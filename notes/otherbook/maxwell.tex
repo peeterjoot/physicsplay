@@ -16,9 +16,13 @@
 \newcommand{\Ddt}[1]{ {{\partial{\mathbf{#1}}} \over {\partial{t}}}}
 \newcommand{\ddts}[1]{ {{\partial^2{#1}} \over {\partial{t}^2}}}
 \newcommand{\Ddts}[1]{ {{\partial^2{\mathbf{#1}}} \over {\partial{t}^2}}}
+\newcommand{\dds}[2]{ {{\partial^2{#1}} \over {\partial{#2}^2}}}
+\newcommand{\Dds}[2]{ {{\partial^2{\mathbf{#1}}} \over {\partial{#2}^2}}}
 \newcommand{\Bj}[0]{\mathbf{j}}
 \newcommand{\BB}[0]{\mathbf{B}}
 \newcommand{\BE}[0]{\mathbf{E}}
+\newcommand{\BS}[0]{\mathbf{S}}
+\newcommand{\D}[2] {{{\partial #2} \over {\partial #1}}}
 
                              % The preamble begins here.
 \title{An Example Document}  % Declares the document's title.
@@ -36,41 +40,112 @@ equations.  The standard formulation these days is the differential
 form, which isn't the most intuitive form.  In cgs units, the differential
 form is as follows:
 
-\begin{equation*}
-\Diverg E = 4\pi\rho
-\end{equation*}
-\begin{equation*}
-\Diverg B = 0
-\end{equation*}
-\begin{equation*}
-\Curl{B} = 4\pi \Bj - {1 \over c} \Ddt{E}
-\end{equation*}
-\begin{equation*}
-\Curl{E} = {1 \over c} \Ddt{B}
-\end{equation*}
+\begin{align*}
+\Diverg E &= 4\pi\rho \\
+\Diverg B &= 0 \\
+\Curl{B} &= 4\pi \Bj - {1 \over c} \Ddt{E} \\
+\Curl{E} &= {1 \over c} \Ddt{B}
+\end{align*}
 
 It is interesting to note that these are probably not the form that Maxwell 
 originally formulated his equations in.  In my 1960 version of encyclodedia 
-britianica Maxwell's equations were given in a differential form.  I had 
-trouble seeing how these two forms were related at first, but the relation
-is via the standard integral transformations.  For example, the formula $\Diverg E = 4\pi\rho$ is an alternate formulation of Gauss' law
+britianica Maxwell's equations were given in a integral form.  I had 
+trouble seeing how these two forms were related at first, but they two 
+quite different forms are a result of applying standard integral 
+transformations like Gauss's theorem (where the a surface S and volume V are closed)
+
 \begin{equation*}
-\BE = \int_V{{\rho\,dV' \over \norm{\mathbf r - \mathbf r'}}}
+\int_{V_S} \Diverg{F}\,dV =
+\int_S \mathbf{F} \cdot\, d\BS 
 \end{equation*}
 
-This can be shown via application of Gauss's theorm.  Similarily the following 
-integral forms of Maxwell's equations:
+and Stokes theorems (where S is an arbirary surface bounding curve C)
+\begin{equation*}
+\int_{S_C} \Curl{F} \cdot d\BS = \int_C \mathbf{F} \cdot d\mathbf{l}
+\end{equation*}
 
-%[ see paper notes ].
+Using these with maxwells equations
+\begin{align*}
+\int_{V_S} \Diverg E \, dV &= 4\pi \int_{V_S} \rho\, dV \\
+\int_{V_S} \Diverg B \, dV &= 0 \\
+\int_{S_C} \Curl{B} \, d\BS &= 4\pi \int_{S_C} \Bj \cdot \, d\BS - {1 \over c} \int_{S_C} \Ddt{E} \cdot \, d\BS \\
+\int_{S_C} \Curl{E} \, d\BS &= {1 \over c} \int_{S_C} \Ddt{B} \cdot \, d\BS
+\end{align*}
 
-One of the awkward things with this standard formulation is that there 
-is an awkward interdependence between the electric and magnetic fields, and 
-the solution of either $\BE$ or $\BB$ interdependently seems difficult.
+\begin{align*}
+\int_{S} \BE \cdot \, d\BS &= 4\pi \int_{V_S} \rho\, dV \\
+\int_{S} \BB \cdot \, d\BS &= 0 \\
+\int_{C} \BB \cdot \, d\mathbf{l} &= 4\pi \int_{S_C} \Bj \cdot \, d\BS - {1 \over c} \int_{S_C} \Ddt{E} \cdot \, d\BS \\
+\int_{C} \BE \cdot \, d\mathbf{l} &= {1 \over c} \int_{S_C} \Ddt{B} \cdot \, d\BS
+\end{align*}
+
+or in terms of normal and tangential components (as in the britanica) we have
+
+\begin{align*}
+\int_{S} E_n \, dS &= 4\pi \int_{V_S} \rho\, dV \\
+\int_{S} B_n \, dS &= 0 \\
+\int_{C} B_t \, dl &= 4\pi \int_{S_C} j_n \, dS - {1 \over c} {{\partial} \over {\partial t}} \int_{S_C} E_n \, dS \\
+\int_{C} E_t \, dl &= {1 \over c} {{\partial} \over {\partial t}} \int_{S_C} B_n \, dS
+\end{align*}
+
+This is how 
+maxwell's equations are presented in my old 
+in encylopedia britianica 
+except for the fact that 
+the above is not in terms of SI units.  I expect that this formulation is closer to how 
+maxwell actually presented his equations because they are in terms of more real 
+seeming quantities.  There are no curl and divergence terms to cloud the mind or
+abstract more than required to state the facts.
+
+Other transformations to and from the differential and integral forms of these
+equations are also possible.  For example, the formula $\Diverg E = 4\pi\rho$ 
+can be shown by taking the divergence of the electic field due to a static
+charge distribution and through use of Gauss's theorm
+\begin{equation*}
+\BE = \int_V{{\rho \mathbf{e}\,dV'} \over {\norm{\mathbf r - \mathbf r'}^2}}
+\end{equation*}
+
+This result is derived in my yellow electrodynamics book.  When I derived this
+result myself, I found that in order to get the same results I needed to make
+math workarounds and seeming hacks. ( describe later ).  These are probably 
+justified and are perhaps more obvious to smarter people than myself.
+Note that the general expression for the 
+electric field in time varying conditions is considerably more complicated,
+so perhaps some of what made the math for this derivation weird may be because
+such a derivation has an artificial aspect to it to start with.
+
+One of the awkward things with this standard formulation, whether it be the 
+differential or the integral form, is that there 
+is an awkward interdependence between the electric and magnetic fields. 
+The solution of either $\BE$ or $\BB$ interdependently seems difficult.  The 
+fact that there are four equations and two unknowns (assuming that the 
+change and current distributions are known) is also slightly awkward.
+There is also a great deal of asymetry in this form, which is unpleasant
+to look at, and seems to suggest something missing.
+
+In my electrodyamics book, where maxwell's equations are ``derived'',
+these equations can be seen to have a more symetrical higher level form, where
+these equations are written in the form of tensor relations where
+the elements of the tensors are the electric and magnetic field components 
+or scalar multiples of these components.  One of the things that I found 
+pleasant about this formulation was that the cross product, a rather 
+arbitrary sort of beast ends up occuring in a natural seeming fashion.  I 
+think that this confirms the fact that in order to see the higher level 
+structure or the cross product it must be expressed in a matrix or tensor form.
+Another example of this can be found by looking at the three dimensional 
+derivation of the torque formula, where the 
+cross product can be seen to be the transformation (per unit angle)
+applied to an object moving through arbirtary differential three dimensional 
+rotation.
+
+Using the vector relation
+
+\begin{equation*}
+\curlCurl{V} = \grad (\Diverg V) - \Delsquared{V}
+\end{equation*}
 
 The interdependence of the $\BE$ and $\BB$ field equations can be removed by taking the
-curl of each of the curl equations, and using the fact that:
-
-$\curlCurl{V} = \grad (\Diverg V) - \Delsquared{V}$
+curl of each of the curl equations.
 
 \begin{align*}
 \curlCurl{B} &= \grad (\Diverg{B}) - \Delsquared{B} \\
@@ -78,10 +153,6 @@ $\curlCurl{V} = \grad (\Diverg V) - \Delsquared{V}$
 4\pi \Curl{j} - {1 \over c^2} \Ddts{B} &= \\
       	     &= 		   - \Delsquared{B}
 \end{align*}
-
-We end up with a single differential equation for the magnetic field $\BB$.
-
-$\delsquared{\BB} - {1 \over c^2} \Ddts{B} = - 4\pi \Curl{j}$
 
 We can do the same calculation for the electric field.
 
@@ -93,23 +164,100 @@ We can do the same calculation for the electric field.
              &= \grad (4\pi\rho) - \Delsquared{E} \\
 \end{align*}
 
-which gives a single differential equation for the electric field $\BE$.
+Using these results we can express the 
+electric field $\BE$ and the
+magnetic field $\BB$.
+as independent differential equations.
 
-%$\Delsquared{E} - {1 \over c^2} \Ddt{E} = {4\pi \over c} \Ddt{j} - 4\pi \grad{\rho}$
-$\Delsquared{E} - {1 \over c^2} \Ddt{E}$
-$ = {4\pi \over c} \Ddt{j} - 4\pi \grad{\rho}$
+\begin{align*}
+\Delsquared{B} - {1 \over c^2} \Ddts{B} &= - 4\pi \Curl{j} \\
+\Delsquared{E} - {1 \over c^2} \Ddts{E} &= - {4\pi \over c} \Ddt{j} + 4\pi \grad{\rho}
+\end{align*}
 
 In the absense of current density and charge these equations take the simple form of standard wave
 equations.
 
+\begin{align*}
+\Delsquared{E} - {1 \over c^2} \Ddt{E} &= 0 \\
+\Delsquared{B} - {1 \over c^2} \Ddt{B} &= 0
+\end{align*}
+
+In this form, where the charge and current densities are zero, we finally have 
+a symetrical description of the electric and the magnetic fields.  Also note 
+that any solution to these is also a solution to the original form where 
+there are non zero current density $\Bj$, and charge density $\rho$.
+
+It can 
+be noted that the general decoupled differential equations above are not 
+as asymetrical as the 4 equation form of maxwell's equations.  In terms of the x, y, and z components 
+of each equation, there is precisely two differential terms, with a suggestively 
+similar form.
+By introducing a 
+single charge/current density four vector formed with the components 
+$(j_x, j_y, j_z, \rho)$ and write these equations in component 
+%(ie: tensor form) 
+form, 
+then some of the underlying symetry can be seen.
+
+We 
+can write the left hand sides of the equations in a simpler form by using the 
+space time four vector $(x_\alpha)_\alpha = (x, y, z, ict)$
+
+\begin{align*}
+\sum_{\alpha = 1 .. 4}{\Dds{E} {x_\alpha}} &= - 4\pi \Curl{j} \\
+\sum_{\alpha = 1 .. 4}{\Dds{B} {x_\alpha}} &= - {4\pi \over c} \Ddt{j} + 4\pi \grad{\rho}
+\end{align*}
+
+Breaking this down into components gives six equations
+
+%curl_x F = DyFz - DzFx = {{\partial F_z} \over {\partial y}}
+%curl_x F = DzFx - DxFy = {{\partial F_x} \over {\partial z}}
+%curl_x F = DzFz - DzFx = {{\partial F_x} \over {\partial y}}
+
+%\sum_{\alpha = 1 .. 4}{\dds{E_x} {x_\alpha}} &= - 4\pi \Curl{j}_x \\
+
+%\sum_{\alpha = 1 .. 4}{\dds{E_x} {x_\alpha}} &= - 4\pi (\D {y}{j_z} - \D {z}{j_y}) \\
+%\sum_{\alpha = 1 .. 4}{\dds{E_y} {x_\alpha}} &= - 4\pi (\D {z}{j_x} - \D {x}{j_z}) \\
+%\sum_{\alpha = 1 .. 4}{\dds{E_z} {x_\alpha}} &= - 4\pi (\D {x}{j_y} - \D {y}{j_x}) \\
+
+\begin{align*}
+\sum_{\alpha = 1 .. 4}{\dds{E_x} {x_\alpha}} &= - 4\pi (\D {y}{j_z} - \D {z}{j_y}) \\
+\sum_{\alpha = 1 .. 4}{\dds{E_y} {x_\alpha}} &= - 4\pi (\D {z}{j_x} - \D {x}{j_z}) \\
+\sum_{\alpha = 1 .. 4}{\dds{E_z} {x_\alpha}} &= - 4\pi (\D {x}{j_y} - \D {y}{j_x}) \\
+\sum_{\alpha = 1 .. 4}{\dds{B_x} {x_\alpha}} &= - 4\pi (\D {ct}{j_x} - \D{x}{\rho})\\
+\sum_{\alpha = 1 .. 4}{\dds{B_y} {x_\alpha}} &= - 4\pi (\D {ct}{j_y} - \D{y}{\rho})\\
+\sum_{\alpha = 1 .. 4}{\dds{B_z} {x_\alpha}} &= - 4\pi (\D {ct}{j_z} - \D{z}{\rho})
+\end{align*}
+
+Which can be put into the following form by replacing the $x, y, z$ indexes by numeric indexes
+
+\begin{align*}
+\sum_{\alpha = 1 .. 4}{i \dds{E_1} {x_\alpha}} &= - 4\pi (i \D {x_2}{j_z} - i \D {x_3}{j_y}) \\
+\sum_{\alpha = 1 .. 4}{i \dds{E_2} {x_\alpha}} &= - 4\pi (i \D {x_3}{j_x} - i \D {x_1}{j_z}) \\
+\sum_{\alpha = 1 .. 4}{i \dds{E_3} {x_\alpha}} &= - 4\pi (i \D {x_1}{j_y} - i \D {x_2}{j_x}) \\
+\sum_{\alpha = 1 .. 4}{\dds{B_1} {x_\alpha}} &= - 4\pi (i \D {x_4}{j_x} - \D{x_1}{\rho})\\
+\sum_{\alpha = 1 .. 4}{\dds{B_2} {x_\alpha}} &= - 4\pi (i \D {x_4}{j_y} - \D{x_2}{\rho})\\
+\sum_{\alpha = 1 .. 4}{\dds{B_3} {x_\alpha}} &= - 4\pi (i \D {x_4}{j_z} - \D{x_3}{\rho})
+\end{align*}
+
+Note that a more appropriate charge density four vector includes an imaginary factor
 \begin{equation*}
-\Delsquared{E} - {1 \over c^2} \Ddt{E} = 0
-\end{equation*}
-\begin{equation*}
-\Delsquared{B} - {1 \over c^2} \Ddt{B} = 0
+(j_\alpha)_\alpha = (i j_x, i j_y, i j_z, \rho)
 \end{equation*}
 
-Any solution to these is also a solution to the original form where there is current density $\Bj$, and 
-charge density $\rho$ since 
+and using this we get the following set of equations:
+
+\begin{align*}
+\sum_{\alpha = 1 .. 4}{i \dds{E_1} {x_\alpha}} &= - 4\pi (\D {x_2}{j_3} - \D {x_3}{j_2}) \\
+\sum_{\alpha = 1 .. 4}{i \dds{E_2} {x_\alpha}} &= - 4\pi (\D {x_3}{j_1} - \D {x_1}{j_3}) \\
+\sum_{\alpha = 1 .. 4}{i \dds{E_3} {x_\alpha}} &= - 4\pi (\D {x_1}{j_2} - \D {x_2}{j_1}) \\
+\sum_{\alpha = 1 .. 4}{\dds{B_1} {x_\alpha}} &= - 4\pi (\D {x_4}{j_1} - \D{x_1}{j_4})\\
+\sum_{\alpha = 1 .. 4}{\dds{B_2} {x_\alpha}} &= - 4\pi (\D {x_4}{j_2} - \D{x_2}{j_4})\\
+\sum_{\alpha = 1 .. 4}{\dds{B_3} {x_\alpha}} &= - 4\pi (\D {x_4}{j_3} - \D{x_3}{j_4})
+\end{align*}
+
+This is as symetrical I can put these equations for now.  There is probably some higher level 
+view that can be used to see the structure behind the particular set of indexes in the right 
+hand size, but I will leave that for some other time.
 
 \end{document}               % End of document.
