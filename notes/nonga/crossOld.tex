@@ -1,0 +1,254 @@
+\documentclass{article}      % Specifies the document class
+
+\usepackage{amsmath}
+\newcommand{\norm}[1]{\lVert#1\rVert}
+
+% partial derivative of #1 wrt. #2:
+\newcommand{\D}[2] {\frac {\partial #2} {\partial #1}}
+% second partial derivative of #1 wrt. #2:
+\newcommand{\Dsq}[2] {\frac {\partial^2 #2} {\partial {#1}^2}}
+
+%
+% shorthand for bold symbols:
+%
+\newcommand{\Bx}[0]{\mathbf{x}}
+\newcommand{\By}[0]{\mathbf{y}}
+\newcommand{\Bz}[0]{\mathbf{z}}
+\newcommand{\Bu}[0]{\mathbf{u}}
+\newcommand{\Br}[0]{\mathbf{r}}
+\newcommand{\BR}[0]{\mathbf{R}}
+\newcommand{\BF}[0]{\mathbf{F}}
+\newcommand{\BM}[0]{\mathbf{M}}
+\newcommand{\Bl}[0]{\mathbf{l}}
+\newcommand{\Cn}[0]{\mathbf{C}^n}
+\newcommand{\Rn}[0]{\mathbf{R}^n}
+\newcommand{\Btheta}[0]{\boldsymbol{\theta}}
+
+\newcommand{\rcap}[0]{\hat{\Br}}
+\newcommand{\ucap}[1]{\hat{\Bu}_{#1}}
+\newcommand{\xcap}[0]{\hat{\Bx}}
+\newcommand{\ycap}[0]{\hat{\By}}
+\newcommand{\zcap}[0]{\hat{\Bz}}
+\newcommand{\thetacap}[0]{\hat{\Btheta}}
+
+\newcommand{\innerprod}[2]{\langle{#1}, {#2}\rangle}
+
+                             % The preamble begins here.
+\title{The cross product in three and more dimensions} % Declares the document's title.
+\author{Peeter Joot}         % Declares the author's name.
+%\date{}        % Deleting this command produces today's date.
+
+\begin{document}             % End of preamble and beginning of text.
+
+\maketitle{}
+
+\section{Introduction}
+
+The cross product is an ugly arbitrary seeming sort of beast, but it is a beast that 
+describes many sorts of physical and mathematical situations.  In vector calculus 
+cross product terms and it relative the determinant end up occuring all over the place, 
+and in physics the cross product also occurs in many contexts.
+Examples are Stokes theorem, Jacobian transformations, normal equations, the 
+curl operator, Maxwell's equations, torque, and the list goes on.  In many of 
+these cases we have mathematics that has no logical tie to three dimensions, but
+the cross product is an explicitly three dimensional sort of beast and one is 
+left quickly with the open question of how to generalize it and the math that
+is related to it to higher dimensions and other mathematical fields that that 
+of real numbers.  One can even wonder how to generalize the cross product to
+lower dimensions than three, since the cross product isn't defined in two or
+one dimension as is the inner product in $\Cn$.
+
+\section{The cross product and torque}
+
+The basic definition of torque as a scalar quantity is the product of the radial distance times 
+the perpendicular force.  The formula in terms of components in three dimensions given a force vector 
+$\BF = (F_x, F_y, F_z)$ and the
+radial distance $\Br = (x, y, z)$ is pretty messy, which is the reason it 
+is typically described by means of a cross product, and
+a generalized torque ``vector'' with a magnitude and direction.
+
+My Feynman book gives a derivation of for the formula for torque in one dimension as 
+the differential work per unit rotation.  This derivation is interesting 
+because it yields in a simple fashion a torque formula without having to 
+introduce the complexities of the cross product or the torque pseudo-vector.  I will 
+not reproduce it here, but will go through a generalized derivation for the torque 
+equation when the plane of rotation has an arbitrary orientation in space, rather 
+than being restricted to the x,y plane (or y,z or z,x).
+
+To start things off, some basic vector algebra results will be presented.
+
+\subsection{change of basis, transformations, and rotations}
+
+Given an orthagonal basis $(\ucap{i})_i$ in one coordinate system and an
+orthagonal basis $(\ucap{i}')_i$ for the same coordinate system, how are 
+the two related?
+
+We can relate the two sets of unit vectors by a set of linear equations
+
+\begin{equation}
+\ucap{i}' = \sum_{j=1}^n{a_{ij}\ucap{j}}
+\end{equation}
+
+What the values of $a_{ij}$ are can be determined by taking inner products and by using the 
+orthagonality constraints.
+
+\begin{align}
+\innerprod{\ucap{i}'}{\ucap{k}} &= \sum_{j=1}^n{a_{ij}\innerprod{\ucap{j}}{\ucap{k}}} \\
+                                &= \sum_{j=1}^n{a_{ij}\delta_{jk}} \\
+                                &= a_{ik}
+\end{align}
+
+So we have the relationship between $\ucap{i}'$ and the unprimed coordinate system basis, and by 
+symmetry, the equivalent relationship for $\ucap{i}$
+
+\begin{align}
+\ucap{i}' &= \sum_{j=1}^n{
+\innerprod{\ucap{i}'}{\ucap{j}}
+\ucap{j}
+} 
+&= \sum_{j=1}^n{
+a_{ij}
+\ucap{j}
+} 
+\\
+\ucap{i} &= \sum_{j=1}^n{
+\innerprod{\ucap{i}}{\ucap{j}'}
+\ucap{j}'
+}
+&= \sum_{j=1}^n{
+\overline{a_{ji}}
+\ucap{j}'
+} 
+\end{align}
+
+Note that we can express these two relationships with a transformation 
+matrix $\BM$ and it's hermition transpose $\BM^*$
+
+\begin{equation}
+\begin{bmatrix}
+\ucap{1}' \\
+\ucap{2}' \\
+\vdots	  \\
+\ucap{n}'
+\end{bmatrix} 
+= 
+\begin{bmatrix}
+	a_{11} & a_{12} & \dots  & a_{1n} \\
+        a_{21} & a_{22} & 	  &        \\
+	\vdots &        & \ddots &        \\
+	a_{n1} & \dots  &        & a_{nn}
+\end{bmatrix}
+\begin{bmatrix}
+\ucap{1}  \\
+\ucap{2}  \\
+\vdots	  \\
+\ucap{n} 
+\end{bmatrix}
+= \BM 
+\begin{bmatrix}
+\ucap{1}  \\
+\ucap{2}  \\
+\vdots	  \\
+\ucap{n} 
+\end{bmatrix}
+\end{equation}
+\begin{equation}
+\begin{bmatrix}
+\ucap{1} \\
+\ucap{2} \\
+\vdots	  \\
+\ucap{n}
+\end{bmatrix} 
+= 
+\begin{bmatrix}
+	\overline{a_{11}} & \overline{a_{21}} & \dots  & \overline{a_{n1}} \\
+        \overline{a_{12}} & \overline{a_{22}} & 	  &        \\
+	\vdots &        & \ddots &        \\
+	\overline{a_{1n}} & \dots  &        & \overline{a_{nn}}
+\end{bmatrix}
+\begin{bmatrix}
+\ucap{1}' \\
+\ucap{2}' \\
+\vdots	  \\
+\ucap{n}'
+\end{bmatrix}
+= \BM^*
+\begin{bmatrix}
+\ucap{1}' \\
+\ucap{2}' \\
+\vdots	  \\
+\ucap{n}'
+\end{bmatrix}
+\end{equation}
+
+Given an arbitrary vector $\Br = [r_j]_j$ in the primary coordinate system, one 
+can express this vector $\Br' = [r_j']_j$ in the secondary coordinate system using 
+the same sort procedure used to derive the transformation matrix $\BM$.
+
+\begin{align}
+\Br' &= 
+      \sum_{k=1}^n
+      {
+       r_k 
+       \ucap{k} 
+      } \\
+      &= 
+      \sum_{k=1}^n
+      {
+       r_k
+\sum_{j=1}^n
+{
+\overline{a_{jk}}
+\ucap{j}'
+}
+      } \\
+      &= 
+\sum_{j=1}^n
+      {
+\ucap{j}'
+      \sum_{k=1}^n
+{
+\overline{a_{jk}}
+       r_k
+}
+      } \\
+      &=
+\sum_{j=1}^n
+      {
+\ucap{j}'
+r_j'
+      }
+\end{align}
+
+Since $r_j' = 
+      \sum_{k=1}^n
+{
+\overline{a_{jk}}
+       r_k
+}
+$
+one can see that the components of the vectors transform 
+in a similar fashion the 
+basis vectors, and we can write $\Br = \BM^T \Br'$ and $\Br' = \overline{\BM} \Br$.
+\footnote{this doesn't seem right.  I find myself wondering if have I messed up, despite the fact that everything looks okay?  Note that on paper I only derived this case for $\Rn$ and not $\Cn$}
+
+%If the work done is $dW$, the object moves through an angle $d\theta$, and the distance from the point of 
+%force application to the point of rotation is $ r = \norm{\Br}$ where $\Br = (x, y) = r(\cos\theta,\sin\theta)$, then 
+%
+%\begin{align*}
+%dW &= \BF \cdot d\Bl \\
+%   &= \BF \cdot r d\thetacap
+%\end{align*}
+%
+%If we transform to a coordinate system with unit vectors 
+%$\ucap{1} = \rcap, \ucap{2} = \thetacap$ 
+%then 
+%$d\thetacap = d\theta \ucap{2}$ 
+%and 
+%$dW = F_\theta r d\theta$ 
+%where 
+%$\BF' = (F_r, F_\theta)$ 
+%is the force as measured in this 
+%coordinate system.
+
+\end{document}               % End of document.
