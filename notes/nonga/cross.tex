@@ -3,26 +3,31 @@
 \usepackage{amsmath}
 \newcommand{\norm}[1]{\lVert#1\rVert}
 
-% partial derivative of #1 wrt. #2:
-\newcommand{\D}[2] {\frac {\partial #2} {\partial #1}}
-% second partial derivative of #1 wrt. #2:
-\newcommand{\Dsq}[2] {\frac {\partial^2 #2} {\partial {#1}^2}}
+% derivative of #1 wrt. #2:
+\newcommand{\D}[2] {\frac {d#2} {d#1}}
 
 %
 % shorthand for bold symbols:
 %
+\newcommand{\Bf}[0]{\mathbf{f}}
+\newcommand{\Bg}[0]{\mathbf{g}}
+\newcommand{\Bl}[0]{\mathbf{l}}
+\newcommand{\Br}[0]{\mathbf{r}}
+\newcommand{\Bu}[0]{\mathbf{u}}
+\newcommand{\Bv}[0]{\mathbf{v}}
 \newcommand{\Bx}[0]{\mathbf{x}}
 \newcommand{\By}[0]{\mathbf{y}}
 \newcommand{\Bz}[0]{\mathbf{z}}
-\newcommand{\Bu}[0]{\mathbf{u}}
-\newcommand{\Br}[0]{\mathbf{r}}
-\newcommand{\BR}[0]{\mathbf{R}}
 \newcommand{\BF}[0]{\mathbf{F}}
+\newcommand{\BI}[0]{\mathbf{I}}
 \newcommand{\BM}[0]{\mathbf{M}}
-\newcommand{\Bl}[0]{\mathbf{l}}
+\newcommand{\BR}[0]{\mathbf{R}}
+\newcommand{\BU}[0]{\mathbf{U}}
 \newcommand{\Cn}[0]{\mathbf{C}^n}
 \newcommand{\Rn}[0]{\mathbf{R}^n}
 \newcommand{\Btheta}[0]{\boldsymbol{\theta}}
+\newcommand{\Btau}[0]{\boldsymbol{\tau}}
+\newcommand{\Bomega}[0]{\boldsymbol{\omega}}
 
 \newcommand{\rcap}[0]{\hat{\Br}}
 \newcommand{\ucap}[1]{\hat{\Bu}_{#1}}
@@ -32,6 +37,8 @@
 \newcommand{\thetacap}[0]{\hat{\Btheta}}
 
 \newcommand{\innerprod}[2]{\langle{#1}, {#2}\rangle}
+\newcommand{\inv}[1]{\frac{1}{#1}}
+\newcommand{\cross}[0]{\times}
 
                              % The preamble begins here.
 \title{The cross product in three and more dimensions} % Declares the document's title.
@@ -44,35 +51,37 @@
 
 \section{Introduction}
 
-The cross product is an ugly arbitrary seeming sort of beast, but it is a beast that 
-describes many sorts of physical and mathematical situations.  In vector calculus 
-cross product terms and it relative the determinant end up occuring all over the place, 
+The cross product is an ugly arbitrary seeming sort of beast, but it is a beast that
+describes many sorts of physical and mathematical situations.  In vector calculus
+cross product terms and it relative the determinant end up occuring all over the place,
 and in physics the cross product also occurs in many contexts.
-Examples are Stokes theorem, Jacobian transformations, normal equations, the 
-curl operator, Maxwell's equations, torque, and the list goes on.  In many of 
+Examples are Stokes theorem, Jacobian transformations, normal equations, the
+curl operator, Maxwell's equations, torque, and the list goes on.  In many of
 these cases we have mathematics that has no logical tie to three dimensions, but
-the cross product is an explicitly three dimensional sort of beast and one is 
+the cross product is an explicitly three dimensional sort of beast and one is
 left quickly with the open question of how to generalize it and the math that
-is related to it to higher dimensions and other mathematical fields that that 
+is related to it to higher dimensions and other mathematical fields that that
 of real numbers.  One can even wonder how to generalize the cross product to
 lower dimensions than three, since the cross product isn't defined in two or
 one dimension as is the inner product in $\Cn$.
 
-\section{The cross product and torque}
+\section{The cross product in physical situations}
 
-The basic definition of torque as a scalar quantity is the product of the radial distance times 
-the perpendicular force.  The formula in terms of components in three dimensions given a force vector 
+On of the common places where the cross product appears naturally is in the
+definition of torque.
+The basic definition of torque as a scalar quantity is the product of the radial distance times
+the perpendicular force.  The formula in terms of components in three dimensions given a force vector
 $\BF = (F_x, F_y, F_z)$ and the
-radial distance $\Br = (x, y, z)$ is pretty messy, which is the reason it 
+radial distance $\Br = (x, y, z)$ is pretty messy, which is the reason it
 is typically described by means of a cross product, and
 a generalized torque ``vector'' with a magnitude and direction.
 
-My Feynman book gives a derivation of for the formula for torque in one dimension as 
-the differential work per unit rotation.  This derivation is interesting 
-because it yields in a simple fashion a torque formula without having to 
-introduce the complexities of the cross product or the torque pseudo-vector.  I will 
-not reproduce it here, but will go through a generalized derivation for the torque 
-equation when the plane of rotation has an arbitrary orientation in space, rather 
+My Feynman book gives a derivation of for the formula for torque in one dimension as
+the differential work per unit rotation.  This derivation is interesting
+because it yields in a simple fashion a torque formula without having to
+introduce the complexities of the cross product or the torque pseudo-vector.  I will
+not reproduce it here, but will go through a generalized derivation for the torque
+equation when the plane of rotation has an arbitrary orientation in space, rather
 than being restricted to the x,y plane (or y,z or z,x).
 
 To start things off, some basic vector algebra results will be presented.
@@ -80,58 +89,66 @@ To start things off, some basic vector algebra results will be presented.
 \subsection{change of basis, transformations, and rotations}
 
 Given an orthagonal basis $(\ucap{i})_i$ in one coordinate system and an
-orthagonal basis $(\ucap{i}')_i$ for the same coordinate system, how are 
+orthagonal basis $(\ucap{i}')_i$ for the same coordinate system, how are
 the two related?
 
 We can relate the two sets of unit vectors by a set of linear equations
 
-\begin{equation}
-\ucap{i}' = \sum_{j=1}^n{a_{ij}\ucap{j}}
-\end{equation}
+\begin{align*}
+\ucap{i}' &= \sum_{s=1}^n{a_{is}\ucap{s}} \\
+\ucap{i} &= \sum_{s=1}^n{b_{is}\ucap{s}'}
+\end{align*}
 
-What the values of $a_{ij}$ are can be determined by taking inner products and by using the 
+What the values of $a_{ij}$ or $b_{ij}$ are can be determined by taking inner products and by using the
 orthagonality constraints.
 
-\begin{align}
-\innerprod{\ucap{i}'}{\ucap{k}} &= \sum_{j=1}^n{a_{ij}\innerprod{\ucap{j}}{\ucap{k}}} \\
-                                &= \sum_{j=1}^n{a_{ij}\delta_{jk}} \\
-                                &= a_{ik}
-\end{align}
+\begin{align*}
+\innerprod{\ucap{i}'}{\ucap{j}} &= \sum_{s=1}^n{a_{is}\innerprod{\ucap{s}}{\ucap{j}}} \\
+                                &= \sum_{s=1}^n{a_{is}\delta_{sj}} \\
+                                &= a_{ij} \\
+\innerprod{\ucap{i}}{\ucap{j}'} &= \sum_{s=1}^n{b_{is}\innerprod{\ucap{s}'}{\ucap{j}'}} \\
+                                &= \sum_{s=1}^n{b_{is}\delta_{sj}} \\
+                                &= b_{ij} \\
+                                &= \overline{a_{ji}} \\
+\end{align*}
 
-So we have the relationship between $\ucap{i}'$ and the unprimed coordinate system basis, and by 
-symmetry, the equivalent relationship for $\ucap{i}$
+So we have the relationships between the two sets of basis vectors $\ucap{i}'$ and $\ucap{i}$,
 
-\begin{align}
-\ucap{i}' &= \sum_{j=1}^n{
-\innerprod{\ucap{i}'}{\ucap{j}}
-\ucap{j}
-} 
-&= \sum_{j=1}^n{
-a_{ij}
-\ucap{j}
-} 
-\\
-\ucap{i} &= \sum_{j=1}^n{
-\innerprod{\ucap{i}}{\ucap{j}'}
-\ucap{j}'
+\begin{align*}
+\ucap{i}'
+&= \sum_{s=1}^n{
+a_{is}
+\ucap{s}
 }
-&= \sum_{j=1}^n{
-\overline{a_{ji}}
-\ucap{j}'
-} 
-\end{align}
+&=
+\sum_{s=1}^n{
+\innerprod{\ucap{i}'}{\ucap{s}}
+\ucap{s}
+}
+\\
+\ucap{i}
+&= \sum_{s=1}^n{
+\overline{a_{si}}
+\ucap{s}'
+}
+&=
+\sum_{s=1}^n{
+\innerprod{\ucap{i}}{\ucap{s}'}
+\ucap{s}'
+}
+\end{align*}
 
-Note that we can express these two relationships with a transformation 
+Note that we can express these two relationships with a transformation
 matrix $\BM$ and it's hermition transpose $\BM^*$
 
-\begin{equation}
+\begin{equation*}
 \begin{bmatrix}
 \ucap{1}' \\
 \ucap{2}' \\
 \vdots	  \\
 \ucap{n}'
-\end{bmatrix} 
-= 
+\end{bmatrix}
+=
 \begin{bmatrix}
 	a_{11} & a_{12} & \dots  & a_{1n} \\
         a_{21} & a_{22} & 	  &        \\
@@ -142,24 +159,24 @@ matrix $\BM$ and it's hermition transpose $\BM^*$
 \ucap{1}  \\
 \ucap{2}  \\
 \vdots	  \\
-\ucap{n} 
+\ucap{n}
 \end{bmatrix}
-= \BM 
+= \BM
 \begin{bmatrix}
 \ucap{1}  \\
 \ucap{2}  \\
 \vdots	  \\
-\ucap{n} 
+\ucap{n}
 \end{bmatrix}
-\end{equation}
-\begin{equation}
+\end{equation*}
+\begin{equation*}
 \begin{bmatrix}
 \ucap{1} \\
 \ucap{2} \\
 \vdots	  \\
 \ucap{n}
-\end{bmatrix} 
-= 
+\end{bmatrix}
+=
 \begin{bmatrix}
 	\overline{a_{11}} & \overline{a_{21}} & \dots  & \overline{a_{n1}} \\
         \overline{a_{12}} & \overline{a_{22}} & 	  &        \\
@@ -179,76 +196,771 @@ matrix $\BM$ and it's hermition transpose $\BM^*$
 \vdots	  \\
 \ucap{n}'
 \end{bmatrix}
-\end{equation}
+\end{equation*}
 
-Given an arbitrary vector $\Br = [r_j]_j$ in the primary coordinate system, one 
-can express this vector $\Br' = [r_j']_j$ in the secondary coordinate system using 
+Given an arbitrary vector $\Br = [r_j]_j$ in the primary coordinate system, one
+can express this vector $\Br' = [r_j']_j$ in the secondary coordinate system using
 the same sort procedure used to derive the transformation matrix $\BM$.
 
-\begin{align}
-\Br' &= 
-      \sum_{k=1}^n
+\begin{align*}
+\Br' &=
+      \sum_{s=1}^n
       {
-       r_k 
-       \ucap{k} 
+       r_s
+       \ucap{s}
       } \\
-      &= 
-      \sum_{k=1}^n
+      &=
+      \sum_{s=1}^n
       {
-       r_k
-\sum_{j=1}^n
+       r_s
+\sum_{t=1}^n
 {
-\overline{a_{jk}}
-\ucap{j}'
-}
-      } \\
-      &= 
-\sum_{j=1}^n
-      {
-\ucap{j}'
-      \sum_{k=1}^n
-{
-\overline{a_{jk}}
-       r_k
+\overline{a_{ts}}
+\ucap{t}'
 }
       } \\
       &=
-\sum_{j=1}^n
+\sum_{t=1}^n
       {
-\ucap{j}'
-r_j'
-      }
-\end{align}
-
-Since $r_j' = 
-      \sum_{k=1}^n
+\ucap{t}'
+      \sum_{s=1}^n
 {
-\overline{a_{jk}}
-       r_k
+\overline{a_{ts}}
+       r_s
+}
+      } \\
+      &=
+\sum_{t=1}^n
+      {
+\ucap{t}'
+r_t'
+      }
+\end{align*}
+
+Since $r_i' =
+      \sum_{s=1}^n
+{
+\overline{a_{is}}
+       r_s
 }
 $
-one can see that the components of the vectors transform 
-in a similar fashion the 
+one can see that the components of the vectors transform
+in a similar fashion the
 basis vectors, and we can write $\Br = \BM^T \Br'$ and $\Br' = \overline{\BM} \Br$.
-\footnote{this doesn't seem right.  I find myself wondering if have I messed up, despite the fact that everything looks okay?  Note that on paper I only derived this case for $\Rn$ and not $\Cn$}
 
-%If the work done is $dW$, the object moves through an angle $d\theta$, and the distance from the point of 
-%force application to the point of rotation is $ r = \norm{\Br}$ where $\Br = (x, y) = r(\cos\theta,\sin\theta)$, then 
+When deriving this this result seemed odd at first, and found myself wondering if have I messed up despite the fact everything looked okay?  On paper I had only derived this case for $\Rn$ and not $\Cn$.\footnote{
+The following example seems to verify that the coordinate vectors and the basis vectors do differ
+by complex conjegate in their transformations.
+
+With $\ucap{1}' = \inv{\sqrt{2}}(1,i), \ucap{2}'=\inv{\sqrt{2}}(1,-i)$, we have
+$\BM =
+\inv{\sqrt{2}}
+\Bigl[
+\begin{smallmatrix}
+1 & i \\
+1 & -i
+\end{smallmatrix}
+\Bigr]
+$.  With an arbitrarily picked test vector
+$\Br = (1,1) = \ucap{1} + \ucap{2} = \inv{\sqrt{2}}((1-i)\ucap{1}' + (1+i)\ucap{2}')$ the application of the
+transformation formulas shows $\Br = \BM^T \Br' =
+\inv{\sqrt{2}}
+\Bigl[
+\begin{smallmatrix}
+1 & 1 \\
+i & -i
+\end{smallmatrix}
+\Bigr]
+\inv{\sqrt{2}}
+\Bigl[
+\begin{smallmatrix}
+1 - i \\
+1 + i
+\end{smallmatrix}
+\Bigr]
+=
+\Bigl[
+\begin{smallmatrix}
+1 \\
+1
+\end{smallmatrix}
+\Bigr]
+$ as expected.
+}
+
+It doesn't matter too much, because I don't need the result for the general case in the torque examination anyhow.
+
+\subsection{torque in two dimensions}
+
+Feynman's proof was fundamentally geometrical and was quite simple, but I don't recall it and my Feynman book is
+a few thousand kilometers away right now.  Using the results above we can also show the same result quite simply,
+and get an idea of how we may approach this for a rotation in three dimensions.
+
+If a rotation inducing force $\BF$ is applied to an object in space with position $\Br$ then the only component of the
+force that will do work is the component perpendicular to the direction $\Br$.  If we form a new coordinate system
+with unit vectors $\rcap = \Br/\norm{\Br}$ and $\thetacap$ where $\thetacap$ is the unit vector perpendicular to $\Br$
+in the direction of positive angular increase, then for
+$\BF' = (F_r, F_\theta)$, only the $F_\theta$
+component of the force $\BF'$ does any work.
+
+To transform to the $r,\theta$ basis, we note that $\thetacap \propto (-y, x)$ so we have
+$\rcap = 1/r(x,y)$ and $\thetacap = 1/r(-y,x)$, and $\BM =
+\inv{r}
+\Bigl[
+\begin{smallmatrix}
+ x & y \\
+-y & x
+\end{smallmatrix}
+\Bigr]
+$
+
+The work done $dW$ is
+\begin{align*}
+dW &= \BF \cdot d\Bl \\
+   &= \BF' \cdot r d\thetacap \\
+   &= F_\theta r d\theta
+\end{align*}
+
+and
+\begin{align*}
+\BF' &= \BM \BF \\
+     &=
+\inv{r}
+\begin{bmatrix}
+ x & y \\
+-y & x
+\end{bmatrix}
+\begin{bmatrix}
+ F_x \\
+ F_y
+\end{bmatrix} \\
+     &=
+\inv{r}
+\begin{bmatrix}
+ x Fx - y F_y \\
+-y Fx + x F_y
+\end{bmatrix}
+\end{align*}
+
+so
+\begin{equation*}
+dW = (x F_y - y F_x) d\theta
+\end{equation*}
+
+What we are calling the torque $\tau$
+is this quantity
+$\tau = \D{\theta}{W} = x F_y - y F_x$,
+the work per unit rotation for a force $\BF = (F_x, F_y)$
+applied at a point $\Br = (x, y)$ from the origin about which the rotation occurs.
+
+It is also easily noted that the transformation
+\begin{equation*}
+\BM =
+\inv{r}
+\begin{bmatrix}
+ x & y \\
+-y & x
+\end{bmatrix}
+=
+\begin{bmatrix}
+ x/r & y/r \\
+-y/r & x/r
+\end{bmatrix}
+=
+\begin{bmatrix}
+ \cos\theta & \sin\theta \\
+-\sin\theta & \cos\theta
+\end{bmatrix}
+\end{equation*}
+
+is just the matrix $\BR_\theta$ for a rotation through and angle $\theta$.  For a rotation
+through a small angle $d\theta$ this transformation becomes,
+
+\begin{equation*}
+\BR_{d\theta} =
+\begin{bmatrix}
+ \cos{d\theta} & \sin{d\theta} \\
+-\sin{d\theta} & \cos{d\theta}
+\end{bmatrix}
+=
+\begin{bmatrix}
+ 1 & d\theta \\
+-d\theta & 1
+\end{bmatrix}
+\end{equation*}
+
+and our displaced vector is
+\begin{equation*}
+\Br' = \BR_{d\theta} \Br =
+\Bigr( \BI +
+\begin{bmatrix}
+ 0 & d\theta \\
+-d\theta & 0
+\end{bmatrix}
+\Bigl) \Br
+\end{equation*}
+
+which gives our differential change in position
+\begin{equation*}
+d\Br = \Br' - \Br =
+(\BR_{d\theta}-\BI) \Br
+=
+\begin{bmatrix}
+ 0 & d\theta \\
+-d\theta & 0
+\end{bmatrix}
+\Br
+\end{equation*}
+
+and the work done is
+
+\begin{align*}
+dW &= \BF \cdot d\Br \\
+   &=
+\begin{bmatrix}
+F_x & F_y
+\end{bmatrix}
+\begin{bmatrix}
+ 0 & d\theta \\
+-d\theta & 0
+\end{bmatrix}
+\Br \\
+   &=
+\begin{bmatrix}
+F_x & F_y
+\end{bmatrix}
+\begin{bmatrix}
+ y d\theta \\
+-x d\theta
+\end{bmatrix} \\
+   &=
+(y F_x - x F_y) d\theta
+\end{align*}
+
+Except for the difference in sign which, honestly, I don't quite understand, this is the same result
+as derived above.
+What would fix the sign difference is if I had taken the differential in the following fashion
+\begin{equation*}
+d\Br = \Br - \Br' =
+(\BI - \BR_{d\theta}) \Br
+=
+\begin{bmatrix}
+ 0 & -d\theta \\
+d\theta & 0
+\end{bmatrix}
+\Br
+\end{equation*}
+instead of the way it was done above.  However, this seems backwards to me, so I am not going to
+change my results until I figure out what it wrong with my logic.
+
+Regardless of the sign discrepency, we can take this same technique and apply it in three dimensions, and
+get some interesting results.
+
+\subsection{torque in three dimensions}
+For three dimensions we can apply successive rotations in the $xy, yz$ and $zx$ planes.
+
+\begin{align*}
+\BR_{d\theta_{xy}}
+&=
+\BR_{d\theta_z}
+&=
+\begin{bmatrix}
+1 & d\theta_z & 0 \\
+-d\theta_z & 1 & 0 \\
+0 & 0 & 1
+\end{bmatrix} \\
+\BR_{d\theta_{yz}}
+&=
+\BR_{d\theta_x}
+&=
+\begin{bmatrix}
+ 1 & 0 & 0 \\
+ 0 & 1 & d\theta_x \\
+ 0 & -d\theta_x & 1
+\end{bmatrix} \\
+\BR_{d\theta_{zx}}
+&=
+\BR_{d\theta_y}
+&=
+\begin{bmatrix}
+ 1 & 0 & -d\theta_y \\
+ 0 & 1 & 0 \\
+ d\theta_y & 0 & 1
+\end{bmatrix} \\
+\end{align*}
+
+Applying these transformations in sequence is a bit messy, but certainly easier than
+applying three successive large rotations in sequence.  The mess of sine and cosine terms
+for that is horrendous if you care to try!
+
+The calulation for the sequential application of
+$\BR_{d\theta_{xy}}$
+,
+$\BR_{d\theta_{yz}}$
+and
+$\BR_{d\theta_{zx}}$
+is below.
+
+\begin{multline*}
+\BR_{d\theta_{zx}}
+\BR_{d\theta_{yz}}
+\BR_{d\theta_{xy}}
 %
-%\begin{align*}
-%dW &= \BF \cdot d\Bl \\
-%   &= \BF \cdot r d\thetacap
-%\end{align*}
+=
 %
-%If we transform to a coordinate system with unit vectors 
-%$\ucap{1} = \rcap, \ucap{2} = \thetacap$ 
-%then 
-%$d\thetacap = d\theta \ucap{2}$ 
-%and 
-%$dW = F_\theta r d\theta$ 
-%where 
-%$\BF' = (F_r, F_\theta)$ 
-%is the force as measured in this 
-%coordinate system.
+\BR_{d\theta_y}
+\BR_{d\theta_x}
+\BR_{d\theta_z} \\
+%
+=
+%
+% \BR_\theta_y
+\begin{bmatrix}
+ 1 & 0 & -d\theta_y \\
+ 0 & 1 & 0 \\
+ d\theta_y & 0 & 1
+\end{bmatrix}
+% \BR_{d\theta_x}
+\begin{bmatrix}
+ 1 & 0 & 0 \\
+ 0 & 1 & d\theta_x \\
+ 0 & -d\theta_x & 1
+\end{bmatrix}
+% \BR_{d\theta_z}
+\begin{bmatrix}
+1 & d\theta_z & 0 \\
+-d\theta_z & 1 & 0 \\
+0 & 0 & 1
+\end{bmatrix} \\
+%
+=
+%
+\begin{bmatrix}
+1 & d\theta_x\,d\theta_y & -d\theta_y \\
+0 & 1 & d\theta_x \\
+d\theta_y & 0 & 1
+\end{bmatrix}
+% \BR_{d\theta_z}
+\begin{bmatrix}
+1 & d\theta_z & 0 \\
+-d\theta_z & 1 & 0 \\
+0 & 0 & 1
+\end{bmatrix} \\
+%
+=
+%
+\begin{bmatrix}
+1-d\theta_x\,d\theta_y\,d\theta_z & d\theta_z + d\theta_x\,d\theta_y & -d\theta_y \\
+-d\theta_z & 1 & d\theta_x \\
+d\theta_y + d\theta_x\,d\theta_z & d\theta_y\,d\theta_z -d\theta_x & 1
+\end{bmatrix} \\
+%
+=
+%
+\BI
++
+\begin{bmatrix}
+0 & d\theta_z & -d\theta_y \\
+-d\theta_z & 0 & d\theta_x \\
+d\theta_y & -d\theta_x & 0
+\end{bmatrix}
++
+\begin{bmatrix}
+0 & d\theta_x\,d\theta_y & 0 \\
+0 & 0 & 0 \\
+d\theta_x\,d\theta_z & d\theta_y\,d\theta_z & 0
+\end{bmatrix} \\
++
+\begin{bmatrix}
+-d\theta_x\,d\theta_y\,d\theta_z & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0
+\end{bmatrix} \\
+\end{multline*}
+
+Note that if the second and third order terms are ignored then
+\begin{equation*}
+\BR_{d\theta_{zx}}
+\BR_{d\theta_{yz}}
+\BR_{d\theta_{xy}} - \BI
+%
+=
+%
+\BR_{d\theta_y}
+\BR_{d\theta_x}
+\BR_{d\theta_z} - \BI
+%
+\approx
+%
+\begin{bmatrix}
+0 & d\theta_z & -d\theta_y \\
+-d\theta_z & 0 & d\theta_x \\
+d\theta_y & -d\theta_x & 0
+\end{bmatrix}
+\end{equation*}
+
+and that
+
+\begin{multline*}
+\begin{bmatrix}
+0 & d\theta_z & -d\theta_y \\
+-d\theta_z & 0 & d\theta_x \\
+d\theta_y & -d\theta_x & 0
+\end{bmatrix}
+= \\
+% \BR_\theta_y
+\begin{bmatrix}
+ 0 & 0 & -d\theta_y \\
+ 0 & 0 & 0 \\
+ d\theta_y & 0 & 0
+\end{bmatrix}
++
+% \BR_{d\theta_x}
+\begin{bmatrix}
+ 0 & 0 & 0 \\
+ 0 & 0 & d\theta_x \\
+ 0 & -d\theta_x & 0
+\end{bmatrix}
+% \BR_{d\theta_z}
++
+\begin{bmatrix}
+0 & d\theta_z & 0 \\
+-d\theta_z & 0 & 0 \\
+0 & 0 & 0
+\end{bmatrix}
+\end{multline*}
+
+So we have the following
+
+\begin{multline*}
+\BR_{d\theta_{zx}}
+\BR_{d\theta_{yz}}
+\BR_{d\theta_{xy}}
+%
+=
+%
+\BR_{d\theta_y}
+\BR_{d\theta_x}
+\BR_{d\theta_z} \\
+\approx
+\BI +
+(\BR_{d\theta_y} - \BI)
++
+(\BR_{d\theta_x} - \BI)
++
+(\BR_{d\theta_z} - \BI)
+=
+\BR_{d\theta_{xyz}}
+\end{multline*}
+
+a result independent of the order of application of the rotations.
+
+We can apply this in the same fashion as we did in the two dimensional case above to
+calcuate the work done
+
+\begin{equation*}
+d\Br = \Br' - \Br =
+(\BR_{d\theta_{xyx}}-\BI) \Br
+=
+\begin{bmatrix}
+0 & d\theta_z & -d\theta_y \\
+-d\theta_z & 0 & d\theta_x \\
+d\theta_y & -d\theta_x & 0
+\end{bmatrix} \Br
+\end{equation*}
+
+\begin{align*}
+dW &= \BF \cdot d\Br \\
+   &=
+\begin{bmatrix}
+F_x & F_y & F_z
+\end{bmatrix}
+\begin{bmatrix}
+0 & d\theta_z & -d\theta_y \\
+-d\theta_z & 0 & d\theta_x \\
+d\theta_y & -d\theta_x & 0
+\end{bmatrix} \Br \\
+ &=
+\begin{bmatrix}
+F_x & F_y & F_z
+\end{bmatrix}
+\begin{bmatrix}
+    y d\theta_z - z d\theta_y \\
+- x d\theta_z + z d\theta_x \\
+x d\theta_y - y d\theta_x
+\end{bmatrix} \\
+  &=
+F_x(y d\theta_z - z d\theta_y) +
+F_y(- x d\theta_z + z d\theta_x) +
+F_z(x d\theta_y - y d\theta_x) \\
+  &=
+\begin{bmatrix}
+z F_y - y F_z & x F_z - z F_x & y F_x - x F_y
+\end{bmatrix}
+\begin{bmatrix}
+d\theta_x \\
+d\theta_y \\
+d\theta_z
+\end{bmatrix} \\
+\end{align*}
+
+So in the three dimensional case
+we can write
+\begin{equation*}
+dW = \BF \cdot d\Br = \Btau \cdot d\Btheta
+\end{equation*}
+
+where
+\begin{equation*}
+d\Btheta =
+\begin{bmatrix}
+d\theta_x \\
+d\theta_y \\
+d\theta_z
+\end{bmatrix}
+\end{equation*}
+
+and where the vector $\Btau$, our torque is defined as
+\begin{equation*}
+\Btau =
+\begin{bmatrix}
+z F_y - y F_z \\
+x F_z - z F_x \\
+y F_x - x F_y
+\end{bmatrix}
+=
+-\Br \cross \BF
+= \BF \cross \Br
+\end{equation*}
+
+the work per unit ``angle'' of rotation in space.  Note that I am again off by a multiplicative factor of $-1$.
+
+\subsection{angular velocity in three dimensions}
+
+One of the formulas that I recall was always just presented and never derived (for the three dimensional case)
+was that for
+$\D{t}{\Br}$ in terms of a vector angular velocity.  This is another equation that the cross product
+comes up, and an equation whose derivation is easily done given some of the work above.
+
+Using the expression for $d\Br$ above and letting $\Bomega = \D{t}{}\Bigl(\theta_x, \theta_y, \theta_z\Bigr)$ we have
+
+\begin{equation*}
+\D{t}{\Br}
+=
+\begin{bmatrix}
+0 & \D{t}{\theta_z} & -\D{t}{\theta_y} \\
+-\D{t}{\theta_z} & 0 & \D{t}{\theta_x} \\
+\D{t}{\theta_y} & -\D{t}{\theta_x} & 0
+\end{bmatrix} \Br
+=
+\begin{bmatrix}
+0 & \omega_z & -\omega_y \\
+-\omega_z & 0 & \omega_x \\
+\omega_y & -\omega_x & 0
+\end{bmatrix} \Br
+=
+\begin{bmatrix}
+x \omega_z - z \omega_y \\
+- x \omega_z + z \omega_x \\
+x \omega_y - y \omega_x
+\end{bmatrix} \Br
+\end{equation*}
+
+For the result of
+\begin{equation*}
+\Bv = \Br \cross \Bomega
+\end{equation*}
+
+Note that I believe I am still out with a factor of $-1$.
+Taking the derivative only in
+the matrix part of the left hand side also seems kind of fishy to me, so I need to reexamine
+my methodology here, and at justify it somehow.
+
+\section{the cross product in greater than three dimensions}
+
+One of the side effects of the derivations above is a way the cross product shows up
+tied
+to a
+matrix form, where it has a lot more structure than the component form.
+
+One of the interesting things that we can do is define a half cross product matrix operator as follows
+
+\begin{equation*}
+\Bf \cross =
+\begin{bmatrix}
+0 & -f_z & f_y \\
+f_z & 0 & -f_x \\
+-f_y & f_x & 0
+\end{bmatrix}
+\end{equation*}
+
+one can apply this to some vector $\Bg$ in matrix form to yield
+\begin{equation*}
+\begin{bmatrix}
+0 & -f_z & f_y \\
+f_z & 0 & -f_x \\
+-f_y & f_x & 0
+\end{bmatrix}
+\begin{bmatrix}
+g_x \\
+g_y \\
+g_z
+\end{bmatrix}
+= \Bf \cross \Bg
+\end{equation*}
+
+as expected.
+
+Furthermore, one can factor this half cross product operator in a pleasant fashion
+
+\begin{equation*}
+\Bf \cross =
+\begin{bmatrix}
+0 & -f_z & f_y \\
+f_z & 0 & -f_x \\
+-f_y & f_x & 0
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 & 0 & f_y \\
+f_z & 0 & 0 \\
+0 & f_x & 0
+\end{bmatrix}
+-
+\begin{bmatrix}
+0 & 0 & f_y \\
+f_z & 0 & 0 \\
+0 & f_x & 0
+\end{bmatrix}^T
+\end{equation*}
+
+Each half of the right hand side can be diagonalized, but not via a change of basis, as follows:
+\begin{multline*}
+\Bf \cross =
+\begin{bmatrix}
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+1 & 0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+f_x & 0 & 0 \\
+0 & f_y & 0 \\
+0 & 0 & f_z
+\end{bmatrix}
+\begin{bmatrix}
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+1 & 0 & 0
+\end{bmatrix} \\
+-
+\begin{bmatrix}
+0 & 0 & 1 \\
+1 & 0 & 0 \\
+0 & 1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+f_x & 0 & 0 \\
+0 & f_y & 0 \\
+0 & 0 & f_z
+\end{bmatrix}
+\begin{bmatrix}
+0 & 0 & 1 \\
+1 & 0 & 0 \\
+0 & 1 & 0
+\end{bmatrix}
+\end{multline*}
+
+The matrix
+$ \BU =
+\Bigl[
+\begin{smallmatrix}
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+1 & 0 & 0
+\end{smallmatrix}
+\Bigr]
+$ above is an interesting one, as $\BU^{-1} = \BU^T = \BU^2$, which implies it is a permutation matrix.
+From this it can be seen that one can write
+
+\begin{multline*}
+\begin{bmatrix}
+0 & 0 & 1 \\
+1 & 0 & 0 \\
+0 & 1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+f_x & 0 & 0 \\
+0 & f_y & 0 \\
+0 & 0 & f_z
+\end{bmatrix}
+\begin{bmatrix}
+0 & 0 & 1 \\
+1 & 0 & 0 \\
+0 & 1 & 0
+\end{bmatrix} \\
+=
+\begin{bmatrix}
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+1 & 0 & 0
+\end{bmatrix}
+\Biggl(
+\begin{bmatrix}
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+1 & 0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+f_x & 0 & 0 \\
+0 & f_y & 0 \\
+0 & 0 & f_z
+\end{bmatrix}
+\begin{bmatrix}
+0 & 0 & 1 \\
+1 & 0 & 0 \\
+0 & 1 & 0
+\end{bmatrix}
+\Biggr) \\
+=
+\Biggl(
+\begin{bmatrix}
+0 & 0 & 1 \\
+1 & 0 & 0 \\
+0 & 1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+f_x & 0 & 0 \\
+0 & f_y & 0 \\
+0 & 0 & f_z
+\end{bmatrix}
+\begin{bmatrix}
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+1 & 0 & 0
+\end{bmatrix}
+\Biggr)
+\begin{bmatrix}
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+1 & 0 & 0
+\end{bmatrix}
+\end{multline*}
+
+where the terms inside the braces represent a change of basis transformation.
+
+We now have a rather nice and concise way of writing our half cross product operator, in a way
+that is possibly suggestive of how to define the cross product in greater than three dimensions.
+\begin{equation*}
+\Bf \cross = \BU D(\Bf) \BU - \BU^T D(\Bf) \BU^T
+\end{equation*}
+
+where $D(\Bf)$ is a the matrix with the components of $\Bf$ along the diagonal.
+
+An alternative form is also possible, by taking advantage of the $\BU$ factorizations noted above.
+We can let $G(\Bf) = \BU^T D(\Bf) \BU = G(\Bf)^T$ which gives
+\begin{align*}
+\Bf \cross &= \BU^T (\BU^T D(\Bf) \BU) - (\BU^T D(\Bf) \BU) \BU \\
+           &= \BU^T G(\Bf) - G(\Bf)^T \BU
+\end{align*}
 
 \end{document}               % End of document.
