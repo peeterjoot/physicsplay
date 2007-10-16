@@ -1,0 +1,151 @@
+\documentclass{article}      % Specifies the document class
+
+\input{../peeters_macros.tex}
+
+%
+% The real thing:
+%
+
+                             % The preamble begins here.
+\title{Cramer's rule} % Declares the document's title.
+\author{Peeter Joot}         % Declares the author's name.
+%\date{}        % Deleting this command produces today's date.
+
+\begin{document}             % End of preamble and beginning of text.
+
+\maketitle{}
+
+\section{Cramer's rule, determinants, and matrix inversion can be naturally expressed in terms of the wedge product. }
+
+The use of the wedge product in the solution of linear equations can be quite useful for various geometric product calculations.
+
+Traditionally, instead of using the wedge product, Cramer's rule is usually presented as a generic algorithm that can be used to solve linear equations of the form $\BA \Bx = \Bb$ (or equivalently to invert a matrix).  Namely
+
+\[
+\Bx = \frac{1}{|\BA|}\operatorname{adj}(\BA)
+\]
+
+This is a useful theoretic result.  For numerical problems row reduction with pivots and other methods are more stable and efficient.
+
+When the wedge product is coupled with the clifford product and put into a natural geometric context, the fact that the determinants are used in the expression of ${\mathbb R}^N$ parallelogram area and parallelepiped volumes (and higher dimensional generalizations of these) also comes as a nice side effect.
+
+As is also shown below, results such as Cramer's rule also follow directly from the property of the wedge product that it selects non identical elements.  The end result is then simple enough that it could be derived easily if required instead of having to remember or look up a rule.
+
+\subsection{Two variables example }
+
+\[
+\begin{bmatrix}
+\Ba & \Bb
+\end{bmatrix}
+\begin{bmatrix}
+x \\ y
+\end{bmatrix}
+= \Ba x + \Bb y = \Bc
+\]
+
+Pre and post multiplying by $\Ba$ and $\Bb$.
+
+\[
+      ( \Ba x + \Bb y ) \wedge \Bb = (\Ba \wedge \Bb) x =       \Bc \wedge \Bb
+\]
+\[
+\Ba \wedge ( \Ba x + \Bb y )       = (\Ba \wedge \Bb) y = \Ba \wedge \Bc      
+\]
+
+Provided $\Ba \wedge \Bb \neq 0$ the solution is
+
+\[
+\begin{bmatrix}x \\ y\end{bmatrix}
+= \frac{1}{\Ba \wedge \Bb}
+\begin{bmatrix}
+\Bc \wedge \Bb \\ \Ba \wedge \Bc
+\end{bmatrix}
+\]
+
+For $\Ba, \Bb \in {\mathbb R}^2$, this is Cramer's rule since the $\Be _1 \wedge \Be _2$ factors of the wedge products
+
+\[
+\Bu \wedge \Bv = \begin{vmatrix}u_1 & u_2 \\ v_1 & v_2 \end{vmatrix} \Be _1 \wedge \Be _2
+\]
+
+divide out.
+
+Similarily, for three, or N variables, the same ideas hold
+
+\[
+\begin{bmatrix}
+\Ba & \Bb & \Bc
+\end{bmatrix}
+\begin{bmatrix}
+x \\ y \\ z
+\end{bmatrix}
+= \Bd
+\]
+
+\[
+\begin{bmatrix}
+x \\ y \\ z
+\end{bmatrix}
+= \frac{1}{\Ba \wedge \Bb \wedge \Bc}
+\begin{bmatrix}
+\Bd \wedge \Bb \wedge \Bc \\
+\Ba \wedge \Bd \wedge \Bc \\
+\Ba \wedge \Bb \wedge \Bd
+\end{bmatrix}
+\]
+
+Again, for the three variable three equation case this is Cramer's rule since the $\Be _1 \wedge \Be _2 \wedge \Be _3$ factors of all the wedge products divide out, leaving the familiar determinants.
+
+\subsection{A numeric example}
+
+When there are more equations than variables case, if the equations have a solution, each of the k-vector quotients will be scalars
+
+To illustrate here is the solution of a simple example with three equations and two unknowns.  
+
+\[
+\begin{bmatrix}
+1 \\ 1 \\ 0
+\end{bmatrix}
+x
++ 
+\begin{bmatrix}
+2 \\ 0 \\ 1
+\end{bmatrix}
+y
+= 
+\begin{bmatrix}
+2 \\ 0 \\ 1
+\end{bmatrix}
+\]
+
+Taking wedge products, and collecting results for $x$ and $y$
+
+\[
+\begin{bmatrix}
+x \\ y\end
+{bmatrix}
+ =
+\frac{1}{(1, 1, 0) \wedge (2, 0, 1)}
+\begin{bmatrix}
+(1, 0, 1) \wedge (2, 0, 2) \\
+(1, 1, 2) \wedge (1, 0, 1)
+\end{bmatrix}
+\]
+
+Finally, expanding out the wedge products, writing $\Be _i \wedge \Be _j = \Be _{ij}$, 
+\[
+\begin{bmatrix}
+x \\ y
+\end{bmatrix} = 
+\frac{1}{-2 \Be _{12} -2 \Be _{13} + 2 \Be _{23}}
+\begin{bmatrix}
+0 \\
+- \Be _{12} - \Be _{13} + \Be _{23}
+\end{bmatrix}
+= 
+\begin{bmatrix}
+0 \\ 1/2
+\end{bmatrix}
+\]
+
+\end{document}               % End of document.
