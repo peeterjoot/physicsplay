@@ -1,0 +1,207 @@
+\documentclass{article}      % Specifies the document class
+
+\input{../peeters_macros.tex}
+
+\newcommand{\dt}[1]{\frac{d {#1}}{dt}}
+\newcommand{\Norm}[1]{\left\lVert{#1}\right\rVert}
+
+%
+% The real thing:
+%
+
+                             % The preamble begins here.
+\title{Rotational dynamics}
+\author{Peeter Joot}         % Declares the author's name.
+%\date{}        % Deleting this command produces today's date.
+
+\begin{document}             % End of preamble and beginning of text.
+
+\maketitle{}
+
+\section{GA introduction of angular velocity}
+
+By taking the first derivative of a radially expressed vector we have the velocity 
+
+\[
+\Bv 
+   = r'\rcap + \rcap(\rcap \wedge \Br')
+   = \rcap( v_r + \rcap \wedge \Bv )
+\]
+
+Or,
+\[
+\rcap \Bv = v_r + \rcap \wedge \Bv
+\]
+\[
+\rcap \Bv = v_r + (1/r)\Br \wedge \Bv
+\]
+
+Put this way, the earlier calculus exercise to derive this seems a bit silly, since it is probably clear that $v_r = \rcap \cdot \Bv$.
+
+Anyways, let's work with velocity expressed this way in a few ways.
+
+\subsection{Speed in terms of linear and rotational components}
+
+\[
+\Norm{\Bv}^2 = v_r^2 + (\rcap(\rcap \wedge \Bv))^2
+\]
+
+And,
+\begin{align*}
+(\rcap(\rcap \wedge \Bv))^2 
+   &= (\Bv \wedge \rcap)\rcap \rcap(\rcap \wedge \Bv) \\
+   &= (\Bv \wedge \rcap)(\rcap \wedge \Bv) \\
+   &= -(\rcap \wedge \Bv)^2 \\
+   &= \Norm{\rcap \wedge \Bv}^2 \\
+\end{align*}
+
+\begin{align*}
+\implies
+\Norm{\Bv}^2 &= v_r^2 + \Norm{\rcap \wedge \Bv}^2 \\
+             &= v_r^2 + \Norm{\rcap \wedge \Bv}^2 \\
+\end{align*}
+
+So, we can assign a physical significance to the bivector.
+
+\[
+\Norm{\rcap \wedge \Bv} = \abs{v_{\perp}} 
+\]
+
+The bivector $\Norm{\rcap \wedge \Bv}$ has the magnitude of the non-radial component of the velocity.  This
+equals the magnitude of the component of the velocity perpendicular to its radial component (ie: the angular component of the velocity).
+
+\subsection{angular velocity.  Prep.}
+
+Because $\Norm{\rcap \wedge \Bv}$ is the non-radial velocity component, for small angles
+${v_\perp}/r$ will equal the angle between the vector and its displacement.
+
+This allows for the calculation of the rate of change of that angle with time, what it called the scalar
+angular velocity (dimensions are $1/t$ not $x/t$).  This can be done by taking the $\sin$ as the ratio of the
+length of the non-radial component of the delta to the length of the displaced vector.
+
+\begin{align*}
+\sin d\theta &= \frac{\Norm{\rcap(\rcap \wedge d\Br)}}{\Norm{\Br + d\Br}} \\
+\end{align*}
+
+With $d\Br = \dt{\Br} dt = \Bv dt$, the angular velocity is
+
+\begin{align*}
+\sin d\theta
+   &= \frac{1}{\Norm{\Br + \Bv dt}} \Norm{ \rcap (\rcap \wedge \Bv) dt } \\
+   &= \frac{1}{\Norm{\Br + \Bv dt}} \Norm{ (\rcap \wedge \Bv) dt } \\
+\frac{\sin d\theta}{\abs{dt}}
+   &= \frac{1}{\Norm{\Br + \Bv dt}} \Norm{ \rcap \wedge \Bv } \\
+   &= \frac{1}{\Norm{\Br}\Norm{\Br + \Bv dt}} \Norm{ \Br \wedge \Bv } \\
+\end{align*}
+
+In the limit, taking $dt > 0$, this is
+\[
+\omega = \dt{\theta} = \frac{1}{\Br^2} \Norm{ \Br \wedge \Bv }
+\]
+
+\subsection{angular velocity.  Summarizing.}
+
+Here is a summary of calculations so far involving the $\Br \wedge \Bv$ bivector
+
+\begin{align*}
+\Bv &= \rcap v_r + \frac{\rcap}{\Norm{\Br}} (\Br \wedge \Bv) \\
+\dt{\rcap} &= \frac{\rcap}{\Br^2} (\Br \wedge \Bv) \\
+\abs{v_{\perp}} &= \frac{1}{\Norm{\Br}} \Norm{ \Br \wedge \Bv } \\
+\omega = \dt{\theta} &= \frac{1}{\Br^2} \Norm{ \Br \wedge \Bv } \\
+\end{align*}
+
+It makes sense to give the bivector a name.  Given it's magnitude the 
+angular velocity bivector $\Bomega$ is designated
+
+\[
+\Bomega = \frac{ \Br \wedge \Bv }{\Br^2} 
+\]
+
+So the linear and rotational components of the velocity can thus be expressed in terms of this, as can our
+unit vector derivative, scalar angular velocity, and perpendicular velocity magnitude:
+
+\begin{align*}
+\omega = \dt{\theta} &= \Norm{ \Bomega } \\
+\Bv &= \rcap v_r + \Br \Bomega \\
+    &= \rcap( v_r + r \Bomega ) \\
+\dt{\rcap} &= \rcap \Bomega \\
+\abs{v_{\perp}} &= r \Norm{ \Bomega } \\
+\end{align*}
+
+This is similar to the vector angular velocity ($\Bomega = (\Br \times \Bv)/r^2$), but instead of lying perpendicular to the
+plane of rotation, it defines the plane of rotation (for a vector $\Ba$, $\Ba \wedge \Bomega$ is zero if the vector is in the plane and non-zero if the vector has a component outside of the plane).
+
+%\begin{align*}
+%\Bomega = \frac{1}{\Br^2} (\Br \wedge \Bv)
+%\end{align*}
+%
+%Or,
+%\begin{align*}
+%\Br \wedge \Bv = \Br^2 \Bomega = r^2\Bomega
+%\end{align*}
+%
+%
+%\begin{align*}
+%\Bv 
+%   &= \rcap(v_r + (1/r)\Br \wedge \Bv) \\
+%   &= \rcap(v_r + r\Bomega) \\
+%   &= v_r\rcap + \Br\Bomega \\
+%\end{align*}
+
+\subsection{Explicit perpendicular unit vector.}
+
+If one introduces a unit vector $\thetacap$ in the direction of rejection of $\Br$ from $d\Br$, the total velocity takes the symetrical form
+\begin{align*}
+\Bv 
+   &= v_r\rcap + r\omega\thetacap \\
+   &= \dt{r}\rcap + r\dt{\theta}\thetacap \\
+\end{align*}
+
+\subsection{acceleration in terms of angular velocity bivector}
+
+This can be written in a few different ways:
+
+%\Br \wedge \Bv = \Br^2 \Bomega = r^2\Bomega
+\begin{align*}
+\Ba 
+%   &= \rcap \left(  v_r' +(1/r)(\rcap \wedge \Bv)^2\right) +    \rcap(\rcap \wedge \Ba) \\
+   &= \rcap \left(  a_r +(1/{r^3})(\Br \wedge \Bv)^2\right) +    \rcap(\rcap \wedge \Ba) \\
+%   &= \rcap \left(  a_r +(1/{r^3})( r^2\Bomega )^2\right) +    \rcap(\rcap \wedge \Ba) \\
+%   &= \rcap \left(  a_r +r( \Bomega )^2\right) +    \rcap(\rcap \wedge \Ba) \\
+   &= \rcap \left(  a_r -r \Norm{\Bomega}^2\right) + \rcap(\rcap \wedge \Ba) \\
+   &= \rcap \left(  a_r -r \Norm{\Bomega}^2 + \rcap \wedge \Ba \right) \\
+   &= \rcap \left(  a_r -(1/r)(\Br\Bomega)^2 + \rcap \wedge \Ba \right) \\
+   &= \rcap \left(  a_r -(1/r)(\Bv - v_r\rcap)^2 + \rcap \wedge \Ba \right) \\
+\end{align*}
+
+Note that for circular motion $v_r = a_r = 0$, so:
+
+\[
+\Bv = \Br \Bomega
+\]
+\[
+\Ba = \rcap \left(  -\frac{\Bv^2}{r} + \rcap \wedge \Ba \right) \\
+\]
+
+For constant circular motion:
+\begin{align*}
+\Ba 
+   &= \Bv\Bomega + \Br\Bomega' \\
+   &= \Bv\Bomega + \Br(\Bzero) \\
+   &= \Br(\Bomega)^2 \\
+   &= -\Br\Norm{\Bomega}^2 \\
+\end{align*}
+
+ie: the $\rcap (\rcap \wedge \Ba )$ term is zero... all accelartion is inwards.
+
+Can also expand this in terms of $\Br$ and $\Bv$:
+\begin{align*}
+\Ba 
+   &= \Br(\Bomega)^2 \\
+   &= \Br(\frac{1}{\Br}\Bv)^2 \\
+   &= -\Br( \Bv \frac{1}{\Br} \frac{1}{\Br}\Bv ) \\
+   &= -\Br( \frac{\Bv^2}{\Br^2}) \\
+   &= -\frac{1}{\Br}\Bv^2 \\
+\end{align*}
+
+\end{document}             % End of preamble and beginning of text.
