@@ -4,6 +4,7 @@
 
 \newcommand{\dt}[1]{\frac{d {#1}}{dt}}
 \newcommand{\Norm}[1]{\left\lVert{#1}\right\rVert}
+\newcommand{\dtheta}[1]{\frac{d {#1}}{d \theta}}
 
 %
 % The real thing:
@@ -159,22 +160,134 @@ If one introduces a unit vector $\thetacap$ in the direction of rejection of $\B
 
 \subsection{acceleration in terms of angular velocity bivector}
 
-This can be written in a few different ways:
+Taking derivatives of velocity, one can with a bit of work,
+express acceleration in terms of
+radial and non-radial components
 
 %\Br \wedge \Bv = \Br^2 \Bomega = r^2\Bomega
+
 \begin{align*}
 \Ba 
-%   &= \rcap \left(  v_r' +(1/r)(\rcap \wedge \Bv)^2\right) +    \rcap(\rcap \wedge \Ba) \\
-   &= \rcap \left(  a_r +(1/{r^3})(\Br \wedge \Bv)^2\right) +    \rcap(\rcap \wedge \Ba) \\
-%   &= \rcap \left(  a_r +(1/{r^3})( r^2\Bomega )^2\right) +    \rcap(\rcap \wedge \Ba) \\
-%   &= \rcap \left(  a_r +r( \Bomega )^2\right) +    \rcap(\rcap \wedge \Ba) \\
-   &= \rcap \left(  a_r -r \Norm{\Bomega}^2\right) + \rcap(\rcap \wedge \Ba) \\
-   &= \rcap \left(  a_r -r \Norm{\Bomega}^2 + \rcap \wedge \Ba \right) \\
-   &= \rcap \left(  a_r -(1/r)(\Br\Bomega)^2 + \rcap \wedge \Ba \right) \\
-   &= \rcap \left(  a_r -(1/r)(\Bv - v_r\rcap)^2 + \rcap \wedge \Ba \right) \\
+   &= (\rcap v_r + \Br \Bomega)' \\
+   &= \rcap' v_r + \rcap v_r' + \Br' \Bomega + \Br \Bomega' \\
+   &= \rcap \Bomega v_r + \rcap v_r' + \Br' \Bomega + \Br \Bomega' \\
+   &= \rcap \Bomega v_r + \rcap a_r + \Bv \Bomega + \Br \Bomega' \\
 \end{align*}
 
-Note that for circular motion $v_r = a_r = 0$, so:
+But,
+\begin{align*}
+\Bomega' &= ((1/r^2) (\Br \wedge \Bv))' \\
+         &= (-2/r^3) r' (\Br \wedge \Bv) + (1/r^2) (\Bv \wedge \Bv + \Br \wedge \Ba) \\
+         &= -(2/r) v_r \Bomega + (1/r^2) (\Br \wedge \Ba) \\
+\end{align*}
+
+%\rcap v_r = \Bv - \Br \Bomega
+So,
+
+\begin{align*}
+\Ba 
+   &= \rcap a_r -\rcap \Bomega v_r + \Bv \Bomega + \rcap (\rcap \wedge \Ba) \\
+   &= \rcap a_r -( \Bv - \Br \Bomega) \Bomega + \Bv \Bomega + \rcap (\rcap \wedge \Ba) \\
+\\
+   &= \rcap a_r + \Br \Bomega^2+ \rcap (\rcap \wedge \Ba) \\
+   &= \rcap( a_r + r \Bomega^2) + \rcap (\rcap \wedge \Ba) \\
+\end{align*}
+
+Note that $\Bomega^2$ is a negative scalar, so as normal writing $\norm{\Bomega}^2 = -\Bomega^2$, we have acceleration in a fashion similar to the
+traditional cross product form:
+
+\begin{align*}
+\Ba 
+   &= \rcap( a_r - r \norm{\Bomega}^2) + \rcap (\rcap \wedge \Ba) \\
+   &= \rcap( a_r - r \norm{\Bomega}^2 + \rcap \wedge \Ba) \\
+\end{align*}
+
+In the traditional representation, this last term, the non-radial acceleration
+component, is often expressed as a derivative.
+
+In terms of the wedge product, this can be done by noting that
+
+\[
+(\Br \wedge \Bv)' = \Bv \wedge \Bv + \Br \wedge \Ba = \Br \wedge \Ba
+\]
+
+\begin{align*}
+\Ba 
+   &= \rcap( a_r - r \norm{\Bomega}^2 ) + \frac{\Br}{r^2}(\Br \wedge \Bv)') \\
+   &= \rcap( a_r - r \norm{\Bomega}^2 ) + \frac{1}{\Br}\dt{(\Br^2 \Bomega)} \\
+\end{align*}
+
+Expressed in terms of force (for constant mass) this is
+\begin{align*}
+\BF &= m \Ba \\
+    &= \rcap (m a_r) + (m \Br) {\Bomega}^2
+       + \frac{1}{\Br}\dt{(m \Br^2 \Bomega)} \\
+    &= \BF_r + (m \Br) {\Bomega}^2
+             + \frac{1}{\Br}\dt{(m \Br^2 \Bomega)} \\
+\end{align*}
+
+Alternately, the non-radial term can be expressed in terms of torque
+
+\begin{align*}
+\rcap (\rcap \wedge \Ba) 
+   &= \rcap (\rcap \wedge m \Ba)  \\
+   &= \frac{\Br}{r^2} (\Br \wedge \BF)  \\
+   &= \frac{1}{\Br} (\Br \wedge \BF)  \\
+   &= \frac{1}{\Br} \Btau \\
+\end{align*}
+
+Thus the torque bivector, which in magnitude was the angular derivative of
+the work
+done by the force $\norm{\Btau} = \tau = \dtheta{W} = \BF \cdot \dtheta{\Br}$
+is also expressable as a time derivative
+
+\begin{align*}
+\Btau 
+&= \dt{( m \Br^2 \Bomega )}  \\
+&= \dt{( m \Br \wedge \Bv)}  \\
+&= \dt{( \Br \wedge m \Bv)}  \\
+&= \dt{( \Br \wedge \Bp  )}  \\
+\end{align*}
+
+This bivector $m \Br^2 \Bomega = \Br \wedge \Bp$ is called the angular
+momentum, designated $\BJ$.  It is related to the total momentum as follows
+
+\[
+\Bp = \rcap (\rcap \cdot \Bp) + \frac{1}{\Br} \BJ 
+\]
+
+So the total force is
+
+\begin{align*}
+\BF 
+    &= \BF_r + m \Br {\Bomega}^2 + \frac{1}{\Br}\dt{\BJ} \\
+\end{align*}
+
+Observe that for a purely radial (ie: central) force, we must have
+$\dt{\BJ} = 0$
+so, the angular
+momentum must be constant.
+
+%\begin{align*}
+%\Ba 
+%   &= \rcap \left(  v_r' +(1/r)(\rcap \wedge \Bv)^2\right) +    \rcap(\rcap \wedge \Ba) \\
+%   &= \rcap \left(  a_r +(1/{r^3})(\Br \wedge \Bv)^2\right) +    \rcap(\rcap \wedge \Ba) \\
+%   &= \rcap \left(  a_r +(1/{r^3})( r^2\Bomega )^2\right) +    \rcap(\rcap \wedge \Ba) \\
+%   &= \rcap \left(  a_r +r( \Bomega )^2\right) +    \rcap(\rcap \wedge \Ba) \\
+%   &= \rcap \left(  a_r -r \Norm{\Bomega}^2\right) + \rcap(\rcap \wedge \Ba) \\
+%\end{align*}
+%
+%This can be written in a few different ways:
+%\begin{align*}
+%\Ba 
+%   &= \rcap \left(  a_r -r \Norm{\Bomega}^2 + \rcap \wedge \Ba \right) \\
+%   &= \rcap \left(  a_r -(1/r)(\Br\Bomega)^2 + \rcap \wedge \Ba \right) \\
+%   &= \rcap \left(  a_r -(1/r)(\Bv - v_r\rcap)^2 + \rcap \wedge \Ba \right) \\
+%\end{align*}
+
+\subsection{Circular motion}
+
+For circular motion $v_r = a_r = 0$, so:
 
 \[
 \Bv = \Br \Bomega
