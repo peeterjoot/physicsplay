@@ -1,0 +1,233 @@
+\documentclass{article}      % Specifies the document class
+
+\input{../peeters_macros.tex}
+
+%
+% The real thing:
+%
+
+                             % The preamble begins here.
+\title{Inertia Tensor} % Declares the document's title.
+\author{Peeter Joot}         % Declares the author's name.
+%\date{}        % Deleting this command produces today's date.
+
+\begin{document}             % End of preamble and beginning of text.
+
+\maketitle{}
+
+\section{}
+
+GAFP derives the angular momentum for rotational motion in the following form
+
+\[
+L = R \left( \int \Bx \wedge (\Bx \cdot \Omega_B) dm \right) R^\dagger
+\]
+
+and calls the integral part, the inertia tensor
+
+\[
+\emph{I}(B) = \int \Bx \wedge (\Bx \cdot \Omega_B) dm
+\]
+
+which is a linear mapping from bivectors to bivectors.  To understand the
+form of this I found it helpful to expanding the wedge product
+part of this explicitly for the \R{3} case.
+
+Ignoring the sum in this expansion write
+
+\[
+f(B) = \Bx \wedge (\Bx \cdot B)
+\]
+
+And writing $\Be_{ij} = \Be_i \Be_j$ introduce a basis
+
+\[
+b = \{ \Be_1 I, \Be_2 I, \Be_3 I \} = \{ \Be_{23}, \Be_{31}, \Be_{12} \}
+\]
+
+for the \R{3} bivector product space.
+
+Now calculate $f(B)$ for each of the basis vectors
+
+\begin{align*}
+f(\Be_1 I) 
+&= \Bx \wedge (\Bx \cdot \Be_{23}) \\
+&= ( x_1 \Be_1 + x_2 \Be_2 + x_3 \Be_3) \wedge (x_2 \Be_3 - x_3 \Be_2) \\
+\end{align*}
+
+Completing this calculation for each of the unit basic bivectors, we have
+%%+ (           + x_2 \Be_2            ) \wedge (x_2 \Be_3            ) \\
+%%+ (                       + x_3 \Be_3) \wedge (          - x_3 \Be_2) \\
+%+ ( x_1 \Be_1                        ) \wedge (x_2 \Be_3            ) \\
+%+ ( x_1 \Be_1                        ) \wedge (          - x_3 \Be_2) \\
+%%+ (           + x_2 \Be_2            ) \wedge (          - x_3 \Be_2) \\ %% = 0
+%%+ (                       + x_3 \Be_3) \wedge (x_2 \Be_3            ) \\ %% = 0
+\begin{align*}
+f(\Be_1 I) &= (x_2^2 + x_3^2) \Be_{23} - (x_1 x_2) \Be_{31} - (x_1 x_3) \Be_{12} \\
+f(\Be_2 I) &= -(x_1 x_2) \Be_{23} + (x_1^2 + x_3^2) \Be_{31} - (x_2 x_3) \Be_{12} \\
+f(\Be_3 I) &= -(x_1 x_3) \Be_{23} - (x_2 x_3) \Be_{31} - (x_1^2 x_2^2) \Be_{12} \\
+\end{align*}
+
+Observe that taking dot products with $(\Be_i I)^\dagger$ will select just the $\Be_i I$ term of the result, so one can
+form the matrix of this linear transformation that maps bivectors in basis $b$ to image vectors also in basis $b$ as follows
+
+\[
+{\begin{bmatrix}
+\emph{I}(B)
+\end{bmatrix}}_{b}^{b}
+=
+{\begin{bmatrix}
+\emph{I}(\Be_i I) \cdot (\Be_j I)^\dagger
+\end{bmatrix}}_{ij}
+=
+\int {\begin{bmatrix}
+(x_2^2 + x_3^2)  & - (x_1 x_2)  & - (x_1 x_3)  \\
+-(x_1 x_2)  & + (x_1^2 + x_3^2)  & - (x_2 x_3)  \\
+-(x_1 x_3)  & - (x_2 x_3)  & - (x_1^2 x_2^2)  \\
+\end{bmatrix}} dm
+\]
+
+Observe that this can also be written in a more typical tensor notation
+
+\[
+I_{ij} 
+= \emph{I}(\Be_i I) \cdot (\Be_j I)^\dagger 
+= \int (\delta_{ij} \Bx^2 - x_i x_j) dm
+\]
+
+Where, as usual for tensors, the meaning of the indexes and whether summation is required is implied.  In this case
+the coordinate transformation matrix for this linear transformation has components $I_{ij}$ (and no summation).
+
+\subsection{ coordinate transformation matrix for a couple other linear transformations }
+
+Seeing a function of a bivector for the first time is kind of intriging.  We can form the matrix of such a linear transformation
+from a basis of the bivector space to the space spanned by function.  For fun, let's calculate that matrix for the basis $b$ above
+for the following function:
+
+\[
+f(B) = \Be_1 \wedge (\Be_2 \cdot B)
+\]
+
+For this function operating on \R{3} bivectors we have:
+
+\begin{align*}
+f(\Be_{23}) &= \Be_1 \wedge (\Be_2 \cdot \Be_{23}) = -\Be_{31} \\
+f(\Be_{31}) &= \Be_1 \wedge (\Be_2 \cdot \Be_{31}) = 0 \\
+f(\Be_{12}) &= \Be_1 \wedge (\Be_2 \cdot \Be_{12}) = 0 \\
+\end{align*}
+
+So
+
+\[
+{\begin{bmatrix}
+f
+\end{bmatrix}}_b^b
+= 
+\begin{bmatrix}
+-1 & 0 & 0
+\end{bmatrix}
+\]
+
+For \R{4} one orthonormal basis is
+
+\[
+b = \{ 
+\Be_{12},
+\Be_{13},
+\Be_{14},
+\Be_{23},
+\Be_{24},
+\Be_{34}
+\}
+\]
+
+A basis for the span of $f$ is $b' = \{
+\Be_{13},
+\Be_{14}
+\}$.  Like any other coordinate transformation associated with a linear transformation we can write the matrix of the transformation that
+takes a coordinate vector in one basis into a coordinate vector for the basis for the image:
+
+\[
+{\begin{bmatrix}
+f(x)
+\end{bmatrix}}_{b'}
+=
+{\begin{bmatrix}
+f
+\end{bmatrix}}_b^{b'}
+{\begin{bmatrix}
+x
+\end{bmatrix}}_{b}
+\] 
+
+For this function $f$ and these pair of basis bivectors we have:
+
+\[
+{\begin{bmatrix}
+f
+\end{bmatrix}}_b^{b'}
+= 
+\begin{bmatrix}
+0 & 0 & 0 & 1 & 0 & 0 \\
+0 & 0 & 0 & 0 & 1 & 0 \\
+\end{bmatrix}
+\]
+
+\subsection{ Equation 3.126 details. }
+
+This statement from GAFP deserves expansion (or at least an exersize):
+
+\[
+A \cdot ( \Bx \wedge (\Bx \cdot B) )
+= \langle{A \Bx (\Bx \cdot B)}\rangle
+= \langle (A \cdot \Bx) \Bx B \rangle
+= B \cdot ( \Bx \wedge (\Bx \cdot A) )
+\]
+
+Perhaps this is obvious to the author, but wasn't to me.  To clarify this observe the following product
+
+\[
+\Bx ( \Bx \cdot B ) = \Bx \cdot ( \Bx \cdot B ) + \Bx \wedge ( \Bx \cdot B ) 
+\]
+
+By writing $B = \Bb \Bc = \Bb \wedge \Bc$ we can show that the dot product part of this product is zero:
+
+\begin{align*}
+\Bx \cdot ( \Bx \cdot B ) 
+&= \Bx \cdot ( (\Bx \cdot \Bb) \Bc - (\Bx \cdot \Bc) \Bb ) \\
+&= (\Bx \cdot \Bc) (\Bx \cdot \Bb) - (\Bx \cdot \Bb) (\Bx \cdot \Bc)) \\
+&= 0
+\end{align*}
+
+This provides the justification for the wedge product removal in the text, since
+one can write
+
+\begin{equation}
+\Bx \wedge ( \Bx \cdot B ) = \Bx ( \Bx \cdot B )
+\end{equation}\label{eqn:inertia_wedge_to_product}
+
+Although it wasn't stated in the text (\ref{eqn:inertia_wedge_to_product}), can
+be used to put this inertia product in a pure dot product form
+
+\begin{align*}
+A^\dagger \cdot (\Bx \wedge (\Bx \cdot B) )
+&= -\langle {A \Bx (\Bx \cdot B)} \rangle \\
+&= -\langle (A \cdot \Bx + A \wedge \Bx)(\Bx \cdot B) \rangle \\
+\end{align*}
+
+The trivector vector product has only vector and trivector components
+\[
+(A \wedge \Bx)(\Bx \cdot B) = \langle{ (A \wedge \Bx)(\Bx \cdot B)}\rangle_1 + \langle{(A \wedge \Bx)(\Bx \cdot B)}\rangle_3
+\]
+
+So $\langle{(A \wedge \Bx)(\Bx \cdot B)}\rangle_0 = 0$, and one can write
+
+\begin{align*}
+A^\dagger \cdot (\Bx \wedge (\Bx \cdot B) )
+&= - (A \cdot \Bx ) \cdot (\Bx \cdot B) \\
+&= (\Bx \cdot A) \cdot (\Bx \cdot B) \\
+\end{align*}
+
+As pointed out in the text this is symetric.  That can't be more clear than above.
+
+\end{document}               % End of document.
