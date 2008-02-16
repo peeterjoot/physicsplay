@@ -2,6 +2,22 @@
 
 \input{../peeters_macros.tex}
 
+\newcommand{\matrixoftx}[3]{
+{
+\begin{bmatrix}
+{#1}
+\end{bmatrix}
+}_{#2}^{#3}
+}
+
+\newcommand{\coordvec}[2]{
+{
+\begin{bmatrix}
+{#1}
+\end{bmatrix}
+}_{#2}
+}
+
 %
 % The real thing:
 %
@@ -65,7 +81,7 @@ Completing this calculation for each of the unit basic bivectors, we have
 \begin{align*}
 f(\Be_1 I) &= (x_2^2 + x_3^2) \Be_{23} - (x_1 x_2) \Be_{31} - (x_1 x_3) \Be_{12} \\
 f(\Be_2 I) &= -(x_1 x_2) \Be_{23} + (x_1^2 + x_3^2) \Be_{31} - (x_2 x_3) \Be_{12} \\
-f(\Be_3 I) &= -(x_1 x_3) \Be_{23} - (x_2 x_3) \Be_{31} - (x_1^2 x_2^2) \Be_{12} \\
+f(\Be_3 I) &= -(x_1 x_3) \Be_{23} - (x_2 x_3) \Be_{31} + (x_1^2 + x_2^2) \Be_{12} \\
 \end{align*}
 
 Observe that taking dot products with $(\Be_i I)^\dagger$ will select just the $\Be_i I$ term of the result, so one can
@@ -81,13 +97,14 @@ form the matrix of this linear transformation that maps bivectors in basis $b$ t
 \end{bmatrix}}_{ij}
 =
 \int {\begin{bmatrix}
-(x_2^2 + x_3^2)  & - (x_1 x_2)  & - (x_1 x_3)  \\
--(x_1 x_2)  & + (x_1^2 + x_3^2)  & - (x_2 x_3)  \\
--(x_1 x_3)  & - (x_2 x_3)  & - (x_1^2 x_2^2)  \\
+x_2^2 + x_3^2  & - x_1 x_2  & - x_1 x_3 \\
+-x_1 x_2  & x_1^2 + x_3^2  & - x_2 x_3  \\
+-x_1 x_3  & -x_2 x_3  & x_1^2 + x_2^2  \\
 \end{bmatrix}} dm
 \]
 
-Observe that this can also be written in a more typical tensor notation
+Observe that this (\R{3} specific expansion) can also be written in a more
+typical tensor notation
 
 \[
 I_{ij} 
@@ -105,9 +122,9 @@ function can be written in terms of an orthogonal basis $\{\sigma_i\}$ as follow
 
 \begin{equation}
 f(B) = \sum_i (f(B) \cdot \sigma_i) \cdot \frac{1}{\sigma_i}
-\end{equation}\label{eqn:kvector_orthogonal_decomp}
+\end{equation}\label{eqn:bladeOrthogDecomp}
 
-The dot product is required since the general product of two bivectors has grade-0, grade-2, and grade-4 terms.
+The dot product is required since the general product of two bivectors has grade-0, grade-2, and grade-4 terms (with a similar mix of higher grade terms for k-blades).
 
 Perhaps unobviously since one is not normally used to seeing a scalar-vector dot product, this formula is not only true for bivectors, but any grade blade, including
 vectors.  To verify this recall that the 
@@ -124,10 +141,10 @@ So, for a scalar-vector dot product is just the scalar product of the two
 a \cdot \Bx = \langle{ a \Bx }\rangle_1 = a \Bx
 \]
 
-The inverse in (\ref{eqn:kvector_orthogonal_decomp}) can be removed by reversion, and for a grade-r blade this sum of projective terms then becomes:
+The inverse in (\ref{eqn:bladeOrthogDecomp}) can be removed by reversion, and for a grade-r blade this sum of projective terms then becomes:
 
 \begin{equation}
-f(B) = (-1)^{r(r-1)/2} \frac{1}{\sigma_i \sigma_i^\dagger}\sum_i (f(B) \cdot \sigma_i) \cdot {\sigma_i}
+f(B) = (-1)^{r(r-1)/2} \frac{1}{{\abs{\sigma_i}}^2}\sum_i (f(B) \cdot \sigma_i) \cdot {\sigma_i}
 \end{equation}
 
 For an orthonormal basis we have
@@ -140,7 +157,7 @@ Which allows for a slightly simpler set of projective terms:
 
 \begin{equation}
 f(B) = (-1)^{r(r-1)/2} \sum_i (f(B) \cdot \sigma_i) \cdot {\sigma_i}
-\end{equation}\label{eqn:kvector_orthonormal_decomp}
+\end{equation}\label{eqn:OrthonormalDecomp}
 
 \subsection{ coordinate transformation matrix for a couple other linear transformations }
 
@@ -168,7 +185,9 @@ f
 \end{bmatrix}}_b^b
 = 
 \begin{bmatrix}
--1 & 0 & 0
+-1 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
 \end{bmatrix}
 \]
 
@@ -248,9 +267,9 @@ one can write
 
 \begin{equation}
 \Bx \wedge ( \Bx \cdot B ) = \Bx ( \Bx \cdot B )
-\end{equation}\label{eqn:inertia_wedge_to_product}
+\end{equation}\label{eqn:inertiaWedgeToProduct}
 
-Although it wasn't stated in the text (\ref{eqn:inertia_wedge_to_product}), can
+Although it wasn't stated in the text (\ref{eqn:inertiaWedgeToProduct}), can
 be used to put this inertia product in a pure dot product form
 
 \begin{align*}
@@ -268,9 +287,206 @@ So $\langle{(A \wedge \Bx)(\Bx \cdot B)}\rangle_0 = 0$, and one can write
 
 \begin{equation}
 A^\dagger \cdot (\Bx \wedge (\Bx \cdot B) ) = (\Bx \cdot A) \cdot (\Bx \cdot B)
-\end{equation}\label{eqn:inertia_tensor_as_dotdotdot}
+\end{equation}\label{eqn:iTensorTripleDot}
 
-As pointed out in the text this is symmetric.  That can't be more clear than in (\ref{eqn:inertia_tensor_as_dotdotdot}).
+As pointed out in the text this is symmetric.  That can't be more clear than in (\ref{eqn:iTensorTripleDot}).
+
+\subsection{ General dimension component expansion of inertia tensor terms }
+
+This triple dot product expansion allows for a more direct component expansion of the component form of the inertia tensor.
+There are three general cases to consider.
+
+\begin{itemize}
+\item The diagonal terms:
+
+\[
+(\Bx \cdot \sigma_i) \cdot (\Bx \cdot \sigma_i) 
+= (\Bx \cdot \sigma_i)^2
+\]
+
+Writing $\sigma_i = \Be_{st}$ where $s \ne t$, we have
+
+\begin{align*}
+(\Bx \cdot \Be_{st})^2
+&=
+( (\Bx \cdot \Be_s) \Be_t -(\Bx \cdot \Be_t) \Be_s )^2 \\
+&=
+x_s^2 + x_t^2 - 2 x_s x_t \Be_t \cdot \Be_s \\
+&=
+x_s^2 + x_t^2
+\end{align*}
+
+\item Off diagonal terms where basis bivectors have a line of intersection (always true for \R{3}).
+
+Here, ignoring the potential variation in sign, we can write the two basis bivectors as $\sigma_i = \Be_{si}$ and $\sigma_j = \Be_{ti}$, where $s \ne t \ne i$.  Computing the products we have
+
+\begin{align*}
+(\Bx \cdot \sigma_i) \cdot (\Bx \cdot \sigma_j)
+&= (\Bx \cdot \Be_{si}) \cdot (\Bx \cdot \Be_{ti})  \\
+&= ((\Bx \cdot \Be_s) \Be_i - (\Bx \cdot \Be_i) \Be_s) \cdot ((\Bx \cdot \Be_t) \Be_i - (\Bx \cdot \Be_i) \Be_t) \\
+&= (x_s \Be_i - x_i \Be_s) \cdot (x_t \Be_i - x_i \Be_t) \\
+&= x_s x_t \\
+\end{align*}
+
+\item Off diagonal terms where basis bivectors have no intersection.
+
+An example from \R{4} are the two bivectors $\Be_1 \wedge \Be_2$ and $\Be_3 \wedge \Be_4$
+
+In general, again ignoring the potential variation in sign, we can write the two basis bivectors as $\sigma_i = \Be_{su}$ and $\sigma_j = \Be_{tv}$, where $s \ne t \ne u \ne v$.  Computing the products we have
+
+\begin{align*}
+(\Bx \cdot \sigma_i) \cdot (\Bx \cdot \sigma_j)
+&= (\Bx \cdot \Be_{su}) \cdot (\Bx \cdot \Be_{tv})  \\
+&= ((\Bx \cdot \Be_s) \Be_u - (\Bx \cdot \Be_u) \Be_s) \cdot ((\Bx \cdot \Be_t) \Be_v - (\Bx \cdot \Be_v) \Be_t) \\
+&= 0 \\
+\end{align*}
+
+\end{itemize}
+
+For example, choosing basis $\sigma = \{ \Be_{12}, \Be_{13}, \Be_{14}, \Be_{23}, \Be_{24}, \Be_{34} \}$ the coordinate transformation matrix can be written out
+
+\[
+{\begin{bmatrix}
+f
+\end{bmatrix}}_\sigma^\sigma
+=
+\begin{bmatrix}
+x_1^2 + x_2^2     &     x_2 x_3      &     x_2 x_4    &     -x_1 x_3      &    -x_1 x_4    &     0 \\
+x_2 x_3           & x_1^2 + x_3^2    &     x_3 x_4      &     x_1 x_2    &            0  & -x_1 x_4 \\
+x_2 x_4           &  x_3 x_4         & x_1^2 + x_4^2    &         0    &      x_1 x_2    & x_1 x_3 \\
+-x_1 x_3          &  x_1 x_2         &          0     & x_2^2 + x_3^2  &      x_3 x_4    & -x_2 x_4 \\
+-x_1 x_4          &  0             &     x_1 x_2      &     x_3 x_4    & x_1^2 + x_4^2   & x_2 x_3 \\
+   0            &  -x_1 x_4        &     x_1 x_3      &    -x_2 x_4    &      x_2 x_3    &  x_3^2 + x_4^2 \\
+\end{bmatrix}
+\]
+
+\subsection{ Example calculation.  Masses in a line. }
+
+Pick some points on the x-axis, $\Br^{(i)}$ with masses $m_i$.
+The (\R{3}) inertia tensor with respect to basis $\{\Be_i I\}$, is
+
+\[
+\sum_i {
+\begin{bmatrix}
+ 0 & 0               & 0      \\
+ 0 & (r^{(i)}_1)^2     & 0      \\
+ 0 & 0               & (r^{(i)}_1)^2  \\
+\end{bmatrix}
+} m_i
+= \sum{ m_i \Br_i^2}
+\begin{bmatrix}
+0 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+\end{bmatrix}
+\]
+
+Observe that in this case the inertia tensor here only has components in the $zx$ and $xy$ planes (no component in the yz plane that is perpendicular to the line).
+
+\subsection{ Example calculation.  Masses in a plane. }
+
+Let $x = re^{i\theta}\Be_1$, where $i=\Be_1 \wedge \Be_2$ be a set of points in the $xy$ plane, and use $\sigma = \{\sigma_i = \Be_i I\}$ as the basis for the \R{3} bivector space.
+
+We need to compute
+
+\begin{align*}
+\Bx \cdot \sigma_i 
+&= r(e^{i\theta} \Be_1) \cdot ( \Be_i I ) \\
+&= r\langle{ e^{i\theta} \Be_1 \Be_i I }\rangle \\
+\end{align*}
+
+Calculation of the inertia tensor components has three cases, depending on the value of $i$
+
+\begin{itemize}
+\item $i=1$
+
+\begin{align*}
+\frac{1}{r}(\Bx \cdot \sigma_i) 
+&= {\langle e^{i\theta} I\rangle}_1 \\
+&= i \sin\theta I \\
+&= - \Be_3 \sin\theta \\
+\end{align*}
+
+\item $i=2$
+
+\begin{align*}
+\frac{1}{r}(\Bx \cdot \sigma_i) 
+&= {\langle e^{i\theta} \Be_1 \Be_2 I\rangle}_1 \\
+&= -{\langle e^{i\theta} \Be_3 \rangle}_1 \\
+&= - \Be_3 \cos\theta \\
+\end{align*}
+
+\item $i=3$
+
+\begin{align*}
+\frac{1}{r}(\Bx \cdot \sigma_i) 
+&= {\langle e^{i\theta} \Be_1 \Be_3 (\Be_3 \Be_1 \Be_2) \rangle}_1 \\
+&= {\langle e^{i\theta} \Be_2 \rangle}_1 \\
+&= e^{i\theta} \Be_2 \\
+\end{align*}
+
+\end{itemize}
+
+Thus for $i=\{1, 2, 3\}$, the diagonal terms are
+\[
+(\Bx \cdot \sigma_i)^2 = r^2 \{ \sin^2 \theta, \cos^2 \theta, 1\}
+\]
+
+and the non-diagonal terms are
+\[
+(\Bx \cdot \sigma_1) \cdot (\Bx \cdot \sigma_2) = r^2 \sin\theta \cos\theta
+\]
+\[
+(\Bx \cdot \sigma_1) \cdot (\Bx \cdot \sigma_3) = 0
+\]
+\[
+(\Bx \cdot \sigma_2) \cdot (\Bx \cdot \sigma_3) = 0
+\]
+
+Thus 
+
+\begin{align*}
+{
+\begin{bmatrix}
+\emph{I}
+\end{bmatrix}
+}_\sigma^\sigma
+&= 
+\sum m r^2
+{
+\begin{bmatrix}
+\sin^2 \theta  & \sin\theta \cos \theta & 0 \\
+\sin\theta \cos \theta & \cos^2 \theta & 0 \\
+0 & 0 & 1 \\
+\end{bmatrix}
+} \\
+\end{align*}
+
+\begin{align*}
+&=
+\sum 
+m r^2
+{
+\begin{bmatrix}
+\frac{1}{2} (1 - \cos 2\theta)    &   \frac{1}{2} \sin 2\theta      &     0 \\
+\frac{1}{2} \sin 2\theta      &     \frac{1}{2}(1 + \cos 2\theta)    &    0 \\
+0 & 0 & 1 \\
+\end{bmatrix}
+} \\
+&=
+\frac{1}{2} 
+\sum 
+m r^2
+\left(
+I + 
+{
+\begin{bmatrix}
+- \cos 2\theta    &    \sin 2\theta     &    0 \\
+\sin 2\theta      &     \cos 2\theta    &    0 \\
+0 & 0 & 1 \\
+\end{bmatrix}
+}
+\right) \\
+\end{align*}
 
 \end{document}               % End of document.
-
