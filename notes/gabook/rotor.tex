@@ -1,0 +1,396 @@
+\documentclass{article}      % Specifies the document class
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+\input{../peeters_macros.tex}
+
+\DeclareMathOperator{\Rej}{Rej}
+\DeclareMathOperator{\Exp}{e}
+
+%
+% The real thing:
+%
+
+                             % The preamble begins here.
+\title{ Rotor Notes. } % Declares the document's title.
+\author{Peeter Joot}         % Declares the author's name.
+%\date{}        % Deleting this command produces today's date.
+
+\begin{document}             % End of preamble and beginning of text.
+
+\maketitle{}
+
+\section{ Rotations strictly in a plane. }
+
+For a plane rotation, a rotation does not have to
+be expressed in terms of left and right half angle rotations, as is the case
+with complex numbers.  Starting with this ``natural'' one sided rotation
+we will see why the half angle double sided Rotor formula works.
+
+\subsection{ Identifying a plane with a bivector.  Justification. }
+Given a bivector $\BB$, we can say this defines the orientation of a plane
+(through the origin)
+since for any vector in the plane we have $\BB \wedge \Bx = 0$, or any vector
+strictly normal to the plane $\BB \cdot \Bx = 0$.
+
+Note that this naturally compares
+to the equation of a line (through the origin) expressed in terms of a
+direction vector $\Bb$,
+where $\Bb \wedge \Bx=0$ if $\Bx$ lies on the line, and $\Bb \cdot \Bx = 0$
+if $\Bx$ is normal to the line.
+
+Given this it's not unreasonable to identify the plane with its bivector.  This
+will be done below, and it should be clear that 
+loose language such as ``the plane $\BB$'', should really be interpretted
+as ``the plane with direction bivector $\BB$'', where the direction bivector
+has the wedge and dot product properties noted above.
+
+\subsection{ Components of a vector in and out of a plane. }
+
+To calculate the components of a vector in and out of a plane, we can form
+the product
+
+\[
+\Bx = \Bx \BB \inv{\BB} = \Bx \cdot \BB \inv{\BB} + \Bx \wedge \BB \inv{\BB}
+\]
+
+This is an orthogonal decomposition of the vector $\Bx$ where the first
+part is the projective term onto the plane $\BB$, and the second is the rejective
+term, the component not in the plane.  Let's verify this.
+
+Write $\Bx = \Bx_\parallel + \Bx_\perp$, where $\Bx_\parallel$, and $\Bx_\perp$ are the components of $\Bx$ parallel and perpenidular to the plane.  Also write
+$\BB = \Bb_1 \wedge \Bb_2$, where $\Bb_i$ are non-colinear vectors in the plane $\BB$.
+
+If $\Bx = \Bx_\parallel$, a vector entirely in the plane $\BB$, then one can
+write
+
+\[
+\Bx = a_1\Bb_1 + a_2\Bb_2
+\]
+
+and the wedge product term is zero
+
+\begin{align*}
+\Bx \wedge \BB 
+&= \left( a_1\Bb_1 + a_2\Bb_2 \right) \wedge \Bb_1 \wedge \Bb_2 \\
+&= a_1 ( \Bb_1 \wedge \Bb_1 ) \wedge \Bb_2
+ - a_2 ( \Bb_2 \wedge \Bb_2 ) \wedge \Bb_1 \\
+&= 0
+\end{align*}
+
+Thus the component parallel to the plane is composed strictly of the dot
+product term
+
+\begin{equation}
+\Bx_\parallel = \Bx \cdot \BB \inv{\BB}
+\end{equation}
+
+Or for a general vector not neccessarily in the plane the component
+of that vector in the plane, it's projection onto the plane is,
+
+\[
+\Proj_{\BB}(\Bx) = \Bx \cdot \BB \inv{\BB}
+= \inv{\abs{\BB}^2}(\BB \cdot \Bx)\BB
+= (\hat{\BB} \cdot \Bx)\hat{\BB}
+\]
+
+Now, for a vector that lies completely perpendicular to the plane $\Bx = \Bx_\perp$, the dot product term with the plane is zero.  To verify this observe
+
+\begin{align*}
+\Bx_\perp \cdot \BB 
+&= \Bx_\perp \cdot (\Bb_1 \wedge \Bb_2) \\
+&= (\Bx_\perp \cdot \Bb_1) \Bb_2 - (\Bx_\perp \cdot \Bb_2) \Bb_1 \\
+\end{align*}
+
+Each of these dot products are zero since $\Bx$ has no components that lie
+in the plane (those components if they existed could be expressed as linear
+combinations of $\Bb_i$).
+
+Thus only the component perpendicular to the plane is composed strictly of the 
+wedge product term
+
+\begin{equation}
+\Bx_\perp = \Bx \wedge \BB \inv{\BB}
+\end{equation}
+
+And again for a general vector we can write it's component that lies out
+of the plane as, the rejection of the plane from the vector as,
+
+\[
+\Rej_{\BB}(\Bx) 
+= \Bx \wedge \BB \inv{\BB}
+= -\inv{\abs{\BB}^2} \Bx \wedge \BB {\BB}
+= -\Bx \wedge \hat{\BB} \hat{\BB}
+\]
+
+\section{ Rotation around normal to arbitrarily oriented plane through origin }
+
+Having established the preliminaries, we can now express a rotation around
+the normal to a plane (with the plane and that normal through the origin).
+
+\begin{figure}[htp]
+\centering
+\includegraphics[totalheight=0.4\textheight]{rotor}
+\caption{Rotation of Vector}\label{fig:rotor}
+\end{figure}
+
+Such a rotation is illustrated in figure \ref{fig:rotor}
+preserves all components of the vector that are perpendicular
+to the plane, and operates only on the components parallel to the plane.
+
+Expressed in terms of exponentials and the projective and rejective decompositions above, this is
+
+\begin{align*}
+R_\theta(\Bx) 
+&= \Bx \wedge \BB \inv{\BB} + \left(\Bx \cdot \BB \inv{\BB}\right)\Exp^{\hat{\BB}\theta} \\
+&= \Bx \wedge \BB \inv{\BB} + \Exp^{-\hat{\BB}\theta}\left(\Bx \cdot \BB \inv{\BB}\right) \\
+\end{align*}
+
+Where we have made explicit note that a plane rotation does not commute with a vector in a plane (it's reverse is required).
+
+To demonstrate this write $i = \Be_2 \Be_1$, a unit bivector in some plane with unit vectors $\Be_i$ also in the plane.  If a vector
+lies in that plane we can write the rotation 
+
+\begin{align*}
+\Bx \Exp^{i\theta} 
+&= \left(a_1\Be_1 + a_2\Be_2\right)\left(\cos\theta + i\sin\theta\right) \\
+&= \cos\theta\left(a_1\Be_1 + a_2\Be_2\right) + \left(a_1\Be_1 + a_2\Be_2\right)\left(\Be_2 \Be_1\sin\theta\right) \\
+&= \cos\theta\left(a_1\Be_1 + a_2\Be_2\right) + \sin\theta \left(-a_1\Be_2 + a_2\Be_1\right) \\
+&= \cos\theta\left(a_1\Be_1 + a_2\Be_2\right) -\Be_2 \Be_1\sin\theta \left(a_1\Be_1 + a_2\Be_2\right) \\
+&= \Exp^{-i\theta}\Bx \\
+\end{align*}
+
+Similarily for a vector that lies outside of the plane we can write
+
+\begin{align*}
+\Bx \Exp^{i\theta} 
+&= (\sum_{j \ne 1,2} a_j \Be_j)(\cos\theta + \Be_2 \Be_1\sin\theta) \\
+&= (\cos\theta + \Be_2 \Be_1\sin\theta) (\sum_{j \ne 1,2} a_j \Be_j) \\
+&= \Exp^{i\theta}\Bx
+\end{align*}
+
+The multivector for a rotation in a plane perpentidular to a vector commutes with that vector.  The properties of the 
+exponential allow us to factor a rotation
+
+\[
+R(\theta) = R(\alpha\theta) R((1-\alpha)\theta)
+\]
+
+where $\alpha <= 1$, and in particular we can set $\alpha = 1/2$, and write
+
+\begin{align*}
+R_\theta(\Bx) 
+&= \Bx \wedge \BB \inv{\BB} + \left(\Bx \cdot \BB \inv{\BB}\right)\Exp^{\hat{\BB}\theta} \\
+&= \left(\Bx \wedge \BB \inv{\BB}\right) \Exp^{-\hat{\BB}\theta/2} \Exp^{\hat{\BB}\theta/2} 
+ + \left(\Bx \cdot \BB \inv{\BB} \right) \Exp^{\hat{\BB}\theta/2} \Exp^{\hat{\BB}\theta/2} \\
+&= \Exp^{-\hat{\BB}\theta/2} \left(\Bx \wedge \BB \inv{\BB}\right) \Exp^{\hat{\BB}\theta/2}  
++ \Exp^{-\hat{\BB}\theta/2} \left(\Bx \cdot \BB \inv{\BB}\right)\Exp^{\hat{\BB}\theta/2} \\
+&= \Exp^{-\hat{\BB}\theta/2} \left(\Bx \wedge \BB + \Bx \cdot \BB\right) \inv{\BB} \Exp^{\hat{\BB}\theta/2} \\
+&= \Exp^{-\hat{\BB}\theta/2} \left(\Bx \BB \inv{\BB} \right) \Exp^{\hat{\BB}\theta/2}  
+\end{align*}
+
+This takes us full circle from dot and wedge products back to $\Bx$, and allows us to express the rotated vector as:
+
+\begin{equation}\label{eqn:rotor}
+R_\theta(\Bx) 
+= \Exp^{-\hat{\BB}\theta/2} \Bx \Exp^{\hat{\BB}\theta/2}
+\end{equation}
+
+Only when the vector lies in the plane ($\Bx = \Bx_\parallel$, or $\Bx \wedge \BB = 0$) can be written using the familiar left or right ``full angle'' rotation exponential that we are used to from complex arithmetric:
+
+\[
+R_\theta(\Bx) = \Exp^{-\hat{\BB}\theta} \Bx = \Bx \Exp^{\hat{\BB}\theta}
+\]
+
+\section{ Rotor equation in terms of normal to plane. }
+
+The rotor equation above is valid for any number of dimensions.  For \R{3} we can alternatively parameterize the plane in terms of
+a unit normal $\Bn$:
+
+\[
+\BB = k i\Bn
+\]
+
+Here $i$ is the \R{3} pseudoscalar $\Be_1 \Be_2 \Be_3$.
+
+Thus we can write
+
+\[
+\hat{\BB} = i\Bn
+\]
+
+and expressing \ref{eqn:rotor} in terms of the unit normal becomes trivial
+
+\begin{equation}
+R_\theta(\Bx) 
+= \Exp^{- i {\Bn}\theta/2} \Bx \Exp^{i{\Bn}\theta/2}
+\end{equation}
+
+Expressing this in terms of components and the unit normal is a bit harder
+
+\begin{align*}
+R_\theta(\Bx) 
+&= \Bx \wedge \BB \inv{\BB} + \left(\Bx \cdot \BB \inv{\BB}\right)\Exp^{\hat{\BB}\theta} \\
+&= \Bx \wedge (i\Bn) \inv{i\Bn} + \left(\Bx \cdot (i\Bn) \inv{i\Bn}\right)\Exp^{{i\Bn}\theta} \\
+\end{align*}
+
+Now, 
+
+\begin{align*}
+\Bx \wedge (i\Bn) 
+&= \inv{2}(\Bx i \Bn + i \Bn \Bx) \\
+&= \frac{i}{2}(\Bx \Bn + \Bn \Bx) \\
+&= (\Bx \cdot \Bn) i
+\end{align*}
+
+And
+
+\begin{align*}
+\inv{i\Bn} 
+&= \inv{i\Bn} \inv{\Bn i} \Bn i \\
+&= - i \Bn \\
+\end{align*}
+
+So the rejective term becomes
+\begin{align*}
+\Bx \wedge \BB \inv{\BB} 
+&= \Bx \wedge (i\Bn) \inv{i\Bn} \\
+&= \Bx \wedge (i\Bn) \inv{i\Bn} \\
+&= (\Bx \cdot \Bn) i (-i) \Bn \\
+&= (\Bx \cdot \Bn) \Bn \\
+&= \Proj_{\Bn}(\Bx) \\
+\end{align*}
+
+Now, for the dot product with the plane term, we have
+
+\begin{align*}
+\Bx \cdot \BB
+&= \Bx \cdot (i \Bn) \\
+&= \inv{2}(\Bx i \Bn - i \Bn \Bx) \\
+&= (\Bx \wedge \Bn)i \\
+\end{align*}
+
+Putting it all together we have
+
+\begin{equation}\label{eqn:rotexp}
+R_\theta(\Bx) 
+= (\Bx \cdot \Bn) \Bn + (\Bx \wedge \Bn)\Bn \Exp^{{i\Bn}\theta}
+\end{equation}
+
+In terms of explicit sine and cosine terms this is (observe that $(i\Bn)^2 = -1$),
+
+\begin{align*}
+R_\theta(\Bx) 
+&= \left(\Bx \cdot \Bn\right) \Bn + \left(\Bx \wedge \Bn\right)\Bn \left(\cos\theta + i\Bn \sin\theta\right) \\
+\end{align*}
+
+\begin{equation}\label{eqn:rotnorm}
+R_\theta(\Bx) =
+\left(\Bx \cdot \Bn\right) \Bn + \left(\Bx \wedge \Bn\right)\Bn \cos\theta + (\Bx \wedge \Bn) i \sin\theta 
+\end{equation}
+
+\begin{figure}[htp]
+\centering
+\includegraphics[totalheight=0.4\textheight]{normalRot}
+\caption{Direction vectors associated with rotation}\label{fig:normalRot}
+\end{figure}
+
+This triplet of mutually orthogonal direction vectors, 
+$\Bn$, $(\Bx \wedge \Bn)\Bn$, and $(\Bx \wedge \Bn) i$
+are illustrated in figure \ref{fig:normalRot}.  The component of the vector in the direction of the normal
+$\Proj_\Bn(\Bx) = \Bx \cdot \Bn \Bn$ is unaltered by the rotation.
+The rotation is applied to the remaining component of $\Bx$, $\Rej_{\Bn}(\Bx) = (\Bx \wedge \Bn)\Bn$, and we rotate
+in the direction $(\Bx \wedge \Bn) i$
+
+\subsection{ Vector rotation in terms of dot and cross products only. }
+
+Expression of this rotation formula \ref{eqn:rotnorm} in terms of ``vector'' relations is also possible, by removing the wedge
+products and the pseudoscalar references.
+
+First the rejective term
+
+\begin{align*}
+(\Bx \wedge \Bn) \Bn 
+&= ((\Bx \cross \Bn) i) \Bn \\
+&= ((\Bx \cross \Bn) i) \cdot \Bn \\
+&= \inv{2} ( ((\Bx \cross \Bn) i) \Bn - \Bn ((\Bx \cross \Bn) i)) \\
+&= \frac{i}{2} ( (\Bx \cross \Bn) \Bn - \Bn (\Bx \cross \Bn) ) \\
+&= i ( (\Bx \cross \Bn) \wedge \Bn ) \\
+&= i^2 ( (\Bx \cross \Bn) \cross \Bn ) \\
+&= \Bn \cross (\Bx \cross \Bn) \\
+\end{align*}
+
+The next term expressed in terms of the cross product is
+
+\begin{align*}
+(\Bx \wedge \Bn) i
+&=
+(\Bx \cross \Bn) i^2 \\
+&= \Bn \cross \Bx \\
+\end{align*}
+
+And putting it all together we have
+
+\begin{equation}\label{eqn:rotcross}
+R_\theta(\Bx) =
+\left(\Bx \cdot \Bn\right) \Bn 
+ + \left(\Bn \cross \Bx\right) \cross \Bn \cos\theta 
+ + \Bn \cross \Bx \sin\theta 
+\end{equation}
+
+Compare equation \ref{eqn:rotcross} to \ref{eqn:rotnorm} and \ref{eqn:rotexp}, and then back to \ref{eqn:rotor}.
+
+\section{ Rotation between two unit vectors. }
+
+For a general rotation we have the ``half angle'' rotor formulation in terms of exponentials, but we can remove the explicit 
+exponential notation where convienent as in:
+
+\begin{align*}
+R_\theta(\Bx) 
+&= \Exp^{-\hat{\BB}\theta/2} \Bx \Exp^{\hat{\BB}\theta/2} \\
+&= \BR^\dagger \Bx \BR \\
+\end{align*}
+
+Here, we write $\BR = \Exp^{\hat{\BB}\theta/2}$.  
+
+\begin{figure}[htp]
+\centering
+\includegraphics[totalheight=0.4\textheight]{parallelogramvec}
+\caption{Sum of unit vectors bisects angle between.}\label{fig:parallelogramvec}
+\end{figure}
+
+When rotating between two arbitrarily oriented unit vectors, 
+say from $\Ba$ to $\Bb$ as in figure \ref{fig:parallelogramvec}, 
+we can write
+
+\[
+\Bb = \Ba\Exp^{\Bi\theta} = \Exp^{-\Bi\theta/2}\Ba \Exp^{\Bi\theta/2} = \BR^\dagger \Ba \BR
+\]
+
+Where $\Bi = \frac{\Bb \wedge \Ba}{\abs{\Bb \wedge \Ba}}$.  This is enough to calculate the rotor $\BR$.
+
+\[
+\BR = \cos{\theta/2} + \frac{\Bb \wedge \Ba}{\abs{\Bb \wedge \Ba}}\sin{\theta/2}
+\]
+
+The trig terms can be calculated from the half angle formulas in terms of $\cos\theta = \Ba \cdot \Bb$, but the fact that
+the sum of the two unit vectors (running to the tip of the parallelogram as in figure \ref{fig:parallelogramvec}) bisects
+the angle between the two vectors (when that angle is less than $\pi$).  Thus we can write
+
+\begin{equation*}
+\frac{\Ba + \Bb}{\abs{\Ba + \Bb}} = \Exp^{\Bi\theta/2} \Ba
+\end{equation*}
+
+Thus the rotor is
+\[
+\BR = \Exp^{\Bi\theta/2} = \frac{1 + \Bb\Ba}{\abs{\Ba + \Bb}} 
+\]
+
+FIXME: review the signs and orientations of all the rotations in this text.  Have switched things part way through.
+
+\end{document}               % End of document.
