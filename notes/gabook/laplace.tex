@@ -1,0 +1,312 @@
+\documentclass{article}      % Specifies the document class
+
+\input{../peeters_macros.tex}
+
+\newcommand{\laplacian}[0]{\nabla^2}
+\newcommand{\Dsq}[2] {\frac {\partial^2 {#1}} {\partial {#2}^2}}
+\newcommand{\dxj}[2] {\frac {\partial {#1}} {\partial {x_{#2}}}}
+\newcommand{\dsqxj}[2] {\frac {\partial^2 {#1}} {\partial {x_{#2}}^2}}
+\DeclareMathOperator{\Exp}{e}
+\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+
+%
+% The real thing:
+%
+
+                             % The preamble begins here.
+\title{exponential solutions to laplace equation}
+\author{Peeter Joot}         % Declares the author's name.
+%\date{}        % Deleting this command produces today's date.
+
+\begin{document}             % End of preamble and beginning of text.
+
+\maketitle{}
+
+\section{ The problem. }
+
+Want solutions of
+
+\[
+\laplacian f = \sum_k \dsqxj{f}{k} = 0
+\]
+
+For real f.
+
+\subsection{ One dimension. }
+
+Here the problem is easy, we just integrate twice:
+
+\[
+f = cx + d
+\]
+
+\subsection{ Two dimensions. }
+
+Solve:
+
+\[
+\dsqxj{f}{1} + \dsqxj{f}{2} = 0
+\]
+
+Can find solutions of the form $f = X(x_1)Y(x_2)$.  Differentiating we have:
+
+\[
+X''Y + XY'' = 0
+\]
+
+So, for $X \ne 0$, and $Y \ne 0$:
+\[
+\frac{X''}{X} = -\frac{Y''}{Y} = k^2
+\]
+
+\[
+\implies
+X = \Exp^{kx}
+\]
+\[
+Y = \Exp^{k\Bi y}
+\]
+
+\[
+\implies
+f = XY = \Exp^{k(x + \Bi y)}
+\]
+
+Here $\Bi$ is anything that squares to -1.  Traditionally this is the
+complex unit imaginary, but we are also free to use a geometric product unit bivector such as $\Bi = \Be_1 \wedge \Be_2 = \Be_1\Be_2 = \Be_{12}$, or $\Bi = \Be_{21}$.
+
+With $\Bi = \Be_{12}$ for example we have:
+
+\begin{align*}
+f = XY = \Exp^{k(x + \Bi y)} 
+&= \Exp^{k(x + \Be_{12} y)} \\
+&= \Exp^{k(x\Be_{1}\Be_1 + \Be_{12} y)} \\
+&= \Exp^{k\Be_1(x\Be_1 + \Be_2 y)} \\
+\end{align*}
+
+Writing $\Br = \sum x_i \Be_i$, all of the following are solutions
+of the laplacian
+
+\begin{align*}
+\Exp^{k\Be_1\Br} \\
+\Exp^{\Br k\Be_1} \\
+\Exp^{k\Be_2\Br} \\
+\Exp^{\Br k\Be_2} \\
+\end{align*}
+
+Now there isn't anything special about the use of the x and y axis so it is reasonable to expect that, given any constant vector $\Bv$, 
+the the following are also solutions
+
+\begin{align*}
+\Exp^{\Br\Bv} &= \Exp^{\Br \cdot \Bv + \Br \wedge \Bv} \\
+\Exp^{\Bv\Br} &= \Exp^{\Br \cdot \Bv - \Br \wedge \Bv} \\
+\end{align*}
+
+Provided $\Br$, and $\Bv$ aren't colinear, the wedge product component of the above can be written in terms of a unit bivector
+$\Bi = \frac{\Br \wedge \Bv}{\abs{\Br \wedge \Bv}}$:
+
+\begin{align*}
+\Exp^{\Br\Bv} &= \Exp^{\Br \cdot \Bv + \Br \wedge \Bv} \\
+&= \Exp^{\Br \cdot \Bv + \left( \frac{\Br \wedge \Bv}{\abs{\Br \wedge \Bv}} \right) {\abs{\Br \wedge \Bv}}} \\
+&= \Exp^{\Br \cdot \Bv} \left( \cos{\abs{\Br \wedge \Bv}} + \left(\frac{\Br \wedge \Bv}{\abs{\Br \wedge \Bv}}\right) \sin{\abs{\Br \wedge \Bv}} \right) \\
+&= \Exp^{\Br \cdot \Bv} \left( \cos{\abs{\Br \wedge \Bv}} + \Bi \sin{\abs{\Br \wedge \Bv}} \right) \\
+\end{align*}
+
+And, for the reverse:
+\begin{align*}
+(\Exp^{\Br\Bv})^\dagger = \Exp^{\Bv\Br}
+&= \Exp^{\Br \cdot \Bv} \left( \cos{\abs{\Br \wedge \Bv}} - \Bi \sin{\abs{\Br \wedge \Bv}} \right) \\
+\end{align*}
+
+This exponential however has both scalar and bivector parts, and we are looking for real solutions, so we can use linear combinations of the
+exponential and its reverse 
+to write strictly real solutions for the $\Br \wedge \Bv \ne 0$ cases:
+
+\begin{align*}
+\inv{2}\left(\Exp^{\Br\Bv} + \Exp^{\Bv\Br}\right) = \Exp^{\Br\cdot\Bv}\cos{\abs{\Br \wedge \Bv}} \\
+\inv{2\Bi}\left(\Exp^{\Br\Bv} - \Exp^{\Bv\Br}\right) = \Exp^{\Br\cdot\Bv}\sin{\abs{\Br \wedge \Bv}} \\
+\end{align*}
+
+Also note that further linear combinations (with positive and negative values for $\Bv$) can be taken, so we can write solutions to the laplacian in 
+the symmetric, real numbered, coordinate free, form
+
+\begin{align*}
+\cosh(\Br\cdot\Bv)\cos{\abs{\Br \wedge \Bv}} \\
+\sinh(\Br\cdot\Bv)\cos{\abs{\Br \wedge \Bv}} \\
+\cosh(\Br\cdot\Bv)\sin{\abs{\Br \wedge \Bv}} \\
+\sinh(\Br\cdot\Bv)\sin{\abs{\Br \wedge \Bv}} \\
+\end{align*}
+
+\subsection{ Verify the expontial solution. }
+
+It is simple enough to verify that the vector product exponential solution above is valid in \R{2}, and it's tempting to assume that this
+is also a solution for \R{N}.  That isn't the case, but to demonstrate this requires a few interesting geometric product manipulations (perhaps
+obvious if tackled differently or to somebody with a better grasp of all the concepts).
+
+Let's calculate one of the partials of the exponential solution
+
+\begin{align*}
+\dxj{}{j}\Exp^{\Br\Bv} 
+&= \dxj{}{j}\Exp^{\Br \cdot \Bv + \Br \wedge \Bv} \\
+&= \left(\dxj{}{j}\Exp^{\Br \cdot \Bv}\right) \Exp^{\Br \wedge \Bv} + \Exp^{\Br \cdot \Bv}\dxj{}{j}{\Exp^{\Br \wedge \Bv}} \\
+&= \dxj{(\Br \cdot \Bv)}{j}\Exp^{\Br\Bv} + \Exp^{\Br \cdot \Bv}\dxj{}{j}{\Exp^{\Br \wedge \Bv}} \\
+&= (\Be_j \cdot \Bv)\Exp^{\Br\Bv} + \Exp^{\Br \cdot \Bv}\dxj{}{j}{\Exp^{\Br \wedge \Bv}} \\
+&= v_j\Exp^{\Br\Bv} + \Exp^{\Br \cdot \Bv}\dxj{}{j}{\Exp^{\Br \wedge \Bv}} \\
+\end{align*}
+
+Now, how do we differentiate this remaining bivector exponential?  Since bivectors do not generally commute, loose application of the 
+chain rule $\frac{df(g)}{dx} = \frac{df}{dg}\frac{dg}{dx} = \frac{dg}{dx}\frac{df}{dg}$ may not be appropriate (what order would one use).  Instead
+write this expontial in terms of scalar and bivector parts and differentiate that
+
+\begin{align*}
+\dxj{}{j}{\Exp^{\Br \wedge \Bv}} 
+&= \dxj{}{j} \left( \cos{\abs{\Br \wedge \Bv}} + \Bi \sin{\abs{\Br \wedge \Bv}} \right) \\
+&= \left(-\sin{\abs{\Br \wedge \Bv}} + \Bi \cos{\abs{\Br \wedge \Bv}} \right)\dxj{\abs{\Br \wedge \Bv}}{j} + \dxj{\Bi}{j} \sin{\abs{\Br \wedge \Bv}} \\
+&= \Bi\left(\Bi\sin{\abs{\Br \wedge \Bv}} + \cos{\abs{\Br \wedge \Bv}} \right)\dxj{\abs{\Br \wedge \Bv}}{j} + \dxj{\Bi}{j} \sin{\abs{\Br \wedge \Bv}} \\
+&= \Bi\Exp^{\Br \wedge \Bv} \dxj{\abs{\Br \wedge \Bv}}{j} + \dxj{\Bi}{j} \sin{\abs{\Br \wedge \Bv}} \\
+&= \Exp^{\Br \wedge \Bv} \dxj{\abs{\Br \wedge \Bv}}{j} + \dxj{\Bi}{j} \sin{\abs{\Br \wedge \Bv}} \\
+\end{align*}
+
+%\subsubsection{ partial of the unit bivector term }
+For \R{2}, it is fairly simple to confirm that 
+\[
+\dxj{\Bi}{j} = 0 
+\]
+
+This makes some intuitive sense (would the unit bivector for the plane be changed by varing one of the length of one of the components).  To prove this
+in general takes a bit more work.
+
+\begin{align*}
+\dxj{\Bi}{j}
+&= \dxj{}{j} \frac{\Br \wedge \Bv}{\abs{\Br \wedge \Bv}} \\
+&= \dxj{(\Br \wedge \Bv)}{j} \inv{\abs{\Br \wedge \Bv}} + {(\Br \wedge \Bv)} \dxj{}{j} \inv{\abs{\Br \wedge \Bv}} \\
+&= (\Be_j \wedge \Bv) \inv{\abs{\Br \wedge \Bv}} + (\Br \wedge \Bv) \dxj{}{j} {(\Br \wedge \Bv \Bv \wedge \Br)}^{-1/2} \\
+&= (\Be_j \wedge \Bv) \inv{\abs{\Br \wedge \Bv}} -\inv{2 \abs{\Br \wedge \Bv}^3} {\Br \wedge \Bv} \dxj{}{j} ({\Br \wedge \Bv}{\Bv \wedge \Br}) \\
+&= (\Be_j \wedge \Bv) \inv{\abs{\Br \wedge \Bv}} -\inv{2 \abs{\Br \wedge \Bv}^3} {\Br \wedge \Bv} (\Be_j \wedge \Bv\Bv \wedge \Br + \Br \wedge \Bv\Bv \wedge \Be_j) \\
+&= (\Be_j \wedge \Bv) \inv{\abs{\Br \wedge \Bv}} +\inv{2 \abs{\Br \wedge \Bv}} \Bi ((\Be_j \wedge \Bv) \Bi + \Bi (\Be_j \wedge \Bv)) \\
+&= \inv{\abs{\Br \wedge \Bv}} \left( \Be_j \wedge \Bv  +\inv{2}\left( \Bi(\Be_j \wedge \Bv)\Bi - \Be_j \wedge \Bv \right) \right) \\
+&= \inv{2 \abs{\Br \wedge \Bv}} \left( \Be_j \wedge \Bv  + \Bi(\Be_j \wedge \Bv)\Bi \right) \\
+&= \inv{2 \abs{\Br \wedge \Bv}} \left( \Be_j \wedge \Bv  - \Exp^{-\Bi \pi/2}(\Be_j \wedge \Bv)\Exp^{\Bi \pi/2} \right) \\
+\end{align*}
+
+This last term is a rotation by $\pi$ in the plane of $\Bi$.
+
+If $\BB = \Be_j \wedge \Bv$ lies in the plane ($\BB = k\Bi$) we have:
+
+\[
+\BB + \Bi (k\Bi) \Bi = \BB - k\Bi = \BB - \BB = 0
+\]
+
+How about for other orientations of $\BB$?  In general this won't be zero.  As a linear operator, the rotation of $\BB$ will be the sum of the
+rotations of the components that are in the plane of rotation and the components out of the plane, so taking the difference, all the components in the plane
+will be zero.
+
+Example, in \R{3}:
+
+\[
+(1,1,1)\wedge(-1,1,1) = 
+\begin{vmatrix}
+ 1 & 1 \\
+ -1 & 1 \\
+\end{vmatrix}(\Be_{13} + \Be_{12}) = 2(\Be_{13} + \Be_{12})
+\]
+
+Rotation of the direction vectors for the plane by $\pi$ in the $\Be_{12}$ plane we have:
+
+\[
+-\Be_{12}(1,1,1)\Be_{12}= 
+(\Be_{2}
+-\Be_{1}
++\Be_{213})\Be_{12}
+= (-\Be_{1} -\Be_{2} + \Be_{3})
+\]
+
+and
+
+\[
+-\Be_{12}(-1,1,1)\Be_{12}= 
+(-\Be_{2}
+-\Be_{1}
++\Be_{213})\Be_{12}
+= (\Be_{1} -\Be_{2} + \Be_{3})
+\]
+
+So the bivector for the plane with the direction vectors rotated is:
+\[
+%(-1,-1,1)
+%( 1,-1,1) = 
+(-1,-1,1)\wedge(1,-1,1) = 
+\begin{vmatrix}
+ -1 & 1 \\
+ -1 & 1 \\
+\end{vmatrix}
+\Be_{23}
++
+\begin{vmatrix}
+ -1 & 1 \\
+ 1 & 1 \\
+\end{vmatrix}
+\Be_{13}
++
+\begin{vmatrix}
+ -1 & -1 \\
+ 1 & -1 \\
+\end{vmatrix}
+\Be_{12}
+=
+-2\Be_{13} + 2\Be_{12}
+\]
+
+Taking the difference, the component in the plane of rotation vanishes as expected, and in this particular case we have:
+
+\[
+\BB + \Bi\BB\Bi = \BB - \Bi^\dagger\BB\Bi = 
+2(\Be_{13} + \Be_{12}) -(-2\Be_{13} + 2\Be_{12}) = 4\Be_{13}
+\]
+
+In the general case to calculate the remainder, we have to know how to compute the projection of a bivector onto a plane.  The procedure for this is similar to a vector
+projection onto a space, and we calculate
+
+\begin{align*}
+\BB\inv{\BA}\BA 
+&= \left(\BB \cdot \inv{\BA} +{\langle{\BB \wedge \inv{\BA}}\rangle}_2 +\BB \wedge \inv{\BA}\right) \BA \\
+&= 
+\BB \cdot \inv{\BA} \BA \\
+&+{\langle{ {\BB \inv{\BA}}\rangle}_2} \cdot \BA 
++{\langle{{\langle{ {\BB \inv{\BA}}\rangle}_2} \BA}\rangle}_2 
++{\langle{ {\BB \inv{\BA}}\rangle}_2} \wedge \BA  \\
+&+(\BB \wedge \inv{\BA}) \cdot \BA 
++{\langle{\BB \wedge \inv{\BA} \BA}\rangle}_4 
++\BB \wedge \inv{\BA} \wedge \BA \\
+\end{align*}
+
+Since the LHS is a bivector, all the 0-grade, 4-grade and 6-grade terms must be zero (though the 6-grade term $\BB \wedge \inv{\BA} \wedge \BA$ is plainly zero anyhow).  That leaves:
+
+\begin{equation}\label{eqn:bivectorprojbivector}
+\BB
+= 
+\BB \cdot \inv{\BA} \BA \\
+%+{\langle{{\langle{ {\BB \inv{\BA}}\rangle}_2} \BA}\rangle}_2 
++\gpgrade{\gpgrade{\BB\inv\BA}{2} \BA}{2}
++\left(\BB \wedge \inv{\BA}\right) \cdot \BA 
+\end{equation}
+\newcommand{\grade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+
+%\begin{align*}
+%\BB + \Bi\BB\Bi
+%&= \left(\BB\cdot\inv{\Bi}\right)\Bi + \left(\BB\wedge\inv{\Bi}\right)\Bi - \Bi^\dagger\left( \left(\BB\cdot\inv{\Bi}\right)\Bi + \left(\BB\wedge\inv{\Bi}\right)\Bi \right) \Bi \\
+%&= \left(\BB\cdot\inv{\Bi}\right)\Bi + \left(\BB\wedge\inv{\Bi}\right)\Bi - \Bi^\dagger \left( \left(\BB\cdot\inv{\Bi}\right)\Bi + \left(\BB\wedge\inv{\Bi}\right)\Bi\right) \Bi \\
+%&= \left(\BB\wedge\inv{\Bi}\right)\Bi + \Bi \left(\BB\wedge\inv{\Bi}\right) \\
+%&= -\left(\BB\wedge{\Bi}\right)\Bi - \Bi \left(\BB\wedge{\Bi}\right) \\
+%\end{align*}
+%
+%Check:
+%\begin{align*}
+%\BB \wedge \Bi =
+%2\left(\Be_{13} + \Be_{12}\right) \wedge \Be_{12}
+%= 0
+%\end{align*}
+%
+%Must be a mistake here somewhere, since these aren't consistent (pretty sure the numerical calculation is right).
+
+\end{document}               % End of document.
