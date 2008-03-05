@@ -8,6 +8,9 @@
 \newcommand{\dsqxj}[2] {\frac {\partial^2 {#1}} {\partial {x_{#2}}^2}}
 \DeclareMathOperator{\Exp}{e}
 \newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+\newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
+\newcommand{\gpgradefour}[1] {\gpgrade{#1}{4}}
 
 %
 % The real thing:
@@ -167,14 +170,15 @@ write this expontial in terms of scalar and bivector parts and differentiate tha
 &= \Exp^{\Br \wedge \Bv} \dxj{\abs{\Br \wedge \Bv}}{j} + \dxj{\Bi}{j} \sin{\abs{\Br \wedge \Bv}} \\
 \end{align*}
 
-%\subsubsection{ partial of the unit bivector term }
-For \R{2}, it is fairly simple to confirm that 
+\subsection{ partial of the unit bivector term }
+For \R{2}, one can confirm that 
 \[
 \dxj{\Bi}{j} = 0 
 \]
 
-This makes some intuitive sense (would the unit bivector for the plane be changed by varing one of the length of one of the components).  To prove this
-in general takes a bit more work.
+This makes some intuitive sense (would the unit bivector for the plane be changed by varing one of the length of one of the components).
+That, again in \R{2}, is required to confirm that the exponential of the vector product is in fact a solution to Laplaces equation.
+However, to determine the conditions where this is generally true for \R{N} takes more work.
 
 \begin{align*}
 \dxj{\Bi}{j}
@@ -264,49 +268,218 @@ Taking the difference, the component in the plane of rotation vanishes as expect
 2(\Be_{13} + \Be_{12}) -(-2\Be_{13} + 2\Be_{12}) = 4\Be_{13}
 \]
 
+\subsection{ Projection of a plane onto a plane. }
+
 In the general case to calculate the remainder, we have to know how to compute the projection of a bivector onto a plane.  The procedure for this is similar to a vector
 projection onto a space, and we calculate
 
 \begin{align*}
 \BB\inv{\BA}\BA 
-&= \left(\BB \cdot \inv{\BA} +{\langle{\BB \wedge \inv{\BA}}\rangle}_2 +\BB \wedge \inv{\BA}\right) \BA \\
+&= \left(\BB \cdot \inv{\BA} + \gpgradetwo{ \BB \inv{\BA} } + \BB \wedge \inv{\BA}\right) \BA \\
 &= 
 \BB \cdot \inv{\BA} \BA \\
-&+{\langle{ {\BB \inv{\BA}}\rangle}_2} \cdot \BA 
-+{\langle{{\langle{ {\BB \inv{\BA}}\rangle}_2} \BA}\rangle}_2 
-+{\langle{ {\BB \inv{\BA}}\rangle}_2} \wedge \BA  \\
-&+(\BB \wedge \inv{\BA}) \cdot \BA 
-+{\langle{\BB \wedge \inv{\BA} \BA}\rangle}_4 
+&
++\gpgradetwo{ \BB \inv{\BA} } \cdot \BA 
++\gpgradetwo{ \gpgradetwo{ \BB \inv{\BA} } \BA }
++\gpgradetwo{ \BB \inv{\BA} } \wedge \BA \\
+&
++\left(\BB \wedge \inv{\BA}\right) \cdot \BA 
++\gpgradefour{\BB \wedge \inv{\BA} \BA}
 +\BB \wedge \inv{\BA} \wedge \BA \\
 \end{align*}
 
-Since the LHS is a bivector, all the 0-grade, 4-grade and 6-grade terms must be zero (though the 6-grade term $\BB \wedge \inv{\BA} \wedge \BA$ is plainly zero anyhow).  That leaves:
+Since $\inv{\BA} = -\frac{\BA}{{\abs{\BA}}^2}$ implies that the 6-grade term $\BB \wedge \inv{\BA} \wedge \BA$ is zero.  The fact that the LHS is a bivector
+implies that the 0-grade and 4-grade terms are zero (also independently implies that the 6-grade term is zero).  This leaves:
 
 \begin{equation}\label{eqn:bivectorprojbivector}
 \BB
 = 
 \BB \cdot \inv{\BA} \BA \\
-%+{\langle{{\langle{ {\BB \inv{\BA}}\rangle}_2} \BA}\rangle}_2 
-+\gpgrade{\gpgrade{\BB\inv\BA}{2} \BA}{2}
++\gpgradetwo{\gpgradetwo{\BB\inv\BA} \BA}
 +\left(\BB \wedge \inv{\BA}\right) \cdot \BA 
 \end{equation}
-\newcommand{\grade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+
+This could be written somewhat more symmetrically as
+\begin{align*}
+\BB
+&=\sum_{i=0,2,4}\gpgradetwo{\gpgrade{\BB \inv{\BA}}{i} \BA} \\
+&= \gpgradetwo{ \gpgradezero{\BB \inv{\BA}} \BA +\gpgradetwo{\BB \inv{\BA}} \BA +\gpgradefour{\BB \inv{\BA}} \BA } \\
+\end{align*}
+
+(This is also a more direct way to derive the result in retrospect).
+
+\subsection{ Back to the unit bivector partial. }
+
+Decomposition of a bivector into components in and out of the plane allows us to write:
+
+\begin{align*}
+\BB + \Bi\BB\Bi
+&=
+(\BB \cdot {\Bi}^\dagger) \Bi 
+\gpgradetwo{\gpgradetwo{\BB \Bi^\dagger} \Bi}
+(\BB \wedge {\Bi}^\dagger) \cdot \Bi  \\
+&\Bi(
+(\BB \cdot {\Bi}^\dagger) \Bi 
+\gpgradetwo{\gpgradetwo{\BB \Bi^\dagger} \Bi}
+(\BB \wedge {\Bi}^\dagger) \cdot \Bi )\Bi \\
+&=
+\gpgradetwo{\gpgradetwo{\BB \Bi^\dagger} \Bi} + \Bi\left( \gpgradetwo{\gpgradetwo{\BB \Bi^\dagger} \Bi} \right)\Bi 
+(\BB \wedge {\Bi}^\dagger) \cdot \Bi + \Bi( (\BB \wedge {\Bi}^\dagger) \cdot \Bi ) \Bi \\
+\end{align*}
+
+For \R{3} the $\BB \wedge \Bi$ terms must be zero since all non-colinear planes have a common vector, but that will not neccessarily be the case for
+higher degree varients of laplace's equation (and solutions in 4 variables will be of interest for the wave equation in three dimensions).
+
+However, in this particular case we have $\BB = \Be_j \wedge \Bv$, and $\Bi = \frac{\Br \wedge \Bv}{\abs{\Br \wedge \Bv}}$.  Since the constant parameter vector $\Bv$
+is common the wedge of the two is zero.  That leaves us with:
+
+\[
+\BB + \Bi\BB\Bi
+=
+\gpgradetwo{\gpgradetwo{\BB \Bi^\dagger} \Bi} - \Bi^\dagger\left( \gpgradetwo{\gpgradetwo{\BB \Bi^\dagger} \Bi} \right)\Bi 
+=
+\gpgradetwo{\gpgradetwo{\BB \Bi^\dagger} \Bi} - \Exp^{-\Bi\pi/2}\left( \gpgradetwo{\gpgradetwo{\BB \Bi^\dagger} \Bi} \right)\Exp^{\Bi\pi/2}
+\]
+
+Since the quantity $\gpgradetwo{\gpgradetwo{\BB \Bi^\dagger} \Bi}$ contains only bivectors that are perpendicular to $\Bi$, the effect of the $\pi$ rotation in the 
+second term negates the bivector.
+
+The end result of this rather long calculation is:
+
+\[
+\BB + \Bi\BB\Bi = 2 \gpgradetwo{\gpgradetwo{\BB \Bi^\dagger} \Bi}
+\]
+
+This doubles all the components of $\Be_j \wedge \Bv$ that are perpendicular to $\Br \wedge \Bv$.  This is consistent with the end result of the numerical
+calcuation above.
+
+As a confirmation lets calculate this for that same example:
+
+\begin{align*}
+2\gpgradetwo{\gpgradetwo{\BB \Bi^\dagger} \Bi}
+&= 2\gpgradetwo{\gpgradetwo{ 2\left(\Be_{13} + \Be_{12}\right) \Be_{21} } \Be_{12}} \\
+&= 4\gpgradetwo{\Be_{32} \Be_{12}} \\
+&= 4\Be_{13} \\
+\end{align*}
+
+Putting things back together we have
+
+\begin{align*}
+\dxj{\Bi}{j}
+&= \dxj{}{j} \frac{\Br \wedge \Bv}{\abs{\Br \wedge \Bv}} \\
+%&= -\frac{\gpgradetwo{\gpgradetwo{(\Be_j \wedge \Bv) (\Br \wedge \Bv)} \Br \wedge \Bv}}{\abs{\Br \wedge \Bv}^3} \\
+&= 
+\gpgradetwo{
+\gpgradetwo{ \frac{\Be_j \wedge \Bv}{\abs{\Br \wedge \Bv}} \frac{\Bv \wedge \Br}{\abs{\Br \wedge \Bv}} }
+    \frac{\Br \wedge \Bv}{\abs{\Br \wedge \Bv}}
+} \\
+&= \gpgradetwo{ \gpgradetwo{ \frac{\Be_j \wedge \Bv}{\abs{\Br \wedge \Bv}} \Bi^\dagger } \Bi } \\
+&= \gpgradetwo{ \gpgradetwo{ \Be_j \wedge \Bv \inv{\Br \wedge \Bv} } \Bi } \\
+\end{align*}
+
+This is zero when $\Bv$ is a multiple of $\Be_j$, or when $\Br$, $\Bv$, and $\Be_j$ all lie in a common plane, which will neccessarily be true for a two variable case.
+
+\subsection{ returning to the first partial of the exponential }
+
+Assembling all the results so far we have:
+
+\begin{align*}
+\dxj{}{j}\Exp^{\Br\Bv} 
+&= v_j\Exp^{\Br\Bv} + \Exp^{\Br \cdot \Bv}\dxj{}{j}{\Exp^{\Br \wedge \Bv}} \\
+\end{align*}
+
+\[
+\Bi = \frac{\Br \wedge \Bv}{\abs{\Br \wedge \Bv}}
+\]
+
+\begin{align*}
+\dxj{}{j}{\Exp^{\Br \wedge \Bv}} 
+&= \Exp^{\Br \wedge \Bv} \dxj{\abs{\Br \wedge \Bv}}{j} + \dxj{\Bi}{j} \sin{\abs{\Br \wedge \Bv}} \\
+\end{align*}
+
+\[
+\hat{\BB'} 
+= \frac{ \dxj{\Br \wedge \Bv}{j} }{\abs{\Br \wedge \Bv}}
+= \frac{\Be_j \wedge \Bv}{\abs{\Br \wedge \Bv}}
+\]
+
+\begin{align*}
+\dxj{\Bi}{j}
+&= \gpgradetwo{ \gpgradetwo{ \frac{\Be_j \wedge \Bv}{\abs{\Br \wedge \Bv}} \Bi^\dagger } \Bi } \\
+&= \gpgradetwo{ \gpgradetwo{ \BB' \Bi^\dagger } \Bi } \\
+&= \inv{2} (\hat{\BB'} + \Bi\hat{\BB'}\Bi) \\
+&= \gpgradetwo{ \gpgradetwo{ {\Be_j \wedge \Bv}\inv{{\Br \wedge \Bv}} } \Bi } \\
+\end{align*}
+
+With a total derivative of
+
+\begin{align*}
+\dxj{}{j}\Exp^{\Br\Bv} 
+&=
+\left(v_j + \dxj{\abs{\Br \wedge \Bv}}{j}\right) \Exp^{\Br\Bv}
++\Exp^{\Br \cdot \Bv} \sin{\abs{\Br \wedge \Bv}}\dxj{\Bi}{j} \\
+\end{align*}
+
+With the second partial being
+
+\begin{align*}
+\dsqxj{}{j}\Exp^{\Br\Bv} 
+&=
+\left( 
+      \left(v_j + \dxj{\abs{\Br \wedge \Bv}}{j}\right)^2
+    + \dsqxj{\abs{\Br \wedge \Bv}}{j}
+\right)
+   \Exp^{\Br\Bv}
++\dxj{}{j}\left(\Exp^{\Br \cdot \Bv} \sin{\abs{\Br \wedge \Bv}}\dxj{\Bi}{j}\right) \\
+\end{align*}
+
 
 %\begin{align*}
-%\BB + \Bi\BB\Bi
-%&= \left(\BB\cdot\inv{\Bi}\right)\Bi + \left(\BB\wedge\inv{\Bi}\right)\Bi - \Bi^\dagger\left( \left(\BB\cdot\inv{\Bi}\right)\Bi + \left(\BB\wedge\inv{\Bi}\right)\Bi \right) \Bi \\
-%&= \left(\BB\cdot\inv{\Bi}\right)\Bi + \left(\BB\wedge\inv{\Bi}\right)\Bi - \Bi^\dagger \left( \left(\BB\cdot\inv{\Bi}\right)\Bi + \left(\BB\wedge\inv{\Bi}\right)\Bi\right) \Bi \\
-%&= \left(\BB\wedge\inv{\Bi}\right)\Bi + \Bi \left(\BB\wedge\inv{\Bi}\right) \\
-%&= -\left(\BB\wedge{\Bi}\right)\Bi - \Bi \left(\BB\wedge{\Bi}\right) \\
+%\dxj{\abs{\Br \wedge \Bv}}{j}
+%&= 
+%\dxj{ ({\Br \wedge \Bv}{\Bv \wedge \Br})^{1/2} }{j} \\
+%&= \inv{ 2 {\abs{\Br \wedge \Bv}} } \left( \left(\Be_j \wedge \Bv\right)\left(\Bv \wedge \Br\right) + \left(\Br \wedge \Bv\right)\left(\Bv \wedge \Be_j\right)\right) \\
+%&= -\inv{ 2 } \left(\left(\Be_j \wedge \Bv\right)\Bi + \Bi\left(\Bv \wedge \Be_j\right)\right) \\
 %\end{align*}
+
+
+%In this last term we have the symmetric product of two bivectors and the LHS is a scalar, so all the grade-2 and grade-4 terms must cancel out.  This leaves just
 %
-%Check:
 %\begin{align*}
-%\BB \wedge \Bi =
-%2\left(\Be_{13} + \Be_{12}\right) \wedge \Be_{12}
-%= 0
+%\dxj{\abs{\Br \wedge \Bv}}{j}
+%&= -\inv{ 2 }\left( \left(\Be_j \wedge \Bv\right) \cdot \Bi + \Bi \cdot \left(\Be_j \wedge \Bv\right) \right) \\
+%&= x_j \frac{\abs{\Be_j \wedge \Bv}^2}
 %\end{align*}
+
+%\[
+%\dxj{}{j}\Exp^{\Br\Bv} 
+%=
+%\left(v_j + x_j \frac{\abs{\Be_j \wedge \Bv}^2}{\abs{\Br \wedge \Bv}}\right)\Exp^{\Br\Bv}
+%+ \Exp^{\Br \cdot \Bv} \sin{\abs{\Br \wedge \Bv}} \gpgradetwo{ \gpgradetwo{ \frac{\Be_j \wedge \Bv}{\abs{\Br \wedge \Bv}} \Bi^\dagger } \Bi }
+%\]
 %
-%Must be a mistake here somewhere, since these aren't consistent (pretty sure the numerical calculation is right).
+%And the second partial is:
+%
+%\begin{align*}
+%\dsqxj{}{j}\Exp^{\Br\Bv} 
+%&=
+%\left(
+%\left(v_j + x_j \frac{\abs{\Be_j \wedge \Bv}^2}{\abs{\Br \wedge \Bv}}\right)^2
+%+ {\abs{\Be_j \wedge \Bv}^2}\dxj{\frac{x_j}{\abs{\Br \wedge \Bv}}}{j}\right) 
+%      \Exp^{\Br\Bv} \\
+%&+ 
+%\dsqxj{}{j}
+%\Exp^{\Br \cdot \Bv} \sin{\abs{\Br \wedge \Bv}} \gpgradetwo{ \gpgradetwo{ \frac{\Be_j \wedge \Bv}{\abs{\Br \wedge \Bv}} \Bi^\dagger } \Bi } \\
+%&=
+%\left(
+%\left(v_j + x_j \frac{\abs{\Be_j \wedge \Bv}^2}{\abs{\Br \wedge \Bv}}\right)^2
+%+ \frac{\abs{\Be_j \wedge \Bv}^2}{\abs{\Br \wedge \Bv}}
+%+ -x_j^2 \frac{\abs{\Be_j \wedge \Bv}^4}{\abs{\Br \wedge \Bv}^3}
+%\right)
+%      \Exp^{\Br\Bv} \\
+%&+ 
+%\dsqxj{}{j}
+%\Exp^{\Br \cdot \Bv} \sin{\abs{\Br \wedge \Bv}} \gpgradetwo{ \gpgradetwo{ \frac{\Be_j \wedge \Bv}{\abs{\Br \wedge \Bv}} \Bi^\dagger } \Bi }
+%\end{align*}
 
 \end{document}               % End of document.
