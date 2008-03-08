@@ -7,6 +7,7 @@
 \newcommand{\dxj}[2] {\frac {\partial {#1}} {\partial {x_{#2}}}}
 \newcommand{\dsqxj}[2] {\frac {\partial^2 {#1}} {\partial {x_{#2}}^2}}
 \DeclareMathOperator{\Exp}{e}
+\DeclareMathOperator{\Rej}{Rej}
 \newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
 \newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
 \newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
@@ -217,12 +218,10 @@ When these intersect in a line the wedge term is zero, so for that special case 
 
 Starting with two planes specified parametrically, each in terms of two direction vectors and a point on the plane:
 
-\[
-\Bx = \Bp + \alpha \Bu + \beta \Bv
-\]
-\[
-\By = \Bq + a \Bw + b \Bz
-\]
+\begin{align}\label{eqn:twoplanes}
+\Bx &= \Bp + \alpha \Bu + \beta \Bv \\
+\By &= \Bq + a \Bw + b \Bz \\
+\end{align}
 
 If these intersect then all points on the line must satisify $\Bx = \By$, so the
 solution requires:
@@ -266,16 +265,16 @@ And a direction vector for the line is:
 (\Bv \wedge \BB)^2 \Bu - (\Bv \wedge \BB)(\Bu \wedge \BB)\Bv
 \]
 
-Now, this result is only valid if $\Bv \wedge \BB \ne 0$ (ie: line of intersection is not directed along $\Bv$), but if that is the case the second form will be zero.  Thus we can add the results allowing for either of $\Bu$, or $\Bv$ to be directed along the line of intersection:
+Now, this result is only valid if $\Bv \wedge \BB \ne 0$ (ie: line of intersection is not directed along $\Bv$), but if that is the case the second form will be zero.  Thus we can add the results (or any non-zero linear combination of) allowing for either of $\Bu$, or $\Bv$ to be directed along the line of intersection:
 
 \begin{equation}\label{eqn:dirvecintersection}
-(\Bv \wedge \BB)^2 \Bu
-+ (\Bu \wedge \BB)^2 \Bv 
-- (\Bv \wedge \BB)(\Bu \wedge \BB)\Bv
-- (\Bu \wedge \BB)(\Bv \wedge \BB)\Bu
+a\left( (\Bv \wedge \BB)^2 \Bu
+- (\Bv \wedge \BB)(\Bu \wedge \BB)\Bv \right)
++ b\left((\Bu \wedge \BB)^2 \Bv 
+- (\Bu \wedge \BB)(\Bv \wedge \BB)\Bu\right)
 \end{equation}
 
-Alternately, one could formuate this in terms of $\BA = \Bu \wedge \Bv$, $\Bw$, and $\Bz$.  Is there a more symetrical form for this direction vector?
+Alternately, one could formulate this in terms of $\BA = \Bu \wedge \Bv$, $\Bw$, and $\Bz$.  Is there a more symetrical form for this direction vector?
 
 \subsection{ Vector along line of intersection in \R{3}}
 
@@ -299,6 +298,49 @@ the general \R{N} result of equation \ref{eqn:dirvecintersection}, not
 just because it is simpler, but also because it is a function of only the
 bivectors for the planes, without a requirement to find or calculate
 two specific independent direction vectors in one of the planes.
+
+\subsection{ Applying this result to \R{N} }
+
+If you reject the component of $\BA$ from $\BB$ for two intersecting bivectors:
+
+\[
+\Rej_{\BA}(\BB) = \frac{1}{\BA}\gpgradetwo{\BA\BB}
+\]
+
+the line of intersection remains the same ... that operation rotates $\BB$ so that the two are mutually perpendicular.  This essentially reduces the problem to that of the three dimensional case, so the solution has to be of the same form... you just need to calculate a ``pseudoscalar'' (what you are calling the join), for the subspace spanned by the two bivectors.
+
+That can be computed by taking any direction vector that is on one plane, but isn't in the second.  For example, pick a vector $\Bu$ in the plane $\BA$ that is not on the intersection of $\BA$ and $\BB$.  In mathese that is $\Bu = \inv{\BA}(\BA\cdot \Bu)$ (or $\Bu \wedge \BA = 0$), where $\Bu \wedge \BB \ne 0$.  Thus a pseudoscalar for this subspace is:
+
+\[
+\Bi = \frac{\Bu \wedge \BB}{\abs{\Bu \wedge \BB}}
+\]
+
+To calculate the direction vector along the intersection we don't care about the scaling above.  Also note that provided $\Bu$ has a component in the plane $\BA$, $\Bu \cdot \BA$ is also in the plane (it's rotated $\pi/2$ from $\inv{\BA}(\BA \cdot \Bu)$.
+
+Thus, provided that $\Bu \cdot \BA$ isn't on the intersection, a scaled ``pseudoscalar''
+for the subspace can be calculated by taking from any vector $\Bu$ with a component in the plane $\BA$:
+
+\[
+\Bi \propto (\Bu \cdot \BA) \wedge \BB
+\]
+
+Thus a vector along the intersection is:
+
+\begin{equation}\label{eqn:pseudoscalarinter}
+\Bd = ((\Bu \cdot \BA) \wedge \BB) \gpgradetwo{\BA\BB}
+\end{equation}
+
+(an interchange of $\BA$ and $\BB$ above would also work).
+
+Without showing the steps one can write the complete parametric solution of the line through the planes of equation \ref{eqn:twoplanes} in terms of this direction vector:
+
+\begin{equation}\label{eqn:finalsolnofRNplaneintersection}
+\Bx = \Bp + \left(\frac{(\Bq - \Bp)\wedge \BB}{(\Bd \cdot \BA) \wedge \BB}\right) (\Bd \cdot \BA) + \alpha \Bd
+\end{equation}
+
+Since $(\Bd \cdot \BA) \ne 0$ and $(\Bd \cdot \BA) \wedge \BB \ne 0$ (unless $\BA$ and $\BB$ are coplanar), observe that this is a natural generator
+of the pseudoscalar for the subspace, and as such shows up in the expression
+above.
 
 \section{ Grade components of a trivector product. }
 
