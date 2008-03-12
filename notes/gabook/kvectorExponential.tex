@@ -1,0 +1,159 @@
+\documentclass{article}      % Specifies the document class
+
+\input{../peeters_macros.tex}
+
+\DeclareMathOperator{\Exp}{e}
+\DeclareMathOperator{\Rej}{Rej}
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+%\newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
+%\newcommand{\gpgradefour}[1] {\gpgrade{#1}{4}}
+
+\newcommand{\ddu}[1] {\frac {d{#1}} {du}}
+
+%
+% The real thing:
+%
+
+                             % The preamble begins here.
+\title{} % Declares the document's title.
+\author{Peeter Joot}         % Declares the author's name.
+%\date{}        % Deleting this command produces today's date.
+
+\begin{document}             % End of preamble and beginning of text.
+
+\maketitle{}
+
+\section{ Motivation }
+
+Exponentials of bivectors and complex numbers are useful as generators of rotations, and expontials of
+square matrices can be used in linear differential equation solution.
+
+How about exponentials of vectors?
+
+Because any power of a vector can be calculated it should be perfectly well defined to use the expontial infinite series with k-vector parameters.  An 
+exponential function of this form will be expanded explicitly and compared to the real number result.  The first
+derivitive will also be calculated to examine it's form.
+
+\section{ Vector Exponential }
+
+The infinite series representation of the exponential defines a function for any $x$ that can be repeatedly multiplied
+with it self.
+
+\begin{equation}
+\Exp^x = \sum_{k=0}^{\infty} \frac{x^k}{k!}
+\end{equation}
+
+Depending on the type of the parameter $x$ this may or may not have properties consistent with
+the real number exponential function.
+For a vector $\Bx = \xcap\abs{\Bx}$, after splitting the sum into even and odd terms this infinite series takes the
+following form:
+
+\begin{equation*}
+\Exp^{\pm\Bx}
+= 
+\sum_{k=0}^{\infty} \frac{\Bx^{2k}}{(2k)!}
+\pm
+\sum_{k=0}^{\infty} \frac{\abs{\Bx}^{2k}\abs{\Bx}\xcap}{(2k+1)!} 
+\end{equation*}
+
+\begin{equation}
+\implies
+\Exp^{\pm\Bx}
+= 
+\cosh\abs{\Bx}
+\pm
+\xcap \sinh\abs{\Bx}
+\end{equation}
+
+One can also employ symmetric and antisymmetric sums to write the hyperbolic functions in terms of the
+vector exponentials:
+
+\[
+\cosh\abs{\Bx} = \frac{\Exp^\Bx + \Exp^{-\Bx}}{2}
+\]
+\[
+\sinh\abs{\Bx} = \frac{\Exp^\Bx - \Exp^{-\Bx}}{2\xcap}
+\]
+
+\subsection{ Vector Exponential derivative }
+One of the defining properties of the exponential is that it's derivitive is related to itself
+
+\[
+\ddu{\Exp^{x}} = \ddu{x}\Exp^{x} = \Exp^{x} \ddu{x}
+\]
+
+For a vector parameter $\Bx$ one shouldn't generally expect that.  Let's expand this to see the form of this
+derivative:
+
+\begin{align*}
+\ddu{\Exp^{\Bx}} 
+&= \ddu{}( \cosh\abs{\Bx} + \xcap \sinh\abs{\Bx} ) \\
+&= ( \sinh\abs{\Bx} + \xcap \cosh\abs{\Bx} ) \ddu{\abs{\Bx}} + \ddu{\xcap} \sinh\abs{\Bx} \\
+\end{align*}
+
+Can calculate $\ddu{\abs{\Bx}}$ with the usual trick:
+
+\[
+\ddu{\abs{\Bx}^2} = 2\abs{\Bx}\ddu{\abs{\Bx}} = \ddu{\Bx}\Bx + \Bx\ddu{\Bx} = 2 \ddu{\Bx} \cdot \Bx
+\]
+
+\[
+\implies
+\ddu{\abs{\Bx}} = \ddu{\Bx} \cdot \xcap
+\]
+
+Calculation of $\ddu{\xcap}$ uses this result:
+
+\begin{align*}
+\ddu{\xcap}
+&= \ddu{}\frac{\Bx}{\abs\Bx}  \\
+&= \ddu{\Bx}\inv{\abs\Bx} - \frac{\Bx}{\abs{\Bx}^2}\ddu{\abs{\Bx}} \\
+&= \ddu{\Bx}\inv{\abs\Bx} - \frac{\Bx}{\abs{\Bx}^2} \ddu{\Bx} \cdot \xcap \\
+&= \inv{\abs\Bx}\left( \ddu{\Bx} - \xcap \left(\ddu{\Bx} \cdot \xcap\right) \right) \\
+&= \frac{\xcap}{\abs\Bx} \left(\xcap \wedge \ddu{\Bx} \right) \\
+&= \inv{\abs\Bx} {\Rej_{\xcap}\left(\ddu{\Bx}\right)} \\
+\end{align*}
+
+Putting these together one write the derivative in a few ways:
+
+\begin{align*}
+\ddu{\Exp^{\Bx}} 
+&= 
+\left(\ddu{\Bx} \cdot \xcap\right) \xcap
+( \xcap \sinh\abs{\Bx} + \cosh\abs{\Bx} ) 
+ + \frac{\xcap}{\abs\Bx} \left(\xcap \wedge \ddu{\Bx} \right) \sinh\abs{\Bx} \\
+&= 
+\xcap \left(\ddu{\Bx} \cdot \xcap\right)\Exp^{\Bx}
+ + \frac{\xcap}{\abs\Bx} \left(\xcap \wedge \ddu{\Bx} \right) \sinh\abs{\Bx} \\
+&= 
+\Proj_{\xcap}\left(\ddu{\Bx}\right) \Exp^{\Bx}
+ + \inv{\abs\Bx} \Rej_{\xcap}\left(\ddu{\Bx}\right) \sinh\abs{\Bx} \\
+\end{align*}
+
+This is considerably different from the real number case.  Only when the vector $\Bx$ and all its variation
+$\ddu{\Bx}$ are colinear does $\ddu{\Bx} = \Proj_{\xcap}\left(\ddu{\Bx}\right)$ for the real number like result:
+
+\begin{equation}
+\ddu{\Exp^{\Bx}} = \ddu{\Bx} \Exp^{\Bx} = \Exp^{\Bx} \ddu{\Bx} 
+\end{equation}
+
+Note that the $\sinh$ term can be explicitly removed
+
+\begin{align*}
+\ddu{\Exp^{\Bx}} 
+=
+\left(\xcap \left(\ddu{\Bx} \cdot \xcap\right) - \inv{2\abs\Bx}\left(\xcap \wedge \ddu{\Bx} \right) \right) \Exp^{\Bx}
+ - \inv{2\abs\Bx}\left(\xcap \wedge \ddu{\Bx} \right) \Exp^{-\Bx} \\
+\end{align*}
+
+, but without a $\Rej_{\xcap}\left(\ddu{\Bx}\right) = 0$
+constraint, there will always be a term that is not proportional to $\Exp^{\Bx}$.
+
+\section{ Bivector Exponential. }
+
+\begin{align*}
+\ddu{\Exp^{\BB}} 
+\end{align*}
+
+\end{document}               % End of document.
