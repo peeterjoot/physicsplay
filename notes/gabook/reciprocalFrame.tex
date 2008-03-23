@@ -13,6 +13,9 @@
 \DeclareMathOperator{\VName}{V}
 \newcommand{\VolumeOp}[1]{\VName_{#1}}
 
+\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+\newcommand{\gpgradeone}[1] {{\left\langle{{#1}}\right\rangle}_{1}}
+
 %
 % The real thing:
 %
@@ -246,10 +249,11 @@ D_{i_1 \cdots i_{k}}^{\Bu_{i_1} \cdots \Bu_{i_{k-1}} \Be }}
 \end{equation}
 
 The superscript notation is borrowed from Doran/Lasenby, and denotes not a vector raised to a power, but this
-this special vector satisfying the following othongonality and scaling criteria:
-\[
+this special vector satisfying the following orthogonality and scaling criteria:
+
+\begin{equation}\label{eqn:reciportho}
 \Bu^k \cdot \Bu_i = \delta_{ki}.
-\]
+\end{equation}
 
 Note that for $k=n-1$, equation \ref{eqn:framevec} reduces to
 
@@ -258,15 +262,278 @@ Note that for $k=n-1$, equation \ref{eqn:framevec} reduces to
 \frac{ D_{1 \cdots (n-1)}^{\Bu_1 \cdots \Bu_{n-1} \Be} } { D_{1 \cdots n}^{\Bu_1 \cdots \Bu_n} }.
 \end{equation}
 
+This or some other scaled version of this is likely as close as we can come to generalizing the cross product
+as an operation that takes vectors to vectors.
+
+\subsection{ Example.  \R{3} case.  Perpendicular to two vectors. }
+
 Observe that for \R{3}, writing $\Bu = \Bu_1$, $\Bv = \Bu_2$, $\Bw = \Bu_3$, and $\Bw' = {\Bu_3}^3$ this is:
 
-\begin{equation*}
+\begin{equation}
 \Bw' = 
 \frac{\DETuvwijk{u}{v}{\Be}{1}{2}{3}}{\DETuvwijk{u}{v}{w}{1}{2}{3}}
 = 
 \frac{\Bu \cross \Bv}{(\Bu \cross \Bv) \cdot \Bw}
-\end{equation*}
+\end{equation}
 
-We have the cross product scaled by the (signed) volume for the parallopiped spanned by the three vectors.
+This is the cross product scaled by the (signed) volume for the parallopiped spanned by the three vectors.
+
+\section{ Derivation with GA. }
+
+Regression with respect to a set of vectors can be expressed directly.  For vectors ${\Bu_i}$ write $\BB = \Bu_1 \wedge \Bu_2 \cdots \Bu_k$.  Then for any vector we have:
+
+\begin{align*}
+\Bx 
+&= \Bx \BB \inv{\BB}  \\
+&= \gpgradeone{ \Bx \BB \inv{\BB} } \\
+&= \gpgradeone{ (\Bx \cdot \BB + \Bx \wedge \BB) \inv{\BB} }
+\end{align*}
+
+All the grade three and grade five terms are selected out by the grade one operation, leaving just
+
+\begin{equation}
+\Bx = (\Bx \cdot \BB) \cdot \inv{\BB} + (\Bx \wedge \BB) \cdot \inv{\BB}.
+\end{equation}
+
+This last term is the rejective component.
+
+\begin{equation}\label{eqn:bladerejection}
+\Rej{\BB}{\Bx} = 
+(\Bx \wedge \BB) \cdot \inv{\BB}
+=
+\frac{
+(\Bx \wedge \BB) \cdot {\BB}^\dagger
+}
+{
+\BB \BB^\dagger
+}
+\end{equation}
+
+Here we see in the denominator the squared sum of determinants in the denominator of equation \ref{eqn:hyperrejection}:
+
+\[
+\BB \BB^\dagger = 
+\sum_{i_1 < \cdots < i_{k} } \left(D_{i_1 \cdots i_{k}}^{\Bu_{i_1} \cdots \Bu_{i_{k}}}\right)^2
+\]
+
+In the numerator we have the dot product of two wedge products, each expressable as sums of determinants:
+
+\[
+\BB^\dagger = (-1)^{k(k-1)/2}
+\sum_{i_1 < \cdots < i_{k} } 
+D_{i_1 \cdots i_{k}}^{\Bu_{i_1} \cdots \Bu_{i_{k}}} \Be_{i_1} \Be_{i_2} \cdots \Be_{i_{k}}
+\]
+
+And
+\[
+\Bx \wedge \BB = 
+\sum_{i_1 < \cdots < i_{k+1} } 
+D_{i_1 \cdots i_{k+1}}^{\Bx \Bu_{i_1} \cdots \Bu_{i_{k}}} \Be_{i_1} \Be_{i_2} \cdots \Be_{i_{k+1}}
+\]
+
+Dotting these is all the grade one components of the product.  
+Performing that calculation would likely provide an explicit confirmation of the inductive hypothysis of 
+equation \ref{eqn:hyperrejection}.  This can be observed directly for the $k+1=n$ case.  That product produces a Laplace
+expansion sum.
+
+\begin{align*}
+(\Bx \wedge \BB) \cdot \BB^\dagger
+&=
+%((-1)^{k(k-1)/2})^2
+D_{1 2 \cdots n}^{\Bx \Bu_{1} \cdots \Bu_{n-1}} 
+\left(
+\Be_{1} D_{2 3 4 \cdots n}^{\Bu_{1} \cdots \Bu_{n-1}}
+-\Be_{2} D_{1 3 4 \cdots n}^{\Bu_{1} \cdots \Bu_{n-1}}
++\Be_{3} D_{1 2 4 \cdots n}^{\Bu_{1} \cdots \Bu_{n-1}}
+\right)
+\end{align*}
+
+\begin{equation}\label{eqn:hyperrejectionganminus}
+(\Bx \wedge \BB) \cdot \inv{\BB}
+=
+\frac{
+D_{1 2 \cdots n}^{\Bx \Bu_{1} \cdots \Bu_{n-1}} 
+D_{1 2 \cdots n}^{\Be \Bu_{1} \cdots \Bu_{n-1}}
+}
+{
+\sum_{i_1 < \cdots < i_{k} } \left(D_{i_1 \cdots i_{k}}^{\Bu_{i_1} \cdots \Bu_{i_{k}}}\right)^2
+}
+\end{equation}
+
+Thus equation \ref{eqn:hyperrejection} for the $k = n-1$ case is proved without induction.  A proof for the $k+1<n$ case would be harder.
+No proof is required if one picks the set of basis vectors ${\Be_i}$ such that $\Be_i \wedge \BB = 0$ (then the $k+1=n$ result applies).
+I believe that proves the general case too if one observes that a rotation to any other basis in the span of the set of vectors only
+changes the sign of the each of the determinants, and the product of the two sign changes will then have value one.
+
+Follow through of the details for a proof of original non GA induction hypothosis is probably not worthwhile since this
+reciprocal frame vector problem can be
+tackled with a different approach using a subspace pseudovector.
+
+It's notable that although this had no induction in the argument above, note that it is fundamentally required.
+That is because there is an inductive proof
+required to prove that the general wedge and dot product vector formulas:
+
+\[
+\Bx \cdot \BB = \inv{2}(\Bx \BB - (-1)^k\BB \Bx)
+\]
+\[
+\Bx \wedge \BB = \inv{2}(\Bx \BB + (-1)^k\BB \Bx)
+\]
+
+from the GA axioms (that's an easier proof without the mass of indexes and determinant products.) 
+
+\section{ Pseudovector from rejection. }
+
+As noted in the previous section the reciprocal frame vector $\Bu^k$ is the vector in the direction of $\Bu_k$ that has no component
+in $\Span{ \Bu_1, \cdots, \Bu_{k-1}}$, normalized such that $\Bu_k \cdot \Bu^k = 1$.  Explicitly, with
+$\BB = \Bu_1 \wedge \Bu_2 \cdots \wedge \Bu_{k-1}$ this is:
+
+\begin{equation}\label{eqn:reciprej}
+\Bu^k = 
+\frac
+{
+(\Bu_k \wedge \BB) \cdot \BB
+}
+{
+\Bu_k \cdot \left((\Bu_k \wedge \BB) \cdot \BB\right)
+}
+\end{equation}
+
+This is derived from equation \ref{eqn:bladerejection}, after noting that
+$\frac{\BB^\dagger}{\BB\BB^\dagger} \propto \BB$, and further
+scaling to produce the desired othornomal property of equation
+\ref{eqn:reciportho}
+that defines the reciprocal frame vector.
+
+\subsection{ Lemma.  Othogonal decomposition. }
+To do so we first need to be able to express a vector $\Bx$ in terms
+of components parallel and perpendicular to the blade $\BA \in \wedge^k$.
+
+\begin{align*}
+\Bx 
+&= \Bx \BA \inv{\BA} \\
+&= (\Bx \cdot \BA + \Bx \wedge \BA) \inv{\BA} \\
+&= 
+(\Bx \cdot \BA) \cdot \inv{\BA}
++ \sum_{i=3,5,\cdots,2k-1} \gpgrade{(\Bx \cdot \BA) \inv{\BA}}{i} \\
+&+ 
+(\Bx \wedge \BA) \cdot \inv{\BA}
++ \sum_{i=3,5,\cdots,2k-1} \gpgrade{(\Bx \wedge \BA) \inv{\BA}}{i} 
++ \underbrace{(\Bx \wedge \BA) \wedge \inv{\BA}}_{=0}
+\end{align*}
+
+Since the LHS and RHS must both be vectors all the non-grade one terms
+are either zero or cancel out.  This can be observed directly since:
+
+\begin{align*}
+\gpgrade{\Bx \cdot \BA \inv{\BA}}{i}
+&= \gpgrade{ \frac{\Bx \BA - (-1)^{k}\BA\Bx}{2}\inv{\BA} }{i}  \\
+&= -\frac{(-1)^{k}}{2} \gpgrade{ \BA\Bx \inv{\BA} }{i}  \\
+\end{align*}
+
+and
+
+\begin{align*}
+\gpgrade{\Bx \wedge \BA \inv{\BA}}{i} 
+&= \gpgrade{ \frac{\Bx \BA + (-1)^{k}\BA\Bx}{2}\inv{\BA} }{i}  \\
+&= +\frac{(-1)^{k}}{2} \gpgrade{ \BA\Bx \inv{\BA} }{i}  \\
+\end{align*}
+
+Thus all of the grade $3, \cdots ,2k-1$ terms cancel each other out.  Some terms
+like $(\Bx \cdot \BA) \wedge \inv{\BA}$ are also independently zero.
+
+(This is a result I've got in other places, but I thought it's worth
+ writing down since I thought the direct cancelation is elegant).
+
+\subsection{ back to reciprocial result. }
+
+Now, 
+equation \ref{eqn:reciprej}
+looks considerably different from the Doran/Lasenby result.
+Reduction to a direct pseudovector/blade product is possible since the
+dot product here can be converted to a direct product.
+
+\begin{align*}
+(\Bu_k \wedge \BB) \cdot \BB
+&= 
+\underbrace{(\Bx \BB)}_{\Bx = \Bu_k - (\Bu_k \cdot \BB) \cdot \inv{\BB}}
+\cdot \BB \\
+&= \gpgradeone{
+\Bx\BB \BB
+} \\
+&= \Bx \BB^2 \\
+&= \left(\left(\Bu_k - (\Bu_k \cdot \BB) \cdot \inv{\BB}\right) \wedge \BB\right) \BB \\
+&= (\Bu_k \wedge \BB) \BB \\
+\end{align*}
+
+Thus equation \ref{eqn:reciprej} is a scaled pseudovector for the subspace
+defined by $\Span {\Bu_i}$, multiplied by a k-1 blade.
+
+\section{ Components of a vector. }
+
+The delta property of 
+equation \ref{eqn:reciportho} allows one to use the reciprocial frame
+vectors and the basis that generated them to calculate the coordinates
+of the a vector with respect to this (not neccessarily othonormal) basis.
+
+That's a pretty powerful result, but somewhat obscured by the Doran/Lasenby
+super/sub script notation.
+
+Suppose one writes a vector in $\Span{\Bu_i}$ in terms of unknown coofficents 
+
+\[
+\Ba = \sum a_i \Bu_i
+\]
+
+Dotting with $\Bu^j$ gives:
+
+\[
+\Ba \cdot \Bu^j 
+= \sum a_i \Bu_i \cdot \Bu^j
+= \sum a_i \delta_{ij}
+= a_j
+\]
+
+Thus
+\begin{equation}\label{eqn:nonrecipcomponents}
+\Ba = \sum (\Ba \cdot \Bu^i) \Bu_i
+\end{equation}
+
+Similarily, writing this vectors in terms of $\Bu^i$ we have
+
+\[
+\Ba = \sum b_i \Bu^i
+\]
+
+Dotting with $\Bu_j$ gives:
+
+\[
+\Ba \cdot \Bu_j 
+= \sum b_i \Bu^i \cdot \Bu_j
+= \sum b_i \delta_{ij}
+= b_j
+\]
+
+Thus
+\begin{equation}\label{eqn:recipcomponents}
+\Ba = \sum (\Ba \cdot \Bu_i) \Bu^i
+\end{equation}
+
+We are used to seeing the equation for components of a vector in terms of a
+basis in the following form: 
+
+\begin{equation}
+\Ba = \sum (\Ba \cdot \Bu_i) \Bu_i
+\end{equation}
+
+This is true only when the basis vectors are orthonormal.
+Equations
+\ref{eqn:nonrecipcomponents} and \ref{eqn:recipcomponents} provide the
+general decomposition of a vector in terms of a general linearly independent
+set.
+
+\subsection{ Reciprocial frame vectors by solving coordinate equation. }
+
+A more natural way to these results are to take repeated wedge products.
 
 \end{document}               % End of document.
