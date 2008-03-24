@@ -156,6 +156,12 @@ and using a change of summation indexes, our final result for the vector perpend
 {\sum_{i<j} \DETuvij{u}{v}{i}{j}^2}
 \end{equation}
 
+As a small aside, it is notable here to observe that
+$\Span\left\{\DETuvij{u}{\Be}{i}{j}\right\}$ is the null space for the vector $\Bu$, and
+the set $\Span\left\{\DETuvwijk{u}{v}{\Be}{i}{j}{k}\right\}$ is the null space for the two vectors $\Bu$ and $\Bv$ respectively.
+
+Since the rejection is a normal to the set of vectors it must neccessarily include these cross product like determinant terms.
+
 As in equation \ref{eqn:rejonevectorD}, use of a $D_{ijk}^{\Bu\Bv\Bw}$ notation allows for a more compact
 result:
 
@@ -535,5 +541,131 @@ set.
 \subsection{ Reciprocial frame vectors by solving coordinate equation. }
 
 A more natural way to these results are to take repeated wedge products.
+Given a vector decomposition in terms of a basis ${\Bu_i}$, we want to solve for $a_i$:
+
+\[
+\Ba = \sum_{i=1}^k a_i \Bu_i
+\]
+
+The solution, from the wedge is:
+
+\[
+\Ba \wedge (\Bu_1 \wedge \Bu_2 \cdots \check{\Bu_i} \cdots \wedge \Bu_k  = a_i (-1)^{i-1} \Bu_1 \wedge \cdots \wedge \Bu_k
+\]
+\[
+\implies
+a_i = 
+(-1)^{i-1} 
+\frac{\Ba \wedge (\Bu_1 \wedge \Bu_2 \cdots \check{\Bu_i} \cdots \wedge \Bu_k}{ \Bu_1 \wedge \cdots \wedge \Bu_k })
+\]
+
+The complete vector in terms of components is thus:
+
+\begin{equation}\label{eqn:coordinateswedge}
+\Ba =
+\sum(-1)^{i-1} 
+\frac{\Ba \wedge \left(\Bu_1 \wedge \Bu_2 \cdots \check{\Bu_i} \cdots \wedge \Bu_k\right)}{ \Bu_1 \wedge \cdots \wedge \Bu_k } \Bu_i
+\end{equation}
+
+We are used to seeing the coordinates expressed in terms of dot products instead of wedge products.  As in \R{3} where
+the pseudovector allows wedge products to be expressed in terms of the dot product we can do the same for the general case.
+
+Writing $\BB \in \bigwedge^{k-1}$ and $\BI \in \bigwedge^k$ we want to reduce an equation of the following form
+
+\begin{equation}\label{eqn:wedgereduction}
+\frac{\Ba \wedge \BB}{\BI} = \inv{\BI} \frac{\Ba\BB + (-1)^{k-1}\BB\Ba}{2}
+\end{equation}
+
+The pseudovector either commutes or anticommutes with a vector in the subspace depending on the grade
+
+\begin{align*}
+\BI \Ba 
+&= \BI \cdot \Ba + \underbrace{\BI \wedge \Ba}_{=0} \\
+&= (-1)^{k-1}\Ba \cdot \BI \\
+&= (-1)^{k-1}\Ba \BI \\
+\end{align*}
+
+Substituting back into equation \ref{eqn:wedgereduction} we have
+
+\begin{align*}
+\frac{\Ba \wedge \BB}{\BI}
+&= (-1)^{k-1} \frac{\Ba \left(\inv{\BI}\BB\right) + \left(\inv{\BI}\BB\right)\Ba}{2} \\
+&= (-1)^{k-1} \Ba \cdot \left(\inv{\BI}\BB\right) \\
+&= \Ba \cdot \left(\BB \inv{\BI}\right) \\
+\end{align*}
+
+With $\BI = \Bu_1 \wedge \cdots \Bu_k$, and $\BB = \Bu_1 \wedge \Bu_2 \cdots \check{\Bu_i} \cdots \wedge \Bu_k$,
+back substitution back into equation \ref{eqn:coordinateswedge} is thus
+
+\begin{align*}
+\Ba 
+%&= \sum(-1)^{i-1} (-1)^{k-1} \Ba \cdot \left(\inv{\BI}\BB\right) \Bu_i \\
+&= \sum
+\Ba \cdot \left(
+(-1)^{i-1} 
+\BB \inv{\BI}\right) \Bu_i
+\end{align*}
+
+The final result yields the reciprocal frame vector $\Bu^k$, and we see how to arrive at this result naturally attempting
+to answer the question of how to find the coordinates of a vector with respect to a (not neccessaryily orthonormal) basis.
+
+\begin{equation}
+\Ba =
+\sum
+\Ba \cdot 
+\underbrace{
+\left((\Bu_1 \wedge \Bu_2 \cdots \check{\Bu_i} \cdots \wedge \Bu_k) \frac{ (-1)^{i-1} }{ \Bu_1 \wedge \cdots \wedge \Bu_k }\right) 
+}_{\Bu^k}
+\Bu_i
+\end{equation}
+
+\section{ Components of a bivector. }
+
+To find the coordinates of a bivector with respect to an arbitrary basis we have a similar problem.
+For a vector basis ${\Ba_i}$, introduce a bivector basis ${\Ba_i \wedge \Ba_j}$, and write
+
+\begin{equation}\label{eqn:bivectorcoord}
+\BB = \sum_{u<v} b_{uv} \Ba_u \wedge \Ba_v
+\end{equation}
+
+Wedging with $\Ba_i \wedge \Ba_j$ will select all but the $ij$ component.  Specifically
+
+\begin{align*}
+\BB \wedge 
+(\Ba_1 \wedge \cdots \check{\Ba_i} \cdots \check{\Ba_j} \cdots \wedge \Ba_k) 
+&= b_{ij} \Ba_i \wedge \Ba_j \wedge (\Ba_1 \wedge \cdots \check{\Ba_i} \cdots \check{\Ba_j} \cdots \wedge \Ba_k)  \\
+&= b_{ij} (-1)^{j-2 + i-1}(\Ba_1 \wedge \cdots \wedge \Ba_k) \\
+\end{align*}
+
+Thus 
+\begin{equation}\label{eqn:bivectorrecip}
+b_{ij} = (-1)^{i+j-1}\BB \wedge
+\frac{ (\Ba_1 \wedge \cdots \check{\Ba_i} \cdots \check{\Ba_j} \cdots \wedge \Ba_k) }
+{(\Ba_1 \wedge \cdots \wedge \Ba_k) }
+\end{equation}
+
+Doran/Lasenby doesn't show this result but instead shows without adequate proof (or if it's a proof, it's not
+one that is understandable)
+that 
+equation \ref{eqn:bivectorrecip} can be written:
+
+\begin{align*}
+b_{ij}
+&= 
+\BB \wedge (\Ba_1 \wedge \cdots \check{\Ba_i} \cdots \check{\Ba_j} \cdots \wedge \Ba_k) 
+\frac{ (-1)^{i+j-1} }
+{(\Ba_1 \wedge \cdots \wedge \Ba_k) } \\
+&=
+\BB \cdot \left(\Ba^j \wedge \Ba^i\right) \\
+\end{align*}
+
+The complete bivector coordinate decomposition is thus:
+
+\begin{equation}
+\BB = \sum_{i<j} \BB \cdot \left(\Ba^j \wedge \Ba^i\right) \Ba_i \wedge \Ba_j
+\end{equation}
+
+This makes intuitive sense based on the very similar vector result, but I don't have an explicit proof of the equivalence.
+%(it's easy enough to confirm for $k=3$ for example).
 
 \end{document}               % End of document.
