@@ -1,0 +1,145 @@
+\documentclass{article}      % Specifies the document class
+
+\input{../peeters_macros.tex}
+\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+
+%
+% The real thing:
+%
+
+                             % The preamble begins here.
+\title{} % Declares the document's title.
+\author{Peeter Joot}         % Declares the author's name.
+%\date{}        % Deleting this command produces today's date.
+
+\begin{document}             % End of preamble and beginning of text.
+
+\maketitle{}
+
+\section{ General triple product reduction formula. }
+
+Consideration of the reciprocal frame bivector decomposition required the following identity
+
+\begin{equation}
+(\BA_a \wedge \BA_b) \cdot \BA_c =
+\BA_a \cdot (\BA_b \cdot \BA_c)
+\end{equation}
+
+This holds when $a + b \le c$.  Similar equations for vector/blade/blade reduction can be found in NFCM, but intuition let me to believe this generalized simply.
+
+To prove this use the definition of the generalized dot product of two blades:
+
+\begin{align*}
+(\BA_a \wedge \BA_b) \cdot \BA_c
+&= \gpgrade{ (\BA_a \wedge \BA_b) \BA_c }{\abs{c-(a+b)}} \\
+\end{align*}
+
+%Now if $\Bx = \BA_a$ is a vector, one can write $\Bx \wedge \BA_b = \Bx\BA_b - \Bx \cdot \BA_b$, and one can use this to show in that case:
+%
+%\[
+%\gpgrade{ (\Bx \wedge \BA_b) \BA_c }{\abs{c-(a+b)}}
+%=
+%\gpgrade{ \Bx \BA_b \BA_c }{\abs{c-(a+b)}}
+%\]
+%
+%The dot product term is a $b-1$ grade vector, so the lowest grade product with $\BA_c$ has grade $c-b+1$.  Since we want the $c-b-1 < c-b+1$ term, so this
+%dot product doesn't contribute to the triple product.
+%
+%For the general case we don't have such a wedge product decomposition relationship, but can write
+%
+
+Note first that without loss of generality we can restrict subsequent discussion 
+to the $b >= a$ case (reverse the wedge for the $b < a$ case.)
+
+\begin{align*}\label{eqn:bladewedge}
+\BA_a \wedge \BA_b 
+&= \BA_a \BA_b - \sum_{i=\abs{b-a},i+=2}^{a+b-2}\gpgrade{\BA_a\BA_b}{i} \\
+&= \BA_a \BA_b - \sum_{k=0}^{a-1}\gpgrade{\BA_a\BA_b}{2k + b - a} \\
+\end{align*}
+
+%\begin{equation}\label{eqn:bladewedge}
+%\BA_a \wedge \BA_b = \BA_a \BA_b - \sum_{i=\abs{b-a},i+=2}^{a+b-2}\gpgrade{\BA_a\BA_b}{i}
+%\end{equation}
+
+%Reduction to a direct product (removal of the explicit wedge) follows like the vector case.
+
+%The highest grade term in the sum of equation \ref{eqn:bladewedge} is for $i = b+a-2$, so a product with $\BA_c$ has grades $c-(b+a-2), \cdots c+(b+a-2)$.  All of these are greater than $c-(a+b)$, so we are left with just the direct product term as in the vector case:
+
+Back substitution gives:
+
+\begin{align*}
+\gpgrade{ (\BA_a \wedge \BA_b) \BA_c }{\abs{c-(a+b)}} 
+&=
+\gpgrade{ \BA_a \BA_b \BA_c }{\abs{c-(a+b)}} 
+-
+\sum_{k=0}^{a-1}
+\gpgrade{ \gpgrade{\BA_a\BA_b}{2k + b - a} \BA_c }{c-a-b}
+\end{align*}
+
+Temporarily writing $\gpgrade{\BA_a\BA_b}{2k + b - a} = \BC_i$,
+\begin{align*}
+\gpgrade{\BA_a\BA_b}{2k + b - a} \BA_c
+&= \sum_{j=c-i,j+=2}^{c+i} \gpgrade{ \BC_i \BA_c }{j} \\
+&= \sum_{r=0}^{i} \gpgrade{ \BC_i \BA_c }{c-i+2r} \\
+&= \sum_{r=0}^{2k+b-a} \gpgrade{ \BC_i \BA_c }{c-2k-b+a+2r} \\
+&= \sum_{r=0}^{2k+b-a} \gpgrade{ \BC_i \BA_c }{c-b+a +2(r-k)} \\
+\end{align*}
+
+We want the only the following grade terms:
+
+\[
+c-b+a+2(r-k) = c - b - a
+\implies
+r=k-a
+\]
+
+There are many such $k,r$ combinations, but we have a $k \in [0,a-1]$ constraint, which implies $r \in [-a,-1]$.  This contradicts with $r$ strictly
+positive,
+so there are no such grade elements.
+
+This gives an intermediate result, the reduction of the triple product to a direct product, removing the explicit wedge:
+
+\begin{equation}
+(\BA_a \wedge \BA_b) \cdot \BA_c =
+\gpgrade{\BA_a \BA_b \BA_c}{c-a-b}
+\end{equation}
+
+\begin{align*}
+\gpgrade{\BA_a \BA_b \BA_c}{c-a-b}
+&= \gpgrade{\BA_a (\BA_b \BA_c)}{c-a-b}
+&= \gpgrade{\BA_a \sum_{i}\gpgrade{\BA_b \BA_c}{i}}{c-a-b}
+&= \gpgrade{\sum_{j}\gpgrade{\BA_a \sum_{i}\gpgrade{\BA_b \BA_c}{i}}{j}}{c-a-b}
+\end{align*}
+
+Explicitly specifying the grades here is omitted for simplicity.  The lowest grade of these is $(c-b)-a$, and all others are higher.  By definition
+
+\[
+\gpgrade{\BA_b \BA_c}{c-b} = \BA_b \cdot \BA_c
+\]
+
+and that lowest grade term is thus
+
+\[
+\gpgrade{\BA_a \gpgrade{\BA_b \BA_c}{c-b}}{c-a-b}
+= \gpgrade{\BA_a (\BA_b \cdot \BA_c)}{c-a-b}
+= \BA_a \cdot (\BA_b \cdot \BA_c)
+\]
+
+This completes the proof.
+
+%\gpgrade{ \left(
+%\BA_a \BA_b - \sum_{i=\abs{b-a},i+=2}^{a+b-2}\gpgrade{\BA_a\BA_b}{i}
+%\right) \BA_c }{\abs{c-(a+b)}}  \\
+%\end{align*}
+%\begin{align*}
+%&=
+%\gpgrade{ \BA_a \BA_b \BA_c }{\abs{c-(a+b)}} 
+%- \sum_{i=\abs{b-a},i+=2}^{a+b-2} \gpgrade{ \gpgrade{\BA_a\BA_b}{i} \BA_c }{\abs{c-(a+b)}}  \\
+%&=
+%\gpgrade{ \BA_a \BA_b \BA_c }{\abs{c-(a+b)}} 
+%- \sum_{j=\abs{c-i},j+=2}^{c+i} \sum_{i=\abs{b-a},i+=2}^{a+b-2} \gpgrade{ \gpgrade{ \gpgrade{\BA_a\BA_b}{i} \BA_c }{j} }{\abs{c-(a+b)}}  \\
+%&=
+%\gpgrade{ \BA_a \BA_b \BA_c }{\abs{c-(a+b)}} \\
+%\end{align*}
+
+\end{document}               % End of document.
