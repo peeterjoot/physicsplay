@@ -663,7 +663,7 @@ $\BI = \Ba_1 \wedge \cdots \wedge \Ba_k$, we have
 
 Thus the bivector in terms of it's coordinates for this basis is:
 
-\begin{equation}
+\begin{equation}\label{eqn:bivectordecomp}
 \sum_{u<v} 
 \BB \cdot
 \left(
@@ -686,7 +686,7 @@ For example for a trivector
 
 It's pretty straightforward to show that this can be decomposed as follows
 
-\[
+\begin{equation}\label{eqn:trivectordecomp}
 \BT = \sum_{u<v<w} \BT \cdot
 \left(
 (\Ba_1 \wedge \cdots \check{\Ba_u} \cdots \check{\Ba_v} \cdots \check{\Ba_w} \cdots \wedge \Ba_k)
@@ -694,35 +694,85 @@ It's pretty straightforward to show that this can be decomposed as follows
 {\Ba_1 \wedge \cdots \wedge \Ba_k}
 \right)
 \Ba_u \wedge \Ba_v \wedge \Ba_w
-\]
+\end{equation}
 
 \subsection{ Compare to GAFP. }
 
-Doran/Lasenby doesn't show this result but instead shows without adequate proof (or if it's a proof, it's not
-one that is understandable)
-that 
-equation \ref{eqn:bivectorrecip} can be written:
+Doran/Lasenby's GAFP 
+demonstrates equation \ref{eqn:recipdot}, and with some incomprehsible steps skips to a generalized
+result of the form
 
-\begin{align*}
-b_{uv}
-&= 
-\BB \cdot
-\left(
-(\Ba_1 \wedge \cdots \check{\Ba_u} \cdots \check{\Ba_v} \cdots \wedge \Ba_k)
-\frac{(-1)^{u+v-3}}
-{\Ba_1 \wedge \cdots \wedge \Ba_k}
-\right)
-&=
-\BB \cdot \left(\Ba^v \wedge \Ba^u\right) \\
-\end{align*}
-
-The complete bivector coordinate decomposition is thus:
-
-\begin{equation}
+\begin{equation}\label{eqn:bivectordecompwithrecipbivector}
 \BB = \sum_{i<j} \BB \cdot \left(\Ba^j \wedge \Ba^i\right) \Ba_i \wedge \Ba_j
 \end{equation}
 
-This makes intuitive sense based on the very similar vector result, but I don't have an explicit proof of the equivalence.
-%(it's easy enough to confirm for $k=3$ for example).
+GAFP states this for general multivectors instead of bivectors, but the idea is the same.
+
+This makes intuitive sense based on the very similar vector result.  This doesn't show that
+the generalized reciprocal frame k-vectors calculated in 
+equation \ref{eqn:bivectordecomp} or equation \ref{eqn:trivectordecomp} can be produced simply
+by wedging the corresponding individual reciprocal frame vectors.
+
+To show that either takes algebric identities that I do not know, or am not thinking of as applicable.
+Alternately perhaps it would just take simple brute force.
+
+Easier is to demonstrate the validity of the final result directly.  Then assuming my direct calculations
+are correct implicitly demonstrates equivalence.
+
+Starting with $\BB$ as defined in equation \ref{eqn:bivectorcoord}, take dot products with 
+$\Ba^j \wedge \Ba^i$.
+
+\begin{align*}
+\BB \cdot (\Ba^j \wedge \Ba^i)
+ &= \sum_{u<v} b_{uv} (\Ba_u \wedge \Ba_v) \cdot (\Ba^j \wedge \Ba^i) \\
+ &= \sum_{u<v} b_{uv} 
+\begin{vmatrix}
+\Ba_u \cdot \Ba^i & \Ba_u \cdot \Ba^j \\
+\Ba_v \cdot \Ba^i & \Ba_v \cdot \Ba^j \\
+\end{vmatrix} \\
+ &= \sum_{u<v} b_{uv} 
+\begin{vmatrix}
+\delta_{ui} & \delta_{uj} \\
+\delta_{vi} & \delta_{vj} \\
+\end{vmatrix} \\
+\end{align*}
+
+Consider this determinant when $u=i$ for example
+\[
+\begin{vmatrix}
+\delta_{ui} & \delta_{uj} \\
+\delta_{vi} & \delta_{vj} \\
+\end{vmatrix} 
+=
+\begin{vmatrix}
+1 & \delta_{ij} \\
+\delta_{vi} & \delta_{vj} \\
+\end{vmatrix}
+=
+\begin{vmatrix}
+1 & 0 \\
+\delta_{vi} & \delta_{vj} \\
+\end{vmatrix}
+= \delta_{vj}
+\]
+
+If any one index is common, then both must be common ($ij=uv$) for this determinent to have a non-zero (ie: one) value.  On the other hand, if no index is common then all the $\delta$'s are zero.
+
+Like 
+equation \ref{eqn:reciportho}
+this demonstrates an orthonormal selection behaviour like the reciprocal frame vector.  It has the action:
+
+\begin{equation}
+(\Ba_i \wedge \Ba_j) \cdot (\Ba^v \wedge \Ba^u) = \delta_{ij,uv}
+\end{equation}
+
+This means that we can write $b_{uv}$ directly in terms of a bivector dot product
+
+\begin{align*}
+b_{uv} = \BB \cdot (\Ba^v \wedge \Ba^u)
+\end{align*}
+
+and thus proves equation \ref{eqn:bivectordecompwithrecipbivector}.  Proof of the general result
+also follows from the determinant expansion of the respective blade dot products.
 
 \end{document}               % End of document.
