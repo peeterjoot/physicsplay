@@ -1,0 +1,108 @@
+\documentclass{article}      % Specifies the document class
+
+\input{../peeters_macros.tex}
+\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+
+%
+% The real thing:
+%
+
+                             % The preamble begins here.
+\title{ Notes on shear transformation. } % Declares the document's title.
+\author{Peeter Joot}         % Declares the author's name.
+%\date{}        % Deleting this command produces today's date.
+
+\begin{document}             % End of preamble and beginning of text.
+
+\maketitle{}
+
+\section{}
+
+GASC and GAFP both give examples of shear transformations of the following
+form:
+
+\[
+F(a) = a + \alpha(a \cdot f) e.
+\]
+
+Geometric Algebra for Physicists uses this to compute the determinant without putting the operator in matrix form.  They end up stating that 
+
+\begin{equation}\label{eqn:shearblade}
+F(A) = A + \alpha e \wedge (f \cdot A).
+\end{equation}
+
+holds for any grade blade $A$.  For grade 1 that is true since
+
+\begin{align*}
+(a \cdot f) e 
+&= \gpgrade{(a \cdot f) e \rangle}{1} \\
+&= (a \cdot f) \wedge e.
+\end{align*}
+
+They demonstrate equation \ref{eqn:shearblade}
+holds for the grade 2 case.  To me it seems
+like an induction is required to make their statement for any grade.
+
+Question: Is there some other principle that I didn't notice in my reading that allows assertion of 
+equation \ref{eqn:shearblade}
+for any grade blade without the induction.
+
+\subsection{ Proof for any grade blade. }
+
+For $A \in {\bigwedge}^r$
+
+\begin{align*}
+F(A) \wedge F(b)
+&= \left(A + \alpha e \wedge (f \cdot A)\right) \wedge
+   \left(b + \alpha(b \cdot f) e \right) \\
+&= A \wedge b
+ + \alpha 
+\left(
+e \wedge (f \cdot A) \wedge b
++ (b \cdot f) A \wedge e 
+\right) \\
+&= A \wedge b
+ + \alpha e \wedge
+\underbrace{
+\left(
+(f \cdot A) \wedge b
++ (-1)^r (b \cdot f) A 
+\right)
+}_{(*)} \\
+&= A \wedge b + \alpha e \wedge (f \cdot (A \wedge b))
+\end{align*}
+
+QED.
+
+Verification below of $(*) = f \cdot (A \wedge b)$ is required to complete the proof (can probably find that in one of the books or papers but it is derivable
+easily enough).
+
+\subsection{ Dot product reduction of blade by one. }
+
+\begin{align*}
+f \cdot (A \wedge b)
+&= \inv{2} \gpgrade{f (A \wedge b)}{r} \\
+&= \inv{2} \gpgrade{f (A b + (-1)^r b A)}{r} \\
+&= \inv{2} \gpgrade{(f A) b + (-1)^r f b A}{r} \\
+&= \inv{2} \gpgrade{(-(-1)^r A f + 2 f \cdot A) b + (-1)^r f b A}{r} \\
+&= (f \cdot A) \wedge b + \frac{(-1)^r}{2} \gpgrade{-A f b + f b A}{r} \\
+&= (f \cdot A) \wedge b + (-1)^r (f \cdot b) A
++ \frac{(-1)^r}{2} \gpgrade{A b \wedge f + f \wedge b A}{r} \\
+\end{align*}
+
+This last term, the symmetric product of a bivector with a blade is zero.
+The grades $r-2, r+4, \ldots$ terms are symmetric, and the other grades
+$r, r+4, \ldots$ are antisymmetric.
+
+Thus we have
+
+\begin{equation}
+f \cdot (A \wedge b)
+= (f \cdot A) \wedge b + (-1)^r (f \cdot b) A
+\end{equation}
+
+This generalizes the familiar vector reduction formula to higher grades.
+Observe that for the vector case we need the most general definition
+of the wedge product for the scalar-vector wedge product (grade $1-0$ part of the product).
+
+\end{document}               % End of document.
