@@ -1,0 +1,454 @@
+\documentclass{article}      % Specifies the document class
+
+\input{../peeters_macros.tex}
+\DeclareMathOperator{\TextTranspose}{T}
+\DeclareMathOperator{\rank}{rank}
+\newcommand{\transpose}[1]{{{#1}^{\TextTranspose}}}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+%
+% The real thing:
+%
+
+                             % The preamble begins here.
+\title{ Matrix and GA formulation of projection. } % Declares the document's title.
+\author{Peeter Joot}         % Declares the author's name.
+\date{ April 11, 2008 }        % Deleting this command produces today's date.
+
+\begin{document}             % End of preamble and beginning of text.
+
+\maketitle{}
+
+\section{ A comparision. }
+
+My initial intention for these notes was to 
+get a feel for the similarities and differences between GA and matrix approaches to solution of projection.  I came to realize that
+I needed to spend a fair amount of time detailing for myself how all this works in a matrix approach.
+
+\section{ Subspace projection in matrix notation. }
+
+The following notes are my summary of the ideas of subspace projection following 
+Gilbert Strang's excellent MIT lecture on the same (probably also detailed in his course textbook) :
+
+\subsection{ Projection onto line. }
+
+\begin{figure}[htp]
+\centering
+\includegraphics[totalheight=0.4\textheight]{Projection_line}
+\caption{Projection onto line.}\label{fig:Projection_line}
+\end{figure}
+
+The simplest sort of projection to compute is projection onto a line.  Given a direction vector $b$, and a line with direction vector $u$
+as in figure \ref{fig:Projection_line}.
+
+The projection onto $u$ is some value:
+
+\[
+p = \alpha u
+\]
+
+and we can write
+
+\[
+b = p + e
+\]
+
+where e is the component perpendicular to the line $u$.
+
+Expressed in terms of the dot product this relationship is described by:
+
+\[
+(b - p) \cdot a = 0
+\]
+
+Or, 
+
+\[
+b \cdot a = \alpha a \cdot a
+\]
+
+and solving for $\alpha$ and substituiting we have:
+
+\begin{equation}
+p = a \frac{a \cdot b}{a \cdot a}
+\end{equation}
+
+In matrix notation that is:
+
+\begin{equation}
+p = a \left(\frac{\transpose{a} b}{\transpose{a} a} \right)
+\end{equation}
+
+Following Gilbert Strang's MIT lecture on subspace projection, the parenthesis can be moved to directly express this as a projection matrix operating on b.
+
+\begin{equation}\label{eqn:projectmatrixline}
+p = \left(\frac{a \transpose{a}}{\transpose{a} a}\right) b = P b
+\end{equation}
+
+\subsection{ Projection onto plane. }
+
+\begin{figure}[htp]
+\centering
+\includegraphics[totalheight=0.4\textheight]{Projection_plane}
+\caption{Projection onto plane.}\label{fig:Projection_plane}
+\end{figure}
+
+Calculation of the projection matrix to project onto a plane is similar.  The variables to solve for are $p$, and $e$ in as figure
+figure \ref{fig:Projection_plane}.
+
+For projection onto a plane (or hyperplane) the idea is the same, splitting the vector into a component in the plane and an perpendicular component.
+Since the
+idea is the same for any dimensional subspace, explicit specification of the summation range is omitted here so the result is good for higher dimensional
+subspaces as well as the plane:
+
+\[
+b - p = e
+\]
+\[
+p = \sum \alpha_i u_i
+\]
+
+however, we get a set of equations, one for each direction vector in the plane
+
+\[
+(b - p) \cdot u_i = 0
+\]
+
+Expanding $p$ explicitly and rearranging we have the following set of equations:
+
+\[
+b \cdot u_i = (\sum_s \alpha_s u_s) \cdot u_i
+\]
+
+putting this in matrix form
+
+\begin{align*}
+[b \cdot u_i]_i 
+&= 
+{
+\begin{bmatrix}
+(\sum_s \alpha u_s) \cdot u_i
+\end{bmatrix}
+}_i \\
+\end{align*}
+
+Writing $U = 
+\begin{bmatrix}
+u_1 & u_2 & \cdots 
+\end{bmatrix}$
+
+\begin{align*}
+\begin{bmatrix}
+\transpose{u_1} \\
+\transpose{u_2} \\
+\vdots 
+\end{bmatrix}
+b
+&= 
+\begin{bmatrix}
+(\sum_s \alpha_s u_s) \cdot u_i
+\end{bmatrix} \\
+&= 
+{
+\begin{bmatrix}
+u_i \cdot u_j
+\end{bmatrix}
+}_{ij}
+\begin{bmatrix}
+\alpha_1 \\
+\alpha_2 \\
+\vdots \\
+\end{bmatrix} \\
+\end{align*}
+
+Solving for the vector of unknown coefficents $\alpha = [\alpha_i]_i$ we have
+
+\[
+\alpha
+=
+{{
+\begin{bmatrix}
+u_i \cdot u_j
+\end{bmatrix}
+}_{ij}}^{-1}
+\transpose{U} b
+\]
+
+And 
+
+\begin{equation}
+p = U \alpha = U
+{{
+\begin{bmatrix}
+u_i \cdot u_j
+\end{bmatrix}
+}_{ij}}^{-1}
+\transpose{U} b
+\end{equation}
+
+However, this matrix in the middle is just $\transpose{U} U$:
+
+\begin{align*}
+\begin{bmatrix}
+\transpose{u_1} \\
+\transpose{u_2} \\
+\vdots \\
+\end{bmatrix}
+\begin{bmatrix}
+{u_1} & {u_2} & \hdots \\
+\end{bmatrix}
+&=
+\begin{bmatrix}
+\transpose{u_1} {u_1} & \transpose{u_1} {u_2} & \hdots \\
+\transpose{u_2} {u_1} & \transpose{u_2} {u_2} & \hdots \\
+\vdots & & \\
+\end{bmatrix} \\
+&=
+{
+\begin{bmatrix}
+\transpose{u_i} {u_j}
+\end{bmatrix}
+}_{ij} \\
+&=
+{
+\begin{bmatrix}
+{u_i} \cdot {u_j}
+\end{bmatrix}
+}_{ij} \\
+\end{align*}
+
+This provides the final result:
+
+\begin{equation}\label{eqn:projectiongeneralmatrix}
+\Proj_{U}\left(b\right) = U (\transpose{U} U)^{-1} \transpose{U} b
+\end{equation}
+
+\subsection{ Application of projection as left pseudoinverse (ie: linear fitting). }
+
+Equation \ref{eqn:projectiongeneralmatrix} provides us a way to find best solutions to general equations of the form:
+
+\[
+A x = b
+\]
+
+Here $A$ is the matrix of a linear transformation, $A : \mathbb{R}^k \rightarrow \mathbb{R}^n$, for some $k<n$.
+By ``best solutions'' here, we give this the geometrical meaning, namely, the solution matching the projection of $b$ onto the space.
+
+If b is not completely in the column space $C(A)$ of $A$, this can have no solution.  However, writing
+
+\[
+b = \Proj_A(b) + b_\perp
+\]
+
+as the components of $b$ in $C(A)$ and not in $C(A)$ respectively we can at least solve the reduced equation for $\hat{x}$:
+
+\begin{equation}\label{eqn:reducedinverseproblem}
+A \hat{x} = \Proj_A(b)
+\end{equation}
+
+
+This will be possible even in circumstances that the original equation had no solution.  Specifically, the vector b when projected onto the plane can be expressed as some
+linear combination of the columns of $A$ (a basis for the subspace).
+
+Substuition of our projection result into equation \ref{eqn:reducedinverseproblem} yields:
+
+\begin{align*}
+A \hat{x} 
+&= \Proj_{A}\left(b\right) = A (\transpose{A} A)^{-1} \transpose{A} b
+\end{align*}
+
+The simplest case here is when $A$ is of full column rank since one can premultiply this complete equation by $\transpose{A}$ without any possibility of nulling
+$A \hat{x}$.
+
+\begin{align*}
+\transpose{A} A \hat{x} 
+&= \transpose{A} A (\transpose{A} A)^{-1} \transpose{A} b \\
+&= \transpose{A} b \\
+\end{align*}
+
+Thus our best fit vector is
+
+\begin{equation}
+\hat{x} 
+= (\transpose{A} A)^{-1} \transpose{A} b
+\end{equation}
+
+Another way to view this is for any vector $x$ that is not in the null space $N(A)$, then the matrix:
+
+\begin{equation}
+A^{+}= (\transpose{A} A)^{-1} \transpose{A}
+\end{equation}
+
+has the action of a left inverse for any full column rank matrix $A$.  Thus when there is a solution to:
+
+\begin{equation}
+A x = b.
+\end{equation}
+
+It can be obtained by premultiplication using this "left" inverse.
+
+\begin{equation}
+A^{+} A x = x = A^{+} b
+\end{equation}
+
+\subsection{ SVD connection. }
+
+SVT decomposition is an factoring of $A \in M^{m \times n}$ with orthonormal matrices $U$, and $V$ producing the following form:
+
+\[
+A = U \Sigma \transpose{V}
+\]
+
+Sigma has the form:
+
+\[
+\Sigma = 
+\begin{bmatrix}
+D_{r,r} & 0_{r,n-r} \\
+0_{m-r,r} & 0_{m-r,n-r} \\
+\end{bmatrix}
+\]
+
+where $r = \rank(A)$, and $D$ is a diagonal matrix with the eigenvalues of $\transpose{A}A$ (or was that the square root of those eigenvalues).
+
+This provides a generalized spectral decomposition and similarity that applies to both non-square matrices and matrices not otherwise diagonalizable
+(ie: square matrix with similarity to a Jordon form matrix).  Given this decomposition we can write:
+
+\[
+\Sigma = \transpose{U} A V
+\]
+
+If one were to ask the question of what is the closest that one could get to inverting such a matrix.  It's pretty clear that the closest one could get to
+identity will be with multiplication of a $\Sigma^{+}$ of the following form:
+
+\[
+\Sigma^{+} \Sigma
+=
+\begin{bmatrix}
+(D_{r,r})^{-1} & 0_{r,m-r} \\
+0_{n-r,r} & 0_{n-r,m-r} \\
+\end{bmatrix}
+\begin{bmatrix}
+D_{r,r} & 0_{r,n-r} \\
+0_{m-r,r} & 0_{m-r,n-r} \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+I_{r,r} & 0_{r,n-r} \\
+0_{n-r,r} & 0_{n-r,n-r} \\
+\end{bmatrix}
+\]
+
+For a right pseudoinverse we have a similar result:
+
+\[
+\Sigma
+\Sigma^{+}
+=
+\begin{bmatrix}
+D_{r,r} & 0_{r,n-r} \\
+0_{m-r,r} & 0_{m-r,n-r} \\
+\end{bmatrix}
+\begin{bmatrix}
+(D_{r,r})^{-1} & 0_{r,m-r} \\
+0_{n-r,r} & 0_{n-r,m-r} \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+I_{r,r} & 0_{r,m-r} \\
+0_{m-r,r} & 0_{m-r,m-r} \\
+\end{bmatrix}
+\]
+
+
+
+\section{ Proof of omitted details and auxillary stuff. }
+
+\subsection{ That we can remove parens to form projection matrix in line projection equation. }
+
+Remove the parens in some of these expressions may not always be correct, so it is worth demonstrating that this is okay as
+done to calculate the projection matrix $P$ in 
+equation \ref{eqn:projectmatrixline}.
+We only need to look at the numerator since the denominator is a scalar in this case.
+
+\begin{align*}
+(a \transpose{a}) b
+&= [ a_i a_j ]_{ij} [b_i]_i \\
+&= 
+{\begin{bmatrix}
+\sum_k a_i a_k b_k
+\end{bmatrix}
+}_i \\
+&= 
+{\begin{bmatrix}
+a_i \sum_k a_k b_k
+\end{bmatrix}
+}_i \\
+&= [ a_i ]_i \transpose{a} b \\
+&= a (\transpose{a} b) \\
+\end{align*}
+
+\subsection{ Full column rank implies $\transpose{A}A$ invertability. }
+
+Now, if $A = [a_i]_i$, 
+the matrix $\transpose{A}A$ is
+
+\[
+\begin{bmatrix}
+{a_1} \cdot {a_1} & {a_1} \cdot {a_2} & \hdots \\
+{a_2} \cdot {a_1} & {a_2} \cdot {a_2} & \hdots \\
+\vdots & & \\
+\end{bmatrix}.
+\]
+
+This is an invertable matrix provided $\{a_i\}_i$ is a linearly independent set of vectors.
+I'm not sure how to show that this is true with just matrix algebra, but one can recognize the determinant of this matrix as a GA dot product of a k-blade:
+
+\[
+(-1)^{k(k-1)/2} (a_1 \wedge \cdots \wedge a_k) \cdot (a_1 \wedge \cdots \wedge a_k).
+\]
+
+Linear independence means that this wedge product is non-zero, and therefore the dot product, and original determinant is also non-zero.
+
+\subsection{ Any invertable scaling of column space basis vectors does not change the projection }
+
+Suppose that one introduces an alternate basis for the column space
+
+\[
+v_i = \sum \alpha_{ik} u_k
+\]
+
+This can be expressed in matrix form as:
+
+\[
+V = U E
+\]
+
+or
+
+\[
+U E^{-1} = V
+\]
+
+We should expect that the projection onto the plane expressed with this alternate basis should be identical to the original.  Verification
+is straightforward:
+
+\begin{align*}
+\Proj_V 
+&= V \left(\transpose{V} V\right)^{-1} \transpose{V} \\
+&= \left(U E^{-1}\right) \left(\transpose{\left(U E^{-1}\right)} \left(U E^{-1}\right)\right)^{-1} \transpose{\left(U E^{-1}\right)} \\
+&= \left(U E^{-1}\right) \left( \transpose{E^{-1}} \transpose{U} U E^{-1}\right)^{-1} \transpose{\left(U E^{-1}\right)} \\
+&= \left(U E^{-1}\right) E \left( \transpose{U}U\right)^{-1} \transpose{E} \transpose{\left(U E^{-1}\right)} \\
+&= U \left( \transpose{U}U\right)^{-1} \transpose{E} \transpose{E^{-1}} \transpose{U} \\
+&= U \left( \transpose{U}U\right)^{-1} \transpose{U} \\
+&= \Proj_U
+\end{align*}
+
+\end{document}               % End of document.
