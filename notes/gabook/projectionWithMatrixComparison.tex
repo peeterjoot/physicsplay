@@ -300,7 +300,8 @@ A^{+} A x = x = A^{+} b
 
 \subsection{ SVD connection. }
 
-SVT decomposition is an factoring of $A \in M^{m \times n}$ with orthonormal matrices $U$, and $V$ producing the following form:
+SVT decomposition is an factoring of $A \in M^{m \times n}$ with orthonormal matrices $U \in M^{m \times m}$
+and $V \in M^{n \times n} $ producing the following form:
 
 \[
 A = U \Sigma \transpose{V}
@@ -316,7 +317,7 @@ D_{r,r} & 0_{r,n-r} \\
 \end{bmatrix}
 \]
 
-where $r = \rank(A)$, and $D$ is a diagonal matrix with the eigenvalues of $\transpose{A}A$ (or was that the square root of those eigenvalues).
+where $r = \rank(A)$, and $D$ is a diagonal matrix with the root of the (positive) eigenvalues of $\transpose{A}A$.
 
 This provides a generalized spectral decomposition and similarity that applies to both non-square matrices and matrices not otherwise diagonalizable
 (ie: square matrix with similarity to a Jordon form matrix).  Given this decomposition we can write:
@@ -367,7 +368,51 @@ I_{r,r} & 0_{r,m-r} \\
 \end{bmatrix}
 \]
 
+With either of these one can define a corresponding pseudoinverse (left or right) as:
 
+\begin{equation}
+A^{+} = V \Sigma^{+} \transpose{U}
+\end{equation}
+
+This is a logical definition, but how close is it to the projective
+left inverse we calculated above in the case where $A$ is not of full column 
+rank?
+
+Multiplication gives: 
+
+\begin{align*}
+A^{+} A 
+&= V \Sigma^{+} \transpose{U} U \Sigma \transpose{V} \\
+&= V \Sigma^{+} \Sigma \transpose{V} \\
+&=
+\begin{bmatrix}
+v_1 & v_2 & \cdots & v_r & v_{r+1} & \cdots & v_n \\
+\end{bmatrix}
+\begin{bmatrix}
+I_{r,r} & 0_{r,n-r} \\
+0_{n-r,r} & 0_{n-r,n-r} \\
+\end{bmatrix}
+\transpose{V} \\
+&=
+\begin{bmatrix}
+v_1 & v_2 & \cdots & v_r & v_{r+1} & \cdots & v_n \\
+\end{bmatrix}
+\begin{bmatrix}
+I_{r,r} & 0_{r,n-r} \\
+0_{n-r,r} & 0_{n-r,n-r} \\
+\end{bmatrix}
+\transpose{V} \\
+&=
+\begin{bmatrix}
+v_1 & v_2 & \cdots & v_r & 0 & \cdots & 0 \\
+\end{bmatrix}
+\begin{bmatrix}
+\transpose{v_1} \\ \transpose{v_2} \\ \vdots \\ \transpose{v_r} \\ \transpose{v_{r+1}} \vdots \\ \transpose{v_n} \\
+\end{bmatrix}
+\\
+\end{align*}
+
+Embeded in that is the same "as-close-to" identity as calculated above.
 
 \section{ Proof of omitted details and auxillary stuff. }
 
