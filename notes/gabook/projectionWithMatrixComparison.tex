@@ -1,9 +1,10 @@
 \documentclass{article}      % Specifies the document class
 
 \input{../peeters_macros.tex}
-\DeclareMathOperator{\TextTranspose}{T}
+%\DeclareMathOperator{\TextTranspose}{T}
 \DeclareMathOperator{\rank}{rank}
-\newcommand{\transpose}[1]{{{#1}^{\TextTranspose}}}
+%\newcommand{\transpose}[1]{{{#1}^{\TextTranspose}}}
+\newcommand{\transpose}[1]{{{#1}^{\text{T}}}}
 
 \usepackage{color,cite,graphicx}
    % use colour in the document, put your citations as [1-4]
@@ -18,7 +19,7 @@
 %
 
                              % The preamble begins here.
-\title{ Matrix and GA formulation of projection. } % Declares the document's title.
+\title{ Matrix review. } % Declares the document's title.
 \author{Peeter Joot}         % Declares the author's name.
 \date{ April 11, 2008 }        % Deleting this command produces today's date.
 
@@ -26,16 +27,22 @@
 
 \maketitle{}
 
-\section{ A comparision. }
+\section{ Motivation. }
 
 My initial intention for these notes was to 
-get a feel for the similarities and differences between GA and matrix approaches to solution of projection.  I came to realize that
-I needed to spend a fair amount of time detailing for myself how all this works in a matrix approach.
+get a feel for the similarities and differences between GA and matrix approaches to solution of projection.  Attempting to
+write up that comparison
+I found gaps in my understanding of the matrix algebra.  In particular the topic of projection as well as the related
+ideas of pseudoinverses and SVD were not adequately covered in my university courses, nor my texts from those courses.
+Here is my attempt to write up what I understand of these subjects and explore the gaps in my knowledge.
+
+Particularily helpful was 
+Gilbert Strang's excellent MIT lecture on subspace projection (available on the MIT opencourse website).
+Much of the notes below are probably detailed in his course textbook, which I don't have.  However, 
+if I can't explain the ideas to myself, or write them up in a way that I feel would explain
+to others, then I obviously don't understand them sufficiently.
 
 \section{ Subspace projection in matrix notation. }
-
-The following notes are my summary of the ideas of subspace projection following 
-Gilbert Strang's excellent MIT lecture on the same (probably also detailed in his course textbook) :
 
 \subsection{ Projection onto line. }
 
@@ -74,7 +81,7 @@ Or,
 b \cdot a = \alpha a \cdot a
 \]
 
-and solving for $\alpha$ and substituiting we have:
+and solving for $\alpha$ and substituting we have:
 
 \begin{equation}
 p = a \frac{a \cdot b}{a \cdot a}
@@ -92,7 +99,7 @@ Following Gilbert Strang's MIT lecture on subspace projection, the parenthesis c
 p = \left(\frac{a \transpose{a}}{\transpose{a} a}\right) b = P b
 \end{equation}
 
-\subsection{ Projection onto plane. }
+\subsection{ Projection onto plane (or subspace). }
 
 \begin{figure}[htp]
 \centering
@@ -168,7 +175,7 @@ u_i \cdot u_j
 \end{bmatrix} \\
 \end{align*}
 
-Solving for the vector of unknown coefficents $\alpha = [\alpha_i]_i$ we have
+Solving for the vector of unknown coefficients $\alpha = [\alpha_i]_i$ we have
 
 \[
 \alpha
@@ -264,7 +271,7 @@ A \hat{x}
 &= \Proj_{A}\left(b\right) = A (\transpose{A} A)^{-1} \transpose{A} b
 \end{align*}
 
-The simplest case here is when $A$ is of full column rank since one can premultiply this complete equation by $\transpose{A}$ without any possibility of nulling
+The simplest case here is when $A$ is of full column rank since one can pre-multiply this complete equation by $\transpose{A}$ without any possibility of nulling
 $A \hat{x}$.
 
 \begin{align*}
@@ -292,7 +299,7 @@ has the action of a left inverse for any full column rank matrix $A$.  Thus when
 A x = b.
 \end{equation}
 
-It can be obtained by premultiplication using this "left" inverse.
+It can be obtained by pre-multiplication using this "left" inverse.
 
 \begin{equation}
 A^{+} A x = x = A^{+} b
@@ -422,6 +429,7 @@ D_{r,r} & 0_{r,n-r} \\
 %\end{bmatrix}
 %\\
 \end{align*}
+%Embeded in that is the same "as-close-to" identity as calculated above.
 
 Writing $D_{r,r} = [\delta_{ij}\sigma_i]_{ij}$, we have:
 
@@ -461,7 +469,8 @@ A_{n,r} B_{r,n}
 
 Thus we can strip the block zero matrices from equation \ref{eqn:VIrVt} and write
 
-\begin{equation*}
+\begin{equation}\label{eqn:pseudoinversetimesmatrix}
+A^{+} A =
 V \Sigma^{+} \Sigma \transpose{V} 
 =
 \begin{bmatrix}
@@ -470,17 +479,157 @@ V \Sigma^{+} \Sigma \transpose{V}
 \begin{bmatrix}
 \transpose{v_1}\sigma_1 \\ \transpose{v_2}\sigma_2 \\ \vdots \\ \transpose{v_r}\sigma_r 
 \end{bmatrix}
-\end{equation*}
+\end{equation}
 
-Intuition says this is $I_{nn}$.  Proof?
+Eliminating the $\sigma$ terms we have:
 
-%Embeded in that is the same "as-close-to" identity as calculated above.
+\begin{equation}\label{eqn:pseudoinversetimesmatrixsum}
+A^{+} A =
+\begin{bmatrix}
+\sum_{k=1}^r {v_k}\transpose{v_k}
+\end{bmatrix}
+=
+\begin{bmatrix}
+v_1 & v_2 & \cdots & v_r 
+\end{bmatrix}
+\begin{bmatrix}
+\transpose{v_1} \\ \transpose{v_2} \\ \vdots \\ \transpose{v_r} 
+\end{bmatrix}
+\end{equation}
 
-\section{ Proof of omitted details and auxillary stuff. }
+We previously calculated a left inverse using the projection matrix associated with a full column rank matrix.  For this product to have the properties of a
+left acting inverse we also expect it to be a projection.
+Let's disgress
+slightly before looking at whether equation
+\ref{eqn:pseudoinversetimesmatrixsum} satisifies this expectation.
 
-\subsection{ That we can remove parens to form projection matrix in line projection equation. }
+\subsection{ Numerical expansion of left pseudoscalar matrix with matrix.}
 
-Remove the parens in some of these expressions may not always be correct, so it is worth demonstrating that this is okay as
+Numerically expanding the projection matrix $A (\transpose{A} A)^{-1}\transpose{A}$ isn't something
+that we want to do (it will get messy with the matrix inversion required for the center product).
+However, in the form of equation \ref{eqn:pseudoinversetimesmatrix} this is not too hard.
+
+Let's do this to get a feel for things.
+
+\subsubsection{ \R{4} plane projection example. }
+
+Take a simple projection onto the plane spanned by the following two orthonormal vectors
+
+\[
+v_1 = 
+\frac{\sqrt{2}}{4}
+\begin{bmatrix}
+1 \\
+2 \\
+\sqrt{3} \\
+0 \\
+\end{bmatrix}
+\]
+
+\[
+v_2 = 
+\frac{\sqrt{2}}{4}
+\begin{bmatrix}
+-\sqrt{3} \\
+0 \\
+1 \\
+2 \\
+\end{bmatrix}
+\]
+
+Now form what we believe to be the projection matrix:
+
+\[
+P =
+\begin{bmatrix}
+v_1 & v_2 \\
+\end{bmatrix}
+\begin{bmatrix}
+\transpose{v_1} \\
+\transpose{v_2} \\
+\end{bmatrix}
+=
+\inv{8}
+\begin{bmatrix}
+1 & -\sqrt{3} \\
+2 & 0 \\
+\sqrt{3} & 1 \\
+0 & 2 \\
+\end{bmatrix}
+\begin{bmatrix}
+1 & 2 & \sqrt{3} & 0 \\
+-\sqrt{3} & 0 & 1 & 2 \\
+\end{bmatrix}
+\]
+\[
+\implies
+P =
+\inv{8}
+\begin{bmatrix}
+4 & 2 & 0 & -2\sqrt{3} \\
+2 & 4 & 2\sqrt{3} & 0 \\
+0 & 2\sqrt{3} & 4 & 2 \\
+-2\sqrt{3} & 0 & 2 & 4 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+1/2 & 1/4 & 0 & -\sqrt{3}/4 \\
+1/4 & 1/2 & \sqrt{3}/4 & 0 \\
+0 & \sqrt{3}/4 & 1/2 & 1/4 \\
+-\sqrt{3}/4 & 0 & 1/4 & 1/2 \\
+\end{bmatrix}
+\]
+
+What can be said about this just by looking at the matrix itself?
+
+\begin{enumerate}
+\item
+One can verify by inspection that $P v_1 = v_1$ and $P v_2 = v_2$, so this
+is has at least one of the expected properties of a projection matrix.
+We also expect that $P x = 0$ for any $x \in N(\transpose{V})$, so if
+it has that property too we can call it the projection matrix for the subspace
+spanned by $v_1$, and $v_2$.  We also assume that this is the projection
+matrix for $A$ (we haven't yet shown any explicit
+relationship between this first
+$r$ column vectors in the matrix $V$ and the original matrix $A$).
+
+\item
+It is symmetric.  For a full column rank matrix $A$ we know to expect this
+of the associated projection matrix from the
+equation $P = A \inv{\transpose{A}A} \transpose{A}$.  For that we can see by 
+inspection that $\transpose{P} = P$.
+
+\item
+In this particular case columns 2,4 and columns 1,3 are each pairs of
+perpendicular vectors.  Is something like this to be expected in general for
+projection matrices?
+\end{enumerate}
+
+\section{ Return to analytic treatment. }
+
+\begin{figure}[htp]
+\centering
+\includegraphics[totalheight=0.4\textheight]{visualize_subspace_projection}
+\caption{Visualizing projection onto a subspace.}\label{fig:Projection_subspace}
+\end{figure}
+
+We can geometrically visualize the projection problem 
+as in figure \ref{fig:Projection_subspace}.  Here
+the subspace can be pictured
+as a plane containing a set of mutually perpendicular basis vectors, as if
+one has visually projected all the higher dimensional vectors onto a plane.
+
+For a vector $x$ that contains some part not in the space we want to find
+the component in the space $p$, or characterize the projection operation
+that produces this vector, and also find the space of vectors that lie
+perpendicular to the space.
+
+
+\section{ Proof of omitted details and auxiliary stuff. }
+
+\subsection{ That we can remove parenthesis to form projection matrix in line projection equation. }
+
+Remove the parenthesis in some of these expressions may not always be correct, so it is worth demonstrating that this is okay as
 done to calculate the projection matrix $P$ in 
 equation \ref{eqn:projectmatrixline}.
 We only need to look at the numerator since the denominator is a scalar in this case.
@@ -515,7 +664,7 @@ the matrix $\transpose{A}A$ is
 \end{bmatrix}.
 \]
 
-This is an invertable matrix provided $\{a_i\}_i$ is a linearly independent set of vectors.
+This is an invertible matrix provided $\{a_i\}_i$ is a linearly independent set of vectors.
 I'm not sure how to show that this is true with just matrix algebra, but one can recognize the determinant of this matrix as a GA dot product of a k-blade:
 
 \[
@@ -524,7 +673,7 @@ I'm not sure how to show that this is true with just matrix algebra, but one can
 
 Linear independence means that this wedge product is non-zero, and therefore the dot product, and original determinant is also non-zero.
 
-\subsection{ Any invertable scaling of column space basis vectors does not change the projection }
+\subsection{ Any invertible scaling of column space basis vectors does not change the projection }
 
 Suppose that one introduces an alternate basis for the column space
 
