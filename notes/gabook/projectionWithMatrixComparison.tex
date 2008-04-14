@@ -507,7 +507,7 @@ slightly before looking at whether equation
 
 Numerically expanding the projection matrix $A (\transpose{A} A)^{-1}\transpose{A}$ isn't something
 that we want to do (it will get messy with the matrix inversion required for the center product).
-However, in the form of equation \ref{eqn:pseudoinversetimesmatrix} this is not too hard.
+However, in the form of equation \ref{eqn:pseudoinversetimesmatrixsum} this is not too hard.
 
 Let's do this to get a feel for things.
 
@@ -624,6 +624,131 @@ the component in the space $p$, or characterize the projection operation
 that produces this vector, and also find the space of vectors that lie
 perpendicular to the space.
 
+We have shown that the left pseudoinverse product with the matrix can
+be expressed as a projection matrix (sum of the projection matrices
+associated with a set of orthonormal vectors)
+
+\begin{equation}\label{eqn:pseudoprojmatsum}
+A^{+} A =
+\sum_{k=1}^r {v_k}\transpose{v_k}
+\end{equation}
+
+Defining (for now)
+\[
+V =
+\begin{bmatrix}
+v_1 & v_2 & \cdots & v_r
+\end{bmatrix}
+\]
+
+(note this is a different ``$V$'' than the $V$ in $A = U \Sigma \transpose{V}$ since it only includes the first $r$ columns).
+
+This allows us to write the matrix of equation \ref{eqn:pseudoprojmatsum}
+as
+
+\begin{equation}
+A^{+} A = V \transpose{V}
+\end{equation}
+
+Now suppose we have a vector $n$ that is perpendicular to all vectors $v_i$.  We can then write:
+
+\[
+v_i \cdot n = 0
+\]
+
+Or,
+\[
+\transpose{v_i} n = 0
+\]
+
+In block matrix form for all $v_i$ that is:
+
+\[
+[\transpose{v_i} n]_i = [\transpose{v_i}]_i n = \transpose{V} n = 0
+\]
+
+This is why we say that $n$ is in the null space of $\transpose{V}$,
+$N(\transpose{V})$ not $N(V)$.  One perhaps could say this is in the null
+or perpendicular space of the set $\{v_i\}$, but our use of columns as
+vectors coupled with the Euclianian norm requires transposition to express
+the same null space concept for a matrix of column vectors.
+
+Since $\transpose{V} n = 0$ for any $n \in N(V)$ we also have
+
+\[
+V \transpose{V} n = 0
+\]
+
+Thus the first property required of this matrix as a projection operation
+is satisfied.
+
+Now we have seen that $V \transpose{V}$ is not an identity matrix, although
+it can have blocks of identity matrixes along the diagonal in some cases.
+However, we can examine the action of this matrix on any vector that lies in the
+span of the set $\{v_i\}$.  By linearity it is sufficient to do this calcuation 
+for a particular $v_i$:
+
+\begin{align*}
+V \transpose{V} v_i
+&=
+V
+\begin{bmatrix}
+\transpose{v_1} v_i \\
+\transpose{v_2} v_i \\
+\vdots \\
+\transpose{v_r} v_i \\
+\end{bmatrix}
+\\
+&=
+\begin{bmatrix}
+{v_1} & {v_2} & \cdots & {v_r} \\
+\end{bmatrix}
+{
+\begin{bmatrix}
+\delta_{si}
+\end{bmatrix}
+}_s \\
+&= \sum_{k=1}^{r} v_k \delta_{ki} \\
+&= v_i \\
+\end{align*}
+
+This completes the verification that $V \transpose{V}$ is a projection
+onto the span of the columns of $V$.  Looking back, since the columns
+of $V$ are of full rank we could also have said this directly using our
+previous projection matrix equation
+
+\[
+\Proj_V = V (\transpose{V} V)^{-1} \transpose{V}
+\]
+
+The central product term to invert is:
+
+\[
+\transpose{V} V = [ \transpose{v_i} v_j ]_{ij} = [ \delta_{ij} ]_{ij} = I_{r,r}
+\]
+
+Therefore, in this particular case where the column vectors are orthonormal,
+our projection matrix can be expressed using the two exterior terms alone:
+
+\begin{equation}\label{eqn:projVr}
+\Proj_V = V (\transpose{V} V)^{-1} \transpose{V} = V \transpose{V}
+\end{equation}
+
+\subsection{ Correlating the SVD derived projection matrix back to $A$. }
+
+We now have to show that this is also the projection matrix associated
+with the columns of the 
+original matrix that we have an SVD factorization for
+
+\[
+A = U \Sigma \transpose{V}
+\]
+
+Once we show this, then we have also demonstrated that the first $r$ 
+(orthonormal) column vectors in the matrix $V$ of this decomposition
+are a basis for the column space of $A$ itself.  Note that we are
+switching back to the original definition of $V \in M^{n,n}$ here, and
+not the $V \in M^{n,r}$ of equation \ref{eqn:projVr}.
 
 \section{ Proof of omitted details and auxiliary stuff. }
 
@@ -665,13 +790,17 @@ the matrix $\transpose{A}A$ is
 \]
 
 This is an invertible matrix provided $\{a_i\}_i$ is a linearly independent set of vectors.
-I'm not sure how to show that this is true with just matrix algebra, but one can recognize the determinant of this matrix as a GA dot product of a k-blade:
+This could be proven if one could show that the 
+determinant of this matrix was non-zero.
+I'm not sure how to show that this is true with just matrix algebra, however
+one can identify, with an adjustment of sign for reversion, as 
+the GA dot product of a k-blade:
 
 \[
 (-1)^{k(k-1)/2} (a_1 \wedge \cdots \wedge a_k) \cdot (a_1 \wedge \cdots \wedge a_k).
 \]
 
-Linear independence means that this wedge product is non-zero, and therefore the dot product, and original determinant is also non-zero.
+Linear independence means that this wedge product is non-zero, and therefore the dot product, and thus original determinant is also non-zero.
 
 \subsection{ Any invertible scaling of column space basis vectors does not change the projection }
 
