@@ -1,5 +1,6 @@
 \documentclass{article}      % Specifies the document class
 
+
 \input{../peeters_macros.tex}
 %\DeclareMathOperator{\TextTranspose}{T}
 \DeclareMathOperator{\rank}{rank}
@@ -27,9 +28,12 @@
 
 \maketitle{}
 
+
 \section{ Motivation. }
 
+
 My initial intention for these notes was to 
+
 get a feel for the similarities and differences between GA and matrix approaches to solution of projection.  Attempting to
 write up that comparison
 I found gaps in my understanding of the matrix algebra.  In particular the topic of projection as well as the related
@@ -42,11 +46,15 @@ Much of the notes below are probably detailed in his course textbook, which I do
 if I can't explain the ideas to myself, or write them up in a way that I feel would explain
 to others, then I obviously don't understand them sufficiently.
 
+
 \section{ Subspace projection in matrix notation. }
+
 
 \subsection{ Projection onto line. }
 
+
 \begin{figure}[htp]
+
 \centering
 \includegraphics[totalheight=0.4\textheight]{Projection_line}
 \caption{Projection onto line.}\label{fig:Projection_line}
@@ -99,7 +107,10 @@ Following Gilbert Strang's MIT lecture on subspace projection, the parenthesis c
 p = \left(\frac{a \transpose{a}}{\transpose{a} a}\right) b = P b
 \end{equation}
 
+
 \subsection{ Projection onto plane (or subspace). }
+
+
 
 \begin{figure}[htp]
 \centering
@@ -107,7 +118,7 @@ p = \left(\frac{a \transpose{a}}{\transpose{a} a}\right) b = P b
 \caption{Projection onto plane.}\label{fig:Projection_plane}
 \end{figure}
 
-Calculation of the projection matrix to project onto a plane is similar.  The variables to solve for are $p$, and $e$ in as figure
+Calculation of the projection matrix to project onto a plane is similar.  The variables to solve for are $p$, and $e$ in as
 figure \ref{fig:Projection_plane}.
 
 For projection onto a plane (or hyperplane) the idea is the same, splitting the vector into a component in the plane and an perpendicular component.
@@ -150,7 +161,6 @@ Writing $U =
 \begin{bmatrix}
 u_1 & u_2 & \cdots 
 \end{bmatrix}$
-
 \begin{align*}
 \begin{bmatrix}
 \transpose{u_1} \\
@@ -195,6 +205,7 @@ p = U \alpha = U
 {{
 \begin{bmatrix}
 u_i \cdot u_j
+
 \end{bmatrix}
 }_{ij}}^{-1}
 \transpose{U} b
@@ -237,277 +248,26 @@ This provides the final result:
 \Proj_{U}\left(b\right) = U (\transpose{U} U)^{-1} \transpose{U} b
 \end{equation}
 
-\subsection{ Application of projection as left pseudoinverse (ie: linear fitting). }
+\subsection{ Simplifying case.  Orthonormal basis for column space. }
 
-Equation \ref{eqn:projectiongeneralmatrix} provides us a way to find best solutions to general equations of the form:
-
-\[
-A x = b
-\]
-
-Here $A$ is the matrix of a linear transformation, $A : \mathbb{R}^k \rightarrow \mathbb{R}^n$, for some $k<n$.
-By ``best solutions'' here, we give this the geometrical meaning, namely, the solution matching the projection of $b$ onto the space.
-
-If b is not completely in the column space $C(A)$ of $A$, this can have no solution.  However, writing
+To evaluate equation \ref{eqn:projectiongeneralmatrix} we need only full column rank for $U$, but this will be messy in general due to the matrix inversion required for the center product.  That can be avoided by picking an orthonormal basis for the vector space that we are projecting on.  With an orthonormal column basis that 
+central product term to invert is:
 
 \[
-b = \Proj_A(b) + b_\perp
+\transpose{U} U = [ \transpose{u_i} u_j ]_{ij} = [ \delta_{ij} ]_{ij} = I_{r,r}
 \]
 
-as the components of $b$ in $C(A)$ and not in $C(A)$ respectively we can at least solve the reduced equation for $\hat{x}$:
+Therefore, the projection matrix can be expressed using the two exterior terms alone:
 
-\begin{equation}\label{eqn:reducedinverseproblem}
-A \hat{x} = \Proj_A(b)
+\begin{equation}\label{eqn:projOrthonormal}
+\Proj_U = U (\transpose{U} U)^{-1} \transpose{U} = U \transpose{U}
 \end{equation}
-
-
-This will be possible even in circumstances that the original equation had no solution.  Specifically, the vector b when projected onto the plane can be expressed as some
-linear combination of the columns of $A$ (a basis for the subspace).
-
-Substuition of our projection result into equation \ref{eqn:reducedinverseproblem} yields:
-
-\begin{align*}
-A \hat{x} 
-&= \Proj_{A}\left(b\right) = A (\transpose{A} A)^{-1} \transpose{A} b
-\end{align*}
-
-The simplest case here is when $A$ is of full column rank since one can pre-multiply this complete equation by $\transpose{A}$ without any possibility of nulling
-$A \hat{x}$.
-
-\begin{align*}
-\transpose{A} A \hat{x} 
-&= \transpose{A} A (\transpose{A} A)^{-1} \transpose{A} b \\
-&= \transpose{A} b \\
-\end{align*}
-
-Thus our best fit vector is
-
-\begin{equation}
-\hat{x} 
-= (\transpose{A} A)^{-1} \transpose{A} b
-\end{equation}
-
-Another way to view this is for any vector $x$ that is not in the null space $N(A)$, then the matrix:
-
-\begin{equation}
-A^{+}= (\transpose{A} A)^{-1} \transpose{A}
-\end{equation}
-
-has the action of a left inverse for any full column rank matrix $A$.  Thus when there is a solution to:
-
-\begin{equation}
-A x = b.
-\end{equation}
-
-It can be obtained by pre-multiplication using this "left" inverse.
-
-\begin{equation}
-A^{+} A x = x = A^{+} b
-\end{equation}
-
-\subsection{ SVD connection. }
-
-SVT decomposition is an factoring of $A \in M^{m \times n}$ with orthonormal matrices $U \in M^{m \times m}$
-and $V \in M^{n \times n} $ producing the following form:
-
-\[
-A = U \Sigma \transpose{V}
-\]
-
-Sigma has the form:
-
-\[
-\Sigma = 
-\begin{bmatrix}
-D_{r,r} & 0_{r,n-r} \\
-0_{m-r,r} & 0_{m-r,n-r} \\
-\end{bmatrix}
-\]
-
-where $r = \rank(A)$, and $D$ is a diagonal matrix with the root of the (positive) eigenvalues of $\transpose{A}A$.
-
-This provides a generalized spectral decomposition and similarity that applies to both non-square matrices and matrices not otherwise diagonalizable
-(ie: square matrix with similarity to a Jordon form matrix).  Given this decomposition we can write:
-
-\[
-\Sigma = \transpose{U} A V
-\]
-
-If one were to ask the question of what is the closest that one could get to inverting such a matrix.  It's pretty clear that the closest one could get to
-identity will be with multiplication of a $\Sigma^{+}$ of the following form:
-
-\[
-\Sigma^{+} \Sigma
-=
-\begin{bmatrix}
-(D_{r,r})^{-1} & 0_{r,m-r} \\
-0_{n-r,r} & 0_{n-r,m-r} \\
-\end{bmatrix}
-\begin{bmatrix}
-D_{r,r} & 0_{r,n-r} \\
-0_{m-r,r} & 0_{m-r,n-r} \\
-\end{bmatrix}
-=
-\begin{bmatrix}
-I_{r,r} & 0_{r,n-r} \\
-0_{n-r,r} & 0_{n-r,n-r} \\
-\end{bmatrix}
-\]
-
-For a right pseudoinverse we have a similar result:
-
-\[
-\Sigma
-\Sigma^{+}
-=
-\begin{bmatrix}
-D_{r,r} & 0_{r,n-r} \\
-0_{m-r,r} & 0_{m-r,n-r} \\
-\end{bmatrix}
-\begin{bmatrix}
-(D_{r,r})^{-1} & 0_{r,m-r} \\
-0_{n-r,r} & 0_{n-r,m-r} \\
-\end{bmatrix}
-=
-\begin{bmatrix}
-I_{r,r} & 0_{r,m-r} \\
-0_{m-r,r} & 0_{m-r,m-r} \\
-\end{bmatrix}
-\]
-
-With either of these one can define a corresponding pseudoinverse (left or right) as:
-
-\begin{equation}
-A^{+} = V \Sigma^{+} \transpose{U}
-\end{equation}
-
-This is a logical definition, but how close is it to the projective
-left inverse we calculated above in the case where $A$ is not of full column 
-rank?
-
-Multiplication gives: 
-
-\begin{align*}
-A^{+} A 
-&= V \Sigma^{+} \transpose{U} U \Sigma \transpose{V} \\
-&= V \Sigma^{+} \Sigma \transpose{V} \\
-&=
-\begin{bmatrix}
-v_1 & v_2 & \cdots & v_r & v_{r+1} & \cdots & v_n \\
-\end{bmatrix}
-\begin{bmatrix}
-(D_{r,r})^{-1} & 0_{r,m-r} \\
-0_{n-r,r} & 0_{n-r,m-r} \\
-\end{bmatrix}
-\begin{bmatrix}
-D_{r,r} & 0_{r,n-r} \\
-0_{m-r,r} & 0_{m-r,n-r} \\
-\end{bmatrix}
-\begin{bmatrix}
-\transpose{v_1} \\ \transpose{v_2} \\ \vdots \\ \transpose{v_r} \\ \transpose{v_{r+1}} \\ \vdots \\ \transpose{v_n} \\
-\end{bmatrix}
-%\begin{bmatrix}
-%I_{r,r} & 0_{r,n-r} \\
-%0_{n-r,r} & 0_{n-r,n-r} \\
-%\end{bmatrix}
-%\transpose{V} \\
-%&=
-%\begin{bmatrix}
-%v_1 & v_2 & \cdots & v_r & v_{r+1} & \cdots & v_n \\
-%\end{bmatrix}
-%\begin{bmatrix}
-%I_{r,r} & 0_{r,n-r} \\
-%0_{n-r,r} & 0_{n-r,n-r} \\
-%\end{bmatrix}
-%\transpose{V} \\
-%&=
-%\begin{bmatrix}
-%v_1 & v_2 & \cdots & v_r & 0 & \cdots & 0 \\
-%\end{bmatrix}
-%\begin{bmatrix}
-%\transpose{v_1} \\ \transpose{v_2} \\ \vdots \\ \transpose{v_r} \\ \transpose{v_{r+1}} \vdots \\ \transpose{v_n} \\
-%\end{bmatrix}
-%\\
-\end{align*}
-%Embeded in that is the same "as-close-to" identity as calculated above.
-
-Writing $D_{r,r} = [\delta_{ij}\sigma_i]_{ij}$, we have:
-
-\begin{equation}\label{eqn:VIrVt}
-V \Sigma^{+} \Sigma \transpose{V} 
-=
-\begin{bmatrix}
-\frac{v_1}{\sigma_1} & \frac{v_2}{\sigma_2} & \cdots & \frac{v_r}{\sigma_2} & 0 & \cdots & 0 
-\end{bmatrix}
-\begin{bmatrix}
-\transpose{v_1}\sigma_1 \\ \transpose{v_2}\sigma_2 \\ \vdots \\ \transpose{v_r}\sigma_r \\ 0 \\ \vdots \\ 0 \\
-\end{bmatrix}
-\end{equation}
-
-Considering this as the product of block matrices we have a product here of the form
-
-\[
-\begin{bmatrix}
-A_{n,r} & 0_{n,n-r}
-\end{bmatrix}
-\begin{bmatrix}
-B_{r,n} \\ 0_{n-r,n}
-\end{bmatrix}
-=
-\begin{bmatrix}
-A_{n,r} B_{r,n} + 0_{n,n-r} 0_{n-r,n}
-\end{bmatrix}
-=
-\begin{bmatrix}
-A_{n,r} B_{r,n} + 0_{n,n}
-\end{bmatrix}
-=
-\begin{bmatrix}
-A_{n,r} B_{r,n}
-\end{bmatrix}
-\]
-
-Thus we can strip the block zero matrices from equation \ref{eqn:VIrVt} and write
-
-\begin{equation}\label{eqn:pseudoinversetimesmatrix}
-A^{+} A =
-V \Sigma^{+} \Sigma \transpose{V} 
-=
-\begin{bmatrix}
-\frac{v_1}{\sigma_1} & \frac{v_2}{\sigma_2} & \cdots & \frac{v_r}{\sigma_2} 
-\end{bmatrix}
-\begin{bmatrix}
-\transpose{v_1}\sigma_1 \\ \transpose{v_2}\sigma_2 \\ \vdots \\ \transpose{v_r}\sigma_r 
-\end{bmatrix}
-\end{equation}
-
-Eliminating the $\sigma$ terms we have:
-
-\begin{equation}\label{eqn:pseudoinversetimesmatrixsum}
-A^{+} A =
-\begin{bmatrix}
-\sum_{k=1}^r {v_k}\transpose{v_k}
-\end{bmatrix}
-=
-\begin{bmatrix}
-v_1 & v_2 & \cdots & v_r 
-\end{bmatrix}
-\begin{bmatrix}
-\transpose{v_1} \\ \transpose{v_2} \\ \vdots \\ \transpose{v_r} 
-\end{bmatrix}
-\end{equation}
-
-We previously calculated a left inverse using the projection matrix associated with a full column rank matrix.  For this product to have the properties of a
-left acting inverse we also expect it to be a projection.
-Let's disgress
-slightly before looking at whether equation
-\ref{eqn:pseudoinversetimesmatrixsum} satisifies this expectation.
 
 \subsection{ Numerical expansion of left pseudoscalar matrix with matrix.}
 
 Numerically expanding the projection matrix $A (\transpose{A} A)^{-1}\transpose{A}$ isn't something
-that we want to do (it will get messy with the matrix inversion required for the center product).
-However, in the form of equation \ref{eqn:pseudoinversetimesmatrixsum} this is not too hard.
+that we want to do, but the simpler projection matrix of equation
+\ref{eqn:projOrthonormal} that we get with an orthonormal basis makes this not so daunting.
 
 Let's do this to get a feel for things.
 
@@ -516,7 +276,7 @@ Let's do this to get a feel for things.
 Take a simple projection onto the plane spanned by the following two orthonormal vectors
 
 \[
-v_1 = 
+u_1 = 
 \frac{\sqrt{2}}{4}
 \begin{bmatrix}
 1 \\
@@ -527,7 +287,7 @@ v_1 =
 \]
 
 \[
-v_2 = 
+u_2 = 
 \frac{\sqrt{2}}{4}
 \begin{bmatrix}
 -\sqrt{3} \\
@@ -537,16 +297,16 @@ v_2 =
 \end{bmatrix}
 \]
 
-Now form what we believe to be the projection matrix:
+Thus the projection matrix is:
 
 \[
 P =
 \begin{bmatrix}
-v_1 & v_2 \\
+u_1 & u_2 \\
 \end{bmatrix}
 \begin{bmatrix}
-\transpose{v_1} \\
-\transpose{v_2} \\
+\transpose{u_1} \\
+\transpose{u_2} \\
 \end{bmatrix}
 =
 \inv{8}
@@ -584,171 +344,483 @@ What can be said about this just by looking at the matrix itself?
 
 \begin{enumerate}
 \item
-One can verify by inspection that $P v_1 = v_1$ and $P v_2 = v_2$, so this
-is has at least one of the expected properties of a projection matrix.
-We also expect that $P x = 0$ for any $x \in N(\transpose{V})$, so if
-it has that property too we can call it the projection matrix for the subspace
-spanned by $v_1$, and $v_2$.  We also assume that this is the projection
-matrix for $A$ (we haven't yet shown any explicit
-relationship between this first
-$r$ column vectors in the matrix $V$ and the original matrix $A$).
+One can verify by inspection that $P u_1 = u_1$ and $P u_2 = u_2$.  This is what we expected
+so this validates all the math performed so far.  Good!
+
+%, so this
+%is has at least one of the expected properties of a projection matrix.
+%We also expect that $P x = 0$ for any $x \in N(\transpose{V})$, so if
+%it has that property too we can call it the projection matrix for the subspace
+%spanned by $u_1$, and $u_2$.  We also assume that this is the projection
+%matrix for $A$ (we haven't yet shown any explicit
+%relationship between this first
+%$r$ column vectors in the matrix $V$ and the original matrix $A$).
 
 \item
-It is symmetric.  For a full column rank matrix $A$ we know to expect this
-of the associated projection matrix from the
-equation $P = A \inv{\transpose{A}A} \transpose{A}$.  For that we can see by 
-inspection that $\transpose{P} = P$.
+It is symmetric.  Analytically, we know to expect this, since for a 
+a full column rank matrix $A$ the transpose of the projection matrix is:
+
+\[
+\transpose{P} = \transpose{\left(A \inv{\transpose{A}A} \transpose{A}\right)} = P.
+\]
 
 \item
 In this particular case columns 2,4 and columns 1,3 are each pairs of
 perpendicular vectors.  Is something like this to be expected in general for
 projection matrices?
+
+\item
+We expect this to be a rank two matrix, so the null space has dimension two.  This can be verified.
+
 \end{enumerate}
 
-\section{ Return to analytic treatment. }
+\subsection{ Return to analytic treatment. }
 
-\begin{figure}[htp]
-\centering
-\includegraphics[totalheight=0.4\textheight]{visualize_subspace_projection}
-\caption{Visualizing projection onto a subspace.}\label{fig:Projection_subspace}
-\end{figure}
+Let's look at the matrix for projection onto an orthonormal basis in a bit more detail.  This simpler form allows for
+some observations that are a bit harder in the general form.
 
-We can geometrically visualize the projection problem 
-as in figure \ref{fig:Projection_subspace}.  Here
-the subspace can be pictured
-as a plane containing a set of mutually perpendicular basis vectors, as if
-one has visually projected all the higher dimensional vectors onto a plane.
-
-For a vector $x$ that contains some part not in the space we want to find
-the component in the space $p$, or characterize the projection operation
-that produces this vector, and also find the space of vectors that lie
-perpendicular to the space.
-
-We have shown that the left pseudoinverse product with the matrix can
-be expressed as a projection matrix (sum of the projection matrices
-associated with a set of orthonormal vectors)
-
-\begin{equation}\label{eqn:pseudoprojmatsum}
-A^{+} A =
-\sum_{k=1}^r {v_k}\transpose{v_k}
-\end{equation}
-
-Defining (for now)
-\[
-V =
-\begin{bmatrix}
-v_1 & v_2 & \cdots & v_r
-\end{bmatrix}
-\]
-
-(note this is a different ``$V$'' than the $V$ in $A = U \Sigma \transpose{V}$ since it only includes the first $r$ columns).
-
-This allows us to write the matrix of equation \ref{eqn:pseudoprojmatsum}
-as
-
-\begin{equation}
-A^{+} A = V \transpose{V}
-\end{equation}
-
-Now suppose we have a vector $n$ that is perpendicular to all vectors $v_i$.  We can then write:
+Suppose we have a vector $n$ that is perpendicular to all the orthonormal vectors $u_i$ that span the subspace.  We can then write:
 
 \[
-v_i \cdot n = 0
+u_i \cdot n = 0
 \]
 
 Or,
 \[
-\transpose{v_i} n = 0
+\transpose{u_i} n = 0
 \]
 
-In block matrix form for all $v_i$ that is:
+In block matrix form for all $u_i$ that is:
 
 \[
-[\transpose{v_i} n]_i = [\transpose{v_i}]_i n = \transpose{V} n = 0
+[\transpose{u_i} n]_i = [\transpose{u_i}]_i n = \transpose{U} n = 0
 \]
 
-This is why we say that $n$ is in the null space of $\transpose{V}$,
-$N(\transpose{V})$ not $N(V)$.  One perhaps could say this is in the null
-or perpendicular space of the set $\{v_i\}$, but our use of columns as
-vectors coupled with the Euclianian norm requires transposition to express
-the same null space concept for a matrix of column vectors.
-
-Since $\transpose{V} n = 0$ for any $n \in N(V)$ we also have
+This is all we need to verify that our projection matrix indeed produces a zero for any vector completely outside of the subspace:
 
 \[
-V \transpose{V} n = 0
+\Proj_U(n) = U (\transpose{U} n) = U 0 = 0
 \]
 
-Thus the first property required of this matrix as a projection operation
-is satisfied.
+Now we have seen numerically that $U \transpose{U}$ is not an identity matrix despite 
+operating as one on any vector that lies completely in the subspace.
+%Although this matrix may 
+%have blocks of identity matrixes along the diagonal in some cases.
 
-Now we have seen that $V \transpose{V}$ is not an identity matrix, although
-it can have blocks of identity matrixes along the diagonal in some cases.
-However, we can examine the action of this matrix on any vector that lies in the
-span of the set $\{v_i\}$.  By linearity it is sufficient to do this calcuation 
-for a particular $v_i$:
+Having seen the action of this matrix on vectors in the null space, we can now
+directly examine the action of this matrix on any vector that lies in the
+span of the set $\{u_i\}$.  By linearity it is sufficient to do this calcuation 
+for a particular $u_i$:
 
 \begin{align*}
-V \transpose{V} v_i
+U \transpose{U} u_i
 &=
-V
+U
 \begin{bmatrix}
-\transpose{v_1} v_i \\
-\transpose{v_2} v_i \\
+\transpose{u_1} u_i \\
+\transpose{u_2} u_i \\
 \vdots \\
-\transpose{v_r} v_i \\
+\transpose{u_r} u_i \\
 \end{bmatrix}
 \\
 &=
 \begin{bmatrix}
-{v_1} & {v_2} & \cdots & {v_r} \\
+{u_1} & {u_2} & \cdots & {u_r} \\
 \end{bmatrix}
 {
 \begin{bmatrix}
 \delta_{si}
 \end{bmatrix}
 }_s \\
-&= \sum_{k=1}^{r} v_k \delta_{ki} \\
-&= v_i \\
+&= \sum_{k=1}^{r} u_k \delta_{ki} \\
+&= u_i \\
 \end{align*}
 
-This completes the verification that $V \transpose{V}$ is a projection
-onto the span of the columns of $V$.  Looking back, since the columns
-of $V$ are of full rank we could also have said this directly using our
-previous projection matrix equation
+This now completes the validation of the properties of this matrix (in it's simpler form with an orthonormal basis for the subspace).
 
-\[
-\Proj_V = V (\transpose{V} V)^{-1} \transpose{V}
-\]
 
-The central product term to invert is:
 
-\[
-\transpose{V} V = [ \transpose{v_i} v_j ]_{ij} = [ \delta_{ij} ]_{ij} = I_{r,r}
-\]
 
-Therefore, in this particular case where the column vectors are orthonormal,
-our projection matrix can be expressed using the two exterior terms alone:
+%\begin{figure}[htp]
+%\centering
+%\includegraphics[totalheight=0.4\textheight]{visualize_subspace_projection}
+%\caption{Visualizing projection onto a subspace.}\label{fig:Projection_subspace}
+%\end{figure}
+%
+%We can geometrically visualize the projection problem 
+%
+%as in figure \ref{fig:Projection_subspace}.  Here
+%the subspace can be pictured
+%as a plane containing a set of mutually perpendicular basis vectors, as if
+%one has visually projected all the higher dimensional vectors onto a plane.
+%
+%For a vector $x$ that contains some part not in the space we want to find
+%the component in the space $p$, or characterize the projection operation
+%that produces this vector, and also find the space of vectors that lie
+%perpendicular to the space.
 
-\begin{equation}\label{eqn:projVr}
-\Proj_V = V (\transpose{V} V)^{-1} \transpose{V} = V \transpose{V}
-\end{equation}
 
-\subsection{ Correlating the SVD derived projection matrix back to $A$. }
 
-We now have to show that this is also the projection matrix associated
-with the columns of the 
-original matrix that we have an SVD factorization for
 
-\[
-A = U \Sigma \transpose{V}
-\]
+%This is why we say that $n$ is in the null space of $\transpose{U}$,
+%$N(\transpose{U})$ not $N(U)$.  One perhaps could say this is in the null
+%or perpendicular space of the set $\{u_i\}$, but our use of columns as
+%vectors coupled with the Euclianian norm requires transposition to express
+%the same null space concept for a matrix of column vectors.
+%
+%Since $\transpose{U} n = 0$ for any $n \in N(U)$ we also have
 
-Once we show this, then we have also demonstrated that the first $r$ 
-(orthonormal) column vectors in the matrix $V$ of this decomposition
-are a basis for the column space of $A$ itself.  Note that we are
-switching back to the original definition of $V \in M^{n,n}$ here, and
-not the $V \in M^{n,r}$ of equation \ref{eqn:projVr}.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%\subsection{ Application of projection as left pseudoinverse (ie: linear fitting). }
+%
+%%We have shown that the left pseudoinverse product with the matrix can
+%%be expressed as a projection matrix (sum of the projection matrices
+%%associated with a set of orthonormal vectors)
+%
+%%\begin{equation}\label{eqn:pseudoprojmatsum}
+%%A^{+} A =
+%%\sum_{k=1}^r {u_k}\transpose{u_k}
+%%\end{equation}
+%%
+%
+%%(note this is a different ``$V$'' than the $V$ in $A = U \Sigma \transpose{V}$ since it only includes the first $r$ columns).
+%%This allows us to write the matrix of equation \ref{eqn:pseudoprojmatsum} as
+%
+%%\begin{equation}
+%%A^{+} A = V \transpose{V}
+%%\end{equation}
+%
+%
+%Equation \ref{eqn:projectiongeneralmatrix} provides us a way to find best solutions to general equations of the form:
+%
+%
+%\[
+%A x = b
+%\]
+%
+%Here $A$ is the matrix of a linear transformation, $A : \mathbb{R}^k \rightarrow \mathbb{R}^n$, for some $k<n$.
+%By ``best solutions'' here, we give this the geometrical meaning, namely, the solution matching the projection of $b$ onto the space.
+%
+%If b is not completely in the column space $C(A)$ of $A$, this can have no solution.  However, writing
+%
+%\[
+%b = \Proj_A(b) + b_\perp
+%\]
+%
+%as the components of $b$ in $C(A)$ and not in $C(A)$ respectively we can at least solve the reduced equation for $\hat{x}$:
+%
+%
+%\begin{equation}\label{eqn:reducedinverseproblem}
+%A \hat{x} = \Proj_A(b)
+%\end{equation}
+%
+%
+%This will be possible even in circumstances that the original equation had no solution.  Specifically, the vector b when projected onto the plane can be expressed as some
+%linear combination of the columns of $A$ (a basis for the subspace).
+%
+%Substuition of our projection result into equation \ref{eqn:reducedinverseproblem} yields:
+%
+%\begin{align*}
+%A \hat{x} 
+%&= \Proj_{A}\left(b\right) = A (\transpose{A} A)^{-1} \transpose{A} b
+%\end{align*}
+%
+%The simplest case here is when $A$ is of full column rank since one can pre-multiply this complete equation by $\transpose{A}$ without any possibility of nulling
+%$A \hat{x}$.
+%
+%\begin{align*}
+%\transpose{A} A \hat{x} 
+%&= \transpose{A} A (\transpose{A} A)^{-1} \transpose{A} b \\
+%&= \transpose{A} b \\
+%\end{align*}
+%
+%Thus our best fit vector is
+%
+%\begin{equation}
+%\hat{x} 
+%= (\transpose{A} A)^{-1} \transpose{A} b
+%\end{equation}
+%
+%Another way to view this is for any vector $x$ that is not in the null space $N(A)$, then the matrix:
+%
+%\begin{equation}
+%A^{+}= (\transpose{A} A)^{-1} \transpose{A}
+%\end{equation}
+%
+%has the action of a left inverse for any full column rank matrix $A$.  Thus when there is a solution to:
+%
+%\begin{equation}
+%A x = b.
+%\end{equation}
+%
+%It can be obtained by pre-multiplication using this "left" inverse.
+%
+%\begin{equation}
+%A^{+} A x = x = A^{+} b
+%\end{equation}
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%
+%\section{ SVD connection. }
+%
+%
+%SVT decomposition is an factoring of $A \in M^{m \times n}$ with orthonormal matrices $U \in M^{m \times m}$
+%
+%and $V \in M^{n \times n} $ producing the following form:
+%
+%\[
+%A = U \Sigma \transpose{V}
+%\]
+%
+%Sigma has the form:
+%
+%\[
+%\Sigma = 
+%\begin{bmatrix}
+%D_{r,r} & 0_{r,n-r} \\
+%0_{m-r,r} & 0_{m-r,n-r} \\
+%\end{bmatrix}
+%\]
+%
+%where $r = \rank(A)$, and $D$ is a diagonal matrix with the root of the (positive) eigenvalues of $\transpose{A}A$.
+%
+%This provides a generalized spectral decomposition and similarity that applies to both non-square matrices and matrices not otherwise diagonalizable
+%(ie: square matrix with similarity to a Jordon form matrix).  Given this decomposition we can write:
+%
+%\[
+%\Sigma = \transpose{U} A V
+%\]
+%
+%If one were to ask the question of what is the closest that one could get to inverting such a matrix.  It's pretty clear that the closest one could get to
+%identity will be with multiplication of a $\Sigma^{+}$ of the following form:
+%
+%\[
+%\Sigma^{+} \Sigma
+%=
+%\begin{bmatrix}
+%(D_{r,r})^{-1} & 0_{r,m-r} \\
+%0_{n-r,r} & 0_{n-r,m-r} \\
+%\end{bmatrix}
+%\begin{bmatrix}
+%D_{r,r} & 0_{r,n-r} \\
+%0_{m-r,r} & 0_{m-r,n-r} \\
+%\end{bmatrix}
+%=
+%\begin{bmatrix}
+%I_{r,r} & 0_{r,n-r} \\
+%0_{n-r,r} & 0_{n-r,n-r} \\
+%\end{bmatrix}
+%\]
+%
+%For a right pseudoinverse we have a similar result:
+%
+%\[
+%\Sigma
+%\Sigma^{+}
+%=
+%\begin{bmatrix}
+%D_{r,r} & 0_{r,n-r} \\
+%0_{m-r,r} & 0_{m-r,n-r} \\
+%\end{bmatrix}
+%\begin{bmatrix}
+%(D_{r,r})^{-1} & 0_{r,m-r} \\
+%0_{n-r,r} & 0_{n-r,m-r} \\
+%\end{bmatrix}
+%=
+%\begin{bmatrix}
+%I_{r,r} & 0_{r,m-r} \\
+%0_{m-r,r} & 0_{m-r,m-r} \\
+%\end{bmatrix}
+%\]
+%
+%With either of these one can define a corresponding pseudoinverse (left or right) as:
+%
+%\begin{equation}
+%A^{+} = V \Sigma^{+} \transpose{U}
+%\end{equation}
+%
+%This is a logical definition, but how close is it to the projective
+%left inverse we calculated above in the case where $A$ is not of full column 
+%rank?
+%
+%Multiplication gives: 
+%
+%\begin{align*}
+%A^{+} A 
+%&= V \Sigma^{+} \transpose{U} U \Sigma \transpose{V} \\
+%&= V \Sigma^{+} \Sigma \transpose{V} \\
+%&=
+%\begin{bmatrix}
+%v_1 & v_2 & \cdots & v_r & v_{r+1} & \cdots & v_n \\
+%\end{bmatrix}
+%\begin{bmatrix}
+%(D_{r,r})^{-1} & 0_{r,m-r} \\
+%0_{n-r,r} & 0_{n-r,m-r} \\
+%\end{bmatrix}
+%\begin{bmatrix}
+%D_{r,r} & 0_{r,n-r} \\
+%0_{m-r,r} & 0_{m-r,n-r} \\
+%\end{bmatrix}
+%\begin{bmatrix}
+%\transpose{v_1} \\ \transpose{v_2} \\ \vdots \\ \transpose{v_r} \\ \transpose{v_{r+1}} \\ \vdots \\ \transpose{v_n} \\
+%\end{bmatrix}
+%\end{align*}
+%%Embeded in that is the same "as-close-to" identity as calculated above.
+%
+%Writing $D_{r,r} = [\delta_{ij}\sigma_i]_{ij}$, we have:
+%
+%\begin{equation}\label{eqn:VIrVt}
+%V \Sigma^{+} \Sigma \transpose{V} 
+%=
+%\begin{bmatrix}
+%\frac{v_1}{\sigma_1} & \frac{v_2}{\sigma_2} & \cdots & \frac{v_r}{\sigma_2} & 0 & \cdots & 0 
+%\end{bmatrix}
+%\begin{bmatrix}
+%\transpose{v_1}\sigma_1 \\ \transpose{v_2}\sigma_2 \\ \vdots \\ \transpose{v_r}\sigma_r \\ 0 \\ \vdots \\ 0 \\
+%\end{bmatrix}
+%\end{equation}
+%
+%Considering this as the product of block matrices we have a product here of the form
+%
+%\[
+%\begin{bmatrix}
+%A_{n,r} & 0_{n,n-r}
+%\end{bmatrix}
+%\begin{bmatrix}
+%B_{r,n} \\ 0_{n-r,n}
+%\end{bmatrix}
+%=
+%\begin{bmatrix}
+%A_{n,r} B_{r,n} + 0_{n,n-r} 0_{n-r,n}
+%\end{bmatrix}
+%=
+%\begin{bmatrix}
+%A_{n,r} B_{r,n} + 0_{n,n}
+%\end{bmatrix}
+%=
+%\begin{bmatrix}
+%A_{n,r} B_{r,n}
+%\end{bmatrix}
+%\]
+%
+%Thus we can strip the block zero matrices from equation \ref{eqn:VIrVt} and write
+%
+%\begin{equation}\label{eqn:pseudoinversetimesmatrix}
+%A^{+} A =
+%V \Sigma^{+} \Sigma \transpose{V} 
+%=
+%\begin{bmatrix}
+%\frac{v_1}{\sigma_1} & \frac{v_2}{\sigma_2} & \cdots & \frac{v_r}{\sigma_2} 
+%\end{bmatrix}
+%\begin{bmatrix}
+%\transpose{v_1}\sigma_1 \\ \transpose{v_2}\sigma_2 \\ \vdots \\ \transpose{v_r}\sigma_r 
+%\end{bmatrix}
+%\end{equation}
+%
+%Eliminating the $\sigma$ terms we have:
+%
+%\begin{equation}\label{eqn:pseudoinversetimesmatrixsum}
+%A^{+} A =
+%\begin{bmatrix}
+%\sum_{k=1}^r {v_k}\transpose{v_k}
+%\end{bmatrix}
+%=
+%\begin{bmatrix}
+%v_1 & v_2 & \cdots & v_r 
+%\end{bmatrix}
+%\begin{bmatrix}
+%\transpose{v_1} \\ \transpose{v_2} \\ \vdots \\ \transpose{v_r} 
+%\end{bmatrix}
+%\end{equation}
+%
+%We previously calculated a left inverse using the projection matrix associated with a full column rank matrix.  For this product to have the properties of a
+%left acting inverse we also expect it to be a projection.
+%Let's disgress
+%slightly before looking at whether equation
+%\ref{eqn:pseudoinversetimesmatrixsum} satisifies this expectation.
+%
+%
+%
+%\subsection{ Correlating the SVD derived projection matrix back to $A$. }
+%
+%
+%We now have to show that this is also the projection matrix associated
+%
+%with the columns of the 
+%original matrix that we have an SVD factorization for
+%
+%\[
+%A = U \Sigma \transpose{V}
+%\]
+%
+%Once we show this, then we have also demonstrated that the first $r$ 
+%(orthonormal) column vectors in the matrix $V$ of this decomposition
+%are a basis for the column space of $A$ itself.  Note that we are
+%switching back to the original definition of $V \in M^{n,n}$ here, and
+%not the $V \in M^{n,r}$ of equation \ref{eqn:projOrthonormal}.
+%
+%
+
+
+
+
+
 
 \section{ Proof of omitted details and auxiliary stuff. }
 
@@ -778,6 +850,7 @@ a_i \sum_k a_k b_k
 
 \subsection{ Full column rank implies $\transpose{A}A$ invertability. }
 
+
 Now, if $A = [a_i]_i$, 
 the matrix $\transpose{A}A$ is
 
@@ -802,9 +875,12 @@ the GA dot product of a k-blade:
 
 Linear independence means that this wedge product is non-zero, and therefore the dot product, and thus original determinant is also non-zero.
 
+
 \subsection{ Any invertible scaling of column space basis vectors does not change the projection }
 
+
 Suppose that one introduces an alternate basis for the column space
+
 
 \[
 v_i = \sum \alpha_{ik} u_k
