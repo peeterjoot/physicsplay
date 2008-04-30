@@ -1,0 +1,317 @@
+\documentclass{article}      % Specifies the document class
+
+\input{../peeters_macros.tex}
+
+\newcommand{\dt}[1]{\dot{#1}}
+\newcommand{\transpose}[1]{{#1}^{\text{T}}}
+
+\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+\newcommand{\gpgradeone}[1] {{\left\langle{{#1}}\right\rangle}_{1}}
+\newcommand{\gpscalargrade}[1] {{\left\langle{{#1}}\right\rangle}}
+
+
+%
+% The real thing:
+%
+
+                             % The preamble begins here.
+\title{ Kinetic Energy in rotational frame. } % Declares the document's title.
+\author{Peeter Joot}         % Declares the author's name.
+%\date{}        % Deleting this command produces today's date.
+
+\begin{document}             % End of preamble and beginning of text.
+
+\maketitle{}
+
+\section{ Motivation. }
+
+Fill in the missing details of the rotational KE derivation in Tong's classical
+dynamics paper and contrast matrix and GA approach.
+
+Given a change of coordinates to a rotating frame
+
+\begin{equation}\label{eqn:rotcoord}
+\Br' = R \Br
+\end{equation}
+
+Where
+
+\[
+R = 
+\begin{bmatrix}
+\cos \theta & -\sin \theta & 0 \\
+\sin \theta & \cos \theta & 0 \\
+0 & 0 & 1 \\
+\end{bmatrix}
+\]
+
+Express the Kinetic energy of a particle in terms of the rotating frame
+coordinate system.
+
+\[
+K = 
+\inv{2} m \dt{\Br}^2 %= \inv{2} m \dt{\Br}^{'2}
+\]
+
+\section{ With matrix formulation. }
+
+The tong paper does this for a z axis rotation with $\theta = \omega t$.
+Constant angular frequency is assumed.
+
+First we calculate our position vector in terms of the rotational frame
+
+\[
+\Br = R^{-1}\Br'
+\]
+
+Where
+
+\[
+R_\theta^{-1} = R_{-\theta} =
+\begin{bmatrix}
+\cos \theta & \sin \theta & 0 \\
+-\sin \theta & \cos \theta & 0 \\
+0 & 0 & 1 \\
+\end{bmatrix}
+\]
+
+The velocity is:
+
+\[
+\dt{\Br} = \dt{R_{-\theta}}\Br' + R_{-\theta}\dt{\Br'}.
+\]
+
+Taking the matrix time derivative we have:
+
+\[
+\dt{R_{-\theta}} =
+-\dt{\theta}
+\begin{bmatrix}
+\sin \theta & -\cos \theta & 0 \\
+\cos \theta & \sin \theta & 0 \\
+0 & 0 & 0 \\
+\end{bmatrix}.
+\]
+
+Taking magnitudes of the velocity we have three terms
+
+\[
+\dt{\Br}^2 = 
+\transpose{\Br'} \transpose{\dt{R_{-\theta}}} \dt{R_{-\theta}}\Br'
++2 \transpose{{\Br'}} \transpose{\dt{R_{-\theta}}} R_{-\theta} \dt{\Br'}
++\transpose{\dt{\Br'}} \transpose{R_{-\theta}} R_{-\theta}\dt{\Br'}
+\]
+
+We need to calculate all the intermediate matrix products.  The last is 
+identity, and the first is:
+
+\[
+\transpose{\dt{R_{-\theta}}} \dt{R_{-\theta}}
+=
+{\dt{\theta}}^2
+\begin{bmatrix}
+\sin \theta & \cos \theta & 0 \\
+-\cos \theta & \sin \theta & 0 \\
+0 & 0 & 0 \\
+\end{bmatrix}
+\begin{bmatrix}
+\sin \theta & -\cos \theta & 0 \\
+\cos \theta & \sin \theta & 0 \\
+0 & 0 & 0 \\
+\end{bmatrix}
+\]
+\[
+=
+{\dt{\theta}}^2
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 0 \\
+\end{bmatrix}
+\]
+
+This leaves just the mixed term
+
+\[
+\transpose{\dt{R_{-\theta}}} {R_{-\theta}}
+=
+-{\dt{\theta}}
+\begin{bmatrix}
+\sin \theta & \cos \theta & 0 \\
+-\cos \theta & \sin \theta & 0 \\
+0 & 0 & 0 \\
+\end{bmatrix}
+\begin{bmatrix}
+\cos \theta & \sin \theta & 0 \\
+-\sin \theta & \cos \theta & 0 \\
+0 & 0 & 1 \\
+\end{bmatrix}
+\]
+\[
+=
+-{\dt{\theta}}
+\begin{bmatrix}
+0 & 1 & 0 \\
+-1 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{bmatrix}
+\]
+
+With $\dt{\theta} = \omega$, the total magnitude of the velocity is thus
+
+\[
+\dt{\Br}^2 = 
+\transpose{\Br'} 
+\omega^2
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 0 \\
+\end{bmatrix}
+\Br'
+-2 \omega \transpose{{\Br'}} 
+\begin{bmatrix}
+0 & 1 & 0 \\
+-1 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{bmatrix}
+\dt{\Br'}
++ {\dt{\Br'}}^2
+\]
+
+Tong's paper presents this expanded out in terms of coordinates:
+
+\[
+\dt{\Br}^2 = 
+\omega^2( {x'}^{2} + {y'}^{2} )
++ 2 \omega ( -x' \dt{y'} +y' \dt{x'} )
++ ( \dt{x'}^{2} + \dt{y'}^{2} + \dt{z'}^{2} )
+\]
+
+Or,
+\begin{equation}\label{eqn:vmagwithmatrix}
+\dt{\Br}^2 = 
++( \omega y' + \dt{x'} )^2 
++( \omega x' - \dt{y'} )^2 
++ \dt{z'}^2 
+\end{equation}
+
+Hmm.  Sign above is reversed from the text?  He also then goes on to
+show that this can be written, with $\Bomega = \omega \zcap$, as 
+
+\[
+\dt{\Br}^2 = ( \dt{\Br'} + \Bomega \cross \Br')^2
+\]
+
+The implication here is that this is a valid result for any rotationing
+coordinate system.   How one would actually prove this in general is 
+a different story.
+
+\section{ With rotor. }
+
+The equivalent to equation \ref{eqn:rotcoord} using a rotor is:
+
+\begin{equation}
+\Br' = R^\dagger \Br R
+\end{equation}
+
+Where $R = \exp( i\theta/2 )$.
+
+Unlike the 
+matrix formulation above we are free to pick any constant unit bivector
+for $i$ if we want to generalize this to any rotational axis, but if we
+want an equivalent to the above rotation matrix we just have to take
+$i = \Be_1 \wedge \Be_2$.
+
+We need a double sided inversion to get our unprimed vector:
+
+\[
+\Br = R \Br' R^\dagger
+\]
+
+and can then take derivatives:
+
+\[
+\dt{\Br} = 
+\dt{R} \Br' R^\dagger
++{R} {\Br'} \dt{R}^\dagger
++{R} \dt{\Br'} R^\dagger
+\]
+\[
+= 
+i\omega \inv{2} {R} \Br' R^\dagger
+- {R} \Br' R^\dagger i\omega\inv{2}
++{R} \dt{\Br'} R^\dagger
+\]
+\[
+= 
+\omega i \cdot ({R} \Br' R^\dagger) +  {R} \dt{\Br'} R^\dagger
+\]
+
+One can put this into the traditional cross product form by introducing
+a normal vector for the rotational axis in the usual way:
+
+\[
+\Bomega = \omega i / \BI_3
+\]
+
+\begin{align*}
+\omega i \cdot ({R} \Br' R^\dagger)
+&= \gpgradeone{ \omega i {R} \Br' R^\dagger } \\
+&= \gpgradeone{ {R} \omega i \Br' R^\dagger } \\
+&= {R} (\omega i) \cdot \Br' R^\dagger \\
+&= {R} (\Bomega \BI_3) \cdot \Br' R^\dagger \\
+&= {R} (\Bomega \cross \Br') R^\dagger \\
+\end{align*}
+
+Summarizing, we can write our velocity using rotational frame components
+as: 
+\begin{equation}\label{eqn:vrotcross}
+\dt{\Br} = {R} \left( \Bomega \cross \Br' + \dt{\Br'} \right) R^\dagger
+\end{equation}
+Or
+\begin{equation}
+\dt{\Br} = {R} \left( \omega i \cdot \Br' + \dt{\Br'} \right) R^\dagger
+\end{equation}
+
+Using the result above from equation \ref{eqn:vrotcross}, we can calculate
+the squared magnitude directly:
+
+\begin{align*}
+\dt{\Br} ^2 
+&= \gpscalargrade{ 
+{R} \left( \Bomega \cross \Br' + \dt{\Br'} \right) R^\dagger
+{R} \left( \Bomega \cross \Br' + \dt{\Br'} \right) R^\dagger
+} \\
+&= \gpscalargrade{ 
+{R} ( \Bomega \cross \Br' + \dt{\Br'} ) ^2 R^\dagger
+} \\
+&= ( \Bomega \cross \Br' + \dt{\Br'} ) ^2 \\
+\end{align*}
+
+We are able to go straight to the end result this way without the mess
+of sine and cosine terms in the rotation matrix.  This is something that
+we can expand by components if desired:
+
+\begin{align*}
+\Bomega \cross \Br' + \dt{\Br'}
+&= 
+\begin{vmatrix}
+\Be_1 & \Be_2 & \Be_3 \\
+0 & 0 & \omega \\
+x' & y' & z' \\
+\end{vmatrix}
++ \dt{\Br'} \\
+&=
+\begin{bmatrix}
+-\omega y' + \dt{x'} \\
+\omega x' + \dt{y'} \\
+ \dt{z'} \\
+\end{bmatrix}
+\end{align*}
+
+This verifies the second part of Tong's equation 2.19, and has a sign that
+doesn't match with equation \ref{eqn:vmagwithmatrix}, which confirms that
+there's likely a sign mixup above leading to that original result.
+
+\end{document}               % End of document.
