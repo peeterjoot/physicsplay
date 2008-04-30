@@ -7,6 +7,8 @@
 %\newcommand{\transpose}[1]{{{#1}^{\TextTranspose}}}
 \newcommand{\transpose}[1]{{{#1}^{\text{T}}}}
 
+\newcommand{\Det}[1] {\abs{#1}}
+
 \usepackage{color,cite,graphicx}
    % use colour in the document, put your citations as [1-4]
    % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
@@ -438,6 +440,129 @@ U
 
 This now completes the validation of the properties of this matrix (in it's simpler form with an orthonormal basis for the subspace).
 
+\section{ Matrix projection vs. Geometric Algebra. }
+
+I found it pretty interesting how similar the projection product is to the projection matrix above from traditional matrix algebra.  It is worthwhile
+to write this out and point out the similarities and differences.
+
+\subsection{ General projection matrix. }
+
+We've shown above, provided a matrix A is of full column rank, a projection onto it's columns can be written:
+
+\[
+\Proj_A(x) = \left( A \frac{1}{\transpose{A} A} \transpose{A} \right) x
+\]
+
+Now contrast this with the projection written in terms of a vector dot product with a non-null blade 
+
+\[
+\Proj_A(x) = A \left(\inv{A} \cdot x\right) = A \inv{A^\dagger A} \left(A^\dagger \cdot x\right)
+\]
+
+This is a curious correspondence and niave comparison could lead one to think that perhaps there the concepts of matrix
+transposition and blade reversal are equivalent.
+
+This isn't actually the case since the matrix transposition actually corresponds to
+the adjoint operation of a linear transformation for blades.
+
+\subsection{ Projection matrix full column rank requirement. }
+
+The projection matrix derivations above required full column rank.  A reformulation in terms
+of a generalized matrix (Moore-Penrose) inverse, or SVD can eliminate this full column rank requirement for
+the formulation of the projection matrix.
+
+We will get to this later, but we never really proved that
+full column rank implies $\transpose{A}A$ invertability.
+
+If one writes out the matrix $\transpose{A}A$ in full
+
+Now, if $A = [a_i]_i$, the matrix
+
+\begin{equation}\label{eqn:AtA}
+\transpose{A}A
+=
+\begin{bmatrix}
+{a_1} \cdot {a_1} & {a_1} \cdot {a_2} & \hdots \\
+{a_2} \cdot {a_1} & {a_2} \cdot {a_2} & \hdots \\
+\vdots & & \\
+\end{bmatrix}.
+\end{equation}
+
+This is an invertible matrix provided $\{a_i\}_i$ is a linearly independent set of vectors.
+For full column rank to imply invertability, it would be sufficient to prove that the 
+determinant of this matrix was non-zero.
+
+I'm not sure how to show that this is true with just matrix algebra, however
+one can identify the determinant of the matrix of equation \ref{eqn:AtA}, after an adjustment
+of sign for reversion, as the GA dot product of a k-blade:
+
+\begin{equation}\label{eqn:AdagdotA}
+(-1)^{k(k-1)/2} (a_1 \wedge \cdots \wedge a_k) \cdot (a_1 \wedge \cdots \wedge a_k).
+\end{equation}
+
+Linear independence means that this wedge product is non-zero, and therefore the dot product, and thus original determinant is also non-zero.
+
+When the $\transpose{A}A$ matrix of equation \ref{eqn:AtA} is invertable that inverse can be written using a cofactor matrix (adjugate expansion):
+
+Let's write this out, where $C_{ij}$ are the cofactor matrixes of $\transpose{A}A$, we have:
+
+\[
+\inv{\transpose{A}A} = \inv{ \Det{ \transpose{A}A } } \transpose{[ C_{ij} ]}
+\]
+
+Observe that the denominator here is exactly the determinant of equation \ref{eqn:AdagdotA}.  This illustrates
+the motivation of Hestenes to lable the explicit alternating vector-vector dot product expansion of a 
+blade-vector dot product the ``generalized Laplace expansion''.
+
+%  This allows us to give additional meaning to the
+%$\inv{\transpose{A}A}\transpose{A}$ factor of the general projection matrix.
+%  Operationally this appears to 
+%provide a way to compute the dot product of a
+%blade with vector (just scaled by the determinant and by the sign of the reversion).
+
+\subsection{ Projection onto orthonormal columns. }
+
+When the 
+columns of the matrix $A$ are orthonormal, the projection matrix is reduced to:
+
+\[
+\Proj_A(x) = \left( A \transpose{A} \right) x.
+\]
+
+The corresponding GA entity is a projection onto a unit magnitude blade.  With that scaling the inverse term also drops out leaving:
+
+\[
+\Proj_A(x) = A \left(A^\dagger \cdot x\right)
+\]
+
+This helps point out the similarity between the matrix inverse $\inv{\transpose{A}A}$ and the blade product inverse $\inv{{A^\dagger}A}$ is only on the surface,
+since this blade product is only a scalar.
+
+
+
+
+
+
+\section{ Projection with generalized dot product. }
+
+\section{ Oblique projection and reciprocal frame vectors. }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -848,32 +973,6 @@ a_i \sum_k a_k b_k
 &= a (\transpose{a} b) \\
 \end{align*}
 
-\subsection{ Full column rank implies $\transpose{A}A$ invertability. }
-
-
-Now, if $A = [a_i]_i$, 
-the matrix $\transpose{A}A$ is
-
-\[
-\begin{bmatrix}
-{a_1} \cdot {a_1} & {a_1} \cdot {a_2} & \hdots \\
-{a_2} \cdot {a_1} & {a_2} \cdot {a_2} & \hdots \\
-\vdots & & \\
-\end{bmatrix}.
-\]
-
-This is an invertible matrix provided $\{a_i\}_i$ is a linearly independent set of vectors.
-This could be proven if one could show that the 
-determinant of this matrix was non-zero.
-I'm not sure how to show that this is true with just matrix algebra, however
-one can identify, with an adjustment of sign for reversion, as 
-the GA dot product of a k-blade:
-
-\[
-(-1)^{k(k-1)/2} (a_1 \wedge \cdots \wedge a_k) \cdot (a_1 \wedge \cdots \wedge a_k).
-\]
-
-Linear independence means that this wedge product is non-zero, and therefore the dot product, and thus original determinant is also non-zero.
 
 
 \subsection{ Any invertible scaling of column space basis vectors does not change the projection }
