@@ -3,11 +3,14 @@
 \input{../peeters_macros.tex}
 
 \newcommand{\dt}[1]{\dot{#1}}
+\newcommand{\ddt}[1]{\ddot{#1}}
 \newcommand{\transpose}[1]{{#1}^{\text{T}}}
+\newcommand{\Balpha}[0]{\boldsymbol{\alpha}}
 
 \newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
 \newcommand{\gpgradeone}[1] {{\left\langle{{#1}}\right\rangle}_{1}}
 \newcommand{\gpscalargrade}[1] {{\left\langle{{#1}}\right\rangle}}
+\newcommand{\BOmega}[0]{\boldsymbol{\Omega}}
 
 
 %
@@ -27,6 +30,11 @@
 
 Fill in the missing details of the rotational KE derivation in Tong's classical
 dynamics paper and contrast matrix and GA approach.
+
+Generalize acceleration in terms
+of rotating frame coordinates without unproved extrapolation that the z axis result
+of Tong's paper is good unconditionally (his cross products are kind of pulled out of
+a magic hat and this shows where they come from).
 
 Given a change of coordinates to a rotating frame
 
@@ -243,26 +251,35 @@ i\omega \inv{2} {R} \Br' R^\dagger
 - {R} \Br' R^\dagger i\omega\inv{2}
 +{R} \dt{\Br'} R^\dagger
 \]
-\[
+\begin{equation}\label{eqn:velocityfixedrotplane}
+\implies
+\dt{\Br} = 
 = 
 \omega i \cdot ({R} \Br' R^\dagger) +  {R} \dt{\Br'} R^\dagger
-\]
+\end{equation}
 
 One can put this into the traditional cross product form by introducing
 a normal vector for the rotational axis in the usual way:
 
 \[
-\Bomega = \omega i / \BI_3
+\BOmega = \omega i
+\]
+\[
+\Bomega = \BOmega / \BI_3
 \]
 
+We can describe the angular velocity by a scaled normal vector $(\Bomega)$ to the rotational plane, or by a scaled bivector for the plane itself ($\BOmega$).
+
 \begin{align*}
-\omega i \cdot ({R} \Br' R^\dagger)
-&= \gpgradeone{ \omega i {R} \Br' R^\dagger } \\
-&= \gpgradeone{ {R} \omega i \Br' R^\dagger } \\
-&= {R} (\omega i) \cdot \Br' R^\dagger \\
+\BOmega \cdot ({R} \Br' R^\dagger)
+&= \gpgradeone{ \BOmega {R} \Br' R^\dagger } \\
+&= \gpgradeone{ {R} \BOmega \Br' R^\dagger } \\
+&= {R} \BOmega \cdot \Br' R^\dagger \\
 &= {R} (\Bomega \BI_3) \cdot \Br' R^\dagger \\
 &= {R} (\Bomega \cross \Br') R^\dagger \\
 \end{align*}
+
+Note that here as before this is valid only when the rotational plane orientation is constant (ie: no wobble), since only then can we assume $i$, and thus $\BOmega$ will commute with the rotor $R$.
 
 Summarizing, we can write our velocity using rotational frame components
 as: 
@@ -271,7 +288,7 @@ as:
 \end{equation}
 Or
 \begin{equation}
-\dt{\Br} = {R} \left( \omega i \cdot \Br' + \dt{\Br'} \right) R^\dagger
+\dt{\Br} = {R} \left( \BOmega \cdot \Br' + \dt{\Br'} \right) R^\dagger
 \end{equation}
 
 Using the result above from equation \ref{eqn:vrotcross}, we can calculate
@@ -313,5 +330,189 @@ x' & y' & z' \\
 This verifies the second part of Tong's equation 2.19, and has a sign that
 doesn't match with equation \ref{eqn:vmagwithmatrix}, which confirms that
 there's likely a sign mixup above leading to that original result.
+
+\section{ Acceleration in rotating coordinates. }
+
+Having calculated velocity in terms of rotational frame coordinates, acceleration is the next
+logical step.
+
+The starting point is the velocity
+
+\[
+\dt{\Br} = R ( \BOmega \cdot \Br' + \dt{\Br}' ) R^\dagger
+\]
+
+Taking deriviatives we have
+\[
+\ddt{\Br} = i \omega /2 \dt{\Br} - \dt{\Br} i \omega /2 + R \left( \dot{\BOmega} \cdot \Br' + \BOmega \cdot \dt{\Br}' + \ddt{\Br}' \right) R^\dagger
+\]
+
+The first two terms are a bivector vector dot product and we can simplify this as follows
+
+\begin{align*}
+i \omega /2 \dt{\Br} - \dt{\Br} i \omega /2
+&= \BOmega /2 \dt{\Br} - \dt{\Br} \BOmega \\
+&= \BOmega \cdot \dt{\Br} \\
+&= \gpgradeone{ \BOmega R ( \BOmega \cdot \Br' + \dt{\Br}' ) R^\dagger } \\
+&= \gpgradeone{ R ( \BOmega (\BOmega \cdot \Br' + \dt{\Br}') ) R^\dagger } \\
+&= R ( \BOmega \cdot (\BOmega \cdot \Br') + \BOmega \cdot \dt{\Br}') R^\dagger \\
+\end{align*}
+
+Thus the total acceleration is
+
+\begin{equation}
+\ddt{\Br} = R \left( \BOmega \cdot (\BOmega \cdot \Br') +\dot{\BOmega} \cdot \Br' + 2 \BOmega \cdot \dt{\Br}' + \ddt{\Br}' \right) R^\dagger
+\end{equation}
+
+Or, in terms of cross products, and angular velocity and acceleration vectors $\Bomega$, and $\Balpha$ respectively, this is
+
+\begin{equation}\label{eqn:accelerationfixedrotplane}
+\ddt{\Br} = R \left( \Bomega \cross (\Bomega \cross \Br') + \Balpha \cross \Br' + 2 \Bomega \cross \dt{\Br}' + \ddt{\Br}' \right) R^\dagger
+\end{equation}
+
+\section{ Allow for a wobble in rotational plane. }
+
+A calculation similar to this can be found in GAFP, but for strictly rigid motion.  It doesn't take too much to combine the two for a generalized result that
+expresses the total acceleration expressed in rotating frame coordinates, but also allowing for general rotation where the frame rotation and the angular velocity
+bivector don't have to be coplanar (ie: commute as above).
+
+Since the primes and dots are kind of cumbersome switch to the GAFP notation where the position of a particle is expressed in terns of a rotational component $\Bx$
+and origin translation $\Bx_0$:
+
+\[
+\By = R \Bx R^\dagger + \Bx_0
+\]
+
+Taking derivatives for velocity
+
+\begin{equation}\label{eqn:velocity}
+\dt{\By} = \dt{R} \Bx R^\dagger +R \Bx \dt{R^\dagger} +R \dt{\Bx} R^\dagger + \dt{\Bx}_0
+\end{equation}
+
+Now use the same observation that the derivative of $R R^\dagger = 1$ is zero:
+
+\begin{equation*}
+\frac{d (R R^\dagger)}{dt} = \dt{R}R^\dagger + R \dt{R^\dagger} = 0
+\end{equation*}
+\begin{equation}\label{eqn:rotdtrot}
+\implies
+\dt{R}R^\dagger = 
+%-R \dt{R^\dagger} =
+ - R \dt{R}^\dagger = -{\left( \dt{R} R^\dagger \right)}^\dagger
+\end{equation}
+
+Since $R$ has only grade 0 and 2 terms, so does its derivative.  Thus the product of the two has grade 0, 2, and 4 terms, but 
+equation \ref{eqn:rotdtrot} shows that the product $\dt{R} R^\dagger$ has a value that is the negative of its reverse, so it must have
+only grade 2 terms (the reverse of the grade 0 and 4 terms would not change sign).
+
+As in equation \ref{eqn:velocityfixedrotplane} we want to write $\dt{R}$ as a bivector/rotor product and equation \ref{eqn:rotdtrot} gives us a means to do so.
+This would have been clearer in GAFP if they had done the simple example first with the orientation of the rotational plane fixed.
+
+So, write:
+
+\[
+\dt{R}R^\dagger = \inv{2}\BOmega
+\]
+\[
+\dt{R} = \inv{2}\BOmega R
+\]
+\[
+\dt{R}^\dagger = - \inv{2} R^\dagger \BOmega
+\]
+
+(including the $1/2$ here is a bit of a cheat ... it's here because having done the calculation on paper first one sees that it's natural to do so).
+
+With this we can substitute back into equation \ref{eqn:velocity}, writing $\By_0 = \By - \Bx_0$ :
+
+\begin{align*}
+\dt{\By}
+&= \inv{2} \BOmega {R} \Bx R^\dagger - \inv{2} R \Bx {R^\dagger} \BOmega +R \dt{\Bx} R^\dagger + \dt{\Bx}_0 \\
+&= \inv{2}\left(\BOmega \By_ - \By_0 \BOmega\right) +R \dt{\Bx} R^\dagger + \dt{\Bx}_0 \\
+&= \BOmega \cdot \By_0 +R \dt{\Bx} R^\dagger + \dt{\Bx}_0 \\
+\end{align*}
+
+We also want to pull in this $\BOmega$ into the rotor as in the fixed orientation
+case, but cannot use commutivity this time since the rotor and angular velocity bivector aren't neccessarily in the same plane.
+
+This is where GAFP introduces their body angular velocity, which applies an inverse rotation to the angular velocity.
+
+Let:
+\[
+\BOmega = R \BOmega_B R^\dagger
+\]
+
+Computing this bivector dot product with $\By$ we have
+
+\begin{align*}
+\BOmega \cdot \By_0
+&= (R \BOmega_B R^\dagger) \cdot (R \Bx R^\dagger) \\
+&= \gpgradeone{R \BOmega_B R^\dagger R \Bx R^\dagger} \\
+&= \gpgradeone{R \BOmega_B \Bx R^\dagger} \\
+&= \gpgradeone{R (\BOmega_B \cdot \Bx + \BOmega_B \wedge \Bx) R^\dagger} \\
+&= {R \BOmega_B \cdot \Bx R^\dagger} \\
+\end{align*}
+
+Thus the total velocity is:
+
+\begin{equation}
+\dt{\By} = {R (\BOmega_B \cdot \Bx + \dt{\Bx} )R^\dagger} + \dt{\Bx}_0
+\end{equation}
+
+Thus given any vector $\Bx$ in the rotating frame coordinate system, we have the relationship for the inertial frame velocity.  We can apply this a second
+time to compute the inertial (rest frame) acceleration in terms of rotating coordinates.  Write $\Bv = \BOmega_B \cdot \Bx + \dt{\Bx}$, 
+
+\begin{equation*}
+\dt{\By} = {R \Bv R^\dagger} + \dt{\Bx}_0
+\end{equation*}
+\begin{equation*}
+\implies
+\ddt{\By} = {R (\BOmega_B \cdot \Bv + \dt{\Bv} ) R^\dagger} + \ddt{\Bx}_0
+\end{equation*}
+
+\[
+\dt{\Bv} = 
+\dt{\BOmega}_B \cdot \Bx 
++\BOmega_B \cdot \dt{\Bx}
++ \ddt{\Bx}
+\]
+
+Combining these we have:
+\begin{align*}
+\ddt{\By} 
+&= {R (\BOmega_B \cdot ( \BOmega_B \cdot \Bx + \dt{\Bx} ) + \dt{\BOmega}_B \cdot \Bx +\BOmega_B \cdot \dt{\Bx} + \ddt{\Bx}) R^\dagger} + \ddt{\Bx}_0 \\
+\end{align*}
+
+\begin{equation}
+\implies
+\ddt{\By} 
+= {R (\BOmega_B \cdot ( \BOmega_B \cdot \Bx ) + \dt{\BOmega}_B \cdot \Bx + 2\BOmega_B \cdot \dt{\Bx} + \ddt{\Bx}) R^\dagger} + \ddt{\Bx}_0
+\end{equation}
+
+This generalizes equation \ref{eqn:accelerationfixedrotplane}, providing the rest frame acceleration in terms of rotational frame coordinates, with centrifugal acceleration, euler force acceleration, and corolis force acceleration terms that accompany the plain old acceleration term $\ddt{\Bx}$.  The only
+requirement for the generality of allowing the orientation of the rotational plane to potentially vary is the use of the ``body angular velocity''
+$\BOmega_B$, replacing the angular velocity as seen from the rest frame $\BOmega$.
+
+\subsection{ Body angular acceleration in terms of rest frame. }
+
+Since we know the relationship between the body angular velocity $\BOmega_B$ with the Rotor (rest frame) angular velocity bivector, for
+completeness, lets compute the body angular acceleration bivector $\dt{\BOmega}_B$ in terms of the rest frame angular acceleration $\dt{\BOmega}$.
+
+\[
+\BOmega_B = R^\dagger \BOmega R
+\]
+\begin{align*}
+\implies
+\dt{\BOmega}_B 
+&= \dt{R}^\dagger \BOmega R +R^\dagger \dt{\BOmega} R +R^\dagger \BOmega \dt{R} \\
+&= -\inv{2}R^\dagger \BOmega^2 R +R^\dagger \dt{\BOmega} R +R^\dagger \BOmega^2 R \inv{2} \\
+&= \inv{2} \left(R^\dagger \BOmega^2 R - R^\dagger \BOmega^2 R\right) +R^\dagger \dt{\BOmega} R \\
+&= R^\dagger \dt{\BOmega} R \\
+\end{align*}
+
+This shows that the body angular acceleration is just an inverse rotation of the rest frame angular acceleration like the angular velocities are.
+
+\section{ Equations of motion from Lagrange partials. }
+
+TBD.  Do this using the Rotor formulation.  How?
 
 \end{document}               % End of document.
