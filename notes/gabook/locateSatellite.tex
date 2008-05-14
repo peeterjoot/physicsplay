@@ -9,6 +9,8 @@
 \usepackage{latexsym,amssymb,epsf} % don't remember if these are
    % needed, but their inclusion can't do any damage
 
+\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+\newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
 
 %
 % The real thing:
@@ -136,11 +138,11 @@ P_s = \left(\frac{(P_2-P_1) \wedge \alpha_2}{ \alpha_1 \wedge \alpha_2 }\right) 
 
 Notice how all the trigonometry is encoded directly in the rotor equations.  If one had to calculate all this using the spherical trigonometry generalized triangle relations I expect that you'd have an ungodly mess of sine and cosines here.
 
-
 This demonstrates two very distinct applications of the wedge product.  The first was to define an oriented plane, and was used as a generator of rotations (very much like the unit imaginary).  This second application, to solve linear equations takes advantage of $a \wedge a = 0$ property of the wedge product.  It was convienent as it allowed simple simulateous solution of the three equations (one for each component) and two unknowns problem in this particular case. 
 
-Instead of solving with the wedge product one could formulate this as a matrix equation:
+\section{ matrix formulation. }
 
+Instead of solving with the wedge product one could formulate this as a matrix equation:
 
 \begin{equation}\label{eqn:twopointsmatrix}
 \begin{bmatrix}
@@ -186,7 +188,7 @@ Here is an example of the matrix to solve for three points:
 \begin{equation}\label{eqn:threepointsmatrix}
 \begin{bmatrix}
 \alpha_1 & -\alpha_2 & 0 \\
-\alpha_1 & 0 & -\alpha_3 \\
+-\alpha_1 & 0 & \alpha_3 \\
 0 & \alpha_2 & -\alpha_3 \\
 \end{bmatrix}
 \begin{bmatrix}
@@ -197,7 +199,7 @@ a_3 \\
 = 
 \begin{bmatrix}
 P_2 - P_1 \\
-P_3 - P_1 \\
+P_1 - P_3 \\
 P_3 - P_2 \\
 \end{bmatrix}
 \end{equation}
@@ -214,6 +216,57 @@ Question, is it actually true that the end effect of applying these rotors in ei
 x' = R_{\psi} R_{\lambda} x R_{\lambda}^\dagger R_{\psi}^\dagger = R_{\lambda} R_{\psi} x R_{\psi}^\dagger R_{\lambda}^\dagger
 \]
 
-Attempting to show this is true or false by direct expansion is not productive (perhaps would be okay with a symbolic GA calculator).  FIXME: write up my attempt to reduce this anylytically.  This appears to show that the rotation order does matter.  A numeric confirmation/denial is likely prudent.
+Attempting to show this is true or false by direct expansion is not productive (perhaps would be okay with a symbolic GA calculator).
+
+To verify or disprove this take the difference between these two rotation results, and see if it can be shown to equal zero.  To simplify this we can start with the expansion of the rotor products in either order and compare:
+
+\begin{align*}
+R_{\psi} R_{\lambda} 
+&= ( \cos(\psi/2) - \Be_{32}\sin(\psi/2) )(\cos(\lambda/2) - \Be_{31}\sin(\lambda/2)) \\
+&= \cos(\psi/2)\cos(\lambda/2) - \Be_{32}\sin(\psi/2)\cos(\lambda/2) - \Be_{31} \cos(\psi/2) \sin(\lambda/2) - \Be_{21} \sin(\psi/2) \sin(\lambda/2) \\
+\end{align*}
+\begin{align*}
+R_{\lambda} R_{\psi}
+&= (\cos(\lambda/2) - \Be_{31}\sin(\lambda/2)) ( \cos(\psi/2) - \Be_{32}\sin(\psi/2) ) \\
+&= \underbrace{\cos(\psi/2)\cos(\lambda/2)}_{a_0} + \underbrace{-\Be_{32}\sin(\psi/2)\cos(\lambda/2) - \Be_{31} \cos(\psi/2) \sin(\lambda/2)}_{A} + \underbrace{\Be_{21} \sin(\psi/2) \sin(\lambda/2)}_{B}
+\end{align*}
+
+Observe that these are identical except for an inversion of sign of the $\Be_{21}$ term.  Using the shorthand above the respective rotations are:
+
+\[
+R_{\lambda,\psi}(x) = R_{\psi} R_{\lambda} x R_{\lambda}^\dagger R_{\psi}^\dagger = (a_0 + A - B) x (a_0 -A +B)
+\]
+
+And
+\[
+R_{\psi,\lambda}(x) = R_{\lambda} R_{\psi} x R_{\psi}^\dagger R_{\lambda}^\dagger = (a_0 + A + B) x (a_0 -A -B)
+\]
+
+Taking differences (and temporarily writing $a = a_0 + A$, and exploiting a grade one filter since the final result must be a vector we have
+
+\begin{align*}
+R_{\lambda,\psi}(x) - R_{\psi,\lambda}(x)
+&= \gpgradeone{R_{\lambda,\psi}(x) - R_{\psi,\lambda}(x)} \\
+&= \gpgradeone{ (a - B) x (a^\dagger +B) -(a + B) x (a^\dagger -B) } \\
+&= \gpgradeone{ ( a x a^\dagger -B x B -B x a^\dagger +a x B ) + ( - a x a^\dagger +B x B +a x B -B x a^\dagger ) } \\
+&= \gpgradeone{ ( -B x a^\dagger +a x B ) + ( +a x B -B x a^\dagger ) } \\
+&= 2\gpgradeone{ -B x a^\dagger +a x B } \\
+&= 2\gpgradeone{ -B x (a_0 - A) + (a_0 + A) x B } \\
+&= 2 a_0 ( -B x + x B ) + 2 \gpgradeone{ B x A + A x B } \\
+&= 4 a_0 x \cdot B + 2 \gpgradeone{ B x A + A x B } \\
+&= 4 a_0 x \cdot B + 2 \gpgradeone{ B \cdot x A - A B \cdot x } + 2 \gpgradeone{ B \wedge x A + A x \wedge B }  \\
+&= 4 a_0 x \cdot B + 4 (B \cdot x) \cdot A + 2 (B \wedge x) \cdot A + 2 A \cdot (B \wedge x )  \\
+&= 4 a_0 x \cdot B + 4 (B \cdot x) \cdot A + 2 (B \wedge x) \cdot A - 2 (B \wedge x ) \cdot A \\
+&= 4 a_0 x \cdot B + 4 (B \cdot x) \cdot A \\
+&= 4 (B \cdot x) \cdot (-a_0 + A) \\
+&= -4 (B \cdot x) \cdot a^\dagger \\
+\end{align*}
+
+Evaluate this for $x = \Be_1$ we do not have zero (a vector with $\Be_2$ and $\Be_3$ components), and for $x = \Be_2$ this difference has $\Be_1$, and $\Be_3$ components.  However, for $x = \Be_3$ this is zero.  Thus these
+rotations only commute when applied to a vector that is completely normal to the sphere.  This is what messes up the intuition.  Rotating a point (represented by a vector) in either order works fine, but rotating a frame located at the surface back to a different point on the surface, and maintaining the east and north orientations we have to be careful which orientation to use.
+
+So which order is right?  It has to be rotate first in the equatorial plane ($\lambda)$, then the northwards rotation, where both are great circle rotations.
+
+A numeric confirmation of this is likely prudent.
 
 \end{document}               % End of document.
