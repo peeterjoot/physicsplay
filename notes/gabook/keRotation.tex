@@ -34,15 +34,16 @@ dynamics paper and contrast matrix and GA approach.
 Generalize acceleration in terms
 of rotating frame coordinates without unproved extrapolation that the z axis result
 of Tong's paper is good unconditionally (his cross products are kind of pulled out of
-a magic hat and this shows where they come from).
+a magic hat and this write up will show a couple ways to see where they come from).
 
-Given a change of coordinates to a rotating frame
+Given coordinates for a point in a rotating frame $\Br'$, the coordinate vector for that point
+in a rest frame is:
 
 \begin{equation}\label{eqn:rotcoord}
-\Br' = R \Br
+\Br = R \Br'
 \end{equation}
 
-Where
+Where the rotating frame moves according to the following z-axis rotation matrix:
 
 \[
 R = 
@@ -53,78 +54,85 @@ R =
 \end{bmatrix}
 \]
 
-Express the Kinetic energy of a particle in terms of the rotating frame
-coordinate system.
+To compute the Lagrangian we want to reexpress the 
+kinetic energy of a particle:
 
 \[
 K = 
-\inv{2} m \dt{\Br}^2 %= \inv{2} m \dt{\Br}^{'2}
+\inv{2} m \dt{\Br}^2
 \]
+
+in terms of the rotating frame coordinate system.
 
 \section{ With matrix formulation. }
 
-The tong paper does this for a z axis rotation with $\theta = \omega t$.
+The Tong paper does this for a z axis rotation with $\theta = \omega t$.
 Constant angular frequency is assumed.
 
 First we calculate our position vector in terms of the rotational frame
 
 \[
-\Br = R^{-1}\Br'
+\Br = R\Br'
 \]
 
-Where
+%Where
+%
+%\[
+%R_\theta^{-1} = R_{-\theta} =
+%\begin{bmatrix}
+%\cos \theta & \sin \theta & 0 \\
+%-\sin \theta & \cos \theta & 0 \\
+%0 & 0 & 1 \\
+%\end{bmatrix}
+%\]
+
+The rest frame velocity is:
 
 \[
-R_\theta^{-1} = R_{-\theta} =
-\begin{bmatrix}
-\cos \theta & \sin \theta & 0 \\
--\sin \theta & \cos \theta & 0 \\
-0 & 0 & 1 \\
-\end{bmatrix}
-\]
-
-The velocity is:
-
-\[
-\dt{\Br} = \dt{R_{-\theta}}\Br' + R_{-\theta}\dt{\Br'}.
+\dt{\Br} = \dt{R}_{\theta} \Br' + R_{\theta} \dt{\Br'}.
 \]
 
 Taking the matrix time derivative we have:
 
 \[
-\dt{R_{-\theta}} =
+\dt{R}_{\theta} =
 -\dt{\theta}
 \begin{bmatrix}
-\sin \theta & -\cos \theta & 0 \\
-\cos \theta & \sin \theta & 0 \\
+\sin \theta & \cos \theta & 0 \\
+-\cos \theta & \sin \theta & 0 \\
 0 & 0 & 0 \\
 \end{bmatrix}.
 \]
 
 Taking magnitudes of the velocity we have three terms
 
-\[
-\dt{\Br}^2 = 
-\transpose{\Br'} \transpose{\dt{R_{-\theta}}} \dt{R_{-\theta}}\Br'
-+2 \transpose{{\Br'}} \transpose{\dt{R_{-\theta}}} R_{-\theta} \dt{\Br'}
-+\transpose{\dt{\Br'}} \transpose{R_{-\theta}} R_{-\theta}\dt{\Br'}
-\]
+\begin{align*}
+\dt{\Br}^2 
+&= 
+(\dt{R}_{\theta} \Br') \cdot (\dt{R}_{\theta} \Br')
++2 (\dt{R}_{\theta} \Br') \cdot (R_{\theta} \dt{\Br'})
++(R_{\theta} \dt{\Br'}) \cdot (R_{\theta} \dt{\Br'}) \\
+&= 
+\transpose{\Br'}\transpose{\dt{R}_{\theta}} \dt{R}_{\theta} \Br'
++2 \transpose{\Br'} \transpose{\dt{R}_{\theta}} R_{\theta} \dt{\Br'}
++\dt{\Br'}^2 \\
+\end{align*}
 
-We need to calculate all the intermediate matrix products.  The last is 
+We need to calculate all the intermediate matrix products.  The last was 
 identity, and the first is:
 
 \[
-\transpose{\dt{R_{-\theta}}} \dt{R_{-\theta}}
+\transpose{\dt{R}_{\theta}} \dt{R}_{\theta}
 =
 {\dt{\theta}}^2
 \begin{bmatrix}
-\sin \theta & \cos \theta & 0 \\
--\cos \theta & \sin \theta & 0 \\
+\sin \theta & -\cos \theta & 0 \\
+\cos \theta & \sin \theta & 0 \\
 0 & 0 & 0 \\
 \end{bmatrix}
 \begin{bmatrix}
-\sin \theta & -\cos \theta & 0 \\
-\cos \theta & \sin \theta & 0 \\
+\sin \theta & \cos \theta & 0 \\
+-\cos \theta & \sin \theta & 0 \\
 0 & 0 & 0 \\
 \end{bmatrix}
 \]
@@ -141,17 +149,17 @@ identity, and the first is:
 This leaves just the mixed term
 
 \[
-\transpose{\dt{R_{-\theta}}} {R_{-\theta}}
+\transpose{\dt{R}_{\theta}} {R_{\theta}}
 =
 -{\dt{\theta}}
 \begin{bmatrix}
-\sin \theta & \cos \theta & 0 \\
--\cos \theta & \sin \theta & 0 \\
+\sin \theta & -\cos \theta & 0 \\
+\cos \theta & \sin \theta & 0 \\
 0 & 0 & 0 \\
 \end{bmatrix}
 \begin{bmatrix}
-\cos \theta & \sin \theta & 0 \\
--\sin \theta & \cos \theta & 0 \\
+\cos \theta & -\sin \theta & 0 \\
+\sin \theta & \cos \theta & 0 \\
 0 & 0 & 1 \\
 \end{bmatrix}
 \]
@@ -159,8 +167,8 @@ This leaves just the mixed term
 =
 -{\dt{\theta}}
 \begin{bmatrix}
-0 & 1 & 0 \\
--1 & 0 & 0 \\
+0 & -1 & 0 \\
+1 & 0 & 0 \\
 0 & 0 & 0 \\
 \end{bmatrix}
 \]
@@ -179,8 +187,8 @@ With $\dt{\theta} = \omega$, the total magnitude of the velocity is thus
 \Br'
 -2 \omega \transpose{{\Br'}} 
 \begin{bmatrix}
-0 & 1 & 0 \\
--1 & 0 & 0 \\
+0 & -1 & 0 \\
+1 & 0 & 0 \\
 0 & 0 & 0 \\
 \end{bmatrix}
 \dt{\Br'}
@@ -191,29 +199,29 @@ Tong's paper presents this expanded out in terms of coordinates:
 
 \[
 \dt{\Br}^2 = 
-\omega^2( {x'}^{2} + {y'}^{2} )
-+ 2 \omega ( -x' \dt{y'} +y' \dt{x'} )
-+ ( \dt{x'}^{2} + \dt{y'}^{2} + \dt{z'}^{2} )
+\omega^2\left( {x'}^{2} + {y'}^{2} \right)
++ 2 \omega \left( x' \dt{y'} -y' \dt{x'} \right)
++ \left( \dt{x'}^{2} + \dt{y'}^{2} + \dt{z'}^{2} \right)
 \]
 
 Or,
 \begin{equation}\label{eqn:vmagwithmatrix}
 \dt{\Br}^2 = 
-+( \omega y' + \dt{x'} )^2 
-+( \omega x' - \dt{y'} )^2 
+\left( -\omega y' + \dt{x'} \right)^2 
++\left( \omega x' + \dt{y'} \right)^2 
 + \dt{z'}^2 
 \end{equation}
 
-Hmm.  Sign above is reversed from the text?  He also then goes on to
+He also then goes on to
 show that this can be written, with $\Bomega = \omega \zcap$, as 
 
 \[
 \dt{\Br}^2 = ( \dt{\Br'} + \Bomega \cross \Br')^2
 \]
 
-The implication here is that this is a valid result for any rotationing
-coordinate system.   How one would actually prove this in general is 
-a different story.
+The implication here is that this is a valid result for any rotating
+coordinate system.   How to prove this in the general rotation case, is shown much later
+in his treatment of rigid bodies.
 
 \section{ With rotor. }
 
@@ -253,9 +261,7 @@ i\omega \inv{2} {R} \Br' R^\dagger
 \]
 \begin{equation}\label{eqn:velocityfixedrotplane}
 \implies
-\dt{\Br} = 
-= 
-\omega i \cdot ({R} \Br' R^\dagger) +  {R} \dt{\Br'} R^\dagger
+\dt{\Br} = \omega i \cdot ({R} \Br' R^\dagger) +  {R} \dt{\Br'} R^\dagger
 \end{equation}
 
 One can put this into the traditional cross product form by introducing
@@ -327,9 +333,8 @@ x' & y' & z' \\
 \end{bmatrix}
 \end{align*}
 
-This verifies the second part of Tong's equation 2.19, and has a sign that
-doesn't match with equation \ref{eqn:vmagwithmatrix}, which confirms that
-there's likely a sign mixup above leading to that original result.
+This verifies the second part of Tong's equation 2.19, also consistent with the
+derivation of equation \ref{eqn:vmagwithmatrix}.
 
 \section{ Acceleration in rotating coordinates. }
 
@@ -510,6 +515,188 @@ completeness, lets compute the body angular acceleration bivector $\dt{\BOmega}_
 \end{align*}
 
 This shows that the body angular acceleration is just an inverse rotation of the rest frame angular acceleration like the angular velocities are.
+
+\section{ Revisit general rotation using matrixes. }
+
+Having fully calculated velocity and acceleration in terms of rotating frame coordinates, lets
+go back and revisit this with matrixes and see how one would do the same for a general rotation.
+
+Following GAFP express the rest frame coordinates for a point $\By$ in terms of a rotation
+applied to a rotating frame position $\Bx$ (this is easier than the mess of primes and dots
+used in Tong's paper).  Also omit the origin translation (that can be added in later if desired
+easily enough)
+
+\[
+\By = R \Bx
+\]
+
+Thus the deriviative is:
+
+\[
+\dt{\By} = \dt{R} \Bx + R \dt{\Bx}.
+\]
+
+As in the GA case we want to factor this so that we have a rotation applied to a something
+that is completely specified in the rotating frame.  This
+is quite easy with matrixes, as we just have to factor out a rotation matrix from $\dt{R}$:
+
+\begin{align*}
+\dt{\By} 
+&= R \transpose{R}\dt{R} \Bx + R \dt{\Bx} \\
+&= R \left(\transpose{R}\dt{R} \Bx + \dt{\Bx} \right) \\
+\end{align*}
+
+This new product $\transpose{R}\dt{R} \Bx$ we have seen above in the special case of z-axis
+rotation as a cross product.  In the GA general rotation case, we've seen that this as a
+bivector-vector dot product.  Both of these are fundamentally antisymmetric operations,
+so we expect this of the matrix operator too.  Verification of this antisymmetry follows
+in almost the same fashion as the GA case, by observing that the deriviative of an identity
+matrix $I = \transpose{R}R$ is zero:
+
+\[
+\dt{I} = 0
+\]
+\[
+\implies
+\transpose{\dt{R}}R + \transpose{R}\dt{R} = 0
+\]
+\[
+\implies
+\transpose{R}\dt{R} = -\transpose{\dt{R}}R = -\transpose{\transpose{R}\dt{R}}
+\]
+
+Thus if one writes:
+
+\begin{equation}\label{eqn:bodyangularvelocitymatrix}
+\BOmega = \transpose{R}\dt{R}
+\end{equation}
+
+the antisymetric property of this matrix can be summarized as:
+
+\[
+\BOmega = -\transpose{\BOmega}.
+\]
+
+Let's write out the form of this matrix in the first few dimensions:
+
+\begin{itemize}
+\item \R{2}
+
+\[
+\BOmega = 
+\begin{bmatrix}
+0 & -a \\
+a & 0  \\
+\end{bmatrix}
+\]
+
+For some $a$.
+
+\item \R{3}
+
+\[
+\BOmega = 
+\begin{bmatrix}
+0 & -a & -b \\
+a &  0 & -c \\
+b &  c &  0 \\
+\end{bmatrix}
+\]
+
+For some $a, b, c$.
+
+\item \R{4}
+
+\[
+\BOmega = 
+\begin{bmatrix}
+0 & -a & -b & -d \\
+a & 0 & -c & -e \\
+b & c & 0 & -f \\
+d & e & f & 0 \\
+\end{bmatrix}
+\]
+
+For some $a, b, c, d, e, f$.
+\end{itemize}
+
+For \R{N} we have $(N^2-N)/2$ degrees of freedom.  It's noteworthy to observe that this is exactly the number of basis elements of a bivector.  For example, in \R{4}, such a bivector basis is
+$\Be_{12}, \Be_{13}, \Be_{14}, \Be_{23}, \Be_{24}, \Be_{34}$.
+
+For \R{3} we have three degrees of freedom and because of the antisymmetry 
+can express this matrix-vector product using the cross product.  Let
+
+\[
+(a,b,c) = (\omega_3, -\omega_2, \omega_1)
+\]
+
+One has:
+
+\[
+\BOmega \Bx = 
+\begin{bmatrix}
+0 & -\omega_3 & \omega_2 \\
+\omega_3 &  0 & -\omega_1 \\
+-\omega_2 & \omega_1 &  0 \\
+\end{bmatrix}
+\begin{bmatrix}
+x_1 \\
+x_2 \\
+x_3 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+-\omega_3 x_2 +\omega_2 x_3 \\
++\omega_3 x_1 -\omega_1 x_3 \\
+-\omega_2 x_1 +\omega_1 x_2 \\
+\end{bmatrix}
+= \Bomega \cross \Bx
+\]
+
+Summarizing the velocity result we have, using $\BOmega$ from equation \ref{eqn:bodyangularvelocitymatrix}:
+
+\begin{equation}
+\dt{\By} = R \left( \BOmega \Bx + \dt{\Bx} \right)
+\end{equation}
+
+Or, for \R{3}, we can define a body angular velocity vector
+
+\begin{equation}
+\Bomega = 
+\begin{bmatrix}
+\BOmega_{32} \\
+\BOmega_{13} \\
+\BOmega_{21} \\
+\end{bmatrix}
+\end{equation}
+
+and thus write the velocity as:
+
+\begin{equation}
+\dt{\By} = R \left( \Bomega \cross \Bx + \dt{\Bx} \right)
+\end{equation}
+
+This, like the GA result is good for general rotations.  Then don't have to be constant
+rotation rates, and it allows for arbitrarily
+oriented as well as wobbly motion of the rotating frame.
+
+As with the GA general velocity calculation, this general form also allows us to calculate
+the squared velocity easily, since the rotation matrixes will
+cancel after transposition:
+
+\[
+\dt{\By}^2 = 
+\left(R \left( \Bomega \cross \Bx + \dt{\Bx} \right)\right) \cdot
+\left(R \left( \Bomega \cross \Bx + \dt{\Bx} \right)\right)
+=
+\transpose{\left( \Bomega \cross \Bx + \dt{\Bx} \right)} \transpose{R}
+R \left( \Bomega \cross \Bx + \dt{\Bx} \right)
+\]
+\[
+\implies
+\dt{\By}^2 = 
+{\left( \Bomega \cross \Bx + \dt{\Bx} \right)}^2
+\]
 
 \section{ Equations of motion from Lagrange partials. }
 

@@ -2,10 +2,10 @@
 
 
 \input{../peeters_macros.tex}
-%\DeclareMathOperator{\TextTranspose}{T}
+\DeclareMathOperator{\T}{T}
 \DeclareMathOperator{\rank}{rank}
 %\newcommand{\transpose}[1]{{{#1}^{\TextTranspose}}}
-\newcommand{\transpose}[1]{{{#1}^{\text{T}}}}
+%\newcommand{\transpose}[1]{{{#1}^{\text{T}}}}
 
 \newcommand{\Det}[1] {\abs{#1}}
 
@@ -100,13 +100,13 @@ p = a \frac{a \cdot b}{a \cdot a}
 In matrix notation that is:
 
 \begin{equation}
-p = a \left(\frac{\transpose{a} b}{\transpose{a} a} \right)
+p = a \left(\frac{a^\T b}{a^\T a} \right)
 \end{equation}
 
 Following Gilbert Strang's MIT lecture on subspace projection, the parenthesis can be moved to directly express this as a projection matrix operating on b.
 
 \begin{equation}\label{eqn:projectmatrixline}
-p = \left(\frac{a \transpose{a}}{\transpose{a} a}\right) b = P b
+p = \left(\frac{a a^\T}{a^\T a}\right) b = P b
 \end{equation}
 
 
@@ -165,8 +165,8 @@ u_1 & u_2 & \cdots
 \end{bmatrix}$
 \begin{align*}
 \begin{bmatrix}
-\transpose{u_1} \\
-\transpose{u_2} \\
+u_1^\T \\
+u_2^\T \\
 \vdots 
 \end{bmatrix}
 b
@@ -197,7 +197,7 @@ Solving for the vector of unknown coefficients $\alpha = [\alpha_i]_i$ we have
 u_i \cdot u_j
 \end{bmatrix}
 }_{ij}}^{-1}
-\transpose{U} b
+U^\T b
 \]
 
 And 
@@ -210,15 +210,15 @@ u_i \cdot u_j
 
 \end{bmatrix}
 }_{ij}}^{-1}
-\transpose{U} b
+U^\T b
 \end{equation}
 
-However, this matrix in the middle is just $\transpose{U} U$:
+However, this matrix in the middle is just $U^\T U$:
 
 \begin{align*}
 \begin{bmatrix}
-\transpose{u_1} \\
-\transpose{u_2} \\
+u_1^\T \\
+u_2^\T \\
 \vdots \\
 \end{bmatrix}
 \begin{bmatrix}
@@ -226,14 +226,14 @@ However, this matrix in the middle is just $\transpose{U} U$:
 \end{bmatrix}
 &=
 \begin{bmatrix}
-\transpose{u_1} {u_1} & \transpose{u_1} {u_2} & \hdots \\
-\transpose{u_2} {u_1} & \transpose{u_2} {u_2} & \hdots \\
+u_1^\T {u_1} & u_1^\T {u_2} & \hdots \\
+u_2^\T {u_1} & u_2^\T {u_2} & \hdots \\
 \vdots & & \\
 \end{bmatrix} \\
 &=
 {
 \begin{bmatrix}
-\transpose{u_i} {u_j}
+u_i^\T {u_j}
 \end{bmatrix}
 }_{ij} \\
 &=
@@ -247,7 +247,7 @@ However, this matrix in the middle is just $\transpose{U} U$:
 This provides the final result:
 
 \begin{equation}\label{eqn:projectiongeneralmatrix}
-\Proj_{U}\left(b\right) = U (\transpose{U} U)^{-1} \transpose{U} b
+\Proj_{U}\left(b\right) = U (U^\T U)^{-1} U^\T b
 \end{equation}
 
 \subsection{ Simplifying case.  Orthonormal basis for column space. }
@@ -256,18 +256,18 @@ To evaluate equation \ref{eqn:projectiongeneralmatrix} we need only full column 
 central product term to invert is:
 
 \[
-\transpose{U} U = [ \transpose{u_i} u_j ]_{ij} = [ \delta_{ij} ]_{ij} = I_{r,r}
+U^\T U = [ u_i^\T u_j ]_{ij} = [ \delta_{ij} ]_{ij} = I_{r,r}
 \]
 
 Therefore, the projection matrix can be expressed using the two exterior terms alone:
 
 \begin{equation}\label{eqn:projOrthonormal}
-\Proj_U = U (\transpose{U} U)^{-1} \transpose{U} = U \transpose{U}
+\Proj_U = U (U^\T U)^{-1} U^\T = U U^\T
 \end{equation}
 
 \subsection{ Numerical expansion of left pseudoscalar matrix with matrix.}
 
-Numerically expanding the projection matrix $A (\transpose{A} A)^{-1}\transpose{A}$ isn't something
+Numerically expanding the projection matrix $A (A^\T A)^{-1}A^\T$ isn't something
 that we want to do, but the simpler projection matrix of equation
 \ref{eqn:projOrthonormal} that we get with an orthonormal basis makes this not so daunting.
 
@@ -307,8 +307,8 @@ P =
 u_1 & u_2 \\
 \end{bmatrix}
 \begin{bmatrix}
-\transpose{u_1} \\
-\transpose{u_2} \\
+u_1^\T \\
+u_2^\T \\
 \end{bmatrix}
 =
 \inv{8}
@@ -351,7 +351,7 @@ so this validates all the math performed so far.  Good!
 
 %, so this
 %is has at least one of the expected properties of a projection matrix.
-%We also expect that $P x = 0$ for any $x \in N(\transpose{V})$, so if
+%We also expect that $P x = 0$ for any $x \in N(V^\T)$, so if
 %it has that property too we can call it the projection matrix for the subspace
 %spanned by $u_1$, and $u_2$.  We also assume that this is the projection
 %matrix for $A$ (we haven't yet shown any explicit
@@ -363,7 +363,7 @@ It is symmetric.  Analytically, we know to expect this, since for a
 a full column rank matrix $A$ the transpose of the projection matrix is:
 
 \[
-\transpose{P} = \transpose{\left(A \inv{\transpose{A}A} \transpose{A}\right)} = P.
+P^\T = {\left(A \inv{A^\TA} A^\T\right)}^\T = P.
 \]
 
 \item
@@ -389,22 +389,22 @@ u_i \cdot n = 0
 
 Or,
 \[
-\transpose{u_i} n = 0
+u_i^\T n = 0
 \]
 
 In block matrix form for all $u_i$ that is:
 
 \[
-[\transpose{u_i} n]_i = [\transpose{u_i}]_i n = \transpose{U} n = 0
+[u_i^\T n]_i = [u_i^\T]_i n = U^\T n = 0
 \]
 
 This is all we need to verify that our projection matrix indeed produces a zero for any vector completely outside of the subspace:
 
 \[
-\Proj_U(n) = U (\transpose{U} n) = U 0 = 0
+\Proj_U(n) = U (U^\T n) = U 0 = 0
 \]
 
-Now we have seen numerically that $U \transpose{U}$ is not an identity matrix despite 
+Now we have seen numerically that $U U^\T$ is not an identity matrix despite 
 operating as one on any vector that lies completely in the subspace.
 %Although this matrix may 
 %have blocks of identity matrixes along the diagonal in some cases.
@@ -415,14 +415,14 @@ span of the set $\{u_i\}$.  By linearity it is sufficient to do this calcuation
 for a particular $u_i$:
 
 \begin{align*}
-U \transpose{U} u_i
+U U^\T u_i
 &=
 U
 \begin{bmatrix}
-\transpose{u_1} u_i \\
-\transpose{u_2} u_i \\
+u_1^\T u_i \\
+u_2^\T u_i \\
 \vdots \\
-\transpose{u_r} u_i \\
+u_r^\T u_i \\
 \end{bmatrix}
 \\
 &=
@@ -450,7 +450,7 @@ to write this out and point out the similarities and differences.
 We've shown above, provided a matrix A is of full column rank, a projection onto it's columns can be written:
 
 \[
-\Proj_A(x) = \left( A \frac{1}{\transpose{A} A} \transpose{A} \right) x
+\Proj_A(x) = \left( A \frac{1}{A^\T A} A^\T \right) x
 \]
 
 Now contrast this with the projection written in terms of a vector dot product with a non-null blade 
@@ -463,7 +463,10 @@ This is a curious correspondence and niave comparison could lead one to think th
 transposition and blade reversal are equivalent.
 
 This isn't actually the case since the matrix transposition actually corresponds to
-the adjoint operation of a linear transformation for blades.
+the adjoint operation of a linear transformation for blades.  Be that as it may, there appears to be other situations
+other than projections where matrix operations of the form $A^\T A$ end up with GA equivalents in the form $A^\dagger A$.  Another example
+is the rigid body equations where the body anglular velocity bivector corresponding to a rotor $R$ is of the form $\BOmega = R' R\^dagger$, whereas the matrix
+form for a rotation matrix $R$ is of the form $\BOmega = R' R^\dagger$.
 
 \subsection{ Projection matrix full column rank requirement. }
 
@@ -472,14 +475,14 @@ of a generalized matrix (Moore-Penrose) inverse, or SVD can eliminate this full 
 the formulation of the projection matrix.
 
 We will get to this later, but we never really proved that
-full column rank implies $\transpose{A}A$ invertability.
+full column rank implies $A^\TA$ invertability.
 
-If one writes out the matrix $\transpose{A}A$ in full
+If one writes out the matrix $A^\TA$ in full
 
 Now, if $A = [a_i]_i$, the matrix
 
 \begin{equation}\label{eqn:AtA}
-\transpose{A}A
+A^\TA
 =
 \begin{bmatrix}
 {a_1} \cdot {a_1} & {a_1} \cdot {a_2} & \hdots \\
@@ -502,12 +505,12 @@ of sign for reversion, as the GA dot product of a k-blade:
 
 Linear independence means that this wedge product is non-zero, and therefore the dot product, and thus original determinant is also non-zero.
 
-When the $\transpose{A}A$ matrix of equation \ref{eqn:AtA} is invertable that inverse can be written using a cofactor matrix (adjugate expansion):
+When the $A^\TA$ matrix of equation \ref{eqn:AtA} is invertable that inverse can be written using a cofactor matrix (adjugate expansion):
 
-Let's write this out, where $C_{ij}$ are the cofactor matrixes of $\transpose{A}A$, we have:
+Let's write this out, where $C_{ij}$ are the cofactor matrixes of $A^\TA$, we have:
 
 \[
-\inv{\transpose{A}A} = \inv{ \Det{ \transpose{A}A } } \transpose{[ C_{ij} ]}
+\inv{A^\TA} = \inv{ \Det{ A^\TA } } {[ C_{ij} ]}^\T
 \]
 
 Observe that the denominator here is exactly the determinant of equation \ref{eqn:AdagdotA}.  This illustrates
@@ -515,7 +518,7 @@ the motivation of Hestenes to lable the explicit alternating vector-vector dot p
 blade-vector dot product the ``generalized Laplace expansion''.
 
 %  This allows us to give additional meaning to the
-%$\inv{\transpose{A}A}\transpose{A}$ factor of the general projection matrix.
+%$\inv{A^\TA}A^\T$ factor of the general projection matrix.
 %  Operationally this appears to 
 %provide a way to compute the dot product of a
 %blade with vector (just scaled by the determinant and by the sign of the reversion).
@@ -526,7 +529,7 @@ When the
 columns of the matrix $A$ are orthonormal, the projection matrix is reduced to:
 
 \[
-\Proj_A(x) = \left( A \transpose{A} \right) x.
+\Proj_A(x) = \left( A A^\T \right) x.
 \]
 
 The corresponding GA entity is a projection onto a unit magnitude blade.  With that scaling the inverse term also drops out leaving:
@@ -535,7 +538,7 @@ The corresponding GA entity is a projection onto a unit magnitude blade.  With t
 \Proj_A(x) = A \left(A^\dagger \cdot x\right)
 \]
 
-This helps point out the similarity between the matrix inverse $\inv{\transpose{A}A}$ and the blade product inverse $\inv{{A^\dagger}A}$ is only on the surface,
+This helps point out the similarity between the matrix inverse $\inv{A^\TA}$ and the blade product inverse $\inv{{A^\dagger}A}$ is only on the surface,
 since this blade product is only a scalar.
 
 
@@ -587,13 +590,13 @@ since this blade product is only a scalar.
 
 
 
-%This is why we say that $n$ is in the null space of $\transpose{U}$,
-%$N(\transpose{U})$ not $N(U)$.  One perhaps could say this is in the null
+%This is why we say that $n$ is in the null space of $U^\T$,
+%$N(U^\T)$ not $N(U)$.  One perhaps could say this is in the null
 %or perpendicular space of the set $\{u_i\}$, but our use of columns as
 %vectors coupled with the Euclianian norm requires transposition to express
 %the same null space concept for a matrix of column vectors.
 %
-%Since $\transpose{U} n = 0$ for any $n \in N(U)$ we also have
+%Since $U^\T n = 0$ for any $n \in N(U)$ we also have
 
 
 
@@ -620,15 +623,15 @@ since this blade product is only a scalar.
 %
 %%\begin{equation}\label{eqn:pseudoprojmatsum}
 %%A^{+} A =
-%%\sum_{k=1}^r {u_k}\transpose{u_k}
+%%\sum_{k=1}^r {u_k}u_k^\T
 %%\end{equation}
 %%
 %
-%%(note this is a different ``$V$'' than the $V$ in $A = U \Sigma \transpose{V}$ since it only includes the first $r$ columns).
+%%(note this is a different ``$V$'' than the $V$ in $A = U \Sigma V^\T$ since it only includes the first $r$ columns).
 %%This allows us to write the matrix of equation \ref{eqn:pseudoprojmatsum} as
 %
 %%\begin{equation}
-%%A^{+} A = V \transpose{V}
+%%A^{+} A = V V^\T
 %%\end{equation}
 %
 %
@@ -663,29 +666,29 @@ since this blade product is only a scalar.
 %
 %\begin{align*}
 %A \hat{x} 
-%&= \Proj_{A}\left(b\right) = A (\transpose{A} A)^{-1} \transpose{A} b
+%&= \Proj_{A}\left(b\right) = A (A^\T A)^{-1} A^\T b
 %\end{align*}
 %
-%The simplest case here is when $A$ is of full column rank since one can pre-multiply this complete equation by $\transpose{A}$ without any possibility of nulling
+%The simplest case here is when $A$ is of full column rank since one can pre-multiply this complete equation by $A^\T$ without any possibility of nulling
 %$A \hat{x}$.
 %
 %\begin{align*}
-%\transpose{A} A \hat{x} 
-%&= \transpose{A} A (\transpose{A} A)^{-1} \transpose{A} b \\
-%&= \transpose{A} b \\
+%A^\T A \hat{x} 
+%&= A^\T A (A^\T A)^{-1} A^\T b \\
+%&= A^\T b \\
 %\end{align*}
 %
 %Thus our best fit vector is
 %
 %\begin{equation}
 %\hat{x} 
-%= (\transpose{A} A)^{-1} \transpose{A} b
+%= (A^\T A)^{-1} A^\T b
 %\end{equation}
 %
 %Another way to view this is for any vector $x$ that is not in the null space $N(A)$, then the matrix:
 %
 %\begin{equation}
-%A^{+}= (\transpose{A} A)^{-1} \transpose{A}
+%A^{+}= (A^\T A)^{-1} A^\T
 %\end{equation}
 %
 %has the action of a left inverse for any full column rank matrix $A$.  Thus when there is a solution to:
@@ -750,7 +753,7 @@ since this blade product is only a scalar.
 %and $V \in M^{n \times n} $ producing the following form:
 %
 %\[
-%A = U \Sigma \transpose{V}
+%A = U \Sigma V^\T
 %\]
 %
 %Sigma has the form:
@@ -763,13 +766,13 @@ since this blade product is only a scalar.
 %\end{bmatrix}
 %\]
 %
-%where $r = \rank(A)$, and $D$ is a diagonal matrix with the root of the (positive) eigenvalues of $\transpose{A}A$.
+%where $r = \rank(A)$, and $D$ is a diagonal matrix with the root of the (positive) eigenvalues of $A^\TA$.
 %
 %This provides a generalized spectral decomposition and similarity that applies to both non-square matrices and matrices not otherwise diagonalizable
 %(ie: square matrix with similarity to a Jordon form matrix).  Given this decomposition we can write:
 %
 %\[
-%\Sigma = \transpose{U} A V
+%\Sigma = U^\T A V
 %\]
 %
 %If one were to ask the question of what is the closest that one could get to inverting such a matrix.  It's pretty clear that the closest one could get to
@@ -817,7 +820,7 @@ since this blade product is only a scalar.
 %With either of these one can define a corresponding pseudoinverse (left or right) as:
 %
 %\begin{equation}
-%A^{+} = V \Sigma^{+} \transpose{U}
+%A^{+} = V \Sigma^{+} U^\T
 %\end{equation}
 %
 %This is a logical definition, but how close is it to the projective
@@ -828,8 +831,8 @@ since this blade product is only a scalar.
 %
 %\begin{align*}
 %A^{+} A 
-%&= V \Sigma^{+} \transpose{U} U \Sigma \transpose{V} \\
-%&= V \Sigma^{+} \Sigma \transpose{V} \\
+%&= V \Sigma^{+} U^\T U \Sigma V^\T \\
+%&= V \Sigma^{+} \Sigma V^\T \\
 %&=
 %\begin{bmatrix}
 %v_1 & v_2 & \cdots & v_r & v_{r+1} & \cdots & v_n \\
@@ -843,7 +846,7 @@ since this blade product is only a scalar.
 %0_{m-r,r} & 0_{m-r,n-r} \\
 %\end{bmatrix}
 %\begin{bmatrix}
-%\transpose{v_1} \\ \transpose{v_2} \\ \vdots \\ \transpose{v_r} \\ \transpose{v_{r+1}} \\ \vdots \\ \transpose{v_n} \\
+%v_1^\T \\ v_2^\T \\ \vdots \\ v_r^\T \\ {v_{r+1}}^\T \\ \vdots \\ v_n^\T \\
 %\end{bmatrix}
 %\end{align*}
 %%Embeded in that is the same "as-close-to" identity as calculated above.
@@ -851,13 +854,13 @@ since this blade product is only a scalar.
 %Writing $D_{r,r} = [\delta_{ij}\sigma_i]_{ij}$, we have:
 %
 %\begin{equation}\label{eqn:VIrVt}
-%V \Sigma^{+} \Sigma \transpose{V} 
+%V \Sigma^{+} \Sigma V^\T 
 %=
 %\begin{bmatrix}
 %\frac{v_1}{\sigma_1} & \frac{v_2}{\sigma_2} & \cdots & \frac{v_r}{\sigma_2} & 0 & \cdots & 0 
 %\end{bmatrix}
 %\begin{bmatrix}
-%\transpose{v_1}\sigma_1 \\ \transpose{v_2}\sigma_2 \\ \vdots \\ \transpose{v_r}\sigma_r \\ 0 \\ \vdots \\ 0 \\
+%v_1^\T\sigma_1 \\ v_2^\T\sigma_2 \\ \vdots \\ v_r^\T\sigma_r \\ 0 \\ \vdots \\ 0 \\
 %\end{bmatrix}
 %\end{equation}
 %
@@ -888,13 +891,13 @@ since this blade product is only a scalar.
 %
 %\begin{equation}\label{eqn:pseudoinversetimesmatrix}
 %A^{+} A =
-%V \Sigma^{+} \Sigma \transpose{V} 
+%V \Sigma^{+} \Sigma V^\T 
 %=
 %\begin{bmatrix}
 %\frac{v_1}{\sigma_1} & \frac{v_2}{\sigma_2} & \cdots & \frac{v_r}{\sigma_2} 
 %\end{bmatrix}
 %\begin{bmatrix}
-%\transpose{v_1}\sigma_1 \\ \transpose{v_2}\sigma_2 \\ \vdots \\ \transpose{v_r}\sigma_r 
+%v_1^\T\sigma_1 \\ v_2^\T\sigma_2 \\ \vdots \\ v_r^\T\sigma_r 
 %\end{bmatrix}
 %\end{equation}
 %
@@ -903,14 +906,14 @@ since this blade product is only a scalar.
 %\begin{equation}\label{eqn:pseudoinversetimesmatrixsum}
 %A^{+} A =
 %\begin{bmatrix}
-%\sum_{k=1}^r {v_k}\transpose{v_k}
+%\sum_{k=1}^r {v_k}v_k^\T
 %\end{bmatrix}
 %=
 %\begin{bmatrix}
 %v_1 & v_2 & \cdots & v_r 
 %\end{bmatrix}
 %\begin{bmatrix}
-%\transpose{v_1} \\ \transpose{v_2} \\ \vdots \\ \transpose{v_r} 
+%v_1^\T \\ v_2^\T \\ \vdots \\ v_r^\T 
 %\end{bmatrix}
 %\end{equation}
 %
@@ -931,7 +934,7 @@ since this blade product is only a scalar.
 %original matrix that we have an SVD factorization for
 %
 %\[
-%A = U \Sigma \transpose{V}
+%A = U \Sigma V^\T
 %\]
 %
 %Once we show this, then we have also demonstrated that the first $r$ 
@@ -957,7 +960,7 @@ equation \ref{eqn:projectmatrixline}.
 We only need to look at the numerator since the denominator is a scalar in this case.
 
 \begin{align*}
-(a \transpose{a}) b
+(a a^\T) b
 &= [ a_i a_j ]_{ij} [b_i]_i \\
 &= 
 {\begin{bmatrix}
@@ -969,8 +972,8 @@ We only need to look at the numerator since the denominator is a scalar in this 
 a_i \sum_k a_k b_k
 \end{bmatrix}
 }_i \\
-&= [ a_i ]_i \transpose{a} b \\
-&= a (\transpose{a} b) \\
+&= [ a_i ]_i a^\T b \\
+&= a (a^\T b) \\
 \end{align*}
 
 
@@ -1002,12 +1005,12 @@ is straightforward:
 
 \begin{align*}
 \Proj_V 
-&= V \left(\transpose{V} V\right)^{-1} \transpose{V} \\
-&= \left(U E^{-1}\right) \left(\transpose{\left(U E^{-1}\right)} \left(U E^{-1}\right)\right)^{-1} \transpose{\left(U E^{-1}\right)} \\
-&= \left(U E^{-1}\right) \left( \transpose{E^{-1}} \transpose{U} U E^{-1}\right)^{-1} \transpose{\left(U E^{-1}\right)} \\
-&= \left(U E^{-1}\right) E \left( \transpose{U}U\right)^{-1} \transpose{E} \transpose{\left(U E^{-1}\right)} \\
-&= U \left( \transpose{U}U\right)^{-1} \transpose{E} \transpose{E^{-1}} \transpose{U} \\
-&= U \left( \transpose{U}U\right)^{-1} \transpose{U} \\
+&= V \left(V^\T V\right)^{-1} V^\T \\
+&= \left(U E^{-1}\right) \left({\left(U E^{-1}\right)}^\T \left(U E^{-1}\right)\right)^{-1} {\left(U E^{-1}\right)}^\T \\
+&= \left(U E^{-1}\right) \left( {E^{-1}}^T U^\T U E^{-1}\right)^{-1} {\left(U E^{-1}\right)}^\T \\
+&= \left(U E^{-1}\right) E \left( U^\TU\right)^{-1} E^\T {\left(U E^{-1}\right)}^\T \\
+&= U \left( U^\TU\right)^{-1} E^\T {E^{-1}}^\T U^\T \\
+&= U \left( U^\TU\right)^{-1} U^\T \\
 &= \Proj_U
 \end{align*}
 
