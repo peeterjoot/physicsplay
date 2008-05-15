@@ -466,7 +466,7 @@ transposition and blade reversal are equivalent.
 
 This isn't actually the case since the matrix transposition actually corresponds to
 the adjoint operation of a linear transformation for blades.  Be that as it may, there appears to be other situations
-other than projections where matrix operations of the form $A^\T A$ end up with GA equivalents in the form $A^\dagger A$.  Another example
+other than projections where matrix operations of the form $B^\T A$ end up with GA equivalents in the form $B^\dagger A$.  An example
 is the rigid body equations where the body anglular velocity bivector corresponding to a rotor $R$ is of the form $\BOmega = R' R^\dagger$, whereas the matrix
 form for a rotation matrix $R$ is of the form $\BOmega = R' R^\dagger$.
 
@@ -543,412 +543,80 @@ The corresponding GA entity is a projection onto a unit magnitude blade.  With t
 This helps point out the similarity between the matrix inverse $\inv{A^\T A}$ and the blade product inverse $\inv{{A^\dagger}A}$ is only on the surface,
 since this blade product is only a scalar.
 
+\section{ Projection and Moore-Penrose vector inverse. }
 
+One can observe that the moore penrose left vector inverse $\Bv^+$ shows up in the projection matrix for a projection onto a line with a direction vector $\Bv$:
 
+\begin{equation}
+\Proj_\Bv(\Bx) = \Bv \underbrace{\inv{ \Bv^\T \Bv} \Bv^\T}_{\Bv^+} \Bx
+\end{equation}
 
+I don't know of any other ``application'' of this Moore-Penrose vector inverse in traditional matrix algebra.  As stated it's an interesting mathematical curiousity that yes one can define a vector inverse, however what would you do with it?
 
+In geometric algebra we also have a vector inverse, but it plays a much more fundamental role, and does not have the restriction of only acting from the left and 
+producing a scalar result.  As an example consider the projection, and rejection decomposition of a vector:
+
+\begin{align*}
+\Bx 
+&= \Bv \inv{\Bv} \Bx \\
+&= \Bv (\inv{\Bv} \cdot \Bx) + \Bv (\inv{\Bv} \wedge \Bx) \\
+&= \Bv (\underbrace{\frac{\Bv}{\Bv^2} \cdot}_{\frac{\Bv^\T}{\Bv^\T \Bv}} \Bx) + \Bv (\frac{\Bv}{\Bv^2} \wedge \Bx) \\
+\end{align*}
+
+We can therefore describe the moore penrose vector left inverse as the matrix of the GA linear transformation $\inv{\Bv} \cdot$.
+
+Unlike the GA vector inverse, whos associativity allowed for the projection/rejection derivation above, this Moore-Penrose vector inverse has only left action, so in the above, you can't further write:
+
+\[
+\Bv \Bv^{+} = 1
+\]
+
+(ie: $\Bv \Bv^{+}$ is a projection matrix not scalar or matrix unity).
+
+\subsection{ matrix of wedge project transformation? }
+
+Q: What's the matrix of the linear transformation $\inv{\Bv} \wedge$?
+
+In rigid body dynamics we see the matrix of the linear transformation $T_\Bv(\Bx) = (\Bv \cross)(\Bx)$.  This is the completely antisymetric matrix as follows:
+
+\begin{equation}
+\Bv \times \Bx = 
+\begin{bmatrix}
+0 & -v_3 & v_2 \\
+v_3 & 0 & -v_1 \\
+-v_2 & v_1 & 0 \\
+\end{bmatrix}
+\begin{bmatrix}
+x_1 \\
+x_2 \\
+x_3 \\
+\end{bmatrix}
+\end{equation}
+
+In order to specify the matrix of a vector-vector wedge product linear transformation we must introduce bivector coordinate vectors.  For the matrix of the cross product linear transformation the standard vector basis was the obvious choice.
+
+Let's pick basis:
+
+\[
+\sigma = \{ \sigma_{ij} = \Be_i \wedge \Be_j \}_{i<j}
+\]
+
+and construct the matrix of the wedge project $T_\Bv : \mathbb{R}^N \rightarrow {\bigwedge}^2$
+
+\[
+T_\Bv(\Bx) = \Bv \wedge \Bx = \sum_{\mu = ij, i<j} \DETuvij{v}{x}{i}{j} \sigma_{\mu}
+\]
+\[
+\implies
+T_\Bv(\Be_k) \cdot {\sigma_{ij}}^\dagger = 
+\sum_{k \in ij, i<j} \DETuvij{v}{x}{i}{j} 
+= %\sum_{k \in ij, i<j} 
+v_i \delta_{kj} - v_j \delta_{ki}
+\]
 
 \section{ Projection with generalized dot product. }
 
 \section{ Oblique projection and reciprocal frame vectors. }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-%\begin{figure}[htp]
-%\centering
-%\includegraphics[totalheight=0.4\textheight]{visualize_subspace_projection}
-%\caption{Visualizing projection onto a subspace.}\label{fig:Projection_subspace}
-%\end{figure}
-%
-%We can geometrically visualize the projection problem 
-%
-%as in figure \ref{fig:Projection_subspace}.  Here
-%the subspace can be pictured
-%as a plane containing a set of mutually perpendicular basis vectors, as if
-%one has visually projected all the higher dimensional vectors onto a plane.
-%
-%For a vector $x$ that contains some part not in the space we want to find
-%the component in the space $p$, or characterize the projection operation
-%that produces this vector, and also find the space of vectors that lie
-%perpendicular to the space.
-
-
-
-
-%This is why we say that $n$ is in the null space of $U^\T$,
-%$N(U^\T)$ not $N(U)$.  One perhaps could say this is in the null
-%or perpendicular space of the set $\{u_i\}$, but our use of columns as
-%vectors coupled with the Euclianian norm requires transposition to express
-%the same null space concept for a matrix of column vectors.
-%
-%Since $U^\T n = 0$ for any $n \in N(U)$ we also have
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-%\subsection{ Application of projection as left pseudoinverse (ie: linear fitting). }
-%
-%%We have shown that the left pseudoinverse product with the matrix can
-%%be expressed as a projection matrix (sum of the projection matrices
-%%associated with a set of orthonormal vectors)
-%
-%%\begin{equation}\label{eqn:pseudoprojmatsum}
-%%A^{+} A =
-%%\sum_{k=1}^r {u_k}u_k^\T
-%%\end{equation}
-%%
-%
-%%(note this is a different ``$V$'' than the $V$ in $A = U \Sigma V^\T$ since it only includes the first $r$ columns).
-%%This allows us to write the matrix of equation \ref{eqn:pseudoprojmatsum} as
-%
-%%\begin{equation}
-%%A^{+} A = V V^\T
-%%\end{equation}
-%
-%
-%Equation \ref{eqn:projectiongeneralmatrix} provides us a way to find best solutions to general equations of the form:
-%
-%
-%\[
-%A x = b
-%\]
-%
-%Here $A$ is the matrix of a linear transformation, $A : \mathbb{R}^k \rightarrow \mathbb{R}^n$, for some $k<n$.
-%By ``best solutions'' here, we give this the geometrical meaning, namely, the solution matching the projection of $b$ onto the space.
-%
-%If b is not completely in the column space $C(A)$ of $A$, this can have no solution.  However, writing
-%
-%\[
-%b = \Proj_A(b) + b_\perp
-%\]
-%
-%as the components of $b$ in $C(A)$ and not in $C(A)$ respectively we can at least solve the reduced equation for $\hat{x}$:
-%
-%
-%\begin{equation}\label{eqn:reducedinverseproblem}
-%A \hat{x} = \Proj_A(b)
-%\end{equation}
-%
-%
-%This will be possible even in circumstances that the original equation had no solution.  Specifically, the vector b when projected onto the plane can be expressed as some
-%linear combination of the columns of $A$ (a basis for the subspace).
-%
-%Substuition of our projection result into equation \ref{eqn:reducedinverseproblem} yields:
-%
-%\begin{align*}
-%A \hat{x} 
-%&= \Proj_{A}\left(b\right) = A (A^\T A)^{-1} A^\T b
-%\end{align*}
-%
-%The simplest case here is when $A$ is of full column rank since one can pre-multiply this complete equation by $A^\T$ without any possibility of nulling
-%$A \hat{x}$.
-%
-%\begin{align*}
-%A^\T A \hat{x} 
-%&= A^\T A (A^\T A)^{-1} A^\T b \\
-%&= A^\T b \\
-%\end{align*}
-%
-%Thus our best fit vector is
-%
-%\begin{equation}
-%\hat{x} 
-%= (A^\T A)^{-1} A^\T b
-%\end{equation}
-%
-%Another way to view this is for any vector $x$ that is not in the null space $N(A)$, then the matrix:
-%
-%\begin{equation}
-%A^{+}= (A^\T A)^{-1} A^\T
-%\end{equation}
-%
-%has the action of a left inverse for any full column rank matrix $A$.  Thus when there is a solution to:
-%
-%\begin{equation}
-%A x = b.
-%\end{equation}
-%
-%It can be obtained by pre-multiplication using this "left" inverse.
-%
-%\begin{equation}
-%A^{+} A x = x = A^{+} b
-%\end{equation}
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%
-%\section{ SVD connection. }
-%
-%
-%SVT decomposition is an factoring of $A \in M^{m \times n}$ with orthonormal matrices $U \in M^{m \times m}$
-%
-%and $V \in M^{n \times n} $ producing the following form:
-%
-%\[
-%A = U \Sigma V^\T
-%\]
-%
-%Sigma has the form:
-%
-%\[
-%\Sigma = 
-%\begin{bmatrix}
-%D_{r,r} & 0_{r,n-r} \\
-%0_{m-r,r} & 0_{m-r,n-r} \\
-%\end{bmatrix}
-%\]
-%
-%where $r = \rank(A)$, and $D$ is a diagonal matrix with the root of the (positive) eigenvalues of $A^\T A$.
-%
-%This provides a generalized spectral decomposition and similarity that applies to both non-square matrices and matrices not otherwise diagonalizable
-%(ie: square matrix with similarity to a Jordon form matrix).  Given this decomposition we can write:
-%
-%\[
-%\Sigma = U^\T A V
-%\]
-%
-%If one were to ask the question of what is the closest that one could get to inverting such a matrix.  It's pretty clear that the closest one could get to
-%identity will be with multiplication of a $\Sigma^{+}$ of the following form:
-%
-%\[
-%\Sigma^{+} \Sigma
-%=
-%\begin{bmatrix}
-%(D_{r,r})^{-1} & 0_{r,m-r} \\
-%0_{n-r,r} & 0_{n-r,m-r} \\
-%\end{bmatrix}
-%\begin{bmatrix}
-%D_{r,r} & 0_{r,n-r} \\
-%0_{m-r,r} & 0_{m-r,n-r} \\
-%\end{bmatrix}
-%=
-%\begin{bmatrix}
-%I_{r,r} & 0_{r,n-r} \\
-%0_{n-r,r} & 0_{n-r,n-r} \\
-%\end{bmatrix}
-%\]
-%
-%For a right pseudoinverse we have a similar result:
-%
-%\[
-%\Sigma
-%\Sigma^{+}
-%=
-%\begin{bmatrix}
-%D_{r,r} & 0_{r,n-r} \\
-%0_{m-r,r} & 0_{m-r,n-r} \\
-%\end{bmatrix}
-%\begin{bmatrix}
-%(D_{r,r})^{-1} & 0_{r,m-r} \\
-%0_{n-r,r} & 0_{n-r,m-r} \\
-%\end{bmatrix}
-%=
-%\begin{bmatrix}
-%I_{r,r} & 0_{r,m-r} \\
-%0_{m-r,r} & 0_{m-r,m-r} \\
-%\end{bmatrix}
-%\]
-%
-%With either of these one can define a corresponding pseudoinverse (left or right) as:
-%
-%\begin{equation}
-%A^{+} = V \Sigma^{+} U^\T
-%\end{equation}
-%
-%This is a logical definition, but how close is it to the projective
-%left inverse we calculated above in the case where $A$ is not of full column 
-%rank?
-%
-%Multiplication gives: 
-%
-%\begin{align*}
-%A^{+} A 
-%&= V \Sigma^{+} U^\T U \Sigma V^\T \\
-%&= V \Sigma^{+} \Sigma V^\T \\
-%&=
-%\begin{bmatrix}
-%v_1 & v_2 & \cdots & v_r & v_{r+1} & \cdots & v_n \\
-%\end{bmatrix}
-%\begin{bmatrix}
-%(D_{r,r})^{-1} & 0_{r,m-r} \\
-%0_{n-r,r} & 0_{n-r,m-r} \\
-%\end{bmatrix}
-%\begin{bmatrix}
-%D_{r,r} & 0_{r,n-r} \\
-%0_{m-r,r} & 0_{m-r,n-r} \\
-%\end{bmatrix}
-%\begin{bmatrix}
-%v_1^\T \\ v_2^\T \\ \vdots \\ v_r^\T \\ {v_{r+1}}^\T \\ \vdots \\ v_n^\T \\
-%\end{bmatrix}
-%\end{align*}
-%%Embeded in that is the same "as-close-to" identity as calculated above.
-%
-%Writing $D_{r,r} = [\delta_{ij}\sigma_i]_{ij}$, we have:
-%
-%\begin{equation}\label{eqn:VIrVt}
-%V \Sigma^{+} \Sigma V^\T 
-%=
-%\begin{bmatrix}
-%\frac{v_1}{\sigma_1} & \frac{v_2}{\sigma_2} & \cdots & \frac{v_r}{\sigma_2} & 0 & \cdots & 0 
-%\end{bmatrix}
-%\begin{bmatrix}
-%v_1^\T \sigma_1 \\ v_2^\T \sigma_2 \\ \vdots \\ v_r^\T \sigma_r \\ 0 \\ \vdots \\ 0 \\
-%\end{bmatrix}
-%\end{equation}
-%
-%Considering this as the product of block matrices we have a product here of the form
-%
-%\[
-%\begin{bmatrix}
-%A_{n,r} & 0_{n,n-r}
-%\end{bmatrix}
-%\begin{bmatrix}
-%B_{r,n} \\ 0_{n-r,n}
-%\end{bmatrix}
-%=
-%\begin{bmatrix}
-%A_{n,r} B_{r,n} + 0_{n,n-r} 0_{n-r,n}
-%\end{bmatrix}
-%=
-%\begin{bmatrix}
-%A_{n,r} B_{r,n} + 0_{n,n}
-%\end{bmatrix}
-%=
-%\begin{bmatrix}
-%A_{n,r} B_{r,n}
-%\end{bmatrix}
-%\]
-%
-%Thus we can strip the block zero matrices from equation \ref{eqn:VIrVt} and write
-%
-%\begin{equation}\label{eqn:pseudoinversetimesmatrix}
-%A^{+} A =
-%V \Sigma^{+} \Sigma V^\T 
-%=
-%\begin{bmatrix}
-%\frac{v_1}{\sigma_1} & \frac{v_2}{\sigma_2} & \cdots & \frac{v_r}{\sigma_2} 
-%\end{bmatrix}
-%\begin{bmatrix}
-%v_1^\T \sigma_1 \\ v_2^\T \sigma_2 \\ \vdots \\ v_r^\T \sigma_r 
-%\end{bmatrix}
-%\end{equation}
-%
-%Eliminating the $\sigma$ terms we have:
-%
-%\begin{equation}\label{eqn:pseudoinversetimesmatrixsum}
-%A^{+} A =
-%\begin{bmatrix}
-%\sum_{k=1}^r {v_k}v_k^\T
-%\end{bmatrix}
-%=
-%\begin{bmatrix}
-%v_1 & v_2 & \cdots & v_r 
-%\end{bmatrix}
-%\begin{bmatrix}
-%v_1^\T \\ v_2^\T \\ \vdots \\ v_r^\T 
-%\end{bmatrix}
-%\end{equation}
-%
-%We previously calculated a left inverse using the projection matrix associated with a full column rank matrix.  For this product to have the properties of a
-%left acting inverse we also expect it to be a projection.
-%Let's disgress
-%slightly before looking at whether equation
-%\ref{eqn:pseudoinversetimesmatrixsum} satisifies this expectation.
-%
-%
-%
-%\subsection{ Correlating the SVD derived projection matrix back to $A$. }
-%
-%
-%We now have to show that this is also the projection matrix associated
-%
-%with the columns of the 
-%original matrix that we have an SVD factorization for
-%
-%\[
-%A = U \Sigma V^\T
-%\]
-%
-%Once we show this, then we have also demonstrated that the first $r$ 
-%(orthonormal) column vectors in the matrix $V$ of this decomposition
-%are a basis for the column space of $A$ itself.  Note that we are
-%switching back to the original definition of $V \in M^{n,n}$ here, and
-%not the $V \in M^{n,r}$ of equation \ref{eqn:projOrthonormal}.
-%
-%
-
-
-
 
 
 
