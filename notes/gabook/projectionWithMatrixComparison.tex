@@ -2,10 +2,12 @@
 
 
 \input{../peeters_macros.tex}
-\DeclareMathOperator{\T}{T}
+%\DeclareMathOperator{\Transpose}{T}
 \DeclareMathOperator{\rank}{rank}
 %\newcommand{\transpose}[1]{{{#1}^{\TextTranspose}}}
 %\newcommand{\transpose}[1]{{{#1}^{\text{T}}}}
+\newcommand{\T}[0]{\text{T}}
+\newcommand{\BOmega}[0]{\boldsymbol{\Omega}}
 
 \newcommand{\Det}[1] {\abs{#1}}
 
@@ -363,7 +365,7 @@ It is symmetric.  Analytically, we know to expect this, since for a
 a full column rank matrix $A$ the transpose of the projection matrix is:
 
 \[
-P^\T = {\left(A \inv{A^\TA} A^\T\right)}^\T = P.
+P^\T = {\left(A \inv{A^\T A} A^\T \right)}^\T = P.
 \]
 
 \item
@@ -465,7 +467,7 @@ transposition and blade reversal are equivalent.
 This isn't actually the case since the matrix transposition actually corresponds to
 the adjoint operation of a linear transformation for blades.  Be that as it may, there appears to be other situations
 other than projections where matrix operations of the form $A^\T A$ end up with GA equivalents in the form $A^\dagger A$.  Another example
-is the rigid body equations where the body anglular velocity bivector corresponding to a rotor $R$ is of the form $\BOmega = R' R\^dagger$, whereas the matrix
+is the rigid body equations where the body anglular velocity bivector corresponding to a rotor $R$ is of the form $\BOmega = R' R^\dagger$, whereas the matrix
 form for a rotation matrix $R$ is of the form $\BOmega = R' R^\dagger$.
 
 \subsection{ Projection matrix full column rank requirement. }
@@ -475,14 +477,14 @@ of a generalized matrix (Moore-Penrose) inverse, or SVD can eliminate this full 
 the formulation of the projection matrix.
 
 We will get to this later, but we never really proved that
-full column rank implies $A^\TA$ invertability.
+full column rank implies $A^\T A$ invertability.
 
-If one writes out the matrix $A^\TA$ in full
+If one writes out the matrix $A^\T A$ in full
 
 Now, if $A = [a_i]_i$, the matrix
 
 \begin{equation}\label{eqn:AtA}
-A^\TA
+A^\T A
 =
 \begin{bmatrix}
 {a_1} \cdot {a_1} & {a_1} \cdot {a_2} & \hdots \\
@@ -505,12 +507,12 @@ of sign for reversion, as the GA dot product of a k-blade:
 
 Linear independence means that this wedge product is non-zero, and therefore the dot product, and thus original determinant is also non-zero.
 
-When the $A^\TA$ matrix of equation \ref{eqn:AtA} is invertable that inverse can be written using a cofactor matrix (adjugate expansion):
+When the $A^\T A$ matrix of equation \ref{eqn:AtA} is invertable that inverse can be written using a cofactor matrix (adjugate expansion):
 
-Let's write this out, where $C_{ij}$ are the cofactor matrixes of $A^\TA$, we have:
+Let's write this out, where $C_{ij}$ are the cofactor matrixes of $A^\T A$, we have:
 
 \[
-\inv{A^\TA} = \inv{ \Det{ A^\TA } } {[ C_{ij} ]}^\T
+\inv{A^\T A} = \inv{ \Det{ A^\T A } } {[ C_{ij} ]}^\T
 \]
 
 Observe that the denominator here is exactly the determinant of equation \ref{eqn:AdagdotA}.  This illustrates
@@ -518,7 +520,7 @@ the motivation of Hestenes to lable the explicit alternating vector-vector dot p
 blade-vector dot product the ``generalized Laplace expansion''.
 
 %  This allows us to give additional meaning to the
-%$\inv{A^\TA}A^\T$ factor of the general projection matrix.
+%$\inv{A^\T A}A^\T$ factor of the general projection matrix.
 %  Operationally this appears to 
 %provide a way to compute the dot product of a
 %blade with vector (just scaled by the determinant and by the sign of the reversion).
@@ -538,7 +540,7 @@ The corresponding GA entity is a projection onto a unit magnitude blade.  With t
 \Proj_A(x) = A \left(A^\dagger \cdot x\right)
 \]
 
-This helps point out the similarity between the matrix inverse $\inv{A^\TA}$ and the blade product inverse $\inv{{A^\dagger}A}$ is only on the surface,
+This helps point out the similarity between the matrix inverse $\inv{A^\T A}$ and the blade product inverse $\inv{{A^\dagger}A}$ is only on the surface,
 since this blade product is only a scalar.
 
 
@@ -766,7 +768,7 @@ since this blade product is only a scalar.
 %\end{bmatrix}
 %\]
 %
-%where $r = \rank(A)$, and $D$ is a diagonal matrix with the root of the (positive) eigenvalues of $A^\TA$.
+%where $r = \rank(A)$, and $D$ is a diagonal matrix with the root of the (positive) eigenvalues of $A^\T A$.
 %
 %This provides a generalized spectral decomposition and similarity that applies to both non-square matrices and matrices not otherwise diagonalizable
 %(ie: square matrix with similarity to a Jordon form matrix).  Given this decomposition we can write:
@@ -860,7 +862,7 @@ since this blade product is only a scalar.
 %\frac{v_1}{\sigma_1} & \frac{v_2}{\sigma_2} & \cdots & \frac{v_r}{\sigma_2} & 0 & \cdots & 0 
 %\end{bmatrix}
 %\begin{bmatrix}
-%v_1^\T\sigma_1 \\ v_2^\T\sigma_2 \\ \vdots \\ v_r^\T\sigma_r \\ 0 \\ \vdots \\ 0 \\
+%v_1^\T \sigma_1 \\ v_2^\T \sigma_2 \\ \vdots \\ v_r^\T \sigma_r \\ 0 \\ \vdots \\ 0 \\
 %\end{bmatrix}
 %\end{equation}
 %
@@ -897,7 +899,7 @@ since this blade product is only a scalar.
 %\frac{v_1}{\sigma_1} & \frac{v_2}{\sigma_2} & \cdots & \frac{v_r}{\sigma_2} 
 %\end{bmatrix}
 %\begin{bmatrix}
-%v_1^\T\sigma_1 \\ v_2^\T\sigma_2 \\ \vdots \\ v_r^\T\sigma_r 
+%v_1^\T \sigma_1 \\ v_2^\T \sigma_2 \\ \vdots \\ v_r^\T \sigma_r 
 %\end{bmatrix}
 %\end{equation}
 %
@@ -1008,9 +1010,9 @@ is straightforward:
 &= V \left(V^\T V\right)^{-1} V^\T \\
 &= \left(U E^{-1}\right) \left({\left(U E^{-1}\right)}^\T \left(U E^{-1}\right)\right)^{-1} {\left(U E^{-1}\right)}^\T \\
 &= \left(U E^{-1}\right) \left( {E^{-1}}^T U^\T U E^{-1}\right)^{-1} {\left(U E^{-1}\right)}^\T \\
-&= \left(U E^{-1}\right) E \left( U^\TU\right)^{-1} E^\T {\left(U E^{-1}\right)}^\T \\
-&= U \left( U^\TU\right)^{-1} E^\T {E^{-1}}^\T U^\T \\
-&= U \left( U^\TU\right)^{-1} U^\T \\
+&= \left(U E^{-1}\right) E \left( U^\T U\right)^{-1} E^\T {\left(U E^{-1}\right)}^\T \\
+&= U \left( U^\T U\right)^{-1} E^\T {E^{-1}}^\T U^\T \\
+&= U \left( U^\T U\right)^{-1} U^\T \\
 &= \Proj_U
 \end{align*}
 
