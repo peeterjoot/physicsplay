@@ -1,6 +1,7 @@
 \documentclass{article}      % Specifies the document class
 
 \input{../peeters_macros.tex}
+\newcommand{\T}[0]{\text{T}}
 
 %
 % The real thing:
@@ -22,6 +23,136 @@ projection.  Calculate this myself.
 
 \section{ Using GA.  Oblique projection onto a line. }
 
+INSERT DIAGRAM.
 
+Problem is to project a vector $\Bx$ onto a line with direction $\pcap$, along a direction vector $\dcap$.
+
+Write:
+
+\[
+\Bx + \alpha \dcap = \beta \pcap
+\]
+
+and solve for $\Bp = \beta \pcap$.  Wedging with $\dcap$ provides the solution:
+
+\[
+\Bx \wedge \dcap + \alpha \underbrace{\dcap \wedge \dcap}_{=0} = \beta \pcap \wedge \dcap
+\]
+\[
+\implies
+\beta = \frac{\Bx \wedge \dcap}{\pcap \wedge \dcap}
+\]
+
+So the ``oblique'' projection onto this line (using direction $\dcap$) is:
+
+\begin{equation}
+\Proj_{\dcap \rightarrow \pcap}(\Bx) = 
+\frac{\Bx \wedge \dcap}{\pcap \wedge \dcap} \pcap
+\end{equation}
+
+This also shows that we do not need unit vectors for this sort of projection
+operation, since we can scale these two vectors by any quantity since they are
+in both the numerator and denominator.
+
+Let $\BD$, and $\BP$ be vectors in the directions of $\dcap$, and $\pcap$ respectively.  Then the projection can also be written:
+
+\begin{equation}\label{eqn:obliqueGAproj}
+\Proj_{\BD \rightarrow \BP}(\Bx) = 
+\frac{\Bx \wedge \BD}{\BP \wedge \BD} \BP
+\end{equation}
+
+It's interesting to see projection expressed here without any sort of dot
+product when all our previous projection calculations had intrinsic
+requirements for a metric.
+
+Because this result is intrisically non-metric, if convienient one can introduce one and express this result with that too.  Such an expansion is:
+
+\begin{align*}
+\frac{\Bx \wedge \BD}{\BP \wedge \BD} \BP
+&=
+\Bx \wedge \BD 
+\frac{\BD \wedge \BP}{\BD \wedge \BP}
+\inv{\BP \wedge \BD}
+\BP \\
+&=
+(\Bx \wedge \BD) \cdot (\BD \wedge \BP)
+\inv{\abs{\BP \wedge \BD}^2}
+\BP \\
+&=
+((\Bx \wedge \BD) \cdot \BD) \cdot \BP
+\inv{\abs{\BP \wedge \BD}^2}
+\BP \\
+&=
+(
+\Bx \BD^2 - \Bx \cdot \BD \BD
+) \cdot \BP
+\inv{\abs{\BP \wedge \BD}^2}
+\BP \\
+&=
+\frac{\Bx \cdot \BP \BD^2 - \Bx \cdot \BD \BD \cdot \BP}
+{\BP^2 \BD^2 - (\BP \cdot \BD)^2
+%p ^ d . d ^ p = p ^ d . d . p = (p d^2 - d.p d) . p = p^2 d^2 - (d.p)^2
+}
+\BP \\
+&=
+\Bx \cdot \frac{\BP \BD^2 - \BD \BD \cdot \BP}{\BP^2 \BD^2 - (\BP \cdot \BD)^2}
+\BP \\
+\end{align*}
+
+Now, this doesn't really simplify things at all, but my aim was to take the GA result from equation \ref{eqn:obliqueGAproj} and put it into
+matrix form.
+
+Assuming a euclidian metrix, and a bit of playing shows that the denominator can be written more simply as:
+
+\[
+\BP^2 \BD^2 - (\BP \cdot \BD)^2 = 
+\begin{vmatrix}
+U^\T U
+\end{vmatrix}
+\]
+
+where:
+
+\[
+U = 
+\begin{bmatrix}
+P & D
+\end{bmatrix}
+\]
+
+Similarily the numerator can be written:
+
+\[
+\Bx \cdot \BP \BD^2 - \Bx \cdot \BD \BD \cdot \BP = 
+D^\T U 
+\begin{bmatrix}
+0 & -1 \\
+1 & 0 \\
+\end{bmatrix}
+U^\T \Bx.
+\]
+
+Combining these yields a projection matrix:
+
+\begin{equation}
+\Proj_{\BD \rightarrow \BP}(\Bx) = 
+\left(
+\BP
+\inv{
+\begin{vmatrix}
+U^\T U
+\end{vmatrix}
+}
+\BD^\T U 
+\begin{bmatrix}
+0 & -1 \\
+1 & 0 \\
+\end{bmatrix}
+U^\T\right) \Bx.
+\end{equation}
+
+The alternation above suggests that this is related to the matrix inverse of something.  Let's try to calculate this directly instead.
+
+\section{ Oblique projection onto a line using matrices. }
 
 \end{document}               % End of document.
