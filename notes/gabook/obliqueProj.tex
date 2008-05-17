@@ -46,7 +46,7 @@ and solve for $\Bp = \beta \pcap$.  Wedging with $\dcap$ provides the solution:
 So the ``oblique'' projection onto this line (using direction $\dcap$) is:
 
 \begin{equation}
-\Proj_{\dcap \rightarrow \pcap}(\Bx) = 
+\Proj_{\dcap \rightarrow \pcap}(\Bx) =
 \frac{\Bx \wedge \dcap}{\pcap \wedge \dcap} \pcap
 \end{equation}
 
@@ -57,7 +57,7 @@ in both the numerator and denominator.
 Let $\BD$, and $\BP$ be vectors in the directions of $\dcap$, and $\pcap$ respectively.  Then the projection can also be written:
 
 \begin{equation}\label{eqn:obliqueGAproj}
-\Proj_{\BD \rightarrow \BP}(\Bx) = 
+\Proj_{\BD \rightarrow \BP}(\Bx) =
 \frac{\Bx \wedge \BD}{\BP \wedge \BD} \BP
 \end{equation}
 
@@ -70,7 +70,7 @@ Because this result is intrisically non-metric, if convienient one can introduce
 \begin{align*}
 \frac{\Bx \wedge \BD}{\BP \wedge \BD} \BP
 &=
-\Bx \wedge \BD 
+\Bx \wedge \BD
 \frac{\BD \wedge \BP}{\BD \wedge \BP}
 \inv{\BP \wedge \BD}
 \BP \\
@@ -105,7 +105,7 @@ matrix form.
 Assuming a euclidian metrix, and a bit of playing shows that the denominator can be written more simply as:
 
 \[
-\BP^2 \BD^2 - (\BP \cdot \BD)^2 = 
+\BP^2 \BD^2 - (\BP \cdot \BD)^2 =
 \begin{vmatrix}
 U^\T U
 \end{vmatrix}
@@ -114,7 +114,7 @@ U^\T U
 where:
 
 \[
-U = 
+U =
 \begin{bmatrix}
 P & D
 \end{bmatrix}
@@ -123,8 +123,8 @@ P & D
 Similarily the numerator can be written:
 
 \[
-\Bx \cdot \BP \BD^2 - \Bx \cdot \BD \BD \cdot \BP = 
-D^\T U 
+\Bx \cdot \BP \BD^2 - \Bx \cdot \BD \BD \cdot \BP =
+D^\T U
 \begin{bmatrix}
 0 & -1 \\
 1 & 0 \\
@@ -134,8 +134,8 @@ U^\T \Bx.
 
 Combining these yields a projection matrix:
 
-\begin{equation}
-\Proj_{\BD \rightarrow \BP}(\Bx) = 
+\begin{equation}\label{eqn:matrixprojfromwedge}
+\Proj_{\BD \rightarrow \BP}(\Bx) =
 \left(
 \BP
 \inv{
@@ -143,7 +143,7 @@ Combining these yields a projection matrix:
 U^\T U
 \end{vmatrix}
 }
-\BD^\T U 
+\BD^\T U
 \begin{bmatrix}
 0 & -1 \\
 1 & 0 \\
@@ -154,5 +154,185 @@ U^\T\right) \Bx.
 The alternation above suggests that this is related to the matrix inverse of something.  Let's try to calculate this directly instead.
 
 \section{ Oblique projection onto a line using matrices. }
+
+Let's start at the same place, except that we know we can discard the unit vectors and work with any vectors in the projection directions:
+
+\[
+\Bx + \alpha \BD = \beta \BP
+\]
+
+Assuming an inner product, we have two sets of results:
+
+\begin{align*}
+\innerprod{\BP}{\Bx} + \alpha \innerprod{\BP}{\BD} &= \beta \innerprod{\BP}{\BP} \\
+\innerprod{\BD}{\Bx} + \alpha \innerprod{\BD}{\BD} &= \beta \innerprod{\BD}{\BP} \\
+\end{align*}
+
+and can solve this for $\alpha$, and $\beta$.
+
+\begin{equation}\label{eqn:matrixtosolve}
+\begin{bmatrix}
+\innerprod{\BP}{\BD} & \innerprod{\BP}{\BP} \\
+\innerprod{\BD}{\BD} & \innerprod{\BD}{\BP} \\
+\end{bmatrix}
+\begin{bmatrix}
+-\alpha \\
+\beta \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+\innerprod{\BP}{\Bx} \\
+\innerprod{\BD}{\Bx} \\
+\end{bmatrix}
+\end{equation}
+
+%This can be solved with matrix inversion, but we are only
+
+If our inner product is defined by $\innerprod{\Bu}{\Bv} = \Bu^* A \Bv$, we have:
+
+\begin{align*}
+\begin{bmatrix}
+\innerprod{\BP}{\BD} & \innerprod{\BP}{\BP} \\
+\innerprod{\BD}{\BD} & \innerprod{\BD}{\BP} \\
+\end{bmatrix}
+&=
+\begin{bmatrix}
+{\BP}^* A {\BD} & {\BP}^* A {\BP} \\
+{\BD}^* A {\BD} & {\BD}^* A {\BP} \\
+\end{bmatrix} \\
+&=
+{
+\begin{bmatrix}
+\BP & \BD \\
+\end{bmatrix}
+}^*
+A
+\begin{bmatrix}
+{\BD} & {\BP} \\
+\end{bmatrix} \\
+\end{align*}
+
+Thus the solution to equation \ref{eqn:matrixtosolve} is
+
+\begin{equation}
+\begin{bmatrix}
+-\alpha \\
+\beta \\
+\end{bmatrix}
+=
+\left(
+\inv{
+{
+\begin{bmatrix}
+\BP & \BD \\
+\end{bmatrix}
+}^*
+A
+\begin{bmatrix}
+{\BD} & {\BP} \\
+\end{bmatrix}
+}
+{
+\begin{bmatrix}
+\BP & \BD \\
+\end{bmatrix}
+}^*
+A
+\right)
+\Bx
+\end{equation}
+
+Again writing $U = 
+\begin{bmatrix}
+P & D \\
+\end{bmatrix}
+$, this is:
+
+\begin{align*}
+\begin{bmatrix}
+-\alpha \\
+\beta \\
+\end{bmatrix}
+&=
+\left(
+\inv{U^* A U 
+\begin{bmatrix}
+0 & 1 \\
+1 & 0 \\
+\end{bmatrix}
+}
+U^*
+A
+\right)
+\Bx \\
+&=
+\left(
+\begin{bmatrix}
+0 & 1 \\
+1 & 0 \\
+\end{bmatrix}
+\inv{U^* A U 
+}
+U^*
+A
+\right)
+\Bx \\
+\end{align*}
+
+Since we only care about solution for $\beta$ to find the projection, we have to discard half the inversion work, and just select
+that part of the solution (suggests that a Cramer's rule method is more efficient than matrix inversion in this case) :
+
+\[
+\beta = 
+\begin{bmatrix}
+0 & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+-\alpha \\
+\beta \\
+\end{bmatrix}
+\]
+
+Thus the solution of this oblique projection problem in terms of matrixes is:
+
+\begin{align*}
+\Proj_{\BD \rightarrow \BP}(\Bx) 
+&= 
+\left(
+\BP
+\begin{bmatrix}
+0 & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+0 & 1 \\
+1 & 0 \\
+\end{bmatrix}
+\inv{U^* A U 
+}
+U^*
+A
+\right)
+\Bx
+\end{align*}
+
+Which is:
+
+\begin{equation}
+\Proj_{\BD \rightarrow \BP}(\Bx) = 
+\left(
+\BP
+\begin{bmatrix}
+1 & 0 \\
+\end{bmatrix}
+\inv{U^* A U 
+}
+U^*
+A
+\right)
+\Bx
+\end{equation}
+
+This should be the same as equation \ref{eqn:matrixprojfromwedge} if one sets $A=I$ (initially above I only allowed for a
+euclidean dot product).
 
 \end{document}               % End of document.
