@@ -2,6 +2,7 @@
 
 \input{../peeters_macros.tex}
 \newcommand{\T}[0]{\text{T}}
+\newcommand{\Bbeta}[0]{\boldsymbol{\beta}}
 
 %
 % The real thing:
@@ -29,9 +30,9 @@ Problem is to project a vector $\Bx$ onto a line with direction $\pcap$, along a
 
 Write:
 
-\[
+\begin{equation}\label{eqn:solveForprojLineUnit}
 \Bx + \alpha \dcap = \beta \pcap
-\]
+\end{equation}
 
 and solve for $\Bp = \beta \pcap$.  Wedging with $\dcap$ provides the solution:
 
@@ -92,7 +93,7 @@ this result is intrisically non-metric, we can introduce one if convienent and e
 &=
 \frac{\Bx \cdot \BP \BD^2 - \Bx \cdot \BD \BD \cdot \BP}
 {\BP^2 \BD^2 - (\BP \cdot \BD)^2
-%p ^ d . d ^ p = p ^ d . d . p = (p d^2 - d.p d) . p = p^2 d^2 - (d.p)^2
+%p ^ d . d ^ p =http://antwrp.gsfc.nasa.gov/apod/ap080424.html p ^ d . d . p = (p d^2 - d.p d) . p = p^2 d^2 - (d.p)^2
 }
 \BP \\
 \end{align*}
@@ -122,7 +123,7 @@ where:
 \[
 U =
 \begin{bmatrix}
-P & D
+\BP & \BD \\
 \end{bmatrix}
 \]
 
@@ -161,11 +162,11 @@ The alternation above suggests that this is related to the matrix inverse of som
 
 \section{ Oblique projection onto a line using matrices. }
 
-Let's start at the same place, except that we know we can discard the unit vectors and work with any vectors in the projection directions:
+Let's start at the same place as in equation \ref{eqn:solveForprojLineUnit}, except that we know we can discard the unit vectors and work with any vectors in the projection directions:
 
-\[
+\begin{equation}\label{eqn:solveForprojLineNonUnit}
 \Bx + \alpha \BD = \beta \BP
-\]
+\end{equation}
 
 Assuming an inner product, we have two sets of results:
 
@@ -250,7 +251,7 @@ A
 
 Again writing $U = 
 \begin{bmatrix}
-P & D \\
+\BP & \BD \\
 \end{bmatrix}
 $, this is:
 
@@ -340,5 +341,213 @@ A
 
 Explicit expansion can be done easily enough to show that this is identical to equation \ref{eqn:obliqueProjNearMatrixForm}, so
 the question of what we were implicitly inverting in equation \ref{eqn:matrixprojfromwedge} is answered.
+
+\section{ Oblique projection onto hyperplane. }
+
+Now that we've got this directed projection problem solved for a line in both GA and matrix form, the next logical step is a $k$-dimensional hyperplane projection.  The equation to solve is now:
+
+\begin{equation}\label{eqn:solveForprojPlane}
+\Bx + \alpha \BD = \sum \beta_i \BP_i
+\end{equation}
+
+\subsection{ Non metric solution using wedge products. }
+
+For $\Bx$ with some component not in the hyperplane, we can wedge with $P = \BP_1 \wedge \BP_2 \wedge \cdots \wedge \BP_k$
+
+\begin{equation*}
+\Bx \wedge P + \alpha \BD \wedge P = \sum_{i=1}^k \beta_i \underbrace{\BP_i \wedge P}_{=0}
+\end{equation*}
+%- \Bx \wedge P = \alpha \BD \wedge P 
+
+Thus the projection onto the hyperplane spanned by $P$ is going from $\Bx$ along $\BD$ is $\Bx + \alpha \BD$:
+
+\begin{equation}\label{eqn:GAhyperplaneProjection}
+\Proj_{\BD \rightarrow P}(\Bx) = \Bx - \frac{\Bx \wedge P}{\BD \wedge P} \BD
+\end{equation}
+
+\subsubsection{ Q: reduction of this }
+
+When P is a single vector we can reduce this to our previous result:
+
+\begin{align*}
+\Proj_{\BD \rightarrow \BP}(\Bx) 
+&= \Bx - \frac{\Bx \wedge \BP}{\BD \wedge \BP} \BD \\
+&= \inv{\BD \wedge \BP} \left((\BD \wedge \BP)\Bx - (\Bx \wedge \BP) \BD \right) \\
+&= \inv{\BD \wedge \BP} \left( (\BD \wedge \BP) \cdot \Bx - (\Bx \wedge \BP)  \cdot \BD \right) \\
+&= \inv{\BD \wedge \BP} \left( \BD \BP \cdot \Bx -\BP \BD \cdot \Bx -\Bx \BP \cdot \BD +\BP \Bx \cdot \BD \right) \\
+&= \inv{\BD \wedge \BP} \left( \BD \BP \cdot \Bx -\Bx \BP \cdot \BD \right) \\
+\end{align*}
+
+Which is:
+\begin{equation}
+\Proj_{\BD \rightarrow \BP}(\Bx) 
+= \inv{\BP \wedge \BD} \BP \cdot ( \BD \wedge \Bx ).
+\end{equation}
+
+A result that is equivalent to our original equation \ref{eqn:obliqueGAproj}.  Can we similarily reduce the general result to something of this form.  Initially I wrote:
+
+\begin{align*}
+\Proj_{\BD \rightarrow P}(\Bx) 
+&= \Bx - \frac{\Bx \wedge P}{\BD \wedge P} \BD \\
+&= \frac{\BD \wedge P}{\BD \wedge P} \Bx - \frac{\Bx \wedge P}{\BD \wedge P} \BD \\
+&= \inv{\BD \wedge P} \left( (\BD \wedge P) \Bx - (\Bx \wedge P) \BD \right) \\
+&= \inv{\BD \wedge P} \left( (\BD \wedge P) \cdot \Bx - (\Bx \wedge P) \cdot \BD \right) \\
+&= \inv{\BD \wedge P} \left( \BD P \cdot \Bx -P \BD \cdot \Bx - \Bx P \cdot \BD + P \Bx \cdot \BD \right) \\
+&= \inv{\BD \wedge P} \left( \BD P \cdot \Bx - \Bx P \cdot \BD \right) \\ 
+&= -\inv{\BD \wedge P} P \cdot (\BD \wedge \Bx ) \\
+\end{align*}
+
+However, I'm not sure that about the manipulations done on the last few lines where P has grade greater than 1 (ie: the triple product expansion and recollection later).
+
+\subsection{ hyperplane directed projection using matrixes. }
+
+To solve equation \ref{eqn:solveForprojPlane} using matrixes, we can take a set of inner products:
+
+\begin{align*}
+\innerprod{\BD}{\Bx} + \alpha \innerprod{\BD}{\BD} &= \sum_{u=1}^k \beta_u \innerprod{\BD}{\BP_u} \\
+\innerprod{\BP_i}{\Bx} + \alpha \innerprod{\BP_i}{\BD} &= \sum_{u=1}^k \beta_u \innerprod{\BP_i}{\BP_u}
+\end{align*}
+
+Write $\BD = \BP_{k+1}$, and $\alpha = -\beta_{k+1}$ for symmetry, which reduces this to:
+
+\begin{align*}
+\innerprod{\BP_{k+1}}{\Bx} &= \sum_{u=1}^k \beta_u \innerprod{\BP_{k+1}}{\BP_u} + \beta_{k+1} \innerprod{\BP_{k+1}}{\BP_{k+1}}  \\
+\innerprod{\BP_i}{\Bx} &= \sum_{u=1}^k \beta_u \innerprod{\BP_i}{\BP_u} + \beta_{k+1} \innerprod{\BP_i}{\BP_{k+1}}
+\end{align*}
+
+That is the following set of equations:
+
+\[
+\innerprod{\BP_i}{\Bx} = \sum_{u=1}^{k+1} \beta_u \innerprod{\BP_i}{\BP_u}
+\]
+
+Which we can now express as a single matrix equation (for $i,j \in [1,k+1]$) :
+
+\begin{equation}
+{
+\begin{bmatrix}
+\innerprod{\BP_i}{\Bx}
+\end{bmatrix}
+}_i
+=
+{
+\begin{bmatrix}
+\innerprod{\BP_i}{\BP_j}
+\end{bmatrix}
+}_{ij}
+{
+\begin{bmatrix}
+\beta_i
+\end{bmatrix}
+}_i
+\end{equation}
+
+Solving for $\Bbeta = 
+{
+\begin{bmatrix}
+\beta_i
+\end{bmatrix}
+}_i
+$, gives:
+
+\[
+\Bbeta = 
+\inv{
+\begin{bmatrix}
+\innerprod{\BP_i}{\BP_j}
+\end{bmatrix}
+}_{ij}
+{
+\begin{bmatrix}
+\innerprod{\BP_i}{\Bx}
+\end{bmatrix}
+}_i
+\]
+
+The projective components of interest are $\sum_{i=1}^k \beta_i \BP_i$.  In matrix form that is:
+
+\begin{align*}
+\begin{bmatrix}
+\BP_1 & \BP_2 & \cdots & \BP_k
+\end{bmatrix}
+\begin{bmatrix}
+\beta_1 \\
+\beta_2 \\
+\vdots \\
+\beta_k
+\end{bmatrix}
+=
+\begin{bmatrix}
+\BP_1 & \BP_2 & \cdots & \BP_k
+\end{bmatrix}
+\begin{bmatrix}
+I_{k,k} & 0_{k,1}
+\end{bmatrix}
+\Bbeta
+\end{align*}
+
+Therefore the directed projection is:
+
+\begin{equation}
+\Proj_{\BD \rightarrow P}(\Bx) 
+=
+\begin{bmatrix}
+\BP_1 & \BP_2 & \cdots & \BP_k
+\end{bmatrix}
+\begin{bmatrix}
+I_{k,k} & 0_{k,1}
+\end{bmatrix}
+\inv{
+\begin{bmatrix}
+\innerprod{\BP_i}{\BP_j}
+\end{bmatrix}
+}_{ij}
+{
+\begin{bmatrix}
+\innerprod{\BP_i}{\Bx}
+\end{bmatrix}
+}_i
+\end{equation}
+
+As before writing $U = 
+\begin{bmatrix}
+\BP_1 & \BP_2 & \cdots & \BP_k & \BD
+\end{bmatrix}
+$, and write $\innerprod{\Bu}{\Bv} = \Bu^* A \Bv$.  The directed projection is now:
+
+\begin{equation*}
+\Proj_{\BD \rightarrow P}(\Bx) 
+=
+\left(
+U 
+\begin{bmatrix}
+I_{k,k} \\
+0_{1,k} \\
+\end{bmatrix}
+\begin{bmatrix}
+I_{k,k} & 0_{k,1}
+\end{bmatrix}
+\inv{
+U^* A U
+}
+U^* A 
+\right)
+\Bx
+\end{equation*}
+\begin{equation}
+=
+\left(
+U 
+\begin{bmatrix}
+I_{k,k} & 0_{k,1} \\
+0_{1,k} & 0_{1,1} \\
+\end{bmatrix}
+\inv{
+U^* A U
+}
+U^* A 
+\right)
+\Bx
+\end{equation}
 
 \end{document}               % End of document.
