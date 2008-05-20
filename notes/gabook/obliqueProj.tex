@@ -379,7 +379,7 @@ When P is a single vector we can reduce this to our previous result:
 \end{align*}
 
 Which is:
-\begin{equation}
+\begin{equation}\label{eqn:followup}
 \Proj_{\BD \rightarrow \BP}(\Bx) 
 = \inv{\BP \wedge \BD} \BP \cdot ( \BD \wedge \Bx ).
 \end{equation}
@@ -549,5 +549,171 @@ U^* A
 \right)
 \Bx
 \end{equation}
+
+\section{ Projection using reciprocal frame vectors. }
+
+%The calculations above amount to finding components of a vector along the projection direction vector $\BD$, and components in the hyperplane.
+%We can generalize this by taking advantage of the fact that
+%componentization with respect to an arbitrary basis can be naturally expressed using the reciprocal frame for that basis.  One of more of these basis vectors can define the ``direction'' to project towards the hyperplane spanned by
+%the remaining vectors.
+
+In a sense the projection operation is essentially a calculation of components of vectors that span a given subspace.  We can also calculate these comoponents using a reciprocal frame.  To start with consider
+just orthogonal projection, where the equation to solve is:
+
+\begin{equation}
+\Bx = \Be + \sum \beta_j \BP_j
+\end{equation}
+
+and $\Be \cdot \BP_i = 0$.
+
+Introduce a reciprocal frame $\{\BP^j\}$ that also spans the space of $\{\BP_j\}$, and is defined by:
+
+\[
+\BP_i \cdot \BP^j = \delta_{ij}
+\]
+
+With this we have:
+
+\begin{align*}
+\Bx \cdot \BP^i
+&= \underbrace{\Be \cdot \BP^i}_{=0} + \sum \beta_j \BP_j \cdot \BP^i \\
+&= \sum \beta_j \delta_{ij} \\
+&= \beta_i \\
+\end{align*}
+
+\begin{equation*}
+\Bx = \Be + \sum \BP_j \BP^j \cdot \Bx
+\end{equation*}
+
+For a euclidian metric the projection part of this is:
+
+\begin{equation*}
+\Proj_P(\Bx) = \left( \sum \BP_j (\BP^j)^\T \right) \Bx
+\end{equation*}
+
+Writing 
+$P = 
+\begin{bmatrix}
+\BP_1 & \BP_2 & \cdots & \BP_k
+\end{bmatrix}
+$
+and for the reciprocal frame vectors:
+$Q = 
+\begin{bmatrix}
+\BP^1 & \BP^2 & \cdots & \BP^k
+\end{bmatrix}
+$
+
+We now have the following simple calculation for the projection matrix onto a set of linearly independent vectors (columns of $P$):
+
+\begin{equation}
+\Proj_P(\Bx) = P Q^\T \Bx.
+\end{equation}
+
+Compare to the general projection matrix previously calculated when the columns of $P$ weren't orthonormal:
+
+\begin{equation}
+\Proj_P(\Bx) = P \inv{P^\T P} P^\T \Bx
+\end{equation}
+
+With orthonormal columns the $P^T P$ becomes identity and the inverse term drops out, and we get something similar with reciprocal frames.  As a side effect this shows us how to calculate without GA the reciprocal frame vectors.  Those vectors
+are thus the columns of
+
+\begin{equation}
+Q = P \inv{P^\T P}
+\end{equation}
+
+We are thus able to get a specific understanding of some of the interior terms of the general orthogonal projection matrix.
+
+Also note that the orthonormality of these columns is confirmed by observing that $Q^\T P = \inv{P^\T P} P^\T P = I$.
+
+\subsection{ example/verification. }
+
+As an example to see that this works write:
+
+\[
+P = 
+\begin{bmatrix}
+1 & 1 \\
+1 & 0 \\
+0 & 1 \\
+\end{bmatrix}
+\]
+
+\[
+P^\T P = 
+\begin{bmatrix}
+1 & 1 & 0 \\
+1 & 0 & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+1 & 1 \\
+1 & 0 \\
+0 & 1 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+2 & 1 \\
+1 & 2 \\
+\end{bmatrix}
+\]
+
+\[
+\inv{P^\T P} = 
+\inv{3}
+\begin{bmatrix}
+2 & -1 \\
+-1 & 2 \\
+\end{bmatrix}
+\]
+
+\[
+Q = P \inv{P^\T P} = 
+\inv{3}
+\begin{bmatrix}
+1 & 1 \\
+1 & 0 \\
+0 & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+2 & -1 \\
+-1 & 2 \\
+\end{bmatrix}
+=
+\inv{3}
+\begin{bmatrix}
+1 & 1 \\
+2 & 1 \\
+-1 & 2 \\
+\end{bmatrix}
+\]
+
+By inspection these columns have the desired properties.
+
+\subsubsection{ Calculation efficiency. }
+
+It would be interesting to compare the computational complexity for a set of reciprocal frame vectors calculated with the GA method (where overhat indicates omission) :
+
+\[
+P^i = (-1)^{i-1} P_1 \wedge \cdots \hat{P_i} \cdots \wedge P_k \inv { P_1 \wedge P_2 \wedge \cdots \wedge P_k }
+\]
+
+The wedge in the denominator can be done just once for all the frame vectors.  Is there a way to use that for the numerator too (dividing out the wedge product with the vector in question)?
+
+Calculation of the $\inv{P^\T P}$ term could be avoided by using SVD.
+
+Writing $P = U \Sigma V^\T$, the reciprocal frame vectors will be $Q = U \Sigma \inv{\Sigma^\T \Sigma} V^\T$.
+
+Would that be any more effecient, or perhaps more importantly, for larger degree vectors is that a more numerically stable calculation?
+
+\section{ Followup. } 
+
+Write out directed projection in terms of reciprocal frames.
+
+Reciprocal frame calculation with alternate dot products?  Want to see how to do this especially for $+,-,-,-$ metric space.
+
+Review the questionable GA algebra reduction earlier for grade $>1$ (following equation \ref{eqn:followup}).
+
+Q: Can a directed frame vector projection be defined in terms of an ``oblique'' dot product.
 
 \end{document}               % End of document.
