@@ -1,0 +1,141 @@
+\documentclass{article}      % Specifies the document class
+
+\input{../peeters_macros.tex}
+\newcommand{\BOmega}[0]{\boldsymbol{\Omega}}
+
+%
+% The real thing:
+%
+
+                             % The preamble begins here.
+\title{ Angular Velocity and Acceleration. } % Declares the document's title.
+\author{Peeter Joot}         % Declares the author's name.
+%\date{}        % Deleting this command produces today's date.
+
+\begin{document}             % End of preamble and beginning of text.
+
+\maketitle{}
+
+A more coherent derivation of angular velocity and acceleration than
+my initial attempt while first learning geometric algebra.
+
+\section{ Angular velocity. }
+
+The goal is to take first and second derivatives of a vector expressed
+radially:
+
+\[
+\Br = r \rcap.
+\]
+
+First step is to expand the velocity in terms of radial components,
+projecting onto the radial and perpendicular directions respectively:
+
+\[
+\Br' = \Bv = \rcap \rcap \Bv = \rcap \left(\rcap \cdot \Bv\right) + \rcap \left(\rcap \wedge \Bv\right)
+\]
+
+That first projective term can be rewritten in terms of magnitude:
+
+\[
+\left(r^2\right)' = 2 r r' = \left(\Br \cdot \Br\right)' = 2 \Br \cdot \Bv.
+\]
+
+Thus
+
+\[
+\rcap \cdot \Bv = r'.
+\]
+
+That plus the introduction of an angular velocity bivector
+
+\[
+\BOmega = \frac{\Br \wedge \Bv}{r^2}
+\]
+
+Allows for the final radial expression of the velocity:
+
+\[
+\Bv = \rcap r' + \Br \BOmega.
+\]
+
+Using a bivector for the angular velocity is different than the traditional
+use of a vector that is normal to the plane.
+
+This bivector encodes the
+angular velocity as a plane directly.  The
+product of a vector with the bivector that contains it produces another vector
+in the plane.  That product is a scaled and rotated by 90 degrees, much like the
+multiplication by a unit complex imaginary.  That is no coincidence since
+the square of a bivector is negative and directly encodes this complex structure
+of an arbitarily oriented plane.
+
+\section{ Angular acceleration. }
+
+Next we take second derivatives:
+
+\[
+\Bv' = \Ba = \left(\rcap r' + \frac{\Br}{r^2} \left(\Br \wedge \Bv\right)\right)'
+\]
+
+%\rcap' = \inv{r^3} \Br \Br \wedge \Bv
+\begin{align*}
+\Ba
+&= \rcap' r' + \rcap r'' + \frac{\Br}{r^2} \underbrace{\left(\Bv \wedge \Bv\right)}_{=0} + \frac{\Br}{r^2} \left(\Br \wedge \Ba\right) + \left(\frac{\rcap}{r}\right)' \left(\Br \wedge \Bv\right) \\
+&=
+\rcap r''
++\rcap'\left( r'  + \frac{1}{r} \Br \wedge \Bv \right)
+- r' \frac{\rcap}{r^2} \left(\Br \wedge \Bv\right)
++ \rcap \left(\rcap \wedge \Ba\right)  \\
+&=
+\rcap r''
++\inv{r^3} \Br\left( \Br \wedge \Bv\right) \left( r'  + \frac{1}{r} \Br \wedge \Bv \right)
+- r' \frac{\rcap}{r^2} \left(\Br \wedge \Bv\right)
++ \rcap \left(\rcap \wedge \Ba\right)  \\
+\end{align*}
+
+The $r'$ terms cancel out, leaving just:
+
+\[
+\Ba = \rcap r'' + \Br \BOmega^2 +
+\rcap \left(\rcap \wedge \Ba\right)
+\]
+
+The squared bivector $\BOmega^2$ is a negative scalar, thus the first two terms are radially directed.  The last is perpendicular to the accelaration, in the plane formed
+by the vector and its second derivative.
+
+Given the acceleration, the force on a particle is thus:
+
+\[
+\BF = m\Ba = m\rcap r'' + m \Br \BOmega^2 + \frac{\Br}{r^2} \left(\Br \wedge \Bp\right)'
+\]
+
+Writing the angular momentum as:
+
+\[
+\BL = \Br \wedge \Bp = m r^2 \BOmega
+\]
+
+the force is thus:
+
+\[
+\BF = m\Ba = m\rcap r'' + m \Br \BOmega^2 + \frac{1}{\Br} \frac{d\BL}{dt}
+\]
+
+The derivative of the angular momentum is called the torque $\Btau$, also a bivector:
+
+\[
+\Btau = \frac{d\BL}{dt}
+\]
+
+When $\Br$ is constant this has the radial arm times force form that we expect of torque:
+
+\[
+\Btau = \Br \wedge \frac{d \Bp}{dt} = \Br \wedge \BF
+\]
+
+As with all these plane quantities (angular velocity, momentum, acceleration), the torque as well is a bivector as it is natural to express this as a planar quantity.  This makes
+more sense in many ways than a cross product, since all of these quantities should be perfectly well defined in a plane (or in spaces of degree greater than three), whereas the
+cross product is a strictly three dimensional entity.
+
+\end{document}               % End of document.

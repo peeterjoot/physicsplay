@@ -1,0 +1,122 @@
+\documentclass{article}      % Specifies the document class
+
+\input{../peeters_macros.tex}
+
+%
+% The real thing:
+%
+
+                             % The preamble begins here.
+\title{} % Declares the document's title.
+\author{Peeter Joot}         % Declares the author's name.
+%\date{}        % Deleting this command produces today's date.
+
+\begin{document}             % End of preamble and beginning of text.
+
+\maketitle{}
+
+\section{ Geometric Algebra: Signs of electromagnetic field tensor components? }
+
+Here's a question that may look like an E \& M question, but is really just a geometric algebra question.  In particular, I've got a sign off by 1 somewhere I think and I wonder if somebody can spot it.
+
+Doran/Lasenby (Geometric Algebra for Physicists) writes for the electromagnetic field:
+
+\[
+F = \mathbf{E} + I\mathbf{B}
+\]
+
+\[
+\mathbf{E} = \sum \sigma_i E_i
+\]
+
+\[
+\mathbf{B} = \sum \sigma_i B_i
+\]
+
+\[
+\sigma_i = \gamma_i \gamma_0
+\]
+
+\[
+I = \gamma_0 \gamma_1 \gamma_2 \gamma_3
+\]
+
+Here, the $\{\gamma_\mu\}$ vectors are an ``orthonormal'' basis, with respect to a $(+,-,-,-)$ metric dot product.
+
+They point out that the coordinates of the bivector F can be calculated by taking dot products with the reciprocal frame vectors:
+
+\[
+F^{\mu\nu} = (\gamma^\nu \wedge \gamma^\mu) \cdot F
+\]
+
+Where the reciprocal frame vectors $\{\gamma^i\}$ are those vectors defined by:
+
+\[
+\gamma^\mu \cdot \gamma_\nu = \delta_{\mu\nu}
+\]
+
+($\gamma^0 = \gamma_0$, and $\gamma^i = -\gamma_i$).
+
+Expressed as a matrix this bivector coordinates are the tensor:
+
+\[
+F^{\mu\nu} =
+\begin{bmatrix}
+0 & -E_1 & -E_2 & -E_3 \\
+E_1 & 0 & -B_3 & B_2 \\
+E_2 & B_3 & 0 & -B_1 \\
+E_3 & -B_2 & B_1 & 0 \\
+\end{bmatrix}
+\]
+
+They don't actually do anything with this tensor in the text, since they operate on the bivector form directly.  It is essentially written out for in matrix form for comparision to other relativistic electrodynamics texts.
+
+If I try calculating this I get different signs for the $B_i$ terms in the matrix above.  The 
+calculation of the $E$ components is straightforward and I get the same answer.  $\mathbf{E}$ explicitly is:
+
+\[
+\mathbf{E} = E_1 \gamma_{10} + E_2 \gamma_{20} + E_3 \gamma_{30}
+\]
+
+Calculation of the $\nu = 0$ terms is:
+
+\begin{align*}
+F^{\mu 0} 
+&= (\gamma^0 \wedge \gamma^\mu) \cdot F \\
+&= (\gamma_0 \wedge (-\gamma_\mu)) \cdot \sum E_i \gamma_{i0} \\
+&= -E_\mu (\gamma_0 \wedge \gamma_\mu) \cdot (\gamma_\mu \wedge \gamma_{0}) \\
+&= -E_\mu \gamma_0 (\gamma_\mu \cdot (\gamma_\mu \wedge \gamma_{0})) \\
+&= -E_\mu \gamma_0 ( \underbrace{\gamma_\mu \cdot \gamma_\mu}_{=-1} \gamma_{0} - \underbrace{\gamma_\mu \cdot \gamma_{0}}_{=0} \gamma_\mu) \\
+&= E_\mu \gamma_0 \cdot \gamma_0 \\
+&= E_\mu \\
+\end{align*}
+
+This is consistent with column zero of their matrix of tensor components above.
+
+For the $B$ components, first I expanded out $I\mathbf{B}$ explicitly:
+
+\begin{align*}
+I\mathbf{B} 
+&= \sum \gamma_0 \gamma_1 \gamma_2 \gamma_3 \gamma_i \gamma_0 B_i \\
+&= \sum \gamma_1 \gamma_2 \gamma_3 \gamma_i B_i \\
+&= B_1 \gamma_{23} + B_2 \gamma_{31} + B_3 \gamma_{12}
+\end{align*}
+
+This calculation is easier for just one pair of index, and for example, calcuating the $12$ component I get:
+
+\begin{align*}
+F^{12} 
+&= (\gamma^2 \wedge \gamma^1) \cdot ( \gamma_1 \wedge \gamma_2 ) B_3 \\
+&= \gamma^2 \cdot (\gamma^1 \cdot ( \gamma_1 \wedge \gamma_2 )) B_3 \\
+&= \gamma^2 \cdot ( \gamma^1 \cdot \gamma_1 \gamma_2 - \gamma^1 \cdot \gamma_2 \gamma_1 ) B_3 \\
+&= \gamma^2 \cdot ( -\gamma_1 \cdot \gamma_1 \gamma_2 ) B_3 \\
+&= \gamma^2 \cdot \gamma_2 B_3 \\
+&= - \gamma_2 \cdot \gamma_2 B_3 \\
+&= - (-1) B_3 \\
+&= B_3 \\
+\end{align*}
+
+Observe that the sign is opposite for this compared to what's in the matrix above.  I don't see a mistake in my calculation, but this isn't listed in the errata even after two editions
+so I'm assuming I have one hiding in there somewhere.
+
+\end{document}               % End of document.
