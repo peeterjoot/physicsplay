@@ -291,12 +291,105 @@ g_{ij} &= \frac{\partial (x_1, \cdots, x_n) }{\partial (x^1, \cdots, x^n) } \\
 g^{ij} &= \frac{\partial (x^1, \cdots, x^n) }{\partial (x_1, \cdots, x_n) }
 \end{align}
 
-This is expected to be useful in some differential exercises.
+Will this be useful in any way?
 
-\subsection{ Computation of reciprocal frame vectors }
+\subsection{ Change of basis. }
 
-The reciprocal frame vectors can be computed with matrix methods or using geometric algebra quotients (duality).
+To perform a change of basis from one non-orthonormal basis $\{e_i\}$ to a second $\{f_i\}$, relations between the sets of vectors
+are required.  Using Greek indexes for the $f$ frame, and English for the $e$ frame, those are:
 
-TBD.
+\begin{align*}
+e_i 		&= \sum f^{\mu} e_i \cdot f_{\mu} 	= \sum f_{\mu} e_i \cdot f^{\mu} \\
+f_{\alpha} 	&= \sum e^k f_{\alpha} \cdot e_k 	= \sum e_k f_{\alpha} \cdot e^k \\
+e^i 		&= \sum f^{\mu} e^i \cdot f_{\mu} 	= \sum f_{\mu} e^i \cdot f^{\mu} \\
+f^{\alpha} 	&= \sum e^k f^{\alpha} \cdot e_k 	= \sum e_k f^{\alpha} \cdot e^k 
+\end{align*}
+
+Following GAFP we can write the dot product terms as a second order tensors $f$ (ie: matrix relation) :
+
+\begin{align*}
+e_i 		&= \sum f^{\mu} f_{i\mu}  	= \sum f_{\mu} {f_i}^{\mu} \\
+f_{\alpha} 	&= \sum e^k f_{k\alpha} 	= \sum e_k {f^k}_{\alpha} \\
+e^i 		&= \sum f^{\mu} {f^i}_{\mu} 	= \sum f_{\mu} f^{i \mu} \\
+f^{\alpha} 	&= \sum e^k {f_k}^{\alpha}  	= \sum e_k f^{k\alpha}
+\end{align*}
+
+Looking at these relations in pairs, such as
+
+\begin{align*}
+f_{\alpha} 	&= \sum e^k f_{k\alpha} \\ 
+e^i 		&= \sum f_{\mu} f^{i \mu} 
+\end{align*}
+
+and 
+
+\begin{align*}
+e_i 		&= \sum f^{\mu} f_{i\mu} \\
+f^{\alpha} 	&= \sum e_k f^{k\alpha}
+\end{align*}
+
+It is clear that $f_{i\alpha}$ is the inverse of $f^{i\alpha}$.  FIXME: write this out explicitly in index notation, to specify
+more exactly the inverse relationship ... that will help clarify the covariant derivative stuff later.  There are also inverse relationships for the mixed index tensors above.  Can those be used in the covariant derivative calculation to simplify things?
+
+Note that all these various tensors are related to each other using the metric tensors for $f$ and $e$.  FIXME: show example.  Also note that using this notation the metric tensors $g_{ij}$ and $g_{\alpha\beta}$ are two completely different linear functions, and careful use of the index conventions are required to keep these straight.
+
+\subsection{ Covariant derivative. }
+
+GAFP exercise 6.1.  Show that the vector derivative:
+
+\begin{equation}
+\nabla = \sum e^i \frac{\partial}{\partial x^i}
+\end{equation}
+
+To show this we will need to utilize the chain rule to rewrite the partials in terms of the alternate frame:
+
+\begin{align*}
+\frac{\partial}{\partial x^i} &= \sum \frac{\partial x^\alpha}{\partial x^i} \frac{\partial}{\partial x^\alpha} 
+\end{align*}
+
+To evaluate the first partial here, we write the coordinates of a vector in terms of both, and take dot products:
+
+\begin{align*}
+\left(\sum x^{\gamma} f_{\gamma}\right) \cdot f^{\alpha} = \left(\sum x^i e_i\right) \cdot f^{\alpha} \\
+\end{align*}
+\begin{align*}
+x^{\alpha} &= \sum x^i {f_i}^{\alpha} \\
+\end{align*}
+\begin{align*}
+\frac{\partial x^{\alpha}}{\partial x^i} &= {f_i}^{\alpha}
+\end{align*}
+
+Thus
+
+\begin{align*}
+\frac{\partial}{\partial x^i} &= \sum {f_i}^{\alpha} \frac{\partial}{\partial x^\alpha} 
+\end{align*}
+
+Combine this with the alternate contravariant frame vector as calculated above:
+
+\[
+e^i = \sum f^{\mu} {f^i}_{\mu}
+\]
+
+and we have:
+
+\begin{align*}
+\sum_i e^i \frac{\partial}{\partial x^i}
+&= \sum_i \left(\sum_{\mu} f^{\mu} {f^i}_{\mu} \right) \left( \sum_{\alpha} {f_i}^{\alpha} \frac{\partial}{\partial x^\alpha}\right) \\
+&= \sum_{\mu \alpha} \left(f^{\mu} \frac{\partial}{\partial x^\alpha} \right) \sum_i {f^i}_{\mu} {f_i}^{\alpha} \\
+&= \sum_{\mu \alpha} \left(f^{\mu} \frac{\partial}{\partial x^\alpha} \right) {\delta_{\mu}}^{\alpha} \\
+&= \sum_{\alpha} f^{\alpha} \frac{\partial}{\partial x^\alpha} \\
+\end{align*}
+
+FIXME: Proper justification of the step $\sum_i {f^i}_{\mu} {f_i}^{\alpha} = {\delta_{\mu}}^{\alpha}$ is missing.  This is possible due
+to the imprecisely noted inverse relationships pointed out above.
+
+Note that my original paper derivation of the above used only the tensors $f_{i\alpha}$, and $f^{i\alpha}$ instead of the mixed index versions used here.  That worked but also required a pair of metric tensors, and one more step to sum over those tensors to get at the final result.
+
+%\subsection{ Computation of reciprocal frame vectors }
+%
+%The reciprocal frame vectors can be computed with matrix methods or using geometric algebra quotients (duality).
+%
+%TBD.
 
 \end{document}               % End of document.
