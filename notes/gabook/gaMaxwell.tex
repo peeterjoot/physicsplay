@@ -1,0 +1,198 @@
+\documentclass{article}      % Specifies the document class
+
+\input{../peeters_macros.tex}
+\newcommand{\grad}[0]{\nabla}
+
+%
+% The real thing:
+%
+
+                             % The preamble begins here.
+\title{} % Declares the document's title.
+\author{Peeter Joot}         % Declares the author's name.
+\date{ July 12, 2008 }        % Deleting this command produces today's date.
+
+\begin{document}             % End of preamble and beginning of text.
+
+\maketitle{}
+
+\section{ Back to Maxwell's equations }
+
+Having observed and demonstrated that the Lorentz transformation is a natural consequence of requiring the electromagnetic wave equation retains the
+form of the wave equation under change of space and time variables that includes a velocity change in one spacial direction.
+
+Lets step back and look at Maxwell's equations to see where the wave equation comes from.  We start with the equations in SI units:
+
+\begin{align*}
+\int_{S(\text{closed boundary of V})} \BE \cdot \ncap dA &= \inv{\epsilon_0} \int_V \rho dV \\
+\int_{S(\text{any closed surface})} \BB \cdot \ncap dA &= 0 \\
+\int_{C(\text{boundary of S})} \BE \cdot d\Bx &= - \int_{S} \frac{\partial \BB}{\partial t} \cdot \ncap dA \\
+\int_{C(\text{boundary of S})} \BB \cdot d\Bx &= \mu_0\left(I + \epsilon_0\int_{S} \frac{\partial \BE}{\partial t} \cdot \ncap dA\right) \\
+\end{align*}
+
+As the surfaces and corresponding loops or volumes are made infinitely small, these equations (FIXME: demonstrate), can be written in differential form:
+
+\begin{align*}
+\grad \cdot \BE &= \frac{\rho}{\epsilon_0} \\
+\grad \cdot \BB &= 0 \\
+\grad \cross \BE &= - \frac{\partial \BB}{\partial t} \\
+\grad \cross \BB &= \mu_0\left(\BJ + \epsilon_0 \frac{\partial \BE}{\partial t}\right) \\
+\end{align*}
+
+These are respectively, Gauss's Law for E, Gauss's Law for B, Faraday's Law, and the Ampere/Maxwell's Law.
+
+This differential form can be manipulated to derive the wave equation for free space, or the wave equation with charge and current forcing terms in other space.
+
+\subsection{ Regrouping terms for dimensional consistency. }
+
+Derivation of the wave equation can be done nicely using geometric algebra, but first is it helpful to put these equations in a more dimensionally pleasant form.
+Lets relate the dimensions of the electric and magnetic fields and the constants $\mu_0, \epsilon_0$.
+
+From Faraday's equation we can relate the dimensions of
+$\BB$, and $\BE$:
+
+\begin{equation}
+\frac{[\BE]}{[d]} = \frac{[\BB]}{[t]}
+\end{equation}
+
+We therefore see that $\BB$, and $\BE$ are related dimensionally by a velocity factor.
+
+Looking at the dimensions of the displacement current density in the Ampere/Maxwell equation we see:
+
+\begin{equation}
+\frac{[\BB]}{[d]} = [\mu_0\epsilon_0] \frac{[\BE]}{[t]}
+\end{equation}
+
+From the two of these the dimensions of the $\mu_0\epsilon_0$ product can be seen to be:
+
+\begin{equation}
+[\mu_0\epsilon_0] = \frac{{[t]}^2}{{[d]}^2}
+\end{equation}
+
+So, we see that we have a velocity factor relating $\BE$, and $\BB$, and we also see that we have a squared velocity coefficient in Ampere/Maxwell's law.  Let's factor this out explicitly so that $\BE$ and $\BB$ take dimensionally consistent form:
+
+\begin{align}
+\tau &= \frac{t}{\sqrt{\mu_0\epsilon_0}}  \\
+\grad \cdot \BE &= \frac{\rho}{\epsilon_0} \\
+\grad \cdot \frac{\BB}{\sqrt{\mu_0\epsilon_0}} &= 0 \\
+\grad \cross \BE &= - \frac{\partial}{\partial \tau} \frac{\BB}{\sqrt{\mu_0\epsilon_0}} \\
+\grad \cross \frac{\BB}{\sqrt{\mu_0\epsilon_0}} &= \sqrt{\frac{\mu_0}{\epsilon_0}} \BJ + \frac{\partial \BE}{\partial \tau}
+\end{align}
+
+\subsection{ Refactoring the equations with the geometric product. }
+
+Now that things are dimensionally consistent, we are ready to group these equations using the geometric product
+
+\begin{equation}
+\BA \BB = \BA \cdot \BB + \BA \wedge \BB = \BA \cdot \BB + i \BA \cross \BB
+\end{equation}
+
+where $i = \Be_1\Be_2\Be_3$ is the spatial pseudoscalar.  By grouping the divergence and curl terms for each of $\BB$, and $\BE$ we can write vector gradient equations
+for each of the Electric and Magnetic fields:
+
+\begin{align}
+\grad \BE = \frac{\rho}{\epsilon_0} - i \frac{\partial}{\partial \tau} \frac{\BB}{\sqrt{\mu_0\epsilon_0}} \label{eqn:grad_e} \\
+\grad \frac{\BB}{\sqrt{\mu_0\epsilon_0}} = i\sqrt{\frac{\mu_0}{\epsilon_0}} \BJ + i\frac{\partial \BE}{\partial \tau} \label{eqn:grad_b}
+\end{align}
+
+Multiplication of equation \ref{eqn:grad_b} with $i$, and adding to \ref{eqn:grad_e}, we have Maxwell's equations consolidated into:
+
+\begin{equation}
+\grad \left(\BE + i \frac{\BB}{\sqrt{\mu_0\epsilon_0}}\right) =
+\left(\frac{\rho}{\epsilon_0} - \sqrt{\frac{\mu_0}{\epsilon_0}} \BJ\right)
+- \frac{\partial}{\partial \tau} \left(\BE + \frac{i\BB}{\sqrt{\mu_0\epsilon_0}} \right)
+\end{equation}
+
+We see that we have a natural combined Electrodynamic field:
+
+\begin{equation}
+\BF = \BE + i \frac{\BB}{\sqrt{\mu_0\epsilon_0}},
+\end{equation}
+
+and can use this to write Maxwell's equations as:
+
+\begin{equation}
+\left(\grad + \sqrt{\mu_0\epsilon_0}\frac{\partial}{\partial t} \right) \BF = \frac{\rho}{\epsilon_0} - \sqrt{\frac{\mu_0}{\epsilon_0}} \BJ.  \label{eqn:maxwell}
+\end{equation}
+
+These are still four equations, and the originals can be recovered by taking scalar, vector, bivector and trivector parts.  However, in this
+consolidated form, we are able to see the structure more easily.
+
+\subsection{ Wave equation for light. }
+
+In particular can do some operations, such as deriving the wave equation
+with special ease.
+
+Let's do just that, by taking the gradient of equation \ref{eqn:maxwell}:
+
+\begin{equation*}
+\grad^2 \BF + \sqrt{\mu_0\epsilon_0}\grad \frac{\partial}{\partial t} \BF =
+\grad \left(\frac{\rho}{\epsilon_0} - \sqrt{\frac{\mu_0}{\epsilon_0}} \BJ\right)
+\end{equation*}
+
+%\grad \BF = - \sqrt{\mu_0\epsilon_0}\frac{\partial \BF}{\partial t} + \left(\frac{\rho}{\epsilon_0} - \sqrt{\frac{\mu_0}{\epsilon_0}} \BJ \right)
+
+Assuming continuity suffienct for mixed partial equality, this is
+
+\begin{align*}
+\grad^2 \BF
+&= - \sqrt{\mu_0\epsilon_0}\frac{\partial}{\partial t} \grad \BF + \grad \left(\frac{\rho}{\epsilon_0} - \sqrt{\frac{\mu_0}{\epsilon_0}} \BJ\right) \\
+&= + \sqrt{\mu_0\epsilon_0}\frac{\partial}{\partial t}
+\left(\sqrt{\mu_0\epsilon_0}\frac{\partial \BF}{\partial t} + \left(\frac{\rho}{\epsilon_0} - \sqrt{\frac{\mu_0}{\epsilon_0}} \BJ \right)\right)
+ + \grad \left(\frac{\rho}{\epsilon_0} - \sqrt{\frac{\mu_0}{\epsilon_0}} \BJ\right) \\
+\end{align*}
+
+Or,
+
+\begin{equation}
+\left(\grad^2 - \mu_0\epsilon_0 \frac{\partial^2}{\partial t^2} \right) \BF =
+\left(\grad + \sqrt{\mu_0\epsilon_0}\frac{\partial}{\partial t}\right)
+\left(\frac{\rho}{\epsilon_0} - \sqrt{\frac{\mu_0}{\epsilon_0}} \BJ \right)
+\end{equation}
+
+Now there are a number of things that can be read out of this equation.  The first is that in a charge and current free region the electromagnetic field is described by the
+wave equation:
+
+\begin{equation}
+\left(\grad^2 - \mu_0\epsilon_0 \frac{\partial^2}{\partial t^2} \right) \BF = 0.
+\end{equation}
+
+Dimensional analysis told us that $1/{\sqrt{\mu_0\epsilon_0}}$ had dimensions of velocity.  We now have a specific meaning for it, namely the
+wave velocity $c$ for an electromagnetic wave in free space:
+
+\begin{equation}
+c = \inv{\sqrt{\mu_0\epsilon_0}}
+\end{equation}
+
+We can utilize this to tidy up many of the relations above, replacing $\mu_0$ with $\epsilon_0$ and $c$ since these three constants are dependent.
+
+\begin{equation}
+\BF = \BE + i c \BB
+\end{equation}
+
+\begin{equation}
+\left(\grad + \partial_{ct}\right) \BF =
+\inv{c \epsilon_0}\left( c \rho - \BJ \right)
+\end{equation}
+
+\begin{equation} \label{eqn:wave}
+\left(\grad^2 - \partial_{ct, ct}\right) \BF =
+\left(\grad + \partial_{c t}\right) \inv{c \epsilon_0}\left( c \rho - \BJ \right)
+\end{equation}
+
+Now, the left hand side of equation \ref{eqn:wave} has only vector and bivector parts.  This implies that the scalar components of the right hand side are zero.  Specifically:
+
+\begin{equation*}
+\partial_t \rho - \grad \cdot \BJ = 0
+\end{equation*}
+
+This is a statement of charge conservation, and is more easily interpretted in integral form:
+%\partial_t \rho = \grad \cdot \BJ
+
+\begin{equation}
+\int_{S(\text{closed boundary of V})} \BJ \cdot \ncap dA = \frac{\partial}{\partial t} \int_V \rho dV = \frac{\partial Q_{enc}}{\partial t}
+\end{equation}
+
+The flux of the current density vector through a closed surface equals the time rate of change of the charge enclosed by that volume (ie: the current).  This could perhaps be viewed as the definition of the current density itself.  This fact would probably be more obvious if I did the math myself to demonstate exactly how to take Maxwells equations in integral form and convert those to their differential form.  In liew of having done that proof myself I can at least determine this as a side effect of a bit of math.
+
+\end{document}               % End of document.
