@@ -3,6 +3,7 @@
 \input{../peeters_macros.tex}
 \newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
 \newcommand{\grad}[0]{\nabla}
+\newcommand{\Partial}[2]{\frac{\partial {#1}}{\partial {#2}}}
 
 %
 % The real thing:
@@ -35,6 +36,8 @@ Having expressed the spacetime gradient with a (STA) Minkowski basis, and knowin
 we therefore expect that the square root of the wave equation (Laplacian) operator is also Lorentz invarient.  Here this idea is explored, and we look at how the spacetime
 gradient behaves under Lorentz transformation.
 
+\subsection{ Lets do it. }
+
 Our spacetime gradient is
 
 \begin{equation*}
@@ -60,6 +63,100 @@ ct \\
 \end{bmatrix}
 \end{equation*}
 
-%\begin{equation*}
-%\end{equation*}
+Set $c=1$ for convience, and use this to transform the partials:
+
+\begin{align*}
+\Partial{}{x} 
+&= \Partial{x'}{x} \Partial{}{x'} + \Partial{t'}{x} \Partial{}{t'} \\
+&= \gamma \left( \Partial{}{x'} -\beta \Partial{}{t'} \right) \\
+\end{align*}
+
+\begin{align*}
+\Partial{}{t} 
+&= \Partial{x'}{t} \Partial{}{x'} + \Partial{t'}{t} \Partial{}{t'} \\
+&= \gamma \left( -\beta \Partial{}{x'} + \Partial{}{t'} \right) \\
+\end{align*}
+
+Inserting this into our expression for the gradient we have
+
+\begin{align*}
+\grad 
+&= \gamma^0 \Partial{}{t}
+ + \gamma^1 \Partial{}{x} 
+ + \gamma^2 \Partial{}{y}
+ + \gamma^3 \Partial{}{z} \\
+&= \gamma^0 \gamma \left( -\beta \Partial{}{x'} + \Partial{}{t'} \right) 
+ + \gamma^1 \gamma \left( \Partial{}{x'} -\beta \Partial{}{t'} \right)
+ + \gamma^2 \Partial{}{y}
+ + \gamma^3 \Partial{}{z}.
+\end{align*}
+
+Grouping by the primed partials this is:
+
+\begin{align*}
+\grad 
+&= \gamma \left(\gamma^0 - \beta\gamma^1\right) \Partial{}{t'}
+ + \gamma \left(\gamma^1 - \beta\gamma^0\right) \Partial{}{x'}
+ + \gamma^2 \Partial{}{y}
+ + \gamma^3 \Partial{}{z}.
+\end{align*}
+
+Lo and behold, the basis vectors with respect to the new coordinates appear to themselves transform as a Lorentz pair.  Specifically:
+
+\begin{equation*}
+\begin{bmatrix}
+{\gamma^1}' \\
+{\gamma^0}' \\
+\end{bmatrix}
+=
+\gamma
+\begin{bmatrix}
+1 & -\beta \\
+-\beta & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+{\gamma^1} \\
+{\gamma^0} \\
+\end{bmatrix}
+\end{equation*}
+
+Now this is a bit curious looking since these new basis vectors are a funny mix of the original time and space basis vectors.  Observe however that these linear combinations of the basis vectors ${\gamma^0}'$, and ${\gamma^1}'$ do behave just as adequately as timelike and spacelike basis vectors:
+
+\begin{align*}
+{\gamma^0}' {\gamma^0}' 
+&= \gamma^2 (-\beta \gamma^1 + \gamma^0 ) (-\beta \gamma^1 + \gamma^0 ) \\
+&= \gamma^2 (-\beta^2 + 1 -\beta \gamma^0\gamma^1 -\beta \gamma^1 \gamma^0 ) \\
+&= \gamma^2 (-\beta^2 + 1 + \underbrace{\beta \gamma^1\gamma^0 -\beta \gamma^1 \gamma^0}_{=0} ) \\
+&= 1 
+\end{align*}
+
+and for the transformed ``spacelike'' vector, it squares like a spacelike vector:
+
+\begin{align*}
+{\gamma^1}' {\gamma^1}' 
+&= \gamma^2 (\gamma^1 -\beta \gamma^0) (\gamma^1 -\beta \gamma^0) \\
+&= \gamma^2 (-1 + \beta^2 -\beta\gamma^0 \gamma^1 -\beta\gamma^1\gamma^0) \\
+&= \gamma^2 (-1 + \beta^2 + \underbrace{\beta \gamma^1\gamma^0 -\beta \gamma^1 \gamma^0}_{=0} ) \\
+&= -1 
+\end{align*}
+
+The conclusion is that like the wave equation, it's square root, the timespace gradient is also Lorentz invarient, and to achieve this invarience we
+transform both the coordinates and the basis vectors (there was no need to transform the basis vectors for the wave equation since it is a scalar
+equation).
+
+\subsection{ transform the spacetime bivector. }
+
+I'm not sure of the significance of the following yet, but it is interesting to note that the spacetime bivector for the transformed coordinate
+pair is also invarient:
+
+\begin{align*}
+{\gamma^1}' {\gamma^0}'
+&= \gamma^2 (\gamma^1 -\beta \gamma^0) (-\beta \gamma^1 + \gamma^0 ) \\
+&= \gamma^2 (\beta -\beta +\beta^2 \gamma^0 \gamma^1 + \gamma^1 \gamma^0) \\
+&= \gamma^2 (1-\beta^2) \gamma^1 \gamma^0 \\
+&= \gamma^1 \gamma^0 
+\end{align*}
+
+We can probably use this to figure out how to transform bivector quantities like the electromagnetic field $F$.
+
 \end{document}               % End of document.
