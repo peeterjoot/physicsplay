@@ -1,0 +1,172 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\newcommand{\grad}[0]{\nabla}
+\newcommand{\PD}[2]{ \frac{\partial{#1}}{\partial {#2}} }
+
+\title{ Cauchy Equations expressed as a gradient. }
+\author{Peeter Joot}
+\date{}        % Deleting this command produces today's date.
+
+\begin{document}
+
+\maketitle{}
+
+\section{}
+
+The complex number derivative, when it exists, is defined as:
+
+\begin{equation*}
+\frac{\delta f}{\delta z} = \frac{ f(z + \delta z) - f(z)}{\delta z}
+\end{equation*}
+\begin{equation*}
+f'(z) = {\text{limit}}_{\abs{\delta z} \rightarrow 0} \quad \frac{\delta f}{\delta z}
+\end{equation*}
+
+Like any two variable function, this limit requires that all limiting paths produce the same result, thus it is
+minimially neccessary that the limits for the particular cases of $\delta z = \delta x + i \delta y$ exist for both
+$\delta x = 0$, and $\delta y = 0$ independently.  Of course there are other possible ways for $\delta z \rightarrow 0$, such as spiralling inwards paths.  Apparently it can be shown that if the specific cases are satisfied, then this limit exists for any path (I'm not sure how to show that, nor will try, at least now).
+
+Examining each of these cases separately, we have for $\delta x = 0$, and $f(z) = u(x,y) + i v(x,y)$:
+
+\begin{align*}
+\frac{\delta f}{\delta z}
+&= \frac{u(x,y + \delta y) + i v(x,y + \delta y)}{i\delta y} \\
+&\rightarrow -i \frac{\partial u(x,y)}{\partial y} + \frac{\partial v(x,y)}{\partial y} \\
+\end{align*}
+
+and for $\delta y = 0$
+\begin{align*}
+\frac{\delta f}{\delta z}
+&= \frac{u(x + \delta x,y) + i v(x + \delta x, y)}{\delta x} \\
+&\rightarrow \frac{\partial u(x,y)}{\partial x} + i\frac{\partial v(x,y)}{\partial x} \\
+\end{align*}
+
+If these are equal regardless of the path, then equating real and imaginary parts of these respective equations we have:
+
+\begin{align}
+\frac{\partial v}{\partial x} + \frac{\partial u}{\partial y} &= 0 \\
+\frac{\partial u}{\partial x} - \frac{\partial v}{\partial y} &= 0
+\end{align}
+
+Now, these are strikingly similar to the gradient, and we make this similarily explicit using the planar
+pseudoscalar
+$i=\Be_1 \wedge \Be_2 = \Be_1 \Be_2$
+as the unit imaginary.  For the first equation, premultiplying by $1 = \Be_{11}$, and post multiplying by $\Be_2$ we have:
+
+\begin{equation*}
+\Be_1 \frac{\partial \Be_{12} v}{\partial x} + \Be_{2}\frac{\partial u}{\partial y} = 0,
+\end{equation*}
+
+and for the second, premultiply by $\Be_1$, and postmultiply the $\partial_y$ term by $1 = \Be_{22}$, and rearrange:
+\begin{equation*}
+\Be_1 \frac{\partial u}{\partial x} + \Be_{2} \frac{\partial \Be_{12} v}{\partial y} = 0.
+\end{equation*}
+
+Adding these we have:
+\begin{equation*}
+\Be_1 \frac{\partial u + \Be_{12}}{\partial x} + \Be_{2} \frac{\partial u + \Be_{12} v}{\partial y} = 0.
+\end{equation*}
+
+Since $f = u + i v$, this is just
+
+\begin{equation}
+\Be_1 \frac{\partial f}{\partial x} + \Be_{2} \frac{\partial f}{\partial y} = 0.
+\end{equation}
+
+Or,
+\begin{equation}\label{eqn:gradf}
+\grad f = 0
+\end{equation}
+
+By taking second partial derivatives and equating mixed partials we are used to seeing these Cauchy-Riemann equations
+take this form as second order equations:
+
+\begin{equation}\label{eqn:uxx}
+\grad^2 u = u_{xx} + u_{yy} = 0
+\end{equation}
+\begin{equation}
+\grad^2 v = v_{xx} + v_{yy} = 0
+\end{equation}
+
+Given this, equation \ref{eqn:gradf} is something that we could have perhaps guessed, since the square root of the laplacian operator, is in fact the gradient (there are an infinite number of such square roots, since any rotation of the coordinate system that expresses the gradient also works).  However, a guess of this isn't required since we see this explicitly through some logical composition of relationships.
+
+The end result is that we can make a statement that
+in regions where the complex function is analytic (has a derivative), the gradient of that function is zero in that region.
+
+This is a kind of interesting result and I expect that this will relavant when figuring out how the geometric calculus
+all fits together.
+
+\subsection{ Verify we still have the Cauchy equations hiding in the gradient. }
+
+We have:
+
+\begin{equation*}
+\grad f \Be_1 = \grad ( \Be_1 u - \Be_2 v) = 0
+\end{equation*}
+
+If this is to be zero, both the scalar and bivector parts of this equation must also be zero.
+
+\begin{align*}
+(\grad \cdot f) \Be_1
+&= \grad \cdot ( \Be_1 u - \Be_2 v) \\
+&= (\Be_1 \partial_x + \Be_2 \partial_y) \cdot ( \Be_1 u - \Be_2 v) \\
+&= (\partial_x u - \partial_y v) = 0
+\end{align*}
+
+\begin{align*}
+(\grad \wedge f) \Be_1
+&= \grad \wedge ( \Be_1 u - \Be_2 v) \\
+&= (\Be_1 \partial_x + \Be_2 \partial_y) \wedge ( \Be_1 u - \Be_2 v) \\
+&= -\Be_1 \wedge \Be_2 (\partial_x v + \partial_y u) = 0
+\end{align*}
+
+We therefore see that this recovers the expected pair of Cauchy equations:
+
+\begin{align*}
+\partial_x u - \partial_y v &= 0 \\
+\partial_x v + \partial_y u &= 0
+\end{align*}
+
+\section{ Complex number formed from plane vector. }
+
+Now, we form a complex number from a vector by factoring out one of the unit vectors for the plane, and introducing an
+appropriate unit imaginary from the remaining plane pseudoscalar.
+However, we have no requirement for othornormal basis vectors to
+express any particular vector constrained to a plane.  In terms of the usual reciprocal relationships a vector in a plane can be expressed as:
+
+\begin{align*}
+x &= x^1 \Be_1 + x^2 \Be_2 \\
+\Be^i \cdot \Be_j &= {\delta^i}_{j} \\
+x^i &= x \cdot \Be^i
+\end{align*}
+
+Now, similar to how we create complex numbers from vectors by factoring out a unit vector, here we can also factor out a vector to put this in complex form:
+
+\begin{equation}\label{eqn:zgeneral}
+z = \Be^1 x = x^1 + (\Be^1 \wedge \Be_2) x^2
+\end{equation}
+
+Lets verify that this funny wedge of mixed upper and lower index basis vectors behaves as expected as purely imaginary
+quantity:
+
+\begin{align*}
+{(\Be^1 \wedge \Be_2)}^2
+&= \Be^1 \Be_2 \Be^1 \Be_2 \\
+&= - \Be^1 \Be^1 \Be_2 \Be_2 \\
+&>= 0
+\end{align*}
+
+Since both $\Be^1 \Be^1 > 0$, and $\Be_2 \Be_2 > 0$, the end result operates as a pure imaginary quantity, however it is potentially
+scaled since there is no requirement that $\Be^1 \Be^1 \Be_2 \Be_2 = 1$.
+
+Going back to equation \ref{eqn:zgeneral}, lets take the gradient and verify that this is zero as expected:
+
+\begin{align*}
+\left(\Be^1 \partial_{x^1} + \Be^2 \partial_{x^2}\right) \left(x^1 + (\Be^1 \wedge \Be_2) x^2\right)
+&= \Be^1 \PD{x^1}{x^1} -\Be^1 \Be^2 \Be_2 \PD{x^2}{x^2} + \Be^2\PD{x^1}{x^2} + \Be^1 \Be^1 \Be_2 \PD{x^2}{x^1} \\
+&= \Be^1 - \Be^1 \\
+&= 0
+\end{align*}
+
+\end{document}
