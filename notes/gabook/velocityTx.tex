@@ -1,6 +1,9 @@
 \documentclass{article}      % Specifies the document class
 
 \input{../peeters_macros.tex}
+\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+\newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
 
 \title{Understanding four velocity transform from rest frame.}
 \author{Peeter Joot}
@@ -21,41 +24,97 @@ without it explicitly for now.
 With:
 
 \begin{align*}
-\Bv/c &= tanh(\alpha)\vcap \\
-R &= \exp(\alpha \vcap/2)
+\Bv/c &= tanh\left(\alpha\right)\vcap \\
+R &= \exp\left(\alpha \vcap/2\right)
 \end{align*}
 
 We want to expansion this Lorentz boost exponential (see details section) and apply it to the rest frame basis vector.  Writing
-$C = \cosh(\alpha/2)$, and $S = \sinh(\alpha/2)$, we have:
+$C = \cosh\left(\alpha/2\right)$, and $S = \sinh\left(\alpha/2\right)$, we have:
 
 \begin{align*}
 v
-&= R (c \gamma_0) R^\dagger \\
-&= c (C + \vcap S) \gamma_0 (C - \vcap S) \\
-&= c (C \gamma_0 + S \vcap \gamma_0) (C - \vcap S) \\
-&= c ( C^2 \gamma_0 + SC \vcap \gamma_0 -CS \gamma_0\vcap - S^2 \vcap \gamma_0 \vcap ) \\
+&= R \left(c \gamma_0\right) R^\dagger \\
+&= c \left(C + \vcap S\right) \gamma_0 \left(C - \vcap S\right) \\
+&= c \left(C \gamma_0 + S \vcap \gamma_0\right) \left(C - \vcap S\right) \\
+&= c \left( C^2 \gamma_0 + SC \vcap \gamma_0 -CS \gamma_0\vcap - S^2 \vcap \gamma_0 \vcap \right) \\
 \end{align*}
 
 Now, here things can start to get confusing since $\vcap$ is a spatial quantity with vector-like spacetime basis bivectors $\sigma_i = \gamma_i \gamma_0$.  Factoring out the $\gamma_0$ term, utilizing the fact that $\gamma_0$ and $\sigma_i$ anticommute (see below).
 
 \begin{align*}
 v
-&= c ( C^2 + S^2 + 2 SC \vcap ) \gamma_0 \\
-&= c ( \cosh(\alpha) + \vcap \sinh(\alpha) ) \gamma_0 \\
-&= c \cosh(\alpha) ( 1 + \vcap \tanh(\alpha) ) \gamma_0 \\
-&= c \cosh(\alpha) ( 1 + \Bv/c ) \gamma_0 \\
-&= c \gamma ( 1 + \Bv/c ) \gamma_0 \\
-&= \gamma ( c \gamma_0 + \sum v^i \gamma_i) \\
-&= \frac{dt}{d\tau}( c \gamma_0 + \sum v^i \gamma_i) \\
-&= \frac{dt}{d\tau} \frac{d}{dt}( c t \gamma_0 + \sum x^i \gamma_i) \\
+&= c \left( C^2 + S^2 + 2 SC \vcap \right) \gamma_0 \\
+&= c \left( \cosh\left(\alpha\right) + \vcap \sinh\left(\alpha\right) \right) \gamma_0 \\
+&= c \cosh\left(\alpha\right) \left( 1 + \vcap \tanh\left(\alpha\right) \right) \gamma_0 \\
+&= c \cosh\left(\alpha\right) \left( 1 + \Bv/c \right) \gamma_0 \\
+&= c \gamma \left( 1 + \Bv/c \right) \gamma_0 \\
+&= \gamma \left( c \gamma_0 + \sum v^i \gamma_i\right) \\
+&= \frac{dt}{d\tau}\left( c \gamma_0 + \sum v^i \gamma_i\right) \\
+&= \frac{dt}{d\tau} \frac{d}{dt}\left( c t \gamma_0 + \sum x^i \gamma_i\right) \\
 &= \frac{dt}{d\tau} \frac{d}{dt} \sum x^{\mu} \gamma_{\mu} \\
 &= \frac{d}{d\tau} \sum x^{\mu} \gamma_{\mu} \\
 &= \frac{dx}{d\tau}
 \end{align*}
 
-So, we get the end result that demonstrates that a Lorentz boost applied to the rest event vector $x = x^0 \gamma_0 = c t \gamma_0$ does produce the desired result.
+So, we get the end result that demonstrates that a Lorentz boost applied to the rest event vector $x = x^0 \gamma_0 = c t \gamma_0$ directly produces the four velocity for the motion from the new viewpoint.  This makes some intuitive sense, but
+I don't feel this is neccessarily obvious without demonstration.
 
-FIXME: Ahh!  This demonstrates why GAFP can do the velative velocity stuff using the ratio of wedge and dot products.  Write this up.
+This also explains how the text is able to use the wedge and dot product ratios with the $\gamma_0$ basis vector
+to produce the relative spatial velocity.  If one introduces a rest frame proper velocity of
+$w = \frac{d}{dt}\left(ct \gamma_0\right) = c \gamma_0$, then one has:
+
+\begin{align*}
+v \cdot w 
+&= \left(\sum \frac{d x^{\mu}}{d\tau} \gamma_{\mu}\right) \cdot \left(c\gamma_0\right) \\
+&= c^2 \gamma
+\end{align*}
+
+\begin{align*}
+v \wedge w 
+&= \left(\sum \frac{d x^{\mu}}{d\tau} \gamma_{\mu}\right) \wedge \left(c\gamma_0\right) \\
+&= \left(\sum \frac{d x^{i}}{d\tau} \gamma_{i}\right) \wedge \left(c\gamma_0\right) \\
+&= c \sum \frac{d x^{i}}{d\tau} \sigma_{i} \\
+&= c \frac{dt}{d\tau} \sum \frac{d x^{i}}{dt} \sigma_{i} \\
+&= c \gamma \sum \frac{d x^{i}}{dt} \sigma_{i} \\
+\end{align*}
+
+Combining these one has the spatial observer dependent (relative) velocity:
+
+\begin{equation}
+\frac{v \wedge w}{v \cdot w} = \inv{c} \sum \frac{d x^{i}}{dt} \sigma_{i} = \frac{\Bv}{c}
+\end{equation}
+
+What isn't clear to me is whether this can be used to determine the relative velocity between two particles in the general case, when one of them isn't a rest frame velocity (time progression only at a fixed point in space.)
+The text seems
+to imply this is the case, so perhaps it is obvious to them only and not me;)
+
+Intuitively, I would guess that this is fact the case because when only two particles are considered, the result should be the same independent of which of the
+two is considered at rest.
+
+Mathematically, I would express this statement by saying that if one has
+a Lorentz boost that takes $v' = T v T^\dagger$ to its rest frame, then application of this to both proper velocities leaves both the wedge and dot product 
+parts of this ratio unchanged:
+
+\begin{align*}
+v \cdot w 
+&= \left(T^\dagger v' T\right) \cdot \left(T^\dagger w' T\right) \\
+&= \gpgradezero{\left(T^\dagger v' T\right) \left(T^\dagger w' T\right)} \\
+&= \gpgradezero{T^\dagger v' w' T} \\
+&= \gpgradezero{T^\dagger v' \cdot w' T} + \underbrace{\gpgradezero{T^\dagger v' \wedge w' T}}_{=0} \\
+&= \left(v' \cdot w'\right)\gpgradezero{T^\dagger T} \\
+&= v' \cdot w'
+\end{align*}
+
+\begin{align*}
+v \wedge w 
+&= \left(T^\dagger v' T\right) \wedge \left(T^\dagger w' T\right) \\
+&= \gpgradetwo{\left(T^\dagger v' T\right) \left(T^\dagger w' T\right)} \\
+&= \gpgradetwo{T^\dagger v' w' T} \\
+&= \underbrace{\gpgradetwo{T^\dagger v' \cdot w' T}}_{=0} + \gpgradetwo{T^\dagger v' \wedge w' T} \\
+&= T^\dagger \left(v' \wedge w'\right) T
+\end{align*}
+
+FIXME: can't those last $T$ factors be removed?
 
 \section{ Appendix. Omitted details from above. }
 
@@ -67,16 +126,16 @@ Expanding
 in series the exponential of a vector $\Bx = x\xcap$, we have:
 
 \begin{align*}
-\exp(\Bx)
-&= \sum \frac{\Bx^{2k}}{(2k)!} + \sum \frac{\Bx^{2k+1}}{(2k+1)!} \\
-&= \sum \frac{x^{2k}}{(2k)!} + \xcap \sum \frac{x^{2k+1}}{(2k+1)!} \\
-&= \cosh(x) + \xcap \sinh(x)
+\exp\left(\Bx\right)
+&= \sum \frac{\Bx^{2k}}{\left(2k\right)!} + \sum \frac{\Bx^{2k+1}}{\left(2k+1\right)!} \\
+&= \sum \frac{x^{2k}}{\left(2k\right)!} + \xcap \sum \frac{x^{2k+1}}{\left(2k+1\right)!} \\
+&= \cosh\left(x\right) + \xcap \sinh\left(x\right)
 \end{align*}
 
 Notationally this can also be written:
 
 \begin{equation*}
-\exp(\Bx) = \cosh(\Bx) + \sinh(\Bx)
+\exp\left(\Bx\right) = \cosh\left(\Bx\right) + \sinh\left(\Bx\right)
 \end{equation*}
 
 But doing so won't really help.
