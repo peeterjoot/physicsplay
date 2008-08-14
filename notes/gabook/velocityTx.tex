@@ -1,0 +1,92 @@
+\documentclass{article}      % Specifies the document class
+
+\input{../peeters_macros.tex}
+
+\title{Understanding four velocity transform from rest frame.}
+\author{Peeter Joot}
+\date{August 13, 2008}
+
+\begin{document}             % End of preamble and beginning of text.
+
+\maketitle{}
+
+\section{}
+
+GAFP writes $v = R \gamma_0 R^\dagger$.  This would probably be a lot more
+obvious to me if I had fully read chapter 5.  Let's just expand this out
+to see how this works.  First thing to note is that there is an ommitted factor
+of $c$, and I'll add that back in here, since I'm not comfortable enough
+without it explicitly for now.
+
+With:
+
+\begin{align*}
+\Bv/c &= tanh(\alpha)\vcap \\
+R &= \exp(\alpha \vcap/2)
+\end{align*}
+
+Now, this exponential is the first thing to make sure is understood.  Expanding
+in series the exponential of a vector $\Bx = x\xcap$, we have:
+
+\begin{align*}
+\exp(\Bx)
+&= \sum \frac{\Bx^{2k}}{(2k)!} + \sum \frac{\Bx^{2k+1}}{(2k+1)!} \\
+&= \sum \frac{x^{2k}}{(2k)!} + \xcap \sum \frac{x^{2k+1}}{(2k+1)!} \\
+&= \cosh(x) + \xcap \sinh(x)
+\end{align*}
+
+Notationally this can also be written:
+
+\begin{equation*}
+\exp(\Bx) = \cosh(\Bx) + \sinh(\Bx)
+\end{equation*}
+
+But doing so won't really help.  Anyways, on to the Lorentz boost applied to the rest frame basis vector.  Writing
+$C = \cosh(\alpha/2)$, and $S = \sinh(\alpha/2)$, we have:
+
+\begin{align*}
+v
+&= R (c \gamma_0) R^\dagger \\
+&= c (C + \vcap S) \gamma_0 (C - \vcap S) \\
+&= c (C \gamma_0 + S \vcap \gamma_0) (C - \vcap S) \\
+&= c ( C^2 \gamma_0 + SC \vcap \gamma_0 -CS \gamma_0\vcap - S^2 \vcap \gamma_0 \vcap ) \\
+\end{align*}
+
+Now, here things can start to get confusing since $\vcap$ is a spatial quantity with vector-like spacetime basis bivectors $\sigma_i = \gamma_i \gamma_0$.  Factoring out the $\gamma_0$ term, utilizing the fact that $\gamma_0$ and $\sigma_i$ anticommute (see below).
+
+\begin{align*}
+v
+&= c ( C^2 + S^2 + 2 SC \vcap ) \gamma_0 \\
+&= c ( \cosh(\alpha) + \vcap \sinh(\alpha) ) \gamma_0 \\
+&= c \cosh(\alpha) ( 1 + \vcap \tanh(\alpha) ) \gamma_0 \\
+&= c \cosh(\alpha) ( 1 + \Bv/c ) \gamma_0 \\
+&= c \gamma ( 1 + \Bv/c ) \gamma_0 \\
+&= \gamma ( c \gamma_0 + \sum v^i \gamma_i ) \\
+%
+%FIXME: including the factor of c wasn't done right.  It's got to also be with the velocity term so that we get the following and can continue:
+%
+&= \gamma ( c \gamma_0 + \sum v^i \gamma_i) \\
+&= \frac{dt}{d\tau}( c \gamma_0 + \sum v^i \gamma_i) \\
+&= \frac{dt}{d\tau} \frac{d}{dt}( c t \gamma_0 + \sum x^i \gamma_i) \\
+&= \frac{dt}{d\tau} \frac{d}{dt} \sum x^{\mu} \gamma_{\mu} \\
+&= \frac{d}{d\tau} \sum x^{\mu} \gamma_{\mu} \\
+&= \frac{dx}{d\tau}
+\end{align*}
+
+So, we get the end result that demonstrates that a Lorentz boost applied to the rest event vector $x = x^0 \gamma_0 = c t \gamma_0$ does produce the desired result.
+
+\section{ Omitted details from above. }
+
+\subsection{ $\Bv$ anticommutes with $\gamma_0$ }
+
+\begin{align*}
+\Bv \gamma_0 
+&= \sum v^i \sigma_i \gamma_0 \\
+&= \sum v^i \gamma_i \gamma_0 \gamma_0 \\
+&= -\sum v^i \gamma_0 \gamma_i \gamma_0 \\
+&= - \gamma_0 \sum v^i \gamma_i \gamma_0 \\
+&= - \gamma_0 \sum v^i \sigma_0 \\
+&= - \gamma_0 \Bv
+\end{align*}
+
+\end{document}               % End of document.
