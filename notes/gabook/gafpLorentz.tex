@@ -1,0 +1,124 @@
+\documentclass{article}      
+
+\input{../peeters_macros.tex}
+\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+\newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
+
+\title{ Some notes on GAFP 5.5.3 The Lorentz force Law.} 
+\author{Peeter Joot}         
+\date{August 16, 2008}        
+
+\begin{document}             
+
+\maketitle{}
+
+\section{}
+
+The idea behind this derivation, is to express the vector part of the proper force in covarient form, and then
+do the same for the energy change part of the proper momentum.  That first part is:
+
+\begin{align*}
+\frac{dp}{d\tau} \wedge \gamma_0 
+&= \frac{d \Bp}{d\tau} \\
+&= \frac{d \Bp}{dt} \frac{dt}{d\tau} \\
+&= \frac{dt}{d\tau} q \left( \BE + \Bv \cross \BB \right)
+\end{align*}
+
+Now, the spacetime split of velocity is done in the normal fashion:
+
+\begin{align*}
+x &= c t \gamma_0 + \sum x^i \gamma_i \\
+v &= \frac{dx}{d\tau} = c \frac{dt}{d\tau} \gamma_0 + \sum \frac{dx^i}{d\tau} \gamma_i \\
+v \cdot \gamma_0 &= c \frac{dt}{d\tau} = c \gamma \\
+v \wedge \gamma_0
+&= \sum \frac{dx^i}{dt} \frac{dt}{d\tau} \gamma_i \gamma_0 \\
+&= (v \cdot \gamma_0)/c \sum v^i \sigma_i \\
+&= (v \cdot \gamma_0) \Bv/c.
+\end{align*}
+
+Writing $\dot{p} = dp/d\tau$, substituite the gamma factor into the force equation:
+
+\begin{equation*}
+\dot{p} \wedge \gamma_0 = ( v/c \cdot \gamma_0 ) q \left( \BE + \Bv \cross \BB \right)
+\end{equation*}
+
+Now, GAFP goes on to show that the $\gamma \BE$ term can be reduced to the form $(\BE \cdot v) \wedge \gamma_0$.  Their
+method isn't exactly obvious, for example writing $\BE = (1/2)(\BE + \BE)$ to start.  Let's just do this backwards 
+instead, expanding $\BE \cdot v$ to see the form of that term:
+
+\begin{align*}
+\BE \cdot v
+&= \left(\sum E^i \gamma_{i0}\right) \cdot \left( \sum v^{\mu} \gamma_{\mu}\right) \\
+&= \sum E^i v^{\mu} \gpgradeone{ \gamma_{i0\mu}} \\
+&= v^0 \sum E^i \gamma_{i} + \sum E^i v^{j} \underbrace{\gpgradeone{ \gamma_{i0j}}}_{-\delta_{ij} \gamma_0} \\
+&= v^0 \sum E^i \gamma_i - \sum E^i v^i \gamma_0.
+\end{align*}
+
+Wedging with $\gamma_0$ we have the desired result:
+
+\begin{equation*}
+(\BE \cdot v) \wedge \gamma_0 = v^0 \sum E^i \gamma_{i0} = (v \cdot \gamma_0) \BE = c \gamma \BE
+\end{equation*}
+
+Now, for equation 5.164 there aren't any suprising steps, but lets try this backwards too:
+
+\begin{align*}
+(I \BB) \cdot v
+&= \left(\sum B^i \underbrace{\gamma_{102030i0}}_{\gamma_{123i}} \right) \cdot \left( \sum v^{\mu} \gamma_{\mu} \right) \\
+&= \sum B^i v^{\mu} \gpgradeone{\gamma_{123i\mu}}
+\end{align*}
+
+That vector selection does yield the cross product as expected:
+
+\begin{equation*}
+\gpgradeone{\gamma_{123i\mu}} =
+\left\{ 
+\begin{array}{l l}
+0 & \quad \mu = 0 \\
+0 & \quad i = \mu \\
+\gamma_1 & \quad i\mu = 32 \\
+-\gamma_2 & \quad i\mu = 31 \\
+\gamma_3 & \quad i\mu = 21 \\
+\end{array} \right.
+\end{equation*}
+
+(with alternation for the missing set of index pairs).
+
+This gives:
+\begin{align*}
+(I \BB) \cdot v
+= (B^3 v^2 - B^2 v^3) \gamma_1
++ (B^1 v^3 - B^3 v^1) \gamma_2
++ (B^2 v^1 - B^1 v^2) \gamma_3,
+\end{align*}
+
+thus, since $v^i = \gamma d{x^i}/dt$, this yields the desired result
+
+\begin{equation*}
+((I\BB) \cdot v) \wedge \gamma_0 = \gamma \Bv \cross \BB
+\end{equation*}
+
+In retrospect, the GAFP way is clearer and easier, than to try to do it the dumb way.
+
+Combining the results we have:
+
+\begin{align*}
+\dot{p} \wedge \gamma_0 
+&= q \gamma ( \BE + \Bv \cross \BB ) \\
+&= q (( \BE + c I \BB ) \cdot (v/c)) \wedge \gamma_0 \\
+\end{align*}
+
+Or with $F = \BE + c I \BB$, we have:
+
+\begin{equation}
+\dot{p} \wedge \gamma_0 = q ( F \cdot v/c ) \wedge \gamma_0
+\end{equation}
+
+It is tempting here to attempt to cancel the $\wedge \gamma_0$ parts of this equation, but that cannot be done
+until one also shows:
+
+\begin{equation*}
+\dot{p} \cdot \gamma_0 = q ( F \cdot v/c ) \cdot \gamma_0
+\end{equation*}
+
+\end{document}               
