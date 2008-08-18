@@ -3,6 +3,7 @@
 \input{../peeters_macros.tex}
 \newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
 \newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
+\newcommand{\gpgradezero}[1] {\gpgrade{#1}{}}
 \newcommand{\grad}[0] {\nabla}
 
 \title{ Some notes on GAFP 5.5.3 The Lorentz force Law.} 
@@ -111,7 +112,7 @@ Combining the results we have:
 
 Or with $F = \BE + c I \BB$, we have:
 
-\begin{equation}
+\begin{equation}\label{eqn:pvec}
 \dot{p} \wedge \gamma_0 = q ( F \cdot v/c ) \wedge \gamma_0
 \end{equation}
 
@@ -122,7 +123,55 @@ until one also shows:
 \dot{p} \cdot \gamma_0 = q ( F \cdot v/c ) \cdot \gamma_0
 \end{equation*}
 
-... (add details) ...
+I follow most of the details of GAFP on this fine.  I found they omitted a couple steps that would have been helpful.
+
+For the four momentum we have:
+
+\begin{equation*}
+p_0 = p \cdot \gamma_0 = E/c
+\end{equation*}
+
+The rate of change work done on the particle by the force is:
+
+\begin{align*}
+dW &= q\BE \cdot d\Bx \\
+\frac{dW}{dt} &= q\BE \cdot \frac{d\Bx}{dt} = c \frac{dp_0}{dt} \\
+\frac{dp_0}{dt} &= q\BE \cdot \Bv/c \\
+\frac{dp_0}{d\tau} &= \underbrace{\frac{dt}{d\tau}}_{v/c \cdot \gamma_0} q\BE \cdot \left( \frac{v \wedge \gamma_0}{v \cdot \gamma_0} \right) \\
+                   &= q\BE \cdot \left(v/c \wedge \gamma_0\right) \\
+                   &= q \left(\BE + c I \BB\right) \cdot \left(v/c \wedge \gamma_0\right) \\
+\end{align*}
+
+$I\BB$ has only purely spatial bivectors, $\gamma_{12}$, $\gamma_{13}$, and $\gamma_{23}$.  On the other hand $v \wedge \gamma_0 = \sum v^i \gamma_{i0}$ has only spacetime bivectors, so $I\BB \cdot (v/c \wedge \gamma_0) = 0$, which is why it can be added above to complete the field.
+
+That leaves:
+
+\begin{equation}\label{eqn:p0wedgedotwedge}
+\frac{dp_0}{d\tau} = q F \cdot \left(v/c \wedge \gamma_0\right),
+\end{equation}
+
+but we want to put this in the same form as equation \ref{eqn:pvec}.  To do so, note how we can reduce the dot product of two bivectors:
+
+\begin{align*}
+( a \wedge b ) \cdot ( c \wedge d ) 
+&= \gpgradezero{ ( a \wedge b ) ( c \wedge d ) } \\
+&= \gpgradezero{ ( a \wedge b ) ( c d - c \cdot d ) } \\
+&= \gpgradezero{ (( a \wedge b ) \cdot c) d + (( a \wedge b ) \wedge c) d } \\
+&= (( a \wedge b ) \cdot c) \cdot d .
+\end{align*}
+
+Using this, and adding the result to equation \ref{eqn:pvec} we have:
+
+\begin{equation*}
+\dot{p} \cdot \gamma_0 + \dot{p} \wedge \gamma_0 = q (F \cdot v/c) \cdot \gamma_0 + q ( F \cdot v/c ) \wedge \gamma_0
+\end{equation*}
+
+Or
+\begin{equation*}
+\dot{p} \gamma_0 = q (F \cdot v/c) \gamma_0
+\end{equation*}
+
+Right multiplying by $\gamma_0$ on both sides to cancel those terms we have our end result, the covarient form of the Lorentz proper force equation:
 
 \begin{equation}\label{eqn:LorentzCovariant}
 \dot{p} = q ( F \cdot v/c ) 
@@ -169,5 +218,11 @@ I believe this dot product is likely an invariant of electromagnetism.  Looking 
 \end{equation}
 
 So we likely want to write $A^0 = -\phi$ for consistency with electrostatics.
+
+FIXME:
+Now, an interesting bit of followup here would be to use this to determine the Energy associated with work done by a Lorentz force.
+I'd expect $q\phi$ components as in the rest frame as well as contributions from the $A^i$ terms.  I'll have to dig into the
+relativistic energy integral stuff a bit more for that.  When done, cross check against the table of "correct" electrodynamics
+equations (compared to statics cases) in the Feynman book.
 
 \end{document}               
