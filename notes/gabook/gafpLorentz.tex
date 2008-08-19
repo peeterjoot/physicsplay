@@ -1,16 +1,17 @@
-\documentclass{article}      
+\documentclass{article}
 
 \input{../peeters_macros.tex}
 \newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
 \newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
 \newcommand{\gpgradezero}[1] {\gpgrade{#1}{}}
 \newcommand{\grad}[0] {\nabla}
+\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
 
-\title{ Some notes on GAFP 5.5.3 The Lorentz force Law.} 
-\author{Peeter Joot}         
-\date{August 16, 2008}        
+\title{ Some notes on GAFP 5.5.3 The Lorentz force Law.}
+\author{Peeter Joot}
+\date{August 16, 2008}
 
-\begin{document}             
+\begin{document}
 
 \maketitle{}
 
@@ -20,7 +21,7 @@ The idea behind this derivation, is to express the vector part of the proper for
 do the same for the energy change part of the proper momentum.  That first part is:
 
 \begin{align*}
-\frac{dp}{d\tau} \wedge \gamma_0 
+\frac{dp}{d\tau} \wedge \gamma_0
 &= \frac{d \Bp}{d\tau} \\
 &= \frac{d \Bp}{dt} \frac{dt}{d\tau} \\
 &= \frac{dt}{d\tau} q \left( \BE + \Bv \cross \BB \right)
@@ -45,7 +46,7 @@ Writing $\dot{p} = dp/d\tau$, substituite the gamma factor into the force equati
 \end{equation*}
 
 Now, GAFP goes on to show that the $\gamma \BE$ term can be reduced to the form $(\BE \cdot v) \wedge \gamma_0$.  Their
-method isn't exactly obvious, for example writing $\BE = (1/2)(\BE + \BE)$ to start.  Let's just do this backwards 
+method isn't exactly obvious, for example writing $\BE = (1/2)(\BE + \BE)$ to start.  Let's just do this backwards
 instead, expanding $\BE \cdot v$ to see the form of that term:
 
 \begin{align*}
@@ -74,7 +75,7 @@ That vector selection does yield the cross product as expected:
 
 \begin{equation*}
 \gpgradeone{\gamma_{123i\mu}} =
-\left\{ 
+\left\{
 \begin{array}{l l}
 0 & \quad \mu = 0 \\
 0 & \quad i = \mu \\
@@ -105,7 +106,7 @@ In retrospect, for this magnetic field term, the GAFP approach is cleaner and ea
 Combining the results we have:
 
 \begin{align*}
-\dot{p} \wedge \gamma_0 
+\dot{p} \wedge \gamma_0
 &= q \gamma ( \BE + \Bv \cross \BB ) \\
 &= q (( \BE + c I \BB ) \cdot (v/c)) \wedge \gamma_0 \\
 \end{align*}
@@ -153,7 +154,7 @@ That leaves:
 but we want to put this in the same form as equation \ref{eqn:pvec}.  To do so, note how we can reduce the dot product of two bivectors:
 
 \begin{align*}
-( a \wedge b ) \cdot ( c \wedge d ) 
+( a \wedge b ) \cdot ( c \wedge d )
 &= \gpgradezero{ ( a \wedge b ) ( c \wedge d ) } \\
 &= \gpgradezero{ ( a \wedge b ) ( c d - c \cdot d ) } \\
 &= \gpgradezero{ (( a \wedge b ) \cdot c) d + (( a \wedge b ) \wedge c) d } \\
@@ -174,7 +175,7 @@ Or
 Right multiplying by $\gamma_0$ on both sides to cancel those terms we have our end result, the covarient form of the Lorentz proper force equation:
 
 \begin{equation}\label{eqn:LorentzCovariant}
-\dot{p} = q ( F \cdot v/c ) 
+\dot{p} = q ( F \cdot v/c )
 \end{equation}
 
 \section{ Lorentz force in terms of four potential. }
@@ -188,7 +189,7 @@ F = \grad \wedge A,
 then inserting into equation \ref{eqn:LorentzCovariant} we have:
 
 \begin{align*}
-\dot{p} 
+\dot{p}
 &= q ( F \cdot v/c )  \\
 &= q (\grad \wedge A) \cdot v/c \\
 &= q \left( \grad (A \cdot v/c) - A (\grad \cdot v/c) \right)
@@ -214,10 +215,86 @@ This leaves the proper Lorentz force expressable as the (spacetime) gradient of 
 I believe this dot product is likely an invariant of electromagnetism.  Looking from the rest frame one has:
 
 \begin{equation}
-\dot{p} = q \grad A^0
+\dot{p} = q \grad A^0 = q \sum \gamma^{\mu} \partial_{\mu} A^0 = \sum E^i \gamma_i
 \end{equation}
 
-So we likely want to write $A^0 = -\phi$ for consistency with electrostatics.
+Wedging with $\gamma_0$ to calculate $\BE = \sum E^i \gamma_i$, we have:
+
+\begin{equation*}
+q \sum -\gamma_{i0} \partial_{i} A^0 = - q \spacegrad A^0
+\end{equation*}
+
+So we want to identify this component of the four vector potential with electrostatic potential:
+
+\begin{equation}
+A^0 = \phi
+\end{equation}
+
+\section{ Explicit expansion of potential spacetime curl in components. }
+
+Having used the gauge condition $\grad \cdot A = 0$, to express the Faraday bivector as a gradient, we should be able to
+verify that this produces the familiar equations for $\BE$, and $\BB$ in terms of $\phi$, and $\BA$.
+
+First lets do the electric field components, which are easier.
+
+With $F = E + icB = \grad \wedge A$, we calculate $\BE = \sum \sigma_i E^i = \sum \gamma_{i0} E^i$.
+
+\begin{align*}
+E^i
+&= F \cdot \left(\gamma^{0} \wedge \gamma^{i}\right) = F \cdot \gamma^{0i} \\
+&= \left(\sum \gamma^{\mu} \partial_{\mu} \wedge \gamma_{\nu} A^{\nu} \right) \cdot \gamma^{0i} \\
+&= \sum \partial_{\mu} A^{\nu} {\gamma^{\mu}}_{\nu} \cdot \gamma^{0i} \\
+&= \partial_{0} A^{i} {\gamma^{0}}_{i} \cdot \gamma^{0i} + \partial_{i} A^{0} {\gamma^{i}}_{0} \cdot \gamma^{0i} \\
+&= - \left(\partial_{0} A^{i} + \partial_{i} A^{0} \right) \\
+\sum E^i \sigma_i
+&= - \left(\partial_{ct} \sum \sigma_i A^{i} + \sum \sigma_i \partial_{i} A^{0} \right) \\
+&= - \left( \inv{c} \frac{\partial \BA}{\partial t} + \spacegrad A^{0} \right) \\
+\end{align*}
+
+Again we see that we should identify $A^0 = \phi$, and write:
+
+\begin{equation}
+\BE + \inv{c} \frac{\partial \BA}{\partial t} = -\spacegrad \phi
+\end{equation}
+
+Now, let's calculate the magnetic field components (setting $c=1$ temporarily):
+
+\begin{align*}
+i \BB
+&= \sigma_{123} \sum \sigma_i B^i \\
+&= \sum \sigma_{123i} B^i \\
+&= \sigma_{1231} B^1 + \sigma_{1232} B^2 + \sigma_{1233} B^3 \\
+&= \sigma_{23} B^1 + \sigma_{31} B^2 + \sigma_{12} B^3 \\
+&= \gamma_{2030} B^1 + \gamma_{3010} B^2 + \gamma_{1020} B^3 \\
+&= \gamma_{32} B^1 + \gamma_{13} B^2 + \gamma_{21} B^3 \\
+\end{align*}
+
+Thus, we can calculate the magnetic field components with:
+\begin{align}
+B^1 &= F \cdot \gamma^{23} \\
+B^2 &= F \cdot \gamma^{31} \\
+B^3 &= F \cdot \gamma^{12}
+\end{align}
+
+Here the components of $F$ of interest are: $\gamma^i \wedge \gamma_j \partial_i A^j = -\gamma_{ij} \partial_i A^j$.
+
+\begin{align*}
+B^1 &= - \partial_2 A^3 \gamma_{23} \cdot \gamma^{23} - \partial_3 A^2 \gamma_{32} \cdot \gamma^{23} \\
+B^2 &= - \partial_3 A^1 \gamma_{31} \cdot \gamma^{31} - \partial_1 A^3 \gamma_{13} \cdot \gamma^{31} \\
+B^3 &= - \partial_1 A^2 \gamma_{12} \cdot \gamma^{12} - \partial_2 A^1 \gamma_{21} \cdot \gamma^{12} \\
+\implies \\
+B^1 &= \partial_2 A^3 - \partial_3 A^2 \\
+B^2 &= \partial_3 A^1 - \partial_1 A^3 \\
+B^3 &= \partial_1 A^2 - \partial_2 A^1 \\
+\end{align*}
+
+Or, with $\BA = \sum \sigma_i A^i$ and $\spacegrad = \sum \sigma_i \partial_i$, this is our familiar:
+
+\begin{equation}
+\BB = \spacegrad \cross \BA
+\end{equation}
+
+\section{ Covarient Lagrangian for a charged point particle? }
 
 FIXME:
 Now, an interesting bit of followup here would be to use this to determine the Energy associated with work done by a Lorentz force.
@@ -225,4 +302,64 @@ I'd expect $q\phi$ components as in the rest frame as well as contributions from
 relativistic energy integral stuff a bit more for that.  When done, cross check against the table of "correct" electrodynamics
 equations (compared to statics cases) in the Feynman book.
 
-\end{document}               
+Now, is it correct that $\int \dot{p} \cdot ds$ is a correct calculation of energy relativistically?  On one hand, at least
+in terms of this generalized potential it seems like a somewhat reasonable thing to do:
+
+\begin{align*}
+q \int \grad \left( A \cdot v/c \right) \cdot ds
+&= q \sum \int \underbrace{\gamma^{\mu} \cdot \gamma_{\nu}}_{={\delta^{\mu}}_{\nu}} \frac{dx^{\nu}}{d\tau}\partial_{\mu} \left( A \cdot v/c \right) d\tau \\
+&= q \sum \int \frac{dx^{\mu}}{d\tau}\frac{\partial \left( A \cdot v/c \right)}{\partial x^{\mu}} d\tau \\
+&= q \int \frac{d \left( A \cdot v/c \right)}{d\tau} d\tau \\
+&= q \left( A \cdot v/c \right) \\
+\end{align*}
+
+With $v = c\gamma_0$ in the particles rest frame this gives:
+
+\begin{equation*}
+q \left( A \cdot v/c \right) = q \phi
+\end{equation*}
+
+Could this be considered a covarient form of the potential:
+
+If there is something to this then we have shown:
+\begin{equation*}
+\int \dot{p} \cdot ds
+= q \int \grad \left( A \cdot v/c \right) \cdot ds
+= q ( A \cdot v/c )
+= -q \int \grad U \cdot ds = -(U_2 - U_1)
+\end{equation*}
+
+So it may be that we have the Lagrangian for a charged point particle in a electromagnetic field as follows:
+
+\begin{align*}
+\mathcal{L}
+&= -mc^2\underbrace{\sqrt{1 - (\Bv/c)^2}}_{\gamma^{-2}} - q ( A \cdot v/c ) \\
+&= -\frac{mc^2}{(v/c) \cdot \gamma_0} - q ( A \cdot v/c ) \\
+\end{align*}
+
+Looking again, I don't think this can be right, because I wouldn't expect an observer dependent term in the first energy component.
+
+Another validation of the intuition that this guess isn't quite right comes from 
+direct evaluation of that left hand integral:
+
+\begin{equation*}
+\int \dot{p} \cdot ds = m \int g_{\mu\nu} \dot{v}^{\mu} \dot{x}^{\nu} d\tau
+\end{equation*}
+
+compare to:
+
+\begin{equation*}
+\frac{d}{d\tau}(v \cdot v) = 2 \dot{v} \cdot v = 2 \sum \dot{v}^{\mu} \dot{x}^{\nu} g_{\mu\nu}
+\end{equation*}
+
+which gives:
+
+\begin{equation*}
+\int \dot{p} \cdot ds = m \inv{2} \int \frac{v \cdot v}{d\tau} d\tau = mv^2/2 = m c^2/2
+\end{equation*}
+
+This isn't anything recognizable, so I would guess the $\int \dot{p} \cdot ds$ isn't what what we want here.
+
+It will be interesting to eventually figure out how all this fits together.
+
+\end{document}
