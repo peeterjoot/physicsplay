@@ -1,11 +1,28 @@
 \documentclass{article}      
 
 \input{../peeters_macros.tex}
+\newcommand{\Abs}[1]{\left\lvert{#1}\right\rvert}
+\newcommand{\grad}[0]{\nabla}
 \newcommand{\LL}[0]{\mathcal{L}}
-\newcommand{\xdot}[0]{\dot{x}}
-\newcommand{\xddot}[0]{\ddot{x}}
+
+\newcommand{\dotalpha}[0]{\dot{\alpha}}
+\newcommand{\ddotalpha}[0]{\ddot{\alpha}}
+
+\newcommand{\dotomega}[0]{\dot{\omega}}
+\newcommand{\ddotomega}[0]{\ddot{\omega}}
+
+\newcommand{\dottheta}[0]{\dot{\theta}}
+\newcommand{\ddottheta}[0]{\ddot{\theta}}
+
 \newcommand{\qdot}[0]{\dot{q}}
 \newcommand{\qddot}[0]{\ddot{q}}
+
+\newcommand{\xdot}[0]{\dot{x}}
+\newcommand{\xddot}[0]{\ddot{x}}
+
+% == \partial_{#1} {#2}
+\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+\newcommand{\PDD}[3]{\frac{\partial^2 {#3}}{\partial {#1}\partial {#2}}}
 
 \title{ Solutions to David Tong's mf1 Lagrangian problems. } % Declares the document's title.
 \author{Peeter Joot}         % Declares the author's name.
@@ -17,55 +34,550 @@
 
 \section{ Problem 1. }
 
+I found it helpful to clarify for myself what was meant by $g_{ab}(q^c)$.  This is a function of all the generalized coordinates:
+
+\begin{equation*}
+g_{ab}(q^c) = g_{ab}( q^1, q^2, \ldots, q^N ) = g_{ab}(\Bq)
+\end{equation*}
+
+So I think that a vector parameter reminder is helpful.
+
 \begin{equation*}
 \LL = \inv{2} \sum  g_{ab}(\Bq) \qdot^a \qdot^b
 \end{equation*}
 
 \begin{equation*}
-\partial_{q^i} \LL = \inv{2} \sum \qdot^a \qdot^b \partial_{q^i}(g_{ab}(\Bq))
+\PD{q^i}{\LL} = \inv{2} \sum \qdot^a \qdot^b \PD{q^i}{g_{ab}(\Bq)}
 \end{equation*}
 
+Now, procede to calculate the generalize momentums:
 \begin{align*}
-\partial_{\qdot^i} \LL
-&= \inv{2} \sum g_{ab}(\Bq) \partial_{\qdot^i}( \qdot^a \qdot^b ) \\
+\PD{\qdot^i}{\LL}
+&= \inv{2} \sum g_{ab}(\Bq) \PD{\qdot^i}{( \qdot^a \qdot^b )} \\
 &= \inv{2} \sum g_{ib}(\Bq) \qdot^b + g_{ai}(\Bq) \qdot^a \\
 &= \sum g_{ai}(\Bq) \qdot^a \\
 \implies \\
-\frac{d}{dt} \partial_{\qdot^i} \LL &= \sum \partial_{q^c} g_{ia} \qdot^c \qdot^a + g_{ai} \qddot^a \\
+\frac{d}{dt} \PD{\qdot^i}{\LL} &= \sum \PD{q^c}{ g_{ia} } \qdot^c \qdot^a + g_{ai} \qddot^a \\
 \end{align*}
 
+Taking the difference we have:
+\begin{align*}
+0
+&= \sum \inv{2} \qdot^a \qdot^b \PD{q^i}{g_{ab}} - \PD{q^c}{g_{ia}} \qdot^c \qdot^a + g_{ai} \qddot^a \\
+&= \sum \qdot^a \qdot^b \left( \inv{2} \PD{q^i}{g_{ab}} - \PD{q^b}{g_{ia}} \right) + g_{ai} \qddot^a \\
+&= \sum \qdot^a \qdot^b \left( -\inv{2} \PD{q^i}{g_{ab}} +\inv{2} \PD{q^b}{g_{ia}} +\inv{2} \PD{q^b}{g_{ia}} \right) - g_{ai} \qddot^a \\
+&= \sum \inv{2} \qdot^a \qdot^b \left( - \PD{q^i}{g_{ab}} + \PD{q^b}{g_{ia}} + \PD{q^a}{g_{ib}} \right) - g_{ai} \qddot^a \\
+\end{align*}
+
+Here a split of the symmetric expression 
+
 \begin{equation*}
-\inv{2} \sum \qdot^a \qdot^b \partial_{q^i}g_{ab} - \partial_{q^c} g_{ia} \qdot^c \qdot^a + g_{ai} \qddot^a = 0
+X = \sum \qdot^a \qdot^b \PD{q^b}{g_{ia}} = \inv{2}(X + X),
 \end{equation*}
+
+was used, and then an interchange of dummy indexes $a,b$.
+
+Now multiply this whole sum by $g^{ci}$, and sum to remove the metric term from the generalized acceleration
+
+\begin{align*}
+\sum g^{ci} g_{ai} \qddot^a &= \inv{2} \sum \qdot^a \qdot^b g^{ci} \left( - \PD{q^i}{g_{ab}} + \PD{q^b}{g_{ia}} + \PD{q^a}{g_{ib}} \right) \\
+\sum {\delta^c}_a \qddot^a &= \\
+\qddot^c &= \\
+\end{align*}
+
+Swapping indexes one more time to put this in a more symmetric form we have the final result:
+
+\begin{equation*}
+\qddot^i = \inv{2} \sum \qdot^a \qdot^b g^{i c} \left( - \PD{q^c}{g_{ab}} + \PD{q^b}{g_{c a}} + \PD{q^a}{g_{c b}} \right)
+\end{equation*}
+
+Oops.  Problem used free indexes $b,c,d$ and used $a$ instead of $i$.  One more swap:
+
+\begin{equation*}
+\qddot^a = \inv{2} \sum \qdot^b \qdot^c g^{a d} \left( - \PD{q^d}{g_{b c}} + \PD{q^c}{g_{d b}} + \PD{q^b}{g_{d c}} \right)
+\end{equation*}
+
+Having typed this up, I wonder how any mathematician previously did tensor algebra without a text editor that has a regular expression interface (easier than on paper).
+
+%\section{ Problem 2. }
+%
+%\begin{equation*}
+%\LL = \inv{12}m^2 \xdot^4 - m \xdot^2 V + V^2
+%\end{equation*}
+%
+%\begin{align*}
+%\frac{\partial L}{\partial x} &= \frac{d}{dt} \frac{\partial L}{\partial \xdot} \\
+%-m \xdot^2 V_x + 2V V_x &= \frac{d}{dt} \left( \inv{3}m^2 \xdot^3 - 2 m \xdot V \right) \\
+%                        &= m^2 \xdot^2 \xddot - 2m \xddot V \\
+%-(m \xdot^2 -2V) V_x    &= m \xddot (m \xdot^2 - 2 V) \\
+%\end{align*}
+%
+%Cancelling left and right common factors:
+%
+%\begin{equation*}
+%m \xddot = -\frac{\partial V}{\partial x}
+%\end{equation*}
+%
+%THIS IS WRONG, since $dV/dt \ne 0$.
+%
+%Although $V(x)$ has no explicit time
+%dependence on $t$, $x = x(t)$, so $dV/dt = dV/dx dx/dt$.
 
 \section{ Problem 2. }
 
 \begin{equation*}
-\LL = \inv{12}m^2 \xdot^4 - m \xdot^2 V + V^2
+\LL = \inv{12}m^2 \xdot^4 + m \xdot^2 V - V^2
 \end{equation*}
 
 \begin{align*}
 \frac{\partial L}{\partial x} &= \frac{d}{dt} \frac{\partial L}{\partial \xdot} \\
--m \xdot^2 V_x + 2V V_x &= \frac{d}{dt} \left( \inv{3}m^2 \xdot^3 - 2 m \xdot V \right) \\
-                        &= m^2 \xdot^2 \xddot - 2m \xddot V \\
--(m \xdot^2 -2V) V_x    &= m \xddot (m \xdot^2 - 2 V) \\
+m \xdot^2 V_x - 2V V_x &= \frac{d}{dt} \left( \inv{3}m^2 \xdot^3 + 2 m \xdot V \right) \\
 \end{align*}
 
-Cancelling left and right common factors:
+When taking the time derivative of $V$, $dV/dt \ne 0$, despite no explicit time dependence.
+Take an example, such as $V = mgx$, where the positional parameter is dependent on time, so the chain rule is required:
 
 \begin{equation*}
-m \xddot = -\frac{\partial V}{\partial x}
+\frac{d V}{dt} = \frac{d V}{dx} \frac{dx}{dt} = \xdot V_x.
 \end{equation*}
 
-THIS IS WRONG, since $dV/dt \ne 0$.
+Perhaps that's obvious, but I made that mistake first doing this problem (which would have been harder to make if I had used an example potential) the first time.  I subsequently constructed an alternate Lagrangian 
+($\LL = \inv{12}m^2 \xdot^4 - m \xdot^2 V + V^2$)
+that worked when this mistake was made, and emailed the author suggesting that I believed he had a sign typo in his problem set.
 
-Although $V(x)$ has no explicit time
-dependence on $t$, $x = x(t)$, so $dV/dt = dV/dx dx/dt$.
+Anyways, continuing with the calculation:
+
+\begin{align*}
+m \xdot^2 V_x - 2V V_x &= m^2 \xdot^2 \xddot + 2m \xddot V + 2 m \xdot^2 V_x \\
+m \xdot^2 V_x - 2V V_x - 2 m \xdot^2 V_x &= m \xddot ( m \xdot^2 + 2 V ) \\
+- ( 2V + m \xdot^2 ) V_x &= \\
+\end{align*}
+
+Cancelling left and right common factors, which perhaps not cooincidentally equal $2E = V + \inv{2}mv^2$ we have:
+
+\begin{equation*}
+m \xddot = -V_x
+\end{equation*}
+
+This is what we'd get for our standard kinentic and position dependenct Lagrangian too:
+
+\begin{equation*}
+\LL = \inv{2}m \xdot^2 - V
+\end{equation*}
+
+\begin{align*}
+\frac{\partial L}{\partial x} &= \frac{d}{dt} \frac{\partial L}{\partial \xdot} \\
+-V_x &= \frac{d (m \xdot) }{dt} \\
+-V_x &= m \xddot
+\end{align*}
 
 \section{ Problem 3. }
-\section{ Problem 4. }
-\section{ Problem 5. }
+
+Derive the relativistic equations of motion for a point particle in a position dependant potential:
+
+\begin{equation*}
+\LL = -m c^2 \sqrt{ 1 - \Bv^2/c^2} - V(\Br)
+\end{equation*}
+
+The first thing to observe here is that for $\abs{\Bv} << c$, this is our familiar kinetic energy Lagrangian
+
+\begin{align*}
+\LL 
+&= -m c^2 ( 1 - \inv{2}\Bv^2/c^2 + \inv{2}\inv{-2}\inv{2!}(\Bv/c)^4 + \cdots ) - V(\Br) \\
+&\approx  -m c^2 + \inv{2} m \Bv^2 - V(\Br) \\
+\end{align*}
+
+The constant term $-mc^2$ won't change the equations of motion and we can perhaps think of this as an additional potential term (quite large as we see from atomic fusion and fission).  For small $\Bv$ we recover the newtonian Kinetic energy term, and therefore expect the results will be equivalent to the newtonian equations in that limit.
+
+Moving on to the calculations we have:
+\begin{align*}
+\frac{\partial L}{\partial x^i} &= \frac{d}{dt} \frac{\partial L}{\partial \xdot^i} \\
+-\PD{x^i}{V} 
+&= -c^2 \frac{d}{dt} m \frac{\partial L}{\partial \xdot^i} \sqrt{ 1 - \sum (\xdot^j)^2/c^2} \\
+&= -c^2 \frac{d}{dt} m \inv{2} \inv{ \sqrt{ 1 - \Bv^2/c^2}} \frac{\partial L}{\partial \xdot^i} \left({ 1 - \sum (\xdot^j)^2/c^2}\right) \\
+&= -c^2 \frac{d}{dt} m \inv{2} \inv{ \sqrt{ 1 - \Bv^2/c^2}} (-2) \xdot^i/c^2 \\
+&= \frac{d}{dt} m \inv{ \sqrt{ 1 - \Bv^2/c^2}} \xdot^i \\
+&= \frac{d}{dt} m \gamma \xdot^i \\
+\implies \\
+- \left(\sum \Be_i \PD{x^i}{}\right) V &= \frac{d}{dt} m \gamma \sum \Be_i \xdot^i \\
+- \grad V  &= \frac{d(m \gamma \Bv)}{dt} \\
+\end{align*}
+
+For $v << c$, $gamma \approx 1$, so we get our Newtonian result in the limiting case.
+
+Now, I found this result very impressive result, buried in a couple line problem statement.  I subsequently used this as the starting point for guessing about how to formulate the Lagrange equations in a proper time form, as well as a proper velocity form for this Kinetic and potential term.  Those turn out to make it possible to express
+Maxwell's law and the Lorentz force law together in a particularily nice compact covariant form.  This catches me a up a bit in terms of my understanding and think that I'm now at least learning and redisovering things known since the early 1900s;)
+
+\section{ Problem 4. Double pendulum. }
+
+First consider a single pendulum (fixed length $l$).
+
+\begin{align*}
+x &= l \exp(i\theta) \\
+\xdot &= l i \dottheta \exp(i\theta) \\
+\abs{\xdot}^2 &= l^2 \dottheta^2 \\
+\end{align*}
+
+Now, if $\theta = 0$ represents the downwards position at rest, the height above that rest point is $h = l - l \cos\theta$.  Therefore the Lagrangian is:
+
+\begin{align*}
+\LL 
+&= \inv{2} m v^2 - mgh \\
+&= \inv{2} m l^2 \dottheta^2 - mg l (1 - \cos\theta) \\
+\end{align*}
+
+Taking deriviatives we have:
+
+\begin{equation*}
+-m g l \sin\theta = \frac{d}{dt} m l^2 \dottheta = m l^2 \ddottheta
+\end{equation*}
+
+Or,
+
+\begin{equation}
+\ddottheta = - g/l \sin\theta 
+\end{equation}
+
+This is consistent with our expectations, and recovers the familiar small angle SHM equation:
+
+\begin{equation*}
+\ddottheta \approx - g/l \theta.
+\end{equation*}
+
+Now, move on to the double pendulum, and compute the Kinetic energies of the two particles:
+
+\begin{align*}
+x_1 &= l_1 \exp(i\theta_1) \\
+\xdot_1 &= l_1 i \dottheta_1 \exp(i\theta_1) \\
+\abs{\xdot_1}^2 &= {l_1}^2 {\dottheta_1}^2 \\
+\end{align*}
+
+\begin{align*}
+x_2 &= x_1 + l_2 \exp(i\theta_2) \\
+\xdot_2 &= \xdot_1 + l_2 i \dottheta_2 \exp(i\theta_2) \\
+        &= l_1 i \dottheta_1 \exp(i\theta_1) + l_2 i \dottheta_2 \exp(i\theta_2) \\
+\abs{\xdot_2}^2
+&= 
+(l_1 \dottheta_1)^2 + (l_2 \dottheta_2)^2
++ l_1 i \dottheta_1 \exp(i\theta_1) l_2 (-i) \dottheta_2 \exp(-i\theta_2) 
++ l_1 (-i) \dottheta_1 \exp(-i\theta_1) l_2 i \dottheta_2 \exp(i\theta_2) \\
+&= 
+(l_1 \dottheta_1)^2 + (l_2 \dottheta_2)^2
++ l_1 l_2 \dottheta_1 \dottheta_2 \left( \exp(i(\theta_1 -\theta_2)) + \exp(-i(\theta_1 - \theta_2)) \right) \\
+&= 
+(l_1 \dottheta_1)^2 + (l_2 \dottheta_2)^2
++ 2 l_1 l_2 \dottheta_1 \dottheta_2 \cos(\theta_1 -\theta_2) \\
+\end{align*}
+
+Now calculate the potential energies for the two masses.  The first has potential of
+
+\begin{equation*}
+T_1 = m_1 g l_1 (1 - \cos\theta_1)
+\end{equation*}
+
+and the potential energy of the second mass, relative to the position of the first mass is:
+\begin{equation*}
+T_2' = m_2 g l_2 (1 - \cos\theta_2)
+\end{equation*}
+
+But that is the potential only if the first mass is at rest.  The total difference in height from the dual rest position is:
+\begin{equation*}
+l_1 (1 - \cos\theta_1) + l_2 (1 - \cos\theta_2)
+\end{equation*}
+
+So, the potential energy for the second mass is:
+\begin{equation*}
+T_2 = m_2 g \left( l_1 (1 - \cos\theta_1) + l_2 (1 - \cos\theta_2) \right)
+\end{equation*}
+
+Dropping constant terms the total Lagrangian for the system is:
+
+\begin{align*}
+\LL 
+&= \inv{2}m_1 {v_1}^2 +\inv{2}m_2 {v_2}^2 + m_1 g l_1 \cos\theta_1 + m_2 g \left( l_1 \cos\theta_1 + l_2 \cos\theta_2 \right) \\
+&=
+\inv{2} m_1 {l_1}^2 {\dottheta_1}^2 
++ \inv{2} m_2 \left( (l_1 \dottheta_1)^2 + (l_2 \dottheta_2)^2 + 2 l_1 l_2 \dottheta_1 \dottheta_2 \cos(\theta_1 -\theta_2) \right) \\
+&+ m_1 g l_1 \cos\theta_1 + m_2 g \left( l_1 \cos\theta_1 + l_2 \cos\theta_2 \right) \\
+\end{align*}
+
+\subsection{ N coupled pendulums. }
+
+Now, with just two masses it is not too messy to expand out those kinetic energy terms, but for more the trig gets too messy.  With the $K_2$ term of the Lagrangian in complex form we have:
+
+\begin{align*}
+\LL 
+&=
+\inv{2} m_1 {l_1}^2 {\dottheta_1}^2 
++ \inv{2} m_2 \Abs{ l_1 \dottheta_1 + l_2 \dottheta_2 \exp(i(\theta_2 -\theta_1)) }^2 \\
+&+ m_1 g l_1 \cos\theta_1 + m_2 g \left( l_1 \cos\theta_1 + l_2 \cos\theta_2 \right) \\
+&=
+\inv{2} m_1 \Abs{l_1 \dottheta_1 \exp(i\theta_1)}^2 
++ \inv{2} m_2 \Abs{ l_1 \dottheta_1 \exp(i\theta_1) + l_2 \dottheta_2 \exp(i\theta_2) }^2 \\
+&+ m_1 g l_1 \cos\theta_1 + m_2 g \left( l_1 \cos\theta_1 + l_2 \cos\theta_2 \right) \\
+\end{align*}
+
+By inspection we can also write the lagrangian for the N particle variant:
+
+\begin{equation*}
+\LL 
+=
+\inv{2} \sum_{j=1}^N m_j \Abs{ \sum_{k=1}^j l_k \dottheta_k \exp(i\theta_k) }^2 
++ g \sum_{j=1}^N l_j \cos\theta_j \sum_{k=j}^N m_k
+\end{equation*}
+
+Can this be used to derive the wave equation?
+
+If each of the $N$ masses is a fraction $m_j = \Delta m = M/N$ of the total mass, and the lengths are all uniformly divided into segments of length
+$l_j = \Delta l = L/N$, then the Lagrangian becomes:
+
+\begin{align*}
+\LL 
+&= \frac{\Delta l}{2g} \sum_{j=1}^N \Abs{ \sum_{k=1}^j \dottheta_k \exp(i\theta_k) }^2 + \sum_{j=1}^N \cos\theta_j \sum_{k=j}^N 1 \\
+&= \frac{\Delta l}{2g} \sum_{j=1}^N \Abs{ \sum_{k=1}^j \dottheta_k \exp(i\theta_k) }^2 + ( N - j + 1 ) \sum_{j=1}^N \cos\theta_j \\
+\end{align*}
+
+FIXME: return to this later.  Want to finish typing up the rest of my solutions for this ps.
+
+\section{ Problem 5.  Pendulum on a rotating wheel. }
+
+Express the position of the pivot point on the wheel with:
+
+\begin{equation*}
+q_1 = R e^{-i\omega t}.
+\end{equation*}
+
+The position of the mass is then:
+\begin{equation*}
+q_2 = R e^{-i\omega t} - il e^{i\theta}.
+\end{equation*}
+
+The velocity of the mass is then:
+\begin{equation*}
+\qdot_2 = -i(\dotomega t + \omega)R e^{-i\omega t} + l \dottheta e^{i\theta}.
+\end{equation*}
+
+Let $\omega t = \alpha$, we have a Kinetic energy of:
+
+\begin{align*}
+\inv{2} m \abs{\qdot_2}^2
+&= \inv{2} m \Abs{-i\dotalpha R e^{-i\omega t} + l \dottheta e^{i\theta}}^2 \\
+&= \inv{2} m \left( R^2 \dotalpha^2 + l^2 \dottheta^2 + 2 R l \dotalpha \dottheta \text{Re}( -i e^{-i\alpha -i\theta}) \right) \\
+&= \inv{2} m \left( R^2 \dotalpha^2 + l^2 \dottheta^2 + 2 R l \dotalpha \dottheta \cos( -\alpha -\theta -\pi/2 ) \right) \\
+&= \inv{2} m \left( R^2 \dotalpha^2 + l^2 \dottheta^2 - 2 R l \dotalpha \dottheta \sin( \alpha +\theta ) \right) \\
+\end{align*}
+
+The potential energy in the Lagrangian does not depend on the position of the pivot, only the angle from vertical, so it is thus:
+
+\begin{equation*}
+T = mg l ( 1 - \cos\theta )
+\end{equation*}
+
+Combining these, dropping the constant term, and dividing through by $ml^2$ we have the Lagrangian of:
+
+\begin{equation*}
+\LL = \inv{2} \left( (R/l)^2 \dotalpha^2 + \dottheta^2 - 2 (R/l) \dotalpha \dottheta \sin( \alpha +\theta ) \right) + (g/l) \cos\theta
+\end{equation*}
+
+\subsection{ Digression.  Reduction of the Lagragian. }
+
+Now, in Tong's solutions for this problem (which he emailed me since I questioned problem 2), he had $\dotalpha = \omega = \text{constant}$, which allows the
+Lagrangian above to be expressed as:
+
+\begin{equation*}
+\LL = 
+\inv{2} \left( (R/l)^2 \omega^2 + \dottheta^2 \right) 
++ \frac{d}{dt} ((R/l) \cos( \omega t + \theta )) + \omega (R/l) \sin(\omega t + \theta)
++ (g/l) \cos\theta
+\end{equation*}
+
+and he made the suprising step of removing that cosine term completely, with a statement that it would not effect the dyanamics because it was a time derivative. 
+That turns out to be a generalized result, but I had to prove it to myself.  I also asked around on PF about this, and it wasn't any named property of Lagrangians,
+but was a theorm in some texts.
+
+First consider the simple example of a Lagrangian with such a cosine derivative term added to it:
+
+\begin{equation*}
+\LL' = \LL + \frac{d}{dt} A \cos(\omega t + \theta)
+\end{equation*}
+
+and compute the equations of motion from this:
+\begin{align*}
+0 
+&= \PD{\theta}{\LL'} - \frac{d}{dt}\left(\PD{\dottheta}{\LL'}\right) \\
+&= \PD{\theta}{\LL} - \frac{d}{dt}\left(\PD{\dottheta}{\LL}\right) 
++ \PD{\theta}{} {\frac{d}{dt} A \cos(\omega t + \theta)} 
+- \frac{d}{dt} \PD{\dottheta}{} \frac{d}{dt} A \cos(\omega t + \theta) \\
+&= \PD{\theta}{\LL} - \frac{d}{dt}\left(\PD{\dottheta}{\LL}\right) 
+- \PD{\theta}{} A \dottheta \sin(\omega t + \theta) + 
+\frac{d}{dt} \PD{\dottheta}{} A \dottheta \sin(\omega t + \theta) \\
+&= \PD{\theta}{\LL} - \frac{d}{dt}\left(\PD{\dottheta}{\LL}\right) 
+- \PD{\theta}{} A \dottheta \sin(\omega t + \theta) + \frac{d}{dt} A \sin(\omega t + \theta) \\
+&= \PD{\theta}{\LL} - \frac{d}{dt}\left(\PD{\dottheta}{\LL}\right) 
+- A \dottheta \cos(\omega t + \theta) + A \dottheta \cos(\omega t + \theta) \\
+&= \PD{\theta}{\LL} - \frac{d}{dt}\left(\PD{\dottheta}{\LL}\right)  \\
+\end{align*}
+
+Now consider the general case, altering a Lagrangian by adding the time derivative of a positional dependent function:
+
+\begin{equation*}
+\LL' = \LL + \frac{df}{dt}
+\end{equation*}
+
+and compute the equations of motion from this more generally altered function:
+\begin{align*}
+0 
+&= \PD{q^i}{\LL'} - \frac{d}{dt}\left(\PD{q^i}{\LL'}\right) \\
+&= \PD{q^i}{\LL} - \frac{d}{dt}\left(\PD{q^i}{\LL}\right) 
++ \PD{q^i}{}\frac{df}{dt} - \frac{d}{dt} \PD{q^i}{} \frac{df}{dt} \\
+\end{align*}
+
+Now, if $f(q^j,\qdot^j,t) = f(q^j,t)$ we have:
+\begin{equation*}
+\frac{df}{dt} = \sum \PD{q^j}{f} \qdot^j + \PD{t}{f}
+\end{equation*}
+
+We want to see if the following sums to zero:
+\begin{align*}
+\PD{q^i}{}\frac{df}{dt} - \frac{d}{dt} \PD{q^i}{} \frac{df}{dt}
+&= \sum \PD{q^i}{} \PD{q^j}{f} \left(\qdot^j + \PD{t}{f}\right) - \frac{d}{dt} \PD{\qdot^i}{} \left(\sum \PD{q^j}{f} \qdot^j + \PD{t}{f}\right) \\
+&= \sum \PDD{q^i}{q^j}{f} \qdot^j + \PDD{q^i}{t}{f} - \frac{d}{dt} \left(\sum \delta_{ij} \PD{q^j}{f} + \PDD{\qdot^i}{t}{f}\right) \\
+&= \sum \PDD{q^i}{q^j}{f} \qdot^j + \PDD{q^i}{t}{f} - \frac{d}{dt} \PD{q^i}{f} \\
+&= \sum \PDD{q^i}{q^j}{f} \qdot^j + \PDD{q^i}{t}{f} - \sum \qdot^j \PDD{q^j}{q^i}{f} - \PDD{t}{q^i}{f} \\
+\end{align*}
+
+Therefore provided the function is sufficiently continuous that all mixed pairs of mixed partials are equal, this is zero, and the $df/dt$ addition does not 
+change the equations of motion that the Lagrangian generates.
+
+\subsection{ Back to the problem. }
+
+Now, return to the Lagrangian for this problem, and compute the equations of motion.  Writing $\mu = R/l$, we have:
+
+\begin{equation*}
+\LL = \inv{2} \left( \mu^2 \dotalpha^2 + \dottheta^2 - 2 \mu \dotalpha \dottheta \sin( \alpha +\theta ) \right) + (g/l) \cos\theta
+\end{equation*}
+
+\begin{align*}
+0 &= \frac{d}{dt}\PD{\dottheta} -\PD{\theta} \LL \\
+&= \frac{d}{dt} \left(\dottheta - \mu \dotalpha \sin(\alpha + \theta)\right) + \mu \dotalpha \dottheta \cos(\alpha + \theta) + (g/l) \sin\theta \\
+&= \ddottheta - \mu \ddotalpha \sin(\alpha + \theta) - \mu \dotalpha \cos(\alpha + \theta) (\dotalpha + \dottheta) + \mu \dotalpha \dottheta \cos(\alpha + \theta) + (g/l) \sin\theta \\
+\end{align*}
+
+Sure enough we have a cancelation of terms for constant $\omega$.  In general we are left with:
+
+\begin{equation*}
+\ddottheta = \mu \ddotalpha \sin(\alpha + \theta) + \mu \dotalpha^2 \cos(\alpha + \theta) - (g/l) \sin\theta
+\end{equation*}
+
+Or,
+\begin{equation*}
+\ddottheta = \mu (\ddotomega t + 2\dotomega) \sin(\omega t + \theta) + \mu (\dotomega t + \omega)^2 \cos(\omega t + \theta) - (g/l) \sin\theta
+\end{equation*}
+
+For constant $\omega$, this is just:
+\begin{equation*}
+\ddottheta = \mu \omega^2 \cos(\omega t + \theta) - (g/l) \sin\theta
+\end{equation*}
+
 \section{ Problem 6. }
+
+First part of the problem is to show that the Lagrangian:
+
+\begin{equation*}
+\LL = \inv{2} m \Bv^2 -q \phi + q \Bv/c \cdot \BA
+\end{equation*}
+
+is equivalent to the Lorentz force law.
+
+When I first tried this problem I had trouble with it, and also had trouble following the text for the same in Tong's paper.  Later I did the somewhat harder problem of exactly
+this, but for the covariant form of the Lorentz force law, so I thought I'd come back to this and try again.
+
+First step that seemed natural was to put the equation into four vector form, despite the fact that the proper time Lagrangian equations were not going to be used to
+produce the equation of motion.  For just the Lorentz part of the Lagrangian we have:
+
+
+\begin{align*}
+\LL' 
+&= -\phi + \Bv/c \cdot \BA \\
+&= -\phi \sum v^i/c A^j \underbrace{\sigma_i \cdot \sigma_j}_{\inv{2}(\gamma_{i0j0} + \gamma_{j0i0}) = - \gamma_i \cdot \gamma_j} \\
+&= -\inv{c} \phi c + \sum v^i A^i {\gamma_i}^2 \\
+&= -\inv{c} \phi c {\gamma_0}^2 + \sum v^i A^i {\gamma_i}^2 \\
+\end{align*}
+
+Thus with $v = c \gamma_0 + \sum v^i \gamma_i = \sum v^{\mu} \gamma_{\mu}$, and $A = \phi \gamma_0 + \sum A^{i} \gamma_i = \sum A^{\mu} \gamma_{\mu}$, we can thus write the complete
+Lagrangian as:
+
+\begin{equation*}
+\LL = \inv{2} m \Bv^2 - q A \cdot v/c
+\end{equation*}
+
+As usual we recover our vector forms by wedging with the time basis vector:
+
+\begin{equation*}
+A \wedge \gamma_0 = \sum A^i \gamma_{i0} = \sum A^i \sigma_i = \BA
+\end{equation*}
+
+and $v \wedge \gamma_0 = \cdots = \Bv$.
+
+Notice the sign in the potential term, which is negative, unlike the same Lagrangian in relativistic (proper) form: $\LL = \inv{2}m v^2 + q A \cdot v/c$.  That difference is required
+since the lack of the use of time as one of the generalized coordinates will change the signs of some of the results.
+
+Now, this doesn't matter for this particular problem, but also observe that this lagrangian is almost in its proper form.  All we have to do is add a $-\inv{2} m c^2$ constant to it, which should not effect the equations of motion.  Doing so yields:
+
+\begin{equation*}
+\LL = \inv{2} m (-c^2 + \Bv^2) - q A \cdot v/c = - \left( \inv{2} mv^2 + q A \cdot v/c \right)
+\end{equation*}
+
+I didn't notice that until writing this up.  So we have the same Lagrangian in both cases, which makes sense.  Whether or not one gets the traditional Lorentz force law from this
+or the equivalent covariant form depends only on whether one treats time as one of the generalized coordinates or not (and if doing so, use proper time in the place of the time
+deriviatives when applying the Lagrange equations).  Cool.
+
+Anyways, now that we have a more symmetric form of the Lagrangian, lets compute the equations of motion.
+
+\begin{align*}
+\PD{x^i}{\LL}
+&= \frac{d}{dt} \PD{\xdot^i}{\LL} \\
+&= \frac{d}{dt} \left(m v^i - q/c A \cdot \PD{\xdot^i}{v} \right) \\
+&= \frac{d}{dt} \left(m v^i - q/c A \cdot \gamma_i \right) \\
+&= \frac{d}{dt} \left(m v^i + q/c A^i \right) \\
+&= p^i + q/c \sum \xdot^j \PD{x^j}{A^i} \\
+q \PD{x^i}{A} \cdot v/c &= \\
+\implies \\
+\dot{p}^i 
+&= -q/c \left( \PD{x^i}{A} \cdot v - \sum \xdot^j \PD{x^j}{A^i} \right) \\
+&= -q/c \left( \sum \PD{x^i}{A^{\mu}} v^{\nu} \gamma_{\mu} \cdot \gamma_{\nu} - \sum v^j \PD{x^j}{A^i} \right) \\
+&= -q/c \left( \sum \PD{x^i}{A^0} v^0 {\gamma_0}^2 +\sum \PD{x^i}{A^j} v^j {\gamma_j}^2 - \sum v^j \PD{x^j}{A^i} \right) \\
+\implies \\
+\sum \sigma_i \dot{p}^i = \Bp
+&= q/c \sum \sigma_i \left( -\PD{x^i}{A^0} v^0 {\gamma_0}^2 - \PD{x^i}{A^j} v^j {\gamma_j}^2 - v^j \PD{x^j}{A^i} \right) \\
+&= -q \grad \phi + \sum \sigma_i v^j \left( \PD{x^i}{A^j} - \PD{x^j}{A^i} \right) \\
+\end{align*}
+
+Now, it's not obvious by looking, but this last expression is $\Bv \cross (\grad \cross \BA)$.  Let's verify this by going backwards:
+
+\begin{align*}
+\Bv \cross (\grad \cross \BA)
+&= \inv{i} \left( \Bv \wedge ( \grad \cross \BA )\right) \\
+&= \inv{2i} \left( \Bv ( \grad \cross \BA ) - ( \grad \cross \BA ) \Bv \right) \\
+&= \inv{2i} \left( \Bv \inv{i} ( \grad \wedge \BA ) - \inv{i} ( \grad \wedge \BA ) \Bv \right) \\
+&= -\inv{2} \left( \Bv ( \grad \wedge \BA ) - ( \grad \wedge \BA ) \Bv \right) \\
+&= ( \grad \wedge \BA ) \cdot \Bv \\
+&= \sum v^k \PD{x^i}{A^j} \sigma_i (\sigma_j \cdot \sigma_k) - \sigma_j (\sigma_i \cdot \sigma_k) \\
+&= \sum v^k \PD{x^i}{A^j} \sigma_i \delta_{jk} - \sigma_j \delta_{ik} \\
+&= \sum v^j \PD{x^i}{A^j} \sigma_i -v^i \PD{x^i}{A^j} \sigma_j \\
+&= \sum v^j \PD{x^i}{A^j} \sigma_i -v^j \PD{x^j}{A^i} \sigma_i \\
+&= \sum v^j \sigma_i \left(\PD{x^i}{A^j} - \PD{x^j}{A^i} \right) \\
+\end{align*}
+
+Therefore the final result is our Lorentz force law, as expected:
+
+\begin{equation*}
+\Bp = -q \grad \phi + q \Bv/c \cross (\grad \cross \BA)
+\end{equation*}
+
+\section{ Problem 6i. }
+\section{ Problem 6ii. }
+
 \section{ Problem 7. }
 \section{ Problem 8. }
 
