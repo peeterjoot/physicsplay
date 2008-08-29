@@ -6,6 +6,7 @@
 \newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
 \newcommand{\xdot}[0]{\dot{x}}
 \newcommand{\vdot}[0]{\dot{v}}
+\newcommand{\mdot}[0]{\dot{m}}
 \newcommand{\xddot}[0]{\ddot{x}}
 
 %
@@ -101,7 +102,7 @@ Performing the calculations for the EOM, and in this case, also allowing mass to
 \PD{x^{\mu}}{\LL} &= \frac{d}{d\tau} \PD{\xdot^{\mu}}{\LL} \\
 - \PD{x^{\mu}}{\phi} + \inv{2} \PD{x^{\mu}}{m} \sum g_{\alpha\beta} \xdot^{\alpha} \xdot^{\beta} &= \\
 - \PD{x^{\mu}}{\phi} + \inv{2} \PD{x^{\mu}}{m} v^2 &= \\
-- \PD{x^{\mu}}{\phi} + \inv{2} \PD{x^{\mu}}{m} c^2 &= \\
+%- \PD{x^{\mu}}{\phi} + \inv{2} \PD{x^{\mu}}{m} c^2 &= \\
 &= \inv{2} \frac{d}{d\tau} m \sum g_{\alpha\beta} \PD{x^{\mu}}{}\left(\xdot^{\alpha} \xdot^{\beta}\right) \\
 &= \inv{2} \frac{d}{d\tau} m \sum g_{\alpha\beta} \left(\delta^{\mu\alpha} \xdot^{\beta} + \xdot^{\alpha} \delta^{\mu\beta}\right) \\
 &= \frac{d}{d\tau} m \sum g_{\alpha\mu} \xdot^{\alpha} \\
@@ -127,9 +128,9 @@ If you are already familiar with tensors then this may be obvious to you (but wa
 Multiplying throughout by $\gamma^{\mu}$, and summing over $\mu$ one has:
 
 \begin{align*}
-\sum \gamma^{\mu} \left( - \PD{x^{\mu}}{\phi} + \inv{2} \PD{x^{\mu}}{m} c^2 \right) 
+\sum \gamma^{\mu} \left( - \PD{x^{\mu}}{\phi} + \inv{2} \PD{x^{\mu}}{m} v^2 \right) 
 &= \sum \gamma^{\mu} \left(\PD{x^{\beta}}{m} \xdot^{\beta} g_{\alpha\mu} \xdot^{\alpha} + m g_{\alpha\mu} \xddot^{\alpha} \right) \\
-- \left(\sum \gamma^{\mu} \PD{x^{\mu}}{}\right) \phi + \inv{2} c^2 \left(\sum \gamma^{\mu} \PD{x^{\mu}}{}\right) m &= \\
+- \left(\sum \gamma^{\mu} \PD{x^{\mu}}{}\right) \phi + \inv{2} v^2 \left(\sum \gamma^{\mu} \PD{x^{\mu}}{}\right) m &= \\
 &= \sum \PD{x^{\beta}}{m} \xdot^{\beta} \gamma^{\mu} \gamma_{\alpha} \cdot \gamma_{\mu} \xdot^{\alpha} + m \gamma^{\mu} \gamma_{\alpha} \cdot \gamma_{\mu} \xddot^{\alpha}  \\
 &= \sum \PD{x^{\beta}}{m} \xdot^{\beta} \gamma_{\alpha} \xdot^{\alpha} + m \gamma_{\alpha} \xddot^{\alpha}  \\
 \end{align*}
@@ -141,9 +142,48 @@ Writing:
 
 This is:
 \begin{equation*}
-- \grad \phi + \inv{2} c^2 \grad m = v \sum \PD{x^{\beta}}{m} \xdot^{\beta} + m \vdot 
+- \grad \phi + \inv{2} v^2 \grad m = v \sum \PD{x^{\beta}}{m} \xdot^{\beta} + m \vdot 
 \end{equation*}
 
-%m\dot{v} + v \sum \xdot^{\beta} \frac{\partial m}{\partial x^{\beta}} = \frac{1}{2} v^2 \grad m
+However, 
+\begin{align*}
+(\grad m) \cdot v 
+&= 
+\left(\sum \gamma^{\mu} \PD{x^{\mu}}{m}\right) \cdot \left( \sum \gamma_{\nu} \xdot^{\nu} \right) \\
+&= \sum \gamma^{\mu} \cdot \gamma_{\nu} \PD{x^{\mu}}{m} \xdot^{\nu} \\
+&= \sum {\delta^{\mu}}_{\nu} \PD{x^{\mu}}{m} \xdot^{\nu} \\
+&= \sum \PD{x^{\mu}}{m} \xdot^{\mu} = \frac{dm}{d\tau}
+\end{align*}
+
+That allows for expressing the EOM in strict vector form:
+\begin{equation*}
+- \grad \phi + \inv{2} v^2 \grad m = v \grad m \cdot v + m \vdot.
+\end{equation*}
+
+However, there is still an asymmetry here, as one would expect a $\mdot v$ term.  Regrouping slightly, and using some algebraic vector
+manipulation we have:
+
+\begin{align*}
+m \vdot + v \grad m \cdot v - \inv{2} v^2 \grad m &= - \grad \phi \\
+m \vdot + \inv{2} v ( \underbrace{2 \grad m \cdot v - v \grad m}_{2 a \cdot b - b a = a b}) &= \\
+m \vdot + \inv{2} v (\grad m) v &= \\
+m \vdot + \inv{2} (v \grad m) v &= \\
+m \vdot + \inv{2} (2 v \cdot \grad m - \grad m v) v &= \\
+m \vdot + (v \cdot \grad m) v - \inv{2} (\grad m v) v &= \\
+m \vdot + \mdot v - \inv{2} \grad m (v v) &= \\
+\implies \\
+\frac{d (m v)}{d\tau} = m \vdot + \mdot v
+&= \inv{2} \grad m c^2 -\grad \phi \\
+&= -\grad \left(\phi - \inv{2} m c^2 \right) \\
+&= -\grad \left(\phi - \inv{2} m v^2 \right) \\
+\end{align*}
+
+So, after a whole wack of algebra, the end result is to show the proper time varient of the Lagrangian equations imply that our 
+proper force can be expressed as a (spacetime) gradient.  The cavaet is that if the mass is allowed to vary, it also needs to be
+included in the generalized potential associated with the equation of motion:
+
+\begin{equation*}
+\frac{d (m v)}{d\tau} = \grad \LL.
+\end{equation*}
 
 \end{document}               % End of document.
