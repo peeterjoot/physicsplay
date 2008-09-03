@@ -6,10 +6,15 @@
 \newcommand{\Abs}[1]{\left\lvert{#1}\right\rvert}
 \newcommand{\qdot}[0]{\dot{q}}
 \newcommand{\qddot}[0]{\ddot{q}}
+\newcommand{\xdot}[0]{\dot{x}}
+\newcommand{\xddot}[0]{\ddot{x}}
 \newcommand{\dotalpha}[0]{\dot{\alpha}}
 \newcommand{\ddotalpha}[0]{\ddot{\alpha}}
 \newcommand{\dottheta}[0]{\dot{\theta}}
 \newcommand{\ddottheta}[0]{\ddot{\theta}}
+% == \partial_{#1} {#2}
+\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+\newcommand{\PDD}[3]{\frac{\partial^2 {#3}}{\partial {#1}\partial {#2}}}
 
 %
 % The real thing:
@@ -24,7 +29,7 @@
 
 \maketitle{}
 
-\section{ Problem 7. }
+\section{ Problem 1.7 }
 
 Barbell shape, equal masses.  center of rod between masses constrained to circular motion.
 
@@ -77,7 +82,7 @@ Taking derivatives to get the OEMs we have:
 
 This is suprising seeming.  Is this correct?
 
-\section{ Problem 8. }
+\section{ Problem 1.8 }
 
 Hopefully, not a copyright violation, but here is the problem verbatim:
 
@@ -147,5 +152,136 @@ So, there's the Lagrangian.
 How about the angular momentum conservation question?  How to answer that?  One way would be to compute the forces from the Lagrangian, and take cross products but is that really the best way?  Perhaps the answer is as simple as observing that there are no external torque's on the system, thus $d\BL/dt = 0$, or angular momentum for the system is constant (conserved).
 
 FIXME: FOLLOWUP: it has been suggested to me on PF that I should look at how this Lagrangian transforms under rotation.  The relative vectors (both speed and velocity) between the different points will be rotation invarient.  Think that is the case for the CM too.
+
+\section{ Problem 2.1 }
+
+Prove that the shortest length curve between two points in space is a straight line.
+
+A first attempt of this I used:
+
+\begin{equation*}
+ds = \sqrt{ 1 + (dy/dx)^2 + (dz/dx)^2 } dx
+\end{equation*}
+
+Application of the Euler-Lagrange equations does show that one ends up with a linear relation between the y and z coordinates, but no mention of x.  Rather than write that up, consider instead a parameterization of the coordinates:
+
+\begin{align*}
+x &= x_1(\lambda) \\
+y &= x_2(\lambda) \\
+z &= x_3(\lambda)
+\end{align*}
+
+in terms of this arbitrary parameterization we have a segment length of:
+
+\begin{equation*}
+ds = \sqrt{ \sum \left(\frac{d x_i}{d\lambda}\right)^2 } d \lambda = f\left(x_i\right) d\lambda
+\end{equation*}
+
+Application of the Euler-Lagrange equation to $f$ we have:
+
+\begin{align*}
+\PD{x_i}{f} 
+&= 0 \\
+&= \frac{d}{d\lambda} \PD{\xdot_i}{} \sqrt{ \sum {\xdot_j}^2 } \\
+&= \frac{d}{d\lambda} \frac{ \xdot_i }{\sqrt{ \sum {\xdot_j}^2 }}
+\end{align*}
+
+Therefore each of these quotients can be equated to a constant:
+
+\begin{align*}
+\frac{ \xdot_i }{\sqrt{ \sum {\xdot_j}^2 }} &= {c_i}^{-2} \\
+{c_i}^2 \xdot_i^2 &= \sum {\xdot_j}^2 \\
+({c_i}^2 -1)\xdot_i^2 &= \sum_{j \ne i} {\xdot_j}^2 \\
+(1 - {c_i}^2)\xdot_i^2 + \sum_{j \ne i} {\xdot_j}^2 &= 0 
+\end{align*}
+
+This last form shows explicitly that not all of these squared derivative terms can be linearly independent.  In particular, we have a
+zero determinant:
+
+\begin{equation*}
+0 =
+\begin{vmatrix}
+1 - c_1^2   & 1            & 1         & 1 & \hdots \\
+1           & 1 - c_2^2    & 1         & 1 & \vdots \\
+1           & 1            & 1 - c_3^2 & 1 & \\
+            &              &           & \ddots & \\
+            &              &           &        & 1 - {c_n}^2
+\end{vmatrix}
+\end{equation*}
+
+Now, expanding this for a couple specific cases isn't too hard.  For $n=2$ we have:
+
+\begin{align*}
+0 &= (1 - c_1^2)(1-c_2^2) - 1 \\
+c_1^2 + c_2^2 &= c_1^2 c_2^2 \\
+c_1^2 &= \frac{c_2^2}{ c_2^2 - 1 } \\
+c_2^2 - 1 &= \frac{c_2^2}{ c_1^2 }
+\end{align*}
+
+This can be substuited back into one our $c_2^2$ equation:
+
+\begin{align*}
+({c_2}^2 -1)\xdot_2^2 &= {\xdot_1}^2 \\
+\frac{c_2^2}{ c_1^2 } \xdot_2^2 &= {\xdot_1}^2 \\
+\pm \frac{c_2}{ c_1 } \xdot_2 &= {\xdot_1} \\
+\pm \frac{c_2}{ c_1 } x_2 &= x_1 + \kappa \\
+\end{align*}
+
+This is precisely the straight line that was desired, but we have setup for proving that consideration of all path variations from two points 
+in \R{N} space has the shortest distance when that path is a straight line.
+
+Despite the general setup, I'm going to chicken out and show this only for the \R{3} case.  In that case our determinant expands to:
+
+\begin{equation*}
+c_1^2 + c_2^2 + c_3^2 = c_1^2 c_2^2 c_3^2
+\end{equation*}
+
+Since not all of the $\xdot_i^2$ can be linearly independent, one can be eliminated:
+
+\begin{align*}
+(1 - c_1^2) \xdot_1^2 + \xdot_2^2 + \xdot_3^2 &= 0 \\
+(1 - c_2^2) \xdot_2^2 + \xdot_3^2 + \xdot_1^2 &= 0 \\
+(1 - c_3^2) \xdot_3^2 + \xdot_1^2 + \xdot_2^2 &= 0
+\end{align*}
+
+Let's pick $\xdot_1^2$ to eliminate, and subst 2 into 3:
+
+\begin{align*}
+%(1 - c_1^2) (-(1 - c_2^2) \xdot_2^2 - \xdot_3^2) + \xdot_2^2 + \xdot_3^2 &= 0 \\
+(1 - c_3^2) \xdot_3^2 + (-(1 - c_2^2) \xdot_2^2 - \xdot_3^2) + \xdot_2^2 &= 0
+\implies \\
+%\xdot_2^2 ( 1 - (1 - c_1^2)(1 - c_2^2) ) + \xdot_3^2 ( 1 - (1 - c_1^2) ) &= 0 \\
+- c_3^2 \xdot_3^2 + c_2^2 \xdot_2 &= 0 \\
+\pm c_3 \xdot_3 &= c_2 \xdot_2 \\
+\end{align*}
+
+%Which is, once again a straight line:
+%
+%\begin{equation*}
+%\pm c_3 x_3 = c_2 x_2 + \kappa
+%\end{equation*}
+
+Since these equations are symmetric, we can do this for all, with the result:
+\begin{align*}
+\pm c_3 \xdot_3 &= c_2 \xdot_2 \\
+\pm c_3 \xdot_3 &= c_1 \xdot_1 \\
+\pm c_2 \xdot_2 &= c_1 \xdot_1 \\
+\end{align*}
+
+Since the $c_i$ constants are arbitrary, then we can for example pick the negative sign for $\pm c_2$, and the positive for the rest, then add all of these, and scale by two:
+
+\begin{equation*}
+c_3 \xdot_3 - c_2 \xdot_2 = c_1 \xdot_1
+\end{equation*}
+
+and integrating:
+
+\begin{equation*}
+c_3 x_3 - c_2 x_2 = c_1 x_1 + \kappa
+\end{equation*}
+
+Again, we have the general equation of a line, subject to the desired constraints on the end points.  In the end we didn't need to 
+evaluate the determinant after all, as done in the 
+\R{2} case.
 
 \end{document}               % End of document.
