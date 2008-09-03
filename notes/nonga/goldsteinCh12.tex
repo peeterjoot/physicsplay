@@ -8,10 +8,14 @@
 \newcommand{\qddot}[0]{\ddot{q}}
 \newcommand{\xdot}[0]{\dot{x}}
 \newcommand{\xddot}[0]{\ddot{x}}
+\newcommand{\ydot}[0]{\dot{y}}
+\newcommand{\yddot}[0]{\ddot{y}}
 \newcommand{\dotalpha}[0]{\dot{\alpha}}
 \newcommand{\ddotalpha}[0]{\ddot{\alpha}}
 \newcommand{\dottheta}[0]{\dot{\theta}}
 \newcommand{\ddottheta}[0]{\ddot{\theta}}
+\newcommand{\dotphi}[0]{\dot{\phi}}
+\newcommand{\ddotphi}[0]{\ddot{\phi}}
 % == \partial_{#1} {#2}
 \newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
 \newcommand{\PDD}[3]{\frac{\partial^2 {#3}}{\partial {#1}\partial {#2}}}
@@ -283,5 +287,218 @@ c_3 x_3 - c_2 x_2 = c_1 x_1 + \kappa
 Again, we have the general equation of a line, subject to the desired constraints on the end points.  In the end we didn't need to 
 evaluate the determinant after all, as done in the 
 \R{2} case.
+
+\section{ Problem 2.2 }
+
+Prove that the geodesics (shortest length paths) on a spherical surface are great circles.
+
+As a variational problem, the first step is to formulate an element of length on the surface.  If we write our vector in spherical coordinates ($\phi$ on the equator, and $\theta$ measuring from the north pole) we have:
+
+FIXME: Scan picture.
+
+\begin{equation*}
+\Br = (x, y, z) = R( \sin\theta cos\phi, \sin\theta \sin\phi, \cos\theta)
+\end{equation*}
+
+A differential vector element on the surface is (set $R=1$ without loss of generality) :
+
+\begin{align*}
+d \Br 
+&= \frac{d\Br}{d \theta} \frac{d \theta}{d \lambda} d \lambda + \frac{d\Br}{d \phi} \frac{d \phi}{d \lambda} d \lambda \\
+&=
+ ( \cos\theta \cos\phi, \cos\theta \sin\phi, -\sin\theta) \dottheta d\lambda
++( -\sin\theta \sin\phi, \sin\theta \cos\phi, 0) \dotphi d\lambda \\
+&=
+ ( \cos\theta \cos\phi \dottheta - \sin\theta \sin\phi \dotphi,
+   \cos\theta \sin\phi \dottheta + \sin\theta \cos\phi \dotphi,
+  -\sin\theta \dottheta) d\lambda
+\end{align*}
+
+Calculation of the length $ds$ of this vector yields:
+
+\begin{equation*}
+ds = \Abs{ d\Br} = \sqrt{\dottheta^2 + (\sin\theta)^2 \dotphi^2} d\lambda
+\end{equation*}
+
+This completes the setup for the minimization problem, and we want to 
+minimize:
+
+\begin{equation*}
+s = \int \sqrt{\dottheta^2 + ( \dotphi \sin\theta )^2 } d\lambda
+\end{equation*}
+
+and can therefore apply the Euler-Lagrange equations to the function
+
+\begin{equation*}
+f(\theta, \phi, \dottheta, \dotphi, \lambda) = 
+\sqrt{\dottheta^2 + ( \dotphi \sin\theta )^2 }
+\end{equation*}
+
+The $\phi$ is cyclic, and we have:
+
+\begin{equation*}
+\PD{\phi}{f} = 0 = \frac{d}{d\lambda} \frac{\dotphi \sin^2\theta}{f}
+\end{equation*}
+
+Thus we have:
+\begin{align*}
+\dotphi^2 \sin^4\theta &= K^2 \left(\dottheta^2 + ( \dotphi \sin\theta )^2 \right) \\
+\dotphi^2 \sin^2\theta( \sin^2\theta - K^2 ) &= K^2 \dottheta^2 \\
+\dotphi^2 
+&= \frac{K^2 \dottheta^2 }{ \sin^2\theta ( \sin^2\theta - K^2 ) } \\
+\dotphi
+&= \frac{K \dottheta }{ \sin\theta \sqrt{ \sin^2\theta - K^2 } } \\
+\end{align*}
+
+This is in a nicely separated form, but it is not obvious that this describes paths that are great circles.
+
+Let's have a look at the second equation.
+\begin{align*}
+\PD{\theta}{f} &= \frac{d}{d\lambda} \PD{\dottheta}{f} \\
+\frac{\sin\theta\cos\theta \dotphi^2}{f}
+&= \frac{d}{d\lambda} \frac{\dottheta}{f} \\
+&= \frac{\ddottheta}{f} - \inv{2} \frac{ (\dottheta^2 + ( \dotphi \sin\theta )^2 )' }{f^3} \\
+&= \frac{\ddottheta}{f} - \frac{ \dottheta \ddottheta + \dotphi \sin\theta ( \ddotphi \sin\theta + \dotphi \cos\theta \dottheta ) }{f^3} \\
+\implies
+-\sin\theta\cos\theta \dotphi^2 ( \dottheta^2 + ( \dotphi \sin\theta )^2 )
+&= -\ddottheta ( \dottheta^2 + ( \dotphi \sin\theta )^2 )
+   + \dottheta \ddottheta 
+   + \dotphi \sin\theta ( \ddotphi \sin\theta + \dotphi \cos\theta \dottheta ) \\
+\end{align*}
+
+Or,
+\begin{equation*}
+- \ddottheta \dottheta^2 
+- \ddottheta \dotphi^2 \sin^2\theta 
++ \dottheta \ddottheta 
++ \dotphi \ddotphi \sin^2\theta
++ \dotphi^2 \dottheta \sin\theta \cos\theta
++ \dotphi^2 \dottheta^2 \sin\theta \cos\theta 
++ \dotphi^4 \sin^3\theta \cos\theta 
+= 0
+\end{equation*}
+
+What a mess!  I don't feel inclined to try to reduce this at the moment.  I'll come back to this problem later.  Perhaps there's a better parameterization?
+
+\section{ Problem 2.3 }
+
+For $f = f( y, \ydot, \yddot, x )$, find the equations for extreme values of
+
+\begin{equation*}
+I = \int_a^b f dx
+\end{equation*}
+
+Here we want $y$ and $\ydot$ fixed at the end points.  Following the first derivative derivation write the 
+functions in terms of the desired extremum functions plus a set of arbitrary functions:
+
+\begin{align*}
+y( x, \alpha ) &= y( x, 0 ) + \alpha n(x) \\
+\ydot( x, \alpha ) &= \ydot( x, 0 ) + \alpha m(x)
+\end{align*}
+
+Here we specify that these arbitrary variational functions vanish at the endpoints:
+
+\begin{equation*}
+n(a) = n(b) = m(a) = m(b) = 0
+\end{equation*}
+
+The functions $y(x, 0)$, and $\ydot(x, 0)$ are the functions we are looking for as solutions to the min/max problem.
+
+Calculating derivatives we have:
+
+\begin{equation*}
+\frac{dI}{d\alpha} = 
+\int \left( 
+\PD{y}{f} \PD{\alpha}{y}
++\PD{\ydot}{f} \PD{\alpha}{\ydot}
++\PD{\yddot}{f} \PD{\alpha}{\yddot}
+\right) d x
+\end{equation*}
+
+Assuming sufficient continuity look at the second term where we have:
+
+\begin{align*}
+\PD{\alpha}{\ydot} 
+&= \PD{\alpha}{} \PD{x}{y} \\
+&= \PD{x}{} \PD{\alpha}{y} \\
+&= \PD{x}{} n(x) \\
+&= \frac{d}{ d x} n(x) \\
+&= \frac{d}{ d x} \PD{\alpha}{y} \\
+\end{align*}
+
+Similarily for the third term we have:
+
+\begin{equation*}
+\PD{\alpha}{\ydot} = \frac{d}{ d x} \PD{\alpha}{\ydot}
+\end{equation*}
+
+\begin{equation*}
+\frac{dI}{d\alpha} = 
+\int \PD{y}{f} \PD{\alpha}{y} d x +
+\underbrace{\PD{\ydot}{f} \frac{d}{ d x} \PD{\alpha}{y}}_{ u v' = (u v)' - u' v } d x
++\PD{\yddot}{f} \frac{d}{ d x} \PD{\alpha}{\ydot} d x
+\end{equation*}
+
+Now integrating by parts:
+\begin{align*}
+\frac{dI}{d\alpha} &= 
+ \int \PD{y}{f} \PD{\alpha}{y} d x
++\int \PD{\ydot}{f} \frac{d}{ d x} \PD{\alpha}{y} d x
++\int \PD{\yddot}{f} \frac{d}{ d x} \PD{\alpha}{\ydot} d x \\
+\frac{dI}{d\alpha} &= 
+ \int \PD{y}{f} \PD{\alpha}{y} d x
++\left(\PD{\ydot}{f} \underbrace{\PD{\alpha}{y}}_{n(x)}\right)_a^b - \int \PD{\alpha}{y} \frac{d}{ d x} \PD{\ydot}{f} d x
++\left(\PD{\yddot}{f} \underbrace{\PD{\alpha}{\ydot}}_{m(x)} \right)_a^b
+-\int \PD{\alpha}{\ydot} \frac{d}{ d x} \PD{\yddot}{f} d x
+\end{align*}
+
+Because $m(a) = m(b) = n(a) = n(b)$ the non-integral terms are all zero, leaving:
+
+\begin{align*}
+\frac{dI}{d\alpha} &= 
+  \int \PD{y}{f} \PD{\alpha}{y} d x
+- \int \PD{\alpha}{y} \frac{d}{ d x} \PD{\ydot}{f} d x
+- \int \PD{\alpha}{\ydot} \frac{d}{ d x} \PD{\yddot}{f} d x
+\end{align*}
+
+Now consider just this last integral, which we can again integrate by parts:
+\begin{align*}
+\int \PD{\alpha}{\ydot} \frac{d}{ d x} \PD{\yddot}{f} d x
+&= \int \underbrace{\frac{d}{dx} \PD{\alpha}{y}}_{u'} \underbrace{\frac{d}{ d x} \PD{\yddot}{f}}_{v} d x \\
+&= 
+\left( \underbrace{\PD{\alpha}{y}}_{n(x)} {\frac{d}{ d x} \PD{\yddot}{f}} \right)_a^b
+-\int \PD{\alpha}{y} \frac{d}{dx} {\frac{d}{ d x} \PD{\yddot}{f}} d x \\
+&= 
+-\int \PD{\alpha}{y} \frac{d^2}{dx^2} \PD{\yddot}{f} d x \\
+\end{align*}
+
+This gives:
+\begin{align*}
+\frac{dI}{d\alpha} &= 
+  \int \PD{y}{f} \PD{\alpha}{y} d x
+- \int \PD{\alpha}{y} \frac{d}{ d x} \PD{\ydot}{f} d x
++ \int \PD{\alpha}{y} \frac{d^2}{dx^2} \PD{\yddot}{f} d x \\
+\frac{dI}{d\alpha} 
+&= \int d x \PD{\alpha}{y} \left( \PD{y}{f} - \frac{d}{ d x} \PD{\ydot}{f} + \frac{d^2}{dx^2} \PD{\yddot}{f} \right) \\
+&= \int d x n(x) \left( \PD{y}{f} - \frac{d}{ d x} \PD{\ydot}{f} + \frac{d^2}{dx^2} \PD{\yddot}{f} \right)
+\end{align*}
+
+So, if we want this derivative to equal zero for any $n(x)$ we require the inner quantity to by zero:
+
+\begin{equation}
+\PD{y}{f} - \frac{d}{ d x} \PD{\ydot}{f} + \frac{d^2}{dx^2} \PD{\yddot}{f} = 0
+\end{equation}
+
+Question.  Goldstein writes this in total differential form instead of a derivative:
+
+\begin{align*}
+dI &= \frac{dI}{d\alpha} d\alpha \\
+&= \int d x \left(\PD{\alpha}{y} d \alpha\right) \left( \PD{y}{f} - \frac{d}{ d x} \PD{\ydot}{f} + \frac{d^2}{dx^2} \PD{\yddot}{f} \right) \\
+\end{align*}
+
+and then calls this quantity $\PD{\alpha}{y} d \alpha = \delta y$, the variation of $y$.  There must be a mathematical subtlety which motivates this
+but it isn't clear to me what that is.  Since the variational calculus texts go a different route, with norms on functional spaces and so forth, perhaps
+understanding that motivation isn't worthwhile.  In the end, the conclusion is the same, namely that the inner expression must equal zero for the extremum
+condition.
 
 \end{document}               % End of document.
