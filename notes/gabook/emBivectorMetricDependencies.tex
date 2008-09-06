@@ -5,10 +5,16 @@
 \newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
 \newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
 \newcommand{\gpgradefour}[1] {\gpgrade{#1}{4}}
+\newcommand{\grad}[0]{\nabla}
+\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+% == \partial_{#1} {#2}
+\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+\newcommand{\PDD}[3]{\frac{\partial^2 {#3}}{\partial {#1}\partial {#2}}}
+\newcommand{\PDsq}[2]{\frac{\partial^2 {#2}}{\partial^2 {#1}}}
 
 \title{ Metric signature dependencies for electromagnetic equations. }
 \author{Peeter Joot}
-\date{ Last Revision: $Date: 2008/09/05 03:19:33 $ }
+\date{ Last Revision: $Date: 2008/09/06 20:22:54 $ }
 
 \begin{document}
 
@@ -160,6 +166,136 @@ In particular for matched pairs of indexes we have:
 \gamma_{\mu\nu} \cdot \gamma^{\nu\mu} = {\delta_{\mu}}^{\mu} {\delta_{\nu}}^{\nu} - {\delta_{\nu}}^{\mu} {\delta_{\mu}}^{\nu} = 1
 \end{equation*}
 
+\subsection{ Pseudoscalar expresed with reciprocal frame vectors. } 
+
+With a positive time metric 
+
+\begin{equation*}
+\gamma_{0123} = -\gamma^{0123}
+\end{equation*}
+
+(three inversions for each of the spatial quantities).  This is metric invariant too since it will match the single negation for the same operation
+using a positive spatial metric.
+
+\subsection{ spatial bivector basis commutation with pseudoscalar. } 
+
+I have been used to writing:
+\begin{equation*}
+\sigma_j = \gamma_{j0}
+\end{equation*}
+
+as a spatial basis, and having this equivalent to the four-pseudoscalar, but this only works with a time positive metric:
+\begin{equation*}
+i_3 = \sigma_{123} = \gamma_{102030} = \gamma_{0123} (\gamma_0)^2
+\end{equation*}
+
+With the spatial positive spacetime metric we therefore have:
+
+\begin{equation*}
+i_3 = \sigma_{123} = \gamma_{102030} = -i_4
+\end{equation*}
+
+instead of $i_3 = i_4$ as is the case with a time positive spacetime metric.  We see that the metric choice can also be interpretted as a choice of handedness.
+
+That choice allowed Doran/Lasenby to initially write the field as a vector plus trivector where $i$ is the spatial pseudoscalar:
+
+\begin{equation}\label{eqn:field}
+F = \BE + i c \BB,
+\end{equation}
+
+and then later switch the interpretation of $i$ to the four space pseudoscalar.  The freedom to do so is metric dependent freedom, but 
+equation \ref{eqn:field} works regardless of metric when $i$ is uniformly interpretted as the spacetime pseudoscalar.
+
+Regardless of the metric the spacetime pseudoscalar commutes with $\sigma_j = \gamma_{j0}$, since it anticommutes twice to cross:
+
+\begin{equation*}
+\sigma_j i = \gamma_{j00123} = \gamma_{00123j} = \gamma_{0123j0} = i \sigma_j
+\end{equation*}
+
+\subsection{ Gradient and Laplacian. } 
+
+As seen by the Lagrangian based derivation of the (spacetime or spatial) gradient, the form is metric independant and valid even for non-orthonormal frames:
+
+\begin{equation*}
+\grad = \gamma^{\mu} \PD{x^{\mu}}{}
+\end{equation*}
+
+\subsubsection{ vector derivative }
+
+A cute aside, as pointed out in John Denker's paper, for orthonormal frames, this can also be written as:
+
+\begin{equation}\label{eqn:gradient}
+\grad = \inv{\gamma_{\mu}} \PD{x^{\mu}}{}
+\end{equation}
+
+as a mnemonic for remembering where the signs go, since in that form the upper and lower indexes are nicely matched in summation convention fashion.
+
+Now, $\gamma_{\mu}$ is a constant when we are not working in curvalinear coordinates, and for constants we are used to the freedom to pull them into our
+derivatives as in:
+
+\begin{equation*}
+\inv{c} \PD{t}{} = \PD{(ct)}{}
+\end{equation*}
+
+Supposing that one had an orthogonal vector decomposition:
+
+\begin{equation*}
+\Bx = \sum \gamma_i x^i = \sum \Bx_i
+\end{equation*}
+
+then, we can abuse notation and do the same thing with our unit vectors, rewriting the gradient equation \ref{eqn:gradient} as:
+
+\begin{equation}\label{eqn:gradvec}
+\grad = \PD{(\gamma_{\mu} x^{\mu})}{} = \sum \PD{\Bx_i}{}
+\end{equation}
+
+Is there anything to this that isn't just abuse of notation?  I think so, and I'm guessing the notational freedom to do this is closely related to 
+what Hestenes calls geometric calculus.
+
+Expanding out the gradient in the form of equation \ref{eqn:gradvec} as a limit statement this becomes, rather loosely:
+
+\begin{equation*}
+\grad = \sum_i \lim_{d\Bx_i \to 0} \inv{ d \Bx_i } \left(f( \Bx + d\Bx_i ) - f( \Bx )\right)
+\end{equation*}
+
+If nothing else this justifies the notation for the polar form gradient of a function that is only radially dependent, where the quantity:
+
+\begin{equation*}
+\spacegrad = \rcap\PD{r}{} = \inv{\rcap}\PD{r}{}
+\end{equation*}
+
+is sometimes written:
+
+\begin{equation*}
+\spacegrad = \PD{\Br}{} 
+\end{equation*}
+
+Tong does this for example in his online dynamics paper, although there it appears to be not much more than a fancy shorthand for gradient.
+
+\subsection{ Four-Laplacian. }
+
+Now, although our gradient is metric invarient, it's square the four-Laplacian is not.  There we have:
+
+\begin{align*}
+\grad^2 
+&= \sum (\gamma^{\mu})^2 \PDsq{x^{\mu}}{} \\
+&= (\gamma^0)^2 \left( \PDsq{x^0}{} + (\gamma^0)^2 (\gamma^i)^2 \PDsq{x^i}{} \right) \\
+&= (\gamma^0)^2 \left( \PDsq{x^0}{} - \PDsq{x^i}{} \right)
+\end{align*}
+
+This makes the metric dependency explicit so that we have:
+
+\begin{equation*}
+\grad^2 = \inv{c^2} \PDsq{t}{} - \PDsq{x^i}{} \quad \mbox{if $(\gamma^0)^2 = 1$}
+\end{equation*}
+\begin{equation*}
+\grad^2 = \PDsq{x^i}{} - \inv{c^2} \PDsq{t}{} \quad \mbox{if $(\gamma^0)^2 = -1$}
+\end{equation*}
+
+\subsection{ Spatial and time component selection. } 
+
+FIXME.
+
 \subsection{ Electrodynamic tensor. }
 
 John Denker's paper writes:
@@ -191,10 +327,13 @@ That implied representation wasn't obvious to me, but I eventually figured out w
 The end result in both cases is a pure "bivector" representation for the complete field:
 
 \begin{equation*}
-F = E^j \gamma_{j0} + icB^j \gamma_{j0}
+F = E^j \gamma_{j0} + ic B^j \gamma_{j0}
 \end{equation*}
 
-ASIDE: Note that bivector is an inaccurate label (depending on definition perhaps) since this grade two multivector cannot be formed by the wedge product of two vectors unless one of the electric or magnetic fields is entirely zero.
+ASIDE: Is bivector the term used for a completely grade two multivector, but not neccessarily a wedge product?
+This field multivector is not definitely not a blade a term reserved for something that can be created by wedging (simple element in grassman algebra terms).
+Here the field multivector cannot be expressed as the wedge product of two vectors unless one of the electric or magnetic fields is entirely zero (essentially
+reducing the dimension of the spanning basis to a 3D bivector).
 
 Let's look at the $B^j$ basis bivectors a bit more closely:
 
@@ -245,7 +384,7 @@ i \gamma_{a0} =
 Putting things back together, our bivector field in index notation is:
 
 \begin{equation}\label{eqn:Fcomp}
-F = E^a \gamma_{a0} - \epsilon_{abc} B^a \gamma_{bc}
+F = E^i \gamma_{i 0} - \epsilon_{i j k} c B^i \gamma_{j k}
 \end{equation}
 
 \subsection{ Tensor components }
@@ -285,7 +424,148 @@ $F_{{\mu} {\nu}} = F \cdot (e_{\nu} \wedge e_{\mu})$ must be:
 F = \inv{2} F_{{\mu} {\nu}} (e^{\mu} \wedge e^{\nu})
 \end{equation}
 
+Writing $F^{\mu\nu}$ or $F_{\mu\nu}$ leaves a lot unspecified.  You will get a different tensor for each choice of basis.  Using this form amounts to the equivalent of using the matrix of a linear transformation with respect to a specified basis.
+
+\subsection{ Electromagnetic tensor components. }
+
 Next, let's calculate these 
 $F_{{\mu} {\nu}}$, and $F^{{\mu} {\nu}}$ values and relate them to our electric and magnetic fields so we can work in or translate to and from all of the traditional vector, the tensor, and the clifford/geometric languages.
+
+\begin{equation*}
+F^{{\mu} {\nu}} = \left( E^i \gamma_{i 0} - \epsilon_{i j k} c B^i \gamma_{j k} \right) \cdot \gamma^{\nu\mu}
+\end{equation*}
+
+By inspection our electric field components we have:
+
+\begin{equation*}
+F^{i0} = E^i,
+\end{equation*}
+
+and for the magnetic field:
+
+\begin{equation*}
+F^{{i} {j}} = - \epsilon_{k i j} c B^k = - \epsilon_{i j k} c B^k.
+\end{equation*}
+
+Putting in sample numbers this is:
+
+\begin{align*}
+F^{{3} {2}} &= - \epsilon_{3 2 1} c B^1 = c B^1 \\
+F^{{1} {3}} &= - \epsilon_{1 3 2} c B^2 = c B^2 \\
+F^{{2} {1}} &= - \epsilon_{2 1 3} c B^3 = c B^3 \\
+\end{align*}
+
+This can be summarized in matrix form:
+
+\begin{equation*}
+F^{\mu\nu} = 
+\begin{bmatrix}
+0   & -E^1 & -E^2 & -E^3 \\
+E^1 &   0  & -c B^3 &  c B^2 \\
+E^2 &  c B^3 &   0  & -c B^1 \\
+E^3 & -c B^2 &  c B^1 &   0  \\
+\end{bmatrix}
+\end{equation*}
+
+Observe that no specific reference to a metric was required to evaluate these components.
+
+\subsection{ reciprocal tensor (name?) }
+
+The reciprocal frame representation of equation \ref{eqn:Fcomp} is metric dependent when expressed 
+
+\begin{align*}
+F 
+&= E^i \gamma_{i 0} - \epsilon_{i j k} c B^i \gamma_{j k} \\
+&= -E^i \gamma^{i 0} - \epsilon_{i j k} c B^i \gamma^{j k}
+\end{align*}
+
+Calculation of the reciprocal representation of the field tensor $F_{{\mu} {\nu}} = F \cdot \gamma_{\nu\mu}$ is now possible, and by inspection, regardless
+of the metric:
+
+\begin{align*}
+F_{i0} &= -E^a = -F^{i0} \\
+F_{ij} &= - \epsilon_{i j k} c B^k \gamma^{i j} = F^{ij}
+\end{align*}
+
+So, all the electric field components in the tensor invert:
+\begin{equation*}
+F_{\mu\nu} = 
+\begin{bmatrix}
+0   & E^1 & E^2 & E^3 \\
+-E^1 &   0  & -c B^3 &  c B^2 \\
+-E^2 &  c B^3 &   0  & -c B^1 \\
+-E^3 & -c B^2 &  c B^1 &   0  \\
+\end{bmatrix}
+\end{equation*}
+
+Again, this is metric independent with this bivector based definition of $F_{\mu\nu}$, and $F^{\mu\nu}$.  Suprising, since I thought I had read otherwise.
+
+\subsection{ Lagrangian density. }
+
+Doran/Lasenby write the Lagrangian density in terms of $\gpgradezero{F^2}$, whereas Denker writes it in terms of $\gpgradezero{F \tilde{F}}$.  Is their
+alternate choice in metric responsible for this difference.
+
+Reversing the field since it is a bivector, just inverts the sign:
+
+\begin{align*}
+F &= E^i \gamma_{i 0} - \epsilon_{i j k} c B^i \gamma_{j k} \\
+\tilde{F} &= E^i \gamma_{0 i} - \epsilon_{i j k} c B^i \gamma_{k j} = -F
+\end{align*}
+
+So the choice of $\gpgradezero{F^2}$ vs. $\gpgradezero{F \tilde{F}}$ is just a sign choice, and does not have anything to do with the metric.
+
+Let's evaluate one of these:
+
+\begin{align*}
+F^2 
+&= 
+(E^i \gamma_{i 0} - \epsilon_{i j k} c B^i \gamma_{j k}) (E^u \gamma_{u 0} - \epsilon_{u v w} c B^u \gamma_{v w})  \\
+&=
+E^i E^u \gamma_{i 0} \gamma_{u 0} 
+- \epsilon_{u v w} E^i c B^u \gamma_{v w} \gamma_{i 0} 
+- \epsilon_{i j k} E^u c B^i \gamma_{j k} \gamma_{u 0} 
++ \epsilon_{i j k} \epsilon_{u v w} c^2 B^i B^u \gamma_{v w} \gamma_{j k}
+\\
+\end{align*}
+
+That first term is:
+
+\begin{align*}
+E^i E^u \gamma_{i 0} \gamma_{u 0} 
+&= \BE^2 + \sum_{i \ne j} E^i E^j ( \sigma_i \sigma_j + \sigma_j \sigma_i ) \\
+&= \BE^2 + \sum_{i \ne j} 2 E^i E^j \sigma_i \cdot \sigma_j \\
+&= \BE^2
+\end{align*}
+
+Hmm.  This is messy.  Let's try with $F = \BE + i c \BB$ directly (with the Doran/Lasenby convention: $\BE = E^k \sigma_k$) :
+
+\begin{align*}
+F^2 
+&= (\BE + i c \BB) (\BE + i c \BB) \\
+&= \BE^2 + c^2 (i \BB) (i \BB) + c (i \BB \BE + \BE i \BB) \\
+&= \BE^2 + c^2 (\BB i) (i \BB) + i c (\BB \BE + \BE \BB) \\
+&= \BE^2 - c^2 \BB^2 + 2 i c (\BB \cdot \BE) \\
+\end{align*}
+
+\subsubsection{ Compared to tensor form. }
+
+Now lets compare to the tensor form, where the Lagrangian density is written in terms of the product of upper and lower index tensors:
+
+\begin{align*}
+F_{\mu\nu}F^{\mu\nu}
+&= F_{i 0}F^{i 0} +F_{0 i}F^{0 i} +\sum_{i<j} F_{i j}F^{i j} +\sum_{j<i} F_{i j}F^{i j} \\
+&= 2 F_{i 0}F^{i 0} + 2 \sum_{i<j} F_{i j}F^{i j} \\
+&= 2 (-E^i)(E^i) + 2 \sum_{i<j} (F^{i j})^2 \\
+&= -2 \BE^2 + 2 \sum_{i<j} ( -\epsilon_{ijk} c B^k )^2 \\
+&= -( \BE^2 + c^2 \BB^2 )
+\end{align*}
+
+Summarizing with a comparision of the bivector and tensor forms we have:
+
+\begin{equation}
+\inv{2} F_{\mu\nu}F^{\mu\nu} = c^2 \BB^2 - \BE^2 = - \gpgradezero{F^2} = \gpgradezero{ F \tilde{F} }
+\end{equation}
+
+But to put this in context we need to figure out how to apply this in the Lagrangian.
 
 \end{document}
