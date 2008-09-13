@@ -8,12 +8,17 @@
 \newcommand{\gpgradefour}[1] {\gpgrade{#1}{4}}
 \newcommand{\grad}[0]{\nabla}
 \newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
 
-\usepackage[bookmarks=true]{hyperref}
+\usepackage[
+bookmarks=true
+%,pdffitwindow
+%,pdfcenterwindow
+]{hyperref}
 
 \title{ An attempt at evaluating the Lagrangian em field equations. }
 \author{Peeter Joot}
-\date{ Sept 8, 2008.  Last Revision: $Date: 2008/09/13 03:29:25 $ }
+\date{ Sept 8, 2008.  Last Revision: $Date: 2008/09/13 19:31:37 $ }
 
 \begin{document}
 
@@ -21,116 +26,217 @@
 
 \maketitle{}
 
-\section{ Busted Attempt. }
-\subsection{ Evaluating Lagragian equations. }
+\section{ Motivation. }
 
-We have seen previously that the Lagrangian equations expressed in vector 
-form can be written
+This document will attempt to calculate Maxwells equation, which in multivector form is
 
-\begin{equation}\label{eqn:lagrangian}
-\grad \LL = \frac{d}{d\tau} \grad_v \LL
+\begin{equation}
+\grad F = J/\epsilon_0 c
 \end{equation}
 
-There is a constant (at least sign) in the Lagrangian that I am not sure of
-at the moment, so the exersize becomes to recover the field equation 
-given a Lagrangian of the form
+using a Lagrangian energy density variational approach.
+
+\subsection{ Notation and definitions. }
+
+For standalone purposes, here is a summary of the notation and definitions that will be used.  Greek letters range over all indexes and
+english indexes range over $1,2,3$.  Bold vectors are spatial enties and non-bold is used for four vectors.
 
 \begin{equation*}
-\LL = \kappa \gpgradezero{ (\grad \wedge A)^2 } + J \cdot A
+\begin{array}{l l l}
+\gamma_{\mu} & & \quad \mbox{Four vector basis vector)} \\
+& & \quad \mbox{($\gamma_{\mu} \cdot \gamma_{\nu} = \pm {\delta^{\mu}}_{\nu}$)} \\
+{(\gamma_0)}^2 {(\gamma_i)}^2 &= -1 & \quad \mbox{Minkowski metric} \\
+\sigma_i = \sigma^i &= \gamma_{i} \wedge \gamma_0 & \quad \mbox{Spatial basis bivector. ($\sigma_i \cdot \sigma_j = \delta_{ij}$)} \\
+                    &= \gamma_{i0} \\
+I &= \gamma_{0} \wedge \gamma_1 \wedge \gamma_{2} \wedge \gamma_3 & \quad \mbox{Four-vector pseudoscalar} \\
+  &= \gamma_{0123} \\
+\gamma^{\mu} \cdot \gamma_{\nu} &= {\delta^{\mu}}_{\nu} & \quad \mbox{Reciprocal basis vectors} \\
+x^{\mu} &= x \cdot \gamma^{\mu} & \quad \mbox{Vector coordinate} \\
+x_{\mu} &= x \cdot \gamma_{\mu} & \quad \mbox{Coordinate for reciprocal basis} \\
+x &= \sum \gamma_{\mu} x^{\mu} & \quad \mbox{Four vector in terms of coordinates} \\
+  &= \sum \gamma^{\mu} x_{\mu} \\
+\BE &= \sum E^i \sigma_i & \quad \mbox{Electric field spatial vector} \\
+\BB &= \sum B^i \sigma_i & \quad \mbox{Magnetic field spatial vector} \\
+J &= \sum \gamma_{\mu} J^{\mu} & \quad \mbox{Current density four vector.} \\
+  &= \sum \gamma^{\mu} J_{\mu} \\
+F &= \BE + I c \BB & \quad \mbox{Electromagnetic bivector} \\
+x^{0} &= x \cdot \gamma^0 & \quad \mbox{Time coordinate (length dim.)} \\
+      &= c t \\
+\Bx &= x \wedge \gamma_0 & \quad \mbox{Spatial vector} \\
+    &= x^i \sigma_i \\
+J^{0} &= J \cdot \gamma^0 & \quad \mbox{Charge density.} \\
+      &= c \rho & \quad \mbox{(current density dimensions.)} \\
+\BJ &= J \wedge \gamma_0 & \quad \mbox{Current density spatial vector} \\
+    &= \sum J^i \sigma_i \\
+\grad &= \sum \gamma^{\mu} \PD{x^{\mu}}{} & \quad \mbox{Spacetime gradient} \\
+      &= \sum \gamma^{\mu}\partial_{\mu} \\
+      &= \sum \gamma_{\mu} \PD{x_{\mu}}{} \\
+      &= \sum \gamma_{\mu}\partial^{\mu} \\
+\spacegrad &= \sum \sigma^{i} \PD{x^{i}}{} & \quad \mbox{Spatial gradient} \\
+           &= \sum \sigma^{i}\partial_{i} \\
+\end{array}
 \end{equation*}
 
-and determine the constant factor $\kappa$.  Splitting the Lagrangian temporarily as
+Summation convention, where summation over all sets of matched upper and lower indexes is implied, will be in effect from this point on.
 
-\begin{equation*}
-\LL = \LL_1 + \LL_2
-\end{equation*}
+\subsection{ Tensor form of the field. } 
 
-the easy part of this evaluation is application of equation \ref{eqn:lagrangian} to $\LL_2 = J \cdot A$
-
-\begin{equation}\label{eqn:maybewrong}
-\grad \LL_2 = J (\grad \cdot A) = \frac{d}{d\tau} \grad_v \LL_2
-\end{equation}
-
-Therefore the expectation is that evaluation of the equations on $\LL_2$ will 
-result in:
+Explicit expansion of the field bivector in terms of coordinates one has
 
 \begin{align*}
-\grad \LL_1 
-&= \kappa \grad \gpgradezero{ (\grad \wedge A)^2 } \\
-&\propto (\grad (\grad \wedge A)) (\grad \cdot A)
+F 
+&= \BE + I c \BB \\
+&= E^k \gamma_{k0} + \gamma_{0123k0} c B^k \\
+&= E^k \gamma_{k0} + {(\gamma_{0})}^2 {(\gamma_{k})}^2 {\epsilon^{ij}}_k c \gamma_{ij} B^k \\
 \end{align*}
 
-So, the some algebra to fill in the middle steps is required.  My
-first attempt to do so has been unsuccessful, so perhaps I'll fall back
-to components and give it a try that way first (or try that with $A = \phi \gamma_0$ perhaps as a simple case).
+Or,
+\begin{equation}
+F = E^k \gamma_{k0} - c {\epsilon^{ij}}_k B^k \gamma_{ij}
+\end{equation}
 
-\subsection{ In coordinates. }
-
-Is equation \ref{eqn:maybewrong} correct?  Let's try the complete Lagrangian calculation in coordinates instead (adding an extra factor of $1/2$
-having tried some of this on paper).
-
-\begin{equation*}
-\LL = \frac{\kappa}{4} ( \partial_{\mu} A_{\nu} - \partial_{\nu} A_{\mu} ) ( \partial^{\mu} A^{\nu} - \partial^{\nu} A^{\mu} ) + J_{\alpha} A^{\alpha}
-\end{equation*}
-
-We have no $\dot{x}_{\mu}$ factors so the field equation is just the result of evaluating $\partial_{\mu} \LL = 0$, but before doing so, the $F^{\mu\nu}F_{\mu\nu}$ term can be simplified:
+When this bivector is expressed in terms of basis bivectors $\gamma_{\mu\nu}$ we have
 
 \begin{align*}
-\inv{2} F_{\mu\nu}F^{\mu\nu}
-&=
-\inv{2} \left(
- \partial_{\mu} A_{\nu} \partial^{\mu} A^{\nu}
--\partial_{\mu} A_{\nu} \partial^{\nu} A^{\mu}
--\partial_{\nu} A_{\mu} \partial^{\mu} A^{\nu}
-+\partial_{\nu} A_{\mu} \partial^{\nu} A^{\mu} \right) \\
+F 
+= \sum_{\mu<\nu} (F \cdot \gamma^{\nu\mu}) \gamma_{\mu\nu}
+= \inv{2} (F \cdot \gamma^{\nu\mu}) \gamma_{\mu\nu} 
+\end{align*}
+
+As shorthand for the coordinates the field can be expressed with respect to various bivector basis sets in tensor form
+
+\begin{equation*}
+\begin{array}{l l l}
+F^{\mu\nu} &= F \cdot \gamma^{\nu\mu} & \quad F = (1/2) F^{\mu\nu} \gamma_{\mu\nu} \\
+F_{\mu\nu} &= F \cdot \gamma_{\nu\mu} & \quad F = (1/2) F_{\mu\nu} \gamma^{\mu\nu} \\
+{F_{\mu}}^\nu &= F \cdot {\gamma_{\nu}}^{\mu} & \quad F = (1/2) {F_{\mu}}^{\nu} {\gamma^{\mu}}_{\nu} \\
+{F^{\mu}}_\nu &= F \cdot {\gamma^{\nu}}_{\mu} & \quad F = (1/2) {F^{\mu}}_{\nu} {\gamma_{\mu}}^{\nu}
+\end{array}
+\end{equation*}
+
+In particular, we can extract the electric field components by dotting with a spacetime mix of indexes
+
+\begin{equation*}
+F^{i0} = E^k \gamma_{k0} \cdot \gamma^{0i} = E^i = -F_{i0}
+\end{equation*}
+
+and the magnetic field components by dotting with the bivectors having a pure spatial mix of indexes
+
+\begin{equation*}
+F^{ij} = - c {\epsilon^{a b}}_k B^k \gamma_{a b} \cdot \gamma^{ji} = - c {\epsilon^{i j}}_k B^k = F_{ij}
+\end{equation*}
+
+It is customary to summarize these tensors in matrix form
+\begin{equation}\label{eqn:matrixtensor}
+F^{\mu\nu} =
+\begin{bmatrix}
+0   & -E^1 & -E^2 & -E^3 \\
+E^1 &   0  & -c B^3 &  c B^2 \\
+E^2 &  c B^3 &   0  & -c B^1 \\
+E^3 & -c B^2 &  c B^1 &   0  \\
+\end{bmatrix}
+\end{equation}
+
+\begin{equation}
+F_{\mu\nu} =
+\begin{bmatrix}
+0   & E^1 & E^2 & E^3 \\
+-E^1 &   0  & -c B^3 &  c B^2 \\
+-E^2 &  c B^3 &   0  & -c B^1 \\
+-E^3 & -c B^2 &  c B^1 &   0  \\
+\end{bmatrix}.
+\end{equation}
+
+We will not need either of these matrixes explcitly, but include them for comparison since there is some variation in the sign conventions and units used
+for the field tensor.
+
+\subsubsection{ Potential form. }
+
+With the assumption that the field can be expressed in terms of the curl of a potential vector
+
+\begin{equation}\label{eqn:potentialdef}
+F = \grad \wedge A
+\end{equation}
+
+the tensor expression of the field becomes
+
+\begin{align*}\label{eqn:tensorpot}
+F^{\mu\nu} &= F \cdot (\gamma^{\nu} \wedge \gamma^{\mu}) = \partial^{\mu} A^{\nu} - \partial^{\nu} A^{\mu} \\
+F_{\mu\nu} &= F \cdot (\gamma_{\nu} \wedge \gamma_{\mu}) = \partial_{\mu} A_{\nu} - \partial_{\nu} A_{\mu} \\
+{F^{\mu}}_{\nu} &= F \cdot (\gamma^{\nu} \wedge \gamma_{\mu}) = \partial^{\mu} A_{\nu} - \partial_{\nu} A^{\mu} \\
+{F_{\mu}}^{\nu} &= F \cdot (\gamma_{\nu} \wedge \gamma^{\mu}) = \partial_{\mu} A^{\nu} - \partial^{\nu} A_{\mu}
+\end{align*}
+
+These field bivector coordinates will be used in the Lagrangian calculations.
+
+\subsection{ Field square. }
+
+Our Lagrangian will be formed from the scalar part (will the pseudoscalar part of the field also play a part?) of the squared bivector
+
+\begin{align*}
+F^2 
+&= (\BE + I c \BB) (\BE + I c \BB) \\
+&= \BE^2 - c^2 \BB^2 + c \left( I \BB \BE + \BE I \BB \right) \\
+&= \BE^2 - c^2 \BB^2 + c I \left( \BB \BE + \BE \BB \right) \\
+&= \BE^2 - c^2 \BB^2 + 2 c I \BE \cdot \BB
+\end{align*}
+
+\subsubsection{ Scalar part. }
+
+One can also show that the following are all identical representations.
+
+\begin{equation}
+\inv{2} F_{\mu\nu}F^{\mu\nu} = -\gpgradezero{F^2} = c^2 \BB^2 -\BE^2
+\end{equation}
+
+In particular, we will use the tensor form with the field defined in terms of the vector potential of equation \ref{eqn:potentialdef}.
+
+\begin{align}
+\LL &= -\frac{\kappa}{4} \gpgradezero{F^2} + J \cdot A \\
+&= \frac{\kappa}{4} F_{\mu\nu} F^{\mu\nu} + J_{\alpha} A^{\alpha} \\
+&= \frac{\kappa}{4} ( \partial_{\mu} A_{\nu} - \partial_{\nu} A_{\mu} ) ( \partial^{\mu} A^{\nu} - \partial^{\nu} A^{\mu} ) + J_{\alpha} A^{\alpha}
+\end{align}
+
+It will be convient to write the density term in a slightly different fashion
+
+\begin{align*}
+F^{\mu\nu} F_{\mu\nu}
 &=
 \partial_{\mu} A_{\nu} \partial^{\mu} A^{\nu}
--\partial_{\mu} A_{\nu} \partial^{\nu} A^{\mu} \\
-&= \partial_{\mu} A_{\nu} \left( \partial^{\mu} A^{\nu} -\partial^{\nu} A^{\mu} \right) \\
+-\partial_{\mu} A_{\nu} \partial^{\nu} A^{\mu}
+-\partial_{\nu} A_{\mu} \partial^{\mu} A^{\nu}
++\partial_{\nu} A_{\mu} \partial^{\nu} A^{\mu} \\
+&= 2 \left( \partial_{\mu} A_{\nu} \partial^{\mu} A^{\nu} -\partial_{\mu} A_{\nu} \partial^{\nu} A^{\mu} \right) \\
+&= 2 \partial_{\mu} A_{\nu} \left( \partial^{\mu} A^{\nu} -\partial^{\nu} A^{\mu} \right) \\
 \end{align*}
-
-%This amounts to writing $F^{\mu\nu} = \inv{2}( F^{\mu\nu} - F^{\nu\mu} )$. NO.
 
 So we want to evaluate the equations for:
-\begin{equation*}
+\begin{equation}\label{eqn:density}
 \LL = \frac{\kappa}{2} \partial_{\mu} A_{\nu} ( \partial^{\mu} A^{\nu} - \partial^{\nu} A^{\mu} ) + J_{\alpha} A^{\alpha}
+\end{equation}
+
+\subsubsection{ Pseudoscalar part. }
+
+
+
+\section{ Variational background. }
+
+Trying to blindly plug into the Euler-Lagrange equations
+
+\begin{equation*}
+\PD{x^\mu}{\LL} = \frac{d}{d\tau} \PD{\dot{x}^\mu}{\LL}
 \end{equation*}
 
-\begin{align*}
-\partial_{\beta} \LL 
-&= 
-\frac{\kappa}{2}
-\partial_{\beta\mu} A_{\nu} ( \partial^{\mu} A^{\nu} - \partial^{\nu} A^{\mu} )
-+ \frac{\kappa}{2}
-\partial_{\mu} A_{\nu} ( \partial_{\beta}^{\mu} A^{\nu} - \partial_{\beta}^{\nu} A^{\mu} )
-+ J_{\alpha} \partial_{\beta}A^{\alpha} \\
-&= 
-\frac{\kappa}{2} \partial_{\beta}^{\mu} A^{\nu} ( \partial_{\mu} A_{\nu} - \partial_{\nu} A_{\mu} )
-+ \frac{\kappa}{2} \partial_{\mu} A_{\nu} ( \partial_{\beta}^{\mu} A^{\nu} - \partial_{\beta}^{\nu} A^{\mu} )
-+ J_{\alpha} \partial_{\beta}A^{\alpha} \\
-&= 
-{\kappa} \partial_{\beta}^{\mu} A^{\nu} \partial_{\mu} A_{\nu}
-- {\kappa} \partial_{\beta}^{\mu} A^{\nu} \partial_{\nu} A_{\mu}
-+ J_{\alpha} \partial_{\beta}A^{\alpha} \\
-\implies \\
--J_{\alpha} \partial_{\beta}A^{\alpha} 
-&= {\kappa} \partial_{\beta}^{\mu} A^{\nu} \left( \partial_{\mu} A_{\nu} - \partial_{\nu} A_{\mu} \right) \\
-&= {\kappa} (\partial^{\mu} \partial_{\beta}A^{\nu} ) F_{\mu\nu} \\
-\end{align*}
+didn't get me anywhere.
 
-Hmm.  I don't see how to reduce the mess above.  A digression to derive the field equation completely from 
-the bivector form so I could compare didn't help.
-
-\section{ Different approach. }
-
-Trying to blindly plug into the Euler-Lagrange equations didn't get anywhere.  Let's try Feynman's way 
-which uses some slightly ad-hoc seeming variational techniques directly.  First calculate some simple examples
-this way to get the feel for them before moving on to the complexity of trying with the electrodynamic Lagrange
-density.
+What did work was Feynman's way from the second volume of the Lectures (the entertainment chapter on Principle of Least Action).
+which uses some slightly ad-hoc seeming variational techniques directly.  To demonstrate the technique some simple examples
+will be calculated to get the feel for the method.  After this we move on to the more complex case of trying with the electrodynamic Lagrange
+density of equation \ref{eqn:density}.
 
 \subsection{ One dimensional purely kinentic Lagrangian. }
 
-Here is pretty much the simplest case.  This illustrates Feynman's technique from the second volume of the Lectures.
+Here is pretty much the simplest case, and illustrates the technique well.
 
 Suppose we have an action associated with a kinetic Lagrangian density $(1/2) m v^2$
 
@@ -141,8 +247,11 @@ S = \int_a^b \frac{m}{2} { \left(\frac{dx}{dt}\right) }^2 d\lambda
 where $x = x(t)$ is an arbitrarily parameterized undetermined function to solve for.
 
 
+%\subsection{ Electrostatic potential in one dimension. }
 
-%\subsection{}
-%\subsection{}
+%\subsection{ Electrostatic potential in two dimensions. }
+
+% for the area here I think we want both type I and type II (elipse, square, ...).  Can probably generalize to
+% other topological forms like donuts but will require that the variational function vanish on _any_ boundary.
 
 \end{document}               % End of document.
