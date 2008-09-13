@@ -18,7 +18,7 @@ bookmarks=true
 
 \title{ An attempt at evaluating the Lagrangian em field equations. }
 \author{Peeter Joot}
-\date{ Sept 8, 2008.  Last Revision: $Date: 2008/09/13 19:31:37 $ }
+\date{ Sept 8, 2008.  Last Revision: $Date: 2008/09/13 21:47:31 $ }
 
 \begin{document}
 
@@ -217,19 +217,19 @@ So we want to evaluate the equations for:
 
 \subsubsection{ Pseudoscalar part. }
 
-
+FIXME: write the $\BE \cdot \BB$ term in tensor notation and see if the second half of Maxwells equation follows from that.
 
 \section{ Variational background. }
 
-Trying to blindly plug into the Euler-Lagrange equations
+Trying to blindly plug into the proper time variation of the Euler-Lagrange equations that can be used to derive the Lorentz force law from a $A \cdot v$ based Lagrangian
 
-\begin{equation*}
+\begin{equation}\label{eqn:eulerlag}
 \PD{x^\mu}{\LL} = \frac{d}{d\tau} \PD{\dot{x}^\mu}{\LL}
-\end{equation*}
+\end{equation}
 
-didn't get me anywhere.
+did not really come close to producing Maxwell's equations from the Lagrangian in equation \ref{eqn:density}.  Whatever the equivalent of the Euler-Lagrange equations is for an energy density Lagrangian they aren't what is in equation \ref{eqn:eulerlag}.
 
-What did work was Feynman's way from the second volume of the Lectures (the entertainment chapter on Principle of Least Action).
+However, what did work was Feynman's way from the second volume of the Lectures (the ``entertainment'' chapter on Principle of Least Action).
 which uses some slightly ad-hoc seeming variational techniques directly.  To demonstrate the technique some simple examples
 will be calculated to get the feel for the method.  After this we move on to the more complex case of trying with the electrodynamic Lagrange
 density of equation \ref{eqn:density}.
@@ -240,14 +240,56 @@ Here is pretty much the simplest case, and illustrates the technique well.
 
 Suppose we have an action associated with a kinetic Lagrangian density $(1/2) m v^2$
 
+\begin{equation}\label{eqn:oneDimKinetic}
+S = \int_a^b \frac{m}{2} { \left(\frac{dx}{dt}\right) }^2 dt
+\end{equation}
+
+where $x = x(t)$ is the undetermined function to solve for.  Feynman's technique is similar to Goldstein's way of deriving the Euler Lagrange equations, but instead of writing
+
 \begin{equation*}
-S = \int_a^b \frac{m}{2} { \left(\frac{dx}{dt}\right) }^2 d\lambda
+x(t, \epsilon) = x(t, 0) + \epsilon n(t)
 \end{equation*}
 
-where $x = x(t)$ is an arbitrarily parameterized undetermined function to solve for.
+and taking derivatives under the integral sign with respect to $\epsilon$, instead he just writes
 
+\begin{equation}\label{eqn:xbarplusn}
+x = \bar{x} + n
+\end{equation}
 
-%\subsection{ Electrostatic potential in one dimension. }
+In either case, the function $n = n(t)$ is zero at the boundaries of the integration region, and is allowed to take any value in between.
+
+Substitution of \ref{eqn:xbarplusn} into \ref{eqn:oneDimKinetic} we have
+
+\begin{equation}
+S = 
+\int_a^b \frac{m}{2} { \left(\frac{d\bar{x}}{dt}\right) }^2 dt
++ 2 \int_a^b \frac{m}{2} \frac{d\bar{x}}{dt} \frac{d n}{dt} dt
++ \int_a^b \frac{m}{2} { \left(\frac{d n}{dt}\right) }^2 dt
+\end{equation}
+
+The last term being quadratic and presumed small is just dropped.  The first term is strictly positive and doesn't vary with $n$ in any way.  The middle term, just as in 
+Goldstein is integrated by parts
+
+\begin{align*}
+\int_a^b \underbrace{ \frac{d\bar{x}}{dt} \frac{d n}{dt} }_{fg'} dt
+&= \underbrace{ \left. \frac{d\bar{x}}{dt} n \right\vert_a^b }_{fg} - \int_a^b \underbrace{\frac{d^2\bar{x}}{dt^2} n}_{f'g} dt.
+\end{align*}
+
+Since $n(a) = n(b) = 0$ the first term is zero.  For the remainder, for it to be independent of path (independent of $n$) is set to zero, leaving
+
+\begin{equation*}
+\frac{d^2\bar{x}}{dt^2} = 0
+\end{equation*}
+
+As the solution to the extreme value problem.  This is nothing but the equation for a straight line, which is what we expect if there are no external forces
+
+\begin{equation*}
+\bar{x} - x_0 = v(t - t_0)
+\end{equation*}
+
+\subsection{ Electrostatic potential in one dimension. }
+
+Next is to apply the same idea to a field Lagrangian, but we will also start with the absolute simplest case.
 
 %\subsection{ Electrostatic potential in two dimensions. }
 
