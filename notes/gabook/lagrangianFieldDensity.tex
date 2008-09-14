@@ -9,6 +9,8 @@
 \newcommand{\grad}[0]{\nabla}
 \newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
 \newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+\newcommand{\PDd}[2]{\frac{\partial^2 {#2}}{{\partial{#1}}^2}}
+%\newcommand{\PDD}[3]{\frac{\partial^2 {#3}}{\partial {#1}\partial {#2}}}
 
 \usepackage[
 bookmarks=true
@@ -18,7 +20,7 @@ bookmarks=true
 
 \title{ An attempt at evaluating the Lagrangian em field equations. }
 \author{Peeter Joot}
-\date{ Sept 8, 2008.  Last Revision: $Date: 2008/09/13 21:47:31 $ }
+\date{ Sept 8, 2008.  Last Revision: $Date: 2008/09/14 01:48:42 $ }
 
 \begin{document}
 
@@ -30,7 +32,7 @@ bookmarks=true
 
 This document will attempt to calculate Maxwells equation, which in multivector form is
 
-\begin{equation}
+\begin{equation}\label{eqn:maxwell}
 \grad F = J/\epsilon_0 c
 \end{equation}
 
@@ -68,11 +70,11 @@ J^{0} &= J \cdot \gamma^0 & \quad \mbox{Charge density.} \\
       &= c \rho & \quad \mbox{(current density dimensions.)} \\
 \BJ &= J \wedge \gamma_0 & \quad \mbox{Current density spatial vector} \\
     &= \sum J^i \sigma_i \\
-\grad &= \sum \gamma^{\mu} \PD{x^{\mu}}{} & \quad \mbox{Spacetime gradient} \\
+\grad &= \sum \gamma^{\mu} \partial/\partial {x^{\mu}} & \quad \mbox{Spacetime gradient} \\
       &= \sum \gamma^{\mu}\partial_{\mu} \\
-      &= \sum \gamma_{\mu} \PD{x_{\mu}}{} \\
+      &= \sum \gamma_{\mu} \partial/\partial {x_{\mu}} \\
       &= \sum \gamma_{\mu}\partial^{\mu} \\
-\spacegrad &= \sum \sigma^{i} \PD{x^{i}}{} & \quad \mbox{Spatial gradient} \\
+\spacegrad &= \sum \sigma^{i} \partial/\partial{x^{i}} & \quad \mbox{Spatial gradient} \\
            &= \sum \sigma^{i}\partial_{i} \\
 \end{array}
 \end{equation*}
@@ -147,8 +149,22 @@ F_{\mu\nu} =
 \end{bmatrix}.
 \end{equation}
 
-We will not need either of these matrixes explcitly, but include them for comparison since there is some variation in the sign conventions and units used
+Neither of these matrixes will be needed explictly, but are included for comparison since there is some variation in the sign conventions and units used
 for the field tensor.
+
+\subsection{ Maxwells equation in tensor form. } 
+
+Taking vector and trivector parts of Maxwells equation \ref{eqn:maxwell}, and writing in terms of coordinates produces two equations respectively
+
+\begin{equation}
+\partial_{\mu} F^{\mu\alpha} = J^{\alpha}/c \epsilon_0
+\end{equation}
+
+\begin{equation}
+\epsilon^{ \alpha \beta \sigma \mu } \partial_{\alpha} F_{\beta\sigma} = 0.
+\end{equation}
+
+The aim here to show that these can be derived from an appropriate Lagrangian density.
 
 \subsubsection{ Potential form. }
 
@@ -275,25 +291,125 @@ Goldstein is integrated by parts
 &= \underbrace{ \left. \frac{d\bar{x}}{dt} n \right\vert_a^b }_{fg} - \int_a^b \underbrace{\frac{d^2\bar{x}}{dt^2} n}_{f'g} dt.
 \end{align*}
 
-Since $n(a) = n(b) = 0$ the first term is zero.  For the remainder, for it to be independent of path (independent of $n$) is set to zero, leaving
+Since $n(a) = n(b) = 0$ the first term is zero.  For the remainder to be independent of path (ie: independent of $n$) the $\bar{x}''$ term is set to zero.  That is
 
 \begin{equation*}
-\frac{d^2\bar{x}}{dt^2} = 0
+\frac{d^2\bar{x}}{dt^2} = 0.
 \end{equation*}
 
 As the solution to the extreme value problem.  This is nothing but the equation for a straight line, which is what we expect if there are no external forces
 
 \begin{equation*}
-\bar{x} - x_0 = v(t - t_0)
+\bar{x} - x_0 = v(t - t_0).
 \end{equation*}
 
-\subsection{ Electrostatic potential in one dimension. }
+\subsection{ Electrostatic potential Lagrangian. }
 
-Next is to apply the same idea to a field Lagrangian, but we will also start with the absolute simplest case.
+Next is to apply the same idea to the field Lagrangian for electrostatics.  The Lagrangian is assumed to be of the following form
 
-%\subsection{ Electrostatic potential in two dimensions. }
+\begin{equation*}
+\LL = \kappa (\spacegrad \phi)^2 + \rho \phi
+\end{equation*}
+
+Let's see if we can recover the electrostatics equation from this with an action of
+
+\begin{equation}\label{eqn:densityaction}
+S = \int_{\Omega} \LL dx dy
+\end{equation}
+
+Doing this for the simpler case of one dimension wouldn't be too much different from the previous kinetic calculation, and doing this in two dimensions is enough
+to see how to apply this to the four dimensional case for the general electrodynamic case.
+
+As above we assume that the general varied potential be written in terms of unknown function for which the action takes its extreme value, plus any other unspecified
+function
+
+\begin{equation}\label{eqn:barphi}
+\phi = \bar{\phi} + n
+\end{equation}
+
+The function $n$ is required to be zero on the boundary of the area $\Omega$.  One can likely assume any sort of area, but for this calculation
+the area will be assumed to be both type I and type II (in the lingo of Salus and Hille).
+
+FIXME: picture here to explain.  Want to describe an open area like a ellipse, or rectangle where bounding functions on the top/bottom, or left/right and a fixed interval 
+in the other direction.
 
 % for the area here I think we want both type I and type II (elipse, square, ...).  Can probably generalize to
 % other topological forms like donuts but will require that the variational function vanish on _any_ boundary.
+
+Substituting the assumed form of the solution from equation \ref{eqn:barphi} into the action integral \ref{eqn:densityaction} one has
+
+\begin{equation*}
+S = 
+    \int_{\Omega} dA \left( \kappa {(\spacegrad \bar{\phi})}^2 + \rho \bar{\phi} \right)
++   \int_{\Omega} dA \left( 2 \kappa (\spacegrad \bar{\phi}) \cdot \spacegrad n + \rho n \right)
++   \kappa \int_{\Omega} dA {(\spacegrad n)}^2 
+\end{equation*}
+
+Again the idea here is to neglect the last integral, ignore the first integral which is fixed, and use integration by parts to eliminate derivatives of $n$
+in the middle integral.  The portion of that integral to focus on is
+
+\begin{equation*}
+2 \kappa \sum \int_{\Omega} dx_1 dx_2 \PD{x_i}{\bar{\phi}} \PD{x_i}{n},
+\end{equation*}
+
+but how do we do integration by parts on such a beast?  We have partial derivatives and multiple integration to deal with.  Consider just one part of this sum, also ignoring the scale factor, and write it as a definite integral
+
+\begin{align*}
+\int_{\Omega} dx_1 dx_2 \PD{x_1}{\bar{\phi}} \PD{x_1}{n}
+&= \int_{x_1=a}^{x_1=b} dx_1 \int_{x_2 = \theta_1(x_1)}^{x_2 = \theta_2(x_1)} dx_2 \PD{x_2}{\bar{\phi}(x_1, x_2)} \PD{x_2}{n(x_1, x_2)} \\
+\end{align*}
+
+In the inner integral $x_1$ can be considered constant, and one can consider $n(x_1, x_2)$ to be a set function of just $x_2$, say
+
+\begin{equation*}
+m_{x_1}(x_2) = n(x_1, x_2)
+\end{equation*}
+
+Then $dm/dx_2$ is our partial of $n$
+
+\begin{equation*}
+\frac{d m_{x_1}(x_2)}{d x_2} = \PD{x_2}{n(x_1, x_2)}
+\end{equation*}
+
+and we can apply integration by parts
+\begin{align*}
+\int_{\Omega} dx_1 dx_2 \PD{x_1}{\bar{\phi}} \PD{x_1}{n} 
+&= \int_{x_1=a}^{x_1=b} dx_1
+%\int_{x_2 = \theta_1(x_1)}^{x_2 = \theta_2(x_1)} dx_2 \PD{x_2}{\bar{\phi}(x_1, x_2)} \PD{x_2}{n(x_1, x_2)}
+% f
+%\PD{x_2}{\bar{\phi}(x_1, x_2)}
+% g'
+%\PD{x_2}{n(x_1, x_2)}
+% fg:
+\left. \PD{x_2}{\bar{\phi}(x_1, x_2)} n(x_1, x_2) \right\vert_{x_2 = \theta_1(x_1)}^{x_2 = \theta_2(x_1)} \\
+&- \int_{x_1=a}^{x_1=b} dx_1 \int_{x_2 = \theta_1(x_1)}^{x_2 = \theta_2(x_1)} dx_2 \frac{d}{dx_2} \PD{x_2}{\bar{\phi}(x_1, x_2)} n(x_1, x_2) \\
+\end{align*}
+
+In the remaining single integral we have 
+$n(x_1, \theta_1(x_1))$, and $n(x_1, \theta_2(x_1))$ but these are both points on the boundary, so by the definition of $n$ these are zero (Feynman takes the
+region as all space and has $n=0$ at infinity).
+
+In the remaining term, the derivative $\frac{d}{d x_2} \PD{x_2}{\bar{\phi}(x_1, x_2)}$ is taken with $x_1$ fixed so is just a second partial.
+Doing in the same integration by parts for the other part of the sum and reassembling results we have
+
+\begin{align*}
+S = \int_{\Omega} dA \left( \kappa {(\spacegrad \bar{\phi})}^2 + \rho \bar{\phi} \right)
+  + \int_{\Omega} dA \left( -2 \kappa \PDd{x_1}{\bar{\phi}} -2 \kappa \PDd{x_2}{\bar{\phi}} + \rho \right) n
+  + \kappa \int_{\Omega} dA {(\spacegrad n)}^2 
+\end{align*}
+
+As before we set this inner term to zero so that it holds for any $n$, and recover the field equation as
+
+\begin{equation*}
+\spacegrad^2 \bar{\phi} = \rho/2 \kappa.
+\end{equation*}
+
+provided we set the constant $\kappa = -\epsilon_0/2$.  This also fixes the unknown constant in our Lagrangian density and action
+
+\begin{equation}
+S = \int_{\Omega} \left(- \frac{\epsilon_0}{2} (\spacegrad \phi)^2 + \rho \phi \right) d\Omega.
+\end{equation}
+
+It is also clear that the arguments above would also hold for the three dimensional case $\phi = \phi(x, y, z)$.
 
 \end{document}               % End of document.
