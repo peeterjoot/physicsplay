@@ -20,9 +20,9 @@ bookmarks=true
 %,pdfcenterwindow
 ]{hyperref}
 
-\title{ An attempt at evaluating the Lagrangian em field equations. }
+\title{ A straightforward variational approach to derive the Maxwell field equation from the electrodynamic Lagrangian density. }
 \author{Peeter Joot}
-\date{ Sept 8, 2008.  Last Revision: $Date: 2008/09/14 05:00:42 $ }
+\date{ Sept 8, 2008.  Last Revision: $Date: 2008/09/14 16:44:15 $ }
 
 \begin{document}
 
@@ -30,7 +30,7 @@ bookmarks=true
 
 \maketitle{}
 
-\section{ Motivation. }
+\section{ Motivation, definitions and setup. }
 
 This document will attempt to calculate Maxwells equation, which in multivector form is
 
@@ -162,7 +162,7 @@ Taking vector and trivector parts of Maxwells equation \ref{eqn:maxwell}, and wr
 \partial_{\mu} F^{\mu\alpha} = J^{\alpha}/c \epsilon_0
 \end{equation}
 
-\begin{equation}
+\begin{equation}\label{eqn:dualpartofMaxwells}
 \epsilon^{ \alpha \beta \sigma \mu } \partial_{\alpha} F_{\beta\sigma} = 0.
 \end{equation}
 
@@ -209,29 +209,66 @@ One can also show that the following are all identical representations.
 
 In particular, we will use the tensor form with the field defined in terms of the vector potential of equation \ref{eqn:potentialdef}.
 
-\begin{align}
-\LL &= -\frac{\kappa}{4} \gpgradezero{F^2} + J \cdot A \\
-&= \frac{\kappa}{4} F_{\mu\nu} F^{\mu\nu} + J_{\alpha} A^{\alpha} \\
-&= \frac{\kappa}{4} ( \partial_{\mu} A_{\nu} - \partial_{\nu} A_{\mu} ) ( \partial^{\mu} A^{\nu} - \partial^{\nu} A^{\mu} ) + J_{\alpha} A^{\alpha}
-\end{align}
-
-It will be convient to write the density term in a slightly different fashion
+Expanding in coordinates this squared curl we have
 
 \begin{align*}
-F^{\mu\nu} F_{\mu\nu}
-&=
-\partial_{\mu} A_{\nu} \partial^{\mu} A^{\nu}
--\partial_{\mu} A_{\nu} \partial^{\nu} A^{\mu}
--\partial_{\nu} A_{\mu} \partial^{\mu} A^{\nu}
-+\partial_{\nu} A_{\mu} \partial^{\nu} A^{\mu} \\
-&= 2 \left( \partial_{\mu} A_{\nu} \partial^{\mu} A^{\nu} -\partial_{\mu} A_{\nu} \partial^{\nu} A^{\mu} \right) \\
-&= 2 \partial_{\mu} A_{\nu} \left( \partial^{\mu} A^{\nu} -\partial^{\nu} A^{\mu} \right) \\
+(\grad \wedge A) (\grad \wedge A)
+&= (\gamma^{\mu\nu} \partial_{\mu} A_{\nu})(\gamma^{\alpha\beta} \partial_{\alpha} A_{\beta}) \\
 \end{align*}
 
-So we want to evaluate the equations for:
-\begin{equation}\label{eqn:density}
-\LL = \frac{\kappa}{2} \partial_{\mu} A_{\nu} ( \partial^{\mu} A^{\nu} - \partial^{\nu} A^{\mu} ) + J_{\alpha} A^{\alpha}
+Implied here is that $\mu \ne \nu$ and $\alpha \ne \beta$.  Given that expansion of the scalar and pseudoscalar parts of this quantity we have
+
+\begin{align*}
+\gpgradezero{ (\grad \wedge A)^2 }
+&= (\gamma^{\mu\nu}) \cdot (\gamma_{\alpha\beta}) \partial_{\mu} A_{\nu} \partial^{\alpha} A^{\beta} \\
+&= \left(\delta^{\mu}_{\beta} \delta^{\nu}_{\alpha} - \delta^{\nu}_{\beta} \delta^{\mu}_{\alpha}\right) \partial_{\mu} A_{\nu} \partial^{\alpha} A^{\beta} \\
+&= \partial_{\mu} A_{\nu} \partial^{\nu} A^{\mu} -\partial_{\mu} A_{\nu} \partial^{\mu} A^{\nu} \\
+&= -\partial_{\mu} A_{\nu} \left( \partial^{\mu} A^{\nu} - \partial^{\nu} A^{\mu} \right) \\
+\end{align*}
+
+That is
+\begin{equation}
+\gpgradezero{ (\grad \wedge A)^2 } = -\partial_{\mu} A_{\nu} F^{\mu\nu} = -\inv{2} F_{\mu\nu}F^{\mu\nu}.
 \end{equation}
+
+For the pseudoscalar parts of the product we have
+\begin{align*}
+\gpgrade{ (\grad \wedge A)^2 }{4} &= (\grad \wedge A) \wedge (\grad \wedge A) \\
+&= (\gamma_{\mu\nu}) \wedge (\gamma_{\alpha\beta}) \partial^{\mu} A^{\nu} \partial^{\alpha} A^{\beta} \\
+\end{align*}
+
+That is
+
+\begin{equation}\label{eqn:pseudoscalarFieldSquare}
+\gpgrade{ (\grad \wedge A)^2 }{4} = \epsilon_{\mu\nu\alpha\beta} I \partial^{\mu} A^{\nu} \partial^{\alpha} A^{\beta}
+\end{equation}
+
+FIXME: how about the commutator part of the product.  Does that also yield something when considered as a Lagrangian.
+
+We will work first with the Lagrangian field density in the following form
+\begin{align}\label{eqn:density}
+\LL &= -\frac{\kappa}{4} \gpgradezero{F^2} + J \cdot A \\
+%&= \frac{\kappa}{4} F_{\mu\nu} F^{\mu\nu} + J_{\alpha} A^{\alpha} \\
+%&= \frac{\kappa}{4} ( \partial_{\mu} A_{\nu} - \partial_{\nu} A_{\mu} ) ( \partial^{\mu} A^{\nu} - \partial^{\nu} A^{\mu} ) + J_{\alpha} A^{\alpha}
+&= \frac{\kappa}{2} \partial_{\mu} A_{\nu} ( \partial^{\mu} A^{\nu} - \partial^{\nu} A^{\mu} ) + J_{\alpha} A^{\alpha}
+\end{align}
+
+%It will be convient to write the density term in a slightly different fashion
+%
+%\begin{align*}
+%F^{\mu\nu} F_{\mu\nu}
+%&=
+%\partial_{\mu} A_{\nu} \partial^{\mu} A^{\nu}
+%-\partial_{\mu} A_{\nu} \partial^{\nu} A^{\mu}
+%-\partial_{\nu} A_{\mu} \partial^{\mu} A^{\nu}
+%+\partial_{\nu} A_{\mu} \partial^{\nu} A^{\mu} \\
+%&= 2 \left( \partial_{\mu} A_{\nu} \partial^{\mu} A^{\nu} -\partial_{\mu} A_{\nu} \partial^{\nu} A^{\mu} \right) \\
+%&= 2 \partial_{\mu} A_{\nu} \left( \partial^{\mu} A^{\nu} -\partial^{\nu} A^{\mu} \right) \\
+%\end{align*}
+
+%So we want to evaluate the equations for:
+%\begin{equation}
+%\end{equation}
 
 \subsubsection{ Pseudoscalar part. }
 
@@ -422,47 +459,6 @@ We want to do the same for the general electrodynamic Lagrangian density (where 
 \LL = \frac{\kappa}{2} \partial_{\mu} A_{\nu} ( \partial^{\mu} A^{\nu} - \partial^{\nu} A^{\mu} ) + J_{\alpha} A^{\alpha}
 \end{equation}
 
-%% FIXME:
-%%Having done the derivation of electrostatics equation, we can also fix the constant $\kappa$ in the general Lagrangian by
-%%comparison by setting $A_\mu = A_\nu = 0$
-%%
-%%\begin{align*}
-%%\LL
-%%&=
-%%\frac{\kappa}{4}
-%%\left(
-%%%( \partial_{\mu} A_{\nu} - \partial_{\nu} A_{\mu} ) ( \partial^{\mu} A^{\nu} - \partial^{\nu} A^{\mu} )
-%%\partial_{\mu} A_{\nu} \partial^{\mu} A^{\nu}
-%%-\partial_{\mu} A_{\nu} \partial^{\nu} A^{\mu}
-%%-\partial_{\nu} A_{\mu} \partial^{\mu} A^{\nu}
-%%+\partial_{\nu} A_{\mu} \partial^{\nu} A^{\mu}
-%%\right)
-%%+ J_{\alpha} A^{\alpha} \\
-%%&=
-%%\frac{\kappa}{4}
-%%\left(
-%%\partial_{\mu} A_{0} \partial^{\mu} A^{0}
-%%-\partial_{0} A_{0} \partial^{0} A^{0}
-%%-\partial_{0} A_{0} \partial^{0} A^{0}
-%%+\partial_{\nu} A_{0} \partial^{\nu} A^{0}
-%%\right)
-%%+ J_{0} A^{0} \\
-%%&= \frac{\kappa}{2} \partial_{i} A_{0} \partial^{i} A^{0} + J_{0} A^{0} \\
-%%&= -\frac{\kappa}{2} (\partial_{i} A^{0})^2 + J_{0} A^{0} \\
-%%&= -\frac{\kappa}{2} (\partial_{i} \phi/c)^2 + c \rho \phi/c \\
-%%&= -\frac{\kappa}{2 c^2} (\partial_{i} \phi)^2 + \rho \phi \\
-%%&= -\frac{\epsilon_0}{2} (\spacegrad \phi)^2 + \rho \phi \\
-%%\end{align*}
-%%
-%%% e mu = 1/c^2
-%%% e c^2 mu = 1
-%%% e c^2 = 1/mu
-%%This dimensional analysis and comparision supplies $\kappa = \epsilon_0 c^2$.  With
-%%$\epsilon_0 \mu_0 = 1/c^2$, we have our scale factor before actually solving the extremal problem and equation \ref{eqn:density} takes the form
-%%
-%%\begin{equation}
-%%\LL = \inv{2 \mu_0} \partial_{\mu} A_{\nu} ( \partial^{\mu} A^{\nu} - \partial^{\nu} A^{\mu} ) + J_{\alpha} A^{\alpha}
-%%\end{equation}
 
 Using the same trick we introduce the desired solution and an variational function for each $A^{\mu}$
 
@@ -533,8 +529,72 @@ When one adds the Lagrangian that gives us the Lorentz force law
 
 (positive metric for time implied in this formula), we have a good chunk of non-quantum electrodynamics described in a couple energy minimization relationships.
 
+\subsection{ Determination of scale factor by comparision to electrostatics case. }
+
+FIXME: write this up.  A first attempt to do it this way (ie: before doing the variational work first) ended up with a $1/c$ factor error.   Correct the latex.
+
+%% FIXME:
+%%Having done the derivation of electrostatics equation, we can also fix the constant $\kappa$ in the general Lagrangian by
+%%comparison by setting $A_\mu = A_\nu = 0$
+%%
+%%\begin{align*}
+%%\LL
+%%&=
+%%\frac{\kappa}{4}
+%%\left(
+%%%( \partial_{\mu} A_{\nu} - \partial_{\nu} A_{\mu} ) ( \partial^{\mu} A^{\nu} - \partial^{\nu} A^{\mu} )
+%%\partial_{\mu} A_{\nu} \partial^{\mu} A^{\nu}
+%%-\partial_{\mu} A_{\nu} \partial^{\nu} A^{\mu}
+%%-\partial_{\nu} A_{\mu} \partial^{\mu} A^{\nu}
+%%+\partial_{\nu} A_{\mu} \partial^{\nu} A^{\mu}
+%%\right)
+%%+ J_{\alpha} A^{\alpha} \\
+%%&=
+%%\frac{\kappa}{4}
+%%\left(
+%%\partial_{\mu} A_{0} \partial^{\mu} A^{0}
+%%-\partial_{0} A_{0} \partial^{0} A^{0}
+%%-\partial_{0} A_{0} \partial^{0} A^{0}
+%%+\partial_{\nu} A_{0} \partial^{\nu} A^{0}
+%%\right)
+%%+ J_{0} A^{0} \\
+%%&= \frac{\kappa}{2} \partial_{i} A_{0} \partial^{i} A^{0} + J_{0} A^{0} \\
+%%&= -\frac{\kappa}{2} (\partial_{i} A^{0})^2 + J_{0} A^{0} \\
+%%&= -\frac{\kappa}{2} (\partial_{i} \phi/c)^2 + c \rho \phi/c \\
+%%&= -\frac{\kappa}{2 c^2} (\partial_{i} \phi)^2 + \rho \phi \\
+%%&= -\frac{\epsilon_0}{2} (\spacegrad \phi)^2 + \rho \phi \\
+%%\end{align*}
+%%
+%%% e mu = 1/c^2
+%%% e c^2 mu = 1
+%%% e c^2 = 1/mu
+%%This dimensional analysis and comparision supplies $\kappa = \epsilon_0 c^2$.  With
+%%$\epsilon_0 \mu_0 = 1/c^2$, we have our scale factor before actually solving the extremal problem and equation \ref{eqn:density} takes the form
+%%
+%%\begin{equation}
+%%\LL = \inv{2 \mu_0} \partial_{\mu} A_{\nu} ( \partial^{\mu} A^{\nu} - \partial^{\nu} A^{\mu} ) + J_{\alpha} A^{\alpha}
+%%\end{equation}
+
+
 %%% mu = 1/e c^2
 %%
 %%Hmm.  Off by a factor of $1/c$ so something went wrong with the determination of $\kappa$.  Other than that this is exactly the tensor form of the vector part of Maxwells equation.
+
+\section{ Trivector components of Maxwells equation from a Lagrangian? }
+
+Next it will be shown that the remaining half \ref{eqn:dualpartofMaxwells}
+of Maxwells equation in tensor form can be calculated from the pseudoscalar part of the field square 
+\ref{eqn:pseudoscalarFieldSquare} when used as a Lagrangian density.
+
+% F^2 = 2cI E.B
+\begin{align*}
+\LL 
+&= -\frac{\kappa I}{4} \gpgrade{F^2}{4} \\
+&= -\frac{\kappa c I}{2} \BE \cdot \BB \\
+&= -\frac{\kappa I}{4} \epsilon_{\mu\nu\alpha\beta} \partial^{\mu} A^{\nu} \partial^{\alpha} A^{\beta}
+\end{align*}
+
+I think that it will be natural as a follow on to retain the complex nature of the field square later and work with an entirely complex Lagrangian, but for now 
+the $-\kappa I/4$ cooeffienent can be dropped since it will not change the overall result.  Where it is useful is that the factor of $I$ implicitly balances the upper and lower indexes used, so a complete index lowering will also not change the result (ie: the pseudoscalar is then correspondingly expressed in terms of index upper basis vectors).
 
 \end{document}               % End of document.
