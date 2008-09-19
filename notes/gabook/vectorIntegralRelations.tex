@@ -4,6 +4,7 @@
 \newcommand{\grad}[0]{\nabla}
 \newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
 \newcommand{\Abs}[1]{\left\lvert{#1}\right\rvert}
+\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
 
 \usepackage{color,cite,graphicx}
    % use colour in the document, put your citations as [1-4]
@@ -18,7 +19,7 @@
 
 \title{ Reconciling vector integral relations. }
 \author{Peeter Joot}
-\date{ Sept. 18, 2008.  Last Revision: $Date: 2008/09/19 04:32:37 $ }
+\date{ Sept. 18, 2008.  Last Revision: $Date: 2008/09/19 12:22:21 $ }
 
 \begin{document}
 
@@ -161,9 +162,31 @@ Dotting the gradient and the path element we have
 &= \frac{d f}{d \lambda} d\lambda
 \end{align*}
 
-Equation \ref{eqn:lineintegral} follows immediately, which we see to be really not much more than the chain rule.  One kind of nice feature
-about this derivation is that if you do it backwards, it provides a nice motivation for the general form of the gradient (ie: in terms
-of a non-orthonormal basis).  That's a lot more obvious a way to get at this result than my previous way of observing that the Euler-Lagrange
+Equation \ref{eqn:lineintegral} follows immediately, which we see to be really not much more than the chain rule.
+
+Additionally this can be put into correspondance with equation \ref{eqn:stokesGA}, with the observation that one can write the gradient of a scalar function as a wedge product by the fundamental definition of wedge in terms of grade selection.  For blades $A$ and $B$ with grades $a$ and $b$ respectively, the wedge is
+
+\begin{align*}
+A \wedge B = \gpgrade{AB}{a+b}
+\end{align*}
+
+Therefore for a scalar function $f$
+
+\begin{align*}
+\grad \wedge f = \gpgrade{\grad f}{1+0} = \grad f
+\end{align*}
+
+Putting this back together one has the desired result
+
+\begin{equation}\label{eqn:lineintegralwedge}
+\int_C (\grad \wedge f) \cdot d\Br = f \vert_{\partial C}
+\end{equation}
+
+\subsection{ Motivating the non-orthonormal form of the gradient. }
+
+An additional note about the derivation of this line integral result.  Having done this with the gradient expressed for possibly non-orthonormal frames, 
+shows that if played backwards, it provides a nice motivation for the general form of the gradient, in terms
+of a such a non-orthonormal basis.  That's a lot more obvious a way to get at this result than my previous way of observing that the Euler-Lagrange
 equations when summed in vector form imply that this is the required form of the gradient.
 
 \section{ Jacobian area determinants. }
@@ -226,7 +249,11 @@ dA =
 \end{align}
 
 This is a slightly more general form than we are used to seeing since the position vector parameterization was allowed to be expresed in terms
-of an arbitrary (possibly non-orthonormal) basis.  For that special case of an orthonormal parameterization
+of an arbitrary (possibly non-orthonormal) basis.  Also observe that the coefficients in the determinant preceding the Jacobian are exactly those of the matrix of the linear transformation between the two sets of basis vectors.
+
+\subsection{ Orthonormal parameterization. } 
+
+For the special (and usual) case of an orthonormal parameterization
 
 \begin{align*}
 \Br = x(u,v) \Be_1 + y(u,v) \Be_2
@@ -244,10 +271,36 @@ that obviousness after a little bit of algebra.  However, in a book like Salus a
 they can't derive it without waiting til close to the end of the book so that Green's is
 available, it's not really so obvious.  The geometrical background just isn't there.
 
+Because there are sign variation degrees of freedom for an arbitrary pseudoscalar, this also illustrates why the absolute value of the Jacobian determinant is used in some circumstances.  Less dodgy is to say the positive area element after change of variables in a specific region is produced by dividing out the pseudoscalar with the same orientation as the area element bivector.
+
 Now, it's not too hard to see that this idea will also work for change of variables for volume and higher
-dimensional volume elements.  We just have to divide by the spatial (or higher dimensional) pseudoscalar of the
-same orientation as the parameterization.  Because there are sign variations in the pseudoscalar, this also
-illustrates why the absolute value of the Jacobian determinant is used in some circumstances.
+dimensional volume elements, after wedging N partials.  We just have to divide by the spatial (or higher dimensional) pseudoscalar of the
+same orientation associated with the parameterization.
+
+\subsection{ Surface area in higher dimensions. }
+
+As well as being able to use these ideas to express scalar area and volume, or higher dimensional generalizations, this can be used to calculate surface area in any number of dimensions.  For a two parameter vector parameterization of a surface $\Br(u,v)$ we can write
+
+\begin{equation}\label{eqn:surfacearea}
+A = \int\int \inv{I_2(u,v)} \PD{u}{\Br} \wedge \PD{v}{\Br} du dv
+\end{equation}
+
+Here $I_2(u,v)$ is the unit pseudoscalar for the tangent space of the surface at the point of interest with the orientation of the bivector 
+$d\BA = \PD{u}{\Br} \wedge \PD{v}{\Br}$.
+
+This is in fact equivalent to the familiar normal form in 3D expressed in terms
+of a cross product
+
+\begin{equation}
+A = \int\int \left(\PD{u}{\Br} \cross \PD{v}{\Br}\right) \cdot \ncap(u,v) du dv
+\end{equation}
+
+but the expression of equation \ref{eqn:surfacearea}, holds for any number of dimensions $N \ge 2$.  As with the wedge product form, we have a requirement that the parameterization is not degenerate at any point, so the 3D de-generalization of our requirement that
+$\PD{u}{\Br} \wedge \PD{v}{\Br} \ne 0$
+on the region of the surface of interest means that for 3D we simply require
+$\PD{u}{\Br} \cross \PD{v}{\Br} \ne 0$.
+
+A consequence of non-degeneracy for the region of the surface area being integrated means that the sign of the bivector cannot change sign, so we have equivalance with the concept of outwards normal to the surface by picking the tangent space unit pseudoscalar to have the same orientation as the bivector area element.
 
 \section{ Green's theorem. }
 
