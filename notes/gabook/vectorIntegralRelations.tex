@@ -5,11 +5,20 @@
 \newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
 \newcommand{\Abs}[1]{\left\lvert{#1}\right\rvert}
 
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+
 \usepackage[bookmarks=true]{hyperref}
 
 \title{ Reconciling vector integral relations. }
 \author{Peeter Joot}
-\date{ Sept. 18, 2008.  Last Revision: $Date: 2008/09/19 01:38:16 $ }
+\date{ Sept. 18, 2008.  Last Revision: $Date: 2008/09/19 04:32:37 $ }
 
 \begin{document}
 
@@ -55,7 +64,7 @@ dimensional cases are not proved at all.
 \item Green's theorem. 
 
 \begin{equation}\label{eqn:greens}
-\int\int \left(\PD{y}{Q} \PD{x}{P}\right) dx dy = \oint P dx + Q dy
+\int\int \left(\PD{y}{Q} - \PD{x}{P}\right) dx dy = \oint P dx + Q dy
 \end{equation}
 
 \item Divergence theorem. 
@@ -152,9 +161,93 @@ Dotting the gradient and the path element we have
 &= \frac{d f}{d \lambda} d\lambda
 \end{align*}
 
-Equation \ref{eqn:lineintegral} follows immediately.
+Equation \ref{eqn:lineintegral} follows immediately, which we see to be really not much more than the chain rule.  One kind of nice feature
+about this derivation is that if you do it backwards, it provides a nice motivation for the general form of the gradient (ie: in terms
+of a non-orthonormal basis).  That's a lot more obvious a way to get at this result than my previous way of observing that the Euler-Lagrange
+equations when summed in vector form imply that this is the required form of the gradient.
 
 \section{ Jacobian area determinants. }
+
+Next in ease of proof is the Jacobian determinant.  This actually comes largely for free since we can utilize the wedge product to
+express areas.
+
+\begin{figure}[htp]
+\centering
+\includegraphics[totalheight=0.4\textheight]{planeParameterization}
+\caption{Plane parameterization}\label{fig:planeParameterization}
+\end{figure}
+
+Introduce a two vector parameterization of the area as in figure \ref{fig:planeParameterization}
+
+\begin{equation*}
+\Br = \gamma^{i} \phi_i(u,v)
+\end{equation*}
+
+Provided that the partials are not colinear at the point of interest, we can compute the area of the parallogram spanned by these
+
+\begin{align*}
+d\BA 
+&= \left(\PD{u}{\Br} du\right) \wedge \left(\PD{v}{\Br} dv\right) \\
+&= \left(\gamma^{i} \PD{u}{\phi_i}\right) \wedge \left(\gamma^{j} \PD{v}{\phi_j} \right) du dv \\
+&= \gamma^{i} \wedge \gamma^{j} \PD{u}{\phi_i} \PD{v}{\phi_j} du dv \\
+&= \sum_{i<j} \gamma^{i} \wedge \gamma^{j} \left( \PD{u}{\phi_i} \PD{v}{\phi_j} - \PD{u}{\phi_i} \PD{v}{\phi_i} \right) du dv \\
+&= \sum_{i<j} \gamma^{i} \wedge \gamma^{j} \PD{(u,v)}{(\phi_i,\phi_j)} du dv \\
+\end{align*}
+
+Here $d\BA$ is a bivector area element, so in the purely two dimensional case, where this is constrained to a plane, the scalar area element
+is recovered by dividing by the plane unit pseudoscalar having the same orientation as this bivector.
+
+One can also see how the same idea will be of use later in the Stokes' generalization of Green's theorem (considering a surface element small enough to be considered planar).
+
+For now, considering just the 2D case we have, to divide through by the plane unit pseudoscalar $i = \Be_1\Be_2$ produced by the product of two orthonormal vectors we want to calculate the product:
+
+\begin{align*}
+\inv{i} \gamma^{1} \wedge \gamma^{2} 
+&= (\Be_2 \wedge \Be_1) \cdot (\gamma^{1} \wedge \gamma^{2}) \\
+&= \Be_2 \cdot (\Be_1 \cdot (\gamma^{1} \wedge \gamma^{2})) \\
+&= \Be_2 \cdot ( (\Be_1 \cdot \gamma^{1}) \gamma^{2} -(\Be_1 \cdot \gamma^{2}) \gamma^{1} ) \\
+&= (\Be_1 \cdot \gamma^{1}) (\Be_2 \cdot \gamma^{2}) -(\Be_1 \cdot \gamma^{2}) (\Be_2 \cdot \gamma^{1}) \\
+&=
+\begin{vmatrix}
+\Be_1 \cdot \gamma^{1} & \Be_1 \cdot \gamma^{2} \\
+\Be_2 \cdot \gamma^{1} & \Be_2 \cdot \gamma^{2}
+\end{vmatrix}
+\end{align*}
+
+Thus the (scalar) area element is
+
+\begin{align}\label{eqn:jacobianframe}
+dA =
+\begin{vmatrix}
+\Be_1 \cdot \gamma^{1} & \Be_1 \cdot \gamma^{2} \\
+\Be_2 \cdot \gamma^{1} & \Be_2 \cdot \gamma^{2}
+\end{vmatrix}
+\PD{(u,v)}{(\phi_1,\phi_2)} du dv
+\end{align}
+
+This is a slightly more general form than we are used to seeing since the position vector parameterization was allowed to be expresed in terms
+of an arbitrary (possibly non-orthonormal) basis.  For that special case of an orthonormal parameterization
+
+\begin{align*}
+\Br = x(u,v) \Be_1 + y(u,v) \Be_2
+\end{align*}
+
+the product of determinants in \ref{eqn:jacobianframe} takes the usual form
+
+\begin{align}\label{eqn:jacobianarea}
+dx dy = \PD{(u,v)}{(x,y)} du dv.
+\end{align}
+
+Now the danger of an expression like \ref{eqn:jacobianarea} is that it almost
+seems obvious.  Now, if you understand the wedge product origin you can state
+that obviousness after a little bit of algebra.  However, in a book like Salus and Hille where
+they can't derive it without waiting til close to the end of the book so that Green's is
+available, it's not really so obvious.  The geometrical background just isn't there.
+
+Now, it's not too hard to see that this idea will also work for change of variables for volume and higher
+dimensional volume elements.  We just have to divide by the spatial (or higher dimensional) pseudoscalar of the
+same orientation as the parameterization.  Because there are sign variations in the pseudoscalar, this also
+illustrates why the absolute value of the Jacobian determinant is used in some circumstances.
 
 \section{ Green's theorem. }
 
