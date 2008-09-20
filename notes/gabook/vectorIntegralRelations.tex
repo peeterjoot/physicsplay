@@ -5,6 +5,10 @@
 \newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
 \newcommand{\Abs}[1]{\left\lvert{#1}\right\rvert}
 \newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+
+% mathmode version of \R{} macro:
+\newcommand{\Rm}[1]{\mathbb{R}^{#1}}
 
 \usepackage{color,cite,graphicx}
    % use colour in the document, put your citations as [1-4]
@@ -13,13 +17,15 @@
 \usepackage{latexsym,amssymb,epsf} % don't remember if these are
    % needed, but their inclusion can't do any damage
 
-
+% ointclockwise, ointctrclockwise
+\usepackage{esint}
+% apparently also in txfonts/pxfonts
 
 \usepackage[bookmarks=true]{hyperref}
 
 \title{ Reconciling vector integral relations. }
 \author{Peeter Joot}
-\date{ Sept. 18, 2008.  Last Revision: $Date: 2008/09/20 15:08:34 $ }
+\date{ Sept. 18, 2008.  Last Revision: $Date: 2008/09/20 18:34:43 $ }
 
 \begin{document}
 
@@ -65,7 +71,13 @@ dimensional cases are not proved at all.
 \item Green's theorem. 
 
 \begin{equation}\label{eqn:greens}
-\int\int \left(\PD{x}{Q} - \PD{y}{P}\right) dx dy = \oint P dx + Q dy
+\int\int \left(\PD{x}{Q} - \PD{y}{P}\right) dx dy = \ointctrclockwise P dx + Q dy
+\end{equation}
+
+\item Stokes theorem. 
+
+\begin{equation}\label{eqn:stokes}
+\int\int (\grad \cross \Bf) \cdot \ncap\, dx dy = \ointctrclockwise \Bf \cdot d\Br
 \end{equation}
 
 \item Divergence theorem. 
@@ -73,6 +85,7 @@ dimensional cases are not proved at all.
 \begin{equation}\label{eqn:divergenceplane}
 \int\int \grad \cdot \Bf\, dx dy = \oint \Bf \cdot \ncap\, ds
 \end{equation}
+FIXME: orientation of integral?
 
 \begin{equation}\label{eqn:divergencevolume}
 \int\int\int_V \grad \cdot \Bf\, dx dy dz = \int\int_S \Bf \cdot \ncap\, dA
@@ -86,11 +99,6 @@ dimensional cases are not proved at all.
 \int\int\int_V \grad \cross \Bf\, dV \int\int_S \Bf \cross \ncap\, dA
 \end{equation}
 
-\item Stokes theorem. 
-
-\begin{equation}\label{eqn:stokes}
-\int\int (\grad \cross \Bf) \cdot \ncap\, dx dy = \oint \Bf \cdot d\Br
-\end{equation}
 
 \end{itemize}
 
@@ -307,8 +315,10 @@ A consequence of non-degeneracy for the region of the surface area being integra
 
 It is pretty clear glancing at equation \ref{eqn:greens}, that the left
 hand side can likely be expressed as the curl of a vector.  By curl here
-is meant the more natural bivector "curl", where we form the operator $\grad \wedge$.  A dumb expansion of such a product,
-assuming for now, an orthonormal basis for the plane, introduce a vector
+is meant the more natural bivector "curl", where we form the operator $\grad \wedge$.
+
+To get a feel for this operation, here is a dumb expansion of such a product,
+where an orthonormal basis for the plane is assumed.  Introduce a vector
 
 \begin{equation*}
 \Bf = P \Be_1 + Q \Be_2
@@ -351,11 +361,11 @@ express this
 d\Br = \PD{u}{\Br} du + \PD{v}{\Br} dv = d\Bu + d\Bv
 \end{equation*}
 
-We can then rewrite the negation of equation \ref{eqn:greenlikeLHS}
+We can then rewrite equation \ref{eqn:greenlikeLHS}
 once more in a slightly cleaner form, independent of the specific parameterization
 
 \begin{equation}\label{eqn:greenlikeLHSFinal}
-\int\int (\grad \wedge \Bf) \cdot (d\Bu \wedge d\Bv) = \int\int (\grad \wedge \Bf) \cdot d\BA
+-\int\int (\grad \wedge \Bf) \cdot (d\Bu \wedge d\Bv) = -\int\int (\grad \wedge \Bf) \cdot d\BA
 \end{equation}
 
 Here we see that it becomes natural to work with the oriented bivector area element $d\BA = d\Bu \wedge d\Bv$.
@@ -403,17 +413,208 @@ and our differential form is
 
 The trailing differential form here is just the Jacobian form for change of variables, so we have
 
-\begin{align}
-\left(\grad \wedge \Bf\right) \cdot d\BA
-= -\sum_{i<j} \left( \PD{x^{i}}{f_j} -\PD{x^{j}}{f_i} \right) dx^i dx^j
+\begin{align}\label{eqn:areaintegral}
+-\left(\grad \wedge \Bf\right) \cdot d\BA
+&= \sum_{i<j} \left( \PD{x^{i}}{f_j} -\PD{x^{j}}{f_i} \right) \PD{(u,v)}{(x^i, x^j)} du dv \\
+&= \sum_{i<j} \left( \PD{x^{i}}{f_j} -\PD{x^{j}}{f_i} \right) dx^i dx^j
 \end{align}
 
 A result that is independent of dimension or any particular parameterization of the area.
 
-\subsection{ Calculating the area integral. }
+\subsection{ Calculating the line integral. }
+
+The expectation is that calculation of the line integral
+
+\begin{equation}
+I = \ointctrclockwise \Bf \cdot d\Br,
+\end{equation}
+
+around any loop in a plane will match equation \ref{eqn:areaintegral}.  This can
+be verified with direct calculation.
+
+FIXME: insert picture.
+
+Again parameterizing the points around the loop with a vector $\Br = \Br(u,v)$ the integral can be split into four parts
+
+\begin{align*}
+I_1 &=  \int_{u=u_0}^{u_1} \Bf(\Br(u,v_0)) \cdot \PD{u}{\Br(u,v_0)} du \\
+I_2 &=  \int_{v=v_0}^{v_1} \Bf(\Br(u_1,v)) \cdot \PD{v}{\Br(u_1,v)} dv \\
+I_3 &= -\int_{u=u_0}^{u_1} \Bf(\Br(u,v_1)) \cdot \PD{u}{\Br(u,v_1)} du \\
+I_4 &= -\int_{v=v_0}^{v_1} \Bf(\Br(u_0,v)) \cdot \PD{v}{\Br(u_0,v)} dv \\
+\end{align*}
+
+Summing these we have
+\begin{align*}
+I
+&= I_1 + I_3 + I_2 + I_4  \\
+&=
+\int_{u=u_0}^{u_1} du \left(
+\Bf(\Br(u,v_0)) \cdot \PD{u}{\Br(u,v_0)} 
+-\Bf(\Br(u,v_1)) \cdot \PD{u}{\Br(u,v_1)} 
+\right) \\
+&+\int_{v=v_0}^{v_1} dv
+\left(
+\Bf(\Br(u_1,v)) \cdot \PD{v}{\Br(u_1,v)} 
+-\Bf(\Br(u_0,v)) \cdot \PD{v}{\Br(u_0,v)}
+\right)
+\end{align*}
+
+Writing out the vectors in components, utilizing reciprocal frames as in the area integral,
+we have $\Bf = \gamma^i f_i$, and $\Br = \gamma_i x^i$ the dot products can be expanded and the sums
+pulled out of the integral
+
+\begin{align*}
+I
+&=
+\sum
+\int_{u=u_0}^{u_1} du \left(
+f_i(\Br(u,v_0)) \PD{u}{x^i(u,v_0)} 
+-f_i(\Br(u,v_1)) \PD{u}{x^i(u,v_1)} 
+\right) \\
+&+\sum \int_{v=v_0}^{v_1} dv
+\left(
+f_i(\Br(u_1,v)) \PD{v}{x^i(u_1,v)} 
+-f_i(\Br(u_0,v)) \PD{v}{x^i(u_0,v)}
+\right) \\
+\end{align*}
+
+The difference of functions here can be written as the integral of partials over the
+$[u_0,u_1]$ or $[v_0,v_1]$ ranges.  This can be more obvious if one temporarily
+introduces helper functions of one variable describing the difference (FIXME: do so like on paper notes).
+
+Such an integration gives
+
+\begin{align*}
+I
+&=
+\sum
+\int_{u=u_0}^{u_1} du \left(
+f_i(x^j(u,v_0)) \PD{u}{x^i(u,v_0)} 
+-f_i(x^j(u,v_1)) \PD{u}{x^i(u,v_1)} 
+\right) \\
+&+\sum \int_{v=v_0}^{v_1} dv
+\left(
+f_i(x^j(u_1,v)) \PD{v}{x^i(u_1,v)} 
+-f_i(x^j(u_0,v)) \PD{v}{x^i(u_0,v)}
+\right) \\
+&=
+\sum
+-\int_{u=u_0}^{u_1} du 
+\int_{v=v_0}^{v_1} dv \PD{v}{} \left(f_i(x^j(u,v)) \PD{u}{x^i(u,v)} \right)
++\sum 
+\int_{v=v_0}^{v_1} dv
+\int_{u=u_0}^{u_1} du \PD{u}{} \left(f_i(x^j(u,v)) \PD{v}{x^i(u,v)} \right) \\
+&=
+\sum \int\int \left(
+\PD{u}{} \left(f_i \PD{v}{x^i} \right) 
+-\PD{v}{} \left(f_i \PD{u}{x^i} \right) 
+\right) du dv \\
+&=
+\sum \int\int \left(
+\PD{u}{f_i} \PD{v}{x^i}
++f_i \PD{u}{} \PD{v}{x^i}
+-\PD{v}{f_i} \PD{u}{x^i}
+-f_i \PD{v}{} \PD{u}{x^i}
+\right) 
+du dv \\
+&=
+\sum \int\int \left(
+\PD{u}{f_i} \PD{v}{x^i}
+-\PD{v}{f_i} \PD{u}{x^i}
+\right) 
+du dv \\
+\end{align*}
+
+Sufficient continuity in the coordinates $x^i$ has been assumed here for mixed partial equality.  Expanding out
+the partials with respect to $u$ and $v$ in terms of the coordinates one has
+
+\begin{align*}
+I
+&=
+\sum \int\int 
+\PD{x^j}{f_i} 
+\left(
+\PD{u}{x^j}
+\PD{v}{x^i}
+-
+\PD{v}{x^j}
+\PD{u}{x^i}
+\right) 
+du dv \\
+&= -\sum \int\int \PD{x^j}{f_i} \PD{(u,v)}{(x^i,x^j)} du dv \\
+\end{align*}
+
+Summing over $i<j$ and $j>i$, with a switch of variables we have
+\begin{equation}
+I
+= 
+\sum_{i<j} \int\int 
+\left(
+\PD{x^i}{f_j}
+-\PD{x^j}{f_i}
+\right)
+\PD{(u,v)}{(x^i,x^j)} du dv 
+\end{equation}
+
+which equals the area integral of equation \ref{eqn:areaintegral}.  We have therefore proved a hybrid Green's-like
+and Stokes-like theorem
+
+\begin{equation}\label{eqn:stokesplane}
+\int\int \left(\grad \wedge f\right) \cdot d\BA = \ointclockwise \Bf \cdot d\Br
+\end{equation}
+
+Like the \R{2} Green's result this applies to a looping path integral in a plane, but this
+form is valid for $\Bf \in \Rm{N}$ as well.  In particular, like Stokes' law this this applies to \R{3}.
+
+I set out only to prove
+Green's theorem, but basically got the general proof without much extra work (using $i,j$ instead of $1,2$)
+once the area integral was expressed as in terms of the wedge curl.
+
+Note carefully that there is a
+difference in the direction of the path integral compared to the cross product form of Stokes' law since
+the squared bivector on the LHS introduces a negation.
+
+As far as generalizing this to a non-planar surface.
+The usual additional arguments to express a general 
+surface as a triangularized set of differential plane elements, with summation cancelling opposing interior
+contributions, is required to complete the proof.  The interesting (to me) part is the
+plane to line integral Stokes law equation has been expressed in its \R{N} generality, and without
+omission of the important loop orientation, and area sense.
+
+\subsection{ Application to formulate Stokes law for a plane loop. }
+
+We can obtain the \R{3} cross product form of Stokes law (assuming the triangularization generalization has been
+done) with some basic algebraic manipulations.
+
+Let $\ncap d\BA = i dA$, where $i = \Be_1\Be_2\Be_3$ is the \R{3} pseudoscalar.  Inserting back into 
+the differential form of the area integral of \ref{eqn:stokesplane} we have
+
+\begin{align*}
+\left(\grad \wedge \Bf\right) \cdot d\BA
+&= \gpgradezero{ (\grad \wedge \Bf) \ncap i dA} \\
+&= \gpgradezero{ i (\grad \cross \Bf) \ncap i dA} \\
+&= -\gpgradezero{ (\grad \cross \Bf) \ncap } dA \\
+&= - (\grad \cross \Bf) \cdot \ncap dA \\
+\end{align*}
+
+This recovers the cross product form of Stokes law
+
+\begin{equation}
+\int\int (\grad \cross \Bf) \cdot \ncap dA = - \ointclockwise \Bf \cdot d\Br = \ointctrclockwise \Bf \cdot d\Br.
+\end{equation}
+
+Note that the surface here does not have to have any notion of outwards facing normal (this makes no sense for a plane for example), as is usually used
+in the description of the \R{3} vector form of Stokes' law.
+That means some care is required in the definition of the unit normal $\ncap$.
+There is however an orientation for this vector, and that is fixed by the
+pseudoscalar.  Supposing that one picks $\ncap$ such that $\ncap d\BA \inv{i} = dA > 0$.  With such a selection, and
+$d\BA = \ucap \vcap dA$, the triplet of vectors is oriented such that $\ncap \ucap \vcap = i$.  There
+is no notion of handedness required, which is a very \R{3} concept, despite having a notion of
+explicitly oriented vectors.
 
 \section{ Divergence theorem. }
 
-\section{ Stokes theorem. }
+This part is left for another day (will have to do some of this on paper first since I don't know where I'm going
+yet.)
 
 \end{document}               % End of document.
