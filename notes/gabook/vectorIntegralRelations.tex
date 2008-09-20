@@ -19,7 +19,7 @@
 
 \title{ Reconciling vector integral relations. }
 \author{Peeter Joot}
-\date{ Sept. 18, 2008.  Last Revision: $Date: 2008/09/20 01:09:31 $ }
+\date{ Sept. 18, 2008.  Last Revision: $Date: 2008/09/20 02:00:31 $ }
 
 \begin{document}
 
@@ -203,7 +203,7 @@ express areas.
 Introduce a two vector parameterization of the area as in figure \ref{fig:planeParameterization}
 
 \begin{equation*}
-\Br = \gamma^{i} \phi_i(u,v)
+\Br = \gamma_{i} \phi^i(u,v)
 \end{equation*}
 
 Provided that the partials are not colinear at the point of interest, we can compute the area of the parallogram spanned by these
@@ -211,10 +211,10 @@ Provided that the partials are not colinear at the point of interest, we can com
 \begin{align*}
 d\BA 
 &= \left(\PD{u}{\Br} du\right) \wedge \left(\PD{v}{\Br} dv\right) \\
-&= \left(\gamma^{i} \PD{u}{\phi_i}\right) \wedge \left(\gamma^{j} \PD{v}{\phi_j} \right) du dv \\
-&= \gamma^{i} \wedge \gamma^{j} \PD{u}{\phi_i} \PD{v}{\phi_j} du dv \\
-&= \sum_{i<j} \gamma^{i} \wedge \gamma^{j} \left( \PD{u}{\phi_i} \PD{v}{\phi_j} - \PD{u}{\phi_i} \PD{v}{\phi_i} \right) du dv \\
-&= \sum_{i<j} \gamma^{i} \wedge \gamma^{j} \PD{(u,v)}{(\phi_i,\phi_j)} du dv \\
+&= \left(\gamma_{i} \PD{u}{\phi^i}\right) \wedge \left(\gamma_{j} \PD{v}{\phi^j} \right) du dv \\
+&= \gamma_{i} \wedge \gamma_{j} \PD{u}{\phi^i} \PD{v}{\phi^j} du dv \\
+&= \sum_{i<j} \gamma_{i} \wedge \gamma_{j} \left( \PD{u}{\phi^i} \PD{v}{\phi^j} - \PD{u}{\phi^i} \PD{v}{\phi^i} \right) du dv \\
+&= \sum_{i<j} \gamma_{i} \wedge \gamma_{j} \PD{(u,v)}{(\phi^i,\phi^j)} du dv \\
 \end{align*}
 
 Here $d\BA$ is a bivector area element, so in the purely two dimensional case, where this is constrained to a plane, the scalar area element
@@ -225,15 +225,15 @@ One can also see how the same idea will be of use later in the Stokes' generaliz
 For now, considering just the 2D case we have, to divide through by the plane unit pseudoscalar $i = \Be_1\Be_2$ produced by the product of two orthonormal vectors we want to calculate the product:
 
 \begin{align*}
-\inv{i} \gamma^{1} \wedge \gamma^{2} 
-&= (\Be_2 \wedge \Be_1) \cdot (\gamma^{1} \wedge \gamma^{2}) \\
-&= \Be_2 \cdot (\Be_1 \cdot (\gamma^{1} \wedge \gamma^{2})) \\
-&= \Be_2 \cdot ( (\Be_1 \cdot \gamma^{1}) \gamma^{2} -(\Be_1 \cdot \gamma^{2}) \gamma^{1} ) \\
-&= (\Be_1 \cdot \gamma^{1}) (\Be_2 \cdot \gamma^{2}) -(\Be_1 \cdot \gamma^{2}) (\Be_2 \cdot \gamma^{1}) \\
+\inv{i} \gamma_{1} \wedge \gamma_{2} 
+&= (\Be_2 \wedge \Be_1) \cdot (\gamma_{1} \wedge \gamma_{2}) \\
+&= \Be_2 \cdot (\Be_1 \cdot (\gamma_{1} \wedge \gamma_{2})) \\
+&= \Be_2 \cdot ( (\Be_1 \cdot \gamma_{1}) \gamma_{2} -(\Be_1 \cdot \gamma_{2}) \gamma_{1} ) \\
+&= (\Be_1 \cdot \gamma_{1}) (\Be_2 \cdot \gamma_{2}) -(\Be_1 \cdot \gamma_{2}) (\Be_2 \cdot \gamma_{1}) \\
 &=
 \begin{vmatrix}
-\Be_1 \cdot \gamma^{1} & \Be_1 \cdot \gamma^{2} \\
-\Be_2 \cdot \gamma^{1} & \Be_2 \cdot \gamma^{2}
+\Be_1 \cdot \gamma_{1} & \Be_1 \cdot \gamma_{2} \\
+\Be_2 \cdot \gamma_{1} & \Be_2 \cdot \gamma_{2}
 \end{vmatrix}
 \end{align*}
 
@@ -242,10 +242,10 @@ Thus the (scalar) area element is
 \begin{align}\label{eqn:jacobianframe}
 dA =
 \begin{vmatrix}
-\Be_1 \cdot \gamma^{1} & \Be_1 \cdot \gamma^{2} \\
-\Be_2 \cdot \gamma^{1} & \Be_2 \cdot \gamma^{2}
+\Be_1 \cdot \gamma_{1} & \Be_1 \cdot \gamma_{2} \\
+\Be_2 \cdot \gamma_{1} & \Be_2 \cdot \gamma_{2}
 \end{vmatrix}
-\PD{(u,v)}{(\phi_1,\phi_2)} du dv
+\PD{(u,v)}{(\phi^1,\phi^2)} du dv
 \end{align}
 
 This is a slightly more general form than we are used to seeing since the position vector parameterization was allowed to be expresed in terms
@@ -307,27 +307,43 @@ A consequence of non-degeneracy for the region of the surface area being integra
 
 It is pretty clear glancing at equation \ref{eqn:greens}, that the left
 hand side can likely be expressed as the curl of a vector.  By curl here
-is meant the more natural bivector "curl", where we form the operator $\grad \wedge$.
-
-Writing $\Bv = P \Be_1 + Q \Be_2$, we have
+is meant the more natural bivector "curl", where we form the operator $\grad \wedge$.  A dumb expansion of such a product,
+assuming for now, an orthonormal basis for the plane, introduce a vector
 
 \begin{equation*}
-\PD{y}{Q} - \PD{x}{P} = -(\grad \wedge \Bv) \inv{i}
+\Bv = P \Be_1 + Q \Be_2
 \end{equation*}
 
-Similarily we've seen that we can express the area element in vector form.  Writing $\Br = x \Be_1 + y \Be_2$, we have
+then compute
+\begin{align*}
+\grad \wedge \Bv
+&= \left( \Be_1 \partial_1 + \Be_2 \partial_2 \right) \wedge \left( \Be_1 P + \Be_2 Q \right) \\
+&= (\Be_{1} \wedge \Be_2) \left( \partial_1 Q - \partial_2 P \right) \\
+&= i \left( \partial_1 Q - \partial_2 P \right) \\
+\end{align*}
+
+Hmm.  Okay, this has $P$, and $Q$ reversed so isn't exactly the form we want for Green's theorem.  It is close however, and allows for writing the scalar alternating form as a vector relation
+
+\begin{equation}\label{eqn:altpartial}
+\partial_1 Q - \partial_2 P = - i(\grad \wedge \Bv).
+\end{equation}
+
+Let's assume it is more interesting for now to work with partials of this form, and continue putting a Green's theorem like
+area integral in complete vector form.
+
+Since the area element can be expressed in vector form, introduce a vector parameterization $\Br = x \Be_1 + y \Be_2$.  The element
+of area expressed in terms of this parameterization is
 
 \begin{equation*}
 dx dy = \inv{i}\left( \PD{u}{\Br} \wedge \PD{v}{\Br} \right) du dv
 \end{equation*}
 
-Re-assembling these, we can form the left hand side of the Green's theorem
-equation completely in vector form
+Re-assembling the scalar alternating equation \ref{eqn:altpartial}, we can form a similar-to LHS of Green's theorem area integral completely in vector form
 
-\begin{equation*}
-\int\int -(\grad \wedge \Bv) \inv{i} \inv{i}\left( \PD{x}{\Br} \wedge \PD{y}{\Br} \right)
-= \int\int (\grad \wedge \Bv) \left( \PD{u}{\Br} \wedge \PD{v}{\Br} \right) du dv
-\end{equation*}
+\begin{equation}\label{eqn:greenlikeLHS}
+\int\int - i(\grad \wedge \Bv) \inv{i}\left( \PD{x}{\Br} \wedge \PD{y}{\Br} \right)
+= -\int\int (\grad \wedge \Bv) \left( \PD{u}{\Br} \wedge \PD{v}{\Br} \right) du dv
+\end{equation}
 
 Considering the total differential of the position vector, it makes sense to introduce vector differential elements to
 express this
@@ -336,18 +352,52 @@ express this
 d\Br = \PD{u}{\Br} du + \PD{v}{\Br} dv = d\Bx + d\By
 \end{equation*}
 
-We can then rewrite the LHS once more in a slightly cleaner form, independent of the specific parameterization
+We can then rewrite the negation of equation \ref{eqn:greenlikeLHS}
+once more in a slightly cleaner form, independent of the specific parameterization
 
-\begin{equation}\label{eqn:greenLHS}
+\begin{equation}\label{eqn:greenlikeLHSFinal}
 \int\int (\grad \wedge \Bv) \cdot (d\Bx \wedge d\By) = \int\int (\grad \wedge \Bv) \cdot d\BA
 \end{equation}
 
 Here we see that it becomes natural to work with the oriented bivector area element $d\BA = d\Bx \wedge d\By$.
 
-Having arrived at what is likely the most natural vector form \ref{eqn:greenLHS} for the LHS of Green's theorem, lets
-now attempt to integrate this in it's most general form, dropping references to the original $x$, and $y$ coordinates.
+Having arrived at what is likely the most natural vector form \ref{eqn:greenlikeLHSFinal} for the LHS of Green's theorem like
+area integral.
+
+We should be able to 
+integrate this in it's most general form, dropping references to the original $x$, and $y$ coordinates.
 If this is the correct form, we should end up with a vector line integral around a path after doing so, and thus prove
 Green's theorm.
+
+
+FIXME: thought this, but am having trouble.  Will try from the loop integral instead.
+
+\subsection{ Expanding the area integral in terms of an arbitrary parameterization. }
+
+The integral expression of equation \ref{eqn:greenlikeLHSFinal} is a form that can be examined independent of the original planar Green's theorem motivation.  Let's expand
+this picking an arbitrary parameterization for both the area element and the vector.  There will also be no need for now to work with the original 2D vectors.
+
+Given a two parameter vector parameterization of a surface, and a reciprocal frame representation of our curled vector:
+
+\begin{align*}
+\Br(u,v) &= \gamma_i {x^i}(u,v) \\
+\Bv &= \gamma^i {v_i},
+\end{align*}
+
+a bivector parallelogram surface element can be then be expressed as
+
+\begin{align*}
+d\BA 
+&= \left(\PD{u}{\Br} du\right) \wedge \left(\PD{v}{\Br} dv\right) \\
+&= \left(\gamma_i \wedge \gamma_j \right) \PD{u}{x^i} \PD{v}{x^j} du dv \\
+\end{align*}
+
+and our differential form is
+
+\begin{align*}
+\left(\grad \wedge \Bv\right) \cdot d\BA
+&= \left( \gamma^i \wedge \gamma^j \right) \cdot \left(\gamma_k \wedge \gamma_m \right) \PD{x^{i}}{v_j} \PD{u}{x^k} \PD{v}{x^m} du dv \\
+\end{align*}
 
 \subsection{ Calculating the area integral. }
 
