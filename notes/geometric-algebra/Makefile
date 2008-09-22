@@ -76,8 +76,6 @@ ordered += ../geometric_algebra/outermorphism_det.pdf
 ordered += ../geometric_algebra/em_bivector_metric_dependencies.pdf
 ordered += ../geometric_algebra/maxwell_to_tensor.pdf
 ordered += ../geometric_algebra/vector_maxwells_projection.pdf
-
-# not finished.  Skip?
 ordered += ../geometric_algebra/lagrangian_field_density.pdf
 
 skipit += ../geometric_algebra/glossary.pdf
