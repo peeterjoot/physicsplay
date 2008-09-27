@@ -1,12 +1,24 @@
 \documentclass{article}
 
 \input{../peeters_macros.tex}
+\newcommand{\grad}[0]{\nabla}
+%\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+%\newcommand{\PDD}[3]{\frac{\partial^2 {#3}}{\partial {#1}\partial {#2}}}
+%\newcommand{\Abs}[1]{\left\lvert{#1}\right\rvert}
+\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+\newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
+\newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
+\newcommand{\gpgradethree}[1] {\gpgrade{#1}{3}}
+
+% ointclockwise, ointctrclockwise
+\usepackage{txfonts}
 
 \usepackage[bookmarks=true]{hyperref}
 
 \title{ Application of stokes integrals to Maxwell equation. }
 \author{Peeter Joot}
-\date{ Sept 26, 2008.  Last Revision: $Date: 2008/09/27 02:03:09 $ }
+\date{ Sept 26, 2008.  Last Revision: $Date: 2008/09/27 03:59:55 $ }
 
 \begin{document}             % End of preamble and beginning of text.
 
@@ -16,8 +28,139 @@
 
 \section{ Putting Maxwell's equation in curl form. }
 
-These notes are followup for 
-\href{http://www.geocities.com/peeter_joot/geometric_algebra/vector_integral_relations.pdf}{./vector_integral_relations.pdf}, applying the generalized
-stokes equation to the electromagnetic field bivector equation.
+These notes are followup for
+
+\href{http://www.geocities.com/peeter_joot/geometric_algebra/vector_integral_relations.pdf}{vector\_integral\_relations.pdf}
+, applying the bivector stokes volume equation
+
+\begin{equation}\label{eqn:summaryStokesVolume}
+\iiint (\grad \wedge F) \cdot d^3\Bx = \oiintclockwise F \cdot d^2\Bx,
+\end{equation}
+
+to the electromagnetic field bivector equation
+
+\begin{equation}\label{eqn:maxwell}
+\grad F = J/\epsilon_0 c.
+\end{equation}
+
+taking vector and trivector parts we have two equations
+\begin{equation}\label{eqn:maxwellv}
+\grad \cdot F = J/\epsilon_0 c,
+\end{equation}
+
+and
+\begin{equation}\label{eqn:maxwellt}
+\grad \wedge F = 0.
+\end{equation}
+
+\subsection{ Trivector equation part. }
+
+The second of these, equation \ref{eqn:maxwellt}, we can apply Stokes to
+directly:
+
+\begin{equation}
+\iiint (\grad \wedge F) \cdot d^3 \Bx = \oiintclockwise F \cdot d^2\Bx = 0.
+\end{equation}
+
+This area integral is a flux like quantity.  Suppose we call this the field flux, then this says
+says
+the flux of the combined electromagnetic field through any surface is zero
+independent of the charge or current densities.
+Note that here $d^3\Bx$
+can be a regular spatial volume trivector element, but one can also pick
+a spacetime (area times time) ``volume'' to integrate over, in which case
+$d^2\Bx$ are the oriented ``surfaces'' of such a spacetime volume.
+
+This doesn't seem like a result that I'm familiar with based on the traditional
+vector forms of Maxwells equation.  Perhaps it is recognizable in terms of
+$\BE$ and $\BB$ explicitly:
+
+\begin{equation}
+\oiintclockwise \BE \cdot d^2\Bx = - c \oiintclockwise \BB \cdot (d^2\Bx I)
+\end{equation}
+
+Note also the subtle difference from traditional vector treatments where
+$\BE$ and $\BB$ were spatial vectors.  Here they are writen as spacetime
+bivectors,
+$\BE = E^i \sigma_i = E^i \gamma_i \wedge \gamma_0$,
+$\BB = B^i \sigma_i = B^i \gamma_i \wedge \gamma_0$.
+
+Although this still doesn't look like a familiar identity, some observations
+can be made.
+
+Only the spacetime surfaces of the volume
+contribute to the LHS integral since $\sigma_i \cdot (\gamma_j \wedge \gamma_k) = 0$.
+
+For the RHS, only the purely spatial surfaces contribute to that $\BB$ integral, since the dual surface $d^2\Bx I$ must have a spacetime component for that dot product to be non-zero.
+
+I will have to come back to this and
+see if this is useful for any types of calculations.
+
+\subsection{ Vector part. }
+
+Moving on to the charge and current dependent vector terms
+of Maxwells equation, we want express equation \ref{eqn:maxwellv} as a
+spacetime curl so that we can apply stokes to it.
+
+We can do this by temporarily writing our field in terms of a potential, and a
+bivector dual to that.
+
+\begin{align*}
+F = \grad \wedge A = I D
+\end{align*}
+\begin{align*}
+\grad F
+&= \grad (\grad \wedge A) \\
+&= \grad \cdot (\grad \wedge A) + \grad \wedge (\grad \wedge A) \\
+&= \grad \cdot (I D) \\
+&= \gpgradeone{ \grad I D } \\
+&= -\gpgradeone{ I (\underbrace{\grad \cdot D}_{1-\text{vector}} + \underbrace{\grad \wedge D}_{3-\text{vector}}) } \\
+&= - I (\grad \wedge D) \\
+\end{align*}
+
+or
+\begin{align*}
+I \grad F = \grad \wedge D.
+\end{align*}
+
+Applying stokes we have
+\begin{align*}
+\int (\grad \wedge D) \cdot d^3\Bx &= \oiintclockwise D \cdot d^2\Bx \\
+\int (I \grad F) \cdot d^3\Bx
+&= \oiintclockwise (-I F) \cdot d^2\Bx \\
+&= \oiintclockwise \gpgradezero{ - F d^2\Bx I } \\
+&= -\oiintclockwise F \cdot (d^2\Bx I) \\
+\inv{\epsilon_0 c} \int (I J) \cdot d^3\Bx &= \\
+\inv{\epsilon_0 c} \int \gpgradezero{ I J d^3\Bx } &= \\
+\inv{\epsilon_0 c} \int \gpgradezero{ J d^3\Bx I } &= \\
+\inv{\epsilon_0 c} \int J \cdot (d^3\Bx I) &= \\
+\end{align*}
+
+Or
+\begin{equation}
+\oiintctrclockwise F \cdot (d^2\Bx I) = \int \frac{J}{\epsilon_0 c} \cdot (d^3\Bx I)
+\end{equation}
+
+This is the integral form of Maxwells equation \ref{eqn:maxwell}.
+This doens't look terribly familiar, but we aren't used to
+seeing Maxwell's equations in a non-disassembled form.
+Hiding in there should be all
+of the traditional eight Maxwells equations in integral form dependent on the
+volume and corresponding surface integrated over.
+
+\section{ Extracting the vector integral forms of Maxwell's equations. }
+
+One can extract the integral forms of Maxwell's equations by applying the
+spatial forms of the divergence and stokes equations on the vector forms
+of Maxwell's equations once those are extracted from \ref{eqn:maxwell}.
+However, having formulated Stokes equation in its bivector form
+we can go directly to those equations by appropriate selection of spatial
+or spacetime volumes.
+Of course we also now have new tools to work with the field in its entirety,
+but lets use this as an exersize to verify that all the previous computation
+that led to Stokes equation gives us the expected results.  In particular
+this should be a good way to verify that
+sign mistakes or other similar small errors (which would not be too hard)
+have not been made.
 
 \end{document}               % End of document.
