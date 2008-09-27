@@ -2,9 +2,7 @@
 
 \input{../peeters_macros.tex}
 \newcommand{\grad}[0]{\nabla}
-%\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
-%\newcommand{\PDD}[3]{\frac{\partial^2 {#3}}{\partial {#1}\partial {#2}}}
-%\newcommand{\Abs}[1]{\left\lvert{#1}\right\rvert}
+\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
 \newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
 \newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
 \newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
@@ -18,7 +16,7 @@
 
 \title{ Application of stokes integrals to Maxwell equation. }
 \author{Peeter Joot}
-\date{ Sept 26, 2008.  Last Revision: $Date: 2008/09/27 04:20:00 $ }
+\date{ Sept 26, 2008.  Last Revision: $Date: 2008/09/27 16:11:24 $ }
 
 \begin{document}             % End of preamble and beginning of text.
 
@@ -150,9 +148,10 @@ volume and corresponding surface integrated over.
 
 \section{ Extracting the vector integral forms of Maxwell's equations. }
 
-One can extract the integral forms of Maxwell's equations by applying the
-spatial forms of the divergence and stokes equations on the vector forms
-of Maxwell's equations once those are extracted from \ref{eqn:maxwell}.
+One can extract the integral forms of Maxwell's equations 
+from \ref{eqn:maxwell}, by first extracting the differential vector
+equations, and then using the spatial
+divergence and stokes equations.
 However, having formulated Stokes equation in its bivector form
 we can go directly to those equations by appropriate selection of spatial
 or spacetime volumes.
@@ -162,5 +161,115 @@ that led to Stokes equation gives us the expected results.  In particular
 this should be a good way to verify that
 sign mistakes or other similar small errors (which would not be too hard)
 have not been made.
+
+\subsection{ Zero current density. }
+
+With $J = c \rho \gamma_0$, the integral form of Maxwell's equation becomes
+
+\begin{align*}
+\oiintctrclockwise F \cdot (d^2\Bx I) 
+&= \int \frac{\rho}{\epsilon_0} \gpgradezero{\gamma_0 d^3\Bx I} \\
+&= \int \frac{\rho}{\epsilon_0} \gpgradezero{\gamma_{0123} \gamma_0 d^3\Bx} \\
+&= -\inv{\epsilon_0} {\gamma_0}^2 \int \frac{\rho}{\epsilon_0} \gpgradezero{\gamma_{123} d^3\Bx} \\
+\end{align*}
+
+From this we see that, in the absence of currents the LHS integral must be zero unless the volume is purely spatial
+
+\begin{align*}
+\oiintctrclockwise_{\partial {A c t}} F \cdot (d^2\Bx I) &= 0 \\
+\end{align*}
+
+For a purely spatial volume the dual surfaces $d^2\Bx I$ always includes a spacetime bivector, therefore the magnetic field contributes nothing
+
+\begin{equation*}
+\oiintctrclockwise_{\partial V} I c B \cdot (d^2\Bx I) = 
+-c \oiintctrclockwise_{\partial V} B \cdot d^2\Bx = 0
+\end{equation*}
+
+FIXME: 
+This looks like the integral equivalent of $\spacegrad \cdot B = 0$.  We know that to be true for more than the zero current case too.
+
+That leaves
+
+\begin{align*}
+\oiintctrclockwise E \cdot (d^2\Bx I) &= -\inv{\epsilon_0} {\gamma_0}^2 \int_{V} \rho \gpgradezero{\gamma_{123} d^3\Bx} \\
+\end{align*}
+
+Letting $d^3 \Bx = dx^1 dx^2 dx^3 \gamma_{123}$.  Within the charge integral becomes
+
+\begin{align*}
+-\inv{\epsilon_0} {\gamma_0}^2 \int_{V} \rho \gpgradezero{\gamma_{123} d^3\Bx} 
+&=
+\inv{\epsilon_0}
+\underbrace{{\gamma_0}^2 {\gamma_1}^2}_{=-1}
+\underbrace{{\gamma_2}^2 {\gamma_3}^2}_{=(\pm 1)^2}
+ \int_{V} \rho dx^1 dx^2 dx^3
+&= -\inv{\epsilon_0} \int_{V} \rho dx^1 dx^2 dx^3
+\end{align*}
+
+To put this in correspondence with the forms we are used to consider the surfaces separately.  For the dual to the
+\href{http://www.geocities.com/peeter_joot/geometric_algebra/vector_integral_relations.pdf}{front surface} we have
+
+\begin{align*}
+d^2 \Bx I
+&= dx^1 dx^2 \gamma_{12} I \\
+&= dx^1 dx^2 \gamma_{120123} \\
+&= dx^1 dx^2 \gamma_{112023} \\
+&= -dx^1 dx^2 \gamma_{112203} \\
+&= -(\pm 1)^2 dx^1 dx^2 \gamma_{03} \\
+&= dx^1 dx^2 \sigma_3
+\end{align*}
+
+For the left surface
+\begin{align*}
+d^2 \Bx I
+&= dx^3 dx^2 \gamma_{32} I \\
+&= dx^3 dx^2 \gamma_{320123} \\
+&= dx^3 dx^2 \gamma_{332012} \\
+&= dx^3 dx^2 \gamma_{332201} \\
+&= dx^3 dx^2 (\pm 1)^2 \gamma_{01} \\
+&= -dx^3 dx^2 \sigma_1 \\
+\end{align*}
+
+and for the top
+\begin{align*}
+d^2 \Bx I
+&= dx^1 dx^3 \gamma_{13} I \\
+&= dx^1 dx^3 \gamma_{130123} \\
+&= dx^1 dx^3 \gamma_{113023} \\
+&= dx^1 dx^3 \gamma_{113302} \\
+&= -dx^1 dx^3 \sigma_2 \\
+\end{align*}
+
+Assembling results, writing $(x^1, x^2, x^3) = (x,y,z)$ we have
+%\begin{align*}
+%\iint 
+%(E_x(x, y, z_0) - E_x(x, y, z_1)) dx dy \\
+%-\iint 
+%(E_y(x_1, y, z) - E_y(x_0, y, z)) dy dz \\
+%-\iint 
+%(E_z(x, y_1, z) - E_z(x, y_0, z)) dx dz \\
+%&= -\inv{\epsilon_0} \int_{V} \rho dx dy dz
+%\end{align*}
+\begin{align*}
+\inv{\epsilon_0} \int_{V} \rho dx dy dz 
+&=
+\iint 
+(E_x(x, y, z_1) - E_x(x, y, z_0)) dx dy \\
+&+\iint 
+(E_y(x_1, y, z) - E_y(x_0, y, z)) dy dz \\
+&+\iint 
+(E_z(x, y_1, z) - E_z(x, y_0, z)) dx dz \\
+\end{align*}
+
+This is Gauss's law for electrostatics in integral form
+
+\begin{equation}
+\iint \BE \cdot \ncap dA = \iiint \frac{\rho}{\epsilon_0} dV
+\end{equation}
+
+Although this is easy to understand, it is apparent that having only a pictorial way of enumerating the oriented bivector
+area elements is not efficient for high level computation.  Revisiting the stokes derivation with a more algebraic enumeration
+of the surfaces should be done!
 
 \end{document}               % End of document.
