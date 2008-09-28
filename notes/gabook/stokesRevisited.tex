@@ -28,7 +28,7 @@
 
 \title{ Revisit Stokes derivation. }
 \author{Peeter Joot}
-\date{ Sept 27, 2008.  Last Revision: $Date: 2008/09/28 04:38:13 $ }
+\date{ Sept 27, 2008.  Last Revision: $Date: 2008/09/28 15:35:55 $ }
 
 \begin{document}
 
@@ -198,7 +198,9 @@ We wish to show that this equals
 
 after which point we have both formulated algebraically the boundary integral, and proven the general $k-1\text{blade}$ Stokes theorem of equation \ref{eqn:genstokes}.
 
-To start, note
+\subsection{ Is a coordinate free proof possible? }
+
+Note that
 \begin{align*}
 \PD{u_i}{F} \cdot (I \Br^{u_i})
 &= \gpgradezero{\PD{u_i}{F} I \Br^{u_i}} \\
@@ -206,7 +208,126 @@ To start, note
 &= \left(\Br^{u_i} \wedge \PD{u_i}{F} \right) \cdot I \\
 \end{align*}
 
-Now, we are left with reducing the wedge product.  Can this be done without coordinates?  It would also be fairly easy to go in circles here since the reciprocal frame vectors can be calculated in terms of the pseudoscalar $I$.
+Can the reduction of this wedge product to curl form be done without coordinates?  It would also be fairly easy to go in circles here since the reciprocal frame vectors can be calculated in terms of the pseudoscalar $I$.
+
+\subsection{ Notation for coordinate expansion. }
+
+I didn't have any luck finding a coordinate free way as outlined above to prove the general result.  The dumb brute force way is still possible though, expanding
+both sides and comparing.
+
+The following will be used in the sections below
+
+\begin{align*}
+\Br &= \gamma_j x^j \\
+\Br_{u_i} &= \gamma_j \PD{u_i}{x^j} \\
+I \Br^{u_i}
+&= (-1)^{k-i} \Br_{u_1} \wedge \Br_{u_2} \wedge \cdots \widehat{\Br_{u_i}} \cdots \wedge \Br_{u_k} \\
+\end{align*}
+
+\begin{equation}\label{eqn:dA}
+I \Br^{u_i}
+= (-1)^{k-i} 
+\gamma_{j_1} \wedge \cdots \gamma_{j_{k-1}} 
+%\underbrace{\PD{u_1}{x^{j_1}} \cdots \PD{u_k}{x^{j_{k-1}}}}_{\partial_{u_i} \,\text{ommitted} } 
+\PD{u_1}{x^{j_1}} \cdots \widehat{\PD{u_i}{}} \cdots \PD{u_k}{x^{j_{k-1}}}
+\end{equation}
+
+Here the overhat is used to indicate omission.
+
+\subsection{ Expanding the curl dot by coordinates. }
+
+One half of the comparision will based on the expansion of $(\grad \wedge F ) \cdot I$.  We calculate
+
+\begin{equation*}
+F = \inv{(k-1)!} F_{j_1 j_2 \cdots j_{k-1}} \gamma^{j_1} \wedge \gamma^{j_2} \cdots \wedge \gamma^{j_{k-1}}
+\end{equation*}
+\begin{equation*}
+I = \gamma_{m_1} \wedge \gamma_{m_2} \cdots \wedge \gamma_{m_{k}} \PD{u_1}{x^{m_1}} \PD{u_2}{x^{m_2}} \cdots \PD{u_k}{x^{m_k}}
+\end{equation*}
+\begin{equation*}
+\grad = \gamma^{j_k} \PD{x^{j_k}}{}
+\end{equation*}
+\begin{align*}
+\grad \wedge F 
+&= \inv{(k-1)!} \PD{x^{j_{k}}}{F_{j_1 j_2 \cdots j_{k-1}}} \gamma^{j_k} \wedge \gamma^{j_1} \wedge \gamma^{j_2} \cdots \wedge \gamma^{j_{k-1}} \\
+&= \frac{(-1)^{k-1}}{(k-1)!} \PD{x^{j_{k}}}{F_{j_1 j_2 \cdots j_{k-1}}}
+\gamma^{j_1} \wedge \gamma^{j_2} \cdots \wedge \gamma^{j_{k-1}} \wedge \gamma^{j_k}.
+\end{align*}
+
+Now, put this all together
+\begin{align*}
+(\grad \wedge F ) \cdot I
+&= \frac{(-1)^{k-1}}{(k-1)!} 
+\left( \gamma^{j_1} \wedge \gamma^{j_2} \cdots \wedge \gamma^{j_{k}} \right) \cdot
+\left( \gamma_{m_1} \wedge \gamma_{m_2} \cdots \wedge \gamma_{m_{k}} \right) \\
+&\PD{x^{j_{k}}}{F_{j_1 j_2 \cdots j_{k-1}}}
+\PD{u_1}{x^{m_1}} \PD{u_2}{x^{m_2}} \cdots \PD{u_k}{x^{m_k}} \\
+&= \frac{(-1)^{k-1}}{(k-1)!} 
+{\delta^{j_k}}_{m_1}
+{\delta^{j_{k-1}}}_{m_2}
+\cdots
+{\delta^{j_{1}}}_{m_k}
+\epsilon^{m_1 m_2 \cdots m_k}
+\PD{x^{j_{k}}}{F_{j_1 j_2 \cdots j_{k-1}}}
+\PD{u_1}{x^{m_1}} \PD{u_2}{x^{m_2}} \cdots \PD{u_k}{x^{m_k}} \\
+&= \frac{(-1)^{k-1}}{(k-1)!} 
+\epsilon^{m_1 m_2 \cdots m_k}
+\PD{x^{m_{1}}}{F_{m_k m_{k-1} \cdots m_{2}}}
+\PD{u_1}{x^{m_1}} \PD{u_2}{x^{m_2}} \cdots \PD{u_k}{x^{m_k}} \\
+\end{align*}
+
+Now, to reverse a $k$ vector, or its corresponding antisymmetric tensor as above we have to perform the following number of swaps
+
+\begin{equation*}
+k-1 + k-2 + \cdots + 1 = k(k-1)/2
+\end{equation*}
+
+We can use this to tidy the indexes above 
+
+\begin{equation*}
+k-1 + (k-1)(k-2)/2
+%= (2k - 2 + k^2 -3k + 2)/2 
+%= (k^2 -k)/2 
+= k(k -1 )/2,
+\end{equation*}
+
+and thus write
+
+\begin{align}\label{eqn:curldot}
+(\grad \wedge F ) \cdot I
+= \frac{(-1)^{k(k-1)/2}}{(k-1)!} 
+\epsilon^{m_1 m_2 \cdots m_k}
+\PD{x^{m_{1}}}{F_{m_2 \cdots m_{k}}}
+\PD{u_1}{x^{m_1}} \PD{u_2}{x^{m_2}} \cdots \PD{u_k}{x^{m_k}}
+\end{align}
+
+\subsection{ Expanding the boundary integral by coordinates. }
+
+The remainder of the proof is to verify that the expression \ref{eqn:curldot} matches the differential form in equation \ref{eqn:toprove2}.
+
+To do so we have to expand
+\begin{equation*}
+\PD{u_i}{F} \cdot (I \Br^{u_i})
+\end{equation*}
+
+\begin{align*}
+\PD{u_i}{F}
+&=
+\PD{u_i}{x^{m_1}}
+\PD{x^{m_1}}{}
+\inv{(k-1)!} F_{m_2 m_3 \cdots m_{k}} \gamma^{m_2} \wedge \gamma^{m_2} \cdots \wedge \gamma^{m_{k}} \\
+\end{align*}
+
+Dotting this with equation \ref{eqn:dA} we have
+\begin{align*}
+\PD{u_i}{F} \cdot (I \Br^{u_i})
+&=
+\frac{(-1)^{k-i}}{(k-1)!}
+\PD{x^{m_1}}{F_{m_2 m_3 \cdots m_{k}}}
+\left( \gamma^{m_2} \wedge \gamma^{m_2} \cdots \wedge \gamma^{m_{k}} \right) \cdot
+\left( \gamma_{j_1} \wedge \cdots \gamma_{j_{k-1}} \right) \\
+&\PD{u_1}{x^{j_1}} \cdots \widehat{\PD{u_i}{}} \cdots \PD{u_k}{x^{j_{k-1}}} \PD{u_i}{x^{m_1}}
+\end{align*}
 
 \section{ Messy proof of zero sum in equation \ref{eqn:toprove} }
 
@@ -217,24 +338,15 @@ Here is the deferred proof that the sum of the differentials of the area element
 \end{align*}
 
 Although not elegant, the partials here can be expanded by coordinates as done in the previous line and area proofs.
-Writing
 
-\begin{align*}
-\Br &= \gamma_j x^j \\
-\Br_{u_i} &= \gamma_j \PD{u_i}{x^j} \\
-I \Br^{u_i}
-&= (-1)^{k-i} \Br_{u_1} \wedge \Br_{u_2} \wedge \cdots \widehat{\Br_{u_i}} \cdots \wedge \Br_{u_k} \\
-&= (-1)^{k-i} 
-\gamma_{j_1} \wedge \cdots \gamma_{j_{k-1}} 
-\underbrace{\PD{u_1}{x^{j_1}} \cdots \PD{u_k}{x^{j_{k-1}}}}_{\partial_{u_i} \,\text{ommitted} } \\
-\end{align*}
-
-Here the overhat is used to indicate omission.  We want to prove that 
+We want to prove that 
 \begin{equation}
-\sum (-1)^{k-i} \gamma_{j_1} \wedge \cdots \gamma_{j_{k-1}} \PD{u_i}{} \PD{u_1}{x^{j_1}} \cdots \widehat{\PD{u_i}{}} \cdots \PD{u_k}{x^{j_{k-1}}} = 0
+\sum (-1)^{k-i} \gamma_{j_1} \wedge \cdots \gamma_{j_{k-1}} \PD{u_i}{}
+\PD{u_1}{x^{j_1}} \cdots \widehat{\PD{u_i}{}} \cdots \PD{u_k}{x^{j_{k-1}}}
+= 0
 \end{equation}
 
-as was done in the $k=1$, and $k=2$ cases.  Pick as an example the $i=3$ case, and assume that $k > 2$ since
+as was done previously in the vector and bivector cases.  Pick as an example the $i=3$ case, and assume that $k > 2$ since
 the two simpler cases have been proven explicitly.  For that $i$, we have the following terms
 \begin{align*}
 \sum (-1)^{k-3} \gamma_{j_1} \wedge \cdots \gamma_{j_{k-1}} 
@@ -273,8 +385,9 @@ matching partial for the $\PDD{u_1}{u_2}{}$ term above.
 
 No swap of indexes is required and we see again that the mixed partials cancel.  Now this is perhaps a slightly lazy proof, but working with
 indexes in the abstract without assigning specific numbers gets confusing.  It is clear to me that the end result will be a zero sum for this term.
-Perhaps somebody cleverer than me can demonstrate this more directly without resorting to this messy coordinate expansion?
 
-
+FIXME: A cleanup of this proof should be possible to eliminate the special case comparisions above.  The tough part is simply writing all the terms
+in a manipulatable fashion.  Then procede to split the sum into terms that differ by even and odd separation of indexes.  Summing over indexes greater and indexes lesser, then swapping indexes as appropriate should complete the proof.
+Alternatively, perhaps I'll figure out a clever way later to demonstrate this more directly without resorting to this messy coordinate expansion.
 
 \end{document}
