@@ -3,6 +3,8 @@
 \input{../peeters_macros.tex}
 \newcommand{\grad}[0]{\nabla}
 \newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+\newcommand{\PDD}[3]{\frac{\partial^2 {#3}}{\partial {#1}\partial {#2}}}
+\newcommand{\PDsq}[2]{\frac{\partial^2 {#2}}{\partial^2 {#1}}}
 \newcommand{\Rm}[1]{\mathbb{R}^{#1}}
 %\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
 \newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
@@ -26,7 +28,7 @@
 
 \title{ Revisit Stokes derivation. }
 \author{Peeter Joot}
-\date{ Sept 27, 2008.  Last Revision: $Date: 2008/09/28 02:26:12 $ }
+\date{ Sept 27, 2008.  Last Revision: $Date: 2008/09/28 04:12:23 $ }
 
 \begin{document}
 
@@ -81,7 +83,7 @@ I \cdot \Br^{u_2} =
 
 We don't care to actually calculate the reciprocal frame vectors.  They just work well to describe the alternation in terms of the pseudoscalar for the plane.
 
-Substituiting back into \ref{eqn:lineprep} we have
+Substituting back into \ref{eqn:lineprep} we have
 
 \begin{align*}
 \ointclockwise \Bf \cdot d\Br
@@ -157,25 +159,122 @@ this yields the expected generalized Stokes result that has been proven for only
 
 Writing
 \begin{align*}
-F &\in {\bigwedge}^k \Rm{n} \\
+F &\in {\bigwedge}^{k-1} \Rm{n} \\
 d^k \Bx &= \PD{u_1}{\Br} \wedge \PD{u_2}{\Br} \wedge \cdots \wedge \PD{u_k}{\Br} du_1 du_2 \cdots du_k = I du_1 du_2 \cdots du_k \\
 \end{align*}
 
-We wish to prove the general Stokes equation for a hyper-parallopiped volume
+We wish to prove the general Stokes equation for a hyper-parallelepiped volume
 
-\begin{equation}
-\int_V F \cdot d^{k}\Bx = \int_{\partial V} F \cdot d^{k-1}\Bx 
+\begin{equation}\label{eqn:genstokes}
+\int_V (\grad \wedge F) \cdot d^{k}\Bx = \int_{\partial V} F \cdot d^{k-1}\Bx 
 \end{equation}
 
 With the presumption that this will algebraically be identical to the line integral and area integral cases for vectors and bivectors respectively
 we want to evaluate
 
-\begin{align}
+\begin{align*}
 \int_{\partial V} F \cdot d^{k-1}\Bx 
 &= \sum \int \frac{du_1 du_2 \cdots du_k}{du_i} \left.{F \cdot (I \Br^{u_i})}\right\vert_{u_i(0)}^{u_i(1)} \\
-&= \int du_1 du_2 \cdots du_k \sum \PD{u_i}{} F \cdot (I \Br^{u_i}).
-\end{align}
+&= \int_V du_1 du_2 \cdots du_k \sum \PD{u_i}{} F \cdot (I \Br^{u_i}) \\
+\end{align*}
 
-The partials here can likely be expanded by coordinates as done in the previous line and area proofs, but is there a more elegant way to do this?
+\begin{equation}\label{eqn:toprove}
+\int_{\partial V} F \cdot d^{k-1}\Bx 
+= \int_V du_1 du_2 \cdots du_k \sum \PD{u_i}{F} \cdot (I \Br^{u_i}) +F \cdot \left( \PD{u_i}{} I \Br^{u_i} \right).
+\end{equation}
+
+The last term here sums to zero.  The messy long proof of this can be found at the end.  Assuming that proven this leaves us with the following identity
+
+\begin{equation}\label{eqn:toprove2}
+\int_{\partial V} F \cdot d^{k-1}\Bx 
+= \int_V du_1 du_2 \cdots du_k \sum \PD{u_i}{F} \cdot (I \Br^{u_i})
+\end{equation}
+
+We wish to show that this equals
+
+\begin{equation*}
+\int_V du_1 du_2 \cdots du_k (\grad \wedge F) \cdot I,
+\end{equation*}
+
+after which point we have both formulated algebraically the boundary integral, and proven the general $k-1\text{blade}$ Stokes theorem of equation \ref{eqn:genstokes}.
+
+To start, note
+\begin{align*}
+\PD{u_i}{F} \cdot (I \Br^{u_i})
+&= \gpgradezero{\PD{u_i}{F} I \Br^{u_i}} \\
+&= \gpgradezero{ \Br^{u_i} \PD{u_i}{F} I } \\
+&= \left(\Br^{u_i} \wedge \PD{u_i}{F} \right) \cdot I \\
+\end{align*}
+
+Now, we are left with reducing the wedge product.  Can this be done without coordinates or going in circles (ie: reciprocal frame vectors can be calculated in terms of the pseudoscalar $I$)?
+
+\section{ Messy proof of zero sum in equation \ref{eqn:toprove} }
+
+Here is the deferred proof that the sum of the differentials of the area elements are zero
+
+\begin{align*}
+\int du_1 du_2 \cdots du_k \sum F \cdot \left( \PD{u_i}{} I \Br^{u_i} \right).
+\end{align*}
+
+Although not elegant, the partials here can be expanded by coordinates as done in the previous line and area proofs.
+Writing
+
+\begin{align*}
+\Br &= \gamma_j x^j \\
+\Br_{u_i} &= \gamma_j \PD{u_i}{x^j} \\
+I \Br^{u_i}
+&= (-1)^{k-i} \Br_{u_1} \wedge \Br_{u_2} \wedge \cdots \widehat{\Br_{u_i}} \cdots \wedge \Br_{u_k} \\
+&= (-1)^{k-i} 
+\gamma_{j_1} \wedge \cdots \gamma_{j_{k-1}} 
+\underbrace{\PD{u_1}{x^{j_1}} \cdots \PD{u_k}{x^{j_{k-1}}}}_{\partial_{u_i} \,\text{ommitted} } \\
+\end{align*}
+
+Here the overhat is used to indicate omission.  We want to prove that 
+\begin{equation}
+\sum (-1)^{k-i} \gamma_{j_1} \wedge \cdots \gamma_{j_{k-1}} \PD{u_i}{} \PD{u_1}{x^{j_1}} \cdots \widehat{\PD{u_i}{}} \cdots \PD{u_k}{x^{j_{k-1}}} = 0
+\end{equation}
+
+as was done in the $k=1$, and $k=2$ cases.  Pick as an example the $i=3$ case, and assume that $k > 2$ since
+the two simpler cases have been proven explicitly.  For that $i$, we have the following terms
+\begin{align*}
+\sum (-1)^{k-3} \gamma_{j_1} \wedge \cdots \gamma_{j_{k-1}} 
+&\left(\PDD{u_3}{u_1}{x^{j_1}} \PD{u_2}{x^{j_{2}}} \PD{u_4}{x^{j_3}} \cdots \PD{u_k}{x^{j_{k-1}}}\right. \\
+&+\PDD{u_3}{u_2}{x^{j_2}} \PD{u_1}{x^{j_1}} \PD{u_4}{x^{j_3}} \cdots \PD{u_k}{x^{j_{k-1}}} \\
+&+\PDD{u_3}{u_4}{x^{j_3}} \PD{u_1}{x^{j_1}} \PD{u_2}{x^{j_2}} \cdots \PD{u_k}{x^{j_{k-1}}} \\
+&+\cdots \\
+&+\left.\PDD{u_3}{u_k}{x^{j_k}} \PD{u_1}{x^{j_1}} \PD{u_2}{x^{j_2}} \cdots \PD{u_{k-1}}{x^{j_{k-2}}}\right)
+\end{align*}
+
+Picking any mixed partial term we expect cancellation with the opposing mixed partial.  Two representive values of $i$ should be sufficient to see that the sum
+is zero.  First pick $i=1$, so that $(-1)^{k-3} = (-1)^{k-1}$, and look at the 
+matching partial for the $\PDD{u_1}{u_3}{}$ term above
+
+\begin{align*}
+\sum (-1)^{k-1} \gamma_{j_1} \wedge \cdots \gamma_{j_{k-1}} 
+&\left(\PDD{u_1}{u_2}{x^{j_1}} \PD{u_3}{x^{j_{2}}} \PD{u_4}{x^{j_3}} \cdots \PD{u_k}{x^{j_{k-1}}}\right. \\
+&+\PDD{u_1}{u_3}{x^{j_2}} \PD{u_2}{x^{j_1}} \PD{u_4}{x^{j_3}} \cdots \PD{u_k}{x^{j_{k-1}}} \\
+&+\cdots \\
+&+\left.\PDD{u_1}{u_k}{x^{j_k}} \PD{u_2}{x^{j_1}} \PD{u_3}{x^{j_2}} \cdots \PD{u_{k-1}}{x^{j_{k-2}}}\right).
+\end{align*}
+
+Swapping dummy indexes $j_1$ and $j_2$ here one can see that the 
+$\PDD{u_1}{u_3}{}$ and $\PDD{u_3}{u_1}{}$ terms cancel.
+
+Now pick $i=2$, so 
+that $(-1)^{k-1} = -(-1)^{k-2}$, and look at the 
+matching partial for the $\PDD{u_1}{u_2}{}$ term above.
+
+\begin{align*}
+\sum (-1)^{k-2} \gamma_{j_1} \wedge \cdots \gamma_{j_{k-1}} 
+&\left(\PDD{u_2}{u_1}{x^{j_1}} \PD{u_3}{x^{j_{2}}} \PD{u_4}{x^{j_3}} \cdots \PD{u_k}{x^{j_{k-1}}}\right. \\
+&+\cdots \\
+&+\left.\PDD{u_2}{u_k}{x^{j_k}} \PD{u_1}{x^{j_1}} \PD{u_3}{x^{j_2}} \cdots \PD{u_{k-1}}{x^{j_{k-2}}}\right).
+\end{align*}
+
+No swap of indexes is required and we see again that the mixed partials cancel.  Now this is perhaps a slightly lazy proof, but working with
+indexes in the abstract without assigning specific numbers gets confusing.  It is clear to me that the end result will be a zero sum for this term.
+Perhaps somebody cleverer than me can demonstrate this more directly without resorting to this messy coordinate expansion?
+
+
 
 \end{document}
