@@ -2,7 +2,9 @@
 
 \input{../peeters_macros.tex}
 \newcommand{\grad}[0]{\nabla}
-\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+\newcommand{\Rm}[1]{\mathbb{R}^{#1}}
+%\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
 \newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
 \newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
 \newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
@@ -24,7 +26,7 @@
 
 \title{ Revisit Stokes derivation. }
 \author{Peeter Joot}
-\date{ Sept 27, 2008.  Last Revision: $Date: 2008/09/27 19:43:26 $ }
+\date{ Sept 27, 2008.  Last Revision: $Date: 2008/09/28 02:26:12 $ }
 
 \begin{document}
 
@@ -46,15 +48,134 @@ algebraic formulation.
 \begin{figure}[htp]
 \centering
 \includegraphics[totalheight=0.4\textheight]{parallelogram_parameterized}
-\caption{Parallelogram}\label{fig:parallelogram}
+\caption{Two variable parameterization of \R{n} parallelogram}\label{fig:parallelogram}
 \end{figure}
+
+An oriented curve around a parallelogram in \R{n} is illustrated in figure 
+\ref{fig:parallelogram}.  We want to evaluate the line integral around this
+path
+
+\begin{align}\label{eqn:lineprep}
+\ointclockwise \Bf \cdot d\Br
+&=
+\int du_1 \left.{\Bf \cdot \PD{u_1}{\Br} }\right\vert_{u_2(0)}^{u_2(1)}
+-\int du_2 \left.{\Bf \cdot \PD{u_2}{\Br} }\right\vert_{u_1(0)}^{u_1(1)} \\
+\end{align}
+
+Now, we can put this in a more symmetric form utilizing a reciprocal 
+frame to enumerate the alternation.  Write
+
+\begin{align*}
+\Br_{u_i} &= \PD{u_i}{\Br} \\
+\Br^{u_j} \cdot \Br_{u_i} &= {\delta^j}_i \\
+I &= \Br_{u_1} \wedge \Br_{u_2} \\
+I \Br^{u_1} &=
+I \cdot \Br^{u_1} =
+% (\Br_{u_1} \wedge \Br_{u_2}) \cdot \Br^{u_1}
+- \Br_{u_2} \\
+I \Br^{u_2} &=
+I \cdot \Br^{u_2} =
+% (\Br_{u_1} \wedge \Br_{u_2}) \cdot \Br^{u_2}
+ \Br_{u_1}.
+\end{align*}
+
+We don't care to actually calculate the reciprocal frame vectors.  They just work well to describe the alternation in terms of the pseudoscalar for the plane.
+
+Substituiting back into \ref{eqn:lineprep} we have
+
+\begin{align*}
+\ointclockwise \Bf \cdot d\Br
+&=
+\int du_1 \left.{\Bf \cdot \left(I \Br^{u_2}\right) }\right\vert_{u_2(0)}^{u_2(1)}
++\int du_2 \left.{\Bf \cdot \left(I \Br^{u_1}\right) }\right\vert_{u_1(0)}^{u_1(1)} \\
+\end{align*}
+
+Or
+\begin{equation}\label{eqn:lineintegral}
+\ointclockwise \Bf \cdot d\Br
+=
+\sum_{i} \int \frac{du_1 du_2}{du_i} \left.{\Bf \cdot \left(I \Br^{u_i}\right) }\right\vert_{u_i(0)}^{u_i(1)}
+\end{equation}
+
+This completes the goal of expressing the line integral in a fashion that doesn't require drawing any pictures,
+and gives a hint about how to do the same for general ${\bigwedge}^k \Rm{n}$ case.
+
+As before this can be written in terms of its integrals
+
+\begin{align*}
+\ointclockwise \Bf \cdot d\Br
+&= \sum_{i, j \ne i} 
+\int_{u_j(0)}^{u_j(1)} du_j
+\int_{u_i(0)}^{u_i(1)}
+ \PD{u_i}{} {\Bf \cdot \left(I \Br^{u_i}\right)} du_i \\
+&= \iint du_1 du_2 \sum \PD{u_i}{} {\Bf \cdot \left(I \Br^{u_i}\right)}
+\end{align*}
+
+Evaluating the derivatives to prove the Stokes/Green's result will be deferred for now (may instead proving
+the general case once formulated).
 
 \subsection{ Parallelopiped parameterization. }
 
 \begin{figure}[htp]
 \centering
 \includegraphics[totalheight=0.4\textheight]{parallelopiped_parameterized}
-\caption{Parallelopiped}\label{fig:parallelopiped}
+\caption{Three variable parameterization of \R{n} parallelopiped}\label{fig:parallelopiped}
 \end{figure}
+
+Next, lets evaluate the bivector area dot products, as in figure \ref{fig:parallelopiped}.
+
+\begin{align*}
+\oiintclockwise \BF \cdot d\BA
+&= \iint du_2 du_1 \left.{F \cdot (\Br_{u_2} \wedge \Br_{u_1})}\right\vert_{u_3(1)}^{u_3(0)} \\
+& +\iint du_3 du_1 \left.{F \cdot (\Br_{u_3} \wedge \Br_{u_1})}\right\vert_{u_2(0)}^{u_2(1)} \\
+& +\iint du_3 du_2 \left.{F \cdot (\Br_{u_3} \wedge -\Br_{u_2})}\right\vert_{u_1(0)}^{u_1(1)} \\
+\end{align*}
+
+Again introducing reciprocal vectors to enumerate the alternation, but now write $I$ as a pseudoscalar
+for the parallelopiped subspace that the area bounds
+
+\begin{align*}
+I &= \Br_{u_1} \wedge \Br_{u_2} \wedge \Br_{u_3} \\
+I \Br^{u_1} &= \Br_{u_2} \wedge \Br_{u_3} \\
+I \Br^{u_2} &= -\Br_{u_1} \wedge \Br_{u_3} \\
+I \Br^{u_3} &= \Br_{u_1} \wedge \Br_{u_2} \\
+\end{align*}
+
+Substituting we have a form almost identical to the line integral of equation \ref{eqn:lineintegral}.
+
+\begin{align}
+\oiintclockwise \BF \cdot d\BA 
+&= \sum \iint \frac{du_1 du_2 du_3}{du_i} \left.{F \cdot (I \Br^{u_i})}\right\vert_{u_i(0)}^{u_i(1)} \\
+&= \iiint du_1 du_2 du_3 \sum \PD{u_i}{} F \cdot (I \Br^{u_i})
+\end{align}
+
+\subsection{ General case. }
+
+Having found that the line integral and oriented area integrals can be expressed uniformly in the same algebraic form, it
+is reasonable to define an integral with such structure as a directed hypervolume boundary for any grade blade, and then verify that
+this yields the expected generalized Stokes result that has been proven for only the vector and area cases.
+
+Writing
+\begin{align*}
+F &\in {\bigwedge}^k \Rm{n} \\
+d^k \Bx &= \PD{u_1}{\Br} \wedge \PD{u_2}{\Br} \wedge \cdots \wedge \PD{u_k}{\Br} du_1 du_2 \cdots du_k = I du_1 du_2 \cdots du_k \\
+\end{align*}
+
+We wish to prove the general Stokes equation for a hyper-parallopiped volume
+
+\begin{equation}
+\int_V F \cdot d^{k}\Bx = \int_{\partial V} F \cdot d^{k-1}\Bx 
+\end{equation}
+
+With the presumption that this will algebraically be identical to the line integral and area integral cases for vectors and bivectors respectively
+we want to evaluate
+
+\begin{align}
+\int_{\partial V} F \cdot d^{k-1}\Bx 
+&= \sum \int \frac{du_1 du_2 \cdots du_k}{du_i} \left.{F \cdot (I \Br^{u_i})}\right\vert_{u_i(0)}^{u_i(1)} \\
+&= \int du_1 du_2 \cdots du_k \sum \PD{u_i}{} F \cdot (I \Br^{u_i}).
+\end{align}
+
+The partials here can likely be expanded by coordinates as done in the previous line and area proofs, but is there a more elegant way to do this?
 
 \end{document}

@@ -16,7 +16,7 @@
 
 \title{ Application of stokes integrals to Maxwell equation. }
 \author{Peeter Joot}
-\date{ Sept 26, 2008.  Last Revision: $Date: 2008/09/27 16:11:24 $ }
+\date{ Sept 26, 2008.  Last Revision: $Date: 2008/09/28 02:26:12 $ }
 
 \begin{document}             % End of preamble and beginning of text.
 
@@ -73,9 +73,12 @@ This doesn't seem like a result that I'm familiar with based on the traditional
 vector forms of Maxwell’s equation.  Perhaps it is recognizable in terms of
 $\BE$ and $\BB$ explicitly:
 
-\begin{equation}
+\begin{equation}\label{eqn:gaussmagnetostatics}
 \oiintclockwise \BE \cdot d^2\Bx = - c \oiintclockwise \BB \cdot (d^2\Bx I)
 \end{equation}
+
+On the surface this doesn't look like a familiar identity.  It is in fact Gauss's law for magnetostatics, which will be shown
+later.
 
 Note also the subtle difference from traditional vector treatments where
 $\BE$ and $\BB$ were spatial vectors.  Here they are writen as spacetime
@@ -83,16 +86,6 @@ bivectors,
 $\BE = E^i \sigma_i = E^i \gamma_i \wedge \gamma_0$,
 $\BB = B^i \sigma_i = B^i \gamma_i \wedge \gamma_0$.
 
-Although this still doesn't look like a familiar identity, some observations
-can be made.
-
-Only the spacetime surfaces of the volume
-contribute to the LHS integral since $\sigma_i \cdot (\gamma_j \wedge \gamma_k) = 0$.
-
-For the RHS, only the purely spatial surfaces contribute to that $\BB$ integral, since the dual surface $d^2\Bx I$ must have a spacetime component for that dot product to be non-zero.
-
-I will have to come back to this and
-see if this is useful for any types of calculations.
 
 \subsection{ Vector part. }
 
@@ -139,12 +132,13 @@ Or
 \oiintctrclockwise F \cdot (d^2\Bx I) = \int \frac{J}{\epsilon_0 c} \cdot (d^3\Bx I)
 \end{equation}
 
-This is the integral form of Maxwells equation \ref{eqn:maxwell}.
+This is the integral form of the vector part of Maxwells equation \ref{eqn:maxwell}.
 This doens't look terribly familiar, but we aren't used to
 seeing Maxwell's equations in a non-disassembled form.
-Hiding in there should be all
-of the traditional eight Maxwells equations in integral form dependent on the
-volume and corresponding surface integrated over.
+Hiding in there should be a subset of the 
+traditional eight Maxwell's equations in integral form.  It will be 
+possible to extract these by considering variations of current and charge density and different 
+volume and surface integration regions.
 
 \section{ Extracting the vector integral forms of Maxwell's equations. }
 
@@ -162,7 +156,7 @@ this should be a good way to verify that
 sign mistakes or other similar small errors (which would not be too hard)
 have not been made.
 
-\subsection{ Zero current density. }
+\subsection{ Zero current density. Gauss's law for Electrostatics. }
 
 With $J = c \rho \gamma_0$, the integral form of Maxwell's equation becomes
 
@@ -173,10 +167,10 @@ With $J = c \rho \gamma_0$, the integral form of Maxwell's equation becomes
 &= -\inv{\epsilon_0} {\gamma_0}^2 \int \frac{\rho}{\epsilon_0} \gpgradezero{\gamma_{123} d^3\Bx} \\
 \end{align*}
 
-From this we see that, in the absence of currents the LHS integral must be zero unless the volume is purely spatial
+From this we see that, in the absence of currents the LHS integral must be zero unless the volume is purely spatial.  Denoting the boundary of a spacetime volume as $\partial A c t$, this is
 
 \begin{align*}
-\oiintctrclockwise_{\partial {A c t}} F \cdot (d^2\Bx I) &= 0 \\
+\oiintctrclockwise_{\partial {A c t}} F \cdot (d^2\Bx I) &= 0.
 \end{align*}
 
 For a purely spatial volume the dual surfaces $d^2\Bx I$ always includes a spacetime bivector, therefore the magnetic field contributes nothing
@@ -186,8 +180,8 @@ For a purely spatial volume the dual surfaces $d^2\Bx I$ always includes a space
 -c \oiintctrclockwise_{\partial V} B \cdot d^2\Bx = 0
 \end{equation*}
 
-FIXME: 
-This looks like the integral equivalent of $\spacegrad \cdot B = 0$.  We know that to be true for more than the zero current case too.
+Although this looks similar to the integral equivalent of $\spacegrad \cdot B = 0$, we should look elsewhere for that since
+that is true for the non-zero current density case too.
 
 That leaves
 
@@ -268,8 +262,43 @@ This is Gauss's law for electrostatics in integral form
 \iint \BE \cdot \ncap dA = \iiint \frac{\rho}{\epsilon_0} dV
 \end{equation}
 
-Although this is easy to understand, it is apparent that having only a pictorial way of enumerating the oriented bivector
+Although this extraction method is easy to understand, it is apparent that having only a pictorial way of enumerating the
+oriented bivector
 area elements is not efficient for high level computation.  Revisiting the stokes derivation with a more algebraic enumeration
 of the surfaces should be done!
+
+\subsection{ Gausses law for magnetostatics }
+
+Return now to equation \ref{eqn:gaussmagnetostatics}, which resulted from considering the trivector part of Maxwell's equation
+
+\begin{equation}
+\oiintclockwise \BE \cdot d^2\Bx = - c \oiintclockwise \BB \cdot (d^2\Bx I).
+\end{equation}
+
+To start some observations can be made.
+
+Only the spacetime surfaces of the volume
+contribute to the LHS integral since $\sigma_i \cdot (\gamma_j \wedge \gamma_k) = 0$.
+
+For the RHS, only the purely spatial surfaces contribute to that $\BB$ integral, since the dual surface $d^2\Bx I$ must have a spacetime component for that dot product to be non-zero.  We have also just enumerated these dual surface area elements $d^2 \Bx I$ for a purely 
+spatial surface, therefore with a $E,B$ substutition we must have
+
+\begin{align*}
+0 &=
+\iint 
+(B_x(x, y, z_1) - B_x(x, y, z_0)) dx dy  \\
+&+\iint 
+(B_y(x_1, y, z) - B_y(x_0, y, z)) dy dz  \\
+&+\iint 
+(B_z(x, y_1, z) - B_z(x, y_0, z)) dx dz
+\end{align*}
+
+or, more compactly
+
+\begin{equation}
+\iint \BB \cdot \ncap dA = 0
+\end{equation}
+
+For any current or charge distribution.  We have therefore obtained two of the eight Maxwell's equations.
 
 \end{document}               % End of document.
