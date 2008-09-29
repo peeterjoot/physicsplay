@@ -28,7 +28,7 @@
 
 \title{ Revisit Stokes derivation. }
 \author{Peeter Joot}
-\date{ Sept 27, 2008.  Last Revision: $Date: 2008/09/28 16:47:43 $ }
+\date{ Sept 27, 2008.  Last Revision: $Date: 2008/09/29 01:07:24 $ }
 
 \begin{document}
 
@@ -357,6 +357,8 @@ m_{k-1} &= n_2 \\
 m_2 &= n_k \\
 \end{align*}
 
+(with appropriate adjustments for i=1)
+
 \begin{align*}
 \PD{u_i}{F} \cdot (I \Br^{u_i})
 &=
@@ -372,7 +374,118 @@ m_2 &= n_k \\
 \end{align*}
 
 Here we have the product of two completely antisymmetric tensors, both with the same set of indexes, so any alternation of those indexes has
-no effect.  The only sign changes come from the $-(-1)^i$ coefficient.  Is this consistent with equation \ref{eqn:curldot}?
+no effect.  The only sign changes come from the $-(-1)^i$ coefficient.
+
+To verify consistency with equation \ref{eqn:curldot} it remains 
+to prove that within the sum the following two are identical
+
+\begin{align}\label{eqn:p1}
+\epsilon^{m_1 m_2 \cdots m_k} \PD{x^{m_{1}}}{F_{m_2 \cdots m_{k}}}
+\end{align}
+\begin{align}\label{eqn:p2}
+(-1)^{i+1}
+\PD{x^{n_i}}{F_{n_1 n_{2} \cdots \widehat{n_i} \cdots n_{k}}}
+\epsilon^{n_1 \cdots \widehat{n_i} \cdots n_{k}}.
+\end{align}
+
+Examination and a bit of thought shows this to be the case.
+FIXME: this statement is intuition based, and I'm having trouble describing
+exactly why I say so.  Revisit this later (for now I'd rather spend the time
+working with the result than to complete the last details of the proof).
+
+\section{ Summary. }
+
+Summarizing, a proof has been given for the general multivector Stokes equation, that provides
+equivalent volume and boundary integral expressions
+
+\begin{equation}\label{eqn:genstokesSummary}
+\int_V (\grad \wedge F) \cdot d^{k}\Bx = \int_{\partial V} F \cdot d^{k-1}\Bx.
+\end{equation}
+
+The proof of this result was restricted to a hyper-parallelopiped volume and its corresponding boundary.  Additional
+arguments are required to extend this to arbitrary shapes.  That argument follows the loop integral case where cancellation
+of oppositely oriented surfaces in adjacent volumes can be used to build up an arbitrary shape in terms of small 
+parallelopiped volumes.
+
+In addition to the proof of this result, a specific algebraic (non-pictorial) meaning has been given to the boundary
+differential form $d^{k-1}\Bx$.  We have used the following notation
+
+\begin{equation}
+\Br_{u_i} = \PD{u_i}{\Br}
+\end{equation}
+\begin{equation}
+\Br^{u_i} \cdot \Br_{u_j} = {\delta^i}_j
+\end{equation}
+\begin{align}
+I &= \Br_{u_1} \wedge \Br_{u_2} \wedge \cdots \wedge \Br_{u_k} \\
+  &= \gamma_{m_1} \wedge \gamma_{m_2} \cdots \wedge \gamma_{m_{k}} \PD{u_1}{x^{m_1}} \PD{u_2}{x^{m_2}} \cdots \PD{u_k}{x^{m_k}} \\
+\end{align}
+\begin{align*}
+I \Br^{u_i} &= I \cdot \Br^{u_i} \\
+&= (-1)^{k-i} \Br_{u_1} \wedge \Br_{u_2} \wedge \cdots \widehat{\Br_{u_i}} \cdots \wedge \Br_{u_k} \\
+&= (-1)^{k-i} 
+\gamma_{j_1} \wedge \cdots \gamma_{j_{k-1}} 
+\PD{u_1}{x^{j_1}} \cdots \widehat{\PD{u_i}{}} \cdots \PD{u_k}{x^{j_{k-1}}}
+\end{align*}
+
+Here $\Br$, as parameterized by $u_i$ spans the hyper-parallopiped, and 
+$\Br(u_1, \cdots, u_i(1), \cdots)$, and $\Br(u_1, \cdots, u_i(0), \cdots)$ represent boundaries of the surface with respect to
+parameter $u_i$.  Putting things together we have the following algebraic description of the boundary
+
+\begin{equation}
+\int_{\partial V} F \cdot d^{k-1}\Bx 
+= \sum \int du_1 \cdots \widehat{du_i} \cdots du_k \left.{F \cdot (I \Br^{u_i})}\right\vert_{u_i(0)}^{u_i(1)} \\
+\end{equation}
+
+Observe that we have a Jacobian like relationship above due to the alternation provided by the wedge product.  For this
+reason it would make sense to introduce vector differentials
+
+\begin{equation}
+d\Bx_i = \PD{u_i}{\Br} du_i,
+\end{equation}
+
+in order to suppress the explicit parameterization.
+
+\begin{align}
+\int_{\partial V} F \cdot d^{k-1}\Bx 
+&=
+ \int \sum (-1)^{k-i}
+\left.{F \cdot 
+\left( d\Bx_1 \wedge \cdots \widehat{d\Bx_i} \cdots \wedge d\Bx_k \right)
+}\right\vert_{u_i(0)}^{u_i(1)} \\
+&=
+\int \sum (-1)^{k-i}
+\left.{F \cdot 
+\left( d\Bx_1 \wedge \cdots \widehat{d\Bx_i} \cdots \wedge d\Bx_k \right)
+}\right\vert_{\partial \Bx_i}
+\end{align}
+
+In the LHS of equation \ref{eqn:genstokesSummary} we also have a specific meaning for the k-vector volume element
+
+\begin{align}
+d^{k}\Bx 
+&= I du_1 du_2 \cdots du_k \\
+&= d\Bx_1 \wedge d\Bx_2 \cdots \wedge d\Bx_k
+\end{align}
+
+Also notable for the volume integral is its tensor formulation, where we have the volume jacobian determinant explicitly
+
+\begin{equation}
+\int_V (\grad \wedge F) \cdot d^{k}\Bx 
+= \int_V
+\frac{(-1)^{k(k-1)/2}}{(k-1)!} 
+\PD{x^{m_{1}}}{F_{m_2 \cdots m_{k}}}
+\frac{\partial( x^{m_1}, \cdots, x^{m_k} )}{\partial( u_1, \cdots, u_k )} du_1 \cdots du_k
+\end{equation}
+
+The other interesting thing worth noting is the reciprocal expression for curl projected onto the integration subspace
+
+\begin{equation}
+(\grad \wedge F) \cdot I = \left( \sum_i \Br^{u_i} \wedge \PD{u_i}{F} \right) \cdot I 
+\end{equation}
+
+I wasn't able to use this, but having mostly completed the proof, this is proved as a side effect.  Here mostly means that the
+unsatisfactory treatments (really handwaving) marked with FIXMEs should be revisited to consider this multivector form of Stokes theorem fully proved here.
 
 \section{ Messy proof of zero sum in equation \ref{eqn:toprove} }
 
