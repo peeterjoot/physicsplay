@@ -1,0 +1,37 @@
+#!/usr/bin/perl
+
+my $rc = $? ;
+my $built = 0 ;
+my $filename = "@ARGV" ;
+
+for ( my $i = 0 ; $i < 3 ; $i++ )
+{
+   my $rebuild = 0 ;
+
+   open my $fh, "pdflatex $filename| " or die ;
+   while (<$fh>)
+   {
+      print ;
+      if (    /Rerun to get cross-references/ 
+           or /There were multiply-defined labels/
+           or /LaTeX Warning: Citation/ 
+         )
+      {
+         $rebuild = 1 ;
+      }
+   }
+   close $fh ;
+   $rc = $? ;
+
+   if ( $rebuild )
+   {
+      my $f = $filename ;
+      $f =~ s/\..*// ;
+
+      system( "bibtex $f" ) ;
+   }
+
+   last unless $rebuild ;
+}
+
+exit $rc ;
