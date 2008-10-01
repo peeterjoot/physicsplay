@@ -2,6 +2,7 @@
 
 \input{../peeters_macros.tex}
 \newcommand{\grad}[0]{\nabla}
+\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
 \newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
 \newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
 \newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
@@ -16,7 +17,7 @@
 
 \title{ Application of stokes integrals to Maxwell equation. }
 \author{Peeter Joot}
-\date{ Sept 26, 2008.  Last Revision: $Date: 2008/09/28 02:26:12 $ }
+\date{ Sept 26, 2008.  Last Revision: $Date: 2008/10/01 02:56:10 $ }
 
 \begin{document}             % End of preamble and beginning of text.
 
@@ -26,10 +27,9 @@
 
 \section{ Putting Maxwell's equation in curl form. }
 
-These notes are followup for
-
-\href{http://www.geocities.com/peeter_joot/geometric_algebra/vector_integral_relations.pdf}{vector\_integral\_relations.pdf}
-, applying the bivector stokes volume equation
+These notes contain an application of the bivector Stokes equations
+detailed in \cite{PJStokes1}.  Background of interest can also be found
+in \cite{DenkerWire}, and \cite{DenkerMaxwell}.
 
 \begin{equation}\label{eqn:summaryStokesVolume}
 \iiint (\grad \wedge F) \cdot d^3\Bx = \oiintclockwise F \cdot d^2\Bx,
@@ -128,12 +128,12 @@ Applying stokes we have
 \end{align*}
 
 Or
-\begin{equation}
+\begin{equation}\label{eqn:maxwellint}
 \oiintctrclockwise F \cdot (d^2\Bx I) = \int \frac{J}{\epsilon_0 c} \cdot (d^3\Bx I)
 \end{equation}
 
-This is the integral form of the vector part of Maxwells equation \ref{eqn:maxwell}.
-This doens't look terribly familiar, but we aren't used to
+This is the integral form of the vector part of Maxwell's equation \ref{eqn:maxwell}.
+This doesn't look terribly familiar, but we aren't used to
 seeing Maxwell's equations in a non-disassembled form.
 Hiding in there should be a subset of the 
 traditional eight Maxwell's equations in integral form.  It will be 
@@ -267,7 +267,7 @@ oriented bivector
 area elements is not efficient for high level computation.  Revisiting the stokes derivation with a more algebraic enumeration
 of the surfaces should be done!
 
-\subsection{ Gausses law for magnetostatics }
+\subsection{ Gauss's law for magnetostatics }
 
 Return now to equation \ref{eqn:gaussmagnetostatics}, which resulted from considering the trivector part of Maxwell's equation
 
@@ -300,5 +300,161 @@ or, more compactly
 \end{equation}
 
 For any current or charge distribution.  We have therefore obtained two of the eight Maxwell's equations.
+
+\subsection{ Zero charge.  Current density in single direction. }
+
+Next to consider is $J = j^i \gamma_i$.  For simplicity, consider current in only one direction,
+taking $J = j^1 \gamma_1$.  The exersize will be to compute the integrals of equation \ref{eqn:maxwellint}.
+
+\begin{align*}
+\oiintclockwise F \cdot (I d^2\Bx) 
+&= \int \frac{J}{\epsilon_0 c} \cdot (I d^3\Bx) \\
+&= \int \frac{j^1}{\epsilon_0 c} \gamma_1 \cdot (I d^3\Bx) \\
+\end{align*}
+
+Unlike the calculations for the Gauss's law equations above, this one
+will be done using the area orientation
+methods from \cite{PJStokes2} since algebraically enumerating the surfaces
+should make life easier.  The two Gauss's law results above were done without this, which wasn't too bad for a purely spatial volume, but with spacetime
+volumes this is probably confusing in addition to being harder.
+
+Starting with the volume element, one can observe that the current density
+will not contribute to the boundary integral unless $d^3\Bx$ has no $\gamma_1$
+component, thus for a rectanglar prism integration spacetime volume let
+$d^3 \Bx = \gamma_{023} dx^0 dx^2 dx^3$
+
+\begin{align*}
+\gamma_1 \cdot (I d^3\Bx) 
+&= \gamma_1 \cdot \gamma_{0123023} dx^0 dx^2 dx^3 \\
+&= \gamma_1 \cdot \gamma_{0012233} dx^0 dx^2 dx^3 \\
+&= \gamma_1 \cdot \gamma_{111} dx^0 dx^2 dx^3 \\
+&= -\gamma_1 \cdot \gamma^{1} dx^0 dx^2 dx^3 \\
+&= - dx^0 dx^2 dx^3 \\
+\end{align*}
+
+Now for all the surfaces we want to calculate 
+$I d^2\Bx$ for each of the surfaces.
+For each of $\mu \in \{0, 2, 3\}$, calculation of $I (d^2\Bx)_\mu$ is required where
+
+\begin{align*}
+(d^2 \Bx)_\mu &= d^3 \Bx \cdot \Br^{\mu} \\
+\Br &= x^i \gamma_i \\
+\Br_\mu
+&= \PD{x^{\mu}}{\Br} \\
+&= \gamma_\mu \\
+\Br^\mu &= \gamma^\mu
+\end{align*}
+
+Calculating the surfaces
+\begin{align*}
+I (d^2 \Bx)_\mu \frac{dx^{\mu}}{dx^0 dx^2 dx^3}
+&= \gpgradetwo{ \gamma_{0123} (\gamma_{023} \cdot \gamma^{\mu}) } \\
+&= \inv{2} \gpgradetwo{ \gamma_{0123} ( \gamma_{023} \gamma^{\mu} + \gamma^{\mu} \gamma_{023} ) } \\
+&= \inv{2} \gpgradetwo{ \gamma_{0123} ( \gamma_{023} \gamma^{\mu} + \gamma_{023} \gamma^{\mu} ) } \\
+&= \gpgradetwo{ \gamma_{0012233} \gamma^{\mu} } \\
+&= -\gpgradetwo{ \gamma_{133} \gamma^{\mu} } \\
+&= -\gpgradetwo{ \gamma^{1} \gamma^{\mu} } \\
+&= \gamma^{\mu} \wedge \gamma^{1} \\
+\end{align*}
+
+Putting things back together we have
+
+\begin{align*}
+-\int j^1 dx^0 dx^2 dx^3 = \int \sum_{\mu = 0,2,3} 
+\left. F \cdot \left(\gamma^{\mu} \wedge \gamma^{1}\right) \right\vert_{\partial x^{\mu}}
+\frac{dx^0 dx^2 dx^3}{dx^{\mu}}
+\end{align*}
+
+Now, for $\mu=0$ we pick up the electric field component of the field
+
+\begin{align*}
+F \cdot \gamma^{01}
+&= \left( E^i \gamma_{i0} -\epsilon_{ijk} c B^k \gamma_{ij} \right) \cdot \gamma^{01} \\
+&= E^i,
+\end{align*}
+
+and for $\mu=2,3$ we pick up magnetic field components
+\begin{align*}
+F \cdot \gamma^{\mu1}
+&= \left( E^i \gamma_{i0} -\epsilon_{ijk} c B^k \gamma_{ij} \right) \cdot \gamma^{\mu1} \\
+&= -\epsilon_{1 \mu k} c B^k \gamma_{1\mu} \cdot \gamma^{\mu1}.
+\end{align*}
+
+For $\mu=2$ this is $- c B^3$, and for $\mu=3$, $-\epsilon_{132} c B^2 = c B^2$, so we have
+
+\begin{align*}
+0 
+&= \int \frac{j^1}{c\epsilon_0} dx^0 dx^2 dx^3 
++ \int \left. E^1 dx^2 dx^3 \right\vert_{\partial x^{0}}
++c\int \left. B^2 dx^0 dx^2 \right\vert_{\partial x^{3}}
+-c\int \left. B^3 dx^0 dx^3 \right\vert_{\partial x^{2}} \\
+&= \int \frac{j^1}{c\epsilon_0} dx^0 dx^2 dx^3 
++ \int \PD{x^0}{E^1} dx^0 dx^2 dx^3 
++c\int \PD{x^3}{B^2} dx^3 dx^2 dx^0 
+-c\int \PD{x^2}{B^3} dx^2 dx^0 dx^3  \\
+&= \int dx^0 \int dx^2 dx^3 \left(\frac{j^1}{c\epsilon_0} + \inv{c}\PD{t}{E^1} +c\PD{x^3}{B^2} -c\PD{x^2}{B^3} \right) \\
+\end{align*}
+
+If this is zero for all time intervals, then the inner integral is also zero.  Utilizing $c^2\mu_0\epsilon_0 = 1$ this is
+
+\begin{align*}
+0
+&= \int dx^2 dx^3 \left( \mu_0 \left( j^1 + \epsilon_0 \PD{t}{E^1} \right) + \left( \PD{x^3}{B^2} -\PD{x^2}{B^3} \right) \right).
+\end{align*}
+
+Writing $d\BA = \sigma_1 dx^2 dx^3$, $\Bj = j^1 \sigma_1$, $\BE = E^1 \sigma_1$, and $\BB = B^i \sigma_i$ we can pick off
+the differential form of the Maxwell-Ampere equation
+
+\begin{equation}
+\spacegrad \cross \BB = \mu_0 \left( \Bj + \epsilon_0 \PD{t}{\BE} \right),
+\end{equation}
+
+as well as the integral form
+\begin{equation}
+\int (\spacegrad \cross \BB) \cdot d\BA 
+= \mu_0 \left(\int \Bj \cdot d\BA + \epsilon_0 \int \PD{t}{\BE} \cdot d\BA \right)
+\end{equation}
+
+Both of these forms come straight from the application of the generalized Stokes equation integrating an appropriate
+spacetime volume.
+
+Now it is normal to have the spatial curl of $\BB$ written as a closed loop integral.  Stokes can be employed
+again to get exactly that form.  This really just undoes the fact that the partials to used as a convience enumerate
+exactly those loop boundaries (although they were originally oriented area boundaries).
+
+\begin{align*}
+\int \PD{x^3}{B^2} dx^3 &= B^2(t, x, y, z_1) - B^2(t, x, y, {z}_0) \\
+\int \PD{x^2}{B^3} dx^2 &= B^3(t, x, {y}_1, z) - B^3(t, x, {y}_0, z)
+\end{align*}
+
+Also observe that this whole treatment was 
+done with $J = j^1 \gamma_1$ only.  It is not hard to see that doing the same with $j^i$ and summing over $\sigma_i$ 
+will produce the same result.  Of course more care is required to handle the more abstract symbolic indexes since a nice
+hardcoded number is easier.
+On the other hand the usual dodge, employing freedom to orient the coordinate system along the
+$\gamma_1$ direction makes the more general algebraic approach a less interesting exersize.
+
+\section{ Faraday's law.}
+
+FIXME: guessing that this one comes from integrating the current over a volume that excludes the current contributions (unlike Maxwell-Ampere above).
+
+\section{ Summary and Followup. }
+
+It would be interesting to see if any of the problems in a Maxwell's equation
+text like \cite{studentsGuide} would be any easier with a combined field as
+is possible in the STA formulation (ie: the ones based on just current
+or charge distributions).
+
+There is also some interesting looking treatments of complex number residue like integrals for the field equation
+in references such as 
+\cite{HestenesFormsGA}.
+I re-encountered that paper after writing up these notes.  I'd seen it before but
+those parts that cover (tersely) the same material as above didn't make much sense until I had independently worked it all
+out in detail myself.
+Perhaps I'm dense, but I find that many academic papers are ironically not very good at all for learning from!
+
+%\bibliographystyle{plain}
+\bibliographystyle{plainnat} % supposed to allow for \url use.
+\bibliography{myrefs}      % expects file "myrefs.bib"
 
 \end{document}               % End of document.
