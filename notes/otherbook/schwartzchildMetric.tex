@@ -1,8 +1,11 @@
 \documentclass{article}      % Specifies the document class
 
 \input{../peeters_macros.tex}
+\newcommand{\grad}[0]{\nabla}
+\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
 \newcommand{\LL}[0]{\mathcal{L}}
 \newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+\newcommand{\PDsq}[2]{\frac{\partial^2 {#2}}{\partial^2 {#1}}}
 \newcommand{\dotalpha}[0]{\dot{\alpha}}
 \newcommand{\ddotalpha}[0]{\ddot{\alpha}}
 
@@ -22,6 +25,8 @@
 
 \newcommand{\adot}[0]{\dot{a}}
 \newcommand{\addot}[0]{\ddot{a}}
+\newcommand{\bdot}[0]{\dot{b}}
+\newcommand{\bddot}[0]{\ddot{b}}
 \newcommand{\qdot}[0]{\dot{q}}
 \newcommand{\qddot}[0]{\ddot{q}}
 \newcommand{\tdot}[0]{\dot{t}}
@@ -50,7 +55,7 @@
                              % The preamble begins here.
 \title{ Some GR Notes. } % Declares the document's title.
 \author{Peeter Joot}         % Declares the author's name.
-\date{ October 2, 2008.  Last Revision: $Date: 2008/10/04 04:01:18 $ } % Deleting this command produces today's date.
+\date{ October 2, 2008.  Last Revision: $Date: 2008/10/04 17:06:40 $ } % Deleting this command produces today's date.
 
 \begin{document}             % End of preamble and beginning of text.
 
@@ -228,83 +233,195 @@ Or
 Now, what is the most natural parameterization?  For physical situations time comes to mind, but if the particle stops for a
 while on the path, then this derivative goes to zero for a while even if the curve is continuous and has derivatives of all
 orders at all points.  Falling back to the most simple curve as a motivator, the circle, 
-the natural parameterization is using fractions $\theta$ of the total arc length of the circle $2\pi$.  If the
-curve is parameterized by arc length we have
+use of fractions $\theta$ of the total circumference of the circle $2\pi$ naturally parameterizes points on the curve.  The same thing can be done for any
+curve in Euclidean space, using arc length to parameterize a path.  In terms
+of the metric tensor this is
 
 \begin{align*}
 \left(\frac{ds}{ds}\right)^2 = 1 = g_{ i j } \frac{dx^i}{ds} \frac{dx^j}{ds}
 \end{align*}
 
-%there the natural parameterization is the arc length itself
-%Just as in geometry the most natural mathematic parameterization variable is often the arc length itself (
+Introducing proper time for spacetime event path parameterization will 
+be related to these spatial ideas.  Before considering proper time some 
+thought about general metrics for spacetime seems to be in order.
 
+\subsection{ General metrics for spacetime. }
+
+It was stated above that equation \ref{eqn:keLagrangian} was the 
+Lagrangian for general relativity, once the metric is specified.
+
+It is not
+at all obvious to me what physically motivates the choice of metric.
+In the two examples that Lut has given me, the Rindler metric and the
+Schwartzchild metric, this appears to be rather arbitrary.
+
+\subsubsection{ Minkowski Metric. }
+
+Picking the
+Minkowski metric for special relativity is not at all an obvious 
+choice.  An introductory physics book like \cite{lewis1965mbp} chooses
+to introduce the idea indirectly by requiring that a coordinate transformation
+used to express the equation for a spherically expanding light shell
+
+\begin{align}\label{eqn:shell}
+\sum_i (x^i)^2 - c^2 t^2 = \sum_i ({x^i}')^2 - c^2 {t'}^2
+\end{align}
+
+is identical in any spacetime coordinate system.  This expresses the idea that the speed
+of light is the same in any frame of reference and that both time and distance
+are to be measured only locally.  The Lorentz transformation can then be derived from
+this notion of spherical shell equation invariance, and the Minkowski mixed signature
+metric can be observed to fundamentally describe both the Lorentz transformation and the
+shell invariance.
+
+First reading this it was not at all obvious to me that \ref{eqn:shell} was a reasonable starting
+point.  The constancy of the speed of light is easy to say, but saying it doesn't mean
+that the implications are understood.  I'd bet that many of the people who make such a statement
+would have trouble reconsiling this statement, if given the standard headlights on a rocket ship
+travelling at $c/2$.
+This non-obvious nature is likely reflected in the degree of popular disbelief of relativity in the general non-physist population.
+Some of that is likely due to misunderstanding and because of the fact that scenerios like the twin paradox are so popular in fiction.
+I would guess that it is likely ``obvious'' to many of the same people who would perfectly who way the speed of light is constant
+in a perfectly agreeable fashion to also state that an observer who sees the spaceship
+moving would see the speed of the light from the headlights going at $1.5 c$ and not detect a conflict between the two ideas.
+
+My personal justification for the Minkowski metric comes from consideration of the wave
+nature of electromagnetism \cite{PJLorentzWave}.  A bit of study of electromagnetism shows that Maxwell's equations
+for electric and magnetic fields requires that
 
 \begin{align*}
-t &= t(\lambda) \\
-r &= r(\lambda) \\
-\Omega &= \Omega(\lambda)
+\left(-\spacegrad^2 + \inv{c^2}\PDsq{t}{}\right) \BE &= 0 \\
+\left(-\spacegrad^2 + \inv{c^2}\PDsq{t}{}\right) \BB &= 0
 \end{align*}
 
-An element of event arc length will then be
+Electromagnetic radiation (light) appears to be a fundamentally wavelike phenomina.  That is an idea that we are all fairly
+comfortable with.  Mathematically and mechanically introduce an arbitrary change of variables $x^{\mu} \rightarrow {x'}^{\mu}$,
+then the chain rule plus a requirement that these equations still describe a wave equation logically in a second coordinate system
+imposes a Lorentz transformation constraint on the coordinate transformation.  
+
+The approach of using the wave equation as a motivator requires some calculus, and thus still isn't something that
+is good for a Layman's justification of the
+Lorentz transformation and the corresponding Minkowski metric.  Einstein himself actually has a nice Layman's treatment of
+special relativity in his book \cite{einstein2005rsa}, which is also worth referring to.
+
+Also related to the wave equation one can justify the Minkowski metric by factoring the scalar wave equation (Delambertian) operator
 
 \begin{align*}
-ds^2 = \left(\frac{ds}{d\lambda}\right)^2 {d\lambda}^2
-&=
-\left( -\CC a \left(\frac{dt}{d\lambda}\right)^2 + {b} \left(\frac{dr}{d\lambda}\right)^2 + r^2\left(\frac{d\Omega}{d\lambda}\right)^2 \right) {d\lambda}^2
+-\spacegrad^2 + \inv{c^2}\PDsq{t}{} = -\sum_i \PDsq{x^{i}}{} +\inv{c^2}\PDsq{t}{}
 \end{align*}
 
+into a vector product.  If one writes the spacetime vector (with $x^0 = ct$) as
 
-\section{ Rindler Metric. }
+\begin{align*}
+x = \gamma_{\mu} x^{\mu}
+\end{align*}
+
+A spacetime gradient operator can be defined that squares to $\pm 1$ times the wave equation operator
+
+\begin{align*}
+\grad &= \gamma^{\mu} \PD{x^{\mu}}{} \\
+\end{align*}
+
+For the square of this operator to equal the wave equation operator we need two conditions
+
+\begin{align*}
+\gamma^{\mu} \cdot \gamma^{\nu} &= \delta^{\mu\nu} {\left(\gamma^{\mu}\right)}^2 \\
+(\gamma^0)^2 (\gamma^i)^2 &= -1.
+\end{align*}
+
+With these we can then write the wave equation operator as
+
+\begin{align*}
+-\spacegrad^2 + \inv{c^2}\PDsq{t}{} = \inv{(\gamma^0)^2} \grad^2
+\end{align*}
+
+There are an infinite number of ways to factor this scalar equation into a vector product, depending on the spacetime 
+coordinate systems used, but all of them vary by a Lorentz transformation!
+
+Requiring that an orthonormal spacetime basis has a Minkowski metric signature $(\gamma^0)^2 (\gamma^i)^2 = -1$ has value
+independent of any mechanics and relativistic consideration.  If nothing else the fact that this can be utilized to
+summarize Maxwell's equations as the clifford algebra product \cite{doran2003gap}
+
+\begin{align*}
+\grad F &= J/c \epsilon_0 \\
+\end{align*}
+
+Here $\grad$ defined as above, and we have a bivector for the field, a vector for the current and charge density, and the 
+four space pseudoscalar ties the electric and magnetic field components together into a single complex number like quanity:
+
+\begin{align*}
+F &= \BE + I c \BB \\
+J &= c \rho \gamma_0 + J^i \gamma_i \\
+I &= \gamma_0 \wedge \gamma_1 \wedge \gamma_2 \wedge \gamma_3 \\
+\end{align*}
+
+The spatial vectors we are used to calculating with are expressed as spacetime bivectors
+\begin{align*}
+\sigma_i &= \gamma_i \wedge \gamma_0 \\
+\sigma_i \cdot \sigma_j &= \delta_{ij} \\
+\BE &= E^i \sigma_i \\
+\BB &= B^i \sigma_i \\
+\BJ &= J^i \sigma_i,
+\end{align*}
+
+where the bivector basis $\{\sigma_i\}$ for the spacetime split behave in all respects like Euclidean vectors.
+
+If nothing else the Minkowski metric idea that is at the root of all of this has got visible value as it brings together all
+of electromagnetism under a single umbrella.
+
+\subsubsection{ Schwartzchild Metric. } 
+
+\begin{align}
+\CC (d\tau)^2 &= -\CC a(r) (dt)^2 + {b(r)} (dr)^2 + r^2(d\Omega)^2 \\
+a(r) &= 1 - \kappa/r \\
+b(r) &= \inv{a(r)} \\
+\PD{r}{a} &= \kappa/r^2 \\
+\PD{r}{b} &= -\kappa/(r-k)^2 \\
+\adot &= \frac{\kappa \rdot}{r^2} \\
+\bdot &= \frac{-\kappa \rdot}{(r-k)^2}
+\end{align}
+
+\subsubsection{ Rindler Metric. }
 
 Lut described the 
 
-\section{ Schwartzchild Metric. } 
+\section{ EOMs. }
 
-Work through the Euler-Lagrange equations for what Lut calls the 
-Schwartzchild metric.
-
-\subsection{ Affine Coordinates. }
-
-%\begin{align}
-%\CC (d\tau)^2 &= -\CC a(r) (dt)^2 + {b(r)} (dr)^2 + r^2(d\Omega)^2 \\
-%a(r) &= 1 - \kappa/r \\
-%b(r) &= \inv{a(r)} \\
-%\PD{r}{a} &= \kappa/r^2 \\
-%\PD{r}{b} &= -\kappa/(r-k)^2 \\
-%\adot &= \frac{\kappa \rdot}{r^2}
-%\bdot &= \frac{-\kappa \rdot}{(r-k)^2}
-%\end{align}
-
-I would interpret the affine coordinates this way.  If we have two ``close'' events described by our $t,r,\Omega$ coordinates, then the path and corresponding
-element of arc length between two events can be described parameterically
-with an arbitrary parameter $\lambda$
-
-\begin{align*}
-t &= t(\lambda) \\
-r &= r(\lambda) \\
-\Omega &= \Omega(\lambda)
-\end{align*}
-
-An element of event arc length will then be
-
-\begin{align*}
-ds^2 = \left(\frac{ds}{d\lambda}\right)^2 {d\lambda}^2
-&=
-\left( -\CC a \left(\frac{dt}{d\lambda}\right)^2 + {b} \left(\frac{dr}{d\lambda}\right)^2 + r^2\left(\frac{d\Omega}{d\lambda}\right)^2 \right) {d\lambda}^2
-\end{align*}
+%Work through the Euler-Lagrange equations for what Lut calls the 
+%Schwartzchild metric.
+%
+%\subsection{ Affine Coordinates. }
 
 
-Introducing such a natural parameterization with units of time means that we need a dimensional fudge factor, so we write $ds = c d\tau$, so that $\tau$ is the unique parameterization for which $(ds/d\tau)^2 = c^2$.
-This implicitly defines the ``proper time'', and we can write our Lagrangian to minimize in terms of that variable
-
-\begin{align*}%\label{eqn:action}
-\LL
-&= \left(\frac{ds}{d\tau}\right)^2 \\
-&= c^2 \\
-&= \left( -\CC a \left(\frac{dt}{d\tau}\right)^2 + {b} \left(\frac{dr}{d\tau}\right)^2 + r^2\left(\frac{d\Omega}{d\tau}\right)^2 \right) \\
-&= -\CC a \tdot^2 + {b} \rdot^2 + r^2\dotOmega^2 \\
-\end{align*}
-
+%I would interpret the affine coordinates this way.  If we have two ``close'' events described by our $t,r,\Omega$ coordinates, then the path and corresponding
+%element of arc length between two events can be described parameterically
+%with an arbitrary parameter $\lambda$
+%
+%\begin{align*}
+%t &= t(\lambda) \\
+%r &= r(\lambda) \\
+%\Omega &= \Omega(\lambda)
+%\end{align*}
+%
+%An element of event arc length will then be
+%
+%\begin{align*}
+%ds^2 = \left(\frac{ds}{d\lambda}\right)^2 {d\lambda}^2
+%&=
+%\left( -\CC a \left(\frac{dt}{d\lambda}\right)^2 + {b} \left(\frac{dr}{d\lambda}\right)^2 + r^2\left(\frac{d\Omega}{d\lambda}\right)^2 \right) {d\lambda}^2
+%\end{align*}
+%
+%Introducing such a natural parameterization with units of time means that we need a dimensional fudge factor, so we write $ds = c d\tau$, so that $\tau$ is the unique parameterization for which $(ds/d\tau)^2 = c^2$.
+%This implicitly defines the ``proper time'', and we can write our Lagrangian to minimize in terms of that variable
+%
+%\begin{align*}%\label{eqn:action}
+%\LL
+%&= \left(\frac{ds}{d\tau}\right)^2 \\
+%&= c^2 \\
+%&= \left( -\CC a \left(\frac{dt}{d\tau}\right)^2 + {b} \left(\frac{dr}{d\tau}\right)^2 + r^2\left(\frac{d\Omega}{d\tau}\right)^2 \right) \\
+%&= -\CC a \tdot^2 + {b} \rdot^2 + r^2\dotOmega^2 \\
+%\end{align*}
+%
 %Derivatives for $\Omega$
 %
 %\begin{align*}
@@ -361,8 +478,6 @@ This implicitly defines the ``proper time'', and we can write our Lagrangian to 
 %\end{align*}
 %
 %The $\rdot^3$ term doesn't look right dimensionally.
-
-
 
 %\bibliographystyle{plain}
 \bibliographystyle{plainnat} % supposed to allow for \url use.
