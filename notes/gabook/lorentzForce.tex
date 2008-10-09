@@ -6,26 +6,28 @@
 \newcommand{\LL}[0]{\mathcal{L}}
 \newcommand{\xdot}[0]{\dot{x}}
 \newcommand{\xddot}[0]{\ddot{x}}
+\newcommand{\pdot}[0]{\dot{p}}
+\newcommand{\pddot}[0]{\ddot{p}}
 
 \usepackage[bookmarks=true]{hyperref}
 
-
 \title{ Revisit Lorentz force from Lagrangian. }
 \author{Peeter Joot}
-\date{ October 8, 2008.  Last Revision: $Date: 2008/10/09 03:25:40 $ }
+\date{ October 8, 2008.  Last Revision: $Date: 2008/10/09 04:24:58 $ }
 
 \begin{document}
 
 \maketitle{}
-
-\tableofcontents
-
-\section{ Motivation }
+%\tableofcontents
+%\section{ Motivation }
 
 In \cite{PJSrLagrangian} a derivation of the Lorentz force in covariant
 form was performed.  Intuition says that result, because of the squared
 proper velocity, was dependent on the 
-positive time Minkowski signature as used in \cite{doran2003gap}. 
+positive time Minkowski signature.  This signature is the common convention
+in \cite{doran2003gap}, using Hestenes' STA relativistic formulation.  With many
+GR references using the opposite signature, it seems worthwhile to understand
+what results are signature dependent and put them in a signature invariant form.
 
 Here the result will be rederived without assuming this signature.
 
@@ -35,7 +37,7 @@ Assume a Lagrangian of the following form
 \LL = \inv{2}m v^2 + \kappa A \cdot v
 \end{align}
 
-where $v$ is the proper velocity, and $A(x^\mu,\xdot^\nu) = A(x^\mu)$ is the four vector potential.
+where $v$ is the proper velocity.  Here $A(x^\mu,\xdot^\nu) = A(x^\mu)$ is a position but not velocity dependent four vector potential.  The constant $\kappa$ includes the charge of the test mass, and will be determined exactly in due course.
 
 As observed in \cite{PJCanMomentum} the equations of motion can be written
 
@@ -47,7 +49,7 @@ We have
 
 \begin{align*}
 \grad v^2 &= 0 \\
-\grad A \cdot v
+\grad (A \cdot v)
 &= \grad A_\mu \xdot^\mu \\
 &= \gamma^\nu \xdot^\mu \partial_\nu A_\mu \\
 \inv{2} \grad_v v^2 
@@ -56,7 +58,56 @@ We have
 &= \gamma^\mu (\gamma_\mu)^2 \xdot^\mu \\
 &= \gamma_\mu \xdot^\mu \\
 &= v \\
+\grad_v (A \cdot v)
+&= \gamma^\nu \partial_{\xdot^\nu} A_\mu \xdot^\mu \\
+&= \gamma^\nu A_\mu {\delta^\mu}_\nu \\
+&= \gamma^\mu A_\mu \\
+&= A \\
+\frac{d}{d\tau} &= \xdot^\mu \partial_\mu
 \end{align*}
+
+Putting all this back together 
+\begin{align*}
+\grad \LL &= \frac{d}{d\tau}(\grad_v \LL) \\
+\kappa \gamma^\nu \xdot^\mu \partial_\nu A_\mu &= \frac{d}{d\tau}\left( m v + \kappa A \right) \\
+\implies \\
+\pdot 
+&= \kappa \left( \gamma^\nu \xdot^\mu \partial_\nu A_\mu - \xdot^\nu \partial_\nu \gamma^\mu A_\mu \right) \\
+&= \kappa \partial_\nu A_\mu \left( \gamma^\nu \xdot^\mu - \xdot^\nu \gamma^\mu \right) \\
+\end{align*}
+
+We know this will be related to $F \cdot v$, where $F = \grad \wedge A$.  Expanding that for comparision
+
+\begin{align*}
+F \cdot v
+&= (\grad \wedge A) \cdot v \\
+&= (\gamma^\mu \wedge \gamma^\nu) \cdot \gamma_\alpha \xdot^\alpha \partial_\mu A_\nu \\
+&= \left( \gamma^\mu {\delta^\nu}_\alpha -\gamma^\nu {\delta^\mu}_\alpha \right) \xdot^\alpha \partial_\mu A_\nu \\
+&= 
+\gamma^\mu \xdot^\nu \partial_\mu A_\nu 
+-\gamma^\nu \xdot^\mu \partial_\mu A_\nu \\
+&= \partial_\nu A_\mu \left( \gamma^\nu \xdot^\mu -\gamma^\mu \xdot^\nu \right) \\
+\end{align*}
+
+Comparison shows that we therefore have
+
+\begin{align}\label{eqn:lorentzUndeterminedConst}
+\pdot = \kappa F \cdot v
+\end{align}
+
+A reasonable approach to fix the constant $\kappa$ is to put this into correspondance with the classical
+vector form of the Lorentz force equation.
+
+Introduce a rest observer, with worldline $x = ct e_0$.  Computation of the spatial parts of the four vector force equation \ref{eqn:lorentzUndeterminedConst} for this rest observer requires taking the wedge product
+with the observer velocity $v = c \gamma e_0$.  This will discard the timelike components of the force equation with
+respect to this observer rest frame, and leave only the 
+purely spatial (using Euclidian vector-like spatial bivector basis $\{\sigma_i = e_i \wedge e_0\}$) components
+for that observer.  For clarity, for the observer frame we use a different set of basis vectors $\{e_\mu\}$, to point
+out that $\gamma_0$ of the derivation above does not have to equal $e_0$.  Since the end result of the Lagrangian calculation
+ended up being coordinate and signature free, this is perhaps superfluous.
+
+Omitting the scale factor $\gamma = dt/d\tau$ for now, application of a wedge with $e_0$ operation to both sides 
+will suffice to determine this observer dependent expression of the force
 
 \bibliographystyle{plainnat} % supposed to allow for \url use.
 \bibliography{myrefs}      % expects file "myrefs.bib"
