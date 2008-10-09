@@ -8,12 +8,14 @@
 \newcommand{\xddot}[0]{\ddot{x}}
 \newcommand{\pdot}[0]{\dot{p}}
 \newcommand{\pddot}[0]{\ddot{p}}
+\newcommand{\fdot}[0]{\dot{f}}
+\newcommand{\fddot}[0]{\ddot{f}}
 
 \usepackage[bookmarks=true]{hyperref}
 
 \title{ Revisit Lorentz force from Lagrangian. }
 \author{Peeter Joot}
-\date{ October 8, 2008.  Last Revision: $Date: 2008/10/09 04:24:58 $ }
+\date{ October 8, 2008.  Last Revision: $Date: 2008/10/09 13:06:28 $ }
 
 \begin{document}
 
@@ -24,8 +26,8 @@
 In \cite{PJSrLagrangian} a derivation of the Lorentz force in covariant
 form was performed.  Intuition says that result, because of the squared
 proper velocity, was dependent on the 
-positive time Minkowski signature.  This signature is the common convention
-in \cite{doran2003gap}, using Hestenes' STA relativistic formulation.  With many
+positive time Minkowski signature.
+With many
 GR references using the opposite signature, it seems worthwhile to understand
 what results are signature dependent and put them in a signature invariant form.
 
@@ -99,15 +101,119 @@ A reasonable approach to fix the constant $\kappa$ is to put this into correspon
 vector form of the Lorentz force equation.
 
 Introduce a rest observer, with worldline $x = ct e_0$.  Computation of the spatial parts of the four vector force equation \ref{eqn:lorentzUndeterminedConst} for this rest observer requires taking the wedge product
-with the observer velocity $v = c \gamma e_0$.  This will discard the timelike components of the force equation with
-respect to this observer rest frame, and leave only the 
-purely spatial (using Euclidian vector-like spatial bivector basis $\{\sigma_i = e_i \wedge e_0\}$) components
-for that observer.  For clarity, for the observer frame we use a different set of basis vectors $\{e_\mu\}$, to point
+with the observer velocity $v = c \gamma e_0$.
+For clarity, for the observer frame we use a different set of basis vectors $\{e_\mu\}$, to point
 out that $\gamma_0$ of the derivation above does not have to equal $e_0$.  Since the end result of the Lagrangian calculation
 ended up being coordinate and signature free, this is perhaps superfluous.
 
+First calculate the field velocity product in terms of electric and magnetic components.  In this new frame of reference write the velocity of the charged particle as
+$v = e_\mu \fdot^\mu$
+
+\begin{align*}
+F \cdot v
+&= (\BE + I c \BB) \cdot v \\
+&= (E^i e_{i0} - \epsilon_{ijk}c B^k e_{ij}) \cdot e_\mu \fdot^\mu \\
+&= 
+  E^i \fdot^0 e_{i0} \cdot e_0
++ E^i \fdot^j e_{i0} \cdot e_j
+- \epsilon_{ijk} c B^k \fdot^m e_{ij} \cdot e_m \\
+\end{align*}
+
 Omitting the scale factor $\gamma = dt/d\tau$ for now, application of a wedge with $e_0$ operation to both sides 
-will suffice to determine this observer dependent expression of the force
+of 
+\ref{eqn:lorentzUndeterminedConst}
+will suffice to determine this observer dependent expression of the force.
+
+\begin{align*}
+(F \cdot v) \wedge e_0
+&= 
+\left(
+  E^i \fdot^0 (e_{i0} \cdot e_0)
++ E^i \fdot^j (e_{i0} \cdot e_j)
+- \epsilon_{ijk} c B^k \fdot^m e_{ij} \cdot e_m \right) \wedge e_0 \\
+&= E^i \fdot^0 e_{i0} (e_0)^2 - \epsilon_{ijk} c B^k \fdot^m (e_i)^2 ( e_{i} \delta_{jm} -e_{j} \delta_{im} ) \wedge e_0 \\
+&= (e_0)^2 \left( E^i \fdot^0 e_{i0} + \epsilon_{ijk} c B^k \left( \fdot^j e_{i0} - \fdot^i e_{j0} \right) \right) \\
+\end{align*}
+
+This has discarded the timelike components of the force equation with respect to this observer rest frame.  Introducing the basis
+$\{\sigma_i = e_i \wedge e_0\}$ for this observers' Euclidian space (these spacetime bivectors square to unity, and behave in every respect like
+spatial vector basis vectors), and writing $\BE = E^i \sigma_i$, $\BB = B^i \sigma_i$, and $\Bv = \sigma_i dx^i/dt$, this is
+
+\begin{align*}
+(F \cdot v) \wedge e_0
+&= (e_0)^2 c \frac{dt}{d\tau} \left( \BE + \epsilon_{ijk} B^k \left( \frac{df^j}{dt} \sigma_{i} - \frac{df^i}{dt} \sigma_{j} \right) \right) \\
+\end{align*}
+
+This inner antisymmetric sum is just the cross product.  This can be observed by expanding the determinant
+
+\begin{align*}
+\Ba \cross \Bb &= 
+\begin{vmatrix}
+\sigma_1 & \sigma_2 & \sigma_3 \\
+a_1 & a_2 & a_3 \\
+b_1 & b_2 & b_3 \\
+\end{vmatrix} \\
+&=
+  \sigma_1 (a_2 b_3 - a_3 b_2)
++ \sigma_2 (a_3 b_1 - a_1 b_3)
++ \sigma_3 (a_1 b_2 - a_2 b_1) \\
+&=
+  \sigma_i a_j b_k
+\end{align*}
+
+This leaves
+\begin{align}\label{eqn:FdotVwedge}
+\kappa (F \cdot v) \wedge e_0
+&= \kappa (e_0)^2 c \frac{dt}{d\tau} \left( \BE + \Bv \cross \BB \right)
+\end{align}
+
+Next we expand
+
+\begin{align*}
+\pdot \wedge e_0 
+&= \left(e_\mu \frac{d m \fdot^\mu}{dt}\frac{dt}{d\tau} \right) \wedge e_0 \\
+&= e_{i0} \frac{d m \fdot^i}{dt} \frac{dt}{d\tau} \\
+\end{align*}
+
+Equating with \ref{eqn:FdotVwedge}, cancelling the $\gamma = dt/d\tau$ factors, leaves the traditional Lorentz force law in observed dependent form
+
+\begin{align*}
+\frac{d}{dt}\left( m \gamma \Bv \right) &= \kappa (e_0)^2 c \left( \BE + \Bv \cross \BB \right)
+\end{align*}
+
+This supplies the undetermined constant factor from the Lagrangian $\kappa (e_0)^2 c = q$.  A summary statement of the results is as follows
+
+\begin{align}
+\LL &= \inv{2} m v^2 + q (e_0)^2 A \cdot (v/c) \\
+\pdot &= (e_0)^2 q F \cdot (v/c) \\
+\Bp &= q (\BE + \Bv \cross \BB)
+\end{align}
+
+For $(e_0)^2 = 1$, we have the proper Lorentz force equation as found in
+\cite{doran2003gap}.  There the equation was obtained using some subtle relativistic symmetry arguments not especially easy to follow.
+
+Having written this, it would be more natural to couple the signature dependency into the velocity term of the Lagrangian since that squared velocity was the 
+signature dependent term to start with
+
+\begin{align*}
+\LL &= \inv{2} m v^2 (e_0)^2 + q A \cdot (v/c) \\
+\end{align*}
+
+Although this doesn't change the equations of motion we can keep that signature factor with the velocity term.  Consider a general potential as an example
+
+\begin{align*}
+\LL &= \inv{2}m v^2 (\gamma_0)^2 + \phi \\
+\grad \LL &= \frac{d}{d\tau}(\grad_v \LL) \\
+\frac{d}{d\tau}(m v (\gamma_0)^2) &= \grad \phi - \frac{d}{d\tau}(\grad_v \phi) \\
+\end{align*}
+
+When the time signature is negative this gives a natural coupling of terms in terms of worldline arc length $ds = -c d\tau$
+
+\begin{align}
+\frac{d}{ds}(m v) &= \inv{c} \left(\grad \phi - \frac{d}{d\tau}(\grad_v \phi) \right) \\
+\end{align}
+
+Since for a positive time metric we have $ds = cd\tau$, this happens to also be a signature invariant form for the equations of motion associated with a general position and velocity dependent special relativistic Lagrangian.
 
 \bibliographystyle{plainnat} % supposed to allow for \url use.
 \bibliography{myrefs}      % expects file "myrefs.bib"
