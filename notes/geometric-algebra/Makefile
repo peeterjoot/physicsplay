@@ -1,6 +1,6 @@
 files := $(shell ls *.ltx)
 pdfs := $(files:.ltx=.pdf)
-ppdfs := $(shell ls ../geometric_algebra/*.pdf)
+ppdfs := $(shell ls ../*/*.pdf)
 
 all : $(pdfs)
 big: test/ga.pdf
@@ -73,6 +73,9 @@ ordered += ../geometric_algebra/mass_vary_lagrangian.pdf
 
 ordered += ../geometric_algebra/canonical_momentum.pdf
 ordered += ../geometric_algebra/outermorphism_det.pdf
+
+ordered += ../mechanics/goldstein_ch1_2.pdf
+
 ordered += ../geometric_algebra/em_bivector_metric_dependencies.pdf
 ordered += ../geometric_algebra/maxwell_to_tensor.pdf
 ordered += ../geometric_algebra/vector_maxwells_projection.pdf
@@ -81,10 +84,20 @@ ordered += ../geometric_algebra/vector_integral_relations.pdf
 
 skipit += ../geometric_algebra/glossary.pdf
 skipit += ../geometric_algebra/long_wire_q.pdf
+skipit += ../feynman/star_distance.pdf
+skipit += ../lut/rindler.pdf
+skipit += ../toc/gabookmark.pdf
+skipit += ../geometric_algebra/usebib.pdf
+skipit += ../geometric_algebra/q.pdf
+skipit += ../matteo/m.pdf
+skipit += ../lut/Rindler-eom.pdf
 
 #ordered +=
 ordered += ../geometric_algebra/stokes_maxwell_application.pdf
 ordered += ../geometric_algebra/stokes_revisited.pdf
+
+ordered += ../lut/schwartzchild_metric.pdf
+ordered += ../geometric_algebra/lorentz_force.pdf
 
 semiordered := $(ordered) $(unordered)
 unordered := $(filter-out $(ordered) $(skipit),$(ppdfs))
