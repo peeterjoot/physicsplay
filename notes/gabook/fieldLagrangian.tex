@@ -1,12 +1,15 @@
 \documentclass{article}
 
 \input{../peeters_macros.tex}
+\newcommand{\LL}[0]{\mathcal{L}}
+\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+\newcommand{\barA}[0]{\bar{A}}
 
 \usepackage[bookmarks=true]{hyperref}
 
 \title{ Derivation of Euler-Lagrange field Lagrangian equations.}
 \author{Peeter Joot}
-\date{ October 10, 2008.  Last Revision: $Date: 2008/10/10 21:26:57 $ }
+\date{ October 10, 2008.  Last Revision: $Date: 2008/10/11 03:33:21 $ }
 
 \begin{document}
 
@@ -18,17 +21,180 @@
 
 In \cite{PJMaxwellLagrangian} Maxwell's equations were derived from
 a Lagrangian action in tensor and STA forms.  This was done with 
-the somewhat non-rigorous but simple direct variational technique used in
-the Principle of Least Action chapter of the Feynman Lectures
-\cite{feynman1963flp}.
+Feynman's \cite{feynman1963flp} simple, but somewhat non-rigorous, direct variational technique.
 
 An alternate approach is to use a field form of the Euler-Lagrange
 equations as done in the wikipedia article \cite{wikiemtensor}.  I had
-trouble understanding that derivation, so will try it myself, first
-using Feynman's approach to derive the field versions of the Euler-Lagrange
-equations.
+trouble understanding that derivation, probably because
+I didn't understand the notation, nor what the source of that equation.
 
-\section{ }
+Here Feynman's approach will be used to derive the field versions of the Euler-Lagrange
+equations, which clarifies the notation.  As a verification of the correctness these
+will be applied to derive Maxwell's equation.
+
+\section{ Deriving the field Lagrangian equations }
+
+That essence of Feynman's method from his 
+``Principle of Least Action'' entertainment chapter of the Lectures is
+to do a first order linear expansion of the function, ignore all the higher order terms,
+then do the integration by parts for the remainder.
+
+Looking at the Maxwell field Lagrangian and action for motivation,
+
+\begin{align*}
+\LL &= (\partial^\mu A^\nu - \partial^\nu A^\mu) (\partial_\mu A_\nu - \partial_\nu A_\mu) + \kappa J^\sigma A_\sigma \\
+S &= \int d^4 x \LL
+\end{align*}
+
+where the potential functions $A^\mu$ (or their index lowered variants)
+are to be determined by extreme values of the action variation.  Note the use of the shorthand
+$\partial_\mu \equiv \PD{x^\mu}{}$.
+
+We want to consider general Lagrangians of this form.  Write
+
+\begin{align*}
+\LL = \LL( A^\mu, \partial_\nu A^\sigma) = \LL(A^0, A^1, \cdots, \partial_0 A^0, \partial_1 A^0, \cdots )
+\end{align*}
+
+\subsection{ First order Taylor expansion of a multi variable function. }
+
+Given an abstractly specified function like this, with indexes and partials flying around, how to do a first order Taylor series expansion may not be obvious, especially since the variables are all undetermined functions!
+
+Consideration of a simple case guides the way.  Assume that a two variable function can be expressed as a polynomial of some order
+
+\begin{align*}
+f(x,y) = a_{i j} x^i y^j
+\end{align*}
+
+Evaluation of this function or its partials at $(x,y) = (0,0)$ supply the constants $a_{i j}$.  Simplest is the lowest order constant
+
+\begin{align*}
+f(0,0) &= a_{0 0} \\
+\end{align*}
+
+\begin{align*}
+\partial_x f &= i a_{i j} x^{i-1} y^j \\
+\partial_y f &= j a_{i j} x^{i} y^{j-1} \\
+\partial_{xx} f &= i(i-1) a_{i j} x^{i-2} y^j \\
+\partial_{yy} f &= j(j-1) a_{i j} x^{i} y^{j-2} \\
+\partial_{xy} f &= i j a_{i j} x^{i-1} y^{j-1} \\
+\hdots \\
+\implies \\
+a_{1 0} &= (\partial_x f) \vert_0 \\
+a_{0 1} &= (\partial_y f) \vert_0 \\
+a_{2 0} &= \inv{2!} (\partial_{xx} f) \vert_0 \\
+a_{0 2} &= \inv{2!} (\partial_{yy} f) \vert_0 \\
+a_{1 1} &= (\partial_{xy} f) \vert_0 = (\partial_{yx} f) \vert_0 \\
+\hdots
+\end{align*}
+
+Or
+
+\begin{align*}
+f(x,y) &= f \vert_0 + x (\partial_x f) \vert_0 + y (\partial_y f) \vert_0 \\
+&+ \inv{2} \left( x^2 (\partial_{x x} f) \vert_0 + x y (\partial_{x y} f) \vert_0  + y x (\partial_{y x} f) \vert_0  + y^2(\partial_{y y} f) \vert_0 \right) \\
+&+ \sum_{(i+j) > 2} a_{i j} x^i y^j
+\end{align*}
+
+\subsection{ First order expansion of the Lagrangian function. }
+
+It isn't hard to see that the same thing can be done for higher degree functions too, although enumerating the 
+higher order terms will get messier, however for the purposes of this variational exercise the assumption is that only
+the first order differential terms are significant.
+
+How to do the first order Taylor expansion of a multivariable function has been established.  Next write $A^\mu = \barA^\mu + n^\mu$, where the $\barA^\mu$ functions are the desired solutions and each of $n^\mu$ vanishes on the boundaries of the integration region.  Expansion of $\LL$ around the desired solutions one has
+
+\begin{align*}
+\LL(\barA^\mu + n^\mu, \partial_\nu( \barA^\sigma + n^\sigma) )
+&=
+\LL(\barA^\mu, \partial_\nu \barA^\sigma ) \\
+&+ (\barA^\mu + n^\mu) \left( \left. \PD{A^\mu}{\LL} \right) \right\vert_{A^\mu = \barA^\mu} \\
+&+ (\partial_\nu \barA^\sigma + \partial_\nu n^\sigma) \left( \left. \PD{(\partial_\nu A^\sigma)}{\LL} \right) \right\vert_{\partial_\nu A^\mu = \partial_\nu \barA^\mu} \\
+&+ \sum_{i+j>2} (\barA^\mu + n^\mu)^i (\partial_\nu \barA^\sigma + \partial_\nu n^\sigma)^j \underbrace{\left(\cdots\right)}_{\text{higher order derivatives}}
+\end{align*}
+
+\subsection{ Example for clarification. }
+Here we see the first use of the peculiar looking partials from the wikipedia article
+
+\begin{align*}
+\PD{(\partial_\nu A^\sigma)}{\LL}.
+\end{align*}
+
+Initially looking at that I couldn't fathom what it meant, but it is just what it says, 
+differentiation with respect to a variable $\partial_\nu A^\sigma$.  As an example, for
+
+\begin{align*}
+\LL 
+&= u A^0 + v A^1 + a \partial_1 A^0 + b \partial_0 A^1 \\
+&= u A^0 + v A^1 + a \PD{x^1}{A^0} + b \PD{x^0}{A^1}
+\end{align*}
+
+where $u$,$v$,$a$, and $b$ are constants.  Then an corresponding example of such a partial term is
+
+\begin{align*}
+\PD{(\partial_1 A^0)}{\LL} = a.
+\end{align*}
+
+\subsection{ Calculationg of the action for the general field Lagrangian. }
+
+\begin{align*}
+S &= \int d^4 x \LL \\
+&= \int d^4 x \LL(\barA^\mu, \partial_\nu \barA^\sigma ) \\
+&+ \int d^4 x (\barA^\mu + n^\mu) \left( \left. \PD{A^\mu}{\LL} \right) \right\vert_{A^\mu = \barA^\mu} \\
+&+ \int d^4 x (\partial_\nu \barA^\sigma + \partial_\nu n^\sigma) \left( \left. \PD{(\partial_\nu A^\sigma)}{\LL} \right) \right\vert_{\partial_\nu A^\mu = \partial_\nu \barA^\mu} \\
+&+ \int d^4 x (\cdots \text{neglected higher order terms} \cdots )
+\end{align*}
+
+Grouping this into parts associated with the assumed variational solution, and the varied parts we have
+
+\begin{align*}
+S &= \int d^4 x 
+\left(
+\LL(\barA^\mu, \partial_\nu \barA^\sigma ) + \barA^\mu \left. \left( \PD{A^\mu}{\LL} \right) \right\vert_{A^\mu = \barA^\mu} 
++ \partial_\nu \barA^\sigma \left. \left( \PD{(\partial_\nu A^\sigma)}{\LL} \right) \right\vert_{\partial_\nu A^\mu = \partial_\nu \barA^\mu} 
+\right) \\
+&+ \int d^4 x 
+\left(
+n^\mu \left. \left( \PD{A^\mu}{\LL} \right) \right\vert_{A^\mu = \barA^\mu} 
++\partial_\nu n^\sigma \left. \left( \PD{(\partial_\nu A^\sigma)}{\LL} \right) \right\vert_{\partial_\nu A^\mu = \partial_\nu \barA^\mu}
+\right) \\
+&+ \cdots
+\end{align*}
+
+None of the terms in the first integral are of interest since they are fixed.  The second term of the remaining integral is the one to integrate by
+parts.  For short, let
+
+\begin{align*}
+u &= \left. \left( \PD{(\partial_\nu A^\sigma)}{\LL} \right) \right\vert_{\partial_\nu A^\mu = \partial_\nu \barA^\mu},
+\end{align*}
+
+then this integral is
+%(u v)' = u' v + u v'
+%\int u' v = \int (u v)' - \int u v' 
+%\int u' v = u v - \int u v' 
+\begin{align*}
+\int d^3 x d x^\nu \PD{x^\nu}{n^\sigma} u 
+&= \int d^3 x \left. {n^\sigma} u \right\vert_{\partial x^\nu} - \int d^4 x n^\sigma \PD{x^\nu}{u}
+\end{align*}
+
+Here $\partial x^\nu$ denotes the boundary of the integration.  Because $n^\sigma$ was by definition zero on all boundaries of the
+integral region this first integral is zero.  Denoting the non-variational parts of the action integral by $\delta S$, we have
+
+\begin{align*}
+\delta S
+&= \int d^4 x \left(
+n^\mu \left. \left( \PD{A^\mu}{\LL} \right) \right\vert_{A^\mu = \barA^\mu} 
+- n^\sigma \partial_\nu \left. \left( \PD{(\partial_\nu A^\sigma)}{\LL} \right) \right\vert_{\partial_\nu A^\mu = \partial_\nu \barA^\mu}
+\right) \\
+&= \int d^4 x
+n^\sigma
+\left(
+\left. \left( \PD{A^\sigma}{\LL} \right) \right\vert_{A^\sigma = \barA^\sigma} 
+- \partial_\nu \left. \left( \PD{(\partial_\nu A^\sigma)}{\LL} \right) \right\vert_{\partial_\nu A^\mu = \partial_\nu \barA^\mu}
+\right)
+\end{align*}
+
+\section{ Verifying the equations.  Maxwell's equation derivation from action. }
 
 \bibliographystyle{plainnat} % supposed to allow for \url use.
 \bibliography{myrefs}      % expects file "myrefs.bib"
