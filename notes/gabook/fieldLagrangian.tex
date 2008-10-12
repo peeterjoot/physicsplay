@@ -12,9 +12,9 @@
 
 \usepackage[bookmarks=true]{hyperref}
 
-\title{ Derivation of Euler-Lagrange field Lagrangian equations.}
+\title{ Derivation of Euler-Lagrange field equations.}
 \author{Peeter Joot}
-\date{ October 10, 2008.  Last Revision: $Date: 2008/10/11 17:38:07 $ }
+\date{ October 10, 2008.  Last Revision: $Date: 2008/10/12 03:31:30 $ }
 
 \begin{document}
 
@@ -225,12 +225,15 @@ of the integration by parts in two variables can be found in the plane solution 
 For Maxwell's equation, our Lagrangian density takes the following complex valued form
 
 \begin{align}\label{eqn:maxlag}
-\LL
-&= -\frac{\epsilon_0 c}{2} (\grad \wedge A)^2 + J \cdot A \\
-&= \kappa (\gamma^{\mu\nu}) (\gamma^{\alpha\beta}) \partial_\mu A_\nu \partial_\alpha A_\beta + J^\sigma A_\sigma
+\LL &= -\frac{\epsilon_0 c}{2} (\grad \wedge A)^2 + J \cdot A
 \end{align}
 
-Here for convience $\kappa = -\epsilon_0 c /2$, and $\gamma^{\alpha\beta} = \gamma^\alpha \wedge \gamma^\beta$.
+In coordinates, writing $\gamma^{\alpha\beta} = \gamma^\alpha \wedge \gamma^\beta$, and 
+for convience $\kappa = -\epsilon_0 c /2$ this is
+
+\begin{align}\label{eqn:maxlagcomp}
+\LL &= \kappa (\gamma^{\mu\nu}) (\gamma^{\alpha\beta}) \partial_\mu A_\nu \partial_\alpha A_\beta + J^\sigma A_\sigma
+\end{align}
 
 Some intermediate calculations to start
 \begin{align*}
@@ -258,31 +261,68 @@ This makes it clearer that the differentiation really just requires evaluation o
 &= \kappa \partial_\alpha A_\beta \left( (\gamma^{\nu\sigma}) (\gamma^{\alpha\beta}) +(\gamma^{\alpha\beta}) (\gamma^{\nu\sigma}) \right).
 \end{align*}
 
-The symmetric product above of bivectors can be reduced.  Consider the symmetric product of general bivectors $U$, and $V$
-
-\begin{align*}
-U V + V U 
-&= 2 (U \cdot V + U \wedge V) \\
-&= 2 (U V - \gpgradetwo{U V} ).
-\end{align*}
-
-In the Lagrangian we can only have scalar and pseudoscalar grades in the bivector square, and 
-since scalar differentiation will not change the grade of the objects there can only be scalar and pseudoscalar grades in this differential.  Thus we can write
-
-\begin{align*}
-\PD{(\partial_\nu A_\sigma)}{\LL} &= 2 \kappa \partial_\alpha A_\beta (\gamma^{\nu\sigma}) (\gamma^{\alpha\beta}).
-\end{align*}
 
 Reassembling results the complete field equations are described by the set of relations
 
 \begin{align*}
-J^\sigma &= -\epsilon_0 c \partial_\nu \partial_\alpha A_\beta (\gamma^{\nu\sigma}) (\gamma^{\alpha\beta})
+J^\sigma
+&= -\inv{2} \epsilon_0 c \partial_\nu \partial_\alpha A_\beta
+%\gpgrade{ (\gamma^{\nu\sigma}) (\gamma^{\alpha\beta}) }{0+4}
+\left( (\gamma^{\nu\sigma}) (\gamma^{\alpha\beta}) +(\gamma^{\alpha\beta}) (\gamma^{\nu\sigma}) \right).
 \end{align*}
 
-Multiplying this by $\gamma_\sigma$ on both sides and summing this is
+Multiplying this by $\gamma_\sigma$ on both sides and summing produces the current density $J = \gamma_\sigma J^\sigma$ on the LHS
+
 \begin{align*}
 \frac{J}{\epsilon_0 c}
-&= \partial_\nu \partial_\alpha A_\beta \gamma_\sigma \gamma^{\sigma\nu} (\gamma^{\alpha\beta}) \\
+&= -\inv{2}
+\partial_\nu \partial_\alpha A_\beta
+\gamma_\sigma
+\left( (\gamma^{\nu\sigma}) (\gamma^{\alpha\beta}) +(\gamma^{\alpha\beta}) (\gamma^{\nu\sigma}) \right) \\
+&= \inv{2}
+\partial_\nu \partial_\alpha A_\beta
+\gamma_\sigma
+\left( (\gamma^{\sigma\nu}) (\gamma^{\alpha\beta}) +(\gamma^{\alpha\beta}) (\gamma^{\sigma\nu}) \right) \\
+\end{align*}
+
+\begin{align}\label{eqn:gettingthere}
+\frac{J}{\epsilon_0 c}
+&= \inv{2}
+\partial_\nu \partial_\alpha A_\beta
+\left(
+\gamma^{\nu} (\gamma^{\alpha\beta}) +
+\gamma_\sigma (\gamma^{\alpha\beta}) (\gamma^{\sigma\nu})
+\right)
+\end{align}
+
+It appears that there's a cancellation of $\sigma$ terms possible in that last term above too.
+Observe that the original Lagrangian of \ref{eqn:maxlag}, 
+had only have scalar and pseudoscalar grades from the bivector square, plus a pure scalar grade part
+
+\begin{align*}
+\LL = \gpgrade{\LL}{0+4}
+\end{align*}
+
+This implies that there is an dependency in the indexes of the
+bivector pairs of the Lagrangian in coordinate form \ref{eqn:maxlagcomp}.
+Since scalar differentiation will not change the grades, the pairs
+of indexes in the symmetric product above in \ref{eqn:gettingthere} are also not all free.
+In particular, either $\{\nu, \sigma\} \in \{\alpha, \beta\}$, or these indexes are all distinct, since two but only two
+of these indexes equal would mean there is a bivector grade in the sum.  
+
+Because of this that bivector product can be commuted
+
+\begin{align*}
+(\gamma^{\alpha\beta}) (\gamma^{\sigma\nu})
+&=
+(\gamma^{\sigma\nu}) (\gamma^{\alpha\beta})
+\end{align*}
+
+which leaves
+
+\begin{align*} %\label{eqn:gettingthere}
+\frac{J}{\epsilon_0 c}
+&= \partial_\nu \partial_\alpha A_\beta \gamma^{\nu} (\gamma^{\alpha\beta}) \\
 &= \gamma^\nu \partial_\nu \partial_\alpha A_\beta (\gamma^{\alpha\beta}) \\
 &= \grad \partial_\alpha A_\beta (\gamma^{\alpha\beta}) \\
 &= \inv{2} \grad \left(\partial_\alpha A_\beta - \partial_\beta A_\alpha \right) (\gamma^{\alpha\beta}) \\
