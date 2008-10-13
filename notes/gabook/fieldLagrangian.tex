@@ -5,6 +5,10 @@
 \newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
 \newcommand{\barA}[0]{\bar{A}}
 \newcommand{\grad}[0]{\nabla}
+\newcommand{\conj}[0]{{*}}
+
+\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+
 \newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
 \newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
 \newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
@@ -14,7 +18,7 @@
 
 \title{ Derivation of Euler-Lagrange field equations.}
 \author{Peeter Joot}
-\date{ October 10, 2008.  Last Revision: $Date: 2008/10/12 03:55:31 $ }
+\date{ October 10, 2008.  Last Revision: $Date: 2008/10/13 02:22:13 $ }
 
 \begin{document}
 
@@ -220,7 +224,8 @@ at the end of the book.
 FIXME: I am also not clear why Goldstein would have a complete derivative $d/dx^\nu$ here instead of $\partial_\nu = \partial/{\partial x^\nu}$.  A more thoroughly worked simple example
 of the integration by parts in two variables can be found in the plane solution of an electrostatics Lagrangian in \cite{PJMaxwellLagrangian}.  Based on the arguments there I think that it has to be a partial derivative.   The partial also happens to be consistent with both the wikipedia article \cite{wikiemtensor}, and the Maxwell's derivation below.
 
-\section{ Verifying the equations.  Maxwell's equation derivation from action. }
+\section{ Verifying the equations. }
+\subsection{ Maxwell's equation derivation from action. }
 
 For Maxwell's equation, our Lagrangian density takes the following complex valued form
 
@@ -347,6 +352,66 @@ This is Maxwell's equation in its full glory
 
 \cite{doran2003gap} contains additional treatment, albeit a dense one, of 
 this form of Maxwell's equation.
+
+\subsection{ Electrodynamic Potential Wave Equation. }
+
+\subsection{ Schrodengers equation. }
+
+Problem $11.3$ in \cite{goldstein1951cm} is to take the Lagrangian
+
+\begin{align*}
+\LL 
+&= \frac{\hbar^2}{2 m} \spacegrad \psi \cdot \spacegrad \psi^\conj + V \psi \psi^\conj + \frac{\hbar}{2i} ( \psi^\conj \partial_t \psi - \psi \partial_t \psi^\conj ) \\
+&= \frac{\hbar^2}{2 m} \partial_k \psi \partial_k \psi^\conj + V \psi \psi^\conj + 
+\frac{\hbar}{2i} ( \psi^\conj \partial_t \psi - \psi \partial_t \psi^\conj ) \\
+\end{align*}
+
+treating $\psi$, and $\psi^\conj$ as separate fields and show that Schrodengers equation and its conjugate follows.  (note: I've added a 1/2 fact in the
+commutator term that wasn't in the Goldstein problem.  Believe that to have been a typo in the original (first edition)).
+
+We have
+\begin{align*}
+\PD{\psi^\conj}{\LL} &= V\psi + \frac{\hbar}{2i} \partial_t \psi \\
+\end{align*}
+
+and canonical momenta
+\begin{align*}
+\PD{(\partial_m \psi^\conj)}{\LL} &= \frac{\hbar^2}{2 m} \partial_{m} \psi \\
+\PD{(\partial_t \psi^\conj)}{\LL} &= -\frac{\hbar}{2i} {\psi} \\
+\end{align*}
+
+\begin{align*}
+\PD{\psi^\conj}{\LL} &= \sum_m \partial_m \PD{(\partial_m \psi^\conj)}{\LL} + \partial_t \PD{(\partial_t \psi^\conj)}{\LL} \\
+V\psi + \frac{\hbar}{2i} \partial_t \psi &= \frac{\hbar^2}{2 m} \sum_m \partial_{mm} \psi -\frac{\hbar}{2i} \PD{t}{\psi} \\
+\end{align*}
+
+which is the desired result
+\begin{align*}
+-\frac{\hbar^2}{2 m} \spacegrad^2 \psi + V\psi &= {\hbar i}{} \PD{t}{\psi} \\
+\end{align*}
+
+The conjugate result
+
+%\begin{align*}
+%\PD{\psi}{\LL} &= V\psi^\conj - \frac{\hbar}{2i} \partial_t \psi^\conj \\
+%\partial_m \PD{(\partial_m \psi)}{\LL} &= 
+%\frac{\hbar^2}{2 m} 
+%\partial_{mm} \psi^\conj \\
+%\partial_t \PD{(\partial_t \psi)}{\LL} &= \frac{\hbar}{2i} \partial_{t}{\psi^\conj} \\
+%\implies \\
+%V\psi^\conj - \frac{\hbar}{2i} \partial_t \psi^\conj &= 
+%\frac{\hbar^2}{2 m} 
+%\sum_m \partial_{mm} \psi^\conj +\frac{\hbar}{2i} \PD{t}{\psi^\conj} \\
+%\end{align*}
+%
+%which is 
+\begin{align*}
+-\frac{\hbar^2}{2 m} \spacegrad^2 \psi^\conj + V\psi^\conj &= -{\hbar i}{} \PD{t}{\psi^\conj} \\
+\end{align*}
+
+follows by inspection since all terms except the time partial are symmetric in $\psi$ and $\psi^\conj$.  The time partial has a negation in sign from the commutator of the Lagrangian.
+
+FIXME: goldstein also wanted the Hamiltonian, but I don't know what that is yet.  Got to go read the earlier parts of the book!
 
 \bibliographystyle{plainnat} % supposed to allow for \url use.
 \bibliography{myrefs}      % expects file "myrefs.bib"
