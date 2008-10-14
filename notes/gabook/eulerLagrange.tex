@@ -4,6 +4,7 @@
 \newcommand{\LL}[0]{\mathcal{L}}
 
 \newcommand{\qdot}[0]{\dot{q}}
+\newcommand{\ndot}[0]{\dot{n}}
 \newcommand{\qbar}[0]{\bar{q}}
 \newcommand{\qdotbar}[0]{\dot{\bar{q}}}
 \newcommand{\qddot}[0]{\ddot{q}}
@@ -14,7 +15,7 @@
 
 \title{Euler Lagrange Equations.}
 \author{Peeter Joot}
-\date{ October 13, 2008.  Last Revision: $Date: 2008/10/14 02:55:48 $ }
+\date{ October 13, 2008.  Last Revision: $Date: 2008/10/14 03:32:08 $ }
 
 \begin{document}
 
@@ -35,14 +36,87 @@ q_i &= \qbar_i + n_i \\
 S &= \int \LL d\lambda
 \end{align*}
 
-Here $\qbar$ is the desired optimial solution, and the functions $n_i$
+Here $\qbar_i$ are the desired optimial solutions, and the functions $n_i$
 are all zero at the end points of the integration range.
 
-A first order taylor expansion of a multivariable function takes the form
+A first order taylor expansion of a multivariable function
+$f(a_i) = f(a_1, a_2, \cdots, a_n)$
+takes the form
 
 \begin{align*}
-f(a_i + x_i) \approx f(a_i) + \sum (a_i + x_i) \PD{x_i}{f} 
+f(a_i + x_i) \approx f(a_i) + \sum_i (a_i + x_i) \left. \PD{x_i}{f} \right\vert_{x_i = a_i}
 \end{align*}
+
+In this case the $x_i$ take the values $q_i$, and $\qdot_i$, so the first
+order Lagrangian approximation requires summation over differential contributions for both sets of terms
+
+\begin{align*}
+\LL(q_i, \qdot_i, \lambda) 
+&\approx \LL(\qbar_i, \qdotbar_i, \lambda) 
++ \sum_i (\qbar_i + n_i) \left. \PD{q_i}{f} \right\vert_0
++ \sum_i (\qdotbar_i + \ndot_i) \left. \PD{\qdot_i}{f} \right\vert_0
+\end{align*}
+
+Here subscript $0$ represents evaluation of the integrals at $q_j = \qbar_j$, 
+or $\qdot_j = \qdotbar_j$.
+
+Now form the action, and group the terms in fixed and variable sets
+
+\begin{align*}
+S &= \int \LL d\lambda \\
+&\approx
+\int d\lambda 
+\left(
+\LL(\qbar_i, \qdotbar_i, \lambda)
++ \sum_i \qbar_i \left. \PD{q_i}{\LL} \right\vert_0
++ \sum_i \qdotbar_i \left. \PD{\qdot_i}{\LL} \right\vert_0
+\right) \\
+&+
+\underbrace{
+\sum_i \int d\lambda
+\left(
+n_i \left. \PD{q_i}{\LL} \right\vert_0
++\ndot_i \left. \PD{\qdot_i}{\LL} \right\vert_0
+\right)
+}_{\delta S}
+\end{align*}
+
+For the optimal solution we want $\delta S = 0$ for all possible paths $n_i$.  Now do the integration by parts writing
+$u' = \ndot_i$, and $v = \partial \LL/{\partial \qdot_i}$ 
+
+\begin{align*}
+\int u' v = u v - \int u v'
+\end{align*}
+
+The action variation is then
+
+\begin{align*}
+\delta S =
++ \sum_i \left. \left( n_i \PD{\qdot_i}{\LL} \right) \right\vert_{\partial \lambda}
++ \sum_i \int d\lambda n_i
+\left(
+\left. \PD{q_i}{\LL} \right\vert_0
+-\frac{d}{d\lambda} \left. \PD{\qdot_i}{\LL} \right\vert_0
+\right)
+\end{align*}
+
+The non-integral term is zero since by definition $n_i = 0$ on the boundary of the desired integration region, so for the
+total variation to equal zero for all possible paths $n_i$ one must have
+
+\begin{align*}
+\PD{q_i}{\LL} -\frac{d}{d\lambda} \PD{\qdot_i}{\LL} = 0.
+\end{align*}
+
+Evaluation of these derivatives at the optimial desired paths has been supressed since these equations now define that path.
+
+\cite{goldstein1951cm} writes calls this quantity the functional derivative
+
+\begin{align*}
+\frac{\delta S}{\delta q_i} = \PD{q_i}{\LL} -\frac{d}{d\lambda} \PD{\qdot_i}{\LL}
+\end{align*}
+
+(with higher order derivatives if the Lagrangian has dependencies on more than generalized position and velocity terms).  Goldstein's 
+approach is also harder to follow than Feynman's (Goldstein introduces a parameter $\epsilon$, writing $q_i = \qbar_i + \epsilon n_i$.  He then takes derivatives under the integral sign for the end result.  To get the rough ideas involved, this method is sufficient.
 
 %\section{}
 
