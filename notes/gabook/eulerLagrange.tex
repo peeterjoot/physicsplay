@@ -15,17 +15,20 @@
 
 \title{Euler Lagrange Equations.}
 \author{Peeter Joot}
-\date{ October 13, 2008.  Last Revision: $Date: 2008/10/14 03:35:59 $ }
+\date{ October 13, 2008.  Last Revision: $Date: 2008/10/15 02:08:11 $ }
 
 \begin{document}
 
 \maketitle{}
 
-%\tableofcontents
+\tableofcontents
 
-In preparation for understanding the multivector Lagrangian treatment of
-\cite{lasenby1993mda}, go back and derive this myself for the scalar
-case.  As in my recent field lagrangian derivations Feynmans
+\section{Scalar form of Euler-Lagrange equations.}
+
+\cite{lasenby1993mda} presents a multivector Lagrangian treatment.  To
+preparation for understanding that I've gone 
+back and derived the scalar
+case myself.  As in my recent field lagrangian derivations Feynmans
 \cite{feynman1963flp} simple action procedure will be used.
 
 Write 
@@ -33,11 +36,11 @@ Write
 \begin{align*}
 \LL &= \LL(q_i, \qdot_i, \lambda) \\
 q_i &= \qbar_i + n_i \\
-S &= \int \LL d\lambda
+S &= \int_{\partial \lambda} \LL d\lambda
 \end{align*}
 
 Here $\qbar_i$ are the desired optimial solutions, and the functions $n_i$
-are all zero at the end points of the integration range.
+are all zero at the end points of the integration range $\partial \lambda$.
 
 A first order taylor expansion of a multivariable function
 $f(a_i) = f(a_1, a_2, \cdots, a_n)$
@@ -53,13 +56,13 @@ order Lagrangian approximation requires summation over differential contribution
 \begin{align*}
 \LL(q_i, \qdot_i, \lambda) 
 &\approx \LL(\qbar_i, \qdotbar_i, \lambda) 
-+ \sum_i (\qbar_i + n_i) \left. \PD{q_i}{f} \right\vert_0
-+ \sum_i (\qdotbar_i + \ndot_i) \left. \PD{\qdot_i}{f} \right\vert_0
++ \sum_i (\qbar_i + n_i) \left. \PD{q_i}{f} \right\vert_{q_i = \qbar_i}
++ \sum_i (\qdotbar_i + \ndot_i) \left. \PD{\qdot_i}{f} \right\vert_{q_i = \qbar_i}
 \end{align*}
 
-Here subscript $0$ represents evaluation of the integrals at $q_j = \qbar_j$, 
-or $\qdot_j = \qdotbar_j$.
-
+%Here subscript $0$ represents evaluation of the integrals at $q_j = \qbar_j$, 
+%or $\qdot_j = \qdotbar_j$.
+%
 Now form the action, and group the terms in fixed and variable sets
 
 \begin{align*}
@@ -68,15 +71,15 @@ S &= \int \LL d\lambda \\
 \int d\lambda 
 \left(
 \LL(\qbar_i, \qdotbar_i, \lambda)
-+ \sum_i \qbar_i \left. \PD{q_i}{\LL} \right\vert_0
-+ \sum_i \qdotbar_i \left. \PD{\qdot_i}{\LL} \right\vert_0
++ \sum_i \qbar_i \left. \PD{q_i}{\LL} \right\vert_{q_i = \qbar_i}
++ \sum_i \qdotbar_i \left. \PD{\qdot_i}{\LL} \right\vert_{q_i = \qbar_i}
 \right) \\
 &+
 \underbrace{
 \sum_i \int d\lambda
 \left(
-n_i \left. \PD{q_i}{\LL} \right\vert_0
-+\ndot_i \left. \PD{\qdot_i}{\LL} \right\vert_0
+n_i \left. \PD{q_i}{\LL} \right\vert_{q_i = \qbar_i}
++\ndot_i \left. \PD{\qdot_i}{\LL} \right\vert_{q_i = \qbar_i}
 \right)
 }_{\delta S}
 \end{align*}
@@ -95,34 +98,98 @@ The action variation is then
 + \sum_i \left. \left( n_i \PD{\qdot_i}{\LL} \right) \right\vert_{\partial \lambda}
 + \sum_i \int d\lambda n_i
 \left(
-\left. \PD{q_i}{\LL} \right\vert_0
--\frac{d}{d\lambda} \left. \PD{\qdot_i}{\LL} \right\vert_0
+\left. \PD{q_i}{\LL} \right\vert_{q_i = \qbar_i}
+-\frac{d}{d\lambda} \left. \PD{\qdot_i}{\LL} \right\vert_{q_i = \qbar_i}
 \right)
 \end{align*}
 
 The non-integral term is zero since by definition $n_i = 0$ on the boundary of the desired integration region, so for the
 total variation to equal zero for all possible paths $n_i$ one must have
 
-\begin{align*}
+\begin{align}\label{eqn:eulerlag}
 \PD{q_i}{\LL} -\frac{d}{d\lambda} \PD{\qdot_i}{\LL} = 0.
-\end{align*}
+\end{align}
 
 Evaluation of these derivatives at the optimial desired paths has been supressed since these equations now define that path.
 
-\cite{goldstein1951cm} writes calls this quantity the functional derivative
+\subsection{ Some comparision to the Goldstein approach. }
+
+\cite{goldstein1951cm} calls the quantity \ref{eqn:eulerlag} the functional derivative
 
 \begin{align*}
 \frac{\delta S}{\delta q_i} = \PD{q_i}{\LL} -\frac{d}{d\lambda} \PD{\qdot_i}{\LL}
 \end{align*}
 
 (with higher order derivatives if the Lagrangian has dependencies on more than generalized position and velocity terms).  Goldstein's 
-approach is also harder to follow than Feynman's (Goldstein introduces a parameter $\epsilon$, writing $q_i = \qbar_i + \epsilon n_i$.  He then takes derivatives under the integral sign for the end result.
+approach is also harder to follow than Feynman's (Goldstein introduces a parameter $\epsilon$, writing
 
-I like this way instead to get the rough idea.
+\begin{align}\label{eqn:epsilonvariation}
+q_i = \qbar_i + \epsilon n_i
+\end{align}
 
-%\section{}
+He then takes derivatives under the integral sign for the end result.
 
-%%\bibliographystyle{plain}
+While his approach is a bit harder to follow initially, that additional $\epsilon$ parameterization of the variation path also fits nicely with this
+linearization procedure.
+After the integration by parts and subsequent differentiation under integral sign nicely does the job of
+discarding all the ``fixed'' $\qbar_i$ contributions to the action leaving:
+
+\begin{align*}
+\frac{dS}{d\epsilon} = \int d\lambda \sum_i n_i \left. \frac{\delta S}{\delta q_i} \right\vert_{q_i = \qbar_i}
+\end{align*}
+
+Introducing this idea does firm things up, eliminating some handwaving.  To obtain the extremal solution it does
+make sense to set the derivate of the action equal to zero, and introducing an additional scalar variational control
+in the paths from the optimimal solution provides that something to take derivatives with respect to.
+
+Goldstein also writes that this action derivative is then evaluated at $\epsilon = 0$.  This really says the same
+thing as Feynman... toss all the higher order terms, since factors of epsilon will be left associated with of these.
+With my initial read of Goldstein this wasn't the least bit clear... it was really yet another example of the classic
+physics approach of solving something with a first order linear approximation.
+
+\section{ Vector formulation. }
+
+\subsection{ Simple case.  Unforced purely kinetic Lagrangian. }
+
+Before considering multivector Lagrangians, a step back to the simplest vector Lagrangrian is in order
+
+\begin{align*}
+\LL = \inv{2}m \dot{\Bx} \cdot \dot{\Bx}
+\end{align*}
+
+Writing $\Bx(\lambda) = \bar{\Bx} + \epsilon \Bn$, and using the variational technique directly the equation of motion for this unforced path should follow directly
+in vector form
+
+\begin{align*}
+S = \int d\lambda \inv{2} m \dot{\bar{\Bx}}^2 + \int m d\lambda \epsilon \dot{\bar{\Bx}} \cdot \dot{\Bn} + \int d\lambda \inv{2} m \epsilon^2 \dot{\bar{\Bn}}^2
+\end{align*}
+
+Integration by parts operating directly on the vector function we have
+
+\begin{align*}
+\left.\frac{d S}{d\epsilon}\right\vert_{\epsilon=0} 
+&= \left.{m \dot{\bar{\Bx}} \cdot {\Bn}}\right\vert_{\partial \lambda} - \int m d\lambda \ddot{\bar{\Bx}} \cdot {\Bn} \\
+&= - \int m d\lambda \ddot{\bar{\Bx}} \cdot {\Bn} \\
+\end{align*}
+
+Introducing shorthand $\delta S/\delta \Bx$, for a vector functional derivative, we have
+\begin{align*}
+\left.\frac{d S}{d\epsilon}\right\vert_{\epsilon=0} &= \int d\lambda \Bn \cdot \frac{\delta S}{\delta \Bx},
+\end{align*}
+
+where the extremal condition is
+\begin{align*}
+\frac{\delta S}{\delta \Bx} = - m \ddot{\bar{\Bx}} = 0.
+\end{align*}
+
+Here the expected and desired Euler Lagrange equation for the Lagrangian (constant velocity in some direction dependent on initial conditions) is arrived at directly in vector form without dropping down to coordinates and reassembling them to get back the vector expression.
+
+\subsection{ Position and velocity gradients in the configuration space. }
+
+Having tackled the simplest case, to generalize this we need a construct to do first order taylor series expansion in the neighbourhood of a vector
+position.  The (multivector) gradient is the obvious candidate operator to do the job.  Before going down that road consider the scalar Lagrangian
+case once more.  In \cite{PJGradientRecip} it was shown that 
+
 \bibliographystyle{plainnat} % supposed to allow for \url use.
 \bibliography{myrefs}      % expects file "myrefs.bib"
 
