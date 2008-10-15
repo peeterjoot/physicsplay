@@ -9,13 +9,14 @@
 \newcommand{\qdotbar}[0]{\dot{\bar{q}}}
 \newcommand{\qddot}[0]{\ddot{q}}
 \newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+\newcommand{\grad}[0]{\nabla}
 
 \usepackage[bookmarks=true]{hyperref}
 
 
 \title{Euler Lagrange Equations.}
 \author{Peeter Joot}
-\date{ October 13, 2008.  Last Revision: $Date: 2008/10/15 02:08:11 $ }
+\date{ October 13, 2008.  Last Revision: $Date: 2008/10/15 02:44:13 $ }
 
 \begin{document}
 
@@ -34,31 +35,31 @@ case myself.  As in my recent field lagrangian derivations Feynmans
 Write 
 
 \begin{align*}
-\LL &= \LL(q_i, \qdot_i, \lambda) \\
-q_i &= \qbar_i + n_i \\
+\LL &= \LL(q^i, \qdot^i, \lambda) \\
+q^i &= \qbar^i + n^i \\
 S &= \int_{\partial \lambda} \LL d\lambda
 \end{align*}
 
-Here $\qbar_i$ are the desired optimial solutions, and the functions $n_i$
+Here $\qbar^i$ are the desired optimial solutions, and the functions $n^i$
 are all zero at the end points of the integration range $\partial \lambda$.
 
 A first order taylor expansion of a multivariable function
-$f(a_i) = f(a_1, a_2, \cdots, a_n)$
+$f(a^i) = f(a^1, a^2, \cdots, a^n)$
 takes the form
 
 \begin{align*}
-f(a_i + x_i) \approx f(a_i) + \sum_i (a_i + x_i) \left. \PD{x_i}{f} \right\vert_{x_i = a_i}
+f(a^i + x^i) \approx f(a^i) + \sum_i (a^i + x^i) \left. \PD{x^i}{f} \right\vert_{x^i = a^i}
 \end{align*}
 
-In this case the $x_i$ take the values $q_i$, and $\qdot_i$, so the first
+In this case the $x^i$ take the values $q^i$, and $\qdot^i$, so the first
 order Lagrangian approximation requires summation over differential contributions for both sets of terms
 
-\begin{align*}
-\LL(q_i, \qdot_i, \lambda) 
-&\approx \LL(\qbar_i, \qdotbar_i, \lambda) 
-+ \sum_i (\qbar_i + n_i) \left. \PD{q_i}{f} \right\vert_{q_i = \qbar_i}
-+ \sum_i (\qdotbar_i + \ndot_i) \left. \PD{\qdot_i}{f} \right\vert_{q_i = \qbar_i}
-\end{align*}
+\begin{align}\label{eqn:linearizedLagrangian}
+\LL(q^i, \qdot^i, \lambda) 
+&\approx \LL(\qbar^i, \qdotbar^i, \lambda) 
++ \sum_i (\qbar^i + n^i) \left. \PD{q^i}{\LL} \right\vert_{q^i = \qbar^i}
++ \sum_i (\qdotbar^i + \ndot^i) \left. \PD{\qdot^i}{\LL} \right\vert_{q^i = \qbar^i}
+\end{align}
 
 %Here subscript $0$ represents evaluation of the integrals at $q_j = \qbar_j$, 
 %or $\qdot_j = \qdotbar_j$.
@@ -70,22 +71,22 @@ S &= \int \LL d\lambda \\
 &\approx
 \int d\lambda 
 \left(
-\LL(\qbar_i, \qdotbar_i, \lambda)
-+ \sum_i \qbar_i \left. \PD{q_i}{\LL} \right\vert_{q_i = \qbar_i}
-+ \sum_i \qdotbar_i \left. \PD{\qdot_i}{\LL} \right\vert_{q_i = \qbar_i}
+\LL(\qbar^i, \qdotbar^i, \lambda)
++ \sum_i \qbar^i \left. \PD{q^i}{\LL} \right\vert_{q^i = \qbar^i}
++ \sum_i \qdotbar^i \left. \PD{\qdot^i}{\LL} \right\vert_{q^i = \qbar^i}
 \right) \\
 &+
 \underbrace{
 \sum_i \int d\lambda
 \left(
-n_i \left. \PD{q_i}{\LL} \right\vert_{q_i = \qbar_i}
-+\ndot_i \left. \PD{\qdot_i}{\LL} \right\vert_{q_i = \qbar_i}
+n^i \left. \PD{q^i}{\LL} \right\vert_{q^i = \qbar^i}
++\ndot^i \left. \PD{\qdot^i}{\LL} \right\vert_{q^i = \qbar^i}
 \right)
 }_{\delta S}
 \end{align*}
 
-For the optimal solution we want $\delta S = 0$ for all possible paths $n_i$.  Now do the integration by parts writing
-$u' = \ndot_i$, and $v = \partial \LL/{\partial \qdot_i}$ 
+For the optimal solution we want $\delta S = 0$ for all possible paths $n^i$.  Now do the integration by parts writing
+$u' = \ndot^i$, and $v = \partial \LL/{\partial \qdot^i}$ 
 
 \begin{align*}
 \int u' v = u v - \int u v'
@@ -95,19 +96,19 @@ The action variation is then
 
 \begin{align*}
 \delta S =
-+ \sum_i \left. \left( n_i \PD{\qdot_i}{\LL} \right) \right\vert_{\partial \lambda}
-+ \sum_i \int d\lambda n_i
++ \sum_i \left. \left( n^i \PD{\qdot^i}{\LL} \right) \right\vert_{\partial \lambda}
++ \sum_i \int d\lambda n^i
 \left(
-\left. \PD{q_i}{\LL} \right\vert_{q_i = \qbar_i}
--\frac{d}{d\lambda} \left. \PD{\qdot_i}{\LL} \right\vert_{q_i = \qbar_i}
+\left. \PD{q^i}{\LL} \right\vert_{q^i = \qbar^i}
+-\frac{d}{d\lambda} \left. \PD{\qdot^i}{\LL} \right\vert_{q^i = \qbar^i}
 \right)
 \end{align*}
 
-The non-integral term is zero since by definition $n_i = 0$ on the boundary of the desired integration region, so for the
-total variation to equal zero for all possible paths $n_i$ one must have
+The non-integral term is zero since by definition $n^i = 0$ on the boundary of the desired integration region, so for the
+total variation to equal zero for all possible paths $n^i$ one must have
 
 \begin{align}\label{eqn:eulerlag}
-\PD{q_i}{\LL} -\frac{d}{d\lambda} \PD{\qdot_i}{\LL} = 0.
+\PD{q^i}{\LL} -\frac{d}{d\lambda} \PD{\qdot^i}{\LL} = 0.
 \end{align}
 
 Evaluation of these derivatives at the optimial desired paths has been supressed since these equations now define that path.
@@ -117,14 +118,14 @@ Evaluation of these derivatives at the optimial desired paths has been supressed
 \cite{goldstein1951cm} calls the quantity \ref{eqn:eulerlag} the functional derivative
 
 \begin{align*}
-\frac{\delta S}{\delta q_i} = \PD{q_i}{\LL} -\frac{d}{d\lambda} \PD{\qdot_i}{\LL}
+\frac{\delta S}{\delta q^i} = \PD{q^i}{\LL} -\frac{d}{d\lambda} \PD{\qdot^i}{\LL}
 \end{align*}
 
 (with higher order derivatives if the Lagrangian has dependencies on more than generalized position and velocity terms).  Goldstein's 
 approach is also harder to follow than Feynman's (Goldstein introduces a parameter $\epsilon$, writing
 
 \begin{align}\label{eqn:epsilonvariation}
-q_i = \qbar_i + \epsilon n_i
+q^i = \qbar^i + \epsilon n^i
 \end{align}
 
 He then takes derivatives under the integral sign for the end result.
@@ -132,10 +133,10 @@ He then takes derivatives under the integral sign for the end result.
 While his approach is a bit harder to follow initially, that additional $\epsilon$ parameterization of the variation path also fits nicely with this
 linearization procedure.
 After the integration by parts and subsequent differentiation under integral sign nicely does the job of
-discarding all the ``fixed'' $\qbar_i$ contributions to the action leaving:
+discarding all the ``fixed'' $\qbar^i$ contributions to the action leaving:
 
 \begin{align*}
-\frac{dS}{d\epsilon} = \int d\lambda \sum_i n_i \left. \frac{\delta S}{\delta q_i} \right\vert_{q_i = \qbar_i}
+\frac{dS}{d\epsilon} = \int d\lambda \sum_i n^i \left. \frac{\delta S}{\delta q^i} \right\vert_{q^i = \qbar^i}
 \end{align*}
 
 Introducing this idea does firm things up, eliminating some handwaving.  To obtain the extremal solution it does
@@ -187,8 +188,63 @@ Here the expected and desired Euler Lagrange equation for the Lagrangian (consta
 \subsection{ Position and velocity gradients in the configuration space. }
 
 Having tackled the simplest case, to generalize this we need a construct to do first order taylor series expansion in the neighbourhood of a vector
-position.  The (multivector) gradient is the obvious candidate operator to do the job.  Before going down that road consider the scalar Lagrangian
-case once more.  In \cite{PJGradientRecip} it was shown that 
+position.  The (multivector) gradient is the obvious candidate operator to do the job.
+Before going down that road consider the scalar Lagrangian case once more, where we will see that it is natural to define position and velocity gradients
+in the configuration space.  It will also be observed that the chain rule essentially motivates the initially somewhat odd seeming reciprocal basis
+used to express the gradient when operating in a non-orthonormal frame.
+
+In equation \ref{eqn:linearizedLagrangian}, the linear differential increment in the neighbourhood of the optimal solution had the form
+
+\begin{align}\label{eqn:gradientMotivator}
+\Delta \LL &=
++ \sum_i (\qbar^i + n^i) \left. \PD{q^i}{\LL} \right\vert_{q^i = \qbar^i}
++ \sum^i (\qdotbar^i + \ndot^i) \left. \PD{\qdot^i}{\LL} \right\vert_{q^i = \qbar^i}
+\end{align}
+
+If one defines a configuration space position and velocity gradients respectively as
+
+\begin{align*}
+\grad_{\Bq} &= \left(\PD{q^1}{}, \PD{q^2}{}, \cdots, \PD{q^n}{}\right) = f_k \PD{q^k}{} \\
+\grad_{\dot{\Bq}} &= \left(\PD{\qdot^1}{}, \PD{\qdot^2}{}, \cdots, \PD{\qdot^n}{}\right) = f_k \PD{\qdot^k}{}
+\end{align*}
+
+and forms a configuration space vector with respect to some linearly independent, but not neccessarily orthonormal, basis
+
+\begin{align*}
+\Bq = q^i e_i
+\end{align*}
+
+then the chain rule dictates the relationship between the configuration vector basis and the basis with which the gradient must be expressed.  In
+particular, if we wish to write \ref{eqn:gradientMotivator} in terms of the configuration space gradients
+
+\begin{align*}
+\Delta \LL &=
+(\bar{\Bq} + \Bn) \cdot \left.\grad_\Bq \LL \right\vert_{\Bq = \bar{\Bq}}
++ (\dot{\bar{\Bq}} + \dot{\Bn}) \cdot \left.\grad_{\dot{\Bq}} \LL \right\vert_{\dot{\Bq} = \dot{\bar{\Bq}}}
+\end{align*}
+
+Then we must have a reciprocal relationship between the basis vector for the configuration space vectors $e_i$, and the corresponding vectors
+from which the gradient was formed
+
+\begin{align*}
+e_i \cdot f_j &= \delta_{i j} \\
+\implies \\
+f_j = e^j
+\end{align*}
+
+This gives us the position and velocity gradients in the configuration space
+
+\begin{align}
+\grad_{\Bq} &= e^k \PD{q^k}{} \\
+\grad_{\dot{\Bq}} &= e^k \PD{\qdot^k}{}.
+\end{align}
+
+Note also that the size of this configuration space does not have to be the same space as the problem.  With this definitions completion of the integration
+by parts yields the Euler-Lagrange equations in a hybrid configuration space vector form
+
+\begin{align}
+\grad_{\Bq} \LL = \frac{d}{d\lambda} \grad_{\dot{\Bq}} \LL
+\end{align}
 
 \bibliographystyle{plainnat} % supposed to allow for \url use.
 \bibliography{myrefs}      % expects file "myrefs.bib"
