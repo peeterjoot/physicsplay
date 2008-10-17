@@ -8,7 +8,13 @@
 \newcommand{\qbar}[0]{\bar{q}}
 \newcommand{\qdotbar}[0]{\dot{\bar{q}}}
 \newcommand{\qddot}[0]{\ddot{q}}
+
 \newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+
+% inline version:
+\newcommand{\PDi}[2]{{\partial {#2}}/{\partial {#1}}}
+
+\newcommand{\PDsq}[2]{\frac{\partial^2 {#2}}{\partial^2 {#1}}}
 \newcommand{\grad}[0]{\nabla}
 
 \usepackage[bookmarks=true]{hyperref}
@@ -16,7 +22,7 @@
 
 \title{Euler Lagrange Equations.}
 \author{Peeter Joot}
-\date{ October 13, 2008.  Last Revision: $Date: 2008/10/15 03:03:39 $ }
+\date{ October 13, 2008.  Last Revision: $Date: 2008/10/17 00:10:43 $ }
 
 \begin{document}
 
@@ -147,6 +153,103 @@ Goldstein also writes that this action derivative is then evaluated at $\epsilon
 thing as Feynman... toss all the higher order terms, since factors of epsilon will be left associated with of these.
 With my initial read of Goldstein this wasn't the least bit clear... it was really yet another example of the classic
 physics approach of solving something with a first order linear approximation.
+
+\subsection{ Noether's theorem. }
+
+Also covered in 
+\cite{doran2003gap} is Noether's theorem in multivector form.  This is used
+to calculate the conserved quantity the Hamiltonian for Lagrangian's with no
+time dependence.  Lets try something similar for the scalar variable case,
+after which the multivector case may make more sense.
+
+At its heart Noether's theorem appears to describe change of variables in
+Lagrangians.
+
+Given a Lagrangian dependent on generalized coordinates $q^i$, and their
+first order derivatives, as well as the path parameter $\lambda$.
+
+\begin{align*}
+\LL &= \LL(q^i, \qdot^i, \lambda) \\
+q^i &= q^i(r^i(\lambda), \alpha)
+\end{align*}
+
+One 
+example of such a change of variables would be the Galalian transformation $q^i = x^i(t) + v t$, with $\lambda = t$.
+
+Application of the chain rule shows how to calculate the first order change
+of the Lagrangian with respect to the new parameter $\alpha$.
+
+\begin{align}\label{eqn:nothFirstChain}
+\frac{d\LL}{d\alpha}
+&=
+\PD{q^i}{\LL} \PD{\alpha}{q^i}
++\PD{\qdot^i}{\LL} \PD{\alpha}{\qdot^i}
+\end{align}
+
+If $q^i$, and $\qdot^i$ satisfy the Euler-Lagrange equations \ref{eqn:eulerlag}, then this can be written
+
+\begin{align}\label{eqn:noethchain}
+\frac{d\LL}{d\alpha}
+&=
+\left(\frac{d}{d\lambda} \PD{\qdot^i}{\LL}\right)
+\PD{\alpha}{q^i}
++\PD{\qdot^i}{\LL} \PD{\alpha}{\qdot^i}
+\end{align}
+
+If one additionally has
+\begin{align*}
+\PDsq{\alpha}{q^i} =\PDsq{\alpha}{\qdot^i} = 0,
+\end{align*}
+
+so that $\PDi{\alpha}{q^i}$, and $\PDi{\alpha}{\qdot^i}$ are dependent only
+on $\lambda$, then \ref{eqn:noethchain} can be written as a total derivative
+
+\begin{align}\label{eqn:noethTotalDer}
+\frac{d\LL}{d\alpha} = \frac{d}{d\lambda} \left( \PD{\qdot^i}{\LL} \PD{\alpha}{q^i} \right)
+\end{align}
+
+If there is an $\alpha$ dependence in these derivatives a weaker total derivative statement is still possible, by evaluating the 
+Lagrangian derivative and $\PDi{\alpha}{q^i}$ at some specific constant value of $\alpha$.  This is
+
+\begin{align*}
+\left.\frac{d\LL}{d\alpha}\right\vert_{\alpha = \alpha_0} = \frac{d}{d\lambda} \left( \PD{\qdot^i}{\LL} \left.\PD{\alpha}{q^i}\right\vert_{\alpha = \alpha_0} \right)
+\end{align*}
+
+FIXME: this is the core math behind the theorm I believe.  Need a high level description, but before I can do that meaningfully, I probably need to work
+some examples.
+
+\subsubsection{ Hamiltonian. }
+
+Of particular interest is when the change of variables for the generalized coordinates is dependent on the parameter $\alpha = \lambda$.
+Given this type of transformation we can write
+\ref{eqn:noethTotalDer} as
+
+\begin{align}\label{eqn:ham1}
+\frac{d\LL}{d\lambda} = \frac{d}{d\lambda} \left( \PD{\qdot^i}{\LL} \PD{\lambda}{q^i} \right)
+\end{align}
+
+For this to be valid in this $\alpha = \lambda$ case, note that the Lagrangian
+itself may not be explicitly dependent on the parameter $\lambda$.  Such a dependence would mean that \ref{eqn:nothFirstChain}
+would require an additional $\PDi{\lambda}{\LL}$ term.
+
+The difference of the \ref{eqn:ham1} terms is called the Hamiltonian $H$
+
+\begin{align*}
+\frac{dH}{d\lambda} &= \frac{d}{d\lambda} \left( \PD{\qdot^i}{\LL} \qdot^i - \frac{d\LL}{d\lambda} \right) = 0 \\
+\end{align*}
+
+Or,
+\begin{align*}
+H &= \PD{\qdot^i}{\LL} \qdot^i - \frac{d\LL}{d\lambda},
+\end{align*}
+
+which is a conserved quantity 
+when the Lagrangian has no explicit $\lambda$ dependence.
+
+\subsection{ Some example applications. }
+%Observe that for a single particle Lagrangian with a position (non-velocity dependent potential $V$)
+%... corresponds to the total energy 
+%FIXME: work through examples here to get a feel for this.
 
 \section{ Vector formulation. }
 
