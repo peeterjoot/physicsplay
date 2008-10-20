@@ -7,14 +7,15 @@
 
 %\title{}
 \author{Peeter Joot}
-\date{ Last Revision: $Date: 2008/10/19 15:56:59 $ }
+\date{ Last Revision: $Date: 2008/10/20 04:08:26 $ }
 
 \begin{document}
 
 %\maketitle{}
 %\tableofcontents
 
-\section{ Application of Lorentz boost to multivector form of field Lagrangian. }
+\section{ Working in multivector form. }
+\subsection{ Application of Lorentz boost to the field Lagrangian. }
 
 The multivector form of the field Lagrangian is
 
@@ -30,7 +31,6 @@ L(X) = \exp( \alpha \acap/2 ) X \exp( -\alpha \acap/2 ) = \Lambda X \Lambda^\dag
 \end{align*}
 
 where $\acap = a^i \gamma_i \wedge \gamma_0$ is any unit spacetime bivector, and $\alpha$ represents the rapidity angle.
-FIXME: should write this in terms of boost velocity $\beta$ to be more physically meaningful.
 
 Consider first the transformation of the interaction term with $A' = L(A)$, and $J' = L(J)$
 
@@ -81,9 +81,163 @@ Putting all the pieces together this shows that the Lagrangian in its entirety i
 \LL' &= \kappa (\grad' \wedge A')^2 + A' \cdot J' = \kappa (\grad \wedge A)^2 + A \cdot J = \LL
 \end{align*}
 
-FIXME: what is the conserved quantity associated with this?  There should be one according to Noether's theorm?  Is it the guage condition $\grad \cdot A = 0$?
+FIXME: what is the conserved quantity associated with this?  There should be one according to Noether's theorem?  Is it the guage condition $\grad \cdot A = 0$?
+
+\subsection{ Lorentz boost applied to the Lorentz force Lagrangian. }
+
+Next interesting case is the Lorentz force, which for a time positive metric 
+signature is:
+
+\begin{align*}
+\LL &= q A \cdot v/c + \inv{2} m v \cdot v
+\end{align*}
+
+The boost invariance of the $A \cdot J$ dot product demonstrated above demonstrates the general invariance property for any four vector dot product, and this
+Lagrangian has nothing but dot products in it.  It thus follows directly that the Lorentz force Lagrangian is also a Lorentz invariant.
 
 \section{ Repeat in tensor form. }
+
+Now, I can follow the above, but presented with the same sort of calculation in tensor form I am hopeless to understand it.  To attempt translating this
+into tensor form, it appears the first step is putting the Lorentz transform itself into tensor or matrix form.
+
+To get the feeling for how this will work, assume $\acap = \sigma_1$, so that the boost is along the x-axis.  In that case we have
+
+\begin{align*}
+L(X)
+%&= (\cosh( \alpha/2 ) + \gamma_{10} \sinh( \alpha/2 )) ( x^0 \gamma_0 + x^1 \gamma_1 + x^2 \gamma_2 + x^3 \gamma_3 ) (\cosh( \alpha/2 ) + \gamma_{01} \sinh( \alpha/2 )) \\
+&= (\cosh( \alpha/2 ) + \gamma_{10} \sinh( \alpha/2 )) x^\mu \gamma_\mu (\cosh( \alpha/2 ) + \gamma_{01} \sinh( \alpha/2 )) \\
+\end{align*}
+
+Writing $C = \cosh(\alpha/2)$, and $S = \sinh(\alpha/2)$, and observing that the exponentials commute with the $\gamma_2$, and $\gamma_3$ directions so the exponential
+action on those directions cancel.
+
+\begin{align*}
+L(X)
+&= x^2 \gamma_2 + x^3 \gamma_3 + (C + \gamma_{10} S) ( x^0 \gamma_0 + x^1 \gamma_1 ) (C + \gamma_{01} S) \\
+\end{align*}
+
+Expanding just the non-perpendicular parts of the above
+\begin{align*}
+&(C + \gamma_{10} S) ( x^0 \gamma_0 + x^1 \gamma_1 ) (C + \gamma_{01} S) \\
+&=
+x^0 (C^2 \gamma_0 + \gamma_{10001} S^2) + x^0 S C (\gamma_{001} + \gamma_{100})
++x^1 (C^2 \gamma_1 + \gamma_{10101} S^2) + x^1 S C (\gamma_{101} + \gamma_{101}) \\
+&=
+x^0 (C^2 \gamma_0 - \gamma_{01100} S^2) + 2 x^0 S C \gamma_{001} 
++x^1 (C^2 \gamma_1 - \gamma_{11001} S^2) - 2 x^1 S C \gamma_{011} \\
+&= (x^0 \gamma_0 + x^1 \gamma_1) (C^2 + S^2) + 2 (\gamma_0)^2 S C (x^0 \gamma_{1} + x^1 \gamma_{0}) \\
+&= (x^0 \gamma_0 + x^1 \gamma_1) \cosh(\alpha) + (\gamma_0)^2 \sinh(\alpha) (x^0 \gamma_{1} + x^1 \gamma_{0}) \\
+&= 
+\gamma_0 ( x^0 \cosh(\alpha) + x^1 \sinh((\gamma_0)^2 \alpha) )
++\gamma_1 ( x^1 \cosh(\alpha) + x^0 \sinh((\gamma_0)^2 \alpha) ) \\
+\end{align*}
+
+In matrix form the complete transformation is thus
+
+\begin{align*}
+{\begin{bmatrix}
+x^0 \\
+x^1 \\
+x^2 \\
+x^3 \\
+\end{bmatrix}}'
+&=
+\begin{bmatrix}
+\cosh(\alpha(\gamma_0)^2) & \sinh(\alpha(\gamma_0)^2) & 0 & 0 \\
+\sinh(\alpha(\gamma_0)^2) & \cosh(\alpha(\gamma_0)^2) & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+x^0 \\
+x^1 \\
+x^2 \\
+x^3 \\
+\end{bmatrix} \\
+&=
+\cosh(\alpha(\gamma_0)^2) 
+\begin{bmatrix}
+1                         & \tanh(\alpha(\gamma_0)^2) & 0 & 0 \\
+\tanh(\alpha(\gamma_0)^2) & 1                         & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 \\
+\end{bmatrix}
+\end{align*}
+
+This supplies the specific meaning for the $\alpha$ factor in the exponential form, namely:
+
+\begin{align*}
+\alpha
+&= -\tanh^{-1}(\beta (\gamma_0)^2) \\
+&= -\tanh^{-1}(\Abs{\Bv}/c (\gamma_0)^2)
+\end{align*}
+
+Or
+\begin{align*}
+\alpha \acap
+&= -\tanh^{-1}(\acap \Abs{\Bv}/c (\gamma_0)^2) \\
+&= -\tanh^{-1}(\Bv/c (\gamma_0)^2) \\
+\end{align*}
+
+Putting this back into the original Lorentz boost equation to tidy it up, and 
+writing $\tanh(\BA) = \Bv/c$, the Lorentz boost is 
+
+\begin{align*}
+L(X) &= 
+\left\{
+\begin{array}{l l}
+\exp(-\BA/2) X \exp(\BA/2) & \quad \mbox{for $(\gamma_0)^2 = 1$} \\
+\exp(\BA/2) X \exp(-\BA/2) & \quad \mbox{for $(\gamma_0)^2 = -1$} \\
+\end{array} \right. \\
+\end{align*}
+
+Both of the metric signature options are indicated here for future reference and comparision with results using the alternate signature.
+
+After this temporary digression back to the multivector form of the Lorentz transformation lets dispose of the specifics of the boost direction and magnitude, and also the metric
+signature.  Instead encode all of these in a single versor variable $\Lambda$, again writing
+
+\begin{align*}
+L(X) &= \Lambda X \Lambda^\dagger
+\end{align*}
+
+What is the general way to encode this linear transformation in tensor/matrix form?  The transformed vector is just that a vector, and thus can be written in terms of 
+coordinates for some basis
+
+\begin{align*}
+L(X) 
+&= (L(X) \cdot e^\mu) e_\mu \\
+&= ((\Lambda (x^\nu \gamma_\nu) \Lambda^\dagger) \cdot e^\mu) e_\mu \\
+&= x^\nu ((\Lambda \gamma_\nu \Lambda^\dagger) \cdot e^\mu) e_\mu \\
+\end{align*}
+
+The inner term is just the tensor that we want.  Write
+
+\begin{align*}
+{\Lambda_{\nu}}^{\mu} &= (\Lambda \gamma_\nu \Lambda^\dagger) \cdot e^\mu \\
+{\Lambda^{\nu}}_{\mu} &= (\Lambda \gamma^\nu \Lambda^\dagger) \cdot e_\mu
+\end{align*}
+
+for 
+\begin{align*}
+L(X) &= x^\nu {\Lambda_{\nu}}^{\mu} e_\mu \\
+     &= x_\nu {\Lambda^{\nu}}_{\mu} e^\mu \\
+\end{align*}
+
+Now, in particular, having observed that the dot product is a Lorentz invariant this should supply the index manipulation rule for operating
+with the Lorentz boost tensor in a dot product context.
+
+Write
+\begin{align*}
+L(X) \cdot L(y)
+&= (x^\nu {\Lambda_{\nu}}^{\mu} e_\mu) \cdot (y_\alpha {\Lambda^{\alpha}}_{\beta} e^\beta) \\
+&= x^\nu y_\alpha {\Lambda_{\nu}}^{\mu} {\Lambda^{\alpha}}_{\beta} e_\mu \cdot e^\beta \\
+&= x^\nu y_\alpha {\Lambda_{\nu}}^{\mu} {\Lambda^{\alpha}}_{\mu} \\
+\end{align*}
+
+Since this equals $x^\nu y_\nu$, the tensor rule must therefore be
+\begin{align*}
+{\Lambda_{\mu}}^{\sigma} {\Lambda^{\nu}}_{\sigma} = {\delta_\mu}^\nu
+\end{align*}
 
 %%\bibliographystyle{plain}
 %\bibliographystyle{plainnat}
