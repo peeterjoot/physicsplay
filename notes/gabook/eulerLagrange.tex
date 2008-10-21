@@ -1,28 +1,18 @@
 \documentclass{article}
 
 \input{../peeters_macros.tex}
-\newcommand{\LL}[0]{\mathcal{L}}
+\input{../peeters_macros2.tex}
 
-\newcommand{\qdot}[0]{\dot{q}}
-\newcommand{\ndot}[0]{\dot{n}}
 \newcommand{\qbar}[0]{\bar{q}}
 \newcommand{\qdotbar}[0]{\dot{\bar{q}}}
-\newcommand{\qddot}[0]{\ddot{q}}
-
-\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
-
-% inline version:
-\newcommand{\PDi}[2]{{\partial {#2}}/{\partial {#1}}}
-
-\newcommand{\PDsq}[2]{\frac{\partial^2 {#2}}{\partial^2 {#1}}}
-\newcommand{\grad}[0]{\nabla}
+\newcommand{\DD}[2]{\frac{d{#2}}{d{#1}}}
+\newcommand{\Xdot}[0]{\dot{X}}
 
 \usepackage[bookmarks=true]{hyperref}
 
-
 \title{Euler Lagrange Equations.}
 \author{Peeter Joot}
-\date{ October 13, 2008.  Last Revision: $Date: 2008/10/17 00:17:44 $ }
+\date{ October 13, 2008.  Last Revision: $Date: 2008/10/21 03:28:25 $ }
 
 \begin{document}
 
@@ -215,10 +205,11 @@ Lagrangian derivative and $\PDi{\alpha}{q^i}$ at some specific constant value of
 \left.\frac{d\LL}{d\alpha}\right\vert_{\alpha = \alpha_0} = \frac{d}{d\lambda} \left( \PD{\qdot^i}{\LL} \left.\PD{\alpha}{q^i}\right\vert_{\alpha = \alpha_0} \right)
 \end{align*}
 
-FIXME: this is the core math behind the theorem I believe.  Need a high level description, but before I can do that meaningfully, I probably need to work
-some examples.
 
 \subsubsection{ Hamiltonian. }
+
+Hmm, the above equations don't much like the Noether's equation in \cite{doran2003gap}.  However, in this form, we can get at the Hamiltonian statement
+without any trouble.  Let's do that first, then return to Noether's
 
 Of particular interest is when the change of variables for the generalized coordinates is dependent on the parameter $\alpha = \lambda$.
 Given this type of transformation we can write
@@ -251,10 +242,102 @@ this corresponds to the total Energy.  Again, work some examples.
 %Observe that for a single particle Lagrangian with a position (non-velocity dependent potential $V$)
 %... corresponds to the total energy 
 
-\subsection{ Examples of application of Noether's theorem. }
+\subsubsection{ Noether's take II }
 
-Linear translation and rotational translation appear to be the usual example
-applications.  Reading about those without actually working through it 
+Noether's theorem is about conserved quantities under symmetry transformations.  Let's revisit the attempt at derivation once more cutting down the complexity
+even further, considering a transformation of a single generalized coordinate and the corresponding change to the Lagrangian under such a transformation.
+
+Write
+
+\begin{align*}
+q &\rightarrow q' = f(q, \alpha) \\
+\LL(q, \qdot, \lambda) &\rightarrow \LL' = \LL(q', \qdot', \lambda) = \LL(f, \fdot, \lambda)
+\end{align*}
+
+Now as before consider the derivative 
+
+\begin{align}\label{eqn:noethtmp1}
+\DD{\alpha}{\LL'} &= \PD{f}{\LL} \PD{\alpha}{f} + \PD{\fdot}{\LL} \PD{\alpha}{\fdot}
+\end{align}
+
+In terms of the transformed coordinates the Euler-Lagrange equations require
+
+\begin{align*}
+\PD{f}{\LL} = \frac{d}{d\lambda} \PD{\fdot}{\LL}
+\end{align*}
+
+and backsubstitution into \ref{eqn:noethtmp1} gives
+\begin{align}\label{eqn:noethtmp2}
+\DD{\alpha}{\LL'} &= \frac{d}{d\lambda} \left( \PD{\fdot}{\LL} \right) \PD{\alpha}{f} + \PD{\fdot}{\LL} \PD{\alpha}{\fdot} \\
+\end{align}
+
+This can be written as a total derivative if 
+\begin{align*}
+\PD{\alpha}{\fdot} &= \frac{d}{d\lambda} \PD{\alpha}{f} \\
+\PD{\alpha}{} \frac{df}{d\lambda} &= \PDD{q}{\alpha}{f} \qdot + \PDsq{\alpha}{f} \alphadot \\
+\PD{\alpha}{} \left( \PD{q}{f} \qdot + \PD{\alpha}{f} \alphadot \right) &= \\
+\PDD{\alpha}{q}{f} \qdot + \PDsq{\alpha}{f} \alphadot + \PD{\alpha}{f} \PD{\alpha}{\alphadot} &= \\
+\end{align*}
+
+Thus given a constraint of sufficient continuity
+\begin{align*}
+\PDD{\alpha}{q}{f} &= \PDD{q}{\alpha}{f} \\
+\end{align*}
+
+and also that $\alphadot$ is not a function of $\alpha$
+
+\begin{align*}
+\PD{\alpha}{\alphadot} &= 0
+\end{align*}
+
+we have from \ref{eqn:noethtmp2}
+\begin{align*}
+\DD{\alpha}{\LL'}
+&= \frac{d}{d\lambda} \left( \PD{\fdot}{\LL} \PD{\alpha}{f} \right) \\
+\end{align*}
+
+Or
+\begin{align}
+\DD{\alpha}{\LL'}
+&= \frac{d}{d\lambda} \left( \PD{\qdot'}{\LL} \PD{\alpha}{q'} \right) \\
+\end{align}
+
+Okay, this is more like it.  When the transformed Lagrangian is symmetric (not a function of $\alpha$) under coordinate transformation then this
+inner quantity, a generalized momentum velocity product, is constant (conserved)
+
+\begin{align*}
+\PD{\qdot'}{\LL} \PD{\alpha}{q'} = \text{constant}
+\end{align*}
+
+Transformations that leave the Lagrangian unchanged have this associated conserved quantity, which dimensionally, assuming a time parameterization, has units of
+energy ($mv^2$).
+
+FIXME: The $\PDi{\alpha}{\alphadot} = 0$ requirement is what is removed by evaluation at $\alpha = \alpha_0$.  This statement seems somewhat handwaving like.  Firm it up with an example and concrete justification.
+
+Note that it still doesn't quite match the multivector result from
+\cite{doran2003gap}, equation $12.10$
+
+\begin{align*}
+\left.\DD{\alpha}{\LL'}\right\vert_{\alpha=0}
+&= \frac{d}{dt} \sum_{i=1}^n \left( 
+\PD{\alpha}{X_i'} \conj \partial_{\Xdot_i}{\LL}
+\right) \\
+\end{align*}
+
+I believe there's a missing prime there, and it should read
+
+\begin{align*}
+\left.\DD{\alpha}{\LL'}\right\vert_{\alpha=0}
+&= \frac{d}{dt} \sum_{i=1}^n \left( 
+\PD{\alpha}{X_i'} \conj \partial_{\Xdot_i'}{\LL}
+\right) \\
+\end{align*}
+
+\subsubsection{ Examples of application of Noether's theorem. }
+
+Linear translation and rotational translation appear to be the usual first example
+applications.  \cite{TongDynamics} does this, as does the wikipedia article.
+Reading about those without actually working through it 
 myself never made complete sense (esp. want to do the angular momentum
 example).  Add that here once worked on paper.  Also do some other examples
 to see how all this fits together (perhaps some examples where cyclic
