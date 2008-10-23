@@ -1,0 +1,179 @@
+\documentclass{article}      % Specifies the document class
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+
+%
+% The real thing:
+%
+
+\usepackage[bookmarks=true]{hyperref}
+
+                             % The preamble begins here.
+\title{ Application of Noether's to Lorentz transformed interaction Lagrangian } % Declares the document's title.
+\author{Peeter Joot}         % Declares the author's name.
+\date{ October 22, 2008.  Last Revision: $Date: 2008/10/23 03:25:47 $ } % Deleting this command produces today's date.
+
+\begin{document}             % End of preamble and beginning of text.
+
+\maketitle{}
+
+%\tableofcontents
+%\section{ Covariant Lorentz force Lagrangian. } 
+
+%The Hamiltonian was used above to extract $v^2$ invariance from the Lorentz force Lagrangian under changes of proper time.
+
+Here we consider Noether's theorem applied to the covariant form of the Lorentz force Lagrangian.
+For proper velocity $v$, four potential $A$, and positive time metric signature $(\gamma_0)^2 = 1$, that is
+
+\begin{align}\label{eqn:lorentzforce}
+\LL = \inv{2}m v \cdot v + q A \cdot v/c
+\end{align}
+
+Let's see if Noether's can be used to extract an invariant from 
+the Lorentz force Lagrangian \ref{eqn:lorentzforce} under a
+Lorentz boost transformation.
+
+Four vector dot products are Lorentz invariants.  This can be thought of as the definition of a Lorentz transform (ie: the transformations
+that leave the four vector dot products unchanged).  Alternatively, this can be shown using the exponential form of the boost
+
+\begin{align*}
+L(x) = \exp(-\alpha \acap/2) x \exp(\alpha \acap/2)
+\end{align*}
+
+\begin{align*}
+L(x) \cdot L(y)
+&= \gpgradezero{ \exp(-\alpha \acap/2) x \exp(\alpha \acap/2) \exp(-\alpha \acap/2) y \exp(\alpha \acap/2) } \\
+&= \gpgradezero{ \exp(-\alpha \acap/2) x y \exp(\alpha \acap/2) } \\
+&= x \cdot y \gpgradezero{ \exp(-\alpha \acap/2) \exp(\alpha \acap/2) } \\
+&= x \cdot y \\
+\end{align*}
+
+Using the exponential form of the boost operation, boosting $v$, $A$ leaves the Lagrangian unchanged.
+Therefore there is a conserved quantity according to Noether's, but what is it?
+
+Consider change with respect to the rapidity factor $\alpha$
+
+\begin{align}\label{eqn:lorentzboosted}
+\PD{\alpha}{\LL'} = \frac{d}{d\tau} \left( \PD{\alpha}{x'} \cdot \grad_{v'} \LL \right)
+\end{align}
+
+The boost spacetime plane $\acap$ could also be considered a parameter in the transformation, but to use that or the combination of the
+two we need the multivector form of Noethers.  These notes were in fact an attempt to get a feeling for the scalar case as lead up to
+that so this is an exersize for later.
+
+As for the derivatives in \ref{eqn:lorentzboosted} we have
+
+\begin{align*}
+\PD{\alpha}{x'} 
+&= \PD{\alpha}{} \exp(-\alpha \acap/2) x \exp(\alpha \acap/2) \\
+&= -\inv{2} \left(\acap x' - x'\acap\right) \\
+&= - \acap \cdot x' \\
+\end{align*}
+
+\begin{align*}
+\grad_{v'} \LL &= p' + qA'/c
+\end{align*}
+
+So the conserved quantity is
+\begin{align*}
+- (\acap \cdot x') \cdot \left( p' + qA'/c \right)
+&= - \acap \cdot (x' \wedge (p' + qA'/c ) ) \\
+&= -\acap \cdot \kappa
+\end{align*}
+
+So we have a conserved quantity
+
+\begin{align*}
+x \wedge (p + qA/c ) = \kappa
+\end{align*}
+
+This has the looks of the three dimensional angular momentum conservation expression (with an added term due to non-radial potential),
+but doesn't look like any quantity from relativistic texts that I have seen (not that I've really seen too much).
+
+As an example to get a feeling for this take $x$ to be a rest frame worldline.  Then we have
+
+\begin{align}
+c t \gamma_0 \wedge ( m \tdot \gamma_0 + qA/c ) = -q t \BA = \kappa
+\end{align}
+
+Which indicates that the product of observer time and the observers' three vector potential is a constant of motion.  Curious.  Not a familar result.
+
+Assuming these calculations are correct, then if this holds for all time for then $\kappa =0$ due to the origin time of $x$.
+I would interpret this to mean that for the charged mass to be at rest, the vector potential must also be zero.  So while $x = ct\gamma_0$ 
+is simple for calculations, it does not appear to be a terribly interesting case.
+
+FIXME: try plugging in specific solutions to the Lorentz force equation here to validate or invalidate this calculation.
+
+One further thing that can be observed about this is that if we take derivatives of
+
+\begin{align*}
+x \wedge (p + qA/c ) = \kappa
+\end{align*}
+
+we have
+\begin{align*}
+v \wedge (p + qA/c ) + x \wedge (\pdot + q\dot{A}/c ) = 0
+\end{align*}
+
+Or
+\begin{align}\label{eqn:noethersLxTx}
+x \wedge \pdot = qA \wedge v/c + q/c \dot{A} \wedge x 
+\end{align}
+
+So we have a relativistic torque expressed in terms of the potential, proper velocity and the variation of the potential.
+
+This still isn't familiar looking, but lets expand this in terms of a particular observable, and see what falls out.  First the LHS, with $dt/d\tau = \gamma$
+
+\begin{align*}
+x \wedge \pdot &= (ct \gamma_0 + x^i \gamma_i) \wedge 
+\left( \gamma \frac{d}{dt}\left( m \gamma (c \gamma_0 + \frac{dx^j}{dt} \gamma_j ) \right) \right) \\
+\end{align*}
+
+So
+\begin{align*}
+\inv{\gamma} (x \wedge \pdot)
+&= 
+- ct \frac{d (\gamma \Bp)}{dt}
++ \Bx \frac{d (m c \gamma)}{dt} 
++ x^i \gamma_i \wedge 
+\frac{d}{dt}\left( m \gamma \frac{dx^j}{dt} \gamma_j \right) \\
+\end{align*}
+
+But
+\begin{align*}
+\sigma_i \wedge \sigma_j
+&= \inv{2}( \gamma_i \gamma_0 \gamma_j \gamma_0 - \gamma_j \gamma_0 \gamma_i \gamma_0) \\
+&= -\frac{(\gamma_0)^2}{2}( \gamma_i \gamma_j - \gamma_j \gamma_i ) \\
+&= -\gamma_i \wedge \gamma_j \\
+\end{align*}
+
+for
+\begin{align*}
+\inv{\gamma} (x \wedge \pdot)
+&= 
+- ct \frac{d (\gamma \Bp)}{dt}
++ \Bx \frac{d (m c \gamma)}{dt} 
+- \Bx \wedge \frac{d( \gamma \Bp )}{dt} \\
+\end{align*}
+
+Now, for the RHS of \ref{eqn:noethersLxTx}, with $A^0 = \phi$
+
+\begin{align*}
+\frac{q}{c} \gamma \frac{d(x \wedge A)}{dt}
+&= \frac{q}{c} \gamma \frac{d}{dt} (ct \gamma_0 + x^i \gamma_i) \wedge (\phi \gamma_0 + A^j \gamma_j) \\
+&= \frac{q}{c} \gamma \frac{d}{dt} \left( -ct \BA + \phi \Bx - \Bx \wedge \BA \right)
+\end{align*}
+
+Equating the vector and bivector parts, and employing a duality transformation for the bivector parts leaves two vector relationships
+\begin{align}
+- ct \frac{d (\gamma \Bp)}{dt} + \Bx \frac{d (m c \gamma)}{dt} &= \frac{q}{c} \frac{d \left( -ct \BA + \phi \Bx \right) }{dt}
+\end{align}
+\begin{align}
+\Bx \cross \frac{d( \gamma \Bp )}{dt} &= \frac{q}{c} \frac{d}{dt} \left( \Bx \cross \BA \right)
+\end{align}
+
+%\bibliographystyle{plainnat} % supposed to allow for \url use.
+%\bibliography{myrefs}      % expects file "myrefs.bib"
+
+\end{document}               % End of document.
