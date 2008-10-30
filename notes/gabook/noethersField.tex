@@ -9,12 +9,12 @@
 
 \title{Field form of Noether's Law.}
 \author{Peeter Joot}
-\date{ October 29, 2008.  Last Revision: $Date: 2008/10/30 02:19:51 $ }
+\date{ October 29, 2008.  Last Revision: $Date: 2008/10/30 04:59:50 $ }
 
 \begin{document}
 
 \maketitle{}
-%\tableofcontents
+\tableofcontents
 
 \section{ Derivation. }
 
@@ -51,9 +51,9 @@ Taking derivatives of the transformed Lagrangian with respect to the free transf
 
 The Euler-Lagrange field equations for the transformed Lagrangian are
 
-\begin{align*}
+\begin{align}\label{eqn:eulerLag}
 \PD{f}{\LL} = \sum_\mu \partial_\mu \PD{(\partial_\mu f)}{\LL}.
-\end{align*}
+\end{align}
 
 For some 
 for background discussion, examples, and derivation of the field form of Noether's equation see
@@ -90,7 +90,7 @@ Noether's law for a field Lagrangian is a statement that if the transformed Lagr
 some type of parameterized field variable transformation, then with $J' = {J'}^\mu \gamma_\mu$ one has
 
 \begin{align}
-\frac{\LL'}{d\alpha} &= \grad \cdot J' = 0 \\
+\frac{d\LL'}{d\alpha} &= \grad \cdot J' = 0 \\
 {J'}^\mu &= \PD{(\partial_\mu \psi')}{\LL} \PD{\alpha}{\psi'} 
 \end{align}
 
@@ -144,14 +144,145 @@ learn some quantum mechanics and see how this works.
 
 \subsection{ Lorentz boost and rotation invariance of Maxwell Lagrangian. }
 
-% followup for:
-% 
+\begin{align}\label{eqn:lagrangian}
+\LL 
+&= -\gpgradezero{(\grad \wedge A)^2} + \kappa A \cdot J \\
+&= \partial_\mu A_\nu (\partial^\mu A^\nu - \partial^\nu A^\mu) + \kappa A_\sigma J^\sigma \\
+\kappa &= \frac{2}{\epsilon_0 c}
+\end{align}
+
+The rotation and boost invariance of the Maxwell Lagragian was demonstrated in 
 %boost_maxwell_lagrangian.ltx
-%\cite{PJBoostMaxwell}
-%
+\cite{PJBoostMaxwell}.
+
+Following 
+%Doing the exersize of determining the conserved quantity for the Lorentz force Lagrangian
+%in 
 %noethers_lorentz_force.ltx
-%\cite{PJLorentzTxInteraction}
-%
+\cite{PJLorentzTxInteraction}
+write the Lorentz boost or rotation in exponential form.
+%motivated learning the field form of Noether's law, since the next obvious thing to try was to see what the 
+%conserved quantity for the field itself was.
+
+\begin{align*}
+L(x) = \exp(-\alpha i/2) x \exp(\alpha i/2), \quad \Lambda = \exp(-\alpha i/2)
+\end{align*}
+
+where $i$ is a unit spatial bivector for a rotation of $-\alpha$ radians, and a boost with rapidity $\alpha$ when $i$ is a spacetime unit bivector.
+
+Introducing the transformation
+
+\begin{align*}
+A \rightarrow A' = \Lambda A \Lambda^\dagger
+\end{align*}
+
+The change in $A'$ with respect to $\alpha$ is
+\begin{align*}
+\PD{\alpha}{A'} = -i A' + A' i = 2 A' \cdot i = 2 {A'}_\sigma \gamma^\sigma \cdot i
+\end{align*}
+
+Next we want to compute
+
+\begin{align*}
+\PD{(\partial_\mu {A'}_\nu)}{\LL} 
+&= \PD{(\partial_\mu {A'}_\nu)}{} \left( \partial_\alpha {A'}_\beta (\partial^\alpha {A'}^\beta - \partial^\beta {A'}^\alpha) + \kappa {A'}_\sigma J^\sigma \right) \\
+&= \left( \PD{(\partial_\mu {A'}_\nu)}{} \partial_\alpha {A'}_\beta \right) \left(\partial^\alpha {A'}^\beta - \partial^\beta {A'}^\alpha \right) \\
+&+ \partial^\alpha {A'}^\beta \PD{(\partial_\mu {A'}_\nu)}{} \left(\partial_\alpha {A'}_\beta - \partial_\beta {A'}_\alpha) \right) \\
+&= \left( \PD{(\partial_\mu {A'}_\nu)}{} \partial_\mu {A'}_\nu \right) \left(\partial^\mu {A'}^\nu - \partial^\nu {A'}^\mu \right) \\
+&+ \partial^\mu {A'}^\nu \PD{(\partial_\mu {A'}_\nu)}{} \partial_\mu {A'}_\nu \\
+&- \partial^\nu {A'}^\mu \PD{(\partial_\mu {A'}_\nu)}{} \partial_\mu {A'}_\nu \\
+&= 2 \left( \partial^\mu {A'}^\nu - \partial^\nu {A'}^\mu \right) \\
+&= 2 F^{\mu\nu}
+\end{align*}
+
+Employing the vector field form of Noether's equation as in \ref{eqn:NoethersVector} the conserved current $C$ components are
+
+\begin{align*}
+C^\mu &= 2 (\gamma_\nu F^{\mu\nu}) \cdot (2 A \cdot i) \\
+&\propto (\gamma_\nu F^{\mu\nu}) \cdot (A \cdot i) \\
+&\propto (\gamma^\mu \cdot F) \cdot (A \cdot i) \\
+\end{align*}
+
+Or 
+\begin{align}
+C = \gamma_\mu ((\gamma^\mu \cdot F) \cdot (A \cdot i))
+\end{align}
+
+Here $C$ was used instead of $J$ for the conserved current vector since $J$ is already taken for the current charge density itself.
+
+\subsection{ Questions. }
+
+FIXME: What is this quantity?  It has the look of
+angular momentum, or torque, or an inertial tensor.  Does it have a physical significance?  Can the $i$ be factored out of the expression, leaving a conserved quantity that is some linear function only of $F$, and $A$ (this was possible in the Lorentz force Lagrangian for the same invariance considerations).
+
+\subsection{ Expansion for x-axis boost. }
+
+FIXME: Example expansion for $i = \gamma_1 \wedge \gamma_0$ (velocity boost along the x axis).
+
+\section{ Appendix. }
+
+\subsection{ Multivariable derivation. }
+
+For completion sake, cut and pasted with with most discussion omitted, 
+the multiple field variable case follows in the same fashion
+as the single field variable Lagrangian.
+
+\begin{align*}
+\LL &= \LL(\psi_\sigma, \partial_\mu \psi_\sigma),
+\end{align*}
+
+The transformation is now:
+
+\begin{align*}
+\psi_\sigma &\rightarrow f_\sigma(\psi_\sigma, \alpha) = \psi_\sigma' \\
+\LL' &= \LL(f_\sigma, \partial_\mu f_\sigma).
+\end{align*}
+
+Taking derivatives:
+
+\begin{align}\label{eqn:noetherschainMult}
+\frac{d\LL'}{d\alpha}
+&= \sum_\sigma \PD{f_\sigma}{\LL}\PD{\alpha}{f_\sigma} + \sum_{\mu,\sigma} \PD{(\partial_\mu f_\sigma)}{\LL}\PD{\alpha}{(\partial_\mu f_\sigma)}
+\end{align}
+
+Again, making the Euler-Lagrange substitution of \ref{eqn:eulerLag} (with $f\rightarrow f_\sigma)$ back into \ref{eqn:noetherschainMult} gives
+
+\begin{align*}
+\frac{d\LL'}{d\alpha}
+&= 
+\sum_\sigma \left( \sum_\mu \partial_\mu \PD{(\partial_\mu f_\sigma)}{\LL}\right)
+\PD{\alpha}{f_\sigma} + \sum_{\mu,\sigma} \PD{(\partial_\mu f_\sigma)}{\LL}\PD{\alpha}{(\partial_\mu f_\sigma)} \\
+&= 
+\sum_{\mu,\sigma} \left( \left( \partial_\mu \PD{(\partial_\mu f_\sigma)}{\LL} \right)
+\PD{\alpha}{f_\sigma} + \PD{(\partial_\mu f_\sigma)}{\LL} \partial_\mu \PD{\alpha}{f_\sigma} \right) \\
+&= \sum_{\mu,\sigma} \partial_\mu \left( \PD{(\partial_\mu f_\sigma)}{\LL} \PD{\alpha}{f_\sigma} \right) \\
+&= \sum_\mu \gamma^\mu \partial_\mu \cdot \left( \sum_{\sigma,\nu} \gamma_\nu \PD{(\partial_\nu f_\sigma)}{\LL} \PD{\alpha}{f_\sigma} \right) \\
+&= \grad \cdot \left( \sum_{\sigma,\nu} \gamma_\nu \PD{(\partial_\nu \psi_\sigma')}{\LL} \PD{\alpha}{\psi_\sigma'} \right) \\
+\end{align*}
+
+Or
+\begin{align}\label{eqn:conCurrent}
+\frac{d \LL'}{d\alpha} &= \grad \cdot J' = 0 \\
+J' &= {J'}^\mu \gamma_\mu \\
+{J'}^\mu &= \sum_\sigma \PD{(\partial_\mu \psi_\sigma')}{\LL} \PD{\alpha}{\psi_\sigma'} 
+\end{align}
+
+A notational convienence for vector valued fields, in particular as we have in the electrodynamic Lagrangian for the vector potential, the chain rule summation in
+\ref{eqn:conCurrent} above can be replaced with a dot product.
+
+\begin{align*}
+{J'}^\mu &= \gamma_\sigma \PD{(\partial_\mu \psi_\sigma')}{\LL} \cdot \PD{\alpha}{\gamma^\sigma \psi_\sigma'} 
+\end{align*}
+
+Dropping primes for convience, and writing $\Psi = \gamma^\sigma \psi_\sigma$ for the vector field variable,
+the field form of Noether's law takes the form
+
+\begin{align}\label{eqn:NoethersVector}
+J &= \gamma_\mu \left( \gamma_\sigma \PD{(\partial_\mu \psi_\sigma)}{\LL} \cdot \PD{\alpha}{\Psi} \right) \\
+\grad \cdot J &= 0.
+\end{align}
+
+That is, a current vector with respect to this configuration space divergence is conserved when the Lagrangian field transformation is invariant.
 
 \bibliographystyle{plainnat} % supposed to allow for \url use.
 \bibliography{myrefs}      % expects file "myrefs.bib"
