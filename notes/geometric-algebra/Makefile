@@ -3,7 +3,7 @@ pdfs := $(files:.ltx=.pdf)
 ppdfs := $(shell ls ../*/*.pdf)
 
 all : $(pdfs)
-big: test/ga.pdf
+big: all.pdf
 
 $(pdfs) : ../peeters_macros.tex
 
@@ -99,11 +99,44 @@ ordered += ../geometric_algebra/stokes_revisited.pdf
 ordered += ../lut/schwartzchild_metric.pdf
 ordered += ../geometric_algebra/lorentz_force.pdf
 
+ordered += ../geometric_algebra/field_lagragian.pdf
+
+skipit += ../lut/sr_lagrangian_q.pdf
+
+ordered += ../lut/maxwell_tensor_lagrangian.pdf
+
+skipit += ../geometric_algebra/pf_sch.pdf
+ordered += ../geometric_algebra/euler_lagrange.pdf
+
+ordered += ../geometric_algebra/boost_maxwell_lagrangian.pdf
+
+# stub (at least right now)
+skipit += ../geometric_algebra/lorentz_tx_em_potential.pdf
+
+ordered += ../geometric_algebra/noethers_lorentz_force.pdf
+
+ordered += ../debroglie/debroglie.pdf
+ordered += ../geometric_algebra/gem.pdf
+ordered += ../geometric_algebra/noethers_field.pdf
+
+skipit += ../lut/luts_Rindler-eom.pdf
+skipit += ../lut/luts_old_Rindler-eom.pdf
+skipit += ../geometric_algebra/all.pdf
+skipit += ../lut/constant_q.pdf
+
 semiordered := $(ordered) $(unordered)
 unordered := $(filter-out $(ordered) $(skipit),$(ppdfs))
+reversed := $(shell echo $(semiordered) | tr ' ' '\n' | grep -n '' | sort -nr | sed 's/[0-9][0-9]*://' | tr '\n' ' ')
 
 showu :
 	@echo $(unordered)
 
-test/ga.pdf: $(semiordered)
-	pdftk $(semiordered) cat output test/ga.pdf
+showa :
+#	@echo $(semiordered)
+	@echo $(reversed)
+
+#test/ga.pdf: $(semiordered)
+#	pdftk $(semiordered) cat output test/ga.pdf
+
+all.pdf: $(reversed)
+	pdftk $(reversed) cat output all.pdf
