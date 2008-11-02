@@ -12,7 +12,7 @@
                              % The preamble begins here.
 \title{Some notes on Euler Angles.} % Declares the document's title.
 \author{Peeter Joot}         % Declares the author's name.
-\date{ November 1, 2008. Last Revision: $Date: 2008/11/02 04:15:55 $ } % Deleting this command produces today's date.
+\date{ November 1, 2008. Last Revision: $Date: 2008/11/02 13:58:34 $ } % Deleting this command produces today's date.
 
 \begin{document}             % End of preamble and beginning of text.
 
@@ -21,7 +21,7 @@
 
 \section{ Removing the rotors from the exponentials. }
 
-In \cite{doran2003gap} section 2.7.5 the euler angle formula is 
+In \cite{doran2003gap} section 2.7.5 the Euler angle formula is 
 developed for $\{z,x',z''\}$ axis rotations by $\{\phi, \theta, \psi\}$
 respectively.
 
@@ -35,7 +35,7 @@ Other than a few details the derivation is pretty straightforward.  Equation
 &= R \exp(\alpha i) R^\dagger
 \end{align*}
 
-where $i$ is a bivector, and $R$ is a rotor.
+where $i$ is a bivector, and $R$ is a rotor ($RR^\dagger = 1$).
 
 \section{ In matrix form. }
 
@@ -48,9 +48,128 @@ R &= \exp(-e_{12}\phi/2) \exp(-e_{23}\theta/2) \exp(-e_{12}\psi/2)
 
 Then there are notes saying this is easier to visualize and work with than
 the equivalent matrix formula.  Let's see what the equivalent matrix formula
-is
+is.  First calculate the rotor action on $\Be_1$
 
+\begin{align*}
+R \Be_1 R^\dagger
+&= 
+e^{-e_{12}\phi/2} e^{-e_{23}\theta/2} e^{-e_{12}\psi/2}
+\Be_1
+e^{e_{12}\psi/2}
+e^{e_{23}\theta/2} 
+e^{e_{12}\phi/2} \\
+&= 
+e^{-e_{12}\phi/2} e^{-e_{23}\theta/2} 
+\Be_1 e^{e_{12}\psi}
+e^{e_{23}\theta/2} 
+e^{e_{12}\phi/2} \\
+&= 
+e^{-e_{12}\phi/2} e^{-e_{23}\theta/2} 
+(\Be_1 \cos\psi + \Be_2 \sin\psi)
+e^{e_{23}\theta/2} 
+e^{e_{12}\phi/2} \\
+&= 
+e^{-e_{12}\phi/2} 
+(\Be_1 \cos\psi + \Be_2 \sin\psi e^{e_{23}\theta} )
+e^{e_{12}\phi/2} \\
+&= 
+e^{-e_{12}\phi/2} 
+(\Be_1 \cos\psi + \Be_2 \sin\psi \cos\theta + \Be_3 \sin\psi \sin\theta )
+e^{e_{12}\phi/2} \\
+&= 
+(\Be_1 \cos\psi + \Be_2 \sin\psi \cos\theta ) e^{e_{12}\phi} 
++ \Be_3 \sin\psi \sin\theta  \\
+&= 
+  \Be_1 (\cos\psi \cos\phi - \sin\psi \cos\theta \sin\phi)
++ \Be_2 (\cos\psi \sin\phi - \sin\psi \cos\theta \cos\phi)
++ \Be_3 \sin\psi \sin\theta  \\
+\end{align*}
 
+Now $\Be_2$:
+
+\begin{align*}
+R \Be_2 R^\dagger
+&= 
+e^{-e_{12}\phi/2} e^{-e_{23}\theta/2} e^{-e_{12}\psi/2}
+\Be_2
+e^{e_{12}\psi/2}
+e^{e_{23}\theta/2} 
+e^{e_{12}\phi/2} \\
+&= 
+-e^{-e_{12}\phi/2} e^{-e_{23}\theta/2} 
+(\Be_2 \cos\psi + \Be_1 \sin\psi)
+e^{e_{23}\theta/2} 
+e^{e_{12}\phi/2} \\
+&= 
+(\Be_2 \cos\psi \cos\theta
++ \Be_1 \sin\psi)
+e^{e_{12}\phi} 
++\Be_3 \cos\psi \sin\theta \\
+&= 
+  \Be_1 (\sin\psi \cos\phi - \cos\psi \cos\theta \sin\phi)
++ \Be_2 (\sin\psi \sin\phi - \cos\psi \cos\theta \cos\phi)
++ \Be_3 \cos\psi \sin\theta \\
+\end{align*}
+
+And finally $\Be_3$
+
+\begin{align*}
+R \Be_3 R^\dagger
+&= 
+e^{-e_{12}\phi/2} e^{-e_{23}\theta/2} e^{-e_{12}\psi/2}
+\Be_3
+e^{e_{12}\psi/2}
+e^{e_{23}\theta/2} 
+e^{e_{12}\phi/2} \\
+&= 
+-e^{-e_{12}\phi/2} 
+\Be_3 e^{e_{32}\theta} 
+e^{e_{12}\phi/2} \\
+&= 
+-e^{-e_{12}\phi/2} 
+(
+\Be_3 \cos\theta
++\Be_2 \sin\theta
+)
+e^{e_{12}\phi/2} \\
+&= 
++\Be_2 \sin\theta e^{e_{21}\phi} 
+-\Be_3 \cos\theta \\
+&= 
+ \Be_1 \sin\theta \sin\phi
++\Be_2 \sin\theta \cos\phi
+-\Be_3 \cos\theta \\
+\end{align*}
+
+This can now be assembled into matrix form
+\begin{align*}
+\begin{bmatrix}
+R(x) \cdot \Be_1 \\
+R(x) \cdot \Be_2 \\
+R(x) \cdot \Be_3
+\end{bmatrix}
+=
+\begin{bmatrix}
+(R \Be_1 R^\dagger) \cdot \Be_1 & (R \Be_2 R^\dagger) \cdot \Be_1 & (R \Be_3 R^\dagger) \cdot \Be_1 \\
+(R \Be_1 R^\dagger) \cdot \Be_2 & (R \Be_2 R^\dagger) \cdot \Be_2 & (R \Be_3 R^\dagger) \cdot \Be_2 \\
+(R \Be_1 R^\dagger) \cdot \Be_3 & (R \Be_2 R^\dagger) \cdot \Be_3 & (R \Be_3 R^\dagger) \cdot \Be_3 \\
+\end{bmatrix}
+\begin{bmatrix}
+x^1 \\
+x^2 \\
+x^3 \\
+\end{bmatrix} = \BR \Bx
+\end{align*}
+
+Therefore we have
+\begin{align}
+\BR &=
+\begin{bmatrix}
+\sin\psi \cos\phi - \cos\psi \cos\theta \sin\phi   & \sin\psi \cos\phi - \cos\psi \cos\theta \sin\phi & \sin\theta \sin\phi \\
+\sin\psi \sin\phi - \cos\psi \cos\theta \cos\phi   & \sin\psi \sin\phi - \cos\psi \cos\theta \cos\phi & \sin\theta \cos\phi \\
+\cos\psi \sin\theta                                & \cos\psi \sin\theta                              & -\cos\theta \\
+\end{bmatrix}
+\end{align}
 
 \bibliographystyle{plainnat} % supposed to allow for \url use.
 \bibliography{myrefs}      % expects file "myrefs.bib"
