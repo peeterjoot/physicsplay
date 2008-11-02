@@ -1,20 +1,15 @@
-\documentclass{article}      % Specifies the document class
+\documentclass{article}
 
 \input{../peeters_macros.tex}
 \input{../peeters_macros2.tex}
 
-%
-% The real thing:
-%
-
 \usepackage[bookmarks=true]{hyperref}
 
-                             % The preamble begins here.
-\title{Some notes on Euler Angles.} % Declares the document's title.
-\author{Peeter Joot}         % Declares the author's name.
-\date{ November 1, 2008. Last Revision: $Date: 2008/11/02 13:58:34 $ } % Deleting this command produces today's date.
+\title{Some notes on Euler Angles.}
+\author{Peeter Joot}
+\date{ November 1, 2008. Last Revision: $Date: 2008/11/02 17:04:40 $ }
 
-\begin{document}             % End of preamble and beginning of text.
+\begin{document}
 
 \maketitle{}
 \tableofcontents
@@ -96,18 +91,18 @@ e^{e_{12}\psi/2}
 e^{e_{23}\theta/2} 
 e^{e_{12}\phi/2} \\
 &= 
--e^{-e_{12}\phi/2} e^{-e_{23}\theta/2} 
-(\Be_2 \cos\psi + \Be_1 \sin\psi)
+e^{-e_{12}\phi/2} e^{-e_{23}\theta/2} 
+(\Be_2 \cos\psi - \Be_1 \sin\psi)
 e^{e_{23}\theta/2} 
 e^{e_{12}\phi/2} \\
 &= 
 (\Be_2 \cos\psi \cos\theta
-+ \Be_1 \sin\psi)
+- \Be_1 \sin\psi)
 e^{e_{12}\phi} 
 +\Be_3 \cos\psi \sin\theta \\
 &= 
-  \Be_1 (\sin\psi \cos\phi - \cos\psi \cos\theta \sin\phi)
-+ \Be_2 (\sin\psi \sin\phi - \cos\psi \cos\theta \cos\phi)
+- \Be_1 (\cos\psi \cos\theta \sin\phi + \sin\psi \cos\phi)
++ \Be_2 (\sin\psi \sin\phi + \cos\psi \cos\theta \cos\phi)
 + \Be_3 \cos\psi \sin\theta \\
 \end{align*}
 
@@ -122,23 +117,21 @@ e^{e_{12}\psi/2}
 e^{e_{23}\theta/2} 
 e^{e_{12}\phi/2} \\
 &= 
--e^{-e_{12}\phi/2} 
-\Be_3 e^{e_{32}\theta} 
+e^{-e_{12}\phi/2} 
+\Be_3 e^{e_{23}\theta} 
 e^{e_{12}\phi/2} \\
 &= 
--e^{-e_{12}\phi/2} 
+e^{-e_{12}\phi/2} 
 (
 \Be_3 \cos\theta
-+\Be_2 \sin\theta
+-\Be_2 \sin\theta
 )
 e^{e_{12}\phi/2} \\
-&= 
-+\Be_2 \sin\theta e^{e_{21}\phi} 
--\Be_3 \cos\theta \\
+&= -\Be_2 \sin\theta e^{e_{12}\phi} +\Be_3 \cos\theta \\
 &= 
  \Be_1 \sin\theta \sin\phi
-+\Be_2 \sin\theta \cos\phi
--\Be_3 \cos\theta \\
+-\Be_2 \sin\theta \cos\phi
++\Be_3 \cos\theta \\
 \end{align*}
 
 This can now be assembled into matrix form
@@ -161,15 +154,111 @@ x^3 \\
 \end{bmatrix} = \BR \Bx
 \end{align*}
 
-Therefore we have
-\begin{align}
+Therefore we have the composite matrix form for the Euler angle rotations
+\begin{align*}
 \BR &=
 \begin{bmatrix}
-\sin\psi \cos\phi - \cos\psi \cos\theta \sin\phi   & \sin\psi \cos\phi - \cos\psi \cos\theta \sin\phi & \sin\theta \sin\phi \\
-\sin\psi \sin\phi - \cos\psi \cos\theta \cos\phi   & \sin\psi \sin\phi - \cos\psi \cos\theta \cos\phi & \sin\theta \cos\phi \\
-\cos\psi \sin\theta                                & \cos\psi \sin\theta                              & -\cos\theta \\
+\cos\psi \cos\phi - \sin\psi \cos\theta \sin\phi   & -\sin\psi \cos\phi - \cos\psi \cos\theta \sin\phi & \sin\theta \sin\phi \\
+\cos\psi \sin\phi - \sin\psi \cos\theta \cos\phi   & \sin\psi \sin\phi + \cos\psi \cos\theta \cos\phi & -\sin\theta \cos\phi \\
+\sin\psi \sin\theta                                & \cos\psi \sin\theta                              & \cos\theta \\
 \end{bmatrix}
-\end{align}
+\end{align*}
+
+Lots of opportunity to make sign errors here.  Let's check with matrix multiplication, which should give the same result
+
+\section{ With composition of rotation matrixes. }
+
+\begin{align*}
+R(x) &= \BR \Bx \\
+&= 
+\BR_{\psi \Be_3}
+\BR_{\theta \Be_1}
+\BR_{\phi \Be_3} \Bx \\
+\end{align*}
+
+Now, that first rotation is
+
+\begin{align*}
+R_\phi(x)
+&= e^{-e_{12}\phi/2} (\Be_i x^i) e^{e_{12}\phi/2} \\
+&= ( \Be_1 x^1 +\Be_2 x^2) e^{e_{12}\phi} + \Be_3 x^3 \\
+&= 
+ x^1 ( \Be_1 \cos\phi +\Be_2 \sin\phi )
++x^2 ( \Be_2 \cos\phi -\Be_1 \sin\phi )
++x^3 \Be_3 \\
+&= 
+ \Be_1 ( x^1 \cos\phi - x^2 \sin\phi )
++\Be_2 ( x^1 \sin\phi + x^2 \cos\phi )
++\Be_3 x^3 \\
+\end{align*}
+
+Which has the expected matrix form
+
+\begin{align*}
+\BR_{\phi \Be_3} \Bx =
+\begin{bmatrix}
+\cos\phi & - \sin\phi & 0 \\
+\sin\phi & \cos\phi & 0 \\
+0 & 0 & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+x^1 \\
+x^2 \\
+x^3 \\
+\end{bmatrix}
+\end{align*}
+
+The first product in the composite rotation is thus
+\begin{align*}
+\BR_{\theta \Be_1} \BR_{\phi \Be_3} &=
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & \cos\theta & - \sin\theta \\
+0 & \sin\theta & \cos\theta \\
+\end{bmatrix} 
+\begin{bmatrix}
+\cos\phi & - \sin\phi & 0 \\
+\sin\phi & \cos\phi & 0 \\
+0 & 0 & 1 \\
+\end{bmatrix} \\
+&=
+\begin{bmatrix}
+\cos\phi             & -\sin\phi             & 0 \\
+\cos\theta\sin\phi   & \cos\theta\cos\phi    & -\sin\theta \\
+\sin\theta\sin\phi   & \sin\theta\sin\phi    & \cos\theta \\
+\end{bmatrix} \\
+\end{align*}
+
+\begin{align*}
+\BR 
+&= \BR_{\psi \Be_3} \BR_{\theta \Be_1} \BR_{\phi \Be_3} \\
+&=
+\begin{bmatrix}
+\cos\psi & - \sin\psi & 0 \\
+\sin\psi & \cos\psi & 0 \\
+0 & 0 & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+\cos\phi             & -\sin\phi             & 0 \\
+\cos\theta\sin\phi   & \cos\theta\cos\phi    & -\sin\theta \\
+\sin\theta\sin\phi   & \sin\theta\sin\phi    & \cos\theta \\
+\end{bmatrix} \\
+&=
+\begin{bmatrix}
+\cos\psi \cos\phi - \sin\psi \cos\theta \sin\phi & -\cos\psi \sin\phi -\sin\psi \cos\theta\cos\phi & \sin\psi \sin\theta \\
+\sin\psi \cos\phi + \cos\psi \cos\theta \sin\phi & -\sin\psi \sin\phi -\sin\psi \cos\theta\cos\phi & \sin\psi \sin\theta \\
+                                                     \sin\theta \sin\phi & \sin\theta\sin\phi & \cos\theta \\
+\end{bmatrix} \\
+%\text{CF above} \\
+%&=
+%\begin{bmatrix}
+%\cos\psi \cos\phi - \sin\psi \cos\theta \sin\phi   & -\sin\psi \cos\phi - \cos\psi \cos\theta \sin\phi & \sin\theta \sin\phi \\
+%\cos\psi \sin\phi - \sin\psi \cos\theta \cos\phi   & \sin\psi \sin\phi + \cos\psi \cos\theta \cos\phi & -\sin\theta \cos\phi \\
+%\sin\psi \sin\theta                                & \cos\psi \sin\theta                              & \cos\theta \\
+%\end{bmatrix}
+\end{align*}
+
+Crap, different results!  Which one (or both) is wrong?
 
 \bibliographystyle{plainnat} % supposed to allow for \url use.
 \bibliography{myrefs}      % expects file "myrefs.bib"
