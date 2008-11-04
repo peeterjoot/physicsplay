@@ -8,6 +8,21 @@
 using namespace e3ga ;
 using namespace std ;
 
+#if 0
+float foopeekasm( const mv & v )
+{
+// 
+// interesting.  looking at the generated asm shows that the compiler
+// (g++ -O2) is
+// able to inline this function despite the fact that the body of
+// mv::gu() is not available until after it is used.
+//
+// Compilers are getting better!
+// 
+  return v.e3e1() ;
+}
+#endif
+
 class symbol
 {
    typedef std::string stringType ;
