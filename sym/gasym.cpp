@@ -1,6 +1,7 @@
 #include <string>
 #include <list>
 #include <iostream>
+#include <cstdio>
 
 #include <libgasandbox/common.h>
 #include <libgasandbox/e3ga.h>
@@ -143,6 +144,7 @@ public:
 class sum
 {
    typedef symbol symbolType ;
+   typedef symbolType::stringType stringType ;
    typedef std::list<symbolType> symbolsType ;
    typedef symbolsType::iterator iter ;
    typedef symbolsType::const_iterator citer ;
@@ -232,6 +234,70 @@ public:
    void normalize()
    {
       listOfSymbols.sort( compareSymbol ) ;
+
+      iter i = listOfSymbols.begin() ;
+
+      while ( i != listOfSymbols.end() )
+      {
+         iter j = i ;
+         symbolType & cur = (*i) ;
+
+         j++ ;
+
+         if ( j != listOfSymbols.end() )
+         {
+            const symbolType next = (*j) ;
+
+            if ( cur.symNumeric.gu() && (cur.symNumeric.gu() == next.symNumeric.gu()) )
+            {
+               bool match = true ;
+               bool nmatch = true ;
+               int k = 0 ;
+               int ia = 0 ;
+
+               for ( int ii = 0 ; ii <= 3 ; ii++ )
+               {
+                  if ( cur.symNumeric.gu() & (1 << ii) )
+                  {
+                     for ( int jj = 0 ; jj < mv_gradeSize[ii] ; jj++)
+                     {
+                        if ( cur.symNumeric.m_c[k] != next.symNumeric.m_c[k] )
+                        {
+                           match = false ;
+                        }
+
+                        if ( cur.symNumeric.m_c[k] != -next.symNumeric.m_c[k] )
+                        {
+                           nmatch = false ;
+                        }
+
+                        k++ ;
+                        ia++ ;
+                     }
+                  }
+                  else
+                  {
+                     ia += mv_gradeSize[ii] ;
+                  }
+               }
+
+               if ( match )
+               {
+                  cur.symName = stringType("(") + cur.symName + stringType(" + ") + next.symName + stringType(")") ;
+
+                  listOfSymbols.erase(j) ;
+               }
+               else if ( nmatch )
+               {
+                  cur.symName = stringType("(") + cur.symName + stringType(" - ") + next.symName + stringType(")") ;
+
+                  listOfSymbols.erase(j) ;
+               }
+            }
+         }
+
+         i++ ;
+      }
    }
 
    void dump(void) const
