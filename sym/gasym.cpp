@@ -83,6 +83,11 @@ public:
 
       return *this ;
    }
+
+   void reverseMe()
+   {
+      symNumeric = reverse( symNumeric ) ;
+   }
 } ;
 
 class sum
@@ -118,6 +123,35 @@ public:
 
          i++ ;
       }
+   }
+
+#if 0 // not used yet.
+   void reverseMe()
+   {
+      iter i = listOfSymbols.begin() ;
+
+      while ( i != listOfSymbols.end() )
+      {
+         (*i).reverseMe() ;
+
+         i++ ;
+      }
+   }
+#endif
+
+   sum reverse() const
+   {
+      sum r(*this) ;
+      iter i = r.listOfSymbols.begin() ;
+
+      while ( i != r.listOfSymbols.end() )
+      {
+         (*i).reverseMe() ;
+
+         i++ ;
+      }
+
+      return r ;
    }
 
    friend sum operator * ( const sum & l, const sum & r )
@@ -183,7 +217,14 @@ int main(int argc, char*argv[])
    bivector iZ = _bivector(e1 ^ e2) ;
    bivector iX = _bivector(e2 ^ e3) ;
 
-
+   mv_string_wedge = " \\wedge " ;
+   mv_string_mul = " " ;
+   mv_string_fp = "%2.0f" ;
+//   mv_string_start = "{" ;
+//   mv_string_end = "}" ;
+	mv_basisVectorNames[0] = "\\mathbf{e}_1" ;
+	mv_basisVectorNames[1] = "\\mathbf{e}_2" ;
+	mv_basisVectorNames[2] = "\\mathbf{e}_3" ;
 
    symbol CosPsi("\\cos(\\psi/2)", 1) ;
    symbol IsinPsi("\\sin(\\psi/2)", -iZ) ;
@@ -207,6 +248,7 @@ int main(int argc, char*argv[])
 
    sum R = (R_psi * R_theta) * R_phi ;
 
+#if 0
 // no reverse implemented yet:
 
    symbol rCosPsi("\\cos(\\psi/2)", 1) ;
@@ -227,6 +269,7 @@ int main(int argc, char*argv[])
    symbol rIsinPhi("\\sin(\\phi/2)", iZ) ;
 
    sum rR_phi( rCosPhi ) ; rR_phi += rIsinPhi ;
+#endif
 
 // okay rotors parts and reverses done.
 
@@ -235,7 +278,8 @@ int main(int argc, char*argv[])
    sum Rr = (rR_phi * rR_theta) * rR_psi ;
 #else
    sum Rl = R_phi ;
-   sum Rr = rR_phi ;
+//   sum Rrx = rR_phi ;
+   sum Rr = R_phi.reverse() ;
 #endif
 
    cout << "expect identity:" << endl ;
