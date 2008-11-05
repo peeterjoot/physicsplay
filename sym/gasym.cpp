@@ -88,6 +88,56 @@ public:
    {
       symNumeric = reverse( symNumeric ) ;
    }
+
+   friend bool compareSymbol (const symbol & first, const symbol & second)
+   {
+      const mv & a = first.symNumeric ;
+      const mv & b = second.symNumeric ;
+
+      if ( a.gu() > b.gu() )
+      {
+         return false ;
+      }
+      else if ( a.gu() < b.gu() )
+      {
+         return true ;
+      }
+      else
+      {
+         int k = 0 ;
+         int ia = 0 ;
+
+         for ( int i = 0 ; i <= 3 ; i++ )
+         {
+            if ( a.gu() & (1 << i) )
+            {
+               for ( int j = 0 ; j < mv_gradeSize[i] ; j++)
+               {
+					   float c1 = (float)mv_basisElementSignByIndex[ia] * a.m_c[k] ;
+					   float c2 = (float)mv_basisElementSignByIndex[ia] * b.m_c[k] ;
+
+                  if ( c1 > c2 )
+                  {
+                     return true ;
+                  }
+                  else if ( c1 )
+                  {
+                     return false ;
+                  }
+
+                  k++ ;
+                  ia++ ;
+               }
+            }
+			   else
+            {
+               ia += mv_gradeSize[i] ;
+            }
+         }
+
+         return false ;
+      }
+   }
 } ;
 
 class sum
@@ -125,7 +175,7 @@ public:
       }
    }
 
-#if 0 // not used yet.
+#if 0 // not used.
    void reverseMe()
    {
       iter i = listOfSymbols.begin() ;
@@ -179,6 +229,11 @@ public:
       return agg ;
    }
 
+   void normalize()
+   {
+      listOfSymbols.sort( compareSymbol ) ;
+   }
+
    void dump(void) const
    {
       citer i = listOfSymbols.begin() ;
@@ -212,7 +267,7 @@ public:
 int main(int argc, char*argv[])
 {
    // profiling for Gaigen 2:
-   e3ga::g2Profiling::init();
+   //e3ga::g2Profiling::init();
 
    bivector iZ = _bivector(e1 ^ e2) ;
    bivector iX = _bivector(e2 ^ e3) ;
@@ -245,55 +300,28 @@ int main(int argc, char*argv[])
 
    sum R_phi( CosPhi ) ; R_phi += IsinPhi ;
 
-
-   sum R = (R_psi * R_theta) * R_phi ;
-
-#if 0
-// no reverse implemented yet:
-
-   symbol rCosPsi("\\cos(\\psi/2)", 1) ;
-   symbol rIsinPsi("\\sin(\\psi/2)", iZ) ;
-
-   sum rR_psi( rCosPsi ) ; rR_psi += rIsinPsi ;
-
-
-
-   symbol rCosTheta("\\cos(\\theta/2)", 1) ;
-   symbol rIsinTheta("\\sin(\\theta/2)", iX) ;
-
-   sum rR_theta( rCosTheta ) ; rR_theta += rIsinTheta ;
-
-
-
-   symbol rCosPhi("\\cos(\\phi/2)", 1) ;
-   symbol rIsinPhi("\\sin(\\phi/2)", iZ) ;
-
-   sum rR_phi( rCosPhi ) ; rR_phi += rIsinPhi ;
-#endif
-
-// okay rotors parts and reverses done.
-
 #if 0
    sum Rl = (R_psi * R_theta) * R_phi ;
-   sum Rr = (rR_phi * rR_theta) * rR_psi ;
 #else
    sum Rl = R_phi ;
-//   sum Rrx = rR_phi ;
-   sum Rr = R_phi.reverse() ;
 #endif
+   sum Rr = Rl.reverse() ;
 
    cout << "expect identity:" << endl ;
    sum ident = Rl * Rr ;
+   ident.normalize() ;
    ident.dump() ;
 
    symbol se1("1", e1) ;
    symbol se2("1", e2) ;
    symbol se3("1", e3) ;
+
    {
       cout << "R_{\\phi,z}(e_1):" << endl ;
       sum t(Rl) ;
       t *= se1 ;
       sum rot_e1 = t * Rr ;
+      rot_e1.normalize() ;
       rot_e1.dump() ;
    }
 
@@ -302,6 +330,7 @@ int main(int argc, char*argv[])
       sum t(Rl) ;
       t *= se2 ;
       sum rot_e2 = t * Rr ;
+      rot_e2.normalize() ;
       rot_e2.dump() ;
    }
 
@@ -310,8 +339,9 @@ int main(int argc, char*argv[])
       sum t(Rl) ;
       t *= se3 ;
       sum rot_e3 = t * Rr ;
+      rot_e3.normalize() ;
       rot_e3.dump() ;
    }
 
-   return 0;
+   return 0 ;
 }
