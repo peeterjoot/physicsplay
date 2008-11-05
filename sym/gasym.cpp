@@ -53,44 +53,6 @@ int mv_bitmask( const mv & a )
 
    return m ;
 }
-#if 0
-		/// coordinate extraction by name
-		inline Float e1() const {
-			if (gu() & 2)
-				return m_c[mv_size[gu() & 1] + 0];
-			else return (float)0.0;
-		}
-		inline Float e2() const {
-			if (gu() & 2)
-				return m_c[mv_size[gu() & 1] + 1];
-			else return (float)0.0;
-		}
-		inline Float e3() const {
-			if (gu() & 2)
-				return m_c[mv_size[gu() & 1] + 2];
-			else return (float)0.0;
-		}
-		inline Float e1e2() const {
-			if (gu() & 4)
-				return m_c[mv_size[gu() & 3] + 0];
-			else return (float)0.0;
-		}
-		inline Float e2e3() const {
-			if (gu() & 4)
-				return m_c[mv_size[gu() & 3] + 1];
-			else return (float)0.0;
-		}
-		inline Float e3e1() const {
-			if (gu() & 4)
-				return m_c[mv_size[gu() & 3] + 2];
-			else return (float)0.0;
-		}
-		inline Float e1e2e3() const {
-			if (gu() & 8)
-				return m_c[mv_size[gu() & 7] + 0];
-			else return (float)0.0;
-		}
-#endif
 
 class symbol ;
 class sum ;
