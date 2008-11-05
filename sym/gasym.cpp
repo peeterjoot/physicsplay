@@ -24,6 +24,79 @@ float foopeekasm( const mv & v )
 }
 #endif
 
+/// return a bitmask with a bit set for each unique basis element in the algebra.
+int mv_bitmask( const mv & a )
+{
+   int m = 0 ;
+   int k = 0 ;
+   int b = 0 ;
+   for ( int i = 0 ; i <= 3 ; i++ )
+   {
+      if ( a.gu() & (1 << i) )
+      {
+         for ( int j = 0 ; j < mv_gradeSize[i] ; j++ )
+         {
+            if ( a.m_c[k] )
+            {
+               m |= (1 << b) ;
+            }
+
+            k++ ;
+            b++ ;
+         }
+      }
+      else
+      {
+         b += mv_gradeSize[i] ;
+      }
+   }
+
+   return m ;
+}
+#if 0
+		/// coordinate extraction by name
+		inline Float e1() const {
+			if (gu() & 2)
+				return m_c[mv_size[gu() & 1] + 0];
+			else return (float)0.0;
+		}
+		inline Float e2() const {
+			if (gu() & 2)
+				return m_c[mv_size[gu() & 1] + 1];
+			else return (float)0.0;
+		}
+		inline Float e3() const {
+			if (gu() & 2)
+				return m_c[mv_size[gu() & 1] + 2];
+			else return (float)0.0;
+		}
+		inline Float e1e2() const {
+			if (gu() & 4)
+				return m_c[mv_size[gu() & 3] + 0];
+			else return (float)0.0;
+		}
+		inline Float e2e3() const {
+			if (gu() & 4)
+				return m_c[mv_size[gu() & 3] + 1];
+			else return (float)0.0;
+		}
+		inline Float e3e1() const {
+			if (gu() & 4)
+				return m_c[mv_size[gu() & 3] + 2];
+			else return (float)0.0;
+		}
+		inline Float e1e2e3() const {
+			if (gu() & 8)
+				return m_c[mv_size[gu() & 7] + 0];
+			else return (float)0.0;
+		}
+#endif
+
+class symbol ;
+class sum ;
+bool compareSymbol (const symbol & first, const symbol & second) ;
+sum dot( const sum & a, const mv & b ) ;
+
 class symbol
 {
    typedef std::string stringType ;
@@ -90,56 +163,42 @@ public:
       symNumeric = reverse( symNumeric ) ;
    }
 
-   friend bool compareSymbol (const symbol & first, const symbol & second)
-   {
-      const mv & a = first.symNumeric ;
-      const mv & b = second.symNumeric ;
+   friend bool compareSymbol (const symbol & first, const symbol & second) ;
+   friend sum dot( const sum & a, const mv & b ) ;
 
-      if ( a.gu() > b.gu() )
-      {
-         return false ;
-      }
-      else if ( a.gu() < b.gu() )
-      {
-         return true ;
-      }
-      else
-      {
-         int k = 0 ;
-         int ia = 0 ;
-
-         for ( int i = 0 ; i <= 3 ; i++ )
-         {
-            if ( a.gu() & (1 << i) )
-            {
-               for ( int j = 0 ; j < mv_gradeSize[i] ; j++)
-               {
-					   float c1 = (float)mv_basisElementSignByIndex[ia] * a.m_c[k] ;
-					   float c2 = (float)mv_basisElementSignByIndex[ia] * b.m_c[k] ;
-
-                  if ( c1 > c2 )
-                  {
-                     return true ;
-                  }
-                  else if ( c1 )
-                  {
-                     return false ;
-                  }
-
-                  k++ ;
-                  ia++ ;
-               }
-            }
-			   else
-            {
-               ia += mv_gradeSize[i] ;
-            }
-         }
-
-         return false ;
-      }
-   }
+   void dump() const ;
 } ;
+
+void symbol::dump() const
+{
+   cout << symName
+        << " ( "
+        << toString(symNumeric)
+        << " )" ;
+   cout << endl ;
+}
+
+bool compareSymbol (const symbol & first, const symbol & second)
+{
+   const mv & a = first.symNumeric ;
+   const mv & b = second.symNumeric ;
+
+   if ( a.gu() > b.gu() )
+   {
+      return false ;
+   }
+   else if ( a.gu() < b.gu() )
+   {
+      return true ;
+   }
+   else
+   {
+      int la = mv_bitmask( a )  ;
+      int lb = mv_bitmask( b )  ;
+
+      return la > lb ;
+   }
+}
 
 class sum
 {
@@ -231,72 +290,83 @@ public:
       return agg ;
    }
 
-   void normalize()
+   void normalize( const bool doPostSort = true )
    {
       listOfSymbols.sort( compareSymbol ) ;
 
-      iter i = listOfSymbols.begin() ;
-
-      while ( i != listOfSymbols.end() )
+      if ( doPostSort )
       {
-         iter j = i ;
-         symbolType & cur = (*i) ;
+         iter i = listOfSymbols.begin() ;
 
-         j++ ;
-
-         if ( j != listOfSymbols.end() )
+         while ( i != listOfSymbols.end() )
          {
-            const symbolType next = (*j) ;
+            iter j = i ;
+            symbolType & cur = (*i) ;
 
-            if ( cur.symNumeric.gu() && (cur.symNumeric.gu() == next.symNumeric.gu()) )
+            j++ ;
+
+            while ( j != listOfSymbols.end() )
             {
-               bool match = true ;
-               bool nmatch = true ;
-               int k = 0 ;
-               int ia = 0 ;
+               const symbolType & next = (*j) ;
 
-               for ( int ii = 0 ; ii <= 3 ; ii++ )
+               if ( cur.symNumeric.gu() && (cur.symNumeric.gu() == next.symNumeric.gu()) )
                {
-                  if ( cur.symNumeric.gu() & (1 << ii) )
+                  bool match = true ;
+                  bool nmatch = true ;
+                  int k = 0 ;
+                  int ia = 0 ;
+
+                  for ( int ii = 0 ; ii <= 3 ; ii++ )
                   {
-                     for ( int jj = 0 ; jj < mv_gradeSize[ii] ; jj++)
+                     if ( cur.symNumeric.gu() & (1 << ii) )
                      {
-                        if ( cur.symNumeric.m_c[k] != next.symNumeric.m_c[k] )
+                        for ( int jj = 0 ; jj < mv_gradeSize[ii] ; jj++)
                         {
-                           match = false ;
-                        }
+                           if ( cur.symNumeric.m_c[k] != next.symNumeric.m_c[k] )
+                           {
+                              match = false ;
+                           }
 
-                        if ( cur.symNumeric.m_c[k] != -next.symNumeric.m_c[k] )
-                        {
-                           nmatch = false ;
-                        }
+                           if ( cur.symNumeric.m_c[k] != -next.symNumeric.m_c[k] )
+                           {
+                              nmatch = false ;
+                           }
 
-                        k++ ;
-                        ia++ ;
+                           k++ ;
+                           ia++ ;
+                        }
                      }
+                     else
+                     {
+                        ia += mv_gradeSize[ii] ;
+                     }
+                  }
+
+                  if ( match )
+                  {
+                     cur.symName = stringType("(") + cur.symName + stringType(" + ") + next.symName + stringType(")") ;
+
+                     j = listOfSymbols.erase(j) ;
+                  }
+                  else if ( nmatch )
+                  {
+                     cur.symName = stringType("(") + cur.symName + stringType(" - ") + next.symName + stringType(")") ;
+
+                     j = listOfSymbols.erase(j) ;
                   }
                   else
                   {
-                     ia += mv_gradeSize[ii] ;
+                     break ;
                   }
                }
-
-               if ( match )
+               else
                {
-                  cur.symName = stringType("(") + cur.symName + stringType(" + ") + next.symName + stringType(")") ;
-
-                  listOfSymbols.erase(j) ;
-               }
-               else if ( nmatch )
-               {
-                  cur.symName = stringType("(") + cur.symName + stringType(" - ") + next.symName + stringType(")") ;
-
-                  listOfSymbols.erase(j) ;
+                  break ;
                }
             }
-         }
 
-         i++ ;
+            i = j ;
+         }
       }
    }
 
@@ -328,7 +398,29 @@ public:
 
       cout << "\\right)" << endl ;
    }
+
+   friend sum dot( const sum & a, const mv & b ) ;
 } ;
+
+sum dot( const sum & a, const mv & b )
+{
+   sum r ;
+
+   sum::citer i = a.listOfSymbols.begin() ;
+
+   while ( i != a.listOfSymbols.end() )
+   {
+      sum::symbolType t(*i) ;
+
+      t.symNumeric = b << t.symNumeric ;
+
+      r.listOfSymbols.push_front( t ) ;
+
+      i++ ;
+   }
+
+   return r ;
+}
 
 int main(int argc, char*argv[])
 {
@@ -343,70 +435,125 @@ int main(int argc, char*argv[])
    mv_string_fp = "%2.0f" ;
 //   mv_string_start = "{" ;
 //   mv_string_end = "}" ;
-	mv_basisVectorNames[0] = "\\mathbf{e}_1" ;
-	mv_basisVectorNames[1] = "\\mathbf{e}_2" ;
-	mv_basisVectorNames[2] = "\\mathbf{e}_3" ;
-
-   symbol CosPsi("\\cos(\\psi/2)", 1) ;
-   symbol IsinPsi("\\sin(\\psi/2)", -iZ) ;
-
-   sum R_psi( CosPsi ) ; R_psi += IsinPsi ;
-
-
-
-   symbol CosTheta("\\cos(\\theta/2)", 1) ;
-   symbol IsinTheta("\\sin(\\theta/2)", -iX) ;
-
-   sum R_theta( CosTheta ) ; R_theta += IsinTheta ;
-
-
-
-   symbol CosPhi("\\cos(\\phi/2)", 1) ;
-   symbol IsinPhi("\\sin(\\phi/2)", -iZ) ;
-
-   sum R_phi( CosPhi ) ; R_phi += IsinPhi ;
+   mv_basisVectorNames[0] = "\\mathbf{e}_1" ;
+   mv_basisVectorNames[1] = "\\mathbf{e}_2" ;
+   mv_basisVectorNames[2] = "\\mathbf{e}_3" ;
 
 #if 0
-   sum Rl = (R_psi * R_theta) * R_phi ;
+   symbol CosPsi("\\cos(\\psi/2)", 1) ;
+   symbol IsinPsi("\\sin(\\psi/2)", -iZ) ;
+   symbol CosTheta("\\cos(\\theta/2)", 1) ;
+   symbol IsinTheta("\\sin(\\theta/2)", -iX) ;
+   symbol CosPhi("\\cos(\\phi/2)", 1) ;
+   symbol IsinPhi("\\sin(\\phi/2)", -iZ) ;
+#else
+   symbol CosPsi("C_\\psi", 1) ;
+   symbol IsinPsi("S_\\psi", -iZ) ;
+   symbol CosTheta("C_\\theta", 1) ;
+   symbol IsinTheta("S_\\theta", -iX) ;
+   symbol CosPhi("C_\\phi", 1) ;
+   symbol IsinPhi("S_\\phi", -iZ) ;
+#endif
+
+   sum R_psi( CosPsi ) ; R_psi += IsinPsi ;
+   sum R_theta( CosTheta ) ; R_theta += IsinTheta ;
+   sum R_phi( CosPhi ) ; R_phi += IsinPhi ;
+
+#if 1
+   sum Rl = (R_phi * R_theta) * R_psi ;
+#elif 1
+   sum Rl = R_phi * R_theta ;
 #else
    sum Rl = R_phi ;
 #endif
    sum Rr = Rl.reverse() ;
 
+#if 0
    cout << "expect identity:" << endl ;
    sum ident = Rl * Rr ;
-   ident.normalize() ;
    ident.dump() ;
+//   cout << "normalized: expect identity:" << endl ;
+//   ident.normalize( false ) ;
+//   ident.dump() ;
+   cout << "normalized: expect identity:" << endl ;
+   ident.normalize( ) ;
+   ident.dump() ;
+#endif
 
    symbol se1("1", e1) ;
    symbol se2("1", e2) ;
    symbol se3("1", e3) ;
 
    {
-      cout << "R_{\\phi,z}(e_1):" << endl ;
+//      cout << "R_{\\phi,z}(e_1):" << endl ;
       sum t(Rl) ;
       t *= se1 ;
       sum rot_e1 = t * Rr ;
       rot_e1.normalize() ;
-      rot_e1.dump() ;
+//      rot_e1.dump() ;
+
+      cout << "\n\n R_{11} &= \n\n" ;
+      sum rot_e1_e1 = dot( rot_e1, e1 ) ;
+      rot_e1_e1.normalize() ;
+      rot_e1_e1.dump() ;
+
+      cout << "\n\n R_{12} &= \n\n" ;
+      sum rot_e1_e2 = dot( rot_e1, e2 ) ;
+      rot_e1_e2.normalize() ;
+      rot_e1_e2.dump() ;
+
+      cout << "\n\n R_{13} &= \n\n" ;
+      sum rot_e1_e3 = dot( rot_e1, e3 ) ;
+      rot_e1_e3.normalize() ;
+      rot_e1_e3.dump() ;
    }
 
    {
-      cout << "R_{\\phi,z}(e_2):" << endl ;
+//      cout << "R_{\\phi,z}(e_2):" << endl ;
       sum t(Rl) ;
       t *= se2 ;
       sum rot_e2 = t * Rr ;
       rot_e2.normalize() ;
-      rot_e2.dump() ;
+//      rot_e2.dump() ;
+
+      cout << "\n\n R_{21} &= \n\n" ;
+      sum rot_e2_e1 = dot( rot_e2, e1 ) ;
+      rot_e2_e1.normalize() ;
+      rot_e2_e1.dump() ;
+
+      cout << "\n\n R_{22} &= \n\n" ;
+      sum rot_e2_e2 = dot( rot_e2, e2 ) ;
+      rot_e2_e2.normalize() ;
+      rot_e2_e2.dump() ;
+
+      cout << "\n\n R_{23} &= \n\n" ;
+      sum rot_e2_e3 = dot( rot_e2, e3 ) ;
+      rot_e2_e3.normalize() ;
+      rot_e2_e3.dump() ;
    }
 
    {
-      cout << "R_{\\phi,z}(e_3):" << endl ;
+//      cout << "R_{\\phi,z}(e_3):" << endl ;
       sum t(Rl) ;
       t *= se3 ;
       sum rot_e3 = t * Rr ;
       rot_e3.normalize() ;
-      rot_e3.dump() ;
+//      rot_e3.dump() ;
+
+      cout << "\n\n R_{31} &= \n\n" ;
+      sum rot_e3_e1 = dot( rot_e3, e1 ) ;
+      rot_e3_e1.normalize() ;
+      rot_e3_e1.dump() ;
+
+      cout << "\n\n R_{32} &= \n\n" ;
+      sum rot_e3_e2 = dot( rot_e3, e2 ) ;
+      rot_e3_e2.normalize() ;
+      rot_e3_e2.dump() ;
+
+      cout << "\n\n R_{33} &= \n\n" ;
+      sum rot_e3_e3 = dot( rot_e3, e3 ) ;
+      rot_e3_e3.normalize() ;
+      rot_e3_e3.dump() ;
    }
 
    return 0 ;
