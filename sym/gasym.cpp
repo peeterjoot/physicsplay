@@ -1,7 +1,9 @@
 #include <string>
 #include <list>
 #include <iostream>
+#include <sstream>
 #include <cstdio>
+#include <map>
 
 #include <libgasandbox/common.h>
 #include <libgasandbox/e3ga.h>
@@ -23,6 +25,70 @@ float foopeekasm( const mv & v )
   return v.e3e1() ;
 }
 #endif
+
+typedef std::string literal ;
+
+class term
+{
+   typedef map<literal, int> factorsType ;
+   typedef factorsType::iterator iterType ;
+   typedef factorsType::const_iterator citerType ;
+
+   factorsType m_factors ;
+
+public:
+   term( const literal & literal )
+   {
+      m_factors[literal] = 1 ;
+   }
+
+   term & operator *= ( const term & v )
+   {
+      for ( citerType i = v.m_factors.begin() ; i != v.m_factors.end() ; i++ )
+      {
+         m_factors[ i->first ] += i->second ;
+      }
+
+      return *this ;
+   }
+
+   term & operator *= ( const literal & v )
+   {
+      m_factors[ v ] ++ ;
+
+      return *this ;
+   }
+
+   std::string toString(void) const
+   {
+      std::ostringstream out ;
+
+      bool doneFirst = false ;
+
+      for ( citerType i = m_factors.begin() ; i != m_factors.end() ; i++ )
+      {
+         if ( doneFirst )
+         {
+            out << " " ;
+         }
+         else
+         {
+            doneFirst = true ;
+         }
+
+         if ( 1 == i->second )
+         {
+            out << i->first ;
+         }
+         else
+         {
+            out << i->first << "^" << i->second ;
+         }
+      }
+
+      return out.str() ;
+   }
+} ;
 
 /// return a bitmask with a bit set for each unique basis element in the algebra.
 int mv_bitmask( const mv & a )
@@ -169,6 +235,7 @@ class sum
    typedef std::list<symbolType> symbolsType ;
    typedef symbolsType::iterator iter ;
    typedef symbolsType::const_iterator citer ;
+
    symbolsType listOfSymbols ;
 
 public:
@@ -386,6 +453,7 @@ sum dot( const sum & a, const mv & b )
 
 int main(int argc, char*argv[])
 {
+#if 0
    // profiling for Gaigen 2:
    //e3ga::g2Profiling::init();
 
@@ -517,6 +585,23 @@ int main(int argc, char*argv[])
       rot_e3_e3.normalize() ;
       rot_e3_e3.dump() ;
    }
+#endif
+
+#if 0
+   map<literal, int> x ;
+
+   x["blah"]++ ;
+   cout << "blah: " << x["blah"] << endl ;
+#endif
+
+#if 0
+   term t("a") ;
+   t *= "b" ;
+   t *= "a" ;
+   t *= "(\\sin(x))" ;
+
+   cout << t.toString() << endl ;
+#endif
 
    return 0 ;
 }
