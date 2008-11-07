@@ -28,30 +28,40 @@ float foopeekasm( const mv & v )
 
 typedef std::string literal ;
 
+/**
+   \brief A class representing one of the elements in a sum.
+
+   logically this has the form:
+
+   scalar [literal^exponent]*
+
+   This is a scaling term (default of one).  This is followed by zero
+   or more symbolic literals raised to integer powers (default of one).
+ */
 class term
 {
    typedef map<literal, int> factorsType ;
    typedef factorsType::iterator iterType ;
    typedef factorsType::const_iterator citerType ;
 
+   // make this float?  int is good enough for what I want right now.
+   typedef int scaleType ;
+
    factorsType m_factors ;
+   scaleType m_scalar ;
 
 public:
-   term( const literal & literal )
+   /**
+    * construct term from a literal.
+    */
+   term( const literal & literal ) : m_scalar(1)
    {
       m_factors[literal] = 1 ;
    }
 
-   term & operator *= ( const term & v )
-   {
-      for ( citerType i = v.m_factors.begin() ; i != v.m_factors.end() ; i++ )
-      {
-         m_factors[ i->first ] += i->second ;
-      }
-
-      return *this ;
-   }
-
+   /**
+    * multiply term by a single literal.  If this shared any common factors with this term, that factors' exponent will be incremented.
+    */
    term & operator *= ( const literal & v )
    {
       m_factors[ v ] ++ ;
@@ -59,34 +69,195 @@ public:
       return *this ;
    }
 
+   /**
+    * multiply term by another term.  Any common factors will result in aggreggate exponentation.
+    */
+   term & operator *= ( const term & v )
+   {
+      for ( citerType i = v.m_factors.begin() ; i != v.m_factors.end() ; i++ )
+      {
+         m_factors[ i->first ] += i->second ;
+      }
+      m_scalar *= v.m_scalar ;
+
+      return *this ;
+   }
+
+   /**
+    * adjust the sign of the scalar factor for this term.
+    */
+   void negate()
+   {
+      m_scalar *= -1 ;
+   }
+
+   /**
+    * convert term to a string.
+    */
    std::string toString(void) const
    {
       std::ostringstream out ;
 
-      bool doneFirst = false ;
-
-      for ( citerType i = m_factors.begin() ; i != m_factors.end() ; i++ )
+      if ( m_factors.size() )
       {
-         if ( doneFirst )
+         if ( m_scalar != 1 )
          {
-            out << " " ;
-         }
-         else
-         {
-            doneFirst = true ;
+            out << m_scalar << " (" ;
          }
 
-         if ( 1 == i->second )
+         bool doneFirst = false ;
+
+         for ( citerType i = m_factors.begin() ; i != m_factors.end() ; i++ )
          {
-            out << i->first ;
+            if ( doneFirst )
+            {
+               out << " " ;
+            }
+            else
+            {
+               doneFirst = true ;
+            }
+
+            if ( 1 == i->second )
+            {
+               out << i->first ;
+            }
+            else
+            {
+               out << i->first << "^" << i->second ;
+            }
          }
-         else
+
+         if ( m_scalar != 1 )
          {
-            out << i->first << "^" << i->second ;
+            out << " )" ;
          }
+      }
+      else
+      {
+         out << m_scalar ;
       }
 
       return out.str() ;
+   }
+
+   /**
+    * compare two terms for sort purposes.
+    */
+   friend bool compareTerm( const term & a, const term & b )
+   {
+      std::string aStr = a.toString() ;
+      std::string bStr = b.toString() ;
+
+      return aStr > bStr ;
+   }
+} ;
+
+/**
+ * A representation of a set (sum) of terms.
+ *
+ * Addition and subtraction are implemented.
+ * Multiplication (with distribution over all sums) is implemented.
+ *
+ * Addition and subtraction operations do not result in common expression elimination, and reduce() must be called
+ * explicitly if desired.
+ */
+class expression
+{
+   typedef std::list<term> contType ;
+   typedef contType::iterator iterType ;
+   typedef contType::const_iterator citerType ;
+
+   contType m_summands ;
+
+public:
+
+   expression( const term & t )
+   {
+      m_summands.push_front( t ) ;
+   }
+
+   /**
+    * multiply all terms in self by factor.
+    */
+   expression & operator *= ( const term & factor )
+   {
+      for ( iterType i = m_summands.begin() ; i != m_summands.end() ; i++ )
+      {
+         (*i) *= factor ;
+      }
+
+      return *this ;
+   }
+
+   /**
+    * negate all terms in self.
+    */
+   void negate() 
+   {
+      for ( iterType i = m_summands.begin() ; i != m_summands.end() ; i++ )
+      {
+         (*i).negate() ;
+      }
+   }
+
+   /**
+    * add a term from self.
+    */
+   expression & operator += ( const term & t )
+   {
+      m_summands.push_front( t ) ;
+
+      return *this ;
+   }
+
+   /**
+    * subtract a term from self.
+    */
+   expression & operator -= ( const term & t )
+   {
+      term n(t) ;
+      n.negate() ;
+
+      m_summands.push_front( n ) ;
+
+      return *this ;
+   }
+
+   /**
+    * add an expression from self.
+    */
+   expression & operator += ( const expression & e )
+   {
+      for ( citerType i = e.m_summands.begin() ; i != e.m_summands.end() ; i++ )
+      {
+         m_summands.push_front((*i)) ;
+      }
+
+      return *this ;
+   }
+
+   /**
+    * subtract an expression from self.
+    */
+   expression & operator -= ( const expression & e )
+   {
+      for ( citerType i = e.m_summands.begin() ; i != e.m_summands.end() ; i++ )
+      {
+         term n((*i)) ;
+         n.negate() ;
+         m_summands.push_front(n) ;
+      }
+
+      return *this ;
+   }
+
+   /**
+    * eliminate common expressions.
+    */
+   void reduce()
+   {
+      m_summands.sort( compareTerm ) ;
    }
 } ;
 
