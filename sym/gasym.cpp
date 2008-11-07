@@ -485,13 +485,9 @@ public:
 
    sum & operator *= ( const symbol & scale )
    {
-      iterType i = m_listOfSymbols.begin() ;
-
-      while ( i != m_listOfSymbols.end() )
+      for ( iterType i = m_listOfSymbols.begin() ; i != m_listOfSymbols.end() ; i++ )
       {
          (*i) *= scale ;
-
-         i++ ;
       }
    }
 
@@ -512,13 +508,10 @@ public:
    sum reverse() const
    {
       sum r(*this) ;
-      iterType i = r.m_listOfSymbols.begin() ;
-
-      while ( i != r.m_listOfSymbols.end() )
+      
+      for ( iterType i = r.m_listOfSymbols.begin() ; i != r.m_listOfSymbols.end() ; i++ )
       {
          (*i).reverseMe() ;
-
-         i++ ;
       }
 
       return r ;
@@ -527,23 +520,16 @@ public:
    friend sum operator * ( const sum & l, const sum & r )
    {
       sum agg ;
-      citerType i = l.m_listOfSymbols.begin() ;
-
-      while ( i != l.m_listOfSymbols.end() )
+      
+      for ( citerType i = l.m_listOfSymbols.begin() ; i != l.m_listOfSymbols.end() ; i++ )
       {
-         citerType j = r.m_listOfSymbols.begin() ;
-
-         while ( j != r.m_listOfSymbols.end() )
+         for ( citerType j = r.m_listOfSymbols.begin() ; j != r.m_listOfSymbols.end() ; j++ )
          {
             symbol tmp(*i) ;
             const symbol & b = (*j) ;
             tmp *= b ;
             agg += tmp ;
-
-            j++ ;
          }
-
-         i++ ;
       }
 
       return agg ;
@@ -635,9 +621,7 @@ void sum::reduce( const bool doPostSort )
       }
 
       // Final pass, now that all the common multivector factors have been accumlated, reduce the symbols.
-      i = m_listOfSymbols.begin() ;
-
-      while ( i != m_listOfSymbols.end() )
+      for ( i = m_listOfSymbols.begin() ; i != m_listOfSymbols.end() ; i++ )
       {
          (*i).reduce() ;
       }
@@ -646,10 +630,9 @@ void sum::reduce( const bool doPostSort )
 
 void sum::dump(void) const
 {
-   citerType i = m_listOfSymbols.begin() ;
    bool first = true ;
 
-   while ( i != m_listOfSymbols.end() )
+   for ( citerType i = m_listOfSymbols.begin() ; i != m_listOfSymbols.end() ; i++ )
    {
       if ( first )
       {
@@ -666,7 +649,6 @@ void sum::dump(void) const
            << " )"
            << endl ;
 
-      i++ ;
       first = false ;
    }
 
@@ -677,17 +659,13 @@ sum dot( const sum & a, const mv & b )
 {
    sum r ;
 
-   sum::citerType i = a.m_listOfSymbols.begin() ;
-
-   while ( i != a.m_listOfSymbols.end() )
+   for ( sum::citerType i = a.m_listOfSymbols.begin() ; i != a.m_listOfSymbols.end() ; i++ )
    {
       symbol t(*i) ;
 
       t.m_symNumeric = b << t.m_symNumeric ;
 
       r.m_listOfSymbols.push_front( t ) ;
-
-      i++ ;
    }
 
    return r ;
