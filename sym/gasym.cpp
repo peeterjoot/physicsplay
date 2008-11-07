@@ -44,13 +44,22 @@ class term
    typedef factorsType::iterator iterType ;
    typedef factorsType::const_iterator citerType ;
 
+public:
    // TODO: perhaps make this float?  int is good enough for what I want right now.
    typedef int scaleType ;
 
+private:
    factorsType m_factors ;
    scaleType m_scalar ;
 
 public:
+   /**
+    * construct a scalar.
+    */
+   term( const scaleType & v ) : m_scalar(v)
+   {
+   }
+
    /**
     * construct term from a literal.
     */
@@ -353,6 +362,18 @@ public:
    }
 
    symbol( const literal & name, const valueType & value ) : m_symName(term(name)), m_symNumeric(value)
+   {
+   }
+
+   symbol( const valueType & value ) : m_symName(term(1)), m_symNumeric(value)
+   {
+   }
+
+   symbol( const literal & name ) : m_symName(term(name)), m_symNumeric(1)
+   {
+   }
+
+   symbol( const term::scaleType & scalar ) : m_symName(term(scalar)), m_symNumeric(1)
    {
    }
 
@@ -690,18 +711,18 @@ int main(int argc, char*argv[])
    mv_basisVectorNames[2] = "\\mathbf{e}_3" ;
 
 #if 0
-   symbol CosPsi("\\cos(\\psi/2)", 1) ;
+   symbol CosPsi("\\cos(\\psi/2)") ;
    symbol IsinPsi("\\sin(\\psi/2)", -iZ) ;
-   symbol CosTheta("\\cos(\\theta/2)", 1) ;
+   symbol CosTheta("\\cos(\\theta/2)") ;
    symbol IsinTheta("\\sin(\\theta/2)", -iX) ;
-   symbol CosPhi("\\cos(\\phi/2)", 1) ;
+   symbol CosPhi("\\cos(\\phi/2)") ;
    symbol IsinPhi("\\sin(\\phi/2)", -iZ) ;
 #else
-   symbol CosPsi("C_\\psi", 1) ;
+   symbol CosPsi("C_\\psi") ;
    symbol IsinPsi("S_\\psi", -iZ) ;
-   symbol CosTheta("C_\\theta", 1) ;
+   symbol CosTheta("C_\\theta") ;
    symbol IsinTheta("S_\\theta", -iX) ;
-   symbol CosPhi("C_\\phi", 1) ;
+   symbol CosPhi("C_\\phi") ;
    symbol IsinPhi("S_\\phi", -iZ) ;
 #endif
 
@@ -709,9 +730,9 @@ int main(int argc, char*argv[])
    sum R_theta( CosTheta ) ; R_theta += IsinTheta ;
    sum R_phi( CosPhi ) ; R_phi += IsinPhi ;
 
-#if 1
+#if 0
    sum Rl = (R_phi * R_theta) * R_psi ;
-#elif 1
+#elif 0
    sum Rl = R_phi * R_theta ;
 #else
    sum Rl = R_phi ;
@@ -730,10 +751,31 @@ int main(int argc, char*argv[])
    ident.dump() ;
 #endif
 
-   symbol se1("1", e1) ;
-   symbol se2("1", e2) ;
-   symbol se3("1", e3) ;
+   symbol se1(e1) ;
+   symbol se2(e2) ;
+   symbol se3(e3) ;
 
+#endif
+
+   // FIXME: okay, ... this is busted.
+   symbol xx(CosPsi) ;
+   xx.dump() ;
+   se1.dump() ;
+   xx *= se1 ;
+   xx.dump() ;
+
+#if 0
+      sum t(Rl) ;
+      t.reduce() ;
+      t.dump() ;
+
+      t *= se1 ;
+      se1.dump() ;
+      //sum rot_e1 = t * Rr ;
+      t.reduce() ;
+      t.dump() ;
+#endif
+#if 0
    {
 //      cout << "R_{\\phi,z}(e_1):" << endl ;
       sum t(Rl) ;
