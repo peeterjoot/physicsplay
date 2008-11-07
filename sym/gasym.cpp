@@ -14,14 +14,14 @@ using namespace std ;
 #if 0
 float foopeekasm( const mv & v )
 {
-// 
+//
 // interesting.  looking at the generated asm shows that the compiler
 // (g++ -O2) is
 // able to inline this function despite the fact that the body of
 // mv::gu() is not available until after it is used.
 //
 // Compilers are getting better!
-// 
+//
   return v.e3e1() ;
 }
 #endif
@@ -44,7 +44,7 @@ class term
    typedef factorsType::iterator iterType ;
    typedef factorsType::const_iterator citerType ;
 
-   // make this float?  int is good enough for what I want right now.
+   // TODO: perhaps make this float?  int is good enough for what I want right now.
    typedef int scaleType ;
 
    factorsType m_factors ;
@@ -94,52 +94,9 @@ public:
    /**
     * convert term to a string.
     */
-   std::string toString(void) const
-   {
-      std::ostringstream out ;
+   inline std::string toString(void) const ;
 
-      if ( m_factors.size() )
-      {
-         if ( m_scalar != 1 )
-         {
-            out << m_scalar << " (" ;
-         }
-
-         bool doneFirst = false ;
-
-         for ( citerType i = m_factors.begin() ; i != m_factors.end() ; i++ )
-         {
-            if ( doneFirst )
-            {
-               out << " " ;
-            }
-            else
-            {
-               doneFirst = true ;
-            }
-
-            if ( 1 == i->second )
-            {
-               out << i->first ;
-            }
-            else
-            {
-               out << i->first << "^" << i->second ;
-            }
-         }
-
-         if ( m_scalar != 1 )
-         {
-            out << " )" ;
-         }
-      }
-      else
-      {
-         out << m_scalar ;
-      }
-
-      return out.str() ;
-   }
+   void toStringStream( std::ostringstream & out ) const ;
 
    /**
     * compare two terms for sort purposes.
@@ -152,6 +109,58 @@ public:
       return aStr > bStr ;
    }
 } ;
+
+void term::toStringStream( std::ostringstream & out ) const
+{
+   if ( m_factors.size() )
+   {
+      if ( m_scalar != 1 )
+      {
+         out << m_scalar << " (" ;
+      }
+
+      bool doneFirst = false ;
+
+      for ( citerType i = m_factors.begin() ; i != m_factors.end() ; i++ )
+      {
+         if ( doneFirst )
+         {
+            out << " " ;
+         }
+         else
+         {
+            doneFirst = true ;
+         }
+
+         if ( 1 == i->second )
+         {
+            out << i->first ;
+         }
+         else
+         {
+            out << i->first << "^" << i->second ;
+         }
+      }
+
+      if ( m_scalar != 1 )
+      {
+         out << " )" ;
+      }
+   }
+   else
+   {
+      out << m_scalar ;
+   }
+}
+
+inline std::string term::toString(void) const
+{
+   std::ostringstream out ;
+
+   toStringStream( out ) ;
+
+   return out.str() ;
+}
 
 /**
  * A representation of a set (sum) of terms.
@@ -169,6 +178,32 @@ class expression
    typedef contType::const_iterator citerType ;
 
    contType m_summands ;
+
+   /**
+    * multiply self by complete expression.  No
+    */
+   void multiply( expression & r, const expression & a, const expression & b )
+   {
+      // TODO: assert that r.m_summands.size() == 0
+
+      // c = \sum_i a_i b_i
+      for ( citerType i = a.m_summands.begin() ; i != a.m_summands.end() ; i++ )
+      {
+         for ( citerType j = a.m_summands.begin() ; j != a.m_summands.end() ; j++ )
+         {
+            term tmp(*i) ;
+
+            tmp *= (*j) ;
+
+            r.m_summands.push_front(tmp) ;
+         }
+      }
+   }
+
+   // for operator *='s use of swap.  Likely no other uses for empty expressions.
+   expression( )
+   {
+   }
 
 public:
 
@@ -190,10 +225,20 @@ public:
       return *this ;
    }
 
+   expression & operator *= ( const expression & e )
+   {
+      expression t ;
+      t.m_summands.swap( m_summands ) ;
+
+      multiply( *this, t, e ) ;
+
+      return *this ;
+   }
+
    /**
     * negate all terms in self.
     */
-   void negate() 
+   void negate()
    {
       for ( iterType i = m_summands.begin() ; i != m_summands.end() ; i++ )
       {
@@ -258,10 +303,112 @@ public:
    void reduce()
    {
       m_summands.sort( compareTerm ) ;
+
+      // FIXME: now that things are sorted aggregate the factors when possible.
+   }
+
+   std::string toString() const
+   {
+      std::ostringstream out ;
+
+      bool doneFirst = false ;
+
+      for ( citerType i = m_summands.begin() ; i != m_summands.end() ; i++ )
+      {
+         if ( doneFirst )
+         {
+            out << " + " ;
+         }
+
+         (*i).toStringStream( out ) ;
+
+         doneFirst = true ;
+      }
+
+      return out.str() ;
    }
 } ;
 
-/// return a bitmask with a bit set for each unique basis element in the algebra.
+class symbol ;
+bool compareSymbol (const symbol & first, const symbol & second) ;
+
+class sum ;
+sum dot( const sum & a, const mv & b ) ;
+
+class symbol
+{
+   expression m_symName ;
+   typedef mv valueType ;
+   valueType m_symNumeric ;
+
+   friend class sum ;
+
+public:
+   symbol( const expression & name, const valueType & value ) : m_symName(name), m_symNumeric(value)
+   {
+   }
+
+   symbol( const term & name, const valueType & value ) : m_symName(name), m_symNumeric(value)
+   {
+   }
+
+   symbol( const literal & name, const valueType & value ) : m_symName(term(name)), m_symNumeric(value)
+   {
+   }
+
+   symbol & operator *= ( const valueType & scale )
+   {
+      m_symNumeric *= scale ;
+
+      return *this ;
+   }
+
+#if 0
+   symbol & operator *= ( const expression & scale )
+   {
+      m_symName *= scale ;
+
+      return *this ;
+   }
+#endif
+
+   symbol & operator *= ( const symbol & scale )
+   {
+      m_symName *= scale.m_symName ;
+      m_symNumeric *= scale.m_symNumeric ;
+
+      return *this ;
+   }
+
+   void reduce()
+   {
+      m_symName.reduce() ;
+   }
+
+   void reverseMe()
+   {
+      m_symNumeric = reverse( m_symNumeric ) ;
+   }
+
+   friend bool compareSymbol (const symbol & first, const symbol & second) ;
+   friend sum dot( const sum & a, const mv & b ) ;
+
+   void dump() const ;
+} ;
+
+void symbol::dump() const
+{
+   cout << m_symName.toString()
+        << " ( "
+        << toString(m_symNumeric)
+        << " )"
+        << endl ;
+}
+
+/**
+ * return a bitmask with a bit set for each unique basis element in the algebra.
+ * Look in the mv internals ... this operation very likely already exists.
+ */
 int mv_bitmask( const mv & a )
 {
    int m = 0 ;
@@ -291,96 +438,10 @@ int mv_bitmask( const mv & a )
    return m ;
 }
 
-class symbol ;
-class sum ;
-bool compareSymbol (const symbol & first, const symbol & second) ;
-sum dot( const sum & a, const mv & b ) ;
-
-class symbol
-{
-   typedef std::string stringType ;
-   stringType symName ;
-   typedef mv valueType ;
-   valueType symNumeric ;
-
-   friend class sum ;
-
-   void multiplyBySymbol( const stringType & v )
-   {
-      stringType s1("1") ;
-      stringType s0("0") ;
-
-      if ( v == s1 || symName == s0 )
-      {
-         // no-op
-      }
-      else if ( symName == s1 )
-      {
-         symName = v ;
-      }
-      else if ( v == s0 )
-      {
-         symName = s0 ;
-      }
-      else
-      {
-         symName += " " ;
-         symName += v ;
-      }
-   }
-
-public:
-   symbol( const stringType & name, const valueType & value ) : symName(name), symNumeric(value)
-   {
-   }
-
-   symbol & operator *= ( const valueType & scale )
-   {
-      symNumeric *= scale ;
-
-      return *this ;
-   }
-
-   symbol & operator *= ( const stringType & scale )
-   {
-      multiplyBySymbol( scale ) ;
-
-      return *this ;
-   }
-
-   symbol & operator *= ( const symbol & scale )
-   {
-      multiplyBySymbol( scale.symName ) ;
-
-      symNumeric *= scale.symNumeric ;
-
-      return *this ;
-   }
-
-   void reverseMe()
-   {
-      symNumeric = reverse( symNumeric ) ;
-   }
-
-   friend bool compareSymbol (const symbol & first, const symbol & second) ;
-   friend sum dot( const sum & a, const mv & b ) ;
-
-   void dump() const ;
-} ;
-
-void symbol::dump() const
-{
-   cout << symName
-        << " ( "
-        << toString(symNumeric)
-        << " )" ;
-   cout << endl ;
-}
-
 bool compareSymbol (const symbol & first, const symbol & second)
 {
-   const mv & a = first.symNumeric ;
-   const mv & b = second.symNumeric ;
+   const mv & a = first.m_symNumeric ;
+   const mv & b = second.m_symNumeric ;
 
    if ( a.gu() > b.gu() )
    {
@@ -401,34 +462,32 @@ bool compareSymbol (const symbol & first, const symbol & second)
 
 class sum
 {
-   typedef symbol symbolType ;
-   typedef symbolType::stringType stringType ;
-   typedef std::list<symbolType> symbolsType ;
-   typedef symbolsType::iterator iter ;
-   typedef symbolsType::const_iterator citer ;
+   typedef std::list<symbol> symbolSetType ;
+   typedef symbolSetType::iterator iterType ;
+   typedef symbolSetType::const_iterator citerType ;
 
-   symbolsType listOfSymbols ;
+   symbolSetType m_listOfSymbols ;
 
 public:
    sum( ) {}
 
-   sum( const symbolType & i )
+   sum( const symbol & i )
    {
-      listOfSymbols.push_front( i ) ;
+      m_listOfSymbols.push_front( i ) ;
    }
 
-   sum & operator += ( const symbolType & more )
+   sum & operator += ( const symbol & more )
    {
-      listOfSymbols.push_front( more ) ;
+      m_listOfSymbols.push_front( more ) ;
 
       return *this ;
    }
 
-   sum & operator *= ( const symbolType & scale )
+   sum & operator *= ( const symbol & scale )
    {
-      iter i = listOfSymbols.begin() ;
+      iterType i = m_listOfSymbols.begin() ;
 
-      while ( i != listOfSymbols.end() )
+      while ( i != m_listOfSymbols.end() )
       {
          (*i) *= scale ;
 
@@ -439,9 +498,9 @@ public:
 #if 0 // not used.
    void reverseMe()
    {
-      iter i = listOfSymbols.begin() ;
+      iterType i = m_listOfSymbols.begin() ;
 
-      while ( i != listOfSymbols.end() )
+      while ( i != m_listOfSymbols.end() )
       {
          (*i).reverseMe() ;
 
@@ -453,9 +512,9 @@ public:
    sum reverse() const
    {
       sum r(*this) ;
-      iter i = r.listOfSymbols.begin() ;
+      iterType i = r.m_listOfSymbols.begin() ;
 
-      while ( i != r.listOfSymbols.end() )
+      while ( i != r.m_listOfSymbols.end() )
       {
          (*i).reverseMe() ;
 
@@ -468,16 +527,16 @@ public:
    friend sum operator * ( const sum & l, const sum & r )
    {
       sum agg ;
-      citer i = l.listOfSymbols.begin() ;
+      citerType i = l.m_listOfSymbols.begin() ;
 
-      while ( i != l.listOfSymbols.end() )
+      while ( i != l.m_listOfSymbols.end() )
       {
-         citer j = r.listOfSymbols.begin() ;
+         citerType j = r.m_listOfSymbols.begin() ;
 
-         while ( j != r.listOfSymbols.end() )
+         while ( j != r.m_listOfSymbols.end() )
          {
-            symbolType tmp(*i) ;
-            const symbolType & b = (*j) ;
+            symbol tmp(*i) ;
+            const symbol & b = (*j) ;
             tmp *= b ;
             agg += tmp ;
 
@@ -490,131 +549,143 @@ public:
       return agg ;
    }
 
-   void normalize( const bool doPostSort = true )
+   void reduce( const bool doPostSort = true ) ;
+
+   void dump(void) const ;
+
+   friend sum dot( const sum & a, const mv & b ) ;
+} ;
+
+void sum::reduce( const bool doPostSort )
+{
+   m_listOfSymbols.sort( compareSymbol ) ;
+
+   if ( doPostSort )
    {
-      listOfSymbols.sort( compareSymbol ) ;
+      iterType i = m_listOfSymbols.begin() ;
 
-      if ( doPostSort )
+      while ( i != m_listOfSymbols.end() )
       {
-         iter i = listOfSymbols.begin() ;
+         iterType j = i ;
+         symbol & cur = (*i) ;
 
-         while ( i != listOfSymbols.end() )
+         j++ ;
+
+         while ( j != m_listOfSymbols.end() )
          {
-            iter j = i ;
-            symbolType & cur = (*i) ;
+            const symbol & next = (*j) ;
 
-            j++ ;
-
-            while ( j != listOfSymbols.end() )
+            if ( cur.m_symNumeric.gu() && (cur.m_symNumeric.gu() == next.m_symNumeric.gu()) )
             {
-               const symbolType & next = (*j) ;
+               bool match = true ;
+               bool nmatch = true ;
+               int k = 0 ;
+               int ia = 0 ;
 
-               if ( cur.symNumeric.gu() && (cur.symNumeric.gu() == next.symNumeric.gu()) )
+               for ( int ii = 0 ; ii <= 3 ; ii++ )
                {
-                  bool match = true ;
-                  bool nmatch = true ;
-                  int k = 0 ;
-                  int ia = 0 ;
-
-                  for ( int ii = 0 ; ii <= 3 ; ii++ )
+                  if ( cur.m_symNumeric.gu() & (1 << ii) )
                   {
-                     if ( cur.symNumeric.gu() & (1 << ii) )
+                     for ( int jj = 0 ; jj < mv_gradeSize[ii] ; jj++)
                      {
-                        for ( int jj = 0 ; jj < mv_gradeSize[ii] ; jj++)
+                        if ( cur.m_symNumeric.m_c[k] != next.m_symNumeric.m_c[k] )
                         {
-                           if ( cur.symNumeric.m_c[k] != next.symNumeric.m_c[k] )
-                           {
-                              match = false ;
-                           }
-
-                           if ( cur.symNumeric.m_c[k] != -next.symNumeric.m_c[k] )
-                           {
-                              nmatch = false ;
-                           }
-
-                           k++ ;
-                           ia++ ;
+                           match = false ;
                         }
+
+                        if ( cur.m_symNumeric.m_c[k] != -next.m_symNumeric.m_c[k] )
+                        {
+                           nmatch = false ;
+                        }
+
+                        k++ ;
+                        ia++ ;
                      }
-                     else
-                     {
-                        ia += mv_gradeSize[ii] ;
-                     }
-                  }
-
-                  if ( match )
-                  {
-                     cur.symName = stringType("(") + cur.symName + stringType(" + ") + next.symName + stringType(")") ;
-
-                     j = listOfSymbols.erase(j) ;
-                  }
-                  else if ( nmatch )
-                  {
-                     cur.symName = stringType("(") + cur.symName + stringType(" - ") + next.symName + stringType(")") ;
-
-                     j = listOfSymbols.erase(j) ;
                   }
                   else
                   {
-                     break ;
+                     ia += mv_gradeSize[ii] ;
                   }
+               }
+
+               if ( match )
+               {
+                  cur.m_symName += next.m_symName ;
+
+                  j = m_listOfSymbols.erase(j) ;
+               }
+               else if ( nmatch )
+               {
+                  cur.m_symName -= next.m_symName ;
+
+                  j = m_listOfSymbols.erase(j) ;
                }
                else
                {
                   break ;
                }
             }
-
-            i = j ;
+            else
+            {
+               break ;
+            }
          }
+
+         i = j ;
       }
-   }
 
-   void dump(void) const
-   {
-      citer i = listOfSymbols.begin() ;
-      bool first = true ;
+      // Final pass, now that all the common multivector factors have been accumlated, reduce the symbols.
+      i = m_listOfSymbols.begin() ;
 
-      while ( i != listOfSymbols.end() )
+      while ( i != m_listOfSymbols.end() )
       {
-         if ( first )
-         {
-            cout << "\\left( " << endl ;
-         }
-         else
-         {
-            cout << "+ " ;
-         }
+         (*i).reduce() ;
+      }
+   }
+}
 
-         cout << (*i).symName
-              << " ( "
-              << toString((*i).symNumeric)
-              << " )" ;
-         cout << endl ;
+void sum::dump(void) const
+{
+   citerType i = m_listOfSymbols.begin() ;
+   bool first = true ;
 
-         i++ ;
-         first = false ;
+   while ( i != m_listOfSymbols.end() )
+   {
+      if ( first )
+      {
+         cout << "\\left( " << endl ;
+      }
+      else
+      {
+         cout << "+ " ;
       }
 
-      cout << "\\right)" << endl ;
+      cout << (*i).m_symName.toString()
+           << " ( "
+           << toString((*i).m_symNumeric)
+           << " )"
+           << endl ;
+
+      i++ ;
+      first = false ;
    }
 
-   friend sum dot( const sum & a, const mv & b ) ;
-} ;
+   cout << "\\right)" << endl ;
+}
 
 sum dot( const sum & a, const mv & b )
 {
    sum r ;
 
-   sum::citer i = a.listOfSymbols.begin() ;
+   sum::citerType i = a.m_listOfSymbols.begin() ;
 
-   while ( i != a.listOfSymbols.end() )
+   while ( i != a.m_listOfSymbols.end() )
    {
-      sum::symbolType t(*i) ;
+      symbol t(*i) ;
 
-      t.symNumeric = b << t.symNumeric ;
+      t.m_symNumeric = b << t.m_symNumeric ;
 
-      r.listOfSymbols.push_front( t ) ;
+      r.m_listOfSymbols.push_front( t ) ;
 
       i++ ;
    }
@@ -624,7 +695,7 @@ sum dot( const sum & a, const mv & b )
 
 int main(int argc, char*argv[])
 {
-#if 0
+#if 1
    // profiling for Gaigen 2:
    //e3ga::g2Profiling::init();
 
@@ -673,11 +744,11 @@ int main(int argc, char*argv[])
    cout << "expect identity:" << endl ;
    sum ident = Rl * Rr ;
    ident.dump() ;
-//   cout << "normalized: expect identity:" << endl ;
-//   ident.normalize( false ) ;
+//   cout << "reduced: expect identity:" << endl ;
+//   ident.reduce( false ) ;
 //   ident.dump() ;
-   cout << "normalized: expect identity:" << endl ;
-   ident.normalize( ) ;
+   cout << "reduced: expect identity:" << endl ;
+   ident.reduce( ) ;
    ident.dump() ;
 #endif
 
@@ -690,22 +761,22 @@ int main(int argc, char*argv[])
       sum t(Rl) ;
       t *= se1 ;
       sum rot_e1 = t * Rr ;
-      rot_e1.normalize() ;
+      rot_e1.reduce() ;
 //      rot_e1.dump() ;
 
       cout << "\n\n R_{11} &= \n\n" ;
       sum rot_e1_e1 = dot( rot_e1, e1 ) ;
-      rot_e1_e1.normalize() ;
+      rot_e1_e1.reduce() ;
       rot_e1_e1.dump() ;
 
       cout << "\n\n R_{12} &= \n\n" ;
       sum rot_e1_e2 = dot( rot_e1, e2 ) ;
-      rot_e1_e2.normalize() ;
+      rot_e1_e2.reduce() ;
       rot_e1_e2.dump() ;
 
       cout << "\n\n R_{13} &= \n\n" ;
       sum rot_e1_e3 = dot( rot_e1, e3 ) ;
-      rot_e1_e3.normalize() ;
+      rot_e1_e3.reduce() ;
       rot_e1_e3.dump() ;
    }
 
@@ -714,22 +785,22 @@ int main(int argc, char*argv[])
       sum t(Rl) ;
       t *= se2 ;
       sum rot_e2 = t * Rr ;
-      rot_e2.normalize() ;
+      rot_e2.reduce() ;
 //      rot_e2.dump() ;
 
       cout << "\n\n R_{21} &= \n\n" ;
       sum rot_e2_e1 = dot( rot_e2, e1 ) ;
-      rot_e2_e1.normalize() ;
+      rot_e2_e1.reduce() ;
       rot_e2_e1.dump() ;
 
       cout << "\n\n R_{22} &= \n\n" ;
       sum rot_e2_e2 = dot( rot_e2, e2 ) ;
-      rot_e2_e2.normalize() ;
+      rot_e2_e2.reduce() ;
       rot_e2_e2.dump() ;
 
       cout << "\n\n R_{23} &= \n\n" ;
       sum rot_e2_e3 = dot( rot_e2, e3 ) ;
-      rot_e2_e3.normalize() ;
+      rot_e2_e3.reduce() ;
       rot_e2_e3.dump() ;
    }
 
@@ -738,22 +809,22 @@ int main(int argc, char*argv[])
       sum t(Rl) ;
       t *= se3 ;
       sum rot_e3 = t * Rr ;
-      rot_e3.normalize() ;
+      rot_e3.reduce() ;
 //      rot_e3.dump() ;
 
       cout << "\n\n R_{31} &= \n\n" ;
       sum rot_e3_e1 = dot( rot_e3, e1 ) ;
-      rot_e3_e1.normalize() ;
+      rot_e3_e1.reduce() ;
       rot_e3_e1.dump() ;
 
       cout << "\n\n R_{32} &= \n\n" ;
       sum rot_e3_e2 = dot( rot_e3, e2 ) ;
-      rot_e3_e2.normalize() ;
+      rot_e3_e2.reduce() ;
       rot_e3_e2.dump() ;
 
       cout << "\n\n R_{33} &= \n\n" ;
       sum rot_e3_e3 = dot( rot_e3, e3 ) ;
-      rot_e3_e3.normalize() ;
+      rot_e3_e3.reduce() ;
       rot_e3_e3.dump() ;
    }
 #endif
