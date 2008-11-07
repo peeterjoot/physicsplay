@@ -105,25 +105,28 @@ public:
     */
    inline std::string toString(void) const ;
 
-   void toStringStream( std::ostringstream & out ) const ;
+   void toStringStream( std::ostringstream & out, const bool useSignPrefix ) const ;
 
    /**
     * compare two terms for sort purposes.
     */
-   friend bool compareTerm( const term & a, const term & b )
-   {
-      std::string aStr = a.toString() ;
-      std::string bStr = b.toString() ;
-
-      return aStr > bStr ;
-   }
+   friend bool compareTerm( const term & a, const term & b ) ;
 } ;
 
-void term::toStringStream( std::ostringstream & out ) const
+void term::toStringStream( std::ostringstream & out, const bool useSignPrefix ) const
 {
    if ( m_factors.size() )
    {
-      if ( m_scalar != 1 )
+      if ( useSignPrefix && m_scalar > 0 )
+      {
+         out << " + " ;
+      }
+
+      if ( -1 == m_scalar )
+      {
+         out << " - " ;
+      }
+      else if ( m_scalar != 1 )
       {
          out << m_scalar << " (" ;
       }
@@ -151,13 +154,18 @@ void term::toStringStream( std::ostringstream & out ) const
          }
       }
 
-      if ( m_scalar != 1 )
+      if ( m_scalar != 1 && m_scalar != -1 )
       {
          out << " )" ;
       }
    }
    else
    {
+      if ( useSignPrefix && m_scalar > 0 )
+      {
+         out << " + " ;
+      }
+
       out << m_scalar ;
    }
 }
@@ -166,9 +174,17 @@ inline std::string term::toString(void) const
 {
    std::ostringstream out ;
 
-   toStringStream( out ) ;
+   toStringStream( out, false ) ;
 
    return out.str() ;
+}
+
+inline bool compareTerm( const term & a, const term & b )
+{
+   std::string aStr = a.toString() ;
+   std::string bStr = b.toString() ;
+
+   return aStr > bStr ;
 }
 
 /**
@@ -198,11 +214,14 @@ class expression
       // c = \sum_i a_i b_i
       for ( citerType i = a.m_summands.begin() ; i != a.m_summands.end() ; i++ )
       {
-         for ( citerType j = a.m_summands.begin() ; j != a.m_summands.end() ; j++ )
+         for ( citerType j = b.m_summands.begin() ; j != b.m_summands.end() ; j++ )
          {
             term tmp(*i) ;
+//      cout << "e:mult: *i: " << (*i).toString() << endl ;
+//      cout << "e:mult: *j: " << (*j).toString() << endl ;
 
             tmp *= (*j) ;
+//      cout << "post: e:mult: tmp: " << tmp.toString() << endl ;
 
             r.m_summands.push_front(tmp) ;
          }
@@ -234,12 +253,20 @@ public:
       return *this ;
    }
 
+   std::string toString() const ;
+
    expression & operator *= ( const expression & e )
    {
       expression t ;
       t.m_summands.swap( m_summands ) ;
 
+//      cout << "e *= t: " << t.toString() << endl ;
+//      cout << "e *= *this: " << toString() << endl ;
+//      cout << "e *= e: " << e.toString() << endl ;
+
       multiply( *this, t, e ) ;
+
+//      cout << "post: e *= *this: " << toString() << endl ;
 
       return *this ;
    }
@@ -313,30 +340,38 @@ public:
    {
       m_summands.sort( compareTerm ) ;
 
-      // FIXME: now that things are sorted aggregate the factors when possible.
-   }
-
-   std::string toString() const
-   {
-      std::ostringstream out ;
-
-      bool doneFirst = false ;
-
-      for ( citerType i = m_summands.begin() ; i != m_summands.end() ; i++ )
-      {
-         if ( doneFirst )
-         {
-            out << " + " ;
-         }
-
-         (*i).toStringStream( out ) ;
-
-         doneFirst = true ;
-      }
-
-      return out.str() ;
+      // now that things are sorted aggregate the factors when possible.
+      //fixme() ;
    }
 } ;
+
+std::string expression::toString() const
+{
+   std::ostringstream out ;
+
+   bool wantSignPrefix = false ;
+
+   contType::size_type size = m_summands.size() ;
+
+   if ( size > 1 )
+   {
+      out << "( " ;
+   }
+
+   for ( citerType i = m_summands.begin() ; i != m_summands.end() ; i++ )
+   {
+      (*i).toStringStream( out, wantSignPrefix ) ;
+
+      wantSignPrefix = true ;
+   }
+
+   if ( size > 1 )
+   {
+      out << " )" ;
+   }
+
+   return out.str() ;
+}
 
 class symbol ;
 bool compareSymbol (const symbol & first, const symbol & second) ;
@@ -694,7 +729,6 @@ sum dot( const sum & a, const mv & b )
 
 int main(int argc, char*argv[])
 {
-#if 1
    // profiling for Gaigen 2:
    //e3ga::g2Profiling::init();
 
@@ -755,27 +789,26 @@ int main(int argc, char*argv[])
    symbol se2(e2) ;
    symbol se3(e3) ;
 
-#endif
-
-   // FIXME: okay, ... this is busted.
-   symbol xx(CosPsi) ;
-   xx.dump() ;
-   se1.dump() ;
-   xx *= se1 ;
-   xx.dump() ;
-
 #if 0
       sum t(Rl) ;
       t.reduce() ;
+      cout << "R: " << endl ;
       t.dump() ;
 
-      t *= se1 ;
+      cout << "e1: " << endl ;
       se1.dump() ;
+
+      cout << "R e1: " << endl ;
+      t *= se1 ;
       //sum rot_e1 = t * Rr ;
+      t.dump() ;
+
+      cout << "reduced: R e1: " << endl ;
       t.reduce() ;
       t.dump() ;
 #endif
-#if 0
+
+#if 1
    {
 //      cout << "R_{\\phi,z}(e_1):" << endl ;
       sum t(Rl) ;
@@ -858,11 +891,24 @@ int main(int argc, char*argv[])
 
 #if 0
    term t("a") ;
+   term u(1) ;
    t *= "b" ;
    t *= "a" ;
    t *= "(\\sin(x))" ;
-
    cout << t.toString() << endl ;
+
+   t *= u ;
+   cout << t.toString() << endl ;
+#endif
+#if 0
+   symbol xx(CosPsi) ;
+   cout << "xx: " << endl ;
+   xx.dump() ;
+   cout << "se1: " << endl ;
+   se1.dump() ;
+   xx *= se1 ;
+   cout << "xx*=se1: " << endl ;
+   xx.dump() ;
 #endif
 
    return 0 ;
