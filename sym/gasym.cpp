@@ -18,21 +18,6 @@
 using namespace e3ga ;
 using namespace std ;
 
-#if 0
-float foopeekasm( const mv & v )
-{
-//
-// interesting.  looking at the generated asm shows that the compiler
-// (g++ -O2) is
-// able to inline this function despite the fact that the body of
-// mv::gu() is not available until after it is used.
-//
-// Compilers are getting better!
-//
-  return v.e3e1() ;
-}
-#endif
-
 typedef std::string literal ;
 
 /**
@@ -273,11 +258,7 @@ class expression
          for ( citerType j = b.m_summands.begin() ; j != b.m_summands.end() ; j++ )
          {
             term tmp(*i) ;
-//      cout << "e:mult: *i: " << (*i).toString() << endl ;
-//      cout << "e:mult: *j: " << (*j).toString() << endl ;
-
             tmp *= (*j) ;
-//      cout << "post: e:mult: tmp: " << tmp.toString() << endl ;
 
             r.m_summands.push_front(tmp) ;
          }
@@ -316,13 +297,7 @@ public:
       expression t ;
       t.m_summands.swap( m_summands ) ;
 
-//      cout << "e *= t: " << t.toString() << endl ;
-//      cout << "e *= *this: " << toString() << endl ;
-//      cout << "e *= e: " << e.toString() << endl ;
-
       multiply( *this, t, e ) ;
-
-//      cout << "post: e *= *this: " << toString() << endl ;
 
       return *this ;
    }
@@ -898,8 +873,7 @@ void sum::dump(void) const
    {
       if ( first )
       {
-         cout //<< "\\left( "
-              << endl ;
+         cout << endl ;
       }
       else
       {
@@ -922,8 +896,7 @@ void sum::dump(void) const
    }
    else
    {
-      cout //<< "\\right)"
-           << endl ;
+      cout << endl ;
    }
 }
 
@@ -951,8 +924,6 @@ int main(int argc, char*argv[])
    mv_string_wedge = " \\wedge " ;
    mv_string_mul = " " ;
    mv_string_fp = "%2.0f" ;
-//   mv_string_start = "{" ;
-//   mv_string_end = "}" ;
    mv_basisVectorNames[0] = "\\mathbf{e}_1" ;
    mv_basisVectorNames[1] = "\\mathbf{e}_2" ;
    mv_basisVectorNames[2] = "\\mathbf{e}_3" ;
