@@ -1,15 +1,9 @@
 /*
  * TODO
  *
- *) fold -1 constants into the expression:
+ format the following as just the expression (ie: when the mv value == 1)
 
-   + ( C_\phi S_\phi + C_\phi S_\phi ) (  -  1 )
-   + ( C_\phi S_\phi - C_\phi S_\phi ) (  -  1 \mathbf{e}_1 \wedge \mathbf{e}_3 )
-
- *) NICE TO HAVE (may have to modify e3ga though): format the following as just the expression (ie: when the mv value == 1)
-
-    ( C_\phi^2 - S_\phi^2 ) (  1 )
-
+ ( C_\phi^2 - S_\phi^2 ) (  1 )
  */
 #include <string>
 #include <list>
