@@ -1,21 +1,14 @@
 /*
-   *) fold -1 constants into the expression:
+ * TODO
+ *
+ *) fold -1 constants into the expression:
 
    + ( C_\phi S_\phi + C_\phi S_\phi ) (  -  1 )
    + ( C_\phi S_\phi - C_\phi S_\phi ) (  -  1 \mathbf{e}_1 \wedge \mathbf{e}_3 )
 
-   *) NICE TO HAVE (may have to modify e3ga though): format the following as just the expression (ie: when the mv value == 1)
+ *) NICE TO HAVE (may have to modify e3ga though): format the following as just the expression (ie: when the mv value == 1)
 
     ( C_\phi^2 - S_\phi^2 ) (  1 )
-
-   *) BUG:
-
-from R_33. This should have been reduced to zero:
-
-+ 2 (C_\phi C_\psi S_\phi S_\psi S_\theta^2 )
- -2 (C_\phi C_\psi S_\phi S_\psi S_\theta^2 )
-+ 2 (C_\phi C_\psi C_\theta^2 S_\phi S_\psi )
- -2 (C_\phi C_\psi C_\theta^2 S_\phi S_\psi )
 
  */
 #include <string>
@@ -69,24 +62,24 @@ class term
 
 public:
    // TODO: perhaps make this float?  int is good enough for what I want right now.
-   typedef int scaleType ;
+   typedef int scalarType ;
 
 private:
    factorsType m_factors ;
-   scaleType m_scalar ;
+   scalarType m_scalar ;
 
 public:
    /**
     * construct a scalar.
     */
-   term( const scaleType & v ) : m_scalar(v)
+   term( const scalarType & v ) : m_scalar(v)
    {
    }
 
    /**
     * construct term from a literal.
     */
-   term( const literal & literal ) : m_scalar(TERM_ONE_VALUE)
+   term( const literal & literal, const scalarType s = TERM_ONE_VALUE ) : m_scalar(s)
    {
       m_factors[ literal ] = 1 ;
    }
@@ -100,13 +93,13 @@ public:
    }
 
 #if 0
-   void adjustScale( const scaleType s )
+   void adjustScale( const scalarType s )
    {
       m_scalar += s ;
    }
 #endif
 
-   scaleType getScale() const
+   scalarType getScale() const
    {
       return m_scalar ;
    }
@@ -154,9 +147,9 @@ public:
    /**
     * convert term to a string.
     */
-   inline std::string toString(void) const ;
+   inline std::string toString( const bool withScalar = true ) const ;
 
-   void toStringStream( std::ostringstream & out, const bool useSignPrefix ) const ;
+   void toStringStream( std::ostringstream & out, const bool useSignPrefix, const bool withScalar = true ) const ;
 
    /**
     * compare two terms for sort purposes.
@@ -169,22 +162,37 @@ public:
    }
 } ;
 
-void term::toStringStream( std::ostringstream & out, const bool useSignPrefix ) const
+void term::toStringStream( std::ostringstream & out, const bool useSignPrefix, const bool withScalar ) const
 {
+   scalarType scalarValue ;
+
+   if ( withScalar )
+   {
+      scalarValue = m_scalar ;
+   }
+   else
+   {
+      //
+      // This is a hack for the compare sort function ... I was lazy and used this string logic to do the compare.
+      // It's not efficient, which will make all the already inefficient reduce() functions worse.
+      //
+      scalarValue = TERM_ONE_VALUE ;
+   }
+
    if ( m_factors.size() )
    {
-      if ( useSignPrefix && m_scalar > TERM_ZERO_VALUE )
+      if ( useSignPrefix && scalarValue > TERM_ZERO_VALUE )
       {
          out << " + " ;
       }
 
-      if ( -TERM_ONE_VALUE == m_scalar )
+      if ( -TERM_ONE_VALUE == scalarValue )
       {
          out << " - " ;
       }
-      else if ( m_scalar != TERM_ONE_VALUE )
+      else if ( scalarValue != TERM_ONE_VALUE )
       {
-         out << m_scalar << " (" ;
+         out << scalarValue << " (" ;
       }
 
       bool doneFirst = false ;
@@ -210,37 +218,45 @@ void term::toStringStream( std::ostringstream & out, const bool useSignPrefix ) 
          }
       }
 
-      if ( m_scalar != TERM_ONE_VALUE && m_scalar != -TERM_ONE_VALUE )
+      if ( scalarValue != TERM_ONE_VALUE && scalarValue != -TERM_ONE_VALUE )
       {
          out << " )" ;
       }
    }
    else
    {
-      if ( useSignPrefix && m_scalar > TERM_ZERO_VALUE )
+      if ( useSignPrefix && scalarValue > TERM_ZERO_VALUE )
       {
          out << " + " ;
       }
 
-      out << m_scalar ;
+      out << scalarValue ;
    }
 }
 
-inline std::string term::toString(void) const
+inline std::string term::toString( const bool withScalar ) const
 {
    std::ostringstream out ;
 
-   toStringStream( out, false ) ;
+   toStringStream( out, false, withScalar ) ;
 
    return out.str() ;
 }
 
 inline bool compareTerm( const term & a, const term & b )
 {
-   std::string aStr = a.toString() ;
-   std::string bStr = b.toString() ;
+   std::string aStr = a.toString( false ) ;
+   std::string bStr = b.toString( false ) ;
 
-   return aStr > bStr ;
+   if ( aStr == bStr )
+   {
+      // want to sort the factors with higher weight than the cooefficients.
+      return a.m_scalar > b.m_scalar ;
+   }
+   else
+   {
+      return aStr > bStr ;
+   }
 }
 
 /**
@@ -476,6 +492,21 @@ void expression::reduce()
       }
    }
 
+   //
+   // a final "dead code" elimination pass.
+   //
+   for ( i = m_summands.begin() ; i != m_summands.end() ; )
+   {
+      if ( TERM_ZERO_VALUE == (*i).getScale() )
+      {
+         i = m_summands.erase( i ) ;
+      }
+      else
+      {
+         i++ ;
+      }
+   }
+
    if ( !m_summands.size() )
    {
       m_summands.push_front( term( TERM_ZERO_VALUE ) ) ;
@@ -545,7 +576,7 @@ public:
    {
    }
 
-   symbol( const term::scaleType & scalar ) : m_symName(term(scalar)), m_symNumeric(1)
+   symbol( const term::scalarType & scalar ) : m_symName(term(scalar)), m_symNumeric(1)
    {
    }
 
@@ -602,7 +633,7 @@ public:
    }
 
    /**
-    * determine if a reduced symbol is zero (either a zero scalar value in the the one and only term of the expression, 
+    * determine if a reduced symbol is zero (either a zero scalar value in the the one and only term of the expression,
     * or a zero as the coefficient of the mv value).
     */
    bool isZero() const ;
@@ -733,7 +764,7 @@ public:
    sum reverse() const
    {
       sum r(*this) ;
-      
+
       for ( iterType i = r.m_listOfSymbols.begin() ; i != r.m_listOfSymbols.end() ; i++ )
       {
          (*i).reverseMe() ;
@@ -745,7 +776,7 @@ public:
    friend sum operator * ( const sum & l, const sum & r )
    {
       sum agg ;
-      
+
       for ( citerType i = l.m_listOfSymbols.begin() ; i != l.m_listOfSymbols.end() ; i++ )
       {
          for ( citerType j = r.m_listOfSymbols.begin() ; j != r.m_listOfSymbols.end() ; j++ )
@@ -763,6 +794,16 @@ public:
    void reduce( const bool doPostSort = true ) ;
 
    void dump(void) const ;
+
+   void dump( const bool reduceFirst ) // NOT const.
+   {
+      if ( reduceFirst )
+      {
+         reduce() ;
+      }
+
+      dump() ;
+   }
 
    friend sum dot( const sum & a, const mv & b ) ;
 
@@ -879,7 +920,8 @@ void sum::dump(void) const
    {
       if ( first )
       {
-         cout << "\\left( " << endl ;
+         cout //<< "\\left( "
+              << endl ;
       }
       else
       {
@@ -902,7 +944,8 @@ void sum::dump(void) const
    }
    else
    {
-      cout << "\\right)" << endl ;
+      cout //<< "\\right)"
+           << endl ;
    }
 }
 
@@ -924,9 +967,6 @@ sum dot( const sum & a, const mv & b )
 
 int main(int argc, char*argv[])
 {
-   // profiling for Gaigen 2:
-   //e3ga::g2Profiling::init();
-
    bivector iZ = _bivector(e1 ^ e2) ;
    bivector iX = _bivector(e2 ^ e3) ;
 
@@ -940,6 +980,9 @@ int main(int argc, char*argv[])
    mv_basisVectorNames[2] = "\\mathbf{e}_3" ;
 
 #if 0
+   // 
+   // names too long.
+   //
    symbol CosPsi("\\cos(\\psi/2)") ;
    symbol IsinPsi("\\sin(\\psi/2)", -iZ) ;
    symbol CosTheta("\\cos(\\theta/2)") ;
@@ -968,41 +1011,32 @@ int main(int argc, char*argv[])
 #endif
    sum Rr = Rl.reverse() ;
 
-#if 0
-   cout << "expect identity:" << endl ;
-   sum ident = Rl * Rr ;
-   ident.dump() ;
-//   cout << "reduced: expect identity:" << endl ;
-//   ident.reduce( false ) ;
-//   ident.dump() ;
-   cout << "reduced: expect identity:" << endl ;
-   ident.reduce( ) ;
-   ident.dump() ;
-#endif
-
    symbol se1(e1) ;
    symbol se2(e2) ;
    symbol se3(e3) ;
 
-#if 0
-      sum t(Rl) ;
-      t.reduce() ;
-      cout << "R: " << endl ;
-      t.dump() ;
+// compute the rotation in coordinates.
+#if 1
+   symbol x1("{x^1}", e1) ;
+   symbol x2("{x^2}", e2) ;
+   symbol x3("{x^3}", e2) ;
 
-      cout << "e1: " << endl ;
-      se1.dump() ;
+   sum x(x1) ; x += x2 ; x += x3 ;
 
-      cout << "R e1: " << endl ;
-      t *= se1 ;
-      //sum rot_e1 = t * Rr ;
-      t.dump() ;
+   sum y = ( Rl * x ) * Rr ;
+   y.dump( true ) ;
 
-      cout << "reduced: R e1: " << endl ;
-      t.reduce() ;
-      t.dump() ;
+   cout << "In coordinates: " << endl ;
+   sum y_e1 = dot( y, e1 ) ;
+   sum y_e2 = dot( y, e2 ) ;
+   sum y_e3 = dot( y, e3 ) ;
+
+   y_e1.dump( true ) ;
+   y_e2.dump( true ) ;
+   y_e3.dump( true ) ;
 #endif
 
+// output more readable to do this in pieces:
 #if 1
    {
 //      cout << "R_{\\phi,z}(e_1):" << endl ;
@@ -1072,6 +1106,7 @@ int main(int argc, char*argv[])
 
       cout << "\n\n R_{33} &= \n\n" ;
       sum rot_e3_e3 = dot( rot_e3, e3 ) ;
+      rot_e3_e3.gradeFilter( SYMBOL_SCALAR_PART ) ;
       rot_e3_e3.reduce() ;
       rot_e3_e3.dump() ;
 
