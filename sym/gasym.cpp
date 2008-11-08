@@ -14,11 +14,6 @@
    *) implement the expression reducer to remove the following dup terms:
 
     ( C_\phi S_\phi + C_\phi S_\phi ) (  1 )
-
-   *) Add grade filtering capability.  Didn't see this in the code, but can
-      do it with a mask easily enough.
-
-   + ( C_\phi S_\phi - C_\phi S_\phi ) (  1 \mathbf{e}_2 \wedge \mathbf{e}_3 )
  */
 #include <string>
 #include <list>
@@ -87,7 +82,35 @@ public:
     */
    term( const literal & literal ) : m_scalar(1)
    {
-      m_factors[literal] = 1 ;
+      m_factors[ literal ] = 1 ;
+   }
+
+   /**
+    * reset the scale factor to one.
+    */
+   void normalize()
+   {
+      m_scalar = 1 ;
+   }
+
+#if 0
+   void adjustScale( const scaleType s )
+   {
+      m_scalar += s ;
+   }
+#endif
+
+   scaleType getScale() const
+   {
+      return m_scalar ;
+   }
+
+   /**
+    * add to the scalar value for this set of factors using the scale factor from another (presumed equal term).
+    */
+   void adjustScale( const term & t )
+   {
+      m_scalar += t.m_scalar ;
    }
 
    /**
@@ -358,14 +381,73 @@ public:
    /**
     * eliminate common expressions.
     */
-   void reduce()
-   {
-      m_summands.sort( compareTerm ) ;
-
-      // now that things are sorted aggregate the factors when possible.
-      //fixme() ;
-   }
+   void reduce() ;
 } ;
+
+void expression::reduce()
+{
+   m_summands.sort( compareTerm ) ;
+
+   std::string curStr ;
+   iterType prev ;
+   iterType i = m_summands.begin() ;
+
+   while ( i != m_summands.end() && (0 == (*i).getScale()) )
+   {
+      i = m_summands.erase( i ) ;
+   }
+
+   if ( i != m_summands.end() )
+   {
+
+      {
+         term curValue = *i ;
+         curValue.normalize() ;
+         curStr = curValue.toString() ;
+      }
+
+      prev = i ;
+      i++ ;
+      while ( i != m_summands.end() )
+      {
+         std::string nextStr ;
+
+         while ( i != m_summands.end() && (0 == (*i).getScale()) )
+         {
+            i = m_summands.erase( i ) ;
+         }
+
+         if ( i == m_summands.end() )
+         {
+            break ;
+         }
+
+         {
+            term next = *i ;
+            next.normalize() ;
+            nextStr = next.toString() ;
+         }
+
+         if ( nextStr == curStr )
+         {
+            (*prev).adjustScale( *i ) ;
+
+            i = m_summands.erase( i ) ;
+         }
+         else
+         {
+            prev = i ;
+            curStr = nextStr ;
+            i++ ;
+         }
+      }
+   }
+
+   if ( !m_summands.size() )
+   {
+      m_summands.push_front( term( 0 ) ) ;
+   }
+}
 
 std::string expression::toString() const
 {
