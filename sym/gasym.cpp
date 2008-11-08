@@ -62,6 +62,9 @@ class term
    typedef factorsType::iterator iterType ;
    typedef factorsType::const_iterator citerType ;
 
+   #define TERM_ZERO_VALUE 0
+   #define TERM_ONE_VALUE 1
+
 public:
    // TODO: perhaps make this float?  int is good enough for what I want right now.
    typedef int scaleType ;
@@ -81,7 +84,7 @@ public:
    /**
     * construct term from a literal.
     */
-   term( const literal & literal ) : m_scalar(1)
+   term( const literal & literal ) : m_scalar(TERM_ONE_VALUE)
    {
       m_factors[ literal ] = 1 ;
    }
@@ -91,7 +94,7 @@ public:
     */
    void normalize()
    {
-      m_scalar = 1 ;
+      m_scalar = TERM_ONE_VALUE ;
    }
 
 #if 0
@@ -143,7 +146,7 @@ public:
     */
    void negate()
    {
-      m_scalar *= -1 ;
+      m_scalar *= -TERM_ONE_VALUE ;
    }
 
    /**
@@ -157,22 +160,27 @@ public:
     * compare two terms for sort purposes.
     */
    friend bool compareTerm( const term & a, const term & b ) ;
+
+   bool isZero() const
+   {
+      return ( TERM_ZERO_VALUE == m_scalar ) ;
+   }
 } ;
 
 void term::toStringStream( std::ostringstream & out, const bool useSignPrefix ) const
 {
    if ( m_factors.size() )
    {
-      if ( useSignPrefix && m_scalar > 0 )
+      if ( useSignPrefix && m_scalar > TERM_ZERO_VALUE )
       {
          out << " + " ;
       }
 
-      if ( -1 == m_scalar )
+      if ( -TERM_ONE_VALUE == m_scalar )
       {
          out << " - " ;
       }
-      else if ( m_scalar != 1 )
+      else if ( m_scalar != TERM_ONE_VALUE )
       {
          out << m_scalar << " (" ;
       }
@@ -200,14 +208,14 @@ void term::toStringStream( std::ostringstream & out, const bool useSignPrefix ) 
          }
       }
 
-      if ( m_scalar != 1 && m_scalar != -1 )
+      if ( m_scalar != TERM_ONE_VALUE && m_scalar != -TERM_ONE_VALUE )
       {
          out << " )" ;
       }
    }
    else
    {
-      if ( useSignPrefix && m_scalar > 0 )
+      if ( useSignPrefix && m_scalar > TERM_ZERO_VALUE )
       {
          out << " + " ;
       }
@@ -383,7 +391,29 @@ public:
     * eliminate common expressions.
     */
    void reduce() ;
+
+   /**
+    * is an expression equal to zero.  Assumes that the expression is reduced.
+    */
+   bool isZero() const ;
 } ;
+
+bool expression::isZero() const
+{
+   citerType i = m_summands.begin() ;
+
+   if ( (*i).isZero() )
+   {
+      i++ ;
+
+      if ( i == m_summands.end() )
+      {
+         return true ;
+      }
+   }
+
+   return false ;
+}
 
 void expression::reduce()
 {
@@ -393,7 +423,7 @@ void expression::reduce()
    iterType prev ;
    iterType i = m_summands.begin() ;
 
-   while ( i != m_summands.end() && (0 == (*i).getScale()) )
+   while ( i != m_summands.end() && (TERM_ZERO_VALUE == (*i).getScale()) )
    {
       i = m_summands.erase( i ) ;
    }
@@ -413,7 +443,7 @@ void expression::reduce()
       {
          std::string nextStr ;
 
-         while ( i != m_summands.end() && (0 == (*i).getScale()) )
+         while ( i != m_summands.end() && (TERM_ZERO_VALUE == (*i).getScale()) )
          {
             i = m_summands.erase( i ) ;
          }
@@ -446,7 +476,7 @@ void expression::reduce()
 
    if ( !m_summands.size() )
    {
-      m_summands.push_front( term( 0 ) ) ;
+      m_summands.push_front( term( TERM_ZERO_VALUE ) ) ;
    }
 }
 
@@ -568,16 +598,13 @@ public:
    {
       m_symNumeric.m_gu &= mask ;
    }
-} ;
 
-void symbol::dump() const
-{
-   cout << m_symName.toString()
-        << " ( "
-        << toString(m_symNumeric)
-        << " )"
-        << endl ;
-}
+   /**
+    * determine if a reduced symbol is zero (either a zero scalar value in the the one and only term of the expression, 
+    * or a zero as the coefficient of the mv value).
+    */
+   bool isZero() const ;
+} ;
 
 /**
  * return a bitmask with a bit set for each unique basis element in the algebra.
@@ -611,6 +638,28 @@ int mv_bitmask( const mv & a )
 
    return m ;
 }
+
+bool symbol::isZero() const
+{
+   if ( m_symName.isZero() || ( 0 == mv_bitmask( m_symNumeric ) ) )
+   {
+      return true ;
+   }
+   else
+   {
+      return false ;
+   }
+}
+
+void symbol::dump() const
+{
+   cout << m_symName.toString()
+        << " ( "
+        << toString(m_symNumeric)
+        << " )"
+        << endl ;
+}
+
 
 bool compareSymbol (const symbol & first, const symbol & second)
 {
@@ -803,9 +852,18 @@ void sum::reduce( const bool doPostSort )
       }
 
       // Final pass, now that all the common multivector factors have been accumlated, reduce the symbols.
-      for ( i = m_listOfSymbols.begin() ; i != m_listOfSymbols.end() ; i++ )
+      for ( i = m_listOfSymbols.begin() ; i != m_listOfSymbols.end() ; )
       {
          (*i).reduce() ;
+
+         if ( (*i).isZero() )
+         {
+            i = m_listOfSymbols.erase( i ) ;
+         }
+         else
+         {
+            i++ ;
+         }
       }
    }
 }
@@ -813,6 +871,7 @@ void sum::reduce( const bool doPostSort )
 void sum::dump(void) const
 {
    bool first = true ;
+   bool zero = true ;
 
    for ( citerType i = m_listOfSymbols.begin() ; i != m_listOfSymbols.end() ; i++ )
    {
@@ -825,6 +884,7 @@ void sum::dump(void) const
          cout << "+ " ;
       }
 
+      zero = false ;
       cout << (*i).m_symName.toString()
            << " ( "
            << toString((*i).m_symNumeric)
@@ -834,7 +894,14 @@ void sum::dump(void) const
       first = false ;
    }
 
-   cout << "\\right)" << endl ;
+   if ( zero )
+   {
+      cout << "0" << endl ;
+   }
+   else
+   {
+      cout << "\\right)" << endl ;
+   }
 }
 
 sum dot( const sum & a, const mv & b )
@@ -1006,9 +1073,11 @@ int main(int argc, char*argv[])
       rot_e3_e3.reduce() ;
       rot_e3_e3.dump() ;
 
+#if 0
       cout << "\n\n R_{33} (filtered) &= \n\n" ;
       rot_e3_e3.gradeFilter( SYMBOL_SCALAR_PART ) ;
       rot_e3_e3.dump() ;
+#endif
    }
 #endif
 
