@@ -4,17 +4,19 @@
    + ( C_\phi S_\phi + C_\phi S_\phi ) (  -  1 )
    + ( C_\phi S_\phi - C_\phi S_\phi ) (  -  1 \mathbf{e}_1 \wedge \mathbf{e}_3 )
 
-   *) fold 0 constants into the expression:
-
-   ( C_\phi S_\phi + C_\phi S_\phi ) ( 0 )
-
-   *) identify the following as zero, and remove any such terms from sum
-
-   + 0 (  1 \mathbf{e}_1 \wedge \mathbf{e}_2 )
-
-   *) format the following as just the expression (ie: when the mv value == 1)
+   *) NICE TO HAVE (may have to modify e3ga though): format the following as just the expression (ie: when the mv value == 1)
 
     ( C_\phi^2 - S_\phi^2 ) (  1 )
+
+   *) BUG:
+
+from R_33. This should have been reduced to zero:
+
++ 2 (C_\phi C_\psi S_\phi S_\psi S_\theta^2 )
+ -2 (C_\phi C_\psi S_\phi S_\psi S_\theta^2 )
++ 2 (C_\phi C_\psi C_\theta^2 S_\phi S_\psi )
+ -2 (C_\phi C_\psi C_\theta^2 S_\phi S_\psi )
+
  */
 #include <string>
 #include <list>
@@ -957,7 +959,7 @@ int main(int argc, char*argv[])
    sum R_theta( CosTheta ) ; R_theta += IsinTheta ;
    sum R_phi( CosPhi ) ; R_phi += IsinPhi ;
 
-#if 0
+#if 1
    sum Rl = (R_phi * R_theta) * R_psi ;
 #elif 0
    sum Rl = R_phi * R_theta ;
