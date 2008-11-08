@@ -57,12 +57,11 @@ class term
    typedef factorsType::iterator iterType ;
    typedef factorsType::const_iterator citerType ;
 
-   #define TERM_ZERO_VALUE 0
-   #define TERM_ONE_VALUE 1
+   #define TERM_ZERO_VALUE 0.0
+   #define TERM_ONE_VALUE 1.0
 
 public:
-   // TODO: perhaps make this float?  int is good enough for what I want right now.
-   typedef int scalarType ;
+   typedef float scalarType ;
 
 private:
    factorsType m_factors ;
@@ -1016,7 +1015,7 @@ int main(int argc, char*argv[])
    symbol se3(e3) ;
 
 // compute the rotation in coordinates.
-#if 1
+#if 0
    symbol x1("{x^1}", e1) ;
    symbol x2("{x^2}", e2) ;
    symbol x3("{x^3}", e2) ;
@@ -1038,84 +1037,66 @@ int main(int argc, char*argv[])
 
 // output more readable to do this in pieces:
 #if 1
+   cout << "\\begin{align*}\n" ;
+
    {
-//      cout << "R_{\\phi,z}(e_1):" << endl ;
       sum t(Rl) ;
       t *= se1 ;
       sum rot_e1 = t * Rr ;
       rot_e1.reduce() ;
-//      rot_e1.dump() ;
 
-      cout << "\n\n R_{11} &= \n\n" ;
+      cout << "R_{11} &=\n" ;
       sum rot_e1_e1 = dot( rot_e1, e1 ) ;
-      rot_e1_e1.reduce() ;
-      rot_e1_e1.dump() ;
+      rot_e1_e1.dump( true ) ;
 
-      cout << "\n\n R_{12} &= \n\n" ;
+      cout << " \\\\\nR_{21} &=\n" ;
       sum rot_e1_e2 = dot( rot_e1, e2 ) ;
-      rot_e1_e2.reduce() ;
-      rot_e1_e2.dump() ;
+      rot_e1_e2.dump( true ) ;
 
-      cout << "\n\n R_{13} &= \n\n" ;
+      cout << " \\\\\nR_{31} &=\n" ;
       sum rot_e1_e3 = dot( rot_e1, e3 ) ;
-      rot_e1_e3.reduce() ;
-      rot_e1_e3.dump() ;
+      rot_e1_e3.dump( true ) ;
    }
 
    {
-//      cout << "R_{\\phi,z}(e_2):" << endl ;
       sum t(Rl) ;
       t *= se2 ;
       sum rot_e2 = t * Rr ;
       rot_e2.reduce() ;
-//      rot_e2.dump() ;
 
-      cout << "\n\n R_{21} &= \n\n" ;
+      cout << " \\\\\nR_{12} &=\n" ;
       sum rot_e2_e1 = dot( rot_e2, e1 ) ;
-      rot_e2_e1.reduce() ;
-      rot_e2_e1.dump() ;
+      rot_e2_e1.dump( true ) ;
 
-      cout << "\n\n R_{22} &= \n\n" ;
+      cout << " \\\\\nR_{22} &=\n" ;
       sum rot_e2_e2 = dot( rot_e2, e2 ) ;
-      rot_e2_e2.reduce() ;
-      rot_e2_e2.dump() ;
+      rot_e2_e2.dump( true ) ;
 
-      cout << "\n\n R_{23} &= \n\n" ;
+      cout << " \\\\\nR_{32} &=\n" ;
       sum rot_e2_e3 = dot( rot_e2, e3 ) ;
-      rot_e2_e3.reduce() ;
-      rot_e2_e3.dump() ;
+      rot_e2_e3.dump( true ) ;
    }
 
    {
-//      cout << "R_{\\phi,z}(e_3):" << endl ;
       sum t(Rl) ;
       t *= se3 ;
       sum rot_e3 = t * Rr ;
       rot_e3.reduce() ;
-//      rot_e3.dump() ;
 
-      cout << "\n\n R_{31} &= \n\n" ;
+      cout << " \\\\\nR_{13} &=\n" ;
       sum rot_e3_e1 = dot( rot_e3, e1 ) ;
-      rot_e3_e1.reduce() ;
-      rot_e3_e1.dump() ;
+      rot_e3_e1.dump( true ) ;
 
-      cout << "\n\n R_{32} &= \n\n" ;
+      cout << " \\\\\nR_{23} &=\n" ;
       sum rot_e3_e2 = dot( rot_e3, e2 ) ;
-      rot_e3_e2.reduce() ;
-      rot_e3_e2.dump() ;
+      rot_e3_e2.dump( true ) ;
 
-      cout << "\n\n R_{33} &= \n\n" ;
+      cout << " \\\\\nR_{33} &=\n" ;
       sum rot_e3_e3 = dot( rot_e3, e3 ) ;
-      rot_e3_e3.gradeFilter( SYMBOL_SCALAR_PART ) ;
-      rot_e3_e3.reduce() ;
-      rot_e3_e3.dump() ;
-
-#if 0
-      cout << "\n\n R_{33} (filtered) &= \n\n" ;
-      rot_e3_e3.gradeFilter( SYMBOL_SCALAR_PART ) ;
-      rot_e3_e3.dump() ;
-#endif
+      rot_e3_e3.dump( true ) ;
    }
+
+   cout << "\\end{align*}\n" ;
 #endif
 
    return 0 ;
