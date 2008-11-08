@@ -178,20 +178,25 @@ void term::toStringStream( std::ostringstream & out, const bool useSignPrefix, c
       scalarValue = TERM_ONE_VALUE ;
    }
 
+   if ( useSignPrefix )
+   {
+      out << " " ;
+
+      if ( scalarValue > TERM_ZERO_VALUE )
+      {
+         out << "+ " ;
+      }
+   }
+
    if ( m_factors.size() )
    {
-      if ( useSignPrefix && scalarValue > TERM_ZERO_VALUE )
+      if ( scalarValue == -TERM_ONE_VALUE )
       {
-         out << " + " ;
-      }
-
-      if ( -TERM_ONE_VALUE == scalarValue )
-      {
-         out << " - " ;
+         out << "- " ;
       }
       else if ( scalarValue != TERM_ONE_VALUE )
       {
-         out << scalarValue << " (" ;
+         out << scalarValue ;
       }
 
       bool doneFirst = false ;
@@ -216,20 +221,6 @@ void term::toStringStream( std::ostringstream & out, const bool useSignPrefix, c
             out << i->first << "^" << i->second ;
          }
       }
-
-      if ( scalarValue != TERM_ONE_VALUE && scalarValue != -TERM_ONE_VALUE )
-      {
-         out << " )" ;
-      }
-   }
-   else
-   {
-      if ( useSignPrefix && scalarValue > TERM_ZERO_VALUE )
-      {
-         out << " + " ;
-      }
-
-      out << scalarValue ;
    }
 }
 
@@ -603,6 +594,13 @@ public:
       return *this ;
    }
 
+   symbol & operator *= ( const term & scale )
+   {
+      m_symName *= scale ;
+
+      return *this ;
+   }
+
    void reduce()
    {
       m_symName.reduce() ;
@@ -618,10 +616,10 @@ public:
 
    void dump() const ;
 
-   #define SYMBOL_SCALAR_PART    (1 << 0)
-   #define SYMBOL_VECTOR_PART    (1 << 1)
-   #define SYMBOL_BIVECTOR_PART  (1 << 2)
-   #define SYMBOL_TRIVECTOR_PART (1 << 3)
+   #define SYMBOL_SCALAR_PART    GRADE_0
+   #define SYMBOL_VECTOR_PART    GRADE_1
+   #define SYMBOL_BIVECTOR_PART  GRADE_2
+   #define SYMBOL_TRIVECTOR_PART GRADE_3
    /**
       \param mask [in]
          One of SYMBOL_SCALAR_PART, SYMBOL_VECTOR_PART, SYMBOL_BIVECTOR_PART, or SYMBOL_TRIVECTOR_PART.
@@ -647,7 +645,7 @@ int mv_bitmask( const mv & a )
    int m = 0 ;
    int k = 0 ;
    int b = 0 ;
-   for ( int i = 0 ; i <= 3 ; i++ )
+   for ( int i = 0 ; i <= mv_spaceDim ; i++ )
    {
       if ( a.gu() & (1 << i) )
       {
@@ -790,7 +788,7 @@ public:
       return agg ;
    }
 
-   void reduce( const bool doPostSort = true ) ;
+   void reduce( ) ;
 
    void dump(void) const ;
 
@@ -815,97 +813,84 @@ public:
    }
 } ;
 
-void sum::reduce( const bool doPostSort )
+int mv_largestCoordinateIndex( const mv & v )
 {
+   int nc = mv_size[v.gu()] ;
+   int i ;
+   int m = -1 ;
+   float maxC = -1.0 ;
+
+   for (i = 0; i < nc; i++)
+   {
+      float C = fabs( v.m_c[i] ) ;
+
+      if ( C > maxC )
+      {
+         maxC = C ;
+         m = i ;
+      }
+   }
+
+   return m ;
+}
+
+void sum::reduce( )
+{
+   // Scale everything
+   for ( iterType i = m_listOfSymbols.begin() ; i != m_listOfSymbols.end() ; i++ )
+   {
+      symbol & cur = (*i) ;
+
+      int m = mv_largestCoordinateIndex( cur.m_symNumeric ) ;
+      float s = cur.m_symNumeric.m_c[ m ] ;
+
+      cur.m_symNumeric *= 1.0/s ;
+      cur.m_symName *= term( s ) ;
+   }
+
+   // sort to aggreggate any equal mv components.
    m_listOfSymbols.sort( compareSymbol ) ;
 
-   if ( doPostSort )
+   for ( iterType i = m_listOfSymbols.begin() ; i != m_listOfSymbols.end() ; )
    {
-      iterType i = m_listOfSymbols.begin() ;
+      symbol & cur = (*i) ;
+      int curMask = mv_bitmask( cur.m_symNumeric ) ;
 
-      while ( i != m_listOfSymbols.end() )
+      iterType j = i ;
+      j++ ;
+
+      while ( j != m_listOfSymbols.end() )
       {
-         iterType j = i ;
-         symbol & cur = (*i) ;
+         const symbol & next = (*j) ;
+         int nextMask = mv_bitmask( next.m_symNumeric ) ;
 
-         j++ ;
-
-         while ( j != m_listOfSymbols.end() )
+         if ( nextMask == curMask )
          {
-            const symbol & next = (*j) ;
+            cur.m_symName += next.m_symName ;
 
-            if ( cur.m_symNumeric.gu() && (cur.m_symNumeric.gu() == next.m_symNumeric.gu()) )
-            {
-               bool match = true ;
-               bool nmatch = true ;
-               int k = 0 ;
-               int ia = 0 ;
-
-               for ( int ii = 0 ; ii <= 3 ; ii++ )
-               {
-                  if ( cur.m_symNumeric.gu() & (1 << ii) )
-                  {
-                     for ( int jj = 0 ; jj < mv_gradeSize[ii] ; jj++)
-                     {
-                        if ( cur.m_symNumeric.m_c[k] != next.m_symNumeric.m_c[k] )
-                        {
-                           match = false ;
-                        }
-
-                        if ( cur.m_symNumeric.m_c[k] != -next.m_symNumeric.m_c[k] )
-                        {
-                           nmatch = false ;
-                        }
-
-                        k++ ;
-                        ia++ ;
-                     }
-                  }
-                  else
-                  {
-                     ia += mv_gradeSize[ii] ;
-                  }
-               }
-
-               if ( match )
-               {
-                  cur.m_symName += next.m_symName ;
-
-                  j = m_listOfSymbols.erase(j) ;
-               }
-               else if ( nmatch )
-               {
-                  cur.m_symName -= next.m_symName ;
-
-                  j = m_listOfSymbols.erase(j) ;
-               }
-               else
-               {
-                  break ;
-               }
-            }
-            else
-            {
-               break ;
-            }
-         }
-
-         i = j ;
-      }
-
-      // Final pass, now that all the common multivector factors have been accumlated, reduce the symbols.
-      for ( i = m_listOfSymbols.begin() ; i != m_listOfSymbols.end() ; )
-      {
-         (*i).reduce() ;
-
-         if ( (*i).isZero() )
-         {
-            i = m_listOfSymbols.erase( i ) ;
+            j = m_listOfSymbols.erase(j) ;
          }
          else
          {
-            i++ ;
+            break ;
          }
+      }
+
+      i = j ;
+   }
+
+   // Final pass, now that all the common multivector factors have been accumlated, reduce the symbols.
+   for ( iterType i = m_listOfSymbols.begin() ; i != m_listOfSymbols.end() ; )
+   {
+      (*i).reduce() ;
+
+      if ( (*i).isZero() )
+      {
+         i = m_listOfSymbols.erase( i ) ;
+      }
+      else
+      {
+         i++ ;
       }
    }
 }
