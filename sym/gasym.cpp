@@ -4,16 +4,17 @@
    + ( C_\phi S_\phi + C_\phi S_\phi ) (  -  1 )
    + ( C_\phi S_\phi - C_\phi S_\phi ) (  -  1 \mathbf{e}_1 \wedge \mathbf{e}_3 )
 
-   *) identify the following as zero, and remove any such terms from sum
+   *) fold 0 constants into the expression:
+
    ( C_\phi S_\phi + C_\phi S_\phi ) ( 0 )
+
+   *) identify the following as zero, and remove any such terms from sum
+
+   + 0 (  1 \mathbf{e}_1 \wedge \mathbf{e}_2 )
 
    *) format the following as just the expression (ie: when the mv value == 1)
 
     ( C_\phi^2 - S_\phi^2 ) (  1 )
-
-   *) implement the expression reducer to remove the following dup terms:
-
-    ( C_\phi S_\phi + C_\phi S_\phi ) (  1 )
  */
 #include <string>
 #include <list>
