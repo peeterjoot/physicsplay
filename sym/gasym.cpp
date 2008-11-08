@@ -1,3 +1,25 @@
+/*
+   *) fold -1 constants into the expression:
+
+   + ( C_\phi S_\phi + C_\phi S_\phi ) (  -  1 )
+   + ( C_\phi S_\phi - C_\phi S_\phi ) (  -  1 \mathbf{e}_1 \wedge \mathbf{e}_3 )
+
+   *) identify the following as zero, and remove any such terms from sum
+   ( C_\phi S_\phi + C_\phi S_\phi ) ( 0 )
+
+   *) format the following as just the expression (ie: when the mv value == 1)
+
+    ( C_\phi^2 - S_\phi^2 ) (  1 )
+
+   *) implement the expression reducer to remove the following dup terms:
+
+    ( C_\phi S_\phi + C_\phi S_\phi ) (  1 )
+
+   *) Add grade filtering capability.  Didn't see this in the code, but can
+      do it with a mask easily enough.
+
+   + ( C_\phi S_\phi - C_\phi S_\phi ) (  1 \mathbf{e}_2 \wedge \mathbf{e}_3 )
+ */
 #include <string>
 #include <list>
 #include <iostream>
@@ -450,6 +472,19 @@ public:
    friend sum dot( const sum & a, const mv & b ) ;
 
    void dump() const ;
+
+   #define SYMBOL_SCALAR_PART    (1 << 0)
+   #define SYMBOL_VECTOR_PART    (1 << 1)
+   #define SYMBOL_BIVECTOR_PART  (1 << 2)
+   #define SYMBOL_TRIVECTOR_PART (1 << 3)
+   /**
+      \param mask [in]
+         One of SYMBOL_SCALAR_PART, SYMBOL_VECTOR_PART, SYMBOL_BIVECTOR_PART, or SYMBOL_TRIVECTOR_PART.
+    */
+   void gradeFilter( const unsigned int mask )
+   {
+      m_symNumeric.m_gu &= mask ;
+   }
 } ;
 
 void symbol::dump() const
@@ -596,6 +631,14 @@ public:
    void dump(void) const ;
 
    friend sum dot( const sum & a, const mv & b ) ;
+
+   void gradeFilter( const unsigned int mask )
+   {
+      for ( iterType i = m_listOfSymbols.begin() ; i != m_listOfSymbols.end() ; i++ )
+      {
+         (*i).gradeFilter( mask ) ;
+      }
+   }
 } ;
 
 void sum::reduce( const bool doPostSort )
@@ -879,36 +922,11 @@ int main(int argc, char*argv[])
       sum rot_e3_e3 = dot( rot_e3, e3 ) ;
       rot_e3_e3.reduce() ;
       rot_e3_e3.dump() ;
+
+      cout << "\n\n R_{33} (filtered) &= \n\n" ;
+      rot_e3_e3.gradeFilter( SYMBOL_SCALAR_PART ) ;
+      rot_e3_e3.dump() ;
    }
-#endif
-
-#if 0
-   map<literal, int> x ;
-
-   x["blah"]++ ;
-   cout << "blah: " << x["blah"] << endl ;
-#endif
-
-#if 0
-   term t("a") ;
-   term u(1) ;
-   t *= "b" ;
-   t *= "a" ;
-   t *= "(\\sin(x))" ;
-   cout << t.toString() << endl ;
-
-   t *= u ;
-   cout << t.toString() << endl ;
-#endif
-#if 0
-   symbol xx(CosPsi) ;
-   cout << "xx: " << endl ;
-   xx.dump() ;
-   cout << "se1: " << endl ;
-   se1.dump() ;
-   xx *= se1 ;
-   cout << "xx*=se1: " << endl ;
-   xx.dump() ;
 #endif
 
    return 0 ;
