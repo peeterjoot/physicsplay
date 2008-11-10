@@ -979,6 +979,11 @@ void euler()
 #endif
    sum Rr = Rl.reverse() ;
 
+#if 1
+   cout << "R:" << endl ;
+   Rl.dump( true ) ;
+#endif
+
 // compute the rotation in coordinates.
 #if 0
    symbol x1("{x^1}", e1) ;
@@ -1001,7 +1006,7 @@ void euler()
 #endif
 
 // output more readable to do this in pieces:
-#if 1
+#if 0
    cout << "\\begin{align*}\n" ;
 
    {
@@ -1067,6 +1072,32 @@ void euler()
 
 void euler2()
 {
+   // aim of this is to verify that this:
+#if 0
+C_\theta 
+\exp\left(
+\frac{- \Be_{12} }{2}\left(\psi+\phi\right) 
+\right)
+%\\
+%&
++ 
+S_\theta
+\exp\left(
+\frac{\Be_{12} }{2}\left(\psi-\phi\right) 
+\right)
+\Be_{32} \\
+
+  // which produces this:
+( - C_\theta S_\phi S_\psi + C_\phi C_\psi C_\theta ) (  1 )
++ ( - C_\psi S_\phi S_\theta + C_\phi S_\psi S_\theta ) (  -  1 \Be_1 \wedge \Be_3 )
++ ( - S_\phi S_\psi S_\theta - C_\phi C_\psi S_\theta ) (  1 \Be_2 \wedge \Be_3 )
++ ( - C_\psi C_\theta S_\phi - C_\phi C_\theta S_\psi ) (  1 \Be_1 \wedge \Be_2 )
+
+// does in fact match 
+// Rl.dump() from euler() above (it does.)
+
+#endif
+
    sum R_psi( CosPsi ) ; R_psi += IsinPsi ;
    sum R_phi( CosPhi ) ; R_phi += IsinPhi ;
 
@@ -1110,9 +1141,9 @@ int main(int argc, char*argv[])
    mv_string_wedge = " \\wedge " ;
    mv_string_mul = " " ;
    mv_string_fp = "%2.0f" ;
-   mv_basisVectorNames[0] = "\\mathbf{e}_1" ;
-   mv_basisVectorNames[1] = "\\mathbf{e}_2" ;
-   mv_basisVectorNames[2] = "\\mathbf{e}_3" ;
+   mv_basisVectorNames[0] = "\\Be_1" ;
+   mv_basisVectorNames[1] = "\\Be_2" ;
+   mv_basisVectorNames[2] = "\\Be_3" ;
 
 //   euler() ;
 //   rotation() ;
