@@ -1,4 +1,11 @@
 /*
+ * Simple symbolic (multi)vector calculator.
+ *
+ * Peeter Joot (peeter.joot@gmail.com).  November 2008.
+ */
+
+
+/*
  * TODO
  *
  format the following as just the expression (ie: when the mv value == 1)
@@ -900,79 +907,30 @@ void sum::dump(void) const
    }
 }
 
-sum dot( const sum & a, const mv & b )
+void euler2()
 {
-   sum r ;
+// cosine theta part
+   sum R_c( SinTheta ) ; R_c *= R_psi * R_phi ;
+// sine theta part
+   sum R_s( SinTheta ) ; R_s *= sum(R_psi).reverse() * R_phi ;
 
-   for ( sum::citerType i = a.m_listOfSymbols.begin() ; i != a.m_listOfSymbols.end() ; i++ )
-   {
-      symbol t(*i) ;
+   bivector e32 = _bivector(e3 ^ e2) ;
+   R_s *= symbol( e32 ) ;
 
-      t.m_symNumeric = b << t.m_symNumeric ;
+   sum R(R_c) ; R += R_s ;
 
-      r.m_listOfSymbols.push_front( t ) ;
-   }
-
-   return r ;
+   R.dump( true ) ;
 }
 
-int main(int argc, char*argv[])
+void rotation()
 {
-   bivector iZ = _bivector(e1 ^ e2) ;
-   bivector iX = _bivector(e2 ^ e3) ;
-
-   mv_string_wedge = " \\wedge " ;
-   mv_string_mul = " " ;
-   mv_string_fp = "%2.0f" ;
-   mv_basisVectorNames[0] = "\\mathbf{e}_1" ;
-   mv_basisVectorNames[1] = "\\mathbf{e}_2" ;
-   mv_basisVectorNames[2] = "\\mathbf{e}_3" ;
-
-#if 0
-   // 
-   // names too long.
-   //
-   symbol CosPsi("\\cos(\\psi/2)") ;
-   symbol IsinPsi("\\sin(\\psi/2)", -iZ) ;
-   symbol CosTheta("\\cos(\\theta/2)") ;
-   symbol IsinTheta("\\sin(\\theta/2)", -iX) ;
-   symbol CosPhi("\\cos(\\phi/2)") ;
-   symbol IsinPhi("\\sin(\\phi/2)", -iZ) ;
-#else
-   symbol CosPsi("C_\\psi") ;
-   symbol IsinPsi("S_\\psi", -iZ) ;
-   symbol CosTheta("C_\\theta") ;
-   symbol IsinTheta("S_\\theta", -iX) ;
-   symbol CosPhi("C_\\phi") ;
-   symbol IsinPhi("S_\\phi", -iZ) ;
-#endif
-
-   sum R_psi( CosPsi ) ; R_psi += IsinPsi ;
-   sum R_theta( CosTheta ) ; R_theta += IsinTheta ;
-   sum R_phi( CosPhi ) ; R_phi += IsinPhi ;
-
-#if 1
-   sum Rl = (R_phi * R_theta) * R_psi ;
-#elif 0
-   sum Rl = R_phi * R_theta ;
-#else
-   sum Rl = R_phi ;
-#endif
-   sum Rr = Rl.reverse() ;
-
-   symbol se1(e1) ;
-   symbol se2(e2) ;
-   symbol se3(e3) ;
-
-// compute the rotation in coordinates.
-#if 0
-   symbol x1("{x^1}", e1) ;
-   symbol x2("{x^2}", e2) ;
-   symbol x3("{x^3}", e2) ;
+   symbol Z(term(1), mv(iZ) ) ;
+   symbol Zbar(Z) ;
+   Zbar.reverseMe() ;
 
    sum x(x1) ; x += x2 ; x += x3 ;
 
-   sum y = ( Rl * x ) * Rr ;
+   sum y = ( Z * x ) * Zbar ;
    y.dump( true ) ;
 
    cout << "In coordinates: " << endl ;
@@ -983,71 +941,20 @@ int main(int argc, char*argv[])
    y_e1.dump( true ) ;
    y_e2.dump( true ) ;
    y_e3.dump( true ) ;
-#endif
+}
 
-// output more readable to do this in pieces:
-#if 1
-   cout << "\\begin{align*}\n" ;
+int main(int argc, char*argv[])
+{
+   mv_string_wedge = " \\wedge " ;
+   mv_string_mul = " " ;
+   mv_string_fp = "%2.0f" ;
+   mv_basisVectorNames[0] = "\\mathbf{e}_1" ;
+   mv_basisVectorNames[1] = "\\mathbf{e}_2" ;
+   mv_basisVectorNames[2] = "\\mathbf{e}_3" ;
 
-   {
-      sum t(Rl) ;
-      t *= se1 ;
-      sum rot_e1 = t * Rr ;
-      rot_e1.reduce() ;
-
-      cout << "R_{11} &=\n" ;
-      sum rot_e1_e1 = dot( rot_e1, e1 ) ;
-      rot_e1_e1.dump( true ) ;
-
-      cout << " \\\\\nR_{21} &=\n" ;
-      sum rot_e1_e2 = dot( rot_e1, e2 ) ;
-      rot_e1_e2.dump( true ) ;
-
-      cout << " \\\\\nR_{31} &=\n" ;
-      sum rot_e1_e3 = dot( rot_e1, e3 ) ;
-      rot_e1_e3.dump( true ) ;
-   }
-
-   {
-      sum t(Rl) ;
-      t *= se2 ;
-      sum rot_e2 = t * Rr ;
-      rot_e2.reduce() ;
-
-      cout << " \\\\\nR_{12} &=\n" ;
-      sum rot_e2_e1 = dot( rot_e2, e1 ) ;
-      rot_e2_e1.dump( true ) ;
-
-      cout << " \\\\\nR_{22} &=\n" ;
-      sum rot_e2_e2 = dot( rot_e2, e2 ) ;
-      rot_e2_e2.dump( true ) ;
-
-      cout << " \\\\\nR_{32} &=\n" ;
-      sum rot_e2_e3 = dot( rot_e2, e3 ) ;
-      rot_e2_e3.dump( true ) ;
-   }
-
-   {
-      sum t(Rl) ;
-      t *= se3 ;
-      sum rot_e3 = t * Rr ;
-      rot_e3.reduce() ;
-
-      cout << " \\\\\nR_{13} &=\n" ;
-      sum rot_e3_e1 = dot( rot_e3, e1 ) ;
-      rot_e3_e1.dump( true ) ;
-
-      cout << " \\\\\nR_{23} &=\n" ;
-      sum rot_e3_e2 = dot( rot_e3, e2 ) ;
-      rot_e3_e2.dump( true ) ;
-
-      cout << " \\\\\nR_{33} &=\n" ;
-      sum rot_e3_e3 = dot( rot_e3, e3 ) ;
-      rot_e3_e3.dump( true ) ;
-   }
-
-   cout << "\\end{align*}\n" ;
-#endif
+//   euler() ;
+//   rotation() ;
+   euler2() ;
 
    return 0 ;
 }
