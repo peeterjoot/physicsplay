@@ -7,7 +7,7 @@
 
 \title{Some notes on Euler Angles.}
 \author{Peeter Joot}
-\date{ November 1, 2008. Last Revision: $Date: 2008/11/03 05:52:36 $ }
+\date{ November 1, 2008. Last Revision: $Date: 2008/11/11 03:28:09 $ }
 
 \begin{document}
 
@@ -376,6 +376,150 @@ R(x) &= \BR \Bx \\
 
 Assuming that this is true, the swapping of angles to match the rotor expression is fully accounted for, and it is understood how to
 correctly do the same calculation in matrix form.
+
+\section{ Relation to Cayley-Klein parameters. }
+
+Exercise 2.9 from \cite{doran2003gap} is to relate the rotation matrix expressed in terms of Cayley-Klein parameters back to the rotor
+formulation.  That matrix has the look of something that involves the half angles.  Use of software to expressing the rotation in terms of the 
+half angle signs and cosines, plus some manually factoring (which could be caried
+further), produces the following mess
+
+\begin{align*}
+R_{11} &= S_\phi^2 S_\psi^2 - C_\psi^2 S_\phi^2 - C_\phi^2 S_\psi^2 + C_\phi^2 C_\psi^2 - 4 C_\phi S_\phi C_\psi S_\psi (C_\theta^2 - S_\theta^2) \\
+R_{21} &= 2 C_\psi S_\psi (C_\phi^2 -S_\phi^2 )(C_\theta^2 -S_\theta^2)
++2 C_\phi S_\phi (C_\psi^2 -S_\psi^2) \\
+R_{31} &= 4 C_\psi C_\theta S_\psi S_\theta  \\
+R_{12} &= -2 C_\phi S_\phi ( C_\psi^2 -S_\psi^2 )(C_\theta^2 - S_\theta^2) - 2 C_\psi S_\psi ( C_\phi^2 -S_\phi^2 ) \\
+R_{22} &= (C_\theta^2 -S_\theta^2)(-S_\phi^2 + C_\phi^2)(C_\psi^2 -S_\psi^2) -4 C_\phi S_\phi C_\psi S_\psi  \\
+R_{32} &= 2 C_\theta S_\theta ( C_\psi^2 - S_\psi^2 ) \\ 
+R_{13} &= 4 C_\phi C_\theta S_\phi S_\theta  \\
+R_{23} &= -2 C_\theta S_\theta ( C_\phi^2 - S_\phi^2 ) \\
+R_{33} &= + C_\theta^2 S_\phi^2 - S_\psi^2 S_\theta^2 - C_\psi^2 S_\theta^2 + C_\phi^2 C_\theta^2 
+\end{align*}
+
+It kind of looks like the terms $C_\theta S_\phi$ may be related to these parameters.
+error prone.  A google search for Cayley Klein also verifies that those parameters are expressed in terms of half angle relations, but even 
+with the hint, I wasn't successful getting something tidy out of all this.
+
+An alternate approach is to just expand the rotor, so terms may be grouped before that rotor and its reverse is applied to the object to be
+rotated.  Again in terms of half angle signs and cosines this is
+
+\begin{align*}
+R &= \exp(-e_{12}\phi/2) \exp(-e_{23}\theta/2) \exp(-e_{12}\psi/2) \\
+&=
+( C_\phi C_\psi - S_\phi S_\psi ) C_\theta 
+- ( C_\psi S_\phi + C_\phi S_\psi ) C_\theta \Be_{12} \\
+&+ ( C_\phi S_\psi - C_\psi S_\phi ) S_\theta \Be_{31} 
+- ( S_\phi S_\psi + C_\phi C_\psi ) S_\theta \Be_{23}  \\
+\end{align*}
+
+Grouping terms produces
+\begin{align}\label{eqn:cayleyhalf}
+R
+=
+\cos\left(\frac{\theta}{2}\right)
+\exp\left(
+\frac{- \Be_{12} }{2}\left(\psi+\phi\right) 
+\right)
++ 
+\sin\left(\frac{\theta}{2}\right)
+\exp\left(
+\frac{\Be_{12} }{2}\left(\psi-\phi\right) 
+\right)
+\Be_{32}
+\end{align}
+
+Okay... now I see how you naturally get four parameters out of this.  Also see why it was hard to get there
+from the fully expanded rotation product ... it would first be required to group all the $\phi$ and $\psi$ terms just right
+in terms of sums and differences.
+
+Let's write
+\begin{align*}
+R &= \alpha + \delta\Be_{21} + \beta \Be_{32} + \gamma \Be_{31} \\
+\alpha &= \cos\left(\frac{\theta}{2}\right) \cos\left( \inv{2}\left(\psi+\phi\right) \right) \\
+\delta &= \cos\left(\frac{\theta}{2}\right) \sin\left( \inv{2}\left(\psi+\phi\right) \right) \\
+\beta &= \sin\left(\frac{\theta}{2}\right) \cos\left( \inv{2}\left(\psi-\phi\right) \right) \\
+\gamma &= \sin\left(\frac{\theta}{2}\right) \sin\left( \inv{2}\left(\psi-\phi\right) \right) \\
+\end{align*}
+
+By inspection, these have the required property $\alpha^2 + \beta^2 + \gamma^2 + \delta^2 = 1$, and 
+multiplying out the rotors yields the rotation matrix
+\begin{align*}
+R =
+\begin{bmatrix}
+ - \gamma^2 + \beta^2 - \delta^2 + \alpha^2 & -2 \beta \gamma -2 \alpha \delta & 2 \delta \beta -2 \alpha \gamma \\
+ -2 \beta \gamma + 2 \alpha \delta & \gamma^2 - \beta^2 - \delta^2 + \alpha^2 & -2 \delta \gamma -2 \alpha \beta \\
+ 2 \delta \beta + 2 \alpha \gamma & -2 \delta \gamma + 2 \alpha \beta & - \gamma^2 - \beta^2 + \delta^2 + \alpha^2 \\
+\end{bmatrix}
+\end{align*}
+
+This is almost the rotation matrix from the exersize, except that the $12$, $21$, $23$, and $32$ terms have inverted signs.  There are three possibilities to explain this
+
+\begin{itemize}
+\item There is a variation of this parameterization that matches exactly.
+\item The software I wrote that does symbolic GA calculations has a bug, or I didn't translate the math to code properly for this
+specific product expansion.
+\item The book has an error.
+\end{itemize}
+
+\section{ Omitted details. }
+\subsection{ Cayley Klein details. }
+
+Equation \ref{eqn:cayleyhalf} was obtained with the following manipulations
+
+\begin{align*}
+R 
+&=
+( C_\phi C_\psi - S_\phi S_\psi ) C_\theta 
+- ( C_\psi S_\phi + C_\phi S_\psi ) C_\theta \Be_{12} \\
+&+ ( C_\phi S_\psi - C_\psi S_\phi ) S_\theta \Be_{31} 
+- ( S_\phi S_\psi + C_\phi C_\psi ) S_\theta \Be_{23}  \\
+&=
+\cos\left(\inv{2}(\phi+\psi)\right) C_\theta 
+-\sin\left(\inv{2}(\phi + \psi)\right) C_\theta \Be_{12} \\
+&- \sin\left(\inv{2}(\phi - \psi)\right) S_\theta \Be_{31} 
+- \cos\left(\inv{2}(\phi - \psi)\right) S_\theta \Be_{23} \\
+&=
+\cos\left(\inv{2}(\psi+\phi)\right) C_\theta 
+-\sin\left(\inv{2}(\psi + \phi)\right) C_\theta \Be_{12} \\
+&+ \sin\left(\inv{2}(\psi - \phi)\right) S_\theta \Be_{31} 
+- \cos\left(\inv{2}(\psi - \phi)\right) S_\theta \Be_{23} \\
+&=
+C_\theta \left(
+\cos\left(\inv{2}(\psi+\phi)\right) 
+-\sin\left(\inv{2}(\psi + \phi)\right) \Be_{12} 
+\right) \\
+&+ 
+S_\theta \left(
+\sin\left(\inv{2}(\psi - \phi)\right) 
+\Be_{31} 
+- \cos\left(\inv{2}(\psi - \phi)\right) \Be_{23} \right) \\
+&=
+C_\theta 
+\exp\left(
+\frac{- \Be_{12} }{2}\left(\psi+\phi\right) 
+\right)
+\\
+&+ 
+S_\theta \Be_{3} 
+\left(
+\sin\left(\inv{2}(\psi - \phi)\right) 
+\Be_{1} 
++ \cos\left(\inv{2}(\psi - \phi)\right) \Be_{2} \right) \\
+&=
+C_\theta 
+\exp\left(
+\frac{- \Be_{12} }{2}\left(\psi+\phi\right) 
+\right)
++ 
+S_\theta
+\exp\left(
+\frac{\Be_{12} }{2}\left(\psi-\phi\right) 
+\right)
+\Be_{32} \\
+\end{align*}
+
+In that last step an arbitrary but convienent decision to write the complex number $i$ as $\Be_{12}$ was employed.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
