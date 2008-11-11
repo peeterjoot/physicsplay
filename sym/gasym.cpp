@@ -964,6 +964,90 @@ symbol x1("{x^1}", e1) ;
 symbol x2("{x^2}", e2) ;
 symbol x3("{x^3}", e2) ;
 
+void printIt( const char * label, sum & v )
+{
+   cout << "\\begin{align*}\n" << label ;
+   v.dump( true ) ;
+   cout << "\\end{align*}\n" ;
+}
+
+void cayleyKlein()
+{
+#if 0
+\begin{align*}
+R &= a + b\Be_{21} + c \Be_{32} + d \Be_{31} \\
+a &= \cos\left(\frac{\theta}{2}\right) \cos\left( \inv{2}\left(\psi+\phi\right) \right) \\
+b &= \cos\left(\frac{\theta}{2}\right) \sin\left( \inv{2}\left(\psi+\phi\right) \right) \\
+c &= \sin\left(\frac{\theta}{2}\right) \cos\left( \inv{2}\left(\psi-\phi\right) \right) \\
+d &= \sin\left(\frac{\theta}{2}\right) \sin\left( \inv{2}\left(\psi-\phi\right) \right) \\
+\end{align*}
+#endif
+
+   symbol a("a") ;
+   symbol b("b", _bivector(e2 ^ e1) ) ;
+   symbol c("c", _bivector(e3 ^ e2) ) ;
+   symbol d("d", _bivector(e3 ^ e1) ) ;
+
+   sum Rl(a) ;
+   Rl += b ;
+   Rl += c ;
+   Rl += d ;
+
+   sum Rr = Rl.reverse() ;
+
+#if 0
+   cout << "R:" << endl ;
+   Rl.dump( true ) ;
+#endif
+
+   sum t1(Rl) ;
+   t1 *= se1 ;
+   sum rot_e1 = t1 * Rr ;
+   rot_e1.reduce() ;
+
+   sum t2(Rl) ;
+   t2 *= se2 ;
+   sum rot_e2 = t2 * Rr ;
+   rot_e2.reduce() ;
+
+   sum t3(Rl) ;
+   t3 *= se3 ;
+   sum rot_e3 = t3 * Rr ;
+   rot_e3.reduce() ;
+
+
+
+   sum rot_e1_e1 = dot( rot_e1, e1 ) ;
+   sum rot_e1_e2 = dot( rot_e1, e2 ) ;
+   sum rot_e1_e3 = dot( rot_e1, e3 ) ;
+
+   sum rot_e2_e1 = dot( rot_e2, e1 ) ;
+   sum rot_e2_e2 = dot( rot_e2, e2 ) ;
+   sum rot_e2_e3 = dot( rot_e2, e3 ) ;
+
+   sum rot_e3_e1 = dot( rot_e3, e1 ) ;
+   sum rot_e3_e2 = dot( rot_e3, e2 ) ;
+   sum rot_e3_e3 = dot( rot_e3, e3 ) ;
+
+   cout << "\\begin{align*}\n" ;
+   cout << "\\begin{bmatrix}\n" ;
+
+rot_e1_e1.dump(true) ; cout << "\n & " ;
+rot_e2_e1.dump(true) ; cout << "\n & " ;
+rot_e3_e1.dump(true) ; cout << "\n \\\\\n" ;
+
+rot_e1_e2.dump(true) ; cout << "\n & " ;
+rot_e2_e2.dump(true) ; cout << "\n & " ;
+rot_e3_e2.dump(true) ; cout << "\n \\\\\n" ;
+
+rot_e1_e3.dump(true) ; cout << "\n & " ;
+rot_e2_e3.dump(true) ; cout << "\n & " ;
+rot_e3_e3.dump(true) ; cout << "\n \\\\\n" ;
+
+   cout << "\\end{bmatrix}\n" ;
+   cout << "\\end{align*}\n" ;
+}
+
 void euler()
 {
    sum R_psi( CosPsi ) ; R_psi += IsinPsi ;
@@ -1147,7 +1231,8 @@ int main(int argc, char*argv[])
 
 //   euler() ;
 //   rotation() ;
-   euler2() ;
+//   euler2() ;
+   cayleyKlein() ;
 
    return 0 ;
 }
