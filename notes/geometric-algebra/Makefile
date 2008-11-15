@@ -124,6 +124,17 @@ skipit += ../lut/luts_old_Rindler-eom.pdf
 skipit += ../geometric_algebra/all.pdf
 skipit += ../lut/constant_q.pdf
 
+# some notes on Rn*2 extensions to complex numbers.  Some good notes here
+# but not coherent to anybody but me or Lut.
+#
+skipit += ../geometric_algebra/complex.pdf
+
+# generated from gasym.cpp:
+skipit += ../sym/o2.pdf
+skipit += ../sym/o3.pdf
+
+ordered += ../geometric_algebra/eulerangle.pdf
+
 semiordered := $(ordered) $(unordered)
 unordered := $(filter-out $(ordered) $(skipit),$(ppdfs))
 reversed := $(shell echo $(semiordered) | tr ' ' '\n' | grep -n '' | sort -nr | sed 's/[0-9][0-9]*://' | tr '\n' ' ')
