@@ -18,12 +18,12 @@
 
 \title{Some notes on spherical polar coordinates}
 \author{Peeter Joot}
-\date{ Nov 13, 2008.  Last Revision: $Date: 2008/11/15 05:10:17 $ }
+\date{ Nov 13, 2008.  Last Revision: $Date: 2008/11/15 20:47:51 $ }
 
 \begin{document}
 
 \maketitle{}
-%\tableofcontents
+\tableofcontents
 
 \section{ Motivation. }
 
@@ -53,6 +53,99 @@ x &= u \cos\theta = r \cos\phi \cos\theta \\
 y &= u \sin\theta = r \cos\phi \sin\theta \\
 z &= r \sin\phi \\
 \end{align*}
+
+\subsection{ The unit vectors. }
+
+To calculate the unit vectors $\rcap$, $\thetacap$, $\phicap$ in the spherical polar frame we need to apply two sets of rotations.  The first is a rotation 
+in the $x,y$ plane, and the second in the $x', z$ plane.
+
+For the intermediate frame after just the $x,y$ plane rotation we have
+
+\begin{align*}
+R_\theta &= \exp(-\Be_{12}\theta/2) \\
+\Be_i' &= R_\theta \Be_i R_\theta^\dagger
+\end{align*}
+
+Now for the rotational plane for the $\phi$ rotation is
+
+\begin{align*}
+\Be_1' \wedge \Be_3 
+&= (R_\theta \Be_1 R_\theta^\dagger) \wedge \Be_3 \\
+&= \inv{2} ( R_\theta \Be_1 R_\theta^\dagger \Be_3 - \Be_3 R_\theta \Be_1 R_\theta^\dagger ) \\
+\end{align*}
+
+Noting that $R_\theta$, having scalar, and $\Be_{12}$ components commutes with $\Be_3$, so we have
+
+\begin{align*}
+\Be_1' \wedge \Be_3 
+&= R_\theta \inv{2} ( \Be_1 \Be_3 - \Be_3 \Be_1 ) R_\theta^\dagger \\
+&= R_\theta \Be_1 \wedge \Be_3 R_\theta^\dagger \\
+\end{align*}
+
+Therefore the rotor for the second stage rotation is
+
+\begin{align*}
+R_\phi 
+&= \exp( - R_\theta \Be_1 \wedge \Be_3 R_\theta^\dagger \phi/2 ) \\
+&= \sum \inv{k!} \left( - R_\theta \Be_1 \wedge \Be_3 R_\theta^\dagger \phi/2 \right)^k \\
+&= R_\theta \sum \inv{k!} ( - \Be_1 \wedge \Be_3 \phi/2 )^k R_\theta^\dagger \\
+&= R_\theta \exp( - \Be_{13} \phi/2 ) R_\theta^\dagger \\
+\end{align*}
+
+Composing both sets of rotations one has
+
+\begin{align*}
+R(\Bx) 
+&= R_\theta \exp( - \Be_{13} \phi/2 ) R_\theta^\dagger R_\theta \Bx R_\theta^\dagger R_\theta \exp( \Be_{13} \phi/2 ) R_\theta^\dagger \\
+&= \exp( - \Be_{12} \theta/2 ) \exp( - \Be_{13} \phi/2 ) \Bx \exp( \Be_{13} \phi/2 ) \exp( \Be_{12} \theta/2 ) \\
+\end{align*}
+
+Or, more compactly
+
+\begin{align}
+R(\Bx) &= R \Bx R^\dagger \\
+R &= R_\theta R_\phi \\
+R_\phi &= \exp(-\Be_{13}\phi/2) \\
+R_\theta &= \exp(-\Be_{12}\theta/2)
+\end{align}
+
+Application of these to the $\{\Be_i\}$ basis produces the $\{\rcap, \thetacap, \phicap\}$ basis.  First application 
+of $R_\phi$ yields the basis vectors for the intermediate rotation.
+
+\begin{align*}
+\begin{array}{l l l}
+{R_\phi}\Be_1 {R_\phi}^\dagger &= \Be_1 (\cos\phi + \Be_{13} \sin\phi) &= \Be_1 \cos\phi + \Be_3 \sin\phi \\
+{R_\phi}\Be_2 {R_\phi}^\dagger &= \Be_2 R_\phi {R_\phi}^\dagger &= \Be_2 \\
+{R_\phi}\Be_3 {R_\phi}^\dagger &= \Be_3 (\cos\phi + \Be_{13} \sin\phi) &= \Be_3 \cos\phi - \Be_1 \sin\phi \\
+\end{array}
+\end{align*}
+
+Applying the second rotation to $R_\phi(\Be_i)$ we have
+\begin{align*}
+\rcap 
+&= {R_\theta}( \Be_1 \cos\phi + \Be_3 \sin\phi ) {R_\theta}^\dagger \\
+&=
+\Be_1 \cos\phi (\cos\theta + \Be_{12} \sin\theta)
++ \Be_3 \sin\phi \\
+&=
+\Be_1 \cos\phi \cos\theta 
++ \Be_2 \cos\phi \sin\theta
++ \Be_3 \sin\phi \\
+\thetacap
+&= {R_\theta} ( \Be_2 ) {R_\theta}^\dagger \\
+&= \Be_2 (\cos\theta + \Be_{12} \sin\theta) \\
+&= \Be_2 \cos\theta - \Be_1 \sin\theta \\
+\phicap
+&= {R_\theta} ( \Be_3 \cos\phi - \Be_1 \sin\phi ) {R_\theta}^\dagger \\
+&= \Be_3 \cos\phi - \Be_1 \sin\phi (\cos\theta + \Be_{12} \sin\theta) \\
+&= 
+- \Be_1 \sin\phi \cos\theta 
+- \Be_2 \sin\phi \sin\theta 
++ \Be_3 \cos\phi
+\\
+\end{align*}
+
+\section{ Revisit everything after this.  Perhaps not right. }
 
 \subsection{ The unit vectors. }
 
@@ -103,7 +196,7 @@ The end result of the algebra above is
 
 \subsection{ Rotor }
 
-As noted in \cite{doran2003gap}, and \cite{PJEulerAngle} the composition of rotors for the sequence of $\theta$, $\phi$ rotations
+%As noted in \cite{doran2003gap}, and \cite{PJEulerAngle} the composition of rotors for the sequence of $\theta$, $\phi$ rotations
 in the $x,y$ and $x',z$ planes will be
 
 \begin{align*}
@@ -116,50 +209,6 @@ R(\Bx)
 \exp(\Be_{12}\theta/2)
 \end{align*}
 
-Or, more compactly
-
-\begin{align*}
-R(\Bx) &= R^\dagger \Bx R \\
-R &= R_\phi R_\theta \\
-R_\phi &= \exp(\Be_{13}\phi/2) \\
-R_\theta &= \exp(\Be_{12}\theta/2)
-\end{align*}
-
-Application of these to the $\{\Be_i\}$ basis produces the $\{\rcap, \thetacap, \phicap\}$ basis.  First application 
-of $R_\phi$ yields the basis vectors for the intermediate rotation.
-
-\begin{align*}
-\begin{array}{l l l}
-{R_\phi}^\dagger \Be_1 R_\phi &= \Be_1 (\cos\phi + \Be_{13} \sin\phi) &= \Be_1 \cos\phi + \Be_3 \sin\phi \\
-{R_\phi}^\dagger \Be_2 R_\phi &= \Be_2 {R_\phi}^\dagger R_\phi &= \Be_2 \\
-{R_\phi}^\dagger \Be_3 R_\phi &= \Be_3 (\cos\phi + \Be_{13} \sin\phi) &= \Be_3 \cos\phi - \Be_1 \sin\phi \\
-\end{array}
-\end{align*}
-
-Applying the second rotor to $R_\phi(\Be_i)$ we have
-\begin{align*}
-\rcap 
-&= {R_\theta}^\dagger ( \Be_1 \cos\phi + \Be_3 \sin\phi ) R_\theta \\
-&=
-\Be_1 \cos\phi (\cos\theta + \Be_{12} \sin\theta)
-+ \Be_3 \sin\phi \\
-&=
-\Be_1 \cos\phi \cos\theta 
-+ \Be_2 \cos\phi \sin\theta
-+ \Be_3 \sin\phi \\
-\thetacap
-&= {R_\theta}^\dagger ( \Be_2 ) R_\theta \\
-&= \Be_2 (\cos\theta + \Be_{12} \sin\theta) \\
-&= \Be_2 \cos\theta - \Be_1 \sin\theta \\
-\phicap
-&= {R_\theta}^\dagger ( \Be_3 \cos\phi - \Be_1 \sin\phi ) R_\theta \\
-&= \Be_3 \cos\phi - \Be_1 \sin\phi (\cos\theta + \Be_{12} \sin\theta) \\
-&= 
-- \Be_1 \sin\phi \cos\theta 
-- \Be_2 \sin\phi \sin\theta 
-+ \Be_3 \cos\phi
-\\
-\end{align*}
 
 And sure enough this produces the same result, but algebraically without any reliance on pictures.
 
