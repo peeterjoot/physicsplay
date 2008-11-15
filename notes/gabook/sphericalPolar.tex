@@ -18,7 +18,7 @@
 
 \title{Some notes on spherical polar coordinates}
 \author{Peeter Joot}
-\date{ Nov 13, 2008.  Last Revision: $Date: 2008/11/14 04:38:29 $ }
+\date{ Nov 13, 2008.  Last Revision: $Date: 2008/11/15 04:40:18 $ }
 
 \begin{document}
 
@@ -139,7 +139,7 @@ of $R_\phi$ yields the basis vectors for the intermediate rotation.
 Applying the second rotor to $R_\phi(\Be_i)$ we have
 \begin{align*}
 \rcap 
-&= {R_\theta}^\dagger \Be_1' R_\theta \\
+&= {R_\theta}^\dagger ( \Be_1 \cos\phi + \Be_3 \sin\phi ) R_\theta \\
 &=
 \Be_1 \cos\phi (\cos\theta + \Be_{12} \sin\theta)
 + \Be_3 \sin\phi \\
@@ -148,11 +148,11 @@ Applying the second rotor to $R_\phi(\Be_i)$ we have
 + \Be_2 \cos\phi \sin\theta
 + \Be_3 \sin\phi \\
 \thetacap
-&= {R_\theta}^\dagger \Be_2' R_\theta \\
+&= {R_\theta}^\dagger ( \Be_2 ) R_\theta \\
 &= \Be_2 (\cos\theta + \Be_{12} \sin\theta) \\
 &= \Be_2 \cos\theta - \Be_1 \sin\theta \\
 \phicap
-&= {R_\theta}^\dagger \Be_3' R_\theta \\
+&= {R_\theta}^\dagger ( \Be_3 \cos\phi - \Be_1 \sin\phi ) R_\theta \\
 &= \Be_3 \cos\phi - \Be_1 \sin\phi (\cos\theta + \Be_{12} \sin\theta) \\
 &= 
 - \Be_1 \sin\phi \cos\theta 
@@ -161,12 +161,123 @@ Applying the second rotor to $R_\phi(\Be_i)$ we have
 \\
 \end{align*}
 
-And sure enough this produces the same result, but algebraically without any reliance on pictures.  A possible
+And sure enough this produces the same result, but algebraically without any reliance on pictures.
+
+A possible
 advantage to this formulation is that one can study 
 frame transformations of the general form $\{\Be_i'\} = \{ R^\dagger \Be_i R \}$, and the result will hold for
 not only spherical polar coordinate systems but others (such as the cylindrical case).
 
-\bibliographystyle{plainnat} % supposed to allow for \url use.
-\bibliography{myrefs}      % expects file "myrefs.bib"
+\section{ Coordinates. } 
 
-\end{document}               % End of document.
+\subsection{ Digression.  Tensor transformation review. }
+
+Considering a linear transformation providing a mapping from one basis to another of the following form
+
+\begin{align*}
+f_i = \LL(e_i) = L e_i L^\dagger
+\end{align*}
+
+where
+\begin{align*}
+L L^\dagger = 1
+\end{align*}
+
+The 
+coordinate vector representation in each of these frames is
+
+\begin{align*}
+x = x^i e_i = y^j f_j.
+\end{align*}
+
+Utilizing a reciprocal frame (ie: not yet requiring an orthonormal frame here), such that $e^i \cdot e_j = {\delta^i}_j$, 
+then dot product provide the coordinate transformations
+\begin{align*}
+x^k e_k \cdot e^k &= y^j f_j \cdot e^k \\
+y^j f_j \cdot f^i &= x^k e_k \cdot f^i \\
+\implies \\
+x^i &= y^j f_j \cdot e^i \\
+y^i &= x^j e_j \cdot f^i
+\end{align*}
+
+The transformed reciprocal frame vectors can be expressed directly in terms of the initial reciprocal frame $f^i = \LL(e^i)$.  Taking
+dot products confirms this
+
+\begin{align*}
+(L e_i L^\dagger) \cdot (L e^j L^\dagger) 
+&= \gpgradezero{ L e_i L^\dagger L e^j L^\dagger } \\
+&= \gpgradezero{ L e_i e^j L^\dagger } \\
+&= e_i \cdot e^j \gpgradezero{ L L^\dagger } \\
+&= e_i \cdot e^j
+\end{align*}
+
+This implies that the forward and inverse coordinate transformations may be summarized as
+\begin{align*}
+y^i &= x^j e_j \cdot \LL(e^i) \\
+x^i &= y^j \LL(e_j) \cdot e^i \\
+\end{align*}
+
+Or in matrix form
+\begin{align}\label{eqn:coordinateTxTensors}
+{\Lambda^i}_j &= \LL(e^i) \cdot e_j \\
+{\Lambda_j}^i &= \LL(e_j) \cdot e^i \\
+y^i &= {\Lambda^i}_j x^j \\
+x^i &= {\Lambda_j}^i y^j
+\end{align}
+
+Where
+\begin{align*}
+x^i &= {\Lambda_j}^i y^j \\
+&= {\Lambda_j}^i {\Lambda^j}_k x^k \\
+\end{align*}
+
+So
+\begin{align*}
+{\Lambda_j}^i {\Lambda^j}_k &= \delta^i_k
+\end{align*}
+
+\subsection{ Expressing spherical polar rotation in matrix form. }
+
+For the spherical polar case, both sets of frame vectors are orthonormal
+
+\begin{align*}
+{\Lambda^i}_j
+&= \LL(\Be_i) \cdot \Be_j \\
+&= (R^\dagger \Be_i R) \cdot \Be_j \\
+&=
+\begin{bmatrix}
+%rcap . {e1 e2 e3}
+\cos\phi \cos\theta & \cos\phi \sin\theta & \sin\phi \\
+%thetacap . {e1 e2 e3}
+- \sin\theta & \cos\theta & 0 \\
+%phicap . {e1 e2 e3}
+- \sin\phi \cos\theta & - \sin\phi \sin\theta & \cos\phi \\
+\end{bmatrix}
+\end{align*}
+
+From equation \ref{eqn:coordinateTxTensors}, one can see that the inverse transformation is the transpose.  This isn't clear looking at the matrix above until one factors it into a pair of separate matrixes
+\begin{align*}
+{\Lambda^i}_j
+&=
+\begin{bmatrix}
+\cos\phi & 0 & \sin\phi \\
+0 & 1 & 0 \\
+-\sin\phi & 0 & \cos\phi
+\end{bmatrix}
+\begin{bmatrix}
+\cos\theta & \sin\theta & 0 \\
+-\sin\theta & \cos\theta & 0 \\
+0 & 0 & 1 \\
+\end{bmatrix}
+\end{align*}
+
+FIXME: from my Euler angle notes, I would have expected this matrix factorization to be in inverted order.  There's an inconsistency
+or misunderstanding here or there somewhere, but I can't find anything wrong in either place.
+
+Hmm, after doing this, which I thought would shed some light on how to transform the gradient (and divergence and curl), it isn't clear to me
+where to go.
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
+
+\end{document}
