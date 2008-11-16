@@ -18,7 +18,7 @@
 
 \title{Some notes on spherical polar coordinates}
 \author{Peeter Joot}
-\date{ Nov 13, 2008.  Last Revision: $Date: 2008/11/15 20:47:51 $ }
+\date{ Nov 13, 2008.  Last Revision: $Date: 2008/11/16 16:48:53 $ }
 
 \begin{document}
 
@@ -27,12 +27,25 @@
 
 \section{ Motivation. }
 
-Derive the coordinates and unit vector relationships, gradient, divergence and curl in spherical polar coordinates.
+Reading the math intro of FIXMEcite{IntroAstrophysics}, I found the statement that the gradient in spherical polar form is:
 
-These results can be found in many texts, including the excellent review article \cite{fleischCoords}, but 
-the exersize of working out the details will be worthwhile as a learning exersize.
+\begin{align*}
+\grad &= 
+\rcap \PD{r}{}
++\thetacap \inv{r} \PD{\theta}{}
++\phicap \inv{r \sin\phi}\PD{\phi}{}
+\end{align*}
+FIXME: verify if I recalled this sine term above correctly by doing this derivation.
 
-\section{ Derivation. }
+There was no picture or description showing the conventions for measurement of the angles or directions.
+To clarify things and leave a margin note I decided to derive the coordinates and unit vector transformation relationships,
+gradient, divergence and curl in spherical polar coordinates.
+
+Although these results can be found in many texts, including the excellent review article \cite{fleischCoords}, 
+the exersize of personally working out the details will be worthwhile as a learning exersize since I hadn't attempted this since
+way back in my school days.
+
+\subsection{ Conventions. }
 
 \begin{figure}[htp]
 \centering
@@ -41,18 +54,14 @@ the exersize of working out the details will be worthwhile as a learning exersiz
 \end{figure}
 
 Figure \ref{fig:spherical_polar} illustrates the conventions used in 
-these notes.
+these notes.  By inspection, the coordinates can be read off the diagram.
 
-\subsection{ Coordinates. }
-
-By inspection, the coordinates can be read off the diagram.
-
-\begin{align*}
+\begin{align}\label{eqn:coordinates}
 u &= r \cos\phi \\
 x &= u \cos\theta = r \cos\phi \cos\theta \\
 y &= u \sin\theta = r \cos\phi \sin\theta \\
-z &= r \sin\phi \\
-\end{align*}
+z &= r \sin\phi
+\end{align}
 
 \subsection{ The unit vectors. }
 
@@ -134,7 +143,7 @@ Applying the second rotation to $R_\phi(\Be_i)$ we have
 \thetacap
 &= {R_\theta} ( \Be_2 ) {R_\theta}^\dagger \\
 &= \Be_2 (\cos\theta + \Be_{12} \sin\theta) \\
-&= \Be_2 \cos\theta - \Be_1 \sin\theta \\
+&= - \Be_1 \sin\theta + \Be_2 \cos\theta \\
 \phicap
 &= {R_\theta} ( \Be_3 \cos\phi - \Be_1 \sin\phi ) {R_\theta}^\dagger \\
 &= \Be_3 \cos\phi - \Be_1 \sin\phi (\cos\theta + \Be_{12} \sin\theta) \\
@@ -145,18 +154,20 @@ Applying the second rotation to $R_\phi(\Be_i)$ we have
 \\
 \end{align*}
 
-\section{ Revisit everything after this.  Perhaps not right. }
+\subsection{ An alternate pictorical derivation of the unit vectors. }
 
-\subsection{ The unit vectors. }
-
-As for the unit vectors themselves, $\rcap$ can be calculated the easiest
+Somewhat more directly, $\rcap$ can be calculated from the coordinate expression of equation \ref{eqn:coordinates}
 
 \begin{align*}
 \rcap 
-&= \inv{r} (x, y, z) \\
+&= \inv{r} (x, y, z),
 \end{align*}
 
-Next, $\thetacap$ lies in the $x,y$ plane, perpendicular to the outwards radial vector in that plane:
+which was found by inspection of the diagram.
+
+For $\thetacap$, again from the figure, observe that it lies in an
+latitudinal plane (ie: $x,y$ plane), and is perpendicular to the outwards radial vector in that plane.  That is
+
 \begin{align*}
 \thetacap 
 &= (\cos\theta \Be_1 + \sin\theta \Be_2) \Be_1 \Be_2 \\
@@ -169,7 +180,7 @@ Lastly, $\phicap$ can be calculated from the dual of $\rcap \wedge \thetacap$
 &= - \Be_1 \Be_2 \Be_3 (\rcap \wedge \thetacap) \\
 \end{align*}
 
-The end result of the algebra above is
+Completing the algebra for the expressions above we have
 \begin{align}
 \rcap 
 &=
@@ -194,46 +205,26 @@ The end result of the algebra above is
 + \cos\phi \Be_3 %\\
 \end{align}
 
-\subsection{ Rotor }
+Sure enough this produces the same result as with the rotor logic.
 
-%As noted in \cite{doran2003gap}, and \cite{PJEulerAngle} the composition of rotors for the sequence of $\theta$, $\phi$ rotations
-in the $x,y$ and $x',z$ planes will be
+The rotor approach was purely algebraically and doesn't have
+the same reliance on pictures.  That may have
+an 
+additional advantage
+since one can then 
+study any frame transformations of the general form $\{\Be_i'\} = \{ R \Be_i R^\dagger \}$, and produce results 
+that apply to 
+not only spherical polar coordinate systems but others such as the cylindrical polar.
 
-\begin{align*}
-R(\Bx) 
-&= 
-\exp(-\Be_{12}\theta/2)
-\exp(-\Be_{13}\phi/2)
-\Bx
-\exp(\Be_{13}\phi/2)
-\exp(\Be_{12}\theta/2)
-\end{align*}
-
-
-And sure enough this produces the same result, but algebraically without any reliance on pictures.
-
-A possible
-advantage to this formulation is that one can study 
-frame transformations of the general form $\{\Be_i'\} = \{ R^\dagger \Be_i R \}$, and the result will hold for
-not only spherical polar coordinate systems but others (such as the cylindrical case).
-
-\section{ Coordinates. } 
-
-\subsection{ Digression.  Tensor transformation review. }
+\subsection{ Tensor transformation. }
 
 Considering a linear transformation providing a mapping from one basis to another of the following form
 
 \begin{align*}
-f_i = \LL(e_i) = L e_i L^\dagger
+f_i = \LL(e_i) = L e_i L^{-1}
 \end{align*}
 
-where
-\begin{align*}
-L L^\dagger = 1
-\end{align*}
-
-The 
-coordinate vector representation in each of these frames is
+The coordinate representation, or Fourier decomposition, of the vectors in each of these frames is
 
 \begin{align*}
 x = x^i e_i = y^j f_j.
@@ -253,10 +244,10 @@ The transformed reciprocal frame vectors can be expressed directly in terms of t
 dot products confirms this
 
 \begin{align*}
-(L e_i L^\dagger) \cdot (L e^j L^\dagger) 
-&= \gpgradezero{ L e_i L^\dagger L e^j L^\dagger } \\
-&= \gpgradezero{ L e_i e^j L^\dagger } \\
-&= e_i \cdot e^j \gpgradezero{ L L^\dagger } \\
+(L e_i L^{-1}) \cdot (L e^j L^{-1}) 
+&= \gpgradezero{ L e_i L^{-1} L e^j L^{-1} } \\
+&= \gpgradezero{ L e_i e^j L^{-1} } \\
+&= e_i \cdot e^j \gpgradezero{ L L^{-1} } \\
 &= e_i \cdot e^j
 \end{align*}
 
@@ -285,6 +276,101 @@ So
 {\Lambda_j}^i {\Lambda^j}_k &= \delta^i_k
 \end{align*}
 
+\subsection{ Gradient after change of coordinates. }
+
+With the transformation matrixes enumerated above we are now equipt to take the gradient expressed in initial frame
+\begin{align*}
+\grad = \sum e^i \PD{x^i}{},
+\end{align*}
+
+and express it in the transformed frame.  The chain rule is required for the derivatives in terms of the transformed coordinates
+
+\begin{align*}
+\PD{x^i}{} 
+&= \PD{x^i}{y^j} \PD{y^j}{} \\
+&= {\Lambda^j}_i \PD{y^j}{} \\
+&= \LL(e^j) \cdot e_i \PD{y^j}{} \\
+&= f^j \cdot e_i \PD{y^j}{}
+\end{align*}
+
+Therefore the gradient is
+\begin{align*}
+\grad &= \sum e^i (f^j \cdot e_i) \PD{y^j}{} \\
+      &= \sum f^j \PD{y^j}{} \\
+\end{align*}
+
+This gets us most of the way towards the desired result for the spherical polar gradient since all that remains is a calculation of the $\PDi{y^j}{}$
+values for
+each of the $\rcap$, $\thetacap$, and $\phicap$ directions.
+
+It is also interesting to observe that the gradient can also be written as
+
+\begin{align*}
+\grad &= \inv{f_j} \PD{y^j}{} \\
+\end{align*}
+
+Observe the similarity to the fourier component decomposition of the vector itself $x = f_i y^i$.  Thus, roughly speaking, the differential operator
+parts of the gradient can be seen to be directional derivatives 
+along the directions of each of the frame vectors.
+
+\subsection{ Notes on transformation of frame vectors vs. coordinates. }
+
+To avoid confusion it is worth noting how the frame vectors vs. the components themselves differ under
+rotational transformation.  Consideration of the example of a pair of orthonormal unit vectors for the plane illustrates this
+
+\begin{align*}
+\Be_1' &= \Be_1 \exp(\Be_{12}\theta) = \Be_1 \cos\theta + \Be_2 \sin\theta \\
+\Be_2' &= \Be_2 \exp(\Be_{12}\theta) = \Be_2 \cos\theta - \Be_1 \sin\theta \\
+\end{align*}
+
+Forming a matrix for the transformation of these unit vectors we have
+\begin{align*}
+\begin{bmatrix}
+\Be_1' \\
+\Be_2'
+\end{bmatrix}
+=
+\begin{bmatrix}
+\cos\theta & \sin\theta \\
+- \sin\theta & \cos\theta \\
+\end{bmatrix}
+\begin{bmatrix}
+\Be_1 \\
+\Be_2
+\end{bmatrix}
+\end{align*}
+
+Now compare this to the transformation of a vector in its entirety
+
+\begin{align*}
+y^1 e_1 + y^2 e_2 
+&= ( x^1 \Be_1 + x^2 \Be_2 ) \exp(\Be_{12}\theta) \\
+&= x^1(\Be_1 \cos\theta + \Be_2 \sin\theta) 
+ + x^2(\Be_2 \cos\theta - \Be_1 \sin\theta) \\
+\end{align*}
+
+And in matrix form this is
+
+\begin{align*}
+\begin{bmatrix}
+y_1 \\
+y_2
+\end{bmatrix}
+=
+\begin{bmatrix}
+\cos\theta & -\sin\theta \\
+\sin\theta & \cos\theta \\
+\end{bmatrix}
+\begin{bmatrix}
+x_1 \\
+x_2
+\end{bmatrix}
+\end{align*}
+
+Note the inversion of the transformation matrix here compared to the frame vector transformation itself.
+
+\section{ FIXME or delete what comes after this. }
+
 \subsection{ Expressing spherical polar rotation in matrix form. }
 
 For the spherical polar case, both sets of frame vectors are orthonormal
@@ -293,6 +379,10 @@ For the spherical polar case, both sets of frame vectors are orthonormal
 {\Lambda^i}_j
 &= \LL(\Be_i) \cdot \Be_j \\
 &= (R^\dagger \Be_i R) \cdot \Be_j \\
+\end{align*}
+
+\begin{align}\label{eqn:rotation}
+{\Lambda^i}_j
 &=
 \begin{bmatrix}
 %rcap . {e1 e2 e3}
@@ -302,7 +392,7 @@ For the spherical polar case, both sets of frame vectors are orthonormal
 %phicap . {e1 e2 e3}
 - \sin\phi \cos\theta & - \sin\phi \sin\theta & \cos\phi \\
 \end{bmatrix}
-\end{align*}
+\end{align}
 
 From equation \ref{eqn:coordinateTxTensors}, one can see that the inverse transformation is the transpose.  This isn't clear looking at the matrix above until one factors it into a pair of separate matrixes
 \begin{align*}
@@ -323,8 +413,31 @@ From equation \ref{eqn:coordinateTxTensors}, one can see that the inverse transf
 FIXME: from my Euler angle notes, I would have expected this matrix factorization to be in inverted order.  There's an inconsistency
 or misunderstanding here or there somewhere, but I can't find anything wrong in either place.
 
-Hmm, after doing this, which I thought would shed some light on how to transform the gradient (and divergence and curl), but it isn't clear to me
-that this was completely helpful.
+%Hmm, after doing this, which I thought would shed some light on how to transform the gradient (and divergence and curl), but it isn't clear to me
+%that this was completely helpful.
+
+\subsection{ Verification of rotation matrix, using only matrix notation. }
+
+As a verification of \ref{eqn:rotation} lets calculate that directly.  The initial rotation is in the $x,y$ plane around the $-\Be_2' = -\Be_2 \exp(\Be_{12}\theta) = -\Be_2 \cos\theta + \Be_1 \sin\theta$ axis.
+
+From \cite{PJRotor} we have the rotation matrix for a $\phi$ rotation about
+unit vector $\Bn = (n_1, n_2, n_3) = (-\cos\theta, \sin\theta, 0) = (-C_\theta, S_\theta, 0)$ is
+
+\begin{align*}
+R_\phi R_\theta
+=
+\begin{bmatrix}
+\cos\phi(1 +{C_\theta}^2) - {C_\theta}^2 & -{C_\theta} {S_\theta} (1-\cos\phi) & {S_\theta} \sin\phi \\
+-{C_\theta} {S_\theta} (1-\cos\phi) & \cos\phi(1 -{S_\theta}^2) + {S_\theta}^2 & {C_\theta} \sin\phi \\
+-{S_\theta} \sin\phi & {-C_\theta} \sin\phi & \cos\phi \\
+\end{bmatrix}
+\begin{bmatrix}
+C_\theta & -S_\theta & 0 \\
+S_\theta & C_\theta & 0 \\
+0 & 0 & 1 \\
+\end{bmatrix}
+\end{align*}
+
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
