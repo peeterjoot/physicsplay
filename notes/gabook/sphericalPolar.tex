@@ -4,6 +4,8 @@
 \input{../peeters_macros2.tex}
 
 \newcommand{\phicap}[0]{\hat{\boldsymbol{\phi}}}
+\newcommand{\Lor}[2]{{{\Lambda^{#1}}_{#2}}}
+\newcommand{\ILor}[2]{{{ \{{\Lambda^{-1}\} }^{#1}}_{#2}}}
 
 \usepackage{color,cite,graphicx}
    % use colour in the document, put your citations as [1-4]
@@ -18,7 +20,7 @@
 
 \title{Some notes on spherical polar coordinates}
 \author{Peeter Joot}
-\date{ Nov 13, 2008.  Last Revision: $Date: 2008/11/16 16:48:53 $ }
+\date{ Nov 13, 2008.  Last Revision: $Date: 2008/11/16 17:13:25 $ }
 
 \begin{document}
 
@@ -259,22 +261,24 @@ x^i &= y^j \LL(e_j) \cdot e^i \\
 
 Or in matrix form
 \begin{align}\label{eqn:coordinateTxTensors}
-{\Lambda^i}_j &= \LL(e^i) \cdot e_j \\
-{\Lambda_j}^i &= \LL(e_j) \cdot e^i \\
-y^i &= {\Lambda^i}_j x^j \\
-x^i &= {\Lambda_j}^i y^j
+\Lor{i}{j} &= \LL(e^i) \cdot e_j \\
+\ILor{i}{j} &= \LL(e_j) \cdot e^i \\
+y^i &= \Lor{i}{j} x^j \\
+x^i &= \ILor{i}{j} y^j
 \end{align}
 
-Where
+The use of inverse notation is justified by the following
+
 \begin{align*}
-x^i &= {\Lambda_j}^i y^j \\
-&= {\Lambda_j}^i {\Lambda^j}_k x^k \\
+x^i &= \ILor{i}{k} y^k \\
+&= \ILor{i}{k} \Lor{k}{j} x^j \\
+\implies \\
+\ILor{i}{k} \Lor{k}{j} &= \delta^i_j
 \end{align*}
 
-So
-\begin{align*}
-{\Lambda_j}^i {\Lambda^j}_k &= \delta^i_k
-\end{align*}
+Some references such as \cite{MinahanTensors} use $\Lor{i}{j}$ for both the forward and inverse transformations, with specific conventions
+about which index is varied to distinguish the two matrices.  I've found that confusing and have instead used the explicit inverse notation
+of \cite{SpenceTensors}.
 
 \subsection{ Gradient after change of coordinates. }
 
@@ -288,7 +292,7 @@ and express it in the transformed frame.  The chain rule is required for the der
 \begin{align*}
 \PD{x^i}{} 
 &= \PD{x^i}{y^j} \PD{y^j}{} \\
-&= {\Lambda^j}_i \PD{y^j}{} \\
+&= \Lor{j}{i} \PD{y^j}{} \\
 &= \LL(e^j) \cdot e_i \PD{y^j}{} \\
 &= f^j \cdot e_i \PD{y^j}{}
 \end{align*}
@@ -303,13 +307,13 @@ This gets us most of the way towards the desired result for the spherical polar 
 values for
 each of the $\rcap$, $\thetacap$, and $\phicap$ directions.
 
-It is also interesting to observe that the gradient can also be written as
+It is also interesting to observe (as in \cite{DenkerMaxwell}) that the gradient can also be written as
 
 \begin{align*}
 \grad &= \inv{f_j} \PD{y^j}{} \\
 \end{align*}
 
-Observe the similarity to the fourier component decomposition of the vector itself $x = f_i y^i$.  Thus, roughly speaking, the differential operator
+Observe the similarity to the Fourier component decomposition of the vector itself $x = f_i y^i$.  Thus, roughly speaking, the differential operator
 parts of the gradient can be seen to be directional derivatives 
 along the directions of each of the frame vectors.
 
@@ -376,13 +380,13 @@ Note the inversion of the transformation matrix here compared to the frame vecto
 For the spherical polar case, both sets of frame vectors are orthonormal
 
 \begin{align*}
-{\Lambda^i}_j
+\Lor{i}{j}
 &= \LL(\Be_i) \cdot \Be_j \\
 &= (R^\dagger \Be_i R) \cdot \Be_j \\
 \end{align*}
 
 \begin{align}\label{eqn:rotation}
-{\Lambda^i}_j
+\Lor{i}{j}
 &=
 \begin{bmatrix}
 %rcap . {e1 e2 e3}
@@ -396,7 +400,7 @@ For the spherical polar case, both sets of frame vectors are orthonormal
 
 From equation \ref{eqn:coordinateTxTensors}, one can see that the inverse transformation is the transpose.  This isn't clear looking at the matrix above until one factors it into a pair of separate matrixes
 \begin{align*}
-{\Lambda^i}_j
+\Lor{i}{j}
 &=
 \begin{bmatrix}
 \cos\phi & 0 & \sin\phi \\
