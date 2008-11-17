@@ -20,7 +20,7 @@
 
 \title{Some notes on spherical polar coordinates}
 \author{Peeter Joot}
-\date{ Nov 13, 2008.  Last Revision: $Date: 2008/11/17 05:07:25 $ }
+\date{ Nov 13, 2008.  Last Revision: $Date: 2008/11/17 14:13:55 $ }
 
 \begin{document}
 
@@ -317,83 +317,113 @@ Observe the similarity to the Fourier component decomposition of the vector itse
 parts of the gradient can be seen to be directional derivatives 
 along the directions of each of the frame vectors.
 
-\subsection{ Element of distance along the curves. }
-
-Using the figure, one can observe that the distances along in each of the spherical polar unit vector directions are obtained in
-this particular case by varying each coordinate in turn.
-
-\begin{itemize}
-\item Along $\rcap$, a vectorial element of distance is just
+This is sufficient to read the elements of distance in each of the directions
+off the figure
 
 \begin{align*}
-\delta \Bx_r 
-&= (r + \delta r)\rcap - r\rcap \\
-&= \delta r \rcap.
+\delta \Bx \cdot \rcap &= \delta r \\
+\delta \Bx \cdot \thetacap &= r \cos\phi \delta \theta \\
+\delta \Bx \cdot \phicap &= r \delta \theta \\
 \end{align*}
 
-\item Along the $\phicap$ direction?
+Therefore the gradient is just
+\begin{align}
+\grad = 
+\rcap \PD{r}{}
++\thetacap \inv{r \cos\phi} \PD{\theta}{} 
++\phicap \inv{r} \PD{\phi}{}
+\end{align}
 
-Here one wants the great circle path obtained by fixing $\theta$ and $r$.  A difference of such position vectors 
-(in the standard basis) is
+Although this last bit has been
+derived graphically, and not analyitically, it does
+clarify the original question of exactly angle and unit vector 
+conventions were intended in the text (polar angle measured from the North pole, not equator, and $\theta$, and $\phi$ reversed).
 
-\begin{align*}
-r 
-\begin{bmatrix}
-(\cos(\phi + \delta \phi) - \cos(\phi)) \cos(\theta) \\
-(\cos(\phi + \delta \phi) - \cos(\phi)) \sin(\theta) \\
-\sin(\phi + \delta \phi) - \sin(\phi) \\
-\end{bmatrix}
-&\approx
-r 
-\begin{bmatrix}
--\sin(\phi) \cos(\theta) \\
--\sin(\phi) \sin(\theta) \\
-\cos(\phi) \\
-\end{bmatrix}
-\delta \phi
-\end{align*}
+This was the long way to that particular result, but this has been
+an exploratory treatment of frame rotation concepts that I personally 
+felt the need to clarity for myself.
 
-This is an unsatisfactory way to express the directed distance, since it is in terms of $\Be_i$.  We have relationships
-for $\rcap$, $\thetacap$, $\phicap$ in terms of $\Be_i$ and could invert that and multiply it out, but that is going to
-make things even messier before things get simpler.
+There are still some additional details that I will explore before concluding
+(including an analyitic treatment of the above).
 
-Instead form the unit bivector for the north south oriented great circle plane through the point of interest
-
-\begin{align*}
-j = \rcap \wedge \phicap
-\end{align*}
-
-For a point $\Bx$ we want to consider an incremental change in position along the $\phicap$ direction.  Forming the 
-projection and rejection from the plane we have
-
-\begin{align*}
-\Bx = \Bx j \inv{j} = (\Bx \cdot j) \inv{j} + (\Bx \wedge j) \inv{j} = \Bx_\parallel + \Bx_\perp
-\end{align*}
-
-So rotating to $\Bx'$ and taking differences we have 
-
-\begin{align*}
-\delta \Bx_\phi 
-&= \Bx' - \Bx \\
-&= \Bx_\parallel' -\Bx_\parallel \\
-&= \Bx_\parallel (\exp(j\delta \phi) - 1) \\
-&\approx \Bx_\parallel j \delta \phi \\
-&= (\Bx \cdot j) \inv{j} j \delta \phi \\
-&= (\Bx \cdot j) \delta \phi
-\end{align*}
-
-\item How about along the $\thetacap$ direction?
-Intuitively, one expects the magnitude to be $r \delta \theta$.  The algebra will be exactly the same as with $\phicap$ direction
-but we have a different bivector for the plane.  Let $i = \Be_1\Be_2$ we have
-
-\begin{align*}
-\delta \Bx_\theta = (\Bx \cdot i) \delta \theta
-\end{align*}
-
-\end{itemize}
-
-Now all this is a bit inexact.  What exactly are these $\delta$ increments?  They have to be small enough that they can be considered to be just along the
-time unit vectors for the rotated frame.
+% FIXME: wrong!
+%%%\subsection{ Element of distance along the curves. }
+%%%
+%%%Using the figure, one can observe that the distances along in each of the spherical polar unit vector directions are obtained in
+%%%this particular case by varying each coordinate in turn.
+%%%
+%%%\begin{itemize}
+%%%\item Along $\rcap$, a vectorial element of distance is just
+%%%
+%%%\begin{align*}
+%%%\delta \Bx_r 
+%%%&= (r + \delta r)\rcap - r\rcap \\
+%%%&= \delta r \rcap.
+%%%\end{align*}
+%%%
+%%%\item Along the $\phicap$ direction?
+%%%
+%%%Here one wants the great circle path obtained by fixing $\theta$ and $r$.  A difference of such position vectors 
+%%%(in the standard basis) is
+%%%
+%%%\begin{align*}
+%%%r 
+%%%\begin{bmatrix}
+%%%(\cos(\phi + \delta \phi) - \cos(\phi)) \cos(\theta) \\
+%%%(\cos(\phi + \delta \phi) - \cos(\phi)) \sin(\theta) \\
+%%%\sin(\phi + \delta \phi) - \sin(\phi) \\
+%%%\end{bmatrix}
+%%%&\approx
+%%%r 
+%%%\begin{bmatrix}
+%%%-\sin(\phi) \cos(\theta) \\
+%%%-\sin(\phi) \sin(\theta) \\
+%%%\cos(\phi) \\
+%%%\end{bmatrix}
+%%%\delta \phi
+%%%\end{align*}
+%%%
+%%%This is an unsatisfactory way to express the directed distance, since it is in terms of $\Be_i$.  We have relationships
+%%%for $\rcap$, $\thetacap$, $\phicap$ in terms of $\Be_i$ and could invert that and multiply it out, but that is going to
+%%%make things even messier before things get simpler.
+%%%
+%%%Instead form the unit bivector for the north south oriented great circle plane through the point of interest
+%%%
+%%%\begin{align*}
+%%%j = \rcap \wedge \phicap
+%%%\end{align*}
+%%%
+%%%For a point $\Bx$ we want to consider an incremental change in position along the $\phicap$ direction.  Forming the 
+%%%projection and rejection from the plane we have
+%%%
+%%%\begin{align*}
+%%%\Bx = \Bx j \inv{j} = (\Bx \cdot j) \inv{j} + (\Bx \wedge j) \inv{j} = \Bx_\parallel + \Bx_\perp
+%%%\end{align*}
+%%%
+%%%So rotating to $\Bx'$ and taking differences we have 
+%%%
+%%%\begin{align*}
+%%%\delta \Bx_\phi 
+%%%&= \Bx' - \Bx \\
+%%%&= \Bx_\parallel' -\Bx_\parallel \\
+%%%&= \Bx_\parallel (\exp(j\delta \phi) - 1) \\
+%%%&\approx \Bx_\parallel j \delta \phi \\
+%%%&= (\Bx \cdot j) \inv{j} j \delta \phi \\
+%%%&= (\Bx \cdot j) \delta \phi
+%%%\end{align*}
+%%%
+%%%\item How about along the $\thetacap$ direction?
+%%%Intuitively, one expects the magnitude to be $r \delta \theta$.  The algebra will be exactly the same as with $\phicap$ direction
+%%%but we have a different bivector for the plane.  Let $i = \Be_1\Be_2$ we have
+%%%
+%%%\begin{align*}
+%%%\delta \Bx_\theta = (\Bx \cdot i) \delta \theta
+%%%\end{align*}
+%%%
+%%%\end{itemize}
+%%%
+%%%Now all this is a bit inexact.  What exactly are these $\delta$ increments?  They have to be small enough that they can be considered to be just along the
+%%%time unit vectors for the rotated frame.
 
 \subsection{ Notes on transformation of frame vectors vs. coordinates. }
 
