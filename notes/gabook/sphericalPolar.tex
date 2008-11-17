@@ -20,7 +20,7 @@
 
 \title{Some notes on spherical polar coordinates}
 \author{Peeter Joot}
-\date{ Nov 13, 2008.  Last Revision: $Date: 2008/11/16 17:13:25 $ }
+\date{ Nov 13, 2008.  Last Revision: $Date: 2008/11/17 03:05:39 $ }
 
 \begin{document}
 
@@ -29,7 +29,7 @@
 
 \section{ Motivation. }
 
-Reading the math intro of FIXMEcite{IntroAstrophysics}, I found the statement that the gradient in spherical polar form is:
+Reading the math intro of \cite{zeilik1998iaa}, I found the statement that the gradient in spherical polar form is:
 
 \begin{align*}
 \grad &= 
@@ -317,6 +317,73 @@ Observe the similarity to the Fourier component decomposition of the vector itse
 parts of the gradient can be seen to be directional derivatives 
 along the directions of each of the frame vectors.
 
+\subsection{ Element of distance along the curves. }
+
+Using the figure, one can observe that the distances along in each of the spherical polar unit vector directions are obtained in
+this particular case by varying each coordinate in turn.
+
+\begin{itemize}
+\item Along $\rcap$, a vectorial element of distance is just $(r + \delta r)\rcap - r\rcap = \delta r \rcap$.
+\item Along the $\phicap$ direction?
+
+Here one wants the great circle path obtained by fixing $\theta$ and $r$.  A difference of such position vectors 
+(in the standard basis) is
+
+\begin{align*}
+r 
+\begin{bmatrix}
+(\cos(\phi + \delta \phi) - \cos(\phi)) \cos(\theta) \\
+(\cos(\phi + \delta \phi) - \cos(\phi)) \sin(\theta) \\
+\sin(\phi + \delta \phi) - \sin(\phi) \\
+\end{bmatrix}
+&\approx
+r 
+\begin{bmatrix}
+-\sin(\phi) \cos(\theta) \\
+-\sin(\phi) \sin(\theta) \\
+\cos(\phi) \\
+\end{bmatrix}
+\delta \phi
+\end{align*}
+
+This is an unsatisfactory way to express the directed distance, since it is in terms of $\Be_i$.  We have relationships
+for $\rcap$, $\thetacap$, $\phicap$ in terms of $\Be_i$ and could invert that and multiply it out, but that is going to
+make things even messier before things get simpler.
+
+Instead form the unit bivector for the north south oriented great circle plane through the point of interest
+
+\begin{align*}
+j = \rcap \wedge \phicap
+\end{align*}
+
+For a point $\Bx$ we want to consider an incremental change in position along the $\phicap$ direction.  Forming the 
+projection and rejection from the plane we have
+
+\begin{align*}
+\Bx = \Bx j \inv{j} = (\Bx \cdot j) \inv{j} + (\Bx \wedge j) \inv{j} = \Bx_\parallel + \Bx_\perp
+\end{align*}
+
+So rotating to $\Bx'$ and taking differences we have 
+
+\begin{align*}
+\Bx' - \Bx 
+&= \Bx_\parallel' -\Bx_\parallel \\
+&= \Bx_\parallel (\exp(j\delta \phi) - 1) \\
+&\approx \Bx_\parallel j \delta \phi \\
+&= (\Bx \cdot j) \inv{j} j \delta \phi \\
+&= (\Bx \cdot j) \delta \phi
+\end{align*}
+
+\item How about along the $\thetacap$ direction?
+Intuitively, one expects the magnitude to be $r \delta \theta$.  The algebra will be exactly the same as with $\phicap$ direction
+but we have a different bivector for the plane.  Let $i = \Be_1\Be_2$ we have
+
+\begin{align*}
+\delta \Bx = (\Bx \cdot i) \delta \theta
+\end{align*}
+
+\end{itemize}
+
 \subsection{ Notes on transformation of frame vectors vs. coordinates. }
 
 To avoid confusion it is worth noting how the frame vectors vs. the components themselves differ under
@@ -373,75 +440,75 @@ x_2
 
 Note the inversion of the transformation matrix here compared to the frame vector transformation itself.
 
-\section{ FIXME or delete what comes after this. }
-
-\subsection{ Expressing spherical polar rotation in matrix form. }
-
-For the spherical polar case, both sets of frame vectors are orthonormal
-
-\begin{align*}
-\Lor{i}{j}
-&= \LL(\Be_i) \cdot \Be_j \\
-&= (R^\dagger \Be_i R) \cdot \Be_j \\
-\end{align*}
-
-\begin{align}\label{eqn:rotation}
-\Lor{i}{j}
-&=
-\begin{bmatrix}
-%rcap . {e1 e2 e3}
-\cos\phi \cos\theta & \cos\phi \sin\theta & \sin\phi \\
-%thetacap . {e1 e2 e3}
-- \sin\theta & \cos\theta & 0 \\
-%phicap . {e1 e2 e3}
-- \sin\phi \cos\theta & - \sin\phi \sin\theta & \cos\phi \\
-\end{bmatrix}
-\end{align}
-
-From equation \ref{eqn:coordinateTxTensors}, one can see that the inverse transformation is the transpose.  This isn't clear looking at the matrix above until one factors it into a pair of separate matrixes
-\begin{align*}
-\Lor{i}{j}
-&=
-\begin{bmatrix}
-\cos\phi & 0 & \sin\phi \\
-0 & 1 & 0 \\
--\sin\phi & 0 & \cos\phi
-\end{bmatrix}
-\begin{bmatrix}
-\cos\theta & \sin\theta & 0 \\
--\sin\theta & \cos\theta & 0 \\
-0 & 0 & 1 \\
-\end{bmatrix}
-\end{align*}
-
-FIXME: from my Euler angle notes, I would have expected this matrix factorization to be in inverted order.  There's an inconsistency
-or misunderstanding here or there somewhere, but I can't find anything wrong in either place.
-
-%Hmm, after doing this, which I thought would shed some light on how to transform the gradient (and divergence and curl), but it isn't clear to me
-%that this was completely helpful.
-
-\subsection{ Verification of rotation matrix, using only matrix notation. }
-
-As a verification of \ref{eqn:rotation} lets calculate that directly.  The initial rotation is in the $x,y$ plane around the $-\Be_2' = -\Be_2 \exp(\Be_{12}\theta) = -\Be_2 \cos\theta + \Be_1 \sin\theta$ axis.
-
-From \cite{PJRotor} we have the rotation matrix for a $\phi$ rotation about
-unit vector $\Bn = (n_1, n_2, n_3) = (-\cos\theta, \sin\theta, 0) = (-C_\theta, S_\theta, 0)$ is
-
-\begin{align*}
-R_\phi R_\theta
-=
-\begin{bmatrix}
-\cos\phi(1 +{C_\theta}^2) - {C_\theta}^2 & -{C_\theta} {S_\theta} (1-\cos\phi) & {S_\theta} \sin\phi \\
--{C_\theta} {S_\theta} (1-\cos\phi) & \cos\phi(1 -{S_\theta}^2) + {S_\theta}^2 & {C_\theta} \sin\phi \\
--{S_\theta} \sin\phi & {-C_\theta} \sin\phi & \cos\phi \\
-\end{bmatrix}
-\begin{bmatrix}
-C_\theta & -S_\theta & 0 \\
-S_\theta & C_\theta & 0 \\
-0 & 0 & 1 \\
-\end{bmatrix}
-\end{align*}
-
+%%%\section{ FIXME or delete what comes after this. }
+%%%
+%%%\subsection{ Expressing spherical polar rotation in matrix form. }
+%%%
+%%%For the spherical polar case, both sets of frame vectors are orthonormal
+%%%
+%%%\begin{align*}
+%%%\Lor{i}{j}
+%%%&= \LL(\Be_i) \cdot \Be_j \\
+%%%&= (R^\dagger \Be_i R) \cdot \Be_j \\
+%%%\end{align*}
+%%%
+%%%\begin{align}\label{eqn:rotation}
+%%%\Lor{i}{j}
+%%%&=
+%%%\begin{bmatrix}
+%%%%rcap . {e1 e2 e3}
+%%%\cos\phi \cos\theta & \cos\phi \sin\theta & \sin\phi \\
+%%%%thetacap . {e1 e2 e3}
+%%%- \sin\theta & \cos\theta & 0 \\
+%%%%phicap . {e1 e2 e3}
+%%%- \sin\phi \cos\theta & - \sin\phi \sin\theta & \cos\phi \\
+%%%\end{bmatrix}
+%%%\end{align}
+%%%
+%%%From equation \ref{eqn:coordinateTxTensors}, one can see that the inverse transformation is the transpose.  This isn't clear looking at the matrix above until one factors it into a pair of separate matrixes
+%%%\begin{align*}
+%%%\Lor{i}{j}
+%%%&=
+%%%\begin{bmatrix}
+%%%\cos\phi & 0 & \sin\phi \\
+%%%0 & 1 & 0 \\
+%%%-\sin\phi & 0 & \cos\phi
+%%%\end{bmatrix}
+%%%\begin{bmatrix}
+%%%\cos\theta & \sin\theta & 0 \\
+%%%-\sin\theta & \cos\theta & 0 \\
+%%%0 & 0 & 1 \\
+%%%\end{bmatrix}
+%%%\end{align*}
+%%%
+%%%FIXME: from my Euler angle notes, I would have expected this matrix factorization to be in inverted order.  There's an inconsistency
+%%%or misunderstanding here or there somewhere, but I can't find anything wrong in either place.
+%%%
+%%%%Hmm, after doing this, which I thought would shed some light on how to transform the gradient (and divergence and curl), but it isn't clear to me
+%%%%that this was completely helpful.
+%%%
+%%%\subsection{ Verification of rotation matrix, using only matrix notation. }
+%%%
+%%%As a verification of \ref{eqn:rotation} lets calculate that directly.  The initial rotation is in the $x,y$ plane around the $-\Be_2' = -\Be_2 \exp(\Be_{12}\theta) = -\Be_2 \cos\theta + \Be_1 \sin\theta$ axis.
+%%%
+%%%From \cite{PJRotor} we have the rotation matrix for a $\phi$ rotation about
+%%%unit vector $\Bn = (n_1, n_2, n_3) = (-\cos\theta, \sin\theta, 0) = (-C_\theta, S_\theta, 0)$ is
+%%%
+%%%\begin{align*}
+%%%R_\phi R_\theta
+%%%=
+%%%\begin{bmatrix}
+%%%\cos\phi(1 +{C_\theta}^2) - {C_\theta}^2 & -{C_\theta} {S_\theta} (1-\cos\phi) & {S_\theta} \sin\phi \\
+%%%-{C_\theta} {S_\theta} (1-\cos\phi) & \cos\phi(1 -{S_\theta}^2) + {S_\theta}^2 & {C_\theta} \sin\phi \\
+%%%-{S_\theta} \sin\phi & {-C_\theta} \sin\phi & \cos\phi \\
+%%%\end{bmatrix}
+%%%\begin{bmatrix}
+%%%C_\theta & -S_\theta & 0 \\
+%%%S_\theta & C_\theta & 0 \\
+%%%0 & 0 & 1 \\
+%%%\end{bmatrix}
+%%%\end{align*}
+%%%
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
