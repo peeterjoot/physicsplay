@@ -20,7 +20,7 @@
 
 \title{Some notes on spherical polar coordinates}
 \author{Peeter Joot}
-\date{ Nov 13, 2008.  Last Revision: $Date: 2008/11/17 14:13:55 $ }
+\date{ Nov 13, 2008.  Last Revision: $Date: 2008/11/19 01:01:51 $ }
 
 \begin{document}
 
@@ -35,18 +35,21 @@ Reading the math intro of \cite{zeilik1998iaa}, I found the statement that the g
 \grad &= 
 \rcap \PD{r}{}
 +\thetacap \inv{r} \PD{\theta}{}
-+\phicap \inv{r \sin\phi}\PD{\phi}{}
++\phicap \inv{r \sin\theta}\PD{\phi}{}
 \end{align*}
-FIXME: verify if I recalled this sine term above correctly by doing this derivation.
 
 There was no picture or description showing the conventions for measurement of the angles or directions.
 To clarify things and leave a margin note I decided to derive the coordinates and unit vector transformation relationships,
 gradient, divergence and curl in spherical polar coordinates.
 
-Although these results can be found in many texts, including the excellent review article \cite{fleischCoords}, 
-the exersize of personally working out the details will be worthwhile as a learning exersize since I hadn't attempted this since
-way back in my school days.
+Although details for this particular result can be found in many texts,
+including the excellent review article \cite{fleischCoords}, the 
+exersize of personally working out the details was thought to be
+a worthwhile
+learning exersize.  Additionally, some related ideas about rotating
+frame systems seem worth exploring, and that will be done here.
 
+\section{ Notes. }
 \subsection{ Conventions. }
 
 \begin{figure}[htp]
@@ -85,7 +88,7 @@ Now for the rotational plane for the $\phi$ rotation is
 &= \inv{2} ( R_\theta \Be_1 R_\theta^\dagger \Be_3 - \Be_3 R_\theta \Be_1 R_\theta^\dagger ) \\
 \end{align*}
 
-Noting that $R_\theta$, having scalar, and $\Be_{12}$ components commutes with $\Be_3$, so we have
+The rotor (or quaternion) $R_\theta$ has scalar and $\Be_{12}$ components, so it commutes with $\Be_3$ leaving
 
 \begin{align*}
 \Be_1' \wedge \Be_3 
@@ -155,6 +158,100 @@ Applying the second rotation to $R_\phi(\Be_i)$ we have
 + \Be_3 \cos\phi
 \\
 \end{align*}
+
+\subsection{ Inverse relations. }
+
+The relations above can be summarized in matrix form
+
+\begin{align}\label{eqn:rotation}
+\begin{bmatrix}
+\rcap \\
+\thetacap \\
+\phicap \\
+\end{bmatrix}
+&=
+\begin{bmatrix}
+%rcap . {e1 e2 e3}
+\cos\phi \cos\theta & \cos\phi \sin\theta & \sin\phi \\
+%thetacap . {e1 e2 e3}
+- \sin\theta & \cos\theta & 0 \\
+%phicap . {e1 e2 e3}
+- \sin\phi \cos\theta & - \sin\phi \sin\theta & \cos\phi \\
+\end{bmatrix}
+\begin{bmatrix}
+\Be_1 \\
+\Be_2 \\
+\Be_3 \\
+\end{bmatrix}
+\end{align}
+
+Or, more compactly
+\begin{align*}
+\begin{bmatrix}
+\rcap \\
+\thetacap \\
+\phicap \\
+\end{bmatrix}
+=
+\BU
+\begin{bmatrix}
+\Be_1 \\
+\Be_2 \\
+\Be_3 \\
+\end{bmatrix}
+\end{align*}
+
+This composite rotation can be inverted with a transpose operation, which 
+becomes clear with the factorization
+\begin{align*}
+\BU
+&=
+\begin{bmatrix}
+\cos\phi & 0 & \sin\phi \\
+0 & 1 & 0 \\
+-\sin\phi & 0 & \cos\phi
+\end{bmatrix}
+\begin{bmatrix}
+\cos\theta & \sin\theta & 0 \\
+-\sin\theta & \cos\theta & 0 \\
+0 & 0 & 1 \\
+\end{bmatrix}
+\end{align*}
+
+Thus
+\begin{align*}
+\begin{bmatrix}
+\Be_1 \\
+\Be_2 \\
+\Be_3 \\
+\end{bmatrix}
+&=
+% U^T :
+%\begin{bmatrix}
+%\cos\theta & -\sin\theta & 0 \\
+%\sin\theta & \cos\theta & 0 \\
+%0 & 0 & 1 \\
+%\end{bmatrix}
+%\begin{bmatrix}
+%\cos\phi & 0 & -\sin\phi \\
+%0 & 1 & 0 \\
+%\sin\phi & 0 & \cos\phi
+%\end{bmatrix}
+%
+\begin{bmatrix}
+\cos\phi \cos\theta & - \sin\theta & - \sin\phi \cos\theta \\
+\cos\phi \sin\theta & \cos\theta & - \sin\phi \sin\theta  \\
+\sin\phi & 0 & \cos\phi \\
+\end{bmatrix}
+\begin{bmatrix}
+\rcap \\
+\thetacap \\
+\phicap \\
+\end{bmatrix}
+\end{align*}
+
+FIXME: NOW SHOW THE COORDINATE TX, AND PROBABLY MOVE THE BIT ABOUT HOW THE
+COORDS AND BASIC VECS TX DIFFERENTLY.  
 
 \subsection{ An alternate pictorical derivation of the unit vectors. }
 
@@ -267,6 +364,7 @@ y^i &= \Lor{i}{j} x^j \\
 x^i &= \ILor{i}{j} y^j
 \end{align}
 
+
 The use of inverse notation is justified by the following
 
 \begin{align*}
@@ -276,9 +374,14 @@ x^i &= \ILor{i}{k} y^k \\
 \ILor{i}{k} \Lor{k}{j} &= \delta^i_j
 \end{align*}
 
-Some references such as \cite{MinahanTensors} use $\Lor{i}{j}$ for both the forward and inverse transformations, with specific conventions
+For the special case where the basis is orthonormal ($\Be_i \cdot \Be^j = {\delta_i}^j$), then it can be observed here that the inverse must also be the
+transpose since the forward and reverse transformation tensors then differ only be a swap of indexes. 
+
+On notation.  Some references such as \cite{MinahanTensors} use $\Lor{i}{j}$ for both the forward and inverse transformations, with specific conventions
 about which index is varied to distinguish the two matrices.  I've found that confusing and have instead used the explicit inverse notation
 of \cite{SpenceTensors}.
+
+
 
 \subsection{ Gradient after change of coordinates. }
 
@@ -455,15 +558,15 @@ Forming a matrix for the transformation of these unit vectors we have
 Now compare this to the transformation of a vector in its entirety
 
 \begin{align*}
-y^1 e_1 + y^2 e_2 
+y^1 \Be_1' + y^2 \Be_2'
 &= ( x^1 \Be_1 + x^2 \Be_2 ) \exp(\Be_{12}\theta) \\
 &= x^1(\Be_1 \cos\theta + \Be_2 \sin\theta) 
  + x^2(\Be_2 \cos\theta - \Be_1 \sin\theta) \\
 \end{align*}
 
-And in matrix form this is
+In matrix form this is
 
-\begin{align*}
+\begin{align}\label{eqn:changeOfBasis}
 \begin{bmatrix}
 y_1 \\
 y_2
@@ -477,9 +580,38 @@ y_2
 x_1 \\
 x_2
 \end{bmatrix}
-\end{align*}
+\end{align}
 
 Note the inversion of the transformation matrix here compared to the frame vector transformation itself.
+
+It should also be observed that the use of a matrix here has some subtlies.
+It is really the matrix of the linear transformation which takes
+coordinates from the initial frame to
+coordinates in the rotated frame.  The notation of \cite{damiano1988cla}
+makes this nicely explicit, and an equation like \ref{eqn:changeOfBasis}
+could be written as
+
+\begin{align*}
+{
+\begin{bmatrix}
+x
+\end{bmatrix}
+}_{\alpha'}
+=
+{
+\begin{bmatrix}
+R
+\end{bmatrix}
+}_{\alpha}^{\alpha'}
+{
+\begin{bmatrix}
+x
+\end{bmatrix}
+}_{\alpha}
+\end{align*}
+
+where ${\alpha} = \{\Be_i\}$ is the initial basis
+and ${\alpha}' = \{\Be_i'\}$ is the rotated basis.
 
 %%%\section{ FIXME or delete what comes after this. }
 %%%
@@ -492,36 +624,8 @@ Note the inversion of the transformation matrix here compared to the frame vecto
 %%%&= \LL(\Be_i) \cdot \Be_j \\
 %%%&= (R^\dagger \Be_i R) \cdot \Be_j \\
 %%%\end{align*}
-%%%
-%%%\begin{align}\label{eqn:rotation}
-%%%\Lor{i}{j}
-%%%&=
-%%%\begin{bmatrix}
-%%%%rcap . {e1 e2 e3}
-%%%\cos\phi \cos\theta & \cos\phi \sin\theta & \sin\phi \\
-%%%%thetacap . {e1 e2 e3}
-%%%- \sin\theta & \cos\theta & 0 \\
-%%%%phicap . {e1 e2 e3}
-%%%- \sin\phi \cos\theta & - \sin\phi \sin\theta & \cos\phi \\
-%%%\end{bmatrix}
-%%%\end{align}
-%%%
-%%%From equation \ref{eqn:coordinateTxTensors}, one can see that the inverse transformation is the transpose.  This isn't clear looking at the matrix above until one factors it into a pair of separate matrixes
-%%%\begin{align*}
-%%%\Lor{i}{j}
-%%%&=
-%%%\begin{bmatrix}
-%%%\cos\phi & 0 & \sin\phi \\
-%%%0 & 1 & 0 \\
-%%%-\sin\phi & 0 & \cos\phi
-%%%\end{bmatrix}
-%%%\begin{bmatrix}
-%%%\cos\theta & \sin\theta & 0 \\
-%%%-\sin\theta & \cos\theta & 0 \\
-%%%0 & 0 & 1 \\
-%%%\end{bmatrix}
-%%%\end{align*}
-%%%
+
+
 %%%FIXME: from my Euler angle notes, I would have expected this matrix factorization to be in inverted order.  There's an inconsistency
 %%%or misunderstanding here or there somewhere, but I can't find anything wrong in either place.
 %%%
