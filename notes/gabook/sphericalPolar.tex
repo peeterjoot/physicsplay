@@ -20,7 +20,7 @@
 
 \title{Some notes on spherical polar coordinates}
 \author{Peeter Joot}
-\date{ Nov 13, 2008.  Last Revision: $Date: 2008/11/19 01:01:51 $ }
+\date{ Nov 13, 2008.  Last Revision: $Date: 2008/11/19 02:22:57 $ }
 
 \begin{document}
 
@@ -159,99 +159,13 @@ Applying the second rotation to $R_\phi(\Be_i)$ we have
 \\
 \end{align*}
 
-\subsection{ Inverse relations. }
+In summary these are
 
-The relations above can be summarized in matrix form
-
-\begin{align}\label{eqn:rotation}
-\begin{bmatrix}
-\rcap \\
-\thetacap \\
-\phicap \\
-\end{bmatrix}
-&=
-\begin{bmatrix}
-%rcap . {e1 e2 e3}
-\cos\phi \cos\theta & \cos\phi \sin\theta & \sin\phi \\
-%thetacap . {e1 e2 e3}
-- \sin\theta & \cos\theta & 0 \\
-%phicap . {e1 e2 e3}
-- \sin\phi \cos\theta & - \sin\phi \sin\theta & \cos\phi \\
-\end{bmatrix}
-\begin{bmatrix}
-\Be_1 \\
-\Be_2 \\
-\Be_3 \\
-\end{bmatrix}
+\begin{align}\label{eqn:unitTxSummary}
+\rcap &= \Be_1 \cos\phi \cos\theta + \Be_2 \cos\phi \sin\theta + \Be_3 \sin\phi \\
+\thetacap &= - \Be_1 \sin\theta + \Be_2 \cos\theta \\
+\phicap &= - \Be_1 \sin\phi \cos\theta - \Be_2 \sin\phi \sin\theta + \Be_3 \cos\phi
 \end{align}
-
-Or, more compactly
-\begin{align*}
-\begin{bmatrix}
-\rcap \\
-\thetacap \\
-\phicap \\
-\end{bmatrix}
-=
-\BU
-\begin{bmatrix}
-\Be_1 \\
-\Be_2 \\
-\Be_3 \\
-\end{bmatrix}
-\end{align*}
-
-This composite rotation can be inverted with a transpose operation, which 
-becomes clear with the factorization
-\begin{align*}
-\BU
-&=
-\begin{bmatrix}
-\cos\phi & 0 & \sin\phi \\
-0 & 1 & 0 \\
--\sin\phi & 0 & \cos\phi
-\end{bmatrix}
-\begin{bmatrix}
-\cos\theta & \sin\theta & 0 \\
--\sin\theta & \cos\theta & 0 \\
-0 & 0 & 1 \\
-\end{bmatrix}
-\end{align*}
-
-Thus
-\begin{align*}
-\begin{bmatrix}
-\Be_1 \\
-\Be_2 \\
-\Be_3 \\
-\end{bmatrix}
-&=
-% U^T :
-%\begin{bmatrix}
-%\cos\theta & -\sin\theta & 0 \\
-%\sin\theta & \cos\theta & 0 \\
-%0 & 0 & 1 \\
-%\end{bmatrix}
-%\begin{bmatrix}
-%\cos\phi & 0 & -\sin\phi \\
-%0 & 1 & 0 \\
-%\sin\phi & 0 & \cos\phi
-%\end{bmatrix}
-%
-\begin{bmatrix}
-\cos\phi \cos\theta & - \sin\theta & - \sin\phi \cos\theta \\
-\cos\phi \sin\theta & \cos\theta & - \sin\phi \sin\theta  \\
-\sin\phi & 0 & \cos\phi \\
-\end{bmatrix}
-\begin{bmatrix}
-\rcap \\
-\thetacap \\
-\phicap \\
-\end{bmatrix}
-\end{align*}
-
-FIXME: NOW SHOW THE COORDINATE TX, AND PROBABLY MOVE THE BIT ABOUT HOW THE
-COORDS AND BASIC VECS TX DIFFERENTLY.  
 
 \subsection{ An alternate pictorical derivation of the unit vectors. }
 
@@ -374,7 +288,7 @@ x^i &= \ILor{i}{k} y^k \\
 \ILor{i}{k} \Lor{k}{j} &= \delta^i_j
 \end{align*}
 
-For the special case where the basis is orthonormal ($\Be_i \cdot \Be^j = {\delta_i}^j$), then it can be observed here that the inverse must also be the
+For the special case where the basis is orthonormal ($e_i \cdot e^j = {\delta_i}^j$), then it can be observed here that the inverse must also be the
 transpose since the forward and reverse transformation tensors then differ only be a swap of indexes. 
 
 On notation.  Some references such as \cite{MinahanTensors} use $\Lor{i}{j}$ for both the forward and inverse transformations, with specific conventions
@@ -528,7 +442,7 @@ There are still some additional details that I will explore before concluding
 %%%Now all this is a bit inexact.  What exactly are these $\delta$ increments?  They have to be small enough that they can be considered to be just along the
 %%%time unit vectors for the rotated frame.
 
-\subsection{ Notes on transformation of frame vectors vs. coordinates. }
+\section{ Transformation of frame vectors vs. coordinates. }
 
 To avoid confusion it is worth noting how the frame vectors vs. the components themselves differ under
 rotational transformation.  Consideration of the example of a pair of orthonormal unit vectors for the plane illustrates this
@@ -564,7 +478,9 @@ y^1 \Be_1' + y^2 \Be_2'
  + x^2(\Be_2 \cos\theta - \Be_1 \sin\theta) \\
 \end{align*}
 
-In matrix form this is
+If one uses the standard basis to specify both the rotated point and 
+the original, then taking dot products with $\Be_i$ yeilds the 
+equivalent matrix representation
 
 \begin{align}\label{eqn:changeOfBasis}
 \begin{bmatrix}
@@ -582,36 +498,134 @@ x_2
 \end{bmatrix}
 \end{align}
 
-Note the inversion of the transformation matrix here compared to the frame vector transformation itself.
+Note how this inverts (transposes) the transformation matrix here
+compared to the matrix for the transformation of the frame vectors.
 
-It should also be observed that the use of a matrix here has some subtlies.
-It is really the matrix of the linear transformation which takes
-coordinates from the initial frame to
-coordinates in the rotated frame.  The notation of \cite{damiano1988cla}
-makes this nicely explicit, and an equation like \ref{eqn:changeOfBasis}
-could be written as
+%It should also be observed that the use of a matrix here has some subtlies.
+%It is really the matrix of the linear transformation which takes
+%coordinates from the initial frame to
+%coordinates in the rotated frame.  The notation of \cite{damiano1988cla}
+%makes this nicely explicit, and an equation like \ref{eqn:changeOfBasis}
+%could be written as
+%
+%\begin{align*}
+%{
+%\begin{bmatrix}
+%x
+%\end{bmatrix}
+%}_{\alpha'}
+%=
+%{
+%\begin{bmatrix}
+%R
+%\end{bmatrix}
+%}_{\alpha}^{\alpha'}
+%{
+%\begin{bmatrix}
+%x
+%\end{bmatrix}
+%}_{\alpha}
+%\end{align*}
+%
+%where ${\alpha} = \{\Be_i\}$ is the initial basis
+%and ${\alpha}' = \{\Be_i'\}$ is the rotated basis.
 
+\subsection{ Inverse relations for spherical polar transformations. }
+
+The relations of \ref{eqn:unitTxSummary} can be summarized in matrix form
+
+\begin{align}\label{eqn:rotation}
+\begin{bmatrix}
+\rcap \\
+\thetacap \\
+\phicap \\
+\end{bmatrix}
+&=
+\begin{bmatrix}
+%rcap . {e1 e2 e3}
+\cos\phi \cos\theta & \cos\phi \sin\theta & \sin\phi \\
+%thetacap . {e1 e2 e3}
+- \sin\theta & \cos\theta & 0 \\
+%phicap . {e1 e2 e3}
+- \sin\phi \cos\theta & - \sin\phi \sin\theta & \cos\phi \\
+\end{bmatrix}
+\begin{bmatrix}
+\Be_1 \\
+\Be_2 \\
+\Be_3 \\
+\end{bmatrix}
+\end{align}
+
+Or, more compactly
 \begin{align*}
-{
 \begin{bmatrix}
-x
+\rcap \\
+\thetacap \\
+\phicap \\
 \end{bmatrix}
-}_{\alpha'}
 =
-{
+\BU
 \begin{bmatrix}
-R
+\Be_1 \\
+\Be_2 \\
+\Be_3 \\
 \end{bmatrix}
-}_{\alpha}^{\alpha'}
-{
-\begin{bmatrix}
-x
-\end{bmatrix}
-}_{\alpha}
 \end{align*}
 
-where ${\alpha} = \{\Be_i\}$ is the initial basis
-and ${\alpha}' = \{\Be_i'\}$ is the rotated basis.
+This composite rotation can be inverted with a transpose operation, which 
+becomes clear with the factorization
+\begin{align*}
+\BU
+&=
+\begin{bmatrix}
+\cos\phi & 0 & \sin\phi \\
+0 & 1 & 0 \\
+-\sin\phi & 0 & \cos\phi
+\end{bmatrix}
+\begin{bmatrix}
+\cos\theta & \sin\theta & 0 \\
+-\sin\theta & \cos\theta & 0 \\
+0 & 0 & 1 \\
+\end{bmatrix}
+\end{align*}
+
+Thus
+\begin{align*}
+\begin{bmatrix}
+\Be_1 \\
+\Be_2 \\
+\Be_3 \\
+\end{bmatrix}
+&=
+% U^T :
+%\begin{bmatrix}
+%\cos\theta & -\sin\theta & 0 \\
+%\sin\theta & \cos\theta & 0 \\
+%0 & 0 & 1 \\
+%\end{bmatrix}
+%\begin{bmatrix}
+%\cos\phi & 0 & -\sin\phi \\
+%0 & 1 & 0 \\
+%\sin\phi & 0 & \cos\phi
+%\end{bmatrix}
+%
+\begin{bmatrix}
+\cos\phi \cos\theta & - \sin\theta & - \sin\phi \cos\theta \\
+\cos\phi \sin\theta & \cos\theta & - \sin\phi \sin\theta  \\
+\sin\phi & 0 & \cos\phi \\
+\end{bmatrix}
+\begin{bmatrix}
+\rcap \\
+\thetacap \\
+\phicap \\
+\end{bmatrix}
+\end{align*}
+
+FIXME: NOW SHOW THE COORDINATE TX, AND PROBABLY MOVE THE BIT ABOUT HOW THE
+COORDS AND BASIC VECS TX DIFFERENTLY.  
+
+
+
 
 %%%\section{ FIXME or delete what comes after this. }
 %%%
