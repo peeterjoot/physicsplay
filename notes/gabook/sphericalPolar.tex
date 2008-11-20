@@ -20,7 +20,7 @@
 
 \title{Some notes on spherical polar coordinates}
 \author{Peeter Joot}
-\date{ Nov 13, 2008.  Last Revision: $Date: 2008/11/19 02:22:57 $ }
+\date{ Nov 13, 2008.  Last Revision: $Date: 2008/11/20 04:46:15 $ }
 
 \begin{document}
 
@@ -482,7 +482,7 @@ If one uses the standard basis to specify both the rotated point and
 the original, then taking dot products with $\Be_i$ yeilds the 
 equivalent matrix representation
 
-\begin{align}\label{eqn:changeOfBasis}
+\begin{align}\label{eqn:planeRotationAppliedToCoordinates}
 \begin{bmatrix}
 y_1 \\
 y_2
@@ -505,7 +505,7 @@ compared to the matrix for the transformation of the frame vectors.
 %It is really the matrix of the linear transformation which takes
 %coordinates from the initial frame to
 %coordinates in the rotated frame.  The notation of \cite{damiano1988cla}
-%makes this nicely explicit, and an equation like \ref{eqn:changeOfBasis}
+%makes this nicely explicit, and an equation like \ref{eqn:planeRotationAppliedToCoordinates}
 %could be written as
 %
 %\begin{align*}
@@ -534,7 +534,7 @@ compared to the matrix for the transformation of the frame vectors.
 
 The relations of \ref{eqn:unitTxSummary} can be summarized in matrix form
 
-\begin{align}\label{eqn:rotation}
+\begin{align}\label{eqn:sphericalPolarRotationMatrixForFrameVectors}
 \begin{bmatrix}
 \rcap \\
 \thetacap \\
@@ -621,11 +621,65 @@ Thus
 \end{bmatrix}
 \end{align*}
 
-FIXME: NOW SHOW THE COORDINATE TX, AND PROBABLY MOVE THE BIT ABOUT HOW THE
-COORDS AND BASIC VECS TX DIFFERENTLY.  
+\subsection{ Transformation of coordinate vector under spherical polar rotation. }
 
+In equation \ref{eqn:planeRotationAppliedToCoordinates} the matrix for the rotation of a coordinate vector for the plane rotation
+was observed to be the transpose of the matrix that transformed the frame vectors themselves.  This is also the case
+in this spherical polar case, as can be seen by forming a general vector and applying equation 
+\ref{eqn:sphericalPolarRotationMatrixForFrameVectors} to the standard basis vectors.
 
+\begin{align*}
+x^1 \Be_1 &\rightarrow x^1 ( \cos\phi \cos\theta \Be_1 + \cos\phi \sin\theta \Be_2 + \sin\phi \Be_3 ) \\
+x^2 \Be_2 &\rightarrow x^2 ( - \sin\theta \Be_1 + \cos\theta \Be_2 ) \\
+x^3 \Be_3 &\rightarrow x^3 ( - \sin\phi \cos\theta \Be_1 - \sin\phi \sin\theta \Be_2 + \cos\phi \Be_3 )
+\end{align*}
 
+Summing this and regrouping one has:
+\begin{align*}
+x^i \Be_i &\rightarrow y^i \Be_i \\
+& \Be_1 ( x^1 \cos\phi \cos\theta - x^2 \sin\theta - x^3 \sin\phi \cos\theta ) \\
+& + \Be_2 ( x^1 \cos\phi \sin\theta + x^2 \cos\theta - x^3 \sin\phi \sin\theta ) \\
+& + \Be_3 ( x^1 \sin\phi + x^3 \cos\phi ) \\
+\end{align*}
+
+taking dot products with $\Be_i$ produces the matrix form
+\begin{align*}
+\begin{bmatrix}
+y^1 \\
+y^2 \\
+y^3 \\
+\end{bmatrix}
+&=
+\begin{bmatrix}
+\cos\phi \cos\theta & - \sin\theta & - \sin\phi \cos\theta \\
+\cos\phi \sin\theta & \cos\theta & - \sin\phi \sin\theta \\
+\sin\phi & 0 & \cos\phi \\
+\end{bmatrix}
+\begin{bmatrix}
+x^1 \\
+x^2 \\
+x^3 \\
+\end{bmatrix} \\
+&=
+\begin{bmatrix}
+\cos\theta & -\sin\theta & 0 \\
+\sin\theta & \cos\theta & 0 \\
+0 & 0 & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+\cos\phi & 0 & -\sin\phi \\
+0 & 1 & 0 \\
+\sin\phi & 0 & \cos\phi
+\end{bmatrix}
+\begin{bmatrix}
+x^1 \\
+x^2 \\
+x^3 \\
+\end{bmatrix} \\
+\end{align*}
+
+As 
+@unpublished{PJEulerAngle,
 
 %%%\section{ FIXME or delete what comes after this. }
 %%%
@@ -648,7 +702,7 @@ COORDS AND BASIC VECS TX DIFFERENTLY.
 %%%
 %%%\subsection{ Verification of rotation matrix, using only matrix notation. }
 %%%
-%%%As a verification of \ref{eqn:rotation} lets calculate that directly.  The initial rotation is in the $x,y$ plane around the $-\Be_2' = -\Be_2 \exp(\Be_{12}\theta) = -\Be_2 \cos\theta + \Be_1 \sin\theta$ axis.
+%%%As a verification of \ref{eqn:sphericalPolarRotationMatrixForFrameVectors} lets calculate that directly.  The initial rotation is in the $x,y$ plane around the $-\Be_2' = -\Be_2 \exp(\Be_{12}\theta) = -\Be_2 \cos\theta + \Be_1 \sin\theta$ axis.
 %%%
 %%%From \cite{PJRotor} we have the rotation matrix for a $\phi$ rotation about
 %%%unit vector $\Bn = (n_1, n_2, n_3) = (-\cos\theta, \sin\theta, 0) = (-C_\theta, S_\theta, 0)$ is
