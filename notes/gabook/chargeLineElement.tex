@@ -15,7 +15,7 @@
 
 \title{ Charge line element. }
 \author{Peeter Joot}
-\date{ Nov 23, 2008.  Last Revision: $Date: 2008/11/23 15:59:41 $ }
+\date{ Nov 23, 2008.  Last Revision: $Date: 2008/11/23 19:40:04 $ }
 
 \begin{document}
 
@@ -43,48 +43,82 @@ We want to sum each of the field contributions along the line, so with
 d\BE &= \frac{dq \ucap(\theta)}{4 \pi \epsilon_0 R^2} \\
 r/R &= \cos\theta \\
 dy &= r d(\tan\theta) = r \sec^2 \theta \\
--\ucap(\theta) &= -\Be_1 e^{-i \theta} \\
+\ucap(\theta) &= \Be_1 e^{i \theta} \\
 i &= \Be_1 \Be_2 
 \end{align*}
+
+% check:
+% 3 pi/2 : e1 e^i\theta = e1 \cos 3\pi/2 + e2\sin 3\pi/2 = -e2 
+%   pi/2 : e1 e^i\theta = e1 \cos \pi/2 + e2\sin \pi/2   = e2
+%      0 : e1 e^i\theta = e1 \cos 0 + e2\sin 0           = e1
+%
+% 3 pi/2 : e^i\theta = \cos 3\pi/2 + e1e2\sin 3\pi/2     = -e1e2 
+% pi/2   : e^i\theta = \cos \pi/2 + e1e2\sin \pi/2       = e1e2
+% 0      : e^i\theta = \cos 0 + e1e2\sin 0               = 1
 
 Putting things together we have
 
 \begin{align*}
 d\BE
-&= \frac{\lambda r \sec^2 \theta \Be_1 e^{-i\theta} d\theta}{4 \pi \epsilon_0 r^2 \sec^2 \theta} \\
-&= \frac{\lambda \Be_1 e^{-i\theta} d\theta}{4 \pi \epsilon_0 r} \\
-&= \frac{\lambda \Be_1 i d(e^{-i\theta})}{4 \pi \epsilon_0 r} \\
+&= \frac{\lambda r \sec^2 \theta \Be_1 e^{i\theta} d\theta}{4 \pi \epsilon_0 r^2 \sec^2 \theta} \\
+&= \frac{\lambda \Be_1 e^{i\theta} d\theta}{4 \pi \epsilon_0 r} \\
+&= -\frac{\lambda \Be_1 i d(e^{i\theta})}{4 \pi \epsilon_0 r} \\
 \end{align*}
 
 Thus the total field is
 \begin{align*}
 \BE
 &= \int d\BE \\
-&= \frac{\lambda \Be_2}{4 \pi \epsilon_0 r} \int d(e^{-i\theta}) \\
+&= -\frac{\lambda \Be_2}{4 \pi \epsilon_0 r} \int d(e^{i\theta}) \\
 \end{align*}
 
 We see that the integration, which has the value
 
 \begin{align}
-\BE = \frac{\lambda} {4 \pi \epsilon_0 r} \Be_2 e^{-i\delta\theta}
+\BE = -\frac{\lambda} {4 \pi \epsilon_0 r} \Be_2 e^{i\delta\theta}
 \end{align}
 
-is not really any harder for a non-infinite line element than it is for an infinite one.  If we want the field
-contribution for a finite length wire we have only to pick an angle parameterized integration range
+The integration range for the infinite wire is $\theta \in [3\pi/2, \pi/2]$
+so the field for the infinite wire is
+
+\begin{align*}
+\BE
+&= -\frac{\lambda} {4 \pi \epsilon_0 r} \Be_2 \left. e^{i\theta} \right\vert^{\theta = \pi/2}_{\theta = 3\pi/2} \\
+&= -\frac{\lambda} {4 \pi \epsilon_0 r} \Be_2 (e^{i\pi/2} - e^{3i\pi/2}) \\
+&= -\frac{\lambda} {4 \pi \epsilon_0 r} \Be_2 (\Be_1 \Be_2 - (-\Be_1 \Be_2)) \\
+&= \frac{\lambda} {2 \pi \epsilon_0 r} \Be_1 \\
+\end{align*}
+% 3 pi/2 : e^i\theta = \cos 3\pi/2 + e1e2\sin 3\pi/2     = -e1e2 
+% pi/2   : e^i\theta = \cos \pi/2 + e1e2\sin \pi/2       = e1e2
+
+%and $e^{-i\pi}$
+%\ucap(\theta) &= \Be_1 e^{i \theta} \quad \theta \in [3\pi/2, \pi/2] \\
+
+Invoking symmetry was done in order to work with coordinates, but working with the vector quantities directly
+avoids this requirement and gives the general result for any subset of angles.
+
+For a finite length wire all that is required is an angle parameterization of that wire's length
 
 \begin{align*}
 %[y_1, y_2] = r[\tan\theta_1, \tan\theta_2].
 [\theta_1, \theta_2] = [\tan^{-1}(y_1/r), \tan^{-1}(y_2/r)]
 \end{align*}
 
-Invoking symmetry was done in order to work with coordinates, but working with the vector quantities directly
-avoids this requirement and gives the general result for any subset of angles.
-
-For the specific case of an infinite length wire, one has an integration range of $\theta \in [-\pi/2, \pi/2]$, and
-the field at $P$ is thus
+For such a range the exponential difference for the integral is
 
 \begin{align*}
-%FIXME: messed up signs here?
+\left. e^{i\theta} \right \vert_{\theta_1}^{\theta_2} 
+&= e^{i\theta_2} - e^{i\theta_1} \\
+&= e^{i(\theta_1 + \theta_2)/2} \left( e^{i(\theta_2 - \theta_1)/2} -e^{i(\theta_2 - \theta_1)/2} \right) \\
+&= 2 i e^{i(\theta_1 + \theta_2)/2} \sin((\theta_2 - \theta_1)/2) \\
+\end{align*}
+
+thus the associated field is
+
+\begin{align*}
+\BE 
+&= -\frac{\lambda} {2 \pi \epsilon_0 r} \Be_2 i e^{i(\theta_1 + \theta_2)/2} \sin((\theta_2 - \theta_1)/2) \\
+&= \frac{\lambda} {2 \pi \epsilon_0 r} \Be_1 e^{i(\theta_1 + \theta_2)/2} \sin((\theta_2 - \theta_1)/2) \\
 \end{align*}
 
 \bibliographystyle{plainnat}
