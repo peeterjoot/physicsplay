@@ -154,6 +154,16 @@ ordered += ../geometric-algebra/eulerangle.pdf
 # in progress:
 ordered += ../geometric-algebra/spherical_polar.pdf
 
+skipit += ../geometric-algebra/all.pdf
+ordered += ../geometric-algebra/guassian_surface.pdf
+ordered += ../geometric-algebra/charge_line_element.pdf
+ordered += ../geometric-algebra/charge_arc_element.pdf
+
+# clean up... contains email to Lut'isms as is.
+ordered += ../geometric-algebra/matrix_to_operator.pdf
+
+# Rules:
+#-----------------------------------------------------
 semiordered := $(ordered) $(unordered)
 unordered := $(filter-out $(ordered) $(skipit),$(ppdfs))
 reversed := $(shell echo $(semiordered) | tr ' ' '\n' | grep -n '' | sort -nr | sed 's/[0-9][0-9]*://' | tr '\n' ' ')
