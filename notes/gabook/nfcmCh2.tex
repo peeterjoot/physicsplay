@@ -1,0 +1,140 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+
+\title{ Some NFCM exersize solutions and notes. }
+\author{Peeter Joot}
+\date{ Nov 27, 2008.  Last Revision: $Date: 2008/11/28 03:02:16 $ }
+
+\begin{document}
+
+\maketitle{}
+
+%\tableofcontents
+\section{ Chapter 2 }
+
+I recall that some of the problems from this chapter of
+\cite{hestenes1999nfc}
+were fairly tricky.  Did I end up doing them all?  I intended to
+revisit these and make sure I understood it all.  As I do so, write up
+solutions, starting with $1.3$, a question on the Geometric Algebra group.
+
+Another thing I recall from the text is that I was fairly confused about
+all the mass of identities by the time I got through it, and it wasn't clear
+to me which were the fundamental ones.
+Eventually I figured out that it is
+really grade selection that is the fundamental operation, and the
+definitions of the generalized dot
+
+\begin{align*}
+A_r \cdot B_s = \gpgrade{A B}{{\Abs{r -s}}}
+\end{align*}
+
+and wedge product
+
+\begin{align*}
+A_r \wedge B_s = \gpgrade{A B}{r + s}
+\end{align*}
+
+and most everything else
+follows from that.
+I also found it was really easy to go around in circles attempting the various proofs, and intended to revisit all of these
+and prove them all for myself making sure I didn't invoke any circular arguments and used only things already proven.
+
+\subsection{ Exersize 1.3 }
+
+Solve for $x$
+
+\begin{align*}
+\alpha x + a x \cdot b = c
+\end{align*}
+
+where $\alpha$ is a scalar and all the rest are vectors.
+
+\subsubsection{ Solution. }
+
+Can dot or wedge the entire equation with the constant vectors.  In particular
+
+\begin{align*}
+c \cdot b &= (\alpha x + a x \cdot b) \cdot b \\ 
+&= (\alpha + a \cdot b) x \cdot b 
+\end{align*}
+\begin{align*}
+\implies
+x \cdot b &= \frac{c \cdot b}{\alpha + a \cdot b} \\
+\end{align*}
+
+and
+\begin{align*}
+c \wedge a &= (\alpha x + a x \cdot b) \wedge a \\ 
+&= \alpha (x \wedge a) + \underbrace{(a \wedge a)}_{=0} (x \cdot b) \wedge a \\
+\end{align*}
+\begin{align*}
+\implies
+x \wedge a &= \inv{\alpha} (c \wedge a) \\
+\end{align*}
+
+This last can be reduced by dotting with $b$, and then substitute the 
+result for $x \cdot b$ from above
+
+\begin{align*}
+(x \wedge a) \cdot b
+&= x (a \cdot b) - (x \cdot b) a \\
+&= x (a \cdot b) - \frac{c \cdot b}{\alpha + a \cdot b} a \\
+\end{align*}
+
+Thus the final solution is
+
+\begin{align*}
+x = \inv{a \cdot b}\left(
+\frac{c \cdot b}{\alpha + a \cdot b} a 
++ \inv{\alpha} (c \wedge a) \cdot b
+\right)
+\end{align*}
+
+Question: was there a geometric or physical motivation for this question.  I can't recall one?
+
+\section{ Sequential proofs of required identities. }
+
+\subsection{ bivector dot with vector reduction. }
+
+In the $1.3$ solution above the identity
+
+\begin{align}
+(a \wedge b) \cdot c &= a (b \cdot c) - (a \cdot c) b \\
+\end{align}
+
+was used.  Let's prove this, taking the vector dot and wedge identities
+as given (FIXME: should do that first for completeness).
+
+\begin{align*}
+(a \wedge b) \cdot c
+&= \gpgradeone{(a \wedge b) c} \\
+\implies \\
+2 (a \wedge b) \cdot c
+&= \gpgradeone{a b c - b a c} \\
+&= \gpgradeone{a b c - b (- c a + 2 a \cdot c )} \\
+&= \gpgradeone{a b c + b c a} - 2 b (a \cdot c ) \\
+&= \gpgradeone{a (b \cdot c + b \wedge c) + (b \cdot c + b \wedge c) a} - 2 b (a \cdot c ) \\
+&= 2 a (b \cdot c) + a \cdot (b \wedge c) + (b \wedge c) \cdot a - 2 b (a \cdot c ) \\
+\end{align*}
+
+To complete the proof we need $a \cdot B = -B \cdot a$ (FIXME: do this one).  Given that one is left with the desired identity after dividing through
+by $2$.
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
+
+\end{document}
