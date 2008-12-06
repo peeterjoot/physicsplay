@@ -1,0 +1,264 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+
+\newcommand{\Clifford}[2]{\mathcal{C}_{\{{#1},{#2}\}}}
+\DeclareMathOperator{\tr}{tr}
+\newcommand{\trace}[1]{\tr\left({#1}\right)}
+
+\newcommand{\PauliI}[0]{
+\begin{bmatrix}
+1 & 0 \\
+0 & 1 \\
+\end{bmatrix}
+}
+
+\newcommand{\PauliX}[0]{
+\begin{bmatrix}
+0 & 1 \\
+1 & 0 \\
+\end{bmatrix}
+}
+
+\newcommand{\PauliY}[0]{
+\begin{bmatrix}
+0 & -i \\
+i & 0 \\
+\end{bmatrix}
+}
+
+\newcommand{\PauliYNoI}[0]{
+\begin{bmatrix}
+0 & -1 \\
+1 & 0 \\
+\end{bmatrix}
+}
+
+\newcommand{\PauliZ}[0]{
+\begin{bmatrix}
+1 & 0 \\
+0 & -1 \\
+\end{bmatrix}
+}
+
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+\title{Translating from Pauli Matrixes to Clifford Algebra}
+\author{Peeter Joot}
+\date{ Dec 06, 2008.  Last Revision: $Date: 2008/12/06 19:34:30 $ }
+
+\begin{document}
+\maketitle{}
+
+%\tableofcontents
+
+\section{ Motivation. }
+
+Having learned Clifford Algebra before studying quantum mechanics, am now trying to work with (and talk to people familiar with) the Pauli and Dirac matrix notation as used in
+traditional quantum mechanics.
+
+The aim of this document is to translation first from the matrix methods and commutator/anticommutator notations to dot, wedge and pseudoscalar notations, and then
+go the opposite way translating some common clifford algebra operations into matrix form to get an idea of how to work in both methods.
+
+\section{ Pauli Matrices }
+
+The matrixes in question are:
+
+\begin{align}
+\sigma_1 &= \PauliX \\
+\sigma_2 &= \PauliY \\
+\sigma_3 &= \PauliZ
+\end{align}
+
+These all have positive square as do the traditional Euclidean unit vectors $\Be_i$, and so can be used algebraically as a vector basis for \R{3}.  So any vector that we
+can write in coordinates
+
+\begin{align*}
+\Bx = x^i \Be_i,
+\end{align*}
+
+we can equivalently write (an isomorphism) in terms of the Pauli matrixes
+
+\begin{align}\label{eqn:vectorInPauliBasis}
+x = x^i \sigma_i.
+\end{align}
+
+\subsection{ Pauli Vector. }
+%Pauli Matrix article
+\cite{wikipauli} introduces the Pauli vector as a mechanism for mapping between a vector basis and this matrix basis
+
+\begin{align*}
+\Bsigma = \sum \sigma_i \Be_i
+\end{align*}
+
+This is a curious looking construct with products of $2 x 2$ matrices and \R{3} vectors.  Obviously these are not the usual $3 x 1$ column vector representations.  This 
+Pauli vector is thus 
+really a notational construct.  If one takes the dot product of a vector expressed using the standard orthonormal Euclidian basis $\{\Be_i\}$ basis, and then
+takes the dot product with the Pauli matrix in a mechanical fashion
+
+\begin{align*}
+\Bx \cdot \Bsigma &=
+(x^i \Be_i) \cdot \sum \sigma_j \Be_j \\
+&= \sum_{i,j} x^i \sigma_j \Be_i \cdot \Be_j \\
+&= x^i \sigma_i \\
+\end{align*}
+
+one arrives at the matrix representation of the vector in the Pauli basis $\{\sigma_i\}$.  Does this construct have any value?  That I don't know, but for the rest of 
+these notes the coordinate representation as in equation \ref{eqn:vectorInPauliBasis} will be used directly.
+
+\subsection{ Matrix squares }
+
+It was stated that the Pauli matrices have unit square.  Direct calculation of this
+is straightforward, and confirms the assertion
+
+\begin{align*}
+{\sigma_1}^2 &= \PauliX \PauliX = \PauliI = I \\
+{\sigma_2}^2 &= \PauliY \PauliY = i^2 \PauliYNoI \PauliYNoI = \PauliI = I \\
+{\sigma_3}^2 &= \PauliZ \PauliZ = \PauliI = I \\
+\end{align*}
+
+Note that unlike the vector (Clifford) square the unit matrix is not a scalar.
+
+\subsection{ Length }
+If we are to
+operate with Pauli matrixes how do we express our most basic vector operation,
+the length?
+
+Examining a vector lying along one direction, say, $\Ba = \alpha\xcap$ we expect
+
+\begin{align*}
+\Ba^2 = \Ba \cdot \Ba = \alpha^2 \xcap \cdot \xcap = \alpha^2.
+\end{align*}
+
+Lets contrast this to the Pauli square for the same vector $y = \alpha\sigma_1$
+
+\begin{align*}
+\Ba^2 = \alpha^2 {\sigma_1}^2
+\end{align*}
+
+The wiki article mentions trace, but no application for it.  One application for the trace that one can observe is as a mechanism to convert a diagonal
+matrix to a scalar.
+In particular, and for this identity matrix one has
+
+\begin{align*}
+\alpha^2 = \inv{2} \trace{\Ba^2}
+\end{align*}
+
+So it is plausible to guess that we may be able to express (squared) length as
+
+\begin{align*}
+\Abs{x}^2 = \inv{2}\trace{x^2}
+\end{align*}
+
+Let's see if this works by performing the coordinate expansion
+
+\begin{align*}
+x^2
+&= (x^i \sigma_i)(x^j \sigma_j) \\
+&= x^i x^j \sigma_i \sigma_j \\
+&= \sum_{i < j} x^i x^j (\sigma_i \sigma_j + \sigma_j \sigma_i) + \sum_i (x^i)^2 {\sigma_i}^2 \\
+\end{align*}
+
+As an algebra that is isomorphic to the Clifford Algebra $\Clifford{3}{0}$ it is expected that the $\sigma_i \sigma_j$ matrixes anticommute for $i \ne j$.  Let's verify this
+
+\begin{align*}
+\begin{array}{l l l l}
+\sigma_1 \sigma_2 &= i \PauliX \PauliYNoI    &= i \PauliZ                                  &=  i \sigma_3 \\
+\sigma_2 \sigma_1 &= i \PauliYNoI \PauliX    &= i \begin{bmatrix}-1 & 0 \\0 & 1\end{bmatrix} &= -i \sigma_3 \\
+\sigma_3 \sigma_1 &= \PauliZ \PauliX         &=   \begin{bmatrix}0 & 1 \\-1 & 0\end{bmatrix} &=  i \sigma_2 \\
+\sigma_1 \sigma_3 &= \PauliX \PauliZ         &=   \begin{bmatrix}0 & -1 \\1 & 0\end{bmatrix} &= -i \sigma_2 \\
+\sigma_2 \sigma_3 &= i \PauliYNoI \PauliZ    &= i \PauliX                                  &=  i \sigma_1 \\
+\sigma_3 \sigma_2 &= i \PauliZ \PauliYNoI    &= i \begin{bmatrix}0 & -1 \\-1 & 0\end{bmatrix} &= -i \sigma_3 \\
+\end{array}
+\end{align*}
+
+Thus the sum over the $\{i < j\} = \{12, 23, 13\}$ indexes above is zero.  This leaves 
+
+\begin{align*}
+x^2 = \sum_i (x^i)^2 I \\
+\end{align*}
+
+and the intuition that the length can be expressed using the trace of the squared vector was correct.  Summarizing this, we have for the length of a vector in the Pauli basis
+
+\begin{align}
+\Abs{x}^2 = \inv{2} \trace{x^2} = \sum_i (x^i)^2
+\end{align}
+
+\subsection{ Dot product. }
+
+Having found the expression for the length of a vector in the Pauli basis, the next logical desirable identity is the dot product.  One can guess that
+this will be the trace of a scaled symmetric product, but can motivate this without guessing in the usual fashion, by calculating the length of an 
+orthonormal sum.
+
+Consider first the length of a general vector sum.  To calculate this we first wish to calculate the matrix square of this sum.
+
+\begin{align*}
+(x + y)^2 &= x^2 + y^2 + x y + y x \\
+\end{align*}
+
+If these vectors are perpendicular this equals $x^2 + y^2$.  Thus orthonormality implies that
+\begin{align*}
+x y + y x &= 0 \\
+\end{align*}
+
+or,
+
+\begin{align}
+y x &= - x y
+\end{align}
+
+We have already observed this by direct calculation for the Pauli matrixes themselves.  Now, this is not any different than the usual description of perpendicularity in a Clifford Algebra, and it is notable that there are not any references to matrixes in this argument.  One only requires that a well defined vector
+product exists, where the squared vector has a length interpretation.
+
+One matrix dependent observation that can be made is that since the left hand side and the $x^2$, and $y^2$ terms are all diagonal, this symmetric sum must also be diagonal.  Additionally, for the length of this vector sum we then have
+
+\begin{align*}
+{\Abs{x + y}}^2
+%&= x^2 + y^2 + x y + y x \\
+&= \Abs{x}^2 + \Abs{y}^2 + \inv{2}\trace{x y + y x} \\
+\end{align*}
+
+For correspondance with the Euclidean dot product we must then have
+
+\begin{align*}
+2 x \cdot y &= \inv{2}\trace{x y + y x}
+\end{align*}
+
+Or
+\begin{align}
+x \cdot y &= \inv{4}\trace{x y + y x}
+\end{align}
+
+Also note that this symmetric product that we find in the dot product definition, is known in physics as the anticommutator, where the commutator
+is the antisymmetric sum.  In the physics notation the commutator (symmetric sum) is
+
+\begin{align}
+[x, y] &= x y + y x
+\end{align}
+
+So the dot product can be written
+
+\begin{align}
+x \cdot y = \inv{4}\trace{[x, y]}
+\end{align}
+
+Similarily, the anticommutator is denoted:
+\begin{align}
+\{x, y\} &= x y - y x,
+\end{align}
+
+and we expect a close relation between this and the wedge product of Clifford Algebra.
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
+
+\end{document}
