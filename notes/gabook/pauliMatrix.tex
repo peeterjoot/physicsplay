@@ -57,7 +57,7 @@ i & 0 \\
 
 \title{Translating from Pauli Matrixes to Clifford Algebra}
 \author{Peeter Joot}
-\date{ Dec 06, 2008.  Last Revision: $Date: 2008/12/07 05:49:10 $ }
+\date{ Dec 06, 2008.  Last Revision: $Date: 2008/12/07 15:43:52 $ }
 
 \begin{document}
 \maketitle{}
@@ -66,11 +66,13 @@ i & 0 \\
 
 \section{ Motivation. }
 
-Having learned Clifford Algebra before studying quantum mechanics, am now trying to work with (and talk to people familiar with) the Pauli and Dirac matrix notation as used in
-traditional quantum mechanics.
+Having learned Clifford Algebra from 
+\cite{doran2003gap}, \cite{hestenes1999nfc}, \cite{dorst2007gac}, and other sources
+before studying quantum mechanics, trying to work with (and talk to people familiar with) the Pauli and Dirac matrix notation as used in
+traditional quantum mechanics becomes difficult.
 
-The aim of this document is to translation first from the matrix methods and commutator/anticommutator notations to dot, wedge and pseudoscalar notations, and then
-go the opposite way translating some common clifford algebra operations into matrix form to get an idea of how to work in both methods.
+The aim of this document is to work through equivalents to many Clifford algebra expressions entirely in
+commutator and anticommutator notations, instead of the dot and wedge products of Clifford algebra.
 
 \section{ Pauli Matrices }
 
@@ -184,7 +186,14 @@ As an algebra that is isomorphic to the Clifford Algebra $\Clifford{3}{0}$ it is
 \end{array}
 \end{align*}
 
-Thus the sum over the $\{i < j\} = \{12, 23, 13\}$ indexes above is zero.  This leaves 
+Thus the sum over the $\{i < j\} = \{12, 23, 13\}$ indexes above is zero.  As a side note here it is also worth observing that
+the table of products above can be summarized as
+
+\begin{align}
+\sigma_a \sigma_b = 2 i \epsilon_{abc} \sigma_c
+\end{align}
+
+Having computed this, our vector square is left with the value
 
 \begin{align*}
 x^2 = \sum_i (x^i)^2 I \\
@@ -241,7 +250,7 @@ Or
 \gpgradezero{x y} &= \inv{4}\traceB{x y + y x}
 \end{align}
 
-Here the clifford algebra grade zero (scalar part) selection notation $\gpgradezero{x y}$ has been used so that the dot product notation $x \cdot y$ can be reserved for an application that is more natural in the Pauli algebra context.
+Here the Clifford algebra grade zero (scalar part) selection notation $\gpgradezero{x y}$ has been used so that the dot product notation $x \cdot y$ can be reserved for an application that is more natural in the Pauli algebra context.
 
 Also note that the symmetric product that we find in the dot product definition, is known in physics as the anticommutator, where the commutator
 is the antisymmetric sum.  In the physics notation the anticommutator (symmetric sum) is
@@ -266,7 +275,7 @@ expected.
 
 \subsection{ Symmetric and antisymmetric split. }
 
-As with the clifford product, the symmetric and antisymetric split of a vector
+As with the Clifford product, the symmetric and antisymetric split of a vector
 product is a useful concept.  This can be used to write the product 
 of two Pauli basis vectors in terms of the anticommutator and commutator 
 products
@@ -280,7 +289,7 @@ These follows from the definition of the anticommutator
 \ref{eqn:anticommutator}
 and commutator 
 \ref{eqn:commutator}
-products above, and are the equivalents of the clifford symmetric and antisymmetric split into dot and wedge products
+products above, and are the equivalents of the Clifford symmetric and antisymmetric split into dot and wedge products
 
 \begin{align}
 x y &= {x} \cdot {y} + {x} \wedge {y} \\
@@ -294,7 +303,7 @@ x \cdot y &= \inv{2}(x y + y x) \\
 x \wedge y &= \inv{2}(x y - y x)
 \end{align*}
 
-Note the factor of two differences in the two algebraic notations.  In particular very handy clifford vector product reversal formula
+Note the factor of two differences in the two algebraic notations.  In particular very handy Clifford vector product reversal formula
 
 \begin{align*}
 y x = - x y + 2 x \cdot y
@@ -331,18 +340,129 @@ x^{-1}
 &= x \inv{x^2} \\
 \end{align*}
 
-The diagonality of the squared matrix or the inverse of that allows for commutation with x.  This diagonality plays the same role as the scalar in a regular clifford square.  In either case the square can commute with the vector, and that 
+This inverse is a scaled version of the vector itself.
+
+The diagonality of the squared matrix or the inverse of that allows for commutation with x.  This diagonality plays the same role as the scalar in a regular Clifford square.  In either case the square can commute with the vector, and that 
 commutation allows the inverse to have both left and right sided action.
 
 Note that like the Clifford vector inverse when the vector is multiplied with this inverse, the product resides outside of the proper \R{3} Pauli basis since the identity matrix is required.
 
 \subsection{ Coordinate extraction. }
 
+Given a vector in the Pauli basis, we can extract the coordinates using the scalar product
+
+\begin{align*}
+x = \sum_i \inv{4}\trace{\symmetric{x}{\sigma_i}} \sigma_i
+\end{align*}
+
+But do not need to convert to strict scalar form if we are multiplying by a Pauli matrix.  So in anticommutator notation
+this takes the form
+
+\begin{align*}
+x &= x^i \sigma_i = \sum_i \inv{2}\symmetric{x}{\sigma_i} \sigma_i \\
+x^i &= \inv{2}\symmetric{x}{\sigma_i}
+\end{align*}
+
 \subsection{ Projection and rejection. }
 
-\subsection{ Dual space basis. }
+The usual Clifford algebra trick for projective and rejective split maps naturally to matrix form.  Write
 
-\subsection{ Unit volume pseudoscalar, and completely antisymmetrized product. }
+\begin{align*}
+x 
+&= x a a^{-1} \\
+&= (x a) a^{-1} \\
+&= \left( \inv{2}\symmetric{x}{a} + \inv{2}\antisymmetric{x}{a} \right) a^{-1} \\
+&= \left( \inv{2}\left(x a + a x \right) + \inv{2} \left(x a - a x \right) \right) a^{-1} \\
+&= \inv{2}\left(x + a x a^{-1} \right) + \inv{2} \left(x - a x a^{-1} \right) \\
+\end{align*}
+
+Since $\symmetric{x}{a}$ is diagonal, this first term is proportional to $a^{-1}$, and thus lines in the direction of $a$ itself.
+The second term is perpendicular to $a$.
+
+These are in fact the projection of $x$ in the direction of $a$ and rejection of $x$ from the direction of $a$ respectively.
+
+\begin{align*}
+x &= x_\parallel + x_\perp \\
+x_\parallel &= \Proj_a(x) = \inv{2}\symmetric{x}{a}a^{-1} = \inv{2}\left(x + a x a^{-1} \right) \\
+x_\perp &= \RejName_a(x) = \inv{2} \antisymmetric{x}{a} a^{-1} = \inv{2} \left( x - a x a^{-1} \right) \\
+\end{align*}
+
+To complete the verification of this note that the perpendicularity of the $x_\perp$ term can be verified by taking dot products
+
+\begin{align*}
+\inv{2}\symmetric{a}{x_\perp} 
+&= \inv{4}\left( a \left(x - a x a^{-1} \right) +\left(x - a x a^{-1} \right) a \right) \\
+&= \inv{4}\left( a x - a a x a^{-1} + x a - a x a^{-1} a \right) \\
+&= \inv{4}\left( a x - x a + x a - a x \right) \\
+&= 0
+\end{align*}
+
+\subsection{ Space of the vector product. }
+
+Expansion of the anticommutator and commutator in coordinate form shows that these entities lie in a different space than the vectors itself.
+
+For real coordinate vectors in the Pauli basis, all the commutator values are imaginary multiples and thus not representable
+
+\begin{align*}
+\antisymmetric{x}{y} 
+&= x^a \sigma_a y^b \sigma_b - y^a \sigma_a x^b \sigma_b \\
+&= (x^a y^b - y^a x^b) \sigma_a \sigma_b \\
+&= 2 i (x^a y^b - y^a x^b) \epsilon_{a b c} \sigma_c
+\end{align*}
+
+Similarily, the anticommutator is diagonal, which also falls outside the Pauli vector basis:
+
+\begin{align*}
+\symmetric{x}{y} 
+&= x^a \sigma_a y^b \sigma_b + y^a \sigma_a x^b \sigma_b \\
+&= (x^a y^b + y^a x^b) \sigma_a \sigma_b \\
+&= (x^a y^b + y^a x^b) ( I \delta_{a b} + i \epsilon_{a b c} \sigma_c) \\
+&= \sum_a (x^a y^a + y^a x^a) I  
++\sum_{a<b}(x^a y^b + y^a x^b) i (\underbrace{\epsilon_{a b c} + \epsilon_{b a c}}_{=0}) \sigma_c \\
+&= \sum_a (x^a y^a + y^a x^a) I,
+\end{align*}
+
+These correspond to the Clifford dot product being scalar (grade zero), and the wedge defining a grade two space, where grade expresses the minimal degree that a product can be reduced to.  By example a Clifford product of normal unit vectors such as
+
+\begin{align*}
+\Be_1 \Be_3 \Be_4 \Be_1 \Be_3 \Be_4 \Be_3 &\propto \Be_3 \\
+\Be_2 \Be_3 \Be_4 \Be_1 \Be_3 \Be_4 \Be_3 \Be_5 &\propto \Be_1 \Be_2 \Be_3 \Be_5
+\end{align*}
+
+are grade one and four respectively.  The proportionality constant will be dependent on metric of the underlying vector space and the number of permutations required to group terms in pairs of matching indexes.
+
+\subsection{ Completely antisymmetrized product. }
+
+In a Clifford algebra no imaginary number is required to express the antisymmetric (commutator) product.  However, the bivector space can be enumerated using a dual basis defined by multiplication of the vector basis elements with the unit volume trivector.  That is also the case here and gives a geometrical meaning to the imaginaries of the Pauli formulation.
+
+How do we even write the unit volume element in Pauli notation?  This would be
+
+\begin{align*}
+\sigma_1 \wedge \sigma_2 \wedge \sigma_3 
+&= (\sigma_1 \wedge \sigma_2) \wedge \sigma_3 \\
+&= \inv{2} \antisymmetric{\sigma_1}{\sigma_2} \wedge \sigma_3 \\
+&= \inv{4} \left( \antisymmetric{\sigma_1}{\sigma_2} \sigma_3 + \sigma_3 \antisymmetric{\sigma_1}{\sigma_2} \right) \\
+\end{align*}
+
+So we have
+\begin{align}\label{eqn:triplewedgeproduct}
+\sigma_1 \wedge \sigma_2 \wedge \sigma_3 
+&= \inv{8} \symmetric{\antisymmetric{\sigma_1}{\sigma_2}}{\sigma_3}
+\end{align}
+
+Similar expansion of $\sigma_1 \wedge \sigma_2 \wedge \sigma_3 = \sigma_1 \wedge (\sigma_2 \wedge \sigma_3)$, or
+$\sigma_1 \wedge \sigma_2 \wedge \sigma_3 = (\sigma_3 \wedge \sigma_1) \wedge \sigma_2$
+ shows that we must also have
+
+\begin{align}
+\symmetric{\antisymmetric{\sigma_1}{\sigma_2}}{\sigma_3}
+= \symmetric{\sigma_1}{\antisymmetric{\sigma_2}{\sigma_3}}
+= \symmetric{\antisymmetric{\sigma_3}{\sigma_1}}{\sigma_2}
+\end{align}
+
+Until now the differences in notation between the anticommutator/commutator and the dot/wedge product of the Pauli algebra and Clifford algebra respectively have only differed by factors of two, which isn't much of a big deal.  However, having to express the naturally associative wedge product operation in the non-associative looking notation of equation \ref{eqn:triplewedgeproduct} is rather unpleasant seeming.  Looking at an expression of the form gives no nmoneic (FIXME: spelling?) hint of the underlying associativity, and actually seems obfuscating.
+
+\subsection{ Unit volume pseudoscalar. }
 
 \subsection{ Complete algebraic space. }
 
