@@ -5,7 +5,10 @@
 
 \newcommand{\Clifford}[2]{\mathcal{C}_{\{{#1},{#2}\}}}
 \DeclareMathOperator{\tr}{tr}
-\newcommand{\trace}[1]{\tr\left({#1}\right)}
+\newcommand{\trace}[1]{\tr{#1}}
+\newcommand{\traceB}[1]{\tr\left({#1}\right)}
+\newcommand{\symmetric}[2]{{\{{#1},{#2}\}}}
+\newcommand{\antisymmetric}[2]{[{#1},{#2}]}
 
 \newcommand{\PauliI}[0]{
 \begin{bmatrix}
@@ -54,12 +57,12 @@ i & 0 \\
 
 \title{Translating from Pauli Matrixes to Clifford Algebra}
 \author{Peeter Joot}
-\date{ Dec 06, 2008.  Last Revision: $Date: 2008/12/06 19:34:30 $ }
+\date{ Dec 06, 2008.  Last Revision: $Date: 2008/12/07 05:49:10 $ }
 
 \begin{document}
 \maketitle{}
 
-%\tableofcontents
+\tableofcontents
 
 \section{ Motivation. }
 
@@ -150,13 +153,13 @@ matrix to a scalar.
 In particular, and for this identity matrix one has
 
 \begin{align*}
-\alpha^2 = \inv{2} \trace{\Ba^2}
+\alpha^2 = \inv{2} \traceB{\Ba^2}
 \end{align*}
 
 So it is plausible to guess that we may be able to express (squared) length as
 
 \begin{align*}
-\Abs{x}^2 = \inv{2}\trace{x^2}
+\Abs{x}^2 = \inv{2}\traceB{x^2}
 \end{align*}
 
 Let's see if this works by performing the coordinate expansion
@@ -190,10 +193,10 @@ x^2 = \sum_i (x^i)^2 I \\
 and the intuition that the length can be expressed using the trace of the squared vector was correct.  Summarizing this, we have for the length of a vector in the Pauli basis
 
 \begin{align}
-\Abs{x}^2 = \inv{2} \trace{x^2} = \sum_i (x^i)^2
+\Abs{x}^2 = \inv{2} \traceB{x^2} = \sum_i (x^i)^2
 \end{align}
 
-\subsection{ Dot product. }
+\subsection{ Scalar product. }
 
 Having found the expression for the length of a vector in the Pauli basis, the next logical desirable identity is the dot product.  One can guess that
 this will be the trace of a scaled symmetric product, but can motivate this without guessing in the usual fashion, by calculating the length of an 
@@ -224,39 +227,126 @@ One matrix dependent observation that can be made is that since the left hand si
 \begin{align*}
 {\Abs{x + y}}^2
 %&= x^2 + y^2 + x y + y x \\
-&= \Abs{x}^2 + \Abs{y}^2 + \inv{2}\trace{x y + y x} \\
+&= \Abs{x}^2 + \Abs{y}^2 + \inv{2}\traceB{x y + y x} \\
 \end{align*}
 
-For correspondance with the Euclidean dot product we must then have
+For correspondance with the Euclidean scalar product of two vectors we must then have
 
 \begin{align*}
-2 x \cdot y &= \inv{2}\trace{x y + y x}
+2 \gpgradezero{x y} &= \inv{2}\traceB{x y + y x}
 \end{align*}
 
 Or
 \begin{align}
-x \cdot y &= \inv{4}\trace{x y + y x}
+\gpgradezero{x y} &= \inv{4}\traceB{x y + y x}
 \end{align}
 
-Also note that this symmetric product that we find in the dot product definition, is known in physics as the anticommutator, where the commutator
-is the antisymmetric sum.  In the physics notation the commutator (symmetric sum) is
+Here the clifford algebra grade zero (scalar part) selection notation $\gpgradezero{x y}$ has been used so that the dot product notation $x \cdot y$ can be reserved for an application that is more natural in the Pauli algebra context.
+
+Also note that the symmetric product that we find in the dot product definition, is known in physics as the anticommutator, where the commutator
+is the antisymmetric sum.  In the physics notation the anticommutator (symmetric sum) is
+
+\begin{align}\label{eqn:anticommutator}
+\symmetric{x}{y} &= x y + y x
+\end{align}
+
+So the scalar product can be written
 
 \begin{align}
-[x, y] &= x y + y x
+\gpgradezero{ x y } = \inv{4}\trace{\symmetric{x}{y}}
 \end{align}
 
-So the dot product can be written
+Similarily, the commutator, an antisymetric product, is denoted:
+\begin{align}\label{eqn:commutator}
+\antisymmetric{x}{y} &= x y - y x,
+\end{align}
+
+A close relationship between this and the wedge product of Clifford Algebra is
+expected.
+
+\subsection{ Symmetric and antisymmetric split. }
+
+As with the clifford product, the symmetric and antisymetric split of a vector
+product is a useful concept.  This can be used to write the product 
+of two Pauli basis vectors in terms of the anticommutator and commutator 
+products
 
 \begin{align}
-x \cdot y = \inv{4}\trace{[x, y]}
+x y &= \inv{2} \symmetric{x}{y} + \inv{2} \antisymmetric{x}{y} \\
+y x &= \inv{2} \symmetric{x}{y} - \inv{2} \antisymmetric{x}{y}
 \end{align}
 
-Similarily, the anticommutator is denoted:
+These follows from the definition of the anticommutator 
+\ref{eqn:anticommutator}
+and commutator 
+\ref{eqn:commutator}
+products above, and are the equivalents of the clifford symmetric and antisymmetric split into dot and wedge products
+
 \begin{align}
-\{x, y\} &= x y - y x,
+x y &= {x} \cdot {y} + {x} \wedge {y} \\
+y x &= {x} \cdot {y} - {x} \wedge {y}
 \end{align}
 
-and we expect a close relation between this and the wedge product of Clifford Algebra.
+Where the dot and wedge products are respectively
+
+\begin{align*}
+x \cdot y &= \inv{2}(x y + y x) \\
+x \wedge y &= \inv{2}(x y - y x)
+\end{align*}
+
+Note the factor of two differences in the two algebraic notations.  In particular very handy clifford vector product reversal formula
+
+\begin{align*}
+y x = - x y + 2 x \cdot y
+\end{align*}
+
+has no factor of two in its Pauli anticommutator equivalent
+
+\begin{align}
+y x = - x y + \symmetric{x}{y}
+\end{align}
+
+\subsection{ Vector inverse. }
+
+It has been observed that the square of a vector is diagonal in this matrix representation, and can therefore be inverted for any non-zero vector
+
+\begin{align*}
+x^2 &= \Abs{x}^2 I \\
+(x^2)^{-1} &= \Abs{x}^{-2} I \\
+\implies \\
+x^2 (x^2)^{-1} &= I \\
+\end{align*}
+
+So it is therefore quite justifable to define
+\begin{align*}
+x^{-2} = \inv{x^2} \equiv \Abs{x}^{-2} I \\
+\end{align*}
+
+This allows for the construction of a dual sided vector inverse operation.
+
+\begin{align*}
+x^{-1}
+&\equiv \inv{\Abs{x}^2} x \\
+&= \inv{x^2} x \\
+&= x \inv{x^2} \\
+\end{align*}
+
+The diagonality of the squared matrix or the inverse of that allows for commutation with x.  This diagonality plays the same role as the scalar in a regular clifford square.  In either case the square can commute with the vector, and that 
+commutation allows the inverse to have both left and right sided action.
+
+Note that like the Clifford vector inverse when the vector is multiplied with this inverse, the product resides outside of the proper \R{3} Pauli basis since the identity matrix is required.
+
+\subsection{ Coordinate extraction. }
+
+\subsection{ Projection and rejection. }
+
+\subsection{ Dual space basis. }
+
+\subsection{ Unit volume pseudoscalar, and completely antisymmetrized product. }
+
+\subsection{ Complete algebraic space. }
+
+% extraction of coordinates from complete complex matrix?
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
