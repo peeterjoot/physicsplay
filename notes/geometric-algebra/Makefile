@@ -3,7 +3,7 @@ pdfs := $(files:.ltx=.pdf)
 ppdfs := $(shell ls ../*/*.pdf)
 
 all : $(pdfs)
-big: all.pdf
+big: everything.pdf
 
 $(pdfs) : ../peeters_macros.tex
 
@@ -134,7 +134,7 @@ skipit += ../lut/luts_Rindler-eom.pdf
 skipit += ../lut/luts_old_Rindler-eom.pdf
 
 # generated:
-#skipit += ../geometric-algebra/all.pdf
+skipit += ../geometric-algebra/everything.pdf
 
 # email about Noether's "charge" conservation:
 skipit += ../lut/constant_q.pdf
@@ -154,13 +154,28 @@ ordered += ../geometric-algebra/eulerangle.pdf
 # in progress:
 ordered += ../geometric-algebra/spherical_polar.pdf
 
-skipit += ../geometric-algebra/all.pdf
 ordered += ../geometric-algebra/guassian_surface.pdf
 ordered += ../geometric-algebra/charge_line_element.pdf
 ordered += ../geometric-algebra/charge_arc_element.pdf
 
-# clean up... contains email to Lut'isms as is.
 ordered += ../geometric-algebra/matrix_to_operator.pdf
+
+ordered += ../geometric-algebra/nfcm_ch2.pdf
+
+# Lut's, not mine:
+skipit += ../lut/GA_matrix.pdf
+
+ordered += ../geometric-algebra/slerp.pdf
+ordered += ../geometric-algebra/wave_eqn.pdf
+ordered += ../geometric-algebra/wave_lagrangian.pdf
+
+# Lut's, not mine:
+skipit += ../lut/ga_matrix_1.pdf
+
+# rough notes on square rooting wave operator (for PF post).
+skipit += ../geometric-algebra/box.pdf
+
+ordered += ../geometric-algebra/pauli_matrix.pdf
 
 # Rules:
 #-----------------------------------------------------
@@ -175,8 +190,6 @@ showa :
 #	@echo $(semiordered)
 	@echo $(reversed)
 
-#test/ga.pdf: $(semiordered)
+everything.pdf: $(reversed)
 #	pdftk $(semiordered) cat output test/ga.pdf
-
-all.pdf: $(reversed)
-	pdftk $(reversed) cat output all.pdf
+	pdftk $(reversed) cat output everything.pdf
