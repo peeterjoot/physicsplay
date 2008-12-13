@@ -17,7 +17,7 @@
 
 \title{ Notes on Bohr Model. }
 \author{Peeter Joot}
-\date{ Dec 11, 2008.  Last Revision: $Date: 2008/12/12 04:41:44 $ }
+\date{ Dec 11, 2008.  Last Revision: $Date: 2008/12/13 01:52:44 $ }
 
 \begin{document}
 \maketitle{}
@@ -46,6 +46,15 @@ the electron.  These are respectively
 \end{align}
 
 In liew of a picture, setting $\Br_p = 0$ works to check signs, leaving an inwards force on the electron as desired.
+
+% FIXME: Add one.
+%\begin{figure}[htp]
+%\centering
+%\includegraphics[totalheight=0.4\textheight]{picturepath}
+%\caption{My Caption}\label{fig:pictlabel}
+%\end{figure}
+%
+%... see figure \ref{fig:picturepath} ...
 
 As usual for a two body problem, use of the difference vector and center of mass vector is desirable.  That is
 
@@ -85,12 +94,49 @@ writing $1/\mu = 1/m_e + 1/m_p$, and $k = e^2/4 \pi \epsilon_0$, our difference 
 \mu \frac{d^2 \Bx}{dt^2} &= -k \frac {\Bx} { \Abs{\Bx}^3 }
 \end{align}
 
+The Bohr model postulates that electron orbits are circular.  It's easy enough to verify that a circular orbit in the center of mass frame is a solution to equation
+\ref{eqn:reduceEOM}.   Write the path in terms of the unit bivector for the plane of rotation $i$ and an initial vector position $\Bx_0$
+
+\begin{align*}
+\Bx = \Bx_0 e^{i \omega t}
+\end{align*}
+
+For constant $i$ and $\omega$, we have
+
+\begin{align*}
+\mu \Bx_0 (i\omega)^2 e^{i\omega t} = - k \frac{\Bx_0}{\Abs{\Bx_0}^3} e^{i\omega t}
+\end{align*}
+
+This provides the 
+angular velocity in terms of the reduced mass of the system and the charge constants
+
+\begin{align*}
+\omega^2 = k \inv{\Abs{\Bx_0}^3} = \frac{e^2}{4 \pi \epsilon_0} \inv{\Abs{\Bx_0}^3}.
+\end{align*}
+
+Although not relavant to the quantum theme, it's hard not to call out the observation that this is
+a Kepler's law like relation for the period of the circular orbit given the radial distance from the center of mass
+
+\begin{align*}
+%T^2 = ( 2 \pi ) \frac{4 \pi \epsilon_0}{e^2} \Abs{\Bx_0}^3.
+T^2 = \frac{8 \pi^2 \epsilon_0}{e^2} \Abs{\Bx_0}^3
+\end{align*}
+
+(although Kepler's law also holds for eliptical orbits which takes more work to show).
+
+% for non-constant \omega: \alpha = \omega t
+%(e^i\alpha)'' 
+%= (i\alpha' e^i\alpha)'
+%= (i\alpha'' - (\alpha')^2)e^i\alpha
+
 Now, the next step in the Bohr argument was that the angular momentum, a conserved quantity is also quantized.  To give real
 meaning to the conservation statement we need the equivalent Lagrangian formulation of \ref{eqn:reduceEOM}.  Anti differentiation
 gives
 
 \begin{align*}
-\grad_\Bv \left( \inv{2} \mu \Bv^2 \right) &= k \xcap \partial_x \inv{x} = - \grad_\Bx \underbrace{\left(- k\inv{\Abs{\Bx}}\right)}_{=\phi}
+\grad_\Bv \left( \inv{2} \mu \Bv^2 \right) 
+&= k \xcap \partial_x \inv{x} \\
+&= - \grad_\Bx \underbrace{\left(- k\inv{\Abs{\Bx}}\right)}_{=\phi}
 \end{align*}
 
 So, our Lagrangian is
@@ -98,15 +144,62 @@ So, our Lagrangian is
 \LL = K - \phi = \inv{2} \mu \Bv^2 + k \inv{\Abs{\Bx}}
 \end{align*}
 
-%\begin{figure}[htp]
-%\centering
-%\includegraphics[totalheight=0.4\textheight]{picturepath}
-%\caption{My Caption}\label{fig:pictlabel}
-%\end{figure}
-%
-%... see figure \ref{fig:picturepath} ...
+The essence of the conservation argument, an application of 
+Noether's theorem,
+is that a rotational transformation of the Lagrangian leaves this energy relationship unchanged.  Essentially repeating 
+the angular momentum example from \cite{PJEulerLagrange} (which was done for a general radial Langrangian potential), we 
+write $i$ for the unit bivector associated with a rotational plane.  The position vector is transformed by rotation in this plane as follows
 
-%\bibliographystyle{plainnat}
-%\bibliography{myrefs}
+\begin{align*}
+\Bx &\rightarrow \Bx' \\
+\Bx' &= R \Bx R^\dagger \\
+R &= \exp{i\theta/2}
+\end{align*}
+
+The magnitude of the position vector is rotation invariant
+
+\begin{align*}
+(\Bx')^2 &= R \Bx R^\dagger R \Bx R^\dagger = \Bx^2,
+\end{align*}
+
+as is our the square of the transformed velocity.  The transformed velocity is
+
+\begin{align*}
+\frac{d\Bx'}{dt} &= \dot{R} \Bx R + R \dot{\Bx} R^\dagger + R \Bx \dot{R}^\dagger
+\end{align*}
+
+but with $\dot{\theta} = 0$, $\dot{R} = 0$ its square is just
+
+\begin{align*}
+(\Bv')^2 &= R {\Bv} R^\dagger R \dot{\Bv} R^\dagger = \Bv^2.
+\end{align*}
+
+We therefore have a Lagrangian that is invarient under this rotational transformation
+
+\begin{align*}
+\LL \rightarrow \LL' = \LL,
+\end{align*}
+
+and by Noether's theorem (essentially application of the chain rule), we have
+
+\begin{align*}
+\frac{d\LL'}{d\theta}
+&= \frac{d}{dt} \left(\frac{d\Bx'}{d\theta} \cdot \grad_{\Bv'} \LL \right) \\
+&= \frac{d}{dt} \left( (i \cdot \Bx') \cdot \mu \Bv' \right).
+\end{align*}
+
+But $d\LL'/d\theta = 0$, so we have for any $i$
+
+\begin{align*}
+(i \cdot \Bx') \cdot (\mu \Bv') &= i \cdot (\Bx' \wedge (\mu \Bv')) = \text{constant}
+\end{align*}
+
+% - then quantization.
+% - discuss connection to Sch. results?
+% - use numbers to see how relativistic the velocities are.  compare hydrogen and massive nuclii.
+% - try: proper maxwell's/Lorentz equations instead of just the Coulomb force.
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
 
 \end{document}
