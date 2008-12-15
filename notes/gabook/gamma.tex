@@ -2,6 +2,37 @@
 
 \input{../peeters_macros.tex}
 \input{../peeters_macros2.tex}
+\newcommand{\scalarProduct}[2]{{#1} \bullet {#2}}
+\newcommand{\symmetric}[2]{{\left\{{#1},{#2}\right\}}}
+\newcommand{\antisymmetric}[2]{\left[{#1},{#2}\right]}
+
+\newcommand{\PauliX}[0]{
+\begin{bmatrix}
+0 & 1 \\
+1 & 0 \\
+\end{bmatrix}
+}
+
+\newcommand{\PauliY}[0]{
+\begin{bmatrix}
+0 & -i \\
+i & 0 \\
+\end{bmatrix}
+}
+
+\newcommand{\PauliYNoI}[0]{
+\begin{bmatrix}
+0 & -1 \\
+1 & 0 \\
+\end{bmatrix}
+}
+
+\newcommand{\PauliZ}[0]{
+\begin{bmatrix}
+1 & 0 \\
+0 & -1 \\
+\end{bmatrix}
+}
 
 \usepackage[bookmarks=true]{hyperref}
 
@@ -15,26 +46,31 @@
 
 \title{ Gamma Matrixes. }
 \author{Peeter Joot}
-\date{ Dec 13, 2008.  Last Revision: $Date: 2008/12/14 15:56:50 $ }
+\date{ Dec 13, 2008.  Last Revision: $Date: 2008/12/15 04:20:53 $ }
 
 \begin{document}
 
 \maketitle{}
 
 %\tableofcontents
-\section{ Generated products. }
 
-A small C++ program using boost::numeric::ublas and std::complex,
-plus some perl to generate part of that, was
-written to generate the mulitiplication table for the gamma matrix products
-for this particular basis.  The metric tensor and the antisymmetry of
-the wedge products can be seen from these.
+\section{ Dirac matrixes. }
 
-%% <GENERATED>
-
+The Dirac matrices $\gamma^\mu$ can be used as a Minkowski basis.  The basic defining relationship is the Minkowski metric, where the dot products satisfy
 
 \begin{align*}
-\gamma^0 = \begin{bmatrix}
+\scalarProduct{\gamma^\mu}{\gamma^\nu} &= \pm \delta_{\mu\nu} \\
+(\scalarProduct{\gamma^0}{\gamma^0})(\scalarProduct{\gamma^a}{\gamma^a}) &= -1 \quad \text{where $a \in \{1,2,3\}$}
+\end{align*}
+
+There is freedom to pick the positive square for either $\gamma^0$ or $\gamma^a$, and both conventions are common.
+
+One of the matrix representations for these vectors listed in the 
+\href{http://en.wikipedia.org/wiki/Gamma_matrices}{Dirac matrix wikipedia article}
+is
+
+\begin{align}\label{eqn:basis}
+\gamma^0 &= \begin{bmatrix}
  1  &  0  &  0  &  0  \\
  0  &  1  &  0  &  0  \\
  0  &  0  &  -1  &  0  \\
@@ -45,11 +81,8 @@ the wedge products can be seen from these.
  0  &  0  &  1  &  0  \\
  0  &  -1  &  0  &  0  \\
  -1  &  0  &  0  &  0  \\
-\end{bmatrix}
-\end{align*}
-
-\begin{align*}
-\gamma^2 = \begin{bmatrix}
+\end{bmatrix} \\
+\gamma^2 &= \begin{bmatrix}
  0  &  0  &  0  &  -i  \\
  0  &  0  &  i  &  0  \\
  0  &  i  &  0  &  0  \\
@@ -61,7 +94,149 @@ the wedge products can be seen from these.
  -1  &  0  &  0  &  0  \\
  0  &  1  &  0  &  0  \\
 \end{bmatrix}
+\end{align}
+
+For this particular basis we have a $+---$ metric signature.  In the matrix form this takes the specific meaning that $(\gamma^0)^2 = I$, and $(\gamma^a)^2 = -I$.
+
+A table of all the possible product variants of \ref{eqn:basis} can be found below in the appendix.
+
+\subsection{ anticommutator product. }
+
+Noting that the matrices square in the fashion just described and that they reverse sign when multiplication order is reversed allows for summarizing the dot products relationships as follows
+
+\begin{align}\label{eqn:symmetric}
+\symmetric{\gamma^\mu}{\gamma^\nu} 
+&= {\gamma^\mu}{\gamma^\nu} + {\gamma^\nu}{\gamma^\mu} \\
+%&= 2 (\scalarProduct{\gamma^\mu}{\gamma^\nu}) I \\
+&= 2 \eta^{\mu\nu} I,
+\end{align}
+
+where the metric tensor $\eta^{\mu\nu} = \scalarProduct{\gamma^\mu}{\gamma^\nu}$ is commonly summarized as coordinates of a matrix as in
+
+\begin{align*}
+\begin{bmatrix}
+\eta^{\mu\nu}
+\end{bmatrix}
+&=
+\begin{bmatrix}
+1 & 0 & 0 & 0 \\
+0 & -1 & 0 & 0 \\
+0 & 0 & -1 & 0 \\
+0 & 0 & 0 & -1 \\
+\end{bmatrix}
 \end{align*}
+
+The relationship \ref{eqn:symmetric} is taken as the defining relationship for the Dirac matrices, but can be seen to be just a matricized statement of the Clifford vector dot product.
+
+\subsection{ Written as Pauli matrixes. }
+
+Using the Pauli matrixes
+
+\begin{align}
+\sigma_1 = \PauliX \quad \sigma_2 = \PauliY \quad \sigma_3 = \PauliZ
+\end{align}
+
+one can write the Dirac matrices and all their products (reading from the multiplication table) more concisely as
+
+\begin{align}
+\gamma^0 &= 
+\begin{bmatrix}
+I & 0 \\
+0 & -I
+\end{bmatrix} \\
+\gamma^a &= 
+\begin{bmatrix}
+0 & \sigma_a \\
+-\sigma_a & 0 \\
+\end{bmatrix} \\
+\gamma^0 \gamma^a &=
+\begin{bmatrix}
+0 & \sigma_a \\
+\sigma_a & 0 \\
+\end{bmatrix} \\
+\gamma^a \gamma^b &=
+- i \epsilon_{a b c}
+\begin{bmatrix}
+\sigma_c & 0 \\
+0 & \sigma_c \\
+\end{bmatrix} \\
+\gamma^1 \gamma^2 \gamma^3 &= i 
+\begin{bmatrix}
+0 & -I \\
+I & 0
+\end{bmatrix} \\
+\gamma^0 \gamma^1 \gamma^2 &= i 
+\begin{bmatrix}
+-\sigma_1 & 0 \\
+0 & \sigma_1 \\
+\end{bmatrix} \\
+\gamma^3 \gamma^0 \gamma^1 &= i 
+\begin{bmatrix}
+\sigma_2 & 0 \\
+0 & -\sigma_2 \\
+\end{bmatrix} \\
+\gamma^0 \gamma^1 \gamma^2 &= i 
+\begin{bmatrix}
+-\sigma_3 & 0 \\
+0 & \sigma_3 \\
+\end{bmatrix}
+\end{align}
+
+\subsection{ Deriving properties using the Pauli matrices. }
+
+From the multiplication table a number of properties can be observed.  Using the Pauli matrices one can arrive at these more directly using the multiplication identity for those
+matrices
+
+\begin{align}
+\sigma_a \sigma_b = 2 i \epsilon_{abc} \sigma_c
+\end{align}
+
+Actually taking the time to type this out in full doesn't seem worthwhile and is a fairly straightforward exercise.
+
+\subsection{ Conguation behaviour. }
+
+Unlike the Pauli matrixes, the Dirac matrices do not split nicely via congugation.  Instead we have the time basis vector and its dual are Hermitian
+
+\begin{align*}
+(\gamma^0)^\conj &= \gamma^0 \\
+(\gamma^1 \gamma^2 \gamma^3)^\conj &= \gamma^1 \gamma^2 \gamma^3
+\end{align*}
+
+whereas the spacelike basis vectors and their duals are all anti-Hermitian
+
+\begin{align*}
+(\gamma^a)^\conj &= -\gamma^a \\
+(\gamma^a \gamma^b \gamma^c)^\conj &= - \gamma^a \gamma^b \gamma^c.
+\end{align*}
+
+For the scalar and the pseudoscalar parts we have a Hermition split
+
+\begin{align*}
+I^\conj &= I \\
+(\gamma^0 \gamma^1 \gamma^2 \gamma^3)^\conj &= -(\gamma^0 \gamma^1 \gamma^2 \gamma^3)^\conj
+\end{align*}
+
+and finally, also have a Hermition split of the bivector parts into spacetime (relative vectors), and the purely spatial bivectors
+
+\begin{align*}
+(\gamma^0 \gamma^a)^\conj &= \gamma^0 \gamma^a \\
+(\gamma^a \gamma^b)^\conj &= -\gamma^a \gamma^b
+\end{align*}
+
+Is there a logical and simple set of matrix operations that splits things nicely into scalar, vector, bivector, trivector, and pseudoscalar parts as there was with the Pauli
+matrices?
+
+\section{ Appendix.  Table of all generated products. }
+
+A small C++ program using boost::numeric::ublas and std::complex,
+plus some perl to generate part of that, was
+written to generate the mulitiplication table for the gamma matrix products
+for this particular basis.  The metric tensor and the antisymmetry of
+the wedge products can be seen from these.
+
+%% <GENERATED>
+
+
 
 
 \begin{align*}
