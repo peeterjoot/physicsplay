@@ -15,11 +15,11 @@
 
 \title{ Green's functions. }
 \author{Peeter Joot}
-\date{ Dec 19, 2008.  Last Revision: $Date: 2008/12/19 21:38:53 $ }
+\date{ Dec 19, 2008.  Last Revision: $Date: 2008/12/20 05:31:11 $ }
 
 \begin{document}
 \maketitle{}
-%\tableofcontents
+\tableofcontents
 
 \section{ Motivation. }
 
@@ -100,7 +100,165 @@ directly solve some of these.
 
 \subsection{ Simplest case. }
 
-Lets start with solutions of a linear first order equation in one variable.
+The simplest case is a homogeneous linear first order equation of one variable.
+
+\begin{align*}
+f' + a f = 0
+\end{align*}
+
+The usual exponential charectaristic solution method solves this one
+
+\begin{align*}
+f &= e^{rx} \\
+\implies \\
+(r + a) e^{rx} &= 0
+\end{align*}
+
+So a homogeneous solution is
+
+\begin{align*}
+f = e^{-ax}
+\end{align*}
+
+The next level of complexity is the inhomogenous case, with a constant forcing function
+
+\begin{align*}
+f' + a f = b
+\end{align*}
+
+This is separable and the solution follows from direct integration
+
+\begin{align*}
+\int \frac{df}{b - a f} &= \int dx \\
+\inv{-a}\ln(b - af) &= x - \inv{a} ln(-B) \\
+\end{align*}
+
+So our complete solution is
+
+\begin{align*}
+f &= A e^{-ax} + \inv{a}\left(b + B e^{-a x}\right)
+\end{align*}
+
+\subsubsection{ With a sampling impulse function. }
+
+Now consider a unit area rectangular spike driving function of width $\epsilon$, and height $1/\epsilon$.  Will this be a reasonable approximation of a delta function
+when $\epsilon$ is let approach zero?
+
+\begin{align*}
+b(x) = 
+\left\{
+\begin{array}{l l}
+1/{\epsilon} & \quad \mbox{if $x \in \left[-\epsilon/2, \epsilon/2 \right]$} \\
+0              & \quad \mbox{otherwise}
+\end{array} \right.
+\end{align*}
+
+With a degree of freedom for the homogeneous solution in each of the three ranges, and one degree of freedom for the inhomogeneous part in the impulse interval we have the following general solution
+
+\begin{align*}
+f(x) = 
+\left\{
+\begin{array}{l l}
+A_{-} e^{-a(x + \epsilon/2)} & \quad x < -\epsilon/2 \\
+%\inv{a \epsilon}
+B e^{-ax} + \inv{a}\left(\inv{\epsilon} + C e^{-a x}\right)& \quad x \in \left[-\epsilon/2, \epsilon/2 \right] \\
+A_{+} e^{-a(x - \epsilon/2)} & \quad x > \epsilon/2 \\
+\end{array} \right.
+\end{align*}
+
+%There's actually one degree of freedom too many in the middle term as can be seen by regrouping slightly
+%\begin{align*}
+%\inv{a \epsilon} B e^{-ax} + \inv{a}\left(\inv{\epsilon} + C e^{-a x}\right) 
+%&= \inv{a \epsilon} (B+C) e^{-ax} + \inv{a \epsilon} \\
+%&= \inv{a \epsilon} \left( (B + C)e^{-ax} + 1 \right)
+%\end{align*}
+
+This isn't neccessarily a continuous function, and there is in fact a degree of freedom too many in the middle term above.  Suppose that one wanted this term
+to take values $B_{-}$, and $B_{+}$ at the boundaries of the impulse interval, one is then left with the following set of simulaneous equations
+
+\begin{align*}
+B_{-} &= \left(B + \inv{a \epsilon } C \right) e^{a \epsilon/2} + \inv{a \epsilon} \\
+B_{+} &= \left(B + \inv{a \epsilon } C \right) e^{-a \epsilon/2} + \inv{a \epsilon} \\
+\end{align*}
+
+As a vector equation this is
+\begin{align*}
+a \epsilon
+\begin{bmatrix}
+B_{-} \\
+B_{+} 
+\end{bmatrix}
+=
+\left(a \epsilon B + C \right) 
+\begin{bmatrix}
+e^{a \epsilon/2} \\
+e^{-a \epsilon/2} 
+\end{bmatrix}
++
+\begin{bmatrix}
+1 \\
+1
+\end{bmatrix}
+\end{align*}
+
+and we can wedge with $(1,1)$ to eliminate it, leaving
+
+\begin{align*}
+a \epsilon
+(B_{-} - B_{+})
+=
+\left(a \epsilon B + C \right) 
+(e^{a \epsilon/2} - e^{-a \epsilon/2})
+\end{align*}
+
+So we have
+
+\begin{align*}
+B + \inv{a \epsilon}C = \frac{B_{-} - B_{+}}{2 \sinh(a \epsilon/2)}
+\end{align*}
+
+and the solution to our equation is therefore
+
+\begin{align*}
+f(x) = 
+\left\{
+\begin{array}{l l}
+A_{-} e^{-a(x + \epsilon/2)} & \quad x < -\epsilon/2 \\
+\frac{B_{-} - B_{+}}{2 \sinh(a \epsilon/2)} e^{-ax} + \inv{a \epsilon} & \quad x \in \left[-\epsilon/2, \epsilon/2 \right] \\
+A_{+} e^{-a(x - \epsilon/2)} & \quad x > \epsilon/2 \\
+\end{array} \right.
+\end{align*}
+
+However, with the middle term being a function of only the difference between the endpoints, means that we must have an additional constraint on the endpoints.  In general one could make this match the a desired value at only one of the endpoints, and then the other is then determined.  How about picking the middle term so that its 
+value at $x=0$ is the midpoint between $A_{-}$ and $A_{+}$.  If one writes $f = \mu e^{-ax} + 1/a \epsilon$ we have
+
+\begin{align*}
+\mu + \inv{a\epsilon} &= \inv{2}\left(A_{-} + A_{+}\right) \\
+\implies \\
+f &= \inv{2}\left(A_{-} + A_{+}\right) e^{-ax} + \inv{a \epsilon} \left(1 - e^{-a x}\right)
+\end{align*}
+
+Now, this was for only the impulse interval.  If however, we have $A = A_{-} = A_{+}$, then writing $u(x)$ for the unit step function, we have for the complete interval the following general solution
+
+\begin{align*}
+f &= A e^{-ax} + \inv{2 a \epsilon} \left(1 - e^{-a x}\right)\left( u(\epsilon/2 + x) + u(\epsilon/2 -x)\right)
+\end{align*}
+
+This finally has a desirable form, with the sum of a regular old homogenous solution, plus a specific solution.  The specific solution here also has the role of the Green's function for our delta like impulse function.  Doing a convolution sum with this impulse function has a sampling like action, but it isn't clear how to take the
+limit of the Green's like function as $\epsilon \rightarrow 0$.
+
+Seeing the delta like function here suggests that the proper Green's function for this operator may in fact be a weighted delta function.  Specifically if we had
+
+\begin{align*}
+f' + a f &= \delta(x) \\
+\end{align*}
+
+Then is the corresponding general solution in terms of homogeneous solution and a Green's function like so:
+\begin{align*}
+f &= A e^{-ax} + \inv{a} \left(1 - e^{-a x}\right) \delta(x) \\
+\end{align*}
+
+How would one even see if this makes sense (ie: how does one take the derivative of a delta function)?  Probably need the convolution before this would make sense.  Let's try this.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
