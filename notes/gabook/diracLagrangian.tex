@@ -1,0 +1,144 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+
+\newcommand{\Dslash}[0]{ \not\!D }
+
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+\title{ Dirac Lagrangian. }
+\author{Peeter Joot}
+\date{ Dec 21, 2008.  Last Revision: $Date: 2008/12/21 16:19:37 $ }
+
+\begin{document}
+
+\maketitle{}
+
+%\tableofcontents
+
+\section{ Dirac Lagrangian with Feynman slash notation. }
+
+Wikipedia's \href{http://en.wikipedia.org/wiki/Lagrangian#Dirac_Lagrangian}{Dirac Lagrangian} entry lists the Lagrangian as
+
+\begin{align*}
+\LL = \bar \psi (i \hbar c \Dslash - mc^2) \psi
+\end{align*}
+
+"where $\psi\!$ is a Dirac spinor, $\bar \psi = \psi^\dagger \gamma^0$ is its Dirac adjoint, $D\!$ is the gauge covariant derivative, and $\Dslash$ is Feynman slash notation|Feynman notation for $\gamma^\sigma D_\sigma\!$."
+
+Let's decode this.  First, what's $D_\sigma$?
+
+From \href{http://en.wikipedia.org/wiki/Gauge_covariant_derivative}{Guage theory}
+
+\begin{align*}
+D_\mu := \partial_\mu - i e A_\mu
+\end{align*}
+
+where $A_\mu$ is the electromagnetic vector potential.
+
+So, in four-vector notation we have
+
+\begin{align*}
+\Dslash 
+&= \gamma^\mu \partial_\mu - i e \gamma^\mu A_\mu \\
+&= \grad - i e A \\
+\end{align*}
+
+So our Lagrangian written out in full is left as
+
+\begin{align}\label{eqn:lag1}
+\LL = \psi^\dagger \gamma^0 ( i \hbar c \grad + \hbar c e A - mc^2) \psi
+\end{align}
+
+How about this $\gamma^0 i \grad$ term?  If we assume that $i = \gamma_0 \gamma_1 \gamma_2 \gamma_3$ is the four space pseudoscalar, then this is
+
+\begin{align*}
+\gamma^0 i \grad
+&= - i \gamma^0 (\gamma^0 \partial_0 + \gamma^i \partial_i) \\
+&= - i (\partial_0 + \sigma_i \partial_i) \\
+\end{align*}
+
+So, operationally, we have the dual of a quaternion like gradient operator.  If $\psi$ is an even grade object, as I'd guess can be implied by
+the term spinor, then there is some sense to requiring a gradient operation that has scalar and spacetime bivector components.
+
+Let's write this
+
+\begin{align*}
+\gamma^0 \grad &= \partial_0 + \sigma_i \partial_i = {\grad}_{0,2}
+\end{align*}
+
+Assuming that $\psi^\dagger$ is equivalent to reverse operation as the notation suggests, and that $\psi$ is even grades.  Then we have $i$ commuting with $\psi$ or its reverse and the Lagrangian is
+
+\begin{align}\label{eqn:lag2}
+\LL 
+= 
+-i \hbar c \psi^\dagger {\grad}_{0,2} \psi
++ \hbar c e \psi^\dagger \gamma^0 A \psi
+- m c^2 \psi^\dagger \gamma^0 \psi
+\end{align}
+
+\subsection{ Field equations. }
+
+Now, how to recover the field equation from \ref{eqn:lag1} or \ref{eqn:lag2}?  If one assumes that the Euler-Lagrange field equations
+
+\begin{align*}
+\PD{\eta}{\LL} - \partial_\mu \PD{(\partial_\mu \eta)}{\LL} = 0
+\end{align*}
+
+hold for these even grade field variables $\psi$, then treating $\psi$ and $\psi^\dagger$ as separate field variables one has for the reversed field variable
+
+\begin{align*}
+\PD{\psi^\dagger}{\LL} - \partial_\mu \PD{(\partial_\mu \psi^\dagger)}{\LL} &= 0 \\
+\gamma^0 ( i \hbar c \grad + \hbar c e A - mc^2) \psi - (0) &= 0
+\end{align*}
+
+Or 
+\begin{align*}
+\hbar (i \grad + e A) \psi = mc \psi
+\end{align*}
+
+Except for the additional $e A$ term here, this is the Dirac equation that we get from taking square roots of the Klien-Gordon equation.  Should $A$ be considered a field variable?  More likely is that this is a supplied potential as in the $V$ of the non-relativistic 
+Schr\"{o}dinger's equation.
+
+Being so loose with the math here is somewhat distrubing but developing some intuition is worthwhile before getting the details down.
+
+Our Lagrangian isn't at all symmetric looking, at least compared to the Lagrangians for the 
+Schr\"{o}dinger's equation, and Klien-Gordon equation respectively
+
+\begin{align*}
+\LL = \frac{\hbar^2}{2m}
+(\spacegrad \psi) \cdot (\spacegrad \psi^\conj) + V \psi \psi^\conj + {i \hbar} \left( \psi \partial_t \psi^\conj - \psi^\conj \partial_t \psi \right)
+\end{align*}
+
+\begin{align*}
+\LL &= -\partial^\nu \psi \partial_\nu \psi^\conj + \frac{m^2 c^2}{\hbar^2} \psi \psi^\conj \\
+\end{align*}
+
+So, it is not obvious that we'd get a similarly nice symmetric reversal or conguate result between the two field variables, if we compute
+the field equations that result from treating $\psi$ itself as the field variable to differentiate with respect to.  Let's now take
+those derivatives to see what follows.
+
+\section{ Alternate Dirac Lagrangian with antisymmetric terms. }
+
+Now, 
+\href{http://en.wikipedia.org/wiki/Dirac_equation#Adjoint_equation_and_Dirac_current}{Adjoint equation and Dirac current} lists the Lagrangian as
+
+\begin{align*}
+\LL = mc \bar{\psi}\psi - {\inv{2}i\hbar}(\bar{\psi}\gamma^\mu (\partial_\mu\psi) - (\partial_\mu\bar{\psi})\gamma^\mu \psi)
+\end{align*}
+
+This is 
+
+%\bibliographystyle{plainnat}
+%\bibliography{myrefs}
+
+\end{document}
