@@ -17,13 +17,12 @@
 
 \title{ Dirac Lagrangian. }
 \author{Peeter Joot}
-\date{ Dec 21, 2008.  Last Revision: $Date: 2008/12/22 02:35:17 $ }
+\date{ Dec 21, 2008.  Last Revision: $Date: 2008/12/22 05:07:08 $ }
 
 \begin{document}
 
 \maketitle{}
-
-%\tableofcontents
+\tableofcontents
 
 \section{ Dirac Lagrangian with Feynman slash notation. }
 
@@ -76,29 +75,53 @@ Let's write this
 \gamma^0 \grad &= \partial_0 + \sigma_i \partial_i = {\grad}_{0,2}
 \end{align*}
 
-Assuming that $\psi^\dagger$ is equivalent to reverse operation as the notation suggests, and that $\psi$ is even grades.  Then we have $i$ commuting with $\psi$ or its reverse and the Lagrangian is
+Now, how about the meaning of $\bar\psi = \psi^\dagger \gamma^0$?  I initially assumed that $\psi^\dagger$ was the reverse operation.
+However, looking in the quantum treatment of \cite{doran2003gap} and their earlier relativity content, I see that they explicitly avoid dagger as a reverse in a relativistic context since it is used for ``something-else'' in a quantum context.  It appears that their mapping from matrix algebra to clifford 
+algebra is 
+
+\begin{align*}
+\psi^\dagger \equiv \gamma_0 \tilde{\psi} \gamma_0,
+\end{align*}
+
+where tilde is used for the reverse operation.
+
+This then implies that 
+
+\begin{align*}
+\bar \psi = \psi^\dagger \gamma^0 = \gamma_0 \tilde{\psi}
+\end{align*}
+
+Now, it is somewhat interesting to note that treating $\psi^\dagger$ as a reverse operation resulted, after calculation of the field equations, in the quantity $\gamma_0 \psi^\dagger \gamma_0$ showing up as a significant quanity.  It was almost like the math was auto-correcting itself attempting to show that the this was the real quantity of interest.
+
+Anyways, mistakes aside, we now have a final expression of the Lagrangian in full in terms of geometric objects
 
 \begin{align}\label{eqn:lag2}
-\LL 
-= 
--i \hbar c \psi^\dagger {\grad}_{0,2} \psi
-+ \hbar c e \psi^\dagger \gamma^0 A \psi
-- m c^2 \psi^\dagger \gamma^0 \psi
+\LL = \gamma_0 \tilde{\psi} ( i \hbar c \grad + \hbar c e A - mc^2) \psi.
 \end{align}
+
+Assuming that this is now the correct geometric interpretation of the Lagrangian, why bother having that first $\gamma_0$ factor.  It shouldn't change the field equations (just as a constant factor shouldn't make a difference).  I'd guess that we can instead write the Lagrangian as
+
+\begin{align}\label{eqn:lag3}
+\LL = \tilde{\psi} \left( i \grad + e A - \frac{mc}{\hbar} \right) \psi,
+\end{align}
+
+where both the constant vector factor $\gamma_0$, and the redundant common factor of $c$ have been removed, and we divide throughout by $\hbar$ to tidy up a bit.
 
 \subsection{ Field equations. }
 
-Now, how to recover the field equation from \ref{eqn:lag1} or \ref{eqn:lag2}?  If one assumes that the Euler-Lagrange field equations
+Now, how to recover the field equation from \ref{eqn:lag3} 
+%or \ref{eqn:lag2}
+?  If one assumes that the Euler-Lagrange field equations
 
 \begin{align*}
 \PD{\eta}{\LL} - \partial_\mu \PD{(\partial_\mu \eta)}{\LL} = 0
 \end{align*}
 
-hold for these even grade field variables $\psi$, then treating $\psi$ and $\psi^\dagger$ as separate field variables one has for the reversed field variable
+hold for these even grade field variables $\psi$, then treating $\psi$ and $\bar \psi$ as separate field variables one has for the reversed field variable
 
 \begin{align*}
-\PD{\psi^\dagger}{\LL} - \partial_\mu \PD{(\partial_\mu \psi^\dagger)}{\LL} &= 0 \\
-\gamma^0 ( i \hbar c \grad + \hbar c e A - mc^2) \psi - (0) &= 0
+\PD{\tilde{\psi}}{\LL} - \partial_\mu \PD{(\partial_\mu \tilde{\psi})}{\LL} &= 0 \\
+\left( i \grad + e A - \frac{mc}{\hbar}\right) \psi - (0) &= 0
 \end{align*}
 
 Or 
@@ -109,9 +132,21 @@ Or
 Except for the additional $e A$ term here, this is the Dirac equation that we get from taking square roots of the Klien-Gordon equation.  Should $A$ be considered a field variable?  More likely is that this is a supplied potential as in the $V$ of the non-relativistic 
 Schr\"{o}dinger's equation.
 
-Being so loose with the math here is somewhat distrubing but developing some intuition is worthwhile before getting the details down.
+Being so loose with the math here (ie: taking partials with respect to non-scalar variables) is somewhat distrubing but developing some intuition is worthwhile before getting the details down.
 
-\subsection{ Congugate field equation. }
+\subsection{ WRONG FROM HERE. Dagger misinterpreted. }
+
+Assuming that $\psi^\dagger$ is equivalent to reverse operation as the notation suggests, and that $\psi$ is even grades.  Then we have $i$ commuting with $\psi$ or its reverse and the Lagrangian is
+
+\begin{align}\label{eqn:lag2busted}
+\LL 
+= 
+-i \hbar c \psi^\dagger {\grad}_{0,2} \psi
++ \hbar c e \psi^\dagger \gamma^0 A \psi
+- m c^2 \psi^\dagger \gamma^0 \psi
+\end{align}
+
+\subsubsection{ Congugate field equation. }
 
 Our Lagrangian isn't at all symmetric looking, at least compared to the Lagrangians for the 
 Schr\"{o}dinger's equation, and Klien-Gordon equation respectively, which are
@@ -188,6 +223,8 @@ where $\psi$ has been assumed to be even, and likely of the specific form
 \begin{align*}
 \psi = \alpha + P^i \sigma_i
 \end{align*}
+
+WRONG GUESS HERE TOO.  Spinors in Doran/Lasenby appear to use the dual pauli vectors, and not the bivectors themselves.  This actually makes sense since one wants a spatial bivector for spin, and not the spacetime bivector as used in a Lorentz boost.
 
 this field variable isn't a scalar, bivector (quaternion like), but has vector/trivector parts.  With field variables having scalar, bivector, vector and trivector parts it isn't unreasonable to consider a spacetime split.  Observe that we have an almost recognizable term in the effective field variable $\gamma^0 \psi$ of
 equation \ref{eqn:antimatter}.  In particular recall that the electric field and magnetic field components of the faraday bivector can be obtained from a 
@@ -290,7 +327,7 @@ Now,
 \LL = mc \bar{\psi}\psi - {\inv{2}i\hbar}(\bar{\psi}\gamma^\mu (\partial_\mu\psi) - (\partial_\mu\bar{\psi})\gamma^\mu \psi)
 \end{align*}
 
-%\bibliographystyle{plainnat}
-%\bibliography{myrefs}
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
 
 \end{document}
