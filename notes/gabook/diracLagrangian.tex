@@ -17,7 +17,7 @@
 
 \title{ Dirac Lagrangian. }
 \author{Peeter Joot}
-\date{ Dec 21, 2008.  Last Revision: $Date: 2008/12/21 16:19:37 $ }
+\date{ Dec 21, 2008.  Last Revision: $Date: 2008/12/22 01:56:52 $ }
 
 \begin{document}
 
@@ -111,21 +111,125 @@ Schr\"{o}dinger's equation.
 
 Being so loose with the math here is somewhat distrubing but developing some intuition is worthwhile before getting the details down.
 
+\subsection{ Congugate field equation. }
+
 Our Lagrangian isn't at all symmetric looking, at least compared to the Lagrangians for the 
-Schr\"{o}dinger's equation, and Klien-Gordon equation respectively
+Schr\"{o}dinger's equation, and Klien-Gordon equation respectively, which are
+
+\begin{align}
+\LL &= \frac{\hbar^2}{2m}
+(\spacegrad \psi) \cdot (\spacegrad \psi^\conj) + V \psi \psi^\conj + {i \hbar} \left( \psi \partial_t \psi^\conj - \psi^\conj \partial_t \psi \right) \\
+\LL &= -\partial^\nu \psi \partial_\nu \psi^\conj + \frac{m^2 c^2}{\hbar^2} \psi \psi^\conj.
+\end{align}
+
+With these Lagrangians one gets the field equation for $\psi$, differentiating with respect to the conjugate field $\psi^\conj$, and the conjugate equation with differentiation with respect to $\psi$ (where $\psi$ and $\psi^\conj$ are treated as independent field variables).
+
+With such an asymmetric Lagrangian, it is not obvious that we'd get a similarly nice symmetric reversal or conguate result with respect to $\psi$ and $\bar \psi$.
+
+Let's compute the derivatives with respect to the $\psi$ field variables to compute the equations for $\bar \psi$ to see what results.  Written out in coordinates so that we can apply the Euler-Lagrange equations, our Lagrangian (with $A$ terms omitted) is
+
+\begin{align}\label{eqn:lagNoA}
+\LL = \bar\psi i \hbar c \gamma^\mu \partial_\mu \psi - \bar \psi m c^2 \psi
+\end{align}
+
+From this we have
 
 \begin{align*}
-\LL = \frac{\hbar^2}{2m}
-(\spacegrad \psi) \cdot (\spacegrad \psi^\conj) + V \psi \psi^\conj + {i \hbar} \left( \psi \partial_t \psi^\conj - \psi^\conj \partial_t \psi \right)
+\PD{\psi}{\LL} = -m c^2 \bar\psi
 \end{align*}
 
 \begin{align*}
-\LL &= -\partial^\nu \psi \partial_\nu \psi^\conj + \frac{m^2 c^2}{\hbar^2} \psi \psi^\conj \\
+\partial_\mu \PD{(\partial_\mu \psi)}{\LL} 
+&= \partial_\mu \bar\psi i \hbar c \gamma^\mu
 \end{align*}
 
-So, it is not obvious that we'd get a similarly nice symmetric reversal or conguate result between the two field variables, if we compute
-the field equations that result from treating $\psi$ itself as the field variable to differentiate with respect to.  Let's now take
-those derivatives to see what follows.
+With $\bar\psi = \psi^\dagger \gamma^0$, the field equation is
+
+\begin{align*}
+\partial_\mu \psi^\dagger \gamma^0 i \hbar c \gamma^\mu = -m c^2 \psi^\dagger \gamma^0
+\end{align*}
+
+One can see the gradient hiding in there.  First noting that the pseudoscalar reverses to itself
+
+\begin{align*}
+i^\dagger 
+&= \gamma_{3210} \\
+&= -\gamma_{2103} \\
+&= -\gamma_{1023} \\
+&= \gamma_{0123} \\
+&= i,
+\end{align*}
+
+we can reverse all the terms above for
+
+\begin{align*}
+\hbar c \gamma^\mu i \gamma^0 \partial_\mu \psi &= -m c^2 \gamma^0 \psi \\
+i \hbar c \gamma^\mu \partial_\mu \gamma^0 \psi &=
+\end{align*}
+
+So, we have the gradient hiding here and the ``conjugate'' field equation isn't for $\psi^\dagger$, or $\bar \psi$, but for ${\bar\psi}^\dagger = \gamma^0 \psi$.  
+
+\begin{align}\label{eqn:antimatter}
+i \hbar \grad (\gamma^0 \psi) &= -m c (\gamma^0 \psi)
+\end{align}
+
+So, the field variable $\gamma^0 \psi$ we find associated with a negated mass term.  Perhaps this is Dirac's antimatter field equation?
+
+\subsubsection{ Spacetime split of the field equations. }
+
+Unlike the $+m$ field equation
+
+\begin{align}\label{eqn:regularMatter}
+i \hbar \grad \psi &= m c \psi
+\end{align}
+
+where $\psi$ has been assumed to be even, and likely of the specific form
+
+\begin{align*}
+\psi = \alpha + P^i \sigma_i
+\end{align*}
+
+this field variable isn't a scalar, bivector (quaternion like), but has vector/trivector parts.  With field variables having scalar, bivector, vector and trivector parts it isn't unreasonable to consider a spacetime split.  Observe that we have an almost recognizable term in the effective field variable $\gamma^0 \psi$ of
+equation \ref{eqn:antimatter}.  In particular recall that the electric field and magnetic field components of the faraday bivector can be obtained from a 
+$\gamma^0 F \gamma_0$ spacetime split.  Specifically
+
+\begin{align*}
+F 
+&= \BE + i c \BB \\
+&= E^j \sigma_j + i c B^j \sigma_j \\
+&= E^j \gamma_j \gamma_0 + i c B^j \gamma_j \gamma_0 \\
+\end{align*}
+
+With this we have
+
+\begin{align*}
+\gamma^0 F \gamma_0
+&= E^j \gamma^0 \gamma_j + \gamma^0 i c B^j \gamma_j \\
+&= -E^j \sigma_j + i c B^j \sigma_j \\
+&= -\BE + i c \BB
+\end{align*}
+
+So we have
+
+\begin{align*}
+\inv{2} \left(F - \gamma^0 F \gamma_0 \right) &= \BE \\
+\inv{2i} \left(F + \gamma^0 F \gamma_0 \right) &= c \BB
+\end{align*}
+
+Does it make sense to use such a spacetime split on the field variables of equations 
+\begin{align}\label{eqn:antimatter}
+i \hbar \grad (\gamma^0 \psi) &= -m c (\gamma^0 \psi)
+\end{align}
+
+So, the field variable $\gamma^0 \psi$ we find associated with a negated mass term.  Perhaps this is Dirac's antimatter field equation?
+
+\subsubsection{ Spacetime split of the field equations. }
+
+Unlike the $+m$ field equation
+
+\begin{align}\label{eqn:regularMatter}
+i \hbar \grad \psi &= m c \psi
+\end{align}
 
 \section{ Alternate Dirac Lagrangian with antisymmetric terms. }
 
