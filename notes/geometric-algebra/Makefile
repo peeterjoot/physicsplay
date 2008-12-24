@@ -167,6 +167,7 @@ skipit += ../lut/GA_matrix.pdf
 
 ordered += ../geometric-algebra/slerp.pdf
 ordered += ../geometric-algebra/wave_eqn.pdf
+
 ordered += ../geometric-algebra/wave_lagrangian.pdf
 
 # Lut's, not mine:
@@ -176,6 +177,18 @@ skipit += ../lut/ga_matrix_1.pdf
 skipit += ../geometric-algebra/box.pdf
 
 ordered += ../geometric-algebra/pauli_matrix.pdf
+ordered += ../geometric-algebra/bohr.pdf
+
+ordered += ../geometric-algebra/sch.pdf
+
+# generated as-is.  Use as base for more thoughtful treatment.
+ordered += ../gamma-matrix/gamma.pdf
+
+ordered += ../dynamics/twobodies.pdf
+ordered += ../geometric-algebra/rapidity.pdf
+ordered += ../geometric-algebra/greens.pdf
+ordered += ../geometric-algebra/dirac_lagrangian.pdf
+ordered += ../qm/qm_susskind.pdf
 
 # Rules:
 #-----------------------------------------------------

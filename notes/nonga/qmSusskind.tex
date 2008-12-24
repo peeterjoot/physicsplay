@@ -5,6 +5,8 @@
 \newcommand{\ket}[1]{\lvert {#1} \rangle}
 \newcommand{\bra}[1]{\langle {#1} \rvert}
 \newcommand{\braket}[2]{\langle{#1} \vert {#2}\rangle}
+\newcommand{\ketbra}[2]{\ket{#1}\bra{#2}}
+\newcommand{\BraOpKet}[3]{\bra{#1} \hat{#2} \ket{#3} }
 
 \usepackage[bookmarks=true]{hyperref}
 
@@ -18,7 +20,7 @@
 
 \title{ Notes on Susskind's QM Lecture 3. }
 \author{Peeter Joot}
-\date{ Dec 23, 2008.  Last Revision: $Date: 2008/12/24 01:07:36 $ }
+\date{ Dec 23, 2008.  Last Revision: $Date: 2008/12/24 05:52:30 $ }
 
 \begin{document}
 
@@ -81,6 +83,324 @@ or,
 Observe that the braket notation is closer to this last form with the conjugation on the first term.  However, note that the metric associated with the braket notation has not been specified yet.  This is in fact an integral over space, where the ket vectors are complex valued functions.
 
 \subsection{ Coordinates and basis notation. }
+
+Ket vectors represent states, and the lables that are used for these are pretty loose.  For example, instead
+of writing the n'th basis vector as 
+
+\begin{align*}
+\ket{a_n}
+\end{align*}
+
+just n was used like so
+
+\begin{align*}
+\ket{n}
+\end{align*}
+
+so if $\{\ket{n}\}$ is a basis, the coordinates of a vector $\ket{A}$ can be written
+
+\begin{align*}
+\ket{A} = \sum_n \alpha_n \ket{n}
+\end{align*}
+
+Note that here in the summation sign, and the subscript $n$ is an index, and also implicitly indexes the basis vectors, but in that context is not a number but a label for the basis vector itself.
+
+Assuming that the $\ket{n}$ vectors are orthonormal, we can take inner products (brackets) to compute the $\alpha_n$ coordinates.
+
+Writing $\ket{k}$ as an alternate labeling for the same basis, the congugate bra vectors when sandwiched against this bra representation denotes the inner product
+
+\begin{align*}
+\braket{n}{A} 
+&= \sum_k \alpha_k \braket{n}{k} \\
+&= \sum_k \alpha_k \delta_{nk} \\
+&= \alpha_n \\
+\end{align*}
+
+So we have
+
+\begin{align*}
+\ket{A} = \sum_n \braket{n}{A} \ket{n}
+\end{align*}
+
+Since $\ket{n}$ is a vector and $\braket{n}{A}$ is just a complex number, this can be rearranged to butt the points
+together as a mnemonic reminder that this is a projective operation.
+
+\begin{align*}
+\ket{A} = \sum_n \ket{n} \braket{n}{A} 
+\end{align*}
+
+As is the case with an othornormal split by projection matrixes, this can be observed to be more than a memory
+device since the object
+
+\begin{align*}
+\ketbra{n}{n}
+\end{align*}
+
+is in fact the orthonormal projection operator onto the $\ket{n}$ direction.  ie:
+
+\begin{align*}
+\Proj_{\ket{n}}(\ket{A}) = \left( \ketbra{n}{n} \right) \ket{A}
+\end{align*}
+
+Note this is not summed over indexes $n$.
+
+In the matrix representation, this is really nothing more than writing
+
+\begin{align*}
+\Proj_{e} (A) = e \innerprod{e}{A} = e (e^\conj A) = (e e^\conj) A
+\end{align*}
+
+So one can think of this funny looking $\ketbra{n}{n}$ as nothing more than the orthonormal projector matrix of the form $e e^\conj$.
+
+\subsection{ Dual space. }
+
+Susskind called the set of the conjugate vectors (the bras), the dual space.  If the basis is not orthonormal
+are the conjugates really the duals (reciprocals) of the basis vectors?  Let's see with an example:
+
+\begin{align*}
+\ket{1} = 
+\inv{\sqrt{2}}
+\begin{bmatrix}
+1 \\
+i
+\end{bmatrix}
+, \quad
+\ket{2} = 
+\inv{\sqrt{5}}
+\begin{bmatrix}
+i \\
+2
+\end{bmatrix}
+\end{align*}
+
+Here we have
+
+\begin{align*}
+\braket{1}{1} = 
+\inv{2}
+\begin{bmatrix}
+1 & -i
+\end{bmatrix}
+\begin{bmatrix}
+1 \\
+i
+\end{bmatrix}
+= 1
+\end{align*}
+
+and 
+
+\begin{align*}
+\braket{2}{2} = 
+\inv{5}
+\begin{bmatrix}
+-i & 2 
+\end{bmatrix}
+\begin{bmatrix}
+i \\
+2
+\end{bmatrix}
+= 1
+\end{align*}
+
+\begin{align*}
+\braket{1}{2} = 
+\inv{\sqrt{10}}
+\begin{bmatrix}
+1 & -i
+\end{bmatrix}
+\begin{bmatrix}
+i \\
+2
+\end{bmatrix}
+= -\frac{i}{\sqrt{10}}
+\end{align*}
+
+\begin{align*}
+\braket{2}{1} = 
+\inv{\sqrt{10}}
+\begin{bmatrix}
+-i & 2
+\end{bmatrix}
+\begin{bmatrix}
+1 \\
+i
+\end{bmatrix}
+= \frac{i}{\sqrt{10}}
+\end{align*}
+
+Definitely not the dual space.  The conjugates are only going to be the dual basis when the primary basis is orthonormal.
+
+Switching back to abstraction temporarily, let's calculate the coordinates with respect to a non-orthonormal
+basis of dimension $k$.  That is, determine the $\alpha_i$ given a decomposition by basis vectors
+
+\begin{align*}
+\ket{x} = \sum_i \alpha_i \ket{a_i}
+\end{align*}
+
+We have 
+\begin{align*}
+\braket{a_j}{x} 
+&= \sum_i \alpha_i \braket{a_j}{a_i} \\
+&=
+\begin{bmatrix}
+\braket{a_j}{a_1} & \braket{a_j}{a_2} & \hdots & \braket{a_j}{a_k}
+\end{bmatrix}
+\begin{bmatrix}
+\alpha_1 \\
+\alpha_2 \\
+\vdots \\
+\alpha_k \\
+\end{bmatrix}
+\end{align*}
+
+Assembling these into a matrix with a column for each $j$, we have
+\begin{align*}
+\begin{bmatrix}
+\braket{a_1}{x} \\
+\braket{a_2}{x} \\
+\vdots \\
+\braket{a_k}{x} \\
+\end{bmatrix}
+&=
+{\begin{bmatrix}
+\braket{a_i}{a_j}
+\end{bmatrix}}_{ij}
+\Balpha
+\end{align*}
+
+With,
+
+\begin{align*}
+A = 
+\begin{bmatrix}
+\ket{a_1} & \ket{a_2} & \hdots & \ket{a_k}
+\end{bmatrix},
+\end{align*}
+
+this is
+
+\begin{align*}
+\Balpha = \inv{A^\conj A} A^\conj \ket{x}
+\end{align*}
+
+or 
+\begin{align*}
+\ket{x} = A \Balpha = A \inv{A^\conj A} A^\conj \ket{x}
+\end{align*}
+
+From this we can pick off the reciprocal frame vectors, which are the columns of 
+
+\begin{align*}
+\begin{bmatrix}
+\ket{a^1} & \ket{a^2} & \hdots & \ket{a^k}
+\end{bmatrix} = 
+A \inv{A^\conj A}
+\end{align*}
+
+To verify we calculate 
+\begin{align*}
+{\begin{bmatrix}
+\ket{a^1} & \ket{a^2} & \hdots & \ket{a^k}
+\end{bmatrix}}^\conj
+\begin{bmatrix}
+\ket{a_1} & \ket{a_2} & \hdots & \ket{a_k}
+\end{bmatrix}
+&=
+\begin{bmatrix}
+\bra{a^1} \\ \bra{a^2} \\ \vdots \\ \bra{a^k}
+\end{bmatrix}
+\begin{bmatrix}
+\ket{a_1} & \ket{a_2} & \hdots & \ket{a_k}
+\end{bmatrix} \\
+&= 
+{
+\begin{bmatrix}
+\braket{a^i}{a_j}
+\end{bmatrix}}_{ij}
+\end{align*}
+
+with the expectation that this is the identity matrix.  That product is
+
+\begin{align*}
+&\left(
+\begin{bmatrix}
+\ket{a_1} & \ket{a_2} & \hdots & \ket{a_k}
+\end{bmatrix}
+\inv{{\begin{bmatrix}
+\braket{a_i}{a_j}
+\end{bmatrix}}_{ij}} \right)^\conj
+\begin{bmatrix}
+\ket{a_1} & \ket{a_2} & \hdots & \ket{a_k}
+\end{bmatrix} \\
+&=
+\inv{{\begin{bmatrix}
+\braket{a_j}{a_i}^\conj
+\end{bmatrix}}_{ij}} 
+\begin{bmatrix}
+\bra{a_1} \\ \bra{a_2} \\ \vdots \\ \bra{a_k}
+\end{bmatrix}
+\begin{bmatrix}
+\ket{a_1} & \ket{a_2} & \hdots & \ket{a_k}
+\end{bmatrix} \\
+&=
+\inv{{\begin{bmatrix}
+\braket{a_i}{a_j}
+\end{bmatrix}}_{ij}} 
+{{\begin{bmatrix}
+\braket{a_i}{a_j}
+\end{bmatrix}}_{ij}} \\
+&= I
+\end{align*}
+
+This proves the desired result, that we can calculate $\braket{a^i}{a_j} = \delta_{ij}$ where 
+
+\begin{align*}
+\begin{bmatrix}
+\ket{a^1} & \ket{a^2} & \hdots & \ket{a^k}
+\end{bmatrix} = 
+\begin{bmatrix}
+\ket{a_1} & \ket{a_2} & \hdots & \ket{a_k}
+\end{bmatrix}
+\inv{{\begin{bmatrix}
+\braket{a_i}{a_j}
+\end{bmatrix}}_{ij}}
+\end{align*}
+
+While kind of fun to see how to express this in the bra ket notation, is this useful.  Probably not since
+all the operators of QM are Hermitian, and thus have orthonormal basis (the eigenvectors).  Oh well... it has
+provided some comfort with the notation if nothing else.
+
+\subsection{ Hermitian operators. }
+
+The operators of QM are written with hats, and are applied to vectors (states).  For example for an 
+operator $\hat{H}$ applied to $\ket{x}$ we write
+
+\begin{align*}
+\hat{H} \ket{x}
+\end{align*}
+
+FIXME: Express op applied to a vector in coordinates.
+
+Additionally, the inner product is written with a sandwich bra ket format like
+
+\begin{align*}
+\braket{y}{ \left(\hat{H} \ket{x} \right) }
+=
+\BraOpKet{y}{H}{x}
+\end{align*}
+
+In the braket notation a Hermitian operator $\hat{H}$ is defined as one 
+
+FIXME.
+
+and anti-Hermitian is:
+
+FIXME:
+
+\subsubsection{ Tricky eigenvalue notation. } 
+
+
 
 \section{ Postulates of QM. }
 
