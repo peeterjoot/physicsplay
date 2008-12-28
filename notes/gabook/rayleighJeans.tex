@@ -3,8 +3,8 @@
 \input{../peeters_macros.tex}
 \input{../peeters_macros2.tex}
 
-\newcommand{\EE}[0]{\mathcal{E}}
-\newcommand{\HH}[0]{\mathcal{H}}
+\newcommand{\EE}[0]{\boldsymbol{\mathcal{E}}}
+\newcommand{\HH}[0]{\boldsymbol{\mathcal{H}}}
 
 \usepackage[bookmarks=true]{hyperref}
 
@@ -18,7 +18,7 @@
 
 \title{ Auxillary notes for Bohm's Rayleigh-Jeans QM intro topic. }
 \author{Peeter Joot}
-\date{ Dec 27, 2008.  Last Revision: $Date: 2008/12/28 01:00:20 $ }
+\date{ Dec 27, 2008.  Last Revision: $Date: 2008/12/28 06:08:58 $ }
 
 \begin{document}
 \maketitle{}
@@ -51,6 +51,158 @@ H = \qdot_i p_i -\LL
 What is the field equivalent of this?  Try to get the feel for this with some simple fields (such as the one dimensional vibrating string), and the Coulomb field.  For the physical case, do this with both the Hamitonian approach and a physical limiting argument.
 
 \section{ 3. Electromagnetic Potentials. }
+
+Bohm writes maxwell's equations in non-SI units, and also, naturally, not in STA form which would be somewhat more natural for a guage
+discussion.
+
+\begin{align*}
+\spacegrad \cross \EE &= -\inv{c} \partial_t \HH \\
+\spacegrad \cdot \EE &= 4 \pi \rho \\
+\spacegrad \cross \HH &= \inv{c} \partial_t \EE + 4 \pi \Bj \\
+\spacegrad \cdot \HH &= 0
+\end{align*}
+
+In STA form this is
+
+\begin{align*}
+\spacegrad \EE &= - \partial_0 i\HH + 4 \pi \rho \\
+\spacegrad i\HH &= -\partial_0 \EE - 4 \pi \Bj \\
+\end{align*}
+
+Or
+\begin{align*}
+\spacegrad (\EE + i\HH) + \partial_0 (\EE + i\HH) &= 4 \pi (\rho - \Bj) \\
+\end{align*}
+
+Left multiplying by $\gamma_0$ gives
+
+\begin{align*}
+\gamma_0 \spacegrad 
+&= \gamma_0 \sum_k \sigma_k \partial_k \\
+&= \gamma_0 \sum_k \gamma_k \gamma_0 \partial_k \\
+&= -\sum_k \gamma_k \partial_k \\
+&= \gamma^k \partial_k \\
+\end{align*}
+
+and
+
+\begin{align*}
+\gamma_0 \Bj 
+&= \sum_k \gamma_0 \sigma_k j^k \\
+&= -\sum_k \gamma_k j^k,
+\end{align*}
+
+so with $J^0 = \rho$, $J^k = j^k$ and $J = \gamma_\mu J^\mu$, we have
+
+\begin{align*}
+\gamma^\mu \partial_\mu (\EE + i\HH) &= 4 \pi J
+\end{align*}
+
+and finally with $F = \EE + i\HH$, we have Maxwell's equation in covariant form
+
+\begin{align*}
+\grad F &= 4 \pi J.
+\end{align*}
+
+Next it is stated that general solutions can be expressed as
+
+\begin{align}\label{eqn:fieldsFromPotentials}
+\HH &= \spacegrad \cross \Ba \\
+\EE &= - \inv{c} \PD{t}{\Ba} - \spacegrad \phi
+\end{align}
+
+Let's double check that this jives with the bivector potential solution $F = \grad \wedge A = \EE + i\HH$.  Let's split our bivector
+into spacetime and spatial components by the conjugate operation
+
+\begin{align*}
+F^\dagger &=\gamma_0 F \gamma_0 \\
+&= \gamma_0 \gamma^\mu \wedge \gamma^\nu \partial_\mu A_\mu \gamma_0 \\
+&=
+\left\{
+\begin{array}{l l}
+0 & \quad \mbox{if $\mu = \nu$} \\
+\gamma^\mu \gamma^\nu \partial_\mu A_\nu & \quad \mbox{if $\mu \in \{1,2,3\}$, and $\nu \in \{1,2,3\}$} \\
+-\gamma^\mu \gamma^\nu \partial_\mu A_\nu & \quad \mbox{one of $\mu = 0$ or $\nu = 0$ } \\
+\end{array} \right.
+\end{align*}
+
+\begin{align*}
+F 
+&= \EE + i\HH \\
+&= \inv{2}(F - F^\dagger) + \inv{2}(F + F^\dagger) \\
+&= \left(\gamma^k \wedge \gamma^0 \partial_k A_0 +\gamma^0 \wedge \gamma^k \partial_0 A_k\right) + \left(\gamma^a \wedge \gamma^b \partial_a A_b\right) \\
+&= -\left(\sum_k \sigma_k \partial_k A^0 + \partial_0 \sigma_k A^k\right) + i\left(\epsilon_{abc}\sigma_a \partial_b A^c\right) \\
+\end{align*}
+
+So, with $\Ba = \sigma_k A^k$, and $\phi = A^0$, we do have equations \ref{eqn:fieldsFromPotentials} as identical to $F = \grad \wedge A$.
+
+Now how about the guage variations of the fields?  Bohm writes that we can alter the potentials by
+
+\begin{align*}
+\Ba' &= \Ba - \spacegrad \psi \\
+\phi' &= \phi + \inv{c}\PD{t}{\psi}
+\end{align*}
+
+How does this translate to an alteration of the four potential?  For the vector potential we have
+
+\begin{align*}
+\sigma_k {A^k}' &= \sigma_k A^k - \sigma_k \partial \psi \\
+\gamma_k \gamma_0 {A^k}' &= \gamma_k \gamma_0 A^k - \gamma_k \gamma_0 \partial_k \psi \\
+-\gamma_0 \gamma_k {A^k}' &= -\gamma_0 \gamma_k A^k - \gamma_0 \gamma^k \partial_k \psi \\
+\gamma_k {A^k}' &= \gamma_k A^k + \gamma^k \partial_k \psi \\
+\end{align*}
+
+with $\phi = A^0$, add in the $\phi$ term
+
+\begin{align*}
+\gamma_0 \phi' &= \gamma_0 \phi + \gamma_0 \PD{x^0}{\psi} \\
+\gamma_0 \phi' &= \gamma_0 \phi + \gamma^0 \PD{x^0}{\psi}
+\end{align*}
+
+For
+\begin{align*}
+\gamma_\mu {A^\mu}' &= \gamma_\mu A^\mu + \gamma^\mu \partial_\mu \psi \\
+\end{align*}
+
+Which is just a statement that we can add a spacetime gradient to our vector potential without altering the field equation:
+
+\begin{align*}
+A' &= A + \grad \psi
+\end{align*}
+
+Let's verify that this does in fact not alter Maxwell's equation.
+
+\begin{align*}
+\grad (\grad \wedge (A + \grad \psi) &= 4 \pi J
+\grad (\grad \wedge A) + \grad (\grad \wedge \grad \psi) &= 
+\end{align*}
+
+Since $\grad \wedge \grad = 0$ we have
+
+\begin{align*}
+\grad (\grad \wedge A') = \grad (\grad \wedge A)
+\end{align*}
+
+Now the statement that $\grad \wedge \grad$ as an operator equals zero, just by virtue of $\grad$ being a vector is worth explicit
+confirmation.  Let's expand that to verify
+
+\begin{align*}
+\grad \wedge \grad \psi 
+&= \gamma^\mu \wedge \gamma^\nu \partial_\mu \partial_\nu \psi \\
+&= \left(\sum_{\mu < \nu} + \sum_{\nu < \mu}\right) \gamma^\mu \wedge \gamma^\nu \partial_\mu \partial_\nu \psi \\
+&= \sum_{\mu < \nu} \gamma^\mu \wedge \gamma^\nu (\partial_\mu \partial_\nu \psi - \partial_\nu \partial_\mu \psi) \\
+\end{align*}
+
+So, we see that we additionally need the field variable $\psi$ to be sufficently continuous for mixed partial equality for the
+statement that $\grad \wedge \grad = 0$ to be valid.  Assuming that continuity is taken as a given the confirmation of the invariance under this transformation is thus complete.
+
+Now, Bohm says he wants to pick $\spacegrad \cdot \Ba' = 0$, and requires
+
+\begin{align*}
+\spacegrad \cdot \Ba - \spacegrad^2 \psi = 0
+\end{align*}
+
+to do so?  FIXME: continue from here.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
