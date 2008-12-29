@@ -18,7 +18,7 @@
 
 \title{ Auxillary notes for Bohm's Rayleigh-Jeans QM intro topic. }
 \author{Peeter Joot}
-\date{ Dec 27, 2008.  Last Revision: $Date: 2008/12/29 02:53:19 $ }
+\date{ Dec 27, 2008.  Last Revision: $Date: 2008/12/29 03:23:22 $ }
 
 \begin{document}
 \maketitle{}
@@ -28,7 +28,7 @@
 \section{ Motivation. }
 
 Fill in the gaps for a reading of the
-Rayleigh-Jeans discussion of \cite{bohm1989qt}.
+initial parts of the Rayleigh-Jeans discussion of \cite{bohm1989qt}.
 
 \section{ 2. Electromagnetic energy. }
 
@@ -70,9 +70,9 @@ In STA form this is
 \end{align*}
 
 Or
-\begin{align*}
+\begin{align}\label{eqn:maxwellNotQuiteCovariant}
 \spacegrad (\EE + i\HH) + \partial_0 (\EE + i\HH) &= 4 \pi (\rho - \Bj) \\
-\end{align*}
+\end{align}
 
 Left multiplying by $\gamma_0$ gives
 
@@ -212,15 +212,47 @@ So, provided we can find a solution to the Poisson equation
 
 one can find a $\psi, \Ba$ gauge transformation that has the particular quality that $\spacegrad \cdot \Ba' = 0$.
 
-That $\psi$ is
+That solution, from equation \ref{eqn:laplacianOfPoisson} is
+
 \begin{align*}
-\psi = -\inv{4\pi}\int (\spacegrad' \cdot \Ba(\Br')) dV' \inv{\Abs{\Br-\Br'}}
+\psi(\Br) = -\inv{4\pi}\int (\spacegrad' \cdot \Ba(\Br')) dV' \inv{\Abs{\Br-\Br'}}
 \end{align*}
 
 The corrallary to this
 is that one may similarily impose a requirement that $\spacegrad \cdot \Ba = 0$, since if that is not the case, some $\Ba'$ can be added to the vector potential to make that the case.
 
 FIXME: handwaving description here.  Show with a math statement with $\Ba \rightarrow \Ba'$.
+
+\subsection{ Free space solutions. }
+
+From \ref{eqn:maxwellNotQuiteCovariant} and \ref{eqn:fieldsFromPotentials}
+the free space solution to Maxwell's
+equation must satisfy 
+
+\begin{align*}
+0 
+&= \left(\spacegrad + \partial_0\right) (\EE + i\HH) \\
+&= \left(\spacegrad + \partial_0\right) \left(- \partial_0{\Ba} - \spacegrad \phi + \spacegrad \wedge \Ba \right) \\
+&= - \spacegrad \partial_0{\Ba} - \spacegrad^2 \phi + \spacegrad (\spacegrad \wedge \Ba) 
+ - \partial_{00}{\Ba} - \partial_0 \spacegrad \phi + \partial_0 (\spacegrad \wedge \Ba) \\
+&= - \spacegrad \cdot \partial_0{\Ba} - \spacegrad^2 \phi + \spacegrad \cdot (\spacegrad \wedge \Ba) 
+ - \partial_{00}{\Ba} - \partial_0 \spacegrad \phi  \\
+\end{align*}
+
+Since the scalar and vector parts of this equation must separately equal zero we have
+
+\begin{align*}
+0 &= - \partial_0 \spacegrad \cdot {\Ba} - \spacegrad^2 \phi \\
+0 &= \spacegrad \cdot (\spacegrad \wedge \Ba) - \partial_{00}{\Ba} - \partial_0 \spacegrad \phi  \\
+\end{align*}
+
+If one picks a gauge transformation such that $\spacegrad \cdot \Ba = 0$ we then have
+\begin{align*}
+0 &= \spacegrad^2 \phi \\
+0 &= \spacegrad^2 \Ba - \partial_{00}{\Ba} - \partial_0 \spacegrad \phi  \\
+\end{align*}
+
+For the first Bohm argues that ``It is well known that the only solution of this equation that is regular over all space is $\phi = 0$'', and anything else implies charge in the region.  What does regular mean here?  I suppose this seems like a reasonable enough statement, but I think the proper way to think about this is really that one has picked the covariant gauge $\grad \cdot A = 0$ (that's simpler anyhow).  With an acceptance of the $\phi =0$ argument one is left with the vector potential wave equation which was the desired goal of that section.
 
 \subsection{ Doing this all directly. }
 
@@ -330,8 +362,14 @@ Picking a spherical integration volume, for which the radius is constant $R = \A
 \begin{align*}
 \spacegrad^2 \psi 
 &= -\rho(\Br) 4 \pi R^2 \inv{R^2} \\
-&= - 4 \pi \rho(\Br)
 \end{align*}
+
+In summary this is
+
+\begin{align}\label{eqn:laplacianOfPoisson}
+\psi &= \int \frac{\rho(\Br')}{\Abs{\Br - \Br'}} dV' \\
+\spacegrad^2 \psi &= - 4 \pi \rho(\Br)
+\end{align}
 
 Having written this out I recall that the same approach was used in
 \cite{schwartz1987pe} (there it was to calculate $\spacegrad \cdot \BE$ in terms of the charge density, but the ideas are all the same.)
