@@ -7,6 +7,12 @@
 \newcommand{\braket}[2]{\langle{#1} \vert {#2}\rangle}
 \newcommand{\ketbra}[2]{\ket{#1}\bra{#2}}
 \newcommand{\BraOpKet}[3]{\bra{#1} \hat{#2} \ket{#3} }
+\newcommand{\hatH}[0]{\hat{H}}
+\newcommand{\hatS}[0]{\hat{S}}
+\newcommand{\hatk}[0]{\hat{k}}
+\newcommand{\hatx}[0]{\hat{x}}
+\newcommand{\hatp}[0]{\hat{p}}
+\DeclareMathOperator{\Prob}{Prob}
 
 \usepackage[bookmarks=true]{hyperref}
 
@@ -20,7 +26,7 @@
 
 \title{ Notes on Susskind's QM Lecture. }
 \author{Peeter Joot}
-\date{ Dec 23, 2008.  Last Revision: $Date: 2008/12/28 01:00:20 $ }
+\date{ Dec 23, 2008.  Last Revision: $Date: 2008/12/29 05:57:30 $ }
 
 \begin{document}
 
@@ -87,6 +93,22 @@ or,
 \end{align*}
 
 Observe that the braket notation is closer to this last form with the conjugation on the first term.  However, note that the metric associated with the braket notation has not been specified yet.  This is in fact an integral over space, where the ket vectors are complex valued functions.
+
+Note that the vectors of QM are typically complex functions, and in the continuous case the inner product representation is
+
+\begin{align*}
+\braket{\psi}{\phi} = \int {\psi}^\conj {\phi}
+\end{align*}
+
+There appears to be some flexibility in choosing this integral, and its range.  Specific examples used in the lectures are
+
+\begin{align*}
+\braket{\psi}{\phi} &= \int_{x=-\infty}^{x=\infty} {\psi(x)}^\conj {\phi(x)} dx \\
+\braket{\psi}{\phi} &= \int {\psi(x,y,z)}^\conj {\phi(x,y,z)} dx dy dz \\
+\braket{\psi}{\phi} &= \int_{x=0}^{2\pi} {\psi(x)}^\conj {\phi(x)} dx \\
+\end{align*}
+
+The last was used in the circular motion treatment of lecture 4. 
 
 \subsection{ Coordinates and basis notation. }
 
@@ -380,10 +402,10 @@ provided some comfort with the notation if nothing else.
 \subsection{ Hermitian operators. }
 
 The operators of QM are written with hats, and are applied to vectors (states).  For example for an 
-operator $\hat{H}$ applied to $\ket{x}$ we write
+operator $\hatH$ applied to $\ket{x}$ we write
 
 \begin{align*}
-\hat{H} \ket{x}
+\hatH \ket{x}
 \end{align*}
 
 FIXME: Express op applied to a vector in coordinates.
@@ -391,30 +413,148 @@ FIXME: Express op applied to a vector in coordinates.
 Additionally, the inner product is written with a sandwich bra ket format like
 
 \begin{align*}
-\braket{y}{ \left(\hat{H} \ket{x} \right) }
+\braket{y}{ \left(\hatH \ket{x} \right) }
 =
 \BraOpKet{y}{H}{x}
 \end{align*}
 
-In the braket notation a Hermitian operator $\hat{H}$ is defined as one 
+In the braket notation a Hermitian operator $\hatH$ is defined as one 
 
-FIXME.
+\begin{align*}
+\BraOpKet{A}{\hatH}{B}^\conj = \BraOpKet{B}{\hatH}{A}
+\end{align*}
 
-and anti-Hermitian is:
+whereas an anti-Hermitian (or skew-Hermitian) operator is:
 
-FIXME:
+\begin{align*}
+\BraOpKet{A}{\hatS}{B}^\conj = -\BraOpKet{B}{\hatS}{A}
+\end{align*}
+
+FIXME: expand $\hatH \ket{A}$ in coordinates and then the inner product of that with another vector.
 
 \subsubsection{ Tricky eigenvalue notation. } 
 
+Worth a small note is a comment on some tricky notation used for eigenvectors and values.  He writes
 
+\begin{align*}
+\hatH \ket{\underbrace{\lambda}_{\text{ A.}}} = \underbrace{\lambda}_{\text{ B. }} \underbrace{\ket{\lambda}}_{\text{C.}}
+\end{align*}
+
+In the A case, $\lambda$ is just a label.  In the B case, $\lambda$ is a (real) number, and in the C case the whole thing $\ket{\lambda}$ is a vector or state.  We have $\lambda$ overloaded for labeling, a numeric value, and a vector, and one uses the context to distinguish these.
 
 \section{ Postulates of QM. }
 
+Rather than starting with the Schr\"{o}dinger equation or an attempt to motivate it, Susskind, after bra/ket preliminaries, starts with an axiomatic approach that I found unexpected.  It sounds like this is how Dirac laid it out in the thirties.  These postulates, if I jotted them down right, were
 
+\begin{enumerate}
+
+\item State vectors are orthogonal (can be made to be orthonormal), and describe distinct configurations.  An example of possible configurations are all the (infinite number of) positions that a particle can take in space.
+
+\item The observables of a system are the collection of Hermitian operators.
+
+\item The values (that which can be obtained by measurement) of observable $\hatH$ are the eigenvalues of that operator.  Since $\hatH$ is
+hermitian these eigenvalues are real (ie: measurements are real numbers).
+
+\item States for which observable $\hatH$ is certain, definite, and/or not statistical are the eigenvectors of $\hatH$.
+
+As an example, thinking back to lecture I or II he discusses a heads/tails system and says that QM unlike classical mechanics allows for
+a linear combination of heads and tails states such as
+
+\begin{align*}
+S = \alpha \ket{H} + \beta \ket{T}
+\end{align*}
+
+provided that the additional constraint $\alpha\bar{\alpha} + \beta\bar{\beta} = 1$ is imposed.  Here the combined state is a representation
+of the probabilities for the two non-statistical states heads and tails.
+
+\item Probability of eigenstate $\lambda$ given state A is
+
+\begin{align*}
+P_{\lambda}
+&= \Abs{\braket{\lambda}{A}}^2 \\
+&= {\braket{\lambda}{A}} {\braket{A}{\lambda}} \\
+&= \braket{A}{\lambda}\braket{\lambda}{A}
+\end{align*}
+
+\end{enumerate}
 
 \section{ Position operator. }
 
+The position operator is defined as
+
+\begin{align*}
+\hatx \ket{\psi} \rightarrow x \phi(x)
+\end{align*}
+
+This is a representation of the operator $\hatx$ applied to ket vector $\ket{\phi}$.  Applied in an inner product this operator produces the
+following action
+
+\begin{align*}
+\BraOpKet{\phi}{\hatx}{\phi} \rightarrow \int {\phi^\conj}(x) x \phi(x) dx
+\end{align*}
+
+which shows that $\hatx$ is Hermitian.
+
+Eigenvectors and values of this operator in the continuous case are actually delta functions.  The eigen equation is
+
+\begin{align*}
+\hatx \ket{\phi} = \lambda \ket{\phi}
+\end{align*}
+
+Or in the function representation
+
+\begin{align*}
+x \phi_{\lambda}(x) = \lambda \phi_{\lambda}(x)
+\end{align*}
+
+or
+\begin{align*}
+(x - \lambda) \phi_{\lambda}(x) = 0
+\end{align*}
+
+Susskind's argument that these eigenfunctions $\phi_\lambda$ are Dirac delta functions is that for any $x\ne \lambda$, $\phi_\lambda(x) = 0$, and that at $x = \lambda$ $\phi_\lambda(x) can be non-zero$.  As Susskind puts it ``zero everywheres except at $x = \lambda$''.  The eigenvalues are all possible values of $x$.
+
+FIXME: Now, where does the unit integral come from in this argument?
+
+A pictorial illustration of the delta function was given with a $\epsilon$ width rectangle of height $1/epsilon$.
+
+orthonormal: $\braket {\delta_{\lambda}(x)} {\delta_{\lambda'}(x)} = 0$ for $\lambda \ne \lambda'$.  FIXME: fill in the details.
+
+The mapping between state and function notation is
+
+\begin{align*}
+\braket{x}{\phi} \rightarrow \int \delta(u-x) \phi(u) du = \phi(x)
+\end{align*}
+
+and the probability to locate particle at $x$ from the postulates is thus
+
+\begin{align*}
+\Prob_x(\phi) = \Abs{\braket{x}{\phi}}^2 = \int \phi^\conj \phi
+\end{align*}
+
+FIXME: fill in the details for both of these.
+
 \section{ Derivative (momentum) operator. }
+
+The next operator that is introduced is the skew-Hermitian operator $\PDi{x}{}$.  Instead of showing that this was the case his preference was
+to instead show that 
+
+\begin{align*}
+\hatk = - i \PD{x}{}
+\end{align*}
+
+is in fact Hermitian.  To see this we need to apply this operator in an inner product context
+
+\begin{align*}
+\BraOpKet{\phi}{\hatk}{\phi} 
+&= \int \phi^\conj \left( - i \PD{x}{} \right) \phi dx \\
+\end{align*}
+
+Integrating by parts one has (with $\phi = 0$ on the boundaries) we have
+\begin{align*}
+\BraOpKet{\phi}{\hatk}{\phi} 
+&= \int \PD\phi^\conj i \phi dx \\
+\end{align*}
 
 \subsection{ Proper characterization as momentum. }
 
