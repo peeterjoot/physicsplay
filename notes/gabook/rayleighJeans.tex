@@ -18,7 +18,7 @@
 
 \title{ Auxillary notes for Bohm's Rayleigh-Jeans QM intro topic. }
 \author{Peeter Joot}
-\date{ Dec 27, 2008.  Last Revision: $Date: 2008/12/28 16:06:42 $ }
+\date{ Dec 27, 2008.  Last Revision: $Date: 2008/12/29 02:53:19 $ }
 
 \begin{document}
 \maketitle{}
@@ -210,10 +210,15 @@ So, provided we can find a solution to the Poisson equation
 \spacegrad^2 \psi = \spacegrad \cdot \Ba
 \end{align}
 
-one can find a $\psi, \Ba$ gauge transformation that has the particular quality that $\spacegrad \cdot \Ba' = 0$.  The corrallary to this
-is that one may similarily impose a requirement that $\spacegrad \cdot \Ba = 0$, since if that is not the case, some $\Ba'$ can be added to the vector potential to make that the case.
+one can find a $\psi, \Ba$ gauge transformation that has the particular quality that $\spacegrad \cdot \Ba' = 0$.
 
-FIXME: Bohm lists the solution for \ref{eqn:psiForDivAPrimeEqZero} (a Poisson integral), but I forget how one shows this.  Work it out.
+That $\psi$ is
+\begin{align*}
+\psi = -\inv{4\pi}\int (\spacegrad' \cdot \Ba(\Br')) dV' \inv{\Abs{\Br-\Br'}}
+\end{align*}
+
+The corrallary to this
+is that one may similarily impose a requirement that $\spacegrad \cdot \Ba = 0$, since if that is not the case, some $\Ba'$ can be added to the vector potential to make that the case.
 
 FIXME: handwaving description here.  Show with a math statement with $\Ba \rightarrow \Ba'$.
 
@@ -238,6 +243,98 @@ This is precisely the four wave equations desired
 \end{align*}
 
 FIXME: show the precise gauge transformation $A \rightarrow A'$ that leads to $\grad \cdot A = 0$.
+
+\section{ Auxillary details. }
+
+\subsection{ Confirm Poisson solution to Laplacian. }
+
+Bohm lists the solution for \ref{eqn:psiForDivAPrimeEqZero} (a Poisson integral), but I forget how one shows this.  I can't figure out how to integrate this Laplacian, but it is simple enough to confirm this by back substuition.
+
+Suppose one has
+
+\begin{align*}
+\psi = \int \frac{\rho(\Br')}{\Abs{\Br - \Br'}} dV'
+\end{align*}
+
+We can take the Laplacian by direct differentiation under the integration sign
+
+\begin{align*}
+\spacegrad^2 \psi = \int {\rho(\Br')} dV' \spacegrad^2 \inv{\Abs{\Br - \Br'}}
+\end{align*}
+
+To evaluate the Laplacian we need
+
+\begin{align*}
+\PD{x_i}{\Abs{\Br - \Br'}^k} 
+&= \PD{x_i}{} \left(\sum_j (x_j - x_j')^2 \right)^{k/2} \\
+&= k { 2\Abs{\Br - \Br'}^{k-2}} \PD{x_i}{} \left(\sum_j (x_j - x_j')^2 \right) \\
+%&= k { 2\Abs{\Br - \Br'}^{k-2}} 2 (x_i - x_i')
+&= k { \Abs{\Br - \Br'}^{k-2}} (x_i - x_i')
+\end{align*}
+
+So we have
+\begin{align*}
+\PD{x_i}{} \PD{x_i}{} {\Abs{\Br - \Br'}^{-1}} 
+&= 
+- (x_i - x_i') \PD{x_i}{}{ \inv{ \Abs{\Br - \Br'}^3} } 
+- \inv{ \Abs{\Br - \Br'}^3} \PD{x_i}{ (x_i - x_i') } \\
+&= 
+3 (x_i - x_i')^2 { \inv{ \Abs{\Br - \Br'}^5} } 
+- \inv{ \Abs{\Br - \Br'}^3} \\
+\end{align*}
+
+So, provided $\Br \ne \Br'$ we have
+
+\begin{align*}
+\spacegrad^2 \psi &= 
+3 (\Br - \Br')^2 \inv{ \Abs{\Br - \Br'}^5} 
+- 3 \inv{ \Abs{\Br - \Br'}^3} \\
+&= 0 
+\end{align*}
+
+Observe that this is true only for \R{3}.  Now, one is left with only an integral around a neighbourhood around the point $\Br$ which can be made small enough that $\rho(\Br') = \rho(\Br)$ in that volume can be taken as constant.
+
+\begin{align*}
+\spacegrad^2 \psi 
+&= \rho(\Br) \int dV' \spacegrad^2 \inv{\Abs{\Br - \Br'}} \\
+&= \rho(\Br) \int dV' \spacegrad \cdot \spacegrad \inv{\Abs{\Br - \Br'}} \\
+&= -\rho(\Br) \int dV' \spacegrad \cdot \frac{(\Br -\Br')}{\Abs{\Br - \Br'}^3} \\
+\end{align*}
+
+Now, if the divergence in this integral was with respect to the primed variable that ranges over the infinitesimal volume, then this could be converted to a surface integral.  
+Observe that a radial expansion of this divergence allows for convient change of variables to the primed $x_i'$ coordinates
+
+\begin{align*}
+\spacegrad \cdot \frac{(\Br -\Br')}{\Abs{\Br - \Br'}^3}
+&= 
+\left(\frac{\Br - \Br'}{\Abs{\Br-\Br'}} \PD{\Abs{\Br-\Br'}}{}\right) \cdot
+\left(\frac{\Br - \Br'}{\Abs{\Br-\Br'}} \inv{\Abs{\Br-\Br'}^2}\right) \\
+&= 
+\PD{\Abs{\Br'-\Br}}{} {\Abs{\Br'-\Br}^{-2}} \\
+&= 
+\left(\frac{\Br' - \Br}{\Abs{\Br'-\Br}} \PD{\Abs{\Br'-\Br}}{}\right) \cdot
+\left(\frac{\Br' - \Br}{\Abs{\Br'-\Br}} \inv{\Abs{\Br'-\Br}^2}\right) \\
+&= \spacegrad' \cdot \frac{(\Br'-\Br)}{\Abs{\Br' - \Br}^3}
+\end{align*}
+
+Now, since $\Br'-\Br$ is in the direction of the outwards normal the divergence theorem can be used
+
+\begin{align*}
+\spacegrad^2 \psi 
+&= -\rho(\Br) \int dV' \spacegrad' \cdot \frac{(\Br' -\Br)}{\Abs{\Br' - \Br}^3} \\
+&= -\rho(\Br) \int_{\partial V'} dA' \inv{\Abs{\Br' - \Br}^2} \\
+\end{align*}
+
+Picking a spherical integration volume, for which the radius is constant $R = \Abs{\Br'-\Br}$, we have
+
+\begin{align*}
+\spacegrad^2 \psi 
+&= -\rho(\Br) 4 \pi R^2 \inv{R^2} \\
+&= - 4 \pi \rho(\Br)
+\end{align*}
+
+Having written this out I recall that the same approach was used in
+\cite{schwartz1987pe} (there it was to calculate $\spacegrad \cdot \BE$ in terms of the charge density, but the ideas are all the same.)
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
