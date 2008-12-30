@@ -108,7 +108,7 @@ ordered += ../geometric-algebra/stokes_revisited.pdf
 ordered += ../lut/schwartzchild_metric.pdf
 ordered += ../geometric-algebra/lorentz_force.pdf
 
-ordered += ../geometric-algebra/field_lagragian.pdf
+ordered += ../geometric-algebra/field_lagrangian.pdf
 
 # an email response:
 skipit += ../lut/sr_lagrangian_q.pdf
@@ -189,6 +189,9 @@ ordered += ../geometric-algebra/rapidity.pdf
 ordered += ../geometric-algebra/greens.pdf
 ordered += ../geometric-algebra/dirac_lagrangian.pdf
 ordered += ../qm/qm_susskind.pdf
+ordered += ../relativity/velocity_addition.pdf
+ordered += ../qm/rayleigh_jeans.pdf
+ordered += ../geometric-algebra/poynting.pdf
 
 # Rules:
 #-----------------------------------------------------
