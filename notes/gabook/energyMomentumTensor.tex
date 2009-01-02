@@ -1,0 +1,293 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+\title{ Energy momentum tensor }
+\author{Peeter Joot}
+\date{ Jan 01, 2009.  Last Revision: $Date: 2009/01/02 02:27:51 $ }
+
+\begin{document}
+\maketitle{}
+
+%\tableofcontents
+%\section{}
+
+\cite{doran2003gap} defines the energy momentum stress tensor as a vector to
+vector mapping of the following form:
+
+\begin{align*}
+T(a) 
+&= \frac{\epsilon_0}{2} F a \tilde{F}
+= - \frac{\epsilon_0}{2} F a F
+\end{align*}
+
+($\epsilon_0$ added).
+
+This quantity can only have vector, trivector, and five vector grades.  The 
+grade five term must be zero
+
+\begin{align*}
+\gpgrade{T(a)}{5}
+&= \frac{\epsilon_0}{2} F \wedge a \wedge \tilde{F} \\
+&= \frac{\epsilon_0}{2} a \wedge (F \wedge \tilde{F}) \\
+&= 0
+\end{align*}
+
+Since $\tilde{T(a)} = T(a)$, the grade three term is also zero (trivectors invert on reversion), so this must therefore be a vector.
+
+As a vector this can be expanded in coordinates
+
+\begin{align*}
+T(a) 
+&= \left(T(a) \cdot \gamma^\beta \right) \gamma_\beta \\
+&= \left(T(a^\alpha \gamma_\alpha) \cdot \gamma^\beta \right) \gamma_\beta \\
+&= a^\alpha \gamma^\beta \left(T(\gamma_\alpha) \cdot \gamma^\beta \right) \\
+\end{align*}
+
+It's this last bit that has the form of a traditional tensor, so we can write
+
+\begin{align*}
+T(a) &= a^\alpha \gamma^\beta {T_\alpha}^{\beta} \\
+{T_\alpha}^{\beta} &= T(\gamma_\alpha) \cdot \gamma^\beta 
+\end{align*}
+
+Let's expand this tensor ${T_\alpha}^{\beta}$ explicitly to verify its form.
+
+We want to expand
+
+
+\begin{align*}
+-2 \inv{\epsilon_0} \left(T(\gamma_\alpha) \cdot \gamma^\beta \right) \gamma_\beta 
+&= \gpgradeone{(\grad \wedge A) \gamma_\alpha (\grad \wedge A)} \\
+&= \gpgradeone{
+(\grad \wedge A) \cdot \gamma_\alpha (\grad \wedge A)
++ (\grad \wedge A) \wedge \gamma^\alpha (\grad \wedge A)
+} \\
+&=
+((\grad \wedge A) \cdot \gamma_\alpha) \cdot (\grad \wedge A)
++ ((\grad \wedge A) \wedge \gamma_\alpha) \cdot (\grad \wedge A)
+\\
+\end{align*}
+
+Both of these will get temporarily messy, so let's do them in parts.  Starting
+with
+
+\begin{align*}
+(\grad \wedge A) \cdot \gamma_\alpha
+&= (\gamma^{a} \wedge \gamma^{b}) \cdot \gamma_{\alpha} \partial_{a} A_{b} \\
+&= (\gamma^{a} {\delta^{b}}_{\alpha} -\gamma^{b} {\delta^{a}}_{\alpha} ) \partial_{a} A_{b} \\
+&=
+\gamma^{a} \partial_{a} A_{\alpha} 
+-\gamma^{b} \partial_{\alpha} A_{b} \\
+&= \gamma^{a} (\partial_{a} A_{\alpha} -\partial_{\alpha} A_{a} ) \\
+&= \gamma^{a} F_{a \alpha} \\
+\end{align*}
+
+
+\begin{align*}
+((\grad \wedge A) \cdot \gamma_\alpha) \cdot (\grad \wedge A) 
+&= \gamma^{a} (\partial_{a} A_{\alpha} -\partial_{\alpha} A_{a} ) \\
+&= \gamma^{a} F_{a \alpha} \cdot (\gamma_{b} \wedge \gamma_{c}) \partial^{b} A^{c} \\
+&= 
+\partial^{b} A^{c} F_{a \alpha} 
+\gamma^{a} \cdot (\gamma_{b} \wedge \gamma_{c}) 
+\\
+&= 
+\partial^{b} A^{c} F_{a \alpha} 
+(
+{\delta^{a}}_{b} \gamma_{c}
+-{\delta^{a}}_{c} \gamma_{b}
+)
+\\
+&= 
+(\partial^{a} A^{b} F_{a \alpha} -\partial^{b} A^{a} F_{a \alpha} )\gamma_{b}
+\\
+&= F^{a b} F_{a \alpha} ) \gamma_{b} \\
+\end{align*}
+
+We will want to dot this with $\gamma^\beta$, and doing so will give
+
+\begin{align}\label{eqn:firstPartDone}
+((\grad \wedge A) \cdot \gamma_\alpha) \cdot (\grad \wedge A) \cdot \gamma^{\beta} 
+&= F^{a \beta} F_{a \alpha} ) 
+\end{align}
+
+Now, on to the last bit
+$(((\grad \wedge A) \wedge \gamma^\alpha) \cdot (\grad \wedge A)) \cdot \gamma^\beta$.  First we have, by inspection,
+
+\begin{align*}
+(\grad \wedge A) \wedge \gamma_\alpha
+&= (\gamma_\alpha)^2 (\gamma^{a} \wedge \gamma^{b}) \wedge \gamma^{\alpha} \partial_{a} A_{b} \\
+\end{align*}
+
+and dotting with $\grad \wedge A$, we have
+
+\begin{align*}
+((\grad \wedge A) \wedge \gamma_\alpha) \cdot (\grad \wedge A)
+&= 
+(\gamma_\alpha)^2 
+\partial_{a} A_{b} 
+\partial^{c} A^{d} 
+(\gamma^{a} \wedge \gamma^{b} \wedge \gamma^{\alpha}) \cdot 
+(\gamma_{c} \wedge \gamma_{d})
+\\
+&= 
+(\gamma_\alpha)^2 
+\partial_{a} A_{b} 
+\partial^{c} A^{d} 
+((\gamma^{a} \wedge \gamma^{b} \wedge \gamma^{\alpha}) \cdot \gamma_{c} ) \cdot \gamma_{d}
+\\
+&= 
+(\gamma_\alpha)^2 
+\partial_{a} A_{b} 
+\partial^{c} A^{d} 
+(
+%((\gamma^{a} \wedge \gamma^{b}) \wedge \gamma^{\alpha}) \cdot \gamma_{c} 
+(\gamma^{a} \wedge \gamma^{b}) {\delta^{\alpha}}_{c}
+-(\gamma^{a} \wedge \gamma^{\alpha}) {\delta^{b}}_{c}
++(\gamma^{b} \wedge \gamma^{\alpha}) {\delta^{a}}_{c}
+) \cdot \gamma_{d}
+\\
+&= 
+(\gamma_\alpha)^2 (
+\partial_{a} A_{b} \partial^{\alpha} A^{d} (\gamma^{a} \wedge \gamma^{b}) 
+-\partial_{a} A_{b} \partial^{b} A^{d} (\gamma^{a} \wedge \gamma^{\alpha}) 
++\partial_{a} A_{b} \partial^{a} A^{d} (\gamma^{b} \wedge \gamma^{\alpha}) 
+) \cdot \gamma_{d}
+\\
+&= 
+(\gamma_\alpha)^2 
+\partial_{a} A_{b}
+( \partial^{\alpha} A^{c} 
+(\gamma^{a} \wedge \gamma^{b}) 
+- \partial^{b} A^{c} (\gamma^{a} \wedge \gamma^{\alpha}) 
++ \partial^{a} A^{c} (\gamma^{b} \wedge \gamma^{\alpha}) 
+) \cdot \gamma_{c}
+\\
+&= 
+(\gamma_\alpha)^2 
+\partial_{a} A_{b}
+( 
++ \partial^{\alpha} A^{c}
+%(\gamma^{a} \wedge \gamma^{b}) \cdot \gamma_c
+(\gamma^{a} {\delta^{b}}_{c} -\gamma^{b} {\delta^{a}}_{c})
+- \partial^{b} A^{c} 
+%(\gamma^{a} \wedge \gamma^{\alpha}) \cdot \gamma_{c}
+(\gamma^{a} {\delta^{\alpha}}_{c} -\gamma^{\alpha} {\delta^{a}}_{c})
++ \partial^{a} A^{c} 
+%(\gamma^{b} \wedge \gamma^{\alpha}) \cdot \gamma_{c}
+(\gamma^{b} {\delta^{\alpha}}_{c} -\gamma^{\alphae {\delta^{b}}_{c})
+) 
+\\
+&= 
+(\gamma_\alpha)^2 \partial_{a} A_{b} \partial^{\alpha} A^{c}
+(\gamma^{a} {\delta^{b}}_{c} -\gamma^{b} {\delta^{a}}_{c})
+-(\gamma_\alpha)^2 \partial_{a} A_{b} \partial^{b} A^{c} 
+(\gamma^{a} {\delta^{\alpha}}_{c} -\gamma^{\alpha} {\delta^{a}}_{c})
++(\gamma_\alpha)^2 \partial_{a} A_{b} \partial^{a} A^{c} 
+(\gamma^{b} {\delta^{\alpha}}_{c} -\gamma^{\alphae {\delta^{b}}_{c})
+\\
+&= 
+(\gamma_\alpha)^2 \partial_{a} A_{b} \partial^{\alpha} A^{c} \gamma^{a} {\delta^{b}}_{c}
+-(\gamma_\alpha)^2 \partial_{a} A_{b} \partial^{\alpha} A^{c} \gamma^{b} {\delta^{a}}_{c})
+%
+-(\gamma_\alpha)^2 \partial_{a} A_{b} \partial^{b} A^{c} \gamma^{a} {\delta^{\alpha}}_{c}
++(\gamma_\alpha)^2 \partial_{a} A_{b} \partial^{b} A^{c} \gamma^{\alpha} {\delta^{a}}_{c}
+%
++(\gamma_\alpha)^2 \partial_{a} A_{b} \partial^{a} A^{c} \gamma^{b} {\delta^{\alpha}}_{c}
+-(\gamma_\alpha)^2 \partial_{a} A_{b} \partial^{a} A^{c} \gamma^{\alpha} {\delta^{b}}_{c}
+\\
+&= 
+(\gamma_\alpha)^2 \partial_{a} A_{b} \partial^{\alpha} A^{b} \gamma^{a} 
+-(\gamma_\alpha)^2 \partial_{a} A_{b} \partial^{b} A^{\alpha} \gamma^{a} 
+%
++(\gamma_\alpha)^2 \partial_{a} A_{b} \partial^{a} A^{\alpha} \gamma^{b}
+-(\gamma_\alpha)^2 \partial_{a} A_{b} \partial^{\alpha} A^{a} \gamma^{b} 
+%
++(\gamma_\alpha)^2 \partial_{a} A_{b} \partial^{b} A^{a} \gamma^{\alpha} 
+-(\gamma_\alpha)^2 \partial_{a} A_{b} \partial^{a} A^{b} \gamma^{\alpha} 
+\\
+&= 
+(\gamma_\alpha)^2 \partial_{a} A_{b} F^{\alpha b} \gamma^{a} 
++(\gamma_\alpha)^2 \partial_{a} A_{b} F^{a \alpha} \gamma^{b}
++\partial_{a} A_{b} F^{b a} \gamma_{\alpha} 
+\\
+&= 
+\partial^{a} A^{b} F_{\alpha b} \gamma_{a} 
+%+\partial^{a} A_{b} F_{a \alpha} \gamma^{b}
++\partial^{b} A_{a} F_{b \alpha} \gamma^{a}
++\partial_{a} A_{b} F^{b a} \gamma_{\alpha} 
+\\
+&= 
+F^{a b} F_{\alpha b} \gamma_{a} 
++\partial_{a} A_{b} F^{b a} \gamma_{\alpha} 
+\\
+\end{align*}
+
+So finally
+
+\begin{align*}
+((\grad \wedge A) \wedge \gamma_\alpha) \cdot (\grad \wedge A) \cdot \gamma^\beta
+&= 
+( F^{a b} F_{\alpha b} \gamma_{a} 
++\partial_{a} A_{b} F^{b a} \gamma_{\alpha} ) \cdot \gamma^\beta
+\\
+&= 
+F^{\beta b} F_{\alpha b} 
++\partial_{a} A_{b} F^{b a} {\delta_{\alpha}}^\beta
+\\
+&= 
+F^{\beta b} F_{\alpha b} 
++\inv{2}(
+\partial_{a} A_{b} F^{b a} {\delta_{\alpha}}^\beta
++\partial_{b} A_{a} F^{a b} {\delta_{\alpha}}^\beta
+)
+\\
+\end{align*}
+
+\begin{align}\label{eqn:secondPart}
+((\grad \wedge A) \wedge \gamma_\alpha) \cdot (\grad \wedge A) \cdot \gamma^\beta
+&=
+F^{\beta b} F_{\alpha b} 
++\inv{2} F_{a b} F^{b a} {\delta_{\alpha}}^\beta
+\end{align}
+
+The final combination of results \ref{eqn:firstPartDone}, and 
+\ref{eqn:secondPart} gives
+
+\begin{align*}
+F \gamma_\alpha F 
+&= 
+2 F^{a \beta} F_{a \alpha} ) 
++\inv{2} F_{a b} F^{b a} {\delta_{\alpha}}^\beta
+\end{align*}
+
+Yielding the tensor
+
+\begin{align*}
+{T_\alpha}^{\beta}
+&=
+\epsilon_0 (
+\inv{4} F_{a b} F^{a b} {\delta_{\alpha}}^\beta 
+-
+F_{a \alpha} 
+F^{a \beta}
+) 
+\end{align*}
+
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
+
+\end{document}
