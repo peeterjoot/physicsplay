@@ -1,0 +1,120 @@
+
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+\title{ Electrostatic field energy. }
+\author{Peeter Joot}
+\date{ Jan 03, 2009.  Last Revision: $Date: 2009/01/03 18:35:14 $ }
+
+\begin{document}
+
+\maketitle{}
+
+%\tableofcontents
+\section{ Field and wave energy and momentum. }
+
+The concept of energy in the electric and magnetic fields I am getting closer to understanding, but there’s a few ways that I would like to approach it.
+
+I've now explored the Poynting vector energy conservation relationships in 
+\cite{PJpoynting}, and
+\cite{PJemstresstensor}
+, but hadn't understood fully where the energy expressions in the electro and magneto statics cases came from
+separately.  I also don't yet know where the $F \gamma_k F$ terms of the stress tensor fit in the big picture?  I suspect that they can be obtained by Lorentz transforming the rest frame expression $F \gamma_0 F$ (the energy density, Poynting momentum density four vector).
+
+It also ought to be possible to relate the field energies to a Lagrangian and Hamiltonian, but I haven't had success doing so.
+
+The last thing that I'd like to understand is how the energy and momentum of a wave can be expressed, both in terms of the abstract conguate field momentum concept and with a concrete example such as the one dimensional oscillating rod that can be treated in a limiting coupled oscillator approach as in 
+\cite{goldstein1951cm}.
+
+Once I've got all these down I think I'll be ready to revisit Bohm's Rayleigh-Jeans law treatment in \cite{bohm1989qt}.  Unfortunately, each time I try persuing some 
+interesting aspect of QM I find that I end up back studying electrodynamics, and suspect that needs to be my focus for the forseeable future (perhaps working throughly through Feynman's
+volume II).
+
+\subsection{ Electrostatic energy in a field. } 
+
+Feynman’s treatment in 
+\cite{feynman1963flp}
+of the energy $\frac{\epsilon_0}{2}\BE^2$ associated with the electrostatic $\BE$ field is very easy to understand.  Here is a write up of this myself without looking at the book to see if I really understood the ideas.
+
+The first step is consideration of the force times distance for two charges gives you the energy required (or gained) by moving one of those charges from infinity to some given separation
+
+\begin{align*}
+W &= \frac{1}{4\pi\epsilon_0} \int_{\infty}^{r} \frac{q_1 q_2}{x^2} \Be_1 \cdot (-\Be_1 dx) \\
+&= \frac{q_1 q_2}{4 \pi \epsilon_0 r}
+\end{align*}
+
+This provides a quantization for an energy in a field concept.  A distribution of charge requires energy to assemble and it is possible to enumerate that energy separately by considering all the charges, or alternatively, by not looking at the final charge distribution, but only considering the net field associated with this charge distribution.  This is a pretty powerful, but somewhat abstract seeming idea.
+
+The generalization to continuous charge distribution from there was pretty straightforward, requiring a double integration over all space
+
+\begin{align*}
+W &= \frac{1}{2} \int \frac{1}{4\pi\epsilon_0} \frac{\rho_1 dV_1 \rho_2 dV_2}{r_{12}}  \\
+&= \frac{1}{2} \int \rho_1 \phi_2 dV_1
+\end{align*}
+
+The $1/2$ factor was due to double counting all "pairs" of charge elements.  The next step was to rewrite the charge density by using Maxwell's equations.  In terms of the four vector potential Maxwell's equation (with the $\grad \cdot A = 0$ gauge) is
+
+\begin{align*}
+\grad^2 A = \inv{\epsilon_0 c}( c \rho \gamma_0 + J^k \gamma_k)
+\end{align*}
+
+So, to write $\rho$ in terms of potential $A^0 = \phi$, we have
+
+\begin{align*}
+\left(\inv{c^2}\PDsq{t}{} - \spacegrad^2\right) \phi = \inv{\epsilon_0} \rho 
+\end{align*}
+
+In the statics case, where $\PD{t}{\phi} = 0$, we can thus write the charge density in terms of the potential
+
+\begin{align*}
+\rho = -\epsilon_0 \spacegrad^2 \phi
+\end{align*}
+
+and substitute back into the energy summation
+
+\begin{align*}
+W 
+&= \frac{1}{2} \int \rho \phi dV \\
+&= \frac{-\epsilon_0}{2} \int \phi \spacegrad^2 \phi dV \\
+\end{align*}
+
+Now, Feynman's last step was a bit sneaky, which was to convert the $\phi \spacegrad^2 \phi$ term into a divergence integral.  Working backwards to derive the identity that he used we want to calculate
+
+\begin{align*}
+\spacegrad \cdot (\phi \spacegrad \phi) 
+&= \gpgradezero{ \spacegrad (\phi \spacegrad \phi) } \\
+&= \gpgradezero{ (\spacegrad \phi) \spacegrad \phi + \phi \spacegrad (\spacegrad \phi) } \\
+&= (\spacegrad \phi)^2 + \phi \spacegrad^2 \phi \\
+\end{align*}
+
+So we can employ Stokes theorem in its dual form to convert this into a $\spacegrad^2$ term and a surface integral term
+\begin{align*}
+W 
+&= \frac{\epsilon_0}{2} \int \left( (\spacegrad \phi)^2 -\spacegrad \cdot (\phi \spacegrad \phi) \right) dV \\
+&= \frac{\epsilon_0}{2} \int (\spacegrad \phi)^2 dV - \frac{\epsilon_0}{2} \int_{\partial V} (\phi \spacegrad \phi) \cdot \ncap dA \\
+\end{align*}
+
+Letting, the surface go to infinity and employing a limiting argument on the magnitudes of the $\phi$ and $\spacegrad \phi$ terms was enough to produce the final electrostatics 
+energy result
+
+\begin{align*}
+W 
+&= \frac{\epsilon_0}{2} \int (\spacegrad \phi)^2 dV \\
+&= \frac{\epsilon_0}{2} \int \BE^2 dV 
+\end{align*}
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
+
+\end{document}
