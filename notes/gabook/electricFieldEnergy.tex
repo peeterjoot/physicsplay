@@ -15,7 +15,7 @@
 
 \title{ Field and wave energy and momentum. }
 \author{Peeter Joot}
-\date{ Jan 03, 2009.  Last Revision: $Date: 2009/01/04 16:59:26 $ }
+\date{ Jan 03, 2009.  Last Revision: $Date: 2009/01/04 18:39:24 $ }
 
 \begin{document}
 
@@ -119,15 +119,21 @@ W
 Feynman's energy discussion of the magnetic field for a constant current loop (magnetostatics), is not so easy to follow.  He considers the dipole moment of a small loop, obtained by comparision to previous electrostatic results (that I'd have to go back and read or re-derive) and some
 subtle seeming arguments about the mechanical vs. total energy of the system.
 
-As an attempt to understand all this, let's break it up into pieces.  First, is calculation of the field for a current loop.
-Going back to
-Maxwell's equation (with the $\grad \cdot A$ gauge again) will show us how this Biot-Savart calculation is expressed in the STA bivector form
+\subsection{ Biot Savart. }
+
+As an attempt to understand all this, let's break it up into pieces.  First, is calculation of the field for a current loop.  Let's also use 
+this as an opportunity to see how one would work directly and express the Biot-Savart law in the STA formulation.
+
+Going back to Maxwell's equation (with the $\grad \cdot A$ gauge again), we have
 
 \begin{align*}
-\grad^2 A^\mu = J^\mu/\epsilon_0 c
+\grad F
+&= \grad (\grad \wedge A) \\
+&= \grad^2 A^\mu \\
+&= J^\mu/\epsilon_0 c
 \end{align*}
 
-For a constant current situation, we have $\PDi{t}{A^\mu} = 0$, and our vector potential equations are
+For a static current configuration with $J^0 = c \rho = 0$, we have $\PDi{t}{A^\mu} = 0$, and our vector potential equations are
 
 \begin{align*}
 \spacegrad^2 A^k = -J^k/\epsilon_0 c
@@ -163,7 +169,7 @@ the infinitesimal volume can be made small enough that $J^k$ can be treated as a
 potential function in terms of this impulse response
 
 \begin{align*}
-A^k &= \int dV \inv{4 \pi \epsilon_0 c r} J^k
+A^k &= \inv{4 \pi \epsilon_0 c} \int \frac{J^k}{r} dV
 \end{align*}
 
 Now, this could have all been done with a comparison to the electrostatic result.  Regardless, it now leaves us in the position to
@@ -174,10 +180,20 @@ F
 &= \grad \wedge A \\
 &= (\gamma^\mu \wedge \gamma_k) \partial_\mu A^k \\
 &= -(\gamma_m \wedge \gamma_k) \partial_m A^k \\
-&= (\sigma_m \wedge \sigma_k) \partial_m A^k \\
 \end{align*}
 
-Now, 
+So our field in terms of components is
+\begin{align}\label{eqn:magneticComponents}
+F &= (\sigma_m \wedge \sigma_k) \partial_m A^k 
+\end{align}
+
+Which in terms of spatial vector potential $\BA = A^k \sigma_k$ is also 
+\begin{align}
+F &= \spacegrad \wedge \BA 
+\end{align}
+
+From \ref{eqn:magneticComponents} we can calculate the field in terms of our potential directly
+
 \begin{align*}
 \partial_m A^k
 &= \inv{4 \pi \epsilon_0 c} \int dV \partial_m \frac{J^k}{r} \\
@@ -195,7 +211,66 @@ F
 &= \inv{4 \pi \epsilon_0 c} \int dV \left( \frac{\Bj \wedge \rcap}{r^2} + \inv{r}(\spacegrad \wedge \Bj) \right) \\
 \end{align*}
 
-The first term here is essentially the Biot Savart law once the current density is converted to current $\int \Bj dV = I \int \jcap dl$, so we expect the second term to be zero.  How to show this?
+The first term here is essentially the Biot Savart law once the current density is converted to current $\int \Bj dV = I \int \jcap dl$, so we expect the second term to be zero.
+
+To calculate the current density divergence we first need the current density in vector form
+
+\begin{align*}
+\Bj 
+&= -\epsilon_0 c \spacegrad^2 \BA  \\
+&= -\epsilon_0 c \gpgradeone{\spacegrad (\spacegrad \BA) } \\
+&= -\epsilon_0 c \spacegrad (\spacegrad \cdot \BA) + \spacegrad \cdot (\spacegrad \wedge \BA) \\
+\end{align*}
+
+Now, recall the gauge choice was
+
+\begin{align*}
+0 &= \grad \cdot A \\
+&= \partial_0 A^0 + \partial_k A^k \\
+&= \inv{c}\PD{t}{A^0} + \spacegrad \cdot \BA
+\end{align*}
+
+So, provided we also have $\PDi{t}{A^0} = 0$, we also have $\spacegrad \cdot \BA = 0$, which is true due to the assumed static conditions, we are left with
+
+\begin{align*}
+\Bj 
+&= -\epsilon_0 c \spacegrad \cdot (\spacegrad \wedge \BA) \\
+\end{align*}
+
+Now we can take the curl of $\Bj$, also 
+writing this magnetic field $F$ in it's dual form $F = i c \BB$, we see that the curl of our static current density vector is zero:
+
+\begin{align*}
+\spacegrad \wedge \Bj
+&= \spacegrad \wedge (\spacegrad \cdot F) \\
+&= c \spacegrad \wedge (\spacegrad \cdot (i \BB)) \\
+&= \frac{c}{2} \spacegrad \wedge (\spacegrad (i \BB) - i \dot{\BB} \dot{\spacegrad} ) \\
+&= c \spacegrad \wedge (i \spacegrad \wedge \BB) \\
+&= c \spacegrad \wedge (i^2 \spacegrad \cross \BB) \\
+&= -ci \spacegrad \cross (\spacegrad \cross \BB) \\
+&= 0
+\end{align*}
+
+This leaves us with
+\begin{align*}
+F 
+&= \inv{4 \pi \epsilon_0 c} \int \frac{\Bj \wedge \rcap}{r^2} dV \\
+\end{align*}
+
+Which with the current density expressed in terms of current is the desired Biot-Savart law
+
+\begin{align}
+F &= \inv{4 \pi \epsilon_0 c} \int \frac{I d\Bs \wedge \rcap}{r^2}
+\end{align}
+
+Much shorter derivations are possible than this one which was essentially done from first principles.  The one in
+\cite{doran2003gap}, which also uses the STA formulation, is the shortest I've ever seen,
+utilizing a vector Green's function for the Laplacian.  However, that requires understanding the geometric calculus chapter of that book, 
+which is a battle for a different day.
+
+\subsection{ Magnetic field torque and energy. }
+
+TODO: work out on paper and write up.
 
 \section{ Complete field energy. } 
 
