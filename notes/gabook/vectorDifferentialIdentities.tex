@@ -1,0 +1,163 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+\title{ Vector Differential Identities. }
+\author{Peeter Joot}
+\date{ Jan 05, 2009.  Last Revision: $Date: 2009/01/06 05:32:06 $ }
+
+\begin{document}
+
+\maketitle{}
+%\tableofcontents
+\section{ Some identities. }
+
+\cite{feynman1963flp} electrodynamics chapter II lists a number of
+differential vector identities.
+
+\begin{enumerate}
+\item $\grad \cdot (\grad T) = \grad^2 T = \mbox{a scalar field}$
+\item $\grad \cross (\grad T) = 0$
+\item $\grad (\grad \cdot \Bh) = \mbox{a vector field}$
+\item $\grad \cdot (\grad \cross \Bh) = 0$
+\item $\grad \cross (\grad \cross \Bh) = \grad(\grad \cdot \Bh) - \grad^2 \Bh$
+\item $(\grad \cdot \grad) \Bh = \mbox{a vector field}$
+\end{enumerate}
+
+Let's see how all these translate to GA form.
+
+\subsection{ Divergence of a gradient. }
+
+This one has the same form, but expanding it can be evaluated by grade
+selection
+
+\begin{align*}
+\grad \cdot (\grad T) 
+&= \gpgradezero{\grad \grad T} \\
+&= (\grad^2) T
+\end{align*}
+
+A less sneaky expansion would be by coordinates
+
+\begin{align*}
+\grad \cdot (\grad T) 
+&= {\sum_{k,j} (\sigma_k \partial_k) \cdot (\sigma_j \partial_j T)} \\
+&= \gpgradezero{\sum_{k,j} (\sigma_k \partial_k) (\sigma_j \partial_j T)} \\
+&= \gpgradezero{\left(\sum_{k,j} \sigma_k \partial_k \sigma_j \partial_j\right) T} \\
+%&= {\left(\sum_{k,j} \sigma_k \partial_k \sigma_j \partial_j\right) } T \\
+&= \gpgradezero{\grad^2 T} \\
+&= \grad^2 T \\
+\end{align*}
+
+\subsection{ Curl of a gradient is zero. }
+
+The duality analogue of this is
+\begin{align*}
+\grad \cross (\grad T) = -i(\grad \wedge (\grad T))
+\end{align*}
+
+Let's verify that this bivector curl is zero.  This can also be done by grade selection
+
+\begin{align*}
+\grad \wedge (\grad T) 
+&= \gpgradetwo{\grad (\grad T)} \\
+&= \gpgradetwo{(\grad \grad) T} \\
+&= (\grad \wedge \grad) T \\
+&= 0
+\end{align*}
+
+Again, this is sneaky and side steps the continuity requirement for mixed partial equality.  Again by coordinates is better
+\begin{align*}
+\grad \wedge (\grad T) 
+&= \gpgradetwo{\sum_{k,j}\sigma_k \partial_k (\sigma_j \partial_j T)} \\
+&= \gpgradetwo{\sum_{k<j}\sigma_k \sigma_j (\partial_k \partial_j - \partial_j \partial_k) T} \\
+&= \sum_{k<j} \sigma_k \wedge \sigma_j (\partial_k \partial_j - \partial_j \partial_k) T \\
+\end{align*}
+
+So provided the mixed partials are zero the curl of a gradient is zero.
+
+\subsection{ Gradient of a divergence. }
+
+Nothing more to say about this one.
+
+\subsection{ Divergence of curl. }
+
+This one looks like it will have a dual form using bivectors.
+
+\begin{align*}
+\grad \cdot (\grad \cross \Bh)
+&= \grad \cdot (-i (\grad \wedge \Bh)) \\
+&= \gpgradezero{\grad (-i (\grad \wedge \Bh))} \\
+&= \gpgradezero{-i \grad (\grad \wedge \Bh)} \\
+&= -(i \grad) \cdot (\grad \wedge \Bh) \\
+\end{align*}
+
+Is this any better than the cross product relationship?
+
+I don't really think so.  They both say the same thing, and only possible value to this duality form is if more than three dimensions are required (in which case the sign of the pseudoscalar $i$ has to be dealt with more carefully).  Geometrically one has the dual of the gradient (a plane normal to the vector itself) dotted with the plane formed by the gradient and the vector operated on.  The corresponding statement for the cross product form is that we have a dot product of a vector with a vector normal to it, so also intuitively expect a zero.  In either case, because we are talking about operators here
+just saying this is zero because of geometrical arguments isn't neccessarily convicing.  Let's evaluate this explicitly in 
+coordinates to verify
+
+\begin{align*}
+(i \grad) \cdot (\grad \wedge \Bh) 
+&= \gpgradezero{i \grad (\grad \wedge \Bh) } \\
+&= \gpgradezero{i \sum_{k,j,l} \sigma_k \partial_k \left((\sigma_j \wedge \sigma_l) \partial_j h^l\right) } \\
+&= -i \sum_{l} \sigma_l \wedge \left( \sum_{k<j} (\sigma_k \wedge \sigma_j) (\partial_k \partial_j -\partial_j \partial_k) h^l \right) \\
+\end{align*}
+
+This inner quantity is zero, again by equality of mixed partials.  While the dual form of this identity wasn't really any better than the cross
+product form, there is nothing in this zero equality proof that was tied to the dimension of the vectors involved, so we do have a more general form
+than can be expressed by the cross product, which could be of value in Minkowski space later.
+
+\subsection{ Curl of a curl. }
+
+This will also have a dual form.  That is
+
+\begin{align*}
+\grad \cross (\grad \cross \Bh)
+&= -i (\grad \wedge (\grad \cross \Bh)) \\
+&= -i (\grad \wedge (-i (\grad \wedge \Bh))) \\
+&= -i \gpgradetwo{\grad (-i (\grad \wedge \Bh))} \\
+&= i \gpgradetwo{i \grad (\grad \wedge \Bh)} \\
+&= i^2 \grad \cdot (\grad \wedge \Bh) \\
+&= - \grad \cdot (\grad \wedge \Bh) \\
+\end{align*}
+
+Now, let's expand this quanity
+\begin{align*}
+\grad \cdot (\grad \wedge \Bh)
+\end{align*}
+
+If the gradient could be treated as a plain old vector we could just do
+\begin{align*}
+\Ba \cdot (\Ba \wedge \Bh) &= \Ba^2 \Bh - \Ba(\Ba \cdot \Bh) \\
+\end{align*}
+
+With the gradient substituted this is exactly the desired identity (with the expected sign difference)
+
+\begin{align*}
+\grad \cdot (\grad \wedge \Bh) &= \grad^2 \Bh - \grad(\grad \cdot \Bh) \\
+\end{align*}
+
+A coordinate expansion to truely verify that this is valid is logically still required, but having done the others above, it is clear how this
+would work out.
+
+\subsection{ Laplacian of a vector. }
+
+This one isn't interesting seeming.
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
+
+\end{document}
