@@ -192,6 +192,10 @@ ordered += ../qm/qm_susskind.pdf
 ordered += ../relativity/velocity_addition.pdf
 ordered += ../qm/rayleigh_jeans.pdf
 ordered += ../geometric-algebra/poynting.pdf
+ordered += ../geometric-algebra/energy_momentum_tensor.pdf
+
+ordered += ../geometric-algebra/electric_field_energy.pdf
+skipit += ../lut/charge_osc.pdf
 
 # Rules:
 #-----------------------------------------------------
