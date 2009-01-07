@@ -1,0 +1,104 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+\title{ DC Power consumption formula for resistive load. }
+\author{Peeter Joot}
+\date{ Mmm dd, 2009.  Last Revision: $Date: 2009/01/07 04:39:24 $ }
+
+\begin{document}
+
+\maketitle{}
+
+%\tableofcontents
+\section{ Motivation. }
+
+Despite a lot of recent study of electrodynamics, faced with a simple electrical problem:
+
+``What capacity generator would be required for an arc welder on a 30 Amp breaker using a 220 volt circuit''.
+
+I couldn't think of how to answer this off the top of my head.  Back in school without hesitation I would have
+been able to plug into $P = I V$ to get a capacity estimation for the generator.
+
+Having forgotten the formula, let's see how we get that $P = I V$ relationship from Maxwell's equations.
+
+\section{}
+
+Having just derived the Poynting energy momentum density relationship from Maxwell's equations, let that be the starting
+point
+
+\begin{align*}
+\frac{d}{dt}\left(\frac{\epsilon_0}{2}\left(\BE^2 + c^2\BB^2 \right) \right) = - \inv{\mu_0} \left(\BE \cross \BB \right) - \BE \cdot \Bj
+\end{align*}
+
+The left hand side is the energy density time variation, which is power per unit volume, so we can integrate this
+over a volume to determine the power associated with a change in the field.
+
+\begin{align*}
+P = -\int dV \left( \inv{\mu_0} \left(\BE \cross \BB \right) + \BE \cdot \Bj \right)
+\end{align*}
+
+As a reminder, let's write the magnetic and electric fields in terms of potentials.
+
+In terms of the ``native'' four potential our field is
+
+\begin{align*}
+F 
+&= \BE + ic \BB \\
+&= \grad \wedge A \\
+&= \gamma_0 \gamma_k \partial_0 A^k + \gamma^j \gamma_0 \partial_j A^0 + \gamma^m \wedge \gamma_n \partial_m A^n \\
+\end{align*}
+
+The electric field is
+
+\begin{align*}
+\BE &= \sum_k (\grad \wedge A) \cdot (\gamma^0 \gamma^k) \gamma_k \gamma_0 \\
+\end{align*}
+
+From this, with $\phi = A^0$, and $\BA = \sigma_k A^k$ we have
+\begin{align*}
+\BE &= -\spacegrad \BA - \grad \phi \\
+i\BB &= \spacegrad \wedge \BA
+\end{align*}
+
+Now, the arc welder is (I think) a DC device, and to 
+get a rough idea of what it requires lets just assume that its a rectifier that outputs RMS DC.
+So if we make this simplification, and assume that we have a 
+purely resistive load (ie: no inductance and therefore no magnetic fields) and a DC supply and constant current, then
+we eliminate the vector potential terms.
+
+This wipes out the $\BB$ and the Poynting vector, and leaves our electric field specified in terms
+of the potential difference accross the load $\BE = -\spacegrad \phi$.
+
+That is
+\begin{align*}
+P &= \int dV (\spacegrad \phi) \cdot \Bj
+\end{align*}
+
+Suppose we are integrating over the length of a uniformly resistive load with some fixed cross sectional area.  $\Bj dV$ is then the magnitude of the current directed along the wire for its length.  This basically leaves us with a line integral over the length of the wire that we are measuring our potential drop over so we are left with just
+
+\begin{align*}
+P &= (\delta \phi) I
+\end{align*}
+
+This $\delta \phi$ is just our voltage drop $V$, and this gives us the desired $P = I V$ equation.
+Now, I also recall from school
+now that I think about it that $P = I V$ also applied to inductive loads, but it required that $I$ and $V$ be phasors that
+represented the sinusodal currents and sources.  A good followup exersize would be to show from Maxwell's equations
+that this is in fact valid.  Eventually I'll know the origin of all the formulas from my old engineering courses.
+
+%\bibliographystyle{plainnat}
+%\bibliography{myrefs}
+
+\end{document}
