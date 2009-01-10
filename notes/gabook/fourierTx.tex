@@ -1,0 +1,75 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+
+\newcommand{\FF}[0]{\mathcal{F}}
+\DeclareMathOperator{\PV}{PV}
+
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+\title{ Fourier transform. }
+\author{Peeter Joot}
+\date{ Jan 09, 2009.  Last Revision: $Date: 2009/01/10 05:29:31 $ }
+
+\begin{document}
+
+\maketitle{}
+%\tableofcontents
+%\section{}
+
+In \cite{mcmahon2005qmd} the Fourier transform pairs are written in a somewhat 
+non-orthogox seeming way.
+
+\begin{align*}
+\phi(p) &= \inv{\sqrt{2\pi\hbar}} \int_{-\infty}^\infty \psi(x) e^{-ipx/\hbar} dx \\
+\psi(x) &= \inv{\sqrt{2\pi\hbar}} \int_{-\infty}^\infty \phi(p) e^{ipx/\hbar} dp \\
+\end{align*}
+
+As an exersize to verify, in a not particularily rigorous fashion, that we get back our original function applying the forward and reverse transformations
+in sequence.  Specifically, let's compute
+
+\begin{align*}
+\FF^{-1}(\FF(\psi(x)))
+&= \PV \inv{\sqrt{2\pi\hbar}} \int_{-\infty}^\infty \left(\inv{\sqrt{2\pi\hbar}} \int_{-\infty}^\infty \psi(u) e^{-ipu/\hbar} du \right) e^{ipx/\hbar} dp \\
+\end{align*}
+
+Here $\PV$ is the principle value of the integral, which is the specifically symmetric integration
+
+\begin{align*}
+\PV \int_{-\infty}^\infty &= \lim_{R \rightarrow \infty} \int_{-R}^R
+\end{align*}
+
+We have for the integration
+\begin{align*}
+\FF^{-1}(\FF(\psi(x)))
+&= \PV \inv{{2\pi\hbar}} \int du \psi(u) \int e^{i p (x-u)/\hbar} dp \\
+\end{align*}
+
+Now, let $v = (x-u)/\hbar$, or $u=x-v\hbar$ for
+
+\begin{align*}
+\inv{{2\pi}} \int dv \psi(x -v\hbar) \int_{-R}^R e^{i p v} dp 
+&=
+\inv{{2\pi}} \int dv \psi(x - v\hbar) \left. \inv{i v} e^{i p v} \right\vert_{p=\epsilon}^R \\
+&+\inv{{2\pi}} \int dv \psi(x - v\hbar) \left. \inv{i v} e^{i p v} \right\vert_{p=-R}^{-\epsilon} \\
+&+\inv{{2\pi}} \int dv \psi(x - v\hbar) \left. \inv{i v} e^{i p v} \right\vert_{p=-\epsilon}^{\epsilon} \\
+\end{align*}
+
+The last of these is
+\begin{align*}
+\int dv \psi(x - v\hbar) \frac{\sin{\epsilon v}}{\pi v} 
+\end{align*}
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
+
+\end{document}
