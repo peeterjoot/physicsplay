@@ -4,6 +4,8 @@
 \input{../peeters_macros2.tex}
 
 \newcommand{\FF}[0]{\mathcal{F}}
+\newcommand{\FM}[0]{\inv{\sqrt{2\pi\hbar}}}
+\newcommand{\Iinf}[1]{ \int_{-\infty}^\infty {#1}}
 \DeclareMathOperator{\PV}{PV}
 
 \usepackage[bookmarks=true]{hyperref}
@@ -18,34 +20,37 @@
 
 \title{ Fourier transform. }
 \author{Peeter Joot}
-\date{ Jan 09, 2009.  Last Revision: $Date: 2009/01/10 06:12:23 $ }
+\date{ Jan 09, 2009.  Last Revision: $Date: 2009/01/10 16:53:41 $ }
 
 \begin{document}
 
 \maketitle{}
 %\tableofcontents
-%\section{}
+
+\section{ Motivation. }
 
 In \cite{mcmahon2005qmd} the Fourier transform pairs are written in a somewhat 
 non-orthogox seeming way.
 
 \begin{align*}
-\phi(p) &= \inv{\sqrt{2\pi\hbar}} \int_{-\infty}^\infty \psi(x) e^{-ipx/\hbar} dx \\
-\psi(x) &= \inv{\sqrt{2\pi\hbar}} \int_{-\infty}^\infty \phi(p) e^{ipx/\hbar} dp \\
+\phi(p) &= \FM \Iinf{\psi(x) e^{-ipx/\hbar} dx} \\
+\psi(x) &= \FM \Iinf{\phi(p) e^{ipx/\hbar} dp} \\
 \end{align*}
+
+\section{ Verify transform pair. }
 
 As an exersize to verify, in a not particularily rigorous fashion, that we get back our original function applying the forward and reverse transformations
 in sequence.  Specifically, let's compute
 
 \begin{align*}
 \FF^{-1}(\FF(\psi(x)))
-&= \PV \inv{\sqrt{2\pi\hbar}} \int_{-\infty}^\infty \left(\inv{\sqrt{2\pi\hbar}} \int_{-\infty}^\infty \psi(u) e^{-ipu/\hbar} du \right) e^{ipx/\hbar} dp \\
+&= \PV \FM \Iinf{\left(\FM \Iinf{\psi(u) e^{-ipu/\hbar} du}\right) e^{ipx/\hbar} dp} \\
 \end{align*}
 
 Here $\PV$ is the principle value of the integral, which is the specifically symmetric integration
 
 \begin{align*}
-\PV \int_{-\infty}^\infty &= \lim_{R \rightarrow \infty} \int_{-R}^R
+\PV \Iinf{} &= \lim_{R \rightarrow \infty} \int_{-R}^R
 \end{align*}
 
 We have for the integration
@@ -89,6 +94,76 @@ $\psi(x)$ in the neighbourhood assuming that it is piecewise continuous:
 
 \begin{align*}
 \FF^{-1}(\FF(\psi(x))) &= \inv{2} \left( \psi(x -\epsilon) + \psi(x + \epsilon) \right)
+\end{align*}
+
+After digging through my old texts I found a treatment of the Fourier integral very similar to what I've done above
+in \cite{lepage1980cva}, but the important details aren't omitted (like integrability conditions).
+I'd read that and some of my treatment is obviously was based on that.  That text 
+treats this still with Reimann (and not Lebesque) integration, but very carefully.
+
+\section{ Parseval's theorem. }
+
+In \cite{mcmahon2005qmd} he notes that Parseval's theorem tells us
+
+\begin{align*}
+\Iinf{f(x)g(x) dx} &= \Iinf{F(k)G^\conj(k) dk} \\
+\Iinf{\Abs{f(x)}^2 dx} &= \Iinf{\Abs{F(k)}^2 dk}
+\end{align*}
+
+The last of these in \cite{haykin1994cs} is called Rayleigh's energy theorem.  
+As a refresher in 
+Fourier manipulation, and to translate to the QM fourier transform notation, let's go through the arguments
+required to prove these.
+
+\subsection{ Convolution. }
+
+We'll need convolution in the QM notation as a first step to express
+the transform of a product.
+
+Suppose we have two functions 
+$\phi_i(x)$
+, and their transform
+pairs 
+$\tilde{\phi}_i(x) = \FF(\phi_i)$, then the transform of the product is
+
+\begin{align*}
+\tilde{\Phi_{12}}(p) = \FF(\phi_1(x)\phi_2(x)) &= \FM \Iinf{\phi_1(x) \phi_2(x) e^{-ipx/\hbar} dx}
+\end{align*}
+
+Now write $\phi_2(x)$ in terms of its inverse transform
+
+\begin{align*}
+\phi_2(x)) &= \FM \Iinf{\tilde{\phi_2(u)} e^{iux/\hbar} du}
+\end{align*}
+
+The product transform is now
+\begin{align*}
+\tilde{\Phi_{12}}(p) 
+&= \FM \Iinf{ \phi_1(x)             \FM \Iinf{\tilde{\phi_2(u)} e^{iux/\hbar} du} e^{-ipx/\hbar} dx} \\
+&= \FM \Iinf{ du \tilde{\phi_2(u)}  \FM \Iinf{ \phi_1(x) e^{-ix(p-u)/\hbar} dx } } \\
+&= \FM \Iinf{ du \tilde{\phi_2(u)}  \tilde{\phi_1(p-u)} } \\
+&= \FM \Iinf{ dv \tilde{\phi_1(v)}  \tilde{\phi_2(p-v)} } \\
+\end{align*}
+
+So we have product transform expressed by the convolution integral, but have an extra $1/\sqrt{2\pi\hbar}$ factor in this form
+
+\begin{align}
+\phi_1(x) \phi_2(x) \Leftrightarrow \FM \Iinf{ dv \tilde{\phi_1(v)}  \tilde{\phi_2(p-v)} } \\
+\end{align}
+
+\subsection{ Conguagation. }
+
+Next we need to see how the congugate transforms.  This is pretty straight forward
+
+\begin{align*}
+\phi^\conj(x) 
+&\Leftrightarrow \FM \Iinf{ \phi^\conj(x) e^{-ipx/\hbar dx}} \\
+&= \left(\FM \Iinf{ \phi(x) e^{ipx/\hbar dx}}\right)^\conj \\
+\end{align*}
+
+So we have
+\begin{align*}
+\phi^\conj(x) \Leftrightarrow \left(\tilde{\phi(-p) \right)^\conj \\
 \end{align*}
 
 \bibliographystyle{plainnat}
