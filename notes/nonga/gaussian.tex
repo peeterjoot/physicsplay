@@ -14,13 +14,13 @@
 
 \title{ Evaluating the Gaussian integral. }
 \author{Peeter Joot}
-\date{ Jan 05, 2009.  Last Revision: $Date: 2009/01/08 04:46:14 $ }
+\date{ Jan 05, 2009.  Last Revision: $Date: 2009/01/10 04:32:43 $ }
 
 \begin{document}
 
 \maketitle{}
 %\tableofcontents
-\section{ }
+\section{ Plain old Gaussian. }
 
 QM solutions appear to involve a lot of Gaussian integrals.  Looking at one
 of the problems in \cite{mcmahon2005qmd} I tried to recall how to evaluate
@@ -49,7 +49,7 @@ So we have
 I = \sqrt{\frac{\pi}{\alpha}}
 \end{align*}
 
-\section{}
+\section{ A couple higher order Gaussian's and normalization exersize. }
 
 In order to do the normalization exersize for
 
@@ -100,6 +100,60 @@ So the normalization required for \ref{eqn:exersize} is
 \end{align*}
 
 The values $a$, and $b$ are presumably due to boundary conditions, and this then fixes $\Abs{A}$ in terms of $\Abs{B}$ or the other way around.
+
+\section{ Generalized. }
+
+Let 
+
+\begin{align}
+I_n = \int_{-\infty}^\infty x^n e^{-\alpha x^2} dx
+\end{align}
+
+We've solved this for $I_0 = \sqrt{\pi/\alpha}$, $I_1 = 0$, and $I_2$.  A quick calculation shows that $I_{2k+1} = 0$ too:
+
+\begin{align*}
+I_n 
+&= \int_{-\infty}^\infty x^n e^{-\alpha x^2} dx \\
+&= \int_{0}^\infty x^n e^{-\alpha x^2} dx +\int_{-\infty}^0 x^n e^{-\alpha x^2} dx \\
+&= \int_{0}^\infty x^n e^{-\alpha x^2} dx +\int_{\infty}^0 (-x)^n e^{-\alpha x^2} (-dx) \\
+&= \int_{0}^\infty x^n e^{-\alpha x^2} dx +\int_0^{\infty} (-x)^n e^{-\alpha x^2} dx \\
+&= \int_{0}^\infty (x^n + (-x)^n)e^{-\alpha x^2} dx \\
+\end{align*}
+
+But if $n$ is odd $(-x)^n = -x^n$, so this is zero.
+
+Now, for $n$ even, we can integrate by parts, as done for $I_2$.
+
+\begin{align*}
+I_{2m}
+&= \int x^{2m} e^{-\alpha x^2} dx \\
+&= \int x^{2m-1} \left(x e^{-\alpha x^2}\right) dx \\
+&= \int x^{2m-1} \left(\frac{e^{-\alpha x^2}}{-2\alpha}\right)' dx \\
+&= -\int (2m-1) x^{2m-2} \frac{e^{-\alpha x^2}}{-2\alpha} dx \\
+\end{align*}
+
+This gives us a recurrance relationship for the even order terms
+\begin{align}
+I_{2m} &= \frac{2m-1}{2\alpha} I_{2m-2}.
+%&= \inv{2\alpha} \sqrt{\frac{\pi}{\alpha}}
+\end{align}
+
+Expanding this explicitly for the first few $m$ shows the pattern
+
+\begin{align*}
+\begin{array}{l l l}
+I_2 &= \frac{2-1}{2\alpha} I_0 &= \frac{1}{2\alpha} \sqrt{\frac{\pi}{\alpha}} \\
+I_4 &= \frac{4-1}{2\alpha}\frac{2-1}{2\alpha} I_0 &= \frac{3.1}{(2\alpha)^2} \sqrt{\frac{\pi}{\alpha}} \\
+I_6 &= \frac{6-1}{2\alpha}\frac{4-1}{2\alpha}\frac{2-1}{2\alpha} I_0 &= \frac{5.3.1}{(2\alpha)^3} \sqrt{\frac{\pi}{\alpha}} \\
+\end{array}
+\end{align*}
+
+Or
+\begin{align}
+I_{0} &= \sqrt{\frac{\pi}{\alpha}} \\
+I_{2m-1} &= 0 \\
+I_{2m} &= \frac{(2m-1)(2m-3)\cdots(3)(1)}{(2\alpha)^m} \sqrt{\frac{\pi}{\alpha}}
+\end{align}
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
