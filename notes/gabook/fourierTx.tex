@@ -18,7 +18,7 @@
 
 \title{ Fourier transform. }
 \author{Peeter Joot}
-\date{ Jan 09, 2009.  Last Revision: $Date: 2009/01/10 05:29:31 $ }
+\date{ Jan 09, 2009.  Last Revision: $Date: 2009/01/10 06:12:23 $ }
 
 \begin{document}
 
@@ -58,15 +58,37 @@ Now, let $v = (x-u)/\hbar$, or $u=x-v\hbar$ for
 
 \begin{align*}
 \inv{{2\pi}} \int dv \psi(x -v\hbar) \int_{-R}^R e^{i p v} dp 
-&=
-\inv{{2\pi}} \int dv \psi(x - v\hbar) \left. \inv{i v} e^{i p v} \right\vert_{p=\epsilon}^R \\
-&+\inv{{2\pi}} \int dv \psi(x - v\hbar) \left. \inv{i v} e^{i p v} \right\vert_{p=-R}^{-\epsilon} \\
-&+\inv{{2\pi}} \int dv \psi(x - v\hbar) \left. \inv{i v} e^{i p v} \right\vert_{p=-\epsilon}^{\epsilon} \\
+&= \inv{{2\pi}} \int dv \psi(x - v\hbar) \left. \inv{i v} e^{i p v} \right\vert_{p=-R}^R \\
+&= \int dv \psi(x - v\hbar) \frac{\sin(R v)}{\pi v} \\
 \end{align*}
 
-The last of these is
+In a hand-waving (aka. Engineering) fashion, one can identify the limit of $\sin(Rv)/\pi v$ as the dirac delta function and
+then declare that this does in fact recover the value of $\psi(x)$ by a Dirac delta filtering around the point $v=0$.
+
+This does in fact work out, but as a strict integration exersize one ought to be able to do better.
+Observe that the integral performed here wasn't really valid for $v=0$ in which case the exponential takes the value of one, so it would be
+better to treat the neighbourhood of $v=0$ more carefully.  Doing so
+
 \begin{align*}
-\int dv \psi(x - v\hbar) \frac{\sin{\epsilon v}}{\pi v} 
+\inv{{2\pi}} \int dv \psi(x -v\hbar) \int_{-R}^R e^{i p v} dp 
+&= \int_{v=-\infty}^{-\epsilon} dv \psi(x - v\hbar) \frac{\sin(R v)}{\pi v} \\
+&+ \int_{v=\epsilon}^\infty dv \psi(x - v\hbar) \frac{\sin(R v)}{\pi v} \\
+&+ \inv{{2\pi}} \int_{v=-\epsilon}^\epsilon dv \psi(x - v\hbar) \int_{-R}^R e^{i p v} dp \\
+&= \int_{v=\epsilon}^\infty dv \left( \psi(x - v\hbar) +\psi(x + v\hbar) \right) \frac{\sin(R v)}{\pi v} \\
+&+ \inv{{2\pi}} \int_{v=-\epsilon}^\epsilon dv \psi(x - v\hbar) \int_{-R}^R e^{i p v} dp \\
+\end{align*}
+
+Now, evaluating this with $\epsilon$ allowing to tend to zero and $R$ tending to infinity simultaneously is troublesome seeming.  I seem to recall that one
+can do something to the effect of setting $\epsilon=1/R$, and then carefully take the limit, but it isn't obvious to me how exactly to do this without
+pulling out an old text.
+While some kind of ad-hoc limit process can likely be done and justified in some fashion, one can see why the hard core mathematicians had to invent
+an alternate stricter mathematics to deal with this stuff rigourously.
+
+That said, from an intuitive point of view, it is fairly clear that the filtering involved here will recover the average of
+$\psi(x)$ in the neighbourhood assuming that it is piecewise continuous:
+
+\begin{align*}
+\FF^{-1}(\FF(\psi(x))) &= \inv{2} \left( \psi(x -\epsilon) + \psi(x + \epsilon) \right)
 \end{align*}
 
 \bibliographystyle{plainnat}
