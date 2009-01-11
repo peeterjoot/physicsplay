@@ -196,6 +196,15 @@ ordered += ../geometric-algebra/energy_momentum_tensor.pdf
 
 ordered += ../geometric-algebra/electric_field_energy.pdf
 skipit += ../lut/charge_osc.pdf
+ordered += ../qm/gaussian.pdf
+ordered += ../geometric-algebra/vector_differential_identities.pdf
+
+ordered += ../maxwell/dc_power.pdf
+# not mine:
+skipit += ../spin/spin.pdf
+
+ordered += ../qm/fourier_tx.pdf
+ordered += ../qm/sch_current.pdf
 
 # Rules:
 #-----------------------------------------------------
