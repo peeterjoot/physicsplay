@@ -1,0 +1,150 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+
+\title{ Schr\"{o}dinger equation probability conservation. }
+\author{Peeter Joot}
+\date{ Jan 11, 2009.  Last Revision: $Date: 2009/01/11 06:04:40 $ }
+
+\begin{document}
+
+\maketitle{}
+%\tableofcontents
+\section{ Motivation. }
+
+In \cite{mcmahon2005qmd} is a one dimensional probability conservation
+derivation from
+Schr\"{o}dinger's equation.  Do this for the three dimensional case.
+
+\section{}
+
+Consider the time rate of change of the probability as expressed 
+in terms of the wave function
+
+\begin{align*}
+\PD{t}{\rho} 
+&= \PD{t}{\psi^\conj \psi} \\
+&= \PD{t}{\psi^\conj} \psi + \psi^\conj \PD{t}{\psi} \\
+\end{align*}
+
+This can be calculated from Schr\"{o}dinger's equation and its complex
+conjugate
+
+\begin{align*}
+\partial_t \psi &= \left(-\frac{\hbar}{2mi}\spacegrad^2 + \inv{i\hbar} V \right) \psi \\
+\partial_t \psi^\conj &= \left(\frac{\hbar}{2mi}\spacegrad^2 - \inv{i\hbar} V \right) \psi^\conj \\
+\end{align*}
+
+Multiplying by the conjugate wave functions and adding we have
+\begin{align*}
+\PD{t}{\rho}
+&=
+\psi^\conj \left(-\frac{\hbar}{2mi}\spacegrad^2 + \inv{i\hbar} V \right) \psi +
+\psi \left(\frac{\hbar}{2mi}\spacegrad^2 - \inv{i\hbar} V \right) \psi^\conj \\
+&=
+\frac{\hbar}{2mi} \left(
+-\psi^\conj \spacegrad^2 \psi + \psi \spacegrad^2 \psi^\conj \right) \\
+\end{align*}
+
+So we have the following conservation law
+\begin{align}\label{eqn:intermediate}
+\PD{t}{\rho} + \frac{\hbar}{2mi} \left( \psi^\conj \spacegrad^2 \psi - \psi \spacegrad^2 \psi^\conj \right) = 0
+\end{align}
+
+The text indicates that the second order terms here can be written as a divergence.  Somewhat loosely, by treating $\psi$ as a scalar field one can show that this is the case
+
+\begin{align*}
+\spacegrad \cdot \left( \psi^\conj \spacegrad \psi - \psi \spacegrad \psi^\conj \right) 
+&=
+\gpgradezero{
+\spacegrad \left( \psi^\conj \spacegrad \psi - \psi \spacegrad \psi^\conj \right) 
+} \\
+&=
+\gpgradezero{
+(\spacegrad \psi^\conj) (\spacegrad \psi) - (\spacegrad \psi) (\spacegrad \psi^\conj)
++\psi^\conj \spacegrad^2 \psi - \psi \spacegrad^2 \psi^\conj
+} \\
+&=
+\gpgradezero{
+2 (\spacegrad \psi^\conj) \wedge (\spacegrad \psi) 
++\psi^\conj \spacegrad^2 \psi - \psi \spacegrad^2 \psi^\conj
+} \\
+&=
+\psi^\conj \spacegrad^2 \psi - \psi \spacegrad^2 \psi^\conj
+ \\
+\end{align*}
+
+Assuming that this procedure is justified.
+equation \ref{eqn:intermediate} therefore can be written
+in terms of a probability current very reminicent of the current density vector of electrodynamics
+
+\begin{align}\label{eqn:pcons}
+\BJ &= \frac{\hbar}{2mi} \left( \psi^\conj \spacegrad \psi - \psi \spacegrad \psi^\conj \right) \\
+0 &= \PD{t}{\rho} + \spacegrad \cdot \BJ 
+\end{align}
+
+Regarding justification, this should be revisited.
+It appears to give the right answer, despite the fact that $\psi$ is a complex (mixed grade) object, which
+likely has some additional significance.
+
+\section{}
+
+Now, having calculated the probability conservation equation \ref{eqn:pcons}, it is interesting to
+note the similarity to the relativistic spacetime divergence from Maxwell's equation.
+
+We can write
+\begin{align*}
+0 = \PD{t}{\rho} + \spacegrad \cdot \BJ &= \grad \cdot \left( c\rho \gamma_0 + \BJ \gamma_0 \right)
+\end{align*}
+
+and form something that has the appearance of a relativistic four vector, re-writing the conservation equation as
+
+\begin{align*}
+J &= c\rho \gamma_0 + \BJ \gamma_0 \\
+0 &= \grad \cdot J
+\end{align*}
+
+Expanding this four component vector shows an interesting form:
+
+\begin{align*}
+J &= c \rho \gamma_0 + 
+\frac{\hbar}{2mi} \left( \psi^\conj \spacegrad \psi - \psi \spacegrad \psi^\conj \right) \gamma_0 \\
+\end{align*}
+
+Now, if one assumes the wave function can be represented as a even grade object with the following complex
+structure
+\begin{align*}
+\psi &= \alpha + \gamma^m \wedge \gamma^n \beta_{mn}
+\end{align*}
+
+then $\gamma_0$ will commute with $\psi$.  Noting that $\spacegrad \gamma_0 = \sum_k \gamma_k \partial_k = -\gamma^k \partial_k$, we have
+
+\begin{align*}
+m J &= m c \psi^\conj \psi \gamma_0 + 
+\frac{i\hbar}{2} \left( \psi^\conj \gamma^k \partial_k \psi - \psi \gamma^k \partial_k \psi^\conj \right) 
+\end{align*}
+
+Now, this is an interesting form.  In particular compare this to the Dirac Lagrangian, as given in 
+the \href{http://en.wikipedia.org/wiki/Dirac_equation#Adjoint_equation_and_Dirac_current}{wikipedia Dirac equation} article.
+
+\begin{align*}
+L = mc \bar{\psi}\psi - \frac{i\hbar}{2}(\bar{\psi}\gamma^\mu (\partial_\mu\psi) - (\partial_\mu\bar{\psi})\gamma^\mu \psi)
+\end{align*}
+
+Although the Schr\"{o}dinger equation is a non-relativistic equation, it appears that the probability current, 
+when we add the $\gamma^0 \partial_0$ term required to put this into a covariant form, is in fact the Lagrangian density
+for the Dirac equation (when scaled by mass).
+
+I don't know enough yet about QM to see what exactly the implications of this are, but I suspect that there is something
+of some interesting significance to this particular observation.
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
+
+\end{document}
