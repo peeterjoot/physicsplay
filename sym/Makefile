@@ -1,20 +1,20 @@
 exe := .exe
 
-aux := ../libgasandbox/e3ga.cpp
-source := $(aux) gasym.cpp
+TESTINC := $(subst .h,_testinc.cpp,$(shell echo *.h))
+testinc_bin := $(subst .cpp,.o,$(TESTINC))
+
+source := ../libgasandbox/e3ga.cpp
+source += expression.cpp
+source += gasym.cpp
+source += sum.cpp
+source += symbol.cpp
+source += term.cpp
 
 COPTS += -g
 #COPTS += -O2
 
 objects := $(subst .cpp,.o,$(source))
 lobjects := $(notdir $(objects))
-
-#libs += wsock32.lib glut32.lib opengl32.lib glu32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib 
-
-#libs += libgasandbox.lib
-#libs += libgasandboxparse.lib
-
-all :: $(lobjects) gasym$(exe)
 
 %.o : %.cpp
 	g++ -I.. -I../ext_include -I ../libgasandbox $(COPTS) -c $^
@@ -28,10 +28,31 @@ gasym$(exe) : $(lobjects)
 files := $(shell ls *.ltx)
 pdfs := $(files:.ltx=.pdf)
 
+all :: $(testinc_bin)
+all :: $(lobjects) gasym$(exe)
 all :: $(pdfs)
 
 latexrules := ./latex
 
+%_testinc.cpp : %.h
+	perl mktestinc $^
+
 %.pdf : %.ltx
 	$(latexrules)/make_pdflatex $<
 
+#----------------------------
+# header dependencies:
+#
+# grep -F .h xx.yy | sed 's/:.* "//;s/".*//'
+#
+
+expression.cpp : expression.h
+gasym.cpp : sum.h
+sum.cpp : sum.h
+symbol.cpp : symbol.h
+term.cpp : term.h
+expression.h : term.h
+sum.h : symbol.h
+symbol.h : expression.h
+
+#----------------------------
