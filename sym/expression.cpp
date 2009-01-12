@@ -1,4 +1,7 @@
 #include "expression.h"
+#include <sstream>
+
+using namespace std ;
 
 bool expression::isZero() const
 {
@@ -15,6 +18,22 @@ bool expression::isZero() const
    }
 
    return false ;
+}
+
+inline bool compareTerm( const term & a, const term & b )
+{
+   std::string aStr = a.toString( false ) ;
+   std::string bStr = b.toString( false ) ;
+
+   if ( aStr == bStr )
+   {
+      // want to sort the factors with higher weight than the cooefficients.
+      return a.m_scalar > b.m_scalar ;
+   }
+   else
+   {
+      return aStr > bStr ;
+   }
 }
 
 void expression::reduce()

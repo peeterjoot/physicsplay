@@ -1,4 +1,7 @@
 #include "symbol.h"
+#include <iostream>
+
+using namespace std ;
 
 /**
  * return a bitmask with a bit set for each unique basis element in the algebra.

@@ -1,3 +1,13 @@
+#if !defined expression_header_included
+#define expression_header_included
+
+/**
+  \file expression.h
+ */
+
+#include "term.h"
+#include <list>
+
 /**
  * A representation of a set (sum) of terms.
  *
@@ -151,3 +161,5 @@ public:
     */
    bool isZero() const ;
 } ;
+
+#endif

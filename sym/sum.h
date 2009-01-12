@@ -1,3 +1,12 @@
+#if !defined sum_header_included
+#define sum_header_included
+
+/**
+  \file sum.h
+ */
+
+#include "symbol.h"
+
 class sum
 {
    typedef std::list<symbol> symbolSetType ;
@@ -187,3 +196,5 @@ public:
       }
    }
 } ;
+
+#endif

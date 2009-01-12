@@ -1,4 +1,7 @@
 #include "sum.h"
+#include <iostream>
+
+using namespace std ;
 
 int mv_largestCoordinateIndex( const mv & v )
 {

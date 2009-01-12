@@ -3,7 +3,7 @@
  *
  * Peeter Joot (peeter.joot@gmail.com).  November 2008.
  *
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  */
 
 
@@ -19,23 +19,12 @@
  *) implement trig.
 
  */
-#include <string>
-#include <list>
 #include <iostream>
-#include <sstream>
 #include <cstdio>
-#include <map>
 
-#include <libgasandbox/common.h>
-#include <libgasandbox/e3ga.h>
-
-using namespace e3ga ;
 using namespace std ;
 
-#include "term.h"
-#include "expression.h"
-#include "symbol.h"
-
+#include "sum.h"
 
 bivector iZ = _bivector(e1 ^ e2) ;
 bivector iX = _bivector(e2 ^ e3) ;

@@ -1,4 +1,15 @@
+#if !defined symbol_header_included
+#define symbol_header_included
+
+/**
+  \file symbol.h
+ */
+
 #include "expression.h"
+#include <libgasandbox/common.h>
+#include <libgasandbox/e3ga.h>
+
+using namespace e3ga ;
 
 class sum ;
 sum dot( const sum & a, const mv & b ) ;
@@ -180,3 +191,7 @@ class mutate_left_contract
       out <<= r ;
    }
 } ;
+
+int mv_bitmask( const mv & a ) ;
+
+#endif

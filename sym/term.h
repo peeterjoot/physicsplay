@@ -1,3 +1,13 @@
+#if !defined term_header_included
+#define term_header_included
+
+/**
+  \file term.h
+ */
+
+#include <string>
+#include <map>
+#include <sstream>
 
 typedef std::string literal ;
 
@@ -13,7 +23,7 @@ typedef std::string literal ;
  */
 class term
 {
-   typedef map<literal, int> factorsType ;
+   typedef std::map<literal, int> factorsType ;
    typedef factorsType::iterator iterType ;
    typedef factorsType::const_iterator citerType ;
 
@@ -120,3 +130,14 @@ public:
       return ( TERM_ZERO_VALUE == m_scalar ) ;
    }
 } ;
+
+inline std::string term::toString( const bool withScalar ) const
+{
+   std::ostringstream out ;
+
+   toStringStream( out, false, withScalar ) ;
+
+   return out.str() ;
+}
+
+#endif
