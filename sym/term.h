@@ -1,8 +1,14 @@
 #if !defined term_header_included
 #define term_header_included
 
+/*
+ * $Date: 2009/01/12 01:06:45 $
+ * $Revision: 1.3 $
+ */
+
 /**
   \file term.h
+  \brief A basic numeric expression with a numeric and symbolic portion.
  */
 
 #include <string>

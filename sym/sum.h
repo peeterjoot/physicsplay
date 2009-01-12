@@ -1,6 +1,11 @@
 #if !defined sum_header_included
 #define sum_header_included
 
+/*
+ * $Date: 2009/01/12 01:06:45 $
+ * $Revision: 1.3 $
+ */
+
 /**
   \file sum.h
  */

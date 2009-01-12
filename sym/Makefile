@@ -3,18 +3,33 @@ exe := .exe
 TESTINC := $(subst .h,_testinc.cpp,$(shell echo *.h))
 testinc_bin := $(subst .cpp,.o,$(TESTINC))
 
-source := ../libgasandbox/e3ga.cpp
 source += expression.cpp
-source += gasym.cpp
-source += sum.cpp
-source += symbol.cpp
 source += term.cpp
+
+gasym_source += sum.cpp
+gasym_source += symbol.cpp
+gasym_source += ../libgasandbox/e3ga.cpp
+gasym_source += gasym.cpp
+gasym_source += $(source)
+
+calc_source += calc.cpp
+calc_source += $(source)
 
 COPTS += -g
 #COPTS += -O2
 
-objects := $(subst .cpp,.o,$(source))
-lobjects := $(notdir $(objects))
+gasym_objects := $(subst .cpp,.o,$(gasym_source))
+calc_objects := $(subst .cpp,.o,$(calc_source))
+lobjects := $(notdir $(gasym_objects) $(calc_objects))
+
+files := $(shell ls *.ltx)
+pdfs := $(files:.ltx=.pdf)
+
+latexrules := ./latex
+
+all :: $(testinc_bin)
+all :: $(lobjects) gasym$(exe) calc$(exe)
+all :: $(pdfs)
 
 %.o : %.cpp
 	g++ -I.. -I../ext_include -I ../libgasandbox $(COPTS) -c $^
@@ -22,17 +37,11 @@ lobjects := $(notdir $(objects))
 %.o : ../libgasandbox/%.cpp
 	g++ -I.. -I../ext_include -I ../libgasandbox $(COPTS) -c $^
 
-gasym$(exe) : $(lobjects)
+gasym$(exe) : $(notdir $(gasym_objects))
 	g++ -L../lib_win32 -I.. -I../ext_include $^ $(libs) -o $@
 
-files := $(shell ls *.ltx)
-pdfs := $(files:.ltx=.pdf)
-
-all :: $(testinc_bin)
-all :: $(lobjects) gasym$(exe)
-all :: $(pdfs)
-
-latexrules := ./latex
+calc$(exe) : $(calc_objects)
+	g++ -L../lib_win32 -I.. -I../ext_include $^ $(libs) -o $@
 
 %_testinc.cpp : %.h
 	perl mktestinc $^
