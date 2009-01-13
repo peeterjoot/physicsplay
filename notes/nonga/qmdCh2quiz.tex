@@ -15,7 +15,7 @@
 
 \title{ Chapter 2 Quiz solutions for QM Demystified book. }
 \author{Peeter Joot}
-\date{ Jan 12, 2009.  Last Revision: $Date: 2009/01/13 04:41:51 $ }
+\date{ Jan 12, 2009.  Last Revision: $Date: 2009/01/13 14:10:30 $ }
 
 \begin{document}
 
@@ -30,16 +30,16 @@ term.  Let's try this, but do it instead for three dimensions and explore a bit.
 We try a test solution of the form
 
 \begin{align*}
-\phi &= X(x) Y(y) Z(z) T(t) \\
+\psi &= X(x) Y(y) Z(z) T(t) \\
 \end{align*}
 
 and substitute into 
 
 \begin{align*}
-\left(-\frac{\hbar^2}{2m}\grad^2 + V\right) \phi &= i \hbar \partial_t \phi
+\left(-\frac{\hbar^2}{2m}\grad^2 + V\right) \psi &= i \hbar \partial_t \psi
 \end{align*}
 
-differentiating and dividing by $\phi$ we have
+differentiating and dividing by $\psi$ we have
 \begin{align*}
 -\frac{\hbar^2}{2m}
 \left(
@@ -85,7 +85,7 @@ equal some negative constant (to be fixed by boundary conditions), we can write
 So we have for the complete equation a solution proportional to
 
 \begin{align*}
-\phi = X Y Z T &= \exp(i(\Bk \cdot \Bx - E t/\hbar))
+\psi = X Y Z T &= \exp(i(\Bk \cdot \Bx - E t/\hbar))
 \end{align*}
 
 With the additonal boundary value constraint of
@@ -97,19 +97,41 @@ With the additonal boundary value constraint of
 
 Let's consider a slightly more general potential with $V$ constant in some interval.
 
-By inspection, in the interval we now have as the solution
+The solution should now be
 
 \begin{align*}
-\phi &= \exp(i(\Bk \cdot \Bx - (E - V) t/\hbar)) \\
-\Bk^2 &= \frac{2 m (E - V)}{\hbar^2}
+\psi &= \exp(i(\Bk \cdot \Bx - (E + V) t/\hbar)) \\
+\Bk^2 &= \frac{2 m E}{\hbar^2}
 \end{align*}
+
+Let's check.  We want 
+\begin{align*}
+\left(-\frac{\hbar^2}{2m}\grad^2 + V -i\hbar \partial_t\right)\psi = 0
+\end{align*}
+
+and have
+\begin{align*}
+0 &=
+\left(\frac{\hbar^2}{2m}\Bk^2 + V -i\hbar \frac{-i(E + V)}{\hbar}\right)\psi \\
+&= \left(\frac{\hbar^2}{2m}\Bk^2 + V -(E + V)\right)\psi \\
+&= \left(\frac{\hbar^2}{2m}\Bk^2 - E\right)\psi \\
+\end{align*}
+
+So for this to hold for all $\psi$ we again have the following constraint on wave number in terms of energy
+
+\begin{align*}
+\Bk^2 = \frac{2 m E}{\hbar^2}
+\end{align*}
+
+
+FIXME: fudged the sign here.  Descriptive text following invalid or needs checking.
 
 Based on just the math, we don't know that $E$ is neccessarily positive, so in addition to the trigonometric solution above is it also reasonable to
 allow for possible
 hyperbolic solutions
 
 \begin{align*}
-\phi &= \exp(\Bk \cdot \Bx - i(E - V) t/\hbar) \\
+\psi &= \exp(\Bk \cdot \Bx - i(E - V) t/\hbar) \\
 \Bk^2 &= \frac{2 m (V - E)}{\hbar^2}
 \end{align*}
 
@@ -122,7 +144,7 @@ Using superposition we should be able to form a wave packet in integral form
 by allowing for any set of $\Bk$ vectors.  Suppose we assemble a test solution by summing over possible wave numbers
 
 \begin{align*}
-\phi = \int A(\Bk) \exp(\alpha(\Bk \cdot \Bx) + i(E - V) t/\hbar) dk_1 dk_2 dk_3 \\
+\psi = \int A(\Bk) \exp(\alpha(\Bk \cdot \Bx) + i(E - V) t/\hbar) dk_1 dk_2 dk_3 \\
 \end{align*}
 
 FIXME: time term sign fudged to make the $V$ cancel out.  Must have a mistake above.
@@ -130,13 +152,13 @@ FIXME: time term sign fudged to make the $V$ cancel out.  Must have a mistake ab
 Does this work?  Let's take derivatives and see what constraints we require if it does.
 
 \begin{align*}
-\grad^2 \phi &= \alpha^2 \Bk^2 \phi \\
-i \hbar \partial_t \phi &= -(E - V) \phi
+\grad^2 \psi &= \alpha^2 \Bk^2 \psi \\
+i \hbar \partial_t \psi &= -(E - V) \psi
 \end{align*}
 
 So we have
 \begin{align*}
--\frac{\hbar^2}{2m} \alpha^2 \Bk^2 \phi + V\phi = -(E-V) \phi
+-\frac{\hbar^2}{2m} \alpha^2 \Bk^2 \psi + V\psi = -(E-V) \psi
 \end{align*}
 
 and the constraint required for the wave number $\Bk$ is 
@@ -148,11 +170,29 @@ and the constraint required for the wave number $\Bk$ is
 So, for trig solutions (plane waves) where $\alpha \propto i$ our energy integration constant $E$ takes a negative value.
 For hyperbolic solutions, where $\alpha = \pm 1$ (say), our energy has a positive value.
 
-This screams for the boundary values of a 3D particle in a box problem, which for infinite potential outside the
-box will require sinusoidal solutions (to vanish on the boundaries since the particle can't get past the potential
-barrier).
+FIXME: this is wrong.  I took $k_m$ out of the integral.  Would also be
+better to allow $k_m$ to be complex and build in the possibility of 
+mixed trig and hyperbolic solutions.
+
+Write the sch eq as an operator
+
+\begin{align*}
+D = -\frac{\hbar^2}{2m}\grad^2 + V -i\hbar\partial_t
+\end{align*}
+
+then apply $D$ to the integral, expecting zero.
+
+Also, use the separation of variables to reduce the sch equation to a purely
+spatial problem.
 
 \subsection{ Particle in a box. }
+
+This screams for the boundary values of a 3D particle in a box problem
+(the one dimensional version of this problem is done in the text).
+Here we introduce an infinite potential outside the
+box, and this will require sinusoidal solutions so that they vanish on
+the boundaries since the particle can't get past the potential
+barrier (and must be continuous at the boundary).
 
 \section{ Problem 2. Probabilities for a polynomial wavefunction. }
 
