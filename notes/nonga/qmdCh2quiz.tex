@@ -14,7 +14,7 @@
 
 \title{ Chapter 2 Quiz solutions for QM Demystified book. }
 \author{Peeter Joot}
-\date{ Jan 12, 2009.  Last Revision: $Date: 2009/01/13 21:48:16 $ }
+\date{ Jan 12, 2009.  Last Revision: $Date: 2009/01/14 04:42:27 $ }
 
 \begin{document}
 
@@ -96,7 +96,30 @@ With the additonal boundary value constraint of
 \Bk^2 &= \frac{2 m E}{\hbar^2}
 \end{align*}
 
-FIXME: use the separation of variables here to show how to reduce the sch equation to a purely spatial problem.
+\subsection{ Time independent equation. }
+
+Given that we can express the time variation of the wave function as an exponential, we can use this to calculate the time independent equation.  Let
+
+\begin{align*}
+\psi(\Bx,t) = \psi(\Bx) e^{-iEt/\hbar}
+\end{align*}
+
+Subst back into the equation gives
+
+\begin{align*}
+\left(-\frac{\hbar^2}{2m}\grad^2 + V\right) \psi(\Bx)e^{-iEt/\hbar} &= E\psi(\Bx)e^{-iEt/\hbar}
+\end{align*}
+
+Or
+
+\begin{align*}
+\left(-\frac{\hbar^2}{2m}\grad^2 + V\right) \psi(\Bx) &= E\psi(\Bx)
+\end{align*}
+
+%Or
+%\begin{align*}
+%\left(-\frac{\hbar^2}{2m}\grad^2 \right) \psi(\Bx) &= (E - V)\psi(\Bx)
+%\end{align*}
 
 \subsection{ Constant potential. }
 
@@ -191,25 +214,74 @@ factor out an explicit $i$, and write
 \psi(\Bx,t) = \int A(\Bk) \exp\left(i \left(\Bk \cdot \Bx - \left(\frac{\hbar^2 \Bk^2}{2m} + V\right) \frac{t}{\hbar}\right)\right) dk_1 dk_2 dk_3 \\
 \end{align*}
 
-\subsection{ Particle in a box. }
-
-This screams for the boundary values of a 3D particle in a box problem
-(the one dimensional version of this problem is done in the text).
-Here we introduce an infinite potential outside the
-box, and this will require sinusoidal solutions so that they vanish on
-the boundaries since the particle can't get past the potential
-barrier (and must be continuous at the boundary).
+%\subsection{ Particle in a box. }
+%
+%This screams for the boundary values of a 3D particle in a box problem
+%(the one dimensional version of this problem is done in the text).
+%Here we introduce an infinite potential outside the
+%box, and this will require sinusoidal solutions so that they vanish on
+%the boundaries since the particle can't get past the potential
+%barrier (and must be continuous at the boundary).
 
 \section{ Problem 2. Probabilities for a polynomial wavefunction. }
 
+The wave function to work with is
+
+\begin{align*}
+\psi = C \frac{1 + ix}{1 + ix^2}
+\end{align*}
+
+With probability density
+
+\begin{align*}
+\psi\psi^\conj = C^2 \frac{1 + x^2}{1 + x^4}
+\end{align*}
+
 \subsection{ normalize it. }
 
-This part can be done directly with a contour integration.
+We can do the normalization with a complex integral over an upper half plane
+semicircular contour.  On the arc we the integral can be parameterized with
 
-\subsection{ definite integral of probablility. }
+\begin{align*}
+z &= R e^{i\theta}
+dz &= R i e^{i\theta} d\theta
+\end{align*}
 
-While a partial fractions split of the probability density can be done
-around the poles $\{\pm\sqrt{i}, \pm i \sqrt{i}\}$
+\begin{align*}
+\int \psi\psi^\conj dz = C^2 \int \frac{1 + R^2 e^{2i\theta}}{1 + R^4 e^{4i\theta}} R i e^{i\theta} d\theta
+\end{align*}
+
+This is of order $R^3/R^4$ so will vanish at infinity.
+
+For the remaining part of the integral we integrate on $[-\infty,\infty]$, but duck up and back around the poles 
+$\sqrt{i}$, and $i \sqrt{i}$ in counterclockwise circles.
+
+Now, the only problem is to remember how to do the integral around the poles.  Suppose we have
+
+\begin{align*}
+I = \oint \frac{f(z)}{z -z_0} dz
+\end{align*}
+
+for a function that is regular at $z_0$, and integrate in an infinitesimal loop around $z_0$.  That contour is parameterized by
+
+\begin{align*}
+dz &= r i e^{i\theta} d\theta \\
+z - z_0 &= r e^{i\theta}
+\end{align*}
+
+So this little contour integral has the value
+\begin{align*}
+I &= \oint f(z) i d\theta \\
+\end{align*}
+
+if the contour is made small enough that $f(z)$ doesn't vary, then that function takes the value $f(z_0)$, and we have for a clockwise contour the value
+
+\begin{align*}
+I = \oint \frac{f(z)}{z -z_0} dz = 2 \pi i f(z_0)
+\end{align*}
+
+Now for this probability density we can do a 
+partial fractions split around the poles $\{\pm\sqrt{i}, \pm i \sqrt{i}\}$ of the form
 
 \begin{align*}
 \frac{1 + x^2}{1 + x^4} &=
@@ -219,16 +291,140 @@ around the poles $\{\pm\sqrt{i}, \pm i \sqrt{i}\}$
 +\frac{D}{x +i\sqrt{i}}
 \end{align*}
 
-Integrating these is straight forward (logarithms), but
-the algebra gets messy to simplify the resulting expression (perhaps not so
-much for the $[0,1]$ interval of the question).
+but we don't really need do to this algebra.  Instead for pole $p$ since it is first order we can write
 
-A lazier way is to invoke \href{http://integrals.wolfram.com/index.jsp}{webmathematica}, which gives
+\begin{align*}
+\psi(x)\psi^\conj(x) = C^2 \left(\frac{1 + x^2}{1 + x^4} (x - p)\right) \inv{x - p}
+\end{align*}
+
+The left hand factor here is then regular at the pole, and we can use L'Hopitals rule to evaluate what value this takes at the pole.
+
+For our first quadrant pole we have
+\begin{align*}
+{\left. \left(\frac{1 + x^2}{1 + x^4} (x - \sqrt{i})\right) \right\vert}_{x=\sqrt{i}}
+&= \frac{ 1 + i }{4 i\sqrt{i}} \\
+&= -i\sqrt{2}/4 \\
+\end{align*}
+
+and for the second quadrant pole we have
+\begin{align*}
+{\left. \left(\frac{1 + x^2}{1 + x^4} (x - \sqrt{i})\right) \right\vert}_{x=i\sqrt{i}}
+&= \frac{ 1 + (i\sqrt{i})^2 }{4 (i\sqrt{i})^3} \\
+&= \frac{ 1 - i }{4 \sqrt{i}} \\
+&= \sqrt{2}\frac{ (1 - i)^2 }{8} \\
+&= -i\sqrt{2}/4
+\end{align*}
+
+Combining all the contours we have for the integral now
+
+\begin{align*}
+0 
+&= 0 + I + 2(-2\pi i)(-i\sqrt{2}/4) C^2 \\
+&= 0 + I - \pi \sqrt{2} C^2 \\
+\end{align*}
+
+Therefore for the unit probability we have as desired
+
+\begin{align*}
+C = \inv{\sqrt{ \pi \sqrt{2}}}
+\end{align*}
+
+\subsection{ definite integral of probablility. }
+
+Next part of the problem was to evaluate the probability of finding the particle in a specific region (
+$[0,1]$ specifically).
+
+Here we need a definite integral, so none of the contour integration tricks will help.  At least I remember how to do that now.
+
+Let's actually do the partial fractions split
+
+\begin{align*}
+\frac{x^2+1}{x^4+1} 
+&= \frac{x^2+1}{x^4-i^2}  \\
+&= \inv{2}\left( \frac{1}{x^2 - i} + \frac{1}{x^2 + i} \right) \\
+&= 
+\inv{4\sqrt{i}}\left( 
+\frac{1}{x - \sqrt{i}} 
+-\frac{1}{x + \sqrt{i}} \right)
++\inv{4\sqrt{-i}}\left( 
+\frac{1}{x - \sqrt{-i}} 
+-\frac{1}{x + \sqrt{-i}} 
+\right)
+\end{align*}
+
+Antidifferentiation gives
+
+\begin{align*}
+%&
+\inv{4\sqrt{i}} \ln\left({\frac{x - \sqrt{i}}{x + \sqrt{i}}}\right)
++\inv{4\sqrt{-i}}\ln\left( \frac{x - \sqrt{-i}}{x + \sqrt{-i}} \right) \\
+%&=
+%-\frac{i\sqrt{i}}{4} \ln\left({\frac{x - \sqrt{i}}{x + \sqrt{i}}}\right)
+%-\frac{\sqrt{i}}{4}\ln\left( \frac{x - \sqrt{-i}}{x + \sqrt{-i}} \right) \\
+%&=
+%\frac{1-i}{4\sqrt{2}} \ln\left({\frac{x - \sqrt{i}}{x + \sqrt{i}}}\right)
+%-\frac{1+i}{4\sqrt{2}}\ln\left( \frac{x - \sqrt{-i}}{x + \sqrt{-i}} \right) \\
+%&= 
+%  \frac{1}{4\sqrt{2}} \ln\left({\frac{(x - \sqrt{i})}{(x + \sqrt{i})}}\frac{(x + \sqrt{-i})}{(x - \sqrt{-i})} \right) 
+%- \frac{i}{4\sqrt{2}} \ln\left( {\frac{(x - \sqrt{i})}{(x + \sqrt{i})}}\frac{(x - \sqrt{-i})}{(x + \sqrt{-i})} \right) \\
+%&= 
+%  \frac{1}{4\sqrt{2}} \ln\left( \frac{ x^2 -1 + \sqrt{i}x (i-1) }{ x^2 -1 + \sqrt{i}x (1-i) } \right) 
+%- \frac{i}{4\sqrt{2}} \ln\left( \frac{ x^2 +1 + \sqrt{i}x (i-1) }{ x^2 -1 - \sqrt{i}x (1+i) } \right) \\
+%&= 
+%  \frac{1}{4\sqrt{2}} \ln\left( \frac{ \sqrt{2}(x^2 +1) - 2 x }{ \sqrt{2}(x^2 -1) + 2 x }\right) 
+%- \frac{i}{4\sqrt{2}} \ln\left( \frac{ \sqrt{2}(x^2 +1) - 2 x }{ \sqrt{2}(x^2 -1) - 2 i x }\right) \\
+\end{align*}
+%1/\sqrt{i} = \sqrt{i}/i = -i\sqrt{i}
+%1/\sqrt{-i} = \sqrt{-i}/-i = -\sqrt{i}
+%\sqrt i = (1+i)/\sqrt{2}
+%\sqrt -i = i(1+i)/\sqrt{2} = (i-1)/\sqrt{2}
+
+%i\sqrt i = (i-1)/\sqrt{2}
+
+%For the $[0,1]$ interval we have
+%
+%\begin{align*}
+%\inv{4\sqrt{i}} \ln\left({\frac{\sqrt{2} - 1 -i}{\sqrt{2} + i + 1}}\right)
+%+\inv{4i\sqrt{i}}\ln\left( \frac{\sqrt{2} - i +1}{\sqrt{2} + i - 1} \right) \\
+%+\sqrt{2}\frac{i-1}{4(i+1)} i\pi
+%\end{align*}
+%(1/(4 sqrt(i))) ln( (sqrt(2) - 1 -i)/(sqrt(2) + i + 1)) +(1/(4 i sqrt(i))) ln ( (sqrt(2) - i +1)/(sqrt(2) + i - 1) ) +sqrt(2) ((i-1)/(4(i+1))) i ln(-1)
+
+%As a check, we should get the $\pi \sqrt{2}$ calculated with the contour integral
+%
+%\begin{align*}
+%&\lim_{R \rightarrow \infty}
+%\left(
+%\inv{4\sqrt{i}} \ln\left({\frac{R - \sqrt{i}}{R + \sqrt{i}}} \frac {R - \sqrt{i}} {R + \sqrt{i}}\right)
+%+\inv{4i\sqrt{i}}\ln\left( \frac{R - \sqrt{-i}}{R + \sqrt{-i}} \frac {R - \sqrt{-i}} {R + \sqrt{-i}} \right) 
+%\right) \\
+%&=
+%\lim_{R \rightarrow \infty}
+%\left(
+%\inv{2\sqrt{i}} \ln\left({\frac{R - \sqrt{i}}{R + \sqrt{i}}} \right)
+%+\inv{2i\sqrt{i}}\ln\left( \frac{R - \sqrt{-i}}{R + \sqrt{-i}} \right) 
+%\right)
+%\end{align*}
+
+%(i-1)(i+1) = i^2 -1 = -2
+%(i+1)(i+1) = i^2 +1 +2i = 2i
+
+It should be possible to simplify this, or use it to verify the contour integral, or directly evaluate the integral for the $[0,1]$ range of the problem,
+but this particular form is proving somewhat intractable (or I've made mistakes).  A lazier way is to invoke \href{http://integrals.wolfram.com/index.jsp}{webmathematica}, which gives
 
 \begin{align*}
 \int \frac{1 + x^2}{1 + x^4} dx &=
 \frac{-\tan^{-1}(1 - \sqrt{2} x) + \tan^{-1}(1 + \sqrt{2} x)}{ \sqrt{2} }
 \end{align*}
+\begin{align*}
+\int C^2 \frac{1 + x^2}{1 + x^4} dx &=
+\inv{2 \pi} (-\tan^{-1}(1 - \sqrt{2} x) + \tan^{-1}(1 + \sqrt{2} x))
+\end{align*}
+
+However calculating this for $x=0$ gives zero and for $x=1$ gives $0.25$, whereas the text gives $\approx 0.52$.  The text can't be correct since the density is symmetric, which would imply that the probabilty to find it in $[-1,1]$ is $1.04 > 1$.
+
+% google calculator:
+%((arctan(1+sqrt(2)) - arctan(1-sqrt(2)))/sqrt(2))/(pi sqrt(2))
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
