@@ -14,7 +14,7 @@
 
 \title{ Chapter 2 Quiz solutions for QM Demystified book. }
 \author{Peeter Joot}
-\date{ Jan 12, 2009.  Last Revision: $Date: 2009/01/14 04:42:27 $ }
+\date{ Jan 12, 2009.  Last Revision: $Date: 2009/01/15 05:32:41 $ }
 
 \begin{document}
 
@@ -425,6 +425,172 @@ However calculating this for $x=0$ gives zero and for $x=1$ gives $0.25$, wherea
 
 % google calculator:
 %((arctan(1+sqrt(2)) - arctan(1-sqrt(2)))/sqrt(2))/(pi sqrt(2))
+
+\section{ Inverse first order wave function. }
+
+This problem was to normalize 
+
+\begin{align*}
+\psi = \inv{x}e^{i\omega t}\quad x \in [1,2]
+\end{align*}
+
+and to calculate the probability to find the particle in $[1.5,2]$.
+
+\subsection{ normalization. }
+
+\begin{align*}
+\int \Abs{\phi}^2 dx 
+&= \int \inv{x^2} dx \\
+&= \inv{1} -\inv{2} \\
+&= \inv{2}
+\end{align*}
+%\int phi^2 = 1/2
+%\int 2 phi^2 = 1
+
+So our normalized wave function is
+
+\begin{align*}
+\psi = \frac{\sqrt{2}}{x}e^{i\omega t}
+\end{align*}
+
+\subsection{ probablility in a range. }
+
+By inspection this probability is
+\begin{align*}
+P(a,b) = {2}\left(\inv{a} - \inv{b}\right)
+\end{align*}
+
+So for $[1.5,2]$ we have
+
+\begin{align*}
+P = {2}\left(\frac{2}{3} - \inv{2}\right) = \inv{3} % 2(4/6 - 3/6) = 2/6
+\end{align*}
+
+\subsection{ expectation values. }
+
+\subsubsection{ position }
+Okay, those were pretty easy integration exersizes.  How about using these
+to verify the Hiesenberg uncertaintly principle.  That should be easy 
+enough with this simple wavefunction.
+
+\begin{align*}
+<x> &= \int_1^2 x \frac{2}{x^2} dx = 2 (\ln(2) - \ln(1)) = 2 \ln(2) \\
+<x^2> &= \int_1^2 x^2 \frac{2}{x^2} dx = 2 - 1 = 1 \\
+\end{align*}
+
+Using the formula for standard deviation on page 50 we have
+\begin{align*}
+\Delta x &= \sqrt{<x^2> - <x>^2} \\
+&= \sqrt{1 - (2 \ln(2))^2}
+\end{align*}
+
+which is a complex number?
+
+Let's go back to the statistical definition of standard deviation from school and see if this makes sense.
+
+\begin{align*}
+\sigma^2 
+&= E( x - \bar{x} )^2 \\
+&= \inv{N} \sum (x_i - \bar{x})^2 \\
+&= \inv{N} \sum \left({x_i}^2 - 2 x_i \bar{x} + {\bar{x}}^2\right) \\
+&= \inv{N} \sum {x_i}^2 - 2 {\bar{x}}^2 + \frac{N}{N} {\bar{x}}^2 \\
+&= \inv{N} \sum {x_i}^2 - {\bar{x}}^2 \\
+\end{align*}
+
+In the QM notation this is
+
+\begin{align*}
+(\Delta x)^2 &= <x^2> - {<x>}^2
+\end{align*}
+
+which is strictly positive.  Okay, so I must have a mistake above somewhere.
+
+Let's look at the expectation value of $x$.  Does $2 \ln(2) = 1.386$ make sense?  How about a discrete average that approximates it
+
+\begin{align*}
+\frac{2}{3}\left( 1 \frac{1}{1^2} + 1.5 \inv{1.5^2} + 2 \inv{2^2} \right) = \frac{13}{9} = 1.444
+\end{align*}
+
+Okay, this makes sense, and it doesn't make sense in the discrete approximation that $<x^2>$ could be lower, so that integration
+must be wrong.  Take $II$
+
+\begin{align*}
+<x^2> &= \int_1^2 x^2 \frac{2}{x^2} dx = {\left.2x\right\vert}_1^2 = 4 - 2 = 2 \\
+\end{align*}
+
+Okay, that's better ... dumb mistake. Our std deviation is therefore
+
+\begin{align*}
+\Delta x = \sqrt{2 - 4 (\ln(2))^2} \approx 2.80
+\end{align*}
+
+\subsubsection{ momentum }
+
+Now, how about the momentum variance?
+
+\begin{align*}
+<p> 
+&= -i \hbar \int_1^2 2 \inv{x} \left(\inv{x}\right)' dx \\
+&= 2 i \hbar \int_1^2 \inv{x^3} dx \\
+%&= - i \hbar \left(\inv{4} - \inv{1}\right) dx \\
+&= i \hbar \left(-\inv{4} + \inv{1}\right) dx \\
+&= \frac{3}{4} i \hbar
+\end{align*}
+
+\begin{align*}
+<p^2> 
+&= -\hbar^2 \int_1^2 2 \inv{x} \left(\inv{x}\right)'' dx \\
+&= -\hbar^2 \int_1^2 2 \inv{x} \left(-\inv{x^2}\right)' dx \\
+&= - 4 \hbar^2 \int_1^2 \inv{x^4} dx \\
+&= - \frac{4}{3} \hbar^2 \left( -\inv{8} + 1 \right) \\
+&= - \frac{7}{6} \hbar^2
+\end{align*}
+
+\begin{align*}
+\frac{<p^2>  - {<p>}^2 }{\hbar^2}
+&= \inv{2}\left(-\frac{7}{3} +\frac{9}{8}\right) \\
+&= -\frac{29}{48}
+\end{align*}
+
+This gives 
+
+\begin{align*}
+\Delta x \Delta p = i \hbar \sqrt{\frac{29}{24}(1 - 2 (\ln(2))^2) } \approx (0.217) i \hbar
+\end{align*}
+%sqrt((29/24) (1 - 2 (ln(2))^2))
+% 1/2 = 0.5
+
+We expect 
+\begin{align*}
+\Delta x \Delta p > \hbar/2
+\end{align*}
+
+and ended up with an imaginary value where the $\hbar$ factor is less than $0.5$.  Something's fishy here, and I
+don't think it's my algebra this time.
+
+How about
+\begin{align*}
+\frac{\Abs{<p^2>}  - \Abs{<p>}^2 }{\hbar^2}
+&= \inv{2}\left(\frac{7}{3} -\frac{9}{8}\right) \\
+&= \frac{29}{48}
+\end{align*}
+%7(8) - 3(9) = 29
+
+Not any different, except that the factor of $i$ vanishes.  Now the 
+\href{http://en.wikipedia.org/wiki/Uncertainty_principle#Matrix_mechanics}{wikipedia uncertainly article}
+presents this way differently.  How to reconsile the ideas here?
+
+\section{ Problem 4. }
+
+Unnormalized wavefunction is
+
+\begin{align*}
+\psi = \inv{x^2 + 9}
+\end{align*}
+
+Now, in the problem, the normalization is given and only the position expectation and variance is asked for.  This
+normalization factor is interesting to calculate however, since to do the contour integral for this one we have to deal
+with a double pole, and I'd also forgotten how to do those.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
