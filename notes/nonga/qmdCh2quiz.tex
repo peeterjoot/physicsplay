@@ -14,7 +14,7 @@
 
 \title{ Chapter 2 Quiz solutions for QM Demystified book. }
 \author{Peeter Joot}
-\date{ Jan 12, 2009.  Last Revision: $Date: 2009/01/15 05:32:41 $ }
+\date{ Jan 12, 2009.  Last Revision: $Date: 2009/01/16 05:16:19 $ }
 
 \begin{document}
 
@@ -466,6 +466,26 @@ So for $[1.5,2]$ we have
 P = {2}\left(\frac{2}{3} - \inv{2}\right) = \inv{3} % 2(4/6 - 3/6) = 2/6
 \end{align*}
 
+\subsection{ Probability current. }
+
+This wave function provides a super simple example to try a current
+calculation with.
+
+\begin{align*}
+J 
+&= \frac{\hbar}{2mi}\left(\psi^\conj\psi_x - \psi {\psi^\conj}_x \right) \\
+\end{align*}
+
+The time factor will cancel out, leaving 
+
+\begin{align*}
+J 
+&= \frac{\hbar}{2mi}\left(\psi\psi_x - \psi {\psi}_x \right) \\
+&= 0
+\end{align*}
+
+Okay, that's a too simple probability calculation exersize!  Not interesting.
+
 \subsection{ expectation values. }
 
 \subsubsection{ position }
@@ -588,9 +608,152 @@ Unnormalized wavefunction is
 \psi = \inv{x^2 + 9}
 \end{align*}
 
+\subsection{ Second order pole contour integral. }
+
 Now, in the problem, the normalization is given and only the position expectation and variance is asked for.  This
 normalization factor is interesting to calculate however, since to do the contour integral for this one we have to deal
 with a double pole, and I'd also forgotten how to do those.
+
+Suppose, again, that we have a regular function $f(z)$ in the neighbourhood
+of $z_0$.  We want to calculate the double pole integral at that point.
+
+\begin{align*}
+I = \oint \frac{f(z)}{(z-z_0)^2} dz
+\end{align*}
+
+Integration by parts looks like the way to go.
+
+\begin{align*}
+I 
+&= \oint \frac{f(z)}{(z-z_0)^2} dz \\
+&= \oint {f(z)}\left(\frac{-1}{z-z_0}\right)' dz \\
+&= \oint \left( \left(-\frac{f(z)}{z-z_0}\right)' +\frac{{f(z)}'}{z-z_0} \right) dz \\
+\end{align*}
+
+Now, for a circular contour around $z_0$, we have
+$z = z_0 + R e^{i\theta} = z_0 + R e^{i(\theta+2\pi)}$, so 
+
+\begin{align*}
+{\left.-\frac{f(z)}{z-z_0}\right\vert}_{z_0 + R e^{i\phi}}^{z_0 + R e^{i(\phi + 2\pi)}} 
+&= -\frac{f(z_0 + R e^{i\phi} - f(z_0 + R e^{i(\phi + 2\pi)}} e^{-i\phi} \\
+&= 0
+\end{align*}
+
+So the integral of the first term is zero, and we know how to deal with second provided the derivative is regular at the point of interest.  
+
+\begin{align*}
+\oint \frac{f(z)}{(z-z_0)^2} dz
+&= \oint \frac{{f(z)}'}{z-z_0} dz \\
+&= 2 \pi i {\left.f(z)'\right\vert}_{z=z_0}
+\end{align*}
+
+\subsection{ normalize. }
+
+Now, we are set to normalize the wave function.  We have a pole at $\pm 3i$
+
+\begin{align*}
+I 
+&= \int \Abs{\psi}^2  \\
+&= \int_{z=-\infty}^{\infty} dz \inv{(z - 3i)^2} \inv{(z + 3i)^2} \\
+\end{align*}
+
+Picking a semicircular arc we have
+
+\begin{align*}
+I + -2 \pi i {\left.\left(\inv{(z + 3i)^2}\right)'\right\vert}_{z=3i} = 0
+\end{align*}
+
+The integral is therefore
+\begin{align*}
+I 
+&= 2 \pi i (-2)\inv{(6i)^3} \\
+&= \pi \inv{54} \\
+\end{align*}
+%4/6 1/36
+%2/3 1/36
+%1/3 1/18
+%1/54
+
+and the normalized wave function is 
+
+\begin{align*}
+\psi = \sqrt{\frac{54}{\pi}}\inv{x^2 + 9}
+\end{align*}
+
+as given in the problem.
+
+\subsection{ expectation and variance values. }
+
+The expectation value for the position operator is just
+
+\begin{align*}
+<x> = \frac{54}{\pi} \int \frac{x}{(x^2 + 9)^2} dx = 0
+\end{align*}
+
+Since it is an odd function.  For the square we have
+
+\begin{align*}
+<x^2>
+&= \frac{54}{\pi} \int \frac{x^2}{(x^2 + 9)^2} dx \\
+&= \frac{54}{\pi} 2 \pi i {\left.\left(\frac{x^2}{(x + 3i)^2}\right)'\right\vert}_{3i} \\
+&= \cdots \quad \mbox{\text{some algebra}} \\
+&= 9
+\end{align*}
+
+Now, how about the momentum?  This one is odd too, and therefore zero
+\begin{align*}
+<p> = -i \hbar \frac{54}{\pi} \int \frac{1}{(x^2 + 9)} \frac{-2x}{(x^2 + 9)^2} dx = 0
+\end{align*}
+
+Last we have the squared momentum operator expectation
+\begin{align*}
+<p^2> 
+&= - \hbar^2 \frac{54}{\pi} \int \frac{1}{(x^2 + 9)} \left(\frac{-2x}{(x^2 + 9)^2}\right)' dx \\
+&= - \hbar^2 \frac{54}{\pi} \int \frac{1}{(x^2 + 9)} 
+\left(\frac{-2}{(x^2 + 9)^2} - {2x}\frac{-2 (2)(x^2+9)(2x)}{(x^2 + 9)^4} \right)
+dx \\
+&= - \hbar^2 \frac{54}{\pi} \int \frac{-2}{(x^2 + 9)^3} 
+\left(1 - {8x^2}\frac{1}{x^2 + 9} \right)
+dx \\
+&= - \hbar^2 \frac{54}{\pi} \int \frac{-2}{(x^2 + 9)^4} \left(9 - 7x^2 \right) dx \\
+&= 2 \hbar^2 \frac{54}{\pi} \int \frac{1}{(x - 3i)^4} \frac{1}{(x + 3i)^4} \left(9 - 7x^2 \right) dx \\
+\end{align*}
+
+Damn.  Now we need a fourth order pole (third derivative) residue.  This is getting messy.  Backing up one step to put
+things in a nice form for cheating with mathematica we have
+
+\begin{align*}
+<p^2> &= \hbar^2 \frac{108}{\pi} \int \frac{1}{(x^2 + 9)^4} \left(9 - 7x^2 \right) dx \\
+\end{align*}
+% \frac{1}{(x^2 + 9)^4} \left(9 - 7x^2 \right) dx \\
+% ==> 
+% (9 - 7x^2 )/((x^2 + 9)^4)
+
+and the cheat gives us
+
+\begin{align*}
+\int \frac{1}{(x^2 + 9)^4} \left(9 - 7x^2 \right) dx 
+&= \frac{-3 x (-729 + 24 x^2 + x^4) + (9 + x^2)^3 \tan^{-1}(x/3)}{1944 (9 + x^2)^3}
+\end{align*}
+
+The first term will drop out for the infinite range, leaving 
+
+\begin{align*}
+2\tan^{-1}(\infty/3)\inv{1944} = \pi \inv{1944}
+\end{align*}
+
+So, if all went well we have
+\begin{align*}
+<p^2> 
+&= \hbar^2 \frac{108}{\pi} \pi \inv{1944} \\
+&= \hbar^2 \inv{18}
+\end{align*}
+
+This provides another numerical verification of the Heisenberg uncertainty relation
+
+\begin{align*}
+\Delta p \Delta x &= \hbar \inv{3 \sqrt{2}} 3 \approx 0.7 \hbar > \hbar/2
+\end{align*}
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
