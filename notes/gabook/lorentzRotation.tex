@@ -1,6 +1,8 @@
 \documentclass{article}      % Specifies the document class
 
 \input{../peeters_macros.tex}
+%\DeclareMathOperator{\Transpose}{T}
+\newcommand{\T}[0]{\text{T}}
 
 %
 % The real thing:
@@ -15,7 +17,7 @@
 
 \maketitle{}
 
-\section{}
+\section{ Response to question about how to solve on PF. }
 
 
 I played with this a bit too, and am posting this after having done so (perhaps too late if it's considered solved by picking an appropriate axis of symmetry ).
@@ -27,16 +29,16 @@ http://www.damtp.cam.ac.uk/user/tong/dynamics/three.pdf
 ).  In that Lorentz Force Law, we essentially have an equation like the rigid body rotation equation $y' = \omega \times y + x_0'$, that resulted from $y = R x + x_0$.  That's a good hint about the antiderivative required for this Lorentz problem, so we have to go backwards from the cross product, and solve for the rotation:
  
 \[
-mv' = q/m ( E + v \times B )
+m \Bv' = \frac{q}{m} ( \BE + \Bv \times \BB )
 \]
 \[
-v = (q/m) E + \Omega v
+\Bv = \frac{q}{m} \BE + \Omega \Bv
 \]
 
 Here $\Omega$ is:
 
 \[
--q/m
+\frac{q}{m}
 \begin{bmatrix}
 0 & B_3 & -B_2 \\
 -B_3 & 0 & B_1 \\
@@ -47,29 +49,29 @@ B_2 & -B_1 & 0 \\
 Following the rigid body treatment (in Tong above) this antisymmetric matrix can be expressed in terms of a rotation matrix (ie: essentially it is a rotation matrix derivative with a rotation factored out of it).  So, let
 
 \[
-\Omega = R' R^T
+\Omega = R' R^\T
 \]
 
 , and use one more trick from the rigid body analysis:
 
 \[
-(RR^T)' = R' R^T + R {R'}^T = I' = 0
+(RR^\T)' = R' R^\T + R {R'}^\T = I' = 0
 \]
 
 \[
-v' - R' R^T v = v' + R {R'}^T v = R (R^T v' + {R'}^T v) 
+\Bv' - R' R^\T \Bv = \Bv' + R {R'}^\T \Bv = R (R^\T \Bv' + {R'}^\T \Bv) 
 \implies 
-R (R^T v)' = (q/m) E
+R (R^\T \Bv)' = \frac{q}{m} \BE
 \]
 
-Thus the solution can be written as two equations, one explicit for v, and one matrix differential equation to solve for R:
+Thus the solution can be written as two equations, one explicit for $\Bv$, and one matrix differential equation to solve for R:
 
 \[
-v = (q/m) E t + R^T C
+\Bv = \frac{q}{m} \BE t + R^\T \Bc
 \]
 
 \[
-R' = -(q/m)
+R' = \frac{q}{m}
 \begin{bmatrix}
 0 & B_3 & -B_2 \\
 -B_3 & 0 & B_1 \\
@@ -78,32 +80,32 @@ B_2 & -B_1 & 0 \\
 R
 \]
 
-====
+\section{}
 
-It appears that I also mixed up the sign of $\Omega$, and thus also the sign where I explicitly wrote out $R' = \Omega R$.  I haven't tried solving that last equation numerically (or analytically), but intuition says that diagonalization would do the trick.  ie: with a solution having a term of the form:
+I haven't tried solving that last equation numerically (or analytically), but intuition says that diagonalization would do the trick.  ie: with a solution having a term of the form:
 
 \[
 e^{Dt}
 \]
 
-I should try this with an example to see if it all holds together (at the bare minimum, if I did things right, it should work for B along the $\hat{z}$ axis;)
+I should try this with an example to see if it all holds together (at the bare minimum, if I did things right, it should work for $\BB$ along the $\zcap$ axis;)
 
 I've also found there's a treatment of this problem in the book Geometric Algebra for Physicists (chapter 5 on spacetime algebra).  So far reading that book, I'd temporarily skipped that chapter for some easier stuff in chapter 6 (vector calculus chapter).  Going back and reading just this fragment, I can't say I fully understand their treatment.  It's interesting looking though;)  They end up reformulating the equation as:
 
 \[
-m v' = q F \cdot v
+m \Bv' = q \BF \cdot \Bv
 \]
 
-where F is a combined electrodynamic field:
+where $\BF$ is a combined electrodynamic field:
 
 \[
-F = E + I B
+\BF = \BE + I \BB
 \]
 
 Then they introduce a rotor parameterization of the velocity, and an equation to solve for the rotor that's similar to the rotation matrix equation I had (factor of two difference because the rotor is a double sided half angle operator unlike the single sided rotation matrix) :
 
 \[
-R' = q/2m F R
+R' = \frac{q}{2m} \BF R
 \]
 
 There's a lot of similarities to what I hacked up, but it will probably take me a while before I can get to the point to digest and compare the two.   Their rotor equation ends up with terms for both electric field and magnetic field whereas mine is magnetic only, ... that makes more sense to me.  My rationalization for this is a guess that this is a side effect of the cross product Lorentz force "law" as stated above not being correct relativistically, whereas theirs is.
