@@ -15,7 +15,7 @@
 
 \title{ Time rate of change of the Poynting vector, and its conservation law. }
 \author{Peeter Joot}
-\date{ Jan 18, 2009.  Last Revision: $Date: 2009/01/18 22:43:07 $ }
+\date{ Jan 18, 2009.  Last Revision: $Date: 2009/01/19 04:52:59 $ }
 
 \begin{document}
 
@@ -320,6 +320,176 @@ if we can find exactly how these relate.
 %\BP = \BP ...
 
 TODO: ...
+
+\section{ Take II. }
+
+After going in circles and having a better idea now where I'm going, time to restart and make sure that errors aren't compounding.
+
+The starting point will be
+
+\begin{align*}
+\PD{t}{\BP} &= \inv{\mu_0} \left( \partial_0 (i c\BB) \cdot \BE  + (i c\BB) \cdot \partial_0 \BE  \right) \\
+\partial_0 \BE &= - \Bj/\epsilon_0 c - \spacegrad \cdot (ic \BB) \\
+\partial_0 (i c \BB) &= -\spacegrad \wedge \BE
+\end{align*}
+
+Assembling we have
+
+\begin{align*}
+\PD{t}{\BP} + \inv{\mu_0} \left( (\spacegrad \wedge \BE) \cdot \BE + (i c\BB) \cdot ( \Bj/\epsilon_0 c + \spacegrad \cdot (ic \BB) ) \right) &= 0 \\
+\end{align*}
+
+This is
+
+\begin{align*}
+\PD{t}{\BP} + \inv{\mu_0} \left( (\spacegrad \wedge \BE) \cdot \BE + (i c\BB) \cdot ( \spacegrad \cdot (ic \BB) ) \right) &= -c^2 (i \BB) \cdot \Bj.
+\end{align*}
+
+Now get rid of the pseudoscalars
+\begin{align*}
+(i \BB) \cdot \Bj
+&= \gpgradeone{ i \BB \Bj } \\
+&= i (\BB \wedge \Bj) \\
+&= i^2 (\BB \cross \Bj) \\
+&= -(\BB \cross \Bj) \\
+\end{align*}
+
+and 
+\begin{align*}
+(i c\BB) \cdot ( \spacegrad \cdot (ic \BB) )  
+&= c^2 \gpgradeone{ i \BB ( \spacegrad \cdot (i\BB) ) } \\
+&= c^2 \gpgradeone{ i \BB \gpgradeone{\spacegrad i\BB} } \\
+&= c^2 \gpgradeone{ i \BB i (\spacegrad \wedge \BB) } \\
+&= -c^2 \gpgradeone{ \BB (\spacegrad \wedge \BB) } \\
+&= -c^2 \BB \cdot (\spacegrad \wedge \BB) \\
+\end{align*}
+
+So we have
+\begin{align*}
+\PD{t}{\BP} - \inv{\mu_0} \left( \BE \cdot (\spacegrad \wedge \BE) +c^2 \BB \cdot (\spacegrad \wedge \BB) \right) &= c^2 (\BB \cross \Bj) \\
+\end{align*}
+
+Now we subtract $(\BE (\spacegrad \cdot \BE) + c^2 \BB (\spacegrad \cdot \BB))/\mu_0 = \BE \rho/\epsilon_0\mu_0$ from both sides yielding
+
+\begin{align*}
+\PD{t}{\BP} - \inv{\mu_0} \left( 
+\BE \cdot (\spacegrad \wedge \BE) + \BE (\spacegrad \cdot \BE) 
++ c^2 \BB \cdot (\spacegrad \wedge \BB) 
++ c^2 \BB (\spacegrad \cdot \BB)
+\right) &= -c^2 (\Bj \cross \BB + \rho \BE) \\
+\end{align*}
+
+Regrouping slightly 
+
+\begin{align*}
+\inv{c^2}\PD{t}{\BP} &+ (\Bj \cross \BB + \rho \BE) 
+= \\
+&{\epsilon_0} \left( 
+\BE \cdot (\spacegrad \wedge \BE) + \BE (\spacegrad \cdot \BE) 
++ c^2 \BB \cdot (\spacegrad \wedge \BB) 
++ c^2 \BB (\spacegrad \cdot \BB)
+\right) 
+\end{align*}
+
+Now, let's write the $\BE$ gradient terms here explicitly in coordinates.
+
+\begin{align*}
+\BE \cdot (\spacegrad \wedge \BE) + \BE (\spacegrad \cdot \BE) 
+&= \sigma_k \cdot (\sigma^m \wedge \sigma_n) E^k \partial_m E^n 
++ E^k \sigma_k \partial_m E^m \\
+&= 
+\delta_{k}^m \sigma_n E^k \partial_m E^n 
+-\delta_{kn} \sigma^m E^k \partial_m E^n 
++ E^k \sigma_k \partial_m E^m \\
+&= \sum_{k,m} \sigma_k \left( E^m \partial_m E^k -E^m \partial_k E^m +E^k \partial_m E^m \right) \\
+\end{align*}
+
+We could do the $\BB$ terms too, but they will have the same form.  Now \cite{schwartz1987pe} contains a relativistic treatment of
+the stress tensor that would take some notation study to digest, but the end result appears to have the divergence
+result that is desired.  It is a second rank tensor which probably explains the $\grad \cdot \sigma$ notation in wikipedia.
+
+For the $x$ coordinate of the $\PDi{t}{\BP}$ vector the book says we have a vector of the form
+
+\begin{align*}
+\BT_x = \inv{2}(E_x^2 - E_y^2 - E_z^2)\sigma_1 + E_x E_y \sigma_2 + E_x E_z \sigma_3
+\end{align*}
+
+and it looks like the divergence of this should give us our desired mess.  Let's try this, writing $k,m,n$ as distinct indexes.
+
+\begin{align*}
+\BT_k &= \inv{2}((E^k)^2 - (E^m)^2 - (E^n)^2)\sigma_k + E^k E^m \sigma_m + E^k E^n \sigma_n
+\end{align*}
+
+\begin{align*}
+\spacegrad \cdot \BT_k
+&= \inv{2} \partial_k ((E^k)^2 - (E^m)^2 - (E^n)^2) 
++ \partial_m (E^k E^m) 
++ \partial_n(E^k E^n) \\
+&= E^k \partial_k E^k 
+- E^m \partial_k E^m
+- E^n \partial_k E^n
++ E^k \partial_m E^m
++ E^m \partial_m E^k 
++ E^k \partial_n E^n
++ E^n \partial_n E^k \\
+&= 
+  E^k \partial_k E^k 
++ E^k \partial_m E^m
++ E^k \partial_n E^n \\
+&+ E^m \partial_m E^k  
+- E^m \partial_k E^m \\
+&+ E^n \partial_n E^k 
+- E^n \partial_k E^n
+\\
+\end{align*}
+
+Does this match?  Let's expand our $k$ term above to see if it looks the same.  That is
+
+\begin{align*}
+\sum_m (E^m \partial_m E^k -E^m \partial_k E^m +E^k \partial_m E^m) 
+&=
+E^k \partial_k E^k 
+-E^k \partial_k E^k 
++E^k \partial_k E^k \\
+&+E^m \partial_m E^k 
+-E^m \partial_k E^m 
++E^k \partial_m E^m \\
+&+E^n \partial_n E^k 
+-E^n \partial_k E^n 
++E^k \partial_n E^n \\
+&=
++E^k \partial_k E^k 
++E^k \partial_m E^m
++E^k \partial_n E^n \\
+&+E^m \partial_m E^k 
+-E^m \partial_k E^m \\
+&+E^n \partial_n E^k 
+-E^n \partial_k E^n \\
+\end{align*}
+
+Yeah!  Finally have a form of the momentum conservation equation that is strictly in terms of gradients and time partials.  Summarizing the results, this is
+
+\begin{align}
+\inv{c^2}\PD{t}{\BP} + \Bj \cross \BB + \rho \BE &= \sum_k \sigma_k \spacegrad \cdot \BT_k
+\end{align}
+
+Where
+\begin{align*}
+\sum_k \sigma_k \spacegrad \cdot \BT_k
+&=
+\epsilon_0 \left(
+\BE \cdot (\spacegrad \wedge \BE) + \BE (\spacegrad \cdot \BE) 
++ c^2 \BB \cdot (\spacegrad \wedge \BB) 
++ c^2 \BB (\spacegrad \cdot \BB) \right)
+\end{align*}
+
+For $\BT_k$ itself, with $k \ne m \ne n$ we have
+
+\begin{align*}
+\BT_k &= 
+\epsilon_0 \left( \inv{2}((E^k)^2 - (E^m)^2 - (E^n)^2)\sigma_k + E^k E^m \sigma_m + E^k E^n \sigma_n \right) \\
+&+\inv{\mu_0}\left(\inv{2}((B^k)^2 - (B^m)^2 - (B^n)^2)\sigma_k + B^k B^m \sigma_m + B^k B^n \sigma_n \right)
+\end{align*}
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
