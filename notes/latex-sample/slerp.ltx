@@ -1,0 +1,79 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+
+\DeclareMathOperator{\atan2}{atan2}
+
+\usepackage[bookmarks=true]{hyperref}
+
+%\usepackage{color,cite,graphicx}
+%   % use colour in the document, put your citations as [1-4]
+%   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+%   % graphics package. 
+%\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+%   % needed, but their inclusion can't do any damage
+%
+
+\title{ Rotor interpolation calculation. }
+\author{Peeter Joot}
+\date{ Nov 30, 2008.  Last Revision: $Date: 2009/01/19 17:40:49 $ }
+
+\begin{document}
+
+\maketitle{}
+
+%\tableofcontents
+%\section{}
+
+The aim is to compute the interpolating rotor $r$ that takes an object
+from one position to another in $n$ steps.
+Here the initial and final positions are given by two rotors $R_1$, and $R_2$
+like so
+
+\begin{align*}
+X_1 &= R_1 X {R_1}^\dagger \\
+X_2 &= R_2 X {R_2}^\dagger = r^n R_1 X {R_1}^\dagger {r^n}^\dagger
+\end{align*}
+
+So, writing 
+
+\begin{align*}
+%r^n R_1 = R_2 
+a = r^n = R_2 \inv{R_1} = \frac{R_2 {R_1}^\dagger}{R_1 {{R_1}^\dagger}} = \cos\theta + I \sin\theta
+\end{align*}
+
+So, 
+
+\begin{align*}
+\frac{\gpgradetwo{a}}{\gpgradezero{a}} &= 
+\frac{\gpgradetwo{a}}{\Abs{\gpgradetwo{a}}} \frac{\Abs{\gpgradetwo{a}}}{\gpgradezero{a}} \\
+&= I \tan\theta
+\end{align*}
+
+Therefore the interpolating rotor is:
+\begin{align*}
+I &= \frac{\gpgradetwo{a}}{\Abs{\gpgradetwo{a}}} \\
+\theta &= \atan2\left(\Abs{\gpgradetwo{a}}, \gpgradezero{a}\right) \\
+r &= \cos(\theta/n) + I \sin(\theta/n)
+\end{align*}
+
+In \cite{dorst2007gac}, equation $10.15$, they've got something like this
+for a fractional angle, but then say that they don't use that in software, 
+instead using $r$ directly, with a comment about designing more softisticated
+algorithms (bivector splines).  That spline comment in particular sounds
+interesting.  Sounds like the details on that are to be found in the journals
+mentioned in Further Reading section of chapter 10.
+
+%\begin{figure}[htp]
+%\centering
+%\includegraphics[totalheight=0.4\textheight]{picturepath}
+%\caption{My Caption}\label{fig:pictlabel}
+%\end{figure}
+%
+%... see figure \ref{fig:picturepath} ...
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
+
+\end{document}
