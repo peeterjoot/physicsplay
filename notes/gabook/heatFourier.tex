@@ -2,6 +2,7 @@
 
 \input{../peeters_macros.tex}
 \input{../peeters_macros2.tex}
+\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
 
 \usepackage[bookmarks=true]{hyperref}
 
@@ -15,7 +16,7 @@
 
 \title{ Fourier Series solution to Heat equation. }
 \author{Peeter Joot}
-\date{ Jan 19, 2009.  Last Revision: $Date: 2009/01/20 01:57:08 $ }
+\date{ Jan 19, 2009.  Last Revision: $Date: 2009/01/20 03:53:23 $ }
 
 \begin{document}
 
@@ -35,14 +36,18 @@ notes to firm things up.
 
 Since this heat equation
 
-\begin{align*}
+\begin{align}
 \grad^2 u = \kappa \partial_t u
-\end{align*}
+\end{align}
 
-is also the Schr\"{o}dinger equation once the 
-constant is fixed appropriately, we can also apply this to a particle
-constrained to a circle, and contrast this with Susskind's solution of the
-same problem (where he used the Fourier transform).
+is also the Schr\"{o}dinger equation for a free particle in one 
+dimension (once the 
+constant is fixed appropriately), we can also apply the Fourier
+technique to a particle
+constrained to a circle.  It would be interesting afterwards to 
+contrast this with Susskind's solution of the
+same problem (where he used the Fourier transform and algebraic techniques
+instead).
 
 \section{ Preliminaries. }
 
@@ -51,16 +56,157 @@ same problem (where he used the Fourier transform).
 Osgood wrote the heat equation for the ring as
 
 \begin{align*}
-\inv{2} u_xx = u_t
+\inv{2} u_{xx} = u_t
 \end{align*}
 
 where $x$ represented an angular position on the ring, and where
 he set the heat diffusion constant to $1/2$ for convienience.
 To apply this to the Schr\"{o}dinger equation retaining all the desired
 units we want to be a bit more careful, so let's start with the Laplacian
-in cylindrical polar coordinates.
+in polar coordinates.
+
+In polar coordinates our gradient is
+
+\begin{align*}
+\grad = \thetacap \inv{r} \PD{\theta}{} +\rcap \PD{r}{} 
+\end{align*}
+
+squaring this we have
+
+\begin{align*}
+\grad^2 = \grad \cdot \grad
+&= 
+\thetacap \inv{r} \PD{\theta}{} \cdot \left(\thetacap \inv{r} \PD{\theta}{}\right)
+ +
+\rcap \PD{r}{} \cdot \left(\rcap \PD{r}{} \right) \\
+&= 
+\frac{-1}{r^3} \PD{\theta}{r} \PD{\theta}{}
++\inv{r^2} \PDSq{\theta}{}
++ \PDSq{r}{}
+\\
+&= \inv{r^2} \PDSq{\theta}{} + \PDSq{r}{} \\
+\end{align*}
+
+So for the circularly constrained where $r$ is constant case we have simply
+
+\begin{align}
+\grad^2 = \inv{r^2} \PDSq{\theta}{}
+\end{align}
+
+and our heat equation to solve becomes
+
+\begin{align}
+\PDSq{\theta}{u(\theta, t)} = (r^2 \kappa) \PD{t}{u(\theta, t)}
+\end{align}
 
 \subsection{ Fourier series. }
+
+Now we also want Fourier series for a given period.  Assuming the absence of the "Rigor Police" as Osgood puts it
+we write for a periodic function $f(x)$ known on the interval $I = [a, a+T]$
+
+\begin{align*}
+f(x) = \sum c_k e^{2\pi i k x/T}
+\end{align*}
+
+\begin{align*}
+\int_{\partial I} f(x) e^{- 2 \pi i m x /T} 
+&= \sum c_k \int_{\partial I} e^{2\pi i (k -m) x/T} \\
+&= c_m T
+\end{align*}
+
+So our Fourier coefficient is
+\begin{align*}
+\hat{f}(k) = c_k = \inv{T} \int_{\partial I} f(x) e^{- 2 \pi i m x /T} 
+\end{align*}
+
+\section{ Solution of heat equation. } 
+
+\subsection{ Basic solution. }
+
+Now we are ready to solve the radial heat equation
+
+\begin{align}\label{eqn:heatRadial}
+u_{\theta\theta} = r^2 \kappa u_t,
+\end{align}
+
+by assuming a Fourier series solution.
+
+Suppose
+
+\begin{align*}
+u(\theta, t) 
+&= \sum c_m(t) e^{2 \pi i m \theta / T} \\
+&= \sum c_m(t) e^{i m \theta} \\
+\end{align*}
+
+Taking derivatives of this assumed solution we have
+\begin{align*}
+u_{\theta\theta} &= \sum (im)^2 c_m e^{i m \theta} \\
+u_{t} &= \sum c_m' e^{i m \theta}
+\end{align*}
+
+Substituting this back into \ref{eqn:heatRadial} we have
+
+\begin{align*}
+\sum - m^2 c_m e^{ i m \theta} = \sum c_m' r^2 \kappa e^{i m \theta}
+\end{align*}
+
+equating components we have 
+
+\begin{align*}
+c_m' = - \frac{m^2}{ r^2 \kappa } c_m 
+\end{align*}
+
+which is also just an exponential.
+
+\begin{align*}
+c_m = A_m e^{- \frac{m^2}{ r^2 \kappa } t }
+\end{align*}
+
+Reassembling we have the time variation of the solution now fixed and can write
+
+\begin{align}
+u(\theta, t) = \sum A_m e^{- \frac{m^2}{ r^2 \kappa } t } e^{i m \theta}
+\end{align}
+
+\subsection{ As initial value problem. }
+
+For the heat equation case, we can assume a known initial heat distribution 
+$f(\theta)$.
+For an initial time $t=0$ we can then write
+
+\begin{align*}
+u(\theta, 0) = \sum A_m e^{i m \theta} = f(\theta)
+\end{align*}
+
+This is just another Fourier series, with Fourier coefficients
+
+\begin{align*}
+A_m = \inv{2\pi} \int_{\partial I} f(v) e^{-i m v} dv
+\end{align*}
+
+Final reassembly of the results gives us
+
+\begin{align}
+u(\theta, t) = \sum e^{- \frac{m^2}{ r^2 \kappa } t } e^{i m \theta} \inv{2\pi} \int_{\partial I} f(v) e^{-i m v} dv
+\end{align}
+
+\subsection{ Convolution. }
+
+Osgood's next step, also with the rigor police in hiding was to exchange orders of integration and summation, to write
+
+\begin{align*}
+u(\theta, t) 
+&= 
+\int_{\partial I} f(v) dv \inv{2 \pi} \sum_m e^{- \frac{m^2}{ r^2 \kappa } t } e^{-i m (v -\theta)} \\
+\end{align*}
+
+Introducing a Green's function $g(v - \theta, t)$, we then have the complete solution in terms of convolution
+
+\begin{align*}
+g( v - \theta, t ) &= \inv{2 \pi} \sum_m e^{- \frac{m^2}{ r^2 \kappa } t } e^{-i m (v -\theta)} \\
+u(\theta, t) &= \int_{\partial I} f(v) g(v - \theta, t) dv 
+\end{align*}
 
 %\bibliographystyle{plainnat}
 %\bibliography{myrefs}
