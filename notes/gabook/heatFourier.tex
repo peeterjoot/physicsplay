@@ -3,6 +3,7 @@
 \input{../peeters_macros.tex}
 \input{../peeters_macros2.tex}
 \newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+\DeclareMathOperator{\sinc}{sinc}
 
 \usepackage[bookmarks=true]{hyperref}
 
@@ -16,7 +17,7 @@
 
 \title{ Fourier Series solution to Heat equation. }
 \author{Peeter Joot}
-\date{ Jan 19, 2009.  Last Revision: $Date: 2009/01/20 03:53:23 $ }
+\date{ Jan 19, 2009.  Last Revision: $Date: 2009/01/20 04:30:55 $ }
 
 \begin{document}
 
@@ -193,20 +194,54 @@ u(\theta, t) = \sum e^{- \frac{m^2}{ r^2 \kappa } t } e^{i m \theta} \inv{2\pi} 
 
 \subsection{ Convolution. }
 
-Osgood's next step, also with the rigor police in hiding was to exchange orders of integration and summation, to write
+Osgood's next step, also with the rigor police in hiding, was to exchange orders of integration and summation, to write
 
 \begin{align*}
 u(\theta, t) 
 &= 
-\int_{\partial I} f(v) dv \inv{2 \pi} \sum_m e^{- \frac{m^2}{ r^2 \kappa } t } e^{-i m (v -\theta)} \\
+\int_{\partial I} f(v) dv \inv{2 \pi} \sum_{m=-\infty}^{\infty} e^{- \frac{m^2}{ r^2 \kappa } t } e^{-i m (v -\theta)} \\
 \end{align*}
 
 Introducing a Green's function $g(v - \theta, t)$, we then have the complete solution in terms of convolution
 
-\begin{align*}
-g( v - \theta, t ) &= \inv{2 \pi} \sum_m e^{- \frac{m^2}{ r^2 \kappa } t } e^{-i m (v -\theta)} \\
+\begin{align}
+g( v - \theta, t ) &= \inv{2 \pi} \sum_{m=-\infty}^\infty e^{- \frac{m^2}{ r^2 \kappa } t } e^{-i m (v -\theta)} \\
 u(\theta, t) &= \int_{\partial I} f(v) g(v - \theta, t) dv 
+\end{align}
+
+Now, this Green's function is fairly interesting.  By summing over paired negative and positive indexes, we have a set of
+weighted Gaussians.
+
+\begin{align*}
+g( v - \theta, t ) &= \inv{2 \pi} + \sum_{m=1}^\infty \exp\left(- \frac{m^2}{ r^2 \kappa } t \right) \frac{\cos(m (v -\theta))}{\pi} \\
 \end{align*}
+
+Recalling that the delta function can be expressed as a limit of a $\sinc$ function, seeing something similar
+in this Green's function is not entirely unsuprising seeming.
+
+\section{ Wave equation. }
+
+The QM equation for a free particle is
+
+\begin{align*}
+-\frac{\hbar^2}{2m} \grad^2 \psi = i \hbar \partial_t \psi
+\end{align*}
+
+This has the same form of the heat equation, so for the free particle on a circle our wave equation is
+
+\begin{align*}
+\psi_{\theta\theta} = - \frac{2 m i r^2 }{\hbar} \partial_t \psi \quad \mbox{ ie: $\kappa = - 2 m i r^2 /\hbar$ }
+\end{align*}
+
+So, if the wave equation was known at an initial time $\psi(\theta, 0) = \phi(\theta)$, we therefore have by comparision the time 
+evolution of the particle's wave function is
+
+\begin{align*}
+g( w, t ) &= \inv{2 \pi} + \sum_{k=1}^\infty \exp\left(- \frac{i \hbar k^2 t}{ 2 m r^4 } \right) \frac{\cos(k w )}{\pi} \\
+\psi(\theta, t) &= \int_{\partial I} \phi(v) g(v - \theta, t) dv 
+\end{align*}
+
+TODO: contrast this to a Fourier transform solution.
 
 %\bibliographystyle{plainnat}
 %\bibliography{myrefs}
