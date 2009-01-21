@@ -18,7 +18,7 @@
 
 \title{ Fourier Series solution to Heat equation. }
 \author{Peeter Joot}
-\date{ Jan 19, 2009.  Last Revision: $Date: 2009/01/21 02:33:37 $ }
+\date{ Jan 19, 2009.  Last Revision: $Date: 2009/01/21 02:43:01 $ }
 
 \begin{document}
 
@@ -291,36 +291,50 @@ But can pull the derivative out of the integral for
 &= \PD{t}{\FF(u)} 
 \end{align*}
 
-So, now we have an equation relating time derivatives only of the fourier transformed solution to be determined.  And since the fourier transformed quantity is a function only of $s$, and $t$ the partial derivative can be replaced by a regular derivative.
-
-FIXME: justify better.  This is a fuzzy statement and doesn't seem right.
+So, now we have an equation relating time derivatives only of the Fourier transformed solution.
 
 Writing $\FF(u) = \hat{u}$ this is
 
+\begin{align}\label{eqn:toSolveFreq}
+( 2 \pi i s )^2 \hat{u} = \kappa \PD{t}{\hat{u}}
+\end{align}
+
+With a solution of
+
 \begin{align*}
-( 2 \pi i s )^2 \hat{u} = \kappa \frac{d \hat{u}}{dt}
+\hat{u} = A(s) e^{ -4 \pi^2 s^2 t/ \kappa }
 \end{align*}
 
-Or
-\begin{align*}
-\hat{u} = e^{ -4 \pi^2 s^2 t/ \kappa }
-\end{align*}
+Here $A(s)$ is an arbitrary constant in time integration constant, which may depend on $s$ since it is a solution of our simpler freqency domain partial differential equation
+\ref{eqn:toSolveFreq}.
 
 Performing an inverse transform to recover $u(x,t)$ we thus have
 
 \begin{align*}
 u(x,t) 
 &= \inv{\sqrt{2\pi}} \int \hat{u} e^{2 \pi i x s } ds  \\
-&= \inv{\sqrt{2\pi}} \int e^{ -4 \pi^2 s^2 t/ \kappa } e^{2 \pi i x s } ds  \\
+&= \inv{\sqrt{2\pi}} \int A(s) e^{ -4 \pi^2 s^2 t/ \kappa } e^{2 \pi i x s } ds  \\
 \end{align*}
 
 Now, how about initial conditions.  Suppose we have $u(x,0) = w(x)$, then 
 
 \begin{align*}
-w(x) &= \inv{\sqrt{2\pi}} \int e^{2 \pi i x s } ds  \\
+w(x) &= \inv{\sqrt{2\pi}} \int A(s) e^{2 \pi i x s } ds \\
 \end{align*}
 
-What to do with this?
+Which is just an inverse Fourier transform in terms of the integration ``constant'' $A(s)$.  We can therefore write the $A(s)$ in terms of the
+initial time domain conditions.
+
+\begin{align*}
+A(s) &= \inv{\sqrt{2\pi}} \int w(x) e^{-2 \pi i s x } dx \\
+&= \hat{w}(s)
+\end{align*}
+
+and finally have a complete solution of the one dimensional Heat equation (or wave equation).  That is
+
+\begin{align*}
+u(x,t) &= \inv{\sqrt{2\pi}} \int \hat{w}(s) e^{ -4 \pi^2 s^2 t/ \kappa } e^{2 \pi i x s } ds  \\
+\end{align*}
 
 %\bibliographystyle{plainnat}
 %\bibliography{myrefs}
