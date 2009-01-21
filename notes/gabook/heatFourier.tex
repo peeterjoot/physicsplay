@@ -4,6 +4,7 @@
 \input{../peeters_macros2.tex}
 \newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
 \DeclareMathOperator{\sinc}{sinc}
+\newcommand{\FF}[0]{\mathcal{F}}
 
 \usepackage[bookmarks=true]{hyperref}
 
@@ -17,7 +18,7 @@
 
 \title{ Fourier Series solution to Heat equation. }
 \author{Peeter Joot}
-\date{ Jan 19, 2009.  Last Revision: $Date: 2009/01/20 04:40:26 $ }
+\date{ Jan 19, 2009.  Last Revision: $Date: 2009/01/21 02:33:37 $ }
 
 \begin{document}
 
@@ -241,7 +242,85 @@ g( w, t ) &= \inv{2 \pi} + \sum_{k=1}^\infty \exp\left(- \frac{i \hbar k^2 t}{ 2
 \psi(\theta, t) &= \int_{\partial I} \phi(v) g(v - \theta, t) dv 
 \end{align*}
 
-TODO: contrast this to a Fourier transform solution.  Also write this in terms of circular angular momentum since that appears natually in the Green's function.
+%TODO: contrast this to a Fourier transform solution.  Also write this in terms of circular angular momentum since that appears natually in the Green's function.
+
+\section{ Fourier transform solution. }
+
+% also see example (brief on details)
+%\href{http://zakuski.utsa.edu/~gokhman/ftp//courses/notes/heat.pdf}{ example of Fourier tx solution. }
+Now, lets try this one dimensional heat problem with a Fourier transform instead to compare.  Here we don't try to start with an
+assumed solution, but instead take the Fourier transform of both sides of the equation directly.
+
+\begin{align*}
+\FF(u_{xx}) = \kappa \FF(u_t)
+\end{align*}
+
+Let's start with the left hand side, where we can evaluate by integrating by parts
+
+\begin{align*}
+\FF(u_{xx}) 
+&= \inv{\sqrt{2\pi}} \int u_{xx}(x, t) e^{- 2 \pi i s x } dx \\
+&= \inv{\sqrt{2\pi}} \int \PD{x}{u_x(x, t)} e^{- 2 \pi i s x } dx \\
+&= \inv{\sqrt{2\pi}} 
+\left(
+{\left. u_x(x, t) e^{- 2 \pi i s x } \right\vert}_{x= -\infty}^\infty
+-( - 2 \pi i s ) \int u_x(x, t) e^{- 2 \pi i s x } dx 
+\right) \\
+\end{align*}
+
+So if we assume (or require) that the derivative of our unknown function $u$ is zero at infinity, and then similarily
+require the function itself to be zero there, we have
+
+\begin{align*}
+\FF(u_{xx}) 
+&= \inv{\sqrt{2\pi}} ( 2 \pi i s ) \int \PD{x}{u_x(x, t)} e^{- 2 \pi i s x } dx  \\
+&= \inv{\sqrt{2\pi}} ( 2 \pi i s )^2 \int u(x, t) e^{- 2 \pi i s x } dx  \\
+&= ( 2 \pi i s )^2 \FF(u)
+\end{align*}
+
+Now, for the time derivative.  We want
+
+\begin{align*}
+\FF(u_t) &= \inv{\sqrt{2\pi}} \int u_t(x, t) e^{- 2 \pi i s x } dx \\
+\end{align*}
+
+But can pull the derivative out of the integral for
+\begin{align*}
+\FF(u_t)
+&= \PD{t}{} \left(\inv{\sqrt{2\pi}} \int u(x, t) e^{- 2 \pi i s x } dx \right) \\
+&= \PD{t}{\FF(u)} 
+\end{align*}
+
+So, now we have an equation relating time derivatives only of the fourier transformed solution to be determined.  And since the fourier transformed quantity is a function only of $s$, and $t$ the partial derivative can be replaced by a regular derivative.
+
+FIXME: justify better.  This is a fuzzy statement and doesn't seem right.
+
+Writing $\FF(u) = \hat{u}$ this is
+
+\begin{align*}
+( 2 \pi i s )^2 \hat{u} = \kappa \frac{d \hat{u}}{dt}
+\end{align*}
+
+Or
+\begin{align*}
+\hat{u} = e^{ -4 \pi^2 s^2 t/ \kappa }
+\end{align*}
+
+Performing an inverse transform to recover $u(x,t)$ we thus have
+
+\begin{align*}
+u(x,t) 
+&= \inv{\sqrt{2\pi}} \int \hat{u} e^{2 \pi i x s } ds  \\
+&= \inv{\sqrt{2\pi}} \int e^{ -4 \pi^2 s^2 t/ \kappa } e^{2 \pi i x s } ds  \\
+\end{align*}
+
+Now, how about initial conditions.  Suppose we have $u(x,0) = w(x)$, then 
+
+\begin{align*}
+w(x) &= \inv{\sqrt{2\pi}} \int e^{2 \pi i x s } ds  \\
+\end{align*}
+
+What to do with this?
 
 %\bibliographystyle{plainnat}
 %\bibliography{myrefs}
