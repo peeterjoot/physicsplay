@@ -5,6 +5,7 @@
 \newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
 \DeclareMathOperator{\sinc}{sinc}
 \newcommand{\FF}[0]{\mathcal{F}}
+\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
 
 \usepackage[bookmarks=true]{hyperref}
 
@@ -18,7 +19,7 @@
 
 \title{ Fourier Series solution to Heat equation. }
 \author{Peeter Joot}
-\date{ Jan 19, 2009.  Last Revision: $Date: 2009/01/21 02:43:01 $ }
+\date{ Jan 19, 2009.  Last Revision: $Date: 2009/01/21 03:32:17 $ }
 
 \begin{document}
 
@@ -111,14 +112,14 @@ f(x) = \sum c_k e^{2\pi i k x/T}
 \end{align*}
 
 \begin{align*}
-\int_{\partial I} f(x) e^{- 2 \pi i m x /T} 
-&= \sum c_k \int_{\partial I} e^{2\pi i (k -m) x/T} \\
-&= c_m T
+\int_{\partial I} f(x) e^{- 2 \pi i n x /T} 
+&= \sum c_k \int_{\partial I} e^{2\pi i (k -n) x/T} \\
+&= c_n T
 \end{align*}
 
 So our Fourier coefficient is
 \begin{align*}
-\hat{f}(k) = c_k = \inv{T} \int_{\partial I} f(x) e^{- 2 \pi i m x /T} 
+\hat{f}(n) = c_n = \inv{T} \int_{\partial I} f(x) e^{- 2 \pi i n x /T} 
 \end{align*}
 
 \section{ Solution of heat equation. } 
@@ -137,38 +138,38 @@ Suppose
 
 \begin{align*}
 u(\theta, t) 
-&= \sum c_m(t) e^{2 \pi i m \theta / T} \\
-&= \sum c_m(t) e^{i m \theta} \\
+&= \sum c_n(t) e^{2 \pi i n \theta / T} \\
+&= \sum c_n(t) e^{i n \theta} \\
 \end{align*}
 
 Taking derivatives of this assumed solution we have
 \begin{align*}
-u_{\theta\theta} &= \sum (im)^2 c_m e^{i m \theta} \\
-u_{t} &= \sum c_m' e^{i m \theta}
+u_{\theta\theta} &= \sum (i n)^2 c_n e^{i n \theta} \\
+u_{t} &= \sum c_n' e^{i n \theta}
 \end{align*}
 
 Substituting this back into \ref{eqn:heatRadial} we have
 
 \begin{align*}
-\sum - m^2 c_m e^{ i m \theta} = \sum c_m' r^2 \kappa e^{i m \theta}
+\sum - n^2 c_n e^{ i n \theta} = \sum c_n' r^2 \kappa e^{i n \theta}
 \end{align*}
 
 equating components we have 
 
 \begin{align*}
-c_m' = - \frac{m^2}{ r^2 \kappa } c_m 
+c_n' = - \frac{n^2}{ r^2 \kappa } c_n 
 \end{align*}
 
 which is also just an exponential.
 
 \begin{align*}
-c_m = A_m e^{- \frac{m^2}{ r^2 \kappa } t }
+c_n = A_n \exp\left(- \frac{n^2}{ r^2 \kappa } t \right)
 \end{align*}
 
 Reassembling we have the time variation of the solution now fixed and can write
 
 \begin{align}
-u(\theta, t) = \sum A_m e^{- \frac{m^2}{ r^2 \kappa } t } e^{i m \theta}
+u(\theta, t) = \sum A_n \exp\left(- \frac{n^2}{ r^2 \kappa } t + i n \theta\right)
 \end{align}
 
 \subsection{ As initial value problem. }
@@ -178,19 +179,19 @@ $f(\theta)$.
 For an initial time $t=0$ we can then write
 
 \begin{align*}
-u(\theta, 0) = \sum A_m e^{i m \theta} = f(\theta)
+u(\theta, 0) = \sum A_n e^{i n \theta} = f(\theta)
 \end{align*}
 
 This is just another Fourier series, with Fourier coefficients
 
 \begin{align*}
-A_m = \inv{2\pi} \int_{\partial I} f(v) e^{-i m v} dv
+A_n = \inv{2\pi} \int_{\partial I} f(v) e^{-i n v} dv
 \end{align*}
 
 Final reassembly of the results gives us
 
 \begin{align}
-u(\theta, t) = \sum e^{- \frac{m^2}{ r^2 \kappa } t } e^{i m \theta} \inv{2\pi} \int_{\partial I} f(v) e^{-i m v} dv
+u(\theta, t) = \sum \exp\left(- \frac{n^2}{ r^2 \kappa } t + i n \theta\right) \inv{2\pi} \int_{\partial I} f(v) e^{-i n v} dv
 \end{align}
 
 \subsection{ Convolution. }
@@ -200,13 +201,13 @@ Osgood's next step, also with the rigor police in hiding, was to exchange orders
 \begin{align*}
 u(\theta, t) 
 &= 
-\int_{\partial I} f(v) dv \inv{2 \pi} \sum_{m=-\infty}^{\infty} e^{- \frac{m^2}{ r^2 \kappa } t } e^{-i m (v -\theta)} \\
+\int_{\partial I} f(v) dv \inv{2 \pi} \sum_{n=-\infty}^{\infty} \exp\left(- \frac{n^2}{ r^2 \kappa } t -i n (v -\theta)\right) \\
 \end{align*}
 
-Introducing a Green's function $g(v - \theta, t)$, we then have the complete solution in terms of convolution
+Introducing a Green's function $g(v, t)$, we then have the complete solution in terms of convolution
 
-\begin{align}
-g( v - \theta, t ) &= \inv{2 \pi} \sum_{m=-\infty}^\infty e^{- \frac{m^2}{ r^2 \kappa } t } e^{-i m (v -\theta)} \\
+\begin{align}\label{eqn:seriesGreens}
+g( v , t ) &= \inv{2 \pi} \sum_{n=-\infty}^\infty \exp\left(- \frac{n^2}{ r^2 \kappa } t -i n v \right) \\
 u(\theta, t) &= \int_{\partial I} f(v) g(v - \theta, t) dv 
 \end{align}
 
@@ -214,7 +215,7 @@ Now, this Green's function is fairly interesting.  By summing over paired negati
 weighted Gaussians.
 
 \begin{align*}
-g( v - \theta, t ) &= \inv{2 \pi} + \sum_{m=1}^\infty \exp\left(- \frac{m^2}{ r^2 \kappa } t \right) \frac{\cos(m (v -\theta))}{\pi} \\
+g( v , t ) &= \inv{2 \pi} + \sum_{n=1}^\infty \exp\left(- \frac{n^2}{ r^2 \kappa } t \right) \frac{\cos(n v )}{\pi} \\
 \end{align*}
 
 Recalling that the delta function can be expressed as a limit of a $\sinc$ function, seeing something similar
@@ -224,21 +225,20 @@ in this Green's function is not entirely unsuprising seeming.
 
 The QM equation for a free particle is
 
-\begin{align*}
+\begin{align}\label{eqn:schro}
 -\frac{\hbar^2}{2m} \grad^2 \psi = i \hbar \partial_t \psi
-\end{align*}
+\end{align}
 
 This has the same form of the heat equation, so for the free particle on a circle our wave equation is
 
 \begin{align*}
-\psi_{\theta\theta} = - \frac{2 m i r^2 }{\hbar} \partial_t \psi \quad \mbox{ ie: $r^2 \kappa = - 2 m i /\hbar$ }
+\psi_{\theta\theta} = - \frac{2 m i r^2 }{\hbar} \partial_t \psi \quad \mbox{ ie: $\kappa = - 2 m i /\hbar$ }
 \end{align*}
 
-So, if the wave equation was known at an initial time $\psi(\theta, 0) = \phi(\theta)$, we therefore have by comparision the time 
-evolution of the particle's wave function is
+So, if the wave equation was known at an initial time $\psi(\theta, 0) = \phi(\theta)$, we therefore have by comparision the time evolution of the particle's wave function is
 
 \begin{align*}
-g( w, t ) &= \inv{2 \pi} + \sum_{k=1}^\infty \exp\left(- \frac{i \hbar k^2 t}{ 2 m r^2 } \right) \frac{\cos(k w )}{\pi} \\
+g( w, t ) &= \inv{2 \pi} + \sum_{n=1}^\infty \exp\left(- \frac{i \hbar n^2 t}{ 2 m r^2 } \right) \frac{\cos(n w )}{\pi} \\
 \psi(\theta, t) &= \int_{\partial I} \phi(v) g(v - \theta, t) dv 
 \end{align*}
 
@@ -259,12 +259,12 @@ Let's start with the left hand side, where we can evaluate by integrating by par
 
 \begin{align*}
 \FF(u_{xx}) 
-&= \inv{\sqrt{2\pi}} \int u_{xx}(x, t) e^{- 2 \pi i s x } dx \\
-&= \inv{\sqrt{2\pi}} \int \PD{x}{u_x(x, t)} e^{- 2 \pi i s x } dx \\
+&= \inv{\sqrt{2\pi}} \IIinf u_{xx}(x, t) e^{- 2 \pi i s x } dx \\
+&= \inv{\sqrt{2\pi}} \IIinf \PD{x}{u_x(x, t)} e^{- 2 \pi i s x } dx \\
 &= \inv{\sqrt{2\pi}} 
 \left(
 {\left. u_x(x, t) e^{- 2 \pi i s x } \right\vert}_{x= -\infty}^\infty
--( - 2 \pi i s ) \int u_x(x, t) e^{- 2 \pi i s x } dx 
+-( - 2 \pi i s ) \IIinf u_x(x, t) e^{- 2 \pi i s x } dx 
 \right) \\
 \end{align*}
 
@@ -273,21 +273,21 @@ require the function itself to be zero there, we have
 
 \begin{align*}
 \FF(u_{xx}) 
-&= \inv{\sqrt{2\pi}} ( 2 \pi i s ) \int \PD{x}{u_x(x, t)} e^{- 2 \pi i s x } dx  \\
-&= \inv{\sqrt{2\pi}} ( 2 \pi i s )^2 \int u(x, t) e^{- 2 \pi i s x } dx  \\
+&= \inv{\sqrt{2\pi}} ( 2 \pi i s ) \IIinf \PD{x}{u_x(x, t)} e^{- 2 \pi i s x } dx  \\
+&= \inv{\sqrt{2\pi}} ( 2 \pi i s )^2 \IIinf u(x, t) e^{- 2 \pi i s x } dx  \\
 &= ( 2 \pi i s )^2 \FF(u)
 \end{align*}
 
 Now, for the time derivative.  We want
 
 \begin{align*}
-\FF(u_t) &= \inv{\sqrt{2\pi}} \int u_t(x, t) e^{- 2 \pi i s x } dx \\
+\FF(u_t) &= \inv{\sqrt{2\pi}} \IIinf u_t(x, t) e^{- 2 \pi i s x } dx \\
 \end{align*}
 
 But can pull the derivative out of the integral for
 \begin{align*}
 \FF(u_t)
-&= \PD{t}{} \left(\inv{\sqrt{2\pi}} \int u(x, t) e^{- 2 \pi i s x } dx \right) \\
+&= \PD{t}{} \left(\inv{\sqrt{2\pi}} \IIinf u(x, t) e^{- 2 \pi i s x } dx \right) \\
 &= \PD{t}{\FF(u)} 
 \end{align*}
 
@@ -312,29 +312,62 @@ Performing an inverse transform to recover $u(x,t)$ we thus have
 
 \begin{align*}
 u(x,t) 
-&= \inv{\sqrt{2\pi}} \int \hat{u} e^{2 \pi i x s } ds  \\
-&= \inv{\sqrt{2\pi}} \int A(s) e^{ -4 \pi^2 s^2 t/ \kappa } e^{2 \pi i x s } ds  \\
+&= \inv{\sqrt{2\pi}} \IIinf \hat{u} e^{2 \pi i x s } ds  \\
+&= \inv{\sqrt{2\pi}} \IIinf A(s) e^{ -4 \pi^2 s^2 t/ \kappa } e^{2 \pi i x s } ds  \\
 \end{align*}
 
 Now, how about initial conditions.  Suppose we have $u(x,0) = w(x)$, then 
 
 \begin{align*}
-w(x) &= \inv{\sqrt{2\pi}} \int A(s) e^{2 \pi i x s } ds \\
+w(x) &= \inv{\sqrt{2\pi}} \IIinf A(s) e^{2 \pi i x s } ds \\
 \end{align*}
 
 Which is just an inverse Fourier transform in terms of the integration ``constant'' $A(s)$.  We can therefore write the $A(s)$ in terms of the
 initial time domain conditions.
 
 \begin{align*}
-A(s) &= \inv{\sqrt{2\pi}} \int w(x) e^{-2 \pi i s x } dx \\
+A(s) &= \inv{\sqrt{2\pi}} \IIinf w(x) e^{-2 \pi i s x } dx \\
 &= \hat{w}(s)
 \end{align*}
 
-and finally have a complete solution of the one dimensional Heat equation (or wave equation).  That is
+and finally have a complete solution of the one dimensional Heat equation.  That is
 
 \begin{align*}
-u(x,t) &= \inv{\sqrt{2\pi}} \int \hat{w}(s) e^{ -4 \pi^2 s^2 t/ \kappa } e^{2 \pi i x s } ds  \\
+u(x,t) &= \inv{\sqrt{2\pi}} \IIinf \hat{w}(s) e^{ -4 \pi^2 s^2 t/ \kappa } e^{2 \pi i x s } ds  \\
 \end{align*}
+
+\subsection{ With Green's function? }
+
+If we put in the integral for $\hat{w}(s)$ explicitly and switch the order as was done with the Fourier series will we get a similar result?   Let's try
+
+\begin{align*}
+u(x,t) 
+&= \inv{\sqrt{2\pi}} \IIinf \left( \inv{\sqrt{2\pi}} \IIinf w(u) e^{-2 \pi i s u } du \right) e^{ -4 \pi^2 s^2 t/ \kappa } e^{2 \pi i x s } ds  \\
+&= \inv{\sqrt{2\pi}} \IIinf du w(u) \inv{\sqrt{2\pi}} \IIinf e^{ -4 \pi^2 s^2 t/ \kappa } e^{2 \pi i (x - u) s } ds  \\
+\end{align*}
+
+Cool.  So, with the introduction of a Green's function $g(w,t)$ for the fundamental solution of the heat equation, we therefore have
+our solution in terms of convolution with the initial conditions.  It doesn't get any more general than this!
+
+\begin{align}
+g(w,t) &= \inv{{2\pi}} \IIinf \exp\left( -\frac{4 \pi^2 s^2 t}{\kappa} + 2 \pi i w s \right) ds \\
+u(x,t) &= \IIinf w(u) g( x - u, t) du
+\end{align}
+
+Compare this to \ref{eqn:seriesGreens}, the solution in terms of Fourier series.  The form is almost identical, but the requirement for periodicity has been removed by switch to the continuous frequency domain!
+
+\subsection{ Wave equation. }
+
+With only a change of variables, setting $\kappa = - 2 m i /\hbar$ we have the general solution to the one dimensional zero potential wave equation 
+\ref{eqn:schro}
+in terms of an initial wave function.
+
+Our solution is 
+
+\begin{align}
+g(w,t) &= \inv{{2\pi}} \IIinf \exp\left( 2 \pi i s \left(w -\frac{\pi s t \hbar}{m} \right)\right) ds \\
+u(x,t) &= \IIinf w(u) g( x - u, t) du
+\end{align}
 
 %\bibliographystyle{plainnat}
 %\bibliography{myrefs}
