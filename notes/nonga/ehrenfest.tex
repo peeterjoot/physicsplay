@@ -2,6 +2,7 @@
 
 \input{../peeters_macros.tex}
 \input{../peeters_macros2.tex}
+\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
 
 \usepackage[bookmarks=true]{hyperref}
 
@@ -15,7 +16,7 @@
 
 \title{ Ehrenfest's theorem. }
 \author{Peeter Joot}
-\date{ Jan 22, 2009.  Last Revision: $Date: 2009/01/23 02:31:20 $ }
+\date{ Jan 22, 2009.  Last Revision: $Date: 2009/01/23 03:18:24 $ }
 
 \begin{document}
 
@@ -119,7 +120,7 @@ recovers equation \ref{eqn:hermitian1}
 
 Here braces have been used to express the limitation of the scope of the action of the operator.
 
-One last way to express this is that one can say that a Hermitian operator when put 
+Another way to express this is that one can say that a Hermitian operator when put 
 in its wave function sandwhich has a 
 conjugate action acting to the left on the conjugate wave function and a non-conjugate
 action to the right.  This allows for a final notation nicety, where one can omit the 
@@ -133,9 +134,26 @@ or in terms of right and left operator notation the equivalent
 \int \psi^\conj (A \psi) \equiv \int \psi^\conj A \psi \equiv \int (\psi A)^\conj \psi
 \end{align*}
 
-It is probably also worth noting that both 
-the position and momentum operators as defined above are Hermitian.  This is 
-straightforward to show.
+%And finally, there is one last way to express this the concept of Hermitian.
+%We have our definition of a left acting operator
+%
+%\begin{align*}
+%(\psi A)^\conj = A^\conj \psi^\conj
+%\end{align*}
+%
+%And can make the observation that conjugation of a product is the 
+%product of the conjugates
+%\begin{align*}
+%(\psi A)^\conj = \psi^\conj A^\conj
+%\end{align*}
+%
+%So we must also have $A = A^\conj$ for a Hermitian operator.  
+% p^conj = +i\hbar d/dx \ne -ihbar d/dx ?
+
+%It is probably also worth noting that both 
+%the position and momentum operators as defined above are Hermitian.  This is 
+%straightforward to show.
+% NOPE: p^2 is Hermitian, not p.
 
 \subsection{ Variance and Heisenberg principle. }
 
@@ -193,8 +211,41 @@ Diving straight in we have
 \begin{align*}
 \PD{t}{<x>}
 &= \PD{t}{} \left( \int \psi^\conj x \psi \right) \\
-&= ...
+&= \int \PD{t}{\psi^\conj} x \psi + \int \psi^\conj x \PD{t}{\psi} 
 \end{align*}
+
+Now, here the Hamiltonian can be introduced, replacing the time derivatives.
+
+We have
+\begin{align*}
+\PD{t}{\psi} &= -\frac{i}{\hbar} H \psi \\
+\end{align*}
+
+So we have
+\begin{align*}
+\PD{t}{<x>}
+&= -\frac{i}{\hbar} \int H {\psi^\conj} x \psi - \frac{i}{\hbar}\int \psi^\conj x H {\psi} 
+\end{align*}
+
+With the Schr\"{o}dinger Hamiltonian we have
+
+\begin{align*}
+H \psi^\conj &= - \frac{\hbar^2}{2m} \PDSq{x}{\psi^\conj} + V\psi^\conj \\
+H \psi &= - \frac{\hbar^2}{2m} \PDSq{x}{\psi} + V\psi \\
+\end{align*}
+
+Combining these we have
+\begin{align*}
+\PD{t}{<x>}
+&= 
+-\frac{i}{\hbar} \int \left( - \frac{\hbar^2}{2m} \PDSq{x}{\psi^\conj} + V\psi^\conj \right) x \psi 
+-\frac{i}{\hbar} \int \psi^\conj x \left(- \frac{\hbar^2}{2m} \PDSq{x}{\psi} + V\psi \right) \\
+&= \frac{i\hbar}{2m} \int \PDSq{x}{\psi^\conj} x \psi + \psi^\conj x \PDSq{x}{\psi}  \\
+&= \frac{i\hbar}{2m} \int \PDSq{x}{\psi^\conj} x \psi + \psi^\conj \left(x \PDSq{x}{}\right) {\psi}  \\
+\end{align*}
+
+Now on the right hand side here we can factor a particular operator $x \partial^2/{\partial x^2}$ into the sandwich, but how about the left
+hand side.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
