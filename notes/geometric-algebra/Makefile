@@ -206,6 +206,26 @@ skipit += ../spin/spin.pdf
 ordered += ../qm/fourier_tx.pdf
 ordered += ../qm/sch_current.pdf
 
+ordered += ../dynamics/radial.pdf
+
+# in progress (close to 1/2 way).
+ordered += ../qm/qmd_ch2quiz.pdf
+
+skipit += ../lut/EFE.pdf
+skipit += ../geometric-algebra/review_alan_gabook.pdf
+
+skipit += ../geometric-algebra/review_alan_gabook_ch4.pdf
+ordered += ../geometric-algebra/two_ninety_rotations.pdf
+
+ordered += ../geometric-algebra/poynting_rate.pdf
+
+skipit += ../latex-sample/slerp.pdf
+skipit += ../latex-sample/template.pdf
+
+ordered += ../qm/heat_fourier.pdf
+ordered += ../qm/fourier_notation.pdf
+ordered += ../qm/ehrenfest.pdf
+
 # Rules:
 #-----------------------------------------------------
 semiordered := $(ordered) $(unordered)
