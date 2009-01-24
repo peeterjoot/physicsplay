@@ -16,7 +16,7 @@
 
 \title{ Expanded notes on Pauli's QM intro from "Wave Mechanics". }
 \author{Peeter Joot}
-\date{ Jan 24, 2009.  Last Revision: $Date: 2009/01/24 18:13:26 $ }
+\date{ Jan 24, 2009.  Last Revision: $Date: 2009/01/24 22:16:14 $ }
 
 \begin{document}
 
@@ -47,20 +47,20 @@ text.
 
 Equation $1.4$ is the famous energy and momentum equations
 
-\begin{align*}
+\begin{align}\label{eqn:p1_4}
 E &= \frac{ m c^2 }{\sqrt{1 - \Bv^2/c^2}} \\
 \Bp &= \frac{ m \Bv }{\sqrt{1 - \Bv^2/c^2}} \\
-\end{align*}
+\end{align}
 
 These pair of these quantities is often now expressed as a four vector in various ways
 
 \begin{align*}
-p &= (\frac{E}{c}, \Bp \gamma_0) \\
+p &= \left(\frac{E}{c}, \Bp \right) \\
 p &= \frac{E}{c} \gamma_0 + \Bp \gamma_0 \\
 \cdots
 \end{align*}
 
-Pauli notes that the two separate energy momentum quantities can be combined into a single scalar invariant
+These two quantities are observably interdependent, and this dependency can be made explicit by forming the sum
 
 \begin{align*}
 \Bp^2 + m^2 c^2 
@@ -70,11 +70,18 @@ Pauli notes that the two separate energy momentum quantities can be combined int
 &= \inv{1 - \Bv^2/c^2} m^2 c^2 \\
 \end{align*}
 
-Which recovers his equation $1.3$ (in the square)
+This recovers Pauli's equation $1.3$ (in the square).
 
 \begin{align}\label{eqn:p1_3}
 \frac{E^2}{c^2} = \Bp^2 + m^2 c^2 
 \end{align}
+
+This is slightly different from how I'm used to seeing this expressed, since Energy is singled out.
+Rearranging slightly recovers the scalar invariant for the energy momentum four vector:
+
+\begin{align*}
+m^2 c^2 &= \frac{E^2}{c^2} -\Bp^2 
+\end{align*}
 
 \subsection{ Energy-momentum four vector from Energy }
 
@@ -112,7 +119,16 @@ Pauli uses this to express the velocity coordinates in terms of energy and momen
 v_k &= \PD{p_k}{E}
 \end{align}
 
-My way of getting this seems a bit fishy (he goes from \ref{eqn:EvP} to \ref{eqn:vEp} directly), but it doesn't appear too unreasonable once one gets the final result.
+My way of getting this seems a bit fishy, dropping the explicit parameterization to get the one form, and then switching magically to partials, but once one gets to the end result it does not appear unreasonable.
+
+Perhaps better is to skip the one form business completely, writing
+
+\begin{align*}
+E = \inv{2} \Bv \cdot \Bp = \inv{2} \sum_k v_k p_k
+\end{align*}
+
+But taking partials from this to get \ref{eqn:vEp} requires care since $p_k$ and $v_k$ are dependent.
+%Perhaps notable is that Pauli goes from \ref{eqn:EvP} to \ref{eqn:vEp} directly.
 
 Assuming \ref{eqn:vEp} is valid and applying this to \ref{eqn:p1_3}, it is relatively straightforward to
 recover the four-vector energy-momentum equations.  
@@ -126,16 +142,54 @@ we calculate
 \begin{align*}
 v_k 
 &= \PD{p_k}{E} \\
-&= (2 p_k c^2) \inv{2} \frac{1}{\sqrt{\Bp^2 c^2 + m^2 c^4 }}
+&= (2 p_k c^2) \inv{2} \frac{1}{\sqrt{\Bp^2 c^2 + m^2 c^4 }} \\
 &= c^2 \frac{p_k}{E}
 \end{align*}
 
 Summing over all components
 \begin{align*}
 \frac{\Bv^2}{c^2} 
-&= \sum_k (v_k)^2/c^2 \\
-&= c^2 \frac{p_k^2}{E^2}
+&= \sum_k \frac{(v_k)^2}{c^2} \\
+&= c^2 \sum_k \frac{{p_k}^2}{E^2} \\
+&= c^2 \frac{\Bp^2}{E^2} \\
 \end{align*}
+
+Subtracting this from one, gives us our gamma factor (squared), which is
+
+\begin{align*}
+1 - \frac{\Bv^2}{c^2} 
+&= 1 - c^2 \frac{\Bp^2}{E^2} \\
+&= \inv{E^2} \left( \Bp^2 c^2 + m^2 c^4  - c^2 {\Bp^2} \right) \\
+&= \frac{m^2 c^4}{E^2} \\
+\end{align*}
+
+So, we have the energy half of \ref{eqn:p1_4}
+
+\begin{align*}
+E^2 &= \frac{m^2 c^4}{1 - \frac{\Bv^2}{c^2} }
+\end{align*}
+
+For the momentum we then have
+\begin{align*}
+\Bp^2 c^2 + m^2 c^4 &= \frac{m^2 c^4}{1 - \frac{\Bv^2}{c^2} }
+\end{align*}
+\begin{align*}
+\Bp^2 
+&= \frac{m^2 c^2}{1 - \frac{\Bv^2}{c^2} } - m^2 c^2 \frac{(1 - \frac{\Bv^2}{c^2} )}{1 - \frac{\Bv^2}{c^2} } \\
+&= \frac{m^2 \Bv^2}{1 - \frac{\Bv^2}{c^2} } 
+\end{align*}
+
+the second half of \ref{eqn:p1_4}.
+
+Pretty cool.  Given the energy momentum invariant, $m^2 c^2 = E^2/c^2 - \Bp^2$, and a requirement that the velocity, momentum, Kinetic energy combination is related precisely as in classical mechanics, with $v_k = \PDi{p_k}{E}$, we
+recover the relativistic energy momentum four vector.
+
+This is probably not suprising to somebody who knows relativity better than I, but it was
+interesting to me to see this worked ``backwards'' this way.
+
+\section{ Light Quanta. }
+
+
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
