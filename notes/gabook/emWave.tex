@@ -14,7 +14,7 @@
 
 \title{ Electrodynamic wave equation solutions. }
 \author{Peeter Joot}
-\date{ Jan 25, 2009.  Last Revision: $Date: 2009/01/25 16:52:32 $ }
+\date{ Jan 25, 2009.  Last Revision: $Date: 2009/01/25 18:00:09 $ }
 
 \begin{document}
 
@@ -23,6 +23,14 @@
 
 \section{ Motivation. }
 
+In \cite{PJwaveFourVector} four vector solutions to the mechanical wave
+equations were explored.  What was obviously missing from that 
+was consideration of the special case for $\Bv^2 = c^2$.
+
+Here solutions to the electrodynamic wave equation will be examined.
+Consideration of such solutions in more detail will is expected
+to be helpful 
+as background for the more complex study of quantum (matter) wave equations.
 
 \section{ Electromagnetic wave equation solutions. }
 
@@ -34,13 +42,20 @@ For electrodynamics our equation to solve is
 
 For the unforced (vacuum) solutions, with 
 $F = \grad \wedge A$, and the Coulomb gauge $\grad \cdot A = 0$ this 
-reduces to four wave equations \ref{eqn:waveEquation} for $\Abs{\Bv} = c$
+reduces to
 
 \begin{align*}
 0 
 &= \left((\gamma^\mu)^2 \partial_{\mu\mu}\right) A  \\
 &= \left( \inv{c^2}\partial_{tt} -\partial_{jj} \right) A
 \end{align*}
+
+These equations have the same form as the mechanical wave equation
+where the wave velocity $\Bv^2 = c^2$ is the speed of light
+
+\begin{align}\label{eqn:waveEquation}
+\left( \inv{\Bv^2} \partial_{tt} - \sum_{j=1}^3 \partial_{jj}\right) \psi = 0
+\end{align}
 
 \subsection{ Separation of variables solution of potential equations. }
 
@@ -103,8 +118,99 @@ A &= \gamma^\nu \exp\left( K_\nu \cdot x \right)  \\
 This is
 
 \begin{align*}
-F &= \left(\gamma^\mu \wedge \gamma^\nu\right) \partial_\mu \exp\left( K_\nu \cdot x \right) \\
+F 
+&= \left(\gamma^\mu \wedge \gamma^\nu\right) \partial_\mu \exp\left( K_\nu \cdot x \right) \\
+&= \left(\gamma^\mu \wedge \gamma^\nu\right) \partial_\mu \exp\left( \gamma^\alpha K_{\nu\alpha} \cdot \gamma_\sigma x^\sigma \right) \\
+&= \left(\gamma^\mu \wedge \gamma^\nu\right) \partial_\mu \exp\left( K_{\nu\sigma} x^\sigma \right) \\
+%&= \left(\gamma^\mu \wedge \gamma^\nu\right) K_{\nu\sigma} \delta_\mu\sigma \exp\left( K_{\nu\sigma} x^\sigma \right) \\
+&= \left(\gamma^\mu \wedge \gamma^\nu\right) K_{\nu\mu} \exp\left( K_{\nu\sigma} x^\sigma \right) \\
+&= \left(\gamma^\mu \wedge \gamma^\nu\right) K_{\nu\mu} \exp\left( K_{\nu} \cdot x \right) \\
+&= \left(\gamma^\mu \wedge \gamma^\nu\right) 
+\inv{2} \left( K_{\nu\mu} \exp\left( K_{\nu} \cdot x \right) - K_{\mu\nu} \exp\left( K_{\mu} \cdot x \right) \right) \\
 \end{align*}
+
+Writing our field in explicit tensor form
+
+\begin{align*}
+F = F_{\mu\nu} \gamma^\mu \wedge \gamma^\nu
+\end{align*}
+
+our vacuum solution is therefore
+
+\begin{align}
+F_{\mu\nu} &= \inv{2} \left( K_{\nu\mu} \exp\left( K_{\nu} \cdot x \right) - K_{\mu\nu} \exp\left( K_{\mu} \cdot x \right) \right) 
+\end{align}
+
+but subject to the null wave number and Lorentz guage constraints
+
+\begin{align}
+\Abs{K_\mu} &= 0 \\
+\grad \cdot \left(\gamma^\mu \exp\left( K_\mu \cdot x \right)\right) &= 0
+\end{align}
+
+\subsection{ Examine the Lorentz gauge constraint. }
+
+That Lorentz gauge constraint on the potential is a curious looking beastie.  Let's expand that out in full to examine it closer
+
+\begin{align*}
+\grad \cdot \left(\gamma^\mu \exp\left( K_\mu \cdot x \right)\right) 
+&= \gamma^\alpha \partial_\alpha \cdot \left(\gamma^\mu \exp\left( K_\mu \cdot x \right)\right)  \\
+&= \sum_\mu (\gamma^\mu)^2 \partial_\mu \exp\left( K_\mu \cdot x \right) \\
+&= \sum_\mu (\gamma^\mu)^2 \partial_\mu \exp\left( \sum \gamma^\nu K_{\mu\nu} \cdot \gamma_\alpha x^\alpha \right) \\
+&= \sum_\mu (\gamma^\mu)^2 \partial_\mu \exp\left( \sum K_{\mu\alpha} x^\alpha \right) \\
+&= \sum_\mu (\gamma^\mu)^2 K_{\mu\mu} \exp\left( K_\mu \cdot x \right)
+\end{align*}
+
+If this must be zero for any $x$ it must also be zero for $x =0$, so the Lorentz gauge imposes an additional restriction on the
+wave number four vectors $K_\mu$
+
+\begin{align*}
+\sum_\mu (\gamma^\mu)^2 K_{\mu\mu} = 0 
+\end{align*}
+
+Expanding in time and spatial coordinates this is
+
+\begin{align*}
+K_{00} - \sum_j K_{jj} = 0 
+\end{align*}
+
+One obvious way to satisfy this is to require that the tensor $K_{\mu\nu}$ be diagonal, but since we also have the null vector requirement
+on each of the $K_\mu$ four vectors it isn't clear that this is an acceptable choice.
+
+\subsection{ Summarizing so far. }
+
+We have found that our field solution has the form
+
+\begin{align*}
+F_{\mu\nu} &= \inv{2} \left( K_{\nu\mu} \exp\left( K_{\nu} \cdot x \right) - K_{\mu\nu} \exp\left( K_{\mu} \cdot x \right) \right) \\
+\end{align*}
+
+Where
+\begin{align*}
+K_\mu &= \gamma^\nu K_{\mu\nu} \\
+x &= \gamma_\mu x^\mu
+\end{align*}
+
+with constraints
+\begin{align*}
+0 &= \sum_\mu (\gamma^\mu)^2 K_{\mu\mu} \\
+0 &= \sum_\mu (\gamma^\mu)^2 (K_{\nu\mu})^2
+\end{align*}
+
+Alternately, calling out the explict space time split of the constraint, we can
+remove the explicit $\gamma^\mu$ factors 
+
+\begin{align*}
+0 = K_{00} - \sum_j K_{jj} = (K_{00})^2 - \sum_j (K_{jj} )^2
+\end{align*}
+
+%If each of $K_{\mu0} \ne 0$ we could alternately remove the explicit $\gamma^\mu$ factors and write
+%
+%\begin{align*}
+%1 = \sum_j \frac{K_{jj}}{K_{00}} = \sum_j \left(\frac{K_{jj}}{K_{00}}\right)^2 
+%\end{align*}
+%
+%Is this any better?
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
