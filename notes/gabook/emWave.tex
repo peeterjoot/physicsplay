@@ -14,7 +14,7 @@
 
 \title{ Electrodynamic wave equation solutions. }
 \author{Peeter Joot}
-\date{ Jan 25, 2009.  Last Revision: $Date: 2009/01/25 23:25:39 $ }
+\date{ Jan 25, 2009.  Last Revision: $Date: 2009/01/26 03:57:48 $ }
 
 \begin{document}
 
@@ -181,21 +181,21 @@ on each of the $K_\mu$ four vectors it isn't clear that this is an acceptable ch
 
 We have found that our field solution has the form
 
-\begin{align*}
-F_{\mu\nu} &= \inv{2} \left( K_{\nu\mu} \exp\left( K_{\nu} \cdot x \right) - K_{\mu\nu} \exp\left( K_{\mu} \cdot x \right) \right) \\
-\end{align*}
+\begin{align}\label{eqn:WorkingSolution}
+F_{\mu\nu} &= \inv{2} \left( K_{\nu\mu} \exp\left( K_{\nu} \cdot x \right) - K_{\mu\nu} \exp\left( K_{\mu} \cdot x \right) \right)
+\end{align}
 
 Where
-\begin{align*}
+\begin{align}\label{eqn:WorkingSolutionDefinitions}
 K_\mu &= \gamma^\nu K_{\mu\nu} \\
 x &= \gamma_\mu x^\mu
-\end{align*}
+\end{align}
 
 with constraints
-\begin{align*}
+\begin{align}\label{eqn:WorkingSolutionConstraints}
 0 &= \sum_\mu (\gamma^\mu)^2 K_{\mu\mu} \\
 0 &= \sum_\mu (\gamma^\mu)^2 (K_{\nu\mu})^2
-\end{align*}
+\end{align}
 
 Alternately, calling out the explict space time split of the constraint, we can
 remove the explicit $\gamma^\mu$ factors 
@@ -360,80 +360,80 @@ Damn.  On paper I missed some terms and it all cancelled out nicely giving only 
 conclusion possible is that we require $x \cdot K_\nu = x \cdot K_\mu$ for this form of solution, and therefore need to restrict the
 test solution to a fixed spacetime direction.
 
-\section{ Take II.  Less general plane wave like solution. }
+\section{ Take II.  A bogus attempt at a less general plane wave like solution. }
 
 Let's try instead
 
+\begin{align}\label{eqn:solutionTensor}
+F = \gamma^\mu \wedge \gamma^\nu A_{\mu\nu} f( x \cdot k )
+\end{align}
+
+and see if we can find conditions on the vector $k$, and the tensor $A$ that make this a solution to the unforced Maxwell equation \ref{eqn:maxwell}.
+
+\subsection{ curl term. }
+
+Taking the curl is straightforward
+
+\begin{align}
+\grad \wedge F 
+&= \gamma^\alpha \wedge \gamma^\mu \wedge \gamma^\nu \partial_\alpha A_{\mu\nu} f( x \cdot k ) \\
+&= \gamma^\alpha \wedge \gamma^\mu \wedge \gamma^\nu A_{\mu\nu} \partial_\alpha f( x^\sigma k_\sigma ) \\
+&= \gamma^\alpha \wedge \gamma^\mu \wedge \gamma^\nu A_{\mu\nu} k_\alpha f'( x \cdot k ) \\
+&= \inv{2} \gamma^\alpha \wedge \gamma^\mu \wedge \gamma^\nu (A_{\mu\nu} - A_{\nu\mu} ) k_\alpha f'( x \cdot k ) \\
+\end{align}
+
+Curiously, the only condition that this yeilds is that we have
+
 \begin{align*}
-F = \gamma^\mu \wedge \gamma^\nu f( x \cdot k )
+A_{\mu\nu} - A_{\nu\mu} = 0
 \end{align*}
 
-and see if we can find conditions on $k$ that make this a solution to the unforced Maxwell equation \ref{eqn:maxwell}.
+which is a symmetry requirement for the tensor
 
-%\section{ Repeat: As on paper. }
-%\subsubsection{ zero divergence }
-%
-%\begin{align}\label{eqn:testSol2}
-%F = \gamma^\mu \wedge \gamma^\nu \left( K_{\mu\nu} f( x \cdot K_\nu ) -K_{\nu\mu} f( x \cdot K_\mu ) \right)
-%\end{align}
-%
-%So, let's substitute equation \ref{eqn:testSol2} and see what comes out, starting with the zero divergence equation
-%
-%\begin{align*}
-%\grad \cdot F 
-%&= \gamma^\alpha \cdot
-%\left(\gamma^\mu \wedge \gamma^\nu\right) \partial_\alpha \left( K_{\mu\nu} f( x \cdot K_\nu ) -K_{\nu\mu} f( x \cdot K_\mu ) \right) \\
-%&= 
-%(\gamma_\alpha)^2 
-%%\gamma_\alpha \cdot \left(\gamma^\mu \wedge \gamma^\nu\right) 
-%\left( \gamma^\nu {\delta_\alpha}^\mu -\gamma^\mu {\delta_\alpha}^\nu \right)
-%\partial_\alpha \left( K_{\mu\nu} f( x \cdot K_\nu ) -K_{\nu\mu} f( x \cdot K_\mu ) \right) \\
-%&= 
-%\left(
-%(\gamma_\mu)^2 \gamma^\nu \partial_\mu 
-%-(\gamma_\nu)^2 \gamma^\mu \partial_\nu 
-%\right)
-%\left( K_{\mu\nu} f( x \cdot K_\nu ) -K_{\nu\mu} f( x \cdot K_\mu ) \right) \\
-%&= 
-%(\gamma_\mu)^2 \gamma^\nu \left( K_{\mu\nu} K_{\nu\mu} f'( x \cdot K_\nu ) -K_{\nu\mu} K_{\mu\mu} f'( x \cdot K_\mu ) \right) 
-%-(\gamma_\nu)^2 \gamma^\mu \left( K_{\mu\nu} K_{\nu \nu} f'( x \cdot K_\nu ) -K_{\nu\mu} K_{\mu \nu} f'( x \cdot K_\mu ) \right) \\
-%&= 
-%2 (\gamma_\mu)^2 \gamma^\nu \left( K_{\mu\nu} K_{\nu\mu} f'( x \cdot K_\nu ) -K_{\nu\mu} K_{\mu\mu} f'( x \cdot K_\mu ) \right) \\
-%\end{align*}
-%
-%%\begin{align*}
-%%\partial_\mu ( x \cdot K_\beta ) = K_{\beta\mu}
-%%\partial_\nu ( x \cdot K_\beta ) = K_{\beta\nu}
-%%\end{align*}
-%
-%% FIX:
-%%\begin{align*}
-%%\grad \cdot F 
-%%&= 2 (\gamma_\mu)^2 \gamma^\nu \left( K_{\mu\nu} K_{\mu\mu} f'( x \cdot K_\mu ) -K_{\nu\mu} K_{\nu\mu} f'( x \cdot K_\nu ) \right) \\
-%%\end{align*}
-%
-%\subsubsection{ zero wedge }
-%
-%For the grade three term we have
-%
-%\begin{align*}
-%\grad \wedge F 
-%&= 
-%\left( \gamma^\alpha \wedge \gamma^\mu \wedge \gamma^\nu\right)
-%\partial_\alpha \left( K_{\mu\nu} f( x \cdot K_\nu ) -K_{\nu\mu} f( x \cdot K_\mu ) \right) \\
-%&= 
-%%\partial_\alpha ( x \cdot K_\beta ) &= K_{\beta\alpha}
-%\left( \gamma^\alpha \wedge \gamma^\mu \wedge \gamma^\nu\right)
-%\left( K_{\mu\nu} K_{\nu\alpha} f'( x \cdot K_\nu ) -K_{\nu\mu} K_{\mu\alpha} f'( x \cdot K_\mu ) \right) \\
-%% FIX:
-%%&= 2\left( \gamma^\alpha \wedge \gamma^\mu \wedge \gamma^\nu\right) K_{\mu\nu} K_{\mu\alpha} f'( x \cdot K_\mu ) \\
-%\end{align*}
-%
-%%So, for this to be zero uniformly for all $f$, we require
-%%
-%%\begin{align*}
-%%K_{\mu\nu} K_{\mu\alpha} = 0 
-%%\end{align*}
+\begin{align*}
+A_{\mu\nu} = A_{\nu\mu}
+\end{align*}
+
+\subsection{ divergence term. }
+
+Now for the divergence 
+
+\begin{align*}
+\grad \cdot F 
+&= \gamma_\alpha \cdot (\gamma^\mu \wedge \gamma^\nu) \partial^\alpha A_{\mu\nu} f( x_\sigma k^\sigma ) \\
+&= \left( {\delta_\alpha}^\mu \gamma^\nu -{\delta_\alpha}^\nu \gamma^\mu \right) k^\alpha A_{\mu\nu} f'( x \cdot k ) \\
+&= 
+ \gamma^\nu k^\mu A_{\mu\nu} f'( x \cdot k ) 
+-\gamma^\mu k^\nu A_{\mu\nu} f'( x \cdot k ) 
+\\
+&= \gamma^\nu k^\mu (A_{\mu\nu} -A_{\nu\mu}) f'( x \cdot k ) 
+\end{align*}
+
+So, again, as in the divergence part of Maxwell's equation for the vacuum ($\grad F = 0$), we require, and it is sufficient that
+
+\begin{align*}
+A_{\mu\nu} -A_{\nu\mu} = 0,
+\end{align*}
+
+for equation \ref{eqn:solutionTensor} to be a solution.  This is somewhat suprising since I wouldn't have expected a symmetric tensor to fall out of
+the analysis.
+
+Actually, this is more than suprising and amounts to a requirement that the field solution is zero.  Going back to the proposed solution we have
+
+\begin{align*}
+F 
+&= \gamma^\mu \wedge \gamma^\nu A_{\mu\nu} f( x \cdot k ) \\
+&= \gamma^\mu \wedge \gamma^\nu \inv{2} (A_{\mu\nu} - A_{\nu\mu})f( x \cdot k ) \\
+\end{align*}
+
+So, any symmetric components of the tensor $A$ automatically cancel out.
+
+\section{ Summary. }
+
+A few dead ends have been chased and I am left with the original attempt summarized by 
+\ref{eqn:WorkingSolution},
+\ref{eqn:WorkingSolutionDefinitions}, and
+\ref{eqn:WorkingSolutionConstraints}.  
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
