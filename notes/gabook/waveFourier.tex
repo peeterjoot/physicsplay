@@ -5,6 +5,7 @@
 
 \newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
 \DeclareMathOperator{\sinc}{sinc}
+\DeclareMathOperator{\PV}{PV}
 \newcommand{\FF}[0]{\mathcal{F}}
 \newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
 
@@ -20,7 +21,7 @@
 
 \title{ Fourier transform solutions to the wave equation. }
 \author{Peeter Joot}
-\date{ Jan 26, 2009.  Last Revision: $Date: 2009/01/26 14:10:20 $ }
+\date{ Jan 26, 2009.  Last Revision: $Date: 2009/01/26 14:31:58 $ }
 
 \begin{document}
 
@@ -87,12 +88,60 @@ Since we have a partial differential equation, for the integration constant we a
 \hat{\psi}(k,t) &= A(k) \exp\left( \pm i v k t \right)
 \end{align*}
 
-Performing an inverse Fourier transform we now have the wave equation expressed in terms of this unknown frequency domain function
-$A(k)$.  That is
+Performing an inverse Fourier transform we now have the wave equation expressed in terms of this unknown (so far) frequency domain function $A(k)$.  That is
+
+\begin{align}\label{eqn:almostThere}
+{\psi}(x,t) &= \inv{\sqrt{2\pi}} \IIinf A(k) \exp\left( \pm i v k t + i k x \right) dk
+\end{align}
+
+Now, suppose we fix the boundary value conditions by employing a known value of the wave function at $t = 0$, say $\psi(x,0) = \phi(x)$.  We then have
 
 \begin{align*}
-\hat{\psi}(k,t) &= \inv{\sqrt{2\pi}} \IIinf A(k) \exp\left( \pm i v k t + i k x \right) dk
+{\phi}(x) &= \inv{\sqrt{2\pi}} \IIinf A(k) \exp\left( i k x \right) dk
 \end{align*}
+
+From which we have $A(k)$ in terms of $\phi$ by inverse transform
+
+\begin{align}\label{eqn:freqInitial}
+A(k) &= \inv{\sqrt{2\pi}} \IIinf \phi(x) \exp\left( -i k x \right) dx
+\end{align}
+
+One could consider the problem fully solved at this point, but it can be carried further.  Let's substitute 
+\ref{eqn:freqInitial} back into \ref{eqn:almostThere}.  This is
+
+\begin{align*}
+{\psi}(x,t) &= \inv{\sqrt{2\pi}} \IIinf \left( \inv{\sqrt{2\pi}} \IIinf \phi(u) \exp\left( -i k u \right) du \right) \exp\left( \pm i v k t + i k x \right) dk
+\end{align*}
+
+With the Rigor police on holiday, exchange the order of integration
+
+\begin{align*}
+{\psi}(x,t) 
+&= \IIinf \phi(u) du \inv{{2\pi}} \IIinf \exp\left( -i k u \pm i v k t + i k x \right) dk \\
+&= \IIinf \phi(u) du \inv{{2\pi}} \IIinf \exp\left( i k (x - u \pm v t ) \right) dk \\
+\end{align*}
+
+The principle value of this inner integral is
+
+\begin{align*}
+\PV \inv{{2\pi}} \IIinf \exp\left( i k (x - u \pm v t ) \right) dk 
+&= \lim_{R\rightarrow \infty} \inv{2\pi} \int_{-R}^R \exp\left( i k (x - u \pm v t ) \right) dk  \\
+&= \lim_{R\rightarrow \infty} \frac{\sin\left( R (x - u \pm v t ) \right) }{ \pi (x - u \pm v t) } \\
+\end{align*}
+
+And here we make the usual identification with the delta function $\delta( x - u \pm v t )$.  We are left with
+
+\begin{align*}
+{\psi}(x,t) 
+&= \IIinf \phi(u) \delta( x - u \pm v t ) du \\
+&= \phi( x \pm v t )
+\end{align*}
+
+We find, amazingly enough, just by application of the Fourier transform, that the time evolution of the
+wave function follows propagation of the initial wave packet down the x-axis in one of the two directions with velocity $v$.
+
+This is a statement well known to any first year student taking a vibrations and waves course, but it is nice to see 
+it follow from the straightforward application of transform techniques straight out of the Engineer's toolbox.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
