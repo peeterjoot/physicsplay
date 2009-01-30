@@ -1,0 +1,168 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+\DeclareMathOperator{\sinc}{sinc}
+\DeclareMathOperator{\PV}{PV}
+\newcommand{\FF}[0]{\mathcal{F}}
+\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+\title{ Fourier transform solutions to Maxwell's equation. }
+\author{Peeter Joot}
+\date{ Mmm dd, 2009.  Last Revision: $Date: 2009/01/30 01:41:19 $ }
+
+\begin{document}
+
+\maketitle{}
+
+\tableofcontents
+\section{ Motivation. }
+
+In \cite{PJwaveFourier} a Green's function solution to the homogeneous 
+wave equation
+
+\begin{align}\label{eqn:wave}
+\left(\inv{v^2} \partial_{tt} -\partial_{xx} -\partial_{yy} -\partial_{zz} \right)\psi = 0 
+\end{align}
+
+was found to be
+
+\begin{align}\label{eqn:greensSolution3d}
+{\psi}(x,y,z,t) &= \IIinf \phi(u,w,r) G( x-u, y-w, z-r, t) du dw dr \\
+G(x,y,z,t) &= \inv{({2\pi})^3} \IIinf \exp\left( i k x + i m y + i n z \pm i \sqrt{k^2 + m^2 + n^2} v t \right) dk dm dn
+\end{align}
+
+The aim of this set of notes is to explore the same ideas to the forced wave
+equations for the four vector potentials of the Lorentz gauge Maxwell equation.
+
+Such solutions can be used to find the Faraday bivector or its associated
+tensor components.
+
+Additionally, we can likely apply the same ideas to solve for the Faraday
+bivector directly from Maxwell's equation without having to solve the 
+associated second order equations.
+
+Note that the specific form of the Fourier transform used in these notes continues to be
+
+\begin{align}
+\hat{f}(\Bk) &= \inv{(\sqrt{2\pi})^n} \IIinf f(\Bx) \exp\left( -i k_j x^j \right) d^n x \\
+{f}(\Bx) &= \inv{(\sqrt{2\pi})^n} \IIinf \hat{f}(\Bk) \exp\left( i k_j x^j \right) d^n k
+\end{align}
+
+\section{ One dimensional forced wave equation. }
+
+A good starting point is the reduced complexity one dimensional forced
+wave equation
+
+\begin{align}
+\left( \inv{v^2} \partial_{tt} -\partial_{xx} \right)\psi = \rho
+\end{align}
+
+Fourier transforming to to the wave number domain, with application of integration by parts twice (each toggling the sign of the spatial 
+derivative term) we have
+
+\begin{align*}
+\inv{v^2}\hat{\psi}_{tt} - (-i k)^2 \hat{\psi} = \hat{\rho}
+\end{align*}
+
+This leaves us with a linear differential equation of the following form to solve
+
+\begin{align}\label{eqn:waveNumEquationToSolve}
+f'' + \alpha^2 f = g
+\end{align}
+
+
+
+\section{ Tedious details. }
+
+\subsection{ Solving the wave number domain differential equation. }
+
+We wish to solve equation the inhomogeneous equation \ref{eqn:waveNumEquationToSolve}.  Writing this in terms of a linear operator equation this is
+
+\begin{align*}
+L(y) &= y'' + \alpha^2 y \\
+L(y) &= g
+\end{align*}
+
+The solutions of this equation will be formed from linear combinations of the homogeneous problem plus a specific solution of the inhomogeneous problem
+
+By inspection the homogeneous problem has solutions in $\Span \{ e^{ i \alpha x }, e^{ -i \alpha x }\}$.
+We can find a solution to the inhomogeneous problem using the variation of parameters method, assuming a solution of the form
+
+\begin{align*}
+y  = u e^{ i \alpha x } + v e^{ -i \alpha x } 
+\end{align*}
+
+Taking derivatives we have
+\begin{align*}
+y' = u' e^{ i \alpha x } + v' e^{ -i \alpha x } + i \alpha (u e^{ i \alpha x } - v e^{ -i \alpha x })
+\end{align*}
+
+The trick to solving this is to employ the freedom to set the $u'$, and $v'$ terms above to zero
+
+\begin{align}\label{eqn:firstConstraint}
+u' e^{ i \alpha x } + v' e^{ -i \alpha x } = 0 
+\end{align}
+
+Given this choice we then have
+\begin{align*}
+y' &= i \alpha (u e^{ i \alpha x } - v e^{ -i \alpha x }) \\
+y'' &= 
+(i \alpha)^2 (u e^{ i \alpha x } + v e^{ -i \alpha x }) 
+i \alpha (u' e^{ i \alpha x } - v' e^{ -i \alpha x }) 
+\end{align*}
+
+So we have
+\begin{align*}
+L(y) 
+&=
+(i \alpha)^2 (u e^{ i \alpha x } + v e^{ -i \alpha x })  \\
+&+i \alpha (u' e^{ i \alpha x } - v' e^{ -i \alpha x }) 
++ (\alpha)^2 (u e^{ i \alpha x } + v e^{ -i \alpha x })  \\
+&=
+i \alpha (u' e^{ i \alpha x } - v' e^{ -i \alpha x }) 
+\end{align*}
+
+With this and \ref{eqn:firstConstraint} we have a set of simultaneous first order linear differential equations to solve
+
+\begin{align*}
+\begin{bmatrix}
+u' \\
+v' \\
+\end{bmatrix}
+&=
+{\begin{bmatrix}
+ e^{ i \alpha x } &- e^{ -i \alpha x } \\
+ e^{ i \alpha x } &  e^{ -i \alpha x } \\
+\end{bmatrix}}^{-1}
+\begin{bmatrix}
+{g}/{i \alpha} \\
+0 \\
+\end{bmatrix} \\
+&=
+\inv{2}
+{\begin{bmatrix}
+ e^{ -i \alpha x } & e^{ -i \alpha x } \\
+ -e^{ i \alpha x } &  e^{ i \alpha x } \\
+\end{bmatrix}}^{-1}
+\begin{bmatrix}
+{g}/{i \alpha} \\
+0 \\
+\end{bmatrix} \\
+\end{align*}
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
+
+\end{document}
