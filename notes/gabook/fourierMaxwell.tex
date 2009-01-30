@@ -13,14 +13,14 @@
 \usepackage{color,cite,graphicx}
    % use colour in the document, put your citations as [1-4]
    % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
-   % graphics package. 
+   % graphics package.
 \usepackage{latexsym,amssymb,epsf} % don't remember if these are
    % needed, but their inclusion can't do any damage
 
 
 \title{ Fourier transform solutions to Maxwell's equation. }
 \author{Peeter Joot}
-\date{ Jan 29, 2009.  Last Revision: $Date: 2009/01/30 04:17:19 $ }
+\date{ Jan 29, 2009.  Last Revision: $Date: 2009/01/30 04:57:02 $ }
 
 \begin{document}
 
@@ -29,11 +29,11 @@
 \tableofcontents
 \section{ Motivation. }
 
-In \cite{PJwaveFourier} a Green's function solution to the homogeneous 
+In \cite{PJwaveFourier} a Green's function solution to the homogeneous
 wave equation
 
 \begin{align}\label{eqn:wave}
-\left(\inv{v^2} \partial_{tt} -\partial_{xx} -\partial_{yy} -\partial_{zz} \right)\psi = 0 
+\left(\inv{v^2} \partial_{tt} -\partial_{xx} -\partial_{yy} -\partial_{zz} \right)\psi = 0
 \end{align}
 
 was found to be
@@ -50,7 +50,7 @@ Such solutions can be used to find the Faraday bivector or its associated
 tensor components.
 
 Additionally, we can likely apply the same ideas to solve for the Faraday
-bivector directly from Maxwell's equation without having to solve the 
+bivector directly from Maxwell's equation without having to solve the
 associated second order equations.
 
 Note that the specific form of the Fourier transform used in these notes continues to be
@@ -60,7 +60,9 @@ Note that the specific form of the Fourier transform used in these notes continu
 {f}(\Bx) &= \inv{(\sqrt{2\pi})^n} \IIinf \hat{f}(\Bk) \exp\left( i k_j x^j \right) d^n k
 \end{align}
 
-\section{ One dimensional forced wave equation. }
+\section{ Forced wave equation. }
+
+\subsection{ One dimensional case. }
 
 A good starting point is the reduced complexity one dimensional forced
 wave equation
@@ -69,12 +71,12 @@ wave equation
 \left( \inv{v^2} \partial_{tt} -\partial_{xx} \right)\psi = \rho
 \end{align}
 
-Fourier transforming to to the wave number domain, with application of integration by parts twice (each toggling the sign of the spatial 
+Fourier transforming to to the wave number domain, with application of integration by parts twice (each toggling the sign of the spatial
 derivative term) we have
 
-\begin{align*}
+\begin{align}
 \inv{v^2}\hat{\psi}_{tt} - (-i k)^2 \hat{\psi} = \hat{\rho}
-\end{align*}
+\end{align}
 
 This leaves us with a linear differential equation of the following form to solve
 
@@ -91,66 +93,142 @@ specified
 \end{align*}
 
 Here because of the partial differentiation we have the flexibility to make the initial time a function of the wave number $k$, but it is probably
-more natural to just set $t_0 = -\infty$.  Doing so, our wave function is
+more natural to just set $t_0 = -\infty$
 
 \begin{align*}
-{\psi}(x, t) 
-&= 
-\inv{\sqrt{2\pi}} \IIinf
-\left( \frac{v}{k} \int_{u = -\infty}^t \hat{\rho}(u) \sin( k v (t-u) ) du \right) \exp( i k x ) dk \\
+\hat{\psi}(k, t) = \frac{v}{k} \int_{u = -\infty}^t \hat{\rho}(k, u) \sin( k v (t-u) ) du
 \end{align*}
+
+But seeing the integral in this form suggests a change of variables $w = t-u$, which gives us our final wave function in the wave number domain with all the time
+dependency removed from the integration limits
+
+\begin{align*}
+\hat{\psi}(k, t) = \frac{v}{k} \int_{w = 0}^\infty \hat{\rho}(k, t-w) \sin( k v w ) dw
+\end{align*}
+
+With this our wave function is
+
+\begin{align*}
+{\psi}(x, t)
+&=
+\inv{\sqrt{2\pi}} \IIinf
+\left(
+\frac{v}{k} \int_{w = 0}^\infty \hat{\rho}(k, t-w) \sin( k v w ) dw
+%\frac{v}{k} \int_{u = -\infty}^t \hat{\rho}(u) \sin( k v (t-u) ) du
+\right) \exp( i k x ) dk \\
+\end{align*}
+
 
 But we also have
 
 \begin{align*}
-\hat{\rho}(k) &= \inv{\sqrt{2\pi}} \int_{-\infty}^\infty {\rho}(x) \exp( -i k x ) dx
+\hat{\rho}(k,t) &= \inv{\sqrt{2\pi}} \int_{-\infty}^\infty {\rho}(x, t) \exp( -i k x ) dx
 \end{align*}
 
 Reassembling we have
 
+%\begin{align*}
+%{\psi}(x, t)
+%&=
+%\inv{\sqrt{2\pi}} \IIinf
+%\left( \frac{v}{k} \int_{u = -\infty}^t
+%\left(
+%\inv{\sqrt{2\pi}} \int_{-\infty}^\infty {\rho}(x) \exp( -i u x ) dx
+%\right)
+%\sin( k v (t-u) ) du \right) \exp( i k x ) dk \\
+%\end{align*}
+
 \begin{align*}
-{\psi}(x, t) 
-&= 
-\inv{\sqrt{2\pi}} \IIinf
-\left( \frac{v}{k} \int_{u = -\infty}^t 
+{\psi}(x, t)
+&=
+\inv{\sqrt{2\pi}}
+\int_{k = -\infty}^\infty
 \left(
-\inv{\sqrt{2\pi}} \int_{-\infty}^\infty {\rho}(x) \exp( -i u x ) dx
+\frac{v}{k}
+\int_{w = 0}^\infty
+\left(
+\inv{\sqrt{2\pi}} \int_{y=-\infty}^\infty {\rho}(y, t-w) \exp( -i k y ) dy
 \right)
-\sin( k v (t-u) ) du \right) \exp( i k x ) dk \\
+\sin( k v w ) dw
+\right) \exp( i k x ) dk
 \end{align*}
 
-This is
-\begin{align*}
-{\psi}(x, t) 
-&= 
-\IIinf {\rho}(x) G( x, t ) dx \\
-G(x, t) &=
-\int_{k=-\infty}^\infty
-\int_{u = -\infty}^t 
-\frac{v}{2 k \pi}
-\sin( k v (t-u) ) 
-\exp( i (k-u) x ) 
-dk 
-du 
-\\
-\end{align*}
+Rearranging a bit we have
 
-or
-\begin{align*}
-% t-u = w
-% u = t-w
-% w(u=t) = 0
-% w(u=-\infty) = \infty
-G(x, t) &=
-\int_{k=-\infty}^\infty
-\int_{w = 0}^{\infty}
-\frac{v}{2 k \pi}
-\sin( k v w ) 
-\exp( i (k+w-t) x ) 
-dk 
-dw 
+\begin{align}
+{\psi}(x, t)
+&=
+%\int_{y=-\infty}^\infty
+%\int_{w = 0}^\infty
+%{\rho}(y, t-w) G(x -y, t) dy dw \\
+%
+% x-y=z
+% y=x-z
+% dy = -dz
+% \int_y -> -\int_z
+%
+\int_{z=-\infty}^\infty
+\int_{w = 0}^\infty
+{\rho}(x-z, t-w) G(z, t) dz dw \\
+G(x, w) &=
+\int_{k = -\infty}^\infty
+\frac{v}{2\pi k}
+\sin( k v w )
+\exp( i k x )
+dk
 \\
-\end{align*}
+\end{align}
+
+We see that our charge density summed over all space contributes to the wave function, but it is the charge density at that spatial location as it existed at a specific previous time.
+Exactly what that previous time is is a rather complex looking function of our integral kernel.
+
+%This is
+%\begin{align*}
+%{\psi}(x, t)
+%&=
+%\IIinf {\rho}(x) G( x, t ) dx \\
+%G(x, t) &=
+%\int_{k=-\infty}^\infty
+%\int_{u = -\infty}^t
+%\frac{v}{2 k \pi}
+%\sin( k v (t-u) )
+%\exp( i (k-u) x )
+%dk
+%du
+%\\
+%\end{align*}
+
+%or
+%\begin{align*}
+%% t-u = w
+%% u = t-w
+%% w(u=t) = 0
+%% w(u=-\infty) = \infty
+%G(x, t) &=
+%\int_{k=-\infty}^\infty
+%\int_{w = 0}^{\infty}
+%\frac{v}{2 k \pi}
+%\sin( k v w )
+%\exp( i (k+w-t) x )
+%dk
+%dw
+%\\
+%\end{align*}
+
+\subsection{ Three dimensional case. }
+
+Having calculated
+
+\begin{align}
+\left( \inv{v^2} \partial_{tt} -\partial_{xx} \right)\psi = \rho
+\end{align}
+
+Fourier transforming to to the wave number domain, with application of integration by parts twice (each toggling the sign of the spatial
+derivative term) we have
+
+\begin{align}
+\inv{v^2}\hat{\psi}_{tt} - (-i k)^2 \hat{\psi} = \hat{\rho}
+\end{align}
 
 \section{ Tedious details. }
 
@@ -169,7 +247,7 @@ By inspection the homogeneous problem has solutions in $\Span \{ e^{ i \alpha x 
 We can find a solution to the inhomogeneous problem using the variation of parameters method, assuming a solution of the form
 
 \begin{align*}
-y  = u e^{ i \alpha x } + v e^{ -i \alpha x } 
+y  = u e^{ i \alpha x } + v e^{ -i \alpha x }
 \end{align*}
 
 Taking derivatives we have
@@ -180,26 +258,26 @@ y' = u' e^{ i \alpha x } + v' e^{ -i \alpha x } + i \alpha (u e^{ i \alpha x } -
 The trick to solving this is to employ the freedom to set the $u'$, and $v'$ terms above to zero
 
 \begin{align}\label{eqn:firstConstraint}
-u' e^{ i \alpha x } + v' e^{ -i \alpha x } = 0 
+u' e^{ i \alpha x } + v' e^{ -i \alpha x } = 0
 \end{align}
 
 Given this choice we then have
 \begin{align*}
 y' &= i \alpha (u e^{ i \alpha x } - v e^{ -i \alpha x }) \\
-y'' &= 
-(i \alpha)^2 (u e^{ i \alpha x } + v e^{ -i \alpha x }) 
-i \alpha (u' e^{ i \alpha x } - v' e^{ -i \alpha x }) 
+y'' &=
+(i \alpha)^2 (u e^{ i \alpha x } + v e^{ -i \alpha x })
+i \alpha (u' e^{ i \alpha x } - v' e^{ -i \alpha x })
 \end{align*}
 
 So we have
 \begin{align*}
-L(y) 
+L(y)
 &=
 (i \alpha)^2 (u e^{ i \alpha x } + v e^{ -i \alpha x })  \\
-&+i \alpha (u' e^{ i \alpha x } - v' e^{ -i \alpha x }) 
+&+i \alpha (u' e^{ i \alpha x } - v' e^{ -i \alpha x })
 + (\alpha)^2 (u e^{ i \alpha x } + v e^{ -i \alpha x })  \\
 &=
-i \alpha (u' e^{ i \alpha x } - v' e^{ -i \alpha x }) 
+i \alpha (u' e^{ i \alpha x } - v' e^{ -i \alpha x })
 \end{align*}
 
 With this and \ref{eqn:firstConstraint} we have a set of simultaneous first order linear differential equations to solve
@@ -229,7 +307,7 @@ v' \\
 0 \\
 \end{bmatrix} \\
 &=
-\frac{g}{2 i \alpha} 
+\frac{g}{2 i \alpha}
 {\begin{bmatrix}
  e^{ -i \alpha x } \\
  -e^{ i \alpha x } \\
@@ -238,10 +316,10 @@ v' \\
 
 Substituting back into the assumed solution we have
 \begin{align*}
-y 
+y
 &= \frac{1}{2 i \alpha} \left(
-  e^{ i \alpha x } \int g e^{ -i \alpha x } 
-- e^{ -i \alpha x } \int g e^{ i \alpha x } 
+  e^{ i \alpha x } \int g e^{ -i \alpha x }
+- e^{ -i \alpha x } \int g e^{ i \alpha x }
 \right) \\
 &= \frac{1}{2 i \alpha} \int_{u=x_0}^x g(u) \left( e^{ -i \alpha (u-x) } -e^{ i \alpha (u-x) } \right) du \\
 \end{align*}
@@ -255,10 +333,10 @@ y &= \frac{1}{\alpha} \int_{u=x_0}^x g(u) \sin( \alpha(x-u) ) du
 A check to see if this is correct is in order to verify this.  Differentiating using \ref{eqn:diffInt} we have
 
 \begin{align*}
-y' 
-&= 
-{\left. 
-\frac{1}{\alpha} 
+y'
+&=
+{\left.
+\frac{1}{\alpha}
 g(u) \sin( \alpha(x-u) ) \right\vert}_{u=x}
 +\frac{1}{\alpha} \int_{u=x_0}^x \PD{x}{} g(u) \sin( \alpha(x-u) ) du \\
 &= \int_{u=x_0}^x g(u) \cos( \alpha(x-u) ) du \\
@@ -268,7 +346,7 @@ and for the second derivative we have
 
 \begin{align*}
 y''
-&= 
+&=
 {\left. g(u) \cos( \alpha(x-u) ) \right\vert}_{u=x}
 - \alpha \int_{u=x_0}^x g(u) \sin( \alpha(x-u) ) du \\
 &= g(x) - \alpha^2 y(x)
@@ -292,25 +370,25 @@ f(x) = F(x,b(x)) - F(x,a(x))
 
 and our derivative is
 \begin{align*}
-f'(x) 
-&= 
-\PD{x}{F}(x,b(x)) 
+f'(x)
+&=
+\PD{x}{F}(x,b(x))
 \PD{u}{F}(x,b(x)) b'
--\PD{x}{F}(x,a(x)) 
+-\PD{x}{F}(x,a(x))
 -\PD{u}{F}(x,a(x)) a' \\
-&= 
+&=
 G(x,b(x)) b'
 -G(x,a(x)) a'
-+\PD{x}{F}(x,b(x)) 
--\PD{x}{F}(x,a(x))  
++\PD{x}{F}(x,b(x))
+-\PD{x}{F}(x,a(x))
 \\
 \end{align*}
 
 Intuition (or recollection?) says that these last two terms are
 
 \begin{align*}
-\PD{x}{F}(x,b(x)) 
--\PD{x}{F}(x,a(x))  
+\PD{x}{F}(x,b(x))
+-\PD{x}{F}(x,a(x))
 &=
 \int_{a}^b \PD{x}{G}(x,u) du
 \end{align*}
@@ -319,8 +397,8 @@ FIXME: Does this make sense?   Justify this... feels handwavyish.
 
 Assuming that is right we then have
 \begin{align}\label{eqn:diffInt}
-\frac{d}{dx} \int_{u = a(x)}^{b(x)} G(x,u) du  
-&= 
+\frac{d}{dx} \int_{u = a(x)}^{b(x)} G(x,u) du
+&=
 G(x,b(x)) b'
 -G(x,a(x)) a'
 + \int_{a(x)}^{b(x)} \PD{x}{G}(x,u) du
