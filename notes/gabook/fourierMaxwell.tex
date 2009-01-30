@@ -20,7 +20,7 @@
 
 \title{ Fourier transform solutions to Maxwell's equation. }
 \author{Peeter Joot}
-\date{ Mmm dd, 2009.  Last Revision: $Date: 2009/01/30 01:41:19 $ }
+\date{ Jan 29, 2009.  Last Revision: $Date: 2009/01/30 04:05:03 $ }
 
 \begin{document}
 
@@ -82,7 +82,58 @@ This leaves us with a linear differential equation of the following form to solv
 f'' + \alpha^2 f = g
 \end{align}
 
+Out of line solution of this can be found below in equation \ref{eqn:solutionToWaveNumberDomainEquation}, where we have
+$f = \hat{\psi}$, $\alpha = k v$, and $g = \hat{\rho} v^2$.  Our solution for the wave function in the wave number domain is now completely
+specified
 
+\begin{align*}
+\hat{\psi}(k, t) = \frac{v}{k} \int_{u=t_0(k)}^t \hat{\rho}(u) \sin( k v (t-u) ) du
+\end{align*}
+
+Here because of the partial differentiation we have the flexibility to make the initial time a function of the wave number $k$, but it is probably
+more natural to just set $t_0 = -\infty$.  Doing so, our wave function is
+
+\begin{align*}
+{\psi}(x, t) 
+&= 
+\inv{\sqrt{2\pi}} \IIinf
+\left( \frac{v}{k} \int_{u = -\infty}^t \hat{\rho}(u) \sin( k v (t-u) ) du \right) \exp( i k x ) dk \\
+\end{align*}
+
+But we also have
+
+\begin{align*}
+\hat{\rho}(k) &= \inv{\sqrt{2\pi}} \int_{-\infty}^\infty {\rho}(x) \exp( -i k x ) dx
+\end{align*}
+
+Reassembling we have
+
+\begin{align*}
+{\psi}(x, t) 
+&= 
+\inv{\sqrt{2\pi}} \IIinf
+\left( \frac{v}{k} \int_{u = -\infty}^t 
+\left(
+\inv{\sqrt{2\pi}} \int_{-\infty}^\infty {\rho}(x) \exp( -i u x ) dx
+\right)
+\sin( k v (t-u) ) du \right) \exp( i k x ) dk \\
+\end{align*}
+
+This is
+\begin{align*}
+{\psi}(x, t) 
+&= 
+\IIinf {\rho}(x) G( k, t ) dx \\
+G(k, t) &=
+\int_{k=-\infty}^\infty
+\int_{u = -\infty}^t 
+\frac{v}{2 k \pi}
+\sin( k v (t-u) ) 
+\exp( i (k-u) x ) 
+dk 
+du 
+\\
+\end{align*}
 
 \section{ Tedious details. }
 
@@ -155,12 +206,108 @@ v' \\
 {\begin{bmatrix}
  e^{ -i \alpha x } & e^{ -i \alpha x } \\
  -e^{ i \alpha x } &  e^{ i \alpha x } \\
-\end{bmatrix}}^{-1}
+\end{bmatrix}}
 \begin{bmatrix}
 {g}/{i \alpha} \\
 0 \\
 \end{bmatrix} \\
+&=
+\frac{g}{2 i \alpha} 
+{\begin{bmatrix}
+ e^{ -i \alpha x } \\
+ -e^{ i \alpha x } \\
+\end{bmatrix}}
 \end{align*}
+
+Substituting back into the assumed solution we have
+\begin{align*}
+y 
+&= \frac{1}{2 i \alpha} \left(
+  e^{ i \alpha x } \int g e^{ -i \alpha x } 
+- e^{ -i \alpha x } \int g e^{ i \alpha x } 
+\right) \\
+&= \frac{1}{2 i \alpha} \int_{u=x_0}^x g(u) \left( e^{ -i \alpha (u-x) } -e^{ i \alpha (u-x) } \right) du \\
+\end{align*}
+
+So our solution appears to be
+
+\begin{align}\label{eqn:solutionToWaveNumberDomainEquation}
+y &= \frac{1}{\alpha} \int_{u=x_0}^x g(u) \sin( \alpha(x-u) ) du
+\end{align}
+
+A check to see if this is correct is in order to verify this.  Differentiating using \ref{eqn:diffInt} we have
+
+\begin{align*}
+y' 
+&= 
+{\left. 
+\frac{1}{\alpha} 
+g(u) \sin( \alpha(x-u) ) \right\vert}_{u=x}
++\frac{1}{\alpha} \int_{u=x_0}^x \PD{x}{} g(u) \sin( \alpha(x-u) ) du \\
+&= \int_{u=x_0}^x g(u) \cos( \alpha(x-u) ) du \\
+\end{align*}
+
+and for the second derivative we have
+
+\begin{align*}
+y''
+&= 
+{\left. g(u) \cos( \alpha(x-u) ) \right\vert}_{u=x}
+- \alpha \int_{u=x_0}^x g(u) \sin( \alpha(x-u) ) du \\
+&= g(x) - \alpha^2 y(x)
+\end{align*}
+
+Excellent, we have $y'' + \alpha^2 y = g$ as desired.
+
+\subsection{ Differentiation under the integral sign. }
+
+Given an function that is both a function of the integral limits and the integrals kernel
+
+\begin{align*}
+f(x) = \int_{u = a(x)}^{b(x)} G(x,u) du,
+\end{align*}
+
+lets recall how to differentiate the beastie.  First let $G(x,u) = \PDi{u}{F(x,u)}$ so we have
+
+\begin{align*}
+f(x) = F(x,b(x)) - F(x,a(x))
+\end{align*}
+
+and our derivative is
+\begin{align*}
+f'(x) 
+&= 
+\PD{x}{F}(x,b(x)) 
+\PD{u}{F}(x,b(x)) b'
+-\PD{x}{F}(x,a(x)) 
+-\PD{u}{F}(x,a(x)) a' \\
+&= 
+G(x,b(x)) b'
+-G(x,a(x)) a'
++\PD{x}{F}(x,b(x)) 
+-\PD{x}{F}(x,a(x))  
+\\
+\end{align*}
+
+Intuition (or recollection?) says that these last two terms are
+
+\begin{align*}
+\PD{x}{F}(x,b(x)) 
+-\PD{x}{F}(x,a(x))  
+&=
+\int_{a}^b \PD{x}{G}(x,u) du
+\end{align*}
+
+FIXME: Does this make sense?   Justify this... feels handwavyish.
+
+Assuming that is right we then have
+\begin{align}\label{eqn:diffInt}
+\frac{d}{dx} \int_{u = a(x)}^{b(x)} G(x,u) du  
+&= 
+G(x,b(x)) b'
+-G(x,a(x)) a'
++ \int_{a(x)}^{b(x)} \PD{x}{G}(x,u) du
+\end{align}
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
