@@ -20,7 +20,7 @@
 
 \title{ Fourier transform solutions to Maxwell's equation. }
 \author{Peeter Joot}
-\date{ Jan 29, 2009.  Last Revision: $Date: 2009/01/30 05:34:38 $ }
+\date{ Jan 29, 2009.  Last Revision: $Date: 2009/01/31 06:13:52 $ }
 
 \begin{document}
 
@@ -232,9 +232,9 @@ and our Fourier transformation produces almost the same result, but we have a wa
 \end{align}
 
 Our wave number domain solution is therefore
-\begin{align*}
-\hat{\psi}(\Bk, t) = \frac{v}{\Abs{\Bk}} \int_{w = 0}^\infty \hat{\rho}(\Bk, t-w) \sin( \Abs{\Bk} v w ) dw
-\end{align*}
+\begin{align}\label{eqn:waveNumDomainSolution}
+\hat{\psi}(\Bk, t) = \frac{v}{\Abs{\Bk}} \int_{\tau = 0}^\infty \hat{\rho}(\Bk, t-\tau) \sin( \Abs{\Bk} v \tau ) d\tau
+\end{align}
 
 But our wave number domain charge density is
 
@@ -244,39 +244,240 @@ But our wave number domain charge density is
 
 Our wave number domain result in terms of the charge density is therefore
 
-%\hat{\rho}(\Bk, t-w) &= \inv{(\sqrt{2\pi})^3} \IIinf \rho(\Br, t-w) \exp\left( -i \Bk \cdot \Br \right) d^3 r \\
+%\hat{\rho}(\Bk, t-\tau) &= \inv{(\sqrt{2\pi})^3} \IIinf \rho(\Br, t-\tau) \exp\left( -i \Bk \cdot \Br \right) d^3 r \\
 \begin{align*}
-\hat{\psi}(\Bk, t) = 
-\frac{v}{\Abs{\Bk}} \int_{w = 0}^\infty 
-%\hat{\rho}(\Bk, t-w) &= 
+\hat{\psi}(\Bk, t) =
+\frac{v}{\Abs{\Bk}} \int_{\tau = 0}^\infty
+%\hat{\rho}(\Bk, t-\tau) &=
 \left(
-\inv{(\sqrt{2\pi})^3} \IIinf \rho(\Br, t-w) \exp\left( -i \Bk \cdot \Br \right) d^3 r 
+\inv{(\sqrt{2\pi})^3} \IIinf \rho(\Br, t-\tau) \exp\left( -i \Bk \cdot \Br \right) d^3 r
 \right)
-\sin( \Abs{\Bk} v w ) dw
+\sin( \Abs{\Bk} v \tau ) d\tau
 \end{align*}
 
 And finally inverse transforming back to the spatial domain we have a complete solution for the inhomogeneous wave equation in terms of the spatial and temporal charge density distribution
 
 \begin{align}
-{\psi}(\Bx, t) 
-%&= \IIinf \int_{w = 0}^\infty \rho(\Br, t-w) G(\Bx -\Br) d^3 r dw \\
-% y_j = x_j - r_j
-% r_j = x_j - y_j
-% dr_j = -dy_j
-% III dr_1 dr_2 dr_3 = (-1)^3 III d^3 y
-&= \IIinf \int_{w = 0}^\infty \rho(\Bx -\By, t-w) G(\By, w) d^3 y dw \\
-G(\By, w) 
+{\psi}(\Bx, t)
+%&= \IIinf \int_{t' = 0}^\infty \rho(\Br, t-t') G(\Bx -\Br) d^3 r dt' \\
+% x'_j = x_j - r_j
+% r_j = x_j - x'_j
+% dr_j = -dx'_j
+% III dr_1 dr_2 dr_3 = (-1)^3 III d^3 x'
+&= \IIinf \int_{t' = 0}^\infty \rho(\Bx -\Bx', t-t') G(\Bx', t') d^3 x' dt' \\
+G(\Bx, t)
 &= \IIinf
-\frac{v}{(2\pi)^3 \Abs{\Bk}} 
-\sin( \Abs{\Bk} v w ) 
-\exp\left( i \Bk \cdot \By \right) 
+\frac{v}{(2\pi)^3 \Abs{\Bk}}
+\sin( \Abs{\Bk} v t )
+\exp\left( i \Bk \cdot \Bx \right)
 d^3 k
 \end{align}
 
-Very cool to see a closed form expression for this.
+For computational purposes we are probably much better off using
+equation \ref{eqn:waveNumDomainSolution}, however,
+from an abstract point of form this expression is much prettier.
+
 One can also see the elements of the traditional retarded time expressions for the potential hiding in there, but making that final next step to show this is actually
 the case looks like it is
 still a job for a different day.
+
+\subsubsection{ Tweak this a bit to put into proper Green's function form. }
+
+Now, it makes sense to redefine $G(\Bx,t)$ above so that we can integrate
+uniformly over all space and time.  To do so we can add a unit step function
+into the definition, so that $G(\Bx,t<0) = 0$.
+Additionally, if we express this convolution it is slightly tidier (and consistent with the normal Green's function notation)
+to put the parameter differences in the kernel term.  Such a change of variables will alter the sign of the integral limits
+by a factor of $(-1)^4$, but we also have a $(-1)^4$ term from the differentials.  After making these final adjustments
+we have a final variation of our integral solution
+
+%
+% y_j = x_j - x'_j
+% dy_j = x_j - dx'_j
+% t' = t - \tau
+% dt' = t - d\tau
+% 
+%&= \int_x'1 \int_x'2 \int_x'3 \int_tau \rho(\Bx -\Bx', t-\tau) G(\Bx', \tau) d^3 x' d\tau \\
+%
+% =>
+%
+%&= (-1)^4 \int_y1 \int_y2 \int_y3 \int_t' \rho(\By, t') G(\Bx - \By, t - t') (-1)^4 d^3 y dt' \\
+% 
+% 
+\begin{align}
+{\psi}(\Bx, t)
+&= \IIinf \rho(\Bx', t') G(\Bx - \Bx', t - t') d^3 x' dt' \\
+G(\Bx, t)
+&= u(t) \IIinf
+\frac{v}{(2\pi)^3 \Abs{\Bk}}
+\sin( \Abs{\Bk} v t )
+\exp\left( i \Bk \cdot \Bx \right)
+d^3 k
+\end{align}
+
+Now our inhomogenious solution is expressed nicely as the convolution of our current density over all space and time
+with an integral kernel.  That integral kernel is precisely the Green's function for this forced wave equation.
+
+This solution comes with a large number of assumptions.  Along the way we have the assumption that both our wave function
+and the charge density was Fourier transformable, and that the wave number domain products were inverse transformable.  We
+also had an assumption that the
+wave function is sufficiently small at the limits of integration that the intermediate contributions from the 
+integration by parts vanished, and finally the big assumption that we were perfectly free to interchange integration order
+in an extremely ad-hoc and non-rigorous fashion!
+
+\section{ Maxwell equation solution. }
+
+Having now found Green's function form for the forced wave equation, we can now move to Maxwell's equation
+
+\begin{align*}
+\grad F = J/\epsilon_0 c
+\end{align*}
+
+In terms of potentials we have $F = \grad \wedge A$, and may also impose the Lorentz gauge $\grad \cdot A = 0$, to give us our four charge/current forced wave equations
+
+\begin{align*}
+\grad^2 A = J/\epsilon_0 c
+\end{align*}
+
+As scalar equations these are
+
+\begin{align}
+\left( \inv{c^2} \PDSq{t}{} -\sum_j \PDSq{x^j}{} \right) A^\mu = \frac{J^\mu}{\epsilon_0 c}
+\end{align}
+
+So, from above, also writing $x^0 = ct$, we have
+
+\begin{align}\label{eqn:fourVectorPotentials}
+{A^\mu}(\Bx, t)
+&= \inv{\epsilon_0 c} \int J^\mu(x') G(x - x') d^4 x' \\
+G(\Bx, t)
+&= u(x^0) \int
+\frac{1}{(2\pi)^3 \Abs{\Bk}}
+\sin( \Abs{\Bk} x^0 )
+\exp\left( i \Bk \cdot \Bx \right)
+d^3 k
+\end{align}
+
+\subsection{ Four vector form for the Green's function. }
+
+Can we put the sine and exponential product in a more pleasing form?  It would be nice to merge the $\Bx$ and $ct$ terms into a 
+single four vector form.  One possibility is merging the two
+
+\begin{align*}
+\sin( \Abs{\Bk} x^0 ) \exp\left( i \Bk \cdot \Bx \right)
+&=
+\inv{2i} \left(
+\exp\left( i \left( \Bk \cdot \Bx +\Abs{\Bk} x^0 \right) \right)
+-\exp\left( i \left( \Bk \cdot \Bx -\Abs{\Bk} x^0 \right) \right)
+\right) \\
+&=
+\inv{2i} \left(
+\exp\left( i \Abs{\Bk} \left( \kcap \cdot \Bx + x^0 \right) \right)
+-\exp\left( i \Abs{\Bk} \left( \kcap \cdot \Bx - x^0 \right) \right)
+\right)
+\end{align*}
+
+Here we have a sort of sine like conjugation in the two exponentials.  Can we tidy this up?  Let's write the unit wave number
+vector in terms of direction cosines
+
+\begin{align*}
+\kcap 
+&= \sum_m \sigma_m \alpha_m \\
+&= \sum_m \gamma_m \gamma_0 \alpha_m \\
+\end{align*}
+
+Allowing us to write
+
+\begin{align*}
+\sum_m \gamma^m \alpha_m &= -\kcap \gamma_0
+\end{align*}
+
+This gives us
+\begin{align*}
+\kcap \cdot \Bx + x^0 
+&= \alpha_m x^m + x^0 \\
+&= (\alpha_m \gamma^m) \cdot (\gamma_j x^j) + \gamma^0 \cdot \gamma_0 x^0 \\
+&= (-\kcap \gamma_0 + \gamma_0) \cdot \gamma_\mu x^\mu \\
+&= (-\kcap \gamma_0 + \gamma_0) \cdot x
+\end{align*}
+
+Similarily we have
+
+\begin{align*}
+\kcap \cdot \Bx - x^0  &= (-\kcap \gamma_0 - \gamma_0) \cdot x
+\end{align*}
+
+and can now put $G$ in explicit four vector form
+
+\begin{align*}
+G(x)
+&= u(x \cdot \gamma_0) \int
+\frac{1}{(2\pi)^3 2 i \Abs{\Bk}}
+\left(
+\exp\left( i ((\Abs{\Bk} -\Bk)\gamma_0) \cdot x \right)
+-\exp\left( -i ((\Abs{\Bk} +\Bk)\gamma_0) \cdot x \right)
+\right)
+d^3 k
+\end{align*}
+
+Hmm, is that really any better?  How about just
+
+\begin{align*}
+G(\Bx, t)
+&= u(x \cdot \gamma_0) \int
+\frac{1}{(2\pi)^3 \Abs{\Bk}}
+\sin( \Abs{\Bk} x \cdot \gamma_0 )
+\exp\left( -i (\Bk \gamma_0) \cdot x \right)
+d^3 k
+\end{align*}
+
+That's probably as good as it gets.
+
+\subsection{ Faraday tensor. }
+
+Attempting to find a tidy four vector form for the four vector potentials was in preparation for taking derivatives.
+Specifically, applied to \ref{eqn:fourVectorPotentials} we have
+
+\begin{align*}
+F^{\mu\nu} = \partial^\mu A^\nu - \partial^\nu A^\mu
+\end{align*}
+
+subject to the Lorentz gauge constraint
+\begin{align*}
+0 = \partial_\mu A^\mu
+\end{align*}
+
+If we switch the convolution indexes for our potentials
+
+\begin{align*}
+{A^\mu}(\Bx, t) &= \inv{\epsilon_0 c} \int J^\mu(x - x') G(x') d^4 x' \\
+\end{align*}
+
+Then the Lorentz gauge condition, after differentiation under the integral sign, is
+
+\begin{align*}
+0 = \partial_\mu A^\mu &= \inv{\epsilon_0 c} \int \left(\partial_\mu J^\mu(x - x') \right) G(x') d^4 x' \\
+\end{align*}
+
+So we see that the Lorentz gauge seems to actually imply the continuity equation
+
+\begin{align*}
+\partial_\mu J^\mu(x) = 0
+\end{align*}
+
+Similarily, it appears that we can write our tensor components in terms of current density derivatives
+
+\begin{align}
+F^{\mu\nu} 
+%&= \partial^\mu A^\nu - \partial^\nu A^\mu \\
+&= \inv{\epsilon_0 c} \int \left(\partial^\mu J^\nu(x - x') - \partial^\nu J^\mu(x - x') \right) G(x') d^4 x'
+\end{align}
+
+Logicially, I suppose that one can consider the entire problem solved here, pending the completion of this calculus exersize.
+
+In terms of tidyness, it would be nicer seeming use the original convolution, and take derivative differences of the Green's
+function.  However, how to do this is not clear to me since this function has no defined derivative
+at the $t=0$ points due to the unit step.
 
 \section{ Appendix.  Mechanical details. }
 
@@ -432,7 +633,24 @@ G(x,b(x)) b'
 \\
 \end{align*}
 
-Intuition (or recollection?) says that these last two terms are
+Now, we want $\PDi{x}{F}$ in terms of $G$, and to get there, assuming sufficient continuity, we have from the definition
+
+\begin{align*}
+\PD{x}{} G(x,u) 
+&= \PD{x}{} \PD{u}{F(x,u)} \\
+&= \PD{u}{} \PD{x}{F(x,u)} \\
+\end{align*}
+
+Integrating both sides with respect to $u$ we have
+
+\begin{align*}
+\int \PD{x}{G} du 
+&= \int \PD{u}{} \PD{x}{F(x,u)} du \\
+%&= \int \PD{u}{} \left( \PD{x}{F(x,u)} + A(x) \right) du \\
+&= \PD{x}{F(x,u)} 
+\end{align*}
+
+This allows us to write 
 
 \begin{align*}
 \PD{x}{F}(x,b(x))
@@ -441,9 +659,8 @@ Intuition (or recollection?) says that these last two terms are
 \int_{a}^b \PD{x}{G}(x,u) du
 \end{align*}
 
-FIXME: Does this make sense?   Justify this... feels handwavyish.
+and finally
 
-Assuming that is right we then have
 \begin{align}\label{eqn:diffInt}
 \frac{d}{dx} \int_{u = a(x)}^{b(x)} G(x,u) du
 &=
@@ -451,6 +668,24 @@ G(x,b(x)) b'
 -G(x,a(x)) a'
 + \int_{a(x)}^{b(x)} \PD{x}{G}(x,u) du
 \end{align}
+
+\subsubsection{ Argument logic error above to understand. }
+
+Is the following not also true
+
+\begin{align*}
+\int \PD{x}{G} du 
+&= \int \PD{u}{} \PD{x}{F(x,u)} du \\
+&= \int \PD{u}{} \left( \PD{x}{F(x,u)} + A(x) \right) du \\
+&= \PD{x}{F(x,u)} + A(x)u + B
+\end{align*}
+
+In this case we have
+\begin{align*}
+\PD{x}{F}(x,b(x)) -\PD{x}{F}(x,a(x)) &= \int_{a}^b \PD{x}{G}(x,u) du - A(x) ( b(x) - a(x))
+\end{align*}
+
+How to reconsile this with the answer I expect (and having gotten it, I believe matches my recollection)?
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
