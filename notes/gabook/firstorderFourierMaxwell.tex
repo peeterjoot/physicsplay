@@ -3,6 +3,12 @@
 \input{../peeters_macros.tex}
 \input{../peeters_macros2.tex}
 
+\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+\DeclareMathOperator{\sinc}{sinc}
+\DeclareMathOperator{\PV}{PV}
+\newcommand{\FF}[0]{\mathcal{F}}
+\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+
 \usepackage[bookmarks=true]{hyperref}
 
 \usepackage{color,cite,graphicx}
@@ -15,7 +21,7 @@
 
 \title{ First order Fourier transform solution attempt for Maxwell's equation. }
 \author{Peeter Joot}
-\date{ Jan 31, 2009.  Last Revision: $Date: 2009/01/31 18:49:37 $ }
+\date{ Jan 31, 2009.  Last Revision: $Date: 2009/01/31 21:55:09 $ }
 
 \begin{document}
 
@@ -34,6 +40,180 @@ the Maxwell's equation in bivector form.
 
 \section{ Setup. }
 
+Again using a 3D spatial fourier transform, we want to put Maxwell's equation into an explicit time dependent form, and can do so by
+premultiplying by our observer's time basis vector $\gamma_0$
+
+\begin{align*}
+\gamma_0 \grad F &= \gamma_0 \frac{J }{\epsilon_0 c}
+\end{align*}
+
+On the left hand side we have
+\begin{align*}
+\gamma_0 \grad 
+&= \gamma_0 \left( \gamma^0 \partial_0 + \gamma^k \partial_k \right) \\
+&= \partial_0 - \gamma^k \gamma_0 \partial_k \\
+&= \partial_0 + \sigma^k \partial_k \\
+&= \partial_0 + \spacegrad \\
+\end{align*}
+
+and on the right hand side we have
+\begin{align*}
+\gamma_0 \frac{J }{\epsilon_0 c}
+&= \gamma_0 \frac{c \rho \gamma_0 + J^k \gamma_k }{\epsilon_0 c} \\
+&= \frac{c \rho - J^k \sigma_k }{\epsilon_0 c} \\
+&= \frac{\rho}{\epsilon_0} - \frac{\Bj}{\epsilon_0 c} \\
+\end{align*}
+
+Both the spacetime gradient and the current density four vector have been put in a quaternionic form with scalar and bivector grades in the 
+STA basis.  This leaves us with the time centric formulation of Maxwell's equation
+
+\begin{align}
+\left(\partial_0 + \spacegrad\right) F &= \frac{\rho}{\epsilon_0} - \frac{\Bj}{\epsilon_0 c} 
+\end{align}
+
+Except for the fact that we have objects of various grades here, and that this is a first instead of second order equation,
+these equations have the same form as in the previous Fourier transform attacks.
+Those were Fourier transform application for the homogeneous and inhomogeneous wave equations, and the heat and 
+Schr\"{o}dinger equation.
+
+\section{ Fourier transforming a mixed grade object. }
+
+Now, here we make the assumption that we can apply 3D Fourier transform pairs to mixed grade objects, as in
+
+\begin{align}
+\hat{\psi}(\Bk, t) &= \inv{(\sqrt{2\pi})^3} \IIinf \psi(\Bx, t) \exp\left( -i \Bk \cdot \Bx \right) d^3 x \\
+{\psi}(\Bx, t) &= \PV \inv{(\sqrt{2\pi})^3} \IIinf \hat{\psi}(\Bk, t) \exp\left( i \Bk \cdot \Bx \right) d^3 k
+\end{align}
+
+Now, because of linearity, is it clear enough that this will work, provided this is a valid transform pair for any specific grade.
+We do however want to be careful of the order of the factors since we want the flexibility to use any particular convienient representation
+of $i$, in particular $i = \gamma_0 \gamma_1 \gamma_2 \gamma_3 = \sigma_1 \sigma_2 \sigma_3$.
+
+Let's repeat our an ad-hoc verification that this transform pair works as desired, being careful with the order of products and specifically
+allowing for $\psi$ to be a non-scalar function.  
+Writing $\Bk = k_m \sigma^m$, $\Br = \sigma_m r^m$, $\Bx = \sigma_m x^m$, that is an expansion of
+
+\begin{align*}
+\PV &\inv{(\sqrt{2\pi})^3} \int 
+\left( \inv{(\sqrt{2\pi})^3} \int \psi(\Br, t) \exp\left( -i \Bk \cdot \Br \right) d^3 r \right)
+\exp\left( i \Bk \cdot \Bx \right) d^3 k \\
+&= \int \psi(\Br, t) d^3 r \PV \inv{({2\pi})^3} \int \exp\left( i \Bk \cdot (\Bx -\Br) \right) d^3 k \\
+&= \int \psi(\Br, t) d^3 r \Pi_{m=1}^3 \PV \inv{{2\pi}} \int \exp\left( i k_m (x^m -r^m) \right) dk_m \\
+&= \int \psi(\Br, t) d^3 r \Pi_{m=1}^3 \lim_{R\rightarrow \infty} \frac{\sin\left( R (x^m -r^m) \right)}{\pi(x^m - r^m)} \\
+&\sim \int \psi(\Br, t) \delta(x^1-r^1) \delta(x^2-r^2) \delta(x^3-r^3) d^3 r \\
+&= \psi(\Bx, t)
+\end{align*}
+
+In the second last step above we make the ad-hoc identification of that $\sinc$ limit with the dirac delta function, and recover
+our original function as desired.
+
+\section{ Fourier transforming the gradient equation. }
+
+Now, suppose we have a Maxwell like equation of the form
+
+\begin{align}\label{eqn:spacetimeGradientEquation}
+\left(\partial_0 + \spacegrad \right) \psi = \rho
+\end{align}
+
+Let's take the Fourier transform of this equation.  This gives us
+
+\begin{align*}
+\partial_0 \hat{\psi} + \sigma^m \FF(\partial_m \psi) = \hat{\rho}
+\end{align*}
+
+Now, we need to look at the middle term in a bit more detail.  For the wave, and heat equations this was evaluated with just an integration
+by parts.  Was there any commutation assumption in that previous treatment?  Let's write this out in full to make sure we are cool.
+
+\begin{align*}
+\FF(\partial_m \psi) 
+&= \inv{(\sqrt{2\pi})^3} \int \left(\partial_m \psi(\Bx, t)\right) \exp\left( -i \Bk \cdot \Bx \right) d^3 x 
+\end{align*}
+
+Let's also expand the integral completely, employing a permutation of indexes $\pi(1,2,3) = (m,n,p)$.
+
+\begin{align*}
+\FF(\partial_m \psi) 
+&= 
+\inv{(\sqrt{2\pi})^3} 
+\int_{\partial x^p} dx^p
+\int_{\partial x^n} dx^n
+\int_{\partial x^m} dx^m
+\left(\partial_m \psi(\Bx, t)\right) \exp\left( -i \Bk \cdot \Bx \right) \\
+\end{align*}
+
+Okay, now we are ready for the integration by parts.  We want a derivative substitution, based on
+
+\begin{align*}
+\partial_m &\left( \psi(\Bx, t) \exp\left( -i \Bk \cdot \Bx \right) \right) \\
+&= (\partial_m \psi(\Bx, t)) \exp\left( -i \Bk \cdot \Bx \right) + \psi(\Bx, t) \partial_m \exp\left( -i \Bk \cdot \Bx \right) \\
+&= (\partial_m \psi(\Bx, t)) \exp\left( -i \Bk \cdot \Bx \right) + \psi(\Bx, t) ( -i k_m ) \exp\left( -i \Bk \cdot \Bx \right) \\
+\end{align*}
+
+Observe that we do not wish to assume that the pseudoscalar $i$ commutes with anything except the exponential term, so we have to leave
+it sandwiched or on the far right.  We also must take care to not neccessarily commute the exponential itself with $\psi$ or its derivative.
+Having noted this we can rearrange as desired for the integration by parts
+
+\begin{align*}
+(\partial_m \psi(\Bx, t)) \exp\left( -i \Bk \cdot \Bx \right)
+&=
+\partial_m \left( \psi(\Bx, t) \exp\left( -i \Bk \cdot \Bx \right) \right) - \psi(\Bx, t) ( -i k_m ) \exp\left( -i \Bk \cdot \Bx \right) \\
+\end{align*}
+
+and substitute back into the integral
+
+\begin{align*}
+\sigma^m \FF(\partial_m \psi) 
+&= 
+\inv{(\sqrt{2\pi})^3} 
+\int_{\partial x^p} dx^p
+\int_{\partial x^n} dx^n
+{\left. {\left(\sigma^m \psi(\Bx, t) \exp\left( -i \Bk \cdot \Bx \right) \right)} \right\vert}_{\partial x^m} \\
+&- 
+\inv{(\sqrt{2\pi})^3} 
+\int_{\partial x^p} dx^p
+\int_{\partial x^n} dx^n
+\int_{\partial x^m} dx^m
+\sigma^m \psi(\Bx, t) ( -i k_m )
+\exp\left( -i \Bk \cdot \Bx \right) 
+\\
+\end{align*}
+
+So, we find that the Fourier transform of our spatial gradient is
+
+\begin{align*}
+\FF(\grad \psi) = \Bk \hat{\psi} i
+\end{align*}
+
+This has the specific ordering of the vector products for our possiblility of non-communative factors.
+
+From this, without making any assumptions about grade, we have the wave number domain equivalent
+for the spacetime split of the gradient equation \ref{eqn:spacetimeGradientEquation}
+
+\begin{align}\label{eqn:waveDomainGeneral}
+\partial_0 \hat{\psi} + \Bk \hat{\psi} i = \hat{\rho}
+\end{align}
+
+\section{ Back to specifics.  Maxwell's equation in wave number domain. }
+
+For Maxwell's equation our field variable $F$ is grade two in the STA basis, and our specific transform pair is:
+
+\begin{align}
+\left(\partial_0 + \spacegrad \right) F &= \gamma_0 J/\epsilon_0 c \\
+\partial_0 \hat{F} + \Bk i \hat{F} &= \gamma_0 \hat{J}/ \epsilon_0 c
+\end{align}
+
+Observe that we have commuted $i = \gamma_0 \gamma_1 \gamma_2 \gamma_3$ with $\hat{F}$ in the transition from the general equation
+\ref{eqn:waveDomainGeneral}.  This is possible in this case since $F$ and its Fourier transform is a grade two STA object so we have
+two sign interchanges in the commutation process.
+
+We want to find a solution to this second equation.  If the objects in question were all scalars this would be simple enough, and is
+a problem of the form
+
+\begin{align*}
+f' + a f &= g
+\end{align*}
+
+Let's remind ourselves what the form of the solution of this inhomogeneous scalar equation is, using the variation of parameters method.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
