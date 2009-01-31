@@ -20,7 +20,7 @@
 
 \title{ Fourier transform solutions to Maxwell's equation. }
 \author{Peeter Joot}
-\date{ Jan 29, 2009.  Last Revision: $Date: 2009/01/31 14:59:03 $ }
+\date{ Jan 29, 2009.  Last Revision: $Date: 2009/01/31 15:31:07 $ }
 
 \begin{document}
 
@@ -136,19 +136,35 @@ Reassembling we have
 %\sin( k v (t-u) ) du \right) \exp( i k x ) dk \\
 %\end{align*}
 
+%\begin{align*}
+%{\psi}(x, t)
+%&= 
+%\inv{\sqrt{2\pi}}
+%\int_{k = -\infty}^\infty
+%\left(
+%\frac{v}{k}
+%\int_{w = 0}^\infty
+%\left(
+%\inv{\sqrt{2\pi}}
+%\int_{y=-\infty}^\infty {\rho}(y, t-w) \exp( -i k y ) dy
+%\right)
+%\sin( k v w ) dw
+%\right) \exp( i k x ) dk
+%\end{align*}
+
 \begin{align*}
 {\psi}(x, t)
-&=
-\inv{\sqrt{2\pi}}
+&= 
 \int_{k = -\infty}^\infty
-\left(
-\frac{v}{k}
 \int_{w = 0}^\infty
-\left(
-\inv{\sqrt{2\pi}} \int_{y=-\infty}^\infty {\rho}(y, t-w) \exp( -i k y ) dy
-\right)
-\sin( k v w ) dw
-\right) \exp( i k x ) dk
+\int_{y=-\infty}^\infty
+\frac{v}{ 2 \pi k}
+{\rho}(y, t-w) 
+\sin( k v w ) 
+\exp( i k (x-y) ) 
+dy
+dw
+dk
 \end{align*}
 
 Rearranging a bit we have
@@ -346,7 +362,7 @@ So, from above, also writing $x^0 = ct$, we have
 \begin{align}\label{eqn:fourVectorPotentials}
 {A^\mu}(\Bx, t)
 &= \inv{\epsilon_0 c} \int J^\mu(x') G(x - x') d^4 x' \\
-G(\Bx, t)
+G(x)
 &= u(x^0) \int
 \frac{1}{(2\pi)^3 \Abs{\Bk}}
 \sin( \Abs{\Bk} x^0 )
@@ -360,7 +376,7 @@ Can we put the sine and exponential product in a more pleasing form?  It would b
 single four vector form.  One possibility is merging the two
 
 \begin{align*}
-\sin( \Abs{\Bk} x^0 ) \exp\left( i \Bk \cdot \Bx \right)
+\sin( \Abs{\Bk} x^0 ) &\exp\left( i \Bk \cdot \Bx \right) \\
 &=
 \inv{2i} \left(
 \exp\left( i \left( \Bk \cdot \Bx +\Abs{\Bk} x^0 \right) \right)
@@ -407,29 +423,42 @@ and can now put $G$ in explicit four vector form
 
 \begin{align*}
 G(x)
-&= u(x \cdot \gamma_0) \int
-\frac{1}{(2\pi)^3 2 i \Abs{\Bk}}
+&= 
+%u(x \cdot \gamma_0) \int
+%\frac{1}{(2\pi)^3 2 i \Abs{\Bk}}
+%\left(
+%\exp\left( i ((\Abs{\Bk} -\Bk)\gamma_0) \cdot x \right)
+%-\exp\left( -i ((\Abs{\Bk} +\Bk)\gamma_0) \cdot x \right)
+%\right)
+%d^3 k
+\frac{u(x \cdot \gamma_0)}{
+(2\pi)^3 2 i 
+} \int
 \left(
 \exp\left( i ((\Abs{\Bk} -\Bk)\gamma_0) \cdot x \right)
 -\exp\left( -i ((\Abs{\Bk} +\Bk)\gamma_0) \cdot x \right)
 \right)
-d^3 k
+\frac{d^3 k}{ \Abs{\Bk} }
 \end{align*}
 
 Hmm, is that really any better?  Intuition says that this whole thing 
 can be written as sine with some sort of geometric product conjugate 
 terms.  How to do that is not clear at this time, so failing that the following
 
-\begin{align*}
-G(\Bx, t)
-&= u(x \cdot \gamma_0) \int
-\frac{1}{(2\pi)^3 \Abs{\Bk}}
+\begin{align}
+G(x)
+&= 
+\frac{u(x \cdot \gamma_0)}{ (2\pi)^3 }
+\int
 \sin( \Abs{\Bk} x \cdot \gamma_0 )
 \exp\left( -i (\Bk \gamma_0) \cdot x \right)
-d^3 k
-\end{align*}
+\frac{d^3 k}{ \Abs{\Bk} }
+\end{align}
 
-is probably about as good as it gets for now.
+is probably about as good as it gets for now.  Note the interesting feature
+that we end up essentially integrating over a unit ball in our wave number
+space.  This suggests the possibility of simplification using the 
+divergence theorem.
 
 \subsection{ Faraday tensor. }
 
