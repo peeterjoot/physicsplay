@@ -21,7 +21,7 @@
 
 \title{ First order Fourier transform solution attempt for Maxwell's equation. }
 \author{Peeter Joot}
-\date{ Jan 31, 2009.  Last Revision: $Date: 2009/01/31 21:55:09 $ }
+\date{ Jan 31, 2009.  Last Revision: $Date: 2009/01/31 22:13:12 $ }
 
 \begin{document}
 
@@ -80,7 +80,7 @@ Schr\"{o}dinger equation.
 
 Now, here we make the assumption that we can apply 3D Fourier transform pairs to mixed grade objects, as in
 
-\begin{align}
+\begin{align}\label{eqn:FourierTxDefinition}
 \hat{\psi}(\Bk, t) &= \inv{(\sqrt{2\pi})^3} \IIinf \psi(\Bx, t) \exp\left( -i \Bk \cdot \Bx \right) d^3 x \\
 {\psi}(\Bx, t) &= \PV \inv{(\sqrt{2\pi})^3} \IIinf \hat{\psi}(\Bk, t) \exp\left( i \Bk \cdot \Bx \right) d^3 k
 \end{align}
@@ -107,7 +107,22 @@ Writing $\Bk = k_m \sigma^m$, $\Br = \sigma_m r^m$, $\Bx = \sigma_m x^m$, that i
 In the second last step above we make the ad-hoc identification of that $\sinc$ limit with the dirac delta function, and recover
 our original function as desired.
 
-\section{ Fourier transforming the gradient equation. }
+\subsection{ Rotor form of the Fourier transform? }
+
+Although the formulation picked above appears to work, it isn't the only choice to potentially make for the Fourier transform
+of multivector.  Would it be more natural to pick an explicit Rotor formulation?  This perhaps makes more sense since it is then
+automatically grade preserving.
+
+\begin{align}
+\hat{\psi}(\Bk, t) &= \inv{(\sqrt{2\pi})^3} \IIinf \exp\left( \inv{2} i \Bk \cdot \Bx \right) \psi(\Bx, t) \exp\left( - \inv{2} i \Bk \cdot \Bx \right) d^3 x \\
+{\psi}(\Bx, t) &= \PV \inv{(\sqrt{2\pi})^3} \IIinf \exp\left( -\inv{2} i \Bk \cdot \Bx \right) \hat{\psi}(\Bk, t) \exp\left( \inv{2} i \Bk \cdot \Bx \right) d^3 k
+\end{align}
+
+Later I tried to make an assumption that the grade of a transformed object equals the original grade, and that doesn't work with the
+Fourier transform definition that has been picked in equation \ref{eqn:FourierTxDefinition}.  It may be neccessary to revamp the complete treatment, but
+for now an observation that the grades of transform pairs do not neccessarily match is required.
+
+\section{ Fourier transforming the spacetime split gradient equation. }
 
 Now, suppose we have a Maxwell like equation of the form
 
@@ -199,12 +214,13 @@ For Maxwell's equation our field variable $F$ is grade two in the STA basis, and
 
 \begin{align}
 \left(\partial_0 + \spacegrad \right) F &= \gamma_0 J/\epsilon_0 c \\
-\partial_0 \hat{F} + \Bk i \hat{F} &= \gamma_0 \hat{J}/ \epsilon_0 c
+\partial_0 \hat{F} + \Bk \hat{F} i &= \gamma_0 \hat{J}/ \epsilon_0 c
 \end{align}
 
-Observe that we have commuted $i = \gamma_0 \gamma_1 \gamma_2 \gamma_3$ with $\hat{F}$ in the transition from the general equation
-\ref{eqn:waveDomainGeneral}.  This is possible in this case since $F$ and its Fourier transform is a grade two STA object so we have
-two sign interchanges in the commutation process.
+Observe that in the transition from
+\ref{eqn:waveDomainGeneral} we do not neccessarily have the freedom to commute $\hat{F}$ with $i = \gamma_0 \gamma_1 \gamma_2 \gamma_3$.
+If we knew for sure that $F$ and its transform had the same grade then this commutation would be possible.  Since $F$ is a grade
+two multivector, and two sign interchange would be required to commute with each of its vector factors in the STA basis, and one could write $F i = i F$.
 
 We want to find a solution to this second equation.  If the objects in question were all scalars this would be simple enough, and is
 a problem of the form
