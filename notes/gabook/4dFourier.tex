@@ -21,7 +21,7 @@
 
 \title{ 4D Fourier transforms applied to Maxwell's equation. }
 \author{Peeter Joot}
-\date{ Feb 1, 2009.  Last Revision: $Date: 2009/02/01 19:15:08 $ }
+\date{ Feb 1, 2009.  Last Revision: $Date: 2009/02/01 21:43:27 $ }
 
 \begin{document}
 
@@ -109,6 +109,8 @@ Note the opposite pairing of upstairs and downstairs indexes in the coordinates.
 
 \section{ Potential equations. }
 
+\subsection{ Inhomogeneous case. } 
+
 First for the attack is the Maxwell potential equations.  As well as using a 4D transform, having learned how to do Fourier
 transformations of multivectors, we will attack this one in vector form as well.  Our equation to invert is
 
@@ -166,12 +168,15 @@ e^{ i k \cdot x } d^4 k \\
 
 This allows us to write this entire specific solution to the forced wave equation problem as a convolution integral
 
-\begin{align}
+\begin{align}\label{eqn:potentialInHomogeneous}
 A(x) &= \inv{\epsilon_0 c} \IIinf {J}(x') G(x-x') d^4 x' \\
 G(x) &= \frac{-1}{ ({2\pi})^4} \IIinf \frac{e^{ i k \cdot x }}{ k^2 } d^4 k 
 \end{align}
 
-Slick!
+Pretty slick looking, but actually also problematic if one thinks about it.  Since $k^2$ is null in some cases
+$G(x)$ may blow up in some conditions.  My assumption however, is that a well defined meaning can be associated
+with this integral, I just do not know what it is yet.  A way to define this more exactly may require
+picking a more specific orthonormal basis once the exact character of $J$ is known.
 
 \subsection{ The homogeneous case. }
 
@@ -201,11 +206,67 @@ Using a spatial transform we have
 &= \partial_{00} \hat{A} - \sum_m \hat{A} (-i k_m)^2 
 \end{align*}
 
-So, we have to solve
+Carefully keeping the pseudoscalar factors all on the right of our vector as the integration by parts was performed doesn't make a difference since we just end up with a scalar in the end.  Our equation in the wave number domain is then just
 
 \begin{align*}
-\partial_{tt} \hat{A} + \hat{A} c^2 \Bk^2 &= c \hat{J}/\epsilon_0
+\partial_{tt} \hat{A}(\Bk,t) + (c^2 \Bk^2) \hat{A}(\Bk,t) &= 0 %c \hat{J}(\Bk,t)/\epsilon_0
 \end{align*}
+
+with exponential solutions
+
+\begin{align*}
+\hat{A}(\Bk, t) &= C(\Bk) \exp(\pm i c \Abs{\Bk} t)
+\end{align*}
+
+In particular, for $t = 0$ we have
+
+\begin{align*}
+\hat{A}(\Bk, 0) &= C(\Bk)
+\end{align*}
+
+Reassembling then gives us our homogeneous solution
+
+\begin{align*}
+{A}(\Bx, t)
+&= 
+\inv{(\sqrt{2\pi})^3} \IIinf 
+\left( \inv{(\sqrt{2\pi})^3} \IIinf A(\Bx', 0) e^{ -i \Bk \cdot \Bx' } d^3 x' \right) e^{\pm i c \Abs{\Bk} t}
+e^{ i \Bk \cdot \Bx } d^3 k
+\end{align*}
+
+This is
+
+\begin{align}\label{eqn:potentialHomogeneous}
+{A}(\Bx, t) &= \IIinf A(\Bx', 0) G( \Bx - \Bx' ) d^3 x' \\
+G(\Bx) &= \inv{({2\pi})^3} \IIinf \exp\left( i \Bk \cdot \Bx \pm i c \Abs{\Bk} t \right) d^3 k
+\end{align}
+
+Here also we have to be careful to keep the Green's function on the right hand side of $A$ since they 
+won't generally commute.
+
+\subsection{ Summarizing. }
+
+Assembling both the homogeneous and inhomogeneous parts for a complete solution we have for the Maxwell
+four vector potential
+
+\begin{align}
+A(x) &= \IIinf \left( A(\Bx', 0) H( \Bx - \Bx' ) + \inv{\epsilon_0 c} \IIinf {J}(x') G(x-x') dx^0 \right) dx^1 dx^2 dx^3 \\
+H(\Bx) &= \inv{({2\pi})^3} \IIinf \exp\left( i \Bk \cdot \Bx  \pm i c \Abs{\Bk} t \right) d^3 k \\
+G(x) &= \frac{-1}{ ({2\pi})^4} \IIinf \frac{e^{ i k \cdot x }}{ k^2 } d^4 k
+\end{align}
+
+Here for convienence both four vectors and spatial vectors were used with
+
+\begin{align*}
+x &= x^\mu \gamma_\mu \\
+\Bx &= x^m \sigma_m = x \wedge \gamma_0
+\end{align*}
+
+As expected, operating where possible in a Four vector context does produce a simpler convolution kernel for the vector potential.
+
+\section{ First order Maxwell equation treatment. }
+
+TODO.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
