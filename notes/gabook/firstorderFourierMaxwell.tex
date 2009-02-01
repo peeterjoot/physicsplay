@@ -21,7 +21,7 @@
 
 \title{ First order Fourier transform solution attempt for Maxwell's equation. }
 \author{Peeter Joot}
-\date{ Jan 31, 2009.  Last Revision: $Date: 2009/01/31 22:13:12 $ }
+\date{ Jan 31, 2009.  Last Revision: $Date: 2009/02/01 00:27:31 $ }
 
 \begin{document}
 
@@ -105,7 +105,7 @@ Writing $\Bk = k_m \sigma^m$, $\Br = \sigma_m r^m$, $\Bx = \sigma_m x^m$, that i
 \end{align*}
 
 In the second last step above we make the ad-hoc identification of that $\sinc$ limit with the dirac delta function, and recover
-our original function as desired.
+our original function as desired (the Rigor police are on holiday again).
 
 \subsection{ Rotor form of the Fourier transform? }
 
@@ -113,14 +113,78 @@ Although the formulation picked above appears to work, it isn't the only choice 
 of multivector.  Would it be more natural to pick an explicit Rotor formulation?  This perhaps makes more sense since it is then
 automatically grade preserving.
 
-\begin{align}
-\hat{\psi}(\Bk, t) &= \inv{(\sqrt{2\pi})^3} \IIinf \exp\left( \inv{2} i \Bk \cdot \Bx \right) \psi(\Bx, t) \exp\left( - \inv{2} i \Bk \cdot \Bx \right) d^3 x \\
-{\psi}(\Bx, t) &= \PV \inv{(\sqrt{2\pi})^3} \IIinf \exp\left( -\inv{2} i \Bk \cdot \Bx \right) \hat{\psi}(\Bk, t) \exp\left( \inv{2} i \Bk \cdot \Bx \right) d^3 k
+\begin{align}\label{eqn:rotorFourier}
+\hat{\psi}(\Bk, t) &= \inv{(\sqrt{2\pi})^n} \IIinf \exp\left( \inv{2} i \Bk \cdot \Bx \right) \psi(\Bx, t) \exp\left( - \inv{2} i \Bk \cdot \Bx \right) d^n x \\
+{\psi}(\Bx, t) &= \PV \inv{(\sqrt{2\pi})^n} \IIinf \exp\left( -\inv{2} i \Bk \cdot \Bx \right) \hat{\psi}(\Bk, t) \exp\left( \inv{2} i \Bk \cdot \Bx \right) d^n k
 \end{align}
 
-Later I tried to make an assumption that the grade of a transformed object equals the original grade, and that doesn't work with the
+This isn't a moot question since I later
+tried to make an assumption that the grade of a transformed object equals the original grade.  That doesn't work with the
 Fourier transform definition that has been picked in equation \ref{eqn:FourierTxDefinition}.  It may be neccessary to revamp the complete treatment, but
-for now an observation that the grades of transform pairs do not neccessarily match is required.
+for now at least an observation that the grades of transform pairs do not neccessarily match is required.
+
+Does the transform pair work?  For the $n=1$ case this is
+
+\begin{align*}
+\FF(f) = \hat{f}(k) &= \inv{\sqrt{2\pi}} \IIinf \exp\left( \inv{2} i k x \right) f(x) \exp\left( - \inv{2} i k x \right) dx \\
+\FF^{-1}(\hat{f}) = {f}(x) &= \PV \inv{\sqrt{2\pi}} \IIinf \exp\left( -\inv{2} i k x \right) \hat{f}(k) \exp\left( \inv{2} i k x \right) dk
+\end{align*}
+
+Will the computation of $\FF^{-1}(\FF(f(x)))$ produce $f(x)$?  Let's try
+
+\begin{align*}
+\FF^{-1}(\FF(f(x)))
+&= \\
+\PV &\inv{{2\pi}} \IIinf \exp\left( -\inv{2} i k x \right) 
+\left(
+\IIinf \exp\left( \inv{2} i k u \right) f(u) \exp\left( - \inv{2} i k u \right) du 
+\right)
+\exp\left( \inv{2} i k x \right) dk \\
+&=
+\PV \inv{{2\pi}} \IIinf \exp\left( -\inv{2} i k (x -u) \right) f(u) \exp\left( \inv{2} i k (x -u) \right) du dk \\
+\end{align*}
+
+Now, this expression can't obviously be identified with the delta function as in the single sided transformation.  Suppose we decompose $f$ into grades that 
+commute and anticommute with $i$.  That is
+
+\begin{align*}
+f &= f_\parallel + f_\perp \\
+f_\parallel i &= i f_\parallel  \\
+f_\perp  i &= -i f_\perp 
+\end{align*}
+
+This is also sufficient to determine how these components of $f$ behave with respect to the exponentials.  We have
+
+\begin{align*}
+e^{i\theta} 
+&= \sum_m \frac{(i\theta)^m}{m!} \\
+&= \cos(\theta) + i\sin(\theta)
+\end{align*}
+
+So we also have
+
+\begin{align*}
+f_\parallel e^{i\theta} &= e^{i\theta} f_\parallel  \\
+f_\perp e^{i\theta} &= e^{-i\theta} f_\perp 
+\end{align*}
+
+This gives us
+\begin{align*}
+\FF^{-1}(\FF(f(x)))
+&=
+\PV \inv{{2\pi}} \IIinf f_\parallel(u) du dk 
++\PV \inv{{2\pi}} \IIinf f_\perp(u) \exp\left( i k (x -u) \right) du dk \\
+&=
+\inv{{2\pi}} \IIinf dk \IIinf f_\parallel(u) du +\IIinf f_\perp(u) \delta( x -u ) du \\
+\end{align*}
+
+So, we see two things.  First is that any $f_\parallel \ne 0$ produces an unpleasant infinite result.  One could, in a vague sense, allow for odd valued $f_\parallel$, however, if we were to apply this inversion transformation pair to a function time varying multivector function $f(x,t)$, this would then require that the function is odd for all times.  Such a function must be zero valued. % or some odd construction such as a function that is zero everywhere except at some denumerable set of points.
+
+The second thing that we see is that if $f$ entirely anticommutes with $i$, we do recover it with this transform pair, obtaining $f_\perp(x)$.
+
+With respect to Maxwell's equation
+this immediately means that this double sided transform pair is of no use, since our pseudoscalar $i = \gamma_0 \gamma_1\gamma_2 \gamma_3$ commutes with our grade two 
+field bivector $F$.
 
 \section{ Fourier transforming the spacetime split gradient equation. }
 
@@ -226,7 +290,7 @@ We want to find a solution to this second equation.  If the objects in question 
 a problem of the form
 
 \begin{align*}
-f' + a f &= g
+f' + a f b &= g
 \end{align*}
 
 Let's remind ourselves what the form of the solution of this inhomogeneous scalar equation is, using the variation of parameters method.
