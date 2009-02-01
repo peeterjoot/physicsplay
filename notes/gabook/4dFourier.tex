@@ -21,7 +21,7 @@
 
 \title{ 4D Fourier transforms applied to Maxwell's equation. }
 \author{Peeter Joot}
-\date{ Feb 1, 2009.  Last Revision: $Date: 2009/02/01 21:43:27 $ }
+\date{ Feb 1, 2009.  Last Revision: $Date: 2009/02/01 23:34:20 $ }
 
 \begin{document}
 
@@ -83,8 +83,8 @@ In these notes an attempt to rework these problems using a 4D spacetime Fourier 
 As before we want a multivector friendly Fourier transform pair, and choose the following
 
 \begin{align}\label{eqn:FourierTxDefinition}
-\hat{\psi}(x) &= \inv{(\sqrt{2\pi})^4} \IIinf \psi(x) \exp\left( -i k \cdot x \right) d^4 x \\
-{\psi}(k) &= \PV \inv{(\sqrt{2\pi})^4} \IIinf \hat{\psi}(k) \exp\left( i k \cdot x \right) d^4 k
+\hat{\psi}(k) &= \inv{(\sqrt{2\pi})^4} \IIinf \psi(x) \exp\left( -i k \cdot x \right) d^4 x \\
+{\psi}(x) &= \PV \inv{(\sqrt{2\pi})^4} \IIinf \hat{\psi}(k) \exp\left( i k \cdot x \right) d^4 k
 \end{align}
 
 Here we use $i = \gamma_0 \gamma_1 \gamma_2 \gamma_3$ as our pseudoscalar, and have to therefore be careful of order
@@ -266,7 +266,57 @@ As expected, operating where possible in a Four vector context does produce a si
 
 \section{ First order Maxwell equation treatment. }
 
-TODO.
+Now we want to Fourier transform Maxwell's equation directly.  That is
+
+\begin{align*}
+\FF(\grad F = J/\epsilon_0 c)
+\end{align*}
+
+For the LHS we have
+
+\begin{align*}
+\FF(\grad F)
+&= \FF(\gamma^\mu \partial_\mu F) \\
+&= \gamma^\mu \inv{(2\pi)^2} \IIinf (\partial_\mu F) e^{ - i k \cdot x } d^4 x \\
+&= -\gamma^\mu \inv{(2\pi)^2} \IIinf F \partial_\mu (e^{ - i k_\sigma x^\sigma }) d^4 x \\
+&= -\gamma^\mu \inv{(2\pi)^2} \IIinf F (-i k_\mu ) e^{ - i k \cdot x } d^4 x \\
+&= -i \gamma^\mu k_\mu \inv{(2\pi)^2} \IIinf F e^{ - i k \cdot x } d^4 x \\
+&= -i k \hat{F}
+\end{align*}
+
+This gives us
+
+\begin{align*}
+-i k \hat{F} = \hat{J}/\epsilon_0 c
+\end{align*}
+
+So to solve the forced Maxwell equation we have only to inverse transform the following
+
+\begin{align*}
+\hat{F} = \inv{ -i k \epsilon_0 c} \hat{J}
+\end{align*}
+
+This is 
+
+\begin{align*}
+{F} 
+&= \inv{(\sqrt{2\pi})^4} \IIinf \inv{ -i k \epsilon_0 c} \left( \inv{(\sqrt{2\pi})^4} \IIinf J(x') e^{ -i k \cdot x' } d^4 x' \right) e^{ i k \cdot x } d^4 k \\
+\end{align*}
+
+Adding to this a solution to the homogeneous equation we now have a complete solution in terms of the given four current density and an
+initial field wave packet
+
+\begin{align*}
+{F} &= 
+\inv{({2\pi})^3} \int e^{ -i c \Bk t } F(\Bx', 0) e^{ i \Bk \cdot (\Bx-\Bx') } d^3 x' d^3 k  
++
+\inv{ ({2\pi})^4 \epsilon_0 c} \int \frac{i}{ k } J(x') e^{ i k \cdot (x - x') } d^4 k d^4 x' \\
+\end{align*}
+
+Observe that we can't make a single sided Green's function to convolve $J$ with since the vectors $k$ and $J$ may not commute.
+
+As expected working in a relativistic context for our inherently relativistic equation turns out to be much simpler and produce a simpler result.  As before 
+trying to actually evaluate these integrals is a different story.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
