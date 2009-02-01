@@ -19,9 +19,9 @@
    % needed, but their inclusion can't do any damage
 
 
-\title{ First order Fourier transform solution attempt for Maxwell's equation. }
+\title{ First order Fourier transform solution of Maxwell's equation. }
 \author{Peeter Joot}
-\date{ Jan 31, 2009.  Last Revision: $Date: 2009/02/01 01:12:33 $ }
+\date{ Jan 31, 2009.  Last Revision: $Date: 2009/02/01 05:42:06 $ }
 
 \begin{document}
 
@@ -294,7 +294,7 @@ This allows us to write our transformed equation in the slightly tider form
 We want to find a solution to this equation.  If the objects in question were all scalars this would be simple enough, and is a problem of the form
 
 \begin{align}\label{eqn:firstOrder}
-f' + a f &= g
+B' + A B &= Q
 \end{align}
 
 For our electromagnetic field our transform is a summation of the following 
@@ -314,13 +314,16 @@ much like the magnetic field portions of our field vector $i c \BB$.
 
 Having figured out the grades of all the terms in \ref{eqn:toSolve}, what
 does a grade split of this equation yield?  For the equation to be true
-do we not need it to be true for all grades?  This would imply
+do we not need it to be true for all grades?  Our grade zero, four, and two
+terms respectively are
 
 \begin{align*}
 (i \Bk) \cdot \hat{F} &= \hat{\rho}/ \epsilon_0 \\
 (i \Bk) \wedge \hat{F} &= 0 \\
 \partial_0 \hat{F} + (i \Bk) \times \hat{F} &= -\hat{\Bj}/ \epsilon_0 c
 \end{align*}
+
+Here the (antisymmetric) commutator product $\gpgradetwo{ab} = a \times b = (a b - ba)/2$ has been used in the last equation for this bivector product.
 
 It is kind of interesting that an unmoving charge density contributes nothing
 to the time variation of the field in the wave number domain, instead
@@ -329,9 +332,171 @@ equation.
 
 \subsection{ Solving this first order inhomogeneous problem. } 
 
-Let's remind ourselves what the form of the solution of this inhomogeneous scalar equation 
-\ref{eqn:firstOrder} is.  Having just used it for our second order 
-wave equation problems, lets use the variation of parameters method again.
+We want to solve the inhomogeneous scalar equation 
+\ref{eqn:firstOrder} but do so in a fashion that is also valid for
+the grades for the Maxwell equation problem.
+
+Application of variation of parameters produces the desired result.  Let's write this equation in operator form
+
+\begin{align*}
+L(B) &= B' + A B
+\end{align*}
+
+and start with the solution of the 
+homogeneous problem
+
+\begin{align*}
+L(B) = 0
+\end{align*}
+
+This is 
+
+\begin{align*}
+B' = -A B
+\end{align*}
+
+so we expect exponential solutions will do the trick, but have to get the ordering right due to the possibility of non-commutative factors.  How about one of
+
+\begin{align*}
+B &= C e^{-At} \\
+B &= e^{-At} C
+\end{align*}
+
+Where $C$ is constant, but not neccesarily a scalar, and doesn't have to commute with $A$.  Taking derivatives of the first we have
+
+\begin{align*}
+B' = C (-A) e^{-At}
+\end{align*}
+
+This doesn't have the desired form unless $C$ and $A$ commute.  How about the second possibility?  That one has the derivative
+
+\begin{align*}
+B' 
+&= (-A) e^{-At} C \\
+&= -A B 
+\end{align*}
+
+which is what we want.  Now, for the inhomogeneous problem we want to use a test solution replacing C with an function to be determined.  That is
+
+\begin{align*}
+B &= e^{-At} U
+\end{align*}
+
+For this we have
+\begin{align*}
+L(B) 
+&= (-A) e^{-At} U + e^{-At} U' + A B  \\
+&= e^{-At} U'
+\end{align*}
+
+Our inhomogeneous problem $L(B) = Q$ is therefore reduced to
+
+\begin{align*}
+e^{-At} U' &= Q
+\end{align*}
+
+Or 
+\begin{align*}
+U &= \int e^{A t} Q(t) dt
+\end{align*}
+
+As an indefinite integral this gives us
+
+\begin{align*}
+B(t)
+&= e^{-At} \int e^{A t} Q(t) dt \\
+\end{align*}
+
+And finally in definite integral form,
+if all has gone well, we have a specific solution to the forced problem
+
+\begin{align}\label{eqn:linearSolved}
+B(t) &= \int_{t_0}^{t} e^{-A (t -\tau)} Q(\tau) d\tau 
+\end{align}
+
+\subsubsection{ Verify. }
+
+With differentiation under the integral sign we have
+
+\begin{align*}
+\frac{dB}{dt} 
+&={\left. e^{-A (t -\tau)} Q(\tau) \right\vert}_{\tau=t} + \int_{t_0}^{t} -A e^{-A (t -\tau)} Q(\tau) d\tau \\
+&= Q(t) - A B
+\end{align*}
+
+Great!
+
+\subsection{ Back to Maxwell's }
+
+Switching to explicit time derivatives we have
+
+\begin{align*}
+\partial_t \hat{F} + (i c \Bk) \hat{F} &= \gamma_0 \hat{J}/ \epsilon_0
+\end{align*}
+
+By \ref{eqn:linearSolved}, this has, respectively, homogeneous and inhomogenous solutions 
+
+\begin{align}\label{eqn:waveNumberDomain}
+\hat{F}(\Bk,t) &= e^{-i c \Bk t} C(\Bk) \\
+\hat{F}(\Bk,t) &= \inv{\epsilon_0} \int_{t_0(\Bk)}^{t} e^{-(i c \Bk) (t -\tau)} \gamma_0 \hat{J}(\Bk,\tau) d\tau 
+\end{align}
+
+For the homogeneous term at $t=0$ we have
+
+\begin{align*}
+\hat{F}(\Bk,0) &= C(\Bk) \\
+\end{align*}
+
+So, $C(\Bk)$ is just the Fourier transform of an initial wave packet.  Reassembling all the bits in terms of fully specified Fourier and inverse Fourier transforms we have
+
+\begin{align*}
+F(\Bx,t) 
+&=
+%F^(\Bk, t) = \inv{(\sqrt{2\pi})^3} \int e^{-ic \Bk t} F(\Bx,0) e^{-i \Bk \cdot \Bx} d^3 x
+\inv{(\sqrt{2\pi})^3} \int 
+%\hat{F}(\Bk,t)
+\left(
+\inv{(\sqrt{2\pi})^3} \int e^{-ic \Bk t} F(\Bu,0) e^{-i \Bk \cdot \Bu} d^3 u
+\right)
+e^{i \Bk \cdot \Bx} d^3 k \\
+&= \inv{({2\pi})^3} \int e^{-ic \Bk t} F(\Bu,0) e^{i \Bk \cdot (\Bx - \Bu)} d^3 u d^3 k \\
+\end{align*}
+
+We have something like a double sided Green's function, with which we do a spatial convolution over all space with to produce a function of wave number.  One more integration over all wave numbers gives us our inverse Fourier transform.  The final result is a beautiful closed form solution for the time evolution of an arbitrary wave packet for the field specified at some 
+specific initial time.
+
+Now, how about that forced term?  We want to inverse Fourier transform our $\hat{J}$ based equation in \ref{eqn:waveNumberDomain}.  Picking our $t_0 = -\infty$ this is
+
+\begin{align*}
+F(\Bx,t) 
+&=
+\inv{(\sqrt{2\pi})^3} \int 
+\left( \inv{\epsilon_0} \int_{\tau = -\infty}^{t} e^{-(i c \Bk) (t -\tau)} \gamma_0 \hat{J}(\Bk,\tau) d\tau  \right) e^{i \Bk \cdot \Bx} d^3 k \\
+&=
+\inv{\epsilon_0 ({2\pi})^3} \int 
+\int_{\tau = -\infty}^{t} e^{-(i c \Bk) (t -\tau)} \gamma_0 {J}(\Bu,\tau) 
+e^{i \Bk \cdot (\Bx-\Bu)} 
+d\tau  
+d^3 u
+d^3 k
+\end{align*}
+
+Again we have a double sided Green's function.  We require a convolution summing the four vector current density contributions over all space and for all times less than $t$.
+
+Now we can combine the vacuum and charge present solutions for a complete solution to Maxwell's equation.  This is
+
+\begin{align}
+F(\Bx,t) 
+&=
+\inv{({2\pi})^3} \int 
+e^{-i c \Bk t}
+\left(
+F(\Bu, 0) + \inv{\epsilon_0} \int_{\tau = -\infty}^{t} e^{i c \Bk \tau } \gamma_0 J(\Bu,\tau)  d\tau  
+\right)
+e^{i \Bk \cdot (\Bx-\Bu)} 
+d^3 u
+d^3 k
+\end{align}
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
