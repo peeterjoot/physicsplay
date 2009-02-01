@@ -3,6 +3,12 @@
 \input{../peeters_macros.tex}
 \input{../peeters_macros2.tex}
 
+\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+\DeclareMathOperator{\sinc}{sinc}
+\DeclareMathOperator{\PV}{PV}
+\newcommand{\FF}[0]{\mathcal{F}}
+\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+
 \usepackage[bookmarks=true]{hyperref}
 
 \usepackage{color,cite,graphicx}
@@ -15,7 +21,7 @@
 
 \title{ 4D Fourier transforms applied to Maxwell's equation. }
 \author{Peeter Joot}
-\date{ Feb 1, 2009.  Last Revision: $Date: 2009/02/01 18:15:04 $ }
+\date{ Feb 1, 2009.  Last Revision: $Date: 2009/02/01 19:15:08 $ }
 
 \begin{document}
 
@@ -24,13 +30,13 @@
 
 \section{ Motivation. }
 
-In \cite{PJfirstOrderMaxwell}, solutions of the first order Maxwell equation
+In \cite{PJfirstOrderMaxwell}, a solution of the first order Maxwell equation
 
 \begin{align}
 \grad F &= \frac{J }{\epsilon_0 c}
 \end{align}
 
-were found to be
+was found to be
 
 \begin{align}
 F(\Bx,t) 
@@ -77,9 +83,129 @@ In these notes an attempt to rework these problems using a 4D spacetime Fourier 
 As before we want a multivector friendly Fourier transform pair, and choose the following
 
 \begin{align}\label{eqn:FourierTxDefinition}
-\hat{\psi}(x) &= \inv{(\sqrt{2\pi})^4} \IIinf \psi(x, t) \exp\left( -i k \cdot x \right) d^4 x \\
-{\psi}(k) &= \PV \inv{(\sqrt{2\pi})^4} \IIinf \hat{\psi}(k, t) \exp\left( i k \cdot x \right) d^4 k
+\hat{\psi}(x) &= \inv{(\sqrt{2\pi})^4} \IIinf \psi(x) \exp\left( -i k \cdot x \right) d^4 x \\
+{\psi}(k) &= \PV \inv{(\sqrt{2\pi})^4} \IIinf \hat{\psi}(k) \exp\left( i k \cdot x \right) d^4 k
 \end{align}
+
+Here we use $i = \gamma_0 \gamma_1 \gamma_2 \gamma_3$ as our pseudoscalar, and have to therefore be careful of order
+of operations since this does not neccessarily commute with multivector $\psi$ or $\hat{\psi}$ functions.
+
+For our dot product and vectors, with summation over matched upstairs downstairs indexes implied, we write
+
+\begin{align*}
+x &= x^\mu \gamma_\mu = x_\mu \gamma^\mu \\
+k &= k^\mu \gamma_\mu = k_\mu \gamma^\mu \\
+x \cdot k &= x^\mu k_\mu = x_\mu k^\mu
+\end{align*}
+
+Finally our differential volume elements are defined to be
+
+\begin{align*}
+d^4 x &= dx^0 dx^1 dx^2 dx^3 \\
+d^4 k &= dk_0 dk_1 dk_2 dk_3 \\
+\end{align*}
+
+Note the opposite pairing of upstairs and downstairs indexes in the coordinates.
+
+\section{ Potential equations. }
+
+First for the attack is the Maxwell potential equations.  As well as using a 4D transform, having learned how to do Fourier
+transformations of multivectors, we will attack this one in vector form as well.  Our equation to invert is
+
+\begin{align*}
+\grad^2 A = J/\epsilon_0 c
+\end{align*}
+
+There is nothing special to do for the transformation of the current term, but the left hand side will require two integration
+parts
+
+\begin{align*}
+\FF(\grad^2 A )
+&= \inv{(2 \pi)^2} \IIinf \left(\left(\partial_{00} - \sum_m \partial_{mm}\right) A \right) e^{ -i k_\mu x^\mu } d^4 x \\
+&= \inv{(2 \pi)^2} \IIinf A \left( (-i k_0)^2 - \sum_m (-i k_m)^2 \right) e^{ -i k_\mu x^\mu } d^4 x \\
+\end{align*}
+
+As usual it is required that $A$ and $\partial_\mu A$ vanish at infinity.  Now for the scalar in the interior we have
+
+\begin{align*}
+(-i k_0)^2 - \sum_m (-i k_m)^2 
+&= -(k_0)^2 + \sum_m (k_m)^2 \\
+\end{align*}
+
+But this is just the (negation) of the square of our wave number vector
+\begin{align*}
+k^2 
+&= k_\mu \gamma^\mu \cdot k_\nu \gamma^\nu \\
+&= k_\mu k_\nu \gamma^\mu \cdot \gamma^\nu \\
+&= 
+k_0 k_0 \gamma_0 \cdot \gamma^0 
+-\sum_{a,b} k_a k_b \gamma_a \cdot \gamma^b \\
+&= (k_0)^2 - \sum_a (k_a)^2
+\end{align*}
+
+Putting things back together we have for our potential vector in the wave number domain
+
+\begin{align*}
+\hat{A} &= \frac{\hat{J}}{- k^2 \epsilon_0 c}
+\end{align*}
+
+Inverting, and substitution for $\hat{J}$ gives us our spacetime domain potential vector in one fell swoop
+
+\begin{align*}
+A(x)
+&= 
+\inv{(\sqrt{2\pi})^4} \IIinf 
+\left(
+\inv{- k^2 \epsilon_0 c} \inv{(\sqrt{2\pi})^4} \IIinf {J}(x') e^{-i k \cdot x' } d^4 x'
+\right)
+e^{ i k \cdot x } d^4 k \\
+&= 
+\inv{({2\pi})^4} \IIinf {J}(x') \inv{- k^2 \epsilon_0 c} e^{ i k \cdot (x - x') } d^4 k d^4 x'
+\\
+\end{align*}
+
+This allows us to write this entire specific solution to the forced wave equation problem as a convolution integral
+
+\begin{align}
+A(x) &= \inv{\epsilon_0 c} \IIinf {J}(x') G(x-x') d^4 x' \\
+G(x) &= \frac{-1}{ ({2\pi})^4} \IIinf \frac{e^{ i k \cdot x }}{ k^2 } d^4 k 
+\end{align}
+
+Slick!
+
+\subsection{ The homogeneous case. }
+
+The missing element here is the addition of any allowed homogeneous solutions to the wave equation.
+The form of such solutions cannot be obtained with the 4D transform since that produces
+
+\begin{align*}
+-k^2 \hat{A} = 0
+\end{align*}
+
+and no meaningful inversion of that is possible.
+
+For the homogeneous problem we are forced to reexpress the spacetime Laplacian with an explicit bias towards either time or a specific direction in space, and attack with a Fourier transform on the remaining coordinates.  This has been done previously, but we can
+revisit this using our new vector transform.
+
+Now we switch to a spatial Fourier transform
+
+\begin{align}\label{eqn:3DFourierTxDefinition}
+\hat{\psi}(\Bk, t) &= \inv{(\sqrt{2\pi})^3} \IIinf \psi(\Bx, t) \exp\left( -i \Bk \cdot \Bx \right) d^3 x \\
+{\psi}(\Bx, t) &= \PV \inv{(\sqrt{2\pi})^3} \IIinf \hat{\psi}(\Bk, t) \exp\left( i \Bk \cdot \Bx \right) d^3 k
+\end{align}
+
+Using a spatial transform we have
+
+\begin{align*}
+\FF((\partial_{00} - \sum_m \partial_{mm}) A)
+&= \partial_{00} \hat{A} - \sum_m \hat{A} (-i k_m)^2 
+\end{align*}
+
+So, we have to solve
+
+\begin{align*}
+\partial_{tt} \hat{A} + \hat{A} c^2 \Bk^2 &= c \hat{J}/\epsilon_0
+\end{align*}
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
