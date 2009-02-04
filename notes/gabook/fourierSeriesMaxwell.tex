@@ -17,7 +17,7 @@
 
 \title{ Fourier series Vacuum Maxwell's equations. }
 \author{Peeter Joot}
-\date{ Feb 03, 2009.  Last Revision: $Date: 2009/02/04 02:45:32 $ }
+\date{ Feb 03, 2009.  Last Revision: $Date: 2009/02/04 04:24:18 $ }
 
 \begin{document}
 
@@ -54,38 +54,38 @@ I_3 &= [ a^3, a^3 + \lambda_3 ] \\
 Our assumed Fourier representation is then
 
 \begin{align*}
-f(\Bx, t) &= \sum_{\Bk} \hat{f}(\Bk, t) \exp\left( - \sum_j \frac{2 \pi i k_j}{\lambda_j} x^j\right)
+f(\Bx, t) &= \sum_{\Bk} \hat{f}_{\Bk}(t) \exp\left( - \sum_j \frac{2 \pi i k_j x^j}{\lambda_j} \right)
 \end{align*}
 
-Here $\Bk = (k_1, k_2, k_3)$ is a triplet of integer values, and takes on all integers in the $[-\infty, \infty]$ range.
+Here $\hat{f}_{\Bk} = \hat{f}_{\{k_1, k_2, k_3\}}$ is indexed over a triplet of integer values, and the $k_1, k_2, k_3$ indexes take on all integer values in the $[-\infty, \infty]$ range.
 
-We also wish to allow $i$ to not just be a generic complex number, but allow for the use of either the Euclidian or Minkowski pseudoscalar
+Note that we also wish to allow $i$ to not just be a generic complex number, but allow for the use of either the Euclidian or Minkowski pseudoscalar
 
 \begin{align*}
 i = \gamma_0 \gamma_1 \gamma_2 \gamma_3 = \sigma_1 \sigma_2 \sigma_3
 \end{align*}
 
-Because of this we should not assume that we can commute $i$, or our exponentials with the functions $f(\Bx,t)$, or $\hat{f}(\Bk,t)$.
+Because of this we should not assume that we can commute $i$, or our exponentials with the functions $f(\Bx,t)$, or $\hat{f}_{\Bk}(t)$.
 
 \begin{align*}
 \int_{x^1 = \partial I_1} &\int_{x^2 = \partial I_2} \int_{x^3 = \partial I_3} f(\Bx, t) 
 e^{ 2 \pi i m_j x^j/\lambda_j}
 dx^1 dx^2 dx^3 \\
-&= \sum_{\Bk} \hat{f}(\Bk, t) \int_{x^1 = \partial I_1} \int_{x^2 = \partial I_2} \int_{x^3 = \partial I_3} dx^1 dx^2 dx^3 e^{ 2 \pi i (m_j - k_j) x^j/\lambda_j} dx^1 dx^2 dx^3
+&= \sum_{\Bk} \hat{f}_{\Bk}(t) \int_{x^1 = \partial I_1} \int_{x^2 = \partial I_2} \int_{x^3 = \partial I_3} dx^1 dx^2 dx^3 e^{ 2 \pi i (m_j - k_j) x^j/\lambda_j} dx^1 dx^2 dx^3
 \end{align*}
 
 But each of these integrals is just $\delta_{\Bk,\Bm} \lambda_1 \lambda_2 \lambda_3$, giving us
 
 \begin{align*}
-\hat{f}(\Bk, t)
+\hat{f}_{\Bk}(t)
 &= \inv{\lambda_1 \lambda_2 \lambda_3 } \int_{x^1 = \partial I_1} \int_{x^2 = \partial I_2} \int_{x^3 = \partial I_3} f(\Bx, t) \exp\left( \sum_j \frac{2 \pi i k_j x^j}{\lambda_j} \right) dx^1 dx^2 dx^3 \\
 \end{align*}
 
 For short lets write this as
 
 \begin{align}
-f(\Bx, t) &= \sum_{\Bk} \hat{f}(\Bk, t) \exp\left( - \frac{2 \pi i k_j x^j }{\lambda_j} \right) \\
-\hat{f}(\Bk, t) &= \inv{V} \int f(\Bx, t) \exp\left( \frac{2 \pi i k_j x^j}{\lambda_j} \right) d^3 x
+f(\Bx, t) &= \sum_{\Bk} \hat{f}_{\Bk}(t) \exp\left( - \frac{2 \pi i k_j x^j }{\lambda_j} \right) \\
+\hat{f}_{\Bk}( t) &= \inv{V} \int f(\Bx, t) \exp\left( \frac{2 \pi i k_j x^j}{\lambda_j} \right) d^3 x
 \end{align}
 
 \subsection{ Vacuum equation. }
@@ -95,7 +95,7 @@ want to apply this to Maxwell's equation for the vacuum.  We will use the
 STA formulation of Maxwell's equation, but use the unit convention of Bohm's
 book.
 
-In \cite{PJrayleighJeans} the STA equivalent to Bohm's notation for Maxwell's equations was found to be
+In \cite{PJrayleighJeans} the STA equivalent to Bohm's notation (cgs I think but with the old style $\HH$ for $c\BB$) for Maxwell's equations was found to be
 
 \begin{align}
 F &= \EE + i\HH \\
@@ -116,11 +116,66 @@ For the vacuum equation, we make an explicit spacetime split by premultiplying w
 
 So our vacuum equation is just
 
-\begin{align}
+\begin{align}\label{eqn:vacuumMaxwell}
 (\partial_0 + \spacegrad) F = 0
 \end{align}
 
 \subsection{ Application of Fourier series. }
+
+Now that a notation for the 3D Fourier series has been established, we
+can assume a series solution for our field of the form
+
+\begin{align}\label{eqn:assumed}
+F(\Bx,t) = \sum_{\Bk} \hat{F}_{\Bk}(t) e^{-2\pi i k_j x^j/\lambda_j}
+\end{align}
+
+can now apply this to the vacuum Maxwell equation \ref{eqn:vacuumMaxwell}.
+This gives us
+
+\begin{align*}
+\sum_{\Bk} \left(\partial_t \hat{F}_{\Bk}(t) \right) e^{-2\pi i k_j x^j/\lambda_j}
+&= -c \sum_{\Bk, m} \sigma^m \hat{F}_{\Bk}(t) \PD{x^m}{} e^{-2\pi i k_j x^j/\lambda_j} \\
+&= -c \sum_{\Bk, m} \sigma^m \hat{F}_{\Bk}(t) \left(-2 \pi \frac{k_m}{\lambda_m}\right) e^{-2\pi i k_j x^j/\lambda_j} \\
+&= 2 \pi c \sum_{\Bk} \sum_m \frac{\sigma^m k_m}{\lambda_m} \hat{F}_{\Bk}(t) i e^{-2\pi i k_j x^j/\lambda_j} \\
+\end{align*}
+
+Now lets invent (perhaps abuse) some notation to tidy things up.  As a subscript on our Fourier coefficients we've used $\Bk$ as an index.  Let's also use it as a vector, and write
+
+\begin{align*}
+\Bk = 2 \pi \sum_m \frac{\sigma^m k_m}{\lambda_m}
+\end{align*}
+
+It was also previously implied that we had
+
+\begin{align*}
+\Bx = \sum_m \sigma_m x^m
+\end{align*}
+
+Also noting that $i$ commutes with $\Bk$ and since $F$ is also an STA bivector $i$ commutes with $F$.  Putting all this together we have
+
+\begin{align*}
+\sum_{\Bk} \left(\partial_t \hat{F}_{\Bk}(t) \right) e^{-i \Bk \cdot \Bx }
+&= i c \sum_{\Bk} \Bk \hat{F}_{\Bk}(t) e^{- i \Bk \cdot \Bx } \\
+\end{align*}
+
+Term by term we now have a (big ass) set of very simple first order differential equations, one for each $\Bk$ triplet of indexes.  Specifically this is
+
+\begin{align*}
+\hat{F}_{\Bk}' &= i c \Bk \hat{F}_{\Bk}
+\end{align*}
+
+With solutions
+
+\begin{align*}
+\hat{F}_{0} &= A_{0} \\
+\hat{F}_{\Bk} &= \exp\left(i c \Bk \hat{F}_{\Bk}\right) A_{\Bk} \\
+\end{align*}
+
+Here $A_{\Bk}$ is an undetermined STA bivector.  Note that we have to keep this undetermined coefficient on the right hand side of the exponential since we cannot assume it commutes with $e^{i\Bk\phi}$.  Substitution back into our assumed solution sum we have a solution to Maxwell's equation, in terms of a set of as yet undetermined (bivector) coefficients
+
+\begin{align}
+F(\Bx,t) = A_0 + \sum_{\Bk \ne 0} \exp\left(i c \Bk \hat{F}_{\Bk}\right) A_{\Bk} \exp(-i \Bk \cdot \Bx )
+\end{align}
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
