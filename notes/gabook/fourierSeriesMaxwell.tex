@@ -1,0 +1,128 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+\newcommand{\EE}[0]{\boldsymbol{\mathcal{E}}}
+\newcommand{\HH}[0]{\boldsymbol{\mathcal{H}}}
+
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+\title{ Fourier series Vacuum Maxwell's equations. }
+\author{Peeter Joot}
+\date{ Feb 03, 2009.  Last Revision: $Date: 2009/02/04 02:45:32 $ }
+
+\begin{document}
+
+\maketitle{}
+
+\tableofcontents
+
+\section{ Fourier series. }
+
+In \cite{bohm1989qt}, 
+after finding a formulation of Maxwell's equations that he likes, Bohm's next
+step is to assume the electric and magnetic fields can be expressed in 
+a 3D Fourier series form, with periodicity in some repeated volume 
+of space, and then procedes to evaluate the energy of the 
+field.
+
+Let's try this.  Instead of using the sine and cosine fourier series
+which looks more complex than it ought to be, use of a complex exponential
+ought to be cleaner.
+
+\subsection{ 3D Fourier series in complex exponential form. }
+
+For a multivector function $f(\Bx, t)$, periodic in some rectangular spatial volume, let's assume that we have a
+3D Fourier series representation.
+
+Define the element of volume for our fundamental wavelengths to be the region bounded by three intervals in the $x^1, x^2, x^3$ directions respectively
+
+\begin{align*}
+I_1 &= [ a^1, a^1 + \lambda_1 ] \\
+I_2 &= [ a^2, a^2 + \lambda_2 ] \\
+I_3 &= [ a^3, a^3 + \lambda_3 ] \\
+\end{align*}
+
+Our assumed Fourier representation is then
+
+\begin{align*}
+f(\Bx, t) &= \sum_{\Bk} \hat{f}(\Bk, t) \exp\left( - \sum_j \frac{2 \pi i k_j}{\lambda_j} x^j\right)
+\end{align*}
+
+Here $\Bk = (k_1, k_2, k_3)$ is a triplet of integer values, and takes on all integers in the $[-\infty, \infty]$ range.
+
+We also wish to allow $i$ to not just be a generic complex number, but allow for the use of either the Euclidian or Minkowski pseudoscalar
+
+\begin{align*}
+i = \gamma_0 \gamma_1 \gamma_2 \gamma_3 = \sigma_1 \sigma_2 \sigma_3
+\end{align*}
+
+Because of this we should not assume that we can commute $i$, or our exponentials with the functions $f(\Bx,t)$, or $\hat{f}(\Bk,t)$.
+
+\begin{align*}
+\int_{x^1 = \partial I_1} &\int_{x^2 = \partial I_2} \int_{x^3 = \partial I_3} f(\Bx, t) 
+e^{ 2 \pi i m_j x^j/\lambda_j}
+dx^1 dx^2 dx^3 \\
+&= \sum_{\Bk} \hat{f}(\Bk, t) \int_{x^1 = \partial I_1} \int_{x^2 = \partial I_2} \int_{x^3 = \partial I_3} dx^1 dx^2 dx^3 e^{ 2 \pi i (m_j - k_j) x^j/\lambda_j} dx^1 dx^2 dx^3
+\end{align*}
+
+But each of these integrals is just $\delta_{\Bk,\Bm} \lambda_1 \lambda_2 \lambda_3$, giving us
+
+\begin{align*}
+\hat{f}(\Bk, t)
+&= \inv{\lambda_1 \lambda_2 \lambda_3 } \int_{x^1 = \partial I_1} \int_{x^2 = \partial I_2} \int_{x^3 = \partial I_3} f(\Bx, t) \exp\left( \sum_j \frac{2 \pi i k_j x^j}{\lambda_j} \right) dx^1 dx^2 dx^3 \\
+\end{align*}
+
+For short lets write this as
+
+\begin{align}
+f(\Bx, t) &= \sum_{\Bk} \hat{f}(\Bk, t) \exp\left( - \frac{2 \pi i k_j x^j }{\lambda_j} \right) \\
+\hat{f}(\Bk, t) &= \inv{V} \int f(\Bx, t) \exp\left( \frac{2 \pi i k_j x^j}{\lambda_j} \right) d^3 x
+\end{align}
+
+\subsection{ Vacuum equation. }
+
+Now that we have a desirable seeming Fourier series representation, we 
+want to apply this to Maxwell's equation for the vacuum.  We will use the 
+STA formulation of Maxwell's equation, but use the unit convention of Bohm's
+book.
+
+In \cite{PJrayleighJeans} the STA equivalent to Bohm's notation for Maxwell's equations was found to be
+
+\begin{align}
+F &= \EE + i\HH \\
+J &= (\rho + \Bj) \gamma_0 \\
+\grad F &= 4 \pi J
+\end{align}
+
+For the vacuum equation, we make an explicit spacetime split by premultiplying with $\gamma_0$
+
+\begin{align*}
+\gamma_0 \grad 
+&= \gamma_0 (\gamma^0 \partial_0 + \gamma^k \partial_k) \\
+&= \partial_0 - \gamma^k \gamma_0 \partial_k \\
+&= \partial_0 + \gamma_k \gamma_0 \partial_k \\
+&= \partial_0 + \sigma_k \partial_k \\
+&= \partial_0 + \spacegrad \\
+\end{align*}
+
+So our vacuum equation is just
+
+\begin{align}
+(\partial_0 + \spacegrad) F = 0
+\end{align}
+
+\subsection{ Application of Fourier series. }
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
+
+\end{document}
