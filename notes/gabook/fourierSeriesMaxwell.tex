@@ -17,7 +17,7 @@
 
 \title{ Fourier series Vacuum Maxwell's equations. }
 \author{Peeter Joot}
-\date{ Feb 03, 2009.  Last Revision: $Date: 2009/02/04 04:24:18 $ }
+\date{ Feb 03, 2009.  Last Revision: $Date: 2009/02/04 05:03:38 $ }
 
 \begin{document}
 
@@ -168,14 +168,51 @@ With solutions
 
 \begin{align*}
 \hat{F}_{0} &= A_{0} \\
-\hat{F}_{\Bk} &= \exp\left(i c \Bk \hat{F}_{\Bk}\right) A_{\Bk} \\
+\hat{F}_{\Bk} &= \exp\left(i c \Bk t \right) A_{\Bk} \\
 \end{align*}
 
-Here $A_{\Bk}$ is an undetermined STA bivector.  Note that we have to keep this undetermined coefficient on the right hand side of the exponential since we cannot assume it commutes with $e^{i\Bk\phi}$.  Substitution back into our assumed solution sum we have a solution to Maxwell's equation, in terms of a set of as yet undetermined (bivector) coefficients
+Here $A_{\Bk}$ is an undetermined STA bivector.  Note that we have to keep this undetermined coefficient on the right hand side of the exponential since we cannot assume it commutes with a factor of the form $\exp(i\Bk\phi)$.  Substitution back into our assumed solution sum we have a solution to Maxwell's equation, in terms of a set of as yet undetermined (bivector) coefficients
 
 \begin{align}
-F(\Bx,t) = A_0 + \sum_{\Bk \ne 0} \exp\left(i c \Bk \hat{F}_{\Bk}\right) A_{\Bk} \exp(-i \Bk \cdot \Bx )
+F(\Bx,t) = A_0 + \sum_{\Bk \ne 0} \exp\left(i c \Bk t \right) A_{\Bk} \exp(-i \Bk \cdot \Bx )
 \end{align}
+
+Now, observe the form of this sum for $t=0$.  This is
+
+\begin{align*}
+F(\Bx,t) 
+&= A_0 + \sum_{\Bk \ne 0} A_{\Bk} \exp(-i \Bk \cdot \Bx ) \\
+&= \sum_{\Bk} A_{\Bk} \exp(-i \Bk \cdot \Bx ) \\
+\end{align*}
+
+So, the $A_k$ coefficients are precisely the Fourier coefficients of $F(\Bx,0)$ as expected.  If we write 
+$
+A_{\Bk}
+=
+{\left.\hat{F}_{\Bk}\right\vert}_{t=0}
+$, we then have an equation for the complete time evolution of any spatially periodic electrodynamic field in terms of the field value at all points in the region at some initial time.  That is
+
+\begin{align}
+F(\Bx,t) &= \sum_{\Bk} \exp\left(i c \Bk t \right) {\left.\hat{F}_{\Bk}\right\vert}_{t=0} \exp(-i \Bk \cdot \Bx) \\
+{\left.\hat{F}_{\Bk}\right\vert}_{t=0} &= \inv{V} \int F(\Bx', 0) \exp\left( i\Bk \cdot \Bx' \right) d^3 x'
+\end{align}
+
+Regrouping slightly, taking advantage that we can commute our complex exponential to the left (cannot do so for the $i\Bk$ exponential)
+we can also write this as a convolution with a Fourier kernel (a Green's function).  That is
+
+\begin{align}
+F(\Bx,t) &= \inv{V} \int \sum_k e^{ - i (\Bk \cdot (\Bx' - \Bx) - \Bk c t) } F(\Bx', 0) d^3 x'
+\end{align}
+
+Or
+\begin{align}
+F(\Bx,t) &= \int G(\Bx' - \Bx, t) F(\Bx', 0) d^3 x' \\
+G(\Bx,t) &= \inv{V} \sum_k e^{ - i (\Bk \cdot \Bx - \Bk c t) }
+\end{align}
+
+Okay, that's cool.  We've now got the basic periodicity result directly from Maxwell's equation in one shot.  No need to drop down to
+potentials, or even the separate electric or magnetic parts of our complete field $F = \EE + i \HH$.  Next in the sequence of understanding
+Bohm's Rayleigh-Jeans result will be to consider the energy and momentum density of the field, but that's a job for a different day.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
