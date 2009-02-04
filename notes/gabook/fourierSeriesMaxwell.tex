@@ -17,7 +17,7 @@
 
 \title{ Fourier series Vacuum Maxwell's equations. }
 \author{Peeter Joot}
-\date{ Feb 03, 2009.  Last Revision: $Date: 2009/02/04 05:03:38 $ }
+\date{ Feb 03, 2009.  Last Revision: $Date: 2009/02/04 13:45:02 $ }
 
 \begin{document}
 
@@ -25,14 +25,16 @@
 
 \tableofcontents
 
-\section{ Fourier series. }
+\section{ Motivation. }
 
 In \cite{bohm1989qt}, 
-after finding a formulation of Maxwell's equations that he likes, Bohm's next
+after finding a formulation of Maxwell's equations that he likes, his next
 step is to assume the electric and magnetic fields can be expressed in 
 a 3D Fourier series form, with periodicity in some repeated volume 
 of space, and then procedes to evaluate the energy of the 
 field.
+
+\section{ Setup. }
 
 Let's try this.  Instead of using the sine and cosine fourier series
 which looks more complex than it ought to be, use of a complex exponential
@@ -95,13 +97,16 @@ want to apply this to Maxwell's equation for the vacuum.  We will use the
 STA formulation of Maxwell's equation, but use the unit convention of Bohm's
 book.
 
-In \cite{PJrayleighJeans} the STA equivalent to Bohm's notation (cgs I think but with the old style $\HH$ for $c\BB$) for Maxwell's equations was found to be
+In \cite{PJrayleighJeans} the STA equivalent to Bohm's notation 
+for Maxwell's equations was found to be
 
 \begin{align}
 F &= \EE + i\HH \\
 J &= (\rho + \Bj) \gamma_0 \\
 \grad F &= 4 \pi J
 \end{align}
+
+This is the cgs form of Maxwell's equation, but with the old style $\HH$ for $c\BB$, and $\EE$ for $\BE$.  In more recent texts $\EE$ is reserved for electromotive flux.  In this set of notes I use Bohm's notation, since the aim is to clarify for myself aspects of his treatment.
 
 For the vacuum equation, we make an explicit spacetime split by premultiplying with $\gamma_0$
 
@@ -120,7 +125,7 @@ So our vacuum equation is just
 (\partial_0 + \spacegrad) F = 0
 \end{align}
 
-\subsection{ Application of Fourier series. }
+\section{ First order vacuum solution with Fourier series. }
 
 Now that a notation for the 3D Fourier series has been established, we
 can assume a series solution for our field of the form
@@ -158,7 +163,7 @@ Also noting that $i$ commutes with $\Bk$ and since $F$ is also an STA bivector $
 &= i c \sum_{\Bk} \Bk \hat{F}_{\Bk}(t) e^{- i \Bk \cdot \Bx } \\
 \end{align*}
 
-Term by term we now have a (big ass) set of very simple first order differential equations, one for each $\Bk$ triplet of indexes.  Specifically this is
+Term by term we now have a (big ass, triple infinite) set of very simple first order differential equations, one for each $\Bk$ triplet of indexes.  Specifically this is
 
 \begin{align*}
 \hat{F}_{\Bk}' &= i c \Bk \hat{F}_{\Bk}
@@ -167,27 +172,29 @@ Term by term we now have a (big ass) set of very simple first order differential
 With solutions
 
 \begin{align*}
-\hat{F}_{0} &= A_{0} \\
-\hat{F}_{\Bk} &= \exp\left(i c \Bk t \right) A_{\Bk} \\
+\hat{F}_{0} &= C_{0} \\
+\hat{F}_{\Bk} &= \exp\left(i c \Bk t \right) C_{\Bk} \\
 \end{align*}
 
-Here $A_{\Bk}$ is an undetermined STA bivector.  Note that we have to keep this undetermined coefficient on the right hand side of the exponential since we cannot assume it commutes with a factor of the form $\exp(i\Bk\phi)$.  Substitution back into our assumed solution sum we have a solution to Maxwell's equation, in terms of a set of as yet undetermined (bivector) coefficients
+Here $C_{\Bk}$ is an undetermined STA bivector.  Note that we have to keep this undetermined coefficient on the right hand side of the exponential since we cannot assume it commutes with a factor of the form $\exp(i\Bk\phi)$.  Substitution back into our assumed solution sum we have a solution to Maxwell's equation, in terms of a set of as yet undetermined (bivector) coefficients
 
-\begin{align}
-F(\Bx,t) = A_0 + \sum_{\Bk \ne 0} \exp\left(i c \Bk t \right) A_{\Bk} \exp(-i \Bk \cdot \Bx )
+\begin{align}\label{eqn:undetermined}
+F(\Bx,t) = C_0 + \sum_{\Bk \ne 0} \exp\left(i c \Bk t \right) C_{\Bk} \exp(-i \Bk \cdot \Bx )
 \end{align}
 
 Now, observe the form of this sum for $t=0$.  This is
 
 \begin{align*}
-F(\Bx,t) 
-&= A_0 + \sum_{\Bk \ne 0} A_{\Bk} \exp(-i \Bk \cdot \Bx ) \\
-&= \sum_{\Bk} A_{\Bk} \exp(-i \Bk \cdot \Bx ) \\
+F(\Bx,0) 
+&= C_0 + \sum_{\Bk \ne 0} C_{\Bk} \exp(-i \Bk \cdot \Bx ) \\
+&= \sum_{\Bk} C_{\Bk} \exp(-i \Bk \cdot \Bx ) \\
 \end{align*}
 
-So, the $A_k$ coefficients are precisely the Fourier coefficients of $F(\Bx,0)$ as expected.  If we write 
+So, the $C_k$ coefficients are precisely the Fourier coefficients of $F(\Bx,0)$.  This is to be expected having repeatedly seen similar results in the Fourier transform treatments of 
+\cite{PJfourierMaxwellSecondOrder}, \cite{PJfirstOrderMaxwell}, and \cite{PJ4dFourier}.
+If we write 
 $
-A_{\Bk}
+C_{\Bk}
 =
 {\left.\hat{F}_{\Bk}\right\vert}_{t=0}
 $, we then have an equation for the complete time evolution of any spatially periodic electrodynamic field in terms of the field value at all points in the region at some initial time.  That is
@@ -211,8 +218,41 @@ G(\Bx,t) &= \inv{V} \sum_k e^{ - i (\Bk \cdot \Bx - \Bk c t) }
 \end{align}
 
 Okay, that's cool.  We've now got the basic periodicity result directly from Maxwell's equation in one shot.  No need to drop down to
-potentials, or even the separate electric or magnetic parts of our complete field $F = \EE + i \HH$.  Next in the sequence of understanding
-Bohm's Rayleigh-Jeans result will be to consider the energy and momentum density of the field, but that's a job for a different day.
+potentials, or even the separate electric or magnetic components of our field $F = \EE + i \HH$.
+
+\subsection{ Electric and magnetic field components. }
+
+Given $F$ we can compute the electric and magnetic field components using a spacetime observer split
+
+\begin{align*}
+\EE &= \inv{2}(F - \gamma_0 F \gamma_0 ) \\
+\HH &= \inv{2i}(F + \gamma_0 F \gamma_0 ) \\
+\end{align*}
+
+FIXME: thought I once wrote a method of doing this with only $i$?  I don't see how to do that now?  Go back in older notes and fix or understand what I did.
+%Alternately separation using the pseudoscalar is possible
+%FIXME: ...
+%F = \EE + i\HH
+%F = \EE + i\HH
+
+Since we are used to separate electric and magnetic fields, as measurable and experiencable quantities, reexpressing the previous results 
+in terms of separate fields out to take some of the abstraction out of the picture.  Additionally, in the Fourier components we expect, or at least ought to be able to show, a $\Bk$ dependence between $\EE$ and $\HH$.
+
+FIXME:TODO...
+
+\subsection{ Separate electric and magnetic fields with the boundary conditions unspecified. }
+
+Fixing the boundary value in terms of the initial field at $t=0$ is not the only option.  We see similar things in classical mechanics in constant acceleration problems where one can use an initial position and velocity, or positions at two different times, and so forth.  Bohm leaves his equivalents to the integration constants $C_{\Bk}$ unspecified.  If we do so too we have equation \ref{eqn:undetermined}.  How does that look with separate fields?
+
+FIXME:TODO:...
+
+\section{ Second order treatment with potentials. }
+
+\subsection{ With the Lorentz gauge. }
+
+% FIXME:TODO:
+%Next in the sequence of understanding
+%Bohm's Rayleigh-Jeans result will be to consider the energy and momentum density of the field, but that's a job for a different day.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
