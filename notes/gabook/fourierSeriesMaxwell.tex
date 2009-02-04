@@ -4,7 +4,7 @@
 \input{../peeters_macros2.tex}
 \newcommand{\EE}[0]{\boldsymbol{\mathcal{E}}}
 \newcommand{\HH}[0]{\boldsymbol{\mathcal{H}}}
-\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+%\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
 
 \usepackage[bookmarks=true]{hyperref}
 
@@ -18,7 +18,7 @@
 
 \title{ Fourier series Vacuum Maxwell's equations. }
 \author{Peeter Joot}
-\date{ Feb 03, 2009.  Last Revision: $Date: 2009/02/04 13:59:52 $ }
+\date{ Feb 03, 2009.  Last Revision: $Date: 2009/02/04 21:09:41 $ }
 
 \begin{document}
 
@@ -213,7 +213,7 @@ F(\Bx,t) &= \inv{V} \int \sum_k e^{ - i (\Bk \cdot (\Bx' - \Bx) - \Bk c t) } F(\
 \end{align}
 
 Or
-\begin{align}
+\begin{align}\label{eqn:bivectorSolution}
 F(\Bx,t) &= \int G(\Bx' - \Bx, t) F(\Bx', 0) d^3 x' \\
 G(\Bx,t) &= \inv{V} \sum_k e^{ - i (\Bk \cdot \Bx - \Bk c t) }
 \end{align}
@@ -280,15 +280,15 @@ Our vacuum field equation for the potential is thus
 
 Now, as before assume a Fourier solution and see what follows.  That is
 
-\begin{align*}
+\begin{align}\label{eqn:assumedPotential}
 A(\Bx, t) &= \sum_{\Bk} \hat{A}_{\Bk}(t) e^{ -i \Bk \cdot \Bx}
-\end{align*}
+\end{align}
 
 Applied to each component this gives us
 \begin{align*}
 \hat{A}_{\Bk}'' e^{ -i \Bk \cdot \Bx} 
-&= c^2 \hat{A}_{\Bk}(t) \sum_m \PDSq{x^m}{} e^{ - 2 \pi i \sum_j k_j x^j /\lambda_j}
-&= c^2 \hat{A}_{\Bk}(t) \sum_m (- 2 \pi i k_m/\lambda_m) e^{ - i \Bk \cdot \Bx }
+&= c^2 \hat{A}_{\Bk}(t) \sum_m \PDsq{x^m}{} e^{ - 2 \pi i \sum_j k_j x^j /\lambda_j} \\
+&= c^2 \hat{A}_{\Bk}(t) \sum_m (- 2 \pi i k_m/\lambda_m)^2 e^{ - i \Bk \cdot \Bx } \\
 &= -c^2 \Bk^2 \hat{A}_{\Bk} e^{ - i \Bk \cdot \Bx }
 \end{align*}
 
@@ -298,7 +298,79 @@ So we are left with another big ass set of simplest equations to solve
 \hat{A}_{\Bk}'' &= -c^2 \Bk^2 \hat{A}_{\Bk}
 \end{align*}
 
-Note that again the origin point $\Bk = (0,0,0)$ is a special case.
+Note that again the origin point $\Bk = (0,0,0)$ is a special case.  Also of note this time is that $\hat{A}_{\Bk}$ has vector and trivector parts, unlike $\hat{F}_{\Bk}$ which being derived from dual and non-dual components of a bivector was still a bivector.
+
+It appears that solutions can be found with either left or right handed
+vector valued integration constants
+
+\begin{align*}
+\hat{A}_{\Bk}(t) &= \exp(\pm i c \Bk t) C_{\Bk} \\
+                 &= D_{\Bk} \exp(\pm i c \Bk t)
+\end{align*}
+
+Since these are equal at $t=0$, it appears to imply that these commute with the
+complex exponentials as was the case for the bivector field.
+
+For the $\Bk = 0$ special case we have solutions
+\begin{align*}
+\hat{A}_{\Bk}(t) &= D_0 t + C_0
+\end{align*}
+
+It doesn't seem unreasonable to require $D_0 = 0$.  Otherwise this time dependent DC Fourier component will blow up at large and small values, while periodic
+solutions are sought.
+
+Putting things back together we have 
+
+\begin{align}
+A(\Bx, t) &= \sum_{\Bk} 
+%\hat{A}_{\Bk}(t) &= 
+\exp(\pm i c \Bk t) C_{\Bk} e^{ -i \Bk \cdot \Bx}
+\end{align}
+
+Here again for $t=0$, our integration constants are found to be determined completely by the initial conditions
+
+\begin{align}
+A(\Bx, 0) &= \sum_{\Bk} C_{\Bk} e^{ -i \Bk \cdot \Bx}
+\end{align}
+
+So we can write
+
+\begin{align*}
+C_{\Bk} = \inv{V} \int A(\Bx', 0) e^{ i \Bk \cdot \Bx'} d^3 x'
+\end{align*}
+
+In integral kernel form this is
+
+%\sum_{\Bk} \inv{V} \int A(\Bx', 0) e^{ i \Bk \cdot (\Bx - \Bx') \mp i c \Bk t } d^3 x'
+\begin{align}
+A(\Bx, t) &= \int A(\Bx', 0) G_A(\Bx - \Bx', t) d^3 x' \\
+G_A(\Bx, t) &= \inv{V} \sum_{\Bk} e^{ i (\Bk \cdot \Bx \mp c \Bk t) }
+\end{align}
+
+Rather suprisingly, this is almost exactly what we had for the bivector field in equation \ref{eqn:bivectorSolution}!  The only difference that the second order differential equation seems to contribute to the kernel is an allowable plus or minus variation in the $ct$ term.
+
+\subsection{ Comparing the first and second order solutions }
+
+Since we are working in the Lorentz gauge, we should have
+
+\begin{align*}
+F 
+&= \grad \wedge A \\
+&= \grad A \\
+&= \int A(\Bx', 0) \left(\grad G_A(\Bx - \Bx', t) \right) d^3 x' \\
+\end{align*}
+
+Or with the opposite convolution
+\begin{align*}
+F &= \grad \int A(\Bx - \Bx', 0) G_A(\Bx', t) d^3 x' \\
+\end{align*}
+
+FIXME: expand these and see what falls out.  
+
+\section{ Field Energy and momentum. }
+
+Given that we have the same structure for our four vector potential solutions as the complete bivector field, it doesn't appear that there is much
+reason to work in the second order quantities.  For the energy momentum analysis, let's go back to the original bivector field solutions.
 
 % FIXME:TODO:
 %Next in the sequence of understanding
