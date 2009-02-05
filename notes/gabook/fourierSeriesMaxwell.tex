@@ -18,7 +18,7 @@
 
 \title{ Fourier series Vacuum Maxwell's equations. }
 \author{Peeter Joot}
-\date{ Feb 03, 2009.  Last Revision: $Date: 2009/02/05 05:34:15 $ }
+\date{ Feb 03, 2009.  Last Revision: $Date: 2009/02/05 14:08:26 $ }
 
 \begin{document}
 
@@ -128,6 +128,8 @@ So our vacuum equation is just
 
 \section{ First order vacuum solution with Fourier series. }
 
+\subsection{ Basic solution in terms of undetermined coefficients. }
+
 Now that a notation for the 3D Fourier series has been established, we
 can assume a series solution for our field of the form
 
@@ -179,15 +181,38 @@ With solutions
 
 Here $C_{\Bk}$ is an undetermined STA bivector.  Note that we have to keep this undetermined coefficient on the right hand side of the exponential since we cannot assume it commutes with a factor of the form $\exp(i\Bk\phi)$.  Substitution back into our assumed solution sum we have a solution to Maxwell's equation, in terms of a set of as yet undetermined (bivector) coefficients
 
-\begin{align}\label{eqn:undetermined}
+\begin{align*}
 F(\Bx,t) = C_0 + \sum_{\Bk \ne 0} \exp\left(i c \Bk t \right) C_{\Bk} \exp(-i \Bk \cdot \Bx )
+\end{align*}
+
+The special case of $\Bk = 0$ is now seen to be not so special and can be brought into the sum.  
+
+\begin{align*}
+F(\Bx,t) = \sum_{\Bk} \exp\left(i c \Bk t \right) C_{\Bk} \exp(-i \Bk \cdot \Bx )
+\end{align*}
+
+We can also 
+take advantage of the bivector nature of $C_{\Bk}$, which implies the complex exponential can commute to the left, since the two fold commutation with the pseudoscalar with change sign twice.  A similar right commutation of the $i\Bk$ exponential cannot be justified, and without more thought I am unsure if it can be allowed?
+
+\begin{align}\label{eqn:undetermined}
+F(\Bx,t) = \sum_{\Bk} \exp\left(-i (\Bk \cdot \Bx - \Bk c t) \right) C_{\Bk} 
 \end{align}
+
+Would this look any tidier in terms of unit wave number vector $\Bk = \Abs{\Bk} \kcap$?  Let's see
+
+\begin{align*}
+F(\Bx,t) = \sum_{\Bk} \exp\left(-i \Abs{\Bk}(\kcap \cdot \Bx - \kcap c t) \right) C_{\Bk} 
+\end{align*}
+
+Perhaps not.
+
+\subsection{ Solution as time evolution of initial field. }
 
 Now, observe the form of this sum for $t=0$.  This is
 
 \begin{align*}
 F(\Bx,0) 
-&= C_0 + \sum_{\Bk \ne 0} C_{\Bk} \exp(-i \Bk \cdot \Bx ) \\
+%&= C_0 + \sum_{\Bk \ne 0} C_{\Bk} \exp(-i \Bk \cdot \Bx ) \\
 &= \sum_{\Bk} C_{\Bk} \exp(-i \Bk \cdot \Bx ) \\
 \end{align*}
 
@@ -205,8 +230,7 @@ F(\Bx,t) &= \sum_{\Bk} \exp\left(i c \Bk t \right) {\left.\hat{F}_{\Bk}\right\ve
 {\left.\hat{F}_{\Bk}\right\vert}_{t=0} &= \inv{V} \int F(\Bx', 0) \exp\left( i\Bk \cdot \Bx' \right) d^3 x'
 \end{align}
 
-Regrouping slightly, taking advantage that we can commute our complex exponential to the left (cannot do so for the $i\Bk$ exponential)
-we can also write this as a convolution with a Fourier kernel (a Green's function).  That is
+Regrouping slightly we can write this as a convolution with a Fourier kernel (a Green's function).  That is
 
 \begin{align}
 F(\Bx,t) &= \inv{V} \int \sum_k e^{ - i (\Bk \cdot (\Bx' - \Bx) - \Bk c t) } F(\Bx', 0) d^3 x'
