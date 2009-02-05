@@ -18,7 +18,7 @@
 
 \title{ Fourier series Vacuum Maxwell's equations. }
 \author{Peeter Joot}
-\date{ Feb 03, 2009.  Last Revision: $Date: 2009/02/05 03:11:14 $ }
+\date{ Feb 03, 2009.  Last Revision: $Date: 2009/02/05 04:51:34 $ }
 
 \begin{document}
 
@@ -101,7 +101,7 @@ book.
 In \cite{PJrayleighJeans} the STA equivalent to Bohm's notation 
 for Maxwell's equations was found to be
 
-\begin{align}
+\begin{align}\label{eqn:maxwell}
 F &= \EE + i\HH \\
 J &= (\rho + \Bj) \gamma_0 \\
 \grad F &= 4 \pi J
@@ -374,6 +374,108 @@ F &= \grad \int A(\Bx - \Bx', 0) G_A(\Bx', t) d^3 x' \\
 FIXME: expand these and see what falls out.  
 
 \section{ Field Energy and momentum. }
+
+\subsection{ Get the units right with these cgs equations. }
+
+We'll want to calculate the equivalent of 
+
+\begin{align*}
+U = \frac{\epsilon_0}{2} (\BE^2 + c^2 \BB^2)
+\end{align*}
+
+but are faced with the alternate units of Bohm's text.  Let's repeat the
+derivation of the electric field energy from \cite{PJelectricFieldEnergy}
+in the cgs units directly from equation \ref{eqn:maxwell} to get it right.
+
+To start with we our spacetime split of \ref{eqn:maxwell} is
+
+\begin{align*}
+( \partial_0 + \spacegrad ) (\EE + \HH) = 4 \pi (\rho - \Bj)
+\end{align*}
+
+The scalar part gives us Coulomb's law
+
+\begin{align}
+\spacegrad \cdot \EE = 4 \pi \rho 
+\end{align}
+
+Gauss's theorem applied to a spherical constant density charge distribution
+gives us
+\begin{align*}
+\int \spacegrad \cdot \EE dV &= 4 \pi \int \rho dV \\
+\implies \\
+\int {\EE} \cdot \ncap dA &= 4 \pi Q \\
+\implies \\
+\Abs{\EE} 4 \pi r^2 &= 4 \pi Q \\
+\end{align*}
+
+so we have the expected ``unitless'' Coloumb law force equation
+
+\begin{align*}
+{\BF} = q\EE = \frac{q Q }{r^2} \rcap
+\end{align*}
+
+So far so good.  Next introduction of a potential.  For statics we don't care
+about the four vectors and stick with the old fashion definition of the potential $\phi$ indirectly in terms of $\EE$.  That is
+
+\begin{align*}
+\EE = -\spacegrad \phi
+\end{align*}
+
+A line integral of this gives us $\phi$ in terms of $\EE$
+\begin{align*}
+-\int \EE \cdot \Br 
+&= \int \spacegrad \phi \cdot d\Br \\
+&= \phi - \phi_0 \\
+\end{align*}
+
+With $\phi_0 = 0$ this is
+
+\begin{align*}
+\phi 
+&= -\int \EE \cdot d\Br  \\
+&= -\int \frac{Q}{r^2} \rcap \cdot d\Br  \\
+&= -\int \frac{Q}{r^2} dr  \\
+&= \frac{Q}{r} \\
+%&= -\int \frac{\rho dV}{r^2} dr 
+\end{align*}
+
+Okay.  Now onto the electrostatic energy.  The work done to move one charge from infinite to some separation $d$ of another like sign charge 
+is
+
+\begin{align*}
+\int F \cdot d\Br 
+&= \int_{r= \infty}^d \frac{q Q}{r^2} \rcap \cdot (-d\Br)  \\
+&= -\int_{r= \infty}^d \frac{qQ}{r^2} dr  \\
+&= \frac{qQ}{d} \\
+&= q\phi \\
+\end{align*}
+
+For a distribution of discrete charges we have to sum over all pairs
+
+\begin{align*}
+W 
+&= \sum_{i \ne j} \frac{q_i q_j}{d_{ij}} \\
+&= \sum_{i,j} \inv{2} \frac{q_i q_j}{d_{ij}} \\
+\end{align*}
+
+In a similar fashion we can do a continuous variation, employing a double summation over all space
+
+%\begin{align*}
+%W &= \inv{2} \int \frac{\rho_1 \rho_2}{r_{12}} dV_1 dV_2 \\
+%\end{align*}
+
+\begin{align*}
+W
+&= \int \rho' dV' \phi \\
+&= \inv{2} \int_{r_{12}= \infty}^d \frac{\int \rho(\Br) dV \int \rho(\Br') dV' }{(r_{12})^2} \rcap_{12} \cdot (-d\Br_{12})  \\
+&= \inv{2} \int_{r_{12}= \infty}^d \frac{\int \rho(\Br) dV \int \rho(\Br') dV' }{(r_{12})^2} \rcap_{12} \cdot (-d\Br_{12})  \\
+&= \inv{2} \int_{r_{12}= \infty}^d \frac{\int \rho(\Br) dV \int \rho(\Br') dV' }{(r_{12})^2} -dr_{12}  \\
+%&= \inv{2} \int \rho(\Br) dV \rho(\Br') dV' \inv{(r_{12})^2} \rcap_{12} \cdot (-d\Br_{12})  \\
+%&= \inv{2} \int \rho(\Br) dV \rho(\Br') dV' \inv{r_{12}} 
+\end{align*}
+
+\subsection{ }
 
 Given that we have the same structure for our four vector potential solutions as the complete bivector field, it doesn't appear that there is much
 reason to work in the second order quantities.  For the energy momentum analysis, let's go back to the original bivector field solutions.
