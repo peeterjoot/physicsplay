@@ -18,7 +18,7 @@
 
 \title{ Fourier series Vacuum Maxwell's equations. }
 \author{Peeter Joot}
-\date{ Feb 03, 2009.  Last Revision: $Date: 2009/02/06 13:22:30 $ }
+\date{ Feb 03, 2009.  Last Revision: $Date: 2009/02/06 13:54:07 $ }
 
 \begin{document}
 
@@ -34,6 +34,12 @@ step is to assume the electric and magnetic fields can be expressed in
 a 3D Fourier series form, with periodicity in some repeated volume 
 of space, and then procedes to evaluate the energy of the 
 field.
+
+\subsection{ Notation. }
+
+A notational table 
+\ref{eqn:notation}
+is included below for reference.
 
 \section{ Setup. }
 
@@ -84,12 +90,30 @@ But each of these integrals is just $\delta_{\Bk,\Bm} \lambda_1 \lambda_2 \lambd
 &= \inv{\lambda_1 \lambda_2 \lambda_3 } \int_{x^1 = \partial I_1} \int_{x^2 = \partial I_2} \int_{x^3 = \partial I_3} f(\Bx, t) \exp\left( \sum_j \frac{2 \pi i k_j x^j}{\lambda_j} \right) dx^1 dx^2 dx^3 \\
 \end{align*}
 
-For short lets write this as
+To tidy things up 
+lets invent (or perhaps abuse) some notation to tidy things up.  As a subscript on our Fourier coefficients we've used $\Bk$ as an index.
+Let's also use it as a vector, and write
+
+\begin{align*}
+\Bk = 2 \pi \sum_m \frac{\sigma^m k_m}{\lambda_m}
+\end{align*}
+
+With our spatial vector $\Bx$ written
+
+\begin{align*}
+\Bx = \sum_m \sigma_m x^m
+\end{align*}
+
+We now have a $\Bk \cdot \Bx$ term in the exponential, and can remove when desirable the coordinate summation.  If we write $V = \lambda_1 \lambda_2 \lambda_3$
+it leaves a nice tidy notation for the 3D fourier series over the volume
 
 \begin{align}
-f(\Bx, t) &= \sum_{\Bk} \hat{f}_{\Bk}(t) \exp\left( - \frac{2 \pi i k_j x^j }{\lambda_j} \right) \\
-\hat{f}_{\Bk}( t) &= \inv{V} \int f(\Bx, t) \exp\left( \frac{2 \pi i k_j x^j}{\lambda_j} \right) d^3 x
+f(\Bx, t) &= \sum_{\Bk} \hat{f}_{\Bk}(t) e^{ - i \Bk \cdot \Bx } \\
+\hat{f}_{\Bk}( t) &= \inv{V} \int f(\Bx, t) e^{ i \Bk \cdot \Bx } d^3 x
 \end{align}
+
+This allows us to procede without caring about the specifics of the lengths of the sides of the rectangular prism that defines the periodicity of the signal
+in question.
 
 \subsection{ Vacuum equation. }
 
@@ -107,7 +131,7 @@ J &= (\rho + \Bj) \gamma_0 \\
 \grad F &= 4 \pi J
 \end{align}
 
-This is the cgs form of Maxwell's equation, but with the old style $\HH$ for $c\BB$, and $\EE$ for $\BE$.  In more recent texts $\EE$ is reserved for electromotive flux.  In this set of notes I use Bohm's notation, since the aim is to clarify for myself aspects of his treatment.
+This is the cgs form of Maxwell's equation, but with the old style $\HH$ for $c\BB$, and $\EE$ for $\BE$.  In more recent texts $\EE$ (as a non-vector) is reserved for electromotive flux.  In this set of notes I use Bohm's notation, since the aim is to clarify for myself aspects of his treatment.
 
 For the vacuum equation, we make an explicit spacetime split by premultiplying with $\gamma_0$
 
@@ -147,19 +171,8 @@ This gives us
 &= 2 \pi c \sum_{\Bk} \sum_m \frac{\sigma^m k_m}{\lambda_m} \hat{F}_{\Bk}(t) i e^{-2\pi i k_j x^j/\lambda_j} \\
 \end{align*}
 
-Now lets invent (perhaps abuse) some notation to tidy things up.  As a subscript on our Fourier coefficients we've used $\Bk$ as an index.  Let's also use it as a vector, and write
 
-\begin{align*}
-\Bk = 2 \pi \sum_m \frac{\sigma^m k_m}{\lambda_m}
-\end{align*}
-
-It was also previously implied that we had
-
-\begin{align*}
-\Bx = \sum_m \sigma_m x^m
-\end{align*}
-
-Also noting that $i$ commutes with $\Bk$ and since $F$ is also an STA bivector $i$ commutes with $F$.  Putting all this together we have
+Note that $i$ commutes with $\Bk$ and since $F$ is also an STA bivector $i$ commutes with $F$.  Putting all this together we have
 
 \begin{align*}
 \sum_{\Bk} \left(\partial_t \hat{F}_{\Bk}(t) \right) e^{-i \Bk \cdot \Bx }
@@ -298,7 +311,7 @@ FIXME:TODO:...
 \subsection{ With the Lorentz gauge. }
 
 Now, it appears that Bohm's use of potentials allows a nice comparison with the harmonic oscillator.  Let's also try a Fourier solution of the 
-potential equations.  Again, use STA instead of the traditional vector equations, writing $A = (\phi + \Ba \gamma_0)$, and employing the Lorentz gauge
+potential equations.  Again, use STA instead of the traditional vector equations, writing $A = (\phi + \Ba)\gamma_0$, and employing the Lorentz gauge
 $\grad \cdot A = 0$ we have for $F = \grad \wedge A$ in csg units
 
 \begin{align*}
@@ -428,6 +441,110 @@ E = \inv{8\pi} ({\EE}^2 + \HH^2)
 % FIXME:TODO:
 %Next in the sequence of understanding
 %Bohm's Rayleigh-Jeans result will be to consider the energy and momentum density of the field, but that's a job for a different day.
+
+\section{ Appendix.  Summary of Notation used. }
+
+% 
+% NOTATION BOILERPLATE BASE STOLEN FROM ../geometric-algebra/4d_fourier.ltx
+% (IN TURN TAKEN FROM:
+% NOTATION BOILERPLATE BASE STOLEN FROM ../geometric-algebra/lagrangian_field_density.ltx
+% )
+%
+Here is a summary of the notation, following largely the conventions from
+\cite{doran2003gap}, but modified here for cgs units as used in \cite{bohm1989qt}
+Greek letters range over all indexes and
+english indexes range over $1,2,3$.  Bold vectors are spatial enties and non-bold is used for four vectors and scalars.
+Summation convention is in effect unless otherwise noted, with implied summation over all sets of matched upper and lower indexes.
+
+\begin{equation*}\label{eqn:notation}
+\begin{array}{l l l}
+\gamma_{\mu} & \gamma_{\mu} \cdot \gamma_{\nu} = \pm {\delta^{\mu}}_{\nu} & \quad \mbox{Four vector basis vector} \\
+{(\gamma_0)}^2 {(\gamma_k)}^2 &= -1 & \quad \mbox{Minkowski metric} \\
+\sigma_k = \sigma^k &= \gamma_{k} \wedge \gamma_0 & \quad \mbox{Spatial basis bivector. ($\sigma_k \cdot \sigma_j = \delta_{kj}$)} \\
+                    &= \gamma_{k} \gamma_0 & \\
+%                    &= \gamma_{k0} \\
+i &= \gamma_{0} \wedge \gamma_1 \wedge \gamma_{2} \wedge \gamma_3 & \quad \mbox{Four-vector pseudoscalar} \\
+  &= \gamma_{0} \gamma_1 \gamma_{2} \gamma_3 & \\
+% NOT USED HERE:
+%  &= \gamma_{0123} \\
+\gamma^{\mu} \cdot \gamma_{\nu} &= {\delta^{\mu}}_{\nu} & \quad \mbox{Reciprocal basis vectors} \\
+x^{\mu} &= x \cdot \gamma^{\mu} & \quad \mbox{Vector coordinate} \\
+x_{\mu} &= x \cdot \gamma_{\mu} & \quad \mbox{Coordinate for reciprocal basis} \\
+x &= \sum \gamma_{\mu} x^{\mu} & \quad \mbox{Four vector in terms of coordinates} \\
+  &= \sum \gamma^{\mu} x_{\mu} \\
+% <SI>
+%\BE &= \sum E^k \sigma_k & \quad \mbox{Electric field spatial vector} \\
+%\BB &= \sum B^k \sigma_k & \quad \mbox{Magnetic field spatial vector} \\
+% </SI>
+% <CGS>
+\EE &= \sum E^k \sigma_k & \quad \mbox{Electric field spatial vector} \\
+\HH &= \sum H^k \sigma_k & \quad \mbox{Magnetic field spatial vector} \\
+% </CGS>
+J &= \sum \gamma_{\mu} J^{\mu} & \quad \mbox{Current density four vector.} \\
+  &= \sum \gamma^{\mu} J_{\mu} \\
+% <SI>
+%F &= \BE + i c \BB & \quad \mbox{Faraday bivector} \\
+% </SI>
+% <CGS>
+F &= \EE + i \HH & \quad \mbox{Faraday bivector} \\
+% </CGS>
+  &= F^{\mu\nu} \gamma_\mu \wedge \gamma_\nu & \quad \mbox{in terms of Faraday tensor} \\
+x^{0} &= x \cdot \gamma^0 & \quad \mbox{Time coordinate (length dim.)} \\
+      &= c t \\
+\Bx &= x \wedge \gamma_0 & \quad \mbox{Spatial vector} \\
+    &= x^k \sigma_k \\
+% <SI>
+%J^{0} &= J \cdot \gamma^0 & \quad \mbox{Charge density.} \\
+%      &= c \rho & \quad \mbox{(current density dimensions.)} \\
+% </SI>
+% <CGS>
+J^{0} &= J \cdot \gamma^0 & \quad \mbox{Charge density.} \\
+      &= \rho & \quad \mbox{(current density dimensions.)} \\
+% </CGS>
+% NOTE: USE OF LOWERCASE SPATIAL CURRENT VECTOR IN THIS DOC.
+\Bj &= J \wedge \gamma_0 & \quad \mbox{Current density spatial vector} \\
+    &= J^k \sigma_k \\ % \sum omitted.
+% 
+\partial_{\mu} &= \PDi{x^\mu}{} & \quad \mbox{Index up partial.} \\
+\partial^{\mu} &= \PDi{x_\mu}{} & \quad \mbox{Index down partial.} \\
+\partial_{\mu\nu} &= \PDi{x^\mu}{}\PDi{x^\nu}{} & \quad \mbox{Index up partial.} \\
+\grad &= \sum \gamma^{\mu} \partial/\partial {x^{\mu}} & \quad \mbox{Spacetime gradient} \\
+      &= \sum \gamma^{\mu}\partial_{\mu} \\
+      &= \sum \gamma_{\mu} \partial/\partial {x_{\mu}} \\
+      &= \sum \gamma_{\mu}\partial^{\mu} \\
+\spacegrad &= \sum \sigma^{k} \partial_k & \quad \mbox{Spatial gradient} \\
+% NOT USED HERE:
+%\PV \IIinf &= \lim_{R\rightarrow \infty} \int_{R}^R & \quad \mbox{Integral Principle value} \\
+%\hat{A}(k) &= \FF(A(x)) & \quad \mbox{Fourier transform of $A$} \\ 
+%{A}(x) &= \FF^{-1}(A(k)) & \quad \mbox{Inverse Fourier transform} \\ 
+\hat{A}_{\Bk} &= \hat{A}_{k_1,k_2,k_3} & \quad \mbox{Fourier coefficient, integer indexes.} \\ 
+\grad^2 A
+   &= (\grad \cdot \grad) A & \quad \mbox{Four Laplacian. } \\
+   &= (\partial_{00} - \sum_k \partial_{kk}) A & \\
+x^2 &= x \cdot x & \quad \mbox{Four vector square. } \\
+    &= x^\mu x_\mu \\
+\Bx^2 &= \Bx \cdot \Bx & \quad \mbox{Spatial vector square. } \\
+    &= \sum_{k=1}^3 (x^k)^2 \\
+    &= \Abs{\Bx}^2 \\
+% NOT USED HERE:
+%d^4 x &= dx^0 dx^1 dx^2 dx^3 & \quad \mbox{Four volume element. } \\
+d^3 x &= dx^1 dx^2 dx^3 & \quad \mbox{Spatial volume element. } \\
+\exp(i\Bk\phi) &= 
+\cos(\Abs{\Bk}\phi) + \frac{i \Bk}{\Abs{i\Bk}} \sin(\Abs{\Bk}\phi) & \quad \mbox{bivector exponential. } \\
+\int_{\partial I} &= \int_{a}^{b} & \quad \mbox{Integration range $I = [a,b]$ } \\
+\text{STA} & & \quad \mbox{Space Time Algebra} \\
+% NOT USED HERE:
+%\text{GA} & & \quad \mbox{Geometric Algebra} \\
+\end{array}
+\end{equation*}
+
+While many things could be formulated in a metric signature independent fashion, no effort to do so here has been made.  Assume
+a time positive
+$(+,-,-,-)$
+metric signature.  Specifically, that is $(\gamma_0)^2 = 1$, and $(\gamma_k)^2 = -1$.  
+
+% NOT USED HERE:
+%The $\PV$ notation used somewhat loosely here is taken from \cite{lepage1980cva} where the author uses it in his Riemann integral proof of the inverse Fourier integral.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
