@@ -239,6 +239,8 @@ ordered2009 += ../geometric-algebra/em_wave.pdf
 ordered2009 += ../qm/wave_fourier.pdf
 ordered2009 += ../geometric-algebra/fourier_maxwell.pdf
 ordered2009 += ../geometric-algebra/firstorder_fourier_maxwell.pdf
+ordered2009 += ../geometric-algebra/4d_fourier.pdf
+ordered2009 += ../qm/fourier_series_maxwell.pdf
 
 # Rules:
 #-----------------------------------------------------
