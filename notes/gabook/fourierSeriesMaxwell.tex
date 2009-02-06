@@ -18,7 +18,7 @@
 
 \title{ Fourier series Vacuum Maxwell's equations. }
 \author{Peeter Joot}
-\date{ Feb 03, 2009.  Last Revision: $Date: 2009/02/06 14:04:00 $ }
+\date{ Feb 03, 2009.  Last Revision: $Date: 2009/02/06 22:59:16 $ }
 
 \begin{document}
 
@@ -27,11 +27,6 @@
 \tableofcontents
 
 \section{ Motivation. }
-
-
-FIXME:EXP: have abused notation and probably made mistakes by combining exponentials that probably don't commute into single argument exponentials.  In this doc and in my previous Fourier docs.  Have to review and fix all of them.
-
-
 
 In \cite{bohm1989qt}, 
 after finding a formulation of Maxwell's equations that he likes, his next
@@ -213,35 +208,53 @@ We can also
 take advantage of the bivector nature of $C_{\Bk}$, which implies the complex exponential can commute to the left, since the two fold commutation with the pseudoscalar with change sign twice.  A similar right commutation of the $i\Bk$ exponential cannot be justified, and without more thought I am unsure if it can be allowed?
 
 \begin{align}\label{eqn:undetermined}
-F(\Bx,t) = \sum_{\Bk} \exp\left(-i (\Bk \cdot \Bx - \Bk c t) \right) C_{\Bk} 
+% WRONG:
+%F(\Bx,t) = \sum_{\Bk} \exp\left(-i (\Bk \cdot \Bx - \Bk c t) \right) C_{\Bk} 
+F(\Bx,t) = \sum_{\Bk} 
+\exp\left(i \Bk c t \right) 
+\exp\left(-i \Bk \cdot \Bx \right) 
+C_{\Bk} 
 \end{align}
-FIXME:EXP: above.
 
-\subsection{ Prettying it up? }
+Now, it is tempting here to write this as a single exponential
 
-Would this look any tidier in terms of unit wave number vector $\Bk = \Abs{\Bk} \kcap$?  Let's see
-
+% k = kcappa g_0 |k|
+% kcap g_0 = kcappa 
 \begin{align*}
-F(\Bx,t) = \sum_{\Bk} \exp\left(-i \Abs{\Bk}(\kcap \cdot \Bx - \kcap c t) \right) C_{\Bk} 
+F(\Bx,t) 
+%&= \sum_{\Bk} e^{i \Abs{\Bk}( \kcap c t - \kcap \cdot \Bx)} C_{\Bk} \\
+&= \sum_{\Bk} \exp\left(i \Bk c t - i\Bk \cdot \Bx \right) C_{\Bk} \\
 \end{align*}
-FIXME:EXP: above.
 
-Perhaps not.
+This would probably allow for a prettier four vector form in terms of $x = x^\mu \gamma_\mu$ replacing the separate $\Bx$ and $x^0 = ct$ terms.
+However, 
+such a grouping is not allowable unless one first demonstrates that $e^{i \Bk \phi }$, and $e^{i \psi }$, for scalars $\phi$ and $\psi$ commute!
 
-One thing we may do however, is perform a summation swap and sum over all
-triplets $-\Bk$ instead, with a redefition of the undetermined
-coefficients $C_{\Bk}$ as $C_{-\Bk}$ (incorporating the effects of that sign swap into the value of these coefficients).  This takes the sign out of the exponential and pretties it up slightly.
-
-\begin{align*}
-F(\Bx,t) = \sum_{\Bk} e^{i \Bk \cdot \Bx - i\Bk c t} C_{\Bk} 
-\end{align*}
-FIXME:EXP: above.
-
-There was also the notational trick noticed in the Fourier transform treatment 
-where a conversion of these separate space and time exponential factors into a single
-four vector dot product was possible.  That should work here a bit better than in the Fourier transform case.
-
-FIXME: detail that here.  Want to see what that implies for a Lorentz transformation of the field.
+%\subsection{ Prettying it up? }
+%
+%Would this look any tidier in terms of unit wave number vector $\Bk = \Abs{\Bk} \kcap$?  Let's see
+%
+%\begin{align*}
+%F(\Bx,t) = \sum_{\Bk} \exp\left(-i \Abs{\Bk}(\kcap \cdot \Bx - \kcap c t) \right) C_{\Bk} 
+%\end{align*}
+%FIXME:EXP: above.
+%
+%Perhaps not.
+%
+%One thing we may do however, is perform a summation swap and sum over all
+%triplets $-\Bk$ instead, with a redefition of the undetermined
+%coefficients $C_{\Bk}$ as $C_{-\Bk}$ (incorporating the effects of that sign swap into the value of these coefficients).  This takes the sign out of the exponential and pretties it up slightly.
+%
+%\begin{align*}
+%F(\Bx,t) = \sum_{\Bk} e^{i \Bk \cdot \Bx - i\Bk c t} C_{\Bk} 
+%\end{align*}
+%FIXME:EXP: above.
+%
+%There was also the notational trick noticed in the Fourier transform treatment 
+%where a conversion of these separate space and time exponential factors into a single
+%four vector dot product was possible.  That should work here a bit better than in the Fourier transform case.
+%
+%FIXME: detail that here.  Want to see what that implies for a Lorentz transformation of the field.
 
 \subsection{ Solution as time evolution of initial field. }
 
@@ -270,16 +283,14 @@ F(\Bx,t) &= \sum_{\Bk} \exp\left(i c \Bk t \right) {\left.\hat{F}_{\Bk}\right\ve
 Regrouping slightly we can write this as a convolution with a Fourier kernel (a Green's function).  That is
 
 \begin{align}
-F(\Bx,t) &= \inv{V} \int \sum_k e^{ - i (\Bk \cdot (\Bx' - \Bx) - \Bk c t) } F(\Bx', 0) d^3 x'
+F(\Bx,t) &= \inv{V} \int \sum_k \exp\left( i \Bk ct \right) \exp\left( - i \Bk \cdot (\Bx' - \Bx) \right) F(\Bx', 0) d^3 x'
 \end{align}
-FIXME:EXP: above.
 
 Or
 \begin{align}\label{eqn:bivectorSolution}
-F(\Bx,t) &= \int G(\Bx' - \Bx, t) F(\Bx', 0) d^3 x' \\
-G(\Bx,t) &= \inv{V} \sum_k e^{ - i (\Bk \cdot \Bx - \Bk c t) }
+F(\Bx,t) &= \int G(\Bx - \Bx', t) F(\Bx', 0) d^3 x' \\
+G(\Bx,t) &= \inv{V} \sum_k \exp\left( i \Bk ct \right) \exp\left( i \Bk \cdot \Bx \right)
 \end{align}
-FIXME:EXP: above.
 
 Okay, that's cool.  We've now got the basic periodicity result directly from Maxwell's equation in one shot.  No need to drop down to
 potentials, or even the separate electric or magnetic components of our field $F = \EE + i \HH$.
@@ -390,13 +401,12 @@ For the $\Bk = 0$ special case we have solutions
 It doesn't seem unreasonable to require $D_0 = 0$.  Otherwise this time dependent DC Fourier component will blow up at large and small values, while periodic
 solutions are sought.
 
-Putting things back together we have 
+Putting things back together we have %either of
 
-\begin{align}
-A(\Bx, t) &= \sum_{\Bk} 
-%\hat{A}_{\Bk}(t) &= 
-\exp(\pm i c \Bk t) C_{\Bk} e^{ -i \Bk \cdot \Bx}
-\end{align}
+\begin{align*}
+A(\Bx, t) &= \sum_{\Bk} \exp(\pm i c \Bk t) C_{\Bk} \exp( -i \Bk \cdot \Bx ) \\
+%          &= \sum_{\Bk} C_{\Bk} \exp(\pm i c \Bk t) \exp( -i \Bk \cdot \Bx )
+\end{align*}
 
 Here again for $t=0$, our integration constants are found to be determined completely by the initial conditions
 
@@ -410,34 +420,34 @@ So we can write
 C_{\Bk} = \inv{V} \int A(\Bx', 0) e^{ i \Bk \cdot \Bx'} d^3 x'
 \end{align*}
 
-In integral kernel form this is
+In integral form this is
 
-%\sum_{\Bk} \inv{V} \int A(\Bx', 0) e^{ i \Bk \cdot (\Bx - \Bx') \mp i c \Bk t } d^3 x'
-\begin{align}
-A(\Bx, t) &= \int A(\Bx', 0) G_A(\Bx - \Bx', t) d^3 x' \\
-G_A(\Bx, t) &= \inv{V} \sum_{\Bk} e^{ i (\Bk \cdot \Bx \mp c \Bk t) }
+\begin{align}\label{eqn:potentialSolution}
+A(\Bx, t) &= \int \sum_{\Bk} \exp(\pm i \Bk c t ) A(\Bx', 0) \exp( i \Bk \cdot (\Bx -\Bx') )
 \end{align}
-FIXME:EXP: above.
 
-Rather suprisingly, this is almost exactly what we had for the bivector field in equation \ref{eqn:bivectorSolution}!  The only difference that the second order differential equation seems to contribute to the kernel is an allowable plus or minus variation in the $ct$ term.
+This, somewhat suprisingly, is strikingly similar to what we had for the bivector field in equation \ref{eqn:bivectorSolution}.  We cannot however
+commute the time phase term to construct a one sided Green's function for this
+potential solution (or perhaps we can but if so shown or attempted to show that this is possible).  We also have a 
+plus or minus variation in the phase term due to the second order nature of the harmonic oscillator equations for our Fourier coefficients.
 
 \subsection{ Comparing the first and second order solutions }
 
-Since we are working in the Lorentz gauge, we should have
+A consequense of working in the Lorentz gauge is that our field solution should be a gradient
 
 \begin{align*}
 F 
 &= \grad \wedge A \\
 &= \grad A \\
-&= \int A(\Bx', 0) \left(\grad G_A(\Bx - \Bx', t) \right) d^3 x' \\
+%&= \int A(\Bx', 0) \left(\grad G_A(\Bx - \Bx', t) \right) d^3 x' \\
 \end{align*}
 
-Or with the opposite convolution
-\begin{align*}
-F &= \grad \int A(\Bx - \Bx', 0) G_A(\Bx', t) d^3 x' \\
-\end{align*}
+%Or with the opposite convolution
+%\begin{align*}
+%F &= \grad \int A(\Bx - \Bx', 0) G_A(\Bx', t) d^3 x' \\
+%\end{align*}
 
-FIXME: expand these and see what falls out.  
+FIXME: expand this out using \ref{eqn:potentialSolution} to compare to the first order solution.
 
 \section{ Field Energy and momentum. }
 
@@ -558,6 +568,10 @@ metric signature.  Specifically, that is $(\gamma_0)^2 = 1$, and $(\gamma_k)^2 =
 
 % NOT USED HERE:
 %The $\PV$ notation used somewhat loosely here is taken from \cite{lepage1980cva} where the author uses it in his Riemann integral proof of the inverse Fourier integral.
+
+\section{ FIXME. }
+
+Caught myself in these notes abusing notation and probably made mistakes by combining exponentials that probably don't commute into single argument exponentials.  Go back and review all other recent previous Fourier treatments and check for and fix this if neccessary
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
