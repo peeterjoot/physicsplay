@@ -1,0 +1,572 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+\newcommand{\EE}[0]{\boldsymbol{\mathcal{E}}}
+\newcommand{\HH}[0]{\boldsymbol{\mathcal{H}}}
+%\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+\title{ Fourier series Vacuum Maxwell's equations. }
+\author{Peeter Joot}
+\date{ Feb 03, 2009.  Last Revision: $Date: 2009/02/07 15:20:07 $ }
+
+\begin{document}
+
+\maketitle{}
+
+\tableofcontents
+
+\section{ Motivation. }
+
+In \cite{bohm1989qt}, 
+after finding a formulation of Maxwell's equations that he likes, his next
+step is to assume the electric and magnetic fields can be expressed in 
+a 3D Fourier series form, with periodicity in some repeated volume 
+of space, and then procedes to evaluate the energy of the 
+field.
+
+\subsection{ Notation. }
+
+A notational table 
+\ref{eqn:notation}
+is included below for reference.
+
+\section{ Setup. }
+
+Let's try this.  Instead of using the sine and cosine fourier series
+which looks more complex than it ought to be, use of a complex exponential
+ought to be cleaner.
+
+\subsection{ 3D Fourier series in complex exponential form. }
+
+For a multivector function $f(\Bx, t)$, periodic in some rectangular spatial volume, let's assume that we have a
+3D Fourier series representation.
+
+Define the element of volume for our fundamental wavelengths to be the region bounded by three intervals in the $x^1, x^2, x^3$ directions respectively
+
+\begin{align*}
+I_1 &= [ a^1, a^1 + \lambda_1 ] \\
+I_2 &= [ a^2, a^2 + \lambda_2 ] \\
+I_3 &= [ a^3, a^3 + \lambda_3 ] \\
+\end{align*}
+
+Our assumed Fourier representation is then
+
+\begin{align*}
+f(\Bx, t) &= \sum_{\Bk} \hat{f}_{\Bk}(t) \exp\left( - \sum_j \frac{2 \pi i k_j x^j}{\lambda_j} \right)
+\end{align*}
+
+Here $\hat{f}_{\Bk} = \hat{f}_{\{k_1, k_2, k_3\}}$ is indexed over a triplet of integer values, and the $k_1, k_2, k_3$ indexes take on all integer values in the $[-\infty, \infty]$ range.
+
+Note that we also wish to allow $i$ to not just be a generic complex number, but allow for the use of either the Euclidian or Minkowski pseudoscalar
+
+\begin{align*}
+i = \gamma_0 \gamma_1 \gamma_2 \gamma_3 = \sigma_1 \sigma_2 \sigma_3
+\end{align*}
+
+Because of this we should not assume that we can commute $i$, or our exponentials with the functions $f(\Bx,t)$, or $\hat{f}_{\Bk}(t)$.
+
+\begin{align*}
+\int_{x^1 = \partial I_1} &\int_{x^2 = \partial I_2} \int_{x^3 = \partial I_3} f(\Bx, t) 
+e^{ 2 \pi i m_j x^j/\lambda_j}
+dx^1 dx^2 dx^3 \\
+&= \sum_{\Bk} \hat{f}_{\Bk}(t) \int_{x^1 = \partial I_1} \int_{x^2 = \partial I_2} \int_{x^3 = \partial I_3} dx^1 dx^2 dx^3 e^{ 2 \pi i (m_j - k_j) x^j/\lambda_j} dx^1 dx^2 dx^3
+\end{align*}
+
+But each of these integrals is just $\delta_{\Bk,\Bm} \lambda_1 \lambda_2 \lambda_3$, giving us
+
+\begin{align*}
+\hat{f}_{\Bk}(t)
+&= \inv{\lambda_1 \lambda_2 \lambda_3 } \int_{x^1 = \partial I_1} \int_{x^2 = \partial I_2} \int_{x^3 = \partial I_3} f(\Bx, t) \exp\left( \sum_j \frac{2 \pi i k_j x^j}{\lambda_j} \right) dx^1 dx^2 dx^3 \\
+\end{align*}
+
+To tidy things up 
+lets invent (or perhaps abuse) some notation to tidy things up.  As a subscript on our Fourier coefficients we've used $\Bk$ as an index.
+Let's also use it as a vector, and define
+
+\begin{align}
+\Bk \equiv 2 \pi \sum_m \frac{\sigma^m k_m}{\lambda_m}
+\end{align}
+
+With our spatial vector $\Bx$ written
+
+\begin{align*}
+\Bx = \sum_m \sigma_m x^m
+\end{align*}
+
+We now have a $\Bk \cdot \Bx$ term in the exponential, and can remove when desirable the coordinate summation.  If we write $V = \lambda_1 \lambda_2 \lambda_3$
+it leaves a nice tidy notation for the 3D fourier series over the volume
+
+\begin{align}
+f(\Bx, t) &= \sum_{\Bk} \hat{f}_{\Bk}(t) e^{ - i \Bk \cdot \Bx } \\
+\hat{f}_{\Bk}( t) &= \inv{V} \int f(\Bx, t) e^{ i \Bk \cdot \Bx } d^3 x
+\end{align}
+
+This allows us to procede without caring about the specifics of the lengths of the sides of the rectangular prism that defines the periodicity of the signal
+in question.
+
+\subsection{ Vacuum equation. }
+
+Now that we have a desirable seeming Fourier series representation, we 
+want to apply this to Maxwell's equation for the vacuum.  We will use the 
+STA formulation of Maxwell's equation, but use the unit convention of Bohm's
+book.
+
+In \cite{PJrayleighJeans} the STA equivalent to Bohm's notation 
+for Maxwell's equations was found to be
+
+\begin{align}\label{eqn:maxwell}
+F &= \EE + i\HH \\
+J &= (\rho + \Bj) \gamma_0 \\
+\grad F &= 4 \pi J
+\end{align}
+
+This is the cgs form of Maxwell's equation, but with the old style $\HH$ for $c\BB$, and $\EE$ for $\BE$.  In more recent texts $\EE$ (as a non-vector) is reserved for electromotive flux.  In this set of notes I use Bohm's notation, since the aim is to clarify for myself aspects of his treatment.
+
+For the vacuum equation, we make an explicit spacetime split by premultiplying with $\gamma_0$
+
+\begin{align*}
+\gamma_0 \grad 
+&= \gamma_0 (\gamma^0 \partial_0 + \gamma^k \partial_k) \\
+&= \partial_0 - \gamma^k \gamma_0 \partial_k \\
+&= \partial_0 + \gamma_k \gamma_0 \partial_k \\
+&= \partial_0 + \sigma_k \partial_k \\
+&= \partial_0 + \spacegrad \\
+\end{align*}
+
+So our vacuum equation is just
+
+\begin{align}\label{eqn:vacuumMaxwell}
+(\partial_0 + \spacegrad) F = 0
+\end{align}
+
+\section{ First order vacuum solution with Fourier series. }
+
+\subsection{ Basic solution in terms of undetermined coefficients. }
+
+Now that a notation for the 3D Fourier series has been established, we
+can assume a series solution for our field of the form
+
+\begin{align}\label{eqn:assumed}
+F(\Bx,t) = \sum_{\Bk} \hat{F}_{\Bk}(t) e^{-2\pi i k_j x^j/\lambda_j}
+\end{align}
+
+can now apply this to the vacuum Maxwell equation \ref{eqn:vacuumMaxwell}.
+This gives us
+
+\begin{align*}
+\sum_{\Bk} \left(\partial_t \hat{F}_{\Bk}(t) \right) e^{-2\pi i k_j x^j/\lambda_j}
+&= -c \sum_{\Bk, m} \sigma^m \hat{F}_{\Bk}(t) \PD{x^m}{} e^{-2\pi i k_j x^j/\lambda_j} \\
+&= -c \sum_{\Bk, m} \sigma^m \hat{F}_{\Bk}(t) \left(-2 \pi \frac{k_m}{\lambda_m}\right) e^{-2\pi i k_j x^j/\lambda_j} \\
+&= 2 \pi c \sum_{\Bk} \sum_m \frac{\sigma^m k_m}{\lambda_m} \hat{F}_{\Bk}(t) i e^{-2\pi i k_j x^j/\lambda_j} \\
+\end{align*}
+
+
+Note that $i$ commutes with $\Bk$ and since $F$ is also an STA bivector $i$ commutes with $F$.  Putting all this together we have
+
+\begin{align*}
+\sum_{\Bk} \left(\partial_t \hat{F}_{\Bk}(t) \right) e^{-i \Bk \cdot \Bx }
+&= i c \sum_{\Bk} \Bk \hat{F}_{\Bk}(t) e^{- i \Bk \cdot \Bx } \\
+\end{align*}
+
+Term by term we now have a (big ass, triple infinite) set of very simple first order differential equations, one for each $\Bk$ triplet of indexes.  Specifically this is
+
+\begin{align*}
+\hat{F}_{\Bk}' &= i c \Bk \hat{F}_{\Bk}
+\end{align*}
+
+With solutions
+
+\begin{align*}
+\hat{F}_{0} &= C_{0} \\
+\hat{F}_{\Bk} &= \exp\left(i c \Bk t \right) C_{\Bk} \\
+\end{align*}
+
+Here $C_{\Bk}$ is an undetermined STA bivector.  For now we keep this undetermined coefficient on the right hand side of the exponential since no demonstration that it commutes with a factor of the form $\exp(i\Bk\phi)$.  Substitution back into our assumed solution sum we have a solution to Maxwell's equation, in terms of a set of as yet undetermined (bivector) coefficients
+
+\begin{align*}
+F(\Bx,t) = C_0 + \sum_{\Bk \ne 0} \exp\left(i c \Bk t \right) C_{\Bk} \exp(-i \Bk \cdot \Bx )
+\end{align*}
+
+The special case of $\Bk = 0$ is now seen to be not so special and can be brought into the sum.  
+
+\begin{align*}
+F(\Bx,t) = \sum_{\Bk} \exp\left(i c \Bk t \right) C_{\Bk} \exp(-i \Bk \cdot \Bx )
+\end{align*}
+
+We can also 
+take advantage of the bivector nature of $C_{\Bk}$, which implies the complex exponential can commute to the left, since the two fold commutation with the pseudoscalar with change sign twice.
+%  A similar right commutation of the $i\Bk$ exponential cannot be justified, and without more thought I am unsure if it can be allowed?
+
+\begin{align}\label{eqn:undetermined}
+F(\Bx,t) = \sum_{\Bk} 
+\exp\left(i \Bk c t \right) 
+\exp\left(-i \Bk \cdot \Bx \right) 
+C_{\Bk} 
+\end{align}
+
+\subsection{ Solution as time evolution of initial field. }
+
+Now, observe the form of this sum for $t=0$.  This is
+
+\begin{align*}
+F(\Bx,0) 
+&= \sum_{\Bk} C_{\Bk} \exp(-i \Bk \cdot \Bx ) \\
+\end{align*}
+
+So, the $C_k$ coefficients are precisely the Fourier coefficients of $F(\Bx,0)$.  This is to be expected having repeatedly seen similar results in the Fourier transform treatments of 
+\cite{PJfourierMaxwellSecondOrder}, \cite{PJfirstOrderMaxwell}, and \cite{PJ4dFourier}.
+We then have an equation for the complete time evolution of any spatially periodic electrodynamic field in terms of the field value at all points in the region at some initial time.  Summarizing so far this is
+
+\begin{align}
+F(\Bx,t) &= \sum_{\Bk} \exp\left(i c \Bk t \right) 
+C_{\Bk}
+\exp(-i \Bk \cdot \Bx) \\
+C_{\Bk}
+&= \inv{V} \int F(\Bx', 0) \exp\left( i\Bk \cdot \Bx' \right) d^3 x'
+\end{align}
+
+Regrouping slightly we can write this as a convolution with a Fourier kernel (a Green's function).  That is
+
+\begin{align}\label{eqn:bivectorSolNonGreens}
+F(\Bx,t) &= \inv{V} \int \sum_{\Bk} \exp\left( i \Bk ct \right) \exp\left( i \Bk \cdot (\Bx' - \Bx) \right) F(\Bx', 0) d^3 x'
+\end{align}
+
+Or
+\begin{align}\label{eqn:bivectorSolution}
+F(\Bx,t) &= \int G(\Bx - \Bx', t) F(\Bx', 0) d^3 x' \\
+G(\Bx,t) &= \inv{V} \sum_{\Bk} \exp\left( i \Bk ct \right) \exp\left( -i \Bk \cdot \Bx \right)
+\end{align}
+
+Okay, that's cool.  We've now got the basic periodicity result directly from Maxwell's equation in one shot.  No need to drop down to
+potentials, or even the separate electric or magnetic components of our field $F = \EE + i \HH$.
+
+\subsection{ Prettying it up?  Questions of commutation. }
+
+Now, it is tempting here to write 
+\ref{eqn:undetermined}
+as a single exponential
+
+% k = kcappa g_0 |k|
+% kcap g_0 = kcappa 
+\begin{align}\label{eqn:isItValid}
+F(\Bx,t) 
+%&= \sum_{\Bk} e^{i \Abs{\Bk}( \kcap c t - \kcap \cdot \Bx)} C_{\Bk} \\
+&= \sum_{\Bk} \exp\left(i \Bk c t - i\Bk \cdot \Bx \right) C_{\Bk} \quad\quad \mbox{VALID?}
+\end{align}
+
+This would probably allow for a prettier four vector form in terms of $x = x^\mu \gamma_\mu$ replacing the separate $\Bx$ and $x^0 = ct$ terms.
+However, 
+such a grouping is not allowable unless one first demonstrates that $e^{i \Bu }$, and $e^{i \alpha }$, for spatial vector $\Bu$ and scalar $\alpha$ commute!
+
+To demonstrate that this is in fact the case 
+note that exponential
+of this dual spatial vector can be written
+
+\begin{align*}
+\exp( i \Bu ) &= \cos( \Bu ) + i \sin( \Bu ) \\
+\end{align*}
+
+This spatial vector cosine, $\cos(\Bu)$, is a scalar (even powers only), and our sine, $\sin(\Bu) \propto \Bu$, is a spatial vector in the direction of $\Bu$ (odd powers leaves a vector times a scalar).  Spatial vectors commute with $i$ (toggles sign twice percolating its way through), therefore pseudoscalar exponentials also commute with $i$.
+
+This will simplify a lot, and it shows that \ref{eqn:isItValid} is in fact a valid representation.
+
+Now, there's one more question of commutation here.  Namely, does a dual spatial vector exponential commute with the field itself
+(or equivalently, one of the Fourier cofficients).
+
+Expanding such a product and attempting term by term commutation should show
+
+\begin{align*}
+e^{i\Bu} F
+&= (\cos \Bu + i\sin\Bu) (\EE + i\HH) \\
+&= i\sin\Bu (\EE + i\HH) + (\EE + i\HH) \cos\Bu \\
+&= i (\sin\Bu) \EE - (\sin\Bu) \HH + F \cos\Bu \\
+&= i (-\EE \sin\Bu + 2 \EE \cdot \sin\Bu ) + (\HH \sin\Bu - 2 \HH \cdot \sin\Bu ) + F \cos\Bu \\
+&= 2 \sin\Bu \cdot (\EE - \HH) + F (\cos\Bu -i\sin\Bu) \\
+&= 2 \sin\Bu \cdot (\EE - \HH) + F e^{-i\Bu}
+\end{align*}
+
+This exponential has one anticommuting term, but also has a scalar component introduced by the portions of the electric
+and magnetic fields that are colinear with the spatial vector $\Bu$.
+
+%
+%Would this look any tidier in terms of unit wave number vector $\Bk = \Abs{\Bk} \kcap$?  Let's see
+%
+%\begin{align*}
+%F(\Bx,t) = \sum_{\Bk} \exp\left(-i \Abs{\Bk}(\kcap \cdot \Bx - \kcap c t) \right) C_{\Bk} 
+%\end{align*}
+%FIXME:EXP: above.
+%
+%Perhaps not.
+%
+%One thing we may do however, is perform a summation swap and sum over all
+%triplets $-\Bk$ instead, with a redefition of the undetermined
+%coefficients $C_{\Bk}$ as $C_{-\Bk}$ (incorporating the effects of that sign swap into the value of these coefficients).  This takes the sign out of the exponential and pretties it up slightly.
+%
+%\begin{align*}
+%F(\Bx,t) = \sum_{\Bk} e^{i \Bk \cdot \Bx - i\Bk c t} C_{\Bk} 
+%\end{align*}
+%FIXME:EXP: above.
+%
+%There was also the notational trick noticed in the Fourier transform treatment 
+%where a conversion of these separate space and time exponential factors into a single
+%four vector dot product was possible.  That should work here a bit better than in the Fourier transform case.
+%
+%FIXME: detail that here.  Want to see what that implies for a Lorentz transformation of the field.
+
+\section{ Field Energy and momentum. }
+
+Given that we have the same structure for our four vector potential solutions as the complete bivector field, it doesn't appear that there is much
+reason to work in the second order quantities.  Following Bohm we should now be prepared to express the field energy density and
+momentum density in terms of the Fourier coefficients, however unlike Bohm, let's try this using the first order 
+solutions found above.
+
+In cgs units (see \cite{PJrayleighJeans} for verification) these field energy and momentum densities (Poynting vector $\BP$) are, respectively
+
+\begin{align*}
+E &= \inv{8\pi} ({\EE}^2 + \HH^2) \\
+\BP &= \inv{4\pi} (\EE \cross \HH )
+\end{align*}
+
+Given that we have a complete field equation without an explicit separation of electric and magnetic components, perhaps this
+is easier to calculate from the stress energy four vector for energy/momentum.  In cgs units this must be
+
+\begin{align}
+T(\gamma_0) &= \inv{8\pi} F \gamma_0 \tilde{F}
+\end{align}
+
+An expansion of this to verify the cgs conversion seems worthwhile.
+
+\begin{align*}
+T(\gamma_0) 
+&= \inv{8\pi} F \gamma_0 \tilde{F} \\
+&= \frac{-1}{8\pi} (\EE + i\HH) \gamma_0 (\EE + i\HH) \\
+&= \frac{1}{8\pi} (\EE + i\HH) (\EE - i\HH) \gamma_0 \\
+&= \frac{1}{8\pi} \left( \EE^2 - (i\HH)^2 + i(\HH \EE - \EE \HH) \right) \gamma_0 \\
+&= \frac{1}{8\pi} \left( \EE^2 + \HH^2 + 2 i^2 \HH \cross \EE \right) \gamma_0 \\
+&= \frac{1}{8\pi} \left( \EE^2 + \HH^2 \right) \gamma_0 + \inv{4 \pi} \left(\EE \cross \HH \right) \gamma_0 \\
+\end{align*}
+
+Good, as expected we have 
+
+\begin{align}
+E &= T(\gamma_0) \cdot \gamma_0 \\
+\BP &= T(\gamma_0) \wedge \gamma_0
+\end{align}
+
+Okay, let's apply this to our field equation \ref{eqn:bivectorSolNonGreens}, and try to percolate the $\gamma_0$ through all the terms
+of $\tilde{F}(\Bx,t)$
+
+\begin{align*}
+\gamma_0 \tilde{F}(\Bx,t) 
+&= -\gamma_0 F(\Bx,t) \\
+&= -\gamma_0 \inv{V} \int \sum_{\Bk} \exp\left( i \Bk ct \right) \exp\left( i \Bk \cdot (\Bx' -\Bx) \right) F(\Bx', 0) d^3 x' \\
+\end{align*}
+
+Taking one factor at a time 
+
+\begin{align*}
+\gamma_0 \exp\left( i \Bk ct \right) 
+&= \gamma_0 (\cos\left( \Bk ct \right) + i \sin\left( \Bk ct \right) ) \\
+&= \cos\left( \Bk ct \right) \gamma_0 - i \gamma_0 \sin\left( \Bk ct \right) ) \\
+&= \cos\left( \Bk ct \right) \gamma_0 - i \sin\left( \Bk ct \right) ) \gamma_0 \\
+&= \exp\left( -i \Bk ct \right) \gamma_0
+\end{align*}
+
+
+Next, percolate $\gamma_0$ through the pseudoscalar exponential.
+
+\begin{align*}
+\gamma_0 e^{i\phi} 
+&= \gamma_0 (\cos\phi + i \sin\phi) \\
+&= \cos\phi \gamma_0 - i \gamma_0 \sin\phi \\
+&= e^{-i\phi} \gamma_0
+\end{align*}
+
+Again, the percolation produces a conjugate effect.  Lastly, as noted previously $F$ commutes with $i$.  We have therefore
+
+\begin{align*}
+\tilde{F}(\Bx,t) \gamma_0 {F}(\Bx,t) \gamma_0
+&=
+\frac{1}{V^2} \int \sum_{\Bk,\Bm} 
+F(\Ba, 0) 
+e^{i \Bk \cdot (\Ba -\Bx) }
+e^{ i \Bk ct }
+e^{ -i \Bm ct } e^{ -i \Bm \cdot (\Bb -\Bx) } F(\Bb, 0) d^3 a d^3 b \\
+&= \frac{1}{V^2} \int \sum_{\Bk,\Bm} F(\Ba, 0) e^{ i \Bk \cdot \Ba -i \Bm \cdot \Bb + i (\Bk -\Bm) ct -i (\Bk - \Bm) \cdot \Bx } F(\Bb, 0) d^3 a d^3 b \\
+&= \frac{1}{V^2} \int \sum_{\Bk} F(\Ba, 0) F(\Bb, 0) e^{ i \Bk \cdot (\Ba - \Bb) } d^3 a d^3 b \\
+&\quad + \frac{1}{V^2} \int \sum_{\Bk \ne \Bm} F(\Ba, 0) e^{ i \Bk \cdot \Ba -i \Bm \cdot \Bb + i (\Bk -\Bm) ct -i (\Bk - \Bm) \cdot \Bx } F(\Bb, 0) d^3 a d^3 b \\
+&= \frac{1}{V^2} \int \sum_{\Bk} F(\Ba, 0) F(\Bb, 0) e^{ i \Bk \cdot (\Ba - \Bb) } d^3 a d^3 b \\
+&\quad + \frac{1}{V^2} \int \sum_{\Bm, \Bk \ne 0} F(\Ba, 0) e^{ 
+i \Bm \cdot (\Ba -\Bb) 
++i \Bk \cdot (\Ba -\Bx)
++ i \Bk ct 
+} F(\Bb, 0) d^3 a d^3 b \\
+\end{align*}
+
+Hmm.  Messy.  The scalar bits of the above are our energy.  We have a $F^2$ like term in the first integral (like the Lagrangian density), but it is at different points, and
+we have to integrate those with a sort of vector convolution.  Given the reciprocal relationships between convolution and multiplication moving between the frequency and time domains in Fourier transforms I'd expect that this first integral can somehow be turned into the sum of the squares of all the Fourier coefficients
+
+\begin{align*}
+\sum_{\Bk} ({C}_{\Bk})^2 
+\end{align*}
+
+which is very much like a discrete version of the Rayleigh energy theorem as derived in \cite{PJqmFourier}, and is in this case
+a constant (not a function of time or space) and is dependent on only the initial field.
+That would mean that the remainder is the Poynting vector,
+which looks reasonable since it has the appearance of being somewhat antisymmetric.
+
+Hmm, having mostly figured it out without doing the math in this case, the answer pops out.  This first integral can be separated cleanly since the pseudoscalar
+exponentials commute with the bivector field.  We then have
+
+\begin{align*}
+\frac{1}{V^2} &\int \sum_{\Bk} F(\Ba, 0) F(\Bb, 0) e^{ i \Bk \cdot (\Ba - \Bb) } d^3 a d^3 b \\
+&= \frac{1}{V} \int \sum_{\Bk} F(\Ba, 0) e^{ i \Bk \cdot \Ba } d^3 a \int F(\Bb, 0) e^{ -i \Bk \cdot \Bb } d^3 b \\
+&= \sum_{\Bk} \hat{F}_{-\Bk} \hat{F}_{\Bk} \\
+\end{align*}
+
+
+The second term could also use a simplification, and it looks like we can separate these $\Ba$ and $\Bb$ integrals too
+
+\begin{align*}
+\frac{1}{V^2} &\int \sum_{\Bm, \Bk \ne 0} F(\Ba, 0) e^{ 
+i \Bm \cdot (\Ba -\Bb) 
++i \Bk \cdot (\Ba -\Bx)
++ i \Bk ct 
+} F(\Bb, 0) d^3 a d^3 b \\
+&=\frac{1}{V} \int \sum_{\Bm, \Bk \ne 0} F(\Ba, 0) e^{ i (\Bm + \Bk) \cdot \Ba } d^3 a
+e^{ i \Bk ct -i \Bk \cdot \Bx }
+\inv{V} \int F(\Bb, 0) 
+e^{-i \Bm \cdot \Bb}
+d^3 b
+ \\
+&= \sum_{\Bm} \sum_{\Bk \ne 0} \hat{F}_{-\Bm -\Bk} e^{ i \Bk ct -i \Bk \cdot \Bx } \hat{F}_{\Bm} \\
+\end{align*}
+
+Finishing examination of these quantity, the first of which is presumably a scalar ($8\pi E$) and the second of which is presumably a spatial vector ($8\pi \BP$), and relating them to the freqencies and the harmonic oscillator model as Bohm did looks like a job
+for a different fresher day.
+
+\section{ Appendix.  Summary of Notation used. }
+
+% 
+% NOTATION BOILERPLATE BASE STOLEN FROM ../geometric-algebra/4d_fourier.ltx
+% (IN TURN TAKEN FROM:
+% NOTATION BOILERPLATE BASE STOLEN FROM ../geometric-algebra/lagrangian_field_density.ltx
+% )
+%
+Here is a summary of the notation, following largely the conventions from
+\cite{doran2003gap}, but modified here for cgs units as used in \cite{bohm1989qt}
+Greek letters range over all indexes and
+english indexes range over $1,2,3$.  Bold vectors are spatial enties and non-bold is used for four vectors and scalars.
+Summation convention is in effect unless otherwise noted, with implied summation over all sets of matched upper and lower indexes.
+
+\begin{equation*}\label{eqn:notation}
+\begin{array}{l l l}
+\gamma_{\mu} & \gamma_{\mu} \cdot \gamma_{\nu} = \pm {\delta^{\mu}}_{\nu} & \quad \mbox{Four vector basis vector} \\
+{(\gamma_0)}^2 {(\gamma_k)}^2 &= -1 & \quad \mbox{Minkowski metric} \\
+\sigma_k = \sigma^k &= \gamma_{k} \wedge \gamma_0 & \quad \mbox{Spatial basis bivector. ($\sigma_k \cdot \sigma_j = \delta_{kj}$)} \\
+                    &= \gamma_{k} \gamma_0 & \\
+%                    &= \gamma_{k0} \\
+i &= \gamma_{0} \wedge \gamma_1 \wedge \gamma_{2} \wedge \gamma_3 & \quad \mbox{Four-vector pseudoscalar} \\
+  &= \gamma_{0} \gamma_1 \gamma_{2} \gamma_3 & \\
+% NOT USED HERE:
+%  &= \gamma_{0123} \\
+\gamma^{\mu} \cdot \gamma_{\nu} &= {\delta^{\mu}}_{\nu} & \quad \mbox{Reciprocal basis vectors} \\
+x^{\mu} &= x \cdot \gamma^{\mu} & \quad \mbox{Vector coordinate} \\
+x_{\mu} &= x \cdot \gamma_{\mu} & \quad \mbox{Coordinate for reciprocal basis} \\
+x &= \gamma_{\mu} x^{\mu} & \quad \mbox{Four vector in terms of coordinates} \\
+  &= \gamma^{\mu} x_{\mu} \\
+% <SI>
+%\BE &= E^k \sigma_k & \quad \mbox{Electric field spatial vector} \\
+%\BB &= B^k \sigma_k & \quad \mbox{Magnetic field spatial vector} \\
+% </SI>
+% <CGS>
+\EE &= E^k \sigma_k & \quad \mbox{Electric field spatial vector} \\
+\HH &= H^k \sigma_k & \quad \mbox{Magnetic field spatial vector} \\
+% </CGS>
+J &= \gamma_{\mu} J^{\mu} & \quad \mbox{Current density four vector.} \\
+  &= \gamma^{\mu} J_{\mu} \\
+% <SI>
+%F &= \BE + i c \BB & \quad \mbox{Faraday bivector} \\
+% </SI>
+% <CGS>
+F &= \EE + i \HH & \quad \mbox{Faraday bivector} \\
+% </CGS>
+  &= F^{\mu\nu} \gamma_\mu \wedge \gamma_\nu & \quad \mbox{in terms of Faraday tensor} \\
+x^{0} &= x \cdot \gamma^0 & \quad \mbox{Time coordinate (length dim.)} \\
+      &= c t \\
+\Bx &= x \wedge \gamma_0 & \quad \mbox{Spatial vector} \\
+    &= x^k \sigma_k \\
+% <SI>
+%J^{0} &= J \cdot \gamma^0 & \quad \mbox{Charge density.} \\
+%      &= c \rho & \quad \mbox{(current density dimensions.)} \\
+% </SI>
+% <CGS>
+J^{0} &= J \cdot \gamma^0 & \quad \mbox{Charge density.} \\
+      &= \rho & \quad \mbox{(current density dimensions.)} \\
+% </CGS>
+% NOTE: USE OF LOWERCASE SPATIAL CURRENT VECTOR IN THIS DOC.
+\Bj &= J \wedge \gamma_0 & \quad \mbox{Current density spatial vector} \\
+    &= J^k \sigma_k \\ % \sum omitted.
+% 
+\partial_{\mu} &= \PDi{x^\mu}{} & \quad \mbox{Index up partial.} \\
+\partial^{\mu} &= \PDi{x_\mu}{} & \quad \mbox{Index down partial.} \\
+\partial_{\mu\nu} &= \PDi{x^\mu}{}\PDi{x^\nu}{} & \quad \mbox{Index up partial.} \\
+\grad &= \sum \gamma^{\mu} \partial/\partial {x^{\mu}} & \quad \mbox{Spacetime gradient} \\
+      &= \gamma^{\mu}\partial_{\mu} \\
+      &= \sum \gamma_{\mu} \partial/\partial {x_{\mu}} \\
+      &= \gamma_{\mu}\partial^{\mu} \\
+\spacegrad &= \sigma^{k} \partial_k & \quad \mbox{Spatial gradient} \\
+% NOT USED HERE:
+%\PV \IIinf &= \lim_{R\rightarrow \infty} \int_{R}^R & \quad \mbox{Integral Principle value} \\
+%\hat{A}(k) &= \FF(A(x)) & \quad \mbox{Fourier transform of $A$} \\ 
+%{A}(x) &= \FF^{-1}(A(k)) & \quad \mbox{Inverse Fourier transform} \\ 
+\hat{A}_{\Bk} &= \hat{A}_{k_1,k_2,k_3} & \quad \mbox{Fourier coefficient, integer indexes.} \\ 
+\grad^2 A
+   &= (\grad \cdot \grad) A & \quad \mbox{Four Laplacian. } \\
+   &= (\partial_{00} - \sum_k \partial_{kk}) A & \\
+x^2 &= x \cdot x & \quad \mbox{Four vector square. } \\
+    &= x^\mu x_\mu \\
+\Bx^2 &= \Bx \cdot \Bx & \quad \mbox{Spatial vector square. } \\
+    &= \sum_{k=1}^3 (x^k)^2 \\
+    &= \Abs{\Bx}^2 \\
+% NOT USED HERE:
+%d^4 x &= dx^0 dx^1 dx^2 dx^3 & \quad \mbox{Four volume element. } \\
+d^3 x &= dx^1 dx^2 dx^3 & \quad \mbox{Spatial volume element. } \\
+% worthy of separate mention:
+%\exp(i\Bu) &= \cos(\Bu) + i \sin(\Bu) & \quad \mbox{bivector exponential. } \\
+\int_{\partial I} &= \int_{a}^{b} & \quad \mbox{Integration range $I = [a,b]$ } \\
+\text{STA} & & \quad \mbox{Space Time Algebra} \\
+(xyz)^{\tilde{}} &= \widetilde{xyz} = z y x & \quad \mbox{Reverse of a vector product.} \\
+% NOT USED HERE:
+%\text{GA} & & \quad \mbox{Geometric Algebra} \\
+\end{array}
+\end{equation*}
+
+While many things could be formulated in a metric signature independent fashion, no effort to do so here has been made.  Assume
+a time positive
+$(+,-,-,-)$
+metric signature.  Specifically, that is $(\gamma_0)^2 = 1$, and $(\gamma_k)^2 = -1$.  
+
+% NOT USED HERE:
+%The $\PV$ notation used somewhat loosely here is taken from \cite{lepage1980cva} where the author uses it in his Riemann integral proof of the inverse Fourier integral.
+
+%\section{ FIXME. }
+%
+%Caught myself in these notes abusing notation and probably made mistakes by combining exponentials that probably don't commute into single argument exponentials.  Go back and review all other recent previous Fourier treatments and check for and fix this if neccessary
+% ... TURNS OUT THEY DID COMMUTE .... should still review other work.
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
+
+\end{document}
