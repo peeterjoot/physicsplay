@@ -138,6 +138,7 @@ skipit += ../lut/luts_Rindler-eom.pdf
 skipit += ../lut/luts_old_Rindler-eom.pdf
 
 # generated:
+skipit += ../geometric-algebra/everything.pdf
 skipit += ../geometric-algebra/everything2007.pdf
 skipit += ../geometric-algebra/everything2008.pdf
 skipit += ../geometric-algebra/everything2009.pdf
@@ -242,6 +243,9 @@ ordered2009 += ../geometric-algebra/firstorder_fourier_maxwell.pdf
 ordered2009 += ../geometric-algebra/4d_fourier.pdf
 ordered2009 += ../qm/fourier_series_maxwell.pdf
 
+ordered2009 += ../qm/potential_fourier.pdf
+skipit += ../qm/stub_em_fields.pdf
+
 # Rules:
 #-----------------------------------------------------
 unordered2009 := $(filter-out $(ordered2009) $(skipit) $(ordered2007) $(ordered2008),$(ppdfs))
@@ -264,3 +268,6 @@ everything2008.pdf: $(reversed2008)
 
 everything2009.pdf: $(reversed2009)
 	pdftk $(reversed2009) cat output $@
+
+everything.pdf: $(ordered2007) $(ordered2008) $(ordered2009) 
+	pdftk $(ordered2007) $(ordered2008) $(ordered2009) cat output $@
