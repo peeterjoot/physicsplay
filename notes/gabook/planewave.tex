@@ -4,6 +4,7 @@
 \input{../peeters_macros2.tex}
 \newcommand{\EE}[0]{\boldsymbol{\mathcal{E}}}
 \newcommand{\HH}[0]{\boldsymbol{\mathcal{H}}}
+\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
 
 \usepackage[bookmarks=true]{hyperref}
 
@@ -17,7 +18,7 @@
 
 \title{ Plane wave Fourier series solutions to the Maxwell vacuum equation. }
 \author{Peeter Joot}
-\date{ Feb 08, 2009.  Last Revision: $Date: 2009/02/10 23:03:22 $ }
+\date{ Feb 08, 2009.  Last Revision: $Date: 2009/02/11 04:42:53 $ }
 
 \begin{document}
 \maketitle{}
@@ -367,13 +368,17 @@ e^{i \Bk \cdot \Bx}
 \gamma_0
 e^{-i \Bomega t}
 \\
+\end{align*}
+% reverse i \Bk = \Bk~ i~ = -\Bk i = -i\Bk
+
+This is
+\begin{align}\label{eqn:conjugateField}
+F^\dagger 
 &= \sum_{\Bk} 
 e^{i \Bk \cdot \Bx}
 (\hat{F}_{\Bk})^{\dagger}
 e^{-i \Bomega t}
-\\
-\end{align*}
-% reverse i \Bk = \Bk~ i~ = -\Bk i = -i\Bk
+\end{align}
 
 So for the energy we have
 
@@ -411,11 +416,11 @@ e^{-i (\Bomega_m-\Bomega_k) t -i \Bm \cdot \Bx}
 \sum_{\Bm, \Bk} 
 \hat{F}_{\Bm}
 (\hat{F}_{\Bk})^{\dagger}
-e^{i (\Bk-\Bm) \cdot \Bx +i (\Bomega_m-\Bomega_k) t}
+e^{i (\Bk-\Bm) \cdot \Bx -i (\Bomega_k-\Bomega_m) t}
 +
 (\hat{F}_{\Bk})^{\dagger}
 \hat{F}_{\Bm}
-e^{-i (\Bomega_m-\Bomega_k) t +i (\Bk -\Bm) \cdot \Bx}
+e^{i (\Bomega_k-\Bomega_m) t +i (\Bk -\Bm) \cdot \Bx}
 \\
 &= 
 \sum_{\Bk} 
@@ -428,11 +433,11 @@ e^{-i (\Bomega_m-\Bomega_k) t +i (\Bk -\Bm) \cdot \Bx}
 \sum_{\Bm \ne \Bk} 
 \hat{F}_{\Bm}
 (\hat{F}_{\Bk})^{\dagger}
-e^{i (\Bk-\Bm) \cdot \Bx +i (\Bomega_m-\Bomega_k) t}
+e^{i (\Bk-\Bm) \cdot \Bx -i (\Bomega_k-\Bomega_m) t}
 +
 (\hat{F}_{\Bk})^{\dagger}
 \hat{F}_{\Bm}
-e^{-i (\Bomega_m-\Bomega_k) t +i (\Bk -\Bm) \cdot \Bx}
+e^{i (\Bomega_k-\Bomega_m) t +i (\Bk -\Bm) \cdot \Bx}
 \\
 \end{align*}
 
@@ -441,22 +446,169 @@ that isn't embedded in the Fourier coefficients themselves has been eliminated.
 What is left is something that looks like it's a real quantity (to be verified)
 Assuming (also to be verified) that $\hat{F}_{\Bk}$ commutes with its conjugate
 we have something that looks 
-like a discrete version of the Rayleigh energy theorem seen in
-a Fourier transform context in \cite{haykin1994cs}
+like a discrete version of what \cite{haykin1994cs} calls
+the Rayleigh energy theorem
 
-FIXME: note what that was, or refer to notes in \cite{PJqmFourier}.
+\begin{align*}
+\IIinf f(x)f^\conj(x) dx &= \IIinf \hat{f}(k)\hat{f}^\conj(k) dk
+\end{align*}
+
+Here $\hat{f}(k)$ is the Fourier transform of $f(x)$.
 
 Before going on it is expected that
-the $\Bk \ne \Bm$ terms all cancel, and this should be verified.
-
+the $\Bk \ne \Bm$ terms all cancel.
 Having restricted the orientations of the allowed angular velocity bivectors to scalar multiples of the plane formed by the (wedge of) the electric
 and magnetic fields, we have only a single set of indexes to sum over (ie: $\Bk = 2 \pi \sigma k/ \lambda$).
 In particular we can sum over $k < m$, and $k > m$ cases separately and add these
 with expectation of cancelation.  Let's see if this works out.
 
-Write $\Bomega = 2 \pi \sigma / \lambda$, this is
+Write $\Bomega = 2 \pi \sigma / \lambda$, $\Bomega_k = k \Bomega$, and $\Bk = \Bomega/c$ then we have for these terms
 
-...
+\begin{align*}
+%\sum_{\{m < k \} \cup \{ k < m \}} &
+\sum_{\Bm \ne \Bk} 
+e^{ i (k-m) \Bomega \cdot \Bx/c } \left( 
+\hat{F}_{\Bm} (\hat{F}_{\Bk})^{\dagger} e^{ -i (k-m) \Bomega t }
++
+(\hat{F}_{\Bk})^{\dagger} \hat{F}_{\Bm} e^{ i (k-m)\Bomega t }
+\right)
+\\
+\end{align*}
+
+\subsubsection{ Hermitian conjugate identities. }
+
+To get comfortable with the required manipulations, let's 
+find the Hermitian conjugate equivalents to some of the familiar complex number relationships.
+
+Not all of these will be the same as in ``normal'' complex numbers.  For instance, while for complex numbers, the identities
+
+\begin{align*}
+z + \bar{z} &= 2 \Re(z) \\
+\inv{i}( z - \bar{z} ) &= 2 \Im(z)
+\end{align*}
+
+are both real numbers, we've seen for the electric and magnetic fields that we don't get scalars from the Hermitian conjugates, instead get a spatial vector where we'd get a real number in complex arithmetic.  Similarily we get a (bi)vector in the dual
+space for the field minus its conjugate.
+
+Some properties:
+\begin{itemize}
+\item Hermitian conjugate of a product
+
+\begin{align*}
+(ab)^\dagger 
+&= \gamma_0 (ab)^{\tilde{}} \gamma_0 \\
+&= \gamma_0 
+(b)^{\tilde{}}
+(a)^{\tilde{}}
+\gamma_0 \\
+&= \left(\gamma_0 (b)^{\tilde{}} \gamma0\right) \left(\gamma_0 (a)^{\tilde{}} \gamma_0\right) \\
+\end{align*}
+
+This is our familiar conjugate of a product is the inverted order product of conjugates.
+\begin{align}
+(ab)^\dagger &= b^\dagger a^\dagger 
+\end{align}
+
+\item conjugate of a pure pseudoscalar exponential
+
+\begin{align*}
+\left(e^{i\alpha}\right)^\dagger
+&=
+\gamma_0
+\left(
+\cos(\alpha)
++ i \sin(\alpha)
+\right)^{\tilde{}}
+\gamma_0 \\
+&=
+\cos(\alpha)
+- i 
+\gamma_0
+\sin(\alpha)
+\gamma_0 \\
+\end{align*}
+
+But that is just
+\begin{align}
+\left(e^{i\alpha}\right)^\dagger &= e^{-i\alpha}
+\end{align}
+
+Again in sync with complex analysis.  Good.
+
+\item conjugate of a dual spatial vector exponential
+\begin{align*}
+\left(e^{i\Bk}\right)^\dagger
+&=
+\gamma_0
+\left(
+\cos(\Bk)
++ i \sin(\Bk)
+\right)^{\tilde{}}
+\gamma_0 \\
+&=
+\gamma_0
+\left(
+\cos(\Bk)
+- \sin(\Bk) i
+\right)
+\gamma_0 \\
+&=
+\cos(\Bk)
+- i\sin(\Bk) 
+\end{align*}
+
+So, we have
+
+\begin{align}
+\left(e^{i\Bk}\right)^\dagger &= e^{-i\Bk}
+\end{align}
+
+Again, consistent with complex numbers for this type of multivector object.
+
+\item dual spatial vector exponential product with a conjugate.
+
+\begin{align*}
+F^\dagger  e^{i\Bk} 
+&= \gamma_0 \tilde{F} \gamma_0 e^{i\Bk} \\
+&= \gamma_0 \tilde{F} e^{i\Bk} \gamma_0 \\
+&= \gamma_0 e^{-i\Bk} \tilde{F} \gamma_0 \\
+&= e^{i\Bk} \gamma_0 \tilde{F} \gamma_0 \\
+\end{align*}
+
+So we have conjugate commutation for both the field and its conjugate
+\begin{align}
+F^\dagger e^{i\Bk} &= e^{-i\Bk} F^\dagger \\
+F e^{i\Bk} &= e^{-i\Bk} F
+\end{align}
+
+\item pseudoscalar exponential product with a conjugate.
+
+For scalar $\alpha$
+
+\begin{align*}
+F^\dagger  e^{i\alpha} 
+&= \gamma_0 \tilde{F} \gamma_0 e^{i\alpha} \\
+&= \gamma_0 \tilde{F} e^{-i\alpha} \gamma_0 \\
+&= \gamma_0 e^{-i\alpha} \tilde{F} \gamma_0 \\
+&= e^{i\alpha} \gamma_0 \tilde{F} \gamma_0 \\
+\end{align*}
+
+In opposition to the dual spatial vector exponential, the plain old pseudoscalar exponentials commute with 
+both the field and its conjugate.
+
+\begin{align}
+F^\dagger e^{i\alpha} &= e^{i\alpha} F^\dagger \\
+F e^{i\alpha} &= e^{i\alpha} F
+\end{align}
+
+\end{itemize}
+
+Observe that the first three of these properties would have allowed for calculation of 
+\ref{eqn:conjugateField} by inspection.
+
+\subsection{ Products of Fourier coefficient with another conjugate coefficient. }
+
+To progress a relationship between the conjugate products of fourier coefficients may be required.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
