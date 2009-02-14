@@ -15,7 +15,7 @@
 
 \title{ Lorentz force relation to the stress energy tensor. }
 \author{Peeter Joot}
-\date{ Feb dd, 2009.  Last Revision: $Date: 2009/02/13 19:09:37 $ }
+\date{ Feb 13, 2009.  Last Revision: $Date: 2009/02/14 05:53:54 $ }
 
 \begin{document}
 
@@ -29,9 +29,13 @@ Have now made a few excursions related to the concepts of electrodynamic
 field energy and momentum.
 
 In \cite{PJpoynting} the energy density rate and poynting divergence 
-relationship was demonstrated using Maxwell's equation.
+relationship was demonstrated using Maxwell's equation.  That was:
 
-In the above and in \cite{PJemstresstensor} this was related to the 
+\begin{align}
+\PD{t}{}\frac{\epsilon_0}{2} \left(\BE^2 + c^2 \BB^2\right) + \spacegrad \cdot \inv{\mu_0}(\BE \cross \BB) &= -\BE \cdot \Bj 
+\end{align}
+
+There and in \cite{PJemstresstensor} this was related to the 
 stress energy four vectors
 
 \begin{align}
@@ -44,6 +48,8 @@ of things was missing.
 
 Later in \cite{PJpoyntingRate} the rate of change of Poynting vector
 was calculated, with an additional attempt to relate this to $T(\gamma_\mu)$.
+
+These relationships, and the operations required to factoring out the divergence were considerably messier.
 
 Finally, in \cite{PJelectricFieldEnergy} the four vector $T(\gamma_\mu)$
 was related to the Lorentz force and the work done moving a charge against
@@ -77,10 +83,138 @@ It is concievable that a generalization of Hermitian conjugation, where the spat
 provide a mapping and driving structure from the Four vector quantities and the somewhat scrambled seeming set
 of relationships observed in the split spatial and time domain.  That will also be explored here.
 
-\section{}
+\section{ Spacetime divergence of the stress energy four vectors. }
 
+The spacetime divergence of the field energy momentum four vector $T(\gamma_0)$ has been calculated previously.  Let's redo this 
+calculation for the other components.
+
+\begin{align*}
+\grad \cdot T(\gamma_\mu) 
+&= \frac{\epsilon_0}{2} \gpgradezero{ \grad (F \gamma_\mu \tilde{F}) } \\
+&= \frac{\epsilon_0}{2} \gpgradezero{ (\grad F) \gamma_\mu \tilde{F} + (\tilde{F} \grad) F \gamma_\mu } \\
+&= \frac{\epsilon_0}{2} \gpgradezero{ (\grad F) \gamma_\mu \tilde{F} + \gamma_\mu \tilde{F} (\grad F) } \\
+&= {\epsilon_0} \gpgradezero{ (\grad F) \gamma_\mu \tilde{F} } \\
+&= \inv{c} \gpgradezero{ J \gamma_\mu \tilde{F} } \\
+\end{align*}
+
+The ability to perform cyclic reordering of terms in a scalar product has been used above.  Application of one more
+reverse operation (which doesn't change a scalar), gives us
+
+\begin{align}
+\grad \cdot T(\gamma_\mu) &= \inv{c} \gpgradezero{ F \gamma_\mu J } 
+\end{align}
+
+Let's expand the right hand size first.
+
+\begin{align*}
+\inv{c} \gpgradezero{ F \gamma_\mu J } &= \inv{c} \gpgradezero{ (\BE + i c \BB) \gamma_\mu (c \rho \gamma_0 + \Bj \gamma_0) } 
+\end{align*}
+
+The $\mu = 0$ term looks the easiest, and for that one we have
+
+\begin{align*}
+\inv{c} \gpgradezero{ (\BE + i c \BB) (c \rho - \Bj) }  = -\Bj \cdot \BE
+\end{align*}
+
+Now, for the other terms, say $\mu = k$, we have
+
+\begin{align*}
+\inv{c} \gpgradezero{ (\BE + i c \BB) (c \rho \sigma_k - \sigma_k \Bj ) } 
+&= E^k \rho - \gpgradezero{ i \BB \sigma_k \Bj }  \\
+&= E^k \rho - J^a B^b \gpgradezero{ \sigma_1 \sigma_2 \sigma_3 \sigma_b \sigma_k \sigma_a }  \\
+&= E^k \rho - J^a B^b \epsilon_{a k b} \\
+&= E^k \rho + J^a B^b \epsilon_{k a b} \\
+&= (\rho \BE + \Bj \cross \BB) \cdot \sigma_k
+\end{align*}
+
+Summarizing the two results we have
+
+\begin{align}
+\inv{c} \gpgradezero{ F \gamma_0 J } &= -\Bj \cdot \BE \\
+\inv{c} \gpgradezero{ F \gamma_k J } &= (\rho \BE + \Bj \cross \BB) \cdot \sigma_k
+\end{align}
+
+The second of these is easily recognizable as components of the Lorentz force for an element of charge (density).  The first
+of these is actually the energy component of the four vector Lorentz force, so expanding that in terms of spacetime quantities
+is the next order of business.
+
+\section{ Four vector Lorentz Force. }
+
+The Lorentz force in covariant form is
+
+%\begin{align}
+%m \ddot{x}_\mu &= q F_{} \cdot \frac{dx}{d\tau}
+%\end{align}
+%
+%Or in vector/bivector form
+
+\begin{align}
+m \ddot{x} &= q F \cdot \dot{x}/c
+\end{align}
+
+Two verifications of this are in order.  One is that we get the traditional vector form of the Lorentz force equation from
+this and the other is that we can get the traditional tensor form from this equation.
+
+\subsection{ Lorentz force in tensor form. }
+
+Recovering the tensor form is probably the easier of the two operations.  We have
+
+\begin{align*}
+m \ddot{x}_\mu \gamma^\mu
+&= \frac{q}{2} F_{\alpha\beta} \dot{x}_\sigma (\gamma^{\alpha} \wedge \gamma^\beta) \cdot \gamma^\sigma \\
+&= \frac{q}{2} F_{\alpha\beta} \dot{x}^\sigma (\gamma^{\alpha} {\delta^\beta}_\sigma -\gamma^{\beta} {\delta^\alpha}_\sigma ) \\
+&= \frac{q}{2} F_{\alpha\beta} \dot{x}^\beta \gamma^{\alpha} - \frac{q}{2} F_{\alpha\beta} \dot{x}^\alpha \gamma^{\beta} \\
+\end{align*}
+
+Dotting with $\gamma_\mu$ the right hand side is
+
+\begin{align*}
+\frac{q}{2} F_{\mu\beta} \dot{x}^\beta - \frac{q}{2} F_{\alpha\mu} \dot{x}^\alpha 
+&= {q} F_{\mu\alpha} \dot{x}^\alpha 
+\end{align*}
+
+Which recovers the tensor form of the equation
+\begin{align}
+m \ddot{x}_\mu &= {q} F_{\mu\alpha} \dot{x}^\alpha 
+\end{align}
+
+\subsection{ Lorentz force components in vector form. }
+
+\begin{align*}
+m \gamma \frac{d}{dt} \gamma \left(c + \sigma_k \frac{dx^k}{dt}\right) \gamma_0
+&= \frac{q}{2c}(F v - v F) \\
+&=
+\frac{q \gamma}{2c} 
+(\BE + i c\BB) 
+\left(c + \sigma_k \frac{dx^k}{dt}\right) \gamma_0
+\\
+&\quad -
+\frac{q \gamma}{2c} 
+\left(c + \sigma_k \frac{dx^k}{dt}\right) \gamma_0
+(\BE + i c\BB) \\
+\end{align*}
+
+Right multiplication by $\gamma_0/\gamma$ we have
+\begin{align*}
+m \frac{d}{dt} \gamma \left(c + \Bv \right) 
+&= \frac{q }{2c} \left( (\BE + i c\BB) \left(c + \Bv \right) -\left(c + \Bv \right) (-\BE + i c\BB) \right) \\
+&= \frac{q }{2c} \left( 
+%(\BE + i c\BB) (c + \Bv ) 
+%-(c + \Bv ) (-\BE + i c\BB) 
++ 2 \BE c 
++ \BE \Bv  + \Bv \BE 
++ i c (\BB \Bv  - \Bv \BB)
+\right) \\
+\end{align*}
+
+After a last bit of reduction this is
+\begin{align}
+m \frac{d}{dt} \gamma \left(c + \Bv \right) &= q (\BE + \Bv \cross \BB) + q \BE \cdot \Bv/c
+\end{align}
+
+
+\section{ Conjugation? }
 % from planewave.ltx
-\section{}
 \subsection{ Followup: stress energy tensor. }
 
 This also suggests a relativistic generalization of conjugation, since the time basis vector should perhaps not have
