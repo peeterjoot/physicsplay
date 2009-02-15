@@ -15,7 +15,7 @@
 
 \title{ Lorentz force relation to the energy momentum tensor. }
 \author{Peeter Joot}
-\date{ Feb 13, 2009.  Last Revision: $Date: 2009/02/14 19:22:54 $ }
+\date{ Feb 13, 2009.  Last Revision: $Date: 2009/02/15 04:06:58 $ }
 
 \begin{document}
 
@@ -36,7 +36,7 @@ relationship was demonstrated using Maxwell's equation.  That was:
 \end{align}
 
 In terms of the field energy density $U$, and Poynting vector $\BP$, this is
-\begin{align}
+\begin{align}\label{eqn:energyDensityPoyntingDefined}
 U &= \frac{\epsilon_0}{2} \left(\BE^2 + c^2 \BB^2\right) \\
 \BP &= \inv{\mu_0}(\BE \cross \BB) \\
 \PD{t}{U} + \spacegrad \cdot \BP &= -\BE \cdot \Bj 
@@ -245,29 +245,6 @@ clear, but some of the associated trickiness in their treatment obscured this
 fact ( Although their treatment is only two pages, I still only 
 understand half of what they are doing!)
 
-\section{ Conjugation? }
-% from planewave.ltx
-\subsection{ Followup: energy momentum tensor. }
-
-This also suggests a relativistic generalization of conjugation, since the time basis vector should perhaps not have
-a distinguishing role.  Something like this:
-
-\begin{align*}
-F^{\dagger_\mu} &= \gamma_\mu \tilde{F} \gamma_\mu
-\end{align*}
-
-Or perhaps:
-\begin{align*}
-F^{\dagger_\mu} &= \gamma_\mu \tilde{F} \gamma^\mu
-\end{align*}
-
-may make sense for consideration of the other components of the general energy momentum tensor, which had roughly the form:
-
-\begin{align*}
-T^{\mu\nu} \propto T(\gamma_\mu) \cdot \gamma^\nu
-\end{align*}
-
-(with some probable adjustments to index positions).  Think this through later.
 
 \section{ Expansion of the energy momentum tensor. }
 
@@ -310,76 +287,148 @@ U                    &= T(\gamma^0) \cdot \gamma^0 \\
 \BP/c \cdot \sigma_k &= T(\gamma^0) \cdot \gamma^k
 \end{align}
 
-\subsubsection{ Last three rows. }
+\subsubsection{ First column. }
 
-Again working first with $\epsilon_0 = c$ we have
+We have Poynting vector terms in the $T^{0k}$ elements of the matrix.  Let's quickly verify that we have them
+in the $T^{k0}$ positions too.
 
-\begin{align*}
-T(\gamma^k) 
-&= \frac{-1}{2} (\BE + i \BB) \gamma^k (\BE + i \BB) \\
-&= \frac{-1}{2} (\BE + i \BB) \gamma^k \gamma_0 \gamma_0 (\BE + i \BB) \\
-&= \frac{1}{2} (\BE + i \BB) \sigma_k \gamma_0 (\BE + i \BB) \\
-&= \frac{1}{2} (\BE + i \BB) \sigma_k (-\BE + i \BB) \gamma_0 \\
-\end{align*}
-
-To reduce this, let's write the fields in terms of projections and rejections onto the $\sigma_k$ direction, as in $\BE_\parallel = (\BE \cdot \sigma_k) \sigma_k$, and $\BE_\perp = (\BE \wedge \sigma_k) \sigma_k$.  Then we have
+To do so, again with $c = \epsilon_0 = 1$ temporarily this is a computation of
 
 \begin{align*}
-T(\gamma^k) 
-&= \frac{1}{2} (\BE + i \BB) (-\BE_\parallel +\BE_\perp + i \BB_\parallel - i \BB_\perp) \sigma_k \gamma_0 \\
-%&= \frac{1}{2} (\BE + i \BB) (-\BE_\parallel +\BE_\perp + i \BB_\parallel - i \BB_\perp) \gamma_k \\
-&= \frac{1}{2} 
-(\BE_\parallel + \BE_\perp + i \BB_\parallel + i \BB_\perp) (-\BE_\parallel +\BE_\perp + i \BB_\parallel - i \BB_\perp) 
-\gamma_k \\
+T(\gamma^k) \cdot \gamma^0 
+&= \inv{2} (T(\gamma^k) \gamma^0 + \gamma^0 T(\gamma^k)) \\
+&= \frac{-1}{4} (F \gamma^k F \gamma^0 + \gamma^0 F \gamma^k F) \\
+&= \frac{1}{4} (F \sigma_k \gamma_0 F \gamma^0 - \gamma^0 F \gamma_0 \sigma_k F) \\
+&= \frac{1}{4} (F \sigma_k (-\BE + i \BB) - (-\BE + i\BB) \sigma_k F) \\
+&= \frac{1}{4} \gpgradezero{\sigma_k (-\BE + i \BB)(\BE + i \BB) - \sigma_k (\BE + i \BB)(-\BE + i\BB) } \\
+&= \frac{1}{4} \gpgradezero{\sigma_k (-\BE^2 -\BB^2 +2 (\BE \cross \BB)) - \sigma_k (-\BE^2 -\BB^2 - 2(\BE \cross \BB)) } \\
 \end{align*}
 
-Let's do this in pieces.  For the $\BE$ terms we have
+Adding back in the units we have
+
+\begin{align}
+T(\gamma^k) \cdot \gamma^0 &= \epsilon_0 c (\BE \cross \BB) \cdot \sigma_k = \inv{c}\BP \cdot \sigma_k
+\end{align}
+
+As expected, these are the components of the Poynting vector (scaled by $1/c$ for units of energy density).
+
+\subsubsection{ Diagonal and remaining terms. }
 
 \begin{align*}
-(\BE_\parallel + \BE_\perp) (-\BE_\parallel +\BE_\perp) 
-&=
-(\BE_\perp)^2 -(\BE_\parallel)^2 
-+\BE_\parallel \BE_\perp
--\BE_\perp \BE_\parallel  \\
-&= (\BE_\perp)^2 -(\BE_\parallel)^2 +    {2} (\BE_\parallel \wedge \BE_\perp) \\
-&= (\BE_\perp)^2 -(\BE_\parallel)^2 +    {2}i (\BE_\parallel \cross \BE_\perp)
+T(\gamma^a) \cdot \gamma^b 
+&= \inv{2} (T(\gamma^a) \gamma^b + \gamma^b T(\gamma^a)) \\
+&= \frac{-1}{4} (F \gamma^a F \gamma^b + \gamma^a F \gamma^b F) \\
+&= \frac{1}{4} (F \sigma_a \gamma_0 F \gamma^b - \gamma^a F \gamma_0 \sigma_b F) \\
+&= \frac{1}{4} (F \sigma_a (-\BE + i \BB) \sigma_b + \sigma_a (-\BE + i \BB) \sigma_b F) \\
+&= \frac{1}{2} \gpgradezero{\sigma_a (-\BE + i \BB) \sigma_b (\BE + i\BB) } \\
 \end{align*}
 
-For the $\BB$ terms we have
+From this point is there any particularily good or clever way to do the remaining reduction?  Doing it with 
+coordinates looks like it would be easy, but also messy.  A decomposition of $\BE$ and $\BB$ that are parallel
+and perpendicular to the spatial basis vectors also looks feasable.
+
+Let's try the dumb way first
 
 \begin{align*}
-(i \BB_\parallel + i \BB_\perp) (i \BB_\parallel - i \BB_\perp) 
-&= (\BB_\parallel + \BB_\perp) (-\BB_\parallel + \BB_\perp)  \\
-&= (\BB_\perp)^2 -(\BB_\parallel)^2 + 2 i (\BB_\parallel \cross \BB_\perp)
+T(\gamma^a) \cdot \gamma^b 
+&= \frac{1}{2} \gpgradezero{\sigma_a (-E^k \sigma_k + i B^k \sigma_k) \sigma_b (E^m \sigma_m + i B^m \sigma_m) } \\
+&= 
+\inv{2} (B^k E^m - E^k B^m) \gpgradezero{ i \sigma_a \sigma_k \sigma_b \sigma_m } 
+- \inv{2} (E^k E^m + B^k B^m) \gpgradezero{ \sigma_a \sigma_k \sigma_b \sigma_m } \\
 \end{align*}
 
-This leaves the $\BE$,$\BB$ cross terms
+Reducing the scalar operations is going to be much different for the $a = b$, and $a \ne b$ cases.  For the diagonal case
+we have 
 
 \begin{align*}
-&(\BE_\parallel + \BE_\perp ) (i \BB_\parallel - i \BB_\perp) 
-+(i \BB_\parallel + i \BB_\perp) (-\BE_\parallel +\BE_\perp ) \\
-&=
-i (\BE_\parallel \BB_\parallel  - \BB_\parallel \BE_\parallel ) \\
-&+i (-\BE_\perp \BB_\perp + \BB_\perp \BE_\perp ) \\
-&+i ( -\BE_\parallel \BB_\perp + \BB_\parallel \BE_\perp ) \\
-&+i ( \BE_\perp \BB_\parallel - \BB_\perp \BE_\parallel ) \\
+T(\gamma^a) \cdot \gamma^a 
+&= 
+\inv{2} (B^k E^m - E^k B^m) \gpgradezero{ i \sigma_a \sigma_k \sigma_a \sigma_m } 
+- \inv{2} (E^k E^m + B^k B^m) \gpgradezero{ \sigma_a \sigma_k \sigma_a \sigma_m } \\
+&= 
+- \inv{2} \sum_{m, k \ne a} \inv{2} (B^k E^m - E^k B^m) \gpgradezero{ i \sigma_k \sigma_m } 
++ \inv{2} \sum_{m, k \ne a} (E^k E^m + B^k B^m) \gpgradezero{ \sigma_k \sigma_m } \\
+&+ \inv{2} \sum_{m} (B^a E^m - E^a B^m) \gpgradezero{ i \sigma_a \sigma_m } 
+- \inv{2} \sum_m (E^a E^m + B^a B^m) \gpgradezero{ \sigma_a \sigma_m } \\
 \end{align*}
 
-Reassembling results, still leaving out the factors for the units we have a natural split into four different terms
+Inserting the units again we have
+\begin{align}
+T(\gamma^a) \cdot \gamma^a 
+&= 
+\frac{\epsilon_0}{2} \left( \sum_{k \ne a} \left( (E^k)^2 + c^2 (B^k)^2 \right) - \left( (E^a)^2  + c^2 (B^a)^2  \right) \right)
+\end{align}
+
+Or, adding and subtracting, we have the diagonal in terms of energy density (minus a fudge) 
+
+\begin{align}
+T(\gamma^a) \cdot \gamma^a &= U - \epsilon_0 \left( (E^a)^2  + c^2 (B^a)^2  \right)
+\end{align}
+
+Now, for the off diagonal terms.  For $a \ne b$ this is
+\begin{align*}
+T(\gamma^a) \cdot \gamma^b 
+&= 
+\inv{2} \sum_m (B^a E^m - E^a B^m) \gpgradezero{ i \sigma_b \sigma_m } 
++\inv{2} \sum_{m}(B^b E^m - E^b B^m) \gpgradezero{ i \sigma_a \sigma_m } \\
+&- \inv{2} \sum_m (E^a E^m + B^a B^m) \gpgradezero{ \sigma_b \sigma_m } 
+- \inv{2} \sum_{m}(E^b E^m + B^b B^m) \gpgradezero{ \sigma_a \sigma_m } \\
+&+\inv{2} \sum_{m, k \ne a,b}(B^k E^m - E^k B^m) \gpgradezero{ i \sigma_a \sigma_k \sigma_b \sigma_m } 
+- \inv{2} \sum_{m, k \ne a,b}(E^k E^m + B^k B^m) \gpgradezero{ \sigma_a \sigma_k \sigma_b \sigma_m } \\
+\end{align*}
+
+The first two scalar filters that include $i$ will be zero, and we have deltas
+$\gpgradezero{ \sigma_b \sigma_m } = \delta_{bm}$ in the next two.
+The remaining two terms have only vector and bivector terms, so we have zero scalar parts.
+That leaves (restoring units)
+
+\begin{align}
+T(\gamma^a) \cdot \gamma^b 
+&= - \frac{\epsilon_0}{2} \left( E^a E^b + E^b E^a + c^2 (B^a B^b + B^b B^a) \right)
+\end{align}
+
+\subsection{ Summarizing. }
+
+Collecting all the results, with $T^{\mu\nu} = T(\gamma^\mu) \cdot \gamma^\nu$, we have
+
+\begin{align}
+T^{00} &= U \\
+T^{aa} &= U - \epsilon_0 \left( (E^a)^2  + c^2 (B^a)^2  \right) \\
+T^{k0} = T^{0k} &= \BP/c \cdot \sigma_k \\
+T^{ab} &= - \frac{\epsilon_0}{2} \left( E^a E^b + E^b E^a + c^2 (B^a B^b + B^b B^a) \right)
+\end{align}
+
+where $U$, and $\BP$ are as defined in equation \ref{eqn:energyDensityPoyntingDefined}.
+
+% other way:
+%
+%To reduce this, let's write the fields in terms of projections and rejections onto the $\sigma_k$ direction, as in $\BE_\parallel = (\BE \cdot \sigma_k) \sigma_k$, and $\BE_\perp = (\BE \wedge \sigma_k) \sigma_k$.  Then we have
+%
+
+
+\section{ Conjugation? }
+% from planewave.ltx
+\subsection{ Followup: energy momentum tensor. }
+
+This also suggests a relativistic generalization of conjugation, since the time basis vector should perhaps not have
+a distinguishing role.  Something like this:
 
 \begin{align*}
-T(\gamma^k) \gamma^k 
-&= \inv{2} \left((\BE_\perp)^2 + (\BB_\perp)^2 -(\BB_\parallel)^2 -(\BE_\parallel)^2 \right) \\
-&+ \left(\BB_\parallel \cross \BE_\parallel + \BE_\perp \cross \BB_\perp \right) \\
-&+ i \left(\BE_\parallel \cross \BE_\perp + \BB_\parallel \cross \BB_\perp \right) \\
-&+ i \left(\BB_\parallel \cdot \BE_\perp - \BE_\parallel \cdot \BB_\perp \right) \\
+F^{\dagger_\mu} &= \gamma_\mu \tilde{F} \gamma_\mu
 \end{align*}
 
-FIXME: look for error above.  How does one get a pseudoscalar term from a vector vector product.  Highest grade must be two?
+Or perhaps:
+\begin{align*}
+F^{\dagger_\mu} &= \gamma_\mu \tilde{F} \gamma^\mu
+\end{align*}
 
-%\subsubsection{ Diagonal terms. }
-%\subsubsection{ First column. }
-%$T(\gamma^k) \cdot \gamma^0$ }
+may make sense for consideration of the other components of the general energy momentum tensor, which had roughly the form:
+
+\begin{align*}
+T^{\mu\nu} \propto T(\gamma_\mu) \cdot \gamma^\nu
+\end{align*}
+
+(with some probable adjustments to index positions).  Think this through later.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
