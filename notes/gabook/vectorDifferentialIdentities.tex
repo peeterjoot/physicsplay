@@ -15,7 +15,7 @@
 
 \title{ Vector Differential Identities. }
 \author{Peeter Joot}
-\date{ Jan 05, 2009.  Last Revision: $Date: 2009/02/01 16:43:07 $ }
+\date{ Jan 05, 2009.  Last Revision: $Date: 2009/02/15 21:35:46 $ }
 
 \begin{document}
 
@@ -159,9 +159,174 @@ This one isn't interesting seeming.
 
 \section{ Two more theorems. }
 
-Also mentioned in this chapter of Feynman are two theorems:
+Two theorems without proof are mentioned here.
 
-TODO.
+\subsection{ Zero curl implies gradient solution. }
+
+Theorem was
+
+\begin{equation*}
+\begin{array}{l l l}
+\text{If} &          \spacegrad \cross \BA &= 0 \\
+\text{there is a } &                  \psi &    \\
+\text{such that  } & \BA &= \spacegrad \psi \\
+\end{array} 
+\end{equation*}
+
+This appears to be half of an if and only if theorem.  The unstated part is if one has a gradient then the curl is zero
+
+\begin{align*}
+\BA = \spacegrad \psi \\
+\implies \\
+\spacegrad \cross \BA &= \spacegrad \cross \spacegrad \psi = 0
+\end{align*}
+
+This last was proven above, and follows from the assumed mixed partial equality.  Now, the real problem here is to find $\psi$ given $\BA$.
+First note that we can remove the three dimensionality of the theorem by duality writing $\spacegrad \cross \BA = -i (\spacegrad \wedge \BA)$.
+In one sense changing the theorem to use the wedge instead of cross makes the problem harder since the wedge product is defined not just
+for \R{3}.  However, this also allows starting with the simpler \R{2} case, so let's do that one first.
+
+Write
+
+\begin{align}\label{eqn:aDefined}
+\BA = \sigma^1 A_1 + \sigma^2 A_2 = \sigma^1 (\partial_1 \psi) + \sigma^2 (\partial_2 \psi)
+\end{align}
+
+The gradient is
+\begin{align*}
+\spacegrad = \sigma^1 \partial_1 + \sigma^2 \partial_2
+\end{align*}
+
+Our curl is then
+
+\begin{align*}
+(\sigma^1 \partial_1 + \sigma^2 \partial_2) \wedge (\sigma^1 A_1 + \sigma^2 A_2) 
+&=
+(\sigma^1 \wedge \sigma^2) (\partial_1 A_2 - \partial_2 A_1)
+\end{align*}
+
+So we have
+\begin{align}\label{eqn:curlZero}
+\partial_1 A_2 = \partial_2 A_1
+\end{align}
+
+Now from \ref{eqn:aDefined} this means we must have
+
+\begin{align}
+\partial_1 \partial_2 \psi = \partial_2 \partial_1 \psi
+\end{align}
+
+This is just a statement of mixed partial equality, and doesn't look particularily useful for solving for $\psi$.  It really shows that the
+is redundancy in the problem, and instead of substuiting for both of $A_1$ and $A_2$
+in \ref{eqn:curlZero}, we can use one or the other.
+
+Doing so we have two equations, either of which we can solve for
+\begin{align*}
+\partial_2 \partial_1 \psi &= \partial_1 A_2 \\
+\partial_1 \partial_2 \psi &= \partial_2 A_1 
+\end{align*}
+
+Integrating once gives
+\begin{align*}
+\partial_1 \psi &= \int \partial_1 A_2 dy + B(x) \\
+\partial_2 \psi &= \int \partial_2 A_1 dx + C(y)
+\end{align*}
+
+And a second time produces solutions for $\psi$ in terms of the vector coordinates
+\begin{align}\label{eqn:twoIntegrations}
+\psi &= \iint \PD{x}{A_2} dy dx + \int B(x) dx + D(y) \\
+\psi &= \iint \PD{y}{A_1} dx dy + \int C(y) dy + E(x)
+\end{align}
+
+Is there a natural way to merge these so that $\psi$ can be expressed more symmetrically in terms of both coordinates?  
+Looking at \ref{eqn:twoIntegrations} I am led to guess that its possible to 
+combine these into a single equation expressing $\psi$ in terms of both $A_1$ and $A_2$.  One way to do so is perhaps just to average the
+two as in
+
+\begin{align*}
+\psi &= \alpha \iint \PD{x}{A_2} dy dx + (1-\alpha) \iint \PD{y}{A_1} dx dy + \int C(y) dy + E(x) + \int B(x) dx + D(y) 
+\end{align*}
+
+But that seems pretty arbitrary.  Perhaps that's the point?
+
+FIXME: work some examples.
+
+%above it looks like these will combine naturally via Green's theorem which introduces a difference in 
+%sign intrinsically related to the curl.  That's been explored in \cite{PJStokes1}, and \cite{PJStokes2}, and intuitively one expects that
+%a complexification of the area element will produce this result.
+
+%Lets get rid of
+%the integration constant functions to start with, pulling them into the integrals.  Starting over this way, the first integration gives us
+
+%\begin{align*}
+%\PD{x}{ \psi(x,y)} &= \int_{v = b_1(x)}^{b_2(x)} \PD{x}{A_2(x,v)} dv \\
+%\PD{y}{ \psi(x,y)} &= \int_{u = c_1(y)}^{c_2(y)} \PD{y}{A_1(u,y)} du 
+%\end{align*}
+%
+%FIXME: second integration gives?
+%\begin{align*}
+%\psi(x,y) &= \int_{u=d_1(x,y)}^{d_2(x,y)} \left(\int_{v = b_1(u)}^{b_2(u)} \PD{u}{A_2(u,v)} dv \right) du \\
+%\psi(x,y) &= \int_{v=e_1(x,y)}^{e_2(x,y)} \left(\int_{u = c_1(v)}^{c_2(v)} \PD{v}{A_1(u,v)} du \right) dv
+%\end{align*}
+%
+%... this doesn't seem right.  Think it through better.
+%
+
+FIXME: look at more than the \R{2} case.
+
+\subsection{ Zero divergence implies curl solution. }
+
+Theorem was
+
+\begin{equation*}
+\begin{array}{l l l}
+\text{If} &                 \spacegrad \cdot \BD &= 0 \\
+\text{there is a } &                         \BC &    \\
+\text{such that  } & \BD &= \spacegrad \cross \BC \\
+\end{array} 
+\end{equation*}
+
+As above, if $\BD = \spacegrad \cross \BC$, then we have
+
+\begin{align*}
+\spacegrad \cdot \BD &= \spacegrad \cdot \spacegrad \cross \BC 
+\end{align*}
+
+and this has already been shown to be zero.  So the problem becomes find $\BC$ given $\BD$.  Again it likely makes sense to treat the
+generalized variation of this problem.  That is
+
+\begin{equation*}
+\begin{array}{l l l}
+\text{If} &                 \spacegrad \cdot \BD &= 0 \\
+\text{there is a } &                         \BC &    \\
+\text{such that  } & \BD &= \spacegrad \wedge \BC \\
+\end{array} 
+\end{equation*}
+
+A duality transformation should then produce the result for the theorem in Feynman.
+
+\begin{align*}
+\spacegrad \cdot \BD 
+&= \spacegrad \cdot (\spacegrad \wedge \BC) \\
+&= (\sigma^k \partial_k) \cdot (\sigma^i \wedge \sigma^j \partial_i C_j) \\
+&= \sigma^k \cdot (\sigma^i \wedge \sigma^j) \partial_k \partial_i C_j \\
+&= ( \sigma^j \delta^{ki} - \sigma^i \delta^{kj} ) \partial_k \partial_i C_j \\
+&= \sigma^j \partial_i \partial_i C_j - \sigma^i \partial_j \partial_i C_j \\
+&= \sigma^j \partial_i (\partial_i C_j -\partial_j C_i) \\
+\end{align*}
+
+If this is to equal zero we must have the following constraint on C
+\begin{align}\label{eqn:blah}
+\partial_{ii} C_j = \partial_{ij} \partial_j C_i
+\end{align}
+
+If the following equality was also true
+\begin{align*}
+\partial_{i} C_j = \partial_{j} \partial_j C_i
+\end{align*}
+
+Then this would also work, but would also mean $\BD$ equals zero so that is not an interesting solution.  Now it appears we must attempt to relate
+\ref{eqn:blah} to $\BD$.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
