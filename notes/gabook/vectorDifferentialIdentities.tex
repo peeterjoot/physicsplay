@@ -15,7 +15,7 @@
 
 \title{ Vector Differential Identities. }
 \author{Peeter Joot}
-\date{ Jan 05, 2009.  Last Revision: $Date: 2009/02/15 21:35:46 $ }
+\date{ Jan 05, 2009.  Last Revision: $Date: 2009/02/16 05:41:36 $ }
 
 \begin{document}
 
@@ -159,7 +159,7 @@ This one isn't interesting seeming.
 
 \section{ Two more theorems. }
 
-Two theorems without proof are mentioned here.
+Two theorems without proof are mentioned in the text.
 
 \subsection{ Zero curl implies gradient solution. }
 
@@ -289,25 +289,41 @@ Theorem was
 As above, if $\BD = \spacegrad \cross \BC$, then we have
 
 \begin{align*}
-\spacegrad \cdot \BD &= \spacegrad \cdot \spacegrad \cross \BC 
+\spacegrad \cdot \BD &= \spacegrad \cdot (\spacegrad \cross \BC)
 \end{align*}
 
-and this has already been shown to be zero.  So the problem becomes find $\BC$ given $\BD$.  Again it likely makes sense to treat the
-generalized variation of this problem.  That is
+and this has already been shown to be zero.  So the problem becomes find $\BC$ given $\BD$.
+
+Also, as before an equivalent generalized (or de-generalized) problem can be expressed.  
+
+That is
+\begin{align*}
+\spacegrad \cdot \BD 
+&= \gpgradezero{\spacegrad \BD} \\
+&= \gpgradezero{\spacegrad (\spacegrad \cross \BC)} \\
+&= \gpgradezero{\spacegrad -i (\spacegrad \wedge \BC)} \\
+&= -\gpgradezero{i\spacegrad \cdot (\spacegrad \wedge \BC)} -\gpgradezero{i\spacegrad \wedge (\spacegrad \wedge \BC)} \\
+&= -\gpgradezero{i\spacegrad \cdot (\spacegrad \wedge \BC)} \\
+\end{align*}
+
+So if $\spacegrad \cdot \BD$ it is also true that $\spacegrad \cdot (\spacegrad \wedge \BC) = 0$
+
+Thus the (de)generalized theorem to prove is
 
 \begin{equation*}
 \begin{array}{l l l}
-\text{If} &                 \spacegrad \cdot \BD &= 0 \\
-\text{there is a } &                         \BC &    \\
-\text{such that  } & \BD &= \spacegrad \wedge \BC \\
+\text{If} &                 \spacegrad \cdot D &= 0 \\
+\text{there is a } &                       C &    \\
+\text{such that  } & D &= \spacegrad \wedge C \\
 \end{array} 
 \end{equation*}
 
-A duality transformation should then produce the result for the theorem in Feynman.
+In the \R{3} case, to prove the original theorem we want a bivector $D = -i\BD$, and seek a vector $C$ such that 
+$D = \spacegrad \wedge C$ ($\BD = -i (\spacegrad \wedge C)$).
 
 \begin{align*}
-\spacegrad \cdot \BD 
-&= \spacegrad \cdot (\spacegrad \wedge \BC) \\
+\spacegrad \cdot D 
+&= \spacegrad \cdot (\spacegrad \wedge C) \\
 &= (\sigma^k \partial_k) \cdot (\sigma^i \wedge \sigma^j \partial_i C_j) \\
 &= \sigma^k \cdot (\sigma^i \wedge \sigma^j) \partial_k \partial_i C_j \\
 &= ( \sigma^j \delta^{ki} - \sigma^i \delta^{kj} ) \partial_k \partial_i C_j \\
@@ -317,16 +333,50 @@ A duality transformation should then produce the result for the theorem in Feynm
 
 If this is to equal zero we must have the following constraint on C
 \begin{align}\label{eqn:blah}
-\partial_{ii} C_j = \partial_{ij} \partial_j C_i
+\partial_{ii} C_j = \partial_{ij} C_i
 \end{align}
 
 If the following equality was also true
 \begin{align*}
-\partial_{i} C_j = \partial_{j} \partial_j C_i
+\partial_{i} C_j = \partial_j C_i
 \end{align*}
 
-Then this would also work, but would also mean $\BD$ equals zero so that is not an interesting solution.  Now it appears we must attempt to relate
-\ref{eqn:blah} to $\BD$.
+Then this would also work, but would also mean $D$ equals zero so that is not an interesting solution.  So, we must go back to
+\ref{eqn:blah} and solve for $C_k$ in terms of $D$.
+
+Suppose we have D explicitly in terms of coordinates
+
+\begin{align*}
+D 
+&= D_{ij} \sigma^i \wedge \sigma^j \\
+&= \sum_{i<j} (D_{ij} -D_{ji})\sigma^i \wedge \sigma^j
+\end{align*}
+
+compare this to $\spacegrad \wedge C$
+
+\begin{align*}
+C &= (\partial_i C_j ) \sigma^i \wedge \sigma^j \\
+  &= \sum_{i<j} (\partial_i C_j -\partial_j C_i) \sigma^i \wedge \sigma^j
+\end{align*}
+
+With the identity
+\begin{align*}
+\partial_i C_j = D_ij
+\end{align*}
+
+Equation \ref{eqn:blah} becomes
+\begin{align*}
+\partial_{ij} C_i &= \partial_{i} D_{ij}  \\
+\implies \\
+\partial_{j} C_i &= D_{ij} + \alpha_{ij}(x^{k \ne i})
+\end{align*}
+
+Where $\alpha_{ij}(x^{k \ne i})$ is some function of all the $x^k \ne x^i$.
+
+Integrating once more we have
+\begin{align*}
+C_i &= \int \left(D_{ij} + \alpha_{ij}(x^{k \ne i}) \right) dx^j + \beta_{ij}(x^{k \ne j})
+\end{align*}
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
