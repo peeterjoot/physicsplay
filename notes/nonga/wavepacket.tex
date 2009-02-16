@@ -1,0 +1,123 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+\title{ Simple Wave Packet Examples. }
+\author{Peeter Joot}
+\date{ Feb 16, 2009.  Last Revision: $Date: 2009/02/16 16:04:31 $ }
+
+\begin{document}
+
+\maketitle{}
+%\tableofcontents
+\section{ Wave packet examples. }
+
+In \cite{bohm1989qt}, chapter 3, a couple explicit wave packet examples are given.
+Perform the integrals.
+
+\subsection{ Unweighted example. Equation 1. }
+
+Summing plane waves over a small range of frequencies
+
+\begin{align*}
+E_z(x) 
+&= \int_{k_0 -\Delta k}^{k_0 -\Delta k} dk e^{ik(x-x_0)} \\
+&= {\left. \frac{e^{ik(x-x_0)}}{i(x-x_0)} \right\vert}_{k_0 -\Delta k}^{k_0 -\Delta k}  \\
+&= \frac{e^{i(k_0 + \Delta k)(x-x_0)}}{i(x-x_0)} -\frac{e^{i(k_0 - \Delta k)(x-x_0)}}{i(x-x_0)} \\
+&= 2 {e^{i k_0 (x-x_0)}}
+ \frac{{e^{i \Delta k(x-x_0)}} -{e^{-i \Delta k(x-x_0)}}}{2 i (x-x_0)} \\
+\end{align*}
+
+Which is Bohm's equation 1.
+\begin{align*}
+E_z(x) &= 2 {e^{i k_0 (x-x_0)}} \frac{\sin( \Delta k (x-x_0))}{ x-x_0}
+\end{align*}
+
+\subsection{ Gaussian weighting example. Equation 4. }
+
+Next example, also chosen for simplicity, uses a Gaussian weighting function
+
+\begin{align*}
+\psi 
+&= \int_\infty^\infty 
+\exp\left( - \frac{(k-k_0)^2}{2(\Delta k)^2} \right)
+\exp\left( i k(x-x_0) \right) dk \\
+\end{align*}
+
+Next, is the sneaky/clever step of adding and subtracting $i k_0 (x-x_0) - (x-x_0)^2 (\Delta k)^2/2$ to the exponentials, which gives
+
+\begin{align*}
+\psi 
+&= 
+\exp\left( i k_0 (x-x_0) - \frac{(x-x_0)^2}{2} (\Delta k)^2 \right) \\
+&\quad \int_\infty^\infty 
+\exp\left( 
+- \frac{(k-k_0)^2}{2(\Delta k)^2} 
++i (k-k_0)(x-x_0) 
++\frac{(x-x_0)^2}{2} (\Delta k)^2 
+\right) 
+dk \\
+\end{align*}
+
+Looking at just the remaining integral part, say $I$, we have
+\begin{align*}
+I &= 
+\int_\infty^\infty 
+\exp\left( \inv{2} \left(
+i^2 \frac{(k-k_0)^2}{(\Delta k)^2} 
++2i (k-k_0)(x-x_0) 
++{(x-x_0)^2}{} (\Delta k)^2 
+\right)
+\right) 
+dk \\
+&= 
+\int_\infty^\infty 
+\exp\left( \inv{2} \left(
+i \frac{k-k_0}{\Delta k} 
++(x-x_0) \Delta k
+\right)^2
+\right) 
+dk \\
+&= 
+\int_\infty^\infty 
+\exp\left( -\inv{2} \left(
+\frac{k-k_0}{\Delta k} 
+-i(x-x_0) \Delta k
+\right)^2
+\right) 
+dk \\
+\end{align*}
+
+A change of variables $u = (k-k_0)/{\Delta k} -i(x-x_0) \Delta k$, $du = dk/{\Delta k}$ gives 
+
+\begin{align*}
+I 
+&= \Delta k \int_\infty^\infty e^{ -u^2/2 } du \\
+&= \sqrt{2 \pi} \Delta k 
+\end{align*}
+
+Which gives 
+
+\begin{align*}
+\psi(x) 
+&= \sqrt{2 \pi} \Delta k 
+\exp\left( i k_0 (x-x_0) - \frac{(x-x_0)^2}{2} (\Delta k)^2 \right) \\
+\end{align*}
+
+Off by a factor of $\sqrt{\Delta k}$ compared to the text?  Typo in the book or a mistake above?
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
+
+\end{document}
