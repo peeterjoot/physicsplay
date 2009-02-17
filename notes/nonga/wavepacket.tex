@@ -3,6 +3,9 @@
 \input{../peeters_macros.tex}
 \input{../peeters_macros2.tex}
 
+\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+
 \usepackage[bookmarks=true]{hyperref}
 
 \usepackage{color,cite,graphicx}
@@ -15,7 +18,7 @@
 
 \title{ Simple Wave Packet Examples. }
 \author{Peeter Joot}
-\date{ Feb 16, 2009.  Last Revision: $Date: 2009/02/16 16:04:31 $ }
+\date{ Feb 16, 2009.  Last Revision: $Date: 2009/02/17 03:32:16 $ }
 
 \begin{document}
 
@@ -24,7 +27,8 @@
 \section{ Wave packet examples. }
 
 In \cite{bohm1989qt}, chapter 3, a couple explicit wave packet examples are given.
-Perform the integrals.
+Some of this is a little hard to follow in the small set font of the text, and some details are missing.  Here the integrals are performed
+in detail.
 
 \subsection{ Unweighted example. Equation 1. }
 
@@ -116,6 +120,81 @@ Which gives
 \end{align*}
 
 Off by a factor of $\sqrt{\Delta k}$ compared to the text?  Typo in the book or a mistake above?
+
+\subsection{ Gaussian weighting with angular velocity and acceleration. }
+
+Next covered is a wave packet where the angular frequency is a function of the wave number, as in equation 8
+
+\begin{align*}
+E(x,t) &= \IIinf f(k - k_0) \exp\left( i k(x-x_0) - i\omega(k) t\right) dk
+\end{align*}
+
+With a taylor series expansion of the frequency about $k_0$
+
+\begin{align*}
+\omega(k) 
+&= \omega(k_0) + \left(\PD{k}{\omega}\right)_{k=k_0} (k-k_0) + \left(\PDSq{k}{\omega}\right)_{k=k_0} \frac{(k-k_0)^2}{2} + \cdots \\
+&= \omega_0 + V_g (k-k_0) + \alpha \frac{(k-k_0)^2}{2} + \cdots \\
+\end{align*}
+
+Here $V_g$, and $\alpha$ are the group velocity and accelerations respectively.  Now, I'd never seen the group velocity expressed
+this way, which seems a particularily simple way of putting it.
+The example of how $\omega = 2 \pi c/\lambda n(\lambda)$ can vary with index of refraction and wavelength is also nice.  I
+imagine a light wave going through a water oil air transition and the angular frequency in each region causing dispersion and 
+reflection and path alteration effects.
+
+Back to the second order approximation of the frequency, substituting back into the wave packet integral one has
+
+\begin{align*}
+E(x,t) &\approx \IIinf f(k - k_0) \exp\left( i k(x-x_0) - i
+\left(\omega_0 + V_g (k-k_0) + \alpha \frac{(k-k_0)^2}{2} \right)
+t\right) dk
+\end{align*}
+
+With $\kappa = k - k_0$, $\Delta x = x -x_0$ and the gaussian weighting $f(\kappa) = e^{-\kappa^2/2(\Delta k)^2}$ this is
+
+\begin{align*}
+\exp&( i k_0 (x-x_0) )
+\IIinf 
+\exp\left( -\frac{\kappa^2}{2(\Delta k)^2} +i \kappa (x-x_0) 
+- i \left(\omega_0 + V_g \kappa + \alpha \frac{\kappa^2}{2} \right) t\right) dk \\
+&=
+\exp( i k_0 \Delta x -i \omega_0 t)
+\IIinf 
+\exp\left( 
+i \kappa ( \Delta x - V_g t )
+-\frac{\kappa^2}{2} \left(\inv{(\Delta k)^2} + i \alpha t \right)
+\right) d\kappa \\
+\end{align*}
+
+With $a = \Delta x - V_g t$ and $b = \inv{(\Delta k)^2} + i \alpha t$, the exponential in the integral takes the form
+\begin{align*}
+\exp\left( i \kappa a - \kappa^2 \frac{b}{2} \right) 
+&= \exp\left( - \frac{b}{2}\left(-2 i \kappa \frac{a}{b} + \kappa^2 \right) \right)  \\
+&= \exp\left( - \frac{b}{2}\left( \kappa - i \frac{a}{b} \right)^2 + \frac{b}{2}\left(\frac{ia}{b}\right)^2 \right)  \\
+&= \exp\left( - \frac{b}{2}\left( \kappa - i \frac{a}{b} \right)^2 - \frac{a^2}{2b} \right)  \\
+\end{align*}
+
+Our wave packet is now
+
+\begin{align*}
+E(x,t) 
+&= \exp\left( i k_0 \Delta x -i \omega_0 t - \frac{( \Delta x - V_g t)^2 (\Delta k)^2}{2(1 + i \alpha t (\Delta k)^2)} \right)
+\IIinf 
+\exp\left( - \frac{b}{2}\left( \kappa - i \frac{a}{b} \right)^2 \right) 
+d\kappa \\
+\end{align*}
+
+A change of vars $u = \sqrt{b}(\kappa - ia/b)$ gives
+
+\begin{align*}
+E(x,t) 
+&= \exp\left( i k_0 \Delta x -i \omega_0 t - \frac{( \Delta x - V_g t)^2 (\Delta k)^2}{2(1 + i \alpha t (\Delta k)^2)} \right)
+\frac{\Delta k}{\sqrt{1 + i \alpha t (\Delta k)^2}}
+\IIinf \exp\left( - \frac{u^2}{2} \right) d\kappa \\
+&= \exp\left( i k_0 \Delta x -i \omega_0 t - \frac{( \Delta x - V_g t)^2 (\Delta k)^2}{2(1 + i \alpha t (\Delta k)^2)} \right)
+\frac{\sqrt{2\pi}\Delta k}{\sqrt{1 + i \alpha t (\Delta k)^2}}
+\end{align*}
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
