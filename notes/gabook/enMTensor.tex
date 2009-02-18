@@ -15,7 +15,7 @@
 
 \title{ Energy momentum tensor relation to Lorentz force. }
 \author{Peeter Joot}
-\date{ Feb 17, 2009.  Last Revision: $Date: 2009/02/18 05:12:34 $ }
+\date{ Feb 17, 2009.  Last Revision: $Date: 2009/02/18 07:14:45 $ }
 
 \begin{document}
 
@@ -26,7 +26,8 @@
 
 In \cite{PJstressEnergyLorentz} the energy momentum tensor was related
 to the Lorentz force in STA form.  Work the same calculation strictly in
-tensor form.  Would like to %compare the difficulty of the algebra and
+tensor form, to
+%compare the difficulty of the algebra and
 develop more comfort with tensor manipulation.  This should also serve
 as a translation aid to compare signs due to metric tensor differences 
 in other reading.
@@ -39,7 +40,7 @@ as
 
 \begin{align}
 T(a) &= 
-\frac{\epsilon_0}{2} F a \tilde{F} = \frac{-\epsilon_0}{2} F a {F} 
+\frac{\epsilon_0}{2} F a \tilde{F} = -\frac{\epsilon_0}{2} F a {F} 
 \end{align}
 
 We've seen that the divergence of the $T(\gamma^\mu)$ vectors generate
@@ -81,7 +82,7 @@ So our tensor components are
 \begin{align*}
 T^{\mu\nu}
 &= T(\gamma^\mu) \cdot \gamma^\nu \\
-&= \frac{-\epsilon_0}{8} F^{\lambda\sigma} F^{\alpha\beta} 
+&= -\frac{\epsilon_0}{8} F^{\lambda\sigma} F^{\alpha\beta} 
 \gpgradezero{ (\gamma_\lambda \wedge \gamma_\sigma) \gamma^\mu (\gamma_\alpha \wedge \gamma_\beta) \gamma^\nu } \\
 \end{align*}
 
@@ -89,7 +90,6 @@ Or
 \begin{align*}
 -8{\inv{\epsilon_0}} T^{\mu\nu}
 &= 
-%\frac{-\epsilon_0}{8} 
 F^{\lambda\sigma} F^{\alpha\beta} 
 \gpgradezero{ 
 (\gamma_\lambda {\delta_\sigma}^\mu 
@@ -98,7 +98,6 @@ F^{\lambda\sigma} F^{\alpha\beta}
 -\gamma_\beta {\delta_\alpha}^\nu)
 } \\
 &+
-%\frac{-\epsilon_0}{8} 
 F^{\lambda\sigma} F^{\alpha\beta} 
 \gpgradezero{ (\gamma_\lambda \wedge \gamma_\sigma \wedge \gamma^\mu) (\gamma_\alpha \wedge \gamma_\beta \wedge \gamma^\nu) } \\
 \end{align*}
@@ -149,7 +148,14 @@ F^{\lambda\sigma} F_{\alpha\beta}
 \eta^{\mu\mu'} \gpgradezero{ (\gamma_\lambda \wedge \gamma_\sigma \wedge \gamma_\mu) (\gamma^\alpha \wedge \gamma^\beta \wedge \gamma^\nu) } \\
 \end{align*}
 
-This dot product is the complete antisymmetric sum, so we have
+This dot product is reducable with the identity
+\begin{align*}
+(a \wedge b \wedge c) \cdot (d \wedge e \wedge f) &= 
+(((a \wedge b \wedge c) \cdot d) \cdot e) \cdot f 
+\end{align*}
+
+leaving a completely antisymmetized sum
+
 \begin{align*}
 &
 F^{\lambda\sigma} F_{\alpha\beta} 
@@ -184,7 +190,7 @@ Combining these we have
 \begin{align*}
 T^{\mu\nu}
 &= 
--{\epsilon_0}{8} \left(
+-\frac{\epsilon_0}{8} \left(
  4 F^{\alpha\mu} {F_{\alpha}}^{\nu} 
 + 4 F^{\nu\alpha} {F^{\mu}}_{\alpha} 
 + 2 F^{\beta\alpha} F_{\alpha\beta} \eta^{\mu\nu} 
@@ -199,7 +205,7 @@ T^{\mu\nu}
 
 
 If by some miracle all the index manipulation worked out, we have
-\begin{align}
+\begin{align}\label{eqn:miracle}
 T^{\mu\nu} &= {\epsilon_0} \left( F^{\alpha\mu} {F^{\nu}}_{\alpha} + \inv{4} F^{\alpha\beta} F_{\alpha\beta} \eta^{\mu\nu} \right)
 \end{align}
 
@@ -313,7 +319,47 @@ So we have
 {F_{\alpha}}^{\mu} J^\alpha/c
 \end{align*}
 
-So, to get the expected result the remaining two derivative terms must somehow cancel.  How to reduce these?
+So, to get the expected result the remaining two derivative terms must somehow cancel.  How to reduce these?  Let's look at twice that
+
+\begin{align*}
+2 (\partial_\nu &F^{\alpha\mu}) {F^{\nu}}_{\alpha} + (\partial_\nu F^{\alpha\beta}) F_{\alpha\beta} \eta^{\mu\nu} \\
+&= 2 (\partial^\nu F^{\alpha\mu}) F_{\nu\alpha} + (\partial^\mu F^{\alpha\beta}) F_{\alpha\beta} \\
+&= (\partial^\nu F^{\alpha\mu}) (F_{\nu\alpha} -F_{\alpha\nu}) + (\partial^\mu F^{\alpha\beta}) F_{\alpha\beta} \\
+&= 
+(\partial^\alpha F^{\beta\mu}) F_{\alpha\beta} 
++(\partial^\beta F^{\mu\alpha}) F_{\alpha\beta}
++ (\partial^\mu F^{\alpha\beta}) F_{\alpha\beta} \\
+&= 
+(\partial^\alpha F^{\beta\mu} +\partial^\beta F^{\mu\alpha} + \partial^\mu F^{\alpha\beta}) F_{\alpha\beta} \\
+\end{align*}
+
+Ah, there's the trivector term of Maxwell's equation hiding in there.
+
+\begin{align*}
+0
+&= \grad \wedge F \\
+&= \gamma_\mu \partial^\mu \wedge \left(\inv{2} F^{\alpha\beta} (\gamma_\alpha \wedge \gamma_\beta) \right) \\
+&= \inv{2} (\partial^\mu F^{\alpha\beta}) (\gamma_\mu \wedge \gamma_\alpha \wedge \gamma_\beta) \\
+&= \inv{3!} 
+\left(
+\partial^\mu F^{\alpha\beta}
++\partial^\alpha F^{\beta\mu} 
++\partial^\beta F^{\mu\alpha}
+\right)
+(\gamma_\mu \wedge \gamma_\alpha \wedge \gamma_\beta)
+\end{align*}
+
+Since this is zero, each component of this trivector must separately equal zero, and we have
+
+\begin{align}
+\partial^\mu F^{\alpha\beta} +\partial^\alpha F^{\beta\mu} +\partial^\beta F^{\mu\alpha} = 0
+\end{align}
+
+So, where $T^{\mu\nu}$ is defined by \ref{eqn:miracle}, the final result is
+
+\begin{align}
+\partial_\nu T^{\mu\nu} &= F^{\alpha\mu} J_\alpha/c
+\end{align}
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
