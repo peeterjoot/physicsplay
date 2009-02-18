@@ -1,0 +1,208 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+\title{ Energy momentum tensor relation to Lorentz force. }
+\author{Peeter Joot}
+\date{ Feb 17, 2009.  Last Revision: $Date: 2009/02/18 03:42:54 $ }
+
+\begin{document}
+
+\maketitle{}
+
+%\tableofcontents
+\section{ Motivation. }
+
+In \cite{PJstressEnergyLorentz} the energy momentum tensor was related
+to the Lorentz force in STA form.  Work the same calculation strictly in
+tensor form.  Would like to compare the difficulty of the algebra and
+develop more comfort with tensor manipulation.  This should also serve
+as a translation aid to compare signs due to metric tensor differences 
+in other reading.
+
+\subsection{ Definitions. }
+
+The energy momentum ``tensor'', really a four vector, is defined
+in \cite{doran2003gap}
+as
+
+\begin{align}
+T(a) &= 
+\frac{\epsilon_0}{2} F a \tilde{F} = \frac{-\epsilon_0}{2} F a {F} 
+\end{align}
+
+We've seen that the divergence of the $T(\gamma^\mu)$ vectors generate
+the Lorentz force relations.
+
+Let's expand this with respect to index lower basis vectors for use in the
+divergence calculation.
+
+\begin{align}
+T(\gamma^\mu) &= (T(\gamma^\mu) \cdot \gamma^\nu) \gamma_\nu 
+\end{align}
+
+So we define
+\begin{align}
+T^{\mu \nu} 
+&= T(\gamma^\mu) \cdot \gamma^\nu
+\end{align}
+
+and can write these four vectors in tensor form as
+\begin{align}
+T(\gamma^\mu) &= T^{\mu \nu} \gamma_\nu 
+\end{align}
+
+\subsection{ Expanding out the tensor. }
+
+An expansion of $T^{\mu\nu}$ was done in \cite{PJemstresstensor}, but looking
+back that seems a peculiar way, using the four vector potential.
+
+Let's try again in terms of $F^{\mu\nu}$ instead.  Our field is
+
+\begin{align}
+F 
+&= \inv{2} F^{\mu\nu} \gamma_{\mu} \wedge \gamma_\nu 
+%\\
+%&= \inv{2} F_{\mu\nu} \gamma^{\mu} \wedge \gamma^\nu
+\end{align}
+
+So our tensor components are
+\begin{align*}
+T^{\mu\nu}
+&= T(\gamma^\mu) \cdot \gamma^\nu \\
+&= \frac{-\epsilon_0}{8} F^{\lambda\sigma} F^{\alpha\beta} 
+\gpgradezero{ (\gamma_\lambda \wedge \gamma_\sigma) \gamma^\mu (\gamma_\alpha \wedge \gamma_\beta) \gamma^\nu } \\
+\end{align*}
+
+Or
+\begin{align*}
+-8{\inv{\epsilon_0}} T^{\mu\nu}
+&= 
+%\frac{-\epsilon_0}{8} 
+F^{\lambda\sigma} F^{\alpha\beta} 
+\gpgradezero{ 
+(\gamma_\lambda {\delta_\sigma}^\mu 
+-\gamma_\sigma {\delta_\lambda}^\mu)
+(\gamma_\alpha {\delta_\beta}^\nu 
+-\gamma_\beta {\delta_\alpha}^\nu)
+} \\
+&+
+%\frac{-\epsilon_0}{8} 
+F^{\lambda\sigma} F^{\alpha\beta} 
+\gpgradezero{ (\gamma_\lambda \wedge \gamma_\sigma \wedge \gamma^\mu) (\gamma_\alpha \wedge \gamma_\beta \wedge \gamma^\nu) } \\
+\end{align*}
+
+Expanding only the first term to start with
+\begin{align*}
+&
+F^{\lambda\sigma} F^{\alpha\beta} (\gamma_\lambda {\delta_\sigma}^\mu) \cdot  (\gamma_\alpha {\delta_\beta}^\nu)  
++F^{\lambda\sigma} F^{\alpha\beta} (\gamma_\sigma {\delta_\lambda}^\mu) \cdot (\gamma_\beta {\delta_\alpha}^\nu) 
+-F^{\lambda\sigma} F^{\alpha\beta} (\gamma_\lambda {\delta_\sigma}^\mu) \cdot (\gamma_\beta {\delta_\alpha}^\nu) 
+-F^{\lambda\sigma} F^{\alpha\beta} (\gamma_\sigma {\delta_\lambda}^\mu) \cdot (\gamma_\alpha {\delta_\beta}^\nu)  \\
+&=
+F^{\lambda\mu} F^{\alpha\nu} \gamma_\lambda \cdot \gamma_\alpha  
++F^{\mu\sigma} F^{\nu\beta} \gamma_\sigma \cdot \gamma_\beta  
+-F^{\lambda\mu} F^{\nu\beta} \gamma_\lambda \cdot \gamma_\beta  
+-F^{\mu\sigma} F^{\alpha\nu} \gamma_\sigma \cdot \gamma_\alpha \\
+&=
+\eta_{\alpha\beta} 
+(
+F^{\lambda\mu} F^{\alpha\nu} \gamma_\lambda \cdot \gamma^\beta  
++
+%\eta_{\alpha\beta} 
+F^{\mu\sigma} F^{\nu\alpha} \gamma_\sigma \cdot \gamma^\beta  
+-
+%\eta_{\alpha\beta} 
+F^{\lambda\mu} F^{\nu\alpha} \gamma_\lambda \cdot \gamma^\beta  
+-
+%\eta_{\alpha\beta} 
+F^{\mu\sigma} F^{\alpha\nu} \gamma_\sigma \cdot \gamma^\beta )
+\\
+&=
+\eta_{\alpha\lambda} F^{\lambda\mu} F^{\alpha\nu} + \eta_{\alpha\sigma} F^{\mu\sigma} F^{\nu\alpha} 
+- \eta_{\alpha\lambda} F^{\lambda\mu} F^{\nu\alpha} - \eta_{\alpha\sigma} F^{\mu\sigma} F^{\alpha\nu}  \\
+&=
+2( \eta_{\alpha\lambda} F^{\lambda\mu} F^{\alpha\nu} + \eta_{\alpha\sigma} F^{\mu\sigma} F^{\nu\alpha} )
+&=
+2( \eta_{\alpha\beta} F^{\beta\mu} F^{\alpha\nu} + 
+\eta_{\alpha\beta} F^{\mu\beta} F^{\nu\alpha} ) \\
+&=
+4 \eta_{\alpha\beta} F^{\beta\mu} F^{\alpha\nu}  \\
+&= 4 F^{\beta\mu} {F_{\beta}}^{\nu} \\
+&= 4 F^{\alpha\mu} {F_{\alpha}}^{\nu} \\
+\end{align*}
+
+For the second term after a shuffle of indexes we have
+\begin{align*}
+F^{\lambda\sigma} F_{\alpha\beta} 
+\eta^{\mu\mu'} \gpgradezero{ (\gamma_\lambda \wedge \gamma_\sigma \wedge \gamma_\mu) (\gamma^\alpha \wedge \gamma^\beta \wedge \gamma^\nu) } \\
+\end{align*}
+
+This dot product is the complete antisymmetric sum, so we have
+\begin{align*}
+&
+F^{\lambda\sigma} F_{\alpha\beta} 
+\eta^{\mu\mu'} 
+(
+{\delta_\lambda}^\nu {\delta_\sigma}^\beta {\delta_{\mu'}}^\alpha
+-{\delta_\lambda}^\nu {\delta_\sigma}^\alpha {\delta_{\mu'}}^\beta
+-{\delta_\lambda}^\beta {\delta_\sigma}^\nu {\delta_{\mu'}}^\alpha
++{\delta_\lambda}^\alpha {\delta_\sigma}^\nu {\delta_{\mu'}}^\beta
++{\delta_\lambda}^\beta {\delta_\sigma}^\alpha {\delta_{\mu'}}^\nu
+-{\delta_\lambda}^\alpha {\delta_\sigma}^\beta {\delta_{\mu'}}^\nu
+) \\
+&=
+  F^{\nu\beta} F_{{\mu'}\beta} \eta^{\mu\mu'} 
+- F^{\nu\alpha} F_{\alpha{\mu'}} \eta^{\mu\mu'}
+- F^{\beta\nu} F_{{\mu'}\beta} \eta^{\mu\mu'} 
++ F^{\alpha\nu} F_{\alpha{\mu'}} \eta^{\mu\mu'} 
++ F^{\beta\alpha} F_{\alpha\beta} \eta^{\mu\mu'} {\delta_{\mu'}}^\nu
+- F^{\alpha\beta} F_{\alpha\beta} \eta^{\mu\mu'} {\delta_{\mu'}}^\nu
+ \\
+&=
+4 F^{\nu\alpha} F_{{\mu'}\alpha} \eta^{\mu\mu'} 
++ 2 F^{\beta\alpha} F_{\alpha\beta} \eta^{\mu\mu'} {\delta_{\mu'}}^\nu
+ \\
+&=
+4 F^{\nu\alpha} {F^{\mu}}_{\alpha} 
++ 2 F^{\beta\alpha} F_{\alpha\beta} \eta^{\mu\nu} 
+ \\
+\end{align*}
+
+Combining these we have
+\begin{align*}
+T^{\mu\nu}
+&= 
+-{\epsilon_0}{8} \left(
+ 4 F^{\alpha\mu} {F_{\alpha}}^{\nu} 
++ 4 F^{\nu\alpha} {F^{\mu}}_{\alpha} 
++ 2 F^{\beta\alpha} F_{\alpha\beta} \eta^{\mu\nu} 
+\right) \\
+&= 
+\frac{\epsilon_0}{8} \left(
+- 4 F^{\alpha\mu} {F_{\alpha}}^{\nu} 
++ 4 F^{\alpha\mu} {F^{\nu}}_{\alpha}
++ 2 F^{\alpha\beta} F_{\alpha\beta} \eta^{\mu\nu} 
+\right) \\
+\end{align*}
+
+If by some miracle all the index manipulation worked out, we have
+\begin{align}
+T^{\mu\nu} &= {\epsilon_0} \left( F^{\alpha\mu} {F^{\nu}}_{\alpha} + \inv{4} F^{\alpha\beta} F_{\alpha\beta} \eta^{\mu\nu} \right)
+\end{align}
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
+
+\end{document}
