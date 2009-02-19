@@ -1,0 +1,71 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+\title{ Attempt to make sense of fourier form of Green's function for the Poisson equation. }
+\author{Peeter Joot}
+\date{ Feb 18, 2009.  Last Revision: $Date: 2009/02/19 05:15:56 $ }
+
+\begin{document}
+
+\maketitle{}
+\tableofcontents
+
+%\section{}
+
+Am just playing around, and 
+following examples of Fourier transform solutions of the heat equation, tried the same thing for 
+the electrostatics Poisson equation
+\begin{align*}
+\grad^2 \phi &= -\rho/\epsilon_0 \\
+\end{align*}
+
+With fourier transform pairs
+\begin{align*}
+\hat{f}(\mathbf{k}) &= \frac{1}{\sqrt{2\pi}} \iiint f(\mathbf{x}) e^{-i \mathbf{k} \cdot \mathbf{x} } d^3 x \\
+{f}(\mathbf{x}) &= \frac{1}{\sqrt{2\pi}} \iiint \hat{f}(\mathbf{k}) e^{i \mathbf{k} \cdot \mathbf{x} } d^3 k \\
+\end{align*}
+
+one gets 
+
+\begin{align*}
+\phi(\mathbf{x}) &= \frac{1}{\epsilon_0} \int \rho(\mathbf{x}' G(\mathbf{x-x'}) d^3 x' \\
+G(\mathbf{x}) &= \frac{1}{(2 \pi)^3} \iiint \frac{1}{\mathbf{k}^2} e^{ i \mathbf{k} \cdot \mathbf{x} } d^3 k
+\end{align*}
+
+Now it seems to me that this integral $G$ only has to be evaluated around a small neighbourhood of the origin.  For example if one evaluates one of
+the
+integrals  
+\begin{align*}
+\int_{-\infty}^\infty \frac{1}{{k_1}^2 + {k_2}^2 + {k_3}^3 } e^{ i k_1 x_1 } dk_1 
+\end{align*}
+
+using a an upper half plane contour the result is zero unless $k_2 = k_3 = 0$.  So one is left with something loosely like
+
+\begin{align*}
+G(\mathbf{x}) &= \lim_{\epsilon \rightarrow 0} \frac{1}{(2 \pi)^3} 
+\int_{k_1 = -\epsilon}^{\epsilon} dk_1
+\int_{k_2 = -\epsilon}^{\epsilon} dk_2
+\int_{k_3 = -\epsilon}^{\epsilon} dk_3
+ \frac{1}{\mathbf{k}^2} e^{ i \mathbf{k} \cdot \mathbf{x} } 
+\end{align*}
+
+However, from electrostatics we also know that the solution to the Poission equation means that $G(\mathbf{x}) = \frac{1}{4\pi\lvert{\mathbf{x}}\rvert}$.
+Does anybody know of a technique that would reduce the integral limit expression above for $G$ to the $1/x$ form?  I've played around with this for a bit
+without any success.
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
+
+\end{document}
