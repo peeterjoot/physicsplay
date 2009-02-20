@@ -15,7 +15,7 @@
 
 \title{ Attempt to make sense of fourier form of Green's function for the Poisson equation. }
 \author{Peeter Joot}
-\date{ Feb 18, 2009.  Last Revision: $Date: 2009/02/20 14:02:57 $ }
+\date{ Feb 18, 2009.  Last Revision: $Date: 2009/02/20 17:05:45 $ }
 
 \begin{document}
 
@@ -66,10 +66,10 @@ Our 3D Fourier transform pairs are defined as
 
 Applying the transform we get
 
-\begin{align*}
+\begin{align}\label{eqn:poissonSolution}
 \phi(\mathbf{x}) &= \frac{1}{\epsilon_0} \iiint \rho(\mathbf{x}') G(\mathbf{x-x'}) d^3 x' \\
 G(\mathbf{x}) &= \frac{1}{(2 \pi)^3} \iiint \frac{1}{\mathbf{k}^2} e^{ i \mathbf{k} \cdot \mathbf{x} } d^3 k
-\end{align*}
+\end{align}
 
 Now it seems to me that this integral $G$ only has to be evaluated around a small neighbourhood of the origin.  For example if one evaluates one of
 the
@@ -142,6 +142,83 @@ I
 \end{align*}
 
 Here the fact that our integral kernel is even in $k$ has been used to double the range and half the kernel.
+
+However, looking at this, one can see that there is trouble.  In particular, we have $\cos\theta$ in the denominator, with a range that allows zeros.  How did the text avoid this trouble?
+
+\subsection{ Take II. }
+
+After mulling it over for a bit, it appears that aligning $\Bx$ with the x-axis is causing the trouble.  Aligning
+with the 
+z-axis will work out much better, and leave only one trig term in the exponential.  Essentially we need to 
+use a volume of rotation about the z-axis, integrating along all sets of constant $\Bk \cdot \Bx$.
+This is a set of integrals over concentric ring volume elements (FIXME: picture).
+
+Our volume element, measuring $\theta \in [0, \pi]$ from the z-axis, and $\phi$ as our position on the ring
+
+\begin{align*}
+\Bk \cdot \Bx &= k x \cos\theta \\
+\rho &= k \sin\theta \\
+dA &= (\rho d\phi)(k d\theta) \\
+d^3 k &= dk dA = k^2 \sin\theta d\theta d\phi dk \\
+\end{align*}
+
+This gives us 
+
+\begin{align*}
+I &= \int_{\theta=0}^{\pi} \int_{\phi=0}^{2\pi} \int_{k=0}^\infty \frac{1}{k^2 + a^2} \exp\left( i k x \cos\theta \right) 
+k^2 \sin\theta d\theta d\phi dk \\
+\end{align*}
+
+Now we can integrate immediately over $\phi$, and make a $t = \cos\theta$ substitution ($dt = -\sin\theta d\theta$)
+
+\begin{align*}
+I 
+&= - 2\pi \int_{t=1}^{-1} \int_{k=0}^\infty \frac{1}{k^2 + a^2} \exp\left( i k x t \right) k^2 dt dk \\
+&= - \frac{2\pi}{ix} \int_{k=0}^\infty \frac{1}{k^2 + a^2} 
+\left( 
+e^{-i k x } -e^{i k x } 
+\right) 
+k dk \\
+&= \frac{2\pi}{ix} \int_{k=0}^\infty \frac{1}{k^2 + a^2} 
+e^{i k x } 
+k dk 
+- \frac{2\pi}{ix} \int_{k=-0}^{-\infty} \frac{1}{k^2 + a^2} 
+e^{i k x } 
+(-k) (-dk) \\
+&= \frac{2\pi}{ix} \int_{k=-\infty}^\infty \frac{1}{k^2 + a^2} e^{i k x } k dk \\
+&= \frac{2\pi}{ix} \int_{k=-\infty}^\infty \inv{k - ia} \frac{ k e^{ i k x } }{(k + ia)} dk \\
+\end{align*}
+
+Now we have something that's in form for contour integration.  In the upper half plane we have a pole at $k= ia$.  Assuming that the
+integral over the big semicircular arc vanishes, we can just pick up the residue at that pole contributing.  The assumption that
+this vanishes is actually non-trivial looking since the $k/(k+ia)$ term at a big radius $R$ tends to $1$.  This is probably where 
+Jordan's lemma comes in, so some study to understand that looks well justified.
+
+\begin{align*}
+0 
+&= I - 2 \pi i {\left. \frac{2\pi}{ix} \frac{ k e^{ i k x } }{(k + ia)} \right\vert}_{k= ia} \\
+&= I - 2 \pi i \frac{2\pi}{ix} \frac{ e^{ - a x } }{2} \\
+\end{align*}
+
+So we have
+\begin{align*}
+I = \frac{2 \pi^2}{x} e^{ - a x } 
+\end{align*}
+
+Now that we have this, the Green's function of \ref{eqn:poissonSolution} is
+
+\begin{align*}
+G(\mathbf{x}) 
+&= \lim_{a \rightarrow 0} \inv{(2\pi)^3} \frac{2 \pi^2}{x} e^{ - a x } \\
+&= \inv{4\pi\Abs{\Bx}}
+\end{align*}
+
+Which gives
+\begin{align*}
+\phi(\Bx) &= \inv{4\pi \epsilon_0} \int \frac{\rho(\Bx')}{\Abs{\Bx - \Bx'}} dV'
+\end{align*}
+
+Hmm.  Did I loose a factor of $-1$ along the way?
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
