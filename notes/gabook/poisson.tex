@@ -3,6 +3,12 @@
 \input{../peeters_macros.tex}
 \input{../peeters_macros2.tex}
 
+\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+\DeclareMathOperator{\sinc}{sinc}
+\DeclareMathOperator{\PV}{PV}
+\newcommand{\FF}[0]{\mathcal{F}}
+\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+
 \usepackage[bookmarks=true]{hyperref}
 
 \usepackage{color,cite,graphicx}
@@ -13,9 +19,9 @@
    % needed, but their inclusion can't do any damage
 
 
-\title{ Attempt to make sense of fourier form of Green's function for the Poisson equation. }
+\title{ Derivation of the Poisson Green's function from the Fourier kernel. }
 \author{Peeter Joot}
-\date{ Feb 18, 2009.  Last Revision: $Date: 2009/02/20 17:16:28 $ }
+\date{ Feb 18, 2009.  Last Revision: $Date: 2009/02/20 20:03:48 $ }
 
 \begin{document}
 
@@ -220,6 +226,35 @@ Which gives
 
 Awesome!  All following from the choice to set $\BE = -\spacegrad \phi$, we have a solution for $\phi$ following directly
 from the divergence equation $\spacegrad \cdot \BE = \rho/\epsilon_0$ via Fourier transformation of this equation.
+
+\section{ Retarded time potentials? }
+
+If we look at the general inhomogeneous Maxwell equation
+
+\begin{align}
+\grad F = J/\epsilon_0 c
+\end{align}
+
+In terms of potential $F = \grad \wedge A$ and employing in the Lorentz gauge $\grad \cdot A = 0$, we have
+
+\begin{align}
+\grad^2 A = \left(\inv{c^2} \partial_{tt} - \sum \partial_{jj}\right) A = J/\epsilon_0 c
+\end{align}
+
+As scalar equations with $A = A^\mu \gamma_\mu$, $J = J^\nu \gamma_\nu$ we have four equations all of the same form.
+
+A Green's function form for such wave equations was previously calculated in \cite{PJfourierMaxwellSecondOrder}.  That was
+
+\begin{align}
+\left( \inv{v^2} \PDSq{t}{} -\sum_j \PDSq{x^j}{} \right)\psi &= \rho \\
+\end{align}
+
+\begin{align}
+{\psi}(\Bx, t) &= \IIinf \rho(\Bx', t') G(\Bx - \Bx', t - t') d^3 x' dt' \\
+G(\Bx, t) &= u(t) \IIinf \frac{v}{(2\pi)^3 \Abs{\Bk}} \sin( \Abs{\Bk} v t ) \exp\left( i \Bk \cdot \Bx \right) d^3 k
+\end{align}
+
+Here $u(t)$ is the unit step function, which meant we only sum the time contributions of the charge density for $t - t' > 0$, or $t' < t$.  That's the causal variant of the solution, which was arbitrary mathematically ($t > t'$ would have also worked).
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
