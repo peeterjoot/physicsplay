@@ -21,7 +21,7 @@
 
 \title{ Derivation of the Poisson Green's function from the Fourier kernel. }
 \author{Peeter Joot}
-\date{ Feb 18, 2009.  Last Revision: $Date: 2009/02/20 20:03:48 $ }
+\date{ Feb 18, 2009.  Last Revision: $Date: 2009/02/20 20:51:30 $ }
 
 \begin{document}
 
@@ -246,15 +246,72 @@ As scalar equations with $A = A^\mu \gamma_\mu$, $J = J^\nu \gamma_\nu$ we have 
 A Green's function form for such wave equations was previously calculated in \cite{PJfourierMaxwellSecondOrder}.  That was
 
 \begin{align}
-\left( \inv{v^2} \PDSq{t}{} -\sum_j \PDSq{x^j}{} \right)\psi &= \rho \\
+\left( \inv{c^2} \PDSq{t}{} -\sum_j \PDSq{x^j}{} \right)\psi &= \rho
 \end{align}
 
 \begin{align}
-{\psi}(\Bx, t) &= \IIinf \rho(\Bx', t') G(\Bx - \Bx', t - t') d^3 x' dt' \\
-G(\Bx, t) &= u(t) \IIinf \frac{v}{(2\pi)^3 \Abs{\Bk}} \sin( \Abs{\Bk} v t ) \exp\left( i \Bk \cdot \Bx \right) d^3 k
+{\psi}(\Bx, t) &= \IIinf \IIinf \IIinf \IIinf \rho(\Bx', t') G(\Bx - \Bx', t - t') d^3 x' dt' \\
+G(\Bx, t) &= u(t) \IIinf \IIinf \IIinf \frac{c}{(2\pi)^3 \Abs{\Bk}} \sin( \Abs{\Bk} c t ) \exp\left( i \Bk \cdot \Bx \right) d^3 k
 \end{align}
 
 Here $u(t)$ is the unit step function, which meant we only sum the time contributions of the charge density for $t - t' > 0$, or $t' < t$.  That's the causal variant of the solution, which was arbitrary mathematically ($t > t'$ would have also worked).
+
+Let's see if the spherical polar method works to reduce this equation too.  In particular we want to evaluate
+
+\begin{align*}
+I = \IIinf \IIinf \IIinf \inv{\Abs{\Bk} + \alpha} \sin( \Abs{\Bk} c t ) \exp\left( i \Bk \cdot \Bx \right) d^3 k
+\end{align*}
+
+For some $\alpha$ to be determined.  Making the same spherical polar substitution we have
+
+\begin{align*}
+I = \IIinf \IIinf \IIinf \inv{\Abs{\Bk} + \alpha} \sin( \Abs{\Bk} c t ) \exp\left( i \Bk \cdot \Bx \right) d^3 k
+\end{align*}
+\begin{align*}
+I 
+&= \int_{\theta=0}^{\pi} \int_{\phi=0}^{2\pi} \int_{k=0}^\infty \frac{1}{k + \alpha} 
+\sin\left( k c t \right) \exp\left( i k x \cos\theta \right) 
+k^2 \sin\theta d\theta d\phi dk \\
+&= 2 \pi \int_{\theta=0}^{\pi} \int_{k=0}^\infty \frac{1}{k + \alpha} 
+\sin\left( k c t \right) \exp\left( i k x \cos\theta \right) 
+k^2 \sin\theta d\theta dk \\
+\end{align*}
+
+Let $\tau = \cos\theta$, $-d\tau = \sin\theta d\theta$, for
+
+\begin{align*}
+I 
+&= 2 \pi \int_{\tau=1}^{-1} \int_{k=0}^\infty \frac{1}{k + \alpha} 
+\sin\left( k c t \right) \exp\left( i k x \tau \right) 
+k^2 (-d\tau) dk \\
+&= -2 \pi \int_{k=0}^\infty \frac{1}{k + \alpha} 
+\sin\left( k c t \right) 
+\frac{2}{2i k x} \left( {\exp\left( -i k x \right) } -{\exp\left( i k x \right) } \right)
+k^2 dk \\
+&= \frac{4 \pi i}{x} \int_{k=0}^\infty \frac{1}{k + \alpha} 
+\sin\left( k c t \right) 
+\sin\left( k x \right) 
+k dk \\
+&= \frac{2 \pi i}{x} \int_{k=0}^\infty \frac{1}{k + \alpha} 
+\left( \cos\left( k (x-c t) \right) -\cos\left( k (x+c t) \right) \right)
+k dk \\
+\end{align*}
+
+Okay, this is much simpler, but still not in a form that's immediately obvious how to apply contour integration to.  The integral
+kernel here is not either an even nor an odd function of $k$, so the trick of doubling the integral range doesn't look like it would
+work.
+
+Let's pause from the math and see what form this gives us for the solution.  That is
+
+\begin{align}
+{\psi}(\Bx, t) &= \IIinf \IIinf \IIinf \IIinf \rho(\Bx - \Bx', t - t') G(\Bx', t') d^3 x' dt' \\
+G(\Bx, t) &= u(t) 
+\frac{c i}{(2\pi) \Abs{\Bx}} 
+\int_{k=0}^\infty \frac{1}{k + \alpha} \left( \cos\left( k (\Abs{\Bx}-c t) \right) -\cos\left( k (\Abs{\Bx}+c t) \right) \right) k dk
+\end{align}
+
+It looks like my initial interpretation of the causal nature of the unit step in the original functional form wasn't right,
+and has to be modified.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
