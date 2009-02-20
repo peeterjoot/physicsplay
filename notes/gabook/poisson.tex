@@ -15,7 +15,7 @@
 
 \title{ Attempt to make sense of fourier form of Green's function for the Poisson equation. }
 \author{Peeter Joot}
-\date{ Feb 18, 2009.  Last Revision: $Date: 2009/02/19 14:41:43 $ }
+\date{ Feb 18, 2009.  Last Revision: $Date: 2009/02/20 14:02:57 $ }
 
 \begin{document}
 
@@ -106,13 +106,42 @@ letting $a$ tend to zero.
 
 Very cool.  It seems worthwhile to go through the motions of this myself, omitting no details I would find valuable.
 
-First we want the volume element in spherical polar form.  That is
+First we want the volume element in spherical polar form, and our vector.  That is
 
 \begin{align*}
-d^3 k = dk_1 dk_2 dk_3 = k^2 \cos\phi d\theta d\phi dk
+\rho &= k \cos\phi \\
+dA &= (\rho d\theta)(k d\phi) \\
+d^3 k &= dk dA = k^2 \cos\phi d\theta d\phi dk \\
+\Bk 
+&= (\rho \cos\theta, \rho \sin\theta, k \sin\theta) \\
+&= k (\cos\phi \cos\theta, \cos\phi \sin\theta, \sin\phi) \\
 \end{align*}
 
 FIXME: scan picture to show angle conventions picked.
+
+This produces
+\begin{align*}
+I = \int_{\theta=0}^{2\pi} \int_{\phi=-\pi/2}^{\pi/2} \int_{k=0}^\infty \frac{1}{k^2 + a^2} \exp\left( i k (\cos\phi \cos\theta x_1 + \cos\phi \sin\theta + x_2 + \sin\phi x_3) \right) 
+k^2 \cos\phi d\theta d\phi dk \\
+\end{align*}
+
+Now, this is a lot less tractable than the Byron/Fuller treatment.  In particular they were able to make a $t = \cos\phi$ substitution, and if I try this I get
+
+\begin{align*}
+I = -\int_{\theta=0}^{2\pi} \int_{t=-1}^{1} \int_{k=0}^\infty \frac{1}{k^2 + a^2} \exp\left( i k (t \cos\theta x_1 + t \sin\theta x_2 + \sqrt{1-t^2} x_3) \right) 
+k^2 dt d\theta dk \\
+\end{align*}
+
+Now, this is still a whole lot different, and in particular it has $ik (t\sin\theta x_2 + \sqrt{1-t^2} x_3)$ in the exponential.  I puzzled over this for a while, but it becomes clear on writing.  Freedom to orient the axis along a preferable direction has been used, and some basis for which $\Bx = x_j \Be^j + = x \Be^1$ has been used!  We are now left with
+
+\begin{align*}
+I 
+&= -\int_{\theta=0}^{2\pi} \int_{t=-1}^{1} \int_{k=0}^\infty \frac{1}{k^2 + a^2} \exp\left( i k t \cos\theta x \right) k^2 dt d\theta dk \\
+&= -\int_{\theta=0}^{2\pi} \int_{k=0}^\infty \frac{2}{(k^2 + a^2) \cos\theta} \sin\left( k t \cos\theta x \right) k d\theta dk \\
+&= -\int_{\theta=0}^{2\pi} \int_{k=-\infty}^\infty \frac{1}{(k^2 + a^2) \cos\theta} \sin\left( k t \cos\theta x \right) k d\theta dk \\
+\end{align*}
+
+Here the fact that our integral kernel is even in $k$ has been used to double the range and half the kernel.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
