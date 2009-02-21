@@ -21,7 +21,7 @@
 
 \title{ Derivation of the Poisson Green's function from the Fourier kernel. }
 \author{Peeter Joot}
-\date{ Feb 18, 2009.  Last Revision: $Date: 2009/02/21 03:57:25 $ }
+\date{ Feb 18, 2009.  Last Revision: $Date: 2009/02/21 05:13:37 $ }
 
 \begin{document}
 
@@ -227,7 +227,9 @@ Which gives
 Awesome!  All following from the choice to set $\BE = -\spacegrad \phi$, we have a solution for $\phi$ following directly
 from the divergence equation $\spacegrad \cdot \BE = \rho/\epsilon_0$ via Fourier transformation of this equation.
 
-\section{ Retarded time potentials? }
+\section{ Retarded time potentials }
+
+\subsection{ Setup. }
 
 If we look at the general inhomogeneous Maxwell equation
 
@@ -256,62 +258,126 @@ G(\Bx, t) &= u(t) \IIinf \IIinf \IIinf \frac{c}{(2\pi)^3 \Abs{\Bk}} \sin( \Abs{\
 
 Here $u(t)$ is the unit step function, which meant we only sum the time contributions of the charge density for $t - t' > 0$, or $t' < t$.  That's the causal variant of the solution, which was arbitrary mathematically ($t > t'$ would have also worked).
 
+\subsection{ Reducing the Green's function integral. }
+
 Let's see if the spherical polar method works to reduce this equation too.  In particular we want to evaluate
 
 \begin{align*}
-I = \IIinf \IIinf \IIinf \inv{\Abs{\Bk} + \alpha} \sin( \Abs{\Bk} c t ) \exp\left( i \Bk \cdot \Bx \right) d^3 k
+I = \IIinf \IIinf \IIinf \inv{\Abs{\Bk}} \sin( \Abs{\Bk} c t ) \exp\left( i \Bk \cdot \Bx \right) d^3 k
 \end{align*}
 
-For some $\alpha$ to be determined.  Making the same spherical polar substitution we have
-
+Will we have a requirement to introduce a pole off the origin as above?  Perhaps like
 \begin{align*}
-I = \IIinf \IIinf \IIinf \inv{\Abs{\Bk} + \alpha} \sin( \Abs{\Bk} c t ) \exp\left( i \Bk \cdot \Bx \right) d^3 k
+\IIinf \IIinf \IIinf \inv{\Abs{\Bk} + \alpha} \sin( \Abs{\Bk} c t ) \exp\left( i \Bk \cdot \Bx \right) d^3 k
 \end{align*}
+
+Let's omit it for now, but make the same spherical polar substitution used successfully above, writing
+%\begin{align*}
+%I = \IIinf \IIinf \IIinf \inv{\Abs{\Bk} } \sin( \Abs{\Bk} c t ) \exp\left( i \Bk \cdot \Bx \right) d^3 k
+%\end{align*}
+
 \begin{align*}
 I 
-&= \int_{\theta=0}^{\pi} \int_{\phi=0}^{2\pi} \int_{k=0}^\infty \frac{1}{k + \alpha} 
+&= \int_{\theta=0}^{\pi} \int_{\phi=0}^{2\pi} \int_{k=0}^\infty \frac{1}{k } 
 \sin\left( k c t \right) \exp\left( i k x \cos\theta \right) 
 k^2 \sin\theta d\theta d\phi dk \\
-&= 2 \pi \int_{\theta=0}^{\pi} \int_{k=0}^\infty \frac{1}{k + \alpha} 
+&= 2 \pi \int_{\theta=0}^{\pi} \int_{k=0}^\infty %\frac{1}{k } 
 \sin\left( k c t \right) \exp\left( i k x \cos\theta \right) 
-k^2 \sin\theta d\theta dk \\
+k \sin\theta d\theta dk \\
 \end{align*}
 
 Let $\tau = \cos\theta$, $-d\tau = \sin\theta d\theta$, for
 
 \begin{align*}
 I 
-&= 2 \pi \int_{\tau=1}^{-1} \int_{k=0}^\infty \frac{1}{k + \alpha} 
+&= 2 \pi \int_{\tau=1}^{-1} \int_{k=0}^\infty %\frac{1}{k } 
 \sin\left( k c t \right) \exp\left( i k x \tau \right) 
-k^2 (-d\tau) dk \\
-&= -2 \pi \int_{k=0}^\infty \frac{1}{k + \alpha} 
+k (-d\tau) dk \\
+&= -2 \pi \int_{k=0}^\infty %\frac{1}{k } 
 \sin\left( k c t \right) 
 \frac{2}{2i k x} \left( {\exp\left( -i k x \right) } -{\exp\left( i k x \right) } \right)
-k^2 dk \\
-&= \frac{4 \pi }{x} \int_{k=0}^\infty \frac{1}{k + \alpha} 
+k dk \\
+&= \frac{4 \pi }{x} \int_{k=0}^\infty %\frac{1}{k } 
 \sin\left( k c t \right) 
 \sin\left( k x \right) 
-k dk \\
-&= \frac{2 \pi }{x} \int_{k=0}^\infty \frac{1}{k + \alpha} 
+dk \\
+&= \frac{2 \pi }{x} \int_{k=0}^\infty %\frac{1}{k } 
 \left( \cos\left( k (x-c t) \right) -\cos\left( k (x+c t) \right) \right)
-k dk \\
+ dk \\
 \end{align*}
 
-Okay, this is much simpler, but still not in a form that's immediately obvious how to apply contour integration to.  The integral
-kernel here is not either an even nor an odd function of $k$, so the trick of doubling the integral range doesn't look like it would
-work.
+Okay, this is much simpler, but still not in a form that's immediately obvious how to apply contour integration to, since it has no poles.
+The integral
+kernel here is however an even function,
+so we can use the trick of doubling the integral range.
 
-Let's pause from the math and see what form this gives us for the solution.  That is
+\begin{align*}
+I &= \frac{\pi }{x} \int_{k=-\infty}^\infty \left( \cos\left( k (x-c t) \right) -\cos\left( k (x+c t) \right) \right) dk \\
+\end{align*}
 
-\begin{align}
-{\psi}(\Bx, t) &= \IIinf \IIinf \IIinf \IIinf \rho(\Bx - \Bx', t - t') G(\Bx', t', 0) d^3 x' dt' \\
-G(\Bx, t, \alpha) &= u(t) 
-\frac{c }{(2\pi) \Abs{\Bx}} 
-\int_{k=0}^\infty \frac{1}{k + \alpha} \left( \cos\left( k (\Abs{\Bx}-c t) \right) -\cos\left( k (\Abs{\Bx}+c t) \right) \right) k dk
+Having done this, this integral isn't really any more well defined.  With a Rigor police on holiday, let's assume we want the
+principle value of this integral
+\begin{align*}
+I 
+&= \lim_{R \rightarrow \infty} \frac{\pi }{x} \int_{k=-R}^R \left( \cos\left( k (x-c t) \right) -\cos\left( k (x+c t) \right) \right) dk \\
+&= \lim_{R \rightarrow \infty} \frac{\pi }{x} \int_{k=-R}^R d \left( \frac{\sin\left( k (x-c t) \right)}{ x - c t} - \frac{\sin\left( k (x+c t) \right)}{x + c t} \right) \\
+&= \lim_{R \rightarrow \infty} \frac{2 \pi^2 }{x} \left( \frac{\sin\left( R (x-c t) \right)}{ \pi(x - c t)} - \frac{\sin\left( R (x+c t) \right)}{\pi(x + c t)} \right) \\
+\end{align*}
+
+This $\sinc$ limit has been seen before being functionally identified with the delta function (the wikipedia article calls these ``nascent delta function''), so we can write
+
+\begin{align*}
+I &= \frac{2 \pi^2 }{x} \left( \delta(x-c t) - \delta(x+c t) \right)
+\end{align*}
+
+For our Green's function we now have
+
+\begin{align*}
+G(\Bx, t) 
+&= u(t) \frac{c }{(2\pi)^3} \frac{2 \pi^2 }{\Abs{\Bx}} \left( \delta(x-c t) - \delta(x+c t) \right) \\
+&= u(t) \frac{c }{4\pi \Abs{\Bx}} \left( \delta(x-c t) - \delta(x+c t) \right) \\
+\end{align*}
+
+And finally, our wave function (switching variables to convolve with the charge density) instead of the Green's function
+
+\begin{align*}
+{\psi}(\Bx, t) 
+&= \IIinf \IIinf \IIinf \IIinf \rho(\Bx - \Bx', t - t') 
+%G(\Bx', t') 
+u(t') \frac{c }{4\pi \Abs{\Bx'}} \left( \delta(\Abs{\Bx'} - c t') - \delta(\Abs{\Bx'} + c t') \right) 
+d^3 x' dt' \\
+\end{align*}
+
+Or
+\begin{align}\label{eqn:almostThere}
+{\psi}(\Bx, t) &= {\psi}_{-}(\Bx, t) +{\psi}_{+}(\Bx, t) \\
+{\psi}_{-}(\Bx, t) &= \IIinf \IIinf \IIinf \frac{c }{4\pi \Abs{\Bx'}} \rho(\Bx - \Bx', t - \Abs{\Bx'}/c) d^3 x'  \\
+{\psi}_{+}(\Bx, t) &= -\IIinf \IIinf \IIinf \frac{c }{4\pi \Abs{\Bx'}} \rho(\Bx - \Bx', t + \Abs{\Bx'}/c) d^3 x' 
 \end{align}
 
-It looks like my initial interpretation of the causal nature of the unit step in the original functional form wasn't right,
-and has to be modified.  Also, is there a reason to keep avoiding the origin?  Setting $\alpha = 0$ would leave a regular function at $k = 0$.
+It looks like my initial interpretation of the causal nature of the unit step in the original functional form wasn't really right.  In this form
+we have two specific solutions to the equation.  One is due to retarded contributions (causal), and the other advanced, and the original unit step
+did not have that information by itself.  Now, these unit step functions have been carelessly dropped here.  Intuitively I see that the remaining
+impact of those is that we sum over previous times only for the retarded solution, and future times only for the advanced solution.  That statement
+is a bit handwavyish (would have to think it though better to properly justify it), but is consistent with statements seen elsewhere, such as in 
+\cite{feynman1963flp}.
+
+It's been a couple years since seeing those for the
+first time in Feynman's text, and wondering how on earth somebody would come up with those, and here we have it, albeit in a somewhat ad-hoc 
+non-rigorous fashion.
+
+\subsection{ Finishing up. }
+
+Observe that \ref{eqn:almostThere} is not quite in the form that the retarded potentials are usually found.  For that we need one more change of
+variables
+\begin{align}
+%{\psi}_{-}(\Bx, t) &= -\IIinf \IIinf \IIinf \frac{c }{4\pi \Abs{\Bx -\Bu}} \rho(\Bu , t - \Abs{\Bx - \Bu}/c) d^3 u  \\
+%{\psi}_{+}(\Bx, t) &= \IIinf \IIinf \IIinf \frac{c }{4\pi \Abs{\Bx -\Bu}} \rho(\Bu , t + \Abs{\Bx - \Bu}/c) d^3 u 
+{\psi}_{-}(\Bx, t) &= -\IIinf \IIinf \IIinf \frac{c }{4\pi \Abs{\Bx -\Bx'}} \rho(\Bx' , t - \Abs{\Bx - \Bx'}/c) d^3 x'  \\
+{\psi}_{+}(\Bx, t) &= \IIinf \IIinf \IIinf \frac{c }{4\pi \Abs{\Bx -\Bx'}} \rho(\Bx' , t + \Abs{\Bx - \Bx'}/c) d^3 x' 
+\end{align}
+
+But put this way, it appears that I gained a factor of $-1$ somewhere along the way.  Don't see it now.  Maybe later with fresh eyes.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
