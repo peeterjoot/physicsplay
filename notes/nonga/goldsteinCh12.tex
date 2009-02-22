@@ -1,4 +1,4 @@
-\documentclass{article}      % Specifies the document class
+\documentclass{article}
 
 \input{../peeters_macros.tex}
 \newcommand{\Brho}[0]{\boldsymbol{\rho}}
@@ -20,18 +20,50 @@
 \newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
 \newcommand{\PDD}[3]{\frac{\partial^2 {#3}}{\partial {#1}\partial {#2}}}
 
+% <grade selection>
 %
-% The real thing:
+\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+
+\newcommand{\gpgradezero}[1] {\gpgrade{#1}{}}
+%\newcommand{\gpscalargrade}[1] {{\left\langle{{#1}}\right\rangle}}
+%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+
+%\newcommand{\gpgradeone}[1] {{\left\langle{{#1}}\right\rangle}_{1}}
+\newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
+
+\newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
+\newcommand{\gpgradethree}[1] {\gpgrade{#1}{3}}
+\newcommand{\gpgradefour}[1] {\gpgrade{#1}{4}}
 %
+% </grade selection>
 
-                             % The preamble begins here.
-\title{Attempts at solutions for some Goldstein Mechanics problems.} % Declares the document's title.
-\author{Peeter Joot}         % Declares the author's name.
-\date{ }        % Deleting this command produces today's date.
 
-\begin{document}             % End of preamble and beginning of text.
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+
+\title{Attempts at solutions for some Goldstein Mechanics problems.}
+\author{Peeter Joot}
+
+\date{ Sep 02, 2008.  Last Revision: $Date: 2009/02/22 05:48:08 $ }
+
+\begin{document}             
 
 \maketitle{}
+
+\section{ Motivation. }
+
+Now have the so often sited \cite{goldstein1951cm} book to study (an ancient
+version from the 50's).  Here's an attempt at a few of the problems.  Some
+problems were tackled but omitted here since they overlapped with those written up in
+\cite{PJTongMf1} before getting this book.
 
 \section{ Problem 1.7 }
 
@@ -88,6 +120,8 @@ This is suprising seeming.  Is this correct?
 
 \section{ Problem 1.8 }
 
+\subsection{ Problem statement. }
+
 Hopefully, not a copyright violation, but here is the problem verbatim:
 
 A system is composed of three particles of equal mass m.  Between any two of them there are forces derivable from a potential
@@ -132,10 +166,10 @@ This can be used to express each of the position vectors in terms of the $\Brho_
 Now, that is enough to specify the part of the Lagrangian from the potentials that act between all the particles
 
 \begin{equation*}
-\LL_U = \sum -U_{ij} = g \left( e^{-\mu \Abs{\Brho_1}} + e^{-\mu \Abs{\Brho_2}} + e^{-\mu \Abs{ \Brho_1 - \Brho_2 }} \right)
+\LL_V = \sum -V_{ij} = g \left( e^{-\mu \Abs{\Brho_1}} + e^{-\mu \Abs{\Brho_2}} + e^{-\mu \Abs{ \Brho_1 - \Brho_2 }} \right)
 \end{equation*}
 
-Now, we need to calculate the two $V$ potentials in terms.  If we consider with positions $\Br_1$, and $\Br_2$ to be the ones
+Now, we need to calculate the two $U$ potential terms.  If we consider with positions $\Br_1$, and $\Br_2$ to be the ones
 that can exert a force on the third, the velocities of those masses relative to $\Br_3$ are:
 
 \begin{equation*}
@@ -153,9 +187,70 @@ g \left( e^{-\mu \Abs{\Brho_1}} + e^{-\mu \Abs{\Brho_2}} + e^{-\mu \Abs{ \Brho_1
 
 So, there's the Lagrangian.
 
-How about the angular momentum conservation question?  How to answer that?  One way would be to compute the forces from the Lagrangian, and take cross products but is that really the best way?  Perhaps the answer is as simple as observing that there are no external torque's on the system, thus $d\BL/dt = 0$, or angular momentum for the system is constant (conserved).
+How about the angular momentum conservation question?  How to answer that?  One way would be to compute the forces from the Lagrangian, and take cross products but is that really the best way?  Perhaps the answer is as simple as observing that there are no external torque's on the system, thus $d\BL/dt = 0$, or angular momentum for the system is constant (conserved).  Is that actually the case 
+with these velocity dependent potentials?
 
-FIXME: FOLLOWUP: it has been suggested to me on PF that I should look at how this Lagrangian transforms under rotation.  The relative vectors (both speed and velocity) between the different points will be rotation invarient.  Think that is the case for the CM too.
+It was suggested to me on PF that I should look at how this Lagrangian transforms under rotation, and use Noether's theorem.
+The goldstein book doesn't explicitly mention this theorem that I can see, and I don't think it was covered yet if it did.
+
+Suppose we did know about Noether's theorem for this problem (as I know do now that I'm revisiting it), we'd have to
+see if the Lagrangian is invariant under rotation.  Suppose that a rigid rotation is introduced, which we can write in GA
+formalism using dual sided quaternion products
+
+\begin{align*}
+\Bx \rightarrow \Bx' = e^{-i\ncap \alpha/2} \Bx e^{i\ncap\alpha/2}
+\end{align*}
+
+(could probably also use a matrix formulation, but the parameterization is messier).
+
+For all the relative vectors $\Brho_i$ we have
+
+\begin{align*}
+\Abs{\Brho_i'} &= \Abs{\Brho_i}
+\end{align*}
+
+So all the $V$ potential interactions are invariant.  
+
+Since the rotation quaternion here is a fixed non-time dependent quantity we have
+
+\begin{align*}
+\dot{\Brho}_i' = e^{-i\ncap \alpha/2} \dot{\Brho}_i e^{i\ncap\alpha/2}
+\end{align*}
+
+,so for the dot product in the the remaining potential term we have
+
+\begin{align*}
+\left( \BR' - \inv{3}\left(\Brho_1' + \Brho_2'\right) \right) \cdot \left({\dot{\Brho}}_1' + {\dot{\Brho}}_2'\right) 
+&= 
+\left(e^{-i\ncap \alpha/2} \left( \BR - \inv{3}\left(\Brho_1 + \Brho_2\right) \right) e^{i\ncap\alpha/2}\right) \cdot
+\left(e^{-i\ncap \alpha/2} \dot{\Brho}_1 + \dot{\Brho_2} e^{i\ncap\alpha/2}\right) \\
+&= 
+\gpgradezero{
+e^{-i\ncap \alpha/2} \left( \BR - \inv{3}\left(\Brho_1 + \Brho_2\right) \right) e^{i\ncap\alpha/2}
+e^{-i\ncap \alpha/2} \dot{\Brho}_1 + \dot{\Brho_2} e^{i\ncap\alpha/2}
+} \\
+&= 
+\gpgradezero{
+e^{-i\ncap \alpha/2} \left( \BR - \inv{3}\left(\Brho_1 + \Brho_2\right) \right) \left(\dot{\Brho}_1 + \dot{\Brho_2}\right) e^{i\ncap\alpha/2}
+} \\
+&= 
+\gpgradezero{
+e^{i\ncap\alpha/2}
+e^{-i\ncap \alpha/2} \left( \BR - \inv{3}\left(\Brho_1 + \Brho_2\right) \right) \left(\dot{\Brho}_1 + \dot{\Brho_2}\right) 
+} \\
+&= 
+\gpgradezero{
+\left( \BR - \inv{3}\left(\Brho_1 + \Brho_2\right) \right) \left(\dot{\Brho}_1 + \dot{\Brho_2}\right) 
+} \\
+&= 
+\left( \BR - \inv{3}\left(\Brho_1 + \Brho_2\right) \right) \cdot \left(\dot{\Brho}_1 + \dot{\Brho_2}\right) 
+\end{align*}
+
+So, presuming I interpretted the $\Br$ in $\Bv \cdot \Br$ correctly,
+all the vector quantites in the Lagrangian are rotation invariant, and by Noether's we should have system angular momentum 
+conservation.
+
+FIXME: Invoking Noether's here seems like cheating.  Should try something more direct here for comparision.
 
 \section{ Problem 2.1 }
 
@@ -500,5 +595,8 @@ and then calls this quantity $\PD{\alpha}{y} d \alpha = \delta y$, the variation
 but it isn't clear to me what that is.  Since the variational calculus texts go a different route, with norms on functional spaces and so forth, perhaps
 understanding that motivation isn't worthwhile.  In the end, the conclusion is the same, namely that the inner expression must equal zero for the extremum
 condition.
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
 
 \end{document}               % End of document.
