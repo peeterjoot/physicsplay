@@ -19,9 +19,9 @@
    % needed, but their inclusion can't do any damage
 
 
-\title{ Derivation of the Poisson Green's function from the Fourier kernel. }
+\title{ Poisson and retarded Potential Green's functions from Fourier kernels. }
 \author{Peeter Joot \quad peeter.joot@gmail.com}
-\date{ Feb 18, 2009.  Last Revision: $Date: 2009/02/22 15:11:52 $ }
+\date{ Feb 18, 2009.  Last Revision: $Date: 2009/02/22 17:13:04 $ }
 
 \begin{document}
 
@@ -248,11 +248,11 @@ As scalar equations with $A = A^\mu \gamma_\mu$, $J = J^\nu \gamma_\nu$ we have 
 A Green's function form for such wave equations was previously calculated in \cite{PJfourierMaxwellSecondOrder}.  That was
 
 \begin{align}
-\left( \inv{c^2} \PDSq{t}{} -\sum_j \PDSq{x^j}{} \right)\psi &= \rho
+\left( \inv{c^2} \PDSq{t}{} -\sum_j \PDSq{x^j}{} \right)\psi &= g
 \end{align}
 
 \begin{align}
-{\psi}(\Bx, t) &= \IIinf \IIinf \IIinf \IIinf \rho(\Bx', t') G(\Bx - \Bx', t - t') d^3 x' dt' \\
+{\psi}(\Bx, t) &= \IIinf \IIinf \IIinf \IIinf g(\Bx', t') G(\Bx - \Bx', t - t') d^3 x' dt' \\
 G(\Bx, t) &= u(t) \IIinf \IIinf \IIinf \frac{c}{(2\pi)^3 \Abs{\Bk}} \sin( \Abs{\Bk} c t ) \exp\left( i \Bk \cdot \Bx \right) d^3 k
 \end{align}
 
@@ -315,7 +315,7 @@ so we can use the trick of doubling the integral range.
 I &= \frac{\pi }{x} \int_{k=-\infty}^\infty \left( \cos\left( k (x-c t) \right) -\cos\left( k (x+c t) \right) \right) dk \\
 \end{align*}
 
-Having done this, this integral isn't really any more well defined.  With a Rigor police on holiday, let's assume we want the
+Having done this, this integral isn't really any more well defined.  With the Rigor police on holiday, let's assume we want the
 principle value of this integral
 \begin{align*}
 I 
@@ -342,42 +342,60 @@ And finally, our wave function (switching variables to convolve with the charge 
 
 \begin{align*}
 {\psi}(\Bx, t) 
-&= \IIinf \IIinf \IIinf \IIinf \rho(\Bx - \Bx', t - t') 
-%G(\Bx', t') 
-u(t') \frac{c }{4\pi \Abs{\Bx'}} \left( \delta(\Abs{\Bx'} - c t') - \delta(\Abs{\Bx'} + c t') \right) 
-d^3 x' dt' \\
+&= 
+\IIinf \IIinf \IIinf \IIinf g(\Bx - \Bx', t - t') u(t') \frac{c }{4\pi \Abs{\Bx'}} \delta(\Abs{\Bx'} - c t') d^3 x' dt' \\
+&-\IIinf \IIinf \IIinf \IIinf g(\Bx - \Bx', t - t') u(t') \frac{c }{4\pi \Abs{\Bx'}} \delta(\Abs{\Bx'} + c t') d^3 x' dt' \\
 \end{align*}
 
-Or
+Let's break these into two parts
+
 \begin{align}\label{eqn:almostThere}
-{\psi}(\Bx, t) &= {\psi}_{-}(\Bx, t) +{\psi}_{+}(\Bx, t) \\
-{\psi}_{-}(\Bx, t) &= \IIinf \IIinf \IIinf \frac{c }{4\pi \Abs{\Bx'}} \rho(\Bx - \Bx', t - \Abs{\Bx'}/c) d^3 x'  \\
-{\psi}_{+}(\Bx, t) &= -\IIinf \IIinf \IIinf \frac{c }{4\pi \Abs{\Bx'}} \rho(\Bx - \Bx', t + \Abs{\Bx'}/c) d^3 x' 
+{\psi}(\Bx, t) &= {\psi}_{-}(\Bx, t) +{\psi}_{+}(\Bx, t)
 \end{align}
 
-It looks like my initial interpretation of the causal nature of the unit step in the original functional form wasn't really right.  In this form
-we have two specific solutions to the equation.  One is due to retarded contributions (causal), and the other advanced, and the original unit step
-did not have that information by itself.  Now, these unit step functions have been carelessly dropped here.  Intuitively I see that the remaining
-impact of those is that we sum over previous times only for the retarded solution, and future times only for the advanced solution.  That statement
-is a bit handwavyish (would have to think it though better to properly justify it), but is consistent with statements seen elsewhere, such as in 
-\cite{feynman1963flp}.
+Where the first part, $\psi_{-}$ is for the $-ct'$ delta function and one $\psi_{-}$ for the $+ct'$.
+Making a $\tau = t-t'$ change of variables, this first portion is
 
-It's been a couple years since seeing those for the
-first time in Feynman's text, and wondering how on earth somebody would come up with those, and here we have it, albeit in a somewhat ad-hoc 
-non-rigorous fashion.
+\begin{align*}
+{\psi}_{-}(\Bx, t) 
+&= -\IIinf \IIinf \IIinf \IIinf g(\Bx - \Bx', \tau) u(t-\tau) \frac{c }{4\pi \Abs{\Bx'}} \delta(\Abs{\Bx'} - c t + c\tau) d^3 x' d\tau \\
+&= -\IIinf \IIinf \IIinf g(\Bx - \Bx'', t - \Abs{\Bx''}/c) \frac{c }{4\pi \Abs{\Bx''}} d^3 x'' \\
+\end{align*}
 
-\subsection{ Finishing up. }
+One more change of variables, $\Bx' = \Bx - \Bx''$, $d^3 x'' = -d^3 x$, gives the final desired retarded potential result.  The $\psi_{+}$ result is similar (see below), and assembling all we have
 
-Observe that \ref{eqn:almostThere} is not quite in the form that the retarded potentials are usually found.  For that we need one more change of
-variables
 \begin{align}
-%{\psi}_{-}(\Bx, t) &= -\IIinf \IIinf \IIinf \frac{c }{4\pi \Abs{\Bx -\Bu}} \rho(\Bu , t - \Abs{\Bx - \Bu}/c) d^3 u  \\
-%{\psi}_{+}(\Bx, t) &= \IIinf \IIinf \IIinf \frac{c }{4\pi \Abs{\Bx -\Bu}} \rho(\Bu , t + \Abs{\Bx - \Bu}/c) d^3 u 
-{\psi}_{-}(\Bx, t) &= -\IIinf \IIinf \IIinf \frac{c }{4\pi \Abs{\Bx -\Bx'}} \rho(\Bx' , t - \Abs{\Bx - \Bx'}/c) d^3 x'  \\
-{\psi}_{+}(\Bx, t) &= \IIinf \IIinf \IIinf \frac{c }{4\pi \Abs{\Bx -\Bx'}} \rho(\Bx' , t + \Abs{\Bx - \Bx'}/c) d^3 x' 
+{\psi}_{-}(\Bx, t) &= \IIinf \IIinf \IIinf g(\Bx', t - \Abs{\Bx - \Bx'}/c) \frac{c }{4\pi \Abs{\Bx - \Bx'}} d^3 x' \\
+{\psi}_{+}(\Bx, t) &= -\IIinf \IIinf \IIinf g(\Bx, t + \Abs{\Bx -\Bx'}/c) \frac{c }{4\pi \Abs{\Bx -\Bx'}} d^3 x' 
 \end{align}
 
-But put this way, it appears that I gained a factor of $-1$ somewhere along the way.  Don't see it now.  Maybe later with fresh eyes.
+It looks like my initial interpretation of the causal nature of the unit step in the original functional form wasn't really right.  It is not 
+until the Green's function is ``integrated'' do we get this causal and non-causal split into two specific solutions.
+In the first of these solutions is only charge contributions at the position in space offset by the wave propagation speed effects the
+potential (this is the causal case).  On the other hand we have a second specific solution to the wave equation
+summing the charge contributions at all the future positions, this time offset by the time it takes a wave to propagate backwards from that future spacetime
+
+The final mathematical result is consistent with statements seen elsewhere, such as in \cite{feynman1963flp}, although it is
+likely that the path taken by others to get this result was less ad-hoc than mine.
+It's been a couple years since seeing this for the
+first time in Feynman's text.
+It wasn't clear to me how somebody could possibly come up with those starting with Maxwell's equations.  
+Here by essentially applying undergrad Engineering Fourier methods, we get the result in an admittedly ad-hoc fashion, but at least the result is not 
+pulled out of a magic hat.
+
+\subsection{ Omitted Details.  Advanced time solution. }
+
+Similar to the above for $\psi_{+}$ we have
+\begin{align*}
+{\psi}_{+}(\Bx, t) 
+&= -\IIinf \IIinf \IIinf \IIinf g(\Bx - \Bx', t - t') u(t') \frac{c }{4\pi \Abs{\Bx'}} \delta(\Abs{\Bx'} + c t') d^3 x' dt' \\
+&= \IIinf \IIinf \IIinf \IIinf g(\Bx - \Bx', \tau) u(t -\tau) \frac{c }{4\pi \Abs{\Bx'}} \delta(\Abs{\Bx'} + c (t -\tau)) d^3 x' d\tau \\
+&= \IIinf \IIinf \IIinf \IIinf g(\Bx - \Bx', \tau) u(t -\tau) \frac{c }{4\pi \Abs{\Bx'}} \delta(\Abs{\Bx'} + c t -c\tau) d^3 x' d\tau \\
+&= \IIinf \IIinf \IIinf g(\Bx - \Bx', t + \Abs{\Bx'}/c) \frac{c }{4\pi \Abs{\Bx'}} d^3 x' \\
+&= -\IIinf \IIinf \IIinf g(\Bx, t + \Abs{\Bx -\Bx'}/c) \frac{c }{4\pi \Abs{\Bx -\Bx'}} d^3 x' \\
+\end{align*}
+
+Is there an extra factor of $-1$ here?
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
