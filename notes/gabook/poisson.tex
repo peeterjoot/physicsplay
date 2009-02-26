@@ -21,7 +21,7 @@
 
 \title{ Poisson and retarded Potential Green's functions from Fourier kernels. }
 \author{Peeter Joot \quad peeter.joot@gmail.com}
-\date{ Feb 18, 2009.  Last Revision: $Date: 2009/02/22 17:13:04 $ }
+\date{ Feb 18, 2009.  Last Revision: $Date: 2009/02/26 00:31:59 $ }
 
 \begin{document}
 
@@ -227,7 +227,7 @@ Which gives
 Awesome!  All following from the choice to set $\BE = -\spacegrad \phi$, we have a solution for $\phi$ following directly
 from the divergence equation $\spacegrad \cdot \BE = \rho/\epsilon_0$ via Fourier transformation of this equation.
 
-\section{ Retarded time potentials }
+\section{ Retarded time potentials for the 3D wave equation. }
 
 \subsection{ Setup. }
 
@@ -396,6 +396,91 @@ Similar to the above for $\psi_{+}$ we have
 \end{align*}
 
 Is there an extra factor of $-1$ here?
+
+\section{ 1D wave equation. }
+
+It is somewhat irregular seeming to treat the 3D case before what should be the simpler 1D case, so let's 
+try evaluating the Green's function for the 1D wave equation too.
+
+We have found that Fourier transforms applied to the forced wave equation 
+\begin{align}
+\left( \inv{v^2} \partial_{tt} -\partial_{xx} \right)\psi = g(x,t)
+\end{align}
+
+result in the following integral solution.
+
+\begin{align}\label{eqn:oneDimResult}
+{\psi}(x, t)
+&=
+\int_{x'=-\infty}^\infty
+\int_{t' = 0}^\infty {g}(x-x', t-t') G(x', t') dx' dt' \\
+G(x, t) &=
+\int_{k = -\infty}^\infty
+\frac{v}{2\pi {k}}
+\sin( {k} v t )
+\exp( i k x )
+dk
+\end{align}
+
+As in the 3D case above can this reduced to something that does not involve such an unpalatable integral.
+Given the 3D result, it would be reasonable to get a result involving $g(x \pm vt)$ terms.
+
+First lets get rid of the mixed absolutes on $k$
+\begin{align*}
+G(x, t)
+&=
+\int_{k = 0}^\infty
+\frac{v}{2\pi {k}}
+\sin( {k} v t )
+\exp( i k x )
+dk
++\int_{k = -\infty}^0
+\frac{v}{2\pi (-k)}
+\sin( (-k) v t )
+\exp( -i k x )
+dk \\
+&=
+\int_{k = 0}^\infty
+\frac{v}{\pi {k}}
+\sin( {k} v t )
+\exp( i k x )
+dk \\
+&=
+\int_{k = 0}^\infty
+\frac{v}{2 \pi {k} i}
+\left(
+\exp( i k (x + vt)) - \exp( i k (x - vt))
+\right)
+dk
+\end{align*}
+
+How to reduce this isn't obvious.  A spherical polar decomposition that will kill the $k$ in the denominator isn't possible
+in this one variable case.
+
+Failing a reduction, perhaps something would be suggested by reassembling?
+
+\begin{align}
+{\psi}(x, t)
+&=
+\int_{x'=-\infty}^\infty
+\int_{t'= 0}^\infty
+\int_{k = 0}^\infty
+{g}(x-x', t-t') 
+%G(x', t')
+\frac{v}{2 \pi {k} i}
+\left(
+e^{ i k (x' + vt')} - e^{ i k (x' - vt')}
+\right)
+dk
+dx' dt' %\\
+\end{align}
+
+Breaking this into two integrals, and doing some kind of change of variables for the coupled $x' \pm vt'$ variables looks
+reasonable.
+
+FIXME: exersize for a different day.  Deleted an initial botched attempt (where absolutes on $k$ were accidentally omitted
+initially).
+
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
