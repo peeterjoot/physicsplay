@@ -15,7 +15,7 @@
 
 \title{ n-sphere volume. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ Feb 26, 2009.  Last Revision: $Date: 2009/02/26 23:27:03 $ }
+\date{ Feb 26, 2009.  Last Revision: $Date: 2009/02/27 04:55:51 $ }
 
 \begin{document}
 
@@ -39,9 +39,54 @@ parameterization is probably desirable.
 
 Before attempting to tackle the problem of interest, the basic question
 of how to do volume and weighted volume integrals over a hyperspherical volumes
-must be considered.
+must be considered.  Doing this for both Euclidean and Minkowski metrics will have to be covered.
 
-\section{ Some hints from wikipedia. }
+\section{ Euclidean n-volume }
+
+\subsection{ Parameterizations. }
+
+The \href{http://en.wikipedia.org/wiki/Hypersphere}{wikipedia article on n-volumes} gives a parameterization, which I'll write out explicitly for the first few dimensions
+
+\begin{itemize}
+\item 1-sphere (circle)
+
+\begin{align*}
+x_1 &= r \cos\phi_1 \\
+x_2 &= r \sin\phi_1 
+\end{align*}
+
+\item 2-sphere (sphere)
+
+\begin{align*}
+x_1 &= r \cos\phi_1 \\
+x_2 &= r \sin\phi_1 \cos\phi_2 \\
+x_3 &= r \sin\phi_1 \sin\phi_2
+\end{align*}
+
+\item 3-sphere (hypersphere)
+
+\begin{align*}
+x_1 &= r \cos\phi_1 \\
+x_2 &= r \sin\phi_1 \cos\phi_2 \\
+x_3 &= r \sin\phi_1 \sin\phi_2 \cos\phi_3 \\
+x_4 &= r \sin\phi_1 \sin\phi_2 \sin\phi_3 \\
+\end{align*}
+
+\end{itemize}
+
+By inspection one can see that we have the desired $r^2 = \sum_i (x_i)^2$ relation.  Each of these can be vectorized to produce
+a parameterized vector that can trace out all the possible points on the volume
+
+\begin{align*}
+\Br &= e^k x_k 
+\end{align*}
+
+\subsection{ Volume elements. }
+
+We can form a parallelogram area (or parallopiped volume, ...) element for any parameterized surface by taking wedge products, and can do that
+for this spherical parameterization too.
+
+FIXME: scan picture.
 
 %\begin{figure}[htp]
 %\centering
@@ -50,6 +95,114 @@ must be considered.
 %\end{figure}
 %
 %... see figure \ref{fig:picturepath} ...
+
+For example for the circle we have
+
+\begin{align*}
+dV_{\Rm{2}}
+&= \PD{r}{\Br} \wedge \PD{\phi_1}{\Br} dr d\phi_1 \\
+&= \left(\PD{r}{}r(\cos\phi_1, \sin\phi_1) \right) \wedge \left(\PD{\phi_1}{}r(\cos\phi_1, \sin\phi_1) \right) dr d\phi_1 \\
+&= (\cos\phi_1, \sin\phi_1) \wedge (-\sin\phi_1, \cos\phi_1) r dr d\phi_1 \\
+&= (\cos^2\phi_1 e^1 e^2 - \sin^2\phi_1 e^2 e^1 ) r dr d\phi_1 \\
+&= r dr d\phi_1 e^1 e^2 \\
+\end{align*}
+
+And for the sphere
+\begin{align*}
+dV_{\Rm{3}}
+&= \PD{r}{\Br} \wedge \PD{\phi_1}{\Br} \wedge \PD{\phi_2}{\Br} dr d\phi_1 d\phi_2 \\
+&= (\cos\phi_1, \sin\phi_1 \cos\phi_2, \sin\phi_1 \sin\phi_2)  \\
+&\wedge (-\sin\phi_1, \cos\phi_1 \cos\phi_2, \cos\phi_1 \sin\phi_2)  \\
+&\wedge (0, -\sin\phi_1 \sin\phi_2, \sin\phi_1 \cos\phi_2) r^2 dr d\phi_1 d\phi_2 \\
+&= 
+\begin{vmatrix}
+\cos\phi_1 & \sin\phi_1 \cos\phi_2 & \sin\phi_1 \sin\phi_2  \\
+-\sin\phi_1 & \cos\phi_1 \cos\phi_2 & \cos\phi_1 \sin\phi_2  \\
+0 & -\sin\phi_1 \sin\phi_2 & \sin\phi_1 \cos\phi_2  \\
+\end{vmatrix} r^2 dr d\phi_1 d\phi_2 e^1 e^2 e^3 \\
+&=
+r^2 dr \sin\phi_1 d\phi_1 d\phi_2 e^1 e^2 e^3 \\
+\end{align*}
+
+And finally for the hypersphere
+
+\begin{align*}
+dV_{\Rm{4}} &=
+\begin{vmatrix}
+\cos\phi_1 & \sin\phi_1 \cos\phi_2 & \sin\phi_1 \sin\phi_2 \cos\phi_3 & \sin\phi_1 \sin\phi_2 \sin\phi_3  \\
+-\sin\phi_1 & \cos\phi_1 \cos\phi_2 & \cos\phi_1 \sin\phi_2 \cos\phi_3 & \cos\phi_1 \sin\phi_2 \sin\phi_3  \\
+         0 & -\sin\phi_1 \sin\phi_2 & \sin\phi_1 \cos\phi_2 \cos\phi_3 & \sin\phi_1 \cos\phi_2 \sin\phi_3  \\
+         0 &                     0 & -\sin\phi_1 \sin\phi_2 \sin\phi_3 & \sin\phi_1 \sin\phi_2 \cos\phi_3  \\
+\end{vmatrix} \\
+&\quad r^3 dr d\phi_1 d\phi_2 d\phi_3 e^1 e^2 e^3 e^4 \\
+&=
+%
+%
+%C_1  &  S_1 C_2 &  S_1 S_2 C_3 & S_1 S_2 S_3  \\
+%-S_1 &  C_1 C_2 &  C_1 S_2 C_3 & C_1 S_2 S_3  \\
+%   0 & -S_1 S_2 &  S_1 C_2 C_3 & S_1 C_2 S_3  \\
+%   0 &        0 & -S_1 S_2 S_3 & S_1 S_2 C_3  \\
+%
+%
+%C_1^2 C_2 S_1^2 C_2 S_2
+%+C_1 S_1 S_2^3 C_1 S_1
+%+S_1^2 C_2 S_1^2 C_2 S_2
+%+S_1^2 S_2 S_1^2 S_2^2
+%
+%
+%+C_1^2 C_2^2 S_1^2 S_2
+%+C_1^2 S_1^2 S_2^3 
+%+S_1^4 C_2^2 S_2
+%+S_1^4 S_2^3
+%
+%
+%+ S_1^2 S_2 
+r^3 dr \sin^2\phi_1 d\phi_1 \sin\phi_2 d\phi_2 d\phi_3 e^1 e^2 e^3 e^4 \\
+\end{align*}
+
+Each of these is consistent with the result in the wiki page.
+
+\subsection{ Some volume computations. }
+
+Let's apply the above results to compute the corresponding n-volume's.
+
+
+\begin{itemize}
+\item 1-sphere (circle)
+\begin{align*}
+V_{\Rm{2}} 
+&= 4 \int_{0}^R r dr \int_{0}^{\pi/2} d\phi_1 \\
+&= \pi R^2 
+\end{align*}
+
+\item 2-sphere (sphere)
+
+\begin{align*}
+V_{\Rm{3}} 
+&= 8 \int_0^R r^2 dr \int_0^{\pi/2} \sin\phi_1 d\phi_1 \int_0^{\pi/2} d\phi_2 \\
+&= 8 \inv{3} R^3 \left( {\left. -\cos\phi_1 \right\vert}_0^{\pi/2} \right) \frac{\pi}{2} \\
+&= \frac{4\pi R^3}{3} \\
+\end{align*}
+
+Okay, so far so good.
+
+\item 3-sphere (hypersphere)
+
+\begin{align*}
+V_{\Rm{3}} 
+&= 16 \int_0^R r^3 dr \int_0^{\pi/2} \sin^2\phi_1 d\phi_1 \int_0^{\pi/2} \sin\phi_2 d\phi_2 \int_0^{\pi/2} d\phi_3 \\
+&= 2 \pi R^4 \int_0^{\pi/2} \sin^2\phi_1 d\phi_1 \\
+&= \pi R^4 \left( {\left.  \phi_1 - \cos\phi_1 \sin\phi_1 \right\vert}_0^{\pi/2} \right) \\
+&= \frac{\pi^2 R^4}{2} \\
+\end{align*}
+
+This is also consistent with the formula supplied in the wiki article.  What I've done here though it integrate over only one of the quadrants, and multiply by $2^n$.  This avoided the more tricky issue of what exact range of angles is required for a complete cover of the surface.
+
+\end{itemize}
+
+\subsection{ Range determination. }
+
+\section{ Minkowski metric sphere. }
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
