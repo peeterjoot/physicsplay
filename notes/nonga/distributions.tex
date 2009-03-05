@@ -21,7 +21,7 @@
 
 \title{ Applications of Fourier distribution theory to some PDEs. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ March 4, 2009.  Last Revision: $Date: 2009/03/04 22:35:55 $ }
+\date{ March 4, 2009.  Last Revision: $Date: 2009/03/05 14:01:52 $ }
 
 \begin{document}
 \maketitle{}
@@ -46,10 +46,11 @@ if all the right fudges were actually performed to get the answer.
 
 \subsection{ Transform pairs. }
 
-The form of the Fourier transform pairs used here are
+The form of the Fourier transform pairs used here will be
+
 \begin{align*}
-\hat{f}(\mathbf{k}) &= \frac{1}{(\sqrt{2\pi})^n} \iiint f(\mathbf{x}) e^{-i \mathbf{k} \cdot \mathbf{x} } d^n x \\
-{f}(\mathbf{x}) &= \frac{1}{(\sqrt{2\pi})^n} \iiint \hat{f}(\mathbf{k}) e^{i \mathbf{k} \cdot \mathbf{x} } d^n k \\
+\hat{f}(\mathbf{k}) &= \frac{1}{(\sqrt{2\pi})^n} \int f(\mathbf{x}) e^{-i \mathbf{k} \cdot \mathbf{x} } d^n x \\
+{f}(\mathbf{x}) &= \frac{1}{(\sqrt{2\pi})^n} \int \hat{f}(\mathbf{k}) e^{i \mathbf{k} \cdot \mathbf{x} } d^n k \\
 \end{align*}
 
 \subsection{ Space of Schwarz functions. }
@@ -59,11 +60,79 @@ The form of the Fourier transform pairs used here are
 This is the simplest PDE that I can think of that one should be able 
 to apply Fourier techniques to.  We seek solutions $f(x,t)$ of
 
-\begin{align}
+\begin{align}\label{eqn:firstOrderAdvancedWave}
 \inv{v} \PD{t}{f} - \PD{x}{f} = 0
 \end{align}
 
+\subsection{ Setup. }
+
+Taking Fourier transforms of equation \ref{eqn:firstOrderAdvancedWave}, and integration
+by parts, we have
+
+\begin{align}
+\inv{v} \PD{t}{\hat{f}}(k,t) + (-ik)\hat{f}(k,t) = 0
+\end{align}
+
+Our solution in the wave number space is thus
+\begin{align}\label{eqn:startingPtFirstOrder}
+{\hat{f}}(k,t) = A(k) e^{i k v t} = \hat{f}(k,0) e^{i k v t}
+\end{align}
+
+This will be the common starting point for both the classical and the distribution approach below.
+It probably ought not to be the starting point for the distribution case since to perform the
+integration by parts one has to assume that $f(x,t)$ vanish at $\pm \infty$.
+The final solution will be seen to not neccessarily have
+such a restriction.  How would one get to this point using the distribution formalism?  There we
+shouldn't have this trouble since the function $f$ will be coupled with the Schwartz test function
+that vanishes satisfactorily at the boundaries.
+
 \subsection{ Classical way. }
+
+To complete the solution in terms of initial conditions we can inverse Fourier transform
+equation \ref{eqn:startingPtFirstOrder}
+
+\begin{align*}
+{{f}}(x,t) = \inv{\sqrt{2\pi}} \left( \inv{\sqrt{2\pi}}\int f(x',0) e^{-i k x'} dx' e^{i k v t} \right) e^{ i k x } dk
+\end{align*}
+
+Here's where things get fishy.  Reversing the order of integration, and performing
+the $k$ integration first we want to ``integrate''
+
+\begin{align*}
+I(x,t) = \inv{2\pi} \int e^{ i k ((x-x') + v t) } dk
+\end{align*}
+
+This we can fudge by saying taking the principle value integral (symmetric about the origin)
+
+\begin{align*}
+I(x,t) &= \lim_{R \rightarrow \infty} \inv{\pi} \frac{\sin( R (x-x' + v t) )}{ (x-x' + vt)}
+\end{align*}
+
+this is a nascent form of the delta function:
+
+\begin{align*}
+\delta(x) \sim \lim_{R \rightarrow \infty} \frac{\sinc( R x )}{\pi x}
+\end{align*}
+
+So we have
+\begin{align*}
+I(x,t) &= \delta(x - x' + v t) 
+\end{align*}
+
+\begin{align*}
+{{f}}(x,t) 
+&= \int f(x',0) \delta(x - x' + v t) dx' \\
+&= f(x + v t,0) 
+\end{align*}
+
+The first order advanced wave equation is thus solved by any function $g(x + vt)$.  This
+is familar from
+\cite{french1971vaw} where it was stated (then demonstrated correct) that solutions of the second
+order homogenous wave equation in one dimension can be expressed in terms of any functions
+$g(x \pm vt)$.
+
+By invoking just the right incantations we can pull the delta function out of the magic hat and 
+produce this expected result.
 
 \subsection{ Using distributions. }
 
