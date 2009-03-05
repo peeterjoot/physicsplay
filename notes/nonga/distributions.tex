@@ -7,6 +7,7 @@
 \DeclareMathOperator{\sinc}{sinc}
 \DeclareMathOperator{\PV}{PV}
 \newcommand{\FF}[0]{\mathcal{F}}
+\newcommand{\Sw}[0]{\mathcal{S}}
 \newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
 
 \usepackage[bookmarks=true]{hyperref}
@@ -21,7 +22,7 @@
 
 \title{ Applications of Fourier distribution theory to some PDEs. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ March 4, 2009.  Last Revision: $Date: 2009/03/05 14:01:52 $ }
+\date{ March 4, 2009.  Last Revision: $Date: 2009/03/05 17:03:35 $ }
 
 \begin{document}
 \maketitle{}
@@ -53,7 +54,12 @@ The form of the Fourier transform pairs used here will be
 {f}(\mathbf{x}) &= \frac{1}{(\sqrt{2\pi})^n} \int \hat{f}(\mathbf{k}) e^{i \mathbf{k} \cdot \mathbf{x} } d^n k \\
 \end{align*}
 
-\subsection{ Space of Schwarz functions. }
+Of particular interest will be forward and inverse Fourier transforms
+of functions in $\Sw$, the space of Schwarz functions.  These are defined
+more exactly in Osgood's notes, but in short have all the most desirable
+properties one can imagine in a Fourier transformation context.  Namely
+continuous, infinitely differentiable, with the function and all 
+derivatives rapidly decreasing (faster than any polynomial).
 
 \section{ 1D first order homogeneous wave equation. }
 
@@ -69,6 +75,35 @@ to apply Fourier techniques to.  We seek solutions $f(x,t)$ of
 Taking Fourier transforms of equation \ref{eqn:firstOrderAdvancedWave}, and integration
 by parts, we have
 
+\begin{align*}
+\FF\left(\inv{v} \PD{t}{f} - \PD{x}{f} \right) &=
+\inv{v} \inv{\sqrt{2\pi}} \int \PD{t}{f} e^{-i k x} dx - \inv{\sqrt{2\pi}} \int \PD{x}{f} e^{-i k x } dx
+\end{align*}
+
+The second term can be integrated by parts
+
+\begin{align*}
+- \inv{\sqrt{2\pi}} \int \PD{x}{f} e^{-i k x } dx
+=
+- \inv{\sqrt{2\pi}} {\left. {f} e^{-i k x } \right\vert}_{x = -\infty}^{\infty}
++ \inv{\sqrt{2\pi}} \int {f} (-i k ) e^{-i k x } dx
+\end{align*}
+
+Already we can see we are in some trouble here since we require 
+$f(x,t)$ vanish at $\pm \infty$.
+For now I close my eyes, and ignore the fact that the final solution will be seen to be more 
+general, and not neccessarily have such a restriction.
+
+FIXME: continue reading osgood and figure out how to do this setup in the distribution formalism?
+With a proper setup of this problem in the distribution formalism one should expect that this trouble will
+go away, since the function $f$ will be coupled with the Schwartz test function
+that vanishes satisfactorily at the boundaries.
+
+Again closing eyes, if one assumes that the order of integration and
+differentiation in the time 
+derivative term above can be reversed, then
+we have a nice single variable first order LDE to solve for $\hat{f}$
+
 \begin{align}
 \inv{v} \PD{t}{\hat{f}}(k,t) + (-ik)\hat{f}(k,t) = 0
 \end{align}
@@ -79,12 +114,29 @@ Our solution in the wave number space is thus
 \end{align}
 
 This will be the common starting point for both the classical and the distribution approach below.
-It probably ought not to be the starting point for the distribution case since to perform the
-integration by parts one has to assume that $f(x,t)$ vanish at $\pm \infty$.
-The final solution will be seen to not neccessarily have
-such a restriction.  How would one get to this point using the distribution formalism?  There we
-shouldn't have this trouble since the function $f$ will be coupled with the Schwartz test function
-that vanishes satisfactorily at the boundaries.
+Because of the integration by parts restriction and the reversion of order of integration and time differentiation, this probably ought not
+be the starting point for the distribution case.  Let's compromise and work with what's known so far one step at a time.
+
+\subsubsection{ On reversal of the time derivative and integration order. }
+
+If one introduces a time variation
+in the integral bounds, but still have them go to infinity based on some
+other limiting process, as in
+
+\begin{align*}
+\PD{t}{} \int_{a(R,t)}^{b(R,t)} f(x,t) dx
+&=
+{\left.\PD{t}{f}(x,t)\right\vert}_{x = b(R,t)} \PD{t}{b}(R,t)
+-{\left.\PD{t}{f}(x,t)\right\vert}_{x = a(R,t)} \PD{t}{a}(R,t)
++ \int_{a(R,t)}^{b(R,t)} \PD{t}{f}(x,t) dx
+\end{align*}
+
+then
+it appears the time derivative of $f$ must vanish faster than the time derivatives of the 
+integral bounds go to infinity in order to fully justify the switch of 
+the order of differentiation and integration above.  That's a rather loose statement, but probably a correct one.  I expect that
+a complete formulation of the problem in terms of distributions would also avoid this issue, since the Schwarz functions and their 
+derivatives have the desirable property of vanishing ``rapidly''.
 
 \subsection{ Classical way. }
 
