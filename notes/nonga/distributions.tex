@@ -22,7 +22,7 @@
 
 \title{ Applications of Fourier distribution theory to some PDEs. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ March 4, 2009.  Last Revision: $Date: 2009/03/06 03:01:43 $ }
+\date{ March 4, 2009.  Last Revision: $Date: 2009/03/06 04:52:48 $ }
 
 \begin{document}
 \maketitle{}
@@ -50,8 +50,8 @@ if all the right fudges were actually performed to get the answer.
 The form of the Fourier transform pairs used here will be
 
 \begin{align*}
-\hat{f}(\mathbf{k}) &= \frac{1}{(\sqrt{2\pi})^n} \int f(\mathbf{x}) e^{-i \mathbf{k} \cdot \mathbf{x} } d^n x \\
-{f}(\mathbf{x}) &= \frac{1}{(\sqrt{2\pi})^n} \int \hat{f}(\mathbf{k}) e^{i \mathbf{k} \cdot \mathbf{x} } d^n k \\
+\hat{f}(\Bk) &= \frac{1}{(\sqrt{2\pi})^n} \int f(\Bx) e^{-i \Bk \cdot \Bx } d^n x \\
+{f}(\Bx) &= \frac{1}{(\sqrt{2\pi})^n} \int \hat{f}(\Bk) e^{i \Bk \cdot \Bx } d^n k \\
 \end{align*}
 
 Of particular interest will be forward and inverse Fourier transforms
@@ -297,7 +297,75 @@ of the formalism that seem reasonable, and make life easier, but leave the rest 
 
 \section{ Second order wave equation. }
 
-TODO.
+Now, let's tackle the second order homogeneous equation
+
+\begin{align}\label{eqn:secondOrderWave}
+\inv{v^2} \PDSq{t}{f} - \sum_j \PDSq{x_j}{f} = 0
+\end{align}
+
+Again Fourier transform the equation
+
+\begin{align*}
+\frac{1}{(\sqrt{2\pi})^n} \int \left( \inv{v^2} \PDSq{t}{f} - \sum_j \PDSq{x_j}{f} \right) e^{-i \Bk \cdot \Bx } d^n x \\
+\end{align*}
+
+From this we get 
+
+\begin{align*}
+\inv{v^2} \PDSq{t}{\hat{f}}(\Bk,t) - \sum_j (-i k_j)^2 \hat{f}(\Bk,t) = 0
+\end{align*}
+
+Or
+\begin{align*}
+\PDSq{t}{\hat{f}}(\Bk,t) = - \Bk^2 v^2 \hat{f}(\Bk,t) 
+\end{align*}
+
+With solutions of the form
+
+\begin{align*}
+\hat{f}(\Bk,t) = A(\Bk) e^{i \Abs{\Bk} v t} = \hat{f}(\Bk,0) e^{i \Abs{\Bk} v t}
+\end{align*}
+
+Here we can allow $v$ to be positive or negative since solutions of either $\pm i \Abs{v \Bk} t$ are allowed.
+
+Now let's switch gears and make the functional nature of $\hat{f}$ explicit.  For $\psi(\Bk) \in \Sw$, we want solutions
+of
+
+\begin{align*}
+\int \hat{f}(\Bk,t) \psi(\Bk) d^n k = \int \hat{f}(\Bk,0) e^{i \Abs{\Bk} v t} \psi(\Bk) d^n k 
+\end{align*}
+
+As in the first order wave equation, $\psi$ can be written as a Fourier transform 
+
+\begin{align}\label{eqn:fourierWaveTx}
+\psi(\Bk) = \frac{1}{(\sqrt{2\pi})^n} \int \phi(\Bx) e^{i \Bk \cdot \Bx } d^n x 
+\end{align}
+
+This gives us
+\begin{align*}
+\int {f}(\Bx,t) \phi(\Bx) d^n x 
+%&= \frac{1}{(\sqrt{2\pi})^n} \int \hat{f}(\Bk,0) e^{i \Abs{\Bk} v t + i \Bk \cdot \Bx } \psi(\Bx) d^n k d^n x \\
+&= \frac{1}{(\sqrt{2\pi})^n} \int {f}(\Bx',0) e^{i \Abs{\Bk} v t - i \Bk \cdot \Bx' } \psi(\Bk) d^n k d^n x' \\
+&= 
+\int {f}(\Bx',0) \left( \frac{1}{(\sqrt{2\pi})^n} \psi(\Bk) e^{i \Abs{\Bk} v t - i \Bk \cdot \Bx' } d^n k 
+\right) d^n x' \\
+\end{align*}
+
+In the classical Fourier treatment we end up with a Green's function of the form
+
+\begin{align*}
+G(\Bx, t) = \frac{1}{({2\pi})^n} \int e^{i \Abs{\Bk} v t - i \Bk \cdot \Bx' } d^n k 
+\end{align*}
+
+And to solve the problem we have to somehow evaluate such an integral to get something delta function like.  In the distribution
+formalism we see the equivalent problem is one of evaluating something that is structurally quite similar to
+a Fourier transform
+
+\begin{align*}
+I(\Bx', t) = \frac{1}{(\sqrt{2\pi})^n} \int \psi(\Bk) e^{i \Abs{\Bk} v t - i \Bk \cdot \Bx' } d^n k 
+\end{align*}
+
+This is a much more well defined looking problem.  It is not obvious however how exactly one can relate this to $\phi(\Bx)$ as defined above in \ref{eqn:fourierWaveTx}?
 
 \section{ Poisson equation. }
 
