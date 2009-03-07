@@ -4,6 +4,7 @@
 \input{../peeters_macros2.tex}
 
 \newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+\newcommand{\PDN}[3]{\frac{\partial^{#3} {#2}}{\partial {#1}^{#3}}}
 \DeclareMathOperator{\sinc}{sinc}
 \DeclareMathOperator{\PV}{PV}
 \newcommand{\FF}[0]{\mathcal{F}}
@@ -23,7 +24,7 @@
 
 \title{ Bohm Chapter 9 problems. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ March 6, 2009.  Last Revision: $Date: 2009/03/07 04:09:35 $ }
+\date{ March 6, 2009.  Last Revision: $Date: 2009/03/07 05:32:15 $ }
 
 \begin{document}
 
@@ -35,7 +36,7 @@
 
 Problems and additional details from reading of \cite{bohm1989qt}, chapter 9.
 
-\subsection{ Problem 1. Momentum wave function normalization. }
+\subsection{ P1. Momentum wave function normalization. }
 
 Given a normalized wave function
 
@@ -58,7 +59,18 @@ Show that the wave function $\phi(k)$ is also normalized, and find the normaliza
 &= 1 \quad\quad\quad \square
 \end{align*}
 
-In \cite{mcmahon2005qmd}, then in \cite{PJqmFourier} we've seen that an alternate Fourier transform pair can be used in terms of
+Bohm defines $\Phi(p) \propto \phi(k)$ with the normalization constant determined by $\int \Abs{\Phi(p)} dp = 1$.  Suppose we 
+let $\Phi(p) = \alpha \phi(k)$, then we have
+
+\begin{align*}
+1 
+&= \int \Phi^\conj(p) \Phi(p) dp \\
+&= \int \alpha^2 \phi^\conj(k) \phi(k) \hbar d k
+\end{align*}
+
+So we want $\alpha^2 \hbar = 1$, and therefore $\Phi(p) = \inv{\sqrt{\hbar}} \phi(k)$.
+
+In \cite{mcmahon2005qmd}, with followup in \cite{PJqmFourier} we've seen that an alternate Fourier transform pair can be used in terms of
 momentum variables.  That is
 
 \begin{align*}
@@ -66,15 +78,115 @@ momentum variables.  That is
 \psi(x) &= \FM \IIinf \Phi(p) e^{ipx/\hbar} dp \\
 \end{align*}
 
-Given that we've shown the normalization for $\phi(k)$ is 1, all we really need to do is express $\Phi(p)$ in terms of $\phi(k)$.
-By inspection that is
+Observe that this is consistent with Bohm's notation, since one can read off 
+$\Phi(p)$ in terms of $\phi(k)$.
+by inspection
 
 \begin{align*}
 \Phi(p) &= \FM \IIinf \psi(x) e^{-ipx/\hbar} dx = \inv{\sqrt{\hbar}} \phi(k)
 \end{align*}
 
-Bohm defines $\Phi(p) \propto \phi(k)$ with the normalization constant determined by $\int \Abs{\Phi(p)} dp = 1$.
-Like so much in his book, that's a more sensible way of doing things.
+\subsection{ P2. Expectation of polynomial momentum function. }
+
+Given a function of momentum 
+
+\begin{align*}
+f(p) &= \sum C_n p^n
+\end{align*}
+
+Express the average, or expectation value of $f(p)$.  It is sufficient to consider one of the monomial terms, say $p^n$.  A translation 
+to position basis via fourier transformation produces the desired result
+
+\begin{align*}
+\bar{p^n} 
+&= \int \Phi^\conj(p) p^n \Phi(p) dp \\
+&= \inv{2\pi \hbar} \iiint \left( \psi^\conj(x') e^{ipx'/\hbar} dx' \right) (\hbar k)^n \left( \psi(x) e^{-ipx/\hbar} dx \right) (\hbar dk) \\
+&= \frac{\hbar^n}{2\pi } \iiint \psi^\conj(x') e^{ikx'} dx' k^n e^{-i k x} \psi(x) dx dk \\
+\end{align*}
+
+The $k^n$ can be reduced to differential form as Bohm did for the $\bar{p}$ case
+
+\begin{align*}
+k^n e^{-i k x} 
+&= k^{n-1} k e^{-i k x} \\
+&= k^{n-1} i \PD{x}{}e^{-i k x} \\
+&= k^{n-m} i^m \PDN{x}{}{m}e^{-i k x} \\
+&= i^n \PDN{x}{}{n}e^{-i k x} \\
+\end{align*}
+
+This leaves something that's in shape for integration by parts
+
+\begin{align*}
+\bar{p^n} 
+&= \frac{(i\hbar)^n}{2\pi} \iiint \psi^\conj(x') e^{ikx'} dx' \left( \PDN{x}{}{n}e^{-i k x} \right) \psi(x) dx dk \\
+&= \frac{(-i\hbar)^n}{2\pi} \iiint \psi^\conj(x') e^{ikx'} dx' \PDN{x}{\psi(x)}{n} e^{-i k x} dx dk \\
+&= \frac{(-i\hbar)^n}{2\pi} \iiint \psi^\conj(x') e^{ik(x'-x)} \PDN{x}{\psi(x)}{n} dx' dx dk \\
+&= {(-i\hbar)^n}{} \iint \psi^\conj(x') \PDN{x}{\psi(x)}{n} dx' dx \inv{2\pi}\int e^{ik(x'-x)} dk \\
+\end{align*}
+
+This last integral is really a distribution, and can be identified with the delta function $\delta(x'-x)$ operating on, in this case, the preceding integral.
+%, and operates on a test function.  Suppose we designate such a test function as $a(u)$, then we have
+%
+%\int \inv{2\pi}\int e^{iku} dk a(u) du
+%&= \int \inv{2\pi}\int e^{iku} a(u) du dk \\
+
+%Now, we can apply the distribution theory as covered in \cite{osgoodFourier} to do a delta function reduction of the exponentials in 
+%this integral.  Specifically pick a function $a(k)$
+
+So we have
+\begin{align*}
+\bar{p^n} 
+&= {(-i\hbar)^n}{} \iint \psi^\conj(x') \PDN{x}{\psi(x)}{n} dx' dx \delta(x'-x) \\
+&= {(-i\hbar)^n}{} \int \psi^\conj(x) \PDN{x}{\psi(x)}{n} dx \\
+\end{align*}
+
+We can put this into explicit operator form, nicely motivating the identification of $-i\hbar \PDi{x}{}$ with the momentum by virtue 
+of the definition of the average or expectation value.
+
+\begin{align*}
+\bar{p^n} 
+&= \int \psi^\conj(x) {\left( -i \hbar \PD{x}{} \right)}^n {\psi(x)} dx \\
+\end{align*}
+
+\subsection{ P3.  Expection of position in momentum space. }
+
+\begin{align*}
+\bar{x} 
+&= \int \psi^\conj(x) x \psi(x) dx \\
+&= 
+\inv{2\pi\hbar} \iiint \Phi^\conj(p) e^{-ipx/\hbar} dp x \Phi(p') e^{ip'x/\hbar} dp' dx \\
+&= 
+\inv{2\pi\hbar} \iiint \Phi^\conj(p) e^{-ipx/\hbar} dp \left( -i \PD{p'}{} e^{ip'x/\hbar} \right) \Phi(p') dp' dx \\
+&= 
+\inv{2\pi\hbar} \iiint \Phi^\conj(p) e^{-ipx/\hbar} dp \left( i \PD{p'}{\Phi(p')} \right) e^{ip'x/\hbar} dp' dx \\
+&= 
+\iint \Phi^\conj(p) \left( i \PD{p'}{} \right) {\Phi(p')} dp dp' \inv{2\pi\hbar} \int e^{i(p'-p)x/\hbar} dx  \\
+&= 
+\iint \Phi^\conj(p) \left( i \PD{p'}{} \right) {\Phi(p')} dp dp' \delta(p'-p)  \\
+\end{align*}
+
+This is
+
+\begin{align*}
+\bar{x} &= \int \Phi^\conj(p) \left( i \PD{p}{} \right) {\Phi(p)} dp 
+\end{align*}
+
+We see that expressing momentum in position space and position in momentum space both result in differential
+operator forms in calculations of expected values
+
+\begin{align*}
+p &\sim -i \hbar \PD{x}{} \\
+x &\sim i \hbar \PD{p}{}
+\end{align*}
+
+Observe the Hamiltonian and Poisson equation structure in these two sets of operators.
+
+\subsection{ P4. Expectation of polynomial position function. }
+
+This problem follows just as P2, and I'm not going to bother typing it up for myself.  For validity, we require
+$x^n \phi(x) \rightarrow 0$ as $x \rightarrow \pm \infty$, or equivalently that $\PDN{p}{}{\Phi} \rightarrow 0$.
+
+\subsection{ P5. Position momentum moment commutators. }
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
