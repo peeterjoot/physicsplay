@@ -24,7 +24,7 @@
 
 \title{ Bohm Chapter 9 problems. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ March 6, 2009.  Last Revision: $Date: 2009/03/07 05:32:15 $ }
+\date{ March 6, 2009.  Last Revision: $Date: 2009/03/07 18:57:44 $ }
 
 \begin{document}
 
@@ -174,19 +174,139 @@ This is
 We see that expressing momentum in position space and position in momentum space both result in differential
 operator forms in calculations of expected values
 
-\begin{align*}
+\begin{align}\label{eqn:operatorCorrespondance}
 p &\sim -i \hbar \PD{x}{} \\
 x &\sim i \hbar \PD{p}{}
-\end{align*}
+\end{align}
 
 Observe the Hamiltonian and Poisson equation structure in these two sets of operators.
 
 \subsection{ P4. Expectation of polynomial position function. }
 
 This problem follows just as P2, and I'm not going to bother typing it up for myself.  For validity, we require
-$x^n \phi(x) \rightarrow 0$ as $x \rightarrow \pm \infty$, or equivalently that $\PDN{p}{}{\Phi} \rightarrow 0$.
+$x^n \phi(x) \rightarrow 0$ as $x \rightarrow \pm \infty$, or equivalently that $\PDN{p}{\Phi}{n} \rightarrow 0$.
 
-\subsection{ P5. Position momentum moment commutators. }
+\subsection{ P5. Some commutator calculations. }
+
+\subsubsection{ P5. Position momentum moment commutators. }
+
+Evaluate
+
+\begin{align*}
+f(x,p) = x^n p^m - p^m x^n
+\end{align*}
+
+Up to this point we've only seen operators in expectation values.  Let's look the simplest case with $n = m = 1$ in that
+context
+
+\begin{align*}
+\bar{f} 
+&= \frac{\hbar}{i} \int \psi^\conj(x) \left(x \PD{x}{} - \PD{x}{} x \right) \psi(x) dx \\
+&= \frac{\hbar}{i} \int \psi^\conj(x) \left(x \PD{x}{\psi(x)} - \psi(x) - x \PD{x}{\psi(x)} \right) dx \\
+&= -\frac{\hbar}{i} \int \psi^\conj(x) \psi(x) dx \\
+&= {i\hbar}
+\end{align*}
+
+So in the same way that the operator correspondance between momentum and the derivative as summarized in 
+\ref{eqn:operatorCorrespondance}.
+
+The higher order commutator expansions could also be evaluated this way, but exploiting the operator nature directly 
+makes this easier.  For the first order moment commutator above one can write
+
+\begin{align*}
+f(x,p) \psi(x) 
+&= (x p - p x) \psi(x) \\
+&= -i \hbar \left(x \PD{x}{} - \PD{x}{} x\right) \psi(x) \\
+&= -i \hbar \left(x \PD{x}{\psi}(x) - \PD{x}{x \psi(x)} \right) \\
+&= -i \hbar \left(x \PD{x}{\psi}(x) - \PD{x}{\psi(x)} -\psi(x) \right) \\
+&= i \hbar \psi(x) \\
+\end{align*}
+
+So we seen that a right acting operator the net effect is the following action
+
+\begin{align*}
+(x p - p x) \sim i \hbar \\
+\end{align*}
+
+If one starts from this point and then calculates the expectation value the result will still be $i \hbar$, but working
+with the probability integrals from the get go is just additional complication.
+
+Building on this result we can then calculate the higher order moment differences of the problem by using the commutator
+to change the order of operations
+
+\begin{align*}
+p x \sim -i \hbar + x p
+\end{align*}
+
+Let's use this for a couple simple examples to start
+\begin{align*}
+x^2 p - p x^2
+&=
+x^2 p - ( -i \hbar + x p) x \\
+&=
+x^2 p + i \hbar x - x ( -i \hbar + x p) \\
+&=
+x^2 p + 2 i \hbar x - x^2 p \\
+&=
+2 i \hbar x \\
+\end{align*}
+
+\begin{align*}
+x p^2 - p^2 x
+&=
+x p^2 - p ( -i \hbar + x p) \\
+&=
+x p^2 + i \hbar p - p x p \\
+&=
+x p^2 + i \hbar p + ( +i \hbar - x p) p \\
+&=
+2 i \hbar p \\
+\end{align*}
+
+Calculation of third powers shows a pattern, and one can guess at an induction hypothesis
+
+\begin{align*}
+x p^n &= p^n x + n i \hbar p^{n-1} \\
+-p x^n &= -x^n p + n i \hbar x^{n-1} \\
+\end{align*}
+
+The $n=1$ cases follow from $xp - px = i\hbar$, leaving only the induction on $n$.  For the momentum powers we have
+
+\begin{align*}
+x p^n p 
+&= p^n x p + n i \hbar p^{n} \\
+&= p^n (p x + i \hbar) + n i \hbar p^{n} \\
+&= p^{n+1} x + (n+1) i \hbar p^{n} \quad\quad\quad\square \\
+\end{align*}
+
+For the position powers we have
+\begin{align*}
+-p x^n x 
+&= -x^n p x + n i \hbar x^{n} \\
+&= x^n (-x p + i \hbar) + n i \hbar x^{n} \\
+&= -x^{n+1} p + (n+1) i \hbar x^{n} \quad\quad\quad\square \\
+\end{align*}
+
+%Okay, now for the general cases.  First let's do $n > m$.  The problem is essentially that of reversing the order of the 
+%product
+%
+%%p x =
+%%-i \hbar + x p
+%\begin{align*}
+%p^m x^n
+%&=
+%p^{m-1} p x x^{n-1} \\
+%&=
+%p^{m-1} ( -i \hbar + x p ) x^{n-1} \\
+%&=
+%-i \hbar p^{m-1} x^{n-1} + p^{m-1} x p x^{n-1} \\
+%\end{align*}
+
+\subsubsection{}
+
+\begin{align*}
+e^{i k x} p - p x^n e^{ i k x}
+\end{align*}
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
