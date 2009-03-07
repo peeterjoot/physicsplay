@@ -245,6 +245,26 @@ ordered2009 += ../qm/fourier_series_maxwell.pdf
 
 ordered2009 += ../qm/potential_fourier.pdf
 skipit += ../qm/stub_em_fields.pdf
+skipit += ../qm/t.pdf
+ordered2009 += ../qm/planewave.pdf
+skipit += ../qm/scratch_planewave.pdf
+
+# this one actualy just a stub.  Want to followup on it:
+ordered2009 += ../geometric-algebra/faraday_lagrangian.pdf
+
+ordered2009 += ../geometric-algebra/stress_energy_lorentz.pdf
+ordered2009 += ../qm/wavepacket.pdf
+ordered2009 += ../geometric-algebra/en_m_tensor.pdf
+ordered2009 += ../fourier/poisson.pdf
+ordered2009 += ../differential_forms/nvolume.pdf
+
+ordered2009 += ../fourier/distributions.pdf
+skipit += ../lut/lut_q0304.pdf
+
+# work related (although it had some mod/div stuff of general interest)
+ordered2009 += ../fletcher/fletcher.pdf
+
+ordered2009 += ../qm/bohm_ch9.pdf
 
 # Rules:
 #-----------------------------------------------------
