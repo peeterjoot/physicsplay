@@ -1,0 +1,111 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+\title{ Dirac delta function in terms of orthogonal functions. }
+\author{Peeter Joot \quad peeter.joot@gmail.com }
+\date{ March 8, 2009.  Last Revision: $Date: 2009/03/09 12:36:34 $ }
+
+\begin{document}
+
+\maketitle{}
+%\tableofcontents
+
+\section{ Motivation. }
+
+Chapter II of \cite{pauli2000wm} expresses the delta function in terms of othonormal basis functions, but the treatment is slightly
+hard to follow.  Try this the slow and dumb way.
+
+\section{ Fourier coefficients. }
+
+Given an othonormal basis 
+
+\begin{align*}
+\int u_m^\conj(x) u_n(x) = \delta_{mn}
+\end{align*}
+
+For a function that can be expressed entirely in this basis, such as
+
+\begin{align*}
+f(x) = \sum_k a_k u_k(x)
+\end{align*}
+
+We can then compute the Fourier coefficients $a_k$ in the normal fashion
+
+\begin{align*}
+\int u_k^\conj(x) f(x) dx 
+&= \sum_n a_n \int u_k^\conj(x) u_n(x) dx \\
+&= \sum_n a_n \delta_{kn} \\
+&= a_k \\
+\end{align*}
+
+So we have 
+\begin{align*}
+f(x) = \sum_k a_k u_k(x)  = \sum_k u_k(x) \int u_k^\conj(x') f(x') dx'
+\end{align*}
+
+\subsection{ Mean square convergence. }
+
+How good of a match is a subset of such a sum?  Pauli considers a mean convergence.
+
+\begin{align*}
+0 &= \lim_{N \rightarrow \infty}\int 
+{\Abs{f(x') -\sum_{k=1}^N a_k u_k(x') }}^2 dx'  \\
+&=
+\int \left(f^\conj(x') -\sum_{k=1}^N a_k^\conj u_k^\conj(x') \right) \left(f(x') - \sum_{m=1}^N a_m u_m(x') \right) 
+dx' \\
+&=
+\int 
+\left( f^\conj(x') f(x') 
+-f^\conj(x') \sum_{m=1}^N a_m u_m(x') 
+- \sum_{k=1}^N a_k^\conj u_k^\conj(x') f(x') 
++ \sum_{m=1}^N a_m u_m(x') \sum_{k=1}^N a_k^\conj u_k^\conj(x')  \right)
+dx' \\
+&=
+\int f^\conj(x') f(x') dx'
+- \sum_{m=1}^N a_m a_m^\conj
+- \sum_{k=1}^N a_k^\conj a_k
++ \sum_{m=1}^N \sum_{k=1}^N a_m a_k^\conj \delta_{km} \\
+%\int u_m(x') u_k^\conj(x') dx' \\
+&= \int \Abs{f(x')}^2 dx' - \sum_{m=1}^N \Abs{a_m}^2 \\
+\end{align*}
+
+So if we have mean square equality in the limit as $N \rightarrow \infty$, then it must also be true that
+
+\begin{align*}
+\int \Abs{f(x')}^2 dx' = \sum_{m=1}^\infty \Abs{a_m}^2 \\
+\end{align*}
+
+He calls this the completeness relation.  If the othonormal basis is sufficient to express the set of desired functions, then
+the squared absolute value of such functions can be expressed entirely in terms of the fourier coefficients.  The mean square
+equality is weaker in the sense that a function can be mismatched to its fourier representation at a set (of ``measure zero'') points,
+and still meet the mean square equality statement.
+
+\subsection{ Generalizing the inner product. }
+
+FIXME: write this up in a way that I like it.  Having done the above I now follow the remainder too.  After "transcribing" Pauli's
+notes in a way that I like then relate this to two specific cases.
+
+first is the fourier series (bounded integral bounds).  second is fourier transform (infinite bounds).  Both with exponential basis.
+
+What is the delta function representation in each of these basis inner-product representations?
+
+Once done this, relate to the bra-ket notation.
+
+Getting a grasp on this will clarify what Susskind did in his lectures with the identity representation (also done in \cite{mcmahon2005qmd}).
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
+
+\end{document}
