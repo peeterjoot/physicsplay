@@ -8,6 +8,7 @@
 \newcommand{\braket}[2]{\langle{#1} \vert {#2}\rangle}
 \newcommand{\ketbra}[2]{\ket{#1}\bra{#2}}
 \newcommand{\BraOpKet}[3]{\bra{#1} \hat{#2} \ket{#3} }
+\newcommand{\Innerprod}[2]{\left\langle{#1}, {#2}\right\rangle}
 
 \usepackage[bookmarks=true]{hyperref}
 
@@ -21,7 +22,7 @@
 
 \title{ Dirac delta function in terms of orthogonal functions. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ March 8, 2009.  Last Revision: $Date: 2009/03/09 12:58:43 $ }
+\date{ March 8, 2009.  Last Revision: $Date: 2009/03/09 20:18:29 $ }
 
 \begin{document}
 
@@ -31,7 +32,7 @@
 \section{ Motivation. }
 
 Chapter II of \cite{pauli2000wm} expresses the delta function in terms of othonormal basis functions, but the treatment is slightly
-hard to follow.  Try this the slow and dumb way.
+hard to follow.  Try this the slow and dumb way, expressing some of this in my own words to get an understanding of the ideas.
 
 \section{ Fourier coefficients. }
 
@@ -131,8 +132,8 @@ form
 
 arises in use, because he now writes the completeness relation using a sum similar to that above
 
-\begin{align}
-\sum_{k} u_k^\conj(x) u_k(x') \equiv \delta(x-x') 
+\begin{align}\label{eqn:deltaSum}
+\sum_{k} u_k^\conj(x') u_k(x) \equiv \delta(x-x') 
 \end{align}
 
 I'd seen this in bra ket notation, in Susskind's lectures as noted in \cite{PJQmSusskind}, and also in \cite{mcmahon2005qmd} as the
@@ -147,16 +148,59 @@ related to Fourier transforms).
 As Pauli did, let's verify that this works, and try to relate this to a few specific choices of inner products (covering at
 least classical Fourier series and the Fourier transform).
 
-FIXME: finish writing this up in a way that I like it.  Having done the above I now follow the remainder too.  After "transcribing" Pauli's
-notes in a way that I like then relate this to two specific cases.
+The relation of equation \ref{eqn:deltaSum} can be shown to have delta function behaviour by integration
 
-first is the fourier series (bounded integral bounds).  second is fourier transform (infinite bounds).  Both with exponential basis.
+\begin{align*}
+\int \sum_{k} u_k^\conj(x') u_k(x) f(x') dx'
+&=
+\sum_{k,m} u_k(x) a_m \int u_k^\conj(x') u_m(x') dx' \\
+&=
+\sum_{k,m} u_k(x) a_m \delta_{km} \\
+&=
+\sum_{k} u_k(x) a_k \\
+&=
+f(x) 
+\end{align*}
 
-What is the delta function representation in each of these basis inner-product representations?
+Strictly speaking this ought to be formulated in terms of mean square convergence since an arbitrary function f(x) 
+may differ from its Fourier sum at specific points (for example at points of discontinuity).
 
-Once done this, relate to the bra-ket notation.
+\subsubsection{ Fourier series example. }
 
-Getting a grasp on this will clarify what Susskind did in his lectures with the identity representation (also done in \cite{mcmahon2005qmd}).
+Suppose the inner product is defined for the range $I = [a, a+T]$.
+
+\begin{align*}
+\Innerprod{f}{g} &= \int_{\partial I} f^\conj(x) g(x) dx
+\end{align*}
+
+What is the identity operator representation in the Fourier series basis ${u'}_k(x) = e^{ 2 \pi i k x / T}$?  First the 
+normalization is required.
+
+\begin{align*}
+\Innerprod{{u'}_k}{{u'}_m} 
+&= \int_{\partial I} e^{ 2 \pi i (m-k) x /T } dx  \\
+&= \delta_{km} T
+\end{align*}
+
+So our orthonormalized basis is
+
+\begin{align*}
+u_k(x) = \inv{\sqrt{T}} e^{ 2 \pi i k x / T}
+\end{align*}
+
+So, the delta function representation in this basis is
+
+\begin{align*}
+\delta(x- x') = \inv{{T}} \sum_k e^{ 2 \pi i k (x-x') / T}
+\end{align*}
+
+%FIXME: finish writing this up in a way that I like it.  Having done the above I now follow the remainder too.  After "transcribing" Pauli's notes in a way that I like then relate this to two specific cases.
+
+%first is the fourier series (bounded integral bounds).  second is fourier transform (infinite bounds).  Both with exponential basis.
+
+%What is the delta function representation in each of these basis inner-product representations?
+
+%Getting a grasp on this will clarify what Susskind did in his lectures with the identity representation (also done in \cite{mcmahon2005qmd}).
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
