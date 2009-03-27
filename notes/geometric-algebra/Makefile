@@ -265,6 +265,12 @@ skipit += ../lut/lut_q0304.pdf
 ordered2009 += ../fletcher/fletcher.pdf
 
 ordered2009 += ../qm/bohm_ch9.pdf
+ordered2009 += ../qm/delta_ortho_series.pdf
+ordered2009 += ../algebra/dot_linearity.pdf
+ordered2009 += ../algebra/levi.pdf
+ordered2009 += ../geometric-algebra/electron_rotor.pdf
+ordered2009 += ../calculus/byron_fuller_calc_var.pdf
+ordered2009 += ../algebra/binomial.pdf
 
 # Rules:
 #-----------------------------------------------------

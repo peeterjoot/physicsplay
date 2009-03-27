@@ -17,7 +17,7 @@
 
 \title{ Integer binomial theorem induction, the easy dumb way. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ March 26, 2009.  Last Revision: $Date: 2009/03/27 00:59:32 $ }
+\date{ March 26, 2009.  Last Revision: $Date: 2009/03/27 21:52:10 $ }
 
 \begin{document}
 \maketitle{}
@@ -33,7 +33,7 @@ explicitly with for the power of three case.  Ironically, working it
 out for an explicit index takes the abstraction out of the problem, and
 generalizing further really only requires a search and replace.
 
-\section{ Do it. }
+\subsection{ Do it. }
 
 Want to prove
 
@@ -49,7 +49,7 @@ where
 
 In particular want to prove this for the $k+1$ case, given $k$.
 
-\subsection{ step with k+1 = 3 }
+\subsubsection{ step with k+1 = 3 }
 
 Three isn't actually the best way to start since it is almost too trivial, but
 one gets the idea easily by doing it.
@@ -81,7 +81,7 @@ remaining bits.
 Now, observe that in all the steps above everywhere if all places that $2$, a nice easy to think with and concrete number, we could have used some
 abstract index.
 
-\subsection{ step with k+1 }
+\subsubsection{ step with k+1 }
 
 A straight text search and replace on $2$ with $k$ gives
 
@@ -127,7 +127,7 @@ then we would have
 
 which is what was desired.
 
-\subsection{ That last little piece. }
+\subsubsection{ That last little piece. }
 
 To prove that last little piece, let's do it again the dumb way, and let a regular expression $s/2/k/g$ in vim do the hard work.
 
@@ -183,7 +183,143 @@ That's all we needed to complete the proof.
 
 I think this is a superior way to do inductive proofs.  Just do the absolute easiest case and do it with a number that is easy to think with.  Search and replace in an editor does all the bits that would make you look clever if you were to leave off the fact that you were really only doing the easy version!
 
-%\bibliographystyle{plainnat}
-%\bibliography{myrefs}
+\section{ The original problem. }
+
+The original problem that I was trying to solve was problem (3.FIXME) from \cite{byron1992mca}.  For an n-th degree polynomial $f(t)$
+show, with $D = d/dt$, that the operator
+
+\begin{align*}
+T = I + \frac{xD}{1!} + \cdots \frac{(xD)^n}{n!}
+\end{align*}
+
+serves to shift the function $T f(t) = f(t + x)$.
+
+\subsection{ Inductive setup. }
+
+For the lower order cases, this is easy to show that the property holds, and for the zeroth degree and first degree polynomial cases we have
+respectively for $f(t) = \sum a_i t^i$
+
+\begin{align*}
+T_0 a_0 t^0 = a_0 (t + x)^0
+\end{align*}
+
+\begin{align*}
+T_1 (a_0 t^0 + a_1 t^1) = (a_0 t^0 + a_1 t^1) + x a_1 = a_0(t + x)^0 + a_1(t + x)^1
+\end{align*}
+
+\subsection{ Induction step. }
+
+Now, given this result for 
+
+\begin{align*}
+T_k &= \sum_{m=0}^k \frac{(xD)^m}{m!} \\
+f_k(t) &= \sum_{m=0}^k a_m t^m
+\end{align*}
+
+Let's prove it for $T_{k+1}$.  That is
+
+\begin{align*}
+T_{k+1} f_{k+1}(t) 
+&= 
+\left( T_{k} + \frac{(xD)^{k+1}}{(k+1)!} \right) \left( f_{k}(t) + a_{k+1}t^{k+1} \right) \\
+&=
+T_{k} f_{k}(t) 
++T_{k} a_{k+1}t^{k+1} 
++\frac{(xD)^{k+1}}{(k+1)!} f_{k}(t) 
++\frac{(xD)^{k+1}}{(k+1)!} a_{k+1}t^{k+1} 
+\\
+&=
+f_{k}(x + t) 
++T_{k} a_{k+1}t^{k+1} 
++\frac{(xD)^{k+1}}{(k+1)!} a_{k+1}t^{k+1} 
+\\
+\end{align*}
+
+Okay, that wasn't so bad to setup.  What remains is to compute, for $m \le k+1$,
+
+\begin{align*}
+\frac{(xD)^{m}}{m!} t^{k+1} 
+\end{align*}
+
+Let's try this with search and replace induction using $m=3$, and $k=7$ to start.  This gives
+
+\begin{align*}
+\frac{(xD)^{3}}{3!} t^{7+1} 
+&=
+\frac{(xD)^{3-1}}{3!} xD t^{7+1} \\
+&=
+\frac{(xD)^{3-1}}{3!} x^1 (7+1) t^{7} \\
+&=
+\frac{(xD)^{3-2}}{3!} x^2 (7+1)(7) t^{7-1} \\
+&=
+\hdots \\
+&=
+\frac{(xD)^{3-3}}{3!} x^3 (7+1)(7) \cdots (7-(3-2)) t^{7-(3-1)} \\
+&=
+\frac{(xD)^{3-3}}{3!} x^3 \frac{(7+1)!}{(7-(3-2)-1)!} t^{7-(3-1)} \\
+\end{align*}
+
+Search and replace on three and seven, all steps remain valid and IDENTICAL, but are ``generalized''
+
+\begin{align*}
+\frac{(xD)^{m}}{m!} t^{k+1} 
+&=
+\frac{(xD)^{m-1}}{m!} xD t^{k+1} \\
+&=
+\frac{(xD)^{m-1}}{m!} x^1 (k+1) t^{k} \\
+&=
+\frac{(xD)^{m-2}}{m!} x^2 (k+1)(k) t^{k-1} \\
+&=
+\hdots \\
+&=
+\frac{(xD)^{m-m}}{m!} x^m (k+1)(k) \cdots (k-(m-2)) t^{k-(m-1)} \\
+&=
+\frac{(xD)^{m-m}}{m!} x^m \frac{(k+1)!}{(k-(m-2)-1)!} t^{k-(m-1)} \\
+\end{align*}
+
+And we are left with
+
+\begin{align*}
+\frac{(xD)^{m}}{m!} t^{k+1} 
+&=
+\frac{(k+1)!}{(k + 1 - m)!m!} x^m t^{k + 1 -m} \\
+&=
+\binom{k+1}{m} x^m t^{k + 1 -m} \\
+\end{align*}
+
+Wrapping up, we now have
+
+\begin{align*}
+T_{k+1} f_{k+1}(t) 
+&= 
+\left( T_{k} + \frac{(xD)^{k+1}}{(k+1)!} \right) \left( f_{k}(t) + a_{k+1}t^{k+1} \right) \\
+&=
+f_{k}(x + t) 
++ a_{k+1} 
+\left( T_{k} t^{k+1} +\frac{(xD)^{k+1}}{(k+1)!} t^{k+1} \right)
+\\
+&=
+f_{k}(x + t) 
++ a_{k+1} 
+\left( 
+\sum_{m=0}^k \frac{(xD)^m}{m!} t^{k+1} +\frac{(xD)^{k+1}}{(k+1)!} t^{k+1} \right)
+\\
+&=
+f_{k}(x + t) 
++ a_{k+1} \sum_{m=0}^{k+1} \frac{(xD)^m}{m!} t^{k+1} 
+\\
+&=
+f_{k}(x + t) 
++ a_{k+1} \sum_{m=0}^{k+1} \binom{k+1}{m} x^m t^{k + 1 -m} \\
+&=
+f_{k}(x + t) + a_{k+1} (x + t)^{k+1} \\
+&=
+f_{k+1}(x + t) 
+\end{align*}
+
+As desired.
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
 
 \end{document}
