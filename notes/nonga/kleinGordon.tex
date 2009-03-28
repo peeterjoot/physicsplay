@@ -19,7 +19,7 @@
 
 \title{ Some Klien-Gordon equation notes. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ March 27, 2009.  Last Revision: $Date: 2009/03/28 02:00:22 $ }
+\date{ March 27, 2009.  Last Revision: $Date: 2009/03/28 23:49:46 $ }
 
 \begin{document}
 
@@ -236,15 +236,26 @@ So, if one has a unit normalized wave packet in the spatial domain, the wave num
 \subsection{ Probabilty current? }
 
 Given the wave equation and an interpretation of $1 = \int \Abs{\psi}^2$ as a probability, can one define a probability current meaningfully.  This
-seems somewhat problematic logically, since computing the derivative
+seems somewhat problematic logically, since computing the derivative, as done in \cite{PJprobCurrent}
 
 \begin{align*}
 \PD{t}{\psi\psi^\conj} = \PD{t}{\psi}\psi^\conj + \psi \PD{t}{\psi^\conj}
 \end{align*}
 
-leaves us with nowhere to go.  We don't have any sort of expression for $\PD{t}{\psi}$ since we have a second order wave equation.
+leaves us with nowhere to go.  For the 
+Schr\"{o}dinger equation probability density, this calcualation gave us
 
-One could, however, compute a second order ``probability current''.
+\begin{align}\label{eqn:pcons}
+\rho &= \psi\psi^\conj \\
+\BJ &= \frac{\hbar}{2mi} \left( \psi^\conj \spacegrad \psi - \psi \spacegrad \psi^\conj \right) \\
+0 &= \PD{t}{\rho} + \spacegrad \cdot \BJ 
+\end{align}
+
+However for the KG equation we don't have any sort of expression for $\PD{t}{\psi}$ since it is second order.
+
+\subsubsection{ second order derivatives of the probablilty density. }
+
+One could, however, compute a second order derivatives of the density, but does this product anything useful?
 
 \begin{align*}
 \PDSq{t}{\psi\psi^\conj} 
@@ -279,6 +290,66 @@ c^2 \left( \psi^\conj \spacegrad^2 \psi + \psi \spacegrad^2 \psi^\conj \right)
 \right)
 \\
 \end{align*}
+
+The first two Laplacian terms can be expressed as divergences with
+
+\begin{align*}
+\spacegrad \cdot (a \spacegrad b) 
+&= 
+\gpgradezero{ \spacegrad (a \spacegrad b) } \\
+&= 
+(\spacegrad a) \cdot (\spacegrad b) + a \spacegrad^2 b
+\end{align*}
+
+This gives
+
+%\spacegrad \cdot (\psi \spacegrad \psi^\conj) - (\spacegrad \psi) \cdot (\spacegrad \psi^\conj) = \psi \spacegrad^2 \psi^\conj
+%\spacegrad \cdot (\psi^\conj \spacegrad \psi) - (\spacegrad \psi^\conj) \cdot (\spacegrad \psi) = \psi^\conj \spacegrad^2 \psi
+\begin{align*}
+\PDSq{t}{\psi\psi^\conj} 
+&= 
+c^2 \spacegrad \cdot \left( \psi \spacegrad \psi^\conj +\psi^\conj \spacegrad \psi \right)
++ 2 \left( 
+\PD{t}{\psi}\PD{t}{\psi^\conj} + \left( \frac{m c^2}{\hbar} \right)^2 \psi \psi^\conj 
+-c^2 (\spacegrad \psi) \cdot (\spacegrad \psi^\conj) 
+\right)
+\\
+\end{align*}
+
+Integrating over all space (assuming the fields vanish at infinity), the divergence terms drop out, and one is left with
+\begin{align*}
+\int \left( \PDSq{t}{\psi\psi^\conj} 
++ 2 c^2 (\spacegrad \psi) \cdot (\spacegrad \psi^\conj) 
+- 2 \PD{t}{\psi}\PD{t}{\psi^\conj}  \right) 
+&= 
+2 \left( \frac{m c^2}{\hbar} \right)^2 
+\\
+\end{align*}
+
+This is kind of funny, since it almost takes us full circle back to the Lagrangian we started with.  Putting everything 
+back into the integral and grouping together 
+
+\begin{align*}
+0 &=
+\int \inv{2 c^2} \PDSq{t}{\psi\psi^\conj} 
+- \int 
+\left(
+\PD{ct}{\psi}\PD{ct}{\psi^\conj}  
+- (\spacegrad \psi) \cdot (\spacegrad \psi^\conj) 
++ \frac{m^2 c^2}{\hbar^2} \psi \psi^\conj
+\right)
+\\
+\end{align*}
+
+So we have
+
+\begin{align*}
+\int d^3 x \LL &= \int d^3 x \inv{2} \PDSq{ct}{\psi\psi^\conj} 
+\end{align*}
+
+On the LHS it almost looks like the original action, but it is integrated over space instead of spacetime.  This integral 
+whatever it is, ends up expressable in terms of just the time derivatives, so there's a somewhat natural seeming space and time
+pairing here.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
