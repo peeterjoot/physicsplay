@@ -3,6 +3,8 @@
 \input{../peeters_macros.tex}
 \input{../peeters_macros2.tex}
 
+\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+
 %\usepackage{listings}
 %\usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
 \usepackage[bookmarks=true]{hyperref}
@@ -17,7 +19,7 @@
 
 \title{ Some Klien-Gordon equation notes. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ March 27, 2009.  Last Revision: $Date: 2009/03/27 23:31:02 $ }
+\date{ March 27, 2009.  Last Revision: $Date: 2009/03/28 02:00:22 $ }
 
 \begin{document}
 
@@ -92,7 +94,7 @@ Since we want $\delta S = 0$ for all $\epsilon$, real or imaginary, the inner te
 This determines the constant factor $\alpha$ (and its sign), so we have the Lagrangian density and corresponding field equation 
 with all the units in place.
 
-\begin{align}
+\begin{align}\label{eqn:withConstant}
 \partial_\mu \partial^\mu \psi &= \frac{m^2 c^2}{\hbar^2} \psi \\
 \LL &= \partial^\mu \psi \partial_\mu \psi^\conj + \frac{m^2 c^2}{\hbar^2}\psi \psi^\conj
 \end{align}
@@ -118,7 +120,165 @@ This also gives us, with less fun, the end result from the density
 
 Pauli starts his book \cite{pauli2000wm} with this relativistic equation, pointing out that the wave packet
 
+\begin{align}
+\psi(\Bx,t) = \inv{(\sqrt{2\pi})^3}\int A(\Bk) e^{ i (\Bk \cdot \Bx - \omega t)} d^3 k
+\end{align}
 
+Satisifies this relativistic scalar wave equation \ref{eqn:withConstant}.
+
+With a time positive metric
+we have
+
+\begin{align*}
+\grad^2 
+&= \partial_\mu\partial^\mu \\
+&= \inv{c^2} \PDSq{t}{} - \sum_{a=1}^3 \PDSq{x^a}{} \\
+&= \inv{c^2} \PDSq{t}{} - \spacegrad^2
+\end{align*}
+
+So to verify that this is a solution we can compute the derivatives for the wave equation.  Those are
+
+\begin{align*}
+\inv{c^2} \PDSq{t} \psi(\Bx,t) = \inv{(\sqrt{2\pi})^3}\int A(\Bk) \left( \frac{(-i\omega)^2}{c^2} \right) e^{ i (\Bk \cdot \Bx - \omega t)} d^3 k
+\end{align*}
+\begin{align*}
+\spacegrad^2 \psi(\Bx,t) = \inv{(\sqrt{2\pi})^3}\int A(\Bk) \left(\sum_{a=1}^3 (i k_a)^2 \right)e^{ i (\Bk \cdot \Bx - \omega t)} d^3 k
+\end{align*}
+
+So we have
+
+\begin{align*}
+\left( \grad^2 - \frac{m^2 c^2}{\hbar^2} \right) \psi 
+&=
+\inv{(\sqrt{2\pi})^3}\int A(\Bk) \left( -\frac{\omega^2}{c^2} + \Bk^2 - \frac{m^2 c^2}{\hbar^2}
+\right)e^{ i (\Bk \cdot \Bx - \omega t)} d^3 k
+\end{align*}
+
+For this to be zero for arbitrary wave number domain wave functions a constraint is required
+
+\begin{align*}
+-\frac{\omega^2}{c^2} + \Bk^2 - \frac{m^2 c^2}{\hbar^2} = 0
+\end{align*}
+
+Or with $\omega = 2 \pi \nu$, and $\hbar = h/2\pi$, this is
+
+\begin{align*}
+\frac{h^2 \nu^2}{c^2} - \hbar^2 \Bk^2 = {m^2 c^2}
+\end{align*}
+
+This means that the constraint on the wave number vector $\Bk$ is that it is incorporated into a four vector momentum vector as
+
+\begin{align*}
+p &= (h \nu/c, \hbar \Bk) \equiv (E/c, \Bp)\\
+p^2 &= (m c)^2
+\end{align*}
+
+Put another way, the integral for the wave packet must not be one over all wave number space, but the wave number space defined by the 
+spherical surface in wave number space
+
+\begin{align*}
+\Bk^2 = \inv{\hbar^2 c^2 }\left( (h \nu)^2 - (m c^2)^2 \right)
+\end{align*}
+
+\subsubsection{ Wave packet as Fourier transform. }
+
+Observe that at $t=0$ one has
+
+\begin{align*}
+\psi(\Bx,0) = \inv{(\sqrt{2\pi})^3}\int A(\Bk) e^{ i (\Bk \cdot \Bx)} d^3 k
+\end{align*}
+
+So $A(\Bk)$ is exactly the Fourier transform of $\psi(\Bx,0)$ 
+and one can
+use the Fourier transform to specify the time evolution of the wave packet in terms of initial conditions.
+
+\begin{align}
+\psi(\Bx,t) = \inv{(\sqrt{2\pi})^3}\int \hat{\psi}_0(\Bk) e^{ i (\Bk \cdot \Bx - \omega t)} d^3 k
+\end{align}
+
+That is actually a fairly odd seeming constraint.  We have a volume integral over a surface of zero thickness unless $\nu$ varies.  Intuitively
+I'd expect that to be zero, so this wave packet form doesn't seem particularily well defined as stated.  Perhaps the value, as
+in Pauli's text, is really just to motivate the relativistic wave equation?
+
+\subsubsection{ Normalization. }
+
+Although Pauli incorporated the $2\pi$ factors into $A(\Bk)$, leaving these explicit allows for the normalization of the wave number and spatial domains
+to be identical.
+
+\begin{align*}
+\int 
+\psi(\Bx,t) \psi^\conj(\Bx,t) d^3 \Bx
+&= 
+\inv{({2\pi})^3}
+\iiint d^3 x
+\hat{\psi}_0(\Bk) e^{ i (\Bk \cdot \Bx - \omega t)} d^3 k
+\widehat{\psi^\conj}_0(\Bk') e^{ -i (\Bk' \cdot \Bx - \omega t)} d^3 k' 
+\\
+&= 
+\iint \hat{\psi}_0(\Bk) \widehat{\psi^\conj}_0(\Bk') 
+d^3 k d^3 k'
+\inv{({2\pi})^3} \int e^{ i ((\Bk- \Bk') \cdot \Bx)} d^3 x
+\\
+&= 
+\iint \hat{\psi}_0(\Bk) \widehat{\psi^\conj}_0(\Bk') \delta^3(\Bk-\Bk') d^3 k d^3 k'
+\\
+&= 
+\int \hat{\psi}_0(\Bk) \widehat{\psi^\conj}_0(\Bk) d^3 k 
+\\
+\end{align*}
+
+So, if one has a unit normalized wave packet in the spatial domain, the wave number domain has the same normalization
+
+\begin{align}
+\int \Abs{\psi(\Bx,t)} d^3 \Bx = \int \Abs{\hat{\psi}_0(\Bk)} d^3 k 
+\end{align}
+
+\subsection{ Probabilty current? }
+
+Given the wave equation and an interpretation of $1 = \int \Abs{\psi}^2$ as a probability, can one define a probability current meaningfully.  This
+seems somewhat problematic logically, since computing the derivative
+
+\begin{align*}
+\PD{t}{\psi\psi^\conj} = \PD{t}{\psi}\psi^\conj + \psi \PD{t}{\psi^\conj}
+\end{align*}
+
+leaves us with nowhere to go.  We don't have any sort of expression for $\PD{t}{\psi}$ since we have a second order wave equation.
+
+One could, however, compute a second order ``probability current''.
+
+\begin{align*}
+\PDSq{t}{\psi\psi^\conj} 
+&= \PD{t}{}\left( \PD{t}{\psi}\psi^\conj + \psi \PD{t}{\psi^\conj} \right) \\
+&= 
+\PDSq{t}{\psi}\psi^\conj 
++ \psi \PDSq{t}{\psi^\conj} 
++ 2 \PD{t}{\psi}\PD{t}{\psi^\conj} 
+\\
+\end{align*}
+
+But we have 
+
+\begin{align*}
+\PDSq{t}{\psi} = c^2 \spacegrad^2 \psi + \left(\frac{m c^2}{\hbar} \right)^2 \psi
+\end{align*}
+
+%\PDSq{t}{\psi} = \left( c^2 \spacegrad^2 \psi + \left(\frac{m c^2}{\hbar} \right)^2 \psi \right)
+%\PDSq{t}{\psi^\conj} = \left( c^2 \spacegrad^2 \psi^\conj + \left(\frac{m c^2}{\hbar} \right)^2 \psi^\conj \right)
+This gives
+\begin{align*}
+\PDSq{t}{\psi\psi^\conj} 
+&= 
+\left( c^2 \spacegrad^2 \psi + \left(\frac{m c^2}{\hbar} \right)^2 \psi \right) \psi^\conj 
++ \psi \left( c^2 \spacegrad^2 \psi^\conj + \left(\frac{m c^2}{\hbar} \right)^2 \psi^\conj \right)
++ 2 \PD{t}{\psi}\PD{t}{\psi^\conj} 
+\\
+&= 
+c^2 \left( \psi^\conj \spacegrad^2 \psi + \psi \spacegrad^2 \psi^\conj \right)
++ 2 \left( 
+\PD{t}{\psi}\PD{t}{\psi^\conj} + \left( \frac{m c^2}{\hbar} \right)^2 \psi \psi^\conj 
+\right)
+\\
+\end{align*}
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
