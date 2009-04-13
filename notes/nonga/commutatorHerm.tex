@@ -6,6 +6,14 @@
 \newcommand{\symmetric}[2]{{\left\{{#1},{#2}\right\}}}
 \newcommand{\antisymmetric}[2]{\left[{#1},{#2}\right]}
 
+%\newcommand{\ket}[1]{\lvert {#1} \rangle}
+%\newcommand{\bra}[1]{\langle {#1} \rvert}
+%\newcommand{\braket}[2]{\langle{#1} \vert {#2}\rangle}
+%\newcommand{\ketbra}[2]{\ket{#1}\bra{#2}}
+%\newcommand{\BraOpKet}[3]{\bra{#1} \hat{#2} \ket{#3} }
+%\newcommand{\Innerprod}[2]{\left\langle{#1}, {#2}\right\rangle}
+\newcommand{\Expectation}[1]{\left\langle {#1} \right\rangle}
+
 %\usepackage{listings}
 %\usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
 \usepackage[bookmarks=true]{hyperref}
@@ -20,7 +28,7 @@
 
 \title{ Commutator and Anti-Commutator Hermitian-ness. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ April 13, 2009.  Last Revision: $Date: 2009/04/13 16:23:54 $ }
+\date{ April 13, 2009.  Last Revision: $Date: 2009/04/13 18:27:56 $ }
 
 \begin{document}
 
@@ -37,7 +45,7 @@ that the anti-commutator
 \symmetric{F}{G} = {F G + G F}
 \end{align*}
 
-is Hermitian, is unclear to me.  Fill in the missing details.  Also prove that 
+is Hermitian, is unclear to me.  Fill in the missing details.  Also prove 12.8, that 
 
 \begin{align*}
 i \antisymmetric{F}{G} = i (F G - G F)
@@ -45,8 +53,60 @@ i \antisymmetric{F}{G} = i (F G - G F)
 
 is Hermitian.
 
-
 \section{ }
+
+\subsection{ Hermitian definition. }
+
+Pauli defines Hermitian in terms of the operator expectation value.  An operator $H$ is Hermitian if
+
+\begin{align}\label{eqn:Hermitian}
+\Expectation{H} = \int \psi^\conj (H \psi) d^3 x = \int \psi (H \psi)^\conj d^3 x
+\end{align}
+
+Or
+\begin{align}\label{eqn:HermitianInt}
+0 &= \Expectation{H} - \Expectation{H}^\conj = \int d^3 x \left( \psi^\conj (H \psi) - \psi (H \psi)^\conj \right)
+\end{align}
+
+\subsection{ Two operator form. }
+
+For completeness, let's derive the two wave function form of the Hermitian operator definition in full detail (omitted from the text).  With $\psi = \psi_1 + \psi_2$
+\ref{eqn:HermitianInt} becomes
+
+\begin{align*}
+\Expectation{H} - \Expectation{H}^\conj
+&= \int (\psi_1 + \psi_2)^\conj (H (\psi_1 + \psi_2)) d^3 x - \int (\psi_1 + \psi_2) (H (\psi_1 + \psi_2))^\conj d^3 x \\
+&= \int d^3 x \\
+&\psi_1^\conj (H \psi_1) - \psi_1 (H \psi_1)^\conj 
++\psi_1^\conj (H \psi_2) - \psi_1 (H \psi_2)^\conj \\
+&+\psi_2^\conj (H \psi_2) - \psi_2 (H \psi_2)^\conj 
++\psi_2^\conj (H \psi_1) - \psi_2 (H \psi_1)^\conj \\
+&= \int d^3 x
+\left( \psi_1^\conj (H \psi_2) - \psi_1 (H \psi_2)^\conj 
++\psi_2^\conj (H \psi_1) - \psi_2 (H \psi_1)^\conj \right) \\
+\end{align*}
+
+Grouping terms, we have 
+
+\begin{align*}
+\int d^3 x \left( \psi_1^\conj (H \psi_2) - \psi_2 (H \psi_1)^\conj \right) = \int d^3 x \left( \psi_1 (H \psi_2)^\conj - \psi_2^\conj (H \psi_1) \right)
+\end{align*}
+
+This is quite a bit different than both sides being separately zero, and the key to that further statement (as pointed out in 9.17 in \cite{bohm1989qt}) 
+is that this is also true if the two wave function are adjusted by constant phase factors
+$\psi_1 \rightarrow \psi_1 e^{ia}$, 
+$\psi_2 \rightarrow \psi_2 e^{ib}$.  Doing so we have
+
+\begin{align*}
+e^{i(a-b)} \int d^3 x \left( \psi_1^\conj (H \psi_2) - \psi_2 (H \psi_1)^\conj \right) = e^{i(b-a)} \int d^3 x \left( \psi_1 (H \psi_2)^\conj - \psi_2^\conj (H \psi_1) \right)
+\end{align*}
+
+For this to hold for any $a$, $b$ both sides of the equation must separately equal zero, and we have
+
+\begin{align}
+\int d^3 x \psi_1^\conj (H \psi_2) = \psi_2 (H \psi_1)^\conj
+\end{align}
+
 \subsection{ Lemma for repeated operators. }
 
 \subsection{ Anti-commutator. }
