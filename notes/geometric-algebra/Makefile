@@ -272,6 +272,22 @@ ordered2009 += ../geometric-algebra/electron_rotor.pdf
 ordered2009 += ../calculus/byron_fuller_calc_var.pdf
 ordered2009 += ../algebra/binomial.pdf
 
+# in progress: 
+ordered2009 += ../qm/klein_gordon.pdf
+
+# rough, but worthy of polishing.
+ordered2009 += ../lut/tangentspace.pdf
+
+# lut's
+skipit      += ../lut/tansp.pdf
+
+# draft for a PF post.
+skipit      += ../calculus/euler.pdf
+
+ordered2009 += ../relativity/pauli_four_vector_v.pdf
+ordered2009 += ../relativity/acc_four_vector.pdf
+ordered2009 += ../qm/commutator_herm.pdf
+
 # Rules:
 #-----------------------------------------------------
 unordered2009 := $(filter-out $(ordered2009) $(skipit) $(ordered2007) $(ordered2008),$(ppdfs))
