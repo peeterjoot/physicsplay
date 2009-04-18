@@ -17,7 +17,7 @@
 
 \title{ Biot Savart Derivation. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ April 1d, 2009.  Last Revision: $Date: 2009/04/18 03:24:37 $ }
+\date{ April 1d, 2009.  Last Revision: $Date: 2009/04/18 04:12:44 $ }
 
 \begin{document}
 
@@ -71,7 +71,7 @@ and for the RHS,
 
 So we have
 
-\begin{align}\label{eqn:blah}
+\begin{align}\label{eqn:spacetimeSplitSteadyState}
 \spacegrad (\BE + i c \BB) 
 &=
 \inv{\epsilon_0}\rho - \frac{\Bj}{\epsilon_0 c} 
@@ -85,19 +85,19 @@ i c (\spacegrad \wedge \BB) &= - \frac{\Bj}{\epsilon_0 c}
 
 or with $\Ba \wedge \Bb = i (\Ba \cross \Bb)$, and $\epsilon_0 \mu_0 c^2 = 1$, this is the familar Ampere-Maxwell equation when $\PDi{t}{\BE} = 0$.
 
-\begin{align}\label{eqn:foo}
+\begin{align}\label{eqn:AmpereMaxwellSteady}
 \spacegrad \cross \BB &= \mu_0 \Bj
 \end{align}
 
 \subsection{ Three vector potential solution. }
 
-With $\spacegrad \BB = 0$ (the trivector part of \ref{eqn:blah}), we can write
+With $\spacegrad \cdot \BB = 0$ (the trivector part of \ref{eqn:spacetimeSplitSteadyState}), we can write
 
 \begin{align*}
 \BB = \spacegrad \cross \BA 
 \end{align*}
 
-For some vector potential $\BA$.  In particular, we have in \ref{eqn:foo}, 
+For some vector potential $\BA$.  In particular, we have in \ref{eqn:AmpereMaxwellSteady}, 
 
 \begin{align*}
 \spacegrad \cross \BB
@@ -115,10 +115,64 @@ For some vector potential $\BA$.  In particular, we have in \ref{eqn:foo},
 \spacegrad (\spacegrad \wedge \BA) 
 - (\spacegrad \wedge \BA) \spacegrad 
 ) \\
-&= \spacegrad (\spacegrad \cdot \BA) - \spacegrad^2 \BA 
+&=
+- \spacegrad \cdot (\spacegrad \wedge \BA) 
+\\
 \end{align*}
 
+Therefore the three vector potential equation for the magnetic field is
 
+\begin{align}\label{eqn:vecAwithJ}
+\spacegrad (\spacegrad \cdot \BA) - \spacegrad^2 \BA &= \mu_0 \Bj
+\end{align}
+
+\subsection{ Gauge freedom. }
+
+We have the freedom to set $\spacegrad \cdot \BA = 0$, in \ref{eqn:vecAwithJ}.  To see this suppose that the vector potential is 
+expressed in terms of some other potential $\BA'$ that does have zero divergence ($\spacegrad \cdot \BA' = 0$) plus a (spatial) gradient
+
+\begin{align*}
+\BA = \BA' + \spacegrad \phi
+\end{align*}
+
+Provided such a construction is possible, then we have
+
+\begin{align*}
+\spacegrad (\spacegrad \cdot \BA) - \spacegrad^2 \BA 
+&= 
+\spacegrad (\spacegrad \cdot (\BA' + \spacegrad \phi)) - \spacegrad^2 (\BA' + \spacegrad \phi) \\
+&= 
+- \spacegrad^2 \BA' 
+\end{align*}
+
+and can instead solve the simpler equivalent problem
+
+\begin{align}\label{eqn:blah}
+\spacegrad^2 \BA'  &= -\mu_0 \Bj
+\end{align}
+
+Addition of the gradient $\spacegrad \phi$ to $A'$ will not change the magnetic field $\BB$ since $\spacegrad \cross (\spacegrad \phi) = 0$.
+
+FIXME: what wasn't shown here is that it is possible to express any vector potential $\BA$ in terms of a divergence free potential and a 
+gradient.  How would one show this?
+
+\subsection{ Solution to the vector Poisson equation. }
+
+The solution (dropping primes) to the Poisson equation \ref{eqn:blah} is
+
+\begin{align*}
+\BA = \frac{\mu_0}{4 \pi} \int \frac{\Bj}{r} dV
+\end{align*}
+
+(See \cite{schwartz1987pe} for example.)
+
+The magnetic field follows by taking the spatial curl
+
+\begin{align*}
+\BB 
+&= \spacegrad \cross \BA \\
+&= \frac{\mu_0}{4 \pi} \spacegrad \cross \int \frac{\Bj'}{\Abs{\Br-\Br'}} dV'
+\end{align*}
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
