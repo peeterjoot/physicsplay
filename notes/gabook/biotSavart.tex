@@ -1,0 +1,126 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+
+%\usepackage{listings}
+%\usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+\title{ Biot Savart Derivation. }
+\author{Peeter Joot \quad peeter.joot@gmail.com }
+\date{ April 1d, 2009.  Last Revision: $Date: 2009/04/18 03:24:37 $ }
+
+\begin{document}
+
+\maketitle{}
+\tableofcontents
+\section{ Motivation. }
+
+Looked at my Biot-Savart derivation in \cite{PJelectricFieldEnergy}.  There I was playing with doing this without first dropping down to the
+familiar vector relations, and end up with an expression of the Biot Savart law in terms of the complete Faraday bivector.  This is
+an excessive approach, albiet interesting (to me).  Let's try this again in terms of just the magnetic field.
+
+\section{ Do it. }
+
+\subsection{ Setup. Ampere-Maxwell equation for steady state. }
+
+The starting point can still be Maxwell's equation
+
+\begin{align}
+\grad F = J/\epsilon_0 c
+\end{align}
+
+and the approach taken will be the more usual consideration of a loop of steady-state (no-time variation) current.
+
+In the steady state we have
+
+\begin{align*}
+\grad = \gamma^0 \inv{c} \partial_t + \gamma^k \partial_k = \gamma^k \partial_k
+\end{align*}
+
+and in particular 
+
+\begin{align*}
+\gamma_0 \grad F 
+&= \gamma_0 \gamma^k \partial_k F \\
+&= \gamma_k \gamma_0 \partial_k F \\
+&= \sigma_k \partial_k F \\
+&= \spacegrad (\BE + i c \BB) \\
+\end{align*}
+
+and for the RHS,
+
+\begin{align*}
+\gamma_0 J/\epsilon_0 c 
+&=
+\gamma_0 (c \rho \gamma_0 + J^k \gamma_k)/\epsilon_0 c  \\
+&=
+(c \rho - J^k \sigma_k)/\epsilon_0 c  \\
+&=
+(c \rho - \Bj)/\epsilon_0 c  \\
+\end{align*}
+
+So we have
+
+\begin{align}\label{eqn:blah}
+\spacegrad (\BE + i c \BB) 
+&=
+\inv{\epsilon_0}\rho - \frac{\Bj}{\epsilon_0 c} 
+\end{align}
+
+Selection of the (spatial) vector grades gives
+
+\begin{align*}
+i c (\spacegrad \wedge \BB) &= - \frac{\Bj}{\epsilon_0 c} 
+\end{align*}
+
+or with $\Ba \wedge \Bb = i (\Ba \cross \Bb)$, and $\epsilon_0 \mu_0 c^2 = 1$, this is the familar Ampere-Maxwell equation when $\PDi{t}{\BE} = 0$.
+
+\begin{align}\label{eqn:foo}
+\spacegrad \cross \BB &= \mu_0 \Bj
+\end{align}
+
+\subsection{ Three vector potential solution. }
+
+With $\spacegrad \BB = 0$ (the trivector part of \ref{eqn:blah}), we can write
+
+\begin{align*}
+\BB = \spacegrad \cross \BA 
+\end{align*}
+
+For some vector potential $\BA$.  In particular, we have in \ref{eqn:foo}, 
+
+\begin{align*}
+\spacegrad \cross \BB
+&=
+\spacegrad \cross (\spacegrad \cross \BA) \\
+&=
+-i (\spacegrad \wedge (\spacegrad \cross \BA) ) \\
+&=
+-\frac{i}{2} (
+\spacegrad (\spacegrad \cross \BA) 
+- (\spacegrad \cross \BA) \spacegrad 
+) \\
+&=
+\frac{i^2}{2} (
+\spacegrad (\spacegrad \wedge \BA) 
+- (\spacegrad \wedge \BA) \spacegrad 
+) \\
+&= \spacegrad (\spacegrad \cdot \BA) - \spacegrad^2 \BA 
+\end{align*}
+
+
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
+
+\end{document}
