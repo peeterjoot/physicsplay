@@ -17,7 +17,7 @@
 
 \title{ Quantum Harmonic Oscillator. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ April 19, 2009.  Last Revision: $Date: 2009/04/19 23:49:21 $ }
+\date{ April 19, 2009.  Last Revision: $Date: 2009/04/19 23:56:32 $ }
 
 \begin{document}
 
@@ -33,7 +33,7 @@ as a comparision.
 We want to solve the Schr\"{o}dinger equation for a quadratic potential
 
 \begin{align}\label{eqn:toSolve}
--\frac{\hbar^2}{2m} \psi + \kappa x^2 \psi = i \hbar \PD{t}{\psi}
+-\frac{\hbar^2}{2m} \psi + \inv{2} m \omega^2 x^2 \psi = i \hbar \PD{t}{\psi}
 \end{align}
 
 \section{ Setup. }
@@ -49,7 +49,7 @@ Equation \ref{eqn:toSolve} is separable, and to do so we can write
 and procede to form the separated equation
 
 \begin{align*}
--\frac{\hbar^2}{2m} \frac{\phi''}{\phi} + \kappa x^2 = i \hbar \frac{T'}{T} = \text{constant}
+-\frac{\hbar^2}{2m} \frac{\phi''}{\phi} + \inv{2} m \omega^2 x^2 = i \hbar \frac{T'}{T} = \text{constant}
 \end{align*}
 
 Writing $E$ for the constant, the and solving for the time function we have
@@ -69,7 +69,7 @@ T(t) = A e^{ -i E t/\hbar }
 What remains is now to solve the spatial wave equation
 
 \begin{align}\label{eqn:spatial}
-\phi'' + \left( \frac{2 m \kappa}{\hbar^2} x^2 - \frac{2m E}{\hbar^2}\right) \phi = 0
+\phi'' + \left( \frac{m^2 \omega^2}{\hbar^2} x^2 - \frac{2m E}{\hbar^2}\right) \phi = 0
 \end{align}
 
 This doesn't really look too much like the harmonic oscillator problem of classical physics.  Let's remind ourself
@@ -124,7 +124,7 @@ The constant term in the potential can be dropped, since it won't contribute to 
 is therefore
 
 \begin{align*}
-\LL 
+H 
 &= \xdot \PD{\xdot}{\LL} - \LL \\
 &= m \xdot^2  - \left( \inv{2}m \xdot^2 - \inv{2} k x^2 \right) \\
 &= \inv{2} m \xdot^2  + \inv{2} k x^2 \\
@@ -136,14 +136,15 @@ Or
 H &= \frac{p^2}{2 m } + \inv{2} m \omega^2 x^2 \\
 \end{align*}
 
-Ah.  In this form we see the structure of the QM Harmonic oscillator equation.  With the position space representation of the momentum operator $p \sim -i \hbar \PDi{x}{}$ we have equation
-\ref{eqn:spatial}.
+Ah.  In this form we see the structure of the QM Harmonic oscillator equation.  With the position space representation of the momentum operator $p \sim -i \hbar \PDi{x}{}$ we have
+something now similar to \ref{eqn:toSolve}.
 
+\section{ Series solution. }
 
 \subsection{ Assuming Gaussian solutions. }
 
-Having seen the operator solution of the QM harmonic oscillator problem, let's use that as a starting point and assume that
-we the solution can be expressed as a scaled Gaussian as in
+Having seen the operator solution of the QM harmonic oscillator problem, we will cheat, and use that as a starting point.  Assume that
+the solution can be expressed as a scaled Gaussian as in
 
 \begin{align}
 \phi(x) &= f(x) e^{ - \alpha x^2/2 }
@@ -162,13 +163,13 @@ we the solution can be expressed as a scaled Gaussian as in
 Substitution of the scaled Gaussian test solution, and its derivatives, gives us
 
 \begin{align*}
-\left( f'' - \alpha f - 2 \alpha x f' + \alpha^2 x^2 f + \left( \frac{2 m \kappa}{\hbar^2} x^2 - \frac{2 m E}{\hbar^2} \right) f \right) e^{ -\alpha x^2 /2} = 0
+\left( f'' - \alpha f - 2 \alpha x f' + \alpha^2 x^2 f + \left( \frac{m^2 \omega^2}{\hbar^2} x^2 - \frac{2 m E}{\hbar^2} \right) f \right) e^{ -\alpha x^2 /2} = 0
 \end{align*}
 
 Since the exponential is never zero, this requires a zero for the differential equation
 
 \begin{align}
-f'' - 2 \alpha x f' + \left( \left(\alpha^2 + \frac{2 m \kappa}{\hbar^2} \right) x^2 - \left(\frac{2 m E}{\hbar^2} + \alpha \right) \right) f = 0
+f'' - 2 \alpha x f' + \left( \left(\alpha^2 + \frac{m^2 \omega^2}{\hbar^2} \right) x^2 - \left(\frac{2 m E}{\hbar^2} + \alpha \right) \right) f = 0
 \end{align}
 
 Compared to \ref{eqn:spatial}, this doesn't really appear to be much of an improvement, but let's work with it, looking for a term by term power series solution.
@@ -181,7 +182,7 @@ f_n(x) &= \sum_{r=0}^n a_r x^r
 
 derivatives are
 \begin{align*}
-f_n' &= \sum_{r=0}^n r a_r x^{r-1}
+f_n' &= \sum_{r=0}^n r a_r x^{r-1} \\
 f_n'' &= \sum_{r=0}^n r(r-1) a_r x^{r-2}
 \end{align*}
 
@@ -189,9 +190,11 @@ We have
 \begin{align*}
 0 &= \sum_{r=0}^{n-2} (r+2)(r+1) a_{r+2} x^{r}
  - 2 \alpha \sum_{r=1}^n r a_r x^{r}
-+ \left(\alpha^2 + \frac{2 m \kappa}{\hbar^2} \right) \sum_{r=0}^n a_r x^{r+2}
++ \left(\alpha^2 + \frac{m^2 \omega^2}{\hbar^2} \right) \sum_{r=0}^n a_r x^{r+2}
 - \left(\frac{2 m E}{\hbar^2} + \alpha \right) \sum_{r=0}^n a_r x^r
 \end{align*}
+
+This should be enough to figure out recurrence relations for the various constants in the polynomials.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
