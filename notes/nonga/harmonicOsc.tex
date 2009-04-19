@@ -4,7 +4,7 @@
 \input{../peeters_macros2.tex}
 
 %\usepackage{listings}
-%\usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
+\usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
 \usepackage[bookmarks=true]{hyperref}
 
 \usepackage{color,cite,graphicx}
@@ -17,7 +17,7 @@
 
 \title{ Quantum Harmonic Oscillator. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ April 19, 2009.  Last Revision: $Date: 2009/04/19 15:35:23 $ }
+\date{ April 19, 2009.  Last Revision: $Date: 2009/04/19 23:49:21 $ }
 
 \begin{document}
 
@@ -104,6 +104,42 @@ So the test function is a solution provided
 \omega^2 = \frac{k}{m}
 \end{align*}
 
+That doesn't really help understanding why \ref{eqn:spatial} is labelled the Harmonic oscillator.  Let's instead put the equation into an energy form.  The work done against the spring
+(potential energy to be returned when the mass is released) is
+
+\begin{align*}
+W 
+&= - \int F \cdot dx \\
+&= - \int -kx dx \\
+&= \inv{2} k (x^2 - x_0^2)
+\end{align*}
+
+So, our Lagrangian is
+
+\begin{align*}
+\LL = \inv{2}m \xdot^2 - \inv{2} k (x^2 - x_0^2)
+\end{align*}
+
+The constant term in the potential can be dropped, since it won't contribute to the equations of motion.  Our conjugate momentum $\PDi{\xdot}{\LL}$ is just $m \xdot$, and the Hamiltonian
+is therefore
+
+\begin{align*}
+\LL 
+&= \xdot \PD{\xdot}{\LL} - \LL \\
+&= m \xdot^2  - \left( \inv{2}m \xdot^2 - \inv{2} k x^2 \right) \\
+&= \inv{2} m \xdot^2  + \inv{2} k x^2 \\
+\end{align*}
+
+Or
+
+\begin{align*}
+H &= \frac{p^2}{2 m } + \inv{2} m \omega^2 x^2 \\
+\end{align*}
+
+Ah.  In this form we see the structure of the QM Harmonic oscillator equation.  With the position space representation of the momentum operator $p \sim -i \hbar \PDi{x}{}$ we have equation
+\ref{eqn:spatial}.
+
+
 \subsection{ Assuming Gaussian solutions. }
 
 Having seen the operator solution of the QM harmonic oscillator problem, let's use that as a starting point and assume that
@@ -123,27 +159,38 @@ we the solution can be expressed as a scaled Gaussian as in
 \left( f''(x) - \alpha f(x) - 2 \alpha x f'(x) + \alpha^2 x^2 f(x) \right) e^{ - \alpha x^2/2 }
 \end{align*}
 
-%Let's also write
-%\begin{align*}
-%\beta^2 &= \frac{2 m \kappa}{\hbar^2} \\
-%\sigma &= \frac{2m E}{\hbar^2}
-%\end{align*}
-%
-%So that \ref{eqn:spatial} becomes
-%
-%\begin{align*}
-%\phi'' + \left( \beta^2 x^2 - \sigma \right) \phi = 0
-%\end{align*}
-
 Substitution of the scaled Gaussian test solution, and its derivatives, gives us
 
 \begin{align*}
-\left( f'' - \alpha f - 2 \alpha x f' + \alpha^2 x^2 f + \left( \frac{2 m \kappa}{\hbar^2} x^2 - \frac{2 m E}{\hbar^2} \right) f \right) e^{ -\alpha x^2 /x} = 0
+\left( f'' - \alpha f - 2 \alpha x f' + \alpha^2 x^2 f + \left( \frac{2 m \kappa}{\hbar^2} x^2 - \frac{2 m E}{\hbar^2} \right) f \right) e^{ -\alpha x^2 /2} = 0
 \end{align*}
 
-Or
+Since the exponential is never zero, this requires a zero for the differential equation
+
+\begin{align}
+f'' - 2 \alpha x f' + \left( \left(\alpha^2 + \frac{2 m \kappa}{\hbar^2} \right) x^2 - \left(\frac{2 m E}{\hbar^2} + \alpha \right) \right) f = 0
+\end{align}
+
+Compared to \ref{eqn:spatial}, this doesn't really appear to be much of an improvement, but let's work with it, looking for a term by term power series solution.
+
+Assuming various power series solutions of the form
+
 \begin{align*}
-f'' - 2 \alpha x f' + \left( (\alpha^2 + \beta^2) x^2 - \left(\frac{2 m E}{\hbar^2} + \alpha \right) \right) f = 0
+f_n(x) &= \sum_{r=0}^n a_r x^r
+\end{align*}
+
+derivatives are
+\begin{align*}
+f_n' &= \sum_{r=0}^n r a_r x^{r-1}
+f_n'' &= \sum_{r=0}^n r(r-1) a_r x^{r-2}
+\end{align*}
+
+We have 
+\begin{align*}
+0 &= \sum_{r=0}^{n-2} (r+2)(r+1) a_{r+2} x^{r}
+ - 2 \alpha \sum_{r=1}^n r a_r x^{r}
++ \left(\alpha^2 + \frac{2 m \kappa}{\hbar^2} \right) \sum_{r=0}^n a_r x^{r+2}
+- \left(\frac{2 m E}{\hbar^2} + \alpha \right) \sum_{r=0}^n a_r x^r
 \end{align*}
 
 \bibliographystyle{plainnat}
