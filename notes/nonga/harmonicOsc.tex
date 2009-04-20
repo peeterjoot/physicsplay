@@ -17,7 +17,7 @@
 
 \title{ Quantum Harmonic Oscillator. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ April 19, 2009.  Last Revision: $Date: 2009/04/20 00:02:02 $ }
+\date{ April 19, 2009.  Last Revision: $Date: 2009/04/20 04:08:42 $ }
 
 \begin{document}
 
@@ -209,6 +209,164 @@ We have
 \end{align*}
 
 This should be enough to figure out recurrence relations for the various constants in the polynomials.
+
+However, before trying to acquire the recurrence relations in their most general form, an attempt at a few simple cases, looking for the lowest order
+polynomial solutions explicitly, gets into trouble.
+
+Specifically, if I try $n=0$, $n=1$, $n=2$ equating each of the polynomial coefficients to zero keeps killing all the coefficients in sequence.  What's 
+gone wrong?
+
+\subsection{ Try zeroth order polynomial scaled Gaussian explicitly. }
+
+Somewhere above things went wrong.  How about a plain old Gaussian?  Let's substitute 
+
+\begin{align*}
+\psi = A e^{\alpha x^2/2}
+\end{align*}
+
+into 
+
+\begin{align*}
+-\frac{\hbar^2}{2m} \psi'' + \left( \inv{2}m \omega^2 x^2 - E \right) \psi = 0
+\end{align*}
+
+Dropping the constant $A$ temporarily the derivatives are
+\begin{align*}
+\psi' &= \alpha x e^{\alpha x^2/2} \\
+\psi'' &= ( \alpha^2 x^2 + \alpha ) e^{\alpha x^2/2} \\
+\end{align*}
+
+This gives
+\begin{align*}
+\left( -( \alpha^2 x^2 + \alpha )\frac{\hbar^2}{2 m} + \left( \inv{2}m \omega^2 x^2 - E \right) \right) e^{\alpha x^2/2} = 0
+\end{align*}
+
+Equating $x^2$ and $x^0$ terms we have
+
+\begin{align*}
+\frac{\alpha^2 \hbar^2}{2 m} &= \inv{2}m \omega^2  \\
+\frac{\alpha \hbar^2}{2 m} &= -E 
+\end{align*}
+
+Or
+\begin{align*}
+\alpha &= \pm \frac{ m \omega }{ \hbar }  \\
+{\alpha } &= - \frac{2 m E }{\hbar^2}
+\end{align*}
+
+Since $\omega = \sqrt{k/m}$ is a given, we want $E$ in terms of $\omega$.  Picking $\alpha$ negative for positive energy, this is
+
+\begin{align*}
+E = \frac{ \omega \hbar }{ 2 } 
+\end{align*}
+
+The solution to the $T'/T$ equation is thus
+
+\begin{align*}
+T \propto e^{-i \omega t/2}
+\end{align*}
+
+So, except for the undetermined constant normalization factor, we have one full solution of the wave equation, 
+
+\begin{align*}
+\psi(x,t) = A \exp\left( - \frac{m \omega x^2 }{2 \hbar} - i \frac{\omega t}{2} \right)
+\end{align*}
+
+The normalization
+
+\begin{align*}
+1 
+&= \int \psi \psi^\conj \\
+&= A^2 \int \exp\left( - \frac{m \omega x^2 }{\hbar} \right) \\
+&= A^2 \sqrt{ \frac{\hbar \pi}{ m \omega } }
+\end{align*}
+
+For a normalizated solution
+\begin{align}
+\psi(x,t) = \left( 
+\frac{ m \omega }{\hbar \pi}
+\right)^{1/4} \exp\left( - \frac{m \omega x^2 }{2 \hbar} - i \frac{\omega t}{2} \right)
+\end{align}
+
+\subsection{ Try first order polynomial scaled Gaussian. }
+
+Next, let's try 
+
+\begin{align*}
+\psi = (x + A) e^{-\alpha x^2/2}
+\end{align*}
+
+No coefficient for the first order nomial has been used since we will need a scale factor in the end for normalization anyways.  Taking derivatives
+
+\begin{align*}
+\psi' 
+&= (1 + (x + A)(-\alpha x)) e^{-\alpha x^2/2} \\
+&= (1 - \alpha A x - \alpha x^2 ) e^{-\alpha x^2/2} \\
+\end{align*}
+
+\begin{align*}
+\psi'' 
+&= 
+\left( - 3 \alpha x - \alpha A + \alpha^2 A x^2 + \alpha^2 x^3 \right) e^{-\alpha x^2/2} \\
+\end{align*}
+
+So we have
+
+\begin{align*}
+-\frac{\hbar^2}{2m}\left( - 3 \alpha x - \alpha A + \alpha^2 A x^2 + \alpha^2 x^3 \right) 
++ \left( \inv{2}m \omega^2 x^2 - E \right) (x + A) = 0
+\end{align*}
+
+Equating either cubic or squared terms provides $\alpha$
+
+\begin{align*}
+\alpha = \pm \frac{m \omega}{\hbar}
+\end{align*}
+
+This is what we had for the plain old gaussian as well.
+
+Equating either the first and scalar terms gives us the energy 
+
+\begin{align*}
+E = \frac{3 \alpha \hbar^2}{2m} = \frac{3 \omega \hbar}{2}
+\end{align*}
+
+which differs from the zeroth order case by a factor of three.
+
+It's curious that the coefficient $A$ cannot be determined.  I didn't expect it to be a free parameter.  Is the normalization enough to
+fix this and any other leading factor?
+
+With
+\begin{align*}
+\psi = (B x + A) \exp( - m \omega x^2/2 \hbar - 3 i \omega t / 2 )
+\end{align*}
+
+\begin{align*}
+1 
+&= \int \psi\psi^\conj \\
+&= \int (B^2 x^2 + 2 A B x + A^2 ) e^{- m \omega x^2/ \hbar } \\
+&= \int (B^2 x^2 + A^2 ) e^{- m \omega x^2/ \hbar } \\
+&= A^2 \sqrt{\frac{\pi \hbar}{m \omega}} + B^2 \inv{2 \pi} \left( \frac{\pi \hbar}{ m \omega} \right)^{3/2} \\
+&= \sqrt{\frac{\pi \hbar}{m \omega}} \left( A^2 + B^2 \frac{ \hbar}{ 2 m \omega} \right) \\
+\end{align*}
+
+In terms of an arbitrary constant $B$, this gives
+
+\begin{align*}
+\end{align*}
+
+It is perhaps reasonable to pick $B=1$.  Regardless, the general solution for this first order polynomial scaled Gaussian is
+
+\begin{align*}
+\psi(x,t) = 
+\left(B x \pm \sqrt{\sqrt{\frac{m \omega}{\pi \hbar}} - B^2 \frac{ \hbar}{ 2 m \omega} }\right) \exp\left( - \frac{m \omega x^2}{2 \hbar} - \frac{3 i \omega t }{ 2} \right)
+\end{align*}
+
+I expected something a bit more simple, without this extra degree of freedom.  That probably has to come from the orthonormality conditions on the
+Hermite polynomials.
+
+Now, there isn't anything here that is particularily special in these two cases, so I'd expect the error has to be a plain old algebra problem 
+hiding in there somewhere.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
