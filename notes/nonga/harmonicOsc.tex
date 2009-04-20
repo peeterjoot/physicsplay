@@ -3,6 +3,8 @@
 \input{../peeters_macros.tex}
 \input{../peeters_macros2.tex}
 
+\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+
 %\usepackage{listings}
 \usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
 \usepackage[bookmarks=true]{hyperref}
@@ -17,7 +19,7 @@
 
 \title{ Quantum Harmonic Oscillator. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ April 19, 2009.  Last Revision: $Date: 2009/04/20 04:09:27 $ }
+\date{ April 19, 2009.  Last Revision: $Date: 2009/04/20 13:24:44 $ }
 
 \begin{document}
 
@@ -365,8 +367,100 @@ It is perhaps reasonable to pick $B=1$.  Regardless, the general solution for th
 I expected something a bit more simple, without this extra degree of freedom.  That probably has to come from the orthonormality conditions on the
 Hermite polynomials.
 
-Now, there isn't anything here that is particularly special in these two cases, so I'd expect the error has to be a plain old algebra problem 
+There's also the matter of the error above when trying to tackle the general case.  Now, there isn't anything here that is particularly special in these two
+cases, so I'd expect the error has to be a plain old algebra problem 
 hiding in there somewhere.
+
+\subsection{ Orthonormality. }
+
+What is the inner product for this Hermite polynomial space.  I've seen statements that it was something like
+
+\begin{align*}
+(f,g) = \int f g e^{-u^2} du
+\end{align*}
+
+From the problem at hand it is perhaps reasonable to assume that this 
+mathematical orthogonality relation follows from a plain old integral over
+the real line for position of the (phaseless) wave functions.  Let's see
+if that is the case for the first two that have been calculated so far.
+
+Let
+
+\begin{align*}
+f &= 
+\left( 
+\frac{ m \omega }{\hbar \pi}
+\right)^{1/4} \exp\left( - \frac{m \omega x^2 }{2 \hbar} \right) \\
+g &=
+\left(x + \sqrt{\sqrt{\frac{m \omega}{\pi \hbar}} - \frac{ \hbar}{ 2 m \omega} }\right) \exp\left( - \frac{m \omega x^2}{2 \hbar} \right)
+\end{align*}
+
+Here $B=1 has been used$ for the first order polynomial wave function.  We want a Graham-Shmidt result based on this
+
+\begin{align*}
+h = g - (f,g) f
+\end{align*}
+
+\begin{align*}
+(f,g)
+&= \IIinf f(x) g(x) dx \\
+&= 
+\left( 
+\frac{ m \omega }{\hbar \pi}
+\right)^{1/4} 
+\IIinf dx
+\left(x + \sqrt{\sqrt{\frac{m \omega}{\pi \hbar}} - \frac{ \hbar}{ 2 m \omega} }\right) 
+\exp\left( - \frac{m \omega x^2 }{\hbar} \right) \\
+&= 
+\left( 
+\frac{ m \omega }{\hbar \pi}
+\right)^{1/4} 
+\sqrt{\sqrt{\frac{m \omega}{\pi \hbar}} - \frac{ \hbar}{ 2 m \omega} }
+\IIinf dx
+\exp\left( - \frac{m \omega x^2 }{\hbar} \right) \\
+&= 
+\left( 
+\frac{ m \omega }{\hbar \pi}
+\right)^{1/4} 
+\sqrt{\sqrt{\frac{m \omega}{\pi \hbar}} - \frac{ \hbar}{ 2 m \omega} }
+\sqrt{ \frac{\pi \hbar}{ m \omega} }
+\end{align*}
+
+So we have
+
+\begin{align*}
+(f,g) f 
+&= 
+\sqrt{\sqrt{\frac{m \omega}{\pi \hbar}} - \frac{ \hbar}{ 2 m \omega} }
+\exp\left( - \frac{m \omega x^2 }{2 \hbar} \right) \\
+\end{align*}
+
+\begin{align*}
+g - (f,g) f 
+&= x \exp\left( - \frac{m \omega x^2}{2 \hbar} \right)
+\end{align*}
+
+This leaves us with two wave function solutions to the Harmonic oscillator equation, where the spatial parts are orthonormal with respect to an unweighted inner product
+over all (linear position) space.  Designating these $\phi_0$, and $\phi_1$, we have
+
+\begin{align*}
+\psi_0 &= \exp\left( - \frac{m \omega x^2}{2 \hbar} - \frac{i \omega t }{ 2} \right) \\
+\psi_1 &= \sqrt{2\pi} \left(\frac{m \omega}{\pi\hbar}\right)^{3/4} x \exp\left( - \frac{m \omega x^2}{2 \hbar} - \frac{3 i \omega t }{ 2} \right)
+\end{align*}
+
+Generalizing, the pattern is clear.  We should have
+
+\begin{align*}
+\psi_N &= H_N(x) \exp\left( - \frac{m \omega x^2}{2 \hbar} - \frac{(2N + 1) i \omega t }{ 2} \right)
+\end{align*}
+
+Where 
+
+\begin{align*}
+\delta_{nm} = \IIinf H_n(x) H_m(x) \exp\left( - \frac{m \omega x^2}{\hbar} \right) dx
+\end{align*}
+
+Where use of the Graham-Schmidt procedure can be used to generate each of these polynomial functions.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
