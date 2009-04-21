@@ -14,19 +14,17 @@
 
 \title{Tensor Derivation of Covariant Lorentz Force from Lagrangian}
 \author{Peeter Joot \quad peeter.joot@gmail.com}
-\date{ October 12, 2008.  Last Revision: $Date: 2009/02/22 15:11:52 $ }
+\date{ October 12, 2008.  Last Revision: $Date: 2009/04/21 02:37:21 $ }
 
 \begin{document}
 
 \maketitle{}
-
 \tableofcontents
-
 \section{ Motivation. }
 
-In \cite{PJSrLorentzForce}, and before that in \cite{PJSrLagrangian} clifford
+In \cite{PJSrLorentzForce}, and before that in \cite{PJSrLagrangian} Clifford
 algebra derivations of the STA form of the covariant Lorentz force equation
-were derived.  As an exersize in tensor manipulation try the equivalent
+were derived.  As an exercise in tensor manipulation try the equivalent
 calculation using only tensor manipulation.
 
 \section{ Calculation. }
@@ -34,38 +32,40 @@ calculation using only tensor manipulation.
 The starting point will be an assumed Lagrangian of the following form
 
 \begin{align}\label{eqn:lagrangian}
-\LL &= \inv{2} v^2 + \kappa A \cdot v \\
-&= \inv{2} \xdot_\alpha \xdot^\alpha + \kappa A_\beta \xdot^\beta
+\LL &= \inv{2} v^2 + (q/m) A \cdot v/c \\
+&= \inv{2} \xdot_\alpha \xdot^\alpha + (q/mc) A_\beta \xdot^\beta
 \end{align}
 
 Here $v$ is the proper (four)velocity, and $A$ is the four potential.
+And following \cite{doran2003gap}, we use a positive time signature for the metric tensor ($+---$).
 
 \begin{align*}
-\PD{x^\mu}{\LL} = \kappa \PD{x^\mu}{A_\beta} \xdot^\beta
+\PD{x^\mu}{\LL} = (q/mc) \PD{x^\mu}{A_\beta} \xdot^\beta
 \end{align*}
 
 \begin{align*}
 \PD{\xdot^\mu}{\LL}
-&= \PD{\xdot^\mu}{} \left( \inv{2} g_{\alpha\beta} \xdot^\beta \xdot^\alpha \right) + \kappa \PD{\xdot^\mu}{(A_\alpha \xdot^\alpha)} \\
-&= \inv{2} \left( g_{\alpha\mu} \xdot^\alpha +g_{\mu\beta} \xdot^\beta \right) + \kappa A_\mu \\
-&= \xdot_\mu + \kappa A_\mu \\
+&= \PD{\xdot^\mu}{} \left( \inv{2} g_{\alpha\beta} \xdot^\beta \xdot^\alpha \right) + (q/mc) \PD{\xdot^\mu}{(A_\alpha \xdot^\alpha)} \\
+&= \inv{2} \left( g_{\alpha\mu} \xdot^\alpha +g_{\mu\beta} \xdot^\beta \right) + (q/mc) A_\mu \\
+&= \xdot_\mu + (q/mc) A_\mu \\
 \end{align*}
 
 \begin{align*}
 \PD{x^\mu}{\LL} &= \frac{d}{d\tau} \PD{\xdot^\mu}{\LL} \\
-\kappa \PD{x^\mu}{A_\beta} \xdot^\beta &= \xddot_\mu + \kappa \xdot^\beta \PD{x^\beta}{A_\mu} \\
+(q/mc) \PD{x^\mu}{A_\beta} \xdot^\beta &= \xddot_\mu + (q/mc) \xdot^\beta \PD{x^\beta}{A_\mu} \\
 \implies \\
 \xddot_\mu
-&= \kappa \xdot^\beta \left( \PD{x^\mu}{A_\beta} - \PD{x^\beta}{A_\mu} \right) \\
-&= \kappa \xdot^\beta \left( \partial_\mu {A_\beta} - \partial_{\beta}{A_\mu} \right) \\
+&= (q/mc) \xdot^\beta \left( \PD{x^\mu}{A_\beta} - \PD{x^\beta}{A_\mu} \right) \\
+&= (q/mc) \xdot^\beta \left( \partial_\mu {A_\beta} - \partial_{\beta}{A_\mu} \right) \\
 \end{align*}
 
-Setting $\kappa = q/mc$ this is the desired result
+This is
+%Setting $\kappa = q/mc$ this is the desired result
 
-\begin{align*}
-m \xddot_\mu &= (q/c) \xdot^\beta F_{\mu\beta} \\
+\begin{align}\label{eqn:fromLagrangian}
+m \xddot_\mu &= (q/c) F_{\mu\beta} \xdot^\beta 
 %m \ddot{x}_\mu &= (q/c) F_{\mu\beta} \dot{x}^\beta \\
-\end{align*}
+\end{align}
 
 The wikipedia article \cite{wikiLorentzForce} writes this in the equivalent indexes toggled form
 \begin{align*}
@@ -95,29 +95,43 @@ vector quantities then have consistently placed indexes.
 \section{ Compare for reference to GA form. }
 
 To verify that this form is identical to familiar STA Lorentz Force equation,
-reduce that equation to coordinates
+
+\begin{align}
+\pdot &= q (F \cdot v/c) 
+\end{align}
+
+reduce this equation to coordinates.  Starting with the RHS (leaving out the q/c)
 
 \begin{align*}
-\pdot \cdot \gamma_\mu &= q (F \cdot v/c) \cdot \gamma_\mu \\
-m \xddot_\alpha \gamma^\alpha \cdot \gamma_\mu &= (q/2c) F_{\alpha\beta} \xdot^\nu
-((\gamma^{\alpha} \wedge \gamma^{\beta}) \cdot \gamma_\nu) \cdot \gamma_\mu \\
-m \xddot_\mu &=
-(q/2c) F_{\alpha\beta} \xdot^\nu \left( \gamma^{\alpha} (\gamma^{\beta} \cdot \gamma_\nu) -\gamma^{\beta} (\gamma^{\alpha} \cdot \gamma_\nu) \right) \cdot \gamma_\mu \\
-m \xddot_\mu &= 
-(q/2c) \left( F_{\alpha\nu} \xdot^\alpha \gamma^{\alpha} - F_{\nu\beta} \xdot^\beta \gamma^{\beta} \right) \cdot \gamma_\mu \\
-&= (q/c) F_{\alpha\nu} \xdot^\alpha \gamma^{\alpha} \cdot \gamma_\mu \\
+(F \cdot v) \cdot \gamma_\mu 
+&= \inv{2} F_{\alpha\beta} \xdot^\nu ((\gamma^{\alpha} \wedge \gamma^{\beta}) \cdot \gamma_\nu) \cdot \gamma_\mu \\
+&= \inv{2} F_{\alpha\beta} \xdot^\nu \left( \gamma^{\alpha} (\gamma^{\beta} \cdot \gamma_\nu) -\gamma^{\beta} (\gamma^{\alpha} \cdot \gamma_\nu) \right) \cdot \gamma_\mu \\
+&= \inv{2} \left( F_{\alpha\nu} \xdot^\nu \gamma^{\alpha} - F_{\nu\beta} \xdot^\nu \gamma^{\beta} \right) \cdot \gamma_\mu \\
+&= \inv{2} \left( F_{\mu\nu} \xdot^\nu - F_{\nu\mu} \xdot^\nu \right) \\
+&= F_{\mu\nu} \xdot^\nu \\
 \end{align*}
 
-Which is close to the desired tensor form (off by factor of -1):
+And for the LHS
 \begin{align*}
-m \xddot_\mu &= (q/c) F_{\mu\nu} \xdot^\mu \\
+\pdot \cdot \gamma_\mu &= m \xddot_\alpha \gamma^\alpha \cdot \gamma_\mu \\
+&= m \xddot_\mu 
 \end{align*}
 
-Note that \cite{doran2003gap} employs a positive time signature for the metric tensor which
-should account for the difference.
+Which gives us
 
-FIXME: No.  Something is wrong here.  I got the $\pdot = q F\cdot v/c$ result
-using the same Lagrangian above!  Sign shouldn't be different.
+\begin{align}
+m \xddot_\mu &= (q/c) F_{\mu\nu} \xdot^\nu
+\end{align}
+
+in agreement with \ref{eqn:fromLagrangian}.
+
+%Which is close to the desired tensor form (off by factor of -1):
+%\begin{align*}
+%m \xddot_\mu &= (q/c) F_{\mu\nu} \xdot^\mu \\
+%\end{align*}
+
+%FIXME: No.  Something is wrong here.  I got the $\pdot = q F\cdot v/c$ result
+%using the same Lagrangian above!  Sign shouldn't be different.
 
 \bibliographystyle{plainnat} % supposed to allow for \url use.
 \bibliography{myrefs}      % expects file "myrefs.bib"
