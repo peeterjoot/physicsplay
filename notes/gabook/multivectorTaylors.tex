@@ -17,7 +17,7 @@
 
 \title{ Developing some intuition for Multivariable Taylor Series. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ April 28, 2009.  Last Revision: $Date: 2009/04/28 14:16:51 $ }
+\date{ April 28, 2009.  Last Revision: $Date: 2009/04/28 23:45:29 $ }
 
 \begin{document}
 
@@ -31,8 +31,8 @@ stress energy tensor treatment.
 
 In the treatment of transformation of the dependent variables (not the field
 variables themselves) of field Lagrangians, there is one bit that
-appears to be the first order linear term from a multivariable taylor
-series expansion.  Play with multivariable taylor series here a bit
+appears to be the first order linear term from a multivariable Taylor
+series expansion.  Play with multivariable Taylor series here a bit
 to develop some intuition with it.
 
 \section{ Single variable case, and generalization of it. }
@@ -91,13 +91,109 @@ Each of these was for a vector parameterized scalar function, although the wikip
 that is identical to that use by \cite{doran2003gap}.  Specifically, that is
 
 \begin{align}
-(\epsilon \cdot \spacegrad) f(x) &= \lim_{h \rightarrow 0} \frac{f(x + h \epsilon) - f(x)}{h}
+(\epsilon \cdot \spacegrad) f(x) 
+&= \lim_{h \rightarrow 0} \frac{f(x + h \epsilon) - f(x)}{h} \\
+&= \left. \PD{h}{f(x + h \epsilon)} \right\vert_{h=0}
 \end{align}
 
-Observe that this defintion as a limit avoids the requirement to define the gradient upfront, something not neccessarily 
+Observe that this defintion as a limit avoids the requirement to define the gradient upfront.  That definition is not neccessarily 
 obvious especially for multivector valued functions.
 
 \section{ Work some examples. }
+
+\subsection{ First order linear vector polynomial. }
+
+Let
+
+\begin{align*}
+f(x) = a + x
+\end{align*}
+
+For this simplest of vector valued vector parameterized functions we have
+
+\begin{align*}
+\PD{h}{f(x + h \epsilon)} 
+&= \PD{h}{} (a + x + h \epsilon) \\
+&= \epsilon \\
+&= (\epsilon \cdot \grad) f
+\end{align*}
+
+with no requirement to evaluate at $h=0$ to complete the directional derivative computation.
+
+The Taylor series expansion about $0$ is thus
+
+\begin{align*}
+f(\epsilon) 
+&= (\epsilon \cdot \grad)^0 f + (\epsilon \cdot \grad)^1 f \\
+&= a + \epsilon \\
+\end{align*}
+
+Nothing else could be expected.
+
+\subsection{ Second order vector parameterized multivector polynomial. }
+
+Now, step up the complexity slightly, and introduce a multivector valued second degree polynomial, say,
+
+\begin{align}\label{eqn:secondOrder}
+f(x) = \alpha + a + x y + w x + c x^2 + d x e + x g x
+\end{align}
+
+Here $\alpha$ is a scalar, and all the other variables are vectors, so we have grades $\le 3$.
+
+For the first order partial we have
+\begin{align*}
+\PD{h}{f(x + h \epsilon)} 
+&= \PD{h}{} ( \alpha + a + (x + h\epsilon) y + w (x + h\epsilon) + c (x + h\epsilon)^2 + d (x + h\epsilon) e + (x + h\epsilon) g (x + h\epsilon) ) \\
+&= 
+\epsilon y 
++ w \epsilon
++ c \epsilon (x + h\epsilon) 
++ c (x + h\epsilon) \epsilon
++ c \epsilon 
++ d \epsilon e 
++ \epsilon g (x + h\epsilon) 
++ (x + h\epsilon) g \epsilon \\
+\end{align*}
+
+Evaluation at $h=0$ we have
+
+\begin{align*}
+(\epsilon \cdot \grad) f
+&=
+\epsilon y 
++ w \epsilon
++ c \epsilon x 
++ c x \epsilon
++ c \epsilon 
++ d \epsilon e 
++ \epsilon g x 
++ x g \epsilon \\
+\end{align*}
+
+By inspection we have
+
+\begin{align*}
+(\epsilon \cdot \grad)^2 f
+&=
++ 2 c \epsilon^2
++ 2 \epsilon g \epsilon \\
+\end{align*}
+
+Combining things forming the Taylor series expansion about the origin we should recover our function
+
+\begin{align*}
+f(\epsilon) 
+&= \inv{0!} \left. (\epsilon \cdot \grad)^0 f \right\vert_{x=0} 
++ \inv{1!} \left. (\epsilon \cdot \grad)^1 f \right\vert_{x=0} 
++ \inv{2} \left. (\epsilon \cdot \grad)^2 f \right\vert_{x=0} \\
+&= \inv{1} (\alpha + a) + \inv{1} (\epsilon y + w \epsilon + c \epsilon + d \epsilon e ) + \inv{2}(2 c \epsilon^2 + 2 \epsilon g \epsilon ) \\
+&= \alpha + a + \epsilon y + w \epsilon + c \epsilon + d \epsilon e + c \epsilon^2 + \epsilon g \epsilon \\
+%&f(x) = \alpha + a + x y + w x + c x^2 + d x e + x g x
+\end{align*}
+
+This should match \ref{eqn:secondOrder}, with an $x = \epsilon$ substituition, and does.  This provides a small verification that this form
+of Taylor series does in fact work out fine when one cannot assume that the variables in question commute as is the case here in these functions
+with vector factors.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
