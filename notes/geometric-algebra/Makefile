@@ -288,6 +288,19 @@ ordered2009 += ../relativity/pauli_four_vector_v.pdf
 ordered2009 += ../relativity/acc_four_vector.pdf
 ordered2009 += ../qm/commutator_herm.pdf
 
+ordered2009 += ../geometric-algebra/lorentz_force_p_qA.pdf
+ordered2009 += ../maxwell/biot_savart.pdf
+ordered2009 += ../qm/harmonic_osc.pdf
+ordered2009 += ../maxwell/maxwell_tensor_from_lagrangian.pdf
+ordered2009 += ../qm/bohm_ch10.pdf
+ordered2009 += ../calculus/wavevariation.pdf
+ordered2009 += ../taylors/multivector_taylors.pdf
+
+# lut's
+skipit += ../lut/pjnote1.pdf
+
+#ordered2009 += 
+
 # Rules:
 #-----------------------------------------------------
 unordered2009 := $(filter-out $(ordered2009) $(skipit) $(ordered2007) $(ordered2008),$(ppdfs))
