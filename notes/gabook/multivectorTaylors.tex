@@ -17,7 +17,7 @@
 
 \title{ Developing some intuition for Multivariable Taylor Series. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ April 28, 2009.  Last Revision: $Date: 2009/04/28 23:45:29 $ }
+\date{ April 28, 2009.  Last Revision: $Date: 2009/04/29 00:30:26 $ }
 
 \begin{document}
 
@@ -26,7 +26,7 @@
 \section{ Motivation. }
 
 The book \cite{doran2003gap} uses Geometric Calculus heavily in its 
-Lagrangian treament.  In particular it is used in some incomprehensible seeming ways in the 
+Lagrangian treatment.  In particular it is used in some incomprehensible seeming ways in the 
 stress energy tensor treatment.
 
 In the treatment of transformation of the dependent variables (not the field
@@ -59,7 +59,13 @@ Without proof, the multivector generalization of this is
 
 \begin{align}
 f(x_0 + \epsilon) 
-&= \left. e^{\epsilon \cdot \grad} f(x) \right\vert_{x=x_0} \\
+&= \left. e^{\epsilon \cdot \grad} f(x) \right\vert_{x=x_0} 
+\end{align}
+
+Or in full,
+
+\begin{align}\label{eqn:taylorMulti}
+f(x_0 + \epsilon) 
 &= \sum \inv{k!} \left. {(\epsilon \cdot \grad)^k} f(x) \right\vert_{x=x_0}
 \end{align}
 
@@ -91,12 +97,12 @@ Each of these was for a vector parameterized scalar function, although the wikip
 that is identical to that use by \cite{doran2003gap}.  Specifically, that is
 
 \begin{align}
-(\epsilon \cdot \spacegrad) f(x) 
+(\epsilon \cdot \grad) f(x) 
 &= \lim_{h \rightarrow 0} \frac{f(x + h \epsilon) - f(x)}{h} \\
 &= \left. \PD{h}{f(x + h \epsilon)} \right\vert_{h=0}
 \end{align}
 
-Observe that this defintion as a limit avoids the requirement to define the gradient upfront.  That definition is not neccessarily 
+Observe that this definition as a limit avoids the requirement to define the gradient upfront.  That definition is not necessarily 
 obvious especially for multivector valued functions.
 
 \section{ Work some examples. }
@@ -124,7 +130,7 @@ The Taylor series expansion about $0$ is thus
 
 \begin{align*}
 f(\epsilon) 
-&= (\epsilon \cdot \grad)^0 f + (\epsilon \cdot \grad)^1 f \\
+&= \left. (\epsilon \cdot \grad)^0 f \right\vert_{x=0} + \left. (\epsilon \cdot \grad)^1 f  \right\vert_{x=0} \\
 &= a + \epsilon \\
 \end{align*}
 
@@ -188,12 +194,36 @@ f(\epsilon)
 + \inv{2} \left. (\epsilon \cdot \grad)^2 f \right\vert_{x=0} \\
 &= \inv{1} (\alpha + a) + \inv{1} (\epsilon y + w \epsilon + c \epsilon + d \epsilon e ) + \inv{2}(2 c \epsilon^2 + 2 \epsilon g \epsilon ) \\
 &= \alpha + a + \epsilon y + w \epsilon + c \epsilon + d \epsilon e + c \epsilon^2 + \epsilon g \epsilon \\
+% cf:
 %&f(x) = \alpha + a + x y + w x + c x^2 + d x e + x g x
 \end{align*}
 
-This should match \ref{eqn:secondOrder}, with an $x = \epsilon$ substituition, and does.  This provides a small verification that this form
-of Taylor series does in fact work out fine when one cannot assume that the variables in question commute as is the case here in these functions
-with vector factors.
+This should match \ref{eqn:secondOrder}, with an $x = \epsilon$ substitution, and does.  With the vector factors in these functions commutativity 
+assumptions could not be made.  These calculations 
+help provide a small verification that this form
+of Taylor series does in fact work out fine with such non-commutative variables.
+
+Observe as well that there was really no requirement in this example that $x$ or any of the other factors to be vectors.  If they were all bivectors or trivectors or some mix the calculations would have had the same results.
+
+\section{ Proof of the multivector Taylor expansion. }
+
+A peek back into \cite{hestenes1999nfc} shows that 
+\ref{eqn:taylorMulti} was in fact proved, but it was done in a very
+sneaky and clever way.  Rather than try to prove treat the multivector
+parameters explicitly, the following scalar parameterized hybrid function
+was created
+
+\begin{align}
+G(\tau) &= F(\Bx_0 + \tau\Ba)
+\end{align}
+
+The scalar parameterized function $G(\tau)$ can be taylor expanded about
+the origin, and then evaluated at $1$ resulting in 
+\ref{eqn:taylorMulti} in terms of powers of $(\Ba \cdot \grad)$.  
+I won't reproduce or try to
+enhance that proof for myself here since it is actually 
+quite clear in the text.  Obviously the trick is non-intuitive enough
+that when thinking about how to prove this myself it didn't occur to me.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
