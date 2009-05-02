@@ -2,6 +2,8 @@
 
 \input{../peeters_macros.tex}
 \input{../peeters_macros2.tex}
+\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+\newcommand{\transpose}[1]{{#1}^{\mathrm{T}}}
 
 %\usepackage{listings}
 %\usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
@@ -17,7 +19,7 @@
 
 \title{ Developing some intuition for Multivariable Taylor Series. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ April 28, 2009.  Last Revision: $Date: 2009/04/29 00:30:26 $ }
+\date{ April 28, 2009.  Last Revision: $Date: 2009/05/02 14:26:02 $ }
 
 \begin{document}
 
@@ -93,7 +95,7 @@ Or \href{http://mathworld.wolfram.com/DirectionalDerivative.html}{in terms of th
 \spacegrad_\Bu f(\Bx) &= \frac{\Bu}{\Abs{\Bu}} \cdot \spacegrad f
 \end{align}
 
-Each of these was for a vector parameterized scalar function, although the wikipedia article does mention a vector valued form
+Each of these was for a vector parametrized scalar function, although the wikipedia article does mention a vector valued form
 that is identical to that use by \cite{doran2003gap}.  Specifically, that is
 
 \begin{align}
@@ -115,7 +117,7 @@ Let
 f(x) = a + x
 \end{align*}
 
-For this simplest of vector valued vector parameterized functions we have
+For this simplest of vector valued vector parametrized functions we have
 
 \begin{align*}
 \PD{h}{f(x + h \epsilon)} 
@@ -136,7 +138,7 @@ f(\epsilon)
 
 Nothing else could be expected.
 
-\subsection{ Second order vector parameterized multivector polynomial. }
+\subsection{ Second order vector parametrized multivector polynomial. }
 
 Now, step up the complexity slightly, and introduce a multivector valued second degree polynomial, say,
 
@@ -210,20 +212,132 @@ Observe as well that there was really no requirement in this example that $x$ or
 A peek back into \cite{hestenes1999nfc} shows that 
 \ref{eqn:taylorMulti} was in fact proved, but it was done in a very
 sneaky and clever way.  Rather than try to prove treat the multivector
-parameters explicitly, the following scalar parameterized hybrid function
+parameters explicitly, the following scalar parametrized hybrid function
 was created
 
 \begin{align}
 G(\tau) &= F(\Bx_0 + \tau\Ba)
 \end{align}
 
-The scalar parameterized function $G(\tau)$ can be taylor expanded about
+The scalar parametrized function $G(\tau)$ can be Taylor expanded about
 the origin, and then evaluated at $1$ resulting in 
 \ref{eqn:taylorMulti} in terms of powers of $(\Ba \cdot \grad)$.  
 I won't reproduce or try to
 enhance that proof for myself here since it is actually 
 quite clear in the text.  Obviously the trick is non-intuitive enough
 that when thinking about how to prove this myself it didn't occur to me.
+
+\section{ Explicit expansion for a scalar function. }
+
+Now, despite the $a \cdot \grad$ notation being unfamiliar seeming, the 
+end result isn't.  Explicit expansion of this for a vector to scalar mapping
+will show this.  In fact this will also account for the 
+\href{http://en.wikipedia.org/wiki/Hessian_matrix}{Hessian matrix}, as in
+
+\begin{align*}
+y=f(\mathbf{x}+\Delta\mathbf{x})\approx f(\mathbf{x}) + J(\mathbf{x})\Delta \mathbf{x} +\frac{1}{2} \Delta\mathbf{x}^\mathrm{T} H(\mathbf{x}) \Delta\mathbf{x}
+\end{align*}
+
+providing
+not only the background on where this comes from, but also the so often
+omitted third order and higher generalizations (most often referred to as $\cdots$).  Poking around a bit I see that the \href{http://en.wikipedia.org/wiki/Taylor_expansion}{wikipedia Taylor Series} does explicitly define the higher order case, but if 
+I'd seen that before the connection to the Hessian wasn't obvious.
+
+\subsection{ Two variable case. }
+
+Rather than start with the general case, the expansion of the first few powers
+of $(\Ba \cdot \spacegrad) f$ for the two variable case is enough to show the pattern.
+How to further generalize this scalar function case will be clear from 
+inspection.
+
+Starting with the first order term, writing $\Ba = (a,b)$ we have
+
+\begin{align*}
+(\Ba \cdot \spacegrad) f(x,y) 
+&= \left. \PD{\tau}{} f(x + a\tau, y + b\tau) \right\vert_{\tau=0} \\
+&= 
+\left. \left( \PD{x + a\tau}{} f(x + a\tau, y + b\tau) \PD{\tau}{(x + a\tau)} \right) \right\vert_{\tau=0} \\
+&\quad+\left. \left( \PD{y + b\tau}{} f(x + a\tau, y + b\tau) \PD{\tau}{(y + b\tau)} \right) \right\vert_{\tau=0} \\
+&= 
+a \PD{x}{f} +b \PD{y}{f} \\
+&= 
+\Ba \cdot (\spacegrad f)
+\end{align*}
+
+For the second derivative operation we have
+\begin{align*}
+(\Ba \cdot \spacegrad)^2 f(x,y) 
+&=
+(\Ba \cdot \spacegrad) 
+\left( (\Ba \cdot \spacegrad) f(x,y) \right) \\
+&=
+(\Ba \cdot \spacegrad) \left( a \PD{x}{f} +b \PD{y}{f} \right) \\
+&= \left. \PD{\tau}{} \left( a \PD{x}{f}(x + a\tau, y + b\tau) + b \PD{y}{f}(x + a\tau, y + b\tau) \right) \right\vert_{\tau=0} \\
+\end{align*}
+
+Especially if one makes a temporary substitution of the partials for some other named variables, it is clear this follows as 
+before, and one gets
+
+\begin{align*}
+(\Ba \cdot \spacegrad)^2 f(x,y) 
+&=
+a^2 \PDSq{x}{f} + b a \PDD{y}{x}{f} 
++a b \PDD{x}{y}{f} + b^2 \PDSq{y}{f} \\
+\end{align*}
+
+Similarly the third order derivative operator gives us
+
+\begin{align*}
+(\Ba \cdot \spacegrad)^3 f(x,y) 
+&=
+a a a \PD{x}{}\PD{x}{}\PD{x}{} f + a b a \PD{x}{}\PD{y}{}\PD{x}{}{f}  \\
+\quad&+a a b \PD{x}{}\PD{y}{}\PD{x}{} f + a b b \PD{x}{}\PD{y}{}\PD{y}{}{f} \\
+&\quad+b a a \PD{y}{}\PD{x}{}\PD{x}{} f + b b a \PD{y}{}\PD{y}{}\PD{x}{}{f} \\
+&\quad+b a b \PD{y}{}\PD{y}{}\PD{x}{} f + b b b \PD{y}{}\PD{y}{}\PD{y}{}{f} \\
+&=
+a^3 \frac{\partial^3 f}{\partial x^3} 
++ 3 a^2 b \PDSq{x}{}\PD{y}{f}
++ 3 a b^2 \PD{x}{}\PDSq{y}{f} 
++b^3 \frac{\partial^3 f}{\partial y^3} 
+\end{align*}
+
+We no longer have the notational nicety of being able to use the gradient notation as was done for the first derivative term.  For the 
+first and second order derivative operations, one has the
+option of using the gradient and Hessian matrix notations
+
+\begin{align*}
+(\Ba \cdot \spacegrad) f(x,y) &=
+\transpose{\Ba} 
+\begin{bmatrix}
+f_{x} \\
+f_{y} 
+\end{bmatrix} 
+\\
+(\Ba \cdot \spacegrad)^2 f(x,y) 
+&=
+\transpose{\Ba} 
+\begin{bmatrix}
+f_{xx} & f_{xy} \\
+f_{yx} & f_{yy}
+\end{bmatrix}
+\Ba
+\end{align*}
+
+But this won't be helpful past the second derivative.
+
+Additionally, if we continue to restrict ourself to the two variable case, 
+it is clear that we have
+
+\begin{align*}
+(\Ba \cdot \spacegrad)^n f(x,y) 
+&=
+\sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k} 
+\left( \PD{x}{} \right)^{n-k}
+\left( \PD{y}{} \right)^{k} f(x,y)
+\end{align*}
+
+But it is also clear that if we switch to more than two variables, this notational niciety will also not hold.
+We will need a tensor notation to be able to handle the general case.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
