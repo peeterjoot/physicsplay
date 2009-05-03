@@ -19,7 +19,7 @@
 
 \title{ Developing some intuition for Multivariable Taylor Series. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ April 28, 2009.  Last Revision: $Date: 2009/05/02 14:26:02 $ }
+\date{ April 28, 2009.  Last Revision: $Date: 2009/05/03 01:11:32 $ }
 
 \begin{document}
 
@@ -305,7 +305,7 @@ We no longer have the notational nicety of being able to use the gradient notati
 first and second order derivative operations, one has the
 option of using the gradient and Hessian matrix notations
 
-\begin{align*}
+\begin{align}
 (\Ba \cdot \spacegrad) f(x,y) &=
 \transpose{\Ba} 
 \begin{bmatrix}
@@ -321,23 +321,97 @@ f_{xx} & f_{xy} \\
 f_{yx} & f_{yy}
 \end{bmatrix}
 \Ba
-\end{align*}
+\end{align}
 
 But this won't be helpful past the second derivative.
 
-Additionally, if we continue to restrict ourself to the two variable case, 
+Additionally, if we continue to restrict oneself to the two variable case, 
 it is clear that we have
 
-\begin{align*}
+\begin{align}
 (\Ba \cdot \spacegrad)^n f(x,y) 
 &=
 \sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k} 
 \left( \PD{x}{} \right)^{n-k}
 \left( \PD{y}{} \right)^{k} f(x,y)
+\end{align}
+
+But it is also clear that if we switch to more than two variables, a binomial 
+series expansion of derivative powers in this fashion will no longer work.  For
+example for three (or more) variables, writing for example $\Ba = (a_1, a_2, a_3)$,
+we have
+
+\begin{align}
+(\Ba \cdot \spacegrad) f(\Bx)
+&=
+\sum_{i} 
+\left( a_i \PD{x_i}{} \right)
+f(\Bx) \\
+(\Ba \cdot \spacegrad)^2 f(\Bx) 
+&=
+\sum_{ij} 
+\left( a_i \PD{x_i}{} \right)
+\left( a_j \PD{x_j}{} \right)
+f(\Bx) \\
+(\Ba \cdot \spacegrad)^3 f(\Bx) 
+&=
+\sum_{ijk} 
+\left( a_i \PD{x_i}{} \right)
+\left( a_j \PD{x_j}{} \right)
+\left( a_k \PD{x_k}{} \right)
+f(\Bx) 
+%\\
+%&\vdots
+\end{align}
+
+If the partials are all collected into a single indexed object, one really has a tensor.  For the first and second orders we
+can represent this tensor in matrix form (as the gradient and Hessian respectively)
+
+\section{ Gradient with non-Euclidean basis. }
+
+The directional derivative has been calculated above for a scalar function.  There is nothing intrinsic to that argument
+that requires an orthonormal basis.
+
+Suppose we have a basis $\{\gamma_\mu\}$, and a reciprocal frame $\{\gamma^\mu\}$.  Let
+
+\begin{align*}
+x &= x^\mu \gamma_\mu = x_\mu \gamma^\mu \\
+a &= a^\mu \gamma_\mu = a_\mu \gamma^\mu 
 \end{align*}
 
-But it is also clear that if we switch to more than two variables, this notational niciety will also not hold.
-We will need a tensor notation to be able to handle the general case.
+The first order directional derivative is then 
+
+\begin{align*}
+(a \cdot \grad) f(x) 
+&=
+\left. \PD{\tau}{f}(x + \tau a) \right\vert_{\tau=0} \\
+\end{align*}
+
+This is
+\begin{align}\label{eqn:gradDotF}
+(a \cdot \grad) f(x) &= \sum_\mu a^\mu \PD{x^\mu}{f}(x) 
+\end{align}
+
+Now, we are used to $\grad$ as a standalone object, and want that operator defined such that we can also write \ref{eqn:gradDotF}
+as
+\begin{align*}
+a \cdot (\grad f(x))
+&=
+\left(a^\mu \gamma_\mu \right) \cdot (\grad f(x))
+\end{align*}
+
+Comparing these we see that our partials in \ref{eqn:gradDotF} do the job provided that we form the vector operator
+
+\begin{align}
+\grad &= \sum_\mu \gamma^\mu \PD{x^\mu}{}
+\end{align}
+
+The text \cite{doran2003gap} defines $\grad$ in this fashion, but has no logical motivation of this idea.  One sees
+quickly enough that this definition works, and is the required form, but building up to the construction
+in a way that builds on previously established ideas is still desirable.
+We see here that this reciprocal frame definition of the gradient follows inevitably from the definition
+of the directional derivative.  Additionally this is a definition with how 
+the directional derivative is defined in a standard Euclidean space with an orthonormal basis.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
