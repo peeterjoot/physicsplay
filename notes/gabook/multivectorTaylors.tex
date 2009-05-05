@@ -4,6 +4,7 @@
 \input{../peeters_macros2.tex}
 \newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
 \newcommand{\transpose}[1]{{#1}^{\mathrm{T}}}
+\newcommand{\stardot}[0]{{*}}
 
 %\usepackage{listings}
 %\usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
@@ -19,7 +20,7 @@
 
 \title{ Developing some intuition for Multivariable and Multivector Taylor Series. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ April 28, 2009.  Last Revision: $Date: 2009/05/04 12:47:34 $ }
+\date{ April 28, 2009.  Last Revision: $Date: 2009/05/05 03:41:01 $ }
 
 \begin{document}
 
@@ -445,7 +446,7 @@ One could alternately express this in a notationally less different form
 using the scalar product operator instead of grade selection, if one writes
 
 \begin{align*}
-{\epsilon \conj \grad} &\equiv \gpgradezero{\epsilon \grad} 
+{\epsilon \stardot \grad} &\equiv \gpgradezero{\epsilon \grad} 
 \end{align*}
 
 However, regardless of the notation used, the fundamental definition 
@@ -462,9 +463,109 @@ operationally is
 The simplest grade mixed multivector space is that of the complex numbers.  Let's write out the
 directional derivative and gradient in this space explicitly.
 
+Writing 
+\begin{align*}
+z_0 &= u + i v \\
+z &= x + i y \\
+\end{align*}
 
+So we have
+\begin{align*}
+\gpgradezero{z_0 \grad} f(z) 
+&= u \PD{x}{f} + v \PD{y}{f} \\
+&= u \PD{x}{f} + i v \inv{i} \PD{y}{f} \\
+&= \gpgradezero{ z_0 \left( \PD{x}{} + \inv{i} \PD{y}{} \right) } f(z) \\
+\end{align*}
+
+and we can therefore identify the gradient operator as
+
+\begin{align*}
+\grad_{0,2} &= \PD{x}{} + \inv{i} \PD{y}{} 
+\end{align*}
+
+Observe the similarity here between the vector gradient for a 2D Euclidian space, where we can form complex numbers by (left) factoring out a 
+unit vector, as in
+
+\begin{align*}
+\Bx 
+&= e_1 x + e_2 y \\
+&= e_1 ( x + e_1 e_2 y ) \\
+&= e_1 ( x + i y ) \\
+&= e_1 z
+\end{align*}
+
+It appears that we can form this complex gradient, by (right) factoring out of the same unit vector from the vector gradient
+
+\begin{align*}
+e_1 \PD{x}{} + e_2 \PD{y}{} 
+&=
+\left( \PD{x}{} + e_2 e_1 \PD{y}{} \right) e_1 \\
+&=
+\left( \PD{x}{} + \inv{i} \PD{y}{} \right) e_1 \\
+&=
+\grad_{0,2} e_1 \\
+\end{align*}
+
+So, if we write $\spacegrad$ as the \R{2} vector gradient, with $\Bx = e_1 x + e_2 y = e_1 z$ as above, we have
+
+\begin{align*}
+\spacegrad \Bx 
+&= \grad_{0,2} e_1 e_1 z \\
+&= \grad_{0,2} z \\
+\end{align*}
+
+This is a rather curious equivalance between 2D vectors and complex numbers.
+
+Having a complex gradient is not familiar from standard complex variable theory.  Then again, neither is a non-contour integral formulation
+of complex Taylor series.  The two of these ought to be equivalent, which seems to imply there is a contour integral representation of the gradient
+in a complex number space too.
+
+TODO: lots to explore here.
 
 \subsection{ 4D scalar plus bivector space }
+
+Suppose we form a scalar, bivector space by factoring out the unit time vector in a Dirac vector representation
+
+\begin{align*}
+x 
+&= x^\mu \gamma_\mu \\
+&= \left( x^0 + x^k \gamma_k \gamma_0 \right) \gamma_0 \\
+&= \left( x^0 + x^k \sigma_k \right) \gamma_0 \\
+&= q \gamma_0 \\
+\end{align*}
+
+This $q$ has the structure of a quaternion-like object (scalar, plus bivector), but the bivectors all have positive square.  Our directional
+derivative, for multivector direction $Q = Q^0 + Q^k \sigma_k$ is 
+
+\begin{align*}
+\gpgradezero{Q \grad} f(q) 
+&= Q^0 \PD{x^0}{f} + \sum_k Q^k \PD{x^k}{f} \\
+\end{align*}
+
+So, we can write
+
+\begin{align*}
+\grad 
+&= \PD{x^0}{} + \sum_k \sigma_k \PD{x^k}{} \\
+\end{align*}
+
+We can do something similar for an Euclidian four vector space
+
+\begin{align*}
+x 
+&= x^\mu e_\mu \\
+&= \left( x^0 + x^k e_k e_0 \right) e_0 \\
+&= \left( x^0 + x^k i_k \right) e_0 \\
+&= q e_0 \\
+\end{align*}
+
+Here each of the bivectors $i_k$ have a negative square, much more quaternion-like (and could easily be defined in an
+isomorphic fashion).  This time we have
+
+\begin{align*}
+\grad 
+&= \PD{x^0}{} + \sum_k \inv{i_k} \PD{x^k}{} \\
+\end{align*}
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
