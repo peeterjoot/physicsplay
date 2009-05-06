@@ -7,7 +7,7 @@
 \newcommand{\stardot}[0]{{*}}
 
 %\usepackage{listings}
-%\usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
+\usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
 \usepackage[bookmarks=true]{hyperref}
 
 \usepackage{color,cite,graphicx}
@@ -20,7 +20,7 @@
 
 \title{ Developing some intuition for Multivariable and Multivector Taylor Series. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ April 28, 2009.  Last Revision: $Date: 2009/05/05 03:41:01 $ }
+\date{ April 28, 2009.  Last Revision: $Date: 2009/05/06 03:58:23 $ }
 
 \begin{document}
 
@@ -516,11 +516,130 @@ So, if we write $\spacegrad$ as the \R{2} vector gradient, with $\Bx = e_1 x + e
 
 This is a rather curious equivalance between 2D vectors and complex numbers.
 
+\subsubsection{ Comparison of contour integral and directional derivative Taylor series. }
+
 Having a complex gradient is not familiar from standard complex variable theory.  Then again, neither is a non-contour integral formulation
 of complex Taylor series.  The two of these ought to be equivalent, which seems to imply there is a contour integral representation of the gradient
-in a complex number space too.
+in a complex number space too (one of the Hestenes paper's mentioned this
+but I didn't understand the notation).
 
-TODO: lots to explore here.
+Let's do an initial comparision of the two.  We need a reminder
+of the contour integral form of the complex derivative.  For a function
+$f(z)$ and its derivatives regular in a neighbourhood of a point $z_0$, we can evaluate
+
+\begin{align*}
+\ointctrclockwise \frac{f(z) dz}{(z - z_0)^k} 
+&=
+-\inv{k-1} \ointctrclockwise {f(z) dz}\left( \inv{(z - z_0)^{k-1}} \right)' \\
+&=
+\inv{k-1} \ointctrclockwise {f'(z) dz}\left( \inv{(z - z_0)^{k-1}} \right) \\
+&=
+\inv{(k-1)(k-2)} \ointctrclockwise {f^2(z) dz}\left( \inv{(z - z_0)^{k-2}} \right) \\
+&=
+\inv{(k-1)(k-2)\cdots(k-n)} \ointctrclockwise {f^n(z) dz}\left( \inv{(z - z_0)^{k-n}} \right) \\
+% k-n = 1 
+% n = k-1
+&=
+\inv{(k-1)(k-2)\cdots(1)} \ointctrclockwise \frac{f^{k-1}(z) dz}{z - z_0} \\
+&= \frac{2 \pi i}{(k-1)!} f^{k-1}(z_0)
+\end{align*}
+
+So we have
+
+\begin{align*}
+\left. \frac{d^k}{dz^k} f(z) \right\vert_{z_0}
+&= 
+\frac{k!}{2 \pi i}\ointctrclockwise \frac{f(z) dz}{(z - z_0)^{k+1}} 
+\end{align*}
+
+Given this we now have a few alternate forms of complex taylor series
+
+\begin{align*}
+f(z_0 + \epsilon) 
+&= \sum \inv{k!} \left. \gpgradezero{\epsilon \grad}^k f(z) \right\vert_{z=z_0} \\
+&= \sum \inv{k!} \epsilon^k \left. \frac{d^k}{dz^k} f(z) \right\vert_{z_0} \\
+&= \inv{2 \pi i} \sum \epsilon^k \ointctrclockwise \frac{f(z) dz}{(z - z_0)^{k+1}} 
+\end{align*}
+
+Observe that the the $0,2$ subscript for the gradient has been dropped above (ie: this is the complex gradient, not the vector 
+form).
+
+\subsubsection{ Complex gradient compared to the derivative. }
+
+A gradient operator has been identified by factoring it out of the directional derivative.  Let's compare this to a
+plain old complex derivative.
+
+\begin{align*}
+f'(z_0) &= \lim_{z \rightarrow z_0} \frac{ f(z) - f(z_0) }{ z - z_0}
+\end{align*}
+
+In particular, evaluating this limit for $z = z_0 + h$, approaching $z_0$ along the x-axis, we have
+
+\begin{align*}
+f'(z_0) 
+&= \lim_{z \rightarrow z_0} \frac{ f(z) - f(z_0) }{ z - z_0} \\
+&= \lim_{h \rightarrow 0} \frac{ f(z_0 + h) - f(z_0) }{ h } \\
+&= \PD{x}{f}(z_0)
+\end{align*}
+
+Evaluating this limit for $z = z_0 + i h$, approaching $z_0$ along the y-axis, we have
+
+\begin{align*}
+f'(z_0) 
+&= \lim_{h \rightarrow 0} \frac{ f(z_0 + i h) - f(z_0) }{ i h } \\
+&= -i \PD{y}{f}(z_0)
+\end{align*}
+
+We have the Cauchy equations by equating these, and if the derivative exists (ie: independent of path) we require at least
+
+\begin{align*}
+\PD{x}{f}(z_0) =
+-i \PD{y}{f}(z_0)
+\end{align*}
+
+Or
+\begin{align*}
+0 
+&=
+\PD{x}{f}(z_0) + i \PD{y}{f}(z_0) \\
+&=
+\tilde{\grad} f(z_0)
+\end{align*}
+
+Premultiplying by $\grad$ produces the harmonic equation
+
+\begin{align*}
+\grad \tilde{\grad} f = \left( \PDSq{x}{} + \PDSq{y}{} \right) f
+\end{align*}
+
+\subsubsection{ First order expansion around a point. }
+
+The above, while interesting or curious, 
+doesn't provide a way to express the differential operator directly in terms of the gradient.
+
+We can write 
+\begin{align*}
+\left. \gpgradezero{ \epsilon \grad } f(z) \right\vert_{z_0}
+&=
+\frac{\epsilon}{ 2 \pi i } \ointctrclockwise \frac{f(z) dz}{(z - z_0)^{2}} \\
+&=
+\epsilon f'(z_0)
+\end{align*}
+
+One can probably integrate this in some circumstances (perhaps when f(z) is regular along the straight path from $z_0$ to $z = z_0 + \epsilon$).  If so, then we have
+
+\begin{align*}
+\epsilon \int_{s=z_0}^{z} f'(s) ds &= \int_{s=z_0}^{z} \left. \gpgradezero{ \epsilon \grad } f(z) \right\vert_{z=s} ds 
+\end{align*}
+
+Or
+\begin{align*}
+f(z) &= f(z_0) + \int_{s=z_0}^{z} \left. \inv{\epsilon}\gpgradezero{ \epsilon \grad } f(z) \right\vert_{z=s} ds 
+\end{align*}
+
+Is there any validity to doing this?  The idea here is to play with some circumstances where we could see 
+where the multivector gradient may show up.  Much more play is required, some of which for discovery and the rest
+to do things more rigorously.
 
 \subsection{ 4D scalar plus bivector space }
 
