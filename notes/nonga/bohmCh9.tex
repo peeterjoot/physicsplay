@@ -25,7 +25,7 @@
 
 \title{ Bohm Chapter 9 problems. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ March 6, 2009.  Last Revision: $Date: 2009/04/30 04:35:11 $ }
+\date{ March 6, 2009.  Last Revision: $Date: 2009/05/08 03:00:20 $ }
 
 \begin{document}
 
@@ -486,18 +486,248 @@ is Hermitian, provided $A_k$ are all real.  This part is clear by inspection.
 
 \subsection{ P7. Hermitian operators. Powers of position operators. }
 
-TODO.
+Want to show that the following is Hermitian
+
+\begin{align*}
+f(x) &= \sum A_k x^k
+\end{align*}
+
+If the conjugate of the expectation equals itself we required only $A_k = A_k^\conj$, so $A_k$ must be strictly real, and we are done.
 
 \subsection{ P8. Non Hermitian momentum power operators if derivative doesn't vanish. }
 
-TODO.
+Show that if $\partial^n \psi/\partial x^n$ doesn't vanish then $(-i\hbar)^{n+1} \partial^{n+1}/\partial x^{n+1}$ is not Hermitian.
 
-\subsection{ P9. }
-\subsection{ P10. }
-\subsection{ P11. }
-\subsection{ P12. }
-\subsection{ P13. }
-\subsection{ P14. }
+We want to evaluate the following and compare it to its conjugate
+
+\begin{align*}
+\expectation{p^{n+1}} 
+&= (-i\hbar)^{n+1} \IIinf \psi^\conj \PDN{x}{\psi}{n+1} dx \\
+&= 
+(-i\hbar)^{n+1} \left. \psi^\conj \PDN{x}{\psi}{n} \right\vert_{-\infty}^{\infty}
++(-1)^{1}(-i\hbar)^{n+1} \IIinf \PDN{x}{\psi^\conj}{1} \PDN{x}{\psi}{n} dx 
+\\
+&= 
+(-i\hbar)^{n+1} \left. \psi^\conj \PDN{x}{\psi}{n} \right\vert_{-\infty}^{\infty}
++(-1)^{1}(-i\hbar)^{n+1} \left. \PDN{x}{\psi^\conj}{1} \PDN{x}{\psi}{n-1} \right\vert_{-\infty}^{\infty}
++(-1)^{2}(-i\hbar)^{n+1} \IIinf \PDN{x}{\psi^\conj}{2} \PDN{x}{\psi}{n-1} dx 
+\\
+&= 
+(-i\hbar)^{n+1} \sum_{k=0}^1
+(-1)^{k}
+\left. \PDN{x}{\psi^\conj}{k} \PDN{x}{\psi}{n-k} \right\vert_{-\infty}^{\infty}
++(-1)^{2}(-i\hbar)^{n+1} \IIinf \PDN{x}{\psi^\conj}{2} \PDN{x}{\psi}{n-1} dx  
+\\
+&= 
+(-i\hbar)^{n+1} \sum_{k=0}^m
+(-1)^{k}
+\left. \PDN{x}{\psi^\conj}{k} \PDN{x}{\psi}{n-k} \right\vert_{-\infty}^{\infty}
++(-1)^{m+1}(-i\hbar)^{n+1} \IIinf \PDN{x}{\psi^\conj}{m+1} \PDN{x}{\psi}{n-m)} dx 
+\\
+&= 
+(-i\hbar)^{n+1} \sum_{k=0}^n
+(-1)^{k}
+\left. \PDN{x}{\psi^\conj}{k} \PDN{x}{\psi}{n-k} \right\vert_{-\infty}^{\infty}
++(i\hbar)^{n+1} \IIinf \PDN{x}{\psi^\conj}{n+1} \psi dx 
+\\
+&= 
+(-i\hbar)^{n+1} \sum_{k=0}^n
+(-1)^{k}
+\left. \PDN{x}{\psi^\conj}{k} \PDN{x}{\psi}{n-k} \right\vert_{-\infty}^{\infty}
++
+\expectation{p^{n+1}}^\conj
+\\
+\end{align*}
+%\newcommand{\PDN}[3]{\frac{\partial^{#3} {#2}}{\partial {#1}^{#3}}}
+
+So we have
+\begin{align*}
+\expectation{p^{n+1}} - \expectation{p^{n+1}}^\conj
+&= 
+(-i\hbar)^{n+1} \sum_{k=0}^n
+(-1)^{k}
+\left. \PDN{x}{\psi^\conj}{k} \PDN{x}{\psi}{n-k} \right\vert_{-\infty}^{\infty}
+\\
+\end{align*}
+
+If $p^{n+1}$ is Hermitian, then this difference should be zero, but if the indicated partial doesn't vanish this
+remainder bit can be non-zero.
+
+\subsection{ P9. m, n'th moment is Hermitian. }
+
+Consider the operator 
+
+\begin{align*}
+\sum A_{nm} \left(\frac{p^n x^m + x^m p^n}{2}\right) 
+\end{align*}
+
+Show that this is Hermitian if all $A_{nm}$ are real.
+
+Consider first one specific term with $A_{nm}$, calculate the conjugate of the expectation value, and integrate
+by parts
+
+\begin{align*}
+\left(
+\int \psi^\conj \inv{2}(p^n x^m + x^m p^n) \psi
+\right)^\conj
+&=
+\inv{2} (-1)^n
+\int \psi (p^n x^m + x^m p^n) \psi^\conj \\
+&=
+\inv{2} (i\hbar)^n 
+\int \psi \left(\frac{d^n (x^m \psi^\conj)}{dx^n} + x^m \frac{d^n \psi^\conj}{dx^n} \right) \\
+&=
+\inv{2} (-i\hbar)^n 
+\int x^m \psi^\conj \left(\frac{d^n \psi }{dx^n} + \psi^\conj \frac{d^n (x^m \psi)}{dx^n} \right) \\
+&=
+\inv{2}
+\int \psi^\conj ( x^m p^n + p^n x^m ) \psi
+\end{align*}
+
+This shows that $(p^n x^m + x^m p^n)/2$ is Hermitian, and the conjugation requires $A_{nm}$ to be real for the
+product of the two to be Hermitian.
+
+\subsection{ P10. Hermitizing Classical operator $(px)^2$. }
+
+Show that 
+\begin{align*}
+\inv{2}\left(x^2 p^2 + p^2 x^2 \right)
+\end{align*}
+
+and 
+\begin{align*}
+\inv{4}\left(x p + p x \right)^2
+\end{align*}
+
+lead to results that differ by a factor of $\hbar^2$.
+
+To do so consider the difference of the expectation of this operator, first calculating this difference.  We will
+want to use the commutator relation, in a few equivalent forms
+
+\begin{align*}
+xp - p x &= i \hbar \\
+xp &= p x + i \hbar \\
+px &= x p - i \hbar \\
+x p + p x &= 2 p x + i \hbar \\
+          &= 2 x p - i \hbar \\
+\end{align*}
+
+This gives us
+
+\begin{align*}
+\inv{4}\left(x p + p x \right)^2 
+&= \inv{4}(2 p x + i \hbar)( 2 x p - i \hbar ) \\
+&= p x^2 p + i\hbar \inv{2}(x p - p x) + \inv{4} \hbar^2 \\
+&= p x^2 p - \hbar^2 \inv{2} + \inv{4} \hbar^2 \\
+&= p x^2 p - \hbar^2 \inv{4} \\
+\end{align*}
+
+For the other operator, reduction to a form that also contains $p x^2 p$, we have
+
+\begin{align*}
+\inv{2}\left(x^2 p^2 + p^2 x^2 \right)
+&=
+\inv{2}\left(x (x p) p + p (p x) x \right) \\
+&=
+\inv{2}\left(x (p x + i \hbar) p + p (x p -i\hbar) x \right) \\
+&=
+\inv{2}\left((x p) x p + p x (p x) + i \hbar ( x p - p x ) \right) \\
+&=
+\inv{2}\left((p x + i\hbar) x p + p x ( x p - i\hbar) + (i \hbar)^2 \right) \\
+&=
+\inv{2}\left( 2 p x^2 p + i \hbar ( x p - p x) + -\hbar^2 \right) \\
+&=
+p x^2 p + -\hbar^2 
+\end{align*}
+
+So now, if we take the difference 
+\begin{align*}
+\inv{2}\left(x^2 p^2 + p^2 x^2 \right) - \inv{4}\left(x p + p x \right)^2 
+&= (p x^2 p + -\hbar^2 ) - (p x^2 p - \hbar^2 \inv{4}) 
+ \\
+&= -\frac{3}{4}\hbar^2 
+ \\
+\end{align*}
+
+The difference of the expectation values of these operators is thus of the order $\hbar^2$ as was to be calculated.
+
+\subsection{ P11.  An explicit calculation of a Hermitian operator. }
+
+Show by integration by parts that $(xp)^\dagger = p x$.
+
+The defining relation for the Hermitian conjugation operation is equation 16 in the text.
+
+\begin{align*}
+\int \psi^\conj (O^\dagger \psi) dx &= \int \psi (O^\conj \psi^\conj) dx
+\end{align*}
+
+For the operator $xp$, we have
+
+\begin{align*}
+\int \psi^\conj (xp)^\dagger \psi dx 
+&= \int \psi (xp)^\conj \psi^\conj dx \\
+&= (-i\hbar)^\conj \int \psi x \PD{x}{\psi^\conj} dx \\
+&= - i\hbar \int \PD{x}{x \psi} \psi^\conj dx \\
+&= \int \psi^\conj (p x) \psi dx \\
+\end{align*}
+
+So we have, as desired
+
+\begin{align*}
+(xp)^\dagger = p x
+\end{align*}
+
+\subsection{ P12. Hermitian operator from antisymmetric difference. }
+
+Show that $H = i (O - O^\dagger)$ is a Hermitian operator.
+
+This follows directly from the definition, calculating the expectation
+
+\begin{align*}
+\expectation{H} 
+&=\int \psi^\conj (i (O - O^\dagger) \psi ) \\
+&=
+i \int \psi^\conj (O \psi )
+-i \int \psi^\conj (O^\dagger \psi ) \\
+&=
+i \int \psi^\conj (O \psi )
+-i \int \psi (O^\conj \psi^\conj) \\
+\end{align*}
+
+Taking conjugates we have
+
+\begin{align*}
+\expectation{H}^\conj
+&=
+-i \int \psi (O^\conj \psi^\conj )
++i \int \psi^\conj (O \psi ) \\
+&=
+\expectation{H} \\
+\quad\quad\quad \square
+\end{align*}
+
+
+\subsection{ P13. When product of operators is Hermitian. }
+
+What relation must exist between Hermitian $B$ and $A$ must exist for $AB$ to be Hermitian.
+
+TODO:
+Am guessing that this has something to do with the commutator of the operators.  This one I don't have a check mark
+besides in my text, so did I ever figure it out?
+
+\subsection{ P14. Show directly that $i(p^2 x - xp^2)$ is Hermitian }
+
+This follows from $(AB)^\dagger = BA$ in the text above.  We have
+
+\begin{align*}
+(i (p^2 x - x p^2))^\dagger 
+&=
+(x^\dagger p^\dagger p^\dagger - p^\dagger p^\dagger x^\dagger)(-i) \\
+&=
+-i (x p^2 - p^2 x) \\
+&=
+i (p^2 x - x p^2 ) \quad\quad\quad \square
+\end{align*}
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
