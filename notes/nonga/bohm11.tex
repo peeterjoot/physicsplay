@@ -29,7 +29,7 @@
 
 \title{ QM notes and problems for Bohm, chapter 11. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ May 8, 2009.  Last Revision: $Date: 2009/05/09 04:33:54 $ }
+\date{ May 8, 2009.  Last Revision: $Date: 2009/05/09 17:07:21 $ }
 
 \begin{document}
 
@@ -41,20 +41,22 @@ Problems and additional details from reading of \cite{bohm1989qt}, chapter 11.
 
 \subsection{ Problem 1.  Probability currents for step potential. }
 
+\subsubsection{ Setup. }
+
 This problem and the associated text has a step potential $V$ for $x>0$.  The 
 idea is that we have a left to right stream of particles with an associated
 wave function, with reflected and transmitted coefficients.
 
 Solutions to the stationary equation are sought in each of the intervals
 
-\begin{align*}
+\begin{align}
 -\frac{\hbar^2}{2m}\psi'' + (V-E)\psi = 0
-\end{align*}
+\end{align}
 
 That is
-\begin{align*}
+\begin{align}
 \psi'' = - \frac{2m}{\hbar^2} (E-V)\psi 
-\end{align*}
+\end{align}
 
 With an assumption of exponential solutions on the left of the barrier
 (ie: no decay and associated hyperbolic solutions in the $V=0$ interval),
@@ -230,18 +232,177 @@ A_{+} \left(
 This reduces the free parameters in the wave functions to the single 
 amplitude
 
-\begin{align*}
+\begin{align}\label{eqn:wavefunctions}
 \psi_1 &= 
 A_{+} e^{ i p_1 x/\hbar }
 +A_{+} \left(
 \frac{ p_1 - p_2 }{p_1 + p_2} \right)
 e^{ -i p_1 x/\hbar } \\
 \psi_2 &= A_{+} \frac{2 p_1 }{p_1 + p_2} e^{ i p_2 x/\hbar }
-\end{align*}
+\end{align}
 
 Inspection provides a check that these do in fact satisfy the desired
-continuity requirements.
+continuity requirements at $x=0$ (both the wave function and it's derivative).
 
+Also observe that a sign error typo in the text is implicitly fixed above (
+sign factor of $p_2$ in $\psi_2$).  That typo is corrected for right afterwards when $A,B,C$ is calculated, since it would otherwise result in a negative sign in the resulting linear equations there too.
+
+\subsubsection{ Probability currents. }
+
+From \ref{eqn:wavefunctions}
+the probability currents can be calculated.  The probability 
+conservation relation follows by taking time derivatives of $\psi^\conj\psi$, as done in \cite{PJprobCurrent}.  We have, for the $x$ component of the current
+
+\begin{align*}
+\PD{t}{\psi\psi^\conj} + \grad \cdot \left(
+\frac{\hbar}{2 m i} 
+\left( 
+\psi^\conj \grad \psi
+-\psi \grad \psi^\conj
+\right)
+\right) = 0
+\end{align*}
+
+Or in short
+
+\begin{align*}
+\PD{t}{\rho} + \grad \cdot \BJ = 0
+\end{align*}
+
+For $\psi_2$ we have
+
+\begin{align*}
+J_2 
+&= 
+\frac{\hbar}{2 m i} 
+\left( 
+B_{+}^\conj e^{ -i p_2 x/\hbar }
+B_{+} (i p_2 /\hbar)e^{ i p_2 x/\hbar }
+-B_{+} e^{ -i p_2 x/\hbar }
+B_{+}^\conj (-i p_2 /\hbar)e^{ -i p_2 x/\hbar }
+\right) \\
+&= \frac{ p_2 \Abs{ B_{+} }^2}{m } \\
+\end{align*}
+
+In terms of $A_{+}$, this is
+
+\begin{align*}
+J_2 &= \frac{ 4 p_1^2 p_2 \Abs{ A_{+} }^2}{m (p_1 + p_2)^2}
+\end{align*}
+
+For $\psi_1$ the $x$ component of the current is
+
+\begin{align*}
+J_1 
+&= 
+\frac{\hbar}{2 m i} 
+\left( 
+(A_{+}^\conj e^{ -i p_1 x/\hbar }
++A_{-}^\conj e^{ i p_1 x/\hbar })
+(A_{+} (i p_1 /\hbar)e^{ i p_1 x/\hbar }
++A_{-} (-i p_1 /\hbar)e^{ -i p_1 x/\hbar }) 
+\right)
+\\
+&
+-
+\frac{\hbar}{2 m i} \left(
+(
+A_{+} e^{ i p_1 x/\hbar } +A_{-} e^{ -i p_1 x/\hbar })
+(A_{+}^\conj (-i p_1 /\hbar)e^{ -i p_1 x/\hbar }
++A_{-}^\conj (i p_1 /\hbar)e^{ i p_1 x/\hbar })
+\right) \\
+&=
+\frac{p_1}{2m} 
+\left(
+2\Abs{A_{+} }^2
++2\Abs{A_{-} }^2
++
+A_{-}^\conj A_{+} e^{ 2 i p_1 x/\hbar }
+-A_{+}^\conj A_{-} e^{ -2 i p_1 x/\hbar }
+-A_{+} A_{-}^\conj e^{ 2 i p_1 x/\hbar }
++A_{-} A_{+}^\conj e^{ -2 i p_1 x/\hbar }
+\right) \\
+&=
+\frac{p_1}{m} 
+\left(
+\Abs{A_{+} }^2
++\Abs{A_{-} }^2
+\right) \\
+\end{align*}
+
+Again in terms of $A_{+}$, we have
+
+\begin{align*}
+\Abs{A_{+} }^2 +\Abs{A_{-} }^2 
+&=
+\Abs{A_{+}}^2 \left( 1 + \left( \frac{ p_1 - p_2 }{p_1 + p_2} \right)^2 \right) \\
+&=
+\Abs{A_{+}}^2 
+\frac{ 2 p_1^2 + 2 p_2^2 + 2 p_1 p_2 - 2 p_1 p_2 }{(p_1 + p_2)^2} \\
+&=
+2 \Abs{A_{+}}^2 \frac{ p_1^2 + p_2^2 }{(p_1 + p_2)^2} \\
+\end{align*}
+
+Which provides the probability current for the sum of the incident and reflected wave functions
+
+\begin{align*}
+J_1
+&=
+\Abs{A_{+}}^2 
+\frac{2 p_1}{m} 
+\frac{ (p_1^2 + p_2^2) }{(p_1 + p_2)^2} \\
+\end{align*}
+
+The individual incident and reflected currents can also be calculated.  These are
+
+\begin{align*}
+J_i &= \frac{ p_1}{m} \Abs{ A_{+} }^2 \\
+J_r &= \frac{ p_1}{m} \Abs{ A_{-} }^2  \\
+&= 
+\Abs{ A_{+} }^2 
+\frac{ p_1 }{m } 
+\left( \frac{ p_1 - p_2 }{p_1 + p_2} \right)^2 
+\end{align*}
+
+Perhaps unsuprisingly, we see that the total probability current for $x<0$, is the sum of the incident and reflected
+currents $J_1 = J_i + J_r$.
+
+\subsubsection{ Transmission and reflection coefficients. }
+
+As in the text we can calculate the reflection coefficent, the ratio of the magnitudes of the reflected and the incident currents,
+
+\begin{align*}
+R 
+&= \frac{J_r}{J_i}  \\
+&=
+\frac{\Abs{ A_{+} }^2 
+\frac{ p_1 }{m } 
+\left( \frac{ p_1 - p_2 }{p_1 + p_2} \right)^2 }{
+\frac{ p_1}{m} 
+\Abs{ A_{+} }^2 } \\
+&=
+\left( \frac{ p_1 - p_2 }{p_1 + p_2} \right)^2 
+\\
+\end{align*}
+
+and can calculate the transmission coefficient, the ratio of the transmitted current $J_2$, to the incident current $J_i$.  This is
+
+\begin{align*}
+T 
+&= \frac{J_2}{J_i} \\
+&= 
+\frac{
+\frac{ 4 p_1^2 p_2 \Abs{ A_{+} }^2}{m (p_1 + p_2)^2}
+}
+{
+\frac{ p_1}{m} \Abs{ A_{+} }^2 
+} \\
+&=
+\frac{ 4 p_1 p_2 }{ (p_1 + p_2)^2}
+\end{align*}
+
+Without first calculating the currents explicitly it wasn't clear to me how $T$ was calculated in the text, and doing this first
+makes that a bit more sensible.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
