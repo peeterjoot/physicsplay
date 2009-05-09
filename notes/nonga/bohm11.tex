@@ -1,0 +1,249 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+
+\DeclareMathOperator{\sgn}{sgn}
+\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+\newcommand{\PDN}[3]{\frac{\partial^{#3} {#2}}{\partial {#1}^{#3}}}
+\DeclareMathOperator{\sinc}{sinc}
+\DeclareMathOperator{\PV}{PV}
+\newcommand{\FF}[0]{\mathcal{F}}
+\newcommand{\Sw}[0]{\mathcal{S}}
+\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+\newcommand{\FM}[0]{\inv{\sqrt{2\pi\hbar}}}
+\newcommand{\expectation}[1]{\langle{#1}\rangle}
+
+%\usepackage{listings}
+%\usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
+% makes \grad look funny though (almost like spacegrad, but narrower)
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+\title{ QM notes and problems for Bohm, chapter 11. }
+\author{Peeter Joot \quad peeter.joot@gmail.com }
+\date{ May 8, 2009.  Last Revision: $Date: 2009/05/09 04:33:54 $ }
+
+\begin{document}
+
+\maketitle{}
+\tableofcontents
+\section{ Bohm Chapter 11 problems. }
+
+Problems and additional details from reading of \cite{bohm1989qt}, chapter 11.
+
+\subsection{ Problem 1.  Probability currents for step potential. }
+
+This problem and the associated text has a step potential $V$ for $x>0$.  The 
+idea is that we have a left to right stream of particles with an associated
+wave function, with reflected and transmitted coefficients.
+
+Solutions to the stationary equation are sought in each of the intervals
+
+\begin{align*}
+-\frac{\hbar^2}{2m}\psi'' + (V-E)\psi = 0
+\end{align*}
+
+That is
+\begin{align*}
+\psi'' = - \frac{2m}{\hbar^2} (E-V)\psi 
+\end{align*}
+
+With an assumption of exponential solutions on the left of the barrier
+(ie: no decay and associated hyperbolic solutions in the $V=0$ interval),
+we must have $E>0$.
+
+So, the solution can be written as the sum
+
+\begin{align*}
+\psi_1 = \sum A_{\pm} \exp\left( \pm i \sqrt{2mE} x / \hbar \right)
+\end{align*}
+
+Similarily for $x>0$, non-hyperbolic solutions are
+
+\begin{align*}
+\psi_2 = \sum B_{\pm} \exp\left( \pm i \sqrt{2m(E-V)} x / \hbar \right)
+\end{align*}
+
+Mathematically, there isn't anything that prevents picking $E-V <0$ solutions
+
+\begin{align*}
+\psi_2 = \sum B_{\pm}' \exp\left( \pm \sqrt{-2m(E-V)} x / \hbar \right)
+\end{align*}
+
+TODO: Come back to this and think it through.  Where will follow through using
+wave function continuity and derivative continuity with these solutions
+in the $x>0$ interval?
+
+Continuity at $x=0$ ($\psi_1(0) = \psi_2(0)$) requires
+
+\begin{align*}
+A_{+} + A_{-} = B_{+} + B_{-}
+\end{align*}
+
+Whereas derivative continuity, with $p_1 = \sqrt{2mE}$, and $p_2 = \sqrt{2m (E-V)}$ requires
+
+\begin{align*}
+\frac{i p_1}{\hbar} (A_{+} - A_{-}) = \frac{i p_2}{\hbar} (B_{+} - B_{-}) 
+\end{align*}
+
+This is
+
+\begin{align*}
+\begin{bmatrix}
+1 & 1 \\
+p_1 & -p_1
+\end{bmatrix}
+\begin{bmatrix}
+A_{+} \\
+A_{-} 
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & 1 \\
+p_2 & -p_2
+\end{bmatrix}
+\begin{bmatrix}
+B_{+} \\
+B_{-} 
+\end{bmatrix}
+\end{align*}
+
+Matrix inversion gives us the $B$ coefficients in terms of $A$
+
+\begin{align*}
+\begin{bmatrix}
+B_{+} \\
+B_{-} 
+\end{bmatrix}
+&=
+\inv{-2p_2}
+\begin{bmatrix}
+-p_2 & -1 \\
+-p_2 & 1
+\end{bmatrix}
+\begin{bmatrix}
+1 & 1 \\
+p_1 & -p_1
+\end{bmatrix}
+\begin{bmatrix}
+A_{+} \\
+A_{-} 
+\end{bmatrix} \\
+&=
+\inv{2p_2}
+\begin{bmatrix}
+p_2 & 1 \\
+p_2 & -1
+\end{bmatrix}
+\begin{bmatrix}
+1 & 1 \\
+p_1 & -p_1
+\end{bmatrix}
+\begin{bmatrix}
+A_{+} \\
+A_{-} 
+\end{bmatrix} \\
+&=
+\inv{2p_2}
+\begin{bmatrix}
+(p_1 + p_2) & (p_2 - p_1) \\
+(p_2 - p_1) & (p_1 + p_2)
+\end{bmatrix}
+\begin{bmatrix}
+A_{+} \\
+A_{-} 
+\end{bmatrix} \\
+\end{align*}
+
+Or equivalently
+
+\begin{align*}
+\begin{bmatrix}
+A_{+} \\
+A_{-} 
+\end{bmatrix}
+&=
+\inv{2p_1}
+\begin{bmatrix}
+(p_1 + p_2) & (p_1 - p_2) \\
+(p_1 - p_2) & (p_1 + p_2)
+\end{bmatrix}
+\begin{bmatrix}
+B_{+} \\
+B_{-} 
+\end{bmatrix} \\
+\end{align*}
+
+Using this last, the 
+assumption of no further barriers in the $x>0$ interval (ie: no reflection at 
+$x = \infty$), allows the physical situation to dictate $B_{-} = 0$.  Then we
+have
+
+\begin{align*}
+\begin{bmatrix}
+A_{+} \\
+A_{-} 
+\end{bmatrix}
+&=
+\frac{B_{+} }{2p_1}
+\begin{bmatrix}
+p_1 + p_2 \\
+p_1 - p_2 
+\end{bmatrix}
+\end{align*}
+
+The first is 
+\begin{align*}
+A_{+} 
+&=
+\frac{B_{+} }{2p_1} (p_1 + p_2)
+\end{align*}
+
+Or
+\begin{align*}
+B_{+} 
+&=
+\frac{2 p_1 A_{+} }{p_1 + p_2}
+\end{align*}
+
+and the second is
+\begin{align*}
+A_{-} 
+&=
+\frac{B_{+} }{2p_1} (p_1 - p_2) \\
+&=
+\frac{2 p_1 A_{+} }{p_1 + p_2}
+\frac{1}{2p_1} (p_1 - p_2) \\
+&=
+A_{+} \left(
+\frac{ p_1 - p_2 }{p_1 + p_2} \right)
+\end{align*}
+
+This reduces the free parameters in the wave functions to the single 
+amplitude
+
+\begin{align*}
+\psi_1 &= 
+A_{+} e^{ i p_1 x/\hbar }
++A_{+} \left(
+\frac{ p_1 - p_2 }{p_1 + p_2} \right)
+e^{ -i p_1 x/\hbar } \\
+\psi_2 &= A_{+} \frac{2 p_1 }{p_1 + p_2} e^{ i p_2 x/\hbar }
+\end{align*}
+
+Inspection provides a check that these do in fact satisfy the desired
+continuity requirements.
+
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
+
+\end{document}
