@@ -21,7 +21,7 @@
 
 \title{ One dimensional rectanglular Quantum barrier problem. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ May 11, 2009.  Last Revision: $Date: 2009/05/12 03:30:25 $ }
+\date{ May 11, 2009.  Last Revision: $Date: 2009/05/12 13:02:28 $ }
 
 \begin{document}
 
@@ -34,6 +34,9 @@ while doing the chapter 11 problems of \cite{bohm1989qt} led to trouble.
 An attempt to look at this worked example in \cite{mcmahon2005qmd} didn't 
 help much due to innumerable typos (at least a lot more than in my first attempt).
 Here's a second bash at it, redoing the calculations from scratch.
+
+There's very little physics here, just a lot of algebra, but let's try
+to get all this algebra correct this time.
 
 \section{ Setup. }
 
@@ -123,10 +126,10 @@ The factor of exponentials are complex conjugates and can be put into polar form
 
 Where 
 
-\begin{align*}
+\begin{align}\label{eqn:muAndTheta}
 \mu^2 &= 4 + \left( \frac{k}{\beta} -\frac{\beta}{k} \right)^2 \\
 \theta &= \atan\left( \inv{2} \left(\frac{k}{\beta} - \frac{\beta}{k} \right) \right)
-\end{align*}
+\end{align}
 
 We have
 
@@ -143,13 +146,13 @@ For notational consistency it looks desirable to write something like
 \end{align*}
 
 Which leaves us with the wave function in the $x<0$ region as
-\begin{align}
+\begin{align}\label{eqn:incidentAndReflected}
 \psi &=
 \frac{\mu E}{2}\cosh\left( i\theta -\beta a \right) e^{ i k x }
 +\frac{\nu E}{2}\sinh\left( \beta a \right) e^{ -i k x }
 \end{align}
 
-\subsection{ Barrier wave function in polar form. }
+\subsection{ (Aside) Barrier wave function in polar form. }
 
 Having seen how the polar form simplifies the final expression of the first region wave function, it can be seen that 
 something similar can be done in the barrier region.  
@@ -168,11 +171,13 @@ we then have
 \end{align*}
 
 So we have in the $x \in [0,a]$ region
-\begin{align}
+\begin{align}\label{eqn:inBarrierCosh}
 \psi &= E \sqrt{1 + \frac{k^2}{\beta^2}} \cosh\left( i\phi + \beta(x-a) \right) 
 \end{align}
 
-Utilizing this should produce the same result.  Equality at $x=0$ then gives
+Utilizing 
+\ref{eqn:inBarrierCosh}
+should produce the same result for $x<0$.  Equality at $x=0$ then gives
 
 \begin{align*}
 A + B &= E \sqrt{1 + \frac{k^2}{\beta^2}} \cosh\left( i\phi -\beta a \right) \\
@@ -189,6 +194,138 @@ B &= \frac{E}{2} \sqrt{1 + \frac{k^2}{\beta^2}} \left(
 \cosh\left( i\phi -\beta a \right) - \frac{i\beta}{k} \sinh\left( i\phi -\beta a \right) 
 \right) \\
 \end{align*}
+
+This produces values for both $A$, $B$ very directly, but this 
+form of solution in the $x<0$ region begs for some additional reduction.  Let's
+defer trying that until after the $T$, and $R$ computations.
+
+\subsubsection{ Verify correctness of barrier solution. }
+
+If we want to verify that \ref{eqn:inBarrierCosh} 
+does still match both value and derivative to the $x>a$ wave function
+showing both of the following is required
+
+\begin{align*}
+1 &= \sqrt{1 + \frac{k^2}{\beta^2}} \cos\left( \atan(k/\beta) \right) \\
+ik &=
+\sqrt{1 + \frac{k^2}{\beta^2}} \beta \sinh\left( i \atan(k/\beta) \right)
+\end{align*}
+
+This last is
+\begin{align*}
+k/\beta &=
+\sqrt{1 + \frac{k^2}{\beta^2}} \sin\left( \atan(k/\beta) \right)
+\end{align*}
+
+But these are just the identities
+
+\begin{align*}
+\sin\left( \atan(u) \right) &= \frac{u}{\sqrt{1 + u^2}} \\
+\cos\left( \atan(u) \right) &= \frac{1}{\sqrt{1 + u^2}}
+\end{align*}
+
+\subsection{ Transmission and reflection coefficients. }
+
+From \ref{eqn:incidentAndReflected} we can calculate the transmission
+coefficient
+
+\begin{align*}
+T &= \frac{\Abs{E}^2}{\Abs{A}^2} \\
+&= \Abs{\frac{2  } { \mu \cosh\left( i\theta -\beta a \right) }}^2 \\
+&= \frac{4} { 
+\left(4 + \left( \frac{k}{\beta} -\frac{\beta}{k} \right)^2 \right)
+\Abs{\cosh\left( i\theta -\beta a \right)}^2 }
+\end{align*}
+
+Expanding the $\cosh$ term we have
+\begin{align*}
+\Abs{\cosh\left( i\theta -\beta a \right)}^2
+&=
+\inv{4}
+\left(
+e^{i\theta - \beta a}
++ e^{-i\theta + \beta a}
+\right)
+\left(
+e^{-i\theta - \beta a}
++ e^{i\theta + \beta a}
+\right) \\
+&=
+\inv{4}\left(
+e^{2\beta a}
++ e^{-2\beta a}
++e^{2i\theta }
++e^{-2i\theta }
+\right) \\
+&=
+\inv{2}
+\left( \cosh(2\beta a) + \cos(2\theta) \right)
+\end{align*}
+
+\begin{align}\label{eqn:coshSquared}
+Which puts us a bit closer to a fully reduced expression for $T$
+
+\begin{align*}
+T 
+&= \frac{8} { 
+\left(4 + \left( \frac{k}{\beta} -\frac{\beta}{k} \right)^2 \right)
+\left( \cosh(2\beta a) + \cos(2\theta) \right)
+}
+\end{align*}
+
+To eliminate the $\theta$ we need 
+
+\begin{align*}
+\cos(2\atan\alpha) = ?
+\end{align*}
+
+Where
+\begin{align*}
+\alpha &= \inv{2} \left(\frac{k}{\beta} - \frac{\beta}{k} \right)
+\end{align*}
+
+The reflection coefficient is
+\begin{align*}
+R &= \frac{\Abs{B}^2}{\Abs{A}^2} \\
+&= 
+\Abs{\frac{\nu \sinh\left( \beta a \right) }
+{\mu \cosh\left( i\theta -\beta a \right) }}
+\end{align*}
+
+\section{ Trig mess. }
+
+\subsection{ Complex $\cosh$ absolute square expansion. }
+
+Expanding the $\cosh$ term we have
+
+\begin{align*}
+\Abs{\cosh\left( i\theta -\beta a \right)}^2
+&=
+\inv{4}
+\left(
+e^{i\theta - \beta a}
++ e^{-i\theta + \beta a}
+\right)
+\left(
+e^{-i\theta - \beta a}
++ e^{i\theta + \beta a}
+\right) \\
+&=
+\inv{4}\left(
+e^{2\beta a}
++ e^{-2\beta a}
++e^{2i\theta }
++e^{-2i\theta }
+\right) \\
+&=
+\end{align*}
+
+Which is
+\begin{align}\label{eqn:coshSquared}
+\Abs{\cosh\left( i\theta -\beta a \right)}^2
+&=\inv{2}
+\left( \cosh(2\beta a) + \cos(2\theta) \right)
+\end{align}
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
