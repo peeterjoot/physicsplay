@@ -1,0 +1,196 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+
+%\DeclareMathOperator{\Atan2}{atan2}
+\DeclareMathOperator{\atan}{atan}
+
+%\usepackage{listings}
+%\usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
+% makes \grad look funny though (almost like spacegrad, but narrower)
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+\title{ One dimensional rectanglular Quantum barrier problem. }
+\author{Peeter Joot \quad peeter.joot@gmail.com }
+\date{ May 11, 2009.  Last Revision: $Date: 2009/05/12 03:30:25 $ }
+
+\begin{document}
+
+\maketitle{}
+\tableofcontents
+\section{ Motivation. }
+
+My first attempt at the probability current calculation for this
+while doing the chapter 11 problems of \cite{bohm1989qt} led to trouble.
+An attempt to look at this worked example in \cite{mcmahon2005qmd} didn't 
+help much due to innumerable typos (at least a lot more than in my first attempt).
+Here's a second bash at it, redoing the calculations from scratch.
+
+\section{ Setup. }
+
+The potential is taken to be zero everywhere except $x \in [0,a]$, where it is
+$V$.  This divides the problem into three regions, I, II, and III, for 
+before ($x<0$), in and after the barrier, and the wave functions for the 
+$E >V$ case are respectively
+
+\begin{equation}
+\psi =
+\left\{
+\begin{array}{l l}
+A e^{i k x} + B e^{-i k x} & \quad \mbox{if $x <0$} \\
+C e^{ \beta(x-a)} + D e^{ -\beta(x-a)} & \quad \mbox{if $x \in [0,a]$} \\
+E e^{i k(x-a)} & \quad \mbox{if $x >0$} \\
+\end{array}
+\right.
+\end{equation}
+
+%Where $p = \hbar \sqrt{2 m E} = \hbar k$
+Where $k = \sqrt{2 m E}/\hbar$, and $\beta = \sqrt{2 m (E-V)}/\hbar$.
+FIXME: check $\beta$ ... doesn't look right.
+
+\subsection{ Equality at $x=a$ }
+
+Equality of the wave functions and derivatives at $x=a$ gives
+
+\begin{align*}
+C + D &= E \\
+C - D &= \frac{i k}{\beta}E
+\end{align*}
+
+which has solutions
+
+\begin{align*}
+C &= \frac{E}{2}( 1 + i k/\beta ) \\
+D &= \frac{E}{2}( 1 - i k/\beta )
+\end{align*}
+
+Two of the free variables of the wave equation are now eliminated, and the wave function in the barrier region can now be written as
+\begin{align}\label{eqn:psiInBarrier}
+\psi =
+\frac{E}{2}\left( \left( 1 + \frac{i k}{\beta} \right) e^{ \beta(x-a)} + \left( 1 - \frac{i k}{\beta} \right) e^{ -\beta(x-a)} \right)
+\end{align}
+
+\subsection{ Equality at $x=0$ }
+
+Equating values and first derivatives at $x=0$ we have
+
+\begin{align*}
+A + B &=
+\frac{E}{2}\left( \left( 1 + \frac{i k}{\beta} \right) e^{ -\beta a} + \left( 1 - \frac{i k}{\beta} \right) e^{ \beta a } \right) \\
+A - B &=
+\frac{\beta E}{2 i k}\left( \left( 1 + \frac{i k}{\beta} \right) e^{ -\beta a} - \left( 1 - \frac{i k}{\beta} \right) e^{ \beta a } \right)
+\end{align*}
+
+Taking sums and differences we have
+
+\begin{align*}
+A &= \frac{E}{4}\left( \left(1 + \frac{\beta}{ik}\right)\left( 1 + \frac{i k}{\beta} \right) e^{ -\beta a} + \left(1 - \frac{\beta}{ik}\right)\left( 1 - \frac{i k}{\beta} \right) e^{ \beta a } \right) \\
+B &= \frac{E}{4}\left( \left(1 - \frac{\beta}{ik}\right)\left( 1 + \frac{i k}{\beta} \right) e^{ -\beta a} + \left(1 + \frac{\beta}{ik}\right)\left( 1 - \frac{i k}{\beta} \right) e^{ \beta a } \right) \\
+\end{align*}
+
+Expanding the products first for $B$
+
+\begin{align*}
+B 
+&= \frac{E}{4}\left( \left(\frac{-\beta}{ik} + \frac{ik}{\beta} \right) e^{ -\beta a} + \left(\frac{\beta}{ik} - \frac{ik}{\beta} \right) e^{ \beta a } \right) \\
+&= \frac{iE}{4}\left( \left(\frac{\beta}{k} + \frac{k}{\beta} \right) e^{ -\beta a} - \left(\frac{\beta}{k} + \frac{k}{\beta} \right) e^{ \beta a } \right) \\
+&= \frac{iE}{4}\left(\frac{\beta}{k} + \frac{k}{\beta} \right) \left( e^{ -\beta a} - e^{ \beta a } \right) \\
+&= \frac{-iE}{2}\left(\frac{\beta}{k} + \frac{k}{\beta} \right) \sinh\left( \beta a \right) \\
+\end{align*}
+
+Now for $A$ we have
+\begin{align*}
+A &= \frac{E}{4}\left( \left(2 + \frac{\beta}{ik} + \frac{ik}{\beta} \right) e^{ -\beta a} + \left(2 - \frac{\beta}{ik} - \frac{ik}{\beta} \right) e^{ \beta a } \right) \\
+\end{align*}
+
+The factor of exponentials are complex conjugates and can be put into polar form to simplify.  Writing
+
+\begin{align*}
+\gamma 
+&= 2 + \frac{\beta}{ik} + \frac{ik}{\beta} \\
+&= 2 + i \left( \frac{k}{\beta} -\frac{\beta}{k} \right) \\
+&= \mu e^{i \theta} 
+\end{align*}
+
+Where 
+
+\begin{align*}
+\mu^2 &= 4 + \left( \frac{k}{\beta} -\frac{\beta}{k} \right)^2 \\
+\theta &= \atan\left( \inv{2} \left(\frac{k}{\beta} - \frac{\beta}{k} \right) \right)
+\end{align*}
+
+We have
+
+\begin{align*}
+A 
+&= \frac{\mu E}{4}\left( e^{ i\theta -\beta a} + e^{ -(i \theta - \beta a) } \right) \\
+&= \frac{\mu E}{2}\cosh\left( i\theta -\beta a \right) \\
+\end{align*}
+
+For notational consistency it looks desirable to write something like
+
+\begin{align*}
+\nu &= -i \left(\frac{\beta}{k} + \frac{k}{\beta} \right) 
+\end{align*}
+
+Which leaves us with the wave function in the $x<0$ region as
+\begin{align}
+\psi &=
+\frac{\mu E}{2}\cosh\left( i\theta -\beta a \right) e^{ i k x }
++\frac{\nu E}{2}\sinh\left( \beta a \right) e^{ -i k x }
+\end{align}
+
+\subsection{ Barrier wave function in polar form. }
+
+Having seen how the polar form simplifies the final expression of the first region wave function, it can be seen that 
+something similar can be done in the barrier region.  
+
+In equation \ref{eqn:psiInBarrier}, we can utilize polar form for the $1+ik/\beta$ constant and its conjugate.  Writing
+
+\begin{align*}
+\tan\phi &= \frac{k}{\beta}
+\end{align*}
+
+we then have
+\begin{align*}
+\psi 
+&=
+\frac{E}{2}\sqrt{1 + \frac{k^2}{\beta^2}} \left( e^{i\phi} e^{ \beta(x-a)} + e^{-i\phi} e^{ -\beta(x-a)} \right) \\
+\end{align*}
+
+So we have in the $x \in [0,a]$ region
+\begin{align}
+\psi &= E \sqrt{1 + \frac{k^2}{\beta^2}} \cosh\left( i\phi + \beta(x-a) \right) 
+\end{align}
+
+Utilizing this should produce the same result.  Equality at $x=0$ then gives
+
+\begin{align*}
+A + B &= E \sqrt{1 + \frac{k^2}{\beta^2}} \cosh\left( i\phi -\beta a \right) \\
+A - B &= E \frac{i\beta}{k} \sqrt{1 + \frac{k^2}{\beta^2}} \sinh\left( i\phi -\beta a \right) \\
+\end{align*}
+
+Or
+
+\begin{align*}
+A &= \frac{E}{2} \sqrt{1 + \frac{k^2}{\beta^2}} \left(
+\cosh\left( i\phi -\beta a \right) + \frac{i\beta}{k} \sinh\left( i\phi -\beta a \right) 
+\right) \\
+B &= \frac{E}{2} \sqrt{1 + \frac{k^2}{\beta^2}} \left(
+\cosh\left( i\phi -\beta a \right) - \frac{i\beta}{k} \sinh\left( i\phi -\beta a \right) 
+\right) \\
+\end{align*}
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
+
+\end{document}
