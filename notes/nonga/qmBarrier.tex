@@ -21,7 +21,7 @@
 
 \title{ One dimensional rectanglular Quantum barrier penetration problem. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ May 11, 2009.  Last Revision: $Date: 2009/05/13 01:58:33 $ }
+\date{ May 11, 2009.  Last Revision: $Date: 2009/05/13 03:15:33 $ }
 
 \begin{document}
 
@@ -50,13 +50,13 @@ $E <V$ case are respectively
 \begin{array}{l l}
 A e^{i k x} + B e^{-i k x} & \quad \mbox{if $x <0$} \\
 C e^{ \beta(x-a)} + D e^{ -\beta(x-a)} & \quad \mbox{if $x \in [0,a]$} \\
-E e^{i k(x-a)} & \quad \mbox{if $x >0$} \\
+E_0 e^{i k(x-a)} & \quad \mbox{if $x >0$} \\
 \end{array}
 \right.
 \end{equation}
 
 Following \cite{mcmahon2005qmd} the wave functions have been written in terms of wave number 
-$k = \sqrt{2 m E}/\hbar$, and $\beta = \sqrt{2 m (V-E)}/\hbar$.  Unfortunately the 
+$k = \sqrt{2 m E_0}/\hbar$, and $\beta = \sqrt{2 m (V-E_0)}/\hbar$.  Unfortunately the 
 \cite{mcmahon2005qmd} has too many typos to attempt to follow directly.
 
 Unlike Bohm or QMD wave functions expressed using functions of $x-a$ are used here since a first
@@ -161,20 +161,29 @@ something similar can be done in the barrier region.
 
 In equation \ref{eqn:psiInBarrier}, we can utilize polar form for the $1+ik/\beta$ constant and its conjugate.  Writing
 
-\begin{align*}
-\tan\phi &= \frac{k}{\beta}
-\end{align*}
+\begin{align}
+\tan\phi &= \frac{k}{\beta} = \sqrt{\frac{E_0}{V-E_0}}
+\end{align}
 
 we then have
 \begin{align*}
 \psi 
 &=
 \frac{E}{2}\sqrt{1 + \frac{k^2}{\beta^2}} \left( e^{i\phi} e^{ \beta(x-a)} + e^{-i\phi} e^{ -\beta(x-a)} \right) \\
+&=
+\frac{E}{2}\sqrt{\frac{V}{V-E_0}} \left( e^{i\phi} e^{ \beta(x-a)} + e^{-i\phi} e^{ -\beta(x-a)} \right) \\
 \end{align*}
 
 So we have in the $x \in [0,a]$ region
 \begin{align}\label{eqn:inBarrierCosh}
 \psi &= E \sqrt{1 + \frac{k^2}{\beta^2}} \cosh\left( i\phi + \beta(x-a) \right) 
+\end{align}
+
+Or in terms of energies
+\begin{align}
+\psi &= E 
+\sqrt{\frac{V}{V-E_0}}
+\cosh\left( i\phi + \beta(x-a) \right) 
 \end{align}
 
 Utilizing 
@@ -201,34 +210,85 @@ This produces values for both $A$, $B$ very directly, but this
 form of solution in the $x<0$ region begs for some additional reduction.  Let's
 defer trying that until after the $T$, and $R$ computations.
 
-\subsubsection{ Verify correctness of barrier solution. }
-
-If we want to verify that \ref{eqn:inBarrierCosh} 
-does still match both value and derivative to the $x>a$ wave function
-showing both of the following is required
-
-\begin{align*}
-1 &= \sqrt{1 + \frac{k^2}{\beta^2}} \cos\left( \atan(k/\beta) \right) \\
-ik &=
-\sqrt{1 + \frac{k^2}{\beta^2}} \beta \sinh\left( i \atan(k/\beta) \right)
-\end{align*}
-
-This last is
-\begin{align*}
-k/\beta &=
-\sqrt{1 + \frac{k^2}{\beta^2}} \sin\left( \atan(k/\beta) \right)
-\end{align*}
-
-But these are just the identities
-
-\begin{align*}
-\sin\left( \atan(u) \right) &= \frac{u}{\sqrt{1 + u^2}} \\
-\cos\left( \atan(u) \right) &= \frac{1}{\sqrt{1 + u^2}}
-\end{align*}
-
 \section{ Calculate the probability currents and densities. }
 
-TODO.  Relate these also to the coefficients (would be more logical to do the current calculations first).
+\subsection{ Probability densities. }
+
+\subsubsection{ Barrier region probability density. }
+
+Using \ref{eqn:inBarrierCosh} we have for the barrier region
+
+\begin{align*}
+\rho 
+&= \psi\psi^\conj \\
+&= \Abs{E}^2 
+\left(1 + \frac{k^2}{\beta^2}\right) \Abs{\cosh\left( i\phi + \beta(x-a) \right) }^2
+\end{align*}
+
+Utilizing the identities \ref{eqn:coshSquared} \ref{eqn:sinhSquared} \ref{eqn:cosineTwiceArcTan}, we have
+
+\begin{align*}
+\rho 
+&= \inv{2} \Abs{E}^2 
+\left(1 + \frac{k^2}{\beta^2}\right) \left( \cosh( 2 \beta(x-a)) + \cos(2\phi) \right) \\
+&= \inv{2} \Abs{E}^2 
+\left(1 + \frac{k^2}{\beta^2}\right) \left( (2 \sinh^2( \beta(x-a)) + 1) + \frac{1 - k^2/\beta^2}{1 + k^2/\beta^2}\right) \\
+&= \inv{2} \Abs{E}^2 \left(
+\left(1 + \frac{k^2}{\beta^2}\right) (2 \sinh^2( \beta(x-a)) + 1) + 1 - \frac{k^2}{\beta^2} \right) \\
+\end{align*}
+
+This is
+\begin{align}
+\rho
+&= \Abs{E}^2 
+\left( 1 + \left(1 + \frac{k^2}{\beta^2}\right) \sinh^2( \beta(x-a)) \right) 
+\end{align}
+
+Or
+
+\begin{align}
+\rho
+&= \Abs{E}^2 
+\left( 1 + \frac{V}{V-E_0} \sinh^2( \beta(x-a)) \right) 
+\end{align}
+
+In particular observe that at $x=a$ we have $\rho = \Abs{E^2}$ the expected probability density for the entirety 
+of the $x>a$ transmission region.
+
+\subsection{ Probability current densities. }
+
+We want to calculate the probability currents in each of the regions, taking the $x$ components of the vector 
+probability current
+
+\begin{align}
+\BJ
+&=
+\frac{\hbar}{2 m i}
+\left(
+\psi^\conj \grad \psi
+-\psi \grad \psi^\conj
+\right)
+\end{align}
+
+In the $x<0$ region we can calculate the incident, reflected, and the total currents.  For the incident current we have
+
+\begin{align*}
+&= \frac{\hbar}{2mi}\left( A^\conj e^{-i k x} (ik)A e^{i k x} -Ae^{i k x} (-ik)A^\conj e^{-i k x} \right) \\
+\end{align*}
+
+which reduces to just
+\begin{align}
+J_i &= \frac{\hbar k \Abs{A}^2 }{m}
+\end{align}
+
+by comparison we then also have for the reflected and transmitted currents, respectively
+
+\begin{align}
+J_r &= \frac{\hbar k \Abs{B}^2 }{m} \\
+J_t &= \frac{\hbar k \Abs{E}^2 }{m}
+\end{align}
+
+That leaves only the current in the barrier region.
 
 \subsection{ Transmission and reflection coefficients. }
 
@@ -238,7 +298,9 @@ From \ref{eqn:incidentAndReflected} we can calculate the transmission
 coefficient
 
 \begin{align*}
-T &= \frac{\Abs{E}^2}{\Abs{A}^2} \\
+T 
+&= \Abs{\frac{J_t}{J_i}} \\
+&= \frac{\Abs{E}^2}{\Abs{A}^2} \\
 &= \Abs{\frac{2  } { \mu \cosh\left( i\theta -\beta a \right) }}^2 \\
 &= \frac{4} { 
 \left(4 + \left( \frac{k}{\beta} -\frac{\beta}{k} \right)^2 \right)
@@ -282,7 +344,9 @@ T
 
 The reflection coefficient is
 \begin{align*}
-R &= \frac{\Abs{B}^2}{\Abs{A}^2} \\
+R 
+&= \Abs{\frac{J_r}{J_i}} \\
+&= \frac{\Abs{B}^2}{\Abs{A}^2} \\
 &= 
 \Abs{\frac{\nu \sinh\left( \beta a \right) }
 {\mu \cosh\left( i\theta -\beta a \right) }}^2 \\
@@ -390,22 +454,22 @@ R
 
 In this form demonstrating that $T + R=1$ becomes trivial!
 
-The last desirable substutition to make is to express the $k$, and $\beta$ quotients in terms of $E$ and $V$.  This is
+The last desirable substutition to make is to express the $k$, and $\beta$ quotients in terms of $E_0$ and $V$.  This is
 
 \begin{align*}
 \left(\frac{k}{\beta} + \frac{\beta}{k}\right)^2
 &=
-\left(\sqrt{\frac{2mE}{2m(V-E)}} + \sqrt{\frac{2m(V-E)}{2mE}}\right)^2 \\
+\left(\sqrt{\frac{2mE}{2m(V-E_0)}} + \sqrt{\frac{2m(V-E_0)}{2mE}}\right)^2 \\
 &=
-\frac{E}{V-E} + \frac{V-E}{E} + 2 \\
+\frac{E_0}{V-E_0} + \frac{V-E_0}{E_0} + 2 \\
 &=
-\frac{E^2 + (V-E)^2}{E(V-E)} + 2 \\
+\frac{E_0^2 + (V-E_0)^2}{E_0(V-E_0)} + 2 \\
 &=
-\frac{2E^2 + -2 E V + V^2 }{E(V-E)} + 2 \\
+\frac{2 E_0^2 + -2 E_0 V + V^2 }{E_0(V-E_0)} + 2 \\
 &=
-\frac{2 EV -2 E^2 + 2E^2 + -2 E V + V^2 }{E(V-E)} \\
+\frac{2 E_0 V -2 E_0^2 + 2 E_0^2 + -2 E_0 V + V^2 }{E_0(V-E_0)} \\
 &=
-\frac{V^2 }{E(V-E)} \\
+\frac{V^2 }{E_0(V-E_0)} \\
 \end{align*}
 
 So, after masses and masses of algebra we have a result that is consistent with that of
@@ -413,14 +477,13 @@ So, after masses and masses of algebra we have a result that is consistent with 
 
 \begin{align}
 T 
-&= \frac{1} { \frac{V^2}{4E(V-E)} \sinh^2(a \beta) + 1 }
+&= \frac{1} { \frac{V^2}{4E(V-E_0)} \sinh^2(a \beta) + 1 }
 \end{align}
 
 \begin{align}
 R 
-&= \frac{1} { \frac{4V(E-V)}{V^2 \sinh^2(a \beta)} + 1 }
+&= \frac{1} { \frac{4V(V-E_0)}{V^2 \sinh^2(a \beta)} + 1 }
 \end{align}
-
 
 \section{ Trig mess. }
 
@@ -513,6 +576,31 @@ For
 &=
 \inv{2} \left( \cosh(2u) -1 \right) 
 \end{align}
+
+\subsubsection{ Verify correctness of barrier solution. }
+
+If we want to verify that \ref{eqn:inBarrierCosh} 
+does still match both value and derivative to the $x>a$ wave function
+showing both of the following is required
+
+\begin{align*}
+1 &= \sqrt{1 + \frac{k^2}{\beta^2}} \cos\left( \atan(k/\beta) \right) \\
+ik &=
+\sqrt{1 + \frac{k^2}{\beta^2}} \beta \sinh\left( i \atan(k/\beta) \right)
+\end{align*}
+
+This last is
+\begin{align*}
+k/\beta &=
+\sqrt{1 + \frac{k^2}{\beta^2}} \sin\left( \atan(k/\beta) \right)
+\end{align*}
+
+But these are just the identities
+
+\begin{align*}
+\sin\left( \atan(u) \right) &= \frac{u}{\sqrt{1 + u^2}} \\
+\cos\left( \atan(u) \right) &= \frac{1}{\sqrt{1 + u^2}}
+\end{align*}
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
