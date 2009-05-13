@@ -1,0 +1,558 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+
+%\usepackage{listings}
+%\usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
+% makes \grad look funny though (almost like spacegrad, but narrower)
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+\title{ VERSION: First try at one dimensional rectanglular Quantum barrier problem. }
+\author{Peeter Joot \quad peeter.joot@gmail.com }
+\date{ May 9, 2009.  Last Revision: $Date: 2009/05/13 01:58:33 $ }
+
+\begin{document}
+
+\maketitle{}
+\tableofcontents
+\section{}
+
+%\begin{figure}[htp]
+%\centering
+%\includegraphics[totalheight=0.4\textheight]{picturepath}
+%\caption{My Caption}\label{fig:pictlabel}
+%\end{figure}
+%
+%... see figure \ref{fig:picturepath} ...
+
+
+\subsection{ Problem 4.  Barrier penetration. }
+
+\subsubsection{ Setup. }
+
+%In the barrier $x \in [0,a]$,
+%
+%\begin{align*}
+%\psi 
+%&= 
+%\frac{A}{2}\left(1 + i \frac{p_1}{p_2}\right) \exp\left( (ip_1 - p_2)\frac{a}{\hbar}
+%+\frac{p_2 x}{\hbar}\right)  \\
+%&+
+%\frac{A}{2}\left(1 - i \frac{p_1}{p_2}\right) \exp\left( (ip_1 + p_2)\frac{a}{\hbar} 
+%-\frac{p_2 x}{\hbar}\right) \\
+%\end{align*}
+%
+%Or
+%\begin{align*}
+%\psi 
+%&=
+%A 
+%\exp\left( ip_1 \frac{a}{\hbar} \right)
+%\cosh\left( p_2 \frac{(a-x)}{\hbar} \right) \\
+%&+
+%i A 
+%\exp\left( ip_1 \frac{a}{\hbar} \right)
+%\inv{2}\left(
+%\frac{p_1}{p_2}\exp\left( p_2 \frac{(x-a)}{\hbar} \right)
+%-\frac{p_2}{p_1}\exp\left( p_2 \frac{(a-x)}{\hbar} \right)
+%\right)
+%\end{align*}
+%
+%Past the barrier, $x >a$,
+%\begin{align*}
+%\psi = 
+%A \exp\left( \frac{ip_1 x}{\hbar}\right)
+%\end{align*}
+%
+%and before the barrier, $x<0$
+%
+%\begin{align*}
+%\psi &=
+%D \exp\left( \frac{ip_1 x}{\hbar}\right)
+%+E \exp\left( \frac{-ip_1 x}{\hbar}\right) \\
+%D 
+%&= 
+%\frac{C}{2} \left( 1 + i \frac{p_2 }{p_1}\right)
+%+\frac{B}{2} \left( 1 - i \frac{p_2 }{p_1}\right) \\
+%E 
+%&= 
+%\frac{C}{2} \left( 1 - i \frac{p_2 }{p_1}\right)
+%+\frac{B}{2} \left( 1 + i \frac{p_2 }{p_1}\right) \\
+%B &= \frac{A}{2}\left(1 + i \frac{p_1}{p_2}\right) \exp\left( (ip_1 - p_2)\frac{a}{\hbar}\right) \\
+%C &= \frac{A}{2}\left(1 - i \frac{p_1}{p_2}\right) \exp\left( (ip_1 + p_2)\frac{a}{\hbar}\right) \\
+%\end{align*}
+%
+%That is
+%
+%\begin{align*}
+%D 
+%&= 
+%\frac{A}{4}\left(1 - i \frac{p_1}{p_2}\right) \exp\left( (ip_1 + p_2)\frac{a}{\hbar}\right) 
+%\left( 1 + i \frac{p_2 }{p_1}\right) \\
+%&+
+%\frac{A}{4}\left(1 + i \frac{p_1}{p_2}\right) \exp\left( (ip_1 - p_2)\frac{a}{\hbar}\right) 
+%\left( 1 - i \frac{p_2 }{p_1}\right) \\
+%E 
+%&= 
+%\frac{A}{4}\left(1 - i \frac{p_1}{p_2}\right) \exp\left( (ip_1 + p_2)\frac{a}{\hbar}\right) 
+%\left( 1 - i \frac{p_2 }{p_1}\right) \\
+%&+
+%\frac{A}{4}\left(1 + i \frac{p_1}{p_2}\right) \exp\left( (ip_1 - p_2)\frac{a}{\hbar}\right) 
+%\left( 1 + i \frac{p_2 }{p_1}\right) \\
+%\end{align*}
+%
+%Expanding the products first for $D$ we have
+%
+%\begin{align*}
+%D 
+%&= 
+%\frac{A}{4}
+%\left(2 - i \frac{p_1^2 - p_2^2}{p_1 p_2}\right)
+%\exp\left( (ip_1 + p_2)\frac{a}{\hbar}\right) 
+%\\
+%&+
+%\frac{A}{4}
+%\left(2 + i \frac{p_1^2 - p_2^2}{p_1 p_2}\right)
+%\exp\left( (ip_1 - p_2)\frac{a}{\hbar}\right) 
+%\\
+%&=
+%A 
+%\exp\left( ip_1 \frac{a}{\hbar}\right) 
+%\cosh\left( p_2 \frac{a}{\hbar}\right) 
+%%%%
+%+\frac{iA}{2}\frac{p_2^2 - p_1^2}{p_1 p_2}
+%\exp\left( ip_1 \frac{a}{\hbar}\right) 
+%\sinh\left( p_2 \frac{a}{\hbar}\right) 
+%%%%
+%\end{align*}
+%
+%and for $E$, we have
+%\begin{align*}
+%E 
+%&= 
+%\frac{-iA}{4}\frac{p_1^2 + p_2^2}{p_1 p_2}
+%\exp\left( (ip_1 + p_2)\frac{a}{\hbar}\right) 
+%\\
+%&+
+%\frac{iA}{4}\frac{p_1^2 + p_2^2}{p_1 p_2}
+%\exp\left( (ip_1 - p_2)\frac{a}{\hbar}\right) 
+%\\
+%&=
+%\frac{iA}{2}\frac{p_1^2 + p_2^2}{p_1 p_2}
+%\exp\left( ip_1 \frac{a}{\hbar}\right) 
+%\sinh\left( p_2 \frac{a}{\hbar}\right) 
+%\end{align*}
+%
+%Reassembling, the sum of the incident and reflected wave functions in the $x<0$ region is
+%
+%%\begin{align*}
+%%D &= 
+%%A \exp\left( ip_1 \frac{a}{\hbar}\right) \cosh\left( p_2 \frac{a}{\hbar}\right) 
+%%+\frac{iA}{2}\frac{p_2^2 - p_1^2}{p_1 p_2} \exp\left( ip_1 \frac{a}{\hbar}\right) \sinh\left( p_2 \frac{a}{\hbar}\right) 
+%%\end{align*}
+%%
+%%\begin{align*}
+%%E &= \frac{iA}{2}\frac{p_1^2 + p_2^2}{p_1 p_2} \exp\left( ip_1 \frac{a}{\hbar}\right) \sinh\left( p_2 \frac{a}{\hbar}\right) 
+%%\end{align*}
+%
+%\begin{align*}
+%\psi 
+%&= A \exp\left( ip_1 \frac{(a+x)}{\hbar}\right) \cosh\left( p_2 \frac{a}{\hbar}\right) \\
+%&+\frac{iA}{2}\frac{p_2^2 - p_1^2}{p_1 p_2} \exp\left( ip_1 \frac{(a+x)}{\hbar}\right) \sinh\left( p_2 \frac{a}{\hbar}\right) \\
+%&+ \frac{iA}{2}\frac{p_1^2 + p_2^2}{p_1 p_2} \exp\left( ip_1 \frac{(a-x)}{\hbar}\right) \sinh\left( p_2 \frac{a}{\hbar}\right)  \\
+%%%%
+%&= A \exp\left( ip_1 \frac{(a+x)}{\hbar}\right) \cosh\left( p_2 \frac{a}{\hbar}\right) \\
+%&+{iA}\frac{p_2 }{p_1 } 
+%\exp\left( ip_1 \frac{a}{\hbar}\right) 
+%\cos\left( p_1 \frac{x}{\hbar}\right) 
+%\sinh\left( p_2 \frac{a}{\hbar}\right) \\
+%&+A \frac{p_1}{p_2} 
+%\exp\left( ip_1 \frac{a}{\hbar}\right) 
+%\sin\left( p_1 \frac{x}{\hbar}\right) 
+%\sinh\left( p_2 \frac{a}{\hbar}\right) \\
+%&= A \exp\left( ip_1 \frac{(a+x)}{\hbar}\right) \cosh\left( p_2 \frac{a}{\hbar}\right) \\
+%&
+%+A \exp\left( ip_1 \frac{a}{\hbar}\right) \sinh\left( p_2 \frac{a}{\hbar}\right) 
+%\left(
+%+{i}\frac{p_2 }{p_1 } 
+%\cos\left( p_1 \frac{x}{\hbar}\right) 
+%+ \frac{p_1}{p_2} 
+%\sin\left( p_1 \frac{x}{\hbar}\right) 
+%\right)
+%\\
+%\end{align*}
+%
+%This can be made slightly more symmetrical by expanding one of the complex exponential terms.  Doing so, also writing $\alpha = A e^{i p_1 a/\hbar}$,
+%we can summarize the wave functions in each of the intervals.
+%
+%For $x<0$
+%\begin{align*}
+%\psi 
+%&= 
+%\alpha 
+%\cosh\left( p_2 \frac{a}{\hbar}\right) 
+%%\left( \cos\left( p_1 \frac{x}{\hbar}\right) + i \sin\left( p_1 \frac{x}{\hbar}\right) \right) \\
+%\exp\left( i p_1 \frac{x}{\hbar}\right) 
+%%\\
+%%&
+%+\alpha
+%\sinh\left( p_2 \frac{a}{\hbar}\right) 
+%\left( {i}\frac{p_2 }{p_1 } \cos\left( p_1 \frac{x}{\hbar}\right) + \frac{p_1}{p_2} \sin\left( p_1 \frac{x}{\hbar}\right) \right)
+%\\
+%\end{align*}
+%
+%For $x \in [0,a]$
+%\begin{align*}
+%\psi 
+%&=
+%\alpha 
+%\cosh\left( p_2 \frac{(x-a)}{\hbar} \right) 
+%+
+%\frac{i\alpha}{2}\left(
+%\frac{p_1}{p_2}\exp\left( p_2 \frac{(x-a)}{\hbar} \right)
+%-\frac{p_2}{p_1}\exp\left( p_2 \frac{(a-x)}{\hbar} \right)
+%\right)
+%\end{align*}
+%
+%and past the barrier, $x >a$,
+%\begin{align*}
+%\psi = 
+%\alpha \exp\left( \frac{ip_1 (x-a)}{\hbar}\right)
+%\end{align*}
+
+Potential barrier, height V, in $[0,a]$, with potential zero everywhere else.  With $p_1 = \sqrt{2mE}$, and $p_2 = \sqrt{2m(V-E)}$, a
+solution is calculated in the text.  Attempting to substitute for the coefficients found, and reduce them to a form
+that looks amenable to calculation of the currents, leads to a mess.  It does however suggest a simpler structure for the 
+wave functions.  Let's start over and seek solutions in the $x>a$ region of the form
+
+\begin{align}
+\psi &= \alpha e^{ i p_1 (x-a)/\hbar}
+\end{align}
+
+and in the barrier region $x \in [0,a]$
+
+\begin{align}
+\psi &= A e^{ p_1 (x-a)/\hbar} +B e^{ -p_1 (x-a)/\hbar}
+\end{align}
+
+continuity (value and derivative) at $x=a$ gives
+
+\begin{align*}
+A + B &= \alpha  \\
+A - B &= i \alpha \frac{p_1}{p_2}
+\end{align*}
+
+Solving and reducing we have 
+
+\begin{align}
+\psi &= 
+\alpha \cosh\left( p_2 (x-a)/\hbar \right)
++ i \alpha \frac{p_1}{p_2} \sinh\left( p_2 (x-a)/\hbar \right)
+\end{align}
+
+For the $x<0$ region assume again a solution of the form
+ 
+\begin{align}
+\psi = u e^{i p_1 x/\hbar} +v e^{-i p_1 x/\hbar}
+\end{align}
+
+Matching at $x=0$ we have
+
+\begin{align*}
+u + v &= \alpha \cosh( p_2 a/\hbar ) - i \alpha \frac{p_1}{p_2} \sinh( p_2 a /\hbar ) \\
+u - v &= i \alpha \frac{p_2}{p_1} \sinh( p_2 a/\hbar ) + \alpha \cosh( p_2 a /\hbar ) \\
+\end{align*}
+
+Solving
+\begin{align}\label{eqn:uAndv}
+u &= \alpha \cosh( p_2 a/\hbar )  + \frac{i\alpha}{2} \sinh( p_2 a /\hbar ) \left( \frac{p_2}{p_1} -  \frac{p_1}{p_2} \right) \\
+v &= - \frac{i\alpha}{2} \sinh( p_2 a /\hbar ) \left( \frac{p_2}{p_1} + \frac{p_1}{p_2} \right)
+\end{align}
+
+\subsubsection{ Currents. }
+
+Current past the barrier is simply calculated 
+
+\begin{align}\label{eqn:JtBarrier}
+J_t
+&= \frac{p_1}{m} \Abs{\alpha}^2 
+\end{align}
+
+Which we can write directly in terms of the probability density
+\begin{align*}
+J_t
+&= \frac{p_1}{m} \rho
+\end{align*}
+
+So, again, the probabily current is a velocity scaling of the probably density.
+
+In the barrier region, writing 
+$C = \cosh(p_2(x-a)/\hbar)$, and 
+$S = \sinh(p_2(x-a)/\hbar)$, we have
+
+\begin{align*}
+J &= 
+\frac{\Abs{\alpha}^2}{ 2 m i } 
+\left(
+\left(C - i \frac{p_1}{p_2}S\right)
+\left(p_2 S + i p_1 C\right) 
+-
+\left(C + i \frac{p_1}{p_2}S\right)
+\left(p_2 S - i p_1 C\right)
+\right)
+\end{align*}
+
+Reducing these products we get
+\begin{align*}
+J 
+&= 
+\frac{p_1 \Abs{\alpha}^2}{m} (C^2 - S^2) \\
+&= 
+\frac{p_1 \Abs{\alpha}^2}{m} 
+\end{align*}
+
+So the current equals that in the region past the barrier.  This 
+equality makes me suspect an error in the treatment of problem 1.
+
+Note however
+that the probability density in this region is
+
+\begin{align*}
+\rho 
+&= \Abs{\alpha}^2 \left(
+C^2 + S^2 \left(\frac{p_1}{p_2}\right)^2
+\right)
+\end{align*}
+
+So, we have
+
+\begin{align*}
+J 
+&= 
+\frac{p_1}{m} \rho \inv{C^2 + {\left(\frac{p_1}{p_2}\right)}^2 S^2 } \\
+&= 
+\frac{p_1}{m} \rho \inv{
+\cosh^2(p_2(x-a)/\hbar)
+ + 
+ {\left(\frac{p_1}{p_2}\right)}^2
+\sinh^2(p_2(x-a)/\hbar)
+ } \\
+\end{align*}
+
+There's a spatially dependency between the current density and the probability density that we don't have past the barrier region.  The current density
+can still
+be thought of as a velocity scaling of the probability density, but
+we have a position dependent velocity inside the barrier
+
+\begin{align*}
+v_b = \frac{p_1}{m} \inv{
+\cosh^2(p_2(x-a)/\hbar)
+ + 
+ {\left(\frac{p_1}{p_2}\right)}^2
+\sinh^2(p_2(x-a)/\hbar)
+ } \\
+\end{align*}
+
+Here the optical analogy seems appropriate, and the barrier with its sharp
+boundaries ends up manifesting like a material with varying index of
+refraction.  Some of that variation of index of refraction (related by Snell's
+law to the velocity of the material) appears to be impacted by the shape of
+the boundary, and loosely it seems like a sharp potential transition acts
+as an impedance.  TODO: do some math to back this up.  Am kind of guessing
+here.
+
+Moving on, we want to calculate the current in the potential free region $x<0$.
+
+Writing, for short
+
+\begin{align*}
+\psi 
+&= u e^{ip_1 x/\hbar} + v e^{-ip_1 x/\hbar} \\
+&= u \epsilon + v \epsilon^\conj
+\end{align*}
+
+Then we have a current of
+
+\begin{align*}
+J &=
+\inv{2mi}\left(
+(u^\conj \epsilon^\conj + v^\conj \epsilon)
+(i p_1 )
+(u \epsilon - v \epsilon^\conj)
+-
+(u \epsilon + v \epsilon^\conj)
+(i p_1 )
+(-u^\conj \epsilon^\conj + v^\conj \epsilon) 
+\right)
+\\
+&=
+\frac{p_1}{m}\left( \Abs{u}^2 - \Abs{v}^2 \right)
+\end{align*}
+
+Our probability density is
+\begin{align*}
+\rho 
+&=
+(u^\conj \epsilon^\conj + v^\conj \epsilon)
+(u \epsilon + v \epsilon^\conj) \\
+&= 
+\Abs{u}^2 + \Abs{v}^2 + 
+u^\conj v (\epsilon^\conj)^2 
++
+v^\conj u \epsilon^2 \\
+&=
+\Abs{u}^2 + \Abs{v}^2 + 
++ 2 \Re(v^\conj u \epsilon^2) \\
+\end{align*}
+
+We are now in shape to substitute \ref{eqn:uAndv} into these.  For short we
+write
+
+\begin{align*}
+u 
+&= \alpha \cosh( p_2 a/\hbar )  + \frac{i\alpha}{2} \sinh( p_2 a /\hbar ) \left( \frac{p_2}{p_1} -  \frac{p_1}{p_2} \right) \\
+&= \alpha C + \frac{i\alpha}{2} S \left( p_{21} - p_{12} \right) \\
+&= \alpha C + \frac{i\alpha}{2} S \delta p
+\end{align*}
+
+and
+\begin{align*}
+v 
+&= - \frac{i\alpha}{2} \sinh( p_2 a /\hbar ) \left( \frac{p_2}{p_1} + \frac{p_1}{p_2} \right) \\
+&= \frac{i\alpha}{2} S \left( p_{12} - p_{21} \right) \\
+&= \frac{i\alpha}{2} S \delta p
+\end{align*}
+
+Absolute squares of these are
+\begin{align*}
+\Abs{u}^2 &= \Abs{\alpha}^2 (C^2 + S^2 (\delta p)^2/4)
+\end{align*}
+
+and
+\begin{align*}
+\Abs{v}^2 &= \Abs{\alpha}^2 S^2 (\delta p)^2/4
+\end{align*}
+
+This gives a total incident plus reflected currrent in the $x<0$ region as
+
+\begin{align}\label{eqn:jTotBarrier}
+J 
+&=
+\frac{p_1}{m} \Abs{\alpha}^2 \cosh^2(p_2 a/\hbar)
+\end{align}
+
+For the probability density, we need
+
+\begin{align*}
+\Abs{u}^2 + \Abs{v}^2 + 2 \Re(v^\conj u \epsilon^2) 
+&=
+\Abs{\alpha}^2 \left(C^2 + S^2 (\delta p)^2/2 
++ 2\Re\left(
+-\frac{i}{2} S (\delta p) \left(C + \frac{i}{2} S (\delta p)\right) e^{i p_1 x/\hbar}
+\right)\right) \\
+&=
+\Abs{\alpha}^2 \left(C^2 + S^2 (\delta p)^2/2 
++ S C (\delta p) \sin( 2 p_1 x/\hbar)
++\frac{1}{2} S^2 (\delta p)^2 \cos( 2 p_1 x/\hbar)
+\right) \\
+&=
+\Abs{\alpha}^2 \left(C^2 + S^2 (\delta p)^2 \inv{2}(1 + \cos( 2 p_1 x/\hbar))
++ S C (\delta p) \sin( 2 p_1 x/\hbar)
+\right) \\
+&=
+\Abs{\alpha}^2 \left(C^2 + S^2 (\delta p)^2 \cos^2( p_1 x/\hbar)
++ S C (\delta p) \sin( 2 p_1 x/\hbar)
+\right) \\
+\end{align*}
+
+So the probability density for $x<0$ is
+\begin{align}
+\rho 
+&=
+\Abs{\alpha}^2 \left(\cosh^2(p_2 a/\hbar) + \sinh^2(p_2 a/\hbar) (\delta p)^2 \cos^2( p_1 x/\hbar)
+%+ \sinh(p_2 a/\hbar)\cosh(p_2 a/\hbar) (\delta p) \sin( 2 p_1 x/\hbar)
++ \inv{2} \sinh(2 p_2 a/\hbar) (\delta p) \sin( 2 p_1 x/\hbar)
+\right)
+\end{align}
+
+The last two currents of interest to calculate in the $x<0$ region are the incident and reflected probability currents.  The
+incident current is
+
+\begin{align*}
+J_i 
+&=
+\frac{\hbar}{2m i}\left( 
+u^\conj \epsilon^\conj (ip_1/\hbar) u \epsilon
+-u \epsilon (-ip_1/\hbar) u^\conj \epsilon^\conj 
+\right)
+\\
+&=
+\frac{p_1}{m} \Abs{u}^2
+\end{align*}
+
+and the reflected current is
+\begin{align*}
+J_r 
+&=
+\frac{\hbar}{2m i}\left( 
+v^\conj \epsilon (-ip_1/\hbar) v^\conj \epsilon^\conj
+-v \epsilon^\conj (ip_1/\hbar) v \epsilon
+\right) \\
+&=
+\frac{-p_1}{m} \Abs{v}^2
+\end{align*}
+
+So we have
+
+\begin{align}\label{eqn:JiBarrier}
+J_i
+&= \frac{p_1}{m} \Abs{\alpha}^2 (\cosh^2(p_2 a/\hbar) + \sinh^2(p_2 a/\hbar) (\delta p)^2/4)
+\end{align}
+
+\begin{align}\label{eqn:JrBarrier}
+J_r
+&= \frac{-p_1}{m} \Abs{\alpha}^2 \sinh^2(p_2 a/\hbar) (\delta p)^2/4
+\end{align}
+
+\subsubsection{ Transmission and reflection coefficients. }
+
+From equations \ref{eqn:JtBarrier} \ref{eqn:JiBarrier} \ref{eqn:JrBarrier}, the transmission and reflection coefficients can be calculated.
+These are
+
+\begin{align*}
+R &=
+\frac{\Abs{J_r}} {\Abs{J_i}} \\
+&=
+\frac{\sinh^2(p_2 a/\hbar) (\delta p)^2/4}{ \cosh^2(p_2 a/\hbar) + \sinh^2(p_2 a/\hbar) (\delta p)^2/4 }
+\end{align*}
+
+and
+
+\begin{align*}
+T &=
+\frac{\Abs{J_t}} {\Abs{J_i}} \\
+&=
+\frac{1}{ \cosh^2(p_2 a/\hbar) + \sinh^2(p_2 a/\hbar) (\delta p)^2/4 }
+\end{align*}
+
+Again, these don't sum to unity as expected.  I either misunderstand something or am making mistakes.  Review this all, and compare to the approximate treatment in the book (for the case $p_2 a/\hbar \gg 1$).
+
+A peek in \cite{mcmahon2005qmd} has got a result similar to this
+but with $1/2$ instead of a $\cosh$ term in the denominator for $T$.  That
+said there are so many obvious typos in that treatment it is hard 
+to trust it.  Review
+can probably focus on my own, but looking for an error in $J_i$ or $\psi_i$.
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
+
+\end{document}
