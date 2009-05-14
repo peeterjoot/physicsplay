@@ -21,7 +21,7 @@
 
 \title{ One dimensional rectangular Quantum barrier penetration problem. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ May 11, 2009.  Last Revision: $Date: 2009/05/14 00:59:58 $ }
+\date{ May 11, 2009.  Last Revision: $Date: 2009/05/14 03:52:36 $ }
 
 \begin{document}
 
@@ -37,7 +37,7 @@ Here's a new try from scratch.
 There's very little physics here, just a lot of algebra, but let's try
 to get all this algebra correct this time.
 
-\section{ Solution. }
+\section{ Wave functions.  Find the coefficients. }
 
 The potential is taken to be zero everywhere except $x \in [0,a]$, where it is
 $V$.  This divides the problem into three regions, I, II, and III, for 
@@ -154,6 +154,23 @@ Which leaves us with the wave function in the $x<0$ region as
 +\frac{\nu E}{2}\sinh\left( \beta a \right) e^{ -i k x }
 \end{align}
 
+Observed later (after trying to sum the transmission and reflection coefficients) is the fact that we can actually write
+
+\begin{align*}
+\mu^2 = \Abs{\nu}^2
+\end{align*}
+
+So an additional simplification of this wave function is possible.
+
+\begin{align}\label{eqn:incidentAndReflectedSimplified}
+\psi &=
+\frac{E}{2} \left(\frac{\beta}{k} + \frac{k}{\beta} \right) 
+\left(
+\cosh\left( i\theta -\beta a \right) e^{ i k x }
+-i \sinh\left( \beta a \right) e^{ -i k x }
+\right)
+\end{align}
+
 \subsection{ (Aside) Barrier wave function in polar form. }
 
 Having seen how the polar form simplifies the final expression of the first region wave function, it can be seen that 
@@ -210,7 +227,7 @@ This produces values for both $A$, $B$ very directly, but this
 form of solution in the $x<0$ region begs for some additional reduction.  Let's
 defer trying that until after the $T$, and $R$ computations.
 
-\section{ Calculate the probability currents and densities. }
+\section{ Probability currents and densities. }
 
 \subsection{ Probability densities. }
 
@@ -255,8 +272,50 @@ Or
 In particular observe that at $x=a$ we have $\rho = \Abs{E^2}$ the expected probability density for the entirety 
 of the $x>a$ transmission region.
 
-\subsection{ Probability current densities. }
+\subsubsection{ Total probability density in the incident region. }
 
+To calculate the current in the potential free region $x<0$, write for short
+
+\begin{align}\label{eqn:forShort}
+\psi 
+&= u e^{ik x} + v e^{-ik x} = u \epsilon + v \epsilon^\conj
+\end{align}
+
+The probability density is
+
+\begin{align*}
+\rho 
+&=
+(u^\conj \epsilon^\conj + v^\conj \epsilon)
+(u \epsilon + v \epsilon^\conj) \\
+&= 
+\Abs{u}^2 + \Abs{v}^2 + 
+u^\conj v (\epsilon^\conj)^2 
++
+v^\conj u \epsilon^2 \\
+&=
+\Abs{u}^2 + \Abs{v}^2 + 
++ 2 \Re(v^\conj u \epsilon^2) \\
+\end{align*}
+
+Putting back in the factors from \ref{eqn:incidentAndReflected} we have
+
+\begin{align*}
+\rho
+&=
+\frac{\Abs{E}^2}{4}
+\left(
+\frac{\beta}{k}
++\frac{k}{\beta}
+\right)^2 
+\left(
+\Abs{\cosh\left( i\theta -\beta a \right)}^2
++\sinh^2\left( \beta a \right) 
++ 2 \Re\left( i \sinh(\beta a) \cosh(i\theta - \beta a) e^{2 i k x} \right)
+\right)
+\end{align*}
+
+\subsection{ Probability current densities. }
 
 \subsubsection{ Current densities outside of the barrier region. }
 
@@ -334,6 +393,28 @@ J_b
 So despite the probability density itself varying with position once into and past the barrier, the current density itself
 retains this
 constant value.
+
+\subsubsection{ Total current density in the incident region. }
+
+As above for the density using the shorthand of \ref{eqn:forShort}, the total current is
+
+\begin{align*}
+J &=
+\frac{\hbar}{2mi}\left(
+(u^\conj \epsilon^\conj + v^\conj \epsilon)
+(i k )
+(u \epsilon - v \epsilon^\conj)
+-
+(u \epsilon + v \epsilon^\conj)
+(i k )
+(-u^\conj \epsilon^\conj + v^\conj \epsilon) 
+\right)
+\\
+&=
+\frac{\hbar k}{m}\left( \Abs{u}^2 - \Abs{v}^2 \right)
+\end{align*}
+
+TODO. finish.
 
 \subsection{ Transmission and reflection coefficients. }
 
@@ -756,6 +837,137 @@ e^{2\beta(x-a)}
 
 which is exactly \ref{eqn:pDensityInBarrier}.  So it seems likely that the mistake calculating the current is restricted to the
 current calculation itself.
+
+\subsection{ Verify continuity of simplified region I wave function. }
+
+The wave function \ref{eqn:incidentAndReflectedSimplified}
+should match the barrier wave function in value and derivative at
+$x=0$.  Let's verify this and ensure all the algebra worked out.
+
+At $x=0$ we have for the $x<0$ wave function value
+\begin{align*}
+\psi &=
+\frac{E}{2} \left(\frac{\beta}{k} + \frac{k}{\beta} \right) 
+\left(
+\cosh\left( i\theta -\beta a \right) -i \sinh\left( \beta a \right) 
+\right) \\
+\end{align*}
+
+Let's expand the trig part of this
+
+\begin{align*}
+\cosh\left( i\theta -\beta a \right) -i \sinh\left( \beta a \right) 
+&=
+\cos( \theta ) \cosh(\beta a ) 
+-i\sin( \theta ) \sinh(\beta a ) 
+-i \sinh( \beta a )  \\
+&=
+\cos( \theta ) \cosh(\beta a ) 
+-i \sinh( \beta a ) (1 + \sin(\theta))
+\end{align*}
+
+Since we have
+
+\begin{align*}
+\theta &= \atan\left( \inv{2} \left(\frac{k}{\beta} - \frac{\beta}{k} \right) \right) \\
+\cos(\atan(u)) &= \inv{\sqrt{1 + u^2}} \\
+\sin(\atan(u)) &= \frac{u}{\sqrt{1 + u^2}} \\
+\end{align*}
+
+So we have
+\begin{align*}
+\cosh\left( i\theta -\beta a \right) -i \sinh\left( \beta a \right) 
+&=
+\inv{\sqrt{1 + \inv{4} \left(\frac{k}{\beta} - \frac{\beta}{k} \right)^2}}
+\left(\cosh(\beta a ) 
+-i
+\inv{2} \left(\frac{k}{\beta} - \frac{\beta}{k} \right) \sinh(\beta a ) \right)
+-i \sinh( \beta a ) \\
+&=
+\frac{2}{\frac{k}{\beta} + \frac{\beta}{k} }
+\left(\cosh(\beta a ) 
+-i
+\inv{2} \left(\frac{k}{\beta} - \frac{\beta}{k} \right) \sinh(\beta a ) \right)
+-i \sinh( \beta a )  \\
+&=
+\frac{ 2 \cosh(\beta a ) }{\frac{k}{\beta} + \frac{\beta}{k} }
+-i \sinh( \beta a ) \left( 1 + \frac{\frac{k}{\beta} - \frac{\beta}{k}}{ \frac{k}{\beta} + \frac{\beta}{k}} \right) \\
+&=
+\frac{ 2 }{\frac{k}{\beta} + \frac{\beta}{k} }
+\left(
+\cosh(\beta a ) - i \frac{k}{\beta}\sinh( \beta a ) 
+\right)
+\end{align*}
+
+and finally, after too much messy algebra, from the region I wave function at $x=0$ we have
+
+\begin{align*}
+\psi(0) &= E \left( \cosh(\beta a ) - i \frac{k}{\beta}\sinh( \beta a )  \right)
+\end{align*}
+
+Now compare to the barrier wave function \ref{eqn:inBarrierCosh} at $x=0$
+
+\begin{align*}
+\psi(0) 
+&= E \sqrt{1 + \frac{k^2}{\beta^2}} \cosh\left( i\atan(k/\beta) - \beta a \right)  \\
+&= E \sqrt{1 + \frac{k^2}{\beta^2}} 
+\left(
+\cos(\atan(k/\beta))\cosh(\beta a)
+-i\sin(\atan(k/\beta))\sinh(\beta a)
+\right) \\
+&= E 
+\left(
+\cosh(\beta a)
+-i\frac{k}{\beta} \sinh(\beta a)
+\right) \\
+\end{align*}
+
+Good.  First consistency check is done.  Now for equality of derivatives.
+
+For \ref{eqn:incidentAndReflectedSimplified}, the derivative at $x=0$ is
+
+\begin{align*}
+\psi' 
+&=
+\frac{E}{2} \left(\frac{\beta}{k} + \frac{k}{\beta} \right) (ik)
+\left(
+\cosh\left( i\theta -\beta a \right) 
++i \sinh\left( \beta a \right) 
+\right) \\
+&=
+\frac{E}{2} \left(\frac{\beta}{k} + \frac{k}{\beta} \right) (ik)
+\left(
+\frac{ 2 \cosh(\beta a ) }{\frac{k}{\beta} + \frac{\beta}{k} }
+-i \sinh( \beta a ) \left( -1 + \frac{\frac{k}{\beta} - \frac{\beta}{k}}{ \frac{k}{\beta} + \frac{\beta}{k}} \right) 
+\right) \\
+&=
+i k E \left( \cosh(\beta a ) + i \frac{\beta}{k}\sinh(\beta a) \right) \\
+&=
+E \left( i k \cosh(\beta a ) - \beta \sinh(\beta a) \right) \\
+\end{align*}
+
+Comparing to the derivative of the barrier wave function \ref{eqn:inBarrierCosh} at $x=0$
+
+\begin{align*}
+\psi'(0)
+&= E \sqrt{1 + \frac{k^2}{\beta^2}} \beta \sinh\left( i\phi - \beta a \right)  \\
+&= E \beta \sqrt{1 + \frac{k^2}{\beta^2}} 
+\left(
+i\sin(\phi)\cosh(\beta a)
+-\cos(\phi)\sinh(\beta a)
+\right) \\
+&= E \beta 
+\left(
+i\frac{k}{\beta}\cosh(\beta a)
+-\sinh(\beta a)
+\right) \\
+&= E 
+\left(
+ik \cosh(\beta a)
+- \beta \sinh(\beta a)
+\right) \\
+\end{align*}
+% tan \phi = k/\beta
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
