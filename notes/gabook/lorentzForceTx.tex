@@ -1,0 +1,269 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+
+%\usepackage{listings}
+%\usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
+% makes \grad look funny though (almost like spacegrad, but narrower)
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+\title{ Lorentz boost of Lorentz force equations. }
+\author{Peeter Joot \quad peeter.joot@gmail.com }
+\date{ May 22, 2009.  Last Revision: $Date: 2009/05/23 20:56:55 $ }
+
+\begin{document}
+
+\maketitle{}
+\tableofcontents
+\section{ Motivation. }
+
+Reading of \cite{bohm1996str} is a treatment of the Lorentz transform
+properties of the Lorentz force equation.  This isn't clear to me
+without working through it myself, but in doing so I have the urge to
+try it with the GA formulation of the Lorentz transformation.
+
+\section{ GA Lorentz tx. }
+
+I've got the coordinate and Geometric Algebra versions of the Lorentz
+transform all mixed up in my head.  Let's work through the relations 
+between these once more.
+
+Write the Lorentz boost of a four vector $x = x^\mu \gamma_\mu = ct \gamma_0 + x^k \gamma_k$ as
+
+\begin{align}\label{eqn:LorentzBoost}
+L(x) &= 
+e^{-\alpha \vcap/2}
+x
+e^{\alpha \vcap/2}
+\end{align}
+
+\subsection{ Invariance property. }
+
+A Lorentz transformation (boost or rotation) can be defined as those transformation that leave the four vector square unchanged.
+
+Following \cite{doran2003gap}, work with a $+---$ metric signature ($1 = \gamma_0^2 = -\gamma_k^2$), and $\sigma_k = \gamma_k \gamma_0$.  Our four vector square in this representation has the familiar invariant form
+
+\begin{align*}
+x^2 
+&= (ct \gamma_0 + x^m \gamma_m) (ct \gamma_0 + x^k \gamma_k) \\
+&= (ct \gamma_0 + x^m \gamma_m) \gamma_0^2 (ct \gamma_0 + x^k \gamma_k) \\
+&= (ct + x^m \sigma_m) (ct - x^k \sigma_k) \\
+&= (ct + \Bx) (ct - \Bx) \\
+&= (ct)^2 - \Bx^2
+\end{align*}
+
+and we expect this of the Lorentz boost of equation \ref{eqn:LorentzBoost}.  To verify we have
+
+\begin{align*}
+L(x)^2 
+&=
+e^{-\alpha \vcap/2}
+x
+e^{\alpha \vcap/2}
+e^{-\alpha \vcap/2}
+x
+e^{\alpha \vcap/2} \\
+&=
+e^{-\alpha \vcap/2}
+x
+x
+e^{\alpha \vcap/2} \\
+&=
+x^2
+e^{-\alpha \vcap/2}
+e^{\alpha \vcap/2} \\
+&=
+x^2
+\end{align*}
+
+\subsection{ Sign of the rapidity angle. }
+
+The factor $\alpha$ will be the rapidity angle, but what sign do we want for a boost along the positive $\vcap$ direction?
+
+Dropping to coordinates is an easy way to determine the sign convention in effect.  Write $\vcap = \sigma_1$
+
+\begin{align*}
+L(x) &= 
+e^{-\alpha \vcap/2}
+x
+e^{\alpha \vcap/2} \\
+&=
+(\cosh(\alpha/2) - \sigma_1 \sinh(\alpha/2))
+(
+x^0 \gamma_0
++x^1 \gamma_1
++x^2 \gamma_2
++x^3 \gamma_3
+)
+(\cosh(\alpha/2) + \sigma_1 \sinh(\alpha/2))
+\end{align*}
+
+$\sigma_1$ commutes with $\gamma_2$ and $\gamma_3$ and anticommutes otherwise, so we have
+
+\begin{align*}
+L(x) &= 
+(
+x^2 \gamma_2
++x^3 \gamma_3
+) 
+e^{-\alpha \vcap/2}
+e^{\alpha \vcap/2}
++
+(
+x^0 \gamma_0
++x^1 \gamma_1
+)
+e^{\alpha \vcap} \\
+&=
+x^2 \gamma_2
++x^3 \gamma_3
++(
+x^0 \gamma_0
++x^1 \gamma_1
+)
+e^{\alpha \vcap} \\
+&=
+x^2 \gamma_2
++x^3 \gamma_3
++(
+x^0 \gamma_0
++x^1 \gamma_1
+)
+(\cosh(\alpha) + \sigma_1 \sinh(\alpha))
+\end{align*}
+
+Expanding out just the $0,1$ terms changed by the transformation we have
+
+\begin{align*}
+(
+&x^0 \gamma_0
++x^1 \gamma_1
+)
+(\cosh(\alpha) + \sigma_1 \sinh(\alpha)) \\
+&=
+x^0 \gamma_0 \cosh(\alpha) 
++x^1 \gamma_1 \cosh(\alpha) 
++x^0 \gamma_0 \sigma_1 \sinh(\alpha)
++x^1 \gamma_1 \sigma_1 \sinh(\alpha) \\
+&=
+x^0 \gamma_0 \cosh(\alpha) 
++x^1 \gamma_1 \cosh(\alpha) 
++x^0 \gamma_0 \gamma_1 \gamma_0 \sinh(\alpha)
++x^1 \gamma_1 \gamma_1 \gamma_0 \sinh(\alpha) \\
+&=
+x^0 \gamma_0 \cosh(\alpha) 
++x^1 \gamma_1 \cosh(\alpha) 
+-x^0 \gamma_1 \sinh(\alpha)
+-x^1 \gamma_0 \sinh(\alpha) \\
+&=
+\gamma_0 (x^0 \cosh(\alpha) -x^1 \sinh(\alpha) )
++\gamma_1 (x^1 \cosh(\alpha) -x^0 \sinh(\alpha) )
+\\
+\end{align*}
+
+Writing ${x^\mu}' = L(x) \cdot \gamma^\mu$, and $x^\mu = x \cdot \gamma^\mu$,
+and a substitution of $\cosh(\alpha) = 1/\sqrt{1 - \Bv^2/c^2}$, and $\alpha \vcap = \tanh^{-1}(\Bv/c)$,
+we have the traditional coordinate
+expression for the one directional Lorentz boost
+
+\begin{align}
+\begin{bmatrix}
+{x^0}' \\
+{x^1}' \\
+{x^2}' \\
+{x^3}'
+\end{bmatrix}
+&=
+\begin{bmatrix}
+\cosh\alpha & -\sinh\alpha & 0 & 0 \\
+-\sinh\alpha & \cosh\alpha & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+x^0 \\
+x^1 \\
+x^2 \\
+x^3
+\end{bmatrix}
+\end{align}
+
+Performing this expansion showed initially showed that I had the wrong sign for $\alpha$ in the exponentials and I went back and
+adjusted it all accordingly.
+
+\subsection{ Expanding out the Lorentz boost for projective and rejective directions. }
+
+Our position four vector can be decomposed into components that commute and anticommute with the spatial boost direction
+$\vcap$.  Write
+
+\begin{align*}
+x &= x_\parallel + x_\perp \\
+x_\perp \vcap &= \vcap x_\perp \\
+x_\parallel \vcap &= -\vcap x_\parallel
+\end{align*}
+
+This then allows for a similar, but more general expansion of the coordinate expansion above.  Following the same arguments
+as above we have
+
+\begin{align*}
+L(x) 
+&= x_\perp + x_\parallel e^{\alpha \vcap} \\
+&= x_\perp + x_\parallel (\cosh\alpha + \vcap\sinh\alpha) \\
+\end{align*}
+
+To procede further a decomposition of $x_\parallel$ is required.  Introducing a four vector with only spatial components for
+convienence
+
+\begin{align}
+u = \vcap \gamma_0 = - \gamma_0 \vcap
+\end{align}
+
+we can compute projective and rejective parts of $x_\parallel$.  This is
+
+\begin{align*}
+x_\parallel 
+&= x_\parallel u \inv{u} \\
+&= (x_\parallel u ) \inv{u} \\
+&= (x_\parallel \cdot u + x_\parallel \wedge u) \inv{u} \\
+\end{align*}
+
+This is
+\begin{align}
+x_\parallel &= \underbrace{(x_\parallel \cdot u) \inv{u}}_{\text{spatial four vector components}} + \underbrace{(x_\parallel \wedge u) \cdot \inv{u} }_{\text{timelike component only.}}
+\end{align}
+
+As no time components contribute to the first term we can identify $(x_\parallel \cdot u)/u$ with the spatial component of $x_\parallel$ in the direction of $\vcap \gamma_0$.  Similarily $(x_\parallel\wedge u)/u$ should have only the timelike components of $x_\parallel$ with respect to $\gamma_0$.
+
+Some mathematical followup to justify the intuitive description above will be required.  In addition we will want to show that $x_\perp$ has no timelike component ($x_\perp \cdot \gamma_0 = 0$), and that $x_\perp$ also has no components in the direction $\vcap \gamma_0$ ($x_\perp \cdot (\vcap\gamma_0) = 0$).
+Let's come back to that afterwards.  For now we can do a preliminary expansion of the boosted vector in terms of this 
+projective and rejective split
+
+\begin{align*}
+L(x)
+&= x_\perp + \left(
+\frac{x_\parallel \cdot u}{u} + \left(x_\parallel \wedge u\right) \inv{u} 
+\right)\left(\cosh\alpha + u \gamma_0 \sinh\alpha\right) \\
+&= x_\perp \\
+&+ \left(x_\parallel \wedge u\right) \inv{u} \cosh\alpha 
++ \left(x_\parallel \cdot u\right) \gamma_0 \sinh\alpha \\
+&+ \frac{x_\parallel \cdot u}{u} \cosh\alpha 
++ \left(x_\parallel \wedge u\right) \gamma_0 \sinh\alpha
+\end{align*}
+
+Here a grouping into pairs of timelike and spacelike components has been used.
+
+Next it is desirable to express the $x_\parallel \cdot u$, and $x_\parallel \wedge u$ products in terms of $\vcap$, and $\gamma_0$ explicitly.
+
+\bibliographystyle{plainnat}
+\bibliography{myrefs}
+
+\end{document}
