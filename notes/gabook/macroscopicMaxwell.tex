@@ -17,9 +17,9 @@
    % needed, but their inclusion can't do any damage
 
 
-\title{ GA Musings on macroscopic maxwell's equation. }
+\title{ GA Musings on macroscopic Maxwell's equation. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ May 28, 2009.  Last Revision: $Date: 2009/05/29 00:19:37 $ }
+\date{ May 28, 2009.  Last Revision: $Date: 2009/05/29 01:49:38 $ }
 
 \begin{document}
 
@@ -29,10 +29,10 @@
 
 In \cite{jackson1975cew} the macroscopic Maxwell's equations are given as
 
-\begin{align}
+\begin{align}\label{eqn:MaxwellMixedFields}
 \spacegrad \cdot \BD &= 4 \pi \rho \\
-\spacegrad \cross \BH - \inv{c} \PD{t}{\BD} &= \frac{4 \pi}{c} \Bj \\
-\spacegrad \cross \BE - \inv{c} \PD{t}{\BB} &= 0 \\
+\spacegrad \cross \BH - \inv{c} \PD{t}{\BD} &= \frac{4 \pi}{c} \BJ \\
+\spacegrad \cross \BE + \inv{c} \PD{t}{\BB} &= 0 \\
 \spacegrad \cdot \BB &= 0
 \end{align}
 
@@ -62,8 +62,96 @@ We can then express the $\BE$, $\BB$ in terms of the derived fields
 \BB &= \BH + 4\pi \BM
 \end{align}
 
-and in turn can write the macroscopic Maxwell equations
+and in turn can write the macroscopic Maxwell equations \ref{eqn:MaxwellMixedFields}
 in terms of just the derived fields, the material properties, and the charges and currents
+
+\begin{align*}
+\spacegrad \cdot \BD &= 4 \pi \rho \\
+\spacegrad \cross \BH - \inv{c} \PD{t}{\BD} &= \frac{4 \pi}{c} \BJ \\
+\spacegrad \cross \BD + \inv{c} \PD{t}{ \BH } &= 4 \pi \spacegrad \cross \BP + \frac{4\pi}{c} \PD{t}{ \BM }  \\
+\spacegrad \cdot \BH &= - 4 \pi \spacegrad \cdot \BM \\
+\end{align*}
+
+Now, using $\Ba \cross \Bb = -i (\Ba \wedge \Bb)$, we have
+
+\begin{align*}
+\spacegrad \cdot \BD &= 4 \pi \rho \\
+i \spacegrad \wedge \BH + \inv{c} \PD{t}{\BD} &= -\frac{4 \pi}{c} \BJ \\
+\spacegrad \wedge \BD + \inv{c} \PD{t}{ i\BH } &= 4 \pi i \spacegrad \cross \BP + \frac{4\pi}{c} \PD{t}{ i \BM }  \\
+i \spacegrad \cdot \BH &= - 4 \pi i \spacegrad \cdot \BM \\
+\end{align*}
+
+Summing these in pairs with $\spacegrad \Ba = \spacegrad \cdot \Ba + \spacegrad \wedge \Ba$, and writing $\PDi{ct}{} = \partial_0$ we have
+
+\begin{align*}
+\spacegrad \BD + \partial_0 {i\BH } &= 4 \pi \rho + 4 \pi \spacegrad \wedge \BP + {4\pi} \partial_0 { i \BM }  \\
+i \spacegrad \BH + \partial_0 {\BD} &= -\frac{4 \pi}{c} \BJ - 4 \pi i \spacegrad \cdot \BM \\
+\end{align*}
+
+Note that while had $i\spacegrad \cdot \Ba \ne \spacegrad \cdot (i\Ba)$, and
+$i\spacegrad \wedge \Ba \ne \spacegrad \wedge (i\Ba)$
+(instead $i\spacegrad \cdot \Ba = \spacegrad \wedge (i\Ba)$, and
+$i\spacegrad \wedge \Ba = \spacegrad \cdot (i\Ba)$), but now that these are summed we can take advantage of the fact that the pseudoscalar $i$
+commutes with all vectors (such as $\spacegrad$).  So, summing once again we have
+
+\begin{align*}
+(\partial_0 + \spacegrad)(\BD + i\BH ) &= 
+\frac{4 \pi}{c} \left( c \rho - \BJ \right)
++ {4 \pi} \left( \spacegrad \wedge \BP + \partial_0 { i \BM }  - \spacegrad \wedge (i\BM) \right)
+\\
+\end{align*}
+
+Finally, premultiplication by $\gamma_0$, where $\BJ = \sigma_k J^k = \gamma_k \gamma_0 J^k$, and $\spacegrad = \sum_k \gamma_k \gamma_0 \partial_k$ we have
+
+\begin{align}
+\gamma^\mu \partial_\mu (\BD + i \BH)
+&=
+\frac{4 \pi}{c} \left( c \rho \gamma_0 + J^k \gamma_k \right)
++ {4 \pi \gamma_0} \left( \spacegrad \wedge \BP + \partial_0 { i \BM }  - \spacegrad \wedge (i\BM) \right)
+\end{align}
+
+With 
+\begin{align}
+J^0 &= c \rho \\
+J &= \gamma_\mu J^\mu \\
+\grad &= \gamma^\mu \partial_\mu \\
+F &= \BD + i\BH
+\end{align}
+
+For the remainding terms we have $\spacegrad \wedge \BP, i\BM \in \Span\{\gamma_a \gamma_b\}$, and $\gamma_0 \spacegrad \wedge (iM) \in \Span{ \gamma_1 \gamma_2 \gamma_3}$, so between the three of these we have a (Dirac) trivector, so it would be reasonable to write
+
+\begin{align}
+T &= {\gamma_0} \left( \spacegrad \wedge \BP + \partial_0 { i \BM }  - \spacegrad \wedge (i\BM) \right) \in \Span\{ \gamma_\mu \wedge \gamma_\nu \wedge \gamma_\sigma\} 
+\end{align}
+
+Putting things back together we have
+
+\begin{align}
+\grad F &= \frac{4\pi}{c} J + 4\pi T
+\end{align}
+
+This has a nice symmetry, almost nicer than the original microscopic version of Maxwell's equation since we now have matched grades (vector plus trivector in the Dirac vector space) on both sides of the equation.
+
+\subsection{ Continuity equation. }
+
+Also observe that interestingly we still have the same continuity equation as in the microscopic case.  Application of another spacetime gradient and then selecting scalar grades we have
+
+\begin{align*}
+\gpgradezero{ \grad \grad F } &= \gpgradezero{ \grad \frac{4\pi}{c} J + 4\pi T }  \\
+\grad^2 \gpgradezero{ F } &=
+&= \frac{ 4 \pi }{c} \gpgradezero{ J } \\
+&= \frac{ 4 \pi }{c} \partial_\mu J^\mu \\
+\end{align*}
+
+Since $F$ is a Dirac bivector it has no scalar part, so this whole thing is zero by the grade selection on the LHS.  So, from the RHS we have
+
+\begin{align*}
+0 &= \partial_\mu J^\mu \\
+&= \inv{c} \PD{t}{c\rho} + \partial_k J^k \\
+&= \PD{t}{\rho} + \spacegrad \cdot \BJ
+\end{align*}
+
+Despite the new trivector term in the equation due to the matter properties!
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
