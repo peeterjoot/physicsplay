@@ -51,8 +51,7 @@ ordered2008 += ../geometric-algebra/laplace.pdf
 # moved to gabook:
 skipit += ../geometric-algebra/bivector.pdf
 skipit += ../geometric-algebra/trivector.pdf
-
-ordered2008 += ../geometric-algebra/kvector_exponential.pdf
+skipit += ../geometric-algebra/kvector_exponential.pdf
 
 # moved to gabook:
 skipit += ../geometric-algebra/scalar_commutes.pdf
@@ -91,7 +90,10 @@ ordered2008 += ../geometric-algebra/sg_mx_41.pdf
 ordered2008 += ../geometric-algebra/pe.pdf
 ordered2008 += ../geometric-algebra/fourvec_dotinvariance.pdf
 ordered2008 += ../geometric-algebra/newtonian_lagrangian_and_gradient.pdf
+
+# moved to gabook
 ordered2008 += ../geometric-algebra/cauchy_gradient.pdf
+
 ordered2008 += ../geometric-algebra/velocity_tx.pdf
 ordered2008 += ../geometric-algebra/em_potential.pdf
 ordered2008 += ../geometric-algebra/gafp_lorentz.pdf
@@ -180,10 +182,10 @@ ordered2008 += ../geometric-algebra/complex.pdf
 skipit += ../sym/o2.pdf
 skipit += ../sym/o3.pdf
 
-ordered2008 += ../geometric-algebra/eulerangle.pdf
-
+# moved to gabook:
+skipit += ../geometric-algebra/eulerangle.pdf
 # in progress:
-ordered2008 += ../geometric-algebra/spherical_polar.pdf
+skipit += ../geometric-algebra/spherical_polar.pdf
 
 ordered2008 += ../geometric-algebra/gaussian_surface.pdf
 ordered2008 += ../geometric-algebra/charge_line_element.pdf
@@ -196,7 +198,9 @@ ordered2008 += ../geometric-algebra/nfcm_ch2.pdf
 # Lut's, not mine:
 skipit += ../lut/GA_matrix.pdf
 
-ordered2008 += ../geometric-algebra/slerp.pdf
+# moved to gabook:
+skipit += ../geometric-algebra/slerp.pdf
+
 ordered2008 += ../geometric-algebra/wave_eqn.pdf
 
 ordered2008 += ../geometric-algebra/wave_lagrangian.pdf
