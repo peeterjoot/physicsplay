@@ -7,6 +7,13 @@
 \DeclareMathOperator{\sgn}{sgn}
 \DeclareMathOperator{\something}{something}
 
+\newcommand{\uDETuvij}[4]{
+\begin{vmatrix}
+ {#1}^{#3} & {#1}^{#4} \\
+ {#2}^{#3} & {#2}^{#4}
+\end{vmatrix}
+}
+
 %\usepackage{listings}
 %\usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
 % makes \grad look funny though (almost like spacegrad, but narrower)
@@ -22,7 +29,7 @@
 
 \title{ A GA introduction attempt. }
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ May 30, 2009.  Last Revision: $Date: 2009/05/31 02:02:43 $ }
+\date{ May 30, 2009.  Last Revision: $Date: 2009/05/31 04:12:28 $ }
 
 \begin{document}
 
@@ -40,7 +47,9 @@ identity
 a \cdot ( b \wedge c) = (a \cdot b) c - (a \cdot c) b
 \end{align}
 
-\section{ The Axioms }
+\section{ Introductory concepts. }
+
+\subsection{ The Axioms }
 
 Two basic axioms are required, contraction and associative multiplication respectively
 
@@ -133,9 +142,9 @@ For an Euclidean space we have ${e_\mu}^2 = 1$, and $e_\nu e_\mu = -e_\mu e_\nu$
 
 This shows that we can make an identification between the symmetric product, and the anticommutator of physics with the dot product, and then define
 
-\begin{align*}
+\begin{align}\label{eqn:dotDefined}
 a \cdot b \equiv \inv{2} \symmetric{a}{b} = \inv{2} (a b + ba)
-\end{align*}
+\end{align}
 
 \subsection{ Antisymmetric product of two vectors (wedge product) }
 
@@ -202,7 +211,15 @@ a_1 \wedge a_2 \wedge a_3 = \inv{6}
 +&a_2 a_3 a_1 (1) + a_3 a_2 a_1 (-1) )
 \end{align*}
 
-We will see later that this completely antisymmetrized sum, the wedge product of differential forms will have an important place in this algebra, but like the dot product it is a specific construction of the more general vector product.  The choice to identify the antisymmetric sum with the wedge product is an action that amounts to a definition of the wedge product.  Having made that definition, the symmetric and antisymmetric decomposition of two vectors leaves us with a peculiar looking hybrid construction:
+We will see later that this completely antisymmetrized sum, the wedge product of differential forms will have an important place in this algebra, but like the dot product it is a specific construction of the more general vector product.  The choice to identify the antisymmetric sum with the wedge product is an action that amounts to a definition of the wedge product.  Explicitly, and complementing
+the dot product definition of \ref{eqn:dotDefined} for the dot product
+of two vectors, we say
+
+\begin{align}\label{eqn:wedgeDefined}
+a \wedge b \equiv \inv{2} \antisymmetric{a}{b} = \inv{2} ( a b - b a )
+\end{align}
+
+Having made this definition, the symmetric and antisymmetric decomposition of two vectors leaves us with a peculiar looking hybrid construction:
 
 \begin{align}\label{eqn:dotPlusWedge}
 a b %&= \inv{2} (a b + b a) + \inv{2} ( a b - b a ) \\
@@ -216,6 +233,160 @@ The definition of \ref{eqn:dotPlusWedge} is often used as the starting point in 
 \subsection{ Expansion of the wedge product of two vectors }
 
 Many introductory geometric algebra treatments try very hard to avoid explicit coordinate treatment.  It is true that GA provides infrastructure for coordinate free treatment, however, this avoidance perhaps contributes to making the subject less accessible.  Since we are so used to coordinate geometry in vector and tensor algebra, let's take advantage of this comfort, and express the wedge product explicitly in coordinate form to help get some comfort for it.
+
+Employing the definition of \ref{eqn:wedgeDefined}, and an othnonormal basis
+expansion in 
+coordinates for two vectors $a$, and $b$, we have
+
+\begin{align*}
+2 (a \wedge b)
+&= ( a b - b a ) \\
+&= 
+\sum_{\mu,\nu} a^\mu b^\mu e_\mu e_\nu 
+-\sum_{\alpha,\beta} a^\alpha b^\beta e_\alpha e_\beta \\
+&= 
+\underbrace{\sum_{\mu} a^\mu b^\mu 
+- \sum_{\alpha} a^\alpha b^\alpha }_{=0}
++ \sum_{\mu \ne \nu} a^\mu b^\nu e_\mu e_\nu 
+- \sum_{\alpha \ne \beta} a^\alpha b^\beta e_\alpha e_\beta \\
+&=
+\sum_{\mu < \nu} (a^\mu b^\nu e_\mu e_\nu + a^\nu b^\mu e_\nu e_\mu)
+- \sum_{\alpha < \beta} (a^\alpha b^\beta e_\alpha e_\beta + a^\beta b^\alpha e_\beta e_\alpha )
+\\
+&=
+2 \sum_{\mu < \nu} ( a^\mu b^\nu - a^\nu b^\mu ) e_\mu e_\nu 
+\end{align*}
+
+So we have
+\begin{align}
+a \wedge b
+&= \sum_{\mu < \nu} \uDETuvij{a}{b}{\mu}{\nu} e_\mu e_\nu 
+\end{align}
+
+The similarity to the \R{3} vector cross product is not accidental.  This similarity can be made explicit by observing the following
+
+\begin{align*}
+e_1 e_2 &= e_1 e_2 (e_3 e_3) = (e_1 e_2 e_3) e_3 \\
+e_2 e_3 &= e_2 e_3 (e_1 e_1) = (e_1 e_2 e_3) e_1 \\
+e_1 e_3 &= e_1 e_3 (e_2 e_2) = -(e_1 e_2 e_3) e_2 \\
+\end{align*}
+
+This common factor, a product of three normal vectors, or grade three blade, is called the pseudoscalar for \R{3}.  We write
+$i = e_1 e_2 e_3$, and can then express the \R{3} wedge product in terms of the cross product
+
+\begin{align*}
+a \wedge b
+&= 
+\uDETuvij{a}{b}{2}{3} e_2 e_3 
++\uDETuvij{a}{b}{1}{3} e_1 e_3 
++\uDETuvij{a}{b}{1}{2} e_1 e_2  \\
+&= 
+(e_1 e_2 e_3) \left( \uDETuvij{a}{b}{2}{3} e_1 
+-\uDETuvij{a}{b}{1}{3} e_2 
++\uDETuvij{a}{b}{1}{2} e_3 \right) \\
+\end{align*}
+
+This is
+
+\begin{align}\label{eqn:wedgeAsCross}
+a \wedge b &= i (a \cross b)
+\end{align}
+
+With this identification we now also have a curious integrated relation where the dot and cross products are united into
+a single structure
+
+\begin{align}\label{eqn:scalarPlusIcross}
+a b = a \cdot b + i (a \cross b)
+\end{align}
+
+\subsection{ Vector product in exponential form. }
+
+One naturally expects there is an inherent connection between the dot and cross products, especially when expressed in terms of
+the angle between the vectors, as in
+
+\begin{align*}
+a \cdot b &= \Abs{a}\Abs{b} \cos\theta_{a,b} \\
+a \cross b &= \Abs{a}\Abs{b} \sin\theta_{a,b} \ncap_{a,b}
+\end{align*}
+
+However, without the structure of the geometric product the specifics of what 
+connection is isn't obvious.  In particular the use of \ref{eqn:scalarPlusIcross} and the angle relations, one can easily
+blunder upon the natural complex structure of the geometric product
+
+\begin{align*}
+a b 
+&= a \cdot b + i (a \cross b) \\
+&=
+\Abs{a}\Abs{b} \left( \cos\theta_{a,b} + i\ncap_{a,b} \sin\theta_{a,b} \right) \\
+\end{align*}
+
+As we've seen pseudoscalar multiplication in \R{3} provides a mapping between a grade 2 blade and a vector, so 
+this $i\ncap$ product is a 2-blade.
+
+In \R{3} we also have $i \ncap = \ncap i$ (exercise for reader) and also $i^2 = -1$ (again for the reader), so this 
+2-blade $i\ncap$ has all the properties of the $i$ of complex arithmetic.  We can, in fact, write
+
+\begin{align*}
+a b 
+&= a \cdot b + i (a \cross b) \\
+&=
+\Abs{a}\Abs{b} \exp( i\ncap_{a,b} \theta_{a,b} )
+\end{align*}
+
+In particular, for unit vectors $a$, $b$ one is able to quaternion exponentials of this form to rotate from one vector to the other
+
+\begin{align*}
+b &= a \exp( i\ncap_{a,b} \theta_{a,b} )
+\end{align*}
+
+This natural GA use
+of multivector exponentials to implement rotations is not restricted to \R{3} or even Euclidean space, and is one of the most
+powerful features of the algebra.
+
+\subsection{ Pseudoscalar. }
+
+In general the
+pseudoscalar for \R{N} is a product of $N$ normal vectors and multiplication by such an object maps m-blades to (N-m) blades.
+
+For \R{2} the unit pseudoscalar has a negative square
+
+\begin{align*}
+(e_1 e_2) (e_1 e_2)
+&=
+- (e_2 e_1) (e_1 e_2) \\
+&=
+- e_2 (e_1 e_1) e_2 \\
+&=
+- e_2 e_2 \\
+&=
+-1
+\end{align*}
+
+and we've seen an example of such a planar pseudoscalar in the subspace of the span of two vectors above (where $\ncap i$ was a pseudoscalar
+for that subspace).  In general the sign of the square of the pseudoscalar depends on both the dimension and the metric of the space, 
+so the ``complex'' exponentials that rotate one vector into another may represent hyperbolic rotations.
+
+For example we have for a four dimensional space the pseudoscalar square is
+
+\begin{align*}
+i^2 &=
+(e_0 e_1 e_2 e_3) (e_0 e_1 e_2 e_3) \\
+&=
+- e_0 e_0 e_1 e_2 e_3 e_1 e_2 e_3 \\
+&=
+- e_0 e_0 e_1 e_2 e_3 e_1 e_2 e_3 \\
+&=
+- e_0 e_0 e_1 e_1 e_2 e_3 e_2 e_3 \\
+&=
+e_0 e_0 e_1 e_1 e_2 e_2 e_3 e_3 \\
+\end{align*}
+
+For a Euclidean space where each of the ${e_k}^2 = 1$, we have ${i_4}^2 = 1$, but for a Minkowski space where one would have for $k\ne0$, ${e_0}^2 {e_k}^2 = -1$, we have $i^2 = -1$
+
+Such a mixed signature metric will allow for implementation of Lorentz transformations as exponentials (hyperbolic) rotations
+in a fashion very much like the quaternionic spatial rotations for Euclidean spaces.
+
+\section{ Higher order products. }
 
 %\bibliographystyle{plainnat}
 %\bibliography{myrefs}
