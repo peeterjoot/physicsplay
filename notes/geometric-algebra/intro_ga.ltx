@@ -1,0 +1,424 @@
+\documentclass{article}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+
+\newcommand{\symmetric}[2]{{\left\{{#1},{#2}\right\}}}
+\newcommand{\antisymmetric}[2]{\left[{#1},{#2}\right]}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\something}{something}
+
+\newcommand{\uDETuvij}[4]{
+\begin{vmatrix}
+ {#1}^{#3} & {#1}^{#4} \\
+ {#2}^{#3} & {#2}^{#4}
+\end{vmatrix}
+}
+
+%\usepackage{listings}
+%\usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
+% makes \grad look funny though (almost like spacegrad, but narrower)
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
+
+
+\title{ A GA introduction attempt. }
+\author{Peeter Joot \quad peeter.joot@gmail.com }
+\date{ May 30, 2009.  Last Revision: $Date: 2009/05/31 13:36:28 $ }
+
+\begin{document}
+
+\maketitle{}
+\tableofcontents
+
+\section{ Motivation }
+
+As an exercise work out axiomatically some of the key vector identities of Geometric Algebra.
+
+Want to at least derive the vector bivector dot product distribution
+identity
+
+\begin{align}
+a \cdot ( b \wedge c) = (a \cdot b) c - (a \cdot c) b
+\end{align}
+
+At the same time attempt here to provide a naturally sequenced introduction to the algebra.
+
+\section{ Introductory concepts. }
+
+\subsection{ The Axioms }
+
+Two basic axioms are required, contraction and associative multiplication respectively
+
+\begin{align}
+a^2 &= \text{scalar} \\
+a (b c) &= (a b) c = a b c
+\end{align}
+
+Linearity and scalar multiplication should probably also be included for completeness, but even with those this is a surprisingly small set of rules.  The choice to impose these as the rules for vector multiplication will be seen to have a rich set of consequences once explored.  It will take a fair amount of work to extract all the consequences of this decision, and some of that will be done here.
+
+\subsection{ Contraction and the metric }
+
+Defining $a^2$ itself requires introduction of a metric, the specification of the multiplication rules for a particular basis for the vector space.  For Euclidean spaces, a requirement that
+
+\begin{align}
+a^2 = \Abs{a}^2
+\end{align}
+
+is sufficient to implicitly define this metric.  However, for the Minkowski spaces of special relativity one wants the squares of time and spatial basis vectors to be opposing in sign.  Deferring the discussion of metric temporarily one can work with the axioms above to discover their implications, and in particular how these relate to the coordinate vector space constructions that are so familiar.
+
+\subsection{ Symmetric sum of vector products }
+
+Squaring a vector sum provides the first interesting feature of the general vector product
+
+\begin{align}\label{sumSquared}
+(a + b)^2 %&= (a + b)(a + b) \\
+&= a^2 + b^2 + a b + b a
+\end{align}
+
+Observe that the LHS is a scalar by the contraction identity, and on the RHS we have scalars $a^2$ and $b^2$ by the same.  This implies that the symmetric sum of products
+
+\begin{align*}
+a b + b a
+\end{align*}
+
+is also a scalar, independent of any choice of metric.  Symmetric sums of this form have a place in physics over the space of operators, often instantiated in matrix form.  There one writes this as the commutator and denotes it as
+
+\begin{align}\label{eqn:anticommutator}
+\symmetric{a}{b} \equiv a b + b a
+\end{align}
+
+In an Euclidean space one can observe that equation \ref{sumSquared} has the same structure as the law of cosines so it should not be surprising that this symmetric sum is also related to the dot product.  For a Euclidean space where one the notion of perpendicularity can be expressed as
+
+\begin{align*}
+\Abs{ a + b }^2 = \Abs{a}^2 + \Abs{b}^2
+\end{align*}
+
+we can then see that an implication of the vector product is the fact that perpendicular vectors have the property
+
+\begin{align*}
+a b + ba = 0
+\end{align*}
+
+or
+
+\begin{align*}
+b a = - a b
+\end{align*}
+
+This notion of perpendicularity will also be seen to make sense for non-Euclidean spaces.
+
+Although it retracts from a purist Geometric Algebra approach where things can be done in a coordinate free fashion, the connection between the symmetric product and the standard vector dot product can be most easily shown by considering an expansion with respect to an orthonormal basis.
+
+Lets write two vectors in an orthonormal basis as
+
+\begin{align*}
+a &= \sum_\mu a^\mu e_\mu \\
+b &= \sum_\mu b^\mu e_\mu
+\end{align*}
+
+Here the choice to utilize raised indexes rather than lower for the coordinates is taken from physics where summation is typically implied when upper and lower indexes are matched as above.
+
+Forming the symmetric product we have
+
+\begin{align*}
+a b + b a
+&=
+\sum_{\mu,\nu} a^\mu e_\mu b^\nu e_\nu + b^\mu e_\mu a^\nu e_\nu \\
+&=
+\sum_{\mu,\nu} a^\mu b^\nu \left( e_\mu e_\nu + e_\nu e_\mu \right) \\
+&=
+2 \sum_{\mu} a^\mu b^\mu {e_\mu}^2 + \sum_{\mu \ne \nu} a^\mu b^\nu \left( e_\mu e_\nu + e_\nu e_\mu \right) \\
+\end{align*}
+
+For an Euclidean space we have ${e_\mu}^2 = 1$, and $e_\nu e_\mu = -e_\mu e_\nu$, so we are left with
+
+\begin{align*}
+\sum_{\mu} a^\mu b^\mu = \inv{2} ( a b + b a)
+\end{align*}
+
+This shows that we can make an identification between the symmetric product, and the anticommutator of physics with the dot product, and then define
+
+\begin{align}\label{eqn:dotDefined}
+a \cdot b \equiv \inv{2} \symmetric{a}{b} = \inv{2} (a b + ba)
+\end{align}
+
+\subsection{ Antisymmetric product of two vectors (wedge product) }
+
+Having identified or defined the symmetric product with the dot product we are now prepared to examine a general product of two vectors.  Employing a symmetric + antisymmetric decomposition we can write such a general product as
+
+\begin{align*}
+a b = \underbrace{\inv{2}(a b + b a)}_{a \cdot b} + \underbrace{ \inv{2} ( a b - b a ) }_{ a \something b }
+\end{align*}
+
+What is this remaining vector operation between the two vectors
+
+\begin{align*}
+a \something b = \inv{2} ( a b - b a )
+\end{align*}
+
+One can continue the comparison with the quantum mechanics, and like the
+anticommutator operator that expressed our symmetric sum in equation
+\ref{eqn:anticommutator} one can introduce a commutator operator
+
+\begin{align}\label{eqn:commutator}
+\antisymmetric{a}{b} \equiv a b - b a
+\end{align}
+
+The commutator however, doesn't naturally extend to more than two vectors, so
+as with the scalar part of the vector product (the dot product part), 
+it is desirable to make a different identification for this part of the vector
+product.
+
+One observation that we can make is that this vector operation changes sign when the operations are reversed.  We have
+
+\begin{align*}
+b \something a = \inv{2} ( b a - a b) = - a \something b
+\end{align*}
+
+Similarly, if $a$ and $b$ are colinear, say $b = \alpha a$, this product is zero
+
+\begin{align*}
+a \something (\alpha a)
+&= \inv{2} ( a  (\alpha a) - (\alpha a) a ) \\
+&= 0
+\end{align*}
+
+This complete antisymmetry, aside from a potential difference in sign, are precisely the properties of the wedge product used in the mathematics of differential forms.  In this differential geometry the wedge product of $m$ one-forms (vectors in this context) can be defined as
+
+\begin{align}\label{eqn:wedge}
+a_1 \wedge a_2 \cdots \wedge a_m
+&= \inv{m!} \sum a_{i_1} a_{i_2} \cdots a_{i_m} \sgn(\pi(i_1 i_2 \cdots i_m))
+\end{align}
+
+Here $\sgn(\pi(\cdots))$ is the sign of the permutation of the indexes.  While we haven't gotten yet to products of more than two vectors it is helpful to know that the wedge product will have a place in such a general product.   An equation like \ref{eqn:wedge} makes a lot more sense after writing it out in full for a few specific cases.  For two vectors $a_1$ and $a_2$ this is
+
+\begin{align}\label{eqn:wedgeTwo}
+a_1 \wedge a_2 = \inv{2}
+\left( a_1 a_2 (1) + a_2 a_1 (-1) \right)
+\end{align}
+
+and for three vectors this is
+
+\begin{align*}
+a_1 \wedge a_2 \wedge a_3 = \inv{6}
+(
+&a_1 a_2 a_3 (1) + a_1 a_3 a_2 (-1) \\
++&a_2 a_1 a_3 (-1) + a_3 a_1 a_2 (1) \\
++&a_2 a_3 a_1 (1) + a_3 a_2 a_1 (-1) )
+\end{align*}
+
+We will see later that this completely antisymmetrized sum, the wedge product of differential forms will have an important place in this algebra, but like the dot product it is a specific construction of the more general vector product.  The choice to identify the antisymmetric sum with the wedge product is an action that amounts to a definition of the wedge product.  Explicitly, and complementing
+the dot product definition of \ref{eqn:dotDefined} for the dot product
+of two vectors, we say
+
+\begin{align}\label{eqn:wedgeDefined}
+a \wedge b \equiv \inv{2} \antisymmetric{a}{b} = \inv{2} ( a b - b a )
+\end{align}
+
+Having made this definition, the symmetric and antisymmetric decomposition of two vectors leaves us with a peculiar looking hybrid construction:
+
+\begin{align}\label{eqn:dotPlusWedge}
+a b %&= \inv{2} (a b + b a) + \inv{2} ( a b - b a ) \\
+&= a \cdot b + a \wedge b
+\end{align}
+
+We had already seen that part of this vector product was not a vector, but was in fact a scalar.  We now see that the remainder is also not a vector but is instead something that resides in a different space.  In differential geometry this object is called a two form, or a simple element in $\bigwedge^2$.  Various labels are available for this object are available in Geometric (or Clifford) algebra, one of which is a 2-blade.  2-vector or bivector is also used in some circumstances, but in dimensions greater than three there are reasons to reserve these labels for a slightly more general construction.
+
+The definition of \ref{eqn:dotPlusWedge} is often used as the starting point in Geometric Algebra introductions.  While there is value to this approach I have personally found that the non-axiomatic approach becomes confusing if one attempts to sort out which of the many identities in the algebra are the fundamental ones.  That is why my preference is to treat this as a consequence rather than the starting point.
+
+\subsection{ Expansion of the wedge product of two vectors }
+
+Many introductory geometric algebra treatments try very hard to avoid explicit coordinate treatment.  It is true that GA provides infrastructure for coordinate free treatment, however, this avoidance perhaps contributes to making the subject less accessible.  Since we are so used to coordinate geometry in vector and tensor algebra, let's take advantage of this comfort, and express the wedge product explicitly in coordinate form to help get some comfort for it.
+
+Employing the definition of \ref{eqn:wedgeDefined}, and an orthonormal basis
+expansion in 
+coordinates for two vectors $a$, and $b$, we have
+
+\begin{align*}
+2 (a \wedge b)
+&= ( a b - b a ) \\
+&= 
+\sum_{\mu,\nu} a^\mu b^\mu e_\mu e_\nu 
+-\sum_{\alpha,\beta} a^\alpha b^\beta e_\alpha e_\beta \\
+&= 
+\underbrace{\sum_{\mu} a^\mu b^\mu 
+- \sum_{\alpha} a^\alpha b^\alpha }_{=0}
++ \sum_{\mu \ne \nu} a^\mu b^\nu e_\mu e_\nu 
+- \sum_{\alpha \ne \beta} a^\alpha b^\beta e_\alpha e_\beta \\
+&=
+\sum_{\mu < \nu} (a^\mu b^\nu e_\mu e_\nu + a^\nu b^\mu e_\nu e_\mu)
+- \sum_{\alpha < \beta} (a^\alpha b^\beta e_\alpha e_\beta + a^\beta b^\alpha e_\beta e_\alpha )
+\\
+&=
+2 \sum_{\mu < \nu} ( a^\mu b^\nu - a^\nu b^\mu ) e_\mu e_\nu 
+\end{align*}
+
+So we have
+\begin{align}
+a \wedge b
+&= \sum_{\mu < \nu} \uDETuvij{a}{b}{\mu}{\nu} e_\mu e_\nu 
+\end{align}
+
+The similarity to the \R{3} vector cross product is not accidental.  This similarity can be made explicit by observing the following
+
+\begin{align*}
+e_1 e_2 &= e_1 e_2 (e_3 e_3) = (e_1 e_2 e_3) e_3 \\
+e_2 e_3 &= e_2 e_3 (e_1 e_1) = (e_1 e_2 e_3) e_1 \\
+e_1 e_3 &= e_1 e_3 (e_2 e_2) = -(e_1 e_2 e_3) e_2 \\
+\end{align*}
+
+This common factor, a product of three normal vectors, or grade three blade, is called the pseudoscalar for \R{3}.  We write
+$i = e_1 e_2 e_3$, and can then express the \R{3} wedge product in terms of the cross product
+
+\begin{align*}
+a \wedge b
+&= 
+\uDETuvij{a}{b}{2}{3} e_2 e_3 
++\uDETuvij{a}{b}{1}{3} e_1 e_3 
++\uDETuvij{a}{b}{1}{2} e_1 e_2  \\
+&= 
+(e_1 e_2 e_3) \left( \uDETuvij{a}{b}{2}{3} e_1 
+-\uDETuvij{a}{b}{1}{3} e_2 
++\uDETuvij{a}{b}{1}{2} e_3 \right) \\
+\end{align*}
+
+This is
+
+\begin{align}\label{eqn:wedgeAsCross}
+a \wedge b &= i (a \cross b)
+\end{align}
+
+With this identification we now also have a curious integrated relation where the dot and cross products are united into
+a single structure
+
+\begin{align}\label{eqn:scalarPlusIcross}
+a b = a \cdot b + i (a \cross b)
+\end{align}
+
+\subsection{ Vector product in exponential form. }
+
+One naturally expects there is an inherent connection between the dot and cross products, especially when expressed in terms of
+the angle between the vectors, as in
+
+\begin{align*}
+a \cdot b &= \Abs{a}\Abs{b} \cos\theta_{a,b} \\
+a \cross b &= \Abs{a}\Abs{b} \sin\theta_{a,b} \ncap_{a,b}
+\end{align*}
+
+However, without the structure of the geometric product the specifics of what 
+connection is isn't obvious.  In particular the use of \ref{eqn:scalarPlusIcross} and the angle relations, one can easily
+blunder upon the natural complex structure of the geometric product
+
+\begin{align*}
+a b 
+&= a \cdot b + i (a \cross b) \\
+&=
+\Abs{a}\Abs{b} \left( \cos\theta_{a,b} + i\ncap_{a,b} \sin\theta_{a,b} \right) \\
+\end{align*}
+
+As we've seen pseudoscalar multiplication in \R{3} provides a mapping between a grade 2 blade and a vector, so 
+this $i\ncap$ product is a 2-blade.
+
+In \R{3} we also have $i \ncap = \ncap i$ (exercise for reader) and also $i^2 = -1$ (again for the reader), so this 
+2-blade $i\ncap$ has all the properties of the $i$ of complex arithmetic.  We can, in fact, write
+
+\begin{align*}
+a b 
+&= a \cdot b + i (a \cross b) \\
+&=
+\Abs{a}\Abs{b} \exp( i\ncap_{a,b} \theta_{a,b} )
+\end{align*}
+
+In particular, for unit vectors $a$, $b$ one is able to quaternion exponentials of this form to rotate from one vector to the other
+
+\begin{align*}
+b &= a \exp( i\ncap_{a,b} \theta_{a,b} )
+\end{align*}
+
+This natural GA use
+of multivector exponentials to implement rotations is not restricted to \R{3} or even Euclidean space, and is one of the most
+powerful features of the algebra.
+
+\subsection{ Pseudoscalar. }
+
+In general the
+pseudoscalar for \R{N} is a product of $N$ normal vectors and multiplication by such an object maps m-blades to (N-m) blades.
+
+For \R{2} the unit pseudoscalar has a negative square
+
+\begin{align*}
+(e_1 e_2) (e_1 e_2)
+&=
+- (e_2 e_1) (e_1 e_2) \\
+&=
+- e_2 (e_1 e_1) e_2 \\
+&=
+- e_2 e_2 \\
+&=
+-1
+\end{align*}
+
+and we've seen an example of such a planar pseudoscalar in the subspace of the span of two vectors above (where $\ncap i$ was a pseudoscalar
+for that subspace).  In general the sign of the square of the pseudoscalar depends on both the dimension and the metric of the space, 
+so the ``complex'' exponentials that rotate one vector into another may represent hyperbolic rotations.
+
+For example we have for a four dimensional space the pseudoscalar square is
+
+\begin{align*}
+i^2 &=
+(e_0 e_1 e_2 e_3) (e_0 e_1 e_2 e_3) \\
+&=
+- e_0 e_0 e_1 e_2 e_3 e_1 e_2 e_3 \\
+&=
+- e_0 e_0 e_1 e_2 e_3 e_1 e_2 e_3 \\
+&=
+- e_0 e_0 e_1 e_1 e_2 e_3 e_2 e_3 \\
+&=
+e_0 e_0 e_1 e_1 e_2 e_2 e_3 e_3 \\
+\end{align*}
+
+For a Euclidean space where each of the ${e_k}^2 = 1$, we have $i^2 = 1$, but for a Minkowski space where one would have for $k\ne0$, ${e_0}^2 {e_k}^2 = -1$, we have $i^2 = -1$
+
+Such a mixed signature metric will allow for implementation of Lorentz transformations as exponentials (hyperbolic) rotations
+in a fashion very much like the quaternionic spatial rotations for Euclidean spaces.
+
+It is also worth pointing out that the pseudoscalar multiplication naturally provides a mapping operator into a dual space, as we've seen 
+in the cross product example, mapping vectors to bivectors, or bivectors to vectors.  Pseudoscalar multiplication in fact provides an 
+implementation of the Hodge duality operation of differential geometry.
+
+In higher than three dimensions, such as four, this duality operation can in fact map 2-blades to orthogonal 2-blades (orthogonal in the sense
+of having no common factors).  Take for example the typical example of a non-simple element from differential geometry
+
+\begin{align*}
+\omega = e_1 \wedge e_2 + e_3 \wedge e_4
+\end{align*}
+
+The two blades that compose this sum have no common factors and thus cannot be formed as the wedge product of two vectors.  These two blades
+are orthogonal in a sense that can be made more exact later.   As this time we just wish to make the observation that 
+the pseudoscalar provides a natural duality operation between these two subspaces of $\bigwedge^2$.  Take for example
+
+\begin{align*}
+i e_1 \wedge e_2 
+&=
+ e_1 e_2 e_3 e_4 e_1 e_2  \\
+&=
+- e_1 e_1 e_2 e_3 e_4 e_2  \\
+&=
+- e_1 e_1 e_2 e_2 e_3 e_4 \\
+&\propto 
+e_3 e_4 \\
+\end{align*}
+
+\section{ Higher order products. }
+
+%\bibliographystyle{plainnat}
+%\bibliography{myrefs}
+
+\end{document}
