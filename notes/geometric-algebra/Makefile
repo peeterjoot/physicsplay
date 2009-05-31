@@ -9,6 +9,8 @@ $(pdfs) : ../peeters_macros.tex
 
 include ../make.rules
 
+#----------------------------------------------------------------
+
 # 2007 and earlier
 ordered2007 :=
 ordered2007 += ../cross-1-15/cross_1_15.pdf
@@ -21,11 +23,11 @@ skipit += ../geometric-algebra/ga_wiki_unit_derivative.pdf
 skipit += ../geometric-algebra/ga_wiki_torque.pdf
 skipit += ../geometric-algebra/ga_wiki_cramers.pdf
 skipit += ../geometric-algebra/ga_wiki.pdf
+skipit += ../geometric-algebra/maxwells_ga.pdf
+skipit += ../geometric-algebra/angular_velocity.pdf
+skipit += ../geometric-algebra/radial_vector_derivatives.pdf
 
-# move to gabook:
-ordered2007 += ../geometric-algebra/maxwells_ga.pdf
-ordered2007 += ../geometric-algebra/angular_velocity.pdf
-ordered2007 += ../geometric-algebra/radial_vector_derivatives.pdf
+#----------------------------------------------------------------
 
 # 2008
 ordered2008 :=
@@ -54,26 +56,29 @@ ordered2008 += ../geometric-algebra/kvector_exponential.pdf
 
 # moved to gabook:
 skipit += ../geometric-algebra/scalar_commutes.pdf
-
-ordered2008 += ../geometric-algebra/angle_between_line_and_plane.pdf
-
-# moved to gabook:
+skipit += ../geometric-algebra/angle_between_line_and_plane.pdf
 skipit += ../geometric-algebra/bladegradereduction.pdf
+skipit += ../geometric-algebra/rordered200oeciprocal_frame.pdf
+skipit += ../geometric-algebra/orthodecomp.pdf
 
-ordered2008 += ../geometric-algebra/reciprocal_frame.pdf
-ordered2008 += ../geometric-algebra/orthodecomp.pdf
 ordered2008 += ../geometric-algebra/gradient_and_forms.pdf
 ordered2008 += ../geometric-algebra/shear.pdf
 ordered2008 += ../geometric-algebra/mp_inverse_svd_rough_notes.pdf
-ordered2008 += ../geometric-algebra/projection_with_matrix_comparison.pdf
+
+# moved to gabook:
+skipit += ../geometric-algebra/projection_with_matrix_comparison.pdf
+
 ordered2008 += ../geometric-algebra/ke_rotation.pdf
 ordered2008 += ../maxwell/lorentz_rotation.pdf
 ordered2008 += ../geometric-algebra/gacs_q8_8.pdf
 ordered2008 += ../geometric-algebra/locate_satellite.pdf
 ordered2008 += ../geometric-algebra/matrix_of_linear_tx.pdf
 ordered2008 += ../geometric-algebra/proj_generalized_dot_prod.pdf
-ordered2008 += ../geometric-algebra/projection_and_moore_penrose_vector_inverse.pdf
-ordered2008 += ../geometric-algebra/oblique_proj.pdf
+
+# moved to gabook:
+skipit += ../geometric-algebra/projection_and_moore_penrose_vector_inverse.pdf
+skipit += ../geometric-algebra/oblique_proj.pdf
+
 ordered2008 += ../geometric-algebra/em_tensor.pdf
 ordered2008 += ../geometric-algebra/angular_acc.pdf
 ordered2008 += ../geometric-algebra/fvec.pdf
@@ -219,6 +224,7 @@ ordered2008 += ../relativity/velocity_addition.pdf
 ordered2008 += ../qm/rayleigh_jeans.pdf
 ordered2008 += ../geometric-algebra/poynting.pdf
 
+#----------------------------------------------------------------
 
 # 2009:
 ordered2009 += ../geometric-algebra/energy_momentum_tensor.pdf
@@ -343,6 +349,7 @@ skipit += ../bookex/contpdf.pdf
 skipit += ../gabook/gabook.pdf
 skipit += ../geometric-algebra/intro_ga.pdf
 
+#----------------------------------------------------------------
 # Rules:
 #-----------------------------------------------------
 unordered2009 := $(filter-out $(ordered2009) $(skipit) $(ordered2007) $(ordered2008),$(ppdfs))
