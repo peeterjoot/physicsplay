@@ -15,10 +15,14 @@ ordered2007 += ../cross-1-15/cross_1_15.pdf
 ordered2007 += ../feynman/star_distance.pdf
 ordered2007 += ../maxwell/maxwell.pdf
 ordered2007 += ../cross/cross.pdf
-ordered2007 += ../geometric-algebra/ga_wiki_unit_derivative.pdf
-ordered2007 += ../geometric-algebra/ga_wiki_torque.pdf
-ordered2007 += ../geometric-algebra/ga_wiki_cramers.pdf
-ordered2007 += ../geometric-algebra/ga_wiki.pdf
+
+# moved to gabook:
+skipit += ../geometric-algebra/ga_wiki_unit_derivative.pdf
+skipit += ../geometric-algebra/ga_wiki_torque.pdf
+skipit += ../geometric-algebra/ga_wiki_cramers.pdf
+skipit += ../geometric-algebra/ga_wiki.pdf
+
+# move to gabook:
 ordered2007 += ../geometric-algebra/maxwells_ga.pdf
 ordered2007 += ../geometric-algebra/angular_velocity.pdf
 ordered2007 += ../geometric-algebra/radial_vector_derivatives.pdf
@@ -29,18 +33,33 @@ ordered2008 += ../geometric-algebra/ga_grade_dot_wedge.pdf
 ordered2008 += ../geometric-algebra/wedge_norm_vs_ga_norm.pdf
 ordered2008 += ../geometric-algebra/pythagoras.pdf
 ordered2008 += ../taylors/taylors.pdf
-ordered2008 += ../geometric-algebra/plane.pdf
+
+# moved to gabook:
+skipit += ../geometric-algebra/plane.pdf
+
 ordered2008 += ../geometric-algebra/legendre.pdf
 ordered2008 += ../geometric-algebra/inertial_tensor.pdf
-ordered2008 += ../geometric-algebra/quaternion.pdf
-ordered2008 += ../geometric-algebra/rotor.pdf
+
+# moved to gabook:
+skipit += ../geometric-algebra/quaternion.pdf
+skipit += ../geometric-algebra/rotor.pdf
+
 ordered2008 += ../geometric-algebra/laplace.pdf
-ordered2008 += ../geometric-algebra/bivector.pdf
-ordered2008 += ../geometric-algebra/trivector.pdf
+
+# moved to gabook:
+skipit += ../geometric-algebra/bivector.pdf
+skipit += ../geometric-algebra/trivector.pdf
+
 ordered2008 += ../geometric-algebra/kvector_exponential.pdf
-ordered2008 += ../geometric-algebra/scalar_commutes.pdf
+
+# moved to gabook:
+skipit += ../geometric-algebra/scalar_commutes.pdf
+
 ordered2008 += ../geometric-algebra/angle_between_line_and_plane.pdf
-ordered2008 += ../geometric-algebra/bladegradereduction.pdf
+
+# moved to gabook:
+skipit += ../geometric-algebra/bladegradereduction.pdf
+
 ordered2008 += ../geometric-algebra/reciprocal_frame.pdf
 ordered2008 += ../geometric-algebra/orthodecomp.pdf
 ordered2008 += ../geometric-algebra/gradient_and_forms.pdf
@@ -294,7 +313,10 @@ ordered2009 += ../qm/harmonic_osc.pdf
 ordered2009 += ../maxwell/maxwell_tensor_from_lagrangian.pdf
 ordered2009 += ../qm/bohm_ch10.pdf
 ordered2009 += ../calculus/wavevariation.pdf
-ordered2009 += ../taylors/multivector_taylors.pdf
+
+# moved to ../gabook/
+#ordered2009 += ../taylors/multivector_taylors.pdf
+skipit += ../taylors/multivector_taylors.pdf
 
 # lut's
 skipit += ../lut/pjnote1.pdf
@@ -311,8 +333,15 @@ ordered2009 += ../relativity/lorentz_force_tx.pdf
 # junk notes:
 skipit += ../relativity/lorentz_force_tx_2.pdf
 ordered2009 += ../geometric-algebra/macroscopic_maxwell.pdf
-ordered2009 += ../geometric-algebra/intro_ga.pdf
+
+#ordered2009 += ../geometric-algebra/intro_ga.pdf
 #ordered2009 += 
+
+skipit += ../bookex/3dpdf.pdf
+skipit += ../bookex/bookex.pdf
+skipit += ../bookex/contpdf.pdf
+skipit += ../gabook/gabook.pdf
+skipit += ../geometric-algebra/intro_ga.pdf
 
 # Rules:
 #-----------------------------------------------------
