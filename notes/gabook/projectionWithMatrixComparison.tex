@@ -1,61 +1,21 @@
-\documentclass{article}      % Specifies the document class
+\chapter{Matrix review.}\label{chap:matrixReview}
 
+\section{Motivation. }
 
-\input{../peeters_macros.tex}
-%\DeclareMathOperator{\Transpose}{T}
-\DeclareMathOperator{\rank}{rank}
-%\newcommand{\transpose}[1]{{{#1}^{\TextTranspose}}}
-%\newcommand{\transpose}[1]{{{#1}^{\text{T}}}}
-\newcommand{\T}[0]{{\text{T}}}
-\newcommand{\BOmega}[0]{\boldsymbol{\Omega}}
-
-\newcommand{\Det}[1] {\abs{#1}}
-
-\usepackage{color,cite,graphicx}
-   % use colour in the document, put your citations as [1-4]
-   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
-   % graphics package. 
-\usepackage{latexsym,amssymb,epsf} % don't remember if these are
-   % needed, but their inclusion can't do any damage
-
-
-%
-% The real thing:
-%
-
-                             % The preamble begins here.
-\title{ Matrix review. } % Declares the document's title.
-\author{Peeter Joot \quad peeter.joot@gmail.com}         % Declares the author's name.
-\date{ April 11, 2008.  Last Revision: $Date: 2009/05/31 18:27:11 $ }
-
-\begin{document}             % End of preamble and beginning of text.
-
-\maketitle{}
-
-
-\section{ Motivation. }
-
-
-My initial intention for these notes was to 
-
-get a feel for the similarities and differences between GA and matrix approaches to solution of projection.  Attempting to
-write up that comparison
-I found gaps in my understanding of the matrix algebra.  In particular the topic of projection as well as the related
-ideas of pseudoinverses and SVD were not adequately covered in my university courses, nor my texts from those courses.
+My initial intention for subset of notes was to get a feel for the similarities and differences between GA and matrix approaches to solution of projection.  Attempting to write up that comparison I found gaps in my understanding of the matrix algebra.  In particular the topic of projection as well as the related ideas of pseudoinverses and SVD were not adequately covered in my university courses, nor my texts from those courses.
 Here is my attempt to write up what I understand of these subjects and explore the gaps in my knowledge.
 
 Particularly helpful was 
 Gilbert Strang's excellent MIT lecture on subspace projection (available on the MIT opencourseware website).
-Much of the notes below are probably detailed in his course textbook, which I don't have.  However, 
-if I can't explain the ideas to myself, or write them up in a way that I feel would explain
-to others, then I obviously don't understand them sufficiently.
+Much of the notes below are probably detailed in his course textbook.
+%, which I don't have.
+%However, if I can't explain the ideas to myself, or write them up in a way that I feel would explain to others, then I obviously don't understand them sufficiently.
 
+There is some GA content here, but the focus in this chapter isn't neccessarily GA.
 
-\section{ Subspace projection in matrix notation. }
+\section{Subspace projection in matrix notation. }
 
-
-\subsection{ Projection onto line. }
-
+\subsection{Projection onto line. }
 
 \begin{figure}[htp]
 
@@ -107,12 +67,12 @@ p = a \left(\frac{a^\T b}{a^\T a} \right)
 
 Following Gilbert Strang's MIT lecture on subspace projection, the parenthesis can be moved to directly express this as a projection matrix operating on b.
 
-\begin{equation}\label{eqn:projectmatrixline}
+\begin{equation}\label{eqn:projMatrixCompare:projectmatrixline}
 p = \left(\frac{a a^\T}{a^\T a}\right) b = P b
 \end{equation}
 
 
-\subsection{ Projection onto plane (or subspace). }
+\subsection{Projection onto plane (or subspace). }
 
 
 
@@ -204,7 +164,7 @@ U^\T b
 
 And 
 
-\begin{equation}\label{eqn:projectionwitheucliandot}
+\begin{equation}\label{eqn:projMatrixCompare:projectionwitheucliandot}
 p = U \alpha = U
 {{
 \begin{bmatrix}
@@ -248,13 +208,13 @@ u_i^\T {u_j}
 
 This provides the final result:
 
-\begin{equation}\label{eqn:projectiongeneralmatrix}
+\begin{equation}\label{eqn:projMatrixCompare:projectiongeneralmatrix}
 \Proj_{U}\left(b\right) = U (U^\T U)^{-1} U^\T b
 \end{equation}
 
-\subsection{ Simplifying case.  Orthonormal basis for column space. }
+\subsection{Simplifying case.  Orthonormal basis for column space. }
 
-To evaluate equation \ref{eqn:projectiongeneralmatrix} we need only full column rank for $U$, but this will be messy in general due to the matrix inversion required for the center product.  That can be avoided by picking an orthonormal basis for the vector space that we are projecting on.  With an orthonormal column basis that 
+To evaluate equation \ref{eqn:projMatrixCompare:projectiongeneralmatrix} we need only full column rank for $U$, but this will be messy in general due to the matrix inversion required for the center product.  That can be avoided by picking an orthonormal basis for the vector space that we are projecting on.  With an orthonormal column basis that 
 central product term to invert is:
 
 \[
@@ -263,19 +223,19 @@ U^\T U = [ u_i^\T u_j ]_{ij} = [ \delta_{ij} ]_{ij} = I_{r,r}
 
 Therefore, the projection matrix can be expressed using the two exterior terms alone:
 
-\begin{equation}\label{eqn:projOrthonormal}
+\begin{equation}\label{eqn:projMatrixCompare:projOrthonormal}
 \Proj_U = U (U^\T U)^{-1} U^\T = U U^\T
 \end{equation}
 
-\subsection{ Numerical expansion of left pseudoscalar matrix with matrix.}
+\subsection{Numerical expansion of left pseudoscalar matrix with matrix.}
 
 Numerically expanding the projection matrix $A (A^\T A)^{-1}A^\T$ isn't something
 that we want to do, but the simpler projection matrix of equation
-\ref{eqn:projOrthonormal} that we get with an orthonormal basis makes this not so daunting.
+\ref{eqn:projMatrixCompare:projOrthonormal} that we get with an orthonormal basis makes this not so daunting.
 
 Let's do this to get a feel for things.
 
-\subsubsection{ \R{4} plane projection example. }
+\subsubsection{\R{4} plane projection example. }
 
 Take a simple projection onto the plane spanned by the following two orthonormal vectors
 
@@ -378,7 +338,7 @@ We expect this to be a rank two matrix, so the null space has dimension two.  Th
 
 \end{enumerate}
 
-\subsection{ Return to analytic treatment. }
+\subsection{Return to analytic treatment. }
 
 Let's look at the matrix for projection onto an orthonormal basis in a bit more detail.  This simpler form allows for
 some observations that are a bit harder in the general form.
@@ -442,12 +402,12 @@ u_r^\T u_i \\
 
 This now completes the validation of the properties of this matrix (in it's simpler form with an orthonormal basis for the subspace).
 
-\section{ Matrix projection vs. Geometric Algebra. }
+\section{Matrix projection vs. Geometric Algebra. }
 
 I found it pretty interesting how similar the projection product is to the projection matrix above from traditional matrix algebra.  It is worthwhile
 to write this out and point out the similarities and differences.
 
-\subsection{ General projection matrix. }
+\subsection{General projection matrix. }
 
 We've shown above, provided a matrix A is of full column rank, a projection onto it's columns can be written:
 
@@ -470,7 +430,7 @@ other than projections where matrix operations of the form $B^\T A$ end up with 
 is the rigid body equations where the body angular velocity bivector corresponding to a rotor $R$ is of the form $\BOmega = R' R^\dagger$, whereas the matrix
 form for a rotation matrix $R$ is of the form $\BOmega = R' R^\dagger$.
 
-\subsection{ Projection matrix full column rank requirement. }
+\subsection{Projection matrix full column rank requirement. }
 
 The projection matrix derivations above required full column rank.  A reformulation in terms
 of a generalized matrix (Moore-Penrose) inverse, or SVD can eliminate this full column rank requirement for
@@ -483,7 +443,7 @@ If one writes out the matrix $A^\T A$ in full
 
 Now, if $A = [a_i]_i$, the matrix
 
-\begin{equation}\label{eqn:AtA}
+\begin{equation}\label{eqn:projMatrixCompare:AtA}
 A^\T A
 =
 \begin{bmatrix}
@@ -498,24 +458,25 @@ For full column rank to imply invertability, it would be sufficient to prove tha
 determinant of this matrix was non-zero.
 
 I'm not sure how to show that this is true with just matrix algebra, however
-one can identify the determinant of the matrix of equation \ref{eqn:AtA}, after an adjustment
+one can identify the determinant of the matrix of equation \ref{eqn:projMatrixCompare:AtA}, after an adjustment
 of sign for reversion, as the GA dot product of a k-blade:
 
-\begin{equation}\label{eqn:AdagdotA}
+\begin{equation}\label{eqn:projMatrixCompare:AdagdotA}
 (-1)^{k(k-1)/2} (a_1 \wedge \cdots \wedge a_k) \cdot (a_1 \wedge \cdots \wedge a_k).
 \end{equation}
 
 Linear independence means that this wedge product is non-zero, and therefore the dot product, and thus original determinant is also non-zero.
 
-When the $A^\T A$ matrix of equation \ref{eqn:AtA} is invertible that inverse can be written using a cofactor matrix (adjoint expansion):
+When the $A^\T A$ matrix of equation \ref{eqn:projMatrixCompare:AtA} is invertible that inverse can be written using a cofactor matrix (adjoint expansion):
 
 Let's write this out, where $C_{ij}$ are the cofactor matrices of $A^\T A$, we have:
 
 \[
-\inv{A^\T A} = \inv{ \Det{ A^\T A } } {[ C_{ij} ]}^\T
+% \Abs for Det:
+\inv{A^\T A} = \inv{ \Abs{ A^\T A } } {[ C_{ij} ]}^\T
 \]
 
-Observe that the denominator here is exactly the determinant of equation \ref{eqn:AdagdotA}.  This illustrates
+Observe that the denominator here is exactly the determinant of equation \ref{eqn:projMatrixCompare:AdagdotA}.  This illustrates
 the motivation of Hestenes to label the explicit alternating vector-vector dot product expansion of a 
 blade-vector dot product the ``generalized Laplace expansion''.
 
@@ -525,7 +486,7 @@ blade-vector dot product the ``generalized Laplace expansion''.
 %provide a way to compute the dot product of a
 %blade with vector (just scaled by the determinant and by the sign of the reversion).
 
-\subsection{ Projection onto orthonormal columns. }
+\subsection{Projection onto orthonormal columns. }
 
 When the 
 columns of the matrix $A$ are orthonormal, the projection matrix is reduced to:
@@ -543,13 +504,13 @@ The corresponding GA entity is a projection onto a unit magnitude blade.  With t
 This helps point out the similarity between the matrix inverse $\inv{A^\T A}$ and the blade product inverse $\inv{{A^\dagger}A}$ is only on the surface,
 since this blade product is only a scalar.
 
-\section{ Proof of omitted details and auxiliary stuff. }
+\section{Proof of omitted details and auxiliary stuff. }
 
-\subsection{ That we can remove parenthesis to form projection matrix in line projection equation. }
+\subsection{That we can remove parenthesis to form projection matrix in line projection equation. }
 
 Remove the parenthesis in some of these expressions may not always be correct, so it is worth demonstrating that this is okay as
 done to calculate the projection matrix $P$ in 
-equation \ref{eqn:projectmatrixline}.
+equation \ref{eqn:projMatrixCompare:projectmatrixline}.
 We only need to look at the numerator since the denominator is a scalar in this case.
 
 \begin{align*}
@@ -571,7 +532,7 @@ a_i \sum_k a_k b_k
 
 
 
-\subsection{ Any invertible scaling of column space basis vectors does not change the projection }
+\subsection{Any invertible scaling of column space basis vectors does not change the projection }
 
 
 Suppose that one introduces an alternate basis for the column space
@@ -606,5 +567,3 @@ is straightforward:
 &= U \left( U^\T U\right)^{-1} U^\T \\
 &= \Proj_U
 \end{align*}
-
-\end{document}               % End of document.
