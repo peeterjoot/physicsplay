@@ -1,14 +1,17 @@
-
 \documentclass[12pt,leqno]{book}
 \usepackage{amsmath,amssymb,amsfonts} % Typical maths resource packages
-\usepackage{graphics}                 % Packages to allow inclusion of graphics
+%\usepackage{graphics}                 % Packages to allow inclusion of graphics
+\usepackage{graphicx}
 \usepackage{color}                    % For creating coloured text and background
-%\usepackage{hyperref}                 % For creating hyperlinks in cross references
-\usepackage[bookmarks=true]{hyperref}
 
 % for ointctr... (also appears to make "prettier" \int and \sum's)
 % ... but messes up other stuff (grad vs \spacegrad).
 \usepackage{txfonts} 
+
+%\usepackage{listings}
+%\usepackage{latexsym,epsf}
+
+\usepackage[bookmarks=true]{hyperref}
 
 \parindent 1cm
 \parskip 0.2cm
@@ -44,9 +47,31 @@
 \newcommand{\transpose}[1]{{#1}^{\mathrm{T}}}
 \newcommand{\stardot}[0]{{*}}
 
-%\def\R{\mathbb{ R}}
-%\def\S{\mathbb{ S}}
-%\def\I{\mathbb{ I}}
+% bivector.tex:
+\newcommand{\laplacian}[0]{\nabla^2}
+\newcommand{\Dsq}[2] {\frac {\partial^2 {#1}} {\partial {#2}^2}}
+\newcommand{\dxj}[2] {\frac {\partial {#1}} {\partial {x_{#2}}}}
+\newcommand{\dsqxj}[2] {\frac {\partial^2 {#1}} {\partial {x_{#2}}^2}}
+\DeclareMathOperator{\ExpName}{e}
+%\DeclareMathOperator{\Exp}{e}
+%\newcommand{\Exp}[1]{\exp{\left({#1}\right)}}
+%\DeclareMathOperator{\Rej}{Rej}
+\DeclareMathOperator{\Rot}{R}
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+%\newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
+%\newcommand{\gpgradefour}[1] {\gpgrade{#1}{4}}
+
+% ga_wiki_torque.tex:
+\newcommand{\Fcap}[0]{\hat{\BF}}
+\newcommand{\bithree}[0]{{\Bi}_3}
+\newcommand{\nrrp}[0]{\norm{\rcap \wedge \Br'}}
+\newcommand{\dtheta}[1]{\frac{d {#1}}{d \theta}}
+
+% ga_wiki_unit_derivative.tex
+\newcommand{\dt}[1]{\frac{d {#1}}{dt}}
+\newcommand{\BrPrimeRej}[0]{\rcap(\rcap \wedge \Br')}
+
 \makeindex
 
 \title{Applied Geometric Algebra}
@@ -54,7 +79,7 @@
 \author{Peeter Joot  \quad peeter.joot@gmail.com \\
 {\small\em \copyright \  Draft date \today }}
 
-\date{ May 31, 2009.  Last Revision: $Date: 2009/05/31 14:18:34 $ }
+\date{ May 31, 2009.  Last Revision: $Date: 2009/05/31 16:05:49 $ }
 \begin{document}
 \maketitle
  \addcontentsline{toc}{chapter}{Contents}
@@ -66,10 +91,16 @@
   \addcontentsline{toc}{chapter}{Preface}
 \pagestyle{plain}
 
-Compile my hodge podge of Geometric Algebra notes into a coherent unit.  Want a treatment that is more
+Start compiling my hodge podge set of Geometric Algebra notes into a coherent unit.  Want a treatment that is more
 understandable than that of 
 \cite{doran2003gap} or 
 \cite{hestenes1999nfc}.
+This may be hard since so many of these notes are disconnected, and as
+is do not necessarily build in a logical sequence.  Many of these 
+notes were an attempt to provide motivation for things presented in
+an unmotivated fashion in other locations, but ironically this probably
+means that much of the content here will be unmotivated since this 
+is the gaps but not the meat of other treatments.
 
 %Each
 %Chapter, Appendix and the Index is made as a {\tt *.tex} file and is
@@ -77,10 +108,6 @@ understandable than that of
 %the name here of the file containing Chapter~1. The inclusion of any
 %particular file can be suppressed by prefixing the line by a
 %percent sign.
-%
-%
-% Do not put an {\tt end{document}} command at the end of chapter files;
-%just one such command is needed at the end of the book.
 %
 %Note the tag used to make an index entry. You may need to consult Lamport's
 %book~\cite{lamport} for details of the procedure to make the index input
@@ -92,8 +119,13 @@ understandable than that of
 \pagenumbering{arabic}
 
 \include{intro_ga}
+\include{ga_wiki}
+\include{ga_wiki_cramers}
+\include{ga_wiki_torque}
+\include{ga_wiki_unit_derivative}
+\include{bivector}
+\include{trivector}
 \include{multivector_taylors}
-%\include{ch2}
 
 %\begin{thebibliography}{99}
 %  \addcontentsline{toc}{chapter}{Bibliography}
