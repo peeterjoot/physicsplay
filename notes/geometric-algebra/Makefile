@@ -161,7 +161,7 @@ ordered2008 += ../geometric-algebra/eulerangle.pdf
 # in progress:
 ordered2008 += ../geometric-algebra/spherical_polar.pdf
 
-ordered2008 += ../geometric-algebra/guassian_surface.pdf
+ordered2008 += ../geometric-algebra/gaussian_surface.pdf
 ordered2008 += ../geometric-algebra/charge_line_element.pdf
 ordered2008 += ../geometric-algebra/charge_arc_element.pdf
 
@@ -299,6 +299,19 @@ ordered2009 += ../taylors/multivector_taylors.pdf
 # lut's
 skipit += ../lut/pjnote1.pdf
 
+ordered2009 += ../dad/voltage_current_resistance.pdf
+ordered2009 += ../qm/bohm11.pdf
+ordered2009 += ../qm/qmb_first_try.pdf
+ordered2009 += ../qm/qm_barrier.pdf
+
+# these not posted yet.   Want to finish lorentz_force_tx first
+# (or at least try in GA formalism to see if I can get it).
+#
+ordered2009 += ../relativity/lorentz_force_tx.pdf
+# junk notes:
+skipit += ../relativity/lorentz_force_tx_2.pdf
+ordered2009 += ../geometric-algebra/macroscopic_maxwell.pdf
+ordered2009 += ../geometric-algebra/intro_ga.pdf
 #ordered2009 += 
 
 # Rules:
