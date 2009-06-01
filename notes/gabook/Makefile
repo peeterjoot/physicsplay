@@ -25,6 +25,16 @@ TEXFILES += oblique_proj.tex
 TEXFILES += projection_and_moore_penrose_vector_inverse.tex
 TEXFILES += angle_between_line_and_plane.tex
 TEXFILES += orthodecomp.tex
+TEXFILES += eulerangle.tex
+TEXFILES += spherical_polar.tex
+TEXFILES += slerp.tex
+TEXFILES += kvector_exponential.tex
+TEXFILES += cauchy_gradient.tex
+TEXFILES += gradient_and_forms.tex
+TEXFILES += vector_integral_relations.tex
+TEXFILES += stokes_revisited.tex
+TEXFILES += nvolume.tex
+TEXFILES += legendre.tex
 TEXFILES += 
 
 gabook.pdf :: $(TEXFILES)
