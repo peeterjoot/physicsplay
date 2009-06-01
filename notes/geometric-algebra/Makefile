@@ -38,8 +38,9 @@ ordered2008 += ../taylors/taylors.pdf
 
 # moved to gabook:
 skipit += ../geometric-algebra/plane.pdf
+skipit += ../geometric-algebra/legendre.pdf
+skipit += ../geometric-algebra/reciprocal_frame.pdf
 
-ordered2008 += ../geometric-algebra/legendre.pdf
 ordered2008 += ../geometric-algebra/inertial_tensor.pdf
 
 # moved to gabook:
@@ -59,8 +60,8 @@ skipit += ../geometric-algebra/angle_between_line_and_plane.pdf
 skipit += ../geometric-algebra/bladegradereduction.pdf
 skipit += ../geometric-algebra/rordered200oeciprocal_frame.pdf
 skipit += ../geometric-algebra/orthodecomp.pdf
+skipit += ../geometric-algebra/gradient_and_forms.pdf
 
-ordered2008 += ../geometric-algebra/gradient_and_forms.pdf
 ordered2008 += ../geometric-algebra/shear.pdf
 ordered2008 += ../geometric-algebra/mp_inverse_svd_rough_notes.pdf
 
@@ -111,7 +112,9 @@ ordered2008 += ../geometric-algebra/em_bivector_metric_dependencies.pdf
 ordered2008 += ../geometric-algebra/maxwell_to_tensor.pdf
 ordered2008 += ../geometric-algebra/vector_maxwells_projection.pdf
 ordered2008 += ../geometric-algebra/lagrangian_field_density.pdf
-ordered2008 += ../geometric-algebra/vector_integral_relations.pdf
+
+# moved to gabook
+skipit += ../geometric-algebra/vector_integral_relations.pdf
 
 skipit += ../geometric-algebra/glossary.pdf
 skipit += ../geometric-algebra/long_wire_q.pdf
@@ -133,7 +136,8 @@ skipit += ../lut/Rindler-eom.pdf
 
 #ordered2008 +=
 ordered2008 += ../geometric-algebra/stokes_maxwell_application.pdf
-ordered2008 += ../geometric-algebra/stokes_revisited.pdf
+# moved to gabook
+skipit += ../geometric-algebra/stokes_revisited.pdf
 
 ordered2008 += ../lut/schwartzchild_metric.pdf
 ordered2008 += ../geometric-algebra/lorentz_force.pdf
@@ -285,7 +289,9 @@ ordered2009 += ../geometric-algebra/stress_energy_lorentz.pdf
 ordered2009 += ../qm/wavepacket.pdf
 ordered2009 += ../geometric-algebra/en_m_tensor.pdf
 ordered2009 += ../fourier/poisson.pdf
-ordered2009 += ../differential_forms/nvolume.pdf
+
+# moved to gabook:
+skipit += ../differential_forms/nvolume.pdf
 
 ordered2009 += ../fourier/distributions.pdf
 skipit += ../lut/lut_q0304.pdf
