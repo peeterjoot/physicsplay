@@ -35,6 +35,8 @@ TEXFILES += vector_integral_relations.tex
 TEXFILES += stokes_revisited.tex
 TEXFILES += nvolume.tex
 TEXFILES += legendre.tex
+TEXFILES += angular_acc.tex
+TEXFILES += angular_acc_cross.tex
 TEXFILES += 
 
 gabook.pdf :: $(TEXFILES)
