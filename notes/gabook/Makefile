@@ -41,6 +41,7 @@ TEXFILES += gabookmark.tex
 TEXFILES += tensor.tex
 TEXFILES += ke_rotation.tex
 TEXFILES += radial.tex
+TEXFILES += gaussian_surface.tex
 TEXFILES += 
 
 gabook.pdf :: $(TEXFILES)
