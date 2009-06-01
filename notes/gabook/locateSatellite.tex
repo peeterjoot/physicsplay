@@ -1,33 +1,11 @@
-\documentclass{article}      % Specifies the document class
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
 
-\input{../peeters_macros.tex}
+\chapter{Satellite triangulation over sphere.}
 
-\usepackage{color,cite,graphicx}
-   % use colour in the document, put your citations as [1-4]
-   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
-   % graphics package. 
-\usepackage{latexsym,amssymb,epsf} % don't remember if these are
-   % needed, but their inclusion can't do any damage
+\section{Motivation and preparation. }
 
-\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
-\newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
-
-%
-% The real thing:
-%
-
-                             % The preamble begins here.
-\title{} % Declares the document's title.
-\author{Peeter Joot \quad peeter.joot@gmail.com}         % Declares the author's name.
-\date{ April 13, 2008.  Last Revision: $Date: 2009/05/30 02:30:24 $ }
-
-\begin{document}             % End of preamble and beginning of text.
-
-\maketitle{}
-
-\section{ Motivation and preparation. }
-
-Was playing around with what is probably traditionally a spherical trig type problem using geometric algebra (locate satellite position using angle measurements from two well separated points).  Origin of the problem was just me looking at my Feynman Lectures introduction where there is a diagram illustrating how trianglulation could be used to locate "Sputnik" and thought I'd try such a calculation, but in a way that I thought was more realistic.
+Was playing around with what is probably traditionally a spherical trig type problem using geometric algebra (locate satellite position using angle measurements from two well separated points).  Origin of the problem was just me looking at my Feynman Lectures introduction where there is a diagram illustrating how triangulation could be used to locate "Sputnik" and thought I'd try such a calculation, but in a way that I thought was more realistic.
 
 \begin{figure}[htp]
 \centering
@@ -45,10 +23,10 @@ Each point $P_i$ can be located by a rotation along the equatorial plane by angl
 To identify a point on the surface we translate our $(0,0)$ reference frame to that point using the
 following rotor equation:
 
-\begin{equation}\label{eqn:northrotor}
+\begin{equation}\label{eqn:locSat:northrotor}
 R_{\psi} = \exp(-\Be_{32}\psi/2) = \cos(\psi/2) - \Be_{32}\sin(\psi/2)
 \end{equation}
-\begin{equation}\label{eqn:eastrotor}
+\begin{equation}\label{eqn:locSat:eastrotor}
 R_{\lambda} = \exp(-\Be_{31}\lambda/2) = \cos(\lambda/2) - \Be_{31}\sin(\lambda/2)
 \end{equation}
 \begin{equation}
@@ -91,7 +69,7 @@ R_{\psi}(\pi/2)^\dagger
 \end{bmatrix}
 \end{equation*}
 
-Verifying this is simple enough using the explicit sine and cosine expansion of the rotors in equation \ref{eqn:northrotor} and \ref{eqn:eastrotor}.
+Verifying this is simple enough using the explicit sine and cosine expansion of the rotors in equation \ref{eqn:locSat:northrotor} and \ref{eqn:locSat:eastrotor}.
 
 Once we have the ability to translate our reference frame to each point on the Earth, we can use the inverse rotation to translate our measured unit vector
 to the satellite at that point back to the reference frame.
@@ -111,7 +89,7 @@ P_i = R_{\psi} R_{\lambda} A_i \Be_3 R_{\lambda}^\dagger R_{\psi}^\dagger
 
 Where $A_i$ is the altitude (relative to the center of the earth) at the point of interest.
 
-\section{ Solution }
+\section{Solution }
 
 Solving for the position of the satellite $P_s$ we have:
 
@@ -138,13 +116,13 @@ P_s = \left(\frac{(P_2-P_1) \wedge \alpha_2}{ \alpha_1 \wedge \alpha_2 }\right) 
 
 Notice how all the trigonometry is encoded directly in the rotor equations.  If one had to calculate all this using the spherical trigonometry generalized triangle relations I expect that you'd have an ungodly mess of sine and cosines here.
 
-This demonstrates two very distinct applications of the wedge product.  The first was to define an oriented plane, and was used as a generator of rotations (very much like the unit imaginary).  This second application, to solve linear equations takes advantage of $a \wedge a = 0$ property of the wedge product.  It was convienent as it allowed simple simulateous solution of the three equations (one for each component) and two unknowns problem in this particular case. 
+This demonstrates two very distinct applications of the wedge product.  The first was to define an oriented plane, and was used as a generator of rotations (very much like the unit imaginary).  This second application, to solve linear equations takes advantage of $a \wedge a = 0$ property of the wedge product.  It was convenient as it allowed simple simultaneous solution of the three equations (one for each component) and two unknowns problem in this particular case. 
 
-\section{ matrix formulation. }
+\section{matrix formulation. }
 
 Instead of solving with the wedge product one could formulate this as a matrix equation:
 
-\begin{equation}\label{eqn:twopointsmatrix}
+\begin{equation}\label{eqn:locSat:twopointsmatrix}
 \begin{bmatrix}
 \alpha_1 & -\alpha_2 \\
 \end{bmatrix}
@@ -158,7 +136,7 @@ P_2 - P_1 \\
 \end{bmatrix}
 \end{equation}
 
-This highlights the fact that the equations are overspecified, which is more obvious still when this is written out in component form:
+This highlights the fact that the equations are over-specified, which is more obvious still when this is written out in component form:
 
 \begin{equation}
 \begin{bmatrix}
@@ -182,10 +160,10 @@ We have one more equation than we need to actually solve it, and cannot use matr
 
 Recall the figure in the Feynman lectures when the observation points and the satellite are all in the same plane.  For that all that was needed was two angles, whereas we have measured six for each of the direction cosines used above, so the fact that our equations can include more info than required to solve the problem isn't unexpected.
 
-We could also generalize this, perhaps to remove measurement error, by utilizing more than two observation points.  This will compound the overspecification of the equations, and makes it clear that we likely want a least squares approach to solve it.
+We could also generalize this, perhaps to remove measurement error, by utilizing more than two observation points.  This will compound the over-specification of the equations, and makes it clear that we likely want a least squares approach to solve it.
 Here is an example of the matrix to solve for three points:
 
-\begin{equation}\label{eqn:threepointsmatrix}
+\begin{equation}\label{eqn:locSat:threepointsmatrix}
 \begin{bmatrix}
 \alpha_1 & -\alpha_2 & 0 \\
 -\alpha_1 & 0 & \alpha_3 \\
@@ -204,11 +182,11 @@ P_3 - P_2 \\
 \end{bmatrix}
 \end{equation}
 
-Since the $\alpha_i$ are vectors, this matrix of rotated direction cosines has dimensions 9 by 3 (just as equation \ref{eqn:twopointsmatrix} is a 3 by 2 matrix).
+Since the $\alpha_i$ are vectors, this matrix of rotated direction cosines has dimensions 9 by 3 (just as equation \ref{eqn:locSat:twopointsmatrix} is a 3 by 2 matrix).
 
-\section{ Question.  Order of latitude and longitude rotors? }
+\section{Question.  Order of latitude and longitude rotors? }
 
-Looking at a globe, it initially seemed clear to me that these "perpendicular" (abusing the word) rotations could be applied in either order, but their rotors definitely don't commute, so I assume that together the non-commutive bits of the rotors "cancel out".
+Looking at a globe, it initially seemed clear to me that these "perpendicular" (abusing the word) rotations could be applied in either order, but their rotors definitely don't commute, so I assume that together the non-commutative bits of the rotors "cancel out".
 
 Question, is it actually true that the end effect of applying these rotors in either order is the same?
 
@@ -268,5 +246,3 @@ rotations only commute when applied to a vector that is completely normal to the
 So which order is right?  It has to be rotate first in the equatorial plane ($\lambda)$, then the northwards rotation, where both are great circle rotations.
 
 A numeric confirmation of this is likely prudent.
-
-\end{document}               % End of document.

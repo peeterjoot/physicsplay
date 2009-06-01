@@ -42,6 +42,10 @@ TEXFILES += tensor.tex
 TEXFILES += ke_rotation.tex
 TEXFILES += radial.tex
 TEXFILES += gaussian_surface.tex
+TEXFILES += newtonian_lagrangian_and_gradient.tex
+TEXFILES += canonical_momentum.tex
+TEXFILES += inertial_tensor.tex
+TEXFILES += locate_satellite.tex
 TEXFILES += 
 
 gabook.pdf :: $(TEXFILES)
@@ -51,6 +55,3 @@ gabook.pdf :: $(TEXFILES)
 
 clean ::
 	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc
-TEXFILES += newtonian_lagrangian_and_gradient.tex
-TEXFILES += canonical_momentum.tex
-TEXFILES += inertial_tensor.tex
