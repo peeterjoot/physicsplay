@@ -53,3 +53,4 @@ clean ::
 	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc
 TEXFILES += newtonian_lagrangian_and_gradient.tex
 TEXFILES += canonical_momentum.tex
+TEXFILES += inertial_tensor.tex
