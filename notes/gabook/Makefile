@@ -39,6 +39,7 @@ TEXFILES += angular_acc.tex
 TEXFILES += angular_acc_cross.tex
 TEXFILES += gabookmark.tex
 TEXFILES += tensor.tex
+TEXFILES += ke_rotation.tex
 TEXFILES += 
 
 gabook.pdf :: $(TEXFILES)
