@@ -37,6 +37,7 @@ TEXFILES += nvolume.tex
 TEXFILES += legendre.tex
 TEXFILES += angular_acc.tex
 TEXFILES += angular_acc_cross.tex
+TEXFILES += gabookmark.tex
 TEXFILES += 
 
 gabook.pdf :: $(TEXFILES)
