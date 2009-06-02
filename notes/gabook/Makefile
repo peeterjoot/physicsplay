@@ -63,3 +63,4 @@ TEXFILES += rayleigh_jeans.tex
 TEXFILES += potential_fourier.tex
 TEXFILES += electric_field_energy.tex
 TEXFILES += poynting.tex
+TEXFILES += poynting_rate.tex
