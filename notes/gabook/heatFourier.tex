@@ -1,33 +1,7 @@
-\documentclass{article}
+\chapter{Fourier Solutions to Heat and Wave equations.}\label{chap:PJheatFourier}
+%\date{ Jan 19, 2009.  Last Revision: $Date: 2009/06/02 04:02:22 $ }
 
-\input{../peeters_macros.tex}
-\input{../peeters_macros2.tex}
-\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
-\DeclareMathOperator{\sinc}{sinc}
-\newcommand{\FF}[0]{\mathcal{F}}
-\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
-
-\usepackage[bookmarks=true]{hyperref}
-
-\usepackage{color,cite,graphicx}
-   % use colour in the document, put your citations as [1-4]
-   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
-   % graphics package. 
-\usepackage{latexsym,amssymb,epsf} % don't remember if these are
-   % needed, but their inclusion can't do any damage
-
-
-\title{ Fourier Solutions to Heat and Wave equations. }
-\author{Peeter Joot \quad peeter.joot@gmail.com}
-\date{ Jan 19, 2009.  Last Revision: $Date: 2009/05/31 14:17:04 $ }
-
-\begin{document}
-
-\maketitle{}
-
-%\tableofcontents
-
-\section{ Motivation. }
+\section{Motivation. }
 
 Stanford iTunesU has some Fourier transform lectures by Prof. Brad Osgood.
 He starts with Fourier series and by Lecture 5 has covered this and
@@ -52,9 +26,9 @@ contrast this with Susskind's solution of the
 same problem (where he used the Fourier transform and algebraic techniques
 instead).
 
-\section{ Preliminaries. }
+\section{Preliminaries. }
 
-\subsection{ Laplacian. }
+\subsection{Laplacian. }
 
 Osgood wrote the heat equation for the ring as
 
@@ -63,7 +37,7 @@ Osgood wrote the heat equation for the ring as
 \end{align*}
 
 where $x$ represented an angular position on the ring, and where
-he set the heat diffusion constant to $1/2$ for convienience.
+he set the heat diffusion constant to $1/2$ for convenience.
 To apply this to the Schr\"{o}dinger equation retaining all the desired
 units we want to be a bit more careful, so let's start with the Laplacian
 in polar coordinates.
@@ -102,7 +76,7 @@ and our heat equation to solve becomes
 \PDSq{\theta}{u(\theta, t)} = (r^2 \kappa) \PD{t}{u(\theta, t)}
 \end{align}
 
-\subsection{ Fourier series. }
+\subsection{Fourier series. }
 
 Now we also want Fourier series for a given period.  Assuming the absence of the "Rigor Police" as Osgood puts it
 we write for a periodic function $f(x)$ known on the interval $I = [a, a+T]$
@@ -122,13 +96,13 @@ So our Fourier coefficient is
 \hat{f}(n) = c_n = \inv{T} \int_{\partial I} f(x) e^{- 2 \pi i n x /T} 
 \end{align*}
 
-\section{ Solution of heat equation. } 
+\section{Solution of heat equation. } 
 
-\subsection{ Basic solution. }
+\subsection{Basic solution. }
 
 Now we are ready to solve the radial heat equation
 
-\begin{align}\label{eqn:heatRadial}
+\begin{align}\label{eqn:heat_fourier:heatRadial}
 u_{\theta\theta} = r^2 \kappa u_t,
 \end{align}
 
@@ -148,7 +122,7 @@ u_{\theta\theta} &= \sum (i n)^2 c_n e^{i n \theta} \\
 u_{t} &= \sum c_n' e^{i n \theta}
 \end{align*}
 
-Substituting this back into \ref{eqn:heatRadial} we have
+Substituting this back into \ref{eqn:heat_fourier:heatRadial} we have
 
 \begin{align*}
 \sum - n^2 c_n e^{ i n \theta} = \sum c_n' r^2 \kappa e^{i n \theta}
@@ -172,7 +146,7 @@ Reassembling we have the time variation of the solution now fixed and can write
 u(\theta, t) = \sum A_n \exp\left(- \frac{n^2}{ r^2 \kappa } t + i n \theta\right)
 \end{align}
 
-\subsection{ As initial value problem. }
+\subsection{As initial value problem. }
 
 For the heat equation case, we can assume a known initial heat distribution 
 $f(\theta)$.
@@ -194,7 +168,7 @@ Final reassembly of the results gives us
 u(\theta, t) = \sum \exp\left(- \frac{n^2}{ r^2 \kappa } t + i n \theta\right) \inv{2\pi} \int_{\partial I} f(v) e^{-i n v} dv
 \end{align}
 
-\subsection{ Convolution. }
+\subsection{Convolution. }
 
 Osgood's next step, also with the rigor police in hiding, was to exchange orders of integration and summation, to write
 
@@ -206,7 +180,7 @@ u(\theta, t)
 
 Introducing a Green's function $g(v, t)$, we then have the complete solution in terms of convolution
 
-\begin{align}\label{eqn:seriesGreens}
+\begin{align}\label{eqn:heat_fourier:seriesGreens}
 g( v , t ) &= \inv{2 \pi} \sum_{n=-\infty}^\infty \exp\left(- \frac{n^2}{ r^2 \kappa } t -i n v \right) \\
 u(\theta, t) &= \int_{\partial I} f(v) g(v - \theta, t) dv 
 \end{align}
@@ -219,13 +193,13 @@ g( v , t ) &= \inv{2 \pi} + \sum_{n=1}^\infty \exp\left(- \frac{n^2}{ r^2 \kappa
 \end{align*}
 
 Recalling that the delta function can be expressed as a limit of a $\sinc$ function, seeing something similar
-in this Green's function is not entirely unsuprising seeming.
+in this Green's function is not entirely unsurprising seeming.
 
-\section{ Wave equation. }
+\section{Wave equation. }
 
 The QM equation for a free particle is
 
-\begin{align}\label{eqn:schro}
+\begin{align}\label{eqn:heat_fourier:schro}
 -\frac{\hbar^2}{2m} \grad^2 \psi = i \hbar \partial_t \psi
 \end{align}
 
@@ -235,7 +209,7 @@ This has the same form of the heat equation, so for the free particle on a circl
 \psi_{\theta\theta} = - \frac{2 m i r^2 }{\hbar} \partial_t \psi \quad \mbox{ ie: $\kappa = - 2 m i /\hbar$ }
 \end{align*}
 
-So, if the wave equation was known at an initial time $\psi(\theta, 0) = \phi(\theta)$, we therefore have by comparision the time evolution of the particle's wave function is
+So, if the wave equation was known at an initial time $\psi(\theta, 0) = \phi(\theta)$, we therefore have by comparison the time evolution of the particle's wave function is
 
 \begin{align*}
 g( w, t ) &= \inv{2 \pi} + \sum_{n=1}^\infty \exp\left(- \frac{i \hbar n^2 t}{ 2 m r^2 } \right) \frac{\cos(n w )}{\pi} \\
@@ -244,7 +218,7 @@ g( w, t ) &= \inv{2 \pi} + \sum_{n=1}^\infty \exp\left(- \frac{i \hbar n^2 t}{ 2
 
 %TODO: contrast this to a Fourier transform solution.  Also write this in terms of circular angular momentum since that appears natually in the Green's function.
 
-\section{ Fourier transform solution. }
+\section{Fourier transform solution. }
 
 % also see example (brief on details)
 %\href{http://zakuski.utsa.edu/~gokhman/ftp//courses/notes/heat.pdf}{ example of Fourier tx solution. }
@@ -308,7 +282,7 @@ So, now we have an equation relating time derivatives only of the Fourier transf
 
 Writing $\FF(u) = \hat{u}$ this is
 
-\begin{align}\label{eqn:toSolveFreq}
+\begin{align}\label{eqn:heat_fourier:toSolveFreq}
 ( 2 \pi i s )^2 \hat{u} = \kappa \PD{t}{\hat{u}}
 \end{align}
 
@@ -319,7 +293,7 @@ With a solution of
 \end{align*}
 
 Here $A(s)$ is an arbitrary constant in time integration constant, which may depend on $s$ since it is a solution of our simpler frequency domain partial differential equation
-\ref{eqn:toSolveFreq}.
+\ref{eqn:heat_fourier:toSolveFreq}.
 
 Performing an inverse transform to recover $u(x,t)$ we thus have
 
@@ -359,7 +333,7 @@ u(x,t) &=
 \IIinf \hat{f}(s) e^{ -4 \pi^2 s^2 t/ \kappa } e^{2 \pi i x s } ds  \\
 \end{align*}
 
-\subsection{ With Green's function? }
+\subsection{With Green's function? }
 
 If we put in the integral for $\hat{f}(s)$ explicitly and switch the order as was done with the Fourier series will we get a similar result?   Let's try
 
@@ -387,11 +361,11 @@ g(w,t) &=
 u(x,t) &= \IIinf f(u) g( x - u, t) du
 \end{align}
 
-Compare this to \ref{eqn:seriesGreens}, the solution in terms of Fourier series.  The form is almost identical, but the requirement for periodicity has been removed by switch to the continuous frequency domain!
+Compare this to \ref{eqn:heat_fourier:seriesGreens}, the solution in terms of Fourier series.  The form is almost identical, but the requirement for periodicity has been removed by switch to the continuous frequency domain!
 
-\subsection{ Wave equation. }
+\subsection{Wave equation. }
 
-With only a change of variables, setting $\kappa = - 2 m i /\hbar$ we have the general solution to the one dimensional zero potential wave equation \ref{eqn:schro} in terms of an initial wave function.  However, we've a form of the Fourier transform that obscures the physics has been picked here unfortunately.  Let's start over in super speed mode directly from the wave equation, using the form of the Fourier transform that substituites $2\pi s \rightarrow k$ for wave number.
+With only a change of variables, setting $\kappa = - 2 m i /\hbar$ we have the general solution to the one dimensional zero potential wave equation \ref{eqn:heat_fourier:schro} in terms of an initial wave function.  However, we've a form of the Fourier transform that obscures the physics has been picked here unfortunately.  Let's start over in super speed mode directly from the wave equation, using the form of the Fourier transform that substitutes $2\pi s \rightarrow k$ for wave number.
 
 We want to solve
 \begin{align*}
@@ -467,7 +441,7 @@ Pretty cool!  Observe that in the wave number or momentum domain the time evolut
 %u(x,t) &= \IIinf f(u) g( x - u, t) du
 %\end{align}
 
-\subsection{ Wave function solutions by Fourier transform for a particle on a circle. }
+\subsection{Wave function solutions by Fourier transform for a particle on a circle. }
 
 Now, thinking about how to translate this Fourier transform method to the 
 wave equation for a particle on a circle (as done by Susskind in his online lectures) makes me realize that one
@@ -477,8 +451,3 @@ It doesn't have to be the Fourier transform.  Now, if we happen to pick an integ
 Now, the next thing to work out in detail is how to translate from the transform methods to the algebraic bra ket notation.  This
 looks like it will follow immediately if one calls out the inner product in use explicitly, but that's an exploration for a
 different day.
-
-%\bibliographystyle{plainnat}
-%\bibliography{myrefs}
-
-\end{document}
