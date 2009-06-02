@@ -50,15 +50,6 @@ TEXFILES += bohr.tex
 TEXFILES += euler_lagrange.tex
 TEXFILES += noethers_lorentz_force.tex
 TEXFILES += sch_current.tex
-TEXFILES += 
-
-gabook.pdf :: $(TEXFILES)
-
-%.pdf : %.tex
-	../make_pdflatex $<
-
-clean ::
-	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc
 TEXFILES += rayleigh_jeans.tex
 TEXFILES += potential_fourier.tex
 TEXFILES += electric_field_energy.tex
@@ -75,3 +66,13 @@ TEXFILES += heat_fourier.tex
 TEXFILES += em_wave.tex
 TEXFILES += wave_eqn.tex
 TEXFILES += proj_generalized_dot_prod.tex
+TEXFILES += fourier_tx.tex
+TEXFILES += 
+
+gabook.pdf :: $(TEXFILES)
+
+%.pdf : %.tex
+	../make_pdflatex $<
+
+clean ::
+	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc
