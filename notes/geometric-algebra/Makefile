@@ -18,14 +18,13 @@ ordered2007 += ../feynman/star_distance.pdf
 ordered2007 += ../maxwell/maxwell.pdf
 ordered2007 += ../cross/cross.pdf
 
-# moved to gabook:
-skipit += ../geometric-algebra/ga_wiki_unit_derivative.pdf
-skipit += ../geometric-algebra/ga_wiki_torque.pdf
-skipit += ../geometric-algebra/ga_wiki_cramers.pdf
-skipit += ../geometric-algebra/ga_wiki.pdf
-skipit += ../geometric-algebra/maxwells_ga.pdf
-skipit += ../geometric-algebra/angular_velocity.pdf
-skipit += ../geometric-algebra/radial_vector_derivatives.pdf
+gabook += ../geometric-algebra/ga_wiki_unit_derivative.pdf
+gabook += ../geometric-algebra/ga_wiki_torque.pdf
+gabook += ../geometric-algebra/ga_wiki_cramers.pdf
+gabook += ../geometric-algebra/ga_wiki.pdf
+gabook += ../geometric-algebra/maxwells_ga.pdf
+gabook += ../geometric-algebra/angular_velocity.pdf
+gabook += ../geometric-algebra/radial_vector_derivatives.pdf
 
 #----------------------------------------------------------------
 
@@ -36,85 +35,79 @@ ordered2008 += ../geometric-algebra/wedge_norm_vs_ga_norm.pdf
 ordered2008 += ../geometric-algebra/pythagoras.pdf
 ordered2008 += ../taylors/taylors.pdf
 
-# moved to gabook:
-skipit += ../geometric-algebra/plane.pdf
-skipit += ../geometric-algebra/legendre.pdf
-skipit += ../geometric-algebra/reciprocal_frame.pdf
-
-ordered2008 += ../geometric-algebra/inertial_tensor.pdf
-
-# moved to gabook:
-skipit += ../geometric-algebra/quaternion.pdf
-skipit += ../geometric-algebra/rotor.pdf
+gabook += ../geometric-algebra/plane.pdf
+gabook += ../geometric-algebra/legendre.pdf
+gabook += ../geometric-algebra/reciprocal_frame.pdf
+gabook += ../geometric-algebra/inertial_tensor.pdf
+gabook += ../geometric-algebra/quaternion.pdf
+gabook += ../geometric-algebra/rotor.pdf
 
 ordered2008 += ../geometric-algebra/laplace.pdf
 
-# moved to gabook:
-skipit += ../geometric-algebra/bivector.pdf
-skipit += ../geometric-algebra/trivector.pdf
-skipit += ../geometric-algebra/kvector_exponential.pdf
+gabook += ../geometric-algebra/bivector.pdf
+gabook += ../geometric-algebra/trivector.pdf
+gabook += ../geometric-algebra/kvector_exponential.pdf
 
-# moved to gabook:
-skipit += ../geometric-algebra/scalar_commutes.pdf
-skipit += ../geometric-algebra/angle_between_line_and_plane.pdf
-skipit += ../geometric-algebra/bladegradereduction.pdf
-skipit += ../geometric-algebra/rordered200oeciprocal_frame.pdf
-skipit += ../geometric-algebra/orthodecomp.pdf
-skipit += ../geometric-algebra/gradient_and_forms.pdf
+gabook += ../geometric-algebra/scalar_commutes.pdf
+gabook += ../geometric-algebra/angle_between_line_and_plane.pdf
+gabook += ../geometric-algebra/bladegradereduction.pdf
+gabook += ../geometric-algebra/rordered200oeciprocal_frame.pdf
+gabook += ../geometric-algebra/orthodecomp.pdf
+gabook += ../geometric-algebra/gradient_and_forms.pdf
 
 ordered2008 += ../geometric-algebra/shear.pdf
 ordered2008 += ../geometric-algebra/mp_inverse_svd_rough_notes.pdf
 
-# moved to gabook:
-skipit += ../geometric-algebra/projection_with_matrix_comparison.pdf
+gabook += ../geometric-algebra/projection_with_matrix_comparison.pdf
+gabook += ../geometric-algebra/ke_rotation.pdf
 
-ordered2008 += ../geometric-algebra/ke_rotation.pdf
 ordered2008 += ../maxwell/lorentz_rotation.pdf
 ordered2008 += ../geometric-algebra/gacs_q8_8.pdf
-ordered2008 += ../geometric-algebra/locate_satellite.pdf
+
+gabook += ../geometric-algebra/locate_satellite.pdf
+
 ordered2008 += ../geometric-algebra/matrix_of_linear_tx.pdf
-ordered2008 += ../geometric-algebra/proj_generalized_dot_prod.pdf
 
-# moved to gabook:
-skipit += ../geometric-algebra/projection_and_moore_penrose_vector_inverse.pdf
-skipit += ../geometric-algebra/oblique_proj.pdf
+gabook += ../geometric-algebra/proj_generalized_dot_prod.pdf
+gabook += ../geometric-algebra/projection_and_moore_penrose_vector_inverse.pdf
+gabook += ../geometric-algebra/oblique_proj.pdf
+gabook += ../geometric-algebra/em_tensor.pdf
+gabook += ../geometric-algebra/angular_acc.pdf
 
-ordered2008 += ../geometric-algebra/em_tensor.pdf
-ordered2008 += ../geometric-algebra/angular_acc.pdf
 ordered2008 += ../geometric-algebra/fvec.pdf
-ordered2008 += ../geometric-algebra/lorentz.pdf
-ordered2008 += ../tensor/tensor.pdf
-ordered2008 += ../geometric-algebra/angular_acc_cross.pdf
+
+gabook += ../geometric-algebra/lorentz.pdf
+gabook += ../tensor/tensor.pdf
+gabook += ../geometric-algebra/angular_acc_cross.pdf
+
 ordered2008 += ../geometric-algebra/ga_maxwell.pdf
-ordered2008 += ../geometric-algebra/spacetimegrad.pdf
+gabook += ../geometric-algebra/spacetimegrad.pdf
 ordered2008 += ../geometric-algebra/sg_mx_41.pdf
 ordered2008 += ../geometric-algebra/pe.pdf
-ordered2008 += ../geometric-algebra/fourvec_dotinvariance.pdf
-ordered2008 += ../geometric-algebra/newtonian_lagrangian_and_gradient.pdf
 
-# moved to gabook
-ordered2008 += ../geometric-algebra/cauchy_gradient.pdf
+gabook += ../geometric-algebra/fourvec_dotinvariance.pdf
+gabook += ../geometric-algebra/newtonian_lagrangian_and_gradient.pdf
+gabook += ../geometric-algebra/cauchy_gradient.pdf
+gabook += ../geometric-algebra/velocity_tx.pdf
 
-ordered2008 += ../geometric-algebra/velocity_tx.pdf
 ordered2008 += ../geometric-algebra/em_potential.pdf
-ordered2008 += ../geometric-algebra/gafp_lorentz.pdf
+gabook += ../geometric-algebra/gafp_lorentz.pdf
 ordered2008 += ../geometric-algebra/sr_lagrangian.pdf
 ordered2008 += ../geometric-algebra/tong_mf1.pdf
-ordered2008 += ../geometric-algebra/lorentz_metric_tensor.pdf
-ordered2008 += ../geometric-algebra/mass_vary_lagrangian.pdf 
 
-ordered2008 += ../geometric-algebra/canonical_momentum.pdf
+gabook += ../geometric-algebra/lorentz_metric_tensor.pdf
+gabook += ../geometric-algebra/mass_vary_lagrangian.pdf 
+gabook += ../geometric-algebra/canonical_momentum.pdf
+
 ordered2008 += ../geometric-algebra/outermorphism_det.pdf
-
 ordered2008 += ../mechanics/goldstein_ch1_2.pdf
 
-ordered2008 += ../geometric-algebra/em_bivector_metric_dependencies.pdf
-ordered2008 += ../geometric-algebra/maxwell_to_tensor.pdf
+gabook += ../geometric-algebra/em_bivector_metric_dependencies.pdf
+gabook += ../geometric-algebra/maxwell_to_tensor.pdf
 ordered2008 += ../geometric-algebra/vector_maxwells_projection.pdf
 ordered2008 += ../geometric-algebra/lagrangian_field_density.pdf
 
-# moved to gabook
-skipit += ../geometric-algebra/vector_integral_relations.pdf
+gabook += ../geometric-algebra/vector_integral_relations.pdf
 
 skipit += ../geometric-algebra/glossary.pdf
 skipit += ../geometric-algebra/long_wire_q.pdf
@@ -122,7 +115,7 @@ skipit += ../geometric-algebra/long_wire_q.pdf
 # email.  needs context of Lut's question:
 skipit += ../lut/rindler.pdf
 
-skipit += ../toc/gabookmark.pdf
+gabook += ../toc/gabookmark.pdf
 skipit += ../geometric-algebra/usebib.pdf
 
 # occasionally generated by pressing 'q' in latex interactive mode.
@@ -136,8 +129,7 @@ skipit += ../lut/Rindler-eom.pdf
 
 #ordered2008 +=
 ordered2008 += ../geometric-algebra/stokes_maxwell_application.pdf
-# moved to gabook
-skipit += ../geometric-algebra/stokes_revisited.pdf
+gabook += ../geometric-algebra/stokes_revisited.pdf
 
 ordered2008 += ../lut/schwartzchild_metric.pdf
 ordered2008 += ../geometric-algebra/lorentz_force.pdf
@@ -150,17 +142,17 @@ skipit += ../lut/sr_lagrangian_q.pdf
 ordered2008 += ../lut/maxwell_tensor_lagrangian.pdf
 
 skipit += ../geometric-algebra/pf_sch.pdf
-ordered2008 += ../geometric-algebra/euler_lagrange.pdf
+gabook += ../geometric-algebra/euler_lagrange.pdf
 
 ordered2008 += ../geometric-algebra/boost_maxwell_lagrangian.pdf
 
 # stub (at least right now)
 skipit += ../geometric-algebra/lorentz_tx_em_potential.pdf
 
-ordered2008 += ../geometric-algebra/noethers_lorentz_force.pdf
+gabook += ../geometric-algebra/noethers_lorentz_force.pdf
 
 ordered2008 += ../debroglie/debroglie.pdf
-ordered2008 += ../geometric-algebra/gem.pdf
+gabook += ../geometric-algebra/gem.pdf
 ordered2008 += ../geometric-algebra/noethers_field.pdf
 
 # not mine:
@@ -186,12 +178,11 @@ ordered2008 += ../geometric-algebra/complex.pdf
 skipit += ../sym/o2.pdf
 skipit += ../sym/o3.pdf
 
-# moved to gabook:
-skipit += ../geometric-algebra/eulerangle.pdf
+gabook += ../geometric-algebra/eulerangle.pdf
 # in progress:
-skipit += ../geometric-algebra/spherical_polar.pdf
+gabook += ../geometric-algebra/spherical_polar.pdf
+gabook += ../geometric-algebra/gaussian_surface.pdf
 
-ordered2008 += ../geometric-algebra/gaussian_surface.pdf
 ordered2008 += ../geometric-algebra/charge_line_element.pdf
 ordered2008 += ../geometric-algebra/charge_arc_element.pdf
 
@@ -202,10 +193,8 @@ ordered2008 += ../geometric-algebra/nfcm_ch2.pdf
 # Lut's, not mine:
 skipit += ../lut/GA_matrix.pdf
 
-# moved to gabook:
-skipit += ../geometric-algebra/slerp.pdf
-
-ordered2008 += ../geometric-algebra/wave_eqn.pdf
+gabook += ../geometric-algebra/slerp.pdf
+gabook += ../geometric-algebra/wave_eqn.pdf
 
 ordered2008 += ../geometric-algebra/wave_lagrangian.pdf
 
@@ -215,83 +204,90 @@ skipit += ../lut/ga_matrix_1.pdf
 # rough notes on square rooting wave operator (for PF post).
 skipit += ../geometric-algebra/box.pdf
 
-ordered2008 += ../geometric-algebra/pauli_matrix.pdf
-ordered2008 += ../geometric-algebra/bohr.pdf
+gabook += ../geometric-algebra/pauli_matrix.pdf
+gabook += ../geometric-algebra/bohr.pdf
 
 ordered2008 += ../geometric-algebra/sch.pdf
 
 # generated as-is.  Use as base for more thoughtful treatment.
-ordered2008 += ../gamma-matrix/gamma.pdf
+gabook += ../gamma-matrix/gamma.pdf
 
 ordered2008 += ../dynamics/twobodies.pdf
 ordered2008 += ../geometric-algebra/rapidity.pdf
 ordered2008 += ../geometric-algebra/greens.pdf
-ordered2008 += ../geometric-algebra/dirac_lagrangian.pdf
+
+gabook += ../geometric-algebra/dirac_lagrangian.pdf
+
 ordered2008 += ../qm/qm_susskind.pdf
 ordered2008 += ../relativity/velocity_addition.pdf
-ordered2008 += ../qm/rayleigh_jeans.pdf
-ordered2008 += ../geometric-algebra/poynting.pdf
+
+gabook += ../qm/rayleigh_jeans.pdf
+gabook += ../geometric-algebra/poynting.pdf
 
 #----------------------------------------------------------------
 
 # 2009:
-ordered2009 += ../geometric-algebra/energy_momentum_tensor.pdf
+gabook += ../geometric-algebra/energy_momentum_tensor.pdf
+gabook += ../geometric-algebra/electric_field_energy.pdf
 
-ordered2009 += ../geometric-algebra/electric_field_energy.pdf
 skipit += ../lut/charge_osc.pdf
 ordered2009 += ../qm/gaussian.pdf
-ordered2009 += ../geometric-algebra/vector_differential_identities.pdf
+
+gabook += ../geometric-algebra/vector_differential_identities.pdf
 
 ordered2009 += ../maxwell/dc_power.pdf
 # not mine:
 skipit += ../spin/spin.pdf
 
-ordered2009 += ../qm/fourier_tx.pdf
-ordered2009 += ../qm/sch_current.pdf
-
-ordered2009 += ../dynamics/radial.pdf
+gabook += ../qm/fourier_tx.pdf
+gabook += ../qm/sch_current.pdf
+gabook += ../dynamics/radial.pdf
 
 # in progress (close to 1/2 way).
 ordered2009 += ../qm/qmd_ch2quiz.pdf
 
 skipit += ../lut/EFE.pdf
 skipit += ../geometric-algebra/review_alan_gabook.pdf
-
 skipit += ../geometric-algebra/review_alan_gabook_ch4.pdf
+
 ordered2009 += ../geometric-algebra/two_ninety_rotations.pdf
 
-ordered2009 += ../geometric-algebra/poynting_rate.pdf
+gabook += ../geometric-algebra/poynting_rate.pdf
 
 skipit += ../latex-sample/slerp.pdf
 skipit += ../latex-sample/template.pdf
 
-ordered2009 += ../qm/heat_fourier.pdf
-ordered2009 += ../qm/fourier_notation.pdf
+gabook += ../qm/heat_fourier.pdf
+gabook += ../qm/fourier_notation.pdf
+
 ordered2009 += ../qm/ehrenfest.pdf
 ordered2009 += ../relativity/pauli_qm_relativity_intro.pdf
-ordered2009 += ../geometric-algebra/em_wave.pdf
-ordered2009 += ../qm/wave_fourier.pdf
-ordered2009 += ../geometric-algebra/fourier_maxwell.pdf
-ordered2009 += ../geometric-algebra/firstorder_fourier_maxwell.pdf
-ordered2009 += ../geometric-algebra/4d_fourier.pdf
-ordered2009 += ../qm/fourier_series_maxwell.pdf
 
-ordered2009 += ../qm/potential_fourier.pdf
+gabook += ../geometric-algebra/em_wave.pdf
+gabook += ../qm/wave_fourier.pdf
+gabook += ../geometric-algebra/fourier_maxwell.pdf
+gabook += ../geometric-algebra/firstorder_fourier_maxwell.pdf
+gabook += ../geometric-algebra/4d_fourier.pdf
+gabook += ../qm/fourier_series_maxwell.pdf
+gabook += ../qm/potential_fourier.pdf
+
 skipit += ../qm/stub_em_fields.pdf
 skipit += ../qm/t.pdf
-ordered2009 += ../qm/planewave.pdf
+
+gabook += ../qm/planewave.pdf
+
 skipit += ../qm/scratch_planewave.pdf
 
 # this one actualy just a stub.  Want to followup on it:
 ordered2009 += ../geometric-algebra/faraday_lagrangian.pdf
 
-ordered2009 += ../geometric-algebra/stress_energy_lorentz.pdf
+gabook += ../geometric-algebra/stress_energy_lorentz.pdf
+
 ordered2009 += ../qm/wavepacket.pdf
 ordered2009 += ../geometric-algebra/en_m_tensor.pdf
-ordered2009 += ../fourier/poisson.pdf
 
-# moved to gabook:
-skipit += ../differential_forms/nvolume.pdf
+gabook += ../fourier/poisson.pdf
+gabook += ../differential_forms/nvolume.pdf
 
 ordered2009 += ../fourier/distributions.pdf
 skipit += ../lut/lut_q0304.pdf
@@ -330,9 +326,7 @@ ordered2009 += ../maxwell/maxwell_tensor_from_lagrangian.pdf
 ordered2009 += ../qm/bohm_ch10.pdf
 ordered2009 += ../calculus/wavevariation.pdf
 
-# moved to ../gabook/
-#ordered2009 += ../taylors/multivector_taylors.pdf
-skipit += ../taylors/multivector_taylors.pdf
+gabook += ../taylors/multivector_taylors.pdf
 
 # lut's
 skipit += ../lut/pjnote1.pdf
@@ -350,14 +344,16 @@ ordered2009 += ../relativity/lorentz_force_tx.pdf
 skipit += ../relativity/lorentz_force_tx_2.pdf
 ordered2009 += ../geometric-algebra/macroscopic_maxwell.pdf
 
-#ordered2009 += ../geometric-algebra/intro_ga.pdf
 #ordered2009 += 
 
 skipit += ../bookex/3dpdf.pdf
 skipit += ../bookex/bookex.pdf
 skipit += ../bookex/contpdf.pdf
-skipit += ../gabook/gabook.pdf
-skipit += ../geometric-algebra/intro_ga.pdf
+
+gabook += ../gabook/gabook.pdf
+gabook += ../geometric-algebra/intro_ga.pdf
+
+skipit += $(gabook)
 
 #----------------------------------------------------------------
 # Rules:
