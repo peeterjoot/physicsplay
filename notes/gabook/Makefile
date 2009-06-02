@@ -71,3 +71,4 @@ TEXFILES += poisson.tex
 TEXFILES += fourier_maxwell.tex
 TEXFILES += firstorder_fourier_maxwell.tex
 TEXFILES += wave_fourier.tex
+TEXFILES += heat_fourier.tex
