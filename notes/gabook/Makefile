@@ -67,6 +67,7 @@ TEXFILES += em_wave.tex
 TEXFILES += wave_eqn.tex
 TEXFILES += proj_generalized_dot_prod.tex
 TEXFILES += fourier_tx.tex
+TEXFILES += fourier_notation.tex
 TEXFILES += 
 
 gabook.pdf :: $(TEXFILES)
