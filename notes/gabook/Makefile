@@ -64,3 +64,4 @@ TEXFILES += potential_fourier.tex
 TEXFILES += electric_field_energy.tex
 TEXFILES += poynting.tex
 TEXFILES += poynting_rate.tex
+TEXFILES += fourier_series_maxwell.tex
