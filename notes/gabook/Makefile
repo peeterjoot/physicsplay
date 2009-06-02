@@ -73,3 +73,4 @@ TEXFILES += firstorder_fourier_maxwell.tex
 TEXFILES += wave_fourier.tex
 TEXFILES += heat_fourier.tex
 TEXFILES += em_wave.tex
+TEXFILES += wave_eqn.tex
