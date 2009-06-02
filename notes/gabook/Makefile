@@ -66,3 +66,4 @@ TEXFILES += poynting.tex
 TEXFILES += poynting_rate.tex
 TEXFILES += fourier_series_maxwell.tex
 TEXFILES += energy_momentum_tensor.tex
+TEXFILES += 4d_fourier.tex
