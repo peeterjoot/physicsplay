@@ -61,3 +61,4 @@ clean ::
 	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc
 TEXFILES += rayleigh_jeans.tex
 TEXFILES += potential_fourier.tex
+TEXFILES += electric_field_energy.tex
