@@ -72,6 +72,14 @@ TEXFILES += planewave.tex
 TEXFILES += dirac_lagrangian.tex
 TEXFILES += pauli_matrix.tex
 TEXFILES += gamma.tex
+TEXFILES += vector_differential_identities.tex
+TEXFILES += em_bivector_metric_dependencies.tex
+TEXFILES += gem.tex
+TEXFILES += mass_vary_lagrangian.tex
+TEXFILES += velocity_tx.tex
+TEXFILES += fourvec_dotinvariance.tex
+TEXFILES += spacetimegrad.tex
+TEXFILES += lorentz.tex
 TEXFILES += 
 
 gabook.pdf :: $(TEXFILES)
