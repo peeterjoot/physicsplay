@@ -70,6 +70,8 @@ TEXFILES += fourier_tx.tex
 TEXFILES += fourier_notation.tex
 TEXFILES += planewave.tex
 TEXFILES += dirac_lagrangian.tex
+TEXFILES += pauli_matrix.tex
+TEXFILES += gamma.tex
 TEXFILES += 
 
 gabook.pdf :: $(TEXFILES)
@@ -79,4 +81,3 @@ gabook.pdf :: $(TEXFILES)
 
 clean ::
 	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc
-TEXFILES += pauli_matrix.tex
