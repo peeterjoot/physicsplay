@@ -49,6 +49,7 @@ TEXFILES += locate_satellite.tex
 TEXFILES += bohr.tex
 TEXFILES += euler_lagrange.tex
 TEXFILES += noethers_lorentz_force.tex
+TEXFILES += sch_current.tex
 TEXFILES += 
 
 gabook.pdf :: $(TEXFILES)
