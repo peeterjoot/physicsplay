@@ -59,3 +59,4 @@ gabook.pdf :: $(TEXFILES)
 
 clean ::
 	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc
+TEXFILES += rayleigh_jeans.tex
