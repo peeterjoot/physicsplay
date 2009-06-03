@@ -109,6 +109,9 @@ TEXFILES += vector_maxwells_projection.tex
 TEXFILES += velocity_tx.tex
 TEXFILES += wave_eqn.tex
 TEXFILES += wave_fourier.tex
+TEXFILES += laplace.tex
+TEXFILES += matrix_of_linear_tx.tex
+TEXFILES += ga_grade_dot_wedge.tex
 TEXFILES += 
 
 gabook.pdf :: $(TEXFILES)
