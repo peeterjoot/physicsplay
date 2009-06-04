@@ -55,6 +55,24 @@ TEXFILES += two_ninety_rotations.tex
 TEXFILES += wave_lagrangian.tex
 TEXFILES += wedge_norm_vs_ga_norm.tex
 TEXFILES += voltage_current_resistance.tex
+TEXFILES += em_tensor.tex
+TEXFILES += lorentz_metric_tensor.tex
+TEXFILES += euler.tex
+TEXFILES += constant_q.tex
+#TEXFILES += lut_q0304.tex
+TEXFILES += rindler.tex
+TEXFILES += sr_lagrangian_q.tex
+TEXFILES += m.tex
+TEXFILES += scratch_planewave.tex
+TEXFILES += stub_em_fields.tex
+TEXFILES += box.tex
+TEXFILES += long_wire_q.tex
+TEXFILES += lorentz_tx_em_potential.tex
+TEXFILES += pf_sch.tex
+TEXFILES += review_alan_gabook.tex
+TEXFILES += review_alan_gabook_ch4.tex
+TEXFILES += lut_q0304.tex
+TEXFILES += cross.tex
 TEXFILES += 
 
 nonga.pdf :: $(TEXFILES)
@@ -64,3 +82,4 @@ nonga.pdf :: $(TEXFILES)
 
 clean ::
 	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc
+TEXFILES += cross_old.tex

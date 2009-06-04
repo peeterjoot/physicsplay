@@ -3,7 +3,9 @@ pdfs := $(files:.ltx=.pdf)
 ppdfs := $(shell ls ../*/*.pdf)
 
 all : $(pdfs)
-big: everything2007.pdf everything2008.pdf everything2009.pdf
+#big:: everything2007.pdf
+#big:: everything2008.pdf
+#big:: everything2009.pdf
 
 $(pdfs) : ../peeters_macros.tex
 
@@ -14,8 +16,8 @@ include ../make.rules
 # 2007 and earlier
 ordered2007 :=
 ordered2007 += ../cross-1-15/cross_1_15.pdf
-ordered2007 += ../feynman/star_distance.pdf
-ordered2007 += ../maxwell/maxwell.pdf
+nonga += ../feynman/star_distance.pdf
+nonga += ../maxwell/maxwell.pdf
 ordered2007 += ../cross/cross.pdf
 
 gabook += ../geometric-algebra/ga_wiki_unit_derivative.pdf
@@ -31,9 +33,9 @@ gabook += ../geometric-algebra/radial_vector_derivatives.pdf
 # 2008
 ordered2008 :=
 gabook += ../geometric-algebra/ga_grade_dot_wedge.pdf
-ordered2008 += ../geometric-algebra/wedge_norm_vs_ga_norm.pdf
-ordered2008 += ../geometric-algebra/pythagoras.pdf
-ordered2008 += ../taylors/taylors.pdf
+nonga += ../geometric-algebra/wedge_norm_vs_ga_norm.pdf
+nonga += ../geometric-algebra/pythagoras.pdf
+nonga += ../taylors/taylors.pdf
 
 gabook += ../geometric-algebra/plane.pdf
 gabook += ../geometric-algebra/legendre.pdf
@@ -45,7 +47,6 @@ gabook += ../geometric-algebra/laplace.pdf
 gabook += ../geometric-algebra/bivector.pdf
 gabook += ../geometric-algebra/trivector.pdf
 gabook += ../geometric-algebra/kvector_exponential.pdf
-
 gabook += ../geometric-algebra/scalar_commutes.pdf
 gabook += ../geometric-algebra/angle_between_line_and_plane.pdf
 gabook += ../geometric-algebra/bladegradereduction.pdf
@@ -53,24 +54,24 @@ gabook += ../geometric-algebra/rordered200oeciprocal_frame.pdf
 gabook += ../geometric-algebra/orthodecomp.pdf
 gabook += ../geometric-algebra/gradient_and_forms.pdf
 
-ordered2008 += ../geometric-algebra/shear.pdf
-ordered2008 += ../geometric-algebra/mp_inverse_svd_rough_notes.pdf
+nonga += ../geometric-algebra/shear.pdf
+nonga += ../geometric-algebra/mp_inverse_svd_rough_notes.pdf
 
 gabook += ../geometric-algebra/projection_with_matrix_comparison.pdf
 gabook += ../geometric-algebra/ke_rotation.pdf
 gabook += ../maxwell/lorentz_rotation.pdf
 
-ordered2008 += ../geometric-algebra/gacs_q8_8.pdf
+nonga += ../geometric-algebra/gacs_q8_8.pdf
 
 gabook += ../geometric-algebra/locate_satellite.pdf
 gabook += ../geometric-algebra/matrix_of_linear_tx.pdf
 gabook += ../geometric-algebra/proj_generalized_dot_prod.pdf
 gabook += ../geometric-algebra/projection_and_moore_penrose_vector_inverse.pdf
 gabook += ../geometric-algebra/oblique_proj.pdf
-gabook += ../geometric-algebra/em_tensor.pdf
+nonga += ../geometric-algebra/em_tensor.pdf
 gabook += ../geometric-algebra/angular_acc.pdf
 
-ordered2008 += ../geometric-algebra/fvec.pdf
+nonga += ../geometric-algebra/fvec.pdf
 
 gabook += ../geometric-algebra/lorentz.pdf
 gabook += ../tensor/tensor.pdf
@@ -79,7 +80,7 @@ gabook += ../geometric-algebra/ga_maxwell.pdf
 gabook += ../geometric-algebra/spacetimegrad.pdf
 gabook += ../geometric-algebra/sg_mx_41.pdf
 
-ordered2008 += ../geometric-algebra/pe.pdf
+nonga += ../geometric-algebra/pe.pdf
 
 gabook += ../geometric-algebra/fourvec_dotinvariance.pdf
 gabook += ../geometric-algebra/newtonian_lagrangian_and_gradient.pdf
@@ -89,14 +90,14 @@ gabook += ../geometric-algebra/em_potential.pdf
 gabook += ../geometric-algebra/gafp_lorentz.pdf
 gabook += ../geometric-algebra/sr_lagrangian.pdf
 
-ordered2008 += ../geometric-algebra/tong_mf1.pdf
+nonga += ../geometric-algebra/tong_mf1.pdf
 
-gabook += ../geometric-algebra/lorentz_metric_tensor.pdf
+nonga += ../geometric-algebra/lorentz_metric_tensor.pdf
 gabook += ../geometric-algebra/mass_vary_lagrangian.pdf 
 gabook += ../geometric-algebra/canonical_momentum.pdf
 
-ordered2008 += ../geometric-algebra/outermorphism_det.pdf
-ordered2008 += ../mechanics/goldstein_ch1_2.pdf
+nonga += ../geometric-algebra/outermorphism_det.pdf
+nonga += ../mechanics/goldstein_ch1_2.pdf
 
 gabook += ../geometric-algebra/em_bivector_metric_dependencies.pdf
 gabook += ../geometric-algebra/maxwell_to_tensor.pdf
@@ -126,7 +127,7 @@ skipit += ../lut/Rindler-eom.pdf
 gabook += ../geometric-algebra/stokes_maxwell_application.pdf
 gabook += ../geometric-algebra/stokes_revisited.pdf
 
-ordered2008 += ../lut/schwartzchild_metric.pdf
+nonga += ../lut/schwartzchild_metric.pdf
 
 gabook += ../geometric-algebra/lorentz_force.pdf
 gabook += ../geometric-algebra/field_lagrangian.pdf
@@ -146,7 +147,7 @@ skipit += ../geometric-algebra/lorentz_tx_em_potential.pdf
 
 gabook += ../geometric-algebra/noethers_lorentz_force.pdf
 
-ordered2008 += ../debroglie/debroglie.pdf
+nonga += ../debroglie/debroglie.pdf
 
 gabook += ../geometric-algebra/gem.pdf
 gabook += ../geometric-algebra/noethers_field.pdf
@@ -167,8 +168,7 @@ skipit += ../lut/constant_q.pdf
 # some notes on Rn*2 extensions to complex numbers.  Some good notes here
 # but not coherent to anybody but me or Lut.
 #
-#skipit += ../geometric-algebra/complex.pdf
-ordered2008 += ../geometric-algebra/complex.pdf
+nonga += ../geometric-algebra/complex.pdf
 
 # generated from gasym.cpp:
 skipit += ../sym/o2.pdf
@@ -182,9 +182,9 @@ gabook += ../geometric-algebra/gaussian_surface.pdf
 gabook += ../geometric-algebra/charge_line_element.pdf
 gabook += ../geometric-algebra/charge_arc_element.pdf
 
-ordered2008 += ../geometric-algebra/matrix_to_operator.pdf
+nonga += ../geometric-algebra/matrix_to_operator.pdf
 
-ordered2008 += ../geometric-algebra/nfcm_ch2.pdf
+nonga += ../geometric-algebra/nfcm_ch2.pdf
 
 # Lut's, not mine:
 skipit += ../lut/GA_matrix.pdf
@@ -192,7 +192,7 @@ skipit += ../lut/GA_matrix.pdf
 gabook += ../geometric-algebra/slerp.pdf
 gabook += ../geometric-algebra/wave_eqn.pdf
 
-ordered2008 += ../geometric-algebra/wave_lagrangian.pdf
+nonga += ../geometric-algebra/wave_lagrangian.pdf
 
 # Lut's, not mine:
 skipit += ../lut/ga_matrix_1.pdf
@@ -203,19 +203,19 @@ skipit += ../geometric-algebra/box.pdf
 gabook += ../geometric-algebra/pauli_matrix.pdf
 gabook += ../geometric-algebra/bohr.pdf
 
-ordered2008 += ../geometric-algebra/sch.pdf
+nonga += ../geometric-algebra/sch.pdf
 
 # generated as-is.  Use as base for more thoughtful treatment.
 gabook += ../gamma-matrix/gamma.pdf
 
-ordered2008 += ../dynamics/twobodies.pdf
-ordered2008 += ../geometric-algebra/rapidity.pdf
-ordered2008 += ../geometric-algebra/greens.pdf
+nonga += ../dynamics/twobodies.pdf
+nonga += ../geometric-algebra/rapidity.pdf
+nonga += ../geometric-algebra/greens.pdf
 
 gabook += ../geometric-algebra/dirac_lagrangian.pdf
 
-ordered2008 += ../qm/qm_susskind.pdf
-ordered2008 += ../relativity/velocity_addition.pdf
+nonga += ../qm/qm_susskind.pdf
+nonga += ../relativity/velocity_addition.pdf
 
 gabook += ../qm/rayleigh_jeans.pdf
 gabook += ../geometric-algebra/poynting.pdf
@@ -227,7 +227,7 @@ gabook += ../geometric-algebra/energy_momentum_tensor.pdf
 gabook += ../geometric-algebra/electric_field_energy.pdf
 
 skipit += ../lut/charge_osc.pdf
-ordered2009 += ../qm/gaussian.pdf
+nonga += ../qm/gaussian.pdf
 
 gabook += ../geometric-algebra/vector_differential_identities.pdf
 gabook += ../maxwell/dc_power.pdf
@@ -240,13 +240,13 @@ gabook += ../qm/sch_current.pdf
 gabook += ../dynamics/radial.pdf
 
 # in progress (close to 1/2 way).
-ordered2009 += ../qm/qmd_ch2quiz.pdf
+nonga += ../qm/qmd_ch2quiz.pdf
 
 skipit += ../lut/EFE.pdf
 skipit += ../geometric-algebra/review_alan_gabook.pdf
 skipit += ../geometric-algebra/review_alan_gabook_ch4.pdf
 
-ordered2009 += ../geometric-algebra/two_ninety_rotations.pdf
+nonga += ../geometric-algebra/two_ninety_rotations.pdf
 
 gabook += ../geometric-algebra/poynting_rate.pdf
 
@@ -256,8 +256,8 @@ skipit += ../latex-sample/template.pdf
 gabook += ../qm/heat_fourier.pdf
 gabook += ../qm/fourier_notation.pdf
 
-ordered2009 += ../qm/ehrenfest.pdf
-ordered2009 += ../relativity/pauli_qm_relativity_intro.pdf
+nonga += ../qm/ehrenfest.pdf
+nonga += ../relativity/pauli_qm_relativity_intro.pdf
 
 gabook += ../geometric-algebra/em_wave.pdf
 gabook += ../qm/wave_fourier.pdf
@@ -275,37 +275,37 @@ gabook += ../qm/planewave.pdf
 skipit += ../qm/scratch_planewave.pdf
 
 # this one actualy just a stub.  Want to followup on it:
-ordered2009 += ../geometric-algebra/faraday_lagrangian.pdf
+nonga += ../geometric-algebra/faraday_lagrangian.pdf
 
 gabook += ../geometric-algebra/stress_energy_lorentz.pdf
 
-ordered2009 += ../qm/wavepacket.pdf
+nonga += ../qm/wavepacket.pdf
 
 gabook += ../geometric-algebra/en_m_tensor.pdf
 gabook += ../fourier/poisson.pdf
 gabook += ../differential_forms/nvolume.pdf
 
-ordered2009 += ../fourier/distributions.pdf
+nonga += ../fourier/distributions.pdf
 skipit += ../lut/lut_q0304.pdf
 
 # work related (although it had some mod/div stuff of general interest)
-ordered2009 += ../fletcher/fletcher.pdf
+nonga += ../fletcher/fletcher.pdf
 
-ordered2009 += ../qm/bohm_ch9.pdf
-ordered2009 += ../qm/delta_ortho_series.pdf
-ordered2009 += ../algebra/dot_linearity.pdf
+nonga += ../qm/bohm_ch9.pdf
+nonga += ../qm/delta_ortho_series.pdf
+nonga += ../algebra/dot_linearity.pdf
 
 gabook += ../algebra/levi.pdf
 gabook += ../geometric-algebra/electron_rotor.pdf
 
-ordered2009 += ../calculus/byron_fuller_calc_var.pdf
-ordered2009 += ../algebra/binomial.pdf
+nonga += ../calculus/byron_fuller_calc_var.pdf
+nonga += ../algebra/binomial.pdf
 
 # in progress: 
-ordered2009 += ../qm/klein_gordon.pdf
+nonga += ../qm/klein_gordon.pdf
 
 # rough, but worthy of polishing.
-ordered2009 += ../lut/tangentspace.pdf
+nonga += ../lut/tangentspace.pdf
 
 # lut's
 skipit      += ../lut/tansp.pdf
@@ -313,29 +313,29 @@ skipit      += ../lut/tansp.pdf
 # draft for a PF post.
 skipit      += ../calculus/euler.pdf
 
-ordered2009 += ../relativity/pauli_four_vector_v.pdf
-ordered2009 += ../relativity/acc_four_vector.pdf
-ordered2009 += ../qm/commutator_herm.pdf
+nonga += ../relativity/pauli_four_vector_v.pdf
+nonga += ../relativity/acc_four_vector.pdf
+nonga += ../qm/commutator_herm.pdf
 
 gabook += ../geometric-algebra/lorentz_force_p_qA.pdf
 gabook += ../maxwell/biot_savart.pdf
 
-ordered2009 += ../qm/harmonic_osc.pdf
+nonga += ../qm/harmonic_osc.pdf
 
 gabook += ../maxwell/maxwell_tensor_from_lagrangian.pdf
 
-ordered2009 += ../qm/bohm_ch10.pdf
-ordered2009 += ../calculus/wavevariation.pdf
+nonga += ../qm/bohm_ch10.pdf
+nonga += ../calculus/wavevariation.pdf
 
 gabook += ../taylors/multivector_taylors.pdf
 
 # lut's
 skipit += ../lut/pjnote1.pdf
 
-ordered2009 += ../dad/voltage_current_resistance.pdf
-ordered2009 += ../qm/bohm11.pdf
-ordered2009 += ../qm/qmb_first_try.pdf
-ordered2009 += ../qm/qm_barrier.pdf
+nonga += ../dad/voltage_current_resistance.pdf
+nonga += ../qm/bohm11.pdf
+nonga += ../qm/qmb_first_try.pdf
+nonga += ../qm/qm_barrier.pdf
 
 # these not posted yet.   Want to finish lorentz_force_tx first
 # (or at least try in GA formalism to see if I can get it).
@@ -353,7 +353,10 @@ skipit += ../bookex/contpdf.pdf
 gabook += ../gabook/gabook.pdf
 gabook += ../geometric-algebra/intro_ga.pdf
 
+nonga += ../nonga/nonga.pdf
+
 skipit += $(gabook)
+skipit += $(nonga)
 
 #ordered2009 += 
 
@@ -375,11 +378,11 @@ showu :
 everything2007.pdf: $(reversed2007)
 	pdftk $(reversed2007) cat output $@
 
-everything2008.pdf: $(reversed2008)
-	pdftk $(reversed2008) cat output $@
+#everything2008.pdf: $(reversed2008)
+#	pdftk $(reversed2008) cat output $@
 
 everything2009.pdf: $(reversed2009)
 	pdftk $(reversed2009) cat output $@
 
-everything.pdf: $(ordered2007) $(ordered2008) $(ordered2009) 
-	pdftk $(ordered2007) $(ordered2008) $(ordered2009) cat output $@
+#everything.pdf: $(ordered2007) $(ordered2008) $(ordered2009) 
+#	pdftk $(ordered2007) $(ordered2008) $(ordered2009) cat output $@
