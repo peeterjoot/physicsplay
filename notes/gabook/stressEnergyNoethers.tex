@@ -20,13 +20,13 @@
 
 \title{Stress Energy Tensor from Lagrangian}\label{chap:stress_energy_noethers}
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ June 5, 2009.  Last Revision: $Date: 2009/06/06 05:42:36 $ }
+\date{ June 5, 2009.  Last Revision: $Date: 2009/06/06 17:00:07 $ }
 
 \begin{document}
 
 \maketitle{}
 \tableofcontents
-\section{ Summary. }
+\section{ Summary and direction. }
 
 In 
 \cite{PJstressEnergyLorentz} 
@@ -109,8 +109,17 @@ For these reasons it seems desirable to
 understand the background behind the stress energy tensor much better.
 In particular, it is natural to then expect that these conservation
 relations may also be found as a 
-consequence of a symmetry and an associated Noether current.  What
-is that symmetry?  Given that symmetry how would one go about
+consequence of a symmetry and an associated Noether current
+(see 
+\cite{PJNoethersField}
+%\ref{chap:PJNoethersField}
+).  What
+is that symmetry?  That symmetry should leave the field equations as 
+calculated by the field Euler-Lagrange equations (see
+\cite{PJFieldLagrangian}
+%\ref{chap:PJFieldLagrangian}
+) unchanged.
+Given that symmetry how would one go about
 actually showing that this is the case?   These are the questions
 to tackle here.
 
@@ -147,14 +156,184 @@ It took me a while to figure out how this was a symmetry, but after a
 nice refreshing motorcycle ride, the answer suddenly surfaced.  One
 can add a derivative to a mechanical Lagrangian and not change
 the resulting equations of motion.  While tackling problem 5 of 
-Tong's mechanics, such an invariance was considered in
+Tong's mechanics
+in 
+\cite{PJTongMf1}
+%\ref{chap:PJTongMf1}
+, such an invariance was considered in
 detail
 %\ref{chap:PJTongMf1:addDerivative}
-.  No Noether current was 
+.
+
+FOLLOWUP: No Noether current was 
 derived for this sort of mechanical symmetry.  From
 what I've read, such a Noether's current calculation is 
-likely to provide a demonstration of linear momentum conservation.  This
-is worthy of explicit followup, but not now.
+likely to provide a demonstration of linear momentum conservation.  Worth
+verifying.
+
+If one has altered the Lagrangian by adding an arbitrary function $f$
+to it.
+
+\begin{align*}
+\LL' = \LL + f
+\end{align*}
+
+Assuming to start a Lagrangian that is a function of a single field variable
+$\LL = \LL(\phi, \partial_\mu \phi)$, then the 
+variation of the Lagrangian for the field equations yields
+
+\begin{align*}
+\frac{\delta \LL'}{\delta \phi}
+&=
+\frac{\partial \LL'}{\partial \phi}
+- 
+\partial_\sigma \frac{\partial \LL'}{\partial (\partial_\sigma \phi)} \\
+&=
+\underbrace{\frac{\partial \LL}{\partial \phi}
+- 
+\partial_\sigma \frac{\partial \LL}{\partial (\partial_\sigma \phi)} }_{=0}
++\frac{\partial f}{\partial \phi}
+- 
+\partial_\sigma \frac{\partial f}{\partial (\partial_\sigma \phi)} \\
+\end{align*}
+
+So, if this transformed Lagrangian is a symmetry, it is sufficient to
+find the conditions for the variation of additional part to be zero
+
+\begin{align}\label{eqn:requirement}
+\frac{\delta f}{\delta \phi} = 0
+\end{align}
+
+\subsection{ Some examples adding a divergence. }
+
+To validate the fact that we can add a divergence to the Lagrangian without
+changing the field equations lets work out a few concrete examples 
+of \ref{eqn:requirement} of for Lagrangian alterations by a divergence
+$f = \partial_\mu F^\mu$.
+
+Each of these examples will be for a single field variable Lagrangian 
+with generalized coordinates $x^1 = x$, and $x^1 = y$.
+ 
+\subsubsection{ Simplest case.  No partials. }
+
+Let 
+
+\begin{align*}
+F^1 &= \phi \\
+F^2 &= 0 \\
+\end{align*}
+
+With this the divergence is 
+
+\begin{align*}
+f 
+&= \partial_x F^x + \partial_y F^y  \\
+&=
+\PD{x}{\phi}
+\end{align*}
+
+Now the variation is
+\begin{align*}
+\frac{\delta f}{\delta \phi} 
+&= 
+\left( \PD{\phi}{} 
+- \PD{x}{}\PD{(\PDi{x}{\phi})}{} 
+- \PD{y}{}\PD{(\PDi{y}{\phi})}{} 
+\right) \PD{x}{\phi} \\
+&= 
+\PD{x}{}\PD{\phi}{\phi} - \PD{x}{1} \\
+&= 0
+\end{align*}
+
+Okay, so far so good.
+
+\subsubsection{ One partial. }
+
+Now, let 
+
+\begin{align*}
+F^1 &= \PD{x}{\phi} \\
+F^2 &= 0 \\
+\end{align*}
+
+With this the divergence is 
+
+\begin{align*}
+f 
+&= \partial_x F^x + \partial_y F^y  \\
+&=
+\PD{x}{}\PD{x}{\phi}
+\end{align*}
+
+And the variation is
+\begin{align*}
+\frac{\delta f}{\delta \phi} 
+&= 
+\left( \PD{\phi}{} 
+- \PD{x}{}\PD{(\PDi{x}{\phi})}{} 
+- \PD{y}{}\PD{(\PDi{y}{\phi})}{} 
+\right) \PD{x}{}\PD{x}{\phi} \\
+&= 
+\PD{\phi}{} \PD{x}{}\PD{x}{\phi} \\
+&= 
+\PD{x}{} \PD{x}{}\PD{\phi}{\phi} \\
+&= 
+\PD{x}{} \PD{x}{1} \\
+&= 0
+\end{align*}
+
+Again, assuming I'm okay to switch the differentiation order, we have zero.
+
+\subsubsection{ Another partial. }
+
+For the last concrete example before going on to the general case, try
+
+\begin{align*}
+F^1 &= \PD{y}{\phi} \\
+F^2 &= 0 \\
+\end{align*}
+
+The divergence is 
+
+\begin{align*}
+f 
+&= \partial_x F^x + \partial_y F^y  \\
+&=
+\PD{x}{}\PD{y}{\phi}
+\end{align*}
+
+And the variation is
+\begin{align*}
+\frac{\delta f}{\delta \phi} 
+&= 
+\left( \PD{\phi}{} 
+- \PD{x}{}\PD{(\PDi{x}{\phi})}{} 
+- \PD{y}{}\PD{(\PDi{y}{\phi})}{} 
+\right) \PD{x}{}\PD{y}{\phi} \\
+&= 
+- \PD{y}{}\PD{x}{1} \\
+&= 0
+\end{align*}
+
+\subsubsection{ The general case. }
+
+Because of linearity we've now seen that we can construct functions with
+any linear combinations of first and second derivatives
+
+\begin{align*}
+F^\mu = a^\mu \phi + \sum_\sigma {b_\sigma}^\mu \PD{x^\sigma}{\phi}
+\end{align*}
+
+and for such a function we will have
+
+\begin{align*}
+\frac{\delta (\partial_\mu F^\mu)}{\delta \phi}  = 0
+\end{align*}
+
+How general can the function $F^\mu = F^\mu(\phi, \partial_\sigma \phi)$ be 
+made and still yield a zero variational derivative?
+
+To answer this, let's compute the derivative for the general case.
 
 
 
