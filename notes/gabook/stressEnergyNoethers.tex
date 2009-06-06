@@ -20,7 +20,7 @@
 
 \title{Stress Energy Tensor from Lagrangian}\label{chap:stress_energy_noethers}
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ June 5, 2009.  Last Revision: $Date: 2009/06/06 22:19:15 $ }
+\date{ June 5, 2009.  Last Revision: $Date: 2009/06/06 23:04:17 $ }
 
 \begin{document}
 
@@ -538,7 +538,7 @@ will not be a symmetry.
 
 The Lagrangian for a one dimensional wave equation is
 
-\begin{align}
+\begin{align}\label{eqn:oneDimWave}
 \LL = 
 \inv{2 v^2} \left(\PD{t}{\phi}\right)^2 - \inv{2} \left(\PD{x}{\phi}\right)^2
 \end{align}
@@ -550,9 +550,12 @@ x &\rightarrow x' = x + a \\
 t &\rightarrow t' = t + \tau 
 \end{align*}
 
-We have by Taylor expansion, as explored in 
+Employing a multivariable Taylor expansion
+(see 
 \cite{PJmultiTaylors}
 %\ref{chap:PJmultiTaylors}
+)
+for our Lagrangian having no explicit dependence on $t$ and $x$, we have
 
 \begin{align*}
 \LL' &= \LL + \underbrace{(a \partial_x + \tau \partial_t)\LL}_{(*)} + \cdots
@@ -570,8 +573,91 @@ Now, if we continue we find that we do in fact still have a symmetry by introduc
 This follows from direct expansion
 
 \begin{align*}
-(*) &= (a \partial_x + \tau \partial_t) \LL
+(*) 
+&= (a \partial_x + \tau \partial_t) \LL \\
+&= 
+a 
+\left(
+\inv{v^2} \phi_t \partial_x \phi_t
+- \phi_x \partial_x \phi_x
+\right)
++ \tau 
+\left(
+\inv{v^2} \phi_t \partial_t \phi_t
+- \phi_x \partial_t \phi_x
+\right) \\
 \end{align*}
+
+Next, calculation of the variational derivative we have
+
+\begin{align*}
+\frac{\delta(*)}{\delta \phi}
+&=
+\left( \PD{\phi}{} - \partial_x \PD{\phi_x}{} - \partial_t \PD{\phi_t}{} \right) (*) \\
+&=
+-\partial_x \left( -a \partial_{xx} \phi - \tau \partial_{tx}\phi \right) 
+-\inv{v^2} \partial_t \left( a \partial_{xt} \phi + \tau \partial_{tt}\phi \right) \\
+&=
+a \left( 
+\partial_x \left(
+\phi_{xx} - \inv{v^2} \phi_{tt}
+\right)
+\right)
++ \tau \left( 
+\partial_t \left(
+\phi_{xx} - \inv{v^2} \phi_{tt}
+\right)
+\right) \\
+\end{align*}
+
+Since we have $\phi_{xx} = \inv{v^2} \phi_{tt}$ by variation of \ref{eqn:oneDimWave}.  So we do in fact have a symmetry from the 
+linearized spacetime translation for any shift $(t,x) \rightarrow (t+\tau, x+a)$.
+
+\section{ Symmetry condition for arbitrary linearized spacetime translation. }
+
+If we want to be able to alter the Lagragian with a linearized vector translation of the generalized coordinates by some arbitrary 
+shift, since we do not have the linear derivatives for many Lagrangians of interest (wave equations, Maxwell equation, ...)
+then can we find a general condition that is responsible for the translation symmetry that we've observed must exist for
+the simple wave equation.
+
+For a general Lagrangian $\LL = \LL(\phi(x), \partial_\mu \phi(x))$ under shift by some vector $a$
+
+\begin{align*}
+x \rightarrow x' = x + a
+\end{align*}
+
+we have
+
+\begin{align*}
+\LL' = e^{a \cdot \grad} \LL = \LL + (a \cdot \grad)\LL + \cdots
+\end{align*}
+
+Compuating the variational derivative for the first order term we have
+
+\begin{align*}
+\frac{\delta (a \cdot \grad) \LL}{\delta \phi} 
+&=
+\left(\PD{\phi}{} - \partial_\sigma \PD{\phi_\sigma}{} \right) \inv{2}(a \grad + \grad a) \LL \\
+&=
+\inv{2} \left( a \grad \PD{\phi}{\LL} - \grad a \partial_\sigma \PD{\phi_\sigma}{\LL} \right) \\
+\end{align*}
+
+But $\PDi{\phi}{\LL} = \partial_\sigma \PDi{\phi_\sigma}{\LL}$, so we have
+
+\begin{align*}
+\frac{\delta (a \cdot \grad) \LL}{\delta \phi} 
+&=
+\inv{2} \left( a \grad \PD{\phi}{\LL} - \grad a \PD{\phi}{\LL} \right) \\
+\end{align*}
+
+This is
+\begin{align}
+\frac{\delta (a \cdot \grad) \LL}{\delta \phi} 
+&= (a \wedge \grad) \PD{\phi}{\LL}
+\end{align}
+
+So for the wave equation, which has only derivatives and no explicit dependence on $\phi$ itself, this 
+shows why we will have a symmetry (not yet calculated) under linearized translation for the wave equation despite the quadratic derivative terms.
 
 \section{ Noether current. }
 
