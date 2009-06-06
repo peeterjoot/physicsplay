@@ -2,6 +2,9 @@ all : gabook.pdf
 
 # add here and as includes to gabook.tex:
 TEXFILES += 4d_fourier.tex
+TEXFILES += outermorphism_det.tex
+TEXFILES += nfcm_ch2.tex
+TEXFILES += complex.tex
 TEXFILES += angle_between_line_and_plane.tex
 TEXFILES += angular_acc.tex
 TEXFILES += angular_acc_cross.tex
@@ -38,7 +41,7 @@ TEXFILES += ga_wiki.tex
 TEXFILES += ga_wiki_cramers.tex
 TEXFILES += ga_wiki_torque.tex
 TEXFILES += ga_wiki_unit_derivative.tex
-TEXFILES += gabook.tex
+TEXFILES += main.tex
 TEXFILES += gabookmark.tex
 TEXFILES += gafp_lorentz.tex
 TEXFILES += gamma.tex
@@ -67,7 +70,7 @@ TEXFILES += maxwell_tensor_lagrangian.tex
 TEXFILES += maxwell_to_tensor.tex
 TEXFILES += maxwells_ga.tex
 TEXFILES += multivector_taylors.tex
-TEXFILES += new_commands.tex
+#TEXFILES += new_commands.tex
 TEXFILES += newtonian_lagrangian_and_gradient.tex
 TEXFILES += noethers_field.tex
 TEXFILES += noethers_lorentz_force.tex
@@ -112,12 +115,15 @@ TEXFILES += wave_fourier.tex
 TEXFILES += laplace.tex
 TEXFILES += matrix_of_linear_tx.tex
 TEXFILES += ga_grade_dot_wedge.tex
+TEXFILES += tong_mf1.tex
 TEXFILES += 
 
 gabook.pdf :: $(TEXFILES)
+	../make_pdflatex main.tex
+	mv main.pdf gabook.pdf
 
-%.pdf : %.tex
-	../make_pdflatex $<
+#%.pdf : %.tex
+#	../make_pdflatex $<
 
 clean ::
 	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc
