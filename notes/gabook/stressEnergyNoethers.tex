@@ -4,7 +4,6 @@
 \input{../peeters_macros2.tex}
 \input{../peeters_macros3.tex}
 
-
 %\usepackage{listings}
 %\usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
 % makes \grad look funny though (almost like spacegrad, but narrower)
@@ -20,7 +19,7 @@
 
 \title{Stress Energy Tensor from Lagrangian}\label{chap:stress_energy_noethers}
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ June 5, 2009.  Last Revision: $Date: 2009/06/06 23:04:17 $ }
+\date{ June 5, 2009.  Last Revision: $Date: 2009/06/07 03:01:06 $ }
 
 \begin{document}
 
@@ -535,7 +534,6 @@ will not be a symmetry.
 
 \section{ Symmetry for Wave equation under spacetime translation. }
 
-
 The Lagrangian for a one dimensional wave equation is
 
 \begin{align}\label{eqn:oneDimWave}
@@ -613,7 +611,7 @@ a \left(
 Since we have $\phi_{xx} = \inv{v^2} \phi_{tt}$ by variation of \ref{eqn:oneDimWave}.  So we do in fact have a symmetry from the 
 linearized spacetime translation for any shift $(t,x) \rightarrow (t+\tau, x+a)$.
 
-\section{ Symmetry condition for arbitrary linearized spacetime translation. }
+\section{ Symmetry condition for arbitrary linearized spacetime translation? }
 
 If we want to be able to alter the Lagragian with a linearized vector translation of the generalized coordinates by some arbitrary 
 shift, since we do not have the linear derivatives for many Lagrangians of interest (wave equations, Maxwell equation, ...)
@@ -629,35 +627,59 @@ x \rightarrow x' = x + a
 we have
 
 \begin{align*}
-\LL' = e^{a \cdot \grad} \LL = \LL + (a \cdot \grad)\LL + \cdots
+\LL' = \left( e^{a \cdot \grad}\right) \LL = \LL + (a \cdot \grad)\LL + \inv{2!}(a \cdot \grad)^2 \LL + \cdots
 \end{align*}
 
-Compuating the variational derivative for the first order term we have
+Now, if we have
 
 \begin{align*}
-\frac{\delta (a \cdot \grad) \LL}{\delta \phi} 
-&=
-\left(\PD{\phi}{} - \partial_\sigma \PD{\phi_\sigma}{} \right) \inv{2}(a \grad + \grad a) \LL \\
-&=
-\inv{2} \left( a \grad \PD{\phi}{\LL} - \grad a \partial_\sigma \PD{\phi_\sigma}{\LL} \right) \\
+\frac{\delta ((a \cdot \grad) \LL)}{\delta \phi} 
+&
+\questionEquals
+(a \cdot \grad) \underbrace{\frac{\delta \LL}{\delta \phi}}_{=0} \\
 \end{align*}
 
-But $\PDi{\phi}{\LL} = \partial_\sigma \PDi{\phi_\sigma}{\LL}$, so we have
+then this would explain the fact that we have a symmetry under linearized translation for the wave equation Lagrangian.  Can this interchange
+of differentiation order be justified?
+
+Writing out this variational derivative in full we have
+\begin{align*}
+\frac{\delta ((a \cdot \grad) \LL)}{\delta \phi} 
+&=
+\left( \PD{\phi}{} - \partial_\sigma \PD{\phi_\sigma}{} \right) a^\mu \partial_\mu \LL \\
+&=
+a^\mu \left( 
+\PD{\phi}{} \PD{x^\mu}{} 
+ - \PD{x^\sigma}{} \PD{\phi_\sigma}{} \PD{x^\mu}{} 
+\right) 
+\LL \\
+\end{align*}
+
+So if we can interchange the differentiation order for both the coordinate and field variable derivatives, namely
 
 \begin{align*}
-\frac{\delta (a \cdot \grad) \LL}{\delta \phi} 
-&=
-\inv{2} \left( a \grad \PD{\phi}{\LL} - \grad a \PD{\phi}{\LL} \right) \\
+\PD{\phi}{} \PD{x^\mu}{} &= \PD{x^\mu}{} \PD{\phi}{} \\
+\PD{\phi_\sigma}{} \PD{x^\mu}{}  &= \PD{x^\mu}{} \PD{\phi_\sigma}{}
 \end{align*}
 
-This is
-\begin{align}
-\frac{\delta (a \cdot \grad) \LL}{\delta \phi} 
-&= (a \wedge \grad) \PD{\phi}{\LL}
-\end{align}
+Provided that's a reasonable thing to do, then the variational derivative of this directional derivative is zero 
 
-So for the wave equation, which has only derivatives and no explicit dependence on $\phi$ itself, this 
-shows why we will have a symmetry (not yet calculated) under linearized translation for the wave equation despite the quadratic derivative terms.
+\begin{align*}
+\frac{\delta ((a \cdot \grad) \LL)}{\delta \phi} 
+&=
+a^\mu \PD{x^\mu}{} 
+\left( 
+\PD{\phi}{} 
+ - \PD{x^\sigma}{} \PD{\phi_\sigma}{} 
+\right) 
+\LL \\
+&=
+(a \cdot \grad) \frac{\delta \LL}{\delta \phi} \\
+&= 0
+\end{align*}
+
+Let's continue assuming that it is in fact reasonable to do this interchange, and therefore have a symmetry for any Lagrangian 
+altered with a first order translational differential.
 
 \section{ Noether current. }
 
