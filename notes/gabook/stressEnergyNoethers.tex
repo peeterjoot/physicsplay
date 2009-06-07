@@ -17,9 +17,9 @@
    % needed, but their inclusion can't do any damage
 
 
-\title{Stress Energy Tensor from Lagrangian}\label{chap:stress_energy_noethers}
+\title{Lagrangian translation and Stress Energy Tensor}\label{chap:stress_energy_noethers}
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ June 5, 2009.  Last Revision: $Date: 2009/06/07 03:01:06 $ }
+\date{ June 5, 2009.  Last Revision: $Date: 2009/06/07 15:15:20 $ }
 
 \begin{document}
 
@@ -114,10 +114,7 @@ consequence of a symmetry and an associated Noether current
 %\ref{chap:PJNoethersField}
 ).  What
 is that symmetry?  That symmetry should leave the field equations as 
-calculated by the field Euler-Lagrange equations (see
-\cite{PJFieldLagrangian}
-%\ref{chap:PJFieldLagrangian}
-) unchanged.
+calculated by the field Euler-Lagrange equations 
 Given that symmetry how would one go about
 actually showing that this is the case?   These are the questions
 to tackle here.
@@ -611,7 +608,7 @@ a \left(
 Since we have $\phi_{xx} = \inv{v^2} \phi_{tt}$ by variation of \ref{eqn:oneDimWave}.  So we do in fact have a symmetry from the 
 linearized spacetime translation for any shift $(t,x) \rightarrow (t+\tau, x+a)$.
 
-\section{ Symmetry condition for arbitrary linearized spacetime translation? }
+\section{ Symmetry condition for arbitrary linearized spacetime translation }
 
 If we want to be able to alter the Lagragian with a linearized vector translation of the generalized coordinates by some arbitrary 
 shift, since we do not have the linear derivatives for many Lagrangians of interest (wave equations, Maxwell equation, ...)
@@ -682,6 +679,162 @@ Let's continue assuming that it is in fact reasonable to do this interchange, an
 altered with a first order translational differential.
 
 \section{ Noether current. }
+
+In
+\cite{PJFieldLagrangian}
+%\ref{chap:PJFieldLagrangian}
+the derivation of Noether's theorem given a single variable parameterized
+alteration of the Lagrangian was seen to essentially be an exersize in the
+application of the chain rule.
+
+How to extend that argument to the multiple variable case isn't immediately
+obvious.  In GA we can divide by vectors but attempting to formulate
+a derivative this way gives us left and right sided derivatives.  How do we
+overcome this to examine change of the Lagrangian with respect to a 
+vector parameterization?
+One possibility is a scalar parameterization of the magnitude 
+of the translation vector.  If the translation is along $a = \alpha u$,
+where $u$ is a unit vector we can write
+
+\begin{align*}
+\LL' &= \LL + \delta \LL  \\
+&= \LL + (a \cdot \grad) \LL \\
+&= \LL + \alpha (u \cdot \grad) \LL \\
+\end{align*}
+
+So we have
+
+\begin{align*}
+\frac{d\LL'}{d\alpha} 
+&=
+(u \cdot \grad) \LL
+\end{align*}
+
+Now our previous Noether's current was derived by considering just
+the sort of derivative on the LHS above, but on the RHS we are back 
+to working with a directional derivative.  The key is finding a 
+logical starting point for the chain rule like expansion that we expect 
+to produce the conservation current.
+
+\begin{align*}
+\delta \LL 
+&=  (a \cdot \grad ) \LL \\
+&=  a^\mu \partial_\mu \LL \\
+&=  a^\mu \left(
+\PD{x^\mu}{\phi} \PD{\phi}{\LL}
++\sum_\sigma
+\PD{x^\mu}{\phi_\sigma} \PD{\phi_\sigma}{\LL}
+\right) \\
+&=  
+\PD{\phi}{\LL} (a \cdot \grad) \phi 
++
+\sum_\sigma
+\PD{\phi_\sigma}{\LL}
+(a \cdot \grad) \phi_\sigma
+\\
+&=  
+\left(
+\sum_\sigma
+\partial_\sigma
+\PD{\phi_\sigma}{\LL}
+\right)
+(a \cdot \grad) \phi 
++
+\sum_\sigma
+\PD{\phi_\sigma}{\LL}
+(a \cdot \grad) \phi_\sigma
+\\
+&=  
+\left(
+\sum_\sigma
+\partial_\sigma
+\PD{\phi_\sigma}{\LL}
+\right)
+(a \cdot \grad) \phi 
++
+\sum_\sigma
+\PD{\phi_\sigma}{\LL}
+\partial_\sigma
+((a \cdot \grad) \phi)
+\\
+&=  
+\sum_\sigma
+\partial_\sigma
+\left(
+\PD{\phi_\sigma}{\LL}
+(a \cdot \grad) \phi 
+\right)
+\\
+\end{align*}
+
+So far so good, but where to go from here?  The trick (from Tong) is that
+the difference with itself is zero.  With a switch of dummy indexes $\sigma \rightarrow \mu$, we have
+
+\begin{align*}
+0 &=
+\delta \LL - \delta \LL  \\
+&= 
+\sum_\mu
+\partial_\mu
+\left(
+\PD{\phi_\mu}{\LL}
+(a \cdot \grad) \phi 
+\right) -
+ a^\mu \partial_\mu \LL 
+\\
+&= 
+\sum_\mu
+\partial_\mu
+\left(
+\PD{\phi_\mu}{\LL}
+(a \cdot \grad) \phi 
+- a^\mu \LL 
+\right)
+\\
+\end{align*}
+
+Now we have a quantity that is zero for any vector $a$, and can say we have
+a conserved current $J(a)$ with coordinates
+
+\begin{align}
+J^\mu(a)
+=
+\PD{\phi_\mu}{\LL}
+(a \cdot \grad) \phi 
+- a^\mu \LL 
+\end{align}
+
+Finally, putting this back into vector form
+
+\begin{align*}
+J(a) &= \gamma_\mu J^\mu(a) \\
+&=
+\left( \gamma_\mu \PD{\phi_\mu}{\LL} \right)
+(a \cdot \grad) \phi 
+- \gamma_\mu a^\mu \LL  \\
+\end{align*}
+
+So we have
+
+\begin{align}
+J(a) &= 
+\left( \left(\gamma_\mu \PD{\phi_\mu}{} \right) \LL \right)
+(a \cdot \grad) \phi 
+- a \LL  
+\end{align}
+
+We have above something gradient like
+\begin{align*}
+\grad = \gamma^\mu \PD{x^\mu}{}
+\end{align*}
+
+It is somewhat like a velocity gradient with respect to the field variable.
+
+\begin{align*}
+\something = \gamma_\mu \PD{\phi_\mu}{}
+\end{align*}
+
+It would be reasonable to expect that this will have a role in the field canonical momentum.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
