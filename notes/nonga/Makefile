@@ -1,7 +1,7 @@
 all : nonga.pdf
 
-TEXFILES += nonga.tex
-TEXFILES += new_commands.tex
+TEXFILES += main.tex
+#TEXFILES += new_commands.tex
 TEXFILES += acc_four_vector.tex
 TEXFILES += acc_four_vector.tex
 TEXFILES += pauli_four_vector_v.tex
@@ -36,21 +36,17 @@ TEXFILES += qm_susskind.tex
 TEXFILES += qmb_first_try.tex
 TEXFILES += qmd_ch2quiz.tex
 TEXFILES += wavepacket.tex
-TEXFILES += complex.tex
 TEXFILES += faraday_lagrangian.tex
 TEXFILES += fvec.tex
 TEXFILES += gacs_q8_8.tex
 TEXFILES += greens.tex
 TEXFILES += matrix_to_operator.tex
 TEXFILES += mp_inverse_svd_rough_notes.tex
-TEXFILES += nfcm_ch2.tex
-TEXFILES += outermorphism_det.tex
 TEXFILES += pe.tex
 TEXFILES += pythagoras.tex
 TEXFILES += rapidity.tex
 TEXFILES += sch.tex
 TEXFILES += shear.tex
-TEXFILES += tong_mf1.tex
 TEXFILES += two_ninety_rotations.tex
 TEXFILES += wave_lagrangian.tex
 TEXFILES += wedge_norm_vs_ga_norm.tex
@@ -76,9 +72,11 @@ TEXFILES += cross.tex
 TEXFILES += 
 
 nonga.pdf :: $(TEXFILES)
+	../make_pdflatex main.tex
+	mv main.pdf nonga.pdf
 
-%.pdf : %.tex
-	../make_pdflatex $<
+#%.pdf : %.tex
+#	../make_pdflatex $<
 
 clean ::
 	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc
