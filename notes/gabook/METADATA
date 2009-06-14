@@ -1,3 +1,5 @@
+#!/usr/bin/perl
+
 use warnings ;
 use strict ;
 
@@ -363,7 +365,6 @@ my @metadata =
    TITLE => qq(Inertia Tensor),
    REF => 'inertialTensor',
 },{
-},{
    SOURCE => 'kvectorExponential',
    DATE => 'March 12, 2008',
    TITLE => qq(Exponential of a blade),
@@ -434,31 +435,25 @@ my @metadata =
    SOURCE => 'lorentzForceTx',
    DATE => 'May 23, 2009',
 },{
-},{
    REF => 'lorentzRotation',
    TITLE => qq(Lorentz Force Trajectory),
    SOURCE => 'lorentzRotation',
    DATE => 'May 7, 2008',
-},{
 },{
    REF => 'macroscopicMaxwell',
    TITLE => qq(Macroscopic Maxwell's equation),
    SOURCE => 'macroscopicMaxwell',
    DATE => 'May 28, 2009',
 },{
-},{
    REF => 'massVaryLagrangian',
    TITLE => qq(Equations of motion given mass variation with spacetime position),
    SOURCE => 'massVaryLagrangian',
    DATE => 'August 28, 2008',
 },{
-},{
    REF => 'matrixOfLinearTx',
    TITLE => qq(Matrix of grade k multivector linear transformations),
    SOURCE => 'matrixOfLinearTx',
    DATE => 'May 16, 2008',
-},{
-},{
 },{
    REF => 'maxwellsGa',
    TITLE => qq(Maxwell's equations expressed with Geometric Algebra),
@@ -579,7 +574,7 @@ exit ;
 sub dumpem
 {
    #my @s = ( $metadata[0], $metadata[1], $metadata[2] ) ;
-   my @sorted = sort mysort @metadata ;
+   my @sorted = sort datesort @metadata ;
 
    foreach (@sorted)
    {
@@ -589,7 +584,7 @@ sub dumpem
              $_->{'DATE'},
              $_->{'REF'} ) ;
 
-      print "$source\n$title\n$date\n$ref\n\n" ;
+      print "\\item $date \\ref{chap:$ref} $title\n\n" ;
    }
 }
 
@@ -599,24 +594,26 @@ print $monthsOfYear{'July'} ;
 die;
 }
 
-sub mysort
+sub datesort
 {
-   my ($asource, $atitle, $adate, $aref) 
-         = ( $$a{'SOURCE'},
-             $$a{'TITLE'},
-             $$a{'DATE'},
-             $$a{'REF'} ) ;
+   my ($adate, $bdate) = ( $$a{'DATE'}, $$b{'DATE'} ) ;
 
-   my ($bsource, $btitle, $bdate, $bref) 
-         = ( $$b{'SOURCE'},
-             $$b{'TITLE'},
-             $$b{'DATE'},
-             $$b{'REF'} ) ;
+#   my ($asource, $atitle, $adate, $aref) 
+#         = ( $$a{'SOURCE'},
+#             $$a{'TITLE'},
+#             $$a{'DATE'},
+#             $$a{'REF'} ) ;
+#
+#   my ($bsource, $btitle, $bdate, $bref) 
+#         = ( $$b{'SOURCE'},
+#             $$b{'TITLE'},
+#             $$b{'DATE'},
+#             $$b{'REF'} ) ;
 
-   die "date parse: $adate\n" unless ( $adate =~ /(\S+)\s+(\d+)\s*,\s*(\d+)\s*/ ) ;
+   die "date parse: $adate : $$a\n" unless ( $adate =~ /(\S+)\s+(\d+)\s*,\s*(\d+)\s*/ ) ;
    my ($amonth, $aday, $ayear) = ($1, $2, $3) ;
 
-   die "date parse: $bdate\n" unless ( $bdate =~ /(\S+)\s+(\d+)\s*,\s*(\d+)\s*/ ) ;
+   die "date parse: $bdate : $$b\n" unless ( $bdate =~ /(\S+)\s+(\d+)\s*,\s*(\d+)\s*/ ) ;
    my ($bmonth, $bday, $byear) = ($1, $2, $3) ;
 
    my $rc = $ayear <=> $byear ;
