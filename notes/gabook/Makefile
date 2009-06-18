@@ -2,6 +2,7 @@ all : gabook.pdf
 
 # add here and as includes to gabook.tex:
 TEXFILES += 4dFourier.tex
+TEXFILES += notationTable.tex
 TEXFILES += outermorphismDet.tex
 TEXFILES += nfcmCh2.tex
 TEXFILES += complex.tex
@@ -116,7 +117,12 @@ TEXFILES += laplace.tex
 TEXFILES += matrixOfLinearTx.tex
 TEXFILES += gaGradeDotWedge.tex
 TEXFILES += tongMf1.tex
+TEXFILES += cronology.tex
+TEXFILES += stressEnergyNoethers.tex
 TEXFILES += 
+
+cronology.tex : METADATA
+	./METADATA -gabook > cronology.tex
 
 gabook.pdf :: $(TEXFILES)
 	../make_pdflatex main.tex
