@@ -16,7 +16,8 @@
 \usepackage{color}
 \usepackage{amsmath}
 \usepackage{amsfonts}
-%\usepackage{graphicx}
+\usepackage{graphicx}
+\usepackage{url}
 \usepackage{subfigure}
 \usepackage{titlesec}
 \usepackage{indentfirst}
@@ -44,11 +45,11 @@
       {\large\@author\ ---\ \@email\par}%
          {\itshape\@date\par}%
          \medskip
-         {\includegraphics[height=1em]{ccl2.eps}\par}
+         {\includegraphics[height=1em]{ccl2}\par}
       \bigskip\hrule\vspace*{0.5pc}%
    \end{flushleft}%
 }
-
+%\includegraphics[totalheight=0.4\textheight]{picturepath}
 
 \newcommand{\methodology}[1]{\textbf{#1}}
 

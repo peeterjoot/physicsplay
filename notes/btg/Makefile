@@ -1,2 +1,2 @@
 relwave.pdf : relwave.tex
-	pdflatex relwave.tex
+	 ../make_pdflatex relwave.tex
