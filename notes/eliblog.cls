@@ -17,7 +17,12 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{graphicx}
-\usepackage{url}
+% this mangles urls with underscores:
+%\usepackage{url}
+% fixes the url underscores:
+%\usepackage{hyperref}
+% remove the side panel:
+\usepackage[bookmarks=false]{hyperref}
 \usepackage{subfigure}
 \usepackage{titlesec}
 \usepackage{indentfirst}
