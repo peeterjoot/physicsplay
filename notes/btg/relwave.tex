@@ -12,26 +12,31 @@
 \newcommand{\BS}[0]{\mathbf{S}}
 \newcommand{\Bk}[0]{\mathbf{k}}
 \newcommand{\Bp}[0]{\mathbf{p}}
+\newcommand{\Bv}[0]{\mathbf{v}}
 \newcommand{\Bx}[0]{\mathbf{x}}
 \newcommand{\LL}[0]{\mathcal{L}}
 \newcommand{\cross}[0]{\times}
 \newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
 \newcommand{\delambertian}[0]{\square}
+\newcommand{\inv}[1]{\frac{1}{#1}}
+\newcommand{\FF}[0]{\mathcal{F}}
+\newcommand{\grad}[0]{\nabla}
 
 \begin{document}
 \maketitle
 
 \section{Alternative approaches to motivate Schr\"{o}dinger's equation.}
 
-It does not take fancy mathematics to motivate the Schr\"{o}dinger's equation.  In
-\cite{french1998iqp} the specialization of Schr\"{o}dinger's equation for a 
+It does not take particularily fancy mathematics to motivate the Schr\"{o}dinger's equation.  In
+French and Taylor (\cite{french1998iqp}) the specialization of Schr\"{o}dinger's equation for a 
 particle in a one dimensional potential
 
 \begin{align}\label{eqn:oneDimSch}
 -\frac{\hbar^2}{2m} \frac{\partial^2 \psi}{\partial x^2} + V\psi = i \hbar \frac{\partial \psi}{\partial t}
 \end{align}
 
-is presented from start to finish in only seven pages.  However this does include a disclaimer upfront that
+is presented from start to finish in only seven pages with no mathematics or physics unfamiliar to second year 
+engineering undergrads.  However this does include a disclaimer upfront that
 ``we ... simply try to make the form of the equation plausible''.  The plausibility arguments
 found in this text are not uncommon, and can be found for example (without the surrounding discussion of the text) 
 in the ``Short heuristic derivation'' of the Wikipedia's Schr\"{o}dinger's equation article (\cite{wikiSchH}).
@@ -65,15 +70,187 @@ DeBroglie hypothesis that an energy momentum four vector for matter can be quant
 outlines a procedure to obtain a small momentum approximation of a relativistic matter wave equation (ie: of the Klien-Gordon equation).
 
 Comments in
-the wikipedia Klien Gordon article (\cite{wikiKG}), suggest that Pauli's approach is probably closer historically to
+the wikipedia Klien-Gordon article (\cite{wikiKG}), suggest that Pauli's approach is probably closer historically to
 the reasoning used initially
 by Schr\"{o}dinger.  It is also interesting to note that the thesis of DeBroglie (\cite{AFkracklauerDeBroglie}) which
 originally hypothosized extension of the notion of quantized freqencies from light to particles 
 also heavily relied on special relativity arguments.
 
 The following discussion follows the brief treatment of Pauli's text, but attempts to fill in some of the in between steps.
-Required to fill in these gaps are familiarity with Maxwell's equations in four vector form,
-Fourier transforms and the Lorentz invariance of an energy-momentum four vector.
+
+\section{Prerequiste concepts.  Wave equation, and Lorentz invariance.}
+
+An unforced mechanical wave described by a function $\psi(t,\Bx)$, propagating undamped and unforced with
+velocity $v$ is described by the familiar equation
+
+\begin{align}\label{eqn:waveEquationV}
+\inv{v^2} \frac{\partial^2 \psi}{\partial t^2} - \spacegrad^2 \psi = 0
+\end{align}
+
+For the purposes of this discussion, a relativistic wave is described by ($\ref{eqn:waveEquationV}$) with two
+additional conditions.  The first is that the wave speed is
+$v = c$, the speed of light.  The second condition required for the label relativistic 
+is a restriction on the allowed coordinate transformations.  These are the linear transformations
+of space time coordinates
+$(t,x,y,z) \rightarrow (t', x', y', z')$ for which the wave equation retains precisely this form
+
+\begin{align}\label{eqn:waveEquationInv}
+\inv{c^2} \frac{\partial^2 \psi}{\partial {t}^2} 
+- \frac{\partial^2 \psi}{\partial {x}^2} 
+- \frac{\partial^2 \psi}{\partial {y}^2} 
+- \frac{\partial^2 \psi}{\partial {z}^2} 
+=
+\inv{c^2} \frac{\partial^2 \psi}{\partial {t'}^2} 
+- \frac{\partial^2 \psi}{\partial {x'}^2} 
+- \frac{\partial^2 \psi}{\partial {y'}^2} 
+- \frac{\partial^2 \psi}{\partial {z'}^2} 
+\end{align}
+
+Such transformations, the Lorentz transformations,
+are those that introduce no cross term such as $\partial^2 \psi/\partial x' \partial y'$,
+and do not change the wave velocity.  One can show that spatial rotations such as
+
+\begin{align}
+\begin{bmatrix}
+ct' \\
+x' \\
+y' \\
+z' \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & \cos\theta & \sin\theta \\
+0 & 0 & -\sin\theta & \cos\theta \\
+\end{bmatrix}
+\begin{bmatrix}
+ct \\
+x \\
+y \\
+z \\
+\end{bmatrix}
+\end{align}
+
+Or Lorentz boosts such as
+\begin{align}
+\begin{bmatrix}
+ct' \\
+x' \\
+y' \\
+z' \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+\cosh\alpha & -\sinh\alpha & 0 & 0 \\
+-\sinh\alpha & \cosh\alpha & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+ct \\
+x \\
+y \\
+z \\
+\end{bmatrix}
+\end{align}
+
+Or any composition of such transformations meet this requirement.
+
+In the linear transformations above the space and time coordinates were merged into a single vector representation,
+the particle worldline vector, often written with shorthand such as
+
+\begin{align}
+X \equiv (ct, \Bx)
+\end{align}
+
+For such a vector, a Lorentz length can be defined
+
+\begin{align}
+X^2 \equiv c^2 t^2 - \Bx^2 \equiv c^2 t^2 - \Bx \cdot \Bx
+\end{align}
+
+Without specific discussion of the wave equation, 
+a more usual but equivalent definition of Lorentz transformations, are those that leave this
+Lorentz length unchanged, as in
+
+\begin{align}
+c^2 t^2 - \Bx^2 = c^2 {t'}^2 - {\Bx'}^2 
+\end{align}
+
+If we introduce a vector space time derivative operator
+
+\begin{align}
+\grad \equiv \left(\inv{c}\frac{\partial}{\partial t}, \spacegrad \right)
+\end{align}
+
+The Lorentz invariant length of this vector operator is in fact our wave equation operator
+
+\begin{align}
+\square \equiv \grad^2 = \inv{c^2}\frac{\partial^2}{\partial t^2} - \spacegrad \cdot \spacegrad
+\end{align}
+
+It is clear that the original requirement for wave equation invariance (\ref{eqn:waveEquationInv}) is also contained within 
+this definition of Lorentz invariant length.
+
+Unit vectors with respect to Lorentz length are neccessarily Lorentz invariant.  Considering for example the time rate of change of
+a particle worldline we have
+
+\begin{align}
+\left(\frac{d}{dt}(ct, \Bx) \right)^2 = c^2 - \Bv^2
+\end{align}
+
+which implies that the Lorentz length of
+\begin{align}
+\frac{1}{\sqrt{1 - \Bv^2/c^2}}(1, \Bv/c)
+\end{align}
+
+is just one.  For the purposes of this 
+Schr\"{o}dinger equation discussion a scaling of this four vector so that it has dimensions of energy is required
+
+\begin{align}
+\frac{1}{\sqrt{1 - \Bv^2/c^2}}(m c^2, m\Bv c)
+\end{align}
+
+Algebraically, the Lorentz length of this four vector can easily be confirmed to be $(m c^2)^2$.  This quantity 
+we will identify as an energy-momentum four vector as follows
+
+\begin{align}\label{eqn:energyMomentumFourVec}
+P = (E/c, \Bp)
+\end{align}
+
+With energy defined as
+\begin{align}
+E \equiv \frac{m c^2}{\sqrt{1 - \Bv^2/c^2}}
+\end{align}
+
+and spatial momentum defined as
+\begin{align}
+\Bp \equiv \frac{m \Bv}{\sqrt{1 - \Bv^2/c^2}}
+\end{align}
+
+It is beyond the scope of these notes to provide a good justification for this identification.
+\footnote{This is a dodge, and having to make a statement like this shows that it is beyond the scope of the author's understanding to coherently justify this identification.  In the spirit of my engineering education I can at least work with it.}
+
+From (\ref{eqn:energyMomentumFourVec}), we will have reason to use the length of this four vector
+
+\begin{align}
+P^2 = E^2/c^2 - \Bp^2 = m^2 c^2
+\end{align}
+
+
+\section{Fourier transform conventions.}
+
+The Fourier conventions that will be used in the wave equation solution of these notes are
+
+\begin{align}
+\FF(f(\Bx)) = \hat{f}(\Bk) = \inv{(\sqrt{2\pi})^3} \int f(\Bx) \exp\left( -i \Bk \cdot \Bx \right) d^3 x 
+\end{align}
+\begin{align}
+\FF^{-1}({f}(\Bk)) = f(\Bx) = \inv{(\sqrt{2\pi})^3} \int \hat{f}(\Bk) \exp\left( i \Bk \cdot \Bx \right) d^3 k
+\end{align}
+
+Our treatment of the wave equation will follow that of Osgood used for the heat equation in (\cite{osgoodFourier}).
 
 \section{Solution of the Vacuum Maxwell equation}
 %
