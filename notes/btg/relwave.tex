@@ -12,6 +12,7 @@
 \newcommand{\BS}[0]{\mathbf{S}}
 \newcommand{\Bk}[0]{\mathbf{k}}
 \newcommand{\Bp}[0]{\mathbf{p}}
+\newcommand{\Ba}[0]{\mathbf{a}}
 \newcommand{\Bv}[0]{\mathbf{v}}
 \newcommand{\Bx}[0]{\mathbf{x}}
 \newcommand{\LL}[0]{\mathcal{L}}
@@ -245,42 +246,104 @@ From (\ref{eqn:energyMomentumFourVec}) that Lorentz length is
 P^2 = E^2/c^2 - \Bp^2 = m^2 c^2
 \end{align}
 
+\section{Wave equation form of Maxwell's equations}
+
+In SI units and traditional vector notation, Maxwell's equations in the absence of charge and currents are
+
+\begin{align}\label{eqn:divE}
+\spacegrad \cdot \BE = 0
+\end{align}
+\begin{align}\label{eqn:divB}
+\spacegrad \cdot \BB = 0
+\end{align}
+\begin{align}\label{eqn:curlB}
+\spacegrad \cross \BB = \inv{c^2} \frac{\partial \BE}{\partial t}
+\end{align}
+\begin{align}\label{eqn:curlE}
+\spacegrad \cross \BE = -\frac{\partial \BB}{\partial t}
+\end{align}
+
+The last two curl equations can be decoupled by once more calculating the curl.
+Illustrating by example
+
+\begin{align}\label{eqn:curlCurlE}
+\spacegrad \cross (\spacegrad \cross \BE) = -\frac{\partial }{\partial t} \spacegrad \cross \BB = -\inv{c^2} \frac{\partial^2 \BE}{\partial t^2}
+\end{align}
+
+Digging out vector identities and utilizing the zero divergence we have
+
+\begin{align}\label{eqn:identForcurlCurlE}
+\spacegrad \cross (\spacegrad \cross \BE) = \spacegrad (\spacegrad \cdot \BE) - \spacegrad^2 \BE = -\spacegrad^2 \BE
+\end{align}
+
+Putting \ref{eqn:curlCurlE}, and \ref{eqn:identForcurlCurlE} together provides a wave equation for the electric field vector
+
+\begin{align}\label{eqn:waveE}
+\inv{c^2} \frac{\partial^2 \BE}{\partial t^2} - \spacegrad^2 \BE = 0
+\end{align}
+
+Operating with curl on the remainding Maxwell equation similarily produces a wave equation for the magnetic field vector
+
+\begin{align}\label{eqn:waveB}
+\inv{c^2} \frac{\partial^2 \BB}{\partial t^2} - \spacegrad^2 \BB = 0
+\end{align}
+
+This is really six wave equations, one for each of the field coordinates.
+
+\section{Solution of the relativistic wave equation.}
+
+Despite the fact that the six equations of (\ref{eqn:waveE}), and (\ref{eqn:waveB}) have the appearance of independence,
+any solution must still meet the constraints of the original Maxwell equations.  For example for a linearly polarized
+plane wave one can have $\BB = \kcap \cross \BE$, so the triplet of $\BE$, $\BB$, and $\kcap$ (the propagation direction) form a set 
+of mutually perpendicular vectors.
+
+Additional details on the dependence of the electromagnetic wave equations
+can be found for example in Jackson (\cite{jackson1975cewWave}).  Fortunately, tackling this
+in full detail is not required.  
+
+There have been two specific aims discussing Maxwell wave equations.
+One has been to provide a real world example of something that propagates with behaviour
+governed by the relativistic wave equation.  The other is that we have an understanding 
+of light quantization due to the photoelectric effect.  Together these 
+will lead eventually to a relativistic matter wave equation and
+the non-relativistic approximation that we know of as the 
+Schr\"{o}dinger equation.
+
+We can now move on to tackle the mathematical problem of finding solutions to our 
+homogeneous wave equation.
+
+\begin{align}
+\delambertian \psi(t,\Bx) = \left( \frac{1}{c^2}\frac{\partial^2}{{\partial t}^2} - \spacegrad^2 \right) \psi(t,\Bx) = 0
+\end{align}
+
 \section{Solution of the Vacuum Maxwell equation}
 
-In terms of a four vector potential
-
-\begin{align}
-A = (A^0, A^1, A^2, A^3)
-\end{align}
-
-Maxwell's equations in the abscence of current and charge take a particularily simple form
+In terms of the four vector potential $A^\mu$
+Maxwell's equations in vacuum may be written 
 
 \begin{align}\label{eqn:waveMax}
-\delambertian A^\mu = \left( \frac{1}{c^2}\frac{\partial^2}{{\partial t}^2} - \spacegrad^2 \right) A^\mu = 0
+\delambertian A^\mu = \partial_\nu \partial^\nu A^\mu = \left( \frac{1}{c^2}\frac{\partial^2}{{\partial t}^2} - \spacegrad^2 \right) A^\mu = 0
 \end{align}
-
-This is a set of four equations, one for each index $\mu \in \{0,1,2,3\}$.  It should be noted
-that these equations (\ref{eqn:waveMax}), are not completely 
-equivalent to Maxwell's equations since a gauge constraint coupling each of field coordinates is also required
-
 \begin{align}
-\inv{c}\frac{\partial A^0}{\partial t}
-+ \frac{\partial A^1}{\partial x}
-+ \frac{\partial A^2}{\partial y}
-+ \frac{\partial A^3}{\partial z}
-= 0
+\partial_\mu A^\mu = 0
 \end{align}
 
-The goal however is not a proper and complete solution of the four coupled potential equations that we need
-to properly understand propagation of classical electromagnetic fields in vacuum.
-Instead we wish to only tackle the much simpler problem of stating the general mathematical for one such homogeneous
+This is a set of four equations, one for each index $\mu \in \{0,1,2,3\}$, plus
+the additional gauge constraint coupling the coordinates $A^\mu$ of the
+potential four vector.
+
+A complete mathematical solution of these four coupled potential 
+wave equations is perhaps required to fully understand propagation of
+classical electromagnetic fields in vacuum (i.e. light).  However, 
+
+Instead we wish to only tackle the much simpler problem of stating the general mathematical form for one such homogeneous
 wave equation.
 
-One way to do this is to guess, as in ({french1971vaw}).   
-One could verify that for a unit vector $\kcap$, arbitrary
-functions of the form $f(ct \pm \kcap \cdot \Bx)$ are solutions to $\delambertian f = 0$.
+One way to do this is to guess, as in (\cite{french1971vaw}).   
+Utilizing such a guess one could verify that for a unit vector $\kcap$, arbitrary
+functions of the form $f(ct \pm \kcap \cdot \Bx)$ are solutions to $\delambertian f(t,\Bx) = 0$.
 
-A more rewarding albeit harder way to tackle this problem is apply a Fourier transform to the wave equation.  As with the heat equation
+A more rewarding, albeit harder, way to tackle this problem is apply a Fourier transform to the wave equation.  As with the heat equation
 (\cite{osgoodFourier}), the result is a much simpler differential equation in the wave number domain.
 Fixing conventions, our 3D spatial Fourier transform pair can be written
 
