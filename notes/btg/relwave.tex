@@ -1,0 +1,444 @@
+\documentclass[]{eliblog}
+
+\title{Schr\"{o}dinger Equation as a Relativistic wave equation approximation.}
+\author{Peeter Joot}
+\date{June 18, 2009}
+\blogpage{http://behindtheguesses.blogspot.com/2009/06/blah.html}
+\email{peeter.joot@gmail.com}
+
+\newcommand{\Abs}[1]{{\left\lvert{#1}\right\rvert}}
+\newcommand{\BB}[0]{\mathbf{B}}
+\newcommand{\BE}[0]{\mathbf{E}}
+\newcommand{\BS}[0]{\mathbf{S}}
+\newcommand{\Bk}[0]{\mathbf{k}}
+\newcommand{\Bp}[0]{\mathbf{p}}
+\newcommand{\Ba}[0]{\mathbf{a}}
+\newcommand{\Bv}[0]{\mathbf{v}}
+\newcommand{\Bx}[0]{\mathbf{x}}
+\newcommand{\LL}[0]{\mathcal{L}}
+\newcommand{\cross}[0]{\times}
+\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+\newcommand{\delambertian}[0]{\square}
+\newcommand{\inv}[1]{\frac{1}{#1}}
+\newcommand{\FF}[0]{\mathcal{F}}
+\newcommand{\grad}[0]{\nabla}
+\newcommand{\kcap}[0]{\hat{\Bk}}
+
+% FIXME: didn't work (spaces following typeset funny).
+%subst later, but leave for now to avoid typing hell.
+\newcommand{\Schrodinger}[0]{Schr\"{o}dinger}
+
+\begin{document}
+\maketitle
+
+\section{Goals and approach.}
+
+Most introductory Quantum texts present some attempt to motivate \Schrodinger's equation.  The quality, size and approach of each of these ranges widely.
+ 
+Pauli's Wave Mechanics (\cite{pauli2000wm}) differs from most of these, utilizing relativistic arguments to motivate the \Schrodinger equation.  His little quantum book starts off, not with the Bohr model or black bodies, but with a lighting fast two page treatment of special relativity.
+
+The Wikipedia Klein-Gordon article (\cite{wikiKG}) indicates that this is also the historical approach used initially by \Schrodinger.
+
+This blog entry follows Pauli's treatment closely.  The starting point will not be ``see optics'', but an attempt at a logic progression building on basic results of electromagnetism, Fourier techniques, and Lorentz invariance.
+
+From special relativity the Lorentz invariant for energy and momentum $E^2 - c^2 \Bp^2 = (m c^2)^2$ is required.  An optional review of how this follows from the definition of Lorentz invariant length is included below.  For any sort
+of complete coverage of special relativity other sources should be consulted.
+
+Fourier transforms will be used to find general solutions of the wave equation for components of the electric or magnetic fields in vacuum
+
+\begin{align}\label{eqn:waveE}
+\delambertian \BE \equiv \inv{c^2} \frac{\partial^2 \BE}{\partial t^2} - \spacegrad^2 \BE = 0
+\end{align}
+\begin{align}\label{eqn:waveB}
+\delambertian \BB \equiv \inv{c^2} \frac{\partial^2 \BB}{\partial t^2} - \spacegrad^2 \BB = 0
+\end{align}
+
+Fixing notation, the symmetric transform pair convention will be used
+
+\begin{align}\label{eqn:Fourier}
+\FF(f(\Bx)) = \hat{f}(\Bk) = \inv{(\sqrt{2\pi})^3} \int f(\Bx) \exp\left( -i \Bk \cdot \Bx \right) d^3 x 
+\end{align}
+\begin{align}\label{eqn:InvFourier}
+\FF^{-1}({f}(\Bk)) = f(\Bx) = \inv{(\sqrt{2\pi})^3} \int \hat{f}(\Bk) \exp\left( i \Bk \cdot \Bx \right) d^3 k
+\end{align}
+
+As with Fourier solutions of the heat equation (\cite{osgoodFourier}), the wave equation when expressed in the wave number domain will be a much simpler equation to solve. 
+
+A relation between the invariant length of the energy momentum four vector for light and the electrodynamic wave equation solution will be observed.  Using this observation, as well as the quantization by frequency from the photoelectric effect, and the DeBroglie hypothesis will allow for formation of a natural relativistic matter wave equation (ie: the Klein-Gordon equation).
+
+Finally, small momentum approximations to the Klein-Gordon equation will be made.  The end result will be finding the traditional introductory form of the \Schrodinger's equation hiding in this relativistic matter wave equation.
+
+\section{Relativity prerequisites.}
+
+In these notes the space time trajectory of a particle will be represented as the pair of locally observable quantities or a column vector equivalent
+
+\begin{align}
+X = (ct, \Bx)
+\end{align}
+
+In analogy to the distance invariance with respect to rotation in Euclidean space, the 
+invariant (squared) length of a four vector with respect to Lorentz transformation is
+
+\begin{align}
+X^2 \equiv c^2 t^2 - \Bx^2 \equiv c^2 t^2 - \Bx \cdot \Bx
+\end{align}
+
+One can verify without any trouble that such a generalized length is unchanged by rotation
+
+\begin{align}
+\begin{bmatrix}
+ct' \\
+x' \\
+y' \\
+z' \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & \cos\theta & \sin\theta \\
+0 & 0 & -\sin\theta & \cos\theta \\
+\end{bmatrix}
+\begin{bmatrix}
+ct \\
+x \\
+y \\
+z \\
+\end{bmatrix}
+\end{align}
+
+And also unchanged by Lorentz boost
+\begin{align}
+\begin{bmatrix}
+ct' \\
+x' \\
+y' \\
+z' \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+\cosh\alpha & -\sinh\alpha & 0 & 0 \\
+-\sinh\alpha & \cosh\alpha & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+ct \\
+x \\
+y \\
+z \\
+\end{bmatrix}
+\end{align}
+
+Although the Lorentz length of a four vector does not change under rotation or boost (or composition of the two), that does not mean that
+this length is a constant.  Consider the worldline of a particle at rest at the origin of the observer frame
+
+\begin{align}
+X = (c t, 0)
+\end{align}
+
+The Lorentz length in this frame is $c^2 t^2$.  In general the Lorentz length will be a function of all the coordinates.  
+
+Those vectors that have constant length are particularly useful, and can be constructed from scalar multiples of unit vectors.  
+In particular for the time evolution of a particle's worldline from an observer frame one has
+
+\begin{align}
+\frac{dX}{dt} = \left(c, \frac{d\Bx}{dt}\right)
+\end{align}
+
+Writing $\Bv = d\Bx/dt$, the Lorentz length and corresponding unit vector $V \equiv {\frac{dX}{dt}}/{\sqrt{\left(\frac{dX}{dt}\right)^2}}$ are then, respectively,
+
+\begin{align}
+\left(\frac{dX}{dt}\right)^2 = c^2 - \Bv^2
+\end{align}
+\begin{align}
+V = \inv{\sqrt{1 - \Bv^2/c^2 }} \left(1, \Bv/c \right)
+\end{align}
+
+Finally, a scaling by $mc$ of this dimensionless ``proper'' velocity $V$ yields a vector with dimensions of momentum, the
+relativistic energy momentum vector (a definition).  This vector and its Lorentz length are
+\begin{align}\label{eqn:energyMomentum}
+P \equiv mc V = \inv{\sqrt{1 - \Bv^2/c^2 }} \left(mc^2/c, m \Bv \right) = (E/c, \Bp)
+\end{align}
+\begin{align}\label{eqn:EPinvar}
+E^2/c^2 - \Bp^2 = m^2 c^2
+\end{align}
+
+When the particle is observed at rest ($\Bp=0$), the Lorentz length (\ref{eqn:EPinvar}) provides the familiar $E= m c^2$ relation.
+Observe that for the Lorentz length of this energy momentum pairing to come out so nicely constant, the relativistic definitions 
+of energy and momentum are required
+
+\begin{align}\label{eqn:Eidentified}
+E \equiv \frac{m c^2}{\sqrt{1 - \Bv^2/c^2}} = m c^2 + \inv{2}m \Bv^2 + \cdots
+\end{align}
+\begin{align}\label{eqn:Pidentified}
+\Bp \equiv \frac{m \Bv}{\sqrt{1 - \Bv^2/c^2}} = m \Bv + \inv{2}m \Bv^3/c^2 + \cdots
+\end{align}
+
+Only in the small velocity limits are the Newtonian kinetic energy $m\Bv^2/2$ and momentum $m\Bv$ the only significant portions of
+the Taylor series.
+
+\section{Light quantization and DeBroglie hypothesis}
+
+The notion that light is quantized coming in discrete frequency dependent packets of energy and momentum, a photon, is now a familiar one.
+%This dates back to Planks quantum hypothesis, and Einsteins paper on the photoelectric effect CITE.
+% A read of the Einstein paper is interesting to see just how much these ideas have which is interesting since .
+In symbols
+
+\begin{align}
+E = h \nu = \hbar \omega
+\end{align}
+
+With zero mass for a photon, the invariance relation (\ref{eqn:EPinvar}) implies that the magnitude of the photon momentum is not independent of $\omega$ and in fact must be 
+
+\begin{align}
+\Abs{\Bp} = \frac{\hbar \omega}{c}
+\end{align}
+
+It is customary to write
+
+\begin{align}
+{\Bp} = \hbar \Bk
+\end{align}
+
+so that the energy momentum four vector for a photon is
+
+\begin{align}
+P = \hbar ( \omega/c, \Bk )
+\end{align}
+
+DeBroglie's extension (\cite{AFkracklauerDeBroglie}) of the quantum relation for photon energy was to write for non-massless particles
+
+\begin{align}
+h \nu = \frac{m c^2}{\sqrt{1 - \Bv^2/c^2}}
+\end{align}
+
+This, together with (\ref{eqn:EPinvar}), provides a quantized invariant relation for energy momentum
+
+\begin{align}\label{eqn:DeBroglie}
+\hbar^2 \left( \frac{\omega^2}{c^2} - \Bk^2 \right) = m^2 c^2
+\end{align}
+
+Once the solution of the wave equation for light (i.e. electromagnetic fields) has been examined, this invariant can be
+used directly to construct a relativistic wave equation for matter (the Klien-Gordon equation), which is the next step along this 
+path to the non-relativistic \Schrodinger equation.
+
+\section{Solution of the relativistic wave equation.}
+
+The next order of business is the solution of the wave equations for the six 
+equations (\ref{eqn:waveE}), and (\ref{eqn:waveB}).  
+Writing $\psi$ for one of the components of $\BE$ or $\BB$ one is left with a scalar homogenous equation to solve
+\footnote{Strictly speaking the problem of understanding classical continuous electrodynamic propagation (i.e. light) takes more than this since any solutions must additionally meet constraints imposed by Maxwell equations.  For example in a linearly polarized plane wave one has $\BB = \kcap \cross \BE$, and the triplet of $\BE$, $\BB$, and $\kcap$ (the propagation direction) form a set of mutually perpendicular vectors (\cite{jackson1975cewWave}).}
+
+\begin{align}\label{eqn:psiWave}
+%\delambertian \psi(t,\Bx) = 
+\left( \frac{1}{c^2}\frac{\partial^2}{{\partial t}^2} - \spacegrad^2 \right) \psi(t,\Bx) = 0
+\end{align}
+
+%The reader will not be suprised with a statement that $\psi = f(ct \pm \kcap \cdot \Bx)$ is a solution to (\ref{eqn:psiWave}), however
+%additional insight and value is obtained by a systematic attack using transform techniques.  
+Let's begin the attack, applying the transform (\ref{eqn:Fourier}) to both terms of the wave equation
+
+\begin{align}
+\inv{(\sqrt{2\pi})^3} \int 
+\inv{c^2} \frac{\partial^2 \psi(t,\Bx)}{\partial t^2}
+\exp\left( -i \Bk \cdot \Bx \right) d^3 x 
+=
+\sum_{m=1}^3 \inv{(\sqrt{2\pi})^3} \int \frac{\partial^2 \psi(t, \Bx) }{\partial {x_m}^2} \exp\left( -i \Bk \cdot \Bx \right) d^3 x 
+\end{align}
+
+Now send the Rigor police on vacation, demanding of $\psi$ that it and its derivatives vanish at the boundaries of the integration region,
+and that sufficient continuitity exists that the time derivatives can be pulled out of the LHS integral.  With this demand of good 
+behaviour made, pull the time 
+differentiation out of the integral on the LHS and integrate by parts twice on the RHS for
+
+\begin{align}
+\inv{c^2} \frac{\partial^2 \hat{\psi}(t,\Bk)}{\partial t^2} = (-i)^2 \Bk^2 \hat{\psi}(t,\Bk)
+\end{align}
+
+With the exception that integration constant may be a function of $\Bk$ due to the time partials, this is the 
+harmonic oscillator equation with solution
+
+\begin{align}\label{eqn:harmonicSolution}
+\hat{\psi}_{\pm}(t,\Bk) = D_{\pm}(\Bk) \exp(\pm i c \Abs{\Bk} t)
+\end{align}
+
+Evaluation at $t=0$ eliminates the exponential, so by (\ref{eqn:InvFourier}) the 
+integration constants $D_{\pm}(\Bk)$ may be expressed in terms of the initial time Fourier transforms of the wave function.
+
+\begin{align}\label{eqn:integrationConst}
+D_{\pm}(\Bk) = \hat{\psi}_{\pm}(0,\Bk) = \inv{(\sqrt{2\pi})^3} \int \psi_{\pm}(0,\Bx) \exp\left( -i \Bk \cdot \Bx \right) d^3 x 
+\end{align}
+
+Writing the inverse Fourier transformation (\ref{eqn:InvFourier}) now
+completely specifies the time evolution of these wave function solutions given the initial time field
+
+\begin{align}
+{\psi}_{\pm}(t,\Bx) 
+= \inv{({2\pi})^3} \int \psi_{\pm}(0,\Bx') \exp\left( -i \Bk \cdot (\Bx' -\Bx) \pm i c \Abs{\Bk} t \right) d^3 x' d^3 k
+\end{align}
+
+Many interesting things can be done with this result and most will be ignored here.  Instead put the evolutional integration into a black box, avoiding any explicit statement of the initial conditions (the Rigor police are still on vacation and they can't catch this blatent
+disregard for integration order).  Dropping explicit $\pm$ subscripts for the $\Bk$ dependent function of the integral the wave 
+function is now
+
+\begin{align}
+A(\Bk) = \inv{({2\pi})^3} \int \psi(0,\Bx') \exp\left( -i \Bk \cdot \Bx' \right) d^3 x'
+\end{align}
+\begin{align}\label{eqn:wavefunction}
+{\psi}(t,\Bx) = \int A(\Bk) \exp\left( i \Bk \cdot \Bx \pm i c \Abs{\Bk} t \right) d^3 k
+\end{align}
+
+Inspection shows that $c \Abs{\Bk}$ has the appearance of angular velocity, and a slightly more 
+conventional looking form can be achieved by making this explicit
+
+\begin{align}\label{eqn:omegaLight}
+\omega = c \Abs{\Bk}
+\end{align}
+\begin{align}\label{eqn:generalSolution}
+{\psi}(t,\Bx) = \int A(\Bk) e^{ i (\Bk \cdot \Bx \pm \omega t) } d^3 k
+\end{align}
+
+This (constrained) superposition of fundamental harmonics represents a general solution to the wave equation for the components 
+of the electromagnetic field.
+
+Forgetting temporarily the lightlike constraint (\ref{eqn:omegaLight}) on angular frequency observe the effect of applying the wave equation operator to 
+(\ref{eqn:generalSolution})
+
+\begin{align}\label{eqn:matterWaveTemp}
+\delambertian {\psi}(t,\Bx) = -\int A(\Bk) \left( \frac{\omega^2}{c^2} - \Bk^2 \right) e^{ i (\Bk \cdot \Bx \pm \omega t) } d^3 k
+\end{align}
+ 
+It is clear that functions of the form $f(\Bk \cdot \Bx \pm c \Abs{\Bk} t)$ explicitly encode the null vector properties required for light-like worldline trajectories.  If this strict proportionality between angular frequency and wave number is relaxed then it is reasonable to assume that such a wave function could then describe phenomena (for massive particles) within the light cone.
+
+In particular observe the effect in (\ref{eqn:matterWaveTemp}) if the DeBroglie invariant (\ref{eqn:DeBroglie}) is applied to (\ref{eqn:generalSolution})
+
+\begin{align}
+\delambertian {\psi}(t,\Bx) = -\frac{m^2 c^2}{\hbar^2} \psi
+\end{align}
+
+This modified wave equation (the Klein-Gordon equation) still describes electric and magnetic fields since photons are massless, but it additionally is not unreasonable seeming as a wave equation for particles with mass.
+
+Note that this is roughly the starting point in Pauli's book, where he says "see optics" to fill in the details.
+
+\section{Small momentum approximation of the Klien-Gordon equation.}
+
+To start the small velocities approximation to solutions (\ref{eqn:generalSolution}) of the Klien-Gordon equation, rearrange the 
+DeBroglie invariant (\ref{eqn:DeBroglie}) in terms of frequency
+
+\begin{align}
+\omega = \frac{m c^2}{\hbar} \sqrt{ 1 + \frac{\hbar^2 \Bk^2}{m^2 c^2}}
+\end{align}
+
+If $(\hbar^2 \Bk^2)/(m^2 c^2) < 1$ is small enough a Taylor expansion is possible
+
+\begin{align}
+\omega \frac{m c^2}{\hbar} + \frac{\hbar \Bk^2}{2 m} + \cdots
+\end{align}
+
+With the zeroth order term factored out the wave function integral (\ref{eqn:generalSolution}) becomes
+
+\begin{align}
+{\psi}(t,\Bx) = e^{\pm im c^2 t /\hbar} \int A(\Bk) \exp\left( i \left(\Bk \cdot \Bx \pm \left(\frac{\hbar \Bk^2}{2 m} + \cdots \right) \right) \right) d^3 k
+\end{align}
+
+It is natural to bundle the integral into a helper variable
+
+\begin{align}\label{eqn:blah}
+{\psi}(t,\Bx) = e^{\pm im c^2 t /\hbar} \psi'(t,\Bx)
+\end{align}
+
+FIXME: It could be implied that in $\psi'$ the quadradic and higher order terms are dropped, but this isn't actually required.... so calling this
+a small momentum approximation isn't accurate... only when we get to the end and drop the second order time derivative is there any 
+neglect of higher order terms.  This is really more like a Taylor expansion around the rest frequency $m c^2/\hbar$
+
+Application of the wave equation operator to the product (\ref{eqn:blah}) is now possible.  Let's do this in pieces, starting with the 
+time derivatives
+
+\begin{align}
+\inv{c^2}\frac{\partial^2}{\partial t^2} \left( e^{\pm im c^2 t /\hbar} \psi' \right)
+=
+\inv{c^2}\frac{\partial}{\partial t} 
+\left( \left( \pm \frac{i m c^2}{\hbar} \psi' + \frac{\partial \psi'}{\partial t} \right) e^{\pm im c^2 t /\hbar} \right)
+\end{align}
+
+Second partials give
+\begin{align}
+\inv{c^2}\frac{\partial^2}{\partial t^2} e^{\pm im c^2 t /\hbar} \psi'
+=
+\inv{c^2}
+\left( - \left(\frac{m c^2}{\hbar}\right)^2 \psi' \pm \frac{2 i m c^2}{\hbar} \frac{\partial \psi'}{\partial t} + \frac{\partial^2 \psi'}{\partial t^2} \right) e^{\pm im c^2 t /\hbar} 
+\end{align}
+
+And finally for the entire wave equation
+\begin{align}
+0 = \left( \delambertian + \frac{m^2 c^2}{\hbar^2} \right) \psi
+=
+\left(
+\frac{1}{c^2}
+\left(
+\left( 
+\pm 2 i \frac{m c^2}{\hbar} \frac{\partial \psi'}{\partial t} +
+\frac{\partial^2 \psi'}{\partial t^2}
+\right)
+-
+\spacegrad^2 \psi'
+\right)
+\exp\left( i \frac{m c^2}{\hbar} t \right)
+\end{align}
+
+A final rearrangement produces something quite close to the \Schrodinger equation as it is probably first seen in the (less general) non-Hamiltonian form
+
+\begin{align}
+-\frac{\hbar^2}{2m} \spacegrad^2 \psi' = \mp i \hbar \frac{\partial \psi'}{\partial t} -\frac{\hbar^2}{2m c^2} \frac{\partial^2 \psi'}{\partial t^2}
+\end{align}
+
+There are two notable differences, one is the sign and the other is the second order time partial.  
+Comparisons in size for coefficients of this wave equation have to be made relative to the other coefficients since $\hbar$ is already a small quantity,
+however, if $m$ is the mass of an electron this second time partial coefficient is of the order $\hbar/(m_e c^2) \approx 10^{-21}$ (seconds).  This is
+small enough that omitting it is justifyable.
+
+Once that term is dropped two equations are left, one of which is the three dimensional potential free \Schrodinger's equation.
+
+\begin{align}\label{eqn:potentialFreeSch}
+-\frac{\hbar^2}{2m} \spacegrad^2 \psi' = \mp i \hbar \frac{\partial \psi'}{\partial t}
+\end{align}
+
+The alternation in sign is suggestive of conjugate behaviour, but it is helpful to know to expect this in the first place!
+
+Schrodinger's equation (\ref{eqn:potentialFreeSch}), at least as presented here (following Pauli), has deeply rooted relativistic origins.
+This isn't obvious when most introductory texts don't mention relativity at all in their motivations of the equation, and
+the spatial and time derivatives aren't even of the same order.
+
+\section{Afterword.  Various approaches for motivating \Schrodinger's equation.}
+
+Mathematically, this isn't the most lightweight motivation of the \Schrodinger's equation around.  It happens to be one that I appreciate, consider
+logical, and with the my current point in time understanding of mathematics and physics find no steps particularily suprising.
+It is also possibly close to the historical route \Schrodinger used, and it would be interesting to see his original paper to see what that was exactly.
+
+In French and Taylor (\cite{french1998iqp}) the specialization of \Schrodinger's equation for a particle in a one dimensional potential
+
+\begin{align}\label{eqn:oneDimSch}
+-\frac{\hbar^2}{2m} \frac{\partial^2 \psi}{\partial x^2} + V\psi = i \hbar \frac{\partial \psi}{\partial t}
+\end{align}
+
+is presented from start to finish in only seven pages with no mathematics or physics unfamiliar to second year engineering undergrads.  However this does include a disclaimer upfront that ``we ... simply try to make the form of the equation plausible''.  The plausibility arguments found in this text are not uncommon, and can be found for example (without the surrounding discussion of the text) in the ``Short heuristic derivation'' of the Wikipedia's \Schrodinger's equation article (\cite{wikiSchH}).
+
+Calling these derivations is justifably debatable and is perhaps the origin of statements like ``\Schrodinger's equation cannot be derived'' (\cite{hyperphysicsSch}).
+Considerable care is required to construct logically consistent arguments that motivate the quantum wave equation in a fashion that is not simply playing the equation in reverse.  Bohm's Quantum Theory (\cite{bohm1989qt}) contains such a carefully crafted treatment.  The cost of this presentation is that it takes nine chapters and two hundred pages to get to the starting point of many other introductory Quantum texts.
+
+Perhaps agreeing with a it cannot be derived opinion, the text of Liboff (\cite{liboff2003iqm}) appears to take a ``let's calculate approach''.  There is little attempt to motivate the equation, instead presenting the equation rather abstractly as an operatorizing of the Hamiltonian.  This requires the magic identification $\Bp \sim -i \hbar \spacegrad$, something harder to make plausible in a classical context.
+Instead one is left to learn its characteristics by using it.  This engineering approach has some merits but must also contribute to much of the mystery and confusion surrounding the subject.
+%Feynman: "I think I can safely say that nobody understands quantum mechanics."
+
+Given this apparent non-relativistic nature it is perhaps somewhat suprising that Pauli's Wave Mechanics (\cite{pauli2000wm}), starts not with the Bohr model, nor black bodies, nor or any of the usual starting points for a Quantum text, but instead with a lighting fast review of special relativity.   By assuming that the solution of the matter wave equation will take the same functional form as the solution for the classical wave equations for light, and by utilizing the DeBroglie hypothesis that an energy momentum four vector for matter can be quantized, Pauli outlines a procedure to obtain a small momentum approximation of a relativistic matter wave equation (ie: of the Klien-Gordon equation).
+
+Comments in the wikipedia Klien-Gordon article (\cite{wikiKG}), suggest that Pauli's approach is probably closer historically to the reasoning used initially by \Schrodinger.  It is also interesting to note that the thesis of DeBroglie (\cite{AFkracklauerDeBroglie}) which originally hypothosized extension of the notion of quantized freqencies from light to particles also heavily relied on special relativity arguments.
+
+The following discussion follows the brief treatment of Pauli's text, but attempts to fill in some of the in between steps.
+
+\bibliography{blog}
+\bibliographystyle{unsrturl}
+
+\end{document}
+
