@@ -4,6 +4,15 @@
 \input{../peeters_macros2.tex}
 \input{../peeters_macros3.tex}
 
+\newcommand{\boxedeqn}[1]{%
+  \[\fbox{%
+      \addtolength{\linewidth}{-2\fboxsep}%
+      \addtolength{\linewidth}{-2\fboxrule}%
+      \begin{minipage}{\linewidth}%
+      \begin{equation}#1\end{equation}%
+      \end{minipage}%
+    }\]%
+}
 
 %\usepackage{listings}
 %\usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
@@ -19,7 +28,7 @@
 
 \title{Poincare transformations.}
 \author{Peeter Joot \quad peeter.joot@gmail.com }
-\date{ June 1, 2009.  $RCSfile: poincareTx.tex,v $ Last $Revision: 1.3 $ $Date: 2009/07/02 00:52:02 $ }
+\date{ June 1, 2009.  $RCSfile: poincareTx.tex,v $ Last $Revision: 1.4 $ $Date: 2009/07/02 04:30:52 $ }
 
 \begin{document}
 
@@ -36,7 +45,7 @@ Attempt to decode one part of this article, the use of a Poincare transformation
 
 \section{Incremental transformation in GA form.}
 
-Equation (11) in the article, is labelled an infinitesimal Poincare
+Equation (11) in the article, is labeled an infinitesimal Poincare
 transformation
 
 \begin{align}\label{eqn:txComponents}
@@ -51,7 +60,7 @@ It is stated that an antisymmetrization condition $\epsilon_{\mu\nu} = -\epsilon
 since the infinitesimal transformation is given by a mixed upper and lower index tensor.   Due to the antisymmetry
 perhaps this all a coordinate statement of the following vector to vector linear transformation
 
-\begin{align}\label{eqn:blah}
+\begin{align}\label{eqn:linearTxGuess}
 x' = x + \epsilon + A \cdot x
 \end{align}
 
@@ -86,7 +95,7 @@ c^\alpha d^\beta x_\sigma ( {\delta_\alpha}^\mu {\delta_\beta}^\sigma -{\delta_\
 \end{align*}
 
 This allows for an identification $\epsilon^\mu\sigma = c^\mu d^\sigma -c^\sigma d^\mu$ which is antisymmetric as required.
-With that identification we can write (\ref{eqn:txComponents}) via the equivalent vector relation (\ref{eqn:blah}) if
+With that identification we can write (\ref{eqn:txComponents}) via the equivalent vector relation (\ref{eqn:linearTxGuess}) if
 we write
 
 \begin{align*}
@@ -96,12 +105,12 @@ we write
 Where ${\epsilon^\mu}_\sigma$ is defined implicitly in terms of components of the bivector $A = c \wedge d$.
 
 Is this what a Poincare transformation is?  The \href{http://mathworld.wolfram.com/PoincareTransformation.html}{Poincare Transformation} article suggests not.  This article suggests that the Poincare transformation is a spacetime translation plus
-a Lorentz tranformation (composition of boosts and rotations).  That Lorentz transformation will not be antisymmetric
-however, so how can these be reconciled?  The key is probably the fact that this was an infinistesimal Poincare transformation
-so lets consider a Taylor expansion of the Lorentz boost or rotation rotor, considering instead a tranformation of the 
+a Lorentz transformation (composition of boosts and rotations).  That Lorentz transformation will not be antisymmetric
+however, so how can these be reconciled?  The key is probably the fact that this was an infinitesimal Poincare transformation
+so lets consider a Taylor expansion of the Lorentz boost or rotation rotor, considering instead a transformation of the 
 following form
 
-\begin{align}\label{eqn:foo}
+\begin{align}\label{eqn:spaceTimeTxAndLor}
 x' &= x + \epsilon + R x \tilde{R} \\
 R \tilde{R} &= 1
 \end{align}
@@ -113,7 +122,7 @@ R = e^{I \theta/2}
 
 Here $\theta$ is either the angle of rotation (when the bivector is a unit spatial plane such as $I = \gamma_k \wedge \gamma_m$), or a rapidity angle (when the bivector is a unit spacetime plane such as $I = \gamma_k \wedge \gamma_0$).
 
-Ignoring the translation in (\ref{eqn:foo}) for now, to calculate the first order term in Taylor series we need
+Ignoring the translation in (\ref{eqn:spaceTimeTxAndLor}) for now, to calculate the first order term in Taylor series we need
 
 \begin{align*}
 \frac{dx'}{d\theta} 
@@ -162,11 +171,11 @@ And the first order Taylor expansion around $\theta =0$ is
 
 \begin{align*}
 x'(d\theta) 
-&\approx x'(\theta = 0) + ( \Omega d\theta ) \cdot x'
+&\approx x'(\theta = 0) + ( \Omega d\theta ) \cdot x' \\
 &= x + ( \Omega d\theta ) \cdot x'
 \end{align*}
 
-This has close to the postuated form in (\ref{eqn:blah}), but differs in one notable way.  The dot product with the antisymmetric form $A = \inv{2} \frac{dR}{d\theta} \tilde{R} d\theta$ is a dot product with $x'$ and not $x$!  One can however 
+This has close to the postulated form in (\ref{eqn:linearTxGuess}), but differs in one notable way.  The dot product with the antisymmetric form $A = \inv{2} \frac{dR}{d\theta} \tilde{R} d\theta$ is a dot product with $x'$ and not $x$!  One can however 
 invert the identity writing $x$ in terms of $x'$ (to first order)
 
 \begin{align*}
@@ -190,20 +199,29 @@ x &= \tilde{R} x' {R} \\
 
 So we have our incremental transformation given by
 
+% red box ... ugly.
+%\colorbox{red}{\parbox{0.5\textwidth}{
 \begin{align}\label{eqn:gotcha}
 x'= x - \left(2 \frac{d \tilde{R}}{d\theta} R d\theta \right) \cdot x
 \end{align}
+%}}
 
-\section{Explicit expansion of the incremental bivector.}
+% plain box.  also ugly
+%\boxedeqn{
+%x'= x - \left(2 \frac{d \tilde{R}}{d\theta} R d\theta \right) \cdot x
+%}\label{eqn:gotcha}
+
+\section{Consider a specific infinitesimal spatial rotation.}
 
 The signs and primes involved in arriving at (\ref{eqn:gotcha}) were a bit confusing.  To firm things
 up a bit considering a specific example is called for.
 
 For a rotation in the $x,y$ plane, we have
 
-\begin{align*}
-R = e^{\gamma_1 \gamma_2 \theta/2}
-\end{align*}
+\begin{align}
+R &= e^{\gamma_1 \gamma_2 \theta/2} \\
+x' &= R x \tilde{R}
+\end{align}
 
 Here also it is easy to get the signs wrong, and it is worth pointing out the sign convention picked here for the Dirac basis is ${\gamma_0}^2 = -{\gamma_k}^2 = 1$.  To verify that $R$ does the desired job, we have
 
@@ -334,11 +352,140 @@ So we have
 The antisymmetric form $\epsilon_{\mu\nu}$ in this case therefore appears to be nothing more than the unit bivector for the plane of rotation!  We should now be able to verify
 the incremental transformation result from (\ref{eqn:gotcha}), which is in this specific case now calculated to be
 
-\begin{align*}
+\begin{align}\label{eqn:xyRot}
 x'= x + d\theta (\gamma_1 \gamma_2) \cdot x
+\end{align}
+
+As a final check let's look at the action of rotation part of the transformation (\ref{eqn:xyRot}) on the coordinates $x^\mu$.  Only the $x^1$ and $x^2$ coordinates need be considered since there is no projection of $\gamma_0$ or $\gamma_3$ components onto the plane $\gamma_1 \gamma_2$.
+
+\begin{align*}
+d\theta (\gamma_1 \gamma_2) \cdot (x^1 \gamma_1 + x^2 \gamma_2)
+&= 
+d\theta \gpgradeone{ \gamma_1 \gamma_2 (x^1 \gamma_1 + x^2 \gamma_2) } \\
+&= 
+d\theta (\gamma_2 x^1 - \gamma_1 x^2)  \\
 \end{align*}
 
-\section{Tensor expansion of the bivector.}
+Now compare to the incremental transformation on the coordinates in matrix form.  That is
+
+\begin{align*}
+\delta R
+&=
+d\theta \frac{d}{d\theta}
+{
+\left.
+\begin{bmatrix}
+1 & 0 & 0 & 0 \\
+0 & \cos\theta & -\sin\theta & 0 \\
+0 & \sin\theta & \cos\theta & 0 \\
+0 & 0 & 0 & 1 \\
+\end{bmatrix}
+\right\vert}_{\theta=0} \\
+&=
+d\theta
+{
+\left.
+\begin{bmatrix}
+0 & 0 & 0 & 0 \\
+0 & -\sin\theta & -\cos\theta & 0 \\
+0 & \cos\theta & -\sin\theta & 0 \\
+0 & 0 & 0 & 0 \\
+\end{bmatrix}
+\right\vert}_{\theta=0} \\
+&=
+d\theta
+\begin{bmatrix}
+0 & 0 & 0 & 0 \\
+0 & 0 & -1 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & 0 & 0 \\
+\end{bmatrix} \\
+\end{align*}
+
+So acting on the coordinate vector
+
+\begin{align*}
+\delta R &= d\theta
+\begin{bmatrix}
+0 & 0 & 0 & 0 \\
+0 & 0 & -1 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & 0 & 0 \\
+\end{bmatrix} 
+\begin{bmatrix}
+x^0 \\
+x^1 \\
+x^2 \\
+x^3
+\end{bmatrix} \\
+&=
+d\theta
+\begin{bmatrix}
+0 \\
+-x^2 \\
+x^1 \\
+0
+\end{bmatrix} \\
+\end{align*}
+
+This is exactly what we got above with the bivector dot product.  Good.
+
+\section{Consider a specific infinitesimal boost.}
+
+For a boost along the $x$ axis we have
+
+\begin{align}
+R &= e^{\gamma_0\gamma_1 \alpha/2} \\
+x' &= R x \tilde{R}
+\end{align}
+
+Verifying, we have
+
+\begin{align*}
+x^0 \gamma_0 
+&\rightarrow x^0 ( \cosh\alpha + \gamma_0 \gamma_1 \sinh\alpha ) \gamma_0 \\
+&= x^0 ( \gamma_0 \cosh\alpha - \gamma_1 \sinh\alpha ) \\
+\end{align*}
+
+\begin{align*}
+x^1 \gamma_1 
+&\rightarrow x^1 ( \cosh\alpha + \gamma_0 \gamma_1 \sinh\alpha ) \gamma_1 \\
+&= x^1 ( \gamma_1 \cosh\alpha - \gamma_0 \sinh\alpha ) \\
+\end{align*}
+
+Dot products recover the familiar boost matrix
+\begin{align*}
+\begin{bmatrix}
+x^0 \\
+x^1 \\
+x^2 \\
+x^3 \\
+\end{bmatrix}'
+&=
+\begin{bmatrix}
+\cosh\alpha & -\sinh\alpha & 0 & 0 \\
+-\sinh\alpha & \cosh\alpha & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+x^0 \\
+x^1 \\
+x^2 \\
+x^3 \\
+\end{bmatrix}
+\end{align*}
+
+Now, how about the incremental transformation given by (\ref{eqn:gotcha}).  A quick calculation shows that we have
+
+\begin{align}\label{eqn:xLor}
+x' = x + d\alpha (\gamma_0 \gamma_1) \cdot x
+\end{align}
+
+Just like the (\ref{eqn:xyRot}) case for a rotation in the $x y$ plane, the antisymmetric form is again the unit bivector of the rotation plane (this time the unit bivector in the spacetime plane of the boost.)
+
+This completes the examination of two specific incremental Lorentz transformations.  It is clear that the result will be the same for an arbitrarily oriented bivector, 
+and the original guess (\ref{eqn:linearTxGuess}) of a geometric equivalent of tensor relation (\ref{eqn:txComponents}) was correct, provided that $A$ is a unit bivector scaled by the magnitude of the incremental transformation.
 
 \bibliographystyle{plainnat}
 \bibliography{myrefs}
