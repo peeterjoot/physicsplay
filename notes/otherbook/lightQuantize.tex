@@ -1,0 +1,112 @@
+\documentclass[]{eliblog}
+
+\input{../peeters_macros.tex}
+\input{../peeters_macros2.tex}
+\input{../peeters_macros3.tex}
+
+\title{Light Quantization?}
+\author{Peeter Joot}
+\email{peeter.joot@gmail.com}
+\date{July 2, 2009}
+\revisionInfo{$RCSfile: lightQuantize.tex,v $ Last $Revision: 1.1 $ $Date: 2009/07/02 16:10:55 $}
+\blogpage{http://sites.google.com/site/peeterjoot/math2009/lightQuantize.pdf}
+
+%\newcommand{\Schrodinger}[0]{Schr\"{o}dinger}
+\begin{document}
+
+\maketitle{}
+\tableofcontents
+\section{Motivation}
+
+In \href{http://sites.google.com/site/peeterjoot/math2009/relwave.pdf}{Relativistic origins of Schr\"odinger's equation}, an ad-hoc technique of motivating the non-relativisitic Schr\"odinger equation was detailed.  This used the DeBroglie quantization hypothesis to matter via a quantization of the Klien-Gordon equation.  While this  does result in the final desired goal some of the intermediate steps are rather unsatisfying.  In particular the wave equation for light in a vacuum was used as a starting point, before moving on to quantized matter.  Quantization of light itself was glossed over, and if that was considered in isolation, it is clear that photon quantization based on the wave equation in isolation cannot possibly be correct.  From the quantization result, whatever that is, one ought to be able to recover Maxwell's vacuum equation by considering time averages in a fashion something like the Erhenfest procedure.  This cannot be done if the coupling between the field components is neglected.
+
+A possible alternate starting point (simpler than the coupling between six field components) that would still use the wave equation would be to use Maxwell's equations in four vector potential form, however, the Lorentz gauge constraint would also be required
+
+\begin{align}\label{eqn:maxwellPotVacuum}
+\partial_\mu \partial^\mu A^\nu &= 0 \\
+\partial_\nu A^\nu &= 0
+\end{align}
+
+In one fashion or another, one must have to start with the vacuum Maxwell's equation in its entirely if attempting light quantization starting from classical arguments.  Regardless of whether one considers the previous Schr\"odinger motivation attempt handwaving, the fact that it is possible at all points to a neccessary failure of the Schr\"odinger equation if the wave function under consideration is for the electron.  Because the starting point for light quantization was wrong, the result for electron quantization must also be wrong.  With the coupling of light and electrons in classical electromagnetism, we need four coupled Schr\"odinger equations, not one.  
+
+This failure is probably what the Dirac formalism addresses.  I likely don't have the prerequisites required to learning QFT at this point to find out.  However, lets see if following the classical requirements more strictly lead anywhere interesting.
+
+\section{Maxwell vacuum solution.}
+
+While Fourier solutions to \ref{eqn:maxwellPotVacuum} are possible, how does one deal with the coupling constraint of the Lorentz gauge?  Let's start
+over with the first order Maxwell equation, noting that (\ref{eqn:maxwellPotVacuum}) was the result of setting $\grad \cdot A$ and $J = 0$ in the
+general Maxwell equation
+
+\begin{align}
+\grad F &= J/\epsilon_0 c \\
+F &= \grad \wedge A
+\end{align}
+
+Picking an observer bias for the gradient by premultiplying with $\gamma_0$ the vacuum equation for light can therefore also be written as
+
+\begin{align*}
+0 
+&= \gamma_0 \grad F \\
+&= \gamma_0 (\gamma^0 \partial_0 + \gamma^k \partial_k) F \\
+&= (\partial_0 - \gamma^k \gamma_0 \partial_k) F \\
+&= (\partial_0 + \sigma^k \partial_k) F \\
+&= \left(\inv{c}\partial_t + \spacegrad \right) F \\
+\end{align*}
+
+A Fourier transformation of this equation produces
+
+\begin{align*}
+0 &= \inv{c} \PD{t}{\hat{F}}(\Bk,t) + \inv{\sqrt{2\pi}^3} \int \sigma^m \partial_m F(\Bx,t) e^{-i \Bk \cdot \Bx} d^3 x
+\end{align*}
+
+and with a single integration by parts one has
+
+\begin{align*}
+0 
+&= \inv{c} \PD{t}{\hat{F}}(\Bk,t) - \inv{\sqrt{2\pi}^3} \int \sigma^m F(\Bx,t) (-i k_m) e^{-i \Bk \cdot \Bx} d^3 x \\
+&= \inv{c} \PD{t}{\hat{F}}(\Bk,t) + \inv{\sqrt{2\pi}^3} \int \Bk F(\Bx,t) i e^{-i \Bk \cdot \Bx} d^3 x \\
+&= \inv{c} \PD{t}{\hat{F}}(\Bk,t) + i \Bk \hat{F}(\Bk,t)
+\end{align*}
+
+The flexibility to employ the pseudoscalare as the imaginary $i = \gamma_0 \gamma_1 \gamma_2 \gamma_3$ has been employed above, so it should
+be noted that pseudoscalar commutation with Dirac bivectors was implied above, but also that we do not have the flexibility to commute $\Bk$ with $F$.
+
+Having done this, the problem to solve is now Maxwell's vacuum equation in the frequency domain
+
+\begin{align*}
+\PD{t}{\hat{F}}(\Bk,t) = -i c \Bk \hat{F}(\Bk,t)
+\end{align*}
+
+Introducing an angular frequency (spatial bivector)
+
+\begin{align*}
+\Omega = -i \Bk c
+\end{align*}
+
+This becomes
+
+\begin{align}\label{eqn:MaxwellFreq}
+\hat{F}' = \Omega F
+\end{align}
+
+With solution
+
+\begin{align}
+\hat{F} = e^{\Omega t} \hat{F}(\Bk,0)
+\end{align}
+
+Differentiation with respect to time verifies that the ordering of the terms is correct and this does in fact solve (\ref{eqn:MaxwellFreq}).  This
+is something we have to be careful of due to the possibility of non-commutating variables.
+
+Back substituition into the inverse transform now supplies the time evolution of the field given the initial time specification
+
+\begin{align*}
+F(\Bx,t) 
+&= \inv{\sqrt{2\pi}^3} \int e^{\Omega t} \hat{F}(\Bk,0) e^{i \Bk \cdot \Bx} d^3 k \\
+&= \inv{(2\pi)^3} \int e^{\Omega t} \left( \int {F}(\Bx',0) e^{-i \Bk \cdot \Bx'} d^3 x' \right) e^{i \Bk \cdot \Bx} d^3 k
+\end{align*}
+
+\bibliography{myrefs}
+\bibliographystyle{unsrturl}
+
+\end{document}
