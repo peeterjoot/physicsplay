@@ -1,0 +1,14 @@
+#!/bin/bash
+
+d=nonga
+d=gabook
+rcs -l $1.ltx && ci $1.ltx
+mv -i RCS/$1.ltx,v ../$d/RCS/$1.tex,v
+cd ../$d
+co -l $1.tex
+aspell -c --mode=tex $1.tex
+perl -p -i -e 's/section{ */section{/' $1.tex
+
+#ci -l Makefile $d.tex
+echo '%\include{'$1'}' >> $d.tex
+echo 'TEXFILES +=' $1.tex >> Makefile
