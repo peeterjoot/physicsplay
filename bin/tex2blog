@@ -2,10 +2,32 @@
 
 use strict ;
 use warnings ;
+use Getopt::Long;
 
-while (<>)
+my $filebase ;
+
+GetOptions( 
+   'file=s'    => \$filebase,
+) ;
+
+my $fh ;
+my %equations ;
+open $fh, "<$filebase.aux" or die "could not open '$filebase.aux'\n" ;
+while (<$fh>)
+{
+   if ( /^\\newlabel{(.*?)}.*equation\.(.*?)}/ )
+   {
+      $equations{$1} = $2 ;
+   }
+}
+close $fh ;
+
+open $fh, "<$filebase.tex" or die "could not open '$filebase.aux'\n" ;
+while (<$fh>)
 {
    chomp ;
+   s/\\cite{.*?}//;
+   s/^%CITE://;
    s/%.*//;
 
    while ( s/\$(.*?)\$/BBB:$1:EEE/g )
@@ -14,32 +36,21 @@ while (<>)
    s/BBB:/\$latex /g;
    s/:EEE/\$/g;
 
+   s/\\label{(eqn:.*?)}/($equations{$1})/g ;
+   s/\\ref{(eqn:.*?)}/$equations{$1}/g ;
+
+   s,\\section{(.*)},<h1>$1</h1>,;
+   s,\\subsection{(.*)},<h2>$1</h1>,;
+   s,\\subsubsection{(.*)},<h3>$1</h1>,;
+
    s/\\begin{align\**}/\$latex /;
    s/\\end{align\**}/\$/;
 
    s/\\begin{equation\**}/\$latex /;
    s/\\end{equation\**}/\$/;
 
+   s/\\inv{(.*?)}/\\frac{1}{$1}/g;
+   s,\\href{(.*?)}{(.*?)},<a href="$1">$2</a>,g ;
    print "$_\n" ;
 }
-
-sub busted
-{
-   if ( /\$([^\$]+)$/ )
-   {
-      my $s = '' ;
-
-      s/^([^\$]+)// ;
-      $s = $1 ;
-
-      while ( s/\$([^\$]\+)\$// )
-      {
-         $s .= "latex:$1:latex" ;
-
-         s/^([^\$]+)// ;
-         $s .= $1 ;
-      }
-
-      $s .= $_ ;
-   }
-}
+close $fh ;
