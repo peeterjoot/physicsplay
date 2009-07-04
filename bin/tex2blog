@@ -1,0 +1,45 @@
+#! /usr/bin/perl
+
+use strict ;
+use warnings ;
+
+while (<>)
+{
+   chomp ;
+   s/%.*//;
+
+   while ( s/\$(.*?)\$/BBB:$1:EEE/g )
+   {
+   }
+   s/BBB:/\$latex /g;
+   s/:EEE/\$/g;
+
+   s/\\begin{align\**}/\$latex /;
+   s/\\end{align\**}/\$/;
+
+   s/\\begin{equation\**}/\$latex /;
+   s/\\end{equation\**}/\$/;
+
+   print "$_\n" ;
+}
+
+sub busted
+{
+   if ( /\$([^\$]+)$/ )
+   {
+      my $s = '' ;
+
+      s/^([^\$]+)// ;
+      $s = $1 ;
+
+      while ( s/\$([^\$]\+)\$// )
+      {
+         $s .= "latex:$1:latex" ;
+
+         s/^([^\$]+)// ;
+         $s .= $1 ;
+      }
+
+      $s .= $_ ;
+   }
+}
