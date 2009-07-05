@@ -22,6 +22,9 @@ while (<$fh>)
 }
 close $fh ;
 
+my $curEqn = '' ;
+my $curEquationLabel = '' ;
+my $inEquation = 0 ;
 open $fh, "<$filebase.tex" or die "could not open '$filebase.aux'\n" ;
 while (<$fh>)
 {
@@ -50,26 +53,58 @@ next if (
    s/BBB:/\$latex /g;
    s/:EEE/\$/g;
 
-   s/\\label{(eqn:.*?)}/($equations{$1})/g ;
    s/\\ref{(eqn:.*?)}/$equations{$1}/g ;
 
    s,\\section{(.*)},<h1>$1</h1>,;
    s,\\subsection{(.*)},<h2>$1</h1>,;
    s,\\subsubsection{(.*)},<h3>$1</h1>,;
-
-   s/\\begin{align\**}/\$latex /;
-   s/\\end{align\**}/\$/;
-
-   s/\\begin{equation\**}/\$latex /;
-   s/\\end{equation\**}/\$/;
-
-   s/\\inv{(.*?)}/\\frac{1}{$1}/g;
-   s/\\Abs{(.*?)}/{\left\lvert{$1}\right\rvert}/g;
-   s/\\gpgrade{(.*?)}{(.*?)}/{\left\langle{{$1}}\right\rangle}_{$2}/g;
-   s/\\gpgradeone{(.*?)}{(.*?)}/{\left\langle{{$1}}\right\rangle}_{1}/g;
-   s/\\gpgradetwo{(.*?)}{(.*?)}/{\left\langle{{$1}}\right\rangle}_{2}/g;
-
    s,\\href{(.*?)}{(.*?)},<a href="$1">$2</a>,g ;
-   print "$_\n" ;
+
+   if ( s/\\begin{align\**}// or s/\\begin{equation\**}// )
+   {
+      if ( s/\\label{(eqn:.*?)}// )
+      {
+         $curEquationLabel = "\\quad\\quad\\quad($equations{$1})" ;
+      }
+      $curEqn .= $_ ;
+      $inEquation = 1 ;
+   }
+   elsif ( s/\\end{align\**}.*// or s/\\end{equation\**}.*// )
+   {
+      print '$latex ' . translate( "$curEqn$_" ) . " $curEquationLabel\$\n" ;
+      $curEqn = '' ;
+      $inEquation = 0 ;
+      $curEquationLabel = '' ;
+   }
+   elsif ( $inEquation )
+   {
+      $curEqn .= $_ ;
+   }
+   else
+   {
+      print translate( $_ ) . "\n" ;
+   }
 }
 close $fh ;
+
+sub translate
+{
+   my $out = "@_" ;
+
+   $out =~ s/\\\\/\\\\ /g;
+   $out =~ s/\\inv{(.*?)}/\\frac{1}{$1}/g;
+   $out =~ s/\\Abs{(.*?)}/{\\left\\lvert{$1}\\right\\rvert}/g;
+   $out =~ s/\\gpgrade{(.*?)}{(.*?)}/{\\left\\langle{{$1}}\\right\\rangle}_{$2}/g;
+   $out =~ s/\\gpgradeone{(.*?)}{(.*?)}/{\\left\\langle{{$1}}\\right\\rangle}_{1}/g;
+   $out =~ s/\\gpgradetwo{(.*?)}{(.*?)}/{\\left\\langle{{$1}}\\right\\rangle}_{2}/g;
+   $out =~ s/\\kcap/\\hat{\\Bk}/g;
+   $out =~ s/\\B(.)/\\mathbf{$1}/g;
+   $out =~ s/\\LL/\\mathcal{L}/g;
+   $out =~ s/\\FF/\\mathcal{F}/g;
+   $out =~ s/\\cross/\\times/g;
+   $out =~ s/\\grad/\\nabla/g;
+   $out =~ s/\\spacegrad/\\boldsymbol{\\nabla}/g;
+   $out =~ s/\\delambertian/\\square/g;
+
+   return $out ;
+}
