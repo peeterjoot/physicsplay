@@ -8,7 +8,7 @@
 \author{Peeter Joot}
 \email{peeter.joot@gmail.com}
 \date{July 2, 2009}
-\revisionInfo{$RCSfile: lightQuantize.tex,v $ Last $Revision: 1.4 $ $Date: 2009/07/04 04:34:25 $}
+\revisionInfo{$RCSfile: lightQuantize.tex,v $ Last $Revision: 1.5 $ $Date: 2009/07/05 19:08:45 $}
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/lightQuantize.pdf}
 
 %\newcommand{\Schrodinger}[0]{Schr\"{o}dinger}
@@ -33,6 +33,7 @@ This failure is probably what the Dirac formalism addresses.  I likely don't hav
 
 \section{Maxwell vacuum solution.}
 
+\subsection{Fourier problem.}
 While Fourier solutions to \ref{eqn:maxwellPotVacuum} are possible, how does one deal with the coupling constraint of the Lorentz gauge?  Let's start
 over with the first order Maxwell equation, noting that (\ref{eqn:maxwellPotVacuum}) was the result of setting $\grad \cdot A$ and $J = 0$ in the
 general Maxwell equation
@@ -77,11 +78,12 @@ Having done this, the problem to solve is now Maxwell's vacuum equation in the f
 \PD{t}{\hat{F}}(\Bk,t) = -i c \Bk \hat{F}(\Bk,t)
 \end{align*}
 
-Introducing an angular frequency (spatial bivector)
+Introducing an angular frequency (spatial) bivector, and its vector dual
 
-\begin{align*}
-\Omega = -i \Bk c
-\end{align*}
+\begin{align}
+\Omega &= -i c \Bk \\
+\Bomega &= c \Bk
+\end{align}
 
 This becomes
 
@@ -147,6 +149,8 @@ Many assumptions have been made here, not the least of which was a requirement f
 &= 0 \quad\quad\quad\square
 \end{align*}
 
+\subsection{Discretizing and grade restrictions.}
+
 The fact that it the integral has zero gradient does not mean that it is a bivector, so there must
 also be at least also be restrictions on the grades of $D(\Bk)$.
 
@@ -199,15 +203,250 @@ F(0, t)
 If $D_\Bk$ is first assumed to be a spatial vector, then $F$ would have a pseudoscalar component if $D_\Bk$ has any
 component parallel to $\hat{\Bk}$.
 
-\begin{align*}
+\begin{align}\label{eqn:commutationRequirementVector}
 D_\Bk \in \span\{\sigma^m\} \implies D_\Bk \cdot \hat{\Bk} = 0 
-\end{align*}
-\begin{align*}
+\end{align}
+\begin{align}\label{eqn:commutationRequirementBiVector}
 D_\Bk \in \span\{\sigma^a \wedge \sigma^b\} \implies D_\Bk \cdot (i\hat{\Bk}) = 0
-\end{align*}
+\end{align}
 
 It doesn't really appear that there is any loss of generality imposing a spatial vector restriction on $D_\Bk$, at
 least in the current free case, since we can convert between the two using a duality transformation.
+Therefore from this point on $D_\Bk$ will be taken to be a spatial vector to simplify discussions.
+
+\subsection{Conjugate split}
+
+The Hermitian conjugate is defined as
+
+\begin{align}
+A^\dagger = \gamma_0 \tilde{A} \gamma_0
+\end{align}
+
+The conjugate action on a multivector product is straightforward to calculate
+
+\begin{align*}
+(A B)^\dagger 
+&= \gamma_0 (A B)^{\tilde{}} \gamma_0 \\
+&= \gamma_0 \tilde{B} \tilde{A} \gamma_0 \\
+&= \gamma_0 \tilde{B} {\gamma_0}^2 \tilde{A} \gamma_0 \\
+&= B^\dagger A^\dagger
+\end{align*}
+
+For a spatial vector Hermitian conjugation leaves the vector unaltered
+
+\begin{align*}
+\Ba 
+&= \gamma_0 (\gamma_k \gamma_0)^{\tilde{}} a^k \gamma_0 \\
+&= \gamma_0 (\gamma_0 \gamma_k) a^k \gamma_0 \\
+&= \gamma_k a^k \gamma_0 \\
+&= \Ba
+\end{align*}
+
+But the pseudoscalar is negated
+
+\begin{align*}
+i^\dagger 
+&=
+\gamma_0 \tilde{i} \gamma_0 \\
+&=
+\gamma_0 i \gamma_0 \\
+&=
+-\gamma_0 \gamma_0 i \\
+&=
+- i \\
+\end{align*}
+
+This allows for a split by conjugation of the field into its electric and magnetic field components.
+
+\begin{align*}
+F^\dagger
+&= -\gamma_0 ( \BE + i c \BB) \gamma_0 \\
+&= -\gamma_0^2 ( -\BE + i c \BB) \\
+&= \BE - i c\BB \\
+\end{align*}
+
+So we have 
+
+\begin{align}
+\BE &= \inv{2}(F + F^\dagger) \\
+c \BB &= \inv{2i}(F - F^\dagger)
+\end{align}
+
+Let's calculate the effects of this conjugate split on the discrete field solutions expressed by 
+(\ref{eqn:planewaveish}).
+
+\begin{align*}
+F^\dagger &= D_\Bk^\dagger (e^{i \Bk \cdot \Bx})^\dagger (e^{-i\Bomega t})^\dagger \\
+\end{align*}
+
+For the pseudoscalar exponentials the Hermitian conjugate, somewhat unsuprisingly has a conjuagate effect
+
+\begin{align*}
+(e^{i \Bk \cdot \Bx})^\dagger
+&= 
+(\cos(\Bk \cdot \Bx) +i\sin(\Bk \cdot \Bx))^\dagger \\
+&= 
+\cos(\Bk \cdot \Bx) -i\sin(\Bk \cdot \Bx) \\
+&= 
+e^{-i\Bk \cdot \Bx}
+\end{align*}
+
+How about the exponentials with the spatial bivector argument?
+\begin{align*}
+(e^{-i\Bomega t})^\dagger 
+&=
+(e^{-i \kcap \omega t})^\dagger  \\
+&=
+(\cos(\omega t) - i \kcap \sin(\omega t))^\dagger \\
+&=
+\cos(\omega t) - \kcap^\dagger i^\dagger \sin(\omega t) \\
+&=
+\cos(\omega t) + \kcap i \sin(\omega t) \\
+&= 
+e^{i \kcap \omega t} \\
+&= 
+e^{i \Bomega t} 
+\end{align*}
+
+Also a conjugate effect.  Assembling results we have for the field and its conjugate
+
+\begin{align*}
+F &= e^{-i\Bomega t} e^{i \Bk \cdot \Bx} D_\Bk  \\
+F^\dagger &= D_\Bk e^{-i \Bk \cdot \Bx} e^{i\Bomega t}
+\end{align*}
+
+By the constraint of (\ref{eqn:commutationRequirementVector}) we have for the product
+
+\begin{align*}
+i \kcap D_\Bk 
+&= 
+-i D_\Bk \kcap \\
+&= 
+- D_\Bk i \kcap \\
+\end{align*}
+
+So $D_\Bk$ and $e^{i\Bomega t}$ commute in a conjugate fashion (whereas $D_\Bk$ and $e^{i\Bk \cdot \Bx}$ just commute)
+
+\begin{align*}
+e^{-i\Bomega t} D_\Bk &= D_\Bk e^{i\Bomega t} D_\Bk 
+\end{align*}
+
+As a result we have for the conjugate split of $F$ into $\BE$ and $\BB$
+\begin{align*}
+F \pm F^\dagger 
+&= e^{-i\Bomega t} e^{i \Bk \cdot \Bx} D_\Bk \pm D_\Bk e^{-i \Bk \cdot \Bx} e^{i\Bomega t} \\
+&= D_\Bk e^{i\Bomega t} e^{i \Bk \cdot \Bx} \pm D_\Bk e^{-i \Bk \cdot \Bx} e^{i\Bomega t} \\
+&= D_\Bk e^{i\Bomega t} (e^{i \Bk \cdot \Bx} \pm e^{-i \Bk \cdot \Bx} ) \\
+\end{align*}
+
+So the split into electric and magnetic fields is
+
+\begin{align*}
+\BE &= D_\Bk e^{i\Bomega t} \cos(\Bk \cdot \Bx) \\
+c\BB &= D_\Bk e^{i\Bomega t} \sin(\Bk \cdot \Bx)
+\end{align*}
+
+Again writing $\Bomega = \kcap \omega t$, and noting that $D_\Bk \kcap = D_\Bk \wedge \kcap$ (since $D_\Bk \cdot \kcap = 0$) we have for the phasor product in the fields above
+
+\begin{align*}
+D_\Bk e^{i\Bomega t} 
+&=
+D_\Bk (\cos(\omega t) + i\kcap \sin(\omega t)) \\
+&=
+D_\Bk \cos(\omega t) + i (D_\Bk \wedge \kcap) \sin(\omega t)) \\
+&=
+D_\Bk \cos(\omega t) + i^2 (D_\Bk \cross \kcap) \sin(\omega t)) \\
+&=
+D_\Bk \cos(\omega t) + (\kcap \cross D_\Bk) \sin(\omega t) \\
+\end{align*}
+
+Unlike the phasors of traditional engineering practise, utilizing $i\kcap$, where $i$ is the pseudoscalar, there
+is no requirement to take the real part to move from the phasor to the observable field representation.  
+
+This gives us for the two component fields
+
+\begin{align}\label{eqn:splitFields}
+\BE &= \left( D_\Bk \cos(\omega t) + (\kcap \cross D_\Bk) \sin(\omega t) \right) \cos(\Bk \cdot \Bx) \\
+c \BB &= \left( D_\Bk \cos(\omega t) + (\kcap \cross D_\Bk) \sin(\omega t) \right) \sin(\Bk \cdot \Bx)
+\end{align}
+
+\subsection{Energy density}
+
+Squaring the phasor $D_\Bk e^{i\Bomega t}$ allows for a power computation
+
+\begin{align*}
+(D_\Bk e^{i\Bomega t} )^2
+&=
+{D_\Bk}^2 \cos^2(\omega t) + (\kcap \cross D_\Bk)^2 \sin^2(\omega t) + 2 D_\Bk \cdot (\kcap \cross D_\Bk) \sin(\omega t) \cos(\omega t)
+\end{align*}
+
+Since $D_\Bk \cdot (\kcap \cross D_\Bk) = 0$ the last term is zero.  For the squared cross product we have
+
+\begin{align*}
+(\kcap \cross D_\Bk)^2
+&= i^2 
+(\kcap \wedge D_\Bk) (\kcap \wedge D_\Bk) \\
+&= 
+((\kcap \wedge D_\Bk) \cdot D_\Bk ) \cdot \kcap  \\
+&= 
+((\kcap {D_\Bk}^2 ) \cdot \kcap  \\
+&= 
+\kcap^2 {D_\Bk}^2  \\
+&= 
+{D_\Bk}^2 
+\end{align*}
+
+So we have for the phasor magnitude just our vector constant squared
+\begin{align}
+(D_\Bk e^{i\Bomega t} )^2
+&= 
+{D_\Bk}^2 
+\end{align}
+
+
+Regardless, the energy density is
+
+\begin{align*}
+U 
+&= \frac{\epsilon_0}{2}(\BE^2 + c^2 \BB^2) \\
+&= \frac{\epsilon_0}{2} {D_\Bk}^2 ( \cos^2(\Bk \cdot \Bx) +\sin^2(\Bk \cdot \Bx) )
+\end{align*}
+
+or
+\begin{align}
+U &= \frac{\epsilon_0}{2} {D_\Bk}^2 
+\end{align}
+
+In retrospect this would have followed much more easily from $D_\Bk e^{i\Bomega t} = e^{-i\Bomega t} D_\Bk$
+
+\begin{align*}
+(D_\Bk e^{i\Bomega t} )^2
+&=
+D_\Bk e^{i\Bomega t} e^{-i\Bomega t} D_\Bk \\
+&=
+D_\Bk D_\Bk \\
+\end{align*}
+
+\subsection{Is this all correct?}
+
+I expected $\BE \cdot \BB = 0$, the traditional notion of mutually perpendicular triplet of electric and magnetic and propagation directions.
+Instead I have
+
+\begin{align*}
+\BE \cdot \BB 
+&= {D_\Bk}^2 \cos(\Bk \cdot \Bx) \sin(\Bk \cdot \Bx) \\
+&= \inv{2} {D_\Bk}^2 \sin( 2 \Bk \cdot \Bx) 
+\end{align*}
+
+This appears to say that for any $\Bx \perp \Bk$ (where the sine is zero), $\BE$ is perpendicular to $\BB$.  I don't quite see how to reconsile this with the fact that by 
+(\ref{eqn:splitFields})
+the two fields appear to be colinear
+
+\begin{align*}
+c \BB = \BE \tan(\Bk \cdot \Bx)
+\end{align*}
+
+Hmm.  This one and in fact (\ref{eqn:splitFields}) both imply that $\BB$ is zero for all $\Bx \perp \Bk$?
 
 \section{Energy Momentum four vector.}
 
@@ -270,13 +509,7 @@ U &= \frac{-1}{2}( F \gamma_0 F \gamma_0 + \gamma_0 F \gamma_0 F) \\
 c \BP &= \frac{-1}{2}( F \gamma_0 F \gamma_0 - \gamma_0 F \gamma_0 F)
 \end{align}
 
-The Hermitian conjugate
-
-\begin{align}
-A^\dagger = \gamma_0 \tilde{A} \gamma_0
-\end{align}
-
-can conviently be used to summarize these relations as follows
+Summarizing with the Hermitian conjugate
 
 \begin{align}
 U &= \frac{1}{2}( F F^\dagger + F^\dagger F) \\
