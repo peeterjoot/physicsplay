@@ -30,6 +30,20 @@ while (<$fh>)
    s/^%CITE://;
    s/%.*//;
 
+next if (
+/\\begin{document}/ or
+/\\end{document}/ or
+/\\maketitle{}/ or
+/\\tableofcontents/ or
+/\\usepackage/ or
+/\\newcommand/ or
+/\\documentclass/ or
+/\\title/ or
+/\\email/ or
+/\\author/ or
+/\\bibliography/ or
+0 ) ;
+
    while ( s/\$(.*?)\$/BBB:$1:EEE/g )
    {
    }
@@ -50,6 +64,11 @@ while (<$fh>)
    s/\\end{equation\**}/\$/;
 
    s/\\inv{(.*?)}/\\frac{1}{$1}/g;
+   s/\\Abs{(.*?)}/{\left\lvert{$1}\right\rvert}/g;
+   s/\\gpgrade{(.*?)}{(.*?)}/{\left\langle{{$1}}\right\rangle}_{$2}/g;
+   s/\\gpgradeone{(.*?)}{(.*?)}/{\left\langle{{$1}}\right\rangle}_{1}/g;
+   s/\\gpgradetwo{(.*?)}{(.*?)}/{\left\langle{{$1}}\right\rangle}_{2}/g;
+
    s,\\href{(.*?)}{(.*?)},<a href="$1">$2</a>,g ;
    print "$_\n" ;
 }
