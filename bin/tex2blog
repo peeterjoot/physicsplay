@@ -22,6 +22,49 @@ while (<$fh>)
 }
 close $fh ;
 
+my $bibString = '' ;
+my %refnumbers ;
+my $curNum = 1 ;
+my $haveBib = 1 ;
+open $fh, "<$filebase.bbl" or $haveBib = 0 ;
+
+if ( $haveBib )
+{
+   while (<$fh>)
+   {
+      chomp ;
+
+      s,\\begin{thebibliography}.*,<h1>References</h1>, ;
+
+      if ( s/\\bibitem{(.*?)}// )
+      {
+         $bibString .= "\n\n" ;
+         $refnumbers{$1} = $curNum ;
+         $bibString .= "[$curNum] " ;
+
+         $curNum++ ;
+      }
+      else
+      {
+         next if (/Available from:/) ;
+         if ( /\\end{thebibliography}/ )
+         {
+            $bibString .= "\n" ;
+            last ;
+         }
+
+         s/~/ /g ;
+         s,\\em *{(.*?)},<em>$1</em>, ;
+         s/\\newblock// ;
+         s,\\url{(.*?)},<a href="$1">$1</a>,;
+         s/{(.*?)}/$1/g ;
+
+         $bibString .= "$_" ;
+      }
+   }
+   close $fh ;
+}
+
 my $curEqn = '' ;
 my $curEquationLabel = '' ;
 my $inEquation = 0 ;
@@ -29,20 +72,22 @@ open $fh, "<$filebase.tex" or die "could not open '$filebase.aux'\n" ;
 while (<$fh>)
 {
    chomp ;
-   s/\\cite{.*?}//;
-   s/^%CITE://;
+   s/\\cite{(.*?)}/[$refnumbers{$1}]/;
+   #s/^%CITE://;
    s/%.*//;
+   s,\\blogpage{(.*)},<a href="$1">[Click here for a PDF of this post with nicer formatting]</a>,;
 
 next if (
 /\\begin{document}/ or
 /\\end{document}/ or
-/\\maketitle{}/ or
+/\\maketitle/ or
 /\\tableofcontents/ or
 /\\usepackage/ or
 /\\newcommand/ or
 /\\documentclass/ or
 /\\title/ or
 /\\email/ or
+/\\date/ or
 /\\author/ or
 /\\bibliography/ or
 0 ) ;
@@ -87,11 +132,15 @@ next if (
 }
 close $fh ;
 
+print $bibString ;
+
 sub translate
 {
    my $out = "@_" ;
 
    $out =~ s/\\\\/\\\\ /g;
+
+   # convert some of my macros:
    $out =~ s/\\inv{(.*?)}/\\frac{1}{$1}/g;
    $out =~ s/\\Abs{(.*?)}/{\\left\\lvert{$1}\\right\\rvert}/g;
    $out =~ s/\\gpgrade{(.*?)}{(.*?)}/{\\left\\langle{{$1}}\\right\\rangle}_{$2}/g;
