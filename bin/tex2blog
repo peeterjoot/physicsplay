@@ -5,9 +5,11 @@ use warnings ;
 use Getopt::Long;
 
 my $filebase ;
+my $showNumbers = 1 ;
 
 GetOptions( 
    'file=s'    => \$filebase,
+   'num!'      => \$showNumbers,
 ) ;
 
 my $fh ;
@@ -36,6 +38,8 @@ if ( $haveBib )
 
       s,\\begin{thebibliography}.*,<h1>References</h1>, ;
 
+#\bibitem[Joot({\natexlab{a}})]{PJLorentzWave}
+      s/\\bibitem.*]{/\\bibitem{/ ;
       if ( s/\\bibitem{(.*?)}// )
       {
          $bibString .= "\n\n" ;
@@ -46,7 +50,11 @@ if ( $haveBib )
       }
       else
       {
-         next if (/Available from:/) ;
+         next if (/Available from:/ or
+                  /\\providecommand/ or
+                  /\\expandafter/ or
+                  0 ) ;
+
          if ( /\\end{thebibliography}/ )
          {
             $bibString .= "\n" ;
@@ -55,6 +63,7 @@ if ( $haveBib )
 
          s/~/ /g ;
          s,\\em *{(.*?)},<em>$1</em>, ;
+         s,\\emph *{(.*?)},<em>$1</em>, ;
          s/\\newblock// ;
          s,\\url{(.*?)},<a href="$1">$1</a>,;
          s/{(.*?)}/$1/g ;
@@ -72,8 +81,7 @@ open $fh, "<$filebase.tex" or die "could not open '$filebase.aux'\n" ;
 while (<$fh>)
 {
    chomp ;
-   s/\\cite{(.*?)}/[$refnumbers{$1}]/;
-   #s/^%CITE://;
+   s/\\cite{(.*?)}/[$refnumbers{$1}]/g;
    s/%.*//;
    s,\\blogpage{(.*)},<a href="$1">[Click here for a PDF of this post with nicer formatting]</a>,;
 
@@ -89,6 +97,8 @@ next if (
 /\\email/ or
 /\\date/ or
 /\\author/ or
+/\\revisionInfo/ or
+/\\input/ or
 /\\bibliography/ or
 0 ) ;
 
@@ -107,7 +117,7 @@ next if (
 
    if ( s/\\begin{align\**}// or s/\\begin{equation\**}// )
    {
-      if ( s/\\label{(eqn:.*?)}// )
+      if ( s/\\label{(eqn:.*?)}// and $showNumbers )
       {
          $curEquationLabel = "\\quad\\quad\\quad($equations{$1})" ;
       }
@@ -139,13 +149,14 @@ sub translate
    my $out = "@_" ;
 
    $out =~ s/\\\\/\\\\ /g;
+   $out =~ s/&=/=/g;
 
    # convert some of my macros:
    $out =~ s/\\inv{(.*?)}/\\frac{1}{$1}/g;
    $out =~ s/\\Abs{(.*?)}/{\\left\\lvert{$1}\\right\\rvert}/g;
    $out =~ s/\\gpgrade{(.*?)}{(.*?)}/{\\left\\langle{{$1}}\\right\\rangle}_{$2}/g;
-   $out =~ s/\\gpgradeone{(.*?)}{(.*?)}/{\\left\\langle{{$1}}\\right\\rangle}_{1}/g;
-   $out =~ s/\\gpgradetwo{(.*?)}{(.*?)}/{\\left\\langle{{$1}}\\right\\rangle}_{2}/g;
+   $out =~ s/\\gpgradeone{(.*?)}/{\\left\\langle{{$1}}\\right\\rangle}_{1}/g;
+   $out =~ s/\\gpgradetwo{(.*?)}/{\\left\\langle{{$1}}\\right\\rangle}_{2}/g;
    $out =~ s/\\kcap/\\hat{\\Bk}/g;
    $out =~ s/\\B(.)/\\mathbf{$1}/g;
    $out =~ s/\\LL/\\mathcal{L}/g;
@@ -154,6 +165,7 @@ sub translate
    $out =~ s/\\grad/\\nabla/g;
    $out =~ s/\\spacegrad/\\boldsymbol{\\nabla}/g;
    $out =~ s/\\delambertian/\\square/g;
+   $out =~ s/\\PD{(.*?)}{(.*?)}/\\frac{\\partial {$2}}{\\partial {$1}}}/g ;
 
    return $out ;
 }
