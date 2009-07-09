@@ -57,20 +57,31 @@ if ( $haveBib )
 
          if ( /\\end{thebibliography}/ )
          {
+            $bibString =~ s,\\url{(.*?)},<a href="$1">$1</a>,;
             $bibString .= "\n" ;
             last ;
          }
 
          s/~/ /g ;
-         s,\\em *{(.*?)},<em>$1</em>, ;
-         s,\\emph *{(.*?)},<em>$1</em>, ;
+         s,{ *\\em\s+(.*?)},<em>$1</em>,g;
+         s,\\em *{(.*?)},<em>$1</em>,g ;
+         s,\\emph *{(.*?)},<em>$1</em>,g ;
          s/\\newblock// ;
-         s,\\url{(.*?)},<a href="$1">$1</a>,;
+
+# \url can be split across lines, as in the following:
+#  \url{http://en.wikipedia.org/w/index.php?title=Relativistic_Doppler_effect&o%
+#ldid=298724264}.
+#
+#In case it isn't do a first check here before stripping out {}'s
+#
+         s,\\url{(.*?)},<a href="$1">$1</a>,sg;
          s/{(.*?)}/$1/g ;
 
+#die "'$_'\n" if /\\url/ ;
          $bibString .= "$_" ;
       }
    }
+
    close $fh ;
 }
 
@@ -128,9 +139,10 @@ next if (
    }
    elsif ( s/\\end{align\**}.*// or s/\\end{equation\**}.*// )
    {
-      my $eq = '$latex ' . translate( "$curEqn$_" ) . " $curEquationLabel\$" ;
-      $eq =~ s/ *\\\\ *\$/\$/g;
-      print "$eq\n" ;
+      my $eq = '$latex \\begin{aligned}' . translate( "$curEqn$_" ) ;
+      $eq =~ s/ *\\\\ *$//g;
+      $eq .= " \\end{aligned} $curEquationLabel\$\n" ;
+      print $eq ;
       $curEqn = '' ;
       $inEquation = 0 ;
       $curEquationLabel = '' ;
@@ -155,7 +167,7 @@ sub translate
    my $out = "@_" ;
 
    $out =~ s/\\\\/\\\\ /g;
-   $out =~ s/&=/=/g;
+#   $out =~ s/&=/=/g;
 
    # convert some of my macros:
    $out =~ s/\\inv{(.*?)}/\\frac{1}{$1}/g;
