@@ -119,6 +119,11 @@ TEXFILES += gaGradeDotWedge.tex
 TEXFILES += tongMf1.tex
 TEXFILES += cronology.tex
 TEXFILES += stressEnergyNoethers.tex
+TEXFILES += lforceLag2.tex
+TEXFILES += emVacWave.tex
+TEXFILES += frequencyTx.tex
+TEXFILES += poincareTx.tex
+TEXFILES += maxwellVacuum.tex
 TEXFILES += 
 
 cronology.tex : METADATA
