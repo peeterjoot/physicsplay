@@ -1,5 +1,8 @@
 #! /usr/bin/perl
 # $Log: tex2blog,v $
+# Revision 1.10  2009/07/11 04:53:16  Peeter
+# *** empty log message ***
+#
 # Revision 1.9  2009/07/09 03:17:51  Peeter
 # *** empty log message ***
 #
@@ -18,6 +21,14 @@ GetOptions(
 
 my $fh ;
 my %equations ;
+
+#foreach (<light*>)
+#{
+#print "$_\n" ;
+#}
+#my $pwd = `pwd` ; chomp $pwd ;
+#print "pwd: $pwd\n" ;
+
 open $fh, "<$filebase.aux" or die "could not open '$filebase.aux'\n" ;
 while (<$fh>)
 {
@@ -92,7 +103,12 @@ if ( $haveBib )
 my $curEqn = '' ;
 my $curEquationLabel = '' ;
 my $inEquation = 0 ;
-open $fh, "<$filebase.tex" or die "could not open '$filebase.aux'\n" ;
+my $failedOpen ;
+open $fh, "<$filebase.tex" or $failedOpen = 1 ;
+if ( $failedOpen )
+{
+   open $fh, "<$filebase.ltx" or die "could not open '$filebase.tex' nor '$filebase.ltx'\n" ;
+}
 while (<$fh>)
 {
    chomp ;
@@ -143,9 +159,17 @@ next if (
    }
    elsif ( s/\\end{align\**}.*// or s/\\end{equation\**}.*// )
    {
-      my $eq = '$latex \\begin{aligned}' . translate( "$curEqn$_" ) ;
+# sample output from latex2wp.  centers things ... looks a bit nicer.
+#<p align=center>$latex \displaystyle   \forall g \in {\cal F}. g^2 = \eta \ \ \ \ \ (1)&fg=000000$</p>
+
+      my $eq = '<p align=center>$latex \\begin{aligned}' . translate( "$curEqn$_" ) ;
       $eq =~ s/ *\\\\ *$//g;
-      $eq .= " \\end{aligned} $curEquationLabel\$\n" ;
+
+# latex2wp used this, but I don't see a difference:
+      my $fgString = '' ;
+#      $fgString = "&fg=000000" ; # omit.
+
+      $eq .= " \\end{aligned} $curEquationLabel$fgString\$</p>\n" ;
       print $eq ;
       $curEqn = '' ;
       $inEquation = 0 ;
