@@ -1,0 +1,123 @@
+\input{../peeter_prologue.tex}
+
+\usepackage{txfonts}
+
+\chapter{Stokes theorem applied to a vector field.}
+\label{chap:stokesGradeTwo}
+%\useCCL
+\date{July 17, 2009}
+\blogpage{http://sites.google.com/site/peeterjoot/math2009/stokesGradeTwo.pdf}
+\revisionInfo{$RCSfile: stokesGradeTwo.tex,v $ Last $Revision: 1.1 $ $Date: 2009/07/18 04:38:03 $}
+
+\beginArtWithToc
+
+\section{Motivation}
+
+I found my self forgetting stokes theorem once again.  Redo this for the simplest case of a parallelogram area element.
+
+What I recall is that we have on one side the curl dotted into the plane of the surface area element
+
+\begin{align}
+\int ( \grad \wedge A ) \cdot d^2 x
+\end{align}
+
+and on the other side a loop integral
+
+\begin{align}
+\ointctrclockwise A \cdot dx
+\end{align}
+
+Comparing the two we should end up with the same form and thus determine the form of the grade two Stokes equation (i.e. for curl of a vector).
+
+\section{Bivector product part.}
+
+\begin{align*}
+( \grad \wedge A ) \cdot d^2 x 
+&=
+( \grad \wedge A ) \cdot \left(\PD{\alpha}{x} \wedge \PD{\beta}{x}\right) 
+d\alpha d\beta \\
+&=
+\partial_\mu A_\nu \PD{\alpha}{x^\sigma} \PD{\beta}{x^\epsilon} (\gamma^\mu \wedge \gamma^\nu) \cdot (\gamma_\sigma \wedge \gamma_\epsilon) 
+d\alpha d\beta \\
+&=
+\partial_\mu A_\nu \PD{\alpha}{x^\sigma} \PD{\beta}{x^\epsilon} ( {\delta^\mu}_\epsilon {\delta^\nu}_\sigma - {\delta^\mu}_\sigma {\delta^\nu}_\epsilon ) 
+d\alpha d\beta \\
+&=
+\partial_\mu A_\nu \left( \PD{\alpha}{x^\nu} \PD{\beta}{x^\mu} - \PD{\alpha}{x^\mu} \PD{\beta}{x^\nu} \right) 
+d\alpha d\beta \\
+\end{align*}
+
+So we have
+\begin{align}\label{eqn:withJac}
+( \grad \wedge A ) \cdot d^2 x &= -\partial_\mu A_\nu \frac{\partial (x^\mu, x^\nu)}{\partial (\alpha, \beta)} d\alpha d\beta
+\end{align}
+
+\section{Loop integral part.}
+
+Integrating around a parallelogram spacetime area element with sides $d\alpha \partial x/\partial \alpha$ and $d\beta \partial x/\partial \beta$ we have
+
+FIXME: picture.
+
+\begin{align*}
+\ointctrclockwise 
+A \cdot dx
+&=
+\int
+{\left. A \right\vert}_{\beta=\beta_0} \cdot \PD{\alpha}{x} d\alpha
++ {\left. A \right\vert}_{\alpha=\alpha_1} \cdot \PD{\beta}{x} d\beta
++ {\left. A \right\vert}_{\beta=\beta_1} \cdot \left( -\PD{\alpha}{x} d\alpha \right)
++ {\left. A \right\vert}_{\alpha=\alpha_0} \cdot \left( -\PD{\beta}{x} d\beta \right) 
+\\
+&=
+\int
+\left( {\left. A \right\vert}_{\alpha=\alpha_1} - {\left. A \right\vert}_{\alpha=\alpha_0} \right) \cdot \PD{\beta}{x} d\beta
+-\left( {\left. A \right\vert}_{\beta=\beta_1} - {\left. A \right\vert}_{\beta=\beta_0} \right) \cdot \PD{\alpha}{x} d\alpha 
+\\
+&=
+\int
+\PD{\alpha}{A} \cdot \PD{\beta}{x} d\alpha d\beta
+-\PD{\beta}{A} \cdot \PD{\alpha}{x} d\beta d\alpha
+\end{align*}
+
+Expanding the derivatives in terms of coordinates we have
+
+\begin{align*}
+\PD{\sigma}{A} 
+&=
+\PD{\sigma}{A_\mu} \gamma^\mu \\
+&= 
+\PD{x^\nu}{A_\mu}\PD{\sigma}{x^\nu} \gamma^\mu \\
+&= 
+\partial_\nu A_\mu \PD{\sigma}{x^\nu} \gamma^\mu \\
+\end{align*}
+
+and
+\begin{align*}
+\PD{\sigma}{x} &= \PD{\sigma}{x^\nu} \gamma_\nu
+\end{align*}
+
+Assembling we have
+\begin{align*}
+\ointctrclockwise 
+A \cdot dx
+&=
+\int
+\partial_\nu A_\mu \left( \PD{\alpha}{x^\nu} \PD{\beta}{x^\mu} - \PD{\beta}{x^\nu} \PD{\alpha}{x^\mu} \right) d\alpha d\beta
+\end{align*}
+
+In terms of the Jacobian used in (\ref{eqn:withJac}) we have
+
+\begin{align*}
+\ointctrclockwise 
+A \cdot dx &= \int \partial_\mu A_\nu \frac{\partial (x^\mu, x^\nu)}{\partial (\alpha, \beta)} d\alpha d\beta
+\end{align*}
+
+Comparing the two we have only a sign difference so the conclusion is that Stokes for a vector field (considering only a flat parallelogram area element) is
+
+\begin{align}
+\int ( \grad \wedge A ) \cdot d^2 x &= \ointclockwise A \cdot dx
+\end{align}
+
+Observe that there's an implied orientation of the area element on the LHS, required to match up with the orientation of the RHS integral.
+
+\EndArticle
