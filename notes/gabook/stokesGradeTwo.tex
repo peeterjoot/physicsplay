@@ -7,11 +7,11 @@
 %\useCCL
 \date{July 17, 2009}
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/stokesGradeTwo.pdf}
-\revisionInfo{$RCSfile: stokesGradeTwo.tex,v $ Last $Revision: 1.1 $ $Date: 2009/07/18 04:38:03 $}
+\revisionInfo{$RCSfile: stokesGradeTwo.tex,v $ Last $Revision: 1.2 $ $Date: 2009/07/19 04:14:44 $}
 
 \beginArtWithToc
 
-\section{Motivation}
+\section{Vector Stokes Theorem}
 
 I found my self forgetting stokes theorem once again.  Redo this for the simplest case of a parallelogram area element.
 
@@ -29,7 +29,7 @@ and on the other side a loop integral
 
 Comparing the two we should end up with the same form and thus determine the form of the grade two Stokes equation (i.e. for curl of a vector).
 
-\section{Bivector product part.}
+\subsection{Bivector product part.}
 
 \begin{align*}
 ( \grad \wedge A ) \cdot d^2 x 
@@ -52,11 +52,16 @@ So we have
 ( \grad \wedge A ) \cdot d^2 x &= -\partial_\mu A_\nu \frac{\partial (x^\mu, x^\nu)}{\partial (\alpha, \beta)} d\alpha d\beta
 \end{align}
 
-\section{Loop integral part.}
+\subsection{Loop integral part.}
 
-Integrating around a parallelogram spacetime area element with sides $d\alpha \partial x/\partial \alpha$ and $d\beta \partial x/\partial \beta$ we have
+Integrating around a parallelogram spacetime area element with sides $d\alpha \partial x/\partial \alpha$ and $d\beta \partial x/\partial \beta$, as
+depicted in figure (\ref{fig:surface_area_element}), we have
 
-FIXME: picture.
+\begin{figure}[htp]
+\centering
+\includegraphics[totalheight=0.4\textheight]{surface_area_element}
+\caption{Surface area element}\label{fig:surface_area_element}
+\end{figure}
 
 \begin{align*}
 \ointctrclockwise 
@@ -120,4 +125,137 @@ Comparing the two we have only a sign difference so the conclusion is that Stoke
 
 Observe that there's an implied orientation of the area element on the LHS, required to match up with the orientation of the RHS integral.
 
-\EndArticle
+\section{Bivector Stokes Theorem}
+
+A parallopiped volume element is depicted in figure (\ref{fig:volume_element}).  Three parameters $\alpha$, $\beta$, $\sigma$ generate a set of differential vector displacements spanning the three dimensional subspace
+
+\begin{figure}[htp]
+\centering
+\includegraphics[totalheight=0.4\textheight]{volume_element}
+\caption{Differential volume element}\label{fig:volume_element}
+\end{figure}
+
+Writing the displacements 
+
+\begin{align*}
+dx_\alpha &= \PD{\alpha}{x} d\alpha \\
+dx_\beta &= \PD{\beta}{x} d\beta \\
+dx_\sigma &= \PD{\sigma}{x} d\sigma
+\end{align*}
+
+We have for the front, right and top face area elements 
+
+\begin{align*}
+dA_F &= dx_\alpha \wedge dx_\beta \\
+dA_R &= dx_\beta \wedge dx_\sigma \\
+dA_T &= dx_\sigma \wedge dx_\alpha \\
+\end{align*}
+
+These are the surfaces of constant parameterization, respectively, $\sigma = \sigma_0$, $\alpha = \alpha_1$, and $\beta = \beta_1$.  For a bivector, the flux through the surface is therefore
+
+\begin{align*}
+\int B \cdot dA 
+&=
+(B_{\sigma_1} \cdot dA_P - B_{\sigma_0} \cdot dA_F )
++ (B_{\alpha_1} \cdot dA_R - B_{\alpha_0} \cdot dA_L)
++ (B_{\beta_1} \cdot dA_T - B_{\beta_0} \cdot dA_B) \\
+&=
+d \sigma \PD{\sigma}{B} \cdot (dx_\beta \wedge dx_\alpha )
++ d \alpha \PD{\alpha}{B} \cdot (dx_\beta \wedge dx_\sigma) 
++ d \beta \PD{\beta}{B} \cdot (dx_\sigma \wedge dx_\alpha ) \\
+\end{align*}
+
+Written out in full this is a bit of a mess
+\begin{align}\label{eqn:mess}
+\int B \cdot dA 
+&=
+d \alpha d\beta d\sigma 
+\partial_\mu \cdot
+\left(
+\left(
+  \PD{\sigma}{x^\mu} \PD{\beta}{x^\nu} \PD{\alpha}{x^\epsilon} 
++ \PD{\alpha}{x^\mu} \PD{\beta}{x^\nu} \PD{\sigma}{x^\epsilon} 
++ \PD{\beta}{x^\mu} \PD{\sigma}{x^\nu} \PD{\alpha}{x^\epsilon} 
+\right) 
+(\gamma_\nu \wedge \gamma_\epsilon )
+\right) 
+\end{align}
+
+It should equal, at least up to a sign, $\int (\grad \wedge B) \cdot d^3 x$.  Expanding the latter is probably easier than regrouping the mess, and doing so we have
+
+\begin{align*}
+(\grad \wedge B) \cdot d^3 x
+&=
+d\alpha d\beta d\sigma ( \gamma^\mu \wedge \partial_\mu B)  \cdot \left( \PD{\alpha}{x} \wedge \PD{\beta}{x} \wedge \PD{\sigma}{x} \right) \\
+&= 
+d\alpha d\beta d\sigma \inv{2} ( \gamma^\mu \partial_\mu B + \partial_\mu B \gamma^\mu )  \cdot \left( \PD{\alpha}{x} \wedge \PD{\beta}{x} \wedge \PD{\sigma}{x} \right) \\
+&=
+d\alpha d\beta d\sigma \inv{2} \gpgradezero{
+( \gamma^\mu \partial_\mu B + \partial_\mu B \gamma^\mu )  \left( \PD{\alpha}{x} \wedge \PD{\beta}{x} \wedge \PD{\sigma}{x} \right) }
+\\
+&=
+d\alpha d\beta d\sigma \inv{2} 
+\partial_\mu B \cdot
+\gpgradetwo{
+\left( \PD{\alpha}{x} \wedge \PD{\beta}{x} \wedge \PD{\sigma}{x} \right) \gamma^\mu 
++ \gamma^\mu \left( \PD{\alpha}{x} \wedge \PD{\beta}{x} \wedge \PD{\sigma}{x} \right) }
+\\
+&=
+d\alpha d\beta d\sigma 
+\partial_\mu B \cdot
+\left( \left( \PD{\alpha}{x} \wedge \PD{\beta}{x} \wedge \PD{\sigma}{x} \right) \cdot \gamma^\mu \right)
+\\
+\end{align*}
+
+Expanding just that trivector-vector dot product
+
+\begin{align*}
+\left( \PD{\alpha}{x} \wedge \PD{\beta}{x} \wedge \PD{\sigma}{x} \right) \cdot \gamma^\mu 
+&=
+\PD{\alpha}{x^\lambda} \PD{\beta}{x^\nu} \PD{\sigma}{x^\epsilon} \left( \gamma_\lambda \wedge \gamma_\nu \wedge \gamma_\epsilon \right) \cdot \gamma^\mu  \\
+&=
+\PD{\alpha}{x^\lambda} \PD{\beta}{x^\nu} \PD{\sigma}{x^\epsilon} \left( 
+\gamma_\lambda \wedge \gamma_\nu {\delta_\epsilon}^\mu
+-\gamma_\lambda \wedge \gamma_\epsilon {\delta_\nu}^\mu
++\gamma_\nu \wedge \gamma_\epsilon {\delta_\lambda}^\mu
+\right) 
+\end{align*}
+
+So we have
+\begin{align*}
+(\grad \wedge B) \cdot d^3 x
+&=
+d\alpha d\beta d\sigma \PD{\alpha}{x^\lambda} \PD{\beta}{x^\nu} \PD{\sigma}{x^\epsilon} \partial_\mu B \cdot \left( 
+\gamma_\lambda \wedge \gamma_\nu {\delta_\epsilon}^\mu
+-\gamma_\lambda \wedge \gamma_\epsilon {\delta_\nu}^\mu
++\gamma_\nu \wedge \gamma_\epsilon {\delta_\lambda}^\mu
+\right) 
+\\
+&=
+d\alpha d\beta d\sigma 
+\partial_\mu B \cdot \left( 
+  \PD{\alpha}{x^\lambda} \PD{\beta}{x^\nu} \PD{\sigma}{x^\mu} \gamma_\lambda \wedge \gamma_\nu 
+%- \PD{\alpha}{x^\lambda} \PD{\beta}{x^\mu} \PD{\sigma}{x^\epsilon} \gamma_\lambda \wedge \gamma_\epsilon 
++ \PD{\alpha}{x^\lambda} \PD{\beta}{x^\mu} \PD{\sigma}{x^\epsilon} \gamma_\epsilon \wedge \gamma_\lambda 
++ \PD{\alpha}{x^\mu} \PD{\beta}{x^\nu} \PD{\sigma}{x^\epsilon} \gamma_\nu \wedge \gamma_\epsilon 
+\right) 
+\\
+\end{align*}
+
+Comparing to mess:
+\begin{align} %\label{eqn:mess}
+\int B \cdot dA 
+&=
+d \alpha d\beta d\sigma 
+\partial_\mu \cdot
+\left(
+\left(
+  \PD{\sigma}{x^\mu} \PD{\beta}{x^\nu} \PD{\alpha}{x^\epsilon} 
++ \PD{\alpha}{x^\mu} \PD{\beta}{x^\nu} \PD{\sigma}{x^\epsilon} 
++ \PD{\beta}{x^\mu} \PD{\sigma}{x^\nu} \PD{\alpha}{x^\epsilon} 
+\right) 
+(\gamma_\nu \wedge \gamma_\epsilon )
+\right) 
+\end{align}
+
+\EndNoBibArticle
