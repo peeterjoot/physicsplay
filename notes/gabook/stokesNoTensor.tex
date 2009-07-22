@@ -5,7 +5,7 @@
 %\useCCL
 \date{July 21, 2009}
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/stokesToTensor.pdf}
-\revisionInfo{$RCSfile: stokesNoTensor.tex,v $ Last $Revision: 1.2 $ $Date: 2009/07/22 03:27:30 $}
+\revisionInfo{$RCSfile: stokesNoTensor.tex,v $ Last $Revision: 1.3 $ $Date: 2009/07/22 13:10:23 $}
 
 \beginArtWithToc
 
@@ -25,6 +25,8 @@ The desire is to relate the curl hypervolume integral to a hypersurface integral
 
 In order to put meaning to this statement the volume and surface elements need to be properly defined.  In order that this be a scalar equation, the object $F$ in the integral is required to be of grade $k-1$, and $k \le n$ where $n$ is the dimension of the vector space that generates the object $F$.
 
+\subsection{Reciprocal frames.}
+
 As evident in equation (\ref{eqn:stokes}) a metric is required to define the dot product.  If an affine non-metric formulation
 of Stokes theorem is possible it will not be attempted here.  A reciprocal basis pair will be utilized, defined by
 
@@ -40,27 +42,76 @@ Vector decomposition in terms of coordinates follows by taking dot products.  We
 x = x^\mu \gamma_\mu = x_\nu \gamma^\nu
 \end{align}
 
-In particular, we write the gradient as
+\subsection{Gradient.}
+
+When working with a non-orthonormal basis, use of the reciprocal frame can be utilized to express the gradient.
 
 \begin{align}
 \grad \equiv \gamma^\mu \partial_\mu \equiv \sum_\mu \gamma^\mu \PD{x^\mu}{}
 \end{align}
 
-The perhaps odd seeming mix of upper and lower indexes in this definition is required to make the directional derivative take the right form.  Writing the directional derivative the usual way
+This contains what may perhaps seem like an odd seeming mix of upper and lower indexes in this definition.  This is how the gradient is defined in \cite{doran2003gap}.  Although it is possible to accept this definition and work with it, this form can be justified by require of the gradient consistency with the the definition of directional derivative.  A definition of the directional derivative that works for single and multivector functions, in \R{3} and other more general spaces is
 
 \begin{align}
 a \cdot \grad F \equiv \lim_{\tau \rightarrow 0} \frac{F(x + a\tau) - F(x)}{\tau} = {\left.\PD{\tau}{F(x + a\tau)} \right\vert}_{\tau=0}
 \end{align}
 
-It can be verified that the directional derivative in terms of coordinates can be written as $a \cdot \grad = a^\mu \partial_\mu$, which then requires the upper index basis vectors in the gradient definition
+Taylor expanding about $\tau=0$ in terms of coordinates we have
 
 \begin{align*}
-a^\mu \partial_\mu 
-&= (a^\nu \gamma_\nu) \cdot \gamma^\mu \partial_\mu \\
-&= a \cdot \grad 
+{\left.\PD{\tau}{F(x + a\tau)} \right\vert}_{\tau=0}
+&= a^\mu \PD{x^\mu}{F} \\
+%&= a^\mu \partial_\mu F \\
+&= (a^\nu \gamma_\nu) \cdot (\gamma^\mu \partial_\mu) F \\
+&= a \cdot \grad F \quad\quad\quad\square
 \end{align*}
 
-The hypervolume element will be defined in terms of a vector parameteriation.
+The lower index representation of the vector coordinates could also have been used, so using the directional derivative to imply a definition of the gradient, we have an additional alternate representation of the gradient
+
+\begin{align}
+\grad \equiv \gamma_\mu \partial^\mu \equiv \sum_\mu \gamma_\mu \PD{x_\mu}{}
+\end{align}
+
+\subsection{Volume element}
+We define the hypervolume in terms of parameterized vector displacements $x = x(a_1, a_2, ... a_k)$.  For the vector x we can form a pseudoscalar for the subspace spanned by this parameterization by wedging the displacements in each of the directions defined by variation of the parameters.  Let
+
+\begin{align*}
+dx_1 & = \PD{a_1}{x} da_1 = \gamma_\mu \PD{a_1}{x^\mu} da_1 \\
+dx_2 & = \PD{a_2}{x} da_2 = \gamma_\mu \PD{a_2}{x^\mu} da_2 \\
+\hdots \\
+dx_k & = \PD{a_k}{x} da_k = \gamma_\mu \PD{a_k}{x^\mu} da_k \\
+\end{align*}
+
+The hypervolume element is then
+\begin{align}
+d^k x \equiv dx_1 \wedge dx_2 \cdots dx_k
+\end{align}
+
+This can be expanded explicitly in coordinates
+
+\begin{align*}
+d^k x 
+&= da_1 da_2 \cdots da_k 
+\left(
+\PD{a_1}{x^{\alpha_1}} 
+\PD{a_2}{x^{\alpha_2}} 
+\cdots
+\PD{a_k}{x^{\alpha_k}} 
+\right)
+( \gamma_{\alpha_1} \wedge \gamma_{\alpha_2} \wedge \cdots \wedge \gamma_{\alpha_k} ) \\
+&= 
+da_1 da_2 \cdots da_k 
+\sum_{\alpha_1 < \alpha_2 < \cdots < \alpha_k}
+\PD{(a_1, a_2, \cdots, a_k)}{(x^{\alpha_1}, x^{\alpha_2}, \cdots, x^{\alpha_k})}
+( \gamma_{\alpha_1} \wedge \gamma_{\alpha_2} \wedge \cdots \wedge \gamma_{\alpha_k} ) \\
+&= 
+\inv{k!}
+da_1 da_2 \cdots da_k
+\PD{(a_1, a_2, \cdots, a_k)}{(x^{\alpha_1}, x^{\alpha_2}, \cdots, x^{\alpha_k})}
+( \gamma_{\alpha_1} \wedge \gamma_{\alpha_2} \wedge \cdots \wedge \gamma_{\alpha_k} ) \\
+\end{align*}
+
+However, we don't wish to use these Jacobians since we've seen how messy this makes things.  Even when the volume element for the subspace was three dimensional, this was starting to get untractable.
 
 \section{Guts}
 
