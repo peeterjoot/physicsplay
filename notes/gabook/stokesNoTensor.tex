@@ -5,7 +5,7 @@
 %\useCCL
 \date{July 21, 2009}
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/stokesToTensor.pdf}
-\revisionInfo{$RCSfile: stokesNoTensor.tex,v $ Last $Revision: 1.4 $ $Date: 2009/07/22 13:28:57 $}
+\revisionInfo{$RCSfile: stokesNoTensor.tex,v $ Last $Revision: 1.5 $ $Date: 2009/07/23 01:25:00 $}
 
 \beginArtWithToc
 
@@ -15,7 +15,8 @@ Relying on pictorial means and a brute force ugly comparison of left and right h
 
 The fact that the pictorial means of defining the boundary surface doens't work well in four vector space is not the only unsatisfactory aspect of the previous treatment.  The fact that a coordinate expansion of the hypervolume element and hypersurface element was performed in the LHS and RHS comparisions was required is particularily ugly.  It is a lot of work and essentially has to be undone on the opposing side of the equation.  Comparing to previous attempts to come to terms with Stokes theorem in (\cite{PJStokes1}) and (\cite{PJStokes2}) this more recent attempt at least avoids the requirement for a tensor expansion of the vector or bivector.  It should be possible to build on this and minimize the amount of coordinate expansion required and go directly from the volume integral to the expression of the boundary surface.
 
-\section{Notation and Setup.}
+\section{Do it.}
+\subsection{Notation and Setup.}
 
 The desire is to relate the curl hypervolume integral to a hypersurface integral on the boundary
 
@@ -104,25 +105,29 @@ da_1 da_2 \cdots da_k
 \sum_{\alpha_1 < \alpha_2 < \cdots < \alpha_k}
 \PD{(a_1, a_2, \cdots, a_k)}{(x^{\alpha_1}, x^{\alpha_2}, \cdots, x^{\alpha_k})}
 ( \gamma_{\alpha_1} \wedge \gamma_{\alpha_2} \wedge \cdots \wedge \gamma_{\alpha_k} ) \\
-&= 
+\end{align*}
+
+This is
+\begin{align}\label{eqn:jacobian}
+d^k x 
 \inv{k!}
 da_1 da_2 \cdots da_k
 \PD{(a_1, a_2, \cdots, a_k)}{(x^{\alpha_1}, x^{\alpha_2}, \cdots, x^{\alpha_k})}
-( \gamma_{\alpha_1} \wedge \gamma_{\alpha_2} \wedge \cdots \wedge \gamma_{\alpha_k} ) \\
-\end{align*}
+( \gamma_{\alpha_1} \wedge \gamma_{\alpha_2} \wedge \cdots \wedge \gamma_{\alpha_k} ) 
+\end{align}
 
 However, we don't wish to use these Jacobians since we've seen how messy this makes things.  Even when the volume element for the subspace was three dimensional, this was starting to get untractable.
 
-\section{Guts}
+\subsection{Expansion of the curl and volume element product}
 
 We are now prepared to go on to the meat of the issue.  The first order of business is the expansion of the curl and volume element product
 
 \begin{align*}
-( \grad \wedge F ) \cdot d^4 x
+( \grad \wedge F ) \cdot d^k x
 &=
-( \gamma^\mu \wedge \partial_\mu F ) \cdot d^4 x \\
+( \gamma^\mu \wedge \partial_\mu F ) \cdot d^k x \\
 &=
-\gpgradezero{ ( \gamma^\mu \wedge \partial_\mu F ) d^4 x } \\
+\gpgradezero{ ( \gamma^\mu \wedge \partial_\mu F ) d^k x } \\
 \end{align*}
 
 The wedge product within the scalar grade selection operator can be expanded in symmetric or antisymmetric sums, but this is a grade dependent operation.  For odd grade blades $A$ (vector, trivector, ...), and vector $a$ we have for the dot and wedge product respectively
@@ -139,12 +144,12 @@ a \wedge A = \inv{2} (a A + A a) \\
 a \cdot A = \inv{2} (a A - A a)
 \end{align*}
 
-Treating the odd grade case for $F$ we have
+First treating the odd grade case for $F$ we have
 
 \begin{align*}
-( \grad \wedge F ) \cdot d^4 x
+( \grad \wedge F ) \cdot d^k x
 &=
-\inv{2} \gpgradezero{ \gamma^\mu \partial_\mu F d^4 x } - \inv{2} \gpgradezero{ \partial_\mu F \gamma^\mu d^4 x } \\
+\inv{2} \gpgradezero{ \gamma^\mu \partial_\mu F d^k x } - \inv{2} \gpgradezero{ \partial_\mu F \gamma^\mu d^k x } \\
 \end{align*}
 
 Employing cyclic scalar reordering within the scalar product for the first term
@@ -156,21 +161,107 @@ Employing cyclic scalar reordering within the scalar product for the first term
 we have
 
 \begin{align*}
-( \grad \wedge F ) \cdot d^4 x
+( \grad \wedge F ) \cdot d^k x
 &=
-\inv{2} \gpgradezero{ \partial_\mu F (d^4 x \gamma^\mu - \gamma^\mu d^4 x)} \\
+\inv{2} \gpgradezero{ \partial_\mu F (d^k x \gamma^\mu - \gamma^\mu d^k x)} \\
 &=
-\inv{2} \gpgradezero{ \partial_\mu F (d^4 x \cdot \gamma^\mu - \gamma^\mu d^4 x)} \\
+\inv{2} \gpgradezero{ \partial_\mu F (d^k x \cdot \gamma^\mu - \gamma^\mu d^k x)} \\
 &=
-\gpgradezero{ \partial_\mu F (d^4 x \cdot \gamma^\mu)} \\
+\gpgradezero{ \partial_\mu F (d^k x \cdot \gamma^\mu)} \\
 \end{align*}
 
 The end result is 
 
 \begin{align}\label{eqn:startingPoint}
-( \grad \wedge F ) \cdot d^4 x &= \partial_\mu F \cdot (d^4 x \cdot \gamma^\mu) 
+( \grad \wedge F ) \cdot d^k x &= \partial_\mu F \cdot (d^k x \cdot \gamma^\mu) 
 \end{align}
 
-For even grade $F$ (and thus odd grade $d^4 x$) it is straightforward to show that (\ref{eqn:startingPoint}) also holds.
+For even grade $F$ (and thus odd grade $d^k x$) it is straightforward to show that (\ref{eqn:startingPoint}) also holds.
+
+\subsection{Expanding the volume dot product}
+
+We want to expand the volume integral dot product
+
+\begin{align}
+d^k x \cdot \gamma^\mu
+\end{align}
+
+Picking $k = 4$ will serve to illustrate the pattern, and the generalization (or degeneralization to lower grades) will be clear.  We have
+
+\begin{align*}
+d^4 x \cdot \gamma^\mu
+&=
+( dx_1 \wedge dx_2 \wedge dx_3 \wedge dx_4 ) \cdot \gamma^\mu \\
+&= ( dx_1 \wedge dx_2 \wedge dx_3 ) dx_4 \cdot \gamma^\mu \\
+&-( dx_1 \wedge dx_2 \wedge dx_4 ) dx_3 \cdot \gamma^\mu \\
+&+( dx_1 \wedge dx_3 \wedge dx_4 ) dx_2 \cdot \gamma^\mu \\
+&-( dx_2 \wedge dx_3 \wedge dx_4 ) dx_1 \cdot \gamma^\mu  \\
+\end{align*}
+
+This avoids the requirement to do the entire Jacobian expansion of (\ref{eqn:jacobian}).  The dot product of the differential displacement $dx_m$ with $\gamma^\mu$ can now be made explicit without as much mess.
+
+\begin{align*}
+dx_m \cdot \gamma^\mu 
+&=
+da_m \PD{a_m}{x^\nu} \gamma_\nu \cdot \gamma^\mu \\
+&=
+da_m \PD{a_m}{x^\mu} \\
+\end{align*}
+
+We now have products of the form
+
+\begin{align*}
+\partial_\mu F da_m \PD{a_m}{x^\mu} 
+&=
+da_m \PD{a_m}{x^\mu} \PD{x^\mu}{F} \\
+&=
+da_m \PD{a_m}{F} \\
+\end{align*}
+
+Now we see that the differential form of (\ref{eqn:startingPoint}) for this $k=4$ example is reduced to
+
+\begin{align*}
+( \grad \wedge F ) \cdot d^4 x 
+&= da_4 \PD{a_4}{F} \cdot ( dx_1 \wedge dx_2 \wedge dx_3 ) \\
+&- da_3 \PD{a_3}{F} \cdot ( dx_1 \wedge dx_2 \wedge dx_4 ) \\
+&+ da_2 \PD{a_2}{F} \cdot ( dx_1 \wedge dx_3 \wedge dx_4 ) \\
+&- da_1 \PD{a_1}{F} \cdot ( dx_2 \wedge dx_3 \wedge dx_4 ) \\
+\end{align*}
+
+Straight integration is now possible yeilding
+
+\begin{align*}
+\int ( \grad \wedge F ) \cdot d^4 x 
+&= \int (F(a_4(1)) - F(a_4(0))) \cdot ( dx_1 \wedge dx_2 \wedge dx_3 ) \\
+&- \int (F(a_3(1)) - F(a_3(0))) \cdot ( dx_1 \wedge dx_2 \wedge dx_4 ) \\
+&+ \int (F(a_2(1)) - F(a_2(0))) \cdot ( dx_1 \wedge dx_3 \wedge dx_4 ) \\
+&- \int (F(a_1(1)) - F(a_1(0))) \cdot ( dx_2 \wedge dx_3 \wedge dx_4 ) \\
+\end{align*}
+
+This is precisely Stokes theorem for the trivector case and makes the enumeration of the boundary surfaces explicit.  As derived there was no requirement for an orthonormal basis, nor a Euclidean metric, nor a parameterization along the basis directions.  The only requirement of the parameterization is that the associated volume element is non-trivial (i.e. none of $dx_q \wedge dx_r = 0$).  The issue of how to extend this from the hyper-parallopiped volume element to a general has been skipped, and should perhaps be thought through more carefully.
+
+For completeness, note that our boundary surface and associated Stokes statement for the bivector and vector cases is, by inspection respectively
+
+\begin{align*}
+\int ( \grad \wedge F ) \cdot d^3 x 
+&= \int (F(a_3(1)) - F(a_3(0))) \cdot ( dx_1 \wedge dx_2 ) \\
+&- \int (F(a_2(1)) - F(a_2(0))) \cdot ( dx_1 \wedge dx_3 ) \\
+&+ \int (F(a_1(1)) - F(a_1(0))) \cdot ( dx_2 \wedge dx_3 ) \\
+\end{align*}
+
+and
+\begin{align*}
+\int ( \grad \wedge F ) \cdot d^2 x 
+&= \int (F(a_2(1)) - F(a_2(0))) \cdot dx_1 \\
+&- \int (F(a_1(1)) - F(a_1(0))) \cdot dx_2 \\
+\end{align*}
+
+These three expansions can be summarized by the single statement
+
+\begin{align}
+\int ( \grad \wedge F ) \cdot d^k x = \int F \cdot d^{k-1} x 
+\end{align}
+
+Where it is implied that the blade $F$ is evaluated on the boundaries and dotted with the associated hypersurface boundary element.  However, having expanded this we now have an explicit statement of exactly what that surface element is now for any desired parameterization.
 
 \EndArticle
