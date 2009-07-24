@@ -7,7 +7,7 @@
 %\useCCL
 \date{July 21, 2009}
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/stokesNoTensor.pdf}
-\revisionInfo{$RCSfile: stokesNoTensor.tex,v $ Last $Revision: 1.7 $ $Date: 2009/07/23 04:14:22 $}
+\revisionInfo{$RCSfile: stokesNoTensor.tex,v $ Last $Revision: 1.8 $ $Date: 2009/07/24 04:51:31 $}
 
 \beginArtWithToc
 
@@ -357,5 +357,85 @@ So we have
 \end{align*}
 
 the orientation of the fourspace volume element and the boundary normal is defined in terms of the parametrization, the duality relations and our explicit expansion of the 4D stokes boundary integral above.
+
+\subsection{4D divergence theorem, continued.}
+
+The basic idea of using duality to express the 4D divergence integral as a stokes boundary surface integral has been explored.  Lets consider this in more detail picking a specific parametrization, namely rectangular four vector coordinates.  For the volume element write
+
+\begin{align*}
+d^4 x 
+&= ( \gamma_0 dx^0 ) \wedge ( \gamma_1 dx^1 ) \wedge ( \gamma_2 dx^2 ) \wedge ( \gamma_3 dx^3 ) \\
+&= \gamma_0 \gamma_1 \gamma_2 \gamma_3 dx^0 dx^1 dx^2 dx^3 \\
+&= i dx^0 dx^1 dx^2 dx^3 \\
+\end{align*}
+
+As seen previously (but not separately), the divergence can be expressed as the dual of the curl
+
+\begin{align*}
+\grad \cdot f
+&=
+\gpgradezero{ \grad f } \\
+&=
+-\gpgradezero{ \grad i (\underbrace{i f}_{\text{grade 3}}) } \\
+&=
+\gpgradezero{ i \grad (i f) } \\
+%&=
+%\gpgradezero{ i ( \grad \cdot (i f) + \grad \wedge (i f) ) } \\
+&=
+\gpgradezero{ i ( \underbrace{\grad \cdot (i f)}_{\text{grade 2}} + \underbrace{\grad \wedge (i f)}_{\text{grade 4}} ) } \\
+&=
+i (\grad \wedge (i f)) \\
+\end{align*}
+
+So we have $\grad \wedge (i f) = -i (\grad \cdot f)$.  Putting things together, and writing $i f = -f i$ we have 
+
+\begin{align*}
+\int (\grad \wedge (i f)) \cdot d^4 x
+&= 
+\int (\grad \cdot f) dx^0 dx^1 dx^2 dx^3 \\
+&=
+\int dx^0 \partial_0 (f i) \cdot \gamma_{123} dx^1 dx^2 dx^3 \\
+&-\int dx^1 \partial_1 (f i) \cdot \gamma_{023} dx^0 dx^2 dx^3 \\
+&+\int dx^2 \partial_2 (f i) \cdot \gamma_{013} dx^0 dx^1 dx^3 \\
+&-\int dx^3 \partial_3 (f i) \cdot \gamma_{012} dx^0 dx^1 dx^2 \\
+\end{align*}
+
+It is straightforward to reduce each of these dot products.  For example
+
+\begin{align*}
+\partial_2 (f i) \cdot \gamma_{013}
+&=
+\gpgradezero{ \partial_2 f \gamma_{0123013} } \\
+&=
+-\gpgradezero{ \partial_2 f \gamma_{2} } \\
+&=
+- \gamma_2 \partial_2 \cdot f \\
+&=
+\gamma^2 \partial_2 \cdot f 
+\end{align*}
+
+The rest proceed the same and rather anticlimactically we end up coming full circle 
+
+\begin{align*}
+\int (\grad \cdot f) dx^0 dx^1 dx^2 dx^3 
+&=
+\int dx^0 \gamma^0 \partial_0 \cdot f dx^1 dx^2 dx^3 \\
+&+\int dx^1 \gamma^1 \partial_1 \cdot f dx^0 dx^2 dx^3 \\
+&+\int dx^2 \gamma^2 \partial_2 \cdot f dx^0 dx^1 dx^3 \\
+&+\int dx^3 \gamma^3 \partial_3 \cdot f dx^0 dx^1 dx^2 \\
+\end{align*}
+
+This is however nothing more than the definition of the divergence itself and no need to resort to Stokes theorem is required.  However, if we are integrating over a rectangle and perform each of the four integrals, we have (with $c=1$) from the dual Stokes equation the perhaps less obvious result
+
+\begin{align*}
+\int \partial_\mu f^\mu dt dx dy dz
+&=
+\int (f^0(t_1) - f^0(t_0)) dx dy dz \\
+&+\int (f^1(x_1) - f^1(x_0)) dt dy dz \\
+&+\int (f^2(y_1) - f^2(y_0)) dt dx dz \\
+&+\int (f^3(z_1) - f^3(z_0)) dt dx dy \\
+\end{align*}
+
+When stated this way one sees that this could have just as easily have followed directly from the left hand side.  What's the point then of the divergence theorem or Stokes theorem?  I think that the value must really be the fact that the Stokes formulation naturally builds the volume element in a fashion independent of any specific parametrization.  Here in rectangular coordinates the result seems obvious, but would the equivalent result seem obvious if non-rectangular spacetime coordinates were employed?  Probably not.
 
 \EndArticle
