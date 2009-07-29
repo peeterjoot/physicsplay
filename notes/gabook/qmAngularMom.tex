@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/qmAngularMom.pdf}
 \date{July 27, 2009}
-\revisionInfo{$RCSfile: qmAngularMom.tex,v $ Last $Revision: 1.2 $ $Date: 2009/07/28 04:35:02 $}
+\revisionInfo{$RCSfile: qmAngularMom.tex,v $ Last $Revision: 1.3 $ $Date: 2009/07/29 01:23:47 $}
 
 \beginArtWithToc
 
@@ -100,20 +100,71 @@ So we have for the Laplacian a representation in terms of projection and rejecti
 \spacegrad^2
 &=
 (\acap \cdot \spacegrad)^2 - \inv{\Ba^2} (\Ba \wedge \spacegrad)^2 \\
+&=
+(\acap \cdot \spacegrad)^2 - (\acap \wedge \spacegrad)^2 \\
 \end{align*}
 
-The vector $\Ba$ was arbitrary, and just needed to be constant with respect to the factorization operations.  Setting $\Ba = \Bx$, the radial position from the origin, we have
+The vector $\Ba$ was arbitrary, and just needed to be constant with respect to the factorization operations.  Setting $\Ba = \Bx$, the radial position from the origin one may guess that we have
 
-\begin{align}
+\begin{align}\label{eqn:wrong}
 \spacegrad^2 &= \frac{\partial^2 }{\partial r^2} - \inv{\Bx^2} (\Bx \wedge \spacegrad)^2 
 \end{align}
 
-So in polar form the bivector form of the angular momentum operator is quite evident, just by application of projection of the gradient onto the radial direction and the tangential plane to the sphere at the radial point
+however, with the switch to a non-constant position vector $\Bx$, this cannot possibly be right.
+
+\section{The Coriolis term}
+
+The radial factorization of the gradient relied on the direction vector $\Ba$ being constant.  If we evaluate (\ref{eqn:wrong}), then there should be a non-zero remainder compared to the Laplacian.  Evaluation by coordinate expansion is one way to verify this, and should produce the difference.  Let's do this in two parts, starting with $(x \wedge \grad)^2$.  Summation will be implied by mixed indexes, and for generality a general basis and associated reciprocal frame will be used.
 
 \begin{align*}
+(x \wedge \grad)^2 f 
+&=
+((x^\mu \gamma_\mu) \wedge (\gamma_\nu \partial^\nu)) \cdot 
+((x_\alpha \gamma^\alpha) \wedge (\gamma^\beta \partial_\beta)) \\
+&=
+(\gamma_\mu \wedge \gamma_\nu) \cdot (\gamma^\alpha \wedge \gamma^\beta) x^\mu \partial^\nu (x_\alpha \partial_\beta) f \\
+&=
+({\delta_\mu}^\beta {\delta_\nu}^\alpha -{\delta_\mu}^\alpha {\delta_\nu}^\beta) x^\mu \partial^\nu (x_\alpha \partial_\beta) f \\
+&=
+x^\mu \partial^\nu ((x_\nu \partial_\mu) - x_\mu \partial_\nu) f \\
+&=
+x^\mu (\partial^\nu x_\nu) \partial_\mu f - x^\mu (\partial^\nu x_\mu) \partial_\nu f \\
+&+x^\mu x_\nu \partial^\nu \partial_\mu f - x^\mu x_\mu \partial^\nu \partial_\nu f \\
+&=
+(n-1) x \cdot \grad f +x^\mu x_\nu \partial^\nu \partial_\mu f - x^2 \grad^2 f \\
+\end{align*}
+
+For the dot product we have
+\begin{align*}
+(x \cdot \grad)^2 f 
+&=
+x^\mu \partial_\mu( x^\nu \partial_\nu ) f \\
+&=
+x^\mu (\partial_\mu x^\nu) \partial_\nu  f + x^\mu x^\nu \partial_\mu \partial_\nu f \\
+&=
+x^\mu \partial_\mu f + x^\mu x_\nu \partial^\nu \partial_\mu f \\
+&=
+x \cdot \grad f + x^\mu x_\nu \partial^\nu \partial_\mu f \\
+\end{align*}
+
+So, forming the difference we have
+
+\begin{align*}
+(x \cdot \grad)^2 f - (x \wedge \grad)^2 f &=
+-(n - 2) x \cdot \grad f + x^2 \grad^2 f \\
+\end{align*}
+
+Or
+\begin{align}
+\grad^2 &= \inv{x^2} (x \cdot \grad)^2 - \inv{x^2} (x \wedge \grad)^2 + (n - 2) \inv{x} \cdot \grad 
+\end{align}
+
+Going back to the quantum Hamiltonian we do still have the angular momentum operator as one of the distinct factors of the Laplacian.  As operators we have something akin to the projection of the gradient onto the radial direction, as well as terms that project the gradient onto the tangential plane to the sphere at the radial point
+
+\begin{align}
 -\frac{\hbar^2}{2m} \spacegrad^2 + V
 &=
--\frac{\hbar^2}{2m} \frac{\partial^2 }{\partial r^2} + \frac{\hbar^2}{2m \Bx^2} (\Bx \wedge \spacegrad)^2 + V
-\end{align*}
+-\frac{\hbar^2}{2m} \left( \inv{\Bx^2} (\Bx \cdot \spacegrad)^2 - \inv{\Bx^2} (\Bx \wedge \spacegrad)^2 + \inv{\Bx} \cdot \spacegrad \right) + V
+\end{align}
 
 \EndArticle
