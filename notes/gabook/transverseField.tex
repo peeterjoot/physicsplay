@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/transverseField.pdf}
 \date{July 30, 2009}
-\revisionInfo{$RCSfile: transverseField.tex,v $ Last $Revision: 1.1 $ $Date: 2009/07/31 02:35:58 $}
+\revisionInfo{$RCSfile: transverseField.tex,v $ Last $Revision: 1.2 $ $Date: 2009/07/31 06:00:13 $}
 
 \beginArtWithToc
 
@@ -17,30 +17,93 @@ It looks like this should be easier using Geometric Algebra.  Let's give this a 
 
 \section{Guts}
 
-The starting point can be the same, the source free Maxwell's equations.  Writing $\partial_0 = 1/c \partial/{\partial t}$, we have
+The starting point can be the same, the source free Maxwell's equations.  Writing $\partial_0 = (1/c) \partial/{\partial t}$, we have
 
-\begin{align*}
-\grad \cdot \BE &= 0 \\
-\grad \cdot \BB &= 0 \\
-\grad \cross \BE &= - \partial_0 \BB \\
-\grad \cross \BB &= \mu \epsilon \partial_0 \BE
-\end{align*}
+\begin{align}
+\spacegrad \cdot \BE &= 0 \\
+\spacegrad \cdot \BB &= 0 \\
+\spacegrad \cross \BE &= - \partial_0 \BB \\
+\spacegrad \cross \BB &= \mu \epsilon \partial_0 \BE
+\end{align}
 
 Multiplication of the last two equations by the spatial pseudoscalar $I$, and using $I \Ba \cross \Bb = \Ba \wedge \Bb$, the curl equations can be written in their dual bivector form
 
-\begin{align*}
-\grad \wedge \BE &= - \partial_0 I \BB \\
-\grad \wedge \BB &= \mu \epsilon \partial_0 I \BE
-\end{align*}
+\begin{align}
+\spacegrad \wedge \BE &= - \partial_0 I \BB \\
+\spacegrad \wedge \BB &= \mu \epsilon \partial_0 I \BE
+\end{align}
 
 Now adding the dot and curl equations using $\Ba \Bb = \Ba \cdot \Bb + \Ba \wedge \Bb$ eliminates the cross products as Eli also did
 
-\begin{align*}
-\grad \BE &= - \partial_0 I \BB \\
-\grad \BB &= \mu \epsilon \partial_0 I \BE
-\end{align*}
+\begin{align}\label{eqn:twoEquations}
+\spacegrad \BE &= - \partial_0 I \BB \\
+\spacegrad \BB &= \mu \epsilon \partial_0 I \BE
+\end{align}
 
+These can be further merged without any loss, into the GA first order equation
 
+\begin{align}\label{eqn:maxwell}
+\left(\spacegrad + \frac{\sqrt{\mu\epsilon}}{c}\partial_t\right) \left(\BE + \frac{I\BB}{\sqrt{\mu\epsilon}} \right) = 0
+\end{align}
+
+We are really after solutions to the total multivector field $F = \BE + I \BB/\sqrt{\mu\epsilon}$.  For this problem where separate electric and magnetic field components are desired, working from (\ref{eqn:twoEquations}) is perhaps what we want?
+
+Following Eli and Jackson, write $\spacegrad = \spacegrad_t + \zcap \partial_z$, and 
+
+\begin{align}
+\BE(x,y,z,t) &= \BE(x,y) e^{\pm i k z - i \omega t} \\
+\BB(x,y,z,t) &= \BB(x,y) e^{\pm i k z - i \omega t}
+\end{align}
+
+Evaluating the $z$ and $t$ partials we have
+\begin{align}
+(\spacegrad_t \pm i k \zcap) \BE(x,y) &= \frac{i\omega}{c} I \BB(x,y) \\
+(\spacegrad_t \pm i k \zcap) \BB(x,y) &= -\mu \epsilon \frac{i\omega}{c} I \BE(x,y)
+\end{align}
+
+For the remainder of these notes, the explicit $(x,y)$ dependence will be assumed for $\BE$ and $\BB$.
+
+An obvious thing to try with these equations is just substuite one into the other.  If that's done we get the pair of second order harmonic equations
+
+\begin{align}
+{\spacegrad_t}^2
+\begin{pmatrix}\BE \\ \BB \end{pmatrix}
+= \left( k^2 - \mu \epsilon \frac{\omega^2}{c^2} \right)
+\begin{pmatrix}\BE \\ \BB \end{pmatrix}
+\end{align}
+
+One could consider the problem solved here.  Separately equating both sides of this equation to zero, we have the $k^2 = \mu\epsilon \omega^2/c^2$ constraint on the wave number and angular velocity, and the second order Laplacian on the left hand side is solved by the real or imaginary parts of any analytic function.  Especially when one considers that we are after a multivector field that of intrinsic complex nature.
+
+If that's not what we want as a solution then from the Maxwell equation (\ref{eqn:maxwell}), we have
+
+\begin{align}
+\left(\spacegrad_t \pm i k \zcap - \sqrt{\mu\epsilon}\frac{i\omega}{c}\right) \left(\BE + \frac{I\BB}{\sqrt{\mu\epsilon}} \right) = 0
+\end{align}
+
+Selecting scalar, vector, bivector and trivector grades of this equation, we have the following respective relations between the various components
+
+\begin{align}
+0 = \gpgradezero{\cdots} &= \grad_t \cdot \BE \pm i k \zcap \cdot \BE \\
+0 = \gpgradeone{\cdots} &= I \grad_t \wedge \BB/\sqrt{\mu\epsilon} \pm i I k \zcap \wedge \BB/\sqrt{\mu\epsilon} - i \sqrt{\mu\epsilon}\frac{\omega}{c} \BE \\
+0 = \gpgradetwo{\cdots} &= \grad_t \wedge \BE \pm i k \zcap \wedge \BE - i \frac{\omega}{c} I \BB \\
+0 = \gpgradethree{\cdots} &= I \grad_t \cdot \BB/\sqrt{\mu\epsilon} \pm i I k \zcap \cdot \BB/\sqrt{\mu\epsilon}
+\end{align}
+
+From the scalar and pseudoscalar grades we have the propagation components in terms of the transverse ones
+
+\begin{align}
+E_z &= \frac{\pm i}{k} \grad_t \cdot \BE_t \\
+B_z &= \frac{\pm i}{k} \grad_t \cdot \BB_t \\
+\end{align}
+
+But this is the opposite of the relations that we are after.  On the other hand from the vector and bivector grades we have
+
+\begin{align}
+i \frac{\omega}{c} \BE &= -\inv{\mu\epsilon}\left(\grad_t \cross \BB_z \pm i k \zcap \cross \BB_t\right) \\
+i \frac{\omega}{c} \BB &= \grad_t \cross \BE_z \pm i k \zcap \cross \BE_t
+\end{align}
+
+and we can probably go through the messy algebra to get the transverse equations, but is there a better way?
 
 %\EndArticle
 \EndNoBibArticle
