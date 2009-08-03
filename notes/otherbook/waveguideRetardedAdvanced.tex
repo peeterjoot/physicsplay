@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/waveguideRetardedAdvanced.pdf}
 \date{August 1, 2009}
-\revisionInfo{$RCSfile: waveguideRetardedAdvanced.tex,v $ Last $Revision: 1.2 $ $Date: 2009/08/02 13:24:08 $}
+\revisionInfo{$RCSfile: waveguideRetardedAdvanced.tex,v $ Last $Revision: 1.3 $ $Date: 2009/08/03 16:19:49 $}
 
 \beginArtWithToc
 
@@ -13,7 +13,9 @@
 
 In (\cite{transverseField}), a Geometric Algebra solution for the transverse components of the electromagnetic field was found.  Here we construct a superposition of these transverse fields, keeping the propagation direction fixed, and allowing for continuous variation of the wave number and angular velocity.  Evaluation of this superposition integral, first utilizing a contour integral, then utilizing an inverse Fourier transform allows for the determination of the functional form of a general wave packet moving along a fixed direction in space.  This wave packet will be seen to have two time dependencies, an advanced time term, and a retarded time term.
 
-\section{Guts}
+%FIXME: found an error in my paper writeup.  I'd neglected the absolutes on the angular velocity $\omega$ after the first integral, and after that this doesn't work out nicely anymore.  I tried an alternative, a hyperbolic change of variables.  This removes the singularity, but too well, and it doesn't even leave a pole at $r=0$.  How to procede?
+
+\section{Superposition of phasor solutions.}
 
 When the field is required to have explicit sinusoidal time and propagation direction, the field components in the transverse (to the propagation) direction were found to be
 
@@ -70,5 +72,112 @@ e^{i \sqrt{\mu\epsilon}\frac{\Abs{\omega}}{c} z}
 \frac{\omega +\zcap\Abs{\omega}}{\Abs{\omega}}
 \spacegrad_t {F_z}^{\omega+}
 \end{align*}
+
+Can one ignore the singularity at $\omega = 0$ since it divides out?  If so, then we have
+
+\begin{align*} %\label{eqn:waveguideRetardedAdvanced:foo9}
+F_t 
+&= 
+\frac{\pi}{2}
+\int d\omega e^{-i\omega t} 
+e^{-i \sqrt{\mu\epsilon}\frac{\Abs{\omega}}{c} z}
+(\Sgn(\omega) - \zcap)
+\spacegrad_t {F_z}^{\omega-} \\
+&
+- 
+\frac{\pi}{2}
+\int d\omega e^{-i\omega t} 
+e^{i \sqrt{\mu\epsilon}\frac{\Abs{\omega}}{c} z} 
+(\Sgn(\omega) + \zcap)
+\spacegrad_t {F_z}^{\omega+}
+\end{align*}
+
+Writing this out separately for the regions greater and lesser than zero we have
+
+\begin{align*} %\label{eqn:waveguideRetardedAdvanced:foo9}
+F_t 
+&= 
+\frac{\pi}{2}
+\int_{0+}^\infty d\omega e^{-i\omega t} 
+e^{-i \sqrt{\mu\epsilon}\frac{\omega}{c} z}
+(1 - \zcap)
+\spacegrad_t {F_z}^{\omega-} 
+- 
+\frac{\pi}{2}
+\int_{0+}^\infty d\omega e^{-i\omega t} 
+e^{i \sqrt{\mu\epsilon}\frac{\omega}{c} z} 
+(1 + \zcap)
+\spacegrad_t {F_z}^{\omega+} \\
+&- 
+\frac{\pi}{2}
+\int_{-\infty}^{0-} d\omega e^{-i\omega t} 
+e^{i \sqrt{\mu\epsilon}\frac{\omega}{c} z}
+(1 + \zcap)
+\spacegrad_t {F_z}^{\omega-} 
+- 
+\frac{\pi}{2}
+\int_{-\infty}^{0-} d\omega e^{-i\omega t} 
+e^{-i \sqrt{\mu\epsilon}\frac{\omega}{c} z} 
+(-1 + \zcap)
+\spacegrad_t {F_z}^{\omega+} \\
+\end{align*}
+
+Grouping by exponentials of like sign, and integrating over a region that omits some nieghbourhood around the origin, we have eliminated the $\Abs{\omega}$ factors
+
+\begin{align*}%\label{eqn:waveguideRetardedAdvanced:foo10}
+F_t 
+&= 
+(1 - \zcap) \spacegrad_t
+\int d\omega e^{-i\omega \left(t + \sqrt{\mu\epsilon}\frac{z}{c}\right)}
+\frac{\pi}{2}({F_z}^{\omega-}\theta(\omega) + {F_z}^{\omega+}\theta(-\omega)) \\
+&-(1 + \zcap) \spacegrad_t
+\int d\omega e^{-i\omega \left(t - \sqrt{\mu\epsilon}\frac{z}{c}\right)}
+\frac{\pi}{2}({F_z}^{\omega-}\theta(\omega) + {F_z}^{\omega+}\theta(-\omega))
+\end{align*}
+
+The heavyside unit step function has been used to group things nicely over the doubled integration ranges, and what is left now can be observed to be Fourier transforms from the frequency to time domain.  The transformed functions are to be evaluated at a shifted time in each case.
+
+\begin{align*}%\label{eqn:waveguideRetardedAdvanced:foo10}
+F_t 
+&= 
+(1 - \zcap) \spacegrad_t
+\frac{\pi}{2}{\left.\FF\left( ({F_z}^{\omega-}\theta(\omega) + {F_z}^{\omega+}\theta(-\omega)) \right)\right\vert}_{t=t + \sqrt{\mu\epsilon}\frac{z}{c}} \\
+&
+-(1 + \zcap) \spacegrad_t
+\frac{\pi}{2}{\left.\FF\left( ({F_z}^{\omega-}\theta(\omega) + {F_z}^{\omega+}\theta(-\omega)) \right)\right\vert}_{t=t - \sqrt{\mu\epsilon}\frac{z}{c}}
+\end{align*}
+
+Attempting to actually evaluate this fourier transform shouldn't actually be neccessary since we the original angular velocity and wave number domain function $F(x,y,\omega,k)$ was arbitrary (except for its commutation with $\zcap$).  Instead we just suppose (once again overloading the symbol $F_z$) that we have a function $F_z(x,y,u)$ that at time $u$ takes the value
+
+\begin{align*}
+F_z(x,y,u) = \frac{\pi}{2}\FF\left( ({F_z}^{\omega-}\theta(\omega) + {F_z}^{\omega+}\theta(-\omega)) \right)
+\end{align*}
+
+The transform will not change the grades of the propagation field $F_z$ so this still commutes with $\zcap$.  We can now write
+
+\begin{align}\label{eqn:waveguideRetardedAdvanced:fooZ}
+F_t 
+&= 
+(1 - \zcap) \spacegrad_t F_z(x,y, t + \sqrt{\mu\epsilon}{z}/{c})
+-(1 + \zcap) \spacegrad_t F_z(x,y, t - \sqrt{\mu\epsilon}{z}/{c})
+\end{align}
+
+So, after a bunch of manipulation, we find exactly how the transverse component of the field is related to the propagation direction field, and have eliminated the phasor description supplied our single frequency/wavenumber field relations.
+
+What we have left is a propagation field that has the form of an arbitrary unidirectional wave packet, travelling in either direction through the medium with speed $\pm c/\sqrt{\mu\epsilon}$.  If all this math is right, the transverse field for an advancing wave is generated by application onto the propagation field of the operator
+
+\begin{align}\label{eqn:fooX}
+-(1 + \zcap) \spacegrad_t
+\end{align}
+
+Similarily, the transverse field for a receding wave is given by application of the operator
+
+\begin{align}\label{eqn:fooY}
+(1 - \zcap) \spacegrad_t
+\end{align}
+
+\section{Verification.}
+
+Given the doubt about the $\omega =0$ point in the integral, and the possibility for sign error and other algebraic mistakes it seems worthwhile now to go back to Maxwell's equation and verify the correctness of these results.  Then, presuming everything worked out okay, it would also be good to relate things back to the electric and magnetic field components of the field.
 
 \EndArticle
