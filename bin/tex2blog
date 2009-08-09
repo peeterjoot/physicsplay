@@ -1,5 +1,8 @@
 #! /usr/bin/perl
 # $Log: tex2blog,v $
+# Revision 1.11  2009/08/09 04:43:49  Peeter
+# *** empty log message ***
+#
 # Revision 1.10  2009/07/11 04:53:16  Peeter
 # *** empty log message ***
 #
@@ -190,20 +193,73 @@ close $fh ;
 
 print $bibString ;
 
+exit ;
+
 sub translate
 {
+   my $r1 = qr/
+        (                   # start of capture buffer 1
+        {                   # match an opening angle bracket
+            (?:               
+                [^{}]++     # one or more non angle brackets, non backtracking
+                  |                  
+                (?1)        # found { or }, so recurse to capture buffer 1
+            )*                 
+        }                   # match a closing angle bracket
+        )                   # end of capture buffer 1
+        /x;
+
+   my $r2 = qr/
+        (                   # start of capture buffer 1
+        {                   # match an opening angle bracket
+            (?:               
+                [^{}]++     # one or more non angle brackets, non backtracking
+                  |                  
+                (?1)        # found { or }, so recurse to capture buffer 1
+            )*                 
+        }                   # match a closing angle bracket
+        )                   # end of capture buffer 1
+        (                   # start of capture buffer 1
+        {                   # match an opening angle bracket
+            (?:               
+                [^{}]++     # one or more non angle brackets, non backtracking
+                  |                  
+                (?1)        # found { or }, so recurse to capture buffer 1
+            )*                 
+        }                   # match a closing angle bracket
+        )                   # end of capture buffer 1
+        /x;
+
+
    my $out = "@_" ;
 
    $out =~ s/\\\\/\\\\ /g;
 #   $out =~ s/&=/=/g;
 
    # convert some of my macros:
-   $out =~ s/\\inv{(.*?)}/\\frac{1}{$1}/g;
-   $out =~ s/\\Abs{(.*?)}/{\\left\\lvert{$1}\\right\\rvert}/g;
-   $out =~ s/\\gpgrade{(.*?)}{(.*?)}/{\\left\\langle{{$1}}\\right\\rangle}_{$2}/g;
-   $out =~ s/\\gpgradeone{(.*?)}/{\\left\\langle{{$1}}\\right\\rangle}_{1}/g;
-   $out =~ s/\\gpgradetwo{(.*?)}/{\\left\\langle{{$1}}\\right\\rangle}_{2}/g;
+   #$out =~ s/\\inv{(.*?)}/\\frac{1}{$1}/g;
+   $out =~ s/\\inv${r1}/\\frac{1}{$1}/g;
+   #$out =~ s/\\Abs{(.*?)}/{\\left\\lvert{$1}\\right\\rvert}/g;
+   $out =~ s/\\Abs${r1}/{\\left\\lvert$1\\right\\rvert}/g;
+   $out =~ s/\\gpgrade${r2}/{\\left\\langle{$1}\\right\\rangle}_{$2}/g;
+
+#   $out =~ s/\\gpgradezero{(.*?)}/\\left\\langle{$1}\\right\\rangle/g;
+#   $out =~ s/\\gpgradeone{(.*?)}/{\\left\\langle{$1}\\right\\rangle}_{1}/g;
+#   $out =~ s/\\gpgradetwo{(.*?)}/{\\left\\langle{$1}\\right\\rangle}_{2}/g;
+#   $out =~ s/\\gpgradethree{(.*?)}/{\\left\\langle{$1}\\right\\rangle}_{3}/g;
+   $out =~ s/\\gpgradezero${r1}/\\left\\langle{$1}\\right\\rangle/g;
+   $out =~ s/\\gpgradeone${r1}/{\\left\\langle{$1}\\right\\rangle}_{1}/g;
+   $out =~ s/\\gpgradetwo${r1}/{\\left\\langle{$1}\\right\\rangle}_{2}/g;
+   $out =~ s/\\gpgradethree${r1}/{\\left\\langle{$1}\\right\\rangle}_{3}/g;
+
+   $out =~ s/\\BCB/\\boldsymbol{\\mathcal{B}}/g;
+   $out =~ s/\\EE/\\boldsymbol{\\mathcal{E}}/g;
    $out =~ s/\\kcap/\\hat{\\Bk}/g;
+   $out =~ s/\\xcap/\\hat{\\Bx}/g;
+   $out =~ s/\\ncap/\\hat{\\Bn}/g;
+   $out =~ s/\\Bomega/\\boldsymbol{\\omega}/g;
+   $out =~ s/\\Bsigma/\\boldsymbol{\\sigma}/g;
+   $out =~ s/\\(.)cap/\\hat{\\B$1}/g;
    $out =~ s/\\B(.)/\\mathbf{$1}/g;
    $out =~ s/\\LL/\\mathcal{L}/g;
    $out =~ s/\\FF/\\mathcal{F}/g;
@@ -211,7 +267,43 @@ sub translate
    $out =~ s/\\grad/\\nabla/g;
    $out =~ s/\\spacegrad/\\boldsymbol{\\nabla}/g;
    $out =~ s/\\delambertian/\\square/g;
-   $out =~ s/\\PD{(.*?)}{(.*?)}/\\frac{\\partial {$2}}{\\partial {$1}}}/g ;
+   $out =~ s/\\conj/{*}/g;
+   $out =~ s/\\PD${r2}/\\frac{\\partial $2}{\\partial $1}/g ;
+   $out =~ s/\\PauliI/\\begin{bmatrix} 1 & 0 \\\\ 0 & 1 \\\\ \\end{bmatrix}/g;
+   $out =~ s/\\PauliX/\\begin{bmatrix} 0 & 1 \\\\ 1 & 0 \\\\ \\end{bmatrix}/g;
+   $out =~ s/\\PauliYNoI/\\begin{bmatrix} 0 & -1 \\\\ 1 & 0 \\\\ \\end{bmatrix}/g;
+   $out =~ s/\\PauliY/\\begin{bmatrix} 0 & -i \\\\ i & 0 \\\\ \\end{bmatrix}/g;
+   $out =~ s/\\PauliZ/\\begin{bmatrix} 1 & 0 \\\\ 0 & -1 \\\\ \\end{bmatrix}/g;
+   $out =~ s/\\Clifford{(.*?)}{(.*?)}/\\mathcal{C}_{\\{{$1},{$2}\\}}/g;
+   $out =~ s/\\scalarProduct{(.*?)}{(.*?)}/{$1} \\bullet {$2}/g;
+
+#   $out =~ s/\\antisymmetric{(.*?)}{(.*?)}/\\left[{$1},{$2}\\right]/g;
+#   $out =~ s/\\symmetric{(.*?)}{(.*?)}/\\left\\{{$1},{$2}\\right\\}/g;
+
+# run twice?
+   $out =~ s/\\antisymmetric${r2}/\\left[$1,$2\\right]/g;
+   $out =~ s/\\symmetric${r2}/\\left\\{$1,$2\\right\\}/g;
+
+   $out =~ s/\\antisymmetric${r2}/\\left[$1,$2\\right]/g;
+   $out =~ s/\\symmetric${r2}/\\left\\{$1,$2\\right\\}/g;
+
+   $out =~ s/\\DETuvwijk{(.*?)}{(.*?)}{(.*?)}{(.*?)}{(.*?)}{(.*?)}/\\begin{vmatrix} {$1}_{$4} & {$1}_{$5} & {$1}_{$6} \\\\ {$2}_{$4} & {$2}_{$5} & {$2}_{$6} \\\\ {$3}_{$4} & {$3}_{$5} & {$3}_{$6} \\end{vmatrix}/g;
+
+   $out =~ s/\\C{(.*?)}/\$latex \\mathbb{C}^{$1}\$/g;
+   $out =~ s/\\R{(.*?)}/\$latex \\mathbb{R}^{$1}\$/g;
+   $out =~ s/\\traceB${r1}/\\tr\\left({$1}\\right)/g;
+   $out =~ s/\\trace${r1}/\\tr{$1}/g;
+   $out =~ s/\\tr/\\text{Tr}/g;
+   $out =~ s/\\RejName/\\text{Rej}/g;
+   $out =~ s/\\Proj/\\text{Proj}/g;
+   $out =~ s/\\Scalar/\\text{Scalar}/g;
+   $out =~ s/\\Real/\\text{Real}/g;
+   $out =~ s/\\Imag/\\text{Imag}/g;
+   $out =~ s/\\symmetricVecBladePauli{(.*?)}{(.*?)}{(.*?)}/\\left\\{{$1},\\left[{$2},{$3}\\right]\\right\\}/g;
+   $out =~ s/\\symmetricBladeVecPauli{(.*?)}{(.*?)}{(.*?)}/\\left\\{\\left[{$1},{$2}\\right],{$3}\\right\\}/g;
+   $out =~ s/\\ahat/\\hat{a}/g;
+   $out =~ s/\\bhat/\\hat{b}/g;
+   $out =~ s/\\xhat/\\hat{x}/g;
 
    return $out ;
 }
