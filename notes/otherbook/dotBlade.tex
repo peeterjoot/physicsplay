@@ -5,20 +5,127 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/dotBlade.pdf}
 \date{Aug 11, 2009}
-\revisionInfo{$RCSfile: dotBlade.tex,v $ Last $Revision: 1.1 $ $Date: 2009/08/11 22:05:28 $}
+\revisionInfo{$RCSfile: dotBlade.tex,v $ Last $Revision: 1.2 $ $Date: 2009/08/12 03:25:38 $}
 
 \beginArtWithToc
 %\beginArtNoToc
 
-Scott commented on the following equations in the 
+Scott asked about the following vector bivector product identities
+
+\begin{align}
+\Bw (\Bu \wedge \Bv) &= \Bw \cdot (\Bu \wedge \Bv) + \Bw \wedge \Bu \wedge \Bv \\
+(\Bu \wedge \Bv) \Bw &= - \Bw \cdot (\Bu \wedge \Bv) + \Bw \wedge \Bu \wedge \Bv
+\end{align}
+
+Specifically, he asked why the sign in the second identity is negative, and if this was a typo (\href{http://sites.google.com/site/peeterjoot/math2009/gabook.pdf}{i.e. in my GA Notes}).
+
+It probably would have been clearer to write
 
 \begin{align*}
-\Bw (\Bu \wedge \Bv) = \Bw \cdot (\Bu \wedge \Bv) + \Bw \wedge \Bu \wedge \Bv
+(\Bu \wedge \Bv) \Bw = (\Bu \wedge \Bv) \cdot \Bw + (\Bu \wedge \Bv) \wedge \Bw
 \end{align*}
+
+But this an equivalent statement, and not a correction.  Let's see why.  One way to answer this would be to base the answer on generalized definitions of the dot and wedge product, where one can write for a grade $r$ blade A, and a vector $\Bv$
+
+\begin{align}\label{eqn:foo1}
+A \cdot \Bv &\equiv \inv{2} (A \Bv -(-1)^r \Bv A) \\
+A \wedge \Bv &\equiv \inv{2} (A \Bv +(-1)^r \Bv A) \\
+\end{align}
+
+Summing (\ref{eqn:foo1}) also implies 
+
+\begin{align}\label{eqn:foo2}
+A \Bv &= A \cdot \Bv + A \wedge \Bv
+\end{align}
+
+These generalized product definitions (\ref{eqn:foo1}) can be found used as a starting point in GA texts (example, \cite{hestenes1999nfc}).  I personally found that this got confusing fast, and got lost quicky in a barrage of vector identities, not knowing which were consequences and which were fundamental.
+
+Some clarity can be had by stepping back and considering the underpinnings of these definitions.  The fundamental operation that backs both the dot and wedge product and other possible products (such as those for bivector with bivector, or bivector with trivector, ...) is really grade selection, and in an
+axiomatic approach to Geometric Algebra the dot and wedge products are definitions based on grade selection.
+
+We first need to define the concept of grade.  Loosely, the grade of a simple product is the least number of perpendicular vector factors that can express the product.  By way of example, suppose we are working in three dimensional Euclidian space with orthonormal unit vectors $\Be_1$, $\Be_2$, and $\Be_3$.  In such a space, here is an example of a grade zero, one, two, and three object respectively
 
 \begin{align*}
-(\Bu \wedge \Bv) \Bw = - \Bw \cdot (\Bu \wedge \Bv) + \Bw \wedge \Bu \wedge \Bv
+\begin{array}{l l}
+3 & \quad \text{scalar, grade zero} \\
+-\Be_1 & \quad \text{vector, grade one} \\
+2 \Be_2 \Be_1 & \quad \text{bivector (plane element), grade two} \\
+5 \Be_1 \Be_3 \Be_2 & \quad \text{trivector (volume element), grade three} \\
+\end{array}
 \end{align*}
 
-%\EndArticle
-\EndNoBibArticle
+In the grade two and three case there are multiple possible representations.  Perpendicular vectors change sign with interchange, so the volume element above could also be written $-5 \Be_1 \Be_2 \Be_3$ or $-5 \Be_3 \Be_1 \Be_2$, and so forth.
+
+Now, a product like something like the following
+
+\begin{align*}
+\Be_1 \Be_3 \Be_2 \Be_3 \Be_2,
+\end{align*}
+
+is not a grade five object.  With this Euclidean space we have $\Be_k\Be_k = 1$ for any $k$, and we can interchange the perpendicular vectors with a sign change each time
+
+\begin{align*}
+\Be_1 \Be_3 \Be_2 \Be_3 \Be_2
+&=
+\Be_1 \Be_3 \Be_2 (\Be_3 \Be_2) \\
+&=
+-\Be_1 \Be_3 \Be_2 (\Be_2 \Be_3) \\
+&=
+-\Be_1 \Be_3 (\Be_2 \Be_2) \Be_3 \\
+&=
+-\Be_1 \Be_3 \Be_3 \\
+&=
+-\Be_1
+\end{align*}
+
+So we see that this is really a grade one (vector) object.  In general if we have a grade $r$ blade, and multiply by a single unit vector, we'll end up with either a grade $r+1$ or a grade $r-1$ object.  Here's an example of each, again for orthonormal Euclidean vectors,
+
+\begin{align*}
+(\Be_1 \Be_3) \Be_2 &= -\Be_1 \Be_2 \Be_3 \\
+(\Be_1 \Be_3) \Be_3 &= \Be_1
+\end{align*}
+
+When the objects multiplied are less simple, this vector product does not have to result in only the grade $r-1$ or grade $r+1$ possibilities, but instead can result in both.  Example, for grade $r=2$,
+
+\begin{align*}
+\Be_1 (\Be_3 + \Be_2) \Be_2 
+&= \Be_1 \Be_3 \Be_2 + \Be_1 \Be_2 \Be_2 \\
+&= -\Be_1 \Be_2 \Be_3 + \Be_1 \\
+\end{align*}
+
+The first product $\Be_1 (\Be_3 + \Be_2)$ is a bivector, and can be thought of as a representation of the plane spanned by the vectors $\{\Be_1, \Be_2 + \Be_3\}$.
+
+With grade defined (or at least discussed and exampled), we now want to define the grade selection notation, which is hard to live without.  For a multivector $M$, not neccessarily a blade, we write for the grade $r$ part of that object
+
+\begin{align}\label{eqn:foo3}
+\gpgrade{M}{r}
+\end{align}
+
+Again, illustrating by example, suppose we have the multivector
+
+\begin{align*}
+M = 3 -\Be_1 + 2 \Be_2 \Be_1 + 5 \Be_1 \Be_3 \Be_2 
+\end{align*}
+
+We'd write for grade two selection
+
+\begin{align*}
+\gpgradetwo{M} = 2 \Be_2 \Be_1
+\end{align*}
+
+This is enough to define the generalized dot and wedge products.  For a grade $r$ blade $A$ and vector $\Bv$, these are respectively
+
+\begin{align}\label{eqn:foo4}
+A \cdot \Bv &\equiv \gpgrade{A \Bv}{r-1} \\
+A \wedge \Bv &\equiv \gpgrade{A \Bv}{r+1} 
+\end{align}
+
+These generalize to products of two general grade blades, but that's not important now.  Instead, lets use these, restricting ourself to a Euclidean space with an orthonormal basis, to develop equations (\ref{eqn:foo1}) for the vector and bivector cases respectively.
+
+Consider first the product of two vectors, $\Bx = x^\mu \Be_\mu$, and $\By = y^\mu \Be_\mu$
+
+\begin{align*}
+\Bx \By &= \sum x^\mu \Be_\mu y^\mu \Be_\mu
+\end{align*}
+
+\EndArticle
