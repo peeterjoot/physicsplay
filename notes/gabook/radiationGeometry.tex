@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/radiationGeometry.pdf}
 \date{Aug 14, 2009}
-\revisionInfo{$RCSfile: radiationGeometry.tex,v $ Last $Revision: 1.3 $ $Date: 2009/08/15 04:26:17 $}
+\revisionInfo{$RCSfile: radiationGeometry.tex,v $ Last $Revision: 1.4 $ $Date: 2009/08/16 05:20:43 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -30,7 +30,7 @@ F = \FF e^{-i\omega t}
 Maxwell's equation reduces to a multivariable eigenvalue problem
 
 \begin{align}\label{eqn:foo3}
-\spacegrad \FF &= \lambda \FF \\
+\spacegrad \FF &= \FF \lambda \\
 \lambda &= i\sqrt{\mu\epsilon} \frac{\omega}{c} 
 \end{align}
 
@@ -117,6 +117,41 @@ Another way to observe this is from the split of $F$ into electric and magnetic 
 
 The space containing each of the $\BE$ and $\BB$ vectors lies in the span of the transverse plane.  We also see that there's some potential redundancy in the respresentation visible here since we have four vectors describing this span $\Bm$, $\Bn$, $\zcap \cross \Bm$, and $\zcap \cross \Bn$, instead of just two.
 
+\subsection{General wave packet.}
+
+If (\ref{eqn:foo1}) were a scalar equation for $F(\Bx,t)$ it can be readily shown using Fourier transforms the field propagation in time given initial time description of the field is 
+
+\begin{align}\label{eqn:foob1}
+F(\Bx, t) = \int \left( \inv{(2\pi)^3} \int F(\Bx', 0) e^{i\Bk \cdot (\Bx' -\Bx)} d^3 x \right) e^{i c \Bk t/ \sqrt{\mu\epsilon}} d^3 k
+\end{align}
+
+In traditional complex algebra the vector exponentials would not be well formed.  We do not have the problem in the GA formalism, but this does lead to a contraction since the resulting $F(\Bx,t)$ cannot be scalar valued.  However, by using this as a motivational tool, and 
+also using assumed structure for the discrete frequency infinite wavetrain phasor, we can guess that a transverse only (to $z$-axis) wave packet may be described by a single direction variant of the Fourier result above.  That is
+
+\begin{align}\label{eqn:foob2}
+F(\Bx, t) = \inv{\sqrt{2\pi}} \int \FF(\Bx, \omega) e^{-I \zcap \omega t} d\omega
+\end{align}
+
+Application of Maxwell's equation to this test solution gives us
+
+\begin{align}\label{eqn:foob3}
+(\spacegrad +\sqrt{\mu\epsilon} \partial_0) F(\Bx,t) &=
+\inv{\sqrt{2\pi}}\int (\spacegrad \FF - \FF I \zcap \sqrt{\mu\epsilon} \frac{\omega}{c}) e^{-I \zcap \omega t} d\omega
+\end{align}
+
+Since (\ref{eqn:foob2}) has the same form as the earlier single frequency phasor test solution, we now know that $\FF$ is required to anticommute with $\zcap$, this means that $\FF$ must satisfy the gradient eigenvalue equation for all $\omega$
+
+\begin{align}\label{eqn:foob4}
+\spacegrad \FF = -I \zcap \sqrt{\mu\epsilon} \frac{\omega}{c} \FF 
+\end{align}
+
+Observe that this is the single frequency problem of equation (\ref{eqn:foo3}), so for mono-directional light we can consider the infinite
+wave train instead of a wave packet with no loss of generality.
+
+\subsection{Attempt 1.  Separation of variables.}
+
+FIXME: signs on $\lambda$ all wrong since $i = I\zcap$ was commuted with $F = F_t$.
+
 While this may not lead to the most general solution to the radiation problem, the transverse only propagation problem is still one of interest.  Let's see where this leads.  In order to reduce the scope of the problem by one degree of freedom, let's split out the $\zcap$ component of the gradient, writing
 
 \begin{align}\label{eqn:foo9}
@@ -141,7 +176,7 @@ With $Z$ in an algebra isomorphic to the complex numbers, it is neccessarily inv
 -\zcap (\spacegrad_t G) + I \lambda G = G (\partial_z Z)\inv{Z} 
 \end{align*}
 
-Similar arguments to the grade fixing for $\FF$ show that $G$ has only vector and bivector grades, but does $G$ have the inverse required to do the separation of variables?  Let's blindly suppose that we can do this, which gives us
+Similar arguments to the grade fixing for $\FF$ show that $G$ has only vector and bivector grades, but does $G$ have the inverse required to do the separation of variables?  Let's blindly suppose that we can do this (and if we can't we can probably fudge it since we multiply again soon after).  This gives
 
 \begin{align}\label{eqn:foo11}
 -\zcap (\spacegrad_t G) \inv{G} + I \lambda  = (\partial_z Z)\inv{Z} = \text{constant}
@@ -165,7 +200,11 @@ The remainder of the separation of variables gives us
 \spacegrad_t G = \zcap (I (\lambda -k) -\alpha) G
 \end{align}
 
-We've now reduced the problem to solve to a two variable eigenvalue problem, where the differential operator to find eigenvectors for is the transverse gradient $\spacegrad_t$.  Can we relate (\ref{eqn:foo14}) to anything we know?  One special case is for constant $G$.  If we also have no hyperbolic angle $\alpha$, then we require $\lambda = \sqrt{\mu\epsilon} \omega/c = k$ for equality.  This wave number and angular frequency dependency is familiar since we also had that when we started with the assumption of oscillatory $z$ and $t$ dependence.  That's the simplest possible case to solve for.  How do we solve this for non-constant fields?
+We've now reduced the problem to solve to a two variable eigenvalue problem, where the differential operator to find eigenvectors for is the transverse gradient $\spacegrad_t$.
+
+Can we relate (\ref{eqn:foo14}) to anything we know?  The very simplest case is for constant $G$ and no hyperbolic angle ($\alpha=0$).  A solution then requires $\lambda = \sqrt{\mu\epsilon} \omega/c = k$.  This wave number and angular frequency dependency is familiar since we also had that when we started with the assumption of oscillatory $z$ and $t$ dependence.
+
+How do we solve this when $G$ is non constant?
 
 \EndArticle
 %\EndNoBibArticle
