@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/radiationGeometry.pdf}
 \date{Aug 14, 2009}
-\revisionInfo{$RCSfile: radiationGeometry.tex,v $ Last $Revision: 1.5 $ $Date: 2009/08/16 14:14:30 $}
+\revisionInfo{$RCSfile: radiationGeometry.tex,v $ Last $Revision: 1.6 $ $Date: 2009/08/16 18:07:13 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -166,61 +166,66 @@ Observe that this is the single frequency problem of equation (\ref{eqn:foo3}), 
 
 \subsection{Attempt 1.  Separation of variables.}
 
-FIXME: signs on $\lambda$ all wrong since $i = I\zcap$ was commuted with $F = F_t$.
-
 While this may not lead to the most general solution to the radiation problem, the transverse only propagation problem is still one of interest.  Let's see where this leads.  In order to reduce the scope of the problem by one degree of freedom, let's split out the $\zcap$ component of the gradient, writing
 
-\begin{align}\label{eqn:foo9}
+\begin{align}\label{eqn:fooc1}
 \spacegrad = \spacegrad_t + \zcap \partial_z
 \end{align}
 
 Also introduce a product split for separation of variables for the $z$ dependence.  That is
 
-\begin{align}\label{eqn:foo10}
+\begin{align}\label{eqn:fooc2}
 \FF = G(x,y) Z(z)
 \end{align}
 
 Again we are faced with the problem of too many choices for the grades of each of these factors.  We can pick one of these, say $Z$, to have only scalar and pseudoscalar grades so that the two factors commute.  Then we have
 
 \begin{align*}
-(\spacegrad_t + \spacegrad_z) \FF = (\spacegrad_t G) Z + \zcap G \partial_z Z = I \zcap \lambda G Z
+(\spacegrad_t + \spacegrad_z) \FF = (\spacegrad_t G) Z + \zcap G \partial_z Z = -G Z I \zcap \lambda 
 \end{align*}
 
-With $Z$ in an algebra isomorphic to the complex numbers, it is necessarily invertible (and commutes with it's derivative).  So with some rearranging we have
+With $Z$ in an algebra isomorphic to the complex numbers, it is necessarily invertible (and commutes with it's derivative).  Similar arguments to the grade fixing for $\FF$ show that $G$ has only vector and bivector grades, but does $G$ have the inverse required to do the separation of variables?  Let's blindly suppose that we can do this (and if we can't we can probably fudge it since we multiply again soon after).  With some rearranging we have
 
-\begin{align*}
--\zcap (\spacegrad_t G) + I \lambda G = G (\partial_z Z)\inv{Z} 
-\end{align*}
-
-Similar arguments to the grade fixing for $\FF$ show that $G$ has only vector and bivector grades, but does $G$ have the inverse required to do the separation of variables?  Let's blindly suppose that we can do this (and if we can't we can probably fudge it since we multiply again soon after).  This gives
-
-\begin{align}\label{eqn:foo11}
--\zcap (\spacegrad_t G) \inv{G} + I \lambda  = (\partial_z Z)\inv{Z} = \text{constant}
+\begin{align}\label{eqn:fooc3}
+-\inv{G} \zcap (\spacegrad_t G + G I \zcap \lambda = (\partial_z Z)\inv{Z} = \text{constant}
 \end{align}
 
-In order to commute these factors we've only required that $Z$ have only scalar and pseudoscalar grades, so for the constant let's pick an arbitrary element in this subspace.  That is
+We want to separately equate these to a constant.  In order to commute these factors we've only required that $Z$ have only scalar and pseudoscalar grades, so for the constant let's pick an arbitrary element in this subspace.  That is
 
-\begin{align}\label{eqn:foo12}
+\begin{align}\label{eqn:fooc4}
 (\partial_z Z)\inv{Z} = \alpha + k I
 \end{align}
 
 The solution for the $Z$ factor in the separation of variables is thus
 
-\begin{align}\label{eqn:foo13}
+\begin{align}\label{eqn:fooc5}
 Z \propto e^{(\alpha + k I)z}
 \end{align}
 
-The remainder of the separation of variables gives us
+For $G$ the separation of variables gives us
 
-\begin{align}\label{eqn:foo14}
-\spacegrad_t G = \zcap (I (\lambda -k) -\alpha) G
+\begin{align}\label{eqn:fooc6}
+\spacegrad_t G + (G \zcap \lambda + \zcap G k) I + \zcap G \alpha = 0
 \end{align}
 
-We've now reduced the problem to solve to a two variable eigenvalue problem, where the differential operator to find eigenvectors for is the transverse gradient $\spacegrad_t$.
+We've now reduced the problem to something like a two variable eigenvalue problem, where the differential operator to find eigenvectors for is the transverse gradient $\spacegrad_t$.  We unfortunately have an untidy split of the eigenvalue into left and right hand factors.
+%Can we relate (\ref{eqn:fooc6}) to anything we know?  The very simplest case is for constant $G$ and no hyperbolic angle ($\alpha=0$).  A solution then requires $\lambda = \sqrt{\mu\epsilon} \omega/c = k$.  This wave number and angular frequency dependency is familiar since we also had that when we started with the assumption of oscillatory $z$ and $t$ dependence.
+%
+%How do we solve this when $G$ is non constant?
 
-Can we relate (\ref{eqn:foo14}) to anything we know?  The very simplest case is for constant $G$ and no hyperbolic angle ($\alpha=0$).  A solution then requires $\lambda = \sqrt{\mu\epsilon} \omega/c = k$.  This wave number and angular frequency dependency is familiar since we also had that when we started with the assumption of oscillatory $z$ and $t$ dependence.
+While the product $GZ$ was transverse only, we've now potentially lost that nice property for $G$ itself, and do not know if $G$ is strictly commuting or anticommuting with $\zcap$.  Assuming either possibility for now, we can split this multivector into transvese and propagation direction fields
 
-How do we solve this when $G$ is non constant?
+\begin{align}\label{eqn:fooc7}
+G_t &= \inv{2}(G - \zcap G \zcap) \\
+G_z &= \inv{2}(G + \zcap G \zcap)
+\end{align}
+
+With this split, a rearrangement of (\ref{eqn:fooc6}) produces
+
+\begin{align}\label{eqn:fooc8}
+(\grad_t + \zcap ((k-\lambda) I + \alpha)) G_t
+= -(\grad_t + \zcap ((k+\lambda) I + \alpha)) G_z
+\end{align}
 
 \EndArticle
 %\EndNoBibArticle
