@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/gradientAltCoord.pdf}
 \date{Aug 22, 2009}
-\revisionInfo{$RCSfile: gradientAltCoord.tex,v $ Last $Revision: 1.2 $ $Date: 2009/08/23 05:28:14 $}
+\revisionInfo{$RCSfile: gradientAltCoord.tex,v $ Last $Revision: 1.3 $ $Date: 2009/08/23 16:26:54 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -18,7 +18,7 @@ I wanted the Laplacian in spherical polar coordinates and figured that I ought t
 
 The \R{3} divergence theorem was based on a curl dot product of a bivector with a volume element.  Starting there we want to write
 
-\begin{align}\label{eqn:foo1}
+\begin{align}\label{eqn:curlDotVolumeDifferentialElement}
 (\grad \wedge B) \cdot d^3 x
 \end{align}
 
@@ -32,17 +32,17 @@ d\Bx_\sigma &= \PD{\sigma}{\Bx} d\sigma
 
 Our volume element is the trivector
 
-\begin{align}\label{eqn:foo2}
+\begin{align}\label{eqn:volumeElement}
 d^3 x \equiv d\Bx_\alpha  \wedge d\Bx_\beta  \wedge d\Bx_\sigma
 \end{align}
 
 Assuming that we know the gradient in terms of an reciprocal pair of basis frames $\gamma^\mu \cdot \gamma_\nu = \delta^\mu_\nu$ we write
 
-\begin{align}\label{eqn:foo3}
+\begin{align}\label{eqn:gradientDefined}
 \grad \equiv \gamma^\mu \partial_\mu = \sum_\mu \gamma^\mu \PD{x^\mu}{}
 \end{align}
 
-Now, an expansion of the differential element (\ref{eqn:foo1}) is possible.  Starting this we have
+Now, an expansion of the differential element (\ref{eqn:curlDotVolumeDifferentialElement}) is possible.  Starting this we have
 
 \begin{align*}
 (\grad \wedge B) \cdot d^3 x
@@ -57,7 +57,7 @@ Now, an expansion of the differential element (\ref{eqn:foo1}) is possible.  Sta
 &=
 \gpgradezero{ \partial_\mu B (d^3 x \cdot \gamma^\mu) } \\
 &=
-\partial_\mu B \cdot (d^3 x \cdot \gamma^\mu) 
+\partial_\mu B \cdot (d^3 x \cdot \gamma^\mu)
 \end{align*}
 
 The cyclic reordering property for the scalar product $\gpgradezero{a b c} = \gpgradezero{ b c a}$ has been used as well as the vector-bivector wedge $2 a \wedge B = a B + B a$, and trivector-vector dot product $2 T \cdot a = T a + a T$.  Expanding this further we have
@@ -86,28 +86,28 @@ d\alpha \PD{\alpha}{B} \cdot (d\Bx_\beta \wedge d\Bx_\sigma) \\
 
 The bivector curl differential element is thus reduced to
 
-\begin{align}\label{eqn:foo4}
+\begin{align}\label{eqn:curDotReduction}
 (\grad \wedge B) \cdot d^3 x
 &=
- d\alpha \PD{\alpha}{B} \cdot (d\Bx_\beta \wedge d\Bx_\sigma) 
-+d\beta \PD{\beta}{B} \cdot (d\Bx_\sigma \wedge d\Bx_\alpha) 
-+d\sigma \PD{\sigma}{B} \cdot (d\Bx_\alpha \wedge d\Bx_\beta) 
+ d\alpha \PD{\alpha}{B} \cdot (d\Bx_\beta \wedge d\Bx_\sigma)
++d\beta \PD{\beta}{B} \cdot (d\Bx_\sigma \wedge d\Bx_\alpha)
++d\sigma \PD{\sigma}{B} \cdot (d\Bx_\alpha \wedge d\Bx_\beta)
 \end{align}
 
-Although it's just algebra and chain rule getting us here, it's still impressive since it applies to arbitrary parameterizations.  As derived there was also not even an assumption of orthogonal coordinates to express the gradient, nor any specific dimension or metric for the space.
+Although it's just algebra and chain rule getting us here, it's still impressive since it applies to arbitrary parameterizations.  As derived there was also not even an assumption of orthogonal coordinates to express the gradient, nor any specific dimension or metric for the space (we could be considering a volume subspace parameterized by the differential displacements).
 
 \section{Divergence theorem.}
 
-In \R{3} the Stokes differential element of (\ref{eqn:foo4}) supplies us, via duality with the vector divergence theorem.  Writing $B = -I a$, we have
+In \R{3} the Stokes differential element of (\ref{eqn:curDotReduction}) supplies us, via duality with the vector divergence theorem.  Writing $B = -I a$, we have
 
 \begin{align*}
-\grad \wedge B 
+\grad \wedge B
 &= -(\grad \wedge (I\Ba)) \\
 &= - \gpgradethree{ \grad I\Ba } \\
 &= - I (\grad \cdot \Ba )
 \end{align*}
 
-Factoring the pseudoscalar from the volume element $d^3 x = I dV$ we have on the LHS 
+Factoring the pseudoscalar from the volume element $d^3 x = I dV$ we have on the LHS
 
 \begin{align*}
 (\grad \wedge B) \cdot d^3 x
@@ -124,22 +124,31 @@ d B \cdot d^2 x
 &=
 - \gpgradezero{ I d \Ba d^2 x } \\
 &=
-d \Ba \cdot (-I d^2 x) 
+d \Ba \cdot (-I d^2 x)
 \end{align*}
 
 Assembling the results for this duality transformation we have the diverence theorem vector result in differential form
 
-\begin{align}\label{eqn:foo5}
+\begin{align}\label{eqn:divergenceForm}
 (\grad \cdot \Ba ) dV &=
- d\alpha \PD{\alpha}{\Ba} \cdot (-I d\Bx_\beta \wedge d\Bx_\sigma) 
-+d\beta \PD{\beta}{\Ba} \cdot (-I d\Bx_\sigma \wedge d\Bx_\alpha) 
-+d\sigma \PD{\sigma}{\Ba} \cdot (-I d\Bx_\alpha \wedge d\Bx_\beta) 
+ d\alpha \PD{\alpha}{\Ba} \cdot (-I d\Bx_\beta \wedge d\Bx_\sigma)
++d\beta \PD{\beta}{\Ba} \cdot (-I d\Bx_\sigma \wedge d\Bx_\alpha)
++d\sigma \PD{\sigma}{\Ba} \cdot (-I d\Bx_\alpha \wedge d\Bx_\beta)
 \end{align}
 
-\section{Examples.}
+\section{Examples (and faulty logic).}
+
+\begin{figure}[htp]
+\centering
+\includegraphics[totalheight=0.4\textheight]{polarAndSpherical}
+\caption{Spherical and Cylindrical coordinate conventions.}\label{fig:polarAndSpherical}
+\end{figure}
+
+Figure (\ref{fig:polarAndSpherical}) shows the coordinate unit vector conventions used in the below.  Following typical conventions a right handed pseudoscalar orientation has been picked.
+
 \subsection{Cartesian coordinates.}
 
-With 
+With
 
 \begin{align*}
 d\Bx &= dx \xcap \\
@@ -153,13 +162,13 @@ and $I = \xcap \ycap \zcap$, we have
 (\grad \cdot \Ba ) dx dy dz &=
  dx \PD{x}{\Ba} \cdot (-\xcap \ycap \zcap \ycap \zcap dy dz )  \\
 &+dy \PD{y}{\Ba} \cdot (-\xcap \ycap \zcap \zcap \xcap dz dx )  \\
-&+dz \PD{z}{\Ba} \cdot (-\xcap \ycap \zcap \xcap \ycap dx dy ) 
+&+dz \PD{z}{\Ba} \cdot (-\xcap \ycap \zcap \xcap \ycap dx dy )
 \end{align*}
 
 Cancelling $dx dy dz$ on each side we have the unsuprising result
 
-\begin{align}\label{eqn:foo6}
-\grad \cdot \Ba &= 
+\begin{align}\label{eqn:cartesianGradDot}
+\grad \cdot \Ba &=
 \left(\xcap \PD{x}{}
 +\ycap \PD{y}{}
 +\zcap \PD{z}{} \right) \cdot \Ba
@@ -181,12 +190,12 @@ with the pseudoscalar $I = \rcap \thetacap \zcap$, we have
 (\grad \cdot \Ba ) r dr d\theta dz &=
  dr \PD{r}{\Ba} \cdot (-\rcap \thetacap \zcap \thetacap \zcap r d\theta dz )  \\
 &+d\theta \PD{\theta}{\Ba} \cdot (-\rcap \thetacap \zcap \zcap \rcap dz dr )  \\
-&+dz \PD{z}{\Ba} \cdot (-\rcap \thetacap \zcap \rcap \thetacap dr r d\theta ) 
+&+dz \PD{z}{\Ba} \cdot (-\rcap \thetacap \zcap \rcap \thetacap dr r d\theta )
 \end{align*}
 
 Again, cancelling the volume elements we have
 
-\begin{align}\label{eqn:foo7}
+\begin{align}\label{eqn:cylindricalGradDot}
 \grad \cdot \Ba &=
 \left(\rcap \PD{r}{}
 +\thetacap \inv{r} \PD{\theta}{}
@@ -209,31 +218,91 @@ with the pseudoscalar $I = \rcap \phicap \thetacap$, we have
 (\grad \cdot \Ba ) r^2 \sin\theta dr d\phi d\theta &=
  dr \PD{r}{\Ba} \cdot (-\rcap \phicap \thetacap \phicap \thetacap r^2 \sin\theta d\phi d\theta )  \\
 &+d\phi \PD{\phi}{\Ba} \cdot (-\rcap \phicap \thetacap \thetacap \rcap r d\theta dr )  \\
-&+d\theta \PD{\theta}{\Ba} \cdot (-\rcap \phicap \thetacap \rcap \phicap dr r \sin\theta d\phi ) 
+&+d\theta \PD{\theta}{\Ba} \cdot (-\rcap \phicap \thetacap \rcap \phicap dr r \sin\theta d\phi )
 \end{align*}
 
 Again, cancelling the volume elements we have
 
-\begin{align}\label{eqn:foo8}
+\begin{align}\label{eqn:sphericalGradDot}
 \grad \cdot \Ba &=
 \left(\rcap \PD{r}{}
-+\phicap \inv{r \sin\theta} \PD{\phi}{} 
++\phicap \inv{r \sin\theta} \PD{\phi}{}
 +\thetacap \inv{r} \PD{\theta}{}
 \right) \cdot \Ba
 \end{align}
 
 \subsection{What's wrong above?}
 
-Looking at this anew, the cancellation of the volume elements is fishy seeming.  It has actually produced the correct results for the gradient in each of these coordinate systems, but for anything but the most infinitestimal volume, the area elements in the differential elements are also going to be functions that vary.  So, while we can use this to infer that in our Cartesian, cylindrical, and spherical coordinate systems our gradient, respectively is
+Looking at this anew, the cancellation of the volume elements is fishy seeming.  It has actually produced the correct results for the gradient in each of these coordinate systems, but for anything but the most infinitestimal volume, the area elements in the differential elements are also going to be functions that vary.  So, while it appears we can use this to blunder upon the correct results for the gradient in each of our example coordinate systems, this abusive mathematics won't give us the divergence expression that's desired.  We have however found the gradient in each of the Cartesian, cylindrical, and spherical coordinate systems, which in summary are
 
-\begin{align}\label{eqn:foo9}
-\grad 
+\begin{align}\label{eqn:gradientExampleSummary}
+\grad
 &= \xcap \PD{x}{} +\ycap \PD{y}{} +\zcap \PD{z}{} \\
 &= \rcap \PD{r}{} +\thetacap \inv{r} \PD{\theta}{} + \zcap \PD{z}{} \\
-&= \rcap \PD{r}{} +\phicap \inv{r \sin\theta} \PD{\phi}{} +\thetacap \inv{r} \PD{\theta}{} 
+&= \rcap \PD{r}{} +\phicap \inv{r \sin\theta} \PD{\phi}{} +\thetacap \inv{r} \PD{\theta}{}
 \end{align}
 
 To consider the divergence itself we will have to be more careful.
+
+\subsection{General orthonormal curvalinear coordinates.}
+
+Before moving on to the divergence, let's consider a general orthonormal curvalinear frame.  As conventional we write
+
+\begin{align*}
+d\Bx_1 &= h_1 dx_1 \Be_1 \\
+d\Bx_2 &= h_2 dx_2 \Be_2 \\
+d\Bx_3 &= h_3 dx_3 \Be_3
+\end{align*}
+
+and $I = \Be_1 \Be_2 \Be_3$.  The volume cancellation now gives us
+
+\begin{align}\label{eqn:curvalinearVolumeCancellation}
+\grad \cdot \Ba &=
+\inv{h_1 h_2 h_3} \left(
+  \PD{x_1}{\Ba} \cdot (\Be_1 h_2 h_3 )
++ \PD{x_2}{\Ba} \cdot (\Be_2 h_3 h_1 )
++ \PD{x_3}{\Ba} \cdot (\Be_3 h_1 h_2 )  \right)
+\end{align}
+
+So the gradient is left as
+
+\begin{align}\label{eqn:gradientCurva}
+\grad &=
+ \Be_1 \inv{h_1} \PD{x_1}{}
++\Be_2 \inv{h_2} \PD{x_2}{}
++\Be_3 \inv{h_3} \PD{x_3}{}
+\end{align}
+
+Here the unit vectors $\Be_k$ and the functions $h_k$ are functions of the parameterization.
+
+\section{Divergence.}
+
+A more careful evaluation of (\ref{eqn:curvalinearVolumeCancellation}) is expected to supply us with the generalized divergence representation.  The expected result will be found in the limit
+
+\begin{align}\label{eqn:foo1}
+\grad \cdot \Ba &=
+\lim_{
+\Delta x_1, \Delta x_2, \Delta x_3 \rightarrow 0}
+\inv{h_1 h_2 h_3 \Delta x_1 \Delta x_2 \Delta x_3
+} \iiint dx_1 dx_2 dx_3 \left(
+h_2 h_3 \Be_1 \cdot \PD{x_1}{}
+h_3 h_1 \Be_2 \cdot \PD{x_2}{}
+h_1 h_2 \Be_3 \cdot \PD{x_3}{} \right) \cdot \Ba
+\end{align}
+
+\begin{figure}[htp]
+\centering
+\includegraphics[totalheight=0.4\textheight]{parameterizedSurface}
+\caption{Two parameter surface.}\label{fig:parameterizedSurface}
+\end{figure}
+
+To help get a feel for what we have to do here, lets consider a simpler similar problem, for the scalar valued integral
+
+\begin{align*}
+I = \iint \left( d\alpha \PD{\alpha}{\Ba} \right) \cdot \left( d\beta \PD{\beta}{\Bx} \right)
+\end{align*}
+
+where the surface is vector parameterized by $\Bx = \Bx(\alpha, \beta)$, as depicted in figure (\ref{fig:parameterizedSurface}).
 
 %\EndArticle
 \EndNoBibArticle
