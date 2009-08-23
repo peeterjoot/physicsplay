@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/gradientAltCoord.pdf}
 \date{Aug 22, 2009}
-\revisionInfo{$RCSfile: gradientAltCoord.tex,v $ Last $Revision: 1.3 $ $Date: 2009/08/23 16:26:54 $}
+\revisionInfo{$RCSfile: gradientAltCoord.tex,v $ Last $Revision: 1.4 $ $Date: 2009/08/23 17:32:55 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -277,18 +277,42 @@ Here the unit vectors $\Be_k$ and the functions $h_k$ are functions of the param
 
 \section{Divergence.}
 
-A more careful evaluation of (\ref{eqn:curvalinearVolumeCancellation}) is expected to supply us with the generalized divergence representation.  The expected result will be found in the limit
+\subsection{The problem.}
 
-\begin{align}\label{eqn:foo1}
-\grad \cdot \Ba &=
+A more careful evaluation of what led to (\ref{eqn:curvalinearVolumeCancellation}) is expected to supply us with the generalized divergence representation.  We want to consider the limit
+
+\begin{align*}
+\grad \cdot \Ba &= 
+\inv{h_1 h_2 h_3}
 \lim_{
 \Delta x_1, \Delta x_2, \Delta x_3 \rightarrow 0}
-\inv{h_1 h_2 h_3 \Delta x_1 \Delta x_2 \Delta x_3
-} \iiint dx_1 dx_2 dx_3 \left(
-h_2 h_3 \Be_1 \cdot \PD{x_1}{}
-h_3 h_1 \Be_2 \cdot \PD{x_2}{}
-h_1 h_2 \Be_3 \cdot \PD{x_3}{} \right) \cdot \Ba
-\end{align}
+\inv{\Delta x_1 \Delta x_2 \Delta x_3
+} \\
+&\iiint dx_1 dx_2 dx_3 \left(
+h_2 h_3 \Be_1 \PD{x_1}{}
++h_3 h_1 \Be_2 \PD{x_2}{}
++h_1 h_2 \Be_3 \PD{x_3}{} \right) \cdot \Ba
+\end{align*}
+
+\subsection{A simpler problem.}
+
+To gain some clarity, let's defer this temporarily and consider the simpler two parameter problem.  First required is the differential form for this curl surface integral.  A super speed derivation of this form from the curl-area dot product is
+
+\begin{align*}
+(\grad \wedge \Ba) \cdot d^2 x
+&=
+\gpgradezero{ (\gamma^m \wedge \partial_m \Ba) d^2 x} \\
+&=
+\inv{2} \gpgradezero{ \gamma^m (\partial_m \Ba) d^2 x - (\partial_m \Ba) \gamma^m d^2 x} \\
+&=
+(\partial_m \Ba) \cdot \inv{2} \gpgradeone{ d^2 x \gamma^m - \gamma^m d^2 x} \\
+&=
+(\partial_m \Ba) \cdot ( d^2 x \cdot \gamma^m ) \\
+&=
+(\partial_m \Ba) \cdot ( d\Bx_\alpha d\Bx_\beta \cdot \gamma^m - d\Bx_\beta d\Bx_\alpha \cdot \gamma^m) \\
+&=
+d\beta \PD{\beta}{\Ba} \cdot d\Bx_\alpha -d\alpha \PD{\alpha}{\Ba} \cdot d\Bx_\beta 
+\end{align*}
 
 \begin{figure}[htp]
 \centering
@@ -296,13 +320,25 @@ h_1 h_2 \Be_3 \cdot \PD{x_3}{} \right) \cdot \Ba
 \caption{Two parameter surface.}\label{fig:parameterizedSurface}
 \end{figure}
 
-To help get a feel for what we have to do here, lets consider a simpler similar problem, for the scalar valued integral
+For the orthonormal curvalinear coordinate problem, we can write $\PDi{\alpha}{\Bx} = h_1 \Be_1$, and $\PDi{\beta}{\Bx} = h_2 \Be_2$, and are left with a requirement to evaluate
+
+\begin{align*}
+(\grad \wedge \Ba) \cdot d^2 x
+&=
+d\beta \PD{\beta}{\Ba} \cdot \Be_1 h_1 d\alpha -d\alpha \PD{\alpha}{\Ba} \cdot \Be_2 h_2 d\beta
+\end{align*}
+
+Our problem is now reduced to evaluation of a scalar valued integrals of the form
 
 \begin{align*}
 I = \iint \left( d\alpha \PD{\alpha}{\Ba} \right) \cdot \left( d\beta \PD{\beta}{\Bx} \right)
 \end{align*}
 
-where the surface is vector parameterized by $\Bx = \Bx(\alpha, \beta)$, as depicted in figure (\ref{fig:parameterizedSurface}).
+over a vector parameterized $\Bx = \Bx(\alpha, \beta)$ surface, as depicted in figure (\ref{fig:parameterizedSurface}).  This has reduced the problem to evaluation of scalar double integrals of the form
+
+\begin{align*}
+I = \iint h \PD{\alpha}{a} d\alpha d\beta 
+\end{align*}
 
 %\EndArticle
 \EndNoBibArticle
