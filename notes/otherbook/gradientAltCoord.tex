@@ -1,11 +1,11 @@
 \input{../peeter_prologue.tex}
 
-\chapter{Divergence in different coordinate systems.}
+\chapter{Gradient and Divergence in different coordinate systems.}
 \label{chap:gradientAltCoord}
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/gradientAltCoord.pdf}
 \date{Aug 22, 2009}
-\revisionInfo{$RCSfile: gradientAltCoord.tex,v $ Last $Revision: 1.1 $ $Date: 2009/08/23 04:03:22 $}
+\revisionInfo{$RCSfile: gradientAltCoord.tex,v $ Last $Revision: 1.2 $ $Date: 2009/08/23 05:28:14 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -14,12 +14,12 @@
 
 I wanted the Laplacian in spherical polar coordinates and figured that I ought to be able to figure it out, not look it up.  My recollection was that this could be calculated using a divergence theorem argument over a volume made made small in the limit.  When I try this I get not the divergence, but the gradient.  Perhaps if I write up my notes more carefully I'll see where I went wrong.
 
-\section{Guts}
+\section{Stokes setup.}
 
 The \R{3} divergence theorem was based on a curl dot product of a bivector with a volume element.  Starting there we want to write
 
 \begin{align}\label{eqn:foo1}
-(\grad \wedge B) \cdot d^3 \Bx
+(\grad \wedge B) \cdot d^3 x
 \end{align}
 
 in terms of derivatives of $B$.  Assuming the volume is parameterized by three differential displacements
@@ -33,7 +33,7 @@ d\Bx_\sigma &= \PD{\sigma}{\Bx} d\sigma
 Our volume element is the trivector
 
 \begin{align}\label{eqn:foo2}
-d^3 \Bx \equiv d\Bx_\alpha  \wedge d\Bx_\beta  \wedge d\Bx_\sigma
+d^3 x \equiv d\Bx_\alpha  \wedge d\Bx_\beta  \wedge d\Bx_\sigma
 \end{align}
 
 Assuming that we know the gradient in terms of an reciprocal pair of basis frames $\gamma^\mu \cdot \gamma_\nu = \delta^\mu_\nu$ we write
@@ -45,25 +45,25 @@ Assuming that we know the gradient in terms of an reciprocal pair of basis frame
 Now, an expansion of the differential element (\ref{eqn:foo1}) is possible.  Starting this we have
 
 \begin{align*}
-(\grad \wedge B) \cdot d^3 \Bx
+(\grad \wedge B) \cdot d^3 x
 &=
-\gpgradezero{ (\grad \wedge B) d^3\Bx } \\
+\gpgradezero{ (\grad \wedge B) d^3 x } \\
 &=
-\gpgradezero{ (\gamma^\mu \wedge \partial_\mu B) d^3 \Bx } \\
+\gpgradezero{ (\gamma^\mu \wedge \partial_\mu B) d^3 x } \\
 &=
-\inv{2} \gpgradezero{ (\gamma^\mu \partial_\mu B + \partial_\mu B \gamma^\mu) d^3 \Bx } \\
+\inv{2} \gpgradezero{ (\gamma^\mu \partial_\mu B + \partial_\mu B \gamma^\mu) d^3 x } \\
 &=
-\inv{2} \gpgradezero{ \partial_\mu B (d^3 \Bx \gamma^\mu + \gamma^\mu d^3 \Bx) } \\
+\inv{2} \gpgradezero{ \partial_\mu B (d^3 x \gamma^\mu + \gamma^\mu d^3 x) } \\
 &=
-\gpgradezero{ \partial_\mu B (d^3 \Bx \cdot \gamma^\mu) } \\
+\gpgradezero{ \partial_\mu B (d^3 x \cdot \gamma^\mu) } \\
 &=
-\partial_\mu B \cdot (d^3 \Bx \cdot \gamma^\mu) 
+\partial_\mu B \cdot (d^3 x \cdot \gamma^\mu) 
 \end{align*}
 
 The cyclic reordering property for the scalar product $\gpgradezero{a b c} = \gpgradezero{ b c a}$ has been used as well as the vector-bivector wedge $2 a \wedge B = a B + B a$, and trivector-vector dot product $2 T \cdot a = T a + a T$.  Expanding this further we have
 
 \begin{align*}
-(\grad \wedge B) \cdot d^3 \Bx
+(\grad \wedge B) \cdot d^3 x
 &=
 \partial_\mu B \cdot \left(
  (d\Bx_\alpha \wedge d\Bx_\beta) d\Bx_\sigma \cdot \gamma^\mu
@@ -71,6 +71,169 @@ The cyclic reordering property for the scalar product $\gpgradezero{a b c} = \gp
 +(d\Bx_\beta  \wedge d\Bx_\sigma) d\Bx_\alpha \cdot \gamma^\mu
 \right)
 \end{align*}
+
+Picking one of these terms as representitive we have
+
+\begin{align*}
+\partial_\mu B \cdot (d\Bx_\beta \wedge d\Bx_\sigma) d\Bx_\alpha \cdot \gamma^\mu
+&=
+\PD{x^\mu}{B} \cdot (d\Bx_\beta \wedge d\Bx_\sigma) \PD{\alpha}{x^\nu} \gamma_\nu \cdot \gamma^\mu d\alpha \\
+&=
+d\alpha \left( \PD{x^\mu}{B} \PD{\alpha}{x^\mu} \right) \cdot (d\Bx_\beta \wedge d\Bx_\sigma) \\
+&=
+d\alpha \PD{\alpha}{B} \cdot (d\Bx_\beta \wedge d\Bx_\sigma) \\
+\end{align*}
+
+The bivector curl differential element is thus reduced to
+
+\begin{align}\label{eqn:foo4}
+(\grad \wedge B) \cdot d^3 x
+&=
+ d\alpha \PD{\alpha}{B} \cdot (d\Bx_\beta \wedge d\Bx_\sigma) 
++d\beta \PD{\beta}{B} \cdot (d\Bx_\sigma \wedge d\Bx_\alpha) 
++d\sigma \PD{\sigma}{B} \cdot (d\Bx_\alpha \wedge d\Bx_\beta) 
+\end{align}
+
+Although it's just algebra and chain rule getting us here, it's still impressive since it applies to arbitrary parameterizations.  As derived there was also not even an assumption of orthogonal coordinates to express the gradient, nor any specific dimension or metric for the space.
+
+\section{Divergence theorem.}
+
+In \R{3} the Stokes differential element of (\ref{eqn:foo4}) supplies us, via duality with the vector divergence theorem.  Writing $B = -I a$, we have
+
+\begin{align*}
+\grad \wedge B 
+&= -(\grad \wedge (I\Ba)) \\
+&= - \gpgradethree{ \grad I\Ba } \\
+&= - I (\grad \cdot \Ba )
+\end{align*}
+
+Factoring the pseudoscalar from the volume element $d^3 x = I dV$ we have on the LHS 
+
+\begin{align*}
+(\grad \wedge B) \cdot d^3 x
+&= - I (\grad \cdot \Ba ) I dV \\
+&= (\grad \cdot \Ba ) dV \\
+\end{align*}
+
+Our terms on the RHS have the form
+
+\begin{align*}
+d B \cdot d^2 x
+&=
+-(d I \Ba) \cdot d^2 x \\
+&=
+- \gpgradezero{ I d \Ba d^2 x } \\
+&=
+d \Ba \cdot (-I d^2 x) 
+\end{align*}
+
+Assembling the results for this duality transformation we have the diverence theorem vector result in differential form
+
+\begin{align}\label{eqn:foo5}
+(\grad \cdot \Ba ) dV &=
+ d\alpha \PD{\alpha}{\Ba} \cdot (-I d\Bx_\beta \wedge d\Bx_\sigma) 
++d\beta \PD{\beta}{\Ba} \cdot (-I d\Bx_\sigma \wedge d\Bx_\alpha) 
++d\sigma \PD{\sigma}{\Ba} \cdot (-I d\Bx_\alpha \wedge d\Bx_\beta) 
+\end{align}
+
+\section{Examples.}
+\subsection{Cartesian coordinates.}
+
+With 
+
+\begin{align*}
+d\Bx &= dx \xcap \\
+d\By &= dy \ycap \\
+d\Bz &= dz \zcap
+\end{align*}
+
+and $I = \xcap \ycap \zcap$, we have
+
+\begin{align*}
+(\grad \cdot \Ba ) dx dy dz &=
+ dx \PD{x}{\Ba} \cdot (-\xcap \ycap \zcap \ycap \zcap dy dz )  \\
+&+dy \PD{y}{\Ba} \cdot (-\xcap \ycap \zcap \zcap \xcap dz dx )  \\
+&+dz \PD{z}{\Ba} \cdot (-\xcap \ycap \zcap \xcap \ycap dx dy ) 
+\end{align*}
+
+Cancelling $dx dy dz$ on each side we have the unsuprising result
+
+\begin{align}\label{eqn:foo6}
+\grad \cdot \Ba &= 
+\left(\xcap \PD{x}{}
++\ycap \PD{y}{}
++\zcap \PD{z}{} \right) \cdot \Ba
+\end{align}
+
+\subsection{Cylindrical coordintes.}
+
+In cylindrical coordinates our differential elements are
+
+\begin{align*}
+d\Br &= dx \rcap \\
+d\Btheta &= r d\theta \thetacap \\
+d\Bz &= dz \zcap
+\end{align*}
+
+with the pseudoscalar $I = \rcap \thetacap \zcap$, we have
+
+\begin{align*}
+(\grad \cdot \Ba ) r dr d\theta dz &=
+ dr \PD{r}{\Ba} \cdot (-\rcap \thetacap \zcap \thetacap \zcap r d\theta dz )  \\
+&+d\theta \PD{\theta}{\Ba} \cdot (-\rcap \thetacap \zcap \zcap \rcap dz dr )  \\
+&+dz \PD{z}{\Ba} \cdot (-\rcap \thetacap \zcap \rcap \thetacap dr r d\theta ) 
+\end{align*}
+
+Again, cancelling the volume elements we have
+
+\begin{align}\label{eqn:foo7}
+\grad \cdot \Ba &=
+\left(\rcap \PD{r}{}
++\thetacap \inv{r} \PD{\theta}{}
++\zcap \PD{z}{} \right) \cdot \Ba
+\end{align}
+
+\subsection{Spherical coordintes.}
+
+Last of interest is the spherical coordinates where our differential elements are
+
+\begin{align*}
+d\Br &= dr \rcap \\
+d\Btheta &= r d\theta \thetacap \\
+d\Bphi &= d\phi r \sin\theta \phicap
+\end{align*}
+
+with the pseudoscalar $I = \rcap \phicap \thetacap$, we have
+
+\begin{align*}
+(\grad \cdot \Ba ) r^2 \sin\theta dr d\phi d\theta &=
+ dr \PD{r}{\Ba} \cdot (-\rcap \phicap \thetacap \phicap \thetacap r^2 \sin\theta d\phi d\theta )  \\
+&+d\phi \PD{\phi}{\Ba} \cdot (-\rcap \phicap \thetacap \thetacap \rcap r d\theta dr )  \\
+&+d\theta \PD{\theta}{\Ba} \cdot (-\rcap \phicap \thetacap \rcap \phicap dr r \sin\theta d\phi ) 
+\end{align*}
+
+Again, cancelling the volume elements we have
+
+\begin{align}\label{eqn:foo8}
+\grad \cdot \Ba &=
+\left(\rcap \PD{r}{}
++\phicap \inv{r \sin\theta} \PD{\phi}{} 
++\thetacap \inv{r} \PD{\theta}{}
+\right) \cdot \Ba
+\end{align}
+
+\subsection{What's wrong above?}
+
+Looking at this anew, the cancellation of the volume elements is fishy seeming.  It has actually produced the correct results for the gradient in each of these coordinate systems, but for anything but the most infinitestimal volume, the area elements in the differential elements are also going to be functions that vary.  So, while we can use this to infer that in our Cartesian, cylindrical, and spherical coordinate systems our gradient, respectively is
+
+\begin{align}\label{eqn:foo9}
+\grad 
+&= \xcap \PD{x}{} +\ycap \PD{y}{} +\zcap \PD{z}{} \\
+&= \rcap \PD{r}{} +\thetacap \inv{r} \PD{\theta}{} + \zcap \PD{z}{} \\
+&= \rcap \PD{r}{} +\phicap \inv{r \sin\theta} \PD{\phi}{} +\thetacap \inv{r} \PD{\theta}{} 
+\end{align}
+
+To consider the divergence itself we will have to be more careful.
 
 %\EndArticle
 \EndNoBibArticle
