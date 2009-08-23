@@ -1,0 +1,76 @@
+\input{../peeter_prologue.tex}
+
+\chapter{Divergence in different coordinate systems.}
+\label{chap:gradientAltCoord}
+%\useCCL
+\blogpage{http://sites.google.com/site/peeterjoot/math2009/gradientAltCoord.pdf}
+\date{Aug 22, 2009}
+\revisionInfo{$RCSfile: gradientAltCoord.tex,v $ Last $Revision: 1.1 $ $Date: 2009/08/23 04:03:22 $}
+
+\beginArtWithToc
+%\beginArtNoToc
+
+\section{Motivation}
+
+I wanted the Laplacian in spherical polar coordinates and figured that I ought to be able to figure it out, not look it up.  My recollection was that this could be calculated using a divergence theorem argument over a volume made made small in the limit.  When I try this I get not the divergence, but the gradient.  Perhaps if I write up my notes more carefully I'll see where I went wrong.
+
+\section{Guts}
+
+The \R{3} divergence theorem was based on a curl dot product of a bivector with a volume element.  Starting there we want to write
+
+\begin{align}\label{eqn:foo1}
+(\grad \wedge B) \cdot d^3 \Bx
+\end{align}
+
+in terms of derivatives of $B$.  Assuming the volume is parameterized by three differential displacements
+
+\begin{align*}
+d\Bx_\alpha &= \PD{\alpha}{\Bx} d\alpha \\
+d\Bx_\beta &= \PD{\beta}{\Bx} d\beta \\
+d\Bx_\sigma &= \PD{\sigma}{\Bx} d\sigma
+\end{align*}
+
+Our volume element is the trivector
+
+\begin{align}\label{eqn:foo2}
+d^3 \Bx \equiv d\Bx_\alpha  \wedge d\Bx_\beta  \wedge d\Bx_\sigma
+\end{align}
+
+Assuming that we know the gradient in terms of an reciprocal pair of basis frames $\gamma^\mu \cdot \gamma_\nu = \delta^\mu_\nu$ we write
+
+\begin{align}\label{eqn:foo3}
+\grad \equiv \gamma^\mu \partial_\mu = \sum_\mu \gamma^\mu \PD{x^\mu}{}
+\end{align}
+
+Now, an expansion of the differential element (\ref{eqn:foo1}) is possible.  Starting this we have
+
+\begin{align*}
+(\grad \wedge B) \cdot d^3 \Bx
+&=
+\gpgradezero{ (\grad \wedge B) d^3\Bx } \\
+&=
+\gpgradezero{ (\gamma^\mu \wedge \partial_\mu B) d^3 \Bx } \\
+&=
+\inv{2} \gpgradezero{ (\gamma^\mu \partial_\mu B + \partial_\mu B \gamma^\mu) d^3 \Bx } \\
+&=
+\inv{2} \gpgradezero{ \partial_\mu B (d^3 \Bx \gamma^\mu + \gamma^\mu d^3 \Bx) } \\
+&=
+\gpgradezero{ \partial_\mu B (d^3 \Bx \cdot \gamma^\mu) } \\
+&=
+\partial_\mu B \cdot (d^3 \Bx \cdot \gamma^\mu) 
+\end{align*}
+
+The cyclic reordering property for the scalar product $\gpgradezero{a b c} = \gpgradezero{ b c a}$ has been used as well as the vector-bivector wedge $2 a \wedge B = a B + B a$, and trivector-vector dot product $2 T \cdot a = T a + a T$.  Expanding this further we have
+
+\begin{align*}
+(\grad \wedge B) \cdot d^3 \Bx
+&=
+\partial_\mu B \cdot \left(
+ (d\Bx_\alpha \wedge d\Bx_\beta) d\Bx_\sigma \cdot \gamma^\mu
+-(d\Bx_\alpha \wedge d\Bx_\sigma) d\Bx_\beta \cdot \gamma^\mu
++(d\Bx_\beta  \wedge d\Bx_\sigma) d\Bx_\alpha \cdot \gamma^\mu
+\right)
+\end{align*}
+
+%\EndArticle
+\EndNoBibArticle
