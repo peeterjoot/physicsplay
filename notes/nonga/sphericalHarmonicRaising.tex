@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/sphericalHarmonicRaising.pdf}
 \date{Aug 18, 2009}
-\revisionInfo{$RCSfile: sphericalHarmonicRaising.tex,v $ Last $Revision: 1.2 $ $Date: 2009/08/18 04:32:22 $}
+\revisionInfo{$RCSfile: sphericalHarmonicRaising.tex,v $ Last $Revision: 1.3 $ $Date: 2009/08/24 03:59:13 $}
 
 %\beginArtWithToc
 \beginArtNoToc
@@ -18,7 +18,7 @@ In Bohm's QT (\cite{bohm1989qt}, the following spherical harmonic eigenfunctions
 \psi_l^{l-s} = \frac{e^{i(l-s)\phi}}{(1-\zeta^2)^{(l-s)/2}} \frac{\partial^s}{\partial \zeta^s} (1-\zeta^2)^l
 \end{align}
 
-This (unnormalized) result (with $\zeta = \cos\theta$) is valid for $s \in [0,l]$.  As an exersize do this by applying the raising operator to $\psi_l^{-l}$.  This should help verify the result (unproven or unclear if proven) that the $\psi_l^m$ and $\psi_l^{-m}$ eigenfunctions differ only by a sign in the $\psi$ phase term.
+This (unnormalized) result (with $\zeta = \cos\theta$) is valid for $s \in [0,l]$.  As an exersize do this by applying the raising operator to $\psi_l^{-l}$.  This should help verify the result (unproven or unclear if proven) that the $\psi_l^m$ and $\psi_l^{-m}$ eigenfunctions differ only by a sign in the $\phi$ phase term.
 
 \section{Guts}
 
@@ -58,6 +58,166 @@ or
 \end{align}
 
 What I wanted to demonstrate to myself, that the $\theta$ dependence is the same for $\psi_l^m$ as it is for $\psi_l^{-m}$ is therefore true from (\ref{eqn:foo3}) for the first case with $m=l$.  We'll need to apply the raising operator to $\psi_l^{-l}$ to verify that this is the case for the rest of the indexes $m$.
+
+To continue we need to integrate for $f_l^{\pm l}$
+
+\begin{align*}
+\int \frac{d f}{f} = l \int \cot\theta d\theta
+\end{align*}
+
+Which integrates to
+
+\begin{align*}
+\ln(f) = l \ln(\sin\theta) + \ln(\kappa)
+\end{align*}
+
+Exponentiating we have
+
+\begin{align*}
+f = \kappa (\sin\theta)^l
+\end{align*}
+
+and have
+
+\begin{align}\label{eqn:foo4}
+\psi_l^{\pm l} = e^{\pm i l \phi} (\sin\theta)^l
+\end{align}
+
+Now are now set to apply the raising operator to $\psi_l^{-l}$.
+
+\begin{align*}
+(L_x + iL_y) \psi_l^{-l} 
+&=
+e^{i\phi} (\partial_\theta + i \cot\theta \partial_\phi) \psi_l^{-l} \\
+&=
+e^{i\phi} (\partial_\theta + i \cot\theta (-i l)) \psi_l^{-l} \\
+&=
+e^{i\phi} (\partial_\theta + l \cot\theta ) \psi_l^{-l} \\
+\end{align*}
+
+Now comes the sneaky trick from the text used in the lowering application argument.  I'm not sure how to guess this one, but playing it backwards we find the differential operator above
+
+\begin{align*}
+\inv{(\sin\theta)^l} \PD{\theta}{} \left( (\sin\theta)^l \psi_l^{\pm l} \right)
+&=
+\inv{(\sin\theta)^l} \left( l (\sin\theta)^{l-1} \cos\theta + (\sin\theta)^l \partial_\theta \right) \psi_l^{\pm l} \\
+&=
+\inv{(\sin\theta)^l} \left( l (\sin\theta)^{l} \cot\theta + (\sin\theta)^l \partial_\theta \right) \psi_l^{\pm l} \\
+\end{align*}
+
+That gives the sneaky identity
+\begin{align}\label{eqn:sneaky}
+\inv{(\sin\theta)^l} \PD{\theta}{} \left( (\sin\theta)^l \psi_l^{\pm l} \right)
+&=
+\left( l \cot\theta + \partial_\theta \right) \psi_l^{\pm l} 
+\end{align}
+
+Backsubstution gives
+
+\begin{align*}
+(L_x + iL_y) \psi_l^{-l} 
+&=
+e^{i\phi} \inv{(\sin\theta)^l} \PD{\theta}{} \left( (\sin\theta)^l \psi_l^{-l} \right) \\
+\end{align*}
+
+For
+\begin{align}\label{eqn:minusLplus1}
+\psi_l^{1-l}
+&=
+e^{i(1-l)\phi} \inv{(\sin\theta)^l} \PD{\theta}{} (\sin\theta)^{2l}
+\end{align}
+
+For a second raising operator application we have
+\begin{align*}
+(L_x + iL_y) \psi_l^{1-l} 
+&=
+e^{i\phi} (\partial_\theta + i \cot\theta \partial_\phi) \psi_l^{1-l} \\
+&=
+e^{i\phi} (\partial_\theta + i \cot\theta (-i)(l-1)) \psi_l^{1-l} \\
+&=
+e^{i\phi} (\partial_\theta + (l-1)\cot\theta ) \psi_l^{1-l} \\
+\end{align*}
+
+A second application of the sneaky identity (\ref{eqn:sneaky}) gives us
+
+\begin{align*}
+\psi_l^{2-l} 
+&=
+e^{i\phi} \inv{(\sin\theta)^{l-1}} \PD{\theta}{} \left( (\sin\theta)^{l-1} \psi_l^{1-l} \right) \\
+&=
+e^{i(2-l)\phi} \inv{(\sin\theta)^{l-1}} \PD{\theta}{} \left( (\sin\theta)^{l-1} 
+\inv{(\sin\theta)^l} \PD{\theta}{} (\sin\theta)^{2l}
+\right) \\
+&=
+e^{i(2-l)\phi} \inv{(\sin\theta)^{l-1}} \PD{\theta}{} \left( 
+\inv{\sin\theta} \PD{\theta}{} (\sin\theta)^{2l}
+\right) \\
+&=
+e^{i(2-l)\phi} \frac{\sin\theta}{(\sin\theta)^{l-1}} \inv{\sin\theta}\PD{\theta}{} \left( 
+\inv{\sin\theta} \PD{\theta}{} (\sin\theta)^{2l}
+\right) \\
+\end{align*}
+
+This gives
+
+\begin{align}\label{eqn:2minusL}
+\psi_l^{2-l} 
+&=
+e^{i(2-l)\phi} \inv{(\sin\theta)^{l-2}} \left( \inv{\sin\theta}\PD{\theta}{} \right)^2 (\sin\theta)^{2l} 
+\end{align}
+
+A comparison with $\phi_l^{1-l}$ from (\ref{eqn:minusLplus1}) shows that the induction hypothosis is
+
+\begin{align}
+\psi_l^{s-l} 
+&=
+e^{i(s-l)\phi} \inv{(\sin\theta)^{l-s}} \left( \inv{\sin\theta}\PD{\theta}{} \right)^s (\sin\theta)^{2l} 
+\end{align}
+
+\subsection{The induction.}
+
+The induction, starting with cut-and-paste-regex replacement, 
+
+\begin{align*}
+(L_x + iL_y) \psi_l^{{s-1}-l} 
+&=
+e^{i\phi} (\partial_\theta + i \cot\theta \partial_\phi) \psi_l^{{s-1}-l} \\
+&=
+e^{i\phi} (\partial_\theta + i \cot\theta (-i)(l -(s-1)) \psi_l^{{s-1}-l} \\
+&=
+e^{i\phi} (\partial_\theta + (l -(s-1)))\cot\theta ) \psi_l^{(s-1)-l} \\
+\end{align*}
+
+A second application of the sneaky identity (\ref{eqn:sneaky}) gives us
+%\psi_l^{s-1-l} 
+%&=
+%e^{i(s-1-l)\phi} \inv{(\sin\theta)^{l-(s-1)}} \left( \inv{\sin\theta}\PD{\theta}{} \right)^{s-1} (\sin\theta)^{2l} 
+
+\begin{align*}
+\psi_l^{s-l} 
+&=
+e^{i\phi} \inv{(\sin\theta)^{l-(s-1)}} \PD{\theta}{} \left( (\sin\theta)^{l-(s-1)} \psi_l^{(s-1)-l} \right) \\
+&=
+e^{i\phi} \inv{(\sin\theta)^{l-(s-1)}} \PD{\theta}{} \left( (\sin\theta)^{l-(s-1)} 
+%\psi_l^{(s-1)-l} 
+e^{i(s-1-l)\phi} \inv{(\sin\theta)^{l-(s-1)}} \left( \inv{\sin\theta}\PD{\theta}{} \right)^{s-1} (\sin\theta)^{2l} 
+\right) \\
+&=
+e^{i(s-l)\phi}
+\frac{\sin\theta}{(\sin\theta)^{l-(s-1)}} \inv{\sin\theta} \PD{\theta}{} \left( 
+\left( \inv{\sin\theta}\PD{\theta}{} \right)^{s-1} (\sin\theta)^{2l} 
+\right) \\
+\end{align*}
+
+% s = 2
+% s - 1 = 1
+This completes the induction arriving at the negative index equivalent of Bohm's equation (46), and as claimed in the text this differs only by sign of the $\phi$ exponential
+
+\begin{align}\label{eqn:sminusL}
+\psi_l^{s-l} 
+&=
+e^{i(s-l)\phi} \inv{(\sin\theta)^{l-s}} \left( \inv{\sin\theta}\PD{\theta}{} \right)^s (\sin\theta)^{2l} 
+\end{align}
 
 \EndArticle
 %\EndNoBibArticle
