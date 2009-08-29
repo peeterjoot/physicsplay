@@ -1,5 +1,8 @@
 #! /usr/bin/perl
 # $Log: tex2blog,v $
+# Revision 1.12  2009/08/29 19:08:31  Peeter
+# *** empty log message ***
+#
 # Revision 1.11  2009/08/09 04:43:49  Peeter
 # *** empty log message ***
 #
@@ -107,6 +110,8 @@ my $curEqn = '' ;
 my $curEquationLabel = '' ;
 my $inEquation = 0 ;
 my $failedOpen ;
+#my $urlMessage = "Click here for a PDF of this post with nicer formatting" ;
+my $urlMessage = "Click here for a PDF of this sequence of posts with nicer formatting" ;
 open $fh, "<$filebase.tex" or $failedOpen = 1 ;
 if ( $failedOpen )
 {
@@ -117,7 +122,7 @@ while (<$fh>)
    chomp ;
    s/\\cite{(.*?)}/[$refnumbers{$1}]/g;
    s/%.*//;
-   s,\\blogpage{(.*)},<a href="$1">[Click here for a PDF of this post with nicer formatting]</a>,;
+   s,\\blogpage{(.*)},<a href="$1">[$urlMessage]</a>,;
 
 next if (
 /\\begin{document}/ or
@@ -136,6 +141,8 @@ next if (
 /\\bibliography/ or
 /\\beginArtWithToc/ or
 /\\EndArticle/ or
+/\\EndNoBibArticle/ or
+/\\beginArtNoToc/ or
 0 ) ;
 
    while ( s/\$(.*?)\$/BBB:$1:EEE/g )
@@ -252,6 +259,12 @@ sub translate
    $out =~ s/\\gpgradetwo${r1}/{\\left\\langle{$1}\\right\\rangle}_{2}/g;
    $out =~ s/\\gpgradethree${r1}/{\\left\\langle{$1}\\right\\rangle}_{3}/g;
 
+   $out =~ s/\\rgrad/\\stackrel{ \\rightarrow }\\grad/g;
+   $out =~ s/\\lgrad/\\stackrel{ \\leftarrow }\\grad/g;
+   $out =~ s/\\lrgrad/\\stackrel{ \\leftrightarrow }\\grad/g;
+   $out =~ s/\\rspacegrad/\\stackrel{ \\rightarrow }\\spacegrad/g;
+   $out =~ s/\\lspacegrad/\\stackrel{ \\leftarrow }\\spacegrad/g;
+
    $out =~ s/\\BCB/\\boldsymbol{\\mathcal{B}}/g;
    $out =~ s/\\EE/\\boldsymbol{\\mathcal{E}}/g;
    $out =~ s/\\kcap/\\hat{\\Bk}/g;
@@ -259,6 +272,7 @@ sub translate
    $out =~ s/\\ncap/\\hat{\\Bn}/g;
    $out =~ s/\\Bomega/\\boldsymbol{\\omega}/g;
    $out =~ s/\\Bsigma/\\boldsymbol{\\sigma}/g;
+   $out =~ s/\\Brho/\\boldsymbol{\\rho}/g;
    $out =~ s/\\(.)cap/\\hat{\\B$1}/g;
    $out =~ s/\\B(.)/\\mathbf{$1}/g;
    $out =~ s/\\LL/\\mathcal{L}/g;
@@ -304,6 +318,8 @@ sub translate
    $out =~ s/\\ahat/\\hat{a}/g;
    $out =~ s/\\bhat/\\hat{b}/g;
    $out =~ s/\\xhat/\\hat{x}/g;
+   $out =~ s/\\thetacap/\\hat{\\boldsymbol{\\theta}}/g;
+   $out =~ s/\\phicap/\\hat{\\boldsymbol{\\phi}}/g;
 
    return $out ;
 }
