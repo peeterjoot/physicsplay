@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/rotationGenerator.pdf}
 \date{Aug 31, 2009}
-\revisionInfo{$RCSfile: rotationGenerator.tex,v $ Last $Revision: 1.1 $ $Date: 2009/09/01 04:33:38 $}
+\revisionInfo{$RCSfile: rotationGenerator.tex,v $ Last $Revision: 1.2 $ $Date: 2009/09/01 14:01:00 $}
 
 %\beginArtWithToc
 \beginArtNoToc
@@ -14,23 +14,23 @@
 
 Eli in his recent \href{http://behindtheguesses.blogspot.com/2009/08/noncommuting-rotation-and-angular.html}{blog post on angular momentum operators} used an exponential operator to generate rotations
 
-\begin{align}\label{eqn:qmAngularMom:goo1}
+\begin{align}\label{eqn:rotationGen:goo1}
 R_{\Delta\theta} = e^{\Delta\theta \ncap \cdot (\Bx \cross \spacegrad)}
 \end{align}
 
 This is something I hadn't seen before, but is comparable to the vector shift operator expressed in terms of directional deriatives $\Bx \cdot \spacegrad$
 
-\begin{align}\label{eqn:qmAngularMom:goo2}
+\begin{align}\label{eqn:rotationGen:goo2}
 f(\Bx + \Ba) = e^{\Ba \cdot \spacegrad} f(\Bx)
 \end{align}
 
-The translation operator of (\ref{eqn:qmAngularMom:goo2}) translates easily to higher dimensions.  In particular we can use the four gradient $\grad = \gamma^\mu \partial_\mu$, and a vector spacetime translation of $x = x^\mu \gamma_\mu \rightarrow (x^\mu + a^\mu) \gamma_\mu$ takes the form
+The translation operator of (\ref{eqn:rotationGen:goo2}) translates easily to higher dimensions.  In particular we can use the four gradient $\grad = \gamma^\mu \partial_\mu$, and a vector spacetime translation of $x = x^\mu \gamma_\mu \rightarrow (x^\mu + a^\mu) \gamma_\mu$ takes the form
 
-\begin{align}\label{eqn:qmAngularMom:goo3}
+\begin{align}\label{eqn:rotationGen:goo3}
 f(x + a) = e^{a \cdot \grad} f(x)
 \end{align}
 
-Since we don't have a cross product of two vectors in a 4D space, reexpressing (\ref{eqn:qmAngularMom:goo1}) in a form that is not tied to three dimensions is desirable.  A duality transformation with $\ncap = i \Be_1 \Be_2 \Be_3$ accomplishes this, where $i$ is a unit bivector for the plane perpendicular to $\ncap$ (i.e. product of two perpendicular unit vectors in the plane).  That duality transformation, expressing the rotation direction using an oriented plane instead of the normal to the plane gives us
+Since we don't have a cross product of two vectors in a 4D space, reexpressing (\ref{eqn:rotationGen:goo1}) in a form that is not tied to three dimensions is desirable.  A duality transformation with $\ncap = i \Be_1 \Be_2 \Be_3$ accomplishes this, where $i$ is a unit bivector for the plane perpendicular to $\ncap$ (i.e. product of two perpendicular unit vectors in the plane).  That duality transformation, expressing the rotation direction using an oriented plane instead of the normal to the plane gives us
 
 \begin{align*}
 \ncap \cdot (\Bx \cross \spacegrad) 
@@ -44,19 +44,83 @@ Since we don't have a cross product of two vectors in a 4D space, reexpressing (
 
 This is just $i \cdot (\Bx \wedge \spacegrad)$, so the generator of the rotation in 3D is
 
-\begin{align}\label{eqn:qmAngularMom:goo4}
+\begin{align}\label{eqn:rotationGen:goo4}
 R_{\Delta\theta} = e^{\Delta\theta i \cdot (\Bx \wedge \spacegrad)}
 \end{align}
 
 It's reasonable to guess then that we could substitute the spacetime gradient and allow $i$ to be any 4D unit spacetime bivector, where a spacelike product pair will generate rotations and a spacetime bivector will generate boosts.  That's really just a notational shift, and we'd write
 
-\begin{align}\label{eqn:qmAngularMom:goo5}
+\begin{align}\label{eqn:rotationGen:goo5}
 R_{\Delta\theta} = e^{\Delta\theta i \cdot (x \wedge \grad)}
 \end{align}
 
-This is very likely correct, but building up to this guess in a logical sequence from a known point will be the aim of this exploration.
+This is very likely correct, but building up to this guess in a logical sequence from a known point will be the aim of this particular exploration.
 
-\section{Guts}
+\section{Setup and conventions}
 
-%\EndArticle
-\EndNoBibArticle
+Rather than expressing the rotation in terms of coordinates, here the rotation will be formulated in terms of dual sided multivector operators (using Geometric Algebra) on vectors.  Then employing the chain rule an examination of the differential change of a multivariable scalar valued function on the underlying rotation will be made.
+
+Following conventions of (\cite{doran2003gap}) vectors will be undecorated rather than boldface since we are deriving results applicable to four vector (and higher) spaces, and not requiring an Euclidean metric.
+
+FIXME: picture.
+
+A vector $x(\theta)$ and a rotation of that vector $y(\theta) = x(\theta + \Delta\theta)$ can be related by the quaternionic operator $R = \alpha + a b$, where $\alpha$ is a scalar and $a$, and $b$ are vectors.
+
+\begin{align}\label{eqn:rotationGen:foo1}
+y = \tilde{R} x R
+\end{align}
+
+Required of $R$ is an invertability property, but without loss of generality we can impose a strictly unitary property $\tilde{R} R = 1$.  Here $\tilde{R}$ denotes the multivector reverse of a Geometric product
+
+\begin{align}\label{eqn:rotationGen:foo2}
+(a b)^{\tilde{}} = \tilde{b} \tilde{a}
+\end{align}
+
+Where for individual vectors the reverse is itself $\tilde{a} = a$.  A singlely parameterized rotation or boost can be convienently expressed using the half angle exponential form
+
+\begin{align}\label{eqn:rotationGen:foo3}
+R = e^{i \theta/2}
+\end{align}
+
+where $i = \hat{u}\hat{v}$ is a unit bivector, a product of two perpendicular unit vectors ($\hat{u} \hat{v} = - \hat{v} \hat{u}$).  For rotations $\hat{u}$, and $\hat{v}$ are both spatial vectors, implying $i^2 = -1$.  For boosts $i$ is the product of a unit timelike vector and unit spatial vector, and with a Minkowski metric condition $\hat{u}^2 \hat{v}^2 = -1$, we have a positive square $i^2 = 1$ for our spacetime rotation plane $i$.
+
+A general Lorentz transformation, containing a composition of rotations and boosts can be formed by application of successive transformations 
+
+\begin{align}\label{eqn:rotationGen:foo4}
+\LL(x) = (\tilde{U} (\tilde{T} \cdots (\tilde{S} x S) T )\cdots U) = \tilde{U} \tilde{T} \cdots \tilde{S} x S T \cdots U
+\end{align}
+
+The composition still has the unitary property $(S T \cdots U)^{\tilde{}} S T \cdots U = 1$, so when the specifics of the parameterization are not required we will allow the rotation operator $R = S T \cdots U$ to be a general composition of individual rotations and boosts.
+
+We will have brief use of coordinates and employ a reciprocal basis pair $\{\gamma^\mu\}$ and $\{\gamma_\nu\}$ where $\gamma^\mu \cdot \gamma_\nu = {\delta^{\mu}}_\nu$.  A vector, employing summation convention, is then denoted
+
+\begin{align}\label{eqn:rotationGen:foo5}
+x = x^\mu \gamma_\mu = x_\mu \gamma^\mu
+\end{align}
+
+Where
+\begin{align}\label{eqn:rotationGen:foo6}
+x_\mu &= x \cdot \gamma_\mu \\
+x_\mu &= x \cdot \gamma_\mu
+\end{align}
+
+Shorthand for partials
+
+\begin{align}\label{eqn:rotationGen:foo7}
+\partial_\mu &\equiv \frac{\partial}{\partial x^\mu} \\
+\partial^\mu &\equiv \frac{\partial}{\partial x_\mu}
+\end{align}
+
+will allow the gradient to be expressed as 
+
+\begin{align}\label{eqn:rotationGen:foo8}
+\grad \equiv \gamma^\mu \partial_\mu = \gamma_\mu \partial^\mu
+\end{align}
+
+Here the perhaps unintuitive mix of upper and lower indexes is required to make the direction derivative come out right when expressed as a dot product
+
+\begin{align}\label{eqn:rotationGen:foo9}
+\lim_{\tau \rightarrow 0} \frac{f(x + a\tau) - f(x)}{\tau} = a^\mu \partial_\mu f(x) = a \cdot \grad f(x)
+\end{align}
+
+\EndArticle
