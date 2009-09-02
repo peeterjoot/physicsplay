@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/rotationGenerator.pdf}
 \date{Aug 31, 2009}
-\revisionInfo{$RCSfile: rotationGenerator.tex,v $ Last $Revision: 1.3 $ $Date: 2009/09/02 00:41:07 $}
+\revisionInfo{$RCSfile: rotationGenerator.tex,v $ Last $Revision: 1.4 $ $Date: 2009/09/02 02:26:34 $}
 
 %\beginArtWithToc
 \beginArtNoToc
@@ -24,7 +24,7 @@ This is something I hadn't seen before, but is comparable to the vector shift op
 f(\Bx + \Ba) = e^{\Ba \cdot \spacegrad} f(\Bx)
 \end{align}
 
-The translation operator of (\ref{eqn:rotationGen:goo2}) translates easily to higher dimensions.  In particular we can use the four gradient $\grad = \gamma^\mu \partial_\mu$, and a vector spacetime translation of $x = x^\mu \gamma_\mu \rightarrow (x^\mu + a^\mu) \gamma_\mu$ takes the form
+The translation operator of (\ref{eqn:rotationGen:goo2}) translates easily to higher dimensions.  Of particular interest is the Minkowski metric 4D spacetime case, where we can use the four gradient $\grad = \gamma^\mu \partial_\mu$, and a vector spacetime translation of $x = x^\mu \gamma_\mu \rightarrow (x^\mu + a^\mu) \gamma_\mu$ to translate ``trivially'' translate this
 
 \begin{align}\label{eqn:rotationGen:goo3}
 f(x + a) = e^{a \cdot \grad} f(x)
@@ -62,9 +62,13 @@ Rather than expressing the rotation in terms of coordinates, here the rotation w
 
 Following conventions of (\cite{doran2003gap}) vectors will be undecorated rather than boldface since we are deriving results applicable to four vector (and higher) spaces, and not requiring an Euclidean metric.
 
-FIXME: picture.
+\begin{figure}[htp]
+\centering
+\includegraphics[totalheight=0.4\textheight]{rotationGen}
+\caption{Rotating vector in the plane with bivector i}\label{fig:rotationGen:rotationGen}
+\end{figure}
 
-A vector $x(\theta)$ and a rotation of that vector $y(\theta) = x(\theta + \Delta\theta)$ can be related by the quaternionic operator $R = \alpha + a b$, where $\alpha$ is a scalar and $a$, and $b$ are vectors.
+The figure (\ref{fig:rotationGen:rotationGen}) has a pair of vectors related by rotation, where the vector $x(\theta)$ is rotated to $y(\theta) = x(\theta + \Delta\theta)$. We choose here to express this rotation using a quaternionic operator $R = \alpha + a b$, where $\alpha$ is a scalar and $a$, and $b$ are vectors.
 
 \begin{align}\label{eqn:rotationGen:foo1}
 y = \tilde{R} x R
@@ -79,7 +83,7 @@ Required of $R$ is an invertability property, but without loss of generality we 
 Where for individual vectors the reverse is itself $\tilde{a} = a$.  A singlely parameterized rotation or boost can be convienently expressed using the half angle exponential form
 
 \begin{align}\label{eqn:rotationGen:foo3}
-R = e^{i \theta/2}
+R = e^{i \theta/2} 
 \end{align}
 
 where $i = \hat{u}\hat{v}$ is a unit bivector, a product of two perpendicular unit vectors ($\hat{u} \hat{v} = - \hat{v} \hat{u}$).  For rotations $\hat{u}$, and $\hat{v}$ are both spatial vectors, implying $i^2 = -1$.  For boosts $i$ is the product of a unit timelike vector and unit spatial vector, and with a Minkowski metric condition $\hat{u}^2 \hat{v}^2 = -1$, we have a positive square $i^2 = 1$ for our spacetime rotation plane $i$.
@@ -125,9 +129,100 @@ The perhaps unintuitive mix of upper and lower indexes is required to make the i
 
 \section{Rotor examples.}
 
+While not attempting to discuss the exponential rotor formulation in any depth, at least illustrating by example for a spatial rotation and Lorentz boost seems called for.
+
+Application of either of these is most easily performed with a split of the vector into components parallel and perpendicular to the ``plane'' of rotation $i$.  For example suppose we decompose a vector $x = p + n$ where $n$ is perpendicular to the rotation plane $i$ (i.e. $n i = i n$), and $p$ is the components in the plane ($p i = - i p$).  A consequence is that $n$ commutes with $R$ and $p$ induces a conjugate effect in the rotor
+
+\begin{align*}
+\tilde{R} x R 
+&=
+e^{-i \theta/2} (p + n) e^{i \theta/2} \\
+&=
+p e^{i \theta/2} e^{i \theta/2} 
++ 
+n e^{-i \theta/2} e^{i \theta/2} \\
+\end{align*}
+
+This is then just
+\begin{align}\label{eqn:rotationGen:foo30}
+\tilde{R} x R 
+&=
+p e^{i \theta} + n 
+\end{align}
+
+To expand any further the metric details are required.  The half angle rotors of (\ref{eqn:rotationGen:foo3}) can be expanded in series, where the metric properties of the bivector dictate the behaviour.  In the spatial bivector case, where $i^2 = -1$ we have
+
+\begin{align}\label{eqn:rotationGen:foo31}
+R = e^{i \theta/2} = \cos(\theta/2) + i\sin(\theta/2)
+\end{align}
+
+whereas when $i^2 = 1$, the series expansion yields a hyperbolic pair
+
+\begin{align}\label{eqn:rotationGen:foo32}
+R = e^{i \theta/2} = \cosh(\theta/2) + i\sinh(\theta/2)
+\end{align}
+
+To make things more specific, and relate to the familiar, consider a rotation in the Euclidean $x,y$ plane where we pick $i = \Be_1 \Be_2$, and rotate $\Bx = x \Be_1 + y \Be_2 + z \Be_3$.  Applying (\ref{eqn:rotationGen:foo30}), and (\ref{eqn:rotationGen:foo31}) we have
+
+\begin{align*}
+\tilde{R} \Bx R 
+&=
+(x \Be_1 + y \Be_2) (\cos\theta + \Be_1 \Be_2 \sin\theta) + z \Be_3 \\
+\end{align*}
+
+We have ${\Be_1}^2 = {\Be_2}^2 = 1$ and $\Be_1 \Be_2 = -\Be_1 \Be_2$, so with some rearrangement
+
+\begin{align*}
+\tilde{R} \Bx R 
+&=
+\Be_1 (x \cos\theta - y \sin\theta )
++\Be_2 (x \sin\theta + y \cos\theta )
++ \Be_3 z
+\end{align*}
+
+This is the familar $x,y$ plane rotation up to a possible sign preference.  Observe that we have the flexibility to adjust the sign of the rotation by altering either $\theta$ or $i$ (we could use $i = \Be_2 \Be_1$ for example).  Because of this Hestenes (\cite{hestenes1999nfc}) chooses to make the angle bivector valued, so instead of $i\theta$ writes
+
+\begin{align}\label{eqn:rotationGen:foo33}
+R = e^{B}
+\end{align}
+
+where $B$ is bivector valued, and thus contains the sign or direction of the rotation or boost as well as the orientation.
+
+% cody:
+%1 877 977 4601
+
+For completeness lets also expand a rotor application for an x-axis boost in the spacetime plane $i = \gamma_1 \gamma_0$.  Following (\cite{doran2003gap}), we use the $(+,-,-,-)$ metric convention $1 = {\gamma_0}^2 = -{\gamma_1}^2 = -{\gamma_2}^2 = -{\gamma_3}^2$.  Switching variable conventions to match the norm lets use $\alpha$ for the rapidity angle, with x-axis boost rotor
+
+\begin{align}\label{eqn:rotationGen:foo34}
+R = e^{\gamma_1 \gamma_0 \alpha/2}
+\end{align}
+
+for the rapidity angle $\alpha$.  The rotor applicaton then gives
+
+\begin{align*}
+\LL(x) 
+&= \tilde{R} (x^0 \gamma_0 + x^1 \gamma_1 + x^2 \gamma_2 + x^3 \gamma_3 ) R \\
+&=
+\tilde{R} (x^0 \gamma_0 + x^1 \gamma_1) R + x^2 \gamma_2 + x^3 \gamma_3 \\
+&=
+(x^0 \gamma_0 + x^1 \gamma_1) (\cosh(\theta) + \gamma_1 \gamma_0 \sinh(\theta/2)) + x^2 \gamma_0 + x^3 \gamma_3 \\
+\end{align*}
+
+A final bit of rearrangement yields the familar 
+
+\begin{align}\label{eqn:rotationGen:foo35}
+\LL(x)
+&=
+\gamma_0 (x^0 \cosh(\theta) - x^1 \sinh(\theta/2))
++ \gamma_1 ( -x^0 \sinh(\theta/2) + x^1 \cosh(\theta))
++ x^2 \gamma_0 + x^3 \gamma_3 
+\end{align}
+
+Again observe the flexibility to adjust the sign as desired by either the bivector orientation or the sign of the scalar rapidity angle.
+
 \section{The rotation operator}
 
-From (\ref{eqn:rotationGen:foo1}) we can express $x$ in terms of $y$ using the inverse transformation
+Moving on to the guts.  From (\ref{eqn:rotationGen:foo1}) we can express $x$ in terms of $y$ using the inverse transformation
 
 \begin{align}\label{eqn:rotationGen:foo10}
 x = R y \tilde{R} 
@@ -207,7 +302,7 @@ f(x(\theta))
 
 Expressing this sum formally as an exponential we have
 
-\begin{align}\label{eqn:rotationGen:foo16}
+\begin{align}\label{eqn:rotationGen:foo20}
 f(x(\theta + \Delta\theta)) = e^{\Delta\theta ( i \cdot x) \cdot \grad} f(x(\theta))
 \end{align}
 
@@ -240,7 +335,13 @@ i \cdot (x \wedge \grad)
 and the rotation operator takes the postulated form
 
 \begin{align}\label{eqn:rotationGen:foo19}
-f(x(\theta + \Delta\theta)) = e^{\Delta\theta i \cdot (x \wedge \grad}) f(x(\theta))
+f(x(\theta + \Delta\theta)) = e^{\Delta\theta i \cdot (x \wedge \grad)} f(x(\theta))
 \end{align}
+
+While the cross product formulation of this is fine for 3D, this works in a plane when desired, as well as higher dimensional spaces as well as optionally non-Euclidean spaces like the Minkowski space required for electrodynamics and relativity.
+
+\section{Some explicit expansions of the angular momentum operator.}
+
+
 
 \EndArticle
