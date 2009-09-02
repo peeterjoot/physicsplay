@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/rotationGenerator.pdf}
 \date{Aug 31, 2009}
-\revisionInfo{$RCSfile: rotationGenerator.tex,v $ Last $Revision: 1.2 $ $Date: 2009/09/01 14:01:00 $}
+\revisionInfo{$RCSfile: rotationGenerator.tex,v $ Last $Revision: 1.3 $ $Date: 2009/09/02 00:41:07 $}
 
 %\beginArtWithToc
 \beginArtNoToc
@@ -117,10 +117,130 @@ will allow the gradient to be expressed as
 \grad \equiv \gamma^\mu \partial_\mu = \gamma_\mu \partial^\mu
 \end{align}
 
-Here the perhaps unintuitive mix of upper and lower indexes is required to make the direction derivative come out right when expressed as a dot product
+The perhaps unintuitive mix of upper and lower indexes is required to make the indexes in the direction derivative come out right when expressed as a dot product
 
 \begin{align}\label{eqn:rotationGen:foo9}
 \lim_{\tau \rightarrow 0} \frac{f(x + a\tau) - f(x)}{\tau} = a^\mu \partial_\mu f(x) = a \cdot \grad f(x)
+\end{align}
+
+\section{Rotor examples.}
+
+\section{The rotation operator}
+
+From (\ref{eqn:rotationGen:foo1}) we can express $x$ in terms of $y$ using the inverse transformation
+
+\begin{align}\label{eqn:rotationGen:foo10}
+x = R y \tilde{R} 
+\end{align}
+
+Assuming $R$ is parameterized by $\theta$, and that both $x$ and $y$ are not directly dependent on $\theta$, we have
+
+\begin{align*}
+\frac{dx}{d\theta} 
+&= 
+\frac{d R}{d \theta} y \tilde{R} + R y \frac{d \tilde{R} }{d\theta} \\
+&= 
+\left(\frac{d R}{d \theta} \tilde{R} \right) (R y \tilde{R}) + (R y \tilde{R}) \left( R \frac{d \tilde{R} }{d\theta} \right) \\
+&= 
+\left(\frac{d R}{d \theta} \tilde{R} \right) x + x \left( R \frac{d \tilde{R} }{d\theta} \right) \\
+\end{align*}
+
+Since we also have $R \tilde{R} = 1$, this product has zero derivative
+
+\begin{align*}
+0 = \frac{d (R \tilde{R})}{d\theta} = \frac{d R}{d\theta} \tilde{R} + R \frac{d \tilde{R}}{d\theta} 
+\end{align*}
+
+Labling one of these, say
+
+\begin{align}\label{eqn:rotationGen:foo11}
+\Omega \equiv \frac{d R}{d\theta} \tilde{R} 
+\end{align}
+
+The multivector $\Omega$ must in fact be a bivector.  As the product of a grade $0,2$ multivector with another $0,2$ multivector, the product may have grades $0,2,4$.  Since reversing $\Omega$ negates it, this product can only have grade 2 components.  In particular, employing the exponential representation of $R$ from (\ref{eqn:rotationGen:foo3}) for a simply parameterized rotation (or boost), we have
+
+\begin{align}\label{eqn:rotationGen:foo16}
+\Omega = \frac{i}{2} e^{i \theta/2} e^{-i \theta/2} = \frac{i}{2}
+\end{align}
+
+With this definition we have a 
+
+complete description of the incremental (first order) rotational along the curve from $x$ to $y$ induced by $R$ via the commutator of this bivector $\Omega$ with the initial position vector $x$.
+
+\begin{align}\label{eqn:rotationGen:foo12}
+\frac{dx}{d\theta} &= \antisymmetric{\Omega}{x} = \inv{2} (i x - x i)
+\end{align}
+
+This commutator is in fact the generalize bivector-vector dot product $\antisymmetric{\Omega}{x} = i \cdot x$, and is vector valued.
+
+Now consider a scalar valued function $f = f(x(\theta))$.  Employing the chain rule, for the $theta$ derivative of $f$ we have a contribution from each coordinate $x^\mu$.  That is
+
+\begin{align*}
+\frac{df}{d\theta} 
+&= \sum_\mu \frac{d x^\mu}{d \theta} \frac{\partial f}{\partial x^\mu}  \\
+&= \frac{d x^\mu}{d \theta} \partial_\mu f \\
+&= \left( \frac{d x^\mu}{d \theta} \gamma_\mu \right) \cdot \left( \gamma^\nu \partial_\nu \right)  f \\
+\end{align*}
+
+But this is just
+\begin{align}\label{eqn:rotationGen:foo13}
+\frac{df}{d\theta} &= \frac{d x}{d \theta} \cdot \grad f
+\end{align}
+
+Or in operator form
+
+\begin{align}\label{eqn:rotationGen:foo14}
+\frac{d}{d\theta} &= (i \cdot x) \cdot \grad 
+\end{align}
+
+The complete Taylor expansion of $f(\theta) = f(x(\theta))$ is therefore 
+
+\begin{align*}
+f(x(\theta + \Delta\theta))
+&=
+\sum_{k=0}^\infty \inv{k!} \left( \Delta\theta \frac{d}{d\theta} \right)^k 
+f(x(\theta)) \\
+&=
+\sum_{k=0}^\infty \inv{k!} \left( \Delta\theta (i \cdot x) \cdot \grad \right)^k 
+f(x(\theta))
+\end{align*}
+
+Expressing this sum formally as an exponential we have
+
+\begin{align}\label{eqn:rotationGen:foo16}
+f(x(\theta + \Delta\theta)) = e^{\Delta\theta ( i \cdot x) \cdot \grad} f(x(\theta))
+\end{align}
+
+In this form, the product $(i \cdot x) \cdot \grad$ does not look much like the cross or wedge product representations of the angular momentum operator that was initially guessed at.  However, we can put this in a more ``standard'' form by rewriting this scalar product using the scalar grade selection operator, and employing the cyclic reordering identity $\gpgradezero{ a b c } = \gpgradezero{ b c a}$
+
+\begin{align*}
+( i \cdot x) \cdot \grad
+&=
+\inv{2} \gpgradezero{ ( i x - x i) \grad } \\
+&=
+\inv{2} \gpgradezero{ i x \grad - \grad x i } \\
+\end{align*}
+
+A pause is required to note that this reordering needs to be interpretted with $x$ fixed with respect to the gradient so that the gradient is acting only to the extreme right.  Then we have
+
+\begin{align}\label{eqn:rotationGen:foo17}
+( i \cdot x) \cdot \grad
+&=
+\inv{2} \gpgradezero{ i (x \cdot \grad) - (x \cdot \grad) i } + \inv{2} \gpgradezero{ i (x \wedge \grad) + (x \cdot \grad) i } 
+\end{align}
+
+The rightmost action of the gradient allows the gradient dot and wedge products to be reordered (with interchange of sign for the wedge).  The product in the first scalar selector has only bivector terms, so we are left with
+
+\begin{align}\label{eqn:rotationGen:foo18}
+( i \cdot x) \cdot \grad
+&=
+i \cdot (x \wedge \grad)
+\end{align}
+
+and the rotation operator takes the postulated form
+
+\begin{align}\label{eqn:rotationGen:foo19}
+f(x(\theta + \Delta\theta)) = e^{\Delta\theta i \cdot (x \wedge \grad}) f(x(\theta))
 \end{align}
 
 \EndArticle
