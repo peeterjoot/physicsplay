@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/rotationGenerator.pdf}
 \date{Aug 31, 2009}
-\revisionInfo{$RCSfile: rotationGenerator.tex,v $ Last $Revision: 1.6 $ $Date: 2009/09/03 03:15:39 $}
+\revisionInfo{$RCSfile: rotationGenerator.tex,v $ Last $Revision: 1.7 $ $Date: 2009/09/03 04:17:44 $}
 
 %\beginArtWithToc
 \beginArtNoToc
@@ -220,6 +220,8 @@ A final bit of rearrangement yields the familar
 
 Again observe the flexibility to adjust the sign as desired by either the bivector orientation or the sign of the scalar rapidity angle.
 
+FIXME: check signs on these results and adjust accordingly to match with standard rotation boost sign conventions.
+
 \section{The rotation operator.}
 
 Moving on to the guts.  From (\ref{eqn:rotationGen:foo1}) we can express $x$ in terms of $y$ using the inverse transformation
@@ -306,7 +308,11 @@ Expressing this sum formally as an exponential we have
 f(x(\theta + \Delta\theta)) = e^{\Delta\theta ( i \cdot x) \cdot \grad} f(x(\theta))
 \end{align}
 
-In this form, the product $(i \cdot x) \cdot \grad$ does not look much like the cross or wedge product representations of the angular momentum operator that was initially guessed at.  However, we can put this in a more ``standard'' form by rewriting this scalar product using the scalar grade selection operator, and employing the cyclic reordering identity $\gpgradezero{ a b c } = \gpgradezero{ b c a}$
+In this form, the product $(i \cdot x) \cdot \grad$ does not look much like the cross or wedge product representations of the angular momentum operator that was initially guessed at.  Let's make a couple observations about this particular form before translating back to the wedge formulation.
+
+FIXME: picture.  discussion of i . x like complex product (rotate by 90), but instead projecting with vectors.
+
+However, we can put this in a more ``standard'' form by rewriting this scalar product using the scalar grade selection operator, and employing the cyclic reordering identity $\gpgradezero{ a b c } = \gpgradezero{ b c a}$
 
 \begin{align*}
 ( i \cdot x) \cdot \grad
@@ -401,25 +407,62 @@ i \cdot (x \wedge \grad)
 
 \section{Matrix treatment.}
 
-It should be more accessable to do the same sort of treatment with matrixes than the Geometric Algebra approach.  I doubt it is really any harder (and may be easier) but it did not occur to me to try it that way.  Setup should be similar
+It should be more accessable to do the same sort of treatment with matrixes than the Geometric Algebra approach.  I doubt it is really any harder (and may be easier) but it did not occur to me to try it that way initially.  Setup should be similar
 
 \begin{align}\label{eqn:rotationGen:boo1}
-y = R x
+y &= R x \\
+x &= R^\T y 
 \end{align}
 
 Taking derivatives we then have
 
 \begin{align*}
-x' 
-&= {R^{-1}}' y
-&= {R^{-1}}' R R^{-1} y
-&= ({R^{-1}}' R) x
+\frac{d x}{d\theta}
+&= \frac{d R^\T}{d\theta} y \\
+&= \frac{d R^\T}{d\theta} R R^\T y \\
+&= \left( \frac{d R^\T}{d\theta} R \right) x \\
 \end{align*}
 
-As before we have $R^{-1} R = 1$ so 
+Introducing an $\Omega = (dR^\T/d\theta) R$ very much like before we can write this
 
 \begin{align}\label{eqn:rotationGen:boo2}
-{R^{-1}}' R = -R^{-1} R'
+\frac{d x}{d\theta} = \Omega x
 \end{align}
+
+For Euclidean spaces (where $R^{-1} = R^\T$ as assumed above), we have $R^\T R = 1$, and thus
+
+\begin{align}\label{eqn:rotationGen:boo3}
+\Omega = \frac{dR^\T}{d\theta} R = -R^\T \frac{dR}{d\theta}
+\end{align}
+
+Transposition shows that this matrix $\Omega$ is completely antisymmetric since we have
+
+\begin{align}\label{eqn:rotationGen:boo4}
+\Omega^\T = -\Omega
+\end{align}
+
+Now, is there a convienent formulation for a general plane rotation in matrix form, perhaps like the Geometric exponential form?  Probably can be done, but considering an x,y plane rotation should give the rough idea.
+
+\begin{align}\label{eqn:rotationGen:boo5}
+R_\theta = 
+\begin{bmatrix}
+\cos\theta & -\sin\theta & 0 \\
+\sin\theta &  \cos\theta & 0 \\
+0 & 0 & 1 \\
+\end{bmatrix}
+\end{align}
+
+After a bit of algebra we have
+
+\begin{align}\label{eqn:rotationGen:boo6}
+\Omega = 
+\begin{bmatrix}
+0 & 1 & 0 \\
+-1 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{bmatrix}
+\end{align}
+
+FIXME: finish this.  Consider chain rule now ... how does that last bit translate.  How would this translate to Minkowski spaces where the transpose isn't the inverse?
 
 \EndArticle
