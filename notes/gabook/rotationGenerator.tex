@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/rotationGenerator.pdf}
 \date{Aug 31, 2009}
-\revisionInfo{$RCSfile: rotationGenerator.tex,v $ Last $Revision: 1.7 $ $Date: 2009/09/03 04:17:44 $}
+\revisionInfo{$RCSfile: rotationGenerator.tex,v $ Last $Revision: 1.8 $ $Date: 2009/09/03 04:49:22 $}
 
 %\beginArtWithToc
 \beginArtNoToc
@@ -410,23 +410,23 @@ i \cdot (x \wedge \grad)
 It should be more accessable to do the same sort of treatment with matrixes than the Geometric Algebra approach.  I doubt it is really any harder (and may be easier) but it did not occur to me to try it that way initially.  Setup should be similar
 
 \begin{align}\label{eqn:rotationGen:boo1}
-y &= R x \\
-x &= R^\T y 
+\By &= R \Bx \\
+\Bx &= R^\T \By 
 \end{align}
 
 Taking derivatives we then have
 
 \begin{align*}
-\frac{d x}{d\theta}
-&= \frac{d R^\T}{d\theta} y \\
-&= \frac{d R^\T}{d\theta} R R^\T y \\
-&= \left( \frac{d R^\T}{d\theta} R \right) x \\
+\frac{d \Bx}{d\theta}
+&= \frac{d R^\T}{d\theta} \By \\
+&= \frac{d R^\T}{d\theta} R R^\T \By \\
+&= \left( \frac{d R^\T}{d\theta} R \right) \Bx \\
 \end{align*}
 
 Introducing an $\Omega = (dR^\T/d\theta) R$ very much like before we can write this
 
 \begin{align}\label{eqn:rotationGen:boo2}
-\frac{d x}{d\theta} = \Omega x
+\frac{d \Bx}{d\theta} = \Omega \Bx
 \end{align}
 
 For Euclidean spaces (where $R^{-1} = R^\T$ as assumed above), we have $R^\T R = 1$, and thus
@@ -463,6 +463,51 @@ After a bit of algebra we have
 \end{bmatrix}
 \end{align}
 
-FIXME: finish this.  Consider chain rule now ... how does that last bit translate.  How would this translate to Minkowski spaces where the transpose isn't the inverse?
+In general we must have 
+
+\begin{align}\label{eqn:rotationGen:boo7}
+\Omega = 
+\begin{bmatrix}
+0 & -c & b \\
+c & 0 & -a \\
+b & a & 0 \\
+\end{bmatrix}
+\end{align}
+
+For some $a,b,c$.  This procedure is not intrinsically three dimension, but in the specific 3D case, we can express this antisymetrization using the cross product.  Writing $\ncap = (a,b,c)$ for the vector with these components, we have in the 3D case only
+
+\begin{align}\label{eqn:rotationGen:boo8}
+\Omega \Bx = \ncap \cross \Bx
+\end{align}
+
+The first order rotation of a function $f(\Bx(\theta))$ now follows from the chain rule as before
+
+\begin{align*}
+\frac{df}{d\theta} 
+&= 
+\frac{d x^\m}{d\theta} 
+\frac{\partial f}{\partial x^m} 
+\\
+&= 
+\frac{d \Bx}{d\theta} \cdot \spacegrad f
+\\
+&= 
+(\Bn \cross \Bx) \cdot \spacegrad f
+\\
+\end{align*}
+
+We have then for the first order rotation derivative operator in 3D
+
+\begin{align}\label{eqn:rotationGen:boo9}
+\frac{d}{d\theta} &= \Bn \cdot (\Bx \cross \spacegrad) 
+\end{align}
+
+For higher (or 2D) spaces one cannot use the cross product so a more general expression of the result (\ref{eqn:rotationGen:boo9}) would be
+
+\begin{align}\label{eqn:rotationGen:boo10}
+\frac{d}{d\theta} &= (\Omega \Bx) \cdot \spacegrad
+\end{align}
+
+Now, in this outline was a fair amount of cheating.  We know that $\ncap$ is the normal to the rotational plane, but that hasn't been shown here.  Instead it was a constructed quantity just pulled out of thin air knowing it would be required.  If one were interested in persuing a treatment of the rotation generator operator strictly using matrix algebra, that would have to be considered.  More troublesome and non-obvious is how this would translate to other metric spaces.
 
 \EndArticle
