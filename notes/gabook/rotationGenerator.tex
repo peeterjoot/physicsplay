@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/rotationGenerator.pdf}
 \date{Aug 31, 2009}
-\revisionInfo{$RCSfile: rotationGenerator.tex,v $ Last $Revision: 1.8 $ $Date: 2009/09/03 04:49:22 $}
+\revisionInfo{$RCSfile: rotationGenerator.tex,v $ Last $Revision: 1.9 $ $Date: 2009/09/04 04:49:46 $}
 
 %\beginArtWithToc
 \beginArtNoToc
@@ -220,8 +220,6 @@ A final bit of rearrangement yields the familar
 
 Again observe the flexibility to adjust the sign as desired by either the bivector orientation or the sign of the scalar rapidity angle.
 
-FIXME: check signs on these results and adjust accordingly to match with standard rotation boost sign conventions.
-
 \section{The rotation operator.}
 
 Moving on to the guts.  From (\ref{eqn:rotationGen:foo1}) we can express $x$ in terms of $y$ using the inverse transformation
@@ -308,11 +306,38 @@ Expressing this sum formally as an exponential we have
 f(x(\theta + \Delta\theta)) = e^{\Delta\theta ( i \cdot x) \cdot \grad} f(x(\theta))
 \end{align}
 
-In this form, the product $(i \cdot x) \cdot \grad$ does not look much like the cross or wedge product representations of the angular momentum operator that was initially guessed at.  Let's make a couple observations about this particular form before translating back to the wedge formulation.
+In this form, the product $(i \cdot x) \cdot \grad$ does not look much like the cross or wedge product representations of the angular momentum operator that was initially guessed at.  Referring to figure (\ref{fig:rotationGen:bivectorDot}) let's make a couple observations about this particular form before translating back to the wedge formulation.
 
-FIXME: picture.  discussion of i . x like complex product (rotate by 90), but instead projecting with vectors.
+\begin{figure}[htp]
+\centering
+\includegraphics[totalheight=0.4\textheight]{bivectorDot}
+\caption{Bivector dot product with vector.}\label{fig:rotationGen:bivectorDot}
+\end{figure}
 
-However, we can put this in a more ``standard'' form by rewriting this scalar product using the scalar grade selection operator, and employing the cyclic reordering identity $\gpgradezero{ a b c } = \gpgradezero{ b c a}$
+It is worth pointing out that any bivector has no unique vector factorization.  For example any of the following are equivalent
+
+\begin{align*}
+i 
+&= \ucap \wedge \vcap \\
+&= (2 \ucap) \wedge (\vcap/2 + \alpha \ucap) \\
+&= \inv{\alpha b - \beta a} (\alpha \ucap + \beta \vcap ) \wedge (a \ucap + b \vcap)
+\end{align*}
+
+For this reason if we factor a bivector into two vectors within the plane we are free to pick one of these in any direction we please and can pick the other in one of the perpendiculars within the plane.  In the figure exactly this was done, factoring the bivector into two perpendicular vectors $i = \ucap \vcap$, where $\ucap$ was picked to be in the direction of the projection of the vector $\Bx$ onto the plane spanned by $\{\ucap, \vcap\}$.  Suppose that projection of $\Bx$ onto the plane is $\alpha \ucap$.  We then have for the bivector vector dot product
+
+\begin{align*}
+i \cdot \Bx 
+&=
+(\ucap\vcap) \cdot (\alpha \ucap) \\
+&=
+\alpha \ucap\vcap \ucap \\
+&=
+-\alpha \underbrace{\ucap\ucap}_{=1} \vcap \\
+\end{align*}
+
+So we have for the dot product $i \cdot \Bx = - \alpha \vcap$, a rotation in the plane of the projection of the vector $\Bx$ onto the plane by 90 degrees.  The direction of the rotation is metric dependent, and a spatially positive metric was used in this example.  Observe that the action of a bivector product on a vector, provided that vector is in the plane spanned by the factors of the bivector is very much like the complex imaginary action.  In both cases we have a 90 degree rotation.  This complex number correspondence is not entirely equivalent though, since we also have $i \cdot \Bx = -\Bx \cdot i$, a negation on reversal of the product ordering, whereas we don't have to worry about commuting the imaginary of complex arithmetic.
+
+This shows how the bivector dot product naturally encodes a rotation.  We could leave things this way, but we also want to see how to put this in a more ``standard'' form.  This is possible by rewriting the scalar product using a scalar grade selection operator.  Also employing the cyclic reordering identity $\gpgradezero{ a b c } = \gpgradezero{ b c a}$, we have
 
 \begin{align*}
 ( i \cdot x) \cdot \grad
@@ -407,7 +432,7 @@ i \cdot (x \wedge \grad)
 
 \section{Matrix treatment.}
 
-It should be more accessable to do the same sort of treatment with matrixes than the Geometric Algebra approach.  I doubt it is really any harder (and may be easier) but it did not occur to me to try it that way initially.  Setup should be similar
+It should be more accessable to do the same sort of treatment with matrixes than the Geometric Algebra approach.  It did not occur to me to try it that way initially, and it is worthwhile to do a comparitive derivation.  Setup should be similar
 
 \begin{align}\label{eqn:rotationGen:boo1}
 \By &= R \Bx \\
@@ -485,7 +510,7 @@ The first order rotation of a function $f(\Bx(\theta))$ now follows from the cha
 \begin{align*}
 \frac{df}{d\theta} 
 &= 
-\frac{d x^\m}{d\theta} 
+\frac{d x^m}{d\theta} 
 \frac{\partial f}{\partial x^m} 
 \\
 &= 
@@ -508,6 +533,6 @@ For higher (or 2D) spaces one cannot use the cross product so a more general exp
 \frac{d}{d\theta} &= (\Omega \Bx) \cdot \spacegrad
 \end{align}
 
-Now, in this outline was a fair amount of cheating.  We know that $\ncap$ is the normal to the rotational plane, but that hasn't been shown here.  Instead it was a constructed quantity just pulled out of thin air knowing it would be required.  If one were interested in persuing a treatment of the rotation generator operator strictly using matrix algebra, that would have to be considered.  More troublesome and non-obvious is how this would translate to other metric spaces.
+Now, in this outline was a fair amount of cheating.  We know that $\ncap$ is the unit normal to the rotational plane, but that hasn't been shown here.  Instead it was a constructed quantity just pulled out of thin air knowing it would be required.  If one were interested in persuing a treatment of the rotation generator operator strictly using matrix algebra, that would have to be considered.  More troublesome and non-obvious is how this would translate to other metric spaces, where we do not neccessarily have the transpose relationships to exploit.
 
 \EndArticle
