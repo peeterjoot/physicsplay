@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/rotationCurrents.pdf}
 \date{Sept 4, 2009}
-\revisionInfo{$RCSfile: rotationCurrents.tex,v $ Last $Revision: 1.1 $ $Date: 2009/09/05 00:55:23 $}
+\revisionInfo{$RCSfile: rotationCurrents.tex,v $ Last $Revision: 1.2 $ $Date: 2009/09/05 15:11:10 $}
 
 \beginArtWithToc
 
@@ -13,10 +13,283 @@
 
 The article (\cite{montesinos2006sem}) details the calculation for a conserved current associated with an incremental poincare transformation.  This is used to directly determine the symmetric energy momentum tensor for Maxwell's equations, in contrast to the canonical energy momentum tensor (arising from spacetime translation) which is not symmetric but can be symmetrized with other arguments.
 
-I believe that I am slowly accumulating the tools required to understand this paper.  One of them is likely the exponential rotational generator examined in \chapcite{rotationGenerator}, utilizing the angular momentum operator.
+I believe that I am slowly accumulating the tools required to understand this paper.  One such tool is likely the exponential rotational generator examined in \chapcite{rotationGenerator}, utilizing the angular momentum operator.
 
 Here I review some of the Noether conservation calculations and the associated Noether currents for a few example Lagrangian densities.  Then I hope to see how to apply similar techniques to these using an angular momentum operator alteration of the Lagrangian density.
 
+\section{Field Euler-Lagrange equations.}
+
+The extremization of the action integral
+
+\begin{align}\label{eqn:rotationCurrents:boo1}
+S &= \int \LL d^4 x
+\end{align}
+
+can be dealt with (following Feynman) as a first order taylor expansion and integration by parts exersize.  A single field variable example serves to illustrate.  A first order Lagrangian of a single field variable has the form
+
+\begin{align}\label{eqn:rotationCurrents:boo2}
+\LL = \LL(\phi, \partial_\mu \phi)
+\end{align}
+
+Let us vary the field $\phi \rightarrow \phi + \bar{\phi}$, inducing a cooresponding variation in the action
+
+\begin{align*}
+S + \delta S
+&= \int \LL(\phi + \bar{\phi}, \partial_\mu (phi + \bar{\phi}) d^4 x \\
+&= \int d^4 x \left(
+\LL(\bar{\phi}, \partial_\mu \bar{\phi})
++
+\bar{\phi} \PD{\phi}{\LL}
++\partial_\mu \bar{\phi} \PD{(\partial_\mu \phi)}{\LL}
++ \cdots \right)
+\end{align*}
+
+Neglecting any second or higher order terms the change in the action from the assumed solution is
+
+\begin{align}\label{eqn:rotationCurrents:boo3}
+\delta S
+&=
+\int d^4 x \left( \bar{\phi} \PD{\phi}{\LL} +\partial_\mu \bar{\phi} \PD{(\partial_\mu \phi)}{\LL} \right)
+\end{align}
+
+This is now integrably by parts yielding
+
+\begin{align}\label{eqn:rotationCurrents:boo4}
+\delta S
+&=
+\int d^3 x \left( {\left. \bar{\phi} \partial_\mu \LL \right\vert}_{\partial x^\mu} \right)
++
+\int d^4 x \bar{\phi} \left( \PD{\phi}{\LL} - \partial_\mu \PD{(\partial_\mu \phi)}{\LL} \right)
+\end{align}
+
+Here $d^3 x$ is taken to mean that part of the integration not including $dx_\mu$.  The field $\bar{\phi}$ is always required to vanish on the boundary as in the dynamic Lagrangian arguments, so the first integral is zero.  If the remainder is zero for all fields $\bar{\phi}$, then the inner term must be zero, and we the field Euler-Lagrange equations as a result
+
+\begin{align}\label{eqn:rotationCurrents:boo5}
+\PD{\phi}{\LL} - \partial_\mu \PD{(\partial_\mu \phi)}{\LL} = 0
+\end{align}
+
+When we have multiple field variables, say $A_\nu$, the chain rule expansion leading to (\ref{eqn:rotationCurrents:boo3}) will have to be modified to sum over all the field variables, and we end up instead with
+
+\begin{align}\label{eqn:rotationCurrents:boo6}
+\delta S
+&=
+\int d^4 x \sum_{\nu} \bar{A_\nu} \left( \PD{A_\nu}{\LL} - \partial_\mu \PD{(\partial_\mu A_\nu)}{\LL} \right)
+\end{align}
+
+So for $\delta S = 0$ for all $\bar{A}_\nu$ we have a set of equations, one for each $\nu$
+
+\begin{align}\label{eqn:rotationCurrents:boo7}
+\PD{A_\nu}{\LL} - \partial_\mu \PD{(\partial_\mu A_\nu)}{\LL} = 0
+\end{align}
+
 \section{Field Noether currents.}
+
+The single parameter Noether conservation equation again is mainly application of the chain rule.  Illustrating with the one field variable case, with an altered field variable $\phi \rightarrow \phi'(\theta)$, and
+
+\begin{align}\label{eqn:rotationCurrents:moo1}
+\LL' = \LL(\phi', \partial_\mu \phi')
+\end{align}
+
+Examining the change of $\LL'$ with $\theta$ we have
+
+\begin{align*}
+\frac{d \LL'}{d \theta}
+&=
+\PD{\phi'}{\LL} \PD{\theta}{\phi'}
++\PD{(\partial_\mu \phi')}{\LL}
+\PD{\theta}{(\partial_\mu \phi')}
+\end{align*}
+
+For the last term we can switch up the order of differentiation
+
+\begin{align*}
+\PD{\theta}{(\partial_\mu \phi')}
+&=
+\PD{\theta}{}
+\PD{x^\mu}{\phi'} \\
+&= \PD{x^\mu}{} \PD{\theta}{\phi'}
+\end{align*}
+
+Additionally, with substutition of the Euler-Lagrange equations in the first term we have
+
+\begin{align*}
+\frac{d \LL'}{d \theta}
+&=
+\left( \PD{x^\mu}{} \PD{(\partial_\mu \phi')}{\LL} \right) \PD{\theta}{\phi'}
++\PD{(\partial_\mu \phi')}{\LL} \PD{x^\mu}{} \PD{\theta}{\phi'} \\
+\end{align*}
+
+But this can be directly antidifferentiated yielding the Noether conservation equation
+
+\begin{align}\label{eqn:rotationCurrents:moo2}
+\frac{d \LL'}{d \theta}
+=
+\PD{x^\mu}{} \left( \PD{(\partial_\mu \phi')}{\LL} \PD{\theta}{\phi'} \right)
+\end{align}
+
+With multiple field variables we'll have a term in the chain rule expansion for each field variable.  The end result is pretty much the same, but we have to sum over all the fields
+
+\begin{align}\label{eqn:rotationCurrents:moo3}
+\frac{d \LL'}{d \theta}
+=
+\sum_\nu \PD{x^\mu}{} \left( \PD{(\partial_\mu {A'}_\nu)}{\LL} \PD{\theta}{{A'}_\nu} \right)
+\end{align}
+
+Unlike the field Euler-Lagrange equations we have just one here, not one for each field variable.  In this multivariable case, expression in vector form can eliminate the sum over field variables.  With $A' = {A'}_\nu \gamma^\nu$, we have
+
+\begin{align}\label{eqn:rotationCurrents:moo4}
+\frac{d \LL'}{d \theta}
+=
+\PD{x^\mu}{} \left( \gamma_\nu \PD{(\partial_\mu {A'}_\nu)}{\LL} \cdot \PD{\theta}{A'} \right)
+\end{align}
+
+With an evaluation at $\theta = 0$, we have finally
+
+\begin{align}\label{eqn:rotationCurrents:moo5}
+{\left. \frac{d \LL'}{d \theta} \right\vert}_{\theta=0}
+=
+\PD{x^\mu}{} \left( \gamma_\nu \PD{(\partial_\mu {A}_\nu)}{\LL} \cdot {\left. \PD{\theta}{A'} \right\vert}_{\theta=0}\right)
+\end{align}
+
+When the Lagrangian alteration is independent of $\theta$ (i.e. is invariant), it is said that there is a symmetry.  By (\ref{eqn:rotationCurrents:moo5}) we have a conserved quantity associated with this symmetry, some quantity, say $J$ that has a zero divergence.   That is
+
+\begin{align}\label{eqn:rotationCurrents:moo6}
+J^\mu &= \gamma_\nu \PD{(\partial_\mu {A}_\nu)}{\LL} \cdot {\left. \PD{\theta}{A'} \right\vert}_{\theta=0} \\
+0 &= \partial_\mu J^\mu
+\end{align}
+
+\section{Maxwell Lagrangian, rotation of coordinates.}
+
+The Maxwell Lagrangian, as well as being the one of interest for the energy momentum tensor, is also invariant to coordinate system rotation.  We may write that Lagrangian density as
+
+\begin{align}\label{eqn:rotationCurrents:goo1}
+\LL = \frac{\epsilon_0}{2} \gpgradezero{(\grad \wedge A)^2} - \inv{c} A \cdot J
+\end{align}
+
+Or in coordinate form as
+
+\begin{align}\label{eqn:rotationCurrents:goo2}
+\LL = -\frac{\epsilon_0}{2} \partial_\mu A_\nu (\partial^\mu A^\nu - \partial^\nu A^\mu) - \inv{c} A_\alpha J^\alpha
+\end{align}
+
+To (\ref{eqn:rotationCurrents:goo1}), we can apply a rotation of coordinates to both the gradient $\grad \rightarrow \tilde{R} \grad R$, and the field $A \rightarrow \tilde{R} A R$.  We have
+
+\begin{align}\label{eqn:rotationCurrents:goo3}
+\LL' &= \frac{\epsilon_0}{8} \gpgradezero{((\tilde{R} \rgrad R) (\tilde{R} A R) - (\tilde{R} A R) (\tilde{R} \lgrad R))^2} - \inv{c} \gpgradezero{ (\tilde{R} A R) (\tilde{R} J R)}
+\end{align}
+
+Employing cyclic commutation $\gpgradezero{ a b c} = \gpgradezero{ c a b }$, and $\tilde{R} R = 1$, we have $\LL' = \LL$, and this Lagrangian therefore has a conserved current specified by (\ref{eqn:rotationCurrents:moo6}).
+
+From (\ref{eqn:rotationCurrents:goo2}) we can calculate (the canonical field momentum?) $\PDi{(\partial_\mu {A}_\nu)}{\LL}$, and get
+
+\begin{align}\label{eqn:rotationCurrents:goo4}
+\gamma_\nu \PD{(\partial_\mu {A}_\nu)}{\LL} = -\epsilon_0 \gamma_\nu F^{\mu\nu}
+\end{align}
+
+This can be written in terms of the total field $F = \grad \wedge A$, after observing
+
+\begin{align*}
+\gamma^\mu \cdot F
+&=
+\gamma^\mu \cdot (\gamma_\alpha \wedge \gamma_\nu \partial^\alpha A^\nu) \\
+&=
+(\gamma_\nu {\delta^\mu}_\alpha - \gamma_\alpha {\delta^\mu}_\nu ) \partial^\alpha A^\nu \\
+&=
+\gamma_\nu F^{\mu\nu}
+\end{align*}
+
+%\begin{align}\label{eqn:rotationCurrents:goo5}
+%\gamma_\nu \PD{(\partial_\mu {A}_\nu)}{\LL} = -\epsilon_0 (\gamma^\mu \cdot F)
+%\end{align}
+
+This leaves us so far with the Noether current conservation of
+
+\begin{align}\label{eqn:rotationCurrents:goo6}
+0 = -\epsilon_0 \partial_\mu \left( (\gamma^\mu \cdot F) \cdot {\left. \PD{\theta}{A'} \right\vert}_{\theta=0}  \right)
+\end{align}
+
+The specifics of the Lorentz transformation used in the coordinate transformation weren't required to get this far, but if we assume a singly parameterized rotation or boost we can use an exponential representation for the rotation
+
+\begin{align}\label{eqn:rotationCurrents:goo7}
+R &= e^{i\theta/2} \\
+A' &= \tilde{R} A R
+\end{align}
+
+The change of the field variable $A'$ with respect to theta (a rotation angle or boost rapidity) is then
+
+\begin{align*}
+\frac{dA'}{d\theta}
+&= \frac{d\tilde{R}}{d\theta} A R + \tilde{R} A \frac{d R}{d\theta} \\
+&= \frac{d\tilde{R}}{d\theta} R A' + A' R \tilde{R} \frac{d R}{d\theta} \\
+&= \inv{2} \left( -i A' + A' i \right) \\
+\end{align*}
+
+But this is just a vector-bivector dot product
+
+\begin{align}\label{eqn:rotationCurrents:goo8}
+\frac{dA'}{d\theta} &= A' \cdot i
+\end{align}
+
+Evaluating at $\theta = 0$ we have just $A \cdot i$, and we are left with the conservation statement
+
+\begin{align}\label{eqn:rotationCurrents:goo9}
+0 = \partial_\sigma \left( (\gamma^\sigma \cdot F) \cdot (A \cdot i) \right)
+\end{align}
+
+As a scalar we can write this multiple dot product explicitly using scalar selection, and factor out the bivector $i$
+
+\begin{align*}
+\partial_\sigma \left( (\gamma^\sigma \cdot F) \cdot (A \cdot i) \right)
+&=
+\partial_\sigma \gpgradezero{ (\gamma^\sigma \cdot F) \cdot (A \cdot i) } \\
+&=
+\inv{2} \partial_\sigma \gpgradezero{ (\gamma^\sigma \cdot F) (A i - i A) } \\
+&=
+\inv{2} \partial_\sigma \gpgradezero{ ((\gamma^\sigma \cdot F) A -A (\gamma^\sigma \cdot F)) i } \\
+\end{align*}
+
+This leaves us with a bivector conservation statement
+
+\begin{align}\label{eqn:rotationCurrents:goo10}
+0 = \left( \partial_\sigma (\gamma^\sigma \cdot F) \wedge A \right) \cdot i
+\end{align}
+
+If this is zero for all spatial and spacetime planes $i$ we must then have
+
+\begin{align}\label{eqn:rotationCurrents:goo11}
+0 = \partial_\sigma \left( (\gamma^\sigma \cdot F) \wedge A \right)
+\end{align}
+
+Can we factor out the $\gamma^\sigma$ from this leaving some function of $F$, and $A$?  Let's come back to that after first relating this to the canonical energy momentum tensor, since doing so allows us to name this quantity (or at least give it a symbol).  To do so, note that this is really six different conservation relationships since it must be separately true for each component of this bivector.   Dotting this with the unit bivectors $\gamma^\nu \wedge \gamma^\mu$ will provide an equivalent set of six tensor equations.  Those follow messily, but directly,
+
+\begin{align*}
+0
+&=
+\partial_\sigma \left( (\gamma^\sigma \cdot F) \wedge A \right)  \cdot (\gamma^\nu \wedge \gamma^\mu) \\
+&=
+\partial_\sigma (F^{\sigma\alpha} A^\beta) (\gamma^\alpha \wedge \gamma_\beta) \cdot (\gamma^\nu \wedge \gamma^\mu) \\
+&=
+\partial_\sigma (F^{\sigma\mu} A^\nu -F^{\sigma\nu} A^\mu )
+\end{align*}
+
+The six conservation equations, one for each $\mu \ne \nu$, are thus
+
+\begin{align}\label{eqn:rotationCurrents:goo12}
+\partial_\sigma F^{\sigma\mu} A^\nu = \partial_\sigma F^{\sigma\nu} A^\mu
+\end{align}
+
+Jackson (\cite{jackson1975cew}) lables, but does not name, these left and right side quantities
+
+\begin{align}\label{eqn:rotationCurrents:goo13}
+{T_D}^{\mu\nu} \equiv \partial_\sigma F^{\sigma\mu} A^\nu
+\end{align}
+
+and uses these to construct the symmetric energy momentum tensor from the canonical tensor by subtraction.  With this label we have as a consequence of rotation invariance
+
+\begin{align}\label{eqn:rotationCurrents:goo14}
+{T_D}^{\mu\nu} = {T_D}^{\nu\mu}
+\end{align}
+
+It isn't at all obvious that this tensor should be symmetric, and it is in perhaps somewhat strange since subtracting this from the canonical tensor produced the symmetric?
 
 \EndArticle
