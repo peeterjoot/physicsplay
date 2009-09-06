@@ -1,0 +1,152 @@
+\input{../peeter_prologue.tex}
+
+\chapter{bivectorSelect}
+\label{chap:bivectorSelect}
+%\useCCL
+\blogpage{http://sites.google.com/site/peeterjoot/math2009/bivectorSelect.pdf}
+\date{Sept 6, 2009}
+\revisionInfo{$RCSfile: bivectorSelect.tex,v $ Last $Revision: 1.1 $ $Date: 2009/09/06 13:35:27 $}
+
+%\beginArtWithToc
+\beginArtNoToc
+
+\section{Motivation}
+
+The aim here is to extract the bivector grades of the squared angular momentum operator
+
+\begin{align}\label{eqn:bivectorSelect:goo1}
+\gpgradetwo{ (x \wedge \grad)^2 } \questionEquals \cdots
+\end{align}
+
+I'd tried this before and believe gotten it wrong.  Take it super slow and dumb and careful.
+
+\section{Non-operator expansion.}
+
+Suppose $P$ is a bivector, $P = (\gamma^k \wedge \gamma^m) P_{km}$, the grade two product with a different unit bivector is
+
+\begin{align*}
+\gpgradetwo{ (\gamma_a \wedge \gamma_b) (\gamma^k \wedge \gamma^m) } P_{km} 
+&= 
+\gpgradetwo{ (\gamma_a \gamma_b - \gamma_a \cdot \gamma_b) (\gamma^k \wedge \gamma^m) } P_{km} \\
+&= 
+\gpgradetwo{ \gamma_a (\gamma_b \cdot (\gamma^k \wedge \gamma^m)) } P_{km} 
++ \gpgradetwo{ \gamma_a (\gamma_b \wedge (\gamma^k \wedge \gamma^m)) } P_{km} 
+- (\gamma_a \cdot \gamma_b) (\gamma^k \wedge \gamma^m) P_{km} \\
+&= 
+(\gamma_a \wedge \gamma^m) P_{b m} -(\gamma_a \wedge \gamma^k) P_{k b} - (\gamma_a \cdot \gamma_b) (\gamma^k \wedge \gamma^m) P_{km} \\
+&+ (\gamma_a \cdot \gamma_b) (\gamma^k \wedge \gamma^m) P_{km} 
+- (\gamma_b \wedge \gamma^m) P_{a m} 
++ (\gamma_b \wedge \gamma^k) P_{k a} 
+\\
+&= 
+(\gamma_a \wedge \gamma^c) (P_{b c} -P_{c b})
++ (\gamma_b \wedge \gamma^c) (P_{c a} -P_{a c} )
+\\
+\end{align*}
+
+\section{Operator expansion.}
+
+A blind replacement $\gamma_a \rightarrow x$, and $\gamma_b \rightarrow \grad$ gives us
+
+\begin{align*}
+\gpgradetwo{ (x \wedge \grad) (\gamma^k \wedge \gamma^m) } P_{km} 
+&= 
+\gpgradetwo{ (x \grad - x \cdot \grad) (\gamma^k \wedge \gamma^m) } P_{km} \\
+&= 
+\gpgradetwo{ x (\grad \cdot (\gamma^k \wedge \gamma^m)) } P_{km} 
++ \gpgradetwo{ x (\grad \wedge (\gamma^k \wedge \gamma^m)) } P_{km} 
+- (x \cdot \grad) (\gamma^k \wedge \gamma^m) P_{km} \\
+\end{align*}
+
+Using $P_{km} = x_k \partial_m$, eliminating the coordinate expansion we have an intermediate result that gets us partway there
+
+\begin{align}\label{eqn:bivectorSelect:goo2}
+\gpgradetwo{ (x \wedge \grad)^2 }
+&=
+\gpgradetwo{ x (\grad \cdot (x \wedge \grad)) } 
++ \gpgradetwo{ x (\grad \wedge (x \wedge \grad)) } 
+- (x \cdot \grad) (x \wedge \grad) 
+\end{align}
+
+An expansion of the first term should be easier than the second.  Dropping back to coordinates we have
+
+\begin{align*}
+\gpgradetwo{ x (\grad \cdot (x \wedge \grad)) } 
+&=
+\gpgradetwo{ x (\grad \cdot (\gamma^k \wedge \gamma^m)) } x_k \partial_m \\
+&=
+\gpgradetwo{ x (\gamma_a \partial^a \cdot (\gamma^k \wedge \gamma^m)) } x_k \partial_m \\
+&=
+\gpgradetwo{ x \gamma^m \partial^k } x_k \partial_m 
+-\gpgradetwo{ x \gamma^k \partial^m } x_k \partial_m  \\
+&=
+x \wedge (\partial^k x_k \gamma^m \partial_m )
+- x \wedge (\partial^m \gamma^k x_k \partial_m ) \\
+\end{align*}
+
+This gets us part way there, and we have
+
+\begin{align}\label{eqn:bivectorSelect:goo3}
+\gpgradetwo{ x (\grad \cdot (x \wedge \grad)) } &= x \wedge (\partial^k x_k \grad ) - x \wedge (\partial^m x \partial_m ) 
+\end{align}
+
+Expanding out these two will be conceptually easier if the operation on a function is made explicit.  For the first
+
+\begin{align*}
+x \wedge (\partial^k x_k \grad ) \phi
+&=
+x \wedge x_k \partial^k (\grad \phi)
++x \wedge ((\partial^k x_k) \grad) \phi \\
+&=
+x \wedge ((x \cdot \grad) (\grad \phi))
++ n (x \wedge \grad) \phi
+\end{align*}
+
+In operator form this is
+
+\begin{align}\label{eqn:bivectorSelect:goo4}
+x \wedge (\partial^k x_k \grad ) &= n (x \wedge \grad) + x \wedge ((x \cdot \grad) \grad ) 
+\end{align}
+
+Now consider the second half of (\ref{eqn:bivectorSelect:goo3}).  For that we expand
+
+\begin{align*}
+x \wedge (\partial^m x \partial_m ) \phi
+&=
+x \wedge (x \partial_m \partial^m \phi)
++ x \wedge ((\partial^m x) \partial_m \phi)
+\end{align*}
+
+Since $x \wedge x = 0$, and $\partial^m x = \partial^m x_k \gamma^k = \gamma^m$, we have
+
+\begin{align*}
+x \wedge (\partial^m x \partial_m ) \phi
+&=
+x \wedge (\gamma^m \partial_m ) \phi \\
+&=
+(x \wedge \grad) \phi
+\end{align*}
+
+Putting things back together we have for (\ref{eqn:bivectorSelect:goo3})
+
+%\gpgradetwo{ x (\grad \cdot (x \wedge \grad)) } &= x \wedge (\partial^k x_k \grad ) - x \wedge (\partial^m x \partial_m ) 
+%x \wedge (\partial^k x_k \grad ) &= n (x \wedge \grad) + x \wedge ((x \cdot \grad) \grad ) 
+%x \wedge (\partial^m x \partial_m ) \phi &= (x \wedge \grad) \phi
+
+\begin{align}\label{eqn:bivectorSelect:goo5}
+\gpgradetwo{ x (\grad \cdot (x \wedge \grad)) } &= (n-1) (x \wedge \grad) + x \wedge ((x \cdot \grad) \grad ) 
+\end{align}
+
+This now completes a fair amount of the bivector selection, and a substitution back into (\ref{eqn:bivectorSelect:goo2}) yields
+
+\begin{align}
+\gpgradetwo{ (x \wedge \grad)^2 }
+&=
+(n-1 - x \cdot \grad) (x \wedge \grad) + x \wedge ((x \cdot \grad) \grad ) 
++ x \cdot ((\grad \wedge (x \wedge \grad)) 
+\end{align}
+
+The remaining task is to explicitly expand the last vector-trivector dot product.
+
+%\EndArticle
+\EndNoBibArticle
