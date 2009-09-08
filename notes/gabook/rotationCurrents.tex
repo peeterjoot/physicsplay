@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/rotationCurrents.pdf}
 \date{Sept 4, 2009}
-\revisionInfo{$RCSfile: rotationCurrents.tex,v $ Last $Revision: 1.5 $ $Date: 2009/09/07 15:17:59 $}
+\revisionInfo{$RCSfile: rotationCurrents.tex,v $ Last $Revision: 1.6 $ $Date: 2009/09/08 01:07:03 $}
 
 \beginArtWithToc
 
@@ -160,15 +160,17 @@ J^\mu &= \gamma_\nu \PD{(\partial_\mu {A}_\nu)}{\LL} \cdot {\left. \PD{\theta}{A
 
 \section{Spacetime translation symmetries and Noether currents.}
 
-The procedure for deriving the Noether current for an incremental spacetime translation followed similar lines.  This was the application of the first order linear Taylor series expansion to the Lagrangian
+Considering the effect of spacetime translation on the Lagrangian we examine the application of the first order linear Taylor series expansion shifting the vector parameters by an increment $a$.  The Lagrangian alteration is
 
 \begin{align}\label{eqn:rotationCurrents:goo1}
-\LL \rightarrow \LL + a \cdot \grad \LL
+\LL \rightarrow e^{a \cdot \grad }\LL \approx \LL + a \cdot \grad \LL
 \end{align}
+
+Similar to the addition of derivatives to the Lagrangians of dynamics, we can in some types of total derivatives $\partial_\mu F^\mu$ to the Lagrangian without changing the resulting field equations (i.e. there is an associated ``symmetry'' for this Lagrangian alteration).  The directional derivative $a \cdot \grad \LL = a^\mu \partial_\mu \LL$ appears to be an example of a total derivative alteration that leaves the Lagrangian unchanged.
 
 \subsection{On the symmetry.}
 
-The fact that this translation is in fact a symmetry (i.e. produces the same field equations) is not neccessarily obvious.  Some abstract arguments are possible, but an initial illustration by example is perhaps more effective.  Lets take one of the simplest field Lagrangians, that of the electrostatic Coulomb field
+The fact that this translation necessarily results in the same field equations is not necessarily obvious.  An initial illustration by example is perhaps more effective, and can be made with one of the simplest field Lagrangians, that of the Coulomb electrostatic law
 
 \begin{align}\label{eqn:rotationCurrents:goo2}
 \LL = \inv{2} (\spacegrad \phi)^2 - \inv{\epsilon_0}\rho \phi = \inv{2} \sum_m(\partial_m \phi)^2 - \inv{\epsilon_0}\rho \phi
@@ -196,7 +198,7 @@ So the extremum condition ${\delta \LL}/{\delta \phi} = 0$ gives
 \spacegrad^2 \phi = - \inv{\epsilon_0}\rho 
 \end{align}
 
-Equivalently, and probably more familiar, we write $\BE = -\spacegrad \phi$, and get the differential form of Coloumb's law in terms of the electric field
+Equivalently, and probably more familiar, we write $\BE = -\spacegrad \phi$, and get the differential form of Coulomb's law in terms of the electric field
 
 \begin{align}\label{eqn:rotationCurrents:goo6}
 \spacegrad \cdot \BE = \inv{\epsilon_0}\rho 
@@ -238,12 +240,64 @@ This example illustrates that we have a symmetry provided we can ``commute'' the
 \Ba \cdot \spacegrad \frac{\delta \LL}{\delta \phi} 
 \end{align}
 
-Since ${\delta \LL}/{\delta \phi} = 0$ by construction, we therefore do not alter the resulting field equations by such a modification.
+Since ${\delta \LL}/{\delta \phi} = 0$ by construction, the resulting field equations are unaltered by such a modification.
 
 Are there conditions where this commutation is not possible?  Some additional exploration on symmetries associated with addition of derivatives to field Lagrangians was made previously in (\cite{stressEnergyNoethers}).  After all was said and done, the conclusion motivated by this simple example was also reached.  Namely, we require the commutation condition (\ref{eqn:rotationCurrents:goo7}) between the variational derivative and the gradient of the Lagrangian.
 
 \subsection{Noether current derivation.}
 
-TO BE CONTINUED: Review the Noether derivation associated with spacetime translation, and the associated conservation currents.  Eventually try to find the Noether current for a linearized alteration of the Lagrangian using the angular momentum operator or the full exponential operator.
+With the assumption that the Lagrangian translation induces a symmetry, we can proceed with the calculation of the Noether current.  This procedure for deriving the Noether current for an incremental spacetime translation follows along similar lines as the scalar alteration considered previously.
+
+We start with the calculation of the first order alteration, expanding the derivatives.  Let's work with a multiple field Lagrangian $\LL = \LL(A^\beta, \partial_\alpha A^\beta)$ right from the start
+
+\begin{align*}
+a \cdot \grad \LL
+&=
+a^\mu \partial_\mu \LL \\
+&=
+a^\mu \left(
+\PD{A^\sigma}{\LL} \PD{x^\mu}{A^\sigma}
++\PD{(\partial_\alpha A^\beta)}{\LL} \PD{x^\mu}{(\partial_\alpha A^\beta)}
+\right) \\
+\end{align*}
+
+Using the Euler-Lagrange field equations in the first term, and switching integration order in the second this can be written as a single derivative
+
+\begin{align*}
+a \cdot \grad \LL
+&=
+a^\mu \left(
+\partial_\alpha \PD{(\partial_\alpha A^\beta)}{\LL} \PD{x^\mu}{A^\beta}
++\PD{(\partial_\alpha A^\beta)}{\LL} \partial_\alpha \PD{x^\mu}{A^\beta}
+\right) \\
+&=
+a^\mu \partial_\alpha \left(
+\PD{(\partial_\alpha A^\beta)}{\LL} \PD{x^\mu}{A^\beta}
+\right) \\
+%&=
+%\partial_\alpha \left(
+%\PD{(\partial_\alpha A^\beta)}{\LL} (a \cdot \grad) A^\beta
+%\right) \\
+\end{align*}
+
+In the scalar Noether current we were able to form an similar expression, but one that was a first order derivative that could be set to zero, to fix the conservation relationship.  Here there's no such freedom, but we can sneakily subtract $a \cdot \grad \LL$ from itself to calculate such a zero
+
+\begin{align}\label{eqn:rotationCurrents:goo8}
+0 =
+\partial_\alpha \left(
+\PD{(\partial_\alpha A^\beta)}{\LL} a^\mu \PD{x^\mu}{A^\beta} - a^\alpha \LL
+\right) 
+\end{align}
+
+Since this must hold for any vector $a$, we have the freedom to choose the simplest such vector, a unit vector $a = \gamma_\nu$, for which $a^\mu = {\delta^\mu}_\nu$.  Our current and its zero divergence relationship then becomes
+
+\begin{align}\label{eqn:rotationCurrents:goo9}
+{T^\alpha}_\nu &= \PD{(\partial_\alpha A^\beta)}{\LL} \partial_\nu A^\beta - {\delta^\alpha}_\nu \LL \\
+0 &= \partial_\alpha {T^\alpha}_\nu 
+\end{align}
+
+This isn't the symmetric energy momentum tensor that we want in the electrodynamics context although it can be obtained from it by adding just the right zero.
+
+TO BE CONTINUED: Noether current for incremental rotation.
 
 \EndArticle
