@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/rotationCurrents.pdf}
 \date{Sept 4, 2009}
-\revisionInfo{$RCSfile: rotationCurrents.tex,v $ Last $Revision: 1.8 $ $Date: 2009/09/08 13:08:53 $}
+\revisionInfo{$RCSfile: rotationCurrents.tex,v $ Last $Revision: 1.9 $ $Date: 2009/09/09 02:28:41 $}
 
 \beginArtWithToc
 
@@ -306,7 +306,9 @@ Let's assume that we can use the exponential generator of rotations
 e^{(i \cdot x) \cdot \grad} = 1 + (i \cdot x) \cdot \grad + \cdots
 \end{align}
 
-to alter a Lagrangian density.  In particular, that we can use the first order approximation of this Taylor series, applying the incremental rotation operator $(i \cdot x) \cdot \grad = i \cdot (x \wedge \grad)$ to transform the Lagrangian.
+to alter a Lagrangian density.
+
+In particular, that we can use the first order approximation of this Taylor series, applying the incremental rotation operator $(i \cdot x) \cdot \grad = i \cdot (x \wedge \grad)$ to transform the Lagrangian.
 
 \begin{align}\label{eqn:rotationCurrents:foo2}
 \LL \rightarrow \LL + (i \cdot x) \cdot \grad \LL
@@ -411,30 +413,105 @@ As is, this doesn't really appear to say much, since we previously also found $\
 i \cdot (x \wedge \grad) \LL = (i \cdot x) \cdot \grad \LL = \grad \cdot (i \cdot x) \LL
 \end{align}
 
-The geometric reason for this is that $\grad \cdot f(x)$ takes its maximum (or minimum) when $f(x)$ is colinear with $x$ and is zero when $f(x)$ is perpendicular to $x$.  The vector $i \cdot x$ is a combined projection and 90 degree rotation in the plane of the bivector, and the divergence is left with no colinear components to operate on.
-
-FIXME: bother showing this explicitly?
-
-The end result is that we should be able to bring the $x$ coordinates into the derivatives of (\ref{eqn:rotationCurrents:foo7}) provided both are brought in.   That gives us a more interesting conservation statement, something that has the looks of field angular momentum
+This suggests that we can pull the $x$ coordinates into the derivatives of (\ref{eqn:rotationCurrents:foo7}) as in
 
 \begin{align}\label{eqn:rotationCurrents:foo9}
-0 = \partial_\alpha \left( x_\nu {T^\alpha}_\mu - x_\mu {T^\alpha}_\nu \right)
+0 = \partial_\alpha \left( {T^\alpha}_\mu x_\nu - {T^\alpha}_\nu x_\mu \right)
 \end{align}
 
-The conservation identity could be summarized using 
+However, expanding this derivative shows that this is fact not the case.  Instead we have
 
-\begin{align}\label{eqn:rotationCurrents:foo1}
-{M^{\alpha}}_{\mu\nu} &\equiv x_\nu {T^\alpha}_\mu - x_\mu {T^\alpha}_\nu \\
-0 &= \partial_\alpha {M^{\alpha}}_{\mu\nu} 
+\begin{align*}
+\partial_\alpha \left( {T^\alpha}_\mu x_\nu - {T^\alpha}_\nu x_\mu \right) 
+&=
+{T^\alpha}_\mu \partial_\alpha x_\nu 
+- {T^\alpha}_\nu \partial_\alpha x_\mu  \\
+&=
+{T^\alpha}_\mu \eta_{\alpha\nu}
+- {T^\alpha}_\nu \eta_{\alpha\mu}  \\
+&=
+T_{\nu\mu} - T_{\mu\nu}
+\end{align*}
+
+So instead of a Noether current, following the procedure used to calculate the spacetime translation current, we have only a mediocre compromise
+
+\begin{align}\label{eqn:rotationCurrents:foo10}
+{M^{\alpha}}_{\mu\nu} &\equiv {T^\alpha}_\mu x_\nu - {T^\alpha}_\nu x_\mu \\
+\partial_\alpha {M^{\alpha}}_{\mu\nu} &= T_{\nu\mu} - T_{\mu\nu}
 \end{align}
 
-FIXME: Jackson (\cite{jackson1975cew}) states a similar index upper expression
+Jackson (\cite{jackson1975cew}) ends up with a similar index upper expression
 
-\begin{align}\label{eqn:rotationCurrents:foo1}
-M^{\alpha\mu\nu} &\equiv x_\nu {T^\alpha\mu} - x_\mu {T^\alpha\nu} \\
-0 &= \partial_\alpha M^{\alpha\mu\nu}
+\begin{align}\label{eqn:rotationCurrents:foo11}
+M^{\alpha\beta\gamma} &\equiv T^{\alpha\beta} x^\gamma - T^{\alpha\gamma} x^\beta \\
 \end{align}
 
-should try to show that these are identical or understand the difference.
+and then uses a requirement for vanishing 4-divergence of this quantity 
+
+\begin{align}\label{eqn:rotationCurrents:foo12}
+0 &= \partial_\alpha M^{\alpha\beta\gamma}
+\end{align}
+
+to symmetrize this tensor by subtracting off all the antisymmetric portions.  The differences compared to Jackson with upper verses lower indexes are minor for we can follow the same arguments and arrive at the same sort of $0 - 0 = 0$ result as we had in (\ref{eqn:rotationCurrents:foo7})
+
+\begin{align}\label{eqn:rotationCurrents:foo13}
+0 = x^\nu \partial_\alpha T^{\alpha\mu} - x^\mu \partial_\alpha T^{\alpha\nu}
+\end{align}
+
+The only difference is that our not-really-a-conservation equation becomes
+
+\begin{align}\label{eqn:rotationCurrents:foo14}
+\partial_\alpha M^{\alpha\mu\nu} =  T^{\nu\mu} - T^{\mu\nu}
+\end{align}
+
+\subsection{An example of the symmetry.}
+
+While not a proof that application of the incremental rotation operator is a symmetry, an example at least provides some comfort that this is a reasonable thing to attempt.  Again, let's consider the Coulomb Lagrangian
+
+\begin{align*}
+\LL = \inv{2} (\spacegrad \phi)^2 - \inv{\epsilon_0}\rho \phi
+\end{align*}
+
+For this we have 
+
+\begin{align*}
+\LL' 
+&= \LL + (i \cdot \Bx) \cdot \spacegrad \LL \\
+&= \LL - (i \cdot \Bx) \cdot \inv{\epsilon_0} \left( \rho \spacegrad \phi + \phi \spacegrad \rho \right)
+\end{align*}
+
+If the variational derivative of the incremental rotation contribution is zero, then we have a symmetry.
+
+\begin{align*}
+\frac{\delta }{\delta \phi} (i \cdot \Bx) \cdot \spacegrad \LL \\
+&=
+(i \cdot \Bx) \cdot \inv{\epsilon_0} \spacegrad \rho 
+- \sum_m \partial_m \left( (i \cdot \Bx) \cdot \inv{\epsilon_0} \rho \Be_m \right) \\
+&=
+(i \cdot \Bx) \cdot \inv{\epsilon_0} \spacegrad \rho 
+- \spacegrad \cdot \left( (i \cdot \Bx) \inv{\epsilon_0} \rho \right) \\
+\end{align*}
+
+As found in (\ref{eqn:rotationCurrents:foo8}), we have $(i \cdot \Bx) \cdot \spacegrad = \spacegrad \cdot (i \cdot \Bx)$, so we have
+
+\begin{align}\label{eqn:rotationCurrents:foo15}
+\frac{\delta }{\delta \phi} (i \cdot \Bx) \cdot \spacegrad \LL = 0
+\end{align}
+
+for this specific Lagrangian as expected.
+
+Note that the test expansion I used to state (\ref{eqn:rotationCurrents:foo8}) was done using only the bivector $i = \gamma_\mu \wedge \gamma_\nu$.  An expansion with $i = u^\alpha u^\beta \gamma_\alpha \wedge \gamma_\beta$ shows that this is also the case in shows that this is true more generally.  Specifically, this expansion gives
+
+\begin{align*}
+\grad \cdot (i \cdot x) \LL 
+&= (i \cdot x) \cdot \grad \LL + (\eta_{\alpha\beta} - \eta_{\beta\alpha}) u^\alpha v^\beta \LL \\
+&= (i \cdot x) \cdot \grad \LL 
+\end{align*}
+
+(since the metric tensor is symmetric).
+
+Loosely speaking, the geometric reason for this is that $\grad \cdot f(x)$ takes its maximum (or minimum) when $f(x)$ is colinear with $x$ and is zero when $f(x)$ is perpendicular to $x$.  The vector $i \cdot x$ is a combined projection and 90 degree rotation in the plane of the bivector, and the divergence is left with no colinear components to operate on.
+
+While this commutation of the $i \cdot \Bx$ with the divergence operator didn't help with finding the Noether current, it does at least show that we have a symmetry.  Demonstrating the invariance for the general Lagrangian (at least the single field variable case) likely follows the same procedure as in this specific example above.
 
 \EndArticle
