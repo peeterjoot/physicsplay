@@ -1,5 +1,8 @@
 #! /usr/bin/perl
 # $Log: tex2blog,v $
+# Revision 1.13  2009/09/13 03:26:46  Peeter
+# *** empty log message ***
+#
 # Revision 1.12  2009/08/29 19:08:31  Peeter
 # *** empty log message ***
 #
@@ -112,6 +115,9 @@ my $inEquation = 0 ;
 my $failedOpen ;
 #my $urlMessage = "Click here for a PDF of this post with nicer formatting" ;
 my $urlMessage = "Click here for a PDF of this sequence of posts with nicer formatting" ;
+
+my $allOut = '' ;
+
 open $fh, "<$filebase.tex" or $failedOpen = 1 ;
 if ( $failedOpen )
 {
@@ -120,6 +126,7 @@ if ( $failedOpen )
 while (<$fh>)
 {
    chomp ;
+   s/\\chapcite{(.*?)}/[$refnumbers{$1}]/g;
    s/\\cite{(.*?)}/[$refnumbers{$1}]/g;
    s/%.*//;
    s,\\blogpage{(.*)},<a href="$1">[$urlMessage]</a>,;
@@ -180,7 +187,7 @@ next if (
 #      $fgString = "&fg=000000" ; # omit.
 
       $eq .= " \\end{aligned} $curEquationLabel$fgString\$</p>\n" ;
-      print $eq ;
+      $allOut .= $eq ;
       $curEqn = '' ;
       $inEquation = 0 ;
       $curEquationLabel = '' ;
@@ -193,12 +200,17 @@ next if (
    {
       s/\\label{(.*?)}//g;
 
-      print translate( $_ ) . "\n" ;
+      $allOut .= translate( $_ ) . "\n" ;
    }
 }
 close $fh ;
 
-print $bibString ;
+$allOut .= $bibString ;
+
+# doesn't work just right.  Keep the post processing manual for now.
+#$allOut =~ s/[\n\r\l]+/\n/smg ;
+$allOut =~ s/[\r\l]+//smg ;
+print $allOut ;
 
 exit ;
 
@@ -258,10 +270,12 @@ sub translate
    $out =~ s/\\gpgradeone${r1}/{\\left\\langle{$1}\\right\\rangle}_{1}/g;
    $out =~ s/\\gpgradetwo${r1}/{\\left\\langle{$1}\\right\\rangle}_{2}/g;
    $out =~ s/\\gpgradethree${r1}/{\\left\\langle{$1}\\right\\rangle}_{3}/g;
+   $out =~ s/\\gpgradefour${r1}/{\\left\\langle{$1}\\right\\rangle}_{4}/g;
 
    $out =~ s/\\rgrad/\\stackrel{ \\rightarrow }\\grad/g;
    $out =~ s/\\lgrad/\\stackrel{ \\leftarrow }\\grad/g;
    $out =~ s/\\lrgrad/\\stackrel{ \\leftrightarrow }\\grad/g;
+   $out =~ s/\\lrpartial/\\stackrel{ \\leftrightarrow }\\partial/g;
    $out =~ s/\\rspacegrad/\\stackrel{ \\rightarrow }\\spacegrad/g;
    $out =~ s/\\lspacegrad/\\stackrel{ \\leftarrow }\\spacegrad/g;
 
@@ -282,6 +296,9 @@ sub translate
    $out =~ s/\\spacegrad/\\boldsymbol{\\nabla}/g;
    $out =~ s/\\delambertian/\\square/g;
    $out =~ s/\\conj/{*}/g;
+
+   $out =~ s,\\PDi${r2},{\\partial $2}/{\\partial $1},g ;
+
    $out =~ s/\\PD${r2}/\\frac{\\partial $2}{\\partial $1}/g ;
    $out =~ s/\\PauliI/\\begin{bmatrix} 1 & 0 \\\\ 0 & 1 \\\\ \\end{bmatrix}/g;
    $out =~ s/\\PauliX/\\begin{bmatrix} 0 & 1 \\\\ 1 & 0 \\\\ \\end{bmatrix}/g;
@@ -320,6 +337,8 @@ sub translate
    $out =~ s/\\xhat/\\hat{x}/g;
    $out =~ s/\\thetacap/\\hat{\\boldsymbol{\\theta}}/g;
    $out =~ s/\\phicap/\\hat{\\boldsymbol{\\phi}}/g;
+   $out =~ s/\\questionEquals/\\stackrel{?}{=}/g;
+   $out =~ s/\\T\b/\\text{T}/g;
 
    return $out ;
 }
