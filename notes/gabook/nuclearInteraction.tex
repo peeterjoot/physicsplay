@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/nuclearInteraction.pdf}
 \date{Sept 13, 2009}
-\revisionInfo{$RCSfile: nuclearInteraction.tex,v $ Last $Revision: 1.2 $ $Date: 2009/09/14 03:55:05 $}
+\revisionInfo{$RCSfile: nuclearInteraction.tex,v $ Last $Revision: 1.3 $ $Date: 2009/09/14 13:00:57 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -18,7 +18,7 @@ Familiarity with Geometric Algebra, and the STA form of the Maxwell and Lorentz 
 
 \begin{align}\label{eqn:nuclearInteraction:boo1}
 \grad F &= J/\epsilon_0 c \\
-m\frac{d^2 X}{d\tau} &= \frac'{c} F \cdot \frac{dX}{d\tau}
+m\frac{d^2 X}{d\tau} &= \frac{q}{c} F \cdot \frac{dX}{d\tau}
 \end{align}
 
 %  To avoid confusion no use of $F$ or $\BP$ for force will be used here, instead using $d\BP/d\tau$.
@@ -33,14 +33,14 @@ Fixing notation, lets write the proton and electron positions respectively by $\
 FIXME: picture
 
 \begin{align}\label{eqn:nuclearInteraction:hoo1}
-\text{Force on electron} &= m_e \frac{d^2 \Br_e}{dt^2} = - k Z e^2 \frac{\Br_e - \Br_p}{\Abs{\Br_e - \Br_p}^3} \\
-\text{Force on proton} &= m_p \frac{d^2 \Br_p}{dt^2} = k Z e^2 \frac{\Br_e - \Br_p}{\Abs{\Br_e - \Br_p}^3}
+\text{Force on electron} &= m_e \frac{d^2 \Br_e}{dt^2} = - \inv{4 \pi \epsilon_0} Z e^2 \frac{\Br_e - \Br_p}{\Abs{\Br_e - \Br_p}^3} \\
+\text{Force on proton} &= m_p \frac{d^2 \Br_p}{dt^2} = \inv{4 \pi \epsilon_0} Z e^2 \frac{\Br_e - \Br_p}{\Abs{\Br_e - \Br_p}^3}
 \end{align}
 
 Subtracting the two after mass division yields the reduced mass equation for the relative motion
 
 \begin{align}\label{eqn:nuclearInteraction:hoo2}
-\frac{d^2 (\Br_e -\Br_p)}{dt^2} = - k Z e^2 \left( \inv{m_e} + \inv{m_p}\right) \frac{\Br_e - \Br_p}{\Abs{\Br_e - \Br_p}^3} 
+\frac{d^2 (\Br_e -\Br_p)}{dt^2} = - \inv{4 \pi \epsilon_0} Z e^2 \left( \inv{m_e} + \inv{m_p}\right) \frac{\Br_e - \Br_p}{\Abs{\Br_e - \Br_p}^3} 
 \end{align}
 
 This is now of the same form as the classical problem of two particle gravitational interaction, with the well known conic solutions.
@@ -48,6 +48,43 @@ This is now of the same form as the classical problem of two particle gravitatio
 \section{Using the divergence equation instead.}
 
 While use of the Coulomb force above provides the equation of motion for the relative motion of the charges, how to generalize this to the relativistic case is not entirely clear.  For the relativistic case we need to consider all of Maxwell's equations, and not just the divergence equation.  Let's back up a step and setup the problem using the divergence equation instead of Coulomb's law.  This is a bit closer to the use of all of Maxwell's equations.
+
+To start off we need a discrete charge expression for the charge density, and can use the delta distribution to express this.
+
+\begin{align}\label{eqn:nuclearInteraction:boo2}
+0 = \int d^3 x \left( \spacegrad \cdot \BE - \inv{\epsilon_0} \left( Z e \delta^3(\Bx - \Br_p) - e \delta^3(\Bx - \Br_e) \right) \right)
+\end{align}
+
+Picking a volume element that only encloses one of the respective charges gives us the Coulomb law for the field produced by those charges as above
+
+\begin{align}\label{eqn:nuclearInteraction:boo3}
+0 &= \int_{\text{Volume around proton only}} d^3 x \left( \spacegrad \cdot \BE_p - \inv{\epsilon_0} Z e \delta^3(\Bx - \Br_p) \right) \\
+0 &= \int_{\text{Volume around electron only}} d^3 x \left( \spacegrad \cdot \BE_e + \inv{\epsilon_0} e \delta^3(\Bx - \Br_e) \right)
+\end{align}
+
+Here $\BE_p$ and $\BE_e$ denote the electric fields due to the proton and electron respectively.  Ignoring the possibility of self interaction the Lorentz forces on the particles are
+
+\begin{align*}
+\text{Force on proton/electron} = \text{charge of proton/electron times field due to electron/proton}
+\end{align*}
+
+In symbols, this is
+
+\begin{align}\label{eqn:nuclearInteraction:boo4}
+m_p \frac{d^2 \Br_p}{dt^2} &= Z e \BE_e \\
+m_e \frac{d^2 \Br_e}{dt^2} &= - e \BE_p
+\end{align}
+
+If we were to substite back into the volume integrals we'd have
+
+\begin{align}\label{eqn:nuclearInteraction:boo5}
+0 &= \int_{\text{Volume around proton only}} d^3 x \left( -\frac{m_e}{e}\spacegrad \cdot \frac{d^2 \Br_e}{dt^2} - \inv{\epsilon_0} Z e \delta^3(\Bx - \Br_p) \right) \\
+0 &= \int_{\text{Volume around electron only}} d^3 x \left( \frac{m_p}{Z e}\spacegrad \cdot \frac{d^2 \Br_p}{dt^2} + \inv{\epsilon_0} e \delta^3(\Bx - \Br_e) \right)
+\end{align}
+
+and it is tempting to take the differences of these two equations so that we can write this in terms of the relative acceleration $d^2 (\Br_e - \Br_p)/dt^2$.  This is however not possible since the volumes are different, and can in fact be entirely disjoint.  
+
+Using this as a guide for the relativistic case, this suggests that we will have to solve for the fields due to the respective current densities, and then substitute that into the Lorentz force relationships.
 
 \section{Relativistic interaction.}
 
