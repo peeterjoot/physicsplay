@@ -5,14 +5,24 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/nuclearInteraction.pdf}
 \date{Sept 13, 2009}
-\revisionInfo{$RCSfile: nuclearInteraction.tex,v $ Last $Revision: 1.1 $ $Date: 2009/09/13 16:27:37 $}
+\revisionInfo{$RCSfile: nuclearInteraction.tex,v $ Last $Revision: 1.2 $ $Date: 2009/09/14 03:55:05 $}
 
 \beginArtWithToc
 %\beginArtNoToc
 
 \section{Motivation}
 
-The problem of a solving for the relativistically correct tragectories of classically interacting proton and electron is one that I've wanted to try for a while.  Conceptually this is just about the simplest interaction problem, but how do we even set up the right equations to solve?
+The problem of a solving for the relativistically correct tragectories of classically interacting proton and electron is one that I've wanted to try for a while.  Conceptually this is just about the simplest interaction problem in electrodynamics (other than motion of a particle in a field), but it is not obvious to me how to even set up the right equations to solve.
+
+Familiarity with Geometric Algebra, and the STA form of the Maxwell and Lorentz force equation will be assumed.  Writing $F = \BE + c I \BB$ for the Faraday bivector, these equations are respectively
+
+\begin{align}\label{eqn:nuclearInteraction:boo1}
+\grad F &= J/\epsilon_0 c \\
+m\frac{d^2 X}{d\tau} &= \frac'{c} F \cdot \frac{dX}{d\tau}
+\end{align}
+
+%  To avoid confusion no use of $F$ or $\BP$ for force will be used here, instead using $d\BP/d\tau$.
+The possibility of self interaction will also be ignored here.  From what I have read this self interaction is more complex than regular two particle interaction.
 
 \section{With only Coulomb interaction.}
 
@@ -33,5 +43,85 @@ Subtracting the two after mass division yields the reduced mass equation for the
 \frac{d^2 (\Br_e -\Br_p)}{dt^2} = - k Z e^2 \left( \inv{m_e} + \inv{m_p}\right) \frac{\Br_e - \Br_p}{\Abs{\Br_e - \Br_p}^3} 
 \end{align}
 
-%\EndArticle
-\EndNoBibArticle
+This is now of the same form as the classical problem of two particle gravitational interaction, with the well known conic solutions.
+
+\section{Using the divergence equation instead.}
+
+While use of the Coulomb force above provides the equation of motion for the relative motion of the charges, how to generalize this to the relativistic case is not entirely clear.  For the relativistic case we need to consider all of Maxwell's equations, and not just the divergence equation.  Let's back up a step and setup the problem using the divergence equation instead of Coulomb's law.  This is a bit closer to the use of all of Maxwell's equations.
+
+\section{Relativistic interaction.}
+
+Any self interaction effects will not be o
+Since we are not considering the effect of 
+The superposition of the fields from the two point particles wou
+We seek the individual fields 
+For the relativistic case, lets write the proton and electron worldlines in the observer frame (the origin) respectively by $X_p = (ct, \Br_p)$ and $X_e = (ct,\Br_e)$, the observer frame proper time as $\tau$.  We should be able to calculate the total field at any point in space with superposition of the individual fields
+
+\begin{align}\label{eqn:nuclearInteraction:hoo3}
+\text{Field due to electron acting on proton} &= F_e \equiv \BE_e + c I\BB_e \\
+\text{Field due to proton acting on electron} &= F_p \equiv \BE_p + c I\BB_p
+\end{align}
+
+but for this problem, I believe that only the effect of the field on the opposing charge is required (we don't have to consider any other points in space).
+
+That field effect 
+can Each of the particles has an associated field, say
+The Lorentz force equations, in covariant Geometric Algebra form, are a pair of proper force equations
+
+\begin{align}\label{eqn:nuclearInteraction:hoo6}
+\text{proper Force on electron} &= m_e \frac{d^2 X_e}{d\tau^2} = - e F_e \cdot \frac{d X_e}{c d\tau} \\
+\text{proper Force on proton} &= m_p \frac{d^2 X_p}{d\tau^2} = Z e F_p \cdot \frac{d X_p}{c d\tau}
+\end{align}
+
+
+It should be possible to obtain the fields $F_e$ and $F_p$ by solving for the pair of Maxwell's equations
+
+\begin{align}\label{eqn:nuclearInteraction:hoo4}
+\grad F_e &= J_e/\epsilon_0 c \\
+\grad F_p &= J_p/\epsilon_0 c
+\end{align}
+
+Here the $J$'s are the four vector current densities, each dependent on the particle trajectories, also to be determined.
+
+Unfortunately we don't want the gradients of the fields, but the fields themselves, so life is made more complex.  That issue was avoided in the Coulomb case since we started not with $\spacegrad \cdot \BE = \rho/\epsilon_0$, but the solution to this divergence equation (the only part of Maxwell's equations left in the static limit).
+
+
+
+
+
+With the question of how to solve or even express the respective fields sidestepped for now, we can at least express the proper force Lorentz interactions.  That is
+
+\begin{align}\label{eqn:nuclearInteraction:hoo5}
+J = Q \int d\tau' \frac{dX'}{d\tau'} \delta^4 (X' - X(\tau))
+\end{align}
+
+
+How to express $J_e$ and $J_p$ will have to be considered more carefully, and 
+This is a set of second order four-vector equations, really eight equations, further coupled by the addition pair of eight equations for each of the fields.  What a mess!  So, where do we start?
+
+One possible starting point is to encode all of the particle tragectory in an active Lorentz transformation and solve for that transformation.  This technique was used successfully in \cite{doran2003gap} for the single particle in a field problem, so it seems worthwhile to at least give it a try.
+
+Suppose we relate our electron and proton event vector at two different proper times by a Lorentz transforms
+
+\begin{align*}
+X_e' &= X_e(\tau_0 + d\tau) = \tilde{R_e} X_e(\tau_0) R_e = X_e(\tau_0) + d\tau {\left. \frac{dX_e}{d\tau} \right\vert}_{\tau = \tau_0} + \cdots \\
+X_p' &= X_p(\tau_0 + d\tau) = \tilde{R_p} X_p(\tau_0) R_p = X_p(\tau_0) + d\tau {\left. \frac{dX_p}{d\tau} \right\vert}_{\tau = \tau_0} + \cdots
+\end{align*}
+
+%\begin{align}\label{eqn:nuclearInteraction:hoo6}
+%X' = X(\tau_0 + d\tau) = \tilde{R}(\tau) X(\tau_0) R(\tau)
+%\end{align}
+%
+Inverting and taking derivatives, also utilizing $\tilde{R}{R} = 1$, we find the proper velocity expressed in terms of the commutator of the bivector $\Omega = (dR/d\tau) \tilde{R}$.   That is
+
+\begin{align*}
+\frac{dX}{d\tau} 
+&= \frac{d}{d\tau} \left( R X' \tilde{R} \right) \\
+&= \frac{dR }{d\tau} \tilde{R} X + X \underbrace{R \frac{d\tilde{R}}{d\tau}}_{= - (dR/d\tau) \tilde{R}} \\
+&= \antisymmetric{ \Omega }{X}
+\end{align*}
+
+
+
+\EndArticle
+%\EndNoBibArticle
