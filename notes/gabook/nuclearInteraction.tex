@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/nuclearInteraction.pdf}
 \date{Sept 13, 2009}
-\revisionInfo{$RCSfile: nuclearInteraction.tex,v $ Last $Revision: 1.5 $ $Date: 2009/09/15 04:35:27 $}
+\revisionInfo{$RCSfile: nuclearInteraction.tex,v $ Last $Revision: 1.6 $ $Date: 2009/09/15 13:49:16 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -95,27 +95,33 @@ Comparing how far we can get starting with the Gauss's law instead of the Coulom
 
 \section{Relativistic interaction.}
 
-First order of business is an expression for a point charge current density four vector.  Following Jackson \cite{jackson1975cew} with a switch to SI units and vector notation we can apparently employ an arbitrary parameterization for the four-vector particle trajectory $R = R^\mu \gamma_\mu$, as measured in the observer frame, and write
+First order of business is an expression for a point charge current density four vector.  Following Jackson \cite{jackson1975cew}, but switching to vector notation from coordinates, we can apparently employ an arbitrary parameterization for the four-vector particle trajectory $R = R^\mu \gamma_\mu$, as measured in the observer frame, and write
 
 \begin{align}\label{eqn:nuclearInteraction:boo7}
-J(X) = q \int d\lambda \frac{dX}{d\lambda} \delta^4 (X - R(\lambda))
+J(X) = q c \int d\lambda \frac{dX}{d\lambda} \delta^4 (X - R(\lambda))
 \end{align}
 
 Here $X = X^\mu \gamma_\mu$ is the four vector event specifying the spacetime position of the current, also as measured in the observer frame.  Reparameterizating in terms of time should get us back something more familiar looking
 
 \begin{align*}
 J(X) 
-&= q \int dt \frac{dX}{dt} \delta^4 (X - R(t)) \\
-&= q \int dt \frac{d}{dt} (c t \gamma_0 + \gamma_k X^k)\delta^4 (X - R(t)) \\
-&= q \int dt \frac{d}{dt} (c t + \Bx)\delta^4 (X - R(t)) \gamma_0 \\
-&= q \int dt (c + \Bv)\delta^4 (X - R(t)) \gamma_0 \\
-&= q \int dt' (c + \Bv(t'))\delta^3 (\Bx - \Br(t')) \delta(t' - t) \gamma_0 \\
-&= q (c + \Bv(t))\delta^3 (\Bx - \Br(t)) \gamma_0 \\
+&= q c \int dt \frac{dX}{dt} \delta^4 (X - R(t)) \\
+&= q c \int dt \frac{d}{dt} (c t \gamma_0 + \gamma_k X^k)\delta^4 (X - R(t)) \\
+&= q c \int dt \frac{d}{dt} (c t + \Bx)\delta^4 (X - R(t)) \gamma_0 \\
+&= q c \int dt (c + \Bv)\delta^4 (X - R(t)) \gamma_0 \\
+&= q c \int dt' (c + \Bv(t'))\delta^3 (\Bx - \Br(t')) \delta(c t' - c t) \gamma_0 \\
 \end{align*}
 
-Comparing to the continuous case where we have $J = \rho ( c + \Bv ) \gamma_0$, it appears that this works out right.
+The split of the fourvolume delta function $\delta^4(X - R(t)) = \delta^3(\Bx - \Br(t)) \delta( {x^0}' - x^0 )$, where $x^0 = c t$ explains why Jackson had a factor of $c$ in his representation.  Since the scaling property of the delta function implies $\delta(c t) = \delta(t)/c$ the spacetime split of the current density is
 
-FIXME: maybe not quite right?  Should the split of the fourvolume delta function be $\delta^4(X - R(t) = \delta^3{\Bx - \Br(t)} \delta( ct' - ct )$.  That's going to add a multiplicative factor to the $dt'$ integral evaluation I think?
+FIXME: got that delta property from a wiki article.  Derive it myself (again), since I'd forgotten it.
+
+\begin{align}\label{eqn:nuclearInteraction:boo11}
+J(X) 
+&= q (c + \Bv(t))\delta^3 (\Bx - \Br(t)) \gamma_0 
+\end{align}
+
+Comparing to the continuous case where we have $J = \rho ( c + \Bv ) \gamma_0$, it appears that this works out right.
 
 With the time reparameterization of the current density, we have for the field due to our proton and electron
 
@@ -127,14 +133,14 @@ With the time reparameterization of the current density, we have for the field d
 How to write this in a more tidy covariant form?  If we reparameterize with any of the other spatial coordinates, say $x$ we end up having to integrate the field gradient with a spacetime three form ($dt dy dz$ if reparameterizing the current density with $x$).  Since the entire equation must be zero I suppose we can just integrate that once more, and simply write
 
 \begin{align}\label{eqn:nuclearInteraction:boo9}
-0 &= \int d^4 x \left( \grad F - \frac{e}{\epsilon_0 c}\int d\tau \frac{dX}{d\tau} \left( Z \delta^4 (X - R_p(\tau)) - \delta^4 (X - R_e(\tau)) \right) \right)
+\text{constant} &= \int d^4 x \left( \grad F - \frac{e}{\epsilon_0 c}\int d\tau \frac{dX}{d\tau} \left( Z \delta^4 (X - R_p(\tau)) - \delta^4 (X - R_e(\tau)) \right) \right)
 \end{align}
 
 Like (\ref{eqn:nuclearInteraction:boo3}) we can pick spacetime volumes that surround just the individual particle worldlines, in which case we have a Coulomb's law like split where the field depends on just the enclosed current.  That is
 
 \begin{align}\label{eqn:nuclearInteraction:boo10}
-0 &= \int_{\text{spacetime volume around only the proton}} d^4 x \left( \grad F_p - \frac{Z e}{\epsilon_0 c} \int d\tau \frac{dX}{d\tau} \delta^4 (X - R_e(\tau)) \right) \\
-0 &= \int_{\text{spacetime volume around only the electron}} d^4 x \left( \grad F_e + \frac{e}{\epsilon_0 c} \int d\tau \frac{dX}{d\tau} \delta^4 (X - R_e(\tau)) \right)
+\text{constant} &= \int_{\text{spacetime volume around only the proton}} d^4 x \left( \grad F_p - \frac{Z e}{\epsilon_0 c} \int d\tau \frac{dX}{d\tau} \delta^4 (X - R_e(\tau)) \right) \\
+\text{constant} &= \int_{\text{spacetime volume around only the electron}} d^4 x \left( \grad F_e + \frac{e}{\epsilon_0 c} \int d\tau \frac{dX}{d\tau} \delta^4 (X - R_e(\tau)) \right)
 \end{align}
 
 FIXME: attempt to draw a picture (one or two spatial dimensions) to develop some comfort with tossing out a phrase like ``spacetime volume surrounding a particle worldline''.
