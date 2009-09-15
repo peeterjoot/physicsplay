@@ -5,14 +5,14 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/nuclearInteraction.pdf}
 \date{Sept 13, 2009}
-\revisionInfo{$RCSfile: nuclearInteraction.tex,v $ Last $Revision: 1.4 $ $Date: 2009/09/14 14:34:31 $}
+\revisionInfo{$RCSfile: nuclearInteraction.tex,v $ Last $Revision: 1.5 $ $Date: 2009/09/15 04:35:27 $}
 
 \beginArtWithToc
 %\beginArtNoToc
 
 \section{Motivation}
 
-The problem of a solving for the relativistically correct tragectories of classically interacting proton and electron is one that I've wanted to try for a while.  Conceptually this is just about the simplest interaction problem in electrodynamics (other than motion of a particle in a field), but it is not obvious to me how to even set up the right equations to solve.
+The problem of a solving for the relativistically correct tragectories of classically interacting proton and electron is one that I've wanted to try for a while.  Conceptually this is just about the simplest interaction problem in electrodynamics (other than motion of a particle in a field), but it is not obvious to me how to even set up the right equations to solve.  I should have the tools now to at least write down the equations to solve, and perhaps solve them too.
 
 Familiarity with Geometric Algebra, and the STA form of the Maxwell and Lorentz force equation will be assumed.  Writing $F = \BE + c I \BB$ for the Faraday bivector, these equations are respectively
 
@@ -94,6 +94,54 @@ The domain of applicability of these equations is no longer explicit, since each
 Comparing how far we can get starting with the Gauss's law instead of the Coulomb force, and looking forward to the relativistic case, it seems likely that solving the field equations due to the respective current densities will be the first required step.  Only then can we substitute that field solution back into the Lorentz force equation to complete the search for the particle trajectories.
 
 \section{Relativistic interaction.}
+
+First order of business is an expression for a point charge current density four vector.  Following Jackson \cite{jackson1975cew} with a switch to SI units and vector notation we can apparently employ an arbitrary parameterization for the four-vector particle trajectory $R = R^\mu \gamma_\mu$, as measured in the observer frame, and write
+
+\begin{align}\label{eqn:nuclearInteraction:boo7}
+J(X) = q \int d\lambda \frac{dX}{d\lambda} \delta^4 (X - R(\lambda))
+\end{align}
+
+Here $X = X^\mu \gamma_\mu$ is the four vector event specifying the spacetime position of the current, also as measured in the observer frame.  Reparameterizating in terms of time should get us back something more familiar looking
+
+\begin{align*}
+J(X) 
+&= q \int dt \frac{dX}{dt} \delta^4 (X - R(t)) \\
+&= q \int dt \frac{d}{dt} (c t \gamma_0 + \gamma_k X^k)\delta^4 (X - R(t)) \\
+&= q \int dt \frac{d}{dt} (c t + \Bx)\delta^4 (X - R(t)) \gamma_0 \\
+&= q \int dt (c + \Bv)\delta^4 (X - R(t)) \gamma_0 \\
+&= q \int dt' (c + \Bv(t'))\delta^3 (\Bx - \Br(t')) \delta(t' - t) \gamma_0 \\
+&= q (c + \Bv(t))\delta^3 (\Bx - \Br(t)) \gamma_0 \\
+\end{align*}
+
+Comparing to the continuous case where we have $J = \rho ( c + \Bv ) \gamma_0$, it appears that this works out right.
+
+FIXME: maybe not quite right?  Should the split of the fourvolume delta function be $\delta^4(X - R(t) = \delta^3{\Bx - \Br(t)} \delta( ct' - ct )$.  That's going to add a multiplicative factor to the $dt'$ integral evaluation I think?
+
+With the time reparameterization of the current density, we have for the field due to our proton and electron
+
+\begin{align}\label{eqn:nuclearInteraction:boo8}
+0 &= \int d^3 x \left( \epsilon_0 c \grad F - Z e (c + \Bv_p(t))\delta^3 (\Bx - \Br_p(t)) + e (c + \Bv_e(t))\delta^3 (\Bx - \Br_e(t)) 
+\gamma_0 \right)
+\end{align}
+
+How to write this in a more tidy covariant form?  If we reparameterize with any of the other spatial coordinates, say $x$ we end up having to integrate the field gradient with a spacetime three form ($dt dy dz$ if reparameterizing the current density with $x$).  Since the entire equation must be zero I suppose we can just integrate that once more, and simply write
+
+\begin{align}\label{eqn:nuclearInteraction:boo9}
+0 &= \int d^4 x \left( \grad F - \frac{e}{\epsilon_0 c}\int d\tau \frac{dX}{d\tau} \left( Z \delta^4 (X - R_p(\tau)) - \delta^4 (X - R_e(\tau)) \right) \right)
+\end{align}
+
+Like (\ref{eqn:nuclearInteraction:boo3}) we can pick spacetime volumes that surround just the individual particle worldlines, in which case we have a Coulomb's law like split where the field depends on just the enclosed current.  That is
+
+\begin{align}\label{eqn:nuclearInteraction:boo10}
+0 &= \int_{\text{spacetime volume around only the proton}} d^4 x \left( \grad F_p - \frac{Z e}{\epsilon_0 c} \int d\tau \frac{dX}{d\tau} \delta^4 (X - R_e(\tau)) \right) \\
+0 &= \int_{\text{spacetime volume around only the electron}} d^4 x \left( \grad F_e + \frac{e}{\epsilon_0 c} \int d\tau \frac{dX}{d\tau} \delta^4 (X - R_e(\tau)) \right)
+\end{align}
+
+FIXME: attempt to draw a picture (one or two spatial dimensions) to develop some comfort with tossing out a phrase like ``spacetime volume surrounding a particle worldline''.
+
+Having expressed the equation for the total field (\ref{eqn:nuclearInteraction:boo9}), we are tracking a nice parallel to the setup for the non-relativistic treatment.  Next is the pair of Lorentz force equations?
+
+\section{BLAH: Relativistic interaction.}
 
 Any self interaction effects will not be o
 Since we are not considering the effect of 
