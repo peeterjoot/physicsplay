@@ -1,5 +1,9 @@
 #! /usr/bin/perl
 # $Log: tex2blog,v $
+# Revision 1.15  2009/09/18 01:42:56  Peeter
+# got some of the latex2mathml changes made.  Going to revamp the
+# main loop to slurp it all in and use multiline patterns.
+#
 # Revision 1.14  2009/09/17 02:04:41  Peeter
 # *** empty log message ***
 #
@@ -24,12 +28,36 @@ use warnings ;
 use Getopt::Long;
 
 my $filebase ;
-my $showNumbers = 1 ;
+#my $showNumbers = 1 ;
+
+# blogger or wordpress?
+my $blogger = 0 ; 
+my $mathml = 1 ; 
+my $mathmlHtml = 1 ; 
 
 GetOptions( 
+   'blogger!'  => \$blogger,
+   'mathml!'   => \$mathml,
    'file=s'    => \$filebase,
-   'num!'      => \$showNumbers,
+#   'num!'      => \$showNumbers,
 ) ;
+
+if ( $blogger or $mathmlHtml )
+{
+   $mathml = 1 ;
+}
+
+my $latexDollarStart ;
+
+if ( $mathml )
+{
+   $latexDollarStart = '$' ;
+#   $showNumbers = 0 ;
+}
+else
+{
+   $latexDollarStart = '$latex ' ;
+}
 
 my $fh ;
 my %equations ;
@@ -121,11 +149,40 @@ my $urlMessage = "Click here for a PDF of this sequence of posts with nicer form
 
 my $allOut = '' ;
 
+if ( $mathmlHtml )
+{
+$allOut .= qq(
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 //EN" 
+    "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+		
+<head>
+<title>blah</title>
+<script type="text/javascript" src="http://math.etsu.edu/LaTeXMathML/LaTeXMathML.js"></script>
+<link rel="stylesheet" type="text/css" href="http://math.etsu.edu/LaTeXMathML/LaTeXMathML.standardarticle.css" />
+</head>
+) ;
+}
+
+if ( $mathml )
+{
+   $allOut .= qq(<pre class="LaTeX"><div>\n) ;
+}
+
 open $fh, "<$filebase.tex" or $failedOpen = 1 ;
 if ( $failedOpen )
 {
    open $fh, "<$filebase.ltx" or die "could not open '$filebase.tex' nor '$filebase.ltx'\n" ;
 }
+
+my $eqnArray ;
+my $newLineEqn = '' ;
+
+#if ( $mathml )
+#{
+#   $newLineEqn = "\n" ;
+#}
+
 while (<$fh>)
 {
    chomp ;
@@ -155,13 +212,20 @@ next if (
 /\\beginArtNoToc/ or
 0 ) ;
 
-   while ( s/\$(.*?)\$/BBB:$1:EEE/g )
+   if ( !$mathml )
    {
-   }
-   s/BBB:/\$latex /g;
-   s/:EEE/\$/g;
+      while ( s/\$(.*?)\$/BBB:$1:EEE/g )
+      {
+      }
 
-   s/\\ref{(eqn:.*?)}/$equations{$1}/g ;
+      s/BBB:/\$latex /g;
+      s/:EEE/\$/g;
+   }
+
+   if ( !$mathml )
+   {
+      s/\\ref{(eqn:.*?)}/$equations{$1}/g ;
+   }
 
    s,\\section{(.*)},<h1>$1</h1>,;
    s,\\subsection{(.*)},<h2>$1</h2>,;
@@ -170,26 +234,51 @@ next if (
 
    if ( s/\\begin{align\**}// or s/\\begin{equation\**}// )
    {
-      if ( s/\\label{(eqn:.*?)}// and $showNumbers )
+      $eqnArray = "eqnarray*" ;
+
+      if ( !$mathml and s/\\label{(eqn:.*?)}// )
       {
          $curEquationLabel = "\\quad\\quad\\quad($equations{$1})" ;
       }
-      $curEqn .= $_ ;
+      elsif ( $mathml and /\\label{eqn:.*?}/ )
+      {
+         $eqnArray = "eqnarray" ;
+      }
+
+      $curEqn .= "$_$newLineEqn" ;
       $inEquation = 1 ;
    }
    elsif ( s/\\end{align\**}.*// or s/\\end{equation\**}.*// )
    {
-# sample output from latex2wp.  centers things ... looks a bit nicer.
-#<p align=center>$latex \displaystyle   \forall g \in {\cal F}. g^2 = \eta \ \ \ \ \ (1)&fg=000000$</p>
+      my $eq ;
 
-      my $eq = '<p align=center>$latex \\begin{aligned}' . translate( "$curEqn$_" ) ;
-      $eq =~ s/ *\\\\ *$//g;
+      if ( $mathml )
+      {
+#<blockquote>$\begin{eqnarray}\nabla F &= J/{\epsilon_0} c \\ m\frac{d^2 X}{d\tau} &= \frac{q}{c} F \cdot \frac{dX}{d\tau}\end{eqnarray}$</blockquote>
+#<blockquote>$\begin{eqnarray*}\nabla \cdot \mathbf{E} = \rho\end{eqnarray*}$</blockquote>
 
-# latex2wp used this, but I don't see a difference:
-      my $fgString = '' ;
-#      $fgString = "&fg=000000" ; # omit.
+         $eq = '<blockquote>$\\begin{' . $eqnArray . '}' . translate( "$curEqn$_" ) ;
 
-      $eq .= " \\end{aligned} $curEquationLabel$fgString\$</p>\n" ;
+         # strip trailing \\ at the end of the equation:
+         $eq =~ s/ *\\\\ *$//g;
+
+         $eq .= " \\end{$eqnArray}\$</blockquote>\n" ;
+      }
+      else
+      {
+         # sample output from latex2wp.  centers things ... looks a bit nicer.
+         #<p align=center>$latex \displaystyle   \forall g \in {\cal F}. g^2 = \eta \ \ \ \ \ (1)&fg=000000$</p>
+
+         $eq = '<p align=center>$latex \\begin{aligned}' . translate( "$curEqn$_$newLineEqn" ) ;
+         $eq =~ s/ *\\\\ *$//g;
+
+         # latex2wp used this, but I don't see a difference:
+         my $fgString = '' ;
+         #      $fgString = "&fg=000000" ; # omit.
+
+         $eq .= " \\end{aligned} $curEquationLabel$fgString\$</p>\n" ;
+      }
+
       $allOut .= $eq ;
       $curEqn = '' ;
       $inEquation = 0 ;
@@ -197,7 +286,7 @@ next if (
    }
    elsif ( $inEquation )
    {
-      $curEqn .= $_ ;
+      $curEqn .= "$_$newLineEqn" ;
    }
    else
    {
@@ -213,6 +302,17 @@ $allOut .= $bibString ;
 # doesn't work just right.  Keep the post processing manual for now.
 #$allOut =~ s/[\n\r\l]+/\n/smg ;
 $allOut =~ s/[\r\l]+//smg ;
+
+if ( $mathml )
+{
+   $allOut .= qq(\n</div></pre>) ;
+}
+
+if ( $mathmlHtml )
+{
+   $allOut .= qq(\n</body> </html>) ;
+}
+
 print $allOut ;
 
 exit ;
@@ -323,8 +423,8 @@ sub translate
 
    $out =~ s/\\DETuvwijk{(.*?)}{(.*?)}{(.*?)}{(.*?)}{(.*?)}{(.*?)}/\\begin{vmatrix} {$1}_{$4} & {$1}_{$5} & {$1}_{$6} \\\\ {$2}_{$4} & {$2}_{$5} & {$2}_{$6} \\\\ {$3}_{$4} & {$3}_{$5} & {$3}_{$6} \\end{vmatrix}/g;
 
-   $out =~ s/\\C{(.*?)}/\$latex \\mathbb{C}^{$1}\$/g;
-   $out =~ s/\\R{(.*?)}/\$latex \\mathbb{R}^{$1}\$/g;
+   $out =~ s/\\C{(.*?)}/$latexDollarStart\\mathbb{C}^{$1}\$/g;
+   $out =~ s/\\R{(.*?)}/$latexDollarStart\\mathbb{R}^{$1}\$/g;
    $out =~ s/\\traceB${r1}/\\tr\\left({$1}\\right)/g;
    $out =~ s/\\trace${r1}/\\tr{$1}/g;
    $out =~ s/\\tr/\\text{Tr}/g;
@@ -342,6 +442,17 @@ sub translate
    $out =~ s/\\phicap/\\hat{\\boldsymbol{\\phi}}/g;
    $out =~ s/\\questionEquals/\\stackrel{?}{=}/g;
    $out =~ s/\\T\b/\\text{T}/g;
+
+   if ( $mathml )
+   {
+      $out =~ s/\\text/\\textrm/g;
+
+      $out =~ s/\\lvert/\\left\\vert/g ;
+      $out =~ s/\\rvert/\\right\\vert/g ;
+
+      # hack.  Not supported by the script.
+      $out =~ s/\\boldsymbol//g ;
+   }
 
    return $out ;
 }
