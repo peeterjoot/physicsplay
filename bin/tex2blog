@@ -1,6 +1,10 @@
 #! /usr/bin/perl
 
 # $Log: tex2blog,v $
+# Revision 1.17  2009/09/18 04:43:41  Peeter
+# got it working again mostly (at least in latexmathml mode.
+# )
+#
 # Revision 1.16  2009/09/18 02:25:52  Peeter
 # restructure totally, should now be broken and do nothing.  Now fix it up.
 #
@@ -8,6 +12,9 @@
 # got some of the latex2mathml changes made.  Going to revamp the
 # main loop to slurp it all in and use multiline patterns.
 #
+
+# BUGS:
+
 use strict ;
 use warnings ;
 use Getopt::Long;
@@ -15,26 +22,27 @@ use Getopt::Long;
 my $filebase ;
 my $showUsage = 0 ;
 
-# blogger or wordpress?  blogger really means use of LaTeXMathML.js 
-my $blogger = 0 ; 
-my $mathml = 1 ; 
+# output for LaTeXMathML.js or wordpress?
+my $mathml = 0 ; 
+my $wordpress = 0 ;
 
 # for use of LaTeXMathML.js in a standalone html file:
 my $mathmlHtml = 1 ; 
 
 GetOptions( 
-   'blogger!'  => \$blogger,
-   'mathml!'   => \$mathml,
-   'file=s'    => \$filebase,
-   'help!'     => $showUsage ;
+   'mathml!'      => \$mathml,
+   'wordpress!'   => \$wordpress,
+   'html!'        => \$mathmlHtml,
+   'file=s'       => \$filebase,
+   'help!'        => \$showUsage,
 ) ;
 
-if ( $showUsage )
+if ( $showUsage or (1 != ($mathml + $wordpress + $mathmlHtml)) )
 {
-   die "usage: ~/bin/tex2blog -f filenameWithoutTexSuffix [-[no]blogger] [-[no]mathml] [-help]"
+   die "usage: ~/bin/tex2blog -f filenameWithoutTexSuffix {-html | -mathml | -wordpress} [-help]"
 }
 
-if ( $blogger or $mathmlHtml )
+if ( $mathmlHtml )
 {
    $mathml = 1 ;
 }
@@ -47,8 +55,6 @@ my %refnumbers ;
 # side effect.  creates the %refnumbers hash.
 my $bibString = processBib() ;
 
-my $allOut = generatePrologue() ;
-
 # most of the file can be treated as single lines but we need 
 # to handle \begin{align}, \begin{equation} ... as multiline
 # patterns.  For this reason, slurp in the whole file, then handle
@@ -58,36 +64,122 @@ my $allOut = generatePrologue() ;
 #
 my $allInput = slurpLatex( $filebase ) ;
 
+# pre-filter out all the latex comments.
+$allInput =~ s/%.*//mg ;
+
 # now do the tricky bits.  
-$allInput =~ s/(bsljfs)/processEquation($1)/sgem ;
+$allInput =~ s/
+\\begin{
+   (?:equation|align|eqnarray)
+   (\**)                         # $1.  Is this a numbered equation or not.  '*' for no.
+}
+(.*?)                            # $2.  The latex text including all whitespace.
+\\end{
+   (?:equation|align|eqnarray)
+   \**                           # the matching * if any.
+}
+/processOneEquation(0, $1, $2)/sgemx ;
 
-$allOut .= processRest( $allInput ) ;
+my $g_title = 'no title' ;
+# side effect: sets $g_title
+my $allOut = processRest( $allInput ) ;
 
-generateEpilogueAndPrintIt( $allOut ) ;
+my $head = generatePrologue( $g_title ) ;
+
+generateEpilogueAndPrintIt( $head . $allOut ) ;
 
 exit ;
 
-sub processEquation
+my $g_EquationSeqNo = 1 ;
+
+sub processOneEquation
 {
-   my ($equationText) = @_ ;
+   my ($bInline, $suppressNumbers, $eq) = @_ ;
+   my $oeq = $eq ;
 
-   # do stuff.
+#   if ( $bInline )
+#   {
+#      warn "inline: '$eq'\n" ;
+#   }
 
-   return $equationText ;
-}
+#   $eq =~ s/%.*//mg ;
+   my $curEquationLabel = '' ;
+   my $eqnArray = "eqnarray" ;
 
-sub expandPeetersMacros
-{
-   my $latexDollarStart ;
-
-   if ( $mathml )
+#   warn "s: $suppressNumbers ; eq: $eq\n" ;
+   if ( $eq =~ s/\\label{(eqn:.*?)}//s )
    {
-      $latexDollarStart = '$' ;
+      my $label = $1 ;
+
+      if ( $mathml )
+      {
+         $equations{$label} = $g_EquationSeqNo++ ;
+      }
+      else
+      {
+         $curEquationLabel = "\\quad\\quad\\quad($equations{$label})" ;
+      }
+
+      die "s: $suppressNumbers ; no label for equation '$oeq'" if ( $suppressNumbers ne '' ) ;
    }
    else
    {
-      $latexDollarStart = '$latex ' ;
+      $eqnArray .= '*' ;
+
+      die "expected * for non-labelled equation '$eq'" if ( $suppressNumbers ne '*' ) ;
    }
+
+   $eq =~ s/\n//smg ;
+   $eq = expandPeetersMathModeMacros( $eq ) ;
+
+#   if ( $bInline )
+#   {
+#      warn "inline post: '$eq'\n" ;
+#   }
+
+   # strip trailing \\ at the end of the equation:
+   #$eq =~ s/ *\\\\ *$//g;
+
+   # use <latexStart> <latexEnd> so that this equation isn't processed again,  In the final pass when everything is split by lines change these to '$' characters for final output.
+   if ( $mathml )
+   {
+      #<blockquote>$\begin{eqnarray}\nabla F &= J/{\epsilon_0} c \\ m\frac{d^2 X}{d\tau} &= \frac{q}{c} F \cdot \frac{dX}{d\tau}\end{eqnarray}$</blockquote>
+      #<blockquote>$\begin{eqnarray*}\nabla \cdot \mathbf{E} = \rho\end{eqnarray*}$</blockquote>
+
+      if ( $bInline )
+      {
+         $eq = "<latexStart>$eq<latexEnd>" ;
+      }
+      else
+      {
+         $eq = "<blockquote><latexStart>\\begin{$eqnArray}$eq \\end{$eqnArray}<latexEnd></blockquote>\n" ;
+      }
+   }
+   else
+   {
+      # sample output from latex2wp.  centers things ... looks a bit nicer.
+      #<p align=center>$latex \displaystyle   \forall g \in {\cal F}. g^2 = \eta \ \ \ \ \ (1)&fg=000000$</p>
+
+      # latex2wp used this, but I don't see a difference:
+      my $fgString = '' ;
+      #      $fgString = "&fg=000000" ; # omit.
+
+      if ( $bInline )
+      {
+         $eq = "<latexStart>latex $eq<latexEnd>" ;
+      }
+      else
+      {
+         $eq = "<p align=center><latexStart>latex \\begin{aligned}$eq\\end{aligned} $curEquationLabel$fgString<latexEnd></p>\n" ;
+      }
+   }
+
+   return $eq ;
+}
+
+sub expandPeetersMathModeMacros
+{
+   my $out = "@_" ;
 
    my $r1 = qr/
         (                   # start of capture buffer 1
@@ -122,9 +214,6 @@ sub expandPeetersMacros
         )                   # end of capture buffer 1
         /x;
 
-
-   my $out = "@_" ;
-
    $out =~ s/\\\\/\\\\ /g;
 #   $out =~ s/&=/=/g;
 
@@ -132,7 +221,17 @@ sub expandPeetersMacros
    #$out =~ s/\\inv{(.*?)}/\\frac{1}{$1}/g;
    $out =~ s/\\inv${r1}/\\frac{1}{$1}/g;
    #$out =~ s/\\Abs{(.*?)}/{\\left\\lvert{$1}\\right\\rvert}/g;
-   $out =~ s/\\Abs${r1}/{\\left\\lvert$1\\right\\rvert}/g;
+
+   if ( $mathml )
+   {
+      # why \\left\lvert?
+      $out =~ s/\\Abs${r1}/{\\left\\vert$1\\right\\vert}/g;
+   }
+   else
+   {
+      $out =~ s/\\Abs${r1}/{\\left\\lvert$1\\right\\rvert}/g;
+   }
+
    $out =~ s/\\gpgrade${r2}/{\\left\\langle{$1}\\right\\rangle}_{$2}/g;
 
 #   $out =~ s/\\gpgradezero{(.*?)}/\\left\\langle{$1}\\right\\rangle/g;
@@ -193,8 +292,6 @@ sub expandPeetersMacros
 
    $out =~ s/\\DETuvwijk{(.*?)}{(.*?)}{(.*?)}{(.*?)}{(.*?)}{(.*?)}/\\begin{vmatrix} {$1}_{$4} & {$1}_{$5} & {$1}_{$6} \\\\ {$2}_{$4} & {$2}_{$5} & {$2}_{$6} \\\\ {$3}_{$4} & {$3}_{$5} & {$3}_{$6} \\end{vmatrix}/g;
 
-   $out =~ s/\\C{(.*?)}/$latexDollarStart\\mathbb{C}^{$1}\$/g;
-   $out =~ s/\\R{(.*?)}/$latexDollarStart\\mathbb{R}^{$1}\$/g;
    $out =~ s/\\traceB${r1}/\\tr\\left({$1}\\right)/g;
    $out =~ s/\\trace${r1}/\\tr{$1}/g;
    $out =~ s/\\tr/\\text{Tr}/g;
@@ -220,7 +317,7 @@ sub expandPeetersMacros
       $out =~ s/\\lvert/\\left\\vert/g ;
       $out =~ s/\\rvert/\\right\\vert/g ;
 
-      # hack.  Not supported by the script.
+      # hack.  Not supported by the script.  should use arrows over.
       $out =~ s/\\boldsymbol//g ;
    }
 
@@ -296,6 +393,8 @@ sub processBib
 
 sub generatePrologue
 {
+   my ($title) = @_ ;
+
    my $prologue = '' ;
 
    if ( $mathmlHtml )
@@ -306,7 +405,7 @@ sub generatePrologue
       <html xmlns="http://www.w3.org/1999/xhtml">
             
       <head>
-      <title>blah</title>
+      <title>$title</title>
       <script type="text/javascript" src="http://math.etsu.edu/LaTeXMathML/LaTeXMathML.js"></script>
       <link rel="stylesheet" type="text/css" href="http://math.etsu.edu/LaTeXMathML/LaTeXMathML.standardarticle.css" />
       </head>
@@ -327,8 +426,6 @@ sub generateEpilogueAndPrintIt
 
    $outText .= $bibString ;
 
-   # doesn't work just right.  Keep the post processing manual for now.
-   #$outText =~ s/[\n\r\l]+/\n/smg ;
    $outText =~ s/[\r\l]+//smg ;
 
    if ( $mathml )
@@ -372,13 +469,12 @@ sub slurpLatex
    my $failedOpen = 0 ;
    my $rawLatex = '' ;
 
-   open $fh, "<$filebase.tex" or $failedOpen = 1 ;
+   open my $fh, "<$filebase.tex" or $failedOpen = 1 ;
    if ( $failedOpen )
    {
       open $fh, "<$filebase.ltx" or die "could not open '$filebase.tex' nor '$filebase.ltx'\n" ;
    }
 
-   my $rawLatex = '' ;
    while (<$fh>)
    {
       $rawLatex .= $_ ;
@@ -390,128 +486,89 @@ sub slurpLatex
 
 sub processRest
 {
-   my ($in) = @_ ;
+   my ($allOneLine) = @_ ;
 
-   my $curEqn = '' ;
-   my $curEquationLabel = '' ;
-   my $inEquation = 0 ;
-   my $eqnArray ;
+   my @allLines = split( /\n/, $allOneLine ) ;
 
    #my $urlMessage = "Click here for a PDF of this post with nicer formatting" ;
    my $urlMessage = "Click here for a PDF of this sequence of posts with nicer formatting" ;
 
-   if ( 0 )
+   my $latexDollarStart ;
+
+   if ( $mathml )
    {
-      chomp ;
-      s/\\chapcite{(.*?)}/[$refnumbers{$1}]/g;
-      s/\\cite{(.*?)}/[$refnumbers{$1}]/g;
-      s/%.*//;
-      s,\\blogpage{(.*)},<a href="$1">[$urlMessage]</a>,;
+      $latexDollarStart = '$' ;
+   }
+   else
+   {
+      $latexDollarStart = '$latex ' ;
+   }
 
-   next if (
-   /\\begin{document}/ or
-   /\\end{document}/ or
-   /\\maketitle/ or
-   /\\tableofcontents/ or
-   /\\usepackage/ or
-   /\\newcommand/ or
-   /\\documentclass/ or
-   /\\title/ or
-   /\\email/ or
-   /\\date/ or
-   /\\author/ or
-   /\\revisionInfo/ or
-   /\\input/ or
-   /\\bibliography/ or
-   /\\beginArtWithToc/ or
-   /\\EndArticle/ or
-   /\\EndNoBibArticle/ or
-   /\\beginArtNoToc/ or
-   0 ) ;
+   my $out = '' ;
 
-      if ( !$mathml )
+   foreach (@allLines)
+   {
+      next if ( /\\documentclass/ or
+                /\\usepackage/ or
+                /\\newcommand/ or
+                /\\input/ or
+                /\\revisionInfo/ or
+                /\\bibliography/ or
+                /\\beginArtWithToc/ or
+                /\\EndArticle/ or
+                /\\EndNoBibArticle/ or
+                /\\beginArtNoToc/ or
+                0 ) ;
+
+      if ( $mathml )
       {
-         while ( s/\$(.*?)\$/BBB:$1:EEE/g )
+         if ( /\\(?:title|chapter){(.*)}/ )
          {
+            $g_title = $1 ;
          }
-
-         s/BBB:/\$latex /g;
-         s/:EEE/\$/g;
-      }
-
-      if ( !$mathml )
-      {
-         s/\\ref{(eqn:.*?)}/$equations{$1}/g ;
-      }
-
-      s,\\section{(.*)},<h1>$1</h1>,;
-      s,\\subsection{(.*)},<h2>$1</h2>,;
-      s,\\subsubsection{(.*)},<h3>$1</h3>,;
-      s,\\href{(.*?)}{(.*?)},<a href="$1">$2</a>,g ;
-
-      if ( s/\\begin{align\**}// or s/\\begin{equation\**}// )
-      {
-         $eqnArray = "eqnarray*" ;
-
-         if ( !$mathml and s/\\label{(eqn:.*?)}// )
-         {
-            $curEquationLabel = "\\quad\\quad\\quad($equations{$1})" ;
-         }
-         elsif ( $mathml and /\\label{eqn:.*?}/ )
-         {
-            $eqnArray = "eqnarray" ;
-         }
-
-         $curEqn .= "$_" ;
-         $inEquation = 1 ;
-      }
-      elsif ( s/\\end{align\**}.*// or s/\\end{equation\**}.*// )
-      {
-         my $eq ;
-
-         if ( $mathml )
-         {
-            #<blockquote>$\begin{eqnarray}\nabla F &= J/{\epsilon_0} c \\ m\frac{d^2 X}{d\tau} &= \frac{q}{c} F \cdot \frac{dX}{d\tau}\end{eqnarray}$</blockquote>
-            #<blockquote>$\begin{eqnarray*}\nabla \cdot \mathbf{E} = \rho\end{eqnarray*}$</blockquote>
-
-            $eq = '<blockquote>$\\begin{' . $eqnArray . '}' . expandPeetersMacros( "$curEqn$_" ) ;
-
-            # strip trailing \\ at the end of the equation:
-            $eq =~ s/ *\\\\ *$//g;
-
-            $eq .= " \\end{$eqnArray}\$</blockquote>\n" ;
-         }
-         else
-         {
-            # sample output from latex2wp.  centers things ... looks a bit nicer.
-            #<p align=center>$latex \displaystyle   \forall g \in {\cal F}. g^2 = \eta \ \ \ \ \ (1)&fg=000000$</p>
-
-            $eq = '<p align=center>$latex \\begin{aligned}' . expandPeetersMacros( "$curEqn$_" ) ;
-            $eq =~ s/ *\\\\ *$//g;
-
-            # latex2wp used this, but I don't see a difference:
-            my $fgString = '' ;
-            #      $fgString = "&fg=000000" ; # omit.
-
-            $eq .= " \\end{aligned} $curEquationLabel$fgString\$</p>\n" ;
-         }
-
-         $allOut .= $eq ;
-         $curEqn = '' ;
-         $inEquation = 0 ;
-         $curEquationLabel = '' ;
-      }
-      elsif ( $inEquation )
-      {
-         $curEqn .= "$_" ;
       }
       else
       {
-         s/\\label{(.*?)}//g;
-
-         $allOut .= expandPeetersMacros( $_ ) . "\n" ;
+         next if ( /\\begin{document}/ or
+                   /\\end{document}/ or
+                   /\\maketitle/ or
+                   /\\tableofcontents/ or
+                   /\\title/ or
+                   /\\email/ or
+                   /\\date/ or
+                   /\\author/ or
+                   0 ) ;
       }
+
+      # process inline math $$ delimited.  Assume that it is all in one line.
+      s/\$(.*?)\$/processOneEquation(1, '*', $1)/eg ;
+
+      s/<latexStart>/\$/g ;
+      s/<latexEnd>/\$/g ;
+
+      s/\\chapcite{(.*?)}/[$refnumbers{$1}]/g;
+      s/\\cite{(.*?)}/[$refnumbers{$1}]/g;
+      s,\\blogpage{(.*)},<a href="$1">[$urlMessage]</a>,;
+
+      s/\\C{(.*?)}/$latexDollarStart\\mathbb{C}^{$1}\$/g;
+      s/\\R{(.*?)}/$latexDollarStart\\mathbb{R}^{$1}\$/g;
+
+      s/\\ref{(eqn:.*?)}/$equations{$1}/g ;
+
+#      if ( !$mathml )
+#      {
+         s,\\section{(.*)},<h1>$1</h1>,;
+         s,\\subsection{(.*)},<h2>$1</h2>,;
+         s,\\subsubsection{(.*)},<h3>$1</h3>,;
+#      }
+
+      s,\\href{(.*?)}{(.*?)},<a href="$1">$2</a>,g ;
+
+      # remove any label's not associated with specific formulas
+      s/\\label{(.*?)}//g;
+
+      $out .= "$_\n" ;
    }
 
-   # return output.  remove $allOut references in this function.
+   return $out ;
 }
