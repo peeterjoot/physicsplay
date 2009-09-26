@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/hamiltonian.pdf}
 \date{Sept 26, 2009}
-\revisionInfo{$RCSfile: hamiltonian.tex,v $ Last $Revision: 1.1 $ $Date: 2009/09/26 18:14:10 $}
+\revisionInfo{$RCSfile: hamiltonian.tex,v $ Last $Revision: 1.2 $ $Date: 2009/09/26 19:52:30 $}
 
 \beginArtWithToc
 
@@ -13,12 +13,143 @@
 
 I've now seen Hamiltonians used, mostly in a Quantum Context, and think that I understand at least some of the math associated with the Hamiltonian and the Hamiltonian principle.  I have, however, not used either of these enough that it seems natural to do so.
 
-Here I attempt to summarize for myself what I know about Hamiltonians, work through a number of examples, some of which I've done already using the Lagrangian formalism.
+Here I attempt to summarize for myself what I know about Hamiltonians, and work through a number of examples.  Some of the examples considered will be ones already treated with the Lagrangian formalism \cite{PJTongMf1}.
+
+Some notation will be invented along the way as reasonable, since I'd like to try to also relate the usual coordinate representation of the Hamiltonian, the Hamiltonian principle, and the Poisson bracket, with the bivector representation of the 2N complex configuration space introduced in \cite{doran2003gap}.
 
 \section{Hamiltonian as a conserved quantity.}
 
-Starting with the Lagrangian formalism the Hamiltonian can be found as a conserved quantity associated with time translation when the Lagrangian has no explicit time dependence.  This follows directly by considering the time derivative of the Lagrangian
+Starting with the Lagrangian formalism the Hamiltonian can be found as a conserved quantity associated with time translation when the Lagrangian has no explicit time dependence.  This follows directly by considering the time derivative of the Lagrangian $\LL = \LL(q^i, \qdot^i)$.
 
+\begin{align*}
+\frac{d\LL}{dt} 
+&= \PD{q^i}{\LL} \frac{dq^i}{dt} +\PD{\qdot^i}{\LL} \frac{d\qdot^i}{dt} \\
+&= \qdot^i \frac{d}{dt}\PD{\qdot^i}{\LL} +\PD{\qdot^i}{\LL} \frac{d\qdot^i}{dt} \\
+&= \frac{d}{dt} \left( \qdot^i \PD{\qdot^i}{\LL} \right) 
+\end{align*}
 
+We can therefore form the difference 
+
+\begin{align}\label{eqn:hamiltonian:foo1}
+\frac{d}{dt} \left( \qdot^i \PD{\qdot^i}{\LL} -\LL \right) = 0
+\end{align}
+
+and find that this quantity, labelled H, is a constant of motion for the system
+
+\begin{align}\label{eqn:hamiltonian:foo2}
+H \equiv \qdot^i \PD{\qdot^i}{\LL} -\LL = \text{constant}
+\end{align}
+
+The $\qdot^i$ partials of the Lagrangian are called the canonical momentum conjugate to $q^i$.  Quite a mouthful, so just canonical momenta seems like a good compromize.  We will write (reserving $p^i = m q^i$ for the non-canonical momenta)
+
+\begin{align}\label{eqn:hamiltonian:foo2b}
+P_i \equiv \PD{\qdot^i}{\LL}
+\end{align}
+
+and note that these are the coordinates of a sort of velocity gradient of the Lagrangian.  We've seen these canonical momenta in velocity gradient form previously where it was noted that we could write the Euler-Lagrange equations in vector form in an orthonormal reciprocal frame space as
+
+\begin{align}\label{eqn:hamiltonian:foo9}
+\grad \LL = \frac{d}{dt} \grad_v \LL
+\end{align}
+
+where $\grad_v = e^i \partial \LL/\partial \xdot^i = e^i P_i$, $\grad = e^i \partial/\partial x^i$, and $x = e_i x^i$.
+
+%Here we will be exploring phase space relationships where the position and velocity basis pairs are treated independently, but also will not have much requirement for direct use of the Euler Lagrange equations.
+
+\section{Some syntaxic sugar.  In vector form.}
+
+Following Jackson \cite{jackson1975cew} (section 12.1, relativistic Lorentz force Hamiltonian), this can be written in vector form if the velocity gradient, the vector sum of the momenta conjugate to the $q^i$'s is given its own symbol $\BP$.  He writes
+
+\begin{align}\label{eqn:hamiltonian:foo3}
+H = \Bv \cdot \BP - \LL
+\end{align}
+
+This makes most sense when working in othonormal coordinates, but can be generalized.  Suppose we introduce a pair of reciprocal frame basis for the generalized position and velocity coordinates, writing as vectors in configuration space
+
+\begin{align}\label{eqn:hamiltonian:foo4}
+q &= e_i q^i \\
+v &= f_i \qdot^i 
+\end{align}
+
+Following \cite{doran2003gap} (who use this for their bivector complexification of the configuration space), we have the freedom to impose orthonormal constraints on this configuration space basis
+
+\begin{align}\label{eqn:hamiltonian:foo5}
+e^i \cdot e_j &= {\delta^i}_j \\
+f^i \cdot f_j &= {\delta^i}_j \\
+e^i \cdot f_j &= {\delta^i}_j
+\end{align}
+
+We can now define configuration space position and velocity gradients
+
+\begin{align}\label{eqn:hamiltonian:foo6}
+\grad &\equiv e^i \PD{q^i}{} \\
+\grad_v &\equiv f^i \PD{\qdot^i}{}
+\end{align}
+
+so the conjugate momenta in vector form is now
+
+\begin{align}\label{eqn:hamiltonian:foo7}
+P \equiv \grad_v \LL = f^i \PD{\qdot^i}{\LL}
+\end{align}
+
+Our Hamiltonian takes the form
+
+\begin{align}\label{eqn:hamiltonian:foo8}
+H = v \cdot P - \LL
+\end{align}
+
+\section{The Hamiltonian principle.}
+
+We want to take partials of \ref{eqn:hamiltonian:foo2} with respect to $P_i$ and $q^i$.  In terms of the canonical momenta we want to differentiate
+
+\begin{align}\label{eqn:hamiltonian:hoo1}
+H \equiv \qdot^i P_i -\LL(q^i, \qdot^i, t)
+\end{align}
+
+for the $P_i$ partial we have
+
+\begin{align*}
+\PD{P_i}{H} = \qdot^i
+\end{align*}
+
+and for the $q^i$ partial
+
+\begin{align*}
+\PD{q^i}{H} 
+&= -\PD{q^i}{\LL} \\
+&= - \frac{d}{dt} \PD{\qdot^i}{\LL} 
+\end{align*}
+
+These two results taken together form what I believe is called the Hamiltonian principle
+
+\begin{align}\label{eqn:hamiltonian:hoo3}
+\PD{P_i}{H} &= \qdot^i \\
+\PD{q^i}{H} &= - \dot{P}_i \\
+P_i &= \PD{\qdot^i}{\LL} 
+\end{align}
+
+A set of 2N first order equations equivalent to the second order Euler-Lagrange equations.  These appear to follow straight from the definitions.  Given that I'm curious why the more complex method of derivation is chosen in \cite{goldstein1951cm}.  There the total differential of the Hamiltonian is computed
+
+...
+
+\section{Examples.}
+
+Now, that's just about the most abstract way we can start things off isn't it.  Getting some initial feel for this constant of motion can be had by considering a sequence of Lagrangians, starting with the very simplest.
+
+\subsection{Particle constrained to force free one dimensional motion}
+
+Our very simplest Lagrangian is that of one dimensional purely kinetic motion
+
+\begin{align}\label{eqn:hamiltonian:boo1}
+\LL = \inv{2} m v^2 = \inv{2} m \xdot^2
+\end{align}
+
+Our Hamiltonian is in this case just
+
+\begin{align}\label{eqn:hamiltonian:boo2}
+H = \xdot m \xdot - \inv{2} m \xdot = \inv{2} m v^2
+\end{align}
+
+So the 
 
 \EndArticle
