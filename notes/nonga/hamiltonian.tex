@@ -5,13 +5,13 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/hamiltonian.pdf}
 \date{Sept 26, 2009}
-\revisionInfo{$RCSfile: hamiltonian.tex,v $ Last $Revision: 1.2 $ $Date: 2009/09/26 19:52:30 $}
+\revisionInfo{$RCSfile: hamiltonian.tex,v $ Last $Revision: 1.3 $ $Date: 2009/09/27 03:56:00 $}
 
 \beginArtWithToc
 
 \section{Motivation}
 
-I've now seen Hamiltonians used, mostly in a Quantum Context, and think that I understand at least some of the math associated with the Hamiltonian and the Hamiltonian principle.  I have, however, not used either of these enough that it seems natural to do so.
+I've now seen Hamiltonians used, mostly in a Quantum context, and think that I understand at least some of the math associated with the Hamiltonian and the Hamiltonian principle.  I have, however, not used either of these enough that it seems natural to do so.
 
 Here I attempt to summarize for myself what I know about Hamiltonians, and work through a number of examples.  Some of the examples considered will be ones already treated with the Lagrangian formalism \cite{PJTongMf1}.
 
@@ -39,6 +39,8 @@ and find that this quantity, labelled H, is a constant of motion for the system
 \begin{align}\label{eqn:hamiltonian:foo2}
 H \equiv \qdot^i \PD{\qdot^i}{\LL} -\LL = \text{constant}
 \end{align}
+
+We'll see later that this constant is sometimes the total energy of the system.
 
 The $\qdot^i$ partials of the Lagrangian are called the canonical momentum conjugate to $q^i$.  Quite a mouthful, so just canonical momenta seems like a good compromize.  We will write (reserving $p^i = m q^i$ for the non-canonical momenta)
 
@@ -130,13 +132,48 @@ P_i &= \PD{\qdot^i}{\LL}
 
 A set of 2N first order equations equivalent to the second order Euler-Lagrange equations.  These appear to follow straight from the definitions.  Given that I'm curious why the more complex method of derivation is chosen in \cite{goldstein1951cm}.  There the total differential of the Hamiltonian is computed
 
-...
+\begin{align*}
+dH &= 
+\qdot^i dP_i 
++ d\qdot^i P_i 
+- dq^i \PD{q^i}{\LL}
+- d \qdot^i \PD{\qdot^i}{\LL}
+- dt \PD{t}{\LL} \\
+&= 
+\qdot^i dP_i 
++ d\qdot^i \left( P_i - \PD{\qdot^i}{\LL} \right)
+- dq^i \PD{q^i}{\LL}
+- dt \PD{t}{\LL} \\
+&= 
+\qdot^i dP_i 
+- dq^i \underbrace{\PD{q^i}{\LL}}_{= d/dt P_i}
+- dt \PD{t}{\LL} \\
+\end{align*}
+
+A term by term comparision to the total differential written out explicitly
+
+\begin{align}\label{eqn:hamiltonian:hoo4}
+dH &= 
+\PD{q^i}{H} d q^i
++\PD{P_i}{H} d P_i
++\PD{t}{H} dt
+\end{align}
+
+allows the Hamiltonian equations to be picked off.
+
+\begin{align}\label{eqn:hamiltonian:hoo5}
+\PD{P_i}{H} &= \qdot^i  \\
+\PD{q^i}{H} &= - \dot{P}_i  \\
+\PD{t}{H}   &= - \PD{t}{\LL} 
+\end{align}
+
+I guess that isn't that much more complicated and it does yield a relation between the Hamiltonian and Lagrangian time derivatives.
 
 \section{Examples.}
 
-Now, that's just about the most abstract way we can start things off isn't it.  Getting some initial feel for this constant of motion can be had by considering a sequence of Lagrangians, starting with the very simplest.
+Now, that's just about the most abstract way we can start things off isn't it?  Getting some initial feel for this constant of motion can be had by considering a sequence of Lagrangians, starting with the very simplest.
 
-\subsection{Particle constrained to force free one dimensional motion}
+\subsection{Force free motion}
 
 Our very simplest Lagrangian is that of one dimensional purely kinetic motion
 
@@ -150,6 +187,278 @@ Our Hamiltonian is in this case just
 H = \xdot m \xdot - \inv{2} m \xdot = \inv{2} m v^2
 \end{align}
 
-So the 
+The Hamiltonian is just the kinetic energy.  The canonical momentum in this case is also equal to the momentum, so eliminating $v$ to apply the Hamiltonian equations we have
+
+\begin{align}\label{eqn:hamiltonian:boo3}
+H = \inv{2m} p^2
+\end{align}
+
+We have then
+
+\begin{align*}
+\PD{p}{H} &= \frac{p}{m} = \dot{x} \\
+\PD{x}{H} &= 0 = -\dot{p} 
+\end{align*}
+
+Just for fun we can put this simple linear system in matrix form
+
+\begin{align}\label{eqn:hamiltonian:boo4}
+\frac{d}{dt}
+\begin{bmatrix}
+p \\
+x
+\end{bmatrix}
+=
+\inv{m}
+\begin{bmatrix}
+0 & 0 \\
+1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+p \\
+x
+\end{bmatrix}
+\end{align}
+
+A linear system of this form $y' = A y$ can be solved by exponentiation with solution
+
+\begin{align}\label{eqn:hamiltonian:boo5}
+y = e^{A t} y_0
+\end{align}
+
+In this case our matrix is nilpotent degree 2 so we can exponentiate only requiring up to the first order power
+
+\begin{align}\label{eqn:hamiltonian:boo6}
+e^{A t} = I + A t
+\end{align}
+
+specifically
+
+\begin{align}\label{eqn:hamiltonian:boo7}
+\begin{bmatrix}
+p \\
+x
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & 0 \\
+\frac{t}{m} & 1
+\end{bmatrix}
+\begin{bmatrix}
+p_0 \\
+x_0
+\end{bmatrix}
+\end{align}
+
+Written out in full this is just
+
+\begin{align}\label{eqn:hamiltonian:boo8}
+p &= p_0 \\
+x &= \frac{p_0}{m} t + x_0
+\end{align}
+
+Since the canonical momentum is the regular momentum $p = m v$ in this case, we have the usual constant rate change of position $x = v_0 t + x_0$ that we could have gotten in many easier ways.  I'd hazzard a guess that any single variable Lagrangian that is at most quadratic in position or velocity will yield a linear system.
+
+The generalization of this Hamiltonian to three dimensions is straightforward, and we get
+
+\begin{align}\label{eqn:hamiltonian:boo9}
+H &= \inv{m} \Bp^2 
+\end{align}
+
+\begin{align}\label{eqn:hamiltonian:boo10}
+\frac{d}{dt}
+\begin{bmatrix}
+p_x \\
+x \\
+p_y \\
+y \\
+p_z \\
+z \\
+\end{bmatrix}
+=
+\inv{m}
+\begin{bmatrix}
+0 & 0 &   &   &   &   \\
+1 & 0 &   &   &   &   \\
+  &   & 0 & 0 &   &   \\
+  &   & 1 & 0 &   &   \\
+  &   &   &   & 0 & 0 \\
+  &   &   &   & 1 & 0 \\
+\end{bmatrix}
+\begin{bmatrix}
+p_x \\
+x \\
+p_y \\
+y \\
+p_z \\
+z \\
+\end{bmatrix}
+\end{align}
+
+Since there is no coupling (nilpotent matrixes down the diagonal) between the coordinates this can be treated as three independent sets of equations of the form \ref{eqn:hamiltonian:boo4}, and we have
+
+\begin{align}\label{eqn:hamiltonian:boo11}
+p_i(t) &= p_i(0) \\
+x_i(t) &= \frac{p_i(0)}{m} t + x_i(0)
+\end{align}
+
+Or just
+
+\begin{align}\label{eqn:hamiltonian:boo12}
+\Bp(t) &= \Bp(0) \\
+\Bx(t) &= \frac{\Bp(0)}{m} t + \Bx(0)
+\end{align}
+
+\subsection{Linear potential (surface gravitation)}
+
+For the gravitational force $F = - m g \zcap = - \spacegrad \phi$, we have $\phi = m g z$, and a Lagrangian of
+
+\begin{align}\label{eqn:hamiltonian:roo1}
+\LL = \inv{2} m \Bv^2 - \phi = \inv{2} m \Bv^2 - m g z
+\end{align}
+
+Without velocity dependence the canonical momentum is the momentum $m \Bv$, and our Hamiltonian is
+
+\begin{align}\label{eqn:hamiltonian:roo2}
+H = \inv{2 m} \Bp^2 + m g z
+\end{align}
+
+The Hamiltonian equations are
+
+\begin{align}\label{eqn:hamiltonian:roo3}
+\PD{p_i}{H} &= \xdot_i = \inv{m} p_i \\
+\sigma_i \PD{x_i}{H} &= -\sigma_i \pdot_i = \begin{bmatrix}0 \\ 0 \\ m g \end{bmatrix}
+\end{align}
+
+In matrix form we have
+
+\begin{align}\label{eqn:hamiltonian:roo4}
+\frac{d}{dt}
+\begin{bmatrix}
+p_x \\
+x \\
+p_y \\
+y \\
+p_z \\
+z \\
+\end{bmatrix}
+=
+\inv{m}
+\begin{bmatrix}
+0 & 0 &   &   &   &   \\
+1 & 0 &   &   &   &   \\
+  &   & 0 & 0 &   &   \\
+  &   & 1 & 0 &   &   \\
+  &   &   &   & 0 & 0 \\
+  &   &   &   & 1 & 0 \\
+\end{bmatrix}
+\begin{bmatrix}
+p_x \\
+x \\
+p_y \\
+y \\
+p_z \\
+z \\
+\end{bmatrix}
++
+\begin{bmatrix}
+0 \\
+0 \\
+0 \\
+0 \\
+-m g \\
+0 \\
+\end{bmatrix}
+\end{align}
+
+So our problem is now reduced to solving a linear system of the form
+
+\begin{align}\label{eqn:hamiltonian:roo5}
+y' = A y + b
+\end{align}
+
+That extra little term $b$ throws a wrench into things and I'm no longer sure how to integrate by inspection.  What can be noted is that we really only have to consider the $z$ components since we've solved the problem for the $x$ and $y$ coordinates in the force free case.  That leaves
+
+\begin{align}\label{eqn:hamiltonian:roo6}
+\frac{d}{dt}
+\begin{bmatrix}
+p_z \\
+z \\
+\end{bmatrix}
+=
+\inv{m}
+\begin{bmatrix}
+0 & 0 \\
+1 & 0 \\
+\end{bmatrix}
+\begin{bmatrix}
+p_z \\
+z \\
+\end{bmatrix}
++
+\begin{bmatrix}
+-m g \\
+0 \\
+\end{bmatrix}
+\end{align}
+
+Is there any reason that we have to solve in matrix form?  Except for a coolness factor, not really, and we can integrate each equation directly.  For the momentum equation we have
+
+\begin{align}\label{eqn:hamiltonian:roo7}
+p_z = - m g t + p_z(0)
+\end{align}
+
+This can be substituted into the position equation for
+
+\begin{align}\label{eqn:hamiltonian:roo8}
+\dot{z} = \inv{m} (p_z(0) - m g t)
+\end{align}
+
+Direct integration is now possible for the final solution
+
+\begin{align*}
+z 
+&= \inv{m} (p_z(0) t - m g t^2/2) + z_0 \\
+&= \frac{p_z(0)}{m} t - \frac{g}{2} t^2 + z_0 
+\end{align*}
+
+Again something that we could have gotten in many easier ways.  Using the result we see that the solution to \ref{eqn:hamiltonian:roo6} in matrix form, again with $A = \inv{m}\begin{bmatrix}0 & 0 \\ 1 & 0\end{bmatrix}$ is
+
+\begin{align}\label{eqn:hamiltonian:roo9}
+\begin{bmatrix}
+p_z \\
+z \\
+\end{bmatrix}
+= e^{At} 
+\begin{bmatrix}
+p_z(0) \\
+z(0) \\
+\end{bmatrix}
+- m g 
+\begin{bmatrix}
+t \\
+\inv{2m} t^2
+\end{bmatrix}
+\end{align}
+
+I thought if I wrote this out how to solve \ref{eqn:hamiltonian:roo5} may be more obvious, but that path is still unclear.  If $A$ were invertable, which it isn't, then writing $b = A c$ would allow for a change of variables.  Does this matter for consideration of a physical problem.  Not really, so I'll fight the urge to play with the math for a while and perhaps revisit this later separately.
+
+\subsection{Harmonic oscillator (spring potential)}
+
+\subsection{Gravitational potential}
+
+\subsection{Pendulum}
+
+\subsection{Spherical pendulum}
+
+\subsection{Double pendulum}
+
+\subsection{Particle in non-velocity dependent potential.}
+
+\subsection{Velocity dependent potential.}
+
+\subsection{Dangling mass connected by string to another.}
+
+\subsection{Lorentz force Hamiltonian.}
 
 \EndArticle
