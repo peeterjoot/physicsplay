@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/hamiltonian.pdf}
 \date{Sept 26, 2009}
-\revisionInfo{$RCSfile: hamiltonian.tex,v $ Last $Revision: 1.7 $ $Date: 2009/09/29 00:05:16 $}
+\revisionInfo{$RCSfile: hamiltonian.tex,v $ Last $Revision: 1.8 $ $Date: 2009/09/29 04:43:24 $}
 
 \beginArtWithToc
 
@@ -688,7 +688,52 @@ Having established what seems like an appropriate form for the Lagrangian, we ca
 H = \sum_i \inv{2 m_i} {\Bp_i}^2 + \inv{2} \sum_{i \ne j} \phi_{ij}
 \end{align}
 
-This leaves us finally in position to evaluate the Hamiltonian equations.
+This leaves us finally in position to evaluate the Hamiltonian equations, but the result of doing so is rudely nothing more than the Newtonian equations in coordinate form.  We get, for the $k$th component of the $i$th particle 
+
+\begin{align}\label{eqn:hamiltonian:moo10}
+\PD{{p^k}_i}{H} = {\dot{x}^k}_i = \inv{m_i} {p^k}_i 
+\end{align}
+
+\begin{align}\label{eqn:hamiltonian:moo11}
+\PD{{x^k}_i}{H} = -{\dot{p}^k}_i = G \sum_{j \ne i} m_i m_j \frac{{x^k}_i -{x^k}_j}{\Abs{\Br_i - \Br_j}^3}
+\end{align}
+
+While this isn't linear it does suggest a method, likely computationally crappy, for computing phase space state transitions for small time increments.  While its hard to write out the matrix, even for the two particle case (the 12 by 12 matrix breaks latex when I try).  Writing for the state space vector
+
+%Writing out \ref{eqn:hamiltonian:moo10} and \ref{eqn:hamiltonian:moo11} in full for the two particle case (because the matrix gets hellishly messy if you go any bigger)
+
+\begin{align}\label{eqn:hamiltonian:moo12}
+\Bz =
+\begin{bmatrix}
+{p^1}_1 \\
+{p^2}_1 \\
+{p^3}_1 \\
+{x^1}_1 \\
+{x^2}_1 \\
+{x^3}_1 \\
+{p^1}_2 \\
+{p^2}_2 \\
+{p^3}_2 \\
+{x^1}_2 \\
+\vdots \\
+\end{bmatrix}
+\end{align}
+
+We have a somewhat sparse equation of the form
+
+\begin{align}\label{eqn:hamiltonian:moo13}
+\frac{d\Bz}{dt} = A \Bz
+\end{align}
+
+Where we have $1/m_j$ terms in the ${\dot{x}^k}_j = {p^k}_j/m_j$ equations, and either $-(N-1) G m_i m_j {r_{ij}}^{-3/2}$ or $G m_i m_j {r_{ij}}^{-3/2}$ from the remaining ${\dot{p}^k}_i$ relations.
+
+Solving \ref{eqn:hamiltonian:moo13} we have
+
+\begin{align}\label{eqn:hamiltonian:moo14}
+\Bz(t_0 + \Delta t) = e^{A (t_0 + \Delta t)} \Bz(t_0) \approx \Bz(t_0) + A(t_0) \Bz(t_0)
+\end{align}
+
+FIXME: I think the $\propto G m_i m_j {r_{ij}}^{-3/2}$ in the matrix positions is the wrong way to linearize the matrix.  Probably need to take derivatives.
 
 \subsection{Pendulum}
 
