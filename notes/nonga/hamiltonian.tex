@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/hamiltonian.pdf}
 \date{Sept 26, 2009}
-\revisionInfo{$RCSfile: hamiltonian.tex,v $ Last $Revision: 1.6 $ $Date: 2009/09/28 13:59:18 $}
+\revisionInfo{$RCSfile: hamiltonian.tex,v $ Last $Revision: 1.7 $ $Date: 2009/09/29 00:05:16 $}
 
 \beginArtWithToc
 
@@ -508,7 +508,7 @@ x_0 \\
 \end{bmatrix}
 \end{align}
 
-The stochastic nature of the phase space solution is interesting.  Provided we can make a simultaneous measurement of position and momentum, this initial state determines a next position and momentum state at a new time $t = t_0 + \Delta t_1$, and we have a tragectory through phase space of discrete transitions from one state to another
+The stateful nature of the phase space solution is interesting.  Provided we can make a simultaneous measurement of position and momentum, this initial state determines a next position and momentum state at a new time $t = t_0 + \Delta t_1$, and we have a tragectory through phase space of discrete transitions from one state to another
 
 \begin{align}\label{eqn:hamiltonian:woo6a}
 {\begin{bmatrix}
@@ -620,25 +620,25 @@ Next I'd like to consider a two particle gravitational interaction.  However, to
 Guessing that the Lagrangian has a single term for the interaction potential
 
 \begin{align}\label{eqn:hamiltonian:moo2}
-\phi_{12} &= \kappa \inv{\Abs{\Br_2 - \Br_1}} 
+\phi_{21} &= \kappa \inv{\Abs{\Br_2 - \Br_1}} 
 \end{align}
 
 so that we have
 \begin{align}\label{eqn:hamiltonian:moo3}
-\LL &= \inv{2} m {\Bv_1}^2 +\inv{2} m {\Bv_2}^2 - \phi_{12}
+\LL &= \inv{2} m {\Bv_1}^2 +\inv{2} m {\Bv_2}^2 - \phi_{21}
 \end{align}
 
 We can evaluate the Euler-Lagrange equations and see if the result is consistent with the Newtonian force laws of \ref{eqn:hamiltonian:moo1}.  Suppose we write the coordinates of $\Br_i$ as ${x^k}_i$.  There are then six Euler-Lagrange equations 
 
 \begin{align*}
 \PD{{x^j}_i}{\LL} &= \frac{d}{dt} \PD{{\dot{x}^j}_i}{\LL} \\
--\PD{{x^j}_i}{\phi_{12}} &= m_i {\ddot{x}^j}_i
+-\PD{{x^j}_i}{\phi_{21}} &= m_i {\ddot{x}^j}_i
 \end{align*}
 
 Evaluating the potential derivatives separately.  Consider the $i=2$ derivative
 
 \begin{align*}
-\PD{{x^j}_2}{\phi_{12}}
+\PD{{x^j}_2}{\phi_{21}}
 &= 
 \kappa \PD{{x^j}_2}{} \left( \sum_k ({x^k}_2 - {x^k}_1)^2 \right)^{-1/2} \\
 &=
@@ -647,7 +647,9 @@ Evaluating the potential derivatives separately.  Consider the $i=2$ derivative
 -\kappa \inv{\Abs{\Br_2 - \Br_1}^3} ({x^j}_2 - {x^j}_1)
 \end{align*}
 
-Somewhat problematic in this derivative is the fact that the derivative of an absolute or square is multivalued.  Consider the graph of $y = (x-a)^2$, the derivative is $y' = \pm 2 (x-a)$ depending upon which side of the parabola one is evaluating the slope.  It appears that everything will work out, obtaining the Newtonian gravitation equations for two particle interaction with either sign, but we have to use the same sign for all derivatives.  With this sign picked arbitrarily following the sense convention of this above calculation, we have from the Euler-Lagrange equations
+%Somewhat problematic in this derivative is the fact that the derivative of an absolute or square is multivalued.  Consider the graph of $y = (x-a)^2$, the derivative is $y' = \pm 2 (x-a)$ depending upon which side of the parabola one is evaluating the slope.  It appears that everything will work out, obtaining the Newtonian gravitation equations for two particle interaction with either sign, but we have to use the same sign for all derivatives.  With this sign picked arbitrarily following the sense convention of this above calculation, we have from the Euler-Lagrange equations
+
+Therefore the final result of the Euler-Lagrange equations is
 
 \begin{align}\label{eqn:hamiltonian:moo4}
 \kappa \inv{\Abs{\Br_2 - \Br_1}^3} ({x^j}_2 - {x^j}_1) &= m_2 {\ddot{x}^j}_2 \\
@@ -657,18 +659,36 @@ Somewhat problematic in this derivative is the fact that the derivative of an ab
 which confirms the Lagrangian and potential guess and fixes the constant $\kappa = - G m_1 m_2$.  With the sign fixed, our potential, Lagrangian, and Hamiltonian are respectively
 
 \begin{align}\label{eqn:hamiltonian:moo5}
-\phi_{12} &= -\frac{G m_1 m_2 }{\Abs{\Br_2 - \Br_1}}  \\
-\LL &= \inv{2} m {\Bv_1}^2 +\inv{2} m {\Bv_2}^2 - \phi_{12} \\
-H &= \inv{2 m} {\Bp_1}^2 +\inv{2 m} {\Bp_2}^2 + \phi_{12}
+\phi_{21} &= -\frac{G m_2 m_1 }{\Abs{\Br_2 - \Br_1}}  \\
+\LL &= \inv{2} m_1 {\Bv_1}^2 +\inv{2} m_2 {\Bv_2}^2 - \phi_{21} \\
+H &= \inv{2 m_1} {\Bp_1}^2 +\inv{2 m_2} {\Bp_2}^2 + \phi_{21}
 \end{align}
 
-FIXME:
-Although this now leaves us in a position to evaluate the Hamiltonian equations, let's briefly consider the multiparticle case.
+There is however an undesirable asymmetry to this expression, in particular a formulation that extends to multiple particles seems desirable.  Let's write instead a slight variation
 
-% something like (fix signs?)
-\begin{align*}
- \inv{2} sum_{ij} \phi_{ij}
-\end{align*}
+\begin{align}\label{eqn:hamiltonian:moo6}
+\phi_{ij} = - \frac{G m_i m_j}{\Abs{\Br_i - \Br_j}}
+\end{align}
+
+and form a scaled by two double summation over all pairs of potentials
+
+\begin{align}\label{eqn:hamiltonian:moo7}
+\LL &= \sum_i \inv{2} m_i {\Bv_i}^2 - \inv{2} \sum_{i \ne j} \phi_{ij}
+\end{align}
+
+%Again since $$, for this to have meaning an agreement to evaluate the Euler-Lagrange partials according to the following ``positive'' sense is required
+%
+%\begin{align}\label{eqn:hamiltonian:moo8}
+%\PD{{x^j}_i}{} (\Br_a - \Br_b)^2 \equiv (\Br_a - \Br_b) \cdot \PD{{x^j}_i}{} (\Br_a - \Br_b)
+%\end{align}
+
+Having established what seems like an appropriate form for the Lagrangian, we can write the Hamiltonian for the multiparticle gravitational interaction by inspection
+
+\begin{align}\label{eqn:hamiltonian:moo9}
+H = \sum_i \inv{2 m_i} {\Bp_i}^2 + \inv{2} \sum_{i \ne j} \phi_{ij}
+\end{align}
+
+This leaves us finally in position to evaluate the Hamiltonian equations.
 
 \subsection{Pendulum}
 
