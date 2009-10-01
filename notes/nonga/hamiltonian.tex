@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/hamiltonian.pdf}
 \date{Sept 26, 2009}
-\revisionInfo{$RCSfile: hamiltonian.tex,v $ Last $Revision: 1.8 $ $Date: 2009/09/29 04:43:24 $}
+\revisionInfo{$RCSfile: hamiltonian.tex,v $ Last $Revision: 1.9 $ $Date: 2009/10/01 00:36:26 $}
 
 \beginArtWithToc
 
@@ -698,9 +698,7 @@ This leaves us finally in position to evaluate the Hamiltonian equations, but th
 \PD{{x^k}_i}{H} = -{\dot{p}^k}_i = G \sum_{j \ne i} m_i m_j \frac{{x^k}_i -{x^k}_j}{\Abs{\Br_i - \Br_j}^3}
 \end{align}
 
-While this isn't linear it does suggest a method, likely computationally crappy, for computing phase space state transitions for small time increments.  While its hard to write out the matrix, even for the two particle case (the 12 by 12 matrix breaks latex when I try).  Writing for the state space vector
-
-%Writing out \ref{eqn:hamiltonian:moo10} and \ref{eqn:hamiltonian:moo11} in full for the two particle case (because the matrix gets hellishly messy if you go any bigger)
+The state space vector for this system of equations is brutally ugly, and could be put into the following form for example
 
 \begin{align}\label{eqn:hamiltonian:moo12}
 \Bz =
@@ -719,21 +717,25 @@ While this isn't linear it does suggest a method, likely computationally crappy,
 \end{bmatrix}
 \end{align}
 
+Where the Hamiltonian equations take the form of a non-linear function on such state space vectors
 We have a somewhat sparse equation of the form
 
 \begin{align}\label{eqn:hamiltonian:moo13}
-\frac{d\Bz}{dt} = A \Bz
+\frac{d\Bz}{dt} = A(\Bz)
 \end{align}
 
-Where we have $1/m_j$ terms in the ${\dot{x}^k}_j = {p^k}_j/m_j$ equations, and either $-(N-1) G m_i m_j {r_{ij}}^{-3/2}$ or $G m_i m_j {r_{ij}}^{-3/2}$ from the remaining ${\dot{p}^k}_i$ relations.
-
-Solving \ref{eqn:hamiltonian:moo13} we have
+One thing that is possible in such a representation is calculating the first order approximate change in position and momentum moving from one time to a small time later
 
 \begin{align}\label{eqn:hamiltonian:moo14}
-\Bz(t_0 + \Delta t) = e^{A (t_0 + \Delta t)} \Bz(t_0) \approx \Bz(t_0) + A(t_0) \Bz(t_0)
+\Bz(t_0 + \Delta t) = \Bz(t_0) + A(\Bz(t_0)) \Delta t
 \end{align}
 
-FIXME: I think the $\propto G m_i m_j {r_{ij}}^{-3/2}$ in the matrix positions is the wrong way to linearize the matrix.  Probably need to take derivatives.
+One could concievably calculate the trajectories in phase space using such increments, and if a small enough time increment is used this can be thought of as solving the gravitational system.  I recall that Feynman did something like this in his lectures, but set up the problem in a more computationally efficient form (it definitely didn't have the redundancy built into the Hamiltonian equations).
+
+FIXME: should be able to solve this for an arbitrary $\Delta t$ later time if this was extended to the higher order terms.  Need something like the $e^{z \cdot \grad}$ chain rule expansion.  Think this through.  Will be a little different since we are already starting with the first order contribution.
+
+What does this system of equations look like with a reduction of order through center of mass change of variables?
+% Lut was exploring this and having trouble.
 
 \subsection{Pendulum}
 
