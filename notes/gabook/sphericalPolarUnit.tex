@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/sphericalPolarUnit.pdf}
 \date{Sept 20, 2009}
-\revisionInfo{$RCSfile: sphericalPolarUnit.tex,v $ Last $Revision: 1.4 $ $Date: 2009/09/21 03:42:26 $}
+\revisionInfo{$RCSfile: sphericalPolarUnit.tex,v $ Last $Revision: 1.5 $ $Date: 2009/10/09 23:07:01 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -18,13 +18,13 @@ In \chapcite{qmAngularMom} I blundered on a particularly concise exponential non
 
 The spherical polar rotor is a composition of rotations, expressed as half angle exponentials.  Following the normal physics conventions we first apply a $z,x$ plane rotation by angle theta, then an $x,y$ plane rotation by angle $\phi$.  This produces the rotor
 
-\begin{align}\label{eqn:sphericalPolarUnit:angExp1}
+\begin{align}\label{eqn:sphericalPolarUnit:foo1}
 R = e^{\Be_{31}\theta/2} e^{\Be_{12}\phi/2}
 \end{align}
 
 Our triplet of Cartesian unit vectors is therefore rotated as
 
-\begin{align}\label{eqn:sphericalPolarUnit:goo14}
+\begin{align}\label{eqn:sphericalPolarUnit:foo2}
 \begin{pmatrix}
 \rcap \\
 \thetacap \\
@@ -42,13 +42,13 @@ R
 
 In the quantum mechanical context it was convenient to denote the $x,y$ plane unit bivector with the imaginary symbol
 
-\begin{align}\label{eqn:sphericalPolarUnit:foo1}
+\begin{align}\label{eqn:sphericalPolarUnit:foo3}
 i = \Be_1 \Be_2
 \end{align}
 
 reserving for the spatial pseudoscalar the capital
 
-\begin{align}\label{eqn:sphericalPolarUnit:foo2}
+\begin{align}\label{eqn:sphericalPolarUnit:foo4}
 I = \Be_1 \Be_2 \Be_3 = \rcap \thetacap \phicap = i \Be_3
 \end{align}
 
@@ -94,7 +94,7 @@ Finally for $\thetacap$, we have a similar messy expansion
 
 Summarizing the three of these relations we have for the rotated unit vectors
 
-\begin{align}\label{eqn:sphericalPolarUnit:goo15}
+\begin{align}\label{eqn:sphericalPolarUnit:foo5}
 \rcap &= \Be_3 e^{I \phicap \theta} \\
 \thetacap &= i \phicap e^{I \phicap \theta} \\
 \phicap &= \Be_2 e^{i\phi} 
@@ -102,23 +102,51 @@ Summarizing the three of these relations we have for the rotated unit vectors
 
 and in particular for the radial position vector from the origin, rotating from the polar axis, we have
 
-\begin{align}\label{eqn:sphericalPolarUnit:angExp2}
+\begin{align}\label{eqn:sphericalPolarUnit:foo6}
 \Bx &= r \rcap = r \Be_3 e^{I\phicap \theta}
 \end{align}
 
 Compare this to the coordinate representation
 
-\begin{align}\label{eqn:sphericalPolarUnit:foo3}
+\begin{align}\label{eqn:sphericalPolarUnit:foo7}
 \Bx = r(\sin\theta \cos\phi, \sin\theta \sin\phi, \cos\theta)
 \end{align}
 
-it is not initially obvious that these $\theta$ and $\phi$ rotations admit such a tidy factorization.
+it is not initially obvious that these $\theta$ and $\phi$ rotations admit such a tidy factorization.  In retrospect, this doesn't seem so suprising, since we can form a quaternion product that acts via multiplication to map a vector to a rotated position.  In fact those quaternions, acting from the right on the initial vectors are 
+
+\begin{align}\label{eqn:sphericalPolarUnit:foo8}
+\Be_3 &\rightarrow \rcap = \Be_3 \bigl( e^{I \phicap \theta} \bigr) \\
+\Be_1 &\rightarrow \thetacap = \Be_1 \bigl( \Be_2 \phicap e^{I \phicap \theta} \bigr) \\
+\Be_2 &\rightarrow \phicap = \Be_2 \bigl( e^{i\phi} \bigr)
+\end{align}
+
+FIXME: it should be possible to reduce the quaternion that rotates $\Be_1 \rightarrow \thetacap$ to a single exponential.  What is it?
+
+\section{A consistency check.}
+
+We expect that the dot product between a north pole oriented vector $\Bz = Z \Be_3$ and the spherically polar rotated vector $\Bx = r \Be_3 e^{I\phicap \theta}$ is just
+
+\begin{align}\label{eqn:sphericalPolarUnit:foo13}
+\Bx \cdot \Bz = Z r \cos\theta
+\end{align}
+
+Lets verify this
+
+\begin{align*}
+\Bx \cdot \Bz 
+&= 
+\gpgradezero{ Z \Be_3 \Be_3 r e^{I\phicap \theta}} \\
+&= 
+Z r \gpgradezero{ \cos\theta + I \phicap \sin\theta} \\
+&= 
+Z r \cos\theta &\quad\square
+\end{align*}
 
 \section{A small example application.}
 
 Let's use these results to compute the spherical polar volume element.  Pictorially this can be read off simply from a diagram.  If one is less trusting of pictorial means (or want a method more generally applicable), we can also do this particular calculation algebraically, expanding the determinant of partials
 
-\begin{align}\label{eqn:sphericalPolarUnit:foo4}
+\begin{align}\label{eqn:sphericalPolarUnit:foo9}
 \begin{vmatrix}
 \frac{\partial \Bx}{\partial r} & \frac{\partial \Bx}{\partial \theta} & \frac{\partial \Bx}{\partial \phi} \\
 \end{vmatrix} dr d\theta d\phi
@@ -155,13 +183,13 @@ Now compare to the same calculation proceeding directly with the exponential for
 
 So the area element, the oriented area of the parallelogram between the two vectors $d\theta \partial \Bx/\partial \theta$, and $d\phi \partial \Bx/\partial \phi$ on the spherical surface at radius $r$ is
 
-\begin{align}\label{eqn:sphericalPolarUnit:foo5}
+\begin{align}\label{eqn:sphericalPolarUnit:foo10}
 d\BS = \left(d\theta \frac{\partial \Bx}{\partial \theta}\right) \wedge \left( d\phi \frac{\partial \Bx}{\partial \phi} \right) 
 = r^2 \thetacap \phicap \sin\theta d\theta d\phi
 \end{align}
 
 and the volume element in trivector form is just the product
-\begin{align}\label{eqn:sphericalPolarUnit:foo6}
+\begin{align}\label{eqn:sphericalPolarUnit:foo11}
 d\BV = \left(dr\frac{\partial \Bx}{\partial r}\right) \wedge d\BS
 = r^2 \sin\theta I dr d\theta d\phi
 \end{align}
