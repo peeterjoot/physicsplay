@@ -3,9 +3,9 @@
 \chapter{Spherical Polar unit vectors in exponential form.}
 \label{chap:sphericalPolarUnit}
 %\useCCL
-\blogpage{http://sites.google.com/site/peeterjoot/math2009/sphericalPolarUnit.pdf}
+\blogpage{http://sites.google.com/site/peeterjoot/math2009/sphericalPolarUnit.pdf?revision=3}
 \date{Sept 20, 2009}
-\revisionInfo{$RCSfile: sphericalPolarUnit.tex,v $ Last $Revision: 1.5 $ $Date: 2009/10/09 23:07:01 $}
+\revisionInfo{$RCSfile: sphericalPolarUnit.tex,v $ Last $Revision: 1.6 $ $Date: 2009/10/10 00:54:07 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -142,7 +142,7 @@ Z r \gpgradezero{ \cos\theta + I \phicap \sin\theta} \\
 Z r \cos\theta &\quad\square
 \end{align*}
 
-\section{A small example application.}
+\section{Area and volume elements.}
 
 Let's use these results to compute the spherical polar volume element.  Pictorially this can be read off simply from a diagram.  If one is less trusting of pictorial means (or want a method more generally applicable), we can also do this particular calculation algebraically, expanding the determinant of partials
 
@@ -192,6 +192,77 @@ and the volume element in trivector form is just the product
 \begin{align}\label{eqn:sphericalPolarUnit:foo11}
 d\BV = \left(dr\frac{\partial \Bx}{\partial r}\right) \wedge d\BS
 = r^2 \sin\theta I dr d\theta d\phi
+\end{align}
+
+\section{Line element.}
+
+The line element for the particle moving on a spherical surface can be calculated by calculating the derivative of the spherical polar unit vector $\rcap$
+
+\begin{align}\label{eqn:sphericalPolarUnit:yoo1a}
+\frac{d\rcap}{dt} = \PD{\phi}{\rcap} \frac{d\phi}{dt} 
++\PD{\theta}{\rcap} \frac{d\theta}{dt}
+\end{align}
+
+than taking the magnitude of this vector.  We can start either in coordinate form
+
+\begin{align}\label{eqn:sphericalPolarUnit:yoo1}
+\rcap 
+&= \Be_3 \cos\theta + \Be_1 \sin\theta \cos\phi + \Be_2 \sin\theta \sin\phi
+\end{align}
+
+or, instead do it the fun way, first grouping this into a complex exponential form.  Writing $i = \Be_1 \Be_2$, the first factorization is
+
+\begin{align}\label{eqn:sphericalPolarUnit:yoo2}
+\rcap 
+&= \Be_3 \cos\theta + \Be_1 \sin\theta e^{i\phi} 
+\end{align}
+
+The unit vector $\Brho = \Be_1 e^{i\phi}$ lies in the $x,y$ plane perpendicular to $\Be_3$, so we can form the unit bivector $\Be_3\Brho$ and further factor the unit vector terms into a $\cos + i \sin$ form
+
+\begin{align*}
+\rcap 
+&= \Be_3 \cos\theta + \Be_1 \sin\theta e^{i\phi} \\
+&= \Be_3 (\cos\theta + \Be_3 \Brho \sin\theta) \\
+\end{align*}
+
+This allows the spherical polar unit vector to be expressed in complex exponential form (really a vector-quaternion product)
+
+\begin{align}\label{eqn:sphericalPolarUnit:yoo3}
+\rcap = \Be_3 e^{\Be_3 \Brho \theta} = e^{-\Be_3 \Brho \theta} \Be_3
+\end{align}
+
+Now, calcuating the unit vector velocity, we get
+
+\begin{align*}
+\frac{d\rcap}{dt} 
+&= \Be_3 \Be_3 \Brho e^{\Be_3 \Brho \theta} \thetadot + \Be_1 \Be_1 \Be_2 \sin\theta e^{i\phi} \phidot \\
+&= \Brho e^{\Be_3 \Brho \theta} \left(\thetadot + e^{-\Be_3 \Brho \theta} \Brho \sin\theta e^{-i\phi} \Be_2 \phidot\right) \\
+&= \left( \thetadot + \Be_2 \sin\theta e^{i\phi} \phidot \Brho e^{\Be_3 \Brho \theta} \right) e^{-\Be_3 \Brho \theta} \Brho
+\end{align*}
+
+The last two lines above factor the $\Brho$ vector and the $e^{\Be_3 \Brho \theta}$ quaternion to the left and to the right in preparation for squaring this to calculate the magnitude.
+
+\begin{align*}
+\left( \frac{d\rcap}{dt} \right)^2
+&=
+\gpgradezero{ \left( \frac{d\rcap}{dt} \right)^2 } \\
+&=
+\gpgradezero{ 
+\left( \thetadot + \Be_2 \sin\theta e^{i\phi} \phidot \Brho e^{\Be_3 \Brho \theta} \right) 
+\left(\thetadot + e^{-\Be_3 \Brho \theta} \Brho \sin\theta e^{-i\phi} \Be_2 \phidot\right) } \\
+&=
+\thetadot^2 + \sin^2\theta \phidot^2
++ \sin\theta \phidot \thetadot
+\gpgradezero{ 
+\Be_2 e^{i\phi} \Brho e^{\Be_3 \rho \theta}
++e^{-\Be_3 \rho \theta} \Brho e^{-i\phi} \Be_2
+} \\
+\end{align*}
+
+This last term ($\in \Span \{\rho\Be_1, \rho\Be_2, \Be_1\Be_3, \Be_2\Be_3\}$) has only grade two components, so the scalar part is zero.  We are left with the line element 
+
+\begin{align}\label{eqn:sphericalPolarUnit:yoo4}
+\left(\frac{d (r\rcap)}{dt}\right)^2 = r^2 \left( \thetadot^2 + \sin^2\theta \phidot^2 \right)
 \end{align}
 
 \EndArticle
