@@ -1,5 +1,16 @@
 all : otherbook.pdf
 
+TEXFILES += gacsQ88.tex
+TEXFILES += shear.tex
+TEXFILES += twoNinetyRotations.tex
+TEXFILES += qmbFirstTry.tex
+TEXFILES += wedgeNormVsGaNorm.tex
+TEXFILES += emTensor.tex
+TEXFILES += matrixToOperator.tex
+TEXFILES += schwartzchildMetric.tex
+TEXFILES += tangentspace.tex
+TEXFILES += waveguideRetardedAdvanced.tex
+TEXFILES += maxwellLagRotate.tex
 TEXFILES += main.tex
 TEXFILES += twobodies.tex
 TEXFILES += scratchPlanewave.tex
