@@ -3,6 +3,16 @@ all : otherbook.pdf
 TEXFILES += gacsQ88.tex
 TEXFILES += shear.tex
 TEXFILES += twoNinetyRotations.tex
+TEXFILES += interactionEnergy.tex
+TEXFILES += lightQuantize.tex
+TEXFILES += maxwellSepVars.tex
+TEXFILES += maxwellVacuum_roughNotes.tex
+TEXFILES += maxwellHomoFirstOrder.tex
+TEXFILES += gaBasics.tex
+TEXFILES += gradientAltCoord.tex
+TEXFILES += epsilonMixed.tex
+TEXFILES += dotBlade_rough.tex
+TEXFILES += decodingMercedFlorez.tex
 TEXFILES += qmbFirstTry.tex
 TEXFILES += wedgeNormVsGaNorm.tex
 TEXFILES += emTensor.tex
@@ -30,6 +40,7 @@ TEXFILES += srLagrangianQ.tex
 TEXFILES += reviewAlanGabook.tex
 TEXFILES += reviewAlanGabookCh4.tex
 TEXFILES += longWireQ.tex
+TEXFILES += bivectorSelectWrong.tex
 TEXFILES += cronology.tex
 TEXFILES +=
 
