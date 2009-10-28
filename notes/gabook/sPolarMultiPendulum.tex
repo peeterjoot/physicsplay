@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/sPolarMultiPendulum.pdf}
 \date{Oct 27, 2009}
-\revisionInfo{$RCSfile: sPolarMultiPendulum.tex,v $ Last $Revision: 1.3 $ $Date: 2009/10/28 04:16:50 $}
+\revisionInfo{$RCSfile: sPolarMultiPendulum.tex,v $ Last $Revision: 1.4 $ $Date: 2009/10/28 04:24:34 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -15,10 +15,10 @@
 The planar multiple pendulum problem proved somewhat tractable in the Hamiltonian formulation.  Generalizing this to allow for three dimensional motion is a logical next step.  Here this is attempted, using a Geometric Algebra scalar plus bivector parameterization of the spherical position of each dangling mass relative to the position of what it is attached to, as in
 
 \begin{align}\label{eqn:sPolarMultiPendulum:zoo1}
-\Bz = r \Be_3 e^{j\theta}
+\Bz = l \Be_3 e^{j\theta}
 \end{align}
 
-The exponential is essentially a unit quaternion, rotating the vector $r \Be_3$ from the polar axis to its $\theta,\phi$ angle dependent position.  Two sided rotation operators are avoided here by requiring of the unit bivector $j = \Be_3 \wedge \Bm$, where $\Bm$ is a vector in the plane of rotation passing through the great circle from $\Be_3$ through $\Bz$.  Note that we are free to pick $\Bm = \Be_1 e^{\Be_1 \Be_2 \phi}$, the unit vector in the $x,y$ plane at angle $\phi$ from the x-axis.  When that is done $j = \Be_3 \Bm$ since these are perpendicular.  Setting up the Lagrangian in terms of the bivector $j$ instead of the scalar angle $\phi$ will be attempted, since this is expected to have some elegance and will be a fun way to try the problem.  This should also provide a concrete example of a multivector Lagrangian in a context much simpler than electromagnetic fields or quantum mechanics.
+The exponential is essentially a unit quaternion, rotating the vector $l \Be_3$ from the polar axis to its $\theta,\phi$ angle dependent position.  Two sided rotation operators are avoided here by requiring of the unit bivector $j = \Be_3 \wedge \Bm$, where $\Bm$ is a vector in the plane of rotation passing through the great circle from $\Be_3$ through $\Bz$.  Note that we are free to pick $\Bm = \Be_1 e^{\Be_1 \Be_2 \phi}$, the unit vector in the $x,y$ plane at angle $\phi$ from the x-axis.  When that is done $j = \Be_3 \Bm$ since these are perpendicular.  Setting up the Lagrangian in terms of the bivector $j$ instead of the scalar angle $\phi$ will be attempted, since this is expected to have some elegance and will be a fun way to try the problem.  This should also provide a concrete example of a multivector Lagrangian in a context much simpler than electromagnetic fields or quantum mechanics.
 
 Note finally that a number of simplifying assumptions will be made.  These include use of point masses, zero friction at the pivots and rigid nonspringy massless connecting rods between the masses.
 
@@ -118,10 +118,10 @@ This is a slightly unholy mix of geometric and matrix algebra, but it works to c
 
 Our Lagrangian for the one particle pendulum, measuring potential energy from the horizontal, is then
 
-% h = r(1+\cos\theta)
-% \phi = m g h = m g r (1+\cos\theta)      %% then drop m g r constant term.
+% h = l(1+\cos\theta)
+% \phi = m g h = m g l (1+\cos\theta)      %% then drop m g l constant term.
 \begin{align}\label{eqn:sPolarMultiPendulum:zoo10}
-\LL = {\dot{\BTheta}}^\dagger \inv{2} m r^2 Q \dot{\BTheta} - m g r \cos\theta
+\LL = {\dot{\BTheta}}^\dagger \inv{2} m l^2 Q \dot{\BTheta} - m g l \cos\theta
 \end{align}
 
 We also have a mechanism that should generalize fairly easily to the two or many pendulum cases too.
@@ -150,17 +150,17 @@ Using this the total Kinetic energy is
 K &= {\dot{\BTheta}}^\dagger \inv{2} Q \dot{\BTheta} \\
 R_1 &=
 \begin{bmatrix}
-r_1 j_1 e^{j_1\theta_1} & 
-r_1 \sin\theta_1 &
+l_1 j_1 e^{j_1\theta_1} & 
+l_1 \sin\theta_1 &
 0 &
 0
 \end{bmatrix} \\
 R_2 &=
 \begin{bmatrix}
- r_1 j_1 e^{j_1\theta_1} & 
- r_1 \sin\theta_1 &
- r_2 j_2 e^{j_2\theta_2} & 
- r_2 \sin\theta_2 
+ l_1 j_1 e^{j_1\theta_1} & 
+ l_1 \sin\theta_1 &
+ l_2 j_2 e^{j_2\theta_2} & 
+ l_2 \sin\theta_2 
 \end{bmatrix} \\
 Q &=
 m_1 {R_1}^\dagger R_1
@@ -217,28 +217,33 @@ In general for the multiple particle case this is
 \begin{align}\label{eqn:sPolarMultiPendulum:zoo16}
 Q &=
 {\begin{bmatrix}
-\left(\sum_{k=\max(r,c)}^N m_k \right) {A_r}^\dagger A_c
+\left(\sum_{k=\max(r,c)}^N m_k \right)
+{A_r}^\dagger A_c
 \end{bmatrix}}_{rc} \\
-A_k &= r_k 
+A_k &= l_k 
 \begin{bmatrix}
 j_k e^{j_k \theta_k} & \sin\theta_k
 \end{bmatrix}
 \end{align}
 
-%For the multiple mass generalization only $R$ has to be changed, and it takes the block matrix form over columns $c$
-%
-%\begin{align}\label{eqn:sPolarMultiPendulum:zoo13}
-%R &=
-%\begin{bmatrix}
-%{
-%\left(\sum_{k=c}^N m_k\right) r_c
-%\begin{bmatrix}
-%j_c e^{j_c\theta_c} & 
-%\sin\theta_c 
-%\end{bmatrix}
-%}_c
-%\end{bmatrix}
-%\end{align}
+Expanded explicitly this is
+
+\begin{align}\label{eqn:sPolarMultiPendulum:zoo17}
+Q &=
+{\begin{bmatrix}
+\left(\sum_{k=\max(r,c)}^N m_k \right) l_r l_c
+\begin{bmatrix}
+- j_r e^{-j_r \theta_r} j_c e^{j_c\theta_c} & - j_r e^{-j_r \theta_r} \sin\theta_c \\
+j_c e^{j_c \theta_c} \sin\theta_r & \sin\theta_r \sin\theta_c
+\end{bmatrix}
+\end{bmatrix}}_{rc}
+\end{align}
+
+Observe that the order of products in this expansion is specifically ordered, since the $j_c$ and $j_r$ bivectors do not neccessarily commute.
+
+The potential in the multiple particle case is also fairly straightforward to compute.  Consider the two particle case to illustrate the pattern
+
+TODO.
 
 %\EndArticle
 \EndNoBibArticle
