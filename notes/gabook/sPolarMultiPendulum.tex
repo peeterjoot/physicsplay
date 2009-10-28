@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/sPolarMultiPendulum.pdf}
 \date{Oct 27, 2009}
-\revisionInfo{$RCSfile: sPolarMultiPendulum.tex,v $ Last $Revision: 1.2 $ $Date: 2009/10/27 22:29:15 $}
+\revisionInfo{$RCSfile: sPolarMultiPendulum.tex,v $ Last $Revision: 1.3 $ $Date: 2009/10/28 04:16:50 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -15,14 +15,230 @@
 The planar multiple pendulum problem proved somewhat tractable in the Hamiltonian formulation.  Generalizing this to allow for three dimensional motion is a logical next step.  Here this is attempted, using a Geometric Algebra scalar plus bivector parameterization of the spherical position of each dangling mass relative to the position of what it is attached to, as in
 
 \begin{align}\label{eqn:sPolarMultiPendulum:zoo1}
-z = r \Be_3 e^{j\theta}
+\Bz = r \Be_3 e^{j\theta}
 \end{align}
 
-The exponential is essentially a unit quaternion, rotating the vector $r \Be_3$ from the polar axis to its $\theta,\phi$ angle dependent position.  Two sided rotation operators are avoided here by requiring of the unit bivector $j = \Be_3 \wedge \Bm$, where $\Bm$ is a vector in the plane of rotation passing through the great circle from $\Be_3$ through $z$.  Note that we are free to pick $\Bm = \Be_1 e^{\Be_1 \Be_2 \phi}$, the unit vector in the $x,y$ plane at angle $\phi$ from the x-axis.  When that is done $j = \Be_3 \Bm$ since these are perpendicular.  Setting up the Lagrangian in terms of the bivector $j$ instead of the scalar angle $\phi$ will be attempted, since this is expected to have some elegance and will be a fun way to try the problem.  This should also provide a concrete example of a multivector Lagrangian in a context much simpler than electromagnetic fields or quantum mechanics.
+The exponential is essentially a unit quaternion, rotating the vector $r \Be_3$ from the polar axis to its $\theta,\phi$ angle dependent position.  Two sided rotation operators are avoided here by requiring of the unit bivector $j = \Be_3 \wedge \Bm$, where $\Bm$ is a vector in the plane of rotation passing through the great circle from $\Be_3$ through $\Bz$.  Note that we are free to pick $\Bm = \Be_1 e^{\Be_1 \Be_2 \phi}$, the unit vector in the $x,y$ plane at angle $\phi$ from the x-axis.  When that is done $j = \Be_3 \Bm$ since these are perpendicular.  Setting up the Lagrangian in terms of the bivector $j$ instead of the scalar angle $\phi$ will be attempted, since this is expected to have some elegance and will be a fun way to try the problem.  This should also provide a concrete example of a multivector Lagrangian in a context much simpler than electromagnetic fields or quantum mechanics.
 
 Note finally that a number of simplifying assumptions will be made.  These include use of point masses, zero friction at the pivots and rigid nonspringy massless connecting rods between the masses.
 
 \section{Kinetic energy for the single pendulum case.}
+
+Let's compute derivatives of the unit vector
+
+\begin{align}\label{eqn:sPolarMultiPendulum:zoo2}
+\zcap = \Be_3 e^{j\theta} = e^{-j\theta} \Be_3
+\end{align}
+
+This can be done with both the left and right factorization of $\Be_3$, and are respectively
+
+\begin{align}\label{eqn:sPolarMultiPendulum:zoo3}
+\dot{\zcap} 
+&= \Be_3 \left( j \thetadot e^{j\theta} + \frac{dj}{dt} \sin\theta \right) \\
+&=
+\Be_3
+\begin{bmatrix}
+j e^{j\theta} & \sin\theta
+\end{bmatrix}
+\frac{d}{dt} 
+\begin{bmatrix}
+\theta \\
+j
+\end{bmatrix}
+\end{align}
+
+\begin{align}\label{eqn:sPolarMultiPendulum:zoo4}
+\dot{\zcap} &= \left( -j \thetadot e^{-j\theta} - \frac{dj}{dt} \sin\theta \right) \Be_3 \\
+&=
+\left(
+\frac{d}{dt} 
+\begin{bmatrix}
+\theta & -j
+\end{bmatrix}
+\right)
+\begin{bmatrix}
+-j e^{-j\theta} \\
+\sin\theta
+\end{bmatrix}
+\Be_3
+\end{align}
+
+These derivatives have been grouped into a matrix factors that allow a natural seeming conjugate operation to be defined.  That is for a matrix of multivector elements $a_{ij}$ 
+
+\begin{align}\label{eqn:sPolarMultiPendulum:zoo5}
+A =
+\begin{bmatrix}
+a_{ij}
+\end{bmatrix}
+\end{align}
+
+define a conjugate matrix, as the transpose of the reversed elements
+
+\begin{align}\label{eqn:sPolarMultiPendulum:zoo6}
+A^\dagger \equiv
+\begin{bmatrix}
+\tilde{a}_{ji}
+\end{bmatrix}
+\end{align}
+
+With this definition, plus two helpers
+
+\begin{align}\label{eqn:sPolarMultiPendulum:zoo7}
+\BTheta &\equiv
+\begin{bmatrix}
+\theta \\ j
+\end{bmatrix} \\
+R &= 
+\begin{bmatrix}
+j e^{j\theta} & \sin\theta
+\end{bmatrix}
+\end{align}
+
+Our velocity becomes
+
+\begin{align}\label{eqn:sPolarMultiPendulum:zoo8}
+{\dot{\zcap}}^2 
+&= {\dot{\BTheta}}^\dagger R^\dagger R \dot{\BTheta} \\
+\end{align}
+
+Explicitly, expanding the inner matrix product we can write
+
+\begin{align}\label{eqn:sPolarMultiPendulum:zoo9}
+Q &\equiv R^\dagger R \\
+&=
+\begin{bmatrix}
+1 & -j e^{-j\theta} \sin\theta \\
+j e^{j\theta} \sin\theta & \sin^2 \theta
+\end{bmatrix} \\
+{\dot{\zcap}}^2 
+&= {\dot{\BTheta}}^\dagger Q \dot{\BTheta} \\
+\end{align}
+
+This is a slightly unholy mix of geometric and matrix algebra, but it works to compactly express the velocity dependence.  Observe that this inner matrix $Q = Q^\dagger$, so it is Hermitian with this definition of conjugation.
+
+Our Lagrangian for the one particle pendulum, measuring potential energy from the horizontal, is then
+
+% h = r(1+\cos\theta)
+% \phi = m g h = m g r (1+\cos\theta)      %% then drop m g r constant term.
+\begin{align}\label{eqn:sPolarMultiPendulum:zoo10}
+\LL = {\dot{\BTheta}}^\dagger \inv{2} m r^2 Q \dot{\BTheta} - m g r \cos\theta
+\end{align}
+
+We also have a mechanism that should generalize fairly easily to the two or many pendulum cases too.
+
+\section{Two and multi particle case.}
+
+For a two particle case where the position of the second mass could be expressed as
+
+\begin{align}\label{eqn:sPolarMultiPendulum:zoo11a}
+\Bz_2 = \Bz_1 + \Be_3 e^{j_2 \theta_2}
+\end{align}
+
+We can use the same factorization and write for our collection of angular velocities
+
+\begin{align}\label{eqn:sPolarMultiPendulum:zoo11}
+\BTheta &\equiv
+\begin{bmatrix}
+\theta_1 \\ j_1 \\
+\theta_2 \\ j_2 \\
+\end{bmatrix} 
+\end{align}
+
+Using this the total Kinetic energy is
+
+\begin{align}\label{eqn:sPolarMultiPendulum:zoo12}
+K &= {\dot{\BTheta}}^\dagger \inv{2} Q \dot{\BTheta} \\
+R_1 &=
+\begin{bmatrix}
+r_1 j_1 e^{j_1\theta_1} & 
+r_1 \sin\theta_1 &
+0 &
+0
+\end{bmatrix} \\
+R_2 &=
+\begin{bmatrix}
+ r_1 j_1 e^{j_1\theta_1} & 
+ r_1 \sin\theta_1 &
+ r_2 j_2 e^{j_2\theta_2} & 
+ r_2 \sin\theta_2 
+\end{bmatrix} \\
+Q &=
+m_1 {R_1}^\dagger R_1
++m_2 {R_2}^\dagger R_2
+\end{align}
+
+An expansion of $Q$ is essentially one of block matrix multiplication (where we already have to be careful with order of operations as we do for the geometric product elements themselves).  We have something like
+
+\begin{align}\label{eqn:sPolarMultiPendulum:zoo13}
+R_1 &= 
+\begin{bmatrix}
+A_1 & 0
+\end{bmatrix} \\
+{R_1}^\dagger &= 
+\begin{bmatrix}
+{A_1}^\dagger \\
+0
+\end{bmatrix} \\
+R_2 &= 
+\begin{bmatrix}
+A_1 & A_2
+\end{bmatrix} \\
+{R_2}^\dagger &= 
+\begin{bmatrix}
+{A_1}^\dagger \\
+{A_2}^\dagger \\
+\end{bmatrix} 
+\end{align}
+
+We have for the products
+\begin{align}\label{eqn:sPolarMultiPendulum:zoo14}
+{R_1}^\dagger R_1 &=
+\begin{bmatrix}
+{A_1}^\dagger A_1 & 0 \\
+0 & 0
+\end{bmatrix} \\
+{R_2}^\dagger R_2 &=
+\begin{bmatrix}
+{A_1}^\dagger A_1 & {A_1}^\dagger A_2 \\
+{A_2}^\dagger A_1 & {A_2}^\dagger A_2 \\
+\end{bmatrix} 
+\end{align}
+
+So our quadratic form matrix is
+\begin{align}\label{eqn:sPolarMultiPendulum:zoo15}
+Q =
+\begin{bmatrix}
+(m_1 + m_2) {A_1}^\dagger A_1 & m_2 {A_1}^\dagger A_2 \\
+m_2 {A_2}^\dagger A_1 & m_2 {A_2}^\dagger A_2 \\
+\end{bmatrix} 
+\end{align}
+
+In general for the multiple particle case this is
+\begin{align}\label{eqn:sPolarMultiPendulum:zoo16}
+Q &=
+{\begin{bmatrix}
+\left(\sum_{k=\max(r,c)}^N m_k \right) {A_r}^\dagger A_c
+\end{bmatrix}}_{rc} \\
+A_k &= r_k 
+\begin{bmatrix}
+j_k e^{j_k \theta_k} & \sin\theta_k
+\end{bmatrix}
+\end{align}
+
+%For the multiple mass generalization only $R$ has to be changed, and it takes the block matrix form over columns $c$
+%
+%\begin{align}\label{eqn:sPolarMultiPendulum:zoo13}
+%R &=
+%\begin{bmatrix}
+%{
+%\left(\sum_{k=c}^N m_k\right) r_c
+%\begin{bmatrix}
+%j_c e^{j_c\theta_c} & 
+%\sin\theta_c 
+%\end{bmatrix}
+%}_c
+%\end{bmatrix}
+%\end{align}
 
 %\EndArticle
 \EndNoBibArticle
