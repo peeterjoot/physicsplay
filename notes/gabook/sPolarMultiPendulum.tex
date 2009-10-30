@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/sPolarMultiPendulum.pdf}
 \date{Oct 27, 2009}
-\revisionInfo{$RCSfile: sPolarMultiPendulum.tex,v $ Last $Revision: 1.8 $ $Date: 2009/10/30 01:23:17 $}
+\revisionInfo{$RCSfile: sPolarMultiPendulum.tex,v $ Last $Revision: 1.9 $ $Date: 2009/10/30 03:26:58 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -270,7 +270,7 @@ Alternately, dropping all the constant terms (using the horizon as the potential
 Lets collect all the bits and pieces now for the multiple pendulum Lagrangian now, repeating for coherency, and introducing a tiny bit more notation (mass sums and block angular velocity matrices) for convienence
 
 \begin{align}\label{eqn:sPolarMultiPendulum:zoo20}
-\LL &= K - \phi \\
+\LL &= K - \phi + C \\
 \BTheta_i &=
 \begin{bmatrix}
 \theta_i \\
@@ -297,7 +297,15 @@ K &=
 g \sum_{i=1}^N \mu_i r_i \cos\theta_i
 \end{align}
 
+One additional term $C$, a constraint enforced by Lagrange multipliers, has been added to the Lagrangian above to encode the additional assumptions made in this derivation.  We have utilized a unit bivector assumption, as well as a $\Be_3$ containment assumption for each of the planes ($\Be_3 \wedge j = 0$).  Thus it appears that we have to add to the Lagrangian
+
+\begin{align}\label{eqn:sPolarMultiPendulum:noo6}
+C = \sum_k \lambda_k ( {j_k}^2 + 1 ) + \alpha_k \Be_3 \wedge j_k
+\end{align}
+
 \section{Multivector Euler-Lagrange equations.}
+
+\subsection{An example to build intuition.}
 
 We now have the Lagrangian for a set of connected spherical pendulums.  Unfortunately, the generalized coordinates used have included bivectors, and we don't know how to evaluate the Euler Lagrange equations for anything but scalar generalized coordinates.  To help understand what we have to do, lets consider the very simplest bivector parameterized Lagrangian, that of a spherical pendulum constrained (perhaps by a track or a surface) of moving only in a ring.  This is shown pictorially in figure (\ref{fig:sPolarMultiPendulum:pendulumPolarCircular})
 
@@ -312,6 +320,71 @@ The potential energy is fixed on this surface, so our Lagrangian is purely kinet
 \begin{align}\label{eqn:sPolarMultiPendulum:noo1}
 \LL = -\inv{2} m l^2 {j'}^2
 \end{align}
+
+The goal is to develop Euler-Lagrange equations that can handle a Lagrangian like this, but until we figure out how to do that, tackling this using variation of the action around a stationary solution is at least possible.  Write
+
+\begin{align}\label{eqn:sPolarMultiPendulum:noo2}
+S = \int \LL dt
+\end{align}
+
+Introducing a bivector variation $j = \bar{j} + \epsilon$ we have
+
+\begin{align*}
+\bar{S} + \delta S 
+&= 
+-\inv{2} m l^2 \int (\bar{j}' + \epsilon')^2 dt \\
+&= 
+-\inv{2} m l^2 \int (\bar{j}')^2 dt
+-\inv{2} m l^2 \int \left( {\bar{j}}' \epsilon' + \epsilon' {\bar{j}}' \right) dt
+-\inv{2} m l^2 \int (\epsilon')^2 dt
+\end{align*}
+
+The first term is just $\bar{S}$.  Setting the variation $\delta S = 0$ (neglecting the quadratic $\epsilon'$ term) and integrating by parts we have
+
+\begin{align*}
+0 &= \delta S \\
+&= 
+\int dt \left( \frac{d}{dt}\left( \inv{2} m l^2 {\bar{j}}' \right) \epsilon + \epsilon \frac{d}{dt}\left( \inv{2} m l^2 {\bar{j}}' \right) \right) \\
+&= 
+\int \left( \frac{d}{dt} m l^2 {\bar{j}}' \right) \cdot \epsilon dt 
+\end{align*}
+
+With $\epsilon$ arbitrary we have a solution to the variation problem for some bivector constant $\kappa$
+
+\begin{align}\label{eqn:sPolarMultiPendulum:noo3}
+m l^2 j' = \kappa
+\end{align}
+
+Is this consistent with what we get with application of the Euler-Lagrange equations to the scalar Lagrangian for this problem?  Using an azimuthal angle $\phi$, that Langrangian is
+
+\begin{align}\label{eqn:sPolarMultiPendulum:noo4}
+\LL = \inv{2} m l^2 \dot{\phi}^2
+\end{align}
+
+and the Euler Lagrange equations give us, for a scalar constant $\mu$
+
+\begin{align}\label{eqn:sPolarMultiPendulum:noo5}
+m l^2 \dot{\phi} = \mu
+\end{align}
+
+To reconsile this with the bivector result observe the relation between the bivector derivative and azimuthal angular velocity.
+
+\begin{align*}
+j 
+&= \Be_3 \wedge \left(\Be_1 e^{\Be_1 \Be_2 \phi} \right) \\
+&= \Be_3 \left(\Be_1 \cos\phi + \Be_2 \sin\phi \right) \\
+\end{align*}
+
+and 
+
+\begin{align*}
+j'
+&= \Be_3 \left(-\Be_1 \sin\phi + \Be_2 \cos\phi \right) \dot{\phi} \\
+&= \Be_3 \Be_2 \left(\Be_1 \Be_2 \sin\phi + \cos\phi \right) \dot{\phi} \\
+&= -\Be_2 j \dot{\phi} \\
+\end{align*}
+
+While in the square we have $(j')^2 = -\dot{\phi}^2$, there is still a subtle difference in the scalar and bivector results, since $j'$ and $\dot{\phi}$ are not related by a constant, but instead by a phase factor proportional to $\Be_2 j$.  This difference in results has its origins in the Lagrange constraint on $j$, which I lazily left off \ref{eqn:sPolarMultiPendulum:noo1} and the subsequent variation.  The constraints enforced by the Lagrange multipliers are really required to get a meaningful result out of things in the end.
 
 \section{Evaluating the pendulum Euler-Lagrange equations.}
 
