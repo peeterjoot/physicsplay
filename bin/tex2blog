@@ -1,6 +1,9 @@
 #! /usr/bin/perl
 
 # $Log: tex2blog,v $
+# Revision 1.18  2009/11/04 23:56:24  Peeter
+# *** empty log message ***
+#
 # Revision 1.17  2009/09/18 04:43:41  Peeter
 # got it working again mostly (at least in latexmathml mode.
 # )
@@ -14,6 +17,11 @@
 #
 
 # BUGS:
+#------
+# mathml: equation numbering requires that section headings be suppressed.
+# mathml: eqnarray requires more than one equation line, and &= shows up as
+#         is otherwise.  Not doing that in the original .tex is required.
+# wordpress: not tested since rewrite.
 
 use strict ;
 use warnings ;
@@ -27,7 +35,7 @@ my $mathml = 0 ;
 my $wordpress = 0 ;
 
 # for use of LaTeXMathML.js in a standalone html file:
-my $mathmlHtml = 1 ; 
+my $mathmlHtml = 0 ; 
 
 GetOptions( 
    'mathml!'      => \$mathml,
@@ -117,6 +125,7 @@ sub processOneEquation
       }
       else
       {
+         die "no equation number for '$label'\n" if ( !exists $equations{$label} ) ;
          $curEquationLabel = "\\quad\\quad\\quad($equations{$label})" ;
       }
 
@@ -175,153 +184,6 @@ sub processOneEquation
    }
 
    return $eq ;
-}
-
-sub expandPeetersMathModeMacros
-{
-   my $out = "@_" ;
-
-   my $r1 = qr/
-        (                   # start of capture buffer 1
-        {                   # match an opening angle bracket
-            (?:               
-                [^{}]++     # one or more non angle brackets, non backtracking
-                  |                  
-                (?1)        # found { or }, so recurse to capture buffer 1
-            )*                 
-        }                   # match a closing angle bracket
-        )                   # end of capture buffer 1
-        /x;
-
-   my $r2 = qr/
-        (                   # start of capture buffer 1
-        {                   # match an opening angle bracket
-            (?:               
-                [^{}]++     # one or more non angle brackets, non backtracking
-                  |                  
-                (?1)        # found { or }, so recurse to capture buffer 1
-            )*                 
-        }                   # match a closing angle bracket
-        )                   # end of capture buffer 1
-        (                   # start of capture buffer 1
-        {                   # match an opening angle bracket
-            (?:               
-                [^{}]++     # one or more non angle brackets, non backtracking
-                  |                  
-                (?1)        # found { or }, so recurse to capture buffer 1
-            )*                 
-        }                   # match a closing angle bracket
-        )                   # end of capture buffer 1
-        /x;
-
-   $out =~ s/\\\\/\\\\ /g;
-#   $out =~ s/&=/=/g;
-
-   # convert some of my macros:
-   #$out =~ s/\\inv{(.*?)}/\\frac{1}{$1}/g;
-   $out =~ s/\\inv${r1}/\\frac{1}{$1}/g;
-   #$out =~ s/\\Abs{(.*?)}/{\\left\\lvert{$1}\\right\\rvert}/g;
-
-   if ( $mathml )
-   {
-      # why \\left\lvert?
-      $out =~ s/\\Abs${r1}/{\\left\\vert$1\\right\\vert}/g;
-   }
-   else
-   {
-      $out =~ s/\\Abs${r1}/{\\left\\lvert$1\\right\\rvert}/g;
-   }
-
-   $out =~ s/\\gpgrade${r2}/{\\left\\langle{$1}\\right\\rangle}_{$2}/g;
-
-#   $out =~ s/\\gpgradezero{(.*?)}/\\left\\langle{$1}\\right\\rangle/g;
-#   $out =~ s/\\gpgradeone{(.*?)}/{\\left\\langle{$1}\\right\\rangle}_{1}/g;
-#   $out =~ s/\\gpgradetwo{(.*?)}/{\\left\\langle{$1}\\right\\rangle}_{2}/g;
-#   $out =~ s/\\gpgradethree{(.*?)}/{\\left\\langle{$1}\\right\\rangle}_{3}/g;
-   $out =~ s/\\gpgradezero${r1}/\\left\\langle{$1}\\right\\rangle/g;
-   $out =~ s/\\gpgradeone${r1}/{\\left\\langle{$1}\\right\\rangle}_{1}/g;
-   $out =~ s/\\gpgradetwo${r1}/{\\left\\langle{$1}\\right\\rangle}_{2}/g;
-   $out =~ s/\\gpgradethree${r1}/{\\left\\langle{$1}\\right\\rangle}_{3}/g;
-   $out =~ s/\\gpgradefour${r1}/{\\left\\langle{$1}\\right\\rangle}_{4}/g;
-
-   $out =~ s/\\rgrad/\\stackrel{ \\rightarrow }\\grad/g;
-   $out =~ s/\\lgrad/\\stackrel{ \\leftarrow }\\grad/g;
-   $out =~ s/\\lrgrad/\\stackrel{ \\leftrightarrow }\\grad/g;
-   $out =~ s/\\lrpartial/\\stackrel{ \\leftrightarrow }\\partial/g;
-   $out =~ s/\\rspacegrad/\\stackrel{ \\rightarrow }\\spacegrad/g;
-   $out =~ s/\\lspacegrad/\\stackrel{ \\leftarrow }\\spacegrad/g;
-
-   $out =~ s/\\BCB/\\boldsymbol{\\mathcal{B}}/g;
-   $out =~ s/\\EE/\\boldsymbol{\\mathcal{E}}/g;
-   $out =~ s/\\kcap/\\hat{\\Bk}/g;
-   $out =~ s/\\xcap/\\hat{\\Bx}/g;
-   $out =~ s/\\ncap/\\hat{\\Bn}/g;
-   $out =~ s/\\Bomega/\\boldsymbol{\\omega}/g;
-   $out =~ s/\\Bsigma/\\boldsymbol{\\sigma}/g;
-   $out =~ s/\\Brho/\\boldsymbol{\\rho}/g;
-   $out =~ s/\\(.)cap/\\hat{\\B$1}/g;
-   $out =~ s/\\B(.)/\\mathbf{$1}/g;
-   $out =~ s/\\LL/\\mathcal{L}/g;
-   $out =~ s/\\FF/\\mathcal{F}/g;
-   $out =~ s/\\cross/\\times/g;
-   $out =~ s/\\grad/\\nabla/g;
-   $out =~ s/\\spacegrad/\\boldsymbol{\\nabla}/g;
-   $out =~ s/\\delambertian/\\square/g;
-   $out =~ s/\\conj/{*}/g;
-
-   $out =~ s,\\PDi${r2},{\\partial $2}/{\\partial $1},g ;
-
-   $out =~ s/\\PD${r2}/\\frac{\\partial $2}{\\partial $1}/g ;
-   $out =~ s/\\PauliI/\\begin{bmatrix} 1 & 0 \\\\ 0 & 1 \\\\ \\end{bmatrix}/g;
-   $out =~ s/\\PauliX/\\begin{bmatrix} 0 & 1 \\\\ 1 & 0 \\\\ \\end{bmatrix}/g;
-   $out =~ s/\\PauliYNoI/\\begin{bmatrix} 0 & -1 \\\\ 1 & 0 \\\\ \\end{bmatrix}/g;
-   $out =~ s/\\PauliY/\\begin{bmatrix} 0 & -i \\\\ i & 0 \\\\ \\end{bmatrix}/g;
-   $out =~ s/\\PauliZ/\\begin{bmatrix} 1 & 0 \\\\ 0 & -1 \\\\ \\end{bmatrix}/g;
-   $out =~ s/\\Clifford{(.*?)}{(.*?)}/\\mathcal{C}_{\\{{$1},{$2}\\}}/g;
-   $out =~ s/\\scalarProduct{(.*?)}{(.*?)}/{$1} \\bullet {$2}/g;
-
-#   $out =~ s/\\antisymmetric{(.*?)}{(.*?)}/\\left[{$1},{$2}\\right]/g;
-#   $out =~ s/\\symmetric{(.*?)}{(.*?)}/\\left\\{{$1},{$2}\\right\\}/g;
-
-# run twice?
-   $out =~ s/\\antisymmetric${r2}/\\left[$1,$2\\right]/g;
-   $out =~ s/\\symmetric${r2}/\\left\\{$1,$2\\right\\}/g;
-
-   $out =~ s/\\antisymmetric${r2}/\\left[$1,$2\\right]/g;
-   $out =~ s/\\symmetric${r2}/\\left\\{$1,$2\\right\\}/g;
-
-   $out =~ s/\\DETuvwijk{(.*?)}{(.*?)}{(.*?)}{(.*?)}{(.*?)}{(.*?)}/\\begin{vmatrix} {$1}_{$4} & {$1}_{$5} & {$1}_{$6} \\\\ {$2}_{$4} & {$2}_{$5} & {$2}_{$6} \\\\ {$3}_{$4} & {$3}_{$5} & {$3}_{$6} \\end{vmatrix}/g;
-
-   $out =~ s/\\traceB${r1}/\\tr\\left({$1}\\right)/g;
-   $out =~ s/\\trace${r1}/\\tr{$1}/g;
-   $out =~ s/\\tr/\\text{Tr}/g;
-   $out =~ s/\\RejName/\\text{Rej}/g;
-   $out =~ s/\\Proj/\\text{Proj}/g;
-   $out =~ s/\\Scalar/\\text{Scalar}/g;
-   $out =~ s/\\Real/\\text{Real}/g;
-   $out =~ s/\\Imag/\\text{Imag}/g;
-   $out =~ s/\\symmetricVecBladePauli{(.*?)}{(.*?)}{(.*?)}/\\left\\{{$1},\\left[{$2},{$3}\\right]\\right\\}/g;
-   $out =~ s/\\symmetricBladeVecPauli{(.*?)}{(.*?)}{(.*?)}/\\left\\{\\left[{$1},{$2}\\right],{$3}\\right\\}/g;
-   $out =~ s/\\ahat/\\hat{a}/g;
-   $out =~ s/\\bhat/\\hat{b}/g;
-   $out =~ s/\\xhat/\\hat{x}/g;
-   $out =~ s/\\thetacap/\\hat{\\boldsymbol{\\theta}}/g;
-   $out =~ s/\\phicap/\\hat{\\boldsymbol{\\phi}}/g;
-   $out =~ s/\\questionEquals/\\stackrel{?}{=}/g;
-   $out =~ s/\\T\b/\\text{T}/g;
-
-   if ( $mathml )
-   {
-      $out =~ s/\\text/\\textrm/g;
-
-      $out =~ s/\\lvert/\\left\\vert/g ;
-      $out =~ s/\\rvert/\\right\\vert/g ;
-
-      # hack.  Not supported by the script.  should use arrows over.
-      $out =~ s/\\boldsymbol//g ;
-   }
-
-   return $out ;
 }
 
 sub processBib
@@ -453,6 +315,8 @@ sub processAuxFile
 
       while (<$fh>)
       {
+         chomp ;
+
          if ( /^\\newlabel{(.*?)}.*equation\.(.*?)}/ )
          {
             $eq{$1} = $2 ;
@@ -460,6 +324,13 @@ sub processAuxFile
       }
       close $fh ;
    }
+
+# debug.  turns out that equation labels don't work quite right when they
+# are also in a \enumerate \item ... context.
+#   foreach (keys %eq)
+#   {
+#      warn "label: '$_'\n" ;
+#   }
 
    return %eq ;
 }
@@ -490,8 +361,9 @@ sub processRest
 
    my @allLines = split( /\n/, $allOneLine ) ;
 
-   #my $urlMessage = "Click here for a PDF of this post with nicer formatting" ;
-   my $urlMessage = "Click here for a PDF of this sequence of posts with nicer formatting" ;
+   my $urlMessage ;
+   $urlMessage = "Click here for a PDF of this post with nicer formatting" ;
+   $urlMessage = "Click here for a PDF of this sequence of posts with nicer formatting" ;
 
    my $latexDollarStart ;
 
@@ -555,6 +427,8 @@ sub processRest
 
       s/\\ref{(eqn:.*?)}/$equations{$1}/g ;
 
+# latexMathMl can do section's but this makes the equation number matching harder (since you get 1.1 1.2 ...)
+# could deal with that by processing things section by section, and then within each section doing all the equations. 
 #      if ( !$mathml )
 #      {
          s,\\section{(.*)},<h1>$1</h1>,;
@@ -568,6 +442,173 @@ sub processRest
       s/\\label{(.*?)}//g;
 
       $out .= "$_\n" ;
+   }
+
+   return $out ;
+}
+
+sub expandPeetersMathModeMacros
+{
+   my $out = "@_" ;
+
+   my $r1 = qr/
+        (                   # start of capture buffer 1
+        {                   # match an opening angle bracket
+            (?:               
+                [^{}]++     # one or more non angle brackets, non backtracking
+                  |                  
+                (?1)        # found { or }, so recurse to capture buffer 1
+            )*                 
+        }                   # match a closing angle bracket
+        )                   # end of capture buffer 1
+        /x;
+
+   my $r2 = qr/
+        (                   # start of capture buffer 1
+        {                   # match an opening angle bracket
+            (?:               
+                [^{}]++     # one or more non angle brackets, non backtracking
+                  |                  
+                (?1)        # found { or }, so recurse to capture buffer 1
+            )*                 
+        }                   # match a closing angle bracket
+        )                   # end of capture buffer 1
+        (                   # start of capture buffer 1
+        {                   # match an opening angle bracket
+            (?:               
+                [^{}]++     # one or more non angle brackets, non backtracking
+                  |                  
+                (?1)        # found { or }, so recurse to capture buffer 1
+            )*                 
+        }                   # match a closing angle bracket
+        )                   # end of capture buffer 1
+        /x;
+
+   $out =~ s/\\\\/\\\\ /g;
+#   $out =~ s/&=/=/g;
+
+   # convert some of my macros:
+
+# special case this one.  bivector.tex shows that there is trouble with this
+# expansion.
+   #$out =~ s/\\inv{\\B(.)}/\\frac{1}{\\mathbf{$1}}/g;
+
+   $out =~ s/\\inv${r1}/\\frac{1}{$1}/g;
+   #$out =~ s/\\Abs{(.*?)}/{\\left\\lvert{$1}\\right\\rvert}/g;
+
+   if ( $mathml )
+   {
+      # why \\left\lvert?
+      $out =~ s/\\Abs${r1}/{\\left\\vert$1\\right\\vert}/g;
+      $out =~ s/\\abs${r1}/{\\left\\vert$1\\right\\vert}/g;
+   }
+   else
+   {
+      $out =~ s/\\Abs${r1}/{\\left\\lvert$1\\right\\rvert}/g;
+      $out =~ s/\\abs${r1}/{\\left\\lvert$1\\right\\rvert}/g;
+   }
+
+   $out =~ s/\\gpgrade${r2}/{\\left\\langle{$1}\\right\\rangle}_{$2}/g;
+
+#   $out =~ s/\\gpgradezero{(.*?)}/\\left\\langle{$1}\\right\\rangle/g;
+#   $out =~ s/\\gpgradeone{(.*?)}/{\\left\\langle{$1}\\right\\rangle}_{1}/g;
+#   $out =~ s/\\gpgradetwo{(.*?)}/{\\left\\langle{$1}\\right\\rangle}_{2}/g;
+#   $out =~ s/\\gpgradethree{(.*?)}/{\\left\\langle{$1}\\right\\rangle}_{3}/g;
+   $out =~ s/\\gpgradezero${r1}/\\left\\langle{$1}\\right\\rangle/g;
+   $out =~ s/\\gpgradeone${r1}/{\\left\\langle{$1}\\right\\rangle}_{1}/g;
+   $out =~ s/\\gpgradetwo${r1}/{\\left\\langle{$1}\\right\\rangle}_{2}/g;
+   $out =~ s/\\gpgradethree${r1}/{\\left\\langle{$1}\\right\\rangle}_{3}/g;
+   $out =~ s/\\gpgradefour${r1}/{\\left\\langle{$1}\\right\\rangle}_{4}/g;
+
+   $out =~ s/\\rgrad/\\stackrel{ \\rightarrow }\\grad/g;
+   $out =~ s/\\lgrad/\\stackrel{ \\leftarrow }\\grad/g;
+   $out =~ s/\\lrgrad/\\stackrel{ \\leftrightarrow }\\grad/g;
+   $out =~ s/\\lrpartial/\\stackrel{ \\leftrightarrow }\\partial/g;
+   $out =~ s/\\rspacegrad/\\stackrel{ \\rightarrow }\\spacegrad/g;
+   $out =~ s/\\lspacegrad/\\stackrel{ \\leftarrow }\\spacegrad/g;
+
+   $out =~ s/\\BCB/\\boldsymbol{\\mathcal{B}}/g;
+   $out =~ s/\\EE/\\boldsymbol{\\mathcal{E}}/g;
+   $out =~ s/\\kcap/\\hat{\\Bk}/g;
+   $out =~ s/\\xcap/\\hat{\\Bx}/g;
+   $out =~ s/\\ncap/\\hat{\\Bn}/g;
+   $out =~ s/\\Bomega/\\boldsymbol{\\omega}/g;
+   $out =~ s/\\Bsigma/\\boldsymbol{\\sigma}/g;
+   $out =~ s/\\Brho/\\boldsymbol{\\rho}/g;
+   $out =~ s/\\BTheta/\\boldsymbol{\\Theta}/g;
+   $out =~ s/\\(.)cap/\\hat{\\B$1}/g;
+   $out =~ s/\\B(.)/\\mathbf{$1}/g;
+   $out =~ s/\\LL/\\mathcal{L}/g;
+   $out =~ s/\\FF/\\mathcal{F}/g;
+   $out =~ s/\\cross/\\times/g;
+   $out =~ s/\\grad/\\nabla/g;
+   $out =~ s/\\spacegrad/\\boldsymbol{\\nabla}/g;
+   $out =~ s/\\delambertian/\\square/g;
+   $out =~ s/\\conj/{*}/g;
+
+   $out =~ s,\\PDi${r2},{\\partial $2}/{\\partial $1},g ;
+
+   $out =~ s/\\PD${r2}/\\frac{\\partial $2}{\\partial $1}/g ;
+   $out =~ s/\\PauliI/\\begin{bmatrix} 1 & 0 \\\\ 0 & 1 \\\\ \\end{bmatrix}/g;
+   $out =~ s/\\PauliX/\\begin{bmatrix} 0 & 1 \\\\ 1 & 0 \\\\ \\end{bmatrix}/g;
+   $out =~ s/\\PauliYNoI/\\begin{bmatrix} 0 & -1 \\\\ 1 & 0 \\\\ \\end{bmatrix}/g;
+   $out =~ s/\\PauliY/\\begin{bmatrix} 0 & -i \\\\ i & 0 \\\\ \\end{bmatrix}/g;
+   $out =~ s/\\PauliZ/\\begin{bmatrix} 1 & 0 \\\\ 0 & -1 \\\\ \\end{bmatrix}/g;
+   $out =~ s/\\Clifford{(.*?)}{(.*?)}/\\mathcal{C}_{\\{{$1},{$2}\\}}/g;
+   $out =~ s/\\scalarProduct{(.*?)}{(.*?)}/{$1} \\bullet {$2}/g;
+
+#   $out =~ s/\\antisymmetric{(.*?)}{(.*?)}/\\left[{$1},{$2}\\right]/g;
+#   $out =~ s/\\symmetric{(.*?)}{(.*?)}/\\left\\{{$1},{$2}\\right\\}/g;
+
+# run twice?
+   $out =~ s/\\antisymmetric${r2}/\\left[$1,$2\\right]/g;
+   $out =~ s/\\symmetric${r2}/\\left\\{$1,$2\\right\\}/g;
+
+   $out =~ s/\\antisymmetric${r2}/\\left[$1,$2\\right]/g;
+   $out =~ s/\\symmetric${r2}/\\left\\{$1,$2\\right\\}/g;
+
+   $out =~ s/\\DETuvwijk{(.*?)}{(.*?)}{(.*?)}{(.*?)}{(.*?)}{(.*?)}/\\begin{vmatrix} {$1}_{$4} & {$1}_{$5} & {$1}_{$6} \\\\ {$2}_{$4} & {$2}_{$5} & {$2}_{$6} \\\\ {$3}_{$4} & {$3}_{$5} & {$3}_{$6} \\end{vmatrix}/g;
+
+   $out =~ s/\\traceB${r1}/\\tr\\left({$1}\\right)/g;
+   $out =~ s/\\trace${r1}/\\tr{$1}/g;
+   $out =~ s/\\tr/\\text{Tr}/g;
+   $out =~ s/\\RejName/\\text{Rej}/g;
+   $out =~ s/\\Proj/\\text{Proj}/g;
+   $out =~ s/\\Rot/\\text{Rot}/g;
+   $out =~ s/\\Scalar/\\text{Scalar}/g;
+   $out =~ s/\\Real/\\text{Real}/g;
+   $out =~ s/\\Imag/\\text{Imag}/g;
+   $out =~ s/\\symmetricVecBladePauli{(.*?)}{(.*?)}{(.*?)}/\\left\\{{$1},\\left[{$2},{$3}\\right]\\right\\}/g;
+   $out =~ s/\\symmetricBladeVecPauli{(.*?)}{(.*?)}{(.*?)}/\\left\\{\\left[{$1},{$2}\\right],{$3}\\right\\}/g;
+   $out =~ s/\\(.)hat/\\hat{$1}/g;
+   $out =~ s/\\(.)dot\b/\\dot{$1}/g;
+   $out =~ s/\\thetadot/\\dot{\\theta}/g;
+   $out =~ s/\\phidot/\\dot{\\phi}/g;
+
+   $out =~ s/\\thetacap/\\hat{\\boldsymbol{\\theta}}/g;
+   $out =~ s/\\phicap/\\hat{\\boldsymbol{\\phi}}/g;
+   $out =~ s/\\questionEquals/\\stackrel{?}{=}/g;
+   $out =~ s/\\T\b/\\text{T}/g;
+
+   $out =~ s/\\evalbar${r2}/{\\left.{$1}\\right\\vert}_{$2}/g ;
+   $out =~ s/\\evalnobar${r2}/{$1}_{$2}/g ;
+
+# need a general way of dealing with this.   wordpress latex doesn't like it
+# the multiply nested {{...}} content.
+#
+   $out =~ s/{{\\mathbf{(.)}}/{\\mathbf{$1}/g;
+# bivector.tex.  multiple passes of this required: ??
+   $out =~ s/\\gpgradetwo${r1}/{\\left\\langle{$1}\\right\\rangle}_{2}/g;
+
+   if ( $mathml )
+   {
+      $out =~ s/\\text/\\textrm/g;
+
+      $out =~ s/\\lvert/\\left\\vert/g ;
+      $out =~ s/\\rvert/\\right\\vert/g ;
+
+      # hack.  Not supported by the script.  should use arrows over.
+      $out =~ s/\\boldsymbol//g ;
    }
 
    return $out ;
