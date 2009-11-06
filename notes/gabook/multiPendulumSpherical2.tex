@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/multiPendulumSpherical2.pdf}
 \date{Nov 4, 2009}
-\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.2 $ $Date: 2009/11/06 05:07:58 $}
+\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.3 $ $Date: 2009/11/06 13:45:41 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -127,6 +127,85 @@ g \sum_{k=1}^N \mu_k r_k \cos\theta_k \\
 \end{align} 
 
 There's a few layers of equations involved and we still have an unholy mess of matrix and geometric algebra in the kernel of the kinetic energy quadratic form, but at least this time all the generalized coordinates of the system are scalars.
+
+\section{Evaluating the Euler-Lagrange equations.}
+
+Evaluation of the equations of motion not getting as far as expanding $B_k$ derivatives gives us
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo6}
+\frac{d}{dt}
+\sum_{k=1}^N \mu_k
+\dot{\BTheta}^\dagger 
+B_k B_k^\dagger 
+{\begin{bmatrix}
+\delta_{ar}
+\begin{bmatrix}
+1 \\
+0
+\end{bmatrix}
+\end{bmatrix}}_r
+&=
+\inv{2} \sum_{k=1}^N \mu_k
+\dot{\BTheta}^\dagger 
+\left(
+\PD{\theta_a}{B_k} B_k^\dagger + B_k \PD{\theta_a}{B_k^\dagger } \right)
+\dot{\BTheta} 
+-g \mu_a r_a \sin\theta_a \\
+\frac{d}{dt}
+\sum_{k=1}^N \mu_k
+\dot{\BTheta}^\dagger 
+B_k B_k^\dagger 
+{\begin{bmatrix}
+\delta_{ar}
+\begin{bmatrix}
+0 \\
+1 
+\end{bmatrix}
+\end{bmatrix}}_r
+&=
+\inv{2} \sum_{k=1}^N \mu_k
+\dot{\BTheta}^\dagger 
+\left(
+\PD{\phi_a}{B_k} B_k^\dagger + B_k \PD{\phi_a}{B_k^\dagger } \right)
+\dot{\BTheta} 
+\end{align}
+
+Note that the $\partial_a B_k$ are zero if $a > k$, and for $a \le k$ have only one term dependent on $A_a$.  Thus we require
+
+\begin{align*}
+\PD{\theta_a}{A_a} &=
+\begin{bmatrix}
+\Be_1 e^{i \phi_a} j_a e^{j_a \theta_a} \\
+\Be_2 e^{i \phi_a} \cos\theta_a 
+\end{bmatrix} 
+\end{align*}
+
+and
+
+\begin{align*}
+\PD{\phi_a}{A_a} 
+&=
+\begin{bmatrix}
+\Be_2 e^{i \phi_a} e^{j_a \theta_a} 
++\Be_1 e^{i \phi_a} \PD{\phi_a}{j_a} \sin\theta_a
+\\
+-\Be_1 e^{i \phi_a} \sin\theta_a 
+\end{bmatrix} \\
+&=
+\begin{bmatrix}
+\Be_2 e^{i \phi_a} e^{j_a \theta_a} 
++\Be_1 e^{i \phi_a} \Be_3 \Be_2 e^{i\phi_a} \sin\theta_a
+\\
+-\Be_1 e^{i \phi_a} \sin\theta_a 
+\end{bmatrix} \\
+&=
+\begin{bmatrix}
+\Be_2 e^{i \phi_a} e^{j_a \theta_a} 
++\Be_1 \Be_3 \Be_2 \sin\theta_a
+\\
+-\Be_1 e^{i \phi_a} \sin\theta_a 
+\end{bmatrix} \\
+\end{align*}
 
 %\EndArticle
 \EndNoBibArticle
