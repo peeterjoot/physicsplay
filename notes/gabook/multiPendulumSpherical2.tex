@@ -1,17 +1,132 @@
 \input{../peeter_prologue.tex}
 
-\chapter{Spherical polar pendulum for one and multiple masses}
+\chapter{Spherical polar pendulum for one and multiple masses (Take II)}
 \label{chap:multiPendulumSpherical2}
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/multiPendulumSpherical2.pdf}
 \date{Nov 4, 2009}
-\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.1 $ $Date: 2009/11/06 02:36:42 $}
+\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.2 $ $Date: 2009/11/06 05:07:58 $}
 
 \beginArtWithToc
 %\beginArtNoToc
 
 \section{Motivation}
-\section{Guts}
+
+Attempting the multiple spherical pendulum problem with a bivector parameterized Lagrangian has just been attempted, but did not turn out to be an effective approach.  Here a variation is used, employing regular plain old scalar spherical angle parameterized Kinetic energy, but still employing Geometric Algebra to express the Hermitian quadratic form associated with this energy term.
+
+The same set of simplifying assumptions will be made.  These are point masses, zero friction at the pivots and rigid nonspringy massless connecting rods between the masses.
+
+\section{The Lagrangian.}
+
+A two particle spherical pendulum is depicted in figure (\ref{fig:sPolarMultiPendulum:pendulumDouble})
+
+\begin{figure}[htp]
+\centering
+\includegraphics[totalheight=0.4\textheight]{pendulumDouble}
+\caption{Double spherical pendulum.}\label{fig:sPolarMultiPendulum:pendulumDouble}
+\end{figure}
+
+The position vector for each particle can be expressed relative to the mass it is connected to (or the origin for the first particle), as in
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo1}
+z_k &= z_{k-1} + \Be_3 e^{j_k \theta_k} \\
+j_k &= \Be_3 \wedge \left( \Be_1 e^{i \phi_k} \right) \\
+i &= \Be_1 \wedge \Be_2
+\end{align}
+
+To express the Kinetic energy for any of the masses $m_k$, we need the derivative of the incremental difference in position
+
+\begin{align*}
+\frac{d}{dt} \left( \Be_3 e^{j_k \theta_k} \right) 
+&=
+\Be_3 \left( j_k \dot{\theta}_k e^{j_k \theta_k} + \frac{d j_k }{dt} \sin\theta_k \right)  \\
+&=
+\Be_3 \left( j_k \dot{\theta}_k e^{j_k \theta_k} + \Be_3 \Be_2 \dot{\phi}_k e^{i \phi_k} \sin\theta_k \right)  \\
+&=
+\left( \frac{d}{dt}
+\begin{bmatrix}
+\theta_k & \phi_k
+\end{bmatrix} \right) 
+\begin{bmatrix}
+\Be_1 e^{i \phi_k} e^{j_k \theta_k} \\
+\Be_2 e^{i \phi_k} \sin\theta_k 
+\end{bmatrix}
+\end{align*}
+
+Introducing a Hermitian conjugation $A^\dagger = \tilde{A}^\T$, reversing and transposing the matrix, and writing
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo2}
+A_k &=
+\begin{bmatrix}
+\Be_1 e^{i \phi_k} e^{j_k \theta_k} \\
+\Be_2 e^{i \phi_k} \sin\theta_k 
+\end{bmatrix} \\
+\BTheta_k &=
+\begin{bmatrix}
+\theta_k \\
+\phi_k
+\end{bmatrix}
+\end{align}
+
+We can now write the relative velocity differential as
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo3}
+(\dot{z}_k - \dot{z}_{k-1})^2 = {\dot{\BTheta}_k}^\dagger A_k A_k^\dagger \dot{\BTheta}_k
+\end{align}
+
+Observe that the inner product is Hermitian under this definition since $(A_k A_k^\dagger)^\dagger = A_k A_k^\dagger$.
+
+The total (squared) velocity of the $k$th particle is then
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo4}
+\BTheta &=
+\begin{bmatrix}
+\BTheta_1 \\
+\BTheta_2 \\
+\vdots \\
+\BTheta_N \\
+\end{bmatrix} \\
+B_k &=
+\begin{bmatrix}
+A_1 \\
+A_2 \\
+\vdots \\
+A_k \\
+0 \\
+\end{bmatrix} \\
+(\dot{z}_k)^2 &=
+\dot{\BTheta}^\dagger B_k B_k^\dagger \dot{\BTheta}
+\end{align}
+
+(where the zero matrix in $B_k$ is a $N-k$ by one zero).  Summing over all masses and adding in the potential energy we have for the Lagrangian of the system
+
+%m_1 A_1 A_1^\dagger
+%+ m_2 
+%A_1 A_1^\dagger
+%A_2 A_2^\dagger
+%+ m_3 
+%A_1 A_1^\dagger
+%A_2 A_2^\dagger
+%A_3 A_3^\dagger
+%...
+%=
+%(m_1 + m_2 + m_3) A_1 A_1^\dagger
+%+(m_2 + m_3) A_2 A_2^\dagger
+%+(m_3) A_3 A_3^\dagger
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo5}
+\mu_k &= \sum_{j=k}^N m_j \\
+K &= 
+\inv{2} \sum_{k=1}^N \mu_k
+\dot{\BTheta}^\dagger 
+B_k B_k^\dagger 
+\dot{\BTheta} \\
+\Phi &=
+g \sum_{k=1}^N \mu_k r_k \cos\theta_k \\
+\LL &= K - \phi
+\end{align} 
+
+There's a few layers of equations involved and we still have an unholy mess of matrix and geometric algebra in the kernel of the kinetic energy quadratic form, but at least this time all the generalized coordinates of the system are scalars.
 
 %\EndArticle
 \EndNoBibArticle
