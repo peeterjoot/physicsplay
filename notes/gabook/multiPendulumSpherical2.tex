@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/multiPendulumSpherical2.pdf}
 \date{Nov 4, 2009}
-\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.12 $ $Date: 2009/11/07 18:30:04 $}
+\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.13 $ $Date: 2009/11/07 20:04:30 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -197,7 +197,7 @@ Q &=
 K &=
 \inv{2} \dot{\BTheta}^\dagger Q
 \dot{\BTheta} 
-=\inv{2} \dot{\BTheta}^\dagger \gpgradezero{Q}
+=\inv{2} \dot{\BTheta}^\T \gpgradezero{Q}
 \dot{\BTheta} \\
 \Phi &=
 g \sum_{k=1}^N \mu_k l_k \cos\theta_k \\
@@ -233,7 +233,7 @@ C_{\phi_c - \phi_r} S_{\theta_r} S_{\theta_c}
 \end{bmatrix}
 \end{align}
 
-One has the option of working with just these scalar parts, using 
+Observe that $\gpgradezero{A_r A_c^\dagger}^T = \gpgradezero{A_c A_r^\dagger}$, so the scalar matrix
 
 \begin{align}\label{eqn:multiPendulumSpherical2:boo21}
 \gpgradezero{Q} = 
@@ -242,54 +242,22 @@ One has the option of working with just these scalar parts, using
 \end{bmatrix}}_{rc}
 \end{align}
 
-for further computations associated with this problem.  That completely eliminates the Geometric algebra from the problem, and is probably a logical way to formulate things for numerical work since one can then exploit any pre existing matrix algebra system without having to create one that understands non-commuting variables and vector products.
+is a real symmetric matrix.  We have the option of using this explicit scalar expansion if desired for further computations associated with this problem.  That completely eliminates the Geometric algebra from the problem, and is probably a logical way to formulate things for numerical work since one can then exploit any pre existing matrix algebra system without having to create one that understands non-commuting variables and vector products.
 
 \section{Evaluating the Euler-Lagrange equations.}
 
-Evaluating the Euler-Lagrange equations for this system, we get for the $\theta_a$ and $\phi_a$ derivatives respectively
-\begin{align}\label{eqn:multiPendulumSpherical2:boo6}
-\frac{d}{dt} \PD{\dot{\theta}_a}{\LL}
-&=
-\PD{\theta_a}{\LL}
-=
-\inv{2} \dot{\BTheta}^\dagger
-{\begin{bmatrix}
-\mu_{\max(r,c)} l_r l_c \gpgradezero{
-\PD{\theta_a}{A_r} A_c^\dagger
-+A_r \PD{\theta_a}{A_c}^\dagger
-}
-\end{bmatrix}}_{rc} 
-\dot{\BTheta}
--g \mu_a l_a \sin\theta_a 
-\end{align}
-
-\begin{align}\label{eqn:multiPendulumSpherical2:boo6c}
-\frac{d}{dt} \PD{\dot{\phi}_a}{\LL}
-&=
-\PD{\phi_a}{\LL}
-=
-\inv{2} \dot{\BTheta}^\dagger
-{\begin{bmatrix}
-\mu_{\max(r,c)} l_r l_c \gpgradezero{
-\PD{\phi_a}{A_r} A_c^\dagger
-+A_r \PD{\phi_a}{A_c}^\dagger
-}
-\end{bmatrix}}_{rc} 
-\dot{\BTheta}
-\end{align}
-
-For the acceleration terms computation reduces nicely to a function of only $\gpgradezero{Q}$
+For the acceleration terms of the Euler-Lagrange equations our computation reduces nicely to a function of only $\gpgradezero{Q}$
 
 \begin{align*}
 \frac{d}{dt} \PD{\dot{\theta}_a}{\LL}
 &=
 \frac{d}{dt} 
 \left(
-\PD{\dot{\theta}_a}{\dot{\BTheta}}^\dagger
+\PD{\dot{\theta}_a}{\dot{\BTheta}}^\T
 \gpgradezero{Q} 
 \dot{\BTheta}
 +
-\dot{\BTheta}^\dagger
+\dot{\BTheta}^\T
 \gpgradezero{Q} 
 \PD{\dot{\theta}_a}{\dot{\BTheta}}
 \right)  \\
@@ -313,11 +281,11 @@ and
 &=
 \frac{d}{dt} 
 \left(
-\PD{\dot{\phi}_a}{\dot{\BTheta}}^\dagger
+\PD{\dot{\phi}_a}{\dot{\BTheta}}^\T
 \gpgradezero{Q} 
 \dot{\BTheta}
 +
-\dot{\BTheta}^\dagger
+\dot{\BTheta}^\T
 \gpgradezero{Q} 
 \PD{\dot{\phi}_a}{\dot{\BTheta}}
 \right)  \\
@@ -334,7 +302,7 @@ and
 \right) 
 \end{align*}
 
-By forming a column matrix we can put the angular velocity gradient in a tidy phase space block matrix representation
+The last groupings above made use of $\gpgradezero{Q} = \gpgradezero{Q}^\T$.  We can now form a column matrix putting all the angular velocity gradient in a tidy block matrix representation
 
 \begin{align}\label{eqn:multiPendulumSpherical2:boo22}
 \grad_{\dot{\BTheta}} \LL = 
@@ -359,6 +327,35 @@ The Euler-Lagrange equation evaluation is now reduced to
 \end{align}
 
 With back substituition of \ref{eqn:multiPendulumSpherical2:boo20}, and \ref{eqn:multiPendulumSpherical2:boo21} we have a complete non-multivector expansion of the right hand side if desired.  To complete things it is desirable to try to find a tidy form for the left hand side, which we have expanded above in terms of $A_r A_c^\dagger$ derivatives.
+
+For the other half of the Euler-Lagrange evaluation for this system, we get for the $\theta_a$ and $\phi_a$ derivatives respectively
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo6}
+\PD{\theta_a}{\LL}
+=
+\inv{2} \dot{\BTheta}^\dagger
+{\begin{bmatrix}
+\mu_{\max(r,c)} l_r l_c \gpgradezero{
+\PD{\theta_a}{A_r} A_c^\dagger
++A_r \PD{\theta_a}{A_c}^\dagger
+}
+\end{bmatrix}}_{rc} 
+\dot{\BTheta}
+-g \mu_a l_a \sin\theta_a 
+\end{align}
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo6c}
+\PD{\phi_a}{\LL}
+=
+\inv{2} \dot{\BTheta}^\dagger
+{\begin{bmatrix}
+\mu_{\max(r,c)} l_r l_c \gpgradezero{
+\PD{\phi_a}{A_r} A_c^\dagger
++A_r \PD{\phi_a}{A_c}^\dagger
+}
+\end{bmatrix}}_{rc} 
+\dot{\BTheta}
+\end{align}
 
 FIXME: revamping from here, working with $Q$ and $\gpgradezero{Q}$ instead.  This will mean that we want $\partial_k A_a A_b^\dagger$ derivatives instead.
 
