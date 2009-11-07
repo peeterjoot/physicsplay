@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/multiPendulumSpherical2.pdf}
 \date{Nov 4, 2009}
-\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.4 $ $Date: 2009/11/06 15:19:13 $}
+\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.5 $ $Date: 2009/11/07 08:48:48 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -37,7 +37,7 @@ i &= \Be_1 \wedge \Be_2
 To express the Kinetic energy for any of the masses $m_k$, we need the derivative of the incremental difference in position
 
 \begin{align*}
-\frac{d}{dt} \left( \Be_3 e^{j_k \theta_k} \right) 
+\frac{d}{dt} \left( \Be_3 e^{j_k \theta_k} \right)
 &=
 \Be_3 \left( j_k \dot{\theta}_k e^{j_k \theta_k} + \frac{d j_k }{dt} \sin\theta_k \right)  \\
 &=
@@ -46,10 +46,10 @@ To express the Kinetic energy for any of the masses $m_k$, we need the derivativ
 \left( \frac{d}{dt}
 \begin{bmatrix}
 \theta_k & \phi_k
-\end{bmatrix} \right) 
+\end{bmatrix} \right)
 \begin{bmatrix}
 \Be_1 e^{i \phi_k} e^{j_k \theta_k} \\
-\Be_2 e^{i \phi_k} \sin\theta_k 
+\Be_2 e^{i \phi_k} \sin\theta_k
 \end{bmatrix}
 \end{align*}
 
@@ -59,7 +59,7 @@ Introducing a Hermitian conjugation $A^\dagger = \tilde{A}^\T$, reversing and tr
 A_k &=
 \begin{bmatrix}
 \Be_1 e^{i \phi_k} e^{j_k \theta_k} \\
-\Be_2 e^{i \phi_k} \sin\theta_k 
+\Be_2 e^{i \phi_k} \sin\theta_k
 \end{bmatrix} \\
 \BTheta_k &=
 \begin{bmatrix}
@@ -101,10 +101,10 @@ A_k \\
 (where the zero matrix in $B_k$ is a $N-k$ by one zero).  Summing over all masses and adding in the potential energy we have for the Lagrangian of the system
 
 %m_1 A_1 A_1^\dagger
-%+ m_2 
+%+ m_2
 %A_1 A_1^\dagger
 %A_2 A_2^\dagger
-%+ m_3 
+%+ m_3
 %A_1 A_1^\dagger
 %A_2 A_2^\dagger
 %A_3 A_3^\dagger
@@ -116,27 +116,67 @@ A_k \\
 
 \begin{align}\label{eqn:multiPendulumSpherical2:boo5}
 \mu_k &= \sum_{j=k}^N m_j \\
-K &= 
+K &=
 \inv{2} \sum_{k=1}^N \mu_k
-\dot{\BTheta}^\dagger 
-B_k B_k^\dagger 
+\dot{\BTheta}^\dagger
+B_k B_k^\dagger
 \dot{\BTheta} \\
 \Phi &=
 g \sum_{k=1}^N \mu_k r_k \cos\theta_k \\
 \LL &= K - \phi
-\end{align} 
+\end{align}
 
 There's a few layers of equations involved and we still have an unholy mess of matrix and geometric algebra in the kernel of the kinetic energy quadratic form, but at least this time all the generalized coordinates of the system are scalars.
 
 \section{Evaluating the Euler-Lagrange equations.}
+
+Before continuing with evaluation of the Euler-Lagrange equations it is helpful to make a couple of observations about the structure of the matrix products that make up our velocity quadratic forms
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo8}
+\dot{\BTheta}^\dagger
+B_k B_k^\dagger
+\dot{\BTheta}
+&=
+\dot{\BTheta}^\dagger
+\begin{bmatrix}
+\begin{bmatrix}
+A_1 A_1^\dagger & A_1 A_2^\dagger & \hdots & A_1 A_k^\dagger \\
+A_2 A_1^\dagger & A_2 A_2^\dagger & \hdots & A_2 A_k^\dagger \\
+\vdots \\
+A_k A_1^\dagger & A_k A_2^\dagger & \hdots & A_k A_k^\dagger
+\end{bmatrix} & 0 \\
+0 & 0
+\end{bmatrix}
+\dot{\BTheta}
+\end{align}
+
+Specifically, consider the $A_a A_b^\dagger$ products that make up the elements of the matrices $Q_k = B_k B_k^\dagger$.  Without knowing anything about the grades that make up the elements of $Q_k$, since it is Hermitian (by this definition of Hermitian) there can be no elements of grade order two or three in the final matrix.  This is because reversion of such grades inverts the sign, and the matrix elements in $Q_k$ all equal their reverse.  Additionally, the elements of the multivector column matrices $A_k$ are vectors, so in the product $A_a A_b^\dagger$ we can only have scalar and bivector (grade two) elements.  The resulting one by one scalar matrix is a sum over all the mixed angular velocities $\dot{\theta}_a \dot{\theta}_b$, $\dot{\theta}_a \dot{\phi}_b$, and $\dot{\phi}_a \dot{\phi}_b$, so once this summation is complete any bivector grades of $A_a A_b^\dagger$ must cancel out.  This is consistent with the expectation that we have a one by one scalar matrix result out of this in the end (i.e. a number).  The end result is a freedom to exploit the convienence of explicitly using a scalar selection operator that filters out any vector, bivector, and trivector grades in the products $A_a A_b^\dagger$.  We will get the same result if we write
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo9}
+\dot{\BTheta}^\dagger
+B_k B_k^\dagger
+\dot{\BTheta}
+&=
+\dot{\BTheta}^\dagger
+\begin{bmatrix}
+\begin{bmatrix}
+\gpgradezero{A_1 A_1^\dagger} & \gpgradezero{A_1 A_2^\dagger} & \hdots & \gpgradezero{A_1 A_k^\dagger} \\
+\gpgradezero{A_2 A_1^\dagger} & \gpgradezero{A_2 A_2^\dagger} & \hdots & \gpgradezero{A_2 A_k^\dagger} \\
+\vdots \\
+\gpgradezero{A_k A_1^\dagger} & \gpgradezero{A_k A_2^\dagger} & \hdots & \gpgradezero{A_k A_k^\dagger}
+\end{bmatrix} & 0 \\
+0 & 0
+\end{bmatrix}
+\dot{\BTheta}
+\end{align}
 
 Evaluation of the equations of motion not getting as far as expanding $B_k$ derivatives gives us
 
 \begin{align}\label{eqn:multiPendulumSpherical2:boo6}
 \frac{d}{dt}
 \sum_{k=1}^N \mu_k
-\dot{\BTheta}^\dagger 
-B_k B_k^\dagger 
+\dot{\BTheta}^\dagger
+B_k B_k^\dagger
 {\begin{bmatrix}
 \delta_{ar}
 \begin{bmatrix}
@@ -146,37 +186,37 @@ B_k B_k^\dagger
 \end{bmatrix}}_r
 &=
 \inv{2} \sum_{k=1}^N \mu_k
-\dot{\BTheta}^\dagger 
+\dot{\BTheta}^\dagger
 \left(
 \PD{\theta_a}{B_k} B_k^\dagger + B_k \PD{\theta_a}{B_k^\dagger } \right)
-\dot{\BTheta} 
+\dot{\BTheta}
 -g \mu_a r_a \sin\theta_a \\
 \frac{d}{dt}
 \sum_{k=1}^N \mu_k
-\dot{\BTheta}^\dagger 
-B_k B_k^\dagger 
+\dot{\BTheta}^\dagger
+B_k B_k^\dagger
 {\begin{bmatrix}
 \delta_{ar}
 \begin{bmatrix}
 0 \\
-1 
+1
 \end{bmatrix}
 \end{bmatrix}}_r
 &=
 \inv{2} \sum_{k=1}^N \mu_k
-\dot{\BTheta}^\dagger 
+\dot{\BTheta}^\dagger
 \left(
 \PD{\phi_a}{B_k} B_k^\dagger + B_k \PD{\phi_a}{B_k^\dagger } \right)
-\dot{\BTheta} 
+\dot{\BTheta}
 \end{align}
 
-Note that the $\partial_a B_k$ are zero if $a > k$, and for $a \le k$ have only one term dependent on $A_a$.  We also have a matrix sum of the form $u + u^\dagger$ in the partials, which discards all grades of order two and three (we know we'll end up with a one by one scalar matrix in the end, but if it is convienent we can explicitly discard these higher grades without the final quadradic form summation).  
+Note that the $\partial_a B_k$ are zero if $a > k$, and for $a \le k$ have only one term dependent on $A_a$.  We also have a matrix sum of the form $u + u^\dagger$ in the partials
 
 \begin{align}\label{eqn:multiPendulumSpherical2:boo7}
 \frac{d}{dt}
 \sum_{k=1}^N \mu_k
-\dot{\BTheta}^\dagger 
-B_k B_k^\dagger 
+\dot{\BTheta}^\dagger
+B_k B_k^\dagger
 {\begin{bmatrix}
 \delta_{ar}
 \begin{bmatrix}
@@ -186,75 +226,80 @@ B_k B_k^\dagger
 \end{bmatrix}}_r
 &=
 \sum_{k=a}^N \mu_k
-\dot{\BTheta}^\dagger 
-\gpgrade{
+\dot{\BTheta}^\dagger
+\gpgradezero{
 {\begin{bmatrix}
 \delta_{ar}
 \PD{\theta_a}{A_a} \\
 \end{bmatrix}}_r
-B_k^\dagger }{0,1}
-\dot{\BTheta} 
+B_k^\dagger }
+\dot{\BTheta}
 -g \mu_a r_a \sin\theta_a \\
 %%%%
 \frac{d}{dt}
 \sum_{k=1}^N \mu_k
-\dot{\BTheta}^\dagger 
-B_k B_k^\dagger 
+\dot{\BTheta}^\dagger
+B_k B_k^\dagger
 {\begin{bmatrix}
 \delta_{ar}
 \begin{bmatrix}
 0 \\
-1 
+1
 \end{bmatrix}
 \end{bmatrix}}_r
 &=
 \sum_{k=a}^N \mu_k
-\dot{\BTheta}^\dagger 
-\gpgrade{
+\dot{\BTheta}^\dagger
+\gpgradezero{
 {\begin{bmatrix}
 \delta_{ar}
 \PD{\phi_a}{A_a} \\
 \end{bmatrix}}_r
-B_k^\dagger }{0,1}
-\dot{\BTheta} 
+B_k^\dagger }
+\dot{\BTheta}
 \end{align}
 
 To go forward further, we require
 
-\begin{align*}
+\begin{align}\label{eqn:multiPendulumSpherical2:boo10}
 \PD{\theta_a}{A_a} &=
 \begin{bmatrix}
 \Be_1 e^{i \phi_a} j_a e^{j_a \theta_a} \\
-\Be_2 e^{i \phi_a} \cos\theta_a 
-\end{bmatrix} 
-\end{align*}
+\Be_2 e^{i \phi_a} \cos\theta_a
+\end{bmatrix}
+\end{align}
 
-and
+and (after some reduction)
 
-\begin{align*}
-\PD{\phi_a}{A_a} 
+\begin{align}\label{eqn:multiPendulumSpherical2:boo11}
+\PD{\phi_a}{A_a}
+%&=
+%\begin{bmatrix}
+%\Be_2 e^{i \phi_a} e^{j_a \theta_a}
+%+\Be_1 e^{i \phi_a} \PD{\phi_a}{j_a} \sin\theta_a
+%\\
+%-\Be_1 e^{i \phi_a} \sin\theta_a
+%\end{bmatrix} \\
+%&=
+%\begin{bmatrix}
+%\Be_2 e^{i \phi_a} e^{j_a \theta_a}
+%+\Be_1 e^{i \phi_a} \Be_3 \Be_2 e^{i\phi_a} \sin\theta_a
+%\\
+%-\Be_1 e^{i \phi_a} \sin\theta_a
+%\end{bmatrix} \\
+%&=
+%\begin{bmatrix}
+%\Be_2 e^{i \phi_a} e^{j_a \theta_a}
+%+\Be_1 \Be_3 \Be_2 \sin\theta_a
+%\\
+%-\Be_1 e^{i \phi_a} \sin\theta_a
+%\end{bmatrix} \\
 &=
 \begin{bmatrix}
-\Be_2 e^{i \phi_a} e^{j_a \theta_a} 
-+\Be_1 e^{i \phi_a} \PD{\phi_a}{j_a} \sin\theta_a
-\\
--\Be_1 e^{i \phi_a} \sin\theta_a 
-\end{bmatrix} \\
-&=
-\begin{bmatrix}
-\Be_2 e^{i \phi_a} e^{j_a \theta_a} 
-+\Be_1 e^{i \phi_a} \Be_3 \Be_2 e^{i\phi_a} \sin\theta_a
-\\
--\Be_1 e^{i \phi_a} \sin\theta_a 
-\end{bmatrix} \\
-&=
-\begin{bmatrix}
-\Be_2 e^{i \phi_a} e^{j_a \theta_a} 
-+\Be_1 \Be_3 \Be_2 \sin\theta_a
-\\
--\Be_1 e^{i \phi_a} \sin\theta_a 
-\end{bmatrix} \\
-\end{align*}
+\Be_2 e^{i \phi_a} \cos\theta_a \\
+-\Be_1 e^{i \phi_a} \sin\theta_a
+\end{bmatrix}
+\end{align}
 
 %\EndArticle
 \EndNoBibArticle
