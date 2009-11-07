@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/multiPendulumSpherical2.pdf}
 \date{Nov 4, 2009}
-\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.10 $ $Date: 2009/11/07 18:04:40 $}
+\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.11 $ $Date: 2009/11/07 18:24:59 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -248,8 +248,10 @@ for further computations associated with this problem.  That completely eliminat
 
 Evaluating the Euler-Lagrange equations for this system, we get for the $\theta_a$ and $\phi_a$ derivatives respectively
 \begin{align}\label{eqn:multiPendulumSpherical2:boo6}
-\frac{d}{dt} \PD{\theta_a}{\LL}
+\frac{d}{dt} \PD{\dot{\theta}_a}{\LL}
 &=
+\PD{\theta_a}{\LL}
+=
 \inv{2} \dot{\BTheta}^\dagger
 {\begin{bmatrix}
 \mu_{\max(r,c)} l_r l_c \gpgradezero{
@@ -257,12 +259,15 @@ Evaluating the Euler-Lagrange equations for this system, we get for the $\theta_
 +A_r \PD{\theta_a}{A_c}^\dagger
 }
 \end{bmatrix}}_{rc} 
-%\inv{2} \sum_{k=1}^N m_k
-%\left( \PD{\theta_a}{B_k} B_k^\dagger + B_k \PD{\theta_a}{B_k^\dagger } \right)
 \dot{\BTheta}
--g \mu_a l_a \sin\theta_a \\
-\frac{d}{dt} \PD{\theta_a}{\LL}
+-g \mu_a l_a \sin\theta_a 
+\end{align}
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo6c}
+\frac{d}{dt} \PD{\dot{\phi}_a}{\LL}
 &=
+\PD{\phi_a}{\LL}
+=
 \inv{2} \dot{\BTheta}^\dagger
 {\begin{bmatrix}
 \mu_{\max(r,c)} l_r l_c \gpgradezero{
@@ -270,18 +275,13 @@ Evaluating the Euler-Lagrange equations for this system, we get for the $\theta_
 +A_r \PD{\phi_a}{A_c}^\dagger
 }
 \end{bmatrix}}_{rc} 
-%\inv{2} \sum_{k=1}^N m_k
-%\left(
-%\PD{\phi_a}{B_k} B_k^\dagger + B_k \PD{\phi_a}{B_k^\dagger } \right)
 \dot{\BTheta}
 \end{align}
 
-Using \ref{eqn:multiPendulumSpherical2:boo20}, and \ref{eqn:multiPendulumSpherical2:boo21} we have a non-multivector expansion of the right hand sides of this
-
-The right hand sides reduce nicely to a function of only $\gpgradezero{Q}$
+For the acceleration terms computation reduces nicely to a function of only $\gpgradezero{Q}$
 
 \begin{align*}
-\frac{d}{dt} \PD{\theta_a}{\LL}
+\frac{d}{dt} \PD{\dot{\theta}_a}{\LL}
 &=
 \frac{d}{dt} 
 \left(
@@ -295,21 +295,21 @@ The right hand sides reduce nicely to a function of only $\gpgradezero{Q}$
 \right)  \\
 &=
 \frac{d}{dt} \left(
-\dot{\BTheta}^\dagger
-\gpgradezero{Q} \right) 
 {\begin{bmatrix}
-\delta_{ar}
+\delta_{ac}
 \begin{bmatrix}
-1 \\
-0
+1 & 0
 \end{bmatrix}
-\end{bmatrix}}_r
+\end{bmatrix}}_c
+\gpgradezero{Q} 
+\dot{\BTheta}
+\right) 
 \end{align*}
 
 and
 
 \begin{align*}
-\frac{d}{dt} \PD{\phi_a}{\LL}
+\frac{d}{dt} \PD{\dot{\phi}_a}{\LL}
 &=
 \frac{d}{dt} 
 \left(
@@ -323,16 +323,42 @@ and
 \right)  \\
 &=
 \frac{d}{dt} \left(
-\dot{\BTheta}^\dagger
-\gpgradezero{Q} \right) 
 {\begin{bmatrix}
-\delta_{ar}
+\delta_{ac}
 \begin{bmatrix}
-0 \\
-1 
+0 & 1
+\end{bmatrix}
+\end{bmatrix}}_c
+\gpgradezero{Q} 
+\dot{\BTheta}
+\right) 
+\end{align*}
+
+By forming a column matrix we can put the angular velocity gradient in a tidy phase space block matrix representation
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo22}
+\grad_{\dot{\BTheta}} = 
+{\begin{bmatrix}
+\begin{bmatrix}
+\PD{\dot{\theta}_r \\
+\PD{\dot{\phi}_r \\
+\end{bmatrix}
+\end{bmatrix}}_r = \gpgradezero{Q} \dot{\BTheta}
+\end{align}
+
+The Euler-Lagrange equation evaluation is now reduced to
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo23}
+\frac{d}{dt} \left( \gpgradezero{Q} \dot{\BTheta} \right) =
+{\begin{bmatrix}
+\begin{bmatrix}
+\PD{\theta_r \\
+\PD{\phi_r \\
 \end{bmatrix}
 \end{bmatrix}}_r
-\end{align*}
+\end{align}
+
+With back substituition of \ref{eqn:multiPendulumSpherical2:boo20}, and \ref{eqn:multiPendulumSpherical2:boo21} we have a complete non-multivector expansion of the right hand side if desired.  To complete things it is desirable to try to find a tidy form for the left hand side, which we have expanded above in terms of $A_r A_c^\dagger$ derivatives.
 
 FIXME: revamping from here, working with $Q$ and $\gpgradezero{Q}$ instead.  This will mean that we want $\partial_k A_a A_b^\dagger$ derivatives instead.
 
