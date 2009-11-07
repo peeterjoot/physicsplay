@@ -1,6 +1,9 @@
 #! /usr/bin/perl
 
 # $Log: tex2blog,v $
+# Revision 1.19  2009/11/07 22:11:58  Peeter
+# hack in some wikipedia and physicsforums support.
+#
 # Revision 1.18  2009/11/04 23:56:24  Peeter
 # *** empty log message ***
 #
@@ -37,17 +40,26 @@ my $wordpress = 0 ;
 # for use of LaTeXMathML.js in a standalone html file:
 my $mathmlHtml = 0 ; 
 
+# for use with physics Forums.
+my $pf = 0 ; 
+
+# wikipedia output.
+# doesn't work as is.  the \begin{aligned} ... \end{aligned} doesn't work.  Is there a way to do that in wikipedia?
+my $wiki = 0 ; 
+
 GetOptions( 
    'mathml!'      => \$mathml,
    'wordpress!'   => \$wordpress,
+   'pf!'          => \$pf,
+   'wiki!'        => \$wiki,
    'html!'        => \$mathmlHtml,
    'file=s'       => \$filebase,
    'help!'        => \$showUsage,
 ) ;
 
-if ( $showUsage or (1 != ($mathml + $wordpress + $mathmlHtml)) )
+if ( $showUsage or (1 != ( $mathml + $wordpress + $mathmlHtml + $pf + $wiki )) )
 {
-   die "usage: ~/bin/tex2blog -f filenameWithoutTexSuffix {-html | -mathml | -wordpress} [-help]"
+   die "usage: ~/bin/tex2blog -f filenameWithoutTexSuffix {-pf | -html | -mathml | -wordpress -wiki} [-help]"
 }
 
 if ( $mathmlHtml )
@@ -149,37 +161,31 @@ sub processOneEquation
    # strip trailing \\ at the end of the equation:
    #$eq =~ s/ *\\\\ *$//g;
 
-   # use <latexStart> <latexEnd> so that this equation isn't processed again,  In the final pass when everything is split by lines change these to '$' characters for final output.
-   if ( $mathml )
+   # use <latexSepLineStart> <latexSepLineEnd> so that this equation isn't processed again,  In the final pass when everything is split by lines change these to '$' characters for final output.
+   if ( $bInline )
    {
-      #<blockquote>$\begin{eqnarray}\nabla F &= J/{\epsilon_0} c \\ m\frac{d^2 X}{d\tau} &= \frac{q}{c} F \cdot \frac{dX}{d\tau}\end{eqnarray}$</blockquote>
-      #<blockquote>$\begin{eqnarray*}\nabla \cdot \mathbf{E} = \rho\end{eqnarray*}$</blockquote>
-
-      if ( $bInline )
-      {
-         $eq = "<latexStart>$eq<latexEnd>" ;
-      }
-      else
-      {
-         $eq = "<blockquote><latexStart>\\begin{$eqnArray}$eq \\end{$eqnArray}<latexEnd></blockquote>\n" ;
-      }
+      $eq = "<latexInlineStart>$eq<latexInlineEnd>" ;
    }
    else
    {
-      # sample output from latex2wp.  centers things ... looks a bit nicer.
-      #<p align=center>$latex \displaystyle   \forall g \in {\cal F}. g^2 = \eta \ \ \ \ \ (1)&fg=000000$</p>
-
-      # latex2wp used this, but I don't see a difference:
-      my $fgString = '' ;
-      #      $fgString = "&fg=000000" ; # omit.
-
-      if ( $bInline )
+      if ( $mathml )
       {
-         $eq = "<latexStart>latex $eq<latexEnd>" ;
+         $eq = "<latexSepLineStart>\\begin{$eqnArray}$eq \\end{$eqnArray}<latexSepLineEnd>" ;
       }
-      else
+      elsif ( $wordpress )
       {
-         $eq = "<p align=center><latexStart>latex \\begin{aligned}$eq\\end{aligned} $curEquationLabel$fgString<latexEnd></p>\n" ;
+         # sample output from latex2wp.  centers things ... looks a bit nicer.
+         #<p align=center>$latex \displaystyle   \forall g \in {\cal F}. g^2 = \eta \ \ \ \ \ (1)&fg=000000$</p>
+
+         # latex2wp used this, but I don't see a difference:
+         my $fgString = '' ;
+         #      $fgString = "&fg=000000" ; # omit.
+
+         $eq = "<latexSepLineStart>\\begin{aligned}$eq\\end{aligned} $curEquationLabel$fgString<latexSepLineEnd>" ;
+      }
+      else # wiki, and pf
+      {
+         $eq = "<latexSepLineStart>\\begin{align}$eq\\end{align} $curEquationLabel<latexSepLineEnd>" ;
       }
    }
 
@@ -362,18 +368,51 @@ sub processRest
    my @allLines = split( /\n/, $allOneLine ) ;
 
    my $urlMessage ;
-   $urlMessage = "Click here for a PDF of this post with nicer formatting" ;
    $urlMessage = "Click here for a PDF of this sequence of posts with nicer formatting" ;
+   $urlMessage = "Click here for a PDF of this post with nicer formatting" ;
 
-   my $latexDollarStart ;
+   my $latexInlineStart ;
+   my $latexInlineEnd ;
+   my $latexSepLineStart ;
+   my $latexSepLineEnd ;
 
-   if ( $mathml )
+   if ( $pf )
    {
-      $latexDollarStart = '$' ;
+      $latexInlineStart = '[itex]' ;
+      $latexInlineEnd = '[/itex]' ;
+
+      $latexSepLineStart = '[tex]' ;
+      $latexSepLineEnd = '[/tex]' ;
    }
+   elsif ( $wiki )
+   {
+      $latexInlineStart = '<math>' ;
+      $latexInlineEnd = '</math>' ;
+
+      $latexSepLineStart = ":<math>\n" ;
+      $latexSepLineEnd = "\n</math>\n" ;
+   }
+   elsif ( $wordpress )
+   {
+      $latexInlineStart = '$latex ' ;
+      $latexInlineEnd = '$' ;
+
+      $latexSepLineStart = '<p align=center>$latex ' ;
+      $latexSepLineEnd = "\$</p>\n" ;
+   }
+   elsif ( $mathml )
+   {
+      $latexInlineStart = '$' ;
+      $latexInlineEnd = '$' ;
+      $latexSepLineStart = '<blockquote>$' ;
+      $latexSepLineEnd = "$</blockquote>\n" ;
+   }
+#   Lance is a cool dude
+#   Lance is really a cool dude
+#   Lance is super duper snooper cob dude
    else
    {
-      $latexDollarStart = '$latex ' ;
+      die ;
    }
 
    my $out = '' ;
@@ -415,15 +454,17 @@ sub processRest
       # process inline math $$ delimited.  Assume that it is all in one line.
       s/\$(.*?)\$/processOneEquation(1, '*', $1)/eg ;
 
-      s/<latexStart>/\$/g ;
-      s/<latexEnd>/\$/g ;
+      s/<latexSepLineStart>/$latexSepLineStart/g ;
+      s/<latexSepLineEnd>/$latexSepLineEnd/g ;
+      s/<latexInlineStart>/$latexInlineStart/g ;
+      s/<latexInlineEnd>/$latexInlineEnd/g ;
 
       s/\\chapcite{(.*?)}/[$refnumbers{$1}]/g;
       s/\\cite{(.*?)}/[$refnumbers{$1}]/g;
       s,\\blogpage{(.*)},<a href="$1">[$urlMessage]</a>,;
 
-      s/\\C{(.*?)}/$latexDollarStart\\mathbb{C}^{$1}\$/g;
-      s/\\R{(.*?)}/$latexDollarStart\\mathbb{R}^{$1}\$/g;
+      s/\\C{(.*?)}/$latexInlineStart\\mathbb{C}^{$1}$latexInlineEnd/g;
+      s/\\R{(.*?)}/$latexInlineStart\\mathbb{R}^{$1}$latexInlineEnd/g;
 
       s/\\ref{(eqn:.*?)}/$equations{$1}/g ;
 
