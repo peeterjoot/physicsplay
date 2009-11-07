@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/multiPendulumSpherical2.pdf}
 \date{Nov 4, 2009}
-\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.5 $ $Date: 2009/11/07 08:48:48 $}
+\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.6 $ $Date: 2009/11/07 09:09:45 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -29,7 +29,7 @@ A two particle spherical pendulum is depicted in figure (\ref{fig:sPolarMultiPen
 The position vector for each particle can be expressed relative to the mass it is connected to (or the origin for the first particle), as in
 
 \begin{align}\label{eqn:multiPendulumSpherical2:boo1}
-z_k &= z_{k-1} + \Be_3 e^{j_k \theta_k} \\
+z_k &= z_{k-1} + \Be_3 l_k e^{j_k \theta_k} \\
 j_k &= \Be_3 \wedge \left( \Be_1 e^{i \phi_k} \right) \\
 i &= \Be_1 \wedge \Be_2
 \end{align}
@@ -71,7 +71,7 @@ A_k &=
 We can now write the relative velocity differential as
 
 \begin{align}\label{eqn:multiPendulumSpherical2:boo3}
-(\dot{z}_k - \dot{z}_{k-1})^2 = {\dot{\BTheta}_k}^\dagger A_k A_k^\dagger \dot{\BTheta}_k
+(\dot{z}_k - \dot{z}_{k-1})^2 = l_k^2 {\dot{\BTheta}_k}^\dagger A_k A_k^\dagger \dot{\BTheta}_k
 \end{align}
 
 Observe that the inner product is Hermitian under this definition since $(A_k A_k^\dagger)^\dagger = A_k A_k^\dagger$.
@@ -88,10 +88,10 @@ The total (squared) velocity of the $k$th particle is then
 \end{bmatrix} \\
 B_k &=
 \begin{bmatrix}
-A_1 \\
-A_2 \\
+l_1 A_1 \\
+l_2 A_2 \\
 \vdots \\
-A_k \\
+l_k A_k \\
 0 \\
 \end{bmatrix} \\
 (\dot{z}_k)^2 &=
@@ -122,7 +122,7 @@ K &=
 B_k B_k^\dagger
 \dot{\BTheta} \\
 \Phi &=
-g \sum_{k=1}^N \mu_k r_k \cos\theta_k \\
+g \sum_{k=1}^N \mu_k l_k \cos\theta_k \\
 \LL &= K - \phi
 \end{align}
 
@@ -140,10 +140,10 @@ B_k B_k^\dagger
 \dot{\BTheta}^\dagger
 \begin{bmatrix}
 \begin{bmatrix}
-A_1 A_1^\dagger & A_1 A_2^\dagger & \hdots & A_1 A_k^\dagger \\
-A_2 A_1^\dagger & A_2 A_2^\dagger & \hdots & A_2 A_k^\dagger \\
+l_1^2 A_1 A_1^\dagger & l_1 l_2 A_1 A_2^\dagger & \hdots & l_1 l_k A_1 A_k^\dagger \\
+l_2 l_1 A_2 A_1^\dagger & l_2^2 A_2 A_2^\dagger & \hdots & l_2 l_k A_2 A_k^\dagger \\
 \vdots \\
-A_k A_1^\dagger & A_k A_2^\dagger & \hdots & A_k A_k^\dagger
+l_k l_1 A_k A_1^\dagger & l_k l_2 A_k A_2^\dagger & \hdots & l_k^2 A_k A_k^\dagger
 \end{bmatrix} & 0 \\
 0 & 0
 \end{bmatrix}
@@ -160,10 +160,10 @@ B_k B_k^\dagger
 \dot{\BTheta}^\dagger
 \begin{bmatrix}
 \begin{bmatrix}
-\gpgradezero{A_1 A_1^\dagger} & \gpgradezero{A_1 A_2^\dagger} & \hdots & \gpgradezero{A_1 A_k^\dagger} \\
-\gpgradezero{A_2 A_1^\dagger} & \gpgradezero{A_2 A_2^\dagger} & \hdots & \gpgradezero{A_2 A_k^\dagger} \\
+l_1^2 \gpgradezero{A_1 A_1^\dagger} & l_1 l_2 \gpgradezero{A_1 A_2^\dagger} & \hdots & l_1 l_k \gpgradezero{A_1 A_k^\dagger} \\
+l_2 l_1 \gpgradezero{A_2 A_1^\dagger} & l_2^2 \gpgradezero{A_2 A_2^\dagger} & \hdots & l_2 l_k \gpgradezero{A_2 A_k^\dagger} \\
 \vdots \\
-\gpgradezero{A_k A_1^\dagger} & \gpgradezero{A_k A_2^\dagger} & \hdots & \gpgradezero{A_k A_k^\dagger}
+l_k l_1 \gpgradezero{A_k A_1^\dagger} & l_k l_2 \gpgradezero{A_k A_2^\dagger} & \hdots & l_k^2 \gpgradezero{A_k A_k^\dagger}
 \end{bmatrix} & 0 \\
 0 & 0
 \end{bmatrix}
@@ -190,7 +190,7 @@ B_k B_k^\dagger
 \left(
 \PD{\theta_a}{B_k} B_k^\dagger + B_k \PD{\theta_a}{B_k^\dagger } \right)
 \dot{\BTheta}
--g \mu_a r_a \sin\theta_a \\
+-g \mu_a l_a \sin\theta_a \\
 \frac{d}{dt}
 \sum_{k=1}^N \mu_k
 \dot{\BTheta}^\dagger
@@ -210,7 +210,7 @@ B_k B_k^\dagger
 \dot{\BTheta}
 \end{align}
 
-Note that the $\partial_a B_k$ are zero if $a > k$, and for $a \le k$ have only one term dependent on $A_a$.  We also have a matrix sum of the form $u + u^\dagger$ in the partials
+Note that the $\partial_a B_k$ are zero if $a > k$, and for $a \le k$ have only one term dependent on $A_a$.  We also have a matrix sum of the form $u + u^\dagger$ in the partials, which can have only scalar and vector terms.  As argued previously all but the scalar elements cancel, leaving
 
 \begin{align}\label{eqn:multiPendulumSpherical2:boo7}
 \frac{d}{dt}
@@ -225,7 +225,7 @@ B_k B_k^\dagger
 \end{bmatrix}
 \end{bmatrix}}_r
 &=
-\sum_{k=a}^N \mu_k
+\sum_{k=a}^N \mu_k l_a
 \dot{\BTheta}^\dagger
 \gpgradezero{
 {\begin{bmatrix}
@@ -234,7 +234,7 @@ B_k B_k^\dagger
 \end{bmatrix}}_r
 B_k^\dagger }
 \dot{\BTheta}
--g \mu_a r_a \sin\theta_a \\
+-g \mu_a l_a \sin\theta_a \\
 %%%%
 \frac{d}{dt}
 \sum_{k=1}^N \mu_k
@@ -299,6 +299,27 @@ and (after some reduction)
 \Be_2 e^{i \phi_a} \cos\theta_a \\
 -\Be_1 e^{i \phi_a} \sin\theta_a
 \end{bmatrix}
+\end{align}
+
+For brievity, writing $S_\theta = \sin\theta$, $C_\phi = \cos\phi$ and so forth, after some reduction we get for the $\phi$ partial block matrix scalar products
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo12}
+\gpgradezero{ A_a A_b^\dagger}
+&=
+\text{TO COMPUTE}
+\end{align}
+\begin{align}\label{eqn:multiPendulumSpherical2:boo13}
+\gpgradezero{ \PD{\phi_a}{A_a} A_b^\dagger}
+&=
+\begin{bmatrix}
+S_{\phi_a + \phi_b} C_{\theta_a} C_{\theta_b} & C_{\phi_b - \phi_a} C_{\theta_a} S_{\theta_b} \\
+-C_{\phi_a + \phi_b} S_{\theta_a} C_{\theta_b} & S_{\phi_b - \phi_a} S_{\theta_a} S_{\theta_b} \\
+\end{bmatrix}
+\end{align}
+\begin{align}\label{eqn:multiPendulumSpherical2:boo14}
+\gpgradezero{ \PD{\theta_a}{A_a} A_b^\dagger}
+&=
+\text{TO COMPUTE}
 \end{align}
 
 %\EndArticle
