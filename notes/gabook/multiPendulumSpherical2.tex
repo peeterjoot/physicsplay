@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/multiPendulumSpherical2.pdf}
 \date{Nov 4, 2009}
-\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.9 $ $Date: 2009/11/07 09:52:52 $}
+\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.10 $ $Date: 2009/11/07 18:04:40 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -204,24 +204,99 @@ g \sum_{k=1}^N \mu_k l_k \cos\theta_k \\
 \LL &= K - \Phi
 \end{align}
 
-FIXME: expand this here.  Can then work with regular old scalars for the rest of the problem.
+After some expansion one gets for the block matrixes contained in $Q$
 
 \begin{align}\label{eqn:multiPendulumSpherical2:boo12}
-\gpgradezero{ A_r A_c^\dagger}
+A_r A_c^\dagger
 &=
-\text{TO COMPUTE}
+\begin{bmatrix}
+e^{i(\phi_c - \phi_r)} e^{j_r \theta_r} e^{j_c \theta_c} & i e^{i(\phi_c - \phi_r)} e^{j_r \theta_r} \sin\theta_c \\
+-i e^{i(\phi_c - \phi_r)} e^{j_c \theta_c} \sin\theta_r  & e^{i(\phi_c - \phi_r)} \sin\theta_r \sin\theta_c
+\end{bmatrix}
 \end{align}
+
+Strictly speaking we only need the scalar parts of these matrices.  For brievity, writing $S_\theta = \sin\theta$, $C_\phi = \cos\phi$ and so forth, those scalar parts are
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo20}
+\gpgradezero{A_r A_c^\dagger}
+=
+\begin{bmatrix}
+C_{\phi_c - \phi_r} 
+C_{\theta_r}
+C_{\theta_c}
+-C_{2(\phi_c - \phi_r)} 
+S_{\theta_r}
+S_{\theta_c} &
+-S_{\phi_c - \phi_r} C_{\theta_r} S_{\theta_c} \\
+S_{\phi_c - \phi_r} C_{\theta_c} S_{\theta_r} &
+C_{\phi_c - \phi_r} S_{\theta_r} S_{\theta_c}
+\end{bmatrix}
+\end{align}
+
+One has the option of working with just these scalar parts, using 
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo21}
+\gpgradezero{Q} = 
+{\begin{bmatrix}
+\mu_{\max(r,c)} l_r l_c \gpgradezero{ A_r A_c^\dagger }
+\end{bmatrix}}_{rc}
+\end{align}
+
+for further computations associated with this problem.  That completely eliminates the Geometric algebra from the problem, and is probably a logical way to formulate things for numerical work since one can then exploit any pre existing matrix algebra system without having to create one that understands non-commuting variables and vector products.
 
 \section{Evaluating the Euler-Lagrange equations.}
 
-FIXME: gut this.  Work with $Q$ and $\gpgradezero{Q}$ instead.  This will mean that we want $\partial_k A_a A_b^\dagger$ derivatives instead.
-
-Evaluation of the equations of motion not getting as far as expanding $B_k$ derivatives gives us
-
+Evaluating the Euler-Lagrange equations for this system, we get for the $\theta_a$ and $\phi_a$ derivatives respectively
 \begin{align}\label{eqn:multiPendulumSpherical2:boo6}
-\frac{d}{dt}
+\frac{d}{dt} \PD{\theta_a}{\LL}
+&=
+\inv{2} \dot{\BTheta}^\dagger
+{\begin{bmatrix}
+\mu_{\max(r,c)} l_r l_c \gpgradezero{
+\PD{\theta_a}{A_r} A_c^\dagger
++A_r \PD{\theta_a}{A_c}^\dagger
+}
+\end{bmatrix}}_{rc} 
+%\inv{2} \sum_{k=1}^N m_k
+%\left( \PD{\theta_a}{B_k} B_k^\dagger + B_k \PD{\theta_a}{B_k^\dagger } \right)
+\dot{\BTheta}
+-g \mu_a l_a \sin\theta_a \\
+\frac{d}{dt} \PD{\theta_a}{\LL}
+&=
+\inv{2} \dot{\BTheta}^\dagger
+{\begin{bmatrix}
+\mu_{\max(r,c)} l_r l_c \gpgradezero{
+\PD{\phi_a}{A_r} A_c^\dagger
++A_r \PD{\phi_a}{A_c}^\dagger
+}
+\end{bmatrix}}_{rc} 
+%\inv{2} \sum_{k=1}^N m_k
+%\left(
+%\PD{\phi_a}{B_k} B_k^\dagger + B_k \PD{\phi_a}{B_k^\dagger } \right)
+\dot{\BTheta}
+\end{align}
+
+Using \ref{eqn:multiPendulumSpherical2:boo20}, and \ref{eqn:multiPendulumSpherical2:boo21} we have a non-multivector expansion of the right hand sides of this
+
+The right hand sides reduce nicely to a function of only $\gpgradezero{Q}$
+
+\begin{align*}
+\frac{d}{dt} \PD{\theta_a}{\LL}
+&=
+\frac{d}{dt} 
+\left(
+\PD{\dot{\theta}_a}{\dot{\BTheta}}^\dagger
+\gpgradezero{Q} 
+\dot{\BTheta}
++
 \dot{\BTheta}^\dagger
-Q
+\gpgradezero{Q} 
+\PD{\dot{\theta}_a}{\dot{\BTheta}}
+\right)  \\
+&=
+\frac{d}{dt} \left(
+\dot{\BTheta}^\dagger
+\gpgradezero{Q} \right) 
 {\begin{bmatrix}
 \delta_{ar}
 \begin{bmatrix}
@@ -229,36 +304,44 @@ Q
 0
 \end{bmatrix}
 \end{bmatrix}}_r
+\end{align*}
+
+and
+
+\begin{align*}
+\frac{d}{dt} \PD{\phi_a}{\LL}
 &=
-\inv{2} \sum_{k=1}^N m_k
-\dot{\BTheta}^\dagger
+\frac{d}{dt} 
 \left(
-\PD{\theta_a}{B_k} B_k^\dagger + B_k \PD{\theta_a}{B_k^\dagger } \right)
+\PD{\dot{\phi}_a}{\dot{\BTheta}}^\dagger
+\gpgradezero{Q} 
 \dot{\BTheta}
--g \mu_a l_a \sin\theta_a \\
-\frac{d}{dt}
-\dot{\BTheta}^\dagger Q
++
+\dot{\BTheta}^\dagger
+\gpgradezero{Q} 
+\PD{\dot{\phi}_a}{\dot{\BTheta}}
+\right)  \\
+&=
+\frac{d}{dt} \left(
+\dot{\BTheta}^\dagger
+\gpgradezero{Q} \right) 
 {\begin{bmatrix}
 \delta_{ar}
 \begin{bmatrix}
 0 \\
-1
+1 
 \end{bmatrix}
 \end{bmatrix}}_r
-&=
-\inv{2} \sum_{k=1}^N m_k
-\dot{\BTheta}^\dagger
-\left(
-\PD{\phi_a}{B_k} B_k^\dagger + B_k \PD{\phi_a}{B_k^\dagger } \right)
-\dot{\BTheta}
-\end{align}
+\end{align*}
+
+FIXME: revamping from here, working with $Q$ and $\gpgradezero{Q}$ instead.  This will mean that we want $\partial_k A_a A_b^\dagger$ derivatives instead.
 
 Note that the $\partial_a B_k$ are zero if $a > k$, and for $a \le k$ have only one term dependent on $A_a$.  We also have a matrix sum of the form $u + u^\dagger$ in the partials, which can have only scalar and vector terms.  As argued previously all but the scalar elements cancel, leaving
 
 \begin{align}\label{eqn:multiPendulumSpherical2:boo7}
 \frac{d}{dt}
 \dot{\BTheta}^\dagger
-Q
+\gpgradezero{Q}
 {\begin{bmatrix}
 \delta_{ar}
 \begin{bmatrix}
@@ -280,7 +363,7 @@ B_k^\dagger }
 %%%%
 \frac{d}{dt}
 \dot{\BTheta}^\dagger
-Q
+\gpgradezero{Q}
 {\begin{bmatrix}
 \delta_{ar}
 \begin{bmatrix}
@@ -342,7 +425,7 @@ and (after some reduction)
 \end{bmatrix}
 \end{align}
 
-For brievity, writing $S_\theta = \sin\theta$, $C_\phi = \cos\phi$ and so forth, after some reduction we get for the $\phi$ partial block matrix scalar products
+After some reduction we get for the $\phi$ partial block matrix scalar products
 
 \begin{align}\label{eqn:multiPendulumSpherical2:boo13}
 \gpgradezero{ \PD{\phi_a}{A_a} A_b^\dagger}
