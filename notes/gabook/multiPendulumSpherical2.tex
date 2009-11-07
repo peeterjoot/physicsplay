@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/multiPendulumSpherical2.pdf}
 \date{Nov 4, 2009}
-\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.6 $ $Date: 2009/11/07 09:09:45 $}
+\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.7 $ $Date: 2009/11/07 09:30:50 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -115,20 +115,21 @@ l_k A_k \\
 %+(m_3) A_3 A_3^\dagger
 
 \begin{align}\label{eqn:multiPendulumSpherical2:boo5}
-\mu_k &= \sum_{j=k}^N m_j \\
 K &=
-\inv{2} \sum_{k=1}^N \mu_k
+\inv{2} \sum_{k=1}^N m_k
 \dot{\BTheta}^\dagger
 B_k B_k^\dagger
 \dot{\BTheta} \\
+\mu_k &= \sum_{j=k}^N m_j \\
 \Phi &=
 g \sum_{k=1}^N \mu_k l_k \cos\theta_k \\
 \LL &= K - \phi
 \end{align}
 
+%FIXME: Had $K = \inv{2} \sum_{k=1}^N \mu_k$ above, and that has not been corrected below.
 There's a few layers of equations involved and we still have an unholy mess of matrix and geometric algebra in the kernel of the kinetic energy quadratic form, but at least this time all the generalized coordinates of the system are scalars.
 
-\section{Evaluating the Euler-Lagrange equations.}
+\section{Some tidy up.}
 
 Before continuing with evaluation of the Euler-Lagrange equations it is helpful to make a couple of observations about the structure of the matrix products that make up our velocity quadratic forms
 
@@ -170,11 +171,30 @@ l_k l_1 \gpgradezero{A_k A_1^\dagger} & l_k l_2 \gpgradezero{A_k A_2^\dagger} & 
 \dot{\BTheta}
 \end{align}
 
+Pulling in the summation over $m_k$ we have
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo14}
+\sum_k m_k
+\dot{\BTheta}^\dagger
+B_k B_k^\dagger
+\dot{\BTheta}
+&=
+\dot{\BTheta}^\dagger
+{\begin{bmatrix}
+\mu_{\max(r,c)} l_r l_c \gpgradezero{A_r A_c^\dagger}
+\end{bmatrix}}_{rc}
+\dot{\BTheta}
+\end{align}
+
+The $\mu_{\max(r,c)} l_r l_c$ factors of the angular velocity matrices are moments of inertia in a generalized sense.
+
+\section{Evaluating the Euler-Lagrange equations.}
+
 Evaluation of the equations of motion not getting as far as expanding $B_k$ derivatives gives us
 
 \begin{align}\label{eqn:multiPendulumSpherical2:boo6}
 \frac{d}{dt}
-\sum_{k=1}^N \mu_k
+\sum_{k=1}^N m_k
 \dot{\BTheta}^\dagger
 B_k B_k^\dagger
 {\begin{bmatrix}
@@ -185,14 +205,14 @@ B_k B_k^\dagger
 \end{bmatrix}
 \end{bmatrix}}_r
 &=
-\inv{2} \sum_{k=1}^N \mu_k
+\inv{2} \sum_{k=1}^N m_k
 \dot{\BTheta}^\dagger
 \left(
 \PD{\theta_a}{B_k} B_k^\dagger + B_k \PD{\theta_a}{B_k^\dagger } \right)
 \dot{\BTheta}
 -g \mu_a l_a \sin\theta_a \\
 \frac{d}{dt}
-\sum_{k=1}^N \mu_k
+\sum_{k=1}^N m_k
 \dot{\BTheta}^\dagger
 B_k B_k^\dagger
 {\begin{bmatrix}
@@ -203,7 +223,7 @@ B_k B_k^\dagger
 \end{bmatrix}
 \end{bmatrix}}_r
 &=
-\inv{2} \sum_{k=1}^N \mu_k
+\inv{2} \sum_{k=1}^N m_k
 \dot{\BTheta}^\dagger
 \left(
 \PD{\phi_a}{B_k} B_k^\dagger + B_k \PD{\phi_a}{B_k^\dagger } \right)
@@ -214,7 +234,7 @@ Note that the $\partial_a B_k$ are zero if $a > k$, and for $a \le k$ have only 
 
 \begin{align}\label{eqn:multiPendulumSpherical2:boo7}
 \frac{d}{dt}
-\sum_{k=1}^N \mu_k
+\sum_{k=1}^N m_k
 \dot{\BTheta}^\dagger
 B_k B_k^\dagger
 {\begin{bmatrix}
@@ -225,7 +245,7 @@ B_k B_k^\dagger
 \end{bmatrix}
 \end{bmatrix}}_r
 &=
-\sum_{k=a}^N \mu_k l_a
+\sum_{k=a}^N m_k l_a
 \dot{\BTheta}^\dagger
 \gpgradezero{
 {\begin{bmatrix}
@@ -237,7 +257,7 @@ B_k^\dagger }
 -g \mu_a l_a \sin\theta_a \\
 %%%%
 \frac{d}{dt}
-\sum_{k=1}^N \mu_k
+\sum_{k=1}^N m_k
 \dot{\BTheta}^\dagger
 B_k B_k^\dagger
 {\begin{bmatrix}
@@ -248,7 +268,7 @@ B_k B_k^\dagger
 \end{bmatrix}
 \end{bmatrix}}_r
 &=
-\sum_{k=a}^N \mu_k
+\sum_{k=a}^N m_k
 \dot{\BTheta}^\dagger
 \gpgradezero{
 {\begin{bmatrix}
