@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/multiPendulumSpherical2.pdf}
 \date{Nov 4, 2009}
-\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.15 $ $Date: 2009/11/08 13:47:18 $}
+\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.16 $ $Date: 2009/11/08 23:12:57 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -318,7 +318,7 @@ A small aside.  This velocity gradient is also the conjugate momentum of the Ham
 P_{\BTheta} = \grad_{\dot{\BTheta}} \LL 
 \end{align}
 
-Noting that $(\gpgradezero{Q}^{-1})^\T = \gpgradezero{Q}^{-1}$, we get for the kinetic energy portion of the Hamiltonian 
+and noting that $(\gpgradezero{Q}^{-1})^\T = \gpgradezero{Q}^{-1}$, we get for the kinetic energy portion of the Hamiltonian 
 
 \begin{align}\label{eqn:multiPendulumSpherical2:boo31}
 K = \inv{2} {P_{\BTheta}}^\T \gpgradezero{Q}^{-1} P_{\BTheta}
@@ -336,11 +336,7 @@ Returning to the evaluation of the Euler-Lagrange equations, the problem is now 
 \end{bmatrix}}_r
 \end{align}
 
-With back substituition of \ref{eqn:multiPendulumSpherical2:boo20}, and \ref{eqn:multiPendulumSpherical2:boo21} we have a complete non-multivector expansion of the left hand side.  For the right we need to consider the $\gpgradezero{A_r A_c^\dagger}$ partials.
-
-FIXME: mess from here after reorg in progress.
-
-For the other half of the Euler-Lagrange evaluation for this system, we get for the $\theta_a$ and $\phi_a$ derivatives respectively
+With back substituition of \ref{eqn:multiPendulumSpherical2:boo20}, and \ref{eqn:multiPendulumSpherical2:boo21} we have a complete non-multivector expansion of the left hand side.  For the right hand side taking the $\theta_a$ and $\phi_a$ derivatives respectively we get
 
 \begin{align}\label{eqn:multiPendulumSpherical2:boo6}
 \PD{\theta_a}{\LL}
@@ -369,52 +365,94 @@ For the other half of the Euler-Lagrange evaluation for this system, we get for 
 \dot{\BTheta}
 \end{align}
 
-Note that the $\partial_a B_k$ are zero if $a > k$, and for $a \le k$ have only one term dependent on $A_a$.  We also have a matrix sum of the form $u + u^\dagger$ in the partials, which can have only scalar and vector terms.  As argued previously all but the scalar elements cancel, leaving
+So to procede we must consider the $\gpgradezero{A_r A_c^\dagger}$ partials.  A bit of thought shows that the matrices of partials above are mostly zeros.  Illustrating by example, consider $\PDi{\theta_2}{\gpgradezero{Q}}$, which in block matrix form is
 
-\begin{align}\label{eqn:multiPendulumSpherical2:boo7}
-\frac{d}{dt}
-\dot{\BTheta}^\dagger
-\gpgradezero{Q}
-{\begin{bmatrix}
-\delta_{ar}
+\begin{align}\label{eqn:multiPendulumSpherical2:boo33}
+\PD{\theta_2}{\gpgradezero{Q}}
+=
 \begin{bmatrix}
-1 \\
-0
+0 & \inv{2} \mu_2 l_1 l_2 \gpgradezero{A_1 \PD{\theta_2}{A_2}^\dagger} & 0 & \hdots & 0 \\
+\inv{2} \mu_2 l_2 l_1 \gpgradezero{\PD{\theta_2}{A_2} A_1^\dagger} &
+\inv{2} \mu_2 l_2 l_2 \gpgradezero{A_2 \PD{\theta_2}{A_2}^\dagger + \PD{\theta_2}{A_2} A_2^\dagger} &
+\inv{2} \mu_3 l_2 l_3 \gpgradezero{\PD{\theta_2}{A_2} A_3^\dagger} & \hdots &
+\inv{2} \mu_N l_2 l_N \gpgradezero{\PD{\theta_2}{A_2} A_N^\dagger} \\
+0 & \inv{2} \mu_3 l_3 l_2 \gpgradezero{A_3 \PD{\theta_2}{A_2}^\dagger} & 0 & \hdots & 0 \\
+0 & \vdots & 0 & \hdots & 0 \\
+0 & \inv{2} \mu_N l_N l_2 \gpgradezero{A_N \PD{\theta_2}{A_2}^\dagger} & 0 & \hdots & 0 \\
 \end{bmatrix}
-\end{bmatrix}}_r
-&=
-\sum_{k=a}^N m_k l_a
-\dot{\BTheta}^\dagger
-\gpgradezero{
-{\begin{bmatrix}
-\delta_{ar}
-\PD{\theta_a}{A_a} \\
-\end{bmatrix}}_r
-B_k^\dagger }
-\dot{\BTheta}
--g \mu_a l_a \sin\theta_a \\
-%%%%
-\frac{d}{dt}
-\dot{\BTheta}^\dagger
-\gpgradezero{Q}
-{\begin{bmatrix}
-\delta_{ar}
-\begin{bmatrix}
-0 \\
-1
-\end{bmatrix}
-\end{bmatrix}}_r
-&=
-\sum_{k=a}^N m_k
-\dot{\BTheta}^\dagger
-\gpgradezero{
-{\begin{bmatrix}
-\delta_{ar}
-\PD{\phi_a}{A_a} \\
-\end{bmatrix}}_r
-B_k^\dagger }
-\dot{\BTheta}
 \end{align}
+
+Observe that the diagonal term has a scalar plus its reverse, so we can drop the one half factor and one of the summands for a total contribution to $\PDi{\theta_2}{\LL}$ of just
+
+\begin{align*}
+\mu_2 {l_2}^2 {\dot{\BTheta}_2}^\T \gpgradezero{\PD{\theta_2}{A_2} A_2^\dagger} \dot{\BTheta}_2
+\end{align*}
+
+Now consider one of the pairs of off diagonal terms.  Adding these we contributions to $\PDi{\theta_2}{\LL}$ of
+
+\begin{align*}
+\inv{2} \mu_2 l_1 l_2 
+{\dot{\BTheta}_1}^\T
+\gpgradezero{A_1 \PD{\theta_2}{A_2}^\dagger} 
+\dot{\BTheta}_2
++\inv{2} \mu_2 l_2 l_1 
+{\dot{\BTheta}_2}^\T
+\gpgradezero{\PD{\theta_2}{A_2} A_1^\dagger} 
+\dot{\BTheta}_1
+&=
+\inv{2} \mu_2 l_1 l_2 
+{\dot{\BTheta}_1}^\T
+\gpgradezero{
+A_1 \PD{\theta_2}{A_2}^\dagger
++A_1 \PD{\theta_2}{A_2}^\dagger
+} 
+\dot{\BTheta}_2 \\
+&=
+\mu_2 l_1 l_2 
+{\dot{\BTheta}_1}^\T
+\gpgradezero{
+A_1 \PD{\theta_2}{A_2}^\dagger
+} 
+\dot{\BTheta}_2 \\
+\end{align*}
+
+This has exactly the same form as the diagonal term, so summing over all terms we get for the position gradient components of the Euler-Lagrange equation just
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo41}
+\PD{\theta_a}{\LL}
+&=
+%\mu_a {l_a}^2 {\dot{\BTheta}_a}^\T \gpgradezero{ A_a \PD{\theta_a}{A_a}^\dagger} \dot{\BTheta}_a
+%+
+%\sum_{k \ne a}
+\sum_{k}
+\mu_{\max(k,a)} l_k l_a 
+{\dot{\BTheta}_k}^\T
+\gpgradezero{
+A_k \PD{\theta_a}{A_a}^\dagger
+} 
+\dot{\BTheta}_a 
+-g \mu_a l_a \sin\theta_a 
+\end{align}
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo40}
+\PD{\phi_a}{\LL}
+&=
+%\mu_a {l_a}^2 {\dot{\BTheta}_a}^\T \gpgradezero{ A_a \PD{\phi_a}{A_a}^\dagger} \dot{\BTheta}_a
+%+
+%\sum_{k \ne a}
+\sum_{k}
+\mu_{\max(k,a)} l_k l_a 
+{\dot{\BTheta}_k}^\T
+\gpgradezero{
+A_k \PD{\phi_a}{A_a}^\dagger
+} 
+\dot{\BTheta}_a 
+\end{align}
+
+The only thing that remains to do is evaluate the $\gpgradezero{A_k \PDi{\phi_a}{A_a}^\dagger}$ matrixes.
+
+FIXME: some of this below based on earlier attempt, but I don't trust it all.  Redo on paper, verify, and finalize the result.
+
 
 To go forward further, we require
 
@@ -430,27 +468,6 @@ and (after some reduction)
 
 \begin{align}\label{eqn:multiPendulumSpherical2:boo11}
 \PD{\phi_a}{A_a}
-%&=
-%\begin{bmatrix}
-%\Be_2 e^{i \phi_a} e^{j_a \theta_a}
-%+\Be_1 e^{i \phi_a} \PD{\phi_a}{j_a} \sin\theta_a
-%\\
-%-\Be_1 e^{i \phi_a} \sin\theta_a
-%\end{bmatrix} \\
-%&=
-%\begin{bmatrix}
-%\Be_2 e^{i \phi_a} e^{j_a \theta_a}
-%+\Be_1 e^{i \phi_a} \Be_3 \Be_2 e^{i\phi_a} \sin\theta_a
-%\\
-%-\Be_1 e^{i \phi_a} \sin\theta_a
-%\end{bmatrix} \\
-%&=
-%\begin{bmatrix}
-%\Be_2 e^{i \phi_a} e^{j_a \theta_a}
-%+\Be_1 \Be_3 \Be_2 \sin\theta_a
-%\\
-%-\Be_1 e^{i \phi_a} \sin\theta_a
-%\end{bmatrix} \\
 &=
 \begin{bmatrix}
 \Be_2 e^{i \phi_a} \cos\theta_a \\
