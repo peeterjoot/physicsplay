@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/multiPendulumSpherical2.pdf}
 \date{Nov 4, 2009}
-\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.14 $ $Date: 2009/11/08 05:16:39 $}
+\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.15 $ $Date: 2009/11/08 13:47:18 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -126,7 +126,6 @@ g \sum_{k=1}^N \mu_k l_k \cos\theta_k \\
 \LL &= K - \Phi
 \end{align}
 
-%FIXME: Had $K = \inv{2} \sum_{k=1}^N \mu_k$ above, and that has not been corrected below.
 There's a few layers of equations involved and we still have an unholy mess of matrix and geometric algebra in the kernel of the kinetic energy quadratic form, but at least this time all the generalized coordinates of the system are scalars.
 
 \section{Some tidy up.}
@@ -221,7 +220,18 @@ C_{\phi_c - \phi_r} S_{\theta_r} S_{\theta_c}
 \end{bmatrix}
 \end{align}
 
-Observe that $\gpgradezero{A_r A_c^\dagger}^T = \gpgradezero{A_c A_r^\dagger}$, so the scalar matrix
+The diagonal blocks are particularily simple and have no $\phi$ dependence
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo20d}
+\gpgradezero{A_r A_r^\dagger}
+=
+\begin{bmatrix}
+1 & 0 \\
+0 & \sin^2 \theta_r
+\end{bmatrix}
+\end{align}
+
+Observe also that $\gpgradezero{A_r A_c^\dagger}^T = \gpgradezero{A_c A_r^\dagger}$, so the scalar matrix
 
 \begin{align}\label{eqn:multiPendulumSpherical2:boo21}
 \gpgradezero{Q} = 
@@ -302,7 +312,19 @@ The last groupings above made use of $\gpgradezero{Q} = \gpgradezero{Q}^\T$, and
 \end{bmatrix}}_r = \gpgradezero{Q} \dot{\BTheta}
 \end{align}
 
-The Euler-Lagrange equation evaluation is now reduced to
+A small aside.  This velocity gradient is also the conjugate momentum of the Hamiltonian, so if we wish to express the Hamiltonian in terms of conjugate momenta, we require invertability of $\gpgradezero{Q}$ at the point in time that we evaluate things.  Writing
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo30}
+P_{\BTheta} = \grad_{\dot{\BTheta}} \LL 
+\end{align}
+
+Noting that $(\gpgradezero{Q}^{-1})^\T = \gpgradezero{Q}^{-1}$, we get for the kinetic energy portion of the Hamiltonian 
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo31}
+K = \inv{2} {P_{\BTheta}}^\T \gpgradezero{Q}^{-1} P_{\BTheta}
+\end{align}
+
+Returning to the evaluation of the Euler-Lagrange equations, the problem is now reduced to calculating the right hand side of the following system
 
 \begin{align}\label{eqn:multiPendulumSpherical2:boo23}
 \frac{d}{dt} \left( \gpgradezero{Q} \dot{\BTheta} \right) =
@@ -314,7 +336,9 @@ The Euler-Lagrange equation evaluation is now reduced to
 \end{bmatrix}}_r
 \end{align}
 
-With back substituition of \ref{eqn:multiPendulumSpherical2:boo20}, and \ref{eqn:multiPendulumSpherical2:boo21} we have a complete non-multivector expansion of the right hand side if desired.  To complete things it is desirable to try to find a tidy form for the left hand side, which we have expanded above in terms of $A_r A_c^\dagger$ derivatives.
+With back substituition of \ref{eqn:multiPendulumSpherical2:boo20}, and \ref{eqn:multiPendulumSpherical2:boo21} we have a complete non-multivector expansion of the left hand side.  For the right we need to consider the $\gpgradezero{A_r A_c^\dagger}$ partials.
+
+FIXME: mess from here after reorg in progress.
 
 For the other half of the Euler-Lagrange evaluation for this system, we get for the $\theta_a$ and $\phi_a$ derivatives respectively
 
@@ -344,8 +368,6 @@ For the other half of the Euler-Lagrange evaluation for this system, we get for 
 \end{bmatrix}}_{rc} 
 \dot{\BTheta}
 \end{align}
-
-FIXME: revamping from here, working with $Q$ and $\gpgradezero{Q}$ instead.  This will mean that we want $\partial_k A_a A_b^\dagger$ derivatives instead.
 
 Note that the $\partial_a B_k$ are zero if $a > k$, and for $a \le k$ have only one term dependent on $A_a$.  We also have a matrix sum of the form $u + u^\dagger$ in the partials, which can have only scalar and vector terms.  As argued previously all but the scalar elements cancel, leaving
 
