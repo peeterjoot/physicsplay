@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/multiPendulumSpherical2.pdf}
 \date{Nov 4, 2009}
-\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.17 $ $Date: 2009/11/09 13:14:50 $}
+\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.18 $ $Date: 2009/11/09 17:40:40 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -13,6 +13,8 @@
 \section{Motivation}
 
 Attempting the multiple spherical pendulum problem with a bivector parameterized Lagrangian has just been attempted, but did not turn out to be an effective approach.  Here a variation is used, employing regular plain old scalar spherical angle parameterized Kinetic energy, but still employing Geometric Algebra to express the Hermitian quadratic form associated with this energy term.
+
+FIXME: url reference to this since it is implictly referenced.  That doc also implictly referenced my Hamiltionan notes, so pointing back to that would be good for connectedness.
 
 The same set of simplifying assumptions will be made.  These are point masses, zero friction at the pivots and rigid nonspringy massless connecting rods between the masses.
 
@@ -482,44 +484,64 @@ It should be possible but it is tedious to calculate the block matrix derivative
 \end{bmatrix}
 \end{align}
 
-However multiplying this out and reducing is a bit tedious and would be a better job for a symbolic algebra package since we have done part of the work for this already and have \ref{eqn:multiPendulumSpherical2:boo20} available to use.  We get
-
-\begin{align}\label{eqn:multiPendulumSpherical2:boo50}
-\gpgradezero{ A_r \PD{\phi_c}{A_c}^\dagger }
-&=
-\begin{bmatrix}
--S_{\phi_c - \phi_r} C_{\theta_r} C_{\theta_c} + S_{\theta_r} S_{\theta_c} &
--C_{\phi_c - \phi_r} C_{\theta_r} S_{\theta_c} \\
-C_{\phi_c - \phi_r} C_{\theta_c} S_{\theta_r} &
--S_{\phi_c - \phi_r} S_{\theta_r} S_{\theta_c} 
-\end{bmatrix}
-\end{align}
+However multiplying this out and reducing is a bit tedious and would be a better job for a symbolic algebra package.  With \ref{eqn:multiPendulumSpherical2:boo20} available to use, one gets easily
 
 \begin{align}\label{eqn:multiPendulumSpherical2:boo51}
-\gpgradezero{ A_r \PD{\theta_c}{A_c}^\dagger }
+\gpgradezero{ A_k \PD{\theta_c}{A_c}^\dagger }
 &=
 \begin{bmatrix}
--C_{\phi_c - \phi_r} C_{\theta_r} S_{\theta_c} + S_{\theta_r} C_{\theta_c} &
--S_{\phi_c - \phi_r} C_{\theta_r} C_{\theta_c} \\
--S_{\phi_c - \phi_r} S_{\theta_c} S_{\theta_r} &
-S_{\phi_c - \phi_r} (1 + \delta_{rc}) S_{\theta_r} C_{\theta_c} 
+-C_{\phi_a - \phi_k} C_{\theta_k} S_{\theta_a} + S_{\theta_k} C_{\theta_a} &
+-S_{\phi_a - \phi_k} C_{\theta_k} C_{\theta_a} \\
+-S_{\phi_a - \phi_k} S_{\theta_a} S_{\theta_k} &
+C_{\phi_a - \phi_k} (1 + \delta_{k a}) S_{\theta_k} C_{\theta_a} 
 \end{bmatrix}
 \end{align}
 
-\begin{align}\label{eqn:multiPendulumSpherical2:boo20x}
-\gpgradezero{A_r A_c^\dagger}
-=
+\begin{align}\label{eqn:multiPendulumSpherical2:boo50}
+\gpgradezero{ A_k \PD{\phi_a}{A_a}^\dagger }
+&=
 \begin{bmatrix}
-C_{\phi_c - \phi_r} 
-C_{\theta_r}
-C_{\theta_c}
-+S_{\theta_r}
-S_{\theta_c} &
--S_{\phi_c - \phi_r} C_{\theta_r} S_{\theta_c} \\
-S_{\phi_c - \phi_r} C_{\theta_c} S_{\theta_r} &
-C_{\phi_c - \phi_r} S_{\theta_r} S_{\theta_c}
+-S_{\phi_a - \phi_k} C_{\theta_k} C_{\theta_a} + S_{\theta_k} S_{\theta_a} &
+-C_{\phi_a - \phi_k} C_{\theta_k} S_{\theta_a} \\
+C_{\phi_a - \phi_k} C_{\theta_a} S_{\theta_k} &
+-S_{\phi_a - \phi_k} S_{\theta_k} S_{\theta_a} 
 \end{bmatrix}
 \end{align}
+
+The right hand side of the Euler-Lagrange equations now becomes
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo55}
+\grad_{\BTheta} \LL =
+\sum_k
+{\begin{bmatrix}
+\begin{bmatrix}
+\mu_{\max(k,r)} l_k l_r {\dot{\BTheta}_k}^\T \gpgradezero{ A_k \PD{\theta_r}{A_r}^\dagger } \dot{\BTheta}_r \\
+\mu_{\max(k,r)} l_k l_r {\dot{\BTheta}_k}^\T \gpgradezero{ A_k \PD{\phi_r}{A_r}^\dagger } \dot{\BTheta}_r 
+\end{bmatrix}
+\end{bmatrix}}_r
+- g
+{\begin{bmatrix}
+\mu_r l_r \sin\theta_r 
+\begin{bmatrix}
+1 \\
+0
+\end{bmatrix}
+\end{bmatrix}}_r
+\end{align}
+
+Can the $\BTheta_a$ matrices be factored out?  How to do that is not obvious.
+
+\section{Hamiltonian form and linearization.}
+
+TODO.
+
+\subsection{Thoughts about the Hamiltonian singularity.}
+
+The fact that the Hamiltonian goes singular on the horizontal in this spherical polar representation is actually what I think is the most interesting bit in the problem (the rest being a lot mechanical details).  On the horizontal $\phi=0$ or $\dot{\phi} = 37000$ radians/sec makes no difference to the dynamics.  All you can say is that the horizontal plane angular momentum is a constant of the system.  It seems very much like the increasing uncertaintly that you get in the corresponding radial QM equation.  Once you start pinning down the $\theta$ angle, you loose the ability to say much about $\phi$.  I suspect there are some deeper connections relating this classical and QM similarity.  Perhaps learning about symplectic flows and phase space volume invariance would shed some light on this. 
+
+\section{A summary.}
+
+TODO.
 
 %\EndArticle
 \EndNoBibArticle
