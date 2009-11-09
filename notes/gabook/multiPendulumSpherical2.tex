@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/multiPendulumSpherical2.pdf}
 \date{Nov 4, 2009}
-\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.16 $ $Date: 2009/11/08 23:12:57 $}
+\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.17 $ $Date: 2009/11/09 13:14:50 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -312,7 +312,7 @@ The last groupings above made use of $\gpgradezero{Q} = \gpgradezero{Q}^\T$, and
 \end{bmatrix}}_r = \gpgradezero{Q} \dot{\BTheta}
 \end{align}
 
-A small aside.  This velocity gradient is also the conjugate momentum of the Hamiltonian, so if we wish to express the Hamiltonian in terms of conjugate momenta, we require invertability of $\gpgradezero{Q}$ at the point in time that we evaluate things.  Writing
+A small aside on Hamiltonian form.  This velocity gradient is also the conjugate momentum of the Hamiltonian, so if we wish to express the Hamiltonian in terms of conjugate momenta, we require invertability of $\gpgradezero{Q}$ at the point in time that we evaluate things.  Writing
 
 \begin{align}\label{eqn:multiPendulumSpherical2:boo30}
 P_{\BTheta} = \grad_{\dot{\BTheta}} \LL 
@@ -323,6 +323,19 @@ and noting that $(\gpgradezero{Q}^{-1})^\T = \gpgradezero{Q}^{-1}$, we get for t
 \begin{align}\label{eqn:multiPendulumSpherical2:boo31}
 K = \inv{2} {P_{\BTheta}}^\T \gpgradezero{Q}^{-1} P_{\BTheta}
 \end{align}
+
+Now, the invertability of $\gpgradezero{Q}$ cannot be taken for granted.  Even in the single particle case we do not have invertability.  For the single particle case we have
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo45}
+\gpgradezero{Q} =
+m l^2 
+\begin{bmatrix}
+1 & 0 \\
+0 & \sin^2 \theta
+\end{bmatrix}
+\end{align}
+
+so at $\theta = \pm \pi/2$ this quadratic form is singlular, and the planar angular momentum becomes a constant of motion.
 
 Returning to the evaluation of the Euler-Lagrange equations, the problem is now reduced to calculating the right hand side of the following system
 
@@ -451,44 +464,61 @@ A_k \PD{\phi_a}{A_a}^\dagger
 
 The only thing that remains to do is evaluate the $\gpgradezero{A_k \PDi{\phi_a}{A_a}^\dagger}$ matrixes.
 
-FIXME: some of this below based on earlier attempt, but I don't trust it all.  Redo on paper, verify, and finalize the result.
-
-
-To go forward further, we require
+It should be possible but it is tedious to calculate the block matrix derivative terms from the $A_a$ partials using
 
 \begin{align}\label{eqn:multiPendulumSpherical2:boo10}
 \PD{\theta_a}{A_a} &=
 \begin{bmatrix}
-\Be_1 e^{i \phi_a} j_a e^{j_a \theta_a} \\
-\Be_2 e^{i \phi_a} \cos\theta_a
+-\Be_3 e^{j_a \theta_a} \\
+\Be_2 e^{i \phi_a} C_{\theta_a}
 \end{bmatrix}
 \end{align}
-
-and (after some reduction)
-
 \begin{align}\label{eqn:multiPendulumSpherical2:boo11}
 \PD{\phi_a}{A_a}
 &=
 \begin{bmatrix}
-\Be_2 e^{i \phi_a} \cos\theta_a \\
--\Be_1 e^{i \phi_a} \sin\theta_a
+\Be_2 e^{i \phi_a} C_{\theta_a} \\
+-\Be_1 e^{i \phi_a} S_{\theta_a}
 \end{bmatrix}
 \end{align}
 
-After some reduction we get for the $\phi$ partial block matrix scalar products
+However multiplying this out and reducing is a bit tedious and would be a better job for a symbolic algebra package since we have done part of the work for this already and have \ref{eqn:multiPendulumSpherical2:boo20} available to use.  We get
 
-\begin{align}\label{eqn:multiPendulumSpherical2:boo13}
-\gpgradezero{ \PD{\phi_a}{A_a} A_b^\dagger}
+\begin{align}\label{eqn:multiPendulumSpherical2:boo50}
+\gpgradezero{ A_r \PD{\phi_c}{A_c}^\dagger }
 &=
 \begin{bmatrix}
-S_{\phi_a + \phi_b} C_{\theta_a} C_{\theta_b} & C_{\phi_b - \phi_a} C_{\theta_a} S_{\theta_b} \\
--C_{\phi_a + \phi_b} S_{\theta_a} C_{\theta_b} & S_{\phi_b - \phi_a} S_{\theta_a} S_{\theta_b} \\
+-S_{\phi_c - \phi_r} C_{\theta_r} C_{\theta_c} + S_{\theta_r} S_{\theta_c} &
+-C_{\phi_c - \phi_r} C_{\theta_r} S_{\theta_c} \\
+C_{\phi_c - \phi_r} C_{\theta_c} S_{\theta_r} &
+-S_{\phi_c - \phi_r} S_{\theta_r} S_{\theta_c} 
 \end{bmatrix}
 \end{align}
-\begin{align}\label{eqn:multiPendulumSpherical2:boo14}
-\gpgradezero{ \PD{\theta_a}{A_a} A_b^\dagger}
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo51}
+\gpgradezero{ A_r \PD{\theta_c}{A_c}^\dagger }
 &=
-\text{TO COMPUTE}
+\begin{bmatrix}
+-C_{\phi_c - \phi_r} C_{\theta_r} S_{\theta_c} + S_{\theta_r} C_{\theta_c} &
+-S_{\phi_c - \phi_r} C_{\theta_r} C_{\theta_c} \\
+-S_{\phi_c - \phi_r} S_{\theta_c} S_{\theta_r} &
+S_{\phi_c - \phi_r} (1 + \delta_{rc}) S_{\theta_r} C_{\theta_c} 
+\end{bmatrix}
+\end{align}
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo20x}
+\gpgradezero{A_r A_c^\dagger}
+=
+\begin{bmatrix}
+C_{\phi_c - \phi_r} 
+C_{\theta_r}
+C_{\theta_c}
++S_{\theta_r}
+S_{\theta_c} &
+-S_{\phi_c - \phi_r} C_{\theta_r} S_{\theta_c} \\
+S_{\phi_c - \phi_r} C_{\theta_c} S_{\theta_r} &
+C_{\phi_c - \phi_r} S_{\theta_r} S_{\theta_c}
+\end{bmatrix}
 \end{align}
 
 %\EndArticle
