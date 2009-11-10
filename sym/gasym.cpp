@@ -3,7 +3,7 @@
  *
  * Peeter Joot (peeter.joot@gmail.com).  November 2008.
  *
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  */
 
 
@@ -56,7 +56,9 @@ symbol x1("{x^1}", e1) ;
 symbol x2("{x^2}", e2) ;
 symbol x3("{x^3}", e2) ;
 
-void printIt( const char * label, sum & v )
+using std::string ;
+
+void printIt( const std::string & label, sum & v )
 {
    cout << "\\begin{align*}\n" << label ;
    v.dump( true ) ;
@@ -739,6 +741,121 @@ void sphericalPolar2()
    printIt( "\\phicap &=", phicap ) ;
 }
 
+void baylisEuler()
+{
+   term Ct("C_\\theta") ;
+   term St("S_\\theta") ;
+   term Cp("C_\\phi") ; 
+   term Sp("S_\\phi") ;
+   term Cc("C_\\chi") ; 
+   term Sc("S_\\chi") ;
+   term h("\\inv{2}") ;
+
+   sum p3( 1 ) ;
+   p3 += symbol( e3 ) ;
+   p3 *= symbol( h, mv(1) ) ;
+
+   symbol scalarRphi( Cp, 1 ) ;
+   symbol bivectorRphi( Sp, _bivector( e2 ^ e1 ) ) ;
+
+   symbol scalarRtheta( Ct, 1 ) ;
+   symbol bivectorRtheta( St, _bivector( e1 ^ e3 ) ) ;
+
+   symbol scalarRchi( Cc, 1 ) ;
+   symbol bivectorRchi( Sc, _bivector( e2 ^ e1 ) ) ;
+
+   sum Rtheta(scalarRtheta) ; Rtheta += bivectorRtheta ;
+   sum Rphi(scalarRphi) ; Rphi += bivectorRphi ;
+   sum Rchi(scalarRchi) ; Rchi += bivectorRchi ;
+
+   printIt( "Rtheta:", Rtheta ) ;
+   printIt( "Rphi:", Rphi ) ;
+   printIt( "Rchi:", Rchi ) ;
+   printIt( "p3:", p3 ) ;
+
+   sum prod(Rphi) ;
+   prod *= Rtheta ;
+   prod *= Rchi ;
+   prod *= p3 ;
+
+   printIt( "prod:", prod ) ;
+}
+
+#if 0
+   A &=
+   Be_1 e^{i phi} e^{j theta} 
+   Be_2 e^{i phi} sin(theta)
+
+   j = e_3 wedge e_1 e^{i phi}
+   i = e_1 wedge e_2
+#endif
+/**
+   build up the matrix
+
+   \param thetaStr [in]
+      Example: "theta"
+   \param phiStr [in]
+      Example: "phi"
+   \param A1 [out]
+       first row.
+   \param A2 [out]
+       second row.
+ */
+void sphericalPendulum( const std::string & thetaStr,
+                        const std::string & phiStr,
+                        sum & A1,
+                        sum & A2 )
+{
+   term cos_theta(std::string("C_") + thetaStr) ;
+   term sin_theta(std::string("S_") + thetaStr) ;
+   term cos_phi(std::string("C_") + phiStr) ; 
+   term sin_phi(std::string("S_") + phiStr) ;
+
+   symbol scalarExpIphi( cos_phi, 1 ) ;
+   symbol bivectorExpIphi( sin_phi, _bivector( e1 ^ e2 ) ) ;
+   sum ExpIphi(scalarExpIphi) ; ExpIphi += bivectorExpIphi ;
+   //printIt( std::string("e^{i") + phiStr + std::string("} &="), ExpIphi ) ;
+
+   sum jBivector( symbol( _bivector( e3 ^ e1) ) ) ;
+   jBivector *= ExpIphi ;
+   //printIt( "j &=", jBivector ) ;
+
+   sum ExpJtheta( symbol( sin_theta, 1 ) ) ;
+   ExpJtheta *= jBivector ;
+   ExpJtheta += symbol( cos_theta, 1 ) ;
+   //printIt( std::string("e^{j") + thetaStr + std::string("} &="), ExpJtheta ) ;
+
+   A1 = symbol( e1 ) ;
+//   printIt( "A1 = ", A1 ) ;
+   A1 *= ExpIphi ;
+//   printIt( "A1 = ", A1 ) ;
+   A1 *= ExpJtheta ;
+//   printIt( "A1 = ", A1 ) ;
+
+   A2 = symbol( e2 ) ;
+//   printIt( "A2 = ", A2 ) ;
+   A2 *= ExpIphi ;
+//   printIt( "A2 = ", A2 ) ;
+   A2 *= symbol( sin_theta, 1 ) ;
+//   printIt( "A2 = ", A2 ) ;
+
+   sum A11 = A1 ;
+   A11 *= A1 ;   
+   printIt( "A11 = ", A11 ) ;
+
+   sum A12 = A1 ;
+   A12 *= A2 ;   
+   printIt( "A12 = ", A12 ) ;
+
+   sum A21 = A2 ;
+   A21 *= A1 ;   
+   printIt( "A21 = ", A21 ) ;
+
+   sum A22 = A2 ;
+   A22 *= A2 ;   
+   printIt( "A22 = ", A22 ) ;
+}
+
 int main(int argc, char*argv[])
 {
    mv_string_wedge = " \\wedge " ;
@@ -756,8 +873,12 @@ int main(int argc, char*argv[])
 //   cayleyKlein3() ;
 //   cayleyKlein4() ;
 //   cayleyKlein5() ;
-   sphericalPolar() ;
+//   sphericalPolar() ;
 //   sphericalPolar2() ;
+//   baylisEuler() ;
+
+   sum A1, A2 ;
+   sphericalPendulum( "\\theta", "\\phi", A1, A2 ) ;
 
    return 0 ;
 }
