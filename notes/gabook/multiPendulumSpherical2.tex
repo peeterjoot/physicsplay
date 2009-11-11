@@ -5,17 +5,16 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/multiPendulumSpherical2.pdf}
 \date{Nov 4, 2009}
-\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.18 $ $Date: 2009/11/09 17:40:40 $}
+\revisionInfo{$RCSfile: multiPendulumSpherical2.tex,v $ Last $Revision: 1.19 $ $Date: 2009/11/11 02:55:04 $}
 
 \beginArtWithToc
 %\beginArtNoToc
 
 \section{Motivation}
 
-Attempting the multiple spherical pendulum problem with a bivector parameterized Lagrangian has just been attempted, but did not turn out to be an effective approach.  Here a variation is used, employing regular plain old scalar spherical angle parameterized Kinetic energy, but still employing Geometric Algebra to express the Hermitian quadratic form associated with this energy term.
+Attempting the multiple spherical pendulum problem with a bivector parameterized Lagrangian has just been attempted (\cite{sPolarMultiPendulum}), but did not turn out to be an effective approach.  Here a variation is used, employing regular plain old scalar spherical angle parameterized Kinetic energy, but still employing Geometric Algebra to express the Hermitian quadratic form associated with this energy term.
 
-FIXME: url reference to this since it is implictly referenced.  That doc also implictly referenced my Hamiltionan notes, so pointing back to that would be good for connectedness.
-
+%FIXME: url reference to this since it is implictly referenced.  That doc also implictly referenced my Hamiltionan notes, so pointing back to that would be good for connectedness.
 The same set of simplifying assumptions will be made.  These are point masses, zero friction at the pivots and rigid nonspringy massless connecting rods between the masses.
 
 \section{The Lagrangian.}
@@ -529,19 +528,78 @@ The right hand side of the Euler-Lagrange equations now becomes
 \end{bmatrix}}_r
 \end{align}
 
-Can the $\BTheta_a$ matrices be factored out?  How to do that is not obvious.
+Can the $\dot{\BTheta}_a$ matrices be factored out, perhaps allowing for expression as a function of $\dot{\BTheta}$?  How to do that if it is possible is not obvious.  The driving reason to do so would be to put things into a tidy form where things are a function of the system angular velocity vector $\BTheta$, but this is not possible anyways since the gradient is non-linear.
 
 \section{Hamiltonian form and linearization.}
 
-TODO.
+Having calculated the Hamiltonian equations for the multiple mass planar pendulum in \cite{hamiltonian}, doing so for the spherical pendulum can now be done by inspection.  With the introduction of a phase space vector for the system using the conjugate momenta (for angles where these conjugate momenta are non-singlular)
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo60}
+\Bz = 
+\begin{bmatrix}
+P_{\BTheta} \\
+\BTheta
+\end{bmatrix}
+\end{align}
+
+we can write the Hamiltonian equations
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo61}
+\frac{d\Bz}{dt} = 
+\begin{bmatrix}
+\grad_{\BTheta} \LL \\
+\gpgradezero{Q}^{-1} P_{\BTheta}
+\end{bmatrix}
+\end{align}
+
+The position gradient is given explicitly in \ref{eqn:multiPendulumSpherical2:boo55}, and that can be substituted here.  That gradient is expressed in terms of $\dot{\BTheta}_k$ and not the conjugate momenta, but the mapping required to express the whole system in terms of the conjugate momenta is simple enough
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo62}
+\dot{\BTheta}_k = 
+{\begin{bmatrix}
+\delta_{kc} I_{22}
+\end{bmatrix}}_c \gpgradezero{Q}^{-1} P_{\BTheta}
+\end{align}
+
+It is apparent that for any sort of numerical treatment use of a angular momentum and angular position phase space vector is not prudent.  If the aim is nothing more than working with a first order system instead of second order, then we are probably better off with an angular velocity plus angular position phase space system.  
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo60a}
+\frac{d}{dt}
+\begin{bmatrix}
+\gpgradezero{Q} \dot{\BTheta} \\
+\BTheta
+\end{bmatrix}
+=
+\begin{bmatrix}
+\grad_{\BTheta} \LL \\
+\dot{\BTheta}
+\end{bmatrix}
+\end{align}
+
+This eliminates the requirement for inverting the sometimes singular matrix $\gpgradezero{Q}$, but one is still left with something that is perhaps tricky to work with since we have the possibility of zeros on the left hand side.  The resulting equation is of the form
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo64}
+M \Bx' = f(\Bx)
+\end{align}
+
+where $M = \left[\begin{smallmatrix}\gpgradezero{Q} & 0 \\ 0 & I\end{smallmatrix}\right]$ is a possibly singular matrix, and $f$ is a non-linear function of the components of $\BTheta$, and $\dot{\BTheta}$.  This is concievably linearizable in the neighbourhood of a particular phase space point $\Bx_0$.  If that is done, resulting in an equation of the form
+
+\begin{align}\label{eqn:multiPendulumSpherical2:boo65}
+M \By' = f(\Bx_0) + B \By 
+\end{align}
+
+where $\Bx = \By + \Bx_0$ and $B$ is an appropriate matrix of partials (the specifics of which don't really have to be spelled out here).  Because of the possible singularities of $M$ the exponentiation techniques applied to the linearized planar pendulum may not be possible with such a linearization.  Study of this less well formed system of LDEs probably has interesting aspects, but is also likely best tackled independently of the specifics of the spherical pendulum problem.
 
 \subsection{Thoughts about the Hamiltonian singularity.}
 
-The fact that the Hamiltonian goes singular on the horizontal in this spherical polar representation is actually what I think is the most interesting bit in the problem (the rest being a lot mechanical details).  On the horizontal $\phi=0$ or $\dot{\phi} = 37000$ radians/sec makes no difference to the dynamics.  All you can say is that the horizontal plane angular momentum is a constant of the system.  It seems very much like the increasing uncertaintly that you get in the corresponding radial QM equation.  Once you start pinning down the $\theta$ angle, you loose the ability to say much about $\phi$.  I suspect there are some deeper connections relating this classical and QM similarity.  Perhaps learning about symplectic flows and phase space volume invariance would shed some light on this. 
+The fact that the Hamiltonian goes singular on the horizontal in this spherical polar representation is actually what I think is the most interesting bit in the problem (the rest being a lot mechanical details).  On the horizontal $\phi=0$ or $\dot{\phi} = 37000$ radians/sec makes no difference to the dynamics.  All you can say is that the horizontal plane angular momentum is a constant of the system.  It seems very much like the increasing uncertaintly that you get in the corresponding radial QM equation.  Once you start pinning down the $\theta$ angle, you loose the ability to say much about $\phi$.
+
+It is also kind of curious how the energy of the system is never ill defined but a choice of a particular orientation to use as a reference for observations of the momenta introduces the singularity as the system approaches the horizontal in that reference frame.
+
+Perhaps there are some deeper connections relating these classical and QM similarity.  Would learning about symplectic flows and phase space volume invariance shed some light on this? 
 
 \section{A summary.}
 
 TODO.
 
-%\EndArticle
-\EndNoBibArticle
+\EndArticle
