@@ -1,11 +1,11 @@
 #! /usr/bin/perl
 
 # $Log: tex2blog,v $
+# Revision 1.20  2009/11/12 02:03:37  Peeter
+# *** empty log message ***
+#
 # Revision 1.19  2009/11/07 22:11:58  Peeter
 # hack in some wikipedia and physicsforums support.
-#
-# Revision 1.18  2009/11/04 23:56:24  Peeter
-# *** empty log message ***
 #
 # Revision 1.17  2009/09/18 04:43:41  Peeter
 # got it working again mostly (at least in latexmathml mode.
@@ -44,14 +44,13 @@ my $mathmlHtml = 0 ;
 my $pf = 0 ; 
 
 # wikipedia output.
-# doesn't work as is.  the \begin{aligned} ... \end{aligned} doesn't work.  Is there a way to do that in wikipedia?
 my $wiki = 0 ; 
 
 GetOptions( 
    'mathml!'      => \$mathml,
    'wordpress!'   => \$wordpress,
    'pf!'          => \$pf,
-   'wiki!'        => \$wiki,
+   'wikipedia!'   => \$wiki,
    'html!'        => \$mathmlHtml,
    'file=s'       => \$filebase,
    'help!'        => \$showUsage,
@@ -633,6 +632,8 @@ sub expandPeetersMathModeMacros
 
    $out =~ s/\\evalbar${r2}/{\\left.{$1}\\right\\vert}_{$2}/g ;
    $out =~ s/\\evalnobar${r2}/{$1}_{$2}/g ;
+
+   $out =~ s/\\DETuvij{(.)}{(.)}{(.)}{(.)}/\\begin{vmatrix} $1_$3 & $1_$4 \\\\ $2_$3 & $2_$4 \\end{vmatrix}/g;
 
 # need a general way of dealing with this.   wordpress latex doesn't like it
 # the multiply nested {{...}} content.
