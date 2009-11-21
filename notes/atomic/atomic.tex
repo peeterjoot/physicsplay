@@ -26,7 +26,7 @@ escapeinside={\%}{)}          % if you want to add a comment within your code
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/atomic.pdf}
 \date{Oct 8, 2009}
-\revisionInfo{$RCSfile: atomic.tex,v $ Last $Revision: 1.4 $ $Date: 2009/11/21 15:17:16 $}
+\revisionInfo{$RCSfile: atomic.tex,v $ Last $Revision: 1.5 $ $Date: 2009/11/21 17:37:48 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -185,7 +185,7 @@ Any mutex implementation requires at least one platform specific method of perfo
 \begin{lstlisting}
    T valueRead ;
 
-   while ( ATOMIC_OPERATION_WAS_SUCCESSFUL != SOME_INSTRUCTIONS_FOR_LOCK_ACQUISION( &m ) )
+   while ( ATOMIC_OP_WAS_SUCCESSFUL != SOME_INSTRUCTIONS_FOR_LOCK_ACQUISION( &m ) )
    {
       // instructions (like PAUSE()) for hyperthreaded cpus.
 
@@ -213,7 +213,109 @@ Even before talking about the hardware, one has to assume that there are mechani
 
 Things would obviously be busted.  In the case of the pthread functions we have non-inline method with unknown side effects requiring a call to an external shared library.  This appears to be enough that the lock protected data does not have to be declared volatile and can be used while the mutex is held as if in a serial programming context.  Understanding the murky language rules that give us the desired thread safe behaviour is difficult (for an average joe programmer like me).  I came to the conclusion this is not a completely well defined area, motivating a lot of the recent C++ standards work into memory consistency and threaded behaviour.
 
-Presuming one assume that the compiler is laying down the instructions for this code in exactly program order, or that there are mechanism available to ensure this, is this enough to guarentee that we have correct program behaviour.  It may come as a rude suprise that, depending on the instructions used to acquire and release the mutex, having the all the instructions scheduled in program order is NOT actually sufficient.  Not all hardware executes instructions in the order the compiler specifies, and we also need mechanisms to prevent the hardware from starting a memory access too early or letting a memory access complete too late.  This is really the point of this discussion, the requirement for memory barrier instructions in addition to the raw atomic instructions that only ensure read,change,update accesses on an isolated piece of memory (the lock word) can be made as if uninterruptable.
+Presuming one assume that the compiler is laying down the instructions for this code in exactly program order, or that there are mechanism available to ensure this, is this enough to guarentee that we have correct program behaviour?
+
+It may come as a rude suprise that, depending on the instructions used to acquire and release the mutex, having the all the instructions scheduled in program order is NOT actually sufficient.  Not all hardware executes instructions in the order the compiler specifies, and we also need mechanisms to prevent the hardware from starting a memory access too early or letting a memory access complete too late.
+
+This requirement for memory ordering instructions is really the whole point of this discussion.  We must have additional mechanism on top of the raw atomic instructions that only ensure read,change,update accesses on an isolated piece of memory (the lock word) can be made as if uninterruptable.
+
+Suppose that one was using the \href{http://gcc.gnu.org/onlinedocs/gcc-4.1.2/gcc/Atomic-Builtins.html}{gcc Atomic Builtins} to attempt to implement a mutex.  One (generally) wrong way to use these would be
+
+\begin{lstlisting}
+   // the mutex data
+   volatile int m = 0 ;
+   #define HELD_BIT 1
+   #define WAITER_BIT 2
+
+   // Get the mutex.
+   while ( TRUE )
+   {
+      int prev = __sync_fetch_and_or( &m, HELD_BIT ) ;
+
+      if ( 0 == ( prev & HELD_BIT ) )
+      {
+         break ;
+      }
+      // sleep and other stuff, possibly blocking and setting WAITER_BIT.
+   }
+
+   // Got the mutex, access the protected data.
+   pShared->myLockProtectedData++ ;
+
+   // Release the mutex.
+   int preLockState = __sync_fetch_and_and( &m, ~HELD_BIT ) ;
+   assert( preLockState & HELD_BIT ) ;
+   if ( preLockState & WAITER_BIT )
+   {
+      WakeUpAnyWaiters() ;
+   }
+\end{lstlisting} 
+
+Reading the GCC docs one sees that this has desired compiler behaviour ``these builtins are considered a full barrier. That is, no memory operand will be moved across the operation, either forward or backward'', so the compiler will generate the instructions in the desired order.
+
+Will the hardware retain that order?  NO, not neccessarily.  These compiler builtins are partially patterned after ones provided by intel, and intel designed them to match functionality provided by their \href{http://www.intel.com/design/itanium/manuals/245319.htm}{ia64 architecture}, an weakly ordered instruction set.  While ia64 was effectively killed by AMD64 and Windows (now living on only in the guise of HP's IPF systems), there are other weakly ordered instruction sets predating ia64.  Some powerpc chips that you will find on big AIX systems, or in older macs, or in your ps3 will be weakly ordered.  The \href{http://developers.sun.com/solaris/articles/sparcv9.pdf}{sparc architecture} allows for weak ordering, but the chips you find in sun machines implement their TSO (total store order) model which is mostly ordered.  However, this allowance for unordered memory is why, way down at the end of the GCC page, one finds a couple special \_lock methods.  The point of these is to ensure that the hardware does not reorder the relative order of memory accesses of the lock word and the lock data, even when the compiler lays down the code in ``program order''.
+
+We can do a mutex implementation less wrongly using a memory barrier for release
+
+\begin{lstlisting}
+   // the mutex data
+   volatile int m = 0 ;
+   #define HELD_BIT 1
+
+   // Get the mutex.
+   while ( TRUE )
+   {
+      int prev = __sync_fetch_and_or( &m, HELD_BIT ) ;
+
+      if ( 0 == ( prev & HELD_BIT ) )
+      {
+         break ;
+      }
+      // sleep and other stuff if you didn't get it
+   }
+
+   // Got the mutex, access the protected data.
+   pShared->myLockProtectedData++ ;
+
+   __sync_syncronize() ; 
+
+   m = 0 ;
+\end{lstlisting} 
+
+Observe that the use of the word barrier is overloaded on the GCC page, with some usage associated with compiler instruction scheduling, and other usage referring to memory ordering.  Their syncronize function appears to be both.  Looking at the generated assembly for a weakly ordered system would verify this interpretation, and one would likely find an lwsync or sync instruction on powerpc for example.  This modification of the locking code ensures the compiler lays down the code with the clearing of the lock word after the protected data access, and the hardware memory barrier instruction should ensure that reads or writes to the protected data are complete before the store to the lock word is allowed to occur.  Depending on the type of instruction that is emitted for the syncronize builtin, this may not actually prevent loads and stores that occur after the lock release from being started before the lock is released.  Generally if that must be prevented a full barrier is required, and it would not suprise me if most implementations of library methods like pthread\_mutex\_unlock do not prevent memory accesses that occur after the lock release from being initiated before the lock release occurs.  This sort of subtlety is not likely to be found in documentation for the mutex library functions.
+
+With the sample code above we are still left with the possibility that the hardware will execute the memory access instructions for the lock protected data before the lock is acquired, making the lock useless.  We can fix this with the \_lock test and set and release builtins, and also remove the likely overzelous full memory barrier that syncronize provides (allowing post lock release memory access into the critical section).  Sample code for this would may look like
+
+\begin{lstlisting}
+   // the mutex data
+   volatile int m = 0 ;
+   #define HELD_VALUE 1
+
+   // Get the mutex.
+   while ( TRUE )
+   {
+      int wasHeld = __sync_lock_test_and_set( &m, HELD_VALUE ) ;
+
+      if ( !wasHeld )
+      {
+         break ;
+      }
+      // sleep and other stuff if you didn't get it
+   }
+
+   // Got the mutex, access the protected data.
+   pShared->myLockProtectedData++ ;
+
+   __sync_lock_release( &m ) ; 
+\end{lstlisting} 
+
+This now implements functional mutual exclusion code, even on weakly ordered systems.  The compiler has provided methods that ensure it does not move the lock protected data accesses out of the critical section, we are using atomic instructions that guarentee other threads cannot also be modifying the data (presuming they all use the same mutex), and also have instructions that ensure the hardware does not inappropriately reorder the memory accesses.  Inappropriate reordering means that accesses to the lock protected data remain after the lock acquision and before the lock release.  It may not mean that memory accesses from before the lock acquision are done by the time the lock is acquired nor that memory accesses that occur after the lock is released occur after the lock is released (the compiler says it does that, but the hardware may be a sneaky bastard behind your back).
+
+So, that's a mutex.  We can use something like this to avoid some of the excessive cost observed when using the pthread library mutex functions, and would expect that the uncontended cost of the back to back increment code could be lessened.
+
+Presuming you do not mind the unportability of such code, and manage to get it right, and want to live with maintaining your own mutex implementation, if you do a poor job dealing with contention, you may very well get worse performance than the system provided methods in the contended codepath.
+
+You really really have to want the performance to go down the path of implementing your own mutual exclusion code.  DB2 is such a product.  DB2 is also a product where first born sacrifices in the name of performance are not considered abhorent.  In our defense our mutex implementation predates the availability of widely available library methods.  We had SMP exploitation before pthreads existed using mutiple processes and shared memory.  Our own implementation also has the advantage of providing framework to build problem determination functionality that cannot be found in generic library implementations.  Performance driven coding is not the only reason we do it ourself even in this more modern age where library methods do exist.
 
 \subsection{What is an atomic, and how does an atomic method work?}
 
