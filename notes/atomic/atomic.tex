@@ -1,17 +1,160 @@
 \input{../peeter_prologue.tex}
 
-\chapter{atomic}
+\usepackage{listings}
+\lstset{ %
+language=C++,                % choose the language of the code
+basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+numbers=left,                   % where to put the line-numbers
+numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+stepnumber=1,                   % the step between two line-numbers. If it is 1 each line will be numbered
+numbersep=5pt,                  % how far the line-numbers are from the code
+backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+showspaces=false,               % show spaces adding particular underscores
+showstringspaces=false,         % underline spaces within strings
+showtabs=false,                 % show tabs within strings adding particular underscores
+frame=single,                   % adds a frame around the code
+tabsize=2,              % sets default tabsize to 2 spaces
+captionpos=b,                   % sets the caption-position to bottom
+breaklines=true,        % sets automatic line breaking
+breakatwhitespace=false,    % sets if automatic breaks should only happen at whitespace
+escapeinside={\%}{)}          % if you want to add a comment within your code
+}
+
+
+\chapter{An attempt to illustrate differences between memory ordering and atomic access.}
 \label{chap:atomic}
 %\useCCL
 %\blogpage{http://sites.google.com/site/peeterjoot/math2009/atomic.pdf}
 \date{Oct 8, 2009}
-\revisionInfo{$RCSfile: atomic.tex,v $ Last $Revision: 1.1 $ $Date: 2009/10/08 16:42:15 $}
+\revisionInfo{$RCSfile: atomic.tex,v $ Last $Revision: 1.2 $ $Date: 2009/11/21 03:39:33 $}
 
 \beginArtWithToc
 %\beginArtNoToc
 
 \section{Motivation}
+
+Use of atomic instructions for manipulating ``word'' (or smaller) size quantities, avoiding the use of mutual exclusion library functions is becoming increasingly easy for developers.  This hasn't made the using atomic instructions or library methods correctly any less difficult or error prone.
+
+Information on how to use these written for an average joe developer is hard to come by.  What can be easily found is good detailed low level information targetted at or written by operating system kernel extension writers or compiler developers \cite{lyons2002powerpc}, or language implementors and designers \cite{lea2005jsr} \cite{boehmMM} \cite{manson2004jsr} \cite{boehm2007c++} \cite{sutter2006prism} \cite{blainey2007weakmm} \cite{adve1996shared}.  Once the low level details are understood one can move on to interesting exploitation topics such as lock free data structures \cite{harris2002practical} \cite{harris2001pragmatic} \cite{harrisPapers} \cite{benciaWeb} \cite{michael2002safe} \cite{valois-lock}.
+
+The driving reason for most atomic usage is lock avoidance, and a desire for performance drives most use of atomic methods.  When atomic operations are used to replace lock protected updates, this can change the semantics of the program in subtle ways that are difficult to understand or get right.  In particular, additional use of memory barrier instructions or library methods may be required to correctly replace lock protected updates.
+
+Discussion of problems and solutions associated with correct atomic usage has been a recurrent theme of many cubicle chats within DB2 development, and I will attempt to describe here part of what I've learned in some of those chats.
+%of these problems over the years.
+%.  I am now deluded enough to think that I understand some of this topic a bit, and am going to make an attempt here at 
+%  A lecture discussion forum for sharing information on this topic is hard to use effectively, since it is hard to talk to many 
+%.  I've given a couple internal talks on the subject, failing miserably at all but putting people to sleep.  In our own atomic library documentation to describe some of the issues in an coherent fashion.
+%I've tried and failed previously in internal (DB2) talks, 
+%  Part of the problem was that I was myself struggling to figure things out while also being the source for information.  
+%of the issues, and their solutions.
+
+My strategy for this discussion is to pick a single common atomic usage pattern that requires memory barriers for correctness, the use of an atomic to flag another memory update is complete.  As this is a lock avoidance pattern, it is helpful to understand some of the mechanics of how such a lock is implemented.  Hopefully my attempt at such a discussion will not be too scary.  After this the incorrect and correct versions of the atomic flagging code will be presented and discussed.
+
+%replace a lock acquision It is often not understood that an atomic manipulation , even of a single variable how an atomic manipulation 
+%.  Acquistion of a mutex, even for a short duration activity, can end up 
+%Part of what makes atomic instructions hard to use is they are often not that th
+
+\section{How does an atomic method work?}
+
+At the core of every atomic library method or compiler intrinsic is one or more special purpose instructions, such as a \href{http://en.wikipedia.org/wiki/Compare-and-swap}{Compare and swap} or \href{http://en.wikipedia.org/wiki/Load-Link/Store-Conditional}{Load Link/Store Conditional}.  Use of these almost invariably requires a retry loop at one level or another.
+
+Why would you want to use an atomic?  Consider the very simplest integer update within a piece of shared memory
+
+\begin{lstlisting}
+   pShared->x++ ;
+\end{lstlisting}
+
+Any such operation requires three steps.  Read the value, change the value, update the value in memory.  On some platforms this is explicit and obvious since the value will have to be read into a register before making the update.  Here's a powerpc example that illustrates this
+
+\begin{lstlisting}
+    7| 000000 lwz      80830000   1     L4A       gr4=(sharedMem)(gr3,0)
+    7| 000004 addi     38040001   2     AI        gr0=gr4,1
+    7| 000008 stw      90030000   1     ST4A      (sharedMem)(gr3,0)=gr0
+\end{lstlisting}
+
+The value in the memory address contained in the register gr3 (offset by zero bytes) is loaded into a register (gr4).  One is added to this (into gr0), and the value is stored back into the original memory location.  Running on a CISC system this may all appear as one instruction, but it still requires the same number of steps internally.
+
+Suppose you had a threaded application where this counter variable is updated routinely by many threads as they complete some routine and commonplace action.  What can now happen, interleaved (with time downwards) accross threads may now look like this
+
+\begin{lstlisting}
+T0: pShared->x = 0
+
+T1: R1 = pShared->x (R1 = 0)
+    R1 = R1 + 1
+T1: <timeslice expires>
+
+T2: R2 = pShared->x
+    R2 = R2 + 1
+    pShared->x = R2
+
+T3: R3 = pShared->x (assume T3 "sees" T2's update, a value of 1)
+    R3 = R3 + 1
+    pShared->x = R3
+
+T4: R4 = pShared->x (assume T4 "sees" T3's update, a value of 2)
+    R4 = R4 + 1
+    pShared->x = R4
+
+T1: <new timeslice.  Starts running again.>
+    pShared->x = R1 (T2 and T3's updates are now clobbered)
+\end{lstlisting}
+
+We had four updates to the counter after the initialization, but the counter value only goes up by one.  Uncontrolled updates like this can oscillate in peculiar fashions, and something that may be expected to be monotonically increase perhaps only trends upwards on average.  If the counter is not heavily contended one could even code something like this, not noticing that it is not behaving properly.
+
+When I came out of school tenish years ago, multicpu machines were not a commodity applicance and it was a bit of a rude suprise that a sequence of increments would not do just that.  Nowadays a garden variety computer from a big box store is a multi-cpu machine, and next year your phone will probably be too, so hopefully this was a too obvious example of non-thread safe code and we can just move on.
+
+
+
 \section{Guts}
 
-%\EndArticle
-\EndNoBibArticle
+The usual pattern for memory barrier usage matches what you would put in the implementation of a critical section, but split into pairs for the producer and consumer. As an example your critical section implementation would typically be of the form:
+
+\begin{lstlisting}
+while (!pShared->lock.testAndSet_Acquire()) ;
+// (this loop should include all the normal critical section stuff like
+// spin, waste, 
+// pause() instructions, and last-resort-give-up-and-blocking on a resource 
+// until the lock is made available.)
+
+// Access to shared memory.
+
+pShared->foo = 1 
+v = pShared-> goo
+
+pShared->lock.clear_Release()
+\end{lstlisting}
+
+Acquire memory barrier above makes sure that any loads (pShared->goo) that may have been started before the successful lock modification are tossed, to be restarted if necessary.
+
+The release memory barrier ensures that the load from goo into the (local say) variable v is complete before the lock word protecting the shared memory is cleared.
+
+You have a similar pattern in the typical producer and consumer atomic flag scenario (it is difficult to tell by your sample if that is what you are doing but should illustrate the idea).
+
+Suppose your producer used an atomic variable to indicate that some other state is ready to use. You'll want something like this:
+
+\begin{lstlisting}
+pShared->goo = 14
+
+pShared->atomic.setBit_Release()
+\end{lstlisting}
+
+Without a "write" barrier here in the producer you have no guarantee that the hardware isn't going to get to the atomic store before the goo store has made it through the cpu store queues, and up through the memory hierarchy where it is visible (even if you have a mechanism that ensures the compiler orders things the way you want).
+
+In the consumer
+
+\begin{lstlisting}
+if ( pShared->atomic.compareAndSwap_Acquire(1,1) )
+{
+   v = pShared->goo 
+}
+\end{lstlisting}
+
+Without a "read" barrier here you won't know that the hardware hasn't gone and fetched goo for you before the atomic access is complete. The atomic (ie: memory manipulated with the Interlocked functions doing stuff like lock cmpxchg), is only "atomic" with respect to itself, not other memory.
+
+Now, the remaining thing that has to be mentioned is that the barrier constructs are highly unportable. Your compiler probably provides \_acquire and \_release variations for most of the atomic manipulation methods, and these are the sorts of ways you would use them. Depending on the platform you are using (ie: ia32), these may very well be exactly what you would get without the \_acquire() or \_release() suffixes. Platforms where this matters are ia64 (effectively dead except on HP where its still twitching slightly), and powerpc. ia64 had .acq and .rel instruction modifiers on most load and store instructions (including the atomic ones like cmpxchg). powerpc has separate instructions for this (isync and lwsync give you the read and write barriers respectively).
+
+Now. Having said all this. Do you really have a good reason for going down this path? Doing all this correctly can be very difficult. Be prepared for a lot of self doubt and insecurity in code reviews and make sure you have a lot of high concurrency testing with all sorts of random timing scenarios. Use a critical section unless you have a very very good reason to avoid it, and don't write that critical section yourself.
+
+
+\EndArticle
+%\EndNoBibArticle
