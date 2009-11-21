@@ -26,7 +26,7 @@ escapeinside={\%}{)}          % if you want to add a comment within your code
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/atomic.pdf}
 \date{Oct 8, 2009}
-\revisionInfo{$RCSfile: atomic.tex,v $ Last $Revision: 1.3 $ $Date: 2009/11/21 05:20:12 $}
+\revisionInfo{$RCSfile: atomic.tex,v $ Last $Revision: 1.4 $ $Date: 2009/11/21 15:17:16 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -56,7 +56,7 @@ My strategy for this discussion is to pick a single common atomic usage pattern 
 
 \section{Why do I need locking or atomics?}
 
-Why would you want to use an atomic?  Consider the very simplest integer update within a piece of shared memory
+Why would you want to use an atomic?  If you are reading because you want to know a bit about memory barrier usage, you probably already know.  However, for illustrative purposes, consider the very simplest example of non-thread-safe updates of an integer in shared memory.
 
 \begin{lstlisting}
    pShared->x++ ;
@@ -64,10 +64,11 @@ Why would you want to use an atomic?  Consider the very simplest integer update 
 
 Any such operation requires three steps.  Read the value, change the value, update the value in memory.  On some platforms this is explicit and obvious since the value will have to be read into a register before making the update.  Here's a powerpc example that illustrates this
 
+% use as -l output
 \begin{lstlisting}
-    7| 000000 lwz      80830000   1     L4A       gr4=(sharedMem)(gr3,0)
-    7| 000004 addi     38040001   2     AI        gr0=gr4,1
-    7| 000008 stw      90030000   1     ST4A      (sharedMem)(gr3,0)=gr0
+    lwz      gr4=(sharedMem)(gr3,0)    ; gr3 == pShared ; (gr3,0) == *pShared
+    addi     gr0=gr4,1
+    stw      (sharedMem)(gr3,0)=gr0
 \end{lstlisting}
 
 The value in the memory address contained in the register gr3 (offset by zero bytes) is loaded into a register (gr4).  One is added to this (into gr0), and the value is stored back into the original memory location.  Running on a CISC system this may all appear as one instruction, but it still requires the same number of steps internally.
@@ -100,7 +101,8 @@ T1: <new timeslice.  Starts running again.>
 We had four updates to the counter after the initialization, but the counter value only goes up by one.  Uncontrolled updates like this can oscillate in peculiar fashions, and something that may be expected to be monotonically increase perhaps only trends upwards on average.  If the counter is not heavily contended you may even fluke out, running for a long time before getting unlucky with an inconsistent update of some sort.
 
 %When I came out of school tenish years ago, multicpu machines were not a commodity applicance and it was a bit of a rude suprise that a sequence of increments would not do just that, increment.  Nowadays a garden variety computer from a big box store is a multi-cpu machine, and next year your phone will probably be too.  
-This is the simplest example of non-thread safe code, and while it probably doesn't teach any reader interested in memory barrier usage anything new, it does provide a lead up to the requirement for locking or atomic methods.
+
+This example leads us nicely to requirements for locking or atomic methods to protect such updates.
 
 \subsection{Use of locking to make the read, change update cycle safe.}
 
@@ -128,7 +130,7 @@ If all threads only ever updates this value we can use a similar bit of code to 
 
 No two sequential samplings of the shared variable x would see the value go down was possible in the uncontrolled update case.  
 
-Now, you may ask why a mutex is required for the read.  If that is just a single operation, why would it matter?  That's a good question, but not easy to answer portably.  If your variable is appropriately aligned and of an appropriate size (practically speaking this means less than or equal to the native register size) and you aren't compiling with funky compiler options that turn your accesses into byte accesses (such options do exist), then you may be able to do just that.  If, however, that variable was a 64-bit integer and you are running on a 32-bit platform, then this read may take two instructions and you have a risk of reading the two halves at different points in time.  Similarly, suppose you were doing a 32-bit integer read, but that 32-bit integer was aligned improperly on a 16-bit boundary (on a platform that allows unaligned access), then your apparent single read may internally require multiple memory accesses (perhaps on different cachelines).  This could cause the same sort of split read scenerio.
+Now, you may ask why a mutex is required for the read.  If that is just a single operation, why would it matter?  That's a good question, but not easy to answer portably.  If your variable is appropriately aligned and of an appropriate size (practically speaking this means less than or equal to the native register size) and you aren't compiling with funky compiler options that turn your accesses into byte accesses (such options do exist), then you may be able to do just that.  However, if that variable, for example, is a 64-bit integer and you are running on a 32-bit platform, then this read may take two instructions and you have a risk of reading the two halves at different points in time.  Similarly, suppose you were doing a 32-bit integer read, but that 32-bit integer was aligned improperly on a 16-bit boundary (on a platform that allows unaligned access), then your apparent single read may internally require multiple memory accesses (perhaps on different cachelines).  This could cause the same sort of split read scenerio.
 
 You probably also need to declare your variable volatile and also have to be prepared to deal with a few other subtlies if lock avoidance on read is going to be attempted.  By the end of these notes some of those subtlies will have been touched on.
 
@@ -136,7 +138,7 @@ To make the story short, it should be assumed that if you want portable correct 
 
 \subsection{What does correctness cost me?}
 
-Now, having corrected the increment code, what does that cost us.  Timing the following very simple program with an without the mutex code
+Now, having corrected the increment code, what does that cost us.  Timing the following very simple single threaded program with an without the mutex code
 
 \begin{lstlisting}
 #include <pthread.h>
@@ -156,7 +158,7 @@ int main()
 
 int inc()
 {
-#if 0
+#if defined USE_THE_MUTEX
    pthread_mutex_lock( &m ) ;
 #endif
 
@@ -164,7 +166,7 @@ int inc()
 
    int v = x ;
 
-#if 0
+#if defined USE_THE_MUTEX
    pthread_mutex_unlock( &m ) ;
 #endif
 
@@ -174,9 +176,49 @@ int inc()
 
 I find that this billion sets of call a function, increment a variable and return it without the mutex takes about 2.5 seconds.  With the mutex calls enabled, the total elapsed time required goes up to 8.5 seconds.  It costs over three times the time to do it with a mutex, and that's without any contention on the mutex whatsoever!  With threads all fighting over the mutex and blocking on kernel resources when they cannot get it, this is as good as it gets.  Correctness doesn't come cheaply.
 
+\subsection{How does the lock work?}
+
+Any mutex implementation requires at least one platform specific method of performing a read, update, change cycle as if it is done without interruption.  Your hardware will likely provide a \href{http://en.wikipedia.org/wiki/Compare-and-swap}{Compare and swap} or \href{http://en.wikipedia.org/wiki/Load-Link/Store-Conditional}{Load Link/Store Conditional} (which can be used to construct higher level atomics like compare and swap).  Implementing a mutex is intrinsically unportable territory.  Older \href{http://download.intel.com/design/intarch/manuals/24319101.pdf}{intel} cpus did not provide a compare and swap, but one did have a bus locked exchange available (LOCK XCHG).
+%, so if you wanted to use compare and swap you had to know or mandate that the code could only be run on newer cpus.  
+\href{http://ftp.parisc-linux.org/docs/arch/pa11_acd.pdf}{HP's PARSIC}, also easily argued to not be a modern architecture, only provides an atomic load and clear word instruction, also requiring 16 BYTE a aligned word.  What can be assumed is that any multiple cpu machine provides some sort of low level atomic instruction suitable for building a mutual exclusion interface.  If one were to imagine what a pthread\_mutex\_lock protected increment expands to, it would likely have the following form
+
+\begin{lstlisting}
+   T valueRead ;
+
+   while ( ATOMIC_OPERATION_WAS_SUCCESSFUL != SOME_INSTRUCTIONS_FOR_LOCK_ACQUISION( &m ) )
+   {
+      // instructions (like PAUSE()) for hyperthreaded cpus.
+
+      // code for wasting a bit of time hoping to get the lock
+      //   (when not running on a uniprocessor).
+
+      // sleep or block using an OS primitive
+   }
+
+   valueRead = pShared->myLockProtectedData ;
+   pShared->myLockProtectedData = valueRead + 1 ;
+
+   SOME_INSTRUCTIONS_FOR_LOCK_RELEASE( &m ) ;
+\end{lstlisting}
+
+Even before talking about the hardware, one has to assume that there are mechanisms available to the library writer that prevent the generated code from being reordered.  Any instructions containing accesses of myLockProtectedData must NOT occur BEFORE the ACQUISION instructions, and must NOT occur AFTER the RELEASE instructions.  If the compiler were to generate code that had the following effect
+
+\begin{lstlisting}
+   T valueRead = pShared->myLockProtectedData ;
+   pShared->myLockProtectedData++ ;
+
+   pthread_mutex_lock( &m ) ;
+   pthread_mutex_unlock( &m ) ;
+\end{lstlisting}
+
+Things would obviously be busted.  In the case of the pthread functions we have non-inline method with unknown side effects requiring a call to an external shared library.  This appears to be enough that the lock protected data does not have to be declared volatile and can be used while the mutex is held as if in a serial programming context.  Understanding the murky language rules that give us the desired thread safe behaviour is difficult (for an average joe programmer like me).  I came to the conclusion this is not a completely well defined area, motivating a lot of the recent C++ standards work into memory consistency and threaded behaviour.
+
+Presuming one assume that the compiler is laying down the instructions for this code in exactly program order, or that there are mechanism available to ensure this, is this enough to guarentee that we have correct program behaviour.  It may come as a rude suprise that, depending on the instructions used to acquire and release the mutex, having the all the instructions scheduled in program order is NOT actually sufficient.  Not all hardware executes instructions in the order the compiler specifies, and we also need mechanisms to prevent the hardware from starting a memory access too early or letting a memory access complete too late.  This is really the point of this discussion, the requirement for memory barrier instructions in addition to the raw atomic instructions that only ensure read,change,update accesses on an isolated piece of memory (the lock word) can be made as if uninterruptable.
+
 \subsection{What is an atomic, and how does an atomic method work?}
 
-At the core of every atomic library method or compiler intrinsic is one or more special purpose instructions, such as a \href{http://en.wikipedia.org/wiki/Compare-and-swap}{Compare and swap} or \href{http://en.wikipedia.org/wiki/Load-Link/Store-Conditional}{Load Link/Store Conditional}.  Use of these almost invariably requires a retry loop at one level or another.
+At the core of every atomic library method or compiler intrinsic is one or more special purpose instructions, such as a 
+Use of these almost invariably requires a retry loop at one level or another.
 
 \section{Guts}
 
