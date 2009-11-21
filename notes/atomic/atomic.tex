@@ -24,9 +24,9 @@ escapeinside={\%}{)}          % if you want to add a comment within your code
 \chapter{An attempt to illustrate differences between memory ordering and atomic access.}
 \label{chap:atomic}
 %\useCCL
-%\blogpage{http://sites.google.com/site/peeterjoot/math2009/atomic.pdf}
+\blogpage{http://sites.google.com/site/peeterjoot/math2009/atomic.pdf}
 \date{Oct 8, 2009}
-\revisionInfo{$RCSfile: atomic.tex,v $ Last $Revision: 1.2 $ $Date: 2009/11/21 03:39:33 $}
+\revisionInfo{$RCSfile: atomic.tex,v $ Last $Revision: 1.3 $ $Date: 2009/11/21 05:20:12 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -54,9 +54,7 @@ My strategy for this discussion is to pick a single common atomic usage pattern 
 %.  Acquistion of a mutex, even for a short duration activity, can end up 
 %Part of what makes atomic instructions hard to use is they are often not that th
 
-\section{How does an atomic method work?}
-
-At the core of every atomic library method or compiler intrinsic is one or more special purpose instructions, such as a \href{http://en.wikipedia.org/wiki/Compare-and-swap}{Compare and swap} or \href{http://en.wikipedia.org/wiki/Load-Link/Store-Conditional}{Load Link/Store Conditional}.  Use of these almost invariably requires a retry loop at one level or another.
+\section{Why do I need locking or atomics?}
 
 Why would you want to use an atomic?  Consider the very simplest integer update within a piece of shared memory
 
@@ -99,11 +97,86 @@ T1: <new timeslice.  Starts running again.>
     pShared->x = R1 (T2 and T3's updates are now clobbered)
 \end{lstlisting}
 
-We had four updates to the counter after the initialization, but the counter value only goes up by one.  Uncontrolled updates like this can oscillate in peculiar fashions, and something that may be expected to be monotonically increase perhaps only trends upwards on average.  If the counter is not heavily contended one could even code something like this, not noticing that it is not behaving properly.
+We had four updates to the counter after the initialization, but the counter value only goes up by one.  Uncontrolled updates like this can oscillate in peculiar fashions, and something that may be expected to be monotonically increase perhaps only trends upwards on average.  If the counter is not heavily contended you may even fluke out, running for a long time before getting unlucky with an inconsistent update of some sort.
 
-When I came out of school tenish years ago, multicpu machines were not a commodity applicance and it was a bit of a rude suprise that a sequence of increments would not do just that.  Nowadays a garden variety computer from a big box store is a multi-cpu machine, and next year your phone will probably be too, so hopefully this was a too obvious example of non-thread safe code and we can just move on.
+%When I came out of school tenish years ago, multicpu machines were not a commodity applicance and it was a bit of a rude suprise that a sequence of increments would not do just that, increment.  Nowadays a garden variety computer from a big box store is a multi-cpu machine, and next year your phone will probably be too.  
+This is the simplest example of non-thread safe code, and while it probably doesn't teach any reader interested in memory barrier usage anything new, it does provide a lead up to the requirement for locking or atomic methods.
 
+\subsection{Use of locking to make the read, change update cycle safe.}
 
+Mutual exclusion mechanisms go by many names, locks, mutexes, critical sections, and latches to name a few.  System libraries usually provide implementations, a common example of which are the Unix pthread\_mutex methods.  The unsafe increment above can be made thread safe, protecting it with such a guard.  With error handling omitted for clarity, a modified example could be as follows
+
+\begin{lstlisting}
+   pthread_mutex_lock( &m ) ;
+
+   pShared->x++ ;
+
+   pthread_mutex_unlock( &m ) ;
+\end{lstlisting}
+
+If all threads only ever updates this value we can use a similar bit of code to read and do something with the read value
+
+\begin{lstlisting}
+   pthread_mutex_lock( &m ) ;
+
+   v = pShared->x ;
+
+   pthread_mutex_unlock( &m ) ;
+
+   doSomethingWithIt( v ) ;
+\end{lstlisting}
+
+No two sequential samplings of the shared variable x would see the value go down was possible in the uncontrolled update case.  
+
+Now, you may ask why a mutex is required for the read.  If that is just a single operation, why would it matter?  That's a good question, but not easy to answer portably.  If your variable is appropriately aligned and of an appropriate size (practically speaking this means less than or equal to the native register size) and you aren't compiling with funky compiler options that turn your accesses into byte accesses (such options do exist), then you may be able to do just that.  If, however, that variable was a 64-bit integer and you are running on a 32-bit platform, then this read may take two instructions and you have a risk of reading the two halves at different points in time.  Similarly, suppose you were doing a 32-bit integer read, but that 32-bit integer was aligned improperly on a 16-bit boundary (on a platform that allows unaligned access), then your apparent single read may internally require multiple memory accesses (perhaps on different cachelines).  This could cause the same sort of split read scenerio.
+
+You probably also need to declare your variable volatile and also have to be prepared to deal with a few other subtlies if lock avoidance on read is going to be attempted.  By the end of these notes some of those subtlies will have been touched on.
+
+To make the story short, it should be assumed that if you want portable correct results you need to take and release the mutex for both read and write.
+
+\subsection{What does correctness cost me?}
+
+Now, having corrected the increment code, what does that cost us.  Timing the following very simple program with an without the mutex code
+
+\begin{lstlisting}
+#include <pthread.h>
+
+int x = 0 ;
+pthread_mutex_t m = PTHREAD_MUTEX_INITIALIZER ;
+
+int inc() ;
+
+int main()
+{
+   for ( int i = 0 ; i < 1000000000 ; i++ )
+   {
+      inc() ;
+   }
+}
+
+int inc()
+{
+#if 0
+   pthread_mutex_lock( &m ) ;
+#endif
+
+   x++ ;
+
+   int v = x ;
+
+#if 0
+   pthread_mutex_unlock( &m ) ;
+#endif
+
+   return x ;
+}
+\end{lstlisting}
+
+I find that this billion sets of call a function, increment a variable and return it without the mutex takes about 2.5 seconds.  With the mutex calls enabled, the total elapsed time required goes up to 8.5 seconds.  It costs over three times the time to do it with a mutex, and that's without any contention on the mutex whatsoever!  With threads all fighting over the mutex and blocking on kernel resources when they cannot get it, this is as good as it gets.  Correctness doesn't come cheaply.
+
+\subsection{What is an atomic, and how does an atomic method work?}
+
+At the core of every atomic library method or compiler intrinsic is one or more special purpose instructions, such as a \href{http://en.wikipedia.org/wiki/Compare-and-swap}{Compare and swap} or \href{http://en.wikipedia.org/wiki/Load-Link/Store-Conditional}{Load Link/Store Conditional}.  Use of these almost invariably requires a retry loop at one level or another.
 
 \section{Guts}
 
