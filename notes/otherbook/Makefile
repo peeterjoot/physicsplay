@@ -3,6 +3,11 @@ all : otherbook.pdf
 TEXFILES += gacsQ88.tex
 TEXFILES += shear.tex
 TEXFILES += twoNinetyRotations.tex
+#TEXFILES += frequencyTx.tex
+#TEXFILES += invarianceEnMom.tex
+#TEXFILES += poincareTx.tex
+#TEXFILES += stokesGradeTwo.tex
+#TEXFILES += transverseField.tex
 TEXFILES += interactionEnergy.tex
 TEXFILES += lightQuantize.tex
 TEXFILES += maxwellSepVars.tex
@@ -42,6 +47,9 @@ TEXFILES += reviewAlanGabookCh4.tex
 TEXFILES += longWireQ.tex
 TEXFILES += bivectorSelectWrong.tex
 TEXFILES += cronology.tex
+TEXFILES += dotBlade.tex
+TEXFILES += ellipticQ.tex
+TEXFILES += gaMintro.tex
 TEXFILES +=
 
 cronology.tex : ../gabook/METADATA
