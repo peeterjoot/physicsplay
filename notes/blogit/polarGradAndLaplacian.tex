@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/polarGradAndLaplacian.pdf}
 \date{Dec 1, 2009}
-\revisionInfo{$RCSfile: polarGradAndLaplacian.tex,v $ Last $Revision: 1.2 $ $Date: 2009/12/02 13:34:48 $}
+\revisionInfo{$RCSfile: polarGradAndLaplacian.tex,v $ Last $Revision: 1.3 $ $Date: 2009/12/02 15:05:43 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -46,6 +46,164 @@ Here we explore the validity of the dictatorial comments of Prof Dmitrevsky.  Th
 This exploration will utilize a two dimensional space as a starting point, transforming from cartesian to polar form representation.  I'll also utilize a geometric algebra representation of the polar unit vectors.
 
 \section{The gradient in polar form.}
+
+Lets start off with a calculation of the gradient in polar form starting with the cartesian form.  Writing $\partial_x = \PDi{x}{}$, $\partial_y = \PDi{y}{}$, $\partial_r = \PDi{j}{}$, and $\partial_\theta = \PDi{\theta}{}$, we want to map
+
+\begin{align}\label{eqn:divGradCurLap:4}
+\spacegrad 
+= \Be_1 \partial_1 + \Be_2 \partial_2
+= 
+\begin{bmatrix}
+\Be_1 & \Be_2 
+\end{bmatrix}
+\begin{bmatrix}
+\partial_1 \\
+\partial_2 
+\end{bmatrix},
+\end{align}
+
+into the same form using $\rcap, \thetacap, \partial_r$, and $\partial_\theta$.  With $i = \Be_1 \Be_2$ we have
+
+\begin{align}\label{eqn:divGradCurLap:5}
+\begin{bmatrix}
+\Be_1 \\
+\Be_2
+\end{bmatrix}
+=
+e^{i\theta}
+\begin{bmatrix}
+\rcap \\
+\thetacap
+\end{bmatrix}.
+\end{align}
+
+Next we need to do a chain rule expansion of the partial operators to change variables.  In matrix form that is
+
+\begin{align}\label{eqn:divGradCurLap:6}
+\begin{bmatrix}
+\PD{x}{} \\
+\PD{y}{} 
+\end{bmatrix}
+= 
+\begin{bmatrix}
+\PD{x}{r} &          \PD{x}{\theta} \\
+\PD{y}{r} &          \PD{y}{\theta} 
+\end{bmatrix}
+\begin{bmatrix}
+\PD{r}{} \\
+\PD{\theta}{} 
+\end{bmatrix}.
+\end{align}
+
+To calculate these partials we drop back to coordinates
+
+\begin{align}\label{eqn:divGradCurLap:7}
+x^2 + y^2 &= r^2 \\
+\frac{y}{x} &= \tan\theta \\
+\frac{x}{y} &= \cot\theta.
+\end{align}
+
+From this we calculate
+
+\begin{align}\label{eqn:divGradCurLap:8}
+\PD{x}{r} &= \cos\theta \\
+\PD{y}{r} &= \sin\theta \\ 
+\inv{r\cos\theta} &= \PD{y}{\theta} \inv{\cos^2\theta} \\
+\inv{r\sin\theta} &= -\PD{x}{\theta} \inv{\sin^2\theta},
+\end{align}
+
+for
+
+\begin{align}\label{eqn:divGradCurLap:6e}
+\begin{bmatrix}
+\PD{x}{} \\
+\PD{y}{} 
+\end{bmatrix}
+= 
+\begin{bmatrix}
+\cos\theta & -\sin\theta/r \\
+\sin\theta & \cos\theta/r
+\end{bmatrix}
+\begin{bmatrix}
+\PD{r}{} \\
+\PD{\theta}{} 
+\end{bmatrix}.
+\end{align}
+
+We can now write down the gradient in polar form, prior to final simplification
+
+\begin{align}\label{eqn:divGradCurLap:4a}
+\spacegrad 
+= 
+e^{i\theta}
+\begin{bmatrix}
+\rcap & \thetacap
+\end{bmatrix}
+\begin{bmatrix}
+\cos\theta & -\sin\theta/r \\
+\sin\theta & \cos\theta/r
+\end{bmatrix}
+\begin{bmatrix}
+\PD{r}{} \\
+\PD{\theta}{} 
+\end{bmatrix}.
+\end{align}
+
+Observe that we can factor a unit vector 
+
+\begin{align}\label{eqn:divGradCurLap:9}
+\begin{bmatrix}
+\rcap & \thetacap
+\end{bmatrix}
+=
+\rcap
+\begin{bmatrix}
+1 & i
+\end{bmatrix}
+=
+\begin{bmatrix}
+i & 1
+\end{bmatrix}
+\thetacap
+\end{align}
+
+so the $1,1$ element of the matrix product in the interior is
+
+\begin{align}\label{eqn:divGradCurLap:9a}
+\begin{bmatrix}
+\rcap & \thetacap
+\end{bmatrix}
+\begin{bmatrix}
+\cos\theta \\
+\sin\theta 
+\end{bmatrix}
+=
+\rcap e^{i\theta} = e^{-i\theta}\rcap.
+\end{align}
+
+Similarily, the $1,2$ element of the matrix product in the interior is
+
+\begin{align}\label{eqn:divGradCurLap:9b}
+\begin{bmatrix}
+\rcap & \thetacap
+\end{bmatrix}
+\begin{bmatrix}
+-\sin\theta/r \\
+\cos\theta/r
+\end{bmatrix}
+=
+\inv{r} e^{-i\theta} \thetacap.
+\end{align}
+
+The exponentials cancel nicely, leaving after a final multiplication with the polar form for the gradient
+
+\begin{align}\label{eqn:divGradCurLap:10}
+\spacegrad = \rcap \partial_r + \thetacap \inv{r} \partial_\theta
+\end{align}
+
+That was a fun way to get the result, although we could have just looked it up.  We want to use this now to calculate the Laplacian.
+
+\section{Polar form Laplacian for the plane.}
 
 \EndArticle
 %\EndNoBibArticle
