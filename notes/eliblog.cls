@@ -17,17 +17,31 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{graphicx}
+
 % this mangles urls with underscores:
 %\usepackage{url}
-% fixes the url underscores:
-%\usepackage{hyperref}
+
+% 
+% hyperref fixes the url underscores:
+%
 % remove the side panel:
-\usepackage[bookmarks=false]{hyperref}
+%\usepackage[bookmarks=false]{hyperref}
+\usepackage{hyperref}
+
 \usepackage{subfigure}
 \usepackage{titlesec}
 \usepackage{indentfirst}
 
-
+%\usepackage{listings}
+%\usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
+% makes \grad look funny though (almost like spacegrad, but narrower)
+%\usepackage[bookmarks=true]{hyperref}
+%\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+%\usepackage{latexsym,amssymb,epsf} % don't remember if these are
+   % needed, but their inclusion can't do any damage
 
 
 \titleformat{\section}[hang]
@@ -48,13 +62,23 @@
       \medskip
 }
       {\large\@author\ ---\ \@email\par}%
-         {\itshape\@date\par}%
-         \medskip
-         {\includegraphics[height=1em]{ccl2}\par}
+         {\itshape\@date\@revisionInfo\par}%
+         \medskip\@useCCL
       \bigskip\hrule\vspace*{0.5pc}%
    \end{flushleft}%
 }
-%\includegraphics[totalheight=0.4\textheight]{picturepath}
+
+%----------------------------------
+% book vs. article abstraction macros:
+
+\newcommand{\chapter}[1]{\title{#1}}
+\newcommand{\beginArtWithToc}[0]{\begin{document}\maketitle{}\tableofcontents}
+\newcommand{\beginArtNoToc}[0]{\begin{document}\maketitle{}}
+\newcommand{\EndNoBibArticle}[0]{\end{document}}
+\newcommand{\EndArticle}[0]{\bibliography{myrefs}\bibliographystyle{unsrturl}\end{document}}
+\newcommand{\chapcite}[1]{\cite{#1}}
+
+%----------------------------------
 
 \newcommand{\methodology}[1]{\textbf{#1}}
 
@@ -76,22 +100,19 @@
 \setlength{\marginparwidth}{.5in}
 \setlength{\marginparsep}{5pt}
 
+\newcommand{\@revisionInfo}{}
+\newcommand{\revisionInfo}[1]{\renewcommand{\@revisionInfo}{\quad{#1}}}
+
+\newcommand{\@useCCL}{}
+\newcommand{\useCCL}[0]{\renewcommand{\@useCCL}{
+         {\includegraphics[height=1em]{ccl2}\par}
+}}
 
 \newcommand{\@blogpage}{0}
 \newcommand{\blogpage}[1]{\renewcommand{\@blogpage}{#1}}
 
 \newcommand{\@email}{{\em No email address given}}
 \newcommand{\email}[1]{\renewcommand{\@email}{{#1}}}
-
-
-
-\newcommand{\lorem}{{Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas diam est, mollis lacinia, tempor vel, condimentum in, augue. Nunc sapien arcu, interdum in, accumsan sit amet, tristique vel, diam. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum nec dui. Nullam ac ligula tincidunt risus porttitor gravida. Maecenas orci velit, accumsan ac, auctor vitae, vehicula in, lacus. Pellentesque vehicula aliquet nisi. Vestibulum laoreet. Mauris pretium vulputate dui. 
-
-Phasellus cursus, erat sit amet blandit semper, justo enim lobortis justo, vitae sagittis dolor nisl non est. Donec tortor nisl, placerat at, luctus sit amet, aliquet ut, leo. Donec a eros a diam iaculis mattis. In volutpat metus et nisi. Suspendisse potenti. Morbi lobortis arcu eu lacus. Nulla dapibus, nulla a vehicula vestibulum, diam sapien tincidunt odio, ac consectetur tellus massa nec nunc. Aliquam sed quam quis turpis suscipit gravida. Suspendisse potenti. Duis eget lectus. Praesent eleifend felis.
-
-Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In non mi ac leo scelerisque eleifend. Proin fringilla nisl dapibus mi. Aliquam mollis aliquet justo. Sed vulputate. Maecenas imperdiet. Sed sollicitudin justo at felis. Vivamus vitae felis. Aenean nisl enim, pellentesque a, tempor sed, sollicitudin ac, neque. In hac habitasse platea dictumst. Mauris vel nisl mollis libero interdum fringilla. Curabitur suscipit fermentum neque. 
-}}
-
 
 \endinput
 
