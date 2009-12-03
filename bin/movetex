@@ -1,14 +1,82 @@
-#!/bin/bash
+#!/usr/bin/perl
 
-d=nonga
-d=gabook
-rcs -l $1.ltx && ci $1.ltx
-mv -i RCS/$1.ltx,v ../$d/RCS/$1.tex,v
+use strict ;
+use warnings ;
+use Getopt::Long;
+
+my $d = 'gabook' ;
+#$d = 'nonga' ;
+#$d = 'otherbook' ;
+my $filebase ;
+
+GetOptions(
+   'file=s'    => \$filebase,
+   'dir=s'    => \$d,
+) ;
+
+die unless defined $filebase ;
+
+my $suffix = 'ltx' ;
+
+if ( ! -e "$filebase.$suffix" )
+{
+   $suffix = 'tex' ;
+}
+
+die "could not find file '$filebase.ltx or '$filebase.tex'\n"
+   if ( ! -e "$filebase.$suffix" ) ;
+
+my $curDirName = `pwd` ; chomp $curDirName ;
+$curDirName =~ s,.*/,, ;
+
+my $mkLinks = "\n" ;
+my @ig = split(/[\n\r\l]+/, `grep includegraphics $filebase.$suffix | sed 's/%.*//'`) ;
+foreach (@ig)
+{
+   $_ =~ s/.*{// ;
+   $_ =~ s/}// ;
+   $_ .= '.png' ;
+
+   die "in: $curDirName: cannot find file '$_' " unless (-e "$_" ) ;
+
+   $mkLinks .= "ln -s ../$curDirName/$_\n" ;
+}
+
+my $title = `grep 'chapter{' $filebase.$suffix` ;
+chomp $title ;
+$title =~ s/.*{(.*?)}.*/$1/ ; 
+
+my $date = `grep 'date{' $filebase.$suffix` ;
+chomp $date ;
+$date =~ s/.*{(.*?)}.*/$1/ ; 
+
+my $meta = "
+,{
+   SOURCE => '$filebase',
+   TITLE => qq($title),
+   DATE => '$date',
+   REF => '$filebase',
+   URL => 'http://sites.google.com/site/peeterjoot/math2009/$filebase.pdf'
+}" ;
+
+system("
+rcs -l $filebase.$suffix && ci $filebase.$suffix
+mv -i RCS/$filebase.$suffix,v ../$d/RCS/$filebase.tex,v
 cd ../$d
-co -l $1.tex
-aspell -c --mode=tex $1.tex
-perl -p -i -e 's/section{ */section{/' $1.tex
+co -l $filebase.tex
+aspell -c --mode=tex $filebase.tex
+#perl -p -i -e 's/section{ */section{/' $filebase.tex
+~/bin/filtertex $filebase.tex
 
-#ci -l Makefile $d.tex
-echo '%\include{'$1'}' >> $d.tex
-echo 'TEXFILES +=' $1.tex >> Makefile
+#ci -l make.dep $d.tex
+echo '\%\\include{'$filebase'}' >> main.tex
+echo 'TEXFILES +=' $filebase.tex >> make.dep
+
+$mkLinks
+
+co -l ../gabook/METADATA
+cat >> ../gabook/METADATA << EOF
+$meta
+EOF
+") ;
+
