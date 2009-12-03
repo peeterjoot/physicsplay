@@ -37,7 +37,7 @@ all :: $(lobjects)
 #all :: trygin$(exe)
 all :: gasym$(exe)
 all :: calc$(exe)
-all :: $(pdfs)
+#all :: $(pdfs)
 
 # from ga_sandbox
 CXXFLAGS += -I$(GASAND)
