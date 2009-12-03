@@ -2,8 +2,8 @@
 #define sum_header_included
 
 /*
- * $Date: 2009/01/12 01:06:45 $
- * $Revision: 1.3 $
+ * $Date: 2009/12/03 04:33:40 $
+ * $Revision: 1.4 $
  */
 
 /**
@@ -12,6 +12,16 @@
 
 #include "symbol.h"
 
+/**
+  This is a list of symbol/multivector pairs.  The sign(s) of each of
+  the summands is built into the symbol themselves.
+
+  A symbol has a multivector factor and a symbolic factor.
+
+  GINAC: a replacement of the symbolic logic here should probably merge
+this highest level class with the next lowest 'class symbol'.  make a list
+of pair<ginac::ex, mv> instead.
+ */
 class sum
 {
    typedef std::list<symbol> symbolSetType ;

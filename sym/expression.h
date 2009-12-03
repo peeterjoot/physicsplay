@@ -2,8 +2,8 @@
 #define expression_header_included
 
 /*
- * $Date: 2009/01/12 01:06:45 $
- * $Revision: 1.3 $
+ * $Date: 2009/12/03 04:33:40 $
+ * $Revision: 1.4 $
  */
 
 /**
@@ -15,13 +15,15 @@
 #include <list>
 
 /**
- * A representation of a set (sum) of terms.
- *
- * Addition and subtraction are implemented.
- * Multiplication (with distribution over all sums) is implemented.
- *
- * Addition and subtraction operations do not result in common expression elimination, and reduce() must be called
- * explicitly if desired.
+   A representation of a set (sum) of terms.
+  
+   Addition and subtraction are implemented.
+   Multiplication (with distribution over all sums) is implemented.
+  
+   Addition and subtraction operations do not result in common expression elimination, and reduce() must be called
+   explicitly if desired.
+
+GINAC: Should be able to replace this and term ginac::ex completely.
  */
 class expression
 {

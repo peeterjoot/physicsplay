@@ -2,8 +2,8 @@
 #define term_header_included
 
 /*
- * $Date: 2009/01/12 01:06:45 $
- * $Revision: 1.3 $
+ * $Date: 2009/12/03 04:33:40 $
+ * $Revision: 1.4 $
  */
 
 /**
@@ -15,6 +15,9 @@
 #include <map>
 #include <sstream>
 
+/**
+   The literal.  The most basic expression (a string).
+ */
 typedef std::string literal ;
 
 /**
@@ -26,6 +29,19 @@ typedef std::string literal ;
 
    This is a scaling term (default of one).  This is followed by zero
    or more symbolic literals raised to integer powers (default of one).
+
+   The implementation is a string indexed associative array (stl::map)
+   of literals (strings), where
+   the value in the array is the exponent of the literal.
+
+   Each multiplication of a literal * literal increases the exponent.
+   Multiplication by a new (different) literal creates a new element
+   (ie: factor) in the array.
+
+GINAC: Should be able to replace this with ginac::ex completely.  This doesn't
+map exactly, and is kind of like product(s) of ginac::symbol(s), plus
+a leading numeric factor (which is superfluous since ginac::ex can represent
+the numeric coefficient).
  */
 class term
 {
@@ -143,6 +159,8 @@ inline std::string term::toString( const bool withScalar ) const
 
    toStringStream( out, false, withScalar ) ;
 
+// not working anymore?
+//cout << "out.str(): " << out.str() << endl ;
    return out.str() ;
 }
 

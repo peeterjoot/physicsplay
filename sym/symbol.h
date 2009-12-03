@@ -2,8 +2,8 @@
 #define symbol_header_included
 
 /*
- * $Date: 2009/01/12 01:06:45 $
- * $Revision: 1.3 $
+ * $Date: 2009/12/03 04:33:40 $
+ * $Revision: 1.4 $
  */
 
 /**
@@ -23,6 +23,21 @@ sum dot( const sum & a, const mv & b ) ;
 class symbol ;
 bool compareSymbol (const symbol & first, const symbol & second) ;
 
+/**
+   A representation of a symbolic expression (polynomial like symbolic object)
+   and an associated multivector factor.
+
+   Here expression is a sum of terms, and a term is a product of factors (where
+   one factor can be a scalar).  Factors in a term have a built in optional
+   exponential scaling, so 'X' * 'X' isn't too factors (literals) but one
+   with an exponent value of 2.
+
+   This class is the first place in the hierarchy that a GA library
+   dependency comes into play.
+
+   GINAC: the expression use here could be completely replaced with ginac::ex.  However, with ginac able to represent all of the lower level symbolic parts
+directly, this particular middleman is not required.
+ */
 class symbol
 {
    expression m_symName ;

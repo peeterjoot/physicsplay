@@ -3,7 +3,7 @@
  *
  * Peeter Joot (peeter.joot@gmail.com).  November 2008.
  *
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  */
 
 
@@ -801,15 +801,19 @@ void baylisEuler()
    \param A2 [out]
        second row.
  */
-void sphericalPendulum( const std::string & thetaStr,
-                        const std::string & phiStr,
-                        sum & A1,
-                        sum & A2 )
+void sphericalPendulum( 
+   const std::string & cosPrefix,
+   const std::string & sinePrefix,
+   const std::string & trigSuffix,
+   const std::string & thetaStr,
+   const std::string & phiStr,
+   sum & A1,
+   sum & A2 )
 {
-   term cos_theta(std::string("C_") + thetaStr) ;
-   term sin_theta(std::string("S_") + thetaStr) ;
-   term cos_phi(std::string("C_") + phiStr) ; 
-   term sin_phi(std::string("S_") + phiStr) ;
+   term cos_theta( cosPrefix + thetaStr + trigSuffix ) ;
+   term sin_theta( sinePrefix + thetaStr + trigSuffix ) ;
+   term cos_phi( cosPrefix + phiStr + trigSuffix ) ; 
+   term sin_phi( sinePrefix + phiStr + trigSuffix ) ;
 
    symbol scalarExpIphi( cos_phi, 1 ) ;
    symbol bivectorExpIphi( sin_phi, _bivector( e1 ^ e2 ) ) ;
@@ -839,21 +843,6 @@ void sphericalPendulum( const std::string & thetaStr,
    A2 *= symbol( sin_theta, 1 ) ;
 //   printIt( "A2 = ", A2 ) ;
 
-   sum A11 = A1 ;
-   A11 *= A1 ;   
-   printIt( "A11 = ", A11 ) ;
-
-   sum A12 = A1 ;
-   A12 *= A2 ;   
-   printIt( "A12 = ", A12 ) ;
-
-   sum A21 = A2 ;
-   A21 *= A1 ;   
-   printIt( "A21 = ", A21 ) ;
-
-   sum A22 = A2 ;
-   A22 *= A2 ;   
-   printIt( "A22 = ", A22 ) ;
 }
 
 int main(int argc, char*argv[])
@@ -877,8 +866,36 @@ int main(int argc, char*argv[])
 //   sphericalPolar2() ;
 //   baylisEuler() ;
 
-   sum A1, A2 ;
-   sphericalPendulum( "\\theta", "\\phi", A1, A2 ) ;
+   {
+      sum A1, A2 ;
+      sum B1, B2 ;
+#if 0
+      sphericalPendulum( "C_", "S_", "", "{\\theta_r}", "{\\phi_r}", A1, A2 ) ;
+      sphericalPendulum( "C_", "S_", "", "{\\theta_c}", "{\\phi_c}", B1, B2 ) ;
+#elif 0
+      sphericalPendulum( "cos(", "sin(", ")", "theta", "phi", A1, A2 ) ;
+      sphericalPendulum( "cos(", "sin(", ")", "alpha", "beta", B1, B2 ) ;
+#else
+      sphericalPendulum( "Cos[", "Sin[", "]", "theta", "phi", A1, A2 ) ;
+      sphericalPendulum( "Cos[", "Sin[", "]", "alpha", "beta", B1, B2 ) ;
+#endif
+
+      sum AB11 = A1 ;
+      AB11 *= B1 ;   
+      printIt( "AB11 : Simplify[] ", AB11 ) ;
+
+      sum AB12 = A1 ;
+      AB12 *= B2 ;   
+      printIt( "AB12 : Simplify[]", AB12 ) ;
+
+      sum AB21 = A2 ;
+      AB21 *= B1 ;   
+      printIt( "AB21 : Simplify[]", AB21 ) ;
+
+      sum AB22 = A2 ;
+      AB22 *= B2 ;   
+      printIt( "AB22 : Simplify[]", AB22 ) ;
+   }
 
    return 0 ;
 }
