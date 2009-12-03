@@ -1,20 +1,25 @@
 \input{../peeter_prologue.tex}
 
-\chapter{Polar form for the gradient and Laplacian.}
+%\chapter{Polar form for the gradient and Laplacian.}
+\chapter{Was Professor Dmitrevsky right about insisting the Laplacian is not generally $\spacegrad \cdot \spacegrad$.}
 \label{chap:polarGradAndLaplacian}
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/polarGradAndLaplacian.pdf}
 \date{Dec 1, 2009}
-\revisionInfo{$RCSfile: polarGradAndLaplacian.tex,v $ Last $Revision: 1.3 $ $Date: 2009/12/02 15:05:43 $}
+\revisionInfo{$RCSfile: polarGradAndLaplacian.tex,v $ Last $Revision: 1.4 $ $Date: 2009/12/03 01:46:31 $}
 
 \beginArtWithToc
 %\beginArtNoToc
+
+\section{Dedication.}
+
+To all tyrannical old Professors driven to cruelty by an unending barrage of increasingly ill prepared students.  
 
 \section{Motivation.}
 
 The text \cite{byron1992mca} has an excellent general derivation of a number of forms of the gradient, divergence, curl and Laplacian.
 
-This is actually done, not starting with the usual cartesian forms, but more general definitions.
+This is actually done, not starting with the usual Cartesian forms, but more general definitions.
 
 \begin{align}\label{eqn:divGradCurLap:1}
 (\text{grad}\  \phi)_i &= \lim_{ds_i \rightarrow 0} \frac{\phi(q_i + dq_i) - \phi(q_i)}{ds_i} \\
@@ -37,17 +42,17 @@ and never never never, the busted way
 \text{Laplacian}\  \phi &= (\spacegrad \cdot \spacegrad) \phi.
 \end{align}
 
-Because ``this only works in cartesian coordinates''.  He probably backed up this assertion with a heartwarming and encouraging statement like ``back in the days when University of Toronto was a real school you would have learned this in kindergarden''.
+Because ``this only works in Cartesian coordinates''.  He probably backed up this assertion with a heartwarming and encouraging statement like ``back in the days when University of Toronto was a real school you would have learned this in kindergarten''.
 
 This detail is actually something that has bugged me ever since, because my assumption was that, provided one was careful, why would a change to an alternate coordinate system matter?  The gradient is still the gradient, so it seems to me that this ought to be a general way to calculate things.
 
-Here we explore the validity of the dictatorial comments of Prof Dmitrevsky.  The key to reconsiling intuition and his statement turns out to lie with the fact that one has to let the gradient operate on the unit vectors in the non cartesian representation as well as the partials, something that wasn't clear as a first year student.  Provided that this is done, the plain old dot product procedure yields the expected results.
+Here we explore the validity of the dictatorial comments of Prof Dmitrevsky.  The key to reconciling intuition and his statement turns out to lie with the fact that one has to let the gradient operate on the unit vectors in the non Cartesian representation as well as the partials, something that wasn't clear as a first year student.  Provided that this is done, the plain old dot product procedure yields the expected results.
 
-This exploration will utilize a two dimensional space as a starting point, transforming from cartesian to polar form representation.  I'll also utilize a geometric algebra representation of the polar unit vectors.
+This exploration will utilize a two dimensional space as a starting point, transforming from Cartesian to polar form representation.  I'll also utilize a geometric algebra representation of the polar unit vectors.
 
 \section{The gradient in polar form.}
 
-Lets start off with a calculation of the gradient in polar form starting with the cartesian form.  Writing $\partial_x = \PDi{x}{}$, $\partial_y = \PDi{y}{}$, $\partial_r = \PDi{j}{}$, and $\partial_\theta = \PDi{\theta}{}$, we want to map
+Lets start off with a calculation of the gradient in polar form starting with the Cartesian form.  Writing $\partial_x = \PDi{x}{}$, $\partial_y = \PDi{y}{}$, $\partial_r = \PDi{j}{}$, and $\partial_\theta = \PDi{\theta}{}$, we want to map
 
 \begin{align}\label{eqn:divGradCurLap:4}
 \spacegrad 
@@ -181,7 +186,7 @@ so the $1,1$ element of the matrix product in the interior is
 \rcap e^{i\theta} = e^{-i\theta}\rcap.
 \end{align}
 
-Similarily, the $1,2$ element of the matrix product in the interior is
+Similarly, the $1,2$ element of the matrix product in the interior is
 
 \begin{align}\label{eqn:divGradCurLap:9b}
 \begin{bmatrix}
@@ -204,6 +209,87 @@ The exponentials cancel nicely, leaving after a final multiplication with the po
 That was a fun way to get the result, although we could have just looked it up.  We want to use this now to calculate the Laplacian.
 
 \section{Polar form Laplacian for the plane.}
+
+We are now ready to look at the Laplacian.  First let's do it the first year electricity and magnetism course way.  We look up the formula for polar form divergence, the one we were supposed to have memorized in kindergarten, and find it to be
+
+\begin{align}\label{eqn:divGradCurLap:11}
+\text{div}\ \BA = \partial_r A_r + \inv{r} A_r + \inv{r} \partial_\theta A_\theta
+\end{align}
+
+We can now apply this to the gradient vector in polar form which has components $\spacegrad_r = \partial_r$, and $\spacegrad_\theta = (1/r)\partial_\theta$, and get
+
+\begin{align}\label{eqn:divGradCurLap:12}
+\text{div}\ \text{grad} = 
+\partial_{rr} + \inv{r} \partial_r + \inv{r} \partial_{\theta\theta}
+\end{align}
+
+This is the expected result, and what we should get by performing $\spacegrad \cdot \spacegrad$ in polar form.  Now, let's do it the wrong way, dotting our gradient with itself.
+
+\begin{align*}
+\spacegrad \cdot \spacegrad 
+&= \left(\partial_r, \inv{r} \partial_\theta\right) \cdot \left(\partial_r, \inv{r} \partial_\theta\right) \\
+&= \partial_{rr} + \inv{r} \partial_\theta \left(\inv{r} \partial_\theta\right) \\
+&= \partial_{rr} + \inv{r^2} \partial_{\theta\theta}
+\end{align*}
+
+This is wrong!  So is Dmitrevsky right that this procedure is flawed, or do you spot the mistake?  I have also cruelly written this out in a way that obscures the error and highlights the source of the confusion.
+
+The problem is that our unit vectors are functions, and they must also be included in the application of our partials.  Using the coordinate polar form without explicitly putting in the unit vectors is how we go wrong.  Here's the right way
+
+\begin{align*}
+\spacegrad \cdot \spacegrad 
+&=
+\left( \rcap \partial_r + \thetacap \inv{r} \partial_\theta \right) \cdot \left( \rcap \partial_r + \thetacap \inv{r} \partial_\theta \right) \\
+&=
+\rcap \cdot \partial_r \left(\rcap \partial_r \right)
++\rcap \cdot \partial_r \left( \thetacap \inv{r} \partial_\theta \right)
++\thetacap \cdot \inv{r} \partial_\theta \left( \rcap \partial_r \right)
++\thetacap \cdot \inv{r} \partial_\theta \left( \thetacap \inv{r} \partial_\theta \right) \\
+\end{align*}
+
+Now we need the derivatives of our unit vectors.  The $\partial_r$ derivatives are zero since these have no radial dependence, but we do have $\theta$ partials
+
+\begin{align*}
+\partial_\theta \rcap 
+&=
+\partial_\theta \left( \Be_1 e^{i\theta} \right) \\
+&=
+\Be_1 \Be_1 \Be_2 e^{i\theta} \\
+&=
+\Be_2 e^{i\theta} \\
+&=
+\thetacap,
+\end{align*}
+
+and
+
+\begin{align*}
+\partial_\theta \thetacap 
+&=
+\partial_\theta \left( \Be_2 e^{i\theta} \right) \\
+&=
+\Be_2 \Be_1 \Be_2 e^{i\theta} \\
+&=
+-\Be_1 e^{i\theta} \\
+&=
+-\rcap.
+\end{align*}
+
+(One should be able to get the same results if these unit vectors were written out in full as $\rcap = \Be_1 \cos\theta + \Be_2 \sin\theta$, and $\thetacap = \Be_2 \cos\theta - \Be_1 \sin\theta$, instead of using the obscure geometric algebra quaterionic rotation exponential operators.)
+
+Having calculated these partials we now have
+
+\begin{align}\label{eqn:divGradCurLap:14}
+(\spacegrad \cdot \spacegrad) \BA
+&=
+\partial_{rr} A_r
++\inv{r} \partial_r A_r
++\inv{r^2} \partial_{\theta\theta} A_\theta
+\end{align}
+
+Exactly what it should be, and what we got with the coordinate form of the divergence operator when applying the ``Laplacian equals the divergence of the gradient'' rule blindly.  We see that the expectation that $\spacegrad \cdot \spacegrad$ is the Laplacian in more than the Cartesian coordinate system is not invalid, but that care is required to apply the chain rule to all functions.  We also see that expressing a vector in coordinate form when the basis vectors are position dependent is also a path to danger.
+
+Is this anything that our electricity and magnetism prof didn't know?  Unlikely.  Is this something that our prof felt that could not be explained to a mob of first year students?  Probably.
 
 \EndArticle
 %\EndNoBibArticle
