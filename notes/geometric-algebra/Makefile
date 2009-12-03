@@ -5,7 +5,7 @@ ppdfs := $(shell ls ../*/*.pdf)
 all : $(pdfs)
 #big:: everything2007.pdf
 #big:: everything2008.pdf
-#big:: everything2009.pdf
+big:: everything2009.pdf
 
 $(pdfs) : ../peeters_macros.tex
 
@@ -355,10 +355,41 @@ gabook += ../geometric-algebra/intro_ga.pdf
 
 nonga += ../nonga/nonga.pdf
 
+nonga += ../relativity/invarianceEnMom.pdf
+gabook += ../relativity/frequencyTx.pdf
+
+# incomplete:
+skipit += ../relativity/epsilonMixed.pdf
+skipit += ../maxwell/interactionEnergy.pdf
+skipit += ../maxwell/lightQuantize.pdf
+skipit += ../maxwell/maxwellVacuum_roughNotes.pdf
+
+skipit += ../nonga/main.pdf
+skipit += ../maxwell/stress_energy_noethers.pdf
+
+gabook += ../maxwell/poincareTx.pdf
+gabook += ../maxwell/maxwellVacuum.pdf
+gabook += ../maxwell/lforceLag2.pdf
+gabook += ../maxwell/emVacWave.pdf
+
+skipit += ../latex2wp/example.pdf
+skipit += ../carlbook/dmaa.pdf
+skipit += ../btg/relwave.pdf
+skipit += ../blogit/stokesGradeTwo.pdf
+skipit += ../blogit/poincareTx.pdf
+skipit += ../blogit/pauliMatrix.pdf
+skipit += ../blogit/invarianceEnMom.pdf
+skipit += ../blogit/frequencyTx.pdf
+skipit += ../blogit/emVacWave.pdf
+
+gabook += ../calculus/stokesGradeTwo.pdf
+gabook += ../calculus/stokesNoTensor.pdf
+gabook += ../qm/qmAngularMom.pdf
+gabook += ../maxwell/transverseField.pdf
+
+skipit += ../geometric-algebra/usebib.pdf
 skipit += $(gabook)
 skipit += $(nonga)
-
-#ordered2009 += 
 
 #----------------------------------------------------------------
 # Rules:

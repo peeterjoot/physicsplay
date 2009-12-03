@@ -21,7 +21,7 @@ pdfs := $(files:.ltx=.pdf)
 
 all :: $(pdfs)
 
-latexrules := ../..
+latexrules := ..
 
 %.pdf : %.ltx
 	$(latexrules)/make_pdflatex $<

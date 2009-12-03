@@ -5,7 +5,7 @@
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2009/gaMintro.pdf}
 \date{Nov 26, 2009}
-\revisionInfo{$RCSfile: gaMintro.tex,v $ Last $Revision: 1.2 $ $Date: 2009/11/27 03:07:22 $}
+\revisionInfo{$RCSfile: gaMintro.tex,v $ Last $Revision: 1.3 $ $Date: 2009/12/03 03:24:40 $}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -385,6 +385,128 @@ This example was primarily to illustrate one non-trivial way that a vector facto
 
 It is a fun diversion to use this result directly to form a multivector parametrized (scalar) Lagrangian for the spherical pendulum problem.  Lagrangian constraints must be added, and one must utilize the multivector generalization of the Euler-Lagrange equations to determine the equations of motion.  Because the three components of the bivector $j$ add redundant degrees of freedom, such an approach needlessly complicates the problem.  A scalar angle parametrization works better and will be used below in the N-pendulum spherical generalization of this problem.
 %  We will however, end up with a matrix of multivector (scalar and bivector) elements.
+
+\section{Single spherical pendulum with geometric algebra.}
+
+As noted in \ref{eqn:mp80}, we can express the unit spherical vector using geometric algebra as
+
+\begin{align}\label{eqn:mp280}
+i &= \Be_1 \Be_2 \\
+j &= \Be_3 \Be_1 e^{i \phi} \\
+\rcap &= \Be_3 e^{j \theta}.
+\end{align}
+
+Our unit vector derivative is then
+
+\begin{align*}
+\dot{\rcap}
+&=
+\frac{d}{dt} \left( \Be_3 e^{j \theta} \right) \\
+&=
+\Be_3 \left( j \dot{\theta} e^{j \theta} + \frac{d j }{dt} S_\theta \right)  \\
+&=
+\Be_3 \left( j \dot{\theta} e^{j \theta} + \Be_3 \Be_2 \dot{\phi} e^{i \phi} S_\theta \right)  \\
+&=
+\Be_1 e^{i\phi} e^{j \theta} \dot{\theta} + S_\theta \Be_2 e^{i \phi} \dot{\phi}
+\end{align*}
+
+Since any vector equals its own reverse we can also write
+
+\begin{align}\label{eqn:mp290}
+\dot{\rcap} = e^{-j\theta} e^{-i \phi} \Be_1 \dot{\theta} + S_\theta e^{-i \phi} \Be_2 \dot{\phi}
+\end{align}
+
+Squaring this for the unit vector speed we have
+
+\begin{align}\label{eqn:mp300}
+\dot{\rcap}^2 = 
+\dot{\theta}^2 \underbrace{\Be_1 e^{i\phi} e^{j \theta} e^{-j\theta} e^{-i \phi} \Be_1 }_{=1}
++ S_\theta^2 \dot{\phi}^2 \underbrace{\Be_2 e^{i \phi} e^{-i \phi} \Be_2 }_{=1}
++ 
+\dot{\theta} 
+\dot{\phi}
+S_\theta
+(
+\Be_1 e^{i\phi} e^{j \theta} 
+e^{-i \phi} \Be_2 
++ \Be_2 e^{i \phi} 
+e^{-j\theta} e^{-i \phi} \Be_1 )
+\end{align}
+
+As a scalar we can write the last term explicitly using the scalar selection operator, and employ the cyclic reordering identity $\gpgradezero{ab} = \gpgradezero{ba}$, which gives us
+
+\begin{align*}
+\Be_1 e^{i\phi} e^{j \theta} 
+e^{-i \phi} \Be_2 
++ \Be_2 e^{i \phi} 
+e^{-j\theta} e^{-i \phi} \Be_1 
+&=
+\gpgradezero{
+- e^{-i \phi} i \Be_1 e^{i\phi} e^{j \theta} 
++ e^{-i \phi} i e^{i \phi} e^{-j\theta} 
+} \\
+&=
+\gpgradezero{
+- i (C_\theta + j S_\theta)
++ i (C_\theta - j S_\theta)
+} \\
+&= 
+- 2 S_\theta \gpgradezero{ i j } \\
+&= 
+- 2 S_\theta \gpgradezero{ \Be_2 \Be_3 C_\phi + \Be_3 \Be_1 S_\phi } \\
+\end{align*}
+
+In the scalar selection all we have are bivectors, so this whole thing is zero.
+
+So, while getting at the quadratic angular velocity terms was simpler using geometric algebra, showing that the cross terms were zero is certainly no easier using geometric algebra.  Messy trig reductions have been replaced by tricky grade selection operations.  In both cases we end up with the same result.
+
+Is there a tidier way to do this?  Lets write instead
+
+\begin{align}\label{eqn:mp310}
+\dot{\rcap}
+&=
+\left( \frac{d}{dt}
+\begin{bmatrix}
+\theta & \phi
+\end{bmatrix} \right)
+\begin{bmatrix}
+\Be_1 e^{i \phi} e^{j \theta} \\
+\Be_2 e^{i \phi} S_\theta
+\end{bmatrix}.
+\end{align}
+
+With $\Theta = \begin{bmatrix}
+\theta \\ \phi
+\end{bmatrix}$, and $A =
+\begin{bmatrix}
+\Be_1 e^{i \phi} e^{j \theta} \\
+\Be_2 e^{i \phi} S_\theta
+\end{bmatrix}$, we have
+
+\begin{align*}
+\dot{\rcap}^2 
+&= \gpgradezero{\dot{\rcap}^2} \\
+&= \gpgradezero{\dot{\Theta}^\dagger A A^\dagger \dot{\Theta}},
+\end{align*}
+
+which is just
+
+\begin{align}\label{eqn:mp320}
+\dot{\rcap}^2 = \dot{\Theta}^\T \gpgradezero{ A A^\dagger } \dot{\Theta}.
+\end{align}
+
+We've actually just calculated all the products in the interior matrix product, and we have
+
+\begin{align}\label{eqn:mp330}
+\dot{\rcap}^2 = \dot{\Theta}^\T 
+\begin{bmatrix}
+1 & 0 \\
+0 & S_\theta^2
+\end{bmatrix}
+\dot{\Theta}.
+\end{align}
+
+This diagonal quadratic form is now trivial to expand, and we therefore get the same result.
 
 \EndArticle
 %\EndNoBibArticle
