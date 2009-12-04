@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
-#include <time.h>
+#include <sys/time.h>
 
 #define N 10000000
 
@@ -42,164 +42,251 @@
 
 #endif
 
-struct FlagState
-{
-   volatile int flag ;
+bool beVerbose = false ;
 
-   char dummy[120] ; // cacheline separator.
-} ;
+#if defined USE_ATOMIC || defined USE_SERIAL
+   volatile unsigned foo = 0 ;
 
-FlagState g[2] ;
-volatile int turn = 0 ;
-
-#if defined USE_ATOMIC
-
-volatile char lockWord = 0 ;
-
-void my_lock( int tidIgnored )
-{
-   char oldValue ;
-   char newValue = 1 ;
-
-   do {
-      // 
-      // A dumb spinlock implementation, with no memory barriers.
-      //
-      __asm__ __volatile__( "xchgb  %0,%1\n\t" : "=r" (oldValue), "+m" (lockWord) : "0" (newValue) ) ;
-
-   } while ( 1 == oldValue ) ;
-}
-
-void my_unlock( int tidIgnored )
-{
-   SCHED_FENCE ;
-
-   lockWord = 0 ;
-}
-#elif defined USE_WIKI
-/* 
- * wikipedia implementation. p0
- *
-     flag[0] := true
-     while flag[1] = true {
-         if turn . 0 {
-             flag[0] := false
-             while turn . 0 {
-             }
-             flag[0] := true
-         }
-     }
- 
-    // critical section
-    ...
-    turn := 1
-    flag[0] := false
- */
-void my_lock( int tid )
-{
-   int other = 1 - tid  ;
-
-   g[tid].flag = true ;
-
-   FENCE ;
-
-   while ( true == g[other].flag )
+   inline void my_increment()
    {
-      if ( turn != tid )
+      unsigned oldValue ;
+      unsigned addValue = 1 ;
+
+      // 
+      // lock signal assertion is required for concurrent correctness.
+      //
+      __asm__ __volatile__( "lock ; xaddl %0,%1\n\t" : "=r"(oldValue), "+m" (foo) : "0" (addValue) : "cc" ) ;
+   }
+
+   void my_lock( int tidIgnored )
+   {
+   }
+#else
+   unsigned foo = 0 ;
+   
+   inline void my_increment()
+   {
+      foo++ ;
+   }
+   
+   #if defined USE_XCHG_LOCK
+   
+      volatile char lockWord = 0 ;
+   
+      void my_lock( int tidIgnored )
       {
-         g[tid].flag = false ;
-
-         while ( turn != tid )
+         char oldValue ;
+         char newValue = 1 ;
+   
+         do {
+            // 
+            // A dumb spinlock implementation, with no memory barriers.
+            //
+            __asm__ __volatile__( "xchgb  %0,%1\n\t" : "=r" (oldValue), "+m" (lockWord) : "0" (newValue) ) ;
+   
+         } while ( 1 == oldValue ) ;
+      }
+   
+      void my_unlock( int tidIgnored )
+      {
+         SCHED_FENCE ;
+   
+         lockWord = 0 ;
+      }
+   #else
+   
+      struct FlagState
+      {
+         volatile int flag ;
+   
+         char dummy[120] ; // cacheline separator.
+      } ;
+   
+      FlagState g[2] ;
+      volatile int turn = 0 ;
+   
+      #if defined USE_WIKI
+      /* 
+       * wikipedia implementation. p0
+       *
+           flag[0] := true
+           while flag[1] = true {
+               if turn . 0 {
+                   flag[0] := false
+                   while turn . 0 {
+                   }
+                   flag[0] := true
+               }
+           }
+       
+          // critical section
+          ...
+          turn := 1
+          flag[0] := false
+       */
+      void my_lock( int tid )
+      {
+         int other = 1 - tid  ;
+   
+         g[tid].flag = true ; // I want in the CS.
+   
+         FENCE ;
+   
+         while ( true == g[other].flag )
          {
+            // 
+            // The other guy is in the CS or wants in.
+            //
+            if ( turn != tid )
+            {
+               // he said he wants it, but hasn't given me my turn yet.
+               // 
+               // let him have a chance.
+               //
+               g[tid].flag = false ;
+   
+               // wait till he gives me my turn
+               while ( turn != tid )
+               {
+               }
+   
+               // he's about to give up his turn or has, so I can say I want it again.
+               // 
+               // I'll now spin on his flag changing (though I could miss it if unlucky and have
+               // to start all over if he tries again fast).
+               //
+               g[tid].flag = true ;
+            }
          }
+      }
+   
+      void my_unlock( int tid )
+      {
+         int other = 1 - tid  ;
+   
+         turn = other ;
+   
+         //SFENCE ;
+   
+         g[tid].flag = false ;
+      }
+   
+      #else
+   
+      void my_lock( int tid )
+      {
+         g[tid].flag = 1 ;
+   
+         //SFENCE ;
+   
+         turn = 1-tid ;
+   
+         FENCE ;
+   
+         //while( g[1-tid].flag && turn != tid ) ;
+         while( g[1-tid].flag )
+         {
+            if ( turn == tid )
+            {
+               break ;
+            }
+         }
+   
+         // This would be the logical place for the lfence, to ensure that the lock data accesses don't 
+         // start till we are in the critical section.
+         //   LFENCE ;
+      }
+   
+      void my_unlock( int tid )
+      {
+         // This would be the logical place for the lfence, to ensure that the lock data accesses are 
+         // complete while we are in the critical section.
+         //   SFENCE ;
+   
+         g[tid].flag = 0 ;
+      }
+      #endif // !USE_WIKI
+   #endif // !USE_XCHG_LOCK
+#endif // !USE_ATOMIC
 
-         g[tid].flag = true ;
+#if defined __cplusplus 
+   #define EXTERNC extern "C"
+#endif
+
+void do_work( int tid ) 
+{
+   int i ;
+   int p = 0 ;
+
+   for( i = 0 ; i < N ; i++ )
+   {
+      my_lock( tid ) ;
+
+      my_increment() ;
+
+      my_unlock( tid ) ;
+
+      if ( beVerbose )
+      {
+         p++ ;
+
+         if ( 0 == (p % 100000) )
+         {
+            printf( "%d: %d\n", tid, p ) ;
+         }
       }
    }
 }
 
-void my_unlock( int tid )
-{
-   int other = 1 - tid  ;
-
-   turn = other ;
-   g[tid].flag = false ;
-}
-#else
-void my_lock(int tid)
-{
-    g[tid].flag = 1 ;
-    turn = 1-tid ;
-
-    FENCE ;
-
-    while( g[1-tid].flag && turn != tid ) ;
-}
-
-void my_unlock(int tid)
-{
-    g[tid].flag = 0 ;
-}
-#endif
-
-unsigned foo = 0 ;
-
-#if defined __cplusplus 
-#define EXTERNC extern "C"
-#endif
-
 EXTERNC
 void *thread_0( void * ) 
 {
-    int i ;
-    int p = 0 ;
-    for( i=0; i<N; i++ ) {
-        my_lock(0) ;
-        foo++ ;
-        my_unlock(0) ;
-
-        p++ ;
-
-        if ( 0 == (p % 100000) )
-        {
-           printf("0: %d\n", p) ;
-        }
-    }
+   do_work( 0 ) ;
 }
 
 EXTERNC
 void *thread_1( void * ) 
 {
-    int i ;
-    int p = 0 ;
-
-    for( i=0; i<N; i++ ) {
-        my_lock(1) ;
-        foo++ ;
-        my_unlock(1) ;
-
-        p++ ;
-
-        if ( 0 == (p % 100000) )
-        {
-           printf("1: %d\n", p) ;
-        }
-    }
+   do_work( 1 ) ;
 }
 
-int main(int argc, char *argv[])
+double timeValToUsec( const struct timeval * const pTv )
 {
-    pthread_t t0, t1 ;
-    double t = time(NULL) ;
+   double uSec = pTv->tv_sec * 1000000 ;
 
-    pthread_create(&t0, NULL, thread_0, NULL) ;
-    pthread_create(&t1, NULL, thread_1, NULL) ;
+   uSec += pTv->tv_usec ;
 
-    pthread_join(t0, NULL) ;
-    pthread_join(t1, NULL) ;
-    t = time(NULL) - t ;
+   return uSec ;
+}
 
-    printf("2*N - foo  = %3u (foo = %u)\n\n", 2*N-foo, foo ) ;
-    printf("time       = %3.0f seconds\n", t ) ;
-    return 0 ;
+int main( int argc, char *argv[] )
+{
+   pthread_t         h[2] ;
+   struct timeval    t[2] ;
+   double            elapsed ;
+
+   gettimeofday( &t[0], NULL ) ;
+
+#if defined USE_SERIAL
+   pthread_create( &h[0], NULL, thread_0, NULL ) ;
+   pthread_join( h[0], NULL ) ;
+
+   pthread_create( &h[1], NULL, thread_1, NULL ) ;
+   pthread_join( h[1], NULL ) ;
+#else
+   pthread_create( &h[0], NULL, thread_0, NULL ) ;
+   pthread_create( &h[1], NULL, thread_1, NULL ) ;
+
+   pthread_join( h[0], NULL ) ;
+   pthread_join( h[1], NULL ) ;
+#endif
+
+   gettimeofday( &t[1], NULL ) ;
+
+   elapsed = timeValToUsec( &t[1] ) - timeValToUsec( &t[0] ) ;
+
+   printf( "2*N - foo  = %3u (foo = %u)\n\n", 2*N - foo, foo ) ;
+   printf( "time       = %f seconds\n", elapsed/1000000.0 ) ;
+
+   return 0 ;
 }
