@@ -1,6 +1,6 @@
 all :: dekker dekker_mfence dekker_lfence dekker_sfence dekker_sched
 all :: dekker_wiki dekker_mfence_wiki dekker_lfence_wiki dekker_sfence_wiki dekker_sched_wiki 
-all :: dekker_xchg dekker_atomic dekker_serial_atomic
+all :: dekker_xchg dekker_atomic dekker_serial_atomic dekker_serial_nolock
 
 dekker: dekker.c
 	g++ dekker.c -o $@ -lpthread
@@ -10,6 +10,9 @@ dekker_atomic: dekker.c
 
 dekker_serial_atomic: dekker.c
 	g++ dekker.c -o $@ -lpthread -DUSE_SERIAL
+
+dekker_serial_nolock: dekker.c
+	g++ dekker.c -o $@ -lpthread -DUSE_SERIAL -DNO_LOCK
 
 dekker_xchg: dekker.c
 	g++ dekker.c -o $@ -lpthread -DUSE_XCHG_LOCK

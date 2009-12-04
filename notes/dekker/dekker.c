@@ -52,10 +52,16 @@ bool be_verbose = false ;
       unsigned old_value ;
       unsigned add_value = 1 ;
 
-      // 
-      // lock signal assertion is required for concurrent correctness.
-      //
-      __asm__ __volatile__( "lock ; xaddl %0,%1\n\t" : "=r"(old_value), "+m" (foo) : "0" (add_value) : "cc" ) ;
+      #if defined NO_LOCK
+         #define LOCK_PREFIX ""
+      #else
+         // 
+         // lock signal assertion is required for concurrent correctness.
+         //
+         #define LOCK_PREFIX "lock; "
+      #endif
+
+      __asm__ __volatile__( LOCK_PREFIX "xaddl %0,%1\n\t" : "=r"(old_value), "+m" (foo) : "0" (add_value) : "cc" ) ;
    }
 
    void my_lock( int tid_ignored )
