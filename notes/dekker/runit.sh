@@ -1,0 +1,14 @@
+dekker
+dekker_atomic
+dekker_lfence
+dekker_lfence_wiki
+dekker_mfence
+dekker_mfence_wiki
+dekker_sched
+dekker_sched_wiki
+dekker_serial_atomic
+dekker_serial_nolock
+dekker_sfence
+dekker_sfence_wiki
+dekker_wiki
+dekker_xchg
