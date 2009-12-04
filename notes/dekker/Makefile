@@ -1,6 +1,24 @@
-all :: dekker dekker_mfence dekker_lfence dekker_sfence dekker_sched
-all :: dekker_wiki dekker_mfence_wiki dekker_lfence_wiki dekker_sfence_wiki dekker_sched_wiki 
-all :: dekker_xchg dekker_atomic dekker_serial_atomic dekker_serial_nolock
+MUTEX += dekker dekker_mfence dekker_lfence dekker_sfence dekker_sched
+MUTEX += dekker_wiki dekker_mfence_wiki dekker_lfence_wiki dekker_sfence_wiki dekker_sched_wiki 
+MUTEX += dekker_xchg dekker_atomic dekker_serial_atomic dekker_serial_nolock
+
+#all :: $(MUTEX)
+
+files := $(shell ls *.tex)
+pdfs := $(files:.tex=.pdf)
+
+all :: $(pdfs)
+
+$(pdfs) : ../peeters_macros.tex
+
+%.pdf : %.tex
+	../make_pdflatex $<
+
+clean ::
+	rm -f *.ps *.dvi *.pdf *.aux *.log
+
+clean ::
+	rm -f *.o $(MUTEX)
 
 dekker: dekker.c
 	g++ dekker.c -o $@ -lpthread
