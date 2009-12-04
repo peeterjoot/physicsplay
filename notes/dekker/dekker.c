@@ -42,23 +42,27 @@
 
 #endif
 
-bool beVerbose = false ;
+bool be_verbose = false ;
 
 #if defined USE_ATOMIC || defined USE_SERIAL
    volatile unsigned foo = 0 ;
 
    inline void my_increment()
    {
-      unsigned oldValue ;
-      unsigned addValue = 1 ;
+      unsigned old_value ;
+      unsigned add_value = 1 ;
 
       // 
       // lock signal assertion is required for concurrent correctness.
       //
-      __asm__ __volatile__( "lock ; xaddl %0,%1\n\t" : "=r"(oldValue), "+m" (foo) : "0" (addValue) : "cc" ) ;
+      __asm__ __volatile__( "lock ; xaddl %0,%1\n\t" : "=r"(old_value), "+m" (foo) : "0" (add_value) : "cc" ) ;
    }
 
-   void my_lock( int tidIgnored )
+   void my_lock( int tid_ignored )
+   {
+   }
+
+   void my_unlock( int tid_ignored )
    {
    }
 #else
@@ -71,38 +75,38 @@ bool beVerbose = false ;
    
    #if defined USE_XCHG_LOCK
    
-      volatile char lockWord = 0 ;
+      volatile char lock_word = 0 ;
    
-      void my_lock( int tidIgnored )
+      void my_lock( int tid_ignored )
       {
-         char oldValue ;
-         char newValue = 1 ;
+         char old_value ;
+         char new_value = 1 ;
    
          do {
             // 
             // A dumb spinlock implementation, with no memory barriers.
             //
-            __asm__ __volatile__( "xchgb  %0,%1\n\t" : "=r" (oldValue), "+m" (lockWord) : "0" (newValue) ) ;
+            __asm__ __volatile__( "xchgb  %0,%1\n\t" : "=r" (old_value), "+m" (lock_word) : "0" (new_value) ) ;
    
-         } while ( 1 == oldValue ) ;
+         } while ( 1 == old_value ) ;
       }
    
-      void my_unlock( int tidIgnored )
+      void my_unlock( int tid_ignored )
       {
          SCHED_FENCE ;
    
-         lockWord = 0 ;
+         lock_word = 0 ;
       }
    #else
    
-      struct FlagState
+      struct FLAG_STATE
       {
          volatile int flag ;
    
          char dummy[120] ; // cacheline separator.
       } ;
    
-      FlagState g[2] ;
+      FLAG_STATE g[2] ;
       volatile int turn = 0 ;
    
       #if defined USE_WIKI
@@ -226,7 +230,7 @@ void do_work( int tid )
 
       my_unlock( tid ) ;
 
-      if ( beVerbose )
+      if ( be_verbose )
       {
          p++ ;
 
@@ -250,7 +254,7 @@ void *thread_1( void * )
    do_work( 1 ) ;
 }
 
-double timeValToUsec( const struct timeval * const pTv )
+double timeval_to_usec( const struct timeval * const pTv )
 {
    double uSec = pTv->tv_sec * 1000000 ;
 
@@ -283,7 +287,7 @@ int main( int argc, char *argv[] )
 
    gettimeofday( &t[1], NULL ) ;
 
-   elapsed = timeValToUsec( &t[1] ) - timeValToUsec( &t[0] ) ;
+   elapsed = timeval_to_usec( &t[1] ) - timeval_to_usec( &t[0] ) ;
 
    printf( "2*N - foo  = %3u (foo = %u)\n\n", 2*N - foo, foo ) ;
    printf( "time       = %f seconds\n", elapsed/1000000.0 ) ;
