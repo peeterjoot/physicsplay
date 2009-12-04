@@ -295,8 +295,9 @@ int main( int argc, char *argv[] )
 
    elapsed = timeval_to_usec( &t[1] ) - timeval_to_usec( &t[0] ) ;
 
-   printf( "2*N - foo  = %3u (foo = %u)\n\n", 2*N - foo, foo ) ;
-   printf( "time       = %f seconds\n", elapsed/1000000.0 ) ;
+   printf( "variation, 2N, foo, 2N - foo, time (seconds)\n" ) ;
+
+   printf( "%s,%u,%u,%u,%f\n", argv[0], 2*N, foo, 2*N - foo, elapsed/1000000.0 ) ;
 
    return 0 ;
 }
