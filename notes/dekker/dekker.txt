@@ -3,9 +3,9 @@
 \chapter{Intel memory ordering, fence instructions, and atomic operations.}
 \label{chap:dekker}
 %\useCCL
-\blogpage{http://sites.google.com/site/peeterjoot/math2009/dekker.pdf}
+\blogpage{http://sites.google.com/site/peeterjoot/math2009/dekker.pdf?revision=2}
 \date{Dec 4, 2009}
-\revisionInfo{$RCSfile: dekker.txt,v $ Last $Revision: 1.5 $ $Date: 2009/12/05 04:08:17 $}
+\revisionInfo{$RCSfile: dekker.txt,v $ Last $Revision: 1.6 $ $Date: 2009/12/05 05:28:20 $}
 
 \usepackage{listings}
 \lstset{ %
@@ -34,9 +34,9 @@ breakatwhitespace=false,    % sets if automatic breaks should only happen at whi
 
 In my recent post about \href{http://wp.me/ppf39-c1}{memory barriers and atomics} (or the \href{http://sites.google.com/site/peeterjoot/math2009/atomic.pdf?revision=1}{PDF version} here), I stated a number of times that x86 (or x86-64) was among the platforms that provided strongly ordered memory access.
 
-My old friend \href{http://www.ece.ubc.ca/~aamodt/}{Tor, now a Professor at UBC}, uses a Dekker's algorithm program to demonstrate to \href{http://courses.ece.ubc.ca/476/}{his computer architecture class} that this is in fact not the case.  This flies in the face of all my experience with DB2, so it becomes immediately interesting from both a theoretical point of view and a correctness issue for the mutual exclusion code that I maintain for our product, much of which I have written or rewritten myself over the years.
+I have an old friend, who we'll call Joe here, uses a Dekker's algorithm program to demonstrate to his computer architecture class that this is in fact not the case.  This flies in the face of all my experience with DB2, so it becomes immediately interesting from both a theoretical point of view and a correctness issue for the mutual exclusion code that I maintain for our product, much of which I have written or rewritten myself over the years.
 
-When talking to Tor, I had stated that I thought the MFENCE, LFENCE, and SFENCE instructions were only required for SSE.  I said the Intel memory model already provided an ordering guarantee, and that no fence instructions were required.  My mistaken recollection was that these were effectively no-ops for non-SSE code and special memory configurations used in privileged mode.  
+When talking to Joe, I had stated that I thought the MFENCE, LFENCE, and SFENCE instructions were only required for SSE.  I said the Intel memory model already provided an ordering guarantee, and that no fence instructions were required.  My mistaken recollection was that these were effectively no-ops for non-SSE code and special memory configurations used in privileged mode.  
 The reasons for my misunderstanding is explored here, including why DB2 mutex implementation does not require these fences.  I knew this once back in the days when the P6 was new, but I had forgotten all this processor-ordering business, demonstrated by an implementation of the Dekker algorithm on a recent Intel multiprocessor machine.
 
 The fact that DB2 mutex and atomic code does not use memory fence instructions can likely be extrapolated to any other Intel targeting mutex implementation regardless of the products or library that providing the mutex.  We all are restricted to the same tricks and toolbox, the Intel instruction set specification itself, and we will see that the easiest and fastest way to implement a mutex does not require these fence instructions and why.
@@ -164,7 +164,7 @@ If one presumes that the compiler has dumbly emitted the code in program order, 
 
 Does this code work?  This code was compiled without optimization, hoping that the compiler will not reorder anything, but I did not check the assembly listings to be sure.  Unoptimized code is usually spectacularly bad, dumb and straightforward, so it is not entirely unreasonable to presume that the instructions are all generated in program order.  Of a set of three runs with FENCE=MFENCE,SFENCE,LFENCE,NOFENCE where two threads looped incrementing an integer variable ten million times each, this code failed the consistency checking with LFENCE and NOFENCE.  With SFENCE this code ran correctly twice, but in one of the iterations produced a count 7 less than the required target value for a mutex protected counter incremented a well known number of times.  This does not demonstrate that this algorithm is correct with FENCE=MFENCE, but it is decisively busted otherwise.
 
-Now, Tor had a different implementation of Dekker's that did not do the turn hand off.  His looked like so (after tweaking it a bit to make it look like mine for consistency)
+Now, Joe had a different implementation of Dekker's that did not do the turn hand off.  His looked like so (after tweaking it a bit to make it look like mine for consistency)
 
 \begin{lstlisting}
 void my_lock( int tid )
@@ -191,7 +191,7 @@ void my_unlock( int tid )
 
 This code was also run with FENCE=MFENCE,SFENCE,LFENCE,NOFENCE.  It passes with MFENCE and SFENCE, and fails with LFENCE and NOFENCE like the implementation of the Wikipedia listing.
 
-Does this mean that his code is correct with SFENCE or even correct with MFENCE or the implementation of the wikipedia listing is correct with MFENCE?  That is harder to say.  The correctness of either set of code even with FENCE=MFENCE is not prove that the code is correct by a few successful test runs.  What is interesting about all this is that Tor's assertion that memory ordering is weakened enough to require fences for correctness now seems very plausible.
+Does this mean that his code is correct with SFENCE or even correct with MFENCE or the implementation of the wikipedia listing is correct with MFENCE?  That is harder to say.  The correctness of either set of code even with FENCE=MFENCE is not prove that the code is correct by a few successful test runs.  What is interesting about all this is that Joe's assertion that memory ordering is weakened enough to require fences for correctness now seems very plausible.
 
 Note that this code is also not cheap.  It is better than the listing originating with the vanilla wikipedia article, but was also clocked at 47 to 67 times slower than contended serial access.  Again not entirely a fair comparison since this code would also do better serially.
 
@@ -224,7 +224,7 @@ void my_unlock( int tid_ignored )
 }
 \end{lstlisting}
 
-Compared to unlocked serial uncontended increment, using this as a replacement for the Dekker mutex (ie. variations of that with enough fencing inserted to make the code appear functional), this runs about 16 times slower.  This is already much better than the Dekker code (either the wikipedia based version or Tor's), but it would again be interesting to check how much worse that gets without contention.  How much of this bus locked atomic exchange cost is aggravated by the contention itself.
+Compared to unlocked serial uncontended increment, using this as a replacement for the Dekker mutex (ie. variations of that with enough fencing inserted to make the code appear functional), this runs about 16 times slower.  This is already much better than the Dekker code (either the wikipedia based version or Joe's), but it would again be interesting to check how much worse that gets without contention.  How much of this bus locked atomic exchange cost is aggravated by the contention itself.
 
 \section{Using an lock xadd for increment}
 
@@ -286,13 +286,13 @@ lock xchg (spinlock mutex w/contention)
 \end{item}
 
 \begin{item}
-Tor's Dekker w/ [sm]fence (mutex w/ contention)
+Joe's implementation of Dekker w/ [SM]FENCE (mutex w/ contention)
 
 47-67x baseline time.
 \end{item}
 
 \begin{item}
-wikipedia Dekker w/ MFENCE (mutex w/ contention)
+My implementation of the wikipedia Dekker listing w/ MFENCE (mutex w/ contention)
 
 76x baseline time.
 \end{item}
