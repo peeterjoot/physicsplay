@@ -92,7 +92,7 @@ bool be_verbose = false ;
             // 
             // A dumb spinlock implementation, with no memory barriers.
             //
-            __asm__ __volatile__( "xchgb  %0,%1\n\t" : "=r" (old_value), "+m" (lock_word) : "0" (new_value) ) ;
+            __asm__ __volatile__( "xchgb  %0,%1\n\t" : "=r" (old_value), "+m" (lock_word) : "0" (new_value) : "cc" ) ;
    
          } while ( 1 == old_value ) ;
       }
