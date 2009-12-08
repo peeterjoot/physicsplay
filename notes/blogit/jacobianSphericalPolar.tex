@@ -14,7 +14,7 @@
 
 The dumbest and most obvious way to do a chain of variables for the gradient is to utilize a chain rule expansion producing the Jacobian matrix to transform the coordinates.  Here we do this to calculate the spherical polar representation of the gradient.
 
-There are smarter and easier ways to do this, but lets see the structure of the resulting Jacobians.
+There are smarter and easier ways to do this, but there is some suprising simple structure to the resulting Jacobians that seems worth noting.
 
 \section{Spherical polar gradient coordinates in terms of cartesian.}
 
@@ -341,6 +341,66 @@ The derivatives are vectors that lie tangential to the unit sphere.  We can calc
 This makes intuitive sense.  We can also verify quicky enough that $(\PDi{\theta}{\rcap})^2 = 1$, and $(\PDi{\phi}{\rcap})^2 = \sin^2\theta$ (I did this with a back of the envelope calculation using geometric algebra).  That is consistent with what this matrix product implies it should equal.
 
 \section{Completing the gradient change of variables to spherical polar coordinates.}
+
+We are now set to calculate the gradient in spherical polar coordinates from our cartesian representation.  From \ref{eqn:jacobianSphericalPolar:8} and
+\ref{eqn:jacobianSphericalPolar:16}, and \ref{eqn:jacobianSphericalPolar:17} we have
+
+\begin{align}\label{eqn:jacobianSphericalPolar:20}
+\spacegrad =
+\begin{bmatrix}
+\Be_1 & \Be_2 & \Be_3  
+\end{bmatrix}
+\begin{bmatrix}
+\rcap \cdot \Be_1 & \inv{r} \PD{\theta}{\rcap} \cdot \Be_1 & \inv{r \sin^2\theta} \PD{\phi}{\rcap} \cdot \Be_1 \\
+\rcap \cdot \Be_2 & \inv{r} \PD{\theta}{\rcap} \cdot \Be_2 & \inv{r \sin^2\theta} \PD{\phi}{\rcap} \cdot \Be_2 \\
+\rcap \cdot \Be_3 & \inv{r} \PD{\theta}{\rcap} \cdot \Be_3 & \inv{r \sin^2\theta} \PD{\phi}{\rcap} \cdot \Be_3 
+\end{bmatrix}
+\begin{bmatrix}
+\partial_r \\
+\partial_\theta \\
+\partial_\phi
+\end{bmatrix}.
+\end{align}
+
+The Jacobian matrix has been written out explicitly as scalars because we are now switching to an abusive notation using matrixes of vector elements.  Our Jacobian, a matrix of scalars happened to have a nice compact representation in column vector form, but we cannot use this when multiplying out with our matrix elements (or perhaps could if we invented more conventions, but lets avoid that).  Having written it out in full we see that we recover our original compact Jacobian representation, and have just
+
+\begin{align}\label{eqn:jacobianSphericalPolar:21}
+\spacegrad = 
+\begin{bmatrix}
+\rcap & \inv{r} \PD{\theta}{\rcap} & \inv{r \sin^2\theta} \PD{\phi}{\rcap} 
+\end{bmatrix}
+\begin{bmatrix}
+\partial_r \\
+\partial_\theta \\
+\partial_\phi
+\end{bmatrix}.
+\end{align}
+
+Expanding this last product we have the gradient in its spherical polar representation
+
+\begin{align}\label{eqn:jacobianSphericalPolar:22}
+\spacegrad = 
+\begin{bmatrix}
+\rcap \PD{r}{} + \inv{r} \PD{\theta}{\rcap} \PD{\theta}{} + \inv{r \sin\theta} \inv{\sin\theta} \PD{\phi}{\rcap} \PD{\phi}{}
+\end{bmatrix}.
+\end{align}
+
+With the labels 
+\begin{subequations}
+\begin{align}\label{eqn:jacobianSphericalPolar:23}
+\thetacap &= \PD{\theta}{\rcap} \\
+\phicap &= \inv{\sin\theta} \PD{\phi}{\rcap},
+\end{align}
+\end{subequations}
+
+(having confirmed that these are unit vectors), we have the final result for the gradient in this representation
+
+\begin{align}\label{eqn:jacobianSphericalPolar:24}
+\spacegrad = 
+\rcap \PD{r}{} + \inv{r} \thetacap \PD{\theta}{} + \inv{r \sin\theta} \phicap \PD{\phi}{}.
+\end{align}
+
+Here the matrix delimiters for the remaining one by one matrix term were also dropped.
 
 %\EndArticle
 \EndNoBibArticle
