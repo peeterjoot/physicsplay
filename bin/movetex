@@ -8,10 +8,12 @@ my $d = 'gabook' ;
 #$d = 'nonga' ;
 #$d = 'otherbook' ;
 my $filebase ;
+my $printOnly = 0 ;
 
 GetOptions(
-   'file=s'    => \$filebase,
+   'file=s'   => \$filebase,
    'dir=s'    => \$d,
+   'print!'   => \$printOnly,
 ) ;
 
 die unless defined $filebase ;
@@ -76,31 +78,36 @@ if ( 0 )
 
    $mkLinks
 
-   co -l ../gabook/METADATA
+   #co -l ../gabook/METADATA
    cat >> ../gabook/METADATA << EOF
    $meta
    EOF
    ") ;
 }
 
-system("
+my $cmd = "
 git commit $filebase.$suffix
 git mv $filebase.$suffix ../$d/$filebase.tex
 cd ../$d
-#co -l $filebase.tex
 aspell -c --mode=tex $filebase.tex
 #perl -p -i -e 's/section{ */section{/' $filebase.tex
 ~/bin/filtertex $filebase.tex
 
-#ci -l make.dep $d.tex
 echo '\%\\include{'$filebase'}' >> main.tex
 echo 'TEXFILES +=' $filebase.tex >> make.dep
 
 $mkLinks
 
-co -l ../gabook/METADATA
 cat >> ../gabook/METADATA << EOF
 $meta
 EOF
-") ;
+" ;
 
+if ( $printOnly )
+{
+   print $cmd ;
+}
+else
+{
+   system $cmd ;
+}
