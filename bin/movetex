@@ -59,11 +59,35 @@ my $meta = "
    URL => 'http://sites.google.com/site/peeterjoot/math2009/$filebase.pdf'
 }" ;
 
+if ( 0 )
+{
+   system("
+   rcs -l $filebase.$suffix && ci $filebase.$suffix
+   mv -i RCS/$filebase.$suffix,v ../$d/RCS/$filebase.tex,v
+   cd ../$d
+   co -l $filebase.tex
+   aspell -c --mode=tex $filebase.tex
+   #perl -p -i -e 's/section{ */section{/' $filebase.tex
+   ~/bin/filtertex $filebase.tex
+
+   #ci -l make.dep $d.tex
+   echo '\%\\include{'$filebase'}' >> main.tex
+   echo 'TEXFILES +=' $filebase.tex >> make.dep
+
+   $mkLinks
+
+   co -l ../gabook/METADATA
+   cat >> ../gabook/METADATA << EOF
+   $meta
+   EOF
+   ") ;
+}
+
 system("
-rcs -l $filebase.$suffix && ci $filebase.$suffix
-mv -i RCS/$filebase.$suffix,v ../$d/RCS/$filebase.tex,v
+git commit $filebase.$suffix
+git mv $filebase.$suffix ../$d/$filebase.tex
 cd ../$d
-co -l $filebase.tex
+#co -l $filebase.tex
 aspell -c --mode=tex $filebase.tex
 #perl -p -i -e 's/section{ */section{/' $filebase.tex
 ~/bin/filtertex $filebase.tex
