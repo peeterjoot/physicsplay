@@ -310,7 +310,37 @@ C_\theta        & -\inv{r} S_\theta       &  0
 \end{bmatrix}.
 \end{align} 
 
-As a verification of correctness multiplication of this with \ref{eqn:jacobianSphericalPolar:7} should produce identity.
+As a verification of correctness multiplication of this with \ref{eqn:jacobianSphericalPolar:7} should produce identity.  That's a mess of trig that I don't really feel like trying, but we can get a rough idea why it should all be the identity matrix by multiplying it out in block matrix form
+
+\begin{align*}
+\frac{\partial (x,y,z)}{\partial (r,\theta,\phi)}
+\frac{\partial (r,\theta,\phi)}{\partial (x, y, z)}
+&=
+\begin{bmatrix} 
+\rcap^\T \\
+r \PD{\theta}{\rcap^\T} \\
+r \PD{\phi}{\rcap^\T} 
+\end{bmatrix}
+\begin{bmatrix}
+\rcap & \inv{r} \PD{\theta}{\rcap} & \inv{r \sin^2\theta} \PD{\phi}{\rcap}
+\end{bmatrix} \\
+&=
+\begin{bmatrix} 
+\rcap^\T \rcap                & \inv{r} \rcap^\T \PD{\theta}{\rcap}      & \inv{r \sin^2 \theta} \rcap^\T \PD{\phi}{\rcap} \\
+r \PD{\theta}{\rcap^\T} \rcap & \PD{\theta}{\rcap^\T} \PD{\theta}{\rcap} & \inv{\sin^2\theta} \PD{\theta}{\rcap^\T} \PD{\phi}{\rcap} \\
+r \PD{\phi}{\rcap^\T} \rcap   & \PD{\phi}{\rcap^\T} \PD{\theta}{\rcap}   & \inv{\sin^2\theta} \PD{\phi}{\rcap^\T} \PD{\phi}{\rcap}
+\end{bmatrix}.
+\end{align*}
+
+The derivatives are vectors that lie tangential to the unit sphere.  We can calculate this to verify, or we can look at the off diagonal terms which say just this if we trust the math that says these should all be zeros.  For each of the off diagonal terms to be zero must mean that we have
+
+\begin{align}\label{eqn:jacobianSphericalPolar:19}
+0 = \PD{\theta}{\rcap} \cdot \rcap = \PD{\theta}{\rcap} \cdot \PD{\phi}{\rcap} = \PD{\phi}{\rcap} \cdot \rcap 
+\end{align}
+
+This makes intuitive sense.  We can also verify quicky enough that $(\PDi{\theta}{\rcap})^2 = 1$, and $(\PDi{\phi}{\rcap})^2 = \sin^2\theta$ (I did this with a back of the envelope calculation using geometric algebra).  That is consistent with what this matrix product implies it should equal.
+
+\section{Completing the gradient change of variables to spherical polar coordinates.}
 
 %\EndArticle
 \EndNoBibArticle
