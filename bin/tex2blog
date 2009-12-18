@@ -612,7 +612,16 @@ sub expandPeetersMathModeMacros
    $out =~ s/\\BXI/\\boldsymbol{\\xi}/g;
    $out =~ s/\\BEta/\\boldsymbol{\\eta}/g;
    $out =~ s/\\(.)cap/\\hat{\\B$1}/g;
-   $out =~ s/\\B(.)/\\mathbf{$1}/g;
+
+# this messes up \Bigr and \Bigl
+#   $out =~ s/\\B(.)/\\mathbf{$1}/g;
+# 
+# Add word boundary:
+#   $out =~ s/\\B(.)\b/\\mathbf{$1}/g;
+# hmm. that doesn't handle \Ba_\Ba.  underscore is probably a word character.
+#
+   $out =~ s/\\B(.)(\b|_)/\\mathbf{$1}$2/g;
+
    $out =~ s/\\LL/\\mathcal{L}/g;
    $out =~ s/\\FF/\\mathcal{F}/g;
    $out =~ s/\\cross/\\times/g;
@@ -657,7 +666,11 @@ sub expandPeetersMathModeMacros
    $out =~ s/\\symmetricVecBladePauli{(.*?)}{(.*?)}{(.*?)}/\\left\\{{$1},\\left[{$2},{$3}\\right]\\right\\}/g;
    $out =~ s/\\symmetricBladeVecPauli{(.*?)}{(.*?)}{(.*?)}/\\left\\{\\left[{$1},{$2}\\right],{$3}\\right\\}/g;
    $out =~ s/\\(.)hat/\\hat{$1}/g;
+
    $out =~ s/\\(.)dot\b/\\dot{$1}/g;
+# hack, undo the above for \\cdot
+   $out =~ s/\\dot{c}/\\cdot/g ;
+
    $out =~ s/\\thetadot/\\dot{\\theta}/g;
    $out =~ s/\\phidot/\\dot{\\phi}/g;
 
@@ -677,9 +690,6 @@ sub expandPeetersMathModeMacros
    $out =~ s/{{\\mathbf{(.)}}/{\\mathbf{$1}/g;
 # bivector.tex.  multiple passes of this required: ??
    $out =~ s/\\gpgradetwo${r1}/{\\left\\langle{$1}\\right\\rangle}_{2}/g;
-
-# hack:
-   $out =~ s/\\dot{c}/\\cdot/g ;
 
    if ( $mathml )
    {
