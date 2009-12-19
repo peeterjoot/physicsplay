@@ -40,9 +40,76 @@
 % hyperref fixes the url underscores.  Latex web companion says to put 
 % hyperref last since it overrides a lot of commands.
 %
-% remove the side panel:
-%\usepackage[bookmarks=false]{hyperref}
-\usepackage{hyperref}
+\usepackage[
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% I like the colour instead of boxes better.  Keep this one:
+% 
+colorlinks=true,
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% remove the side panel (better for small docs)
+%
+%bookmarks=false,
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% this is unfriendly, and generates viewer popup:
+%
+%pdfpagemode=FullScreen,
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% More screen real estate by default:
+%
+pdftoolbar=false,
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Avoid control-2 in acrobat?
+%
+pdffitwindow=true,
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Blech:
+%
+%pdfpagelayout=TwoColumnLeft,
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Try this:
+%
+%pdfwindowui=false,
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% NOTE: backref takes multiple build passes to take effect:
+%
+backref 
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+]{hyperref}
+
+% FIXME: this is something that ought to be configurable with \author
+\hypersetup{%
+pdfauthor={Peeter Joot}
+% 
+% Again: have my title/chapter info.  For article mode use the title.
+% 
+%pdftitle={\title}
+%pdfsubject={}
+%pdfkeywords={}
+}
+
+% does not work.  probably have to install it to try it out.  See that MikTex
+% and the other big Tex distribution include this.  Probably migrate from
+% cygwin to MikTex to try.  Note: this package is supposed to be usable
+% as a replacement for hyperref.
+% (latex web companion shows a nice ragged edge display using this style
+%  in figures 2.19-2.21)
+%\usepackage{pdfscreen}
 
 \titleformat{\section}[hang]
 {\normalfont\sffamily}
