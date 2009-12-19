@@ -4,6 +4,7 @@
 \typeout{ ==========> Assignment Class (assignment.cls) 2002 <============= }
 \typeout{ Eli Lansey (c) 2009 }
 \typeout{ In case of questions, contact elansey@gmail.com }
+\typeout{ Further hacked by Peeter Joot for his own purposes. peeter.joot@gmail.com }
 \typeout{}
 
 
@@ -21,13 +22,6 @@
 % this mangles urls with underscores:
 %\usepackage{url}
 
-% 
-% hyperref fixes the url underscores:
-%
-% remove the side panel:
-%\usepackage[bookmarks=false]{hyperref}
-\usepackage{hyperref}
-
 \usepackage{subfigure}
 \usepackage{titlesec}
 \usepackage{indentfirst}
@@ -36,13 +30,19 @@
 %\usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
 % makes \grad look funny though (almost like spacegrad, but narrower)
 %\usepackage[bookmarks=true]{hyperref}
-%\usepackage{color,cite,graphicx}
+%\usepackage{cite,graphicx}
    % use colour in the document, put your citations as [1-4]
    % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
    % graphics package. 
-%\usepackage{latexsym,amssymb,epsf} % don't remember if these are
-   % needed, but their inclusion can't do any damage
+%\usepackage{latexsym,amssymb,epsf} % what did these provide?
 
+% 
+% hyperref fixes the url underscores.  Latex web companion says to put 
+% hyperref last since it overrides a lot of commands.
+%
+% remove the side panel:
+%\usepackage[bookmarks=false]{hyperref}
+\usepackage{hyperref}
 
 \titleformat{\section}[hang]
 {\normalfont\sffamily}
