@@ -63,7 +63,7 @@ bookmarks=false,
 %
 % More screen real estate by default:
 %
-pdftoolbar=false,
+%pdftoolbar=false,
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
