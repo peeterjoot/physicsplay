@@ -51,7 +51,7 @@ colorlinks=true,
 %
 % remove the side panel (better for small docs)
 %
-%bookmarks=false,
+bookmarks=false,
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -144,10 +144,11 @@ pdfauthor={Peeter Joot}
 \newcommand{\EndNoBibArticle}[0]{\end{document}}
 \newcommand{\EndArticle}[0]{\bibliography{myrefs}\bibliographystyle{unsrturl}\end{document}}
 \newcommand{\chapcite}[1]{\cite{#1}}
+\newcommand{\urlchapcite}[3]{\href{#1}{#2} \cite{#3}}
 
 %----------------------------------
 
-\newcommand{\methodology}[1]{\textbf{#1}}
+%\newcommand{\methodology}[1]{\textbf{#1}}
 
 \RequirePackage{ifthen}
 \setlength{\textwidth}{\paperwidth}
