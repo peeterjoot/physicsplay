@@ -1,7 +1,18 @@
 files := $(shell ls *.tex)
 pdfs := $(files:.tex=.pdf)
 
-all : $(pdfs)
+# logically symlinks, but MikTex doesn't like those:
+SYMLINKS += abbrvurl.bst
+SYMLINKS += alphaurl.bst
+SYMLINKS += eliblog.cls 
+SYMLINKS += myrefs.bib 
+SYMLINKS += plainurl.bst
+SYMLINKS += unsrturl.bst
+
+all :: $(SYMLINKS) $(pdfs)
+
+% : ../%
+	cp $^ $@
 
 gaBasics.pdf : gaBasics.tex
 
