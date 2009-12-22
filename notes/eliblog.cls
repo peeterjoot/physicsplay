@@ -127,8 +127,11 @@ screen
 % * `UseOC' (PDF 1.5)
 %
 ]{pdfscreen}
-\screensize{7.5in}{13in}
-%\screensize{6.25in}{8in}
+% better on my laptop:
+\screensize{7.5in}{12.5in}
+
+% good on Michelle s laptop:
+%\screensize{7.5in}{13in}
 \margins{.75in}{.75in}{.75in}{.75in}
 
 \titleformat{\section}[hang]
