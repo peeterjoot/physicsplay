@@ -69,7 +69,7 @@ bookmarks=false,
 %
 % Avoid control-2 in acrobat?
 %
-pdffitwindow=true,
+%pdffitwindow=true,
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -109,7 +109,27 @@ pdfauthor={Peeter Joot}
 % as a replacement for hyperref.
 % (latex web companion shows a nice ragged edge display using this style
 %  in figures 2.19-2.21)
-%\usepackage{pdfscreen}
+\usepackage[%
+%
+screen
+%,panelleft
+,nopanel
+%,gray
+,paneltoc
+% print version:
+%,print
+%pdfpagemode=FullScreen
+% Values of option `pdfpagemode':
+% * `UseNone'
+% * `UseOutlines'
+% * `UseThumbs'
+% * `FullScreen'
+% * `UseOC' (PDF 1.5)
+%
+]{pdfscreen}
+\screensize{7.5in}{13in}
+%\screensize{6.25in}{8in}
+\margins{.75in}{.75in}{.75in}{.75in}
 
 \titleformat{\section}[hang]
 {\normalfont\sffamily}

@@ -1,5 +1,5 @@
-files := $(shell ls *.tex)
-pdfs := $(files:.tex=.pdf)
+TEXFILES := $(shell ls *.tex)
+PDFS := $(TEXFILES:.tex=.pdf)
 
 # logically symlinks, but MikTex doesn't like those:
 SYMLINKS += abbrvurl.bst
@@ -9,7 +9,9 @@ SYMLINKS += myrefs.bib
 SYMLINKS += plainurl.bst
 SYMLINKS += unsrturl.bst
 
-all :: $(SYMLINKS) $(pdfs)
+all :: $(SYMLINKS) $(PDFS)
+
+$(PDFS) : eliblog.cls myrefs.bib
 
 % : ../%
 	cp $^ $@
