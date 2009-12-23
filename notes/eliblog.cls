@@ -7,7 +7,6 @@
 \typeout{ Further hacked by Peeter Joot for his own purposes. peeter.joot@gmail.com }
 \typeout{}
 
-
 \DeclareOption*{%
   \PassOptionsToClass{\CurrentOption}{article}%
 }
@@ -103,12 +102,8 @@ pdfauthor={Peeter Joot}
 %pdfkeywords={}
 }
 
-% does not work.  probably have to install it to try it out.  See that MikTex
-% and the other big Tex distribution include this.  Probably migrate from
-% cygwin to MikTex to try.  Note: this package is supposed to be usable
-% as a replacement for hyperref.
 % (latex web companion shows a nice ragged edge display using this style
-%  in figures 2.19-2.21)
+%  in figures 2.19-2.21).  But it didn't say how it got that.
 \usepackage[%
 %
 screen
@@ -134,6 +129,7 @@ screen
 %\screensize{7.5in}{13in}
 \margins{.75in}{.75in}{.75in}{.75in}
 
+
 \titleformat{\section}[hang]
 {\normalfont\sffamily}
 {\thesection .}{.5em}{\bfseries}
@@ -141,7 +137,6 @@ screen
 \titleformat{\subsection}[hang]
 {\normalfont\itshape}
 {\thesubsection .}{.5em}{\bfseries}
-
 
 \renewcommand{\maketitle}{%
    \begin{flushleft}%
