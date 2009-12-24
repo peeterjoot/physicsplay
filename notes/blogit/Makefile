@@ -2,19 +2,24 @@ TEXFILES := $(shell ls *.tex)
 PDFS := $(TEXFILES:.tex=.pdf)
 
 # logically symlinks, but MikTex doesn't like those:
-SYMLINKS += abbrvurl.bst
-SYMLINKS += alphaurl.bst
-SYMLINKS += eliblog.cls 
-SYMLINKS += myrefs.bib 
-SYMLINKS += plainurl.bst
-SYMLINKS += unsrturl.bst
+ORIG_FILES += ../abbrvurl.bst
+ORIG_FILES += ../alphaurl.bst
+ORIG_FILES += ../eliblog.cls 
+ORIG_FILES += ../myrefs.bib 
+ORIG_FILES += ../plainurl.bst
+ORIG_FILES += ../unsrturl.bst
 
-all :: $(SYMLINKS) $(PDFS)
+LOCAL_FILES := $(notdir $(ORIG_FILES))
 
-$(PDFS) : eliblog.cls myrefs.bib
+all :: $(LOCAL_FILES) $(PDFS)
 
-% : ../%
-	cp $^ $@
+$(PDFS) : $(LOCAL_FILES)
+
+$(LOCAL_FILES) : 
+	cp $(filter %$@, $(ORIG_FILES)) $@
+
+#% : ../%
+#	cp $^ $@
 
 gaBasics.pdf : gaBasics.tex
 
@@ -27,4 +32,4 @@ gaBasics.pdf : gaBasics.tex
 	../make_pdflatex $<
 
 clean ::
-	rm -f *.ps *.dvi *.pdf *.aux *.log *.bbl *.blg
+	rm -f *.ps *.dvi *.pdf *.aux *.log *.bbl *.blg $(LOCAL_FILES) *.brf
