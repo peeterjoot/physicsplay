@@ -8,18 +8,17 @@ ORIG_FILES += ../eliblog.cls
 ORIG_FILES += ../myrefs.bib 
 ORIG_FILES += ../plainurl.bst
 ORIG_FILES += ../unsrturl.bst
+ORIG_FILES += ../gabook/ftMaxVacuum.tex
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
 all :: $(LOCAL_FILES) $(PDFS)
+all :: ftMaxVacuum.pdf
 
 $(PDFS) : $(LOCAL_FILES)
 
 $(LOCAL_FILES) : 
 	cp $(filter %$@, $(ORIG_FILES)) $@
-
-#% : ../%
-#	cp $^ $@
 
 gaBasics.pdf : gaBasics.tex
 
