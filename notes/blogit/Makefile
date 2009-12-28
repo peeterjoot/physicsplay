@@ -8,12 +8,12 @@ ORIG_FILES += ../eliblog.cls
 ORIG_FILES += ../myrefs.bib 
 ORIG_FILES += ../plainurl.bst
 ORIG_FILES += ../unsrturl.bst
-ORIG_FILES += ../gabook/ftMaxVacuum.tex
+#ORIG_FILES += ../gabook/ftMaxVacuum.tex
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
 all :: $(LOCAL_FILES) $(PDFS)
-all :: ftMaxVacuum.pdf
+#all :: ftMaxVacuum.pdf
 
 $(PDFS) : $(LOCAL_FILES)
 
