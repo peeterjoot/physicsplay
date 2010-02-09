@@ -103,7 +103,7 @@ pdfauthor={Peeter Joot}
 }
 
 % (latex web companion shows a nice ragged edge display using this style
-%  in figures 2.19-2.21).  But it didn't say how it got that.
+%  in figures 2.19-2.21).  But it did not say how it got that.
 \usepackage[%
 %
 screen
