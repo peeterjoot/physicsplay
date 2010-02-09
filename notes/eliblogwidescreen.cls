@@ -102,6 +102,34 @@ pdfauthor={Peeter Joot}
 %pdfkeywords={}
 }
 
+% (latex web companion shows a nice ragged edge display using this style
+%  in figures 2.19-2.21).  But it did not say how it got that.
+\usepackage[%
+%
+screen
+%,panelleft
+,nopanel
+%,gray
+,paneltoc
+% print version:
+%,print
+%pdfpagemode=FullScreen
+% Values of option `pdfpagemode':
+% * `UseNone'
+% * `UseOutlines'
+% * `UseThumbs'
+% * `FullScreen'
+% * `UseOC' (PDF 1.5)
+%
+]{pdfscreen}
+% better on my laptop:
+\screensize{7.5in}{12.5in}
+
+% good on Michelle s laptop:
+%\screensize{7.5in}{13in}
+\margins{.75in}{.75in}{.75in}{.75in}
+
+
 \titleformat{\section}[hang]
 {\normalfont\sffamily}
 {\thesection .}{.5em}{\bfseries}

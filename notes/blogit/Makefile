@@ -5,6 +5,7 @@ PDFS := $(TEXFILES:.tex=.pdf)
 ORIG_FILES += ../abbrvurl.bst
 ORIG_FILES += ../alphaurl.bst
 ORIG_FILES += ../eliblog.cls 
+ORIG_FILES += ../eliblogwidescreen.cls 
 ORIG_FILES += ../myrefs.bib 
 ORIG_FILES += ../plainurl.bst
 ORIG_FILES += ../unsrturl.bst
@@ -30,5 +31,10 @@ gaBasics.pdf : gaBasics.tex
 %.pdf : %.tex
 	../make_pdflatex $<
 
-clean ::
-	rm -f *.ps *.dvi *.pdf *.aux *.log *.bbl *.blg $(LOCAL_FILES) *.brf
+clean :: mostlyclean localclean
+
+mostlyclean :: 
+	rm -f *.ps *.dvi *.pdf *.aux *.log *.bbl *.blg *.brf
+
+localclean ::
+	rm -f $(LOCAL_FILES)
