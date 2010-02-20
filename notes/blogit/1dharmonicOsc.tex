@@ -1,0 +1,103 @@
+%\input{../peeter_prologue_print.tex}
+\input{../peeter_prologue_widescreen.tex}
+
+\chapter{1D forced harmonic oscillator.  Quick solution of non-homogeneous problem.}
+\label{chap:1dharmonicOsc}
+%\useCCL
+\blogpage{http://sites.google.com/site/peeterjoot/math2010/1dharmonicOsc.pdf}
+\date{Feb 19, 2010}
+\revisionInfo{1dharmonicOsc.tex}
+
+%\beginArtWithToc
+\beginArtNoToc
+
+\section{Motivation.}
+
+In \cite{brown1954feynman} equation (25) we have a forced harmonic oscillator equation
+
+\begin{align}\label{eqn:1dharmonicOsc:1}
+m \ddot{x} + m \omega^2 x = \gamma(t).
+\end{align}
+
+The solution of this equation is provided, but for fun lets derive it.
+
+\section{Guts}
+
+Writing
+
+\begin{align}\label{eqn:1dharmonicOsc:2}
+\omega u = \dot{x},
+\end{align}
+
+we can rewrite the second order equation as a first order linear system 
+
+\begin{align}\label{eqn:1dharmonicOsc:3}
+\dot{u} + \omega x &= \gamma(t)/m \omega \\
+\dot{x} - \omega u &= 0,
+\end{align}
+
+Or, with $X = (u, x)$, in matrix form
+
+\begin{align}\label{eqn:1dharmonicOsc:4}
+\dot{X} + \omega 
+\begin{bmatrix}
+0 & 1 \\
+-1 & 0
+\end{bmatrix}
+X
+&=
+\begin{bmatrix}
+\gamma(t)/m \omega \\
+0
+\end{bmatrix}.
+\end{align}
+
+The two by two matrix has the same properties as the complex imaginary, squaring to the identity matrix, so the equation to solve is now of the form
+
+\begin{align}\label{eqn:1dharmonicOsc:5}
+\dot{X} + \omega i X &= \Gamma.
+\end{align}
+
+The homogeneous part of the solution is just the matrix
+
+\begin{align*}
+X 
+&= e^{-i \omega t} A \\
+&= 
+\left( 
+\cos(\omega t) 
+\begin{bmatrix}
+1 & 0 \\
+0 & 1
+\end{bmatrix}
+- 
+\sin(\omega t)
+\begin{bmatrix}
+0 & 1 \\
+-1 & 0
+\end{bmatrix}
+\right) A,
+\end{align*}
+
+where $A$ is a two by one column matrix of constants.  Assuming for the specific solution $X = e^{-i \omega t} A(t)$, and substuiting we have
+
+\begin{align}\label{eqn:1dharmonicOsc:6}
+e^{-i \omega t} \dot{A} = \Gamma(t).
+\end{align}
+
+This integrates directly, fixing the unknown column vector function $A(t)$
+
+\begin{align}\label{eqn:1dharmonicOsc:7}
+A(t) = A(0) + \int_0^t e^{i \omega \tau} \Gamma(\tau).
+\end{align}
+
+Thus the non-homogeneous solution takes the form
+
+\begin{align}\label{eqn:1dharmonicOsc:8}
+X = e^{-i \omega t} A(0) + \int_0^t e^{i \omega (\tau - t)} \Gamma(\tau).
+\end{align}
+
+Note that $A(0) = (\dot{x}_0/\omega, x_0)$.  Multiplying this out, and discarding all but the second row of the matrix product gives $x(t)$, and Feynman's equation (26) follows directly.
+
+\EndArticle
+%\EndNoBibArticle
