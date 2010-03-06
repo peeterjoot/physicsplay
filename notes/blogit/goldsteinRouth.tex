@@ -1,0 +1,137 @@
+%\input{../peeter_prologue_print.tex}
+\input{../peeter_prologue_widescreen.tex}
+
+\chapter{Notes on Goldstein's Route's procedure.}
+\label{chap:goldsteinRouth}
+%\useCCL
+\blogpage{http://sites.google.com/site/peeterjoot/math2010/goldsteinRouth.pdf}
+\date{Mar 3, 2010}
+\revisionInfo{goldsteinRouth.tex}
+
+%\beginArtWithToc
+\beginArtNoToc
+
+\section{Motivation.}
+
+Attempting study of \cite{goldstein1951cm} section 7-2 on Routh's procedure has been giving me some trouble.  It wasn't ``sinking in'', indicating a fundamental misunderstanding, or at least a requirement to work some examples.  Here I pick a system, the spherical pendulum, which has the required ignorable coordinate, to illustrate the ideas for myself with something less abstract.
+
+\section{Spherical pendulum example.}
+
+The Lagrangian for the pendulum is
+
+\begin{align}\label{eqn:goldsteinRouth:1}
+\LL = \inv{2} m r^2 \left( \dot{\theta}^2 + \dot{\phi}^2 \sin^2 \theta \right) - m g r ( 1 + \cos\theta ),
+\end{align}
+
+and our conjugate momenta are therefore
+
+\begin{align}\label{eqn:goldsteinRouth:2}
+p_\theta &= \PD{\dot{\theta}}{\LL} = m r^2 \dot{\theta} \\
+p_\phi &= \PD{\dot{\phi}}{\LL} = m r^2 \sin^2\theta \dot{\phi}.
+\end{align}
+
+That's enough to now formulate the Hamiltonian $H = \dot{\theta} p_\theta + \dot{\phi} p_\phi - \LL$, which is
+
+\begin{align}\label{eqn:goldsteinRouth:3}
+H = H(\theta, p_\theta, p_\phi) = \inv{2 m r^2 } (p_\theta)^2 + \inv{2 m r^2 \sin^2\theta} (p_\phi)^2 + m g r ( 1 + \cos\theta ).
+\end{align}
+
+We've got the ignorable coordinate $\phi$ here, since the Hamiltonian has no explicit dependence on it.  In the Hamiltonian formalism the constant of motion associated with this comes as a consequence of evaluating the Hamiltonian equations.  For this system, those are
+
+\begin{align}\label{eqn:goldsteinRouth:4}
+\PD{\theta}{H} &= - \dot{p}_\theta \\
+\PD{\phi}{H} &= - \dot{p}_\phi \\
+\PD{p_\theta}{H} &= \dot{\theta} \\
+\PD{p_\phi}{H} &= \dot{\phi},
+\end{align}
+
+Or, explicitly,
+\begin{align}\label{eqn:goldsteinRouth:5}
+- \dot{p}_\theta &= -m g r \sin\theta - \frac{\cos\theta}{2 m r^2 \sin^3 \theta} (p_\phi)^2  \\
+- \dot{p}_\phi &= 0 \\
+\dot{\theta} &= \inv{m r^2 } p_\theta \\
+\dot{\phi} &= \inv{m r^2 \sin^2 \theta} p_\phi.
+\end{align}
+
+The second of these provides the integration constant, allowing us to write, $p_\phi = \alpha$.  Once this is done, our Hamiltonian example is reduced to one complete set of conjugate coordinates,
+
+\begin{align}\label{eqn:goldsteinRouth:6}
+H(\theta, p_\theta, \alpha) = \inv{2 m r^2 } (p_\theta)^2 + \inv{2 m r^2 \sin^2\theta} \alpha^2 + m g r ( 1 + \cos\theta ).
+\end{align}
+
+Goldstein notes that the behavior of the cyclic coordinate follows by integrating
+
+\begin{align}\label{eqn:goldsteinRouth:7}
+\dot{q}_n = \PD{\alpha}{H}.
+\end{align}
+
+In this example $\alpha = p_\theta$, so this is really just one of our Hamiltonian equations
+
+\begin{align}\label{eqn:goldsteinRouth:8}
+\dot{\phi} = \PD{p_\phi}{H}.
+\end{align}
+
+Okay, good.  First part of the mission is accomplished.  The setup for Routh's procedure no longer has anything mysterious to it.
+
+Now, Goldstein defines the Routhian as
+
+\begin{align}\label{eqn:goldsteinRouth:9}
+R = p_i \dot{q}_i - \LL,
+\end{align}
+
+where the index $i$ is summed only over the cyclic (ignorable) coordinates.  For this spherical pendulum example, this is $q_i = \phi$, and $p_i = m r^2 \sin^2 \theta \dot{\phi}$, for
+
+\begin{align}\label{eqn:goldsteinRouth:10}
+R = \inv{2} m r^2 \left( -\dot{\theta}^2 + \dot{\phi}^2 \sin^2 \theta \right) + m g r ( 1 + \cos\theta ).
+\end{align}
+
+Now, we should also have for the non-cyclic coordinates, just like the Euler-Lagrange equations 
+
+\begin{align}\label{eqn:goldsteinRouth:11}
+\PD{\theta}{R} = \frac{d}{dt} \PD{\dot{\theta}}{R}.
+\end{align}
+
+Evaluating this we have
+
+\begin{align}\label{eqn:goldsteinRouth:12}
+m r^2 \sin\theta \cos\theta \dot{\phi}^2 - m g r \sin\theta = \frac{d}{dt} \left( -m r^2 \dot{\theta} \right).
+\end{align}
+
+It would be reasonable now to compare this the $\theta$ Euler-Lagrange equations, but evaluating those we get
+
+\begin{align}\label{eqn:goldsteinRouth:13}
+m r^2 \sin\theta \cos\theta \dot{\phi}^2 + m g r \sin\theta = \frac{d}{dt} \left( m r^2 \dot{\theta} \right).
+\end{align}
+
+Bugger.  We've got a sign difference on the $\dot{\phi}^2$ term.
+
+\section{Simpler planar example.}
+
+Having found an inconsistency with Routhian formalism and the concrete example of the spherical pendulum which has a cyclic coordinate as desired, let's step back slightly, and try a simpler example, artificially constructed
+
+\begin{align}\label{eqn:goldsteinRouth:20}
+\LL = \inv{2} m (\dot{x}^2 + \dot{y}^2 ) - V(x).
+\end{align}
+
+Our Hamiltonian and Routhian functions are
+
+\begin{align}\label{eqn:goldsteinRouth:21}
+H &= \inv{2} m (\dot{x}^2 + \dot{y}^2 ) + V(x) \\
+R &= \inv{2} m (-\dot{x}^2 + \dot{y}^2 ) + V(x) 
+\end{align}
+
+For the non-cyclic coordinate we should have
+
+\begin{align}\label{eqn:goldsteinRouth:22}
+\PD{x}{R} = \frac{d}{dt} \PD{\dot{x}}{R},
+\end{align}
+
+which is
+
+\begin{align}\label{eqn:goldsteinRouth:23}
+V'(x) = \frac{d}{dt}\left( - m \dot{x} \right)
+\end{align}
+
+Okay, good, that's what is expected, and exactly what we get from the Euler-Lagrange equations.  This looks good, so where did things go wrong in the spherical pendulum evaluation.
+
+\EndArticle
