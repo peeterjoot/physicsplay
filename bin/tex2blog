@@ -1,60 +1,48 @@
 #! /usr/bin/perl
 
-# $Log: tex2blog,v $
-# Revision 1.22  2009/12/03 03:06:20  Peeter
-# *** empty log message ***
-#
-# Revision 1.21  2009/11/30 02:59:53  Peeter
-# *** empty log message ***
-#
-#
-# Revision 1.19  2009/11/07 22:11:58  Peeter
-# hack in some wikipedia and physicsforums support.
-#
-# Revision 1.17  2009/09/18 04:43:41  Peeter
-# got it working again mostly (at least in latexmathml mode.
-# )
-#
-# Revision 1.16  2009/09/18 02:25:52  Peeter
-# restructure totally, should now be broken and do nothing.  Now fix it up.
-#
-# Revision 1.15  2009/09/18 01:42:56  Peeter
-# got some of the latex2mathml changes made.  Going to revamp the
-# main loop to slurp it all in and use multiline patterns.
-#
-
 # any user of this may alternately be interested in:
 # http://lucatrevisan.wordpress.com/latex-to-wordpress/
 # 
 # Why do I also have one?
+#
 # 1) I wrote this before learning about the above.
+#
 # 2) After I'd learned about this, mine already had support for
 #    multiple argument newcommand macro replacement, and I couldn't
-#    figure out how to do the same in python.
-# 3) I'd added in \cite and \ref support (although it introduces some
-#    spurious % characters in the output sometimes and I haven't debugged
-#    that yet).
+#    figure out how to do the same in python (and don't really want to do so).
+#
+# 3) I'd added in \cite and \ref support
+#
 # 4) It doesn't support all my personal macros (this has a subset of 
 #    what I've got in my peeters_macros.tex).  If you are using 
 #    this script and are not Peeter you probably want to modify
 #    expandPeetersMathModeMacros to do just your own.
-# 5) I've got some rudimentary wikipedia and physics forums modes in this.
-
+#
+# 5) I've got some rudimentary wikipedia and 'physics forum' output modes
+#    in this script.
+#
+# TODO:
+# implement a latex to latex mode, so that it does nothing but expand
+# personal macros for standalone use without \include's.
+#
 # BUGS:
 #------
-# mathml: equation numbering requires that section headings be suppressed.
-# mathml: eqnarray requires more than one equation line, and &= shows up as
-#         is otherwise.  Not doing that in the original .tex is required.
+# o) CITE expansion:
+#    introduces some
+#    spurious % characters in the output sometimes and I haven't debugged
+#    that yet.
+# o) mathml mode:
+#    equation numbering requires that section headings be suppressed.
+# o) mathml mode:
+#    eqnarray requires more than one equation line, and &= shows up as
+#    is otherwise.  Not doing that in the original .tex is required.
+# o) Have bugs expanding {\begin{bmatrix}...\end{bmatrix}}_{...} output
+#    (example: ~/math/nonga/hamiltonian.tex).
 # 
 # [Since the mathml output (usable in blogger since it supports javascript)
 #  turns out to not be that great, I'm not likely to do any more for the 
 #  mathml output mode.]
 # 
-# TODO:
-# implement a latex to latex mode, so that it does nothing but expand
-# personal macros for standalone use without \include's.
-# Fix the bugs expanding {\begin{bmatrix}...\end{bmatrix}}_{...} output
-# (example: ~/math/nonga/hamiltonian.tex).
 
 use strict ;
 use warnings ;
