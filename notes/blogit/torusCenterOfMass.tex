@@ -1,0 +1,100 @@
+%\input{../peeter_prologue_print.tex}
+\input{../peeter_prologue_widescreen.tex}
+
+\chapter{Center of mass of a toroidal segment.}
+\label{chap:torusCenterOfMass}
+%\useCCL
+\blogpage{http://sites.google.com/site/peeterjoot/math2010/torusCenterOfMass.pdf}
+\date{May 15, 2010}
+\revisionInfo{torusCenterOfMass.tex}
+
+%\beginArtWithToc
+\beginArtNoToc
+
+\section{Motivation.}
+
+In \href{http://samjshah.com/2010/05/05/i-love-when-kids-stump-me/}{I love when kids stump me}, the center of mass of a toroidal segment is desired, and the simpler problem of a circular ring segment is considered.
+
+Let's try the solid torus problem for fun using the geometric algebra toolbox.  To setup the problem, it seems reasonable to introduce two angle, plus radius, toroidal parametrization as shown in figure (\ref{fig:toriodalSegment}).
+
+\begin{figure}[htp]
+\centering
+\includegraphics[totalheight=0.7\textheight]{toriodalSegment}
+\caption{Toriodal parameterization}\label{fig:toriodalSegment}
+\end{figure}
+
+Our position vector to a point within the torus is then
+
+\begin{subequations}
+\begin{align}\label{eqn:torusCenterOfMass:1}
+\Br(\rho, \theta, \phi) &= e^{-j\theta/2} \left( \rho \Be_1 e^{ i \phi } + R \Be_3 \right) e^{j \theta/2} \\
+i &= \Be_1 \Be_3 \\
+j &= \Be_3 \Be_2 
+\end{align}
+\end{subequations}
+
+Here $i$ and $j$ for the bivectors are labels picked at random.  They happen to have the quaternion-ic property $i j = -j i$, which can be verified easily.
+
+\section{Volume element}
+
+Before we can calculate the center of mass, we'll need the volume element.  I don't recall having ever seen such a volume element, so let's calculate it from scratch.
+
+We want 
+
+\begin{align}\label{eqn:torusCenterOfMass:2}
+dV = \pm \Be_1 \Be_2 \Be_3 \left( \PD{\rho}{\Br} \wedge \PD{\theta}{\Br} \wedge \PD{\phi}{\Br} \right) d\rho d\theta d\phi,
+\end{align}
+
+so the first order of business is calculation of the partials.  After some regrouping those are
+
+\begin{subequations}
+\begin{align}\label{eqn:torusCenterOfMass:3}
+\PD{\rho}{\Br} &= e^{-j\theta/2} \Be_1 e^{ i \phi } e^{j \theta/2} \\
+\PD{\theta}{\Br} 
+%&= e^{-j\theta/2} \left( \rho \inv{2} \left( -\Be_3 \Be_2 \Be_1 e^{ i \phi } + \Be_1 e^{ i \phi } \Be_3 \Be_2 \right) + R \Be_2 \right) e^{j \theta/2} \\
+&= e^{-j\theta/2} \left( R + \rho \sin\phi \right) \Be_2 e^{j \theta/2} \\
+\PD{\phi}{\Br} &= e^{-j\theta/2} \rho \Be_3 e^{ i \phi } e^{j \theta/2}.
+\end{align}
+\end{subequations}
+
+For the volume element we want the wedge of each of these, and can instead select the trivector grades of the products, which conveniently wipes out a number of the interior exponentials
+
+\begin{align}\label{eqn:torusCenterOfMass:4}
+\PD{\rho}{\Br} \wedge \PD{\theta}{\Br} \wedge \PD{\phi}{\Br} 
+&= 
+\rho \left( R + \rho \sin\phi \right) \gpgradethree{ e^{-j\theta/2} \Be_1 e^{ i \phi } \Be_2 \Be_3 e^{ i \phi } e^{j \theta/2} } 
+\end{align}
+
+Note that $\Be_1$ commutes with $j = \Be_3 \Be_2$, so also with $e^{-j\theta/2}$.  Also $\Be_2 \Be_3 = -j$ anticommutes with $i$, so we have a conjugate commutation effect $e^{i\phi} j = j e^{-i\phi}$.  Together the trivector grade selection reduces almost magically to just
+
+\begin{align}\label{eqn:torusCenterOfMass:5}
+\PD{\rho}{\Br} \wedge \PD{\theta}{\Br} \wedge \PD{\phi}{\Br} 
+&= 
+\rho \left( R + \rho \sin\phi \right) \Be_1 \Be_2 \Be_3 
+\end{align}
+
+Thus the volume element, after taking the positive sign, is
+
+\begin{align}\label{eqn:torusCenterOfMass:6}
+dV = \rho \left( R + \rho \sin\phi \right) d\rho d\theta d\phi.
+\end{align}
+
+As a check we should find that we can use this to calculate the volume of the complete torus, and obtain the expected $V = (2 \pi R) (\pi r^2)$ result.  That volume is
+
+\begin{align}\label{eqn:torusCenterOfMass:7}
+V = \int_{\rho=0}^r \int_{\theta=0}^{2\pi} \int_{\phi=0}^{2\pi} \rho \left( R + \rho \sin\phi \right) d\rho d\theta d\phi.
+\end{align}
+
+The sine term conveniently vanishes over the $2\pi$ interval, leaving just
+\begin{align}\label{eqn:torusCenterOfMass:8}
+V = \inv{2} r^2 R (2 \pi)(2 \pi),
+\end{align}
+
+as expected.
+
+\section{Center of mass.}
+
+With the prep done, we are ready to move on to the original problem ... but math playtime has run out for the day, so that will come later.
+
+%\EndArticle
+\EndNoBibArticle
