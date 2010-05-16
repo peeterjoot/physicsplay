@@ -20,7 +20,7 @@ Let's try the solid torus problem for fun using the geometric algebra toolbox.  
 \begin{figure}[htp]
 \centering
 \includegraphics[totalheight=0.7\textheight]{toriodalSegment}
-\caption{Toriodal parameterization}\label{fig:toriodalSegment}
+\caption{Toroidal parametrization}\label{fig:toriodalSegment}
 \end{figure}
 
 Our position vector to a point within the torus is then
@@ -94,7 +94,59 @@ as expected.
 
 \section{Center of mass.}
 
-With the prep done, we are ready to move on to the original problem ... but math playtime has run out for the day, so that will come later.
+With the prep done, we are ready to move on to the original problem.  Given a toroidal segment over angle $\theta \in [-\Delta \theta/2, \Delta \theta/2]$, then the volume of that segment is 
+
+\begin{align}\label{eqn:torusCenterOfMass:9}
+\Delta V = r^2 R \pi \Delta \theta.
+\end{align}
+
+Our center of mass position vector is then located at
+
+\begin{align}\label{eqn:torusCenterOfMass:10}
+\BR \Delta V 
+&= 
+\int_{\rho=0}^r \int_{\theta=-\Delta \theta/2}^{\Delta \theta/2} \int_{\phi=0}^{2\pi} 
+e^{-j\theta/2} \left( \rho \Be_1 e^{ i \phi } + R \Be_3 \right) e^{j \theta/2} 
+\rho \left( R + \rho \sin\phi \right) d\rho d\theta d\phi.
+\end{align}
+
+Evaluating the $\phi$ integrals we loose the $\int_0^{2\pi} e^{i\phi}$ and $\int_0^{2\pi} \sin\phi$ terms and are left with $\int_0^{2\pi} e^{i\phi} \sin\phi d\phi = i \pi /2$ and $\int_0^{2\pi} d\phi = 2 \pi$.  This leaves us with 
+
+\begin{align}\label{eqn:torusCenterOfMass:11}
+\BR \Delta V 
+&= 
+\int_{\rho=0}^r \int_{\theta=-\Delta \theta/2}^{\Delta \theta/2} 
+\left( e^{-j\theta/2} \rho^3 \Be_3 \frac{\pi}{2} e^{j \theta/2} + 2 \pi \rho R^2 \Be_3 e^{j \theta}  \right) d\rho d\theta \\
+&= 
+\int_{\theta=-\Delta \theta/2}^{\Delta \theta/2} 
+\left( e^{-j\theta/2} r^4 \Be_3 \frac{\pi}{8} e^{j \theta/2} + 2\pi \inv{2} r^2 R^2 \Be_3 e^{j \theta}  \right) d\theta \\
+&= 
+\int_{\theta=-\Delta \theta/2}^{\Delta \theta/2} 
+\left( e^{-j\theta/2} r^4 \Be_3 \frac{\pi}{8} e^{j \theta/2} + \pi r^2 R^2 \Be_3 e^{j \theta}  \right) d\theta.
+\end{align}
+
+Since $\Be_3 j = -j \Be_3$, we have a conjugate commutation with the $e^{-j \theta/2}$ for just
+
+\begin{align}\label{eqn:torusCenterOfMass:12}
+\BR \Delta V 
+&= 
+\pi r^2 \left( \frac{r^2}{8} + R^2 \right) \Be_3 
+\int_{\theta=-\Delta \theta/2}^{\Delta \theta/2} 
+e^{j \theta} d\theta \\
+&= 
+\pi r^2 \left( \frac{r^2}{8} + R^2 \right) \Be_3 
+2 \sin(\Delta \theta/2).
+\end{align}
+
+A final reassembly, provides the desired final result for the center of mass vector
+
+\begin{align}\label{eqn:torusCenterOfMass:13}
+\BR &= \Be_3 \inv{R} \left( \frac{r^2}{8} + R^2 \right) \frac{\sin(\Delta \theta/2)}{ \Delta \theta/2 }.
+\end{align}
+
+Presuming no algebraic errors have been made, how about a couple of sanity checks to see if the correctness of this seems plausible.
+
+We are pointing in the $z$-axis direction as expected by symmetry.  Good.  For $\Delta \theta = 2 \pi$, our center of mass vector is at the origin.  Good, that's also what we expected.  If we let $r \rightarrow 0$, and $\Delta \theta \rightarrow 0$, we have $\BR = R \Be_3$ as also expected for a tiny segment of ``wire'' at that position.  Also good.
 
 %\EndArticle
 \EndNoBibArticle
