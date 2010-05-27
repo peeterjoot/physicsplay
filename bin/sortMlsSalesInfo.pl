@@ -2,10 +2,17 @@
 
 my $all = 0 ;
 my $soldReport = 0 ;
-my $countryReport = 0 ;
+my $countryReport = 1 ;
 my $feetInOneMeter = 3.2808399 ;
 
-my @keys = (
+my @keys ;
+
+if ( $countryReport )
+{
+   push( @keys, 'Town' ) ;
+}
+
+push( @keys,
  'Type'
 ,'Bedrooms'
 ,'Kitchens'
@@ -55,6 +62,7 @@ if ( $countryReport )
 while (<>)
 {
    s/&nbsp;/ /g ;
+   s/&amp;/&/g ;
    s/width="\d+%"//g ;
    s/border="\d+"//g ;
    s/align=".*?"//g ;
@@ -83,11 +91,11 @@ sub foo
    my $n = "@_" ;
    my %info ;
 
-   if ( $n =~ /MLS.:*\s(N\d+)/smg )
+   if ( $n =~ /MLS.:*\s(\w\d+)/smg )
    {
       $info{MLS} = $1 ;
    }
-   elsif ( $n =~ /^\s+(N\d+)\s*$/smg )
+   elsif ( $n =~ /^\s+(\w\d+)\s*$/smg )
    {
       $info{MLS} = $1 ;
    }
@@ -280,6 +288,19 @@ Sewers:.*?<td.*?>(.*?)</td>
 
    $info{Address} =~ s/\n/ /smg ;
    $info{Address} =~ s/\r/ /smg ;
+
+   if ( $info{Address} =~ /Stouf/ )
+   {
+      $info{Town} = 'Stouffville' ;
+   }
+   elsif ( $info{Address} =~ /Markham/ )
+   {
+      $info{Town} = 'Markham' ;
+   }
+   elsif ( $info{Address} =~ /Claremont/ )
+   {
+      $info{Town} = 'Claremont' ;
+   }
 
    if ( 0 )
    {
