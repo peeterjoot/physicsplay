@@ -64,6 +64,7 @@ while (<>)
    s/&nbsp;/ /g ;
    s/&amp;/&/g ;
    s/width="\d+%"//g ;
+   s/\s*For Sale//g ;
    s/border="\d+"//g ;
    s/align=".*?"//g ;
    s/<br>//g ;
@@ -174,6 +175,12 @@ Sold:.*?<td.*?>(.*?)</td>,smx )
          $info{'Sold Date'} = $3 ;
       }
       elsif ( m,
+Taxes:.*?<td.*?>(.*?)</td>.*?
+,smx )
+      {
+         $info{Taxes} = $1 ;
+      }
+      elsif ( m,
 MLS.:.*?<td.*?>(.*?)</td>.*?
 DOM:.*?<td.*?>(.*?)</td>.*?
 Possession:.*?<td.*?>(.*?)</td>.*?
@@ -182,6 +189,14 @@ Possession:.*?<td.*?>(.*?)</td>.*?
 #         $info{MLS} = $1 ;
          $info{DOM} = $2 ;
          $info{Possession} = $3 ;
+      }
+      elsif ( m,
+MLS.:.*?<td.*?>(.*?)</td>.*?
+Possession:.*?<td.*?>(.*?)</td>.*?
+,smx )
+      {
+#         $info{MLS} = $1 ;
+         $info{Possession} = $2 ;
       }
       elsif ( m,
 <td.*?>(.*?)</td>.*
