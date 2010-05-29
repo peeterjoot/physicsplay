@@ -1,0 +1,121 @@
+\input{../peeter_prologue_print.tex}
+%\input{../peeter_prologue_widescreen.tex}
+
+\chapter{Fourier transformation of the Pauli QED wave equation.}
+\label{chap:pauliFourier}
+%\useCCL
+\blogpage{http://sites.google.com/site/peeterjoot/math2010/pauliFourier.pdf}
+\date{May 29, 2010}
+\revisionInfo{pauliFourier.tex}
+
+%\beginArtWithToc
+\beginArtNoToc
+
+\section{Motivation.}
+
+In \cite{feynman1961qed}, Feynman writes the Pauli wave equation for a non-relativistic treatment of a mass in a scalar and vector potential electrodynamic field.  That is
+
+\begin{align}\label{eqn:pauliFourier:1}
+i \hbar \PD{t}{\Psi} = \inv{2m} \left( \Bp - \frac{e}{c} \BA \right)^2 \Psi + e \phi \Psi
+\end{align}
+
+Is this amenable to Fourier transform solution like so many other PDEs?  Let's give it a try.
+
+\section{Fourier Notation.}
+
+Our transform pair will be written
+
+\begin{subequations}
+\begin{align}
+\Psi(\Bx, t) &= \inv{(\sqrt{2 \pi})^3} \int \hat{\Psi}(\Bk, t) e^{i \Bk \cdot \Bx} d^3 \Bk \label{eqn:pauliFourier:2a} \\
+\hat{\Psi}(\Bk, t) &= \inv{(\sqrt{2 \pi})^3} \int \Psi(\Bx, t) e^{-i \Bk \cdot \Bx} d^3 \Bx \label{eqn:pauliFourier:2b}
+\end{align}
+\end{subequations}
+
+\section{Guts}
+
+If we expand out the Hamiltonian terms we have for the Pauli equation
+
+\begin{align}\label{eqn:pauliFourier:3}
+i \hbar \PD{t}{\Psi} = \inv{2m} \left( - \hbar^2 \spacegrad^2 - 2 i \hbar \frac{e}{c} \BA \cdot \spacegrad + \frac{e^2}{c^2} \BA^2 \right) \Psi + e \phi \Psi.
+\end{align}
+
+Let's now apply each of these derivative operations to our assumed Fourier solution $\Psi(\Bx, t)$ from \ref{eqn:pauliFourier:2a}.  Starting with the Laplacian we have
+
+\begin{align}\label{eqn:pauliFourier:xx1}
+\spacegrad^2 \Psi(\Bx, t) &=
+\inv{(\sqrt{2 \pi})^3} \int \hat{\Psi}(\Bk, t) (i\Bk)^2 e^{i \Bk \cdot \Bx} d^3 \Bk.
+\end{align}
+
+For the $\BA \cdot \spacegrad$ operator application we have
+
+\begin{align}\label{eqn:pauliFourier:xx2}
+\BA \cdot \spacegrad \Psi(\Bx, t) &=
+\inv{(\sqrt{2 \pi})^3} \int \hat{\Psi}(\Bk, t) (i \BA \cdot \Bk) e^{i \Bk \cdot \Bx} d^3 \Bk.
+\end{align}
+
+Putting both together we have
+
+\begin{align}\label{eqn:pauliFourier:5}
+0 &= 
+\inv{(\sqrt{2 \pi})^3} \int 
+\left(
+-i \hbar \PD{t}{\hat{\Psi}} + \inv{2m} \left( \hbar^2 \Bk^2 + 2 \hbar \frac{e}{c} \BA \cdot \Bk + \frac{e^2}{c^2} \BA^2 \right) \hat{\Psi} + e \phi \hat{\Psi} \right)
+e^{i \Bk \cdot \Bx} d^3 \Bk.
+\end{align}
+
+Switching to the wave number domain, we reduce the equation to a first order time domain problem, namely
+
+\begin{align}\label{eqn:pauliFourier:6}
+\PD{t}{\hat{\Psi}}(\Bk, t) = \inv{i \hbar} \left( \inv{2m} \left( \hbar \Bk + \frac{e}{c} \BA \right)^2 + e \phi \right) \Psi(\Bk, t)
+\end{align}
+
+Since $\BA = \BA(\Bx, t)$, and $\phi = \phi(\Bx, t)$, is this really meaningful in any way?  Let's suppose that it is, and further simplify the system by imposing a constraint of constant time potentials ($\PDi{t}{\BA} = \PDi{t}{\phi} = 0$).  That allows for direct integration of the wave function for
+
+\begin{align}\label{eqn:pauliFourier:7}
+\hat{\Psi}(\Bk, t) = \hat{\Psi}(\Bk, 0) \exp\left(
+\inv{i \hbar} \left( \inv{2m} \left( \hbar \Bk + \frac{e}{c} \BA \right)^2 + e \phi \right) t
+\right)
+\end{align}
+
+It it probably really in the inverse transform context that our equation \ref{eqn:pauliFourier:6} takes meaning, giving
+
+\begin{align}\label{eqn:pauliFourier:8}
+\Psi(\Bx, t) &= \inv{(\sqrt{2 \pi})^3} \int 
+\hat{\Psi}(\Bk, 0) \exp\left(
+\inv{i \hbar} \left( \inv{2m} \left( \hbar \Bk + \frac{e}{c} \BA \right)^2 + e \phi \right) t
++ i \Bk \cdot \Bx
+\right)
+d^3 \Bk.
+\end{align}
+
+Furthermore, inserting the inverse Fourier transform of $\hat{\Psi}(\Bk, 0)$, we have the time evolution of the wave function as a convolution integral
+
+\begin{align}\label{eqn:pauliFourier:9}
+\Psi(\Bx, t) &= \inv{(2 \pi)^3} \int 
+\Psi(\Bx', 0) \exp\left(
+\inv{i \hbar} \left( \inv{2m} \left( \hbar \Bk + \frac{e}{c} \BA \right)^2 + e \phi \right) t
++ i \Bk \cdot (\Bx - \Bx')
+\right)
+d^3 \Bk d^3 \Bx'.
+\end{align}
+
+Splitting out the convolution kernel, this takes a slightly tidier form
+
+\begin{subequations}
+\begin{align}\label{eqn:pauliFourier:10}
+\Psi(\Bx, t) &= 
+\int \hat{U}(\Bx - \Bx', t) \Psi(\Bx', 0) d^3 \Bx' \\
+\hat{U}(\Bx, t) &= 
+\inv{(2 \pi)^3} 
+\int
+\exp\left(
+\inv{i \hbar} \left( \inv{2m} \left( \hbar \Bk + \frac{e}{c} \BA \right)^2 + e \phi \right) t
++ i \Bk \cdot \Bx 
+\right)
+d^3 \Bk.
+\end{align}
+\end{subequations}
+
+\EndArticle
+%\EndNoBibArticle
