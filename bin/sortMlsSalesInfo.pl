@@ -1,11 +1,12 @@
 #!/usr/bin/perl
 
-my $all = 0 ;
-my $soldReport = 0 ;
+my $soldReport = 1 ;
 my $countryReport = 1 ;
-my $feetInOneMeter = 3.2808399 ;
+my $debugMode = 0 ;
 
 my @keys ;
+my $all = '' ;
+my $feetInOneMeter = 3.2808399 ;
 
 if ( $countryReport )
 {
@@ -157,6 +158,38 @@ sub foo
          $info{'Orig Price'} = $1 ;
          $info{Taxes} = $2 ;
       }
+# 		<th>Expiry Date:</th>
+# 		<td>9/30/2010</td>
+# 		<th>Closing Date:</th>
+# 		<td>6/18/2010</td>
+# 		<th>Original Price:</th>
+# 		<td>$338,000</td>
+      elsif ( m,
+Original.Price:.*?<td.*?>(.*?)</td>.*?
+,smx )
+      {
+         $info{'Orig Price'} = $1 ;
+      }
+##
+# 		<th >SPIS:</th>
+# 		<td >N</td>
+# 		<th >DOM:</th>
+# 		<td >12</td>
+#  		<th >Taxes:</th>
+# 		<td >$2,487.24/2010</td>
+#  		<th >Last Status:</th>
+# 		<td >Sld</td>
+#
+      elsif ( m,
+SPIS:.*?<td.*?>(.*?)</td>.*?
+DOM:.*?<td.*?>(.*?)</td>.*?
+Taxes:.*?<td.*?>(.*?)</td>.*?
+,smx )
+      {
+         $info{SPIS} = $1 ;
+         $info{DOM} = $2 ;
+         $info{Taxes} = $3 ;
+      }
       elsif ( m,
 SPIS:.*?<td.*?>(.*?)</td>.*?
 Taxes:.*?<td.*?>(.*?)</td>.*?
@@ -173,6 +206,21 @@ Sold:.*?<td.*?>(.*?)</td>,smx )
          $info{DOM} = $1 ;
          $info{'Contract Date'} = $2 ;
          $info{'Sold Date'} = $3 ;
+      }
+#
+#      <th >Contract Date:</th>
+#      <td >5/7/2010</td>
+#      <th >Sold Date:</th>
+#      <td >5/19/2010</td>
+#      <th >Leased Terms:</th>
+#      <td > </td>
+#
+      elsif ( m,
+Contract.Date:.*?<td.*?>(.*?)</td>.*?
+Sold.Date:.*?<td.*?>(.*?)</td>,smx )
+      {
+         $info{'Contract Date'} = $1 ;
+         $info{'Sold Date'} = $2 ;
       }
       elsif ( m,
 Taxes:.*?<td.*?>(.*?)</td>.*?
@@ -317,7 +365,7 @@ Sewers:.*?<td.*?>(.*?)</td>
       $info{Town} = 'Claremont' ;
    }
 
-   if ( 0 )
+   if ( $debugMode )
    {
       open my $fh, ">$info{MLS}.out" or die ;
       print $fh $debug ;
