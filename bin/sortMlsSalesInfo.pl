@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-my $soldReport = 1 ;
+my $soldReport = 0 ;
 my $countryReport = 1 ;
 my $debugMode = 0 ;
 
