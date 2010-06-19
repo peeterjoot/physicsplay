@@ -64,7 +64,7 @@ or
 \end{align}
 \end{subequations}
 
-Just like any other coupled pendulum system, this one is non-linear.  There's no obvious way to solve this in closed form, but we could determine a solution in the neighbourhood of a point $(x, \theta) = (x_0, \theta_0)$.  Let's switch our dynamical variables to ones that express the deviation from the initial point $\delta x = x - x_0$, and $\delta \theta = \theta - \theta_0$, with $u = (\delta x)'$, and $v = (\delta \theta)'$.  Our system then takes the form
+Just like any other coupled pendulum system, this one is non-linear.  There's no obvious way to solve this in closed form, but we could determine a solution in the neighborhood of a point $(x, \theta) = (x_0, \theta_0)$.  Let's switch our dynamical variables to ones that express the deviation from the initial point $\delta x = x - x_0$, and $\delta \theta = \theta - \theta_0$, with $u = (\delta x)'$, and $v = (\delta \theta)'$.  Our system then takes the form
 
 \begin{subequations}
 \label{eqn:hoopSpring:4}
@@ -137,10 +137,100 @@ This reduces the problem to the solutions of first order equations of the form
 + \begin{bmatrix}
 0 & A \\
 I & 0
-\end{bmatrix}\Bx,
+\end{bmatrix}\Bx = \Ba + \BB \Bx
 \end{align}
 
-where $\Ba$, and $A$ are constant matrices.
+where $\Ba$, and $A$ are constant matrices.  Such a matrix equation has the solution
+
+\begin{align}\label{eqn:hoopSpring:8}
+\Bx = e^{B t} \Bx_0 + (e^{Bt} - I) B^{-1} \Ba,
+\end{align}
+
+but the zeros in $B$ should allow the exponential and inverse to be calculated with less work.  That inverse is readily verified to be
+
+\begin{align}\label{eqn:hoopSpring:9}
+B^{-1} =
+\begin{bmatrix}
+0 & I \\
+A^{-1} & 0
+\end{bmatrix}.
+\end{align}
+
+It is also not hard to show that 
+
+\begin{subequations}
+\label{eqn:hoopSpring:10}
+\begin{align}
+B^{2n} = 
+\begin{bmatrix}
+A^n & 0 \\
+0 & A^n
+\end{bmatrix} \\
+B^{2n+1} = 
+\begin{bmatrix}
+0 & A^{n+1} \\
+A^n & 0
+\end{bmatrix}.
+\end{align}
+\end{subequations}
+
+Together this allows for the power series expansion 
+
+\begin{align}\label{eqn:hoopSpring:11}
+e^{Bt} &=
+\begin{bmatrix}
+\cosh(t \sqrt{A}) & \sinh(t \sqrt{A}) \\
+\sinh(t \sqrt{A}) \inv{\sqrt{A}} & \cosh(t \sqrt{A})
+\end{bmatrix}.
+\end{align}
+
+All of the remaining sub matrix expansions should be straightforward to calculate provided the eigenvalues and vectors of $A$ are calculated.  Specifically, suppose that we have
+
+\begin{align}\label{eqn:hoopSpring:12}
+A = U 
+\begin{bmatrix}
+\lambda_1 & 0 \\
+0 & \lambda_2 
+\end{bmatrix}
+U^{-1}.
+\end{align}
+
+Then all the perhaps non-obvious functions of matrixes expand to just
+\begin{subequations}
+\label{eqn:hoopSpring:13}
+\begin{align}
+A^{-1} &= U 
+\begin{bmatrix}
+\lambda_1^{-1} & 0 \\
+0 & \lambda_2^{-1} 
+\end{bmatrix}
+U^{-1} \\
+\sqrt{A} &= U 
+\begin{bmatrix}
+\sqrt{\lambda_1} & 0 \\
+0 & \sqrt{\lambda_2}
+\end{bmatrix}
+U^{-1} \\
+\cosh{t \sqrt{A}} &= U 
+\begin{bmatrix}
+\cosh( t \sqrt{\lambda_1} ) & 0 \\
+0 & \cosh( t \sqrt{\lambda_2} )
+\end{bmatrix}
+U^{-1} \\
+\sinh{t \sqrt{A}} &= U 
+\begin{bmatrix}
+\sinh( t \sqrt{\lambda_1} ) & 0 \\
+0 & \sinh( t \sqrt{\lambda_2} )
+\end{bmatrix}
+U^{-1} \\
+\sinh{t \sqrt{A}} \inv{\sqrt{A}} &= U 
+\begin{bmatrix}
+\sinh( t \sqrt{\lambda_1} )/\sqrt{\lambda_1} & 0 \\
+0 & \sinh( t \sqrt{\lambda_2} )/\sqrt{\lambda_2}
+\end{bmatrix}
+U^{-1} 
+\end{align}
+\end{subequations}
 
 %\EndArticle
 \EndNoBibArticle
