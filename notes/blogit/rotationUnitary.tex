@@ -1,0 +1,278 @@
+\input{../peeter_prologue_print.tex}
+%\input{../peeter_prologue_widescreen.tex}
+
+\chapter{Rotations using matrix exponentials}
+\label{chap:rotationUnitary}
+%\useCCL
+\blogpage{http://sites.google.com/site/peeterjoot/math2010/rotationUnitary.pdf}
+\date{July 27, 2010}
+\revisionInfo{rotationUnitary.tex}
+
+%\beginArtWithToc
+\beginArtNoToc
+
+\section{Motivation.}
+
+In \cite{desai2009quantum} it is noted in problem 1.3 that any Unitary operator can be expressed in exponential form
+
+\begin{align}\label{eqn:rotationUnitary:1}
+U = e^{iC},
+\end{align}
+
+where $C$ is Hermitian.  This is a powerful result hiding away in this problem.  I haven't actually managed to prove this yet to my satisfaction, but working through some examples is highly worthwhile.  In particular it is interesting to compute the matrix $C$ for a rotation matrix.  One finds that the matrix for such a rotation operator is in fact one of the Pauli spin matrices, and I found it interesting that this falls out so naturally.  Additionally, it is rather slick that one is able to so concisely express the rotation in exponential form, something that is natural and powerful in complex variable algebra, and also possible using Geometric Algebra using exponentials of bivectors.  Here we can do it after all with nothing more than the plain old matrix algebra that everybody is already comfortable with.
+
+\section{The logarithm of the Unitary matrix.}
+
+By inspection we can invert \ref{eqn:rotationUnitary:1} for $C$, by taking the logarithm
+
+\begin{align}\label{eqn:rotationUnitary:2}
+C = -i \ln U.
+\end{align}
+
+The problem becomes one of evaluating the logarithm, or even giving meaning to it.  I'll assume that the functions of matrices that we are interested in are all polynomial in powers of the matrix, as in
+
+\begin{align}\label{eqn:rotationUnitary:3}
+f(U) = \sum_k \alpha_k U^k,
+\end{align}
+
+and that such series are convergent.  Then using a spectral decomposition, possible since Unitary matrices are normal, we can write for diagonal $\Sigma = {\begin{bmatrix} \lambda_i \end{bmatrix}}_i$
+
+\begin{align}\label{eqn:rotationUnitary:4}
+U = V \Sigma V^\dagger,
+\end{align}
+
+and
+
+\begin{align}\label{eqn:rotationUnitary:3b}
+f(U) = V \left( \sum_k \alpha_k \Sigma^k \right) V^\dagger = V {\begin{bmatrix} f(\lambda_i) \end{bmatrix}}_i V^\dagger.
+\end{align}
+
+Provided the logarithm has a convergent power series representation for $U$, we then have for our Hermitian matrix $C$
+
+\begin{align}\label{eqn:rotationUnitary:5}
+C = -i V (\ln \Sigma) V^\dagger
+\end{align}
+
+\subsection{Evaluate this logarithm for an $x,y$ plane rotation.}
+
+Given the rotation matrix
+
+\begin{align}\label{eqn:rotationUnitary:6}
+U =
+\begin{bmatrix}
+\cos\theta & \sin\theta \\
+-\sin\theta & \cos\theta
+\end{bmatrix},
+\end{align}
+
+We find that the eigenvalues are $e^{\pm i\theta}$, with eigenvectors proportional to $(1, \pm i)$ respectively.  Our decomposition for $U$ is then given by
+\ref{eqn:rotationUnitary:4}, and
+
+\begin{align}\label{eqn:rotationUnitary:7}
+V &= \inv{\sqrt{2}}
+\begin{bmatrix}
+1 & 1 \\
+i & -i
+\end{bmatrix} \\
+\Sigma &=
+\begin{bmatrix}
+e^{i\theta} & 0 \\
+0 & e^{-i\theta}
+\end{bmatrix}.
+\end{align}
+
+Taking logs we have
+
+\begin{align*}
+C
+&=
+\frac{1}{2}
+\begin{bmatrix}
+1 & 1 \\
+i & -i
+\end{bmatrix}
+\begin{bmatrix}
+\theta & 0 \\
+0 & -\theta
+\end{bmatrix} \
+\begin{bmatrix}
+1 & -i \\
+1 & i
+\end{bmatrix} \\
+&=
+\frac{1}{2}
+\begin{bmatrix}
+1 & 1 \\
+i & -i
+\end{bmatrix}
+\begin{bmatrix}
+\theta  & -i\theta \\
+-\theta & -i\theta
+\end{bmatrix}  \\
+&=
+\begin{bmatrix}
+0 & -i\theta \\
+i\theta & 0
+\end{bmatrix}.
+\end{align*}
+
+With the Pauli matrix
+
+\begin{align}\label{eqn:rotationUnitary:8a}
+\sigma_2 =
+\begin{bmatrix}
+0 & -i \\
+i & 0
+\end{bmatrix},
+\end{align}
+
+we then have for an $x,y$ plane rotation matrix just:
+
+\begin{align}\label{eqn:rotationUnitary:8}
+C = \theta \sigma_2
+\end{align}
+
+and
+\begin{align}\label{eqn:rotationUnitary:9}
+U = e^{i \theta \sigma_2}.
+\end{align}
+
+Immediately, since $\sigma_2^2 = I$, this also provides us with a trigonometric expansion
+\begin{align}\label{eqn:rotationUnitary:10}
+U = I \cos\theta + i \sigma_2 \sin\theta.
+\end{align}
+
+By inspection one can see that this takes us full circle back to the original matrix form \ref{eqn:rotationUnitary:6} of the rotation.  The exponential form of
+\ref{eqn:rotationUnitary:9} has a beauty that is however far superior to the plain old trigonometric matrix that we are comfortable with.  All without any geometric algebra or bivector exponentials.
+
+\subsection{Three dimensional exponential rotation matrices.}
+
+By inspection, we can augment our matrix $C$ for a three dimensional rotation in the $x,y$ plane, or a $y,z$ rotation, or a $x,z$ rotation.  Those are, respectively
+
+\begin{align}\label{eqn:rotationUnitary:30}
+U_{x,y}
+&=
+\exp
+\begin{bmatrix}
+0 & \theta & 0 \\
+-\theta & 0 & 0 \\
+0 & 0 & i
+\end{bmatrix} \\
+U_{y,z}
+&=
+\exp
+\begin{bmatrix}
+i & 0 & 0 \\
+0 & 0 & \theta \\
+0 & -\theta & 0 \\
+\end{bmatrix} \\
+U_{x,z}
+&=
+\exp
+\begin{bmatrix}
+0 & 0 & \theta \\
+0 & i & 0 \\
+-\theta & 0 & 0 \\
+\end{bmatrix}
+\end{align}
+
+Each of these matrices can be related to each other by similarity transformation using the permutation matrices
+\begin{align*}
+\begin{bmatrix}
+0 & 0 & 1 \\
+0 & 1 & 0 \\
+1 & 0 & 0 \\
+\end{bmatrix},
+\end{align*}
+
+and
+\begin{align*}
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & 0 & 1 \\
+0 & 1 & 0 \\
+\end{bmatrix}.
+\end{align*}
+
+\subsection{Exponential matrix form for a Lorentz boost.}
+
+The next obvious thing to try with this matrix representation is a Lorentz boost.
+
+\begin{align}\label{eqn:rotationUnitary:40}
+L =
+\begin{bmatrix}
+\cosh\alpha & -\sinh\alpha \\
+-\sinh\alpha & \cosh\alpha
+\end{bmatrix},
+\end{align}
+
+where $\cosh\alpha = \gamma$, and $\tanh\alpha = \beta$.
+
+This matrix has a spectral decomposition given by
+\begin{align}\label{eqn:rotationUnitary:41}
+V &= \inv{\sqrt{2}}
+\begin{bmatrix}
+1 & 1 \\
+-1 & 1
+\end{bmatrix} \\
+\Sigma &=
+\begin{bmatrix}
+e^\alpha & 0 \\
+0 & e^{-\alpha}
+\end{bmatrix}.
+\end{align}
+
+Taking logs and computing $C$ we have
+
+\begin{align*}
+C
+&=
+-\frac{i}{2}
+\begin{bmatrix}
+1 & 1 \\
+-1 & 1 
+\end{bmatrix}
+\begin{bmatrix}
+\alpha & 0 \\
+0 & -\alpha
+\end{bmatrix} 
+\begin{bmatrix}
+1 & -1 \\
+1 & 1
+\end{bmatrix} \\
+&=
+-\frac{i}{2}
+\begin{bmatrix}
+1 & 1 \\
+-1 & 1 
+\end{bmatrix}
+\begin{bmatrix}
+\alpha & -\alpha \\
+-\alpha & -\alpha
+\end{bmatrix} \\
+&=
+i \alpha
+\begin{bmatrix}
+0 & 1 \\
+1 & 0 
+\end{bmatrix}.
+\end{align*}
+
+Again we have one of the Pauli spin matrices.  This time it is
+\begin{align}\label{eqn:rotationUnitary:42}
+\sigma_1 =
+\begin{bmatrix}
+0 & 1 \\
+1 & 0 
+\end{bmatrix}.
+\end{align}
+
+So we can write our Lorentz boost \ref{eqn:rotationUnitary:40} as just
+
+\begin{align}\label{eqn:rotationUnitary:43}
+L = e^{-\alpha \sigma_1} = I \cosh\alpha - \sigma_1 \sinh\alpha.
+\end{align}
+
+By inspection again, we can come full circle by inspection from this last hyperbolic representation back to the original explicit matrix representation.  Quite nifty!
+
+\EndArticle
