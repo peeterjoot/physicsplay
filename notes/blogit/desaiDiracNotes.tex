@@ -509,7 +509,23 @@ This completes the required proof, showing that the matrix $C$ is Hermitian
 C = -i V \ln ( \Sigma ) V^\dagger = C^\dagger.
 \end{align}
 
-FIXME: probably also ought to show explicitly that the Unitary eigenvalues are unit norm, since I don't remember how that result was obtained (that hint came curtosy of wikipedia \cite{wiki:unitary}, which references Shankar).
+I initially relied on wikipedia \cite{wiki:unitary} for the hint that Unitary matrices have unit norm eigenvalues (and the wiki article references Shankar, which I don't have).  However, this is straightforward to show.  Suppose that $x$ is an eigenvector for $U$ with eigenvalue $\lambda$, then we have
+
+\begin{align*}
+\braket{U x}{U x}
+&= \braket{U^\dagger U x}{x} \\
+&= \braket{x}{x},
+\end{align*}
+
+but we also have
+
+\begin{align*}
+\braket{U x}{U x}
+&= \braket{\lambda x}{ \lambda x} \\
+&= \Abs{\lambda}^2 \braket{x}{x}.
+\end{align*}
+
+We must then have $\Abs{\lambda}^2 = 1$, or $\lambda = e^{i\alpha}$ for some real $\alpha$.
 
 \subsubsection{Commuting real and imaginary parts.}
 
@@ -561,8 +577,84 @@ B &= -V \sinh(\ln \Sigma) V^\dagger,
 
 and again here the functions of matrices are nothing more than diagonal evaluation of the respective functions to each of the eigenvalues of $\Sigma$.
 
-\subsection{P4.}
-\subsection{P5.}
+\subsection{P4. Determinant of exponential in terms of trace.}
+
+Show 
+
+\begin{align*}
+\det (e^A) = e^{\tr A}.
+\end{align*}
+
+The problem doesn't put constraints (ie: no statement that $A$ is Hermitian), so we can't assume a Unitary diagonalization is possible.  We can however assume an upper triangular similarity transformation of the form
+
+\begin{align*}
+A = W J W^{-1},
+\end{align*}
+
+where $W$ is invertible, but not neccessarily unitary, and $J$ is in Jordan Canonican form.  That form is upper triangular with the eigenvalues on the diagonal, and only ones or zeros above the diagonal (however, for the purposes of this problem we only need to know that it is upper triangular).
+
+The determinant of $e^A$ is then
+
+\begin{align*}
+\det(e^A) 
+&=
+\det(W) \det(e^J) \det(W^{-1}) \\
+&=
+\det(e^J).
+\end{align*}
+
+Note that the exponential of a triangular matrix has the exponentials of the eigenvalues along the diagonal.  We can see this by computing the square of an upper triangular matrix in block form.  A general proof of this is straightforward, but one gets the idea by considering the two by two case
+
+\begin{align*}
+\begin{bmatrix}
+a & c \\
+0 & b
+\end{bmatrix}
+\begin{bmatrix}
+a & c \\
+0 & b
+\end{bmatrix}
+&=
+\begin{bmatrix}
+a^2 & (a + b)c \\
+0 & b^2
+\end{bmatrix}.
+\end{align*}
+
+Forming the exponential series, one is left with exponentials of the eigenvalues along the diagonal.  So we have for our determinant
+
+\begin{align*}
+\det(e^A) 
+&=
+\det(e^J) \\
+&=
+\Pi_k e^{\lambda_k} \\
+&=
+e^{\sum_k \lambda_k} \\
+&=
+e^{\tr(A)} \qquad \square.
+\end{align*}
+
+\subsection{P5. Trace of an outer product operator.}
+
+Show that 
+
+\begin{align*}
+\tr( \ket{\alpha}\bra{\beta} ) = \braket{\beta}{\alpha}.
+\end{align*}
+
+Let $A = \ket{\alpha}\bra{\beta}$, and introduce a complete basis $\ket{e_k}$.  The trace with respect to this basis (or any) is thus
+
+\begin{align*}
+\tr(A) 
+&= \sum_k \bra{e_k} A \ket{e_k} \\
+&= \sum_k \bra{e_k} \left( \ket{\alpha} \bra{\beta} \right) \ket{e_k} \\
+&= \sum_k \braket{\beta} {e_k} \braket{e_k} {\alpha} \\
+&= \bra{\beta} \left( \sum_k \ket{e_k} \bra{e_k} \right) \ket{\alpha} \\
+&= \bra{\beta} I \ket{\alpha} \\
+&= \braket{\beta} {\alpha} \qquad \square.
+\end{align*}
+
 \subsection{P6.}
 
 \EndArticle
