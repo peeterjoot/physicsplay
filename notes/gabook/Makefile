@@ -31,6 +31,10 @@ ORIG_FILES += ../differential_forms/tangent_area_form.png
 ORIG_FILES += ../unsrturl.bst
 ORIG_FILES += ../geometric-algebra/visualize_subspace_projection.png
 ORIG_FILES += ../calculus/volume_element.png
+ORIG_FILES += ../blogit/newtonsIntersectionHorizontal.png
+ORIG_FILES += ../blogit/newtonsIntersectionAnyOrientation.png
+ORIG_FILES += ../blogit/newtonsIntersectionTwoCurves.png
+ORIG_FILES += ../blogit/toriodalSegment.png
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
