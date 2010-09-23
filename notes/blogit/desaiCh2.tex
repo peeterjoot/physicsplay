@@ -36,6 +36,8 @@ It will likely be good to come back to this later when trying to reconsile this 
 
 There is one fundamental assumption that appears to be made in this section that isn't justified by anything except the end result.  That is the assumption that $P$ is a derivative like operator, acting with a product rule action.  That's used to obtain (2.28) and is a fairly black magic operation.  This same assumption, is also hiding, somewhat sneakily, in the manipulation for (2.44).
 
+If one has to make that assumption that $P$ is a derivative like operator, I don't feel this method of introducing it is any less arbitrary seeming.  It is still pulled out of a magic hat, only because the answer is known ahead of time.  The approach of \cite{bohm1989qt}, where the derivative nature is presented as consequence of transforming (via Fourier transforms) from the position to the momentum representation, seems much more intuitive and less arbitrary.
+
 \subsection{Generalized momentum commutator.}
 
 It is stated that
@@ -146,6 +148,39 @@ As last note and question.  The first order Taylor approximation of the momentum
 
 then how does one evaluate a squared delta function (or Nth power)?
 
+Talked to Vatche about this after class.  The key to this is sequential evaluation.  Considering the simple case for $P^2$, we evaluate one operator at a time, and never actually square the delta function
+
+\begin{align*}
+\bra{x'} P^2 \ket{\phi} 
+%&= \bra{x'} P (P \ket{\phi}) \\
+%&= -i \hbar \int dx' \bra{x'} P (\delta(x-x') \PD{x}{} \ket{x'} \braket{x'}{\phi}) \\
+%&= -i \hbar \bra{x'} P \PD{x'}{} \ket{x'} \braket{x'}{\phi}) \\
+\end{align*}
+
+I was also questioned why I was including the delta function at this point.  Why would I do that.  Thinking further on this, I see that isn't a reasonable thing to do.  That delta function only comes into the mix when one takes the matrix element of the momentum operator as in
+
+\begin{align*}
+\bra{x'} P \ket{x} = -i \hbar \delta(x-x') \frac{d}{dx'}. 
+\end{align*}
+
+This is very much like the fact that the delta function only shows up in the continuous representation in other context where one has matrix elements.  The most simple example of which is just
+
+\begin{align*}
+\braket{x'}{x} = \delta(x-x').
+\end{align*}
+
+I also see now that the momentum operator is directly identified with the derivative (no delta function) in two other places in the text.  These are equations (2.32) and (2.46) respectively:
+
+\begin{align*}
+P(x) &= -i \hbar \frac{d}{dx} \\
+P &= -i \hbar \frac{d}{dX}.
+\end{align*}
+
+In the first, (2.32), I thought the $P(x)$ was somehow different, just a helpful expression found along the way, but now it occurs to me that this was intended to be an unambigous representation of the momentum operator itself.
+
+FIXME: rework the expansion of $D(\Delta x') \phi(x)$ above in light of this.  Examine the connection between that and 
+$D(\Delta x') \ket{\phi}$ to get a feel for all the notational magic.
+
 \subsection{Time evolution operator}
 
 The phrase ``we identify time evoution with the Hamiltonian''.  What a magic hat manuver!  Is there a way that this would be logical without already knowing the answer?
@@ -254,7 +289,243 @@ So $a = 1$, and our Hermitian operator is
 T = -i \hbar \left( \PD{r}{} + \frac{1}{r} \right).
 \end{align*}
 
-\subsection{6.}
+\subsection{6. Radial directional derivative operator.}
+
+\subsubsection{Problem.}
+Show that 
+
+\begin{align*}
+D = \Bp \cdot \rcap + \rcap \cdot \Bp,
+\end{align*}
+
+is Hermitian.  Expand this operator in spherical coordinates.  Compare result to problem 5.
+
+\subsubsection{Solution.}
+
+Tackling the spherical coordinates expression of of the operator $D$, we have
+
+\begin{align*}
+\inv{-i\hbar} D \Psi 
+&= \left( \spacegrad \cdot \rcap + \rcap \cdot \spacegrad \right) \Psi \\
+&= 
+\left( \spacegrad \cdot \rcap \right) \Psi 
++ \left( \spacegrad \Psi \right) \cdot \rcap 
++ \rcap \cdot \left(\spacegrad \Psi\right) \\
+&=
+\left( \spacegrad \cdot \rcap \right) \Psi 
++ 2 \rcap \cdot \left( \spacegrad \Psi \right).
+\end{align*}
+
+Here braces have been used to denote the extend of the operation of the gradient.  In spherical polar coordinates, our gradient is
+
+\begin{align*}
+\spacegrad \equiv 
+\rcap \PD{r}{}
++\thetacap \inv{r} \PD{\theta}{}
++\phicap \inv{r \sin\theta} \PD{\phi}{}.
+\end{align*}
+
+This gets us most of the way there, and we have
+
+\begin{align*}
+\inv{-i\hbar} D \Psi 
+&=
+2 \PD{r}{\Psi} 
++ 
+\left( 
+\rcap \cdot \PD{r}{\rcap}
++\inv{r} \thetacap \cdot \PD{\theta}{\rcap}
++\inv{r \sin\theta} \phicap \cdot \PD{\phi}{\rcap}
+\right) \Psi.
+\end{align*}
+
+Since $\PDi{r}{\rcap} = 0$, we are left with evaluating $\thetacap \cdot \PDi{\theta}{\rcap}$, and $\phicap \cdot \PDi{\phi}{\rcap}$.  To do so I chose to employ the (Geometric Algebra) exponential form of the spherical unit vectors \cite{sphericalPolarUnit}
+
+\begin{align*}
+I &= \Be_1 \Be_2 \Be_3 \\
+\phicap &= \Be_{2} \exp( I \Be_3 \phi ) \\
+\rcap &= \Be_3 \exp( I \phicap \theta ) \\
+\thetacap &= \Be_1 \Be_2 \phicap \exp( I \phicap \theta ).
+\end{align*}
+
+The partials of interest are then
+
+\begin{align*}
+\PD{\theta}{\rcap} &= \Be_3 I \phicap \exp( I \phicap \theta ) = \thetacap,
+\end{align*}
+
+and
+
+\begin{align*}
+\PD{\phi}{\rcap} 
+&= \PD{\phi}{} \Be_3 \left( \cos\theta + I \phicap \sin\theta \right) \\
+&= \Be_1 \Be_2 \sin\theta \PD{\phi}{\phicap} \\
+&= \Be_1 \Be_2 \sin\theta \Be_2 \Be_1 \Be_2 \exp( I \Be_3 \phi ) \\
+&= \sin\theta \phicap.
+\end{align*}
+
+These partials are consistent with those found online in \href{http://mathworld.wolfram.com/SphericalCoordinates.html}{mathworld's Spherical Coordinates} (once $\phi$, and $\theta$ are interchanged).
+
+Substitution back into our expression for the operator we have
+\begin{align*}
+D &= - 2 i \hbar \left( \PD{r}{} + \inv{r} \right),
+\end{align*}
+
+an operator that is exactly twice the operator of problem 5, already shown to be Hermitian.  Since the constant numerical scaling of a Hermitian operator leaves it Hermitian, this shows that $D$ is Hermitian as expected.
+
+\subsubsection{$\thetacap$ directional momentum operator}
+
+Let's try this for the other unit vector directions too.  We also want
+
+\begin{align*}
+\left( \spacegrad \cdot \thetacap + \thetacap \cdot \spacegrad \right) \Psi
+&=
+2 \thetacap \cdot (\spacegrad \Psi) + \left( \spacegrad \cdot \thetacap \right) \Psi.
+\end{align*}
+
+The work consists of evaluating
+
+\begin{align*}
+\spacegrad \cdot \thetacap 
+&= \rcap \cdot \PD{r}{\thetacap}
++ \inv{r} \thetacap \cdot \PD{\theta}{\thetacap}
++ \inv{r \sin\theta} \phicap \cdot \PD{\phi}{\thetacap}.
+\end{align*}
+
+This time we need the $\PDi{\theta}{\thetacap}$, $\PDi{\phi}{\thetacap}$ partials, which are
+
+\begin{align*}
+\PD{\theta}{\thetacap} 
+&=
+\Be_1 \Be_2 \phicap I \phicap \exp( I \phicap \theta) \\
+&=
+-\Be_3 \exp( I \phicap \theta) \\
+&=
+- \rcap.
+\end{align*}
+
+This has no $\thetacap$ component, so does not contribute to $\spacegrad \cdot \thetacap$.  Noting that
+
+\begin{align*}
+\PD{\phi}{\phicap} &= -\Be_1 \exp( I \Be_3 \phi ) = \Be_2 \Be_1 \phicap,
+\end{align*}
+
+the $\phi$ partial is
+
+\begin{align*}
+\PD{\phi}{\thetacap} &=
+\Be_1 \Be_2 \left( 
+\PD{\phi}{\phicap} \exp( I \phicap \theta )
++\phicap I \sin\theta \PD{\phi}{\phicap} 
+\right) \\
+&=
+\phicap 
+\left( 
+\exp( I \phicap \theta )
++I \sin\theta \Be_2 \Be_1 \phicap
+\right),
+\end{align*}
+
+with $\phicap$ component
+\begin{align*}
+\phicap \cdot \PD{\phi}{\thetacap} &=
+\gpgradezero{
+\exp( I \phicap \theta )
++I \sin\theta \Be_2 \Be_1 \phicap } \\
+&=
+\cos\theta + \Be_3 \cdot \phicap \sin\theta \\
+&=
+\cos\theta.
+\end{align*}
+
+Assembling the results, and labling this operator $\Theta$ we have
+
+\begin{align*}
+\Theta &\equiv \inv{2} \left( \Bp \cdot \thetacap + \thetacap \cdot \Bp \right)  \\
+&=
+-i \hbar \inv{r} \left( \PD{\theta}{} + \inv{2} \cot\theta \right).
+\end{align*}
+
+It would be reasonable to expect this operator to also be Hermitian, and checking this explicitly by comparing
+$\bra{\Phi} \Theta \ket{\Psi}^\conj$ and $\bra{\Psi} \Theta \ket{\Phi}$, shows that this is in fact the case.
+
+\subsubsection{$\phicap$ directional momentum operator}
+
+Let's try this for the other unit vector directions too.  We also want
+
+\begin{align*}
+\left( \spacegrad \cdot \phicap + \phicap \cdot \spacegrad \right) \Psi
+&=
+2 \phicap \cdot (\spacegrad \Psi) + \left( \spacegrad \cdot \phicap \right) \Psi.
+\end{align*}
+
+The work consists of evaluating
+
+\begin{align*}
+\spacegrad \cdot \phicap 
+&= \rcap \cdot \PD{r}{\phicap}
++ \inv{r} \thetacap \cdot \PD{\theta}{\phicap}
++ \inv{r \sin\theta} \phicap \cdot \PD{\phi}{\phicap}.
+\end{align*}
+
+This time we need the $\PDi{\theta}{\phicap}$, $\PDi{\phi}{\phicap} = \Be_2 \Be_1 \phicap$ partials.  The $\theta$ partial is
+
+\begin{align*}
+\PD{\theta}{\phicap} 
+&=
+\PD{\theta}{} \Be_2 \exp( I \Be_3 \phi ) \\
+&= 0.
+\end{align*}
+
+We conclude that $\spacegrad \cdot \phicap = 0$, and expect that we have one more Hermitian operator
+
+\begin{align*}
+\Phi &\equiv \inv{2} \left( \Bp \cdot \phicap + \phicap \cdot \Bp \right)  \\
+&=
+-i \hbar \inv{r \sin\theta} \PD{\phi}{}.
+\end{align*}
+
+It is simple to confirm that this is Hermitian since the integration by parts does not involve any of the volume element.  In fact, any operator $-i\hbar f(r,\theta) \PDi{\phi}{}$ would also be Hermitian, including the simplest case $-i\hbar \PDi{\phi}{}$.  Have to dig out my Bohm text again, since I seem to recall that one used in the spherical Harmonics chapter.
+
+\subsubsection{A note on the Hermitian test and Dirac notation.}
+
+I've been a bit loose with my notation, and while I've stated that this has been done this by showing
+
+\begin{align*}
+\bra{\phi} A \ket{\psi}^\conj - \bra{\psi} A \ket{\phi} = 0.
+\end{align*}
+
+However, what I've actually done is show that 
+
+\begin{align*}
+\left( \int d^3 \Bx \phi^\conj (\Bx) A(\Bx) \psi(\Bx) \right)^\conj - \int d^3 \Bx \psi^\conj (\Bx) A(\Bx) \phi(\Bx) = 0.
+\end{align*}
+
+To justify this note that 
+
+\begin{align*}
+\bra{\phi} A \ket{\psi}^\conj 
+&=
+\left( \iint d^3 \Br d^3 \Bs \braket{\phi}{\Br} \bra{\Br} A \ket{\Bs} \braket{\Bs}{\psi} \right)^\conj
+&=
+\iint d^3 \Br d^3 \Bs \phi(\Br) \delta^3(\Br - \Bs) A^\conj(\Bs) \psi(\Bs) \\
+&=
+\int d^3 \Br \phi(\Br) A^\conj(\Br) \psi(\Br),
+\end{align*}
+
+and
+\begin{align*}
+\bra{\phi} A \ket{\psi}^\conj 
+&=
+\iint d^3 \Br d^3 \Bs \braket{\psi}{\Br} \bra{\Br} A \ket{\Bs} \braket{\Bs}{\phi} \\
+&=
+\iint d^3 \Br d^3 \Bs \bra{\Br} \psi(\Br) \delta^3(\Br - \Bs) A(\Bs) \phi(\Bs) \\
+&=
+\int d^3 \Br \bra{\Br} \psi(\Br) A(\Br) \phi(\Br).
+\end{align*}
+
+Working backwards one sees that the comparison of the wave function integrals in explicit inner product notation is sufficient to demonstrate the Hermitian property.
+
 \subsection{7.}
 \subsection{8.}
 \subsection{9.}
