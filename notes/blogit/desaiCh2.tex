@@ -214,7 +214,77 @@ This doesn't vanish at $z = 0$ as the principle part in this section is stated t
 Will this even have any relevance in this text?
 
 \section{Problems.}
-\subsection{1.}
+\subsection{1. Cauchy-Shwartz identity.}
+\subsubsection{1. Blundering on the standard trick.}
+
+This proof is a standard one from a linear algebra book, one for which has a tricky trick that I never remember.  For $\ket{c} = \ket{a} + \lambda \ket{b}$, we wish to take the inner product and find the magic value of $\lambda$ that leaves only real terms in the resulting expression.
+
+That is
+
+\begin{align*}
+\Abs{\ket{a} + \lambda \ket{b}}^2 
+&=
+\braket{a + \lambda b}{a + \lambda b} \\
+&= \Abs{\ket{a}}^2 + \Abs{\lambda}^2 \Abs{\ket{b}}^2 + \lambda \braket{a}{b} + \lambda^\conj \braket{b}{a} \\
+\end{align*}
+
+Let's try $\lambda = \braket{b}{a}/\Abs{\ket{b}}^n$.  This gives
+
+\begin{align*}
+\Abs{\ket{a} + \lambda \ket{b}}^2 
+&= \Abs{\ket{a}}^2 + \Abs{\braket{b}{a}}^2 \Abs{\ket{b}}^{2-2n} + \Abs{\braket{a}{b}}^2/\Abs{\ket{b}}^n + \Abs{\braket{b}{a}}^2/\Abs{\ket{b}}^n \\
+\end{align*}
+
+We want terms to drop out so we pick $2 -2n = -n$, or $n = 2$.  This gives
+
+\begin{align*}
+\Abs{\ket{a} + \lambda \ket{b}}^2 
+&= \Abs{\ket{a}}^2 + 3 \Abs{\braket{b}{a}}^2/\Abs{\ket{b}}^2 \\
+\end{align*}
+
+It appears that this wasn't the magic value desired.  If we pick $\lambda = -\braket{b}{a}/\Abs{\ket{b}}^n$ instead, we have what we want:
+
+\begin{align*}
+\Abs{\ket{a} + \lambda \ket{b}}^2 
+&= \Abs{\ket{a}}^2 - \Abs{\braket{b}{a}}^2/\Abs{\ket{b}}^2 \ge 0
+\end{align*}
+
+And rearranging, and dropping the $\Abs{}$ notation in favour of inner products, we have the desired result:
+
+\begin{align*}
+\braket{a}{a} \braket{b}{b} \ge \braket{b}{a}\braket{a}{b}.
+\end{align*}
+
+\subsubsection{1. As a min/max problem.}
+
+The trial and error approach above, where we trying to blunder upon the well known but obscure trick, kind of sucks.  We can also do this as a min/max problem, although this is made slightly messier by the complex vector space.  Define
+
+\begin{align*}
+f(\lambda) =
+\braket{a}{a} + \lambda \lambda^\conj \braket{b}{b} + \lambda \braket{a}{b} + \lambda^\conj \braket{b}{a} \\
+\end{align*}
+
+Now, set $df/d\lambda = 0$
+
+\begin{align*}
+\frac{df}{d\lambda} 
+&=
+\left(\lambda^\conj + \lambda \frac{d\lambda^\conj}{d\lambda}\right) \braket{b}{b} + \braket{a}{b} + \frac{d\lambda^\conj}{d\lambda} \braket{b}{a} \\
+&=
+\lambda^\conj \braket{b}{b} + \braket{a}{b} 
++
+\frac{d\lambda^\conj}{d\lambda} \Bigl( 
+\lambda \braket{b}{b} + \braket{b}{a} \Bigr)
+\end{align*}
+
+Now, we have a bit of a problem with $d\lambda^\conj/d\lambda$, since that doesn't actually exist.  However, if we insist that what multiplies it is zero, we have $df/d\lambda = 0$ as desired.  This yields 
+
+\begin{align*}
+\lambda = - \frac{\braket{b}{a} }{ \braket{b}{b}  }
+\end{align*}
+
+as desired, and the remainder of the proof follows as before.  This is nicer, as slightly less black magic is required.
+
 \subsection{2.}
 \subsection{3.}
 \subsection{4.}
@@ -364,7 +434,7 @@ and
 &= \sin\theta \phicap.
 \end{align*}
 
-These partials are consistent with those found online in \href{http://mathworld.wolfram.com/SphericalCoordinates.html}{mathworld's Spherical Coordinates} (once $\phi$, and $\theta$ are interchanged).
+Only after computing these, did I find exactly these results for the partials of interest, in \href{http://mathworld.wolfram.com/SphericalCoordinates.html}{mathworld's Spherical Coordinates page}, which confirms these calculations.  Note that a different angle convention is used there, so one has to exchange $\phi$, and $\theta$ and the corresponding unit vector labels.
 
 Substitution back into our expression for the operator we have
 \begin{align*}
@@ -526,7 +596,59 @@ and
 
 Working backwards one sees that the comparison of the wave function integrals in explicit inner product notation is sufficient to demonstrate the Hermitian property.
 
-\subsection{7.}
+\subsection{7. Some commutators.}
+\subsubsection{7. Problem.}
+
+For $D$ in problem 6, obtain
+
+\begin{itemize}
+\item i) $[D, x_i]$
+\item ii) $[D, p_i]$
+\item iii) $[D, L_i]$, where $L_i = \Be_i \cdot (\Br \cross \Bp)$.
+\item iv) Show that $e^{i\alpha D/\hbar} x_i e^{-i\alpha D/\hbar} = e^\alpha x_i$
+\end{itemize}
+
+\subsubsection{7. Solution.}
+
+To start observe that we can write the operator in a form more convient for use with cartesian coordinates:
+
+\begin{align*}
+D = -2 i\hbar \inv{r}( \Br \cdot \spacegrad + 1)
+\end{align*}
+
+\begin{itemize}
+\item i) 
+
+\begin{align*}
+[D, x_i] \Psi
+&=
+D x_i \Psi - x_i D \Psi \\
+&=
+-2 i \hbar \inv{r} \left( \Br \cdot \spacegrad + 1 \right) x_i \Psi
++2 i \hbar x_i \inv{r} \left( \Br \cdot \spacegrad + 1 \right) \Psi \\
+&=
+-2 i \hbar \inv{r} \Br \cdot \spacegrad x_i \Psi
++2 i \hbar x_i \inv{r} \Br \cdot \spacegrad \Psi \\
+&=
+-2 i \hbar \inv{r} \Br \cdot (\spacegrad x_i) \Psi
+-2 i \hbar x_i \inv{r} \Br \cdot \spacegrad \Psi
++2 i \hbar x_i \inv{r} \Br \cdot \spacegrad \Psi \\
+&=
+-2 i \hbar \inv{r} \Br \cdot \Be_i \Psi.
+\end{align*}
+
+So this first commutator is:
+
+\begin{align*}
+[D, x_i] = -2 i \hbar \frac{x_i}{r}.
+\end{align*}
+
+\item ii) $[D, p_i]$
+\item iii) $[D, L_i]$
+
+\item iv) Show that $e^{i\alpha D/\hbar} x_i e^{-i\alpha D/\hbar} = e^\alpha x_i$
+\end{itemize}
+
 \subsection{8.}
 \subsection{9.}
 \subsection{10.}
