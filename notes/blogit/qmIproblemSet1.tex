@@ -1,4 +1,10 @@
-\input{../peeter_prologue_print.tex}
+\documentclass[]{eliblog}
+
+\input{../peeters_macros.tex}
+
+\author{Peeter Joot}
+\email{peeter.joot@utoronto.ca}
+%\input{../peeter_prologue_print.tex}
 %\input{../peeter_prologue_widescreen.tex}
 
 \chapter{PHY356 Problem Set I.}
@@ -13,16 +19,16 @@
 
 \section{Problem 1.}
 
-Assume that $X$ and $P = -i \hbar \PDi{x}{}$ are the x-direction position and momentum operators. Show that $\antisymmetric{X}{P}=i\hbar$. Find $\bra{x}(XP-PX)\ket{x'}$ using the above definitions. What is the physical meaning of this expression?
+Assume that $X$ and $P = -i \hbar \PDi{x}{}$ are the x-direction position and momentum operators. Show that $\antisymmetric{X}{P}=i\hbar \BOne$. Find $\bra{x}(XP-PX)\ket{x'}$ using the above definitions. What is the physical meaning of this expression?
 
 \subsection{Commutator Part.}
 
-We consider the commutator action on an arbitrary wave function $\psi(x)$
+We can get a rough idea of the approach required by temporarily avoiding the Dirac notation that complicates things.  To do so, consider the commutator action on an arbitrary wave function $\psi(x)$
 
 \begin{align*}
 (x P - P x)\psi
 &=
-x P \psi + i\hbar \PD{x}{} x \psi \\
+x P \psi + i\hbar \PD{x}{} (x \psi) \\
 &=
 x P \psi + i\hbar \left(\psi + \PD{x}{\psi} \right) \\
 &=
@@ -31,12 +37,12 @@ x P \psi + i \hbar \psi - x P \psi \\
 i \hbar \psi
 \end{align*}
 
-Thus 
+Since this is true for all $\psi(x)$ we can make the identification
 \begin{align*}
-x P - P x &= i\hbar.
+x P - P x &= i\hbar \BOne
 \end{align*}
 
-Use of Dirac notation would complicate this expansion, and the mention of the matrix element in the next part of the problem makes me wonder if the problem was supposed to be formulated in that more complicated way, as an exersize in the algebraic manipulation?  If so, we should instead consider the action of the commutator within a matrix element of the form
+Since use of the Dirac notation is central to the lecture notes and course text, it seems reasonable to follow this up with the same procedure utilizing the Dirac notation.  We do so by considering the action of the commutator within a matrix element of the form
 
 \begin{align*}
 \bra{x} XP - PX \ket{\psi}.
@@ -54,7 +60,7 @@ Considering the $XP$ part first we have
 \braket{x}{x'} x' \bra{x'} P \ket{\psi} \\
 &=
 \int dx'
-\delta(x-x')\bra{x'}x' P {\psi}  \\
+\delta(x-x')\bra{x'}x' P \ket{\psi}  \\
 &=
 \bra{x} x P \ket{\psi}.
 \end{align*}
@@ -64,17 +70,22 @@ Now consider the $PX$ part
 \begin{align*}
 \bra{x} PX \ket{\psi}
 &=
-\int dx'
-\bra{x} P \ket{x'}\bra{x'} X \ket{\psi}  \\
-&=
-\int dx'
-\bra{x} P \ket{x'}\bra{x'}x' \ket{\psi}  \\
-&=
-\int dx'
-\bra{x} (-i\hbar\PD{x}{}) \ket{x'}\bra{x'}x' \ket{\psi}  \\
+\bra{x} \BI PX \ket{\psi} \\
+%&=
+%\int dx'
+%\bra{x} P \ket{x'}\bra{x'} X \ket{\psi}  \\
+%&=
+%\int dx'
+%\bra{x} P \ket{x'}\bra{x'}x' \ket{\psi}  \\
+%&=
+%\int dx'
+%\bra{x} (-i\hbar\PD{x}{}) \ket{x'}\bra{x'}x' \ket{\psi}  \\
 %&=
 %\int dx'
 %\braket{x}{x'} (-i\hbar)\PD{x}{} \bra{x'}x' \ket{\psi}  \\
+&=
+\int dx'
+\braket{x}{x'} \bra{x'} P X \ket{\psi}  \\
 &=
 \int dx'
 \braket{x}{x'} \bra{x'} (-i\hbar)\PD{x}{} x' \ket{\psi}  \\
@@ -84,10 +95,10 @@ Now consider the $PX$ part
 &=
 \bra{x} (-i\hbar)\PD{x}{} x \ket{\psi}  \\
 &=
-\bra{x} (-i\hbar) \ket{\psi} + 
+\bra{x} (-i\hbar) \BOne \ket{\psi} + 
 \bra{x} x (-i\hbar)\PD{x}{} \ket{\psi}  \\
 &=
-\bra{x} -i\hbar + x P \ket{\psi}  
+\bra{x} -i\hbar \BOne + x P \ket{\psi}  
 \end{align*}
 
 Taking the differences, we have for arbitrary states $\bra{x}$, and $\ket{\psi}$
@@ -96,18 +107,20 @@ Taking the differences, we have for arbitrary states $\bra{x}$, and $\ket{\psi}$
 \bra{x} XP - PX \ket{\psi} 
 &= 
 \bra{x} x P \ket{\psi} -
-\bra{x} -i\hbar + x P \ket{\psi} \\
+\bra{x} -i\hbar \BOne + x P \ket{\psi} \\
 &= 
-\bra{x} i \hbar \ket{\psi} 
+\bra{x} i \hbar \BOne \ket{\psi} 
 \end{align*}
 
 or
 
 \begin{align*}
-XP - PX - i \hbar = 0,
+\bra{x} XP - PX - i \hbar \BOne \ket{\psi} = 0
 \end{align*}
 
-as required.  This seems like overkill, but does at least produce the expected result.  It also provides another worked example of the fairly tricky seeming Dirac notation.
+Since this is true for all $\bra{x}$ and $\ket{\psi}$, we can make the required identification $XP - PX = i \hbar \BOne $ as in the wave function approach.
+
+%as required.  This seems like overkill, but does at least produce the expected result.  It also provides another worked example of the fairly tricky seeming Dirac notation.
 
 \subsection{Matrix element.}
 
@@ -116,7 +129,7 @@ Having evaluated the commutator, the matrix element is simple to compute.  It is
 \begin{align*}
 \bra{x} XP - PX \ket{x'}
 &=
-\bra{x} i \hbar \ket{x'} \\
+\bra{x} i \hbar \BOne \ket{x'} \\
 &=
 i \hbar \braket{x}{x'} \\
 &=
@@ -131,7 +144,9 @@ Now, what is the physical meaning of this matrix element?  When $x = x'$ we have
 \bra{x} XP - PX \ket{x} &= i \hbar,
 \end{align*}
 
-but this is not real valued, meaning that the commutator is not Hermitian, and therefore not an observable.  I am at a loss to assign any further physical meaning to an operator that is not an observable.  The text doesn't provide any help that I can find.  In fact, there is almost no reference to anything physical so far in the text ... just an awful lot of math!
+but this is not real valued, meaning that the commutator is not Hermitian, and therefore not an observable.  Since the question did not ask for the value of the matrix element of the Hermitian operator, $\antisymmetric{X}{P} = \hbar$, an $\hbar$ scaled identity operator (and an observable), it must be assumed that some other physical meaning is being asked for.
+
+%I am at a loss to assign any further physical meaning to an operator that is not an observable.  The text doesn't provide any help that I can find.  In fact, there is almost no reference to anything physical so far in the text ... just an awful lot of math!
 
 Is there supposed to be a physical meaning to the matrix element itself?  Again the text is no obvious help.  We have a physical meaning of a matrix element of an operator, only in the context of other questions.  One such question is an operator expectation value, for example for the position operator we have
 
@@ -147,7 +162,6 @@ Is there supposed to be a physical meaning to the matrix element itself?  Again 
 
 Here the matrix element $\bra{x'} X \ket{x}$ shows up as an impulse response like weighting factor in the expectation integral, altering the probability density in the region around $x = x'$.  It only seems to be when there is additional context do we have a physical meaning to the matrix element itself.  This example also requires the operator in question to be Hermitian, which isn't the case for the position-momentum commutator.
 
-Now, if the question was to find the physical meaning to the matrix element of the operator $-i\antisymmetric{X}{P} = \hbar$, perhaps that would make more sense.  At least that operator is an observable.
 
 \section{Problem 2.}
 
