@@ -34,7 +34,7 @@ gaBasics.pdf : gaBasics.tex
 clean :: mostlyclean localclean
 
 mostlyclean :: 
-	rm -f *.ps *.dvi *.pdf *.aux *.log *.bbl *.blg *.brf
+	rm -f *.ps *.dvi *.pdf *.aux *.log *.bbl *.blg *.brf *.toc
 
 localclean ::
 	rm -f $(LOCAL_FILES)
