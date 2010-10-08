@@ -20,10 +20,217 @@ Some puzzling stuff in the interaction section and superposition of time-depende
 
 \section{Problems}
 
-\subsection{1. }
-\subsection{2. }
-\subsection{3. }
-\subsection{4. Feynman-Hellman relation.}
+\subsection{Problem 1. Virial Theorem.}
+\subsubsection{Statement.}
+
+With the assumption that $\expectation{\Br \cdot \Bp}$ is independent of time, and 
+
+\begin{align}\label{eqn:desaiCh3:100}
+H = \frac{\Bp^2}{2m} + V(\Br) = T + V
+\end{align}
+
+show that 
+
+\begin{align}\label{eqn:desaiCh3:102}
+2 \expectation{T} = \expectation{ \Br \cdot \spacegrad V}.
+\end{align}
+
+\subsubsection{Solution.}
+
+I floundered with this a bit, but found the required hint in \href{http://www.physicsforums.com/showthread.php?t=164682}{physicsforums}.  We can start with the Hamiltonian time derivative relation
+
+\begin{align}\label{eqn:desaiCh3:103}
+i\hbar \frac{d A_H}{dt} = \antisymmetric{A_H}{H}
+\end{align}
+
+So, with the assumption that $\expectation{\Br \cdot \Bp}$ is independent of time, and the use of a stationary state $\ket{\psi}$ for the expectation calculation we have
+
+\begin{align*}
+0 &=
+\frac{d}{dt} \expectation{\Br \cdot \Bp}  \\
+&=
+\frac{d}{dt} \bra{\psi} \Br \cdot \Bp \ket{\psi} \\
+&=
+\bra{\psi} 
+\frac{d}{dt} ( \Br \cdot \Bp ) \ket{\psi} \\
+&= 
+\inv{i\hbar} \expectation{ \antisymmetric{ \Br \cdot \Bp }{H} } \\
+&= 
+-\expectation{ \antisymmetric{ \Br \cdot \spacegrad }{\frac{\Bp^2}{2m}} } 
+-\expectation{ \antisymmetric{ \Br \cdot \spacegrad }{V(\Br)} }.
+\end{align*}
+
+The exersize now becomes one of evaluating the remaining commutators.  For the Laplacian commutator we have
+
+\begin{align*}
+\antisymmetric{ \Br \cdot \spacegrad }{\spacegrad^2} \psi
+&=
+x_m \partial_m \partial_n \partial_n \psi 
+- \partial_n \partial_n x_m \partial_m \psi \\
+&=
+x_m \partial_m \partial_n \partial_n \psi 
+- \partial_n \partial_n \psi 
+- \partial_n x_m \partial_n \partial_m \psi \\
+&=
+x_m \partial_m \partial_n \partial_n \psi 
+- \partial_n \partial_n \psi 
+- \partial_n \partial_n \psi 
+- x_m \partial_n \partial_n \partial_m \psi \\
+&=
+- 2 \spacegrad^2 \psi
+\end{align*}
+
+For the potential commutator we have
+
+\begin{align*}
+\antisymmetric{ \Br \cdot \spacegrad }{V(\Br)} \psi
+&=
+x_m \partial_m V \psi 
+-V x_m \partial_m \psi  \\
+&=
+x_m (\partial_m V) \psi 
+x_m V \partial_m \psi 
+-V x_m \partial_m \psi  \\
+&=
+\Bigl( \Br \cdot (\spacegrad V) \Bigr) \psi
+\end{align*}
+
+Putting all the $\hbar$ factors back in, we get
+
+\begin{align}\label{eqn:desaiCh3:104}
+2 \expectation{ \frac{\Bp^2}{2m} } = \expectation{ \Br \cdot (\spacegrad V) },
+\end{align}
+
+which is the desired result.
+
+Followup: why assume $\expectation{\Br \cdot \Bp}$ is independent of time?
+
+%\href{http://www.caelestis.de/dateien/UEA05_2.pdf}{http://www.caelestis.de/dateien/UEA05_2.pdf} (ie: we need the Hamiltonian commutator).
+
+
+\subsection{Problem 2. Application of virial theorem.}
+
+Calculate $\expectation{T}$ with $V = \lambda \ln(r/a)$.
+
+\begin{align*}
+\Br \cdot \spacegrad V 
+&= r \rcap \cdot \rcap \lambda \PD{r}{\ln(r/a)} \\
+&= \lambda r \inv{a} \frac{a}{r} \\
+&= \lambda  \\
+\implies \\
+\expectation{T} &= \lambda/2
+\end{align*}
+
+\subsection{Problem 3. Heisenberg Position operator representation.}
+
+\subsubsection{Part I.}
+Express $x$ as an operator $x_H$ for $H = \Bp^2/2m$.
+
+With 
+
+\begin{align*}
+\bra{\psi} x \ket{\psi} = \bra{\psi_0} U^\dagger x U \ket{\psi_0}
+\end{align*}
+
+We want to expand 
+\begin{align*}
+x_H 
+&= U^\dagger x U \\
+&= e^{i H t/\hbar} x e^{-iH t/\hbar} \\
+&= \sum_{k,l = 0}^\infty \inv{k!} \inv{l!} 
+\left(\frac{i H t}{\hbar}\right)^k 
+x 
+\left(\frac{-i H t}{\hbar}\right)^l .
+\end{align*}
+
+We to evaluate $H^k x H^l$ to procede.  Using $p^n x = -i \hbar n p^{n-1} + x p^n$, we have
+
+\begin{align*}
+H^k x 
+&= \inv{(2m)^k} p^2k x \\
+&= \inv{(2m)^k} \left( -i \hbar (2k) p^{2k -1} + x p^2k \right) \\
+&= x H^k + \inv{2m} (-i \hbar) (2k) p p^{2(k-1)}/(2m)^{k-1} \\
+&= x H^k - \frac{i \hbar k}{m} p H^{k-1}.
+\end{align*}
+
+This gives us
+\begin{align*}
+x_H 
+&= x - \frac{i \hbar p }{m} \sum_{k,l=0}^\infty \frac{k}{k!} \inv{l!}
+\left(\frac{i t}{\hbar}\right)^k H^{k-1 + l}
+\left(\frac{-i t}{\hbar}\right)^l  \\
+&= x - \frac{i \hbar p i t }{m \hbar} 
+\end{align*}
+
+Or
+\begin{align}\label{eqn:desaiCh3:303}
+x_H 
+&= x + \frac{p t }{m} 
+\end{align}
+
+
+\subsubsection{Part II.}
+Express $x$ as an operator $x_H$ for $H = \Bp^2/2m + V$ with $V = \lambda x^m$.
+
+In retrospect, for the first part of this problem, it would have been better to use the series expansion for this exponential sandwich
+
+Or, in explicit form
+\begin{align}\label{eqn:desaiCh3:304}
+e^A B e^{-A}
+&=
+B 
++ \inv{1!} \antisymmetric{A}{B}
++ \inv{2!} 
+\antisymmetric{A}{\antisymmetric{A}{B}}
++ \cdots
+\end{align}
+
+Doing so, we'd find for the first commutator
+
+\begin{align}\label{eqn:desaiCh3:305}
+\frac{i t}{2m \hbar} \antisymmetric{\Bp^2}{x} = \frac{t p}{m},
+\end{align}
+
+so that the series has only the first two terms, and we'd obtain the same result.  That seems like a logical approach to try here too.  For the first commutator, we get the same $tp/m$ result since $\antisymmetric{V,x} = 0$.
+
+Employing 
+\begin{align}\label{eqn:desaiCh3:306}
+x^n p = i \hbar n x^{n-1} + p x^n,
+\end{align}
+
+I find 
+
+\begin{align*}
+\left( \frac{i t}{\hbar} \right)^2 \antisymmetric{H}{\antisymmetric{H}{x}} 
+&= \frac{i \lambda t^2}{\hbar m } \antisymmetric{x^n}{p}  \\
+&= - \frac{n t^2 \lambda}{m} x^{n-1} \\
+&= - \frac{n t^2 V}{m x} \\
+\end{align*}
+
+The triple commutator gets no prettier, and I get
+
+\begin{align*}
+\left( \frac{i t}{\hbar} \right)^3 \antisymmetric{H}{\antisymmetric{H}{\antisymmetric{H}{x}}}
+&= 
+\frac{it}{\hbar} \antisymmetric{ \frac{\Bp^2}{2m} + \lambda x^n}{ - \frac{n t^2 V}{m x} } \\
+&= 
+-\frac{it}{\hbar} \frac{n t^2 }{m } \frac{\lambda}{2m} \antisymmetric{\Bp^2}{ x^{n-1}} \\
+&= \cdots \\
+&= \frac{n(n-1)t^3 V}{ 2 m^2 x^3 } (i \hbar n + 2 p x).
+\end{align*}
+
+Putting all the pieces together this gives
+
+\begin{align}\label{eqn:desaiCh3:307}
+x_H =
+e^{iH t/\hbar} x e^{-iH t/\hbar}  &= 
+x + \frac{tp}{m} - \frac{n t^2 V}{ 2 m x} 
++ \frac{n(n-1)t^3 V}{ 12 m^2 x^3 } (i \hbar n + 2 p x) + \cdots
+\end{align}
+
+If there is a closed form for this it isn't obvious to me, and that's as far as I'll take this problem.
+
+\subsection{Problem 4. Feynman-Hellman relation.}
 
 For continuously parameterized eigenstate, eigenvalue and Hamiltonian $\ket{\psi(\lambda)}$, $E(\lambda)$ and $H(\lambda)$ respectively, we can relate the derivatives
 
@@ -44,19 +251,19 @@ Left multiplication by $\bra{\psi}$ gives
 \end{align*}
 
 which provides the desired identity
-\begin{align}\label{eqn:desaiCh3:1}
+\begin{align}\label{eqn:desaiCh3:4}
 \PD{\lambda}{E} 
 = \bra{\psi(\lambda)}\PD{\lambda}{H} \ket{\psi(\lambda)}
 %= \expectation{ \psi(\lambda) \PD{\lambda}{H} \psi(\lambda) }
 \end{align}
 
-\subsection{5. }
-\subsection{6. }
-\subsection{7. }
-\subsection{8. }
-\subsection{9. }
-\subsection{10. }
-\subsection{11. commutator of angular momentum with Hamiltonian.}
+\subsection{Problem 5. }
+\subsection{Problem 6. }
+\subsection{Problem 7. }
+\subsection{Problem 8. }
+\subsection{Problem 9. }
+\subsection{Problem 10. }
+\subsection{Problem 11. commutator of angular momentum with Hamiltonian.}
 
 Show that $\antisymmetric{\BL}{H} = 0$, where $H = \Bp^2/2m + V(r)$.
 
