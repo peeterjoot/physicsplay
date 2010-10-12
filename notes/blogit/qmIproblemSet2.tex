@@ -1,6 +1,9 @@
 \documentclass[]{eliblog}
 
+\usepackage{color}
+
 \input{../peeters_macros.tex}
+
 
 \author{Peeter Joot}
 \email{peeter.joot@utoronto.ca, 920798560}
@@ -15,12 +18,109 @@
 %\revisionInfo{qmIproblemSet1.tex}
 
 \beginArtNoToc
-
 \section{Problem 1.}
 
 A particle of mass $m$ is free to move along the x-direction such that $V(X)=0$. Express the time evolution operator $U(t,t_0)$ defined by Eq. (2.166) using the momentum eigenstates $\ket{p}$ with delta-function normalization. Find $\bra{x} U(t,t0) \ket{x'}$,  where $\ket{x}$ and $\ket{x'}$ are position eigenstates.  What is the physical meaning of this expression?
 
 \section{Solution.}
+
+We can expand the time evolution operator in series
+
+\begin{align*}
+U(t,t_0) 
+&= e^{-i H(t-t_0)/\hbar} \\
+&= e^{ -i P^2 (t-t_0)/ 2m \hbar } \\
+&= 1 + \sum_{k=1}^\infty \inv{k!} \left( -i \frac{P^2 (t-t_0)}{2m \hbar} \right)^k.
+\end{align*}
+
+We can now evaluate the momentum matrix element $\bra{p} U(t,t_0) \ket{p'}$, which will essentially require the value of $\bra{p} P^{2k} \ket{p'}$.  That is
+
+\begin{align*}
+\bra{p} P^{2k} \ket{p'}
+&= \bra{p} P^{2k-1} P \ket{p'} \\
+&= \bra{p} P^{2k-1} \ket{p'} p' \\
+&= \cdots \\
+&= \braket{p}{p'} (p')^{2k}.
+\end{align*}
+
+The momentum matrix element is therefore reduced to
+
+\begin{align}\label{eqn:qmIproblemSet2:1}
+\bra{p} U(t,t_0) \ket{p'}
+&=
+\braket{p}{p'} \exp\left( -i \frac{p^2 (t-t_0)}{2m \hbar} \right)
+= \delta(p-p') \exp\left( -i \frac{p^2 (t-t_0)}{2m \hbar} \right)
+\end{align}
+
+For the position matrix element we have a similar sum
+\begin{align*}
+\bra{x} U(t,t_0) \ket{x'} 
+&= 
+\braket{x}{x'} 
++ \sum_{k=1}^\infty \inv{k!} \bra{x} \left( -i \frac{P^2 (t-t_0)}{2m \hbar} \right)^k \ket{x'},
+\end{align*}
+
+and require $\bra{x} P^{2k} \ket{x'}$ to continue.  That is
+
+\begin{align*}
+\bra{x} P^{2k} \ket{x'}
+&=
+\int dx''\bra{x} P^{2k-1} \ket{x''}\bra{x''} P \ket{x'} \\
+&=
+\int dx''\bra{x} P^{2k-1} \ket{x''} \delta(x''-x') (-i\hbar) \frac{d}{dx'} \\
+&=
+\bra{x} P^{2k-1} \ket{x'} (-i\hbar) \frac{d}{dx'} \\
+&= \cdots \\
+&= \braket{x}{x'} \left( (-i\hbar) \frac{d}{dx'} \right)^{2k}
+\end{align*}
+
+Our position matrix element is therefore the differential operator
+
+\begin{align}\label{eqn:qmIproblemSet2:10}
+\bra{x} U(t,t_0) \ket{x'} 
+&=
+\braket{x}{x'} \left( \frac{i (t-t_0)\hbar}{2m} \frac{d^2}{d{x'}^2} \right)
+=\delta(x-x') \left( \frac{i (t-t_0)\hbar}{2m} \frac{d^2}{d{x'}^2} \right)
+\end{align}
+
+Finally, we need to determine the physical meaning of such a matrix element operator.  
+
+With the delta function that this matrix element operator includes it really only takes on a meaning with a convolution integral.  One such integral would be
+
+\begin{align*}
+\int dx' \bra{x} U \ket{x'} \braket{x'}{\phi_0} 
+&=
+\bra{x} U \ket{\phi_0} \\
+&=
+\braket{x}{\phi(t)} \\
+&=
+\phi(x,t)
+\end{align*}
+
+Consider two additional contexts where this matrix element arises.  We can find this matrix element by expanding a normalized inner product for the time evolved state
+\begin{align*}
+1 
+&= \braket{\phi(t)}{\phi(t)} \\
+&= \bra{\phi(t)} U \ket{\phi_0} \\
+&= \iint dx dx' \bra{\phi(t)} \ket{x} \bra{x} U \ket{x'}\bra{x'} \ket{\phi_0} \\
+&= \iint dx dx' \phi^\conj(x,t) \bra{x} U \ket{x'} \phi(x,0).
+\end{align*}
+
+Here we see the matrix element as an operator weighting factor in the probability density relating the initial and final time states, but also relating two positions.  
+
+This matrix element also arises in the expectation value of the time evolution operator with respect to the initial time state.  That is
+
+\begin{align*}
+\expectation{U} 
+&= \bra{\phi_0} U \ket{\phi_0} \\
+&= \braket{\phi_0}{\phi} = \int dx \phi^\conj(x,0) \phi(x,t) \\
+&= \iint dx dx' \bra{\phi_0} \ket{x} \bra{x} U \ket{x'}\bra{x'} \ket{\phi_0} \\
+&= \iint dx dx' \phi^\conj(x,0) \bra{x} U \ket{x'} \phi(x,0)
+\end{align*}
+
+Again we have something akin to a probability density or weighting factor relating the initial and final time states.
+
+Based on this, I would be inclined to state that the position matrix element of the time evolution operator $\bra{x} U \ket{x'}$ represents something akin to an operator form of probability amplitude for a particle to travel between two points.
 
 %\EndArticle
 \EndNoBibArticle
