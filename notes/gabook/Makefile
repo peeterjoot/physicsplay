@@ -49,4 +49,4 @@ cronology.tex : METADATA
 	./METADATA -gabook > cronology.tex
 
 clean ::
-	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc *.brf
+	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc *.brf $(LOCAL_FILES)

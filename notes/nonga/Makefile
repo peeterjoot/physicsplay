@@ -19,7 +19,7 @@ $(LOCAL_FILES) :
 cronology.tex : ../gabook/METADATA
 	../gabook/METADATA -miscbook > cronology.tex
 
-miscphysics.pdf :: $(TEXFILES)
+miscphysics.pdf :: $(TEXFILES) $(LOCAL_FILES)
 	../make_pdflatex main.tex
 	mv main.pdf miscphysics.pdf
 
@@ -27,4 +27,4 @@ miscphysics.pdf :: $(TEXFILES)
 #	../make_pdflatex $<
 
 clean ::
-	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc
+	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc $(LOCAL_FILES)

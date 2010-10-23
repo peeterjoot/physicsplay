@@ -1,8 +1,8 @@
 include make.dep
 
 ORIG_FILES += ../myrefs.bib
-ORIG_FILES += ../blogit/gridSummation.png
-ORIG_FILES += ../blogit/hoopSpring.png
+ORIG_FILES += ../nonga/gridSummation.png
+ORIG_FILES += ../nonga/hoopSpring.png
 ORIG_FILES += ../gabook/parallelogramArea.png
 ORIG_FILES += ../calculus/parameterizedSurface.png
 ORIG_FILES += ../calculus/polarAndSpherical.png
@@ -27,4 +27,4 @@ cronology.tex : ../gabook/METADATA
 #	../make_pdflatex $<
 
 clean ::
-	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc
+	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc $(LOCAL_FILES)
