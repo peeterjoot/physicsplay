@@ -1,6 +1,20 @@
+include make.dep
+
+ORIG_FILES += ../gabook/pendulumDouble.png
+ORIG_FILES += ../myrefs.bib
+ORIG_FILES += ../abbrvurl.bst
+ORIG_FILES += ../alphaurl.bst
+ORIG_FILES += ../plainurl.bst
+ORIG_FILES += ../unsrturl.bst
+
+LOCAL_FILES := $(notdir $(ORIG_FILES))
+
 all : miscphysics.pdf
 
-include make.dep
+local : $(LOCAL_FILES) 
+
+$(LOCAL_FILES) :
+	cp $(filter %$@, $(ORIG_FILES)) $@
 
 cronology.tex : ../gabook/METADATA
 	../gabook/METADATA -miscbook > cronology.tex
