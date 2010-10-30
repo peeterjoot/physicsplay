@@ -23,14 +23,16 @@
 A particle of mass $m$ is free to move along the x-direction such that $V(X)=0$. The state of the system is represented by the wavefunction Eq. (4.74)
 
 \begin{align}\label{eqn:qmIproblemSet3:1}
-\psi(x,t) = \int_{-\infty}^\infty dk e^{i k x} e^{- i \omega t} f(k)
+\psi(x,t) = \inv{\sqrt{2\pi}} \int_{-\infty}^\infty dk e^{i k x} e^{- i \omega t} f(k)
 \end{align}
 
-with $f(k)$ given by Eq. (4.59). 
+with $f(k)$ given by Eq. (4.59).
 
 \begin{align}\label{eqn:qmIproblemSet3:2}
 f(k) &= N e^{-\alpha k^2}
 \end{align}
+
+Note that I've inserted a $1/\sqrt{2\pi}$ factor above that isn't in the text, because otherwise $\psi(x,t)$ will not be unit normalized (assuming $f(k)$ is normalized in wavenumber space).
 
 \begin{itemize}
 \item 
@@ -51,25 +53,25 @@ To calculate the group velocity we need to know the dependence of $\omega$ on $k
 Let's step back and consider the time evolution action on $\psi(x,0)$.  For the free particle case we have
 
 \begin{align}\label{eqn:qmIproblemSet3:101}
-H = \frac{\Bp^2}{2m} = -\frac{\hbar^2}{2m} \partial_{xx}
+H = \frac{\Bp^2}{2m} = -\frac{\hbar^2}{2m} \partial_{xx}.
 \end{align}
 
-so
+Writing $N' = N/\sqrt{2\pi}$ we have
 
 \begin{align*}
 -\frac{i t}{\hbar} H \psi(x,0) 
 &= 
 \frac{i t \hbar }{2m} 
-N \int_{-\infty}^\infty dk (i k)^2 e^{i k x - \alpha k^2} \\
+N' \int_{-\infty}^\infty dk (i k)^2 e^{i k x - \alpha k^2} \\
 &= 
-N \int_{-\infty}^\infty dk \frac{-i t \hbar k^2}{2m} e^{i k x - \alpha k^2}
+N' \int_{-\infty}^\infty dk \frac{-i t \hbar k^2}{2m} e^{i k x - \alpha k^2}
 \end{align*}
 
 Each successive application of $-iHt/\hbar$ will introduce another power of $-it\hbar k^2/2 m$, so once we sum all the terms of the exponential series $U(t) = e^{-iHt/\hbar}$ we have
 
 \begin{align}\label{eqn:qmIproblemSet3:102}
 \psi(x,t) =
-N \int_{-\infty}^\infty dk \exp\left( 
+N' \int_{-\infty}^\infty dk \exp\left( 
 \frac{-i t \hbar k^2}{2m} + i k x - \alpha k^2 \right).
 \end{align}
 
@@ -85,16 +87,114 @@ v_g = \PD{k}{\omega(k)} = \frac{\hbar k}{m}.
 
 \subsection{(b). What is the probability for measuring the particle at position $x=x_0>0$ at time $t=t_0>0$? }
 
-\subsection{(c). What is the probability per unit length for measuring the particle at position $x=x_0>0$ at time $t=t_0>0$? }
-\subsection{(d). Explain the physical meaning of the above results.}
-\subsection{scratch notes. }
-We can observe that the normalization does not provide this dependence since we have for time $t=0$
+In order to evaluate the probability, it looks desirable to evaluate the wave function integral \ref{eqn:qmIproblemSet3:102}.  
+Writing $2 \beta = i/(\alpha + i t \hbar/2m )$, the exponent of that integral is
 
-\begin{align}\label{eqn:qmIproblemSet3:100}
-\psi(x,0) = N \int_{-\infty}^\infty dk e^{i k x - \alpha k^2},
+\begin{align*}
+-k^2 \left( \alpha + \frac{i t \hbar }{2m} \right) + i k x
+&=
+-\left( \alpha + \frac{i t \hbar }{2m} \right) \left( k^2 - \frac{i k x }{\alpha + \frac{i t \hbar }{2m} } \right) \\
+&=
+-\frac{i}{2\beta} \left( (k - x \beta )^2 - x^2 \beta^2 \right)
+\end{align*}
+
+The $x^2$ portion of the exponential
+
+\begin{align*}
+\frac{i x^2 \beta^2}{2\beta} = \frac{i x^2 \beta}{2} = - \frac{x^2 }{4 (\alpha + i t \hbar /2m)}
+\end{align*}
+
+then comes out of the integral.  We can also make a change of variables $q = k + x \beta$ to evaluate the remainder of the Gaussian and are left with
+
+\begin{align}\label{eqn:qmIproblemSet3:107}
+\psi(x,t) =
+N' \sqrt{ \frac{\pi}{\alpha + i t \hbar/2m} } \exp\left( - \frac{x^2 }{4 (\alpha + i t \hbar /2m)} \right).
 \end{align}
 
-and from this find $N = (\pi/2 \alpha)^{1/4}$.
+Observe that from \ref{eqn:qmIproblemSet3:2} we can compute $N = (2 \alpha/\pi)^{1/4}$, which could be substituted back into \ref{eqn:qmIproblemSet3:107} if desired.
+
+Our probability density is 
+
+\begin{align*}
+\Abs{ \psi(x,t) }^2 
+&=
+\inv{2 \pi} N^2 \Abs{ \frac{\pi}{\alpha + i t \hbar/2m} } \exp\left( - \frac{x^2}{4} \left( 
+\inv{(\alpha + i t \hbar /2m)} + \inv{(\alpha - i t \hbar /2m)} 
+\right) \right) \\
+&=
+\inv{2 \pi} \sqrt{\frac{2 \alpha}{\pi} } \frac{\pi}{\sqrt{\alpha^2 + (t \hbar/2m)^2 }} \exp\left( - \frac{x^2}{4} 
+\inv{\alpha^2 + (t \hbar/2m)^2 } \left( 
+\alpha - i t \hbar /2m + \alpha + i t \hbar /2m 
+\right)
+\right) \\
+&=
+\end{align*}
+
+With a final regrouping of terms, this is
+
+\begin{align}\label{eqn:qmIproblemSet3:110}
+\Abs{ \psi(x,t) }^2 =
+\sqrt{\frac{ \alpha }{ 2 \pi (\alpha^2 + (t \hbar/2m)^2 }) }
+\exp\left( - \frac{x^2}{2} 
+\frac{\alpha}{\alpha^2 + (t \hbar/2m)^2 } 
+\right).
+\end{align}
+
+As a sanity check we observe that this integrates to unity for all $t$ as desired.  The probability that we find the particle at position $x > x_0$ is then
+
+\begin{align}\label{eqn:qmIproblemSet3:111}
+P_{x>x_0}(t) = \sqrt{\frac{ \alpha }{ 2 \pi (\alpha^2 + (t \hbar/2m)^2 }) }
+\int_{x=x_0}^\infty dx \exp\left( - \frac{x^2}{2} 
+\frac{\alpha}{\alpha^2 + (t \hbar/2m)^2 } 
+\right)
+\end{align}
+
+The only simplification we can make is to rewrite this in terms of the complementary error function
+
+\begin{align}\label{eqn:qmIproblemSet3:112}
+\erfc(x) = \frac{2}{\sqrt{\pi}} \int_x^\infty e^{-t^2} dt.
+\end{align}
+
+Writing
+
+\begin{align}\label{eqn:qmIproblemSet3:113}
+\beta(t) = \frac{\alpha}{\alpha^2 + (t \hbar/2m)^2 },
+\end{align}
+
+we have
+\begin{align}\label{eqn:qmIproblemSet3:114}
+P_{x>x_0}(t_0) = \inv{2} \erfc \left( \sqrt{\beta(t_0)/2} x_0 \right)
+\end{align}
+
+Sanity checking this result, we note that since $\erfc(0) = 1$ the probability for finding the particle in the $x>0$ range is $1/2$ as expected.
+
+
+\subsection{(c). What is the probability per unit length for measuring the particle at position $x=x_0>0$ at time $t=t_0>0$? }
+
+This unit length probability is thus
+
+\begin{align}\label{eqn:qmIproblemSet3:115}
+P_{x>x_0+1/2}(t_0) - P_{x>x_0-1/2}(t_0) 
+&=
+\inv{2} \erfc\left( \sqrt{\frac{\beta(t_0)}{2}} \left(x_0+\inv{2} \right) \right) 
+-\inv{2} \erfc\left( \sqrt{\frac{\beta(t_0)}{2}} \left(x_0-\inv{2} \right) \right) 
+\end{align}
+
+\subsection{(d). Explain the physical meaning of the above results.}
+
+To get an idea what the group velocity means, observe that we can write our wavefunction \ref{eqn:qmIproblemSet3:1} as
+
+\begin{align}\label{eqn:qmIproblemSet3:140}
+\psi(x,t) = \inv{\sqrt{2\pi}} \int_{-\infty}^\infty dk e^{i k (x - v_g t)} f(k)
+\end{align}
+
+We see that the phase coefficient of the Gaussian $f(k)$ ``moves'' at the rate of the group velocity $v_g$.  Also recall that in the text it is noted that the time dependent term \ref{eqn:qmIproblemSet3:113} can be expressed in terms of position and momentum uncertainties $(\Delta x)^2$, and $(\Delta p)^2 = \hbar^2 (\Delta k)^2$.  That is
+
+\begin{align}\label{eqn:qmIproblemSet3:116}
+\inv{\beta(t)} = (\Delta x)^2 + \frac{(\Delta p)^2}{m^2} t^2 \equiv (\Delta x(t))^2
+\end{align}
+
+This makes it evident that the probability density flattens and spreads over time with the rate equal to the uncertainty of the group velocity $\Delta p/m = \Delta v_g$ (since $v_g = \hbar k/m$).  It is interesting that something as simple as this phase change results in a physically measurable phenomena.  We see that a direct result of this linear with time phase change, we are less able to find the particle localized around it's original time $x = 0$ position as more time elapses.
 
 \section{Problem 2.}
 
