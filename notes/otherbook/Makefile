@@ -13,6 +13,8 @@ LOCAL_FILES := $(notdir $(ORIG_FILES))
 
 all : otherbook.pdf
 
+local : $(LOCAL_FILES) 
+
 $(LOCAL_FILES) : 
 	cp $(filter %$@, $(ORIG_FILES)) $@
 

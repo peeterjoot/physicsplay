@@ -11,12 +11,18 @@ ORIG_FILES += ../plainurl.bst
 ORIG_FILES += ../unsrturl.bst
 #ORIG_FILES += ../gabook/ftMaxVacuum.tex
 
+# for gaBasics:
+ORIG_FILES += ../otherbook/triangleLaw.png
+ORIG_FILES += ../otherbook/rotateMinusOne.png
+
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
 all :: $(LOCAL_FILES) $(PDFS)
 #all :: ftMaxVacuum.pdf
 
 $(PDFS) : $(LOCAL_FILES)
+
+local : $(LOCAL_FILES)
 
 $(LOCAL_FILES) : 
 	cp $(filter %$@, $(ORIG_FILES)) $@
