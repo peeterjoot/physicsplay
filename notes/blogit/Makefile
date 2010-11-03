@@ -14,6 +14,7 @@ ORIG_FILES += ../unsrturl.bst
 # for gaBasics:
 ORIG_FILES += ../otherbook/triangleLaw.png
 ORIG_FILES += ../otherbook/rotateMinusOne.png
+ORIG_FILES += ../gabook/parallelogramArea.png
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
