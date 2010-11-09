@@ -152,7 +152,7 @@ sub processOneEquation
       {
          $equations{$label} = $g_EquationSeqNo++ ;
       }
-      else
+      elsif (!$wiki)
       {
          die "no equation number for '$label'\n" if ( !exists $equations{$label} ) ;
          #$curEquationLabel = "\\quad\\quad\\quad($equations{$label})" ;
@@ -492,14 +492,21 @@ sub processRest
       s/\\ref{(eqn:.*?)}/$equations{$1}/g ;
       s/\\autoref{(eqn:.*?)}/($equations{$1})/g ;
 
+      if ( $wiki )
+      {
+         s,\\section{(.*)},==$1==,;
+         s,\\subsection{(.*)},===$1===,;
+         s,\\subsubsection{(.*)},===$1===,;
+      }
+      else
+      {
 # latexMathMl can do section's but this makes the equation number matching harder (since you get 1.1 1.2 ...)
 # could deal with that by processing things section by section, and then within each section doing all the equations. 
-#      if ( !$mathml )
-#      {
+
          s,\\section{(.*)},<h1>$1</h1>,;
          s,\\subsection{(.*)},<h2>$1</h2>,;
          s,\\subsubsection{(.*)},<h3>$1</h3>,;
-#      }
+      }
 
       s,\\href{(.*?)}{(.*?)},<a href="$1">$2</a>,g ;
 
