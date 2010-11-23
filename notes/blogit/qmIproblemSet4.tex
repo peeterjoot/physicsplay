@@ -222,24 +222,209 @@ For the hydrogen atom, determine $\bra{nlm}(1/R)\ket{nlm}$ and $1/\bra{nlm}R\ket
 
 \subsection{Solution}
 
-\section{Suggested non-submission problem 1.}
-\subsection{Statement}
-In Section 8.1.1, why are boundary conditions imposed on $u(x)$ at $x=\pm a$? 
-\subsection{Solution}
+Both of the computation tasks for the hydrogen like atom require expansion of a braket of the following form
 
-\section{Suggested non-submission problem 2.}
-\subsection{Statement}
+\begin{equation}\label{eqn:qmIproblemSet4:200}
+\bra{nlm} A(R) \ket{nlm},
+\end{equation}
 
-In Section 8.1.2, what is the probability current density for $u(x)$. Does this make physical sense? 
+where $A(R) = R = (X^2 + Y^2 + Z^2)^{1/2}$ or $A(R) = 1/R$.
 
-\subsection{Solution}
+The spherical representation of the identity resolution is required to convert this braket into integral form
 
-\section{Suggested non-submission problem 3.}
-\subsection{Statement}
+\begin{equation}\label{eqn:qmIproblemSet4:202}
+\BOne = \int r^2 \sin\theta dr d\theta d\phi 
+\ket{ r \theta \phi}
+\bra{ r \theta \phi},
+\end{equation}
 
-Why are the states described in Sections 8.6.1 and 8.8 degenerate?
+where the spherical wave function is given by the braket $\braket{ r \theta \phi}{nlm} = R_{nl}(r) Y_{lm}(\theta,\phi)$.
 
-\subsection{Solution}
+Additionally, the radial form of the delta function will be required, which is
+\begin{equation}\label{eqn:qmIproblemSet4:204}
+\delta(\Bx - \Bx') = \inv{r^2 \sin\theta} \delta(r - r') \delta(\theta - \theta') \delta(\phi - \phi')
+\end{equation}
+
+Two applications of the identity operator to the braket yield
+\begin{align*}
+&\bra{nlm} A(R) \ket{nlm} \\
+&=\bra{nlm} \BOne A(R) \BOne \ket{nlm} \\
+&=
+\int 
+dr d\theta d\phi 
+dr' d\theta' d\phi'
+r^2 \sin\theta 
+{r'}^2 \sin\theta' 
+\braket{nlm}{ r \theta \phi}
+\bra{ r \theta \phi} A(R) 
+\ket{ r' \theta' \phi'}
+\braket{ r' \theta' \phi'}{nlm} \\
+&=
+\int 
+dr d\theta d\phi 
+dr' d\theta' d\phi'
+r^2 \sin\theta 
+{r'}^2 \sin\theta' 
+R_{lm}(r) Y_{lm}^\conj(\theta, \phi)
+\bra{ r \theta \phi} A(R) \ket{ r' \theta' \phi'}
+R_{lm}(r') Y_{lm}(\theta', \phi') \\
+\end{align*}
+
+To continue an assumption about the matrix element $\bra{ r \theta \phi} A(R) \ket{ r' \theta' \phi'}$ is required.  It seems reasonable that this would be
+
+\begin{equation}\label{eqn:qmIproblemSet4:206}
+\bra{ r \theta \phi} A(R) \ket{ r' \theta' \phi'} = \\
+\delta(\Bx - \Bx') A(r) = \inv{r^2 \sin\theta} \delta(r-r') \delta(\theta -\theta')\delta(\phi-\phi') A(r).
+\end{equation}
+
+The braket can now be written completely in integral form as
+\begin{align*}
+&\bra{nlm} A(R) \ket{nlm} \\
+&=
+\int 
+dr d\theta d\phi 
+dr' d\theta' d\phi'
+r^2 \sin\theta 
+{r'}^2 \sin\theta' 
+R_{lm}(r) Y_{lm}^\conj(\theta, \phi)
+\inv{r^2 \sin\theta} \delta(r-r') \delta(\theta -\theta')\delta(\phi-\phi') A(r)
+R_{lm}(r') Y_{lm}(\theta', \phi') \\
+&=
+\int 
+dr d\theta d\phi 
+{r'}^2 \sin\theta' dr' d\theta' d\phi'
+R_{lm}(r) Y_{lm}^\conj(\theta, \phi)
+\delta(r-r') \delta(\theta -\theta')\delta(\phi-\phi') A(r)
+R_{lm}(r') Y_{lm}(\theta', \phi') \\
+\end{align*}
+
+Application of the delta functions then reduces the integral, since the only $\theta$, and $\phi$ dependence is in the (orthonormal) $Y_{lm}$ terms they are found to drop out
+
+\begin{align*}
+\bra{nlm} A(R) \ket{nlm}
+&=
+\int 
+dr d\theta d\phi 
+r^2 \sin\theta 
+R_{lm}(r) Y_{lm}^\conj(\theta, \phi)
+A(r)
+R_{lm}(r) Y_{lm}(\theta, \phi) \\
+&=
+\int 
+dr 
+r^2 
+R_{lm}(r) 
+A(r)
+R_{lm}(r) 
+\underbrace{\int
+\sin\theta d\theta d\phi 
+Y_{lm}^\conj(\theta, \phi)
+Y_{lm}(\theta, \phi) }_{=1}
+\\
+\end{align*}
+
+This leaves just the radial wave functions in the integral
+\begin{equation}\label{eqn:qmIproblemSet4:208}
+\bra{nlm} A(R) \ket{nlm}
+=
+\int 
+dr 
+r^2 
+R_{lm}^2(r) 
+A(r)
+\end{equation}
+
+As a consistency check, observe that with $A(r) = 1$, this integral evaluates to 1 according to equation (8.274) in the text, so we can think of $(r R_{lm}(r))^2$ as the radial probability density for functions of $r$.
+
+The problem asks specifically for these expectation values for the $\ket{211}$ state.  For that state the radial wavefunction is found in (8.277) as
+
+\begin{equation}\label{eqn:qmIproblemSet4:210}
+R_{21}(r) = 
+\left(\frac{Z}{2a_0}\right)^{3/2} \frac{ Z r }{a_0 \sqrt{3}} e^{-Z r/2 a_0}
+\end{equation}
+
+The braket can now be written explicitly 
+\begin{equation}\label{eqn:qmIproblemSet4:212}
+\bra{nlm} A(R) \ket{nlm}
+=
+%\left(\frac{Z}{2a_0}\right)^{3} \frac{ Z^2 }{3 a_0^2 } 
+\inv{24} \left(\frac{ Z }{a_0 } \right)^5
+\int_0^\infty
+dr 
+r^2 
+e^{-Z r/ a_0}
+A(r)
+\end{equation}
+
+Now, let's consider the two functions $A(r)$ separately.  First for $A(r) = r$ we have
+\begin{align*}
+\bra{nlm} A(R) \ket{nlm}
+&=
+\inv{24} \left(\frac{ Z }{a_0 } \right)^5
+\int_0^\infty
+dr 
+r^3 
+e^{-Z r/ a_0} 
+\\
+&=
+\frac{ Z }{ 24 a_0 } 
+\int_0^\infty
+du 
+u^3 
+e^{-u} 
+\\
+\end{align*}
+
+The last integral evaluates to $6$, leaving
+\begin{equation}\label{eqn:qmIproblemSet4:220}
+1/ \bra{nlm} R \ket{nlm}
+=
+\frac{ 4 a_0 }{ Z } = n^2 \frac{a_0}{Z}
+\end{equation}
+
+Performing the same task for $A(R) = 1/R$
+\begin{align*}
+\bra{nlm} 1/R \ket{nlm}
+&=
+\inv{24} \left(\frac{ Z }{a_0 } \right)^5
+\int_0^\infty
+dr 
+r 
+e^{-Z r/ a_0} 
+\\
+&=
+\inv{24} \left( \frac{ Z }{ a_0 } \right)^3
+\int_0^\infty
+du 
+u
+e^{-u}.
+\end{align*}
+
+This last integral has value $1$, and we have the second part of the computational task complete
+\begin{equation}\label{eqn:qmIproblemSet4:225}
+\bra{nlm} 1/R \ket{nlm} = \inv{24} \left( \frac{ Z }{ a_0 } \right)^3
+\end{equation}
+
+The question of whether or not \ref{eqn:qmIproblemSet4:220}, and \ref{eqn:qmIproblemSet4:225} are equal is answered.  HOWEVER, \ref{eqn:qmIproblemSet4:225} does not look dimensionally correct!
+
+%%%\section{Suggested non-submission problem 1.}
+%%%\subsection{Statement}
+%%%In Section 8.1.1, why are boundary conditions imposed on $u(x)$ at $x=\pm a$? 
+%%%\subsection{Solution}
+%%%
+%%%\section{Suggested non-submission problem 2.}
+%%%\subsection{Statement}
+%%%
+%%%In Section 8.1.2, what is the probability current density for $u(x)$. Does this make physical sense? 
+%%%
+%%%\subsection{Solution}
+%%%
+%%%\section{Suggested non-submission problem 3.}
+%%%\subsection{Statement}
+%%%
+%%%Why are the states described in Sections 8.6.1 and 8.8 degenerate?
+%%%
+%%%\subsection{Solution}
 
 %\EndArticle
 \EndNoBibArticle
