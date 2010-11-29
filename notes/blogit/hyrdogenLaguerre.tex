@@ -13,7 +13,7 @@
 
 \section{Motivation.}
 
-For the hyrdogen atom, after some variable substuitions the radial part of the Schr\"{o}dinger equation takes the form
+For the hydrogen atom, after some variable substitutions the radial part of the Schr\"{o}dinger equation takes the form
 
 \begin{equation}\label{eqn:hyrdogenLaguerre:10}
 \frac{d^2 R_l}{d\rho^2} + \frac{2}{\rho} \frac{d R_l}{d\rho} + \left( \frac{\lambda}{\rho} - \frac{l(l+1)}{\rho^2} - \inv{4} \right) R_l = 0
@@ -25,66 +25,113 @@ In \cite{desai2009quantum} it is argued that the functions $R_l$ are of the form
 R_l = \rho^s L(\rho) e^{-\rho/2}
 \end{equation}
 
-where $L$ is a polynomial in $\rho$.  Considering the small $\rho$ limit this is used to argue that $s=l$, but some of the details leading to that are omitted.  Here are some of those missing bits in gory (and simplistic in a mechanical way) detail
+where $L$ is a polynomial in $\rho$, specifically Laguerre polynomials.  Let's look at some of those details a bit more closely.
 
 \section{Guts}
 
-We need the first derivative to start things off
+The first part of the argument comes from considering the $\rho \rightarrow \infty$ case, where Schr\"{o}dinger's equation is approximately
 
-\begin{align*}
-R_l(\rho)'
-&= \left( \rho^s L(\rho) e^{-\rho/2} \right)' \\
-&= \left( s \rho^{s-1} L + \rho^s \left(L' - \inv{2} L\right) \right) e^{-\rho/2} \\
-\end{align*}
-
-\begin{equation}\label{eqn:hyrdogenLaguerre:30}
-R_l(\rho)'  e^{\rho/2}
-= s \rho^{s-1} \left(1 - \frac{\rho}{2}\right)L + \rho^s L'
+\begin{equation}\label{eqn:hyrdogenLaguerre:10a}
+\frac{d^2 R_l}{d\rho^2} - \inv{4} R_l \approx 0.
 \end{equation}
 
-For the second derivative we get
-\begin{align*}
-R_l(\rho)''
-&= \left( \left( s \rho^{s-1} L + \rho^s \left(L' - \inv{2} L\right) \right) e^{-\rho/2}  \right)' \\
-&=
-s
-\left( (s-1) \rho^{s-2} L + \rho^s \left(L' - \inv{2} L\right) \right) e^{-\rho/2} \\
-&\quad+\left( s \rho^{s-1} L' + \rho^s \left(L'' - \inv{2} L'\right) \right) e^{-\rho/2} \\
-&\quad-\inv{2}\left( s \rho^{s-1} L + \rho^s \left(L' - \inv{2} L\right) \right) e^{-\rho/2} \\
-\end{align*}
+This large $\rho$ approximation has solutions $e^{\pm \rho/2}$, and we take the negative sign case as physically meaningful in order for the wave function to be normalizable.
 
-Or
-\begin{equation}\label{eqn:hyrdogenLaguerre:40}
-R_l(\rho)'' e^{\rho/2}
-=
-\rho^s \left( L'' + L' (s - 1 ) + L (-s/2 + 1/4) \right)
-+ \inv{2} s \rho^{s-1} L'
-+ s(s-1) \rho^{s-2} L
+Next it is argued that polynomial multiples of this will also be approximate solutions.  Utilizing monomial multiple of the decreasing exponential as a trial solution, let's compute how this fits into the radial Schr\"{o}dinger's equation \ref{eqn:hyrdogenLaguerre:10} above.  Write
+
+\begin{equation}\label{eqn:hyrdogenLaguerre:15}
+R_l = \rho^s e^{-\rho/2}
 \end{equation}
 
-Putting these together and substuition back into \ref{eqn:hyrdogenLaguerre:10} yields
+The derivatives are
 
 \begin{align*}
-0 &= \rho^s \left( L'' + L' (s - 1 ) + L (-s/2 + 1/4) \right)
-+ \inv{2} s \rho^{s-1} L'
-+ s(s-1) \rho^{s-2} L \\
-&\quad+ s \rho^{s-2} \left(2 - \rho\right)L + 2 \rho^{s-1} L'  \\
-&\quad+\left( \lambda\rho^{s-1} - l(l+1) \rho^{s-2} - \frac{\rho^s}{4} \right) L
+R_l' &= \rho^{s-1} \left( s -\frac{\rho}{2}\right) e^{-\rho/2} \\
+R_l'' &= 
+\rho^{s-2} 
+\left( s (s-1) -s \rho +\frac{1}{4} \rho^2 
+\right)
+e^{-\rho/2}
 \end{align*}
 
-Now for the $\rho \rightarrow 0$ approximation where the $\rho^{s-2}$ terms dominate we have
+and substitution yields
+%\rho^{s-2} 
+%e^{-\rho/2}
+%\left( 
+%s (s-1) 
+%-s \rho 
+%+\frac{1}{4} \rho^2 
+%+2s 
+%-\rho 
+%+\lambda \rho 
+%- l(l+1) 
+%- \frac{\rho^2}{4} 
+%\right)
+%&=
+\begin{equation}\label{eqn:hyrdogenLaguerre:16}
+\rho^{s-2} 
+e^{-\rho/2}
+\left( 
+(s - \rho) (s+1) 
++\lambda \rho 
+- l(l+1) 
+\right)
+\end{equation}
+
+There are two things that this can show.  The first is that for $\rho \rightarrow \infty$ this produces a polynomial with degree $s-2$ and $s-1$ terms multiplied by the exponential, and we have approximately
+
+\begin{equation}\label{eqn:hyrdogenLaguerre:17}
+\rho^{s-1} 
+e^{-\rho/2}
+(\lambda - s - 1)
+\end{equation}
+
+The $s-1$ terms will dominate the polynomial, but the exponential dominate all, approaching zero for $\rho \rightarrow \infty$, just as the non-polynomial multiplied $e^{-\rho/2}$ approximate solution will.  This confirms that in the limit this polynomial multiplied exponential still has the desired behavior in the large $\rho$ limit.  Also observe that in the limit of small $\rho$ we have approximately
+
+\begin{equation}\label{eqn:hyrdogenLaguerre:18}
+\rho^{s-2} 
+e^{-\rho/2}
+\left( 
+s (s+1) - l(l+1) 
+\right)
+\end{equation}
+
+Since $\rho^{s-2} \rightarrow \infty$ as $\rho \rightarrow 0$, we require either a different trial solution, or $s=l$ to have a normalizable wavefunction.
+
+Before settling on $s=l$ let's compute the derivatives for a more general trial function, of the form \ref{eqn:hyrdogenLaguerre:20}, and substitute those.  After a bit of computation we find
+
+\begin{equation}\label{eqn:hyrdogenLaguerre:19}
+R_l' = \rho^{s-1} e^{-\rho/2} \left( \left( s - \frac{\rho}{2} \right) L + \rho L'
+\right)
+\end{equation}
+\begin{equation}\label{eqn:hyrdogenLaguerre:19b}
+R_l'' = \rho^{s-2} e^{-\rho/2} \left( 
+\left( s(s-1) - s \rho + \frac{\rho^2}{4} \right) L 
++\left( 2 s \rho -\rho^2 \right) L'
++ \rho^2 L''
+\right)
+\end{equation}
+
+Putting these together and substitution back into \ref{eqn:hyrdogenLaguerre:10} yields
+
+\begin{equation}\label{eqn:hyrdogenLaguerre:19c}
+0 = \rho^{s-2} e^{-\rho/2} \left( 
+L \left( (s-\rho)(s+1) + \rho \lambda -l (l+1)
+\right) 
++\rho L' \left( 2 (s+1) -\rho \right) 
++ \rho^2 L''
+\right)
+\end{equation}
+
+In the $\rho \rightarrow 0$ limit where the $\rho^{s-2}$ terms dominate \ref{eqn:hyrdogenLaguerre:50} becomes
 \begin{equation}\label{eqn:hyrdogenLaguerre:50}
 0 \approx
-\rho^{s-2} L \left(
-s(s-1) + 2 s - l(l+1)
-\right)
-=
 \rho^{s-2} L \left(
 s(s+1) - l(l+1)
 \right)
 \end{equation}
 
-This provides the $s=l$ or $s = -(l+1)$ possibilities from the text.  A side question.  How does one solve integer equations like this?
+Again, this provides the $s=l$ or $s = -(l+1)$ possibilities from the text, and we discard $s=-(l+1)$ due to non-normalizability.  A side question.  How does one solve integer equations like this?
 
 \subsection{What remains?}
 
@@ -92,17 +139,23 @@ With $s=l$ killing off the $\rho^{s-2}$ terms, what is our differential equation
 
 \begin{equation}\label{eqn:hyrdogenLaguerre:100}
 0 = 
-\rho^l \left( L'' + L' (l - 1 ) - L/2 \right)
-+
-\rho^{l-1} \left( (\lambda - l) L + (2 + l/2)L' \right)
+\rho L''
++L' \left( 2 (l+1) -\rho \right) 
++L \left( \lambda - (l+1) \right) 
 \end{equation}
 
-or
+Comparing this to \cite{wiki:laguerre} we have something pretty close to the stated differential equation for the Laguerre polynomial.  Ours is of the form
 
-\begin{equation}\label{eqn:hyrdogenLaguerre:101}
+\begin{equation}\label{eqn:hyrdogenLaguerre:100}
 0 = 
-\rho L'' + L' (\rho(l-1) + (2 + l/2) ) + (\lambda -1 -\rho/2) L = 0.
+\rho L''
++L' \left( m -\rho \right) 
++L n,
 \end{equation}
+
+whereas the wikipedia article has $m=1$ explicitly.  No change of variables involving a scalar multiplicative factor for $\rho$ appears to be able to get it into that form, and I am guessing this is the differential equation for the associated Laguerre polynomial (something not stated in the wikipedia article).
+
+Let's derive the recurrence relations for the coefficients, and work out the first few such polynomials to compare.
 
 \EndArticle
 %\EndNoBibArticle
