@@ -1,6 +1,7 @@
 \documentclass[]{eliblog}
 
 \usepackage{color}
+%\usepackage{marvosym}
 %\usepackage{txfonts} % for xi
 
 \input{../peeters_macros.tex}
@@ -52,20 +53,20 @@ By changing the problem, this state could be physically relavent.  We'd require 
 V(x) =
 \left\{
 \begin{array}{l l}
-V_l & \quad \mbox{if $x < a$} \\
+f(x) & \quad \mbox{if $x < a$} \\
 \inv{2} K x^2 & \quad \mbox{if $a < x < b$} \\
-V_r & \quad \mbox{if $x > b$} \\
+g(x) & \quad \mbox{if $x > b$} \\
 \end{array}
 \right.
 \end{equation}
 
-where $V_l$ and $V_r$ are constants.  For such a potential, within the harmonic well, the general solution would be a superposition of states
+For such a potential, within the harmonic well, a general solution of the form
 
 \begin{equation}\label{eqn:qmIproblemSet5:19}
-u(x,t) = \sum_n H_n(\xi) \Bigl(A_n e^{-\xi^2/2} + B_n e^{\xi^2/2} \Bigr) e^{-i E_n t/\hbar}.
+u(x,t) = \sum_n H_n(\xi) \Bigl(A_n e^{-\xi^2/2} + B_n e^{\xi^2/2} \Bigr) e^{-i E_n t/\hbar},
 \end{equation}
 
-Normalization would not prohibit non-zero $B_n$ values in that situation, and the problem becomes one of matching the boundary value constraints.
+is possible since normalization would not prohibit non-zero $B_n$ values in that situation.  The problem would become one of matching the boundary value constraints.
 
 \subsubsection{Probability per unit length at $x=0$.}
 
@@ -81,31 +82,20 @@ Here it is assumed that the $A_n$ coefficients yield unit probability
 \int \Abs{u(x,0)}^2 dx = \sum_n \Abs{A_n}^2 = 1
 \end{equation}
 
-The question of probability per unit length is much easier asked of a pure state, for which we have just a single contributor
+%%%The question of probability per unit length is much easier asked of a pure state, for which we have just a single contributor
+%%%
+%%%\begin{equation}\label{eqn:qmIproblemSet5:20b}
+%%%u(x,t) = N_n H_n(\xi) e^{-\xi^2/2} e^{-i E_n t/\hbar}.
+%%%\end{equation}
 
-\begin{equation}\label{eqn:qmIproblemSet5:20b}
-u(x,t) = N_n H_n(\xi) e^{-\xi^2/2} e^{-i E_n t/\hbar}.
+We cannot answer the question for the probability that the particle is found at the specific $x=0$ position at $t=t_0$ (that probability is zero in a continuous space), but we can answer the question for the probability that a particle is found in an interval surrounding a specific point at this time.  We could calculate the average probability in the unit interval $[-1/2,1/2]$ surrounding the point $x = 0$.  It would also be possible to calculate the average probability for an increasingly small interval, and could define this as the probability per unit length for an interval surrounding $x = x_0$ as
+
+\begin{equation}\label{eqn:qmIproblemSet5:17}
+P = \text{Probability per unit length} = 
+\lim_{\epsilon \rightarrow 0} \inv{\epsilon} \int_{x_0 - \epsilon/2}^{x_0 + \epsilon/2} \Abs{ \Psi(x, t_0) }^2 dx = \Abs{\Psi(x_0, t_0)}^2
 \end{equation}
 
-We cannot answer the question for the probability that the particle is found at the specific $x=0$ position at $t=t_0$, but we can answer the question for the probability that a particle is found in an interval surrounding a specific point at this time.  We could for example ask for the probabilities that the particle could be found in any of the regions $[-1,0]$, $[-1/2,1/2]$, or $[0,1]$.  It seems reasonable to use $[-1/2,1/2]$ to answer this question, for which we have
-
-\begin{align*}
-\text{Probability that particle is found between -0.5 and 0.5}
-&=
-N_n^2 \int_{x=-1/2}^{1/2} H_n^2(\xi) e^{-\xi^2} dx \\
-&=
-\frac{N_n^2}{\alpha} \int_{\xi=-\alpha/2}^{\alpha/2} H_n^2(\xi) e^{-\xi^2} d\xi \\
-\end{align*}
-
-Inserting $N_n$ we have
-\begin{equation}\label{eqn:qmIproblemSet5:20e}
-P =
-\inv{ \sqrt{\pi} 2^n n!} \int_{\xi=-\alpha/2}^{\alpha/2} H_n^2(\xi) e^{-\xi^2} d\xi 
-\end{equation}
-
-Can this be evaluated any further without knowledge of $n$ specifically?
-
-For the impure state of \ref{eqn:qmIproblemSet5:20} we have for the probability density
+So the probability per unit length is just the probability density itself, evaluated at the point of interest.  For the impure state of \ref{eqn:qmIproblemSet5:20} we have for the probability density
 
 \begin{align*}
 \Abs{u}^2 
@@ -155,90 +145,113 @@ e^{-\xi^2}
 \right) \\
 \end{align*}
 
-For this mixed state wavefunction the question of the probability to find the particle within $1/2$ unit of $x=0$ in either direction is now
+Evaluation at the point $x = 0$, we have
 
-\begin{align*}
-P 
-&= \int_{-1/2}^{1/2} \Abs{u(x)}^2 dx \\
-&=
+\begin{equation}\label{eqn:qmIproblemSet5:500}
+\Abs{u(0,t_0)}^2 
+=
 \sum_n 
-\frac{\Abs{A_n}^2 }{\alpha}
-\int_{-\alpha/2}^{\alpha/2} d\xi
-(H_n(\xi))^2 e^{-\xi^2} \\
-&+\frac{2}{\alpha} \sum_{m < n} 
-\left(
-\Re ( A_n A_m^\conj ) \cos( (n - m)\omega t_0)
-+\Im ( A_n A_m^\conj ) \sin( (n - m)\omega t_0)
+\Abs{A_n}^2 (H_n(0))^2 +2 \sum_{m < n} H_n(0) H_m(0) \left( \Re ( A_n A_m^\conj ) \cos( (n - m)\omega t_0) +\Im ( A_n A_m^\conj ) \sin( (n - m)\omega t_0)
 \right) 
-\int_{-\alpha/2}^{\alpha/2} d\xi
-H_n(\xi) H_m(\xi)
-e^{-\xi^2}
-\end{align*}
+\end{equation}
 
-It is interesting that the time dependence of the probability per unit length is time dependent only for a mixed state.
-
-\subsubsection{The probability for the first few pure states.}
-
-We can try to evaluate \ref{eqn:qmIproblemSet5:20e} explicitly for a couple of values of $n$, however, we can do no better than utilization of the error function to express this.  We have for the first couple Hankle functions
-
-\begin{align}\label{eqn:qmIproblemSet5:200}
-H_0(\xi) &= 1 \\
-H_1(\xi) &= 2 \xi \\
-H_2(\xi) &= 4 \xi^2 - 2
-\end{align}
-
-So for the first few pure states, we get for each of the respective probabilities in this interval (at $t = t_0$ or any other time)
-\begin{align*}
-\inv{ \sqrt{\pi} }
-\int_{-{\alpha/2}}^{\alpha/2} H_0^2(\xi) e^{-\xi^2} d\xi 
-&= 
-\inv{ \sqrt{\pi} }
-\int_{-{\alpha/2}}^{\alpha/2} e^{-\xi^2} d\xi 
-= 
-% integrate e^(-x^2)/sqrt(pi)
-\erf({\alpha/2}) \\
+%%%For this mixed state wavefunction the question of the probability to find the particle within $1/2$ unit of $x=0$ in either direction is now
 %%%
-\inv{ 2 \sqrt{\pi} }
-\int_{-{\alpha/2}}^{\alpha/2} H_1^2(\xi) e^{-\xi^2} d\xi 
-&= 
-\frac{2}{ \sqrt{\pi} }
-\int_{-{\alpha/2}}^{\alpha/2} \xi^2 e^{-\xi^2} d\xi 
-= 
-% integrate 2 x^2 e^(-x^2)/sqrt(pi)
-\erf({\alpha/2}) - \frac{\alpha}{\sqrt{\pi}} e^{-\alpha^2/4} 
-\\
-\inv{ 8 \sqrt{\pi} }
-\int_{-{\alpha/2}}^{\alpha/2} H_2^2(\xi) e^{-\xi^2} d\xi 
-&= 
-\inv{ 2 \sqrt{\pi} }
-\int_{-{\alpha/2}}^{\alpha/2} (2 \xi^2 -1)^2 e^{-\xi^2} d\xi 
-= 
-% integrate (2 x^2 - 1)^2 e^(-x^2)/2/sqrt(pi)
-\erf({\alpha/2}) - \frac{1}{2 \sqrt{\pi}} \alpha e^{-\alpha^2/4} (1 + \alpha^2/2)
-\end{align*}
+%%%\begin{align*}
+%%%P 
+%%%&= \int_{-1/2}^{1/2} \Abs{u(x)}^2 dx \\
+%%%&=
+%%%\sum_n 
+%%%\frac{\Abs{A_n}^2 }{\alpha}
+%%%\int_{-\alpha/2}^{\alpha/2} d\xi
+%%%(H_n(\xi))^2 e^{-\xi^2} \\
+%%%&+\frac{2}{\alpha} \sum_{m < n} 
+%%%\left(
+%%%\Re ( A_n A_m^\conj ) \cos( (n - m)\omega t_0)
+%%%+\Im ( A_n A_m^\conj ) \sin( (n - m)\omega t_0)
+%%%\right) 
+%%%\int_{-\alpha/2}^{\alpha/2} d\xi
+%%%H_n(\xi) H_m(\xi)
+%%%e^{-\xi^2}
+%%%\end{align*}
 
-To get a feel for this observe that we have $m_e/\hbar = 8 637.99381 s / m^2$, so for an electron, so when $\omega$ is not small our parameter $\alpha = \sqrt{m \omega/\hbar}$ is fairly large.  This means that we can make the approximations $\erf(\alpha/2) \approx 1$, and $e^{-\alpha^2/4} \approx 0$.
+It is interesting that the time dependence of the probability per unit length only has the time dependence for a mixed state.
 
-On the other hand, for small $\alpha$, we have $\erf(\alpha/2) \approx \alpha/\sqrt{\pi}$.
+For a pure state and its wavefunction $u(x,t) = N_n H_n(\xi) e^{-\xi^2/2} e^{-i E_n t/\hbar}$ we have just
+\begin{equation}\label{eqn:qmIproblemSet5:510}
+\Abs{u(0,t_0)}^2 
+=
+N_n^2 (H_n(0))^2 = \frac{\alpha}{\sqrt{\pi} 2^n n!} H_n(0)^2
+\end{equation}
 
-FIXME: negative probability in second integral for small $\alpha$?
+This is zero for odd $n$.  For even $n$ is appears that $H_n(0)^2$ may equal $2^n$ (this is true at least up to n=4).  If that's the case we have for even energy states an $x=0$ probability per unit length value of $\Abs{u(0,t_0)}^2 = \frac{\alpha}{\sqrt{\pi} n!}$.
 
-%\begin{align*}
-%\text{for pure state of electron with $E = E_0$} P(x \in [-1/2,1/2]) 
-%\approx \sqrt{2/\pi} &= 0.8 \\
-%\text{for pure state of electron with $E = E_1$} P(x \in [-1/2,1/2]) 
-%\approx &= 1 \\
-%\text{for pure state of electron with $E = E_1$} P(x \in [-1/2,1/2]) 
-%\approx &= 3/8 = 0.4 \\
-%\end{align*}
+\subsubsection{Probability for the non-normalizable state earlier in the problem statement.}
 
-For large $\alpha$ we 
+It is possible, albeit odd (but consistent with the lack of details in the problem statement), that this question was asking for the probability per unit length for the non-normalizable $E_1$ wavefunction $u(x) = B \xi e^{\xi^2/2}$.  Since normalization requires $B=0$, that probability density is simply zero (or undefined, depending on one's point of view).
 
-We see that physically the probability that a particle will be found very close to the origin is highly dependent energy level associated with the state that the particle is found in and its associated wave function.  A low energy state does not necessarily mean that the particle will be found at a small displacement from the origin, as in the case in a classical system.  Also different from the classical system is that when the state the particle is expressed as a superposition of basis states, then the probability for the particle to be found in the interval is also time dependent.  That probability oscillates with sine and cosine dependence around a steady state probability fixed by the sum of the pure state probabilities.
+%%%\subsubsection{The probability for the first few pure states.}
+%%%
+%%%We can try to evaluate \ref{eqn:qmIproblemSet5:20e} explicitly for a couple of values of $n$, however, we can do no better than utilization of the error function to express this.  We have for the first couple Hankle functions
+%%%
+%%%\begin{align}\label{eqn:qmIproblemSet5:200}
+%%%H_0(\xi) &= 1 \\
+%%%H_1(\xi) &= 2 \xi \\
+%%%H_2(\xi) &= 4 \xi^2 - 2
+%%%\end{align}
+%%%
+%%%So for the first few pure states, we get for each of the respective probabilities in this interval (at $t = t_0$ or any other time)
+%%%\begin{align*}
+%%%\inv{ \sqrt{\pi} }
+%%%\int_{-{\alpha/2}}^{\alpha/2} H_0^2(\xi) e^{-\xi^2} d\xi 
+%%%&= 
+%%%\inv{ \sqrt{\pi} }
+%%%\int_{-{\alpha/2}}^{\alpha/2} e^{-\xi^2} d\xi 
+%%%= 
+%%%% integrate e^(-x^2)/sqrt(pi)
+%%%\erf({\alpha/2}) \\
+%%%%%%
+%%%\inv{ 2 \sqrt{\pi} }
+%%%\int_{-{\alpha/2}}^{\alpha/2} H_1^2(\xi) e^{-\xi^2} d\xi 
+%%%&= 
+%%%\frac{2}{ \sqrt{\pi} }
+%%%\int_{-{\alpha/2}}^{\alpha/2} \xi^2 e^{-\xi^2} d\xi 
+%%%= 
+%%%% integrate 2 x^2 e^(-x^2)/sqrt(pi)
+%%%\erf({\alpha/2}) - \frac{\alpha}{\sqrt{\pi}} e^{-\alpha^2/4} 
+%%%\\
+%%%\inv{ 8 \sqrt{\pi} }
+%%%\int_{-{\alpha/2}}^{\alpha/2} H_2^2(\xi) e^{-\xi^2} d\xi 
+%%%&= 
+%%%\inv{ 2 \sqrt{\pi} }
+%%%\int_{-{\alpha/2}}^{\alpha/2} (2 \xi^2 -1)^2 e^{-\xi^2} d\xi 
+%%%= 
+%%%% integrate (2 x^2 - 1)^2 e^(-x^2)/2/sqrt(pi)
+%%%\erf({\alpha/2}) - \frac{1}{2 \sqrt{\pi}} \alpha e^{-\alpha^2/4} (1 + \alpha^2/2)
+%%%\end{align*}
+%%%
+%%%To get a feel for this observe that we have $m_e/\hbar = 8 637.99381 s / m^2$, so for an electron, so when $\omega$ is not small our parameter $\alpha = \sqrt{m \omega/\hbar}$ is fairly large.  This means that we can make the approximations $\erf(\alpha/2) \approx 1$, and $e^{-\alpha^2/4} \approx 0$.
+%%%
+%%%On the other hand, for small $\alpha$, we have $\erf(\alpha/2) \approx \alpha/\sqrt{\pi}$.
+%%%
+%%%FIXME: negative probability in second integral for small $\alpha$?
+%%%
+%%%%\begin{align*}
+%%%%\text{for pure state of electron with $E = E_0$} P(x \in [-1/2,1/2]) 
+%%%%\approx \sqrt{2/\pi} &= 0.8 \\
+%%%%\text{for pure state of electron with $E = E_1$} P(x \in [-1/2,1/2]) 
+%%%%\approx &= 1 \\
+%%%%\text{for pure state of electron with $E = E_1$} P(x \in [-1/2,1/2]) 
+%%%%\approx &= 3/8 = 0.4 \\
+%%%%\end{align*}
+%%%
+%%%For large $\alpha$ we 
+%%%
+%%%We see that physically the probability that a particle will be found very close to the origin is highly dependent energy level associated with the state that the particle is found in and its associated wave function.  A low energy state does not necessarily mean that the particle will be found at a small displacement from the origin, as in the case in a classical system.  Also different from the classical system is that when the state the particle is expressed as a superposition of basis states, then the probability for the particle to be found in the interval is also time dependent.  That probability oscillates with sine and cosine dependence around a steady state probability fixed by the sum of the pure state probabilities.
+%%%
 
-\subsubsection{A final note.  Probability for non-normalizable state earlier in the problem statement.}
-
-In case this question was asking about the probability for the particle to be found in the region for the non-normalizable state $u(x) = B \xi e^{\xi^2/2}$, we can answer this too.  Since this requires $B=0$, that probability is also simply zero.
+%sym:
+%\Leo \Sagittarius \Pisces \Aquarius \Capricorn \Venus \Saturn \Sun \Uranus \Libra \Scorpio
 
 %\EndArticle
 \EndNoBibArticle
