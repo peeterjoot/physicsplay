@@ -30,6 +30,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <vector>
 
@@ -50,7 +51,8 @@ int g_mouseButton = -1;
 e2ga::vector g_position;
 mv::Float g_zoom = 0.007f;
 int g_maxIter = 30;
-e2ga::vector g_c(vector_e1_e2, -0.835f, -0.2321f);
+e2ga::vector g_c ;
+double g_scale = 10.0 ;
 
 // mouse position on last call to MouseButton() / MouseMotion()
 e2ga::vector g_prevMousePos;
@@ -72,15 +74,14 @@ void computeFractal(const e2ga::vector &translation, const e2ga::vector &c, mv::
 			e2ga::vector x = _vector(zoom * p - translation);
 
 			for (int i = 0; i < maxIter; i++) {
-				//x = _vector(x * e * x + c); // n = 2
-				x = _vector(x * e * x * e * x + c); // n = 3
+				x = _vector(x * e * x + c); // n = 2
+				//x = _vector(x * e * x * e * x + c); // n = 3
 				//x = _vector(x * e * x * e * x * e * x + c); // n = 4
 		        if (_Float(norm_e2(x)) > 1e4f) break; // 1e4 = 'infinity'
 			}
 
 			// convert to grey-scale value:
-			//float valF = _Float(norm_e(x)) / 10.0f;
-			float valF = _Float(norm_e(x)) / 1000.0f;
+			float valF = _Float(norm_e(x)) / g_scale ;
 			unsigned char val = (valF > 255) ? 255 : (unsigned char)(valF + 0.5f);
 
 			rgbBuffer[idx + 0] = rgbBuffer[idx + 1] = rgbBuffer[idx + 2] = val;
@@ -175,6 +176,24 @@ void Keyboard(unsigned char key, int x, int y) {
 }
 
 int main(int argc, char*argv[]) {
+
+
+	if ( 4 == argc )
+	{
+		double d_r = strtod( argv[1], NULL ) ;
+		double d_i = strtod( argv[2], NULL ) ;
+		g_scale = strtod( argv[3], NULL ) ;
+
+		g_c = e2ga::vector( vector_e1_e2, d_r, d_i ) ;
+
+		printf( "c = (%f,%f)\n", d_r, d_i ) ;
+	}
+	else
+	{
+		// Default:
+		g_c = e2ga::vector( vector_e1_e2, -0.835f, -0.2321f ) ;
+	}
+
 	// profiling for Gaigen 2:
 	e2ga::g2Profiling::init();
 
@@ -195,4 +214,3 @@ int main(int argc, char*argv[]) {
 
 	return 0;
 }
-
