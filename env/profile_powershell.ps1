@@ -14,3 +14,4 @@ function eprofile {vim C:\Users\Peeter\cygwin_home\physicsplay\env\profile_power
 
 function mdir {set-location -path ~/cygwin_home/physicsplay}
 function jdir {set-location -path ~/cygwin_home/physicsplay/gaJuliaFractal}
+function e2dir {set-location -path C:\Users\Peeter\cygwin_home\gasand\ga25\TestG25\e2ga_cpp}
