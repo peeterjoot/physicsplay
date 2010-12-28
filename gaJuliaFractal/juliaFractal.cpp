@@ -99,6 +99,88 @@ void computeJulia(const e2ga::vector &translation, const e2ga::vector &c, mv::Fl
 	}
 }
 
+void computeMandelbrot( std::vector<unsigned char> &rgbBuffer, int width, int height )
+{
+	int idx = 0 ;
+
+	e1_t e = e1 ;
+
+//x0 = scaled x co-ordinate of pixel (must be scaled to lie somewhere in the interval (-2.5 to 1)
+//y0 = scaled y co-ordinate of pixel (must be scaled to lie somewhere in the interval (-1, 1)
+	
+	e2ga::vector c( e2ga::vector::coord_e1_e2, -2.5, -1 ) ;
+	e2ga::vector dx ;
+	e2ga::vector dy ;
+	dx.set_e1( 3.5/(double)width ) ;
+	dy.set_e2( 2.0/(double)height ) ;
+
+#if 0
+	printf( "dx=%s\n", dx.c_str_f() ) ;
+	printf( "dy=%s\n", dy.c_str_f() ) ;
+	printf( "dx=%f,%f\n", dx.get_e1(), dx.get_e2() ) ;
+	printf( "dy=%f,%f\n", dy.get_e1(), dy.get_e2() ) ;
+	fflush(NULL) ;
+	return ;
+#endif
+
+	// for each pixel in the image, evaluate fractal function:
+	for (int imageY = 0 ; imageY < height ; imageY++)
+	{
+		e2ga::vector p(c) ;
+
+		for (int imageX = 0 ; imageX < width ; imageX++)
+		{
+			double normSquared ;
+			e2ga::vector x = p ;
+
+			int i = 0 ;
+			#define MAX_MAND_ITERS 15
+			for ( ; i < MAX_MAND_ITERS ; i++ )
+			{
+				x = x * e * x + p ;
+			
+				normSquared = norm2( x ) ;
+
+				#define MAX_MAND_NORM_SQUARED 4.0f
+		        	if ( normSquared >= MAX_MAND_NORM_SQUARED )
+				{
+					break ;
+				}
+			}
+
+		        if ( normSquared >= MAX_MAND_NORM_SQUARED )
+			{
+				// 0's for black, 255's for white.
+				rgbBuffer[idx + 0] = 0 ;
+				rgbBuffer[idx + 1] = 0 ;
+				rgbBuffer[idx + 2] = 0 ;
+			}
+			else
+			{
+				double valF = normSquared * 256.0 * 256.0 * 256.0 / MAX_MAND_NORM_SQUARED ;
+				int v = valF ;
+
+				rgbBuffer[idx + 0] = v & 0xFF ;
+				rgbBuffer[idx + 1] = (v >> 8) & 0xFF ;
+				rgbBuffer[idx + 2] = (v >> 16) & 0xFF ;
+			}
+
+#if 0
+			printf( "(%d,%d): iters: %d, n: %f ; RGB:%02X,%02X,%02X\n", imageX, imageY, i, normSquared, rgbBuffer[idx + 0], rgbBuffer[idx + 1], rgbBuffer[idx + 2] ) ;
+			printf( "c=%s\n", c.c_str_f() ) ;
+			printf( "p=%s\n", p.c_str_f() ) ;
+#endif
+
+			idx += 3 ;
+
+			p += dx ;
+		}
+
+		c += dy ;
+	}
+}
+
+//#define DO_JULIA
 void display() {
 	//doIntelWarning() ; // warn for possible problems with pciking on Intel graphics chipsets
 
@@ -120,16 +202,21 @@ void display() {
 	int width = g_viewportWidth ^ (g_viewportWidth & 3) ;
 	int height = g_viewportHeight ;
 	std::vector<unsigned char>buf(width * height * 3) ;
+#if defined DO_JULIA
 	computeJulia(g_position, g_c, g_zoom, g_maxIter, buf, width, height) ;
+#else
+	computeMandelbrot(buf, width, height) ;
+#endif
 
 	glRasterPos2f(0.0f, 0.0f) ;
 	glDrawPixels(width, height, GL_RGB, GL_UNSIGNED_BYTE, &buf[0]) ;
 
-
+#if defined DO_JULIA
 	glColor3f(0.5f, 0.5f, 1.0f) ;
 	void *font = GLUT_BITMAP_HELVETICA_18 ;
 	renderBitmapString(20, 20, font, "Press 1 .. 9 to set number of iterations.") ;
 	renderBitmapString(20, 40, font, "Use mouse buttons to translate, modify and zoom.") ;
+#endif
 
 	glutSwapBuffers() ;
 }
