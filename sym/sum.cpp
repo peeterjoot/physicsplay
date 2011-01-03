@@ -1,16 +1,13 @@
-/*
- * $Date: 2009/01/12 01:06:45 $
- * $Revision: 1.3 $
- */
-
 #include "sum.h"
 #include <iostream>
 
 using namespace std ;
 
+// FIXME: this appears to be hacked from: double mv::largestCoordinate() const.
+// What was I doing with it?
 int mv_largestCoordinateIndex( const mv & v )
 {
-   int nc = mv_size[v.gu()] ;
+   int nc = e3ga_mvSize[v.gu()] ;
    int i ;
    int m = -1 ;
    float maxC = -1.0 ;

@@ -1,11 +1,6 @@
 #if !defined sum_header_included
 #define sum_header_included
 
-/*
- * $Date: 2009/12/03 04:33:40 $
- * $Revision: 1.4 $
- */
-
 /**
   \file sum.h
  */
@@ -83,6 +78,8 @@ public:
       {
          (*i) *= scale ;
       }
+
+      return *this ;
    }
 
 #if 0 // not used.

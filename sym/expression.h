@@ -1,11 +1,6 @@
 #if !defined expression_header_included
 #define expression_header_included
 
-/*
- * $Date: 2009/12/03 04:33:40 $
- * $Revision: 1.4 $
- */
-
 /**
   \file expression.h
   \brief An expression class supporting addition and multiplication.

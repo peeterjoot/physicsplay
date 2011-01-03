@@ -1,8 +1,3 @@
-/*
- * $Date: 2009/01/12 01:06:45 $
- * $Revision: 1.3 $
- */
-
 #include "symbol.h"
 #include <iostream>
 
@@ -17,11 +12,11 @@ int mv_bitmask( const mv & a )
    int m = 0 ;
    int k = 0 ;
    int b = 0 ;
-   for ( int i = 0 ; i <= mv_spaceDim ; i++ )
+   for ( int i = 0 ; i <= e3ga_spaceDim ; i++ )
    {
       if ( a.gu() & (1 << i) )
       {
-         for ( int j = 0 ; j < mv_gradeSize[i] ; j++ )
+         for ( int j = 0 ; j < e3ga_groupSize[i] ; j++ )
          {
             if ( a.m_c[k] )
             {
@@ -34,7 +29,7 @@ int mv_bitmask( const mv & a )
       }
       else
       {
-         b += mv_gradeSize[i] ;
+         b += e3ga_groupSize[i] ;
       }
    }
 

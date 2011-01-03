@@ -141,7 +141,7 @@ void computeMandelbrot( std::vector<unsigned char> &rgbBuffer, int width, int he
 			
 				normSquared = norm2( x ) ;
 
-				#define MAX_MAND_NORM_SQUARED 4.0f
+				#define MAX_MAND_NORM_SQUARED 16.0f
 		        	if ( normSquared >= MAX_MAND_NORM_SQUARED )
 				{
 					break ;
@@ -151,6 +151,11 @@ void computeMandelbrot( std::vector<unsigned char> &rgbBuffer, int width, int he
 		        if ( normSquared >= MAX_MAND_NORM_SQUARED )
 			{
 				// 0's for black, 255's for white.
+#if 0
+				rgbBuffer[idx + 0] = 255 ;
+				rgbBuffer[idx + 1] = 255 ;
+				rgbBuffer[idx + 2] = 255 ;
+#endif
 				rgbBuffer[idx + 0] = 0 ;
 				rgbBuffer[idx + 1] = 0 ;
 				rgbBuffer[idx + 2] = 0 ;
@@ -160,9 +165,16 @@ void computeMandelbrot( std::vector<unsigned char> &rgbBuffer, int width, int he
 				double valF = normSquared * 256.0 * 256.0 * 256.0 / MAX_MAND_NORM_SQUARED ;
 				int v = valF ;
 
+#if 1
 				rgbBuffer[idx + 0] = v & 0xFF ;
 				rgbBuffer[idx + 1] = (v >> 8) & 0xFF ;
 				rgbBuffer[idx + 2] = (v >> 16) & 0xFF ;
+#endif
+#if 0
+				rgbBuffer[idx + 0] = 255 - (v & 0xFF) ;
+				rgbBuffer[idx + 1] = 255 - ((v >> 8) & 0xFF) ;
+				rgbBuffer[idx + 2] = 255 - ((v >> 16) & 0xFF) ;
+#endif
 			}
 
 #if 0

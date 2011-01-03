@@ -1,67 +1,79 @@
-exe := .exe
+EXE := .EXE
+OBJ := obj
 
 #TESTINC := $(subst .h,_testinc.cpp,$(shell echo *.h))
-#testinc_bin := $(subst .cpp,.o,$(TESTINC))
+#TESTINC_bin := $(subst .cpp,.$(OBJ),$(TESTINC))
 
 GASAND := $(HOME)/gasand/ga_sandbox-1.0.5
-LDFLAGS_GASAND := -L$(GASAND)/lib_win32
+#LDFLAGS_GASAND := -L$(GASAND)/lib_win32
 
-source += expression.cpp
-source += term.cpp
+SOURCES += expression.cpp
+SOURCES += term.cpp
 
-gasym_source += sum.cpp
-gasym_source += symbol.cpp
-gasym_source += $(GASAND)/libgasandbox/e3ga.cpp
-gasym_source += gasym.cpp
-gasym_source += $(source)
+gasym_SOURCE += sum.cpp
+gasym_SOURCE += symbol.cpp
+#gasym_SOURCE += $(GASAND)/libgasandbox/e3ga.cpp
+gasym_SOURCE += gasym.cpp
+gasym_SOURCE += $(SOURCES)
 
-calc_source += calc.cpp
-calc_source += $(source)
+calc_SOURCE += calc.cpp
+calc_SOURCE += $(SOURCES)
 
-COPTS += -g
+#COPTS += -g
 #COPTS += -O2
+#CXX := g++
 
-CXX := g++
+#COPTS += -g
+#COPTS += -O2
+#CXX := g++
+CXX := CL /nologo
 
-gasym_objects := $(subst .cpp,.o,$(gasym_source))
-calc_objects := $(subst .cpp,.o,$(calc_source))
-lobjects := $(notdir $(gasym_objects) $(calc_objects))
+GASANDBOX := ../../gasand/ga2/ga_sandbox-1.0.7
+#LIBGLUT := freeglut.lib
 
-files := $(shell ls *.ltx)
-pdfs := $(files:.ltx=.pdf)
+LIBGASANDBOX += ../../gasand/ga25/TestG25/e3ga_cpp/e3ga.obj
 
-LATEX_HELPER_DIR := /cygdrive/d/peeterj/personal/math
+CXXFLAGS += /Zi -DWIN32 /EHsc
+#CXXFLAGS += -I../../gasand/ga25/TestG25/e2ga_cpp
+#CXXFLAGS += -I../../gasand/ga25/TestG25/c3ga_cpp
+CXXFLAGS += -I../../gasand/ga25/TestG25/e3ga_cpp
+#CXXFLAGS += -I.
 
-#all :: $(testinc_bin)
-all :: $(lobjects)
-#all :: trygin$(exe)
-all :: gasym$(exe)
-all :: calc$(exe)
-#all :: $(pdfs)
+COMPILE = $(CXX) $(CXXFLAGS) /c /Fo$*.$(OBJ)
+LINK = $(CXX) /Fe$@
 
-# from ga_sandbox
-CXXFLAGS += -I$(GASAND)
-CXXFLAGS += -I$(GASAND)/ext_include
-CXXFLAGS += -I $(GASAND)/libgasandbox
+gasym_OBJECTS := $(subst .cpp,.$(OBJ),$(gasym_SOURCE))
+calc_OBJECTS := $(subst .cpp,.$(OBJ),$(calc_SOURCE))
 
-#CXXFLAGS += -I $(HOME)/local/include
+FILES := $(shell ls *.ltx)
+PDFS := $(FILES:.ltx=.pdf)
 
-%.o : %.cpp
-	$(CXX) $(CXXFLAGS) $(COPTS) -c $^
+#LATEX_HELPER_DIR := /cygdrive/d/peeterj/personal/math
 
-%.o : $(GASAND)/libgasandbox/%.cpp
-	$(CXX) $(CXXFLAGS) $(COPTS) -c $^
+all :: $(gasym_OBJECTS)
+all :: gasym$(EXE)
+
+#all :: $(TESTINC_bin)
+#all :: $(calc_OBJECTS)
+#all :: trygin$(EXE)
+#all :: calc$(EXE)
+#all :: $(PDFS)
+
+%.$(OBJ) : %.cpp
+	$(CXX) $(CXXFLAGS) $(COPTS) /c $^
+
+#%.$(OBJ) : $(GASAND)/libgasandbox/%.cpp
+#	$(CXX) $(CXXFLAGS) $(COPTS) -c $^
 
 #LIBS_GINAC := -L $(HOME)/local/lib -lginac -lcln
+#trygin$(EXE) : trygin.$(OBJ)
+#	$(CXX) $(LDFLAGS_GASAND) $(CXXFLAGS) $^ $(LIBS_GINAC) /Fe$@
 
-#trygin$(exe) : trygin.o
-#	$(CXX) $(LDFLAGS_GASAND) $(CXXFLAGS) $^ $(LIBS_GINAC) -o $@
+gasym$(EXE) : $(notdir $(gasym_OBJECTS))
+	$(CXX) $(LDFLAGS_GASAND) $(CXXFLAGS) $^ $(LIBGASANDBOX) /Fe$@
 
-gasym$(exe) : $(notdir $(gasym_objects))
-	$(CXX) $(LDFLAGS_GASAND) $(CXXFLAGS) $^ $(libs) -o $@
-
-calc$(exe) : $(calc_objects)
-	$(CXX) $(LDFLAGS_GASAND) $(CXXFLAGS) $^ $(libs) -o $@
+calc$(EXE) : $(calc_OBJECTS)
+	$(CXX) $(LDFLAGS_GASAND) $(CXXFLAGS) $^ $(libs) /Fe$@
 
 %_testinc.cpp : %.h
 	perl mktestinc $^

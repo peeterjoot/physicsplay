@@ -1,18 +1,13 @@
 #if !defined symbol_header_included
 #define symbol_header_included
 
-/*
- * $Date: 2009/12/03 04:33:40 $
- * $Revision: 1.4 $
- */
-
 /**
   \file symbol.h
  */
 
 #include "expression.h"
-#include <libgasandbox/common.h>
-#include <libgasandbox/e3ga.h>
+//#include <common.h>
+#include <e3ga.h>
 
 using namespace e3ga ;
 

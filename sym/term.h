@@ -1,11 +1,6 @@
 #if !defined term_header_included
 #define term_header_included
 
-/*
- * $Date: 2009/12/03 04:33:40 $
- * $Revision: 1.4 $
- */
-
 /**
   \file term.h
   \brief A basic numeric expression with a numeric and symbolic portion.

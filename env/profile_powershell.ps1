@@ -15,3 +15,25 @@ function eprofile {vim C:\Users\Peeter\cygwin_home\physicsplay\env\profile_power
 function mdir {set-location -path ~/cygwin_home/physicsplay}
 function jdir {set-location -path ~/cygwin_home/physicsplay/gaJuliaFractal}
 function e2dir {set-location -path C:\Users\Peeter\cygwin_home\gasand\ga25\TestG25\e2ga_cpp}
+
+Remove-item Alias:cd
+function cd
+{
+	if ($args[0] -eq '-')
+	{
+		$pwd = $OLDPWD ;
+	}
+	else
+	{
+		$pwd = $args[0] ;
+	}
+	
+	$tmp = pwd ;
+	
+	if ( $pwd )
+	{
+		Set-Location $pwd ;
+	}
+	
+	Set-Variable -Name OLDPWD -Value $tmp -Scope global  ;
+}

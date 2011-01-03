@@ -26,8 +26,8 @@ using namespace std ;
 
 #include "sum.h"
 
-bivector iZ = _bivector(e1 ^ e2) ;
-bivector iX = _bivector(e2 ^ e3) ;
+bivector iZ = bivector(e1 ^ e2) ;
+bivector iX = bivector(e2 ^ e3) ;
 
 #if 0
 //
@@ -65,6 +65,7 @@ void printIt( const std::string & label, sum & v )
    cout << "\\end{align*}\n" ;
 }
 
+#if 0
 void cayleyKlein()
 {
 #if 0
@@ -78,9 +79,9 @@ d &= \sin\left(\frac{\theta}{2}\right) \sin\left( \inv{2}\left(\psi-\phi\right) 
 #endif
 
    symbol a("a") ;
-   symbol b("b", _bivector(e2 ^ e1) ) ;
-   symbol c("c", _bivector(e3 ^ e2) ) ;
-   symbol d("d", _bivector(e3 ^ e1) ) ;
+   symbol b("b", bivector(e2 ^ e1) ) ;
+   symbol c("c", bivector(e3 ^ e2) ) ;
+   symbol d("d", bivector(e3 ^ e1) ) ;
 
    sum Rl(a) ;
    Rl += b ;
@@ -155,9 +156,9 @@ d &= -\sin\left(\frac{\theta}{2}\right) \sin\left( \inv{2}\left(\psi-\phi\right)
 #endif
 
    symbol a("a") ;
-   symbol b("b", -_bivector(e2 ^ e1) ) ;
-   symbol c("c", -_bivector(e3 ^ e2) ) ;
-   symbol d("d", -_bivector(e3 ^ e1) ) ;
+   symbol b("b", -bivector(e2 ^ e1) ) ;
+   symbol c("c", -bivector(e3 ^ e2) ) ;
+   symbol d("d", -bivector(e3 ^ e1) ) ;
 
    sum Rl(a) ;
    Rl += b ;
@@ -232,9 +233,9 @@ d &= -\sin\left(\frac{\theta}{2}\right) \sin\left( \inv{2}\left(\psi-\phi\right)
 #endif
 
    symbol a("a") ;
-   symbol b("b", _bivector(e2 ^ e1) ) ;
-   symbol c("c", -_bivector(e3 ^ e2) ) ;
-   symbol d("d", -_bivector(e3 ^ e1) ) ;
+   symbol b("b", bivector(e2 ^ e1) ) ;
+   symbol c("c", -bivector(e3 ^ e2) ) ;
+   symbol d("d", -bivector(e3 ^ e1) ) ;
 
    sum Rl(a) ;
    Rl += b ;
@@ -309,9 +310,9 @@ d &= -\sin\left(\frac{\theta}{2}\right) \sin\left( \inv{2}\left(\psi-\phi\right)
 #endif
 
    symbol a("a") ;
-   symbol b("b", -_bivector(e2 ^ e1) ) ;
-   symbol c("c", _bivector(e3 ^ e2) ) ;
-   symbol d("d", -_bivector(e3 ^ e1) ) ;
+   symbol b("b", -bivector(e2 ^ e1) ) ;
+   symbol c("c", bivector(e3 ^ e2) ) ;
+   symbol d("d", -bivector(e3 ^ e1) ) ;
 
    sum Rl(a) ;
    Rl += b ;
@@ -386,9 +387,9 @@ d &= \sin\left(\frac{\theta}{2}\right) \sin\left( \inv{2}\left(\psi-\phi\right) 
 #endif
 
    symbol a("a") ;
-   symbol b("b", -_bivector(e2 ^ e1) ) ;
-   symbol c("c", -_bivector(e3 ^ e2) ) ;
-   symbol d("d", _bivector(e3 ^ e1) ) ;
+   symbol b("b", -bivector(e2 ^ e1) ) ;
+   symbol c("c", -bivector(e3 ^ e2) ) ;
+   symbol d("d", bivector(e3 ^ e1) ) ;
 
    sum Rl(a) ;
    Rl += b ;
@@ -449,6 +450,7 @@ rot_e3_e3.dump(true) ; cout << "\n \\\\\n" ;
    cout << "\\end{bmatrix}\n" ;
    cout << "\\end{align*}\n" ;
 }
+
 void euler()
 {
    sum R_psi( CosPsi ) ; R_psi += IsinPsi ;
@@ -592,7 +594,7 @@ S_\theta
 // sine theta part
    sum R_s = sum( SinTheta ) * (sum(R_psi).reverse() * R_phi ) ;
 
-   bivector e32 = _bivector(e3 ^ e2) ;
+   bivector e32 = bivector(e3 ^ e2) ;
    R_s *= symbol( e32 ) ;
 
    sum R(R_c) ; R += R_s ;
@@ -632,7 +634,7 @@ void sphericalPolar()
    rcap += symbol(ry, e2) ;
    rcap += symbol(rz, e3) ;
 
-   bivector i = _bivector(e1 ^ e2) ;
+   bivector i = bivector(e1 ^ e2) ;
 
 //C^2 - S^2 = 1/4( e^2ix + e^-2ix + 2 + e^2ix + e^-2ix - 2 )  = cos(2x)
 
@@ -721,10 +723,10 @@ void sphericalPolar2()
    term Sp("S_\\phi") ;
 
    symbol scalarRtheta( Ct, 1 ) ;
-   symbol bivectorRtheta( St, _bivector( e1 ^ e2 ) ) ;
+   symbol bivectorRtheta( St, bivector( e1 ^ e2 ) ) ;
 
    symbol scalarRphi( Cp, 1 ) ;
-   symbol bivectorRphi( Sp, _bivector( e1 ^ e3 ) ) ;
+   symbol bivectorRphi( Sp, bivector( e1 ^ e3 ) ) ;
 
    sum Rtheta(scalarRtheta) ; Rtheta += bivectorRtheta ;
    sum Rphi(scalarRphi) ; Rphi += bivectorRphi ;
@@ -756,13 +758,13 @@ void baylisEuler()
    p3 *= symbol( h, mv(1) ) ;
 
    symbol scalarRphi( Cp, 1 ) ;
-   symbol bivectorRphi( Sp, _bivector( e2 ^ e1 ) ) ;
+   symbol bivectorRphi( Sp, bivector( e2 ^ e1 ) ) ;
 
    symbol scalarRtheta( Ct, 1 ) ;
-   symbol bivectorRtheta( St, _bivector( e1 ^ e3 ) ) ;
+   symbol bivectorRtheta( St, bivector( e1 ^ e3 ) ) ;
 
    symbol scalarRchi( Cc, 1 ) ;
-   symbol bivectorRchi( Sc, _bivector( e2 ^ e1 ) ) ;
+   symbol bivectorRchi( Sc, bivector( e2 ^ e1 ) ) ;
 
    sum Rtheta(scalarRtheta) ; Rtheta += bivectorRtheta ;
    sum Rphi(scalarRphi) ; Rphi += bivectorRphi ;
@@ -780,6 +782,7 @@ void baylisEuler()
 
    printIt( "prod:", prod ) ;
 }
+#endif
 
 #if 0
    A &=
@@ -816,11 +819,11 @@ void sphericalPendulum(
    term sin_phi( sinePrefix + phiStr + trigSuffix ) ;
 
    symbol scalarExpIphi( cos_phi, 1 ) ;
-   symbol bivectorExpIphi( sin_phi, _bivector( e1 ^ e2 ) ) ;
+   symbol bivectorExpIphi( sin_phi, bivector( e1 ^ e2 ) ) ;
    sum ExpIphi(scalarExpIphi) ; ExpIphi += bivectorExpIphi ;
    //printIt( std::string("e^{i") + phiStr + std::string("} &="), ExpIphi ) ;
 
-   sum jBivector( symbol( _bivector( e3 ^ e1) ) ) ;
+   sum jBivector( symbol( mv( e3 ^ e1) ) ) ;
    jBivector *= ExpIphi ;
    //printIt( "j &=", jBivector ) ;
 
@@ -845,14 +848,21 @@ void sphericalPendulum(
 
 }
 
+// HACK: switch to setStringFormat when gaigen2.5.1 generator bug is fixed.
+namespace e3ga
+{
+   void e3ga_setStringFormat(const char *what, const char *format);
+} ;
+
 int main(int argc, char*argv[])
 {
-   mv_string_wedge = " \\wedge " ;
-   mv_string_mul = " " ;
-   mv_string_fp = "%2.0f" ;
-   mv_basisVectorNames[0] = "\\Be_1" ;
-   mv_basisVectorNames[1] = "\\Be_2" ;
-   mv_basisVectorNames[2] = "\\Be_3" ;
+   e3ga_setStringFormat( "wedge", "\\wedge " ) ;
+   e3ga_setStringFormat( "mul", " " ) ;
+   e3ga_setStringFormat( "fp", "%2.0f" ) ;
+
+   e3ga_basisVectorNames[0] = "\\Be_1" ;
+   e3ga_basisVectorNames[1] = "\\Be_2" ;
+   e3ga_basisVectorNames[2] = "\\Be_3" ;
 
 //   euler() ;
 //   rotation() ;

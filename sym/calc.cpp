@@ -3,8 +3,6 @@
  *
  * Peeter Joot (peeter.joot@gmail.com).
  *
- * $Date: 2009/01/12 02:06:37 $
- * $Revision: 1.2 $
  */
 
 #include <iostream>
