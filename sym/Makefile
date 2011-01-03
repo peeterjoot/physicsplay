@@ -52,11 +52,11 @@ PDFS := $(FILES:.ltx=.pdf)
 
 all :: $(gasym_OBJECTS)
 all :: gasym$(EXE)
+#all :: $(calc_OBJECTS)
+#all :: calc$(EXE)
 
 #all :: $(TESTINC_bin)
-#all :: $(calc_OBJECTS)
 #all :: trygin$(EXE)
-#all :: calc$(EXE)
 #all :: $(PDFS)
 
 %.$(OBJ) : %.cpp
@@ -69,11 +69,11 @@ all :: gasym$(EXE)
 #trygin$(EXE) : trygin.$(OBJ)
 #	$(CXX) $(LDFLAGS_GASAND) $(CXXFLAGS) $^ $(LIBS_GINAC) /Fe$@
 
-gasym$(EXE) : $(notdir $(gasym_OBJECTS))
+gasym$(EXE) : $(gasym_OBJECTS)
 	$(CXX) $(LDFLAGS_GASAND) $(CXXFLAGS) $^ $(LIBGASANDBOX) /Fe$@
 
 calc$(EXE) : $(calc_OBJECTS)
-	$(CXX) $(LDFLAGS_GASAND) $(CXXFLAGS) $^ $(libs) /Fe$@
+	$(CXX) $(LDFLAGS_GASAND) $(CXXFLAGS) $^ /Fe$@
 
 %_testinc.cpp : %.h
 	perl mktestinc $^
