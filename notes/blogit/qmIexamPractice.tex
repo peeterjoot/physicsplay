@@ -1,0 +1,196 @@
+\input{../peeter_prologue_print.tex}
+%\input{../peeter_prologue_widescreen.tex}
+
+\chapter{Some worked problems from old PHY356 exams.}
+\label{chap:qmIexamPractice}
+%\useCCL
+\blogpage{http://sites.google.com/site/peeterjoot/math2010/qmIexamPractice.pdf}
+\date{Dec X, 2010}
+\revisionInfo{qmIexamPractice.tex}
+
+\beginArtWithToc
+%\beginArtNoToc
+
+\section{Motivation.}
+
+Some of the old exam questions that I did for preparation for the exam I liked, and thought I'd write up some of them for potential future reference.
+
+\section{Questions from the Dec 2007 PHY355H1F exam.}
+\subsection{1b.}
+
+\paragraph{Q:} If $\Pi$ is the parity operator, defined by $\Pi \ket{x} = \ket{-x}$, where $\ket{x}$ is the eigenket of the position operator $X$ with eigenvalue $x$), and $P$ is the momentum operator conjugate to $X$, show (carefully) that $\Pi P \Pi = -P$.
+
+\paragraph{A:}
+
+Consider the matrix element $\bra{-x'} \antisymmetric{\Pi}{P} \ket{x}$.  This is
+
+\begin{align*}
+\bra{-x'} \antisymmetric{\Pi}{P} \ket{x}
+&=
+\bra{-x'} \Pi P - P \Pi \ket{x} \\
+&=
+\bra{-x'} \Pi P \ket{x} - \bra{-x} P \Pi \ket{x} \\
+&=
+\bra{x'} P \ket{x} - \bra{-x} P \ket{-x} \\
+&=
+- i \hbar \left(
+\delta(x'-x) \PD{}{x}
+-\underbrace{\delta(-x -(-x'))}_{= \delta(x'-x) = \delta(x-x')} \PD{}{-x}
+\right) \\
+&=
+- 2 i \hbar 
+\delta(x'-x) \PD{}{x} \\
+&=
+2 \bra{x'} P \ket{x} \\
+&=
+2 \bra{-x'} \Pi P \ket{x} \\
+\end{align*}
+
+We've taken advantage of the Hermitian property of $P$ and $\Pi$ here, and can rearrange for
+
+\begin{equation}\label{eqn:qmIexamPractice2007Dec:1b:10}
+\bra{-x'} \Pi P - P \Pi - 2 \Pi P \ket{x} = 0
+\end{equation}
+
+Since this is true for all $\bra{-x}$ and $\ket{x}$ we have
+
+\begin{equation}\label{eqn:qmIexamPractice2007Dec:1b:20}
+\Pi P + P \Pi = 0.
+\end{equation}
+
+Right multiplication by $\Pi$ and rearranging we have
+\begin{equation}\label{eqn:qmIexamPractice2007Dec:1b:30}
+\Pi P \Pi = - P \Pi \Pi = - P.
+\end{equation}
+
+\subsection{1f.}
+
+\paragraph{Q:} For a free particle moving in one-dimention, the propagator (i.e. the coordinate representation of the evolution opeator),
+
+\begin{equation}\label{eqn:qmIexamPractice2007Dec:1f:10}
+G(x,x';t) = \bra{x} U(t) \ket{x'}
+\end{equation}
+
+is given by
+
+\begin{equation}\label{eqn:qmIexamPractice2007Dec:1f:20}
+G(x,x';t) = \sqrt{\frac{m}{2 \pi i \hbar t}} e^{i m (x-x')^2/ (2 \hbar t)}.
+\end{equation}
+
+\paragraph{A:}
+
+This problem is actually fairly straightforward, but it is nice to work it having had a similar problem set question where we were asked about this time evolution operator matrix element (ie: what it's physical meaning is).  Here we have a concrete example of the form of this matrix operator.
+
+Proceeding directly, we have
+
+\begin{align*}
+\bra{x} U \ket{x'}
+&=
+\int \braket{x}{p'} \bra{p'} U \ket{p} \braket{p}{x'} dp dp' \\
+&=
+\int u_{p'}(x) \bra{p'} e^{-i P^2 t/(2 m \hbar)} \ket{p} u_p^\conj(x') dp dp' \\
+&=
+\int u_{p'}(x) e^{-i p^2 t/(2 m \hbar)} \delta(p-p') u_p^\conj(x') dp dp' \\
+&=
+\int u_{p}(x) e^{-i p^2 t/(2 m \hbar)} u_p^\conj(x') dp \\
+&=
+\inv{(\sqrt{2 \pi \hbar})^2} \int e^{i p (x-x')/\hbar} e^{-i p^2 t/(2 m \hbar)} dp \\
+&=
+\inv{2 \pi \hbar} \int e^{i p (x-x')/\hbar} e^{-i p^2 t/(2 m \hbar)} dp \\
+&=
+\inv{2 \pi} 
+\int e^{i k (x-x')} e^{-i \hbar k^2 t/(2 m)} dk \\
+&=
+\inv{2 \pi} 
+\int dk e^{- \left(k^2 \frac{ i \hbar t}{2m} - i k (x-x')
+\right)
+} \\
+&=
+\inv{2 \pi} 
+\int dk e^{- \frac{ i \hbar t}{2m}\left(k - i \frac{2m}{i \hbar t}\frac{(x-x')}{2} \right)^2
+- \frac{i^2 2 m (x-x')^2}{4 i \hbar t} 
+} \\
+&=
+\inv{2 \pi}  \sqrt{\pi} \sqrt{\frac{2m}{i \hbar t}}
+e^{\frac{ i m (x-x')^2}{2 \hbar t}},
+\end{align*}
+
+which is the desired result.  Now, let's look at how this would be used.  We can express our time evolved state using this matrix element by introducing an identity
+
+\begin{align*}
+\braket{x}{\psi(t)} 
+&=
+\bra{x} U \ket{\psi(0)} \\
+&=
+\int dx' \bra{x} U \ket{x'} \braket{x'}{\psi(0)} \\
+&=
+\sqrt{\frac{m}{2 \pi i \hbar t}} 
+\int dx' 
+e^{i m (x-x')^2/ (2 \hbar t)}
+\braket{x'}{\psi(0)} \\
+\end{align*}
+
+This gives us
+\begin{equation}\label{eqn:qmIexamPractice2007Dec:1f:40}
+\psi(x, t)
+=
+\sqrt{\frac{m}{2 \pi i \hbar t}} 
+\int dx' 
+e^{i m (x-x')^2/ (2 \hbar t)} \psi(x', 0)
+\end{equation}
+
+However, note that our free particle wave function at time zero is
+
+\begin{equation}\label{eqn:qmIexamPractice2007Dec:1f:50}
+\psi(x, 0) = \frac{e^{i p x/\hbar}}{\sqrt{2 \pi \hbar}}
+\end{equation}
+
+So the convolution integral \ref{eqn:qmIexamPractice2007Dec:1f:40} does not exist.  We likely have to require that the solution be not a pure state, but instead a superposition of a set of continuous states (a wave packet in position or momentum space related by Fourier transforms).  That is
+
+\begin{align}\label{eqn:qmIexamPractice2007Dec:1f:60}
+\psi(x, 0) &= 
+\inv{\sqrt{2 \pi \hbar}} \int \hat{\psi}(p, 0) e^{i p x/\hbar} dp \\
+\hat{\psi}(p, 0) &= 
+\inv{\sqrt{2 \pi \hbar}} \int \psi(x'', 0) e^{-i p x''/\hbar} dx''
+\end{align}
+
+The time evolution of this wave packet is then determined by the propagator, and is
+
+\begin{equation}\label{eqn:qmIexamPractice2007Dec:1f:70}
+\psi(x,t) =
+\sqrt{\frac{m}{2 \pi i \hbar t}} 
+\inv{\sqrt{2 \pi \hbar}} 
+\int dx' dp
+e^{i m (x-x')^2/ (2 \hbar t)}
+\hat{\psi}(p, 0) e^{i p x'/\hbar} ,
+\end{equation}
+
+or in terms of the position space wave packet evaluated at time zero
+
+\begin{equation}\label{eqn:qmIexamPractice2007Dec:1f:80}
+\psi(x,t) =
+\sqrt{\frac{m}{2 \pi i \hbar t}}
+\inv{2 \pi}
+\int dx' dx'' dk
+e^{i m (x-x')^2/ (2 \hbar t)}
+e^{i k (x' - x'')} \psi(x'', 0)
+\end{equation}
+
+We see that the propagator also ends up with a Fourier transform structure, and we have
+
+\begin{align}\label{eqn:qmIexamPractice2007Dec:1f:90}
+\psi(x,t) &= \int dx' U(x, x' ; t) \psi(x', 0) \\
+U(x, x' ; t) &=
+\sqrt{\frac{m}{2 \pi i \hbar t}}
+\inv{2 \pi}
+\int du dk
+e^{i m (x - x' - u)^2/ (2 \hbar t)}
+e^{i k u }
+\end{align}
+
+Does that Fourier transform exist?  I'd not be suprised if it ended up with a delta function representation.  I'll hold off attempting to evaluate and reduce it until another day.
+
+\subsection{2.}
+
+%\EndArticle
+\EndNoBibArticle
