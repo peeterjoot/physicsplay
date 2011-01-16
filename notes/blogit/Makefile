@@ -10,6 +10,7 @@ ORIG_FILES += ../myrefs.bib
 ORIG_FILES += ../plainurl.bst
 ORIG_FILES += ../unsrturl.bst
 #ORIG_FILES += ../gabook/ftMaxVacuum.tex
+ORIG_FILES += ../phy450/antisymmetricTensorTx.tex
 
 # for gaBasics:
 ORIG_FILES += ../otherbook/triangleLaw.png
