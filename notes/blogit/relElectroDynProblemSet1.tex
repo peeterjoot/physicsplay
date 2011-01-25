@@ -156,6 +156,47 @@ To get an initial feel for this function $f(x,y) = x^2 (1 - y^2) + y^2$, notice 
 
 \section{Problem 3.}
 \subsection{Statement}
-\subsection{Solution}
+
+A toy model of a GPS system has satellites moving in a straight line with constant velocity $V_x$ and at a constant height $h$ (measured, e.g., along the y-axis) above ``ground'' (the x-axis).  The satellites broadcast the time in their rest frame as well as their location at a time of broadcast.  Imagine a person on the ground recieves simultaneously broadcasts from two satellites, $A$ and $B$, reporting their locations $x_A'$ and $x_B'$ as well as times of broadcast (which happen to be equal), $t_A' = t_B'$.	
+
+\begin{enumerate}
+\item  Find a condition determining your position in $x$.  Evaluate it to find your deviation from the midpoint between the satellites to first order in $V_x/c$.
+\item For some real numbers, note that in reality there are 24 satellites, moving with $V ~4 \text{km}/s$, a distance $R \approx 2.7 \times 10^4 \text{km}$.  Use these numbers and the result from the previous problem (assuming a flat Earth, to be sure...) to get an idea whether (special) relativisitic effects are important for the typical modern GPS accuracy of order 10 m (or less)?
+\end{enumerate}
+
+\subsection{Discussion of the non-toy model.}
+
+It is fairly easy to find interesting info about the mechanisms that real GPS works using.  NASA has a nice \href{http://www.nasm.si.edu/gps/work.html}{How does GPS work} page \cite{nasaGPS}, and How stuff works has a nice \href{http://electronics.howstuffworks.com/gadgets/travel/gps.htm}{How GPS Receivers Work} article \cite{howStuffWorksGPS}.  Reading these one finds that the GPS clocks are actually kept synchronized.  The typical GPS reciever obviously has a clock, since we have countdown timers for time until arrival, is that clock accurate enough compared to the satellite atomic clocks to be used for the GPS location algorithm?  What is done in fact is to use the local reciever time to seed the iterative algorithms, allowing the local time to be calculated eventually with an accuracy that actually approaches that of the satellite's atomic clocks.  Some of the sources of error, like reflection of the signals, delaying them, and interference by atmosphere are also discussed in these articles.  Also interesting is that there is a table lookup of the satellites position implemented in the GPS recievers.  This table lookup is used to seed the iterative algorithms, and can be used to reduce calculation error.
+
+Our basic GPS problem is to calcuate the intersection of a number of ``spherical'' hypersurfaces.  This is made more interesting by the fact that this is both a non-linear and an over-specified problem.  Let's consider the geometric problem to get an idea of how to set up this problem.  Suppose that we have a set of $k$ satellites, located at position $\Bp_i, i \in [1,k]$, and we know that these are located with distance $d_i$ from our position $\Bx$.
+
+Our problem is then to find the simultaneous solution to the following set of equations
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsA1:300}
+\begin{aligned}
+(\Bx - \Bp_1)^2 &= d_1^2 \\
+(\Bx - \Bp_2)^2 &= d_2^2 \\
+\vdots \\
+(\Bx - \Bk_2)^2 &= d_k^2.
+\end{aligned}
+\end{equation}
+
+Observe that even if we reduce this to a one dimensional problem in a single variable $x$, we still have a non-linear system
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsA1:300b}
+\begin{aligned}
+0 &= (x - p_1)^2 - d_1^2 \\
+0 &= (x - p_2)^2 - d_2^2 \\
+\vdots \\
+0 &= (x - k_2)^2 - d_k^2.
+\end{aligned}
+\end{equation}
+
+We also need to be aware of the fact that each of the positions $p_i$, and the respective distances $d_i$ will in reality both have associated errors, so there is not likely any specific single value of $x$ that ``solves'' this problem, unless it is setup in a contrived and perfect fashion.  This intrinsic error, and the $k$ equations, one unknown nature of the problem (or three unknowns for spatial, or four for spatial and time position) suggests a least squares approach, but it will have to be one that also incorporates iteration.
+
+
+
+\subsection{Solution. Part 1.}
+\subsection{Solution. Part 2.}
 
 \EndArticle
