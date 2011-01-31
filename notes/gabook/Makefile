@@ -23,7 +23,7 @@ ORIG_FILES += ../geometric-algebra/planeParameterization.png
 ORIG_FILES += ../geometric-algebra/planerejection.png
 ORIG_FILES += ../calculus/rotationGen.png
 ORIG_FILES += ../geometric-algebra/rotor.png
-ORIG_FILES += ../geometric-algebra/satellite.PNG
+ORIG_FILES += ../geometric-algebra/satellite.png
 ORIG_FILES += ../geometric-algebra/spherical_polar.png
 ORIG_FILES += ../calculus/surface_area_element.png
 ORIG_FILES += ../geometric-algebra/surface_flux_element.png
@@ -34,7 +34,7 @@ ORIG_FILES += ../calculus/volume_element.png
 ORIG_FILES += ../blogit/newtonsIntersectionHorizontal.png
 ORIG_FILES += ../blogit/newtonsIntersectionAnyOrientation.png
 ORIG_FILES += ../blogit/newtonsIntersectionTwoCurves.png
-ORIG_FILES += ../blogit/toriodalSegment.png
+ORIG_FILES += ../blogit/toriodalSegment.PNG
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
