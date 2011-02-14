@@ -583,6 +583,8 @@ sub expandPeetersMathModeMacros
       $out =~ s/\\abs${r1}/{\\left\\lvert$1\\right\\rvert}/g;
    }
 
+   $out =~ s/\\Norm${r1}/{\\left\\lVert$1\\right\\rVert}/g;
+
    $out =~ s/\\bra${r1}/{\\langle $1 \\rvert}/g;
    $out =~ s/\\ket${r1}/{\\lvert $1 \\rangle}/g;
 
@@ -619,12 +621,14 @@ sub expandPeetersMathModeMacros
    $out =~ s/\\Bnu/\\boldsymbol{\\nu}/g;
    $out =~ s/\\Bsigma/\\boldsymbol{\\sigma}/g;
    $out =~ s/\\Brho/\\boldsymbol{\\rho}/g;
+   $out =~ s/\\Bbeta/\\boldsymbol{\\beta}/g;
    $out =~ s/\\BTheta/\\boldsymbol{\\Theta}/g;
    $out =~ s/\\BXI/\\boldsymbol{\\xi}/g;
    $out =~ s/\\BEta/\\boldsymbol{\\eta}/g;
    $out =~ s/\\(.)cap/\\hat{\\B$1}/g;
    $out =~ s/\\hat(\w)/\\hat{$1}/g;
 
+   $out =~ s/\\InvGamma/\\sqrt{1 - \\frac{\\Bv^2}{c^2}}/g;
 # this messes up \Bigr and \Bigl
 #   $out =~ s/\\B(.)/\\mathbf{$1}/g;
 # 
@@ -668,6 +672,9 @@ sub expandPeetersMathModeMacros
 
    $out =~ s/\\traceB${r1}/\\tr\\left({$1}\\right)/g;
    $out =~ s/\\trace${r1}/\\tr{$1}/g;
+   $out =~ s/\\ddtau${r1}/\\frac{d{$1}}{d\\tau}/g;
+   $out =~ s/\\ddt${r1}/\\frac{d{$1}}{dt}/g;
+   $out =~ s/\\dds${r1}/\\frac{d{$1}}{ds}/g;
 
    # FIXME: this is italics.  bold in html done how?
    $out =~ s/\\paragraph${r1}/<em>$1<\/em>/g;
@@ -694,6 +701,8 @@ sub expandPeetersMathModeMacros
    $out =~ s/\\thetadot/\\dot{\\theta}/g;
    $out =~ s/\\phidot/\\dot{\\phi}/g;
    $out =~ s/\\xdot/\\dot{x}/g;
+   $out =~ s/\\pdot/\\dot{p}/g;
+   $out =~ s/\\vdot/\\dot{v}/g;
 
    $out =~ s/\\directproduct/\\otimes/g;
    $out =~ s/\\thetacap/\\hat{\\boldsymbol{\\theta}}/g;
@@ -702,6 +711,15 @@ sub expandPeetersMathModeMacros
    $out =~ s/\\questionEquals/\\stackrel{?}{=}/g;
    $out =~ s/\\T\b/\\text{T}/g;
    $out =~ s/\\BOne/\\mathbf{1}/g;
+
+
+   # HACK.  Can't use txfonts in wordpress.  At least suppress the can't parse
+   # message (unfortunately with loss of meaning).
+   if ( $wordpress )
+   {
+      $out =~ s/\\ointclockwise/\\oint/g;
+   }
+
    $out =~ s/\\Bzero/\\mathbf{0}/g;
 
    $out =~ s/\\evalbar${r2}/{\\left.{$1}\\right\\vert}_{$2}/g ;
