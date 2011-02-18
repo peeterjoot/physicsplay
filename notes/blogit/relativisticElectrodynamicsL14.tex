@@ -120,8 +120,53 @@ This has the identical form (with $\phi \sim \chi$, and $4 \pi \rho \sim \spaceg
 
 While we aren't trying to actually solve this (just show that it can be solved).  One way to look at this problem is that it is just a Laplace equation, and we could utilize a Green's function solution if desired.
 
-FIXME: What's the Green's function?
+\subsection{On the Green's function.}
 
+Recall that the Green's function for the Laplacian was 
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsL14:292}
+G(\Bx, \Bx') = \inv{\Abs{\Bx - \Bx'}}
+\end{equation}
+
+with the property 
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsL14:294}
+\spacegrad^2 G(\Bx, \Bx') = \delta(\Bx - \Bx')
+\end{equation}
+
+Our LDE to solve by Green's method is
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsL14:296}
+\spacegrad^2 \phi = 4 \pi \rho,
+\end{equation}
+
+We let this equation (after switching to primed coordinates) operate on the Green's function
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsL14:298}
+\int d^3 \Bx' {\spacegrad'}^2 \phi(\Bx') G(\Bx, \Bx') 
+=
+\int d^3 \Bx' 4 \pi \phi(\Bx') G(\Bx, \Bx').
+\end{equation}
+
+Assuming that the left action of the Green's function on the test function $\phi(\Bx')$ is the same as the right action (i.e. $\phi(\Bx')$ and $G(\Bx, \Bx')$ commute), we have for the LHS
+
+\begin{align*}
+\int d^3 \Bx' {\spacegrad'}^2 \phi(\Bx') G(\Bx, \Bx') 
+&=
+\int d^3 \Bx' {\spacegrad'}^2 G(\Bx, \Bx') \phi(\Bx') \\
+&=
+\int d^3 \Bx' \delta(\Bx - \Bx') \phi(\Bx') \\
+&=
+\phi(\Bx).
+\end{align*}
+
+Substitution of $G(\Bx, \Bx') = 1/\Abs{\Bx - \Bx'}$ on the RHS then gives us the general solution
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsL14:300}
+\phi(\Bx) = 4 \pi \int d^3 \Bx' \frac{\rho(\Bx') }{\Abs{\Bx - \Bx'}}
+\end{equation}
+
+\subsection{Back to Maxwell's equations in vacuum.}
 What are the Maxwell's vacuum equations now?
 
 With the second gauge substitution we have
@@ -215,9 +260,9 @@ If we want $\partial_i A^i = 0$, then we have
 -\partial_i {A'}^i = \partial_i \partial^i \chi = \left( \inv{c^2} \frac{\partial^2}{\partial t^2} - \Delta \right) \chi
 \end{equation}
 
-This is the physicist proof.  Yes, it can be solved.  To really solve this, we'd want to use Green's functions.
+This is the physicist proof.  Yes, it can be solved.  To really solve this, we'd want to use Green's functions.  I seem to recall the Green's function is a retarded time version of the Laplacian Green's function, and we can figure that exact form out by switching to a Fourier frequency domain representation.
 
-Returning to Maxwell's equations we have
+Anyways.  Returning to Maxwell's equations we have
 
 \begin{align}\label{eqn:relativisticElectrodynamicsL14:530}
 0 &= \partial_i \partial^i A^j \\
@@ -236,32 +281,102 @@ But the Lorentz transform matrices multiply out to identity, in the same way tha
 
 \section{What happens with a Massive vector field?}
 
-FIXME: go through this section and fill in the details.
-
 \begin{equation}\label{eqn:relativisticElectrodynamicsL14:570}
 S = \int d^4 x \left( \inv{4} F^{ij} F_{ij} + \frac{m^2}{2} A^i A_i \right)
 \end{equation}
 
-We call this a mass term because the units require it.
+\subsection{An aside on units}
+
+``Note that this action is expressed in dimensions where $\hbar = c = 1$, making the action is unit-less (energy and time are inverse units of each other).  The $d^4x$ has units of $m^{-4}$ (since $[x] = \hbar/mc$), so $F$ has units of $m^2$, and then $A$ has units of mass. Therefore $d^4x A A$ has units of $m^{-2}$ and therefore you need something that has units of $m^2$ to make the action unit-less. When you don't take $c=1$, then you've got to worry about those factors, but I think you'll see it works out fine.''
+
+For what it's worth, I can adjust the units of this action to those that we've used in class with,
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsL14:800}
+S = \int d^4 x \left( -\inv{16 \pi c} F^{ij} F_{ij} - \frac{m^2 c^2}{8 \hbar^2} A^i A_i \right)
+\end{equation}
+
+\subsection{Back to the problem.}
+
+%\begin{align*}
+%\delta S 
+%&= 0  \\
+%&= \int d^4 x \left( \partial^i \partial_i A_j - \partial_j \partial_i A^i \delta A^i + m^2 A_i \delta A^i \right)
+%\end{align*}
+%
+The variation of the field invariant is
 
 \begin{align*}
-\delta S 
-&= 0  \\
-&= \int d^4 x \left( \partial^i \partial_i A_j - \partial_j \partial_i A^i \delta A^i + m^2 A_i \delta A^i \right)
+\delta (F_{ij} F^{ij})
+&=
+2 (\delta F_{ij}) F^{ij}) \\
+&=
+2 (\delta(\partial_i A_j -\partial_j A_i)) F^{ij}) \\
+&=
+2 (\partial_i \delta(A_j) -\partial_j \delta(A_i)) F^{ij}) \\
+&=
+4 F^{ij} \partial_i \delta(A_j) \\
+&=
+4 \partial_i (F^{ij} \delta(A_j)) - 4 (\partial_i F^{ij}) \delta(A_j).
 \end{align*}
 
-We get 
+Variation of the $A^2$ term gives us
 
-\begin{equation}\label{eqn:relativisticElectrodynamicsL14:590}
-\left( (\Delta - m^2) g_{ij} - \partial_i \partial_j \right) A^i = 0
+\begin{equation}\label{eqn:relativisticElectrodynamicsL14:700}
+\delta (A^j A_j) = 2 A^j \delta(A_j),
 \end{equation}
 
-FIXME: The EOM (DIY)
+so we have
 
-\begin{equation}\label{eqn:relativisticElectrodynamicsL14:610}
-m^2 \partial_i A^i = 0
+\begin{align*}
+0 &= \delta S \\
+&= \int d^4 x \delta(A_j) \left( -\partial_i F^{ij} + m^2 A^j \right)
++ \int d^4 x \partial_i (F^{ij} \delta(A_j))
+\end{align*}
+
+The last integral vanishes on the boundary with the assumption that $\delta(A_j) = 0$ on that boundary.
+
+Since this must be true for all variations, this leaves us with
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsL14:720}
+\partial_i F^{ij} = m^2 A^j
 \end{equation}
 
-With the mass term, the Lorentz gauge is already chosen for us?
+The RHS can be expanded into wave equation and divergence parts
+
+\begin{align*}
+\partial_i F^{ij}
+&=
+\partial_i (\partial^i A^j - \partial^j A^i) \\
+&=
+(\partial_i \partial^i) A^j - \partial^j (\partial_i A^i) \\
+\end{align*}
+
+With $\square$ for the wave equation operator
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsL14:750}
+\square = \partial_i \partial^i = \inv{c^2} \PDSq{t}{} - \Delta,
+\end{equation}
+
+we can manipulate the EOM to pull out an $A_i$ factor
+
+\begin{align*}
+0 
+&= \left( \square -m^2 \right) A^j - \partial^j (\partial_i A^i) \\
+&= \left( \square -m^2 \right) g^{ij} A_i - \partial^j (\partial^i A_i) \\
+&= \left( \left( \square -m^2 \right) g^{ij} - \partial^j \partial^i \right) A_i.
+\end{align*}
+
+If we hit this with a derivative we get	
+
+\begin{align*}
+0 
+&= \partial_j \left( \left( \square -m^2 \right) g^{ij} - \partial^j \partial^i \right) A_i \\
+&= \left( \left( \square -m^2 \right) \partial^i - \partial_j \partial^j \partial^i \right) A_i \\
+&= \left( \left( \square -m^2 \right) \partial^i - \square \partial^i \right) A_i \\
+&= \left( \square -m^2 - \square \right) \partial^i A_i \\
+&= -m^2 \partial^i A_i \\
+\end{align*}
+
+Since $m$ is presumed to be non-zero here, this means that the Lorentz gauge is already chosen for us by the equations of motion.
 
 \EndArticle
