@@ -3,7 +3,8 @@
 BEGIN
 {
 
-$n = 10 ;
+$n = $ENV{START} ;
+$n = 10 unless ( defined $n ) ;
 
 }
 
