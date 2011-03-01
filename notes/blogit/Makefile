@@ -1,4 +1,7 @@
-TEXFILES := $(shell ls *.tex)
+RAWTEXFILES := $(shell ls *.tex)
+PHY450_PS3_2 := relElectroDynProblemSet3TwoInternals.tex
+TEXFILES := $(filter-out $(PHY450_PS3_2), $(RAWTEXFILES))
+
 PDFS := $(TEXFILES:.tex=.pdf)
 
 # logically symlinks, but MikTex doesn't like those:
@@ -44,3 +47,6 @@ mostlyclean ::
 
 localclean ::
 	rm -f $(LOCAL_FILES)
+
+relElectroDynProblemSet3.pdf : $(PHY450_PS3_2)
+relElectroDynProblemSet3_2.pdf: $(PHY450_PS3_2)
