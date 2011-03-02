@@ -38,7 +38,7 @@ gaBasics.pdf : gaBasics.tex
 #	./wordToTex < gaBasics.txt > gaBasics.tex
 
 %.pdf : %.tex
-	../make_pdflatex $<
+	perl ../make_pdflatex $<
 
 clean :: mostlyclean localclean
 
