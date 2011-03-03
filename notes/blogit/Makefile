@@ -1,6 +1,12 @@
 RAWTEXFILES := $(shell ls *.tex)
+
 PHY450_PS3_2 := relElectroDynProblemSet3TwoInternals.tex
-TEXFILES := $(filter-out $(PHY450_PS3_2), $(RAWTEXFILES))
+
+INCOMPLETE += relativisticElectrodynamicsL16.tex
+INCOMPLETE += $(PHY450_PS3_2)
+
+TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
+
 
 PDFS := $(TEXFILES:.tex=.pdf)
 
