@@ -3,7 +3,7 @@ RAWTEXFILES := $(shell ls *.tex)
 #PHY450_PS3_2 := relElectroDynProblemSet3TwoInternals.tex
 PHY450_PS4_2 := relElectroDynProblemSet4TwoInternals.tex
 
-INCOMPLETE += relativisticElectrodynamicsL16.tex
+#INCOMPLETE += relativisticElectrodynamicsL16.tex
 #INCOMPLETE += $(PHY450_PS3_2)
 INCOMPLETE += $(PHY450_PS4_2)
 
