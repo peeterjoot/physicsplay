@@ -1,9 +1,11 @@
 RAWTEXFILES := $(shell ls *.tex)
 
-PHY450_PS3_2 := relElectroDynProblemSet3TwoInternals.tex
+#PHY450_PS3_2 := relElectroDynProblemSet3TwoInternals.tex
+PHY450_PS4_2 := relElectroDynProblemSet4TwoInternals.tex
 
 INCOMPLETE += relativisticElectrodynamicsL16.tex
-INCOMPLETE += $(PHY450_PS3_2)
+#INCOMPLETE += $(PHY450_PS3_2)
+INCOMPLETE += $(PHY450_PS4_2)
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
@@ -54,5 +56,8 @@ mostlyclean ::
 localclean ::
 	rm -f $(LOCAL_FILES)
 
-relElectroDynProblemSet3.pdf : $(PHY450_PS3_2)
-relElectroDynProblemSet3_2.pdf: $(PHY450_PS3_2)
+#relElectroDynProblemSet3.pdf : $(PHY450_PS3_2)
+#relElectroDynProblemSet3_2.pdf: $(PHY450_PS3_2)
+
+relElectroDynProblemSet4.pdf : $(PHY450_PS4_2)
+relElectroDynProblemSet4_2.pdf: $(PHY450_PS4_2)
