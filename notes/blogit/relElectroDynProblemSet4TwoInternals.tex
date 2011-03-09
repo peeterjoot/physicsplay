@@ -210,7 +210,7 @@ Let's also verify the last of Maxwell's equations in phasor form.  The time depe
 
 With only $r$ and $\theta$ components in the magnetic phasor we have
 
-\begin{equation}\label{eqn:relElectroDynProblemSet4:n}
+\begin{equation}\label{eqn:relElectroDynProblemSet4:630}
 \grad \cross (v_r \rcap + v_\theta \thetacap) 
 =
 -\inv{r \sin\theta} 
@@ -232,7 +232,7 @@ Immediately, we see that with no explicit $\phi$ dependence in the coordinates, 
 \grad \cross \BB 
 &=
 \inv{r } \left(
-- A\sin\theta 
+ A\sin\theta 
 \partial_r \left( 1 - \frac{i}{k r} + \frac{1}{k^2 r^2} \right) e^{i k r} 
 +\frac{2 A \sin\theta}{k r^2} 
 \left( -i - \frac{1}{kr} \right) e^{i k r} 
@@ -240,7 +240,6 @@ Immediately, we see that with no explicit $\phi$ dependence in the coordinates, 
 &=
 A \sin\theta 
 \inv{r } \left(
-- 
 \partial_r \left( 1 - \frac{i}{k r} + \frac{1}{k^2 r^2} \right) e^{i k r} 
 +\frac{2 }{k r^2} 
 \left( -i - \frac{1}{kr} \right) e^{i k r} 
@@ -248,34 +247,173 @@ A \sin\theta
 &=
 A \sin\theta e^{i k r}
 \inv{r } \left(
-- 
 (ik)\left( 1 - \frac{i}{k r} + \frac{1}{k^2 r^2} \right) 
--\left( \frac{i}{k r^2} - \frac{2}{k^2 r^3} \right) 
++\left( \frac{i}{k r^2} - \frac{2}{k^2 r^3} \right) 
 +\frac{2 }{k r^2} 
 \left( -i - \frac{1}{kr} \right) 
 \right) \phicap \\
 &=
 A \sin\theta e^{i k r}
 \inv{r } \left(
-- 
-(ik)\left( 1 - \frac{i}{k r} + \frac{1}{k^2 r^2} \right) 
--\frac{i}{k r^2} 
--\frac{2i }{k r^2} 
+i k + \inv{r} - \frac{ 4 }{k^2 r^3}
 \right) \phicap \\
 \end{align*}
 
-FIXME: Believe that I have made an algebraic error somewhere.  Have a $-4i/kr^2$ term that should have cancelled out.  Assuming that's the only mistake, and fudging it, we are left with
+What we expect is $\grad \cross \BB = - i k \BE$ which is
 
-\begin{equation}\label{eqn:relElectroDynProblemSet4:n}
-\grad \cross \BB 
-=
+\begin{equation}\label{eqn:relElectroDynProblemSet4:640}
+- i k \BE =
 A \sin\theta e^{i k r}
 \inv{r } \left(
 - i k - \inv{r}
 \right) \phicap 
 \end{equation}
 
-which is precisely $-i k \BE$ as we should expect.
+FIXME: Somewhere I must have made a sign error, because these aren't matching!  Have an extra $1/r^3$ term and the wrong sign on the $1/r$ term.
 
 \subsubsection{Part 2.  Poynting and intensity.}
+
+Our Poynting vector is
+
+\begin{equation}\label{eqn:relElectroDynProblemSet4:650}
+\vec{S} = \frac{c}{4 \pi} \vec{E} \cross \vec{B},
+\end{equation}
+
+which we could calculate from \ref{eqn:relElectroDynProblemSet4:400}, and \ref{eqn:relElectroDynProblemSet4:610}.  However, that looks like it's going to be a mess to multiply out.  Let's use instead the trick from \S 48 of the course text \cite{landau1980classical}, and work with the complex quantities directly, noting that we have
+
+\begin{align*}
+(\Real \BE e^{i \alpha}) \cross (\Real \BB e^{i \alpha}) 
+&= \inv{4} 
+( \BE e^{i \alpha} + \BE^\conj e^{-i \alpha}) \cross ( \BB e^{i \alpha} + \BB^\conj e^{-i \alpha}) \\
+&= \inv{2} \Real \left( \BE \cross \BB^\conj + (\BE \cross \BB) e^{2 i \alpha} \right).
+\end{align*}
+
+Now we can do the Poynting calculation using the simpler relations \ref{eqn:relElectroDynProblemSet4:580}, \ref{eqn:relElectroDynProblemSet4:600}.
+
+Let's also write
+\begin{align}\label{eqn:relElectroDynProblemSet4:655}
+\BE &= A e^{i k r} E_\phi \phicap \\
+\BB &= A e^{i k r} ( B_r \rcap + B_\theta \thetacap )
+\end{align}
+
+where
+
+\begin{align}\label{eqn:relElectroDynProblemSet4:660}
+E_\phi &= \frac{\sin\theta}{r} \left( 1 - \frac{i}{kr} \right)  \\
+B_r &= -\frac{2 \cos\theta}{k r^2} \left( i + \frac{1}{kr} \right)  \\
+B_\theta &= - \frac{\sin\theta}{r} \left( 1 - \frac{i}{k r} + \frac{1}{k^2 r^2} \right) 
+\end{align}
+
+So our Poynting vector is
+
+\begin{align*}
+\vec{S} 
+&= \frac{A^2 c}{2 \pi} \Real
+\left(
+E_\phi \phicap \cross ( B_r^\conj \rcap + B_\theta^\conj \thetacap )
++
+E_\phi \phicap \cross ( B_r \rcap + B_\theta \thetacap ) e^{ 2 i ( k r - \omega t ) }
+\right) \\
+\end{align*}
+
+Note that our unit vector basis $\{ \rcap, \thetacap, \phicap \}$ was rotated from $\{ \zcap, \xcap, \ycap \}$, so we have
+
+\begin{align}\label{eqn:relElectroDynProblemSet4:670}
+\phicap \cross \rcap &= \thetacap \\
+\thetacap \cross \phicap &= \rcap \\
+\rcap \cross \thetacap &= \phicap ,
+\end{align}
+
+and plug this into our Poynting expression
+
+\begin{align*}
+\vec{S} 
+&= \frac{A^2 c}{2 \pi} \Real
+\left(
+E_\phi B_r^\conj \thetacap 
+-E_\phi B_\theta^\conj \rcap 
++(E_\phi B_r \thetacap 
+-E_\phi B_\theta \rcap )
+e^{ 2 i ( k r - \omega t ) }
+\right) \\
+\end{align*}
+
+Now we have to multiply out our terms.  We have
+
+\begin{align*}
+E_\phi B_r^\conj &=
+- \frac{\sin\theta}{r} \frac{2 \cos\theta}{k r^2} 
+\left( 1 - \frac{i}{kr} \right)
+\left( -i + \frac{1}{kr} \right) \\
+&=
+-\frac{ \sin(2\theta)}{k r^3}
+\left( -i - \frac{i}{k^2 r^2} \right),
+\end{align*}
+
+Since this has no real part, there is no average contribution to $\vec{S}$ in the $\thetacap$ direction.  What do we have for the time dependent part
+
+\begin{align*}
+E_\phi B_r &=
+- \frac{\sin\theta}{r} \frac{2 \cos\theta}{k r^2} 
+\left( 1 - \frac{i}{kr} \right)
+\left( i + \frac{1}{kr} \right) \\
+&=
+-\frac{ \sin(2\theta)}{k r^3}
+\left( i + \frac{2}{kr} - \frac{i}{k^2 r^2} \right) 
+\end{align*}
+
+This is non zero, so we have a time dependent $\thetacap$ contribution that averages out.  Moving on
+
+\begin{align*}
+- E_\phi B_\theta^\conj
+&= 
+\frac{\sin^2\theta}{r^2} 
+\left( 1 - \frac{i}{kr} \right)
+\left( 1 + \frac{i}{kr} + \frac{1}{k^2 r^2} \right) \\
+&= 
+\frac{\sin^2\theta}{r^2} 
+\left( 1 + \frac{2}{k^2 r^2} - \frac{i}{k^3 r^3}\right).
+\end{align*}
+
+This is non-zero, so the steady state Poynting vector is in the outwards radial direction.  The last piece is
+
+\begin{align*}
+- E_\phi B_\theta
+&= 
+\frac{\sin^2\theta}{r^2} 
+\left( 1 - \frac{i}{kr} \right)
+\left( 1 - \frac{i}{kr} + \frac{1}{k^2 r^2} \right) \\
+&= 
+\frac{\sin^2\theta}{r^2} 
+\left( 1 - \frac{2i}{k r} - \frac{i}{k^3 r^3}\right).
+\end{align*}
+
+Assembling all the results we have
+
+\begin{align*}
+\begin{aligned}
+\vec{S} 
+&= 
+\frac{A^2 c}{2 \pi} 
+\frac{\sin^2\theta}{r^2} 
+\left( 1 + \frac{2}{k^2 r^2} \right) \rcap \\
+&\quad +
+\frac{A^2 c}{2 \pi} 
+\Real \left(
+\left(
+-\frac{ \sin(2\theta)}{k r^3} \left( i + \frac{2}{kr} - \frac{i}{k^2 r^2} \right) \thetacap
++\frac{\sin^2\theta}{r^2} \left( 1 - \frac{2i}{k r} - \frac{i}{k^3 r^3}\right) \rcap 
+\right) e^{ 2 i ( k r - \omega t ) }
+\right) 
+\end{aligned}
+\end{align*}
+
+We can read off the intensity directly
+
+\begin{equation}\label{eqn:relElectroDynProblemSet4:680}
+\vec{I} = \expectation{\vec{S}} = 
+\frac{A^2 c \sin^2 \theta}{2 \pi r^2} 
+\left( 1 + \frac{2}{k^2 r^2} \right) \rcap 
+\end{equation}
+
 \subsubsection{Part 3.  Find the power.}
