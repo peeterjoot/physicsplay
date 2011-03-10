@@ -7,6 +7,7 @@ PHY450_PS4_2 := relElectroDynProblemSet4TwoInternals.tex
 #INCOMPLETE += $(PHY450_PS3_2)
 INCOMPLETE += $(PHY450_PS4_2)
 INCOMPLETE += relElectroDynProblemSet3_2.tex
+INCOMPLETE += relativisticElectrodynamicsL18.tex
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
