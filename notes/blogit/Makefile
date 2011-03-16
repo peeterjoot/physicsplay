@@ -9,9 +9,10 @@ PHY450_PS5_1 := relElectroDynProblemSet5OneInternals.tex
 INCOMPLETE += $(PHY450_PS5_1)
 INCOMPLETE += relElectroDynProblemSet3_2.tex
 INCOMPLETE += relElectroDynProblemSet4_2.tex
+INCOMPLETE += relElectroDynProblemSet4_2.tex
+INCOMPLETE += relativisticElectrodynamicsL19.tex
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
-
 
 PDFS := $(TEXFILES:.tex=.pdf)
 
