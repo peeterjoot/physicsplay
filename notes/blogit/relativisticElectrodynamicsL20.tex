@@ -96,13 +96,15 @@ so for our Taylor expansion to be valid we have the following constraints on the
 \Abs{\omega_0 \frac{\Bx \cdot \Bx'}{c \Abs{\Bx}}} \le \frac{\omega_0 l}{c} \ll 1.
 \end{equation}
 
-This is a physical requirement size of the wavelength of the emitter (if the wavelength doesn't meet this requirement, this expansion does not work).
+This is a physical requirement size of the wavelength of the emitter (if the wavelength doesn't meet this requirement, this expansion does not work).  The connection to the wavelength can be observed by noting that we have
 
-FIXME: REVIEWED TO HERE.
-
-\begin{equation}\label{eqn:relativisticElectrodynamicsL20:170}
-\frac{\omega_0}{c} = \frac{2 \pi}{c T} \sim \inv{\lambda}
-\end{equation}
+\begin{align*}
+\frac{\omega_0}{c} &= k \\
+2 \pi k &= \inv{\lambda} \\
+\implies \frac{\omega_0}{c} &\sim \inv{\lambda} \\
+\end{align*}
+% as noted in class.  wasn't clear to me:
+%\frac{\omega_0}{c} &= \frac{2 \pi}{c T} \sim \inv{\lambda}
 
 \section{Putting the pieces together.  Potentials at a distance.}
 
@@ -126,8 +128,8 @@ A^i(\Bx, t)
 A^0(\Bx, t) 
 \approx 
 \inv{\Abs{\Bx}} \int d^3 \Bx' \rho\left(\Bx', t - \frac{\Abs{\Bx}}{c}\right)
-+\inv{\Abs{\Bx}^3} \int d^3 \Bx' \Bx' \rho \left(\Bx', t - \frac{\Abs{\Bx}}{c}\right)
-+\inv{\Abs{\Bx}^2} \Bx \cdot \int d^3 \Bx' \Bx' \PD{t}{\rho}\left(\Bx', t - \frac{\Abs{\Bx}}{c}\right)
++\frac{\Bx}{\Abs{\Bx}^3} \cdot \int d^3 \Bx' \Bx' \rho \left(\Bx', t - \frac{\Abs{\Bx}}{c}\right)
++\frac{\Bx}{c \Abs{\Bx}^2} \cdot \int d^3 \Bx' \Bx' \PD{t}{\rho}\left(\Bx', t - \frac{\Abs{\Bx}}{c}\right)
 \end{equation}
 
 The first term is the total charge evaluated at the retarded time.  In the second term (and in the third, where it's derivative is taken) we have
@@ -148,24 +150,24 @@ which is the dipole moment evaluated at the retarded time $t_r = t - \Abs{\Bx}/c
 
 For the spatial components of the current lets just keep the first term
 
-FIXME: Why?
-
 \begin{align*}
 A^\alpha(\Bx, t) 
 &\approx
 \inv{ c \Abs{\Bx}} \int d^3 \Bx' j^\alpha\left(\Bx', t - \frac{\Abs{\Bx}}{c}\right) \\
 &=
-\inv{ c \Abs{\Bx}} \int d^3 \Bx' (\spacegrad_{\Bx'} x^\alpha \cdot \Bj\left(\Bx', t - \frac{\Abs{\Bx}}{c}\right)  \\
+\inv{ c \Abs{\Bx}} \int d^3 \Bx' (\spacegrad_{\Bx'} x^\alpha) \cdot \Bj\left(\Bx', t - \frac{\Abs{\Bx}}{c}\right)  \\
 &=
 \inv{ c \Abs{\Bx}} \int d^3 \Bx' 
 \left(
-\spacegrad \left( {x'}^\alpha \Bj \left(\Bx', t - \frac{\Abs{\Bx}}{c}\right) \right)
+\spacegrad \cdot \left( {x'}^\alpha \Bj \left(\Bx', t - \frac{\Abs{\Bx}}{c}\right) \right)
 - {x'}^\alpha \spacegrad_{\Bx'} \cdot \Bj\left(\Bx', t - \frac{\Abs{\Bx}}{c}\right) 
 \right) \\
 &=
 \inv{ c \Abs{\Bx}} \oint_{S^2_\infty} d^2 \Bsigma \cdot {x'}^\alpha \Bj\left(\Bx', t - \frac{\Abs{\Bx}}{c}\right)
 +\inv{ c \Abs{\Bx}} \int d^3 \Bx' {x'}^\alpha \PD{t}{}\rho\left(\Bx', t - \frac{\Abs{\Bx}}{c}\right)
 \end{align*}
+
+There's two tricks used here.  One was writing the unit vector $\Be_\alpha = \spacegrad x^\alpha$.  The other was use of the continuity equation $\PDi{t}{\rho} + \spacegrad \Bj = 0$.  This first trick was mentioned as one of the few tricks of physics that will often be repeated since there aren't many good ones.
 
 With the first term vanishing on the boundary (since $j^i$ is localized), and pulling the time derivatives out of the integral, we can summarize the dipole potentials as
 
@@ -183,11 +185,13 @@ A^0(\Bx, t) &= \frac{Q\left(t - \frac{\Abs{\Bx}}{c}\right)}{\Abs{\Bx}} + \frac{\
 PICTURE: two closely separated oppositely charges, wiggling along the line connecting them (on the z-axis).  $-q$ at rest, while $+q$ oscillates.
 
 \begin{equation}\label{eqn:relativisticElectrodynamicsL20:270}
-z_+(t) = z_0 + a \sin\omega t
+z_+(t) = z_0 + a \sin\omega t.
 \end{equation}
 
+Since we've put the $-q$ charge at the origin, it has no contribution to the dipole moment, and we have
+
 \begin{equation}\label{eqn:relativisticElectrodynamicsL20:290}
-\Bd(t) = \Be_z q (z_0 + a \sin\omega t)
+\Bd(t) = \Be_z q (z_0 + a \sin\omega t).
 \end{equation}
 
 Thus
@@ -197,7 +201,7 @@ A^0(\Bx, t) &= \inv{\Abs{\Bx}^3} \Bx \cdot \Bd\left(t - \frac{\Abs{\Bx}}{c}\righ
 \BA(\Bx, t) &= \frac{\dot{\Bd}\left(t - \frac{\Abs{\Bx}}{c}\right)}{c \Abs{\Bx}}
 \end{align}
 
-so with $t_r = t - \Abs{\Bx}/c$
+so with $t_r = t - \Abs{\Bx}/c$, and $z = \Bx \cdot \Be_z$ in the dipole dot product, we have
 
 \begin{align}\label{eqn:relativisticElectrodynamicsL20:400}
 A^0(\Bx, t) &= 
@@ -205,9 +209,11 @@ A^0(\Bx, t) &=
 \BA(\Bx, t) &= \inv{c \Abs{\Bx}} \Be_z q a \omega \cos(\omega t_r)
 \end{align}
 
-These hold provided $\Abs{\Bx} \gg (z_0, a)$ and $\omega l/c \ll 1$.  Observe that $\omega l \sim v$ so this is a requirement that our charged positive particle is moving with $\Abs{\Bv}/c \ll 1$.
+These hold provided $\Abs{\Bx} \gg (z_0, a)$ and $\omega l/c \ll 1$.  Recall that $\omega \lambda = c/2\pi$, which has dimensions of velocity.
 
 FIXME: think through and justify $\omega l = v$.
+FIXME: REVIEWED TO HERE.
+Observe that $\omega l \sim v$ so this is a requirement that our charged positive particle is moving with $\Abs{\Bv}/c \ll 1$.
 
 Taking derivatives, noting that $\spacegrad t_r = -\spacegrad \Abs{\Bx}/c$, and $\spacegrad \Abs{\Bx} = \xcap$, and keeping just the radiation term, we have
 
