@@ -13,7 +13,7 @@ INCOMPLETE += relElectroDynProblemSet4_2.tex
 INCOMPLETE += relativisticElectrodynamicsL19.tex
 #INCOMPLETE += relativisticElectrodynamicsL20.tex
 INCOMPLETE += relativisticElectrodynamicsT7.tex
-INCOMPLETE += relElectroDynProblemSet5.tex
+#INCOMPLETE += relElectroDynProblemSet5.tex
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
