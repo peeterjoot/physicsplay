@@ -3,8 +3,8 @@
 
 An infinitely thin flat conducting surface lying in the $x-z$ plane carries a surface current density:
 
-\begin{equation}\label{eqn:relElectroDynProblemSet5:n}
-\Bkappa - \Be_z \theta(t) \kappa_0 \sin\omega t
+\begin{equation}\label{eqn:relElectroDynProblemSet5P1:n}
+\Bkappa = \Be_z \theta(t) \kappa_0 \sin\omega t
 \end{equation}
 
 Here $\Be_z$ is a unit vector in the $z$ direction, $\kappa_0$ is the peak value of the current density, and $\theta(t)$ is the theta function: $\theta(t < 0) - 0, \theta(t > 0) = 1$.
@@ -13,37 +13,137 @@ Here $\Be_z$ is a unit vector in the $z$ direction, $\kappa_0$ is the peak value
 \item Write down the equations determining the electromagnetic potentials.  Specify which gauge you choose to work in.
 \item Find the electromagnetic potentials outside the plane.
 \item Find the electric and magnetic fields outside the plane.
-\item Give a physical interpetation of the results of the previosu section.  Do they agree with your qualitative expectations?
+\item Give a physical interpretation of the results of the previous section.  Do they agree with your qualitative expectations?
 \item Find the direction and magnitude of the energy flux outside the plane.
-\item Consier a point at some distance from the plane.  Sketch the intensity of the electromagnetic field near this point as a function of time.  Explain physically.
+\item Consider a point at some distance from the plane.  Sketch the intensity of the electromagnetic field near this point as a function of time.  Explain physically.
 \item Consider now a point near the plane.  Are the electric and magnetic fields you found continuous across the conducting plane?  Explain.
 \end{enumerate}
 
-\subsection{1. Solution}
+\subsection{1.  Determining the electromagnetic potentials.}
+
+Augmenting the surface current density with a delta function we can form the current density for the system
+
+\begin{equation}\label{eqn:relElectroDynProblemSet5P1:n}
+\BJ = \delta(y) \Bkappa = \Be_z \theta(t) \delta(y) \kappa_0 \sin\omega t.
+\end{equation}
+
+With only a current distribution specified use of the Coulomb gauge allows for setting the scalar potential on the surface equal to zero, so that we have
+
+\begin{align}\label{eqn:relElectroDynProblemSet5P1:n}
+\square \BA &= \frac{4 \pi \BJ}{c} \\
+\BE &= - \inv{c} \PD{t}{\BA} \\
+\BB &= \spacegrad \cross \BB
+\end{align}
+
+Utilizing our Green's function 
+
+\begin{equation}\label{eqn:relElectroDynProblemSet5P1:n}
+G(\Bx, t) = \frac{\delta(t - \Abs{\Bx}/c)}{4 \pi \Abs{\Bx}} = \delta^3(\Bx)\delta(t),
+\end{equation}
+
+we can invert our vector potential equation, solving for $\BA$
+
+\begin{align*}
+\BA(\Bx, t) 
+&= \int d^3 \Bx' dt' \square_{\Bx', t'} G(\Bx - \Bx', t - t') \BA(\Bx', t') \\
+&= \int d^3 \Bx' dt' G(\Bx - \Bx', t - t') \frac{4 \pi \BJ(\Bx', t')}{c} \\
+&= \int d^3 \Bx' dt' 
+\frac{\delta(t - t' - \Abs{\Bx -\Bx'}/c)}{4 \pi \Abs{\Bx - \Bx'}}
+\frac{4 \pi \BJ(\Bx', t')}{c} \\
+&= \int d^3 \Bx' 
+\frac{\BJ(\Bx', t - \Abs{\Bx - \Bx'}/c}{c \Abs{\Bx - \Bx'}} \\
+&= \inv{c} \int dx' dy' dz'
+\Be_z \theta(t - \Abs{\Bx -\Bx'}/c) \delta(y) \kappa_0 \sin(\omega(t - \Abs{\Bx -\Bx'}/c))
+\inv{\Abs{\Bx - \Bx'}} \\
+&= \frac{
+\Be_z \kappa_0
+}{c} \int dx' dz'
+\theta(t - \Abs{\Bx -(x', 0, z')}/c) 
+\sin(\omega(t - \Abs{\Bx -(x', 0, z')}/c))
+\inv{\Abs{\Bx - (x', 0, z')}} \\
+&= \frac{
+\Be_z \kappa_0
+}{c} \int dx' dz'
+\theta\left(t - \inv{c} \sqrt{(x-x')^2 + y^2 + (z-z')^2}\right) 
+\frac{\sin\left(\omega\left(t - \inv{c} \sqrt{(x-x')^2 + y^2 + (z-z')^2}\right)\right)}{\sqrt{(x-x')^2 + y^2 + (z-z')^2}}
+\end{align*}
+
+Now a switch to polar coordinates makes sense.  Let's use
+
+\begin{align}\label{eqn:relElectroDynProblemSet5P1:n}
+x' - x &= r \cos\alpha \\
+z' - z &= r \sin\alpha 
+\end{align}
+
+This gives us
+
+\begin{align*}
+\BA(\Bx, t) 
+&= \frac{
+\Be_z \kappa_0
+}{c} \int_{r=0}^\infty \int_{\alpha=0}^{2\pi} r dr d\alpha
+\theta\left(t - \inv{c} \sqrt{r^2 + y^2}\right) 
+\frac{\sin\left(\omega\left(t - \inv{c} \sqrt{r^2 + y^2 }\right)\right)}{\sqrt{r^2 + y^2}} \\
+&= \frac{
+2 \pi \Be_z \kappa_0
+}{c} \int_{r=0}^\infty r dr 
+\theta\left(t - \inv{c} \sqrt{r^2 + y^2}\right) 
+\frac{\sin\left(\omega\left(t - \inv{c} \sqrt{r^2 + y^2 }\right)\right)}{\sqrt{r^2 + y^2}} \\
+\end{align*}
+
+Since the theta function imposes a 
+
+\begin{equation}\label{eqn:relElectroDynProblemSet5P1:n}
+t - \inv{c} \sqrt{r^2 + y^2 } > 0
+\end{equation}
+
+constraint, equivalent to
+
+\begin{equation}\label{eqn:relElectroDynProblemSet5P1:n}
+c^2 t^2 > r^2 + y^2,
+\end{equation}
+
+we can reduce the upper range of the integral and drop the theta function explicitly
+
+\begin{equation}\label{eqn:relElectroDynProblemSet5P1:n}
+\BA(\Bx, t) 
+= \frac{
+2 \pi \Be_z \kappa_0
+}{c} \int_{r=0}^{\sqrt{c^2 t^2 - y^2}} r dr 
+\frac{\sin\left(\omega\left(t - \inv{c} \sqrt{r^2 + y^2 }\right)\right)}{\sqrt{r^2 + y^2}} 
+\end{equation}
+
+Here I got slightly lazy and used mathematica to help evaluate this integral and get finally
+\begin{equation}\label{eqn:relElectroDynProblemSet5P1:n}
+\BA(\Bx, t) 
+= \frac{
+2 \pi \Be_z \kappa_0 \omega
+}{c^2} (1 - \cos(\omega(t - \Abs{y}/c))).
+\end{equation}
+
+It was expected that the lack of boundary on the conducting sheet would make the potential away from the plane only depend on the $y$ components of the spatial distance, and this is precisely what we find performing the grunt work of the integration.  Also, given that we had a sinusoidal forcing function for our wave equation, it seems logical that we also find our non-homogeneous solution to the wave equation has sinusoidal dependence, so this looks like a reasonable solution.
+
+\subsection{2.  Find the electromagnetic potentials outside the plane.}
 
 TODO. 
 
-\subsection{2. Solution}
+\subsection{3. Find the electric and magnetic fields outside the plane.}
 
 TODO. 
 
-\subsection{3. Solution}
+\subsection{4. Give a physical interpretation of the results of the previous section.}
 
 TODO. 
 
-\subsection{4. Solution}
+\subsection{5. Find the direction and magnitude of the energy flux outside the plane.}
 
 TODO. 
 
-\subsection{5. Solution}
+\subsection{6. Sketch the intensity of the electromagnetic field far from the plane.}
 
 TODO. 
 
-\subsection{6. Solution}
-
-TODO. 
-
-\subsection{7. Solution}
+\subsection{7. Continuity accross the plane?}
 
 TODO. 
 
