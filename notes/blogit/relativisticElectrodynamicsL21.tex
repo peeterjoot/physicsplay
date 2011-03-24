@@ -1,5 +1,6 @@
 \input{../peeter_prologue_print.tex}
 %\input{../peeter_prologue_widescreen.tex}
+\usepackage{cancel}
 
 \chapter{PHY450H1S.  Relativistic Electrodynamics Lecture 21 (Taught by Prof. Erich Poppitz).  More on EM fields due to dipole radiation.}
 \label{chap:relativisticElectrodynamicsL21}
@@ -17,8 +18,135 @@ Covering chapter 8 material from the text \cite{landau1980classical}.
 
 Covering \href{http://www.physics.utoronto.ca/~poppitz/epoppitz/PHY450_files/RelEMpp147-165.pdf}{lecture notes pp. 147-165:} radiated power (154); fields in the ``wave zone'' and discussions of approximations made (155-159); EM fields due to electric dipole radiation (160-163); Poynting vector, angular distribution, and power of dipole radiation (164-165) [Wednesday, Mar. 16...]
 
-\section{.}
+\section{Where we left off.}
 
-TODO.  All hand written.
+For a localized charge distribution, we'd arrived at expressions for the scalar and vector potentials far from the point where the charges and currents were localized.  This was then used to consider the specific case of a dipole system where one of the charges had a sinusoidal oscillation.  The charge positions for the negative and positive charges respectively were
+
+\begin{align}\label{eqn:relativisticElectrodynamicsL21:10}
+z_{-} &= 0 \\
+z_{+} &= \Be_3( z_0 + a \sin(\omega t)) ,
+\end{align}
+
+so that our dipole moment $\Bd = \int \rho(\Bx') \Bx'$ is
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsL21:30}
+\Bd = \Be_3 q (z_0 + a \sin(\omega t)).
+\end{equation}
+
+The scalar potential, to first order in a number of Taylor expansions at our point far from the source, evaluated at the retarded time $t_r = t - \Abs{\Bx}/c$, was found to be
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsL21:35}
+A^0(\Bx, t) = \frac{z q}{\Abs{\Bx}^3} ( z_0 + a \sin(\omega t_r) ) + \frac{z q}{c \Abs{\Bx}^2} a \omega \cos(\omega t_r),
+\end{equation}
+
+and our vector potential, also with the same approximations, was
+\begin{equation}\label{eqn:relativisticElectrodynamicsL21:40}
+\BA(\Bx, t) = \inv{c \Abs{\Bx} } \Be_3 q a \omega \cos(\omega t_r).
+\end{equation}
+
+We found that the electric field (neglecting any non-radiation terms that died off as inverse square in the distance) was
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsL21:50}
+\BE = \frac{a \omega^2 q}{c^2 \Abs{\Bx}} \sin( \omega (t - \Abs{\Bx}/c) ) \left( \Be_3 - \rcap \frac{z}{\Abs{\Bx}} \right).
+\end{equation}
+
+\section{Direct computation of the magnetic radiation field}
+
+Taking the curl of the vector potential \ref{eqn:relativisticElectrodynamicsL21:50} for the magnetic field, we'll neglect the contribution from the $1/\Abs{\Bx}$ since that will be inverse square, and die off too quickly far from the source
+
+\begin{align*}
+\BB 
+&= \spacegrad \cross \BA \\
+&= \spacegrad \cross \inv{c \Abs{\Bx} } \Be_3 q a \omega \cos(\omega (t - \Abs{\Bx}/c)) \\
+&\approx - \frac{q a \omega}{c \Abs{\Bx} } \Be_3 \cross \spacegrad \cos(\omega (t - \Abs{\Bx}/c)) \\
+&= - \frac{q a \omega}{c \Abs{\Bx} } \left( -\frac{\omega}{c} \right) 
+(\Be_3 \cross \spacegrad \Abs{\Bx}) \sin(\omega (t - \Abs{\Bx}/c)),
+\end{align*}
+
+which is
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsL21:n}
+\BB = \frac{q a \omega^2}{c^2 \Abs{\Bx} } (\Be_3 \cross \rcap) \sin(\omega (t - \Abs{\Bx}/c)).
+\end{equation}
+
+Comparing to \ref{eqn:relativisticElectrodynamicsL21:50}, we see that this equals $\rcap \cross \BE$ as expected.
+
+\section{An aside: A tidier form for the electric dipole field}
+
+We can rewrite the electric field \ref{eqn:relativisticElectrodynamicsL21:50} in terms of the retarded time dipole
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsL21:n}
+\BE = \inv{c^2 \Abs{\Bx}} \Bigl( -\ddot{\Bd}(t_r) + \rcap ( \ddot{\Bd}(t_r) \cdot \rcap ) \Bigr),
+\end{equation}
+
+where 
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsL21:n}
+\ddot{\Bd}(t) = - q a \omega^2 \sin(\omega t) \Be_3
+\end{equation}
+
+Then using the vector identity
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsL21:n}
+(\BA \cross \rcap ) \cross \rcap = -\BA + (\rcap \cdot \BA) \rcap,
+\end{equation}
+
+we have for the fields
+
+\begin{align}\label{eqn:relativisticElectrodynamicsL21:n}
+\BE &= \inv{c^2 \Abs{\Bx}} (\ddot{\Bd}(t_r) \cross \rcap) \cross \rcap \\
+\BB &= \rcap \cross \BE
+\end{align}
+
+\section{Calculating the energy flux}
+
+Our Poynting vector, the energy flux, is
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsL21:n}
+\BS = \frac{c}{4 \pi} \BE \cross \BB = 
+\frac{c}{4 \pi}
+\left( \frac{q a \omega^2}{c^2 \Abs{\Bx} } \right)^2
+\sin^2(\omega (t - \Abs{\Bx}/c))
+\left( \Be_3 - \rcap \frac{z}{\Abs{\Bx}} \right) \cross (\rcap \cross \Be_3).
+\end{equation}
+
+Expanding just the cross terms we have
+
+\begin{align*}
+\left( \Be_3 - \rcap \frac{z}{\Abs{\Bx}} \right) \cross (\rcap \cross \Be_3)
+&=
+-(\rcap \cross \Be_3) \cross \Be_3 - \frac{z}{\Abs{\Bx}} (\Be_3 \cross \rcap) \cross \rcap \\
+&=
+-(-\rcap + \Be_3(\Be_3 \cdot \rcap) ) - \frac{z}{\Abs{\Bx}} (-\Be_3 + \rcap (\rcap \cdot \Be_3)) \\
+&=
+\rcap - \cancel{\Be_3(\Be_3 \cdot \rcap)} + \frac{z}{\Abs{\Bx}} (\cancel{\Be_3} - \rcap (\rcap \cdot \Be_3)) \\
+&=
+\rcap( 1 - (\rcap \cdot \Be_3)^2 ).
+\end{align*}
+
+Note that we've utilized $\rcap \cdot \Be_3 = z/\Abs{\Bx}$ to do the cancelations above, and for the final grouping.  Since $\rcap \cdot \Be_3 = \cos\theta$, the direction cosine of the unit radial vector with the z-axis, we have for the direction of the Poynting vector
+
+\begin{align*}
+\rcap( 1 - (\rcap \cdot \Be_3)^2 ) 
+&= \rcap (1 - \cos^2\theta) \\
+&= \rcap \sin^2\theta.
+\end{align*}
+
+Our poynting vector is found to be directed radially outwards, and is
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsL21:n}
+\BS =
+\frac{c}{4 \pi}
+\left( \frac{q a \omega^2}{c^2 \Abs{\Bx} } \right)^2
+\sin^2(\omega (t - \Abs{\Bx}/c)) \sin^2\theta \rcap.
+\end{equation}
+
+The intensity is constant along the curves
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsL21:n}
+\Abs{\sin\theta} \sim r
+\end{equation}
+
+
 
 \EndArticle
