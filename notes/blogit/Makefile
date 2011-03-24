@@ -10,10 +10,14 @@ INCOMPLETE += $(PHY450_PS5_1)
 INCOMPLETE += relElectroDynProblemSet3_2.tex
 INCOMPLETE += relElectroDynProblemSet4_2.tex
 INCOMPLETE += relElectroDynProblemSet4_2.tex
+# took these notes by hand.  Haven't gone back and Latexed them.
 INCOMPLETE += relativisticElectrodynamicsL19.tex
-#INCOMPLETE += relativisticElectrodynamicsL20.tex
 INCOMPLETE += relativisticElectrodynamicsT7.tex
-#INCOMPLETE += relElectroDynProblemSet5.tex
+
+# took these notes by hand.  Haven't gone back and Latexed them.
+#relativisticElectrodynamicsL21.tex
+# missed this lecture.  Won't likely try to latex anything (see his hand written notes only).
+#relativisticElectrodynamicsL22.tex
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
