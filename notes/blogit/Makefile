@@ -3,12 +3,13 @@ RAWTEXFILES := $(shell ls *.tex)
 #PHY450_PS3_2 := relElectroDynProblemSet3TwoInternals.tex
 #PHY450_PS4_2 := relElectroDynProblemSet4TwoInternals.tex
 PHY450_PS5_1 := relElectroDynProblemSet5OneInternals.tex
+PHY450_PS6_1 := relElectroDynProblemSet6OneInternals.tex
 
 #INCOMPLETE += $(PHY450_PS3_2)
 #INCOMPLETE += $(PHY450_PS4_2)
 INCOMPLETE += $(PHY450_PS5_1)
+INCOMPLETE += $(PHY450_PS6_1)
 INCOMPLETE += relElectroDynProblemSet3_2.tex
-INCOMPLETE += relElectroDynProblemSet4_2.tex
 INCOMPLETE += relElectroDynProblemSet4_2.tex
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
