@@ -68,3 +68,6 @@ localclean ::
 
 relElectroDynProblemSet5.pdf : $(PHY450_PS5_1)
 relElectroDynProblemSet5_1.pdf: $(PHY450_PS5_1)
+
+relElectroDynProblemSet6.pdf : $(PHY450_PS6_1)
+relElectroDynProblemSet6_1.pdf: $(PHY450_PS6_1)
