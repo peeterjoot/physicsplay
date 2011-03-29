@@ -12,7 +12,7 @@ INCOMPLETE += $(PHY450_PS6_1)
 INCOMPLETE += relElectroDynProblemSet3_2.tex
 INCOMPLETE += relElectroDynProblemSet4_2.tex
 # temp.  just to speed up the build.
-INCOMPLETE += relElectroDynProblemSet6.tex
+#INCOMPLETE += relElectroDynProblemSet6.tex
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
