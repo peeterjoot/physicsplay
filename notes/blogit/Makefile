@@ -14,6 +14,9 @@ INCOMPLETE += relElectroDynProblemSet4_2.tex
 # temp.  just to speed up the build.
 #INCOMPLETE += relElectroDynProblemSet6.tex
 
+# in progress.  Lots to do (took notes on paper).
+INCOMPLETE += relativisticElectrodynamicsL23.teX
+
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
 PDFS := $(TEXFILES:.tex=.pdf)
