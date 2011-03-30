@@ -15,7 +15,7 @@ INCOMPLETE += relElectroDynProblemSet4_2.tex
 #INCOMPLETE += relElectroDynProblemSet6.tex
 
 # in progress.  Lots to do (took notes on paper).
-INCOMPLETE += relativisticElectrodynamicsL23.teX
+INCOMPLETE += relativisticElectrodynamicsL23.tex
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
