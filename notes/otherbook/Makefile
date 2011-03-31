@@ -26,8 +26,8 @@ otherbook.pdf :: $(TEXFILES) $(LOCAL_FILES)
 	../make_pdflatex main.tex
 	mv main.pdf otherbook.pdf
 
-cronology.tex : ../gabook/METADATA
-	../gabook/METADATA -otherbook > cronology.tex
+cronology.tex : ../METADATA
+	../METADATA -otherbook > cronology.tex
 
 #%.pdf : %.tex
 #	../make_pdflatex $<
