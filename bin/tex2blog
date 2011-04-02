@@ -64,6 +64,39 @@ my $pf = 0 ;
 # wikipedia output.
 my $wiki = 0 ; 
 
+my $r1 = qr/
+     (                   # start of capture buffer 1
+     {                   # match an opening angle bracket
+         (?:               
+             [^{}]++     # one or more non angle brackets, non backtracking
+               |                  
+             (?1)        # found { or }, so recurse to capture buffer 1
+         )*                 
+     }                   # match a closing angle bracket
+     )                   # end of capture buffer 1
+     /x;
+
+my $r2 = qr/
+     (                   # start of capture buffer 1
+     {                   # match an opening angle bracket
+         (?:               
+             [^{}]++     # one or more non angle brackets, non backtracking
+               |                  
+             (?1)        # found { or }, so recurse to capture buffer 1
+         )*                 
+     }                   # match a closing angle bracket
+     )                   # end of capture buffer 1
+     (                   # start of capture buffer 1
+     {                   # match an opening angle bracket
+         (?:               
+             [^{}]++     # one or more non angle brackets, non backtracking
+               |                  
+             (?1)        # found { or }, so recurse to capture buffer 1
+         )*                 
+     }                   # match a closing angle bracket
+     )                   # end of capture buffer 1
+     /x;
+
 GetOptions( 
    'mathml!'      => \$mathml,
    'wordpress!'   => \$wordpress,
@@ -506,6 +539,11 @@ sub processRest
          s,\\section{(.*)},<h1>$1</h1>,;
          s,\\subsection{(.*)},<h2>$1</h2>,;
          s,\\subsubsection{(.*)},<h3>$1</h3>,;
+
+         $out =~ s/\\paragraph{${r1}}/<b>$1<\/b>/g;
+         # avoiding underline since that looks like a hyperlink.
+         $out =~ s/\\underline{${r1}}/<i>$1<\/i>/g;
+         $out =~ s/\\S\b/section/g;
       }
 
       s,\\href{(.*?)}{(.*?)},<a href="$1">$2</a>,g ;
@@ -525,39 +563,6 @@ sub processRest
 sub expandPeetersMathModeMacros
 {
    my $out = "@_" ;
-
-   my $r1 = qr/
-        (                   # start of capture buffer 1
-        {                   # match an opening angle bracket
-            (?:               
-                [^{}]++     # one or more non angle brackets, non backtracking
-                  |                  
-                (?1)        # found { or }, so recurse to capture buffer 1
-            )*                 
-        }                   # match a closing angle bracket
-        )                   # end of capture buffer 1
-        /x;
-
-   my $r2 = qr/
-        (                   # start of capture buffer 1
-        {                   # match an opening angle bracket
-            (?:               
-                [^{}]++     # one or more non angle brackets, non backtracking
-                  |                  
-                (?1)        # found { or }, so recurse to capture buffer 1
-            )*                 
-        }                   # match a closing angle bracket
-        )                   # end of capture buffer 1
-        (                   # start of capture buffer 1
-        {                   # match an opening angle bracket
-            (?:               
-                [^{}]++     # one or more non angle brackets, non backtracking
-                  |                  
-                (?1)        # found { or }, so recurse to capture buffer 1
-            )*                 
-        }                   # match a closing angle bracket
-        )                   # end of capture buffer 1
-        /x;
 
    $out =~ s/\\\\/\\\\ /g;
 #   $out =~ s/&=/=/g;
@@ -683,9 +688,6 @@ sub expandPeetersMathModeMacros
    }
 
    $out =~ s/\\PDSq${r2}/\\frac{\\partial^2 {$2}}{\\partial {$1}^2}/g;
-
-   # FIXME: this is italics.  bold in html done how?
-   $out =~ s/\\paragraph${r1}/<em>$1<\/em>/g;
 
    $out =~ s/\\expectation${r1}/\\left\\langle{$1}\\right\\rangle/g;
    $out =~ s/\\tr/\\text{Tr}/g;
