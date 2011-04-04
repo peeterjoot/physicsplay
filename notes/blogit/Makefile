@@ -12,12 +12,12 @@ INCOMPLETE += $(PHY450_PS6_1)
 INCOMPLETE += relElectroDynProblemSet3_2.tex
 INCOMPLETE += relElectroDynProblemSet4_2.tex
 # temp.  just to speed up the build.
-INCOMPLETE += relElectroDynProblemSet6.tex
-INCOMPLETE += relElectroDynProblemSet6_1.tex
+#INCOMPLETE += relElectroDynProblemSet6.tex
+#INCOMPLETE += relElectroDynProblemSet6_1.tex
 
 # need phy450ps5P1Q7.png:
-INCOMPLETE += relElectroDynProblemSet5.tex
-INCOMPLETE += relElectroDynProblemSet5_1.tex
+#INCOMPLETE += relElectroDynProblemSet5.tex
+#INCOMPLETE += relElectroDynProblemSet5_1.tex
 
 # in progress.  Lots to do (took notes on paper).
 INCOMPLETE += relativisticElectrodynamicsL23.tex
