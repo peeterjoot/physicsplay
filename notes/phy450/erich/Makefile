@@ -27,6 +27,7 @@ ORDERED += RelEMpp177.pdf
 ORDERED += RelEMpp178.pdf
 ORDERED += RelEMpp179-180.pdf
 ORDERED += RelEMpp181-195.pdf
+ORDERED += RelEMpp196-200.pdf
 
 ORDERED += 450hw1.pdf
 ORDERED += PS1soln.pdf
@@ -38,10 +39,30 @@ ORDERED += 450midterm.pdf
 ORDERED += 450hw4.pdf
 ORDERED += PS4soln.pdf
 ORDERED += 450hw5.pdf
+ORDERED += PS5soln.pdf
 ORDERED += 450hw6.pdf
+
+GENERATED += RelEMpp12-24.pdf
+GENERATED += RelEMpp166-176.pdf
+GENERATED += RelEMpp177.pdf
+GENERATED += RelEMpp178.pdf
+GENERATED += RelEMpp179-180.pdf
+GENERATED += RelEMpp25-26.pdf
+GENERATED += RelEMpp52-53.pdf
+GENERATED += RelEMpp54-56.pdf
+
+SOURCES := $(filter-out $(GENERATED),$(ORDERED))
+SOURCES += RelEM12-26.pdf
+SOURCES += RelEMpp166-180.pdf
+SOURCES += RelEMpp52-56.pdf
+
+ORIGIN := http://www.physics.utoronto.ca/~poppitz/epoppitz/PHY450_files
 
 poppitz450.pdf : $(ORDERED)
 	pdftk $(ORDERED) cat output $@
+
+$(SOURCES) :
+	wget $(ORIGIN)/$@
 
 # rules to split a couple of the pdfs to inject or reorder various pages.
 
