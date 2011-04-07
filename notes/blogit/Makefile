@@ -23,6 +23,9 @@ INCOMPLETE += relElectroDynProblemSet4_2.tex
 INCOMPLETE += relativisticElectrodynamicsL23.tex
 INCOMPLETE += relativisticElectrodynamicsL26.tex
 
+# incomplete:
+INCOMPLETE += relativisticElectrodynamicsT9.tex
+
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
 PDFS := $(TEXFILES:.tex=.pdf)
