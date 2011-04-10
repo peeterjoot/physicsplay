@@ -18,7 +18,7 @@ INCOMPLETE += relElectroDynProblemSet5_1.tex
 #INCOMPLETE += relElectroDynProblemSet6_1.tex
 
 # in progress.  Lots to do (took notes on paper).
-INCOMPLETE += relativisticElectrodynamicsL23.tex
+#INCOMPLETE += relativisticElectrodynamicsL23.tex
 INCOMPLETE += relativisticElectrodynamicsL26.tex
 
 # incomplete:
