@@ -12,16 +12,10 @@ INCOMPLETE += $(PHY450_PS6_1)
 INCOMPLETE += relElectroDynProblemSet3_2.tex
 INCOMPLETE += relElectroDynProblemSet4_2.tex
 INCOMPLETE += relElectroDynProblemSet5_1.tex
-
-# temp.  just to speed up the build.
-#INCOMPLETE += relElectroDynProblemSet6.tex
-#INCOMPLETE += relElectroDynProblemSet6_1.tex
+INCOMPLETE += relElectroDynProblemSet6_1.tex
 
 # in progress.  Lots to do (took notes on paper).
-#INCOMPLETE += relativisticElectrodynamicsL23.tex
 INCOMPLETE += relativisticElectrodynamicsL26.tex
-
-# incomplete:
 #INCOMPLETE += relativisticElectrodynamicsT9.tex
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
@@ -81,5 +75,5 @@ localclean ::
 #relElectroDynProblemSet5.pdf : $(PHY450_PS5_1)
 #relElectroDynProblemSet5_1.pdf: $(PHY450_PS5_1)
 
-relElectroDynProblemSet6.pdf : $(PHY450_PS6_1)
-relElectroDynProblemSet6_1.pdf: $(PHY450_PS6_1)
+#relElectroDynProblemSet6.pdf : $(PHY450_PS6_1)
+#relElectroDynProblemSet6_1.pdf: $(PHY450_PS6_1)

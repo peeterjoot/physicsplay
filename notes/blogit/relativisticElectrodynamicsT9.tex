@@ -13,6 +13,8 @@
 
 \section{HW6. Question 3. (Non subtle hints about how important this is (i.e. for the exam)}
 
+\subsection{Motivation.}
+
 This is problem 1 from \S 47 of the text \cite{landau1980classical}.
 
 Determine the force exerted on a wall from which an incident plane EM wave is reflected (w/ reflection coefficient $R$) and incident angle $\theta$.
@@ -25,42 +27,69 @@ f_\alpha = - \sigma_{\alpha \beta} n_\beta - {\sigma'}_{\alpha \beta} n_\beta
 
 Here $\sigma_{\alpha \beta}$ is the Maxwell stress tensor for the incident wave, and ${\sigma'}_{\alpha \beta}$ is the Maxwell stress tensor for the reflected wave, and $n_\beta$ is normal to the wall.
 
+\subsection{On the signs of the force per unit area}
+
+The signs in \ref{eqn:relativisticElectrodynamicsT9:10} require a bit of thought.  We have for the rate of change of the $\alpha$ component of the field momentum
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsT9:11}
+\ddt{} \int d^3 \Bx \left( \frac{S^\alpha}{c^2} \right) = - \int d^2 \sigma^\beta T^{\beta \alpha}
+\end{equation}
+
+where $d^2 \sigma^\beta = d^2 \sigma \Bn \cdot \Be_\beta$, and $\Bn$ is the outwards unit normal to the surface.  This is the rate of change of momentum for the field, the force on the field.  For the force on the wall per unit area, we wish to invert this, giving
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsT9:n}
+df^\alpha_{\text{on the wall, per unit area}}
+= (\Bn \cdot \Be_\beta) T^{\beta \alpha}
+= -(\Bn \cdot \Be_\beta) \sigma_{\beta \alpha}
+\end{equation}
+
+\subsection{Returning to the tutorial notes}
+
+Simon writes
+
 \begin{align}\label{eqn:relativisticElectrodynamicsT9:30}
 f_\perp &= - \sigma_{\perp \perp} - {\sigma'}_{\perp \perp} \\
 f_\parallel &= - \sigma_{\parallel \perp} - {\sigma'}_{\parallel \perp} 
 \end{align}
 
-But stating this solution is very non-trivial, because $\sigma_{\alpha \beta}$ is non-linear in $\BE$ and $\BB$.
+and then says stating this solution is very non-trivial, because $\sigma_{\alpha \beta}$ is non-linear in $\BE$ and $\BB$.  This non-triviality is a good point.  Without calculating it, I find the results above to be pulled out of a magic hat.  The point of the tutorial discussion was to work through this in detail.
+
+\section{Working out the tensor.}
 
 FIXME: PICTURE: 
 
 The Reflection coefficient can be defined in this case as
 
 \begin{equation}\label{eqn:relativisticElectrodynamicsT9:50}
-\Abs{\BE}^2 = R \Abs{\BE'}
+R = \frac{ \Abs{\BE'}^2 }{ \Abs{\BE}^2 },
 \end{equation}
 
-(really a ratio of powers, but those are proportional to $\BE^2$ and ${\BE'}^2$.
+a ratio of the powers of the reflected wave power to the incident wave power (which are proportional to ${\BE'}^2$ and ${\BE}^2$ respectively.
 
-Incident:
+Suppose we pick the following orientation for the incident fields
 
 \begin{align}\label{eqn:relativisticElectrodynamicsT9:70}
 E_x &= E \sin\theta \\
 E_y &= -E \cos\theta \\
-B_z &= E 
+B_z &= E ,
 \end{align}
 
-Reflected:
+With the reflected assumed to be in some still perpendicular orientation (with this orientation picked for convienence)
+
 \begin{align}\label{eqn:relativisticElectrodynamicsT9:90}
 E_x' &= E' \sin\theta \\
 E_y' &= E' \cos\theta \\
-B_z' &= E'
+B_z' &= E'.
 \end{align}
+
+Here
 
 \begin{align}\label{eqn:relativisticElectrodynamicsT9:110}
 E &= E_0 \cos(\Bp \cdot \Bx - \omega t) \\
-E' &= \sqrt{R} E_0 \cos(\Bp \cdot \Bx - \omega t)
+E' &= \sqrt{R} E_0 \cos(\Bp' \cdot \Bx - \omega t)
 \end{align}
+
+FIXME: there are assumptions below that $\Bp' \cdot \Bx = \Bp \cdot \Bx$.  I don't see where that comes from, since the propagation directions are difference for the incident and the reflected waves.
 
 \begin{equation}\label{eqn:relativisticElectrodynamicsT9:130}
 \sigma_{\alpha\beta} = -T^{\alpha\beta} = \inv{4\pi} \left(
@@ -72,9 +101,65 @@ E' &= \sqrt{R} E_0 \cos(\Bp \cdot \Bx - \omega t)
 \right)
 \end{equation}
 
+\subsection{Aside: On the geometry, and the angle of incidence.}
+
+According to wikipedia \cite{wiki:angleOfIncidence} the angle of incidence is measured from the normal.
+
+Let's use complex numbers to get the orientation of the electric and propagation direction fields right.  We have for the incident propagation direction
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsT9:n}
+-\pcap \sim e^{i (\pi + \theta) }
+\end{equation}
+
+or
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsT9:n}
+\pcap \sim e^{i\theta}
+\end{equation}
+
+If we pick the electric field rotated negatively from that direction, we have
+
+\begin{align*}
+\hat{\BE} 
+&\sim -i e^{i \theta} \\
+&= -i (\cos\theta + i \sin\theta) \\
+&= -i \cos\theta + \sin\theta
+\end{align*}
+
+Or
+
+\begin{align}\label{eqn:relativisticElectrodynamicsT9:n}
+E_x &\sim \sin\theta \\
+E_y &\sim -\cos\theta
+\end{align}
+
+For the reflected direction we have
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsT9:n}
+\pcap' \sim e^{i (\pi - \theta)} = - e^{-i \theta}
+\end{equation}
+
+rotating negatively for the electric field direction, we have
+
+\begin{align*}
+\hat{\BE'} 
+&\sim -i (- e^{-i\theta} ) \\
+&= i(cos\theta - i\sin\theta) \\
+&= i cos\theta + \sin\theta
+\end{align*}
+
+Or
+
+\begin{align}\label{eqn:relativisticElectrodynamicsT9:n}
+E_x' &\sim \sin\theta \\
+E_y' &\sim \cos\theta 
+\end{align}
+
+\subsection{Back to the problem (again).}
+
 Where $\vec{\mathcal{E}}$ and $\vec{\mathcal{B}}$ are the total EM fields.
 
-FIXME: why the total here?
+\paragraph{Aside:} Why the fields are added in this fashion wasn't clear to me, but I guess this makes sense.  Even if the propagation directions differ, the total field at any point is still just a superposition.
 
 \begin{align}\label{eqn:relativisticElectrodynamicsT9:150}
 \vec{\mathcal{E}} &= \BE + \BE' \\
@@ -84,9 +169,9 @@ FIXME: why the total here?
 Get 
 
 \begin{align}\label{eqn:relativisticElectrodynamicsT9:170}
-\sigma_{3 3} &= \inv{4 \pi} \left( \mathcal{E}^2 - \inv{2} (\mathcal{E}^2 + \mathcal{B}^2) \right) = 0 \\
+\sigma_{3 3} &= \inv{4 \pi} \left( \underbrace{B_z B_z}_{=\vec{\mathcal{B}}^2} - \inv{2} (\vec{\mathcal{E}}^2 + \vec{\mathcal{B}}^2) \right) = 0 \\
 \sigma_{3 1} &= 0 = \sigma_{3 2} \\
-\sigma_{1 1} &= \inv{4 \pi} \left( (\mathcal{E}')^2 - \inv{2} (\mathcal{E}^2 + \mathcal{B}^2) \right) = 0 \\
+\sigma_{1 1} &= \inv{4 \pi} \left( (\mathcal{E}^1)^2 - \inv{2} (\vec{\mathcal{E}}^2 + \vec{\mathcal{B}}^2) \right) 
 \end{align}
 
 \begin{align}\label{eqn:relativisticElectrodynamicsT9:190}
@@ -97,15 +182,15 @@ Get
 so
 \begin{align*}
 \sigma_{1 1} 
-&= \inv{4 \pi} \left( (\mathcal{E}')^2 - \inv{2} ((\mathcal{E}')^2 + \mathcal{E}^2 + (E + E')^2 \right) \\
-&= \inv{8 \pi} \left( (\mathcal{E}')^2 - (\mathcal{E})^2 - (E + E')^2 \right) \\
+&= \inv{4 \pi} \left( (\mathcal{E}^1)^2 - \inv{2} ((\mathcal{E}^1)^2 + (\mathcal{E}^2)^2 + (E + E')^2 \right) \\
+&= \inv{8 \pi} \left( (\mathcal{E}^1)^2 - (\mathcal{E}^2)^2 - (E + E')^2 \right) \\
 &= \inv{8 \pi} \left( 
 (E + E')^2 \sin^2\theta 
--(E - E')^2 \cos^2\theta -(E + E')^2
+-(E' - E)^2 \cos^2\theta -(E + E')^2
 \right) \\
 &= \inv{8 \pi} \left( 
 E^2( \sin^2\theta - \cos^2\theta - 1)
-(E')^2( \sin^2\theta - \cos^2\theta - 1)
++(E')^2( \sin^2\theta - \cos^2\theta - 1)
 + 2 E E' (\sin^2\theta + \cos^2\theta -1 )
 \right) \\
 &= \inv{8 \pi} \left( - 2 E^2 \cos^2\theta - 2 (E')^2 \cos^2\theta \right) \\
@@ -113,16 +198,71 @@ E^2( \sin^2\theta - \cos^2\theta - 1)
 &= \sigma_\parallel + {\sigma'}_\parallel
 \end{align*}
 
-For $\sigma_{12}$ we have
+This last bit I didn't get.  What is $\sigma_\parallel$ and ${\sigma'}_\parallel$.  Are these parallel to the wall or parallel to the normal to the wall.  It turns out that this appears to mean parallel to the normal.  We can see this by direct calculation
+
+\begin{align*}
+\sigma_{x x}^{\text{incident}} 
+&= \inv{4 \pi} \left( 
+E_x^2 - \inv{2} (\BE^2 + \BB^2)
+\right) \\
+&= \inv{4 \pi} \left( 
+E^2 \sin^2 \theta - \inv{2} 2 E^2 
+\right) \\
+&= -\inv{4 \pi} E^2 \cos^2\theta
+\end{align*}
+
+\begin{align*}
+{\sigma}_{x x}^{\text{reflected}} 
+&= \inv{4 \pi} \left( 
+{E_x'}^2 - \inv{2} ({\BE'}^2 + {\BB'}^2)
+\right) \\
+&= \inv{4 \pi} \left( 
+{E'}^2 \sin^2 \theta - \inv{2} 2 {E'}^2 
+\right) \\
+&= -\inv{4 \pi} {E'}^2 \cos^2\theta
+\end{align*}
+
+So by comparison we see that we have
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsT9:n}
+\sigma_{1 1} = {\sigma}_{x x}^{\text{incident}} +{\sigma}_{x x}^{\text{reflected}} 
+\end{equation}
+
+Moving on, for our other component on the $x,y$ place $\sigma_{12}$ we have
 
 \begin{align*}
 \sigma_{12} 
 &= \inv{4 \pi} \mathcal{E}^1 \mathcal{E}^2 \\
 &= \inv{4 \pi} (E + E') \sin\theta (-E + E') \cos\theta \\
-&= -\inv{4 \pi} (E^2 + (E')^2) \sin\theta \cos\theta 
+&= \inv{4 \pi} ((E')^2 - E^2) \sin\theta \cos\theta 
 \end{align*}
 
-So we have
+Again we can compare to the sums of the reflected and incident tensors for this $x,y$ component.  Those are
+
+\begin{align*}
+\sigma_{12}^{\text{incident}} 
+&= 
+\inv{4 \pi} ( E^1 E^2 ) \\
+&= 
+-\inv{4 \pi} E^2 \sin\theta \cos\theta,
+\end{align*}
+
+and
+\begin{align*}
+\sigma_{12}^{\text{reflected}} 
+&= 
+\inv{4 \pi} ( {E'}^1 {E'}^2 ) \\
+&= 
+\inv{4 \pi} {E'}^2 \sin\theta \cos\theta
+\end{align*}
+
+Which demonstrates that we have
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsT9:n}
+\sigma_{12} = \sigma_{12}^{\text{incident}} + \sigma_{12}^{\text{reflected}} 
+\end{equation}
+
+Summarizing, for the components in the $x,y$ plane we have found that we have
 
 \begin{equation}\label{eqn:relativisticElectrodynamicsT9:210}
 \sigma_{\alpha\beta}^{\text{total}} n_\beta = \sigma_{\alpha 1 }^{\text{total}} = \sigma_{\alpha 1} + {\sigma'}_{\alpha 1}
@@ -135,13 +275,41 @@ This result, assumed in the text, was non-trivial to derive.  It is also not gen
 \begin{align*}
 \sigma_{2 2} 
 &= \inv{4 \pi} \left( (\mathcal{E}^y)^2 - \inv{2} ( \vec{\mathcal{E}}^2 + \vec{\mathcal{B}}^2 ) \right) \\
-&= \inv{8 \pi} \left( (\mathcal{E}^y)^2 - \vec{\mathcal{E}}^2 + \vec{\mathcal{B}}^2 ) \right) \\
+&= \inv{8 \pi} \left( (\mathcal{E}^y)^2 - (\mathcal{E}^x)^2 - \vec{\mathcal{B}}^2 ) \right) \\
+&= \inv{8 \pi} \left( 
+(E' - E)^2 \cos^2\theta - (E + E')^2 \sin^2\theta - (E + E')^2
+\right) \\
 &= \inv{8 \pi} \left( 
 E^2 ( -1 + \cos^2 \theta - \sin^2\theta )
 +{E'}^2 ( -1 + \cos^2 \theta - \sin^2\theta )
-+ 2 E E' ( -\cos^2\theta + \sin^2\theta -1 ) \right)
++ 2 E E' ( -\cos^2\theta - \sin^2\theta -1 ) \right) \\
 &= -\inv{4 \pi} \left( E^2 \sin^2 \theta + (E')^2 \sin^2 \theta + 2 E E' \right)
 \end{align*}
+
+If we compare to the incident and reflected tensors we have
+
+\begin{align*}
+\sigma_{y y}^{\text{incident}} 
+&= \inv{4 \pi} \left( (E^y)^2 -\inv{2} E^2 \right) \\
+&= \inv{4 \pi} E^2 ( \cos^2\theta - 1 ) \\
+&= -\inv{4 \pi} E^2 \sin^2\theta 
+\end{align*}
+
+and
+\begin{align*}
+\sigma_{y y}^{\text{reflected}} 
+&= \inv{4 \pi} \left( ({E'}^y)^2 -\inv{2} {E'}^2 \right) \\
+&= \inv{4 \pi} {E'}^2 ( \cos^2\theta - 1 ) \\
+&= -\inv{4 \pi} {E'}^2 \sin^2\theta 
+\end{align*}
+
+There's a cross term that we can't have summing the two, so we have, in general
+
+\begin{equation}\label{eqn:relativisticElectrodynamicsT9:n}
+\sigma_{2 2}^{\text{total}} \ne 
+\sigma_{y y}^{\text{incident}} 
++\sigma_{y y}^{\text{reflected}} 
+\end{equation}
 
 \subsection{Force per unit area?}
 
@@ -167,7 +335,7 @@ Averaged
 
 \begin{align}\label{eqn:relativisticElectrodynamicsT9:310}
 f_x &= n^x \sigma_{x x} = W (1 + R) \cos^2\theta \\
-f_y &= n^y \sigma_{x y} = W (1 - R) \sin\theta \cos\theta
+f_y &= n^y \sigma_{x y} = W (1 - R) \sin\theta \cos\theta \\
 f_z &= 0
 \end{align}
 
