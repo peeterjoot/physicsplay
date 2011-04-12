@@ -66,34 +66,34 @@ my $wiki = 0 ;
 
 my $r1 = qr/
      (                   # start of capture buffer 1
-     {                   # match an opening angle bracket
+     {                   # match an opening brace
          (?:               
-             [^{}]++     # one or more non angle brackets, non backtracking
+             [^{}]++     # one or more non braces, non backtracking
                |                  
              (?1)        # found { or }, so recurse to capture buffer 1
          )*                 
-     }                   # match a closing angle bracket
+     }                   # match a closing brace
      )                   # end of capture buffer 1
      /x;
 
 my $r2 = qr/
      (                   # start of capture buffer 1
-     {                   # match an opening angle bracket
+     {                   # match an opening brace
          (?:               
-             [^{}]++     # one or more non angle brackets, non backtracking
+             [^{}]++     # one or more non braces, non backtracking
                |                  
              (?1)        # found { or }, so recurse to capture buffer 1
          )*                 
-     }                   # match a closing angle bracket
+     }                   # match a closing brace
      )                   # end of capture buffer 1
      (                   # start of capture buffer 1
-     {                   # match an opening angle bracket
+     {                   # match an opening brace
          (?:               
-             [^{}]++     # one or more non angle brackets, non backtracking
+             [^{}]++     # one or more non braces, non backtracking
                |                  
              (?1)        # found { or }, so recurse to capture buffer 1
          )*                 
-     }                   # match a closing angle bracket
+     }                   # match a closing brace
      )                   # end of capture buffer 1
      /x;
 
@@ -422,7 +422,7 @@ sub processRest
 
    my $urlMessage ;
    #$urlMessage = "Click here for a PDF of this sequence of posts with nicer formatting" ;
-   $urlMessage = "Click here for a PDF of this post with nicer formatting" ;
+   $urlMessage = "Click here for a PDF of this post with nicer formatting (especially if my latex to wordpress script has left FORMULA DOES NOT PARSE errors.)" ;
 
    my $urlMessage2 = '' ;
 #   $urlMessage2 .= "Note that this PDF file is formatted in a wide-for-screen layout that is probably not good for printing." ;
@@ -507,6 +507,11 @@ sub processRest
                    0 ) ;
       }
 
+      s/\\paragraph{(.*?)}/<b>$1<\/b>/g;
+      # avoiding underline since that looks like a hyperlink.
+      s/\\underline{(.*?)}/<i>$1<\/i>/g;
+      s/\\S\b/section/g;
+
       # process inline math $$ delimited.  Assume that it is all in one line.
       s/\$(.*?)\$/processOneEquation(1, '*', $1)/eg ;
 
@@ -539,11 +544,6 @@ sub processRest
          s,\\section{(.*)},<h1>$1</h1>,;
          s,\\subsection{(.*)},<h2>$1</h2>,;
          s,\\subsubsection{(.*)},<h3>$1</h3>,;
-
-         $out =~ s/\\paragraph{${r1}}/<b>$1<\/b>/g;
-         # avoiding underline since that looks like a hyperlink.
-         $out =~ s/\\underline{${r1}}/<i>$1<\/i>/g;
-         $out =~ s/\\S\b/section/g;
       }
 
       s,\\href{(.*?)}{(.*?)},<a href="$1">$2</a>,g ;
