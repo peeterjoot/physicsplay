@@ -13,9 +13,139 @@
 
 \section{Abstract.}
 
-Perhaps because special relativity is taught in a highly coordinate centric fashion, some of the linear algebra toolbox available to the student, is not applied to this study.  The concepts of basis and change of basis are powerful tools for the study of vector algebraic systems in Euclidean spaces.  There is nothing inherent in the study of special relativity that requires the concept of basis to be avoided and it will be shown here some nice conceptual advantages to including the basis along with the coordinates.  Lorentz transformations can be seen as change of basis matrices, and can be calculated using basic vector algebra techniques such as the Graham-Schmidt orthonormalization algorithm.
+The standard language for the teaching and study of special relativity is that of tensor algebra.  
+While an explicit basis is common in the study of Euclidean spaces, it is usually implied in the study of inertial relativistic systems.  
+For the study of inertial relativisitic systems it will be shown that introducing an explicit basis opens up some of the standard linear algebra toolbox, and has some distinct conceptual advantages.
+As with matrix representations of four vectors, the use of an explicit basis allows the details of the coordinate representation to be suppressed, allowing four vectors to be manipulated as complete entities in an inner products space.
+It will be shown that Lorentz transformations can be viewed as change of basis operations.  It will also be seen that the Lorentz boost matrix can be calculated using the Graham-Schmidt orthonormalization algorithm, a procedure that most students of relativity are likely already comfortable using in its Euclidean form.
+This treatment is not intended for a new student of relativity, but it is the author's opinion that many of the ideas presented could be utilized in the instruction of the subject.
 
-\section{Preliminaries.  Basis and reciprocal basis, and relation to coordinates.}
+\section{Preliminaries, notation, and definitions.}
+
+\subsection{Four vectors and invariant length}
+
+We define a four vector, or event, as a tuple of time and space coordinates.  These will be represented herein as non-bold letters of the form
+
+x = (c t, \Bx) = ( c t, x, y, z ) = ( x^0, x^1, x^2, x^3 )
+
+Bold letters are reserved for Euclidean vectors.  As usual, the factor of $c$ in the time coordinate is included so that the units of any of the coordinates in the tuple have dimensions of distance.  As conventional, upper indexes are used for the coordinates of the four vector in the standard basis (so $x^2$ is the 2-indexed coordinate of the four vector and not the square of $x$).  Lower indexed four vector coordinates will be introduced later once the reciprocal basis is introduced.
+
+At the heart of special relativity is the definition of the invariant length or interval, which defines a ``distance'' like measure between any a pair of events.  The (squared) invariant length of the vector $x$ above from the origin of the space time vector space $(0, 0, 0, 0)$ can be defined in terms a non-positive definite inner product
+
+x^2 = x \cdot x = \pm ((c t)^2 - \Bx^2)
+
+where \Bx^2 = \Bx \cdot \Bx$ is used as shorthand for the Euclidean dot product.  The choice of a positive sign will be used herein.  Equivalent to the definition above, one may define a dot product between two vectors.  For $y = (y^0, \By)$ we have
+
+x \cdot y = x^0 y^0 - \Bx \cdot \By
+
+Observer that no attempt at motivating why a mixed sign length of this form is required for special relativity will be made here.  That more difficult job is deferred to any number of books that cover special relativity (for example \cite{landau1980classical}).
+
+\subsection{Coordinate representation with a non-orthonormal basis}
+
+The use of a non-orthonormal basis, even in Euclidean spaces, makes life a bit more difficult.  There is, however, no choice in the matter for special relativity.  The closest that we can get to an orthonormal basis is the standard basis $\{e_0, e_1, e_2, e_3\}$, where
+
+e_0 &= (1, 0, 0, 0) \\
+e_1 &= (0, 1, 0, 0) \\
+e_2 &= (0, 0, 1, 0) \\
+e_3 &= (0, 0, 0, 1) 
+
+From our definition of invariant length we have $(e_1)^2 = (e_2)^2 = (e_3)^2 = -1$.  A relativistic basis cannot be constructed for which all the basic vectors are unity.
+
+It is convienent to introduce the concept of a reciprocal basis when dealing with non-orthonormal systems.  The utility of a reciprocal basis is not limited to the non-Euclidean systems that describes special relativity, so we can use a simple skewed Euclidean basis in a plane to illustrate the ideas.  For example, suppose that we have a basis $A = \{e_1, e_2\}$ in a 2 dimensional Euclidean space
+
+e_1 &= 
+\begin{bmatrix}
+1 \\
+0
+\end{bmatrix} \\
+e_2 &= 
+\begin{bmatrix}
+1 \\
+2
+\end{bmatrix} 
+
+Consider the problem of solving for the coordinates $a,b$ of a vector with such a basis
+
+x = a e_1 + b e_2
+
+Provided the basis is complete, it is always possible to compute a second basis ${e^1, e^2}$ for which one has
+
+e_i \cdot e^j = {\delta_i}^j
+
+This set of vectors is called the reciprocal basis.  We can calculate these vectors easily, based on the requirement that
+
+\begin{bmatrix}
+e_1^\T \\
+e_2^T
+\end{bmatrix}
+\begin{bmatrix}
+e^1 & e^2
+\end{bmatrix} = I
+
+Working that out gives us
+
+\begin{bmatrix}
+e^1 & e^2
+\end{bmatrix}
+=
+{
+\begin{bmatrix}
+e_1^\T \\
+e_2^T
+\end{bmatrix}
+}^{-1}
+= 
+{\begin{bmatrix}
+1 & 0 \\
+1 & 2
+\end{bmatrix}}^{-1}
+= 
+\inv{2} 
+\begin{bmatrix}
+2 & 0 \\
+-1 & 1
+\end{bmatrix}
+
+or
+
+e_1 &= 
+\begin{bmatrix}
+1 \\
+-1/2
+\end{bmatrix} \\
+e_2 &= 
+\begin{bmatrix}
+0 \\
+1/2
+\end{bmatrix} 
+
+The task of computing the coordinates of our vector is now simple.  We have
+
+x \cdot e^1 &= a e_1 \cdot e^1 + b \cancel{e_2 \cdot e^1} = a
+x \cdot e^2 &= a \cancel{e_1 \cdot e^2} + b e_2 \cdot e^2 = b
+
+Here's a concrete example
+
+x = 
+\begin{bmatrix}
+4 \\
+2
+\end{bmatrix} 
+= 3 
+\begin{bmatrix}
+1 \\
+0
+\end{bmatrix} 
++ 
+1
+\begin{bmatrix}
+1 \\
+2
+\end{bmatrix} 
+
+It becomes simple to compute that the coordinates of $x$ in the basis $A$ above.  That is
+
+x = 
 
 \section{Lorentz boost}
 
