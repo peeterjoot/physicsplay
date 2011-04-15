@@ -18,7 +18,7 @@ While an explicit basis is common in the study of Euclidean spaces, it is usuall
 For the study of inertial relativisitic systems it will be shown that introducing an explicit basis opens up some of the standard linear algebra toolbox, and has some distinct conceptual advantages.
 As with matrix representations of four vectors, the use of an explicit basis allows the details of the coordinate representation to be suppressed, allowing four vectors to be manipulated as complete entities in an inner products space.
 It will be shown that Lorentz transformations can be viewed as change of basis operations.  It will also be seen that the Lorentz boost matrix can be calculated using the Graham-Schmidt orthonormalization algorithm, a procedure that most students of relativity are likely already comfortable using in its Euclidean form.
-This treatment is not intended for a new student of relativity, but it is the author's opinion that many of the ideas presented could be utilized in the instruction of the subject.
+%This treatment is not intended for a new student of relativity, but it is the author's opinion that many of the ideas presented could be utilized in the instruction of the subject.
 
 \section{Preliminaries, notation, and definitions.}
 
@@ -26,17 +26,23 @@ This treatment is not intended for a new student of relativity, but it is the au
 
 We define a four vector, or event, as a tuple of time and space coordinates.  These will be represented herein as non-bold letters of the form
 
-x = (c t, \Bx) = ( c t, x, y, z ) = ( x^0, x^1, x^2, x^3 )
+\begin{equation}\label{eqn:grahamSchmidtLorentz:10}
+x = (c t, \Bx) = ( c t, x, y, z ) = ( x^0, x^1, x^2, x^3 ).
+\end{equation}
 
 Bold letters are reserved for Euclidean vectors.  As usual, the factor of $c$ in the time coordinate is included so that the units of any of the coordinates in the tuple have dimensions of distance.  As conventional, upper indexes are used for the coordinates of the four vector in the standard basis (so $x^2$ is the 2-indexed coordinate of the four vector and not the square of $x$).  Lower indexed four vector coordinates will be introduced later once the reciprocal basis is introduced.
 
 At the heart of special relativity is the definition of the invariant length or interval, which defines a ``distance'' like measure between any a pair of events.  The (squared) invariant length of the vector $x$ above from the origin of the space time vector space $(0, 0, 0, 0)$ can be defined in terms a non-positive definite inner product
 
-x^2 = x \cdot x = \pm ((c t)^2 - \Bx^2)
+\begin{equation}\label{eqn:grahamSchmidtLorentz:30}
+x^2 = x \cdot x = \pm ((c t)^2 - \Bx^2),
+\end{equation}
 
-where \Bx^2 = \Bx \cdot \Bx$ is used as shorthand for the Euclidean dot product.  The choice of a positive sign will be used herein.  Equivalent to the definition above, one may define a dot product between two vectors.  For $y = (y^0, \By)$ we have
+where $\Bx^2 = \Bx \cdot \Bx$ is used as shorthand for the Euclidean dot product.  The choice of a positive sign will be used herein.  Equivalent to the definition above, one may define a dot product between two vectors.  For $y = (y^0, \By)$ we have
 
-x \cdot y = x^0 y^0 - \Bx \cdot \By
+\begin{equation}\label{eqn:grahamSchmidtLorentz:50}
+x \cdot y = x^0 y^0 - \Bx \cdot \By.
+\end{equation}
 
 Observer that no attempt at motivating why a mixed sign length of this form is required for special relativity will be made here.  That more difficult job is deferred to any number of books that cover special relativity (for example \cite{landau1980classical}).
 
@@ -44,15 +50,25 @@ Observer that no attempt at motivating why a mixed sign length of this form is r
 
 The use of a non-orthonormal basis, even in Euclidean spaces, makes life a bit more difficult.  There is, however, no choice in the matter for special relativity.  The closest that we can get to an orthonormal basis is the standard basis $\{e_0, e_1, e_2, e_3\}$, where
 
+\begin{equation}\label{eqn:grahamSchmidtLorentz:70}
+\begin{aligned}
 e_0 &= (1, 0, 0, 0) \\
 e_1 &= (0, 1, 0, 0) \\
 e_2 &= (0, 0, 1, 0) \\
 e_3 &= (0, 0, 0, 1) 
+\end{aligned}
+\end{equation}
 
-From our definition of invariant length we have $(e_1)^2 = (e_2)^2 = (e_3)^2 = -1$.  A relativistic basis cannot be constructed for which all the basic vectors are unity.
+From our definition of invariant length we have $(e_1)^2 = (e_2)^2 = (e_3)^2 = -1$.  A relativistic basis cannot be constructed for which all the basis vectors are unity.
 
-It is convienent to introduce the concept of a reciprocal basis when dealing with non-orthonormal systems.  The utility of a reciprocal basis is not limited to the non-Euclidean systems that describes special relativity, so we can use a simple skewed Euclidean basis in a plane to illustrate the ideas.  For example, suppose that we have a basis $A = \{e_1, e_2\}$ in a 2 dimensional Euclidean space
+It is convienent to introduce the concept of a reciprocal basis when dealing with non-orthonormal systems.
 
+\subsubsection{Reciprocal basis by example in Euclidean space.}
+
+The utility of a reciprocal basis is not limited to the non-Euclidean systems that describes special relativity, so we can use a simple oblique Euclidean basis in a plane to illustrate the ideas.  For example, suppose that we have a basis $A = \{e_1, e_2\}$ in a 2 dimensional Euclidean space
+
+\begin{equation}\label{eqn:grahamSchmidtLorentz:90}
+\begin{aligned}
 e_1 &= 
 \begin{bmatrix}
 1 \\
@@ -63,27 +79,36 @@ e_2 &=
 1 \\
 2
 \end{bmatrix} 
+\end{aligned}
+\end{equation}
 
 Consider the problem of solving for the coordinates $a,b$ of a vector with such a basis
 
-x = a e_1 + b e_2
+\begin{equation}\label{eqn:grahamSchmidtLorentz:110}
+x = a e_1 + b e_2.
+\end{equation}
 
 Provided the basis is complete, it is always possible to compute a second basis ${e^1, e^2}$ for which one has
 
-e_i \cdot e^j = {\delta_i}^j
+\begin{equation}\label{eqn:grahamSchmidtLorentz:130}
+e_i \cdot e^j = {\delta_i}^j.
+\end{equation}
 
 This set of vectors is called the reciprocal basis.  We can calculate these vectors easily, based on the requirement that
 
+\begin{equation}\label{eqn:grahamSchmidtLorentz:150}
 \begin{bmatrix}
 e_1^\T \\
 e_2^T
 \end{bmatrix}
 \begin{bmatrix}
 e^1 & e^2
-\end{bmatrix} = I
+\end{bmatrix} = I.
+\end{equation}
 
 Working that out gives us
 
+\begin{equation}\label{eqn:grahamSchmidtLorentz:170}
 \begin{bmatrix}
 e^1 & e^2
 \end{bmatrix}
@@ -104,10 +129,13 @@ e_2^T
 \begin{bmatrix}
 2 & 0 \\
 -1 & 1
-\end{bmatrix}
+\end{bmatrix},
+\end{equation}
 
 or
 
+\begin{equation}\label{eqn:grahamSchmidtLorentz:190}
+\begin{aligned}
 e_1 &= 
 \begin{bmatrix}
 1 \\
@@ -118,19 +146,44 @@ e_2 &=
 0 \\
 1/2
 \end{bmatrix} 
+\end{aligned}
+\end{equation}
 
 The task of computing the coordinates of our vector is now simple.  We have
 
-x \cdot e^1 &= a e_1 \cdot e^1 + b \cancel{e_2 \cdot e^1} = a
+\begin{equation}\label{eqn:grahamSchmidtLorentz:340}
+\begin{aligned}
+x \cdot e^1 &= a e_1 \cdot e^1 + b \cancel{e_2 \cdot e^1} = a \\
 x \cdot e^2 &= a \cancel{e_1 \cdot e^2} + b e_2 \cdot e^2 = b
+\end{aligned}
+\end{equation}
 
 Here's a concrete example
 
+\begin{equation}\label{eqn:grahamSchmidtLorentz:230}
 x = 
 \begin{bmatrix}
 4 \\
 2
 \end{bmatrix} 
+=
+\left(
+\begin{bmatrix}
+4 \\
+2
+\end{bmatrix} 
+\cdot e^1 
+\right)
+e_1
++
+\left(
+\begin{bmatrix}
+4 \\
+2
+\end{bmatrix} 
+\cdot e^2
+\right)
+e_2
 = 3 
 \begin{bmatrix}
 1 \\
@@ -141,11 +194,184 @@ x =
 \begin{bmatrix}
 1 \\
 2
-\end{bmatrix} 
+\end{bmatrix}.
+\end{equation}
 
-It becomes simple to compute that the coordinates of $x$ in the basis $A$ above.  That is
+There is also nothing stopping us from using the reciprocal basis, and calculating the components with respect to that.  For the same vector, if we were to write
 
+\begin{equation}\label{eqn:grahamSchmidtLorentz:250}
+x = c e^1 + d e^2,
+\end{equation}
+
+we can dot with $e_1$ and $e_2$ respectively to compute $c$ and $d$ and find
+
+\begin{equation}\label{eqn:grahamSchmidtLorentz:360}
+\begin{aligned}
+x \cdot e_1 &= c e^1 \cdot e_1 + d \cancel{e^2 \cdot e_1} = c \\
+x \cdot e_2 &= c \cancel{e^1 \cdot e_2} + d e^2 \cdot e_2 = d
+\end{aligned}
+\end{equation}
+
+For the concrete example we have
+
+\begin{equation}\label{eqn:grahamSchmidtLorentz:290}
 x = 
+\begin{bmatrix}
+4 \\
+2
+\end{bmatrix} 
+=
+\left(
+\begin{bmatrix}
+4 \\
+2
+\end{bmatrix} 
+\cdot e_1
+\right)
+e^1
++
+\left(
+\begin{bmatrix}
+4 \\
+2
+\end{bmatrix} 
+\cdot e_2
+\right)
+e^2
+= 4 
+\begin{bmatrix}
+1 \\
+-1/2
+\end{bmatrix} 
++ 
+8
+\begin{bmatrix}
+0 \\
+1/2
+\end{bmatrix}.
+\end{equation}
+
+It is natural to employ the tensor notation writing $x^1 = a, x^2 = b, x_1 = c, x_2 = d$, so that we have
+
+\begin{equation}\label{eqn:grahamSchmidtLorentz:310}
+x = x^1 e_1 + x^2 e_2 = x_1 e^1 + x_2 e^2,
+\end{equation}
+
+or with summation implied over repeated indexes just
+
+\begin{equation}\label{eqn:grahamSchmidtLorentz:330}
+\begin{aligned}
+x &= x^i e_i = (x \cdot e^i) e_i \\
+  &= x_i e^i = (x \cdot e_i) e^i
+\end{aligned}
+\end{equation}
+
+In this context there is nothing special about either upper or lower indexes.  They are just coordinates with respect to a basis and it's reciprocal frame, respectively.  Observe that when the original basis happens to be orthonormal, one has equality between the basis vectors and their reciprocal duals $e_i = e^i$, and between the coordinates calculated from those bases respectively $x_i = x^i$.
+
+\subsubsection{Reciprocal basis for relativity.}
+
+Because it is not possible to have an orthonormal basis in a relativistic context, the reciprocal basis neccessarily has a place in the geometry of relativity.  The vectors in the reciprocal basis are still implicitly definited by \ref{eqn:grahamSchmidtLorentz:130}, and while the calculation of these is slightly messier in general, the reciprocal basis $\{e^i\}$ associated with the standard basis $\{e_i\}$ of \ref{eqn:grahamSchmidtLorentz:70} can be obtained by inspection
+
+\begin{equation}\label{eqn:grahamSchmidtLorentz:70b}
+\begin{aligned}
+e^0 &= (1, 0, 0, 0) \\
+e^1 &= (0, -1, 0, 0) \\
+e^2 &= (0, 0, -1, 0) \\
+e^3 &= (0, 0, 0, -1) 
+\end{aligned}
+\end{equation}
+
+Utilizing this pair of bases we have for a spacetime vector
+
+\begin{equation}\label{eqn:grahamSchmidtLorentz:331}
+\begin{aligned}
+x &= x^\alpha e_\alpha = (x \cdot e^\alpha) e_\alpha \\
+  &= x_\alpha e^\alpha = (x \cdot e_\alpha) e^\alpha,
+\end{aligned}
+\end{equation}
+
+where repeated greek indexes imply summation over both temporal and spatial indexes $\{0, 1, 2, 3\}$.  Again in this context, there is nothing special about either upper or lower indexes.  In tensor algebra, upper indexes are ``special'' since the invariant transformations are defined in terms of those coordinates, but this is really just a choice of basis.  Ideally we would seek a coordinate free representation of our Lorentz transformations consistent with this statement.
+
+\subsection{Proper separation}
+
+Given a particle parameterization along a tragectory $x(\lambda)$ in spacetime, one can compute the average spacetime length between a pair of points on this path
+
+\begin{equation}\label{eqn:grahamSchmidtLorentz:400}
+s_b - s_a = \int_{\lambda = a}^b \sqrt{ \frac{d x(\lambda)}{d\lambda} \cdot \frac{d x(\lambda)}{d\lambda} } d\lambda.
+\end{equation}
+
+%For infinitesimally separated points on the tragectory, we have
+%
+%\begin{equation}\label{eqn:grahamSchmidtLorentz:420}
+%ds^2 = d\lambda^2 \left( \frac{d x(\lambda)}{d\lambda} \cdot \frac{d x(\lambda)} \right)^2.
+%\end{equation}
+%
+%Being a bit loose with our differentials this is
+%
+%\begin{align}\label{eqn:grahamSchmidtLorentz:420b}
+%\left( \frac{ds}{d\lambda} )^2 &= \left( \frac{d x(\lambda)}{d\lambda} \cdot \frac{d x(\lambda) \right)^2 \\
+%\left( \frac{d\lambda}{ds} )^2 &= 1/\left( \frac{d x(\lambda)}{d\lambda} \cdot \frac{d x(\lambda) \right)^2
+%\end{align}
+
+A tragectory $x(\lambda)$ may be reparameterized in terms of the instantaneous proper separation $s$.  Doing so, one finds that the first derivative of $x(s)$ is a timelike unit vector (squares to $1$, not $-1$ like $e_0 = (1, 0, 0, 0)$) along any point of the curve.
+
+This is nicely demonstrated by example.
+%  That is
+%
+%\begin{align*}
+%\left( \frac{dx}{ds} \right)^2 
+%&= 
+%\left( \frac{dx}{d\lambda} \frac{d\lambda}{ds} \right)^2  \\
+%&= 
+%\left( \frac{dx}{d\lambda} \right)^2 \left( \frac{d\lambda}{ds} \right)^2  \\
+%&= 1
+%\end{align*}
+%
+Consider an inertial system, with a particle moving along a constant velocity tragectory, parameterized by an external observers time $t$
+
+\begin{equation}\label{eqn:grahamSchmidtLorentz:440}
+x(t) = (c t, \Bv t)
+\end{equation}
+
+Our proper separation anywhere along this spacetime curve is
+
+\begin{equation}\label{eqn:grahamSchmidtLorentz:460}
+s = \int \sqrt{(c t, \Bv t)^2} dt = \int \sqrt{ c^2 - \Bv^2 } dt = \sqrt{ c^2 - \Bv^2 } t,
+\end{equation}
+
+so our proper length reparameterization of this path is
+
+\begin{equation}\label{eqn:grahamSchmidtLorentz:480}
+x(s) = \inv{\sqrt{c^2 - \Bv^2}} (c, \Bv) s.
+\end{equation}
+
+Our first derivative
+
+\begin{equation}\label{eqn:grahamSchmidtLorentz:500}
+\frac{dx}{ds} = \inv{\sqrt{c^2 - \Bv^2}} (c, \Bv) 
+\end{equation}
+
+is now easily observed to be of unit length 
+
+\begin{equation}\label{eqn:grahamSchmidtLorentz:520}
+\left( \frac{dx}{ds} \right)^2 = \inv{c^2 - \Bv^2} (c^2 - \Bv^2) = 1.
+\end{equation}
+
+For an arbitrary reparameterization $x(\mu(\lambda))$ we can utilize that parameterization to decompose a tragectory into tangential and perpendicular components
+
+\begin{equation}\label{eqn:grahamSchmidtLorentz:540}
+x(\mu) = \frac{dx}{d\mu} \mu + \left( x - \frac{dx}{d\mu} \mu \right).
+\end{equation}
+
+Observe that for an inertial system, this implies that we have only a timelike component for the tragectory, when parameterized by proper length.  That is
+
+\begin{equation}\label{eqn:grahamSchmidtLorentz:n}
+x(s) = \frac{dx}{ds} s.
+\end{equation}
+
+This means that a proper length parameterization cooresponds to the time in the frame for which the particle is instantaneously at rest.  A student of special relativity is familiar with being able to switch to a frame in which the particle is instanteously at rest by performing a Lorentz boost, so we have indirectly obtained a first hint that we can interpret such a transformation as nothing more than a change of basis.
+
+\subsection{Graham-Schmidt procedure for spacetime.}
 
 \section{Lorentz boost}
 
