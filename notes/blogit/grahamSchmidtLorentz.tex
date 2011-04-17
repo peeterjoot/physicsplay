@@ -15,8 +15,17 @@
 %
 % http://arxiv.org/abs/1006.3552
 
-\documentclass[iop,tighten]{emulateapj}
+% this one is a double column compact form.
+%\documentclass[iop]{emulateapj}
+% slightly less space used with the tighten option.
+%\documentclass[iop,tighten]{emulateapj}
+\documentclass[iop,onecolumn]{emulateapj}
+%
+% http://www.tug.org/texlive/Contents/live/texmf-dist/doc/latex/aastex/aasguide.pdf
+% full width variation:
 %\documentclass[12pt,preprint]{aastex}
+% double column variation, not as compact as the emulateapj above
+%\documentclass[12pt,preprint2]{aastex}
 
 %\usepackage{apjfonts}
 %\usepackage[numbers]{natbib}
@@ -47,20 +56,16 @@
 Peeter Joot \altaffilmark{1}
 }
 
-\altaffiltext{1}{Department of Physics, University of Toronto, peeter.joot@utoronto.ca} 
-%\altaffiltext{2} {Cavendish Laboratory; 19 J.J. Thomson Ave., 
-%Cambridge CB3 0HE, UK}
-%\altaffiltext{3}{NASA/GSFC, Code 660, Greenbelt, MD 20771}
-%\altaffiltext{4}{Department of Electrical and Computer Engineering, 
-%Duke University, Durham, NC 27708}
+\altaffiltext{1}{peeter.joot@utoronto.ca}
+%\altaffiltext{1}{Department of Physics, University of Toronto, peeter.joot@utoronto.ca}
 
 \begin{abstract}
 
-The standard language for the teaching and study of special relativity is that of tensor algebra.  
-While an explicit basis is common in the study of Euclidean spaces, it is usually implied in the study of inertial relativistic systems.  
+The standard language for the teaching and study of special relativity is that of tensor algebra.
+While an explicit basis is common in the study of Euclidean spaces, it is usually implied in the study of inertial relativistic systems.
 For the study of inertial relativistic systems it will be shown that introducing an explicit basis opens up some of the standard linear algebra toolbox, and has some distinct conceptual advantages.
 As with matrix representations of four vectors, the use of an explicit basis allows the details of the coordinate representation to be suppressed, allowing four vectors to be manipulated as complete entities in an inner products space.
-It will be shown that Lorentz transformations can be viewed as change of basis operations.  It will also be seen that the Lorentz boost matrix can be calculated using the Graham-Schmidt orthonormalization algorithm, a procedure that most students of relativity are likely already comfortable using in its Euclidean form.
+It will be shown that Lorentz transformations can be viewed as change of basis operations, and example calculations of Lorentz transform matrices using the Graham-Schmidt orthonormalization algorithm will be provided.
 
 \end{abstract}
 
@@ -106,16 +111,18 @@ Lorentz boost, change of basis, special relativity, inertial frame
 
 \subsection{Four vectors and invariant length}
 
-We define a four vector, or event, as a tuple of time and space coordinates.  These will be represented herein as non-bold letters of the form
+Four vectors will be written as a tuples of time and space coordinates.  These will be represented herein as non-bold letters of the form
 
 \begin{equation}\label{eqn:grahamSchmidtLorentz:10}
-x = (c t, \Bx) = ( c t, x, y, z ) = ( x^0, x^1, x^2, x^3 ).
+x = (c t, \Bx) = ( c t, x, y, z ) = ( x^0, x^1, x^2, x^3 ),
 \end{equation}
 
-Bold letters are reserved for Euclidean vectors.  As usual, the factor of $c$ in the time coordinate is included so that the units of any of the coordinates in the tuple have dimensions of distance.  As conventional, upper indexes are used for the coordinates of the four vector in the standard basis (so $x^2$ is the 2-indexed coordinate of the four vector and not the square of $x$).  Lower indexed four vector coordinates will be introduced later once the reciprocal basis is introduced.
+with bold letters will reserved for Euclidean vectors.  As usual, the factor of $c$ in the time coordinate is included so that the units of any of the coordinates in the tuple have dimensions of distance.  Also, as conventional, upper indexes are used for the coordinates of the four vector in the standard basis (so $x^2$ is the 2-indexed coordinate of the four vector and not the square of $x$).  Lower indexed four vector coordinates will be introduced later once the reciprocal basis is introduced.
 
-At the heart of special relativity is the definition of the invariant length or interval, which defines a ``distance'' like measure between any a pair of events.  The (squared) invariant length of the vector $x$ above from the origin of the space time vector space $(0, 0, 0, 0)$ can be defined in terms a non-positive definite inner product
-
+At the heart of special relativity is the definition of the invariant length or interval, which defines a ``distance'' like measure between any a pair of vectors.
+%  The (squared) invariant length of the vector $x$ above from the origin of the space time vector space $(0, 0, 0, 0)$ can be defined in terms a non-positive definite inner product
+%
+%
 \begin{equation}\label{eqn:grahamSchmidtLorentz:30}
 x^2 = x \cdot x = \pm ((c t)^2 - \Bx^2),
 \end{equation}
@@ -139,7 +146,7 @@ The use of a non-orthonormal basis, even in Euclidean spaces, makes life a bit m
 e_0 &= (1, 0, 0, 0) \\
 e_1 &= (0, 1, 0, 0) \\
 e_2 &= (0, 0, 1, 0) \\
-e_3 &= (0, 0, 0, 1) 
+e_3 &= (0, 0, 0, 1)
 \end{aligned}
 \end{equation}
 
@@ -153,16 +160,16 @@ The utility of a reciprocal basis is not limited to the non-Euclidean vector spa
 
 \begin{equation}\label{eqn:grahamSchmidtLorentz:90}
 \begin{aligned}
-e_1 &= 
+e_1 &=
 \begin{bmatrix}
 1 \\
 0
 \end{bmatrix} \\
-e_2 &= 
+e_2 &=
 \begin{bmatrix}
 1 \\
 2
-\end{bmatrix} 
+\end{bmatrix}
 \end{aligned}
 \end{equation}
 
@@ -203,13 +210,13 @@ e^1 & e^2
 {e_2}^T
 \end{bmatrix}
 }^{-1}
-= 
+=
 {\begin{bmatrix}
 1 & 0 \\
 1 & 2
 \end{bmatrix}}^{-1}
-= 
-\inv{2} 
+=
+\inv{2}
 \begin{bmatrix}
 2 & 0 \\
 -1 & 1
@@ -220,16 +227,16 @@ or
 
 \begin{equation}\label{eqn:grahamSchmidtLorentz:190}
 \begin{aligned}
-e_1 &= 
+e_1 &=
 \begin{bmatrix}
 1 \\
 -1/2
 \end{bmatrix} \\
-e_2 &= 
+e_2 &=
 \begin{bmatrix}
 0 \\
 1/2
-\end{bmatrix} 
+\end{bmatrix}
 \end{aligned}
 \end{equation}
 
@@ -246,7 +253,7 @@ Here's a concrete example
 
 \begin{equation}\label{eqn:grahamSchmidtLorentz:230}
 \begin{aligned}
-x &= 
+x &=
 \begin{bmatrix}
 4 \\
 2
@@ -256,8 +263,8 @@ x &=
 \begin{bmatrix}
 4 \\
 2
-\end{bmatrix} 
-\cdot e^1 
+\end{bmatrix}
+\cdot e^1
 \right)
 e_1
 +
@@ -265,16 +272,16 @@ e_1
 \begin{bmatrix}
 4 \\
 2
-\end{bmatrix} 
+\end{bmatrix}
 \cdot e^2
 \right)
 e_2 \\
-&= 3 
+&= 3
 \begin{bmatrix}
 1 \\
 0
-\end{bmatrix} 
-+ 
+\end{bmatrix}
++
 1
 \begin{bmatrix}
 1 \\
@@ -302,8 +309,8 @@ For the concrete example we have
 
 \begin{equation}\label{eqn:grahamSchmidtLorentz:290}
 \begin{aligned}
-x 
-&= 
+x
+&=
 \begin{bmatrix}
 4 \\
 2
@@ -313,7 +320,7 @@ x
 \begin{bmatrix}
 4 \\
 2
-\end{bmatrix} 
+\end{bmatrix}
 \cdot e_1
 \right)
 e^1
@@ -322,16 +329,16 @@ e^1
 \begin{bmatrix}
 4 \\
 2
-\end{bmatrix} 
+\end{bmatrix}
 \cdot e_2
 \right)
 e^2 \\
-&= 4 
+&= 4
 \begin{bmatrix}
 1 \\
 -1/2
-\end{bmatrix} 
-+ 
+\end{bmatrix}
++
 8
 \begin{bmatrix}
 0 \\
@@ -374,7 +381,7 @@ Because it is not possible to have an orthonormal basis in a relativistic contex
 e^0 &= (1, 0, 0, 0) \\
 e^1 &= (0, -1, 0, 0) \\
 e^2 &= (0, 0, -1, 0) \\
-e^3 &= (0, 0, 0, -1) 
+e^3 &= (0, 0, 0, -1)
 \end{aligned}
 \end{equation}
 
@@ -416,10 +423,10 @@ This is nicely demonstrated by example.
 %  That is
 %
 %\begin{align*}
-%\left( \frac{dx}{ds} \right)^2 
-%&= 
+%\left( \frac{dx}{ds} \right)^2
+%&=
 %\left( \frac{dx}{d\lambda} \frac{d\lambda}{ds} \right)^2  \\
-%&= 
+%&=
 %\left( \frac{dx}{d\lambda} \right)^2 \left( \frac{d\lambda}{ds} \right)^2  \\
 %&= 1
 %\end{align*}
@@ -434,7 +441,7 @@ Our proper separation anywhere along this spacetime curve is
 
 \begin{equation}\label{eqn:grahamSchmidtLorentz:460}
 \begin{aligned}
-s 
+s
 &= \int \sqrt{(c t, \Bv t)^2} dt  \\
 &= \int \sqrt{ c^2 - \Bv^2 } dt  \\
 &= \sqrt{ c^2 - \Bv^2 } t
@@ -450,10 +457,10 @@ x(s) = \inv{\sqrt{c^2 - \Bv^2}} (c, \Bv) s.
 Our first derivative
 
 \begin{equation}\label{eqn:grahamSchmidtLorentz:500}
-\frac{dx}{ds} = \inv{\sqrt{c^2 - \Bv^2}} (c, \Bv) 
+\frac{dx}{ds} = \inv{\sqrt{c^2 - \Bv^2}} (c, \Bv)
 \end{equation}
 
-is now easily observed to be of unit length 
+is now easily observed to be of unit length
 
 \begin{equation}\label{eqn:grahamSchmidtLorentz:520}
 \left( \frac{dx}{ds} \right)^2 = \inv{c^2 - \Bv^2} (c^2 - \Bv^2) = 1.
@@ -505,10 +512,10 @@ b = a - \sum_{\sigma \le \alpha} (a \cdot f_\sigma) f^\sigma
 
 Once normalized $f_{\alpha+1} = b/\sqrt{\Abs{b^2}}$, we can repeat until the basis is complete.
 
-For this one dimensional spatial example, we can pick any vector out of the span of $f_0$ and find a vector normal to that.  Picking rather arbitrarily, let's use $e_1 = (0, 1)$, 
+For this one dimensional spatial example, we can pick any vector out of the span of $f_0$ and find a vector normal to that.  Picking rather arbitrarily, let's use $e_1 = (0, 1)$,
 
 \begin{align*}
-b 
+b
 &= e_1 - (e_1 \cdot f_0) f^0 \\
 &= (0, 1) - (0, 1) \cdot (1, \beta) \gamma^2 (1, \beta) \\
 &= (0, 1) + \beta \gamma^2 (1, \beta) \\
@@ -522,12 +529,12 @@ This can be normalized as $f_1 = \pm \gamma(\beta, 1)$.  To determine the sign, 
 \begin{vmatrix}
 e_0 \\
 e_1
-\end{vmatrix} 
+\end{vmatrix}
 =
 \begin{vmatrix}
 1 & 0 \\
 0 & 1
-\end{vmatrix} 
+\end{vmatrix}
 = 1.
 \end{equation}
 
@@ -537,12 +544,12 @@ For this new basis, a basis for which $f_0$ is the timelike unit vector for the 
 \begin{vmatrix}
 f_0 \\
 f_1
-\end{vmatrix} 
+\end{vmatrix}
 =
 \begin{vmatrix}
 \gamma & \gamma \beta \\
 \pm \gamma \beta & \pm \gamma
-\end{vmatrix} 
+\end{vmatrix}
 =
 \pm \gamma^2 ( 1 - \beta^2)
 = \pm 1.
@@ -596,25 +603,25 @@ f^1 \cdot e_0 & f^1 \cdot e_1
 \end{bmatrix} \\
 &=
 \begin{bmatrix}
-( 1, \beta ) 
-\cdot 
-(1, 0) 
-\gamma & 
-( 1, \beta ) 
-\cdot 
-(0, 1) 
+( 1, \beta )
+\cdot
+(1, 0)
+\gamma &
+( 1, \beta )
+\cdot
+(0, 1)
 \gamma \\
-( -\beta, -1) 
-\cdot 
-(1, 0) 
-\gamma & 
-( -\beta, -1) 
-\cdot 
-(0, 1) 
+( -\beta, -1)
+\cdot
+(1, 0)
+\gamma &
+( -\beta, -1)
+\cdot
+(0, 1)
 \gamma
 \end{bmatrix} \\
 &=
-\gamma 
+\gamma
 \begin{bmatrix}
 1 & - \beta \\
 - \beta & 1
@@ -636,7 +643,7 @@ Our timelike unit vector is $f_0 = ( 1, \beta \cos\theta, \beta \sin\theta )$, a
 
 \begin{align}\label{eqn:grahamSchmidtLorentz:820}
 f_1 &= \gamma ( \beta, \cos\theta, \sin\theta ) \\
-f_2 &= \gamma ( 0, -\sin\theta, \cos\theta ) 
+f_2 &= \gamma ( 0, -\sin\theta, \cos\theta )
 \end{align}
 
 The matrix of this linear transformation is
@@ -657,18 +664,18 @@ While this has unit determinant, and necessarily preserves the invariant length 
 While only one and two spatial direction examples were considered, the generalization to three spatial directions, and expression in tensor form follows trivially
 
 \begin{equation}\label{eqn:grahamSchmidtLorentz:760}
-y^\alpha = 
+y^\alpha =
 (f^\alpha \cdot e_\beta )
-x^\beta 
+x^\beta
 \end{equation}
 
 or
 \begin{align}\label{eqn:grahamSchmidtLorentz:780}
-y^\alpha &= 
-{\wedge^\alpha}_\beta 
+y^\alpha &=
+{\wedge^\alpha}_\beta
 x^\beta \\
-{\wedge^\alpha}_\beta 
-&= 
+{\wedge^\alpha}_\beta
+&=
 f^\alpha \cdot e_\beta.
 \end{align}
 
@@ -677,24 +684,24 @@ It is natural to consider the coordinates $y^\alpha$ after transformation as the
 We can see this from the tensor expressions as well, once \ref{eqn:grahamSchmidtLorentz:780} is expressed in terms of the basis vectors
 
 \begin{align*}
-y^\alpha 
-&= 
-{\wedge^\alpha}_\beta 
+y^\alpha
+&=
+{\wedge^\alpha}_\beta
 x^\beta \\
-&= x^\beta 
-(f^\alpha \cdot e_\beta) 
+&= x^\beta
+(f^\alpha \cdot e_\beta)
 \\
 y \cdot f^\alpha &= \\
-&=(x \cdot e^\beta) 
-(f^\alpha \cdot e_\beta) 
+&=(x \cdot e^\beta)
+(f^\alpha \cdot e_\beta)
 \\
 \implies
-(y \cdot f^\alpha) f_\alpha &= (x \cdot e^\beta) 
-(f^\alpha \cdot e_\beta) 
+(y \cdot f^\alpha) f_\alpha &= (x \cdot e^\beta)
+(f^\alpha \cdot e_\beta)
 f_\alpha \\
-y 
+y
 &= (x \cdot e^\beta) e_\beta \\
-&= x 
+&= x
 \end{align*}
 
 \section{Conclusion}
