@@ -172,5 +172,14 @@ pdfauthor={Peeter Joot}
 \newcommand{\@email}{{\em No email address given}}
 \newcommand{\email}[1]{\renewcommand{\@email}{{#1}}}
 
-\endinput
+% for compatability for natbib, used by journals.
+%
+\newcommand{\citep}[1]{\cite{#1}}
+\newcommand{\citet}[1]{\cite{#1}}
 
+% more journal stubs:
+\newcommand{\altaffiltext}[2]{}
+\newcommand{\altaffilmark}[1]{}
+\newcommand{\keywords}[1]{}
+
+\endinput
