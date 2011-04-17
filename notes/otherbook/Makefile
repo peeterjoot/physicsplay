@@ -1,7 +1,10 @@
 include make.dep
 
 ORIG_FILES += ../myrefs.bib
-ORIG_FILES += ../nonga/gridSummation.png
+ORIG_FILES += ../unsrturl.bst
+ORIG_FILES += ../abbrvurl.bst
+ORIG_FILES += ../alphaurl.bst
+ORIG_FILES += ../plainurl.bst
 ORIG_FILES += ../nonga/hoopSpring.png
 ORIG_FILES += ../gabook/parallelogramArea.png
 ORIG_FILES += ../calculus/parameterizedSurface.png
@@ -9,9 +12,9 @@ ORIG_FILES += ../calculus/polarAndSpherical.png
 ORIG_FILES += ../calculus/surface_area_element.png
 ORIG_FILES += ../calculus/volume_element.png
 
-ORIG_FILES += ../blogit/gaBasics.tex
-ORIG_FILES += ../blogit/dotBlade.tex
-ORIG_FILES += ../blogit/gaMintro.tex
+#ORIG_FILES += ../blogit/gaBasics.tex
+#ORIG_FILES += ../blogit/dotBlade.tex
+#ORIG_FILES += ../blogit/gaMintro.tex
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
