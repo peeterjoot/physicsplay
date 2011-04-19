@@ -41,6 +41,7 @@ ORDERED += PS4soln.pdf
 ORDERED += 450hw5.pdf
 ORDERED += PS5soln.pdf
 ORDERED += 450hw6.pdf
+ORDERED += PS6soln.pdf
 
 GENERATED += RelEMpp12-24.pdf
 GENERATED += RelEMpp166-176.pdf
