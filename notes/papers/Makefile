@@ -1,3 +1,7 @@
+#
+# could consider moving: ../nonga/multiPendulumSphericalMatrix.tex here too.
+#
+
 RAWTEXFILES := $(shell ls *.tex)
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
