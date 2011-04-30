@@ -1,6 +1,8 @@
 ORDERED += CMpp1-13.pdf
-ORDERED += CMpp13.1-27.pdf
+#ORDERED += CMpp13.1-27.pdf
+ORDERED += CMpp13.1-20.pdf 
 ORDERED += CMpp20.1-.2.pdf
+ORDERED += CMpp21-27.pdf 
 ORDERED += CMpp27.1-.3.pdf
 ORDERED += CMpp28-57.pdf
 ORDERED += CMppC1-C5.pdf
@@ -42,3 +44,8 @@ poppitz354.pdf : $(ORDERED)
 #$(SOURCES) :
 #	wget $(ORIGIN)/$@
 
+CMpp13.1-20.pdf : CMpp13.1-27.pdf
+	pdftk $< cat 1-11 output $@
+
+CMpp21-27.pdf : CMpp13.1-27.pdf
+	pdftk $< cat 12-18 output $@
