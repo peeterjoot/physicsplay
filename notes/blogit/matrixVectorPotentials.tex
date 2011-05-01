@@ -1,0 +1,174 @@
+\input{../peeter_prologue_print.tex}
+%\input{../peeter_prologue_widescreen.tex}
+
+\chapter{mytitle}
+\label{chap:matrixVectorPotentials}
+%\useCCL
+\blogpage{http://sites.google.com/site/peeterjoot/math2011/matrixVectorPotentials.pdf}
+\date{April 30, 2011}
+\revisionInfo{matrixVectorPotentials.tex}
+
+\beginArtWithToc
+%\beginArtNoToc
+
+\section{Motivation.}
+
+A while ago I worked the problem of determining the equations of motion for a chain like object.  This was idealized as a set of $N$ interconnected spherical pendulums.  One of the aspects of that problem that I found fun was that it allowed me to use a new construct, factoring vectors into multivector matrix products, multiplied using the Geometric (Clifford) product.  It seemed at the time that this made the problem tractible, whereas a traditional formulation was much less so.  Later I realized that a very similar factorization was possible with matrices directly.
+
+I encountered a new use for this idea of factoring a vector into a product of multivector matrixes.  Namely, a calculation of the four vector Lienard-Wiechert potentials, given a general motion described in cylindrical coordinates.  This I thought I'd try since we had a similar problem on our exam (with the motion of the charged particle additionally constrained to a circle).
+
+\section{The goal of the calculation.}
+
+Our problem is to calculate
+
+\begin{align}\label{eqn:matrixVectorPotentials:n}
+A^0 &= \frac{q}{R^\conj} \\
+\BA &= \frac{q \Bv_c}{c R^\conj}
+\end{align}
+
+where $\Bx_c(t)$ is the location of the charged particle, $\Br$ is the point that the field is measured, and 
+
+\begin{align}\label{eqn:matrixVectorPotentials:n}
+R^\conj &= R - \frac{\Bv_c}{c} \cdot \BR \\
+R^2 &= \BR^2 = c^2( t - t_r)^2 \\
+\BR &= \Br - \Bx_c(t_r) \\
+\Bv_c &= \PD{t_r}{\Bx_c}.
+\end{align}
+
+\section{Calculating the potentials for an arbitrary cylindrical motion.}
+
+Suppose that our charged particle has the trajectory
+
+\begin{equation}\label{eqn:matrixVectorPotentials:n}
+\Bx_c(t) = h(t) \Be_3 + a(t) \Be_1 e^{i \theta(t)}
+\end{equation}
+
+where $i = \Be_1 \Be_2$, and we measure the field at the point
+
+\begin{equation}\label{eqn:matrixVectorPotentials:n}
+\Br = z \Be_3 + \rho \Be_1 e^{i \phi}
+\end{equation}
+
+The vector separation between the two is
+
+\begin{align*}
+\BR 
+&= \Br - \Bx_c \\
+&= (z - h) \Be_3 + \Be_1 ( \rho e^{i\phi} - a e^{i\theta} ) \\
+&=
+\begin{bmatrix}
+\Be_1 e^{i\phi} & - \Be_1 e^{i\theta} & \Be_3
+\end{bmatrix}
+\begin{bmatrix}
+\rho \\
+a \\
+z - h
+\end{bmatrix}
+\end{align*}
+
+Transposition does not change this at all, so the (squared) length of this vector difference is
+
+\begin{align*}
+\BR^2 &=
+\begin{bmatrix}
+\rho &
+a & 
+(z - h)
+\end{bmatrix}
+\begin{bmatrix}
+\Be_1 e^{i\phi} \\
+- \Be_1 e^{i\theta} \\
+ \Be_3
+\end{bmatrix}
+\begin{bmatrix}
+\Be_1 e^{i\phi} & - \Be_1 e^{i\theta} & \Be_3
+\end{bmatrix}
+\begin{bmatrix}
+\rho \\
+a \\
+z - h
+\end{bmatrix} \\
+&=
+\begin{bmatrix}
+\rho &
+a & 
+(z - h)
+\end{bmatrix}
+\begin{bmatrix}
+\Be_1 e^{i\phi} \Be_1 e^{i\phi} & - \Be_1 e^{i\phi} \Be_1 e^{i\theta} & \Be_1 e^{i\phi} \Be_3 \\
+- \Be_1 e^{i\theta} \Be_1 e^{i\phi} & \Be_1 e^{i\theta} \Be_1 e^{i\theta} & - \Be_1 e^{i\theta} \Be_3 \\
+ \Be_3 \Be_1 e^{i\phi} & -\Be_3 \Be_1 e^{i\theta} & \Be_3 \Be_3 \\
+\end{bmatrix}
+\begin{bmatrix}
+\rho \\
+a \\
+z - h
+\end{bmatrix} \\
+&=
+\begin{bmatrix}
+\rho &
+a & 
+(z - h)
+\end{bmatrix}
+\begin{bmatrix}
+1 & - e^{i(\theta-\phi)} & \Be_1 e^{i\phi} \Be_3 \\
+- e^{i(\phi -\theta)} & 1 & - \Be_1 e^{i\theta} \Be_3 \\
+ \Be_3 \Be_1 e^{i\phi} & -\Be_3 \Be_1 e^{i\theta} & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+\rho \\
+a \\
+z - h
+\end{bmatrix} \\
+\end{align*}
+
+There are a few things of note about this matrix.  One of which is that it is \underline{not} symmetric.  This is a consequence of the non-commutative nature of the vector products.  What we do have is a Hermitian transpose like symmetry.  Observe that terms like the $(1,2)$ and the $(2,1)$ elements of the matrix are equal after all the vector products are reversed.
+
+Using tilde to denote this reversion, we have
+
+\begin{align*}
+(e^{i (\theta - \phi)})^{\tilde{}}
+&=
+\cos(\theta - \phi)
++ (\Be_1 \Be_2)^{\tilde{}}
+\sin(\theta - \phi) \\
+&=
+\cos(\theta - \phi)
++ \Be_2 \Be_1
+\sin(\theta - \phi) \\
+&=
+\cos(\theta - \phi)
+- \Be_1 \Be_2 
+\sin(\theta - \phi) \\
+&=
+e^{-i (\theta -\phi)}.
+\end{align*}
+
+The fact that all the elements of this matrix, if non-scalar, have their reversed value in the transposed position, is sufficient to show that the end result is a scalar as expected.  Consider a general quadratic form where the matrix has scalar and bivector grades as above, where there is reversion in all the transposed positions.  That is
+
+\begin{equation}\label{eqn:matrixVectorPotentials:n}
+b^\T A b
+\end{equation}
+
+where $A = \Norm{A_{ij}}$, a $m \times m$ matrix where $A_{ij} = \tilde{A_{ji}}$ and contains scalar and bivector grades, and $b = \Norm{b_i}$, a $m\times 1$ column matrix of scalars.  Then the product is
+
+\begin{align*}
+\sum_{ij} b_i A_{ij} b_j
+&=
+\sum_{i<j} b_i A_{ij} b_j
++\sum_{j<i} b_i A_{ij} b_j
++\sum_{k} b_k A_{kk} b_k \\
+&=
+\sum_{i<j} b_i A_{ij} b_j
++\sum_{i<j} b_{j} A_{ji} b_i
++\sum_{k} b_k A_{kk} b_k \\
+&=
+\sum_{k} b_k A_{kk} b_k + 2 \sum_{i<j} b_i (A_{ij} + A_{ji}) b_j
+&=
+\sum_{k} b_k A_{kk} b_k + 2 \sum_{i<j} b_i (A_{ij} + \tilde{A_{ij}}) b_j
+\end{align*}
+
+The quantity in braces $A_{ij} + \tilde{A_{ij}}$ is a scalar since any of the bivector grades in $A_{ij}$ must then cancel out.
+
+\EndArticle
+%\EndNoBibArticle
