@@ -13,9 +13,9 @@
 
 \section{Motivation.}
 
-A while ago I worked the problem of determining the equations of motion for a chain like object.  This was idealized as a set of $N$ interconnected spherical pendulums.  One of the aspects of that problem that I found fun was that it allowed me to use a new construct, factoring vectors into multivector matrix products, multiplied using the Geometric (Clifford) product.  It seemed at the time that this made the problem tractible, whereas a traditional formulation was much less so.  Later I realized that a very similar factorization was possible with matrices directly.
+A while ago I worked the problem of determining the equations of motion for a chain like object.  This was idealized as a set of $N$ interconnected spherical pendulums.  One of the aspects of that problem that I found fun was that it allowed me to use a new construct, factoring vectors into multivector matrix products, multiplied using the Geometric (Clifford) product.  It seemed at the time that this made the problem tractable, whereas a traditional formulation was much less so.  Later I realized that a very similar factorization was possible with matrices directly.
 
-I encountered a new use for this idea of factoring a vector into a product of multivector matrixes.  Namely, a calculation of the four vector Lienard-Wiechert potentials, given a general motion described in cylindrical coordinates.  This I thought I'd try since we had a similar problem on our exam (with the motion of the charged particle additionally constrained to a circle).
+I encountered a new use for this idea of factoring a vector into a product of multivector matrices.  Namely, a calculation of the four vector Lienard-Wiechert potentials, given a general motion described in cylindrical coordinates.  This I thought I'd try since we had a similar problem on our exam (with the motion of the charged particle additionally constrained to a circle).
 
 \section{The goal of the calculation.}
 
@@ -122,6 +122,8 @@ z - h
 \end{bmatrix} \\
 \end{align*}
 
+\subsection{A motivation for a Hermitian like transposition operation.}
+
 There are a few things of note about this matrix.  One of which is that it is \underline{not} symmetric.  This is a consequence of the non-commutative nature of the vector products.  What we do have is a Hermitian transpose like symmetry.  Observe that terms like the $(1,2)$ and the $(2,1)$ elements of the matrix are equal after all the vector products are reversed.
 
 Using tilde to denote this reversion, we have
@@ -163,12 +165,121 @@ where $A = \Norm{A_{ij}}$, a $m \times m$ matrix where $A_{ij} = \tilde{A_{ji}}$
 +\sum_{i<j} b_{j} A_{ji} b_i
 +\sum_{k} b_k A_{kk} b_k \\
 &=
-\sum_{k} b_k A_{kk} b_k + 2 \sum_{i<j} b_i (A_{ij} + A_{ji}) b_j
+\sum_{k} b_k A_{kk} b_k + 2 \sum_{i<j} b_i (A_{ij} + A_{ji}) b_j \\
 &=
 \sum_{k} b_k A_{kk} b_k + 2 \sum_{i<j} b_i (A_{ij} + \tilde{A_{ij}}) b_j
 \end{align*}
 
-The quantity in braces $A_{ij} + \tilde{A_{ij}}$ is a scalar since any of the bivector grades in $A_{ij}$ must then cancel out.
+The quantity in braces $A_{ij} + \tilde{A_{ij}}$ is a scalar since any of the bivector grades in $A_{ij}$ cancel out.  Consider a similar general product of a vector after the vector has been factored into a product of matrices of multivector elements
+
+\begin{equation}\label{eqn:matrixVectorPotentials:n}
+\Bx = 
+\begin{bmatrix}
+a_1 & a_2 & \hdots & a_m
+\end{bmatrix}
+\begin{bmatrix}
+b_1 \\ b_2 \\ \vdots \\ b_m
+\end{bmatrix}
+%=
+%\left(
+%\begin{bmatrix}
+%\tilde{b_1} & \tilde{b_2} & \hdots & \tilde{b_m}
+%\end{bmatrix}
+%\begin{bmatrix}
+%\tilde{a_1} \\ \tilde{a_2} \\ \vdots \\ \tilde{a_m}
+%\end{bmatrix}
+%\right)^{\tilde{}}.
+\end{equation}
+
+The (squared) length of the vector is
+
+\begin{align*}\label{eqn:matrixVectorPotentials:n}
+\Bx^2 
+&= (a_i b_i) (a_j b_j)  \\
+&= (a_i b_i)^{\tilde{}} a_j b_j  \\
+&= \tilde{b_i} \tilde{a_i} a_j b_j  \\
+&= \tilde{b_i} (\tilde{a_i} a_j) b_j.
+\end{align*}
+
+It is clear that we want a transposition operation that includes reversal of its elements, so with a general factorization of a vector into matrices of multivectors $\Bx = A b$, it's square will be $\Bx = {\tilde{b}}^\T {\tilde{A}}^\T A b$.
+
+As with purely complex valued matrices, it is convenient to use the dagger notation, and define
+
+\begin{equation}\label{eqn:matrixVectorPotentials:n}
+A^\dagger = \tilde{A}^\T
+\end{equation}
+
+where $\tilde{A}$ contains the reversed elements of $A$.  By extension, we can define dot and wedge products of vectors expressed as products of multivector matrices.  Given $\Bx = A b$, a row vector and column vector product, and $\By = C d$, where each of the rows or columns has $m$ elements, the dot and wedge products are
+
+\begin{align}\label{eqn:matrixVectorPotentials:n}
+\Bx \cdot \By &= \gpgradezero{ d^\dagger C^\dagger A b } \\
+\Bx \wedge \By &= \gpgradetwo{ d^\dagger C^\dagger A b }.
+\end{align}
+
+In particular, if $b$ and $d$ are matrices of scalars we have
+
+\begin{align}\label{eqn:matrixVectorPotentials:n}
+\Bx \cdot \By &= d^\T \gpgradezero{C^\dagger A} b = d^\T \frac{C^\dagger A + A^\dagger C}{2} b \\
+\Bx \wedge \By &= d^\T \gpgradetwo{C^\dagger A} b = d^\T \frac{C^\dagger A - A^\dagger C}{2} b.
+\end{align}
+
+The dot product is seen as a generator of symmetric matrices, and the wedge product a generator of purely antisymmetric matrices.
+
+\subsection{Back to the problem}
+
+Now, returning to the example above, where we want $\BR^2$.  We've seen that we can drop any bivector terms from the matrix, so that the squared length can be reduced as
+
+\begin{align*}
+\BR^2 
+&=
+\begin{bmatrix}
+\rho &
+a & 
+(z - h)
+\end{bmatrix}
+\begin{bmatrix}
+1 & - e^{i(\theta-\phi)} & 0 \\
+- e^{i(\phi -\theta)} & 1 & 0 \\
+0 & 0 & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+\rho \\
+a \\
+z - h
+\end{bmatrix} \\
+&=
+\begin{bmatrix}
+\rho &
+a & 
+(z - h)
+\end{bmatrix}
+\begin{bmatrix}
+1 & - \cos(\theta-\phi) & 0 \\
+- \cos(\theta -\phi) & 1 & 0 \\
+0 & 0 & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+\rho \\
+a \\
+z - h
+\end{bmatrix} \\
+&=
+\begin{bmatrix}
+\rho &
+a & 
+(z - h)
+\end{bmatrix}
+\begin{bmatrix}
+\rho - a \cos(\theta - \phi) \\
+- \rho \cos(\theta - \phi) + a \\
+z - h
+\end{bmatrix}
+\end{align*}
+
+So we have
+\begin{equation}\label{eqn:matrixVectorPotentials:n}
+\BR^2 = \rho^2 + a^2 + (z -h)^2 - 2 a \rho \cos(\theta - \phi)
+\end{equation}
 
 \EndArticle
 %\EndNoBibArticle
