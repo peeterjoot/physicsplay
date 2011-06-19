@@ -15,7 +15,8 @@ STANDALONE += desaiTypos.tex
 
 PHY356 := $(filter-out $(STANDALONE), $(TEXFILES))
 
-all : phy356.pdf desaiTypos.pdf
+all :: phy356.pdf desaiTypos.pdf
+#all :: t.pdf
 
 local : $(LOCAL_FILES) 
 
@@ -31,6 +32,9 @@ phy356.pdf :: $(PHY356) $(LOCAL_FILES)
 
 desaiTypos.pdf :: desaiTypos.tex
 	../make_pdflatex $<
+
+#t.pdf :: t.tex
+#	../make_pdflatex $<
 
 #%.pdf : %.tex
 #	../make_pdflatex $<
