@@ -4,64 +4,64 @@
 
 \section{How to solve without GA? }
 
-\cite{doran2003gap} treats the solution of the Lorentz force equation
-in covariant form.
+%% http://www.physicsforums.com/showthread.php?t=231213
 
-While some simplified variants of the equation can be solved by 
-picking an appropriate axis of symmetry, is a solution 
-for the trajectory 
-for a more general field pair possible without the softistication 
-of the GA methods?
+\citep{doran2003gap} treats the solution of the Lorentz force equation in covariant form.
 
-Here's a bash at starting it.  My approach essentially replays a
-rigid body rotation derivation backwards
-\href{http://www.damtp.cam.ac.uk/user/tong/dynamics/three.pdf}{such as the one found in Tong}.
+While some simplified variants of the equation can be solved by picking an appropriate axis of symmetry, is a solution for the trajectory for a more general field pair possible without the softistication of the GA methods?
+
+Here's a bash at starting it.  My approach essentially replays a rigid body rotation derivation backwards \href{http://www.damtp.cam.ac.uk/user/tong/dynamics/three.pdf}{such as the one found in Tong}.
 
 In the Lorentz Force Law, we essentially have an equation like the rigid body rotation equation $y' = \omega \times y + x_0'$, that resulted from $y = R x + x_0$.  That's a good hint about the anti-derivative required for this Lorentz problem, so we have to go backwards from the cross product, and solve for the rotation:
  
-\[
-m \Bv' = \frac{q}{m} ( \BE + \Bv \times \BB )
-\]
-\[
-\Bv = \frac{q}{m} \BE + \Omega \Bv
-\]
+\begin{equation}\label{eqn:lorentzRotation:n}
+\frac{d(\Bp}{dt} = q ( \BE + \Bv \times \BB ).
+\end{equation}
 
-Here $\Omega$ is:
+While $\Bp = \gamma m \Bv$, for $v \ll c$, we can write this as a matrix equation
 
-\[
+\begin{equation}\label{eqn:lorentzRotation:n}
+\Bv = \frac{q}{m} \BE + \Omega \Bv,
+\end{equation}
+
+where $\Omega$ is
+
+\begin{equation}\label{eqn:lorentzRotation:n}
 \frac{q}{m}
 \begin{bmatrix}
 0 & B_3 & -B_2 \\
 -B_3 & 0 & B_1 \\
 B_2 & -B_1 & 0 \\
-\end{bmatrix}
-\]
+\end{bmatrix}.
+\end{equation}
 
 Following the rigid body treatment (in Tong above) this antisymmetric matrix can be expressed in terms of a rotation matrix (ie: essentially it is a rotation matrix derivative with a rotation factored out of it).  So, let
 
-\[
-\Omega = R' R^\T
-\]
+\begin{equation}\label{eqn:lorentzRotation:n}
+\Omega = R' R^\T,
+\end{equation}
 
-, and use one more trick from the rigid body analysis:
+and use one more trick from the rigid body analysis:
 
-\[
+\begin{equation}\label{eqn:lorentzRotation:n}
 (RR^\T)' = R' R^\T + R {R'}^\T = I' = 0
-\]
+\end{equation}
 
-\[
-\Bv' - R' R^\T \Bv = \Bv' + R {R'}^\T \Bv = R (R^\T \Bv' + {R'}^\T \Bv) 
-\implies 
-R (R^\T \Bv)' = \frac{q}{m} \BE
-\]
+\begin{align*}
+\Bv' - R' R^\T \Bv 
+&= \Bv' + R {R'}^\T \Bv  \\
+&= R (R^\T \Bv' + {R'}^\T \Bv)  \\
+&\implies \\
+R (R^\T \Bv)' &= \frac{q}{m} \BE
+\end{align*}
 
 Thus the solution can be written as two equations, one explicit for $\Bv$, and one matrix differential equation to solve for R:
 
-\[
+\begin{equation}\label{eqn:lorentzRotation:n}
 \Bv = \frac{q}{m} \BE t + R^\T \Bc
-\]
+\end{equation}
 
-\[
+\begin{equation}\label{eqn:lorentzRotation:n}
 R' = \frac{q}{m}
 \begin{bmatrix}
 0 & B_3 & -B_2 \\
@@ -69,36 +69,36 @@ R' = \frac{q}{m}
 B_2 & -B_1 & 0 \\
 \end{bmatrix}
 R
-\]
+\end{equation}
 
-\section{}
+\section{Solving for the rotation}
 
 I haven't tried solving that last equation numerically (or analytically), but intuition says that diagonalization would do the trick.  ie: with a solution having a term of the form:
 
-\[
+\begin{equation}\label{eqn:lorentzRotation:n}
 e^{Dt}
-\]
+\end{equation}
 
 I should try this with an example to see if it all holds together (at the bare minimum, if I did things right, it should work for $\BB$ along the $\zcap$ axis;)
 
-Now as mentioned in \cite{doran2003gap}
-there's a treatment of this problem 
-in chapter 5 on spacetime algebra.  So far reading that book, I'd temporarily skipped that chapter for some easier stuff in chapter 6 (vector calculus chapter).  Going back and reading just this fragment, I can't say I fully understand their treatment.  It's interesting looking though;)  They end up reformulating the equation as:
+Now as mentioned in \citep{doran2003gap} there's a treatment of this problem in chapter 5 on spacetime algebra.  So far reading that book, I'd temporarily skipped that chapter for some easier stuff in chapter 6 (vector calculus chapter).  Going back and reading just this fragment, I can't say I fully understand their treatment.  It's interesting looking though;)  They end up reformulating the equation as:
 
-\[
-m \Bv' = q \BF \cdot \Bv
-\]
+\begin{equation}\label{eqn:lorentzRotation:n}
+m v' = q F \cdot v,
+\end{equation}
 
-where $\BF$ is a combined electrodynamic field:
+where $F$ is a combined electrodynamic field:
 
-\[
-\BF = \BE + I \BB
-\]
+\begin{equation}\label{eqn:lorentzRotation:n}
+F = \BE + I \BB,
+\end{equation}
+
+and $v = dx/d\tau$ is the four vector proper velocity.
 
 Then they introduce a rotor parametrization of the velocity, and an equation to solve for the rotor that's similar to the rotation matrix equation I had (factor of two difference because the rotor is a double sided half angle operator unlike the single sided rotation matrix) :
 
-\[
-R' = \frac{q}{2m} \BF R
-\]
+\begin{equation}\label{eqn:lorentzRotation:n}
+R' = \frac{q}{2m} F R
+\end{equation}
 
-There's a lot of similarities to what I hacked up, but it will probably take me a while before I can get to the point to digest and compare the two.   Their rotor equation ends up with terms for both electric field and magnetic field whereas mine is magnetic only, ... that makes more sense to me.  My rationalization for this is a guess that this is a side effect of the cross product Lorentz force "law" as stated above not being correct relativistically, whereas theirs is.
+There's a lot of similarities to what I hacked up, but it will probably take me a while before I can get to the point to digest and compare the two.   Their rotor equation ends up with terms for both electric field and magnetic field whereas mine is magnetic only.  Something that involves both makes more sense.

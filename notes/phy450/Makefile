@@ -15,8 +15,8 @@ local : $(LOCAL_FILES)
 $(LOCAL_FILES) :
 	cp $(filter %$@, $(ORIG_FILES)) $@
 
-cronology.tex : ../gabook/METADATA
-	../gabook/METADATA -phy450 > cronology.tex
+cronology.tex : ../METADATA
+	../METADATA -phy450 > cronology.tex
 
 phy450.pdf :: $(TEXFILES) $(LOCAL_FILES)
 	../make_pdflatex main.tex

@@ -1,4 +1,7 @@
-TEXFILES := $(shell ls *.tex)
+RAWTEXFILES := $(shell ls *.tex)
+
+TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
+
 PDFS := $(TEXFILES:.tex=.pdf)
 
 # logically symlinks, but MikTex doesn't like those:
@@ -35,12 +38,12 @@ gaBasics.pdf : gaBasics.tex
 #	./wordToTex < gaBasics.txt > gaBasics.tex
 
 %.pdf : %.tex
-	../make_pdflatex $<
+	perl ../make_pdflatex $<
 
 clean :: mostlyclean localclean
 
 mostlyclean :: 
-	rm -f *.ps *.dvi *.pdf *.aux *.log *.bbl *.blg *.brf *.toc *.stackdump
+	rm -f *.ps *.dvi *.pdf *.aux *.log *.bbl *.blg *.brf *.toc *.stackdump *.bib
 
 localclean ::
 	rm -f $(LOCAL_FILES)

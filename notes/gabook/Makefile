@@ -45,8 +45,8 @@ gabook.pdf :: $(TEXFILES) $(LOCAL_FILES)
 	../make_pdflatex main.tex
 	mv main.pdf gabook.pdf
 
-cronology.tex : METADATA
-	./METADATA -gabook > cronology.tex
+cronology.tex : ../METADATA
+	../METADATA -gabook > cronology.tex
 
 clean ::
 	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc *.brf $(LOCAL_FILES)

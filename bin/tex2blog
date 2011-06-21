@@ -64,6 +64,39 @@ my $pf = 0 ;
 # wikipedia output.
 my $wiki = 0 ; 
 
+my $r1 = qr/
+     (                   # start of capture buffer 1
+     {                   # match an opening brace
+         (?:               
+             [^{}]++     # one or more non braces, non backtracking
+               |                  
+             (?1)        # found { or }, so recurse to capture buffer 1
+         )*                 
+     }                   # match a closing brace
+     )                   # end of capture buffer 1
+     /x;
+
+my $r2 = qr/
+     (                   # start of capture buffer 1
+     {                   # match an opening brace
+         (?:               
+             [^{}]++     # one or more non braces, non backtracking
+               |                  
+             (?1)        # found { or }, so recurse to capture buffer 1
+         )*                 
+     }                   # match a closing brace
+     )                   # end of capture buffer 1
+     (                   # start of capture buffer 1
+     {                   # match an opening brace
+         (?:               
+             [^{}]++     # one or more non braces, non backtracking
+               |                  
+             (?1)        # found { or }, so recurse to capture buffer 1
+         )*                 
+     }                   # match a closing brace
+     )                   # end of capture buffer 1
+     /x;
+
 GetOptions( 
    'mathml!'      => \$mathml,
    'wordpress!'   => \$wordpress,
@@ -389,7 +422,7 @@ sub processRest
 
    my $urlMessage ;
    #$urlMessage = "Click here for a PDF of this sequence of posts with nicer formatting" ;
-   $urlMessage = "Click here for a PDF of this post with nicer formatting" ;
+   $urlMessage = "Click here for a PDF of this post with nicer formatting (especially if my latex to wordpress script has left FORMULA DOES NOT PARSE errors.)" ;
 
    my $urlMessage2 = '' ;
 #   $urlMessage2 .= "Note that this PDF file is formatted in a wide-for-screen layout that is probably not good for printing." ;
@@ -474,6 +507,11 @@ sub processRest
                    0 ) ;
       }
 
+      s/\\paragraph{(.*?)}/<b>$1<\/b>/g;
+      # avoiding underline since that looks like a hyperlink.
+      s/\\underline{(.*?)}/<i>$1<\/i>/g;
+      s/\\S\b/section/g;
+
       # process inline math $$ delimited.  Assume that it is all in one line.
       s/\$(.*?)\$/processOneEquation(1, '*', $1)/eg ;
 
@@ -525,39 +563,6 @@ sub processRest
 sub expandPeetersMathModeMacros
 {
    my $out = "@_" ;
-
-   my $r1 = qr/
-        (                   # start of capture buffer 1
-        {                   # match an opening angle bracket
-            (?:               
-                [^{}]++     # one or more non angle brackets, non backtracking
-                  |                  
-                (?1)        # found { or }, so recurse to capture buffer 1
-            )*                 
-        }                   # match a closing angle bracket
-        )                   # end of capture buffer 1
-        /x;
-
-   my $r2 = qr/
-        (                   # start of capture buffer 1
-        {                   # match an opening angle bracket
-            (?:               
-                [^{}]++     # one or more non angle brackets, non backtracking
-                  |                  
-                (?1)        # found { or }, so recurse to capture buffer 1
-            )*                 
-        }                   # match a closing angle bracket
-        )                   # end of capture buffer 1
-        (                   # start of capture buffer 1
-        {                   # match an opening angle bracket
-            (?:               
-                [^{}]++     # one or more non angle brackets, non backtracking
-                  |                  
-                (?1)        # found { or }, so recurse to capture buffer 1
-            )*                 
-        }                   # match a closing angle bracket
-        )                   # end of capture buffer 1
-        /x;
 
    $out =~ s/\\\\/\\\\ /g;
 #   $out =~ s/&=/=/g;
@@ -620,14 +625,17 @@ sub expandPeetersMathModeMacros
    $out =~ s/\\Bmu/\\boldsymbol{\\mu}/g;
    $out =~ s/\\Bnu/\\boldsymbol{\\nu}/g;
    $out =~ s/\\Bsigma/\\boldsymbol{\\sigma}/g;
+   $out =~ s/\\Balpha/\\boldsymbol{\\alpha}/g;
    $out =~ s/\\Brho/\\boldsymbol{\\rho}/g;
    $out =~ s/\\Bbeta/\\boldsymbol{\\beta}/g;
+   $out =~ s/\\Bkappa/\\boldsymbol{\\kappa}/g;
    $out =~ s/\\BTheta/\\boldsymbol{\\Theta}/g;
    $out =~ s/\\BXI/\\boldsymbol{\\xi}/g;
    $out =~ s/\\BEta/\\boldsymbol{\\eta}/g;
    $out =~ s/\\(.)cap/\\hat{\\B$1}/g;
    $out =~ s/\\hat(\w)/\\hat{$1}/g;
 
+   $out =~ s/\\InvGamma/\\sqrt{1 - \\frac{\\Bv^2}{c^2}}/g;
 # this messes up \Bigr and \Bigl
 #   $out =~ s/\\B(.)/\\mathbf{$1}/g;
 # 
@@ -671,9 +679,18 @@ sub expandPeetersMathModeMacros
 
    $out =~ s/\\traceB${r1}/\\tr\\left({$1}\\right)/g;
    $out =~ s/\\trace${r1}/\\tr{$1}/g;
+   $out =~ s/\\ddtau${r1}/\\frac{d{$1}}{d\\tau}/g;
+   $out =~ s/\\ddt${r1}/\\frac{d{$1}}{dt}/g;
+   $out =~ s/\\dds${r1}/\\frac{d{$1}}{ds}/g;
 
-   # FIXME: this is italics.  bold in html done how?
-   $out =~ s/\\paragraph${r1}/<em>$1<\/em>/g;
+   # hack:
+   if ( $wordpress )
+   {
+      $out =~ s/\\cancel${r1}/$1/g;
+   }
+
+   $out =~ s/\\PDSq${r2}/\\frac{\\partial^2 {$2}}{\\partial {$1}^2}/g;
+   $out =~ s/\\innerprod${r2}/{\\langle{$1}, {$2}\\rangle}/g;
 
    $out =~ s/\\expectation${r1}/\\left\\langle{$1}\\right\\rangle/g;
    $out =~ s/\\tr/\\text{Tr}/g;
@@ -697,6 +714,8 @@ sub expandPeetersMathModeMacros
    $out =~ s/\\thetadot/\\dot{\\theta}/g;
    $out =~ s/\\phidot/\\dot{\\phi}/g;
    $out =~ s/\\xdot/\\dot{x}/g;
+   $out =~ s/\\pdot/\\dot{p}/g;
+   $out =~ s/\\vdot/\\dot{v}/g;
 
    $out =~ s/\\directproduct/\\otimes/g;
    $out =~ s/\\thetacap/\\hat{\\boldsymbol{\\theta}}/g;
@@ -705,6 +724,7 @@ sub expandPeetersMathModeMacros
    $out =~ s/\\questionEquals/\\stackrel{?}{=}/g;
    $out =~ s/\\T\b/\\text{T}/g;
    $out =~ s/\\BOne/\\mathbf{1}/g;
+
 
    # HACK.  Can't use txfonts in wordpress.  At least suppress the can't parse
    # message (unfortunately with loss of meaning).

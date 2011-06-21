@@ -7,7 +7,7 @@
 \section{Motivation.}
 
 Having recently attempted a number of Fourier solutions to the Heat, Schr\"{o}dinger, Maxwell vacuum, and inhomogeneous Maxwell equation, a reading
-of \cite{mjPerryElectrodynamics} inspired me to have another go.  In particular, he writes the Poisson equation solution explicitly in terms of a Green's
+of \citep{mjPerryElectrodynamics} inspired me to have another go.  In particular, he writes the Poisson equation solution explicitly in terms of a Green's
 function.
 
 The Green's function for the Poisson equation
@@ -16,29 +16,20 @@ The Green's function for the Poisson equation
 G(\mathbf{x} - \Bx') = \frac{1}{4\pi\lvert{\mathbf{x} -\Bx'}\rvert}
 \end{align}
 
-isn't really derived, rather is just pointed out.  However, it is a nice closed form that doesn't have any integrals.
-Contrast this to the Fourier transform method, where one ends up with a messy threefold
-integral that isn't particularly obvious how to integrate.
+isn't really derived, rather is just pointed out.  However, it is a nice closed form that doesn't have any integrals.  Contrast this to the Fourier transform method, where one ends up with a messy threefold integral that isn't particularly obvious how to integrate.
 
-In the PF thread \href{http://www.physicsforums.com/showthread.php?t=293550}{Fourier transform solution to electrostatics Poisson equation?}
-I asked if anybody knew how to reduce this integral to the
-potential kernel of electrostatics.  Before getting any answer from PF I found it in
-\cite{byron1992mca}, a book recently purchased, but not yet read.
+In the PF thread \href{http://www.physicsforums.com/showthread.php?t=293550}{Fourier transform solution to electrostatics Poisson equation?} I asked if anybody knew how to reduce this integral to the potential kernel of electrostatics.  Before getting any answer from PF I found it in \citep{byron1992mca}, a book recently purchased, but not yet read.
 
-
-Go through this calculation here myself in full detail to get more comfort with the ideas.  Some of these ideas can probably also be applied to
-previous incomplete Fourier solution attempts.  In particular, the retarded time potential solutions likely follow.
-Can these same ideas be applied to the STA form of the Maxwell equation, explicitly inverting it, as
-\cite{doran2003gap} indicate is possible (but do not spell out).
+Go through this calculation here myself in full detail to get more comfort with the ideas.  Some of these ideas can probably also be applied to previous incomplete Fourier solution attempts.  In particular, the retarded time potential solutions likely follow.  Can these same ideas be applied to the STA form of the Maxwell equation, explicitly inverting it, as \citep{doran2003gap} indicate is possible (but do not spell out).
 
 \section{Poisson equation. }
 \subsection{Setup. }
 
 As often illustrated with the Heat equation, we seek a Fourier transform solution of the electrostatics Poisson equation
 
-\begin{align}
-\nabla^2 \phi &= -\rho/\epsilon_0
-\end{align}
+\begin{equation}\label{eqn:poisson:LaplacianPhi}
+\nabla^2 \phi = -\rho/\epsilon_0
+\end{equation}
 
 Our 3D Fourier transform pairs are defined as
 \begin{align*}
@@ -53,9 +44,39 @@ Applying the transform we get
 G(\mathbf{x}) &= \frac{1}{(2 \pi)^3} \iiint \frac{1}{\mathbf{k}^2} e^{ i \mathbf{k} \cdot \mathbf{x} } d^3 k
 \end{align}
 
-Now it seems to me that this integral $G$ only has to be evaluated around a small neighborhood of the origin.  For example if one evaluates one of
-the
-integrals
+Green's functions are usually defined by their delta function operational properties.  Doing so, as defined above we have
+
+\begin{equation}\label{eqn:poisson:greens}
+\nabla^2 G(\Bx) = - 4 \pi \delta^3(\Bx)
+\end{equation}
+
+(note that there are different sign conventions for this delta function identification.)
+
+Application to the Poisson equation \ref{eqn:poisson:LaplacianPhi} gives
+
+\begin{equation}\label{eqn:poisson:10}
+\int \nabla^2 G(\Bx - \Bx') \phi(\Bx') = \int (- 4 \pi \delta^3(\Bx - \Bx')) \phi(\Bx') = - 4 \pi \phi(\Bx)
+\end{equation}
+
+and with expansion in the alternate sequence
+\begin{equation}\label{eqn:poisson:20}
+\int \nabla^2 G(\Bx - \Bx') \phi(\Bx') = \int G(\Bx - \Bx') ({\nabla'}^2 \phi(\Bx')) = -\inv{\epsilon_0}\int G(\Bx - \Bx') \rho(\Bx')
+\end{equation}
+
+With prior knowledge of electrostatics we should therefore find
+
+\begin{equation}\label{eqn:poisson:30}
+G(\Bx) = \inv{4 \pi \Abs{\Bx}}.
+\end{equation}
+
+Our task is to actually compute this from the Fourier integral.
+
+\subsection{Evaluating the convolution kernel integral. }
+
+\subsubsection{Some initial thoughts.}
+
+Now it seems to me that this integral $G$ only has to be evaluated around a small neighborhood of the origin.  For example if one evaluates one of the integrals
+
 \begin{align*}
 \int_{-\infty}^\infty \frac{1}{{k_1}^2 + {k_2}^2 + {k_3}^3 } e^{ i k_1 x_1 } dk_1
 \end{align*}
@@ -70,13 +91,11 @@ G(\mathbf{x}) &= \lim_{\epsilon \rightarrow 0} \frac{1}{(2 \pi)^3}
  \frac{1}{\mathbf{k}^2} e^{ i \mathbf{k} \cdot \mathbf{x} }
 \end{align*}
 
-How to reduce this?  Somehow it must be possible to take this Fourier convolution kernel and somehow evaluate the integral to produce the
-electrostatics potential.
+How to reduce this?  Somehow it must be possible to take this Fourier convolution kernel and somehow evaluate the integral to produce the electrostatics potential.
 
-\subsection{Evaluating the convolution kernel integral. }
+\subsubsection{An attempt.}
 
-The answer of how to do so, as pointed out above, was found in
-\cite{byron1992mca}.  Instead of trying to evaluate this integral which has a pole at the origin, they cleverly evaluate a variant of it
+The answer of how to do so, as pointed out above, was found in \citep{byron1992mca}.  Instead of trying to evaluate this integral which has a pole at the origin, they cleverly evaluate a variant of it
 
 \begin{align*}
 I = \iiint \frac{1}{\mathbf{k}^2 + a^2} e^{ i \mathbf{k} \cdot \mathbf{x} } d^3 k
@@ -351,7 +370,7 @@ In the first of these solutions is only charge contributions at the position in 
 potential (this is the causal case).  On the other hand we have a second specific solution to the wave equation
 summing the charge contributions at all the future positions, this time offset by the time it takes a wave to propagate backwards from that future spacetime
 
-The final mathematical result is consistent with statements seen elsewhere, such as in \cite{feynman1963flp}, although it is
+The final mathematical result is consistent with statements seen elsewhere, such as in \citep{feynman1963flp}, although it is
 likely that the path taken by others to get this result was less ad-hoc than mine.
 It's been a couple years since seeing this for the
 first time in Feynman's text.
