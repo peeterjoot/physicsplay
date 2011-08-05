@@ -13,6 +13,7 @@ ORIG_FILES += ../myrefs.bib
 ORIG_FILES += ../plainurl.bst
 ORIG_FILES += ../unsrturl.bst
 
+#ORIG_FILES += ../phy356/gridSummation.png
 # for gaBasics:
 ORIG_FILES += ../otherbook/triangleLaw.png
 ORIG_FILES += ../otherbook/rotateMinusOne.png
