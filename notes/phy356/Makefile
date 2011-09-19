@@ -10,7 +10,6 @@ ORIG_FILES += ../eliblog.cls
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
-STANDALONE += desaiTyposPhy356Chapters.tex
 STANDALONE += desaiTypos.tex
 
 PHY356 := $(filter-out $(STANDALONE), $(TEXFILES))
@@ -42,5 +41,4 @@ desaiTypos.pdf :: desaiTypos.tex
 clean ::
 	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc $(LOCAL_FILES)
 
-phy356.pdf :: desaiTyposPhy356Chapters.tex
-desaiTypos.pdf :: desaiTyposPhy356Chapters.tex desaiTyposPhy356Chapters2.tex desaiTyposSecondThird.tex
+phy356.pdf :: 
