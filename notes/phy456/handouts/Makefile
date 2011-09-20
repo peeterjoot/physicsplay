@@ -19,8 +19,10 @@ ORDERED += shreview.pdf
 #The hydrogen atom
 ORDERED += hreview.pdf
 
-#Problem Set 1
+#Problem Sets
 ORDERED += prob1.pdf
+ORDERED += soln1.pdf
+ORDERED += prob2.pdf
 
 sipe.pdf : $(ORDERED)
 	pdftk $(ORDERED) cat output $@
