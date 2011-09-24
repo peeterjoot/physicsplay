@@ -23,6 +23,7 @@ ORDERED += hreview.pdf
 ORDERED += prob1.pdf
 ORDERED += soln1.pdf
 ORDERED += prob2.pdf
+ORDERED += soln2.pdf
 
 sipe.pdf : $(ORDERED)
 	pdftk $(ORDERED) cat output $@
