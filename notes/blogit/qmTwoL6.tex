@@ -113,70 +113,286 @@ In the Schr\"{o}dinger picture our dynamics have the form
 i \hbar \frac{d}{dt} \ket{\psi_s(t)} = H \ket{\psi_s(t)}
 \end{equation}
 
-\section{Appendix for this lecture (not class notes).}
+How about the Heisenberg picture?  We look for a solution 
 
-\subsection{Justifying the Taylor expansion.}
+\begin{equation}\label{eqn:qmTwoL6:400}
+\ket{\psi_s(t)} = U(t, t_0) \ket{\psi_s(t_0)}.
+\end{equation}
 
-One way to justify the expansion of \ref{eqn:qmTwoL6:30} is to consider a Clifford algebra factorization (following notation from \cite{doran2003gap}) of the absolute vector difference, where $\BR$ is considered small.
+We want to find this operator that evolves the state from the state as some initial time $t_0$, to the arbitrary later state found at time $t$.  Plugging in we have
+
+\begin{equation}\label{eqn:qmTwoL6:420}
+i \hbar \ddt{} U(t, t_0) \ket{\psi_s(t_0)}
+=
+H(t) U(t, t_0) \ket{\psi_s(t_0)}.
+\end{equation}
+
+This has to hold for all $\ket{\psi_s(t_0)}$, and we can equivalently seek a solution of the operator equation
+
+\begin{equation}\label{eqn:qmTwoL6:440}
+i \hbar \ddt{} U(t, t_0) = H(t) U(t, t_0),
+\end{equation}
+
+where
+
+\begin{equation}\label{eqn:qmTwoL6:460}
+U(t_0, t_0) = I,
+\end{equation}
+
+the identity for the Hilbert space.
+
+Suppose that $H(t)$ was independent of time.  We could find that 
+
+\begin{equation}\label{eqn:qmTwoL6:480}
+U(t, t_0) = e^{-i H(t - t_0)/\hbar}.
+\end{equation}
+
+If $H(t)$ depends on time could you guess that 
+
+\begin{equation}\label{eqn:qmTwoL6:500}
+U(t, t_0) = e^{-\frac{i}{\hbar} \int_{t_0}^t H(\tau) d\tau}
+\end{equation}
+
+holds?  No.  This may be true when $H(t)$ is a number, but when it is an operator, the Hamiltonian does not necessarily commute with itself at different times
+
+\begin{equation}\label{eqn:qmTwoL6:520}
+\antisymmetric{H(t')}{H(t'')} \ne 0.
+\end{equation}
+
+So this is \underline{wrong} in general.  As an aside, for numbers, \ref{eqn:qmTwoL6:500} can be verified easily.  We have
 
 \begin{align*}
-\Abs{\Br - \BR}
-&= \sqrt{ \left(\Br - \BR\right) \left(\Br - \BR\right) } \\
-&= \sqrt{ \gpgradezero{\Br \left(1 - \inv{\Br} \BR\right) \left(1 - \BR \inv{\Br}\right) \Br} } \\
-&= \sqrt{ \gpgradezero{\Br^2 \left(1 - \inv{\Br} \BR\right) \left(1 - \BR \inv{\Br}\right) } } \\
-&= \Abs{\Br} \sqrt{ 1 - 2 \inv{\Br} \cdot \BR + \gpgradezero{\inv{\Br} \BR \BR \inv{\Br}}} \\
-&= \Abs{\Br} \sqrt{ 1 - 2 \inv{\Br} \cdot \BR + \frac{\BR^2}{\Br^2}}
+i \hbar \left( e^{-\frac{i}{\hbar} \int_{t_0}^t H(\tau) d\tau} \right)'
+&=
+i \hbar \left( -\frac{i}{\hbar} \right) \left( \int_{t_0}^t H(\tau) d\tau \right)'
+e^{-\frac{i}{\hbar} \int_{t_0}^t H(\tau) d\tau } \\
+&=
+\left( H(t) \frac{dt}{dt} - H(t_0) \frac{dt_0}{dt} \right)
+e^{-\frac{i}{\hbar} \int_{t_0}^t H(\tau) d\tau}  \\
+&= 
+H(t) U(t, t_0)
 \end{align*}
 
-Neglecting the $\BR^2$ term, we can then Taylor series expand this scalar expression 
+\subsection{Expectations}
 
-\begin{equation}\label{eqn:qmTwoL6:150}
-\inv{\Abs{\Br - \BR}} 
-\approx
-\inv{\Abs{\Br}} \left( 
-1 + \inv{\Br} \cdot \BR
-\right) 
-=
-\inv{\Abs{\Br}} 
-+ \frac{\rcap}{\Br^2} \cdot \BR
-=
-\inv{\Abs{\Br}} 
-+ \frac{\Br}{\Abs{\Br}^3} \cdot \BR
+Suppose that we do find $U(t, t_0)$.  Then our expectation takes the form
+
+\begin{equation}\label{eqn:qmTwoL6:600}
+\bra{\psi_s(t)} O_s \ket{\psi_s(t)} 
+= 
+\bra{\psi_s(t_0)} U^\dagger(t, t_0) O_s U(t, t_0) \ket{\psi_s(t_0)} 
 \end{equation}
 
-If all went well, this should match the expression used in class
+Put
 
-\begin{equation}\label{eqn:qmTwoL6:170}
-\inv{\Abs{\Br - \BR}} \approx \inv{\Abs{\Br}} 
-+ 
-\BR \cdot \evalbar{\left(
-\PD{\BR}{} \inv{\Abs{ \Br - \BR}}
-\right)}{\BR = 0}.
+\begin{equation}\label{eqn:qmTwoL6:620}
+\ket{\psi_H} = \ket{\psi_s(t_0)},
 \end{equation}
 
-Let's check this one.  Evaluating the gradient we have
+and form
+
+\begin{equation}\label{eqn:qmTwoL6:640}
+O_H = U^\dagger(t, t_0) O_s U(t, t_0) 
+\end{equation}
+
+so that our expectation has the familiar representations
+
+\begin{equation}\label{eqn:qmTwoL6:660}
+\bra{\psi_s(t)} O_s \ket{\psi_s(t)} 
+=
+\bra{\psi_H} O_H \ket{\psi_H} 
+\end{equation}
+
+\subsection{New strategy.  Interaction picture.}
+
+Let's define 
+
+\begin{equation}\label{eqn:qmTwoL6:680}
+U_I(t, t_0) = e^{\frac{i}{\hbar} H_0(t - t_0)} U(t, t_0)
+\end{equation}
+
+or
+\begin{equation}\label{eqn:qmTwoL6:700}
+U(t, t_0) = e^{-\frac{i}{\hbar} H_0(t - t_0)} U_I(t, t_0).
+\end{equation}
+
+Let's see how this works.  We have
 
 \begin{align*}
-\PD{\BR}{} \inv{\Abs{ \Br - \BR}}
+i \hbar \ddt{U_I} 
+&= 
+i \hbar \ddt{} \left(
+e^{\frac{i}{\hbar} H_0(t - t_0)} U(t, t_0)
+\right) \\
 &=
-\Be_i \PD{R^i}{} ((x^j - R^j)^2)^{-1/2} \\
+-H_0 U(t, t_0)
++
+e^{\frac{i}{\hbar} H_0(t - t_0)} \left( i \hbar \ddt{} U(t, t_0) \right) \\
 &=
-\Be_i \left(-\inv{2}\right) 2 (x^j - R^j) \PD{R^i}{(x^j - R^j)} \inv{\Abs{\Br - \BR}^3} \\
-&= \frac{\Br - \BR}{
-\Abs{\Br - \BR}^3} 
+-H_0 U(t, t_0)
++
+e^{\frac{i}{\hbar} H_0(t - t_0)} \left( (H + H'(t)) U(t, t_0) \right) \\
+&=
+e^{\frac{i}{\hbar} H_0(t - t_0)} H'(t)) U(t, t_0) \\
+&=
+e^{\frac{i}{\hbar} H_0(t - t_0)} H'(t)) e^{-\frac{i}{\hbar} H_0(t - t_0)} U_I(t, t_0).
 \end{align*}
 
-Evaluated at $\BR = 0$ we have
+Define 
 
-\begin{equation}\label{eqn:qmTwoL6:190}
-\inv{\Abs{\Br - \BR}} \approx \inv{\Abs{\Br}} 
-+ 
-\BR \cdot \frac{\Br}{\Abs{\Br}^3},
+\begin{equation}\label{eqn:qmTwoL6:720}
+\bar{H}'(t) =
+e^{\frac{i}{\hbar} H_0(t - t_0)} H'(t)) e^{-\frac{i}{\hbar} H_0(t - t_0)},
 \end{equation}
 
-which matches what we got with the Clifford algebra approach.
+so that our operator equation takes the form
 
-A better justification for what was done in the lecture is to simply recall the derivation of the multi-variable Taylor series.  Given a scalar valued function of some number of variables
+\begin{equation}\label{eqn:qmTwoL6:740}
+i \hbar \ddt{} U_I(t, t_0) = \bar{H}'(t) U_I(t, t_0).
+\end{equation}
+
+Note that we also have the required identity at the initial time
+
+\begin{equation}\label{eqn:qmTwoL6:760}
+U_I(t_0, t_0) = I.
+\end{equation}
+
+Without requiring us to actually find $U(t, t_0)$ all of the dynamics of the time dependent interaction are now embedded in our operator equation for $\bar{H}'(t)$, with all of the simple interaction related to the non time dependent portions of the Hamiltonian left separate.
+
+\subsection{Connection with the Schr\"{o}dinger picture.}
+
+In the Schr\"{o}dinger picture we have
+
+\begin{align*}
+\ket{\psi_s(t)} 
+&= U(t, t_0) 
+\ket{\psi_s(t_0)}  \\
+&=
+e^{-\frac{i}{\hbar} H_0(t - t_0)} U_I(t, t_0)
+\ket{\psi_s(t_0)}.
+\end{align*}
+
+With a definition of the interaction picture ket as
+
+\begin{equation}\label{eqn:qmTwoL6:780}
+\ket{\psi_I} 
+= U_I(t, t_0) \ket{\psi_s(t_0)} = U_I(t, t_0) \ket{\psi_H},
+\end{equation}
+
+the Schr\"{o}dinger picture is then related to the interaction picture by
+
+\begin{equation}\label{eqn:qmTwoL6:800}
+\ket{\psi_s(t)} = e^{-\frac{i}{\hbar} H_0(t - t_0)} \ket{\psi_I}.
+\end{equation}
+
+Also, by multiplying \ref{eqn:qmTwoL6:740} by our Schr\"{o}dinger ket, we remove the last vestiges of $U_I$ and $U$ from the dynamical equation for our time dependent interaction
+
+\begin{equation}\label{eqn:qmTwoL6:820}
+i \hbar \ddt{} 
+\ket{\psi_I} 
+= \bar{H}'(t) 
+\ket{\psi_I}.
+\end{equation}
+
+\subsection{Interaction picture expectation.}
+
+Inverting \ref{eqn:qmTwoL6:800}, we can form an operator expectation, and relate it the interaction and Schr\"{o}dinger pictures
+
+\begin{equation}\label{eqn:qmTwoL6:840}
+\bra{\psi_s(t)} O_s \ket{\psi_s(t)} =
+\bra{\psi_I} 
+e^{\frac{i}{\hbar} H_0(t - t_0)}
+O_s
+e^{-\frac{i}{\hbar} H_0(t - t_0)}
+\ket{\psi_I} .
+\end{equation}
+
+With a definition
+
+\begin{equation}\label{eqn:qmTwoL6:860}
+O_I =
+e^{\frac{i}{\hbar} H_0(t - t_0)}
+O_s
+e^{-\frac{i}{\hbar} H_0(t - t_0)},
+\end{equation}
+
+we have
+\begin{equation}\label{eqn:qmTwoL6:880}
+\bra{\psi_s(t)} O_s \ket{\psi_s(t)} =
+\bra{\psi_I} 
+O_I
+\ket{\psi_I}.
+\end{equation}
+
+As before, the time evolution of our interaction picture operator, can be found by taking derivatives of \ref{eqn:qmTwoL6:860}, for which we find
+
+\begin{equation}\label{eqn:qmTwoL6:900}
+i \hbar \ddt{O_I(t)} = \antisymmetric{O_I(t)}{H_0}
+\end{equation}
+
+\subsection{Summarizing the interaction picture.}
+
+Given 
+
+\begin{equation}\label{eqn:qmTwoL6:910}
+H(t) = H_0 + H'(t),
+\end{equation}
+
+and initial time states
+\begin{equation}\label{eqn:qmTwoL6:950}
+\ket{\psi_I(t_0)} =
+\ket{\psi_s(t_0)} = \ket{\psi_H},
+\end{equation}
+
+we have
+\begin{equation}\label{eqn:qmTwoL6:880b}
+\bra{\psi_s(t)} O_s \ket{\psi_s(t)} =
+\bra{\psi_I} 
+O_I
+\ket{\psi_I},
+\end{equation}
+
+where
+
+\begin{equation}\label{eqn:qmTwoL6:920}
+\ket{\psi_I} 
+= U_I(t, t_0) \ket{\psi_s(t_0)},
+\end{equation}
+
+and
+
+\begin{equation}\label{eqn:qmTwoL6:820b}
+i \hbar \ddt{} 
+\ket{\psi_I} 
+= \bar{H}'(t) 
+\ket{\psi_I},
+\end{equation}
+
+or
+
+\begin{align}\label{eqn:qmTwoL6:740b}
+i \hbar \ddt{} U_I(t, t_0) &= \bar{H}'(t) U_I(t, t_0) \\
+U_I(t_0, t_0) &= I.
+\end{align}
+
+Our interaction picture Hamiltonian is
+
+\begin{equation}\label{eqn:qmTwoL6:720b}
+\bar{H}'(t) =
+e^{\frac{i}{\hbar} H_0(t - t_0)} H'(t)) e^{-\frac{i}{\hbar} H_0(t - t_0)},
+\end{equation}
+
+and for Schr\"{o}dinger operators, independent of time, we have the dynamical equation
+
+\begin{equation}\label{eqn:qmTwoL6:900b}
+i \hbar \ddt{O_I(t)} = \antisymmetric{O_I(t)}{H_0}
+\end{equation}
+
+\section{Justifying the Taylor expansion above (not class notes).}
+
+\subsection{Multivariable Taylor series}
+
+As outlined in \S 2.8 ($8.10$) of \cite{hestenes1999nfc}, we want to derive the multi-variable Taylor expansion for a scalar valued function of some number of variables
 
 \begin{equation}\label{eqn:qmTwoL6:210}
 f(\Bu) = f(u^1, u^2, \cdots),
@@ -270,6 +486,82 @@ f(\Ba + \Bx) = \evalbar{e^{ \Bx \cdot \spacegrad_{\Bu} } f(\Bu)}{\Bu = \Ba}
 
 Here a dummy variable $\Bu$ has been retained as an instruction not to differentiate the $\Bx$ part of the directional derivative in any repeated applications of the $\Bx \cdot \spacegrad$ operator.
 
-Once we derive this (or for those with lesser degrees of amnesia, recall it), we can see that \ref{eqn:qmTwoL6:30} was a direct application of this, retaining no second order or higher terms.
+That notational cludge can be removed by swapping $\Ba$ and $\Bx$
+
+\begin{equation}\label{eqn:qmTwoL6:390b}
+f(\Ba + \Bx) = 
+%\sum_{k=0}^\infty \inv{k!} \evalbar{(\Ba \cdot \spacegrad_{\Bu})^k f(\Bu)}{\Bu = \Bx}
+\sum_{k=0}^\infty \inv{k!} (\Ba \cdot \spacegrad)^k f(\Bx)
+=
+e^{ \Ba \cdot \spacegrad } f(\Bx),
+\end{equation}
+
+where $\spacegrad = \spacegrad_{\Bx} = (\PDi{x^1}{}, \PDi{x^2}{}, ...)$.
+
+Having derived this (or for those with lesser degrees of amnesia, recall it), we can see that \ref{eqn:qmTwoL6:30} was a direct application of this, retaining no second order or higher terms.
+
+Our expression used in the interaction Hamiltonian discussion was
+
+\begin{equation}\label{eqn:qmTwoL6:170}
+\inv{\Abs{\Br - \BR}} \approx \inv{\Abs{\Br}} 
++ 
+\BR \cdot \evalbar{\left(
+\PD{\BR}{} \inv{\Abs{ \Br - \BR}}
+\right)}{\BR = 0}.
+\end{equation}
+
+which we can see has the same structure as above with some variable substitutions.  Evaluating it we have
+
+\begin{align*}
+\PD{\BR}{} \inv{\Abs{ \Br - \BR}}
+&=
+\Be_i \PD{R^i}{} ((x^j - R^j)^2)^{-1/2} \\
+&=
+\Be_i \left(-\inv{2}\right) 2 (x^j - R^j) \PD{R^i}{(x^j - R^j)} \inv{\Abs{\Br - \BR}^3} \\
+&= \frac{\Br - \BR}{
+\Abs{\Br - \BR}^3} ,
+\end{align*}
+
+and at $\BR = 0$ we have
+
+\begin{equation}\label{eqn:qmTwoL6:190}
+\inv{\Abs{\Br - \BR}} \approx \inv{\Abs{\Br}} 
++ 
+\BR \cdot 
+\frac{\Br}{\Abs{\Br}^3}.
+\end{equation}
+
+We see in this direction derivative produces the classical electric Coulomb field expression for an electrostatic distribution, once we take the $\Br/\Abs{\Br}^3$ and multiply it with the $- Z e$ factor.
+
+\subsection{With algebra.}
+
+A different way to justify the expansion of \ref{eqn:qmTwoL6:30} is to consider a Clifford algebra factorization (following notation from \cite{doran2003gap}) of the absolute vector difference, where $\BR$ is considered small.
+
+\begin{align*}
+\Abs{\Br - \BR}
+&= \sqrt{ \left(\Br - \BR\right) \left(\Br - \BR\right) } \\
+&= \sqrt{ \gpgradezero{\Br \left(1 - \inv{\Br} \BR\right) \left(1 - \BR \inv{\Br}\right) \Br} } \\
+&= \sqrt{ \gpgradezero{\Br^2 \left(1 - \inv{\Br} \BR\right) \left(1 - \BR \inv{\Br}\right) } } \\
+&= \Abs{\Br} \sqrt{ 1 - 2 \inv{\Br} \cdot \BR + \gpgradezero{\inv{\Br} \BR \BR \inv{\Br}}} \\
+&= \Abs{\Br} \sqrt{ 1 - 2 \inv{\Br} \cdot \BR + \frac{\BR^2}{\Br^2}}
+\end{align*}
+
+Neglecting the $\BR^2$ term, we can then Taylor series expand this scalar expression 
+
+\begin{equation}\label{eqn:qmTwoL6:150}
+\inv{\Abs{\Br - \BR}} 
+\approx
+\inv{\Abs{\Br}} \left( 
+1 + \inv{\Br} \cdot \BR
+\right) 
+=
+\inv{\Abs{\Br}} 
++ \frac{\rcap}{\Br^2} \cdot \BR
+=
+\inv{\Abs{\Br}} 
++ \frac{\Br}{\Abs{\Br}^3} \cdot \BR.
+\end{equation}
+
+Observe this is what was found with the multivariable Taylor series expansion too. 
 
 \EndArticle
