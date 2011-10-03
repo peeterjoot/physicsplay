@@ -1,0 +1,242 @@
+\input{../peeter_prologue_print.tex}
+%\input{../peeter_prologue_widescreen.tex}
+
+\chapter{Curious problem using the variational method to find the ground state energy of the Harmonic oscillator.}
+\label{chap:variationHarmonicOscillator}
+%\useCCL
+\blogpage{http://sites.google.com/site/peeterjoot/math2011/variationHarmonicOscillator.pdf}
+\date{Sept 1, 2011}
+\revisionInfo{variationHarmonicOscillator.tex}
+
+\beginArtWithToc
+%\beginArtNoToc
+
+\section{Motivation}
+\section{Recap.  Variational method to find the ground state energy.}
+
+Problem 3 of \S 24.4 in the text \cite{desai2009quantum} is an interesting one.  It asks to use the variational method to find the ground state energy of a one dimensional harmonic oscillator Hamiltonian.
+
+Somewhat unexpectedly, once I take derivatives equate to zero, I find that the variational parameter beta becomes imaginary?
+
+I tried this twice on paper and pencil, both times getting the same thing.  This seems like a noteworthy problem, and one worth reflecting on a bit.
+
+
+\section{Recap.  The variational method.}
+
+Given any, not necessarily normalized wavefunction, with a series representation specified using the energy eigenvectors for the space
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:10}
+\ket{\psi} = \sum_m c_{m} \ket{\psi_m},
+\end{equation}
+
+where
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:30}
+H \ket{\psi_m} = E_m \ket{\psi_m},
+\end{equation}
+
+and
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:50}
+\braket{\psi_m \psi_n} = \delta_{mn}.
+\end{equation}
+
+We can perform an energy expectation calculation with respect to this more general state
+
+\begin{align*}
+\bra{\psi} H \ket{\psi} 
+&= 
+\sum_m c_{m}^\conj \bra{\psi_m} 
+H
+\sum_n c_{n} \ket{\psi_n} \\
+&=
+\sum_m c_{m}^\conj \bra{\psi_m}
+\sum_n c_{n} E_n \ket{\psi_n} \\
+&=
+\sum_{m,n} c_{m}^\conj c_n E_n \braket{\psi_m}{\psi_n} \\
+&
+\sum_{m} \Abs{c_{m}}^2 E_m \\
+&\ge
+\sum_{m} \Abs{c_{m}}^2 E_0
+&=
+E_0 \braket{\psi}{\psi}
+\end{align*}
+
+This allows us to form an estimate of the ground state energy for the system, by using any state vector formed from a superposition of energy eigenstates, by simply calculating
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:70}
+E_0 \le \frac{\bra{\psi} H \ket{\psi}}{ \braket{\psi}{\psi} }.
+\end{equation}
+
+One of the examples in the text is to use this to find an approximation of the ground state energy for the Helium atom Hamiltonian
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:90}
+H = 
+-\frac{\hbar^2}{2m} \left( 
+\spacegrad_1^2
++\spacegrad_1^2\right) - 2 e^2 \left( \inv{r_1} + \inv{r_2} \right) + \frac{e^2}{\Abs{\Br_1 - \Br_2}}.
+\end{equation}
+
+This calculation is performed using a trial function that was a solution of the interaction free Hamiltonian
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:110}
+\phi = \frac{Z^3}{pi a_0^3} e^{-Z (r_1 + r_2)/a_0 }.
+\end{equation}
+
+This is despite the fact that this is not a solution to the interaction Hamiltonian.  The end result ends up being pretty close to the measured value (although there is a pesky error in the book that appears to require a compensating error somewhere else).
+
+Part of the variational technique used in that problem, is to allow Z to vary, and then once the normalized expectation is computed, set the derivative of that equal to zero to calculate the trial wavefunction as a parameter of Z that has the lowest energy eigenstate for a function of that form.  We find considering the Harmonic oscillator that this final variation does not necessarily produce meaningful results.
+
+\section{The Harmonic oscillator variational problem.}
+
+The problem asks for the use of the trial wavefunction
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:130}
+\phi = e^{-\beta \Abs{x}},
+\end{equation}
+
+to perform the variational calculation above for the Harmonic oscillator Hamiltonian, which has the one dimensional position space representation
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:150}
+H = -\frac{\hbar^2}{2m} \frac{d^2}{dx^2} + \inv{2} m \omega^2 x^2.
+\end{equation}
+
+We can find the normalization easily
+
+\begin{align*}
+\braket{\phi}{\phi} 
+&= \int_{-\infty}^\infty e^{- 2 \beta \Abs{x}} dx \\
+&= 2 \inv{2 \beta} \int_{0}^\infty e^{- 2 \beta x} 2 \beta dx \\
+&= 2 \inv{2 \beta} \int_{0}^\infty e^{- u} du \\
+&= \inv{\beta}
+\end{align*}
+
+After a bit of calculation, using integration by parts, we find for the energy expectation
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:170}
+\bra{\phi} H \ket{\phi} = 
+\int_{-\infty}^\infty dx
+e^{- \beta \Abs{x}} 
+\left( -\frac{\hbar^2}{2m} \frac{d^2}{dx^2} + \inv{2} m \omega^2 x^2 \right)
+e^{- \beta \Abs{x}} 
+= 
+-\frac{\beta \hbar^2}{2m} + \frac{m \omega^2}{4 \beta^3}.
+\end{equation}
+
+Note that evaluating this integral requires the origin to be avoided where the derivative of $\Abs{x}$ becomes undefined.  So one has to evaluate this in the limit as $\int_{-\infty}^\infty = \int_{\infty}^{-\epsilon} + \int_\epsilon^\infty$ (which is an easy way to do it anyways since the absolute value can be eliminated by doubling the integral).  Because of the curious end result, I also verified my calculation \href{https://github.com/peeterjoot/physicsplay/tree/master/notes/phy456/24.4.3 attempt with mathematica.nb}{using Mathematica}.
+
+So, our ground state energy estimation, parametrized by $\beta$ becomes
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:190}
+E[\beta] = -\frac{- \beta^2 \hbar^2}{2m} + \frac{m \omega^2}{4 \beta^2}.
+\end{equation}
+
+Observe that if we set the derivative of this equal to zero to find the ``best'' beta associated with this trial function
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:210}
+0 = \PD{\beta}{E} = -\frac{\beta \hbar^2}{2m} - \frac{m \omega^2}{2 \beta^3}
+\end{equation}
+
+we find that the parameter beta that best minimizes this ground state energy function is complex with value
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:230}
+\beta^2 = \pm \frac{i m \omega}{\sqrt{2} \hbar}.
+\end{equation}
+
+So, it appears that we can't minimize \ref{eqn:variationHarmonicOscillator:190} to find a best ground state energy estimate associated with the trial function \ref{eqn:variationHarmonicOscillator:130}.  We do however, know the exact ground state energy $\hbar \omega/2$ for the Harmonic oscillator.  Is is possible to show that for all $\beta^2$ we have
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:250}
+\frac{\hbar \omega}{2} \le -\frac{- \beta^2 \hbar^2}{2m} + \frac{m \omega^2}{4 \beta^2}
+\end{equation}
+
+?  This inequality would be expected if we can assume that the trial wavefunction has a Fourier series representation utilizing the actual energy eigenfunctions for the system.
+
+\section{Some reflection.}
+
+I think that it is notable that I don't believe the trial wave function for this problem lies in the span of the Hilbert space that describes the solutions to the Harmonic oscillator.  Another thing of possible interest is the trouble near the origin for this wave function, when operated on by $P^2/2m$.  Observe that Mathematica also required some special hand holding to deal with the origin.
+
+I had initially thought that part of the value of this variational method was that we can use it despite not even knowing what the exact solution is (and in the case of the Helium atom, I believe it was stated in class that an exact closed form solution is not even known).  This makes me wonder what restrictions must be imposed on the trial solutions to get a meaningful answer from the variational calculation?
+
+Having started with a wavefunction that is probably not representable in the solution space is likely the bigger problem here.  We probably need to adjust the treatment to account for that.  Suppose we have
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:270}
+\ket{\phi} = \sum_n c_n \ket{\psi_n} + c_\perp \ket{\psi_\perp}.
+\end{equation}
+
+where $\ket{\psi_\perp}$ is unknown, and presumed not orthogonal to any of the energy eigenkets.  We can still calculate the norm of the trial function
+
+\begin{align*}
+\braket{\phi}{\phi}
+&=
+\sum_{n,m} \braket{ c_n \psi_n + c_\perp \psi_\perp}{ c_m \psi_m + c_\perp \psi_\perp} \\
+&=
+\sum_n \Abs{c_n}^2 
++ c_n^\conj c_\perp 
+\braket{\psi_n}{\psi_\perp}
++ c_n c_\perp^\conj \braket{\psi_\perp}{\psi_n}
++ \Abs{c_\perp}^2
+\braket{\psi_\perp}{\psi_\perp} \\
+&=
+\braket{\psi_\perp}{\psi_\perp} +
+\sum_n \Abs{c_n}^2 + 2 \Real \left(c_n^\conj c_\perp \braket{\psi_n}{\psi_\perp} \right).
+\end{align*}
+
+Similarly we can calculate the energy expectation for this unnormalized state and find
+
+\begin{align*}
+\bra{\phi} H \ket{\phi}
+&=
+\sum_{n,m} \bra{ c_n \psi_n + c_\perp \psi_\perp} H \ket{ c_m \psi_m + c_\perp \psi_\perp} \\
+&=
+\sum_n \Abs{c_n}^2 E_n
++ c_n^\conj c_\perp E_n
+\braket{\psi_n}{\psi_\perp}
++ c_n c_\perp^\conj E_n \braket{\psi_\perp}{\psi_n}
++ \Abs{c_\perp}^2
+\bra{\psi_\perp} H \ket{\psi_\perp} 
+%&=
+%\braket{\psi_\perp} H {\psi_\perp} +
+%\sum_n \Abs{c_n}^2 + 2 \Real \left(c_n^\conj c_\perp \braket{\psi_n}{\psi_\perp} \right).
+\end{align*}
+
+Our normalized energy expectation is therefore the considerably messier
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:290}
+\begin{aligned}
+\frac{\bra{\phi} H \ket{\phi}}{
+\braket{\phi}{\phi}
+}
+&=
+\frac{
+\sum_n \Abs{c_n}^2 E_n
++ c_n^\conj c_\perp E_n
+\braket{\psi_n}{\psi_\perp}
++ c_n c_\perp^\conj E_n \braket{\psi_\perp}{\psi_n}
++ \Abs{c_\perp}^2
+\bra{\psi_\perp} H \ket{\psi_\perp} 
+}
+{
+\braket{\psi_\perp}{\psi_\perp} +
+\sum_m \Abs{c_m}^2 + 2 \Real \left(c_m^\conj c_\perp \braket{\psi_m}{\psi_\perp} \right)
+} \\
+&\ge 
+\frac{
+\sum_n \Abs{c_n}^2 E_0
++ c_n^\conj c_\perp E_n
+\braket{\psi_n}{\psi_\perp}
++ c_n c_\perp^\conj E_n \braket{\psi_\perp}{\psi_n}
++ \Abs{c_\perp}^2
+\bra{\psi_\perp} H \ket{\psi_\perp} 
+}
+{
+\braket{\psi_\perp}{\psi_\perp} +
+\sum_m \Abs{c_m}^2 + 2 \Real \left(c_m^\conj c_\perp \braket{\psi_m}{\psi_\perp} \right)
+}
+\end{aligned}
+\end{equation}
+
+With a requirement to include the perpendicular cross terms the norm doesn't just cancel out, leaving us with a clean estimation of the ground state energy.  In order to utilize this variational method, we implicitly have an assumption that the $\braket{\psi_\perp}{\psi_\perp}$ and $\braket{\psi_m}{\psi_\perp}$ terms in the denominator are sufficiently small that they can be neglected.
+
+For this harmonic oscillator problem, it would be interesting to calculate that Fourier remainder explicitly.
+
+\EndArticle
