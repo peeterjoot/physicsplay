@@ -22,7 +22,7 @@ for ( my $a = 0 ; $a < 2 ; $a++ )
 			{
 				my ($A, $B, $C, $D) = ($h1{$a}, $h1{$b}, $h2{$c}, $h2{$d}) ;
 
-				print "+ a_{$A$B$C$D} \\ket{$A}\\ket{$B} \\otimes \\ket{$C}\\ket{$D}\n" ;
+				print "+ a_{$A$B$C$D} \\ket{$A}\\bra{$B} \\otimes \\ket{$C}\\bra{$D}\n" ;
 			}
 		}
 	}
