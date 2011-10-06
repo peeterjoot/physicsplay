@@ -26,6 +26,7 @@ ORDERED += prob2.pdf
 ORDERED += soln2.pdf
 ORDERED += prob3.pdf
 ORDERED += soln3.pdf
+ORDERED += prob4.pdf
 ORDERED += quiz1formulasheet.pdf
 
 sipe.pdf : $(ORDERED)
