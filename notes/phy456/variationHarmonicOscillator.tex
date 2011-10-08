@@ -5,7 +5,7 @@
 \label{chap:variationHarmonicOscillator}
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2011/variationHarmonicOscillator.pdf}
-\date{Sept 1, 2011}
+\date{Oct 3, 2011}
 \revisionInfo{variationHarmonicOscillator.tex}
 
 \beginArtWithToc
@@ -237,6 +237,176 @@ Our normalized energy expectation is therefore the considerably messier
 
 With a requirement to include the perpendicular cross terms the norm doesn't just cancel out, leaving us with a clean estimation of the ground state energy.  In order to utilize this variational method, we implicitly have an assumption that the $\braket{\psi_\perp}{\psi_\perp}$ and $\braket{\psi_m}{\psi_\perp}$ terms in the denominator are sufficiently small that they can be neglected.
 
-For this harmonic oscillator problem, it would be interesting to calculate that Fourier remainder explicitly.
+\section{Calculating the Fourier terms}
+
+Our wave function, with $\beta=1$ is plotted in figure (\ref{fig:expMinusBetsAbsX})
+
+\begin{figure}[htp]
+\centering
+\includegraphics[totalheight=0.2\textheight]{expMinusBetsAbsX}
+\caption{Exponential trial function with absolute exponential die off.}\label{fig:expMinusBetsAbsX}
+\end{figure}
+
+The zeroth order fitting using the Gaussian exponential is found to be
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:310}
+\psi_0(x) = \sqrt{2 \beta} 
+\erfc\left(\frac{\beta }{\sqrt{2} \alpha }\right)
+e^{- \alpha^2 x^2/2 +\beta^2/(2 \alpha^2)} 
+\end{equation}
+
+With $\alpha = \beta = 1$, this is plotted in figure (\ref{fig:expMinusBetsAbsXfirstOrderFitting}) and can be seen to match fairly well
+
+\begin{figure}[htp]
+\centering
+\includegraphics[totalheight=0.2\textheight]{expMinusBetsAbsXfirstOrderFitting}
+\caption{First ten orders, fitting harmonic oscillator wavefunctions to this trial function.}\label{fig:expMinusBetsAbsXfirstOrderFitting}
+\end{figure}
+
+The higher order terms get small fast, but we can see in figure (\ref{fig:expMinusBetsAbsXtenthOrderFitting}), where a tenth order fitting is depicted that it would take a number of them to get anything close to the sharp peak that we have in our exponential trial function.
+
+\begin{figure}[htp]
+\centering
+\includegraphics[totalheight=0.2\textheight]{expMinusBetsAbsXtenthOrderFitting}
+\caption{Tenth order harmonic oscillator wavefunction fitting.}\label{fig:expMinusBetsAbsXtenthOrderFitting}
+\end{figure}
+
+Note that the all the brakets of even orders in $n$ with the trial function are zero, which is why the tenth order approximation is only a sum of six terms.
+
+Details for this \href{https://github.com/peeterjoot/physicsplay/blob/master/notes/phy456/gaussian\%20fitting\%20for\%20abs\%20function.nb}{harmonic oscillator wavefunction fitting} can be found separately in the linked Mathematica worksheet.
+
+The question of interest is why if we can approximate the trial function so nicely (except at the origin) even with just a first order approximation (polynomial times Gaussian functions where the polynomials are Hankel functions), and we can get an exact value for the lowest energy state using the first order approximation of our trial function, why do we get garbage if we include enough terms that the peak is sharp?  It must therefore be important to consider the origin, but how do we give some meaning to the derivative of the absolute value function?  The key, supplied when asking in office hours for the course, is to express the absolute value function in terms of Heavyside step functions, for which the derivative can be identified as the delta function.
+
+\section{Correcting, treating the origin this way.}
+
+Here's how we can express the absolute value function using the Heavyside step
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:330}
+\Abs{x} = x \theta(x) - x \theta(-x),
+\end{equation}
+
+where the step function is zero for $x < 0$ and one for $x > 0$ as plotted in figure (\ref{fig:stepFunction}).
+
+\begin{figure}[htp]
+\centering
+\includegraphics[totalheight=0.2\textheight]{stepFunction}
+\caption{stepFunction}\label{fig:stepFunction}
+\end{figure}
+
+Expressed this way, with the identification $\theta'(x) = \delta(x)$, we have for the derivative of the absolute value function
+
+\begin{align*}
+\Abs{x}' 
+&= x' \theta(x) - x' \theta(-x) + x \theta'(x) - x \theta'(-x) \\
+&= \theta(x) - \theta(-x) + x \delta(x) + x \delta(-x) \\
+&= \theta(x) - \theta(-x) + x \delta(x) + x \delta(x) \\
+\end{align*}
+
+Observe that we have our expected unit derivative for $x > 0$, and $-1$ derivative for $x < 0$.  At the origin our $\theta$ contributions vanish, and we are left with
+
+\begin{align*}
+\evalbar{\Abs{x}' }{x=0}
+= 2 \evalbar{x \delta(x)}{x=0} \\
+\end{align*}
+
+We've got zero times infinity here, so how do we give meaning to this?  As with any delta functional, we've got to apply it to a well behaved (square integrable) test function $f(x)$ and integrate.  Doing so we have
+
+\begin{align*}
+\int_{-\infty}^\infty dx \Abs{x}' f(x) 
+&= 2 \int_{-\infty}^\infty dx x \delta(x) f(x) \\
+&= 2 (0) f(0)
+\end{align*}
+
+This equals zero for any well behaved test function $f(x)$.  Since the delta function only picks up the contribution at the origin, we can therefore identify $\Abs{x}'$ as zero at the origin.
+
+Using the same technique, we can express our trial function in terms of steps
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:350}
+\psi = e^{-\beta \Abs{x}} = \theta(x) e^{-\beta x} + \theta(-x) e^{\beta x}.
+\end{equation}
+
+This we can now take derivatives of, even at the origin, and find
+
+\begin{align*}
+\psi' 
+&= \theta'(x) e^{-\beta x} + \theta'(-x) e^{\beta x} -\beta \theta(x) e^{-\beta x} + \beta \theta(-x) e^{\beta x} \\
+&= \delta(x) e^{-\beta x} - \delta(-x) e^{\beta x} -\beta \theta(x) e^{-\beta x} + \beta \theta(-x) e^{\beta x} \\
+&= \cancel{\delta(x) e^{-\beta x} - \delta(x) e^{\beta x}} -\beta \theta(x) e^{-\beta x} + \beta \theta(-x) e^{\beta x} \\
+&= \beta \left( 
+-\theta(x) e^{-\beta x} + \theta(-x) e^{\beta x} 
+\right)
+\end{align*}
+
+Taking second derivatives we find
+
+\begin{align*}
+\psi''
+&= \beta \left( 
+-\theta'(x) e^{-\beta x} + \theta'(-x) e^{\beta x} 
++\beta \theta(x) e^{-\beta x} + \beta \theta(-x) e^{\beta x} 
+\right) \\
+&= 
+\beta \left( 
+-\delta(x) e^{-\beta x} - \delta(-x) e^{\beta x} 
++\beta \theta(x) e^{-\beta x} + \beta \theta(-x) e^{\beta x} 
+\right) \\
+&= \beta^2 \psi - 2 \beta \delta(x)
+\end{align*}
+
+Now application of the Hamiltonian operator on our trial function gives us
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:370}
+H \psi = -\frac{\hbar^2}{2m} \left( \beta^2 \psi - 2 \delta(x) \right) + \inv{2} m \omega^2 x^2 \psi,
+\end{equation}
+
+so
+
+\begin{align*}
+\bra{\psi} H \ket{\psi} &= 
+\int_{-\infty}^\infty 
+\left( 
+-\frac{\hbar^2 \beta^2}{2m} + \inv{2} m \omega^2 x^2 
+\right) e^{-2 \beta \Abs{x} }
++ \frac{\hbar^2 \beta}{m}
+\int_{-\infty}^\infty \delta(x)
+e^{- \beta \Abs{x}} \\
+&=
+-\frac{\beta \hbar^2}{2m} + \frac{m \omega^2}{4 \beta^3} + \frac{\hbar^2 \beta}{m} \\
+&=
+\frac{\beta \hbar^2}{2m} + \frac{m \omega^2}{4 \beta^3}.
+\end{align*}
+
+Normalized we have
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:390}
+E[\beta] = \frac{\bra{\psi} H \ket{\psi}}{\braket{\psi}{\psi}} = \frac{\beta^2 \hbar^2}{2m} + \frac{m \omega^2}{4 \beta^2}.
+\end{equation}
+
+This is looking much more promising.  We'll have the sign alternation that we require to find a positive, non-complex, value for $\beta$ when $E[\beta]$ is minimized.  That is
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:410}
+0 = \PD{\beta}{E} = 
+\frac{\beta \hbar^2}{m} - \frac{m \omega^2}{2 \beta^3},
+\end{equation}
+
+so the extremum is found at 
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:430}
+\beta^4 = \frac{m^2 \omega^2}{2 \hbar^2}.
+\end{equation}
+
+Plugging this back in we find that our trial function associated with the minimum energy (unnormalized still) is
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:450}
+\psi = e^{-\sqrt{\frac{m \omega x^2}{\sqrt{2} \hbar}}},
+\end{equation}
+
+and that energy, after substitution, is
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:470}
+E[\beta_{\text{min}}] = \frac{\hbar \omega}{2} \sqrt{2}
+\end{equation}
+
+We have something that's $1.4 \times$ the true ground state energy, but is at least a ball park value.  However, to get this result, we have to be very careful to treat our point of singularity.  A derivative that we'd call undefined in first year calculus, is not only defined, but required, for this treatment to work!
 
 \EndArticle
