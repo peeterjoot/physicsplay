@@ -80,7 +80,7 @@ H =
 This calculation is performed using a trial function that was a solution of the interaction free Hamiltonian
 
 \begin{equation}\label{eqn:variationHarmonicOscillator:110}
-\phi = \frac{Z^3}{pi a_0^3} e^{-Z (r_1 + r_2)/a_0 }.
+\phi = \frac{Z^3}{\pi a_0^3} e^{-Z (r_1 + r_2)/a_0 }.
 \end{equation}
 
 This is despite the fact that this is not a solution to the interaction Hamiltonian.  The end result ends up being pretty close to the measured value (although there is a pesky error in the book that appears to require a compensating error somewhere else).
@@ -111,21 +111,69 @@ We can find the normalization easily
 &= \inv{\beta}
 \end{align*}
 
-After a bit of calculation, using integration by parts, we find for the energy expectation
+Using integration by parts, we find for the energy expectation
 
-\begin{equation}\label{eqn:variationHarmonicOscillator:170}
-\bra{\phi} H \ket{\phi} = 
+\begin{align*}
+\bra{\phi} H \ket{\phi} 
+&= 
 \int_{-\infty}^\infty dx
 e^{- \beta \Abs{x}} 
 \left( -\frac{\hbar^2}{2m} \frac{d^2}{dx^2} + \inv{2} m \omega^2 x^2 \right)
+e^{- \beta \Abs{x}}  \\
+&=
+\lim_{\epsilon \rightarrow 0}
+\left(
+\int_{-\infty}^{-\epsilon}
++
+\int_{-\epsilon}^\epsilon 
++
+\int_{\epsilon}^\infty 
+\right)
+dx
 e^{- \beta \Abs{x}} 
-= 
--\frac{\beta \hbar^2}{2m} + \frac{m \omega^2}{4 \beta^3}.
-\end{equation}
+\left( -\frac{\hbar^2}{2m} \frac{d^2}{dx^2} + \inv{2} m \omega^2 x^2 \right)
+e^{- \beta \Abs{x}}  \\
+&=
+2 \int_{0}^\infty dx
+e^{ - 2 \beta x } 
+\left( -\frac{\hbar^2 \beta^2}{2m} + \inv{2} m \omega^2 x^2 \right)
+-
+\frac{\hbar^2}{2m} 
+\lim_{\epsilon \rightarrow 0}
+\int_{-\epsilon}^\epsilon 
+dx
+e^{- \beta \Abs{x}} 
+\frac{d^2}{dx^2} 
+e^{- \beta \Abs{x}} 
+\end{align*}
 
-Note that evaluating this integral requires the origin to be avoided where the derivative of $\Abs{x}$ becomes undefined.  So one has to evaluate this in the limit as $\int_{-\infty}^\infty = \int_{\infty}^{-\epsilon} + \int_\epsilon^\infty$ (which is an easy way to do it anyways since the absolute value can be eliminated by doubling the integral).  Because of the curious end result, I also verified my calculation \href{https://github.com/peeterjoot/physicsplay/tree/master/notes/phy456/24.4.3 attempt with mathematica.nb}{using Mathematica}.
+The first integral we can do
 
-So, our ground state energy estimation, parametrized by $\beta$ becomes
+\begin{align*}
+2 \int_{0}^\infty dx
+e^{- 2 \beta x} 
+\left( -\frac{\hbar^2 \beta^2}{2m} + \inv{2} m \omega^2 x^2 \right)
+&= 
+-\frac{\hbar^2 \beta^2}{m} 
+\int_{0}^\infty dx e^{- 2 \beta x} 
++ m \omega^2 
+ \int_{0}^\infty dx x^2 e^{- 2 \beta x}  \\
+&= 
+-\frac{\hbar^2 \beta}{2 m} 
+\int_{0}^\infty du e^{- u} 
++ \frac{m \omega^2 }{8 \beta^3}
+ \int_{0}^\infty du u^2 e^{- u}  \\
+&=
+-\frac{\beta \hbar^2}{2m} + \frac{m \omega^2}{4 \beta^3}
+\end{align*}
+
+A naive evaluation of this integral requires the origin to be avoided where the derivative of $\Abs{x}$ becomes undefined.  This also provides a nice way to evaluate this integral because we can double the integral and half the range, eliminating the absolute value.
+
+However, can we assume that the remaining integral is zero?
+
+I thought that we could, but the end result is curious.  I tried also verified my calculation \href{https://github.com/peeterjoot/physicsplay/tree/master/notes/phy456/24.4.3 attempt with mathematica.nb}{using Mathematica}.  Mathematica also required some special hand holding to deal with the origin.  Initially I coded this by avoiding the origin in as above, but later switched to $\Abs{x} = \sqrt{x^2}$ which Mathematica treats more gracefully.
+
+Without that last integral, involving our singular $\Abs{x}'$ and $\Abs{x}''$ terms, our ground state energy estimation, parametrized by $\beta$ is
 
 \begin{equation}\label{eqn:variationHarmonicOscillator:190}
 E[\beta] = -\frac{- \beta^2 \hbar^2}{2m} + \frac{m \omega^2}{4 \beta^2}.
@@ -143,7 +191,7 @@ we find that the parameter beta that best minimizes this ground state energy fun
 \beta^2 = \pm \frac{i m \omega}{\sqrt{2} \hbar}.
 \end{equation}
 
-So, it appears that we can't minimize \ref{eqn:variationHarmonicOscillator:190} to find a best ground state energy estimate associated with the trial function \ref{eqn:variationHarmonicOscillator:130}.  We do however, know the exact ground state energy $\hbar \omega/2$ for the Harmonic oscillator.  Is is possible to show that for all $\beta^2$ we have
+It appears at first glance that we can't minimize \ref{eqn:variationHarmonicOscillator:190} to find a best ground state energy estimate associated with the trial function \ref{eqn:variationHarmonicOscillator:130}.  We do however, know the exact ground state energy $\hbar \omega/2$ for the Harmonic oscillator.  Is is possible to show that for all $\beta^2$ we have
 
 \begin{equation}\label{eqn:variationHarmonicOscillator:250}
 \frac{\hbar \omega}{2} \le -\frac{- \beta^2 \hbar^2}{2m} + \frac{m \omega^2}{4 \beta^2}
@@ -151,13 +199,15 @@ So, it appears that we can't minimize \ref{eqn:variationHarmonicOscillator:190} 
 
 ?  This inequality would be expected if we can assume that the trial wavefunction has a Fourier series representation utilizing the actual energy eigenfunctions for the system.
 
-\section{Some reflection.}
+The resolution to this question is avoided once we include the singularity.  This is explored in the last part of these notes.
 
-I think that it is notable that I don't believe the trial wave function for this problem lies in the span of the Hilbert space that describes the solutions to the Harmonic oscillator.  Another thing of possible interest is the trouble near the origin for this wave function, when operated on by $P^2/2m$.  Observe that Mathematica also required some special hand holding to deal with the origin.
+\section{Is our trial function representable?}
+
+I thought perhaps that since the trial wave function for this problem lies outside the span of the Hilbert space that describes the solutions to the Harmonic oscillator.  Another thing of possible interest is the trouble near the origin for this wave function, when operated on by $P^2/2m$, and this has been (incorrectly assumed to have zero contribution above).
 
 I had initially thought that part of the value of this variational method was that we can use it despite not even knowing what the exact solution is (and in the case of the Helium atom, I believe it was stated in class that an exact closed form solution is not even known).  This makes me wonder what restrictions must be imposed on the trial solutions to get a meaningful answer from the variational calculation?
 
-Having started with a wavefunction that is probably not representable in the solution space is likely the bigger problem here.  We probably need to adjust the treatment to account for that.  Suppose we have
+Suppose that the trial wavefunction is not representable in the solution space.  If that is the case, we need to adjust the treatment to account for that.  Suppose we have
 
 \begin{equation}\label{eqn:variationHarmonicOscillator:270}
 \ket{\phi} = \sum_n c_n \ket{\psi_n} + c_\perp \ket{\psi_\perp}.
@@ -239,6 +289,32 @@ With a requirement to include the perpendicular cross terms the norm doesn't jus
 
 \section{Calculating the Fourier terms}
 
+In order to see how much a problem representing this trial function in the Harmonic oscillator wavefunction solution space, we can just calculate the Fourier fit.
+
+Our first few basis functions, with $\alpha = \sqrt{m \omega/\hbar}$ are
+
+\begin{align*}
+u_0 &= \sqrt{\frac{\alpha}{\sqrt{\pi}}} e^{-\alpha^2 x^2/2} \\
+u_1 &= \sqrt{\frac{\alpha}{2 \sqrt{\pi}}} (2 \alpha x) e^{-\alpha^2 x^2/2} \\
+u_2 &= \sqrt{\frac{\alpha}{8 \sqrt{\pi}}} (4 \alpha^2 x^2 - 2) e^{-\alpha^2 x^2/2}
+\end{align*}
+
+In general our wavefunctions are
+
+\begin{align*}
+u_n &= N_n H_n(\alpha x) e^{-\alpha^2 x^2/2} \\
+N_n &= \sqrt{
+\frac{\alpha}{\sqrt{\pi} 2^n n!}
+} \\
+H_n(\eta) &= (-1)^n e^{\eta^2} \frac{d^n}{d\eta^n} e^{-\eta^2}
+\end{align*}
+
+From which we find 
+
+\begin{equation}\label{eqn:variationHarmonicOscillator:471}
+\psi(x) = e^{-\alpha^2 x^2/2} (N_n)^2 H_n(\alpha x) \int_{-\infty}^\infty H_n(\alpha x) e^{-\alpha^2 x^2/2} \psi(x) dx
+\end{equation}
+
 Our wave function, with $\beta=1$ is plotted in figure (\ref{fig:expMinusBetsAbsX})
 
 \begin{figure}[htp]
@@ -273,9 +349,9 @@ The higher order terms get small fast, but we can see in figure (\ref{fig:expMin
 
 Note that the all the brakets of even orders in $n$ with the trial function are zero, which is why the tenth order approximation is only a sum of six terms.
 
-Details for this \href{https://github.com/peeterjoot/physicsplay/blob/master/notes/phy456/gaussian\%20fitting\%20for\%20abs\%20function.nb}{harmonic oscillator wavefunction fitting} can be found separately in the linked Mathematica worksheet.
+Details for this \href{https://github.com/peeterjoot/physicsplay/blob/master/notes/phy456/gaussian\%20fitting\%20for\%20abs\%20function.nb}{harmonic oscillator wavefunction fitting} can be found separately, calculated using a Mathematica worksheet.
 
-The question of interest is why if we can approximate the trial function so nicely (except at the origin) even with just a first order approximation (polynomial times Gaussian functions where the polynomials are Hankel functions), and we can get an exact value for the lowest energy state using the first order approximation of our trial function, why do we get garbage if we include enough terms that the peak is sharp?  It must therefore be important to consider the origin, but how do we give some meaning to the derivative of the absolute value function?  The key, supplied when asking in office hours for the course, is to express the absolute value function in terms of Heavyside step functions, for which the derivative can be identified as the delta function.
+The question of interest is why if we can approximate the trial function so nicely (except at the origin) even with just a first order approximation (polynomial times Gaussian functions where the polynomials are Hankel functions), and we can get an exact value for the lowest energy state using the first order approximation of our trial function, why do we get garbage from the variational method, where enough terms are implicitly included that the peak should be sharp.  It must therefore be important to consider the origin, but how do we give some meaning to the derivative of the absolute value function?  The key, supplied when asking Professor Sipe in office hours for the course, is to express the absolute value function in terms of Heavyside step functions, for which the derivative can be identified as the delta function.
 
 \section{Correcting, treating the origin this way.}
 
