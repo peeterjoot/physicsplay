@@ -11,7 +11,9 @@ LOCAL_FILES := $(notdir $(ORIG_FILES))
 
 PHY456 := $(filter-out $(STANDALONE), $(TEXFILES))
 
-all :: phy456.pdf
+PDFS := phy456.pdf
+
+all :: $(PDFS)
 
 local : $(LOCAL_FILES) 
 
@@ -26,4 +28,4 @@ phy456.pdf :: $(PHY456) $(LOCAL_FILES)
 	mv main.pdf phy456.pdf
 
 clean ::
-	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc $(LOCAL_FILES)
+	rm -f *.ps *.dvi $(PDFS) *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc $(LOCAL_FILES)

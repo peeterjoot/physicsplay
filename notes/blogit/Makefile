@@ -1,5 +1,5 @@
 RAWTEXFILES := $(shell ls *.tex)
-
+#INCOMPLETE += qmTwoL8fig0FrequenciesAbsorbtionAndEmission.tex
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
 PDFS := $(TEXFILES:.tex=.pdf)
@@ -19,11 +19,17 @@ ORIG_FILES += ../otherbook/triangleLaw.png
 ORIG_FILES += ../otherbook/rotateMinusOne.png
 ORIG_FILES += ../gabook/parallelogramArea.png
 
-ORIG_FILES += ../phy456/expMinusBetsAbsX.png
-ORIG_FILES += ../phy456/expMinusBetsAbsXfirstOrderFitting.png
-ORIG_FILES += ../phy456/expMinusBetsAbsXtenthOrderFitting.png
-ORIG_FILES += ../phy456/stepFunction.png
-ORIG_FILES += ../phy456/gaussianWavePacket.png
+#ORIG_FILES += ../phy456/expMinusBetsAbsX.png
+#ORIG_FILES += ../phy456/expMinusBetsAbsXfirstOrderFitting.png
+#ORIG_FILES += ../phy456/expMinusBetsAbsXtenthOrderFitting.png
+#ORIG_FILES += ../phy456/stepFunction.png
+#ORIG_FILES += ../phy456/gaussianWavePacket.png
+#ORIG_FILES += ../phy456/qmTwoL8fig0FrequenciesAbsorbtionAndEmission.pdf
+#ORIG_FILES += ../phy456/qmTwoL8fig0FrequenciesAbsorbtionAndEmission.pdf_tex
+#ORIG_FILES += ../phy456/FTgaussianWavePacket.png
+#ORIG_FILES += ../phy456/suddenStepHamiltonian.png
+#ORIG_FILES += ../phy456/suddenHamiltonianPertubationHO.png
+
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
@@ -50,7 +56,7 @@ gaBasics.pdf : gaBasics.tex
 clean :: mostlyclean localclean
 
 mostlyclean :: 
-	rm -f *.ps *.dvi *.pdf *.aux *.log *.bbl *.blg *.brf *.toc *.stackdump *.bib
+	rm -f *.ps *.dvi $(PDFS) *.aux *.log *.bbl *.blg *.brf *.toc *.stackdump *.bib
 
 localclean ::
 	rm -f $(LOCAL_FILES)
