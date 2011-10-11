@@ -24,11 +24,11 @@ ORIG_FILES += ../gabook/parallelogramArea.png
 #ORIG_FILES += ../phy456/expMinusBetsAbsXtenthOrderFitting.png
 #ORIG_FILES += ../phy456/stepFunction.png
 #ORIG_FILES += ../phy456/gaussianWavePacket.png
-#ORIG_FILES += ../phy456/qmTwoL8fig0FrequenciesAbsorbtionAndEmission.pdf
-#ORIG_FILES += ../phy456/qmTwoL8fig0FrequenciesAbsorbtionAndEmission.pdf_tex
 #ORIG_FILES += ../phy456/FTgaussianWavePacket.png
 #ORIG_FILES += ../phy456/suddenStepHamiltonian.png
 #ORIG_FILES += ../phy456/suddenHamiltonianPertubationHO.png
+#ORIG_FILES += ../phy456/qmTwoL8fig0FrequenciesAbsorbtionAndEmission.pdf
+#ORIG_FILES += ../phy456/qmTwoL8fig0FrequenciesAbsorbtionAndEmission.pdf_tex
 
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
