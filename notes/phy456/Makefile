@@ -9,11 +9,11 @@ ORIG_FILES += ../eliblog.cls
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
-PHY456 := $(filter-out $(STANDALONE), $(TEXFILES))
+PHY456 := $(filter-out $(STANDALONE), $(BOOKDEPENDENCIES))
 
-PDFS := phy456.pdf
+GENERATED_PDFS := phy456.pdf
 
-all :: $(PDFS)
+all :: $(GENERATED_PDFS)
 
 local : $(LOCAL_FILES) 
 
@@ -28,4 +28,4 @@ phy456.pdf :: $(PHY456) $(LOCAL_FILES)
 	mv main.pdf phy456.pdf
 
 clean ::
-	rm -f *.ps *.dvi $(PDFS) *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc $(LOCAL_FILES)
+	rm -f *.ps *.dvi $(GENERATED_PDFS) *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc $(LOCAL_FILES)
