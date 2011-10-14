@@ -29,6 +29,7 @@ ORIG_FILES += ../gabook/parallelogramArea.png
 #ORIG_FILES += ../phy456/suddenHamiltonianPertubationHO.png
 #ORIG_FILES += ../phy456/qmTwoL8fig0FrequenciesAbsorbtionAndEmission.pdf
 #ORIG_FILES += ../phy456/qmTwoL8fig0FrequenciesAbsorbtionAndEmission.pdf_tex
+ORIG_FILES += ../phy456/unitStepSine.png
 
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
