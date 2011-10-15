@@ -41,12 +41,16 @@ foreach (@ig)
 {
    $_ =~ s/.*{// ;
    $_ =~ s/}// ;
-   $_ .= '.png' ;
+   $_ .= '*' ;
+   my @gg = glob( $_ ) ;
 
-   die "in: $curDirName: cannot find file '$_' " unless (-e "$_" ) ;
+   foreach (@gg)
+   {
+      die "in: $curDirName: cannot find file '$_' " unless (-e "$_" ) ;
 
-   #$mkLinks .= "ln -s ../$curDirName/$_\n" ;
-   $mkLinks .= "git mv ../$curDirName/$_ $_\n" ;
+      #$mkLinks .= "ln -s ../$curDirName/$_\n" ;
+      $mkLinks .= "echo git mv ../$curDirName/$_ $_\n" ;
+   }
 }
 
 my $title = `grep 'chapter{' $filebase.$suffix` ;
