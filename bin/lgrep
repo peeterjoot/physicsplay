@@ -1,0 +1,22 @@
+#!/usr/bin/perl
+
+my $f = $ARGV[0] ;
+
+open my $fh, "<$f" or die ;
+
+while (<$fh>)
+{
+   if ( /label{eqn:(.*?)}/ )
+   {
+      my $v = $1 ;
+      $v =~ s/.*:// ;
+      $v =~ s/[a-z]//g ;
+      $v =~ s/[A-Z]//g ;
+      $h{$v}++ ;
+   }
+}
+
+my @a = (sort { $b <=> $a } keys %h) ;
+my $n = $a[0] + 20 ;
+
+print "START=$n ~/bin/numberIt.pl $f" ;
