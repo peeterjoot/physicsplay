@@ -36,6 +36,8 @@ ORDERED += soln5.pdf
 ORDERED += prob6.pdf
 ORDERED += soln6.pdf
 ORDERED += quiz2formulasheet.pdf
+ORDERED += prob7.pdf
+#ORDERED += 'Correction WKB.pdf'
 
 sipe.pdf : $(ORDERED)
 	pdftk $(ORDERED) cat output $@
