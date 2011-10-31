@@ -1,5 +1,6 @@
 RAWTEXFILES := $(shell ls *.tex)
 #INCOMPLETE += qmTwoL8fig0FrequenciesAbsorbtionAndEmission.tex
+INCOMPLETE += qmTwoL15halfAngle.tex
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
 PDFS := $(TEXFILES:.tex=.pdf)
