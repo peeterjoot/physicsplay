@@ -1,3 +1,8 @@
+#
+# All Programs -> VS 9 -> Vs Tools -> VS command prompt
+# set PATH=%PATH%;c:\cygwin\bin
+#
+
 EXE := .EXE
 OBJ := obj
 

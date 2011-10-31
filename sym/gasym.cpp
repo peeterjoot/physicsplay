@@ -1,9 +1,7 @@
 /*
  * Simple symbolic (multi)vector calculator.
  *
- * Peeter Joot (peeter.joot@gmail.com).  November 2008.
- *
- * $Revision: 1.36 $
+ * Peeter Joot (peeter.joot@gmail.com).
  */
 
 
@@ -623,6 +621,7 @@ void rotation()
    y_e3.dump( true ) ;
 }
 
+
 void sphericalPolar()
 {
    // full angle sign and cosine shorthand:
@@ -854,6 +853,72 @@ namespace e3ga
    void e3ga_setStringFormat(const char *what, const char *format);
 } ;
 
+void someSortOfSphericalPendulumStuff()
+{
+   sum A1, A2 ;
+   sum B1, B2 ;
+#if 0
+   sphericalPendulum( "C_", "S_", "", "{\\theta_r}", "{\\phi_r}", A1, A2 ) ;
+   sphericalPendulum( "C_", "S_", "", "{\\theta_c}", "{\\phi_c}", B1, B2 ) ;
+#elif 0
+   sphericalPendulum( "cos(", "sin(", ")", "theta", "phi", A1, A2 ) ;
+   sphericalPendulum( "cos(", "sin(", ")", "alpha", "beta", B1, B2 ) ;
+#else
+   sphericalPendulum( "Cos[", "Sin[", "]", "theta", "phi", A1, A2 ) ;
+   sphericalPendulum( "Cos[", "Sin[", "]", "alpha", "beta", B1, B2 ) ;
+#endif
+
+   sum AB11 = A1 ;
+   AB11 *= B1 ;   
+   printIt( "AB11 : Simplify[] ", AB11 ) ;
+
+   sum AB12 = A1 ;
+   AB12 *= B2 ;   
+   printIt( "AB12 : Simplify[]", AB12 ) ;
+
+   sum AB21 = A2 ;
+   AB21 *= B1 ;   
+   printIt( "AB21 : Simplify[]", AB21 ) ;
+
+   sum AB22 = A2 ;
+   AB22 *= B2 ;   
+   printIt( "AB22 : Simplify[]", AB22 ) ;
+}
+
+void rotationQmTwoPs7q3()
+{
+   symbol y1("x", e1) ;
+   symbol y2("y", e2) ;
+   symbol y3("z", e2) ;
+
+   symbol CosMu("C_{\\mu/2}") ;
+   symbol SinMu("S_{\\mu/2}") ;
+   symbol ncap ( "\\inv{\\sqrt{2}}", mv( e3 ^ (e1 - e2)) ) ;
+
+   symbol sinPart(ncap) ;
+   sinPart *= SinMu ;
+
+   sum expMu(CosMu) ;
+   expMu += sinPart ;
+
+   sum RexpMu = expMu.reverse() ;
+
+   sum x(y1) ; x += y2 ; x += y3 ;
+   sum y(RexpMu) ;
+   y *= x ;
+   y *= expMu ;
+   y.dump( true ) ;
+
+   cout << "In coordinates: " << endl ;
+   sum y_e1 = dot( y, e1 ) ;
+   sum y_e2 = dot( y, e2 ) ;
+   sum y_e3 = dot( y, e3 ) ;
+
+   y_e1.dump( true ) ;
+   y_e2.dump( true ) ;
+   y_e3.dump( true ) ;
+}
+
 int main(int argc, char*argv[])
 {
    e3ga_setStringFormat( "wedge", "\\wedge " ) ;
@@ -876,36 +941,7 @@ int main(int argc, char*argv[])
 //   sphericalPolar2() ;
 //   baylisEuler() ;
 
-   {
-      sum A1, A2 ;
-      sum B1, B2 ;
-#if 0
-      sphericalPendulum( "C_", "S_", "", "{\\theta_r}", "{\\phi_r}", A1, A2 ) ;
-      sphericalPendulum( "C_", "S_", "", "{\\theta_c}", "{\\phi_c}", B1, B2 ) ;
-#elif 0
-      sphericalPendulum( "cos(", "sin(", ")", "theta", "phi", A1, A2 ) ;
-      sphericalPendulum( "cos(", "sin(", ")", "alpha", "beta", B1, B2 ) ;
-#else
-      sphericalPendulum( "Cos[", "Sin[", "]", "theta", "phi", A1, A2 ) ;
-      sphericalPendulum( "Cos[", "Sin[", "]", "alpha", "beta", B1, B2 ) ;
-#endif
-
-      sum AB11 = A1 ;
-      AB11 *= B1 ;   
-      printIt( "AB11 : Simplify[] ", AB11 ) ;
-
-      sum AB12 = A1 ;
-      AB12 *= B2 ;   
-      printIt( "AB12 : Simplify[]", AB12 ) ;
-
-      sum AB21 = A2 ;
-      AB21 *= B1 ;   
-      printIt( "AB21 : Simplify[]", AB21 ) ;
-
-      sum AB22 = A2 ;
-      AB22 *= B2 ;   
-      printIt( "AB22 : Simplify[]", AB22 ) ;
-   }
+   rotationQmTwoPs7q3() ;
 
    return 0 ;
 }
