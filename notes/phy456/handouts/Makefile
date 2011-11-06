@@ -42,6 +42,7 @@ ORDERED += quiz2solutions.pdf
 ORDERED += prob7.pdf
 ORDERED += soln7.pdf
 ORDERED += prob8.pdf
+ORDERED += soln8.pdf
 
 sipe.pdf : $(ORDERED)
 	pdftk $(ORDERED) cat output $@
