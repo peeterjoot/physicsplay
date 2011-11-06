@@ -1,6 +1,4 @@
 RAWTEXFILES := $(shell ls *.tex)
-#INCOMPLETE += qmTwoL8fig0FrequenciesAbsorbtionAndEmission.tex
-INCOMPLETE += qmTwoL15halfAngle.tex
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
 PDFS := $(TEXFILES:.tex=.pdf)
@@ -14,24 +12,10 @@ ORIG_FILES += ../myrefs.bib
 ORIG_FILES += ../plainurl.bst
 ORIG_FILES += ../unsrturl.bst
 
-#ORIG_FILES += ../phy356/gridSummation.png
 # for gaBasics:
 ORIG_FILES += ../otherbook/triangleLaw.png
 ORIG_FILES += ../otherbook/rotateMinusOne.png
 ORIG_FILES += ../gabook/parallelogramArea.png
-
-#ORIG_FILES += ../phy456/expMinusBetsAbsX.png
-#ORIG_FILES += ../phy456/expMinusBetsAbsXfirstOrderFitting.png
-#ORIG_FILES += ../phy456/expMinusBetsAbsXtenthOrderFitting.png
-#ORIG_FILES += ../phy456/stepFunction.png
-#ORIG_FILES += ../phy456/gaussianWavePacket.png
-#ORIG_FILES += ../phy456/FTgaussianWavePacket.png
-#ORIG_FILES += ../phy456/suddenStepHamiltonian.png
-#ORIG_FILES += ../phy456/suddenHamiltonianPertubationHO.png
-#ORIG_FILES += ../phy456/qmTwoL8fig0FrequenciesAbsorbtionAndEmission.pdf
-#ORIG_FILES += ../phy456/qmTwoL8fig0FrequenciesAbsorbtionAndEmission.pdf_tex
-#ORIG_FILES += ../phy456/unitStepSine.png
-
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
