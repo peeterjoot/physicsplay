@@ -1,6 +1,8 @@
 \input{../peeter_prologue_print.tex}
 %\input{../peeter_prologue_widescreen.tex}
 
+\usepackage{easybmat}
+
 \chapter{Degeneracy and diagonalization}
 \label{chap:pertubationDegeneracy}
 %\useCCL
@@ -142,13 +144,327 @@ E^0 -E + \lambda d_1 & 0 \\
 
 So our energy eigenvalues associated with the perturbed state are (exactly) 
 
-\begin{equation}\label{eqn:pertubationDegeneracy:n}
+\begin{equation}\label{eqn:pertubationDegeneracy:90}
 E = E^0 + \lambda d_1, E^0 + \lambda d_2.
 \end{equation}
 
 It's a bit curious seeming that only the energy eigenvalues associated with the degeneracy play any part in this result, but there is some intuitive comfort in this idea.  Without the perturbation, we can't do an energy measurement that would distinguish one or the other of the eigenkets for the degenerate energy level, so it doesn't seem unreasonable that a perturbed energy level close to the original can be formed by superposition of these two states, and thus the perturbed energy eigenvalue for the new system would then be related to only those degenerate levels.
 
 Observe that in the problem set three problem we had a diagonal initial Hamiltonian $H_0$, that doesn't have an impact on the argument above, since that portion of the Hamiltonian only has a diagonal contribution to the result found in \ref{eqn:pertubationDegeneracy:50}, since the identity $H_0 \ket{i} = c \ket{i}, i \in [3,4]$ removes any requirement to know the specifics of that portion of the matrix element of $H_0$.
+
+\section{Generalizing slightly.}
+
+Let's work with a system that has kets using an explicit degeneracy index
+
+\begin{equation}\label{eqn:pertubationDegeneracy:110}
+H_0 \ket{m \alpha_m} = E_m^0 \ket{m \alpha_m}, \qquad \alpha_m = 1, \cdots, \gamma_m, m \in [1, N]
+\end{equation}
+
+\paragraph{Example:}
+
+\begin{equation}\label{eqn:pertubationDegeneracy:130}
+\begin{aligned}
+\ket{m \alpha_m} \in 
+&\ket{11} \\
+&\ket{21}, \ket{22} \\
+&\ket{31} \\
+&\ket{41}, \ket{42}, \ket{43}.
+\end{aligned}
+\end{equation}
+
+Again we seek to find the energy eigenvalues of the new system
+
+\begin{equation}\label{eqn:pertubationDegeneracy:150}
+H = H_0 + \lambda H'.
+\end{equation}
+
+For any $m$ with associated with a degeneracy ($\gamma_m > 1$) we can calculate the subspace diagonalization
+
+\begin{equation}\label{eqn:pertubationDegeneracy:170}
+\begin{bmatrix}
+\bra{m i} H' \ket{m j}
+\end{bmatrix}
+= U_m D_m U_m^\dagger,
+\end{equation}
+
+where
+
+\begin{equation}\label{eqn:pertubationDegeneracy:190}
+U_m U_m^\dagger = 1,
+\end{equation}
+
+and $D_m$ is diagonal
+
+\begin{equation}\label{eqn:pertubationDegeneracy:210}
+D_m = 
+\begin{bmatrix}
+\delta_{ij} E_{m,i}'
+\end{bmatrix}.
+\end{equation}
+
+This isn't a diagonalizing transformation in the usual sense.  Putting it together into block matrix form, we can write
+
+\begin{equation}\label{eqn:pertubationDegeneracy:230}
+U = 
+\begin{bmatrix}
+U_1 &   	&  	 & \\
+    & U_2 	&  	 & \\
+    &     	& \ddots & \\
+    &     	&        & U_N \\
+\end{bmatrix}
+\end{equation}
+
+and find that a similarity transformation using this change of basis matrix puts all the block matrixes along the diagonal into diagonal form, but leaves the rest possibly non-zero
+
+\begin{equation}\label{eqn:pertubationDegeneracy:250}
+U^\dagger
+\begin{bmatrix}
+\bra{m \alpha_{m_i}} H' \ket{m j} \ket{m \alpha_{m_j}}
+\end{bmatrix}
+U
+=
+\begin{bmatrix}
+D_1 & x 	& x	 & x \\
+ x  & D_2 	& x	 & x \\
+ x  & x   	& \ddots & x \\
+ x  & x   	& x      & D_N \\
+\end{bmatrix}
+\end{equation}
+
+Let's do this explicitly using a specific degeneracy example, supposing that we have a non-degenerate ground state, and two pairs doubly degenerate next energy levels.  That is
+
+\begin{equation}\label{eqn:pertubationDegeneracy:270}
+\begin{aligned}
+\ket{m \alpha_m} \in 
+&\ket{11} \\
+&\ket{21}, \ket{22} \\
+&\ket{31}, \ket{32} 
+\end{aligned}
+\end{equation}
+
+Our change of basis matrix is
+\begin{equation}\label{eqn:pertubationDegeneracy:290}
+U = 
+\left[
+\begin{BMAT}(rc){c:c:c}{c:c:c}
+1 & 
+\begin{BMAT}(rc){cc}{c}
+0 & 0
+\end{BMAT}
+&
+\begin{BMAT}(rc){cc}{c}
+0 & 0
+\end{BMAT} \\
+\begin{BMAT}(rc){c}{cc}
+0 \\
+0
+\end{BMAT} 
+& U_2
+&
+\begin{BMAT}(rc){cc}{cc}
+0 & 0 \\
+0 & 0
+\end{BMAT} \\
+\begin{BMAT}(rc){c}{cc}
+0 \\
+0
+\end{BMAT}
+&
+\begin{BMAT}(rc){cc}{cc}
+0 & 0 \\
+0 & 0
+\end{BMAT} 
+&
+U_3
+\end{BMAT} 
+\right]
+\end{equation}
+
+We'd like to calculate
+
+\begin{equation}\label{eqn:pertubationDegeneracy:310}
+U^\dagger H' U
+\end{equation}
+
+Let's write this putting row and column range subscripts on our matrices to explicitly block them into multiplication compatable sized pieces
+
+\begin{align}\label{eqn:pertubationDegeneracy:330}
+U &= 
+\begin{bmatrix}
+I_{11,11} & 0_{11, 23} & 0_{11,45} \\
+0_{23,11} & U_{23, 23} & 0_{23,45} \\
+0_{45,11} & 0_{45, 23} & U_{45,45} 
+\end{bmatrix} \\
+H' &= 
+\begin{bmatrix}
+{H'}_{11,11} & {H'}_{11, 23} & {H'}_{11,45} \\
+{H'}_{23,11} & {H'}_{23, 23} & {H'}_{23,45} \\
+{H'}_{45,11} & {H'}_{45, 23} & {H'}_{45,45} 
+\end{bmatrix} \\
+\end{align}
+
+The change of basis calculation then becomes
+\begin{align*}
+U^\dagger H' U
+&=
+\begin{bmatrix}
+I_{11,11} & 0_{11, 23} & 0_{11,45} \\
+0_{23,11} & U_{23, 23}^\dagger & 0_{23,45} \\
+0_{45,11} & 0_{45, 23} & U_{45,45}^\dagger
+\end{bmatrix}
+\begin{bmatrix}
+{H'}_{11,11} & {H'}_{11, 23} & {H'}_{11,45} \\
+{H'}_{23,11} & {H'}_{23, 23} & {H'}_{23,45} \\
+{H'}_{45,11} & {H'}_{45, 23} & {H'}_{45,45} 
+\end{bmatrix} 
+\begin{bmatrix}
+I_{11,11} & 0_{11, 23} & 0_{11,45} \\
+0_{23,11} & U_{23, 23} & 0_{23,45} \\
+0_{45,11} & 0_{45, 23} & U_{45,45} 
+\end{bmatrix} \\
+&=
+\begin{bmatrix}
+I_{11,11} & 0_{11, 23} & 0_{11,45} \\
+0_{23,11} & U_{23, 23}^\dagger & 0_{23,45} \\
+0_{45,11} & 0_{45, 23} & U_{45,45}^\dagger
+\end{bmatrix}
+\begin{bmatrix}
+{H'}_{11,11} & {H'}_{11, 23} U_{23, 23} & {H'}_{11,45} U_{45, 45} \\
+{H'}_{23,11} & {H'}_{23, 23} U_{23, 23} & {H'}_{23,45} U_{45, 45} \\
+{H'}_{45,11} & {H'}_{45, 23} U_{23, 23} & {H'}_{45,45} U_{45, 45} 
+\end{bmatrix} \\
+&=
+\begin{bmatrix}
+\boxed{{H'}_{11,11}} & {H'}_{11, 23} U_{23, 23} & {H'}_{11,45} U_{45, 45} \\
+U_{23, 23}^\dagger {H'}_{23,11} & \boxed{U_{23, 23}^\dagger {H'}_{23, 23} U_{23, 23}} & U_{23, 23}^\dagger {H'}_{23,45} U_{45, 45} \\
+U_{45, 45}^\dagger {H'}_{45,11} & U_{45, 45}^\dagger {H'}_{45, 23} U_{23, 23} & \boxed{U_{45, 45}^\dagger {H'}_{45,45} U_{45, 45} }
+\end{bmatrix} 
+\end{align*}
+
+We see that we end up with explicitly diagonal matrixes along the diagonal blocks, but products that are otherwise everywhere else.
+
+In the new basis our kets become
+
+\begin{equation}\label{eqn:pertubationDegeneracy:350}
+\ket{m \alpha_m'} = U^\dagger \ket{m \alpha_m}
+\end{equation}
+
+Suppose we calculate this change of basis representation for $\ket{21}$ (we've implicitly assumed above that our original basis had the ordering $\{ \ket{11} \ket{21}, \ket{22}, \ket{31}, \ket{32} \}$).  We find
+
+\begin{align*}
+\ket{21'} 
+&= U^\conj \ket{21} \\
+&=
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & U_2^\conj & 0 \\
+0 & 0 & U_3^\conj 
+\end{bmatrix}
+\left[
+\begin{BMAT}(rc){c}{c:cc:cc}
+0 \\
+1 \\
+0 \\
+0 \\
+0 \\
+\end{BMAT}
+\right]
+\end{align*}
+
+With 
+\begin{align}\label{eqn:pertubationDegeneracy:370}
+U_2
+&=
+\begin{bmatrix}
+U_{2,11} & U_{2,12} \\
+U_{2,21} & U_{2,22}
+\end{bmatrix} \\
+U_2^\dagger 
+&=
+\begin{bmatrix}
+U_{2,11}^\conj & U_{2,21}^\conj \\
+U_{2,12}^\conj & U_{2,22}^\conj
+\end{bmatrix}
+\end{align}
+
+We find
+\begin{equation}\label{eqn:pertubationDegeneracy:390}
+\begin{aligned}
+\ket{21'} 
+&= U^\conj \ket{21'} \\
+&=
+\begin{bmatrix}
+0 \\
+U_{2,11}^\conj  \\
+U_{2,12}^\conj  \\
+0  \\
+0
+\end{bmatrix}
+&=
+U_{2,11}^\conj \ket{21} + 
+U_{2,12}^\conj \ket{22}
+\end{aligned}
+\end{equation}
+
+Generalizing this, it is clear that for a given degeneracy level, the transformed kets in the new basis are superposition of only the kets associated with that degenerate level (and the kets for the non-degenerate levels are left as is).
+
+Even better, we have for all $\ket{m \alpha_m'} = U^\dagger \ket{m \alpha_m}$ that $\ket{m \alpha_m'}$ remain eigenkets of the unperturbed Hamiltonian.  We see that by computing the matrix element of our Hamiltonian in the full basis.
+
+Writing
+
+\begin{equation}\label{eqn:pertubationDegeneracy:410}
+F = U^\dagger H' U,
+\end{equation}
+
+or
+\begin{equation}\label{eqn:pertubationDegeneracy:430}
+H' = U F U^\dagger,
+\end{equation}
+
+where $F$ has been shown to have diagonal block diagonals, we can write
+
+\begin{align*}\label{eqn:pertubationDegeneracy:450}
+H 
+&= H_0 + \lambda U F U^\dagger \\
+&= U U^\dagger H_0 U U^\dagger + \lambda U F U^\dagger \\
+&= U \Bigl( U^\dagger H_0 U + \lambda F \Bigr) U^\dagger 
+\end{align*}
+
+So in the $\ket{m \alpha_m'}$ basis, our Hamiltonian's matrix element is
+
+\begin{equation}\label{eqn:pertubationDegeneracy:470}
+H \rightarrow U^\dagger H_0 U + \lambda F 
+\end{equation}
+
+When $\lambda = 0$, application of this Hamiltonian to the new basis kets gives
+
+\begin{align*}
+H_0 
+\ket{m \alpha'} 
+&=
+U^\dagger H_0 U 
+U^\dagger
+\ket{m \alpha}  \\
+&=
+U^\dagger H_0
+\ket{m \alpha}  \\
+&=
+U^\dagger E_m^0
+\ket{m \alpha}  \\
+&=
+E_m^0
+\left(
+U^\dagger 
+\ket{m \alpha}\right)  \\
+\end{align*}
+
+But this is just
+
+\begin{equation}\label{eqn:pertubationDegeneracy:490}
+H_0 \ket{m \alpha'} = E_m^0 \ket{m \alpha'},
+\end{equation}
+
+a statement that the $\ket{m \alpha'}$ are still the energy eigenkets for the unperturbed system.  This matches our expectations since we've seen that these differ from the original basis elements only for degenerate energy levels, and that these new basis elements are superpositions of only the kets for their respective degeneracy levels.
 
 \section{Repeating the perturbation argument with explicit diagonalization.}
 
