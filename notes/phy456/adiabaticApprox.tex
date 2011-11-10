@@ -275,5 +275,127 @@ It's not particularly illuminating looking, but possible to compute, and we can 
 \end{aligned}
 \end{equation}
 
-%\EndArticle
-\EndNoBibArticle
+\section{New info.  How to do the $\lambda$ expansion.}
+
+Asking about this, Federico nicely explained.  ``The reason why you are going in circles when trying the lambda expansion is because you are not assuming the term $\bra{\psi(t)} (d/dt) \ket{\psi(t)}$ to be of order lambda. This has to be assumed, otherwise it doesn't make sense at all trying a perturbative approach. This assumption means that the coupling between the level $s$ and the other levels is assumed to be small because the time dependent part of the Hamiltonian is small or changes slowly with time. Making a Taylor expansion in time would be sensible only if you are interested in a short interval of time. The lambda-expansion approach would work for any time as long as the time dependent piece of the Hamiltonian doesn't change wildly or is too big.''
+
+In the tutorial he outlined another way to justify this.  We've written so far
+
+\begin{equation}\label{eqn:adiabaticApprox:370}
+H = 
+\left\{
+\begin{array}{l l}
+H(t) & \quad \mbox{$t > 0$} \\
+H_0 & \quad \mbox{$t < 0$} 
+\end{array}
+\right.
+\end{equation}
+
+where $H(0) = H_0$.  We can make this explicit, and introduce a $\lambda$ factor into the picture if we write
+
+\begin{equation}\label{eqn:adiabaticApprox:390}
+H(t) = H_0 + \lambda H'(t),
+\end{equation}
+
+where $H_0$ has no time dependence, so that our Hamiltonian is then just the ``steady-state'' system for $\lambda = 0$.
+
+Now recall the method from \cite{bohm1989qt} that we can use to relate our bra-derivative-ket to the Hamiltonian.  Taking derivatives of the energy identity, braketed between two independent kets ($m \ne n$) we have
+
+\begin{align*}
+0 
+&= 
+\bra{\psihat_m(t)}
+\ddt{} \left(
+H(t) \ket{\psihat_n(t)} - \hbar \omega_n \ket{\psihat_n(t)} 
+\right) \\
+&= 
+\bra{\psihat_m(t)}
+\left(
+\ddt{H(t)} \ket{\psihat_n(t)} 
++H(t) \ddt{} \ket{\psihat_n(t)} 
+-\hbar \ddt{\omega_n} \ket{\psihat_n(t)} 
+-\hbar \omega_n \ddt{} \ket{\psihat_n(t)} 
+\right) \\
+&= 
+\hbar (\omega_m - \omega_n) 
+\bra{\psihat_m(t)}
+\ddt{} \ket{\psihat_n(t)} 
+-\cancel{\hbar \ddt{\omega_n} \delta_{mn}}
++
+\bra{\psihat_m(t)}
+\ddt{H(t)} \ket{\psihat_n(t)} 
+\end{align*}
+
+So for $m \ne n$ we find a dependence between the bra-derivative-ket and the time derivative of the Hamiltonian
+
+\begin{equation}\label{eqn:adiabaticApprox:410}
+\bra{\psihat_m(t)}
+\ddt{} \ket{\psihat_n(t)} 
+=
+\frac{
+\bra{\psihat_m(t)}
+\ddt{H(t)} \ket{\psihat_n(t)} 
+}
+{
+\hbar (\omega_n - \omega_m) 
+}
+\end{equation}
+
+Referring back to \ref{eqn:adiabaticApprox:390} we see the $\lambda$ dependence in this quantity, coming directly from the $\lambda$ dependence imposed on the time dependent part of the Hamiltonian
+
+\begin{equation}\label{eqn:adiabaticApprox:430}
+\bra{\psihat_m(t)}
+\ddt{} \ket{\psihat_n(t)} 
+=
+\lambda
+\frac{
+\bra{\psihat_m(t)}
+\ddt{H'(t)} \ket{\psihat_n(t)} 
+}
+{
+\hbar (\omega_n - \omega_m) 
+}
+\end{equation}
+
+Given this $\lambda$ dependence, let's revisit the perturbation attempt of \ref{eqn:adiabaticApprox:170}.  Our first order factors of $\lambda$ are now
+
+\begin{align*}
+\ddt{} \barb_s^{(1)}(t) 
+&= - \sum_{n \ne s} \delta_{mn} e^{i \gamma_{sn}(t) } \bra{\psihat_s(t)} \ddt{} \ket{\psihat_n(t)} \\
+&= 
+\left\{
+\begin{array}{l l}
+0 & 
+\quad \mbox{if $m = s$} \\
+- e^{i \gamma_{sm}(t) } \bra{\psihat_s(t)} \ddt{} \ket{\psihat_m(t)} &
+\quad \mbox{if $m \ne s$} \\
+\end{array}
+\right.
+\end{align*}
+
+So we find to first order
+
+\begin{equation}\label{eqn:adiabaticApprox:450}
+\barb_s(t) 
+=
+\delta_{ms}(1 + \lambda \text{constant})
++ 
+- 
+(1-\delta_{ms}) \lambda
+\int_0^t dt'
+e^{i \gamma_{sm}(t') } \bra{\psihat_s(t')} \frac{d}{dt'} \ket{\psihat_m(t')} 
+\end{equation}
+
+A couple observations of this result.  One is that the constant factor in the $m = s$ case makes sense.  This would likely be a negative contribution since we have to decrease the probability coefficient for finding our wavefunction in the $m = s$ state after perturbation, since we are increasing the probability for finding it elsewhere by changing the Hamiltonian.
+
+Also observe that since $e^{i\gamma_{sm}} \sim 0$ for small $t$ this is consistent with the first order Taylor series expansion where we found our first order contribution was
+
+\begin{equation}\label{eqn:adiabaticApprox:470}
+- (1 - \delta_{ms}) t \bra{\psihat_s(t)} \frac{d}{dt} \ket{\psihat_m(t)}.
+\end{equation}
+
+Also note that this $-e^{i \gamma_{sm}(t') } \bra{\psihat_s(t')} \frac{d}{dt'} \ket{\psihat_m(t')}$ is exactly the difference from $0$ that was mentioned in class when the trial solution of $\barb_s = \delta_{sm}$ was tested by plugging it into \ref{eqn:adiabaticApprox:50}, so it's not too surprising that we should have a factor of exactly this form when we refine our approximation.
+
+A question to consider should we wish to refine the $\lambda$ perturbation to higher than first order in $\lambda$: is there any sort of $\lambda$ dependence in the $e^{i \gamma_{sm}}$ coming from the $\Gamma_{sm}$ term in that exponential?
+
+\EndArticle

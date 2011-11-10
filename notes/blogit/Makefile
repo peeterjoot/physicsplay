@@ -1,4 +1,5 @@
 RAWTEXFILES := $(shell ls *.tex)
+INCOMPLETE += qmTwoL17.tex
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
 PDFS := $(TEXFILES:.tex=.pdf)
