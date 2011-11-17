@@ -36,6 +36,7 @@ my $curDirName = `pwd` ; chomp $curDirName ;
 $curDirName =~ s,.*/,, ;
 
 my $mkLinks = "\n" ;
+my @newDeps = () ;
 my @ig = split(/[\n\r\l]+/, `grep includegraphics $filebase.$suffix | sed 's/%.*//'`) ;
 foreach (@ig)
 {
@@ -50,6 +51,8 @@ foreach (@ig)
 
       #$mkLinks .= "ln -s ../$curDirName/$_\n" ;
       $mkLinks .= "git mv ../$curDirName/$_ $_\n" ;
+
+      push( @newDeps, $_ ) ;
    }
 }
 
@@ -85,6 +88,10 @@ if ( 0 )
    #ci -l make.dep $d.tex
    echo '\%\\include{'$filebase'}' >> main.tex
    echo 'BOOKDEPENDENCIES +=' $filebase.tex >> make.dep
+   foreach (@newDeps)
+   {
+      echo 'BOOKDEPENDENCIES +=' $_ >> make.dep
+   }
 
    $mkLinks
 
