@@ -11,11 +11,13 @@ $d = 'phy456' ;
 #$d = 'otherbook' ;
 my $filebase ;
 my $printOnly = 0 ;
+my $spellcheck = 1 ;
 
 my $mathbase = 'math2011' ;
 
 GetOptions(
    'file=s'   => \$filebase,
+   'spellcheck!'   => \$spellcheck,
    'dir=s'    => \$d,
    'print!'   => \$printOnly,
 ) ;
@@ -35,7 +37,7 @@ die "could not find file '$filebase.ltx or '$filebase.tex'\n"
 my $curDirName = `pwd` ; chomp $curDirName ;
 $curDirName =~ s,.*/,, ;
 
-my $mkLinks = "\n" ;
+my @newDirCommands = () ;
 my @newDeps = () ;
 my @ig = split(/[\n\r\l]+/, `grep includegraphics $filebase.$suffix | sed 's/%.*//'`) ;
 foreach (@ig)
@@ -47,10 +49,13 @@ foreach (@ig)
 
    foreach (@gg)
    {
-      die "in: $curDirName: cannot find file '$_' " unless (-e "$_" ) ;
+      if ( !-e "$_" )
+      {
+         warn "in: $curDirName: cannot find file '$_' (skipping)\n" ;
+         next ;
+      }
 
-      #$mkLinks .= "ln -s ../$curDirName/$_\n" ;
-      $mkLinks .= "git mv ../$curDirName/$_ $_\n" ;
+      push( @newDirCommands, "git mv ../$curDirName/$_ $_" ) ;
 
       push( @newDeps, $_ ) ;
    }
@@ -74,57 +79,53 @@ my $meta = "
    WHAT => qq()
 }" ;
 
-if ( 0 )
+my @thisDirCommands = (
+    "git commit $filebase.$suffix"
+   ,"git mv $filebase.$suffix ../$d/$filebase.tex"
+) ;
+
+if ( $spellcheck )
 {
-   system("
-   rcs -l $filebase.$suffix && ci $filebase.$suffix
-   mv -i RCS/$filebase.$suffix,v ../$d/RCS/$filebase.tex,v
-   cd ../$d
-   co -l $filebase.tex
-   aspell -c --mode=tex $filebase.tex
-   #perl -p -i -e 's/section{ */section{/' $filebase.tex
-   ~/bin/filtertex $filebase.tex
-
-   #ci -l make.dep $d.tex
-   echo '\%\\include{'$filebase'}' >> main.tex
-   echo 'BOOKDEPENDENCIES +=' $filebase.tex >> make.dep
-   foreach (@newDeps)
-   {
-      echo 'BOOKDEPENDENCIES +=' $_ >> make.dep
-   }
-
-   $mkLinks
-
-   #co -l ../METADATA
-   cat >> ../METADATA << EOF
-   $meta
-   EOF
-   ") ;
+   push( @newDirCommands, "aspell -c --mode=tex $filebase.tex" ) ;
 }
 
-my $cmd = "
-git commit $filebase.$suffix
-git mv $filebase.$suffix ../$d/$filebase.tex
-cd ../$d
-aspell -c --mode=tex $filebase.tex
-#perl -p -i -e 's/section{ */section{/' $filebase.tex
-~/bin/filtertex $filebase.tex
+foreach (@newDeps)
+{
+   push( @newDirCommands, "echo 'BOOKDEPENDENCIES +=' $_ >> make.dep" ) ;
+}
 
-echo '\%\\include{'$filebase'}' >> main.tex
-echo 'BOOKDEPENDENCIES +=' $filebase.tex >> make.dep
+push( @newDirCommands, "~/bin/filtertex $filebase.tex" ) ;
+push( @newDirCommands, "echo '\%\\include{'$filebase'}' >> main.tex" ) ;
+push( @newDirCommands, "echo 'BOOKDEPENDENCIES +=' $filebase.tex >> make.dep" ) ;
 
-$mkLinks
-
+push( @newDirCommands, "
 cat >> ../METADATA << EOF
 $meta
 EOF
-" ;
+" ) ;
 
-if ( $printOnly )
+foreach (@thisDirCommands)
 {
-   print $cmd ;
+   dosystem( $_ ) ;
 }
-else
+
+chdir "../$d" or die ;
+
+foreach (@newDirCommands)
 {
-   system $cmd ;
+   dosystem( $_ ) ;
+}
+
+exit 0 ;
+
+sub dosystem
+{
+   if ( $printOnly )
+   {
+      print "$_\n" ;
+   }
+   else
+   {
+      system "$_" ;
+   }
 }
