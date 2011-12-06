@@ -57,6 +57,10 @@ ORDERED += soln12.pdf
 ORDERED += quiz4formulasheet.pdf
 #ORDERED += quiz4solutions.pdf
 #ORDERED += quiz4.pdf
+ORDERED += finalformulasheet.pdf
+ORDERED += phy456h-d09.pdf
+ORDERED += phy456h-d10.pdf
+ORDERED += phy457h-d08.pdf
 
 sipe.pdf : $(ORDERED)
 	pdftk $(ORDERED) cat output $@
