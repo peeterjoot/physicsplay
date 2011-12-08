@@ -1,0 +1,224 @@
+\input{../peeter_prologue_print.tex}
+%\input{../peeter_prologue_widescreen.tex}
+
+\chapter{Helmholtz Green's function.}
+\label{chap:helmholtzGreens}
+%\useCCL
+\blogpage{http://sites.google.com/site/peeterjoot2/math2011/helmholtzGreens.pdf}
+\date{Dec 12, 2011}
+\revisionInfo{helmholtzGreens.tex}
+
+\beginArtWithToc
+%\beginArtNoToc
+
+\section{Motivation.}
+
+In class this week, looking at an instance of the Helmholtz equation
+
+\begin{equation}\label{eqn:helmholtzGreens:10}
+\left( \spacegrad^2 + \Bk^2\right) \psi_\Bk(\Br) = s(\Br).
+\end{equation}
+
+We were told that the Green's function
+
+\begin{equation}\label{eqn:helmholtzGreens:30}
+\left( \spacegrad^2 + \Bk^2\right) G^0(\Br, \Br') = \delta(\Br- \Br')
+\end{equation}
+
+that can be used to solve for a particular solution this differential equation vvia convolution
+
+\begin{equation}\label{eqn:helmholtzGreens:50}
+\psi_\Bk(\Br) = \int G^0(\Br, \Br') s(\Br') d^3 \Br',
+\end{equation}
+
+had the value
+
+\begin{equation}\label{eqn:helmholtzGreens:70}
+G^0(\Br, \Br') = - \inv{4 \pi} \frac{e^{i k \Abs{\Br - \Br'}} }{\Abs{\Br - \Br'}}.
+\end{equation}
+
+Let's try to verify this.
+
+\section{Guts}
+
+Application of the Helmoltz differential operator $\spacegrad^2 + \Bk^2$ on the presumed solution gives
+
+\begin{equation}\label{eqn:helmholtzGreens:90}
+(\spacegrad^2 + \Bk^2) \psi_\Bk(\Br) = 
+- \inv{4 \pi} 
+\int (\spacegrad^2 + \Bk^2) 
+\frac{e^{i k \Abs{\Br - \Br'}} }{\Abs{\Br - \Br'}}
+s(\Br') d^3 \Br'.
+\end{equation}
+
+To proceed we'll need to evaluate 
+
+\begin{equation}\label{eqn:helmholtzGreens:110}
+\spacegrad^2 \frac{e^{i k \Abs{\Br - \Br'}} }{\Abs{\Br - \Br'}}.
+\end{equation}
+
+Writing $\mu = \Abs{\Br - \Br'}$ we start with the computation of
+
+\begin{align*}
+\PD{x}{} \frac{e^{i k \mu} }{\mu}
+&=
+\PD{x}{\mu} \left( \frac{i k}{\mu} - \inv{\mu^2} \right) e^{i k \mu} \\
+&=
+\PD{x}{\mu} \left( i k - \inv{\mu} \right) \frac{e^{i k \mu}}{\mu}
+\end{align*}
+
+We see that we'll have
+
+\begin{equation}\label{eqn:helmholtzGreens:130}
+\spacegrad \frac{e^{i k \mu} }{\mu} = \left( i k - \inv{\mu} \right) \frac{e^{i k \mu}}{\mu} \spacegrad \mu.
+\end{equation}
+
+Taking second derivatives with respect to $x$ we find
+
+\begin{align*}
+\PDSq{x}{} \frac{e^{i k \mu} }{\mu}
+&=
+\PDSq{x}{\mu} \left( i k - \inv{\mu} \right) \frac{e^{i k \mu}}{\mu}
++\PD{x}{\mu} \PD{x}{\mu} \inv{\mu^2} \frac{e^{i k \mu}}{\mu}
++\left( \PD{x}{\mu} \right)^2 \left( i k - \inv{\mu} \right)^2 \frac{e^{i k \mu}}{\mu} \\
+&=
+\PDSq{x}{\mu} \left( i k - \inv{\mu} \right) \frac{e^{i k \mu}}{\mu}
++\left( \PD{x}{\mu} \right)^2 
+\left( -k^2 - \frac{ 2 i k }{\mu} + \frac{2}{\mu^2} \right)
+\frac{e^{i k \mu}}{\mu}.
+\end{align*}
+
+Our Laplacian is then
+
+\begin{equation}\label{eqn:helmholtzGreens:150}
+\spacegrad^2
+\frac{e^{i k \mu} }{\mu} =
+\left( i k - \inv{\mu} \right) \frac{e^{i k \mu}}{\mu} \spacegrad^2 \mu
++
+\left( -k^2 - \frac{ 2 i k }{\mu} + \frac{2}{\mu^2} \right)
+\frac{e^{i k \mu}}{\mu} (\spacegrad \mu)^2.
+\end{equation}
+
+Now lets calculate the derivatives of $\mu$.  Working on $x$ again, we have
+
+\begin{align*}
+\PD{x}{} \mu
+&=
+\PD{x}{} \sqrt{ 
+(x - x')^2 
++(y - y')^2 
++(z - z')^2 
+} \\
+&=
+\inv{2} 2 (x - x')
+\inv{\sqrt{ 
+(x - x')^2 
++(y - y')^2 
++(z - z')^2 
+}} \\
+&=
+\frac{x - x'}{\mu}.
+\end{align*}
+
+So we have
+
+\begin{align}\label{eqn:helmholtzGreens:170}
+\spacegrad \mu &= \frac{\Br - \Br'}{\mu} \\
+(\spacegrad \mu)^2 &= 1 
+\end{align}
+
+Taking second derivatives with respect to $x$ we find
+
+\begin{align*}
+\PDSq{x}{} \mu
+&= \PD{x}{}
+\frac{x - x'}{\mu} \\
+&= 
+\frac{1}{\mu} 
+- (x - x') \PD{x}{\mu} \inv{\mu^2}
+\\
+&=
+\frac{1}{\mu} 
+- (x - x') \frac{x - x'}{\mu} \inv{\mu^2}
+\\
+&=
+\frac{1}{\mu} 
+- (x - x')^2 \inv{\mu^3}.
+\end{align*}
+
+So we find
+
+\begin{equation}\label{eqn:helmholtzGreens:190}
+\spacegrad^2 \mu = 
+\frac{3}{\mu} 
+- \inv{\mu},
+\end{equation}
+
+or
+
+\begin{equation}\label{eqn:helmholtzGreens:210}
+\spacegrad^2 \mu = \frac{2}{\mu}.
+\end{equation}
+
+Inserting this and $(\spacegrad \mu)^2$ into \ref{eqn:helmholtzGreens:150} we find
+
+\begin{equation}\label{eqn:helmholtzGreens:n}
+\begin{aligned}
+\spacegrad^2
+\frac{e^{i k \mu} }{\mu} 
+&=
+\left( i k - \inv{\mu} \right) \frac{e^{i k \mu}}{\mu} \frac{2}{\mu}
++
+\left( -k^2 - \frac{ 2 i k }{\mu} + \frac{2}{\mu^2} \right)
+\frac{e^{i k \mu}}{\mu}
+&=
+-k^2 \frac{e^{i k \mu}}{\mu}
+\end{aligned}
+\end{equation}
+
+This shows us that provided $\Br \ne \Br'$ we have
+
+\begin{equation}\label{eqn:helmholtzGreens:n}
+(\spacegrad^2 + \Bk^2) G^0(\Br, \Br') = 0.
+\end{equation}
+
+We find therefore that we have the desired delta function behaviour away from $\Br = \Br'$.  Let's consider a volume element in the small spherical space centered on $\Br$ defined by $\Abs{\Br - \Br'} < \epsilon$.  Without loss of generality we can center this volume at $\Br = 0$.  Tossing on our physics hat, we assume that $s(\Br)$ is sufficiently continuous and well behaved that we can pull it out of the integral, yielding
+
+\begin{align*}
+(\spacegrad^2 + \Bk^2)
+- \inv{4 \pi} 
+\int 
+\frac{e^{i k \Abs{\Br - \Br'}} }{\Abs{\Br - \Br'}}
+s(\Br') d^3 \Br'
+&=
+(\spacegrad^2 + \Bk^2)
+- \inv{4 \pi} 
+\int_{r' = 0}^\epsilon
+\int_{\theta' = 0}^\pi
+\int_{\phi' = 0}^{2 \pi}
+\frac{e^{i k r'} }{r'}
+s(\Br') 
+(r')^2 \sin\theta' dr' d\theta' d\phi' \\
+&=
+(\spacegrad^2 + \Bk^2)
+s(0) 
+- \inv{4 \pi} 
+\int_{r' = 0}^\epsilon
+\int_{\theta' = 0}^\pi
+\int_{\phi' = 0}^{2 \pi}
+\frac{e^{i k r'} }{r'}
+(r')^2 \sin\theta' dr' d\theta' d\phi' \\
+&=
+-k^2
+s(0) 
+\int_{r' = 0}^\epsilon
+r' e^{i k r'} 
+(r')^2 \sin\theta' dr' d\theta' d\phi' \\
+\end{align*}
+
+\int_0^\epsilon x e^{i k x} dx
+=
+\frac{1+e^{i k \epsilon } (-1+i k \epsilon )}{i^2 k^2}
+
+\EndArticle
+%\EndNoBibArticle
