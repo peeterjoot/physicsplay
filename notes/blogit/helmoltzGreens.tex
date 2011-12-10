@@ -182,54 +182,136 @@ This shows us that provided $\Br \ne \Br'$ we have
 (\spacegrad^2 + \Bk^2) G^0(\Br, \Br') = 0.
 \end{equation}
 
-We find therefore that we have the desired delta function behaviour away from $\Br = \Br'$.  Let's consider a volume element in the small spherical space centered on $\Br$ defined by $\Abs{\Br - \Br'} < \epsilon$.  Without loss of generality we can center this volume at $\Br = 0$.  Tossing on our physics hat, we assume that $s(\Br)$ is sufficiently continuous and well behaved that we can pull it out of the integral, yielding
+Having shown that we end up with zero everywhere that $\Br \ne \Br'$ we are left to consider a neighborhood of the volume surrounding the point $\Br$ in our integral.  Following the Coulomb treatment in \S 2.2 of \cite{schwartz1987pe} we use a spherical volume element centered around $\Br$ of radius $\epsilon$, and then convert a divergence to a surface area to evaluate the integral away from the problematic point
+
+\begin{equation}\label{eqn:helmoltzGreens:n}
+-\inv{4\pi} \int_{\text{all space}} (\spacegrad^2 + \Bk^2) \frac{e^{i k \Abs{\Br - \Br'}}}{\Abs{\Br - \Br'}} s(\Br') d^3 \Br'
+=
+-\inv{4\pi} \int_{\Abs{\Br - \Br'} < \epsilon} (\spacegrad^2 + \Bk^2) \frac{e^{i k \Abs{\Br - \Br'}}}{\Abs{\Br - \Br'}} s(\Br') d^3 \Br'
+\end{equation}
+
+We make the change of variables $\Br' = \Br + \Ba$.  We add an explicit $\Br$ suffix to our Laplacian at the same time to remind us that it is taking derivatives with respect to the coordinates of $\Br = (x, y, z)$, and not the coordinates of our integration variable $\Ba = (a_x, a_y, a_z)$.  Assuming sufficient continuity and ``well behavedness'' of $s(\Br')$ we'll be able to pull it out of the integral, giving
 
 \begin{align*}
-(\spacegrad^2 + \Bk^2)
-\left(
-- \inv{4 \pi} 
-\right)
-\int 
-\frac{e^{i k \Abs{\Br - \Br'}} }{\Abs{\Br - \Br'}}
-s(\Br') d^3 \Br'
-&=
-(\spacegrad^2 + \Bk^2)
-\left(
-- \inv{4 \pi} 
-\right)
-\int_{r' = 0}^\epsilon
-\int_{\theta' = 0}^\pi
-\int_{\phi' = 0}^{2 \pi}
-\frac{e^{i k r'} }{r'}
-s(\Br') 
-(r')^2 \sin\theta' dr' d\theta' d\phi' \\
-&=
-(\spacegrad^2 + \Bk^2)
-s(0) 
-\left(
-- \inv{4 \pi} 
-\right)
-\int_{r' = 0}^\epsilon
-\int_{\theta' = 0}^\pi
-\int_{\phi' = 0}^{2 \pi}
-\frac{e^{i k r'} }{r'}
-(r')^2 \sin\theta' dr' d\theta' d\phi' \\
-&=
--k^2
-s(0) 
-\int_{r' = 0}^\epsilon
-r' e^{i k r'} 
-dr' \\
-&=
-s(0) 
-\int_{x = 0}^{k \epsilon}
-x e^{i x} 
-d x \\
+-\inv{4\pi} \int_{\Abs{\Br - \Br'} < \epsilon} (\spacegrad_\Br^2 + \Bk^2) \frac{e^{i k \Abs{\Br - \Br'}}}{\Abs{\Br - \Br'}} s(\Br') d^3 \Br'
+&= 
+-\frac{1}{4\pi} \int_{\Abs{\Ba} < \epsilon} (\spacegrad_\Br^2 + \Bk^2) \frac{e^{i k \Abs{\Ba}}}{\Abs{\Ba}} s(\Br + \Ba) d^3 \Ba \\
+&= 
+-\frac{s(\Br)}{4\pi} \int_{\Abs{\Ba} < \epsilon} (\spacegrad_\Br^2 + \Bk^2) \frac{e^{i k \Abs{\Ba}}}{\Abs{\Ba}} d^3 \Ba 
 \end{align*}
 
-%\int_0^\epsilon x e^{i k x} dx
-%=
-%\frac{1+e^{i k \epsilon } (-1+i k \epsilon )}{i^2 k^2}
+Recalling the dependencies on the derivatives of $\Abs{\Br - \Br'}$ in our previous gradient evaluations, we note that we have
+
+\begin{align*}
+\spacegrad_\Br \Abs{\Br - \Br'} &= -\spacegrad_\Ba \Abs{\Ba} \\
+(\spacegrad_\Br \Abs{\Br - \Br'})^2 &= (\spacegrad_\Ba \Abs{\Ba})^2 \\
+\spacegrad_\Br^2 \Abs{\Br - \Br'} &= \spacegrad_\Ba^2 \Abs{\Ba},
+\end{align*}
+
+so with $\Ba = \Br - \Br'$, we can rewrite our Laplacian as
+
+\begin{align*}
+\spacegrad_\Br^2 \frac{e^{i k \Abs{\Br - \Br'}}}{\Abs{\Br - \Br'}} 
+&= 
+\spacegrad_\Ba^2 \frac{e^{i k \Abs{\Ba}}}{\Abs{\Ba}}  \\
+&= 
+\spacegrad_\Ba \cdot \left(\spacegrad_\Ba \frac{e^{i k \Abs{\Ba}}}{\Abs{\Ba}} \right)
+\end{align*}
+
+This gives us
+
+\begin{align*}
+-\frac{s(\Br)}{4\pi} 
+\int_{\Abs{\Ba} < \epsilon} (\spacegrad_\Ba^2 + \Bk^2) \frac{e^{i k \Abs{\Ba}}}{\Abs{\Ba}} d^3 \Ba 
+&=
+-\frac{s(\Br)}{4\pi} 
+\int_{dV} \spacegrad_\Ba \cdot \left( \spacegrad_\Ba \frac{e^{i k \Abs{\Ba}}}{\Abs{\Ba}} \right) d^3 \Ba 
+-\frac{s(\Br)}{4\pi} \int_{dV}
+\Bk^2 \frac{e^{i k \Abs{\Ba}}}{\Abs{\Ba}} d^3 \Ba  \\
+&=
+-\frac{s(\Br)}{4\pi} 
+\int_{dA} \left( \spacegrad_\Ba \frac{e^{i k \Abs{\Ba}}}{\Abs{\Ba}} \right) \cdot \acap d^2 \Ba 
+-\frac{s(\Br)}{4\pi} 
+\int_{dV}
+\Bk^2 \frac{e^{i k \Abs{\Ba}}}{\Abs{\Ba}} d^3 \Ba 
+\end{align*}
+
+To complete these evaluations, we can now employ a spherical coordinate change of variables.  Let's do the $\Bk^2$ volume integral first.  We have
+
+\begin{align*}
+\int_{dV}
+\Bk^2 \frac{e^{i k \Abs{\Ba}}}{\Abs{\Ba}} d^3 \Ba 
+&=
+\int_{a = 0}^\epsilon \int_{\theta = 0}^\pi \int_{\phi=0}^{2\pi}
+\Bk^2 \frac{e^{i k a}}{a} a^2 da \sin\theta d\theta d\phi \\
+&=
+4\pi k^2
+\int_{a = 0}^\epsilon 
+a e^{i k a} da  \\
+&=
+4\pi 
+\int_{u = 0}^{k\epsilon}
+u e^{i u} du  \\
+&=
+4\pi 
+{\left.
+(-i u + 1) e^{i u} \right\vert}_0^{k \epsilon} \\
+&=
+4 \pi \left( (-i k \epsilon + 1)e^{i k \epsilon} - 1 \right)
+\end{align*}
+
+To evaluate the surface integral we note that we'll require only the radial portion of the gradient, so have
+
+\begin{align*}
+\left( \spacegrad_\Ba \frac{e^{i k \Abs{\Ba}}}{\Abs{\Ba}} \right) \cdot \acap
+&=
+\left( \acap \PD{a}{} \frac{e^{i k a}}{a} \right) \cdot \acap \\
+&=
+\PD{a}{} \frac{e^{i k a}}{a} \\
+&=
+\left( i k \inv{a} - \inv{a^2} \right)
+e^{i k a} \\
+&=
+\left( i k a - 1 \right)
+\frac{e^{i k a}}{a^2}
+\end{align*}
+
+Our area element is $a^2 \sin\theta d\theta d\phi$, so we are left with
+
+\begin{align*}
+\int_{dA} \left( \spacegrad_\Ba \frac{e^{i k \Abs{\Ba}}}{\Abs{\Ba}} \right) \cdot \acap d^2 \Ba 
+&=
+\evalbar{
+\int_{\theta = 0}^\pi \int_{\phi=0}^{2\pi}
+\left( i k a - 1 \right)
+\frac{e^{i k a}}{a^2}
+a^2 \sin\theta d\theta d\phi 
+}{a = \epsilon}
+\\
+&=
+4 \pi
+\left( i k \epsilon - 1 \right) e^{i k \epsilon}
+\end{align*}
+
+Putting everything back together we have
+
+\begin{align*}
+-\inv{4\pi} \int_{\text{all space}} (\spacegrad^2 + \Bk^2) \frac{e^{i k \Abs{\Br - \Br'}}}{\Abs{\Br - \Br'}} s(\Br') d^3 \Br'
+&=
+-s(\Br)
+\left(
+(-i k \epsilon + 1)e^{i k \epsilon} - 1 
++\left( i k \epsilon - 1 \right) e^{i k \epsilon}
+\right) \\
+&=
+-s(\Br)
+\left(
+(-i k \epsilon + 1 + i k \epsilon - 1 )e^{i k \epsilon} - 1 
+\right) \\
+&=
+s(\Br)
+\end{align*}
+
+This completes the desired verification of the Green's function for the Helmholtz operator.  Observe the perfect cancellation here, so the limit of $\epsilon \rightarrow 0$ can be independent of how large $k$ is made.  You have to complete the integrals for both the Laplacian and the $\Bk^2$ portions of the integrals and add them, \underline{before} taking any limits, or else you'll get into trouble (as I did in my first attempt).
 
 \EndArticle
-%\EndNoBibArticle
