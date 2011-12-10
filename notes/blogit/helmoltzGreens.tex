@@ -25,7 +25,7 @@ We were told that the Green's function
 \left( \spacegrad^2 + \Bk^2\right) G^0(\Br, \Br') = \delta(\Br- \Br')
 \end{equation}
 
-that can be used to solve for a particular solution this differential equation vvia convolution
+that can be used to solve for a particular solution this differential equation via convolution
 
 \begin{equation}\label{eqn:helmholtzGreens:50}
 \psi_\Bk(\Br) = \int G^0(\Br, \Br') s(\Br') d^3 \Br',
@@ -41,7 +41,7 @@ Let's try to verify this.
 
 \section{Guts}
 
-Application of the Helmoltz differential operator $\spacegrad^2 + \Bk^2$ on the presumed solution gives
+Application of the Helmholtz differential operator $\spacegrad^2 + \Bk^2$ on the presumed solution gives
 
 \begin{equation}\label{eqn:helmholtzGreens:90}
 (\spacegrad^2 + \Bk^2) \psi_\Bk(\Br) = 
@@ -50,6 +50,8 @@ Application of the Helmoltz differential operator $\spacegrad^2 + \Bk^2$ on the 
 \frac{e^{i k \Abs{\Br - \Br'}} }{\Abs{\Br - \Br'}}
 s(\Br') d^3 \Br'.
 \end{equation}
+
+\subsection{When $\Br \ne \Br'$.}
 
 To proceed we'll need to evaluate 
 
@@ -162,7 +164,7 @@ or
 
 Inserting this and $(\spacegrad \mu)^2$ into \ref{eqn:helmholtzGreens:150} we find
 
-\begin{equation}\label{eqn:helmholtzGreens:n}
+\begin{equation}\label{eqn:helmholtzGreens:220}
 \begin{aligned}
 \spacegrad^2
 \frac{e^{i k \mu} }{\mu} 
@@ -178,13 +180,15 @@ Inserting this and $(\spacegrad \mu)^2$ into \ref{eqn:helmholtzGreens:150} we fi
 
 This shows us that provided $\Br \ne \Br'$ we have
 
-\begin{equation}\label{eqn:helmholtzGreens:n}
+\begin{equation}\label{eqn:helmholtzGreens:35}
 (\spacegrad^2 + \Bk^2) G^0(\Br, \Br') = 0.
 \end{equation}
 
+\subsection{In the neighborhood of $\Abs{\Br - \Br'} < \epsilon$.}
+
 Having shown that we end up with zero everywhere that $\Br \ne \Br'$ we are left to consider a neighborhood of the volume surrounding the point $\Br$ in our integral.  Following the Coulomb treatment in \S 2.2 of \cite{schwartz1987pe} we use a spherical volume element centered around $\Br$ of radius $\epsilon$, and then convert a divergence to a surface area to evaluate the integral away from the problematic point
 
-\begin{equation}\label{eqn:helmoltzGreens:n}
+\begin{equation}\label{eqn:helmoltzGreens:50}
 -\inv{4\pi} \int_{\text{all space}} (\spacegrad^2 + \Bk^2) \frac{e^{i k \Abs{\Br - \Br'}}}{\Abs{\Br - \Br'}} s(\Br') d^3 \Br'
 =
 -\inv{4\pi} \int_{\Abs{\Br - \Br'} < \epsilon} (\spacegrad^2 + \Bk^2) \frac{e^{i k \Abs{\Br - \Br'}}}{\Abs{\Br - \Br'}} s(\Br') d^3 \Br'
@@ -202,21 +206,21 @@ We make the change of variables $\Br' = \Br + \Ba$.  We add an explicit $\Br$ su
 
 Recalling the dependencies on the derivatives of $\Abs{\Br - \Br'}$ in our previous gradient evaluations, we note that we have
 
-\begin{align*}
+\begin{align}\label{eqn:shortTimeDepPertubation:300}
 \spacegrad_\Br \Abs{\Br - \Br'} &= -\spacegrad_\Ba \Abs{\Ba} \\
 (\spacegrad_\Br \Abs{\Br - \Br'})^2 &= (\spacegrad_\Ba \Abs{\Ba})^2 \\
 \spacegrad_\Br^2 \Abs{\Br - \Br'} &= \spacegrad_\Ba^2 \Abs{\Ba},
-\end{align*}
+\end{align}
 
 so with $\Ba = \Br - \Br'$, we can rewrite our Laplacian as
 
-\begin{align*}
+\begin{equation}\label{eqn:shortTimeDepPertubation:310}
 \spacegrad_\Br^2 \frac{e^{i k \Abs{\Br - \Br'}}}{\Abs{\Br - \Br'}} 
-&= 
-\spacegrad_\Ba^2 \frac{e^{i k \Abs{\Ba}}}{\Abs{\Ba}}  \\
-&= 
+= 
+\spacegrad_\Ba^2 \frac{e^{i k \Abs{\Ba}}}{\Abs{\Ba}} 
+= 
 \spacegrad_\Ba \cdot \left(\spacegrad_\Ba \frac{e^{i k \Abs{\Ba}}}{\Abs{\Ba}} \right)
-\end{align*}
+\end{equation}
 
 This gives us
 
@@ -278,7 +282,8 @@ e^{i k a} \\
 
 Our area element is $a^2 \sin\theta d\theta d\phi$, so we are left with
 
-\begin{align*}
+\begin{equation}\label{eqn:shortTimeDepPertubation:320}
+\begin{aligned}
 \int_{dA} \left( \spacegrad_\Ba \frac{e^{i k \Abs{\Ba}}}{\Abs{\Ba}} \right) \cdot \acap d^2 \Ba 
 &=
 \evalbar{
@@ -291,7 +296,8 @@ a^2 \sin\theta d\theta d\phi
 &=
 4 \pi
 \left( i k \epsilon - 1 \right) e^{i k \epsilon}
-\end{align*}
+\end{aligned}
+\end{equation}
 
 Putting everything back together we have
 
@@ -307,10 +313,14 @@ Putting everything back together we have
 -s(\Br)
 \left(
 (-i k \epsilon + 1 + i k \epsilon - 1 )e^{i k \epsilon} - 1 
-\right) \\
-&=
-s(\Br)
+\right) 
 \end{align*}
+
+But this is just
+
+\begin{equation}\label{eqn:shortTimeDepPertubation:330}
+-\inv{4\pi} \int_{\text{all space}} (\spacegrad^2 + \Bk^2) \frac{e^{i k \Abs{\Br - \Br'}}}{\Abs{\Br - \Br'}} s(\Br') d^3 \Br' = s(\Br).
+\end{equation}
 
 This completes the desired verification of the Green's function for the Helmholtz operator.  Observe the perfect cancellation here, so the limit of $\epsilon \rightarrow 0$ can be independent of how large $k$ is made.  You have to complete the integrals for both the Laplacian and the $\Bk^2$ portions of the integrals and add them, \underline{before} taking any limits, or else you'll get into trouble (as I did in my first attempt).
 
