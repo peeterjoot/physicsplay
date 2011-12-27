@@ -19,7 +19,7 @@ $(LOCAL_FILES) :
 cronology.tex : ../METADATA
 	../METADATA -miscbook > cronology.tex
 
-miscphysics.pdf :: $(TEXFILES) $(LOCAL_FILES)
+miscphysics.pdf :: $(BOOKDEPENDENCIES) $(LOCAL_FILES)
 	../make_pdflatex main.tex
 	mv main.pdf miscphysics.pdf
 
