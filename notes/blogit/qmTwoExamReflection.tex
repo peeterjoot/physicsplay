@@ -243,6 +243,21 @@ We see the magnitude flatten out, and what was exponential spatial damping, beco
 
 \subsection{Part b.  Slow flattening of the ``spring constant''.}
 
+For this part of the question our spring constant decreases gradually as
+
+\begin{equation}\label{eqn:qmTwoExamReflection:n}
+k(t) = k_0 e^{-\beta t}.
+\end{equation}
+
+Note that it was actually $\alpha$ not $\beta$ in the question, but we have $\alpha$ in the harmonic oscillator wavefunctions on the formula sheet, so I'm using $\beta$ instead
+
+\begin{align}\label{eqn:qmTwoExamReflection:n}
+\psi_n(x) &= \inv{\sqrt{2^n n!}} \left(\inv{\alpha^2 \pi}\right)^{1/4} e^{-x^2/2\alpha^2} H_n(x/\alpha) \\
+\alpha^2 &= \frac{\hbar}{m \omega} 
+= \frac{\hbar}{\sqrt{k m}} 
+= \frac{\hbar}{\sqrt{k_0 m}} e^{\beta t/2}
+\end{align}
+
 \subsubsection{Simplest approximation.}
 
 For the slow changing Hamiltonian we have a couple of possible strategies.  In both of these we employ time varying energy eigenvalues and eigenkets
@@ -405,7 +420,7 @@ First order of business is the computation of
 &= \frac{E_0(t)}{\hbar} \\
 &= \frac{\hbar \omega(t)}{\hbar}\left( 0 + \inv{2} \right) \\
 &= \inv{2} \sqrt{\frac{k(t)}{m}} \\
-&= \inv{2} \sqrt{\frac{k_0}{m}} e^{-\alpha t/2}.
+&= \inv{2} \sqrt{\frac{k_0}{m}} e^{-\beta t/2}.
 \end{align*}
 
 So
@@ -414,13 +429,13 @@ So
 \int_0^t \omega_0(t') dt'
 &= 
 \inv{2} \sqrt{\frac{k_0}{m}} 
-\int_0^t e^{-\alpha t/2} \\
+\int_0^t e^{-\beta t/2} \\
 &= 
 \inv{2} \sqrt{\frac{k_0}{m}} 
-{\left.{ \left(-\frac{2}{\alpha}\right) e^{-\alpha t/2} }\right\vert}_0^t \\
+{\left.{ \left(-\frac{2}{\beta}\right) e^{-\beta t/2} }\right\vert}_0^t \\
 &= 
-\inv{\alpha} \sqrt{\frac{k_0}{m}} 
-\left( 1 - e^{-\alpha t/2} \right)
+\inv{\beta} \sqrt{\frac{k_0}{m}} 
+\left( 1 - e^{-\beta t/2} \right)
 \end{align*}
 
 So we have
@@ -429,8 +444,8 @@ So we have
 e^{-i \int_0^t \omega_0}
 =
 \exp\left(
-- \frac{i}{\alpha} \sqrt{\frac{k_0}{m}} 
-\left( 1 - e^{-\alpha t/2} \right)
+- \frac{i}{\beta} \sqrt{\frac{k_0}{m}} 
+\left( 1 - e^{-\beta t/2} \right)
 \right)
 \end{equation}
 
@@ -443,20 +458,19 @@ Now lets look at the Berry phase term due to the $\Gamma_0$ contribution.  For t
 \end{equation}
 
 With
-
 \begin{align*}
-\sigma^2 
+\alpha^2 
 &= \frac{\hbar}{m \omega} \\
 &= \frac{\hbar}{m} \sqrt{\frac{m}{k}} \\
-&= \frac{\hbar}{ \sqrt{m k_0 e^{-\alpha t} } },
+&= \frac{\hbar}{ \sqrt{m k_0 e^{-\beta t} } },
 \end{align*}
 
 or
 
 \begin{equation}\label{eqn:qmTwoExamReflection:810}
-\sigma^2 
+\alpha^2 
 = \frac{\hbar}{ \sqrt{m k_0} }
-e^{\alpha t/2}.
+e^{\beta t/2}.
 \end{equation}
 
 Our first few wavefunctions are
@@ -464,16 +478,18 @@ Our first few wavefunctions are
 \begin{align}\label{eqn:qmTwoExamReflection:830}
 \psi_0(x) 
 &=
-\left(\inv{\sigma\pi}\right)^{1/4} e^{- x^2/2 \sigma} \\
+\left(\inv{\alpha^2\pi}\right)^{1/4} e^{- x^2/2 \alpha^2} \\
 \psi_1(x) 
 &=
-\left(\inv{\sigma\pi}\right)^{1/4} e^{- x^2/2 \sigma} \frac{x}{\sqrt{\sigma}} \inv{\sqrt{2}} \\
+\left(\inv{\alpha^2\pi}\right)^{1/4} e^{- x^2/2 \alpha^2} \frac{x}{\alpha} \inv{\sqrt{2}} \\
 \psi_2(x) 
 &=
-\left(\inv{\sigma\pi}\right)^{1/4} e^{- x^2/2 \sigma} \left( \frac{2 x^2}{\sigma} - 1 \right) \inv{\sqrt{2}}
+\left(\inv{\alpha^2\pi}\right)^{1/4} e^{- x^2/2 \alpha^2} \left( \frac{2 x^2}{\alpha^2} - 1 \right) \inv{\sqrt{2}}
 \end{align}
 
 and our contribution to the Berry phase is
+
+%FIXME: check this after $\sigma \rightarrow \alpha^2$ subst
 \begin{align*}
 \braket{x}{0'} 
 &=
@@ -481,40 +497,97 @@ and our contribution to the Berry phase is
 &=
 \frac{d}{dt} \braket{x}{0} \\
 &=
-\frac{d}{dt} \left(\inv{\sigma \pi}\right)^{1/4} e^{ - x^2/2 \sigma} \\
+\frac{d}{dt} \frac{\alpha^{-1/2}}{\pi^{1/4}} e^{ - x^2/2 \alpha^2} \\
 &=
-\left(-\inv{4} \frac{\sigma^{-5/4}}{\pi^{1/4}} + 
-\left(\inv{\sigma \pi}\right)^{1/4} \left(-\frac{x^2}{2}\right)\left(-\inv{\sigma^2}\right) \right) \frac{d\sigma}{dt} 
-e^{ - x^2/2 \sigma} \\
+\inv{\pi^{1/4}}
+\left(
+  -\inv{2} \alpha^{-3/2}
+  + 
+  \alpha^{-1/2} \left(-\frac{x^2}{2}\right) \left( \frac{-2}{\alpha^3}\right) 
+\right) 
+\frac{d\alpha}{dt} 
+e^{ - x^2/2 \alpha^2} \\
 &=
-\left(\inv{\sigma \pi}\right)^{1/4} \left(\frac{x^2}{2\sigma^2} - \inv{4 \sigma} \right)
-e^{ - x^2/2 \sigma} \\
+\inv{\pi^{1/4}} 
+e^{ - x^2/2 \alpha^2} 
+\frac{d\alpha}{dt} 
+\left(
+-\inv{2 \alpha^{3/2}} + \frac{x^2}{\alpha^{7/2}}
+\right) \\
 &=
-\inv{\sigma} \left(\inv{\sigma \pi}\right)^{1/4} \left(\frac{x^2}{2\sigma} - \inv{4} \right)
-e^{ - x^2/2 \sigma} \\
+\inv{(\alpha^2 \pi)^{1/4}} 
+e^{ - x^2/2 \alpha^2} 
+\frac{d\alpha}{dt} 
+\inv{\alpha}
+\left(
+-\inv{2} + \frac{x^2}{\alpha^2}
+\right) \\
+&=
+\inv{2}
+\inv{\alpha}
+\inv{(\alpha^2 \pi)^{1/4}} 
+e^{ - x^2/2 \alpha^2} 
+\frac{d\alpha}{dt} 
+\left(
+2 \frac{x^2}{\alpha^2} - 1
+\right) \\
+&=
+\inv{\sqrt{2}} \inv{\alpha} 
+\frac{d\alpha}{dt} 
+\psi_2(x)
 \end{align*}
 
 From \ref{eqn:qmTwoExamReflection:810} we compute
 
 \begin{equation}\label{eqn:qmTwoExamReflection:870}
-2 \sigma \frac{d\sigma}{dt} = \frac{\alpha \hbar}{2 \sqrt{m k_0}} e^{\alpha t/2},
+2 \alpha \frac{d\alpha}{dt} = \frac{\beta \hbar}{2 \sqrt{m k_0}} e^{\beta t/2},
 \end{equation}
 
 or
 
 \begin{equation}\label{eqn:qmTwoExamReflection:890}
-\frac{d\sigma}{dt} = \frac{\alpha}{4},
+\frac{d\alpha}{dt} = \frac{\beta}{4} e^{\beta t/4}
 \end{equation}
 
-and are finally able to conclude that
+so
+
+\begin{equation}\label{eqn:qmTwoExamReflection:n}
+\bra{x} \frac{d}{dt} \ket{0} 
+=
+\frac{\beta}{4 \sqrt{2} \alpha} e^{\beta t/4}
+\braket{x}{2} 
+\end{equation}
+
+With 
+
+\begin{equation}\label{eqn:qmTwoExamReflection:n}
+\alpha_0^2 = \alpha^2(0) = \frac{\hbar}{\sqrt{m k_0}},
+\end{equation}
+
+we are finally able to conclude that
 
 \begin{equation}\label{eqn:qmTwoExamReflection:910}
 \bra{x} \frac{d}{dt} \ket{0} 
 =
-\frac{\alpha}{16 \sigma(t)} \braket{x}{2}
+\frac{\beta}{4 \sqrt{2} \alpha_0} 
+\braket{x}{2}
 \end{equation}
 
-This is orthogonal to $\braket{0}{x}$ in \ref{eqn:qmTwoExamReflection:850}, so we have
+Returning to \ref{eqn:qmTwoExamReflection:850} we find
+
+\begin{align*}
+\Gamma_0 &= 
+i 
+\frac{\beta}{4 \sqrt{2} \alpha_0} 
+\int dx \braket{0}{x}
+\braket{x}{2} \\
+&= 
+i 
+\frac{\beta}{4 \sqrt{2} \alpha_0} 
+\braket{0}{2}
+\end{align*}
+
+So the Berry phase term is zero
 
 \begin{equation}\label{eqn:qmTwoExamReflection:930}
 \Gamma_0(t) = 0
@@ -525,8 +598,8 @@ Our perturbed state \ref{eqn:qmTwoExamReflection:770} therefore takes the form o
 \begin{equation}\label{eqn:qmTwoExamReflection:950}
 \ket{\psi} =
 \exp\left(
-- \frac{i}{\alpha} \sqrt{\frac{k_0}{m}} 
-\left( 1 - e^{-\alpha t/2} \right)
+- \frac{i}{\beta} \sqrt{\frac{k_0}{m}} 
+\left( 1 - e^{-\beta t/2} \right)
 \right) \ket{0}.
 \end{equation}
 
@@ -537,13 +610,13 @@ In wave function form this is
 \psi(x, t)
 &=
 \exp\left(
-- \frac{i}{\alpha} \sqrt{\frac{k_0}{m}} 
-\left( 1 - e^{-\alpha t/2} \right)
+- \frac{i}{\beta} \sqrt{\frac{k_0}{m}} 
+\left( 1 - e^{-\beta t/2} \right)
 \right) 
-\left(\inv{\sigma\pi}\right)^{1/4} e^{- x^2/2 \sigma} \\
-\sigma^2 
+\left(\inv{\alpha^2\pi}\right)^{1/4} e^{- x^2/2 \alpha^2} \\
+\alpha^2 
 &= \frac{\hbar}{ \sqrt{m k_0} }
-e^{\alpha t/2}.
+e^{\beta t/2}.
 \end{aligned}
 \end{equation}
 
@@ -552,7 +625,7 @@ e^{\alpha t/2}.
 Should we wish to attempt to solve the set of differential equations specified by \ref{eqn:qmTwoExamReflection:550}, we'll have to compute
 
 \begin{equation}\label{eqn:qmTwoExamReflection:n}
-\bra{m} \frac{d}{dt} {k} = \int dx m(x) \frac{d}{dt} k(x),
+\bra{m} \frac{d}{dt} \ket{k} = \int dx m(x) \frac{d}{dt} k(x),
 \end{equation}
 
 for all pairs $m, k \ne 0, 0$ (we've done $0,0$ and found it to be zero).  Is that feasible?
