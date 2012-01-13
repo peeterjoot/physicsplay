@@ -1,0 +1,140 @@
+#!/usr/bin/perl
+
+# posted some thoughts on how to continue this:
+# 
+# http://wp.me/ppf39-Dd
+# 
+# Since that post, added a register name simplifier, so that all registers have the same format.
+# Could then implement local %rXXX -> %rRegName[dbh] renames, where RegName is symbolic, instead of 0-15.
+# next step would probably be to identify store instructions that clobber a register, such as:
+#
+# mov ...,%rXXX
+# xor %rXXX,%rXXX
+#
+# whenever one of those is found twice in a BB, then rename all the uses of that regname, using a symbolic regname
+# based on the BB label.  Repeat until each BB has only one clobber of each register.
+# 
+
+my @lines = () ;
+my %addressMap = () ;
+my $flableCount = 0 ;
+my $blableCount = 0 ;
+my $lableCount = 0 ;
+
+while (<>)
+{
+   chomp ;
+
+   if ( /^\s(\S+):\tj\S+\s+(\S+)/ )
+   {
+      my ($haddr, $htarget) = ($1, $2) ;
+
+      my $addr = hex($haddr) ;
+      my $target = hex($htarget) ;
+
+      if ( defined $addressMap{$htarget} )
+      {
+         if ( (($target > $addr) and $addressMap{$htarget} =~ /^B/) or
+              (($target < $addr) and $addressMap{$htarget} =~ /^F/) )
+         {
+            $addressMap{$htarget} = "L$lableCount" ;
+
+            $flableCount++ ;
+         }
+      }
+      else
+      {
+         # Initially re-lable branches based on the direction observed in the first branch.
+         if ( $target > $addr )
+         {
+            $addressMap{$htarget} = "F$flableCount" ;
+
+            $flableCount++ ;
+         }
+         else
+         {
+            $addressMap{$htarget} = "B$blableCount" ;
+
+            $blableCount++ ;
+         }
+      }
+   }
+
+   push( @lines, $_ ) ;
+}
+
+my @addrs = ( keys %addressMap ) ;
+
+my %regmap = 
+(
+   rax => 'r0',
+   rbx => 'r1',
+   rcx => 'r2',
+   rdx => 'r3',
+   rsi => 'r4',
+   rdi => 'r5',
+   rbp => 'r6',
+   rsp => 'r7',
+   eax => 'r0d',
+   ebx => 'r1d',
+   ecx => 'r2d',
+   edx => 'r3d',
+   esi => 'r4d',
+   edi => 'r5d',
+   ebp => 'r6d',
+   esp => 'r7d',
+   ax => 'r0d',
+   bx => 'r1d',
+   cx => 'r2d',
+   dx => 'r3d',
+   si => 'r4d',
+   di => 'r5d',
+   bp => 'r6d',
+   sp => 'r7d',
+   al => 'r0b',
+   bl => 'r1b',
+   cl => 'r2b',
+   dl => 'r3b',
+   sil => 'r4b',
+   dil => 'r5b',
+   bpl => 'r6b',
+   spl => 'r7b',
+   ah => 'r0h',
+   bh => 'r1h',
+   ch => 'r2h',
+   dh => 'r3h',
+) ;
+
+my @oldregs = ( keys %regmap ) ;
+
+foreach my $line (@lines)
+{
+   foreach ( @addrs )
+   {
+      # 3639fe0:   je     3639fec <sqloSpinLockConflict+0x8c>
+      # my $debug = $line ;
+
+      if ( $line =~ s/\t(j\S+)  # example: <tab>je
+                      \s+
+                      $_
+                      \s.*
+                     //x )
+      {
+#         print "\n### $_ -> $addressMap{$_}\n" ;
+         $line .= sprintf("\t%-6s $addressMap{$_}", $1) ;
+
+#         print "\n### $debug -> $line\n" ;
+      }
+
+      $line =~ s/^ $_:/ $addressMap{$_}:/ ;
+   }
+
+   foreach ( @oldregs )
+   {
+      $line =~ s/%$_\b/%$regmap{$_}/g ;
+   }
+
+   $line =~ s/^ [0-9a-f]+:// ;
+
+   print "$line\n" ;
+}
