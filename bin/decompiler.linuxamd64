@@ -17,19 +17,46 @@
 
 my @lines = () ;
 my %addressMap = () ;
+my $flableCount = 0 ;
+my $blableCount = 0 ;
 my $lableCount = 0 ;
 
 while (<>)
 {
    chomp ;
 
-   if ( /\tj\S+\s+(\S+)/ )
+   if ( /^\s(\S+):\tj\S+\s+(\S+)/ )
    {
-      unless ( defined $addressMap{$1} )
-      {
-         $addressMap{$1} = "L$lableCount" ;
+      my ($haddr, $htarget) = ($1, $2) ;
 
-         $lableCount++ ;
+      my $addr = hex($haddr) ;
+      my $target = hex($htarget) ;
+
+      if ( defined $addressMap{$htarget} )
+      {
+         if ( (($target > $addr) and $addressMap{$htarget} =~ /^B/) or
+              (($target < $addr) and $addressMap{$htarget} =~ /^F/) )
+         {
+            $addressMap{$htarget} = "L$lableCount" ;
+
+            $flableCount++ ;
+         }
+      }
+      else
+      {
+         # Initially re-lable branches based on the direction observed in the first branch.
+         if ( $target > $addr )
+         {
+            $addressMap{$htarget} = "F$flableCount" ;
+
+            $flableCount++ ;
+         }
+         else
+         {
+            $addressMap{$htarget} = "B$blableCount" ;
+
+            $blableCount++ ;
+         }
       }
    }
 
@@ -84,11 +111,20 @@ foreach my $line (@lines)
 {
    foreach ( @addrs )
    {
-      $line =~ s/\t(j\S+)  # example: <tab>je
-                 \s+
-                 $_
-                 \s.*
-                /printf("\t%-6s $addressMap{$_}", $1)/xe ;
+      # 3639fe0:   je     3639fec <sqloSpinLockConflict+0x8c>
+      # my $debug = $line ;
+
+      if ( $line =~ s/\t(j\S+)  # example: <tab>je
+                      \s+
+                      $_
+                      \s.*
+                     //x )
+      {
+#         print "\n### $_ -> $addressMap{$_}\n" ;
+         $line .= sprintf("\t%-6s $addressMap{$_}", $1) ;
+
+#         print "\n### $debug -> $line\n" ;
+      }
 
       $line =~ s/^ $_:/ $addressMap{$_}:/ ;
    }
