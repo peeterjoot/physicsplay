@@ -18,6 +18,10 @@ ORIG_FILES += ../unsrturl.bst
 ORIG_FILES += ../otherbook/triangleLaw.png
 ORIG_FILES += ../otherbook/rotateMinusOne.png
 ORIG_FILES += ../gabook/parallelogramArea.png
+ORIG_FILES += ../phy454/continuumL2fig1.png
+ORIG_FILES += ../phy454/continuumL2fig2.png
+ORIG_FILES += ../phy454/continuumL2fig3.png
+ORIG_FILES += ../phy454/continuumL2fig4.png
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
