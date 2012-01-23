@@ -22,6 +22,7 @@ ORIG_FILES += ../phy454/continuumL2fig1.png
 ORIG_FILES += ../phy454/continuumL2fig2.png
 ORIG_FILES += ../phy454/continuumL2fig3.png
 ORIG_FILES += ../phy454/continuumL2fig4.png
+ORIG_FILES += ../phy454/continuumL2fig5.png
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
