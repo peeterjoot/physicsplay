@@ -1,16 +1,13 @@
 #!/usr/bin/perl
 
+#----------------------------------------------------------------------------------------------
+#
 # posted some thoughts on how to continue this:
 # 
 # http://wp.me/ppf39-Dd
 #
-#
-# collect the asm with:
-#
-# nm exe | tee nm.out | grep -A1 function_of_interest
-# objdump -d --no-show-raw-insn --start-address=0x<address from nm> --stop-address=0x<...>
-# 
 # Since that post, added a register name simplifier, so that all registers have the same format.
+#
 # Could then implement local %rXXX -> %rRegName[dbh] renames, where RegName is symbolic, instead of 0-15.
 # next step would probably be to identify store instructions that clobber a register, such as:
 #
@@ -19,7 +16,23 @@
 #
 # whenever one of those is found twice in a BB, then rename all the uses of that regname, using a symbolic regname
 # based on the BB label.  Repeat until each BB has only one clobber of each register.
+#
+#----------------------------------------------------------------------------------------------
+# collect the asm with:
+#
+# nm exe | tee nm.out | grep -A1 function_of_interest
+# objdump -d --no-show-raw-insn --reloc --start-address=0x<address from nm> --stop-address=0x<...>
 # 
+#----------------------------------------------------------------------------------------------
+# asked about how to get the callq addresses directly from .o files here: http://goo.gl/V3qJj
+# ... add --reloc to the objdump command to get output like:
+#
+#     124:       callq  129 <_Z24ossAtomicUnorderedPeek32PVKi+0x33>
+#                        125: R_X86_64_PLT32     _ossIsBadReadPtr+0xfffffffffffffffc
+#
+# build in support for that in this script (want to omit the PLT line, but modify the
+# callq to include that output).
+#----------------------------------------------------------------------------------------------
 
 my @lines = () ;
 my %addressMap = () ;
