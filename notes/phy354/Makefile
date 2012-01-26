@@ -21,6 +21,7 @@ ORDERED += CMpp144-156.pdf
 ORDERED += 2011_354hw1.pdf
 ORDERED += 354hw1.pdf
 ORDERED += hw1p1.pdf
+ORDERED += 2011_354hw2.pdf
 ORDERED += 354hw2.pdf
 ORDERED += cm_hw2_q1.pdf
 ORDERED += 354hw3.pdf
