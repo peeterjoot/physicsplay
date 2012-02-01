@@ -5,8 +5,12 @@ ORDERED += CMpp20.1-.2.pdf
 ORDERED += CMpp21-27.pdf 
 ORDERED += CMpp27.1-.3.pdf
 ORDERED += CMpp28-57.pdf
-ORDERED += CMppC1-C5.pdf
-ORDERED += CMpp86.1-86.3.pdf
+ORDERED += CMppD1-86.3.pdf
+
+# from the 2011 course.  Looks like replaced by CMppD1-86.3.pdf above.
+#ORDERED += CMppC1-C5.pdf
+#ORDERED += CMpp86.1-86.3.pdf
+
 ORDERED += CMpp73-82.pdf
 ORDERED += CMpp157-169.pdf
 ORDERED += CMppA1-A8.pdf
