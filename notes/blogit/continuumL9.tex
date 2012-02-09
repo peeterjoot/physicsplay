@@ -1,7 +1,7 @@
 \input{../peeter_prologue_print.tex}
 %\input{../peeter_prologue_widescreen.tex}
 
-\chapter{PHY454H1S\\Continuum Mechanics.  Lecture 9: XXX.  Taught by Prof. K. Das.}
+\chapter{PHY454H1S\\Continuum Mechanics.  Lecture 9: Newtonian fluids.  Mass conservation.  Constituative relation.  Incompressible fluids.  Taught by Prof. K. Das.}
 \label{chap:continuumL9}
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot2/math2012/continuumL9.pdf}
@@ -10,6 +10,10 @@
 
 \beginArtWithToc
 %\beginArtNoToc
+
+\section{FIXME:}
+
+FIXME: Reading: \S XX from \cite{acheson1990elementary}?
 
 \section{Disclaimer.}
 
@@ -56,6 +60,8 @@ We can now split the components of the gradient of $u_i$ into symmetric and anti
 \end{aligned}
 \end{equation}
 
+\subsection{The antisymmetric term (name?)}
+
 With
 
 \begin{equation}\label{eqn:continuumL9:70}
@@ -65,18 +71,29 @@ With
 we introduce the dual vector 
 
 \begin{equation}\label{eqn:continuumL9:90}
-\BOmega = \Omega_k \Be_k = \inv{2} \omega_k = fixme
+\BOmega = \Omega_k \Be_k = \inv{2} \Bomega
 \end{equation}
 
 defined according to
 
 \begin{align}\label{eqn:continuumL9:110}
-\Omega_1 &= \omega_{32} = \inv{2} \omega_1 \\
-\Omega_2 &= \omega_{13} = \inv{2} \omega_2 \\
-\Omega_3 &= \omega_{21} = \inv{2} \omega_3 
+\Omega_1 &= \inv{2} \omega_{32} = \inv{2} \omega_1 \\
+\Omega_2 &= \inv{2} \omega_{13} = \inv{2} \omega_2 \\
+\Omega_3 &= \inv{2} \omega_{21} = \inv{2} \omega_3 
 \end{align}
 
-and write
+With 
+\begin{equation}\label{eqn:continuumL9:n}
+\omega_{ij}
+= \epsilon_{ijk} \partial_i u_j
+\end{equation}
+
+we can write
+\begin{equation}\label{eqn:continuumL9:590}
+\Omega_k = -\inv{2} \epsilon_{ijk} \partial_i u_j.
+\end{equation}
+
+In matrix form this becomes
 
 \begin{equation}\label{eqn:continuumL9:130}
 \omega_{ij} = 
@@ -84,20 +101,55 @@ and write
 0 & -\Omega_3 & \Omega_2 \\
 \Omega_3 & 0 & -\Omega_1  \\
 -\Omega_2 & \Omega_1 & 0
-\end{bmatrix}
+\end{bmatrix}.
 \end{equation}
 
-We can then write (for the special case $e_{ij} = 0$), we can write our displacement equation in vector form as 
+For the special case $e_{ij} = 0$, our displacement equation in vector form becomes
 
 \begin{equation}\label{eqn:continuumL9:150}
-d\Bx' = d\Bx + \BOmega \cross d\Bx \delta t
+d\Bx' = d\Bx + \BOmega \cross d\Bx \delta t.
 \end{equation}
+
+Let's do a quick verification that this is all kosher.
+
+\begin{align*}
+(\BOmega \cross d\Bx)_i
+&=
+\Omega_r dx_s \epsilon_{rsi} \\
+&=
+\left(-\inv{2} \epsilon_{abr} \partial_a u_b \right) dx_s \epsilon_{rsi} \\
+&=
+-\inv{2} \partial_a u_b dx_s \delta^{[ab]}_{si} \\
+&=
+-\inv{2} (
+\partial_s u_i
+-\partial_i u_s
+) dx_s  \\
+&=
+\inv{2} \left(
+\PD{x_i}{u_s}
+-\PD{x_s}{u_i}
+\right) dx_s  \\
+&=
+\inv{2} \left(
+\PD{x_i}{u_j}
+-\PD{x_j}{u_i}
+\right) dx_j  \\
+&=
+\omega_{ij} dx_j.
+\end{align*}
+
+All's good in the world of signs and indexes.
+
+\subsection{The symmetric term (strain tensor).}
 
 Now let's look at the symmetric term.  With the initial volume
 
 \begin{equation}\label{eqn:continuumL9:170}
-dV = dx_1 dx_2 dx_3
+dV = dx_1 dx_2 dx_3,
 \end{equation}
+
+and the final volume written assuming that we are working in our principle strain basis, we have (very much like the solids case)
 
 \begin{align*}
 dV' 
@@ -136,6 +188,8 @@ or
 \frac{\delta(dV)}{dV \delta t} = \spacegrad \cdot \Bu,
 \end{equation}
 
+We identify the divergence of the displacement as the relative change in volume per unit time.
+
 \section{Newtonian Fluids.}
 
 \begin{definition}
@@ -159,6 +213,8 @@ For comparison, in solids we had
 \begin{equation}\label{eqn:continuumL9:270}
 \sigma_{ij} = \lambda e_{kk} \delta_{ij} + 2 \mu e_{ij}
 \end{equation}
+
+While we are allowing for rotation in the fluids ($\omega_{ij}$) that we did not consider for solids, we now impose a requirement that the strain tensor trace is constant.  What is the physical justification for this?
 
 \subsection{Dimensions}
 
@@ -201,7 +257,7 @@ Velocity of fluid particle is $\Bu$
 
 we must have
 
-\begin{equation}\label{eqn:continuumL9:n}A
+\begin{equation}\label{eqn:continuumL9:n}
 \PD{t}{} \int \rho dV 
 =
 -\oint \rho \Bu \cdot d\Bs.
@@ -297,7 +353,5 @@ which then implies
 
 at all points in the fluid.
 
-%FIXME: Reading: \S XX from \cite{landau1960theory}.
 
-%\EndArticle
-\EndNoBibArticle
+\EndArticle
