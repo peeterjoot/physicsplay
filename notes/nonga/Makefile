@@ -20,6 +20,8 @@ cronology.tex : ../METADATA
 	../METADATA -miscbook > cronology.tex
 
 miscphysics.pdf :: $(BOOKDEPENDENCIES) $(LOCAL_FILES)
+	mkdir -p ./.revinfo/
+	~/bin/mkRevInfo > ./.revinfo/lastCommit.tex
 	../make_pdflatex main.tex
 	mv main.pdf miscphysics.pdf
 
