@@ -1,0 +1,42 @@
+#!/usr/bin/perl
+
+my $lastCommit ;
+my $commitDate ;
+
+open my $fh, "git log -1 |" or die ;
+while (<$fh>)
+{
+   chomp ;
+
+   if ( /commit/ )
+   {
+      $lastCommit = $_ ;
+   }
+   elsif ( s/^Date:\s*// )
+   {
+      # Date:   Sun Feb 12 13:38:15 2012 -0500
+
+      # strip timezone:
+      s/\s*-\d+// ;
+
+      # strip day of week:
+      s/\S+\s+// ;
+
+      # strip hour:min:sec
+      s/\d\d:\d\d:\d\d\s+// ;
+
+      # convert spaces to /'s
+      s, ,/,g ;
+
+      $commitDate = $_ ;
+      last ;
+   }
+}
+close $fh ;
+
+my $url = "https://github.com/peeterjoot/physicsplay" ;
+#$url = "http://goo.gl/j2GYL" ;
+print "Revision $url $lastCommit $commitDate\n" ;
+
+#print "c: $lastCommit\n" ;
+#print "d: $commitDate\n" ;
