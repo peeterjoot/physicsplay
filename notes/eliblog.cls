@@ -119,7 +119,7 @@ pdfauthor={Peeter Joot}
       \medskip
 }
       {\large\@author\ ---\ \@email\par}%
-         {\itshape\@date\@revisionInfo\par}%
+         {\itshape\@revisionInfo\@gitRevisionInfo\par}%
          \medskip\@useCCL
       \bigskip\hrule\vspace*{0.5pc}%
    \end{flushleft}%
@@ -159,7 +159,10 @@ pdfauthor={Peeter Joot}
 \setlength{\marginparsep}{5pt}
 
 \newcommand{\@revisionInfo}{}
-\newcommand{\revisionInfo}[1]{\renewcommand{\@revisionInfo}{\quad{#1}}}
+\newcommand{\revisionInfo}[1]{\renewcommand{\@revisionInfo}{@date\quad{#1}}}
+
+\newcommand{\@gitRevisionInfo}{}
+\newcommand{\gitRevisionInfo}[1]{\renewcommand{\@gitRevisionInfo}{\input{./.revinfo/lastCommit.tex} #1.tex}}
 
 \newcommand{\@useCCL}{}
 \newcommand{\useCCL}[0]{\renewcommand{\@useCCL}{

@@ -44,6 +44,8 @@ gaBasics.pdf : gaBasics.tex
 #	./wordToTex < gaBasics.txt > gaBasics.tex
 
 %.pdf : %.tex
+	mkdir -p ./.revinfo/
+	~/bin/mkRevInfo > ./.revinfo/lastCommit.tex
 	perl ../make_pdflatex $<
 
 clean :: mostlyclean localclean
