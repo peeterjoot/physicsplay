@@ -1,14 +1,24 @@
 #!/usr/bin/perl
 
+use strict ;
+use warnings ;
+use Getopt::Long ;
+
+my $book = 0 ;
 my $lastCommit ;
 my $commitDate ;
+
+GetOptions( 
+   'book!'      => \$book,
+   'help!'      => sub { die "usage: mkRevInfo [-book]\n" ; },
+) ;
 
 open my $fh, "git log -1 |" or die ;
 while (<$fh>)
 {
    chomp ;
 
-   if ( /commit/ )
+   if ( s/commit\s*// )
    {
       $lastCommit = $_ ;
    }
@@ -36,7 +46,20 @@ close $fh ;
 
 my $url = "https://github.com/peeterjoot/physicsplay" ;
 #$url = "http://goo.gl/j2GYL" ;
-print "Revision $url $lastCommit $commitDate\n" ;
 
-#print "c: $lastCommit\n" ;
-#print "d: $commitDate\n" ;
+if ( $book )
+{
+   print qq@
+Sources for this notes compilation can be found in the github repository
+
+\\href{$url}{$url}
+
+The last commit ($commitDate), associated with this pdf was
+
+$lastCommit
+@ ;
+}
+else
+{
+   print "Revision $url commit $lastCommit $commitDate\n" ;
+}

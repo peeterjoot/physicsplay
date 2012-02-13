@@ -26,10 +26,14 @@ cronology.tex : ../METADATA
 	../METADATA -phy356 > cronology.tex
 
 phy356.pdf :: $(PHY356) $(LOCAL_FILES)
+	mkdir -p ./.revinfo/
+	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
 	../make_pdflatex main.tex
 	mv main.pdf phy356.pdf
 
 desaiTypos.pdf :: desaiTypos.tex
+	mkdir -p ./.revinfo/
+	~/bin/mkRevInfo > ./.revinfo/lastCommit.tex
 	../make_pdflatex $<
 
 #t.pdf :: t.tex
@@ -41,4 +45,3 @@ desaiTypos.pdf :: desaiTypos.tex
 clean ::
 	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc $(LOCAL_FILES)
 
-phy356.pdf :: 

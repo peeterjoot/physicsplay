@@ -24,6 +24,8 @@ cronology.tex : ../METADATA
 	../METADATA -phy454 > cronology.tex
 
 phy454.pdf :: $(PHY454) $(LOCAL_FILES)
+	mkdir -p ./.revinfo/
+	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
 	../make_pdflatex main.tex
 	mv main.pdf phy454.pdf
 

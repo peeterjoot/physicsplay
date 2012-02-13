@@ -26,6 +26,8 @@ $(LOCAL_FILES) :
 	cp $(filter %$@, $(ORIG_FILES)) $@
 
 otherbook.pdf :: $(TEXFILES) $(LOCAL_FILES)
+	mkdir -p ./.revinfo/
+	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
 	../make_pdflatex main.tex
 	mv main.pdf otherbook.pdf
 
@@ -33,6 +35,8 @@ cronology.tex : ../METADATA
 	../METADATA -otherbook > cronology.tex
 
 #%.pdf : %.tex
+#	mkdir -p ./.revinfo/
+#	~/bin/mkRevInfo > ./.revinfo/lastCommit.tex
 #	../make_pdflatex $<
 
 clean ::
