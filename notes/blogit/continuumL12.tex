@@ -1,7 +1,7 @@
 \input{../peeter_prologue_print.tex}
 %\input{../peeter_prologue_widescreen.tex}
 
-\chapter{PHY454H1S\\Continuum Mechanics.  Lecture 12: XXX.  Taught by Prof. K. Das.}
+\chapter{PHY454H1S\\Continuum Mechanics.  Lecture 12: Flow in a pipe.  Taught by Prof. K. Das.}
 \label{chap:continuumL12}
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot2/math2012/continuumL12.pdf}
@@ -15,11 +15,295 @@
 
 Peeter's lecture notes from class.  May not be entirely coherent.
 
-\section{Review.}
+\section{Review.  Steady rectilinear flow.}
 
-\section{Stuff.}
+Steady:
+
+\begin{equation}\label{eqn:continuumL12:10}
+\PD{t}{} = 0
+\end{equation}
+
+Rectilinear is a unidirectional flow such as
+
+\begin{equation}\label{eqn:continuumL12:30}
+\Bu = \xcap u( x, y, z ),
+\end{equation}
+
+\begin{enumerate}
+\item 
+From continuity we have $\spacegrad \cdot \Bu = 0$, so for this case we have
+
+\begin{equation*}
+\PD{x}{u} = 0
+\end{equation*}
+
+FIXME: recall that we related $d\rho/dt = 0$ and $\spacegrad \cdot \Bu = 0$
+
+or 
+
+\begin{equation*}
+u = u(y, z)
+\end{equation*}
+
+\item Nonlinear term is zero.  $(\Bu \cdot \spacegrad) \Bu = 0$
+\item $p = p(x)$.  $\frac{d^2 p}{dx^2} = 0 \implies \frac{dp}{dx} = -G$
+
+\item $\mu \left( \PDSq{y}{u} + \PDSq{z}{u} \right) = G$
+
+\end{enumerate}
+
+\section{Some handwaving examples.}
+
+FIXME: F1, F2, F3
+
+(simple shear flow, channel flow, combination of the two: flow over plate).
+
+Example 2.  Fluid in a container.  If the surface tension is altered on one side, we induce a flow on the surface, leading to a circulation flow.  This can be done for example, by introducing a heat source or addition of surfactant.
+
+This is illustrated in figure
+
+FIXME: F4.
+
+This sort of flow (hard to analyize, first done by Steve Davis (1980's).
+
+The point here is that we can use some level of intuition to guide our attempts at solution.
+
+\section{Flow down a pipe.}
+
+We use a cylindrical coordinate $(r, \theta, z)$ convention for this problem as in
+
+FIXME: F5
+
+\begin{equation}\label{eqn:continuumL12:50}
+\Bu = \zcap w(r)
+\end{equation}
+
+\begin{equation}\label{eqn:continuumL12:70}
+\inv{r} \frac{d}{dr} \left( r \frac{dw}{dr} \right) = - \frac{G}{\mu}
+\end{equation}
+
+\begin{equation}\label{eqn:continuumL12:90}
+r \frac{dw}{dr} = - \frac{G r^2}{2\mu} + A
+\end{equation}
+
+\begin{equation}\label{eqn:continuumL12:110}
+w = -\frac{G r^2}{4 \mu} + A \ln(r) + B
+\end{equation}
+
+Requiring finite solutions for $r = 0$ means that we must have $A = 0$.  Also $w(a) = 0$, we have $B = G a^2/4 \mu$ so we must have
+
+\begin{equation}\label{eqn:continuumL12:130}
+w(r) = \frac{G}{4 \mu}( a^2 - r^2 )
+\end{equation}
+
+\section{Example: Gravity driven flow of a liquid film}
+
+Coordinates as in
+
+FIXME: F6
+
+\begin{equation}\label{eqn:continuumL12:150}
+\Bu = \xcap u(y)
+\end{equation}
+
+Boundary conditions
+
+\begin{enumerate}
+\item $u(y = 0) = 0$
+\item Tangential stress at the air-liquid interface $y = h$ is equal.
+
+\begin{equation}\label{eqn:continuumL12:170}
+\Btau \cdot (\Bsigma_l \cdot \ncap) = \Btau \cdot (\Bsigma_a \cdot \ncap),
+\end{equation}
+\end{enumerate}
+
+We write 
+
+\begin{align}\label{eqn:continuumL12:190}
+\Btau &= 
+\begin{bmatrix}
+1 \\
+0 \\
+0
+\end{bmatrix} \\
+\ncap &= 
+\begin{bmatrix}
+0 \\
+1 \\
+0
+\end{bmatrix} \\
+\end{align}
+
+\begin{align}\label{eqn:continuumL12:210}
+\sigma_{ij}^l 
+&= - p \delta_{ij} + \mu^l \left( 
+\PD{x_j}{u_i} +
+\PD{x_i}{u_j}
+\right) \\
+\sigma_{ij}^a 
+&= - p \delta_{ij} + \mu^a \left( 
+\PD{x_j}{u_i} +
+\PD{x_i}{u_j}
+\right) \\
+\end{align}
+
+We expect that the flow of liquid will induce a flow of air at the interface, but may be able to make a one-sided approximation.  Let's see how far we get before we have to introduce any approximations and compute the traction vector for the liquid
+
+\begin{align*}
+\Bsigma^l \cdot \ncap = 
+\begin{bmatrix}
+-p & \mu^l \PDi{y}{u} & 0 \\
+\mu^l \PDi{y}{u} & -p & 0 \\
+0 & 0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+0 \\
+1 \\
+0
+\end{bmatrix} \\
+&=
+\begin{bmatrix}
+\mu^l \PDi{y}{u} \\
+-p \\
+0
+\end{bmatrix}
+\end{align*}
+
+So
+
+\begin{equation}\label{eqn:continuumL12:230}
+\Btau \cdot (\Bsigma^l \ncap)
+=
+\begin{bmatrix}
+1 & 0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+\mu^l \PDi{y}{u} \\
+-p \\
+0
+\end{bmatrix}
+=
+\mu^l \PD{y}{u}
+\end{equation}
+
+Our boundary value condition is therefore
+
+\begin{equation}\label{eqn:continuumL12:250}
+\evalbar{\mu^l \PD{y}{u^l}}{y = h} =
+\evalbar{\mu^a \PD{y}{u^a}}{y = h}
+\end{equation}
+
+When can we decouple this, treating only the liquid?  Observe that we have
+
+\begin{equation}\label{eqn:continuumL12:270}
+\evalbar{\PD{y}{u^l}}{y = h} =
+\evalbar{\frac{\mu^a}{\mu^l} \PD{y}{u^a}}{y = h}
+\end{equation}
+
+so if
+
+\begin{equation}\label{eqn:continuumL12:290}
+\frac{\mu_a}{\mu_l} \ll 1
+\end{equation}
+
+we can treat only the liquid portion of the problem, with a boundary value condition
+
+\begin{equation}\label{eqn:continuumL12:310}
+\evalbar{\PD{y}{u^l}}{y = h} = 0.
+\end{equation}
+
+Let's look at the component of the traction vector in the direction of the normal (liquid pressure acting on the air)
+
+\begin{equation}\label{eqn:continuumL12:330}
+\ncap (\Bsigma^l \ncap) = \ncap (\Bsigma^a \ncap) 
+\end{equation}
+
+or
+
+\begin{equation}\label{eqn:continuumL12:350}
+\begin{bmatrix}
+0 & 1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+\mu^l \PD{y}{u} \\
+-p^l \\
+0
+\end{bmatrix}
+= -\evalbar{p^l}{y = h} = -\evalbar{p^a}{y = h}
+\end{equation}
+
+i.e. We have pressure matching at the interface.
+
+Our body force is
+
+\begin{equation}\label{eqn:continuumL12:370}
+\Bf = 
+\begin{bmatrix}
+g \sin\alpha \\
+-g \cos\alpha \\
+0
+\end{bmatrix}
+\end{equation}
+
+Going back to the NS equation, our only surviving parts are
+
+\begin{align}\label{eqn:continuumL12:390}
+0 &= -\PD{x}{p} + \mu \PDSq{y}{u} + g \sin\alpha \\
+0 &= -\PD{y}{p} - g \cos\alpha \\
+0 &= -\PD{z}{p} 
+\end{align}
+
+The last gives us $p \ne p(z)$.  Integrating the second we have
+
+\begin{equation}\label{eqn:continuumL12:410}
+p = \rho g y \cos\alpha + p_1
+\end{equation}
+
+Since $p = p_{\text{atm}}$ at $y = h$, we have
+
+\begin{equation}\label{eqn:continuumL12:430}
+p_{\text{atm}} = \rho g h \cos\alpha + p_1
+\end{equation}
+
+Our first NS equation becomes
+
+\begin{equation}\label{eqn:continuumL12:450}
+0 = \mu \PDSq{y}{u} + g \sin\alpha,
+\end{equation}
+
+or
+\begin{equation}\label{eqn:continuumL12:470}
+\PDSq{y}{u} = \frac{g}{\mu} \sin\alpha
+\end{equation}
+
+Solving we have
+
+\begin{equation}\label{eqn:continuumL12:490}
+u = - \rho g \frac{\sin\alpha}{2 \mu} y^2 + A y + B
+\end{equation}
+
+With
+
+\begin{align}\label{eqn:continuumL12:510}
+u(0) &= 0 \\
+\evalbar{\PD{y}{u}}{y = h} &= 0
+\end{align}
+
+\begin{equation}\label{eqn:classicalMechanicsPs2:530}
+u = \rho g \frac{\sin\alpha}{2 \mu} \left( 2 h y - y^2 \right) 
+\end{equation}
+
+FIXME: F7.
+
+It's important to note that in these problems we have to derive our boundary value conditions!  They are not given.
+
+In this discussion, the height $h$ was assumed to be constant, with the tangential direction constant and parallel to the surface that the liquid is flowing on.  It's claimed in class that this is actually a consequence of surface tension only!  That's not at all intuitive, but will be covered when we learn about ``stability conditions''.
+
+\section{Study note.}
+
+Memorizing the NS equation required for midterm, but more complex stuff (like cylindrical forms of the strain tensor if required) will be given.
 
 %FIXME: Reading: \S XX from \cite{acheson1990elementary}
 
-\EndArticle
-%\EndNoBibArticle
+%\EndArticle
+\EndNoBibArticle
