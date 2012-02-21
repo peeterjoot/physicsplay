@@ -122,9 +122,10 @@ To verify the signs, it's helpful to refer to the diagram (\ref{fig:classicalMec
    \caption{Direction vectors for interaction with mass distribution.}\label{fig:classicalMechanicsPs2:somePotentialsFig2}
 \end{figure}
 
+\subsubsection{Niave approach, with bogus result.}
 Our mass density as a function of $Z$ is
 
-\begin{equation}\label{eqn:classicalMechanicsPs2:n}
+\begin{equation}\label{eqn:classicalMechanicsPs2:170}
 \rho(r', \theta', z') = \lambda \delta(z')
 \end{equation}
 
@@ -152,7 +153,7 @@ for
 
 This has the same functional form $\phi = m g z$ as \ref{eqn:classicalMechanicsPs2:70}, except with
 
-\begin{equation}\label{eqn:classicalMechanicsPs2:n}
+\begin{equation}\label{eqn:classicalMechanicsPs2:190}
 g = 2 \pi G \sigma \int_0^{\pi/2} d\alpha \frac{\sin \alpha}{\cos^2 \alpha}.
 \end{equation}
 
@@ -160,22 +161,26 @@ There's one significant and irritating difference.  The integral above doesn't h
 
 What went wrong?  Trouble can be seen right from the beginning.  Consider the differential form above for $u \gg 1$
 
-\begin{equation}\label{eqn:classicalMechanicsPs2:n}
+\begin{equation}\label{eqn:classicalMechanicsPs2:210}
 \frac{u du}{\sqrt{1 + u^2}} \approx du.
 \end{equation}
 
-This we are integrating on $u \in [0, \infty]$, so long before we make the trig substitutions we are in trouble.  My guess is that we have to tie the limits of the width of the plane and its diameter, decreasing the thickness in proportion to the increase in the radius.  Let's try that.
+This we are integrating on $u \in [0, \infty]$, so long before we make the trig substitutions we are in trouble.  
+
+\subsubsection{As the limit of a finite volume.}
+
+My guess is that we have to tie the limits of the width of the plane and its diameter, decreasing the thickness in proportion to the increase in the radius.  Let's try that.
 
 With a finite cylinder of height $\epsilon$, radius $R$, with a measurement of the potential directly above the cylinder at height $z$, we have
 
-\begin{equation}\label{eqn:classicalMechanicsPs2:n}
+\begin{equation}\label{eqn:classicalMechanicsPs2:230}
 \phi(z) 
 = \rho G \int_0^{2\pi} d\theta' \int_0^\epsilon dz' \int_0^R r' dr' \inv{\sqrt{(z-z')^2 + {r'}^2}}.
 \end{equation}
 
 Performing the $\theta'$ integration and substituting
 
-\begin{equation}\label{eqn:classicalMechanicsPs2:n}
+\begin{equation}\label{eqn:classicalMechanicsPs2:250}
 r' = (z - z') \tan\alpha,
 \end{equation}
 
@@ -211,7 +216,7 @@ we have
 
 For \href{https://raw.github.com/peeterjoot/physicsplay/master/notes/phy454/continuumProblemSet1Q3.cdf}{this integral we find}
 
-\begin{equation}\label{eqn:classicalMechanicsPs2:n}
+\begin{equation}\label{eqn:classicalMechanicsPs2:270}
 \int dx \sqrt{1 + \inv{x^2}} 
 %=
 %\frac{\sqrt{1+\frac{1}{x^2}} x }{\sqrt{1+x^2}}
@@ -224,7 +229,7 @@ For \href{https://raw.github.com/peeterjoot/physicsplay/master/notes/phy454/cont
 Taking limits $\epsilon \rightarrow 0$ and $R \rightarrow \infty$ the terms
 $\sqrt{1 + x^2}$ at either $x = z/R$ or $x = (z-\epsilon)/R$ tend to 1.  This leaves us only with the $ln(x)$ contribution, so
 
-\begin{equation}\label{eqn:classicalMechanicsPs2:n}
+\begin{equation}\label{eqn:classicalMechanicsPs2:290}
 \phi(z) =
 2 \pi \rho G 
 \left( -\epsilon + R \left( 
@@ -233,87 +238,33 @@ $\sqrt{1 + x^2}$ at either $x = z/R$ or $x = (z-\epsilon)/R$ tend to 1.  This le
 
 Now, we have the form of a differential above
 
-\begin{equation}\label{eqn:classicalMechanicsPs2:n}
-\frac{df}{dx} = \frac{f(x - \epsilon) - f(x)}{-\epsilon}
+\begin{equation}\label{eqn:classicalMechanicsPs2:310}
+\frac{df}{dx} = \frac{f(x - \epsilon) - f(x)}{-\epsilon} = \inv{\epsilon) \left( f(x) - f(x - \epsilon) \right).
 \end{equation}
 
-so
+Since $\rho \Delta A \epsilon = \sigma A$, we'd then have
 
-\begin{equation}\label{eqn:classicalMechanicsPs2:n}
+\begin{align*}
+\phi(z) 
+=
+2 \pi (\rho \epsilon) G 
+\left( -1 + R \frac{d}{dz} ln(z/R) \right)
+=
+2 \pi \sigma G 
+\left( -1 + \frac{d}{dz/R} ln(z/R) \right)
+=
+2 \pi \sigma G 
+\left( -1 + \frac{R}{z} \right)
+\end{align*}
+
+There appears to have been a dropped factor of $R$ here, and somehow I have a $1/z$ instead of $z$.  \underline{Suppose} the $R$ factor was removed and the $z$ was inverted.  Then we \underline{would} have 
+
+\begin{equation}\label{eqn:classicalMechanicsPs2:330}
 \phi(z) =
-2 \pi \rho G 
-\left( -\epsilon + R \epsilon \frac{R}{z} \right)
-\end{equation}
-
-If it were not for the inverted $R/z$ here, then everything would work out.  We want a $z/R$ so that the $R$ factors cancel and we would be left with
-
-\begin{equation}\label{eqn:classicalMechanicsPs2:n}
-\phi(z) =
-2 \pi (\rho \epsilon) G (z - 1)
-\end{equation}
-
-Since $\rho \Delta A \epsilon = \lambda A$, we'd then have
-
-\begin{equation}\label{eqn:classicalMechanicsPs2:n}
-\phi(z) =
-2 \pi \lambda G (z - 1),
+2 \pi \sigma G (z - 1),
 \end{equation}
 
 differing only be a constant from the result obtained by looking at the forces (which is allowable).  I'm presuming there's an error above somewhere.  Where?
-
-%%%%Now make a 
-%%%%
-%%%%\begin{equation}\label{eqn:classicalMechanicsPs2:n}
-%%%%u = \frac{z' - z}{R}
-%%%%\end{equation}
-%%%%
-%%%%substitution for
-%%%%
-%%%%\begin{equation}\label{eqn:classicalMechanicsPs2:n}
-%%%%\phi(z) =
-%%%%2 \pi \rho G 
-%%%%\left( -\epsilon +
-%%%%R \int_{-z/R}^{(\epsilon - z)/R}
-%%%%du 
-%%%%\sqrt{1 + \inv{u^2}} \right).
-%%%%\end{equation}
-%%%%
-%%%%This can be evaluated obtaining for finite $\epsilon$ and $R$
-%%%%
-%%%%\begin{equation}\label{eqn:classicalMechanicsPs2:n}
-%%%%\begin{aligned}
-%%%%\phi(z) &=
-%%%%2 \pi \rho G 
-%%%%\Biggl(
-%%%%-\epsilon 
-%%%%+R \Biggl( \\
-%%%%&\frac{\sqrt{1+\frac{R^2}{z^2}} z \left(\sqrt{1+\frac{z^2}{R^2}}+\ln\left(-\frac{z}{R}\right)-\ln\left(1+\sqrt{1+\frac{z^2}{R^2}}\right)\right)}{R \sqrt{1+\frac{z^2}{R^2}}} \\
-%%%%&+
-%%%%\frac{(-z+\epsilon ) \sqrt{1+\frac{R^2}{(-z+\epsilon )^2}} \left(\sqrt{1+\frac{(-z+\epsilon )^2}{R^2}}+\ln\left(\frac{-z+\epsilon }{R}\right)-\ln\left(1+\sqrt{1+\frac{(-z+\epsilon )^2}{R^2}}\right)\right)}{R \sqrt{1+\frac{(-z+\epsilon )^2}{R^2}}}
-%%%%\Biggr)
-%%%%\Biggr)
-%%%%\end{aligned}
-%%%%\end{equation}
-%%%%
-%%%%Taking limits with $\epsilon \rightarrow 0$, and $R \rightarrow \infty$ we have
-%%%%
-%%%%\begin{equation}\label{eqn:classicalMechanicsPs2:n}
-%%%%\phi(z) =
-%%%%2 \pi \rho G 
-%%%%\left(
-%%%%R \left(
-%%%%1
-%%%%+\ln\left(-\frac{z}{R}\right)-\ln(2)
-%%%%\right)
-%%%%+
-%%%%- R \left(
-%%%%1
-%%%%+\ln\left(\frac{-z}{R}\right)-\ln(2) 
-%%%%\right)
-%%%%\right),
-%%%%\end{equation}
-%%%%
-%%%%I think my evaluation of the limits may have been too cavalier, because we have an $R - R$ term with $R \rightarrow \infty$.  The logs in the interior factors are also troublesome with negative arguments.
 
 %\EndArticle
 \EndNoBibArticle
