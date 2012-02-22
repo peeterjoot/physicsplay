@@ -214,7 +214,8 @@ we have
 \end{align*}
 %% MATHEMATICA: FullSimplify[1/Cos[ArcTan[u]]] = Sqrt[1 + u^2]
 
-For \href{https://raw.github.com/peeterjoot/physicsplay/master/notes/phy454/continuumProblemSet1Q3.cdf}{this integral we find}
+For this integral we find
+%\href{https://raw.github.com/peeterjoot/physicsplay/master/notes/phy354/.cdf}{this integral we find}
 
 \begin{equation}\label{eqn:classicalMechanicsPs2:270}
 \int dx \sqrt{1 + \inv{x^2}} 
@@ -263,20 +264,136 @@ We also want to express the charge density $\rho$ in terms of surface charge den
 \left( -1 + R \frac{d}{dz} \ln(z/R) \right) \\
 &=
 2 \pi \sigma G 
-\left( -1 + \frac{d}{dz/R} \ln(z/R) \right) \\
-&=
-2 \pi \sigma G 
-\left( -1 + \frac{R}{z} \right)
+\left( -1 + \frac{d}{dz/R} \ln(z/R) \right),
 \end{align*}
 
-There appears to have been a dropped factor of $R$ here, and somehow I have a $1/z$ instead of $z$.  Since $-\ln(x) = \ln(1/x)$, both of these suggest a sign error somewhere.  \underline{Suppose} the $R$ factor was removed and the $z$ was inverted.  Then we \underline{would} have 
-
-\begin{equation}\label{eqn:classicalMechanicsPs2:330}
-\phi(z) =
-2 \pi \sigma G (z - 1),
+or
+\begin{equation}\label{eqn:classicalMechanicsPs2:350}
+\phi(z)
+=
+2 \pi \sigma G 
+\left( -1 + \frac{R}{z} \right)
 \end{equation}
 
-differing only be a constant from the result obtained by looking at the forces (which is allowable).  There's got to be an error above somewhere, but where?
+%There appears to have been a dropped factor of $R$ here, and somehow I have a $1/z$ instead of $z$.  Since $-\ln(x) = \ln(1/x)$, both of these suggest a sign error somewhere.  \underline{Suppose} the $R$ factor was removed and the $z$ was inverted.  Then we \underline{would} have 
+%
+%\begin{equation}\label{eqn:classicalMechanicsPs2:330}
+%\phi(z) =
+%2 \pi \sigma G (z - 1),
+%\end{equation}
+%
+%differing only be a constant from the result obtained by looking at the forces (which is allowable).  There's got to be an error above somewhere, but where?
+
+Looking at this result, we have the same divergent integration result as in the first attempt, and the reason for this is clear after some reflection.  The limiting process for the radius and the thickness of the slice were allowed to complete independently.  Before taking limits we had
+
+\begin{equation}\label{eqn:classicalMechanicsPs2:370}
+\phi(z) = 2 \pi \sigma G 
+\left( -1
+\inv{\epsilon} \int_0^\epsilon dz' 
+\sqrt{1 + \left(\frac{R}{z-z'}\right)^2} \right).
+\end{equation}
+
+Consider a similar, but slightly more general case, where we evaluate the limit
+
+\begin{equation}\label{eqn:classicalMechanicsPs2:390}
+L = \lim_{\epsilon \rightarrow 0} \inv{\epsilon} \int_a^{a + \epsilon} f(x) dx,
+\end{equation}
+
+where $F'(x) = f(x)$, so that
+
+\begin{align*}
+L &= 
+\lim_{\epsilon \rightarrow 0} \frac{ F(a + \epsilon) - F(a)}{\epsilon} \\
+&= F'(a) \\
+&= f(a).
+\end{align*}
+
+So even without evaluating the integral we expect that we'll have
+
+\begin{align*}
+\phi(z) &= 
+2 \pi \sigma G 
+\left( -1 + \evalbar{
+\sqrt{1 + \left(\frac{R}{z-z'}\right)^2} }{z' = 0} \right) \\
+&\rightarrow 
+2 \pi \sigma G 
+\left( -1 + \frac{R}{z} \right).
+\end{align*}
+
+This matches what was obtained in \ref{eqn:classicalMechanicsPs2:350} by brute forcing the integral with Mathematica, and then evaluating the limit the hard way.  Darn.
+
+\subsubsection{As the limit of a finite volume.  Take II.}
+
+Let's try once more.  We'll consider a homogeneous cylindrical volume of radius $R$, thickness $\epsilon$ with total mass
+
+\begin{equation}\label{eqn:classicalMechanicsPs2:n}
+M = \rho \pi R^2 \epsilon = \sigma \pi R^2,
+\end{equation}
+
+so that the area density is 
+
+\begin{equation}\label{eqn:classicalMechanicsPs2:n}
+\sigma = \rho \epsilon.
+\end{equation}
+
+Now we'll reduce the thickness of the volume, keeping the total mass fixed, so that
+
+\begin{equation}\label{eqn:classicalMechanicsPs2:n}
+\pi R^2 \epsilon = \text{constant} = \pi c^2,
+\end{equation}
+
+or
+
+\begin{equation}\label{eqn:classicalMechanicsPs2:n}
+R = \frac{c}{\sqrt{\epsilon}}.
+\end{equation}
+
+We wish to evaluate
+
+\begin{equation}\label{eqn:classicalMechanicsPs2:n}
+\phi(z) 
+= 
+2 \pi \sigma G 
+\inv{\epsilon} 
+\int_0^\epsilon dz' \int_0^{c/\sqrt{\epsilon}} r' dr' \inv{\sqrt{(z-z')^2 + {r'}^2}}.
+\end{equation}
+
+% cancelled save with this calculation by accident... damn!
+%\href{https://raw.github.com/peeterjoot/physicsplay/master/notes/phy354/problemSetIIproblem4IntegralsEvaluatingInfinitePlanePotentialTakeII.cdf}{
+Performing the integrals, (first $r'$, then $z'$) we find
+
+\begin{equation}\label{eqn:classicalMechanicsPs2:n}
+\begin{aligned}
+\phi(z) = 2 \pi \sigma G \inv{2 \epsilon^2}
+\Biggl(
+&z \left(-2 \epsilon ^2+\sqrt{\epsilon  \left(c^2+z^2 \epsilon \right)}-\sqrt{\epsilon  \left(c^2+(z-\epsilon )^2 \epsilon \right)}\right) \\
+&+\epsilon  \left(\epsilon ^2+\sqrt{\epsilon  \left(c^2+(z-\epsilon )^2 \epsilon \right)}\right) \\
+&+c^2 \left(-\ln \left(-z \epsilon +\sqrt{\epsilon  \left(c^2+z^2 \epsilon \right)}\right)+\ln \left(-(z - \epsilon) \epsilon +\sqrt{\epsilon  \left(c^2+(z-\epsilon )^2 \epsilon \right)}\right)\right)
+\Biggr)
+\end{aligned}
+\end{equation}
+
+The $\epsilon^3/\epsilon^2$ term is clearly killed in the limit, and we have a $-z$ contribution from the first term.  For $\epsilon \ne 0$ the difference of logarithms above can be written as
+
+\begin{equation}\label{eqn:classicalMechanicsPs2:n}
+\frac{-z+\epsilon +\sqrt{\frac{c^2+(z-\epsilon )^2 \epsilon }{\epsilon }}}{-z+\sqrt{\frac{c^2+z^2 \epsilon }{\epsilon }}}
+\end{equation}
+
+Suppose we could also validly argue that this tends to $\ln(1) = 0$, and the difference of square roots could also be cancelled.  Then we would be left with just
+
+\begin{equation}\label{eqn:classicalMechanicsPs2:n}
+\phi(z) = 2 \pi \sigma G \left(-z + \inv{2\epsilon} \sqrt{\epsilon(c^2 + (z - \epilson)^2\epsilon} \right)
+\end{equation}
+
+If we also demand that $z^2 \epsilon \gg c^2$, then we have a $z/2$ contribution from the remaining square root and are left with
+
+\begin{equation}\label{eqn:classicalMechanicsPs2:n}
+\phi(z) = 2 \pi \sigma G (-z/2).
+\end{equation}
+
+This differs from the expected result by a factor of $-2$, and we've had to do some very fishy root taking to even get that far.  Employing l'H\hat{o}pital's rule (or letting Mathematica attempt to evaluate the limit), we get infinities for the difference of logarithm term.
+
+So, with a lot of cheating we get a result that's similar to the expected, but not actually a match, and even to get that we had to take the limits in an invalid way.  It looks like it's back to the drawing board, but I'm not sure how to approach it.
 
 %\EndArticle
 \EndNoBibArticle
