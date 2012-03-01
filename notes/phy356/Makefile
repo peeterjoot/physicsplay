@@ -12,7 +12,7 @@ LOCAL_FILES := $(notdir $(ORIG_FILES))
 
 STANDALONE += desaiTypos.tex
 
-PHY356 := $(filter-out $(STANDALONE), $(TEXFILES))
+PHY356 := $(filter-out $(STANDALONE), $(BOOKDEPENDENCIES))
 
 all :: phy356.pdf desaiTypos.pdf
 #all :: t.pdf

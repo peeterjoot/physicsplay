@@ -1,3 +1,13 @@
+include make.dep
+
+ORIG_FILES += ../myrefs.bib
+ORIG_FILES += ../abbrvurl.bst
+ORIG_FILES += ../alphaurl.bst
+ORIG_FILES += ../plainurl.bst
+ORIG_FILES += ../unsrturl.bst
+
+LOCAL_FILES := $(notdir $(ORIG_FILES))
+
 ORDERED += CMpp1-13.pdf
 #ORDERED += CMpp13.1-27.pdf
 ORDERED += CMpp13.1-20.pdf 
@@ -43,6 +53,26 @@ ORIGIN := http://www.physics.utoronto.ca/~poppitz/epoppitz/PHY354_files
 
 #SOURCES := $(filter-out $(GENERATED),$(ORDERED))
 #SOURCES := $(ORDERED)
+
+all :: phy354.pdf
+all :: poppitz354.pdf
+
+local : $(LOCAL_FILES) 
+
+$(LOCAL_FILES) :
+	cp $(filter %$@, $(ORIG_FILES)) $@
+
+cronology.tex : ../METADATA
+	../METADATA -phy354 > cronology.tex
+
+phy354.pdf :: $(BOOKDEPENDENCIES) $(LOCAL_FILES)
+	mkdir -p ./.revinfo/
+	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
+	../make_pdflatex main.tex
+	mv main.pdf phy354.pdf
+
+clean ::
+	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc $(LOCAL_FILES)
 
 poppitz354.pdf : $(ORDERED)
 	pdftk $(ORDERED) cat output $@

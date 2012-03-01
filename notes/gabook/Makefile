@@ -38,7 +38,7 @@ LOCAL_FILES := $(notdir $(ORIG_FILES))
 $(LOCAL_FILES) : 
 	cp $(filter %$@, $(ORIG_FILES)) $@
 
-gabook.pdf :: $(TEXFILES) $(LOCAL_FILES)
+gabook.pdf :: $(BOOKDEPENDENCIES) $(LOCAL_FILES)
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
 	../make_pdflatex main.tex

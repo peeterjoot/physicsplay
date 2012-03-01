@@ -25,7 +25,7 @@ local : $(LOCAL_FILES)
 $(LOCAL_FILES) : 
 	cp $(filter %$@, $(ORIG_FILES)) $@
 
-otherbook.pdf :: $(TEXFILES) $(LOCAL_FILES)
+otherbook.pdf :: $(BOOKDEPENDENCIES) $(LOCAL_FILES)
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
 	../make_pdflatex main.tex

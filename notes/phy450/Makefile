@@ -18,7 +18,7 @@ $(LOCAL_FILES) :
 cronology.tex : ../METADATA
 	../METADATA -phy450 > cronology.tex
 
-phy450.pdf :: $(TEXFILES) $(LOCAL_FILES)
+phy450.pdf :: $(BOOKDEPENDENCIES) $(LOCAL_FILES)
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
 	../make_pdflatex main.tex
