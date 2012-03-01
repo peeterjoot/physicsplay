@@ -71,8 +71,9 @@ phy354.pdf :: $(BOOKDEPENDENCIES) $(LOCAL_FILES)
 	../make_pdflatex main.tex
 	mv main.pdf phy354.pdf
 
-clean ::
-	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc $(LOCAL_FILES)
+# FIXME: don't want pdf's in here!
+#clean ::
+#	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc $(LOCAL_FILES)
 
 poppitz354.pdf : $(ORDERED)
 	pdftk $(ORDERED) cat output $@
