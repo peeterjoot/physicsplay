@@ -25,8 +25,8 @@ ORIG_FILES += ../gabook/parallelogramArea.png
 #ORIG_FILES += ../phy454/continuumL2fig5.png
 #ORIG_FILES += ../phy454/continuumProblemSet1Q2fig1.png
 #ORIG_FILES += ../phy454/twoLayerInclinedFlowFig1.png
-ORIG_FILES += ../phy454/continuumL13Fig14.png
-ORIG_FILES += ../phy454/continuumL13Fig13.png
+#ORIG_FILES += ../phy454/continuumL13Fig14.png
+#ORIG_FILES += ../phy454/continuumL13Fig13.png
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
