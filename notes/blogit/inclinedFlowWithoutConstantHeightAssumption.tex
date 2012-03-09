@@ -37,7 +37,7 @@ We'll use the same coordinates as before, with the directions given as in figure
 
 For viscous incompressible flow down the plane our equations of motion are
 
-\begin{align}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:n}
+\begin{align}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:20}
 \rho \PD{t}{u} + \rho (u \partial_x + v \partial_y) u &= -\partial_x p + \mu \left(\partial_{xx} + \partial_{yy}\right) u + \rho g \sin\alpha \\
 \rho \PD{t}{v} + \rho (u \partial_x + v \partial_y) v &= -\partial_y p + \mu \left(\partial_{xx} + \partial_{yy}\right) v - \rho g \cos\alpha \\
 0 &= -\partial_z p \\
@@ -46,7 +46,7 @@ For viscous incompressible flow down the plane our equations of motion are
 
 Now, can we kill the time dependent term?  Even allowing for $u$ to vary with $x$ and introducing a non-horizontal flow component, I think that we can.  If the flow at $x = 0$ is constant, not varying at all with time, I think it makes sense that we will have no time dependence in the flow for $x \ne 0$.  So, I believe that our starting point is as above, but with the time derivatives killed off.  That is
 
-\begin{align}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:n}
+\begin{align}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:40}
 \rho (u \partial_x + v \partial_y) u &= -\partial_x p + \mu \left(\partial_{xx} + \partial_{yy}\right) u + \rho g \sin\alpha \\
 \rho (u \partial_x + v \partial_y) v &= -\partial_y p + \mu \left(\partial_{xx} + \partial_{yy}\right) v - \rho g \cos\alpha \\
 0 &= -\partial_z p \\
@@ -59,13 +59,13 @@ These don't look particularily easy to solve, and we haven't even set up the bou
 
 We'll have a boundary constraint on the pressure at the interface
 
-\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:n}
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:60}
 p(h(x)) = p_A
 \end{equation}
 
 and the no-slip condition for the velocity components at the base of the slope
 
-\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:n}
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:80}
 u(x, 0) = v(x, 0) = 0
 \end{equation}
 
@@ -79,42 +79,176 @@ We should also have a zero tangential component to the traction vector at the in
 
 A position vector on the surface has the value
 
-\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:n}
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:100}
 \Br = x \xcap + h \ycap
 \end{equation}
 
 so that a differential element on the surface, tangential to the surface is proportional to
 
-\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:n}
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:120}
 d\Br = \left( \xcap + \ddx{h} \ycap \right) dx
 \end{equation}
 
 so our unit tangent vector in the direction depicted in the figure is
 
-\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:n}
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:140}
 \taucap = \inv{\sqrt{1 + (h')^2}} \left( 1, h' \right).
 \end{equation}
 
-The outwards facing normal has one of the two values
+The outwards facing normal has a value, up to a factor of plus or minus one, of
 
-\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:n}
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:160}
 \ncap = 
-\pm \inv{\sqrt{1 + (h')^2}} \left( h', -1 \right).
+\inv{\sqrt{1 + (h')^2}} \left( h', -1 \right).
 \end{equation}
 
 We can fix the orientation by considering the unit bivector
 
 \begin{align*}
-\taucap \wedge \ncap = 
-\pm \inv{1 + (h')^2} 
+\taucap \wedge \ncap &= 
+\inv{1 + (h')^2} 
 \left( 1, h' \right) 
 \wedge
-\left( h', -1 \right) 
-=
-\pm 
+\left( h', -1 \right) \\
+&=
 \begin{vmatrix}
+1 & h' \\
+h' & -1
 \end{vmatrix}
+\Be_1 \Be_2 \\
+&=
+( -1 - (h')^2 )
+\Be_1 \Be_2.
 \end{align*}
+
+So we really want the other orientation
+
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:180}
+\ncap = \inv{\sqrt{1 + (h')^2}} \left( -h', 1 \right).
+\end{equation}
+
+Our traction vector relative to the normal $\ncap$ is
+
+\begin{align*}
+\Bt 
+&= \Be_i T_{ij} n_j \\
+&= 
+\Be_i \left( -p \delta_{ij}
++ \mu e_{ij}
+\right) n_j \\
+&=
+-p \ncap + \mu \Be_i e_{ij} n_j
+\end{align*}
+
+So the component in the tangential direction is
+
+\begin{align*}
+\Bt \cdot \taucap 
+&=
+-p \cancel{\ncap \cdot \taucap} + \mu \Be_i e_{ij} n_j tau_i \\
+&=
+\frac{\mu}{1 + (h')^2}
+\begin{bmatrix}
+1 & h' 
+\end{bmatrix}
+\begin{bmatrix}
+e_{11} & e_{12} \\
+e_{21} & e_{22}
+\end{bmatrix}
+\begin{bmatrix}
+-h'  \\
+1
+\end{bmatrix} \\
+&=
+\frac{\mu}{1 + (h')^2}
+\begin{bmatrix}
+1 & h' 
+\end{bmatrix}
+\begin{bmatrix}
+-h' e_{11} + e_{12} \\
+-h' e_{21} + e_{22}
+\end{bmatrix} \\
+&=
+\frac{\mu}{1 + (h')^2}
+\left(
+-h' e_{11} + e_{12} + h'( -h' e_{21} + e_{22} )
+\right) \\
+&=
+\frac{\mu}{1 + (h')^2}
+\left(
+h' (e_{22} - e_{11} )
++ e_{12} (1 - (h')^2 )
+\right) 
+\end{align*}
+
+Our strain tensor components, for a general 2D flow, are
+
+\begin{align}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:200}
+e_{11} &= \PD{x}{u} \\
+e_{22} &= \PD{y}{v} \\
+e_{12} &= 
+\inv{2} \left( 
+\PD{x}{v} +
+\PD{y}{u}
+\right).
+\end{align}
+
+So, a zero tangential traction vector component at the interface requires
+
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:220}
+0 = h' \left( \PD{y}{v} - \PD{x}{u} \right) + 
+\inv{2} \left( 
+\PD{x}{v} +
+\PD{y}{u}
+\right)
+(1 - (h')^2 ).
+\end{equation}
+
+What is the normal component of the traction vector at the interface?  We can calculate
+
+\begin{align*}
+\Bt \cdot \taucap 
+&=
+-p + \mu \Be_i e_{ij} n_j n_i \\
+&=
+\frac{\mu}{1 + (h')^2}
+\begin{bmatrix}
+-h' & 1
+\end{bmatrix}
+\begin{bmatrix}
+-h' e_{11} + e_{12} \\
+-h' e_{21} + e_{22}
+\end{bmatrix} \\
+&=
+\frac{\mu}{1 + (h')^2}
+\left(
+-h'(-h' e_{11} + e_{12}) -h' e_{21} + e_{22}
+\right)  \\
+&=
+\frac{\mu}{1 + (h')^2}
+\left(
+-2 h' e_{12} 
++ (h')^2 e_{11} + e_{22}
+\right)
+\end{align*}
+
+So this component of the traction vector is
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:240}
+\Bt \cdot \taucap 
+=
+\frac{\mu}{1 + (h')^2}
+\left(
+- h' 
+\left( 
+\PD{x}{v} +
+\PD{y}{u}
+\right)
++ (h')^2 \PD{x}{u} 
+ + \PD{y}{v} 
+\right)
+\end{equation}
+
+For the purely recilinear flow, with $h' = 0$ and $v = 0$ this was zero overall, but that was a consequence of NS and our assumptions.  How about in this more general case?  Is this one of our boundary value conditions, or will we end up with something non-zero, and that non-zero value characterizes the fact that we have some downwards flow in the fluid?
 
 %\EndArticle
 \EndNoBibArticle
