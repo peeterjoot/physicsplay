@@ -329,10 +329,14 @@ Referring back to \ref{eqn:continuumProblemSet2:500} our velocities are
 \begin{equation}\label{eqn:continuumProblemSet2:600}
 \boxed{
 \begin{aligned}
+%u^{(1)} &= 
+%-\frac{U }{h(\mu^{(1)} + \mu^{(2)})} \mu^{(2)} \left( y + h \right) \\
+%u^{(2)} &= 
+%-\frac{U }{h(\mu^{(1)} + \mu^{(2)})} \left( \mu^{(1)} y + \mu^{(2)} h \right) 
 u^{(1)} &= 
--\frac{U }{h(\mu^{(1)} + \mu^{(2)})} \mu^{(2)} \left( y + h \right) \\
+-\frac{U \mu^{(2)} }{(\mu^{(1)} + \mu^{(2)})} \left( 1 + \frac{y}{h} \right) \\
 u^{(2)} &= 
--\frac{U }{h(\mu^{(1)} + \mu^{(2)})} \left( \mu^{(1)} y + \mu^{(2)} h \right) 
+-\frac{U \mu^{(2)} }{(\mu^{(1)} + \mu^{(2)})} \left( 1 + \frac{\mu^{(1)}}{\mu^{(2)}} \frac{y}{h} \right) 
 \end{aligned}
 }
 %-\frac{U \mu^{(1)}}{h(\mu^{(1)} + \mu^{(2)})} y
@@ -341,11 +345,105 @@ u^{(2)} &=
 
 Checking, we see at a glance we see that we have $u^{(2)}(h) = -U$, $u^{(1)}(-h) = 0$, $u^{(1)}(0) = u^{(2)}(0)$, and $\evalbar{\mu^{(1)} du^{(1)}/dy}{y=0} = \mu^{(2)} \evalbar{du^{(2)}/dy}{y=0}$ as desired.
 
+As an example, let's add some numbers.  With mercury and water in layers ${(1)}$ and ${(2)}$ respectively, we have
+
+\begin{align}\label{eqn:continuumL16:620}
+\mu^{(1)} &= 0.001526 \quad \text{Pa-s} \\
+\mu^{(2)} &= 0.00089 \quad \text{Pa-s} 
+\end{align}
+
+so that our velocity is
+
+\begin{equation}\label{eqn:continuumProblemSet2:640}
+u(y) = 
+\left\{
+\begin{array}{l l}
+-1.37 U \left(1 + \frac{y}{h}\right) & \quad \mbox{$y \in [-h, 0]$} \\
+-1.37 U \left(1 + 1.7 \frac{y}{h}\right) & \quad \mbox{$y \in [0, h]$}
+\end{array}
+\right.
+\end{equation}
+
+This is plotted with $h = U = 1$ in figure (\ref{fig:continuumProblemSet2:continuumProblemSet2Fig3})
+\begin{figure}[htp]
+   \centering
+   \includegraphics[totalheight=0.2\textheight]{continuumProblemSet2Fig3}
+   \caption{Two layer shearing flow with water over mercury.}\label{fig:continuumProblemSet2:continuumProblemSet2Fig3}
+\end{figure}
+
 \subsection{Part 2.  Calculate the maximum speed.}
+
+With $u^{(1)}(-h) = 0$, and $u^{(1)}$ linearly decreasing, then $u^{(2)}$ linearly decreasing further from the value at $y = 0$, it is clear that the maximum speed, no matter the viscosities of the fluids, is on the upper moving interface.  This maximum takes the value $\Abs{u^{(2)}(h)} = U$.
+
 \subsection{Part 3.  Calculate the mean speed.}
+
+As linear functions the average speeds of the respective fluids fall on the midpoints $y = \pm h/2$.  These are
+
+\begin{align}\label{eqn:continuumProblemSet2:660}
+\expectation{u^{(1)}} &= -\frac{U \mu^{(2)} }{ 2 (\mu^{(1)} + \mu^{(2)})} \\
+\expectation{u^{(2)}} &= -\frac{U \mu^{(2)} }{(\mu^{(1)} + \mu^{(2)})} \left( 1 + \frac{\mu^{(1)}}{2 \mu^{(2)}} \right) 
+\end{align}
+
+Averaging these two gives us the overall average, so we find
+
+\begin{equation}\label{eqn:continuumProblemSet2:680}
+\expectation{u(y)} = 
+-\frac{U }{ 4 (\mu^{(1)} + \mu^{(2)})} \left( 3 \mu^{(2)} + \mu^{(1)} \right) 
+\end{equation}
+
 \subsection{Part 4.  Calculate the flux}
+
+We can calculate the volume flux, much like the mass flux (although the mass flux seems a more sensible quantity to calculate).  Looking at the rate of change of an element of fluid passing through the $y-z$ plane we have
+
+\begin{equation}\label{eqn:continuumProblemSet2:700}
+\frac{dV}{dt} = dy dz \Bu \cdot \xcap
+\end{equation}
+
+Integrating over the total height, for a width $\Delta z$ we have
+
+\begin{align*}
+\text{Volume Flux} 
+&= \Delta z \int_{-h}^h u(y) dy \\
+&= \Delta z 2h \expectation{u} \\
+\end{align*}
+
+So our volume flux through a width $\Delta z$ is
+
+\begin{equation}\label{eqn:continuumProblemSet2:720}
+\text{Volume Flux} 
+=
+-\frac{2 h U \Delta z}{ 4 (\mu^{(1)} + \mu^{(2)})} \left( 3 \mu^{(2)} + \mu^{(1)} \right).
+\end{equation}
+
 \subsection{Part 5.  Tangential force on the wall.}
+
+From \ref{eqn:continuumProblemSet2:600} the tangential components of our traction vectors are
+
+\begin{align*}
+t^{(1)} 
+&= \mu^{(1)} \frac{d u^{(1)}}{dy} \\
+&= -\frac{U \mu^{(1)} \mu^{(2)} }{(\mu^{(1)} + \mu^{(2)})} \inv{h}
+\end{align*}
+
+and
+
+\begin{align*}
+t^{(2)} 
+&= \mu^{(2)} \frac{d u^{(2)}}{dy} \\
+&= -\frac{U \mu^{(1)} \mu^{(2)} }{(\mu^{(1)} + \mu^{(2)})} \inv{h}
+\end{align*}
+
+We see that the tangential component of the traction vector is a constant throughout both fluids.  Allowing this force to act on a length $L$ of the lower wall, our force per unit width over that strip is just
+
+\begin{equation}\label{eqn:continuumProblemSet2:740}
+F = -\frac{U \mu^{(1)} \mu^{(2)} }{(\mu^{(1)} + \mu^{(2)})} \frac{L}{h}.
+\end{equation}
+
+The negative value here makes sense since it is acting to push the fluid backwards in the direction of the upper wall motion.
+
 \subsection{Part 6.  Tangential force on the lower fluid.}
+
+Due to constant nature of the tangential component of the traction vector shown above, the force per unit width of the upper fluid acting on the lower fluid, is also given by \ref{eqn:continuumProblemSet2:740}.
 
 \section{Problem Q3.}
 \subsection{Statement}
