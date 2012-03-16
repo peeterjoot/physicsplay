@@ -1,0 +1,53 @@
+#!/usr/bin/perl
+
+my %all = map {$_ => 1} @ARGV ;
+
+foreach (sort keys %all)
+{
+   my $path = $_ ;
+
+   die unless ( $path =~ /(.*)Fig(.*)\.(.*)/ ) ;
+
+   my ($basename, $figNum, $extension) = ($1, $2, $3) ;
+   my $picturepath = "${basename}Fig$figNum" ;
+
+   if ( $extension eq 'svg' )
+   {
+      next ;
+   }
+   elsif ( $extension eq 'pdf' )
+   {
+      next ;
+   }
+   elsif ( $extension eq 'png' )
+   {
+      next if ( exists $all{"$picturepath.pdf_tex"} ) ;
+
+my $fpng = "figure (\\ref{fig:$basename:$picturepath})
+\\begin{figure}[htp]
+   \\centering
+   \\includegraphics[totalheight=0.2\\textheight]{$picturepath}
+   \\caption{FIXME}\\label{fig:$basename:$picturepath}
+\\end{figure}
+" ;
+
+      print $fpng ;
+   }
+   elsif ( $extension eq 'pdf_tex' )
+   {
+my $fpdf = "figure (\\ref{fig:$basename:$picturepath})
+\\begin{figure}[htp]
+   \\centering
+   \\def\\svgwidth{0.3\\columnwidth}
+   \\input{$picturepath.pdf_tex}
+   \\caption{FIXME}\\label{fig:$basename:$picturepath}
+\\end{figure}
+" ;
+
+      print $fpdf ;
+   }
+#   else
+#   {
+#      warn "%UNKNOWN EXTENSION: skipping: $path\n" ;   
+#   }
+}

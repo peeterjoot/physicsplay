@@ -41,16 +41,26 @@ $curDirName =~ s,.*/,, ;
 
 my @newDirCommands = () ;
 my @newDeps = () ;
-my @ig = split(/[\n\r\l]+/, `grep includegraphics $filebase.$suffix | sed 's/%.*//'`) ;
+
+#print "grep -e includegraphics -e input.*pdf_tex $filebase.$suffix | sed 's/%.*//'\n" ;
+#die ;
+my @ig = split(/[\n\r\l]+/, `grep -e includegraphics -e 'input.*pdf_tex'  $filebase.$suffix | sed 's/%.*//'`) ;
 foreach (@ig)
 {
+   next if ( $_ eq '' ) ;
+
+#print "pre-glob: '$_'\n" ;
    $_ =~ s/.*{// ;
    $_ =~ s/}// ;
-   $_ .= '*' ;
+   $_ =~ s/\.pdf_tex// ;
+   $_ .= '.*' ;
+
+#print "glob: $_\n" ;
    my @gg = glob( $_ ) ;
 
    foreach (@gg)
    {
+#print "gg: $_\n" ;
       if ( !-e "$_" )
       {
          warn "in: $curDirName: cannot find file '$_' (skipping)\n" ;
