@@ -312,5 +312,115 @@ Again assuming no motion of the air, with air pressure $p_A$, this is
 
 Observe that for the horizontal flow problem, where $h' = 0$ and $v = 0$, this would have been nothing more than a requirement that $p(h) = p_A$, but now that we introduce downwards motion and allow the height to vary, the pressure matching condition becomes a much more complex beastie.
 
+\section{Laplacian of Pressure and Vorticity.}
+
+Supposing that we are neglecting the non-linear term of the Navier-Stokes equation.  For incompressible steady state flow, without any external forces, we would then have
+
+\begin{subequations}
+\begin{equation}\label{eqn:qmTwoExamReflection:5}
+0 = -\spacegrad p + \mu \spacegrad^2 \Bu 
+\end{equation}
+\begin{equation}\label{eqn:qmTwoExamReflection:n}
+0 = \spacegrad \cdot \Bu
+\end{equation}
+\end{subequations}
+
+How do we actually solve this beastie?
+
+\subsection{Separation of variables?}
+
+Considering this in 2D, assuming no z-dependence, with $\Bu = \Bu(x, y) = (u, v)$ we have
+
+\begin{align}\label{eqn:nsVorticity:30}
+0 &= -\partial_x p + \mu (\partial_{xx} + \partial_{yy} )u \\
+0 &= -\partial_y p + \mu (\partial_{xx} + \partial_{yy} )v \\
+0 &= \partial_x u + \partial_y v.
+\end{align}
+
+Attempting separation of variables seems like something reasonable to try.  With
+
+\begin{align}\label{eqn:nsVorticity:50}
+u &= X(x) Y(y) \\
+v &= R(x) S(y) \\
+p &= P(x) Q(y)
+\end{align}
+
+we get
+
+\begin{align}\label{eqn:nsVorticity:70}
+0 &= -P' Q + \mu (X'' Y + X Y'') \\
+0 &= -P Q' + \mu (R'' S + R S'') \\
+0 &= X' Y + R S'
+\end{align}
+
+I couldn't find a way to substitute any of these into the other that would allow me to separate them, but perhaps I wasn't clever enough.  
+
+\subsection{In terms of vorticity?}
+
+The idea of substuting the zero divergence equation $\spacegrad \cdot \Bu$ will clearly lead to something a bit simpler.  Treating the Laplacian as a geometric (clifford) product of two gradients we have
+
+\begin{align*}
+0 
+&= -\spacegrad p + \mu \spacegrad^2 \Bu \\
+&= -\spacegrad p + \mu \spacegrad ( \spacegrad \Bu ) \\
+&= -\spacegrad p + \mu \spacegrad ( \cancel{\spacegrad \cdot \Bu} + \spacegrad \wedge \Bu ) \\
+&= -\spacegrad p + \mu \spacegrad ( \spacegrad \wedge \Bu ) \\
+&= \spacegrad \left( -p + \mu \spacegrad \wedge \Bu \right)
+\end{align*}
+
+Writing out the vorticity (bivector) in component form, and writing $i = \Be_1 \wedge \Be_2 = \Be_1 \Be_2$ for the 2D pseudoscalar, we have
+
+\begin{align*}
+\spacegrad \wedge \Bu 
+&= (\Be_1 \partial_x + \Be_2 \partial_y) \wedge (\Be_1 u + \Be_2 v) \\
+&= \Be_1 \Be_2 (\partial_x v - \partial_y u ) \\
+&= i (\partial_x v - \partial_y u )
+\end{align*}
+
+It seems natural to write
+
+\begin{equation}\label{eqn:qmTwoExamReflection:90}
+\Theta = \partial_x v - \partial_y u,
+\end{equation}
+
+so that Navier-Stokes takes the form
+
+\begin{equation}\label{eqn:qmTwoExamReflection:110}
+0 = \spacegrad (-p + i \mu \Theta ).
+\end{equation}
+
+Operating on this from the left with another gradient we find that this combination of pressure and vorticity must satisfy the following multivector Laplacian equation
+
+\begin{equation}\label{eqn:qmTwoExamReflection:130}
+0 = \spacegrad^2 (-p + i \mu \Theta ).
+\end{equation}
+
+However, note that $\spacegrad^2$ is a scalar operator, and this zero identity has both scalar and pure bivector components.  Both must separately equal zero
+
+\begin{subequations}
+\label{eqn:qmTwoExamReflection:150}
+\begin{equation}\label{eqn:qmTwoExamReflection:170}
+0 = \spacegrad^2 p 
+\end{equation}
+\begin{equation}\label{eqn:qmTwoExamReflection:190}
+0 = \spacegrad^2 \Theta.
+\end{equation}
+\end{subequations}
+
+Note that we can obtain \ref{eqn:qmTwoExamReflection:150} much more directly, if we know that's what we want to do.  Just operate on \ref{eqn:qmTwoExamReflection:5} with the gradient from the left right off the bat.  We find
+
+\begin{align*}
+0 
+&= -\spacegrad^2 p + \mu \spacegrad^3 \Bu \\
+&= -\spacegrad^2 p + \mu \spacegrad^2 (\spacegrad \Bu) \\
+&= -\spacegrad^2 p + \mu \spacegrad^2 (\spacegrad \wedge \Bu) \\
+\end{align*}
+
+Again, we have a multivector equation scalar and bivector parts, that must separately equal zero.  With the magnitude of the vorticity $\Theta$  given by \ref{eqn:qmTwoExamReflection:90}, we once again obtain \ref{eqn:qmTwoExamReflection:150}.  This can be done in plain old vector algebra as well by operating on the left not by the gradient, but separately with a divergence and curl operator.
+
+\section{Now what?}
+
+So, it seems like a reasonable way to tackle a problem of this form may be to take a general solution to the Laplacian equation (i.e. linear combinations of harmonmic functions), and then fit those to our specific boundary value constraints.  Attempting this should be the next step.  However, we ought to step back slightly, because our external gravitation force wasn't included above.  Also, can we include the non-linear term in the LHS in our pressure and vorticity equations (without which are just Laplacians).
+
 %\EndArticle
 \EndNoBibArticle
