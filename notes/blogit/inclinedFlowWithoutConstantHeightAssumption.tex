@@ -1,7 +1,7 @@
 \input{../peeter_prologue_print.tex}
 %\input{../peeter_prologue_widescreen.tex}
 
-\chapter{Inclined flow without constant height assumption}
+\chapter{Inclined flow without constant height assumption.  Setting up the problem, but not actually solving it.}
 \label{chap:inclinedFlowWithoutConstantHeightAssumption}
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot2/math2012/inclinedFlowWithoutConstantHeightAssumption.pdf}
@@ -317,10 +317,10 @@ Observe that for the horizontal flow problem, where $h' = 0$ and $v = 0$, this w
 Supposing that we are neglecting the non-linear term of the Navier-Stokes equation.  For incompressible steady state flow, without any external forces, we would then have
 
 \begin{subequations}
-\begin{equation}\label{eqn:qmTwoExamReflection:5}
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:5}
 0 = -\spacegrad p + \mu \spacegrad^2 \Bu 
 \end{equation}
-\begin{equation}\label{eqn:qmTwoExamReflection:n}
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:460}
 0 = \spacegrad \cdot \Bu
 \end{equation}
 \end{subequations}
@@ -379,35 +379,35 @@ Writing out the vorticity (bivector) in component form, and writing $i = \Be_1 \
 
 It seems natural to write
 
-\begin{equation}\label{eqn:qmTwoExamReflection:90}
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:90}
 \Theta = \partial_x v - \partial_y u,
 \end{equation}
 
 so that Navier-Stokes takes the form
 
-\begin{equation}\label{eqn:qmTwoExamReflection:110}
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:110}
 0 = \spacegrad (-p + i \mu \Theta ).
 \end{equation}
 
 Operating on this from the left with another gradient we find that this combination of pressure and vorticity must satisfy the following multivector Laplacian equation
 
-\begin{equation}\label{eqn:qmTwoExamReflection:130}
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:130}
 0 = \spacegrad^2 (-p + i \mu \Theta ).
 \end{equation}
 
 However, note that $\spacegrad^2$ is a scalar operator, and this zero identity has both scalar and pure bivector components.  Both must separately equal zero
 
 \begin{subequations}
-\label{eqn:qmTwoExamReflection:150}
-\begin{equation}\label{eqn:qmTwoExamReflection:170}
+\label{eqn:inclinedFlowWithoutConstantHeightAssumption:150}
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:170}
 0 = \spacegrad^2 p 
 \end{equation}
-\begin{equation}\label{eqn:qmTwoExamReflection:190}
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:190}
 0 = \spacegrad^2 \Theta.
 \end{equation}
 \end{subequations}
 
-Note that we can obtain \ref{eqn:qmTwoExamReflection:150} much more directly, if we know that's what we want to do.  Just operate on \ref{eqn:qmTwoExamReflection:5} with the gradient from the left right off the bat.  We find
+Note that we can obtain \ref{eqn:inclinedFlowWithoutConstantHeightAssumption:150} much more directly, if we know that's what we want to do.  Just operate on \ref{eqn:inclinedFlowWithoutConstantHeightAssumption:5} with the gradient from the left right off the bat.  We find
 
 \begin{align*}
 0 
@@ -416,11 +416,138 @@ Note that we can obtain \ref{eqn:qmTwoExamReflection:150} much more directly, if
 &= -\spacegrad^2 p + \mu \spacegrad^2 (\spacegrad \wedge \Bu) \\
 \end{align*}
 
-Again, we have a multivector equation scalar and bivector parts, that must separately equal zero.  With the magnitude of the vorticity $\Theta$  given by \ref{eqn:qmTwoExamReflection:90}, we once again obtain \ref{eqn:qmTwoExamReflection:150}.  This can be done in plain old vector algebra as well by operating on the left not by the gradient, but separately with a divergence and curl operator.
+Again, we have a multivector equation scalar and bivector parts, that must separately equal zero.  With the magnitude of the vorticity $\Theta$  given by \ref{eqn:inclinedFlowWithoutConstantHeightAssumption:90}, we once again obtain \ref{eqn:inclinedFlowWithoutConstantHeightAssumption:150}.  This can be done in plain old vector algebra as well by operating on the left not by the gradient, but separately with a divergence and curl operator.
+
+\subsection{Pressure and vorticity equations with the non-linear term retained.}
+
+If we add back in our body force, and assume that it is constant (i.e. gravity), then this this will get killed with the application of the gradient.  We'll still end up with one Laplacian for pressure, and one for vorticity.  That's not the case for the inertial $(\Bu \cdot \spacegrad) \Bu$ term of Navier-Stokes.  Let's take the divergence and curl of this and see how we have to modify the Laplacian equations above.
+
+Starting with the divergence, with summation implied over repeated indexes, we have
+
+\begin{align*}
+\spacegrad \cdot ((\Bu \cdot \spacegrad) \Bu)
+&=
+\partial_k ( \Bu \cdot \spacegrad u_k ) \\
+&=
+\partial_k ( u_m \partial_m u_k ) \\
+&=
+(\partial_k u_m) (\partial_m u_k ) 
++ u_m \partial_m \partial_k u_k \\
+&=
+\sum_k (\partial_k u_k)^2
++
+\sum_{k \ne m} (\partial_k u_m) (\partial_m u_k ) 
++ (\Bu \cdot \spacegrad) ( \spacegrad \cdot \Bu )
+\end{align*}
+
+So we have
+
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:480}
+\spacegrad \cdot ((\Bu \cdot \spacegrad) \Bu)
+=
+\sum_k (\partial_k u_k)^2
++
+2 \sum_{k < m} (\partial_k u_m) (\partial_m u_k ) 
++ (\Bu \cdot \spacegrad) ( \spacegrad \cdot \Bu )
+\end{equation}
+
+We are working with the $\spacegrad \cdot \Bu = 0$ incompressibility assumption so we kill off the last term.  Our velocity ends up introducing a non-homogeneous forcing term to the Laplacian pressure equation and we've got something trickier to solve
+
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:500}
+\boxed{
+\rho \sum_k (\partial_k u_k)^2
++
+2 \rho \sum_{k < m} (\partial_k u_m) (\partial_m u_k ) 
+=
+-\spacegrad^2 p.
+}
+\end{equation}
+
+Now let's see how our vorticity Laplacian needs to be modified.  Taking the curl of the implusive term we have
+
+\begin{align*}
+\spacegrad \wedge ((\Bu \cdot \spacegrad) \Bu) 
+&=
+\Be_k \partial_k \wedge ( u_m \partial_m u_n \Be_n ) \\
+&=
+(\Be_k \wedge \Be_n) \partial_k ( u_m \partial_m u_n ) \\
+&=
+(\Be_k \wedge \Be_n) 
+\left( 
+(\partial_k u_m) (\partial_m u_n ) 
++u_m \partial_m \partial_k u_n 
+\right) \\
+&=
+(\Be_k \wedge \Be_n) 
+\left( 
+(\partial_k u_m) (\partial_m u_n ) 
++ (\Bu \cdot \spacegrad) \partial_k u_n
+\right) 
+\end{align*}
+
+So we have
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:520}
+\spacegrad \wedge ((\Bu \cdot \spacegrad) \Bu) 
+=
+(\spacegrad u_m) \wedge (\partial_m \Bu)
++ (\Bu \cdot \spacegrad) (\spacegrad \wedge \Bu)
+\end{equation}
+
+Putting things back together, our vorticity equation is
+
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:540}
+\rho (\spacegrad u_m) \wedge (\partial_m \Bu)
++ \rho (\Bu \cdot \spacegrad) (\spacegrad \wedge \Bu)
+= 
+\mu \spacegrad^2 (\spacegrad \wedge \Bu)
+\end{equation}
+
+Or, with
+
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:560}
+\Bomega = \spacegrad \wedge \Bu,
+\end{equation}
+
+this is
+
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:580}
+\boxed{
+(\spacegrad u_m) \wedge (\partial_m \Bu) + (\Bu \cdot \spacegrad) \Bomega = \nu \spacegrad^2 \Bomega.
+}
+\end{equation}
+
+It is this and \ref{eqn:inclinedFlowWithoutConstantHeightAssumption:500} that we really have to solve.  Before moving on, let's write out all the non-boundary condition equations in coordinate form for the 2D case that we are interested in here.  We have
+
+\begin{subequations}
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:600}
+\rho \left( \left(\PD{x}{u}\right)^2 +\left(\PD{y}{u}\right)^2 + 2 \PD{y}{u} \PD{x}{v} \right) = -\spacegrad^2 p
+\end{equation}
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:620}
+2 \left( 
+\PD{x}{u} \PD{y}{v}
++\PD{x}{v} \PD{y}{v}
+\right)
++ \left( u \PD{x}{} + v \PD{y}{} \right) \Theta
+=
+\nu \spacegrad^2 \Theta
+\end{equation}
+\begin{equation}\label{eqn:inclinedFlowWithoutConstantHeightAssumption:640}
+\Theta = \PD{x}{v} - \PD{y}{u}
+\end{equation}
+\end{subequations}
+
+Our solution has to satisfy these equations, as well as still satisfying the original Navier-Stokes system \ref{eqn:inclinedFlowWithoutConstantHeightAssumption:40} that includes our gravitational term, and also has to satisfy both of our boundary value constraints \ref{eqn:inclinedFlowWithoutConstantHeightAssumption:220}, \ref{eqn:inclinedFlowWithoutConstantHeightAssumption:280}, and have $u(x, 0) = v(x, 0) = 0$.  Wow, what a mess!  And this is all just the steady state problem.  Imagine adding time into the mix too!
 
 \section{Now what?}
 
-So, it seems like a reasonable way to tackle a problem of this form may be to take a general solution to the Laplacian equation (i.e. linear combinations of harmonmic functions), and then fit those to our specific boundary value constraints.  Attempting this should be the next step.  However, we ought to step back slightly, because our external gravitation force wasn't included above.  Also, can we include the non-linear term in the LHS in our pressure and vorticity equations (without which are just Laplacians).
+The strategy that I'd thought to attempt to tackle a problem with is something along the following lines
+
+\begin{itemize}
+\item First ignore the non-linear terms.  Find solutions for the homogenous vorticity and pressure Laplacian equations that satisfy our boundary value conditions, and use that to find a first solution for $h(x)$.
+\item Use this to solve for $u$ and $v$ from the vorticity.
+\end{itemize}
+
+However, after having gotten this far, just setting up the problem for solution, I think that it's perhaps best not to try to solve it yet, and study some more first.  I have a feeling that there are likely a number of techniques that have been developed that will likely be useful to know before I try to plow my way through things.  It's interesting to see just how tricky the equations of motion become when one doesn't make unrealistic assumptions.  I have a feeling that to actually attempt this specific problem, I may very well need a computer and numerical techniques.
 
 %\EndArticle
 \EndNoBibArticle
