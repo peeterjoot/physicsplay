@@ -34,11 +34,11 @@ ORIG_FILES += ../gabook/parallelogramArea.png
 #ORIG_FILES += ../phy454/continuumProblemSet2Fig3.png
 #ORIG_FILES += ../phy454/continuumProblemSet2Fig4.png
 #ORIG_FILES += ../phy454/continuumProblemSet2Fig5.png
-ORIG_FILES += ../phy454/inclinedFlowWithoutConstantHeightAssumptionFig1.png
-ORIG_FILES += ../phy454/inclinedFlowWithoutConstantHeightAssumptionFig2.pdf
-ORIG_FILES += ../phy454/inclinedFlowWithoutConstantHeightAssumptionFig2.pdf_tex
-ORIG_FILES += ../phy454/inclinedFlowWithoutConstantHeightAssumptionFig3.pdf
-ORIG_FILES += ../phy454/inclinedFlowWithoutConstantHeightAssumptionFig3.pdf_tex
+#ORIG_FILES += ../phy454/inclinedFlowWithoutConstantHeightAssumptionFig1.png
+#ORIG_FILES += ../phy454/inclinedFlowWithoutConstantHeightAssumptionFig2.pdf
+#ORIG_FILES += ../phy454/inclinedFlowWithoutConstantHeightAssumptionFig2.pdf_tex
+#ORIG_FILES += ../phy454/inclinedFlowWithoutConstantHeightAssumptionFig3.pdf
+#ORIG_FILES += ../phy454/inclinedFlowWithoutConstantHeightAssumptionFig3.pdf_tex
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
