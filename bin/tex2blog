@@ -338,6 +338,17 @@ sub generatePrologue
       $prologue .= qq(<pre class="LaTeX"><div>\n) ;
    }
 
+   if ( $wordpress )
+   {
+# FIXME: embed category and tags in my latex and parse them from there.  Can I mine the tags of all my posts and re-insert them directly into my original docs?
+      $prologue .= "
+[category Math and Physics Learning]
+[tags geometric algebra, Navier-Stokes, PHY454H1S, vorticity]
+[status draft]
+[nogallery]
+" ;
+   }
+
    return $prologue ;
 }
 
@@ -357,6 +368,11 @@ sub generateEpilogueAndPrintIt
    if ( $mathmlHtml )
    {
       $outText .= qq(\n</body> </html>) ;
+   }
+
+   if ( $wordpress )
+   {
+      $outText .= qq([end] This and anything else should be ignored.) ;
    }
 
    print $outText ;
@@ -431,6 +447,9 @@ sub processRest
    my $latexInlineEnd ;
    my $latexSepLineStart ;
    my $latexSepLineEnd ;
+
+   my $bProcessingItemize = 0 ;
+   my $bProcessingEnumerate = 0 ;
 
    if ( $pf )
    {
@@ -548,6 +567,25 @@ sub processRest
          s,\\subsection{(.*)},<h2>$1</h2>,;
          s,\\subsubsection{(.*)},<h3>$1</h3>,;
       }
+
+      if ( s,\\begin{itemize},<ol>, )
+      {
+         $bProcessingItemize = 1 ;
+      }
+      elsif ( s,\\begin{enumerate},<ul>, )
+      {
+         $bProcessingEnumerate = 1 ;
+      }
+      elsif ( s,\\end{itemize},</ol>, )
+      {
+         $bProcessingItemize = 0 ;
+      }
+      elsif ( s,\\end{enumerate},</ul>, )
+      {
+         $bProcessingEnumerate = 0 ;
+      }
+
+      s,\\item,<li>, ;
 
       s,\\href{(.*?)}{(.*?)},<a href="$1">$2</a>,g ;
 
