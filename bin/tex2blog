@@ -122,6 +122,9 @@ my %equations = processAuxFile( "$filebase.aux" ) ;
 
 my %refnumbers ;
 
+my $keywords = '' ;
+my $category = 'Math and Physics Learning' ;
+
 # side effect.  creates the %refnumbers hash.
 my $bibString = processBib() ;
 
@@ -340,10 +343,11 @@ sub generatePrologue
 
    if ( $wordpress )
    {
-# FIXME: embed category and tags in my latex and parse them from there.  Can I mine the tags of all my posts and re-insert them directly into my original docs?
+# FIXME: Can I mine the tags of all my posts and re-insert them directly into my original docs?
       $prologue .= "
-[category Math and Physics Learning]
-[tags geometric algebra, Navier-Stokes, PHY454H1S, vorticity]
+[category $category]
+[title $g_title]
+[tags $keywords]
 [status draft]
 [nogallery]
 " ;
@@ -373,6 +377,8 @@ sub generateEpilogueAndPrintIt
    if ( $wordpress )
    {
       $outText .= qq([end] This and anything else should be ignored.) ;
+
+      $outText .= "# email $ENV{WORDPRESSEMAIL} -s autopost -a ..." ;
    }
 
    print $outText ;
@@ -507,14 +513,22 @@ sub processRest
                 /\\beginArtNoToc/ or
                 0 ) ;
 
-      if ( $mathml )
+      if ( s/\\keywords{(.*)}// )
       {
-         if ( /\\(?:title|chapter){(.*)}/ )
-         {
-            $g_title = $1 ;
-         }
+         $keywords = $1 ;
       }
-      else
+
+      if ( s/\\wordpresscategory{(.*)}// )
+      {
+         $category = $1 ;
+      }
+
+      if ( s/\\(?:title|chapter){(.*)}// )
+      {
+         $g_title = $1 ;
+      }
+
+      unless ( $mathml )
       {
          next if ( /\\begin{document}/ or
                    /\\end{document}/ or
@@ -525,7 +539,8 @@ sub processRest
                    /\\date/ or
                    /\\author/ or
                    0 ) ;
-         s/\\chapter{(.*)}/$1/ ;
+
+#        s/\\chapter{(.*)}/$1/ ;
       }
 
       s/\\paragraph{(.*?)}/<b>$1<\/b>/g;
