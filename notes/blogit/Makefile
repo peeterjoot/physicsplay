@@ -1,5 +1,5 @@
 RAWTEXFILES := $(shell ls *.tex)
-#INCOMPLETE += 
+INCOMPLETE += motionOfFreeTop.tex
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
 PDFS := $(TEXFILES:.tex=.pdf)
