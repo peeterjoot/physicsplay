@@ -1,7 +1,7 @@
 \input{../peeter_prologue_print.tex}
 %\input{../peeter_prologue_widescreen.tex}
 
-\chapter{PHY454H1S Continuum Mechanics.  Lecture 21: XXX.  Taught by Prof. K. Das.}
+\chapter{PHY454H1S Continuum Mechanics.  Lecture 21: Stability.  Taught by Prof. K. Das.}
 \label{chap:continuumL21}
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot2/math2012/continuumL21.pdf}
@@ -16,9 +16,213 @@
 
 Peeter's lecture notes from class.  May not be entirely coherent.
 
-\section{Review.}
+\section{Stability.  Some graphical illustrations.}
 
-\section{Stuff.}
+What do we mean by stability?  A configuration is stable if after a small disturbance it returns to it's original position.  A couple systems to consider are shown in
+
+FIXME: F1
+
+We can examine how a displacement $\delta x$ changes with time after making it.  In a stable configuration without friction we will induce an oscillation.  With friction we'll have a damping effect.  For the parabolic well, these are illustrated in
+
+FIXME: F2
+
+For the inverted parabola our displacement takes the form
+
+FIXME: F3
+
+For the ball on the table, assuming some friction that stops the ball, fairly quickly, we'll have a displacement as illustrated in
+
+FIXME: F1c''
+
+\section{Characterizing stability}
+
+Let's suppose that our displacement can be described in exponential form
+
+\begin{equation}\label{eqn:continuumL21:10}
+\delta x \sim e^{\sigma t}
+\end{equation}
+
+where $\sigma$ is the \textit{growth rate of pertubation}, and is in general a complex number of the form
+
+\begin{equation}\label{eqn:continuumL21:30}
+\sigma = \sigma_\text{R} + i \sigma_\text{I}
+\end{equation}
+
+\subsection{Case I.  Oscillatory unstability}
+
+A system of the form
+
+\begin{align*}
+\sigma_{\text{R}} &= 0 \\
+\sigma_{\text{I}} &> 0
+\end{align*}
+
+\textit{oscillatory unstable}.  An example of this is the undamped parabolic system illustrated above.
+
+\subsection{Case II.  Marginal unstability.}
+
+FIXME:
+%\begin{align*}
+%\delta x 
+%&\sim e^{\sigma_{\text{R}} t} e^{i \simgaI t} \\
+%&\sim e^{\sigma_{\text{R}} t} \left( \cos \sigma_{\text{I}} t + i \sin \simgaI t \right)
+%\end{align*}
+
+We'll call systems of the form
+
+\begin{align*}
+\sigma_{\text{I}} &= 0 \\
+\sigma_{\text{R}} &> 0
+\end{align*}
+
+\textit{marginally unstable}.  We can have unstable systems with $\sigma_{\text{I}} \ne 0$ but still $\sigma_{\text{R}} > 0$, but these are less common.
+
+\subsection{Case III.  Neutral stability.}
+
+\begin{align*}
+\sigma &= 0 \\
+\sigma_{\text{R}} &= \sigma_{\text{I}} &= 0
+\end{align*}
+
+An example of this was the billard table example where the ball moved to a new location on the table after being bumped slightly.
+
+\section{A mathematical description.}
+
+For fluids we have to bring in the heat equation (which isn't in the scope of this course to derive).  Our equations are the Navier-Stokes
+
+\begin{equation}\label{eqn:continuumL21:50}
+\rho \PD{t}{\Bu} + \rho (\Bu \cdot \spacegrad) \Bu = - \spacegrad p + \mu \spacegrad^2 \Bu - \rho \zcap g
+\end{equation}
+
+For steady state with $\Bu = 0$ initially (our base state), we'll call the following the equation of the base state
+
+\begin{equation}\label{eqn:continuumL21:70}
+\boxed{
+\spacegrad p_s = -\rho \zcap g
+}
+\end{equation}
+
+FIXME: should this be:
+
+\begin{equation}\label{eqn:continuumL21:70bb}
+\boxed{
+\spacegrad p_s = -\rho_s \zcap g
+}
+\end{equation}
+
+We'll allow pertubations of each of our variables
+
+\begin{align*}
+\Bu &= \Bu_\text{base} + \delta \Bu = 0 + \delta \Bu \\
+p &= p_s + \delta p \\
+\rho &= \rho_s + \delta \rho
+\end{align*}
+
+After pertubation NS takes the form
+
+\begin{equation}\label{eqn:continuumL21:90}
+(\rho_s + \delta \rho )\PD{t}{(0 + \delta \Bu)} + (\rho_s + \delta \rho) ((0 + \delta \Bu) \cdot \spacegrad) (0 + \delta \Bu) = - \spacegrad (p_s + \delta p) + \mu \spacegrad^2 (0 + \delta \Bu) - (\rho_s + \delta \rho) \zcap g
+\end{equation}
+
+Retaining only terms that are of first order of smallness.
+
+\begin{equation}\label{eqn:continuumL21:110}
+\rho_s \PD{t}{\delta \Bu} = - \spacegrad p_s - \spacegrad \delta p + \mu \spacegrad^2 \delta \Bu - \rho_s \zcap g - \delta \rho \zcap g
+\end{equation}
+
+applying our equation of base state \ref{eqn:continuumL21:70}, we have
+%\spacegrad p_s = -\rho_s \zcap g
+\begin{equation}\label{eqn:continuumL21:110b}
+\rho_s \PD{t}{\delta \Bu} = \cancel{\rho_s \zcap g} - \spacegrad \delta p + \mu \spacegrad^2 \delta \Bu - \cancel{\rho_s \zcap g} - \delta \rho \zcap g,
+\end{equation}
+
+or
+
+\begin{equation}\label{eqn:continuumL21:110c}
+\rho_s \PD{t}{\delta \Bu} = - \spacegrad \delta p + \mu \spacegrad^2 \delta \Bu - \delta \rho \zcap g.
+\end{equation}
+
+we can write
+
+\begin{equation}\label{eqn:continuumL21:130}
+\left( \PD{t}{} - \nu \spacegrad^2 \right) \delta \Bu = -\inv{\rho_s} \spacegrad \delta p - \frac{\delta \rho}{\rho_s} \zcap g
+\end{equation}
+
+Applying the divergence operation on both sides, and using $\spacegrad \Bu = 0$ so that $\spacegrad \delta \Bu = 0$ we have
+
+\begin{equation}\label{eqn:continuumL21:150}
+\left( \PD{t}{} - \nu \spacegrad^2 \right) \cancel{\spacegrad \cdot \delta \Bu} = -\inv{\rho_s} \spacegrad^2 \delta p - (\zcap \cdot \spacegrad ) \frac{\delta \rho}{\rho_s} g,
+\end{equation}
+
+or
+
+\begin{equation}\label{eqn:continuumL21:170}
+\inv{\rho_s} \spacegrad^2 \delta p = - (\zcap \cdot \spacegrad ) \frac{\delta \rho}{\rho_s} g.
+\end{equation}
+
+Assuming that $\rho_s$ is constant (actually that's already been done above), we can cancel it, leaving
+
+\begin{equation}\label{eqn:continuumL21:190}
+\spacegrad^2 \delta p = - (\zcap \cdot \spacegrad ) g \delta \rho = -g \PD{z}{} \delta \rho.
+\end{equation}
+
+operating once more with $\PDi{z}{}$ we have
+
+\begin{equation}\label{eqn:continuumL21:210}
+\spacegrad^2 \PD{z}{\delta p} = -g \PDSq{z}{\delta \rho}.
+\end{equation}
+
+NEW SECTION?  Missed where this came from.  Taking curls?
+
+\begin{equation}\label{eqn:continuumL21:230}
+\left( \PD{t}{} - \nu \spacegrad^2 \right) \delta \omega = -\inv{\rho_s} \PD{z}{\delta p} - \frac{\delta \rho}{\rho_s} g
+\end{equation}
+
+\begin{align*}
+\left( \PD{t}{} - \nu \spacegrad^2 \right) \spacegrad^2 \delta \omega 
+&= -\inv{\rho_s} \PD{z}{ \spacegrad^2 \delta p} - \frac{g}{\rho_s} \spacegrad^2 \delta \rho \\
+&= -\frac{g}{\rho_s} \PDSq{z}{\delta \rho} - \frac{g}{\rho_s} \spacegrad^2 \delta \rho \\
+&= 
+-\frac{g}{\rho_s} \left( 
+\PDSq{x}{}
++\PDSq{y}{}
+\right)
+\delta \rho \\
+&=
+g \alpha \left( 
+\PDSq{x}{}
++\PDSq{y}{}
+\right)
+\delta T
+\end{align*}
+
+in the last step we use the following assumed relation for temperature
+
+\begin{equation}\label{eqn:continuumL21:250}
+\delta \rho = - \rho_s \alpha \delta T
+\end{equation}
+
+(where does this come from?)
+
+We have finally
+
+\begin{equation}\label{eqn:continuumL21:290}
+\left( \PD{t}{} - \nu \spacegrad^2 \right) \spacegrad^2 \delta \omega 
+= 
+g \alpha \left( 
+\PDSq{x}{}
++\PDSq{y}{}
+\right)
+\delta T
+\end{equation}
+
+Solving this is the Rayleigh-Benard instabilit problem.
+
+\begin{equation}\label{eqn:continuumL21:270}
+\left( \PD{t}{} - \kappa \spacegrad^2 \right) \delta T = \Delta T \frac{\delta \omega}{d}
+\end{equation}
+
+%\section{Stuff.}
 
 %FIXME: Reading: \S XX from \cite{acheson1990elementary}
 
