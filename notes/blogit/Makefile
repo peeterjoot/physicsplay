@@ -43,6 +43,7 @@ ORIG_FILES += ../gabook/parallelogramArea.png
 #ORIG_FILES += ../gabook/gaQuickIntroFig1.pdf_tex
 #ORIG_FILES += ../gabook/gaQuickIntroFig2.pdf
 #ORIG_FILES += ../gabook/gaQuickIntroFig2.pdf_tex
+#ORIG_FILES += ../phy454/animatedTwoLayerFlowMu2GreaterThanMu1.avi
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
