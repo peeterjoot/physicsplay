@@ -23,7 +23,10 @@ $(LOCAL_FILES) :
 cronology.tex : ../METADATA
 	../METADATA -phy454 > cronology.tex
 
-phy454.pdf :: $(PHY454) $(LOCAL_FILES)
+mathematica.tex : ../METADATA
+	../METADATA -mathematica -latex -phy454 > mathematica.tex
+
+phy454.pdf :: $(PHY454) $(LOCAL_FILES) mathematica.tex
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
 	../make_pdflatex main.tex
