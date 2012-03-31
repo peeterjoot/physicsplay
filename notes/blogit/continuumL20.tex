@@ -1,13 +1,13 @@
 \input{../peeter_prologue_print.tex}
 %\input{../peeter_prologue_widescreen.tex}
 
-\chapter{PHY454H1S Continuum Mechanics.  Lecture 20: Aysymtotic solutions of ill conditioned equations.  Taught by Prof. K. Das.}
+\chapter{PHY454H1S Continuum Mechanics.  Lecture 20: Asymptotic solutions of ill conditioned equations.  Taught by Prof. K. Das.}
 \label{chap:continuumL20}
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot2/math2012/continuumL20.pdf}
 \date{Mar 28, 2012}
 \gitRevisionInfo{continuumL20}
-\keywords{Navier-Stokes, PHY454H1S} 
+\keywords{Navier-Stokes, PHY454H1S, Ill conditioned LDEs, regular perturbation, singular perturbation.}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -37,33 +37,33 @@ We'll consider two cases, both ones that we can solve exactly
 \subsection{The first order LDE.}
 \subsubsection{Exact solution.}
 
-Our homogeneous equation is 
+Our homogeneous equation is
 
-\begin{equation}\label{eqn:continuumL20:n}
+\begin{equation}\label{eqn:continuumL20:370}
 \epsilon \frac{du}{dy} + u = 0,
 \end{equation}
 
 with solution
 
-\begin{equation}\label{eqn:continuumL20:n}
+\begin{equation}\label{eqn:continuumL20:390}
 u \propto e^{-y/\epsilon}.
 \end{equation}
 
 Looking for a solution of the form
 
-\begin{equation}\label{eqn:continuumL20:n}
+\begin{equation}\label{eqn:continuumL20:410}
 u = A(y) e^{-y/\epsilon},
 \end{equation}
 
 we find
 
-\begin{equation}\label{eqn:continuumL20:n}
+\begin{equation}\label{eqn:continuumL20:430}
 \epsilon A' e^{-y/\epsilon} = y,
 \end{equation}
 
 and integrate to find
 
-\begin{equation}\label{eqn:continuumL20:n}
+\begin{equation}\label{eqn:continuumL20:450}
 A(y) = (y - \epsilon) e^{x/\epsilon} + C.
 \end{equation}
 
@@ -82,20 +82,20 @@ This is plotted in figure (\ref{fig:continuumL20:continuumL20Fig1})
 
 \subsubsection{Limiting cases.}
 
-We want to consider the limiting case where 
+We want to consider the limiting case where
 \begin{equation}\label{eqn:continuumL20:70}
 0 < \epsilon \ll 1,
 \end{equation}
 
 and we let $\epsilon \rightarrow 0$.  If $y = O(1)$, then we have
 
-\begin{equation}\label{eqn:continuumL20:n}
+\begin{equation}\label{eqn:continuumL20:470}
 u \approx 1 \times 0 + y,
 \end{equation}
 
 or just
 
-\begin{equation}\label{eqn:continuumL20:n}
+\begin{equation}\label{eqn:continuumL20:490}
 u = y.
 \end{equation}
 
@@ -110,7 +110,7 @@ However, if $y = O(\epsilon)$ then we have to be more careful constructing an ap
 %\end{equation}
 %
 %\begin{align*}
-%y 
+%y
 %&= 0.05 \text{m} \\
 %&= 0.01 x 1 \text{m} \\
 %&= \epsilon O(1)
@@ -127,7 +127,7 @@ If $\epsilon \rightarrow 0$ and $y \rightarrow O(\epsilon)$
 e^{-y/\epsilon} \rightarrow e^{-\epsilon O(1) /\epsilon} \rightarrow e^{-O(1)}
 \end{equation}
 
-so 
+so
 
 \begin{equation}\label{eqn:continuumL20:170}
 u \approx e^{-y/\epsilon}
@@ -161,7 +161,7 @@ When $\epsilon \rightarrow 0$ we have
 We have solution
 
 \begin{equation}\label{eqn:continuumL20:270}
-\ln u = -Y + ln C,
+\ln u = -Y + \ln C,
 \end{equation}
 
 or
@@ -177,9 +177,11 @@ u \propto e^{-Y} = e^{-y/\epsilon}.
 
 \subsubsection{Exact solution.}
 
-We saw above in the first order system that our specific solution was polynomial.  Let's start by looking for such a solution, starting with a first order polynomial
+We saw above in the first order system that our specific solution was polynomial.  While that was found by the method of variation of parameters, it seems obvious in retrospect.  Let's start by looking for such a solution, starting with a first order polynomial
 
-u = A y + B
+\begin{equation}\label{eqn:continuumL20:510}
+u = A y + B.
+\end{equation}
 
 Application of our LDE operator on this produces
 
@@ -188,7 +190,7 @@ A &= 1 \\
 B &= 0.
 \end{align*}
 
-Now let's move on to find a solution to the homogenous equation
+Now let's move on to find a solution to the homogeneous equation
 
 \begin{equation}\label{eqn:continuumL20:30b}
 \epsilon \frac{d^2u}{dy^2} + \frac{du}{dy} = 0
@@ -196,11 +198,42 @@ Now let's move on to find a solution to the homogenous equation
 
 As usual, we look for the characteristic equation by assuming a solution of the form $u = e^{m y}$.  This gives us
 
-\begin{equation}\label{eqn:continuumL20:n}
-\epsilon m^2 + m = (\epsilon m + 1) m = 0
+\begin{equation}\label{eqn:continuumL20:530}
+\epsilon m^2 + m = (\epsilon m + 1) m = 0,
 \end{equation}
 
-Compare this to the exact solution
+with roots
+
+\begin{equation}\label{eqn:continuumL20:550}
+m = 0, -1/\epsilon.
+\end{equation}
+
+So our homogeneous equation has the form
+
+\begin{equation}\label{eqn:continuumL20:570}
+u(y) = A e^{-y/\epsilon} + B,
+\end{equation}
+
+and our full solution is
+
+\begin{equation}\label{eqn:continuumL20:590}
+u(y) = A e^{-y/\epsilon} + B + y
+\end{equation}
+
+with the constants $A$ and $B$ to be determined from our boundary value conditions.  We find
+
+\begin{align*}
+0 &= u(0) = A + B + 0 \\
+2 &= u(1) = A e^{-1/\epsilon} + B + 1.
+\end{align*}
+
+We've got $B = -A$ and by subtracting
+
+\begin{equation}\label{eqn:continuumL20:610}
+A ( e^{-1/\epsilon} -1 ) = 1.
+\end{equation}
+
+So the exact solution is
 
 \begin{equation}\label{eqn:continuumL20:310}
 u = y + \frac{e^{-y/\epsilon} - 1}{e^{1/\epsilon} - 1}.
@@ -213,127 +246,85 @@ This is plotted in figure (\ref{fig:continuumL20:continuumL20Fig2})
    \caption{Plot of our ill conditioned second order LDE}\label{fig:continuumL20:continuumL20Fig2}
 \end{figure}
 
-\subsubsection{Regular pertubation.}
+\subsubsection{Solution in the regular region.}
 
-For small $\epsilon$ our LDE is approximately
+For small $\epsilon$ relative to $y$ our LDE is approximately
 
-\begin{equation}\label{eqn:continuumL20:n}
+\begin{equation}\label{eqn:continuumL20:630}
 \frac{du}{dy} = 1,
 \end{equation}
 
 which has solution
-\begin{equation}\label{eqn:continuumL20:n}
-u = y + C 
+\begin{equation}\label{eqn:continuumL20:650}
+u = y + C
 \end{equation}
 
 Our $u(1) = 2$ boundary value constraint gives us
 
-\begin{equation}\label{eqn:continuumL20:n}
-c = 1,
+\begin{equation}\label{eqn:continuumL20:670}
+C = 1.
 \end{equation}
 
-so our solution in the regular region is
+Our solution in the regular region where $\epsilon \rightarrow 0$ and $y = O(1)$ is therefore just
 
-\begin{equation}\label{eqn:continuumL20:n}
+\begin{equation}\label{eqn:continuumL20:690}
 u = y + 1.
 \end{equation}
 
+\subsubsection{Solution in the ill conditioned region.}
 
-When $\epsilon \rightarrow 0$ and $y = O(1)$ we have
-
-\begin{equation}\label{eqn:continuumL20:330}
-u = y + 1.
-\end{equation}
-
-when $y = O(\epsilon)$ and both $\epsilon$ and $y$ tend to zero, we have approximately
+Now let's consider the inner region.  We'll see below that when $y = O(\epsilon)$, and we allow both $\epsilon$ and $y$ tend to zero independently, we have approximately
 
 \begin{equation}\label{eqn:continuumL20:350}
-u = 1 - e^{-y/\epsilon}
+u \sim 1 - e^{-y/\epsilon}.
 \end{equation}
 
-FIXME: show.  This one isn't as obvious.
+We'll now show this.  We start with a helpful change of variables as we did in the first order case
 
-Consider the inner region and write
-
-\begin{equation}\label{eqn:continuumL20:n}
-Y = \frac{y}{\epsilon},
+\begin{equation}\label{eqn:continuumL20:710}
+Y = \frac{y}{\epsilon}.
 \end{equation}
 
-when $y = O(\epsilon)$ and $Y = O(1)$ we have
+When $y = O(\epsilon)$ and $Y = O(1)$ we have
 
-\begin{equation}\label{eqn:continuumL20:n}
+\begin{equation}\label{eqn:continuumL20:730}
 \cancel{\epsilon} \frac{d^2 u}{\cancel{\epsilon} \epsilon dY^2} + \inv{\epsilon} \frac{du}{dY} = 1
 \end{equation}
 
 or
-\begin{equation}\label{eqn:continuumL20:n}
+\begin{equation}\label{eqn:continuumL20:750}
 \frac{d^2 u}{dY^2} + \frac{du}{dY} = \epsilon.
 \end{equation}
 
-when $\epsilon \rightarrow 0$ we have approximately
+This puts the LDE into a non ill conditioned form, and allows us to let $\epsilon \rightarrow 0$.  We have approximately
 
-\begin{equation}\label{eqn:continuumL20:n}
+\begin{equation}\label{eqn:continuumL20:770}
 \frac{d^2 u}{dY^2} + \frac{du}{dY} = 0.
-\epsilon.
 \end{equation}
 
-This we can solve in the normal way, computing the characteristic equation and so forth with an assumed solution of $u = e^{mY}$.
+We've solved this in our exact solution work above (in a slightly more general form), and thus in this case we have just
 
-FIXME: show in detail:
-
-We find
-\begin{equation}\label{eqn:continuumL20:n}
-m^2 + m = 0
-\end{equation}
-
-with solutions
-
-\begin{equation}\label{eqn:continuumL20:n}
-m = 0, -1
-\end{equation}
-
-Our solution therefore has the form
-
-\begin{equation}\label{eqn:continuumL20:n}
+\begin{equation}\label{eqn:continuumL20:830}
 u = A + B e^{-Y}
 \end{equation}
 
 at $Y = 0$ we have
 
-\begin{equation}\label{eqn:continuumL20:n}
+\begin{equation}\label{eqn:continuumL20:850}
 u = A + B = 0.
 \end{equation}
 
-so that 
-\begin{equation}\label{eqn:continuumL20:n}
+so that
+\begin{equation}\label{eqn:continuumL20:870}
 B = -A.
 \end{equation}
 
-and we find
+and we find for the inner region
 
-\begin{equation}\label{eqn:continuumL20:n}
-u = A (1 - e^{-Y}) = A( 1 - e^{-y/\epsilon} )
+\begin{equation}\label{eqn:continuumL20:890}
+u = A (1 - e^{-Y}) = A( 1 - e^{-y/\epsilon} ) \sim 1 - e^{-y/\epsilon}.
 \end{equation}
 
-In the outer region with $\epsilon \rightarrow 0$ and $y = O(1)$ we have
+Taking these independent solutions for the inner and outer regions and putting them together into a coherent form (called matched asymptotic expansion) is a rich and tricky field.  For info on that we've been referred to \cite{hinch1991perturbation}.
 
-\begin{equation}\label{eqn:continuumL20:n}
-\frac{du}{dy} = 1
-\end{equation}
-
-or 
-
-\begin{equation}\label{eqn:continuumL20:n}
-u = y + 1
-\end{equation}
-
-%Taking both together we have something that looks like
-%
-%FIXME: F4
-%
-%FIXME: Reading: \S XX from \cite{acheson1990elementary}
-
-FIXME: what was the reference? John Hinch.  Theory of pertubations.
-
-%\EndArticle
-\EndNoBibArticle
+\EndArticle
