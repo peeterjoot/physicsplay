@@ -38,8 +38,8 @@ phy454.pdf :: $(PHY454) $(LOCAL_FILES) mathematica.tex
 animatedTwoLayerFlowMu2GreaterThanMu1Try2.mp4 :
 	wget $(URLPATH)animatedTwoLayerFlowMu2GreaterThanMu1Try2.mp4
 
-animatedTwoLayerFlowMu2GreaterThanMu2Try1.mp4 :
-	wget $(URLPATH)animatedTwoLayerFlowMu2GreaterThanMu2Try1.mp4
+animatedTwoLayerFlowMu1GreaterThanMu2Try2.mp4 :
+	wget $(URLPATH)animatedTwoLayerFlowMu1GreaterThanMu2Try2.mp4
 
 channelFlowWithStepPressureGradientEarlyTimeEvolution.mp4 : 
 	wget $(URLPATH)channelFlowWithStepPressureGradientEarlyTimeEvolution.mp4
