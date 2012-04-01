@@ -44,14 +44,21 @@ ORIG_FILES += ../gabook/parallelogramArea.png
 #ORIG_FILES += ../gabook/gaQuickIntroFig2.pdf
 #ORIG_FILES += ../gabook/gaQuickIntroFig2.pdf_tex
 #ORIG_FILES += ../phy454/animatedTwoLayerFlowMu2GreaterThanMu1.avi
+ORIG_FILES += ../phy454/animatedTwoLayerFlowMu1GreaterThanMu2.avi
 #ORIG_FILES += ../phy454/channelFlowWithStepPressureGradientTimeEvolution.wmv
 
-VIDEO += channelFlowWithStepPressureGradientTimeEvolution.avi
+VIDEO += channelFlowWithStepPressureGradientTimeEvolution.mp4
+VIDEO += channelFlowWithStepPressureGradientTimeEvolution2.mp4
+VIDEO += animatedTwoLayerFlowMu1GreaterThanMu2.mp4
+VIDEO += animatedTwoLayerFlowMu2GreaterThanMu1.mp4
+VIDEO += channelFlowWithStepPressureGradientEarlyTimeEvolution.mp4
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
-all :: $(LOCAL_FILES) $(PDFS) $(VIDEO)
+all :: $(LOCAL_FILES) $(PDFS)
 #all :: ftMaxVacuum.pdf
+
+video: $(VIDEO)
 
 channelFlowWithStepPressureGradientTimeEvolution.avi : 
 	wget http://peeterjoot.hostei.com/phy454/channelFlowWithStepPressureGradientTimeEvolution.avi
@@ -74,6 +81,9 @@ gaBasics.pdf : gaBasics.tex
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo > ./.revinfo/lastCommit.tex
 	perl ../make_pdflatex $<
+
+%.mp4 : %.avi
+	/cygdrive/c/Temp/ffmpeg/bin/ffmpeg -i $< -vcodec libx264 $@
 
 clean :: mostlyclean localclean
 
