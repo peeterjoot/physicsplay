@@ -44,11 +44,17 @@ ORIG_FILES += ../gabook/parallelogramArea.png
 #ORIG_FILES += ../gabook/gaQuickIntroFig2.pdf
 #ORIG_FILES += ../gabook/gaQuickIntroFig2.pdf_tex
 #ORIG_FILES += ../phy454/animatedTwoLayerFlowMu2GreaterThanMu1.avi
+#ORIG_FILES += ../phy454/channelFlowWithStepPressureGradientTimeEvolution.wmv
+
+VIDEO += channelFlowWithStepPressureGradientTimeEvolution.avi
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
-all :: $(LOCAL_FILES) $(PDFS)
+all :: $(LOCAL_FILES) $(PDFS) $(VIDEO)
 #all :: ftMaxVacuum.pdf
+
+channelFlowWithStepPressureGradientTimeEvolution.avi : 
+	wget http://peeterjoot.hostei.com/phy454/channelFlowWithStepPressureGradientTimeEvolution.avi
 
 $(PDFS) : $(LOCAL_FILES)
 

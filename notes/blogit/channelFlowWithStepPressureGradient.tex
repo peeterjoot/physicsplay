@@ -1,7 +1,9 @@
 \input{../peeter_prologue_print.tex}
 %\input{../peeter_prologue_widescreen.tex}
 
-%\usepackage{movie15}
+\usepackage{movie15}
+%\usepackage[english]{babel}
+%\usepackage{media9}
 
 \chapter{Channel flow with step pressure gradient}
 \label{chap:channelFlowWithStepPressureGradient}
@@ -213,7 +215,8 @@ Our undetermined constants should be provided by the boundary value constraint a
 \begin{equation}\label{eqn:channelFlowWithStepPressureGradient:470}
 -\frac{P}{2 \mu} \left( h^2 - y^2 \right)
 =
-C_0 + \sum_{m > 0} C_m 
+%C_0 + 
+\sum_{m \ge 0} C_m 
 \left\{
 \begin{array}{l l}
 \sin \left( \frac{ m \pi y }{2 h} \right) & \quad \mbox{$m$ even} \\
@@ -222,17 +225,17 @@ C_0 + \sum_{m > 0} C_m
 \right.
 \end{equation}
 
-We find $C_0$ by integrating over $[-h, h]$
-
-\begin{equation}\label{eqn:channelFlowWithStepPressureGradient:490}
-\int_{-h}^h -\frac{P}{2 \mu} \left( h^2 - y^2 \right) = 2 h C_0,
-\end{equation}
-
-which yields
-
-\begin{equation}\label{eqn:channelFlowWithStepPressureGradient:510}
-C_0 = -\frac{P h^2}{12 \mu}.
-\end{equation}
+%We find $C_0$ by integrating over $[-h, h]$
+%
+%\begin{equation}\label{eqn:channelFlowWithStepPressureGradient:490}
+%\int_{-h}^h -\frac{P}{2 \mu} \left( h^2 - y^2 \right) dy = 2 h C_0,
+%\end{equation}
+%
+%which yields
+%
+%\begin{equation}\label{eqn:channelFlowWithStepPressureGradient:510}
+%C_0 = -\frac{P h^2}{12 \mu}.
+%\end{equation}
 
 Multiplying by a sine and integrating will clearly give zero (even times odd function over a symmetric interval).  Let's see if there's any scaling required to select out the $C_m$ term
 
@@ -300,7 +303,7 @@ Our complete solution is
 \begin{equation}\label{eqn:channelFlowWithStepPressureGradient:550}
 u(y, t) =
 \frac{P h^2}{2 \mu} \left( 1 - \left( \frac{y}{h} \right)^2 \right)
--\frac{P h^2}{12 \mu}
+%-\frac{P h^2}{12 \mu}
 - 
 \frac{16 P h^2 }{\mu \pi^3 }
 \sum_{n = 0}^\infty 
@@ -316,6 +319,69 @@ The largest of the damped exponentials above is the $n = 0$ term which is
 e^{ - \pi^2 \nu t /h^2 },
 \end{equation}
 
-so if $\nu t >> h^2$ these terms all die off.  That leaves us with the steady state equation, less the non-damped constant factor from the Fourier series.
+so if $\nu t >> h^2$ these terms all die off, leaving us with just the steady state.
+%.  That leaves us with the steady state equation, less the non-damped constant factor from the Fourier series.
+
+Rather remarkably, this Fourier series is actually a very good fit even after only a single term.  Using the viscosity and density of water, $h = 1 \text{cm}$, and $P = 3 \times \mu_{\text{water}} \times (2 \text{cm}/{s})/ h^2$ (parameterizing the pressure gradient by the average velocity it will induce), a plot of the parabola that we are fitting to and the difference of that from the first Fourier term is shown in figure (\ref{fig:channelFlowWithStepPressureGradient:channelFlowWithStepPressureGradientFig1}).
+
+\begin{figure}[htp]
+   \centering
+   \includegraphics[totalheight=0.3\textheight]{channelFlowWithStepPressureGradientFig1}
+   \caption{Parabolic channel flow steady state, and difference from first Fourier term.}\label{fig:channelFlowWithStepPressureGradient:channelFlowWithStepPressureGradientFig1}
+\end{figure}
+
+The higher order corrections are even smaller.  Even the first order deviations from the parabola that we are fitting to is a correction on the scale of $1/100$ of the height of the parabola.  This is illustrated in figure (\ref{fig:channelFlowWithStepPressureGradient:channelFlowWithStepPressureGradientFig2}) where the magnitude of the first 5 deviations from the steady state are plotted.
+
+\begin{figure}[htp]
+   \centering
+   \includegraphics[
+totalheight=0.3\textheight
+]{channelFlowWithStepPressureGradientFig2}
+   \caption{Difference from the steady state for the first five Fourier terms.}
+   \label{fig:channelFlowWithStepPressureGradient:channelFlowWithStepPressureGradientFig2}
+\end{figure}
+
+An animation of the time evolution above can be found in \ref{fig:channelFlowWithStepPressureGradient:channelFlowWithStepPressureGradientAnimation1}.
+
+\begin{figure}[htp]
+   \centering
+   \includemovie[ poster, text={\small(Loading ...)} ]{10cm}{10cm}{channelFlowWithStepPressureGradientTimeEvolution.avi}
+   \caption{Time evolution of channel flow velocity profile after turning on a constant pressure gradient (CLICK TO ANIMATE).}
+   \label{fig:channelFlowWithStepPressureGradient:channelFlowWithStepPressureGradientAnimation1}
+\end{figure}
+
+%%%%%\begin{figure}[htp]
+%%%%%   \centering
+%%%%%   \includemedia[ 
+%%%%%width=0.6\linewidth,height=0.45\linewidth,
+%%%%%%addresource=http://peeterjoot.hostei.com/phy454/channelFlowWithStepPressureGradientTimeEvolution.mp4,
+%%%%%addresource=channelFlowWithStepPressureGradientTimeEvolution.mp4,
+%%%%%%activate=pageopen,
+%%%%%%activate=onclick,
+%%%%%flashvars={%
+%%%%%%source=http://peeterjoot.hostei.com/phy454/channelFlowWithStepPressureGradientTimeEvolution.mp4%
+%%%%%source=channelFlowWithStepPressureGradientTimeEvolution.mp4%
+%%%%%&autoplay=true%
+%%%%%%&autohide=0%
+%%%%%}
+%%%%%]{Click to animate.}{VPlayer.swf}
+%%%%%%{http://mirrors.ibiblio.org/pub/mirrors/CTAN/macros/latex/contrib/media9/players/VPlayer.swf}
+%%%%%   \caption{Time evolution of channel flow velocity profile after turning on a constant pressure gradient (CLICK TO ANIMATE).}
+%%%%%   \label{fig:channelFlowWithStepPressureGradient:channelFlowWithStepPressureGradientAnimation1}
+%%%%%\end{figure}
+%%%%%%flashvars={source=channelFlowWithStepPressureGradientTimeEvolution.mp4}
+%%%%%%&loop=true%
+%%%%%%&vid=./channelFlowWithStepPressureGradientTimeEvolution.mp4
+%%%%%
+%%%%%%\includemedia[
+%%%%%%width=0.6\linewidth,height=0.45\linewidth,
+%%%%%%activate=pageopen,
+%%%%%%flashvars={%
+%%%%%%autoPlay=true%
+%%%%%%&source=rtmp://streaming.music.indiana.edu:1935/onDemand/%
+%%%%%%mp4:media/20090327_VarRussianTheme-h264-480.m4v%
+%%%%%%}
+%%%%%%]{}{VPlayer.swf}
+%%%%%
 
 \EndArticle
