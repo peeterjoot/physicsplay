@@ -1,5 +1,6 @@
 RAWTEXFILES := $(shell ls *.tex)
 INCOMPLETE += motionOfFreeTop.tex
+INCOMPLETE += xx.tex
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
 PDFS := $(TEXFILES:.tex=.pdf)
@@ -48,12 +49,13 @@ ORIG_FILES += ../gabook/parallelogramArea.png
 #ORIG_FILES += ../phy454/animatedTwoLayerFlowMu2GreaterThanMu1.avi
 #ORIG_FILES += ../phy454/animatedTwoLayerFlowMu1GreaterThanMu2.avi
 #ORIG_FILES += ../phy454/channelFlowWithStepPressureGradientTimeEvolution.wmv
+ORIG_FILES += ../strobe/StrobeMediaPlayback.swf
 
-VIDEO += channelFlowWithStepPressureGradientTimeEvolution.avi
+#VIDEO += channelFlowWithStepPressureGradientTimeEvolution.avi
 #VIDEO += channelFlowWithStepPressureGradientTimeEvolution2.mp4
 #VIDEO += animatedTwoLayerFlowMu1GreaterThanMu2.mp4
 #VIDEO += animatedTwoLayerFlowMu2GreaterThanMu1.mp4
-VIDEO += channelFlowWithStepPressureGradientEarlyTimeEvolution.avi
+#VIDEO += channelFlowWithStepPressureGradientEarlyTimeEvolution.avi
 
 #VIDEO += animatedTwoLayerFlowMu2GreaterThanMu1Try2.mp4
 #VIDEO += animatedTwoLayerFlowMu1GreaterThanMu2Try2.mp4

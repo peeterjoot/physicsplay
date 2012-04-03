@@ -6,6 +6,7 @@ ORIG_FILES += ../alphaurl.bst
 ORIG_FILES += ../plainurl.bst
 ORIG_FILES += ../unsrturl.bst
 ORIG_FILES += ../eliblog.cls 
+ORIG_FILES += ../strobe/StrobeMediaPlayback.swf
 
 URLPATH := http://peeterjoot.hostei.com/phy454/
 
@@ -35,11 +36,11 @@ phy454.pdf :: $(PHY454) $(LOCAL_FILES) mathematica.tex
 	mv main.pdf phy454.pdf
 
 # backed up .mp4's (and .avi's) to:
-animatedTwoLayerFlowMu2GreaterThanMu1Try2.mp4 :
-	wget $(URLPATH)animatedTwoLayerFlowMu2GreaterThanMu1Try2.mp4
+animatedTwoLayerFlowMu2GreaterThanMu1Try3.mp4 :
+	wget $(URLPATH)animatedTwoLayerFlowMu2GreaterThanMu1Try3.mp4
 
-animatedTwoLayerFlowMu1GreaterThanMu2Try2.mp4 :
-	wget $(URLPATH)animatedTwoLayerFlowMu1GreaterThanMu2Try2.mp4
+animatedTwoLayerFlowMu1GreaterThanMu2Try3.mp4 :
+	wget $(URLPATH)animatedTwoLayerFlowMu1GreaterThanMu2Try3.mp4
 
 channelFlowWithStepPressureGradientEarlyTimeEvolution.mp4 : 
 	wget $(URLPATH)channelFlowWithStepPressureGradientEarlyTimeEvolution.mp4
