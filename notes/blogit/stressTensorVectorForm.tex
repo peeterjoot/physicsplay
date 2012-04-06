@@ -17,24 +17,23 @@
 Exersize 6.1 from \cite{acheson1990elementary} is to show that the traction vector can be written in vector form (a rather curious thing to have to say) as
 
 \begin{equation}\label{eqn:stressTensorVectorForm:10}
-\Bt = -p \Bn + \mu ( 2 ( \Bn \cdot \spacegrad + \Bn \cross (\spacegrad \cross \Bu)).
+\Bt = -p \Bn + \mu ( 2 \Bn \cdot \spacegrad + \Bn \cross (\spacegrad \cross \Bu)).
 \end{equation}
 
 Note that the text uses a wedge symbol for the cross product, and I've switched to standard notation.  I've done so because the use of a Geometric-Algebra wedge product also can be used to express this relationship, in which case we would write
 
 \begin{equation}\label{eqn:stressTensorVectorForm:30}
-\Bt = -p \Bn + \mu ( 2 ( \Bn \cdot \spacegrad - \Bn \cdot (\spacegrad \wedge \Bu)).
+\Bt = -p \Bn + \mu ( 2 \Bn \cdot \spacegrad + (\spacegrad \wedge \Bu) \cdot \Bn).
 \end{equation}
 
 In either case we have
 
 \begin{equation}\label{eqn:stressTensorVectorForm:50}
-\Bn \cdot (\spacegrad \wedge \Bu)
+(\spacegrad \wedge \Bu) \cdot \Bn
 = 
--\Bn \cross (\spacegrad \cross \Bu)
+\Bn \cross (\spacegrad \cross \Bu)
 =
-(\Bn \cdot \spacegrad) \Bu -
-\spacegrad' (\Bn \cdot \Bu')
+\spacegrad' (\Bn \cdot \Bu') - (\Bn \cdot \spacegrad) \Bu 
 \end{equation}
 
 (where the primes indicate the scope of the gradient, showing here that we are operating only on $\Bu$, and not $\Bn$).
@@ -42,5 +41,81 @@ In either case we have
 After computing this, lets also compute the stress tensor in cylindrical and spherical coordinates, something that this allows us to do fairly easily without having to deal with the second order terms that we encountered doing this by computing the difference of squared displacements.
 
 \section{Verifying the relationship.}
+
+Let's start with the the plain old cross product version
+
+\begin{align*}
+(\Bn \cross (\spacegrad \cross \Bu) + 2 (\Bn \cdot \spacegrad) \Bu)_i
+&=
+n_a (\spacegrad \cross \Bu)_b \epsilon_{a b i}  + 2 n_a \partial_a u_i \\
+&=
+n_a \partial_r u_s \epsilon_{r s b} \epsilon_{a b i}  + 2 n_a \partial_a u_i \\
+&=
+n_a \partial_r u_s \delta_{ia}^{[rs]} + 2 n_a \partial_a u_i \\
+&=
+n_a ( \partial_i u_a -\partial_a u_i ) + 2 n_a \partial_a u_i \\
+&=
+n_a \partial_i u_a + n_a \partial_a u_i \\
+&=
+n_a (\partial_i u_a + \partial_a u_i) \\
+&=
+\sigma_{i a } n_a 
+\end{align*}
+
+We can also put the double cross product in wedge product form
+
+\begin{align*}
+\Bn \cross (\spacegrad \cross \Bu)
+&=
+-I \Bn \wedge (\spacegrad \cross \Bu) \\
+&=
+-\frac{I}{2} 
+\left(
+\Bn (\spacegrad \cross \Bu) 
+- (\spacegrad \cross \Bu) \Bn
+\right) \\
+&=
+-\frac{I}{2} 
+\left(
+-I \Bn (\spacegrad \wedge \Bu) 
++ I (\spacegrad \wedge \Bu) \Bn
+\right) \\
+&=
+-\frac{I^2}{2} 
+\left(
+- \Bn (\spacegrad \wedge \Bu) 
++ (\spacegrad \wedge \Bu) \Bn
+\right) \\
+&=
+(\spacegrad \wedge \Bu) \cdot \Bn
+\end{align*}
+
+Equivalently (and easier) we can just expand the dot product of the wedge and the vector using the relationship
+
+\begin{equation}\label{eqn:stressTensorVectorForm:n}
+\Ba \cdot (\Bc \wedge \Bd \wedge \Be \wedge \cdots )
+=
+(\Ba \cdot \Bc) (\Bd \wedge \Be \wedge \cdots ) - (\Ba \cdot \Bd) (\Bc \wedge \Be \wedge \cdots ) +
+\end{equation}
+
+so we find
+
+\begin{align*}
+((\spacegrad \wedge \Bu) \cdot \Bn + 2 (\Bn \cdot \spacegrad) \Bu
+)_i
+&=
+(
+\spacegrad' (\Bu' \cdot \Bn)
+-
+(\Bn \cdot \spacegrad) \Bu
++ 2 (\Bn \cdot \spacegrad) \Bu
+)_i \\
+&=
+\partial_i u_a n_a
++
+n_a \partial_a u_i \\
+&=
+\sigma_{ia} n_a.
+\end{align*}
 
 \EndArticle
