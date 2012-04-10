@@ -15,6 +15,7 @@ ORIG_FILES += ../plainurl.bst
 ORIG_FILES += ../unsrturl.bst
 
 # for gaBasics:
+ORIG_FILES += ../phy454/couetteFlowFig1.png
 #ORIG_FILES += ../phy456/qmTwoL22fig5.png
 ORIG_FILES += ../otherbook/triangleLaw.png
 ORIG_FILES += ../otherbook/rotateMinusOne.png
