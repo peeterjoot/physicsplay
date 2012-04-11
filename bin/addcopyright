@@ -1,0 +1,47 @@
+#!/usr/bin/perl
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+# cygwin gives me unknown module.  How to update?
+#use File::Slurp ;
+
+my $showUsage = 0 ;
+my $filename ;
+my $copytext ;
+
+GetOptions
+( 
+   'file=s'  => \$filename,
+   'copy=s'  => \$copytext,
+   'help!'   => \$showUsage,
+) ;
+
+if ( $showUsage or !defined $filename or !defined $copytext )
+{
+   die "usage: addcopyright -file filename -copy copyrightfilename\n" ;
+}
+
+my $copy = read_file( $copytext ) ;
+my $text = read_file( $filename ) ;
+
+open my $fh, ">$filename" or die "could not open '$filename' for write\n" ;
+print $fh $copy . $text ;
+close $fh ;
+
+exit 0 ;
+
+sub read_file
+{
+   my ($path) = @_ ;
+   my $t = '' ;
+   open my $fh, "<$path" or die "could not open file '$path'\n" ;
+
+   while (<$fh>)
+   {
+      $t .= $_ ;
+   }
+   close $fh ;
+
+   return $t ;
+}

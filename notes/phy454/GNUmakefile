@@ -6,6 +6,11 @@ ORIG_FILES += ../alphaurl.bst
 ORIG_FILES += ../plainurl.bst
 ORIG_FILES += ../unsrturl.bst
 ORIG_FILES += ../eliblog.cls 
+ORIG_FILES += ../sourceaccess.tex 
+ORIG_FILES += ../gitclone.ksh
+ORIG_FILES += ../gitPull.ksh
+ORIG_FILES += ../sampleBuildMake.ksh
+ORIG_FILES += ../currentBookCopyright.tex
 ORIG_FILES += ../strobe/StrobeMediaPlayback.swf
 
 URLPATH := http://peeterjoot.hostei.com/phy454/
