@@ -11,6 +11,18 @@ ORIG_FILES += ../gitclone.ksh
 ORIG_FILES += ../gitPull.ksh
 ORIG_FILES += ../sampleBuildMake.ksh
 ORIG_FILES += ../currentBookCopyright.tex
+
+# this isn't part of my git repository.  It is the open-source StrobeMediaPlayback.swf from Adobe, hosted on SourceForge.net, and recommended by the media9 package maintainer, and 
+# available here:
+#
+# http://sourceforge.net/projects/smp.adobe/files/
+#
+# I've downloaded that and placed the flash 10.1 version here:
+# 
+# note that the next version of media9 will bundle this directly, so requiring this external file for now is only temporary:
+#
+# http://tex.stackexchange.com/questions/1574/embedding-videos-and-animations/50370#comment104622_50370
+#
 ORIG_FILES += ../strobe/StrobeMediaPlayback.swf
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
