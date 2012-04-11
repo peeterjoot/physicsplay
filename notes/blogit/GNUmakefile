@@ -50,38 +50,15 @@ ORIG_FILES += ../gabook/parallelogramArea.png
 #ORIG_FILES += ../phy454/animatedTwoLayerFlowMu2GreaterThanMu1.avi
 #ORIG_FILES += ../phy454/animatedTwoLayerFlowMu1GreaterThanMu2.avi
 #ORIG_FILES += ../phy454/channelFlowWithStepPressureGradientTimeEvolution.wmv
-ORIG_FILES += ../strobe/StrobeMediaPlayback.swf
-
-#VIDEO += channelFlowWithStepPressureGradientTimeEvolution.avi
-#VIDEO += channelFlowWithStepPressureGradientTimeEvolution2.mp4
+#ORIG_FILES += ../strobe/StrobeMediaPlayback.swf
 #VIDEO += animatedTwoLayerFlowMu1GreaterThanMu2.mp4
-#VIDEO += animatedTwoLayerFlowMu2GreaterThanMu1.mp4
-#VIDEO += channelFlowWithStepPressureGradientEarlyTimeEvolution.avi
-
-#VIDEO += animatedTwoLayerFlowMu2GreaterThanMu1Try2.mp4
-#VIDEO += animatedTwoLayerFlowMu1GreaterThanMu2Try2.mp4
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
-
-MEDIAURLPATH := http://peeterjoot.hostei.com/phy454
 
 all :: $(LOCAL_FILES) $(PDFS)
 #all :: ftMaxVacuum.pdf
 
 video: $(VIDEO)
-
-# backed up .mp4's (and .avi's) to:
-#animatedTwoLayerFlowMu2GreaterThanMu1Try2.mp4 :
-#	wget $(MEDIAURLPATH)/animatedTwoLayerFlowMu2GreaterThanMu1Try2.mp4
-#
-#animatedTwoLayerFlowMu2GreaterThanMu2Try1.mp4 :
-#	wget $(MEDIAURLPATH)/animatedTwoLayerFlowMu2GreaterThanMu2Try1.mp4
-
-channelFlowWithStepPressureGradientEarlyTimeEvolution.avi : 
-	wget $(MEDIAURLPATH)/channelFlowWithStepPressureGradientEarlyTimeEvolution.avi
-
-channelFlowWithStepPressureGradientTimeEvolution.avi : 
-	wget $(MEDIAURLPATH)/channelFlowWithStepPressureGradientTimeEvolution.avi
 
 $(PDFS) : $(LOCAL_FILES)
 
