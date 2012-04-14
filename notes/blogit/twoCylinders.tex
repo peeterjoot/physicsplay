@@ -20,6 +20,9 @@
 \input{../peeter_prologue_print.tex}
 %\input{../peeter_prologue_widescreen.tex}
 
+\usepackage[english]{babel}
+\usepackage{media9}
+
 \chapter{Flow between infinite moving inner cylinder and outer cylinder.}
 \label{chap:twoCylinders}
 %\useCCL
@@ -51,7 +54,7 @@ An infinite cylinder of radius $R_1$ is moving with velocity $v$ parallel to its
 
 Let's start with the illustration of figure (\ref{fig:twoCylinder:twoCylinderFig1}) to fix coordinates.
 
-\imageFigure{twoCylinderFig1}{1: FIXME: CAPTION}{fig:twoCylinder:twoCylinderFig1}{0.3}
+\imageFigure{twoCylinderFig1}{Coordinates for flow between two cylinders.}{fig:twoCylinder:twoCylinderFig1}{0.2}
 
 We'll assume that we can find a solution of the following form
 
@@ -164,13 +167,121 @@ A plot of this function can be found in figure (\ref{fig:twoCylinder:twoCylinder
 
 \imageFigure{twoCylinderFig2}{Velocity plot due to inner cylinder dragging fluid along with it.}{fig:twoCylinder:twoCylinderFig2}{0.2}
 
+%figure (\ref{fig:twoCylinders:twoCylindersFig3}).
+%\movieFigure{twoCylindersFig3.flv}{3: FIXME: CAPTION}{fig:twoCylinders:twoCylindersFig3}{width=320pt,height=240pt}
+
 \subsection{Part 2.  Friction force per unit length.}
 
-TODO.
+For the frictional force per unit area on the fluid by the inner cylinder we have
+
+\begin{align*}
+(\Bsigma \cdot \rcap ) \cdot \zcap
+&=
+-p \rcap \cdot \zcap +
+2 \mu \inv{2} \left( 
+\PD{r}{u_z}
++\cancel{\PD{z}{u_r}}
+\right) \\
+&=
+\mu v \frac{\ln r }{\ln (R_1/R_2) }
+\end{align*}
+
+So the forces on the inner and outer cylinders for a strip of width $\Delta z$ is
+
+\begin{subequations}
+\begin{equation}\label{eqn:twoCylinder:330}
+\text{frictional force on inner cylinder} 
+= -2 \pi R_1 \Delta z \mu v \zcap \frac{\ln R_1 }{\ln (R_1/R_2) }
+\end{equation}
+\begin{equation}\label{eqn:twoCylinder:350}
+\text{frictional force on inner cylinder} 
+=
+2 \pi R_2 \Delta z \mu v \zcap \frac{\ln R_2 }{\ln (R_1/R_2) }
+\end{equation}
+\end{subequations}
 
 \subsection{Part 4.  With external pressure gradient.}
 
-TODO.
+With an external pressure gradient imposed we expect a superposition of a parabolic flow profile with what we've calculated above.  With 
+
+\begin{equation}\label{eqn:twoCylinder:370}
+G = - \frac{dp}{dz},
+\end{equation}
+
+our Navier-Stokes equation will now take the form
+
+\begin{equation}\label{eqn:twoCylinder:390}
+0 = - \rcap p' - (-G \zcap) + \frac{\mu}{r} (r w')' \zcap.
+\end{equation}
+
+We want to solve the LDE
+
+\begin{equation}\label{eqn:twoCylinder:410}
+- \frac{ G r}{\mu} =
+(r w')' = r w'' + w'
+\end{equation}
+
+The homogeneous portion of this equation
+
+\begin{equation}\label{eqn:twoCylinder:430}
+(r w')' = 0,
+\end{equation}
+
+we have already solved finding $w = C \ln r + D$.  It looks reasonable to try a polynomial solution for the specific solution.  Let's try a second order polynomial
+
+\begin{subequations}
+\begin{equation}\label{eqn:twoCylinder:450}
+w = A r^2 + B r 
+\end{equation}
+\begin{equation}\label{eqn:twoCylinder:470}
+w' = 2 A r + B
+\end{equation}
+\begin{equation}\label{eqn:twoCylinder:490}
+w'' = 2 A.
+\end{equation}
+\end{subequations}
+
+We need
+
+\begin{equation}\label{eqn:twoCylinder:510}
+-\frac{G r}{\mu} = 2 A r + 2 A r + B,
+\end{equation}
+
+So $B = 0$ and $4 A = -G/\mu$, and our general solution has the form
+
+\begin{equation}\label{eqn:twoCylinder:530}
+w = -\frac{G}{4 \mu} r^2 + C \ln r + D.
+\end{equation}
+
+requiring just the boundary condition fitting.  Let's tweak the constants slightly, writing
+
+\begin{equation}\label{eqn:twoCylinder:550}
+w = \frac{G}{4 \mu} (R_2^2 - r^2) + C \ln r/R_2 + D,
+\end{equation}
+
+so that $D = 0$ falls out of the $w(R_2) = 0$ constraint.  Our last integration constant is then determined by the solution of
+
+\begin{equation}\label{eqn:twoCylinder:570}
+v = \frac{G}{4 \mu} (R_2^2 - R_1^2) + C \ln R_1/R_2.
+\end{equation}
+
+Or
+
+\begin{equation}\label{eqn:twoCylinder:590}
+\boxed{
+w = \frac{G}{4 \mu} (R_2^2 - r^2) + 
+\left(v - \frac{G}{4 \mu} (R_2^2 - R_1^2)\right)
+\frac{\ln r/R_2}{\ln R_1/R_2}.
+}
+\end{equation}
+
+A plot of this, with a pressure gradient small enough that we still see the logarithmic profile is shown in figure (\ref{fig:twoCylinder:twoCylinderFig4}).  An animation of this with different values for $R_1$, $v$, and $G/4\mu$ is available on \href{http://youtu.be/BNgpnYeRpLo}{http://youtu.be/BNgpnYeRpLo}, but the Mathematica notebook above can also be used.
+
+\imageFigure{twoCylinderFig4}{Pressure gradient added.}{fig:twoCylinder:twoCylinderFig4}{0.2}
+
+% Too big and two slow to embed:
+%figure (\ref{fig:twoCylinders:twoCylindersFig5}).
+%\movieFigure{twoCylindersFig5.flv}{5: FIXME: CAPTION}{fig:twoCylinders:twoCylindersFig5}{width=320pt,height=240pt}
 
 %\EndArticle
 \EndNoBibArticle
