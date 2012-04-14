@@ -84,7 +84,11 @@ gaBasics.pdf : gaBasics.tex
 	~/bin/mkRevInfo > ./.revinfo/lastCommit.tex
 	perl ../make_pdflatex $<
 
-%.mp4 : %.avi
+#%.mp4 : %.avi
+#	/cygdrive/c/Temp/ffmpeg/bin/ffmpeg -i $< -vcodec libx264 $@
+
+%.mp4 : %.mov
+	#/cygdrive/c/Temp/ffmpeg/bin/ffmpeg -i $< -vcodec copy -acodec copy $@
 	/cygdrive/c/Temp/ffmpeg/bin/ffmpeg -i $< -vcodec libx264 $@
 
 clean :: mostlyclean localclean
