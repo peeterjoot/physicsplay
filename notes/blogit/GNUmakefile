@@ -56,6 +56,15 @@ ORIG_FILES += ../gabook/parallelogramArea.png
 #ORIG_FILES += ../phy454/animatedTwoLayerFlowMu1GreaterThanMu2.avi
 #ORIG_FILES += ../phy454/channelFlowWithStepPressureGradientTimeEvolution.wmv
 #ORIG_FILES += ../strobe/StrobeMediaPlayback.swf
+
+ORIG_FILES += ../phy454/twoCylinderFig1.png
+ORIG_FILES += ../phy454/twoCylinderFig2.png
+ORIG_FILES += ../phy454/twoCylinderFig4.png
+ORIG_FILES += ../phy454/twoCylindersFig6.png
+ORIG_FILES += ../phy454/twoCylindersFig7.png
+ORIG_FILES += ../phy454/twoCylindersFig8.png
+ORIG_FILES += ../phy454/twoCylindersFig9.png
+
 #VIDEO += animatedTwoLayerFlowMu1GreaterThanMu2.mp4
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
