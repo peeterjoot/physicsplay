@@ -59,6 +59,7 @@ ORIG_FILES += ../gabook/parallelogramArea.png
 
 ORIG_FILES += ../phy454/twoCylinderFig1.png
 ORIG_FILES += ../phy454/twoCylinderFig2.png
+ORIG_FILES += ../phy454/twoCylindersFig3.mp4
 ORIG_FILES += ../phy454/twoCylinderFig4.png
 ORIG_FILES += ../phy454/twoCylindersFig6.png
 ORIG_FILES += ../phy454/twoCylindersFig7.png
