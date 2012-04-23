@@ -28,7 +28,7 @@
 \blogpage{http://sites.google.com/site/peeterjoot2/math2012/continuumReview.pdf}
 \date{Apr 21, 2012}
 \gitRevisionInfo{continuumReview}
-\keywords{strain, displacement vector, stress, constituitive relation, Lame parameters, shear modulus, Cauchy tetrahedron, Uniform hydrostatic compression, Bulk modulus, Uniaxial stress, Young's modulus, Poisson's ratio.}
+\keywords{strain, displacement vector, stress, constitutive relation, Lame parameters, shear modulus, Cauchy tetrahedron, Uniform hydrostatic compression, Bulk modulus, Uniaxial stress, Young's modulus, Poisson's ratio, Compatibility condition}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -91,7 +91,7 @@ e_{ij}
 \right).
 \end{equation}
 
-\subsection{relating displacement and position by strain}
+\subsection{Unresolved: Relating displacement and position by strain}
 
 In \cite{feynman1963flp:elasticMaterials} it is pointed out that this strain tensor simply relates the displacement vector coordinates $u_i$ to the coordinates at the point at which it is measured
 
@@ -99,7 +99,29 @@ In \cite{feynman1963flp:elasticMaterials} it is pointed out that this strain ten
 u_i = e_{ij} x_j.
 \end{equation}
 
-This is easily seen to be the case, recovering \ref{eqn:continuumReview:90} by taking derivatives of \ref{eqn:continuumReview:110}, plus an assumption that $e_{ij}$ is symmetric.
+When we get to fluid dynamics we perform a linear expansion of $du_i$ and find something similar
+
+\begin{equation}\label{eqn:continuumReview:530}
+dx_i' - dx_i = du_i = \PD{x_k}{u_i} dx_k = e_{ij} dx_k + \omega_{ij} dx_k
+\end{equation}
+
+where
+
+\begin{equation}\label{eqn:continuumReview:550}
+\omega_{ij} = \inv{2} \left( \PD{x_i}{u_j} +\PD{x_j}{u_i} \right).
+\end{equation}
+
+Except for the antisymmetric term, note the structural similarity of \ref{eqn:continuumReview:110} and \ref{eqn:continuumReview:530}.  Why is it that we neglect the vorticity tensor in statics?
+%  If we are approximating the displacement, it appears to have a natural place in things, as we can see
+%
+%\begin{align*}
+%u_i 
+%&\approx \PD{x_j}{u_i} x_j \\
+%&=
+%e_{ij} x_j + \omega_{ik} x_k.
+%\end{align*}
+%
+%This is easily seen to be the case, recovering \ref{eqn:continuumReview:90} by taking derivatives of \ref{eqn:continuumReview:110}, plus an assumption that $e_{ij}$ is symmetric.
 
 \subsection{Diagonal strain representation.}
 
@@ -129,7 +151,7 @@ e_{kk} \approx \frac{dV' - dV}{dV}.
 
 \subsection{Strain in cylindrical coordinates.}
 
-Useful in many practise problems are the cylindrical coordinate representation of the strain tensor 
+Useful in many practice problems are the cylindrical coordinate representation of the strain tensor 
 
 \begin{align}\label{eqn:continuumReview:210}
 2 e_{rr} &= \PD{r}{u_r}  \\
@@ -140,7 +162,7 @@ Useful in many practise problems are the cylindrical coordinate representation o
 2 e_{\phi z} &= \PD{z}{u_\phi} +\inv{r} \PD{\phi}{u_z}.
 \end{align}
 
-This can be found in \cite{landau1960theory}.  It was not derived there or in class, but is not too hard, even using the second order methods we used for the cartesian form of the tensor.
+This can be found in \cite{landau1960theory}.  It was not derived there or in class, but is not too hard, even using the second order methods we used for the Cartesian form of the tensor.
 
 An easier way to do this derivation (and understand what the coordinates represent) follows from the relation found in \S 6 of \cite{acheson1990elementary}
 
@@ -171,7 +193,7 @@ With force balance arguments (the Cauchy tetrahedron) we found that the force pe
 \Bt = \Be_i t_i = \Be_i \sigma_{ij} n_j.
 \end{equation}
 
-\section{Constituative relation.}
+\section{Constitutive relation.}
 
 In the scope of this course we considered only Newtonian materials, those for which the stress and strain tensors are linearly related
 
@@ -193,7 +215,24 @@ By computing the trace of the stress $\sigma_{ii}$ we can invert this to find
 2 \mu e_{ij} = \sigma_{ij} - \frac{\lambda}{3 \lambda + 2 \mu} \sigma_{kk} \delta_{ij}.
 \end{equation}
 
-\subsection{Uniform hydrostatic compression.}
+\section{Compatibility condition.}
+
+For a 2D strain tensor we found an interrelationship between the components of the strain tensor
+
+\begin{equation}\label{eqn:continuumReview:510}
+2 \frac{\partial^2 e_{12}}{\partial x_1 \partial x_2} 
+=
+\PDSq{x_1}{e_{22}} 
++\PDSq{x_2}{e_{11}},
+\end{equation}
+
+and called this the compatibility condition.  It was claimed, but not demonstrated that this is what is required to ensure a deformation maintained a coherent solid geometry.
+
+I wasn't able to find any references to this compatibility condition in any of the texts I have, but found \cite{wiki:compatibilityMechanics}, \cite{wiki:infinitesimalStrainTheory}, and \cite{wiki:saintVenantCompat}.  It's not terribly surprising to see Christoffel symbol and differential forms references on those pages, since one can imagine that we'd wish to look at the mappings of all the points in the object as it undergoes the transformation from the original to the deformed state.
+
+Even with just three points in a plane, say $\Ba$, $\Bb$, $\Bc$, the general deformation of an object doesn't seem like it's the easiest thing to describe.  We can imagine that these have trajectories in the deformation process $\Ba = \Ba(\alpha$, $\Bb = \Bb(\beta)$, $\Bc = \Bc(\gamma)$, with $\Ba', \Bb', \Bc'$ at the end points of the trajectories.  We'd want to look at displacement vectors $\Bu_a, \Bu_b, \Bu_c$ along each of these trajectories, and then see how they must be related.  Doing that carefully must result in this compatibility condition.
+
+\section{Uniform hydrostatic compression.}
 
 With only normal components of the stress (no shear), and the stress having the same value in all directions, we find
 
@@ -213,7 +252,7 @@ With $e_{ii} = (dV' - dV)/dV = \Delta V/V$, we formed the Bulk modulus $K$ with 
 K = \left( \lambda + \frac{2 \mu}{3} \right) = -\frac{p V}{\Delta V}.
 \end{equation}
 
-\subsection{Uniaxial stress.  Young's modulus.  Poisson's ratio.}
+\section{Uniaxial stress.  Young's modulus.  Poisson's ratio.}
 
 For the special case with only one non-zero stress component (we used $\sigma_{11}$) we were able to compute Young's modulus $E$, the ratio between stress and strain in that direction
 
@@ -244,5 +283,53 @@ e_{11} &= \inv{E}\left( \sigma_{11} - \nu(\sigma_{22} + \sigma_{33}) \right) \\
 e_{22} &= \inv{E}\left( \sigma_{22} - \nu(\sigma_{11} + \sigma_{33}) \right) \\
 e_{33} &= \inv{E}\left( \sigma_{33} - \nu(\sigma_{11} + \sigma_{22}) \right)
 \end{align}
+
+\section{Displacement propagation}
+
+It was argued that the equation relating the time evolution of a one of the vector displacement coordinates was given by
+
+\begin{equation}\label{eqn:continuumReview:570}
+\rho \PDSq{t}{u_i} = \PD{x_j}{\sigma_{ij}} + f_i,
+\end{equation}
+
+where the divergence term $\PDi{x_j}{\sigma_{ij}}$ is the internal force per unit volume on the object and $f_i$ is the external force.  Employing the constitutive relation we showed that this can be expanded as
+
+\begin{equation}\label{eqn:continuumReview:590}
+\rho \PDSq{t}{u_i} = (\lambda + \mu) \frac{\partial^2 u_k}{\partial x_i \partial x_k}
++ \mu
+\frac{\partial^2 u_i}
+{\partial x_j^2
+},
+\end{equation}
+
+or in vector form
+
+\begin{equation}\label{eqn:continuumReview:610}
+\rho \PDSq{t}{\Bu} = (\lambda + \mu) \spacegrad (\spacegrad \cdot \Bu) + \mu \spacegrad^2 \Bu.
+\end{equation}
+
+\section{P-waves}
+
+Operating on \ref{eqn:continuumReview:610} with the divergence operator, and writing $\Theta = \spacegrad \cdot \Bu$, a quantity that was our relative change in volume in the diagonal strain basis, we were able to find this divergence obeys a wave equation
+
+\begin{equation}\label{eqn:continuumReview:630}
+\PDSq{t}{\Theta} = \frac{\lambda + 2 \mu}{\rho} \spacegrad^2 \Theta.
+\end{equation}
+
+We called these P-waves.
+
+\section{S-waves}
+
+Similarly, operating on \ref{eqn:continuumReview:610} with the curl operator, and writing $\Bomega = \spacegrad \cross \Bu$, we were able to find this curl also obeys a wave equation
+
+\begin{equation}\label{eqn:continuumReview:650}
+\PDSq{t}{\Theta} = \frac{\lambda + 2 \mu}{\rho} \spacegrad^2 \Theta.
+\end{equation}
+
+These we called S-waves.  We also noted that the (transverse) compression waves (P-waves) with speed $C_T = \sqrt{\mu/\rho}$, traveled faster than the vorticity (S) waves with speed $C_L = \sqrt{(\lambda + 2 \mu)/\rho}$ since $\lambda > 0$ and $\mu > 0$, and 
+
+\begin{equation}\label{eqn:continuumReview:670}
+\frac{C_L}{C_T} = \sqrt{\frac{ \lambda + 2 \mu}{\mu}} = \sqrt{ \frac{\lambda}{\mu} + 2}.
+\end{equation}
 
 \EndArticle
