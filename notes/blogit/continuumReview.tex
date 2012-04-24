@@ -28,7 +28,7 @@
 \blogpage{http://sites.google.com/site/peeterjoot2/math2012/continuumReview.pdf}
 \date{Apr 21, 2012}
 \gitRevisionInfo{continuumReview}
-\keywords{strain, displacement vector, stress, constitutive relation, Lame parameters, shear modulus, Cauchy tetrahedron, Uniform hydrostatic compression, Bulk modulus, Uniaxial stress, Young's modulus, Poisson's ratio, Compatibility condition}
+\keywords{strain, displacement vector, stress, constitutive relation, Lame parameters, shear modulus, Cauchy tetrahedron, Uniform hydrostatic compression, Bulk modulus, Uniaxial stress, Young's modulus, Poisson's ratio, Compatibility condition,P-waves, S-waves, wave equation, displacement potentials, phasor, Love wave, Rayleigh wave}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -225,7 +225,7 @@ and further restricted our attention to isotropic materials, which can be shown 
 \sigma_{ij} = \lambda e_{kk} \delta_{ij} + 2 \mu e_{ij},
 \end{equation}
 
-where $\lambda$ and $\mu$ are the Lame parameters and $\mu$ is called the shear modulus.
+where $\lambda$ and $\mu$ are the Lame parameters and $\mu$ is called the shear modulus (and viscosity in the context of fluids).
 
 By computing the trace of the stress $\sigma_{ii}$ we can invert this to find
 
@@ -333,10 +333,138 @@ These we called S-waves.  We also noted that the (transverse) compression waves 
 \frac{C_L}{C_T} = \sqrt{\frac{ \lambda + 2 \mu}{\mu}} = \sqrt{ \frac{\lambda}{\mu} + 2}.
 \end{equation}
 
-\subsubsection{Elastostatics, gradient and curl representation of the vector displacement.}
+\subsubsection{Scalar and vector potential representation.}
 
-\subsubsection{Phasor description of vector displacement equations and solutions.}
+Assuming a vector displacement representation with gradient and curl components
+
+\begin{equation}\label{eqn:continuumReview:690}
+\Bu = \spacegrad \phi + \spacegrad \cross \BH,
+\end{equation}
+
+We found that the displacement time evolution equation split nicely into curl free and divergence free terms
+
+\begin{equation}\label{eqn:continuumReview:710}
+\spacegrad
+\left(
+\rho \PDSq{t}{\phi} - (\lambda + 2\mu) \spacegrad^2 \phi
+\right)
++
+\spacegrad \cross
+\left(
+\rho \PDSq{t}{\BH} - \mu \spacegrad^2 \BH
+\right)
+= 0.
+\end{equation}
+
+When neglecting boundary value effects this could be written as a pair of independent equations
+
+\begin{subequations}
+\begin{equation}\label{eqn:continuumReview:730}
+\rho \PDSq{t}{\phi} - (\lambda + 2\mu) \spacegrad^2 \phi = 0
+\end{equation}
+\begin{equation}\label{eqn:continuumReview:750}
+\rho \PDSq{t}{\BH} - \mu \spacegrad^2 \BH
+= 0.
+\end{equation}
+\end{subequations}
+
+This are the irrotational (curl free) P-wave and solenoidal (divergence free) S-wave equations respectively.
+
+%This theory led to no actual calculation work, just a few videos that illustrated what we'd presumably be able to calculate if we were to attempt to apply these concepts.
+
+\subsubsection{Phasor description.}
+
+It was mentioned that we could assume a phasor representation for our potentials, writing
+
+\begin{subequations}
+\begin{equation}\label{eqn:continuumReview:770}
+\phi = A \exp\left( i ( \Bk \cdot \Bx - \omega t) \right) 
+\end{equation}
+\begin{equation}\label{eqn:continuumReview:790}
+\BH = \BB \exp\left( i ( \Bk \cdot \Bx - \omega t) \right)
+\end{equation}
+\end{subequations}
+
+finding
+
+\begin{equation}\label{eqn:continuumReview:810}
+\Bu = i \Bk \phi + i \Bk \cross \BH.
+\end{equation}
+
+We did nothing with neither the potential nor the phasor theory for solid displacement time evolution, and presumably won't on the exam either.
+
+\subsection{Some wave types}
+
+Some time was spent on non-qualitative descriptions and review of descriptions for solutions to the time evolution equations we did not attempt
+
+\begin{itemize}
+\item P-waves \cite{wiki:pwave}.  Irrotational, non volume preserving body wave.
+\item S-waves \cite{wiki:swave}.  Divergence free body wave.  Shearing forces are present and volume is preserved (slower than S-waves)
+\item Rayleigh wave \cite{wiki:rayleighwave}.  A surface wave that propagates near the surface of a body without penetrating into it.
+\item Love wave \cite{wiki:lovewave}.  A polarized shear surface wave with the shear displacements moving perpendicular to the direction of propagation.
+\end{itemize}
+
+For reasons that aren't clear both the midterm and last years final ask us to spew this sort of stuff (instead of actually trying to do something analytic associated with them).
 
 \section{Fluids}
+
+\subsection{Vector displacements.}
+
+Those portions of the theory of elasticity that we did cover have the appearance of providing some logical context for the derivation of the Navier-Stokes equation.  Our starting point is almost identical, but we now look at displacements that vary with time, forming
+
+\begin{equation}\label{eqn:continuumReview:830}
+d\Bx' = d\Bx + d\Bu \delta t.
+\end{equation}
+
+We compute a first order Taylor expansion of this differential, defining a symmetric strain and antisymmetric vorticity tensor
+
+\begin{subequations}
+\begin{equation}\label{eqn:continuumReview:850}
+e_{ij} = \inv{2} \left(
+\PD{x_j}{u_i} +
+\PD{x_i}{u_j} \right).
+\end{equation}
+\begin{equation}\label{eqn:continuumReview:870}
+\omega_{ij} = \inv{2} \left(
+\PD{x_j}{u_i}
+-\PD{x_i}{u_j} \right)
+\end{equation}
+\end{subequations}
+
+Allowing us to write
+
+\begin{equation}\label{eqn:continuumReview:890}
+dx_i' = dx_i + e_{ij} dx_j \delta t + \omega_{ij} dx_j \delta t.
+\end{equation}
+
+We introduced vector and dual vector forms of the vorticity tensor with
+
+\begin{subequations}
+\begin{equation}\label{eqn:continuumReview:n}
+\Omega_k = \partial_i u_j \epsilon_{i j k}
+\end{equation}
+\begin{equation}\label{eqn:continuumReview:n}
+\omega_{i j} = -\Omega_k \epsilon_{i j k},
+\end{equation}
+\end{subequations}
+
+or
+
+\begin{subequations}
+\begin{equation}\label{eqn:continuumReview:910}
+\Bomega = \spacegrad \cross \Bu
+\end{equation}
+\begin{equation}\label{eqn:continuumReview:930}
+\BOmega = \inv{2} (\Bomega)_a \Be_a.
+\end{equation}
+\end{subequations}
+
+We were then able to put our displacement differential into a partial vector form
+
+\begin{equation}\label{eqn:continuumReview:950}
+d\Bx' = d\Bx + \left( \Be_i (e_{ij} \Be_j) \cdot d\Bx + \BOmega \cross d\Bx \right) \delta t.
+\end{equation}
+
+\subsection{Relative change in volume}
 
 \EndArticle
