@@ -72,7 +72,7 @@ We introduced vector and dual vector forms of the vorticity tensor with
 
 \begin{subequations}
 \begin{equation}\label{eqn:continuumFluidsReview:970}
-\Omega_k = \partial_i u_j \epsilon_{i j k}
+\Omega_k = \inv{2} \partial_i u_j \epsilon_{i j k}
 \end{equation}
 \begin{equation}\label{eqn:continuumFluidsReview:990}
 \omega_{i j} = -\Omega_k \epsilon_{i j k},
@@ -97,6 +97,116 @@ d\Bx' = d\Bx + \left( \Be_i (e_{ij} \Be_j) \cdot d\Bx + \BOmega \cross d\Bx \rig
 \end{equation}
 
 \section{Relative change in volume}
+
+We are able to identity the divergence of the displacement as the relative change in volume per unit time in terms of the strain tensor trace (in the basis for which the strain is diagonal at a given point)
+
+\begin{equation}\label{eqn:continuumFluidsReview:1010}
+\frac{dV' - dV}{dV \delta t} = \spacegrad \cdot \Bu.
+\end{equation}
+
+\section{Conservation of mass}
+
+Utilizing Green's theorem we argued that 
+
+\begin{equation}\label{eqn:continuumFluidsReview:1030}
+\int \left( \PD{t}{\rho} + \spacegrad \cdot (\rho \Bu) \right) dV = 0.
+\end{equation}
+
+We were able to relate this to rate of change of density, computing
+
+\begin{equation}\label{eqn:continuumFluidsReview:1050}
+\frac{d\rho}{dt} = \PD{t}{\rho} + \Bu \cdot \spacegrad \rho =
+- \rho \spacegrad \cdot \Bu.
+\end{equation}
+
+An important consequence of this is that for incompressible fluids (the only types of fluids considered in this course) the divergence of the displacement $\spacegrad \cdot \Bu = 0$.
+
+\section{Constitutive relation}
+
+We consider only Newtonian fluids, for which the stress is linearly related to the strain.  We will model fluids as disjoint sets of hydrostatic materials for which the constitutive relation was previously found to be
+
+\begin{equation}\label{eqn:continuumFluidsReview:1070}
+\sigma_{ij} = - p \delta_{ij} + 2 \mu e_{ij}.
+\end{equation}
+
+\section{Conservation of momentum (Navier-Stokes)}
+
+As in elasticity, our momentum conservation equation had the form
+
+\begin{equation}\label{eqn:continuumFluidsReview:1090}
+\rho \frac{du_i}{dt} = \PD{x_j}{\sigma_{ij}} + \rho f_i,
+\end{equation}
+
+where $f_i$ are the components of the external (body) forces per unit volume acting on the fluid.
+
+Utilizing the constitutive relation and explicitly evaluating the stress tensor divergence $\PDi{x_j}{\sigma_{ij}}$ we find
+
+\begin{equation}\label{eqn:continuumFluidsReview:1110}
+\rho \frac{d\Bu}{dt} 
+=
+\rho \PD{t}{\Bu} + \rho (\Bu \cdot \spacegrad) \Bu
+= -\spacegrad p + \mu \spacegrad^2 \Bu
++ \mu \spacegrad (\spacegrad \cdot \Bu) + \rho \Bf.
+\end{equation}
+
+Since we treat only incompressible fluids in this course we can decompose this into a pair of equations
+
+\begin{subequations}
+\begin{equation}\label{eqn:continuumFluidsReview:1130}
+\rho \PD{t}{\Bu} + \rho (\Bu \cdot \spacegrad) \Bu
+= -\spacegrad p 
++ \mu \spacegrad^2 \Bu
++ \rho \Bf.
+\end{equation}
+\begin{equation}\label{eqn:continuumFluidsReview:1150}
+\spacegrad \cdot \Bu = 0
+\end{equation}
+\end{subequations}
+
+\section{No slip condition}
+
+We'll find in general that we have to solve for our boundary value conditions.  One of the important constraints that we have to do so will be a requirement (experimentally motivated) that our velocities match at an interface.  This was illustrated with a rocker tank video in class.
+
+This is the no-slip condition, and includes a requirement that the fluid velocity at the boundary of a non-moving surface is zero, and that the fluid velocity on the boundary of a moving surface matches the rate of the surface itself.
+
+For fluids $A$ and $B$ separated at an interface with unit normal $\ncap$ and unit tangent $\taucap$ we wrote the no-slip condition as
+
+\begin{subequations}
+\begin{equation}\label{eqn:continuumFluidsReview:1170}
+\Bu_A \cdot \taucap = \Bu_B \cdot \taucap
+\end{equation}
+\begin{equation}\label{eqn:continuumFluidsReview:1190}
+\Bu_A \cdot \ncap = \Bu_B \cdot \ncap.
+\end{equation}
+\end{subequations}
+
+For the problems we attempt, it will often be enough to consider only the tangential component of the velocity.
+
+\section{Traction vector matching at an interface.}
+
+As well as matching velocities, we have a force balance requirement at any interface.  This will be expressed in terms of the traction vector
+
+\begin{equation}\label{eqn:continuumFluidsReview:1210}
+\BT = \Be_i \sigma_{ij} n_j,
+\end{equation}
+
+where $n_j$ are the components of the normal pointing from the interface into the fluid (so the traction vector represents the force of the interface on the fluid).  When that interface is another fluid, we are able to calculate the force of one fluid on the other.
+
+In addition the the constraints provided by the no-slip condition, we'll often have to constrain our solutions according to the equality of the tangential components of the traction vector
+
+\begin{equation}\label{eqn:continuumFluidsReview:1230}
+\evalbar{\tau_i (\sigma_{ij} n_j)}{A} =
+\evalbar{\tau_i (\sigma_{ij} n_j)}{B},
+\end{equation}
+
+We'll sometimes also have to consider, especially when solving for the pressure, the force balance for the normal component of the traction vector at the interface too
+
+\begin{equation}\label{eqn:continuumFluidsReview:1250}
+\evalbar{n_i (\sigma_{ij} n_j)}{A} =
+\evalbar{n_i (\sigma_{ij} n_j)}{B}.
+\end{equation}
+
+As well as having a messy non-linear PDE to start with, our boundary value constraints can be very complicated, making the subject rich and tricky.
 
 %\EndArticle
 \EndNoBibArticle
