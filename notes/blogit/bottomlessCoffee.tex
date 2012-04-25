@@ -1,0 +1,245 @@
+%
+%
+%
+% Copyright © 2012 Peeter Joot
+% All Rights Reserved
+%
+% This file may be reproduced and distributed in whole or in part, without fee, subject to the following conditions:
+%
+% o The copyright notice above and this permission notice must be preserved complete on all complete or partial copies.
+%
+% o Any translation or derived work must be approved by the author in writing before distribution.
+%
+% o If you distribute this work in part, instructions for obtaining the complete version of this file must be included, and a means for obtaining a complete version provided.
+%
+%
+% Exceptions to these rules may be granted for academic purposes: Write to the author and ask.
+%
+%
+%
+\input{../peeter_prologue_print.tex}
+%\input{../peeter_prologue_widescreen.tex}
+
+%\usepackage[english]{babel}
+%\usepackage{media9}
+\chapter{Spin down of coffee in a bottomless cup.}
+
+\label{chap:bottomlessCoffee}
+%\useCCL
+\blogpage{http://sites.google.com/site/peeterjoot2/math2012/bottomlessCoffee.pdf}
+\date{Apr 24, 2012}
+\gitRevisionInfo{bottomlessCoffee}
+\keywords{PHY454H1S, PHY454H1, coffee, Navier-Stokes, spin}
+
+\beginArtWithToc
+%\beginArtNoToc
+%\wordpresscategory{}
+
+\section{Motivation.}
+
+Here's a variation of a problem outlined in \S 2 of \cite{acheson1990elementary}, which looked at the time evolution of fluid with initial rotational motion, after the (cylindrical) rotation driver stops, later describing this as the spin down of a cup of tea.  I'll work the problem in more detail than in the text, and also make two refinements.
+
+\begin{enumerate}
+\item I drink coffee and not tea. 
+\item I stir my coffee in the interior of the cup and not on the outer edge.
+\end{enumerate}
+
+Because of the second point I'll model my stir stick as a rotating cylinder in the cup and not by somebody spinning the cup itself to stir the tea.  This only changes the solution for the steady state part of the problem.
+
+\section{Guts}
+
+We'll work in cylindrical coordinates following the conventions of figure (\ref{fig:coffeeCupDiagram:coffeeCupDiagramFig1}).
+
+\imageFigure{coffeeCupDiagramFig1}{Fluid flow in nested cylinders.}{fig:coffeeCupDiagram:coffeeCupDiagramFig1}{0.3}
+
+We'll assume a solution that with velocity azimuthal in direction, and both pressure and velocity that are only radially dependent.
+
+\begin{equation}\label{eqn:bottomlessCoffee:10}
+\Bu = u(r) \phicap.
+\end{equation}
+\begin{equation}\label{eqn:bottomlessCoffee:30}
+p = p(r)
+\end{equation}
+
+Let's first verify that this meets the non-compressible condition that eliminates the $\mu \spacegrad (\spacegrad \cdot \Bu)$ term from Navier-Stokes
+
+\begin{align*}
+\spacegrad \cdot \Bu
+&=
+\left(\rcap \partial_r + \frac{\phicap}{r} \partial_\phi + \zcap \partial_z\right) \cdot \left(u \phicap\right) \\
+&=
+\phicap \cdot
+\left(\rcap \partial_r u + \frac{\phicap}{r} \partial_\phi u + \zcap \partial_z u\right) 
++
+u
+\left(\rcap \cdot \partial_r \phicap + \frac{\phicap}{r} \cdot \partial_\phi \phicap + \zcap \cdot \partial_z \phicap\right)  \\
+&=
+\phicap \cdot \rcap \partial_r u 
++
+u
+\frac{\phicap}{r} \cdot \left(-\rcap\right) \\
+&= 0.
+\end{align*}
+
+Good.  Now let's express each of the terms of Navier-Stokes in cylindrical form.  Our time dependence is
+
+\begin{equation}\label{eqn:bottomlessCoffee:50}
+\rho \partial_t u(r, t) \phicap
+=
+\rho \phicap \partial_t u.
+\end{equation}
+
+Our inertial term is
+
+\begin{equation}\label{eqn:bottomlessCoffee:70}
+\begin{aligned}
+\rho (\Bu \cdot \spacegrad) \Bu
+&=
+\frac{\rho u}{r} \partial_\phi (u \phicap) \\
+&=
+\frac{\rho u^2}{r} (-\rcap).
+\end{aligned}
+\end{equation}
+
+Our pressure term is
+
+\begin{equation}\label{eqn:bottomlessCoffee:90}
+-\spacegrad p
+=
+-\rcap \partial_r p,
+\end{equation}
+
+and our Laplacian term is 
+
+\begin{equation}\label{eqn:bottomlessCoffee:110}
+\begin{aligned}
+\mu \spacegrad^2 \Bu
+&=
+\mu \left( 
+\inv{r} \partial_r ( r \partial_r) + \inv{r^2} \partial_{\phi\phi} + \partial_{z z}
+\right)
+u(r) \phicap \\
+&=
+\mu \left( 
+\frac{\phicap}{r} \partial_r ( r \partial_r u) + \frac{-\rcap u}{r^2} 
+\right).
+\end{aligned}
+\end{equation}
+
+Putting things together, we find that Navier-Stokes takes the form
+
+\begin{equation}\label{eqn:bottomlessCoffee:130}
+\rho \phicap \partial_t u
++
+\frac{\rho u^2}{r} (-\rcap)
+=
+-\rcap \partial_r p
++
+\mu \left( 
+\frac{\phicap}{r} \partial_r ( r \partial_r u) + \frac{-\phicap u}{r^2} 
+\right),
+\end{equation}
+
+which nicely splits into an separate equations for the $\phicap$ and $\rcap$ directions respectively
+
+\begin{subequations}
+\begin{equation}\label{eqn:bottomlessCoffee:150}
+\inv{\nu} \partial_t u
+=
+\frac{1}{r} \partial_r ( r \partial_r u) 
+- \frac{u}{r^2}
+\end{equation}
+\begin{equation}\label{eqn:bottomlessCoffee:170}
+\frac{\rho u^2}{r}
+=
+\partial_r p.
+\end{equation}
+\end{subequations}
+
+\subsection{Steady state solution}
+
+Before $t = 0$ we seek the steady state, the solution of
+
+\begin{equation}\label{eqn:bottomlessCoffee:190}
+r \partial_r ( r \partial_r u) - u = 0.
+\end{equation}
+
+We've seen that 
+
+\begin{equation}\label{eqn:bottomlessCoffee:210}
+u(r) = A r + \frac{B}{r}
+\end{equation}
+
+is the general solution, and can now fit this to the boundary value constraints.  For the interior portion of the cup we have
+
+\begin{equation}\label{eqn:bottomlessCoffee:230}
+\evalbar{A r + \frac{B}{r}}{r = 0} = 0
+\end{equation}
+
+so $B = 0$ is required.  For the interface of the ``stir-stick'' (moving fast enough that we can consider it having a cylindrical effect) at $r = R_1$ we have
+
+\begin{equation}\label{eqn:bottomlessCoffee:250}
+A R_1 = \Omega R_1,
+\end{equation}
+
+so the interior portion of our steady state coffee velocity is just
+
+\begin{equation}\label{eqn:bottomlessCoffee:270}
+\Bu = \Omega r \phicap.
+\end{equation}
+
+Between the cup edge and the stir-stick we have to solve
+
+\begin{align}\label{eqn:bottomlessCoffee:290}
+A R_1 + \frac{B}{R_1} &= \Omega R_1 \\
+A R_2 + \frac{B}{R_2} &= 0,
+\end{align}
+
+or
+\begin{align}\label{eqn:bottomlessCoffee:310}
+A R_1^2 + B &= \Omega R_1^2 \\
+A R_2^2 + B &= 0.
+\end{align}
+
+Subtracting we find
+
+\begin{subequations}
+\begin{equation}\label{eqn:bottomlessCoffee:330}
+A = -\frac{\Omega R_1^2}{R_2^2 - R_1^2}
+\end{equation}
+\begin{equation}\label{eqn:bottomlessCoffee:350}
+B = \frac{\Omega R_1^2 R_2^2}{R_2^2 - R_1^2},
+\end{equation}
+\end{subequations}
+
+so our steady state coffee flow is
+\begin{equation}\label{eqn:bottomlessCoffee:370}
+\Bu =
+\left\{
+\begin{array}{l l}
+\Omega r \phicap
+& \quad \mbox{$r \in [0, R_1]$} \\
+\frac{\Omega R_1^2}{R_2^2 - R_1^2} 
+\left( 
+\frac{R_2^2}{r} -r 
+\right)
+\phicap
+& \quad \mbox{$r \in [R_1, R_2]$} \\
+\end{array}
+\right.
+\end{equation}
+
+\subsection{Time evolution.}
+
+We can use a separation of variables technique with $u(r, t) = R(r) T(t)$ to find
+
+\begin{equation}\label{eqn:bottomlessCoffee:n}
+\inv{\nu} \frac{T'}{T} = \inv{R} \left( 
+\frac{1}{r} \partial_r ( r \partial_r R) 
+- \frac{R}{r^2}
+\right).
+\end{equation}
+
+\subsection{Future.}
+
+\EndArticle
