@@ -1,6 +1,20 @@
 RAWTEXFILES := $(shell ls *.tex)
 INCOMPLETE += motionOfFreeTop.tex
 INCOMPLETE += xx.tex
+
+# these may not all be incomplete, but I don't want to build them right now:
+INCOMPLETE += classicalMechanicsPs2.tex
+INCOMPLETE += desaiCh24.tex
+INCOMPLETE += dotBlade.tex
+INCOMPLETE += gaBasics.tex
+INCOMPLETE += gaMintro.tex
+INCOMPLETE += maxwellsFromGA.tex
+INCOMPLETE += parallelAxisTheorem.tex
+INCOMPLETE += pipeFlowConstPressureGradient.tex
+INCOMPLETE += qmTwoExamReflection.tex
+INCOMPLETE += qmTwoR1.tex
+INCOMPLETE += qmTwoR5.tex
+
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
 PDFS := $(TEXFILES:.tex=.pdf)
