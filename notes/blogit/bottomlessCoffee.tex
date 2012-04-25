@@ -50,7 +50,7 @@ Because of the second point I'll model my stir stick as a rotating cylinder in t
 
 We'll work in cylindrical coordinates following the conventions of figure (\ref{fig:coffeeCupDiagram:coffeeCupDiagramFig1}).
 
-\imageFigure{coffeeCupDiagramFig1}{Fluid flow in nested cylinders.}{fig:coffeeCupDiagram:coffeeCupDiagramFig1}{0.3}
+\imageFigure{bottomlessCoffeeFig1}{Fluid flow in nested cylinders.}{fig:coffeeCupDiagram:coffeeCupDiagramFig1}{0.3}
 
 We'll assume a solution that with velocity azimuthal in direction, and both pressure and velocity that are only radially dependent.
 
@@ -233,13 +233,112 @@ so our steady state coffee flow is
 
 We can use a separation of variables technique with $u(r, t) = R(r) T(t)$ to find
 
-\begin{equation}\label{eqn:bottomlessCoffee:n}
-\inv{\nu} \frac{T'}{T} = \inv{R} \left( 
+\begin{equation}\label{eqn:bottomlessCoffee:390}
+\inv{\nu} \frac{T'}{T} = 
+\inv{R} \left( 
 \frac{1}{r} \partial_r ( r \partial_r R) 
 - \frac{R}{r^2}
-\right).
+\right)
+= -\lambda^2,
 \end{equation}
 
-\subsection{Future.}
+which gives us
+
+\begin{equation}\label{eqn:bottomlessCoffee:410}
+T \propto e^{-\lambda^2 \nu t},
+\end{equation}
+
+and $R$ specified by
+
+\begin{equation}\label{eqn:bottomlessCoffee:430}
+0 = r^2 \frac{d^2 R}{dr^2} + r \frac{d R}{dr} + R \left( r^2 \lambda^2 - 1 \right).
+\end{equation}
+
+Checking \cite{abramowitz1964handbook} (9.1.1) we see that this can be put into the standard form of the Bessel equation if we eliminate the $\lambda$ term.  We can do that writing $z = r \lambda$, $\mathcal{R}(z) = R(z/\lambda)$ and noting that $r d/dr = z d/dz$ and $r^2 d^2/dr^2 = z^2 d^2/dz^2$, which gives us
+
+\begin{equation}\label{eqn:bottomlessCoffee:450}
+0 = z^2 \frac{d^2 \mathcal{R}}{dr^2} + z \frac{d \mathcal{R}}{dr} + \mathcal{R} \left( z^2 - 1 \right).
+\end{equation}
+
+The solutions are
+
+\begin{equation}\label{eqn:bottomlessCoffee:470}
+\mathcal{R}(z) = J_{\pm 1}(z), Y_{\pm 1}(z).
+\end{equation}
+
+From (9.1.5) of the handbook we see that the plus and minus variations are linearly dependent since $J_{-1}(z) = -J_1(z)$ and $Y_{-1}(z) = -Y_1(z)$, and from (9.1.8) that $Y_1(z)$ is infinite at the origin, so our general solution has to be of the form
+
+\begin{equation}\label{eqn:bottomlessCoffee:490}
+\Bu(r, t) = \phicap \sum_\lambda c_\lambda e^{-\lambda^2 \nu t} J_{1}(r \lambda).
+\end{equation}
+
+In the text, I see that the transformation $\lambda \rightarrow \lambda/a$ (where $a$ was the radius of the cup) is made so that the Bessel function parameter was dimensionless.  We can do that too but write
+
+\begin{equation}\label{eqn:bottomlessCoffee:490b}
+\Bu(r, t) = \phicap \sum_\lambda c_\lambda e^{-\frac{\lambda^2}{R_2^2} \nu t} J_{1}\left(\lambda \frac{r}{R_2}\right).
+\end{equation}
+
+Our boundary value constraint is that we require this to match \ref{eqn:bottomlessCoffee:370} at $t = 0$.  Let's write $R_2 = R$, $R_1 = a R$, $z = r/R$, so that we are working in the unit circle with $z \in [0, 1]$.  Our boundary problem can now be expressed as
+
+\begin{equation}\label{eqn:bottomlessCoffee:490c}
+\inv{\Omega R} \sum_\lambda c_\lambda J_{1}\left(\lambda z\right)
+=
+\left\{
+\begin{array}{l l}
+z 
+& \quad \mbox{$z \in [0, a]$} \\
+\frac{1}{\frac{R^2}{a^2} - 1} 
+\left( 
+\inv{z} - z
+\right)
+& \quad \mbox{$z \in [a, 1]$} \\
+\end{array}
+\right.
+\end{equation}
+
+Let's pull the $\Omega R$ factor into $c_\lambda$ and state the problem to be solved as
+
+\begin{subequations}
+\begin{equation}\label{eqn:bottomlessCoffee:510}
+\Bu(r, t) = \Omega R \phicap \sum_{i=1}^n c_i e^{-\frac{\lambda_i^2}{R^2} \nu t} J_{1}\left(\lambda_i \frac{r}{R}\right)
+\end{equation}
+\begin{equation}\label{eqn:bottomlessCoffee:530}
+\sum_{i = 1}^n c_i J_{1}\left(\lambda_i z\right) = \phi(z)
+\end{equation}
+\begin{equation}\label{eqn:bottomlessCoffee:550}
+\phi(z) = 
+\left\{
+\begin{array}{l l}
+z 
+& \quad \mbox{$z \in [0, a]$} \\
+\frac{a^2}{1 - a^2} 
+\left( 
+\inv{z} - z
+\right)
+& \quad \mbox{$z \in [a, 1]$} \\
+\end{array}
+\right..
+\end{equation}
+\end{subequations}
+
+Looking at \S 2.7 of \cite{sagan1989boundary} it appears the solutions for $c_i$ can be obtained from
+
+\begin{equation}\label{eqn:bottomlessCoffee:570}
+c_i = \frac{
+\int_0^1 r\phi(z) J_1(\lambda_i z) dz}{
+\int_0^1 r J_1^2(\lambda_i z) dz},
+\end{equation}
+
+where $\lambda_i$ are the zeros of $J_1$.
+
+To get a feel for these, a plot of the first few of these fitting functions is shown in figure (\ref{fig:bottomlessCoffee:bottomlessCoffeeFig3}).
+
+\imageFigure{bottomlessCoffeeFig3}{First four zero crossing Bessel functions $J_1( \lambda_i z)$}{fig:bottomlessCoffee:bottomlessCoffeeFig3}{0.2}
+
+Using Mathematica in \href{https://raw.github.com/peeterjoot/physicsplay/master/notes/phy454/bottomlessCoffee.cdf}{bottomlessCoffee.cdf}, these coefficents were calculated for $a = 0.6$.  The $n = 1, 3, 5$ approximations to the fitting function are plotted with a comparision to the steady state velocity profile in figure (\ref{fig:bottomlessCoffee:bottomlessCoffeeFig2}).
+
+\imageFigure{bottomlessCoffeeFig2}{Bessel function fitting for the steady state velocity profile for $n = 1, 3, 5$.}{fig:bottomlessCoffee:bottomlessCoffeeFig2}{0.2}
+
+As indicated in the text, the spin down is way too slow to match reality (this can be seen visually in the worksheet by animating it).
 
 \EndArticle
