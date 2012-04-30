@@ -37,7 +37,9 @@
 
 \section{Motivation.}
 
-Having tackled the problem of the spin down of a bottomless cup of coffee, lets try the harder problem with a non-infinite cup.
+Having tackled the problem of the spin down of a bottomless cup of coffee, lets try setting up the harder problem with a non-infinite cup.  It turns out that this is a lot harder.  Even the steady state solution requires a superposition of Bessel functions (whereas we only had that in the bottomless problem when we tried to find the time evolution after ceasing the stirring).  
+
+I can find the form of the solution, but don't know how to actually apply the boundary value constraints.  I also find the no-slip constraints themselves become problematic, because they lead to an inconsistency at the point of contact of a moving and a static interface.  Before continuing, I need to find out how to deal with that inconsistency.
 
 \section{Navier-Stokes for the problem.}
 
@@ -131,38 +133,84 @@ s \Omega
 \right.
 \end{equation}
 
-This is clearly going to be an easier problem to solve, if we stir the coffee on the outside edge of the cup only ($s = R$).  Lets start with the inside region and see how far we get.  We've got to match a $u(s, z, 0) = s \Omega$ boundary value constraint, where $\Omega$ is the angular velocity of the stirring.  We know how to solve that, since we had a similar problem for the $t = 0$ boundary value constraint in the bottomless spin down problem.  Writing $\lambda_i/s = 1/a$ where $\lambda_i$ are the zeros of the $J_1$ we have
+Observe that, regardless of $a$ we have $u(0, z, 0) = 0$ because $J_1(0) = 0$.  We also can't scale $a$ as $\lambda_i/s$ (where $\lambda_i$ are the zeros of $J_1$) when the stirring isn't at the edge since we need $u(s, z, 0) = \Omega s$.  That suggests that we probably want to write our system as
 
-\begin{equation}\label{eqn:coffeeCupWithBottom:250}
-1 = \sum_i C_i J_1(\lambda_i r/s) \sinh( \lambda_i z/s)
-\end{equation}
-
-With solution
-
-\begin{equation}\label{eqn:coffeeCupWithBottom:270}
-C_i = 
-\frac{
-\int_0^1 w J_1 (\lambda_i w) dw
-}{
-\int_0^1 w J_1^2 (\lambda_i w) dw
-}.
-\end{equation}
-
-We are left with only the boundary value problem on the surface to deal with, and have found in the inner portion of the stirred cup that we have
-
-\begin{equation}\label{eqn:coffeeCupWithBottom:290}
+\begin{equation}\label{eqn:coffeeCupWithBottom:230b}
 u(r, z, 0) = 
+\left\{
+\begin{array}{l l}
 s \Omega
 \sum 
-\frac{
-\int_0^1 w J_1 (\lambda_i w) dw
-}{
-\int_0^1 w J_1^2 (\lambda_i w) dw
-}
-J_1( \lambda_i r/s) \sinh(\lambda_i z/s).
+C_i J_1(\lambda_i r/R) \sinh(\lambda_i z/R)
+& \quad \mbox{$r < s$} \\
+s \Omega
+\sum 
+\left( D_i J_1(\lambda_i r/R) + E_i Y_1(\lambda_i r/R) \right) \sinh(\lambda_i z/R)
+ & \quad \mbox{$r \in [s, R]$} \\
+\end{array}
+\right.
 \end{equation}
 
-FIXME: this is wrong.  We have a different $C_i$ for each value of $z$.  Need to build in another degree of freedom, and method of solution above does not work.
+The boundary value constraints of $u(r = s) = \Omega s$ and $u(r = R) = 0$ require the solution of
+
+\begin{subequations}
+\begin{equation}\label{eqn:coffeeCupWithBottom:310}
+1 = \sum C_i J_1(\lambda_i s/R) \sinh(\lambda_i z/R) 
+\end{equation}
+\begin{equation}\label{eqn:coffeeCupWithBottom:330}
+1 = \sum \left( D_i J_1(\lambda_i s/R) + E_i Y_1(\lambda_i s/R) \right) \sinh(\lambda_i z/R)
+\end{equation}
+\begin{equation}\label{eqn:coffeeCupWithBottom:350}
+0 = \sum E_i Y_1(\lambda_i) \sinh(\lambda_i z/R).
+\end{equation}
+\end{subequations}
+
+We know how to solve a system like \ref{eqn:coffeeCupWithBottom:310} if we did not have the $\sinh$ term in the mix.  Can we look for a numerical (least squares?) solution to this more general problem.  Will it be possible to find something that's a good fit regardless of the value of $z$?
+
+We have other troubles too.  We can't simultaneously satisfy the boundary value condition of $u(s, z) = \Omega s$ and also $u(s, 0) = 0$.  Should we attempt something like a least squares solution and start going near $z = 0$ the small $\sinh$ values near there will start forcing the $C_i$'s arbitrarily high.
+
+We have to somehow modify the no-slip condition so that when we have a moving interface in contact with a static interface we somehow deal with the fact that the no-slip constraints cannot simultaneously require the velocity to match both the moving and static interfaces at that point of contact.
+
+%This is clearly going to be an easier problem to solve, if we stir the coffee on the outside edge of the cup only ($s = R$).  Lets start with the inside region and see how far we get.  We've got to match a $u(s, z, 0) = s \Omega$ boundary value constraint, where $\Omega$ is the angular velocity of the stirring.  
+
+%We know how to solve that, since we had a similar problem for the $t = 0$ boundary value constraint in the bottomless spin down problem.  Writing $\lambda_i/s = 1/a$ where $\lambda_i$ are the zeros of the $J_1$ we can almost put things in a form that we know how to solve
+%
+%\begin{equation}\label{eqn:coffeeCupWithBottom:250}
+%1 = \sum_i C_i J_1(\lambda_i r/s) \sinh( \lambda_i z/s)
+%\end{equation}
+%
+%If that $\sinh$ were not there, then we could solve this with
+%
+%\begin{equation}\label{eqn:coffeeCupWithBottom:270}
+%C_i = 
+%\frac{
+%\int_0^1 w J_1 (\lambda_i w) dw
+%}{
+%\int_0^1 w J_1^2 (\lambda_i w) dw
+%}.
+%\end{equation}
+%
+%It's not clear how to solve this more general problem.  In fact, thinking about doing so numerically, we see there's a problem.  
+%
+%Let's try this numerically, looking for least square solutions for the unknown coefficents that satisfy
+%
+%\begin{equation}\label{eqn:coffeeCupWithBottom:290}
+%u(r, z, 0) = 
+%\left\{
+%%\begin{array}{l l}
+%s \Omega
+%\sum 
+%C_i J_1\left(\lambda_i \frac{r}{s}\right) \sinh\left(\lambda_i \frac{z}{s}\right)
+%& \quad \mbox{$r < s$} \\
+%s \Omega
+%\sum 
+%\left( D_i J_1\left(\lambda_i \frac{r-s}{R-s}\right) + E_i Y_1\left(\lambda_i \frac{r-s}{R-s}\right) \right) \sinh\left(\lambda_i \frac{z}{R-s}\right)
+% & \quad \mbox{$r \in [s, R]$} \\
+%\end{array}
+%\right.
+%\end{equation}
+%
+%Hmm, this doesn't work either.  In the first we have a zero on the RHS when $r = s$.
 
 %\EndArticle
 \EndNoBibArticle
