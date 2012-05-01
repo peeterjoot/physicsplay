@@ -22,14 +22,14 @@
 
 %\usepackage[english]{babel}
 %\usepackage{media9}
-\chapter{Steady state velocity profile of stirred cup of non-bottomless coffee.}
+\chapter{Steady state velocity profile of stirred cup of non-bottomless coffee (continued).}
 
 \label{chap:coffeeCupWithBottom}
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot2/math2012/coffeeCupWithBottom.pdf}
 \date{Apr 29, 2012}
 \gitRevisionInfo{coffeeCupWithBottom}
-\keywords{Navier-Stokes, PHY454H1S, PHY454H1}
+\keywords{Navier-Stokes, PHY454H1S, PHY454H1, Mathematica}
 
 \beginArtWithToc
 %\beginArtNoToc
@@ -171,46 +171,66 @@ We have other troubles too.  We can't simultaneously satisfy the boundary value 
 
 We have to somehow modify the no-slip condition so that when we have a moving interface in contact with a static interface we somehow deal with the fact that the no-slip constraints cannot simultaneously require the velocity to match both the moving and static interfaces at that point of contact.
 
-%This is clearly going to be an easier problem to solve, if we stir the coffee on the outside edge of the cup only ($s = R$).  Lets start with the inside region and see how far we get.  We've got to match a $u(s, z, 0) = s \Omega$ boundary value constraint, where $\Omega$ is the angular velocity of the stirring.  
+\section{Working around the no-slip troubles at the base of the cup.}
 
-%We know how to solve that, since we had a similar problem for the $t = 0$ boundary value constraint in the bottomless spin down problem.  Writing $\lambda_i/s = 1/a$ where $\lambda_i$ are the zeros of the $J_1$ we can almost put things in a form that we know how to solve
-%
-%\begin{equation}\label{eqn:coffeeCupWithBottom:250}
-%1 = \sum_i C_i J_1(\lambda_i r/s) \sinh( \lambda_i z/s)
-%\end{equation}
-%
-%If that $\sinh$ were not there, then we could solve this with
-%
-%\begin{equation}\label{eqn:coffeeCupWithBottom:270}
-%C_i = 
-%\frac{
-%\int_0^1 w J_1 (\lambda_i w) dw
-%}{
-%\int_0^1 w J_1^2 (\lambda_i w) dw
-%}.
-%\end{equation}
-%
-%It's not clear how to solve this more general problem.  In fact, thinking about doing so numerically, we see there's a problem.  
-%
-%Let's try this numerically, looking for least square solutions for the unknown coefficents that satisfy
-%
-%\begin{equation}\label{eqn:coffeeCupWithBottom:290}
-%u(r, z, 0) = 
-%\left\{
-%%\begin{array}{l l}
-%s \Omega
-%\sum 
-%C_i J_1\left(\lambda_i \frac{r}{s}\right) \sinh\left(\lambda_i \frac{z}{s}\right)
-%& \quad \mbox{$r < s$} \\
-%s \Omega
-%\sum 
-%\left( D_i J_1\left(\lambda_i \frac{r-s}{R-s}\right) + E_i Y_1\left(\lambda_i \frac{r-s}{R-s}\right) \right) \sinh\left(\lambda_i \frac{z}{R-s}\right)
-% & \quad \mbox{$r \in [s, R]$} \\
-%\end{array}
-%\right.
-%\end{equation}
-%
-%Hmm, this doesn't work either.  In the first we have a zero on the RHS when $r = s$.
+We've just found the functional form for an azimuthal flow that has $z$-axis dependence.  Attempting to apply the no-slip boundary value condition for our mixing device got us into trouble, since this simultaneously require zero and non-zero velocity at the point of contact of the mixing interface and the bottom of the vessel (i.e. where the stir stick contacts the bottom of the cup).  We can avoid this issue by constraining the mixing to only occur above the bottom of the cup, and then look at the flow that this induces below the mixing point.
+
+Let's attempt to solve this new simpler boundary value problem.  We'll position the mixing cylinder at a height $d$ above the bottom of the cup, and set the radius of that inner cylinder to $s$ as before, with the mixing occurring at an angular velocity of $\Omega$.  We now want apply these boundary value constrains to the velocity function we've found for the steady state problem.  Provided $z < d$, this will have the form
+
+\begin{equation}\label{eqn:coffeeCupWithBottom:500}
+u(r, z, 0) = s \Omega \sum C_i J_1(\lambda_i r/R) \sinh(\lambda_i z/R)
+\end{equation}
+
+where $\lambda_i$ are the zeros of the order one Bessel function $J_1$.  Observe that our boundary value conditions of $u(R, z, 0) = 0$ and $u(r, 0, 0) = 0$ are automatically satisfied.  Note that because of the $u(R, z, 0) = 0$ equality here, this form of solution is no good if we are mixing at the edge of the cup, so we require $s \ne R$.
+
+Our remaining boundary value condition $u(s, d, 0) = s \Omega$, means that we have to solve
+
+\begin{equation}\label{eqn:coffeeCupWithBottom:520}
+1 = \sum C_i J_1(\lambda_i s/R) \sinh(\lambda_i d/R)
+\end{equation}
+
+Having had the same sort of problem in our steady state bottomless coffee problem, we know how to solve this
+
+\begin{equation}\label{eqn:coffeeCupWithBottom:540}
+C_i \sinh(\lambda_i d/R) = 
+\frac{
+\int_0^1 w J_1 (\lambda_i w) dw
+}{
+\int_0^1 w J_1^2 (\lambda_i w) dw
+}.
+\end{equation}
+
+So we find that below the point of stirring ($z = d$), our steady state solution for the velocity should be
+
+\begin{equation}\label{eqn:coffeeCupWithBottom:560}
+\Bu(r, z, 0) = s \Omega \phicap \sum_{i=1}^\infty
+\frac{
+\int_0^1 w J_1 (\lambda_i w) dw
+}{
+\int_0^1 w J_1^2 (\lambda_i w) dw
+}
+J_1(\lambda_i r/R) \frac{\sinh(\lambda_i z/R)}{\sinh(\lambda_i d/R) }
+\end{equation}
+
+For a cup size of $R = 5 \text{cm}$, stir radius of $s = 3 \text{cm}$, stir depth $d = 2 \text{cm}$, and angular velocity $\Omega = 2 \pi \text{rad}/\text{s}$, we can compute (\href{https://raw.github.com/peeterjoot/physicsplay/master/notes/phy454/coffeeCupWithBottom.cdf}{phy454/coffeeCupWithBottom.cdf}) some terms of this series
+
+\begin{equation}\label{eqn:coffeeCupWithBottom:580}
+\begin{aligned}
+u(r, z, 0) &=
+27.1119 J_{1}(7.66341 r) \sinh (7.66341 z)-3.42819 J_{1}(14.0312 r) \sinh (14.0312 z) \\
+&+4.97807 J_{1}(20.3469 r) \sinh (20.3469 z)-1.53542 J_{1}(26.6474 r) \sinh (26.6474 z) + \cdots
+\end{aligned}
+\end{equation}
+
+We can plot this velocity field as in figure (\ref{fig:coffeeCupWithBottom:coffeeCupWithBottomFig2}), but it's hard to see the radial dependence.
+
+\imageFigure{coffeeCupWithBottomFig2}{Vector field plot of the velocity field below the stir depth.}{fig:coffeeCupWithBottom:coffeeCupWithBottomFig2}{0.3}
+
+The radial dependence of the magnitude of the velocity can be seen in figure (\ref{fig:coffeeCupWithBottom:coffeeCupWithBottomFig1}), which plots $u(r, d, 0)$.  We see the zero velocity at the edges of the cup as expected, and once we hit the stir height, matching of stir velocity.  An animation showing the variation of the radial velocity profile at various depths up to the stir height is available at \youtubehref{BS8XQdXljSk}.  Observing this we see that the velocity is dominated by the first term in the Bessel series, essentially just scaled by the hyperbolic sine that multiplies it.
+
+\imageFigure{coffeeCupWithBottomFig1}{Radial velocity dependence at the stir height.}{fig:coffeeCupWithBottom:coffeeCupWithBottomFig1}{0.3}.
+
+It's not clear to me how to compute the velocity profile above the point of lowest stir depth.  However, the next step of interest is to try to compute the time evolution of this flow if we should stop the stirring at $t = 0$.
 
 %\EndArticle
 \EndNoBibArticle
