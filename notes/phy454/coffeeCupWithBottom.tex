@@ -245,7 +245,7 @@ Let's now consider the time evolution problem when we stop the stirring abruptly
 with $u = R(r) Z(z) T(t)$ we find
 
 \begin{equation}\label{eqn:coffeeCupWithBottom:620}
-\frac{T'}{T} = -\nu \alpha^2
+\frac{T'}{T} = -\nu \frac{\alpha^2}{R^2} =
 \nu
 \left( \inv{r R} ( r R' )' -\frac{1}{r^2} + \frac{Z''}{Z} \right).
 \end{equation}
@@ -253,7 +253,7 @@ with $u = R(r) Z(z) T(t)$ we find
 We have immediately
 
 \begin{equation}\label{eqn:coffeeCupWithBottom:640}
-T \propto e^{-\alpha^2 \nu t},
+T \propto e^{-\alpha^2 \nu t/R^2},
 \end{equation}
 
 and can insist that we also have
@@ -263,7 +263,7 @@ and can insist that we also have
 \inv{r R} ( r R' )' -\frac{1}{r^2} = -\frac{\lambda_i^2}{R^2}
 \end{equation}
 \begin{equation}\label{eqn:coffeeCupWithBottom:680}
-\frac{Z''}{Z} = \frac{\lambda_i^2}{R^2} - \alpha^2
+\frac{Z''}{Z} = \frac{\lambda_i^2}{R^2} - \frac{\alpha^2}{R^2}
 \end{equation}
 \end{subequations}
 
@@ -273,8 +273,8 @@ Our time dependent solution below the point of stirring is therefore of the form
 \begin{aligned}
 u(r, z, t)
 &=
-s \Omega \sum_{\alpha^2 \lambda_i^2 > R^2} c_{i \alpha} J_1(\lambda_i r/R) \sinh\left( \sqrt{\frac{\lambda_i^2}{R^2} - \alpha^2} z \right) e^{-\alpha^2 \nu t} \\
-&+s \Omega \sum_{\alpha^2 \lambda_i^2 < R^2} d_{i \alpha} J_1(\lambda_i r/R) \sin\left( \sqrt{-\frac{\lambda_i^2}{R^2} + \alpha^2} z \right) e^{-\alpha^2 \nu t}
+s \Omega \sum_{\lambda_i^2 > \alpha^2} c_{i \alpha} J_1(\lambda_i r/R) \sinh\left( \sqrt{\lambda_i^2 - \alpha^2} \frac{z}{R} \right) e^{-\alpha^2 \nu t/R^2} \\
+&+s \Omega \sum_{\lambda_i^2 < \alpha^2} d_{i \alpha} J_1(\lambda_i r/R) \sin\left( \sqrt{\alpha^2 -\lambda_i^2} \frac{z}{R} \right) e^{-\alpha^2 \nu t/R^2}
 \end{aligned}
 \end{equation}
 
@@ -290,11 +290,53 @@ with a boundary value condition
 }
 J_1(\lambda_i r/R) \frac{\sinh(\lambda_i z/R)}{\sinh(\lambda_i d/R) } 
 &=
-\sum_{\alpha^2 \lambda_j^2 > R^2} c_{i \alpha} J_1(\lambda_j r/R) \sinh\left( \sqrt{\frac{\lambda_j^2}{R^2} - \alpha^2} z \right) \\
-&+\sum_{\alpha^2 \lambda_j^2 < R^2} d_{i \alpha} J_1(\lambda_j r/R) \sin\left( \sqrt{-\frac{\lambda_j^2}{R^2} + \alpha^2} z \right) 
+\sum_{\lambda_j^2 > \alpha^2} c_{j \alpha} J_1(\lambda_j r/R) \sinh\left( \sqrt{\lambda_j^2 - \alpha^2} \frac{z}{R} \right) \\
+&+\sum_{\lambda_j^2 < \alpha^2} d_{j \alpha} J_1(\lambda_j r/R) \sin\left( \sqrt{\alpha^2 -\lambda_j^2 } \frac{z}{R} \right) 
 \end{aligned}
 \end{equation}
 
 It's not clear to me how to solve this, and I think that I'd have to go back and actually understand the theory from \cite{sagan1989boundary} used to solve the steady state problem above for $C_i$ (i.e. I don't know where the result I used came from, only that it works, so when I'm faced with a requirement to generalize it, I'm out of luck).
+
+It looks like it would be reasonable to drop the hyperbolic terms, and insist that
+
+\begin{equation}\label{eqn:coffeeCupWithBottom:n}
+(\alpha^2 - \lambda_j^2) \frac{d}{R} = 2 \pi j,
+\end{equation}
+
+or
+
+\begin{equation}\label{eqn:coffeeCupWithBottom:n}
+\alpha^2 2 \pi j \frac{R}{d} + \lambda_j^2.
+\end{equation}
+
+leaving us to find $d_j = d_{j\alpha}$ such that
+
+\begin{equation}\label{eqn:coffeeCupWithBottom:720b}
+\sum_{i=1}^\infty 
+\frac{
+\int_0^1 w J_1 (\lambda_i w) dw
+}{
+\int_0^1 w J_1^2 (\lambda_i w) dw
+}
+J_1(\lambda_i r/R) \frac{\sinh(\lambda_i z/R)}{\sinh(\lambda_i d/R) } 
+=
+\sum_{j = 1}^\infty d_j J_1(\lambda_j r/R) \sin 2 \pi j \frac{z}{d}.
+\end{equation}
+
+If this matches at any $r$, then it must also match at $r = s$, so we'd have
+
+\begin{equation}\label{eqn:coffeeCupWithBottom:720c}
+\sum_{i=1}^\infty 
+\frac{
+\int_0^1 w J_1 (\lambda_i w) dw
+}{
+\int_0^1 w J_1^2 (\lambda_i w) dw
+}
+J_1(\lambda_i s/R) \frac{\sinh(\lambda_i z/R)}{\sinh(\lambda_i d/R) } 
+=
+\sum_{j = 1}^\infty d_j J_1(\lambda_j s/R) \sin 2 \pi j \frac{z}{d}.
+\end{equation}
+
+Solving this Fourier problem will give us a match at $z = 0$, and $r = 0, s, R$.  Will that match for all $r,z$, or do we have to retain the hyperbolic terms and do something fancier?
 
 \EndArticle
