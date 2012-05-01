@@ -79,6 +79,8 @@ ORIG_FILES += ../phy454/twoCylindersFig6.png
 ORIG_FILES += ../phy454/twoCylindersFig7.png
 ORIG_FILES += ../phy454/twoCylindersFig8.png
 ORIG_FILES += ../phy454/twoCylindersFig9.png
+#ORIG_FILES += ../phy454/coffeeCupWithBottomFig2.png
+#ORIG_FILES += ../phy454/coffeeCupWithBottomFig1.png
 
 #VIDEO += animatedTwoLayerFlowMu1GreaterThanMu2.mp4
 
