@@ -1,5 +1,3 @@
-all :: gabook.pdf
-
 include make.dep
 
 # logically symlinks, but MikTex doesn't like those:
@@ -34,6 +32,12 @@ ORIG_FILES += ../calculus/volume_element.png
 ORIG_FILES += ../nonga/pendulumDouble.png
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
+
+all :: gabook.pdf .gitignore
+
+.gitignore : GNUmakefile
+	rm -f .gitignore
+	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/gabook/,' > $@
 
 $(LOCAL_FILES) : 
 	cp $(filter %$@, $(ORIG_FILES)) $@

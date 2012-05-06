@@ -13,7 +13,11 @@ PHY456 := $(filter-out $(STANDALONE), $(BOOKDEPENDENCIES))
 
 GENERATED_PDFS := phy456.pdf
 
-all :: $(GENERATED_PDFS)
+all :: $(GENERATED_PDFS) .gitignore
+
+.gitignore : GNUmakefile
+	rm -f .gitignore
+	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/phy456/,' > $@
 
 local : $(LOCAL_FILES) 
 

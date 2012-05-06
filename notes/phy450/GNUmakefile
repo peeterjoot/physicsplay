@@ -8,12 +8,16 @@ ORIG_FILES += ../unsrturl.bst
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
-all : phy450.pdf
+all : phy450.pdf .gitignore
 
 local : $(LOCAL_FILES) 
 
 $(LOCAL_FILES) :
 	cp $(filter %$@, $(ORIG_FILES)) $@
+
+.gitignore : GNUmakefile
+	rm -f .gitignore
+	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/phy450/,' > $@
 
 cronology.tex : ../METADATA
 	../METADATA -phy450 > cronology.tex

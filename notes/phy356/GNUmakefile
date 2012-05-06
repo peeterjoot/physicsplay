@@ -14,8 +14,12 @@ STANDALONE += desaiTypos.tex
 
 PHY356 := $(filter-out $(STANDALONE), $(BOOKDEPENDENCIES))
 
-all :: phy356.pdf desaiTypos.pdf
+all :: phy356.pdf desaiTypos.pdf .gitignore
 #all :: t.pdf
+
+.gitignore : GNUmakefile
+	rm -f .gitignore
+	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/phy356/,' > $@
 
 local : $(LOCAL_FILES) 
 

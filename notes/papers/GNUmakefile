@@ -19,7 +19,11 @@ ORIG_FILES += ../unsrturl.bst
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
-all :: $(LOCAL_FILES) $(PDFS)
+all :: $(LOCAL_FILES) $(PDFS) .gitignore
+
+.gitignore : GNUmakefile
+	rm -f .gitignore
+	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/papers/,' > $@
 
 $(PDFS) : $(LOCAL_FILES)
 

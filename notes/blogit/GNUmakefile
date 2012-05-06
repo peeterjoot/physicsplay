@@ -82,12 +82,17 @@ ORIG_FILES += ../phy454/twoCylindersFig9.png
 #ORIG_FILES += ../phy454/coffeeCupWithBottomFig2.png
 #ORIG_FILES += ../phy454/coffeeCupWithBottomFig1.png
 
+##       src/internal.o
 #VIDEO += animatedTwoLayerFlowMu1GreaterThanMu2.mp4
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
-all :: $(LOCAL_FILES) $(PDFS)
+all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
+
+.gitignore : GNUmakefile
+	rm -f .gitignore
+	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/blogit/,' > $@
 
 video: $(VIDEO)
 

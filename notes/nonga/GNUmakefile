@@ -9,9 +9,13 @@ ORIG_FILES += ../unsrturl.bst
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
-all : miscphysics.pdf
+all : miscphysics.pdf .gitignore
 
 local : $(LOCAL_FILES) 
+
+.gitignore : GNUmakefile
+	rm -f .gitignore
+	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/nonga/,' > $@
 
 $(LOCAL_FILES) :
 	cp $(filter %$@, $(ORIG_FILES)) $@

@@ -18,7 +18,11 @@ ORIG_FILES += ../calculus/volume_element.png
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
-all : otherbook.pdf
+all : otherbook.pdf .gitignore
+
+.gitignore : GNUmakefile
+	rm -f .gitignore
+	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/otherbook/,' > $@
 
 local : $(LOCAL_FILES) 
 
