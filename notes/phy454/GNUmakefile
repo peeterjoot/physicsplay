@@ -1,11 +1,20 @@
-include make.dep
+#include make.dep
+
+SOURCE_DIRS += .
+SOURCE_DIRS += elastic
+SOURCE_DIRS += fluids
+SOURCE_DIRS += appendix
+
+BOOKDEPENDENCIES := $(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.mp4 $(dir)/*.pdf_tex $(dir)/*.png $(dir)/*.tex))
+PDFDEPENDENCIES := $(subst pdf_tex,pdf,$(filter %.pdf_tex,$(BOOKDEPENDENCIES)))
+BOOKDEPENDENCIES += $(PDFDEPENDENCIES)
 
 ORIG_FILES += ../myrefs.bib
 ORIG_FILES += ../abbrvurl.bst
 ORIG_FILES += ../alphaurl.bst
 ORIG_FILES += ../plainurl.bst
 ORIG_FILES += ../unsrturl.bst
-ORIG_FILES += ../eliblog.cls 
+#ORIG_FILES += ../eliblog.cls 
 ORIG_FILES += ../sourceaccess.tex 
 ORIG_FILES += ../gitclone.ksh
 ORIG_FILES += ../gitPull.ksh
@@ -23,7 +32,7 @@ ORIG_FILES += ../currentBookCopyright.tex
 #
 # http://tex.stackexchange.com/questions/1574/embedding-videos-and-animations/50370#comment104622_50370
 #
-ORIG_FILES += ../strobe/StrobeMediaPlayback.swf
+#ORIG_FILES += ../strobe/StrobeMediaPlayback.swf
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
