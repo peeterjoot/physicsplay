@@ -136,7 +136,7 @@ pdfauthor={Peeter Joot}
 \newcommand{\EndArticle}[0]{\bibliography{myrefs}\bibliographystyle{unsrturl}\end{document}}
 
 % this one in standalong articles is a plain old cite, but within a book that contains the chapter
-% is a \ref{chap:#1}.  That requires the chapter lable to have the same name.
+% is a \ref{chap:#1}.  That requires the chapter label to have the same name.
 \newcommand{\chapcite}[1]{\cite{#1}}
 
 % make this one a citation to an external notes compilation, but an actual formula reference 
