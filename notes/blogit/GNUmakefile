@@ -1,6 +1,5 @@
 RAWTEXFILES := $(shell ls *.tex)
 INCOMPLETE += motionOfFreeTop.tex
-INCOMPLETE += xx.tex
 
 # these may not all be incomplete, but I don't want to build them right now:
 INCOMPLETE += classicalMechanicsPs2.tex
