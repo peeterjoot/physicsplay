@@ -32,28 +32,62 @@
 
 \section{Strain Tensor.}
 
-This follows \cite{landau1960theory} \S 1 very closely.
+We've defined strain \ref{dfn:continuumL2:30} as the measure of deformation of a body.  This is a purely geometric definition, and by itself has no requirement to understand the forces that put the object into the deformed configuration.  A mathematical statement of this definition needs to be made.
 
-Utilizing summation convention consider a set of small internal displacements $u_1, u_2, u_3$ to the $x, y, z$ coordinates so that the transformation $x_i \rightarrow x_i'$ is related by
+A solid deformation of an object with vertices located at $\Ba$, $\Bb$, and $\Bc$ is illustrated in figure (\ref{fig:strain:strainFig1}), where the deformed vertices are located at $\Ba'$, $\Bb'$, and $\Bc'$.
 
+\imageFigure{strainFig1}{Deformation of a planar object}{fig:strain:strainFig1}{0.5}
+
+Identifying a specific point in the object with an undeformed position $\Bx$, we can consider the deformation of the object in the vicinity of this point.  If this point has deformed position $\Bx'$, we define the \textit{displacement vector}, the vectoral difference between the displaced and original point in the object, as
+
+\begin{equation}\label{eqn:strainTensor:n}
+\Bu = \Bx' - \Bx,
+\end{equation}
+
+or in coordinates
+
+\begin{equation}\label{eqn:continuumElasticityReview:10}
+u_i = x_i' - x_i.
+\end{equation}
+
+In general each of the displaced coordinate locations, and therefore also the displacement vector coordinates, is some function of position
+
+\begin{equation}\label{eqn:strainTensor:n}
+\Bx' = \Bf(\Bx),
+\end{equation}
+
+or in coordinates
+
+\begin{equation}\label{eqn:strainTensor:n}
+x_i' = f_i(\Bx).
+\end{equation}
+
+Now we'll consider how a vector difference between two infinitesimally close points in the object change under deformation.  Imagine that we are looking at points along some parameterized trajectory within the object as illustrated in figure (\ref{fig:strain:strainFig2}).
+
+\imageFigure{strainFig2}{Transformation under deformation of an infinitesimal line element along a trajectory.}{fig:strain:strainFig2}{0.5}
+
+In the original object, we can locate a point $\By = \Bx + d\Bx$ a little bit further along the parameterized path.  In the deformed object we find this point at location $\By' = \Bx' + d\Bx'$.  We wish to consider how this line element differs in the original and deformed configurations, indirectly calculating the magnitude of the difference
+
+\begin{equation}\label{eqn:strainTensor:n}
+d\Bu = d\Bx' - d\Bx.
+\end{equation}
+
+There are two ways we can perform this calculation.  The first, following \cite{landau1960theory} \S 1, is to take a difference of the lengths of the displacment vector in the deformed and the original object.  The second, an approach we'll use later in our treatment of fluids is to consider a linear expansion of the change in displacement between the deformed and original objects.  
+
+%Utilizing summation convention consider a set of small internal displacements $u_1, u_2, u_3$ to the $x, y, z$ coordinates so that the transformation $x_i \rightarrow x_i'$ is related by
+%
 %figure (\ref{fig:continuumL2:continuumL2fig4})
-\imageFigure{continuumL2fig4}{Differential change to the object.}{fig:continuumL2:continuumL2fig4}{0.3}
+%\imageFigure{continuumL2fig4}{Differential change to the object.}{fig:continuumL2:continuumL2fig4}{0.3}
 
-\begin{align}\label{eqn:continuumL2:50}
-u_i &= x_i' - x_i \\
-x_i' &= g(x_i) \\
-u_i &= f(x_i)
-\end{align}
-
-(ie: $x_i'$ is a function of all the initial coordinates, as are the displacements $u_i$).
+Rearranging for the displacement line element in the deformed object, and working in coordinates we write
 
 \begin{equation}\label{eqn:continuumL2:70}
 dx_i' = dx_i + du_i
 \end{equation}
 
 \begin{align}\label{eqn:continuumL2:90}
-dl &= \sqrt{dx_k dx_k} \\
-dl' &= \sqrt{d{x'}_k d{x'}_k}
+dl &= \Abs{d\Bx} = \sqrt{dx_k dx_k} \\
+dl' &= \Abs{d\Bx'} = \sqrt{d{x'}_k d{x'}_k}
 \end{align}
 
 or
@@ -63,16 +97,16 @@ or
 (dx_k + du_k)
 (dx_k + du_k)
 =
-dl^2 + 2 dx_k du_k + du_k du_k
+dl^2 + 2 dx_k du_k + du_k du_k.
 \end{equation}
 
-with
+Using a Taylor expansion, we write
 
 \begin{equation}\label{eqn:continuumL2:130}
 du_i = \PD{x_k}{u_i} dx_k
 \end{equation}
 
-we have
+so that
 
 \begin{equation}\label{eqn:continuumL2:150}
 du_i^2 =
@@ -115,6 +149,7 @@ We write
 where we define the \emph{strain tensor} as
 
 \begin{equation}\label{eqn:continuumL2:190}
+\boxed{
 e_{ik} = \inv{2} \left(
 \left(
 \PD{x_k}{u_i}
@@ -123,73 +158,21 @@ e_{ik} = \inv{2} \left(
 \right)
 + \PD{x_i}{u_l}
 \PD{x_k}{u_l}
-\right)
+\right).
+}
 \end{equation}
 
-Here $e_{ik}$ is a $3 \times 3$ matrix in Cartesian coordinates
+In this course we will make use of only the linear terms, essentially defining the strain tensor as 
 
-\begin{equation}\label{eqn:continuumL2:210}
-\begin{bmatrix}
-e_{11} & e_{12} & e_{13} \\
-e_{21} & e_{22} & e_{23} \\
-e_{31} & e_{32} & e_{33} \\
-\end{bmatrix}
+\begin{equation}\label{eqn:continuumElasticityReview:90}
+\boxed{
+e_{ij}
+=
+\inv{2}
+\left( 
+\PD{x_i}{u_j} + 
+\PD{x_j}{u_i} 
+\right).
+}
 \end{equation}
 
-We see from \ref{eqn:continuumL2:190} that $e_{ik}$ is symmetric, so we have
-
-\begin{align}\label{eqn:continuumL2:230}
-e_{21} &= e_{12} \\
-e_{31} &= e_{13} \\
-e_{32} &= e_{23}
-\end{align}
-
-Because any real symmetric matrix can be diagonalized we can write in some coordinate system
-
-\begin{equation}\label{eqn:continuumL2:250}
-\bar{e}_{ik} =
-\begin{bmatrix}
-\bar{e}_{11} & 0 & 0 \\
-0 & \bar{e}_{22} & 0 \\
-0 & 0 & \bar{e}_{33} \\
-\end{bmatrix}
-\end{equation}
-
-\begin{align}\label{eqn:continuumL2:270}
-{dx_1'}^2 &= (1 + 2 \bar{e}_{11}) dx_1^2 \\
-{dx_2'}^2 &= (1 + 2 \bar{e}_{22}) dx_2^2 \\
-{dx_3'}^2 &= (1 + 2 \bar{e}_{33}) dx_3^2
-\end{align}
-
-If our changes are small enough we can also write approximately, taking the first order term in the square root evaluation
-
-\begin{align}\label{eqn:continuumL2:290}
-dx_1' &\approx (1 + \bar{e}_{11}) dx_1 \\
-dx_2' &\approx (1 + \bar{e}_{22}) dx_2 \\
-dx_3' &\approx (1 + \bar{e}_{33}) dx_3
-\end{align}
-
-%FIXME: some hand waving here to think through.
-We are also free to define a volume element
-
-\begin{equation}\label{eqn:continuumL2:310}
-dV' =
-dx_1'
-dx_2'
-dx_3'
-\approx
-(1 + e_{11})
-(1 + e_{22})
-(1 + e_{33})
-dx_1 dx_2 dx_3
-\end{equation}
-
-\begin{equation}\label{eqn:continuumL2:330}
-dV' = (1 + e_{11} +e_{22} +e_{33} ) dV
-\end{equation}
-
-So the change of volume is given by the trace
-
-\begin{equation}\label{eqn:continuumL2:350}
-dV' = ( 1 + e_{ii} ) dV
-\end{equation}
