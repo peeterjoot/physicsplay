@@ -5,6 +5,7 @@ SOURCE_DIRS += elastic/displacements
 SOURCE_DIRS += elastic/strain
 SOURCE_DIRS += elastic/stress
 SOURCE_DIRS += intro
+SOURCE_DIRS += figures
 SOURCE_DIRS += solutions
 
 # FIXME: move the figures into a figures dir to get them out of the way).
@@ -69,4 +70,4 @@ phy454.pdf :: $(PHY454) $(LOCAL_FILES) mathematica.tex
 	mv main.pdf phy454.pdf
 
 clean ::
-	rm -f *.ps *.dvi $(GENERATED_PDFS) *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc $(LOCAL_FILES)
+	rm -f *.ps *.dvi $(GENERATED_PDFS) *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc $(LOCAL_FILES) $(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.aux))
