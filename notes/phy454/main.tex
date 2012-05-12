@@ -17,7 +17,8 @@
 % 
 % 
 % 
-\documentclass[12pt,leqno]{book}
+%\documentclass[12pt,leqno]{book}
+\documentclass[12pt,openany]{memoir}
 
 \usepackage{amsmath,amssymb,amsfonts} % Typical maths resource packages
 \usepackage{graphicx}
@@ -25,7 +26,7 @@
 \usepackage{txfonts} 
 \usepackage{listings}
 \usepackage[bookmarks=true,plainpages=false]{hyperref}
-\usepackage{easybmat}
+%\usepackage{easybmat}
 
 %\usepackage[english]{babel}
 %\usepackage{media9}
@@ -37,6 +38,7 @@
 \usepackage{caption}
 \usepackage[answerdelayed]{exercise}
 
+%% MMM: these were from my book class usage, but work fine with memoir too.
 \parindent 1cm
 \parskip 0.2cm
 \topmargin 0.2cm
@@ -75,32 +77,46 @@
 %\makeindex
 
 \begin{document}
-\pagenumbering{alph}
+\chapterstyle{ell}
+%\pagenumbering{alph}
+
+% with the MMM block above commented out, this is required to get even left and right margins:
+%
+% http://tex.stackexchange.com/questions/25516/same-margins-when-specifying-twoside-in-memoir
+%
+%\setlrmargins{*}{*}{1}
+%\checkandfixthelayout
 
 \title{Course notes and problems from\\University of Toronto PHY454H1S\\Continuum Mechanics.}
 \author{Peeter Joot \quad peeter.joot@gmail.com}
 
 \maketitle
+\newpage
 
-\clearpage\pagenumbering{roman}
+%\clearpage\pagenumbering{roman}
 \tableofcontents
+\newpage
+%\listoftables
+\listoffigures
 
-\clearpage\pagenumbering{arabic}
+%\clearpage\pagenumbering{arabic}
 
-\pagestyle{plain}
+%\pagestyle{plain}
 
-\part{Copyright, Document Version, and Source access.}
+\chapter*{Copyright, Document Version, and Source access.}
 \input{currentBookCopyright.tex}
 \input{./.revinfo/lastCommitBook.tex}
 %\input{sourceaccess.tex}
 
-\part{Preface}
+%\part{Preface}
    \include{preface}
+%\thispagestyle{empty}
 
-\part{Introduction}
-   \chapter{Continuum mechanics}
-      \include{intro/continuumL1}
-      \include{intro/continuumMechanics}
+\part{Lecture Notes}
+   \chapter{Introduction to continuum mechanics}
+% include changed to input.  using include forces a pagebreak between the chapter heading and the text that is included.
+      \input{intro/continuumL1}
+      \input{intro/continuumMechanics}
 
 % clutter.  Don't want too many part sections.
 %\part{Readings}
@@ -110,44 +126,45 @@
 %\part{Multimedia figures.}
 %\include{multimedia}
 
-\part{Elasticity}
+%\part{Elasticity}
    % now removed:
    %\include{elastic/continuumElasticityReview}
    % (keep this temporariliy for the keywords, and use those eventually for building an index)
 
    \chapter{Strain Tensor}
-      \include{elastic/strain/lec1StrainTensor}
-      \include{elastic/strain/matrixRepresentation}
-      \include{elastic/strain/3cylindrical}
-      \include{elastic/strain/4compatibility}
-      \include{elastic/strain/07strain}
-      \include{elastic/strain/problems}
+      \input{elastic/strain/lec1StrainTensor}
+      \input{elastic/strain/matrixRepresentation}
+      \input{elastic/strain/3cylindrical}
+      \input{elastic/strain/4compatibility}
+      \input{elastic/strain/07strain}
+      \input{elastic/strain/problems}
    \chapter{Stress tensor.}
-      \include{elastic/stress/lec4stress}
-      \include{elastic/stress/00stress}
-      \include{elastic/stress/08stress}
-      \include{elastic/stress/01diagonalization}
-      \include{elastic/stress/02relatingStressAndForce}
-      \include{elastic/stress/03reviewStress}
-      \include{elastic/stress/09opposingExample}
-      \include{elastic/stress/10stretch2D}
-      \include{elastic/stress/12cauchyReview}
-      \include{elastic/stress/13radialStretch}
-      \include{elastic/stress/14constituative}
-      \include{elastic/stress/04reviewConstituative}
-      \include{elastic/stress/15constituativeHydro}
-      \include{elastic/stress/05reviewHydrostatic}
-      \include{elastic/stress/16constituativeUniaxial}
-      \include{elastic/stress/06reviewUniaxialYoungsPoisson}
-      \include{elastic/stress/problems}
-   \chapter{Displacement propagation}
-      \include{elastic/displacements/reviewDisplacement}
-      \include{elastic/displacements/elasticWaves}
-      \include{elastic/displacements/compatibilityCondition}
-      \include{elastic/displacements/phasorWaveSolutions}
-      \include{elastic/displacements/problems}
+%      \input{elastic/stress/lec4stress}
+      \input{elastic/stress/00stress}
+      \input{elastic/stress/08stress}
+      \input{elastic/stress/01diagonalization}
+      \input{elastic/stress/02relatingStressAndForce}
+      \input{elastic/stress/03reviewStress}
+      \input{elastic/stress/09opposingExample}
+      \input{elastic/stress/10stretch2D}
+      \input{elastic/stress/12cauchyReview}
+      \input{elastic/stress/13radialStretch}
+      \input{elastic/stress/14constituative}
+      \input{elastic/stress/04reviewConstituative}
+      \input{elastic/stress/15constituativeHydro}
+      \input{elastic/stress/05reviewHydrostatic}
+      \input{elastic/stress/16constituativeUniaxial}
+      \input{elastic/stress/06reviewUniaxialYoungsPoisson}
+      \input{elastic/stress/problems}
 
-\part{Fluid dynamics}
+   \chapter{Displacement propagation}
+      \input{elastic/displacements/reviewDisplacement}
+      \input{elastic/displacements/elasticWaves}
+      \input{elastic/displacements/compatibilityCondition}
+      \input{elastic/displacements/phasorWaveSolutions}
+      \input{elastic/displacements/problems}
+
+%\part{Fluid dynamics}
    \include{fluids/continuumFluidsReview}
    \include{fluids/strainAndVorticity}
    \include{fluids/newtonianFluidsAndMassConservationAndConstitutiveRelationAndIncompressibleFluids}
@@ -166,7 +183,7 @@
    \include{fluids/thermalStability}
 
 % turn these into the solutions for problems assigned in all the above sections.
-\part{Solutions to problems.}
+\part{Worked problems}
    %\part{Problem Sets and Tests}
    %\include{solutions/continuumProblemSet1}
    \include{solutions/continuumProblemSet2}
@@ -183,26 +200,31 @@
    \include{solutions/constantSpinSurfaces}
    \include{solutions/coffeeCupWithBottom}
 
-\part{Mathematica Notebooks}
+%\part{Mathematica Notebooks}
 % FIXME: have phy454/ references that should be phy454/mathematica/ or just have the paths removed.
-   \include{mathematica}
 
+\appendixpage
+%\appendix
+\begin{appendix}
 % move a lot more here.
-\part{Appendix}
+%\part{Appendix}
    \include{appendix/strainOtherCoordinateSystems}
    \include{appendix/stressTensorVectorForm}
    \include{appendix/poissonAndShearModulus}
    \include{appendix/fourierSeries}
+   \include{mathematica}
+\end{appendix}
 
+%%% is this now going to have appendix style numbering?
 %\part{Cronology}
 %\include{cronology}
-\part{Bibliography}
+%\part{Bibliography}
 
 % END INCLUDES.
 %-------------------------------------------------------
 
 \bibliography{myrefs}
 \bibliographystyle{unsrturl}
-  \addcontentsline{toc}{chapter}{Bibliography}
+%  \addcontentsline{toc}{chapter}{Bibliography}
 
 \end{document}
