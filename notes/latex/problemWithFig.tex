@@ -10,6 +10,77 @@
 %\usepackage{dpfloat}     % floats on facing pages
 %\usepackage{fonttable}[2009/04/01]   % font tables
 
+%\usepackage[frenchb]{babel}
+
+% Pour "première partie"
+%\usepackage{fmtcount}
+
+\chapterstyle{ell}
+%\chapterstyle{thatcher}
+
+% http://tex.stackexchange.com/questions/49512/part-style-in-memoir-class
+%
+%\renewcommand*{\parttitlefont}{\normalfont\large\MakeUppercase}
+%\renewcommand*{\partnumfont}{\normalfont\scshape\MakeLowercase}
+%\renewcommand*{\partnamefont}{\normalfont\scshape\MakeLowercase}
+%\renewcommand*{\printpartnum}{}
+%
+% This draws a line between the "Part N" text and the "part name" text.
+%\renewcommand{\midpartskip}{\par\parbox{0.5in}{\hrulefill}\par}
+  \renewcommand{\midpartskip}{\begingroup
+    \vspace*{\beforechapskip}%
+    \begin{adjustwidth}{}{-\chapindent}%
+    \hrulefill
+    \smash{\rule{0.4pt}{15mm}}
+    \end{adjustwidth}\endgroup}
+%\renewcommand{\beforepartskip}{\vspace*{\fill}}
+
+% numeric instead of roman numeral for the part num:
+\renewcommand*{\thepart}{\arabic{part}}
+% ell like Fonts: 
+% 
+% ragged left: from http://tex.stackexchange.com/questions/42489/a-modification-of-part-style-in-memoir
+% (moves the text to the right)
+\renewcommand*{\parttitlefont}{\normalfont\huge\sffamily\raggedleft}
+\renewcommand*{\partnumfont}{\normalfont\HUGE\sffamily\raggedleft}
+\renewcommand*{\partnamefont}{\normalfont\HUGE\sffamily\raggedleft}
+% this (without the \beforepartskip of the same form) force the part text higher onto the page.
+\renewcommand{\afterpartskip}{\vspace*{\fill}}
+
+% from memoir.cls:
+%  \renewcommand*{\midpartskip}{\par\vskip 20pt}%
+%  \renewcommand*{\afterpartskip}{\vfil\newpage}%
+%  \renewcommand*{\partnamefont}{\normalfont\huge\bfseries}%
+%  \renewcommand*{\partnumfont}{\normalfont\huge\bfseries}%
+%  \renewcommand*{\parttitlefont}{\normalfont\Huge\bfseries}%
+%  \renewcommand*{\printpartname}{\partnamefont \partname}%
+%  \renewcommand*{\partnamenum}{\space}%
+%  \renewcommand*{\printpartnum}{\partnumfont \thepart}%
+%  \renewcommand*{\printparttitle}[1]{\parttitlefont{##1}}%
+
+\makechapterstyle{myell}{%
+  \chapterstyle{default}
+  \renewcommand*{\chapnumfont}{\normalfont\HUGE\sffamily}
+  \renewcommand*{\chaptitlefont}{\normalfont\huge\sffamily}
+  \settowidth{\chapindent}{\chapnumfont 111}
+  \renewcommand*{\chapterheadstart}{\begingroup
+    \vspace*{\beforechapskip}%
+    \begin{adjustwidth}{}{-\chapindent}%
+    \hrulefill
+    \smash{\rule{0.4pt}{15mm}}
+    \end{adjustwidth}\endgroup}
+  \renewcommand*{\printchaptername}{}
+  \renewcommand*{\chapternamenum}{}
+  \renewcommand*{\printchapternum}{%
+    \begin{adjustwidth}{}{-\chapindent}
+    \hfill
+    \raisebox{10mm}[0pt][0pt]{\chapnumfont \thechapter}%
+                              \hspace*{1em}
+    \end{adjustwidth}\vspace*{-3.0\onelineskip}}
+  \renewcommand*{\printchaptertitle}[1]{%
+    \vskip\onelineskip
+    \raggedleft {\chaptitlefont ##1}\par\nobreak}}
+
 \begin{document}
 
 %\nopartblankpage
@@ -30,10 +101,11 @@
 \setlength\beforechapskip{-\baselineskip}
 %\chapterstyle{lyhne}
 %\chapterstyle{ger}
-\chapterstyle{ell}
-\chapter{foo}
+\chapterstyle{myell}
+\part{A lot of Foo}
+\chapter{Foo}
 
-\begin{Exercise}[title={foo}, label=ex1]
+\begin{Exercise}[title={Foo}, label=ex1]
 A tough question.
 \end{Exercise}
 
@@ -49,7 +121,7 @@ A smart answer.
 \end{Answer}
 
 \chapter{bar}
-\begin{Exercise}[title={foo}, label=ex2]
+\begin{Exercise}[title={Foo}, label=ex2]
 A tough question.
 \end{Exercise}
 
@@ -64,8 +136,9 @@ A smart answer.
 \end{Answer}
 
 \appendix
+\part{moo part}
 \chapter{moo}
-\begin{Exercise}[title={foo}, label=ex3]
+\begin{Exercise}[title={Foo 2}, label=ex3]
 A tough question.
 \end{Exercise}
 
@@ -78,6 +151,5 @@ A smart answer.
 %   \label{fig:ex3}
 %\end{figure}
 \end{Answer}
-
 
 \end{document}
