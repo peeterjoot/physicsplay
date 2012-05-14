@@ -19,8 +19,10 @@ all :: $(LOCAL_FILES)
 #all :: $(PDFS)
 all :: .gitignore
 #all :: partEll.pdf
-all :: ans2.pdf
+#all :: ans2.pdf
 #all :: main.pdf
+#all :: chapFigureMisplacement.pdf
+all :: problem3.pdf
 
 .gitignore : GNUmakefile
 	rm -f .gitignore

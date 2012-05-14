@@ -13,13 +13,56 @@
 \end{center}%
 }
 
+% http://tex.stackexchange.com/questions/55832/in-memoir-environment-the-chapter-heading-placement-gets-messed-up-if-a-too-big/55845#55845
+\makechapterstyle{boxedell}{%
+  \chapterstyle{default}
+  \renewcommand*{\chapnumfont}{\normalfont\HUGE\sffamily}
+  \renewcommand*{\chaptitlefont}{\normalfont\huge\sffamily}
+  \settowidth{\chapindent}{\chapnumfont 111}
+  \renewcommand*{\chapterheadstart}{\begingroup
+    \vspace*{\beforechapskip}%
+    \vbox{\begin{adjustwidth}{}{-\chapindent}%
+    \hrulefill
+    \smash{\rule{0.4pt}{15mm}}
+    \end{adjustwidth}}\endgroup}
+  \renewcommand*{\printchaptername}{}
+  \renewcommand*{\chapternamenum}{}
+  \renewcommand*{\printchapternum}{%
+    \vbox{\begin{adjustwidth}{}{-\chapindent}
+    \hfill
+    \raisebox{10mm}[0pt][0pt]{\chapnumfont \thechapter}%
+                              \hspace*{1em}
+    \end{adjustwidth}}\vspace*{-3.0\onelineskip}}
+  \renewcommand*{\printchaptertitle}[1]{%
+    \vskip\onelineskip
+    \raggedleft {\chaptitlefont ##1}\par\nobreak}}
+
+\makechapterstyle{sboxedell}{%
+  \chapterstyle{ell}
+  \renewcommand*{\chapterheadstart}{\begingroup
+    \vspace*{\beforechapskip}%
+    \vbox{\begin{adjustwidth}{}{-\chapindent}%
+    \hrulefill
+    \smash{\rule{0.4pt}{15mm}}
+    \end{adjustwidth}}\endgroup}
+  \renewcommand*{\printchapternum}{%
+    \vbox{\begin{adjustwidth}{}{-\chapindent}
+    \hfill
+    \raisebox{10mm}[0pt][0pt]{\chapnumfont \thechapter}%
+                              \hspace*{1em}
+    \end{adjustwidth}}\vspace*{-3.0\onelineskip}}}
+
+
+
 \begin{document}
-\chapterstyle{ell}
+\chapterstyle{sboxedell}
+
+
 \chapter{foo}
 \section{foo.}
 
 aa'aa aaaaaaa aaaaaa aaa aa aaa aaaaaaa aa aaaaaaaaaaa aa a aaaa.  aaaa aa a aaaaaa aaaaaaaaa aaaaaaaaaa, aaa aa aaaaaa aaa aa aaaaaaaaaaa aa aaaaaaaaaa aaa aaaaaa aaaa aaa aaa aaaaaa aaaa aaa aaaaaaaa aaaaaaaaaaaaa.  a aaaaaaaaaaaa aaaaaaaaa aa aaaa aaaaaaaaaa aaaaa aa aa aaaa.  a aaaaa aaaaaaaaaaa aa aa aaaaaa aaaa aaaaaaaa aaaaaaa aa aa, aa, aaa aa aa aaaaaaaaaaa aa aaaaaa (aaa{aaa:aaaaaa:aaaaaaaaa1}), aaaaa aaa aaaaaaaa aaaaaaaa aaa aaaaaaa aa aa', aa', aaa aa'.
 
-%\imageCentered{figures/strainFig1}{caption text}{fig:1}{0.5}
+\imageCentered{figures/strainFig1}{caption text}{fig:1}{0.5}
 
 \end{document}
