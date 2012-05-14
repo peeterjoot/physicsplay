@@ -72,15 +72,9 @@
 %-----------------------------------------
 \DeclareMathOperator{\Atan}{atan}
 
+% change \part formatting so that it matches \chapterstyle{ell}
 %-----------------------------------------------------------------------------------
-% http://tex.stackexchange.com/questions/55790/modifying-part-style-in-memoir-class-to-match-ell-chapterstyle/55795#55795
-\renewcommand{\midpartskip}{\begingroup
- \vspace*{-.4\beforechapskip}
- \begin{adjustwidth}{}{-.5\chapindent}
- \hrulefill
- \smash{\rule{0.4pt}{15mm}}
- \end{adjustwidth}\endgroup}
-
+% http://tex.stackexchange.com/questions/49512/part-style-in-memoir-class?answertab=active#tab-top
 % numeric instead of roman numeral for the part num:
 \renewcommand*{\thepart}{\arabic{part}}
 % ell like Fonts: 
@@ -90,8 +84,32 @@
 \renewcommand*{\parttitlefont}{\normalfont\huge\sffamily\raggedleft}
 \renewcommand*{\partnumfont}{\normalfont\HUGE\sffamily\raggedleft}
 \renewcommand*{\partnamefont}{\normalfont\HUGE\sffamily\raggedleft}
+%-----------------------------------------------------------------------------------
+% http://tex.stackexchange.com/questions/55790/modifying-part-style-in-memoir-class-to-match-ell-chapterstyle/55795#55795
+%\renewcommand{\midpartskip}{\begingroup
+% \vspace*{-.4\beforechapskip}
+% \begin{adjustwidth}{}{-.5\chapindent}
+% \hrulefill
+% \smash{\rule{0.4pt}{15mm}}
+% \end{adjustwidth}\endgroup}
+%-----------------------------------------------------------------------------------
+% better:
+% http://tex.stackexchange.com/questions/55790/modifying-part-style-in-memoir-class-to-match-ell-chapterstyle/55797#55797
+\renewcommand{\beforepartskip}{%
+  \null
+  \vspace*{\beforechapskip}
+  \vspace*{\onelineskip}
+  }
+\renewcommand{\midpartskip}{\begingroup
+  % \vspace*{\beforechapskip}%
+  \begin{adjustwidth}{}{-\chapindent}%
+  \hrulefill
+  \smash{\rule{0.4pt}{15mm}}
+  \end{adjustwidth}\endgroup}
+
 % this (without the \beforepartskip of the same form) force the part text higher onto the page.
-\renewcommand{\afterpartskip}{\vspace*{\fill}}
+%\renewcommand{\afterpartskip}{\vspace*{\fill}}
+% with \beforepartskip redefined as above, don't need this.
 %-----------------------------------------------------------------------------------
 
 %\include{new_commands}
