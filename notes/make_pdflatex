@@ -7,9 +7,18 @@ my $filename = "@ARGV" ;
 #my $pwd = `pwd` ; chomp $pwd ;
 my $pdflatex = 'pdflatex' ;
 
+my $verbose = 1 ;
+
 for ( my $i = 0 ; $i < 3 ; $i++ )
 {
-   my $rebuild = 0 ;
+   my $genbib = 0 ;
+   my $genindex = 0 ;
+   my $indexFile ;
+
+   my $basename = $filename ;
+   $basename =~ s/\..*// ;
+
+   print "$i: # $pdflatex $filename\n" if ( $verbose ) ;
 
    open my $fh, "$pdflatex $filename| " or die "could not run '$pdflatex' or open file '$filename'\n" ;
 
@@ -22,21 +31,32 @@ for ( my $i = 0 ; $i < 3 ; $i++ )
            or /Warning: Label\(s\) may have changed./
          )
       {
-         $rebuild = 1 ;
+         $genbib = 1 ;
+      }
+
+      # only do the makeindex on the first pass.
+      if ( /Writing index file (\S+)/ and !$i )
+      {
+         $indexFile = $1 ;
+         $genindex = 1 ;
       }
    }
    close $fh ;
    $rc = $? ;
 
-   if ( $rebuild )
+   if ( $genindex )
    {
-      my $f = $filename ;
-      $f =~ s/\..*// ;
+      print "$i: # makeindex $indexFile\n" if ( $verbose ) ;
+      system( "makeindex $indexFile" ) ;
+   }  
 
-      system( "bibtex $f" ) ;
+   if ( $genbib )
+   {
+      print "$i: # bibtex $basename\n" if ( $verbose ) ;
+      system( "bibtex $basename" ) ;
    }
 
-   last unless $rebuild ;
+   last unless ( $genbib or $genindex ) ;
 }
 
 exit $rc ;

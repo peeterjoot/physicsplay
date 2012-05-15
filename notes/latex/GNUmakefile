@@ -22,7 +22,9 @@ all :: .gitignore
 #all :: ans2.pdf
 #all :: main.pdf
 #all :: chapFigureMisplacement.pdf
-all :: problem3.pdf
+#all :: problem3.pdf
+#all :: index.pdf
+all :: problemWithFig.pdf
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
@@ -45,7 +47,7 @@ $(LOCAL_FILES) :
 clean :: mostlyclean localclean
 
 mostlyclean :: 
-	rm -f *.ps *.dvi $(PDFS) *.aux *.log *.bbl *.blg *.brf *.toc *.stackdump *.bib
+	rm -f *.ilg *.idx *.ps *.dvi $(PDFS) *.aux *.log *.bbl *.blg *.brf *.toc *.stackdump *.bib
 
 localclean ::
 	rm -f $(LOCAL_FILES)

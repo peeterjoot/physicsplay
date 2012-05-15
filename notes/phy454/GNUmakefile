@@ -70,4 +70,4 @@ phy454.pdf :: $(PHY454) $(LOCAL_FILES) mathematica.tex
 	mv main.pdf phy454.pdf
 
 clean ::
-	rm -f *.ps *.dvi $(GENERATED_PDFS) *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc $(LOCAL_FILES) $(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.aux))
+	rm -f *.ilg *.ind *.idx *.ps *.dvi $(GENERATED_PDFS) *.log *.aux *.bbl *.blg *.lof *.log *.lot *.out *.toc $(LOCAL_FILES) $(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.aux))
