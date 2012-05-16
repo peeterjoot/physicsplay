@@ -6,6 +6,7 @@ NOIGNORERULES += notes/gamma-matrix/GNUmakefile
 NOIGNORERULES += notes/geometric-algebra/GNUmakefile
 NOIGNORERULES += notes/phy1530/GNUmakefile
 NOIGNORERULES += notes/phy354/GNUmakefile
+NOIGNORERULES += notes/latex/GNUmakefile
 
 SUBMAKES := $(filter-out $(NOIGNORERULES),$(SUBMAKES))
 
