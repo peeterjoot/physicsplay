@@ -12,6 +12,7 @@ ORIG_FILES += ../eliblogwidescreen.cls
 ORIG_FILES += ../myrefs.bib 
 ORIG_FILES += ../plainurl.bst
 ORIG_FILES += ../unsrturl.bst
+ORIG_FILES += ../phy454/figures/couetteFlowFig1.png
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
@@ -24,7 +25,8 @@ all :: .gitignore
 #all :: chapFigureMisplacement.pdf
 #all :: problem3.pdf
 #all :: index.pdf
-all :: problemWithFig.pdf
+#all :: problemWithFig.pdf
+all :: sectionColor.pdf
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
