@@ -17,245 +17,17 @@
 %
 %
 %
-%\documentclass[12pt,leqno]{book}
 \documentclass[12pt,openany]{memoir}
 
-%% http://tex.stackexchange.com/questions/26467/why-did-they-put-pdf-titling-in-the-hyperref-package (Stefan's answer) :
-%\pdfinfo{
-%  /Title (Course notes and problems from University of Toronto PHY454H1S Continuum Mechanics.)%
-%%  /Creator ()
-%  /Producer (pdflatex)
-%  /Author (Peeter Joot)%
-%  /Subject (Fluid Mechanics)
-%  /Keywords (Elasticity, Fluid Mechanics, Navier-Stokes)
-%}
-% didn't work.  try hyperref instead.
-
-\usepackage{amsmath,amssymb,amsfonts} % Typical maths resource packages
-\usepackage{graphicx}
-\usepackage{txfonts}
-\usepackage{listings}
-\usepackage[bookmarks=true,plainpages=false]{hyperref}
-%\usepackage{easybmat}
-
-%\usepackage[english]{babel}
-%\usepackage{media9}
-%\usepackage{movie15}
-
-% for captionof
-%\usepackage[]{caption}
-%\usepackage[hypcap=false]{caption}
-
-% also using caption for color captions:
-% http://www.latex-community.org/forum/viewtopic.php?f=45&p=42828
-\usepackage[svgnames]{xcolor}
-\usepackage[labelfont={color=Maroon,bf}]{caption}
-%\usepackage{caption}
-
-\usepackage[answerdelayed]{exercise}
-\usepackage[]{makeidx}
-
-%------------------------
-% colorize section headers:
-%------------------------
-% http://stackoverflow.com/questions/3275770/modifying-section-to-make-it-colorful-with-latex
-%\titleformat{\section}
-%{\normalfont\Large\bfseries}
-%{\color{blue}\thesection}{1em}{}
-%\titlelabel{\color{blue}{\thetitle}.\quad}
-% better:
-%------------------------
-%
-% http://tex.stackexchange.com/questions/56004/customizing-section-formatting-using-memoir-class-color-and-numbering/56006#56006
-%
-% To control the level up to which sectional units will be numbered, you can use \setsecnumdepth{<sectional unit>}; to color the sectional unit numbers, you can use \setsecnumformat:
-%
-\setsecnumformat{\color{blue}\csname the#1\endcsname\quad} % csname is for macro expansion: http://www.tex.ac.uk/cgi-bin/texfaq2html?label=csname
-\setsecnumdepth{subsubsection}
-%------------------------
-
-%% MMM: these were from my book class usage, but work fine with memoir too.
-\parindent 1cm
-\parskip 0.2cm
-\topmargin 0.2cm
-\oddsidemargin 1cm
-\evensidemargin 0.5cm
-\textwidth 15cm
-\textheight 21cm
-
-\input{../peeters_macros.tex}
-
-\newcommand{\indexpair}[1]{#1 \index{#1}}
-
-\newcommand{\citep}[1]{\cite{#1}}
-\newcommand{\citet}[1]{\cite{#1}}
-\newcommand{\chapcite}[1]{\ref{chap:#1}}
-% make this one a citation to an external notes compilation, but an actual formula reference
-% when that 'chapter' is eventually included in the notes compilation.
-\newcommand{\inbookref}[2]{\ref{#2}}
-
-%-----------------------------------------
-%
-% stubs for article class.
-%
-\newcommand{\blogpage}[1]{}
-\newcommand{\email}[1]{}
-\newcommand{\beginArtWithToc}[0]{}
-\newcommand{\beginArtNoToc}[0]{}
-\newcommand{\EndArticle}[0]{}
-\newcommand{\EndNoBibArticle}[0]{}
-\newcommand{\revisionInfo}[1]{}
-\newcommand{\gitRevisionInfo}[1]{}
-\newcommand{\keywords}[1]{}
-%-----------------------------------------
-\DeclareMathOperator{\Atan}{atan}
-
-% change \part formatting so that it matches \chapterstyle{ell}
-%-----------------------------------------------------------------------------------
-% http://tex.stackexchange.com/questions/49512/part-style-in-memoir-class?answertab=active#tab-top
-% numeric instead of roman numeral for the part num:
-\renewcommand*{\thepart}{\arabic{part}}
-% ell like Fonts:
-%
-% ragged left: from http://tex.stackexchange.com/questions/42489/a-modification-of-part-style-in-memoir
-% (moves the text to the right)
-\renewcommand*{\parttitlefont}{\color{MidnightBlue}\normalfont\huge\sffamily\raggedleft}
-\renewcommand*{\partnumfont}{\normalfont\HUGE\sffamily\raggedleft}
-\renewcommand*{\partnamefont}{\normalfont\HUGE\sffamily\raggedleft}
-%-----------------------------------------------------------------------------------
-% http://tex.stackexchange.com/questions/55790/modifying-part-style-in-memoir-class-to-match-ell-chapterstyle/55795#55795
-%\renewcommand{\midpartskip}{\begingroup
-% \vspace*{-.4\beforechapskip}
-% \begin{adjustwidth}{}{-.5\chapindent}
-% \hrulefill
-% \smash{\rule{0.4pt}{15mm}}
-% \end{adjustwidth}\endgroup}
-%-----------------------------------------------------------------------------------
-% better:
-% http://tex.stackexchange.com/questions/55790/modifying-part-style-in-memoir-class-to-match-ell-chapterstyle/55797#55797
-\renewcommand{\beforepartskip}{%
-  \null
-  \vspace*{\beforechapskip}
-  \vspace*{\onelineskip}
-  }
-\renewcommand{\midpartskip}{\begingroup
-  % \vspace*{\beforechapskip}%
-  \begin{adjustwidth}{}{-\chapindent}%
-  \hrulefill
-  \smash{\rule{0.4pt}{15mm}}
-  \end{adjustwidth}\endgroup}
-
-% this (without the \beforepartskip of the same form) force the part text higher onto the page.
-%\renewcommand{\afterpartskip}{\vspace*{\fill}}
-% with \beforepartskip redefined as above, don't need this.
-
-%-----------------------------------------------------------------------------------
-% http://tex.stackexchange.com/questions/55832/in-memoir-environment-the-chapter-heading-placement-gets-messed-up-if-a-too-big/55845#55845
-%\makechapterstyle{boxedell}{%
-%  \chapterstyle{ell}%
-%  \renewcommand*{\chapterheadstart}{\begingroup%
-%    \vspace*{\beforechapskip}%
-%    \vbox{\begin{adjustwidth}{}{-\chapindent}%
-%    \hrulefill%
-%    \smash{\rule{0.4pt}{15mm}}%
-%    \end{adjustwidth}}\endgroup}%
-%  \renewcommand*{\printchapternum}{%
-%    \vbox{\begin{adjustwidth}{}{-\chapindent}%
-%    \hfill%
-%    \raisebox{10mm}[0pt][0pt]{\chapnumfont \thechapter}%
-%                              \hspace*{1em}%
-%    \end{adjustwidth}}\vspace*{-3.0\onelineskip}}%
-%}
-%
-% While the above is probably strictly more correct, it's not really required with
-% the use of the problematic \begin{center} ... \end{center} for figures avoided.
-%
-% See the new \imagefigure command to see how that was done.
-%
-%-----------------------------------------------------------------------------------
-%% http://tex.stackexchange.com/questions/10183/change-font-colour-of-bringhurst-chapterstyle-in-memoir
-%\renewcommand{\printchaptertitle}[1]{%
-%  \memRTLraggedright\Large\scshape\MakeLowercase{\textcolor{red}{#1}}%
-%}
-%-----------------------------------------------------------------------------------
-\makechapterstyle{myell}{%
-  \chapterstyle{ell}%
-%  \renewcommand*{\chapnumfont}{\normalfont\HUGE\sffamily}
-%  \renewcommand*{\chaptitlefont}{\normalfont\huge\sffamily}
-%  \settowidth{\chapindent}{\chapnumfont 111}
-%  \renewcommand*{\chapterheadstart}{\begingroup
-%    \vspace*{\beforechapskip}%
-%    \begin{adjustwidth}{}{-\chapindent}%
-%    \hrulefill
-%    \smash{\rule{0.4pt}{15mm}}
-%    \end{adjustwidth}\endgroup}
-%  \renewcommand*{\printchaptername}{}
-%  \renewcommand*{\chapternamenum}{}
-%  \renewcommand*{\printchapternum}{%
-%    \begin{adjustwidth}{}{-\chapindent}
-%    \hfill
-%    \raisebox{10mm}[0pt][0pt]{\chapnumfont \thechapter}%
-%                              \hspace*{1em}
-%    \end{adjustwidth}\vspace*{-3.0\onelineskip}}
-  \renewcommand*{\printchaptertitle}[1]{%
-    \vskip\onelineskip
-    \raggedleft \color{red}{\chaptitlefont ##1}\par\nobreak}}
-%-----------------------------------------------------------------------------------
-
-%\include{new_commands}
-
-% from memoir package:
-%\newcommand{\titleJT}{\begingroup% Jan Tschichold: typographer
-%\tdrop = 0.08\txtheight
-%\vspace*{\tdrop}
-%\hspace*{0.3\txtwidth}
-%{\Large Peeter Joot \quad peeter.joot@gmail.com}\\[2\tdrop]
-%\hspace*{0.3\txtwidth}{\Huge\itshape University of Toronto PHY454H1S}\par
-%{\raggedleft\Huge\itshape Continuum Mechanics\par}
-%\vfill
-%\vspace*{\tdrop}
-%\endgroup}
-%%\FSfont{5gm}% Garamond
-%%\hspace*{0.3\txtwidth}{\Large \plogo} \\[0.5\baselineskip]
-%%\hspace*{0.3\txtwidth}{\Large The Publisher}
-
-%\newcommand*{\titleJT}{\begingroup% Jan Tschichold: typographer
-%\FSfont{5gm}% Garamond
-%\tdrop = 0.08\txtheight
-%\vspace*{\tdrop}
-%\hspace*{0.3\txtwidth}
-%{\Large The Author}\\[2\tdrop]
-%\hspace*{0.3\txtwidth}{\Huge\itshape The Big Book of}\par
-%{\raggedleft\Huge\itshape Conundrums\par}
-%\vfill
-%\hspace*{0.3\txtwidth}{\Large \plogo} \\[0.5\baselineskip]
-%\hspace*{0.3\txtwidth}{\Large The Publisher}
-%\vspace*{\tdrop}
-%\endgroup}
-
-% remove the centerline that we have in exercise.sty
-%\renewcommand{\ExerciseHeader}{\textbf{\large\ExerciseName\ExerciseHeaderNB\ExerciseHeaderTitle\ExerciseHeaderOrigin\medskip}\par}
-%\renewcommand{\AnswerHeader}{\medskip\textbf{Answer for \ExerciseName\ \ExerciseHeaderNB}\smallskip\par}
-
-\renewcommand{\ExerciseHeader}{\leftline{\textbf{\large\ExerciseName\ \color{blue}{\ExerciseHeaderNB}\ExerciseHeaderTitle\ExerciseHeaderOrigin\medskip}}}
-\renewcommand{\AnswerHeader}{\medskip\leftline{\textbf{Answer for \ExerciseName\ \color{blue}{\ExerciseHeaderNB}}\smallskip}}
-
-\input{titleCommands.tex}
-
-\makeindex
-
-%--------------------------------------------------------------------------------------------
-% color equation numbers:
-% http://tex.stackexchange.com/questions/28903/changing-the-apperance-of-equation-numbers-with-amsmath/28907#28907
-% http://tex.stackexchange.com/questions/50521/coloured-equation-number-without-changing-colour-of-reference-using-hyperref
-\makeatletter
-\let\mytagform@=\tagform@
-\def\tagform@#1{\maketag@@@{\color{Olive}(#1)}}
-\makeatother
-%--------------------------------------------------------------------------------------------
+\usepackage{mylayout}
+\hypersetup{
+   pdftitle={University of Toronto, Continuum Mechanics (PHY454H1S).  2012 notes and problems},
+   pdfauthor={Peeter Joot.  peeter.joot@gmail.com},
+   pdfsubject={Continuum Mechanics},
+   pdfkeywords={Continuum Mechanics} {Fluid Dynamics} {PHY454H1S} {University of Toronto} {Navier-Stokes}
+}
 
 \begin{document}
-%\chapterstyle{boxedell}
 \chapterstyle{myell}
 %\pagenumbering{alph}
 
@@ -281,7 +53,7 @@
 %
 % http://www.latextemplates.com/template/multi-purpose-large-font-title-page
 %
-\input{titlePage.tex}
+\input{FrontBackmatter/titlePage.tex}
 %--------------------------------------------------------------------------------------------
 \chapter*{Copyright.}
   \addcontentsline{toc}{chapter}{Copyright.}
@@ -295,7 +67,7 @@
 %\input{sourceaccess.tex}
 
 %\part{Preface}
-   \include{preface}
+   \include{FrontBackmatter/preface}
 
 %\clearpage\pagenumbering{roman}
 \tableofcontents
@@ -314,11 +86,11 @@
 %
 % clutter.  Don't want too many part sections.
 %\part{Readings}
-%\include{readings}
+%\include{FrontBackmatter/readings}
 %
 % Removed because they were too unreliable.  FIXME: remove references to these videos
 %\part{Multimedia figures.}
-%\include{multimedia}
+%\include{FrontBackmatter/multimedia}
 %
 %\part{Elasticity}
    % now removed:

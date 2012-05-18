@@ -7,9 +7,10 @@ SOURCE_DIRS += elastic/stress
 SOURCE_DIRS += intro
 SOURCE_DIRS += figures
 SOURCE_DIRS += solutions
+SOURCE_DIRS += FrontBackmatter
 
 # FIXME: move the figures into a figures dir to get them out of the way).
-DEPENDENCYEXTENSIONS := mp4 pdf_tex png tex
+DEPENDENCYEXTENSIONS := mp4 pdf_tex png tex sty
 BOOKDEPENDENCIES := $(foreach ext,$(DEPENDENCYEXTENSIONS),$(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.$(ext))))
 
 PDFDEPENDENCIES := $(subst pdf_tex,pdf,$(filter %.pdf_tex,$(BOOKDEPENDENCIES)))
