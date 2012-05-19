@@ -30,7 +30,7 @@ cronology.tex : ../METADATA
 phy456.pdf :: $(PHY456) $(LOCAL_FILES)
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
-	../make_pdflatex main.tex
+	../make_pdflatex -file main.tex
 	mv main.pdf phy456.pdf
 
 clean ::

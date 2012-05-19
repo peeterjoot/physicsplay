@@ -45,7 +45,7 @@ $(LOCAL_FILES) :
 gabook.pdf :: $(BOOKDEPENDENCIES) $(LOCAL_FILES)
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
-	../make_pdflatex main.tex
+	../make_pdflatex -file main.tex
 	mv main.pdf gabook.pdf
 
 cronology.tex : ../METADATA

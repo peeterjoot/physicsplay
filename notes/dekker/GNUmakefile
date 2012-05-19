@@ -12,7 +12,7 @@ all :: $(pdfs)
 $(pdfs) : ../peeters_macros.tex
 
 %.pdf : %.tex
-	../make_pdflatex $<
+	../make_pdflatex -file $<
 
 clean ::
 	rm -f *.ps *.dvi *.pdf *.aux *.log

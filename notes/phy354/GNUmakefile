@@ -25,7 +25,7 @@ cronology.tex : ../METADATA
 phy354.pdf :: $(BOOKDEPENDENCIES) $(LOCAL_FILES)
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
-	../make_pdflatex main.tex
+	../make_pdflatex -file main.tex
 	mv main.pdf phy354.pdf
 
 # FIXME: don't want pdf's in here!

@@ -32,7 +32,7 @@ $(LOCAL_FILES) :
 otherbook.pdf :: $(BOOKDEPENDENCIES) $(LOCAL_FILES)
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
-	../make_pdflatex main.tex
+	../make_pdflatex -file main.tex
 	mv main.pdf otherbook.pdf
 
 cronology.tex : ../METADATA
@@ -41,7 +41,7 @@ cronology.tex : ../METADATA
 #%.pdf : %.tex
 #	mkdir -p ./.revinfo/
 #	~/bin/mkRevInfo > ./.revinfo/lastCommit.tex
-#	../make_pdflatex $<
+#	../make_pdflatex -file $<
 
 clean ::
 	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc $(LOCAL_FILES)

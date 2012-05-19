@@ -19,7 +19,7 @@ $(LOCAL_FILES) : $(ORIG_FILES)
 	cp $(filter %$@, $(ORIG_FILES)) $@
 
 %.pdf : %.tex
-	../make_pdflatex $<
+	../make_pdflatex -file $<
 
 clean ::
 	rm -f *.ps *.dvi *.pdf *.aux *.log

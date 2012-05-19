@@ -17,10 +17,10 @@ PDFDEPENDENCIES := $(subst pdf_tex,pdf,$(filter %.pdf_tex,$(BOOKDEPENDENCIES)))
 BOOKDEPENDENCIES += $(PDFDEPENDENCIES)
 
 ORIG_FILES += ../myrefs.bib
-ORIG_FILES += ../abbrvurl.bst
-ORIG_FILES += ../alphaurl.bst
-ORIG_FILES += ../plainurl.bst
-ORIG_FILES += ../unsrturl.bst
+#ORIG_FILES += ../abbrvurl.bst
+#ORIG_FILES += ../alphaurl.bst
+#ORIG_FILES += ../plainurl.bst
+#ORIG_FILES += ../unsrturl.bst
 #ORIG_FILES += ../eliblog.cls 
 #ORIG_FILES += ../sourceaccess.tex 
 ORIG_FILES += ../gitclone.ksh
@@ -67,7 +67,7 @@ mathematica.tex : ../METADATA
 phy454.pdf :: $(PHY454) $(LOCAL_FILES) mathematica.tex
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
-	../make_pdflatex main.tex
+	../make_pdflatex -file main.tex
 	mv main.pdf phy454.pdf
 
 clean ::

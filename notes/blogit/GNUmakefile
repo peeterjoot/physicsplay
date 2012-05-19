@@ -112,7 +112,7 @@ gaBasics.pdf : gaBasics.tex
 %.pdf : %.tex
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo > ./.revinfo/lastCommit.tex
-	perl ../make_pdflatex $<
+	perl ../make_pdflatex -file $<
 
 #%.mp4 : %.avi
 #	/cygdrive/c/Temp/ffmpeg/bin/ffmpeg -i $< -vcodec libx264 $@

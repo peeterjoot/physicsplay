@@ -40,7 +40,7 @@ mathematica.tex : ../METADATA
 phy485.pdf :: $(PHY485) $(LOCAL_FILES)
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
-	../make_pdflatex main.tex
+	../make_pdflatex -file main.tex
 	mv main.pdf phy485.pdf
 
 clean ::

@@ -24,5 +24,5 @@ all :: $(pdfs)
 latexrules := ..
 
 %.pdf : %.ltx
-	$(latexrules)/make_pdflatex $<
+	$(latexrules)/make_pdflatex -file $<
 

@@ -1,13 +1,25 @@
 #!/usr/bin/perl
 
+use strict ;
+use warnings ;
+use Getopt::Long;
+
 my $rc = $? ;
 my $built = 0 ;
-my $filename = "@ARGV" ;
+my $forcebib = 0 ;
+my $pdflatex = 'pdflatex' ;
+my $verbose = 1 ;
+my $filename ;
+
+GetOptions(
+   'filename=s'   => \$filename,
+   'forcebib!'    => \$forcebib,
+   'verbose!'     => \$verbose
+) ;
+
+die "usage: make_pdflatex [-forcebib] [-[no]verbose] -filename filename.tex\n" if (! defined $filename) ;
 
 #my $pwd = `pwd` ; chomp $pwd ;
-my $pdflatex = 'pdflatex' ;
-
-my $verbose = 1 ;
 
 for ( my $i = 0 ; $i < 3 ; $i++ )
 {
@@ -29,6 +41,7 @@ for ( my $i = 0 ; $i < 3 ; $i++ )
            or /There were multiply-defined labels/
            or /Warning: Citation/
            or /Warning: Label\(s\) may have changed./
+           or ($forcebib and !$i)
          )
       {
          $genbib = 1 ;

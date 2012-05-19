@@ -33,7 +33,7 @@ $(LOCAL_FILES) :
 	cp $(filter %$@, $(ORIG_FILES)) $@
 
 %.pdf : %.tex
-	perl ../make_pdflatex $<
+	perl ../make_pdflatex -file $<
 
 clean :: mostlyclean localclean
 

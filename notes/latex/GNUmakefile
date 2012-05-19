@@ -45,7 +45,7 @@ $(LOCAL_FILES) :
 %.pdf : %.tex
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo > ./.revinfo/lastCommit.tex
-	perl ../make_pdflatex $<
+	perl ../make_pdflatex -file $<
 
 clean :: mostlyclean localclean
 
