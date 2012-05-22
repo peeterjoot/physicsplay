@@ -26,10 +26,22 @@
 % Better: chapter numbers within exersize counters.  Let the chngcntr package do the work (it also works properly across a chapter boundary)
 % http://tex.stackexchange.com/questions/27444/number-exercises-according-to-chapter
 %
-\usepackage[]{chngcntr}
-\counterwithin{Exercise}{chapter}
-\counterwithin{Answer}{chapter}
-
+%\usepackage[]{chngcntr}
+%\newcounter{Example}
+%\counterwithin{Example}{chapter}
+%\counterwithin{Exercise}{chapter}
+%\counterwithin{Answer}{chapter}
+%-----------------------------------------------------------------------------
+% use of chngcntr as above worked fine until I started using Examples.  Here's the issue and solution:
+%
+% http://tex.stackexchange.com/questions/56927/help-with-exercise-sty-counter-not-shown-incremented#56933
+\renewcounter{Exercise}[chapter]
+\makeatletter
+\renewcommand{\theExercise}{\if@ExeStared\else\thechapter.\arabic{\@ExerciseCounter}\fi}
+\makeatother
+\newcounter{Example}
+\renewcounter{Example}[chapter]
+%-----------------------------------------------------------------------------
 \renewcommand{\ExerciseHeader}{\leftline{\textbf{\large\color{DarkOliveGreen}{\ExerciseName\ \ExerciseHeaderNB} \color{Maroon}{\ExerciseHeaderTitle}\ExerciseHeaderOrigin\medskip}}}
 \renewcommand{\AnswerHeader}{\medskip\leftline{\textbf{\color{Maroon}{Answer for \ExerciseName}\ \color{DarkOliveGreen}{\ExerciseHeaderNB}}\smallskip}}
 %-----------------------------------------------------------------------------
@@ -57,8 +69,6 @@
 \end{mydefinition}%
 }
 
-% would be nice to box these, with a light colored background.
-\newcounter{Example}
 \newcommand{\makeexample}[3]{%
 \begin{Exercise}[%
 title={#1},%
@@ -69,6 +79,8 @@ counter={Example}%
 #3%
 \end{Exercise}%
 }
+%\addcontentsline{toc}{section}{Example \thechapter.\theExample\ #1}
+%\pdfbookmark[1]{Example \thechapter.\theExample\ #1}{ex\thechapter.\theExample}
 
 \newcommand{\makeproblem}[3]{%
 \begin{Exercise}[%
@@ -78,6 +90,8 @@ label={#2}%
 #3%
 \end{Exercise}%
 }
+%\addcontentsline{toc}{section}{Example \thechapter.\theExercise\ #1}
+%\pdfbookmark[1]{Example \thechapter.\theExercise\ #1}{ex\thechapter.\theExercise}
 
 \newcommand{\makeanswer}[2]{%
 \begin{Answer}[%

@@ -1,13 +1,21 @@
 SOURCE_DIRS += .
-SOURCE_DIRS += fluids
 SOURCE_DIRS += appendix
 SOURCE_DIRS += elastic/displacements
 SOURCE_DIRS += elastic/strain
 SOURCE_DIRS += elastic/stress
-SOURCE_DIRS += intro
-SOURCE_DIRS += figures
-SOURCE_DIRS += solutions
+SOURCE_DIRS += fluids
+SOURCE_DIRS += fluids/bernoulli
+SOURCE_DIRS += fluids/boundaryLayers
+SOURCE_DIRS += fluids/hydrostatics
+SOURCE_DIRS += fluids/navierStokes
+SOURCE_DIRS += fluids/nondimensionalisation
+SOURCE_DIRS += fluids/singularPertubation
+SOURCE_DIRS += fluids/surfaces
+SOURCE_DIRS += fluids/surfaceTension
+SOURCE_DIRS += fluids/thermal
 SOURCE_DIRS += FrontBackmatter
+SOURCE_DIRS += intro
+SOURCE_DIRS += solutions
 
 # FIXME: move the figures into a figures dir to get them out of the way).
 DEPENDENCYEXTENSIONS := mp4 pdf_tex png tex sty
@@ -67,7 +75,7 @@ mathematica.tex : ../METADATA
 phy454.pdf :: $(PHY454) $(LOCAL_FILES) mathematica.tex
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
-	../make_pdflatex -file main.tex
+	../make_pdflatex -nojustonce -file main.tex
 	mv main.pdf phy454.pdf
 
 clean ::
