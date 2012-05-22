@@ -27,7 +27,8 @@ all :: .gitignore
 #all :: index.pdf
 #all :: problemWithFig.pdf
 #all :: sectionColor.pdf
-all :: colors.pdf
+#all :: colors.pdf
+all :: problemChap.pdf
 
 .gitignore : GNUmakefile
 	rm -f .gitignore

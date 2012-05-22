@@ -18,8 +18,18 @@
 
 %-----------------------------------------------------------------------------------
 % remove the centerline that we have in exercise.sty
-% and add some color.
+% and add some color.  and add chapter numbers.
 %
+%\renewcommand{\ExerciseHeader}{\leftline{\textbf{\large\color{DarkOliveGreen}{\ExerciseName\ \thechapter.\ExerciseHeaderNB} \color{Maroon}{\ExerciseHeaderTitle}\ExerciseHeaderOrigin\medskip}}}
+%\renewcommand{\AnswerHeader}{\medskip\leftline{\textbf{\color{Maroon}{Answer for \ExerciseName}\ \color{DarkOliveGreen}{\thechapter.\ExerciseHeaderNB}}\smallskip}}
+%-----------------------------------------------------------------------------
+% Better: chapter numbers within exersize counters.  Let the chngcntr package do the work (it also works properly across a chapter boundary)
+% http://tex.stackexchange.com/questions/27444/number-exercises-according-to-chapter
+%
+\usepackage[]{chngcntr}
+\counterwithin{Exercise}{chapter}
+\counterwithin{Answer}{chapter}
+
 \renewcommand{\ExerciseHeader}{\leftline{\textbf{\large\color{DarkOliveGreen}{\ExerciseName\ \ExerciseHeaderNB} \color{Maroon}{\ExerciseHeaderTitle}\ExerciseHeaderOrigin\medskip}}}
 \renewcommand{\AnswerHeader}{\medskip\leftline{\textbf{\color{Maroon}{Answer for \ExerciseName}\ \color{DarkOliveGreen}{\ExerciseHeaderNB}}\smallskip}}
 %-----------------------------------------------------------------------------
@@ -46,3 +56,29 @@
 #3%
 \end{mydefinition}%
 }
+
+\newcounter{Example}
+\newcounter{Problem}
+\newenvironment{Example}{\begin{Exercise}[name={Example},
+counter={Example}]}
+{\end{Exercise}}
+
+\newcommand{\makeproblem}[3]{%
+\begin{Exercise}[%
+title={#1},%
+label={#2}%
+]%
+#3%
+\end{Exercise}%
+}
+
+\newcommand{\makeanswer}[2]{%
+\begin{Answer}[%
+ref={#1}
+]%
+#2%
+\end{Answer}%
+}
+
+%\newcommand{\mychapter}[0]{\renewcounter{Example}\renewcounter{Problem}\chapter}
+\newcommand{\mychapter}[0]{\chapter}
