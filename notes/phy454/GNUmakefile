@@ -27,12 +27,13 @@ ORIG_FILES += ../currentBookCopyright.tex
 ORIG_FILES += ../myrefs.bib 
 
 LOCAL_FILES := $(filter-out myrefs.bib,$(notdir $(ORIG_FILES)))
+COPIED_FILES += peeters_macros.sty
 
 PHY454 := $(filter-out $(STANDALONE), $(BOOKDEPENDENCIES))
 
 GENERATED_PDFS := phy454.pdf
 
-PHY454_DEPS := $(PHY454) $(LOCAL_FILES) mathematica.tex myrefs.bib
+PHY454_DEPS := $(PHY454) $(LOCAL_FILES) mathematica.tex myrefs.bib $(COPIED_FILES)
 
 all :: $(GENERATED_PDFS) .gitignore
 
@@ -41,9 +42,12 @@ all :: $(GENERATED_PDFS) .gitignore
 myrefs.bib : ../myrefs.bib
 	sed 's/@webpage/@manual/g' < $< > $@
 
+peeters_macros.sty : ../peeters_macros.tex
+	cp $< $@
+
 .gitignore : GNUmakefile
 	rm -f .gitignore
-	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/phy454/,' > $@
+	echo $(ORIG_FILES) $(COPIED_FILES) | tr ' ' '\n' | sed 's,.*/,notes/phy454/,' > $@
 
 local : $(LOCAL_FILES) 
 
