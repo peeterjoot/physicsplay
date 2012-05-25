@@ -62,8 +62,6 @@ phy454.pdf :: $(PHY454_DEPS)
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
 	../make_pdflatex -nojustonce -file phy454.tex
-	# why did I have this?
-	#mv main.pdf phy454.pdf
 
 clean ::
 	rm -f *.ilg *.ind *.idx *.ps *.dvi $(GENERATED_PDFS) *.log *.aux *.bbl *.blg *.lof *.log *.lot *.out *.toc $(LOCAL_FILES) $(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.aux))
