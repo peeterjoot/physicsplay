@@ -29,7 +29,8 @@ all :: .gitignore
 #all :: sectionColor.pdf
 #all :: colors.pdf
 #all :: problemChap.pdf
-all :: breqnTest.pdf
+#all :: breqnTest.pdf
+#all :: dmath.pdf
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
