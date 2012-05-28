@@ -15,14 +15,16 @@ use Getopt::Long ;
 #use File::Slurp ;
 
 my $showUsage = 0 ;
+my $replace = 1 ;
 my $filename ;
 my $copytext ;
 
 GetOptions
 ( 
-   'file=s'  => \$filename,
-   'copy=s'  => \$copytext,
-   'help!'   => \$showUsage,
+   'file=s'     => \$filename,
+   'copy=s'     => \$copytext,
+   'replace!'   => \$replace,
+   'help!'      => \$showUsage,
 ) ;
 
 if ( $showUsage or !defined $filename or !defined $copytext )
@@ -33,8 +35,21 @@ if ( $showUsage or !defined $filename or !defined $copytext )
 my $copy = read_file( $copytext ) ;
 my $text = read_file( $filename ) ;
 
+if ( $replace )
+{
+   # strip out old copyright.
+   $text =~ s/.*Copyright.*author\sand\sask\.\s*(%\s)*/$copy/smgx ;
+}
+
 open my $fh, ">$filename" or die "could not open '$filename' for write\n" ;
-print $fh $copy . $text ;
+if ( $replace )
+{
+   print $fh $text ;
+}
+else
+{
+   print $fh $copy . $text ;
+}
 close $fh ;
 
 exit 0 ;
