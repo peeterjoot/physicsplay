@@ -27,7 +27,7 @@ ORIG_FILES += ../currentBookCopyright.tex
 ORIG_FILES += ../myrefs.bib 
 
 LOCAL_FILES := $(filter-out myrefs.bib,$(notdir $(ORIG_FILES)))
-COPIED_FILES += peeters_macros.sty
+COPIED_FILES += ./peeters_macros.sty
 
 PHY454 := $(filter-out $(STANDALONE), $(BOOKDEPENDENCIES))
 
