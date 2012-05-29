@@ -10,45 +10,53 @@ PDFDEPENDENCIES := $(subst pdf_tex,pdf,$(filter %.pdf_tex,$(BOOKDEPENDENCIES)))
 BOOKDEPENDENCIES += $(PDFDEPENDENCIES)
 
 ORIG_FILES += ../currentBookCopyright.tex
-ORIG_FILES += ../myrefs.bib 
 ORIG_FILES += ../classicthesis.mine/classicthesis.sty
 ORIG_FILES += ../classicthesis.mine/mycommon.sty
 
-ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/Bibliography.tex
+# straight from the classicthesis template:
+ORIG_FRONTBACK_FILES += ../classicthesis/FrontBackmatter/Bibliography.tex
+ORIG_FRONTBACK_FILES += ../classicthesis/FrontBackmatter/DirtyTitlepage.tex
+
+# slightly modified from the classicthesis template:
 ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/Contents.tex
 ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/Dedication.tex
-ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/DirtyTitlepage.tex
 ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/Titleback.tex
 ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/Titlepage.tex
-ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/Contents.tex
+
+# like some of the above pages in the classicthesis template:
 ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/copyright.tex
 ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/Version.tex
 
-LOCAL_FILES := $(filter-out myrefs.bib,$(notdir $(ORIG_FILES)))
+LOCAL_FILES := $(notdir $(ORIG_FILES))
 LOCAL_FRONTBACK_FILES := $(foreach e,$(notdir $(ORIG_FRONTBACK_FILES)),FrontBackmatter/$(e))
 
 # ./ in these due to a bug in the .gitignore generation rule.
 COPIED_FILES += ./peeters_macros.sty
 COPIED_FILES += ./phy485.tex
+COPIED_FILES += ./Bibliography.bib
 
 PHY485 := $(filter-out $(STANDALONE), $(BOOKDEPENDENCIES))
 
 GENERATED_PDFS := phy485.pdf
+GENERATED_SOURCES := mathematica.tex 
 
-PHY485_DEPS := $(PHY485) $(LOCAL_FILES) mathematica.tex myrefs.bib $(COPIED_FILES) $(LOCAL_FRONTBACK_FILES)
+PHY485_DEPS := $(PHY485) $(LOCAL_FILES) $(GENERATED_SOURCES) $(COPIED_FILES) $(LOCAL_FRONTBACK_FILES)
 
 MAIN_TARGETS := $(GENERATED_PDFS) .gitignore
 
-CLEAN_TARGETS := *.ilg *.ind *.idx *.ps *.dvi *.log *.aux *.bbl *.blg *.lof *.log *.lot *.out *.toc 
+CLEAN_TARGETS := *.ilg *.ind *.idx *.ps *.dvi *.log *.aux *.bbl *.blg *.lof *.log *.lot *.out *.toc *.synctex.gz
 CLEAN_TARGETS += $(MAIN_TARGETS) 
-CLEAN_TARGETS += $(LOCAL_FILES) $(LOCAL_FRONTBACK_FILES) $(COPIED_FILES)
+CLEAN_TARGETS += $(GENERATED_SOURCES)
+CLEAN_TARGETS += $(LOCAL_FILES)
+CLEAN_TARGETS += $(LOCAL_FRONTBACK_FILES)
+CLEAN_TARGETS += $(COPIED_FILES)
 CLEAN_TARGETS += $(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.aux))
 
 all :: $(MAIN_TARGETS)
 
 # plainnat.bib (as used by classicthesis) doesn't like @webpage:
 # http://tex.stackexchange.com/questions/56951/what-does-warning-entry-type-for-isnt-style-file-defined-mean/56954#56954
-myrefs.bib : ../myrefs.bib
+Bibliography.bib : ../myrefs.bib
 	sed 's/@webpage/@manual/g' < $< > $@
 
 peeters_macros.sty : ../peeters_macros.tex
@@ -60,7 +68,7 @@ phy485.tex : ../classicthesis.mine/ClassicThesis.tex
 .gitignore : GNUmakefile
 	rm -f .gitignore
 	echo $(ORIG_FILES) $(COPIED_FILES) | tr ' ' '\n' | sed 's,.*/,notes/phy485/,' > $@
-	echo $(LOCAL_FRONTBACK_FILES) | tr ' ' '\n' | sed 's,^,notes/phy485/,' >> $@
+	echo $(LOCAL_FRONTBACK_FILES) $(GENERATED_SOURCES) | tr ' ' '\n' | sed 's,^,notes/phy485/,' >> $@
 
 $(LOCAL_FILES) :
 	cp $(filter %$@, $(ORIG_FILES)) $@
@@ -78,3 +86,4 @@ phy485.pdf :: $(PHY485_DEPS)
 
 clean ::
 	rm -f $(CLEAN_TARGETS)
+	rm -rf ./.revinfo
