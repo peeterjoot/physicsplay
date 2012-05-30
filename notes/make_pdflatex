@@ -52,7 +52,10 @@ for ( my $i = 0 ; $i < 3 ; $i++ )
 
    print "$i: # $pdflatex $filename\n" if ( $verbose ) ;
 
-   open my $fh, "$pdflatex $filename| " or die "could not run '$pdflatex' or open file '$filename'\n" ;
+   system( "$pdflatex $filename" ) ;
+   $rc = $? >> 8 ;
+
+   open my $fh, "<$basename.log" or die "could not open '$basename.log'\n" ;
 
    while (<$fh>)
    {
