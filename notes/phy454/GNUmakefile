@@ -17,7 +17,6 @@ SOURCE_DIRS += fluids/singularPertubation
 SOURCE_DIRS += fluids/surfaces
 SOURCE_DIRS += fluids/surfaceTension
 SOURCE_DIRS += fluids/thermal
-SOURCE_DIRS += FrontBackmatter
 SOURCE_DIRS += intro
 SOURCE_DIRS += solutions
 

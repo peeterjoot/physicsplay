@@ -1,37 +1,19 @@
-include make.dep
+THISDIR := phy456
 
-ORIG_FILES += ../myrefs.bib
-ORIG_FILES += ../abbrvurl.bst
-ORIG_FILES += ../alphaurl.bst
-ORIG_FILES += ../plainurl.bst
-ORIG_FILES += ../unsrturl.bst
-ORIG_FILES += ../eliblog.cls 
+include ../make.vars
 
-LOCAL_FILES := $(notdir $(ORIG_FILES))
+SOURCE_DIRS += approx
+SOURCE_DIRS += figures
+SOURCE_DIRS += handouts
+SOURCE_DIRS += mathematica
+SOURCE_DIRS += problems
+SOURCE_DIRS += scattering
+SOURCE_DIRS += spin
 
-PHY456 := $(filter-out $(STANDALONE), $(BOOKDEPENDENCIES))
+GENERATED_SOURCES := mathematica.tex 
 
-GENERATED_PDFS := phy456.pdf
+include ../make.rules
 
-all :: $(GENERATED_PDFS) .gitignore
+peeters_macros.sty : ../peeters_macros.tex
+	cp $< $@
 
-.gitignore : GNUmakefile
-	rm -f .gitignore
-	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/phy456/,' > $@
-
-local : $(LOCAL_FILES) 
-
-$(LOCAL_FILES) :
-	cp $(filter %$@, $(ORIG_FILES)) $@
-
-cronology.tex : ../METADATA
-	../METADATA -phy456 > cronology.tex
-
-phy456.pdf :: $(PHY456) $(LOCAL_FILES)
-	mkdir -p ./.revinfo/
-	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
-	../make_pdflatex -file main.tex
-	mv main.pdf phy456.pdf
-
-clean ::
-	rm -f *.ps *.dvi $(GENERATED_PDFS) *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc $(LOCAL_FILES)

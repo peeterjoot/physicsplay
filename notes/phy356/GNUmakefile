@@ -4,7 +4,6 @@ include ../make.vars
 
 SOURCE_DIRS += chapters
 SOURCE_DIRS += figures
-SOURCE_DIRS += FrontBackmatter
 
 ORIG_FILES += ../myrefs.bib
 ORIG_FILES += ../abbrvurl.bst
