@@ -1,6 +1,6 @@
 THISDIR := phy454
 
-include ../make.varsPre
+include ../make.vars
 
 SOURCE_DIRS += appendix
 SOURCE_DIRS += figures
@@ -22,8 +22,6 @@ SOURCE_DIRS += intro
 SOURCE_DIRS += solutions
 
 GENERATED_SOURCES := mathematica.tex 
-
-include ../make.varsPost
 
 include ../make.rules
 
