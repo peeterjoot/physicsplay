@@ -61,8 +61,8 @@ all :: $(MAIN_TARGETS)
 Bibliography.bib : ../myrefs.bib
 	sed 's/@webpage/@manual/g' < $< > $@
 
-peeters_macros.sty : ../peeters_macros.tex
-	cp $< $@
+peeters_macros.sty : ../peeters_macros.tex phy354.sty
+	cat ../peeters_macros.tex phy354.sty > $@
 
 phy354.tex : ../classicthesis.mine/ClassicThesis.tex
 	cp $< $@
@@ -84,7 +84,7 @@ mathematica.tex : ../METADATA
 phy354.pdf :: $(PHY354_DEPS)
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
-	../make_pdflatex -justonce -file phy354.tex
+	../make_pdflatex -nojustonce -file phy354.tex
 
 clean ::
 	rm -f $(CLEAN_TARGETS)
