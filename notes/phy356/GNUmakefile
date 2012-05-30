@@ -12,6 +12,12 @@ BOOKDEPENDENCIES += $(PDFDEPENDENCIES)
 ORIG_FILES += ../currentBookCopyright.tex
 ORIG_FILES += ../classicthesis.mine/classicthesis.sty
 ORIG_FILES += ../classicthesis.mine/mycommon.sty
+ORIG_FILES += ../myrefs.bib
+ORIG_FILES += ../abbrvurl.bst
+ORIG_FILES += ../alphaurl.bst
+ORIG_FILES += ../plainurl.bst
+ORIG_FILES += ../unsrturl.bst
+ORIG_FILES += ../eliblog.cls
 
 # straight from the classicthesis template:
 ORIG_FRONTBACK_FILES += ../classicthesis/FrontBackmatter/Bibliography.tex
@@ -65,8 +71,8 @@ desaiTypos.pdf :: desaiTypos.tex
 Bibliography.bib : ../myrefs.bib
 	sed 's/@webpage/@manual/g' < $< > $@
 
-peeters_macros.sty : ../peeters_macros.tex
-	cp $< $@
+peeters_macros.sty : ../peeters_macros.tex phy356.sty
+	cat ../peeters_macros.tex phy356.sty > $@
 
 phy356.tex : ../classicthesis.mine/ClassicThesis.tex
 	cp $< $@
