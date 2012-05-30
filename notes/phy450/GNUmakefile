@@ -1,32 +1,104 @@
-include make.dep
+SOURCE_DIRS += .
+SOURCE_DIRS += appendix
+SOURCE_DIRS += figures
+SOURCE_DIRS += elastic/displacements
+SOURCE_DIRS += elastic/strain
+SOURCE_DIRS += elastic/stress
+SOURCE_DIRS += fluids
+SOURCE_DIRS += fluids/bernoulli
+SOURCE_DIRS += fluids/boundaryLayers
+SOURCE_DIRS += fluids/hydrostatics
+SOURCE_DIRS += fluids/navierStokes
+SOURCE_DIRS += fluids/nondimensionalisation
+SOURCE_DIRS += fluids/singularPertubation
+SOURCE_DIRS += fluids/surfaces
+SOURCE_DIRS += fluids/surfaceTension
+SOURCE_DIRS += fluids/thermal
+SOURCE_DIRS += FrontBackmatter
+SOURCE_DIRS += intro
+SOURCE_DIRS += solutions
 
-ORIG_FILES += ../myrefs.bib
-ORIG_FILES += ../abbrvurl.bst
-ORIG_FILES += ../alphaurl.bst
-ORIG_FILES += ../plainurl.bst
-ORIG_FILES += ../unsrturl.bst
+DEPENDENCYEXTENSIONS := mp4 pdf_tex png tex sty
+BOOKDEPENDENCIES := $(foreach ext,$(DEPENDENCYEXTENSIONS),$(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.$(ext))))
+
+PDFDEPENDENCIES := $(subst pdf_tex,pdf,$(filter %.pdf_tex,$(BOOKDEPENDENCIES)))
+BOOKDEPENDENCIES += $(PDFDEPENDENCIES)
+
+ORIG_FILES += ../currentBookCopyright.tex
+ORIG_FILES += ../classicthesis.mine/classicthesis.sty
+ORIG_FILES += ../classicthesis.mine/mycommon.sty
+
+# straight from the classicthesis template:
+ORIG_FRONTBACK_FILES += ../classicthesis/FrontBackmatter/Bibliography.tex
+ORIG_FRONTBACK_FILES += ../classicthesis/FrontBackmatter/DirtyTitlepage.tex
+
+# slightly modified from the classicthesis template:
+ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/Contents.tex
+ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/Dedication.tex
+ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/Titleback.tex
+ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/Titlepage.tex
+
+# like some of the above pages in the classicthesis template:
+ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/copyright.tex
+ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/Version.tex
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
+LOCAL_FRONTBACK_FILES := $(foreach e,$(notdir $(ORIG_FRONTBACK_FILES)),FrontBackmatter/$(e))
 
-all : phy450.pdf .gitignore
+# ./ in these due to a bug in the .gitignore generation rule.
+COPIED_FILES += ./peeters_macros.sty
+COPIED_FILES += ./phy450.tex
+COPIED_FILES += ./Bibliography.bib
 
-local : $(LOCAL_FILES) 
+PHY450 := $(filter-out $(STANDALONE), $(BOOKDEPENDENCIES))
+
+GENERATED_PDFS := phy450.pdf
+#GENERATED_SOURCES += mathematica.tex 
+
+PHY450_DEPS := $(PHY450) $(LOCAL_FILES) $(GENERATED_SOURCES) $(COPIED_FILES) $(LOCAL_FRONTBACK_FILES)
+
+MAIN_TARGETS := $(GENERATED_PDFS) .gitignore
+
+CLEAN_TARGETS := *.ilg *.ind *.idx *.ps *.dvi *.log *.aux *.bbl *.blg *.lof *.log *.lot *.out *.toc *.synctex.gz *.stackdump
+CLEAN_TARGETS += $(MAIN_TARGETS) 
+CLEAN_TARGETS += $(GENERATED_SOURCES)
+CLEAN_TARGETS += $(LOCAL_FILES)
+CLEAN_TARGETS += $(LOCAL_FRONTBACK_FILES)
+CLEAN_TARGETS += $(COPIED_FILES)
+CLEAN_TARGETS += $(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.aux))
+
+all :: $(MAIN_TARGETS)
+
+# plainnat.bib (as used by classicthesis) doesn't like @webpage:
+# http://tex.stackexchange.com/questions/56951/what-does-warning-entry-type-for-isnt-style-file-defined-mean/56954#56954
+Bibliography.bib : ../myrefs.bib
+	sed 's/@webpage/@manual/g' < $< > $@
+
+peeters_macros.sty : ../peeters_macros.tex phy450.sty
+	cat ../peeters_macros.tex phy450.sty > $@   
+
+phy450.tex : ../classicthesis.mine/ClassicThesis.tex
+	cp $< $@
+
+.gitignore : GNUmakefile
+	rm -f .gitignore
+	echo $(ORIG_FILES) $(COPIED_FILES) | tr ' ' '\n' | sed 's,.*/,notes/phy450/,' > $@
+	echo $(LOCAL_FRONTBACK_FILES) $(GENERATED_SOURCES) | tr ' ' '\n' | sed 's,^,notes/phy450/,' >> $@
 
 $(LOCAL_FILES) :
 	cp $(filter %$@, $(ORIG_FILES)) $@
 
-.gitignore : GNUmakefile
-	rm -f .gitignore
-	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/phy450/,' > $@
+$(LOCAL_FRONTBACK_FILES) :
+	cp $(filter %$@, $(ORIG_FRONTBACK_FILES)) $@
 
-cronology.tex : ../METADATA
-	../METADATA -phy450 > cronology.tex
+mathematica.tex : ../METADATA
+	../METADATA -mathematica -latex -phy450 > mathematica.tex
 
-phy450.pdf :: $(BOOKDEPENDENCIES) $(LOCAL_FILES)
+phy450.pdf :: $(PHY450_DEPS)
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
-	../make_pdflatex -file main.tex
-	mv main.pdf phy450.pdf
+	../make_pdflatex -nojustonce -file phy450.tex
 
 clean ::
-	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc $(LOCAL_FILES)
+	rm -f $(CLEAN_TARGETS)
+	rm -rf ./.revinfo
