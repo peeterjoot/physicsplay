@@ -1,20 +1,32 @@
-#%.ps : %.dvi
-#	dvips $* -o $@
-#
-#%.dvi : %.tex
-#	tex $*
-#
-#%.dvi : %.ltx
-#	latex $<
+all :: $(MAIN_TARGETS)
 
-%.pdf : %.tex
-	pdftex $*
-
-%.pdf : %.ltx
-	../make_pdflatex $<
-#	-bibtex $*
-#	../make_pdflatex $<
-#	../make_pdflatex $<
+$(THISDIR).pdf :: $(THISBOOK_DEPS)
+	mkdir -p ./.revinfo/
+	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
+	../make_pdflatex -nojustonce -file $(THISDIR).tex
 
 clean ::
-	rm -f *.ps *.dvi *.pdf *.aux *.log
+	rm -f $(CLEAN_TARGETS)
+	rm -rf ./.revinfo
+
+$(THISDIR).tex : ../classicthesis.mine/ClassicThesis.tex
+	cp $< $@
+
+mathematica.tex : ../METADATA
+	../METADATA -mathematica -latex -$(THISDIR) > mathematica.tex
+
+# plainnat.bib (as used by classicthesis) doesn't like @webpage:
+# http://tex.stackexchange.com/questions/56951/what-does-warning-entry-type-for-isnt-style-file-defined-mean/56954#56954
+Bibliography.bib : ../myrefs.bib
+	sed 's/@webpage/@manual/g' < $< > $@
+
+.gitignore : GNUmakefile
+	rm -f .gitignore
+	echo $(ORIG_FILES) $(COPIED_FILES) | tr ' ' '\n' | sed 's,.*/,notes/$(THISDIR)/,' > $@
+	echo $(LOCAL_FRONTBACK_FILES) $(GENERATED_SOURCES) | tr ' ' '\n' | sed 's,^,notes/$(THISDIR)/,' >> $@
+
+$(LOCAL_FILES) :
+	cp $(filter %$@, $(ORIG_FILES)) $@
+
+$(LOCAL_FRONTBACK_FILES) :
+	cp $(filter %$@, $(ORIG_FRONTBACK_FILES)) $@

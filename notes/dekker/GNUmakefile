@@ -7,7 +7,11 @@ MUTEX += dekker_xchg dekker_atomic dekker_serial_atomic dekker_serial_nolock
 files := $(shell ls *.tex)
 pdfs := $(files:.tex=.pdf)
 
-all :: $(pdfs)
+all :: $(pdfs) .gitignore
+
+.gitignore : GNUmakefile
+	rm -f .gitignore
+	touch $@
 
 $(pdfs) : ../peeters_macros.tex
 

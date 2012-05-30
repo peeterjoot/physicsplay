@@ -11,7 +11,11 @@ ORIG_FILES += ../eliblog.cls
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
-all :: $(PDFS)
+all :: $(PDFS) .gitignore
+
+.gitignore : GNUmakefile
+	rm -f .gitignore
+	echo $(ORIG_FILES) $(COPIED_FILES) | tr ' ' '\n' | sed 's,.*/,notes/atomic/,' > $@
 
 $(PDFS) : ../peeters_macros.tex $(LOCAL_FILES)
 

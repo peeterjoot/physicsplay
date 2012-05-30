@@ -2,14 +2,25 @@ files := $(shell ls *.ltx)
 pdfs := $(files:.ltx=.pdf)
 ppdfs := $(shell ls ../*/*.pdf)
 
-all : $(pdfs)
+all : $(pdfs) .gitignore
 #big:: everything2007.pdf
 #big:: everything2008.pdf
 big:: everything2009.pdf
 
 $(pdfs) : ../peeters_macros.tex
 
-include ../make.rules
+.gitignore : GNUmakefile
+	rm -f .gitignore
+	touch $@
+
+%.pdf : %.tex
+	pdftex $*
+
+%.pdf : %.ltx
+	../make_pdflatex $<
+
+clean ::
+	rm -f *.ps *.dvi *.pdf *.aux *.log
 
 #----------------------------------------------------------------
 

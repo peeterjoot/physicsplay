@@ -8,7 +8,11 @@ COPTS += -I$(HOME)/boostlib/include/boost-1_37/
 
 OBJECTS := $(subst .cpp,.o,$(SOURCE))
 
-all :: $(OBJECTS) matrix$(EXE)
+all :: $(OBJECTS) matrix$(EXE) .gitignore
+
+.gitignore : GNUmakefile
+	rm -f .gitignore
+	touch $@
 
 %.o : %.cpp
 	g++ $(COPTS) -c $^
