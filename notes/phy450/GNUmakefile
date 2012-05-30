@@ -1,22 +1,8 @@
 SOURCE_DIRS += .
-SOURCE_DIRS += appendix
 SOURCE_DIRS += figures
-SOURCE_DIRS += elastic/displacements
-SOURCE_DIRS += elastic/strain
-SOURCE_DIRS += elastic/stress
-SOURCE_DIRS += fluids
-SOURCE_DIRS += fluids/bernoulli
-SOURCE_DIRS += fluids/boundaryLayers
-SOURCE_DIRS += fluids/hydrostatics
-SOURCE_DIRS += fluids/navierStokes
-SOURCE_DIRS += fluids/nondimensionalisation
-SOURCE_DIRS += fluids/singularPertubation
-SOURCE_DIRS += fluids/surfaces
-SOURCE_DIRS += fluids/surfaceTension
-SOURCE_DIRS += fluids/thermal
 SOURCE_DIRS += FrontBackmatter
-SOURCE_DIRS += intro
-SOURCE_DIRS += solutions
+SOURCE_DIRS += lectures
+SOURCE_DIRS += problems
 
 DEPENDENCYEXTENSIONS := mp4 pdf_tex png tex sty
 BOOKDEPENDENCIES := $(foreach ext,$(DEPENDENCYEXTENSIONS),$(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.$(ext))))
@@ -53,13 +39,12 @@ COPIED_FILES += ./Bibliography.bib
 PHY450 := $(filter-out $(STANDALONE), $(BOOKDEPENDENCIES))
 
 GENERATED_PDFS := phy450.pdf
-#GENERATED_SOURCES += mathematica.tex 
 
 PHY450_DEPS := $(PHY450) $(LOCAL_FILES) $(GENERATED_SOURCES) $(COPIED_FILES) $(LOCAL_FRONTBACK_FILES)
 
 MAIN_TARGETS := $(GENERATED_PDFS) .gitignore
 
-CLEAN_TARGETS := *.ilg *.ind *.idx *.ps *.dvi *.log *.aux *.bbl *.blg *.lof *.log *.lot *.out *.toc *.synctex.gz *.stackdump
+CLEAN_TARGETS := *.ilg *.ind *.idx *.ps *.dvi *.log *.aux *.bbl *.blg *.lof *.log *.lot *.out *.toc *.synctex.gz *.stackdump *.brf
 CLEAN_TARGETS += $(MAIN_TARGETS) 
 CLEAN_TARGETS += $(GENERATED_SOURCES)
 CLEAN_TARGETS += $(LOCAL_FILES)
@@ -90,9 +75,6 @@ $(LOCAL_FILES) :
 
 $(LOCAL_FRONTBACK_FILES) :
 	cp $(filter %$@, $(ORIG_FRONTBACK_FILES)) $@
-
-mathematica.tex : ../METADATA
-	../METADATA -mathematica -latex -phy450 > mathematica.tex
 
 phy450.pdf :: $(PHY450_DEPS)
 	mkdir -p ./.revinfo/

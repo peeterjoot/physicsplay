@@ -44,7 +44,7 @@ PHY485_DEPS := $(PHY485) $(LOCAL_FILES) $(GENERATED_SOURCES) $(COPIED_FILES) $(L
 
 MAIN_TARGETS := $(GENERATED_PDFS) .gitignore
 
-CLEAN_TARGETS := *.ilg *.ind *.idx *.ps *.dvi *.log *.aux *.bbl *.blg *.lof *.log *.lot *.out *.toc *.synctex.gz
+CLEAN_TARGETS := *.ilg *.ind *.idx *.ps *.dvi *.log *.aux *.bbl *.blg *.lof *.log *.lot *.out *.toc *.synctex.gz *.stackdump *.brf
 CLEAN_TARGETS += $(MAIN_TARGETS) 
 CLEAN_TARGETS += $(GENERATED_SOURCES)
 CLEAN_TARGETS += $(LOCAL_FILES)
