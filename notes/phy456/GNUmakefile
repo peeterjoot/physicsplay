@@ -14,6 +14,5 @@ GENERATED_SOURCES := mathematica.tex
 
 include ../make.rules
 
-peeters_macros.sty : ../peeters_macros.tex
-	cp $< $@
-
+peeters_macros.sty : ../peeters_macros.tex $(THISDIR).sty
+	cat ../peeters_macros.tex $(THISDIR).sty > $@
