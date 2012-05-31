@@ -20,29 +20,36 @@ SOURCE_DIRS += rotation
 
 ORIG_FILES += ../algebra/levi.pl
 
-ORIG_FIGURE_FILES += ../geometric-algebra/Projection_line.png
-ORIG_FIGURE_FILES += ../geometric-algebra/Projection_plane.png
-ORIG_FIGURE_FILES += ../calculus/bivectorDot.png
-ORIG_FIGURE_FILES += ../geometric-algebra/charge_line_element_figure.png
-ORIG_FIGURE_FILES += ../geometric-algebra/cube_unfolded_004.png
-ORIG_FIGURE_FILES += ../geometric-algebra/imaginaryorientation.png
-ORIG_FIGURE_FILES += ../geometric-algebra/normalRot.png
-ORIG_FIGURE_FILES += ../geometric-algebra/p41.png
-ORIG_FIGURE_FILES += ../geometric-algebra/parallelogram_parameterized.png
-ORIG_FIGURE_FILES += ../geometric-algebra/parallelogramvec.png
-ORIG_FIGURE_FILES += ../geometric-algebra/parallelopiped_parameterized.png
-ORIG_FIGURE_FILES += ../geometric-algebra/planeParameterization.png
-ORIG_FIGURE_FILES += ../geometric-algebra/planerejection.png
-ORIG_FIGURE_FILES += ../calculus/rotationGen.png
-ORIG_FIGURE_FILES += ../geometric-algebra/rotor.png
-ORIG_FIGURE_FILES += ../geometric-algebra/satellite.png
-ORIG_FIGURE_FILES += ../geometric-algebra/spherical_polar.png
-ORIG_FIGURE_FILES += ../calculus/surface_area_element.png
-ORIG_FIGURE_FILES += ../geometric-algebra/surface_flux_element.png
-ORIG_FIGURE_FILES += ../differential_forms/tangent_area_form.png
-ORIG_FIGURE_FILES += ../geometric-algebra/visualize_subspace_projection.png
-ORIG_FIGURE_FILES += ../calculus/volume_element.png
-ORIG_FIGURE_FILES += ../nonga/figures/pendulumDouble.png
+ORIG_FIGURE_DIRS += ../calculus
+ORIG_FIGURE_DIRS += ../differential_forms
+ORIG_FIGURE_DIRS += ../geometric-algebra
+ORIG_FIGURE_DIRS += ../nonga/figures
+
+LOCAL_FIGURE_FILES += Projection_line.png
+LOCAL_FIGURE_FILES += Projection_plane.png
+LOCAL_FIGURE_FILES += bivectorDot.png
+LOCAL_FIGURE_FILES += charge_line_element_figure.png
+LOCAL_FIGURE_FILES += cube_unfolded_004.png
+LOCAL_FIGURE_FILES += imaginaryorientation.png
+LOCAL_FIGURE_FILES += normalRot.png
+LOCAL_FIGURE_FILES += p41.png
+LOCAL_FIGURE_FILES += parallelogram_parameterized.png
+LOCAL_FIGURE_FILES += parallelogramvec.png
+LOCAL_FIGURE_FILES += parallelopiped_parameterized.png
+LOCAL_FIGURE_FILES += planeParameterization.png
+LOCAL_FIGURE_FILES += planerejection.png
+LOCAL_FIGURE_FILES += rotationGen.png
+LOCAL_FIGURE_FILES += rotor.png
+LOCAL_FIGURE_FILES += satellite.png
+LOCAL_FIGURE_FILES += spherical_polar.png
+LOCAL_FIGURE_FILES += surface_area_element.png
+LOCAL_FIGURE_FILES += surface_flux_element.png
+LOCAL_FIGURE_FILES += tangent_area_form.png
+LOCAL_FIGURE_FILES += visualize_subspace_projection.png
+LOCAL_FIGURE_FILES += volume_element.png
+LOCAL_FIGURE_FILES += pendulumDouble.png
+
+LOCAL_FIGURE_FILES := $(addprefix figures/,$(LOCAL_FIGURE_FILES))
 
 GENERATED_SOURCES += mathematica.tex 
 GENERATED_SOURCES += cronology.tex
@@ -51,3 +58,8 @@ include ../make.rules
 
 peeters_macros.sty : ../peeters_macros.tex $(THISDIR).sty
 	cat ../peeters_macros.tex $(THISDIR).sty > $@
+
+figures/%.png: %.png
+	cp $< $@
+
+vpath %.png $(ORIG_FIGURE_DIRS)
