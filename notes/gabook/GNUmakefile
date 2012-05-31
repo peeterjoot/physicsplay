@@ -47,7 +47,6 @@ LOCAL_FIGURE_FILES += surface_flux_element.png
 LOCAL_FIGURE_FILES += tangent_area_form.png
 LOCAL_FIGURE_FILES += visualize_subspace_projection.png
 LOCAL_FIGURE_FILES += volume_element.png
-LOCAL_FIGURE_FILES += pendulumDouble.png
 
 LOCAL_FIGURE_FILES := $(addprefix figures/,$(LOCAL_FIGURE_FILES))
 
