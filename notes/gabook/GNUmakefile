@@ -1,57 +1,53 @@
-include make.dep
+THISDIR := gabook
 
-ORIG_FILES += ../abbrvurl.bst
-ORIG_FILES += ../alphaurl.bst
-ORIG_FILES += ../plainurl.bst
-ORIG_FILES += ../myrefs.bib
-ORIG_FILES += ../unsrturl.bst
+include ../make.vars
+
+SOURCE_DIRS += appendix
+SOURCE_DIRS += basics
+SOURCE_DIRS += calculus
+SOURCE_DIRS += electrodynamics
+SOURCE_DIRS += emstress
+SOURCE_DIRS += figures
+SOURCE_DIRS += fourier
+SOURCE_DIRS += lagrangian
+SOURCE_DIRS += lorentzforce
+SOURCE_DIRS += mathematica
+SOURCE_DIRS += physics
+SOURCE_DIRS += projection
+SOURCE_DIRS += qm
+SOURCE_DIRS += relativity
+SOURCE_DIRS += rotation
 
 ORIG_FILES += ../algebra/levi.pl
 
-# logically symlinks, but MikTex doesn't like those:
-ORIG_FILES += ../geometric-algebra/Projection_line.png
-ORIG_FILES += ../geometric-algebra/Projection_plane.png
-ORIG_FILES += ../calculus/bivectorDot.png
-ORIG_FILES += ../geometric-algebra/charge_line_element_figure.png
-ORIG_FILES += ../geometric-algebra/cube_unfolded_004.png
-ORIG_FILES += ../geometric-algebra/imaginaryorientation.png
-ORIG_FILES += ../geometric-algebra/normalRot.png
-ORIG_FILES += ../geometric-algebra/p41.png
-ORIG_FILES += ../geometric-algebra/parallelogram_parameterized.png
-ORIG_FILES += ../geometric-algebra/parallelogramvec.png
-ORIG_FILES += ../geometric-algebra/parallelopiped_parameterized.png
-ORIG_FILES += ../geometric-algebra/planeParameterization.png
-ORIG_FILES += ../geometric-algebra/planerejection.png
-ORIG_FILES += ../calculus/rotationGen.png
-ORIG_FILES += ../geometric-algebra/rotor.png
-ORIG_FILES += ../geometric-algebra/satellite.png
-ORIG_FILES += ../geometric-algebra/spherical_polar.png
-ORIG_FILES += ../calculus/surface_area_element.png
-ORIG_FILES += ../geometric-algebra/surface_flux_element.png
-ORIG_FILES += ../differential_forms/tangent_area_form.png
-ORIG_FILES += ../geometric-algebra/visualize_subspace_projection.png
-ORIG_FILES += ../calculus/volume_element.png
-ORIG_FILES += ../nonga/pendulumDouble.png
+ORIG_FIGURE_FILES += ../geometric-algebra/Projection_line.png
+ORIG_FIGURE_FILES += ../geometric-algebra/Projection_plane.png
+ORIG_FIGURE_FILES += ../calculus/bivectorDot.png
+ORIG_FIGURE_FILES += ../geometric-algebra/charge_line_element_figure.png
+ORIG_FIGURE_FILES += ../geometric-algebra/cube_unfolded_004.png
+ORIG_FIGURE_FILES += ../geometric-algebra/imaginaryorientation.png
+ORIG_FIGURE_FILES += ../geometric-algebra/normalRot.png
+ORIG_FIGURE_FILES += ../geometric-algebra/p41.png
+ORIG_FIGURE_FILES += ../geometric-algebra/parallelogram_parameterized.png
+ORIG_FIGURE_FILES += ../geometric-algebra/parallelogramvec.png
+ORIG_FIGURE_FILES += ../geometric-algebra/parallelopiped_parameterized.png
+ORIG_FIGURE_FILES += ../geometric-algebra/planeParameterization.png
+ORIG_FIGURE_FILES += ../geometric-algebra/planerejection.png
+ORIG_FIGURE_FILES += ../calculus/rotationGen.png
+ORIG_FIGURE_FILES += ../geometric-algebra/rotor.png
+ORIG_FIGURE_FILES += ../geometric-algebra/satellite.png
+ORIG_FIGURE_FILES += ../geometric-algebra/spherical_polar.png
+ORIG_FIGURE_FILES += ../calculus/surface_area_element.png
+ORIG_FIGURE_FILES += ../geometric-algebra/surface_flux_element.png
+ORIG_FIGURE_FILES += ../differential_forms/tangent_area_form.png
+ORIG_FIGURE_FILES += ../geometric-algebra/visualize_subspace_projection.png
+ORIG_FIGURE_FILES += ../calculus/volume_element.png
+ORIG_FIGURE_FILES += ../nonga/figures/pendulumDouble.png
 
-LOCAL_FILES := $(notdir $(ORIG_FILES))
+GENERATED_SOURCES += mathematica.tex 
+GENERATED_SOURCES += cronology.tex
 
-all :: gabook.pdf .gitignore
+include ../make.rules
 
-.gitignore : GNUmakefile
-	rm -f .gitignore
-	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/gabook/,' > $@
-
-$(LOCAL_FILES) : 
-	cp $(filter %$@, $(ORIG_FILES)) $@
-
-gabook.pdf :: $(BOOKDEPENDENCIES) $(LOCAL_FILES)
-	mkdir -p ./.revinfo/
-	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
-	../make_pdflatex -file main.tex
-	mv main.pdf gabook.pdf
-
-cronology.tex : ../METADATA
-	../METADATA -gabook > cronology.tex
-
-clean ::
-	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc *.brf $(LOCAL_FILES)
+peeters_macros.sty : ../peeters_macros.tex $(THISDIR).sty
+	cat ../peeters_macros.tex $(THISDIR).sty > $@

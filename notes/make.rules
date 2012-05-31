@@ -1,14 +1,16 @@
 BOOKDEPENDENCIES := $(foreach ext,$(DEPENDENCYEXTENSIONS),$(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.$(ext))))
+BOOKDEPENDENCIES := $(foreach ext,$(DEPENDENCYEXTENSIONS),$(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.$(ext))))
 
 PDFDEPENDENCIES := $(subst pdf_tex,pdf,$(filter %.pdf_tex,$(BOOKDEPENDENCIES)))
 BOOKDEPENDENCIES += $(PDFDEPENDENCIES)
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 LOCAL_FRONTBACK_FILES := $(foreach e,$(notdir $(ORIG_FRONTBACK_FILES)),FrontBackmatter/$(e))
+LOCAL_FIGURE_FILES := $(foreach e,$(notdir $(ORIG_FIGURE_FILES)),figures/$(e))
 
 JUSTBOOKDEPENDENCIES := $(filter-out $(STANDALONE), $(BOOKDEPENDENCIES))
 
-THISBOOK_DEPS := $(JUSTBOOKDEPENDENCIES) $(LOCAL_FILES) $(GENERATED_SOURCES) $(COPIED_FILES) $(LOCAL_FRONTBACK_FILES)
+THISBOOK_DEPS := $(JUSTBOOKDEPENDENCIES) $(LOCAL_FILES) $(GENERATED_SOURCES) $(COPIED_FILES) $(LOCAL_FRONTBACK_FILES) $(LOCAL_FIGURE_FILES)
 
 MAIN_TARGETS += $(GENERATED_PDFS) .gitignore
 
@@ -16,6 +18,7 @@ CLEAN_TARGETS += $(MAIN_TARGETS)
 CLEAN_TARGETS += $(GENERATED_SOURCES)
 CLEAN_TARGETS += $(LOCAL_FILES)
 CLEAN_TARGETS += $(LOCAL_FRONTBACK_FILES)
+CLEAN_TARGETS += $(LOCAL_FIGURE_FILES)
 CLEAN_TARGETS += $(COPIED_FILES)
 CLEAN_TARGETS += $(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.aux))
 
@@ -44,7 +47,7 @@ Bibliography.bib : ../myrefs.bib
 .gitignore : GNUmakefile
 	rm -f .gitignore
 	echo $(ORIG_FILES) $(COPIED_FILES) | tr ' ' '\n' | sed 's,.*/,notes/$(THISDIR)/,' > $@
-	echo $(LOCAL_FRONTBACK_FILES) $(GENERATED_SOURCES) | tr ' ' '\n' | sed 's,^,notes/$(THISDIR)/,' >> $@
+	echo $(LOCAL_FIGURE_FILES) $(LOCAL_FRONTBACK_FILES) $(GENERATED_SOURCES) | tr ' ' '\n' | sed 's,^,notes/$(THISDIR)/,' >> $@
 
 cronology.tex : ../METADATA
 	../METADATA -$(THISDIR) > cronology.tex
@@ -54,3 +57,13 @@ $(LOCAL_FILES) :
 
 $(LOCAL_FRONTBACK_FILES) :
 	cp $(filter %$@, $(ORIG_FRONTBACK_FILES)) $@
+
+#o=../geometric-algebra/Projection_line.png ../geometric-algebra/Projection_plane.png
+$(LOCAL_FIGURE_FILES) :
+	#echo t: $@
+	#echo tf: $(notdir $@)
+	#echo o: $(ORIG_FIGURE_FILES)
+	#echo f: $(filter $(notdir $@),$(ORIG_FIGURE_FILES))
+	#echo f2: $(filter Projection_line.png,$o)
+	#cp $(filter $(notdir $@),$(ORIG_FIGURE_FILES)) $@
+	cp $(ORIG_FIGURE_FILES) figures/
