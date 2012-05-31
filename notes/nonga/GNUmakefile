@@ -1,38 +1,17 @@
-include make.dep
+THISDIR := miscphysics
+
+include ../make.vars
+
+SOURCE_DIRS += figures
+SOURCE_DIRS += solutions
+SOURCE_DIRS += lectures
+SOURCE_DIRS += problems
 
 ORIG_FILES += ../gabook/pendulumDouble.png
-ORIG_FILES += ../myrefs.bib
-ORIG_FILES += ../abbrvurl.bst
-ORIG_FILES += ../alphaurl.bst
-ORIG_FILES += ../plainurl.bst
-ORIG_FILES += ../unsrturl.bst
 
-LOCAL_FILES := $(notdir $(ORIG_FILES))
+GENERATED_SOURCES := cronology.tex
 
-all : miscphysics.pdf .gitignore
+include ../make.rules
 
-local : $(LOCAL_FILES) 
-
-.gitignore : GNUmakefile
-	rm -f .gitignore
-	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/nonga/,' > $@
-
-$(LOCAL_FILES) :
-	cp $(filter %$@, $(ORIG_FILES)) $@
-
-cronology.tex : ../METADATA
-	../METADATA -miscbook > cronology.tex
-
-miscphysics.pdf :: $(BOOKDEPENDENCIES) $(LOCAL_FILES)
-	mkdir -p ./.revinfo/
-	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
-	../make_pdflatex -file main.tex
-	mv main.pdf miscphysics.pdf
-
-#%.pdf : %.tex
-#	mkdir -p ./.revinfo/
-#	~/bin/mkRevInfo > ./.revinfo/lastCommit.tex
-#	../make_pdflatex -file $<
-
-clean ::
-	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc $(LOCAL_FILES)
+peeters_macros.sty : ../peeters_macros.tex $(THISDIR).sty
+	cat ../peeters_macros.tex $(THISDIR).sty > $@
