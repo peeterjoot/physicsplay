@@ -23,7 +23,7 @@ ORIG_FILES += ../algebra/levi.pl
 ORIG_FIGURE_DIRS += ../calculus
 ORIG_FIGURE_DIRS += ../differential_forms
 ORIG_FIGURE_DIRS += ../geometric-algebra
-ORIG_FIGURE_DIRS += ../nonga/figures
+ORIG_FIGURE_DIRS += ../miscphysics/figures
 
 LOCAL_FIGURE_FILES += Projection_line.png
 LOCAL_FIGURE_FILES += Projection_plane.png
