@@ -48,6 +48,9 @@ Bibliography.bib : ../myrefs.bib
 	rm -f .gitignore
 	echo $(ORIG_FILES) $(COPIED_FILES) | tr ' ' '\n' | sed 's,.*/,notes/$(THISDIR)/,' > $@
 	echo $(LOCAL_FIGURE_FILES) $(LOCAL_FRONTBACK_FILES) $(GENERATED_SOURCES) | tr ' ' '\n' | sed 's,^,notes/$(THISDIR)/,' >> $@
+ifneq ($(PDFDEPENDENCIES),)
+	echo $(PDFDEPENDENCIES) | tr ' ' '\n' | sed 's,^,!notes/$(THISDIR)/,' >> $@
+endif
 
 cronology.tex : ../METADATA
 	../METADATA -$(THISDIR) > cronology.tex
