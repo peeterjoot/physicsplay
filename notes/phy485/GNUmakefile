@@ -8,7 +8,3 @@ SOURCE_DIRS += solutions
 GENERATED_SOURCES := mathematica.tex 
 
 include ../make.rules
-
-peeters_macros.sty : ../peeters_macros.tex
-	cp $< $@
-

@@ -20,6 +20,3 @@ desaiTypos.pdf :: desaiTypos.tex
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo > ./.revinfo/lastCommit.tex
 	../make_pdflatex -file $<
-
-peeters_macros.sty : ../peeters_macros.tex $(THISDIR).sty
-	cat ../peeters_macros.tex $(THISDIR).sty > $@

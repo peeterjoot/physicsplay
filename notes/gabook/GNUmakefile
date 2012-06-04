@@ -55,9 +55,6 @@ GENERATED_SOURCES += cronology.tex
 
 include ../make.rules
 
-peeters_macros.sty : ../peeters_macros.tex $(THISDIR).sty
-	cat ../peeters_macros.tex $(THISDIR).sty > $@
-
 figures/%.png: %.png
 	cp $< $@
 

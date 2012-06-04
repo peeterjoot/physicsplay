@@ -10,7 +10,3 @@ SOURCE_DIRS += problems
 GENERATED_SOURCES := mathematica.tex 
 
 include ../make.rules
-
-peeters_macros.sty : ../peeters_macros.tex
-	cp $< $@
-
