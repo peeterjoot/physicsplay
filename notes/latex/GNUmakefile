@@ -37,7 +37,7 @@ all :: colorArticle.pdf
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
-	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/blogit/,' > $@
+	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/latex/,' > $@
 
 video: $(VIDEO)
 
@@ -51,12 +51,16 @@ $(LOCAL_FILES) :
 %.pdf : %.tex
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo > ./.revinfo/lastCommit.tex
+	~/bin/mkRevInfo -date > ./.revinfo/gitCommitDate.tex
+	~/bin/mkRevInfo -commit > ./.revinfo/gitCommitString.tex
+	~/bin/mkRevInfo -repo > ./.revinfo/gitRepo.tex
 	perl ../make_pdflatex -file $<
 
 clean :: mostlyclean localclean
 
 mostlyclean :: 
 	rm -f *.ilg *.idx *.ps *.dvi $(PDFS) *.aux *.log *.bbl *.blg *.brf *.toc *.stackdump *.bib
+	rm -rf ./.revinfo/
 
 peeters_macros.sty : ../peeters_macros.tex
 	cat ../peeters_macros.tex > $@

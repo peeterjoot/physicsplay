@@ -5,12 +5,18 @@ use warnings ;
 use Getopt::Long ;
 
 my $book = 0 ;
+my $onlyrepo = 0 ;
+my $onlycommit = 0 ;
+my $onlycommitdate = 0 ;
 my $lastCommit ;
 my $commitDate ;
 
 GetOptions( 
    'book!'      => \$book,
-   'help!'      => sub { die "usage: mkRevInfo [-book]\n" ; },
+   'commit!'    => \$onlycommit,
+   'date!'      => \$onlycommitdate,
+   'repo!'      => \$onlyrepo,
+   'help'       => sub { die "usage: mkRevInfo [-book] [-commit] [-date] [-repo]\n" ; },
 ) ;
 
 open my $fh, "git log -1 |" or die ;
@@ -38,6 +44,8 @@ while (<$fh>)
       # convert spaces to /'s
       s, ,/,g ;
 
+      #s/\s+$// ;
+
       $commitDate = $_ ;
       last ;
    }
@@ -58,6 +66,18 @@ The last commit ($commitDate), associated with this pdf was
 
 $lastCommit
 @ ;
+}
+elsif ( $onlyrepo )
+{
+   print "$url" ;
+}
+elsif ( $onlycommit )
+{
+   print "$lastCommit" ;
+}
+elsif ( $onlycommitdate )
+{
+   print "$commitDate" ;
 }
 else
 {
