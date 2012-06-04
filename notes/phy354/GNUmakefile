@@ -4,6 +4,7 @@ include ../make.vars
 
 SOURCE_DIRS += figures
 SOURCE_DIRS += lectures
+SOURCE_DIRS += galagrangian
 SOURCE_DIRS += mine
 SOURCE_DIRS += problems
 

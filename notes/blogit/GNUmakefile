@@ -1,8 +1,10 @@
+THISDIR := blogit
+
 RAWTEXFILES := $(shell ls *.tex)
 INCOMPLETE += motionOfFreeTop.tex
 
 # these may not all be incomplete, but I don't want to build them right now:
-INCOMPLETE += classicalMechanicsPs2.tex
+INCOMPLETE += pp.tex
 INCOMPLETE += desaiCh24.tex
 INCOMPLETE += dotBlade.tex
 INCOMPLETE += gaBasics.tex
@@ -26,6 +28,7 @@ ORIG_FILES += ../eliblogwidescreen.cls
 ORIG_FILES += ../myrefs.bib 
 ORIG_FILES += ../plainurl.bst
 ORIG_FILES += ../unsrturl.bst
+ORIG_FILES += ../classicthesis.mine/mycommon.sty
 
 # for gaBasics:
 ORIG_FILES += ../phy454/figures/couetteFlowFig1.png
@@ -88,6 +91,7 @@ LOCAL_FILES := $(notdir $(ORIG_FILES))
 
 all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
+all :: peeters_macros.sty
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
@@ -125,6 +129,9 @@ clean :: mostlyclean localclean
 
 mostlyclean :: 
 	rm -f *.ps *.dvi $(PDFS) *.aux *.log *.bbl *.blg *.brf *.toc *.stackdump *.bib
+
+peeters_macros.sty : ../peeters_macros.tex $(THISDIR).sty
+	cat ../peeters_macros.tex $(THISDIR).sty > $@
 
 localclean ::
 	rm -f $(LOCAL_FILES)
