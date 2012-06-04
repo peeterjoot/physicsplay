@@ -10,22 +10,22 @@ SOURCE_DIRS += FrontBackmatter
 DEPENDENCYEXTENSIONS += mp4 pdf_tex png tex sty
 
 ORIG_FILES += ../currentBookCopyright.tex
-ORIG_FILES += ../classicthesis.mine/classicthesis.sty
+ORIG_FILES += ../classicthesis/classicthesis.sty
 ORIG_FILES += ../classicthesis.mine/mycommon.sty
 
 # straight from the classicthesis template:
-ORIG_FRONTBACK_FILES += ../classicthesis/FrontBackmatter/Bibliography.tex
-ORIG_FRONTBACK_FILES += ../classicthesis/FrontBackmatter/DirtyTitlepage.tex
+#ORIG_FRONTBACK_FILES += ../classicthesis/FrontBackmatter/Bibliography.tex
+#ORIG_FRONTBACK_FILES += ../classicthesis/FrontBackmatter/DirtyTitlepage.tex
 
 # slightly modified from the classicthesis template:
-ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/Contents.tex
-ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/Dedication.tex
-ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/Titleback.tex
-ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/Titlepage.tex
+#ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/Contents.tex
+#ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/Dedication.tex
+#ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/Titleback.tex
+#ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/Titlepage.tex
 
 # like some of the above pages in the classicthesis template:
-ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/copyright.tex
-ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/Version.tex
+#ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/copyright.tex
+#ORIG_FRONTBACK_FILES += ../classicthesis.mine/FrontBackmatter/Version.tex
 
 # ./ in these due to a bug in the .gitignore generation rule.
 COPIED_FILES += ./peeters_macros.sty
