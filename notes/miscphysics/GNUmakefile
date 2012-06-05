@@ -16,7 +16,8 @@ SOURCE_DIRS += qm
 SOURCE_DIRS += relativity
 SOURCE_DIRS += sort
 
-ORIG_FILES += ../gabook/pendulumDouble.png
+ORIG_FILES += ../gabook/figures/pendulumDouble.png
+ORIG_FILE_DIRS += ../gabook/figures
 
 GENERATED_SOURCES := cronology.tex
 

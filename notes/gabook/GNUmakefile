@@ -19,6 +19,7 @@ SOURCE_DIRS += relativity
 SOURCE_DIRS += rotation
 
 ORIG_FILES += ../algebra/levi.pl
+ORIG_FILE_DIRS += ../algebra
 
 ORIG_FIGURE_DIRS += ../calculus
 ORIG_FIGURE_DIRS += ../differential_forms

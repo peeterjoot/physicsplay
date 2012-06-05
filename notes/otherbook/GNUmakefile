@@ -5,12 +5,16 @@ ORIG_FILES += ../unsrturl.bst
 ORIG_FILES += ../abbrvurl.bst
 ORIG_FILES += ../alphaurl.bst
 ORIG_FILES += ../plainurl.bst
-ORIG_FILES += ../nonga/hoopSpring.png
-ORIG_FILES += ../gabook/parallelogramArea.png
+ORIG_FILES += ../miscphysics/hoopSpring.png
+ORIG_FILES += ../gabook/figures/parallelogramArea.png
 ORIG_FILES += ../calculus/parameterizedSurface.png
 ORIG_FILES += ../calculus/polarAndSpherical.png
 ORIG_FILES += ../calculus/surface_area_element.png
 ORIG_FILES += ../calculus/volume_element.png
+
+ORIG_FILE_DIRS += ../miscphysics/
+ORIG_FILE_DIRS += ../gabook/figures/
+ORIG_FILE_DIRS += ../calculus/
 
 #ORIG_FILES += ../blogit/gaBasics.tex
 #ORIG_FILES += ../blogit/dotBlade.tex
