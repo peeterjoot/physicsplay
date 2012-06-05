@@ -40,7 +40,7 @@ ORIG_FILES += ../phy454/figures/couetteFlowFig6.mp4
 #ORIG_FILES += ../phy456/qmTwoL22fig5.png
 ORIG_FILES += ../otherbook/triangleLaw.png
 ORIG_FILES += ../otherbook/rotateMinusOne.png
-ORIG_FILES += ../gabook/parallelogramArea.png
+#ORIG_FILES += ../gabook/figures/parallelogramArea.png
 #ORIG_FILES += ../phy454/figures/continuumL2fig1.png
 #ORIG_FILES += ../phy454/figures/continuumL2fig2.png
 #ORIG_FILES += ../phy454/figures/continuumL2fig3.png
@@ -116,7 +116,10 @@ gaBasics.pdf : gaBasics.tex
 %.pdf : %.tex
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo > ./.revinfo/lastCommit.tex
-	perl ../make_pdflatex -file $<
+	~/bin/mkRevInfo -date > ./.revinfo/gitCommitDate.tex
+	~/bin/mkRevInfo -commit > ./.revinfo/gitCommitString.tex
+	~/bin/mkRevInfo -repo > ./.revinfo/gitRepo.tex
+	perl ../make_pdflatex -nojustonce -file $<
 
 #%.mp4 : %.avi
 #	/cygdrive/c/Temp/ffmpeg/bin/ffmpeg -i $< -vcodec libx264 $@

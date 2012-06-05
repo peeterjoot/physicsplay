@@ -20,6 +20,7 @@ LOCAL_FILES := $(notdir $(ORIG_FILES))
 all :: $(LOCAL_FILES)
 #all :: $(PDFS)
 all :: .gitignore
+all :: Bibliography.bib
 all :: peeters_macros.sty
 #all :: partEll.pdf
 #all :: ans2.pdf
@@ -54,7 +55,7 @@ $(LOCAL_FILES) :
 	~/bin/mkRevInfo -date > ./.revinfo/gitCommitDate.tex
 	~/bin/mkRevInfo -commit > ./.revinfo/gitCommitString.tex
 	~/bin/mkRevInfo -repo > ./.revinfo/gitRepo.tex
-	perl ../make_pdflatex -file $<
+	perl ../make_pdflatex -nojustonce -file $<
 
 clean :: mostlyclean localclean
 
@@ -64,6 +65,9 @@ mostlyclean ::
 
 peeters_macros.sty : ../peeters_macros.tex
 	cat ../peeters_macros.tex > $@
+
+Bibliography.bib : ../myrefs.bib
+	sed 's/@webpage/@manual/g' < $< > $@
 
 localclean ::
 	rm -f $(LOCAL_FILES)
