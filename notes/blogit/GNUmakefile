@@ -28,7 +28,7 @@ ORIG_FILES += ../eliblogwidescreen.cls
 ORIG_FILES += ../myrefs.bib 
 ORIG_FILES += ../plainurl.bst
 ORIG_FILES += ../unsrturl.bst
-ORIG_FILES += ../classicthesis.mine/mycommon.sty
+ORIG_FILES += ../mycommon.sty
 
 # for gaBasics:
 ORIG_FILES += ../phy454/figures/couetteFlowFig1.png

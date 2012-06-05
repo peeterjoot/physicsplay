@@ -2,6 +2,20 @@
 % Copyright © 2012 Peeter Joot.  All Rights Reserved.
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
 %
+%
+%-----------------------------------------------------------------------------------
+%
+% This latex file is for style related stuff (mostly color related), to be used in
+% my notes collections based on the
+% classicthesis template.
+%
+% Some of these are also applicable to articles that use the scrreprt
+% document class.
+%
+% Basic macros (\Br, ...) have been left in peeters_macros (but this imports those as a side effect).
+%
+%-----------------------------------------------------------------------------------
+
 \usepackage{peeters_macros}
 
 %-----------------------------------------------------------------------------------
@@ -20,6 +34,8 @@
    % also using caption for color captions:
    % http://www.latex-community.org/forum/viewtopic.php?f=45&p=42828
    %\usepackage[svgnames]{xcolor}
+   \PassOptionsToPackage{dvipsnames,svgnames}{xcolor}
+   %\PassOptionsToPackage{svgnames}{xcolor}
    \usepackage{caption}
    \captionsetup{labelfont={color=DarkOliveGreen,bf},textfont={color=Maroon}}
 
@@ -87,6 +103,8 @@
 
 %-----------------------------------------------------------------------------------
 % want indexes, but it's a lot of work to add in the indexing after the fact.  Stub this out as opposed to making a crappy one.
+% (that comment applied to phy454.pdf)
+%
 
 %   \usepackage[]{makeidx}
 %   \makeindex
@@ -169,18 +187,34 @@ ref={#1}
 \end{Answer}%
 }
 
-% didn't end up needing these.  used chngcntr instead.
-%\newcommand{\mychapter}[0]{\renewcounter{Example}\renewcounter{Problem}\chapter}
-%\newcommand{\mychapter}[0]{\chapter}
-
-% make this one a citation to an external notes compilation, but an actual formula reference
-% when that 'chapter' is eventually included in the notes compilation.
-%\newcommand{\inbookref}[2]{\ref{#2}}
-
 %\newcommand{\FIXME}[1]{\unnumberedSubsection{EDITING NOTE}\par#1}
 \newcommand{\FIXME}[1]{}
+%--------------------------------------------------------------------------------------------
 
-% a temporary marker
-%\newcommand{\DMATH}[0]{}
-%\newcommand{\DMATH}[0]{\paragraph{DMATH}}
+\newcommand{\colorSectionsForArticle}[0]{%
+     \titleformat{\section}
+        {\relax}{\color{DarkOliveGreen}{\textsc{\thesection}}}{1em}{\color{Maroon}}
+     \titleformat{\subsection}
+        {\relax}{\color{DarkOliveGreen}{\textsc{\thesubsection}}}{1em}{\color{Maroon}\normalsize\itshape}
+     \titleformat{\subsubsection}
+        {\relax}{\color{DarkOliveGreen}{\textsc{\thesubsubsection}}}{1em}{\color{Maroon}\normalsize\itshape}
+    \titlespacing*{\chapter}{0pt}{1\baselineskip}{1.2\baselineskip}
+    \titlespacing*{\section}{0pt}{1.25\baselineskip}{1\baselineskip} 
+    \titlespacing*{\subsection}{0pt}{1.25\baselineskip}{1\baselineskip}
+    \titlespacing*{\paragraph}{0pt}{1\baselineskip}{1\baselineskip}
+}
+
+\newcommand{\myClassicThesisOverrides}[0]{%
+     \titleformat{\chapter}[display]
+        {\relax}{\mbox{}\oldmarginpar{\vspace*{-3\baselineskip}\color{DarkOliveGreen}\chapterNumber\thechapter}}{0pt}%
+        {\color{Maroon}\raggedright\spacedallcaps}[\normalsize\vspace*{.8\baselineskip}\titlerule]
+     \titleformat{\section}
+        {\relax}{\color{DarkOliveGreen}{\textsc{\MakeTextLowercase{\thesection}}}}{1em}{\color{Maroon}\spacedlowsmallcaps}
+     \titleformat{\subsection}
+        {\relax}{\color{DarkOliveGreen}{\textsc{\MakeTextLowercase{\thesubsection}}}}{1em}{\color{Maroon}\normalsize\itshape}
+     \titleformat{\subsubsection}
+        {\relax}{\color{DarkOliveGreen}{\textsc{\MakeTextLowercase{\thesubsubsection}}}}{1em}{\color{Maroon}\normalsize\itshape}        
+% not required: only used in Colophon.tex
+%     \renewcommand{\finalVersionString}{\emph{Final Version} as of \today\ (\myVersion).}
+}
 %--------------------------------------------------------------------------------------------

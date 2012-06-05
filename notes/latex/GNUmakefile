@@ -12,7 +12,7 @@ ORIG_FILES += ../eliblogwidescreen.cls
 ORIG_FILES += ../myrefs.bib 
 ORIG_FILES += ../plainurl.bst
 ORIG_FILES += ../unsrturl.bst
-ORIG_FILES += ../classicthesis.mine/mycommon.sty
+ORIG_FILES += ../mycommon.sty
 ORIG_FILES += ../phy454/figures/couetteFlowFig1.png
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
