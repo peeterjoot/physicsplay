@@ -8,6 +8,6 @@ SOURCE_DIRS += galagrangian
 SOURCE_DIRS += mine
 SOURCE_DIRS += problems
 
-GENERATED_SOURCES := mathematica.tex 
+GENERATED_SOURCES += mathematica.tex 
 
 include ../make.rules

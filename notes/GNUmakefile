@@ -8,8 +8,6 @@ copyright : currentCopyright.latexPrologue currentBookCopyright.tex
 currentCopyright.latexPrologue :
 	~/bin/printCopyRight -what file -desc file -line='% ' > $@
 
-currentBookCopyright.tex :
-	~/bin/printCopyRight -latex > $@
 
 l:
 	find -name "*.tex" | grep -ve classicthesis -e /junk/ -e revinfo/ > $@

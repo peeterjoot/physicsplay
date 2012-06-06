@@ -28,7 +28,6 @@ ORIG_FILES += ../eliblogwidescreen.cls
 ORIG_FILES += ../myrefs.bib 
 ORIG_FILES += ../plainurl.bst
 ORIG_FILES += ../unsrturl.bst
-ORIG_FILES += ../mycommon.sty
 
 # for gaBasics:
 ORIG_FILES += ../phy454/figures/couetteFlowFig1.png
@@ -89,9 +88,10 @@ ORIG_FILES += ../phy454/figures/twoCylindersFig9.png
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
+all :: peeters_macros.sty
+all :: peeters_layout.sty
 all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
-all :: peeters_macros.sty
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
@@ -133,8 +133,11 @@ clean :: mostlyclean localclean
 mostlyclean :: 
 	rm -f *.ps *.dvi $(PDFS) *.aux *.log *.bbl *.blg *.brf *.toc *.stackdump *.bib
 
-peeters_macros.sty : ../peeters_macros.tex $(THISDIR).sty
-	cat ../peeters_macros.tex $(THISDIR).sty > $@
+peeters_layout.sty : ../peeters_layout.sty
+	cp $^ $@
+
+peeters_macros.sty : ../peeters_macros.sty
+	cp $^ $@
 
 localclean ::
 	rm -f $(LOCAL_FILES)

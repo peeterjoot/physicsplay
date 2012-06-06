@@ -18,8 +18,9 @@ SOURCE_DIRS += qm
 SOURCE_DIRS += relativity
 SOURCE_DIRS += rotation
 
-ORIG_FILES += ../algebra/levi.pl
-ORIG_FILE_DIRS += ../algebra
+# FIXME:
+#ORIG_FILES += ../algebra/levi.pl
+#ORIG_FILE_DIRS += ../algebra
 
 ORIG_FIGURE_DIRS += ../calculus
 ORIG_FIGURE_DIRS += ../differential_forms
@@ -48,8 +49,6 @@ LOCAL_FIGURE_FILES += surface_flux_element.png
 LOCAL_FIGURE_FILES += tangent_area_form.png
 LOCAL_FIGURE_FILES += visualize_subspace_projection.png
 LOCAL_FIGURE_FILES += volume_element.png
-
-LOCAL_FIGURE_FILES := $(addprefix figures/,$(LOCAL_FIGURE_FILES))
 
 GENERATED_SOURCES += mathematica.tex 
 GENERATED_SOURCES += cronology.tex

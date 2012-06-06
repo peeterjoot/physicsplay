@@ -1,10 +1,11 @@
+LOCAL_FIGURE_FILES := $(addprefix figures/,$(LOCAL_FIGURE_FILES))
+
 BOOKDEPENDENCIES := $(foreach ext,$(DEPENDENCYEXTENSIONS),$(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.$(ext))))
 BOOKDEPENDENCIES := $(foreach ext,$(DEPENDENCYEXTENSIONS),$(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.$(ext))))
 
 PDFDEPENDENCIES := $(subst pdf_tex,pdf,$(filter %.pdf_tex,$(BOOKDEPENDENCIES)))
 BOOKDEPENDENCIES += $(PDFDEPENDENCIES)
 
-#LOCAL_FILES := $(notdir $(ORIG_FILES))
 LOCAL_FRONTBACK_FILES := $(foreach e,$(notdir $(ORIG_FRONTBACK_FILES)),FrontBackmatter/$(e))
 
 JUSTBOOKDEPENDENCIES := $(filter-out $(STANDALONE), $(BOOKDEPENDENCIES))
@@ -15,7 +16,6 @@ MAIN_TARGETS += $(GENERATED_PDFS) .gitignore
 
 CLEAN_TARGETS += $(MAIN_TARGETS) 
 CLEAN_TARGETS += $(GENERATED_SOURCES)
-CLEAN_TARGETS += $(LOCAL_FILES)
 CLEAN_TARGETS += $(LOCAL_FRONTBACK_FILES)
 CLEAN_TARGETS += $(LOCAL_FIGURE_FILES)
 CLEAN_TARGETS += $(COPIED_FILES)
@@ -24,6 +24,7 @@ CLEAN_TARGETS += $(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.aux))
 define dopdflatex
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo > ./.revinfo/lastCommit.tex
+	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
 	~/bin/mkRevInfo -date > ./.revinfo/gitCommitDate.tex
 	~/bin/mkRevInfo -commit > ./.revinfo/gitCommitString.tex
 	~/bin/mkRevInfo -repo > ./.revinfo/gitRepo.tex
@@ -49,8 +50,13 @@ mathematica.tex : ../METADATA
 
 # plainnat.bib (as used by classicthesis) doesn't like @webpage:
 # http://tex.stackexchange.com/questions/56951/what-does-warning-entry-type-for-isnt-style-file-defined-mean/56954#56954
-Bibliography.bib : ../myrefs.bib
+Bibliography.bib : myrefs.bib
 	sed 's/@webpage/@manual/g' < $< > $@
+
+# old style:
+myrefs.bib: ../myrefs.bib.in ../METADATA
+	cp ../myrefs.bib.in myrefs.bib
+	../METADATA -bib >> myrefs.bib
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
@@ -63,20 +69,19 @@ endif
 cronology.tex : ../METADATA
 	../METADATA -$(THISDIR) > cronology.tex
 
-#$(LOCAL_FILES) :
-#	cp $(filter %$@, $(ORIG_FILES)) $@
-
-$(filter %.sty,$(LOCAL_FILES)) : ./%.sty: %.sty
-	cp $< $@
+$(LOCAL_FILES) :
+	cp $(filter %$@, $(ORIG_FILES)) $@
 
 $(LOCAL_FRONTBACK_FILES) :
 	cp $(filter %$@, $(ORIG_FRONTBACK_FILES)) $@
 
 peeters_layout.sty : ../peeters_layout.sty
-	cp ../peeters_layout.sty $@
+	cp $^ $@
 
 peeters_macros.sty : ../peeters_macros.sty
-	cp ../peeters_macros.sty $@
+	cp $^ $@
+
+currentBookCopyright.tex :
+	~/bin/printCopyRight -latex > $@
 
 vpath %.tex $(ORIG_FILE_DIRS)
-vpath %.sty $(ORIG_FILE_DIRS)
