@@ -134,10 +134,17 @@ pdfauthor={Peeter Joot}
 \newcommand{\beginArtNoToc}[0]{\begin{document}\maketitle{}}
 \newcommand{\EndNoBibArticle}[0]{\end{document}}
 \newcommand{\EndArticle}[0]{\bibliography{myrefs}\bibliographystyle{unsrturl}\end{document}}
+
+% this one in standalong articles is a plain old cite, but within a book that contains the chapter
+% is a \ref{chap:#1}.  That requires the chapter label to have the same name.
 \newcommand{\chapcite}[1]{\cite{#1}}
+
+% make this one a citation to an external notes compilation, but an actual formula reference 
+% when that 'chapter' is eventually included in the notes compilation.
+\newcommand{\inbookref}[2]{\cite{#1}}
+
 \newcommand{\urlchapcite}[3]{\href{#1}{#2} \cite{#3}}
 %\newcommand{\keywords}[1]{\par\noindent {\small{\em Keywords\/}: #1}}
-
 %----------------------------------
 
 %\newcommand{\methodology}[1]{\textbf{#1}}

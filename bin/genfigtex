@@ -6,7 +6,7 @@ foreach (sort keys %all)
 {
    my $path = $_ ;
 
-   die unless ( $path =~ /(.*)Fig(.*)\.(.*)/ ) ;
+   die "Expect 'Fig' in the filename '$path'\n" unless ( $path =~ /(.*)Fig(.*)\.(.*)/ ) ;
 
    my ($basename, $figNum, $extension) = ($1, $2, $3) ;
    my $picturepath = "${basename}Fig$figNum" ;
@@ -19,30 +19,39 @@ foreach (sort keys %all)
    {
       next ;
    }
+   elsif ( $extension =~ /mp4|swf|flv/ )
+   {
+my $fmov = "figure (\\ref{fig:$basename:$picturepath}).
+\\movieFigure{$picturepath.$extension}{$figNum: FIXME: CAPTION}{fig:$basename:$picturepath}{width=320pt,height=240pt}
+" ;
+
+      print $fmov ;
+   }
    elsif ( $extension eq 'png' )
    {
       next if ( exists $all{"$picturepath.pdf_tex"} ) ;
 
-my $fpng = "figure (\\ref{fig:$basename:$picturepath})
-\\begin{figure}[htp]
-   \\centering
-   \\includegraphics[totalheight=0.2\\textheight]{$picturepath}
-   \\caption{$figNum: FIXME: CAPTION}
-   \\label{fig:$basename:$picturepath}
-\\end{figure}
+#\\begin{figure}[htp]
+#   \\centering
+#   \\includegraphics[totalheight=0.2\\textheight]
+#   \\label{fig:$basename:$picturepath}
+#\\end{figure}
+my $fpng = "figure (\\ref{fig:$basename:$picturepath}).
+\\imageFigure{$picturepath}{$figNum: FIXME: CAPTION}{fig:$basename:$picturepath}{0.2}
 " ;
 
       print $fpng ;
    }
    elsif ( $extension eq 'pdf_tex' )
    {
-my $fpdf = "figure (\\ref{fig:$basename:$picturepath})
-\\begin{figure}[htp]
-   \\centering
-   \\def\\svgwidth{0.3\\columnwidth}
-   \\input{$picturepath.pdf_tex}
-   \\caption{FIXME}\\label{fig:$basename:$picturepath}
-\\end{figure}
+#\\begin{figure}[htp]
+#   \\centering
+#   \\def\\svgwidth{0.3\\columnwidth}
+#   \\input{$picturepath.pdf_tex}
+#   \\caption{FIXME}\\label{fig:$basename:$picturepath}
+#\\end{figure}
+my $fpdf = "figure (\\ref{fig:$basename:$picturepath}).
+\\pdfTexFigure{$picturepath.pdf_tex}{$figNum: FIXME: CAPTION}{fig:$basename:$picturepath}{0.3}
 " ;
 
       print $fpdf ;

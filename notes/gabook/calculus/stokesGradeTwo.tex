@@ -1,0 +1,266 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+
+% 
+% 
+%\input{../peeter_prologue.tex}
+%\usepackage{txfonts}
+
+\chapter{Stokes theorem applied to vector and bivector fields}
+\label{chap:stokesGradeTwo}
+
+%%\date{July 17, 2009}
+%%\revisionInfo{$RCSfile: stokesGradeTwo.tex,v $ Last $Revision: 1.5 $ $Date: 2009/08/01 22:12:18 $}
+
+%\blogpage{http://sites.google.com/site/peeterjoot/math2009/stokesGradeTwo.pdf}
+%\date{July 17, 2009.  $RCSfile: stokesGradeTwo.tex,v $ Last $Revision: 1.5 $ $Date: 2009/08/01 22:12:18 $}
+
+\beginArtWithToc
+
+\section{Vector Stokes Theorem}
+
+I found my self forgetting stokes theorem once again.  Redo this for the simplest case of a parallelogram area element.
+
+What I recall is that we have on one side the curl dotted into the plane of the surface area element
+
+\begin{align}
+\int ( \grad \wedge A ) \cdot d^2 x
+\end{align}
+
+and on the other side a loop integral
+
+\begin{align}
+\ointctrclockwise A \cdot dx
+\end{align}
+
+Comparing the two we should end up with the same form and thus determine the form of the grade two Stokes equation (i.e. for curl of a vector).
+
+\subsection{Bivector product part}
+
+\begin{align*}
+( \grad \wedge A ) \cdot d^2 x 
+&=
+( \grad \wedge A ) \cdot \left(\PD{\alpha}{x} \wedge \PD{\beta}{x}\right) 
+d\alpha d\beta \\
+&=
+\partial_\mu A_\nu \PD{\alpha}{x^\sigma} \PD{\beta}{x^\epsilon} (\gamma^\mu \wedge \gamma^\nu) \cdot (\gamma_\sigma \wedge \gamma_\epsilon) 
+d\alpha d\beta \\
+&=
+\partial_\mu A_\nu \PD{\alpha}{x^\sigma} \PD{\beta}{x^\epsilon} ( {\delta^\mu}_\epsilon {\delta^\nu}_\sigma - {\delta^\mu}_\sigma {\delta^\nu}_\epsilon ) 
+d\alpha d\beta \\
+&=
+\partial_\mu A_\nu \left( \PD{\alpha}{x^\nu} \PD{\beta}{x^\mu} - \PD{\alpha}{x^\mu} \PD{\beta}{x^\nu} \right) 
+d\alpha d\beta \\
+\end{align*}
+
+So we have
+\begin{align}\label{eqn:stokesGradeTwo:withJac}
+( \grad \wedge A ) \cdot d^2 x &= -\partial_\mu A_\nu \frac{\partial (x^\mu, x^\nu)}{\partial (\alpha, \beta)} d\alpha d\beta
+\end{align}
+
+\subsection{Loop integral part}
+
+Integrating around a parallelogram spacetime area element with sides $d\alpha \partial x/\partial \alpha$ and $d\beta \partial x/\partial \beta$, as
+depicted in figure (\ref{fig:surface_area_element}), we have
+
+\imageFigure{figures/surface_area_element}{Surface area element}{fig:surface_area_element}{0.4}
+
+\begin{align*}
+\ointctrclockwise 
+A \cdot dx
+&=
+\int
+{\left. A \right\vert}_{\beta=\beta_0} \cdot \PD{\alpha}{x} d\alpha
++ {\left. A \right\vert}_{\alpha=\alpha_1} \cdot \PD{\beta}{x} d\beta
++ {\left. A \right\vert}_{\beta=\beta_1} \cdot \left( -\PD{\alpha}{x} d\alpha \right)
++ {\left. A \right\vert}_{\alpha=\alpha_0} \cdot \left( -\PD{\beta}{x} d\beta \right) 
+\\
+&=
+\int
+\left( {\left. A \right\vert}_{\alpha=\alpha_1} - {\left. A \right\vert}_{\alpha=\alpha_0} \right) \cdot \PD{\beta}{x} d\beta
+-\left( {\left. A \right\vert}_{\beta=\beta_1} - {\left. A \right\vert}_{\beta=\beta_0} \right) \cdot \PD{\alpha}{x} d\alpha 
+\\
+&=
+\int
+\PD{\alpha}{A} \cdot \PD{\beta}{x} d\alpha d\beta
+-\PD{\beta}{A} \cdot \PD{\alpha}{x} d\beta d\alpha
+\end{align*}
+
+Expanding the derivatives in terms of coordinates we have
+
+\begin{align*}
+\PD{\sigma}{A} 
+&=
+\PD{\sigma}{A_\mu} \gamma^\mu \\
+&= 
+\PD{x^\nu}{A_\mu}\PD{\sigma}{x^\nu} \gamma^\mu \\
+&= 
+\partial_\nu A_\mu \PD{\sigma}{x^\nu} \gamma^\mu \\
+\end{align*}
+
+and
+\begin{align*}
+\PD{\sigma}{x} &= \PD{\sigma}{x^\nu} \gamma_\nu
+\end{align*}
+
+Assembling we have
+\begin{align*}
+\ointctrclockwise 
+A \cdot dx
+&=
+\int
+\partial_\nu A_\mu \left( \PD{\alpha}{x^\nu} \PD{\beta}{x^\mu} - \PD{\beta}{x^\nu} \PD{\alpha}{x^\mu} \right) d\alpha d\beta
+\end{align*}
+
+In terms of the Jacobian used in (\ref{eqn:stokesGradeTwo:withJac}) we have
+
+\begin{align*}
+\ointctrclockwise 
+A \cdot dx &= \int \partial_\mu A_\nu \frac{\partial (x^\mu, x^\nu)}{\partial (\alpha, \beta)} d\alpha d\beta
+\end{align*}
+
+Comparing the two we have only a sign difference so the conclusion is that Stokes for a vector field (considering only a flat parallelogram area element) is
+
+\begin{align}
+\int ( \grad \wedge A ) \cdot d^2 x &= \ointclockwise A \cdot dx
+\end{align}
+
+Observe that there is an implied orientation of the area element on the LHS, required to match up with the orientation of the RHS integral.
+
+\section{Bivector Stokes Theorem}
+
+A parallelepiped volume element is depicted in figure (\ref{fig:volume_element}).  Three parameters $\alpha$, $\beta$, $\sigma$ generate a set of differential vector displacements spanning the three dimensional subspace
+
+\imageFigure{figures/volume_element}{Differential volume element}{fig:volume_element}{0.4}
+
+Writing the displacements 
+
+\begin{align*}
+dx_\alpha &= \PD{\alpha}{x} d\alpha \\
+dx_\beta &= \PD{\beta}{x} d\beta \\
+dx_\sigma &= \PD{\sigma}{x} d\sigma
+\end{align*}
+
+We have for the front, right and top face area elements 
+
+\begin{align*}
+dA_F &= dx_\alpha \wedge dx_\beta \\
+dA_R &= dx_\beta \wedge dx_\sigma \\
+dA_T &= dx_\sigma \wedge dx_\alpha \\
+\end{align*}
+
+These are the surfaces of constant parametrization, respectively, $\sigma = \sigma_1$, $\alpha = \alpha_1$, and $\beta = \beta_1$.  For a bivector, the flux through the surface is therefore
+
+\begin{align*}
+\int B \cdot dA 
+&=
+(B_{\sigma_1} \cdot dA_F - B_{\sigma_0} \cdot dA_P )
++ (B_{\alpha_1} \cdot dA_R - B_{\alpha_0} \cdot dA_L)
++ (B_{\beta_1} \cdot dA_T - B_{\beta_0} \cdot dA_B) \\
+&=
+d \sigma \PD{\sigma}{B} \cdot (dx_\alpha \wedge dx_\beta )
++ d \alpha \PD{\alpha}{B} \cdot (dx_\beta \wedge dx_\sigma) 
++ d \beta \PD{\beta}{B} \cdot (dx_\sigma \wedge dx_\alpha ) \\
+\end{align*}
+
+Written out in full this is a bit of a mess
+\begin{align}\label{eqn:stokesGradeTwo:mess}
+\int B \cdot dA 
+&=
+d \alpha d\beta d\sigma 
+\partial_\mu B \cdot
+\left(
+\left(
+- \PD{\sigma}{x^\mu} \PD{\beta}{x^\nu} \PD{\alpha}{x^\epsilon} 
++ \PD{\alpha}{x^\mu} \PD{\beta}{x^\nu} \PD{\sigma}{x^\epsilon} 
++ \PD{\beta}{x^\mu} \PD{\sigma}{x^\nu} \PD{\alpha}{x^\epsilon} 
+\right) 
+(\gamma_\nu \wedge \gamma_\epsilon )
+\right) 
+\end{align}
+
+It should equal, at least up to a sign, $\int (\grad \wedge B) \cdot d^3 x$.  Expanding the latter is probably easier than regrouping the mess, and doing so we have
+
+\begin{align*}
+(\grad \wedge B) \cdot d^3 x
+&=
+d\alpha d\beta d\sigma ( \gamma^\mu \wedge \partial_\mu B)  \cdot \left( \PD{\alpha}{x} \wedge \PD{\beta}{x} \wedge \PD{\sigma}{x} \right) \\
+&= 
+d\alpha d\beta d\sigma \inv{2} ( \gamma^\mu \partial_\mu B + \partial_\mu B \gamma^\mu )  \cdot \left( \PD{\alpha}{x} \wedge \PD{\beta}{x} \wedge \PD{\sigma}{x} \right) \\
+&=
+d\alpha d\beta d\sigma \inv{2} \gpgradezero{
+( \gamma^\mu \partial_\mu B + \partial_\mu B \gamma^\mu )  \left( \PD{\alpha}{x} \wedge \PD{\beta}{x} \wedge \PD{\sigma}{x} \right) }
+\\
+&=
+d\alpha d\beta d\sigma \inv{2} 
+\partial_\mu B \cdot
+\gpgradetwo{
+\left( \PD{\alpha}{x} \wedge \PD{\beta}{x} \wedge \PD{\sigma}{x} \right) \gamma^\mu 
++ \gamma^\mu \left( \PD{\alpha}{x} \wedge \PD{\beta}{x} \wedge \PD{\sigma}{x} \right) }
+\\
+&=
+d\alpha d\beta d\sigma 
+\partial_\mu B \cdot
+\left( \left( \PD{\alpha}{x} \wedge \PD{\beta}{x} \wedge \PD{\sigma}{x} \right) \cdot \gamma^\mu \right)
+\\
+\end{align*}
+
+Expanding just that trivector-vector dot product
+
+\begin{align*}
+\left( \PD{\alpha}{x} \wedge \PD{\beta}{x} \wedge \PD{\sigma}{x} \right) \cdot \gamma^\mu 
+&=
+\PD{\alpha}{x^\lambda} \PD{\beta}{x^\nu} \PD{\sigma}{x^\epsilon} \left( \gamma_\lambda \wedge \gamma_\nu \wedge \gamma_\epsilon \right) \cdot \gamma^\mu  \\
+&=
+\PD{\alpha}{x^\lambda} \PD{\beta}{x^\nu} \PD{\sigma}{x^\epsilon} \left( 
+\gamma_\lambda \wedge \gamma_\nu {\delta_\epsilon}^\mu
+-\gamma_\lambda \wedge \gamma_\epsilon {\delta_\nu}^\mu
++\gamma_\nu \wedge \gamma_\epsilon {\delta_\lambda}^\mu
+\right) 
+\end{align*}
+
+So we have
+\begin{align*}
+(\grad \wedge B) \cdot d^3 x
+&=
+d\alpha d\beta d\sigma \PD{\alpha}{x^\lambda} \PD{\beta}{x^\nu} \PD{\sigma}{x^\epsilon} \partial_\mu B \cdot \left( 
+\gamma_\lambda \wedge \gamma_\nu {\delta_\epsilon}^\mu
+-\gamma_\lambda \wedge \gamma_\epsilon {\delta_\nu}^\mu
++\gamma_\nu \wedge \gamma_\epsilon {\delta_\lambda}^\mu
+\right) 
+\\
+&=
+d\alpha d\beta d\sigma 
+\partial_\mu B \cdot \left( 
+  \PD{\alpha}{x^\lambda} \PD{\beta}{x^\nu} \PD{\sigma}{x^\mu} \gamma_\lambda \wedge \gamma_\nu 
+%- \PD{\alpha}{x^\lambda} \PD{\beta}{x^\mu} \PD{\sigma}{x^\epsilon} \gamma_\lambda \wedge \gamma_\epsilon 
++ \PD{\alpha}{x^\lambda} \PD{\beta}{x^\mu} \PD{\sigma}{x^\epsilon} \gamma_\epsilon \wedge \gamma_\lambda 
++ \PD{\alpha}{x^\mu} \PD{\beta}{x^\nu} \PD{\sigma}{x^\epsilon} \gamma_\nu \wedge \gamma_\epsilon 
+\right) 
+\\
+&=
+d\alpha d\beta d\sigma 
+\partial_\mu B \cdot 
+\left( 
+\left( 
+  \PD{\alpha}{x^\nu} \PD{\beta}{x^\epsilon} \PD{\sigma}{x^\mu} 
++ \PD{\alpha}{x^\epsilon} \PD{\beta}{x^\mu} \PD{\sigma}{x^\nu} 
++ \PD{\alpha}{x^\mu} \PD{\beta}{x^\nu} \PD{\sigma}{x^\epsilon} 
+\right) 
+\gamma_\nu \wedge \gamma_\epsilon 
+\right) 
+\\
+\end{align*}
+
+Noting that an $\epsilon$, $\nu$ interchange in the first term inverts the sign, we have an exact match with (\ref{eqn:stokesGradeTwo:mess}), thus fixing the sign for the
+bivector form of Stokes theorem for the orientation picked in this diagram
+
+\begin{align}
+\int (\grad \wedge B) \cdot d^3 x &= \int B \cdot d^2 x
+\end{align}
+
+Like the vector case, there is a requirement to be very specific about the meaning given to the oriented surfaces, and the corresponding oriented volume element (which could be a volume subspace of a greater than three dimensional space).
+
+%\EndNoBibArticle

@@ -1,0 +1,742 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+
+% 
+% 
+%\documentclass{article}
+
+%\input{../peeters_macros.tex}
+%\input{../peeters_macros2.tex}
+
+%\usepackage{listings}
+%\usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
+% makes \grad look funny though (almost like spacegrad, but narrower)
+
+%\usepackage[bookmarks=true]{hyperref}
+
+%\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+%\usepackage{latexsym,amssymb,epsf} % do not remember if these are
+   % needed, but their inclusion can not do any damage
+
+
+\chapter{Worked calculus of variations problems from Byron and Fuller}
+\label{chap:PJbyronFullerCalcVarProblems}
+%\author{Peeter Joot \quad peeter.joot@gmail.com }
+\date{ March 21, 2009.  byronFullerCalcVar.tex }
+
+%\begin{document}
+
+%\maketitle{}
+%\tableofcontents
+
+\section{Worked calculus of variations problems}
+
+Select problems from chapter II of \citep{byron1992mca}.
+
+\subsection{Problem 1.  Shortest line between points in polar coordinates}
+
+Problem.  Variational calculus exercise to find shortest distance between two points using polar coordinates.
+ 
+The line element is:
+ 
+\begin{align*}
+ds^2 = r^2 d\theta^2 + {r'}^2
+\end{align*}
+ 
+So, the integral to minimize is
+ 
+\begin{align*}
+I = \int \sqrt{ r^2 + {r'}^2 } d\theta
+\end{align*}
+ 
+Application of the Euler-Lagrange equations yields
+ 
+\begin{align*}
+0 
+&= \left( \PD{r}{} - \frac{d}{d\theta} \PD{r'}{} \right) \sqrt{ r^2 + {r'}^2 }  \\
+&= \frac{r}{\sqrt{{r'}^2 + r^2}} - \frac{d}{d\theta} \left( \frac{{r'}}{\sqrt{{r'}^2 + r^2}}\right) \\
+\end{align*}
+ 
+Dividing through by $r$ and writing $v = u' = {r'}/r$ this is
+ 
+\begin{align*}
+\frac{1}{\sqrt{v^2 + 1}}
+&= \frac{d}{d\theta} \left( \frac{v}{\sqrt{v^2 + 1}}\right) \\
+&= \frac{v'}{\sqrt{v^2 + 1}} -\frac{v^2 v'}{(\sqrt{v^2 + 1})^3} \\
+\end{align*}
+ 
+\begin{align*}
+1 
+&= v' \left( 1 -\frac{v^2 }{v^2 + 1} \right) \\
+&= \frac{v'}{v^2 + 1} \\
+\end{align*}
+
+This is now separable, and can be integrated directly
+
+\begin{align*}
+\theta - \theta_0
+&= \int \frac{dv}{v^2 + 1} \\
+&= \arctan(v) \\
+\end{align*}
+ 
+\begin{align*}
+\tan(\theta - \theta_0)
+&= \frac{{r'}}{r} \\
+&= \frac{d \ln(r) }{d\theta}
+\end{align*}
+
+That solves the first of the second order differential equations resulting from the Euler-Lagrange equations, and the 
+last becomes
+\begin{align*}
+\ln(r) &= \int \tan(\theta - \theta_0) d\theta \\
+&= -\ln(\cos(\theta - \theta_0)) + \ln(r_0)
+\end{align*}
+
+Finally a polar parametric equation is obtained
+ 
+\begin{align*}
+\frac{r}{r_0} \cos(\theta - \theta_0) = 1
+\end{align*}
+ 
+If all went right, this should be the equation for a straight line in polar form.
+
+It does not look like one, but if the cosine is expanded 
+
+\begin{align*}
+\cos(\theta - \theta_0) 
+&= \Re\left( e^{i\theta}e^{-i\theta_0} \right) \\
+&= \Re\left( (\cos\theta + i\sin\theta)(\cos\theta_0 - i\sin\theta_0) \right) \\
+&= \cos\theta\cos\theta_0 + \sin\theta\sin\theta_0 \\
+\end{align*}
+
+With $x = r\cos\theta$, and $y = r\sin\theta$ this gives
+
+\begin{align*}
+r_0 
+&= r \left( \cos\theta\cos\theta_0 + \sin\theta\sin\theta_0 \right) \\
+&= x \cos\theta_0 + y\sin\theta_0 \\
+\end{align*}
+
+So, sure enough, following the math gives an equation for a straight line in a recognizable form.
+
+\subsection{Problem 2. Shortest line, in 3D}
+
+Did this one in \chapcite{PJgoldch1}
+
+\subsection{Problem 3.  Spherical geodesics}
+
+First calculate the line element (this was given in the problem, but I feel like working it out).
+The position vector with $i = \Be_1 \Be_2$, is given by
+
+\begin{align*}
+\Br = a ( \sin\theta \Be_1 e^{i\phi} + \Be_3 \cos\theta )
+\end{align*}
+
+So, the differential given constant radius $a$ is
+
+\begin{align*}
+d\Br 
+&= 
+a \thetadot ( \cos\theta \Be_1 e^{i\phi} - \Be_3 \sin\theta )
++ a \phidot ( \sin\theta \Be_1 \Be_1 \Be_2 e^{i\phi} ) \\
+&= 
+a \left( \thetadot \cos\theta \Be_1 + \phidot \sin\theta \Be_2 \right) e^{i\phi} - a \thetadot \Be_3 \sin\theta \\
+\end{align*}
+
+And the square is
+\begin{align*}
+d\Br^2
+&= a^2 \left( \thetadot^2 \cos^2\theta + \phidot^2 \sin^2\theta + \thetadot^2 \sin^2\theta \right) \\
+&= a^2 \left( \thetadot^2 + \phidot^2 \sin^2\theta \right) \\
+\end{align*}
+
+Here the derivatives are with respect to some implicit variable that parametrizes the differential displacement.
+This can be taken to be $\theta$, which gives the distance along any two points on the sphere as
+
+\begin{align*}
+S &= a^2 \int d\theta \sqrt{1 + \left(\frac{d\phi}{d\theta}\right)^2 \sin^2\theta } \\
+\end{align*}
+
+Writing $f(\theta, \phi, \phidot) = \sqrt{1 + \phidot^2 \sin^2\theta}$, the Euler-Lagrange equations can be
+applied
+
+\begin{align*}
+0 
+&= \left( \PD{\phi}{} - \frac{d}{d\theta} \PD{\phidot}{} \right) f \\
+&= 0 - \frac{d}{d\theta} \frac{(1/2)(2\phidot) \sin^2\theta}{\sqrt{1 + \phidot^2 \sin^2\theta}} \\
+\end{align*}
+
+Introducing an integration constant $\kappa$, this is
+
+\begin{align*}
+\phidot \sin^2\theta = \kappa \sqrt{1 + \phidot^2 \sin^2\theta}
+\end{align*}
+
+squaring
+\begin{align*}
+\phidot^2 \sin^4\theta &= \kappa^2 \left(1 + \phidot^2 \sin^2\theta \right) \\
+\phidot^2 \sin^2\theta \left( \sin^2 \theta - \kappa^2 \right) &= \kappa^2 \\
+\end{align*}
+
+\begin{align*}
+\phi - \phi_0 &= \kappa \int \frac{d\theta}{\sin\theta \sqrt{ \sin^2 \theta - \kappa^2 }} \\
+\end{align*}
+
+This does not look particularly nice to integrate.  Instead, let us try writing the arc length integral as
+
+\begin{align*}
+\frac{S}{a^2} &= \int d\phi \sqrt{{\frac{d\theta}{d\phi}}^2 + \sin^2\theta } \\
+\end{align*}
+
+\begin{align*}
+0 
+&= \left( \PD{\theta}{} - \frac{d}{d\phi} \PD{\thetadot}{} \right) \sqrt{\thetadot^2 + \sin^2\theta } \\
+&= \frac{\sin\theta \cos\theta}{ \sqrt{\thetadot^2 + \sin^2\theta } } -
+\frac{d}{d\phi} \frac{\thetadot} { \sqrt{\thetadot^2 + \sin^2\theta } } \\
+&= \frac{\sin\theta \cos\theta}{ \sqrt{\thetadot^2 + \sin^2\theta } } -
+\left(
+\frac{\thetaddot} { \sqrt{\thetadot^2 + \sin^2\theta } } 
++ \frac{(-1/2)\thetadot(2 \thetadot \thetaddot + 2 \sin\theta\cos\theta \thetadot)} { (\sqrt{\thetadot^2 + \sin^2\theta })^3 } 
+\right) \\
+&= \frac{\sin\theta \cos\theta}{ \sqrt{\thetadot^2 + \sin^2\theta } } 
+- \frac{\thetaddot} { \sqrt{\thetadot^2 + \sin^2\theta } } 
++ \frac{\thetadot^2( \thetaddot + \sin\theta\cos\theta )} { (\sqrt{\thetadot^2 + \sin^2\theta })^3 } 
+\\
+\end{align*}
+
+Multiplying through by $(\sqrt{\thetadot^2 + \sin^2\theta })^3$, this is
+
+\begin{align*}
+0 
+&= (\sin\theta \cos\theta - \thetaddot) ( \thetadot^2 + \sin^2\theta ) + \thetadot^2( \thetaddot + \sin\theta\cos\theta )  \\
+&= 
+2 \sin\theta \cos\theta \thetadot^2 
++ \sin\theta \cos\theta \sin^2\theta 
+- \thetaddot \sin^2\theta  
+\\
+\end{align*}
+
+Or
+\begin{align*}
+\thetaddot =
+2 (\cot\theta) \thetadot^2 
++ \sin\theta \cos\theta 
+\end{align*}
+
+Darn.  That does not look much easier to solve.
+
+Looking back at the problem, I see that it was asked to prove that $\phi = \alpha - \sin^{-1}(k\cot(\theta))$.  So, instead of trying to solve
+the differential equation above from scratch, verification that this given solution is probably all that was desired.
+
+\begin{align*}
+-\sin(\phi - \alpha) = k\cot(\theta)
+\end{align*}
+
+Or
+\begin{align*}
+\theta = \cot^{-1}\left(-\inv{k} \sin(\phi - \alpha)\right)
+\end{align*}
+
+Looks like derivatives of the above are required. ... An exercise for a different night.
+
+\subsection{Problem 6.  Action with second order derivatives}
+
+Did this one in \chapcite{PJgoldch1}.
+
+\subsection{Problem 7.  Fermat's principle, and Snell's law}
+
+\subsubsection{part a}
+
+\imageFigure{figures/snells}{Snell's law.  Position dependent velocity gradient}{fig:snells}{0.4}
+
+This one is kind of cool.  It will be interesting to eventually learn the QM reasons why light takes the path of least time, but for now we can calculate with that.  The setup of the problem is depicted in figure \ref{fig:snells}.
+
+For the time to be minimized along the path we need to describe that time.  From the figure, we have
+
+\begin{align*}
+\frac{ds}{dt} = u
+\end{align*}
+
+Or, 
+\begin{align*}
+t = \int dt = \int_{p_1}^{p_2} \frac{ds}{u}
+\end{align*}
+
+It is common to write $ds^2$ in terms of $dy/dx$ in many problems, as in 
+
+\begin{align*}
+ds = \sqrt{1 + \frac{dy}{dx}} dx
+\end{align*}
+
+but an attempt to use this in the minimization problem just produces a mess.   There is no obvious conserved quantity and reducing the resulting differential equations
+leads to a mess.
+
+Instead we can write
+
+\begin{align*}
+ds = \sqrt{1 + \left(\frac{dx}{dy}\right)^2} dy
+\end{align*}
+
+and aim to minimize the integral
+
+\begin{align*}
+ds = \sqrt{1 + \left(\frac{dx}{dy}\right)^2} dy
+\end{align*}
+
+\begin{align*}
+t = \int_{p_1}^{p_2} \inv{u(y)} \sqrt{1 + \left(\frac{dx}{dy}\right)^2} dy
+\end{align*}
+
+This action now has no $x$ dependence, so we have a cyclic variable and conserved quantity.  Writing
+
+\begin{align*}
+\LL(x,\xdot, y) &= \inv{u(y)} \sqrt{1 + \xdot^2} 
+\end{align*}
+
+The Euler-Lagrange equation evaluation gives us
+
+\begin{align*}
+\PD{x}{\LL} &= 0
+\end{align*}
+
+\begin{align*}
+\PD{\xdot}{\LL} &= \frac{\xdot}{u \sqrt{1 + \xdot^2} }
+\end{align*}
+
+So, we have
+
+\begin{align*}
+\frac{\xdot}{u \sqrt{1 + \xdot^2} } &= \text{const}
+\end{align*}
+
+In terms of the angle from the vertical $\alpha$, we have
+
+\begin{align*}
+\frac{dx}{dy} = \tan\alpha 
+\end{align*}
+
+So
+\begin{align*}
+1 + \xdot^2 
+&= 1 + \frac{\sin^2\alpha}{\cos^2\alpha} \\
+&= \inv{\cos^2\alpha} \\
+\end{align*}
+
+and we have
+\begin{align*}
+\text{const}
+&= 
+\frac{\tan\alpha \cos\alpha}{u}  \\
+\end{align*}
+
+Which is the desired result
+\begin{align*}
+\text{const} &= \frac{\sin\alpha}{u} \\
+\end{align*}
+
+\subsubsection{Part b}
+
+This part of the problem is to calculate the path if the speed of light
+in the material varies in proportion to the position, say
+
+\begin{align*}
+u(y) = u_0 + a y
+\end{align*}
+
+Let
+
+\begin{align*}
+\frac{\sin\alpha}{u_0 + a y} = \kappa
+\end{align*}
+
+\begin{align*}
+\left( \frac{dx}{dy} \right)^2 
+&= \frac{\sin^2 \alpha}{\cos^2 \alpha} \\
+&= 
+\frac{\kappa^2 (u_0 + a y)^2}{ 1 - \kappa^2 (u_0 + a y)^2 } \\
+\end{align*}
+
+Let $w = u_0/a + y$, for
+
+\begin{align*}
+\kappa^2 a^2 w^2 &= \left(\frac{dx}{dw}\right)^2 (1 - \kappa^2 a^2 w^2 )
+\end{align*}
+
+\begin{align*}
+x - x_0 &=
+\pm \kappa a \int \frac{w dw }{\sqrt{ 1 - \kappa^2 a^2 w^2 }} \\
+\end{align*}
+
+With $v = \kappa w$
+
+\begin{align*}
+x - x_0 
+&=
+\pm \inv{\kappa a} \int \frac{v dv }{\sqrt{ 1 - v^2 }} \\
+&=
+\mp \inv{\kappa a} \sqrt{ 1 - v^2 } \\
+&=
+\mp \inv{\kappa a} \sqrt{ 1 - \kappa^2 a^2 w^2 } \\
+\end{align*}
+
+Or
+\begin{align*}
+\inv{\kappa^2}\left({x}- {x_0} \right)^2 + a^2 \left(\frac{u_0}{a} + y\right)^2 = \inv{\kappa^2}
+\end{align*}
+
+This looks like an ellipse, not a circle which is what the problem asked for.  I am guessing that the point of this 
+linearly varying index of refraction question is to model an abrupt change between two surfaces continuously, and show that
+a complete change of direction is possible.  In that case, the precise parametrization that makes the ellipse a circle is not necessarily relevant.
+
+\subsection{Problem 9.  Schr\"{o}dinger Lagrangian}
+
+Did this one in \chapcite{PJgoldch1}.
+
+\subsection{Problem 10.  \texorpdfstring{$\pi$}{pi}-meson Lagrangian (Klein-Gordon)}
+
+\subsubsection{Setup}
+
+Charged scalar meson in two real fields is given in the Minkowski notation $x_\mu = (x,y,z,it)$, with $c = \hbar = 1$.
+
+\begin{align}
+\LL = -\inv{2}\left( 
+\PD{x_\mu}{\phi_1} \PD{x_\mu}{\phi_1} 
++ \PD{x_\mu}{\phi_2} \PD{x_\mu}{\phi_2} 
+\right)
++ \inv{2}
+\left( 
+{\phi_1}^2 
++ {\phi_2}^2 
+\right)
+\left( e^2 A_\mu A_\mu - m^2 \right) 
++ e A_\mu \left(
+\phi_2 \PD{x_\mu}{\phi_1}
+-\phi_1 \PD{x_\mu}{\phi_2}
+\right)
+\end{align}
+
+With summation over repeated indexes.
+
+I am more comfortable with the upper and lower index notation used for repeated indexes, and will switch to that for the remainder
+of the problem.  Translating with $x^\mu = (x,y,z,t)$, $x_\mu = (x,y,z,-t)$ (retaining the use of a $+++-$ metric), we have
+
+\begin{align}
+\LL 
+&= -\inv{2}\left( 
+\PD{x_\mu}{\phi_1} \PD{x^\mu}{\phi_1} 
++ \PD{x_\mu}{\phi_2} \PD{x^\mu}{\phi_2} 
+\right)
++ \inv{2}
+\left( 
+{\phi_1}^2 
++ {\phi_2}^2 
+\right)
+\left( e^2 A_\mu A^\mu - m^2 \right) 
++ e A^\mu \left(
+\phi_2 \PD{x^\mu}{\phi_1}
+-\phi_1 \PD{x^\mu}{\phi_2}
+\right) \\
+&= -\inv{2}\left( 
+\partial_\mu \phi_1 \partial^\mu \phi_1
++\partial_\mu \phi_1 \partial^\mu \phi_1
+\right)
++ \inv{2}
+\left( 
+{\phi_1}^2 
++ {\phi_2}^2 
+\right)
+\left( e^2 A_\mu A^\mu - m^2 \right) 
++ e A^\mu \left(
+\phi_2 \partial_\mu {\phi_1}
+-\phi_1 \partial_\mu {\phi_2}
+\right) 
+\end{align}
+
+In this last form with $\partial_\mu \equiv \PDi{x^\mu}{}$, and $\partial^\mu \equiv \PDi{x_\mu}{}$, we have this Lagrangian density expressed nicely with
+balanced upper and lower indexes.
+
+%For comfort with the conventions
+%I am used to using, translate this to a $+---$ metric as well as the use of upper and lower index notation.  The density is 
+%then
+%
+%\begin{align}
+%\LL 
+%&=
+%\inv{2}\left( 
+%\partial_\mu \phi_1 \partial^\mu \phi_1
+%+\partial_\mu \phi_2 \partial^\mu \phi_2
+%\right)
+%- \inv{2} \left( m^2 + e^2 A^\mu A_\mu \right) \left( {\phi_1}^2 + {\phi_2}^2 \right)
+%- e A^\mu \left( 
+%\phi_2 \partial_\mu \phi_1 - \phi_1 \partial_\mu \phi_2  
+%\right) 
+%\end{align}
+
+%\begin{align}
+%\LL 
+%&=
+%\inv{2}\left( (\grad \phi_1)^2 + (\grad \phi_2)^2 \right)
+%- \inv{2} \left( m^2 + e^2 A^2 \right) \left( {\phi_1}^2 + {\phi_2}^2 \right)
+%- e A \cdot \left( \phi_2 \grad \phi_1 - \phi_1 \grad \phi_2  \right) 
+%\end{align}
+
+\subsubsection{Euler-Lagrange evaluation}
+
+Evaluating the Euler-Lagrange equations we have
+
+\begin{align*}
+\PD{\phi_1}{\LL} &= \left( -m^2 + e^2 A^\mu A_\mu \right) \phi_1 - e A^\mu \partial_\mu \phi_2 
+\end{align*}
+
+\begin{align*}
+\partial_\mu \PD{(\partial_\mu \phi_1)}{\LL} 
+&=
+\partial_\mu \left( -\partial^\mu \phi_1 + e A^\mu \phi_2 \right) \\
+&=
+-\partial_\mu \partial^\mu \phi_1 
++ e (\partial_\mu A^\mu) \phi_2 
++ e A^\mu \partial_\mu \phi_2 
+\\
+\end{align*}
+
+Adding in the same calculation for variation of $\phi_2$ we have
+
+\begin{align*}
+\left( \partial_\mu \partial^\mu -m^2 + e^2 A^\mu A_\mu \right) \phi_1 &= e (\partial_\mu A^\mu) \phi_2 + 2 e (A^\mu \partial_\mu) \phi_2  \\
+\left( \partial_\mu \partial^\mu -m^2 + e^2 A^\mu A_\mu \right) \phi_2 &= -e (\partial_\mu A^\mu) \phi_1 - 2 e (A^\mu \partial_\mu) \phi_1 
+\end{align*}
+
+%\begin{align}
+%(\grad^2 + m^2 + e^2 A^2) \phi_1 &= e (\grad \cdot A) \phi_2 + 2 e A \cdot (\grad \phi_2) \\
+%(\grad^2 + m^2 + e^2 A^2) \phi_2 &= - e (\grad \cdot A) \phi_1 - 2 e A \cdot (\grad \phi_1)
+%\end{align}
+%
+\subsubsection{Complexify the Euler-Lagrange solutions}
+
+Writing
+
+\begin{align*}
+\phi &= \inv{\sqrt{2}}\left( \phi_1 - i \phi_2 \right) \\
+\phi^\conj &= \inv{\sqrt{2}}\left( \phi_2 + i \phi_2 \right) \\
+\end{align*}
+
+and by adding multiples of the Euler-Lagrange equation evaluations above we have
+
+\begin{align}\label{eqn:byron_fuller_calc_var:complexifiedSolution}
+\left( \partial_\mu \partial^\mu -m^2 + e^2 A^\mu A_\mu \right) \phi &= i e (\partial_\mu A^\mu) \phi + 2 i e (A^\mu \partial_\mu) \phi 
+\end{align}
+
+Noting that $\square^2 = \partial_\mu \partial^\mu$, this does obtain the desired result for the $A=0$ case.
+
+\subsubsection{Complexify the density}
+
+Part of the problem is also to put the density in complex form (albeit only for the $A=0$ case).  We do this by expanding
+
+\begin{align*}
+%(\grad \phi^\conj) \cdot (\grad \phi) 
+&= \partial_\mu \phi^\conj \partial^\mu \phi \\
+&=
+\inv{2} \left( \partial_\mu (\phi_1 + i \phi_2) \partial^\mu (\phi_1 - i \phi_2) \right) \\
+&=
+\inv{2} \left( \partial_\mu \phi_1 \partial^\mu \phi_1 + \partial_\mu \phi_2 \partial^\mu \phi_2 \right) \\
+\end{align*}
+
+and by evaluating
+\begin{align*}
+\phi^\conj \phi 
+&= \inv{2} (\phi_1 + i \phi_2) (\phi_1 - i \phi_2) \\
+&= \inv{2} ({\phi_1}^2 + {\phi_2}^2 )
+\end{align*}
+
+This leaves just the probability current term.  We can get this by expanding
+
+\begin{align*}
+- i A^\mu \left( \phi^\conj \partial_\mu \phi - \phi \partial_\mu \phi^\conj \right)
+&=
+\frac{-i}{2} A^\mu \left( (\phi_1 + i \phi_2) \partial_\mu (\phi_1 - i \phi_2) - (\phi_1 - i \phi_2) \partial_\mu (\phi_1 + i \phi_2) \right) \\
+&=
+A^\mu \left( \phi_2 \partial_\mu \phi_1 - \phi_1 \partial_\mu \phi_2 \right)
+\end{align*}
+
+%(having initially guessed that expanding $\phi^\conj \grad \phi - \phi \grad \phi^\conj$ would do the job).
+
+So the density in terms of the complex field variable is 
+
+%\begin{align}
+%\LL 
+%&=
+%(\grad \phi^\conj) \cdot (\grad \phi)
+%- \left( m^2 + e^2 A^2 \right) \phi^\conj \phi
+%+ i e A \cdot \left( \phi^\conj \grad \phi - \phi \grad \phi^\conj \right)
+%\end{align}
+%
+Or in index form
+
+\begin{align}\label{eqn:byron_fuller_calc_var:densityComplex}
+\LL 
+&=
+-\partial^\mu \phi^\conj \partial_\mu \phi
++ \left( -m^2 + e^2 A^\mu A_\mu \right) \phi^\conj \phi
+- i e A^\mu \left( \phi^\conj \partial_\mu \phi - \phi \partial_\mu \phi^\conj \right)
+\end{align}
+
+Evaluating the Euler-Lagrange equations to verify that no sign errors were made we have
+
+\begin{align*}
+\PD{\phi^\conj}{\LL}
+&=
+\partial_\mu \PD{(\partial_\mu \phi^\conj)}{\LL} \\
+\left( -m^2 + e^2 A^2 \right) \phi 
+- i e A^\mu \partial_\mu \phi
+&=
+\partial_\mu (-\partial^\mu \phi + i e A^\mu \phi) \\
+\end{align*}
+
+Which gives
+\begin{align}
+\left( -m^2 + e^2 A^2 + \partial_\mu \partial^\mu \right) \phi &= i e (\partial_\mu A^\mu + 2 A^\mu \partial_\mu) \phi
+\end{align}
+
+This is consistent with the original result \ref{eqn:byron_fuller_calc_var:complexifiedSolution} based on the two real fields.
+
+\subsubsection{Noether current for global gauge invariance}
+
+To calculate the Noether current that results from a global gauge transformation by a complex phase factor, form
+
+\begin{align*}
+\phi &\rightarrow \phi' = \phi e^{-i e \theta} \\
+\phi^\conj &\rightarrow {\phi'}^\conj = \phi^\conj e^{i e \theta} \\
+\LL_0' &= \LL_0( \phi', {\phi'}^\conj, \partial_\mu \phi', \partial_\mu {\phi'}^\conj )
+\end{align*}
+
+Then 
+
+\begin{align*}
+\frac{d\LL'}{d\theta} 
+&=
+\PD{\phi'}{\LL'} \PD{\theta}{\phi'} 
++\PD{(\partial_\mu \phi')}{\LL'} \PD{\theta}{\partial_\mu \phi'}
++\PD{{\phi'}^\conj}{\LL'} \PD{\theta}{{\phi'}^\conj}
++\PD{(\partial_\mu {\phi')}^\conj}{\LL'} \PD{\theta}{\partial_\mu {\phi'}^\conj} \\
+&=
+\PD{\phi'}{\LL'} \PD{\theta}{\phi'} 
++\PD{(\partial_\mu \phi')}{\LL'} \partial_\mu \PD{\theta}{\phi'}
++\PD{{\phi'}^\conj}{\LL'} \PD{\theta}{{\phi'}^\conj}
++\PD{(\partial_\mu {\phi')}^\conj}{\LL'} \partial_\mu \PD{\theta}{{\phi'}^\conj} \\
+&=
+\partial_\mu \PD{(\partial_\mu \phi')}{\LL'} 
+\PD{\theta}{\phi'} 
++\PD{(\partial_\mu \phi')}{\LL'} \partial_\mu \PD{\theta}{\phi'}
++
+\partial_\mu \PD{(\partial_\mu {\phi'}^\conj)}{\LL'} 
+\PD{\theta}{{\phi'}^\conj}
++\PD{(\partial_\mu {\phi')}^\conj}{\LL'} \partial_\mu \PD{\theta}{{\phi'}^\conj} \\
+&=
+\partial_\mu \left( 
+\PD{(\partial_\mu \phi')}{\LL'} \PD{\theta}{\phi'} 
++
+\PD{(\partial_\mu {\phi'}^\conj)}{\LL'} \PD{\theta}{{\phi'}^\conj}
+\right)
+\end{align*}
+
+Calculating these for the $A=0$ Lagrangian we have
+
+\begin{align*}
+\PD{\theta}{\phi'} 
+&= \PD{\theta}{} \left( \phi e^{-i e \theta} \right) \\
+&= -i e \phi e^{-i e \theta} \\
+\end{align*}
+
+and
+\begin{align*}
+\PD{(\partial_\mu \phi')}{\LL'} &= - \partial^\mu {\phi'}^\conj \\
+\PD{(\partial_\mu {\phi'}^\conj)}{\LL'} &= - \partial^\mu \phi' \\
+\end{align*}
+
+Evaluation at $\theta=0$ for this zero potential Lagrangian we have the Noether conservation statement
+\begin{align*}
+0 
+&=
+\left. \frac{d\LL'}{d\theta} \right\vert_{\theta=0} \\
+&=
+-\partial_\mu \left( \partial^\mu \phi^\conj (-i e \phi ) + \partial^\mu \phi (i e \phi^\conj ) \right)
+\end{align*}
+
+Writing
+
+\begin{align}
+J^\mu \equiv i \left( \phi^\conj \partial^\mu \phi - \phi \partial^\mu \phi^\conj \right)
+\end{align}
+
+this is
+
+\begin{align*}
+0 &= - e \partial_\mu J^\mu
+\end{align*}
+
+Or 
+\begin{align}
+\partial_\mu J^\mu &= 0
+\end{align}
+
+Observe that this same probability current was in the original Lagrangian (with potential), and with this definition one has a slightly
+tidier form for the Lagrangian density \ref{eqn:byron_fuller_calc_var:densityComplex}
+
+\begin{align}\label{eqn:byron_fuller_calc_var:LagrangianWithCurrent}
+\LL 
+&=
+-\partial^\mu \phi^\conj \partial_\mu \phi
++ \left( -m^2 + e^2 A^\mu A_\mu \right) \phi^\conj \phi
+- e A_\mu J^\mu 
+\end{align}
+
+\subsubsection{Interaction via local gauge invariance}
+
+In \chapcite{PJkgNotes} the Klein-Gordon equation of this problem was also explored, including a derivation of the interaction terms
+by introducing a local gauge term.  
+Those results ended up different, and it appears that the difference from the
+interaction terms given in this problem may be due to the choice of the sign of the complex exponential.
+Also note that the KG notes mentioned above use the GA notation with a $+---$ metric,
+so comparing the two requires some care.
+
+Let us try this again, and see if at least results consistent with the original Lagrangian of this problem can be obtained.
+
+\begin{align*}
+\LL_0' 
+&= -m^2 \phi^\conj \phi - 
+\partial^\mu \left( \phi^\conj e^{ie\theta} \right) \partial_\mu \left( \phi e^{-ie\theta} \right) \\
+&= -m^2 \phi^\conj \phi - 
+\left( \partial^\mu \phi^\conj + i e \partial^\mu \theta \right) e^{i e \theta} \left( \partial_\mu \phi - ie \partial_\mu \theta 
+\right) 
+e^{-ie\theta} 
+\\
+&= -m^2 \phi^\conj \phi - 
+\left( 
+\partial^\mu \phi^\conj \partial_\mu \phi 
++ i e \left( A^\mu \phi^\conj \partial_\mu \phi - A_\mu \phi \partial^\mu \phi^\conj \right)
++ e^2 A^\mu A_\mu \phi \phi^\conj
+\right) 
+\\
+\end{align*}
+
+Here the usual identities $A^\mu \equiv \partial^\mu \theta$ and $A_\mu \equiv \partial_\mu \theta$ were used.
+
+This gives
+\begin{align}
+\LL_0'
+&= 
+\left( -e^2 A^\mu A_\mu - m^2 \right) \phi \phi^\conj - \partial^\mu \phi^\conj \partial_\mu \phi - e A_\mu J^\mu
+\end{align}
+
+Note that the $A^2$ sign ends up different than in potential included Lagrangian \ref{eqn:byron_fuller_calc_var:LagrangianWithCurrent}.  Is the original Lagrangian 
+of the problem wrong, or is this something that I have done wrong?
+
+%\bibliographystyle{plainnat}
+%\bibliography{myrefs}
+
+%\end{document}

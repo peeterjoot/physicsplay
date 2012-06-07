@@ -1,0 +1,72 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+
+% http://tex.stackexchange.com/questions/55790/modifying-part-style-in-memoir-class-to-match-ell-chapterstyle
+
+\documentclass[openany]{memoir}
+
+\chapterstyle{ell}
+
+% original:
+%  \renewcommand*{\chapterheadstart}{\begingroup
+%    \vspace*{\beforechapskip}%
+%    \begin{adjustwidth}{}{-\chapindent}%
+%    \hrulefill
+%    \smash{\rule{0.4pt}{15mm}}
+%    \end{adjustwidth}\endgroup}
+
+% answer 1:
+% http://tex.stackexchange.com/questions/55790/modifying-part-style-in-memoir-class-to-match-ell-chapterstyle/55795#55795
+%\renewcommand{\midpartskip}{\begingroup
+% \vspace*{-.4\beforechapskip}
+% \begin{adjustwidth}{}{-.5\chapindent}
+% \hrulefill
+% \smash{\rule{0.4pt}{15mm}}
+% \end{adjustwidth}\endgroup}
+
+%------------------------------------------------------------
+% http://tex.stackexchange.com/questions/55790/modifying-part-style-in-memoir-class-to-match-ell-chapterstyle/55797#55797
+\renewcommand{\midpartskip}{\begingroup%
+ % \vspace*{\beforechapskip}%
+ \begin{adjustwidth}{}{-\chapindent}%
+ \hrulefill%
+ \smash{\rule{0.4pt}{15mm}}%
+ \end{adjustwidth}\endgroup}
+
+\renewcommand\printpartnum{}
+\renewcommand{\partnamenum}{}
+\renewcommand\printpartname{%
+  \begin{adjustwidth}{}{-\chapindent}
+  \hfill
+  \raisebox{11mm}[0pt][0pt]{\partnamefont\partname~\thepart}%
+  \hspace*{1em}
+  \end{adjustwidth}\vspace*{-3.0\onelineskip}}
+%------------------------------------------------------------
+
+% numeric instead of roman numeral for the part num:
+\renewcommand*{\thepart}{\arabic{part}}
+% ell like Fonts: 
+% 
+% ragged left: from http://tex.stackexchange.com/questions/42489/a-modification-of-part-style-in-memoir
+% (moves the text to the right)
+\renewcommand*{\parttitlefont}{\normalfont\huge\sffamily\raggedleft}
+\renewcommand*{\partnumfont}{\normalfont\HUGE\sffamily\raggedleft}
+\renewcommand*{\partnamefont}{\normalfont\HUGE\sffamily\raggedleft}
+% this (without the \beforepartskip of the same form) force the part text higher onto the page.
+\renewcommand{\afterpartskip}{\vspace*{\fill}}
+
+\begin{document}
+
+\chapterstyle{ell}
+\part{A lot of Foo}
+\chapter{Foo}
+
+Foo stuff.
+
+\chapter{Bar}
+
+Bar stuff.
+
+\end{document}

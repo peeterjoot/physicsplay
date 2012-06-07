@@ -44,14 +44,25 @@ my @newDeps = () ;
 
 #print "grep -e includegraphics -e input.*pdf_tex $filebase.$suffix | sed 's/%.*//'\n" ;
 #die ;
-my @ig = split(/[\n\r\l]+/, `grep -e includegraphics -e 'input.*pdf_tex'  $filebase.$suffix | sed 's/%.*//'`) ;
+my $gpat = "-e includegraphics -e imageFigure -e pdfTexFigure -e 'input.*pdf_tex'" ;
+
+# FIXME: want these as dependencies, but not in the git repo:
+#$gpat .= ' -e movieFigure' ;
+
+my @ig = split(/[\n\r\l]+/, `grep $gpat $filebase.$suffix | sed 's/%.*//'`) ;
 foreach (@ig)
 {
    next if ( $_ eq '' ) ;
 
-#print "pre-glob: '$_'\n" ;
-   $_ =~ s/.*{// ;
-   $_ =~ s/}// ;
+   unless ( s/^\\imageFigure{// or
+#        s/^\\movieFigure{// or
+        s/^\\pdfTexFigure{// )
+   {
+      $_ =~ s/.*{// ;
+   }
+
+   s/}.*// ;
+
    $_ =~ s/\.pdf_tex// ;
    $_ .= '.*' ;
 

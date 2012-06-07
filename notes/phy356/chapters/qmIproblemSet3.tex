@@ -1,0 +1,387 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+
+\chapter{PHY356 Problem Set III}
+\label{chap:qmIproblemSet3}
+%\blogpage{http://sites.google.com/site/peeterjoot/math2010/qmIproblemSet3.pdf}
+%\date{Oct 23, 2010}
+
+\section{Problem 1}
+\subsection{Statement}
+
+A particle of mass $m$ is free to move along the x-direction such that $V(X)=0$. The state of the system is represented by the wavefunction Eq. (4.74)
+
+\begin{align}\label{eqn:qmIproblemSet3:1}
+\psi(x,t) = \inv{\sqrt{2\pi}} \int_{-\infty}^\infty dk e^{i k x} e^{- i \omega t} f(k)
+\end{align}
+
+with $f(k)$ given by Eq. (4.59).
+
+\begin{align}\label{eqn:qmIproblemSet3:2}
+f(k) &= N e^{-\alpha k^2}
+\end{align}
+
+Note that I have inserted a $1/\sqrt{2\pi}$ factor above that is not in the text, because otherwise $\psi(x,t)$ will not be unit normalized (assuming $f(k)$ is normalized in wavenumber space).
+
+\begin{itemize}
+\item 
+(a) What is the group velocity associated with this state? 
+\item 
+(b) What is the probability for measuring the particle at position $x=x_0>0$ at time $t=t_0>0$? 
+\item 
+(c) What is the probability per unit length for measuring the particle at position $x=x_0>0$ at time $t=t_0>0$? 
+\item 
+(d) Explain the physical meaning of the above results.
+\end{itemize}
+
+\subsection{Solution}
+\subsubsection{(a).  group velocity}
+
+To calculate the group velocity we need to know the dependence of $\omega$ on $k$.
+
+Let us step back and consider the time evolution action on $\psi(x,0)$.  For the free particle case we have
+
+\begin{align}\label{eqn:qmIproblemSet3:101}
+H = \frac{\Bp^2}{2m} = -\frac{\hbar^2}{2m} \partial_{xx}.
+\end{align}
+
+Writing $N' = N/\sqrt{2\pi}$ we have
+
+\begin{align*}
+-\frac{i t}{\hbar} H \psi(x,0) 
+&= 
+\frac{i t \hbar }{2m} 
+N' \int_{-\infty}^\infty dk (i k)^2 e^{i k x - \alpha k^2} \\
+&= 
+N' \int_{-\infty}^\infty dk \frac{-i t \hbar k^2}{2m} e^{i k x - \alpha k^2}
+\end{align*}
+
+Each successive application of $-iHt/\hbar$ will introduce another power of $-it\hbar k^2/2 m$, so once we sum all the terms of the exponential series $U(t) = e^{-iHt/\hbar}$ we have
+
+\begin{align}\label{eqn:qmIproblemSet3:102}
+\psi(x,t) =
+N' \int_{-\infty}^\infty dk \exp\left( 
+\frac{-i t \hbar k^2}{2m} + i k x - \alpha k^2 \right).
+\end{align}
+
+Comparing with \ref{eqn:qmIproblemSet3:1} we find
+\begin{align}\label{eqn:qmIproblemSet3:103}
+\omega(k) = \frac{\hbar k^2}{2m}.
+\end{align}
+
+This completes this section of the problem since we are now able to calculate the group velocity 
+\begin{align}\label{eqn:qmIproblemSet3:104}
+v_g = \PD{k}{\omega(k)} = \frac{\hbar k}{m}.
+\end{align}
+
+\subsection{(b). What is the probability for measuring the particle at position \texorpdfstring{$x=x_0>0$}{x positive} at time \texorpdfstring{$t=t_0>0$}{greater than zero}?}
+
+In order to evaluate the probability, it looks desirable to evaluate the wave function integral \ref{eqn:qmIproblemSet3:102}.  
+Writing $2 \beta = i/(\alpha + i t \hbar/2m )$, the exponent of that integral is
+
+\begin{align*}
+-k^2 \left( \alpha + \frac{i t \hbar }{2m} \right) + i k x
+&=
+-\left( \alpha + \frac{i t \hbar }{2m} \right) \left( k^2 - \frac{i k x }{\alpha + \frac{i t \hbar }{2m} } \right) \\
+&=
+-\frac{i}{2\beta} \left( (k - x \beta )^2 - x^2 \beta^2 \right)
+\end{align*}
+
+The $x^2$ portion of the exponential
+
+\begin{align*}
+\frac{i x^2 \beta^2}{2\beta} = \frac{i x^2 \beta}{2} = - \frac{x^2 }{4 (\alpha + i t \hbar /2m)}
+\end{align*}
+
+then comes out of the integral.  We can also make a change of variables $q = k - x \beta$ to evaluate the remainder of the Gaussian and are left with
+
+\begin{align}\label{eqn:qmIproblemSet3:107}
+\psi(x,t) =
+N' \sqrt{ \frac{\pi}{\alpha + i t \hbar/2m} } \exp\left( - \frac{x^2 }{4 (\alpha + i t \hbar /2m)} \right).
+\end{align}
+
+Observe that from \ref{eqn:qmIproblemSet3:2} we can compute $N = (2 \alpha/\pi)^{1/4}$, which could be substituted back into \ref{eqn:qmIproblemSet3:107} if desired.
+
+Our probability density is 
+
+\begin{align*}
+\Abs{ \psi(x,t) }^2 
+&=
+\inv{2 \pi} N^2 \Abs{ \frac{\pi}{\alpha + i t \hbar/2m} } \exp\left( - \frac{x^2}{4} \left( 
+\inv{(\alpha + i t \hbar /2m)} + \inv{(\alpha - i t \hbar /2m)} 
+\right) \right) \\
+&=
+\inv{2 \pi} \sqrt{\frac{2 \alpha}{\pi} } \frac{\pi}{\sqrt{\alpha^2 + (t \hbar/2m)^2 }} \exp\left( - \frac{x^2}{4} 
+\inv{\alpha^2 + (t \hbar/2m)^2 } \left( 
+\alpha - i t \hbar /2m + \alpha + i t \hbar /2m 
+\right)
+\right) \\
+&=
+\end{align*}
+
+With a final regrouping of terms, this is
+
+\begin{align}\label{eqn:qmIproblemSet3:110}
+\Abs{ \psi(x,t) }^2 =
+\sqrt{\frac{ \alpha }{ 2 \pi (\alpha^2 + (t \hbar/2m)^2 }) }
+\exp\left( - \frac{x^2}{2} 
+\frac{\alpha}{\alpha^2 + (t \hbar/2m)^2 } 
+\right).
+\end{align}
+
+As a sanity check we observe that this integrates to unity for all $t$ as desired.  The probability that we find the particle at position $x > x_0$ is then
+
+\begin{align}\label{eqn:qmIproblemSet3:111}
+P_{x>x_0}(t) = \sqrt{\frac{ \alpha }{ 2 \pi (\alpha^2 + (t \hbar/2m)^2 }) }
+\int_{x=x_0}^\infty dx \exp\left( - \frac{x^2}{2} 
+\frac{\alpha}{\alpha^2 + (t \hbar/2m)^2 } 
+\right)
+\end{align}
+
+The only simplification we can make is to rewrite this in terms of the complementary error function
+
+\begin{align}\label{eqn:qmIproblemSet3:112}
+\erfc(x) = \frac{2}{\sqrt{\pi}} \int_x^\infty e^{-t^2} dt.
+\end{align}
+
+Writing
+
+\begin{align}\label{eqn:qmIproblemSet3:113}
+\beta(t) = \frac{\alpha}{\alpha^2 + (t \hbar/2m)^2 },
+\end{align}
+
+we have
+\begin{align}\label{eqn:qmIproblemSet3:114}
+P_{x>x_0}(t_0) = \inv{2} \erfc \left( \sqrt{\beta(t_0)/2} x_0 \right)
+\end{align}
+
+Sanity checking this result, we note that since $\erfc(0) = 1$ the probability for finding the particle in the $x>0$ range is $1/2$ as expected.
+
+
+\subsection{(c). What is the probability per unit length for measuring the particle at position 
+\texorpdfstring{$x=x_0>0$}{x positive} at time \texorpdfstring{$t=t_0>0$}{greater than zero}?}
+
+This unit length probability is thus
+
+\begin{align}\label{eqn:qmIproblemSet3:115}
+P_{x>x_0+1/2}(t_0) - P_{x>x_0-1/2}(t_0) 
+&=
+\inv{2} \erfc\left( \sqrt{\frac{\beta(t_0)}{2}} \left(x_0+\inv{2} \right) \right) 
+-\inv{2} \erfc\left( \sqrt{\frac{\beta(t_0)}{2}} \left(x_0-\inv{2} \right) \right) 
+\end{align}
+
+\subsection{(d). Explain the physical meaning of the above results}
+
+To get an idea what the group velocity means, observe that we can write our wavefunction \ref{eqn:qmIproblemSet3:1} as
+
+\begin{align}\label{eqn:qmIproblemSet3:140}
+\psi(x,t) = \inv{\sqrt{2\pi}} \int_{-\infty}^\infty dk e^{i k (x - v_g t)} f(k)
+\end{align}
+
+We see that the phase coefficient of the Gaussian $f(k)$ ``moves'' at the rate of the group velocity $v_g$.  Also recall that in the text it is noted that the time dependent term \ref{eqn:qmIproblemSet3:113} can be expressed in terms of position and momentum uncertainties $(\Delta x)^2$, and $(\Delta p)^2 = \hbar^2 (\Delta k)^2$.  That is
+
+\begin{align}\label{eqn:qmIproblemSet3:116}
+\inv{\beta(t)} = (\Delta x)^2 + \frac{(\Delta p)^2}{m^2} t^2 \equiv (\Delta x(t))^2
+\end{align}
+
+This makes it evident that the probability density flattens and spreads over time with the rate equal to the uncertainty of the group velocity $\Delta p/m = \Delta v_g$ (since $v_g = \hbar k/m$).  It is interesting that something as simple as this phase change results in a physically measurable phenomena.  We see that a direct result of this linear with time phase change, we are less able to find the particle localized around it is original time $x = 0$ position as more time elapses.
+
+\section{Problem 2}
+
+\subsection{Statement}
+A particle with intrinsic angular momentum or spin $s=1/2$ is prepared in the spin-up with respect to the z-direction state $\ket{f}=\ket{z+}$. Determine
+
+\begin{align}\label{eqn:qmIproblemSet3:3}
+\left(\bra{f} \left( S_z - \bra{f} S_z \ket{f} \BOne \right)^2 \ket{f} \right)^{1/2}
+\end{align}
+
+and 
+
+\begin{align}\label{eqn:qmIproblemSet3:4}
+\left(\bra{f} \left( S_x - \bra{f} S_x \ket{f} \BOne \right)^2 \ket{f} \right)^{1/2}
+\end{align}
+
+and explain what these relations say about the system.
+
+\subsection{Solution:  Uncertainty of \texorpdfstring{$S_z$}{S z} with respect to \texorpdfstring{$\ket{z+}$}{ket z plus}}
+
+%%%%To start, we note that we have the matrix representations
+%%%%
+%%%%\begin{align}\label{eqn:qmIproblemSet3:5}
+%%%%S_z &= 
+%%%%\frac{\hbar}{2}
+%%%%\PauliZ \\
+%%%%\ket{f} = \ket{z+} &= 
+%%%%\begin{bmatrix}
+%%%%1 \\
+%%%%0
+%%%%\end{bmatrix}.
+%%%%\end{align}
+%%%%
+%%%%In the matrix representation, the expectation values are straightforward to calculate.  For the expectation of $S_z$ with respect to this state we have
+%%%%
+%%%%\begin{align*}
+%%%%\bra{f} S_z \ket{f} 
+%%%%&=
+%%%%\frac{\hbar}{2}
+%%%%\begin{bmatrix}
+%%%%1 & 0
+%%%%\end{bmatrix}
+%%%%\PauliZ
+%%%%\begin{bmatrix}
+%%%%1 \\
+%%%%0
+%%%%\end{bmatrix} \\
+%%%%&=
+%%%%\frac{\hbar}{2}
+%%%%\begin{bmatrix}
+%%%%1 & 0
+%%%%\end{bmatrix}
+%%%%\begin{bmatrix}
+%%%%1 \\
+%%%%0
+%%%%\end{bmatrix} \\
+%%%%&=
+%%%%\frac{\hbar}{2}
+%%%%\end{align*}
+%%%%
+%%%% SNIP.
+%%%%
+%%%%We can next compute $S_z - \bra{f} S_z \ket{f} \BOne$
+%%%%
+%%%%\begin{align*}
+%%%%S_z - \bra{f} S_z \ket{f} \BOne
+%%%%&=
+%%%%\frac{\hbar}{2} \PauliZ - \frac{\hbar}{2} 
+%%%%\begin{bmatrix}
+%%%%1 & 0 \\
+%%%%0 & 1
+%%%%\end{bmatrix}
+%%%%&=
+%%%%\hbar
+%%%%\begin{bmatrix}
+%%%%0 & 0 \\
+%%%%0 & 1 
+%%%%\end{bmatrix}.
+%%%%\end{align*}
+%%%%
+%%%%The matrix factor is a projector, squaring to itself, so we have
+%%%%
+%%%%\begin{align}\label{eqn:qmIproblemSet3:6}
+%%%%\bra{f} \left( S_z - \bra{f} S_z \ket{f} \BOne \right)^2 \ket{f} 
+%%%%&=
+%%%%\hbar^2 
+%%%%\begin{bmatrix}
+%%%%1 & 0
+%%%%\end{bmatrix}
+%%%%\begin{bmatrix}
+%%%%0 & 0 \\
+%%%%0 & 1
+%%%%\end{bmatrix}
+%%%%\begin{bmatrix}
+%%%%1 \\
+%%%%0
+%%%%\end{bmatrix}
+%%%%= 0
+%%%%\end{align}
+%%%%XX
+
+Noting that $S_z \ket{f} = S_z \ket{z+} = \hbar/2 \ket{z+}$ we have
+
+\begin{align}\label{eqn:qmIproblemSet3:10}
+\bra{f} S_z \ket{f} = \frac{\hbar}{2} 
+\end{align}
+
+The average outcome for many measurements of the physical quantity associated with the operator $S_z$ when the system has been prepared in the state $\ket{f} = \ket{z+}$ is $\hbar/2$.
+
+\begin{align}\label{eqn:qmIproblemSet3:11}
+\Bigl(S_z - \bra{f} S_z \ket{f} \BOne \Bigr) \ket{f}
+&= 
+\frac{\hbar}{2} \ket{f} 
+-\frac{\hbar}{2} \ket{f} = 0
+\end{align}
+
+We could also compute this from the matrix representations, but it is slightly more work.
+
+Operating once more with $S_z - \bra{f} S_z \ket{f} \BOne$ on the zero ket vector still gives us zero, so we have zero in the root for \ref{eqn:qmIproblemSet3:3}
+\begin{align}\label{eqn:qmIproblemSet3:3b}
+\left(\bra{f} \left( S_z - \bra{f} S_z \ket{f} \BOne \right)^2 \ket{f} \right)^{1/2} = 0
+\end{align}
+
+
+%In the variance calculation above we have the operator $D = S_z - \bra{f} S_z \ket{S_z} \BOne$, and its square.  Both $D$ and $D^2$ commute with $S_z$, and thus have the same eigenstates as $S_z$.  In particular when the system is prepared in the state $\ket{z+}$, no measurement of the physical quantity We have a physical quantity associated with the operator $D$
+%Each of the operators involved in the variance calculation above 
+
+%Observe that we are looking at the expectation value of a new operator, say, $V = (S_z - \bra{f} S_z \ket{f})^2$.  Also observe that $V$ commutes with $S_z$, and thus shares the same eigenstates.  A measurement 
+
+What does \ref{eqn:qmIproblemSet3:3b} say about the state of the system?  Given many measurements of the physical quantity associated with the operator $V = (S_z - \bra{f} S_z \ket{f} \BOne)^2$, where the initial state of the system is always $\ket{f} = \ket{z+}$, then the average of the measurements of the physical quantity associated with $V$ is zero.  We can think of the operator $V^{1/2} = S_z - \bra{f} S_z \ket{f} \BOne$ as a representation of the observable, ``how different is the measured result from the average $\bra{f} S_z \ket{f}$''.  
+
+So, given a system prepared in state $\ket{f} = \ket{z+}$, and performance of repeated measurements capable of only examining spin-up, we find that the system is never any different than its initial spin-up state.  We have no uncertainty that we will measure any difference from spin-up on average, when the system is prepared in the spin-up state.
+
+\subsection{Solution:  Uncertainty of \texorpdfstring{$S_x$}{S x} with respect to \texorpdfstring{$\ket{z+}$}{ket z plus}}
+
+For this second part of the problem, we note that we can write
+
+\begin{align}\label{eqn:qmIproblemSet3:20}
+\ket{f} = \ket{z+} = \inv{\sqrt{2}} ( \ket{x+} + \ket{x-} ).
+\end{align}
+
+So the expectation value of $S_x$ with respect to this state is
+\begin{align*}
+\bra{f} S_x \ket{f}
+&=
+\inv{2}
+( \ket{x+} + \ket{x-} ) S_x ( \ket{x+} + \ket{x-} ) \\
+&=
+\hbar 
+( \ket{x+} + \ket{x-} ) ( \ket{x+} - \ket{x-} ) \\
+&=
+\hbar 
+( 1 + 0 + 0 -1 ) \\
+&= 0
+\end{align*}
+
+After repeated preparation of the system in state $\ket{f}$, the average measurement of the physical quantity associated with operator $S_x$ is zero.  In terms of the eigenstates for that operator $\ket{x+}$ and $\ket{x-}$ we have equal probability of measuring either given this particular initial system state.
+
+For the variance calculation, this reduces our problem to the calculation of $\bra{f} S_x^2 \ket{f}$, which is
+
+\begin{align*}
+\bra{f} S_x^2 \ket{f} 
+&=
+\inv{2} \left( \frac{\hbar}{2} \right)^2 
+( \ket{x+} + \ket{x-} ) ( (+1)^2 \ket{x+} + (-1)^2 \ket{x-} ) \\
+&=
+\left( \frac{\hbar}{2} \right)^2,
+\end{align*}
+
+so for \ref{eqn:qmIproblemSet3:4b} we have
+
+\begin{align}\label{eqn:qmIproblemSet3:4b}
+\left(\bra{f} \left( S_x - \bra{f} S_x \ket{f} \BOne \right)^2 \ket{f} \right)^{1/2} = \frac{\hbar}{2}
+\end{align}
+
+The average of the absolute magnitude of the physical quantity associated with operator $S_x$ is found to be $\hbar/2$ when repeated measurements are performed given a system initially prepared in state $\ket{f} = \ket{z+}$.  We saw that the average value for the measurement of that physical quantity itself was zero, showing that we have equal probabilities of measuring either $\pm \hbar/2$ for this experiment.  A measurement that would show the system was in the x-direction spin-up or spin-down states would find that these states are equi-probable.
+
+\section{Grading comments}
+
+I lost one mark on the group velocity response.  Instead of \ref{eqn:qmIproblemSet3:104b} he wanted
+
+\begin{align}\label{eqn:qmIproblemSet3:104b}
+v_g = {\left. \PD{k}{\omega(k)} \right\vert}_{k = k_0}= \frac{\hbar k_0}{m} = 0
+\end{align}
+
+since $f(k)$ peaks at $k=0$.
+
+I will have to go back and think about that a bit, because I am unsure of the last bits of the reasoning there.
+
+I also lost 0.5 and 0.25 (twice) because I did not explicitly state that the probability that the particle is at $x_0$, a specific single point, is zero.  I thought that was obvious and did not have to be stated, but it appears expressing this explicitly is what he was looking for.
+
+Curiously, one thing that I did not loose marks on was, the wrong answer for the probability per unit length.  What he was actually asking for was the following
+
+\begin{align}\label{eqn:qmIproblemSet3:1000}
+\lim_{\epsilon \rightarrow 0} \inv{\epsilon} \int_{x_0 - \epsilon/2}^{x_0 + \epsilon/2} \Abs{ \Psi(x_0, t_0) }^2 dx = \Abs{\Psi(x_0, t_0)}^2
+\end{align}
+
+That is a whole lot more sensible seeming quantity to calculate than what I did,  but I do not think that I can be faulted too much since the phrase was never used in the text nor in the lectures.

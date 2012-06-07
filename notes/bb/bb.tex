@@ -1,0 +1,211 @@
+\documentclass[ twoside,
+                openright,
+                numbers=noenddot,
+                headinclude,
+                footinclude=true,
+                cleardoublepage=empty,
+                abstractoff, 
+                BCOR=5mm,
+                paper=letter,
+                fontsize=11pt,
+                american ]{scrreprt}
+
+\PassOptionsToPackage{svgnames}{xcolor}
+
+\PassOptionsToPackage{eulerchapternumbers,
+                      pdfspacing,
+% hacked .sty for these three:
+a5paper=false,
+nochapters=true,
+drafting=false,
+% 
+                      subfig,beramono}{classicthesis}                           
+\usepackage{ifthen}
+\newboolean{enable-backrefs} 
+\setboolean{enable-backrefs}{true} 
+
+%------------------------------------------------------------
+
+%\newcommand{\@revisionInfo}{}
+%\newcommand{\revisionInfo}[1]{\renewcommand{\@revisionInfo}{@date\quad{#1}}}
+%
+%\newcommand{\@gitRevisionInfo}{}
+%\newcommand{\gitRevisionInfo}[1]{\renewcommand{\@gitRevisionInfo}{\input{./.revinfo/lastCommit.tex} #1.tex}}
+%
+%\newcommand{\@useCCL}{}
+%\newcommand{\useCCL}[0]{\renewcommand{\@useCCL}{
+%         {\includegraphics[height=1em]{ccl2}\par}
+%}}
+%
+%\newcommand{\@blogpage}{0}
+%\newcommand{\blogpage}[1]{\renewcommand{\@blogpage}{#1}}
+%
+%\newcommand{\@email}{{\em No email address given}}
+%\newcommand{\email}[1]{\renewcommand{\@email}{{#1}}}
+%
+%\newcommand{\@keywords}[1]{}
+%\newcommand{\keywords}[1]{\renewcommand{\@keywords}{{\par\noindent {\small{\em Keywords\/}: {#1}}}}}
+%
+%\author{Peeter Joot}
+%\email{peeter.joot@gmail.com}
+%\blogpage{http://sites.google.com/site/peeterjoot2/math2012/template.pdf}
+%\date{June XX, 2012}
+%%\gitRevisionInfo{template}
+%\keywords{}
+
+\newcommand{\myTitle}{My title\xspace}
+\newcommand{\mySubtitle}{my subtitle\xspace}
+\newcommand{\myName}{Peeter Joot\ peeter.joot@gmail.com\xspace}
+\newcommand{\myTime}{Dec 2012}
+\newcommand{\myVersion}{version v.1\xspace}
+
+%------------------------------------------------------------
+% this part came from Eli's eliblog.cls
+%
+%
+%\RequirePackage{ifthen}
+%
+%\titleformat{\section}[hang]
+%{\normalfont\sffamily}
+%{\thesection .}{.5em}{\bfseries}
+%
+%\titleformat{\subsection}[hang]
+%{\normalfont\itshape}
+%{\thesubsection .}{.5em}{\bfseries}
+%
+%\renewcommand{\maketitle}{%
+%   \begin{flushleft}%
+%      {\sffamily\Large\bfseries\@title\par}%
+%      \medskip
+%\ifthenelse{\equal{\@blogpage}{0}}{}{
+%      {\large{\texttt{\@blogpage}}\par}%
+%      \medskip
+%}
+%      {\large\@author\ ---\ \@email\par}%
+%         {\itshape\@revisionInfo\@gitRevisionInfo\par}%
+%         \medskip\@useCCL
+%      \@keywords
+%      \bigskip\hrule\vspace*{0.5pc}%
+%   \end{flushleft}%
+%}
+%
+%------------------------------------------------------------
+
+\newcounter{dummy} % necessary for correct hyperlinks (to index, bib, etc.)
+\newlength{\abcd} % for ab..z string length calculation
+\providecommand{\mLyX}{L\kern-.1667em\lower.25em\hbox{Y}\kern-.125emX\@}
+
+\PassOptionsToPackage{latin9}{inputenc}   
+ \usepackage{inputenc}
+
+\usepackage{babel}
+
+\PassOptionsToPackage{square,numbers}{natbib}
+ \usepackage{natbib}
+
+\PassOptionsToPackage{fleqn}{amsmath}
+ \usepackage{amsmath}
+
+\PassOptionsToPackage{T1}{fontenc} 
+   \usepackage{fontenc}                 
+\usepackage{xspace} 
+\usepackage{mparhack} 
+\usepackage{fixltx2e} 
+
+\usepackage{caption}
+\captionsetup{format=hang,font=small}
+\usepackage{subfig}  
+
+\PassOptionsToPackage{pdftex,hyperfootnotes=false,pdfpagelabels}{hyperref}
+   \usepackage{hyperref}  % backref linktocpage pagebackref
+\pdfcompresslevel=9
+\pdfadjustspacing=1 
+\PassOptionsToPackage{pdftex}{graphicx}
+   \usepackage{graphicx} 
+
+\hypersetup{
+    colorlinks=true, linktocpage=true, pdfstartpage=3, pdfstartview=FitV,
+    breaklinks=true, pdfpagemode=UseNone, pageanchor=true, pdfpagemode=UseOutlines,
+    plainpages=false,
+%    bookmark=false,
+    %bookmarksnumbered, bookmarksopen=true, bookmarksopenlevel=1,
+    hypertexnames=true, pdfhighlight=/O,
+    urlcolor=webbrown, linkcolor=RoyalBlue, citecolor=webgreen, 
+    %pdftitle={\myTitle},
+    %pdfauthor={\textcopyright\ \myName},
+    %pdfkeywords=,
+    %pdfcreator={pdfLaTeX},
+    %pdfproducer={LaTeX with hyperref and classicthesis}
+}   
+
+%\listfiles
+
+\usepackage{classicthesis} 
+
+%----------------------------------------------------------------
+% hacking of classicthesis style for color:
+
+\titleformat{\chapter}[display]%
+{\relax}{\mbox{}\oldmarginpar{\vspace*{-3\baselineskip}\color{DarkOliveGreen}\chapterNumber}}{0pt}%
+{\color{Maroon}\raggedright\spacedallcaps}[\normalsize\vspace*{.8\baselineskip}\titlerule]%
+
+% for "article" mode, don't use chapter number in heading
+%     \titleformat{\chapter}[display]%
+%        {\relax}{\mbox{}\oldmarginpar{\vspace*{-3\baselineskip}\color{DarkOliveGreen}\chapterNumber\thechapter}}{0pt}%
+%        {\color{Maroon}\raggedright\spacedallcaps}[\normalsize\vspace*{.8\baselineskip}\titlerule]%
+
+     \titleformat{\section}
+        {\relax}{\color{DarkOliveGreen}{\textsc{\MakeTextLowercase{\thesection}}}}{1em}{\color{Maroon}\spacedlowsmallcaps}
+
+     \titleformat{\subsection}
+        {\relax}{\color{DarkOliveGreen}{\textsc{\MakeTextLowercase{\thesubsection}}}}{1em}{\color{Maroon}\normalsize\itshape}
+
+     \titleformat{\subsubsection}
+        {\relax}{\color{DarkOliveGreen}{\textsc{\MakeTextLowercase{\thesubsubsection}}}}{1em}{\color{Maroon}\normalsize\itshape}
+
+%----------------------------------------------------------------
+
+\usepackage[left=3cm,right=3cm]{geometry}
+
+\usepackage{mycommon}
+
+\begin{document}
+\maketitle{}
+
+\frenchspacing
+\raggedbottom
+\selectlanguage{american} 
+\pagestyle{plain}
+\pagestyle{scrheadings}
+
+\chapter{Foo}
+   \section{Goo}
+Foo goo moo.
+\begin{equation}
+a = 1
+\end{equation}
+\begin{dmath}
+b = 
+1 + 2 + 3 + 4 +
+1 + 2 + 3 + 4 +
+1 + 2 + 3 + 4 +
+1 + 2 + 3 + 4 +
+1 + 2 + 3 + 4 +
+1 + 2 + 3 + 4 +
+1 + 2 + 3 + 4 +
+1 + 2 + 3 + 4 +
+1 + 2 + 3 + 4
+\end{dmath}
+\clearpage
+Foo goo moo.
+Foo goo moo.
+
+%   \section{Solutions}
+%      \shipoutAnswer
+
+%\manualmark
+%\markboth{\spacedlowsmallcaps{\bibname}}{\spacedlowsmallcaps{\bibname}} 
+%
+%\bibliographystyle{plainnat}
+%\bibliography{Bibliography}
+\end{document}

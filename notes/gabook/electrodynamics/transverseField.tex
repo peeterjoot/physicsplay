@@ -1,0 +1,304 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+
+% 
+% 
+%\input{../peeter_prologue.tex}
+
+\chapter{Transverse electric and magnetic fields}
+\label{chap:transverseField}
+
+%\blogpage{http://sites.google.com/site/peeterjoot/math2009/transverseField.pdf}
+
+%%\date{July 30, 2009}
+%%\revisionInfo{$RCSfile: transverseField.tex,v $ Last $Revision: 1.12 $ $Date: 2009/08/06 09:35:17 $}
+
+%\date{July 30, 2009.  $RCSfile: transverseField.tex,v $ Last $Revision: 1.12 $ $Date: 2009/08/06 09:35:17 $}
+
+\beginArtWithToc
+
+\section{Motivation}
+
+In Eli's \href{http://behindtheguesses.blogspot.com/2009/07/transverse-electric-and-magnetic-fields.html}{Transverse Electric and Magnetic Fields in a Conducting Waveguide} blog entry he works through the algebra calculating the transverse components, the perpendicular to the propagation direction components.
+
+This should be possible using Geometric Algebra too, and trying this made for a good exercise.
+
+\section{Setup}
+
+The starting point can be the same, the source free Maxwell's equations.  Writing $\partial_0 = (1/c) \partial/{\partial t}$, we have
+
+\begin{align}\label{eqn:transverseField:blah1}
+\spacegrad \cdot \BE &= 0 \\
+\spacegrad \cdot \BB &= 0 \\
+\spacegrad \cross \BE &= - \partial_0 \BB \\
+\spacegrad \cross \BB &= \mu \epsilon \partial_0 \BE
+\end{align}
+
+Multiplication of the last two equations by the spatial pseudoscalar $I$, and using $I \Ba \cross \Bb = \Ba \wedge \Bb$, the curl equations can be written in their dual bivector form
+
+\begin{align}\label{eqn:transverseField:blah2}
+\spacegrad \wedge \BE &= - \partial_0 I \BB \\
+\spacegrad \wedge \BB &= \mu \epsilon \partial_0 I \BE
+\end{align}
+
+Now adding the dot and curl equations using $\Ba \Bb = \Ba \cdot \Bb + \Ba \wedge \Bb$ eliminates the cross products
+
+\begin{align}\label{eqn:transverseField:twoEquations}
+\spacegrad \BE &= - \partial_0 I \BB \\
+\spacegrad \BB &= \mu \epsilon \partial_0 I \BE
+\end{align}
+
+These can be further merged without any loss, into the GA first order equation
+
+\begin{align}\label{eqn:transverseField:maxwell}
+\left(\spacegrad + \frac{\sqrt{\mu\epsilon}}{c}\partial_t\right) \left(\BE + \frac{I\BB}{\sqrt{\mu\epsilon}} \right) = 0
+\end{align}
+
+We are really after solutions to the total multivector field $F = \BE + I \BB/\sqrt{\mu\epsilon}$.  For this problem where separate electric and magnetic field components are desired, working from (\ref{eqn:transverseField:twoEquations}) is perhaps what we want?
+
+Following Eli and Jackson, write $\spacegrad = \spacegrad_t + \zcap \partial_z$, and 
+
+\begin{align}\label{eqn:transverseField:blah3}
+\BE(x,y,z,t) &= \BE(x,y) e^{\pm i k z - i \omega t} \\
+\BB(x,y,z,t) &= \BB(x,y) e^{\pm i k z - i \omega t}
+\end{align}
+
+Evaluating the $z$ and $t$ partials we have
+\begin{align}\label{eqn:transverseField:blah4}
+(\spacegrad_t \pm i k \zcap) \BE(x,y) &= \frac{i\omega}{c} I \BB(x,y) \\
+(\spacegrad_t \pm i k \zcap) \BB(x,y) &= -\mu \epsilon \frac{i\omega}{c} I \BE(x,y)
+\end{align}
+
+For the remainder of these notes, the explicit $(x,y)$ dependence will be assumed for $\BE$ and $\BB$.
+
+An obvious thing to try with these equations is just substitute one into the other.  If that is done we get the pair of second order harmonic equations
+
+\begin{align}\label{eqn:transverseField:blah5}
+{\spacegrad_t}^2
+\begin{pmatrix}\BE \\ \BB \end{pmatrix}
+= \left( k^2 - \mu \epsilon \frac{\omega^2}{c^2} \right)
+\begin{pmatrix}\BE \\ \BB \end{pmatrix}
+\end{align}
+
+One could consider the problem solved here.  Separately equating both sides of this equation to zero, we have the $k^2 = \mu\epsilon \omega^2/c^2$ constraint on the wave number and angular velocity, and the second order Laplacian on the left hand side is solved by the real or imaginary parts of any analytic function.  Especially when one considers that we are after a multivector field that of intrinsic complex nature.
+
+However, that is not really what we want as a solution.  Doing the same on the unified Maxwell equation (\ref{eqn:transverseField:maxwell}), we have
+
+\begin{align}\label{eqn:transverseField:max2}
+\left(\spacegrad_t \pm i k \zcap - \sqrt{\mu\epsilon}\frac{i\omega}{c}\right) \left(\BE + \frac{I\BB}{\sqrt{\mu\epsilon}} \right) = 0
+\end{align}
+
+Selecting scalar, vector, bivector and trivector grades of this equation produces the following respective relations between the various components
+
+\begin{align}\label{eqn:transverseField:blah6}
+0 = \gpgradezero{\cdots} &= \spacegrad_t \cdot \BE \pm i k \zcap \cdot \BE \\
+0 = \gpgradeone{\cdots} &= I \spacegrad_t \wedge \BB/\sqrt{\mu\epsilon} \pm i I k \zcap \wedge \BB/\sqrt{\mu\epsilon} - i \sqrt{\mu\epsilon}\frac{\omega}{c} \BE \\
+0 = \gpgradetwo{\cdots} &= \spacegrad_t \wedge \BE \pm i k \zcap \wedge \BE - i \frac{\omega}{c} I \BB \\
+0 = \gpgradethree{\cdots} &= I \spacegrad_t \cdot \BB/\sqrt{\mu\epsilon} \pm i I k \zcap \cdot \BB/\sqrt{\mu\epsilon}
+\end{align}
+
+From the scalar and pseudoscalar grades we have the propagation components in terms of the transverse ones
+
+\begin{align}\label{eqn:transverseField:blah7}
+E_z &= \frac{\pm i}{k} \spacegrad_t \cdot \BE_t \\
+B_z &= \frac{\pm i}{k} \spacegrad_t \cdot \BB_t 
+\end{align}
+
+But this is the opposite of the relations that we are after.  On the other hand from the vector and bivector grades we have
+
+\begin{align}\label{eqn:transverseField:messy}
+i \frac{\omega}{c} \BE &= -\inv{\mu\epsilon}\left(\spacegrad_t \cross \BB_z \pm i k \zcap \cross \BB_t\right) \\
+i \frac{\omega}{c} \BB &= \spacegrad_t \cross \BE_z \pm i k \zcap \cross \BE_t
+\end{align}
+
+\section{A clue from the final result}
+
+From (\ref{eqn:transverseField:messy}) and a lot of messy algebra we should be able to get the transverse equations.  Is there a slicker way?  The end result that Eli obtained suggests a path.  That result was
+
+\begin{align}\label{eqn:transverseField:blah8}
+\BE_t = \frac{i}{\mu\epsilon \frac{\omega^2}{c^2} - k^2} \left( \pm k \spacegrad_t E_z - \frac{\omega}{c} \zcap \cross \spacegrad_t B_z \right)
+\end{align}
+
+The numerator looks like it can be factored, and after a bit of playing around a suitable factorization can be obtained:
+
+\begin{align*}
+\gpgradeone{ \left( \pm k + \frac{\omega}{c} \zcap \right) \spacegrad_t \zcap \left( \BE_z + I \BB_z \right) }
+&=
+\gpgradeone{ \left( \pm k + \frac{\omega}{c} \zcap \right) \spacegrad_t \left( E_z + I B_z \right) } \\
+&=
+\pm k \spacegrad E_z + \frac{\omega}{c} \gpgradeone{ I \zcap \spacegrad_t B_z } \\
+&=
+\pm k \spacegrad E_z + \frac{\omega}{c} I \zcap \wedge \spacegrad_t B_z \\
+&=
+\pm k \spacegrad E_z - \frac{\omega}{c} \zcap \cross \spacegrad_t B_z \\
+\end{align*}
+
+Observe that the propagation components of the field $\BE_z + I\BE_z$ can be written in terms of the symmetric product
+
+\begin{align*}
+\inv{2} \left( \zcap (\BE + I\BB) + (\BE + I\BB) \zcap \right)
+&=
+\inv{2} \left( \zcap \BE + \BE \zcap \right) + \frac{I}{2} \left( \zcap \BB + \BB \zcap + I \right) \\
+&=
+\zcap \cdot \BE + I \zcap \cdot \BB
+\end{align*}
+
+Now the total field in CGS units was actually $F = \BE + I \BB/\sqrt{\mu\epsilon}$, not $F = \BE + I \BB$, so the factorization above is not exactly what we want.   It does however, provide the required clue.  We probably get the result we want by forming the symmetric product (a hybrid dot product selecting both the vector and bivector terms).
+
+\section{Symmetric product of the field with the direction vector}
+
+Rearranging Maxwell's equation (\ref{eqn:transverseField:max2}) in terms of the transverse gradient and the total field $F$ we have
+
+\begin{align}\label{eqn:transverseField:blah9}
+\spacegrad_t F = \left( \mp i k \zcap + \sqrt{\mu\epsilon}\frac{i\omega}{c}\right) F
+\end{align}
+
+With this our symmetric product is
+
+\begin{align*}
+\spacegrad_t ( F \zcap + \zcap F) 
+&= (\spacegrad_t F) \zcap - \zcap (\spacegrad_t F) \\
+&=
+\left( \mp i k \zcap + \sqrt{\mu\epsilon}\frac{i\omega}{c}\right) F \zcap
+- \zcap \left( \mp i k \zcap + \sqrt{\mu\epsilon}\frac{i\omega}{c}\right) F \\
+&=
+i \left( \mp k \zcap + \sqrt{\mu\epsilon}\frac{\omega}{c}\right) (F \zcap - \zcap F) \\
+\end{align*}
+
+The antisymmetric product on the right hand side should contain the desired transverse field components.  To verify multiply it out
+
+\begin{align*}
+\inv{2}(F \zcap - \zcap F)  
+&=
+\inv{2}\left( \left(\BE + I \BB/\sqrt{\mu\epsilon}\right) \zcap - \zcap \left(\BE + I \BB/\sqrt{\mu\epsilon}\right) \right)  \\
+&=
+\BE \wedge \zcap + I \BB/\sqrt{\mu\epsilon} \wedge \zcap \\
+&=
+(\BE_t + I \BB_t/\sqrt{\mu\epsilon}) \zcap \\
+\end{align*}
+
+Now, with multiplication by the conjugate quantity $-i(\pm k \zcap + \sqrt{\mu\epsilon}\omega/c)$, we can extract these transverse components.
+
+\begin{align*}
+\left( \pm k \zcap + \sqrt{\mu\epsilon}\frac{\omega}{c}\right) \left( \mp k \zcap + \sqrt{\mu\epsilon}\frac{\omega}{c}\right) (F \zcap - \zcap F) &=
+\left( -k^2 + {\mu\epsilon}\frac{\omega^2}{c^2}\right) (F \zcap - \zcap F) 
+\end{align*}
+
+Rearranging, we have the transverse components of the field
+
+\begin{align}\label{eqn:transverseField:blah10}
+(\BE_t + I \BB_t/\sqrt{\mu\epsilon}) \zcap &=
+\frac{i}{k^2 - \mu\epsilon\frac{\omega^2}{c^2}} \left( \pm k \zcap + \sqrt{\mu\epsilon}\frac{\omega}{c}\right) \spacegrad_t \inv{2}( F \zcap + \zcap F) 
+\end{align}
+
+With left multiplication by $\zcap$, and writing $F = F_t + F_z$ we have
+
+\begin{align}\label{eqn:transverseField:transverseBoth}
+F_t &= \frac{i}{k^2 - \mu\epsilon\frac{\omega^2}{c^2}} \left( \pm k \zcap + \sqrt{\mu\epsilon}\frac{\omega}{c}\right) \spacegrad_t F_z
+\end{align}
+
+While this is a complete solution, we can additionally extract the electric and magnetic fields to compare results with Eli's calculation.  We take 
+vector grades to do so with $\BE_t = \gpgradeone{F_t}$, and $\BB_t/\sqrt{\mu\epsilon} = \gpgradeone{-I F_t}$.   For the transverse electric field
+
+\begin{align*}
+\gpgradeone{ \left( \pm k \zcap + \sqrt{\mu\epsilon}\frac{\omega}{c}\right) \spacegrad_t (\BE_z + I \BB_z/\sqrt{/\mu\epsilon}) } 
+&=
+\pm k \zcap (-\zcap) \spacegrad_t E_z + \frac{\omega}{c} \underbrace{\gpgradeone{I \spacegrad_t \zcap}}_{-I^2 \zcap \cross \spacegrad_t } B_z \\
+&=
+\mp k \spacegrad_t E_z + \frac{\omega}{c} \zcap \cross \spacegrad_t B_z \\
+\end{align*}
+
+and for the transverse magnetic field
+
+\begin{align*}
+&\gpgradeone{ -I \left( \pm k \zcap + \sqrt{\mu\epsilon}\frac{\omega}{c}\right) \spacegrad_t (\BE_z + I \BB_z/\sqrt{\mu\epsilon}) }  \\
+&=
+-I \sqrt{\mu\epsilon}\frac{\omega}{c} \spacegrad_t \BE_z
++\gpgradeone{ \left( \pm k \zcap + \sqrt{\mu\epsilon}\frac{\omega}{c}\right) \spacegrad_t \BB_z/\sqrt{\mu\epsilon} }  \\
+&=
+- \sqrt{\mu\epsilon}\frac{\omega}{c} \zcap \cross \spacegrad_t E_z
+\mp k \spacegrad_t B_z/\sqrt{\mu\epsilon} \\
+\end{align*}
+
+Thus the split of transverse field into the electric and magnetic components yields
+
+\begin{align}\label{eqn:transverseField:transversePair}
+\BE_t &= \frac{i}{k^2 - \mu\epsilon\frac{\omega^2}{c^2}} \left( \mp k \spacegrad_t E_z + \frac{\omega}{c} \zcap \cross \spacegrad_t B_z \right) \\
+\BB_t &= \frac{i}{k^2 - \mu\epsilon\frac{\omega^2}{c^2}} \left( - {\mu\epsilon}\frac{\omega}{c} \zcap \cross \spacegrad_t E_z \mp k \spacegrad_t B_z \right) 
+\end{align}
+
+Compared to Eli's method using messy traditional vector algebra, this method also has a fair amount of messy tricky algebra, but of a different sort.
+
+\section{Summary}
+
+There is potentially a lot of new ideas above (some for me even with previous exposure to the Geometric Algebra formalism).  There was no real attempt to teach GA here, but for completeness the GA form of Maxwell's equation was developed from the traditional divergence and curl formulation of Maxwell's equations.  That was mainly due to use of CGS units which differ since this makes Maxwell's equation take a different form from the usual (see \citep{doran2003gap}).
+
+Here a less exploratory summary of the previous results above is assembled.
+
+In these CGS units our field $F$, and Maxwell's equation (in absence of charge and current), take the form
+
+\begin{align}\label{eqn:transverseField:foo2}
+F &= \BE + \frac{I\BB}{\sqrt{\mu\epsilon}} \\
+0 &= \left(\spacegrad + \frac{\sqrt{\mu\epsilon}}{c}\partial_t\right) F 
+\end{align}
+
+The electric and magnetic fields can be picked off by selecting the grade one (vector) components
+
+\begin{align}\label{eqn:transverseField:foo8}
+\BE &= \gpgradeone{F} \\
+\BB &= \gpgradeone{-I F}
+\end{align}
+
+With an explicit sinusoidal and $z$-axis time dependence for the field
+
+\begin{align}\label{eqn:transverseField:foo3}
+F(x,y,z,t) &= F(x,y) e^{\pm i k z - i \omega t} 
+\end{align}
+
+and a split of the gradient into transverse and $z$-axis components $\spacegrad = \spacegrad_t + \zcap \partial_z$, Maxwell's equation takes the form
+
+\begin{align}\label{eqn:transverseField:summaryMax2}
+\left(\spacegrad_t \pm i k \zcap - \sqrt{\mu\epsilon}\frac{i\omega}{c}\right) F(x,y) = 0
+\end{align}
+
+Writing for short $F = F(x,y)$, we can split the field into transverse and $z$-axis components with the commutator and anticommutator products respectively.  For the $z$-axis components we have
+
+\begin{align}\label{eqn:transverseField:foo4}
+F_z \zcap \equiv E_z + I B_z = \inv{2} (F \zcap + \zcap F) 
+\end{align}
+
+The projections onto the $z$-axis and and transverse directions are respectively 
+
+\begin{align}\label{eqn:transverseField:foo5}
+F_z &= \BE_z + I \BB_z = \inv{2} (F + \zcap F \zcap) \\
+F_t &= \BE_t + I \BB_t = \inv{2} (F - \zcap F \zcap)
+\end{align}
+
+With an application of the transverse gradient to the $z$-axis field we easily found the relation between the two field components
+
+\begin{align}\label{eqn:transverseField:foo6}
+\spacegrad_t F_z &= i \left( \pm k \zcap - \sqrt{\mu\epsilon}\frac{\omega}{c}\right) F_t
+\end{align}
+
+A left division by the multivector factor gives the total transverse field
+
+\begin{align}\label{eqn:transverseField:foo7}
+F_t &= \inv{i \left( \pm k \zcap - \sqrt{\mu\epsilon}\frac{\omega}{c}\right) } \spacegrad_t F_z 
+\end{align}
+
+Multiplication of both the numerator and denominator by the conjugate normalizes this
+
+\begin{align}\label{eqn:transverseField:summaryTransverseBoth}
+F_t &= \frac{i}{k^2 - \mu\epsilon\frac{\omega^2}{c^2}} \left( \pm k \zcap + \sqrt{\mu\epsilon}\frac{\omega}{c}\right) \spacegrad_t F_z
+\end{align}
+
+From this the transverse electric and magnetic fields may be picked off using the projective grade selection operations of (\ref{eqn:transverseField:foo8}), and are
+
+\begin{align}\label{eqn:transverseField:SummaryTransversePair}
+\BE_t &= \frac{i}{\mu\epsilon\frac{\omega^2}{c^2} -k^2} \left( \pm k \spacegrad_t E_z - \frac{\omega}{c} \zcap \cross \spacegrad_t B_z \right) \\
+\BB_t &= \frac{i}{\mu\epsilon\frac{\omega^2}{c^2} -k^2} \left( {\mu\epsilon}\frac{\omega}{c} \zcap \cross \spacegrad_t E_z \pm k \spacegrad_t B_z \right) 
+\end{align}
+
+%\EndArticle

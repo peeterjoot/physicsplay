@@ -1,0 +1,239 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+%
+%-----------------------------------------------------------------------------------
+%
+% This latex file is for style related stuff (mostly color related), to be used in
+% my notes collections based on the
+% classicthesis template.
+%
+% Some of these are also applicable to articles that use the scrreprt
+% document class.
+%
+% Basic macros (\Br, ...) have been left in peeters_macros (but this imports those as a side effect).
+%
+%-----------------------------------------------------------------------------------
+
+%\ProvidesPackage{peeters_layout}[Peeter's layout specific commands for both classicthesis and articles]
+\RequirePackage{peeters_macros}
+\RequirePackage{amsmath}
+
+%-----------------------------------------------------------------------------------
+% See marco's answer in:
+   %       http://tex.stackexchange.com/questions/53808/miktex-font-ccicons-at-600-not-found
+   %
+   % to use this package with MikTex on Windows 7.
+   %
+   \RequirePackage{ccicons}
+   % provides: \ccbyncnd
+
+%-----------------------------------------------------------------------------------
+% for captionof:
+
+   % also using caption for color captions:
+   % http://www.latex-community.org/forum/viewtopic.php?f=45&p=42828
+   \PassOptionsToPackage{dvipsnames,svgnames}{xcolor}
+   \RequirePackage{caption}
+   \captionsetup{labelfont={color=DarkOliveGreen,bf},textfont={color=Maroon}}
+
+%--------------------------------------------------------------------------------------------
+% Color equation numbers:
+
+   % http://tex.stackexchange.com/questions/28903/changing-the-apperance-of-equation-numbers-with-amsmath/28907#28907
+   % http://tex.stackexchange.com/questions/50521/coloured-equation-number-without-changing-colour-of-reference-using-hyperref
+   \makeatletter
+   \let\mytagform@=\tagform@
+   \def\tagform@#1{\maketag@@@{\color{DarkOliveGreen}(#1)}}
+   \makeatother
+
+%------------------------------------------------------------------------------------
+% http://tex.stackexchange.com/questions/57253/in-a-multiple-file-latex-document-is-there-a-way-to-tag-each-page-with-the-file
+%
+% could restrict to drafting mode:
+% <didn't end up needing this.>
+
+   %\RequirePackage{fancyhdr}
+   %\RequirePackage{currfile}
+   %\pagestyle{fancy}
+   %\lhead{}
+   %\chead{}
+   %\rhead{}
+   %\lfoot{}
+   %\cfoot{\thepage}
+   %\rfoot{\currfilepath}
+   %\renewcommand\headrulewidth{0pt}
+   %\renewcommand\footrulewidth{0pt}
+
+%-----------------------------------------------------------------------------------
+
+\RequirePackage{exercise}
+
+   %-----------------------------------------------------------------------------------
+   % remove the centerline that we have in exercise.sty
+   % and add some color.  and add chapter numbers.
+   %
+   %\renewcommand{\ExerciseHeader}{\leftline{\textbf{\large\color{DarkOliveGreen}{\ExerciseName\ \thechapter.\ExerciseHeaderNB} \color{Maroon}{\ExerciseHeaderTitle}\ExerciseHeaderOrigin\medskip}}}
+   %\renewcommand{\AnswerHeader}{\medskip\leftline{\textbf{\color{Maroon}{Answer for \ExerciseName}\ \color{DarkOliveGreen}{\thechapter.\ExerciseHeaderNB}}\smallskip}}
+   %-----------------------------------------------------------------------------
+   % Better: chapter numbers within exersize counters.  Let the chngcntr package do the work (it also works properly across a chapter boundary)
+   % http://tex.stackexchange.com/questions/27444/number-exercises-according-to-chapter
+   %
+   %\RequirePackage{chngcntr}
+   %\newcounter{Example}
+   %\counterwithin{Example}{chapter}
+   %\counterwithin{Exercise}{chapter}
+   %\counterwithin{Answer}{chapter}
+   %-----------------------------------------------------------------------------
+   % use of chngcntr as above worked fine until I started using Examples.  Here's the issue and solution:
+   %
+   % http://tex.stackexchange.com/questions/56927/help-with-exercise-sty-counter-not-shown-incremented#56933
+   \renewcounter{Exercise}[chapter]
+   \makeatletter
+   \renewcommand{\theExercise}{\if@ExeStared\else\thechapter.\arabic{\@ExerciseCounter}\fi}
+   \makeatother
+   \newcounter{Example}
+   \renewcounter{Example}[chapter]
+   %-----------------------------------------------------------------------------
+   \renewcommand{\ExerciseHeader}{\leftline{\textbf{\large\color{DarkOliveGreen}{\ExerciseName\ \ExerciseHeaderNB} \color{Maroon}{\ExerciseHeaderTitle}\ExerciseHeaderOrigin\medskip}}}
+   \renewcommand{\AnswerHeader}{\medskip\leftline{\textbf{\color{Maroon}{Answer for \ExerciseName}\ \color{DarkOliveGreen}{\ExerciseHeaderNB}}\smallskip}}
+   %-----------------------------------------------------------------------------
+
+%-----------------------------------------------------------------------------------
+% want indexes, but it's a lot of work to add in the indexing after the fact.  Stub this out as opposed to making a crappy one.
+% (that comment applied to phy454.pdf)
+%
+
+%   \RequirePackage{makeidx}
+%   \makeindex
+%\newcommand{\index}[1]{}
+
+%--------------------------------------------------------------------------------------------
+% Long equation support:
+%
+
+   % http://tex.stackexchange.com/questions/21290/how-to-make-left-right-pairs-of-delimiter-work-over-multiple-lines
+   % breqn package supports \left \right over multiple lines.
+
+   % Note: mathpazo option required for flexisym if I want \boldsymbol{\Omega} to work.  otherwise it
+   % shows up as a solid black box.
+   %
+   \PassOptionsToPackage{mathpazo}{flexisym}
+   \RequirePackage{flexisym}
+   \RequirePackage{breqn}
+   % and this one for dmath env equation numbers
+   % http://tex.stackexchange.com/questions/57007/colored-equation-numbers-with-breqn-package/57008#57008
+   \renewcommand{\eqnumcolor}{\color{DarkOliveGreen}}
+
+%-----------------------------------------------------------------------------------
+% 
+% Misc. new commands.  could potentially move to peeters_macros 
+%
+
+% this doesn't work in an Exercise environment, and the paragraph text ends up displayed later (for example in the summary
+% sections.  have removed all references).
+% could probably fix this like done in \imageFigure, making the \paragraph{} use ifinner predicate.
+% verify output.  have changed \titleformat for paragraph below instead.
+%\newcommand{\unnumberedSubsection}[1]{{\color{Maroon}{\paragraph{#1}}}}
+\newcommand{\unnumberedSubsection}[1]{\paragraph{#1}}
+
+\newcommand{\question}[0]{unnumberedSubsection{Question:}}
+\newcommand{\answer}[0]{unnumberedSubsection{Answer:}}
+
+\newtheorem{mydefinition}[theorem]{\color{DarkOliveGreen}Definition}
+
+\newcommand{\makedefinition}[3]{
+\begin{mydefinition}%
+\emph{(\color{Maroon}{#1})}%
+\label{#2}%
+\par%
+#3%
+\end{mydefinition}%
+}
+
+% title, label, text
+\newcommand{\makeexample}[3]{%
+\begin{Exercise}[%
+title={#1},%
+label={#2},%
+name={Example},%
+counter={Example}%
+]%
+\noindent{\color{Maroon}{\rule{\linewidth}{0.5mm}}}
+\par
+#3%
+\par\noindent
+{\color{Maroon}{\rule{\linewidth}{0.5mm}}}
+\end{Exercise}%
+}
+%\addcontentsline{toc}{section}{Example \thechapter.\theExample\ #1}
+%\pdfbookmark[1]{Example \thechapter.\theExample\ #1}{ex\thechapter.\theExample}
+
+\newcommand{\makeproblem}[3]{%
+\begin{Exercise}[%
+title={#1},%
+label={#2}%
+]%
+#3%
+\end{Exercise}%
+}
+%\addcontentsline{toc}{section}{Example \thechapter.\theExercise\ #1}
+%\pdfbookmark[1]{Example \thechapter.\theExercise\ #1}{ex\thechapter.\theExercise}
+
+\newcommand{\makeanswer}[2]{%
+\begin{Answer}[%
+ref={#1}
+]%
+#2%
+\end{Answer}%
+}
+
+\newcommand{\makesubproblem}[2]{%
+\label{#2}
+\Question{#1}
+}
+
+\newcommand{\makesubanswer}[2]{%
+\paragraph{Solution Part \ref{#2}. #1}
+}
+
+%\newcommand{\FIXME}[1]{\unnumberedSubsection{EDITING NOTE}\par#1}
+\newcommand{\FIXME}[1]{}
+%--------------------------------------------------------------------------------------------
+
+
+% titlesec package based modifications, based on the titleformat's found in classicthesis.  I've added color:
+\newcommand{\myClassicThesisOverrides}[0]{%
+   \titleformat{\chapter}[display]
+      {\relax}{\mbox{}\oldmarginpar{\vspace*{-3\baselineskip}\color{DarkOliveGreen}\chapterNumber\thechapter}}{0pt}%
+      {\color{Maroon}\raggedright\spacedallcaps}[\normalsize\vspace*{.8\baselineskip}\titlerule]
+   \titleformat{\section}
+      {\relax}{\color{DarkOliveGreen}{\textsc{\MakeTextLowercase{\thesection}}}}{1em}{\color{Maroon}\spacedlowsmallcaps}
+   \titleformat{\subsection}
+      {\relax}{\color{DarkOliveGreen}{\textsc{\MakeTextLowercase{\thesubsection}}}}{1em}{\color{Maroon}\normalsize\itshape}
+   \titleformat{\subsubsection}
+      {\relax}{\color{DarkOliveGreen}{\textsc{\MakeTextLowercase{\thesubsubsection}}}}{1em}{\color{Maroon}\normalsize\itshape}        
+   \titleformat{\paragraph}[runin]
+      {\relax}{\color{DarkOliveGreen}{\textsc{\MakeTextLowercase{\theparagraph}}}}{1em}{\color{Maroon}\normalsize\itshape}        
+% not required: only used in Colophon.tex
+%     \renewcommand{\finalVersionString}{\emph{Final Version} as of \today\ (\myVersion).}
+}
+
+% titlesec modifications like those used in my application of the classicthesis template (above)
+% note that I've also got \chapter hacked in peeter_prologue_print2.tex so that it's like \title.
+\newcommand{\colorSectionsForArticle}[0]{%
+   \titleformat{\section}
+      {\relax}{\color{DarkOliveGreen}{\textsc{\thesection}}}{1em}{\color{Maroon}}
+   \titleformat{\subsection}
+      {\relax}{\color{DarkOliveGreen}{\textsc{\thesubsection}}}{1em}{\color{Maroon}\normalsize\itshape}
+   \titleformat{\subsubsection}
+      {\relax}{\color{DarkOliveGreen}{\textsc{\thesubsubsection}}}{1em}{\color{Maroon}\normalsize\itshape}
+   \titleformat{\paragraph}[runin]
+      {\relax}{\color{DarkOliveGreen}{\textsc{\MakeTextLowercase{\theparagraph}}}}{1em}{\color{Maroon}\normalsize\itshape}        
+   \titlespacing*{\chapter}{0pt}{1\baselineskip}{1.2\baselineskip}
+   \titlespacing*{\section}{0pt}{1.25\baselineskip}{1\baselineskip} 
+   \titlespacing*{\subsection}{0pt}{1.25\baselineskip}{1\baselineskip}
+   \titlespacing*{\paragraph}{0pt}{1\baselineskip}{1\baselineskip}
+}
+%--------------------------------------------------------------------------------------------

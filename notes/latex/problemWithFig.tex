@@ -1,0 +1,193 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\documentclass[openany]{memoir}
+%\documentclass[10pt,letterpaper,extrafontsizes]{memoir}
+
+\input{../peeters_macros.tex}
+
+\usepackage{graphicx}
+
+% ell, ger, lyhne
+\usepackage[]{exercise}
+%\usepackage{memsty}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{titlepages}  % code of the example titlepages
+%\usepackage{memlays}     % extra layout diagrams
+%\usepackage{dpfloat}     % floats on facing pages
+%\usepackage{fonttable}[2009/04/01]   % font tables
+
+\usepackage[svgnames]{xcolor}
+\usepackage[labelfont={color=Brown,bf}]{caption}
+%\usepackage{titlesec}
+
+% http://stackoverflow.com/questions/3275770/modifying-section-to-make-it-colorful-with-latex
+%\titleformat{\section}
+%{\normalfont\Large\bfseries}
+%{\color{blue}\thesection}{1em}{}
+%%{\color{black}\normalfont\Large\bfseries}
+%\titlelabel{\color{blue}{\thetitle}.\quad}
+%\renewcommand{\sechook}{\color{blue}}
+
+  \setsecheadstyle{\color{blue}\Large\bfseries\memRTLraggedright}
+%\setthesection{\color{blue}{\thechapter}.\Alph{section}}
+
+%\usepackage[frenchb]{babel}
+
+% Pour "première partie"
+%\usepackage{fmtcount}
+
+%\chapterstyle{ell}
+%\chapterstyle{thatcher}
+
+% http://tex.stackexchange.com/questions/49512/part-style-in-memoir-class
+%
+%\renewcommand*{\parttitlefont}{\normalfont\large\MakeUppercase}
+%\renewcommand*{\partnumfont}{\normalfont\scshape\MakeLowercase}
+%\renewcommand*{\partnamefont}{\normalfont\scshape\MakeLowercase}
+%\renewcommand*{\printpartnum}{}
+%
+% This draws a line between the "Part N" text and the "part name" text.
+%\renewcommand{\midpartskip}{\par\parbox{0.5in}{\hrulefill}\par}
+  \renewcommand{\midpartskip}{\begingroup
+    \vspace*{\beforechapskip}%
+    \begin{adjustwidth}{}{-\chapindent}%
+    \hrulefill
+    \smash{\rule{0.4pt}{15mm}}
+    \end{adjustwidth}\endgroup}
+%\renewcommand{\beforepartskip}{\vspace*{\fill}}
+
+% numeric instead of roman numeral for the part num:
+\renewcommand*{\thepart}{\arabic{part}}
+% ell like Fonts: 
+% 
+% ragged left: from http://tex.stackexchange.com/questions/42489/a-modification-of-part-style-in-memoir
+% (moves the text to the right)
+\renewcommand*{\parttitlefont}{\normalfont\huge\sffamily\raggedleft}
+\renewcommand*{\partnumfont}{\normalfont\HUGE\sffamily\raggedleft}
+\renewcommand*{\partnamefont}{\normalfont\HUGE\sffamily\raggedleft}
+% this (without the \beforepartskip of the same form) force the part text higher onto the page.
+\renewcommand{\afterpartskip}{\vspace*{\fill}}
+
+% from memoir.cls:
+%  \renewcommand*{\midpartskip}{\par\vskip 20pt}%
+%  \renewcommand*{\afterpartskip}{\vfil\newpage}%
+%  \renewcommand*{\partnamefont}{\normalfont\huge\bfseries}%
+%  \renewcommand*{\partnumfont}{\normalfont\huge\bfseries}%
+%  \renewcommand*{\parttitlefont}{\normalfont\Huge\bfseries}%
+%  \renewcommand*{\printpartname}{\partnamefont \partname}%
+%  \renewcommand*{\partnamenum}{\space}%
+%  \renewcommand*{\printpartnum}{\partnumfont \thepart}%
+%  \renewcommand*{\printparttitle}[1]{\parttitlefont{##1}}%
+
+\makechapterstyle{myell}{%
+  \chapterstyle{default}
+  \renewcommand*{\chapnumfont}{\normalfont\HUGE\sffamily}
+  \renewcommand*{\chaptitlefont}{\normalfont\huge\sffamily}
+  \settowidth{\chapindent}{\chapnumfont 111}
+  \renewcommand*{\chapterheadstart}{\begingroup
+    \vspace*{\beforechapskip}%
+    \begin{adjustwidth}{}{-\chapindent}%
+    \hrulefill
+    \smash{\rule{0.4pt}{15mm}}
+    \end{adjustwidth}\endgroup}
+  \renewcommand*{\printchaptername}{}
+  \renewcommand*{\chapternamenum}{}
+  \renewcommand*{\printchapternum}{%
+    \begin{adjustwidth}{}{-\chapindent}
+    \hfill
+    \raisebox{10mm}[0pt][0pt]{\chapnumfont \thechapter}%
+                              \hspace*{1em}
+    \end{adjustwidth}\vspace*{-3.0\onelineskip}}
+  \renewcommand*{\printchaptertitle}[1]{%
+    \vskip\onelineskip
+    \raggedleft \textcolor{red}{\chaptitlefont ##1}\par\nobreak}}
+
+%\setlength{\Exeleftmargin}{1mm}
+%\setlength{\ExerciseSkipBefore}{1mm}
+
+%\setlength{\Exesep}{1mm}
+%\setlength{\Exetopsep}{1mm}
+%\setlength{\Exeparsep}{1mm}
+%\setlength{\Exepartopsep}{1mm}
+%\setlength{\Exeleftmargin}{1mm}
+%\setlength{\Exerightmargin}{1mm}
+%\setlength{\Exelabelwidth}{1mm}
+%\setlength{\Exelabelsep}{1mm}
+
+\renewcommand{\ExerciseHeader}{\textbf{\large\ExerciseName\ExerciseHeaderNB\ExerciseHeaderTitle\ExerciseHeaderOrigin\medskip}\par}
+
+\renewcommand{\AnswerHeader}{\medskip\textbf{Answer for \ExerciseName\ \ExerciseHeaderNB}\smallskip\par}
+
+\begin{document}
+
+%\nopartblankpage
+%\setupshorttoc
+%\tableofcontents
+%\clearpage
+%\setupparasubsecs
+%\setupmaintoc
+%\tableofcontents
+%\setlength{\unitlength}{1pt}
+%\clearpage
+%\listoffigures
+%\clearpage
+%\listoftables
+%\clearpage
+%\listofegresults
+
+\setlength\beforechapskip{-\baselineskip}
+%\chapterstyle{lyhne}
+%\chapterstyle{ger}
+\chapterstyle{myell}
+%\part{A lot of Foo}
+\chapter{Foo}
+\section{blah}
+\section{stuff}
+\subsection{more stuff}
+
+\begin{Exercise}[title={Foo}, label=ex1]
+A tough question.
+\end{Exercise}
+
+\begin{Answer}[ref={ex1}]
+A smart answer.
+
+% http://tex.stackexchange.com/questions/55338/how-to-use-figure-inside-a-exercise-environment
+\imageFigure{couetteFlowFig1.png}{caption here}{fig:ff}{0.2}
+\end{Answer}
+
+%\chapter{bar}
+\begin{Exercise}[title={Foo}, label=ex2]
+A tough question.
+\end{Exercise}
+
+\begin{Answer}[ref={ex2}]
+A smart answer.
+
+%\begin{figure}[htp]
+%   \centering
+%   \includegraphics[totalheight=0.2\textheight]{couetteFlowFig1.png}
+%   \label{fig:ex2}
+%\end{figure}
+\end{Answer}
+
+%\appendix
+%\part{moo part}
+%\chapter{moo}
+\begin{Exercise}[title={Foo 2}, label=ex3]
+A tough question.
+\end{Exercise}
+
+\begin{Answer}[ref={ex3}]
+A smart answer.
+
+%\begin{figure}[htp]
+%   \centering
+%   \includegraphics[totalheight=0.2\textheight]{couetteFlowFig1.png}
+%   \label{fig:ex3}
+%\end{figure}
+\end{Answer}
+
+\end{document}
