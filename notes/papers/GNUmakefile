@@ -1,44 +1,25 @@
 #
 # could consider moving: ../nonga/multiPendulumSphericalMatrix.tex here too.
 #
+THISDIR := phy356
 
-RAWTEXFILES := $(shell ls *.tex)
+#include ../make.vars
+SOURCE_DIRS += .
 
-TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
+DEPENDENCYEXTENSIONS += mp4 pdf_tex png tex sty
 
-PDFS := $(TEXFILES:.tex=.pdf)
+GENERATED_SOURCES += currentBookCopyright.tex
 
-# logically symlinks, but MikTex doesn't like those:
-ORIG_FILES += ../abbrvurl.bst
-ORIG_FILES += ../alphaurl.bst
-ORIG_FILES += ../eliblog.cls 
-ORIG_FILES += ../eliblogwidescreen.cls 
-ORIG_FILES += ../myrefs.bib 
-ORIG_FILES += ../plainurl.bst
-ORIG_FILES += ../unsrturl.bst
+# ./ in these due to a bug in the .gitignore generation rule.
+COPIED_FILES += ./peeters_macros.sty
+COPIED_FILES += ./peeters_layout.sty
+COPIED_FILES += ./Bibliography.bib
+COPIED_FILES += ./myrefs.bib
 
-LOCAL_FILES := $(notdir $(ORIG_FILES))
+MAIN_TARGETS += ./myrefs.bib
+GENERATED_PDFS += gramSchmidtLorentz.pdf
+GENERATED_PDFS += relwave.pdf
 
-all :: $(LOCAL_FILES) $(PDFS) .gitignore
+CLEAN_TARGETS += *.ilg *.ind *.idx *.ps *.dvi *.log *.aux *.bbl *.blg *.lof *.log *.lot *.out *.toc *.synctex.gz *.stackdump *.brf
 
-.gitignore : GNUmakefile
-	rm -f .gitignore
-	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/papers/,' > $@
-
-$(PDFS) : $(LOCAL_FILES)
-
-local : $(LOCAL_FILES)
-
-$(LOCAL_FILES) : 
-	cp $(filter %$@, $(ORIG_FILES)) $@
-
-%.pdf : %.tex
-	perl ../make_pdflatex -file $<
-
-clean :: mostlyclean localclean
-
-mostlyclean :: 
-	rm -f *.ps *.dvi *.pdf *.aux *.log *.bbl *.blg *.brf *.toc *.stackdump *.bib
-
-localclean ::
-	rm -f $(LOCAL_FILES)
+include ../make.rules

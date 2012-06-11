@@ -1,4 +1,8 @@
-LOCAL_FIGURE_FILES := $(addprefix figures/,$(LOCAL_FIGURE_FILES))
+LOCAL_COPIED_FILES += $(addprefix figures/,$(LOCAL_FIGURE_FILES))
+LOCAL_COPIED_FILES += $(addprefix listings/,$(LOCAL_LISTING_FILES))
+
+LOCAL_FRONTBACK_FILES := $(foreach e,$(notdir $(ORIG_FRONTBACK_FILES)),FrontBackmatter/$(e))
+LOCAL_COPIED_FILES += $(LOCAL_FRONTBACK_FILES)
 
 BOOKDEPENDENCIES := $(foreach ext,$(DEPENDENCYEXTENSIONS),$(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.$(ext))))
 BOOKDEPENDENCIES := $(foreach ext,$(DEPENDENCYEXTENSIONS),$(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.$(ext))))
@@ -6,18 +10,15 @@ BOOKDEPENDENCIES := $(foreach ext,$(DEPENDENCYEXTENSIONS),$(foreach dir,$(SOURCE
 PDFDEPENDENCIES := $(subst pdf_tex,pdf,$(filter %.pdf_tex,$(BOOKDEPENDENCIES)))
 BOOKDEPENDENCIES += $(PDFDEPENDENCIES)
 
-LOCAL_FRONTBACK_FILES := $(foreach e,$(notdir $(ORIG_FRONTBACK_FILES)),FrontBackmatter/$(e))
-
 JUSTBOOKDEPENDENCIES := $(filter-out $(STANDALONE), $(BOOKDEPENDENCIES))
 
-THISBOOK_DEPS := $(JUSTBOOKDEPENDENCIES) $(LOCAL_FILES) $(GENERATED_SOURCES) $(COPIED_FILES) $(LOCAL_FRONTBACK_FILES) $(LOCAL_FIGURE_FILES)
+THISBOOK_DEPS := $(JUSTBOOKDEPENDENCIES) $(LOCAL_FILES) $(GENERATED_SOURCES) $(COPIED_FILES) $(LOCAL_COPIED_FILES)
 
 MAIN_TARGETS += $(GENERATED_PDFS) .gitignore
 
 CLEAN_TARGETS += $(MAIN_TARGETS) 
 CLEAN_TARGETS += $(GENERATED_SOURCES)
-CLEAN_TARGETS += $(LOCAL_FRONTBACK_FILES)
-CLEAN_TARGETS += $(LOCAL_FIGURE_FILES)
+CLEAN_TARGETS += $(LOCAL_COPIED_FILES)
 CLEAN_TARGETS += $(COPIED_FILES)
 CLEAN_TARGETS += $(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.aux))
 
@@ -61,7 +62,7 @@ myrefs.bib: ../myrefs.bib.in ../METADATA
 .gitignore : GNUmakefile
 	rm -f .gitignore
 	echo $(ORIG_FILES) $(COPIED_FILES) | tr ' ' '\n' | sed 's,.*/,notes/$(THISDIR)/,' > $@
-	echo $(LOCAL_FIGURE_FILES) $(LOCAL_FRONTBACK_FILES) $(GENERATED_SOURCES) | tr ' ' '\n' | sed 's,^,notes/$(THISDIR)/,' >> $@
+	echo $(LOCAL_COPIED_FILES) $(GENERATED_SOURCES) | tr ' ' '\n' | sed 's,^,notes/$(THISDIR)/,' >> $@
 ifneq ($(PDFDEPENDENCIES),)
 	echo $(PDFDEPENDENCIES) | tr ' ' '\n' | sed 's,^,!notes/$(THISDIR)/,' >> $@
 endif
