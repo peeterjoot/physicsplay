@@ -10,6 +10,6 @@ SOURCE_DIRS += problems
 SOURCE_DIRS += scattering
 SOURCE_DIRS += spin
 
-GENERATED_SOURCES := mathematica.tex 
+GENERATED_SOURCES += mathematica.tex 
 
 include ../make.rules

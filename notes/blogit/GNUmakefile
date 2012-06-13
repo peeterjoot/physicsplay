@@ -21,14 +21,13 @@ TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES))
 PDFS := $(TEXFILES:.tex=.pdf)
 
 # logically symlinks, but MikTex doesn't like those:
-ORIG_FILES += ../abbrvurl.bst
-ORIG_FILES += ../alphaurl.bst
-ORIG_FILES += ../eliblog.cls 
-ORIG_FILES += ../eliblogwidescreen.cls 
-ORIG_FILES += ../myrefs.bib 
-ORIG_FILES += ../plainurl.bst
-ORIG_FILES += ../unsrturl.bst
-ORIG_FILES += ../mycommon.sty
+#ORIG_FILES += ../abbrvurl.bst
+#ORIG_FILES += ../alphaurl.bst
+#ORIG_FILES += ../eliblog.cls 
+#ORIG_FILES += ../eliblogwidescreen.cls 
+#ORIG_FILES += ../myrefs.bib 
+#ORIG_FILES += ../plainurl.bst
+#ORIG_FILES += ../unsrturl.bst
 
 # for gaBasics:
 ORIG_FILES += ../phy454/figures/couetteFlowFig1.png
@@ -40,7 +39,7 @@ ORIG_FILES += ../phy454/figures/couetteFlowFig6.mp4
 #ORIG_FILES += ../phy456/qmTwoL22fig5.png
 ORIG_FILES += ../otherbook/triangleLaw.png
 ORIG_FILES += ../otherbook/rotateMinusOne.png
-ORIG_FILES += ../gabook/parallelogramArea.png
+#ORIG_FILES += ../gabook/figures/parallelogramArea.png
 #ORIG_FILES += ../phy454/figures/continuumL2fig1.png
 #ORIG_FILES += ../phy454/figures/continuumL2fig2.png
 #ORIG_FILES += ../phy454/figures/continuumL2fig3.png
@@ -89,9 +88,10 @@ ORIG_FILES += ../phy454/figures/twoCylindersFig9.png
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
+all :: peeters_macros.sty
+all :: peeters_layout.sty
 all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
-all :: peeters_macros.sty
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
@@ -116,7 +116,10 @@ gaBasics.pdf : gaBasics.tex
 %.pdf : %.tex
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo > ./.revinfo/lastCommit.tex
-	perl ../make_pdflatex -file $<
+	~/bin/mkRevInfo -date > ./.revinfo/gitCommitDate.tex
+	~/bin/mkRevInfo -commit > ./.revinfo/gitCommitString.tex
+	~/bin/mkRevInfo -repo > ./.revinfo/gitRepo.tex
+	perl ../make_pdflatex -nojustonce -file $<
 
 #%.mp4 : %.avi
 #	/cygdrive/c/Temp/ffmpeg/bin/ffmpeg -i $< -vcodec libx264 $@
@@ -130,8 +133,11 @@ clean :: mostlyclean localclean
 mostlyclean :: 
 	rm -f *.ps *.dvi $(PDFS) *.aux *.log *.bbl *.blg *.brf *.toc *.stackdump *.bib
 
-peeters_macros.sty : ../peeters_macros.tex $(THISDIR).sty
-	cat ../peeters_macros.tex $(THISDIR).sty > $@
+peeters_layout.sty : ../peeters_layout.sty
+	cp $^ $@
+
+peeters_macros.sty : ../peeters_macros.sty
+	cp $^ $@
 
 localclean ::
 	rm -f $(LOCAL_FILES)

@@ -20,6 +20,6 @@ SOURCE_DIRS += fluids/thermal
 SOURCE_DIRS += intro
 SOURCE_DIRS += solutions
 
-GENERATED_SOURCES := mathematica.tex 
+GENERATED_SOURCES += mathematica.tex 
 
 include ../make.rules

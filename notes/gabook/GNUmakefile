@@ -18,13 +18,10 @@ SOURCE_DIRS += qm
 SOURCE_DIRS += relativity
 SOURCE_DIRS += rotation
 
-ORIG_FILES += ../algebra/levi.pl
-
 ORIG_FIGURE_DIRS += ../calculus
 ORIG_FIGURE_DIRS += ../differential_forms
 ORIG_FIGURE_DIRS += ../geometric-algebra
 ORIG_FIGURE_DIRS += ../miscphysics/figures
-
 LOCAL_FIGURE_FILES += Projection_line.png
 LOCAL_FIGURE_FILES += Projection_plane.png
 LOCAL_FIGURE_FILES += bivectorDot.png
@@ -48,7 +45,8 @@ LOCAL_FIGURE_FILES += tangent_area_form.png
 LOCAL_FIGURE_FILES += visualize_subspace_projection.png
 LOCAL_FIGURE_FILES += volume_element.png
 
-LOCAL_FIGURE_FILES := $(addprefix figures/,$(LOCAL_FIGURE_FILES))
+ORIG_LISTING_DIRS += ../algebra
+LOCAL_LISTING_FILES += levi.pl
 
 GENERATED_SOURCES += mathematica.tex 
 GENERATED_SOURCES += cronology.tex
@@ -58,4 +56,9 @@ include ../make.rules
 figures/%.png: %.png
 	cp $< $@
 
+listings/%.pl: %.pl
+	mkdir -p $(@D)
+	cp $< $@
+
 vpath %.png $(ORIG_FIGURE_DIRS)
+vpath %.pl $(ORIG_LISTING_DIRS)

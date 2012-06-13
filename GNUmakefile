@@ -1,9 +1,23 @@
 SUBMAKES := $(wildcard notes/*/GNUmakefile)
-#SUBMAKES := $(filter-out $(NOIGNORERULES),$(SUBMAKES))
+SUBDIRS := $(subst /GNUmakefile,,$(SUBMAKES))
+IGNOREDIRS += notes/atomic
+IGNOREDIRS += notes/bb
+IGNOREDIRS += notes/phy1530
+SUBDIRS := $(filter-out $(IGNOREDIRS),$(SUBDIRS))
 
-GITIGNORES := $(subst GNUmakefile,.gitignore,$(SUBMAKES))
+GITIGNORES := $(addsuffix /.gitignore,$(SUBDIRS))
 
-all : .gitignore
+all :: .gitignore
+
+e:
+	echo s: $(SUBMAKES)
+	echo s: $(SUBDIRS)
+	echo g: $(GITIGNORES)
+
+.PHONY: subdirs #$(SUBDIRS)
+
+subdirs:
+	$(foreach dir,$(SUBDIRS),make -C $(dir);)
 
 %/.gitignore : %/GNUmakefile
 	make -C $(<D) .gitignore

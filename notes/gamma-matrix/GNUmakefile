@@ -20,13 +20,13 @@ all :: $(OBJECTS) matrix$(EXE) .gitignore
 matrix$(EXE) : $(OBJECTS)
 	g++ $(OBJECTS) -o $@
 
-files := $(shell ls *.ltx)
-pdfs := $(files:.ltx=.pdf)
-
-all :: $(pdfs)
-
-latexrules := ..
-
-%.pdf : %.ltx
-	$(latexrules)/make_pdflatex -file $<
-
+#files := $(shell ls *.ltx)
+#pdfs := $(files:.ltx=.pdf)
+#
+#all :: $(pdfs)
+#
+#latexrules := ..
+#
+#%.pdf : %.ltx
+#	$(latexrules)/make_pdflatex -file $<
+#
