@@ -27,8 +27,8 @@ Let us continue studying the Lagrangian of Problem 1 of Homework 1, namely, its 
 
 \makesubproblem{Consider first the case of time-independent $\BA$ and $\phi$. Find the expression for the conserved energy, $\mathcal{E}$, of the particle.}{\basename:problem:1:1}
 \makesubproblem{For external $\BA$ and $\phi$ dependent on time, find $d \mathcal{E}/dt$.}{\basename:problem:1:2}
-\makesubproblem{Let now $\BA$ and $\phi$ be spatially homogeneous, i.e. $\Br$-independent. Find the conserved momentum. Is it equal to the usual $m \Bv$?}{\basename:problem:1:3}
-\makesubproblem{Consider motion in the field of an electrostatic source (creating an external static $\phi(\Br)$). Find the angular momentum of the particle. Is it conserved for all $\phi(\Br)$?}{\basename:problem:1:4}
+\makesubproblem{Let now $\BA$ and $\phi$ be spatially homogeneous, i.e. $\Bx$-independent. Find the conserved momentum. Is it equal to the usual $m \Bv$?}{\basename:problem:1:3}
+\makesubproblem{Consider motion in the field of an electrostatic source (creating an external static $\phi(\Bx)$). Find the angular momentum of the particle. Is it conserved for all $\phi(\Bx)$?}{\basename:problem:1:4}
 }
 
 \makeanswer{\basename:problem:1}{
@@ -230,8 +230,116 @@ The conserved momentum is then just
 \end{dmath}
 
 \makesubanswer{Conserved angular momentum}{\basename:problem:1:4}
-TODO. %\lipsum
+
+Does the conserved angular momentum take the same from as $\Bx \cross \BM$ as we had in a non-velocity dependent Lagrangian?  We can check using the same Noether arguments using the following coordinate transformation
+
+\begin{dmath}\label{eqn:classicalMechanicsPs2:730}
+\Bx' = e^{-\epsilon j/2} \Bx e^{\epsilon j/2},
+\end{dmath}
+
+where $j = \ucap \wedge \vcap$ is the geometric product of two perpendicular unit vectors, and $\epsilon$ is the magnitude of the rotation.  This gives us
+
+\begin{dmath}\label{eqn:classicalMechanicsPs2:750}
+\frac{d\Bx'}{d\epsilon} = 
+-\frac{j}{2} e^{-\epsilon j/2} \Bx e^{\epsilon j/2}
++ e^{-\epsilon j/2} \Bx e^{\epsilon j/2} \frac{j}{2}
+=
+\inv{2} \left( \Bx' j - j \Bx' \right)
+= \Bx' \cdot j.
+\end{dmath}
+
+The Noether conservation statement is then
+
+\begin{dmath}\label{eqn:classicalMechanicsPs2:770}
+\frac{d\LL'}{d\epsilon} = \ddt{} \left( \PD{\xdot_i}{\LL'} \Be_i \cdot (\Bx' \cdot j) \right)
+\end{dmath}
+
+With a static scalar potential $\phi(\Bx)$ is our Lagrangian rotation invariant?  We have 
+
+\begin{dmath}\label{eqn:classicalMechanicsPs2:790}
+\LL' 
+= 
+\inv{2} {\Bv'}^2 - q \phi(\Bx')
+=
+\inv{2} {\Bv}^2 - q \phi(\Bx').
+\end{dmath}
+
+With zero vector potential, our kinetic term is invariant since the squared velocity is invariant, but we require $\phi(\Bx') = \phi(\Bx)$ for total Lagrangian invariance.  We have that if $\phi(\Bx) = \phi(\Abs{\Bx})$.
+
+Evaluating the conservation identity \ref{eqn:classicalMechanicsPs2:770} at $\epsilon = 0$ we have
+
+\begin{dmath}\label{eqn:classicalMechanicsPs2:810}
+0 
+= \ddt{} \left( \BM \cdot (\Bx \cdot j) \right).
+\end{dmath}
+
+We are used to seeing this in dual form using the cross product
+
+\begin{dmath}\label{eqn:classicalMechanicsPs2:830}
+\BM \cdot (\Bx \cdot j) 
+=
+\gpgradezero{
+\BM (\Bx \cdot j) 
 }
+=
+\inv{2} \gpgradezero{
+\BM \Bx j - \BM j \Bx 
+}
+=
+\inv{2} \gpgradezero{
+\BM \Bx j - \Bx \BM j 
+}
+=
+\inv{2} \gpgradezero{
+\BM \wedge \Bx - \Bx \wedge \BM 
+}
+\cdot j
+=
+\inv{2} \gpgradezero{
+\left( \BM \wedge \Bx - \Bx \wedge \BM \right) \cdot j
+}
+=
+(\BM \wedge \Bx) \cdot j
+=
+I (\BM \cross \Bx) \cdot j
+\end{dmath}
+
+Since $j$ can be arbitrarily oriented, we have a requirement that
+
+\begin{dmath}\label{eqn:classicalMechanicsPs2:850}
+0 = \Bx \cross \BM
+\end{dmath}
+
+This verifies that the our angular momentum is conserved, provided that $\phi(\Bx) = \phi(\Abs{\Bx})$, and $\BA = 0$.  With $\BA = 0$, so that $\BM = m \Bv + q \BA = m \Bv$ this is just
+
+\begin{dmath}\label{eqn:classicalMechanicsPs2:870}
+\Bx \cross \BM = m \Bx \cross \Bv.
+\end{dmath}
+
+\paragraph{Computing the conserved quantity without use of Geometric Algebra}
+
+Consider the expansion of our infinisimal rotation, projecting our vector $\Bx$ into components lying in the plane of rotation $(\Bx \cdot j) j$ and perpendicular to that plane.  We have
+
+\begin{dmath}\label{eqn:classicalMechanicsPs2:890}
+\Bx' 
+= e^{-j \epsilon/2} \Bx e^{j \epsilon/2}
+= e^{-j \epsilon/2} ((\Bx \cdot j) j + (\Bx \wedge j) j) e^{j \epsilon/2}
+= e^{-j \epsilon/2} ((\Bx \cdot j) e^{j \epsilon/2} j
+= ((\Bx \cdot j) e^{j \epsilon} j
+\approx ((\Bx \cdot j) j \epsilon
+=
+\inv{2} (\Bx j - j \Bx) j \epsilon
+=
+-I^2 \inv{2} (\Bx j - j \Bx) j \epsilon
+=
+\inv{2} (\Bx (-Ij) - (-Ij) \Bx) (I j) \epsilon
+=
+( \Bx \wedge (-Ij) ) j \epsilon
+\end{dmath}
+
+FIXME: messed up.  try on paper first.
+}
+
 \shipoutAnswer
 
 \makeproblem{Integrals of motion in a helix potential}{\basename:problem:2}{
