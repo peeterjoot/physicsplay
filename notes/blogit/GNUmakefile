@@ -21,13 +21,13 @@ TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES))
 PDFS := $(TEXFILES:.tex=.pdf)
 
 # logically symlinks, but MikTex doesn't like those:
-ORIG_FILES += ../abbrvurl.bst
-ORIG_FILES += ../alphaurl.bst
-ORIG_FILES += ../eliblog.cls 
-ORIG_FILES += ../eliblogwidescreen.cls 
-ORIG_FILES += ../myrefs.bib 
-ORIG_FILES += ../plainurl.bst
-ORIG_FILES += ../unsrturl.bst
+#ORIG_FILES += ../abbrvurl.bst
+#ORIG_FILES += ../alphaurl.bst
+#ORIG_FILES += ../eliblog.cls 
+#ORIG_FILES += ../eliblogwidescreen.cls 
+#ORIG_FILES += ../myrefs.bib 
+#ORIG_FILES += ../plainurl.bst
+#ORIG_FILES += ../unsrturl.bst
 
 # for gaBasics:
 ORIG_FILES += ../phy454/figures/couetteFlowFig1.png
