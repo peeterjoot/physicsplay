@@ -1,11 +1,20 @@
 #!/usr/bin/perl
 
-my $min = 0 ;
+my $totalMinutes = 0 ;
 
 while (<>)
 {
    my $diff ;
+   my $negate = 0 ;
    chomp ;
+
+   if ( s/^\+// )
+   {
+   }
+   elsif ( s/^-// )
+   {
+      $negate = 1 ;
+   }
 
    if ( /(.*)-(.*)/ )
    {
@@ -27,12 +36,14 @@ while (<>)
       $diff = toMinutes($_) ;
    }
 
+   $diff = -$diff if ( $negate ) ;
+
 #print "$_: $diff\n" ;
-   $min += $diff ;
+   $totalMinutes += $diff ;
 }
 
-my $hours = int($min/60) ;
-my $minutes = int($min % 60) ;
+my $hours = int($totalMinutes/60) ;
+my $minutes = int($totalMinutes % 60) ;
 printf "$hours:%02d\n", $minutes ;
 
 exit ;
