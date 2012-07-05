@@ -1,0 +1,48 @@
+#!/usr/bin/perl
+
+my $min = 0 ;
+
+while (<>)
+{
+   my $diff ;
+   chomp ;
+
+   if ( /(.*)-(.*)/ )
+   {
+      my ($a, $b) = ($1, $2) ;
+      my $bmin = toMinutes($b) ;
+      my $amin = toMinutes($a) ;
+
+      if ( $bmin >= $amin )
+      {
+         $diff = ($bmin - $amin) ;
+      }
+      else
+      {
+         $diff = ($bmin + 12*60 - $amin) ;
+      }
+   }
+   else
+   {
+      $diff = toMinutes($_) ;
+   }
+
+#print "$_: $diff\n" ;
+   $min += $diff ;
+}
+
+my $hours = int($min/60) ;
+my $minutes = int($min % 60) ;
+printf "$hours:%02d\n", $minutes ;
+
+exit ;
+
+sub toMinutes
+{
+   my ($t) = @_ ;
+
+   $t =~ /(.*):(.*)/ or die ;
+   my ($h, $m) = ($1, $2) ;
+
+   return $h*60 + $m ;
+}
