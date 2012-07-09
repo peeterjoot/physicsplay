@@ -1,8 +1,29 @@
 #!/usr/bin/perl
 
+use strict ;
+use warnings ;
+use Getopt::Long;
+
 my $soldReport = 0 ;
-my $countryReport = 1 ;
+my $countryReport = 0 ;
 my $debugMode = 0 ;
+my $filename ;
+my $showUsage = 0 ;
+my $skipHeader = 0 ;
+
+GetOptions(
+   'countryReport!'     => \$countryReport,
+   'debugMode!'         => \$debugMode,
+   'skipHeader!'        => \$skipHeader,
+   'soldReport!'        => \$soldReport,
+   'filename=s'         => \$filename,
+   'help!'              => \$showUsage,
+) ;
+
+if ( $showUsage or !defined $filename )
+{
+   die "usage: ~/bin/sortMlsSalesInfo.pl -f filename [-debug] [-countryReport] [-soldReport] [-help]\n"
+}
 
 my @keys ;
 my $all = '' ;
@@ -16,7 +37,9 @@ if ( $countryReport )
 push( @keys,
  'Type'
 ,'Bedrooms'
+,'Total Bedrooms'
 ,'Kitchens'
+,'Total Kitchens'
 ,'Garage Type'
 ,'Garage Spaces'
 ,'Parking Spaces'
@@ -43,6 +66,7 @@ push(@keys,
  'Taxes'
 ,'Approx Square Ft'
 ,'Rooms'
+,'Total Rooms'
 ,'Lot Size'
 ,'Basement'
 
@@ -60,7 +84,11 @@ if ( $countryReport )
    push( @keys, 'Exterior', 'Water' ,'Sewers' ) ;
 }
 
-while (<>)
+push( @keys, 'Reportname', 'Url', 'Comments' ) ;
+
+open my $fh, "<$filename" or die "could not open file '$filename'\n" ;
+
+while (<$fh>)
 {
    s/&nbsp;/ /g ;
    s/&amp;/&/g ;
@@ -72,17 +100,27 @@ while (<>)
 #   s/^\s+//g ;
    $all .= $_ ;
 }
+close $fh ; 
 
-foreach (@keys)
+unless ( $skipHeader )
 {
-   print "$_\t" ;
+   foreach (@keys)
+   {
+      print "$_\t" ;
+   }
+   print "\n" ;
 }
-print "\n" ;
+
+#$all =~ 
+#s,
+#Prepared\sby.*?</tbody></table>
+#(.*?^</tbody></table>)
+#.*?Toronto\sReal\sEstate,foo($1),smegx ;
 
 $all =~ 
 s,
-Prepared\sby.*?</tbody></table>
-(.*?^</tbody></table>)
+Prepared\sby.*?</table>
+(.*?^</table>)
 .*?Toronto\sReal\sEstate,foo($1),smegx ;
 
 exit 0 ;
@@ -125,6 +163,18 @@ sub foo
    foreach (@tr)
    {
       $debug .= "tr: $_" ;
+
+      if ( s/<font.*?".*?"\s*>// )
+      {
+         s,</fon[gt]>,,smg ;
+      }
+
+#      $debug .= "tr2: $_" ;
+# trouble parsing a record of the following form:?
+#				<tr>
+#					<td colspan="3"><font style="font: bold 9pt">2091 Gerrard St E&nbsp;&nbsp;</font></td>
+#					<td><font style="font: bold 9pt">$469,000</font></td>
+#				</tr>
 
 # address, sale price
       if ( m,GetPHOTO.*?<td.*?>(.*?)</td>.*Sold:.*?<td *>(.*?)</td>,sm )
@@ -372,6 +422,21 @@ Sewers:.*?<td.*?>(.*?)</td>
       close $fh ;
    }
    
+   $info{'Reportname'} = $filename ;
+
+   my $totalBedrooms = eval( $info{'Bedrooms'} ) ;
+   $info{'Total Bedrooms'} = $totalBedrooms ;
+
+   my $totalKitchens = eval( $info{'Kitchens'} ) ;
+   $info{'Total Kitchens'} = $totalKitchens ;
+
+   my $totalRooms = eval( $info{'Rooms'} ) ;
+   $info{'Total Rooms'} = $totalRooms ;
+
+   $info{'List'} =~ s/\$// ;
+   $info{'List'} =~ s/,//g ;
+   $info{'List'} /= 1000 ;
+
    foreach (@keys)
    {
       print "$info{$_}\t" ;
