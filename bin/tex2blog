@@ -64,6 +64,13 @@ my $pf = 0 ;
 # wikipedia output.
 my $wiki = 0 ; 
 
+my $urlMessage ;
+#$urlMessage = "Click here for a PDF of this sequence of posts with nicer formatting" ;
+$urlMessage = "Click here for a PDF of this post with nicer formatting and figures if the post had any (especially if my latex to wordpress script has left FORMULA DOES NOT PARSE errors.)" ;
+
+my $urlMessage2 = '' ;
+# $urlMessage2 .= "Note that this PDF file is formatted in a wide-for-screen layout that is probably not good for printing." ;
+
 my $r1 = qr/
      (                   # start of capture buffer 1
      {                   # match an opening brace
@@ -146,7 +153,7 @@ $allInput =~ s/
    (?:equation|dmath|align|eqnarray)
    (\**)                         # $1.  Is this a numbered equation or not.  '*' for no.
 }
-(.*?)                            # $2.  The latex text including all whitespace.
+(.*?)                            # $2.  The latex text including all whitespace (and the label)
 \\end{
    (?:equation|dmath|align|eqnarray)
    \**                           # the matching * if any.
@@ -398,7 +405,15 @@ sub processAuxFile
       {
          chomp ;
 
+# with {equation}
+#\newlabel{eqn:landauMechanicsCh1P3:10}{{1.1}{1}{Guts\relax }{equation.1.2.1}{}}
+# with {dmath}
+#\newlabel{eqn:landauMechanicsCh1P3:10}{{1.1}{1}{Guts\relax }{Answer.1}{}}
          if ( /^\\newlabel{(.*?)}.*equation\.(.*?)}/ )
+         {
+            $eq{$1} = $2 ;
+         }
+         elsif ( /^\\newlabel{(.*?)}{{((?:\d|\.)+)}.*Answer/ )
          {
             $eq{$1} = $2 ;
          }
@@ -441,13 +456,6 @@ sub processRest
    my ($allOneLine) = @_ ;
 
    my @allLines = split( /\n/, $allOneLine ) ;
-
-   my $urlMessage ;
-   #$urlMessage = "Click here for a PDF of this sequence of posts with nicer formatting" ;
-   $urlMessage = "Click here for a PDF of this post with nicer formatting and figures if the post had any (especially if my latex to wordpress script has left FORMULA DOES NOT PARSE errors.)" ;
-
-   my $urlMessage2 = '' ;
-#   $urlMessage2 .= "Note that this PDF file is formatted in a wide-for-screen layout that is probably not good for printing." ;
 
    my $latexInlineStart ;
    my $latexInlineEnd ;
@@ -500,9 +508,17 @@ sub processRest
 
    foreach (@allLines)
    {
+      if ( s/(?:\\newcommand{\\keywords}{(.*)}|\\keywords{(.*)})// )
+      {
+         $keywords = $1 ;
+      }
+
+      s,\\renewcommand{\\basename}{(.*?)},\\blogpage{https://sites.google.com/site/peeterjoot2/math2012/$1.pdf}, ;
+
       next if ( /\\documentclass/ or
                 /\\usepackage/ or
                 /\\newcommand/ or
+                /\\renewcommand/ or
                 /\\input/ or
                 /\\subequations/ or
                 /\\revisionInfo/ or
@@ -510,21 +526,22 @@ sub processRest
                 /\\bibliography/ or
                 /\\beginArtWithToc/ or
                 /\\EndArticle/ or
+                /\\shipoutAnswer/ or
                 /\\EndNoBibArticle/ or
                 /\\beginArtNoToc/ or
                 0 ) ;
 
-      if ( s/\\keywords{(.*)}// )
-      {
-         $keywords = $1 ;
-      }
+#      if ( s/\\keywords{(.*)}// )
+#      {
+#         $keywords = $1 ;
+#      }
 
       if ( s/\\wordpresscategory{(.*)}// )
       {
          $category = $1 ;
       }
 
-      if ( s/\\(?:title|chapter){(.*)}// )
+      if ( s/\\(?:title|generatetitle|chapter){(.*)}// )
       {
          $g_title = $1 ;
       }
@@ -582,6 +599,11 @@ sub processRest
          s,\\section{(.*)},<h1>$1</h1>,;
          s,\\subsection{(.*)},<h2>$1</h2>,;
          s,\\subsubsection{(.*)},<h3>$1</h3>,;
+
+# \makeproblem{Pendulum with support moving in circle}{landauMechanics:ch1:pr1}
+# \makeanswer{landauMechanics:ch1:pr1}
+         s,\\makeproblem{(.*?)}{(.*?)},<h2>Question: $1</h2>,;
+         s,\\makeanswer{.*?},<h2>Answer</h2>,;
       }
 
       if ( s,\\begin{itemize},<ol>, )
