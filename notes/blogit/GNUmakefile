@@ -88,6 +88,7 @@ ORIG_FILES += ../phy454/figures/twoCylindersFig9.png
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
+all :: Bibliography.bib
 all :: peeters_macros.sty
 all :: peeters_layout.sty
 all :: $(LOCAL_FILES) $(PDFS) .gitignore
@@ -138,6 +139,14 @@ peeters_layout.sty : ../peeters_layout.sty
 
 peeters_macros.sty : ../peeters_macros.sty
 	cp $^ $@
+
+Bibliography.bib : myrefs.bib
+	sed 's/@webpage/@manual/g' < $< > $@
+
+# old style:
+myrefs.bib: ../myrefs.bib.in ../METADATA
+	cp ../myrefs.bib.in myrefs.bib
+	../METADATA -bib >> myrefs.bib
 
 localclean ::
 	rm -f $(LOCAL_FILES)
