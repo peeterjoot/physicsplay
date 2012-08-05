@@ -1,0 +1,129 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+% pick one:
+%\input{../assignment.tex}
+\input{../blogpost.tex}
+\renewcommand{\basename}{poyntingComplex}
+\renewcommand{\dirname}{notes/blogit/}
+\newcommand{\keywords}{Poynting vector, complex, phasor}
+
+\input{../peeter_prologue_print2.tex}
+
+\beginArtNoToc
+
+\generatetitle{Complex form of Poynting relationship}
+\label{chap:\basename}
+%\section{Motivation}
+
+This is a problem from \cite{fowles1989introduction}, something that I'd tried back when reading \cite{jackson1975cew} but in a way that involved Geometric Algebra and the covariant representation of the energy momentum tensor.  Let's try this with plain old complex vector algebra instead.
+
+%\section{Guts}
+
+\makeproblem{Average Poynting flux for complex 2D fields (problem 2.4)}{ch2:pr4}{ 
+
+Given a complex field phasor representation of the form
+
+\begin{dmath}\label{eqn:poyntingComplex:10}
+\tilde{\BE} = \BE_0 e^{i (\Bk \cdot \Bx - \omega t)}
+\end{dmath}
+\begin{dmath}\label{eqn:poyntingComplex:30}
+\tilde{\BH} = \BH_0 e^{i (\Bk \cdot \Bx - \omega t)}.
+\end{dmath}
+
+Here we allow the components of $\BE_0$ and $\BH_0$ to be complex.  As usual our fields are defined as the real parts of the phasors
+
+\begin{dmath}\label{eqn:poyntingComplex:50}
+\BE = \Real( \tilde{\BE} )
+\end{dmath}
+\begin{dmath}\label{eqn:poyntingComplex:70}
+\BH = \Real( \tilde{\BH} ).
+\end{dmath}
+
+Show that the average Poynting vector has the value
+
+\begin{dmath}\label{eqn:poyntingComplex:90}
+\expectation{ \BS } = \expectation{ \BE \cross \BH } = \inv{2} \Real( \BE_0 \cross \BH_0^\conj ).
+\end{dmath}
+}
+
+\makeanswer{ch2:pr4}{ 
+While the text works with two dimensional quantities in the $x,y$ plane, I found this problem easier when tackled in three dimensions.  Suppose we write the complex phasor components as
+
+\begin{dmath}\label{eqn:poyntingComplex:110}
+\BE_0 = \sum_k (\BE_{kr} + i \BE_{ki}) \Be_k = \sum_k \Abs{\BE_k} e^{i \phi_k} \Be_k
+\end{dmath}
+\begin{dmath}\label{eqn:poyntingComplex:130}
+\BH_0 = \sum_k (\BH_{kr} + i \BH_{ki}) \Be_k = \sum_k \Abs{\BH_k} e^{i \psi_k} \Be_k,
+\end{dmath}
+
+and also write $\phi_k' = \phi_k + \Bk \cdot \Bx$, and $\psi_k' = \psi_k + \Bk \cdot \Bx$, then our (real) fields are
+
+\begin{dmath}\label{eqn:poyntingComplex:150}
+\BE = \sum_k \Abs{\BE_k} \cos(\phi_k' - \omega t) \Be_k
+\end{dmath}
+\begin{dmath}\label{eqn:poyntingComplex:170}
+\BH = \sum_k \Abs{\BH_k} \cos(\psi_k' - \omega t) \Be_k,
+\end{dmath}
+
+and our Poynting vector before averaging (in these units) is
+
+\begin{dmath}\label{eqn:poyntingComplex:190}
+\BE \cross \BH = \sum_{klm} \Abs{\BE_k} 
+\Abs{\BH_l} 
+\cos(\phi_k' - \omega t) 
+\cos(\psi_l' - \omega t) \epsilon_{klm} \Be_m.
+\end{dmath}
+
+We are tasked with computing the average of cosines
+
+\begin{dmath}\label{eqn:poyntingComplex:210}
+\expectation{ \cos(a - \omega t) \cos(b - \omega t) }
+=
+\inv{T} \int_0^T 
+\cos(a - \omega t) \cos(b - \omega t) dt
+=
+\inv{\omega T} \int_0^T 
+\cos(a - \omega t) \cos(b - \omega t) \omega dt
+=
+\inv{2 \pi} \int_0^{2 \pi}
+\cos(a - u) \cos(b - u) du
+=
+\inv{4 \pi} \int_0^{2 \pi}
+\cos(a + b - 2 u) + \cos(a - b) du
+=
+\inv{2} \cos(a - b).
+\end{dmath}
+
+So, our average Poynting vector is
+\begin{dmath}\label{eqn:poyntingComplex:230}
+\expectation{\BE \cross \BH} = \inv{2} \sum_{klm} \Abs{\BE_k} 
+\Abs{\BH_l} 
+\cos(\phi_k - \psi_l) 
+\epsilon_{klm} \Be_m.
+\end{dmath}
+
+We have only to compare this to the desired expression
+
+\begin{dmath}\label{eqn:poyntingComplex:250}
+\inv{2} \Real( \BE_0 \cross \BH_0^\conj )
+= \inv{2} 
+\sum_{klm} \Real\left(
+\Abs{\BE_k} e^{i\phi_k}
+\Abs{\BH_l} e^{-i\psi_l}
+\right)
+\epsilon_{klm} \Be_m 
+= \inv{2} 
+\sum_{klm} 
+\Abs{\BE_k} 
+\Abs{\BH_l} 
+\cos( \phi_k - \psi_l )
+\epsilon_{klm} \Be_m.
+\end{dmath}
+
+This proves the desired result.
+}
+
+\vcsinfo
+\EndArticle
