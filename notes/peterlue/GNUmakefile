@@ -9,6 +9,7 @@ COPIED_FILES += ./peeters_layout.sty
 COPIED_FILES += ./Bibliography.bib
 
 GENERATED_PDFS += AetherPhysics.pdf
+GENERATED_PDFS += sampleArticle.pdf
 
 CLEAN_TARGETS += *.ilg *.ind *.idx *.ps *.dvi *.log *.aux *.bbl *.blg *.lof *.log *.lot *.out *.toc *.synctex.gz *.stackdump *.brf
 
