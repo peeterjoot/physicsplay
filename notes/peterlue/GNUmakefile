@@ -1,20 +1,14 @@
-#
-# could consider moving: ../nonga/multiPendulumSphericalMatrix.tex here too.
-#
-THISDIR := papers
+THISDIR := peterlue
 
 # <modified from ../make.vars>
 SOURCE_DIRS += .
-
-#GENERATED_SOURCES += currentBookCopyright.tex
 
 # ./ in these due to a bug in the .gitignore generation rule.
 COPIED_FILES += ./peeters_macros.sty
 COPIED_FILES += ./peeters_layout.sty
 COPIED_FILES += ./Bibliography.bib
 
-GENERATED_PDFS += gramSchmidtLorentz.pdf
-GENERATED_PDFS += relwave.pdf
+GENERATED_PDFS += AetherPhysics.pdf
 
 CLEAN_TARGETS += *.ilg *.ind *.idx *.ps *.dvi *.log *.aux *.bbl *.blg *.lof *.log *.lot *.out *.toc *.synctex.gz *.stackdump *.brf
 
