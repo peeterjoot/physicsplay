@@ -1,0 +1,262 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{modernOpticsLecture3}
+\renewcommand{\dirname}{notes/phy485/}
+\keywords{Eikonal equation, ray equation, Optics, PHY485H1F}
+
+\input{../peeter_prologue_print2.tex}
+
+\beginArtNoToc
+
+\generatetitle{PHY485H1F Modern Optics.  Lecture 3: GRIN (Graded Refractive INdex).  Taught by Prof.\ Joseph Thywissen}
+\label{chap:modernOpticsLecture3}
+
+\section{Disclaimer}
+
+Peeter's lecture notes from class.  May not be entirely coherent.
+
+\section{Gradium Lens}
+
+We'll use Fermat's theorem
+
+\makedefinition{Fermat's theorem}{dfn:modernOpticsLecture3:10}{
+The pathlength is the same for all rays.
+}
+
+Looking to 
+
+FIXME: F1
+
+we write
+
+\begin{dmath}\label{eqn:modernOpticsLecture3:n}
+\text{edge} = n(\Br) d + \sqrt{r^2 + f^2}
+\end{dmath}
+\begin{dmath}\label{eqn:modernOpticsLecture3:n}
+\text{center} = n_0 d + f.
+\end{dmath}
+
+Employing te paraxial approximation $r << f$ we have
+
+\begin{dmath}\label{eqn:modernOpticsLecture3:n}
+\sqrt{r^2 + f^2} \approx f \left( 1 + \inv{2} \frac{r^2}{f^2} \right)
+\end{dmath}
+
+so that the edge is
+
+\begin{dmath}\label{eqn:modernOpticsLecture3:n}
+n(\Br) d + \sqrt{r^2 + f^2} \approx n(\Br) d + f,
+\end{dmath}
+
+and
+
+\begin{dmath}\label{eqn:modernOpticsLecture3:n}
+n(\Br) = n_0 - \inv{2} \frac{r^2}{f d}
+\end{dmath}
+
+\section{GRIN (Graded Refractive Index) optics}
+
+We will now consider a cylindrical system as illustrated in 
+
+FIXME: F2
+
+and look at ray path for 
+
+\begin{dmath}\label{eqn:modernOpticsLecture3:10}
+n(\rho) = n_0 - \alpha \rho^2/2.
+\end{dmath}
+
+We seek a relationship as potentially illustrated in 
+
+FIXME: F3
+
+where 
+
+\begin{dmath}\label{eqn:modernOpticsLecture3:30}
+ds = dz \sqrt{ 1 + \Abs{ \ddz{\rho} }^2 \sim dz,
+\end{dmath}
+
+for the paraxial approximation.
+
+\paragraph{Approach} Eikonal Equation (Ray equation).
+
+\begin{dmath}\label{eqn:modernOpticsLecture3:50}
+\dds \left(  n(\Br) \dds{\Br} \right) = \spacegrad n
+\end{dmath}
+
+paraxial
+
+\begin{dmath}\label{eqn:modernOpticsLecture3:70}
+\ddz ( (n_0 - \cancel{\alpha \rho^2/2} ) \ddz \Brho = \spacegrad ( n_0 - \alpha/2 \rho^2 ) = - \alpha \Brho
+\end{dmath}
+
+We have a SHO
+
+\begin{dmath}\label{eqn:modernOpticsLecture3:90}
+\boxed{
+n_0 \ddz^2 \Brho = - \alpha \Brho
+}
+\end{dmath}
+
+Let's write this out
+
+FIXME: \frac{\sqrt{\alpha}}{n_0} should be \sqrt{\frac{\alpha}{n_0}}
+\begin{dmath}\label{eqn:modernOpticsLecture3:110}
+\Brho(z) = 
+\begin{bmatrix}
+x(z) \\
+y(z) \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+A \cos( \frac{\sqrt{\alpha}}{n_0} z ) + B \sin( \frac{\sqrt{\alpha}}{n_0} z) \\
+C \cos( \frac{\sqrt{\alpha}}{n_0} z ) + D \sin( \frac{\sqrt{\alpha}}{n_0} z) \\
+\end{bmatrix}
+\end{dmath}
+
+We have 4 constants determined by the initial conditions 
+
+\begin{dmath}\label{eqn:modernOpticsLecture3:130}
+\Brho(0) = 
+\begin{bmatrix}
+A \\
+C
+\end{bmatrix}
+\end{dmath}
+
+\begin{dmath}\label{eqn:modernOpticsLecture3:150}
+\evalbar{\ddz \Br}{0} = 
+\frac{\sqrt{\alpha}}{n_0}
+\begin{bmatrix}
+B \\
+D
+\end{bmatrix},
+\end{dmath}
+
+as illustrated in
+
+FIXME: F4
+
+If the length is an integer $L$ as in 
+
+FIXME: F5
+
+If the length is a half integer $L$ as in 
+
+FIXME: F6
+
+If $\text{length} = \left(n + \inv{4} \right)L$ as in 
+
+FIXME: F7
+
+\section{Applications of GRIN fibers and Fermat's theorem}
+
+Are path lengths equal?  Instead of dropping all but the $dz$ term in our $ds$ approximation above (FIXME: ref), how about we retain the first order Taylor expansion
+
+\begin{dmath}\label{eqn:modernOpticsLecture3:170}
+T = \int_0^L \frac{ds}{c/n(\Br)} 
+= \int_0^L dz \left( 1 + \inv{2} \Abs{ \ddz \Brho}^2 } \left(n_0 - \frac{\alpha}{2} \rho^2 \right)
+\approx \frac{n_0}{c} \int_0^L dz \left( 1 + \inv{2} \Abs{ \ddz{\Brho} }^2 - \frac{\alpha}{2 n_0} \rho^2 \right) + O(\text{higher order corrections})
+\end{dmath}
+
+\begin{dmath}\label{eqn:modernOpticsLecture3:190}
+\ddz{} \left( \Brho \cdot \ddz{\Brho} \right) 
+=
+\Abs{ \ddz{\Brho} }^2 + \rho \cdot \frac{d^2 \Brho }{d^2 z}
+\end{dmath}
+
+so 
+
+\begin{dmath}\label{eqn:modernOpticsLecture3:210}
+T 
+= \frac{n_0}{c} \int_0^L dz \left( 1 
++ \inv{2} \ddz{} \left( \Brho \cdot \ddz{\Brho} \right) 
+- \rho \cdot \frac{d^2 \Brho }{d^2 z}
+-\inv{2} \frac{\alpha}{n_0} \rho^2
+\end{dmath}
+
+But
+\begin{dmath}\label{eqn:modernOpticsLecture3:230}
+- \rho \cdot \frac{d^2 \Brho }{d^2 z}
+-\inv{2} \frac{\alpha}{n_0} \rho^2
+=
+-\inv{2} \underbrace{( ddz2 \Brho - \alpha/n_0 \Brho)}_{ = 0 \text{by Eikonal}} \cdot \Brho
+\end{dmath}
+
+so 
+\begin{dmath}\label{eqn:modernOpticsLecture3:250}
+T 
+= \frac{n_0 L}{c} 
++ \underbrace{\evalrange{ \Brho \cdot \ddz{\Brho} }{0}{L}}{ = 0 $\text{if refocused}}
+\end{dmath}
+
+Here if refocused means $\Brho = 0$ at both sides.
+
+See chapter 3 of FIXME: Principles of optics by B...?
+
+Ray equation gives paths of stationary action 
+
+In general our action is 
+
+\begin{dmath}\label{eqn:modernOpticsLecture3:270}
+S = \int_{t_1}^{t_2} dt \LL
+\end{dmath}
+
+where $\LL$ is the Lagrangian.  We recall Hamilton's principle which states that if 
+
+\begin{dmath}\label{eqn:modernOpticsLecture3:290}
+\delta S = 0,
+\end{dmath}
+
+(a path variation as illustrated in 
+
+FIXME: F10
+
+), then the statement \ref{eqn:modernOpticsLecture3:290} gives us Hamiltonian dynamics (Hamilton's equations).
+
+Why does this work?  One explaination is that we have in quantum mechanics the most general action
+
+\begin{dmath}\label{eqn:modernOpticsLecture3:n}
+amplitude (path) = \exp( i S[path]/\hbar ),
+\end{dmath}
+
+This is called Feynman's Path Integral.
+
+We have a Lagrangian for electromagnetism
+
+\begin{dmath}\label{eqn:modernOpticsLecture3:n}
+\LL_{\text{EM}} = \inv{c} \rho \phi + \inv{c} \Bj \cdot \BA + \inv{8 \pi} \BE^2 - \inv{8 \pi} \BB^2.
+\end{dmath}
+
+Using this we can derive Maxwell's equations.
+
+As a problem we are going to calculate the amplitude for the Cornu spiral
+
+FIXME: F11
+
+Propose some experiments
+
+1) Block the primary path
+
+FIXME: F12
+
+2) Block 2 paths
+
+FIXME: F13
+
+3) Block half paths
+
+FIXME: F14
+
+4) Allow paths with the same phase.
+
+FIXME: F15
+
+We'll see that the Action principle does in fact provide us all the real physical effects (Frenel diffraction, multi-slit diffraction, ...)
+
+\vcsinfo
+%\EndArticle
+\EndNoBibArticle
