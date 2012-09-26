@@ -2,7 +2,8 @@
 
 use strict ;
 use warnings ;
-use Getopt::Long;
+use Getopt::Long ;
+use POSIX qw/strftime/ ;
 
 my $d ;
 #$d = 'gabook' ;
@@ -86,11 +87,20 @@ foreach (@ig)
 
 my $title = `grep 'chapter{' $filebase.$suffix` ;
 chomp $title ;
-$title =~ s/.*{(.*?)}.*/$1/ ; 
+if (! ($title =~ s/.*{(.*?)}.*/$1/) )
+{
+   $title = `grep 'generatetitle{' $filebase.$suffix` ;
+   chomp $title ;
+}
 
 my $date = `grep 'date{' $filebase.$suffix` ;
 chomp $date ;
 $date =~ s/.*{(.*?)}.*/$1/ ; 
+
+if ( $date eq '' )
+{
+   $date = strftime( "%B %d, %Y", localtime ) ;
+}
 
 my $meta = "
 ,{
