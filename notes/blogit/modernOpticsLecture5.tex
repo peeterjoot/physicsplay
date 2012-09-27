@@ -5,19 +5,189 @@
 \input{../blogpost.tex}
 \renewcommand{\basename}{modernOpticsLecture5}
 \renewcommand{\dirname}{notes/phy485/}
-\newcommand{\keywords}{Optics, PHY485H1F}
+\newcommand{\keywords}{Optics, PHY485H1F, Fraunhofer diffraction, Fresnel diffraction}
 \input{../peeter_prologue_print2.tex}
 \beginArtNoToc
-\generatetitle{PHY485H1F Modern Optics.  Lecture 5: XXX.  Taught by Prof.\ Joseph Thywissen}
-%\chapter{XXX}
+\generatetitle{PHY485H1F Modern Optics.  Lecture 5: Diffraction (cont.).  Taught by Prof.\ Joseph Thywissen}
+%\chapter{Diffraction (cont.)}
 \label{chap:modernOpticsLecture5}
 
 \section{Disclaimer}
 
 Peeter's lecture notes from class.  May not be entirely coherent.
 
-\section{Motivation}
-\section{Guts}
+\section{Diffraction}
+
+\begin{dmath}\label{eqn:modernOpticsLecture5:n}
+\Psi(\Br) = -\inv{4\pi} \int da' \frac{e^{i k R}}{R} \left(
+\spacegrad \Psi + \left( i k - \inv{R} \right) \Rcap \Psi 
+\right) \cdot \ncap
+\end{dmath}
+
+Length scales
+
+Wavelength $\lambda$, object size $d$, distance of observation $r$, sources $r_s$, where the object is larger than $\lambda$
+
+\begin{dmath}\label{eqn:modernOpticsLecture5:n}
+r, r_s \gg d \gg \lambda,
+\end{dmath}
+
+since we are far from the object.  A consequence of this is is that we have
+
+\begin{dmath}\label{eqn:modernOpticsLecture5:n}
+\left( i k - \inv{r} \right) \approx i k,
+\end{dmath}
+
+because $r \gg \lambda$.  Another consequence is that in an integral like 
+
+\begin{dmath}\label{eqn:modernOpticsLecture5:n}
+\int \frac{ \cdots }{ \Abs{ \Br - \Br' } } da' \approx \inv{ R_s} \int \cdots da',
+\end{dmath}
+
+because $r \gg d$.  
+
+We still have to be \underline{careful} with something like
+
+\begin{dmath}\label{eqn:modernOpticsLecture5:n}
+\int \cdots e^{i k {\Br'}^2/r}
+\end{dmath}
+
+since this exponential could matter very much.  Recalling that $\BR = \Br - \Br'$, we have
+
+% FIXME: latex:
+%\begin{dmath}\label{eqn:modernOpticsLecture5:n}
+%k R = \underbrace{k r}_{O(r\lambda}} - \underbrace{k \rcap \cdot \Br'}_{O(d/\lambda)} + \underbrace{\frac{k}{2r} \left( {\Br'}^2 - \left( \rcap \cdot \Br' \right)^2 \right)}_{O(d^2/\lambda r)} + \underbrace{\cdots}_{O(d^3\lambda r^2)}
+%\end{dmath}
+
+FIXME: reason through this myself, expanding $R = \sqrt{\BR^2} = \sqrt{ (\Br - \Br')^2 }$.
+
+We need any exponential to be small with respect to $1$ to neglect.  
+\begin{itemize}
+\item In the above if $r \gg d^2/\lambda$ we can neglect this third term, which is the \underline{Fraunhofer} case.
+\item \underline{Fresnel} diffraction retains the ${\Br'}^2$ term! (with $r^2 \gg d^3/\lambda$, we'll stop at this $\Br'^2$ term).
+\end{itemize}
+
+We'll treat the Fraunhofer case now killing the $1/R$ term here:
+
+\begin{dmath}\label{eqn:modernOpticsLecture5:n}
+\Psi(\Br) = -\inv{4\pi} \int da' \frac{e^{i k R}}{R} \left(
+\spacegrad \Psi + \left( i k - \cancel{\inv{R}} \right) \Rcap \Psi 
+\right) \cdot \ncap.
+\end{dmath}
+
+We'll use a point source
+
+\Psi = \frac{e^{i k R_s }}{R_s}
+
+where
+
+\spacegrad \Psi = \Rcap_s \left( i k - \cancel{\inv{R_s}} \right) \frac{e^{i k R_s}}{R_s}
+
+Our diffraction integral, with a small enough object $d \ll r, r_s$, we'll be able to pull the obliquity factor out of the integral
+
+\Psi(\Br) 
+= \frac{ A }{\lambda i} \iint da' \frac{e^{i k (R + R_s)}}{R_s R} k(\theta)
+\approx \frac{ A k(\theta) }{\lambda i} \iint da' \frac{e^{i k (R + R_s)}}{R_s R}
+\approx \frac{ A }{\lambda i} \iint da' \frac{e^{i k (R + R_s)}}{R_s R}
+
+We've also made the paraxial approximation, recalling that
+
+\begin{dmath}\label{eqn:modernOpticsLecture5:n}
+k(\theta) = \frac{1 + \cos\theta}{2},
+\end{dmath}
+
+so that for $\theta \approx 0$, in the region illustrated in
+
+FIXME: F1
+FIXME: F2
+
+we have $k(\theta) \approx 1$.
+
+Our problem is now reduced to
+
+\begin{dmath}\label{eqn:modernOpticsLecture5:n}
+\Psi(\Br) 
+= \frac{ A }{\lambda i} \frac{ e^{i k (r_s + r)}}{r_s r} \iint_{\text{aperature}} da' e^{i k f(\Br')}
+\end{dmath}
+
+where 
+%FIXME: $\Br' = R - r + R_s - r_s$ % ???
+
+\begin{dmath}\label{eqn:modernOpticsLecture5:n}
+f(\Br') = - \left(\rcap + \rcap_s \right) \cdot \Br' + \inv{2r} \left( {\Br'}^2 - (\rcap \cdot \rcap')^2 \right) + \inv{2 r_s} \left( (\Br')^2 - (\Br_s \cdot \Br')^2 \right)
+\end{dmath}
+
+the first term is the Fraunhofer term and the last two are the Fresnel contributions.
+
+Referring to 
+
+FIXME: F3
+
+we find
+
+\begin{dmath}\label{eqn:modernOpticsLecture5:n}
+k f 
+= -k (\rcap + \rcap_s) \cdot \Br'
+= -(\Bk -\Bk') \cdot \Br'
+\end{dmath}
+
+putting things back into the diffraction integral, we have something of the form
+
+\begin{dmath}\label{eqn:modernOpticsLecture5:n}
+\Psi(\Br) 
+= \text{constant} \iint_{\text{aperature}} d^2 \Br' e^{i (\Bk - \Bk') \cdot \Br' } g(\Br')
+\end{dmath}
+
+where $g(\Br')$ is an ``aperature'' function defined in the open portion as illustrated in
+
+FIXME: F4
+
+If we define $g(\Br')$ to be zero outside of the aperature
+
+%FIXME: latex
+%g(\Br') = 1, open
+%0, blocked
+
+then we can just write
+
+\begin{dmath}\label{eqn:modernOpticsLecture5:n}
+\Psi(\Br) 
+= \text{constant} \iint d^2 \Br' e^{i (\Bk - \Bk') \cdot \Br' } g(\Br')
+\end{dmath}
+
+so that
+
+\begin{dmath}\label{eqn:modernOpticsLecture5:n}
+\Psi = (\text{constant}) G(\Bk_s - \Bk)
+\end{dmath}
+
+where 
+
+\begin{dmath}\label{eqn:modernOpticsLecture5:n}
+G(\Bk) = \iint e^{i \Bk \cdot \Br'} g(\Br') d^2 \Br',
+\end{dmath}
+
+which is just a Fourier transform!  Our amplitude is 
+
+\begin{dmath}\label{eqn:modernOpticsLecture5:n}
+I(\Br) = \Abs{\Psi(\Br)}^2 = (\text{constant})^2 \Abs{G(\Bk_s - \Bk)}^2
+\end{dmath}
+
+Note that if the amplitude 
+
+\begin{dmath}\label{eqn:modernOpticsLecture5:n}
+\Abs{\Psi(\Br')} = \Psi_0
+\end{dmath}
+
+then this constant is
+
+\begin{dmath}\label{eqn:modernOpticsLecture5:n}
+\inv{2} \left( \frac{k \Psi_0}{2 \pi r} \right)^2.
+\end{dmath}
+
+Calculating this for a circular pattern we find a sinc function, and for a square (?), we'll get a first order Bessel function.  (FIXME: was that right?).  We can deal with double slit by doing a convolution of a rectangle aperature with a pair of delta functions and then just multiply the Fourier transforms.
+
+We will be applying this diffraction result to investigate coherence.  We'll find that if the source is not coherent, the chance of observing the fringe oscillations far from the source becomes very small.
 
 %\vcsinfo
 %\EndArticle
