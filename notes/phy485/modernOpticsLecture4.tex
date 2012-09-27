@@ -2,22 +2,20 @@
 % Copyright © 2012 Peeter Joot.  All Rights Reserved.
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
 %
-\input{../blogpost.tex}
-\renewcommand{\basename}{modernOpticsLecture4}
-\renewcommand{\dirname}{notes/phy485/}
-\newcommand{\keywords}{Optics, PHY485H1F, diffraction, diffraction integral, Huygens-Fresnel principle}
-
-\input{../peeter_prologue_print2.tex}
-
-\beginArtNoToc
-
-\generatetitle{PHY485H1F Modern Optics.  Lecture 4: Diffraction.  Taught by Prof.\ Joseph Thywissen}
+%\input{../blogpost.tex}
+%\renewcommand{\basename}{modernOpticsLecture4}
+%\renewcommand{\dirname}{notes/phy485/}
+%\newcommand{\keywords}{Optics, PHY485H1F, diffraction, diffraction integral, Huygens-Fresnel principle}
+%\input{../peeter_prologue_print2.tex}
+%\beginArtNoToc
+%\generatetitle{PHY485H1F Modern Optics.  Lecture 4: Diffraction.  Taught by Prof.\ Joseph Thywissen}
+\chapter{Diffraction}
 \label{chap:modernOpticsLecture4}
 
-\section{Disclaimer}
-
-Peeter's lecture notes from class.  May not be entirely coherent.
-
+%\section{Disclaimer}
+%
+%Peeter's lecture notes from class.  May not be entirely coherent.
+%
 \section{Context}
 
 We start the class with a green laser setup, where the light is displayed on the screen, then also after going through a single and double slit, as illustrated in figure (\ref{fig:modernOpticsLecture4:modernOpticsLecture4Fig1}).
@@ -57,7 +55,7 @@ With the principle of superposition
 
 We will assume no mixing, so that we can treat just one component.
 
-Reading: \S 8 \cite{born2000principles}, \S \cite{jackson1975cew}.  The first goes and proves that the scalar theory is sufficient under this conditions.
+Reading: \S 8.3.1 \citep{born1980principles}, \S 9.8 \citep{jackson1975cew}.  The first goes and proves that the scalar theory is sufficient under this conditions.
 
 We'd like to solve the wave equation with these approximations.
 
@@ -79,7 +77,7 @@ We find
 }
 \end{dmath}
 
-This is called the Helmholtz equation.  Reading: Appendix 2 of \cite{hecht1998hecht}.
+This is called the Helmholtz equation.
 
 It turns out that the solution to this equation is generally written out as the surface integral
 
@@ -91,17 +89,27 @@ It turns out that the solution to this equation is generally written out as the 
 Here $\ncap$ is the unit normal perpendicular to the surface, and the Green function of the Helmholtz equation is
 
 \begin{dmath}\label{eqn:modernOpticsLecture4:110}
-G(\Br, \Br') = \frac{e^{i k R}}{4 \pi R}.
+G(\Br, \Br') = -\frac{e^{i k R}}{4 \pi R} = -\frac{e^{i k \Abs{\Br - \Br'}}}{4 \pi \Abs{\Br - \Br'}},
 \end{dmath}
 
-Recall that we demonstrated that this Green's function worked as an exercise in \cite{phy456:helmoltzGreens}.
-FIXME: did I drop a sign?
+%where $R = \Abs{\Br - \Br'}$.  
+Recall that we previously demonstrated \citep{phy456:helmoltzGreens} that this Green's function works to solve the forced Helmoltz equation
 
-As illustrated in figure (\ref{fig:modernOpticsLecture4:modernOpticsLecture4Fig3}).
+\begin{equation}\label{eqn:modernOpticsLecture4:helmholtzGreens:10}
+\left( \spacegrad^2 + \Bk^2\right) \psi_\Bk(\Br) = s(\Br),
+\end{equation}
+
+with solution
+
+\begin{equation}\label{eqn:modernOpticsLecture4:helmholtzGreens:50}
+\psi_\Bk(\Br) = \int G(\Abs{\Br - \Br'}) s(\Br') d^3 \Br',
+\end{equation}
+
+it is far from obvious how to apply this to the homogeneous Helmoltz equation.  The tricks involved (application of Green's theorem to a spherical volume with the center deleted) can be found in appendix 2 of \citep{hecht1998hecht} (also relavant is \S 10.4).  The end result of that trickery is called the Kirchhoff Integral Theorem.
+
+Is this Green's function reasonable seeming?  As illustrated in figure (\ref{fig:modernOpticsLecture4:modernOpticsLecture4Fig3}) this isn't an entirely unsurprising seeming Green's function for this problem.  We have the $e^{i k R}$ type of phase factor that we expected (and guessed in the geometric optics treatment), and also have the $1/R$ factor that we need to retain power at a distance $R$.
 
 \imageFigure{modernOpticsLecture4Fig3}{Wave function at the aperture}{fig:modernOpticsLecture4:modernOpticsLecture4Fig3}{0.2}
-
-this isn't an entirely unsurprising seeming Green's function for this problem.  We have the $e^{i k R}$ type of phase factor that we expected (and guessed in the geometric optics treatment), and also have the $1/R$ factor that we need to retain power at a distance $R$.
 
 Also note that the primed gradient is taken with respect to the coordinates of $\Br'$
 
@@ -124,7 +132,7 @@ Applying this to our problem we find
 \Psi(\Br) = -\inv{4 \pi} \iint \frac{e^{i k R}}{R} 
 \ncap \cdot 
 \left( 
-\spacegrad' \Psi + \left( i k - \inv{R} \right) \frac{\BR}{R} \Psi \right) 
+\spacegrad' \Psi(\Br') + \left( i k - \inv{R} \right) \frac{\BR}{R} \Psi(\Br') \right) 
 da'.
 \end{dmath}
 
@@ -223,8 +231,7 @@ Should we open up the pinhole, we have to adjust things accordingly, and find
 }
 \end{dmath}
 
-
 This is called the \underline{diffraction integral}.
 
-\vcsinfo
-\EndArticle
+%\vcsinfo
+%\EndArticle
