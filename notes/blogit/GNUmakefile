@@ -2,6 +2,7 @@ THISDIR := blogit
 
 RAWTEXFILES := $(shell ls *.tex)
 INCOMPLETE += motionOfFreeTop.tex
+INCOMPLETE += modernOpticsProblemSet1.tex
 
 # these may not all be incomplete, but I don't want to build them right now:
 INCOMPLETE += pp.tex
