@@ -8,16 +8,270 @@
 \newcommand{\keywords}{Optics, PHY485H1F}
 \input{../peeter_prologue_print2.tex}
 \beginArtNoToc
-\generatetitle{PHY485H1F Modern Optics.  Lecture 6: XXX.  Taught by Prof.\ Joseph Thywissen}
-%\chapter{XXX}
+\generatetitle{PHY485H1F Modern Optics.  Lecture 6: Fresnel diffraction.  Taught by Prof.\ Joseph Thywissen}
+%\chapter{Fresnel diffraction}
 \label{chap:modernOpticsLecture6}
 
 \section{Disclaimer}
 
 Peeter's lecture notes from class.  May not be entirely coherent.
 
-\section{XXX}
+\section{Fresnel diffraction from an edge}
 
-\vcsinfo
+Consider the experiments of 
+
+FIXME: F1
+
+Why, with such a carefully placed barrier, do we end up with $I_0/4$?  If we consider that the light takes all paths, and we have blocked half the paths, so that the amplitude of the wave function $\Abs{\Psi_0/2}$ results in the factor of $1/4$.  Let's do the math to see why this is the case more precisely.
+
+We found 
+
+\begin{equation}\label{eqn:modernOpticsLecture6:10}
+\Psi(\Br) = \frac{A}{i\lambda} \frac{e^{ik (r_s + r)}}{r_s r} \int_{\text{aperature}} e^{i k f(\Br')} da'
+\end{equation}
+
+In the Fraunhofer limit (the far field) we had
+
+\begin{equation}\label{eqn:modernOpticsLecture6:30}
+k f \rightarrow ( \Bk_s - \Bk ) \cdot \Br',
+\end{equation}
+
+where $r \gg d^2/\lambda$, and $d$ is a typical aperature size.
+
+Recalling that the exact expression for $f$ was
+
+\begin{equation}\label{eqn:modernOpticsLecture6:50}
+f(\Br') = - \left(\rcap + \rcap_s \right) \cdot \Br' + \inv{2r} \left( {\Br'}^2 - (\rcap \cdot \rcap')^2 \right) + \inv{2 r_s} \left( (\Br')^2 - (\Br_s \cdot \Br')^2 \right)
+\end{equation}
+
+We'll now consider the \underline{Fresnel} limit where $\Bk_s = \Bk$, and
+
+\begin{equation}\label{eqn:modernOpticsLecture6:70}
+k f = \frac{k}{2} \left( \inv{r} + \inv{r_s} \right) {r'}^2
+\end{equation}
+
+These Fresnel terms are generally important when $r \sim d^2/\lambda$ even if $r \gg d$ (because $\lambda \ll d$).  We'd like to massage this $k f$ expression
+
+\begin{equation}\label{eqn:modernOpticsLecture6:90}
+k f = \frac{k}{2} \left( 
+r_s^{-1}
++r^{-1} \right) \left({x'}^2 + {y'}^2 \right) = \frac{\pi}{2} \left( u^2 + v^2 \right),
+\end{equation}
+
+where we have made a change of variables
+
+\begin{dmath}\label{eqn:modernOpticsLecture6:110}
+\begin{bmatrix}
+x' \\
+y'
+\end{bmatrix}
+=
+\sqrt{\frac{\pi/k}{r_s^{-1} + r^{-1}}}
+\begin{bmatrix}
+u \\
+v
+\end{bmatrix}
+=
+\sqrt{\frac{\lambda/2}{r_s^{-1} + r^{-1}}}
+\begin{bmatrix}
+u \\
+v
+\end{bmatrix}
+\end{dmath}
+
+Our area element is then
+
+\begin{equation}\label{eqn:modernOpticsLecture6:130}
+dx' dy'  = 
+\frac{\lambda/2}{r_s^{-1} + r^{-1}} du dv
+\end{equation}
+
+Our integral is now
+
+\begin{dmath}\label{eqn:modernOpticsLecture6:150}
+\Psi(\Br) 
+= \frac{A}{i\lambda} \frac{e^{ik (r_s + r)}}{r_s r} \int_{\text{aperature}} e^{i k f(\Br')} da'
+= \frac{A}{i\lambda} \frac{e^{ik (r_s + r)}}{r_s r} 
+\frac{\lambda/2}{r_s^{-1} + r^{-1}}
+\int_{\text{aperature}} e^{i \frac{\pi}{2} (u^2 + v^2} du dv
+= 
+\frac{A}{i\lambda} e^{ik (r_s + r)} 
+\frac{\lambda/2}{r_s + r}
+\int_{\text{aperature}} e^{i \frac{\pi}{2} (u^2 + v^2} du dv
+\end{dmath}
+
+Referring to figure 
+
+FIXME: F2
+
+let's do this integral.  Putting in our limits we have
+
+\begin{equation}\label{eqn:modernOpticsLecture6:170}
+\Psi(\Br) 
+=
+\frac{A}{ 2 i } 
+\frac{
+e^{ik (r_s + r)} 
+}{r_s + r}
+\int_{-\infty}^\infty du \int_{-\infty}^w dv
+e^{i \frac{\pi}{2} \left(u^2 + v^2 \right) } du dv
+\end{equation}
+
+where 
+
+\begin{equation}\label{eqn:modernOpticsLecture6:190}
+w = \sqrt{ \frac{2}{\lambda} \left( \inv{r_s} + \inv{r} \right) }
+\end{equation}
+
+We use \footnote{Can be computed by integrating $\cos(\pi v^2/2) + i \sin(\pi v^2/2)$, or using the gaussian integral result.}
+
+\begin{equation}\label{eqn:modernOpticsLecture6:210}
+\int_{-\infty}^\infty dv e^{i \frac{\pi}{2} v^2 } = 1 + i = \sqrt{2} e^{i \pi/4}
+\end{equation}
+
+FIXME: do this integral in the ways suggested as an exersize.
+
+\begin{equation}\label{eqn:modernOpticsLecture6:230}
+\int_{-\infty}^w dv e^{i \frac{\pi}{2} v^2 } 
+=
+\int_{-\infty}^0 
+\int_{0}^w 
+dv e^{i \frac{\pi}{2} v^2 } 
+=
+\frac{1 + i}{2} + C(w) + S(w),
+\end{equation}
+
+where 
+
+\begin{subequations}
+\begin{equation}\label{eqn:modernOpticsLecture6:250}
+S(w) = \int_0^w \sin \left( \frac{\pi}{2} u^2 \right) du
+\end{equation}
+\begin{equation}\label{eqn:modernOpticsLecture6:270}
+C(w) = \int_0^w \cos \left( \frac{\pi}{2} u^2 \right) du
+\end{equation}
+\end{subequations}
+
+Parametrically plotting these we get the \underline{Cornu Spiral} 
+
+FIXME: F3
+
+There are some interesting features of this curve.
+
+\begin{enumerate}
+\item 
+The length along the curve is 
+
+\begin{dmath}\label{eqn:modernOpticsLecture6:290}
+dl^2 
+= dS^2 + dC^2
+= 
+\left( \frac{dS}{dw} \right)^2
++\left( \frac{dC}{dw} \right)^2
+=
+\left(
+\sin^2\left( \frac{\pi}{2} w^2 \right)
++\cos^2\left( \frac{\pi}{2} w^2 \right)
+\right) dw^2
+= dw^2
+\end{dmath}
+
+so that
+
+\begin{dmath}\label{eqn:modernOpticsLecture6:310}
+\boxed{
+dl = dw
+}
+\end{dmath}
+\item How about the angle along the curve.  Stating the result, where the angle is given by 
+
+\begin{dmath}\label{eqn:modernOpticsLecture6:330}
+\boxed{
+\tan\theta = \frac{dy}{dx}
+}
+\end{dmath}
+
+one can find that
+
+\begin{dmath}\label{eqn:modernOpticsLecture6:350}
+\theta = \frac{\pi}{2} w^2
+\end{dmath}
+
+\end{enumerate}
+
+Going back to our diffraction integral we find
+
+\begin{equation}\label{eqn:modernOpticsLecture6:370}
+\Psi(\Br) 
+=
+\frac{A}{ 2 i } 
+\frac{
+e^{ik (r_s + r)} 
+}{r_s + r}
+\left( 1 + i \right) \left( \frac{1 + i}{2} + C(w) + S(w) \right)
+\end{equation}
+
+\paragraph{Check: No obstruction?}
+
+We've got $w \rightarrow \infty$, so that $C(w) = 1/2$ and $C(w) = 1/2$.  This gives us
+
+\begin{equation}\label{eqn:modernOpticsLecture6:390}
+\Psi(\Br) 
+=
+A
+\frac{
+e^{ik (r_s + r)} 
+}{r_s + r}
+\equiv \Psi_\infty(\Br).
+\end{equation}
+
+Now let's consider our obstruction right along the line of sight ($w = 0$).  Now we have, since $C(0) = S(0) = 0$
+
+\begin{equation}\label{eqn:modernOpticsLecture6:410}
+\Psi(\Br) 
+=
+\Psi_\infty(\Br)
+\inv{2 i} (1 + i) \left( \frac{1 + i}{2} + 0 \right)
+=
+\inv{2} \Psi_\infty(\Br).
+\end{equation}
+
+We do see that we end up with half the amplitude, so that as claimed our intensity (which squares the amplitude) results in a factor of $1/4$
+
+In general our \underline{Intensity} is
+
+\begin{dmath}\label{eqn:modernOpticsLecture6:430}
+I 
+= \Abs{\Psi}^2
+= \Abs{\Psi_infty}^2 \inv{2} \left( 
+\left( 
+\inv{2} + C(w)
+\right)^2
++
+\left( 
+\inv{2} + S(w)
+\right)^2
+\right)
+\end{dmath}
+
+\paragraph{Check, again with $w = 0$}, we have
+
+\begin{dmath}\label{eqn:modernOpticsLecture6:450}
+I_\infty \inv{2} \left( \inv{4} + \inv{4} \right) = I_\infty/4.
+\end{dmath}
+
+Other examples.
+
+Diffraction from an edge $w = d$.
+
+FIXME : F4
+
+Poisson spot.
+
+FIXME: F5
+
+Once we understand that light does in fact take all the paths, we can utilize this to build a \underline{Fresnel lens} by blocking selectively.  This allows us block all the portions of the phase that negatively interfere.  This can be used for example to focus x-rays.
+
+%\vcsinfo
 %\EndArticle
 \EndNoBibArticle
