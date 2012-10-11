@@ -16,6 +16,11 @@ foreach (sort keys %all)
    my ($basename, $figNum, $extension) = ($1, $2, $3) ;
    my $picturepath = "${basename}Fig$figNum" ;
 
+   $basename =~ s,.*/,, ;
+
+   my $picturepathNoDir = $picturepath ;
+   $picturepathNoDir =~ s,.*/,, ;
+
    if ( $extension eq 'svg' )
    {
       next ;
@@ -26,8 +31,8 @@ foreach (sort keys %all)
    }
    elsif ( $extension =~ /mp4|swf|flv/ )
    {
-my $fmov = "${refTextPre}{fig:$basename:$picturepath}$refTextPost.
-\\movieFigure{$picturepath.$extension}{$figNum: FIXME: CAPTION}{fig:$basename:$picturepath}{width=320pt,height=240pt}
+my $fmov = "${refTextPre}{fig:$basename:$picturepathNoDir}$refTextPost.
+\\movieFigure{$picturepath.$extension}{$figNum: FIXME: CAPTION}{fig:$basename:$picturepathNoDir}{width=320pt,height=240pt}
 " ;
 
       print $fmov ;
@@ -35,8 +40,8 @@ my $fmov = "${refTextPre}{fig:$basename:$picturepath}$refTextPost.
 # doesn't work.  Run epstopdf instead to explicitly convert
 #   elsif ( $extension eq 'eps' )
 #   {
-#my $f = "${refTextPre}{fig:$basename:$picturepath}$refTextPost.
-#\\imageFigure{$picturepath.$extension}{$figNum: FIXME: CAPTION}{fig:$basename:$picturepath}{0.2}
+#my $f = "${refTextPre}{fig:$basename:$picturepathNoDir}$refTextPost.
+#\\imageFigure{$picturepath.$extension}{$figNum: FIXME: CAPTION}{fig:$basename:$picturepathNoDir}{0.2}
 #" ;
 #
 #      print $f ;
@@ -48,10 +53,10 @@ my $fmov = "${refTextPre}{fig:$basename:$picturepath}$refTextPost.
 #\\begin{figure}[htp]
 #   \\centering
 #   \\includegraphics[totalheight=0.2\\textheight]
-#   \\label{fig:$basename:$picturepath}
+#   \\label{fig:$basename:$picturepathNoDir}
 #\\end{figure}
-my $f = "${refTextPre}{fig:$basename:$picturepath}$refTextPost.
-\\imageFigure{$picturepath}{$figNum: FIXME: CAPTION}{fig:$basename:$picturepath}{0.2}
+my $f = "${refTextPre}{fig:$basename:$picturepathNoDir}$refTextPost.
+\\imageFigure{$picturepath}{$figNum: FIXME: CAPTION}{fig:$basename:$picturepathNoDir}{0.2}
 " ;
 
       print $f ;
@@ -62,10 +67,10 @@ my $f = "${refTextPre}{fig:$basename:$picturepath}$refTextPost.
 #   \\centering
 #   \\def\\svgwidth{0.3\\columnwidth}
 #   \\input{$picturepath.pdf_tex}
-#   \\caption{FIXME}\\label{fig:$basename:$picturepath}
+#   \\caption{FIXME}\\label{fig:$basename:$picturepathNoDir}
 #\\end{figure}
-my $fpdf = "${refTextPre}{fig:$basename:$picturepath}$refTextPost.
-\\pdfTexFigure{$picturepath.pdf_tex}{$figNum: FIXME: CAPTION}{fig:$basename:$picturepath}{0.3}
+my $fpdf = "${refTextPre}{fig:$basename:$picturepathNoDir}$refTextPost.
+\\pdfTexFigure{$picturepath.pdf_tex}{$figNum: FIXME: CAPTION}{fig:$basename:$picturepathNoDir}{0.3}
 " ;
 
       print $fpdf ;
