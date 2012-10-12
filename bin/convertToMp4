@@ -28,6 +28,18 @@ if ( !defined $outBaseName )
 
 $outFileName = "$outBaseName.mp4" ;
 
+# another way to try (with tip for seeking):
+#
+#http://mathematica.stackexchange.com/questions/4232/how-to-save-animation-in-mp4-format-instead-of-avi/11958#11958
+#
+#The mp4 video to be generated must have even number of pixels in both dimensions. To ensure this independently from the input file, ffmpeg can be invoked as
+#
+#   ffmpeg -i in.avi -vf scale="trunc(iw/2)*2:trunc(ih/2)*2" -vcodec libx264 -x264opts keyint=25 out.mp4
+#
+#-x264opts keyint=25 ensures that keyframes be inserted at every second. This is necessary for precise seeking within the video (using the <- / -> arrow keys of the keyboard [VPlayer.swf] or the slider [StrobeMediaPlayback.swf])
+#
+#
+
 my $cmd = "$ffmpeg -i $inFileName -y -vcodec libx264 $outFileName 2>&1" ;
 my $retry = 0 ;
 my $messageOnRetryFailure = '' ;
