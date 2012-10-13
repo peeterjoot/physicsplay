@@ -70,7 +70,7 @@ We find
 
 \begin{dmath}\label{eqn:modernOpticsLecture4:70}
 \boxed{
-(\spacegrad^2 + \Bk^2) \Psi(\Br) = 0
+\left( \spacegrad^2 + \Bk^2 \right) \Psi(\Br) = 0
 }
 \end{dmath}
 
@@ -90,7 +90,7 @@ G(\Br, \Br') = -\frac{e^{i k R}}{4 \pi R} = -\frac{e^{i k \Abs{\Br - \Br'}}}{4 \
 \end{dmath}
 
 %where $R = \Abs{\Br - \Br'}$.  
-Recall that we previously demonstrated \citep{phy456:helmoltzGreens} that this Green's function works to solve the forced Helmoltz equation
+It is somewhat messy, but relatively straightforward to demonstrate \citep{phy456:helmoltzGreens} that this Green's function works to solve the forced Helmoltz equation
 
 \begin{equation}\label{eqn:modernOpticsLecture4:helmholtzGreens:10}
 \left( \spacegrad^2 + \Bk^2\right) \Psi_\Bk(\Br) = s(\Br),
@@ -99,10 +99,10 @@ Recall that we previously demonstrated \citep{phy456:helmoltzGreens} that this G
 with solution
 
 \begin{equation}\label{eqn:modernOpticsLecture4:helmholtzGreens:50}
-\Psi_\Bk(\Br) = \int G(\Abs{\Br - \Br'}) s(\Br') d^3 \Br',
+\Psi_\Bk(\Br) = \int G(\Abs{\Br - \Br'}) s(\Br') d^3 \Br'.
 \end{equation}
 
-it is far from obvious how to apply this to the homogeneous Helmoltz equation.  The tricks involved (application of Green's theorem to a spherical volume with the center deleted) can be found in appendix 2 of \citep{hecht1998hecht} (also relavant is \S 10.4).  The end result of that trickery is called the Kirchhoff Integral Theorem.
+However, it is far from obvious how to apply this to the homogeneous Helmoltz equation.  The tricks involved (application of Green's theorem to a spherical volume with the center deleted) can be found in \S A.2, \S 10.4 of \citep{hecht1998hecht}, and also in \S 5.2 of \citep{fowles1989introduction}.  The end result of that trickery is called the Kirchhoff Integral Theorem.
 
 Is this Green's function reasonable seeming?  As illustrated in \cref{fig:modernOpticsLecture4:modernOpticsLecture4Fig3}) this isn't an entirely unsurprising seeming Green's function for this problem.  We have the $e^{i k R}$ type of phase factor that we expected (and guessed in the geometric optics treatment, and also have the $1/R$ factor that we need to retain power at a distance $R$.
 
@@ -141,26 +141,31 @@ This neglect is justified for example in Jackson, cited above.
 
 \section{A calculated example: pinhole}
 
-Consider \cref{fig:modernOpticsLecture4:modernOpticsLecture4Fig5}
+With placement of our origin at the pinhole, so that $\Br' = 0$, $\BR = \Br$, $\BR_s = \Br_s$, we want to consider the geometry of \cref{fig:modernOpticsLecture4:modernOpticsLecture4Fig5}.
 
 \imageFigure{figures/modernOpticsLecture4Fig5}{Source, aperture and observation point}{fig:modernOpticsLecture4:modernOpticsLecture4Fig5}{0.4}
 
-where
+Our spherical wave function at the aperature is
 
 \begin{dmath}\label{eqn:modernOpticsLecture4:190}
 \Psi(\Br') = A \frac{e^{i k R_s}}{R_s}
 \end{dmath}
 
-and
+so that
 
 \begin{dmath}\label{eqn:modernOpticsLecture4:210}
-\spacegrad' \Psi = \ncap \left( i k - \inv{R_s} \right) \frac{e^{i k R_s}}{R_s}.
+\spacegrad' \Psi 
+= - A \frac{\Br_s - \Br'}{\Abs{\Br_s - \Br'}}
+\left( i k - \inv{R_s} \right) \frac{e^{i k R_s}}{R_s}
+= - A \frac{\Br_s}{\Abs{\Br_s}}
+\left( i k - \inv{R_s} \right) \frac{e^{i k R_s}}{R_s}
+= A \ncap \left( i k - \inv{R_s} \right) \frac{e^{i k R_s}}{R_s}.
 \end{dmath}
 
-We will place our origin at the pinhole, so that $\Br' = 0$, $\BR = \Br$, $\BR_s = \Br_s$.  Our resulting wave function is then
+Our resulting wave function is then
 
 \begin{dmath}\label{eqn:modernOpticsLecture4:230}
-\Psi(\Br) = - \frac{A}{4 \pi} \frac{e^{i k ( R + r_s)}}{R r_s} 
+\Psi(\Br) = - \frac{A}{4 \pi} \iint da' \frac{e^{i k ( R + r_s)}}{R r_s} 
 \left( 
 \ncap \cdot \ncap 
 \left( i k - \inv{r_s} 
@@ -193,7 +198,7 @@ and
 where $d$ is the ``typical object size'', so that we have
 
 \begin{dmath}\label{eqn:modernOpticsLecture4:310}
-\Psi(\Br) = - \frac{A}{4 \pi} \frac{e^{i k ( R + r_s)}}{R r_s} \left( 
+\Psi(\Br) = - \frac{A}{4 \pi} \iint da' \frac{e^{i k ( R + r_s)}}{R r_s} \left( 
 \ncap \cdot \ncap \left( i k - \cancel{\inv{r_s}} \right) + \ncap \cdot \rcap 
 \left( i k - \cancel{\inv{r}}
 \right)
@@ -204,7 +209,7 @@ or with $\theta$ as illustrated,
 
 \begin{dmath}\label{eqn:modernOpticsLecture4:330}
 \boxed{
-\Psi(\Br) = \frac{k A}{2 \pi i} \frac{e^{i k ( r + r_s)}}{r r_s} k(\theta),
+\Psi(\Br) = \frac{k A}{2 \pi i} \iint da' \frac{e^{i k ( r + r_s)}}{r r_s} k(\theta),
 }
 \end{dmath}
 
@@ -218,17 +223,18 @@ is the ``obliquity factor''.
 
 This is called the \underline{Huygens-Fresnel} principle.
 
-\section{Generalizing}
-
-Should we open up the pinhole, we have to adjust things accordingly, and find
-
-\begin{dmath}\label{eqn:modernOpticsLecture4:370}
-\boxed{
-\Psi(\Br) = \frac{k A}{2 \pi r r_s} \iint e^{i k (R + R_s)} k(\theta) d^2 \Br'
-}
-\end{dmath}
-
-This is called the \underline{diffraction integral}.
+% This is messed up.  Looks like he was trying to give us a glance at what was to come.
+%\section{Generalizing}
+%
+%Should we open up the pinhole, we have to adjust things accordingly, and find
+%
+%\begin{dmath}\label{eqn:modernOpticsLecture4:370}
+%\boxed{
+%\Psi(\Br) = \frac{k A}{2 \pi i} \iint \frac{e^{i k (R + R_s)}}{ r r_s } k(\theta) d^2 \Br'
+%}
+%\end{dmath}
+%
+%This is called the \underline{diffraction integral}.
 
 %\vcsinfo
 %\EndArticle
