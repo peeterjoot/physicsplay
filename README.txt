@@ -87,6 +87,10 @@ notes/peterlue/
   
    A sample simple latex file for Peter.
 
+notes/mathematica/
+
+   A couple random mathematica notebooks
+
 notes/algebra
 notes/calculus
 notes/dekker
@@ -96,9 +100,6 @@ notes/financials
 notes/gamma-matrix
 notes/geometric-algebra
 notes/lut
-notes/mathematica
-notes/oldblogit
-notes/phy1530
 notes/relativity
 notes/toc
    ?  I think that some of this is from before I created the gabook/ compilation.  
