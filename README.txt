@@ -2,7 +2,15 @@ Some directories in this repository:
 
 bin/
 
-   Some scripts
+   Some scripts.
+
+notes/blogit/
+
+   Various things in unfinished states.
+
+notes/atomic/
+
+   Some informal papers on atomic operations and memory barriers.
 
 notes/gabook/
 
@@ -74,3 +82,23 @@ tmcache/
 
    prototype code to attempt to avoid non-signal safe function localtime_r(), which can be desirable
    to use in a signal handler.
+
+notes/peterlue/
+  
+   A sample simple latex file for Peter.
+
+notes/algebra
+notes/calculus
+notes/dekker
+notes/differential_forms
+notes/dynamics
+notes/financials
+notes/gamma-matrix
+notes/geometric-algebra
+notes/lut
+notes/mathematica
+notes/oldblogit
+notes/phy1530
+notes/relativity
+notes/toc
+   ?  I think that some of this is from before I created the gabook/ compilation.  
