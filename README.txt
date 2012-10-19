@@ -57,3 +57,20 @@ sym/
 
    A C++ geometric algebra symbolic calculator using the 'gasandbox' libraries.
 
+cpuinfo/
+
+   inline assembly test for powerpc mfpvr instruction.
+   test program that reads AT_PLATFORM from the ELF binary object header.
+
+env/
+
+   some aliases, and .vimrc, sort of stuff.
+
+studentNumberGrep/
+
+   a little perl regex sample for somebody
+
+tmcache/
+
+   prototype code to attempt to avoid non-signal safe function localtime_r(), which can be desirable
+   to use in a signal handler.
