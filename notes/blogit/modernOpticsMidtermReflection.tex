@@ -154,15 +154,15 @@ I = I_1 + I_2 +
 Letting
 \begin{dmath}\label{eqn:modernOpticsMidtermReflection:240}
 \Psi_0(t) = 
-\frac{1}{\sqrt{2 \pi}} \int d\omega \tilde{\Psi}_0(\omega) e^{i \omega  t},
+\frac{1}{\sqrt{2 \pi}} \int d\omega \tilde{\Psi}_0(\omega) e^{-i \omega  t},
 \end{dmath}
 
 we have for the interference term
 
 \begin{dmath}\label{eqn:modernOpticsMidtermReflection:260}
 \Gamma(\tau) = \frac{2}{r_1 r_2 T} \int_{-T/2}^{T/2} dt
-\Psi_0(r_1/c - t) 
-\Psi_0^\conj(r_2/c - t - \tau) 
+\Psi_0(t - r_1/c) 
+\Psi_0^\conj(t + \tau - r_2/c ) 
 e^{i \phi_1(t) - i \phi_2(t + \tau)}.
 \end{dmath}
 
@@ -175,9 +175,9 @@ Clearly this will be more tractable if we fold the random phase functions $\phi_
 so that our interference term is reduced to
 \begin{dmath}\label{eqn:modernOpticsMidtermReflection:300}
 \Gamma(\tau) 
-= \frac{2}{r_1 r_2 T} \int_{-T/2}^{T/2} dt
-\Psi_0(r_1/c - t) 
-\Psi_0^\conj(r_2/c - t - \tau) 
+%= \frac{2}{r_1 r_2 T} \int_{-T/2}^{T/2} dt
+%\Psi_0(r_1/c - t) 
+%\Psi_0^\conj(r_2/c - t - \tau) 
 = \frac{2}{r_1 r_2 T} \int_{-T/2}^{T/2} dt
 \Psi_0(t - r_1/c) 
 \Psi_0^\conj(t + \tau - r_2/c) 
@@ -192,14 +192,41 @@ Now let's impose an additional constraint requiring for some finite $T$ that we 
 \Psi_0(u) = 0
 \end{dmath}
 
-Ignoring the details about the range restriction we require for $\tau$ for now, our interference term will then be proportional to the plain old convolution integral, and we can reexpress this beastie using our final selected Fourier representation \cref{eqn:modernOpticsMidtermReflection:280}
+Ignoring the details about the range restriction we require for $\tau$ for now, our interference term will then be proportional to the plain old convolution integral, and we can reexpress this beastie in terms of assumed transform pairs
+
+\begin{subequations}
+\begin{dmath}\label{eqn:modernOpticsLecture13:360}
+\tilde{\Psi_0}(\omega) = 
+\frac{1}{\sqrt{2 \pi}} \int dt \Psi_0(t) e^{i \omega  t}
+\end{dmath}
+\begin{dmath}\label{eqn:modernOpticsLecture13:380}
+\Psi_0(t) = 
+\frac{1}{\sqrt{2 \pi}} \int d\omega \tilde{\Psi}_0(\omega) e^{-i \omega  t}
+\end{dmath}
+\end{subequations}
 
 \begin{dmath}\label{eqn:modernOpticsMidtermReflection:340}
 \Gamma(\tau) \sim \int_{-\infty}^\infty
 \Psi_0(u) 
 \Psi_0^\conj(u + \tau + (r_1 - r_2)/c) 
 =
-\inv{2\pi} \int
+\inv{2\pi} \int du
+d\omega \tilde{\Psi}_0(\omega) e^{i \omega  u}
+d\omega' {\tilde{\Psi}}^\conj_0(\omega') e^{-i \omega' (u + \tau + (r_1 - r_2)/c)}
+=
+\int \delta(\omega - \omega')
+d\omega \tilde{\Psi}_0(\omega) 
+d\omega' {\tilde{\Psi}}^\conj_0(\omega') e^{-i \omega' (\tau + (r_1 - r_2)/c)}
+=
+\int 
+d\omega \tilde{\Psi}_0(\omega) 
+{\tilde{\Psi}}^\conj_0(\omega) e^{-i \omega (\tau + (r_1 - r_2)/c)}
+=
+\int 
+d\omega \Abs{\tilde{\Psi}_0(\omega) }^2
+e^{-i \omega (\tau + (r_1 - r_2)/c)}
+\sim 
+\evalbar{ \FF \left( \Abs{\tilde{\Psi}_0(\omega) }^2 \right) }{ t = \tau + (r_1 - r_2)/c}
 \end{dmath}
 
 } % makeanswer
