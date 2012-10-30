@@ -10,7 +10,7 @@ currentCopyright.latexPrologue :
 
 
 l:
-	find -name "*.tex" | grep -ve classicthesis -e /junk/ -e revinfo/ > $@
+	find -name "*.tex" | grep -ve classicthesis -e /bak/ -e /junk/ -e revinfo/ -e /th/ > $@
 
 myrefs.bib: myrefs.bib.in METADATA
 	cat myrefs.bib.in > myrefs.bib
