@@ -1,0 +1,211 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+% pick one:
+%\input{../assignment.tex}
+\input{../blogpost.tex}
+\renewcommand{\basename}{modernOpticsMidtermReflection}
+\renewcommand{\dirname}{notes/phy485/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\beginArtNoToc
+
+\generatetitle{Midterm Reflection: Lloyd's mirror}
+\chapter{Lloyd's mirror}
+\label{chap:modernOpticsMidtermReflection}
+\section{Motivation}
+
+I got confused about the geometry in a Lloyd's mirror configration on the midterm.  After a more careful figure, it becomes more clear how to (correctly) tackle the problem.  Here's a new try after the fact.
+
+\makeproblem{Lloyd's mirror.  Temporal coherence}{modernOpticsMidtermReflection:pr:1}{
+
+Calculate the coherence length for the Lloyd's mirror configuration of \cref{fig:modernOpticsMidtermReflection:modernOpticsMidtermReflectionFig1}.
+
+\imageFigure{modernOpticsMidtermReflectionFig1}{Lloyd's mirror}{fig:modernOpticsMidtermReflection:modernOpticsMidtermReflectionFig1}{0.3}
+}
+\makeanswer{modernOpticsMidtermReflection:pr:1}{ 
+
+We want to consider the pathlength differences along the direct path $c$, to that of $b = 2 a + b_2$.  Noting that I've made the unfortunate choice of $c$ for ohe of these paths, not to be confused here with the speed of light, the lengths of these paths are
+
+\begin{subequations}
+\begin{equation}\label{eqn:modernOpticsMidtermReflection:20}
+c = \sqrt{ L^2 + x^2 }
+\end{equation}
+\begin{equation}\label{eqn:modernOpticsMidtermReflection:40}
+b = \sqrt{L^2 + (2 h + x)^2}
+\end{equation}
+\end{subequations}
+
+The pathlength difference, for $x, h \ll L$ is then
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:60}
+b - c 
+=
+L 
+\left(
+\sqrt{1 + \left( \frac{2 h + x}{L} \right)^2}
+-
+\sqrt{ 1 + \frac{x^2}{L^2} }
+\right)
+\sim
+L \inv{2 L^2}( 4 h^2 + 4 h x )
+= \frac{2 h}{L}( h + x )
+\end{dmath}
+
+So, supposing that we have a spherical wave emitted from the point source, allowing for a different (random) in each direction, the waves that arrive at the observation point, having travelled along paths $c$ and $b$ respectively are
+
+\begin{subequations}
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:80}
+\Psi_c = \frac{\Psi_0}{c} e^{i k c - i \omega t + \phi_c(t)}
+\end{dmath}
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:100}
+\Psi_b = \frac{\Psi_0}{b} e^{i k b - i \omega t + \phi_b(t)}
+\end{dmath}
+\end{subequations}
+
+Our average intensity, should there be a time delay of $\tau$ in the $b$ path, is
+
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:120}
+I(\tau) 
+= \expectation{ 
+\left( \Psi_c(t) + \Psi_b(t + \tau) \right)
+\left( \Psi_c^\conj(t) + \Psi_b^\conj(t + \tau) \right)
+}
+= 
+\expectation{ \Abs{\Psi_c(t)}^2 }
++
+\expectation{ \Abs{\Psi_b(t + \tau)}^2 }
++
+2 \Real
+\expectation{
+\frac{\Psi_0}{c} e^{i k c - i \omega t + \phi_c(t)}
+\frac{\Psi_0^\conj}{b} e^{-i k b + i \omega (t + \tau) - \phi_b(t + \tau)}
+}
+=
+I_c + I_b 
++ 2 \Real \left(
+\frac{\Psi_0}{c} 
+\frac{\Psi_0^\conj}{b} 
+e^{ i \omega \tau}
+e^{ i k (c - b) }
+\expectation{
+e^{ i \phi_c(t) - i \phi_b(t + \tau) }
+}
+\right)
+\sim
+I_c + I_b 
++ 2 \Real \left(
+\frac{\Psi_0}{c} 
+\frac{\Psi_0^\conj}{b} 
+e^{ i \omega \tau}
+e^{ i k (c - b) }
+\left( 1 - \frac{\tau}{\tau_0} \right) 
+\right)
+\Theta(\tau_0 - \tau)
+\end{dmath}
+
+The interference term, scaling by requiring a unit value at $\tau = 0$, and writing $x' = x + h$ (effectively repositioning our origin) is therefore
+
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:140}
+\gamma(x', \tau) \sim
+\cos \left( 
+\frac{2 k h}{L} x'
+- \omega \tau
+\right)
+\left( 1 - \frac{\tau}{\tau_0} \right) 
+\Theta(\tau_0 - \tau)
+\end{dmath}
+
+This has a maximum at $(x', \tau) = (0, 0)$.  We've also got a set of level curves, marking the amplitudes of equal magnitude
+
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:160}
+\tau = \frac{2 k h x'}{L \omega} = \frac{2 h x' c}{L} = \text{constant}.
+\end{dmath}
+
+This isn't at all what I recall calculating on the midterm.  There must have been something else in the statement of the Lloyd's mirror problem that I've forgotten.  Could it have been a Gaussian wave packet emitted from the source?  Yes, that was it.  We were told to assume that our source had a Gaussian frequency distribution.  Let's play around with evolving things and suppose that we slightly generalize the spherical waves we'd interfered by allowing a superposition of the form
+
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:180}
+\Psi_i = \frac{1}{\sqrt{2 \pi} r_i} \int d\omega \tilde{\Psi}_0(\omega) e^{i \omega \left( r_i/c - t \right) + \phi_i(t)}.
+\end{dmath}
+
+Now, if we delay one such wave function in time at the source by time $\tau$, our resultant field is
+
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:200}
+\Psi = 
+\frac{1}{\sqrt{2 \pi} r_1} \int d\omega \tilde{\Psi}_0(\omega) e^{i \omega \left( r_1/c - t \right) + i \phi_1(t)}
++\frac{1}{\sqrt{2 \pi} r_2} \int d\omega \tilde{\Psi}_0(\omega) e^{i \omega \left( r_2/c - t - \tau \right) + i\phi_2(t + \tau)},
+\end{dmath}
+
+with average intensity proportional to
+
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:220}
+I = I_1 + I_2 + 
+\frac{\Abs{\Psi_0}^2}{\pi r_1 r_2} 
+\Real
+\expectation{
+\int d\omega \tilde{\Psi}_0(\omega) e^{i \omega \left( r_1/c - t \right) + i \phi_1(t)}
+\int d\omega' {\tilde{\Psi}}^\conj_0(\omega') e^{-i \omega' \left( r_2/c - t - \tau \right) - i\phi_2(t + \tau)}
+}
+\end{dmath}
+
+Letting
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:240}
+\Psi_0(t) = 
+\frac{1}{\sqrt{2 \pi}} \int d\omega \tilde{\Psi}_0(\omega) e^{i \omega  t},
+\end{dmath}
+
+we have for the interference term
+
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:260}
+\Gamma(\tau) = \frac{2}{r_1 r_2 T} \int_{-T/2}^{T/2} dt
+\Psi_0(r_1/c - t) 
+\Psi_0^\conj(r_2/c - t - \tau) 
+e^{i \phi_1(t) - i \phi_2(t + \tau)}.
+\end{dmath}
+
+Clearly this will be more tractable if we fold the random phase functions $\phi_i(t)$ into the Fourier integrals, as in
+
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:280}
+\Psi_i = \frac{1}{\sqrt{2 \pi} r_i} \int d\omega \tilde{\Psi}_0(\omega) e^{i \omega \left( r_i/c - t \right)}.
+\end{dmath}
+
+so that our interference term is reduced to
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:300}
+\Gamma(\tau) 
+= \frac{2}{r_1 r_2 T} \int_{-T/2}^{T/2} dt
+\Psi_0(r_1/c - t) 
+\Psi_0^\conj(r_2/c - t - \tau) 
+= \frac{2}{r_1 r_2 T} \int_{-T/2}^{T/2} dt
+\Psi_0(t - r_1/c) 
+\Psi_0^\conj(t + \tau - r_2/c) 
+= \frac{2}{r_1 r_2 T} \int_{-T/2 - r_1/c}^{T/2 - r_1/c} du
+\Psi_0(u) 
+\Psi_0^\conj(u + \tau + (r_1 - r_2)/c) 
+\end{dmath}
+
+Now let's impose an additional constraint requiring for some finite $T$ that we have for $\Abs{u} > T$
+
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:320}
+\Psi_0(u) = 0
+\end{dmath}
+
+Ignoring the details about the range restriction we require for $\tau$ for now, our interference term will then be proportional to the plain old convolution integral, and we can reexpress this beastie using our final selected Fourier representation \cref{eqn:modernOpticsMidtermReflection:280}
+
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:340}
+\Gamma(\tau) \sim \int_{-\infty}^\infty
+\Psi_0(u) 
+\Psi_0^\conj(u + \tau + (r_1 - r_2)/c) 
+=
+\inv{2\pi} \int
+\end{dmath}
+
+} % makeanswer
+
+%\section{Spatial coherence}
+
+\vcsinfo
+%\EndArticle
+\EndNoBibArticle
