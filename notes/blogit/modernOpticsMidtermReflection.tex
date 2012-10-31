@@ -19,7 +19,7 @@
 \label{chap:modernOpticsMidtermReflection}
 \section{Motivation}
 
-I got confused about the geometry in a Lloyd's mirror configration on the midterm.  After a more careful figure, it becomes more clear how to (correctly) tackle the problem.  Here's a new try after the fact.
+I got confused about the geometry in a Lloyd's mirror configration on the midterm.  After a more careful figure, it becomes more clear how to (correctly) tackle the problem.  Here's a new try after the fact, more leisurely exploring the associated ideas than midterm time constraints allowed.
 
 \makeproblem{Lloyd's mirror.  Temporal coherence}{modernOpticsMidtermReflection:pr:1}{
 
@@ -51,7 +51,12 @@ L
 \sqrt{ 1 + \frac{x^2}{L^2} }
 \right)
 \sim
-L \inv{2 L^2}( 4 h^2 + 4 h x )
+L \inv{2 L^2}( 4 h^2 + 4 h x ),
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:60b}
+b - c 
 = \frac{2 h}{L}( h + x )
 \end{dmath}
 
@@ -225,13 +230,147 @@ d\omega \tilde{\Psi}_0(\omega)
 \int 
 d\omega \Abs{\tilde{\Psi}_0(\omega) }^2
 e^{-i \omega (\tau + (r_1 - r_2)/c)}
-\sim 
-\evalbar{ \FF \left( \Abs{\tilde{\Psi}_0(\omega) }^2 \right) }{ t = \tau + (r_1 - r_2)/c}
 \end{dmath}
+
+Again, dropping multiplicative constants, our interference term has the following proportionality
+
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:440}
+\Gamma(\tau) 
+\sim 
+\evalbar{ \FF \left( \Abs{\tilde{\Psi}_0(\omega) }^2 \right) }{ t = \tau + (r_1 - r_2)/c}.
+\end{dmath}
+
+For this problem, we are told that our wave packet has a Gaussian frequency distribution
+
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:400}
+\Psi(\omega) = \inv{\sqrt{ 2 \pi } \Delta \omega } 
+\exp\left( 
+-\frac{(\omega - \omega_0)^2}
+{2 (\Delta \omega)^2}
+\right)
+\end{dmath}
+
+We expect this to also be Gaussian in the time domain.  Let's perform that Fourier inversion to see what that looks like.  Because $k = \omega/c$ isn't constant, we can't just toss in the spatial dependency after the fact, so we hack it in here as a retarded time, adding in the $1/r$ factor required for a spherical wave
+
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:420}
+\Psi(r, t) = \inv{(\sqrt{ 2 \pi })^2 r \Delta \omega } 
+\int d\omega
+\exp\left( 
+-\frac{(\omega - \omega_0)^2}
+{2 (\Delta \omega)^2}
++ i \omega (r/c - t)
+\right)
+=
+\inv{\sqrt{2 \pi} r}
+\exp\left(
+-\frac{1}{2} (t - r/c)^2 (\Delta \omega)^2 - i \omega _0 (t - r/c)
+\right)
+\end{dmath}
+
+Plotted implicitly against the retarded time $t - r/c$ for some non-zero $r$, we've got a Gaussian envelope, and oscillations within that as in \cref{fig:gaussianWavePacket:gaussianWavePacketFig2}.
+
+\imageFigure{gaussianWavePacketFig2}{Gaussian wave packet}{fig:gaussianWavePacket:gaussianWavePacketFig2}{0.2}
+
+We now want our auto-correlation \ref{eqn:modernOpticsMidtermReflection:440} for this Lloyd's configuration.  Fourier transforming the square of our frequency spectrum we have
+
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:460}
+\inv{2 \pi \Delta \omega} \int d\omega
+\exp\left( 
+-\frac{(\omega - \omega_0)^2}
+{(\Delta \omega)^2}
+- i \omega t
+\right)
+=
+\frac{
+\exp
+\left(
+-\inv{4} t^2 (\Delta \omega)^2 - i \omega_0 t 
+\right)
+}{4 \pi ^{3/2} (\Delta \omega)^2}.
+\end{dmath}
+
+Again we have a Gaussian envelope, with oscillations at the average frequency.  
+%We want to evaluate this at
+%t \sim \tau 
+We recall that for the Lloyd's configuration our path length difference \ref{eqn:modernOpticsMidtermReflection:60b} was
+
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:480}
+\frac{r_1 - r_2}{c} = \frac{2 h}{L c}( h + x ),
+\end{dmath}
+
+so our mutual correlation is
+
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:500}
+\Gamma(\tau) \sim
+\exp
+\left(
+-\inv{4} \left(\tau - 
+\frac{2 h}{L c}( h + x )
+\right)^2 (\Delta \omega)^2 - i \omega_0 \left(
+\tau -
+\frac{2 h}{L c}( h + x )
+\right)
+\right)
+\sim
+\exp
+\left(
+-\left(\frac{\tau}{2} - 
+\frac{h}{L c}( h + x )
+\right)^2 (\Delta \omega)^2 
++\left(
+\frac{h}{L c}( h + x )
+\right)^2 (\Delta \omega)^2
+\right)
+\times
+\exp
+\left(
+- i \omega_0 \left(
+\tau -
+\frac{2 h}{L c}( h + x )
+\right)
+\right)
+=
+\exp
+\left(
+(\Delta \omega)^2
+\left(
+\frac{\tau h}{L c}( h + x ) - \frac{\tau^2}{4}
+\right)
+\right)
+\times
+\exp
+\left(
+- i \omega_0 \left(
+\tau -
+\frac{2 h}{L c}( h + x )
+\right)
+\right)
+\end{dmath}
+
+We've got a Gaussian envelope with oscillations at the average frequency as in \cref{fig:ftOfgaussianSquaredAtRetardedTime:ftOfgaussianSquaredAtRetardedTimeFig3}.
+
+\imageFigure{ftOfgaussianSquaredAtRetardedTimeFig3}{Mutual coherence of Gaussian source}{fig:ftOfgaussianSquaredAtRetardedTime:ftOfgaussianSquaredAtRetardedTimeFig3}{0.2}
+
+The falloff of the Gaussian will be dominated by $e^{-(\Delta \omega)^2 \tau^2/4}$, so our coherence time, the time for a $1/e$ reduction, is
+
+\begin{dmath}\label{eqn:modernOpticsMidtermReflection:520}
+\boxed{
+\tau_c = \frac{2}{ (\Delta \omega) }.
+}
+\end{dmath}
+
+I recall this is exactly what I got attempting the midterm (skipping any attempt to reason through things from scratch as above).  Is it correct?  While the mutual collelation has a dependence on the path length difference of the Lloyd's configuration, the coherence time is independent of that, and only depends on the width of source spectrum.
 
 } % makeanswer
 
-%\section{Spatial coherence}
+\makeproblem{Spatial coherence in Lloyd's mirror configuration}{modernOpticsMidtermReflection:pr:2}{ 
+
+If the source is spatially spread, how far apart does it have to be for a one half reduction in the fringe visibility?
+
+} % makeproblem
+
+\makeanswer{modernOpticsMidtermReflection:pr:2}{ 
+} % makeanswer
 
 \vcsinfo
 %\EndArticle
