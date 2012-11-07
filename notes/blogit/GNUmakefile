@@ -5,10 +5,10 @@ INCOMPLETE += motionOfFreeTop.tex
 #INCOMPLETE += modernOpticsProblemSet1.tex
 INCOMPLETE += PS2.tex
 INCOMPLETE += PS1b.tex
-INCOMPLETE += modernOpticsProblemSet2Problem2.tex
-INCOMPLETE += modernOpticsProblemSet2Problem4.tex
-INCOMPLETE += modernOpticsProblemSet2Problem3.tex
-INCOMPLETE += modernOpticsProblemSet2Problem1.tex
+INCOMPLETE += modernOpticsProblemSet3Problem2.tex
+INCOMPLETE += modernOpticsProblemSet3Problem4.tex
+INCOMPLETE += modernOpticsProblemSet3Problem3.tex
+INCOMPLETE += modernOpticsProblemSet3Problem1.tex
 
 # these may not all be incomplete, but I don't want to build them right now:
 INCOMPLETE += pp.tex
@@ -101,7 +101,7 @@ all :: peeters_layout.sty
 all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
 
-modernOpticsProblemSet2.pdf : modernOpticsProblemSet2Problem4.tex modernOpticsProblemSet2Problem2.tex modernOpticsProblemSet2Problem1.tex modernOpticsProblemSet2Problem3.tex
+modernOpticsProblemSet3.pdf : modernOpticsProblemSet3Problem4.tex modernOpticsProblemSet3Problem2.tex modernOpticsProblemSet3Problem1.tex modernOpticsProblemSet3Problem3.tex
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
