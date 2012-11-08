@@ -16,17 +16,75 @@
 %%\chapter{Multiple interference (cont.)}
 %\label{chap:modernOpticsLecture15}
 %
-%%\section{Disclaimer}
-%%
-%%Peeter's lecture notes from class.  May not be entirely coherent.
+%\section{Disclaimer}
 %
+%Peeter's lecture notes from class.  May not be entirely coherent.
+
 \fxwarning{review lecture 15}{work through this lecture in detail.}
 
-We are going to look at the far field of a diffraction grating with $N$ illuminated slits \cref{fig:modernOpticsLecture15:modernOpticsLecture15Fig1}.
+We are going to look at the far field of a diffraction grating with $N$ illuminated slits \cref{fig:modernOpticsLecture15:modernOpticsLecture15Fig1}.  Let's review this, writing out the Fraunhofer approximation for an image plane set at the back plane of a lens at the aperture as in \cref{fig:modernOpticsLecture15:modernOpticsLecture15Fig6}.
 
 \imageFigure{figures/modernOpticsLecture15Fig1}{Diffraction grating interferometry}{fig:modernOpticsLecture15:modernOpticsLecture15Fig1}{0.3}
+\imageFigure{figures/modernOpticsLecture15Fig6}{Fraunhofer diffraction}{fig:modernOpticsLecture15:modernOpticsLecture15Fig6}{0.3}
 
-using the convolution theorem \ref{pr:convolution:1}, constructing the object as a convolution, with transmission \cref{fig:modernOpticsLecture15:modernOpticsLecture15Fig2}.
+Our transfer matrix is
+
+\begin{dmath}\label{eqn:modernOpticsLecture15:620}
+M_{x,y} = 
+\begin{bmatrix}
+1 & f \\
+0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+1 & 0 \\
+-1/f & 1
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 & f \\
+-1/f & 1
+\end{bmatrix}
+\end{dmath}
+
+so that if $\alpha, \beta$ are the output angles at the lens, our image positions are $f \alpha, f \beta$ respectively.  Our geometry is
+
+\begin{dmath}\label{eqn:modernOpticsLecture15:640}
+\BR + \Br' = \Br = f(\alpha, \beta, 1),
+\end{dmath}
+
+for which our path length from $\Br'$ is
+
+\begin{dmath}\label{eqn:modernOpticsLecture15:660}
+\Abs{\BR} 
+= r \left( 1 + \frac{{r'}^2}{r^2} - 2 \frac{\Br \cdot \Br'}{r^2} \right)^{1/2}
+\sim r + \frac{{r'}^2}{2 r^2} - \rcap \cdot \Br',
+\end{dmath}
+
+and to first order
+
+\begin{dmath}\label{eqn:modernOpticsLecture15:680}
+k\Abs{\BR} 
+\sim k f - k \rcap \cdot \Br'
+= k f - k (x', y') \cdot (\alpha, \beta)
+= k f - k x' \alpha - k y' \beta
+= k f - \Bk \cdot \Br'.
+\end{dmath}
+
+Our diffraction integral therefore takes the form
+
+\begin{dmath}\label{eqn:modernOpticsLecture15:700}
+\Psi(\Br) \sim \frac{e^{i k f}}{f} \int e^{-i \Bk \cdot \Br' } d^2 \Br'.
+\end{dmath}
+
+Dealing with only one direction ($y$), and writing $\Bk = (k_x, k_y) = (2 \pi/\lambda) (\cos\theta, \sin\theta)$, and dropping the propagation term we have
+
+\begin{dmath}\label{eqn:modernOpticsLecture15:720}
+\Psi(\Br) \sim \int e^{-i k_y y' } dy',
+\end{dmath}
+
+which is the Fourier transform of the aperture, say $g(y)$ evaluated at $k_y = (2 \pi/\lambda) \sin\theta$.
+
+We will use the convolution theorem \ref{pr:convolution:1}, constructing the complete aperture as a convolution, with transmission \cref{fig:modernOpticsLecture15:modernOpticsLecture15Fig2}.
 
 \imageFigure{figures/modernOpticsLecture15Fig2}{Convolution of box with comb}{fig:modernOpticsLecture15:modernOpticsLecture15Fig2}{0.2}
 
@@ -57,10 +115,10 @@ g(y - n a)
 Convolution theorem
 
 \begin{dmath}\label{eqn:modernOpticsLecture15:80}
-F( k_y ) = H( k_y ) G( k_y )
+F( k_y ) = H( k_y ) G( k_y ).
 \end{dmath}
 
-here we write
+As mentioned, here we write
 
 \begin{dmath}\label{eqn:modernOpticsLecture15:100}
 k_y = \frac{2 \pi}{\lambda} \sin\theta.
@@ -68,15 +126,30 @@ k_y = \frac{2 \pi}{\lambda} \sin\theta.
 
 (to distinguish from our normal writing of $k = 2 \pi /\lambda$)
 
-For a single slit, in the Fraunhofer limit, we've seen that 
+For a single slit, in the Fraunhofer limit, we compute
 
 \begin{dmath}\label{eqn:modernOpticsLecture15:120}
-G(k_y)  = \frac{\sin(b k_y/2)}{b k_y/2}
+G(k_y) 
+= 
+\int_{-b/2}^{b/2} e^{-i k_y y} dy
+= \evalrange{\frac{e^{-i k_y y}}{-i k_y}}{-b/2}{b/2}
+= \frac{
+e^{i k_y b/2}
+-e^{-i k_y b/2}
+}
+{
+2 (i k_y) /2 
+}
+= 
+\frac{\sin(b k_y/2)}{b k_y/2}
 \end{dmath}
 
-as illustrated in \cref{fig:modernOpticsLecture15:modernOpticsLecture15Fig3}.
-
-\imageFigure{figures/modernOpticsLecture15Fig3}{Zero of diffraction intensity}{fig:modernOpticsLecture15:modernOpticsLecture15Fig3}{0.2}
+as illustrated in \cref{fig:lecture15figuresSincCrossings:lecture15figuresSincCrossingsFig7}.
+% hand drawn:
+%\cref{fig:modernOpticsLecture15:modernOpticsLecture15Fig3}.
+%\imageFigure{figures/modernOpticsLecture15Fig3}{Zero of diffraction intensity}{fig:modernOpticsLecture15:modernOpticsLecture15Fig3}{0.2}
+% mathematica:
+\imageFigure{figures/lecture15figuresSincCrossingsFig7}{Zero of diffraction wavefunction}{fig:lecture15figuresSincCrossings:lecture15figuresSincCrossingsFig7}{0.3}
 
 For the Fourier transform of the delta comb, we have
 
@@ -176,13 +249,17 @@ where
 
 (Good).
 
+To get a bit of a feeling for what this looks like we can check out a plot, as in \cref{fig:lecture15figures5aperaturesIntensityPlot:lecture15figures5aperaturesIntensityPlotFig8}, plotting $n = 5, a = 0.869, b = 0.172, \lambda = 1$.
+
+\imageFigure{figures/lecture15figures5aperaturesIntensityPlotFig8}{A sample intensity pattern for a multiple aperature diffraction grating}{fig:lecture15figures5aperaturesIntensityPlot:lecture15figures5aperaturesIntensityPlotFig8}{0.3}
+
+\fxwarning{reference mathematica notebook link in appendix.}{have mathematica workbook to plot this interactively.}
+
 Our far field view was \cref{fig:modernOpticsLecture15:modernOpticsLecture15Fig4}.
 
 \imageFigure{figures/modernOpticsLecture15Fig4}{Far field view}{fig:modernOpticsLecture15:modernOpticsLecture15Fig4}{0.2}
 
 How well can we resolve frequency?
-
-\fxwarning{plot with $N = 10$.}{This was a plot from the slides}
 
 We will write out $\gamma$ in terms of angular frequency
 

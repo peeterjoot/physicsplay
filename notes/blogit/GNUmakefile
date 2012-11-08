@@ -27,15 +27,6 @@ TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES))
 
 PDFS := $(TEXFILES:.tex=.pdf)
 
-# logically symlinks, but MikTex doesn't like those:
-#ORIG_FILES += ../abbrvurl.bst
-#ORIG_FILES += ../alphaurl.bst
-#ORIG_FILES += ../eliblog.cls 
-#ORIG_FILES += ../eliblogwidescreen.cls 
-#ORIG_FILES += ../myrefs.bib 
-#ORIG_FILES += ../plainurl.bst
-#ORIG_FILES += ../unsrturl.bst
-
 # for gaBasics:
 ORIG_FILES += ../phy454/figures/couetteFlowFig1.png
 ORIG_FILES += ../phy454/figures/couetteFlowFig2.png
@@ -43,41 +34,8 @@ ORIG_FILES += ../phy454/figures/couetteFlowFig3.png
 ORIG_FILES += ../phy454/figures/couetteFlowFig4.png
 ORIG_FILES += ../phy454/figures/couetteFlowFig5.png
 ORIG_FILES += ../phy454/figures/couetteFlowFig6.mp4
-#ORIG_FILES += ../phy456/qmTwoL22fig5.png
 ORIG_FILES += ../otherbook/triangleLaw.png
 ORIG_FILES += ../otherbook/rotateMinusOne.png
-#ORIG_FILES += ../gabook/figures/parallelogramArea.png
-#ORIG_FILES += ../phy454/figures/continuumL2fig1.png
-#ORIG_FILES += ../phy454/figures/continuumL2fig2.png
-#ORIG_FILES += ../phy454/figures/continuumL2fig3.png
-#ORIG_FILES += ../phy454/figures/continuumL2fig4.png
-#ORIG_FILES += ../phy454/figures/continuumL2fig5.png
-#ORIG_FILES += ../phy454/figures/continuumProblemSet1Q2fig1.png
-#ORIG_FILES += ../phy454/figures/twoLayerInclinedFlowFig1.png
-#ORIG_FILES += ../phy454/figures/continuumL13Fig14.png
-#ORIG_FILES += ../phy454/figures/continuumL13Fig13.png
-#ORIG_FILES += ../phy454/figures/continuumProblemSet2Fig6mu1Gtmu2.png
-#ORIG_FILES += ../phy454/figures/continuumProblemSet2Fig6mu2Gtmu1.png
-#ORIG_FILES += ../phy454/figures/continuumProblemSet2Fig1r2.pdf
-#ORIG_FILES += ../phy454/figures/continuumProblemSet2Fig1r2.pdf_tex
-#ORIG_FILES += ../phy454/figures/continuumProblemSet2Fig2r2.pdf
-#ORIG_FILES += ../phy454/figures/continuumProblemSet2Fig2r2.pdf_tex
-#ORIG_FILES += ../phy454/figures/continuumProblemSet2Fig3.png
-#ORIG_FILES += ../phy454/figures/continuumProblemSet2Fig4.png
-#ORIG_FILES += ../phy454/figures/continuumProblemSet2Fig5.png
-#ORIG_FILES += ../phy454/figures/inclinedFlowWithoutConstantHeightAssumptionFig1.png
-#ORIG_FILES += ../phy454/figures/inclinedFlowWithoutConstantHeightAssumptionFig2.pdf
-#ORIG_FILES += ../phy454/figures/inclinedFlowWithoutConstantHeightAssumptionFig2.pdf_tex
-#ORIG_FILES += ../phy454/figures/inclinedFlowWithoutConstantHeightAssumptionFig3.pdf
-#ORIG_FILES += ../phy454/figures/inclinedFlowWithoutConstantHeightAssumptionFig3.pdf_tex
-#ORIG_FILES += ../gabook/gaQuickIntroFig1.pdf
-#ORIG_FILES += ../gabook/gaQuickIntroFig1.pdf_tex
-#ORIG_FILES += ../gabook/gaQuickIntroFig2.pdf
-#ORIG_FILES += ../gabook/gaQuickIntroFig2.pdf_tex
-#ORIG_FILES += ../phy454/figures/animatedTwoLayerFlowMu2GreaterThanMu1.avi
-#ORIG_FILES += ../phy454/figures/animatedTwoLayerFlowMu1GreaterThanMu2.avi
-#ORIG_FILES += ../phy454/figures/channelFlowWithStepPressureGradientTimeEvolution.wmv
-#ORIG_FILES += ../strobe/StrobeMediaPlayback.swf
 
 ORIG_FILES += ../phy454/figures/twoCylinderFig1.png
 ORIG_FILES += ../phy454/figures/twoCylinderFig2.png
@@ -87,8 +45,6 @@ ORIG_FILES += ../phy454/figures/twoCylindersFig6.png
 ORIG_FILES += ../phy454/figures/twoCylindersFig7.png
 ORIG_FILES += ../phy454/figures/twoCylindersFig8.png
 ORIG_FILES += ../phy454/figures/twoCylindersFig9.png
-#ORIG_FILES += ../phy454/figures/coffeeCupWithBottomFig2.png
-#ORIG_FILES += ../phy454/figures/coffeeCupWithBottomFig1.png
 
 ##       src/internal.o
 #VIDEO += animatedTwoLayerFlowMu1GreaterThanMu2.mp4
