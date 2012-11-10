@@ -33,7 +33,7 @@ where $\tau_{\mathrm{rep}}$ is a time between pulses, and $\overbar{\omega}$ is 
 }
 \makeanswer{modernOptics:problemSet3:1}{
 
-\paragraph{Setup, assembling all required concepts in one place.}
+\paragraph{Setup, for my own benefit, assembling all required concepts in one place.}
 
 First consider the average intensity due to the contributions of both path components, with respective pathlengths $r_a$, and $r_a + c \tau$
 
@@ -128,7 +128,7 @@ I(\tau) = 2 I_0( 1 + \Real \gamma(\tau) )
 
 \makeSubAnswer{Frequency doublet}{modernOptics:problemSet3:1a}
 
-We are now set to tackle this specific problem.  Our first task is the Fourier inversion of the frequency domain intensity.  Note that the form of the doublet as given in this problem is not directly invertible without the use of special functions.  In general the absolute value of the frequency introduces a discontinuity in the derivative at the origin that makes live ``fun''.  What we can do, however, is assume that $\omega_{1,2} \gg 0$ so that we can make the approximation
+We are now set to tackle this specific problem.  Our first task is the Fourier inversion of the frequency domain intensity.  Note that the form of the doublet as given in this problem is not directly invertible without the use of special functions.  In general the absolute value of the frequency introduces a discontinuity in the derivative at the origin that makes live ``fun''.  What we can do, however, is assume that $\omega_{1,2} \gg \sigma$ so that we can make the approximation
 
 \begin{dmath}\label{eqn:modernOptics:problemSet3:1:240}
 \frac{\sigma^2}
@@ -147,13 +147,134 @@ We are now set to tackle this specific problem.  Our first task is the Fourier i
 }
 \end{dmath}
 
-A comparison of these for small $\omega_0$ is shown in 
+A comparison of these for small $\omega_0$ is shown in \cref{fig:frequencySinglets:frequencySingletsFig2}.
 
-F2
+\imageFigure{frequencySingletsFig2}{Comparision to doubled frequency form}{fig:frequencySinglets:frequencySingletsFig2}{0.3}
 
-FIXME: fill it in.
+For large enough $\omega_0$ there is no visible difference in the two functions  as seen in \cref{fig:frequencySinglets:frequencySingletsFig3}.
 
-...
+\imageFigure{frequencySingletsFig3}{More widely separated peak frequencies}{fig:frequencySinglets:frequencySingletsFig3}{0.3}
+
+To Fourier invert one of these peaked intensity functions
+
+\begin{dmath}\label{eqn:modernOptics:problemSet3:1:260}
+f(\omega) =
+\frac{\sigma^2}
+{
+\sigma^2 + (\omega - \omega_0)^2
+}
+\end{dmath}
+
+We first note that 
+
+\begin{dmath}\label{eqn:modernOptics:problemSet3:1:280}
+\int e^{i \omega \tau} f(\omega - \omega_0) d\omega
+=
+\int e^{i (\omega' + \omega_0) \tau} f(\omega') d\omega'
+\end{dmath}
+
+so
+
+\begin{dmath}\label{eqn:modernOptics:problemSet3:1:300}
+\FF^{-1}(f(\omega - \omega_0)) = e^{i\omega_0 \tau} \FF^{-1} (f(\omega)).
+\end{dmath}
+
+We have only to consider the Fourier inversion of a function of the form
+
+\begin{dmath}\label{eqn:modernOptics:problemSet3:1:320}
+g(\omega) =
+\frac{\sigma^2}
+{
+\sigma^2 + \omega^2
+},
+\end{dmath}
+
+but we recognize this from class, where we looked at the Fourier transform of a unit area symmetric damped exponential ($\sigma > 0$)
+
+\begin{dmath}\label{eqn:modernOptics:problemSet3:1:340}
+\FF \frac{\sigma}{2} e^{-\sigma \Abs{\tau}}
+=
+\frac{\sigma}{2} \int_{-\infty}^\infty e^{-i\omega \tau - \sigma \Abs{\tau}} dt
+=
+\frac{\sigma}{2} \int_0^\infty e^{-i\omega \tau - \sigma \tau} dt
++\frac{\sigma}{2} \int_{-\infty}^0 e^{-i\omega \tau + \sigma \tau} dt
+=
+\frac{\sigma}{2} \evalrange{
+\frac{ e^{i\omega \tau - \sigma \tau} }{
+i \omega - \sigma
+}
+}
+{ 0 } { \infty }
++
+\frac{\sigma}{2} \evalrange{
+\frac{ e^{i\omega \tau + \sigma \tau} }{
+i \omega + \sigma
+}
+}
+{ -\infty }{0}
+=
+\frac{\sigma}{2} \left( 
+\inv{\sigma - i \omega}
++\inv{\sigma + i \omega}
+\right)
+=
+\frac{\sigma}{2} \frac{2 \sigma}{ \sigma^2 + \omega^2 },
+\end{dmath}
+
+so that (up to a potential constant multiplicative factor according to the Fourier transform convention in use)
+
+\begin{dmath}\label{eqn:modernOptics:problemSet3:1:360}
+\FF^{-1} 
+\left(
+\frac{\sigma^2}
+{
+\sigma^2 + (\omega - \omega_0)^2
+}
+\right)
+= 
+\frac{\sigma}{2} e^{-\sigma \Abs{\tau}} e^{i \omega_0 \tau}.
+\end{dmath}
+
+We can now immediately write the Fourier transform pair for our Intensity
+
+\begin{dmath}\label{eqn:modernOptics:problemSet3:1:380}
+I(\omega) \sim \frac{I_0}{2} \sum_{\omega_k = \pm \omega_1, \pm \omega_2} 
+\frac{\sigma^2}{\sigma^2 + (\omega - \omega_k)^2}
+\leftrightarrow
+\frac{I_0}{2}
+\sigma e^{-\sigma \Abs{\tau}} \left(
+\cos(\omega_1 \tau)
++\cos(\omega_2 \tau)
+\right)
+\end{dmath}
+
+With $\omega_{1,2} = \overbar{\omega} \mp \Delta/2$, we rewrite
+
+\begin{dmath}\label{eqn:modernOptics:problemSet3:1:400}
+\cos(\omega_1 \tau) +\cos(\omega_2 \tau)
+=
+\cos\left( 
+\left(
+\overbar{\omega} - \Delta/2 
+\right) \tau 
+\right)
++
+\cos\left( 
+\left(
+\overbar{\omega} - \Delta/2 
+\right) \tau 
+\right)
+= 2 \cos( \overbar{\omega} \tau ) \cos ( \Delta \tau/2 )
+\end{dmath}
+
+so that
+
+\begin{dmath}\label{eqn:modernOptics:problemSet3:1:420}
+I(\tau) \sim
+I_0
+\sigma e^{-\sigma \Abs{\tau}} 
+\cos( \overbar{\omega} \tau ) \cos ( \Delta \tau /2 )
+\end{dmath}
 
 Plotted in \cref{fig:problemSet3:problemSet3Fig1a}.
 
