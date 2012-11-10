@@ -32,7 +32,128 @@ where $\tau_{\mathrm{rep}}$ is a time between pulses, and $\overbar{\omega}$ is 
 {\bf Plot} the michelson output for $\sigma = \delta/20$, $\overbar{\omega} = 50 \delta$, $N=10$, for $\tau$ in the range $0 \rightarrow 4 \pi / \delta$. (note we're in the limit of small comb spacing and even narrower peaks: $\sigma \ll \delta \ll \overbar{\omega}$.)
 }
 \makeanswer{modernOptics:problemSet3:1}{
+
+\paragraph{Setup, assembling all required concepts in one place.}
+
+First consider the average intensity due to the contributions of both path components, with respective pathlengths $r_a$, and $r_a + c \tau$
+
+\begin{dmath}\label{eqn:modernOptics:problemSet3:1:160}
+I(\tau) 
+= 
+\expectation{ \Abs{ \Psi(r_a + c \tau) + \Psi(r_a, t) }^2 }
+= 
+\expectation{ \Abs{ \Psi(r_a + c \tau) }^2 }
++\expectation{ \Abs{ \Psi(r_a ) }^2 }
++ 2 \Real 
+\expectation{ 
+\Psi(r_a + c \tau) \Psi^\conj(r_a, t) 
+}
+\end{dmath}
+
+To evaluate this, lets assume initially a spherical wave packet at the outputs of interferometer paths
+
+\begin{dmath}\label{eqn:modernOptics:problemSet3:1:80}
+\Psi(r, t) = \inv{\sqrt{2\pi}} \int \tilde{\Psi}(\omega) \frac{e^{-i \omega( t - r/c )}}{r} d\omega.
+\end{dmath}
+
+With a pathlength difference of $c \tau$ the autocorrelation for the two paths is
+
+\begin{dmath}\label{eqn:modernOptics:problemSet3:1:100}
+\Gamma(\tau) = \expectation{
+\Psi(r_a + c \tau, t) \Psi^\conj(r_a, t)
+}.
+\end{dmath}
+
+%so that $\Gamma(0) \sim I$ the average intensity when there is no path delay between the path components.  
+Very roughly, we can evaluate this average
+
+\begin{dmath}\label{eqn:modernOptics:problemSet3:1:120}
+\Gamma(\tau) = 
+\lim_{T \rightarrow \infty} \inv{2 T} \int_{-T}^T dt
+\inv{2\pi} 
+\int \tilde{\Psi}(\omega) \frac{e^{-i \omega( t - r_a/c -\tau )}}{r_a + c\tau} d\omega
+\int \tilde{\Psi}^\conj(\omega') \frac{e^{i \omega'( t - r_a/c )}}{r_a } d\omega'
+\sim
+\lim_{T \rightarrow \infty} \inv{4 \pi T r_a^2} \int_{-T}^T dt
+\int \tilde{\Psi}(\omega) e^{-i \omega( t - r_a/c - \tau)} d\omega
+\int \tilde{\Psi}^\conj(\omega') e^{i \omega'( t - r_a/c )} d\omega'
+\end{dmath}
+
+Here we've assumed that $c \tau \ll r_a$, so that we can pull out the spatial variation of the amplitude.  Now lets also assume that the time domain wave forms are bounded for some $T = T_c$, so that
+
+\begin{dmath}\label{eqn:modernOptics:problemSet3:1:140}
+\lim_{T \rightarrow \infty} \inv{2T} \int_{-T}^T = \inv{2 T_c} \int_{-\infty}^\infty,
+\end{dmath}
+
+allowing us to increase the bounds of the $dt$ integral, and make a delta function identification
+
+\begin{dmath}\label{eqn:modernOptics:problemSet3:1:120}
+\Gamma(\tau) \sim
+\inv{2 T_c r_a^2} 
+\int d\omega \tilde{\Psi}(\omega) 
+\int d\omega' \tilde{\Psi}^\conj(\omega') 
+e^{i \omega \tau} 
+\inv{2\pi}
+\int 
+dt
+e^{i (\omega' - \omega)( t - r_a/c )} 
+=
+\inv{2 T_c r_a^2} 
+\int d\omega \tilde{\Psi}(\omega) 
+\int d\omega' \tilde{\Psi}^\conj(\omega') \delta(\omega' - \omega)
+e^{i \omega \tau} 
+=
+\inv{2 T_c r_a^2} 
+\int d\omega \tilde{\Psi}(\omega) 
+\tilde{\Psi}^\conj(\omega) 
+e^{i \omega \tau} 
+\sim \FF^{-1} \left( \Abs{\Psi(\omega)}^2 \right),
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:modernOptics:problemSet3:1:180}
+\Gamma(\tau) \sim \FF^{-1} \left( I(\omega) \right).
+\end{dmath}
+
+With
+\begin{dmath}\label{eqn:modernOptics:problemSet3:1:200}
+\gamma(\tau) = \frac{\Gamma(\tau)}{\Gamma(0)},
+\end{dmath}
+
+our intensity \ref{eqn:modernOptics:problemSet3:1:160} as a function of the additional pathlength $c \tau$, takes the form
+
+\begin{dmath}\label{eqn:modernOptics:problemSet3:1:220}
+I(\tau) = 2 I_0( 1 + \Real \gamma(\tau) )
+\end{dmath}
+
 \makeSubAnswer{Frequency doublet}{modernOptics:problemSet3:1a}
+
+We are now set to tackle this specific problem.  Our first task is the Fourier inversion of the frequency domain intensity.  Note that the form of the doublet as given in this problem is not directly invertible without the use of special functions.  In general the absolute value of the frequency introduces a discontinuity in the derivative at the origin that makes live ``fun''.  What we can do, however, is assume that $\omega_{1,2} \gg 0$ so that we can make the approximation
+
+\begin{dmath}\label{eqn:modernOptics:problemSet3:1:240}
+\frac{\sigma^2}
+{
+\sigma^2 + (\Abs{\omega} - \omega_0)^2
+}
+\sim
+\frac{\sigma^2}
+{
+\sigma^2 + (\omega - \omega_0)^2
+}
++
+\frac{\sigma^2}
+{
+\sigma^2 + (\omega + \omega_0)^2
+}
+\end{dmath}
+
+A comparison of these for small $\omega_0$ is shown in 
+
+F2
+
+FIXME: fill it in.
+
+...
 
 Plotted in \cref{fig:problemSet3:problemSet3Fig1a}.
 
