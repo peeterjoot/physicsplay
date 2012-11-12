@@ -20,39 +20,42 @@
 %
 %Peeter's lecture notes from class.  May not be entirely coherent.
 
-\fxwarning{review lecture 15}{work through this lecture in detail.}
-
-We are going to look at the far field of a diffraction grating with $N$ illuminated slits \cref{fig:modernOpticsLecture15:modernOpticsLecture15Fig1}.  Let's review this, writing out the Fraunhofer approximation for an image plane set at the back plane of a lens at the aperture as in \cref{fig:modernOpticsLecture15:modernOpticsLecture15Fig6}.
+We are going to look at the (Fraunhofer) far field of a diffraction grating with $N$ illuminated slits \cref{fig:modernOpticsLecture15:modernOpticsLecture15Fig1}.  
+%Let's review this, writing out the Fraunhofer approximation for an image plane set at the back plane of a lens at the aperture as in \cref{fig:modernOpticsLecture15:modernOpticsLecture15Fig6}.
 
 \imageFigure{figures/modernOpticsLecture15Fig1}{Diffraction grating interferometry}{fig:modernOpticsLecture15:modernOpticsLecture15Fig1}{0.3}
-\imageFigure{figures/modernOpticsLecture15Fig6}{Fraunhofer diffraction}{fig:modernOpticsLecture15:modernOpticsLecture15Fig6}{0.3}
-
-Our transfer matrix is
-
-\begin{dmath}\label{eqn:modernOpticsLecture15:620}
-M_{x,y} = 
-\begin{bmatrix}
-1 & f \\
-0 & 1
-\end{bmatrix}
-\begin{bmatrix}
-1 & 0 \\
--1/f & 1
-\end{bmatrix}
-=
-\begin{bmatrix}
-0 & f \\
--1/f & 1
-\end{bmatrix}
-\end{dmath}
-
-so that if $\alpha, \beta$ are the output angles at the lens, our image positions are $f \alpha, f \beta$ respectively.  Our geometry is
+%\imageFigure{figures/modernOpticsLecture15Fig6}{Fraunhofer diffraction}{fig:modernOpticsLecture15:modernOpticsLecture15Fig6}{0.3}
+%
+%Our transfer matrix is
+%
+%\begin{dmath}\label{eqn:modernOpticsLecture15:620}
+%M_{x,y} = 
+%\begin{bmatrix}
+%1 & f \\
+%0 & 1
+%\end{bmatrix}
+%\begin{bmatrix}
+%1 & 0 \\
+%-1/f & 1
+%\end{bmatrix}
+%=
+%\begin{bmatrix}
+%0 & f \\
+%-1/f & 1
+%\end{bmatrix}
+%\end{dmath}
+%
+%so that if $\alpha, \beta$ are the output angles at the lens, our image positions are $f \alpha, f \beta$ respectively.  
+Our geometry is
 
 \begin{dmath}\label{eqn:modernOpticsLecture15:640}
-\BR + \Br' = \Br = f(\alpha, \beta, 1),
+\BR + \Br' = \Br %= f(\alpha, \beta, 1),
+\end{dmath}
+\begin{dmath}\label{eqn:modernOpticsLecture15:n}
+\BR_s + \Br' = \Br_s 
 \end{dmath}
 
-for which our path length from $\Br'$ is
+for which our path length from $\Br'$ to the observation point is
 
 \begin{dmath}\label{eqn:modernOpticsLecture15:660}
 \Abs{\BR} 
@@ -65,24 +68,50 @@ and to first order
 \begin{dmath}\label{eqn:modernOpticsLecture15:680}
 k\Abs{\BR} 
 \sim k f - k \rcap \cdot \Br'
-= k f - k (x', y') \cdot (\alpha, \beta)
-= k f - k x' \alpha - k y' \beta
-= k f - \Bk \cdot \Br'.
+= k f - k y' \sin\theta.
+%= k f - k x' \alpha - k y' \beta
+%= k f - \Bk \cdot \Br'.
 \end{dmath}
 
-Our diffraction integral therefore takes the form
+Similarily
+\begin{dmath}\label{eqn:modernOpticsLecture15:n}
+k\Abs{\BR_s} 
+\sim k f - k \rcap \cdot \Br'
+= k f - \Bk \cdot \Br'
+= k f - k \sin\theta_s y'
+\end{dmath}
+
+With 
+
+\begin{dmath}\label{eqn:modernOpticsLecture15:n}
+k_y \equiv \frac{2 \pi}{\lambda} \sin\theta,
+\end{dmath}
+
+and
+\begin{dmath}\label{eqn:modernOpticsLecture15:n}
+k_{y,s} \equiv \frac{2 \pi}{\lambda} \sin\theta_s,
+\end{dmath}
+
+our diffraction integral, in one dimension takes the form
 
 \begin{dmath}\label{eqn:modernOpticsLecture15:700}
-\Psi(\Br) \sim \frac{e^{i k f}}{f} \int e^{-i \Bk \cdot \Br' } d^2 \Br'.
+\Psi(\Br) \sim \int e^{i (k_{y,s} - k_{y}) y' } dy'
 \end{dmath}
 
-Dealing with only one direction ($y$), and writing $\Bk = (k_x, k_y) = (2 \pi/\lambda) (\cos\theta, \sin\theta)$, and dropping the propagation term we have
+or
+\begin{dmath}\label{eqn:modernOpticsLecture15:n}
+\Psi(\Br) \sim \int e^{i \frac{2 \pi}{\lambda} (\sin\theta_s - \sin\theta) y' } dy'
+\end{dmath}
 
+We'll work with $\theta_s = 0$, normally incident plane waves, for which the diffraction integral reduces to just
+
+%Dealing with only one direction ($y$), and writing $\Bk = (k_x, k_y) = (2 \pi/\lambda) (\cos\theta, \sin\theta)$, and dropping the propagation term we have
+%
 \begin{dmath}\label{eqn:modernOpticsLecture15:720}
-\Psi(\Br) \sim \int e^{-i k_y y' } dy',
+\Psi(\Br) \sim \int e^{-i k_y y' } dy'.
 \end{dmath}
 
-which is the Fourier transform of the aperture, say $g(y)$ evaluated at $k_y = (2 \pi/\lambda) \sin\theta$.
+This is the Fourier transform of the aperture, say $g(y)$ evaluated at $k_y = (2 \pi/\lambda) \sin\theta$.  Note that $k_y \ne \Bk \cdot \rcap'$, it is not the projection in the $\ycap$ direction, which is $k \sin\theta_s$.  The angle $\theta$ here is the angle to the \underline{observation} point.
 
 We will use the convolution theorem \ref{pr:convolution:1}, constructing the complete aperture as a convolution, with transmission \cref{fig:modernOpticsLecture15:modernOpticsLecture15Fig2}.
 
@@ -256,6 +285,10 @@ To get a bit of a feeling for what this looks like we can check out a plot, as i
 Our far field view was \cref{fig:modernOpticsLecture15:modernOpticsLecture15Fig4}.
 
 \imageFigure{figures/modernOpticsLecture15Fig4}{Far field view}{fig:modernOpticsLecture15:modernOpticsLecture15Fig4}{0.2}
+
+\paragraph{Frequency resolution}
+
+\fxwarning{review lecture 15 from this point}{work through lecture in detail from this point.}
 
 How well can we resolve frequency?
 
