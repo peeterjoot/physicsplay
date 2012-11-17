@@ -17,7 +17,7 @@ e:
 .PHONY: subdirs #$(SUBDIRS)
 
 subdirs:
-	$(foreach dir,$(SUBDIRS),make -C $(dir);)
+	$(foreach dir,$(SUBDIRS),make -k -C $(dir);)
 
 %/.gitignore : %/GNUmakefile
 	make -C $(<D) .gitignore
