@@ -2,13 +2,10 @@ THISDIR := blogit
 
 RAWTEXFILES := $(shell ls *.tex)
 INCOMPLETE += motionOfFreeTop.tex
-#INCOMPLETE += modernOpticsProblemSet1.tex
-INCOMPLETE += PS2.tex
-INCOMPLETE += PS1b.tex
-INCOMPLETE += modernOpticsProblemSet3Problem2.tex
-INCOMPLETE += modernOpticsProblemSet3Problem4.tex
-INCOMPLETE += modernOpticsProblemSet3Problem3.tex
-INCOMPLETE += modernOpticsProblemSet3Problem1.tex
+INCOMPLETE += modernOpticsProblemSet4Problem2.tex
+INCOMPLETE += modernOpticsProblemSet4Problem4.tex
+INCOMPLETE += modernOpticsProblemSet4Problem3.tex
+INCOMPLETE += modernOpticsProblemSet4Problem1.tex
 
 # these may not all be incomplete, but I don't want to build them right now:
 INCOMPLETE += pp.tex
@@ -26,6 +23,8 @@ INCOMPLETE += qmTwoR5.tex
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
 PDFS := $(TEXFILES:.tex=.pdf)
+
+ORIG_FILES += ../phy485/figures/modernOpticsLecture11Fig1.png
 
 # for gaBasics:
 ORIG_FILES += ../phy454/figures/couetteFlowFig1.png
