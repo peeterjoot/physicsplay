@@ -1,11 +1,11 @@
 include make.dep
 
-ORIG_FILES += ../myrefs.bib
+#ORIG_FILES += ../myrefs.bib
 ORIG_FILES += ../unsrturl.bst
 ORIG_FILES += ../abbrvurl.bst
 ORIG_FILES += ../alphaurl.bst
 ORIG_FILES += ../plainurl.bst
-ORIG_FILES += ../miscphysics/hoopSpring.png
+ORIG_FILES += ../phy354/figures/hoopSpring.png
 ORIG_FILES += ../gabook/figures/parallelogramArea.png
 ORIG_FILES += ../calculus/parameterizedSurface.png
 ORIG_FILES += ../calculus/polarAndSpherical.png
@@ -22,7 +22,7 @@ ORIG_FILE_DIRS += ../calculus/
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
-all : otherbook.pdf .gitignore
+all : peeters_macros.sty peeters_layout.sty myrefs.bib otherbook.pdf .gitignore
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
@@ -41,6 +41,27 @@ otherbook.pdf :: $(BOOKDEPENDENCIES) $(LOCAL_FILES)
 
 cronology.tex : ../METADATA
 	../METADATA -otherbook > cronology.tex
+
+#-------------------------------
+# HACK: from ../make.rules:
+
+# plainnat.bib (as used by classicthesis) doesn't like @webpage:
+# http://tex.stackexchange.com/questions/56951/what-does-warning-entry-type-for-isnt-style-file-defined-mean/56954#56954
+Bibliography.bib : myrefs.bib
+	sed 's/@webpage/@manual/g' < $< > $@
+
+# old style:
+myrefs.bib: ../myrefs.bib.in ../METADATA
+	cp ../myrefs.bib.in myrefs.bib
+	../METADATA -bib >> myrefs.bib
+
+peeters_layout.sty : ../peeters_layout.sty
+	cp $^ $@
+
+peeters_macros.sty : ../peeters_macros.sty
+	cp $^ $@
+#-------------------------------
+
 
 #%.pdf : %.tex
 #	mkdir -p ./.revinfo/
