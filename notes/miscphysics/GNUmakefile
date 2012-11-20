@@ -17,8 +17,19 @@ SOURCE_DIRS += relativity
 SOURCE_DIRS += sort
 
 LOCAL_FIGURE_FILES += pendulumDouble.png
-ORIG_FIGURE_DIRS += ../gabook/figures
+#ORIG_FIGURE_DIRS += ../gabook/figures
+ORIG_FIGURE_DIRS += ../phy354/figures/
 
 GENERATED_SOURCES += cronology.tex
 
 include ../make.rules
+
+figures/%.png: %.png
+	cp $< $@
+
+#listings/%.pl: %.pl
+#	mkdir -p $(@D)
+#	cp $< $@
+
+vpath %.png $(ORIG_FIGURE_DIRS)
+vpath %.pl $(ORIG_LISTING_DIRS)

@@ -2,6 +2,7 @@ SUBMAKES := $(wildcard notes/*/GNUmakefile)
 SUBDIRS := $(subst /GNUmakefile,,$(SUBMAKES))
 IGNOREDIRS += notes/atomic
 IGNOREDIRS += notes/bb
+IGNOREDIRS += notes/geometric-algebra
 IGNOREDIRS += notes/phy1530
 SUBDIRS := $(filter-out $(IGNOREDIRS),$(SUBDIRS))
 
@@ -17,7 +18,7 @@ e:
 .PHONY: subdirs #$(SUBDIRS)
 
 subdirs:
-	$(foreach dir,$(SUBDIRS),make -k -C $(dir);)
+	$(foreach dir,$(SUBDIRS),make -C $(dir);)
 
 %/.gitignore : %/GNUmakefile
 	make -C $(<D) .gitignore
