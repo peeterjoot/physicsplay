@@ -8,21 +8,241 @@
 \newcommand{\keywords}{Optics, PHY485H1F}
 \input{../peeter_prologue_print2.tex}
 
+\usepackage{tikz}
+
 \usepackage[draft]{fixme}
 \fxusetheme{color}
 
 \beginArtNoToc
-\generatetitle{PHY485H1F Modern Optics.  Lecture 18: XXX.  Taught by Prof.\ Joseph Thywissen}
-%\chapter{XXX}
+\generatetitle{PHY485H1F Modern Optics.  Lecture 18: Gaussian modes.  Taught by Prof.\ Joseph Thywissen}
+%\chapter{Gaussian modes}
 \label{chap:modernOpticsLecture18}
 
 %\section{Disclaimer}
 %
 %Peeter's lecture notes from class.  May not be entirely coherent.
 
-\section{XXX}
+\section{Gaussian modes}
 
 \fxwarning{review lecture 18}{work through this lecture in detail.}
+
+READING: Yariv van Driel
+
+We'll start thinking about transverse modes in a cavity.  Our starting point is Maxwell's equations
+
+\begin{subequations}
+\begin{dmath}\label{eqn:modernOpticsLecture18:20}
+\spacegrad \cross \BH = \epsilon \PD{t}{\BE}
+\end{dmath}
+\begin{dmath}\label{eqn:modernOpticsLecture18:40}
+\spacegrad \cross \BE = -\mu \PD{t}{\BH}
+\end{dmath}
+\begin{dmath}\label{eqn:modernOpticsLecture18:60}
+\spacegrad \cdot \BB = 0
+\end{dmath}
+\begin{dmath}\label{eqn:modernOpticsLecture18:80}
+\spacegrad \cdot \BE = 0.
+\end{dmath}
+\end{subequations}
+
+We won't actually need the $\BE$ divergence equation, and will be looking for a wave equation where $\epsilon(\Br)$ varies ``slowly''.
+
+Reminder
+
+\begin{subequations}
+\begin{equation}\label{eqn:modernOpticsLecture18:100}
+n^2 = \frac{\epsilon}{\epsilon_0}
+\end{equation}
+\begin{equation}\label{eqn:modernOpticsLecture18:120}
+v = \frac{c}{n} = \inv{\sqrt{\epsilon\mu}}
+\end{equation}
+\begin{equation}\label{eqn:modernOpticsLecture18:140}
+k = \omega \sqrt{\epsilon \mu} = \frac{\omega n}{c}
+\end{equation}
+\end{subequations}
+
+Recall that 
+
+\begin{equation}\label{eqn:modernOpticsLecture18:160}
+\spacegrad (\cross \spacegrad \BA) = \spacegrad (\spacegrad \cdot \BA) - \spacegrad^2 \BA
+\end{equation}
+
+Taking curls of both sides ...
+
+\begin{equation}\label{eqn:modernOpticsLecture18:180}
+\spacegrad^2 \BE - \mu \epsilon(\Br) \PDSq{t}{\BE} = 
+\mathLabelBox{
+-\spacegrad \left( \inv{\epsilon} \BE \cdot \spacegrad \epsilon \right)
+}{Neglect this if $\epsilon$ varies slowly compared to $\lambda$}
+\end{equation}
+
+We suppose that the time dependence of the electric field is monochromatic, so that
+
+\begin{equation}\label{eqn:modernOpticsLecture18:200}
+\BE(\Br, t) = \BE(\Br) e^{-i \omega t}
+\end{equation}
+
+We then find
+
+\begin{equation}\label{eqn:modernOpticsLecture18:220}
+\Abs{
+\spacegrad \left( \inv{\epsilon} \BE \cdot \spacegrad \epsilon \right)
+} \ll k^2 \BE,
+\end{equation}
+
+so that
+
+\begin{equation}\label{eqn:modernOpticsLecture18:240}
+\boxed{
+\spacegrad^2 \BE(\Br) + k^2(\Br) \BE(\Br) = 0.
+}
+\end{equation}
+
+Choose $\epsilon(\Br)$ such that with $k_0 = \omega/c$, we have
+
+\begin{equation}\label{eqn:modernOpticsLecture18:260}
+\boxed{
+k^2(\Br) = k_0^2 - k k_x r^2.
+}
+\end{equation}
+
+\fxwarning{what was this connected to?}
+
+\begin{equation}\label{eqn:modernOpticsLecture18:280}
+\cdots + \omega^2 \mu \epsilon(\Br) \BE(\Br)
+\equiv \left( \frac{n \omega}{c} \right)^2 - k k_2 r^2
+\end{equation}
+
+Perhaps this medium looks like
+
+F1.
+
+Let's look for solutions of the form
+
+\begin{equation}\label{eqn:modernOpticsLecture18:n}
+\BE = 
+\mathLabelBox{
+\BE_0
+}{A vector, with a chosen polarity}
+\mathLabelBox{
+u(r, \theta, z) 
+}{
+Slowly varying (complex) envelope
+}
+e^{i k z}
+\end{equation}
+
+We can now work with a scalar amplitude
+
+\begin{equation}\label{eqn:modernOpticsLecture18:n}
+\Psi(r, \theta, z) = u e^{i k z}.
+\end{equation}
+
+Recall that our Laplacian in cylindrical coordinates is
+
+\begin{equation}\label{eqn:modernOpticsLecture18:n}
+\spacegrad^2 = 
+\mathLabelBox{
+\PDSq{r}{} + \inv{r} \PD{r}{}
+}{$\spacegrad_{\mathrm{T}}^2$}
++ \inv{r^2} \PDSq{\theta}{}
++ \PDSq{z}{}
+\end{equation}
+
+We'll look for cylindrically symmetric solutions so that we can ignore the $\theta$ dependence in the Laplacian.
+
+\begin{dmath}\label{eqn:modernOpticsLecture18:n}
+\PDSq{z}{} u e^{i k z}
+= 
+\PD{z}{}
+\left( 
+\PD{z}{u}
+e^{i k z}
++i k u 
+e^{i k z}
+\right)
+=
+\PDSq{z}{u} e^{i k z} + 2 i k \PD{Z}{U} e^{i k z} - k^2 u e^{i k z}.
+\end{dmath}
+
+Noting that 
+
+\begin{dmath}\label{eqn:modernOpticsLecture18:n}
+\spacegrad_T^2 u e^{i k z} = (\spacegrad_T^2 u \right) e^{i k z},
+\end{dmath}
+
+we can assemble and cancel the expoentials
+
+\begin{dmath}\label{eqn:modernOpticsLecture18:n}
+\boxed{
+\PDSq{z}{u} + 2 i k \PD{z}{u} + \spacegrad_T^2 u - k k_2 r^2 u = 0
+}
+\end{dmath}
+
+This is the \underline{paraxial wave equation}.  If 
+
+\begin{dmath}\label{eqn:modernOpticsLecture18:n}
+\Abs{ \PDSq{z}{u} } \ll k \Abs{ \PD{z}{u} },
+\end{dmath}
+
+so that $u$ is slowing varying on the wavelength scale, then we can neglect the first term
+
+\begin{dmath}\label{eqn:modernOpticsLecture18:n}
+\boxed{
+2 i k \PD{z}{u} + \spacegrad_T^2 u - k k_2 r^2 u = 0
+}
+\end{dmath}
+
+Also note that we've dropped our suffix for $k$ along the way somewhere $k_0 \rightarrow k$.
+
+Also note that we didn't need to use cylindrical coordinates here, and could have grouped the transverse Laplacian as just
+
+\begin{dmath}\label{eqn:modernOpticsLecture18:n}
+\spacegrad_T^2 = 
+\PDSq{x}{}
++\PDSq{y}{}
+\end{dmath}
+
+Let's rewrite this in a slightly different order
+
+\begin{dmath}\label{eqn:modernOpticsLecture18:n}
+\boxed{
+\spacegrad_T^2 u 
+- k k_2 r^2 u = 
+-2 i k \PD{z}{u} 
+}
+\end{dmath}
+
+Observe that this has the same form as the 2D Schr\"{o}dinger equation
+
+\begin{dmath}\label{eqn:modernOpticsLecture18:n}
+\Hcap = \inv{2 m} \pcap^2 + \inv{2} m \omega^2 (\xcap^2 + \ycap^2),
+\end{dmath}
+
+or in a position basis
+
+\begin{dmath}\label{eqn:modernOpticsLecture18:n}
+H \rightarrow -\frac{\hbar^2}{2m} 
+\mathLabelBox{
+\left( 
+\PDSq{x}{}
++\PDSq{y}{}
+\right)
+}{$\spacegrad_T^2$}
++ \inv{2} m \omega^2 
+\mathLabelBox{
+(x^2 + y^2)
+}{$r^2$}
+\end{dmath}
+
+\begin{dmath}\label{eqn:modernOpticsLecture18:n}
+\spacegrad_T^2 \Psi
+= -\frac{m^2 \omega^2}{\hbar^2} r^2 \Psi 
+= 
+- \frac{2 m i}{\hbar} \PD{t}{\Psi}
+\end{dmath}
+
+
 
 %\EndArticle
 \EndNoBibArticle
