@@ -31,21 +31,22 @@ READING: Yariv van Driel
 We'll start thinking about transverse modes in a cavity.  Our starting point is Maxwell's equations
 
 \begin{subequations}
+\label{eqn:modernOpticsLecture18:10}
 \begin{dmath}\label{eqn:modernOpticsLecture18:20}
 \spacegrad \cross \BH = \epsilon \PD{t}{\BE}
 \end{dmath}
 \begin{dmath}\label{eqn:modernOpticsLecture18:40}
 \spacegrad \cross \BE = -\mu \PD{t}{\BH}
 \end{dmath}
-\begin{dmath}\label{eqn:modernOpticsLecture18:60}
-\spacegrad \cdot \BB = 0
-\end{dmath}
 \begin{dmath}\label{eqn:modernOpticsLecture18:80}
-\spacegrad \cdot \BE = 0.
+\spacegrad \cdot (\epsilon \BE) = 0
+\end{dmath}
+\begin{dmath}\label{eqn:modernOpticsLecture18:60}
+\spacegrad \cdot \BB = 0.
 \end{dmath}
 \end{subequations}
 
-We won't actually need the $\BE$ divergence equation, and will be looking for a wave equation where $\epsilon(\Br)$ varies ``slowly''.
+We won't actually need the $\BB$ divergence equation, and will be looking for a wave equation where $\epsilon(\Br)$ varies ``slowly''.
 
 Reminder
 
@@ -64,10 +65,43 @@ k = \omega \sqrt{\epsilon \mu} = \frac{\omega n}{c}
 Recall that 
 
 \begin{equation}\label{eqn:modernOpticsLecture18:160}
-\spacegrad (\cross \spacegrad \BA) = \spacegrad (\spacegrad \cdot \BA) - \spacegrad^2 \BA
+\spacegrad \cross (\spacegrad \cross \BA) = \spacegrad (\spacegrad \cdot \BA) - \spacegrad^2 \BA
 \end{equation}
 
-Taking curls of both sides ...
+Taking curls of both sides of the $\BE$ curl equation \ref{eqn:modernOpticsLecture18:40}
+
+\begin{dmath}\label{eqn:modernOpticsLecture18:660}
+\spacegrad (\spacegrad \cdot \BE) - \spacegrad^2 \BE
+= -\spacegrad \cross \left( \mu \PD{t}{\BH} \right)
+= -( \spacegrad \mu ) \cross \PD{t}{\BH} 
+ -\mu \spacegrad \cross \PD{t}{\BH} 
+= -( \spacegrad \mu ) \cross \PD{t}{\BH} 
+ -\mu \PD{t}{}
+\left( 
+\epsilon \PD{t}{\BE}
+\right),
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:modernOpticsLecture18:680}
+ \spacegrad^2 \BE
+ -\mu \epsilon 
+\PDSq{t}{\BE}
+= ( \spacegrad \mu ) \cross \PD{t}{\BH} 
++ \spacegrad (
+\mathLabelBox{ 
+\spacegrad \cdot \BE
+}{
+$\spacegrad \cdot (\epsilon \BE) = \epsilon \spacegrad \cdot \BE + (\spacegrad \epsilon) \cdot \BE$
+}
+) 
+= ( \spacegrad \mu ) \cross \PD{t}{\BH} 
++ \spacegrad \left(
+- \inv{\epsilon} (\spacegrad \epsilon) \cdot \BE
+\right).
+\end{dmath}
+
+So if we assume that $\mu \sim 1$ (or doesn't vary much from that), we have
 
 \begin{equation}\label{eqn:modernOpticsLecture18:180}
 \spacegrad^2 \BE - \mu \epsilon(\Br) \PDSq{t}{\BE} = 
@@ -82,7 +116,20 @@ We suppose that the time dependence of the electric field is monochromatic, so t
 \BE(\Br, t) = \BE(\Br) e^{-i \omega t}
 \end{equation}
 
-We then find
+our second time partial is
+
+\begin{dmath}\label{eqn:modernOpticsLecture18:700}
+\PDSq{t}{}\BE(\Br, t) 
+= -\BE(\Br) \omega^2 e^{-i \omega t}
+= -\BE(\Br) 
+\frac{k^2}{\epsilon\mu}
+e^{-i \omega t}
+= -\BE(\Br) 
+k^2
+e^{-i \omega t}
+\end{dmath}
+
+Provided we have
 
 \begin{equation}\label{eqn:modernOpticsLecture18:220}
 \Abs{
@@ -90,7 +137,7 @@ We then find
 } \ll k^2 \BE,
 \end{equation}
 
-so that
+Our wave equation reduces to
 
 \begin{equation}\label{eqn:modernOpticsLecture18:240}
 \boxed{
@@ -102,7 +149,7 @@ Choose $\epsilon(\Br)$ such that with $k_0 = \omega/c$, we have
 
 \begin{equation}\label{eqn:modernOpticsLecture18:260}
 \boxed{
-k^2(\Br) = k_0^2 - k k_x r^2.
+k^2(\Br) = k_0^2 - k_0 k_2 r^2.
 }
 \end{equation}
 
@@ -119,7 +166,7 @@ F1.
 
 Let's look for solutions of the form
 
-\begin{equation}\label{eqn:modernOpticsLecture18:n}
+\begin{equation}\label{eqn:modernOpticsLecture18:300}
 \BE = 
 \mathLabelBox{
 \BE_0
@@ -134,13 +181,13 @@ e^{i k z}
 
 We can now work with a scalar amplitude
 
-\begin{equation}\label{eqn:modernOpticsLecture18:n}
-\Psi(r, \theta, z) = u e^{i k z}.
+\begin{equation}\label{eqn:modernOpticsLecture18:320}
+\Psi(r, \theta, z) = u e^{i k_0 z}.
 \end{equation}
 
 Recall that our Laplacian in cylindrical coordinates is
 
-\begin{equation}\label{eqn:modernOpticsLecture18:n}
+\begin{equation}\label{eqn:modernOpticsLecture18:340}
 \spacegrad^2 = 
 \mathLabelBox{
 \PDSq{r}{} + \inv{r} \PD{r}{}
@@ -149,100 +196,170 @@ Recall that our Laplacian in cylindrical coordinates is
 + \PDSq{z}{}
 \end{equation}
 
-We'll look for cylindrically symmetric solutions so that we can ignore the $\theta$ dependence in the Laplacian.
+We'll look for cylindrical symmetric solutions so that we can ignore the $\theta$ dependence in the Laplacian.
 
-\begin{dmath}\label{eqn:modernOpticsLecture18:n}
-\PDSq{z}{} u e^{i k z}
+\begin{dmath}\label{eqn:modernOpticsLecture18:360}
+\PDSq{z}{} u e^{i k_0 z}
 = 
 \PD{z}{}
 \left( 
-\PD{z}{u}
-e^{i k z}
-+i k u 
-e^{i k z}
+\PD{z}{u} e^{i k_0 z}
++i k_0 u e^{i k_0 z}
 \right)
 =
-\PDSq{z}{u} e^{i k z} + 2 i k \PD{Z}{U} e^{i k z} - k^2 u e^{i k z}.
+\PDSq{z}{u} e^{i k_0 z}
++ i k_0 \PD{z}{u} e^{i k_0 z}
++i k_0 \PD{z}{u} e^{i k_0 z}
+- k_0^2 u e^{i k_0 z}
+=
+\left(
+\PDSq{z}{u} 
+ + 2 i k_0 \PD{z}{u} 
+- k_0^2 u 
+\right)
+e^{i k_0 z}.
 \end{dmath}
 
 Noting that 
 
-\begin{dmath}\label{eqn:modernOpticsLecture18:n}
-\spacegrad_T^2 u e^{i k z} = (\spacegrad_T^2 u \right) e^{i k z},
+\begin{dmath}\label{eqn:modernOpticsLecture18:380}
+\spacegrad_{\mathrm{T}}^2 u e^{i k_0 z} = \left(\spacegrad_{\mathrm{T}}^2 u \right) e^{i k_0 z},
 \end{dmath}
 
-we can assemble and cancel the expoentials
+we can assemble (dropping exponentials)
 
-\begin{dmath}\label{eqn:modernOpticsLecture18:n}
+\begin{dmath}\label{eqn:modernOpticsLecture18:720}
+0 
+= 
+\PDSq{z}{u} + 2 i k_0 \PD{z}{u} + \spacegrad_{\mathrm{T}}^2 u - \cancel{k_0^2 u }
++ (\cancel{k_0^2} - k_0 k_2 r^2) u.
+\end{dmath}
+
+This is the \underline{paraxial wave equation}
+
+\begin{dmath}\label{eqn:modernOpticsLecture18:400}
 \boxed{
-\PDSq{z}{u} + 2 i k \PD{z}{u} + \spacegrad_T^2 u - k k_2 r^2 u = 0
+\PDSq{z}{u} + 2 i k_0 \PD{z}{u} + \spacegrad_{\mathrm{T}}^2 u - k_0 k_2 r^2 u = 0
 }
 \end{dmath}
 
-This is the \underline{paraxial wave equation}.  If 
+%Let's now drop the suffix for $k$ and write $k_0 \rightarrow k$.  
+If
 
-\begin{dmath}\label{eqn:modernOpticsLecture18:n}
-\Abs{ \PDSq{z}{u} } \ll k \Abs{ \PD{z}{u} },
+\begin{dmath}\label{eqn:modernOpticsLecture18:420}
+\Abs{ \PDSq{z}{u} } \ll k_0 \Abs{ \PD{z}{u} },
 \end{dmath}
 
 so that $u$ is slowing varying on the wavelength scale, then we can neglect the first term
 
-\begin{dmath}\label{eqn:modernOpticsLecture18:n}
+\begin{dmath}\label{eqn:modernOpticsLecture18:440}
 \boxed{
-2 i k \PD{z}{u} + \spacegrad_T^2 u - k k_2 r^2 u = 0
+2 i k_0 \PD{z}{u} + \spacegrad_{\mathrm{T}}^2 u - k_0 k_2 r^2 u = 0
 }
 \end{dmath}
 
-Also note that we've dropped our suffix for $k$ along the way somewhere $k_0 \rightarrow k$.
-
 Also note that we didn't need to use cylindrical coordinates here, and could have grouped the transverse Laplacian as just
 
-\begin{dmath}\label{eqn:modernOpticsLecture18:n}
-\spacegrad_T^2 = 
+\begin{dmath}\label{eqn:modernOpticsLecture18:460}
+\spacegrad_{\mathrm{T}}^2 = 
 \PDSq{x}{}
 +\PDSq{y}{}
 \end{dmath}
 
 Let's rewrite this in a slightly different order
 
-\begin{dmath}\label{eqn:modernOpticsLecture18:n}
+\begin{dmath}\label{eqn:modernOpticsLecture18:480}
 \boxed{
-\spacegrad_T^2 u 
-- k k_2 r^2 u = 
--2 i k \PD{z}{u} 
+\spacegrad_{\mathrm{T}}^2 u 
+- k_0 k_2 r^2 u = 
+-2 i k_0 \PD{z}{u} 
 }
 \end{dmath}
 
 Observe that this has the same form as the 2D Schr\"{o}dinger equation
 
-\begin{dmath}\label{eqn:modernOpticsLecture18:n}
-\Hcap = \inv{2 m} \pcap^2 + \inv{2} m \omega^2 (\xcap^2 + \ycap^2),
+\begin{dmath}\label{eqn:modernOpticsLecture18:500}
+\hat{H} = \inv{2 m} \hat{p}^2 + \inv{2} m \omega^2 (\hat{x}^2 + \hat{y}^2),
 \end{dmath}
 
 or in a position basis
 
-\begin{dmath}\label{eqn:modernOpticsLecture18:n}
-H \rightarrow -\frac{\hbar^2}{2m} 
+\begin{dmath}\label{eqn:modernOpticsLecture18:520}
+\hat{H} \rightarrow -\frac{\hbar^2}{2m} 
 \mathLabelBox{
 \left( 
 \PDSq{x}{}
 +\PDSq{y}{}
 \right)
-}{$\spacegrad_T^2$}
+}{$\spacegrad_{\mathrm{T}}^2$}
 + \inv{2} m \omega^2 
 \mathLabelBox{
 (x^2 + y^2)
 }{$r^2$}
-\end{dmath}
-
-\begin{dmath}\label{eqn:modernOpticsLecture18:n}
-\spacegrad_T^2 \Psi
-= -\frac{m^2 \omega^2}{\hbar^2} r^2 \Psi 
 = 
-- \frac{2 m i}{\hbar} \PD{t}{\Psi}
+i \hbar \PD{t}{}
 \end{dmath}
 
+\begin{equation}\label{eqn:modernOpticsLecture18:540}
+\spacegrad_{\mathrm{T}}^2 \Psi
+= -\frac{m^2 \omega^2}{\hbar^2} r^2 \Psi 
+- \frac{2 m i}{\hbar} \PD{t}{\Psi}
+\end{equation}
 
+We can think of the equivalence in the following form
+
+\begin{subequations}
+\begin{dmath}\label{eqn:modernOpticsLecture18:740}
+\frac{m^2 \omega^2}{\hbar^2} \leftrightarrow k_0 k_2
+\end{dmath}
+\begin{dmath}\label{eqn:modernOpticsLecture18:760}
+\frac{m}{\hbar} \PD{t}{} \leftrightarrow k_0 \PD{z}{}
+\end{dmath}
+\end{subequations}
+
+F2
+
+Recall that our 1D SHO solutions look like
+
+F3
+
+In 2D our solutions look like
+
+F4
+
+\paragraph{Formal mapping}
+
+\begin{dmath}\label{eqn:modernOpticsLecture18:560}
+z \rightarrow 
+\mathLabelBox{
+\frac{\hbar k_0 }{m} t
+}{Looks like velocity}
+\end{dmath}
+
+If 
+
+\begin{dmath}\label{eqn:modernOpticsLecture18:580}
+m_{\mathrm{eff}} = \frac{\hbar \omega}{c^2}
+\end{dmath}
+
+\begin{dmath}\label{eqn:modernOpticsLecture18:600}
+m c^2 = \hbar \omega
+\end{dmath}
+
+This is a dispersion relation
+
+\begin{dmath}\label{eqn:modernOpticsLecture18:620}
+E 
+= \hbar \omega 
+= \hbar c \sqrt{ k_x^2 + k_y^2 + k_z^2 }
+\approx \text{constant} + \inv{2} \frac{\hbar c k_x^2}{k}
+= 
+\frac{\hbar^2 k_x^2}{2 m_{\mathrm{eff}}}
+\end{dmath}
+
+\begin{dmath}\label{eqn:modernOpticsLecture18:640}
+k_z \gg k_x, k_y
+\end{dmath}
 
 %\EndArticle
 \EndNoBibArticle

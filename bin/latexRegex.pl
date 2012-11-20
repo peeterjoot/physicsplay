@@ -1,0 +1,10 @@
+#s/\\Gamma_st/\\Gamma_{\\mathrm{st}}/g ;
+#s/\\Gamma_{st}/\\Gamma_{\\mathrm{st}}/g  ;
+#s/\\Gamma_sp/\\Gamma_{\\mathrm{sp}}/g  ;
+#s/\\Gamma_{sp}/\\Gamma_{\\mathrm{sp}}/g  ;
+#s/\\Gamma_cav/\\Gamma_{\\mathrm{cav}}/g  ;
+#s/\\Gamma_{cav}/\\Gamma_{\\mathrm{cav}}/g  ;
+#s/\\Br_av/\\Br_{\\mathrm{av}}/g ;
+#s/\\rcap_av/\\rcap_{\\mathrm{av}}/g ;
+#s/r_av/r_{\\mathrm{av}}/g ;
+s/\\spacegrad_T/\\spacegrad_{\\mathrm{T}}/g ;
