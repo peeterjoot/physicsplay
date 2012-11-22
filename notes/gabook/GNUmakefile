@@ -50,6 +50,7 @@ LOCAL_LISTING_FILES += levi.pl
 
 GENERATED_SOURCES += mathematica.tex 
 GENERATED_SOURCES += cronology.tex
+GENERATED_SOURCES += backmatter.tex
 
 include ../make.rules
 
@@ -58,6 +59,9 @@ figures/%.png: %.png
 
 listings/%.pl: %.pl
 	mkdir -p $(@D)
+	cp $< $@
+
+backmatter.tex : ../classicthesis.mine/backmatter.tex
 	cp $< $@
 
 vpath %.png $(ORIG_FIGURE_DIRS)
