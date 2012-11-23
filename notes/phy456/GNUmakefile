@@ -11,5 +11,9 @@ SOURCE_DIRS += scattering
 SOURCE_DIRS += spin
 
 GENERATED_SOURCES += mathematica.tex 
+GENERATED_SOURCES += backmatter.tex
+
+backmatter.tex : ../classicthesis.mine/backmatter.tex
+	cp $< $@
 
 include ../make.rules

@@ -21,10 +21,14 @@ LOCAL_FIGURE_FILES += pendulumDouble.png
 ORIG_FIGURE_DIRS += ../phy354/figures/
 
 GENERATED_SOURCES += cronology.tex
+GENERATED_SOURCES += backmatter.tex
 
 include ../make.rules
 
 figures/%.png: %.png
+	cp $< $@
+
+backmatter.tex : ../classicthesis.mine/backmatter.tex
 	cp $< $@
 
 #listings/%.pl: %.pl
