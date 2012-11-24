@@ -11,7 +11,7 @@ SOURCE_DIRS += problems
 GENERATED_SOURCES += mathematica.tex 
 GENERATED_SOURCES += backmatter.tex
 
+include ../make.rules
+
 backmatter.tex : ../classicthesis.mine/backmatter.tex
 	cp $< $@
-
-include ../make.rules
