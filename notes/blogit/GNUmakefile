@@ -56,7 +56,7 @@ all :: peeters_layout.sty
 all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
 
-modernOpticsProblemSet3.pdf : modernOpticsProblemSet3Problem4.tex modernOpticsProblemSet3Problem2.tex modernOpticsProblemSet3Problem1.tex modernOpticsProblemSet3Problem3.tex
+modernOpticsProblemSet4.pdf : modernOpticsProblemSet4Problem4.tex modernOpticsProblemSet4Problem2.tex modernOpticsProblemSet4Problem1.tex modernOpticsProblemSet4Problem3.tex
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
