@@ -8,7 +8,9 @@
 //
 #include <cstdio>
 #include <string>
+#include <cstdlib>
 #include <sstream>
+#include <iostream>
 
 #include "clang/AST/ASTConsumer.h"
 #include "clang/AST/RecursiveASTVisitor.h"
@@ -109,8 +111,11 @@ public:
     virtual bool HandleTopLevelDecl(DeclGroupRef DR) {
         for (DeclGroupRef::iterator b = DR.begin(), e = DR.end();
              b != e; ++b)
+        {
             // Traverse the declaration using our AST visitor.
             Visitor.TraverseDecl(*b);
+        }
+
         return true;
     }
 

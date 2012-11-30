@@ -51,10 +51,16 @@ CLANGLIBS += -lclangRewriteCore
 CLANGLIBS += -lclangEdit -lclangAST -lclangLex -lclangBasic
 CLANGLIBS += -lLLVMMCParser
 
-all: rewritersample
+EXES += classvisitor
+#EXES += rewritersample
+
+all: $(EXES)
 
 rewritersample: rewritersample.cpp
 	$(CXX) rewritersample.cpp $(CFLAGS) -o rewritersample $(CLANG_BUILD_FLAGS) $(CLANGLIBS) $(LLVM_CONFIG_OUT) $(LDFLAGS)
 
+classvisitor: classvisitor.cpp
+	$(CXX) classvisitor.cpp $(CFLAGS) -o classvisitor $(CLANG_BUILD_FLAGS) $(CLANGLIBS) $(LLVM_CONFIG_OUT) $(LDFLAGS)
+
 clean:
-	rm -rf *.o *.ll rewritersample
+	rm -rf *.o *.ll classvisitor 
