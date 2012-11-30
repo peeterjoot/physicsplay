@@ -132,10 +132,10 @@ int main(int argc, char *argv[])
     TheCompInst.createDiagnostics(0, 0);
 
     // Initialize target info with the default triple for our platform.
-    TargetOptions TO;
-    TO.Triple = llvm::sys::getDefaultTargetTriple();
+    TargetOptions * TO = new TargetOptions ; // leaking since it appears TargetInfo frees this on destruction.
+    TO->Triple = llvm::sys::getDefaultTargetTriple();
     TargetInfo *TI = TargetInfo::CreateTargetInfo(
-        TheCompInst.getDiagnostics(), &TO);
+        TheCompInst.getDiagnostics(), TO);
     TheCompInst.setTarget(TI);
 
     TheCompInst.createFileManager();
