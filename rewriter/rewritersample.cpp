@@ -6,11 +6,8 @@
 // Eli Bendersky (eliben@gmail.com)
 // This code is in the public domain
 //
-#include <cstdio>
 #include <string>
-#include <cstdlib>
 #include <sstream>
-#include <iostream>
 
 #include "clang/AST/ASTConsumer.h"
 #include "clang/AST/RecursiveASTVisitor.h"

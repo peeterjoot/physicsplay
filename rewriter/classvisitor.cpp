@@ -4,11 +4,7 @@
 //
 // Based on Eli Bendersky's rewritersample.cpp
 //
-#include <cstdio>
 #include <string>
-#include <cassert>
-#include <cstdlib>
-#include <sstream>
 #include <iostream>
 
 #include "clang/AST/ASTConsumer.h"
@@ -43,7 +39,7 @@ public:
    {
       const QualType & q = t->getUnderlyingType() ;
 
-      cout << t->getName().str() << " -> " << q.getAsString() << endl ;
+      cout << t->getName().str() << " : " << q.getAsString() << endl ;
 
       return true ;
    }
@@ -51,7 +47,7 @@ public:
    // Find class/struct/unions:
    bool VisitCXXRecordDecl( CXXRecordDecl* r )
    {
-      cout << "VisitCXXRecordDecl:: CLASS: " << r->getName().str() << endl ;
+//      cout << "VisitCXXRecordDecl:: CLASS: " << r->getName().str() << endl ;
 
       for ( CXXRecordDecl::base_class_iterator b = r->bases_begin(), e = r->bases_end() ;
             b != e ; ++b )
@@ -60,7 +56,8 @@ public:
 
          const QualType & q = a.getType() ;
 
-         cout << "BASE CLASS: " << q.getAsString() << endl ;
+         cout << r->getName().str() << " : " << q.getAsString() << endl ;
+//         cout << "BASE CLASS: " << q.getAsString() << endl ;
       }
 
       return true ;
@@ -70,8 +67,8 @@ public:
    bool VisitFieldDecl( FieldDecl * f )
    {
       RecordDecl * r = f->getParent() ;
-      cout << "CLASS: " << r->getName().str() << endl ;
-      cout << "MEMBER: " << f->getName().str() << " ( " ;
+//      cout << "CLASS: " << r->getName().str() << endl ;
+//      cout << "MEMBER: " << f->getName().str() << " ( " ;
 
       TypeSourceInfo * t = f->getTypeSourceInfo() ;
 
@@ -84,23 +81,18 @@ public:
       }
 
       const QualType & q = TL.getType() ;
-      const QualType & qu = q.getDesugaredType( ci.getASTContext() ) ;
+//      cout << "TYPE: " << q.getAsString() << " )" << endl ;
 
-      // for SVC, probably want both sugared and non-sugared types:
-      //cout << "TYPE: " << q.getAsString() << " )" << endl ;
+// FIXME: want to prune the struct/union/class from here:
+      cout << r->getName().str() << " : " << q.getAsString() << endl ;
+
+#if 0
+      const QualType & qu = q.getDesugaredType( ci.getASTContext() ) ;
       cout << "TYPE: " << qu.getAsString() << " )" << endl ;
+#endif
 
       return true ;
    }
-#if 0
-      //QualType CanonicalType = q.getTypePtr()->CanonicalType ;
-      //if ( CanonicalType.isScalarType( ) ) // private.
-      if ( q.isTrivialType( ci.getASTContext() ) )
-      {
-         cout << "SCALAR " ;
-      }
-#endif
-
 } ;
 
 // Implementation of the ASTConsumer interface for reading an AST produced

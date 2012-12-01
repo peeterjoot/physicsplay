@@ -1,30 +1,13 @@
-CFLAGS += -fno-rtti
+# don't think this is needed.  llvm-config returns it
+#CFLAGS += -fno-rtti
 CFLAGS += -g
 LLVM_LIBS := core mc
 
-#-------------------------------------------------
-# local clang build related stuff:
+HOSTNAME := $(shell hostname)
 
-GCCPATH=/vbs/bldsupp.linux1/linuxamd64/gcc-4.2.2-31309
+include makefile.$(HOSTNAME)
 
-LDFLAGS += -Wl,-rpath,$(GCCPATH)/lib64
-LDFLAGS += -Wl,-rpath-link,$(GCCPATH)/lib64
-
-CXX := $(GCCPATH)/bin/g++
-
-#-------------------------------------------------
-# Built two versions of clang, one for debugging
-# into rewritersample.cpp:
-#-------------------------------------------------
-CONFIG_RELEASE = Debug+Asserts
-CLANGPATH=$(HOME)/clang/debug
-#-------------------------------------------------
-#CONFIG_RELEASE = Release+Asserts
-#CLANGPATH=$(HOME)/clang/optimized
-#-------------------------------------------------
-
-LLVM_BIN_PATH = $(CLANGPATH)/bin
-LLVM_CONFIG_COMMAND := $(LLVM_BIN_PATH)/llvm-config --cxxflags --ldflags --libs $(LLVM_LIBS)
+LLVM_CONFIG_COMMAND := $(LLVM_BIN_PATH)llvm-config --cxxflags --ldflags --libs $(LLVM_LIBS)
 LLVM_CONFIG_OUT := $(shell $(LLVM_CONFIG_COMMAND))
 
 # HACK: llvm-config doesn't get along with clearcase as an install path and appears to be picking out my view storage dir.
