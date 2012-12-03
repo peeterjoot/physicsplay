@@ -5,7 +5,11 @@
 // Based on Eli Bendersky's rewritersample.cpp
 //
 #include <string>
+#include <vector>
 #include <iostream>
+#include <getopt.h> // gnu getopt assumed.
+#include <cstdio>
+#include <cstdlib>  // exit
 
 #include "clang/AST/ASTConsumer.h"
 #include "clang/AST/RecursiveASTVisitor.h"
@@ -20,6 +24,11 @@
 #include "clang/Parse/ParseAST.h"
 #include "llvm/Support/Host.h"
 #include "llvm/Support/raw_ostream.h"
+#include "clang/Frontend/TextDiagnosticPrinter.h"
+#include "clang/Lex/HeaderSearch.h"
+#include "clang/AST/ASTContext.h"
+#include "clang/Frontend/Utils.h" // InitializePreprocessor
+#include <getopt.h>
 
 using namespace clang ;
 using namespace std ;
@@ -120,60 +129,172 @@ private:
    MyASTVisitor Visitor ;
 } ;
 
-
-int main(int argc, char *argv[])
+void printUsageAndExit( const char * argv0 )
 {
-   if (argc != 2)
+   printf( "%s [-Ipath | --include=path] [-Dval | --define=val] [-h | --help] filename.cpp\n"
+           "\n"
+           "\tExample: %s x.cpp -Ipath1 -Dfoo -Dhoo --include=path2\n"
+           , argv0
+           , argv0 ) ;
+
+   exit( 1 ) ;
+}
+
+// clang env setup based on clangtut/tutorial6.cpp
+int main( int argc, char * argv[] )
+{
+   struct option options[] =
    {
-      llvm::errs() << "Usage: rewritersample <filename>\n" ;
-      return 1 ;
+       {"include", 1, 0, 'I'}
+      ,{"define", 1, 0, 'D'}
+      ,{"help", 1, 0, 'h'}
+   } ;
+
+   int c = 0 ;
+   int optindex = 0 ;
+   vector<string> includes ;
+   vector<string> defines ;
+
+   while ( ( c = getopt_long(argc, argv, "I:D:h", options, &optindex ) ) != EOF )
+   {
+      switch (c)
+      {
+         case 'I':
+         {
+            includes.push_back( optarg ) ;
+            //printf( "-I : %s\n", optarg ) ;
+            break ;
+         }
+         case 'D':
+         {
+            defines.push_back( optarg ) ;
+            //printf( "-D : %s\n", optarg ) ;
+            break ;
+         }
+
+         case 'h':
+         default:
+         {
+            printUsageAndExit( argv[0] ) ;
+         }
+      }
    }
 
-   // CompilerInstance will hold the instance of the Clang compiler for us,
-   // managing the various objects needed to run the compiler.
-   CompilerInstance TheCompInst ;
-   TheCompInst.createDiagnostics(0, 0) ;
+   if ( optind != (argc - 1) )
+   {
+      printUsageAndExit( argv[0] ) ;
+   }
+ 
+   DiagnosticOptions diagnosticOptions ;
 
-   // Initialize target info with the default triple for our platform.
-   TargetOptions * TO = new TargetOptions ;
-   TO->Triple = llvm::sys::getDefaultTargetTriple() ;
-   TargetInfo *TI = TargetInfo::CreateTargetInfo(
-      TheCompInst.getDiagnostics(), TO) ;
-   TheCompInst.setTarget(TI) ;
+   TextDiagnosticPrinter * pTextDiagnosticPrinter 
+      = new TextDiagnosticPrinter( llvm::outs(),
+                                   &diagnosticOptions ) ;
 
-   TheCompInst.createFileManager() ;
-   FileManager &FileMgr = TheCompInst.getFileManager() ;
-   TheCompInst.createSourceManager(FileMgr) ;
-   SourceManager &SourceMgr = TheCompInst.getSourceManager() ;
+   llvm::IntrusiveRefCntPtr<DiagnosticIDs> pDiagIDs ;
+
+   DiagnosticsEngine * pDiagnosticsEngine 
+      = new DiagnosticsEngine( pDiagIDs,
+                               &diagnosticOptions,
+                               pTextDiagnosticPrinter ) ;
+
+   LangOptions languageOptions ;
 
    // Allow C++ code (https://github.com/loarabia/Clang-tutorial/blob/master/CIrewriter.cpp)
-   TheCompInst.getLangOpts().GNUMode = 1 ; 
-   TheCompInst.getLangOpts().CXXExceptions = 1 ; 
-   TheCompInst.getLangOpts().RTTI = 1 ; 
-   TheCompInst.getLangOpts().Bool = 1 ; 
-   TheCompInst.getLangOpts().CPlusPlus = 1 ; 
- 
-   TheCompInst.createPreprocessor() ;
-   TheCompInst.createASTContext() ;
+   languageOptions.GNUMode = 1 ;
+   languageOptions.CXXExceptions = 1 ;
+   languageOptions.RTTI = 1 ;
+   languageOptions.Bool = 1 ;
+   languageOptions.CPlusPlus = 1 ;
 
-   // Set the main file handled by the source manager to the input file.
-   const FileEntry *FileIn = FileMgr.getFile(argv[1]) ;
+   FileSystemOptions fileSystemOptions ;
 
-   if ( FileIn )
+   FileManager fileManager( fileSystemOptions ) ;
+
+   SourceManager sourceManager( *pDiagnosticsEngine,
+                                fileManager ) ;
+
+   llvm::IntrusiveRefCntPtr<HeaderSearchOptions> headerSearchOptions( new HeaderSearchOptions() ) ;
+
+   for ( vector<string>::iterator i = includes.begin() ; i != includes.end(); ++i )
    {
-      SourceMgr.createMainFileID(FileIn) ;
+      //cout << "processing -I" << *i << endl ;
+      headerSearchOptions->AddPath( *i,
+                                    frontend::Quoted,
+                                    true,
+                                    false,
+                                    false ) ;
+   }
 
-      TheCompInst.getDiagnosticClient().BeginSourceFile(
-         TheCompInst.getLangOpts(),
-         &TheCompInst.getPreprocessor()) ;
+   TargetOptions targetOptions ;
 
-      // Create an AST consumer instance which is going to get called by
-      // ParseAST.
-      MyASTConsumer TheConsumer( TheCompInst ) ;
+   targetOptions.Triple = llvm::sys::getDefaultTargetTriple() ;
 
-      // Parse the file to AST, registering our consumer as the AST consumer.
-      ParseAST(TheCompInst.getPreprocessor(), &TheConsumer,
-            TheCompInst.getASTContext()) ;
+   TargetInfo * pTargetInfo = TargetInfo::CreateTargetInfo( *pDiagnosticsEngine,
+                                                            &targetOptions ) ;
+
+   HeaderSearch headerSearch( headerSearchOptions,
+                              fileManager,
+                              *pDiagnosticsEngine,
+                              languageOptions,
+                              pTargetInfo ) ;
+
+   CompilerInstance compInst ;
+
+   llvm::IntrusiveRefCntPtr<PreprocessorOptions> pOpts( new PreprocessorOptions() ) ;
+
+   Preprocessor preprocessor( pOpts,
+                              *pDiagnosticsEngine,
+                              languageOptions,
+                              pTargetInfo,
+                              sourceManager,
+                              headerSearch,
+                              compInst ) ;
+
+   FrontendOptions frontendOptions ;
+
+   InitializePreprocessor( preprocessor,
+                           *pOpts,
+                           *headerSearchOptions,
+                           frontendOptions ) ;
+       
+   const FileEntry * pFile = fileManager.getFile( argv[optind] ) ;
+   
+   if ( pFile )
+   {
+      sourceManager.createMainFileID( pFile ) ;
+
+      const TargetInfo &targetInfo = *pTargetInfo ;
+
+      IdentifierTable identifierTable( languageOptions ) ;
+
+      SelectorTable selectorTable ;
+
+      Builtin::Context builtinContext ;
+
+      builtinContext.InitializeTarget( targetInfo ) ;
+
+      ASTContext astContext( languageOptions,
+                             sourceManager,
+                             pTargetInfo,
+                             identifierTable,
+                             selectorTable,
+                             builtinContext,
+                             0 /* size_reserve*/ ) ;
+
+      MyASTConsumer astConsumer( compInst ) ;
+
+#if 0
+      Sema sema( preprocessor,
+                 astContext,
+                 astConsumer ) ;
+#endif
+
+      pTextDiagnosticPrinter->BeginSourceFile( languageOptions, &preprocessor ) ;
+
+      ParseAST( preprocessor, &astConsumer, astContext ) ;
+
+      pTextDiagnosticPrinter->EndSourceFile() ;
    }
 
    return 0 ;

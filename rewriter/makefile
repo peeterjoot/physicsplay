@@ -1,5 +1,3 @@
-# don't think this is needed.  llvm-config returns it
-#CFLAGS += -fno-rtti
 CFLAGS += -g
 LLVM_LIBS := core mc
 
@@ -7,8 +5,8 @@ HOSTNAME := $(shell hostname)
 
 include makefile.$(HOSTNAME)
 
-LLVM_CONFIG_COMMAND := $(LLVM_BIN_PATH)llvm-config --cxxflags --ldflags --libs $(LLVM_LIBS)
-LLVM_CONFIG_OUT := $(shell $(LLVM_CONFIG_COMMAND))
+CFLAGS += $(shell $(LLVM_BIN_PATH)llvm-config --cxxflags)
+LDFLAGS += $(shell $(LLVM_BIN_PATH)llvm-config --ldflags)
 
 # HACK: llvm-config doesn't get along with clearcase as an install path and appears to be picking out my view storage dir.
 #
@@ -22,28 +20,33 @@ LLVM_CONFIG_OUT := $(shell $(LLVM_CONFIG_COMMAND))
 # for debugging:
 
 # for Release+Asserts config:
-LLVM_CONFIG_OUT := $(subst -O3,,$(LLVM_CONFIG_OUT))
+CFLAGS := $(subst -O3,,$(CFLAGS))
 #-------------------------------------------------
 
-CLANGLIBS += -lclangFrontendTool -lclangFrontend -lclangDriver 
-CLANGLIBS += -lclangSerialization -lclangCodeGen -lclangParse 
-CLANGLIBS += -lclangSema -lclangStaticAnalyzerFrontend 
-CLANGLIBS += -lclangStaticAnalyzerCheckers -lclangStaticAnalyzerCore 
-CLANGLIBS += -lclangAnalysis -lclangARCMigrate 
-CLANGLIBS += -lclangRewriteCore 
-CLANGLIBS += -lclangEdit -lclangAST -lclangLex -lclangBasic
-CLANGLIBS += -lLLVMMCParser
+LDFLAGS += -lclangFrontendTool -lclangFrontend -lclangDriver 
+LDFLAGS += -lclangSerialization -lclangCodeGen -lclangParse 
+LDFLAGS += -lclangSema -lclangStaticAnalyzerFrontend 
+LDFLAGS += -lclangStaticAnalyzerCheckers -lclangStaticAnalyzerCore 
+LDFLAGS += -lclangAnalysis -lclangARCMigrate 
+LDFLAGS += -lclangRewriteCore 
+LDFLAGS += -lclangEdit -lclangAST -lclangLex -lclangBasic
+LDFLAGS += -lLLVMMCParser
+
+LDFLAGS += $(shell $(LLVM_BIN_PATH)llvm-config --libs $(LLVM_LIBS))
 
 EXES += classvisitor
 #EXES += rewritersample
 
 all: $(EXES)
 
-rewritersample: rewritersample.cpp
-	$(CXX) rewritersample.cpp $(CFLAGS) -o rewritersample $(CLANG_BUILD_FLAGS) $(CLANGLIBS) $(LLVM_CONFIG_OUT) $(LDFLAGS)
+%.o : %.cpp
+	$(CXX) -c $< $(CFLAGS)
 
-classvisitor: classvisitor.cpp
-	$(CXX) classvisitor.cpp $(CFLAGS) -o classvisitor $(CLANG_BUILD_FLAGS) $(CLANGLIBS) $(LLVM_CONFIG_OUT) $(LDFLAGS)
+rewritersample: rewritersample.o
+	$(CXX) rewritersample.o -o rewritersample $(LDFLAGS)
+
+classvisitor: classvisitor.o
+	$(CXX) classvisitor.o -o classvisitor $(LDFLAGS)
 
 clean:
 	rm -rf *.o *.ll classvisitor 

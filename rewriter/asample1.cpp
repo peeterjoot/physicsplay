@@ -1,8 +1,4 @@
-class foo
-{
-   public:
-   char v ;
-} ;
+#include "asample1.h"
 
 struct blah
 {
