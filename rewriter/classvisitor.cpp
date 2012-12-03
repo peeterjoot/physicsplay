@@ -140,13 +140,14 @@ void printUsageAndExit( const char * argv0 )
    exit( 1 ) ;
 }
 
-// clang env setup based on clangtut/tutorial6.cpp
+// preprocessor driver based on https://github.com/loarabia/Clang-tutorial/blob/master/tutorial6.cpp
 int main( int argc, char * argv[] )
 {
    struct option options[] =
    {
        {"include", 1, 0, 'I'}
       ,{"define", 1, 0, 'D'}
+      ,{"undef", 1, 0, 'U'}
       ,{"help", 1, 0, 'h'}
    } ;
 
@@ -154,8 +155,9 @@ int main( int argc, char * argv[] )
    int optindex = 0 ;
    vector<string> includes ;
    vector<string> defines ;
+   vector<string> undefs ;
 
-   while ( ( c = getopt_long(argc, argv, "I:D:h", options, &optindex ) ) != EOF )
+   while ( ( c = getopt_long(argc, argv, "I:D:U:h", options, &optindex ) ) != EOF )
    {
       switch (c)
       {
@@ -169,6 +171,12 @@ int main( int argc, char * argv[] )
          {
             defines.push_back( optarg ) ;
             //printf( "-D : %s\n", optarg ) ;
+            break ;
+         }
+         case 'U':
+         {
+            undefs.push_back( optarg ) ;
+            //printf( "-U : %s\n", optarg ) ;
             break ;
          }
 
