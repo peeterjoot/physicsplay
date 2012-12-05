@@ -1,23 +1,167 @@
 \makeproblem{Stability in a cavity}{modernOptics:problemSet4:2}{ 
 Using ABCD matrices, derive the condition for stability of a Gaussian beam in a cavity. 
 
-\makesubproblem{Assuming symmetric beams}{modernOptics:problemSet4:2a}
+\makesubproblem{Assuming symmetric beams.}{modernOptics:problemSet4:2a}
 %{\bf (a)}
-Assume symmetric beams and follow Fowles \S 10.5 to find Eq.~(10.32). 
+Follow Fowles \S 10.5 to find Eq.~(10.32). 
 
-\makesubproblem{Stability criterion}{modernOptics:problemSet4:2b}
+\makesubproblem{Stability criterion.}{modernOptics:problemSet4:2b}
 %{\bf (b)}
 Fowles derives the stability criterion from the eigen{\em{values}}. Find the rays that at the eigen{\em{vectors}} of a single-pass ray matrix for the planar case ($L/R = 0$). Comment on why they are the only reasonable choice. 
 
-\makesubproblem{Unequal mirror radii}{modernOptics:problemSet4:2c}
+\makesubproblem{Unequal mirror radii.}{modernOptics:problemSet4:2c}
 %{\bf (c)}
-Allow unequal mirror radii, and derive Fowles Eq.~(10.33).
+Allowing for unequal mirror radii, derive Fowles Eq.~(10.33).
 }
 
 \makeanswer{modernOptics:problemSet4:2}{ 
 \makeSubAnswer{Assuming symmetric beams}{modernOptics:problemSet4:2a}
 
-TODO.
+Given the M\"obius transform relationship the Gaussian beams, we can first consider the stability conditions for powers of the transfer matrix itself to not diverge.  This follows \citep{fowles1989introduction}, filling in some additional details.
+
+The matrix for a single pass of free propagation through distance $d$, and then reflection off of a curved mirror with focus $f$ is the composition
+
+\begin{equation}\label{eqn:problemSet4Problem4:20}
+M = 
+\begin{bmatrix}
+1 & 0 \\
+-1/f & 1
+\end{bmatrix}
+\begin{bmatrix}
+1 & d \\
+0 & 1
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & d \\
+-1/f &  -d/f + 1
+\end{bmatrix}.
+\end{equation}
+
+Each pass of propagation and reflection adds another power of $M$ to the matrix for which we will base the final M\"obius transformation on.  We'll want to perform a diagonalization to simplify that matrix exponentiation, so that if
+
+\begin{equation}\label{eqn:problemSet4Problem4:40}
+M E = E D,
+\end{equation}
+
+or
+
+\begin{equation}\label{eqn:problemSet4Problem4:60}
+M = E D E^{-1},
+\end{equation}
+
+We can express the final matrix transformation after $n$ reflections directly
+
+\begin{equation}\label{eqn:problemSet4Problem4:80}
+M^n = E D^n E^{-1}.
+\end{equation}
+
+We'll need the eigenvalues first.  Our characteristic equation is
+
+\begin{dmath}\label{eqn:problemSet4Problem4:100}
+0 
+= \Abs{ M - \lambda I } 
+=
+\begin{vmatrix}
+1 - \lambda & d \\
+-1/f & 1 - d/f - \lambda
+\end{vmatrix}
+=
+1 - \cancel{d/f} - \lambda - \lambda( 1 - d/f - \lambda ) + \cancel{d/f}
+= 
+\lambda^2 - 2 \lambda \left( 1 - \frac{d}{2 f} \right) + 1.
+\end{dmath}
+
+Following Fowles, we write
+
+\begin{dmath}\label{eqn:problemSet4Problem4:120}
+\alpha = 1 - \frac{d}{2 f},
+\end{dmath}
+
+So that the characteristic equation is
+
+\begin{dmath}\label{eqn:problemSet4Problem4:140}
+0
+= 
+\lambda^2 - 2 \lambda \alpha + 1
+= 
+\left( \lambda - \alpha \right)^2 + 1 - \alpha^2
+\end{dmath}
+
+Note that this corrects a sign error in the text.  Solving for $\lambda$ we have
+
+\begin{dmath}\label{eqn:problemSet4Problem4:160}
+\lambda_{\pm} = \alpha \pm \sqrt{\alpha^2 - 1}.
+\end{dmath}
+
+Observe that these satisfy our expectation that $\lambda_{+} \lambda_{-} = 1$, so we can write these as 
+
+\begin{align}\label{eqn:problemSet4Problem4:300}
+\lambda_{+} &= \lambda \\
+\lambda_{-} &= 1/\lambda,
+\end{align}
+
+for some value $\lambda$.  Our ABCD matrix for $n$ sets of propagate-and-reflect is
+
+\begin{dmath}\label{eqn:problemSet4Problem4:260}
+M^n = E 
+\begin{bmatrix}
+\lambda^n & 0 \\
+0 & \inv{\lambda^n}
+\end{bmatrix}
+E^{-1}.
+\end{dmath}
+
+If $E = [ e_{i j} ]$ and $E^{-1} = [ f_{i j} ]$, then the product takes the value
+
+\begin{dmath}\label{eqn:problemSet4Problem4:280}
+E D^n E^{-1} 
+= [ e_{i k} \lambda_k^n \delta_{k m } f_{m j} ]
+= [ e_{i m} \lambda_m^n f_{m j} ]
+= [ 
+e_{i 1} \lambda^n f_{1 j} 
++
+e_{i 2} \inv{\lambda^n} f_{2 j} 
+],
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:problemSet4Problem4:320}
+M^n
+= 
+\lambda^n [ e_{i 1} f_{1 j} ] + \inv{\lambda^n} [ e_{i 2} f_{2 j} ].
+\end{dmath}
+
+So, if $\lambda$ is real and greater than 1, the ABCD matrix will start to grow without bound.
+
+To consider the bounding behaviour of $\lambda^n$, lets follow Fowles, and separate the eigenvalues into real and complex as follows
+
+\begin{dmath}\label{eqn:problemSet4Problem4:180}
+\lambda = \alpha \pm 
+\left\{
+\begin{array}{l l}
+\sqrt{\alpha^2 - 1} & \quad \mbox{if $\Abs{\alpha} > 1$} \\
+i \sqrt{1 - \alpha^2} & \quad \mbox{if $\Abs{\alpha} < 1$} 
+\end{array}
+\right.
+\end{dmath}
+
+When $\Abs{\alpha} = 1$, we have a double eigenvalue with value $\alpha$ and may not be able to find a spanning set of eigenvectors.  For the $\Abs{\alpha} < 1$ case, we can introduce $\phi$ such that $\cos\phi = \alpha$, allowing us to write
+
+\begin{dmath}\label{eqn:problemSet4Problem4:200}
+\lambda_{\pm} = e^{\pm i \phi}
+\end{dmath}
+
+What can we say about the real valued eigenvalue case?  We know that from $\Det M = 1$ both real valued eigenvalues must have matching signs.  We can also see from
+
+\begin{dmath}\label{eqn:problemSet4Problem4:240}
+\lambda_{\pm} = \Abs{\alpha} \left( \sgn(\alpha) \pm \sqrt{1 - \inv{\alpha^2}} \right),
+\end{dmath}
+
+that if these are positive, then one of the eigenvalues is greater than 1, and if negative, at least one is less than $-1$.  If we pick $\lambda$ as the eigenvalue for which $\Abs{\lambda} > 1$, then $\lambda^n$ will clearly diverge as $n$ grows, and we the ABCD matrix of \ref{eqn:problemSet4Problem4:320} becomes unstable.
+
+%If considering just rays, for the rays to be constrained we'd need the resulting angle to be constrained.
+
 \makeSubAnswer{Stability criterion}{modernOptics:problemSet4:2b}
 
 TODO.
@@ -25,4 +169,3 @@ TODO.
 
 TODO.
 }
-
