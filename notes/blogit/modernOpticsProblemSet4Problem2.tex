@@ -1,28 +1,431 @@
 \makeproblem{Stability in a cavity}{modernOptics:problemSet4:2}{ 
 Using ABCD matrices, derive the condition for stability of a Gaussian beam in a cavity. 
 
-\makesubproblem{Assuming symmetric beams}{modernOptics:problemSet4:2a}
+\makesubproblem{Assuming symmetric beams.}{modernOptics:problemSet4:2a}
 %{\bf (a)}
-Assume symmetric beams and follow Fowles \S 10.5 to find Eq.~(10.32). 
+Follow Fowles \S 10.5 to find Eq.~(10.32). 
 
-\makesubproblem{Stability criterion}{modernOptics:problemSet4:2b}
+\makesubproblem{Stability criterion.}{modernOptics:problemSet4:2b}
 %{\bf (b)}
-Fowles derives the stability criterion from the eigen{\em{values}}. Find the rays that at the eigen{\em{vectors}} of a single-pass ray matrix for the planar case ($L/R = 0$). Comment on why they are the only reasonable choice. 
+Fowles derives the stability criterion from the eigen{\em{values}}. Find the rays that are eigen{\em{vectors}} of a single-pass ray matrix for the planar case ($L/R = 0$). Comment on why they are the only reasonable choice. 
 
-\makesubproblem{Unequal mirror radii}{modernOptics:problemSet4:2c}
+\makesubproblem{Unequal mirror radii.}{modernOptics:problemSet4:2c}
 %{\bf (c)}
-Allow unequal mirror radii, and derive Fowles Eq.~(10.33).
+Allowing for unequal mirror radii, derive Fowles Eq.~(10.33).
 }
 
 \makeanswer{modernOptics:problemSet4:2}{ 
 \makeSubAnswer{Assuming symmetric beams}{modernOptics:problemSet4:2a}
 
-TODO.
+Given the M\"obius transform relationship the Gaussian beams, we can first consider the stability conditions for powers of the transfer matrix itself to not diverge.  This follows \citep{fowles1989introduction}, filling in some additional details.
+
+The matrix for a single pass of free propagation through distance $d$, and then reflection off of a curved mirror with focus $f$ is the composition
+
+\begin{equation}\label{eqn:problemSet4Problem4:20}
+M = 
+\begin{bmatrix}
+1 & 0 \\
+-1/f & 1
+\end{bmatrix}
+\begin{bmatrix}
+1 & d \\
+0 & 1
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & d \\
+-1/f &  -d/f + 1
+\end{bmatrix}.
+\end{equation}
+
+Each pass of propagation and reflection adds another power of $M$ to the matrix for which we will base the final M\"obius transformation on.  We'll want to perform a diagonalization to simplify that matrix exponentiation, so that if
+
+\begin{equation}\label{eqn:problemSet4Problem4:40}
+M E = E D,
+\end{equation}
+
+or
+
+\begin{equation}\label{eqn:problemSet4Problem4:60}
+M = E D E^{-1},
+\end{equation}
+
+We can express the final matrix transformation after $n$ reflections directly
+
+\begin{equation}\label{eqn:problemSet4Problem4:80}
+M^n = E D^n E^{-1}.
+\end{equation}
+
+We'll need the eigenvalues first.  Our characteristic equation is
+
+\begin{dmath}\label{eqn:problemSet4Problem4:100}
+0 
+= \Abs{ M - \lambda I } 
+=
+\begin{vmatrix}
+1 - \lambda & d \\
+-1/f & 1 - d/f - \lambda
+\end{vmatrix}
+=
+1 - \cancel{d/f} - \lambda - \lambda( 1 - d/f - \lambda ) + \cancel{d/f}
+= 
+\lambda^2 - 2 \lambda \left( 1 - \frac{d}{2 f} \right) + 1.
+\end{dmath}
+
+Following Fowles, we write
+
+\begin{dmath}\label{eqn:problemSet4Problem4:120}
+\alpha = 1 - \frac{d}{2 f},
+\end{dmath}
+
+So that the characteristic equation is
+
+\begin{dmath}\label{eqn:problemSet4Problem4:140}
+0
+= 
+\lambda^2 - 2 \lambda \alpha + 1
+= 
+\left( \lambda - \alpha \right)^2 + 1 - \alpha^2
+\end{dmath}
+
+Note that this corrects a sign error in the text.  Solving for $\lambda$ we have
+
+\begin{dmath}\label{eqn:problemSet4Problem4:160}
+\lambda_{\pm} = \alpha \pm \sqrt{\alpha^2 - 1}.
+\end{dmath}
+
+Observe that these satisfy our expectation that $\lambda_{+} \lambda_{-} = 1$, so we can write these as 
+
+\begin{align}\label{eqn:problemSet4Problem4:300}
+\lambda_{+} &= \lambda \\
+\lambda_{-} &= 1/\lambda,
+\end{align}
+
+for some value $\lambda$.  Our ABCD matrix for $n$ sets of propagate-and-reflect is
+
+\begin{dmath}\label{eqn:problemSet4Problem4:260}
+M^n = E 
+\begin{bmatrix}
+\lambda^n & 0 \\
+0 & \inv{\lambda^n}
+\end{bmatrix}
+E^{-1}.
+\end{dmath}
+
+If $E = [ e_{i j} ]$ and $E^{-1} = [ f_{i j} ]$, then the product takes the value
+
+\begin{dmath}\label{eqn:problemSet4Problem4:280}
+E D^n E^{-1} 
+= [ e_{i k} \lambda_k^n \delta_{k m } f_{m j} ]
+= [ e_{i m} \lambda_m^n f_{m j} ]
+= [ 
+e_{i 1} \lambda^n f_{1 j} 
++
+e_{i 2} \inv{\lambda^n} f_{2 j} 
+],
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:problemSet4Problem4:320}
+M^n
+= 
+\lambda^n [ e_{i 1} f_{1 j} ] + \inv{\lambda^n} [ e_{i 2} f_{2 j} ].
+\end{dmath}
+
+So, if $\lambda$ is real and greater than 1, the ABCD matrix will start to grow without bound.
+
+To consider the bounding behaviour of $\lambda^n$, lets follow Fowles, and separate the eigenvalues into real and complex as follows
+
+\begin{dmath}\label{eqn:problemSet4Problem4:180}
+\lambda = \alpha \pm 
+\left\{
+\begin{array}{l l}
+\sqrt{\alpha^2 - 1} & \quad \mbox{if $\Abs{\alpha} > 1$} \\
+i \sqrt{1 - \alpha^2} & \quad \mbox{if $\Abs{\alpha} < 1$} 
+\end{array}
+\right.
+\end{dmath}
+
+When $\Abs{\alpha} = 1$, we have a double eigenvalue with value $\alpha$ and may not be able to find a spanning set of eigenvectors.  For the $\Abs{\alpha} < 1$ case, we can introduce $\phi$ such that $\cos\phi = \alpha$, allowing us to write
+
+\begin{dmath}\label{eqn:problemSet4Problem4:200}
+\lambda_{\pm} = e^{\pm i \phi}
+\end{dmath}
+
+What can we say about the real valued eigenvalue case?  We know that from $\Det M = 1$ both real valued eigenvalues must have matching signs.  We can also see from
+
+\begin{dmath}\label{eqn:problemSet4Problem4:240}
+\lambda_{\pm} = \Abs{\alpha} \left( \sgn(\alpha) \pm \sqrt{1 - \inv{\alpha^2}} \right),
+\end{dmath}
+
+that if these are positive, then one of the eigenvalues is greater than 1, and if negative, at least one is less than $-1$.  If we pick $\lambda$ as the eigenvalue for which $\Abs{\lambda} > 1$, then $\lambda^n$ will clearly diverge as $n$ grows, and we the ABCD matrix of \ref{eqn:problemSet4Problem4:320} becomes unstable.
+
+This can also be expressed in terms of rays.  Given a ray with an eigenvector decomposition
+
+\begin{dmath}\label{eqn:problemSet4Problem4:340}
+\Bx = a \Be_1 + b \Be_2,
+\end{dmath}
+
+where
+
+\begin{dmath}\label{eqn:problemSet4Problem4:360}
+E = [ \Be_1 \Be_2 ],
+\end{dmath}
+
+then it follows from \ref{eqn:problemSet4Problem4:320} that
+
+\begin{dmath}\label{eqn:problemSet4Problem4:380}
+M^n \Bx = a \lambda^n \Be_1 + b \inv{\lambda^n} \Be_2.
+\end{dmath}
+
+Both the position and the angle increase without bound, leading the ray out of the cavity if $\Abs{\alpha} > 1$.  
+
+I'd avoided the ``suppose that the ray is an eigenvector'' argument from Fowles initially above because the eigenvectors in the complex case are also complex, and that didn't seem physically realistic.  It also wasn't clear to me what $\lambda^n \Bx$ was if $\Bx$ was a ray and $\lambda$ was complex (i.e.  Eq.~(10.32) in the text).  However, what resolves this conundrum is the realization that the projection constants $a$ and $b$ above are also complex in this case.  So while, for complex eigenvectors we won't ever have a ray that is given exactly by an eigenvector, we can still form a superposition of the two.  The result, and the transformation of \ref{eqn:problemSet4Problem4:380}, is still neccessarily real valued.
+
+\paragraph{The stability criteria}
+
+Our last task is to express the stability condition $\Abs{\alpha} < 1$ in terms of $d$, $f$ and $r$ (the last for the optical resonator with equal curvature mirrors).
+
+This stability criterion is 
+
+\begin{equation}\label{eqn:problemSet4Problem4:400}
+\Abs{\alpha} = \Abs{1 - \frac{d}{2f}} < 1.
+\end{equation}
+
+Let's consider this in two separate cases.
+\begin{enumerate}
+\item The condition $\alpha > 0$ can be written
+
+\begin{dmath}\label{eqn:problemSet4Problem4:420}
+1 - \frac{d}{2f} > 0 ,
+\end{dmath}
+
+or
+
+\begin{dmath}\label{eqn:problemSet4Problem4:560}
+1 > \frac{d}{2f},
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:problemSet4Problem4:580}
+d < 2 f.
+\end{dmath}
+
+For these positive values of $\alpha$ we have
+
+\begin{dmath}\label{eqn:problemSet4Problem4:440}
+1 - \frac{d}{2f} < 1
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:problemSet4Problem4:600}
+\frac{d}{2f} > 0,
+\end{dmath}
+
+which just means that $d$ is positive.  This shows that $d \in (0, 2f)$ results in a stable system.
+
+\item The condition $\alpha < 0$ can be written
+
+\begin{dmath}\label{eqn:problemSet4Problem4:460}
+1 - \frac{d}{2f} < 0
+\end{dmath}
+
+or
+
+\begin{dmath}\label{eqn:problemSet4Problem4:480}
+1 < \frac{d}{2f}
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:problemSet4Problem4:500}
+2f < d.
+\end{dmath}
+
+The stability criteria for such values of $d$ and $f$ is 
+
+\begin{dmath}\label{eqn:problemSet4Problem4:520}
+\Abs{\alpha} = -1 + \frac{d}{2f} < 1,
+\end{dmath}
+
+or
+
+\begin{dmath}\label{eqn:problemSet4Problem4:540}
+d < 4 f.
+\end{dmath}
+
+This shows that $d \in (2 f, 4 f)$ also results in a stable system.
+\end{enumerate}
+
+With both sets of ranges for $d$ mutually exclusive, and the point $d = 2f$ also stable (doubled eigenvalue with value $1$), we can form the union of the two, and have a stable system provided
+
+\begin{dmath}\label{eqn:problemSet4Problem4:620}
+d \in (0, 4 f).
+\end{dmath}
+
+This was for a set of lenses set distance $d$ apart.  Noting from the text that ``a curved mirror of radius $r$ is optically equivalent to a lens of focal length $f = r/2$'', we have for the optical resonator
+
+\begin{dmath}\label{eqn:problemSet4Problem4:620}
+\boxed{
+d \in (0, 2 r),
+}
+\end{dmath}
+
+the desired result.
+
 \makeSubAnswer{Stability criterion}{modernOptics:problemSet4:2b}
 
-TODO.
+A system with plane mirrors is characterized by $f = \infty$ or $1/f = 0$.  Our ABCD matrix is then just
+
+\begin{equation}\label{eqn:problemSet4Problem4:20}
+M = 
+\begin{bmatrix}
+1 & 0 \\
+0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+1 & d \\
+0 & 1
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & d \\
+0 & 1
+\end{bmatrix}.
+\end{equation}
+
+This is a system that has only a single eigenvalue of $1$ and is already in Jordon canonical form, so it cannot be diagonalized any further.  Our eigenvector can be found by inspection
+
+\begin{dmath}\label{eqn:problemSet4Problem4:640}
+\Be = 
+\begin{bmatrix}
+1 \\
+0 
+\end{bmatrix},
+\end{dmath}
+
+since this clearly satisfies $M \Be = \Be$.  Any vector that is a multiple of this is also an eigenvector for this system
+
+\begin{dmath}\label{eqn:problemSet4Problem4:660}
+\Bx = 
+\begin{bmatrix}
+y \\ 
+0
+\end{bmatrix}.
+\end{dmath}
+
+These are the only stable rays, which makes intuitive sense.  Only rays that are parallel to the pair of mirrors will not diverge.
+
 \makeSubAnswer{Unequal mirror radii}{modernOptics:problemSet4:2c}
 
-TODO.
-}
+We now wish to look at the characteristic equation for a round trip through the two sets of geometric elements.  That is
 
+\begin{dmath}\label{eqn:problemSet4Problem4:680}
+M = M_2 M_1 = 
+\begin{bmatrix}
+1 & d \\
+-1/f_2 &  -d/f_2 + 1
+\end{bmatrix}
+\begin{bmatrix}
+1 & d \\
+-1/f_1 &  -d/f_1 + 1
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & d \\
+2(1 - \alpha_2) & 1 - 2 \alpha_2
+\end{bmatrix}
+\begin{bmatrix}
+1 & d \\
+2(1 - \alpha_1) & 1 - 2 \alpha_1
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 + 2 (1 - \alpha_1) & 2 d (1 - \alpha_1) \\
+2 (1 - \alpha_2) + 2 (1 - 2 \alpha_2)(1 - \alpha_1) & 2 d (1 - \alpha_2) + (1 - 2 \alpha_1)(1 - 2 \alpha_2)
+\end{bmatrix}
+\end{dmath}
+
+While direct computation of $0 = \Det( M - \lambda I )$ is hard, it gives a big ass messy expression that's hard to make heads or tails of.
+
+Let's suppose that it's of the form
+
+\begin{dmath}\label{eqn:problemSet4Problem4:700}
+0 = \lambda^2 - 2 \lambda a + b^2
+\end{dmath}
+
+If that were the case, then we have
+
+\begin{dmath}\label{eqn:problemSet4Problem4:720}
+0 = (\lambda - a)^2 + b^2 - a^2,
+\end{dmath}
+
+or
+
+\begin{dmath}\label{eqn:problemSet4Problem4:740}
+\lambda = a \pm \sqrt{a^2 - b^2}.
+\end{dmath}
+
+We have our stability criteria when these are complex, or
+
+\begin{dmath}\label{eqn:problemSet4Problem4:760}
+\Abs{a} < \Abs{b}.
+\end{dmath}
+
+Observe that we don't have to actually solve for the eigenvalues, just find these values $a$ and $b$ from \ref{eqn:problemSet4Problem4:680}.  That's still a pain in the butt and I resorted to using Mathematica for that part \cref{fig:modernOpticsProblemSet4:modernOpticsProblemSet4Fig1}.
+
+\imageFigure{modernOpticsProblemSet4Fig1}{Ugly characteristic equation coefficient computation}{fig:modernOpticsProblemSet4:modernOpticsProblemSet4Fig1}{0.3}
+
+This gives us
+
+\begin{subequations}
+\begin{equation}\label{eqn:problemSet4Problem4:780}
+a = -1 - 2 d + \alpha_1 \left(1 + d -2 \alpha_2 \right) + (1 + d) \alpha_2 
+\end{equation}
+\begin{dmath}\label{eqn:problemSet4Problem4:800}
+b^2 = \left(1 - 2 d - 2 \alpha_1 +2 d \alpha_1 \right) \left(1 - 2 d - 2 \alpha_2 + 2 d \alpha_2 \right)
+\end{dmath}
+\end{subequations}
+
+Observe that we can further simplify $b^2$ (which isn't actually a complete square as I'd figured).  That first factor is
+
+\begin{dmath}\label{eqn:problemSet4Problem4:820}
+1 - 2 d - 2 \alpha_1 +2 d \alpha_1 
+=
+1 - 2 d - 2 \alpha_1 ( 1 - 2 d)
+=
+(1 - 2 d)( 1 - 2 \alpha_1).
+\end{dmath}
+
+This gives us
+
+\begin{dmath}\label{eqn:problemSet4Problem4:840}
+b^2 = \left(1 - 2 d\right)^2 ( 1 - 2 \alpha_1) ( 1 - 2 \alpha_2).
+\end{dmath}
+
+We can group terms in $a$ a bit.  I get
+
+\begin{equation}\label{eqn:problemSet4Problem4:860}
+a = (1 - 2 d)(\alpha_1 + \alpha_2 + 1 ) + d (\alpha_1 + \alpha_2) - 2 (1 + \alpha_1 \alpha_2).
+\end{equation}
+
+Our stability criteria is then
+
+\begin{equation}\label{eqn:problemSet4Problem4:880}
+\Abs{
+(1 - 2 d)(\alpha_1 + \alpha_2 + 1 ) + d (\alpha_1 + \alpha_2) - 2 (1 + \alpha_1 \alpha_2)
+} < 
+\Abs{1 - 2 d} \sqrt{( 1 - 2 \alpha_1) ( 1 - 2 \alpha_2)},
+\end{equation}
+
+or
+\begin{equation}\label{eqn:problemSet4Problem4:900}
+\Abs{
+\alpha_1 + \alpha_2 + 1 + \frac{d (\alpha_1 + \alpha_2) - 2 (1 + \alpha_1 \alpha_2)}{1 - 2 d}
+} < 
+\sqrt{( 1 - 2 \alpha_1) ( 1 - 2 \alpha_2)},
+\end{equation}
+
+It's not at all obvious to me how to reduce this any further, and come up with the desired inequality.  Perhaps I'm approaching this entirely wrong.
+
+See on re-inspection that \ref{eqn:problemSet4Problem4:820} is wrong, which messes up everything after it.  It's also glaringly obvious that I need to somehow get $d$ out of the works if the final inequality is to only involve $\alpha_1$ and $\alpha_2$.  This should probably be done early, but how?
+}
