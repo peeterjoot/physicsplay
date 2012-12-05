@@ -295,7 +295,7 @@ M =
 
 This is a system that has only a single eigenvalue of $1$ and is already in Jordon canonical form, so it cannot be diagonalized any further.  Our eigenvector can be found by inspection
 
-\begin{dmath}\label{eqn:problemSet4Problem4:n}
+\begin{dmath}\label{eqn:problemSet4Problem4:640}
 \Be = 
 \begin{bmatrix}
 1 \\
@@ -305,7 +305,7 @@ This is a system that has only a single eigenvalue of $1$ and is already in Jord
 
 since this clearly satisfies $M \Be = \Be$.  Any vector that is a multiple of this is also an eigenvector for this system
 
-\begin{dmath}\label{eqn:problemSet4Problem4:n}
+\begin{dmath}\label{eqn:problemSet4Problem4:660}
 \Bx = 
 \begin{bmatrix}
 y \\ 
@@ -317,5 +317,113 @@ These are the only stable rays, which makes intuitive sense.  Only rays that are
 
 \makeSubAnswer{Unequal mirror radii}{modernOptics:problemSet4:2c}
 
-TODO.
+We now wish to look at the characteristic equation for a round trip through the two sets of geometric elements.  That is
+
+\begin{dmath}\label{eqn:problemSet4Problem4:680}
+M = M_2 M_1 = 
+\begin{bmatrix}
+1 & d \\
+-1/f_2 &  -d/f_2 + 1
+\end{bmatrix}
+\begin{bmatrix}
+1 & d \\
+-1/f_1 &  -d/f_1 + 1
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & d \\
+2(1 - \alpha_2) & 1 - 2 \alpha_2
+\end{bmatrix}
+\begin{bmatrix}
+1 & d \\
+2(1 - \alpha_1) & 1 - 2 \alpha_1
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 + 2 (1 - \alpha_1) & 2 d (1 - \alpha_1) \\
+2 (1 - \alpha_2) + 2 (1 - 2 \alpha_2)(1 - \alpha_1) & 2 d (1 - \alpha_2) + (1 - 2 \alpha_1)(1 - 2 \alpha_2)
+\end{bmatrix}
+\end{dmath}
+
+While direct computation of $0 = \Det( M - \lambda I )$ is hard, it gives a big ass messy expression that's hard to make heads or tails of.
+
+Let's suppose that it's of the form
+
+\begin{dmath}\label{eqn:problemSet4Problem4:700}
+0 = \lambda^2 - 2 \lambda a + b^2
+\end{dmath}
+
+If that were the case, then we have
+
+\begin{dmath}\label{eqn:problemSet4Problem4:720}
+0 = (\lambda - a)^2 + b^2 - a^2,
+\end{dmath}
+
+or
+
+\begin{dmath}\label{eqn:problemSet4Problem4:740}
+\lambda = a \pm \sqrt{a^2 - b^2}.
+\end{dmath}
+
+We have our stability criteria when these are complex, or
+
+\begin{dmath}\label{eqn:problemSet4Problem4:760}
+\Abs{a} < \Abs{b}.
+\end{dmath}
+
+Observe that we don't have to actually solve for the eigenvalues, just find these values $a$ and $b$ from \ref{eqn:problemSet4Problem4:680}.  That's still a pain in the butt and I resorted to using Mathematica for that part \cref{fig:modernOpticsProblemSet4:modernOpticsProblemSet4Fig1}.
+
+\imageFigure{modernOpticsProblemSet4Fig1}{Ugly characteristic equation coefficient computation}{fig:modernOpticsProblemSet4:modernOpticsProblemSet4Fig1}{0.3}
+
+This gives us
+
+\begin{subequations}
+\begin{equation}\label{eqn:problemSet4Problem4:780}
+a = -1 - 2 d + \alpha_1 \left(1 + d -2 \alpha_2 \right) + (1 + d) \alpha_2 
+\end{equation}
+\begin{dmath}\label{eqn:problemSet4Problem4:n}
+b^2 = \left(1 - 2 d - 2 \alpha_1 +2 d \alpha_1 \right) \left(1 - 2 d - 2 \alpha_2 + 2 d \alpha_2 \right)
+\end{dmath}
+\end{subequations}
+
+Observe that we can further simplify $b^2$ (which isn't actually a complete square as I'd figured).  That first factor is
+
+\begin{dmath}\label{eqn:problemSet4Problem4:n}
+1 - 2 d - 2 \alpha_1 +2 d \alpha_1 
+=
+1 - 2 d - 2 \alpha_1 ( 1 - 2 d)
+=
+(1 - 2 d)( 1 - 2 \alpha_1).
+\end{dmath}
+
+This gives us
+
+\begin{dmath}\label{eqn:problemSet4Problem4:n}
+b^2 = \left(1 - 2 d\right)^2 ( 1 - 2 \alpha_1) ( 1 - 2 \alpha_2).
+\end{dmath}
+
+We can group $a$ a bit.  I get
+
+\begin{equation}\label{eqn:problemSet4Problem4:n}
+a = (1 - 2 d)(\alpha_1 + \alpha_2 + 1 ) + d (\alpha_1 + \alpha_2) - 2 (1 + \alpha_1 \alpha_2).
+\end{equation}
+
+Our stability criteria is then
+
+\begin{equation}\label{eqn:problemSet4Problem4:n}
+\Abs{
+(1 - 2 d)(\alpha_1 + \alpha_2 + 1 ) + d (\alpha_1 + \alpha_2) - 2 (1 + \alpha_1 \alpha_2)
+} < 
+\Abs{1 - 2 d} \sqrt{( 1 - 2 \alpha_1) ( 1 - 2 \alpha_2)},
+\end{equation}
+
+or
+\begin{equation}\label{eqn:problemSet4Problem4:n}
+\Abs{
+\alpha_1 + \alpha_2 + 1 + \frac{d (\alpha_1 + \alpha_2) - 2 (1 + \alpha_1 \alpha_2)}{1 - 2 d}
+} < 
+\sqrt{( 1 - 2 \alpha_1) ( 1 - 2 \alpha_2)},
+\end{equation}
+
+It's not at all obvious to me how to reduce this any further, and come up with the desired inequality.  Perhaps I'm approaching this entirely wrong.
 }
