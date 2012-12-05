@@ -153,9 +153,9 @@ int main( int argc, char * argv[] )
 
    int c = 0 ;
    int optindex = 0 ;
-   vector<string> includes ;
-   vector<string> defines ;
-   vector<string> undefs ;
+
+   llvm::IntrusiveRefCntPtr<PreprocessorOptions> pOpts( new PreprocessorOptions() ) ;
+   llvm::IntrusiveRefCntPtr<HeaderSearchOptions> headerSearchOptions( new HeaderSearchOptions() ) ;
 
    while ( ( c = getopt_long(argc, argv, "I:D:U:h", options, &optindex ) ) != EOF )
    {
@@ -163,20 +163,27 @@ int main( int argc, char * argv[] )
       {
          case 'I':
          {
-            includes.push_back( optarg ) ;
             //printf( "-I : %s\n", optarg ) ;
+            headerSearchOptions->AddPath( optarg,
+                                          frontend::Quoted,
+                                          true,
+                                          false,
+                                          false ) ;
+
             break ;
          }
          case 'D':
          {
-            defines.push_back( optarg ) ;
             //printf( "-D : %s\n", optarg ) ;
+            pOpts->addMacroDef( optarg ) ;
+
             break ;
          }
          case 'U':
          {
-            undefs.push_back( optarg ) ;
             //printf( "-U : %s\n", optarg ) ;
+            pOpts->addMacroUndef( optarg ) ;
+
             break ;
          }
 
@@ -222,18 +229,6 @@ int main( int argc, char * argv[] )
    SourceManager sourceManager( *pDiagnosticsEngine,
                                 fileManager ) ;
 
-   llvm::IntrusiveRefCntPtr<HeaderSearchOptions> headerSearchOptions( new HeaderSearchOptions() ) ;
-
-   for ( vector<string>::iterator i = includes.begin() ; i != includes.end(); ++i )
-   {
-      //cout << "processing -I" << *i << endl ;
-      headerSearchOptions->AddPath( *i,
-                                    frontend::Quoted,
-                                    true,
-                                    false,
-                                    false ) ;
-   }
-
    TargetOptions targetOptions ;
 
    targetOptions.Triple = llvm::sys::getDefaultTargetTriple() ;
@@ -249,8 +244,6 @@ int main( int argc, char * argv[] )
 
    CompilerInstance compInst ;
 
-   llvm::IntrusiveRefCntPtr<PreprocessorOptions> pOpts( new PreprocessorOptions() ) ;
-
    Preprocessor preprocessor( pOpts,
                               *pDiagnosticsEngine,
                               languageOptions,
@@ -260,6 +253,7 @@ int main( int argc, char * argv[] )
                               compInst ) ;
 
    FrontendOptions frontendOptions ;
+   //frontendOptions.SkipFunctionBodies = 1 ;
 
    InitializePreprocessor( preprocessor,
                            *pOpts,
