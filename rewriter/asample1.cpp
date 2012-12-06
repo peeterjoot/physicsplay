@@ -12,6 +12,15 @@ union uu
 {
    int ui ;
    char uc ;
+#if defined foodef
+   long ul ;
+#endif
+#if defined bardef && (bardef == 2)
+   long long ull ;
+#endif
+#if defined NOTDEFINED
+   notdef bvlah ;
+#endif
 } ;
 
 struct Test
