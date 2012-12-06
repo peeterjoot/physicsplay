@@ -345,87 +345,125 @@ M = M_2 M_1 =
 \end{bmatrix}
 \end{dmath}
 
-While direct computation of $0 = \Det( M - \lambda I )$ is hard, it gives a big ass messy expression that's hard to make heads or tails of.
+Direct niave computation of $0 = \Det( M - \lambda I )$ is hard, it gives a big ass messy expression that's hard to make heads or tails of.  If we consider the 2 dimensional eigenvalue problem more generally, some simplifications can be made.  With 
 
-Let's suppose that it's of the form
-
-\begin{dmath}\label{eqn:problemSet4Problem4:700}
-0 = \lambda^2 - 2 \lambda a + b^2
-\end{dmath}
-
-If that were the case, then we have
-
-\begin{dmath}\label{eqn:problemSet4Problem4:720}
-0 = (\lambda - a)^2 + b^2 - a^2,
-\end{dmath}
-
-or
-
-\begin{dmath}\label{eqn:problemSet4Problem4:740}
-\lambda = a \pm \sqrt{a^2 - b^2}.
-\end{dmath}
-
-We have our stability criteria when these are complex, or
-
-\begin{dmath}\label{eqn:problemSet4Problem4:760}
-\Abs{a} < \Abs{b}.
-\end{dmath}
-
-Observe that we don't have to actually solve for the eigenvalues, just find these values $a$ and $b$ from \ref{eqn:problemSet4Problem4:680}.  That's still a pain in the butt and I resorted to using Mathematica for that part \cref{fig:modernOpticsProblemSet4:modernOpticsProblemSet4Fig1}.
-
-\imageFigure{modernOpticsProblemSet4Fig1}{Ugly characteristic equation coefficient computation}{fig:modernOpticsProblemSet4:modernOpticsProblemSet4Fig1}{0.3}
-
-This gives us
-
-\begin{subequations}
-\begin{equation}\label{eqn:problemSet4Problem4:780}
-a = -1 - 2 d + \alpha_1 \left(1 + d -2 \alpha_2 \right) + (1 + d) \alpha_2 
+\begin{equation}\label{eqn:problemSet4Problem4:n}
+M = 
+\begin{bmatrix}
+A & B \\
+C & D
+\end{bmatrix},
 \end{equation}
-\begin{dmath}\label{eqn:problemSet4Problem4:800}
-b^2 = \left(1 - 2 d - 2 \alpha_1 +2 d \alpha_1 \right) \left(1 - 2 d - 2 \alpha_2 + 2 d \alpha_2 \right)
-\end{dmath}
-\end{subequations}
 
-Observe that we can further simplify $b^2$ (which isn't actually a complete square as I'd figured).  That first factor is
+our characteristic equation, again the $\Det M = 1$ constraint for this problem where all the propagation is free
 
-\begin{dmath}\label{eqn:problemSet4Problem4:820}
-1 - 2 d - 2 \alpha_1 +2 d \alpha_1 
-=
-1 - 2 d - 2 \alpha_1 ( 1 - 2 d)
-=
-(1 - 2 d)( 1 - 2 \alpha_1).
+\begin{dmath}\label{eqn:problemSet4Problem4:n}
+0 
+= (A - \lambda)(D - \lambda) - B C
+= \lambda^2 - \lambda( A + D ) + A D - BC
+= \lambda^2 - \lambda \tr M + 1
+= \left(\lambda - \frac{\tr M}{2}\right)^2 + 1 - \left(\frac{\tr M}{2}\right)^2 
 \end{dmath}
 
 This gives us
 
-\begin{dmath}\label{eqn:problemSet4Problem4:840}
-b^2 = \left(1 - 2 d\right)^2 ( 1 - 2 \alpha_1) ( 1 - 2 \alpha_2).
+\begin{dmath}\label{eqn:problemSet4Problem4:n}
+\lambda = 
+\frac{\tr M}{2} \pm \sqrt{ \left(\frac{\tr M}{2}\right)^2 - 1 }.
 \end{dmath}
 
-We can group terms in $a$ a bit.  I get
+Our stability criteria is
 
-\begin{equation}\label{eqn:problemSet4Problem4:860}
-a = (1 - 2 d)(\alpha_1 + \alpha_2 + 1 ) + d (\alpha_1 + \alpha_2) - 2 (1 + \alpha_1 \alpha_2).
-\end{equation}
-
-Our stability criteria is then
-
-\begin{equation}\label{eqn:problemSet4Problem4:880}
-\Abs{
-(1 - 2 d)(\alpha_1 + \alpha_2 + 1 ) + d (\alpha_1 + \alpha_2) - 2 (1 + \alpha_1 \alpha_2)
-} < 
-\Abs{1 - 2 d} \sqrt{( 1 - 2 \alpha_1) ( 1 - 2 \alpha_2)},
-\end{equation}
+\begin{dmath}\label{eqn:problemSet4Problem4:n}
+\Abs{ \frac{\tr M}{2} } < 1,
+\end{dmath}
 
 or
-\begin{equation}\label{eqn:problemSet4Problem4:900}
-\Abs{
-\alpha_1 + \alpha_2 + 1 + \frac{d (\alpha_1 + \alpha_2) - 2 (1 + \alpha_1 \alpha_2)}{1 - 2 d}
-} < 
-\sqrt{( 1 - 2 \alpha_1) ( 1 - 2 \alpha_2)},
-\end{equation}
 
-It's not at all obvious to me how to reduce this any further, and come up with the desired inequality.  Perhaps I'm approaching this entirely wrong.
+\begin{dmath}\label{eqn:problemSet4Problem4:n}
+-2 < \tr M < 2.
+\end{dmath}
 
-See on re-inspection that \ref{eqn:problemSet4Problem4:820} is wrong, which messes up everything after it.  It's also glaringly obvious that I need to somehow get $d$ out of the works if the final inequality is to only involve $\alpha_1$ and $\alpha_2$.  This should probably be done early, but how?
+%
+%Let's suppose that it's of the form
+%
+%\begin{dmath}\label{eqn:problemSet4Problem4:700}
+%0 = \lambda^2 - 2 \lambda a + b^2
+%\end{dmath}
+%
+%If that were the case, then we have
+%
+%\begin{dmath}\label{eqn:problemSet4Problem4:720}
+%0 = (\lambda - a)^2 + b^2 - a^2,
+%\end{dmath}
+%
+%or
+%
+%\begin{dmath}\label{eqn:problemSet4Problem4:740}
+%\lambda = a \pm \sqrt{a^2 - b^2}.
+%\end{dmath}
+%
+%We have our stability criteria when these are complex, or
+%
+%\begin{dmath}\label{eqn:problemSet4Problem4:760}
+%\Abs{a} < \Abs{b}.
+%\end{dmath}
+%
+%Observe that we don't have to actually solve for the eigenvalues, just find these values $a$ and $b$ from \ref{eqn:problemSet4Problem4:680}.  That's still a pain in the butt and I resorted to using Mathematica for that part \cref{fig:modernOpticsProblemSet4:modernOpticsProblemSet4Fig1}.
+%
+%\imageFigure{modernOpticsProblemSet4Fig1}{Ugly characteristic equation coefficient computation}{fig:modernOpticsProblemSet4:modernOpticsProblemSet4Fig1}{0.3}
+%
+%This gives us
+%
+%\begin{subequations}
+%\begin{equation}\label{eqn:problemSet4Problem4:780}
+%a = -1 - 2 d + \alpha_1 \left(1 + d -2 \alpha_2 \right) + (1 + d) \alpha_2 
+%\end{equation}
+%\begin{dmath}\label{eqn:problemSet4Problem4:800}
+%b^2 = \left(1 - 2 d - 2 \alpha_1 +2 d \alpha_1 \right) \left(1 - 2 d - 2 \alpha_2 + 2 d \alpha_2 \right)
+%\end{dmath}
+%\end{subequations}
+%
+%Observe that we can further simplify $b^2$ (which isn't actually a complete square as I'd figured).  That first factor is
+%
+%\begin{dmath}\label{eqn:problemSet4Problem4:820}
+%1 - 2 d - 2 \alpha_1 +2 d \alpha_1 
+%=
+%1 - 2 d - 2 \alpha_1 ( 1 - 2 d)
+%=
+%(1 - 2 d)( 1 - 2 \alpha_1).
+%\end{dmath}
+%
+%This gives us
+%
+%\begin{dmath}\label{eqn:problemSet4Problem4:840}
+%b^2 = \left(1 - 2 d\right)^2 ( 1 - 2 \alpha_1) ( 1 - 2 \alpha_2).
+%\end{dmath}
+%
+%We can group terms in $a$ a bit.  I get
+%
+%\begin{equation}\label{eqn:problemSet4Problem4:860}
+%a = (1 - 2 d)(\alpha_1 + \alpha_2 + 1 ) + d (\alpha_1 + \alpha_2) - 2 (1 + \alpha_1 \alpha_2).
+%\end{equation}
+%
+%Our stability criteria is then
+%
+%\begin{equation}\label{eqn:problemSet4Problem4:880}
+%\Abs{
+%(1 - 2 d)(\alpha_1 + \alpha_2 + 1 ) + d (\alpha_1 + \alpha_2) - 2 (1 + \alpha_1 \alpha_2)
+%} < 
+%\Abs{1 - 2 d} \sqrt{( 1 - 2 \alpha_1) ( 1 - 2 \alpha_2)},
+%\end{equation}
+%
+%or
+%\begin{equation}\label{eqn:problemSet4Problem4:900}
+%\Abs{
+%\alpha_1 + \alpha_2 + 1 + \frac{d (\alpha_1 + \alpha_2) - 2 (1 + \alpha_1 \alpha_2)}{1 - 2 d}
+%} < 
+%\sqrt{( 1 - 2 \alpha_1) ( 1 - 2 \alpha_2)},
+%\end{equation}
+%
+%It's not at all obvious to me how to reduce this any further, and come up with the desired inequality.  Perhaps I'm approaching this entirely wrong.
+%
+%See on re-inspection that \ref{eqn:problemSet4Problem4:820} is wrong, which messes up everything after it.  It's also glaringly obvious that I need to somehow get $d$ out of the works if the final inequality is to only involve $\alpha_1$ and $\alpha_2$.  This should probably be done early, but how?
 }
