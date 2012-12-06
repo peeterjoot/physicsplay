@@ -2,11 +2,14 @@
 #s/\\Gamma_{cav}/\\Gamma_{\\mathrm{cav}}/g  ;
 #s/\\Gamma_{sp}/\\Gamma_{\\mathrm{sp}}/g  ;
 #s/\\Gamma_{st}/\\Gamma_{\\mathrm{st}}/g  ;
-#s/\\Gamma_cav/\\Gamma_{\\mathrm{cav}}/g  ;
+s/\\Gamma_cav/\\Gamma_{\\mathrm{cav}}/g  ;
 #s/\\Gamma_sp/\\Gamma_{\\mathrm{sp}}/g  ;
 #s/\\Gamma_st/\\Gamma_{\\mathrm{st}}/g ;
 #s/\\rcap_av/\\rcap_{\\mathrm{av}}/g ;
 #s/\\spacegrad_T/\\spacegrad_{\\mathrm{T}}/g ;
+s/_min/_{\\mathrm{min}}/g ;
+s/_laser/_{\\mathrm{laser}}/g ;
+s/k_B/_{k_{\\mathrm{B}}}/g ;
 #s/_div/_{\\mathrm{div}}/g ;
 #s/_eff/_{\\mathrm{eff}}/g ;
 #s/_L/_{\\mathrm{L}}/g ;
