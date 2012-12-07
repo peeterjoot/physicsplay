@@ -24,7 +24,7 @@ TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES))
 
 PDFS := $(TEXFILES:.tex=.pdf)
 
-ORIG_FILES += ../phy485/figures/modernOpticsLecture11Fig1.png
+#ORIG_FILES += ../phy485/figures/modernOpticsLecture11Fig1.png
 
 # for gaBasics:
 ORIG_FILES += ../phy454/figures/couetteFlowFig1.png
