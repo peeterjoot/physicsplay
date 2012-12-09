@@ -1,0 +1,49 @@
+% http://tex.stackexchange.com/questions/86188/labelling-with-arrows-in-an-automated-way
+
+\documentclass{article}
+
+\usepackage{tikz}
+\usepackage{amsmath}
+
+% formula, text, node#
+\newcommand{\mathWithDescription}[3]{%
+\tikz[baseline]{%
+    \node[draw=red,rounded corners,anchor=base] (m#3)%
+    {$\displaystyle#1$};%
+    \node[above of=m#3] (l#3) {#2};%
+    \draw[-,red] (l#3) -- (m#3);%
+}%
+}
+
+\newcounter{mathLableNode}
+
+\newcommand{\mathLabelBox}[2]{%
+   \stepcounter{mathLableNode}%
+   \mathWithDescription{#1}{#2}{\themathLableNode}%
+}
+
+\begin{document}
+
+\begin{equation}
+\boldsymbol{\nabla}^2 = 
+\mathLabelBox{
+\frac{\partial^2}{\partial r^2} + \frac{1}{r} \frac{\partial}{\partial r}{}
+}{$\boldsymbol{\nabla}_{\mathrm{T}}^2$}
++ \frac{1}{r^2} \frac{\partial^2}{\partial \theta^2}
++ \frac{\partial^2}{\partial z^2}
+\end{equation}
+
+\begin{equation}
+\mathbf{E} = 
+\mathLabelBox{
+\mathbf{E}_0
+}{A vector, with a chosen polarity}
+\mathLabelBox{
+u(r, \theta, z) 
+}{
+Slowly varying (complex) envelope
+}
+e^{i k_0 z}.
+\end{equation}
+
+\end{document}
