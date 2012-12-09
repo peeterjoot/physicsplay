@@ -256,37 +256,34 @@ ref={#1}
 
 %--------------------------------------------------------------------------------------------
 
-%% this replaces use of \underbrace{math}_{label}, but requires for each use in an equation environment
-%% an extra numeric parameter for the l1, l2, l3, m1, m2, m3 ... node and label markers
-%% [which I'm sure could be automated].
-%% 
-%% even nicer looking are the following spline arrows and color boxes:
-%% 
-%% http://www.texample.net/tikz/examples/beamer-arrows/
-%% 
-%% (but it looked like too much manual work to place them).
-%%
-%% formula, text, node#
-%\newcommand{\mathWithDescription}[3]{%
-%\tikz[baseline]{%
-%    \node[draw=red,rounded corners,anchor=base] (m#3)%
-%    {$\displaystyle#1$};%
-%    \node[above of=m#3] (l#3) {#2};%
-%    \draw[-,red] (l#3) -- (m#3);%
-%}%
-%}
-%
-%\newcounter{mathLableNode}
-%
-%\newcommand{\mathLabelBox}[2]{%
-%   \stepcounter{mathLableNode}%
-%   \mathWithDescription{#1}{#2}{\themathLableNode}%
-%}
-%
-% cool:
-% http://tex.stackexchange.com/questions/86188/labelling-with-arrows-in-an-automated-way/86203#86203
-
+% this replaces use of \underbrace{math}_{label}, but requires for each use in an equation environment
+% an extra numeric parameter for the l1, l2, l3, m1, m2, m3 ... node and label markers
+% [which I'm sure could be automated].
+% 
 \usepackage{tikz}
+
+\newcounter{mathLableNode}
+
+% formula, text, node#
+\newcommand{\myMathWithDescription}[3]{%
+\tikz[baseline]{%
+    \node[draw=red,rounded corners,anchor=base] (m#3)%
+    {$\displaystyle#1$};%
+    \node[above of=m#3] (l#3) {#2};%
+    \draw[-,red] (l#3) -- (m#3);%
+}%
+}
+
+\newcommand{\myMathLabelBox}[2]{%
+   \stepcounter{mathLableNode}%
+   \mathWithDescription{#1}{#2}{\themathLableNode}%
+}
+
+% allowing for label placement:
+%
+% http://www.texample.net/tikz/examples/beamer-arrows/
+%
+% http://tex.stackexchange.com/questions/86188/labelling-with-arrows-in-an-automated-way/86203#86203
 
 \newif\ifclipme\clipmetrue
 \tikzset{labelstyle/.style={LabelStyle/.append style={#1}},linestyle/.style={LineStyle/.append style={#1}}}
@@ -302,14 +299,17 @@ ref={#1}
         \ifclipme\end{pgfinterruptboundingbox}\fi
     }%
 }}
+
 \newcommand{\mathWithDescriptionStarred}[3][]{{%
     \clipmefalse%
     \mathWithDescription[#1]{#2}{#3}{\themathLableNode}%
 }}
 
-\newcounter{mathLableNode}
 \newcommand{\mathLabelBox}[3][]{%
    \stepcounter{mathLableNode}%
    \mathWithDescription[#1]{#2}{#3}{\themathLableNode}%
    \vphantom{\mathWithDescriptionStarred[#1]{#2}{#3}{\themathLableNode}}%
 }
+
+% doesn't work: I think it gets expanded too early:
+%\newcommand{\labelBoxPlacementBelow}[0]{labelstyle={below of=m\themathLableNode,below of=m\themathLableNode}}
