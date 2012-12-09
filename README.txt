@@ -76,7 +76,7 @@ env/
 
 studentNumberGrep/
 
-   a little perl regex sample for somebody
+   a little perl regex sample
 
 tmcache/
 
