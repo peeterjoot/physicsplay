@@ -256,31 +256,60 @@ ref={#1}
 
 %--------------------------------------------------------------------------------------------
 
-% this replaces use of \underbrace{math}_{label}, but requires for each use in an equation environment
-% an extra numeric parameter for the l1, l2, l3, m1, m2, m3 ... node and label markers
-% [which I'm sure could be automated].
-% 
-% even nicer looking are the following spline arrows and color boxes:
-% 
-% http://www.texample.net/tikz/examples/beamer-arrows/
-% 
-% (but it looked like too much manual work to place them).
+%% this replaces use of \underbrace{math}_{label}, but requires for each use in an equation environment
+%% an extra numeric parameter for the l1, l2, l3, m1, m2, m3 ... node and label markers
+%% [which I'm sure could be automated].
+%% 
+%% even nicer looking are the following spline arrows and color boxes:
+%% 
+%% http://www.texample.net/tikz/examples/beamer-arrows/
+%% 
+%% (but it looked like too much manual work to place them).
+%%
+%% formula, text, node#
+%\newcommand{\mathWithDescription}[3]{%
+%\tikz[baseline]{%
+%    \node[draw=red,rounded corners,anchor=base] (m#3)%
+%    {$\displaystyle#1$};%
+%    \node[above of=m#3] (l#3) {#2};%
+%    \draw[-,red] (l#3) -- (m#3);%
+%}%
+%}
 %
-%\usepackage{tikz}
-% formula, text, node#
-\newcommand{\mathWithDescription}[3]{%
-\tikz[baseline]{%
-    \node[draw=red,rounded corners,anchor=base] (m#3)%
-    {$\displaystyle#1$};%
-    \node[above of=m#3] (l#3) {#2};%
-    \draw[-,red] (l#3) -- (m#3);%
-}%
-}
+%\newcounter{mathLableNode}
+%
+%\newcommand{\mathLabelBox}[2]{%
+%   \stepcounter{mathLableNode}%
+%   \mathWithDescription{#1}{#2}{\themathLableNode}%
+%}
+%
+% cool:
+% http://tex.stackexchange.com/questions/86188/labelling-with-arrows-in-an-automated-way/86203#86203
+
+\usepackage{tikz}
+
+\newif\ifclipme\clipmetrue
+\tikzset{labelstyle/.style={LabelStyle/.append style={#1}},linestyle/.style={LineStyle/.append style={#1}}}
+\tikzset{LabelStyle/.initial={},LineStyle/.initial={}}
+
+\newcommand{\mathWithDescription}[4][]{{%
+    \tikzset{#1}%
+    \tikz[baseline]{
+        \node[draw=red,rounded corners,anchor=base] (m#4) {$\displaystyle#2$};
+        \ifclipme\begin{pgfinterruptboundingbox}\fi
+            \node[above of=m#4,font=\strut, LabelStyle] (l#4) {#3};
+            \draw[-,red, LineStyle] (l#4) to (m#4);
+        \ifclipme\end{pgfinterruptboundingbox}\fi
+    }%
+}}
+\newcommand{\mathWithDescriptionStarred}[3][]{{%
+    \clipmefalse%
+    \mathWithDescription[#1]{#2}{#3}{\themathLableNode}%
+}}
 
 \newcounter{mathLableNode}
-
-\newcommand{\mathLabelBox}[2]{%
+\newcommand{\mathLabelBox}[3][]{%
    \stepcounter{mathLableNode}%
-   \mathWithDescription{#1}{#2}{\themathLableNode}%
+   \mathWithDescription[#1]{#2}{#3}{\themathLableNode}%
+   \vphantom{\mathWithDescriptionStarred[#1]{#2}{#3}{\themathLableNode}}%
 }
-
