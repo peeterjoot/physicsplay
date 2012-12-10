@@ -28,7 +28,6 @@
 #include "clang/Lex/HeaderSearch.h"
 #include "clang/AST/ASTContext.h"
 #include "clang/Frontend/Utils.h" // InitializePreprocessor
-#include <getopt.h>
 
 using namespace clang ;
 using namespace std ;
@@ -56,7 +55,7 @@ public:
    // Find class/struct/unions:
    bool VisitCXXRecordDecl( CXXRecordDecl* r )
    {
-//      cout << "VisitCXXRecordDecl:: CLASS: " << r->getName().str() << endl ;
+      cout << "VisitCXXRecordDecl:: CLASS: " << r->getName().str() << endl ;
 
       for ( CXXRecordDecl::base_class_iterator b = r->bases_begin(), e = r->bases_end() ;
             b != e ; ++b )
@@ -157,10 +156,39 @@ int main( int argc, char * argv[] )
    llvm::IntrusiveRefCntPtr<PreprocessorOptions> pOpts( new PreprocessorOptions() ) ;
    llvm::IntrusiveRefCntPtr<HeaderSearchOptions> headerSearchOptions( new HeaderSearchOptions() ) ;
 
-   while ( ( c = getopt_long(argc, argv, "I:D:U:h", options, &optindex ) ) != EOF )
+   for ( ; c != EOF ; )
    {
+      c = getopt_long( argc,
+                       argv,
+                       "I:" // -Ipath | --include=path
+                       "D:" // -Dval | --define=val
+                       "U:" // -Uval | --undef=val
+                       "h"  // -h (this driver help)
+                       /* option compatibility with actual compilers: */
+                       "c"  // -c
+                       "W:" // -Wformat ...
+                       "O:" // -O2 -O0 ...
+                       "m:" // -msse4.2 ...
+                       "f:" // -fcheck-new ...
+                       "g"  // -g
+                       "",
+                       options,
+                       &optindex ) ;
+            /* dummy args: */ 
+
       switch (c)
       {
+         case 'W':
+         case 'c':
+         case 'O':
+         case 'm':
+         case 'f':
+         case 'g':
+         {
+            /* no-op */
+
+            break ;
+         }
          case 'I':
          {
             //printf( "-I : %s\n", optarg ) ;
@@ -187,6 +215,10 @@ int main( int argc, char * argv[] )
             break ;
          }
 
+         case EOF:
+         {
+            break ;
+         }
          case 'h':
          default:
          {
@@ -266,15 +298,13 @@ int main( int argc, char * argv[] )
    {
       sourceManager.createMainFileID( pFile ) ;
 
-      const TargetInfo &targetInfo = *pTargetInfo ;
-
       IdentifierTable identifierTable( languageOptions ) ;
 
       SelectorTable selectorTable ;
 
       Builtin::Context builtinContext ;
 
-      builtinContext.InitializeTarget( targetInfo ) ;
+      builtinContext.InitializeTarget( *pTargetInfo ) ;
 
       ASTContext astContext( languageOptions,
                              sourceManager,
@@ -285,12 +315,6 @@ int main( int argc, char * argv[] )
                              0 /* size_reserve*/ ) ;
 
       MyASTConsumer astConsumer( compInst ) ;
-
-#if 0
-      Sema sema( preprocessor,
-                 astContext,
-                 astConsumer ) ;
-#endif
 
       pTextDiagnosticPrinter->BeginSourceFile( languageOptions, &preprocessor ) ;
 
