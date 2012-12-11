@@ -2,7 +2,21 @@
 //
 // classvisitor.cpp: AST visitor code to get info about structure fields with Clang
 //
-// Based on Eli Bendersky's rewritersample.cpp
+// The MyASTVisitor and driver was initially based on Eli Bendersky's rewritersample.cpp.
+//
+// Later gutted the driver and replaced with one based on:
+//
+//    https://github.com/loarabia/Clang-tutorial/blob/master/tutorial6.cpp
+//
+// As is this code can be used to answer two types of questions:
+//
+// 1) What dependencies does a class/struct/union have.  Raw output
+//    includes enough info that one could build a dependency tree for a given type.
+//
+// 2) Identify all global variables and their types, and cross reference that with the class/struct's dependency info (from above) 
+//    to see what global variables use explicit constructors.  This is for finding where specifically a C++ global constructor
+//    is coming from when this are problematic (i.e. this is a restriction of libdb2.a and if you accidentally add a constructor
+//    it can be hard to figure out the exact global it came from.)
 //
 #include <string>
 #include <vector>
@@ -101,6 +115,19 @@ public:
       {
          //cout << "VisitCXXRecordDecl:: CLASS: " << r->getName().str() << endl ;
 
+#if 1
+         for ( CXXRecordDecl::ctor_iterator b = r->ctor_begin(), e = r->ctor_end() ;
+               b != e ; ++b )
+         {
+            if ( !b->isImplicitlyDefined() )
+            {
+               cout << r->getName().str() << " : CONSTRUCTOR" << endl ;
+
+               break ;
+            }
+         }
+
+#else
          if ( 
               r->hasConstCopyConstructor() ||
               r->hasUserDeclaredConstructor() ||
@@ -142,6 +169,7 @@ if ( r->hasFailedImplicitMoveConstructor() ) { cout << r->getName().str() << " :
 if ( r->hasConstexprNonCopyMoveConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasConstexprNonCopyMoveConstructor" << endl ; }
 if ( r->hasTrivialMoveConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasTrivialMoveConstructor" << endl ; }
 if ( r->hasNonTrivialMoveConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasNonTrivialMoveConstructor" << endl ; }
+#endif
 #endif
 
          for ( CXXRecordDecl::base_class_iterator b = r->bases_begin(), e = r->bases_end() ;
@@ -235,7 +263,6 @@ void printUsageAndExit( const char * argv0 )
    exit( 1 ) ;
 }
 
-// preprocessor driver based on https://github.com/loarabia/Clang-tutorial/blob/master/tutorial6.cpp
 int main( int argc, char * argv[] )
 {
    struct option options[] =
