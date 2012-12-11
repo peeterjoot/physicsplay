@@ -8,6 +8,9 @@ struct blah
 typedef blah moo ;
 #define Moo blah
 
+// forward declaration
+class qq ;
+
 union uu
 {
    int ui ;
