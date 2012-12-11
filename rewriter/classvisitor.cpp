@@ -193,28 +193,12 @@ if ( r->hasNonTrivialMoveConstructor() ) { cout << r->getName().str() << " : CON
    // Member's within class/struct/union:
    bool VisitFieldDecl( FieldDecl * f )
    {
-      RecordDecl * r = f->getParent() ; //->getDefinition() ;
-//      cout << "CLASS: " << r->getName().str() << endl ;
-//      cout << "MEMBER: " << f->getName().str() << " ( " ;
-
+      RecordDecl * r = f->getParent() ;
+      const QualType & theMembersClassType = ci.getASTContext().getRecordType( r ) ;
       const QualType & thisFieldQualType = getQualTypeForDecl( f ) ;
-//      cout << "TYPE: " << thisFieldQualType.getAsString() << " )" << endl ;
-
-      string s = r->getName().str() ;
-      // Deal with anonymous structures:
-      //if ( r->isAnonymousStructOrUnion() ) // doesn't work
-      if ( "" == s )
-      {
-         const Type * RT = r->getTypeForDecl() ;
-
-         QualType QT = RT->getCanonicalTypeInternal() ;
-
-         s = QT.getAsString() ;
-      }
 
       cout 
-         //<< "MEMBER: " << f->getName().str() 
-         << s
+         << theMembersClassType.getAsString() //better than r->getName().str(), since this handles anonymous struct/class/unions too.
          << " : " << thisFieldQualType.getAsString() << endl ;
 
 // Think this pruned the struct/union/class:
@@ -232,7 +216,7 @@ if ( r->hasNonTrivialMoveConstructor() ) { cout << r->getName().str() << " : CON
 class MyASTConsumer : public ASTConsumer
 {
 public:
-   MyASTConsumer( CompilerInstance & ci_ ) : Visitor(ci_) {}
+   MyASTConsumer( CompilerInstance & ci_ ) : Visitor( ci_ ) {}
 
    // Override the method that gets called for each parsed top-level
    // declaration.
@@ -414,7 +398,7 @@ int main( int argc, char * argv[] )
                            *pOpts,
                            *headerSearchOptions,
                            frontendOptions ) ;
-       
+
    const FileEntry * pFile = fileManager.getFile( argv[optind] ) ;
    
    if ( pFile )
@@ -429,19 +413,21 @@ int main( int argc, char * argv[] )
 
       builtinContext.InitializeTarget( *pTargetInfo ) ;
 
-      ASTContext astContext( languageOptions,
-                             sourceManager,
-                             pTargetInfo,
-                             identifierTable,
-                             selectorTable,
-                             builtinContext,
-                             0 /* size_reserve*/ ) ;
+      ASTContext * pASTcontext = new ASTContext( languageOptions,
+                                                 sourceManager,
+                                                 pTargetInfo,
+                                                 identifierTable,
+                                                 selectorTable,
+                                                 builtinContext,
+                                                 0 /* size_reserve*/ ) ;
+
+      compInst.setASTContext( pASTcontext ) ;
 
       MyASTConsumer astConsumer( compInst ) ;
 
       pTextDiagnosticPrinter->BeginSourceFile( languageOptions, &preprocessor ) ;
 
-      ParseAST( preprocessor, &astConsumer, astContext ) ;
+      ParseAST( preprocessor, &astConsumer, *pASTcontext ) ;
 
       pTextDiagnosticPrinter->EndSourceFile() ;
    }
