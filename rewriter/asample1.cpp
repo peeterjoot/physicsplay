@@ -51,3 +51,4 @@ class bar : public foo
 
    Test t ;
 } ;
+

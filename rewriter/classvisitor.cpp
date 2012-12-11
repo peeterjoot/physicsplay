@@ -57,6 +57,33 @@ public:
    MyASTVisitor( CompilerInstance & ci_ ) : ci(ci_)
    {}
 
+#if 0
+   bool VisitCXXConstructorDecl( CXXConstructorDecl * c )
+   {
+      cout 
+         << "GLOBAL: " 
+         << c->getName().str() 
+         << endl ;
+         //<< " : " << q.getAsString()
+
+      return true ;
+   }
+#endif
+
+   bool VisitVarDecl( VarDecl * v )
+   {
+      if ( v->hasGlobalStorage() )
+      {
+         QualType q = getQualTypeForDecl( v ) ;
+
+         cout 
+            << "GLOBAL: " 
+            << v->getName().str() << " : " << q.getAsString() << endl ;
+      }
+
+      return true ;
+   }
+
    // Find typedefs:
    bool VisitTypedefDecl( TypedefDecl * t )
    {
@@ -73,6 +100,49 @@ public:
       if ( r->isThisDeclarationADefinition() )
       {
          //cout << "VisitCXXRecordDecl:: CLASS: " << r->getName().str() << endl ;
+
+         if ( 
+              r->hasConstCopyConstructor() ||
+              r->hasUserDeclaredConstructor() ||
+              r->hasUserProvidedDefaultConstructor() ||
+              r->hasUserDeclaredCopyConstructor() ||
+              r->hasNonTrivialDefaultConstructor() ||
+              r->hasConstexprDefaultConstructor() ||
+              r->hasNonTrivialCopyConstructor() ||
+              r->hasUserDeclaredMoveConstructor()  ||
+              r->hasFailedImplicitMoveConstructor()  ||
+              r->hasConstexprNonCopyMoveConstructor()  ||
+              r->hasNonTrivialMoveConstructor()  ||
+              //r->hasTrivialMoveConstructor()  ||
+              //r->hasDefaultConstructor() ||
+              //r->hasCopyConstructorWithConstParam() ||
+              //r->hasMoveConstructor() ||
+              //r->hasTrivialDefaultConstructor() ||
+              //r->hasTrivialCopyConstructor() ||
+              0 )
+         {
+            cout << r->getName().str() << " : CONSTRUCTOR" << endl ;
+         }
+
+#if 0
+if ( r->hasDefaultConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasDefaultConstructor" << endl ; }
+if ( r->hasConstCopyConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasConstCopyConstructor" << endl ; }
+if ( r->hasUserDeclaredConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasUserDeclaredConstructor" << endl ; }
+if ( r->hasUserProvidedDefaultConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasUserProvidedDefaultConstructor" << endl ; }
+if ( r->hasUserDeclaredCopyConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasUserDeclaredCopyConstructor" << endl ; }
+if ( r->hasCopyConstructorWithConstParam() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasCopyConstructorWithConstParam" << endl ; }
+if ( r->hasMoveConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasMoveConstructor" << endl ; }
+if ( r->hasTrivialDefaultConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasTrivialDefaultConstructor" << endl ; }
+if ( r->hasNonTrivialDefaultConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasNonTrivialDefaultConstructor" << endl ; }
+if ( r->hasConstexprDefaultConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasConstexprDefaultConstructor" << endl ; }
+if ( r->hasTrivialCopyConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasTrivialCopyConstructor" << endl ; }
+if ( r->hasNonTrivialCopyConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasNonTrivialCopyConstructor" << endl ; }
+if ( r->hasUserDeclaredMoveConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasUserDeclaredMoveConstructor" << endl ; }
+if ( r->hasFailedImplicitMoveConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasFailedImplicitMoveConstructor" << endl ; }
+if ( r->hasConstexprNonCopyMoveConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasConstexprNonCopyMoveConstructor" << endl ; }
+if ( r->hasTrivialMoveConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasTrivialMoveConstructor" << endl ; }
+if ( r->hasNonTrivialMoveConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasNonTrivialMoveConstructor" << endl ; }
+#endif
 
          for ( CXXRecordDecl::base_class_iterator b = r->bases_begin(), e = r->bases_end() ;
                b != e ; ++b )
@@ -102,13 +172,24 @@ public:
       const QualType & thisFieldQualType = getQualTypeForDecl( f ) ;
 //      cout << "TYPE: " << thisFieldQualType.getAsString() << " )" << endl ;
 
-// FIXME: want to prune the struct/union/class from here:
+      string s = r->getName().str() ;
+      // Deal with anonymous structures:
+      //if ( r->isAnonymousStructOrUnion() ) // doesn't work
+      if ( "" == s )
+      {
+         const Type * RT = r->getTypeForDecl() ;
+
+         QualType QT = RT->getCanonicalTypeInternal() ;
+
+         s = QT.getAsString() ;
+      }
+
       cout 
-         //<< "MEMBER: " << f->getName().str() << " : \pThisFieldSourceInfo"
-         //<< "'" << r->getName().str() << "'"
-         << r->getName().str() 
+         //<< "MEMBER: " << f->getName().str() 
+         << s
          << " : " << thisFieldQualType.getAsString() << endl ;
 
+// Think this pruned the struct/union/class:
 #if 0
       const QualType & qu = thisFieldQualType.getDesugaredType( ci.getASTContext() ) ;
       cout << "TYPE: " << qu.getAsString() << " )" << endl ;
