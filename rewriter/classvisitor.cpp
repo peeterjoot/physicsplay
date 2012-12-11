@@ -32,6 +32,21 @@
 using namespace clang ;
 using namespace std ;
 
+inline QualType getQualTypeForDecl( DeclaratorDecl * f )
+{
+   TypeSourceInfo * pThisFieldSourceInfo = f->getTypeSourceInfo() ;
+
+   TypeLoc thisFieldTypeLoc = pThisFieldSourceInfo->getTypeLoc() ;
+
+   // don't care if it's an array, just want the basic underlying type of the array.
+   if ( const ArrayTypeLoc * pTypeLocIfArray = dyn_cast<ArrayTypeLoc>( &thisFieldTypeLoc ) )
+   {
+      thisFieldTypeLoc = pTypeLocIfArray->getElementLoc() ;
+   }
+
+   return thisFieldTypeLoc.getType() ;
+}
+
 // By implementing RecursiveASTVisitor, we can specify which AST nodes
 // we're interested in by overriding relevant methods.
 class MyASTVisitor : public RecursiveASTVisitor<MyASTVisitor>
@@ -55,17 +70,23 @@ public:
    // Find class/struct/unions:
    bool VisitCXXRecordDecl( CXXRecordDecl* r )
    {
-      cout << "VisitCXXRecordDecl:: CLASS: " << r->getName().str() << endl ;
-
-      for ( CXXRecordDecl::base_class_iterator b = r->bases_begin(), e = r->bases_end() ;
-            b != e ; ++b )
+      if ( r->isThisDeclarationADefinition() )
       {
-         CXXBaseSpecifier & a = *b ;
+         //cout << "VisitCXXRecordDecl:: CLASS: " << r->getName().str() << endl ;
 
-         const QualType & q = a.getType() ;
+         for ( CXXRecordDecl::base_class_iterator b = r->bases_begin(), e = r->bases_end() ;
+               b != e ; ++b )
+         {
+            CXXBaseSpecifier & a = *b ;
 
-         cout << r->getName().str() << " : " << q.getAsString() << endl ;
-//         cout << "BASE CLASS: " << q.getAsString() << endl ;
+            const QualType & q = a.getType() ;
+
+            cout 
+               //<< "CLASS: " << r->getName().str() << " : "
+               << r->getName().str() << " : " << q.getAsString() << endl ;
+
+   //         cout << "BASE CLASS: " << q.getAsString() << endl ;
+         }
       }
 
       return true ;
@@ -74,28 +95,22 @@ public:
    // Member's within class/struct/union:
    bool VisitFieldDecl( FieldDecl * f )
    {
-      RecordDecl * r = f->getParent() ;
+      RecordDecl * r = f->getParent() ; //->getDefinition() ;
 //      cout << "CLASS: " << r->getName().str() << endl ;
 //      cout << "MEMBER: " << f->getName().str() << " ( " ;
 
-      TypeSourceInfo * t = f->getTypeSourceInfo() ;
-
-      TypeLoc TL = t->getTypeLoc() ;
-
-      // don't care if it's an array, just want the basic underlying type of the array.
-      if ( const ArrayTypeLoc *Arr = dyn_cast<ArrayTypeLoc>(&TL) )
-      {
-         TL = Arr->getElementLoc() ;
-      }
-
-      const QualType & q = TL.getType() ;
-//      cout << "TYPE: " << q.getAsString() << " )" << endl ;
+      const QualType & thisFieldQualType = getQualTypeForDecl( f ) ;
+//      cout << "TYPE: " << thisFieldQualType.getAsString() << " )" << endl ;
 
 // FIXME: want to prune the struct/union/class from here:
-      cout << r->getName().str() << " : " << q.getAsString() << endl ;
+      cout 
+         //<< "MEMBER: " << f->getName().str() << " : \pThisFieldSourceInfo"
+         //<< "'" << r->getName().str() << "'"
+         << r->getName().str() 
+         << " : " << thisFieldQualType.getAsString() << endl ;
 
 #if 0
-      const QualType & qu = q.getDesugaredType( ci.getASTContext() ) ;
+      const QualType & qu = thisFieldQualType.getDesugaredType( ci.getASTContext() ) ;
       cout << "TYPE: " << qu.getAsString() << " )" << endl ;
 #endif
 

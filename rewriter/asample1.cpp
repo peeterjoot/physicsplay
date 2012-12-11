@@ -26,6 +26,12 @@ union uu
 #endif
 } ;
 
+class qq 
+{ 
+   public:
+      int x ;
+} ;
+
 struct Test
 {
    int a, b ;
