@@ -116,10 +116,35 @@ public:
          //cout << "VisitCXXRecordDecl:: CLASS: " << r->getName().str() << endl ;
 
 #if 1
+         // Had a different suggestion on the clang list on how to approach this: 
+         //
+         // -----------------------------------------------------------------------
+         //
+         // But why not instead just directly look at the initializer for theBigGiantGlobalVariable, which will be a CXXConstructExpr pointing directly to the default constructor?  You can then walk over the initializers in that constructor . which, since it's an implicitly-defined default constructor, should all be non-trivial . and see what constructors they use, etc.
+         //
+         // Anyway, this would also be a reasonable enhancement request for -Wglobal-constructors;  we could easily say:
+         // warning: declaration requires a global constructor
+         // ...
+         // note: because type 'a' has a non-trivial default constructor
+         // note: because type 'b' has a non-trivial default constructor
+         // note: because type 'nowHasConstructor' has a non-trivial default constructor
+         //
+         // Although it would be even better if these notes were compressed to:
+         // note: because the subobject 'foo.bar.baz' has a non-trivial default constructor
+         // (that is, walking through implicitly-defined default constructors)
+         //
+         // -----------------------------------------------------------------------
+         //
+         // Note that this would likely also avoid the trouble with isThisDeclarationADefinition() assertions in isImplicitlyDefined()
+         // as a side effect.
+         //
          for ( CXXRecordDecl::ctor_iterator b = r->ctor_begin(), e = r->ctor_end() ;
                b != e ; ++b )
          {
-            if ( !b->isImplicitlyDefined() )
+            // 
+            // isThisDeclarationADefinition: sqlajctl_1_.o with SQLO_FHANDLE containing a constructor hits this (struct sqlacb)
+            //
+            if ( b->isThisDeclarationADefinition() && !b->isImplicitlyDefined() )
             {
                cout << r->getName().str() << " : CONSTRUCTOR" << endl ;
 
