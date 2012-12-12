@@ -2,7 +2,21 @@
 //
 // classvisitor.cpp: AST visitor code to get info about structure fields with Clang
 //
-// Based on Eli Bendersky's rewritersample.cpp
+// The MyASTVisitor and driver was initially based on Eli Bendersky's rewritersample.cpp.
+//
+// Later gutted the driver and replaced with one based on:
+//
+//    https://github.com/loarabia/Clang-tutorial/blob/master/tutorial6.cpp
+//
+// As is this code can be used to answer two types of questions:
+//
+// 1) What dependencies does a class/struct/union have.  Raw output
+//    includes enough info that one could build a dependency tree for a given type.
+//
+// 2) Identify all global variables and their types, and cross reference that with the class/struct's dependency info (from above) 
+//    to see what global variables use explicit constructors.  This is for finding where specifically a C++ global constructor
+//    is coming from when this are problematic (i.e. this is a restriction of libdb2.a and if you accidentally add a constructor
+//    it can be hard to figure out the exact global it came from.)
 //
 #include <string>
 #include <vector>
@@ -32,6 +46,21 @@
 using namespace clang ;
 using namespace std ;
 
+inline QualType getQualTypeForDecl( DeclaratorDecl * f )
+{
+   TypeSourceInfo * pThisFieldSourceInfo = f->getTypeSourceInfo() ;
+
+   TypeLoc thisFieldTypeLoc = pThisFieldSourceInfo->getTypeLoc() ;
+
+   // don't care if it's an array, just want the basic underlying type of the array.
+   if ( const ArrayTypeLoc * pTypeLocIfArray = dyn_cast<ArrayTypeLoc>( &thisFieldTypeLoc ) )
+   {
+      thisFieldTypeLoc = pTypeLocIfArray->getElementLoc() ;
+   }
+
+   return thisFieldTypeLoc.getType() ;
+}
+
 // By implementing RecursiveASTVisitor, we can specify which AST nodes
 // we're interested in by overriding relevant methods.
 class MyASTVisitor : public RecursiveASTVisitor<MyASTVisitor>
@@ -41,6 +70,33 @@ class MyASTVisitor : public RecursiveASTVisitor<MyASTVisitor>
 public:
    MyASTVisitor( CompilerInstance & ci_ ) : ci(ci_)
    {}
+
+#if 0
+   bool VisitCXXConstructorDecl( CXXConstructorDecl * c )
+   {
+      cout 
+         << "GLOBAL: " 
+         << c->getName().str() 
+         << endl ;
+         //<< " : " << q.getAsString()
+
+      return true ;
+   }
+#endif
+
+   bool VisitVarDecl( VarDecl * v )
+   {
+      if ( v->hasGlobalStorage() )
+      {
+         QualType q = getQualTypeForDecl( v ) ;
+
+         cout 
+            << "GLOBAL: " 
+            << v->getName().str() << " : " << q.getAsString() << endl ;
+      }
+
+      return true ;
+   }
 
    // Find typedefs:
    bool VisitTypedefDecl( TypedefDecl * t )
@@ -55,17 +111,80 @@ public:
    // Find class/struct/unions:
    bool VisitCXXRecordDecl( CXXRecordDecl* r )
    {
-      cout << "VisitCXXRecordDecl:: CLASS: " << r->getName().str() << endl ;
-
-      for ( CXXRecordDecl::base_class_iterator b = r->bases_begin(), e = r->bases_end() ;
-            b != e ; ++b )
+      if ( r->isThisDeclarationADefinition() )
       {
-         CXXBaseSpecifier & a = *b ;
+         //cout << "VisitCXXRecordDecl:: CLASS: " << r->getName().str() << endl ;
 
-         const QualType & q = a.getType() ;
+#if 1
+         for ( CXXRecordDecl::ctor_iterator b = r->ctor_begin(), e = r->ctor_end() ;
+               b != e ; ++b )
+         {
+            if ( !b->isImplicitlyDefined() )
+            {
+               cout << r->getName().str() << " : CONSTRUCTOR" << endl ;
 
-         cout << r->getName().str() << " : " << q.getAsString() << endl ;
-//         cout << "BASE CLASS: " << q.getAsString() << endl ;
+               break ;
+            }
+         }
+
+#else
+         if ( 
+              r->hasConstCopyConstructor() ||
+              r->hasUserDeclaredConstructor() ||
+              r->hasUserProvidedDefaultConstructor() ||
+              r->hasUserDeclaredCopyConstructor() ||
+              r->hasNonTrivialDefaultConstructor() ||
+              r->hasConstexprDefaultConstructor() ||
+              r->hasNonTrivialCopyConstructor() ||
+              r->hasUserDeclaredMoveConstructor()  ||
+              r->hasFailedImplicitMoveConstructor()  ||
+              r->hasConstexprNonCopyMoveConstructor()  ||
+              r->hasNonTrivialMoveConstructor()  ||
+              //r->hasTrivialMoveConstructor()  ||
+              //r->hasDefaultConstructor() ||
+              //r->hasCopyConstructorWithConstParam() ||
+              //r->hasMoveConstructor() ||
+              //r->hasTrivialDefaultConstructor() ||
+              //r->hasTrivialCopyConstructor() ||
+              0 )
+         {
+            cout << r->getName().str() << " : CONSTRUCTOR" << endl ;
+         }
+
+#if 0
+if ( r->hasDefaultConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasDefaultConstructor" << endl ; }
+if ( r->hasConstCopyConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasConstCopyConstructor" << endl ; }
+if ( r->hasUserDeclaredConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasUserDeclaredConstructor" << endl ; }
+if ( r->hasUserProvidedDefaultConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasUserProvidedDefaultConstructor" << endl ; }
+if ( r->hasUserDeclaredCopyConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasUserDeclaredCopyConstructor" << endl ; }
+if ( r->hasCopyConstructorWithConstParam() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasCopyConstructorWithConstParam" << endl ; }
+if ( r->hasMoveConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasMoveConstructor" << endl ; }
+if ( r->hasTrivialDefaultConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasTrivialDefaultConstructor" << endl ; }
+if ( r->hasNonTrivialDefaultConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasNonTrivialDefaultConstructor" << endl ; }
+if ( r->hasConstexprDefaultConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasConstexprDefaultConstructor" << endl ; }
+if ( r->hasTrivialCopyConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasTrivialCopyConstructor" << endl ; }
+if ( r->hasNonTrivialCopyConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasNonTrivialCopyConstructor" << endl ; }
+if ( r->hasUserDeclaredMoveConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasUserDeclaredMoveConstructor" << endl ; }
+if ( r->hasFailedImplicitMoveConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasFailedImplicitMoveConstructor" << endl ; }
+if ( r->hasConstexprNonCopyMoveConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasConstexprNonCopyMoveConstructor" << endl ; }
+if ( r->hasTrivialMoveConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasTrivialMoveConstructor" << endl ; }
+if ( r->hasNonTrivialMoveConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasNonTrivialMoveConstructor" << endl ; }
+#endif
+#endif
+
+         for ( CXXRecordDecl::base_class_iterator b = r->bases_begin(), e = r->bases_end() ;
+               b != e ; ++b )
+         {
+            CXXBaseSpecifier & a = *b ;
+
+            const QualType & q = a.getType() ;
+
+            cout 
+               //<< "CLASS: " << r->getName().str() << " : "
+               << r->getName().str() << " : " << q.getAsString() << endl ;
+
+   //         cout << "BASE CLASS: " << q.getAsString() << endl ;
+         }
       }
 
       return true ;
@@ -75,27 +194,16 @@ public:
    bool VisitFieldDecl( FieldDecl * f )
    {
       RecordDecl * r = f->getParent() ;
-//      cout << "CLASS: " << r->getName().str() << endl ;
-//      cout << "MEMBER: " << f->getName().str() << " ( " ;
+      const QualType & theMembersClassType = ci.getASTContext().getRecordType( r ) ;
+      const QualType & thisFieldQualType = getQualTypeForDecl( f ) ;
 
-      TypeSourceInfo * t = f->getTypeSourceInfo() ;
+      cout 
+         << theMembersClassType.getAsString() //better than r->getName().str(), since this handles anonymous struct/class/unions too.
+         << " : " << thisFieldQualType.getAsString() << endl ;
 
-      TypeLoc TL = t->getTypeLoc() ;
-
-      // don't care if it's an array, just want the basic underlying type of the array.
-      if ( const ArrayTypeLoc *Arr = dyn_cast<ArrayTypeLoc>(&TL) )
-      {
-         TL = Arr->getElementLoc() ;
-      }
-
-      const QualType & q = TL.getType() ;
-//      cout << "TYPE: " << q.getAsString() << " )" << endl ;
-
-// FIXME: want to prune the struct/union/class from here:
-      cout << r->getName().str() << " : " << q.getAsString() << endl ;
-
+// Think this pruned the struct/union/class:
 #if 0
-      const QualType & qu = q.getDesugaredType( ci.getASTContext() ) ;
+      const QualType & qu = thisFieldQualType.getDesugaredType( ci.getASTContext() ) ;
       cout << "TYPE: " << qu.getAsString() << " )" << endl ;
 #endif
 
@@ -108,7 +216,7 @@ public:
 class MyASTConsumer : public ASTConsumer
 {
 public:
-   MyASTConsumer( CompilerInstance & ci_ ) : Visitor(ci_) {}
+   MyASTConsumer( CompilerInstance & ci_ ) : Visitor( ci_ ) {}
 
    // Override the method that gets called for each parsed top-level
    // declaration.
@@ -139,7 +247,6 @@ void printUsageAndExit( const char * argv0 )
    exit( 1 ) ;
 }
 
-// preprocessor driver based on https://github.com/loarabia/Clang-tutorial/blob/master/tutorial6.cpp
 int main( int argc, char * argv[] )
 {
    struct option options[] =
@@ -291,7 +398,7 @@ int main( int argc, char * argv[] )
                            *pOpts,
                            *headerSearchOptions,
                            frontendOptions ) ;
-       
+
    const FileEntry * pFile = fileManager.getFile( argv[optind] ) ;
    
    if ( pFile )
@@ -306,19 +413,21 @@ int main( int argc, char * argv[] )
 
       builtinContext.InitializeTarget( *pTargetInfo ) ;
 
-      ASTContext astContext( languageOptions,
-                             sourceManager,
-                             pTargetInfo,
-                             identifierTable,
-                             selectorTable,
-                             builtinContext,
-                             0 /* size_reserve*/ ) ;
+      ASTContext * pASTcontext = new ASTContext( languageOptions,
+                                                 sourceManager,
+                                                 pTargetInfo,
+                                                 identifierTable,
+                                                 selectorTable,
+                                                 builtinContext,
+                                                 0 /* size_reserve*/ ) ;
+
+      compInst.setASTContext( pASTcontext ) ;
 
       MyASTConsumer astConsumer( compInst ) ;
 
       pTextDiagnosticPrinter->BeginSourceFile( languageOptions, &preprocessor ) ;
 
-      ParseAST( preprocessor, &astConsumer, astContext ) ;
+      ParseAST( preprocessor, &astConsumer, *pASTcontext ) ;
 
       pTextDiagnosticPrinter->EndSourceFile() ;
    }
