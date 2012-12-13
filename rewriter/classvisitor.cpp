@@ -71,29 +71,139 @@ public:
    MyASTVisitor( CompilerInstance & ci_ ) : ci(ci_)
    {}
 
-#if 0
    bool VisitCXXConstructorDecl( CXXConstructorDecl * c )
    {
+//      cout << "CONS: " << endl ;
+      int i = 0 ;
+
+      for ( CXXConstructorDecl::init_iterator I = c->init_begin(),
+                                              E = c->init_end() ;
+            I != E ; ++I )
+      {
+         cout << "CONS: " << i << endl ;
+         i++ ;
+      }
+#if 0
+      //QualType t = ci.getASTContext().getRecordType( c ) ;
       cout 
-         << "GLOBAL: " 
+         << "CONS: " 
          << c->getName().str() 
          << endl ;
          //<< " : " << q.getAsString()
+#endif
 
       return true ;
    }
-#endif
 
-   bool VisitVarDecl( VarDecl * v )
+   bool VisitVarDecl( VarDecl * var )
    {
-      if ( v->hasGlobalStorage() )
+      if ( var->hasGlobalStorage() )
       {
-         QualType q = getQualTypeForDecl( v ) ;
+         QualType q = getQualTypeForDecl( var ) ;
 
          cout 
             << "GLOBAL: " 
-            << v->getName().str() << " : " << q.getAsString() << endl ;
+            << var->getName().str() << " : " << q.getAsString() << endl ;
       }
+
+#if 1
+      // From Eli's email "Here's the code used to implement -Wglobal-constructor:"
+      //
+      // (modified for my AST context since I think this was a Sema:: method).
+      //
+      Expr * Init = var->getInit() ;
+      bool IsGlobal = var->hasGlobalStorage() && !var->isStaticLocal() ;
+      QualType type = var->getType();
+      ASTContext & Context = ci.getASTContext() ;
+      QualType baseType = Context.getBaseElementType( type ) ;
+
+      // Not sure what the difference is between type and baseType here.  from asample3.cpp get 'struct krcb' from both.
+      cout 
+         << "var::getName: var::type, var::baseType "
+         << var->getName().str() << " : " << type.getAsString() << " , " << baseType.getAsString() << endl ;
+
+      if ( !var->getDeclContext()->isDependentContext() && Init && !Init->isValueDependent() )
+      {
+         if ( IsGlobal && !var->isConstexpr() &&
+              !Init->isConstantInitializer(Context, baseType->isReferenceType()) )
+         {
+            SourceLocation s = var->getLocation() ;
+
+            SourceManager & sm = Context.getSourceManager() ;
+            DiagnosticsEngine & Diag = sm.getDiagnostics() ;
+
+            cout << "global: found where." << endl ;
+#if 0 // this prints the FILE/LINE/COLUMN, but llvm::outs() doesn't mesh well with cout.
+            cout << "WHERE: " ;
+            s.print( llvm::outs(), Context.getSourceManager() ) ;
+            cout << endl ;
+#endif
+
+//            cout << Init->getSourceRange() ;
+
+//            Diag(var->getLocation(), diag::warn_global_constructor)
+//              << 
+//              Init->getSourceRange();
+
+            if ( const CXXConstructExpr * r = dyn_cast<CXXConstructExpr>( Init ) )
+            {
+               cout << "found CXXConstructExpr" << endl ;
+
+   //1.  Look at the constructor: getConstructor().
+   //2.  Check whether it's a implicitly-defined default constructor: isDefaultConstructor(), isImplicitlyDefined().  If not, you've found your problem right there.
+   //3.  Iterate over the initializers: init_begin(), init_end().
+   //4.  I believe the expression for each initializer should always be a CXXConstructExpr.  Recurse.
+               CXXConstructorDecl * c = r->getConstructor() ;
+
+               if ( 
+                    // !c->isDefaultConstructor() && 
+                     !c->isImplicitlyDefined() )
+               {
+                  cout << "found !implicit" << endl ;
+
+                  int j = 0 ;
+
+                  for ( CXXConstructorDecl::init_iterator b = c->init_begin(), e = c->init_end() ;
+                        b != e ; ++b )
+                  {
+                     CXXCtorInitializer * i = *b ;
+
+                     if ( i->isBaseInitializer() )
+                     {
+                        // found it:
+                        cout << j << ": base init" << endl ;
+                     }
+
+                     if ( i->isMemberInitializer() )
+                     {
+                        cout << j << ": member init" << endl ;
+
+                        FieldDecl * f = i->getMember() ;
+
+                        RecordDecl * r = f->getParent() ;
+
+                        if ( const CXXRecordDecl * rr = dyn_cast<CXXRecordDecl>( r ) )
+                        {
+                           const QualType & theMembersClassType = ci.getASTContext().getRecordType( r ) ;
+                           const QualType & thisFieldQualType = getQualTypeForDecl( f ) ; // type of the field.  Now check if that type has a constructor.
+
+                           cout << j << ": init: " ;
+                           cout 
+                              << theMembersClassType.getAsString() //better than r->getName().str(), since this handles anonymous struct/class/unions too.
+                              << " : " << thisFieldQualType.getAsString() << endl ;
+
+                           // NEXT:
+                           // Does the class type CXXRecordDecl (ie: struct krcb) have a !implicit constructor 
+                        }
+                     }
+
+                     j++ ;
+                  }
+               }
+            }
+         }
+      }
+#endif
 
       return true ;
    }
