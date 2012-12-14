@@ -74,83 +74,19 @@ public:
 
 #define GLOBALVISITOR
 #if defined GLOBALVISITOR
-   #if 0
-   bool VisitCXXConstructorDecl( CXXConstructorDecl * c )
+   static string subMemberString( const string & prefix, const string & field )
    {
-      // cout << "CONS: " << endl ;
-      int i = 0 ;
+      string s = prefix ;
 
-      for ( CXXConstructorDecl::init_iterator I = c->init_begin(),
-                                              E = c->init_end() ;
-            I != E ; ++I )
+      if ( "" != prefix )
       {
-         cout << "CONS: " << i << endl ;
-         i++ ;
+         s += "." ;
       }
 
-      #if 0
-      //QualType t = context.getRecordType( c ) ;
-      cout 
-         << "CONS: " 
-         << c->getName().str() 
-         << endl ;
-         //<< " : " << q.getAsString()
-      #endif
+      s += field ;
 
-      return true ;
+      return s ;
    }
-   #endif
-
-   void isVarInitAGlobal( VarDecl * var )
-   {
-      // From Eli's email "Here's the code used to implement -Wglobal-constructor:"
-      //
-      // (modified for my AST context since I think this was a Sema:: method).
-      //
-      Expr *         Init     = var->getInit() ;
-      bool           IsGlobal = var->hasGlobalStorage() && !var->isStaticLocal() ;
-      QualType       type     = var->getType();
-      QualType       baseType = context.getBaseElementType( type ) ;
-
-      // Not sure what the difference is between type and baseType here.  from asample3.cpp get 'struct krcb' from both.
-      cout 
-         << "var::getName: var::type, var::baseType "
-         << var->getName().str() << " : " << type.getAsString() << " , " << baseType.getAsString() << endl ;
-
-      if ( !var->getDeclContext()->isDependentContext() && Init && !Init->isValueDependent() )
-      {
-         if ( IsGlobal && !var->isConstexpr() &&
-              !Init->isConstantInitializer(context, baseType->isReferenceType()) )
-         {
-            cout << "global: found where." << endl ;
-
-            #if 0 // this prints the FILE/LINE/COLUMN, but llvm::outs() doesn't mesh well with cout.
-               SourceLocation s = var->getLocation() ;
-               SourceManager & sm = context.getSourceManager() ;
-               DiagnosticsEngine & Diag = sm.getDiagnostics() ;
-
-               cout << "WHERE: " ;
-               s.print( llvm::outs(), context.getSourceManager() ) ;
-               cout << endl ;
-
-               // cout << Init->getSourceRange() ;
-
-               // Diag(var->getLocation(), diag::warn_global_constructor)
-               //    << Init->getSourceRange();
-            #endif
-
-            if ( const CXXConstructExpr * r = dyn_cast<CXXConstructExpr>( Init ) )
-            {
-               cout << "found CXXConstructExpr" << endl ;
-
-               CXXConstructorDecl * c = r->getConstructor() ;
-
-               printOriginOfAnyNonTrivialConstructors( c ) ;
-            }
-         }
-      }
-   }
-
 
    // 
    // 1.  Look at the constructor: getConstructor().
@@ -158,201 +94,64 @@ public:
    // 3.  Iterate over the initializers: init_begin(), init_end().
    // 4.  I believe the expression for each initializer should always be a CXXConstructExpr.  Recurse.
    //
-   void printOriginOfAnyNonTrivialConstructors ( CXXConstructorDecl * c )
+   void recurseOverConstructorDecls( CXXConstructorDecl * c, string subobject )
    {
-      if ( 
-           // !c->isDefaultConstructor() && 
-            !c->isImplicitlyDefined() )
+      for ( CXXConstructorDecl::init_iterator b = c->init_begin(), e = c->init_end() ;
+            b != e ; ++b )
       {
-         cout << "found !implicit" << endl ;
+         CXXCtorInitializer *    i        = *b ;
+         FieldDecl *             f        = i->getMember() ;
+         Expr *                  Init     = i->getInit() ;
+         string                  subfield = subMemberString( subobject, f->getName().str() ) ;
 
-         for ( CXXConstructorDecl::init_iterator b = c->init_begin(), e = c->init_end() ;
-               b != e ; ++b )
+         const QualType &        ftype  = getQualTypeForDecl( f ) ; // type of the field.  Now check if that type has a constructor.
+
+         if ( const CXXConstructExpr * r = dyn_cast<CXXConstructExpr>( Init ) )
          {
-            CXXCtorInitializer *    i     = *b ;
-            FieldDecl *             f     = i->getMember() ;
-            const QualType &        ftype  = getQualTypeForDecl( f ) ; // type of the field.  Now check if that type has a constructor.
+            CXXConstructorDecl * cInner = r->getConstructor() ;
 
-            cout 
-               << f->getName().str() << endl 
-               << ftype.getAsString() << endl ;
-
-#if 0
-            //TypeSourceInfo * pThisFieldSourceInfo = f->getTypeSourceInfo() ;
-
-            if ( i->isBaseInitializer() )
+            if ( !cInner->isImplicitlyDefined() )
             {
-               // does inheritance always imply a non-implicit constructor?  don't think so:
-               cout << j << ": base init" << endl ;
+               cout 
+                  << "global: " 
+                  << subfield 
+                  << " : " 
+                  << ftype.getAsString() 
+                  << endl ;
             }
-#endif
 
-                  Expr *         Init     = i->getInit() ;
-//                  QualType       type     = i->getType();
-//                  QualType       baseType = context.getBaseElementType( type ) ;
-
-            if ( const CXXConstructExpr * r = dyn_cast<CXXConstructExpr>( Init ) )
-            {
-               
-                           CXXConstructorDecl * c = r->getConstructor() ;
-
-                           printOriginOfAnyNonTrivialConstructors( c ) ;
-            }
-#if 0
-            if ( i->isMemberInitializer() )
-            {
-               //cout << j << ": member init" << endl ;
-
-               if ( CXXRecordDecl * r = dyn_cast<CXXRecordDecl>( f ) )
-              // if ( CXXRecordDecl * r = dyn_cast<CXXRecordDecl>( f->getParent() ) )
-               {
-                  #if 1
-                     if ( r->hasDefaultConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasDefaultConstructor" << endl ; }
-                     if ( r->hasConstCopyConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasConstCopyConstructor" << endl ; }
-                     if ( r->hasUserDeclaredConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasUserDeclaredConstructor" << endl ; }
-                     if ( r->hasUserProvidedDefaultConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasUserProvidedDefaultConstructor" << endl ; }
-                     if ( r->hasUserDeclaredCopyConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasUserDeclaredCopyConstructor" << endl ; }
-                     if ( r->hasCopyConstructorWithConstParam() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasCopyConstructorWithConstParam" << endl ; }
-                     if ( r->hasMoveConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasMoveConstructor" << endl ; }
-                     if ( r->hasTrivialDefaultConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasTrivialDefaultConstructor" << endl ; }
-                     if ( r->hasNonTrivialDefaultConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasNonTrivialDefaultConstructor" << endl ; }
-                     if ( r->hasConstexprDefaultConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasConstexprDefaultConstructor" << endl ; }
-                     if ( r->hasTrivialCopyConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasTrivialCopyConstructor" << endl ; }
-                     if ( r->hasNonTrivialCopyConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasNonTrivialCopyConstructor" << endl ; }
-                     if ( r->hasUserDeclaredMoveConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasUserDeclaredMoveConstructor" << endl ; }
-                     if ( r->hasFailedImplicitMoveConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasFailedImplicitMoveConstructor" << endl ; }
-                     if ( r->hasConstexprNonCopyMoveConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasConstexprNonCopyMoveConstructor" << endl ; }
-                     if ( r->hasTrivialMoveConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasTrivialMoveConstructor" << endl ; }
-                     if ( r->hasNonTrivialMoveConstructor() ) { cout << r->getName().str() << " : CONSTRUCTOR: hasNonTrivialMoveConstructor" << endl ; }
-                  #endif
-
-                  const QualType & theMembersClassType = context.getRecordType( r ) ;
-
-                  cout 
-                     << theMembersClassType.getAsString() //better than r->getName().str(), since this handles anonymous struct/class/unions too.
-                     ;
-                  cout << j << ": init: " ;
-
-   //               CXXConstructorDecl * c = f->getTargetConstructor() ;
-   //               CXXConstructorDecl * c = f->getConstructor() ;
-
-
-                  // Not sure what the difference is between type and baseType here.  from asample3.cpp get 'struct krcb' from both.
-                  cout 
-                     //<< "i::getName: "
-                     << "i::type, i::baseType "
-                     //<< i->getName().str() 
-                     << " : " << type.getAsString() << " , " << baseType.getAsString() << endl ;
-
-   //               if ( !i->getDeclContext()->isDependentContext() && Init && !Init->isValueDependent() )
-                  {
-   //                  if ( //IsGlobal && 
-   //                       //!i->isConstexpr() &&
-   //                       !Init->isConstantInitializer(context, baseType->isReferenceType()) )
-                     {
-                        //cout << "inner: global: found where." << endl ;
-
-                        if ( const CXXConstructExpr * r = dyn_cast<CXXConstructExpr>( Init ) )
-                        {
-                           //cout << "inner: found CXXConstructExpr" << endl ;
-
-                           CXXConstructorDecl * c = r->getConstructor() ;
-
-                           printOriginOfAnyNonTrivialConstructors( c ) ;
-                        }
-                     }
-                  }
-               }
-            }
-#endif
+            recurseOverConstructorDecls( cInner, subfield ) ;
          }
       }
    }
 
-#if 0
-   CXXRecordDecl* r 
-         // Had a different suggestion on the clang list on how to approach this: 
-         //
-         // -----------------------------------------------------------------------
-         //
-         // But why not instead just directly look at the initializer for theBigGiantGlobalVariable, which will be a CXXConstructExpr pointing directly to the default constructor?  You can then walk over the initializers in that constructor . which, since it's an implicitly-defined default constructor, should all be non-trivial . and see what constructors they use, etc.
-         //
-         // Anyway, this would also be a reasonable enhancement request for -Wglobal-constructors;  we could easily say:
-         // warning: declaration requires a global constructor
-         // ...
-         // note: because type 'a' has a non-trivial default constructor
-         // note: because type 'b' has a non-trivial default constructor
-         // note: because type 'nowHasConstructor' has a non-trivial default constructor
-         //
-         // Although it would be even better if these notes were compressed to:
-         // note: because the subobject 'foo.bar.baz' has a non-trivial default constructor
-         // (that is, walking through implicitly-defined default constructors)
-         //
-         // -----------------------------------------------------------------------
-         //
-         // Note that this would likely also avoid the trouble with isThisDeclarationADefinition() assertions in isImplicitlyDefined()
-         // as a side effect.
-         //
-         for ( CXXRecordDecl::ctor_iterator b = r->ctor_begin(), e = r->ctor_end() ;
-               b != e ; ++b )
-         {
-            const CXXConstructorDecl * c = *b ;
-
-            // 
-            // isThisDeclarationADefinition: sqlajctl_1_.o with SQLO_FHANDLE containing a constructor hits this (struct sqlacb)
-            //
-            if ( c->isThisDeclarationADefinition() && !c->isImplicitlyDefined() )
-            {
-               cout << r->getName().str() << " : CONSTRUCTOR" << endl ;
-
-               break ;
-            }
-         }
-
-#elif 0
-         if ( 
-              r->hasConstCopyConstructor() ||
-              r->hasUserDeclaredConstructor() ||
-              r->hasUserProvidedDefaultConstructor() ||
-              r->hasUserDeclaredCopyConstructor() ||
-              r->hasNonTrivialDefaultConstructor() ||
-              r->hasConstexprDefaultConstructor() ||
-              r->hasNonTrivialCopyConstructor() ||
-              r->hasUserDeclaredMoveConstructor()  ||
-              r->hasFailedImplicitMoveConstructor()  ||
-              r->hasConstexprNonCopyMoveConstructor()  ||
-              r->hasNonTrivialMoveConstructor()  ||
-              //r->hasTrivialMoveConstructor()  ||
-              //r->hasDefaultConstructor() ||
-              //r->hasCopyConstructorWithConstParam() ||
-              //r->hasMoveConstructor() ||
-              //r->hasTrivialDefaultConstructor() ||
-              //r->hasTrivialCopyConstructor() ||
-              0 )
-         {
-            cout << r->getName().str() << " : CONSTRUCTOR" << endl ;
-         }
-
-#endif
-
    bool VisitVarDecl( VarDecl * var )
    {
-      if ( var->hasGlobalStorage() )
+      // modified from Eli's email "Here's the code used to implement -Wglobal-constructor:"
+      Expr *         Init     = var->getInit() ;
+      bool           IsGlobal = var->hasGlobalStorage() && !var->isStaticLocal() ;
+      QualType       type     = var->getType();
+      QualType       baseType = context.getBaseElementType( type ) ;
+
+      if ( !var->getDeclContext()->isDependentContext() && Init && !Init->isValueDependent() )
       {
-         QualType q = getQualTypeForDecl( var ) ;
+         if ( IsGlobal && !var->isConstexpr() &&
+              !Init->isConstantInitializer( context, baseType->isReferenceType() ) )
+         {
+            if ( const CXXConstructExpr * r = dyn_cast<CXXConstructExpr>( Init ) )
+            {
+               CXXConstructorDecl * c = r->getConstructor() ;
 
-         cout 
-            << "GLOBAL: " 
-            << var->getName().str() << " : " << q.getAsString() << endl ;
+               recurseOverConstructorDecls( c, var->getName().str() ) ;
+            }
+         }
       }
-
-      isVarInitAGlobal( var ) ;
 
       return true ;
    }
 #endif
 
-//#define CLASSVISITOR
+#define CLASSVISITOR
 #if defined CLASSVISITOR
    // Find typedefs:
    bool VisitTypedefDecl( TypedefDecl * t )
@@ -365,12 +164,11 @@ public:
    }
 
    // Find class/struct/unions:
-   bool VisitCXXRecordDecl( CXXRecordDecl* r )
+   bool VisitCXXRecordDecl( CXXRecordDecl * r )
    {
       if ( r->isThisDeclarationADefinition() )
       {
          //cout << "VisitCXXRecordDecl:: CLASS: " << r->getName().str() << endl ;
-
 
          for ( CXXRecordDecl::base_class_iterator b = r->bases_begin(), e = r->bases_end() ;
                b != e ; ++b )
