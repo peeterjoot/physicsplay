@@ -104,23 +104,63 @@ public:
          Expr *                  Init     = i->getInit() ;
          string                  subfield = subMemberString( subobject, f->getName().str() ) ;
 
-         const QualType &        ftype  = getQualTypeForDecl( f ) ; // type of the field.  Now check if that type has a constructor.
+         const QualType &        ftype    = getQualTypeForDecl( f ) ; // type of the field.  Now check if that type has a constructor.
 
          if ( const CXXConstructExpr * r = dyn_cast<CXXConstructExpr>( Init ) )
          {
-            CXXConstructorDecl * cInner = r->getConstructor() ;
+            CXXConstructorDecl * cInner   = r->getConstructor() ;
+            CXXRecordDecl *      frec     = ftype->getAsCXXRecordDecl() ;
 
-            if ( !cInner->isImplicitlyDefined() )
+#if 0
+            if ( frec->hasDefaultConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasDefaultConstructor" << endl ; }
+            if ( frec->hasConstCopyConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasConstCopyConstructor" << endl ; }
+            if ( frec->hasUserDeclaredConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasUserDeclaredConstructor" << endl ; }
+            if ( frec->hasUserProvidedDefaultConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasUserProvidedDefaultConstructor" << endl ; }
+            if ( frec->hasUserDeclaredCopyConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasUserDeclaredCopyConstructor" << endl ; }
+            if ( frec->hasCopyConstructorWithConstParam() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasCopyConstructorWithConstParam" << endl ; }
+            if ( frec->hasMoveConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasMoveConstructor" << endl ; }
+            if ( frec->hasTrivialDefaultConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasTrivialDefaultConstructor" << endl ; }
+            if ( frec->hasNonTrivialDefaultConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasNonTrivialDefaultConstructor" << endl ; }
+            if ( frec->hasConstexprDefaultConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasConstexprDefaultConstructor" << endl ; }
+            if ( frec->hasTrivialCopyConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasTrivialCopyConstructor" << endl ; }
+            if ( frec->hasNonTrivialCopyConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasNonTrivialCopyConstructor" << endl ; }
+            if ( frec->hasUserDeclaredMoveConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasUserDeclaredMoveConstructor" << endl ; }
+            if ( frec->hasFailedImplicitMoveConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasFailedImplicitMoveConstructor" << endl ; }
+            if ( frec->hasConstexprNonCopyMoveConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasConstexprNonCopyMoveConstructor" << endl ; }
+            if ( frec->hasTrivialMoveConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasTrivialMoveConstructor" << endl ; }
+            if ( frec->hasNonTrivialMoveConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasNonTrivialMoveConstructor" << endl ; }
+#endif
+
+            if ( !cInner->isImplicitlyDefined() &&
+                 ( frec->hasUserDeclaredConstructor() ||
+                   frec->hasUserProvidedDefaultConstructor() ||
+                   frec->hasUserDeclaredCopyConstructor() ||
+                   frec->hasNonTrivialDefaultConstructor() ||
+                   frec->hasConstexprDefaultConstructor() ||
+                   frec->hasNonTrivialCopyConstructor() ||
+                   frec->hasUserDeclaredMoveConstructor()  ||
+                   frec->hasFailedImplicitMoveConstructor()  ||
+                   frec->hasConstexprNonCopyMoveConstructor()  ||
+                   frec->hasNonTrivialMoveConstructor()  ||
+                   //frec->hasConstCopyConstructor() ||
+                   //frec->hasTrivialMoveConstructor()  ||
+                   //frec->hasDefaultConstructor() ||
+                   //frec->hasCopyConstructorWithConstParam() ||
+                   //frec->hasMoveConstructor() ||
+                   //frec->hasTrivialDefaultConstructor() ||
+                   //frec->hasTrivialCopyConstructor() ||
+                   0 )
+               )
             {
                cout 
-                  << "global: " 
+                  << "Global subobject requires constructor: " 
                   << subfield 
                   << " : " 
                   << ftype.getAsString() 
                   << endl ;
-            }
 
-            recurseOverConstructorDecls( cInner, subfield ) ;
+               recurseOverConstructorDecls( cInner, subfield ) ;
+            }
          }
       }
    }
