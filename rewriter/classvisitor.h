@@ -146,15 +146,13 @@ class MyASTVisitor : public RecursiveASTVisitor<MyASTVisitor>
 {
    CompilerInstance &            m_ci ;
    ASTContext &                  m_context ;
-   const LangOptions &           m_lo ;
    PrintingPolicy                m_pp ;
 
 public:
    MyASTVisitor( CompilerInstance & ci_ ) :
       m_ci( ci_ ),
       m_context( m_ci.getASTContext() ),
-      m_lo( m_context.getLangOpts() ),
-      m_pp( m_lo )
+      m_pp( m_context.getLangOpts() )
    {
       m_pp.SuppressTagKeyword = 1 ;
    }
