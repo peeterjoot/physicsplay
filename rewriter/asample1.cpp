@@ -41,6 +41,8 @@ struct Test
 
    int * e ;
    Moo * f ;
+   float * ffp ;
+   float ff ;
 
    uu umember ;
 
