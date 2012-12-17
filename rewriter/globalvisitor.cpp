@@ -1,3 +1,3 @@
-#define CLASSVISITOR
+#define GLOBALVISITOR
 
 #include "classvisitor.h"
