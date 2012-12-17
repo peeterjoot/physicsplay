@@ -36,12 +36,21 @@ LDFLAGS += $(shell $(LLVM_BIN_PATH)llvm-config --libs $(LLVM_LIBS))
 
 EXES += classvisitor
 EXES += globalvisitor
+EXES += testit
 #EXES += rewritersample
+
+CFLAGS += -std=c++11
 
 all: $(EXES)
 
+classvisitor.o : classvisitor.h
+globalvisitor.o : classvisitor.h
+
 %.o : %.cpp
 	$(CXX) -c $< $(CFLAGS)
+
+testit: testit.o
+	$(CXX) $< -o $@ $(LDFLAGS)
 
 classvisitor: classvisitor.o
 	$(CXX) $< -o $@ $(LDFLAGS)

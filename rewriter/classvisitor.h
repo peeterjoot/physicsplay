@@ -46,6 +46,33 @@
 using namespace clang ;
 using namespace std ;
 
+#if defined CLASSVISITOR
+#include <set>
+
+class dependencyMap
+{
+   typedef set< string > dependencyContainerType ;
+
+   dependencyContainerType m_typeDeps ;
+
+public:
+   void insert( const string & theTypeName, const string & theTypeDep )
+   {
+      // cout << theTypeName + " : " + theTypeDep << endl ;
+
+      m_typeDeps.insert( theTypeName + " : " + theTypeDep ) ;
+   }
+
+   void dump()
+   {
+      for ( auto & kv : m_typeDeps )
+      {
+         cout << kv << endl ;
+      }
+   }
+} g_depMap ;
+#endif
+
 inline QualType getQualTypeForDecl( DeclaratorDecl * f )
 {
    TypeSourceInfo * pThisFieldSourceInfo = f->getTypeSourceInfo() ;
@@ -65,12 +92,20 @@ inline QualType getQualTypeForDecl( DeclaratorDecl * f )
 // we're interested in by overriding relevant methods.
 class MyASTVisitor : public RecursiveASTVisitor<MyASTVisitor>
 {
-   CompilerInstance & ci ;
-   ASTContext &       context ;
+   CompilerInstance &            m_ci ;
+   ASTContext &                  m_context ;
+   const LangOptions &           m_lo ;
+   PrintingPolicy                m_pp ;
 
 public:
-   MyASTVisitor( CompilerInstance & ci_ ) : ci(ci_), context(ci.getASTContext())
-   {}
+   MyASTVisitor( CompilerInstance & ci_ ) :
+      m_ci( ci_ ),
+      m_context( m_ci.getASTContext() ),
+      m_lo( m_context.getLangOpts() ),
+      m_pp( m_lo )
+   {
+      m_pp.SuppressTagKeyword = 1 ;
+   }
 
 #if defined GLOBALVISITOR
    static string subMemberString( const string & prefix, const string & field )
@@ -170,12 +205,12 @@ public:
       Expr *         Init     = var->getInit() ;
       bool           IsGlobal = var->hasGlobalStorage() && !var->isStaticLocal() ;
       QualType       type     = var->getType();
-      QualType       baseType = context.getBaseElementType( type ) ;
+      QualType       baseType = m_context.getBaseElementType( type ) ;
 
       if ( !var->getDeclContext()->isDependentContext() && Init && !Init->isValueDependent() )
       {
          if ( IsGlobal && !var->isConstexpr() &&
-              !Init->isConstantInitializer( context, baseType->isReferenceType() ) )
+              !Init->isConstantInitializer( m_context, baseType->isReferenceType() ) )
          {
             if ( const CXXConstructExpr * r = dyn_cast<CXXConstructExpr>( Init ) )
             {
@@ -196,7 +231,7 @@ public:
    {
       const QualType & q = t->getUnderlyingType() ;
 
-      cout << t->getName().str() << " : " << q.getAsString() << endl ;
+      g_depMap.insert( t->getName().str(), q.getAsString( m_pp ) ) ;
 
       return true ;
    }
@@ -206,8 +241,6 @@ public:
    {
       if ( r->isThisDeclarationADefinition() )
       {
-         //cout << "VisitCXXRecordDecl:: CLASS: " << r->getName().str() << endl ;
-
          for ( CXXRecordDecl::base_class_iterator b = r->bases_begin(), e = r->bases_end() ;
                b != e ; ++b )
          {
@@ -215,11 +248,7 @@ public:
 
             const QualType & q = a.getType() ;
 
-            cout 
-               //<< "CLASS: " << r->getName().str() << " : "
-               << r->getName().str() << " : " << q.getAsString() << endl ;
-
-   //         cout << "BASE CLASS: " << q.getAsString() << endl ;
+            g_depMap.insert( r->getName().str(), q.getAsString( m_pp ) ) ;
          }
       }
 
@@ -230,18 +259,10 @@ public:
    bool VisitFieldDecl( FieldDecl * f )
    {
       RecordDecl * r = f->getParent() ;
-      const QualType & theMembersClassType = context.getRecordType( r ) ;
+      const QualType & theMembersClassType = m_context.getRecordType( r ) ;
       const QualType & thisFieldQualType = getQualTypeForDecl( f ) ;
 
-      cout 
-         << theMembersClassType.getAsString() //better than r->getName().str(), since this handles anonymous struct/class/unions too.
-         << " : " << thisFieldQualType.getAsString() << endl ;
-
-// Think this pruned the struct/union/class:
-#if 0
-      const QualType & qu = thisFieldQualType.getDesugaredType( context ) ;
-      cout << "TYPE: " << qu.getAsString() << " )" << endl ;
-#endif
+      g_depMap.insert( theMembersClassType.getAsString( m_pp ), thisFieldQualType.getAsString( m_pp ) ) ;
 
       return true ;
    }
@@ -467,6 +488,10 @@ int main( int argc, char * argv[] )
       ParseAST( preprocessor, &astConsumer, *pASTcontext ) ;
 
       pTextDiagnosticPrinter->EndSourceFile() ;
+
+      #if defined CLASSVISITOR
+         g_depMap.dump() ;
+      #endif
    }
 
    return 0 ;
