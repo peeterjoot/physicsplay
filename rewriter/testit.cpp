@@ -17,7 +17,47 @@ public:
       m_typeDeps[ theTypeName ].insert( theTypeDep ) ;
    }
 
+   void collectAllDeps( set< string > & allDeps, const string & theTypeName )
+   {
+      auto & setOfDepsForThisType = m_typeDeps[ theTypeName ] ;
+
+      for ( auto & oneDependentType : setOfDepsForThisType )
+      {
+         if ( m_typeDeps.count( oneDependentType ) )
+         {
+            collectAllDeps( allDeps, oneDependentType ) ;
+         }
+         else
+         {
+            allDeps.insert( setOfDepsForThisType.begin(), setOfDepsForThisType.end() ) ;
+         }
+      }
+   }
+
    void dump()
+   {
+      for ( auto & k : m_typeDeps )
+      {
+         cout << k.first << " : " ;
+
+         set< string > s ;
+
+         collectAllDeps( s, k.first ) ;
+
+         const char * commaOrBlank = "" ;
+
+         for ( auto & v : s )
+         {
+            cout << commaOrBlank << v ;
+
+            commaOrBlank = ", " ;
+         }
+
+         cout << endl ;
+      }
+   }
+
+   void dumpNoDeps()
    {
       for ( auto & k : m_typeDeps )
       {
@@ -48,9 +88,16 @@ int main()
    d.insert( "uu", "long long" ) ;
 
    d.insert( "qq", "int" ) ;
+   d.insert( "qq", "uu" ) ;
+   d.insert( "qq", "Test" ) ;
    d.insert( "Test", "int" ) ;
+   d.insert( "Test", "uu" ) ;
 
+   cout << "recursive:" << endl ;
    d.dump() ;
+
+   cout << "flat:" << endl ;
+   d.dumpNoDeps() ;
 
    return 0 ;
 }

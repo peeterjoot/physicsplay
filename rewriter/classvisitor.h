@@ -51,23 +51,75 @@ using namespace std ;
 
 class dependencyMap
 {
-   typedef set< string > dependencyContainerType ;
+   typedef set< string >              stringSet ;
+   typedef map< string, stringSet >   dependencyContainerType ;
 
    dependencyContainerType m_typeDeps ;
 
 public:
    void insert( const string & theTypeName, const string & theTypeDep )
    {
-      // cout << theTypeName + " : " + theTypeDep << endl ;
+      m_typeDeps[ theTypeName ].insert( theTypeDep ) ;
+   }
 
-      m_typeDeps.insert( theTypeName + " : " + theTypeDep ) ;
+   void collectAllDeps( stringSet & allDeps, const string & theTypeName )
+   {
+      auto & setOfDepsForThisType = m_typeDeps[ theTypeName ] ;
+
+      for ( auto & oneDependentType : setOfDepsForThisType )
+      {
+         if ( m_typeDeps.count( oneDependentType ) )
+         {
+            collectAllDeps( allDeps, oneDependentType ) ;
+         }
+         else
+         {
+            allDeps.insert( setOfDepsForThisType.begin(), setOfDepsForThisType.end() ) ;
+         }
+      }
    }
 
    void dump()
    {
-      for ( auto & kv : m_typeDeps )
+      for ( auto & k : m_typeDeps )
       {
-         cout << kv << endl ;
+         cout << k.first << " : " ;
+
+         stringSet s ;
+
+         collectAllDeps( s, k.first ) ;
+
+         const char * commaOrBlank = "" ;
+
+         for ( auto & v : s )
+         {
+            cout << commaOrBlank << v ;
+
+            commaOrBlank = ", " ;
+         }
+
+         cout << endl ;
+      }
+   }
+
+   void dumpNoDeps()
+   {
+      for ( auto & k : m_typeDeps )
+      {
+         cout << k.first << " : " ;
+
+         const char * commaOrBlank = "" ;
+
+         stringSet deps = m_typeDeps[ k.first ] ;
+
+         for ( auto & v : deps )
+         {
+            cout << commaOrBlank << v ;
+
+            commaOrBlank = ", " ;
+         }
+
+         cout << endl ;
       }
    }
 } g_depMap ;
@@ -226,12 +278,30 @@ public:
 #endif
 
 #if defined CLASSVISITOR
+
+   void insertIntoMap( const string & theTypeName, const QualType & q )
+   {
+      const Type * t = q.getTypePtr() ;
+
+      if ( t->isArithmeticType() ||
+           t->isPointerType() ||
+           t->isReferenceType() ||
+           0 )
+      {
+         // skip these.
+      }
+      else
+      {
+         g_depMap.insert( theTypeName, q.getAsString( m_pp ) ) ;
+      }
+   }
+
    // Find typedefs:
    bool VisitTypedefDecl( TypedefDecl * t )
    {
       const QualType & q = t->getUnderlyingType() ;
 
-      g_depMap.insert( t->getName().str(), q.getAsString( m_pp ) ) ;
+      insertIntoMap( t->getName().str(), q ) ;
 
       return true ;
    }
@@ -248,7 +318,7 @@ public:
 
             const QualType & q = a.getType() ;
 
-            g_depMap.insert( r->getName().str(), q.getAsString( m_pp ) ) ;
+            insertIntoMap( r->getName().str(), q ) ;
          }
       }
 
@@ -262,7 +332,7 @@ public:
       const QualType & theMembersClassType = m_context.getRecordType( r ) ;
       const QualType & thisFieldQualType = getQualTypeForDecl( f ) ;
 
-      g_depMap.insert( theMembersClassType.getAsString( m_pp ), thisFieldQualType.getAsString( m_pp ) ) ;
+      insertIntoMap( theMembersClassType.getAsString( m_pp ), thisFieldQualType ) ;
 
       return true ;
    }

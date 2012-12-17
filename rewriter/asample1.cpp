@@ -39,6 +39,9 @@ struct Test
    moo c ;
    Moo d ;
 
+   int * e ;
+   Moo * f ;
+
    uu umember ;
 
    blah bb[ 3 ] ;
