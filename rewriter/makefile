@@ -35,18 +35,31 @@ LDFLAGS += -lLLVMMCParser
 LDFLAGS += $(shell $(LLVM_BIN_PATH)llvm-config --libs $(LLVM_LIBS))
 
 EXES += classvisitor
+EXES += globalvisitor
+EXES += testit
 #EXES += rewritersample
 
+CFLAGS += -std=c++11
+
 all: $(EXES)
+
+classvisitor.o : classvisitor.h
+globalvisitor.o : classvisitor.h
 
 %.o : %.cpp
 	$(CXX) -c $< $(CFLAGS)
 
-rewritersample: rewritersample.o
-	$(CXX) rewritersample.o -o rewritersample $(LDFLAGS)
+testit: testit.o
+	$(CXX) $< -o $@ $(LDFLAGS)
 
 classvisitor: classvisitor.o
-	$(CXX) classvisitor.o -o classvisitor $(LDFLAGS)
+	$(CXX) $< -o $@ $(LDFLAGS)
+
+globalvisitor: globalvisitor.o
+	$(CXX) $< -o $@ $(LDFLAGS)
+
+rewritersample: rewritersample.o
+	$(CXX) $< -o $@ $(LDFLAGS)
 
 clean:
-	rm -rf *.o *.ll classvisitor 
+	rm -rf *.o *.ll classvisitor globalvisitor rewritersample
