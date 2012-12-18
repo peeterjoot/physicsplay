@@ -59,7 +59,11 @@ notes/phy456/
 
 notes/phy485/
 
-   (in progress) Class notes and problems from 'Modern Optics', taught by Prof. Joseph Thywissen.
+   Class notes and problems from 'Advanced Classical Mechanics', taught by Prof. Joseph Thywissen.
+
+notes/phy452/
+
+   Class notes and problems from 'Basic Statistical Mechanics', taught by Prof. Arun Paramekanti.
 
 sym/
 
