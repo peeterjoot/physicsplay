@@ -6,8 +6,8 @@ typedef struct foo
 
 typedef struct Foo
 {
-   unsigned char m;                        
-   unsigned char n;                        
+   unsigned char m[2][3];                        
+   unsigned char n[2];
 } bar;
 
 typedef Foo moo ;

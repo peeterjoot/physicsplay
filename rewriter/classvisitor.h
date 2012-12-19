@@ -143,10 +143,17 @@ inline QualType getQualTypeForDecl( DeclaratorDecl * f )
    TypeLoc thisFieldTypeLoc = pThisFieldSourceInfo->getTypeLoc() ;
 
    // don't care if it's an array, just want the basic underlying type of the array.
-   if ( const ArrayTypeLoc * pTypeLocIfArray = dyn_cast<ArrayTypeLoc>( &thisFieldTypeLoc ) )
+   for ( ; ; )
    {
-      thisFieldTypeLoc = pTypeLocIfArray->getElementLoc() ;
-   }
+      if ( const ArrayTypeLoc * pTypeLocIfArray = dyn_cast<ArrayTypeLoc>( &thisFieldTypeLoc ) )
+      {
+         thisFieldTypeLoc = pTypeLocIfArray->getElementLoc() ;
+      }
+      else
+      {
+         break ;
+      }
+   } 
 
    return thisFieldTypeLoc.getType() ;
 }
@@ -290,6 +297,7 @@ public:
 
    void insertIntoMap( const string & theTypeName, const QualType & q, const string * const pAsString = NULL )
    {
+#if 1
       const Type * t = q.getTypePtr() ;
 
       if ( t->isArithmeticType() ||
@@ -299,7 +307,9 @@ public:
       {
          // skip these.
       }
-      else if ( pAsString )
+      else 
+#endif
+         if ( pAsString )
       {
          g_depMap.insert( theTypeName, *pAsString ) ;
       }
@@ -310,30 +320,44 @@ public:
    }
 
    // Find typedefs:
-   bool VisitTypedefDecl( TypedefDecl * t )
+   bool VisitTypedefDecl( TypedefDecl * dtDecl )
    {
-      const QualType & q = t->getUnderlyingType() ;
+      const QualType &  qtUnderLying         = dtDecl->getUnderlyingType() ;
+      const Type *      tUnderlying          = qtUnderLying.getTypePtr() ;
+      string            theUnderlyingType    = qtUnderLying.getAsString( ) ;
+      string            typeDefinitionName   = dtDecl->getName().str() ;
+      string *          pName                = NULL ;
 
-      const Type * tt = q.getTypePtr() ;
-      string theUnderlyingType = q.getAsString( ) ;
-      string typeDefinitionName = t->getName().str() ;
-      string * pName = NULL ;
+#if 0
+      if ( const RecordType * r = dyn_cast<RecordType>( tUnderlying ) )
+      {
+cout << "RecordType: " << typeDefinitionName << ","<< theUnderlyingType << ":" << r->getDecl()->getName().str() << endl ;
+#if 0
+         theUnderlyingType = r->getDecl()->getName().str() ;
+         pName = &theUnderlyingType ;
+#endif
+      }
+#endif
 
-      if ( tt->isStructureType() && (("struct " + typeDefinitionName) == theUnderlyingType ) )
+      if ( tUnderlying->isStructureType() )
       {
-         pName = &typeDefinitionName ;
+         theUnderlyingType = theUnderlyingType.substr(strlen("struct ")) ;
+         pName = &theUnderlyingType ;
       }
-      else if ( tt->isClassType() && (("class " + typeDefinitionName) == theUnderlyingType ) )
+      else if ( tUnderlying->isClassType() )
       {
-         pName = &typeDefinitionName ;
+         theUnderlyingType = theUnderlyingType.substr(strlen("class ")) ;
+         pName = &theUnderlyingType ;
       }
-      else if ( tt->isUnionType() && (("union " + typeDefinitionName) == theUnderlyingType ) )
+      else if ( tUnderlying->isUnionType() )
       {
-         pName = &typeDefinitionName ;
+         theUnderlyingType = theUnderlyingType.substr(strlen("union ")) ;
+         pName = &theUnderlyingType ;
       }
-      else
+
+      if ( typeDefinitionName != theUnderlyingType )
       {
-         insertIntoMap( typeDefinitionName, q, pName ) ;
+         insertIntoMap( typeDefinitionName, qtUnderLying, pName ) ;
       }
 
       return true ;
