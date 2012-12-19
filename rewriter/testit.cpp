@@ -1,3 +1,87 @@
+#include <iostream>
+#include <string>
+#include <regex>
+
+using namespace std ;
+
+int main()
+{
+   // This should match any word
+   regex word("[[:alpha:]]+");
+   string input = "hi 7 bye" ;
+
+   // Replace with an empty string
+   const string format = "" ;
+
+   string clean_words = regex_replace( input, word, format, regex_constants::format_default ) ;
+   cout << clean_words << endl ;
+
+   return 0 ;
+}
+
+#if 0
+int main()
+{
+   regex tag( "(class )" ) ;
+   const string format = "" ;
+   const string input = "class foo" ;
+
+//   regex_constants::ECMAScript
+   string r = regex_replace( input, tag, format, regex_constants::format_no_copy | regex_constants::ECMAScript) ;
+   cout << input << " -> " << r << endl ;
+
+   r = regex_replace( input, tag, format ) ;
+   cout << input << " -> " << r << endl ;
+
+   return 0 ;
+}
+#elif 0
+int main()
+{
+   //regex tag( "^(class|struct|union) ") ; 
+   regex tag( "class " ) ;
+
+   const string inputs[] = 
+   {
+      "struct foo",
+      "class foo",
+      " class foo",
+      "union foo",
+   } ;
+
+   const string format = "" ;
+
+
+   return 0 ;
+}
+#elif 0
+int main()
+{
+   //regex tag( "^(class|struct|union) ") ; 
+   regex tag( "class " ) ;
+
+   const string inputs[] = 
+   {
+      "struct foo",
+      "class foo",
+      " class foo",
+      "union foo",
+   } ;
+
+   const string format = "" ;
+
+   for ( auto & v : inputs )
+   {
+      string r = regex_replace( v, tag, format, regex_constants::format_default ) ;
+
+      cout << v << " -> " << r << endl ;
+   }
+
+   return 0 ;
+}
+#endif
+
+#if 0
 #include <map>
 #include <set>
 #include <string>
@@ -101,6 +185,7 @@ int main()
 
    return 0 ;
 }
+#endif
 
 #if 0
 void foo()

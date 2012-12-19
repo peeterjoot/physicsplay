@@ -79,7 +79,7 @@ public:
       }
    }
 
-   void dump()
+   void dump( )
    {
       for ( auto & k : m_typeDeps )
       {
@@ -99,6 +99,17 @@ public:
          }
 
          cout << endl ;
+      }
+   }
+
+   void dumpJustDeps( )
+   {
+      for ( auto & k : m_typeDeps )
+      {
+         for ( auto & v : m_typeDeps[ k.first ] )
+         {
+            cout << v << endl ;
+         }
       }
    }
 
@@ -277,7 +288,7 @@ public:
 
 #if defined CLASSVISITOR
 
-   void insertIntoMap( const string & theTypeName, const QualType & q )
+   void insertIntoMap( const string & theTypeName, const QualType & q, const string * const pAsString = NULL )
    {
       const Type * t = q.getTypePtr() ;
 
@@ -287,6 +298,10 @@ public:
            0 )
       {
          // skip these.
+      }
+      else if ( pAsString )
+      {
+         g_depMap.insert( theTypeName, *pAsString ) ;
       }
       else
       {
@@ -299,7 +314,27 @@ public:
    {
       const QualType & q = t->getUnderlyingType() ;
 
-      insertIntoMap( t->getName().str(), q ) ;
+      const Type * tt = q.getTypePtr() ;
+      string theUnderlyingType = q.getAsString( ) ;
+      string typeDefinitionName = t->getName().str() ;
+      string * pName = NULL ;
+
+      if ( tt->isStructureType() && (("struct " + typeDefinitionName) == theUnderlyingType ) )
+      {
+         pName = &typeDefinitionName ;
+      }
+      else if ( tt->isClassType() && (("class " + typeDefinitionName) == theUnderlyingType ) )
+      {
+         pName = &typeDefinitionName ;
+      }
+      else if ( tt->isUnionType() && (("union " + typeDefinitionName) == theUnderlyingType ) )
+      {
+         pName = &typeDefinitionName ;
+      }
+      else
+      {
+         insertIntoMap( typeDefinitionName, q, pName ) ;
+      }
 
       return true ;
    }
@@ -328,7 +363,7 @@ public:
    {
       RecordDecl * r = f->getParent() ;
       const QualType & theMembersClassType = m_context.getRecordType( r ) ;
-      const QualType & thisFieldQualType = getQualTypeForDecl( f ) ;
+      const QualType & thisFieldQualType = getQualTypeForDecl( f ).getDesugaredType( m_context ) ;
 
       insertIntoMap( theMembersClassType.getAsString( m_pp ), thisFieldQualType ) ;
 
