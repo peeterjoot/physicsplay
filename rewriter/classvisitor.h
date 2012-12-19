@@ -338,6 +338,15 @@ cout << "RecordType: " << typeDefinitionName << ","<< theUnderlyingType << ":" <
 #endif
       }
 #endif
+#if 0
+      if ( const ParenType * r = dyn_cast<ParenType>( tUnderlying ) )
+      {
+         const QualType & qq = r->desugar() ;
+cout << "ParenType: " << typeDefinitionName << ","<< theUnderlyingType 
+   //<< ":" << r->getName().str() 
+   << ":" << qq.getAsString( m_pp ) << endl ;
+      }
+#endif
 
       if ( tUnderlying->isStructureType() )
       {
@@ -447,6 +456,10 @@ int main( int argc, char * argv[] )
 
    llvm::IntrusiveRefCntPtr<PreprocessorOptions> pOpts( new PreprocessorOptions() ) ;
    llvm::IntrusiveRefCntPtr<HeaderSearchOptions> headerSearchOptions( new HeaderSearchOptions() ) ;
+
+// true by default.  Didn't help:
+//   headerSearchOptions->UseStandardSystemIncludes = 1 ;
+//   headerSearchOptions->UseStandardCXXIncludes = 1 ;
 
    for ( ; c != EOF ; )
    {
