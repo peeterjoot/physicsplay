@@ -1,3 +1,4 @@
+#CFLAGS += -ferror-limit=200
 CFLAGS += -g
 LLVM_LIBS := core mc
 
@@ -38,7 +39,8 @@ EXES += classvisitor
 EXES += globalvisitor
 EXES += rewriter
 EXES += testit
-#EXES += rewritersample
+EXES += dumper
+CLEAN_EXES += rewritersample
 
 CFLAGS += -std=c++11
 
@@ -47,11 +49,15 @@ all: $(EXES)
 classvisitor.o : classvisitor.h visitor.h isystem.h
 globalvisitor.o : classvisitor.h globalcons.h isystem.h
 rewriter.o : classvisitor.h rewriter.h isystem.h
+dumper.o : classvisitor.h dumper.h isystem.h
 
 %.o : %.cpp
 	$(CXX) -c $< $(CFLAGS)
 
 testit: testit.o
+	$(CXX) $< -o $@ $(LDFLAGS)
+
+dumper: dumper.o
 	$(CXX) $< -o $@ $(LDFLAGS)
 
 classvisitor: classvisitor.o
@@ -70,4 +76,4 @@ isystem.h : isystem.pl
 	$< $(CXX) > $@
 
 clean:
-	rm -rf *.o *.ll classvisitor globalvisitor rewritersample rewriter isystem.h
+	rm -rf *.o *.ll $(EXES) $(CLEAN_EXES) isystem.h

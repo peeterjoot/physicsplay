@@ -191,6 +191,10 @@ public:
 #if defined REWRITER
    #include "rewriter.h"
 #endif
+
+#if defined DUMPER
+   #include "dumper.h"
+#endif
 } ;
 
 // Implementation of the ASTConsumer interface for reading an AST produced
@@ -246,48 +250,6 @@ int main( int argc, char * argv[] )
    llvm::IntrusiveRefCntPtr<HeaderSearchOptions> headerSearchOptions( new HeaderSearchOptions() ) ;
 
    #include "isystem.h"
-
-#if 0
-   string externCsystemPaths[] =
-   { 
-       "/include"
-      ,"/usr/include"
-//      ,"/usr/include/linux"
-   } ;
-
-   string systemPaths[] =
-   { 
-       "/home/peeterj/clang/optimized/lib/gcc/x86_64-unknown-linux-gnu/4.7.2/../../../../include/c++/4.7.2/tr1"
-      ,"/home/peeterj/clang/optimized/lib/gcc/x86_64-unknown-linux-gnu/4.7.2/../../../../include/c++/4.7.2"
-      ,"/home/peeterj/clang/optimized/lib/gcc/x86_64-unknown-linux-gnu/4.7.2/../../../../include/c++/4.7.2/x86_64-unknown-linux-gnu"
-      ,"/home/peeterj/clang/optimized/lib/gcc/x86_64-unknown-linux-gnu/4.7.2/../../../../include/c++/4.7.2/backward"
-//      ,"/home/peeterj/clang/optimized/lib/gcc/x86_64-unknown-linux-gnu/4.7.2/../../../../include/c++/4.7.2/parallel"
-      ,"/usr/local/include"
-      ,"/home/peeterj/clang/optimized/bin/../lib/clang/3.3/include"
-   } ;
-
-   for ( auto & s : systemPaths )
-   {
-      headerSearchOptions->AddPath( s,
-                                    clang::frontend::Angled,
-                                    false, // IsUserSupplied
-                                    false, // IsFramework
-                                    false, // IgnoreSysRoot
-                                    true, // IsInternal
-                                    false ) ; // ImplicitExternC
-   }
-
-   for ( auto & s : systemPaths )
-   {
-      headerSearchOptions->AddPath( s,
-                                    clang::frontend::Angled,
-                                    false, // IsUserSupplied
-                                    false, // IsFramework
-                                    false, // IgnoreSysRoot
-                                    true, // IsInternal
-                                    true ) ; // ImplicitExternC
-   }
-#endif
 
    for ( ; c != EOF ; )
    {
@@ -381,11 +343,13 @@ int main( int argc, char * argv[] )
    LangOptions languageOptions ;
 
    // Allow C++ code (https://github.com/loarabia/Clang-tutorial/blob/master/CIrewriter.cpp)
-   languageOptions.GNUMode = 1 ;
-   languageOptions.CXXExceptions = 1 ;
-   languageOptions.RTTI = 1 ;
-   languageOptions.Bool = 1 ;
-   languageOptions.CPlusPlus = 1 ;
+   languageOptions.GNUMode          = 1 ;
+   languageOptions.CXXExceptions    = 1 ;
+   languageOptions.RTTI             = 1 ;
+   languageOptions.Bool             = 1 ;
+   languageOptions.CPlusPlus        = 1 ;
+   languageOptions.WChar            = 1 ; // stdlib.h and friends want wchar_t to be defined by the compiler in C++ mode.
+   //languageOptions.NoBuiltin        = 0 ;
 
    FileSystemOptions fileSystemOptions ;
 
@@ -445,6 +409,7 @@ int main( int argc, char * argv[] )
       Builtin::Context builtinContext ;
 
       builtinContext.InitializeTarget( *pTargetInfo ) ;
+      //builtinContext.InitializeBuiltins( identifierTable, languageOptions ) ;
 
       ASTContext * pASTcontext = new ASTContext( languageOptions,
                                                  sourceManager,

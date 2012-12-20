@@ -1,3 +1,7 @@
+#if !defined linux
+#error blah
+blah
+#endif
 #include <stdlib.h>
 
 typedef struct foo                      
@@ -28,9 +32,13 @@ void infinite( int z, int y, int x = 0 )
 #define SQLT_CFG 0
 #define SQLT_cfgReadDcsDirectory 0
 void sqlt_fnc_entry( int, int ) ;
+void sqlt_fnc_entry2( int, int ) ;
+#define mm_sqlt_fnc_entry( x, y ) sqlt_fnc_entry2( x, y )
 void iicall( int z, int y, int x = 0 )
 {
-sqlt_fnc_entry( SQLT_CFG, SQLT_cfgReadDcsDirectory );
+   sqlt_fnc_entry( SQLT_CFG, SQLT_cfgReadDcsDirectory ) ;
+
+   mm_sqlt_fnc_entry( SQLT_CFG, SQLT_cfgReadDcsDirectory ) ;
 
    if ( 1 )
    {
