@@ -44,9 +44,9 @@ CFLAGS += -std=c++11
 
 all: $(EXES)
 
-classvisitor.o : classvisitor.h visitor.h
-globalvisitor.o : classvisitor.h globalcons.h
-rewriter.o : classvisitor.h rewriter.h
+classvisitor.o : classvisitor.h visitor.h isystem.h
+globalvisitor.o : classvisitor.h globalcons.h isystem.h
+rewriter.o : classvisitor.h rewriter.h isystem.h
 
 %.o : %.cpp
 	$(CXX) -c $< $(CFLAGS)
@@ -66,8 +66,8 @@ globalvisitor: globalvisitor.o
 rewritersample: rewritersample.o
 	$(CXX) $< -o $@ $(LDFLAGS)
 
-empty.o : empty.cpp
-	$(CXX) '-###' -c empty.cpp 2>&1 | tr ' ' '\n' | grep -A1 isystem
+isystem.h : isystem.pl
+	$< $(CXX) > $@
 
 clean:
-	rm -rf *.o *.ll classvisitor globalvisitor rewritersample
+	rm -rf *.o *.ll classvisitor globalvisitor rewritersample rewriter isystem.h

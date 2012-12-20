@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "asample1.h"
 
 struct blah

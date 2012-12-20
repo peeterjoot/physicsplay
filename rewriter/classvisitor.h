@@ -245,9 +245,49 @@ int main( int argc, char * argv[] )
    llvm::IntrusiveRefCntPtr<PreprocessorOptions> pOpts( new PreprocessorOptions() ) ;
    llvm::IntrusiveRefCntPtr<HeaderSearchOptions> headerSearchOptions( new HeaderSearchOptions() ) ;
 
-// true by default.  Didn't help:
-//   headerSearchOptions->UseStandardSystemIncludes = 1 ;
-//   headerSearchOptions->UseStandardCXXIncludes = 1 ;
+   #include "isystem.h"
+
+#if 0
+   string externCsystemPaths[] =
+   { 
+       "/include"
+      ,"/usr/include"
+//      ,"/usr/include/linux"
+   } ;
+
+   string systemPaths[] =
+   { 
+       "/home/peeterj/clang/optimized/lib/gcc/x86_64-unknown-linux-gnu/4.7.2/../../../../include/c++/4.7.2/tr1"
+      ,"/home/peeterj/clang/optimized/lib/gcc/x86_64-unknown-linux-gnu/4.7.2/../../../../include/c++/4.7.2"
+      ,"/home/peeterj/clang/optimized/lib/gcc/x86_64-unknown-linux-gnu/4.7.2/../../../../include/c++/4.7.2/x86_64-unknown-linux-gnu"
+      ,"/home/peeterj/clang/optimized/lib/gcc/x86_64-unknown-linux-gnu/4.7.2/../../../../include/c++/4.7.2/backward"
+//      ,"/home/peeterj/clang/optimized/lib/gcc/x86_64-unknown-linux-gnu/4.7.2/../../../../include/c++/4.7.2/parallel"
+      ,"/usr/local/include"
+      ,"/home/peeterj/clang/optimized/bin/../lib/clang/3.3/include"
+   } ;
+
+   for ( auto & s : systemPaths )
+   {
+      headerSearchOptions->AddPath( s,
+                                    clang::frontend::Angled,
+                                    false, // IsUserSupplied
+                                    false, // IsFramework
+                                    false, // IgnoreSysRoot
+                                    true, // IsInternal
+                                    false ) ; // ImplicitExternC
+   }
+
+   for ( auto & s : systemPaths )
+   {
+      headerSearchOptions->AddPath( s,
+                                    clang::frontend::Angled,
+                                    false, // IsUserSupplied
+                                    false, // IsFramework
+                                    false, // IgnoreSysRoot
+                                    true, // IsInternal
+                                    true ) ; // ImplicitExternC
+   }
+#endif
 
    for ( ; c != EOF ; )
    {
@@ -319,20 +359,6 @@ int main( int argc, char * argv[] )
          }
       }
    }
-
-#if 0
-   // hack attempt:
-   string systemPaths[] = { "/usr/include", "/usr/include/linux", "/usr/include/asm", "/home/peeterj/clang/optimized/lib/clang/3.3/include" } ;
-
-   for ( auto & s : systemPaths )
-   {
-      headerSearchOptions->AddPath( s,
-                                    clang::frontend::Angled,
-                                    false,
-                                    false,
-                                    false ) ;
-   }
-#endif
 
    if ( optind != (argc - 1) )
    {

@@ -1,5 +1,5 @@
 #echo // asample1.cpp
-#./classvisitor -Iinc -Dfoodef -Dbardef=2 asample1.cpp
+./classvisitor -Iinc -Dfoodef -Dbardef=2 asample1.cpp
 #echo 
 #echo 
 #echo 
@@ -28,9 +28,9 @@
 #echo 
 #./classvisitor -I./inc asample1.cpp
 #./classvisitor -I`pwd`/inc asample1.cpp
-echo // asample5.cpp
-cp asample5.cpp retest.cpp
-./rewriter retest.cpp
-diff -up asample5.cpp retest.cpp
-echo 
-echo 
+#echo // asample5.cpp
+#cp asample5.cpp retest.cpp
+#./rewriter retest.cpp
+#diff -up asample5.cpp retest.cpp
+#echo 
+#echo 
