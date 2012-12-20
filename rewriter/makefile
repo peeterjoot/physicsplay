@@ -36,6 +36,7 @@ LDFLAGS += $(shell $(LLVM_BIN_PATH)llvm-config --libs $(LLVM_LIBS))
 
 EXES += classvisitor
 EXES += globalvisitor
+EXES += rewriter
 EXES += testit
 #EXES += rewritersample
 
@@ -43,8 +44,9 @@ CFLAGS += -std=c++11
 
 all: $(EXES)
 
-classvisitor.o : classvisitor.h
-globalvisitor.o : classvisitor.h
+classvisitor.o : classvisitor.h visitor.h
+globalvisitor.o : classvisitor.h globalcons.h
+rewriter.o : classvisitor.h rewriter.h
 
 %.o : %.cpp
 	$(CXX) -c $< $(CFLAGS)
@@ -55,11 +57,17 @@ testit: testit.o
 classvisitor: classvisitor.o
 	$(CXX) $< -o $@ $(LDFLAGS)
 
+rewriter: rewriter.o
+	$(CXX) $< -o $@ $(LDFLAGS)
+
 globalvisitor: globalvisitor.o
 	$(CXX) $< -o $@ $(LDFLAGS)
 
 rewritersample: rewritersample.o
 	$(CXX) $< -o $@ $(LDFLAGS)
+
+empty.o : empty.cpp
+	$(CXX) '-###' -c empty.cpp 2>&1 | tr ' ' '\n' | grep -A1 isystem
 
 clean:
 	rm -rf *.o *.ll classvisitor globalvisitor rewritersample

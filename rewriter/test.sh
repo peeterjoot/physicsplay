@@ -21,10 +21,16 @@
 #echo 
 #echo 
 #echo 
-
-echo // asample5.cpp
-./classvisitor asample5.cpp
-echo 
-echo 
+#
+#echo // asample5.cpp
+#./classvisitor asample5.cpp
+#echo 
+#echo 
 #./classvisitor -I./inc asample1.cpp
 #./classvisitor -I`pwd`/inc asample1.cpp
+echo // asample5.cpp
+cp asample5.cpp retest.cpp
+./rewriter retest.cpp
+diff -up asample5.cpp retest.cpp
+echo 
+echo 
