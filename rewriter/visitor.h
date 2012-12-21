@@ -1,6 +1,6 @@
 void insertIntoMap( const string & theTypeName, const QualType & q, const string * const pAsString = NULL )
 {
-#if 1
+#if 0
    const Type * t = q.getTypePtr() ;
 
    if ( t->isArithmeticType() ||
@@ -22,34 +22,33 @@ void insertIntoMap( const string & theTypeName, const QualType & q, const string
    }
 }
 
+static QualType returnUnderlyingTypeIfArray( QualType q )
+{
+   const Type *   tUnderlying = q.getTypePtr() ;
+
+   if ( tUnderlying->isArrayType() )
+   {
+      while ( tUnderlying->isArrayType() )
+      {
+         //tUnderlying->dump() ;
+
+         tUnderlying = tUnderlying->getBaseElementTypeUnsafe() ;
+      }
+
+      q = tUnderlying->getLocallyUnqualifiedSingleStepDesugaredType() ;
+   }
+
+   return q ;
+}
+
 // Find typedefs:
 bool VisitTypedefDecl( TypedefDecl * dtDecl )
 {
-   const QualType &  qtUnderLying         = dtDecl->getUnderlyingType() ;
-   const Type *      tUnderlying          = qtUnderLying.getTypePtr() ;
-   string            theUnderlyingType    = qtUnderLying.getAsString( ) ;
-   string            typeDefinitionName   = dtDecl->getName().str() ;
-   string *          pName                = NULL ;
-
-#if 0
-   if ( const RecordType * r = dyn_cast<RecordType>( tUnderlying ) )
-   {
-cout << "RecordType: " << typeDefinitionName << ","<< theUnderlyingType << ":" << r->getDecl()->getName().str() << endl ;
-#if 0
-      theUnderlyingType = r->getDecl()->getName().str() ;
-      pName = &theUnderlyingType ;
-#endif
-   }
-#endif
-#if 0
-   if ( const ParenType * r = dyn_cast<ParenType>( tUnderlying ) )
-   {
-      const QualType & qq = r->desugar() ;
-cout << "ParenType: " << typeDefinitionName << ","<< theUnderlyingType 
-//<< ":" << r->getName().str() 
-<< ":" << qq.getAsString( m_pp ) << endl ;
-   }
-#endif
+   QualType       qtUnderLying         = returnUnderlyingTypeIfArray( dtDecl->getUnderlyingType() ) ;
+   const Type *   tUnderlying          = qtUnderLying.getTypePtr() ;
+   string         theUnderlyingType    = qtUnderLying.getAsString( ) ;
+   string         typeDefinitionName   = dtDecl->getName().str() ;
+   string *       pName                = NULL ;
 
    if ( tUnderlying->isStructureType() )
    {
@@ -99,7 +98,7 @@ bool VisitFieldDecl( FieldDecl * f )
 {
    RecordDecl * r = f->getParent() ;
    const QualType & theMembersClassType = m_context.getRecordType( r ) ;
-   const QualType & thisFieldQualType = getQualTypeForDecl( f ).getDesugaredType( m_context ) ;
+   const QualType & thisFieldQualType = returnUnderlyingTypeIfArray( getQualTypeForDecl( f ).getDesugaredType( m_context ) ) ;
 
    insertIntoMap( theMembersClassType.getAsString( m_pp ), thisFieldQualType ) ;
 
