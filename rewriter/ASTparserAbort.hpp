@@ -1,6 +1,7 @@
 static inline unsigned int ecfGetComponentIndex( unsigned int id ) { return ( ( id & 255 ) >> 19 ) ; }
 
-#define OSS_HINT_MARK_BRANCH_UNLIKELY(x) __builtin_expect((x),0)
+#define OSS_HINT_MARK_BRANCH_UNLIKELY(x) (x)
+#define OSS_HINT_MARK_BASIC_BLOCK_INFREQUENT
 
 extern "C"  unsigned long g_sqltCompTraceFlags[230+1] ;
 
