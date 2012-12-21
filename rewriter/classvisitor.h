@@ -249,6 +249,40 @@ int main( int argc, char * argv[] )
    llvm::IntrusiveRefCntPtr<PreprocessorOptions> pOpts( new PreprocessorOptions() ) ;
    llvm::IntrusiveRefCntPtr<HeaderSearchOptions> headerSearchOptions( new HeaderSearchOptions() ) ;
 
+// 
+// This handles the issues with <stdlib.h> not found ... and so forth.  However, it introduces problems with various __builtin... not found.
+// Those builtins not found also appear to be able to trigger an assert in the parser:
+//
+//    /view/peeterj_clang-9/vbs/engn/include/trcbase.h:488:32: note: expanded from macro 'sqlt_tmp_entry'
+//       #define sqlt_tmp_entry      sqlt_fnc_entry
+//                                   ^
+//    /view/peeterj_clang-9/vbs/engn/include/trcbase.h:393:7: note: expanded from macro 'sqlt_fnc_entry'
+//          HOOK_INTO_OLD_TRACE_ENTRY(fnc) ;                                     \
+//          ^
+//    /view/peeterj_clang-9/vbs/engn/pd/inc/pdtraceapi.h:467:4: note: expanded from macro 'HOOK_INTO_OLD_TRACE_ENTRY'
+//       TRACE_ENTRY_DEBUG_HOOK( _ecfID );      \
+//       ^
+//    /view/peeterj_clang-9/vbs/engn/pd/inc/pdtraceapi.h:444:4: note: expanded from macro 'TRACE_ENTRY_DEBUG_HOOK'
+//       IF_TRACE_AND_DEBUG_HOOK \
+//       ^
+//    /view/peeterj_clang-9/vbs/engn/pd/inc/pdtraceapi.h:434:38: note: expanded from macro 'IF_TRACE_AND_DEBUG_HOOK'
+//    #define IF_TRACE_AND_DEBUG_HOOK if ( OSS_HINT_MARK_BRANCH_UNLIKELY(pdTraceLocalFlag & PD_FLAG_DEBUG_HOOK))
+//                                         ^
+//    /view/peeterj_clang-9/vbs/common/osse/core/inc/osscompilerhints.h:77:46: note: expanded from macro 'OSS_HINT_MARK_BRANCH_UNLIKELY'
+//        #define OSS_HINT_MARK_BRANCH_UNLIKELY(x) __builtin_expect((x),0)
+//                                                 ^
+//    /vbs/engn/include/sqlowlst_inlines.h:48:10: warning: expression result unused
+//    classvisitor: /home/peeterj/clang/sources/llvm/tools/clang/lib/Basic/SourceManager.cpp:950: std::pair<clang::SourceLocation, clang::SourceLocation> clang::SourceManager::getImmediateExpansionRange(clang::SourceLocation) const: Assertion `Loc.isMacroID() && "Not a macro expansion loc!"' failed.
+//    Stack dump:
+//    0.      /vbs/engn/include/sqlowlst_inlines.h:48:10 <Spelling=/view/peeterj_clang-9/vbs/engn/include/trcbase.h:393:38>: current parser token ';'
+//    1.      /vbs/engn/include/sqlowlst_inlines.h:47:7: parsing function body 'semaphoreOp'
+//    2.      /vbs/engn/include/sqlowlst_inlines.h:47:7: in compound statement ('{}')
+//    3.      /vbs/engn/include/sqlowlst_inlines.h:48:10 <Spelling=/view/peeterj_clang-9/vbs/engn/include/trcbase.h:391:4>: in compound statement ('{}')
+//    4.      /vbs/engn/include/sqlowlst_inlines.h:48:10 <Spelling=/view/peeterj_clang-9/vbs/engn/pd/inc/pdtraceapi.h:464:43>: in compound statement ('{}')
+//    Aborted
+//
+// Should report this, but producing a standalone fragment to reproduce this is tricky.
+//
    #include "isystem.h"
 
    for ( ; c != EOF ; )
