@@ -65,6 +65,11 @@ bool VisitTypedefDecl( TypedefDecl * dtDecl )
       theUnderlyingType = theUnderlyingType.substr(strlen("union ")) ;
       pName = &theUnderlyingType ;
    }
+   else if ( tUnderlying->isEnumeralType() )
+   {
+      theUnderlyingType = theUnderlyingType.substr(strlen("enum ")) ;
+      pName = &theUnderlyingType ;
+   }
 
    if ( typeDefinitionName != theUnderlyingType )
    {
