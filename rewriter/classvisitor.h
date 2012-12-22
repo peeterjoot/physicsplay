@@ -42,6 +42,10 @@
 #include "clang/Lex/HeaderSearch.h"
 #include "clang/AST/ASTContext.h"
 #include "clang/Frontend/Utils.h" // InitializePreprocessor
+#include "clang/Rewrite/Core/Rewriter.h"
+#if defined REWRITER
+   #include <sstream>
+#endif
 
 using namespace clang ;
 using namespace std ;
@@ -79,7 +83,7 @@ public:
       }
    }
 
-   void dump()
+   void dump( )
    {
       for ( auto & k : m_typeDeps )
       {
@@ -99,6 +103,17 @@ public:
          }
 
          cout << endl ;
+      }
+   }
+
+   void dumpJustDeps( )
+   {
+      for ( auto & k : m_typeDeps )
+      {
+         for ( auto & v : m_typeDeps[ k.first ] )
+         {
+            cout << v << endl ;
+         }
       }
    }
 
@@ -132,10 +147,17 @@ inline QualType getQualTypeForDecl( DeclaratorDecl * f )
    TypeLoc thisFieldTypeLoc = pThisFieldSourceInfo->getTypeLoc() ;
 
    // don't care if it's an array, just want the basic underlying type of the array.
-   if ( const ArrayTypeLoc * pTypeLocIfArray = dyn_cast<ArrayTypeLoc>( &thisFieldTypeLoc ) )
+   for ( ; ; )
    {
-      thisFieldTypeLoc = pTypeLocIfArray->getElementLoc() ;
-   }
+      if ( const ArrayTypeLoc * pTypeLocIfArray = dyn_cast<ArrayTypeLoc>( &thisFieldTypeLoc ) )
+      {
+         thisFieldTypeLoc = pTypeLocIfArray->getElementLoc() ;
+      }
+      else
+      {
+         break ;
+      }
+   } 
 
    return thisFieldTypeLoc.getType() ;
 }
@@ -147,193 +169,31 @@ class MyASTVisitor : public RecursiveASTVisitor<MyASTVisitor>
    CompilerInstance &            m_ci ;
    ASTContext &                  m_context ;
    PrintingPolicy                m_pp ;
-
+   Rewriter &                    m_re ;
 public:
-   MyASTVisitor( CompilerInstance & ci_ ) :
+   MyASTVisitor( CompilerInstance & ci_, Rewriter & re ) :
       m_ci( ci_ ),
       m_context( m_ci.getASTContext() ),
-      m_pp( m_context.getLangOpts() )
+      m_pp( m_context.getLangOpts() ),
+      m_re( re )
    {
       m_pp.SuppressTagKeyword = 1 ;
    }
 
 #if defined GLOBALVISITOR
-   static string subMemberString( const string & prefix, const string & field )
-   {
-      string s = prefix ;
-
-      if ( "" != prefix )
-      {
-         s += "." ;
-      }
-
-      s += field ;
-
-      return s ;
-   }
-
-   // 
-   // 1.  Look at the constructor: getConstructor().
-   // 2.  Check whether it's a implicitly-defined default constructor: isDefaultConstructor(), isImplicitlyDefined().  If not, you've found your problem right there.
-   // 3.  Iterate over the initializers: init_begin(), init_end().
-   // 4.  I believe the expression for each initializer should always be a CXXConstructExpr.  Recurse.
-   //
-   void recurseOverConstructorDecls( CXXConstructorDecl * c, string subobject )
-   {
-      for ( CXXConstructorDecl::init_iterator b = c->init_begin(), e = c->init_end() ;
-            b != e ; ++b )
-      {
-         CXXCtorInitializer *    i        = *b ;
-         FieldDecl *             f        = i->getMember() ;
-         Expr *                  Init     = i->getInit() ;
-         string                  subfield = subMemberString( subobject, f->getName().str() ) ;
-
-         const QualType &        ftype    = getQualTypeForDecl( f ) ; // type of the field.  Now check if that type has a constructor.
-
-         if ( const CXXConstructExpr * r = dyn_cast<CXXConstructExpr>( Init ) )
-         {
-            CXXConstructorDecl * cInner   = r->getConstructor() ;
-            CXXRecordDecl *      frec     = ftype->getAsCXXRecordDecl() ;
-
-#if 0
-            if ( frec->hasDefaultConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasDefaultConstructor" << endl ; }
-            if ( frec->hasConstCopyConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasConstCopyConstructor" << endl ; }
-            if ( frec->hasUserDeclaredConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasUserDeclaredConstructor" << endl ; }
-            if ( frec->hasUserProvidedDefaultConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasUserProvidedDefaultConstructor" << endl ; }
-            if ( frec->hasUserDeclaredCopyConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasUserDeclaredCopyConstructor" << endl ; }
-            if ( frec->hasCopyConstructorWithConstParam() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasCopyConstructorWithConstParam" << endl ; }
-            if ( frec->hasMoveConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasMoveConstructor" << endl ; }
-            if ( frec->hasTrivialDefaultConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasTrivialDefaultConstructor" << endl ; }
-            if ( frec->hasNonTrivialDefaultConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasNonTrivialDefaultConstructor" << endl ; }
-            if ( frec->hasConstexprDefaultConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasConstexprDefaultConstructor" << endl ; }
-            if ( frec->hasTrivialCopyConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasTrivialCopyConstructor" << endl ; }
-            if ( frec->hasNonTrivialCopyConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasNonTrivialCopyConstructor" << endl ; }
-            if ( frec->hasUserDeclaredMoveConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasUserDeclaredMoveConstructor" << endl ; }
-            if ( frec->hasFailedImplicitMoveConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasFailedImplicitMoveConstructor" << endl ; }
-            if ( frec->hasConstexprNonCopyMoveConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasConstexprNonCopyMoveConstructor" << endl ; }
-            if ( frec->hasTrivialMoveConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasTrivialMoveConstructor" << endl ; }
-            if ( frec->hasNonTrivialMoveConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasNonTrivialMoveConstructor" << endl ; }
-#endif
-
-            if ( !cInner->isImplicitlyDefined() &&
-                 ( frec->hasUserDeclaredConstructor() ||
-                   frec->hasUserProvidedDefaultConstructor() ||
-                   frec->hasUserDeclaredCopyConstructor() ||
-                   frec->hasNonTrivialDefaultConstructor() ||
-                   frec->hasConstexprDefaultConstructor() ||
-                   frec->hasNonTrivialCopyConstructor() ||
-                   frec->hasUserDeclaredMoveConstructor()  ||
-                   frec->hasFailedImplicitMoveConstructor()  ||
-                   frec->hasConstexprNonCopyMoveConstructor()  ||
-                   frec->hasNonTrivialMoveConstructor()  ||
-                   //frec->hasConstCopyConstructor() ||
-                   //frec->hasTrivialMoveConstructor()  ||
-                   //frec->hasDefaultConstructor() ||
-                   //frec->hasCopyConstructorWithConstParam() ||
-                   //frec->hasMoveConstructor() ||
-                   //frec->hasTrivialDefaultConstructor() ||
-                   //frec->hasTrivialCopyConstructor() ||
-                   0 )
-               )
-            {
-               cout 
-                  << "Global subobject requires constructor: " 
-                  << subfield 
-                  << " : " 
-                  << ftype.getAsString() 
-                  << endl ;
-
-               recurseOverConstructorDecls( cInner, subfield ) ;
-            }
-         }
-      }
-   }
-
-   bool VisitVarDecl( VarDecl * var )
-   {
-      // modified from Eli's email "Here's the code used to implement -Wglobal-constructor:"
-      Expr *         Init     = var->getInit() ;
-      bool           IsGlobal = var->hasGlobalStorage() && !var->isStaticLocal() ;
-      QualType       type     = var->getType();
-      QualType       baseType = m_context.getBaseElementType( type ) ;
-
-      if ( !var->getDeclContext()->isDependentContext() && Init && !Init->isValueDependent() )
-      {
-         if ( IsGlobal && !var->isConstexpr() &&
-              !Init->isConstantInitializer( m_context, baseType->isReferenceType() ) )
-         {
-            if ( const CXXConstructExpr * r = dyn_cast<CXXConstructExpr>( Init ) )
-            {
-               CXXConstructorDecl * c = r->getConstructor() ;
-
-               recurseOverConstructorDecls( c, var->getName().str() ) ;
-            }
-         }
-      }
-
-      return true ;
-   }
+   #include "globalcons.h"
 #endif
 
 #if defined CLASSVISITOR
+   #include "visitor.h"
+#endif
 
-   void insertIntoMap( const string & theTypeName, const QualType & q )
-   {
-      const Type * t = q.getTypePtr() ;
+#if defined REWRITER
+   #include "rewriter.h"
+#endif
 
-      if ( t->isArithmeticType() ||
-           t->isPointerType() ||
-           t->isReferenceType() ||
-           0 )
-      {
-         // skip these.
-      }
-      else
-      {
-         g_depMap.insert( theTypeName, q.getAsString( m_pp ) ) ;
-      }
-   }
-
-   // Find typedefs:
-   bool VisitTypedefDecl( TypedefDecl * t )
-   {
-      const QualType & q = t->getUnderlyingType() ;
-
-      insertIntoMap( t->getName().str(), q ) ;
-
-      return true ;
-   }
-
-   // Find class/struct/unions:
-   bool VisitCXXRecordDecl( CXXRecordDecl * r )
-   {
-      if ( r->isThisDeclarationADefinition() )
-      {
-         for ( CXXRecordDecl::base_class_iterator b = r->bases_begin(), e = r->bases_end() ;
-               b != e ; ++b )
-         {
-            CXXBaseSpecifier & a = *b ;
-
-            const QualType & q = a.getType() ;
-
-            insertIntoMap( r->getName().str(), q ) ;
-         }
-      }
-
-      return true ;
-   }
-
-   // Member's within class/struct/union:
-   bool VisitFieldDecl( FieldDecl * f )
-   {
-      RecordDecl * r = f->getParent() ;
-      const QualType & theMembersClassType = m_context.getRecordType( r ) ;
-      const QualType & thisFieldQualType = getQualTypeForDecl( f ) ;
-
-      insertIntoMap( theMembersClassType.getAsString( m_pp ), thisFieldQualType ) ;
-
-      return true ;
-   }
+#if defined DUMPER
+   #include "dumper.h"
 #endif
 } ;
 
@@ -342,14 +202,14 @@ public:
 class MyASTConsumer : public ASTConsumer
 {
 public:
-   MyASTConsumer( CompilerInstance & ci_ ) : Visitor( ci_ ) {}
+   MyASTConsumer( CompilerInstance & ci_, Rewriter & re_ ) : Visitor( ci_, re_ ) {}
 
    // Override the method that gets called for each parsed top-level
    // declaration.
    virtual bool HandleTopLevelDecl(DeclGroupRef DR)
    {
-      for (DeclGroupRef::iterator b = DR.begin(), e = DR.end() ;
-          b != e ; ++b)
+      for ( DeclGroupRef::iterator b = DR.begin(), e = DR.end() ;
+            b != e ; ++b )
       {
          // Traverse the declaration using our AST visitor.
          Visitor.TraverseDecl(*b) ;
@@ -388,6 +248,42 @@ int main( int argc, char * argv[] )
 
    llvm::IntrusiveRefCntPtr<PreprocessorOptions> pOpts( new PreprocessorOptions() ) ;
    llvm::IntrusiveRefCntPtr<HeaderSearchOptions> headerSearchOptions( new HeaderSearchOptions() ) ;
+
+// 
+// This handles the issues with <stdlib.h> not found ... and so forth.  However, it introduces problems with various __builtin... not found.
+// Those builtins not found also appear to be able to trigger an assert in the parser:
+//
+//    /view/peeterj_clang-9/vbs/engn/include/trcbase.h:488:32: note: expanded from macro 'sqlt_tmp_entry'
+//       #define sqlt_tmp_entry      sqlt_fnc_entry
+//                                   ^
+//    /view/peeterj_clang-9/vbs/engn/include/trcbase.h:393:7: note: expanded from macro 'sqlt_fnc_entry'
+//          HOOK_INTO_OLD_TRACE_ENTRY(fnc) ;                                     \
+//          ^
+//    /view/peeterj_clang-9/vbs/engn/pd/inc/pdtraceapi.h:467:4: note: expanded from macro 'HOOK_INTO_OLD_TRACE_ENTRY'
+//       TRACE_ENTRY_DEBUG_HOOK( _ecfID );      \
+//       ^
+//    /view/peeterj_clang-9/vbs/engn/pd/inc/pdtraceapi.h:444:4: note: expanded from macro 'TRACE_ENTRY_DEBUG_HOOK'
+//       IF_TRACE_AND_DEBUG_HOOK \
+//       ^
+//    /view/peeterj_clang-9/vbs/engn/pd/inc/pdtraceapi.h:434:38: note: expanded from macro 'IF_TRACE_AND_DEBUG_HOOK'
+//    #define IF_TRACE_AND_DEBUG_HOOK if ( OSS_HINT_MARK_BRANCH_UNLIKELY(pdTraceLocalFlag & PD_FLAG_DEBUG_HOOK))
+//                                         ^
+//    /view/peeterj_clang-9/vbs/common/osse/core/inc/osscompilerhints.h:77:46: note: expanded from macro 'OSS_HINT_MARK_BRANCH_UNLIKELY'
+//        #define OSS_HINT_MARK_BRANCH_UNLIKELY(x) __builtin_expect((x),0)
+//                                                 ^
+//    /vbs/engn/include/sqlowlst_inlines.h:48:10: warning: expression result unused
+//    classvisitor: /home/peeterj/clang/sources/llvm/tools/clang/lib/Basic/SourceManager.cpp:950: std::pair<clang::SourceLocation, clang::SourceLocation> clang::SourceManager::getImmediateExpansionRange(clang::SourceLocation) const: Assertion `Loc.isMacroID() && "Not a macro expansion loc!"' failed.
+//    Stack dump:
+//    0.      /vbs/engn/include/sqlowlst_inlines.h:48:10 <Spelling=/view/peeterj_clang-9/vbs/engn/include/trcbase.h:393:38>: current parser token ';'
+//    1.      /vbs/engn/include/sqlowlst_inlines.h:47:7: parsing function body 'semaphoreOp'
+//    2.      /vbs/engn/include/sqlowlst_inlines.h:47:7: in compound statement ('{}')
+//    3.      /vbs/engn/include/sqlowlst_inlines.h:48:10 <Spelling=/view/peeterj_clang-9/vbs/engn/include/trcbase.h:391:4>: in compound statement ('{}')
+//    4.      /vbs/engn/include/sqlowlst_inlines.h:48:10 <Spelling=/view/peeterj_clang-9/vbs/engn/pd/inc/pdtraceapi.h:464:43>: in compound statement ('{}')
+//    Aborted
+//
+// Should report this, but producing a standalone fragment to reproduce this is tricky.
+//
+   //#include "isystem.h"
 
    for ( ; c != EOF ; )
    {
@@ -481,11 +377,13 @@ int main( int argc, char * argv[] )
    LangOptions languageOptions ;
 
    // Allow C++ code (https://github.com/loarabia/Clang-tutorial/blob/master/CIrewriter.cpp)
-   languageOptions.GNUMode = 1 ;
-   languageOptions.CXXExceptions = 1 ;
-   languageOptions.RTTI = 1 ;
-   languageOptions.Bool = 1 ;
-   languageOptions.CPlusPlus = 1 ;
+   languageOptions.GNUMode          = 1 ;
+   languageOptions.CXXExceptions    = 1 ;
+   languageOptions.RTTI             = 1 ;
+   languageOptions.Bool             = 1 ;
+   languageOptions.CPlusPlus        = 1 ;
+   languageOptions.WChar            = 1 ; // stdlib.h and friends want wchar_t to be defined by the compiler in C++ mode.
+   //languageOptions.NoBuiltin        = 0 ;
 
    FileSystemOptions fileSystemOptions ;
 
@@ -531,6 +429,13 @@ int main( int argc, char * argv[] )
    {
       sourceManager.createMainFileID( pFile ) ;
 
+      Rewriter TheRewriter ;
+
+      #if defined REWRITER
+      // A Rewriter helps us manage the code rewriting task.
+      TheRewriter.setSourceMgr( sourceManager, languageOptions ) ;
+      #endif
+
       IdentifierTable identifierTable( languageOptions ) ;
 
       SelectorTable selectorTable ;
@@ -538,6 +443,7 @@ int main( int argc, char * argv[] )
       Builtin::Context builtinContext ;
 
       builtinContext.InitializeTarget( *pTargetInfo ) ;
+      //builtinContext.InitializeBuiltins( identifierTable, languageOptions ) ;
 
       ASTContext * pASTcontext = new ASTContext( languageOptions,
                                                  sourceManager,
@@ -549,7 +455,7 @@ int main( int argc, char * argv[] )
 
       compInst.setASTContext( pASTcontext ) ;
 
-      MyASTConsumer astConsumer( compInst ) ;
+      MyASTConsumer astConsumer( compInst, TheRewriter ) ;
 
       pTextDiagnosticPrinter->BeginSourceFile( languageOptions, &preprocessor ) ;
 
@@ -559,6 +465,22 @@ int main( int argc, char * argv[] )
 
       #if defined CLASSVISITOR
          g_depMap.dump() ;
+      #endif
+
+      #if defined REWRITER
+         // At this point the rewriter's buffer should be full with the rewritten
+         // file contents.
+         const RewriteBuffer * RewriteBuf =
+             TheRewriter.getRewriteBufferFor( sourceManager.getMainFileID() ) ;
+
+         if ( RewriteBuf )
+         {
+            llvm::outs() << string( RewriteBuf->begin(), RewriteBuf->end() ) ;
+         }
+         else
+         {
+            cout << "file unchanged: " << argv[optind] << endl ;
+         }
       #endif
    }
 
