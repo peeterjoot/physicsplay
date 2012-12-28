@@ -1,4 +1,4 @@
-THISDIR := phy354
+THISDIR := classicalmechanics
 
 include ../make.vars
 
