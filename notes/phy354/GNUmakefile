@@ -2,6 +2,8 @@ THISDIR := phy354
 
 include ../make.vars
 
+#ONCEFLAGS := -justonce
+
 SOURCE_DIRS += figures
 SOURCE_DIRS += lectures
 SOURCE_DIRS += galagrangian
