@@ -73,6 +73,9 @@ globalvisitor: globalvisitor.o
 rewritersample: rewritersample.o
 	$(CXX) $< -o $@ $(LDFLAGS)
 
+#	g++ -shared -fPIC `llvm-config --cxxflags` -I`llvm-config --src-root`/tools/clang/include \
+#		-I`llvm-config --obj-root`/tools/clang/include -o LockUnlockChecker.so LockUnlockChecker.cpp
+#
 LockUnlockChecker: LockUnlockChecker.o
 	$(CXX) $< -o $@ $(LDFLAGS)
 
