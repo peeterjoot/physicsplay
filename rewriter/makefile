@@ -40,6 +40,7 @@ EXES += globalvisitor
 EXES += rewriter
 EXES += testit
 EXES += dumper
+EXES += LockUnlockChecker
 CLEAN_EXES += rewritersample
 
 CFLAGS += -std=c++11
@@ -70,6 +71,9 @@ globalvisitor: globalvisitor.o
 	$(CXX) $< -o $@ $(LDFLAGS)
 
 rewritersample: rewritersample.o
+	$(CXX) $< -o $@ $(LDFLAGS)
+
+LockUnlockChecker: LockUnlockChecker.o
 	$(CXX) $< -o $@ $(LDFLAGS)
 
 isystem.h : isystem.pl
