@@ -1,24 +1,29 @@
-void insertIntoMap( const string & theTypeName, const QualType & q, const string * const pAsString = NULL )
+void insertIntoMap( const string & theTypeName, const QualType & q, const string * pAsString = NULL )
 {
-#if 0
    const Type * t = q.getTypePtr() ;
 
-   if ( t->isArithmeticType() ||
-        t->isPointerType() ||
-        t->isReferenceType() ||
-        0 )
+   if ( g_quietDeps )
    {
-      // skip these.
+      if ( t->isArithmeticType() ||
+           t->isPointerType() ||
+           t->isReferenceType() ||
+           0 )
+      {
+         // 
+         // This is a hack, so that there is at least one fake dependency for each type, since any type is only put 
+         // into the dependency tree implicitly.
+         //
+         pAsString = &g_typeSuppressed ;
+      }
    }
-   else 
-#endif
-      if ( pAsString )
+
+   if ( pAsString )
    {
-      g_depMap.insert( theTypeName, *pAsString ) ;
+      g_depMap.insertDependency( theTypeName, *pAsString ) ;
    }
    else
    {
-      g_depMap.insert( theTypeName, q.getAsString( m_pp ) ) ;
+      g_depMap.insertDependency( theTypeName, q.getAsString( m_pp ) ) ;
    }
 }
 

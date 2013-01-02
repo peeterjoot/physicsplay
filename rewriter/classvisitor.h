@@ -51,93 +51,7 @@ using namespace clang ;
 using namespace std ;
 
 #if defined CLASSVISITOR
-#include <set>
-
-class dependencyMap
-{
-   typedef set< string >              stringSet ;
-   typedef map< string, stringSet >   dependencyContainerType ;
-
-   dependencyContainerType m_typeDeps ;
-
-public:
-   void insert( const string & theTypeName, const string & theTypeDep )
-   {
-      m_typeDeps[ theTypeName ].insert( theTypeDep ) ;
-   }
-
-   void collectAllDeps( stringSet & allDeps, const string & theTypeName )
-   {
-      auto & setOfDepsForThisType = m_typeDeps[ theTypeName ] ;
-
-      for ( auto & oneDependentType : setOfDepsForThisType )
-      {
-         if ( m_typeDeps.count( oneDependentType ) )
-         {
-            collectAllDeps( allDeps, oneDependentType ) ;
-         }
-         else
-         {
-            allDeps.insert( setOfDepsForThisType.begin(), setOfDepsForThisType.end() ) ;
-         }
-      }
-   }
-
-   void dump( )
-   {
-      for ( auto & k : m_typeDeps )
-      {
-         cout << k.first << " : " ;
-
-         stringSet s ;
-
-         collectAllDeps( s, k.first ) ;
-
-         const char * commaOrBlank = "" ;
-
-         for ( auto & v : s )
-         {
-            cout << commaOrBlank << v ;
-
-            commaOrBlank = ", " ;
-         }
-
-         cout << endl ;
-      }
-   }
-
-   void dumpJustDeps( )
-   {
-      for ( auto & k : m_typeDeps )
-      {
-         for ( auto & v : m_typeDeps[ k.first ] )
-         {
-            cout << v << endl ;
-         }
-      }
-   }
-
-   void dumpNoDeps()
-   {
-      for ( auto & k : m_typeDeps )
-      {
-         cout << k.first << " : " ;
-
-         const char * commaOrBlank = "" ;
-
-         stringSet deps = m_typeDeps[ k.first ] ;
-
-         for ( auto & v : deps )
-         {
-            cout << commaOrBlank << v ;
-
-            commaOrBlank = ", " ;
-         }
-
-         cout << endl ;
-      }
-   }
-} g_depMap ;
+   #include "depmap.h"
 #endif
 
 inline QualType getQualTypeForDecl( DeclaratorDecl * f )
@@ -240,7 +154,10 @@ int main( int argc, char * argv[] )
        {"include", 1, 0, 'I'}
       ,{"define", 1, 0, 'D'}
       ,{"undef", 1, 0, 'U'}
-      ,{"help", 1, 0, 'h'}
+#if defined CLASSVISITOR
+      ,{"verbosedeps", 0, 0, 'v'}
+#endif
+      ,{"help", 0, 0, 'h'}
    } ;
 
    int c = 0 ;
@@ -283,7 +200,7 @@ int main( int argc, char * argv[] )
 //
 // Should report this, but producing a standalone fragment to reproduce this is tricky.
 //
-   #include "isystem.h"
+   //#include "isystem.h"
 
    for ( ; c != EOF ; )
    {
@@ -307,6 +224,14 @@ int main( int argc, char * argv[] )
 
       switch (c)
       {
+#if defined CLASSVISITOR
+         case 'v':
+         {
+            g_quietDeps = false ;
+
+            break ;
+         }
+#endif
          case 'W':
          case 'c':
          case 'O':

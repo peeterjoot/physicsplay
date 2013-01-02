@@ -47,7 +47,7 @@ CFLAGS += -std=c++11
 
 all: $(EXES)
 
-classvisitor.o : classvisitor.h visitor.h isystem.h
+classvisitor.o : classvisitor.h visitor.h isystem.h depmap.h
 globalvisitor.o : classvisitor.h globalcons.h isystem.h
 rewriter.o : classvisitor.h rewriter.h isystem.h
 dumper.o : classvisitor.h dumper.h isystem.h
