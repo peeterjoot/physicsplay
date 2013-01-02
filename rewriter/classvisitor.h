@@ -283,7 +283,7 @@ int main( int argc, char * argv[] )
 //
 // Should report this, but producing a standalone fragment to reproduce this is tricky.
 //
-   //#include "isystem.h"
+   #include "isystem.h"
 
    for ( ; c != EOF ; )
    {
