@@ -40,7 +40,7 @@ EXES += globalvisitor
 EXES += rewriter
 EXES += testit
 EXES += dumper
-EXES += LockUnlockChecker
+EXES += LockUnlockChecker.so
 CLEAN_EXES += rewritersample
 
 CFLAGS += -std=c++11
@@ -76,8 +76,8 @@ rewritersample: rewritersample.o
 #	g++ -shared -fPIC `llvm-config --cxxflags` -I`llvm-config --src-root`/tools/clang/include \
 #		-I`llvm-config --obj-root`/tools/clang/include -o LockUnlockChecker.so LockUnlockChecker.cpp
 #
-LockUnlockChecker: LockUnlockChecker.o
-	$(CXX) $< -o $@ $(LDFLAGS)
+LockUnlockChecker.so: LockUnlockChecker.o
+	$(CXX) -shared $< -o $@ $(LDFLAGS)
 
 isystem.h : isystem.pl
 	$< $(CXX) > $@
