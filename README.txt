@@ -28,7 +28,7 @@ notes/papers/
    http://arxiv.org/abs/1104.4829 -- Change of basis and Gram-Schmidt orthonormalization in special relativity
    relwave.tex -- expanding on Pauli's derivation of Schrodinger's equation from the Klein-Gordon equation.
 
-notes/phy354/
+notes/classicalmechanics/
 
    Personal study notes on Lagrangians, and Hamiltonians (Reading of Goldstein, ... ).
    These are currently part of the posted gabook.pdf, but I've pulled them into this collection because
