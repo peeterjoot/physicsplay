@@ -7,6 +7,7 @@ HOSTNAME := $(shell hostname)
 include makefile.$(HOSTNAME)
 
 CFLAGS += $(shell $(LLVM_BIN_PATH)llvm-config --cxxflags)
+#CFLAGS := $(filter-out -fno-exceptions,$(CFLAGS))
 LDFLAGS += $(shell $(LLVM_BIN_PATH)llvm-config --ldflags)
 
 # HACK: llvm-config doesn't get along with clearcase as an install path and appears to be picking out my view storage dir.

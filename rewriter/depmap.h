@@ -1,5 +1,5 @@
 #include <set>
-string g_typeSuppressed( "<>" ) ;
+#include <fstream>
 
 class dependencyMap
 {
@@ -23,15 +23,6 @@ class dependencyMap
             allDeps.insert( setOfDepsForThisType.begin(), setOfDepsForThisType.end() ) ;
          }
       }
-   }
-
-public:
-   /**
-      A pair of types.  The type and something that it depends on.
-    */
-   void insertDependency( const string & theTypeName, const string & theTypeDep )
-   {
-      m_typeDeps[ theTypeName ].insert( theTypeDep ) ;
    }
 
    /**
@@ -60,24 +51,58 @@ public:
       }
    }
 
+public:
+   /**
+      A pair of types.  The type and something that it depends on.
+    */
+   void insertDependency( const string & theTypeName, const string & theTypeDep )
+   {
+      m_typeDeps[ theTypeName ].insert( theTypeDep ) ;
+   }
+
    /**
       dump dependencies as a tree.
     */
    void dump( )
    {
-      for ( auto & k : m_typeDeps )
-      {
-         stringSet seen ;
+      ifstream file ; // Will let destructor cleanup ifstream object.
 
-         dumpOne( k.first, seen, "" ) ;
+      if ( g_symbolfile )
+      {
+         file.open( g_symbolfile ) ;
+
+         if ( file.is_open() )
+         {
+            string line ;
+
+            while ( file >> line )
+            {
+               stringSet seen ;
+
+               dumpOne( line, seen, "" ) ;
+            }
+         }
+         else
+         {
+            cout << "Failed to process --symbolfile==" << g_symbolfile << endl ;
+         }
+      }
+      else
+      {
+         /* didn't find a list of specific symbols of interest.  Dump all symbols */
+         for ( auto & k : m_typeDeps )
+         {
+            stringSet seen ;
+
+            dumpOne( k.first, seen, "" ) ;
+         }
       }
    }
 
-#if 0
    /**
       Find all the dependencies of a type recursively and dump them for each type in flat fashion.
     */
-   void dumpflat( )
+   void dumpRecursiveDeps( )
    {
       for ( auto & k : m_typeDeps )
       {
@@ -114,7 +139,7 @@ public:
       }
    }
 
-   void dumpNoDeps()
+   void dumpDirectDeps()
    {
       for ( auto & k : m_typeDeps )
       {
@@ -132,7 +157,6 @@ public:
          cout << endl ;
       }
    }
-#endif
 } g_depMap ;
 
 bool g_quietDeps = true ;

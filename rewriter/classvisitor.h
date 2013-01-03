@@ -51,6 +51,9 @@ using namespace clang ;
 using namespace std ;
 
 #if defined CLASSVISITOR
+   const char * g_symbolfile = NULL ;
+   string g_typeSuppressed( "<>" ) ;
+
    #include "depmap.h"
 #endif
 
@@ -156,6 +159,7 @@ int main( int argc, char * argv[] )
       ,{"undef", 1, 0, 'U'}
 #if defined CLASSVISITOR
       ,{"verbosedeps", 0, 0, 'v'}
+      ,{"symbolfile", 1, 0, 's'}
 #endif
       ,{"help", 0, 0, 'h'}
    } ;
@@ -228,6 +232,12 @@ int main( int argc, char * argv[] )
          case 'v':
          {
             g_quietDeps = false ;
+
+            break ;
+         }
+         case 's':
+         {
+            g_symbolfile = optarg ;
 
             break ;
          }
