@@ -14,6 +14,7 @@
 #s/_eff/_{\\mathrm{eff}}/g ;
 #s/_L/_{\\mathrm{L}}/g ;
 #s/_osc/_{\\mathrm{osc}}/g ;
+s/_CM/_{\\mathrm{CM}}/g ;
 #s/_ph/_{\\mathrm{ph}}/g ;
 #s/_T/_{\\mathrm{T}}/g ;
-s/_av/_{\\mathrm{av}}/g ;
+#s/_av/_{\\mathrm{av}}/g ;
