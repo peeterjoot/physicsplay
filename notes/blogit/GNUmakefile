@@ -13,7 +13,6 @@ INCOMPLETE += dotBlade.tex
 INCOMPLETE += gaBasics.tex
 INCOMPLETE += gaMintro.tex
 INCOMPLETE += maxwellsFromGA.tex
-INCOMPLETE += parallelAxisTheorem.tex
 INCOMPLETE += pipeFlowConstPressureGradient.tex
 INCOMPLETE += qmTwoExamReflection.tex
 INCOMPLETE += qmTwoR1.tex
