@@ -12,6 +12,7 @@ SOURCE_DIRS += problems
 
 GENERATED_SOURCES += mathematica.tex 
 GENERATED_SOURCES += backmatter.tex
+GENERATED_SOURCES += cronology.tex
 
 include ../make.rules
 
