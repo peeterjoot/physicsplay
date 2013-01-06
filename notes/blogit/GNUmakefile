@@ -1,11 +1,10 @@
 THISDIR := blogit
 
 RAWTEXFILES := $(shell ls *.tex)
-INCOMPLETE += motionOfFreeTop.tex
-INCOMPLETE += modernOpticsProblemSet4Problem2.tex
-INCOMPLETE += modernOpticsProblemSet4Problem4.tex
-INCOMPLETE += modernOpticsProblemSet4Problem3.tex
-INCOMPLETE += modernOpticsProblemSet4Problem1.tex
+#INCOMPLETE += basicStatMechProblemSet4Problem2.tex
+#INCOMPLETE += basicStatMechProblemSet4Problem4.tex
+#INCOMPLETE += basicStatMechProblemSet4Problem3.tex
+#INCOMPLETE += basicStatMechProblemSet4Problem1.tex
 
 # these may not all be incomplete, but I don't want to build them right now:
 INCOMPLETE += pp.tex
@@ -23,8 +22,6 @@ INCOMPLETE += qmTwoR5.tex
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
 PDFS := $(TEXFILES:.tex=.pdf)
-
-#ORIG_FILES += ../phy485/figures/modernOpticsLecture11Fig1.png
 
 # for gaBasics:
 ORIG_FILES += ../phy454/figures/couetteFlowFig1.png
@@ -56,7 +53,7 @@ all :: peeters_layout.sty
 all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
 
-modernOpticsProblemSet4.pdf : modernOpticsProblemSet4Problem4.tex modernOpticsProblemSet4Problem2.tex modernOpticsProblemSet4Problem1.tex modernOpticsProblemSet4Problem3.tex
+#basicStatMechProblemSet4.pdf : basicStatMechProblemSet4Problem4.tex basicStatMechProblemSet4Problem2.tex basicStatMechProblemSet4Problem1.tex basicStatMechProblemSet4Problem3.tex
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
