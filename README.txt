@@ -1,3 +1,15 @@
+neeter Joot's geometric algebra biased math and physics latex source.
+
+#-------------------------------------------------------
+# grabbing a copy of the tree
+#
+
+mkdir ~/physicsplay
+cd ~/physicsplay
+git clone git@github.com:peeterjoot/physicsplay.git ./
+
+#-------------------------------------------------------
+
 Some directories in this repository:
 
 bin/
