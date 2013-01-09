@@ -1,0 +1,91 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+
+% 
+% 
+%\documentclass{article}
+
+%\input{../peeters_macros.tex}
+
+%\usepackage[bookmarks=true]{hyperref}
+
+\chapter{Taylor's theorem deviation}
+\label{chap:taylors}
+%\author{Peeter Joot \quad peeter.joot@gmail.com}
+\date{ Feb. 2, 2008. taylors.tex }
+
+%\begin{document}
+
+%\maketitle{}
+
+\citep{hestenes1999nfc} presents a very simple derivation of Taylor's Theorem,
+but I feel a
+slightly different (dumber, but longer) presentation would be more effective.
+
+In the same fashion, form the integral
+
+\[
+I = \int_{t}^{t+s} F'(u) du
+\]
+
+Now, observe that the this first order derivative can be written in
+terms of its second order derivative
+
+\[
+(u F'(u))' = F'(u) + u F''(u)
+\]
+
+So we could write
+
+\begin{align*}
+I &= \int_{t}^{t+s} ((u F'(u))' - u F''(u)) du \\
+  &= {u F'(u)} \vert_{u=t}^{t+s} - \int_{t}^{t+s} u F''(u)) du \\
+  &= (t+s) F'(t+s) - t F'(t) - \int_{t}^{t+s} u F''(u)) du \\
+\end{align*}
+
+This is true, but not the Taylor expansion we are used to.  Adjusting things slightly leaves a zero term at $u=t+s$, as follows:
+
+\[
+\left((t + s - u) F'(u)\right)' = -F'(u) + (t+s-u) F''(u)
+\]
+
+\begin{align*}
+I &= F(t+s) - F(t) \\
+ &= \int_{t}^{t+s} ( - ((t + s - u) F'(u))' + (t+s-u) F''(u) ) du \\
+ &= - {(t + s - u) F'(u)} \vert_{u=t}^{t+s} + \int_{t}^{t+s} (t+s-u) F''(u) du \\
+ &= s F'(t) + \int_{t}^{t+s} (t+s-u) F''(u) du \\
+\end{align*}
+
+This results in the first two order terms of the Tailor series, with an explicit remainder term
+
+\[
+F(t+s) = F(t) + s F'(t) + \int_{t}^{t+s} (t+s-u) F''(u) du
+\]
+
+This process can be continued for as many terms as desired.  Doing the calculation for the second order term yields
+
+\[
+\left(\frac{(t + s - u)^2}{2} F''(u)\right)' = -( t + s - u ) F''(u) + \frac{(t+s-u)}{2} F'''(u)
+\]
+
+And substituting that into the first order expansion above we have
+
+\[
+F(t+s) = F(t) + s F'(t) + \frac{s^2}{2} F''(t) + \int_{t}^{t+s} \frac{1}{2}(t+s-u)^2 F'''(u) du
+\]
+
+Induction produces n terms of Taylor's series with an explicit remainder
+
+\[
+F(t+s) = \sum_{k=0}^{n} \frac{s^k}{k!} \frac{d^k}{dt^k} F(t) +
+                        \int_{t}^{t+s} \frac{1}{n!}(t+s-u)^n \frac{d^{n+1}}{dt^{n+1}} F(u) du
+\]
+
+To truly prove the infinite series result one would have to show that the remainder term tends to zero.
+
+%\bibliographystyle{plainnat} % supposed to allow for \url use.
+%\bibliography{myrefs}      % expects file "myrefs.bib"
+
+%\end{document}               % End of document.

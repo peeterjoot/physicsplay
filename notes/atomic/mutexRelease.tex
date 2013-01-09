@@ -1,3 +1,10 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+
+% 
+% 
 \input{../peeter_prologue_print.tex}
 
 \usepackage{listings}
@@ -20,7 +27,7 @@ breakatwhitespace=false,    % sets if automatic breaks should only happen at whi
 %escapeinside={\%}{)}          % if you want to add a comment within your code
 }
 
-\chapter{Timings and correctness issues for mutex release operations.}
+\chapter{Timings and correctness issues for mutex release operations}
 \label{chap:mutex}
 %\useCCL
 \blogpage{http://sites.google.com/site/peeterjoot/math2010/mutexRelease.pdf}
@@ -36,11 +43,11 @@ I have made some notes previously about Intel memory barrier instructions in the
 
 Our product (DB2) breaks what probably ought to be the first rule for the use of spinlocks.  Do not implement these yourself.  Much of this is historical, because our product predated any library implementations.  Another part of this is portability.  These types of interfaces are not available in any sort of library that spans all the platforms we require.  Another part of this is performance.  Our implementation works very well, and is well tuned for the specific purposes we use it for.  The last part is purely an issue of code momentum.  Given that we have exposed an interface to our callers changes made to the spinlock code must avoid having a side effect of changing the interfaces exposed to higher level DB2 code, and even internal changes can be tricky due to the massive platform and portability matrix we are constrained to support.
 
-Given that we are stuck with our own implementation, we are also stuck with maintenance.  Our maintenance story has improved and compared to when I have started we now have a much better abstraction of this code, with less redundancy and platform specifics.  Of all the parts of our operating system portability library layer that is exposed to higher level DB2 code and DB2 developers, this is by far one of the touchiest and scariest parts of our code.  Nobody really wants to touch it if they don't have to.
+Given that we are stuck with our own implementation, we are also stuck with maintenance.  Our maintenance story has improved and compared to when I have started we now have a much better abstraction of this code, with less redundancy and platform specifics.  Of all the parts of our operating system portability library layer that is exposed to higher level DB2 code and DB2 developers, this is by far one of the touchiest and scariest parts of our code.  Nobody really wants to touch it if they do not have to.
 
 These posts were in response to understanding if a change to some of this code was required.  In particular, we have some inconsistencies in what barrier instructions and mechanisms are used to implement the unlock portion of one of our types of spinlocks.  It does not really give away any trade secrets to describe some of this externally.  One of our spinlock implementations is a simple and dumb interface that can be used without restriction.  The other sort of spinlock that we implement has additional state, including waiter information used in conjunction with operating system specific functions for wait and wakeup.  This last spinlock type in unambiguously correct release semantics on Intel due to necessary use of locked compare and exchange instructions for unlock.  This is or what should be the mutex type preferred for most of our code.  The more primitive variation is supplied to DB2 code for use in special situations, and in that code the platform inconsistencies in the barrier instructions was noticed.
 
-\section{Lock release barriers.}
+\section{Lock release barriers}
 
 Here are three variations of unambiguously correct possible primitive lock release instructions for Intel targeted code (assuming the spinlock does not have additional state that must be retained)
 

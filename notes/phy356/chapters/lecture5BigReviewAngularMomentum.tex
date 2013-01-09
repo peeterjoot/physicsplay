@@ -1,0 +1,152 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+HOMEWORK: go through the steps to understand how to formulate $\spacegrad^2$ in spherical polar coordinates.  This is a lot of work, but is good practice and background for dealing with the Hydrogen atom, something with spherical symmetry that is most naturally analyzed in the spherical polar coordinates.
+
+In spherical coordinates (We will not go through this here, but it is good practice) with
+
+\begin{align*}
+x &= r \sin\theta \cos\phi \\
+y &= r \sin\theta \sin\phi \\
+z &= r \cos\theta
+\end{align*}
+
+we have with $u = u(r,\theta, \phi)$
+
+\begin{align*}
+-\frac{\hbar^2}{2m} \left(
+\inv{r} \partial_{rr} (r u) +  \inv{r^2 \sin\theta} \partial_\theta (\sin\theta \partial_\theta u)
++ \inv{r^2 \sin^2\theta} \partial_{\phi\phi} u
+ \right)
+&= E u
+\end{align*}
+
+We see the start of a separation of variables attack with $u = R(r) Y(\theta, \phi)$.  We end up with
+
+\begin{align*}
+-\frac{\hbar^2}{2m} &\left(
+\frac{r}{R} (r R')' +  \inv{Y \sin\theta} \partial_\theta (\sin\theta \partial_\theta Y)
++ \inv{Y \sin^2\theta} \partial_{\phi\phi} Y
+ \right) \\
+\end{align*}
+
+\begin{align*}
+r (r R')' + \left( \frac{2m E}{\hbar^2} r^2 - \lambda \right) R &= 0
+\end{align*}
+\begin{align*}
+\inv{Y \sin\theta} \partial_\theta (\sin\theta \partial_\theta Y) + \inv{Y \sin^2\theta} \partial_{\phi\phi} Y &= -\lambda
+\end{align*}
+
+Application of separation of variables again, with $Y = P(\theta) Q(\phi)$ gives us
+
+\begin{align*}
+\inv{P \sin\theta} \partial_\theta (\sin\theta \partial_\theta P) + \inv{Q \sin^2\theta} \partial_{\phi\phi} Q &= -\lambda
+\end{align*}
+
+\begin{align*}
+\frac{\sin\theta}{P } \partial_\theta (\sin\theta \partial_\theta P)
++\lambda  \sin^2\theta
++ \inv{Q } \partial_{\phi\phi} Q &= 0
+\end{align*}
+
+\begin{align*}
+\frac{\sin\theta}{P } \partial_\theta (\sin\theta \partial_\theta P) + \lambda \sin^2\theta - \mu = 0
+\inv{Q } \partial_{\phi\phi} Q &= -\mu
+\end{align*}
+
+or
+\begin{align}\label{eqn:PHY356F:1000}
+\frac{1}{P \sin\theta} \partial_\theta (\sin\theta \partial_\theta P) +\lambda -\frac{\mu}{\sin^2\theta} &= 0
+\end{align}
+\begin{align}\label{eqn:PHY356F:2000}
+\partial_{\phi\phi} Q &= -\mu Q
+\end{align}
+
+The equation for $P$ can be solved using the Legendre function $P_l^m(\cos\theta)$ where $\lambda = l(l+1)$ and $l$ is an integer
+
+Replacing $\mu$ with $m^2$, where $m$ is an integer
+
+\begin{align*}
+\frac{d^2 Q}{d\phi^2} &= -m^2 Q
+\end{align*}
+
+Imposing a periodic boundary condition $Q(\phi) = Q(\phi + 2\pi)$, where ($m = 0, \pm 1, \pm 2, \cdots$) we have
+
+\begin{align*}
+Q &= \inv{\sqrt{2\pi}} e^{im\phi}
+\end{align*}
+
+There is the overall solution $r(r,\theta,\phi) = R(r) Y(\theta, \phi)$ for a free particle.  The functions $Y(\theta, \phi)$ are
+
+\begin{align*}
+Y_{lm}(\theta, \phi)
+&= N \left( \inv{\sqrt{2\pi}} e^{im\phi} \right) 
+\mathLabelBox{ P_l^m(\cos\theta) }{$ -l \le m \le l$}
+\end{align*}
+
+where $N$ is a normalization constant, and $m = 0, \pm 1, \pm 2, \cdots$.  $Y_{lm}$ is an eigenstate of the $\BL^2$ operator and $L_z$ (two for the price of one).  There is no specific reason for the direction $z$, but it is the direction picked out of convention.
+
+Angular momentum is given by
+
+\begin{align*}
+\BL = \Br \cross \Bp
+\end{align*}
+
+where
+
+\begin{align*}
+\BR = x \xcap + y\ycap + z\zcap
+\end{align*}
+
+and
+\begin{align*}
+\Bp = p_x \xcap + p_y\ycap + p_z\zcap
+\end{align*}
+
+The important thing to remember is that the aim of following all the math is to show that
+
+\begin{align*}
+\BL^2 Y_{lm} = \hbar^2 l (l+1) Y_{lm}
+\end{align*}
+
+and simultaneously
+
+\begin{align*}
+\BL_z Y_{lm} = \hbar m Y_{lm}
+\end{align*}
+
+Part of the solution involves working with $\antisymmetric{L_z}{L_{+}}$, and $\antisymmetric{L_z}{L_{-}}$, where
+
+\begin{align*}
+L_{+} &= L_x + i L_y \\
+L_{-} &= L_x - i L_y
+\end{align*}
+
+An exercise (not in the book) is to evaluate
+\begin{align}\label{eqn:PHY356F:4000}
+\antisymmetric{L_z}{L_{+}}
+&= L_z L_x + i L_z L_y - L_x L_z - i L_y L_z
+\end{align}
+
+where
+\begin{align}\label{eqn:PHY356F:5000}
+\antisymmetric{L_x}{L_y}  &= i \hbar L_z \\
+\antisymmetric{L_y}{L_z}  &= i \hbar L_x \\
+\antisymmetric{L_z}{L_x}  &= i \hbar L_y
+\end{align}
+
+Substitution back in \ref{eqn:PHY356F:4000} we have
+
+\begin{align*}
+\antisymmetric{L_z}{L_{+}}
+&=
+\antisymmetric{L_z}{L_x}
++ i \antisymmetric{L_z}{L_y}  \\
+&=
+i \hbar ( L_y - i L_x ) \\
+&=
+\hbar ( i L_y +  L_x ) \\
+&=
+\hbar L_{+}
+\end{align*}

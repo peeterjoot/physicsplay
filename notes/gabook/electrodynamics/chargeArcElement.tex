@@ -1,0 +1,155 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+
+% 
+% 
+\chapter{Field due to line charge in arc}
+\label{chap:chargeArcElement}
+%\date{Nov 23, 2008.  chargeArcElement.tex}
+
+\section{Motivation}
+
+Problem $1.5$ from \citep{purcell1963eam}, is to calculate the field
+at the center of a half circular arc of line charge.  Do this calculation
+and setup for the calculation at other points.
+
+\section{Just the stated problem}
+
+%\begin{figure}[htp]
+%\centering
+%\includegraphics[totalheight=0.4\textheight]{picturepath}
+%\caption{My Caption}\label{fig:pictlabel}
+%\end{figure}
+%
+%... see \cref{fig:picturepath} ...
+
+To solve for the field at just the center point in the plane of the arc, given line charge density $\lambda$, and arc
+radius $R$ one has, and pseudoscalar for the plane $i = \Be_1\Be_2$ one has
+
+\begin{align*}
+dq &= \lambda R d\theta \\
+d\BE &= \inv{4 \pi \epsilon_0 R^2} dq (-\Be_1 e^{i\theta} )
+\end{align*}
+
+Straight integration gives the result in short order
+
+\begin{align*}
+\BE
+&= \frac{-\lambda \Be_1}{4 \pi \epsilon_0 R} \int_0^\pi e^{i\theta} d\theta \\
+&= \frac{\lambda \Be_2}{4 \pi \epsilon_0 R} \left. e^{i\theta} \right\vert_0^\pi \\
+&= \frac{-\lambda \Be_2}{2 \pi \epsilon_0 R}
+\end{align*}
+
+So, if the total charge is $Q = \pi R \lambda$, the field is then
+
+\begin{align*}
+\BE
+&= \frac{-Q \Be_2}{2 \pi^2 \epsilon_0 R^2} \\
+\end{align*}
+
+So, at the center point the semicircular arc of charge behaves as if it is a point charge of magnitude $2Q/\pi$ at the point $R \Be_2$
+
+\begin{align}\label{eqn:chargeArcEl:semicircleAtCenter}
+\BE = \frac{-Q \Be_2}{ 4 \pi \epsilon_0 R^2 } \frac{2}{\pi}
+\end{align}
+
+\section{Field at other points}
+
+Now, how about at points outside of the plane of the charge?
+
+Suppose our point of measurement is expressed in cylindrical polar coordinates
+
+\begin{align*}
+P = \rho \Be_1 e^{i\alpha} + z \Be_3
+\end{align*}
+
+So that the vector from the element of charge at $\theta$ is
+\begin{align*}
+\Bu = P - R \Be_1 e^{i\theta} &= \Be_1 (\rho e^{i\alpha} -R e^{i\theta}) + z \Be_3
+\end{align*}
+
+Relative to $\theta$, writing $\theta = \alpha + \beta$ this is
+\begin{align*}
+\Bu &= \Be_1 e^{i\alpha} (\rho -R e^{i\beta}) + z \Be_3
+\end{align*}
+
+The squared magnitude of this vector is
+\begin{align*}
+\Bu^2
+&= \Abs{\rho -R e^{i\beta}}^2 + z^2 \\
+&= z^2 + \rho^2 + R^2 -2 \rho R \cos\beta \\
+\end{align*}
+
+The field is thus
+
+\begin{align}\label{eqn:chargeArcEl:fieldAtP}
+\BE = \inv{4 \pi \epsilon_0} \lambda R 
+\int_{\beta=\theta_1 -\alpha}^{\beta=\theta_2-\alpha}
+{
+\left(z^2 + \rho^2 + R^2 -2 \rho R \cos\beta\right)
+}^{-3/2}
+\left(\Be_1 e^{i\alpha} (\rho -R e^{i\beta}) + z \Be_3\right)
+d\beta
+\end{align}
+
+This integral has two variations
+\begin{align*}
+&\int { \left(a^2 - b^2\cos\beta\right) }^{-3/2} d\beta \\
+&\int { \left(a^2 - b^2\cos\beta\right) }^{-3/2} e^{i\beta} d\beta \\
+\end{align*}
+
+or
+\begin{align*}
+I_1 &= \int { \left(a^2 - b^2\cos\beta\right) }^{-3/2} d\beta \\
+I_2 &= \int { \left(a^2 - b^2\cos\beta\right) }^{-3/2} \cos\beta d\beta \\
+I_3 &= \int { \left(a^2 - b^2\cos\beta\right) }^{-3/2} \sin\beta d\beta \\
+\end{align*}
+
+Of these when only the last is obviously integrable (at least for $b \ne 0$)
+\begin{align*}
+I_3
+&= \int { \left(a^2 - b^2\cos\beta\right) }^{-3/2} \sin\beta d\beta \\
+&= -2 {\left(a^2 - b^2\cos\beta\right) }^{-1/2} \\
+\end{align*}
+
+Having solved for the imaginary component can the Cauchy Riemann equations be used to supply the real part?  How about $I_1$ ?
+
+\subsection{On the z-axis}
+
+Not knowing how to solve the integral of \ref{eqn:chargeArcEl:fieldAtP} (elliptic?), the easy case
+of $\rho = 0$ (up the z-axis) can at least be obtained
+
+\begin{align*}
+\BE 
+&= \inv{4 \pi \epsilon_0} \lambda R { \left(z^2 + R^2\right) }^{-3/2}
+\int_{\theta_1}^{\theta_2} \left(-\Be_1 R e^{i\theta} + z \Be_3\right) d\theta \\
+&= \inv{4 \pi \epsilon_0} \lambda R { \left(z^2 + R^2\right) }^{-3/2}
+\left(\Be_2 R (e^{i\theta_2} -e^{i\theta_1}) + z \Be_3 \Delta\theta \right) \\
+&= \inv{4 \pi \epsilon_0} \lambda R { \left(z^2 + R^2\right) }^{-3/2}
+\left(\Be_2 R e^{i(\theta_1 + \theta_2)/2} \left(
+e^{i(\theta_2 - \theta_1)/2}
+-e^{-i(\theta_2 - \theta_1)/2}
+\right) + z \Be_3 \Delta\theta \right) \\
+&= \inv{4 \pi \epsilon_0} \lambda R { \left(z^2 + R^2\right) }^{-3/2}
+\left(-2 \Be_1 R e^{i(\theta_1 + \theta_2)/2} \sin(\Delta\theta/2)
++ z \Be_3 \Delta\theta \right) \\
+&= \inv{4 \pi \epsilon_0 \Delta\theta} Q { \left(z^2 + R^2\right) }^{-3/2}
+\left(-2 \Be_1 R e^{i(\theta_1 + \theta_2)/2} \sin(\Delta\theta/2)
++ z \Be_3 \Delta\theta \right) \\
+\end{align*}
+
+Eliminating the explicit imaginary, and writing $\overbar{\theta} = (\theta_1 + \theta_2)/2$, we have in vector form
+the field on any position up and down the z-axis
+\begin{align}
+\BE 
+&= \inv{4 \pi \epsilon_0 \Delta\theta} Q { \left(z^2 + R^2\right) }^{-3/2}
+\left(
+-2 R \left( \Be_1 \cos \overbar{\theta} +\Be_2 \sin\overbar{\theta} \right) \sin(\Delta\theta/2)
++ z \Be_3 \Delta\theta \right) 
+\end{align}
+
+For $z = 0$, $\theta_1 = 0$, and $\theta_2 = \pi$, this matches with \ref{eqn:chargeArcEl:semicircleAtCenter} as expected, but
+expressing this as an equivalent to a point charge is no longer possible at any point off the plane of the
+charge.

@@ -1,0 +1,73 @@
+#!/usr/bin/perl
+
+# input of the form:
+#+0:25
+#-0:10
+#11:15-1:55
+#3:30-7:30
+# ... this adds them up
+
+my $totalMinutes = 0 ;
+
+while (<>)
+{
+   chomp ;
+
+   s/#.*// ;
+   next if /^ *$/ ;
+
+   my $diff ;
+   my $negate = 0 ;
+
+   if ( s/^\+// )
+   {
+   }
+   elsif ( s/^-// )
+   {
+      $negate = 1 ;
+   }
+
+   if ( /(.*)-(.*)/ )
+   {
+      my ($a, $b) = ($1, $2) ;
+      my $bmin = toMinutes($b) ;
+      my $amin = toMinutes($a) ;
+
+      if ( $bmin >= $amin )
+      {
+         $diff = ($bmin - $amin) ;
+      }
+      else
+      {
+         $diff = ($bmin + 12*60 - $amin) ;
+      }
+   }
+   else
+   {
+      $diff = toMinutes($_) ;
+   }
+
+   $diff = -$diff if ( $negate ) ;
+
+#print "$_: $diff\n" ;
+   $totalMinutes += $diff ;
+}
+
+my $hours = int($totalMinutes/60) ;
+my $minutes = int($totalMinutes % 60) ;
+printf "$hours:%02d\n", $minutes ;
+
+my $comparedTo8hours = abs($totalMinutes - 60*8) ;
+printf "compared to 8 hours (in hours): %.02f\n", $comparedTo8hours/60 ;
+
+exit ;
+
+sub toMinutes
+{
+   my ($t) = @_ ;
+
+   $t =~ /(.*):(.*)/ or die "toMinutes: failed to match on line with '$t'\n" ;
+   my ($h, $m) = ($1, $2) ;
+
+   return $h*60 + $m ;
+}

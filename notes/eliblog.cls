@@ -115,12 +115,13 @@ pdfauthor={Peeter Joot}
       {\sffamily\Large\bfseries\@title\par}%
       \medskip
 \ifthenelse{\equal{\@blogpage}{0}}{}{
-      {\large{Originally appeared at: \texttt{\@blogpage}}\par}%
+      {\large{\texttt{\@blogpage}}\par}%
       \medskip
 }
       {\large\@author\ ---\ \@email\par}%
          {\itshape\@revisionInfo\@gitRevisionInfo\par}%
          \medskip\@useCCL
+      \@keywords
       \bigskip\hrule\vspace*{0.5pc}%
    \end{flushleft}%
 }
@@ -133,9 +134,17 @@ pdfauthor={Peeter Joot}
 \newcommand{\beginArtNoToc}[0]{\begin{document}\maketitle{}}
 \newcommand{\EndNoBibArticle}[0]{\end{document}}
 \newcommand{\EndArticle}[0]{\bibliography{myrefs}\bibliographystyle{unsrturl}\end{document}}
-\newcommand{\chapcite}[1]{\cite{#1}}
-\newcommand{\urlchapcite}[3]{\href{#1}{#2} \cite{#3}}
 
+% this one in standalong articles is a plain old cite, but within a book that contains the chapter
+% is a \ref{chap:#1}.  That requires the chapter label to have the same name.
+\newcommand{\chapcite}[1]{\cite{#1}}
+
+% make this one a citation to an external notes compilation, but an actual formula reference 
+% when that 'chapter' is eventually included in the notes compilation.
+\newcommand{\inbookref}[2]{\cite{#1}}
+
+\newcommand{\urlchapcite}[3]{\href{#1}{#2} \cite{#3}}
+%\newcommand{\keywords}[1]{\par\noindent {\small{\em Keywords\/}: #1}}
 %----------------------------------
 
 %\newcommand{\methodology}[1]{\textbf{#1}}
@@ -175,6 +184,10 @@ pdfauthor={Peeter Joot}
 \newcommand{\@email}{{\em No email address given}}
 \newcommand{\email}[1]{\renewcommand{\@email}{{#1}}}
 
+\newcommand{\@keywords}[1]{}
+\newcommand{\keywords}[1]{\renewcommand{\@keywords}{{\par\noindent {\small{\em Keywords\/}: {#1}}}}}
+
+
 % for compatability for natbib, used by journals.
 %
 \newcommand{\citep}[1]{\cite{#1}}
@@ -183,6 +196,5 @@ pdfauthor={Peeter Joot}
 % more journal stubs:
 \newcommand{\altaffiltext}[2]{}
 \newcommand{\altaffilmark}[1]{}
-\newcommand{\keywords}[1]{}
 
 \endinput

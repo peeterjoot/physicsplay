@@ -1,0 +1,61 @@
+% http://tex.stackexchange.com/questions/86188/labelling-with-arrows-in-an-automated-way/86203#86203
+
+\documentclass{article}
+\usepackage{tikz}
+\usepackage{amsmath}
+
+\newif\ifclipme\clipmetrue
+\tikzset{labelstyle/.style={LabelStyle/.append style={#1}},linestyle/.style={LineStyle/.append style={#1}}}
+\tikzset{LabelStyle/.initial={},LineStyle/.initial={}}
+
+\newcommand{\myMathWithDescription}[4][]{{%
+    \tikzset{#1}%
+    \tikz[baseline]{
+        \node[draw=red,rounded corners,anchor=base] (m#4) {$\displaystyle#2$};
+        \ifclipme\begin{pgfinterruptboundingbox}\fi
+            \node[above of=m#4,font=\strut, LabelStyle] (l#4) {#3};
+            \draw[-,red, LineStyle] (l#4) to (m#4);
+        \ifclipme\end{pgfinterruptboundingbox}\fi
+    }%
+}}
+\newcommand{\myMathWithDescriptionStarred}[3][]{{%
+    \clipmefalse%
+    \myMathWithDescription[#1]{#2}{#3}{\themathLableNode}%
+}}
+
+\newcounter{mathLableNode}
+\newcommand{\mathLabelBox}[3][]{%
+   \stepcounter{mathLableNode}%
+   \myMathWithDescription[#1]{#2}{#3}{\themathLableNode}%
+   \vphantom{\myMathWithDescriptionStarred[#1]{#2}{#3}{\themathLableNode}}%
+}
+
+\begin{document}
+\begin{equation}
+\boldsymbol{\nabla}^2 = 
+\mathLabelBox{
+\frac{\partial^2}{\partial r^2} + \frac{1}{r} \frac{\partial}{\partial r}
+}
+{$\boldsymbol{\nabla}_{\mathrm{T}}^2$}
+
++ \frac{1}{r^2} \frac{\partial^2}{\partial \theta^2} + \frac{\partial^2}{\partial z^2}
+\end{equation}
+
+\begin{equation}
+\mathbf{E} =
+\mathLabelBox[
+    labelstyle={yshift=1.2em},
+    linestyle={}
+    ]
+{\mathbf{E}_0}
+{A vector, with a chosen polarity} \cdot
+\mathLabelBox[
+    labelstyle={xshift=2cm},
+    linestyle={out=270,in=90, latex-}
+    ]
+{u(r, \theta, z)}
+{Slowly varying (complex) envelope}
+ \cdot e^{i k_0 z}.
+\end{equation}
+\end{document}
+

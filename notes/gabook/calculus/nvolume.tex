@@ -1,0 +1,635 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+
+% 
+% 
+\chapter{Spherical and hyperspherical parametrization}
+\label{chap:nvolume}
+%\date{Feb 26, 2009.  nvolume.tex}
+
+\section{Motivation}
+
+In \chapcite{PJ4dFourier} a 4D Fourier transform solution of Maxwell's equation yielded a Green's function of the form
+
+\begin{align*}
+G(x) = \iiiint \frac{e^{i k_\mu x^\mu}}{k_\nu k^\nu} dk_1 dk_2 dk_3 dk_4
+\end{align*}
+
+To attempt to ``evaluate'' this integral, as done in
+\chapcite{PJpoisson}
+to produce the retarded time potentials,
+a hypervolume equivalent to spherical polar coordinate
+parametrization is probably desirable.
+
+Before attempting to tackle the problem of interest, the basic question
+of how to do volume and weighted volume integrals over a hemispherical volumes
+must be considered.  Doing this for both Euclidean and Minkowski metrics will have to be covered.
+
+\section{Euclidean n-volume}
+
+\subsection{Parametrization}
+
+The \href{http://en.wikipedia.org/wiki/Hypersphere}{wikipedia article on n-volumes} gives a parametrization, which I will write out explicitly for the first few dimensions
+
+\begin{itemize}
+\item 1-sphere (circle)
+
+\begin{align*}
+x^1 &= r \cos\phi_1 \\
+x^2 &= r \sin\phi_1 
+\end{align*}
+
+\item 2-sphere (sphere)
+
+\begin{align*}
+x^1 &= r \cos\phi_1 \\
+x^2 &= r \sin\phi_1 \cos\phi_2 \\
+x^3 &= r \sin\phi_1 \sin\phi_2
+\end{align*}
+
+\item 3-sphere (hypersphere)
+
+\begin{align*}
+x^1 &= r \cos\phi_1 \\
+x^2 &= r \sin\phi_1 \cos\phi_2 \\
+x^3 &= r \sin\phi_1 \sin\phi_2 \cos\phi_3 \\
+x^4 &= r \sin\phi_1 \sin\phi_2 \sin\phi_3 \\
+\end{align*}
+
+\end{itemize}
+
+By inspection one can see that we have the desired $r^2 = \sum_i (x^i)^2$ relation.  Each of these can be vectorized to produce
+a parametrized vector that can trace out all the possible points on the volume
+
+\begin{align*}
+\Br &= \sigma_k x^k 
+\end{align*}
+
+\subsection{Volume elements}
+
+We can form a parallelogram area (or parallelepiped volume, ...) element for any parametrized surface by taking wedge products, as in \cref{fig:tangent_area_form}.  This can also be done for this spherical parametrization too.
+
+\imageFigure{figures/tangent_area_form}{Tangent vector along curves of parametrized vector}{fig:tangent_area_form}{0.4}
+
+For example for the circle we have
+
+\begin{align*}
+dV_{\Rm{2}}
+&= \PD{r}{\Br} \wedge \PD{\phi_1}{\Br} dr d\phi_1 \\
+&= \left(\PD{r}{}r(\cos\phi_1, \sin\phi_1) \right) \wedge \left(\PD{\phi_1}{}r(\cos\phi_1, \sin\phi_1) \right) dr d\phi_1 \\
+&= (\cos\phi_1, \sin\phi_1) \wedge (-\sin\phi_1, \cos\phi_1) r dr d\phi_1 \\
+&= (\cos^2\phi_1 \sigma_1 \sigma_2 - \sin^2\phi_1 \sigma_2 \sigma_1 ) r dr d\phi_1 \\
+&= r dr d\phi_1 \sigma_1 \sigma_2 \\
+\end{align*}
+
+And for the sphere
+\begin{align*}
+dV_{\Rm{3}}
+&= \PD{r}{\Br} \wedge \PD{\phi_1}{\Br} \wedge \PD{\phi_2}{\Br} dr d\phi_1 d\phi_2 \\
+&= (\cos\phi_1, \sin\phi_1 \cos\phi_2, \sin\phi_1 \sin\phi_2)  \\
+&\wedge (-\sin\phi_1, \cos\phi_1 \cos\phi_2, \cos\phi_1 \sin\phi_2)  \\
+&\wedge (0, -\sin\phi_1 \sin\phi_2, \sin\phi_1 \cos\phi_2) r^2 dr d\phi_1 d\phi_2 \\
+&= 
+\begin{vmatrix}
+\cos\phi_1 & \sin\phi_1 \cos\phi_2 & \sin\phi_1 \sin\phi_2  \\
+-\sin\phi_1 & \cos\phi_1 \cos\phi_2 & \cos\phi_1 \sin\phi_2  \\
+0 & -\sin\phi_1 \sin\phi_2 & \sin\phi_1 \cos\phi_2  \\
+\end{vmatrix} r^2 dr d\phi_1 d\phi_2 \sigma_1 \sigma_2 \sigma_3 \\
+&=
+r^2 dr \sin\phi_1 d\phi_1 d\phi_2 \sigma_1 \sigma_2 \sigma_3 \\
+\end{align*}
+
+And finally for the hypersphere
+
+\begin{align*}
+dV_{\Rm{4}} &=
+\begin{vmatrix}
+\cos\phi_1 & \sin\phi_1 \cos\phi_2 & \sin\phi_1 \sin\phi_2 \cos\phi_3 & \sin\phi_1 \sin\phi_2 \sin\phi_3  \\
+-\sin\phi_1 & \cos\phi_1 \cos\phi_2 & \cos\phi_1 \sin\phi_2 \cos\phi_3 & \cos\phi_1 \sin\phi_2 \sin\phi_3  \\
+         0 & -\sin\phi_1 \sin\phi_2 & \sin\phi_1 \cos\phi_2 \cos\phi_3 & \sin\phi_1 \cos\phi_2 \sin\phi_3  \\
+         0 &                     0 & -\sin\phi_1 \sin\phi_2 \sin\phi_3 & \sin\phi_1 \sin\phi_2 \cos\phi_3  \\
+\end{vmatrix} \\
+&\quad r^3 dr d\phi_1 d\phi_2 d\phi_3 \sigma_1 \sigma_2 \sigma_3 \sigma_4 \\
+&=
+%
+%
+%C_1  &  S_1 C_2 &  S_1 S_2 C_3 & S_1 S_2 S_3  \\
+%-S_1 &  C_1 C_2 &  C_1 S_2 C_3 & C_1 S_2 S_3  \\
+%   0 & -S_1 S_2 &  S_1 C_2 C_3 & S_1 C_2 S_3  \\
+%   0 &        0 & -S_1 S_2 S_3 & S_1 S_2 C_3  \\
+%
+%
+%C_1^2 C_2 S_1^2 C_2 S_2
+%+C_1 S_1 S_2^3 C_1 S_1
+%+S_1^2 C_2 S_1^2 C_2 S_2
+%+S_1^2 S_2 S_1^2 S_2^2
+%
+%
+%+C_1^2 C_2^2 S_1^2 S_2
+%+C_1^2 S_1^2 S_2^3 
+%+S_1^4 C_2^2 S_2
+%+S_1^4 S_2^3
+%
+%
+%+ S_1^2 S_2 
+r^3 dr \sin^2\phi_1 d\phi_1 \sin\phi_2 d\phi_2 d\phi_3 \sigma_1 \sigma_2 \sigma_3 \sigma_4 \\
+\end{align*}
+
+Each of these is consistent with the result in the wiki page.
+
+\subsection{Some volume computations}
+
+Let us apply the above results to compute the corresponding n-volume's.
+
+
+\begin{itemize}
+\item 1-sphere (circle)
+\begin{align*}
+V_{\Rm{2}} 
+&= 4 \int_{0}^R r dr \int_{0}^{\pi/2} d\phi_1 \\
+&= \pi R^2 
+\end{align*}
+
+\item 2-sphere (sphere)
+
+\begin{align*}
+V_{\Rm{3}} 
+&= 8 \int_0^R r^2 dr \int_0^{\pi/2} \sin\phi_1 d\phi_1 \int_0^{\pi/2} d\phi_2 \\
+&= 8 \inv{3} R^3 \left( {\left. -\cos\phi_1 \right\vert}_0^{\pi/2} \right) \frac{\pi}{2} \\
+&= \frac{4\pi R^3}{3} \\
+\end{align*}
+
+Okay, so far so good.
+
+\item 3-sphere (hypersphere)
+
+\begin{align*}
+V_{\Rm{3}} 
+&= 16 \int_0^R r^3 dr \int_0^{\pi/2} \sin^2\phi_1 d\phi_1 \int_0^{\pi/2} \sin\phi_2 d\phi_2 \int_0^{\pi/2} d\phi_3 \\
+&= 2 \pi R^4 \int_0^{\pi/2} \sin^2\phi_1 d\phi_1 \\
+&= \pi R^4 \left( {\left.  \phi_1 - \cos\phi_1 \sin\phi_1 \right\vert}_0^{\pi/2} \right) \\
+&= \frac{\pi^2 R^4}{2} \\
+\end{align*}
+
+This is also consistent with the formula supplied in the wiki article.  
+
+\end{itemize}
+
+\subsection{Range determination}
+
+What I have done here though it integrate over only one of the quadrants, and multiply by $2^n$.  This avoided the more tricky issue of what exact range of angles is required for a complete and non-overlapping cover of the surface.
+
+The wiki article says that the range is $[0,2\pi]$ for the last angle and $[0,\pi]$ for the others.  
+Reevaluating the integrals above shows that this does work, but that is a bit of a cheat, and it is not obvious
+to me past \R{3} that this should be the case.
+
+How can this be rationalized?
+
+\begin{itemize}
+\item circle
+For the case of the circle what are the end points in each of the quadrants?  These are (with $r=1$)
+
+\begin{align*}
+(\cos\phi_1, \sin\phi_1)_{\phi_1 = 0}        &= ( 1, 0 ) = \sigma_1 \\
+(\cos\phi_1, \sin\phi_1)_{\phi_1 = \pi/2}    &= ( 0, 1 ) = \sigma_2 \\
+(\cos\phi_1, \sin\phi_1)_{\phi_1 = \pi}      &= ( -1, 0 ) = -\sigma_1 \\
+(\cos\phi_1, \sin\phi_1)_{\phi_1 = 3\pi/2}   &= ( 0, -1 ) = -\sigma_2
+\end{align*}
+
+As expected, each of the $\pi/2$ increments traces out the points in successive quadrants.
+
+\item sphere
+
+Again with $r=1$, some representative points on the circle are
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+$\phi_1$ & $\phi_2$ & $(\cos\phi_1, \sin\phi_1 \cos\phi_2, \sin\phi_1 \sin\phi_2)$ & $\Br$ \\
+\hline
+0 & 0 & $(1,0,0)$ & $\sigma_1$ \\
+0 & $\pi/2$ &  $(1,0,0)$ & $\sigma_1$ \\
+0 & $\pi$ &  $(1,0,0)$ & $\sigma_1$ \\
+0 & $3\pi/2$ &  $(1,0,0)$ & $\sigma_1$ \\
+%
+% $(0, \cos\phi_2, \sin\phi_2)$ 
+%
+% traces out a circle in y,z plane
+%
+$\pi/2$ & 0 &  $(0,1,0)$ & $\sigma_2$ \\
+$\pi/2$ & $\pi/2$ &  $(0,0,1)$ & $\sigma_3$ \\
+$\pi/2$ & $\pi$ &  $(0,-1,0)$ & $-\sigma_2$ \\
+$\pi/2$ & $3\pi/2$ &  $(0,0,-1)$ & $-\sigma_3$ \\
+%
+%
+% $(-1, 0\cos\phi_2, \sin\phi_1 \sin\phi_2)$ & $\Br$ \\
+%
+$\pi$ & 0 &  $(-1,0,0)$ & $-\sigma_1$ \\
+$\pi$ & $\pi/2$ &  $(-1,0,0)$ & $-\sigma_1$ \\
+$\pi$ & $\pi$ &  $(-1,0,0)$ & $-\sigma_1$ \\
+$\pi$ & $3\pi/2$ & $(-1,0,0)$ & $-\sigma_1$ \\
+\hline
+\end{tabular}
+
+The most informative of these is for $\phi_1 = \pi/2$, where we had $\Br = (0, \cos\phi_2, \sin\phi_2)$, and our points trace out a path along the unit circle of the $y,z$ plane.  At $\phi_1 = 0$ our point $\Br = \sigma_1$ did not move, and at $\phi_1 = \pi$ we are at the other end of the sphere, also fixed.  A reasonable guess is that at each $\phi_1$ we trace out a different circle in the $y,z$ plane.
+
+We can write, with $\sigma_{23} = \sigma_1 \wedge \sigma_2 = \sigma_1 \sigma_2$,
+
+\begin{align*}
+\Br 
+%&= \cos\phi_1 (1, \tan\phi_1 \cos\phi_2, \tan\phi_1 \sin\phi_2) \\
+&= \cos\phi_1 \sigma_1 + \sin\phi_1 ( \cos\phi_2 \sigma_2 + \sin\phi_2 \sigma_3 ) \\
+&= \cos\phi_1 \sigma_1 + \sin\phi_1 \sigma_2 ( \cos\phi_2 + \sin\phi_2 \sigma_2 \sigma_3 ) \\
+\end{align*}
+
+Or, in exponential form
+
+\begin{align}\label{eqn:nvolume:sphereVec}
+\Br &= \cos\phi_1 \sigma_1 + \sin\phi_1 \sigma_2 \exp( \sigma_{23} \phi_2 )
+\end{align}
+
+Put this way the effects of the parametrization is clear.   For each fixed $\phi_1$, the exponential traces out a circle in the $y,z$ plane, starting at the point $\Br = \cos\phi_1 \sigma_1 + \sin\phi_1 \sigma_2$.  $\phi_1$ traces out a semi-circle in the $x,y$ plane.
+
+FIXME: picture.
+
+This would have been easy enough to understand if starting from a picture and constructing the parametrization.  Seeing what the 
+geometry is from the algebra requires a bit more (or different) work.  Having done it, are we now prepared to understand the geometry 
+of the hypersphere parametrization.
+
+\item hypersphere.
+
+The vector form in the spherical case was convenient for extracting geometric properties.  Can we do that here too?
+
+\begin{align*}
+\Br
+&= \sigma_1 \cos\phi_1 + \sigma_2 \sin\phi_1 \cos\phi_2 + \sigma_3 \sin\phi_1 \sin\phi_2 \cos\phi_3 + \sigma_4 \sin\phi_1 \sin\phi_2 \sin\phi_3 \\
+&= \sigma_1 \cos\phi_1 + \sigma_2 \sin\phi_1 \cos\phi_2 + \sigma_3 \sin\phi_1 \sin\phi_2 (\cos\phi_3 + \sigma_{34} \sin\phi_3) \\
+&= \sigma_1 \cos\phi_1 + \sigma_2 \sin\phi_1 \cos\phi_2 + \sigma_3 \sin\phi_1 \sin\phi_2 \exp(\sigma_{34}\phi_3) \\
+&= \sigma_1 \cos\phi_1 + \sigma_2 \sin\phi_1 (\cos\phi_2 + \sigma_{23} \sin\phi_2 \exp(\sigma_{34}\phi_3) ) \\
+\end{align*}
+
+Observe that if $\phi_3 = 0$ we have
+
+\begin{align*}
+\Br
+&= \sigma_1 \cos\phi_1 + \sigma_2 \sin\phi_1 \exp( \sigma_{23} \phi_2 ) \\
+\end{align*}
+
+Which is exactly the parametrization of a half sphere ($\phi_2 \in [0,\pi]$).  Contrast this to the semi-circle that $\phi_1$ traced out in the spherical case.  
+
+In the spherical case, the points $\phi_1 = \pi/2$ were nicely representative.  For the hypersphere those points are
+
+\begin{align*}
+\Br &= \sigma_2 \cos\phi_2 + \sigma_3 \sin\phi_2 \exp(\sigma_{34}\phi_3) \\
+\end{align*}
+
+We saw above that this is the parametrization of a sphere.
+
+Also like the spherical case, we have $\Br = \pm \sigma_1$ at $\phi_1 = 0$, and $\phi_1 = \pi$ respectively.
+
+The geometrical conclusion is that for each $\phi_1 \in [0,\pi/2]$ range the points $\Br$ trace out increasingly
+larger spheres, and after that decreasing sized spheres until we get to a point again at $\phi_1 = \pi$.
+
+\end{itemize}
+
+\section{Minkowski metric sphere}
+
+\subsection{2D hyperbola}
+
+Our 1-sphere equation was all the points on the curve
+
+\begin{align*}
+x^2 + y^2 = r^2
+\end{align*}
+
+The hyperbolic equivalent to this is
+
+\begin{align*}
+x^2 - y^2 = r^2
+\end{align*}
+
+Although this is not a closed curve like the circle.  To put this in a 
+more natural physical context, lets write (with $c=1$)
+
+\begin{align*}
+\Br = \gamma_0 t + \gamma_1 x
+\end{align*}
+
+So the equation of the 1-hyperboloid becomes
+
+\begin{align*}
+\Br^2 = t^2 - x^2 = r^2
+\end{align*}
+
+We can parametrize this with complex angles $i\phi$
+
+\begin{align*}
+\Br = r (\gamma_0 \cosh\phi + \gamma_1 \sinh\phi) 
+\end{align*}
+
+This gives us
+
+\begin{align*}
+\Br^2 = r^2 (\cosh^2\phi - \sinh^2\phi) = r^2
+\end{align*}
+
+as desired.  Like the circle, writing $\gamma_{01} = \gamma_0 \wedge \gamma_1$, an exponential form also works nicely
+
+\begin{align*}
+\Br = r \gamma_0 \exp(\gamma_{01} \phi)
+\end{align*}
+
+Here the square is 
+
+\begin{align*}
+\Br^2 
+&= r^2 \gamma_0 \exp(\gamma_{01} \phi) \gamma_0 \exp(\gamma_{01} \phi) \\
+&= r^2 \exp(-\gamma_{01} \phi) (\gamma_0)^2 \exp(\gamma_{01} \phi) \\
+&= r^2 \exp(-\gamma_{01} \phi) \exp(\gamma_{01} \phi) \\
+&= r^2 \\
+\end{align*}
+
+Again as desired.
+
+\subsection{3D hyperbola}
+
+Unlike the circle, a pure hyperbolic parametrization does not work to construct a Minkowski
+square signature.  Consider for example
+
+\begin{align*}
+\Br 
+&= \cosh \phi \gamma_0 + \gamma_1 \sinh\phi \cosh \psi + \gamma_2 \sinh\phi \sinh\psi \\
+\end{align*}
+
+Squaring this we have
+\begin{align*}
+\Br^2
+&= \cosh^2 \phi - \sinh^2\phi (\cosh^2 \psi + \sinh^2\psi) \\
+\end{align*}
+
+We would get the desired result if we chop off the $h$ in all the $\psi$ hyperbolic functions.  This
+shows that an appropriate parametrization is instead
+
+\begin{align*}
+\Br 
+&= \cosh \phi \gamma_0 + \gamma_1 \sinh\phi \cos\psi + \gamma_2 \sinh\phi \sin\psi \\
+\end{align*}
+
+This now squares to 1.  To see how to extend this to higher dimensions (of which we only need one more)
+we can factor out a $\gamma_0$
+
+\begin{align*}
+\Br 
+&= \gamma_0 (\cosh \phi - \sinh\phi (\mathLabelBox{\sigma_1 \cos\psi + \sigma_2 \sin\psi}{spatial vector parametrization of circle}) ) \\
+\end{align*}
+
+Now to extend this to three dimensions we have just to substituted the spherical parametrization from \ref{eqn:nvolume:sphereVec}
+
+\begin{align*}
+\Br 
+&= r \gamma_0 (\cosh \phi_0 - \sinh\phi_0 ( \cos\phi_1 \sigma_1 + \sin\phi_1 \sigma_2 \exp( \sigma_{23} \phi_2 )) ) \\
+&= r (\gamma_0 \cosh \phi_0 + \sinh\phi_0 ( \cos\phi_1 \gamma_1 + \sin\phi_1 \gamma_2 \exp( \gamma_{32} \phi_2 )) ) \\
+\end{align*}
+
+\subsection{Summarizing the hyperbolic vector parametrization}
+
+Our parametrization in two, three, and four dimensions, respectively, are
+\begin{align*}
+\Br_2 &= r (\gamma_0 \cosh \phi_0 + \sinh\phi_0 \gamma_1) \\
+\Br_3 &= r (\gamma_0 \cosh \phi_0 + \sinh\phi_0 \gamma_1 \exp( \gamma_{21} \phi_1 ) ) \\
+\Br_4 &= r (\gamma_0 \cosh \phi_0 + \sinh\phi_0 ( \cos\phi_1 \gamma_1 + \sin\phi_1 \gamma_2 \exp( \gamma_{32} \phi_2 )) )
+\end{align*}
+
+\subsection{Volume elements}
+
+What are our volume elements using this parametrization can be calculated as above.
+
+\subsubsection{For one spatial dimension we have}
+
+\begin{align*}
+dV_2 \gamma_0 \gamma_1 
+&=
+\begin{vmatrix}
+\cosh \phi_0 & \sinh\phi_0  \\
+\sinh \phi_0 & \cosh\phi_0 
+\end{vmatrix} r dr d\phi_0 \\
+&=
+r dr d\phi_0 \\
+\end{align*}
+
+\subsubsection{For two spatial dimensions we have}
+
+%\begin{align*}
+%dV_3 \gamma_0 \gamma_1 \gamma_2
+%&= \left(\PD{r}{\Br} \wedge \PD{\phi_0}{\Br} \wedge \PD{\phi_1}{\Br} \right) dr d\phi_0 d\phi_1 \\
+%&\langle \\
+%& (\gamma_0 \cosh \phi_0 + \sinh\phi_0 \gamma_1 \exp( \gamma_{21} \phi_1 ) ) \times \\
+%& (\gamma_0 \sinh \phi_0 + \cosh\phi_0 \gamma_1 \exp( \gamma_{21} \phi_1 ) ) \times \\
+%& (\gamma_0 \cosh \phi_0 + \sinh\phi_0 \gamma_1 \gamma_{21} \exp( \gamma_{21} \phi_1 ) )  \\
+%\rangle_{3} \\
+%& r^2 dr d\phi_0 d\phi_1
+%\end{align*}
+%
+%That first product within the grade selection is
+%\begin{align*}
+%&(\gamma_0 \cosh \phi_0 + \sinh\phi_0 \gamma_1 \exp( \gamma_{21} \phi_1 ) ) 
+%(\gamma_0 \sinh \phi_0 + \cosh\phi_0 \gamma_1 \exp( \gamma_{21} \phi_1 ) )  \\
+%&= \gamma_{01} ( \cosh^2\phi_0 \exp( \gamma_{21} \phi_1)  -\sinh^2\phi_0 \exp( -\gamma_{21} \phi_1 ) ) \\
+%&= \gamma_{01} \cos\phi_1
+%%+\gamma_{0121} \sin\phi_1 \cosh^2 \phi_0
+%+\gamma_{02} \sin\phi_1 \cosh^2 \phi_0
+%%-\gamma_{0112} \sin\phi_1 \sinh^2 \phi_0
+%+\gamma_{02} \sin\phi_1 \sinh^2 \phi_0 \\
+%&= \gamma_{01} \cos\phi_1 +\gamma_{02} \sin\phi_1 (\cosh^2 \phi_0 + \sinh^2 \phi_0) \\
+%\end{align*}
+%
+%and the third factor is
+%\begin{align*}
+%\gamma_0 \cosh \phi_0 + \sinh\phi_0 \gamma_{2} \exp( \gamma_{21} \phi_1 ) 
+%\end{align*}
+%
+%So this last product is
+%\begin{align*}
+%&(\gamma_{01} \cos\phi_1 +\gamma_{02} \sin\phi_1 (\cosh^2 \phi_0 + \sinh^2 \phi_0) )
+%(\gamma_0 \cosh \phi_0 + \sinh\phi_0 \gamma_{2} \exp( \gamma_{21} \phi_1 ) ) \\
+%&=
+%(\gamma_{01} \cos\phi_1 +\gamma_{02} \sin\phi_1 (\cosh^2 \phi_0 + \sinh^2 \phi_0) ) \sinh\phi_0 (\gamma_{2} \cos \phi_1 -\gamma_{1} \sin\phi_1 ) \\
+%&=
+% \gamma_{012} \cos^2\phi_1 
+%-\gamma_{021} \sin^2\phi_1 (\cosh^2 \phi_0 + \sinh^2 \phi_0) ) \sinh\phi_0  \\
+%&=
+% \gamma_{012} (\cos^2\phi_1 +\sin^2\phi_1 (\cosh^2 \phi_0 + \sinh^2 \phi_0) ) \sinh\phi_0 ) \\
+%\end{align*}
+%
+%Note that above in many spots the grade three selection was used to discard terms that have no contribution.  The final result, without much 
+%potential more for simplification appears to be
+%
+%\begin{align*}
+%dV_3 &= (\cos^2\phi_1 +\sin^2\phi_1 (\cosh^2 \phi_0 + \sinh^2 \phi_0) ) \sinh\phi_0 r^2 dr d\phi_0 d\phi_1
+%\end{align*}
+%
+%I do not trust this result since I expected something simpler.  Let us try again
+
+\begin{align*}
+\Br_3 &= r (\gamma_0 \cosh \phi_0 + \gamma_1 \sinh\phi_0 \cos\phi_1 + \gamma_2 \sinh\phi_0 \sin\phi_2 ) \\
+\end{align*}
+
+The derivatives are
+\begin{align*}
+\PD{r}{\Br_3} &= \gamma_0 \cosh \phi_0 + \gamma_1 \sinh\phi_0 \cos\phi_1 + \gamma_2 \sinh\phi_0 \sin\phi_1  \\
+\inv{r} \PD{\phi_0}{\Br_3} &= \gamma_0 \sinh \phi_0 + \gamma_1 \cosh\phi_0 \cos\phi_1 + \gamma_2 \cosh\phi_0 \sin\phi_1  \\
+\inv{r} \PD{\phi_1}{\Br_3} &= -\gamma_1 \sinh\phi_0 \sin\phi_1 + \gamma_2 \sinh\phi_0 \cos\phi_1 
+\end{align*}
+
+Or
+\begin{align*}
+\PD{r}{\Br_3} &= \gamma_0 \cosh \phi_0 + \gamma_1 \sinh\phi_0 \exp (\gamma_{21} \phi_1 ) \\
+\inv{r} \PD{\phi_0}{\Br_3} &= \gamma_0 \sinh \phi_0 + \cosh\phi_0 \exp (-\gamma_{21} \phi_1 ) \gamma_1 \\
+\inv{r} \PD{\phi_1}{\Br_3} &= \sinh\phi_0 \gamma_2 \exp(\gamma_{21} \phi_1 )
+\end{align*}
+
+Multiplying this out, discarding non-grade three terms we have
+
+\begin{align*}
+&(\gamma_{10} \sinh^2\phi_0 \exp (\gamma_{21} \phi_1 ) +\gamma_{01} \cosh^2 \phi_0 \exp (\gamma_{21} \phi_1 ) ) \sinh\phi_0 \gamma_2 \exp(\gamma_{21} \phi_1 ) \\
+&=\gamma_{01} \exp (\gamma_{21} \phi_1 ) \sinh\phi_0 \exp(-\gamma_{21} \phi_1 ) \gamma_2 \\
+&=\gamma_{01} \sinh\phi_0 \gamma_2 \\
+\end{align*}
+
+This gives us
+
+\begin{align*}
+dV_3 &= r^2 \sinh\phi_0 dr d\phi_0 d\phi_1 \\
+\end{align*}
+
+\subsubsection{For three spatial dimensions we have}
+
+\begin{align*}
+\Br_4 &= r (\gamma_0 \cosh \phi_0 + \sinh\phi_0 ( \cos\phi_1 \gamma_1 + \sin\phi_1 \gamma_2 \exp( \gamma_{32} \phi_2 )) )
+\end{align*}
+
+So our derivatives are
+
+\begin{align*}
+\PD{r}{\Br_4} &= \gamma_0 \cosh \phi_0 + \sinh\phi_0 ( \cos\phi_1 \gamma_1 + \sin\phi_1 \gamma_2 \exp( \gamma_{32} \phi_2 )) \\
+\inv{r}\PD{\phi_0}{\Br_4} &= \gamma_0 \sinh \phi_0 + \cosh\phi_0 ( \cos\phi_1 \gamma_1 + \sin\phi_1 \gamma_2 \exp( \gamma_{32} \phi_2 )) \\
+\inv{r}\PD{\phi_1}{\Br_4} &= \sinh\phi_0 ( -\sin\phi_1 \gamma_1 + \cos\phi_1 \gamma_2 \exp( \gamma_{32} \phi_2 )) \\
+\inv{r}\PD{\phi_2}{\Br_4} &= \sinh\phi_0 \sin\phi_1 \gamma_3 \exp( \gamma_{32} \phi_2 )
+\end{align*}
+
+In shorthand, writing $C$ and $S$ for the trig and hyperbolic functions as appropriate, we have
+
+\begin{align*}
+\gamma_0 C_0 + S_0 C_1 \gamma_1 + S_0 S_1 \gamma_2 \exp( \gamma_{32} \phi_2 )  \\
+\gamma_0 S_0 + C_0 C_1 \gamma_1 + C_0 S_1 \gamma_2 \exp( \gamma_{32} \phi_2 )  \\
+ -S_0 S_1 \gamma_1 + S_0 C_1 \gamma_2 \exp( \gamma_{32} \phi_2 )  \\
+S_0 S_1 \gamma_3 \exp( \gamma_{32} \phi_2 )
+\end{align*}
+
+Multiplying these out and dropping terms that will not contribute grade four bits is needed to calculate the volume element.  
+The full product for the first two derivatives is
+
+\begin{align*}
+&\gamma_0 C_0 \gamma_0 S_0
++\gamma_0 C_0 C_0 C_1 \gamma_1
++\gamma_0 C_0 C_0 S_1 \gamma_2 \exp( \gamma_{32} \phi_2 ) \\
+&+S_0 C_1 \gamma_1 \gamma_0 S_0
++S_0 C_1 \gamma_1 C_0 C_1 \gamma_1
++S_0 C_1 \gamma_1 C_0 S_1 \gamma_2 \exp( \gamma_{32} \phi_2 ) \\
+&+S_0 S_1 \gamma_2 \exp( \gamma_{32} \phi_2 ) \gamma_0 S_0
++S_0 S_1 \gamma_2 \exp( \gamma_{32} \phi_2 ) C_0 C_1 \gamma_1
++S_0 S_1 \gamma_2 \exp( \gamma_{32} \phi_2 ) C_0 S_1 \gamma_2 \exp( \gamma_{32} \phi_2 ) \\
+\end{align*}
+
+We can discard the scalar terms:
+\begin{align*}
+\gamma_0 C_0 \gamma_0 S_0 +S_0 C_1 \gamma_1 C_0 C_1 \gamma_1 +S_0 S_1 \gamma_2 \exp( \gamma_{32} \phi_2 ) C_0 S_1 \exp( -\gamma_{32} \phi_2 ) \gamma_2 
+\end{align*}
+
+Two of these terms cancel out
+\begin{align*}
+S_0 C_0 C_1 S_1 \gamma_{12} \exp( \gamma_{32} \phi_2 ) 
++S_0 C_0 C_1 S_1 \gamma_{21} \exp( \gamma_{32} \phi_2 ) 
+\end{align*}
+
+and we are left with two bivector contributors to the eventual four-pseudoscalar
+\begin{align*}
+\gamma_{01} C_1 
++\gamma_{02} S_1 \exp( \gamma_{32} \phi_2 ) 
+\end{align*}
+
+Multiplying out the last two derivatives we have
+\begin{align*}
+-S_0^2 S_1^2 \gamma_{13} \exp( \gamma_{32} \phi_2 )
+%+ S_0^2 C_1 S_1 \gamma_2 \exp( \gamma_{32} \phi_2 ) \exp( -\gamma_{32} \phi_2 ) \gamma_3
++ S_0^2 C_1 S_1 \gamma_{23}
+\end{align*}
+
+Almost there.  A final multiplication of these sets of products gives
+
+\begin{align*}
+&-\gamma_{01} C_1 S_0^2 S_1^2 \gamma_{13} \exp( \gamma_{32} \phi_2 )
+-\gamma_{02} S_1 \exp( \gamma_{32} \phi_2 ) S_0^2 S_1^2 \gamma_{13} \exp( \gamma_{32} \phi_2 ) \\
+&+\gamma_{01} C_1 S_0^2 C_1 S_1 \gamma_{23}
++\gamma_{02} S_1 \exp( \gamma_{32} \phi_2 ) S_0^2 C_1 S_1 \gamma_{23} \\
+&=
+\gamma_{03} C_1 S_0^2 S_1^2 \exp( \gamma_{32} \phi_2 )
+-\gamma_{02} \exp( \gamma_{32} \phi_2 ) S_0^2 S_1^3 \exp( -\gamma_{32} \phi_2 ) \gamma_{13} \\
+&\qquad +\gamma_{0123} C_1^2 S_0^2 S_1 
+-\gamma_{03} \exp( \gamma_{32} \phi_2 ) S_0^2 C_1 S_1^2 \\
+&=
+\gamma_{03} C_1 S_0^2 S_1^2 \exp( \gamma_{32} \phi_2 )
++\gamma_{0123} S_0^2 S_1 (S_1^2 + C_1^2)
+-\gamma_{03} \exp( \gamma_{32} \phi_2 ) S_0^2 C_1 S_1^2 \\
+&=
+\gamma_{03} C_1 S_1^2 (S_0^2 -S_0^2)\exp( \gamma_{32} \phi_2 )
++\gamma_{0123} S_0^2 S_1  \\
+\end{align*}
+
+Therefore our final result is
+
+\begin{align*}
+dV_4 &= \sinh^2 \phi_0 \sin\phi_1 r^3 dr d\phi_0 d\phi_1 d\phi_2
+\end{align*}
+
+\section{Summary}
+
+\subsection{Vector parametrization}
+
+N-Spherical parametrization
+
+\begin{align}
+\Br_2 &= \sigma_1 \exp( \sigma_{12} \phi_1 ) \\
+\Br_3 &= \cos\phi_1 \sigma_1 + \sin\phi_1 \sigma_2 \exp( \sigma_{23} \phi_2 ) \\
+\Br_4 &= \sigma_1 \cos\phi_1 + \sigma_2 \sin\phi_1 (\cos\phi_2 + \sigma_{23} \sin\phi_2 \exp(\sigma_{34}\phi_3) ) 
+\end{align}
+
+N-Hypersphere parametrization
+
+\begin{align}
+\Br_2 &= r (\gamma_0 \cosh \phi_0 + \sinh\phi_0 \gamma_1) \\
+\Br_3 &= r (\gamma_0 \cosh \phi_0 + \sinh\phi_0 \gamma_1 \exp( \gamma_{21} \phi_1 ) ) \\
+\Br_4 &= r (\gamma_0 \cosh \phi_0 + \sinh\phi_0 ( \cos\phi_1 \gamma_1 + \sin\phi_1 \gamma_2 \exp( \gamma_{32} \phi_2 )) )
+\end{align}
+
+\subsection{Volume elements}
+
+To summarize the mess of algebra we have shown that our hyperbolic volume elements are given by
+
+\begin{align}
+dV_2 &= \left(r dr\right) d\phi_0 \\
+dV_3 &= \left(r^2 dr\right) \left(\sinh\phi_0 d\phi_0\right) d\phi_1 \\
+dV_4 &= \left(r^3 dr\right) \left(\sinh^2 \phi_0 d\phi_0\right) \left(\sin\phi_1 d\phi_1\right) d\phi_2
+\end{align}
+
+Compare this to the volume elements for the n-spheres
+
+\begin{align}
+dV_2 &= \left(r dr\right) d\phi_1 \\
+dV_3 &= \left(r^2 dr\right) \left(\sin\phi_1 d\phi_1\right) d\phi_2 \\
+dV_4 &= \left(r^3 dr\right) \left(\sin^2\phi_1 d\phi_1\right) \left(\sin\phi_2 d\phi_2\right) d\phi_3 
+\end{align}
+
+Besides labeling variations the only difference in the form is a switch from trig to hyperbolic functions for the first angle (which has an implied
+range difference as well).

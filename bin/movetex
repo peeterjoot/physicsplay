@@ -2,7 +2,8 @@
 
 use strict ;
 use warnings ;
-use Getopt::Long;
+use Getopt::Long ;
+use POSIX qw/strftime/ ;
 
 my $d ;
 #$d = 'gabook' ;
@@ -15,7 +16,7 @@ my $filebase ;
 my $printOnly = 0 ;
 my $spellcheck = 1 ;
 
-my $mathbase = 'math2012' ;
+my $mathbase = 'math2013' ;
 
 GetOptions(
    'file=s'   => \$filebase,
@@ -41,16 +42,37 @@ $curDirName =~ s,.*/,, ;
 
 my @newDirCommands = () ;
 my @newDeps = () ;
-my @ig = split(/[\n\r\l]+/, `grep includegraphics $filebase.$suffix | sed 's/%.*//'`) ;
+
+#print "grep -e includegraphics -e input.*pdf_tex $filebase.$suffix | sed 's/%.*//'\n" ;
+#die ;
+my $gpat = "-e includegraphics -e imageFigure -e pdfTexFigure -e 'input.*pdf_tex'" ;
+
+# FIXME: want these as dependencies, but not in the git repo:
+#$gpat .= ' -e movieFigure' ;
+
+my @ig = split(/[\n\r\l]+/, `grep $gpat $filebase.$suffix | sed 's/%.*//'`) ;
 foreach (@ig)
 {
-   $_ =~ s/.*{// ;
-   $_ =~ s/}// ;
-   $_ .= '*' ;
+   next if ( $_ eq '' ) ;
+
+   unless ( s/^\\imageFigure{// or
+#        s/^\\movieFigure{// or
+        s/^\\pdfTexFigure{// )
+   {
+      $_ =~ s/.*{// ;
+   }
+
+   s/}.*// ;
+
+   $_ =~ s/\.pdf_tex// ;
+   $_ .= '.*' ;
+
+#print "glob: $_\n" ;
    my @gg = glob( $_ ) ;
 
    foreach (@gg)
    {
+#print "gg: $_\n" ;
       if ( !-e "$_" )
       {
          warn "in: $curDirName: cannot find file '$_' (skipping)\n" ;
@@ -65,11 +87,20 @@ foreach (@ig)
 
 my $title = `grep 'chapter{' $filebase.$suffix` ;
 chomp $title ;
-$title =~ s/.*{(.*?)}.*/$1/ ; 
+if (! ($title =~ s/.*{(.*?)}.*/$1/) )
+{
+   $title = `grep 'generatetitle{' $filebase.$suffix` ;
+   chomp $title ;
+}
 
 my $date = `grep 'date{' $filebase.$suffix` ;
 chomp $date ;
 $date =~ s/.*{(.*?)}.*/$1/ ; 
+
+if ( $date eq '' )
+{
+   $date = strftime( "%B %d, %Y", localtime ) ;
+}
 
 my $meta = "
 ,{
@@ -91,14 +122,14 @@ if ( $spellcheck )
    push( @newDirCommands, "aspell -c --mode=tex $filebase.tex" ) ;
 }
 
-foreach (@newDeps)
-{
-   push( @newDirCommands, "echo 'BOOKDEPENDENCIES +=' $_ >> make.dep" ) ;
-}
+#foreach (@newDeps)
+#{
+#   push( @newDirCommands, "echo 'BOOKDEPENDENCIES +=' $_ >> make.dep" ) ;
+#}
 
 push( @newDirCommands, "~/bin/filtertex $filebase.tex" ) ;
-push( @newDirCommands, "echo '\%\\include{'$filebase'}' >> main.tex" ) ;
-push( @newDirCommands, "echo 'BOOKDEPENDENCIES +=' $filebase.tex >> make.dep" ) ;
+push( @newDirCommands, "echo '\%\\include{'$filebase'}' >> chapters.tex" ) ;
+#push( @newDirCommands, "echo 'BOOKDEPENDENCIES +=' $filebase.tex >> make.dep" ) ;
 
 push( @newDirCommands, "
 cat >> ../METADATA << EOF

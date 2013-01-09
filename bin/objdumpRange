@@ -1,0 +1,47 @@
+#!/usr/bin/perl
+
+use strict ;
+use warnings ;
+use Getopt::Long;
+
+my $symbolName ;
+my $libraryName ;
+
+GetOptions(
+   'sym=s'    => \$symbolName,
+   'lib=s'    => \$libraryName
+) ;
+
+die "objdumpRange -s symname -l libname\n" unless( defined $symbolName and defined $libraryName ) ;
+
+my $nmCmd = "nm -n $libraryName | grep -A1 $symbolName" ;
+print "# $nmCmd\n" ;
+my $nm = `$nmCmd` ;
+my @symInfo = split( /\n/, $nm ) ;
+die if ( scalar(@symInfo) != 2 ) ;
+
+my $myaddr ;
+my $nextaddr ;
+
+foreach ( @symInfo )
+{
+# 0000000001a20150 T pdFormatCaResponse
+# 0000000001a2075e T pdFormatManagementHandle
+   my @i = split( /\s+/, $_ ) ;
+
+   print "# @i\n" ;
+
+   if ( defined $myaddr )
+   {
+      $nextaddr = $i[0] ;
+   }
+   else
+   {
+      $myaddr = $i[0] ;
+   }
+}
+
+my $cmd = "objdump -l -d --no-show-raw-insn --reloc --start-address=0x$myaddr --stop-address=0x$nextaddr $libraryName" ;
+print "# $cmd\n" ;
+
+system( $cmd ) ;

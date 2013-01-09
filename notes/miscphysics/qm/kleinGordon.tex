@@ -1,0 +1,710 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+
+% 
+% 
+%\documentclass{article}
+
+%\input{../peeters_macros.tex}
+%\input{../peeters_macros2.tex}
+
+%\usepackage{listings}
+%\usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
+%\usepackage[bookmarks=true]{hyperref}
+
+%\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package.
+%\usepackage{latexsym,amssymb,epsf} % do not remember if these are
+   % needed, but their inclusion can not do any damage
+
+
+\chapter{Some Klein-Gordon equation notes}
+\label{chap:PJkgNotes}
+%\author{Peeter Joot \quad peeter.joot@gmail.com }
+\date{ March 27, 2009.  kleinGordon.tex }
+
+%\begin{document}
+
+%\maketitle{}
+%\tableofcontents
+\section{Motivation}
+
+Want to explore the ideas of global and local gauge invariance.  I seem to recall that Susskind
+used the Klein-Gordon Lagrangian, which had a form something like
+
+\begin{align}\label{eqn:klein_gordon:densityUndeterminedCoeff}
+\LL = \partial^\mu \psi \partial_\mu \psi^\conj + \alpha m^2 \psi \psi^\conj
+\end{align}
+
+Since this was one of the simplest forms to apply the
+a relativistic gauge transformation concept to, use this for the gauge transformation exercise.  Before doing that it also seemed reasonable to
+explore this relativistic QM equation slightly to get an introductory feel for it.
+
+\section{Determine that constant}
+
+We want
+
+\begin{align*}
+\grad^2 \psi = \partial^\mu \partial_\mu \psi = -\frac{m^2 c^2}{\hbar^2} \psi
+\end{align*}
+
+%FIXME: according to the 
+%\href{http://en.wikipedia.org/wiki/Klein-Gordon_equation}{wikipedia KG page}
+%and the
+%\href{http://mathworld.wolfram.com/Klein-GordonEquation.html}{wolfram KG page}
+%and planet-math (URL)
+%and Sdredniki
+%and problem 3.10 in \citep{byron1992mca},
+%I had the sign of my $m^2$ mixed up given my use of $+---$ metric.  
+% That messed up pretty much everything below, and I have attempted to
+% fix it all up.
+
+So, to start things off let us do the variation on the Lagrangian density of \ref{eqn:klein_gordon:densityUndeterminedCoeff}.  For fun, let us try it with Feynman's method (first order Taylor expansion, and no memorization
+of the field form of the Euler-Lagrange equations).
+
+Write $\psi = \phi + \epsilon$, where $\phi$ is the desired solution and $\epsilon$ is a field that
+vanishes on the boundaries of the action integral
+
+\begin{align*}
+S
+&= \int \LL d^4 x \\
+&=
+\int \left( \partial^\mu (\phi + \epsilon) \partial_\mu (\phi + \epsilon)^\conj + \alpha m^2 (\phi + \epsilon) (\phi + \epsilon)^\conj \right) d^4 x \\
+&=
+\int d^4 x \partial^\mu \phi \partial_\mu \phi^\conj
++ \alpha m^2 \int \phi \phi^\conj  d^4 x \\
+&+ \int d^4 x \partial^\mu \epsilon \partial_\mu \phi^\conj
++ \int d^4 x \partial^\mu \phi \partial_\mu \epsilon^\conj  \\
+&+ \alpha m^2 \int \phi \epsilon^\conj  d^4 x
++ \alpha m^2 \int \epsilon \phi^\conj  d^4 x \\
+&+ \alpha m^2 \int \epsilon \epsilon^\conj  d^4 x
++ \int d^4 x \partial^\mu \epsilon \partial_\mu \epsilon^\conj \\
+\end{align*}
+
+Only the mixed $\epsilon$, $\phi$ terms are of interest.  The $\phi$ only terms are the desired solution, and do not vary with $\epsilon$, and the last two are
+quadratic and can be neglected as small.  Integration by parts on the remainder we have
+
+\begin{align*}
+\delta S
+&=
+\int d^4 x \partial^\mu \epsilon \partial_\mu \phi^\conj
++ \int d^4 x \partial^\mu \phi \partial_\mu \epsilon^\conj
++ \alpha m^2 \int \phi \epsilon^\conj  d^4 x
++ \alpha m^2 \int \epsilon \phi^\conj  d^4 x \\
+&=
+\int d^4 x \epsilon \left( -\partial^\mu \partial_\mu \phi^\conj + \alpha m^2 \phi^\conj \right)
++ \int d^4 x \left( -\partial_\mu \partial^\mu \phi + \alpha m^2 \phi \right) \epsilon^\conj
+\\
+&=
+2 \int d^4 x \Re \left( \left( -\partial_\mu \partial^\mu \phi + \alpha m^2 \phi \right) \epsilon^\conj  \right) \\
+\end{align*}
+
+Since we want $\delta S = 0$ for all $\epsilon$, real or imaginary, the inner term gives us the field equation for the Lagrangian density, and we have
+
+\begin{align*}
+\partial_\mu \partial^\mu \phi = \alpha m^2 \phi
+\end{align*}
+
+This determines the constant factor $\alpha$ (and its sign), so we have the Lagrangian density and corresponding field equation
+with all the units in place.
+
+\begin{align}\label{eqn:klein_gordon:withConstant}
+\partial_\mu \partial^\mu \psi &= -\frac{m^2 c^2}{\hbar^2} \psi \\
+\LL &= \partial^\mu \psi \partial_\mu \psi^\conj - \frac{m^2 c^2}{\hbar^2}\psi \psi^\conj
+\end{align}
+
+Now, that was not really any easier to do it that way.  Mechanically plugging into the Euler-Lagrange equations would have gotten us there faster, but Feynman's method from the Lectures \citep{feynman1963flp} is pretty cool for its simplicity.
+
+\begin{align*}
+0
+&= \partial_{\psi^\conj}\LL - \sum_\sigma \partial_\sigma \PD{(\partial_\sigma \psi^\conj)}{\LL} \\
+&= -\frac{m^2 c^2}{\hbar^2}\psi - \sum_\sigma \partial_\sigma \partial^\sigma \psi
+\end{align*}
+
+This also gives us, with less fun, the end result from the density
+
+\begin{align*}
+\partial_\sigma \partial^\sigma \psi &= -\frac{m^2 c^2}{\hbar^2}\psi
+\end{align*}
+
+\section{Solutions to the Klein-Gordon equation}
+
+Pauli starts his book \citep{pauli2000wm} with this relativistic equation, pointing out that the wave packet
+
+\begin{align}
+\psi(\Bx,t) = \inv{(\sqrt{2\pi})^3}\int A(\Bk) e^{ i (\Bk \cdot \Bx - \omega t)} d^3 k
+\end{align}
+
+Satisfies this relativistic scalar wave equation \ref{eqn:klein_gordon:withConstant}.
+
+With a time positive metric
+we have
+
+\begin{align*}
+\grad^2
+&= \partial_\mu\partial^\mu \\
+&= \inv{c^2} \PDSq{t}{} - \sum_{a=1}^3 \PDSq{x^a}{} \\
+&= \inv{c^2} \PDSq{t}{} - \spacegrad^2
+\end{align*}
+
+So to verify that this is a solution we can compute the derivatives for the wave equation.  Those are
+
+\begin{align*}
+\inv{c^2} \PDSq{t} \psi(\Bx,t) = \inv{(\sqrt{2\pi})^3}\int A(\Bk) \left( \frac{(-i\omega)^2}{c^2} \right) e^{ i (\Bk \cdot \Bx - \omega t)} d^3 k
+\end{align*}
+\begin{align*}
+\spacegrad^2 \psi(\Bx,t) = \inv{(\sqrt{2\pi})^3}\int A(\Bk) \left(\sum_{a=1}^3 (i k_a)^2 \right)e^{ i (\Bk \cdot \Bx - \omega t)} d^3 k
+\end{align*}
+
+So we have
+
+\begin{align*}
+\left( \grad^2 + \frac{m^2 c^2}{\hbar^2} \right) \psi
+&=
+\inv{(\sqrt{2\pi})^3}\int A(\Bk) \left( -\frac{\omega^2}{c^2} + \Bk^2 + \frac{m^2 c^2}{\hbar^2}
+\right)e^{ i (\Bk \cdot \Bx - \omega t)} d^3 k
+\end{align*}
+
+For this to be zero for arbitrary wave number domain wave functions a constraint is required
+
+\begin{align*}
+-\frac{\omega^2}{c^2} + \Bk^2 + \frac{m^2 c^2}{\hbar^2} = 0
+\end{align*}
+
+Or with $\omega = 2 \pi \nu$, and $\hbar = h/2\pi$, this is
+
+\begin{align*}
+\frac{h^2 \nu^2}{c^2} - \hbar^2 \Bk^2 = {m^2 c^2}
+\end{align*}
+
+This means that the constraint on the wave number vector $\Bk$ is that it is incorporated into a four vector momentum vector as
+
+\begin{align*}
+p &= (h \nu/c, \hbar \Bk) \equiv (E/c, \Bp)\\
+p^2 &= (m c)^2
+\end{align*}
+
+Put another way, the integral for the wave packet must not be one over all wave number space, but the wave number space defined by the
+hyperbolic surface in wave number space
+
+\begin{align*}
+\Bk^2 = \inv{\hbar^2 c^2 }\left( (h \nu)^2 - (m c^2)^2 \right)
+\end{align*}
+
+\subsection{Wave packet as Fourier transform}
+
+Observe that at $t=0$ one has
+
+\begin{align*}
+\psi(\Bx,0) = \inv{(\sqrt{2\pi})^3}\int A(\Bk) e^{ i (\Bk \cdot \Bx)} d^3 k
+\end{align*}
+
+So $A(\Bk)$ is exactly the Fourier transform of $\psi(\Bx,0)$
+and one can
+use the Fourier transform to specify the time evolution of the wave packet in terms of initial conditions.
+
+\begin{align}
+\psi(\Bx,t) = \inv{(\sqrt{2\pi})^3}\int \hat{\psi}_0(\Bk) e^{ i (\Bk \cdot \Bx - \omega t)} d^3 k
+\end{align}
+
+That is actually a fairly odd seeming constraint.  We have a volume integral over a surface of zero thickness unless $\nu$ varies.  Intuitively
+I had expect that to be zero, so this wave packet form does not seem particularly well defined as stated.  Perhaps the value, as
+in Pauli's text, is really just to motivate the relativistic wave equation?
+
+\subsection{Normalization}
+
+Although Pauli incorporated the $2\pi$ factors into $A(\Bk)$, leaving these explicit allows for the normalization of the wave number and spatial domains
+to be identical.
+
+\begin{align*}
+\int
+\psi(\Bx,t) \psi^\conj(\Bx,t) d^3 \Bx
+&=
+\inv{({2\pi})^3}
+\iiint d^3 x
+\hat{\psi}_0(\Bk) e^{ i (\Bk \cdot \Bx - \omega t)} d^3 k
+\widehat{\psi^\conj}_0(\Bk') e^{ -i (\Bk' \cdot \Bx - \omega t)} d^3 k'
+\\
+&=
+\iint \hat{\psi}_0(\Bk) \widehat{\psi^\conj}_0(\Bk')
+d^3 k d^3 k'
+\inv{({2\pi})^3} \int e^{ i ((\Bk- \Bk') \cdot \Bx)} d^3 x
+\\
+&=
+\iint \hat{\psi}_0(\Bk) \widehat{\psi^\conj}_0(\Bk') \delta^3(\Bk-\Bk') d^3 k d^3 k'
+\\
+&=
+\int \hat{\psi}_0(\Bk) \widehat{\psi^\conj}_0(\Bk) d^3 k
+\\
+\end{align*}
+
+So, if one has a unit normalized wave packet in the spatial domain, the wave number domain has the same normalization
+
+\begin{align}
+\int \Abs{\psi(\Bx,t)} d^3 \Bx = \int \Abs{\hat{\psi}_0(\Bk)} d^3 k
+\end{align}
+
+\section{Probability current?}
+
+Given the wave equation and an interpretation of $1 = \int \Abs{\psi}^2$ as a probability, can one define a probability current meaningfully.  This
+seems somewhat problematic logically, since computing the derivative, as done in \citep{gabook:PJprobCurrent}
+
+\begin{align*}
+\PD{t}{\psi\psi^\conj} = \PD{t}{\psi}\psi^\conj + \psi \PD{t}{\psi^\conj}
+\end{align*}
+
+leaves us with nowhere to go.  For the
+Schr\"{o}dinger equation probability density, this calculation gave us
+
+\begin{align}\label{eqn:klein_gordon:pcons}
+\rho &= \psi\psi^\conj \\
+\BJ &= \frac{\hbar}{2mi} \left( \psi^\conj \spacegrad \psi - \psi \spacegrad \psi^\conj \right) \\
+0 &= \PD{t}{\rho} + \spacegrad \cdot \BJ
+\end{align}
+
+However for the KG equation we do not have any sort of expression for $\PD{t}{\psi}$ since it is second order.
+
+\subsection{Second order derivatives of the probability density}
+
+One could, however, compute a second order derivatives of the density, but does this product anything useful?
+
+\begin{align*}
+\PDSq{t}{\psi\psi^\conj}
+&= \PD{t}{}\left( \PD{t}{\psi}\psi^\conj + \psi \PD{t}{\psi^\conj} \right) \\
+&=
+\PDSq{t}{\psi}\psi^\conj
++ \psi \PDSq{t}{\psi^\conj}
++ 2 \PD{t}{\psi}\PD{t}{\psi^\conj}
+\\
+\end{align*}
+
+But we have
+
+\begin{align*}
+\PDSq{t}{\psi} = c^2 \spacegrad^2 \psi - \left(\frac{m c^2}{\hbar} \right)^2 \psi
+\end{align*}
+
+This gives
+\begin{align*}
+\PDSq{t}{\psi\psi^\conj}
+&=
+\left( c^2 \spacegrad^2 \psi - \left(\frac{m c^2}{\hbar} \right)^2 \psi \right) \psi^\conj
++ \psi \left( c^2 \spacegrad^2 \psi^\conj - \left(\frac{m c^2}{\hbar} \right)^2 \psi^\conj \right)
++ 2 \PD{t}{\psi}\PD{t}{\psi^\conj}
+\\
+&=
+c^2 \left( \psi^\conj \spacegrad^2 \psi + \psi \spacegrad^2 \psi^\conj \right)
++ 2 \left(
+\PD{t}{\psi}\PD{t}{\psi^\conj} - \left( \frac{m c^2}{\hbar} \right)^2 \psi \psi^\conj
+\right)
+\\
+\end{align*}
+
+The first two Laplacian terms can be expressed as divergences with
+
+\begin{align*}
+\spacegrad \cdot (a \spacegrad b)
+&=
+\gpgradezero{ \spacegrad (a \spacegrad b) } \\
+&=
+(\spacegrad a) \cdot (\spacegrad b) + a \spacegrad^2 b
+\end{align*}
+
+This gives
+
+\begin{align*}
+\PDSq{t}{\psi\psi^\conj}
+&=
+c^2 \spacegrad \cdot \left( \psi \spacegrad \psi^\conj +\psi^\conj \spacegrad \psi \right)
++ 2 \left(
+\PD{t}{\psi}\PD{t}{\psi^\conj} - \left( \frac{m c^2}{\hbar} \right)^2 \psi \psi^\conj
+-c^2 (\spacegrad \psi) \cdot (\spacegrad \psi^\conj)
+\right)
+\\
+\end{align*}
+
+Integrating over all space (assuming the fields vanish at infinity), the divergence terms drop out, and one is left with
+\begin{align*}
+\int \left( \PDSq{t}{\psi\psi^\conj}
++ 2 c^2 (\spacegrad \psi) \cdot (\spacegrad \psi^\conj)
+- 2 \PD{t}{\psi}\PD{t}{\psi^\conj}  \right)
+&=
+-2 \left( \frac{m c^2}{\hbar} \right)^2
+\\
+\end{align*}
+
+This is kind of funny, since it almost takes us full circle back to the Lagrangian we started with.  Putting everything
+back into the integral and grouping together
+
+\begin{align*}
+\int \inv{2 c^2} \PDSq{t}{\psi\psi^\conj}
+&=
+\int
+\left(
+\PD{ct}{\psi}\PD{ct}{\psi^\conj}
+- (\spacegrad \psi) \cdot (\spacegrad \psi^\conj)
+- \frac{m^2 c^2}{\hbar^2} \psi \psi^\conj
+\right)
+\\
+&=
+\int
+\left(
+\grad \psi \cdot \grad \psi^\conj
+- \frac{m^2 c^2}{\hbar^2} \psi \psi^\conj
+\right)
+\\
+\end{align*}
+
+So we have
+
+\begin{align*}
+\int d^3 x \LL &= \inv{2} \int d^3 x \PDSq{ct}{\psi\psi^\conj}
+\end{align*}
+
+On the LHS it almost looks like the original action, but it is integrated over space instead of spacetime.  This integral
+whatever it is, ends up expressible in terms of just the time derivatives, so there is a somewhat natural seeming space and time
+pairing here.
+
+\section{Radial solution}
+
+What does separation of variables yield for this equation?  Let
+
+\begin{align*}
+\psi(\Bx,t) = \phi(\Bx)\tau(t)
+\end{align*}
+
+\begin{align*}
+\grad^2 \psi
+&= \left(\inv{c^2} \PDSq{t}{} - \spacegrad^2 \right) \phi(\Bx)\tau(t) \\
+&= \inv{c^2} \phi\tau'' - \tau \spacegrad^2 \phi \\
+&= -\frac{m^2 c^2}{\hbar^2}\phi\tau
+\end{align*}
+
+So we have
+\begin{align*}
+\inv{c^2} \frac{\tau''}{\tau} - \inv{\phi} \spacegrad^2 \phi &= -\frac{m^2 c^2}{\hbar^2}
+\end{align*}
+
+Let $\tau''/\tau = c^2 \kappa^2$, for some constant $\kappa$, perhaps imaginary. This gives
+
+\begin{align*}
+\spacegrad^2 \phi &= \left( \kappa^2 + \frac{m^2 c^2}{\hbar^2} \right) \phi
+\end{align*}
+
+Introducing one additional constant
+
+\begin{align*}
+\mu^2 &= \kappa^2 + \frac{m^2 c^2}{\hbar^2}
+\end{align*}
+
+The spatial component of the equation becomes
+
+\begin{align*}
+\left( \spacegrad^2 - \mu^2 \right) \phi &= 0
+\end{align*}
+
+Now, let us return to the equation for $\tau$ and integrate.  If $\kappa$ is real then the solutions are linear
+combinations of hyperbolic functions
+
+\begin{align*}
+\tau = A_{\pm} e^{\pm \kappa c t}
+\end{align*}
+
+Here is where the math allows more than seems regular in a physical context.  Hyperbolic seem a bit irregular for the time term of a wave function, so it probably makes sense to make $\kappa$
+pure imaginary, say $\kappa = i k$.  Then we have a sinusoidal phase term for the time dependent function
+
+\begin{align*}
+\tau = A_{\pm} e^{\pm i k c t}
+\end{align*}
+
+and the spatial remainder takes the form of a Helmholtz equation.
+
+\begin{align*}
+\left( \spacegrad^2 + \left( k^2 + \frac{m^2 c^2}{\hbar^2} \right) \right) \phi &= 0
+\end{align*}
+
+The Helmholtz equation is also what we would have gotten with separation of variables for an unforced wave
+equation, so the spatial solution of the Klein Gordon equation takes the same form as solutions to the
+homogeneous wave equation (example: plane waves or superpositions of them), but with the wave number vector magnitude is shifted due to the inclusion of
+the $m^2 c^2/\hbar^2$ constant term in the equation above.
+
+\section{Gauge transformation}
+
+The concept of gauge transformation is explained very nicely in \citep{vtgauge}.  Work through this
+for the KG Lagrangian.
+
+\subsection{Constant phase change}
+
+A global gauge transformation that changes phase everywhere by some constant amount
+
+\begin{align*}
+\psi' = \psi e^{i\theta}
+\end{align*}
+
+does not change the Lagrangian
+
+\begin{align*}
+\LL'
+&= \partial^\mu \psi'  \partial_\mu {\psi'}^\conj - \frac{m^2 c^2}{\hbar^2}\psi' {\psi'}^\conj \\
+&= \partial^\mu \psi e^{i\theta} \partial_\mu \psi^\conj e^{-i\theta} - \frac{m^2 c^2}{\hbar^2}\psi e^{i\theta}\psi^\conj e^{-i\theta} \\
+&= \LL
+\end{align*}
+
+Because of the symmetry Noether's theorem can be applied to find a conserved quantity.  In this simple case the Noether's equation is not really necessary.
+Instead, the conserved quantity can be computed directly.
+
+\begin{align*}
+\frac{d\LL'}{d\theta}
+&=
+\PD{\psi'}{\LL'} \PD{\theta}{\psi'}
++\PD{{\psi'}^\conj}{\LL'} \PD{\theta}{{\psi'}^\conj}
++\PD{(\partial_\mu \psi')}{\LL'} \PD{\theta}{(\partial_\mu \psi')}
++\PD{(\partial_\mu {\psi'}^\conj)}{\LL'} \PD{\theta}{(\partial_\mu {\psi'}^\conj)} \\
+\end{align*}
+
+Note that summation over $\mu$ is implied here, so this is really a chain rule expansion with respect to all ten field variables.
+
+At $\theta=0$, $\psi' = \psi$, and this derivative is
+
+\begin{align*}
+{\left. \frac{d\LL'}{d\theta} \right\vert}_{\theta=0}
+&=
+-\frac{m^2 c^2}{\hbar^2}\left( \psi^\conj (i \psi) + \psi (-i\psi^\conj) \right)
++ \partial^\mu \psi^\conj (i\partial_\mu \psi)
++ \partial^\mu \psi (-i \partial_\mu {\psi}^\conj) \\
+\end{align*}
+
+The first term is zero, and one can guess that the remainder can be written as a divergence as follows (with confirmation)
+
+\begin{align*}
+i \partial_\mu \left(
+\psi \partial^\mu \psi^\conj
+-\psi^\conj \partial^\mu \psi
+\right)
+&=
+i \left(
+\partial_\mu \psi \partial^\mu \psi^\conj
+-\partial_\mu \psi^\conj \partial^\mu \psi
++\psi \partial_\mu \partial^\mu \psi^\conj
+-\psi^\conj \partial_\mu \partial^\mu \psi
+\right) \\
+&=
+i \left(
+\partial_\mu \psi \partial^\mu \psi^\conj
+-\partial_\mu \psi^\conj \partial^\mu \psi \right)
+- \frac{ i m^2 c^2}{\hbar^2} \left(
+\psi \psi^\conj
+-\psi^\conj \psi
+\right) \\
+\end{align*}
+
+(confirming the guess).
+
+We therefore have a spacetime divergence of zero for this current, namely
+
+\begin{align}
+J^\mu &=
+i \left(
+\psi \partial^\mu \psi^\conj
+-\psi^\conj \partial^\mu \psi
+\right) \\
+\partial_\mu J^\mu &= 0
+\end{align}
+
+In GA form, with $J = \gamma_\mu J^\mu$, and $\grad = \gamma^\mu \partial_\mu$ this is
+
+\begin{align}
+J &=
+i \left(
+\psi \grad \psi^\conj
+-\psi^\conj \grad \psi
+\right) \\
+\grad \cdot J &= 0
+\end{align}
+
+A relation very much like the vector probability current of the non-relativistic Schr\"{o}dinger equation.  We have seen above, however, that
+unlike the non-relativistic equation, because we lack first order time derivatives, we do not have a way to relate this to the probability density
+$\rho = \psi\psi^\conj$.
+
+Working through this helps clarify why the requirement for interpretation of $\rho$ as a probability current with the
+corresponding continuity equation was highlighted in \citep{bohm1989qt} as one of the reasons for requiring a first order in time wave equation.
+
+Also see here that this is exactly the result that was found in \citep{gabook:PJNoethersField} where the Noether equation for the conserved current
+was derived.  Working this out by direct calculation, however, provides a nice lead in to an attempt to do the same for non-constant $\theta$
+(local gauge transformation).
+
+\subsection{Local gauge transformation}
+
+Now, if one lets the field transformation vary with space and time
+
+\begin{align}
+\theta = \theta(x^\mu)
+\end{align}
+
+Then there will be less cancellation in the transformed Lagrangian, and it will no longer be invariant.  We have
+
+\begin{align*}
+\psi' &= \psi e^{i\theta} \\
+{\psi'}^\conj &= \psi^\conj e^{-i\theta} \\
+\partial_\mu \psi' &= (\partial_\mu \psi + i \psi \partial_\mu \theta ) e^{i\theta}  \\
+\partial^\mu {\psi'}^\conj &= (\partial^\mu \psi^\conj - i \psi^\conj \partial^\mu \theta) e^{-i\theta} \\
+\end{align*}
+
+\begin{align*}
+\LL'
+&= \partial_\mu \psi' \partial^\mu {\psi'}^\conj - \frac{m^2 c^2}{\hbar^2} \psi' {\psi'}^\conj \\
+&=
+(\partial_\mu \psi + i \psi \partial_\mu \theta ) (\partial^\mu \psi^\conj - i \psi^\conj \partial^\mu \theta)
+- \frac{m^2 c^2}{\hbar^2} \psi {\psi}^\conj \\
+&=
+\partial_\mu \psi \partial^\mu \psi^\conj
+-i (\partial_\mu \psi) \psi^\conj (\partial^\mu \theta)
++ i \psi (\partial_\mu \theta) (\partial^\mu \psi^\conj)
++ \left( -\frac{m^2 c^2}{\hbar^2} + \partial_\mu \theta \partial^\mu \theta \right) \psi {\psi}^\conj \\
+&=
+\partial_\mu \psi \partial^\mu \psi^\conj
++ (\partial_\mu \theta) J^\mu %\left( i \psi (\partial^\mu \psi^\conj) -i (\partial^\mu \psi) \psi^\conj \right)
++ \left( -\frac{m^2 c^2}{\hbar^2} + \partial_\mu \theta \partial^\mu \theta \right) \psi {\psi}^\conj \\
+\end{align*}
+
+Introduction of a four vector $A^\mu = \partial^\mu \theta$, the transformed Lagrangian becomes
+
+\begin{align}
+\LL'
+&=
+\partial_\mu \psi \partial^\mu \psi^\conj
++ A_\mu J^\mu
++ \left( -\frac{m^2 c^2}{\hbar^2} + A_\mu A^\mu \right) \psi {\psi}^\conj \\
+&=
+(\grad \psi) \cdot (\grad \psi^\conj) + A \cdot J
++ \left( -\frac{m^2 c^2}{\hbar^2} + A^2 \right) \psi {\psi}^\conj
+\end{align}
+
+So if the local gauge transformation is interpreted as supplying an external electromagnetic potential $A$, we have the same $A \cdot J$ coupling term
+as we have in the Maxwell field Lagrangian, but the current here is the probability current, rather than the electric charge/current density vector.  Also
+somewhat curiously, we have the square of the potential $A$ showing up as a mass term.
+
+\subsubsection{Gauge invariant form}
+
+Our transformed Lagrangian can now be written (dropping primes)
+
+\begin{align}\label{eqn:klein_gordon:gaugeInvariant}
+\LL(\psi, A)
+&=
+(\grad \psi + i \psi A) \cdot (\grad \psi + i \psi A)^\conj
+- \frac{m^2 c^2}{\hbar^2} \psi {\psi}^\conj
+\end{align}
+
+Making an additional local transformation $\psi \rightarrow \psi e^{i\alpha}$, and writing $B^\mu = \partial^\mu \alpha$ the new transformed Lagrangian becomes
+
+\begin{align*}
+\LL' = \LL(\psi', A')
+&=
+(\grad \psi + i \psi (A'+B)) \cdot (\grad \psi + i \psi (A'+B))^\conj
+- \frac{m^2 c^2}{\hbar^2} \psi {\psi}^\conj \\
+\end{align*}
+
+So, if one requires that $A$ transforms as $A^\mu \rightarrow A^\mu - \partial^\mu \alpha = {A'}^\mu$ (ie: $A' = A - B$), then we have $\LL' = \LL$, and
+the new Lagrangian is locally gauge invariant.
+
+We see that local gauge invariance requires that a potential term be included in the Lagrangian
+, as in \ref{eqn:klein_gordon:gaugeInvariant}, and additionally that both this potential and the wave field transform in pairs, say,
+
+\begin{align}
+\psi &\rightarrow \psi e^{i\alpha} \\
+A^\mu &\rightarrow A^\mu - \partial^\mu \alpha
+\end{align}
+
+This is exactly what Susskind covered in his relativity lecture on iTunesU, but going over it all myself, albeit rather after the fact, firms up the ideas.  How
+do these ideas apply to the Maxwell Lagrangian ... the expectation is that one can start with the free space form, and find the coupling term $A \cdot J$ via a
+gauge transformation of some sort?  Would also like to work through this myself for the non-relativistic wave Lagrangian.
+
+
+\subsubsection{Gauge covariant derivative}
+
+Observe that in \ref{eqn:klein_gordon:gaugeInvariant}, we also have something that looks
+like the
+gauge covariant derivative of the Dirac equation
+
+\begin{align*}
+%D\!\!\!/
+\Dslash
+&= \grad - i A \\
+&\equiv \gamma^\mu \partial_\mu - i \gamma_\mu A^\mu
+\end{align*}
+
+Using this, the gauge transformed Lagrangian can be written
+
+\begin{align*}
+\LL
+&=
+(\Dslash^\conj \psi) \cdot (\Dslash \psi^\conj)
+- \frac{m^2 c^2}{\hbar^2} \psi {\psi}^\conj
+\end{align*}
+
+This is tidier, but comes with the cost of hiding even more in the notation.
+
+\subsubsection{Field equations for the gauge Lagrangian?}
+
+What sort of field equation do we end up with after the local gauge transformation that alters the Lagrangian?  Let us compute this, starting with the transformed density written out in full
+
+\begin{align*}
+\LL
+&=
+\partial^\mu \psi \partial_\mu \psi^\conj
++ A_\mu %J^\mu
+i \left(
+\psi \partial^\mu \psi^\conj
+-\psi^\conj \partial^\mu \psi
+\right) 
++ \left( -\frac{m^2 c^2}{\hbar^2} + A_\mu A^\mu \right) \psi {\psi}^\conj \\
+\end{align*}
+
+Computing the Euler Lagrange equations, for a variation in $\psi^\conj$ we have
+
+\begin{align*}
+0 &= 
+\PD{\psi^\conj}{\LL}
+- \partial_\mu \PD{(\partial_\mu \psi^\conj)}{\LL} \\
+&= -i A_\mu \partial^\mu \psi
++ \left( -\frac{m^2 c^2}{\hbar^2} + A_\mu A^\mu \right) \psi 
+-\partial_\mu \partial^\mu \psi  + i \partial_\mu (A^\mu \psi) \\
+&= -i A_\mu \partial^\mu \psi
++ \left( -\frac{m^2 c^2}{\hbar^2} + A_\mu A^\mu \right) \psi 
+-\partial_\mu \partial^\mu \psi  
++ i (\partial_\mu A^\mu) \psi 
++ i A^\mu (\partial_\mu \psi) \\
+\end{align*}
+
+Toggling indexes on the last term, allows it to cancel with the first, and we are left with
+
+\begin{align*}
+\grad^2 \psi
+&= \left( -\frac{m^2 c^2}{\hbar^2} + A^2 + i (\grad \cdot A) \right) \psi 
+\end{align*}
+
+If $A$ is an electromagnetic potential four vector calculated in the Lorentz gauge where one can choose $\grad \cdot A = 0$, 
+then the net effect of the gauge variation is to add a $A^\mu A_\mu$ vector product (a Lorentz invariant) to the mass term.  In the Dirac equation I think we have that too, but the potential shows up instead coupled to the field in a first
+order power.
+
+Now, comparing to problem 3.10 of \citep{byron1992mca} as worked in \chapcite{PJbyronFullerCalcVarProblems} the last two terms here differ by a sign factor, and there is also 
+no $A \cdot \grad$ term (where I had two such terms instead of an exact cancellation as was the case here).  Is there an error above, or in my solution to this problem?
+
+\section{Stress energy tensor}
+
+For completeness sake it would be nice to derive the stress energy tensor
+for the KG equation here.  Both \citep{srednicki2007qft} and \citep{doran2003gap} mention that this is the resulting symmetry from
+a spacetime translation.  D/L's treatment is pretty incomprehensible to me
+at the moment, and will take a lot more study before I understand
+it.  Perhaps I can blunder through it on my own without the GA infrastructure?
+
+TODO (for both the potential free and gauge potential cases).
+
+%\bibliographystyle{plainnat}
+%\bibliography{myrefs}
+
+%\end{document}

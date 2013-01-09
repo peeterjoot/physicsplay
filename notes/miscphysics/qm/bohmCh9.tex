@@ -1,0 +1,733 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+
+% 
+% 
+%\documentclass{article}
+
+%\input{../peeters_macros.tex}
+%\input{../peeters_macros2.tex}
+
+%\usepackage[bookmarks=true]{hyperref}
+
+%\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+%\usepackage{latexsym,amssymb,epsf} % do not remember if these are
+   % needed, but their inclusion can not do any damage
+
+
+\chapter{Bohm Chapter 9 problems}
+\label{chap:bohmCh9}
+%\author{Peeter Joot \quad peeter.joot@gmail.com }
+\date{ March 6, 2009.  bohmCh9.tex }
+
+%\begin{document}
+
+%\maketitle{}
+
+%\tableofcontents
+
+\section{Bohm Chapter 9 problems}
+
+Problems and additional details from reading of \citep{bohm1989qt}, chapter 9.
+
+\subsection{P1. Momentum wave function normalization}
+
+Given a normalized wave function
+
+\begin{align*}
+\IIinf \psi^\conj(x) \psi(x) dx = 1
+\end{align*}
+
+Show that the wave function $\phi(k)$ is also normalized, and find the normalization factor for $\Phi(p)$.
+
+\begin{align*}
+\IIinf \phi^\conj(k) \phi(k) dk 
+&= 
+\IIinf \phi^\conj(k) \left( \inv{\sqrt{2\pi}} \IIinf \psi(x) e^{-i k x} dx \right) dk  \\
+&= 
+\IIinf \left( \inv{\sqrt{2\pi}} \IIinf \phi^\conj(k) e^{-i k x} dk \right) \psi(x) dx  \\
+&= 
+\IIinf {\left( \inv{\sqrt{2\pi}} \IIinf \phi(k) e^{i k x} dk \right)}^\conj \psi(x) dx  \\
+&= 
+\IIinf \psi^\conj(x) \psi(x) dx  \\
+&= 1 \quad\quad\quad \square
+\end{align*}
+
+Bohm defines $\Phi(p) \propto \phi(k)$ with the normalization constant determined by $\int \Abs{\Phi(p)} dp = 1$.  Suppose we 
+let $\Phi(p) = \alpha \phi(k)$, then we have
+
+\begin{align*}
+1 
+&= \int \Phi^\conj(p) \Phi(p) dp \\
+&= \int \alpha^2 \phi^\conj(k) \phi(k) \hbar d k
+\end{align*}
+
+So we want $\alpha^2 \hbar = 1$, and therefore $\Phi(p) = \inv{\sqrt{\hbar}} \phi(k)$.
+
+In \citep{mcmahon2005qmd}, with followup in \citep{gabook:PJqmFourier} we have seen that an alternate Fourier transform pair can be used in terms of
+momentum variables.  That is
+
+\begin{align*}
+\Phi(p) &= \FM \IIinf \psi(x) e^{-ipx/\hbar} dx \\
+\psi(x) &= \FM \IIinf \Phi(p) e^{ipx/\hbar} dp \\
+\end{align*}
+
+Observe that this is consistent with Bohm's notation, since one can read off 
+$\Phi(p)$ in terms of $\phi(k)$.
+by inspection
+
+\begin{align*}
+\Phi(p) &= \FM \IIinf \psi(x) e^{-ipx/\hbar} dx = \inv{\sqrt{\hbar}} \phi(k)
+\end{align*}
+
+\subsection{P2. Expectation of polynomial momentum function}
+
+Given a function of momentum 
+
+\begin{align*}
+f(p) &= \sum C_n p^n
+\end{align*}
+
+Express the average, or expectation value of $f(p)$.  It is sufficient to consider one of the monomial terms, say $p^n$.  A translation 
+to position basis via Fourier transformation produces the desired result
+
+\begin{align*}
+\expectation{p^n} 
+&= \int \Phi^\conj(p) p^n \Phi(p) dp \\
+&= \inv{2\pi \hbar} \iiint \left( \psi^\conj(x') e^{ipx'/\hbar} dx' \right) (\hbar k)^n \left( \psi(x) e^{-ipx/\hbar} dx \right) (\hbar dk) \\
+&= \frac{\hbar^n}{2\pi } \iiint \psi^\conj(x') e^{ikx'} dx' k^n e^{-i k x} \psi(x) dx dk \\
+\end{align*}
+
+The $k^n$ can be reduced to differential form as Bohm did for the $\expectation{p}$ case
+
+\begin{align*}
+k^n e^{-i k x} 
+&= k^{n-1} k e^{-i k x} \\
+&= k^{n-1} i \PD{x}{}e^{-i k x} \\
+&= k^{n-m} i^m \PDN{x}{}{m}e^{-i k x} \\
+&= i^n \PDN{x}{}{n}e^{-i k x} \\
+\end{align*}
+
+This leaves something that is in shape for integration by parts
+
+\begin{align*}
+\expectation{p^n} 
+&= \frac{(i\hbar)^n}{2\pi} \iiint \psi^\conj(x') e^{ikx'} dx' \left( \PDN{x}{}{n}e^{-i k x} \right) \psi(x) dx dk \\
+&= \frac{(-i\hbar)^n}{2\pi} \iiint \psi^\conj(x') e^{ikx'} dx' \PDN{x}{\psi(x)}{n} e^{-i k x} dx dk \\
+&= \frac{(-i\hbar)^n}{2\pi} \iiint \psi^\conj(x') e^{ik(x'-x)} \PDN{x}{\psi(x)}{n} dx' dx dk \\
+&= {(-i\hbar)^n}{} \iint \psi^\conj(x') \PDN{x}{\psi(x)}{n} dx' dx \inv{2\pi}\int e^{ik(x'-x)} dk \\
+\end{align*}
+
+This last integral is really a distribution, and can be identified with the delta function $\delta(x'-x)$ operating on, in this case, the preceding integral.
+%, and operates on a test function.  Suppose we designate such a test function as $a(u)$, then we have
+%
+%\int \inv{2\pi}\int e^{iku} dk a(u) du
+%&= \int \inv{2\pi}\int e^{iku} a(u) du dk \\
+
+%Now, we can apply the distribution theory as covered in \citep{osgoodFourier} to do a delta function reduction of the exponentials in 
+%this integral.  Specifically pick a function $a(k)$
+
+So we have
+\begin{align*}
+\expectation{p^n} 
+&= {(-i\hbar)^n}{} \iint \psi^\conj(x') \PDN{x}{\psi(x)}{n} dx' dx \delta(x'-x) \\
+&= {(-i\hbar)^n}{} \int \psi^\conj(x) \PDN{x}{\psi(x)}{n} dx \\
+\end{align*}
+
+We can put this into explicit operator form, nicely motivating the identification of $-i\hbar \PDi{x}{}$ with the momentum by virtue 
+of the definition of the average or expectation value.
+
+\begin{align*}
+\expectation{p^n} 
+&= \int \psi^\conj(x) {\left( -i \hbar \PD{x}{} \right)}^n {\psi(x)} dx \\
+\end{align*}
+
+\subsection{P3.  Expectation of position in momentum space}
+
+\begin{align*}
+\expectation{x} 
+&= \int \psi^\conj(x) x \psi(x) dx \\
+&= 
+\inv{2\pi\hbar} \iiint \Phi^\conj(p) e^{-ipx/\hbar} dp x \Phi(p') e^{ip'x/\hbar} dp' dx \\
+&= 
+\inv{2\pi\hbar} \iiint \Phi^\conj(p) e^{-ipx/\hbar} dp \left( -i \PD{p'}{} e^{ip'x/\hbar} \right) \Phi(p') dp' dx \\
+&= 
+\inv{2\pi\hbar} \iiint \Phi^\conj(p) e^{-ipx/\hbar} dp \left( i \PD{p'}{\Phi(p')} \right) e^{ip'x/\hbar} dp' dx \\
+&= 
+\iint \Phi^\conj(p) \left( i \PD{p'}{} \right) {\Phi(p')} dp dp' \inv{2\pi\hbar} \int e^{i(p'-p)x/\hbar} dx  \\
+&= 
+\iint \Phi^\conj(p) \left( i \PD{p'}{} \right) {\Phi(p')} dp dp' \delta(p'-p)  \\
+\end{align*}
+
+This is
+
+\begin{align*}
+\expectation{x} &= \int \Phi^\conj(p) \left( i \PD{p}{} \right) {\Phi(p)} dp 
+\end{align*}
+
+We see that expressing momentum in position space and position in momentum space both result in differential
+operator forms in calculations of expected values
+
+\begin{align}\label{eqn:bohm_ch9:operatorCorrespondance}
+p &\sim -i \hbar \PD{x}{} \\
+x &\sim i \hbar \PD{p}{}
+\end{align}
+
+Observe the Hamiltonian and Poisson equation structure in these two sets of operators.
+
+\subsection{P4. Expectation of polynomial position function}
+
+This problem follows just as P2, and I am not going to bother typing it up for myself.  For validity, we require
+$x^n \phi(x) \rightarrow 0$ as $x \rightarrow \pm \infty$, or equivalently that $\PDN{p}{\Phi}{n} \rightarrow 0$.
+
+\subsection{P5. Some commutator calculations}
+
+\subsubsection{P5. Position momentum moment commutators}
+
+Evaluate
+
+\begin{align*}
+f(x,p) = x^n p^m - p^m x^n
+\end{align*}
+
+Up to this point we have only seen operators in expectation values.  Let us look the simplest case with $n = m = 1$ in that
+context
+
+\begin{align*}
+\expectation{f} 
+&= \frac{\hbar}{i} \int \psi^\conj(x) \left(x \PD{x}{} - \PD{x}{} x \right) \psi(x) dx \\
+&= \frac{\hbar}{i} \int \psi^\conj(x) \left(x \PD{x}{\psi(x)} - \psi(x) - x \PD{x}{\psi(x)} \right) dx \\
+&= -\frac{\hbar}{i} \int \psi^\conj(x) \psi(x) dx \\
+&= {i\hbar}
+\end{align*}
+
+So in the same way that the operator correspondence between momentum and the derivative as summarized in 
+\ref{eqn:bohm_ch9:operatorCorrespondance}, one can associate the commutator operator with its action in the expectation value and
+say
+
+\begin{align}\label{eqn:bohm_ch9:commutator}
+x p - p x \sim  i\hbar
+\end{align}
+
+The higher order commutator expansions could also be evaluated this way, but exploiting the operator nature directly 
+makes this easier.  For the first order moment commutator above one can write
+
+\begin{align*}
+f(x,p) \psi(x) 
+&= (x p - p x) \psi(x) \\
+&= -i \hbar \left(x \PD{x}{} - \PD{x}{} x\right) \psi(x) \\
+&= -i \hbar \left(x \PD{x}{\psi}(x) - \PD{x}{x \psi(x)} \right) \\
+&= -i \hbar \left(x \PD{x}{\psi}(x) - \PD{x}{\psi(x)} -\psi(x) \right) \\
+&= i \hbar \psi(x) \\
+\end{align*}
+
+So again we see that as a right acting operator the net effect on any wave function is the following action
+
+\begin{align*}
+(x p - p x) \psi = i \hbar \psi \\
+\end{align*}
+
+If one starts from this point and then calculates the expectation value the result will still be $i \hbar$, but working
+with the probability integrals from the get go is just additional complication.
+
+Building on this result we can then calculate the higher order moment differences of the problem by using the commutator
+to change the order of operations
+
+\begin{align*}
+p x \sim -i \hbar + x p
+\end{align*}
+
+Let us use this for a couple simple examples to start
+\begin{align*}
+x^2 p - p x^2
+&=
+x^2 p - ( -i \hbar + x p) x \\
+&=
+x^2 p + i \hbar x - x ( -i \hbar + x p) \\
+&=
+x^2 p + 2 i \hbar x - x^2 p \\
+&=
+2 i \hbar x \\
+\end{align*}
+
+\begin{align*}
+x p^2 - p^2 x
+&=
+x p^2 - p ( -i \hbar + x p) \\
+&=
+x p^2 + i \hbar p - p x p \\
+&=
+x p^2 + i \hbar p + ( +i \hbar - x p) p \\
+&=
+2 i \hbar p \\
+\end{align*}
+
+Calculation of third powers shows a pattern, and one can guess at an induction hypothesis
+
+\begin{align*}
+x p^n &= p^n x + n i \hbar p^{n-1} \\
+-p x^n &= -x^n p + n i \hbar x^{n-1} \\
+\end{align*}
+
+The $n=1$ cases follow from $xp - px = i\hbar$, leaving only the induction on $n$.  For the momentum powers we have
+
+\begin{align*}
+x p^n p 
+&= p^n x p + n i \hbar p^{n} \\
+&= p^n (p x + i \hbar) + n i \hbar p^{n} \\
+&= p^{n+1} x + (n+1) i \hbar p^{n} \quad\quad\quad\square \\
+\end{align*}
+
+For the position powers we have
+\begin{align*}
+-p x^n x 
+&= -x^n p x + n i \hbar x^{n} \\
+&= x^n (-x p + i \hbar) + n i \hbar x^{n} \\
+&= -x^{n+1} p + (n+1) i \hbar x^{n} \quad\quad\quad\square \\
+\end{align*}
+
+This completes the proof for a first order version of the problem
+
+\begin{align*}
+x p^n - p^n x &= n i \hbar p^{n-1} \\
+x^n p -p x^n &=  n i \hbar x^{n-1} \\
+\end{align*}
+
+Observe that working with the operator form changes the calculation of derivatives problem in the original
+commutator evaluation to nothing more than an algebraic exercise.
+% (but one where there is a requirement to not accidentally invert the product order).
+
+The general case still remains.  Building up to that let us do a couple examples
+
+%x p^n = 
+%p^n x +  n i \hbar p^{n-1} \\
+%
+%x^n p = 
+%p x^n  +  n i \hbar x^{n-1} \\
+%
+%x^{n-1} p = 
+%(p x^{n-1}  +  (n-1) i \hbar x^{n-2})
+%x^{n-2} p = 
+%(p x^{n-2}  +  (n-2) i \hbar x^{n-3})
+
+\begin{align*}
+x^n p^2
+&= (x^n p) p \\
+&= (p x^n  +  n i \hbar x^{n-1} ) p \\
+&= p (x^n p) +  n i \hbar (x^{n-1} p ) \\
+&= p^2 x^n  +  2 n i \hbar p x^{n-1} +  n (n-1) (i \hbar)^2 x^{n-2} \\
+\end{align*}
+
+\begin{align*}
+x^n p^3
+&=
+(x^n p^2) p \\
+&=
+(p^2 x^n  +  2 n i \hbar p x^{n-1} +  n (n-1) (i \hbar)^2 x^{n-2} ) p \\
+&=
+  p^2 ( p x^n  +  n i \hbar x^{n-1} ) 
++ 2 n i \hbar p ( p x^{n-1}  +  (n-1) i \hbar x^{n-2} ) 
++ n (n-1) (i \hbar)^2 ( p x^{n-2}  +  (n-2) i \hbar x^{n-3}) 
+\\
+&=
+  p^3 x^n
++ 3 n (i \hbar) p^2 x^{n-1}  
++ 3 n(n-1) (i \hbar)^2 p x^{n-2} 
++ n (n-1)(n-2) (i \hbar)^3 x^{n-3}
+\\
+\end{align*}
+
+We see what looks like binomial coefficients, so a reasonable inductive hypothesis, for $m \le n$
+
+\begin{align}\label{eqn:bohm_ch9:commutatorMomentMlessThanN}
+x^n p^m
+&= \sum_{j=0}^m \binom{m}{j} (i \hbar)^j p^{m-j} x^{n-j} (n)(n-1)\cdots(n-j+1)
+\end{align}
+
+And in particular, for $m \le n$
+\begin{align}
+x^n p^m - p^m x^n
+&= \sum_{j=1}^m \binom{m}{j} (i \hbar)^j p^{m-j} x^{n-j} (n)(n-1)\cdots(n-j+1) 
+\end{align}
+
+For $m \ge n$, let us start with
+
+\begin{align*}
+p^m x = x p^m -  m i \hbar p^{m-1} 
+\end{align*}
+%p^m x = x p^m -  m (i \hbar) p^{m-1} 
+%p^{m-1} x = x p^{m-1} -  (m-1) (i \hbar) p^{m-2} 
+%p^{m-2} x = x p^{m-2} -  (m-2) (i \hbar) p^{m-3} 
+
+First do the $x^2$
+\begin{align*}
+p^m x^2 
+&= x p^m x -  m (i \hbar) p^{m-1} x \\
+&= x (p^m x) -  m (i \hbar) (p^{m-1} x) \\
+&= x^2 p^m - 2 m (i \hbar) x p^{m-1} +  m (m-1)(i \hbar)^2 p^{m-2} \\
+\end{align*}
+
+And for the cube $x^3$
+\begin{align*}
+p^m x^3  
+&= 
+( p^m x^2 ) x \\
+&= 
+( x^2 p^m - 2 m (i \hbar) x p^{m-1} +  m (m-1)(i \hbar)^2 p^{m-2} ) x \\
+&= 
+x^2 (p^m x )
+- 2 m (i \hbar) x (p^{m-1} x )
++ m (m-1)(i \hbar)^2 (p^{m-2} x) \\
+&= 
+x^2 ( x p^m -  m (i \hbar) p^{m-1} ) \\
+&\quad- 2 m (i \hbar) x ( x p^{m-1} -  (m-1) (i \hbar) p^{m-2} ) \\
+&\quad+ m (m-1)(i \hbar)^2 ( x p^{m-2} -  (m-2) (i \hbar) p^{m-3} ) \\
+&= 
+x^3 p^m 
+- 3 m (i \hbar) x^2 p^{m-1} 
++ 3 m (m-1) (i \hbar)^2 x p^{m-2} 
+- m (m-1)(i \hbar)^2 (m-2) (i \hbar) p^{m-3} \\
+\end{align*}
+
+It appears that in this case with $m \ge n$, like \ref{eqn:bohm_ch9:commutatorMomentMlessThanN}, we want as the induction statement 
+
+\begin{align}
+p^m x^n &= \sum_{j=0}^n \binom{n}{j} (-i \hbar)^j x^{n-j} p^{m-j} (m)(m-1)\cdots(m-j+1) 
+\end{align}
+
+And for the commutator moment the expected result, pending induction on the above, is
+\begin{align}
+x^n p^m - p^m x^n &= -\sum_{j=1}^n \binom{n}{j} (-i \hbar)^j x^{n-j} p^{m-j} (m)(m-1)\cdots(m-j+1) 
+\end{align}
+
+Summarizing, this is
+\begin{align*}
+&x^n p^m - p^m x^n
+= \\
+&\left\{
+\begin{array}{l l}
+\sum_{j=1}^m \binom{m}{j} (i \hbar)^j p^{m-j} x^{n-j} (n)(n-1)\cdots(n-j+1) & \quad \mbox{if $m \le n$} \\
+-\sum_{j=1}^n \binom{n}{j} (-i \hbar)^j x^{n-j} p^{m-j} (m)(m-1)\cdots(m-j+1) & \quad \mbox{if $m \ge n$}
+\end{array}
+\right.
+\end{align*}
+
+\subsubsection{P5.b}
+
+\begin{align*}
+e^{i k x} p - 
+p e^{ i k x}
+\end{align*}
+
+Reversing the second term via power series expansion we have
+
+\begin{align*}
+p e^{ i k x}
+&=
+p \sum_{n=0}^\infty \frac{( i k x )^n}{n!} \\
+&=
+\sum_{n=0}^\infty \frac{( i k )^n}{n!} (x^n p - n i \hbar x^{n-1} )
+\\
+&=
+e^{ i k x} p
+-\sum_{n=1}^\infty \frac{( i k )^n}{n!} (n i \hbar x^{n-1} )
+\\
+&=
+e^{ i k x} p
+-(i k)(i\hbar) \sum_{n=1}^\infty \frac{( i k x)^{n-1}}{(n-1)!} 
+\\
+&=
+e^{ i k x} p
++ (k\hbar) e^{i k x}
+\\
+\end{align*}
+
+So we have
+
+\begin{align*}
+e^{ i k x} p - p e^{ i k x} &= - (k\hbar) e^{i k x}
+\end{align*}
+
+\subsection{P6. Hermitian operators. Powers of momentum operators}
+
+Show that $p^n$ is Hermitian
+
+\begin{align*}
+\expectation{p^n}^\conj 
+&=
+\left( \int \psi^\conj (-i \hbar)^n \frac{d^n}{dx^n} \psi \right)^\conj \\
+&=
+\int \psi (i \hbar)^n \frac{d^n}{dx^n} \psi^\conj \\
+&=
+\int \left( (-1)^n \frac{d^n}{dx^n} \psi \right) (i \hbar)^n \psi^\conj \\
+&=
+\int \left( p^n \psi \right) \psi^\conj \\
+&=
+\expectation{p^n}
+\end{align*}
+
+Thus, by the definition of equation (13) in the text, this operator is
+Hermitian.
+
+Next is to show that 
+
+\begin{align*}
+f(p) = \sum_k A_k p^k
+\end{align*}
+
+is Hermitian, provided $A_k$ are all real.  This part is clear by inspection.
+
+\subsection{P7. Hermitian operators. Powers of position operators}
+
+Want to show that the following is Hermitian
+
+\begin{align*}
+f(x) &= \sum A_k x^k
+\end{align*}
+
+If the conjugate of the expectation equals itself we required only $A_k = A_k^\conj$, so $A_k$ must be strictly real, and we are done.
+
+\subsection{P8. Non Hermitian momentum power operators if derivative does not vanish}
+
+Show that if $\partial^n \psi/\partial x^n$ does not vanish then $(-i\hbar)^{n+1} \partial^{n+1}/\partial x^{n+1}$ is not Hermitian.
+
+We want to evaluate the following and compare it to its conjugate
+
+\begin{align*}
+\expectation{p^{n+1}} 
+&= (-i\hbar)^{n+1} \IIinf \psi^\conj \PDN{x}{\psi}{n+1} dx \\
+&= 
+(-i\hbar)^{n+1} \left. \psi^\conj \PDN{x}{\psi}{n} \right\vert_{-\infty}^{\infty}
++(-1)^{1}(-i\hbar)^{n+1} \IIinf \PDN{x}{\psi^\conj}{1} \PDN{x}{\psi}{n} dx 
+\\
+&= 
+(-i\hbar)^{n+1} \left. \psi^\conj \PDN{x}{\psi}{n} \right\vert_{-\infty}^{\infty}
++(-1)^{1}(-i\hbar)^{n+1} \left. \PDN{x}{\psi^\conj}{1} \PDN{x}{\psi}{n-1} \right\vert_{-\infty}^{\infty}
++(-1)^{2}(-i\hbar)^{n+1} \IIinf \PDN{x}{\psi^\conj}{2} \PDN{x}{\psi}{n-1} dx 
+\\
+&= 
+(-i\hbar)^{n+1} \sum_{k=0}^1
+(-1)^{k}
+\left. \PDN{x}{\psi^\conj}{k} \PDN{x}{\psi}{n-k} \right\vert_{-\infty}^{\infty}
++(-1)^{2}(-i\hbar)^{n+1} \IIinf \PDN{x}{\psi^\conj}{2} \PDN{x}{\psi}{n-1} dx  
+\\
+&= 
+(-i\hbar)^{n+1} \sum_{k=0}^m
+(-1)^{k}
+\left. \PDN{x}{\psi^\conj}{k} \PDN{x}{\psi}{n-k} \right\vert_{-\infty}^{\infty}
++(-1)^{m+1}(-i\hbar)^{n+1} \IIinf \PDN{x}{\psi^\conj}{m+1} \PDN{x}{\psi}{n-m)} dx 
+\\
+&= 
+(-i\hbar)^{n+1} \sum_{k=0}^n
+(-1)^{k}
+\left. \PDN{x}{\psi^\conj}{k} \PDN{x}{\psi}{n-k} \right\vert_{-\infty}^{\infty}
++(i\hbar)^{n+1} \IIinf \PDN{x}{\psi^\conj}{n+1} \psi dx 
+\\
+&= 
+(-i\hbar)^{n+1} \sum_{k=0}^n
+(-1)^{k}
+\left. \PDN{x}{\psi^\conj}{k} \PDN{x}{\psi}{n-k} \right\vert_{-\infty}^{\infty}
++
+\expectation{p^{n+1}}^\conj
+\\
+\end{align*}
+%\newcommand{\PDN}[3]{\frac{\partial^{#3} {#2}}{\partial {#1}^{#3}}}
+
+So we have
+\begin{align*}
+\expectation{p^{n+1}} - \expectation{p^{n+1}}^\conj
+&= 
+(-i\hbar)^{n+1} \sum_{k=0}^n
+(-1)^{k}
+\left. \PDN{x}{\psi^\conj}{k} \PDN{x}{\psi}{n-k} \right\vert_{-\infty}^{\infty}
+\\
+\end{align*}
+
+If $p^{n+1}$ is Hermitian, then this difference should be zero, but if the indicated partial does not vanish this
+remainder bit can be non-zero.
+
+\subsection{P9. m, n'th moment is Hermitian}
+
+Consider the operator 
+
+\begin{align*}
+\sum A_{nm} \left(\frac{p^n x^m + x^m p^n}{2}\right) 
+\end{align*}
+
+Show that this is Hermitian if all $A_{nm}$ are real.
+
+Consider first one specific term with $A_{nm}$, calculate the conjugate of the expectation value, and integrate
+by parts
+
+\begin{align*}
+\left(
+\int \psi^\conj \inv{2}(p^n x^m + x^m p^n) \psi
+\right)^\conj
+&=
+\inv{2} (-1)^n
+\int \psi (p^n x^m + x^m p^n) \psi^\conj \\
+&=
+\inv{2} (i\hbar)^n 
+\int \psi \left(\frac{d^n (x^m \psi^\conj)}{dx^n} + x^m \frac{d^n \psi^\conj}{dx^n} \right) \\
+&=
+\inv{2} (-i\hbar)^n 
+\int x^m \psi^\conj \left(\frac{d^n \psi }{dx^n} + \psi^\conj \frac{d^n (x^m \psi)}{dx^n} \right) \\
+&=
+\inv{2}
+\int \psi^\conj ( x^m p^n + p^n x^m ) \psi
+\end{align*}
+
+This shows that $(p^n x^m + x^m p^n)/2$ is Hermitian, and the conjugation requires $A_{nm}$ to be real for the
+product of the two to be Hermitian.
+
+\subsection{P10. Hermitizing Classical operator \texorpdfstring{$(px)^2$}{p x p x}}
+
+Show that 
+\begin{align*}
+\inv{2}\left(x^2 p^2 + p^2 x^2 \right)
+\end{align*}
+
+and 
+\begin{align*}
+\inv{4}\left(x p + p x \right)^2
+\end{align*}
+
+lead to results that differ by a factor of $\hbar^2$.
+
+To do so consider the difference of the expectation of this operator, first calculating this difference.  We will
+want to use the commutator relation, in a few equivalent forms
+
+\begin{align*}
+xp - p x &= i \hbar \\
+xp &= p x + i \hbar \\
+px &= x p - i \hbar \\
+x p + p x &= 2 p x + i \hbar \\
+          &= 2 x p - i \hbar \\
+\end{align*}
+
+This gives us
+
+\begin{align*}
+\inv{4}\left(x p + p x \right)^2 
+&= \inv{4}(2 p x + i \hbar)( 2 x p - i \hbar ) \\
+&= p x^2 p + i\hbar \inv{2}(x p - p x) + \inv{4} \hbar^2 \\
+&= p x^2 p - \hbar^2 \inv{2} + \inv{4} \hbar^2 \\
+&= p x^2 p - \hbar^2 \inv{4} \\
+\end{align*}
+
+For the other operator, reduction to a form that also contains $p x^2 p$, we have
+
+\begin{align*}
+\inv{2}\left(x^2 p^2 + p^2 x^2 \right)
+&=
+\inv{2}\left(x (x p) p + p (p x) x \right) \\
+&=
+\inv{2}\left(x (p x + i \hbar) p + p (x p -i\hbar) x \right) \\
+&=
+\inv{2}\left((x p) x p + p x (p x) + i \hbar ( x p - p x ) \right) \\
+&=
+\inv{2}\left((p x + i\hbar) x p + p x ( x p - i\hbar) + (i \hbar)^2 \right) \\
+&=
+\inv{2}\left( 2 p x^2 p + i \hbar ( x p - p x) + -\hbar^2 \right) \\
+&=
+p x^2 p + -\hbar^2 
+\end{align*}
+
+So now, if we take the difference 
+\begin{align*}
+\inv{2}\left(x^2 p^2 + p^2 x^2 \right) - \inv{4}\left(x p + p x \right)^2 
+&= (p x^2 p + -\hbar^2 ) - (p x^2 p - \hbar^2 \inv{4}) 
+ \\
+&= -\frac{3}{4}\hbar^2 
+ \\
+\end{align*}
+
+The difference of the expectation values of these operators is thus of the order $\hbar^2$ as was to be calculated.
+
+\subsection{P11.  An explicit calculation of a Hermitian operator}
+
+Show by integration by parts that $(xp)^\dagger = p x$.
+
+The defining relation for the Hermitian conjugation operation is equation 16 in the text.
+
+\begin{align*}
+\int \psi^\conj (O^\dagger \psi) dx &= \int \psi (O^\conj \psi^\conj) dx
+\end{align*}
+
+For the operator $xp$, we have
+
+\begin{align*}
+\int \psi^\conj (xp)^\dagger \psi dx 
+&= \int \psi (xp)^\conj \psi^\conj dx \\
+&= (-i\hbar)^\conj \int \psi x \PD{x}{\psi^\conj} dx \\
+&= - i\hbar \int \PD{x}{x \psi} \psi^\conj dx \\
+&= \int \psi^\conj (p x) \psi dx \\
+\end{align*}
+
+So we have, as desired
+
+\begin{align*}
+(xp)^\dagger = p x
+\end{align*}
+
+\subsection{P12. Hermitian operator from antisymmetric difference}
+
+Show that $H = i (O - O^\dagger)$ is a Hermitian operator.
+
+This follows directly from the definition, calculating the expectation
+
+\begin{align*}
+\expectation{H} 
+&=\int \psi^\conj (i (O - O^\dagger) \psi ) \\
+&=
+i \int \psi^\conj (O \psi )
+-i \int \psi^\conj (O^\dagger \psi ) \\
+&=
+i \int \psi^\conj (O \psi )
+-i \int \psi (O^\conj \psi^\conj) \\
+\end{align*}
+
+Taking conjugates we have
+
+\begin{align*}
+\expectation{H}^\conj
+&=
+-i \int \psi (O^\conj \psi^\conj )
++i \int \psi^\conj (O \psi ) \\
+&=
+\expectation{H} \\
+\quad\quad\quad \square
+\end{align*}
+
+
+\subsection{P13. When product of operators is Hermitian}
+
+What relation must exist between Hermitian $B$ and $A$ must exist for $AB$ to be Hermitian.
+
+TODO:
+Am guessing that this has something to do with the commutator of the operators.  This one I do not have a check mark
+besides in my text, so did I ever figure it out?
+
+\subsection{P14. Show directly that \texorpdfstring{$i(p^2 x - xp^2)$}{i p p x - i x p p} is Hermitian}
+
+This follows from $(AB)^\dagger = BA$ in the text above.  We have
+
+\begin{align*}
+(i (p^2 x - x p^2))^\dagger 
+&=
+(x^\dagger p^\dagger p^\dagger - p^\dagger p^\dagger x^\dagger)(-i) \\
+&=
+-i (x p^2 - p^2 x) \\
+&=
+i (p^2 x - x p^2 ) \quad\quad\quad \square
+\end{align*}
+
+%\bibliographystyle{plainnat}
+%\bibliography{myrefs}
+
+%\end{document}

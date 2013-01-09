@@ -1,0 +1,113 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+
+% 
+% 
+%\input{../peeter_prologue_print.tex}
+%\input{../peeter_prologue_widescreen.tex}
+
+\chapter{Infinite square well wavefunction}
+\label{chap:liboff41}
+%\useCCL
+\blogpage{http://sites.google.com/site/peeterjoot/math2010/liboff41.pdf}
+\date{May 31, 2010}
+\revisionInfo{liboff41.tex}
+
+%\beginArtWithToc
+\beginArtNoToc
+
+\section{Motivation}
+
+Work problem 4.1 from \citep{liboff2003iqm}, calculation of the eigensolution for an infinite square well, with boundaries $[-a/2, a/2]$.  It is actually a bit tidier seeming to generalize this slightly to boundaries $[a,b]$, which also implicitly solves the problem.  This is surely a problem that is done in 700 other QM texts, but I liked the way I did it this time so am writing it down.
+
+\section{Guts}
+
+Our equation to solve is $i \hbar \Psi_t = -(\hbar^2/2m) \Psi_{xx}$.  Separation of variables $\Psi = T \phi$ gives us
+
+\begin{align}\label{eqn:liboff41:1}
+T &\propto e^{-i E t/\hbar } \\
+\phi'' &= -\frac{2 m E }{\hbar^2} \phi
+\end{align}
+
+With $k^2 = 2 m E/\hbar^2$, we have
+
+\begin{align}\label{eqn:liboff41:2}
+\phi = A e^{i k x } + B e^{-i k x},
+\end{align}
+
+and the usual $\phi(a) = \phi(b) = 0$ boundary conditions give us
+
+\begin{align}\label{eqn:liboff41:3}
+0 = 
+\begin{bmatrix}
+e^{i k a } & e^{-i k a} \\
+e^{i k b } & e^{-i k b}
+\end{bmatrix}
+\begin{bmatrix}
+A \\
+B
+\end{bmatrix}.
+\end{align}
+
+We must have a zero determinant, which gives us the constraints on $k$ immediately
+\begin{align*}
+0 &= e^{i k (a - b)} - e^{i k (b-a)} \\
+&= 2 i \sin( k (a - b) ).
+\end{align*}
+
+So our constraint on $k$ in terms of integers $n$, and the corresponding integration constant $E$
+
+\begin{align}\label{eqn:liboff41:4}
+k &= \frac{n \pi}{b - a} \\
+E &= \frac{\hbar^2 n^2 \pi^2 }{2 m (b-a)^2}.
+\end{align}
+
+One of the constants $A,B$ can be eliminated directly by picking any one of the two zeros from \ref{eqn:liboff41:3}
+
+\begin{align*}
+&A e ^{i k a } + B e^{-i k a} = 0 \\
+&\implies \\
+&B = -A e ^{2 i k a } 
+\end{align*}
+
+So we have
+
+\begin{align}\label{eqn:liboff41:5}
+\phi = A \left( e^{i k x } - e^{ ik (2a - x) } \right).
+\end{align}
+
+Or,
+\begin{align}\label{eqn:liboff41:5b}
+\phi = 2 A i e^{i k a} \sin( k (x-a )) 
+\end{align}
+
+Because probability densities, currents and the expectations of any operators will always have paired $\phi$ and $\phi^\conj$ factors, any constant phase factors like $i e^{i k a}$ above can be dropped, or absorbed into the constant $A$, and we can write
+
+\begin{align}\label{eqn:liboff41:5d}
+\phi = 2 A \sin( k (x-a )) 
+\end{align}
+
+The only thing left is to fix $A$ by integrating $\Abs{\phi}^2$, for which we have
+
+\begin{align*}
+1 &= \int_a^b \phi \phi^\conj dx \\
+&= A^2 \int_a^b dx \left( e^{i k x } - e^{ ik (2a - x) } \right) \left( e^{-i k x } - e^{ -ik (2a - x) } \right) \\
+&= A^2 \int_a^b dx \left( 2 - e^{ik(2a - 2x)} - e^{ik(-2a + 2x)} \right) \\
+&= 2 A^2 \int_a^b dx \left( 1 - \cos (2 k (a - x)) \right)
+\end{align*}
+
+This last trig term vanishes over the integration region and we are left with 
+
+\begin{align}\label{eqn:liboff41:6}
+A = \inv{ \sqrt{2 (b-a)}},
+\end{align}
+
+which essentially completes the problem.  A final substitution back into \ref{eqn:liboff41:5b} allows for a final tidy up
+
+\begin{align}\label{eqn:liboff41:5c}
+\phi = \sqrt{\frac{2}{b-a}} \sin( k (x-a )).
+\end{align}
+
+\EndArticle
