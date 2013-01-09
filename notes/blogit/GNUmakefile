@@ -8,7 +8,7 @@ RAWTEXFILES := $(shell ls *.tex)
 
 # these may not all be incomplete, but I don't want to build them right now:
 INCOMPLETE += pp.tex
-INCOMPLETE += desaiCh24.tex
+#INCOMPLETE += desaiCh24.tex
 INCOMPLETE += dotBlade.tex
 INCOMPLETE += gaBasics.tex
 INCOMPLETE += gaMintro.tex
