@@ -9,6 +9,6 @@ SOURCE_DIRS += appendix
 SOURCE_DIRS += figures
 #SOURCE_DIRS += solutions
 
-#GENERATED_SOURCES += mathematica.tex 
+GENERATED_SOURCES += mathematica.tex 
 
 include ../make.rules
