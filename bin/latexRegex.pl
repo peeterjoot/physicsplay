@@ -1,4 +1,5 @@
 #s/\\Br_av/\\Br_{\\mathrm{av}}/g ;
+s/\\PP/\\mathcal{P}/g ;
 #s/\\Gamma_{cav}/\\Gamma_{\\mathrm{cav}}/g  ;
 #s/\\Gamma_{sp}/\\Gamma_{\\mathrm{sp}}/g  ;
 #s/\\Gamma_{st}/\\Gamma_{\\mathrm{st}}/g  ;
@@ -14,7 +15,7 @@
 #s/_eff/_{\\mathrm{eff}}/g ;
 #s/_L/_{\\mathrm{L}}/g ;
 #s/_osc/_{\\mathrm{osc}}/g ;
-s/_CM/_{\\mathrm{CM}}/g ;
+#s/_CM/_{\\mathrm{CM}}/g ;
 #s/_ph/_{\\mathrm{ph}}/g ;
 #s/_T/_{\\mathrm{T}}/g ;
 #s/_av/_{\\mathrm{av}}/g ;
