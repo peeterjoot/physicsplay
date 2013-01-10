@@ -64,6 +64,8 @@ my $pf = 0 ;
 # wikipedia output.
 my $wiki = 0 ; 
 
+my $auxdebug = 0 ;
+
 my $urlMessage ;
 #$urlMessage = "Click here for a PDF of this sequence of posts with nicer formatting" ;
 $urlMessage = "Click here for a PDF of this post with nicer formatting and figures if the post had any (especially if my latex to wordpress script has left FORMULA DOES NOT PARSE errors.)" ;
@@ -197,6 +199,18 @@ sub processOneEquation
       }
       elsif (!$wiki)
       {
+         if ( !exists $equations{$label} )
+         {
+            warn "no equation number for '$label'\n" ;
+
+            foreach ( keys %equations )
+            {
+               print "eq: $_\n" ;
+            }
+
+            die "aborting!\n" ;
+         }
+
          die "no equation number for '$label'\n" if ( !exists $equations{$label} ) ;
          #$curEquationLabel = "\\quad\\quad\\quad($equations{$label})" ;
 
@@ -413,20 +427,31 @@ sub processAuxFile
          {
             $eq{$1} = $2 ;
          }
-         elsif ( /^\\newlabel{(.*?)}{{((?:\d|\.)+)}.*Answer/ )
+         #elsif ( /^\\newlabel{(.*?)}{{((?:\d|\.)+)}.*Answer/ )
+         elsif ( /^\\newlabel{(.*?)}{{((?:\d|\.)+)}.*/ )
          {
             $eq{$1} = $2 ;
          }
+         elsif ( $auxdebug )
+         {
+            warn "auxdebug: $_\n" ;
+         }
       }
+
       close $fh ;
    }
 
-# debug.  turns out that equation labels don't work quite right when they
-# are also in a \enumerate \item ... context.
-#   foreach (keys %eq)
-#   {
-#      warn "label: '$_'\n" ;
-#   }
+   #
+   # debug.  turns out that equation labels don't work quite right when they
+   # are also in a \enumerate \item ... context.
+   #
+   if ( $auxdebug )
+   {
+      foreach (keys %eq)
+      {
+         warn "label: '$_'\n" ;
+      }
+   }
 
    return %eq ;
 }
