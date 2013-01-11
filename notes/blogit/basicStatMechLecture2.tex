@@ -220,12 +220,12 @@ P_N(X)
 \right.
 \end{equation}
 
-We'll use the \underline{Stirling formula}, to find
+We'll use the Stirling formula \ref{eqn:basicStatMechLecture2:480}, to find
 
-\begin{equation}\label{eqn:basicStatMechLecture2:480}
-N! \approx \sqrt{ 2 \pi N} N^N e^{-N},
-\end{equation}
-
+%\begin{equation}\label{eqn:basicStatMechLecture2:480}
+%N! \approx \sqrt{ 2 \pi N} N^N e^{-N},
+%\end{equation}
+%
 \begin{dmath}\label{eqn:basicStatMechLecture2:500}
 P_N(X) 
 = 
@@ -358,29 +358,105 @@ f(y^\conj) +
 \right)
 \end{equation}
 
-Dropping all but the quadratic term we have
+We'll drop all but the quadratic term, and first need the second derivative
+
+\begin{dmath}\label{eqn:basicStatMechLecture2:780}
+f''(y) 
+= \frac{d}{dy} \left(-1 + \alpha \inv{y}\right)
+= -\alpha \inv{y^2},
+\end{dmath}
+
+at $y = y^\conj = \alpha$ we have $f''(y^\conj) = -\inv{\alpha}$ and
 
 \begin{dmath}\label{eqn:basicStatMechLecture2:720}
-I(\alpha \gg 1) \approx \int_0^\infty
+I(\alpha \gg 1) \approx 
+e^{f(y^\conj)}
+\int_0^\infty
 \exp\left(
 \inv{2}
 \evalbar{\PDSq{y}{f}}{y^\conj}
 (y - y^\conj)^2
 \right)
 =
-e^{f(y^\conj)}
-\int_0^\infty dy e^{-(y - y^\conj)^2/2}
-\approx
 e^{f(\alpha)}
-\int_0^\infty dy e^{-(y - \alpha)^2/2}
+\int_0^\infty dy 
+e^{
+-\frac{(y - \alpha)^2}{2 
+%\mathLabelBox
+%[
+%   labelstyle={below of=m\themathLableNode, below of=m\themathLableNode}
+%]
+%{
+\alpha
+%}{Question: Was this factor on the board.  I didn't have it in my notes?}
+}
+}
+%\approx
+%e^{f(\alpha)}
+%\int_0^\infty dy e^{-(y - \alpha)^2/2}
 \end{dmath}
+
+For the integral Mathematica gives
+%\begin{dmath}\label{eqn:basicStatMechLecture2:800}
+%\int_0^\infty dy 
+%e^{
+%-\frac{(y - \alpha)^2}{2 \alpha}
+%}
+%=
+%\inv{2}
+%\int_{-\infty}^\infty dy 
+%e^{
+%-
+%\frac{(y - \alpha)^2}{2 \alpha}
+%}
+%=
+%\frac{\sqrt{2 \alpha}}{2} 
+%\int_{-\infty}^\infty d
+%%\mathLabelBox
+%%[
+%%   labelstyle={xshift=2cm},
+%%   linestyle={out=90,in=270, latex-}
+%%]
+%%{
+%u
+%%}{$u= (y-\alpha)/\sqrt{2 \alpha}$}
+%e^{
+%-u^2
+%}
+%=
+%\frac{\sqrt{2 \pi \alpha}}{2} 
+%\end{dmath}
+
+\begin{equation}\label{eqn:basicStatMechLecture2:820}
+\int_0^\infty dy 
+e^{
+-\frac{(y - \alpha)^2}{2 \alpha}
+}
+=
+\sqrt{\frac{\pi  \alpha }{2}} \left(\erf \left(\sqrt{\frac{\alpha }{2}}\right)+1\right).
+\end{equation}
+
+From \cref{fig:basicStatMechLecture2:basicStatMechLecture2Fig8} observe that $\erf(x) \rightarrow 1$ in the limit
+
+\imageFigure{basicStatMechLecture2Fig8}{Error function}{fig:basicStatMechLecture2:basicStatMechLecture2Fig8}{0.3}
+
+So we have for large $\alpha$
+
+\begin{equation}\label{eqn:basicStatMechLecture2:840}
+\int_0^\infty dy 
+e^{
+-\frac{(y - \alpha)^2}{2 \alpha}
+}
+\approx \sqrt{2 \pi \alpha}
+\end{equation}
 
 \begin{equation}\label{eqn:basicStatMechLecture2:740}
 e^{f(\alpha)} = e^{-\alpha + \alpha \ln \alpha}
 \end{equation}
 
+We have for $\alpha \gg 1$
 \begin{equation}\label{eqn:basicStatMechLecture2:760}
-I(\alpha \gg 1) \approx e^{-\alpha} 
+I(\alpha) \approx e^{-\alpha} 
 \mathLabelBox
 [
    labelstyle={xshift=2cm},
@@ -393,6 +469,14 @@ e^{\alpha \ln \alpha}
 $\alpha^\alpha$
 }
 \sqrt{2 \pi \alpha}
+\end{equation}
+
+This gives us the \underline{Stirling} approximation 
+
+\begin{equation}\label{eqn:basicStatMechLecture2:480}
+\boxed{
+N! \approx \sqrt{ 2 \pi N} N^N e^{-N},
+}
 \end{equation}
 
 %\EndArticle
