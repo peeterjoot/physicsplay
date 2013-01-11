@@ -163,6 +163,13 @@ X \rightarrow 2, 0, 0, 2
 \}
 \end{equation}
 
+\begin{itemize}
+\item $X = 3$ : 1 way
+\item $X = 1$ : 3 ways
+\item $X = -1$ : 3 ways
+\item $X = -3$ : 1 way
+\end{itemize}
+
 %\cref{fig:basicStatMechLecture2:basicStatMechLecture2Fig5}.
 \imageFigure{basicStatMechLecture2Fig5}{3 tosses}{fig:basicStatMechLecture2:basicStatMechLecture2Fig5}{0.3}
 
@@ -219,7 +226,7 @@ We'll use the \underline{Stirling formula}, to find
 N! \approx \sqrt{ 2 \pi N} N^N e^{-N},
 \end{equation}
 
-\begin{equation}\label{eqn:basicStatMechLecture2:500}
+\begin{dmath}\label{eqn:basicStatMechLecture2:500}
 P_N(X) 
 = 
 \left(\inv{2}\right)^N 
@@ -235,9 +242,26 @@ P_N(X)
 e^{-\frac{N+X}{2}} \left( \frac{N+X}{2}\right)^{\frac{N+X}{2}} \sqrt{ 2 \pi \frac{N+X}{2}} 
 e^{-\frac{N-X}{2}} \left( \frac{N-X}{2}\right)^{\frac{N-X}{2}} \sqrt{ 2 \pi \frac{N-X}{2}} 
 }
-\end{equation}
+=
+\left( \inv{2} \right)^N 
+\frac
+{ 2 N^N \sqrt{ N} }
+{ 
+\sqrt{2 \pi}
+\left( \frac{N+X}{2}\right)^{\frac{N+X}{2}} \sqrt{ N^2 - X^2} 
+\left( \frac{N-X}{2}\right)^{\frac{N-X}{2}} 
+}
+=
+\frac
+{ 2 N^N \sqrt{ N} }
+{ 
+\sqrt{2 \pi}
+\left( N^2 - X^2 \right)^{N/2 + 1/2}
+\left( \frac{N+X}{N-X}\right)^{X/2} 
+}
+\end{dmath}
 
-This can be simplified to (FIXME: do it)
+This can be apparently be simplified to
 
 \begin{equation}\label{eqn:basicStatMechLecture2:520}
 P_N(X) 
@@ -254,24 +278,32 @@ To prove the Stirling formula we'll use the Gamma (related) function
 I(\alpha) = \int_0^\infty dy e^{-y} y^\alpha
 \end{equation}
 
-We can show (FIXME: fill in details)
+Observe that we have
 
-\begin{subequations}
 \begin{equation}\label{eqn:basicStatMechLecture2:560}
-I(0) = 1
+I(0) = \int_0^\infty dy e^{-y} = 1,
 \end{equation}
-\begin{equation}\label{eqn:basicStatMechLecture2:580}
-I(\alpha+1) = (\alpha + 1) I(\alpha)
-\end{equation}
-\end{subequations}
 
-Since this means 
+and
+
+\begin{dmath}\label{eqn:basicStatMechLecture2:570}
+I(\alpha + 1) 
+= \int_0^\infty dy e^{-y} y^{\alpha + 1}
+= \int_0^\infty d \left( \frac{e^{-y}}{-1} \right) y^{\alpha + 1}
+= 
+\cancel{\evalrange{\left( \frac{e^{-y}}{-1} y^{\alpha + 1} \right)}{0}{\infty}}
+-
+\int_0^\infty dy \left( \frac{e^{-y}}{-1} \right) (\alpha + 1) y^{\alpha}
+= (\alpha + 1)I(y).
+\end{dmath}
+
+This induction result means that
 
 \begin{equation}\label{eqn:basicStatMechLecture2:600}
 I(\alpha = N) = N!,
 \end{equation}
 
-we can use the large $\alpha$ behaviour of this function to find approximations of the factorial.  What does the innards of this integral (integrand) look like.  We can plot these \cref{fig:basicStatMechLecture2:basicStatMechLecture2Fig7}, and find a hump for any non-zero value of $\alpha$ ($\alpha = 0$ is just a line)
+so we can use the large $\alpha$ behaviour of this function to find approximations of the factorial.  What does the innards of this integral (integrand) look like.  We can plot these \cref{fig:basicStatMechLecture2:basicStatMechLecture2Fig7}, and find a hump for any non-zero value of $\alpha$ ($\alpha = 0$ is just a line)
 
 \imageFigure{basicStatMechLecture2Fig7}{Some values of $f(y, \alpha)$}{fig:basicStatMechLecture2:basicStatMechLecture2Fig7}{0.3}
 
@@ -309,7 +341,12 @@ We now want to expand the integrand around this peak value
 I(\alpha) = \int_0^\infty
 \exp\left(
 f(y^\conj) + 
-\mathLabelBox{
+\mathLabelBox
+[
+   labelstyle={xshift=2cm, yshift=0.5cm},
+   linestyle={out=270,in=90, latex-}
+]
+{
 \evalbar{\PD{y}{f}}{y^\conj}
 }{=0}
 (y - y^\conj) 
@@ -345,6 +382,10 @@ e^{f(\alpha)} = e^{-\alpha + \alpha \ln \alpha}
 \begin{equation}\label{eqn:basicStatMechLecture2:760}
 I(\alpha \gg 1) \approx e^{-\alpha} 
 \mathLabelBox
+[
+   labelstyle={xshift=2cm},
+   linestyle={out=270,in=90, latex-}
+]
 {
 e^{\alpha \ln \alpha} 
 }
