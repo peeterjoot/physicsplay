@@ -10,6 +10,9 @@ SOURCE_DIRS += figures
 #SOURCE_DIRS += solutions
 
 GENERATED_SOURCES += mathematica.tex 
-#GENERATED_PDFS += basicStatMechProblemSet1.pdf
+GENERATED_PDFS += basicStatMechProblemSet1.pdf
 
 include ../make.rules
+
+basicStatMechProblemSet1.pdf : basicStatMechProblemSet1Problem2.tex basicStatMechProblemSet1Problem1.tex
+basicStatMechProblemSet1.pdf : $(PDF_DEPS)
