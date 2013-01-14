@@ -35,6 +35,10 @@ endef
 
 all :: $(MAIN_TARGETS)
 
+opt/%.pdf : %.pdf
+	mkdir -p opt
+	$(QPDF) --linearize $< $@
+
 $(THISDIR).pdf :: $(THISBOOK_DEPS)
 
 %.pdf :: %.tex
@@ -98,3 +102,7 @@ currentBookCopyright.tex :
 	~/bin/printCopyRight -latex > $@
 
 vpath %.tex $(ORIG_FILE_DIRS)
+
+ifneq ($(QPDF),)
+all :: opt/$(THISDIR).pdf
+endif
