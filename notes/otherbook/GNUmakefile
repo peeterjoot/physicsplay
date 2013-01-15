@@ -5,7 +5,7 @@ ORIG_FILES += ../unsrturl.bst
 ORIG_FILES += ../abbrvurl.bst
 ORIG_FILES += ../alphaurl.bst
 ORIG_FILES += ../plainurl.bst
-ORIG_FILES += ../phy354/figures/hoopSpring.png
+ORIG_FILES += ../classicalmechanics/figures/hoopSpring.png
 ORIG_FILES += ../gabook/figures/parallelogramArea.png
 ORIG_FILES += ../calculus/parameterizedSurface.png
 ORIG_FILES += ../calculus/polarAndSpherical.png
@@ -22,7 +22,7 @@ ORIG_FILE_DIRS += ../calculus/
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
-all : peeters_macros.sty peeters_layout.sty myrefs.bib otherbook.pdf .gitignore
+all : book_layout.sty peeters_macros.sty peeters_layout.sty myrefs.bib otherbook.pdf .gitignore
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
@@ -58,6 +58,9 @@ myrefs.bib: ../myrefs.bib.in ../METADATA
 peeters_layout.sty : ../peeters_layout.sty
 	cp $^ $@
 
+book_layout.sty : ../book_layout.sty
+	cp $^ $@
+
 peeters_macros.sty : ../peeters_macros.sty
 	cp $^ $@
 #-------------------------------
@@ -69,4 +72,4 @@ peeters_macros.sty : ../peeters_macros.sty
 #	../make_pdflatex -file $<
 
 clean ::
-	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc $(LOCAL_FILES)
+	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc $(LOCAL_FILES) *.synctex.gz
