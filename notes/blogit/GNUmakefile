@@ -26,8 +26,8 @@ ORIG_FILES += ../phy454/figures/couetteFlowFig3.png
 ORIG_FILES += ../phy454/figures/couetteFlowFig4.png
 ORIG_FILES += ../phy454/figures/couetteFlowFig5.png
 ORIG_FILES += ../phy454/figures/couetteFlowFig6.mp4
-ORIG_FILES += ../otherbook/triangleLaw.png
-ORIG_FILES += ../otherbook/rotateMinusOne.png
+ORIG_FILES += ../otherbook/figures/triangleLawFig2.png
+ORIG_FILES += ../otherbook/figures/rotateMinusOneFig1.png
 
 ORIG_FILES += ../phy454/figures/twoCylinderFig1.png
 ORIG_FILES += ../phy454/figures/twoCylinderFig2.png

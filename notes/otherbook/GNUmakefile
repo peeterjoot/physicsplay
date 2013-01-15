@@ -1,75 +1,16 @@
-include make.dep
+THISDIR := otherbook
 
-#ORIG_FILES += ../myrefs.bib
-ORIG_FILES += ../unsrturl.bst
-ORIG_FILES += ../abbrvurl.bst
-ORIG_FILES += ../alphaurl.bst
-ORIG_FILES += ../plainurl.bst
-ORIG_FILES += ../classicalmechanics/figures/hoopSpring.png
-ORIG_FILES += ../gabook/figures/parallelogramArea.png
-ORIG_FILES += ../calculus/parameterizedSurface.png
-ORIG_FILES += ../calculus/polarAndSpherical.png
-ORIG_FILES += ../calculus/surface_area_element.png
-ORIG_FILES += ../calculus/volume_element.png
+include ../make.vars
 
-ORIG_FILE_DIRS += ../miscphysics/
-ORIG_FILE_DIRS += ../gabook/figures/
-ORIG_FILE_DIRS += ../calculus/
+SOURCE_DIRS += appendix
+# FIXME:
+# 1) including this incorrectly adds figures/*pdf to the ./.gitignore file
+# 2) also not seeing this result in figure dependencies. touch figures/etalonFig1.pdf
+SOURCE_DIRS += figures
+#SOURCE_DIRS += solutions
 
-#ORIG_FILES += ../blogit/gaBasics.tex
-#ORIG_FILES += ../blogit/dotBlade.tex
-#ORIG_FILES += ../blogit/gaMintro.tex
+#GENERATED_SOURCES += mathematica.tex 
 
-LOCAL_FILES := $(notdir $(ORIG_FILES))
-
-all : book_layout.sty peeters_macros.sty peeters_layout.sty myrefs.bib otherbook.pdf .gitignore
-
-.gitignore : GNUmakefile
-	rm -f .gitignore
-	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/otherbook/,' > $@
-
-local : $(LOCAL_FILES) 
-
-$(LOCAL_FILES) : 
-	cp $(filter %$@, $(ORIG_FILES)) $@
-
-otherbook.pdf :: $(BOOKDEPENDENCIES) $(LOCAL_FILES)
-	mkdir -p ./.revinfo/
-	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
-	../make_pdflatex -file main.tex
-	mv main.pdf otherbook.pdf
-
-cronology.tex : ../METADATA
-	../METADATA -otherbook > cronology.tex
-
-#-------------------------------
-# HACK: from ../make.rules:
-
-# plainnat.bib (as used by classicthesis) doesn't like @webpage:
-# http://tex.stackexchange.com/questions/56951/what-does-warning-entry-type-for-isnt-style-file-defined-mean/56954#56954
-Bibliography.bib : myrefs.bib
-	sed 's/@webpage/@manual/g' < $< > $@
-
-# old style:
-myrefs.bib: ../myrefs.bib.in ../METADATA
-	cp ../myrefs.bib.in myrefs.bib
-	../METADATA -bib >> myrefs.bib
-
-peeters_layout.sty : ../peeters_layout.sty
-	cp $^ $@
-
-book_layout.sty : ../book_layout.sty
-	cp $^ $@
-
-peeters_macros.sty : ../peeters_macros.sty
-	cp $^ $@
-#-------------------------------
+include ../make.rules
 
 
-#%.pdf : %.tex
-#	mkdir -p ./.revinfo/
-#	~/bin/mkRevInfo > ./.revinfo/lastCommit.tex
-#	../make_pdflatex -file $<
-
-clean ::
-	rm -f *.ps *.dvi *.pdf *.aux *.log *.aux *.bbl *.blg *.idx *.lof *.log *.lot *.out *.toc $(LOCAL_FILES) *.synctex.gz
