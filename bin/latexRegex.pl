@@ -1,5 +1,6 @@
 #s/\\Br_av/\\Br_{\\mathrm{av}}/g ;
 s/\\PP/\\mathcal{P}/g ;
+s/N_c/N_{\\mathrm{c}}/g ;
 #s/\\Gamma_{cav}/\\Gamma_{\\mathrm{cav}}/g  ;
 #s/\\Gamma_{sp}/\\Gamma_{\\mathrm{sp}}/g  ;
 #s/\\Gamma_{st}/\\Gamma_{\\mathrm{st}}/g  ;
