@@ -41,7 +41,6 @@ LOCAL_FIGURE_FILES += satellite.png
 LOCAL_FIGURE_FILES += spherical_polar.png
 LOCAL_FIGURE_FILES += surface_area_element.png
 LOCAL_FIGURE_FILES += surface_flux_element.png
-LOCAL_FIGURE_FILES += tangent_area_form.png
 LOCAL_FIGURE_FILES += visualize_subspace_projection.png
 LOCAL_FIGURE_FILES += volume_element.png
 

@@ -7,13 +7,15 @@ MUTEX += dekker_xchg dekker_atomic dekker_serial_atomic dekker_serial_nolock
 files := $(shell ls *.tex)
 pdfs := $(files:.tex=.pdf)
 
+PDF_GENERATED_DEPS += peeters_macros.sty peeters_layout.sty Bibliography.bib myrefs.bib
+
 all :: $(pdfs) .gitignore
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
 	touch $@
 
-$(pdfs) : peeters_macros.sty peeters_layout.sty Bibliography.bib
+$(pdfs) : $(PDF_GENERATED_DEPS)
 
 peeters_layout.sty : ../peeters_layout.sty
 	cp $^ $@
@@ -35,10 +37,7 @@ myrefs.bib: ../myrefs.bib.in ../METADATA
 	../make_pdflatex -file $<
 
 clean ::
-	rm -f *.ps *.dvi *.pdf *.aux *.log
-
-clean ::
-	rm -f *.o $(MUTEX)
+	rm -f *.ps *.dvi *.pdf *.aux *.log $(PDF_GENERATED_DEPS) *.o $(MUTEX)
 
 dekker: dekker.c
 	g++ dekker.c -o $@ -lpthread
