@@ -107,13 +107,22 @@ notes/mathematica/
 
    A couple random mathematica notebooks
 
+notes/gamma-matrix
+
+   Some C++ gamma matrix related code.  Forget exactly what it did.  Uses boost::ublas.
+
+notes/financials
+
+   a mathematica notebook where I'd tried the stock grabbing function for an IBM stock history. 
+
+notes/dekker
+   
+   a dekker's algorithm related "paper" posted to my blog, discussing memory ordering.
+
 notes/algebra
 notes/calculus
-notes/dekker
 notes/differential_forms
 notes/dynamics
-notes/financials
-notes/gamma-matrix
 notes/geometric-algebra
 notes/lut
 notes/relativity
