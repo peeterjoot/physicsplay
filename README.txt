@@ -121,10 +121,6 @@ notes/dekker
 
 notes/algebra
 notes/calculus
-notes/differential_forms
-notes/dynamics
 notes/geometric-algebra
-notes/lut
-notes/relativity
 notes/toc
    ?  I think that some of this is from before I created the gabook/ compilation.  
