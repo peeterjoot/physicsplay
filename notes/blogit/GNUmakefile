@@ -43,6 +43,11 @@ ORIG_FILES += ../phy454/figures/twoCylindersFig9.png
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
+QPDF_DIR := $(wildcard /cygdrive/d/qpdf-*/bin $(HOME)/qpdf-*)
+ifneq ($(QPDF_DIR),)
+   QPDF := $(QPDF_DIR)/bin/qpdf.exe
+endif
+
 all :: Bibliography.bib
 all :: peeters_macros.sty
 all :: peeters_layout.sty
@@ -104,6 +109,10 @@ Bibliography.bib : myrefs.bib
 myrefs.bib: ../myrefs.bib.in ../METADATA
 	cp ../myrefs.bib.in myrefs.bib
 	../METADATA -bib >> myrefs.bib
+
+opt/%.pdf : %.pdf
+	mkdir -p opt
+	$(QPDF) --linearize $< $@
 
 localclean ::
 	rm -f $(LOCAL_FILES)
