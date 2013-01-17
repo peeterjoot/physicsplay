@@ -18,28 +18,6 @@ SOURCE_DIRS += qm
 SOURCE_DIRS += relativity
 SOURCE_DIRS += rotation
 
-ORIG_FIGURE_DIRS += ../calculus
-ORIG_FIGURE_DIRS += ../differential_forms
-ORIG_FIGURE_DIRS += ../geometric-algebra
-ORIG_FIGURE_DIRS += ../miscphysics/figures
-LOCAL_FIGURE_FILES += Projection_line.png
-LOCAL_FIGURE_FILES += Projection_plane.png
-LOCAL_FIGURE_FILES += charge_line_element_figure.png
-LOCAL_FIGURE_FILES += cube_unfolded_004.png
-LOCAL_FIGURE_FILES += imaginaryorientation.png
-LOCAL_FIGURE_FILES += normalRot.png
-LOCAL_FIGURE_FILES += p41.png
-LOCAL_FIGURE_FILES += parallelogram_parameterized.png
-LOCAL_FIGURE_FILES += parallelogramvec.png
-LOCAL_FIGURE_FILES += parallelopiped_parameterized.png
-LOCAL_FIGURE_FILES += planeParameterization.png
-LOCAL_FIGURE_FILES += planerejection.png
-LOCAL_FIGURE_FILES += rotor.png
-LOCAL_FIGURE_FILES += satellite.png
-LOCAL_FIGURE_FILES += spherical_polar.png
-LOCAL_FIGURE_FILES += surface_flux_element.png
-LOCAL_FIGURE_FILES += visualize_subspace_projection.png
-
 ORIG_LISTING_DIRS += ../algebra
 LOCAL_LISTING_FILES += levi.pl
 
