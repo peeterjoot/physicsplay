@@ -119,8 +119,5 @@ notes/dekker
    
    a dekker's algorithm related "paper" posted to my blog, discussing memory ordering.
 
-notes/algebra
-notes/calculus
-notes/geometric-algebra
 notes/toc
    ?  I think that some of this is from before I created the gabook/ compilation.  
