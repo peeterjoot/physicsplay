@@ -4,16 +4,14 @@ RAWTEXFILES := $(shell ls *.tex)
 #INCOMPLETE += basicStatMechProblemSet1Problem1.tex
 #INCOMPLETE += basicStatMechProblemSet1Problem2.tex
 
-# these may not all be incomplete, but I don't want to build them right now:
-INCOMPLETE += pp.tex
-INCOMPLETE += dotBlade.tex
-INCOMPLETE += gaBasics.tex
-INCOMPLETE += gaMintro.tex
-INCOMPLETE += maxwellsFromGA.tex
-INCOMPLETE += pipeFlowConstPressureGradient.tex
-INCOMPLETE += qmTwoExamReflection.tex
-INCOMPLETE += qmTwoR1.tex
-INCOMPLETE += qmTwoR5.tex
+# buildable:
+#INCOMPLETE += dotBlade.tex
+#INCOMPLETE += gaBasics.tex
+#INCOMPLETE += gaMintro.tex
+#INCOMPLETE += maxwellsFromGA.tex
+#INCOMPLETE += pipeFlowConstPressureGradient.tex
+#INCOMPLETE += qmTwoExamReflection.tex
+#INCOMPLETE += qmTwoR1.tex
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
@@ -26,8 +24,6 @@ ORIG_FILES += ../phy454/figures/couetteFlowFig3.png
 ORIG_FILES += ../phy454/figures/couetteFlowFig4.png
 ORIG_FILES += ../phy454/figures/couetteFlowFig5.png
 ORIG_FILES += ../phy454/figures/couetteFlowFig6.mp4
-ORIG_FILES += ../otherbook/figures/triangleLawFig2.png
-ORIG_FILES += ../otherbook/figures/rotateMinusOneFig1.png
 
 ORIG_FILES += ../phy454/figures/twoCylinderFig1.png
 ORIG_FILES += ../phy454/figures/twoCylinderFig2.png
