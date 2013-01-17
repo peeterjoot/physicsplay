@@ -4,14 +4,9 @@ include ../make.vars
 
 ORIG_FIGURE_DIRS += ../classicalmechanics/figures
 ORIG_FIGURE_DIRS += ../gabook/figures
-ORIG_FIGURE_DIRS += ../calculus
 
 LOCAL_FIGURE_FILES += hoopSpring.png
 LOCAL_FIGURE_FILES += parallelogramArea.png
-LOCAL_FIGURE_FILES += parameterizedSurface.png
-LOCAL_FIGURE_FILES += polarAndSpherical.png
-LOCAL_FIGURE_FILES += surface_area_element.png
-LOCAL_FIGURE_FILES += volume_element.png
 
 SOURCE_DIRS += appendix
 # FIXME:
