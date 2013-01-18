@@ -2,13 +2,13 @@ SUBMAKES := $(wildcard notes/*/GNUmakefile)
 SUBDIRS := $(subst /GNUmakefile,,$(SUBMAKES))
 IGNOREDIRS += notes/atomic
 IGNOREDIRS += notes/bb
-IGNOREDIRS += notes/geometric-algebra
 IGNOREDIRS += notes/phy1530
+IGNOREDIRS += notes/gamma-matrix
 SUBDIRS := $(filter-out $(IGNOREDIRS),$(SUBDIRS))
 
 GITIGNORES := $(addsuffix /.gitignore,$(SUBDIRS))
 
-all :: .gitignore
+all :: .gitignore subdirs
 
 e:
 	echo s: $(SUBMAKES)
