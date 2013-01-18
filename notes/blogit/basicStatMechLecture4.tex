@@ -5,7 +5,7 @@
 \input{../blogpost.tex}
 \renewcommand{\basename}{basicStatMechLecture4}
 \renewcommand{\dirname}{notes/phy452/}
-\newcommand{\keywords}{Statistical mechanics, PHY452H1S}
+\newcommand{\keywords}{Statistical mechanics, PHY452H1S, Maxwell-Boltzmann distribution, Fluctuation-Dissipation theorem, Fick's law, continuity equation, ideal gas law, random walk, phase space, dissipation, diffusion, Boltzmann constant}
 \input{../peeter_prologue_print2.tex}
 
 %\usepackage[draft]{fixme}
@@ -23,13 +23,13 @@
 
 \section{Review: Lead up to Maxwell distribution for gases}
 
-After a number of collisions, our $i$th particle will have a velocity
+For the random walk, after a number of collisions $N_{\mathrm{c}}$, we found that a particle (labeled the $i$th) will have a velocity
 
 \begin{equation}\label{eqn:basicStatMechLecture4:20}
 \Bv_i(N_{\mathrm{c}}) = \Bv_i(0) + \sum_{l = 1}^{N_{\mathrm{c}}} \Delta \Bv_i(l)
 \end{equation}
 
-We argued that the probability distribution for finding a velocity $\Bv$ was as in
+We argued that the probability distribution for finding a velocity $\Bv$ was as in \cref{fig:basicStatMechLecture4:basicStatMechLecture4Fig1}, and
 
 \begin{equation}\label{eqn:basicStatMechLecture4:40}
 \mathcal{P}_{N_{\mathrm{c}}}(\Bv_i) \propto \exp
@@ -38,7 +38,6 @@ We argued that the probability distribution for finding a velocity $\Bv$ was as 
 \right)
 \end{equation}
 
-%\cref{fig:basicStatMechLecture4:basicStatMechLecture4Fig1}.
 \imageFigure{basicStatMechLecture4Fig1}{Velocity distribution found without considering kinetic energy conservation}{fig:basicStatMechLecture4:basicStatMechLecture4Fig1}{0.3}
 
 \section{What went wrong?}
@@ -49,7 +48,7 @@ However, we know that this must be wrong, since we require
 T = \inv{2} \sum_{i = 1}^{n} \Bv_i^2 = \mbox{conserved}
 \end{equation}
 
-Where our arguement went wrong is that when the particle has a greater than average velocity, the effect of a collision will be to slow it down.  We have to account for 
+Where our argument went wrong is that when the particle has a greater than average velocity, the effect of a collision will be to slow it down.  We have to account for 
 
 \begin{itemize}
 \item Fluctuations $\rightarrow$ ``random walk''
@@ -141,9 +140,9 @@ c(v) \propto \exp
 }
 \end{equation}
 
-This is the \underline{Maxwell-Boltzman} distribution, illustrated in \cref{fig:basicStatMechLecture4:basicStatMechLecture4Fig3}.
+This is the \underline{Maxwell-Boltzmann} distribution, illustrated in \cref{fig:basicStatMechLecture4:basicStatMechLecture4Fig3}.
 
-\imageFigure{basicStatMechLecture4Fig3}{Maxwell-Boltzman distribution}{fig:basicStatMechLecture4:basicStatMechLecture4Fig3}{0.3}
+\imageFigure{basicStatMechLecture4Fig3}{Maxwell-Boltzmann distribution}{fig:basicStatMechLecture4:basicStatMechLecture4Fig3}{0.3}
 
 The concentration $c(v)$ has a probability distribution.
 
@@ -192,7 +191,7 @@ T = \mbox{absolute temperature}
 
 \section{Equilibrium steady states}
 
-Fluctations $\leftrightarrow$ Dissipation
+Fluctuations $\leftrightarrow$ Dissipation
 
 \begin{equation}\label{eqn:basicStatMechLecture4:340}
 \boxed{
@@ -240,7 +239,8 @@ This is three sets of equations, one for each component $v_\alpha$ of $\Bv$
 So that our steady state equation is
 
 \begin{equation}\label{eqn:basicStatMechLecture4:400}
-c(\Bv, t \rightarrow \infty) \propto \exp
+c(\Bv, t \rightarrow \infty) \propto 
+\exp
 \left(
 -\frac{
 v_x^2 
@@ -252,11 +252,119 @@ v_z^2
 \right).
 \end{equation}
 
-and we can find
+Computing the average 3D squared velocity for this distribution, we have
 
-\begin{equation}\label{eqn:basicStatMechLecture4:420}
-\inv{2} m \expectation{\Bv \cdot \Bv} = \frac{3}{2} k_{\mathrm{B}} T
-\end{equation}
+\begin{dmath}\label{eqn:basicStatMechLecture4:420}
+\inv{2} m \expectation{\Bv \cdot \Bv} 
+= 
+\frac
+{
+   \int dv_x dv_y dv_z
+   \left(
+   v_x^2 
+   +
+   v_y^2 
+   +
+   v_z^2 
+   \right)
+   \exp
+   \left(
+   -\frac{
+   v_x^2 
+   +
+   v_y^2 
+   +
+   v_z^2 
+   }{ 2 (D/\eta) }
+   \right)
+}
+{
+   \int dv_x dv_y dv_z
+   \exp
+   \left(
+   -\frac{
+   v_x^2 
+   +
+   v_y^2 
+   +
+   v_z^2 
+   }{ 2 (D/\eta) }
+   \right)
+}
+=
+\frac
+{
+   \int dv_x 
+   v_x^2 
+   \exp
+   \left(
+   -\frac{
+   v_x^2 
+   }{ 2 (D/\eta) }
+   \right)
+}
+{
+   \int dv_x 
+   \exp
+   \left(
+   -\frac{
+   v_x^2 
+   }{ 2 (D/\eta) }
+   \right)
+}
++
+\frac
+{
+   \int dv_y 
+   v_y^2 
+   \exp
+   \left(
+   -\frac{
+   v_y^2 
+   }{ 2 (D/\eta) }
+   \right)
+}
+{
+   \int dv_y 
+   \exp
+   \left(
+   -\frac{
+   v_y^2 
+   }{ 2 (D/\eta) }
+   \right)
+}
++
+\frac
+{
+   \int dv_z 
+   v_z^2 
+   \exp
+   \left(
+   -\frac{
+   v_z^2 
+   }{ 2 (D/\eta) }
+   \right)
+}
+{
+   \int dv_z 
+   \exp
+   \left(
+   -\frac{
+   v_z^2 
+   }{ 2 (D/\eta) }
+   \right)
+}
+= 
+3 
+\left( 
+   \frac{1}{2} 
+   k_{\mathrm{B}} T
+\right)
+= \frac{3}{2} 
+k_{\mathrm{B}} T
+\end{dmath}
+
+For each component $v_\alpha$ the normalization kills off all the contributions for the other components, leaving us with the usual $3 k_{\mathrm{B}} T/2$ ideal gas law kinetic energy.
 
 \section{Phase space}
 
@@ -276,7 +384,18 @@ Here
 \item $\mbox{Dimension} = N_{\text{particles} \times 2 \times d}$, where $d$ is the physical space dimension.
 \end{itemize}
 
-The motion in phase space will be governed by the knowledge of how each of these coordinates change for ever particle
+The motion in phase space will be governed by the knowledge of how each of these coordinates change for all the particles.  Assuming a Hamiltonian $H$ and recalling that $H = \xdot p - \LL$, gives us
+
+\begin{subequations}
+\begin{equation}\label{eqn:basicStatMechLecture4:600}
+\PD{p}{H} = \xdot
+\end{equation}
+\begin{equation}\label{eqn:basicStatMechLecture4:620}
+\PD{x}{H} = -\PD{x}{\LL} = - \ddt{p},
+\end{equation}
+\end{subequations}
+
+we have for the following set of equations describing the entire system
 
 \begin{subequations}
 \begin{equation}\label{eqn:basicStatMechLecture4:460}
