@@ -1,5 +1,5 @@
 #s/\\Br_av/\\Br_{\\mathrm{av}}/g ;
-s/\\PP/\\mathcal{P}/g ;
+#s/\\PP/\\mathcal{P}/g ;
 s/N_c/N_{\\mathrm{c}}/g ;
 #s/\\Gamma_{cav}/\\Gamma_{\\mathrm{cav}}/g  ;
 #s/\\Gamma_{sp}/\\Gamma_{\\mathrm{sp}}/g  ;
@@ -11,7 +11,7 @@ s/N_c/N_{\\mathrm{c}}/g ;
 #s/\\spacegrad_T/\\spacegrad_{\\mathrm{T}}/g ;
 #s/_min/_{\\mathrm{min}}/g ;
 #s/_laser/_{\\mathrm{laser}}/g ;
-s/k_B/_{k_{\\mathrm{B}}}/g ;
+#s/k_B/_{k_{\\mathrm{B}}}/g ;
 #s/_div/_{\\mathrm{div}}/g ;
 #s/_eff/_{\\mathrm{eff}}/g ;
 #s/_L/_{\\mathrm{L}}/g ;
