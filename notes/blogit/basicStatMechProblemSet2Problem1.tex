@@ -43,13 +43,209 @@ to assume $A < 1/L$ to ensure that the probability density is positive.  Obtain 
 
 \makeanswer{basicStatMech:problemSet2:1}{ 
 
-TODO.
+Inserting the transform definitions we have
 
-\makeSubAnswer{XXX}{basicStatMech:problemSet2:1a}
+\begin{dmath}\label{eqn:basicStatMechProblemSet2Problem1:120}
+0 
+= 
+\left( \PD{t}{} - D \PDSq{x}{} \right) P
+= 
+\left( \PD{t}{} - D \PDSq{x}{} \right) 
+\int_{-\infty}^\infty \frac{dk}{2 \pi} \tilde{P}(k, t) \exp\left( i k x \right)
+=
+\int_{-\infty}^\infty \frac{dk}{2 \pi} 
+\left(
+\PD{t}{} 
+\tilde{P}(k, t) 
++ 
+k^2 D
+\tilde{P}(k, t) 
+\right)
+\exp\left( i k x \right),
+\end{dmath}
 
-TODO.
+We conclude that
 
-\makeSubAnswer{XXX}{basicStatMech:problemSet2:1b}
+\begin{equation}\label{eqn:basicStatMechProblemSet2Problem1:140}
+0 = 
+\tilde{P}(k, t) 
++ 
+k^2 D
+\tilde{P}(k, t),
+\end{equation}
+
+or
+
+\begin{equation}\label{eqn:basicStatMechProblemSet2Problem1:160}
+\tilde{P}(k, t) = A(k) e^{-k^2 D t}.
+\end{equation}
+
+If the Fourier transform of the distribution is constant until time $t$, so that $\tilde{P}(k, t < 0) = \tilde{P}(k, 0)$, we can write
+
+\begin{equation}\label{eqn:basicStatMechProblemSet2Problem1:180}
+\boxed{
+\tilde{P}(k, t) = \tilde{P}(k, 0) e^{-k^2 D t}.
+}
+\end{equation}
+
+The time evolution of the distributions transform just requires multiplication by the decreasing exponential factor $e^{-k^2 D t}$.  
+
+\paragraph{Propagator for the diffusion equation}
+
+We can also use this to express the explicit time evolution of the distribution
+
+\begin{dmath}\label{eqn:basicStatMechProblemSet2Problem1:200}
+P(x, t) 
+= 
+\int_{-\infty}^\infty \frac{dk}{2 \pi} 
+\tilde{P}(k, 0) 
+e^{-k^2 D t}
+\exp\left( i k x \right)
+= 
+\int_{-\infty}^\infty \frac{dk}{2 \pi} 
+\int_{-\infty}^\infty dx' P(x', 0) \exp\left( -i k x' \right)
+e^{-k^2 D t}
+\exp\left( i k x \right)
+= 
+\int_{-\infty}^\infty 
+dx' P(x', 0) 
+\int_{-\infty}^\infty 
+\frac{dk}{2 \pi} 
+\exp\left( -k^2 D t + i k (x - x') \right)
+\end{dmath}
+
+Our distribution time evolution is given by convolve with a propagator function
+
+\begin{subequations}
+\begin{equation}\label{eqn:basicStatMechProblemSet2Problem1:220}
+P(x, t) = \int dx' P(x', 0) G(x', x)
+\end{equation}
+\begin{equation}\label{eqn:basicStatMechProblemSet2Problem1:240}
+G(x', x) 
+=
+\int_{-\infty}^\infty 
+\frac{dk}{2 \pi} 
+\exp\left( -k^2 D t + i k (x - x') \right)
+\end{equation}
+\end{subequations}
+
+For $t \ge 0$ we can complete the square, finding that this propagator is
+
+\begin{dmath}\label{eqn:basicStatMechProblemSet2Problem1:260}
+G(x', x) 
+=
+\int_{-\infty}^\infty 
+\frac{dk}{2 \pi} 
+\exp\left( -k^2 D t + i k (x - x') \right)
+=
+\exp\left( \left(\frac{i (x - x')}{2 \sqrt{D t}} \right)^2 \right)
+\int_{-\infty}^\infty 
+\frac{dk}{2 \pi} 
+\exp\left( - \left(k \sqrt{D t} + \frac{i (x - x')}{2 \sqrt{D t}} \right)^2 \right)
+\end{dmath}
+
+or
+
+\begin{equation}\label{eqn:basicStatMechProblemSet2Problem1:360}
+\boxed{
+G(x', x) 
+=
+\frac{1}{\sqrt{4 \pi D t}} \exp\left(
+-\frac{(x - x')^2}{4 D t}
+\right).
+}
+\end{equation}
+
+A schematic plot of this function as a function of $t$ for fixed $x - x'$ is plotted in \cref{fig:problemSet2distPropagator:problemSet2distPropagatorFig1}.
+
+\imageFigure{problemSet2distPropagatorFig1}{Form of the propagator function for the diffusion equation}{fig:problemSet2distPropagator:problemSet2distPropagatorFig1}{0.3}
+
+\makeSubAnswer{Gaussian}{basicStatMech:problemSet2:1a}
+
+For the Gaussian of \ref{eqn:basicStatMechProblemSet2Problem1:80} we compute the initial time Fourier transform
+
+\begin{dmath}\label{eqn:basicStatMechProblemSet2Problem1:280}
+\tilde{P}(k) 
+= 
+\int_{-\infty}^\infty dx 
+\inv{\sqrt{2 \pi \sigma^2}} \exp
+\left(
+-\frac{x^2}{2 \sigma^2}
+-i k x 
+\right)
+=
+\inv{\sqrt{2 \pi \sigma^2}} 
+\exp
+\left(
+-\left( \frac{\sqrt{ 2 \sigma^2}}{2} k i
+\right)^2
+\right)
+\int_{-\infty}^\infty dx 
+\exp
+\left(
+-\left( \frac{x}{\sqrt{2 \sigma^2} } + \frac{\sqrt{ 2 \sigma^2}}{2} k i
+\right)^2
+\right)
+=
+\exp\left(
+-\frac{\sigma^2 k^2}{2}
+\right).
+\end{dmath}
+
+The time evolution of the generating function is
+
+\begin{dmath}\label{eqn:basicStatMechProblemSet2Problem1:300}
+\tilde{P}(k, t) 
+= 
+\exp\left(
+-\frac{\sigma^2 k^2}{2} - D k^2 t
+\right),
+\end{dmath}
+
+and we can find our time evolved probability density by inverse transforming
+
+\begin{dmath}\label{eqn:basicStatMechProblemSet2Problem1:320}
+P(x, t) 
+= 
+\int_{-\infty}^\infty \frac{dk}{2 \pi} 
+\exp\left(
+-\frac{\sigma^2 k^2}{2} - D k^2 t + i k x
+\right)
+=
+\exp\left(
+i \frac{x}{ 2 \sqrt{\frac{\sigma^2}{2} + D t} }
+\right)^2
+\int_{-\infty}^\infty \frac{dk}{2 \pi} 
+\exp\left(
+-\left(
+k \sqrt{\frac{\sigma^2}{2} + D t} 
++ i \frac{x}{ 2 
+\sqrt{\frac{\sigma^2}{2} + D t} 
+}
+\right)^2
+\right)
+\end{dmath}
+
+For $t \ge 0$ this is
+
+\begin{equation}\label{eqn:basicStatMechProblemSet2Problem1:340}
+\boxed{
+P(x, t) 
+=
+\inv{\sqrt{2 \pi \left( \sigma^2 + 2 D t \right) } }
+\exp\left(
+-\frac{x^2}{2 \left( \sigma^2 + 2 D t \right) }
+\right).
+}
+\end{equation}
+
+As a check, we see that this reproduces the $t = 0$ value as expected.  A further check using Mathematica applying the propagator \ref{eqn:basicStatMechProblemSet2Problem1:360}, also finds the same result as this manual calculation.
+
+This is plotted for $D = \sigma = 1$ in \cref{fig:problemSet2gaussianTimeEvolution:problemSet2gaussianTimeEvolutionFig2} for a couple different times $t \ge 0$.
+
+\imageFigure{problemSet2gaussianTimeEvolutionFig2}{Gaussian probability density time evolution with diffusion}{fig:problemSet2gaussianTimeEvolution:problemSet2gaussianTimeEvolutionFig2}{0.3}
+
+\makeSubAnswer{Boxed constant with small oscillation}{basicStatMech:problemSet2:1b}
 
 TODO.
 }
