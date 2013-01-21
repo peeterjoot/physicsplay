@@ -1,0 +1,488 @@
+\makeoproblem{Diffusion}{basicStatMech:problemSet2:1}{2013 problem set 2, problem 1}{ 
+
+The usual diffusion equation for the probability density in one dimension is given by
+
+\begin{equation}\label{eqn:basicStatMechProblemSet2Problem1:20}
+\PD{t}{P}(x, t) = D \PDSq{x}{P}(x, t)
+\end{equation}
+
+where $D$ is the diffusion constant.  Define the Fourier components of the probability distribution via
+
+\begin{subequations}
+\begin{equation}\label{eqn:basicStatMechProblemSet2Problem1:40}
+P(x, t) = \int_{-\infty}^\infty \frac{dk}{2 \pi} \tilde{P}(k, t) \exp\left( i k x \right)
+\end{equation}
+\begin{equation}\label{eqn:basicStatMechProblemSet2Problem1:60}
+\tilde{P}(k, t) = \int_{-\infty}^\infty dx P(x, t) \exp\left( -i k x \right)
+\end{equation}
+\end{subequations}
+
+This is useful since the diffusion equation is linear in the probability and each Fourier component will evolve independently.  Using this, solve the diffusion equation to obtain $P(k,t)$ in Fourier space given the initial $\tilde{P}(k,0)$.
+
+\makesubproblem{Assuming an initial Gaussian profile}{basicStatMech:problemSet2:1a}
+
+\begin{equation}\label{eqn:basicStatMechProblemSet2Problem1:80}
+P(x, 0) = \inv{\sqrt{2 \pi \sigma^2}} \exp
+\left(
+-\frac{x^2}{2 \sigma^2}
+\right),
+\end{equation}
+
+obtain the probability density $P(x,t)$ at a later time $t$.  (NB: Fourier transform, get the solution, transform back.)  Schematically plot the profile at the initial time and a later time.
+
+\makesubproblem{A small modulation on top of a uniform value}{basicStatMech:problemSet2:1b}
+Let the probability density be proportional to
+
+\begin{equation}\label{eqn:basicStatMechProblemSet2Problem1:100}
+\inv{L} + A \sin(k_0 x)
+\end{equation}
+
+at an initial time $t = 0$.  Assume this is in a box of large size $L$, but ignore boundary effects except to note that it will help to normalize the constant piece, assuming the oscillating piece integrates to zero.  Also note that we have
+to assume $A < 1/L$ to ensure that the probability density is positive.  Obtain $P(x,t)$ at a later time $t$. Roughly how long does the modulation take to decay away? Schematically plot the profile at the initial time and a later time.
+} % makeoproblem
+
+\makeanswer{basicStatMech:problemSet2:1}{ 
+
+Inserting the transform definitions we have
+
+\begin{dmath}\label{eqn:basicStatMechProblemSet2Problem1:120}
+0 
+= 
+\left( \PD{t}{} - D \PDSq{x}{} \right) P
+= 
+\left( \PD{t}{} - D \PDSq{x}{} \right) 
+\int_{-\infty}^\infty \frac{dk}{2 \pi} \tilde{P}(k, t) \exp\left( i k x \right)
+=
+\int_{-\infty}^\infty \frac{dk}{2 \pi} 
+\left(
+\PD{t}{} 
+\tilde{P}(k, t) 
++ 
+k^2 D
+\tilde{P}(k, t) 
+\right)
+\exp\left( i k x \right),
+\end{dmath}
+
+We conclude that
+
+\begin{equation}\label{eqn:basicStatMechProblemSet2Problem1:140}
+0 = 
+\tilde{P}(k, t) 
++ 
+k^2 D
+\tilde{P}(k, t),
+\end{equation}
+
+or
+
+\begin{equation}\label{eqn:basicStatMechProblemSet2Problem1:160}
+\tilde{P}(k, t) = A(k) e^{-k^2 D t}.
+\end{equation}
+
+If the Fourier transform of the distribution is constant until time $t$, so that $\tilde{P}(k, t < 0) = \tilde{P}(k, 0)$, we can write
+
+\begin{equation}\label{eqn:basicStatMechProblemSet2Problem1:180}
+\boxed{
+\tilde{P}(k, t) = \tilde{P}(k, 0) e^{-k^2 D t}.
+}
+\end{equation}
+
+The time evolution of the distributions transform just requires multiplication by the decreasing exponential factor $e^{-k^2 D t}$.  
+
+\paragraph{Propagator for the diffusion equation}
+
+We can also use this to express the explicit time evolution of the distribution
+
+\begin{dmath}\label{eqn:basicStatMechProblemSet2Problem1:200}
+P(x, t) 
+= 
+\int_{-\infty}^\infty \frac{dk}{2 \pi} 
+\tilde{P}(k, 0) 
+e^{-k^2 D t}
+\exp\left( i k x \right)
+= 
+\int_{-\infty}^\infty \frac{dk}{2 \pi} 
+\int_{-\infty}^\infty dx' P(x', 0) \exp\left( -i k x' \right)
+e^{-k^2 D t}
+\exp\left( i k x \right)
+= 
+\int_{-\infty}^\infty 
+dx' P(x', 0) 
+\int_{-\infty}^\infty 
+\frac{dk}{2 \pi} 
+\exp\left( -k^2 D t + i k (x - x') \right)
+\end{dmath}
+
+Our distribution time evolution is given by convolve with a propagator function
+
+\begin{subequations}
+\begin{equation}\label{eqn:basicStatMechProblemSet2Problem1:220}
+P(x, t) = \int dx' P(x', 0) G(x', x)
+\end{equation}
+\begin{equation}\label{eqn:basicStatMechProblemSet2Problem1:240}
+G(x', x) 
+=
+\int_{-\infty}^\infty 
+\frac{dk}{2 \pi} 
+\exp\left( -k^2 D t + i k (x - x') \right)
+\end{equation}
+\end{subequations}
+
+For $t \ge 0$ we can complete the square, finding that this propagator is
+
+\begin{dmath}\label{eqn:basicStatMechProblemSet2Problem1:260}
+G(x', x) 
+=
+\int_{-\infty}^\infty 
+\frac{dk}{2 \pi} 
+\exp\left( -k^2 D t + i k (x - x') \right)
+=
+\exp\left( \left(\frac{i (x - x')}{2 \sqrt{D t}} \right)^2 \right)
+\int_{-\infty}^\infty 
+\frac{dk}{2 \pi} 
+\exp\left( - \left(k \sqrt{D t} + \frac{i (x - x')}{2 \sqrt{D t}} \right)^2 \right)
+\end{dmath}
+
+or
+
+\begin{equation}\label{eqn:basicStatMechProblemSet2Problem1:360}
+\boxed{
+G(x', x) 
+=
+\frac{1}{\sqrt{4 \pi D t}} \exp\left(
+-\frac{(x - x')^2}{4 D t}
+\right).
+}
+\end{equation}
+
+A schematic plot of this function as a function of $t$ for fixed $x - x'$ is plotted in \cref{fig:problemSet2distPropagator:problemSet2distPropagatorFig1}.
+
+\imageFigure{figures/problemSet2distPropagatorFig1}{Form of the propagator function for the diffusion equation}{fig:problemSet2distPropagator:problemSet2distPropagatorFig1}{0.3}
+
+\makeSubAnswer{Gaussian}{basicStatMech:problemSet2:1a}
+
+For the Gaussian of \ref{eqn:basicStatMechProblemSet2Problem1:80} we compute the initial time Fourier transform
+
+\begin{dmath}\label{eqn:basicStatMechProblemSet2Problem1:280}
+\tilde{P}(k) 
+= 
+\int_{-\infty}^\infty dx 
+\inv{\sqrt{2 \pi \sigma^2}} \exp
+\left(
+-\frac{x^2}{2 \sigma^2}
+-i k x 
+\right)
+=
+\inv{\sqrt{2 \pi \sigma^2}} 
+\exp
+\left(
+-\left( \frac{\sqrt{ 2 \sigma^2}}{2} k i
+\right)^2
+\right)
+\int_{-\infty}^\infty dx 
+\exp
+\left(
+-\left( \frac{x}{\sqrt{2 \sigma^2} } + \frac{\sqrt{ 2 \sigma^2}}{2} k i
+\right)^2
+\right)
+=
+\exp\left(
+-\frac{\sigma^2 k^2}{2}
+\right).
+\end{dmath}
+
+The time evolution of the generating function is
+
+\begin{dmath}\label{eqn:basicStatMechProblemSet2Problem1:300}
+\tilde{P}(k, t) 
+= 
+\exp\left(
+-\frac{\sigma^2 k^2}{2} - D k^2 t
+\right),
+\end{dmath}
+
+and we can find our time evolved probability density by inverse transforming
+
+\begin{dmath}\label{eqn:basicStatMechProblemSet2Problem1:320}
+P(x, t) 
+= 
+\int_{-\infty}^\infty \frac{dk}{2 \pi} 
+\exp\left(
+-\frac{\sigma^2 k^2}{2} - D k^2 t + i k x
+\right)
+=
+\exp\left(
+i \frac{x}{ 2 \sqrt{\frac{\sigma^2}{2} + D t} }
+\right)^2
+\int_{-\infty}^\infty \frac{dk}{2 \pi} 
+\exp\left(
+-\left(
+k \sqrt{\frac{\sigma^2}{2} + D t} 
++ i \frac{x}{ 2 
+\sqrt{\frac{\sigma^2}{2} + D t} 
+}
+\right)^2
+\right)
+\end{dmath}
+
+For $t \ge 0$ this is
+
+\begin{equation}\label{eqn:basicStatMechProblemSet2Problem1:340}
+\boxed{
+P(x, t) 
+=
+\inv{\sqrt{2 \pi \left( \sigma^2 + 2 D t \right) } }
+\exp\left(
+-\frac{x^2}{2 \left( \sigma^2 + 2 D t \right) }
+\right).
+}
+\end{equation}
+
+As a check, we see that this reproduces the $t = 0$ value as expected.  A further check using Mathematica applying the propagator \ref{eqn:basicStatMechProblemSet2Problem1:360}, also finds the same result as this manual calculation.
+
+This is plotted for $D = \sigma = 1$ in \cref{fig:problemSet2gaussianTimeEvolution:problemSet2gaussianTimeEvolutionFig2} for a couple different times $t \ge 0$.
+
+\imageFigure{figures/problemSet2gaussianTimeEvolutionFig2}{Gaussian probability density time evolution with diffusion}{fig:problemSet2gaussianTimeEvolution:problemSet2gaussianTimeEvolutionFig2}{0.3}
+
+\makeSubAnswer{Boxed constant with small oscillation}{basicStatMech:problemSet2:1b}
+
+The normalization of the distribution depends on the interval boundaries.  With the box range given by $x \in [a, a + L]$ we have
+
+\begin{equation}\label{eqn:basicStatMechProblemSet2Problem1:380}
+\int_a^{a + L} dx \left( \inv{L} + A \sin( k_0 x) \right) dx
+=
+1 - \frac{A}{k_0} \left( \cos( k_0(a + L) ) - \cos( k_0 a ) \right)
+\end{equation}
+
+With an even range for box $x \in [-L/2, L/2]$ this is unity.
+
+To find the distribution at a later point in time we can utilize the propagator
+
+\begin{dmath}\label{eqn:basicStatMechProblemSet2Problem1:400}
+P(x, t) 
+= 
+\int_{-L/2}^{L/2} dx' \inv{2 \sqrt{\pi D t} } 
+\left( \inv{L} + A \sin( k_0 x' ) \right) \exp
+\left( 
+- \frac{(x' - x)^2}{2 \sqrt{D t} }
+\right)
+\end{dmath}
+
+Let's write this as
+
+\begin{subequations}
+\begin{dmath}\label{eqn:basicStatMechProblemSet2Problem1:520}
+P(x, t) = P_{\mathrm{rect}}(x, t) + P_{\mathrm{sin}}(x, t)
+\end{dmath}
+\begin{dmath}\label{eqn:basicStatMechProblemSet2Problem1:540}
+P_{\mathrm{rect}}(x, t) 
+=
+\inv{2 L \sqrt{\pi D t} } 
+\int_{-L/2}^{L/2} dx' 
+\exp
+\left( 
+- \frac{(x' - x)^2}{2 \sqrt{D t} }
+\right)
+\end{dmath}
+\begin{dmath}\label{eqn:basicStatMechProblemSet2Problem1:560}
+P_{\mathrm{sin}}(x, t)
+=
+\frac{A}{2 \sqrt{\pi D t} } 
+\int_{-L/2}^{L/2} dx' 
+\sin( k_0 x' ) 
+\exp
+\left( 
+- \frac{(x' - x)^2}{2 \sqrt{D t} }
+\right)
+\end{dmath}
+\end{subequations}
+
+Applying a $u = (x' - x)/\sqrt{4 D t}$ change of variables for the first term, we can reduce it to a difference of error functions
+
+\begin{dmath}\label{eqn:basicStatMechProblemSet2Problem1:420}
+P_{\mathrm{rect}}(x, t)
+=
+\inv{L} 
+\int_{-L/2}^{L/2} dx' \inv{2 \sqrt{\pi D t} } 
+\exp
+\left( 
+- \frac{(x' - x)^2}{2 \sqrt{D t} }
+\right)
+=
+\inv{L \sqrt{\pi}}
+\int_{-\frac{L/2 +x}{2 \sqrt{D t}}}^{\frac{L/2 - x}{2 \sqrt{Dt}}} 
+du  
+e^{-u^2}
+=
+\inv{2 L} \left( 
+\erf\left( \frac{L/2 -x}{2 \sqrt{D t}} \right)
+-\erf\left( -\frac{L/2 +x}{2 \sqrt{D t}} \right)
+\right)
+\end{dmath}
+
+Following Mathematica, lets introduce a two argument error function for the difference between two points
+
+\begin{dmath}\label{eqn:basicStatMechProblemSet2Problem1:480}
+\erf(z_0, z_1) \equiv \erf(z_1) - \erf(z_0).
+\end{dmath}
+
+Using that our rectangular function's time evolution can be written
+
+\begin{dmath}\label{eqn:basicStatMechProblemSet2Problem1:500}
+P_{\mathrm{rect}}(x, t)
+=
+\inv{2 L} \erf
+\left( 
+-\frac{L/2 +x}{2 \sqrt{D t}} 
+,
+\frac{L/2 -x}{2 \sqrt{D t}} 
+\right)
+\end{dmath}
+
+For $L = D = 1$, and $t = 10^{-8}$, this is plotted in \cref{fig:problemSet2Problem1iiRectPropagator:problemSet2Problem1iiRectPropagatorFig3}.  Somewhat surprisingly, this difference of error functions does appear to result in a rectangular function for small $t$.
+
+\imageFigure{figures/problemSet2Problem1iiRectPropagatorFig3}{Rectangular part of the probability distribution for very small $t$.}{fig:problemSet2Problem1iiRectPropagator:problemSet2Problem1iiRectPropagatorFig3}{0.3}
+
+The time evolution of this non-oscillation part of the probability distribution is plotted as a function of both $t$ and $x$ in \cref{fig:problemSet2Problem1iiRectPropagator:problemSet2Problem1iiRectPropagatorFig4}.
+
+\imageFigure{figures/problemSet2Problem1iiRectPropagatorFig4}{Time evolution of the rectangular part of the probability distribution}{fig:problemSet2Problem1iiRectPropagator:problemSet2Problem1iiRectPropagatorFig4}{0.3}
+
+For the sine piece we can also find a solution in terms of (complex) error functions
+
+\begin{dmath}\label{eqn:basicStatMechProblemSet2Problem1:440}
+P_{\mathrm{sin}}(x, t)
+=
+A 
+\int_{-L/2}^{L/2} dx' \inv{2 \sqrt{\pi D t} } 
+\sin( k_0 x' ) 
+\exp
+\left( 
+- \frac{(x' - x)^2}{2 \sqrt{D t} }
+\right)
+=
+\frac{A}{\sqrt{\pi}}
+\int_{-\frac{L/2 +x}{2 \sqrt{D t}}}^{\frac{L/2 - x}{2 \sqrt{Dt}}} 
+du  
+\sin( k_0 ( x + 2 u \sqrt{D t} ) ) e^{-u^2}
+=
+\frac{A}{2 i \sqrt{\pi}}
+\int_{-\frac{L/2 +x}{2 \sqrt{D t}}}^{\frac{L/2 - x}{2 \sqrt{Dt}}} 
+du  
+\left( 
+e^{ i k_0 ( x + 2 u \sqrt{D t} ) } 
+-e^{ -i k_0 ( x + 2 u \sqrt{D t} ) }
+\right)
+e^{-u^2}
+=
+\frac{A}{2 i \sqrt{\pi}}
+\left( 
+e^{ i k_0 x }
+\int_{-\frac{L/2 +x}{2 \sqrt{D t}}}^{\frac{L/2 - x}{2 \sqrt{Dt}}} 
+du  
+e^{ -u^2 + 2 i k_0 u \sqrt{D t} } 
+-
+e^{ -i k_0 x }
+\int_{-\frac{L/2 +x}{2 \sqrt{D t}}}^{\frac{L/2 - x}{2 \sqrt{Dt}}} 
+du  
+e^{ -u^2 -2 i k_0 u \sqrt{D t} }
+\right)
+=
+\frac{A}{2 i \sqrt{\pi}}
+e^{ -k_0^2 D t } 
+\left( 
+e^{ i k_0 x }
+\int_{-\frac{L/2 +x}{2 \sqrt{D t}}}^{\frac{L/2 - x}{2 \sqrt{Dt}}} 
+du  
+e^{ -(u - i k_0 \sqrt{D t})^2 } 
+-
+e^{ -i k_0 x }
+\int_{-\frac{L/2 +x}{2 \sqrt{D t}}}^{\frac{L/2 - x}{2 \sqrt{Dt}}} 
+du  
+e^{ -(u + i k_0 \sqrt{D t})^2 }
+\right)
+=
+\frac{A}{2 i \sqrt{\pi}}
+e^{ -k_0^2 D t } 
+\left( 
+e^{ i k_0 x }
+\int_{-\frac{L/2 +x}{2 \sqrt{D t}} - i k_0 \sqrt{D t}}^{\frac{L/2 - x}{2 \sqrt{Dt}} - i k_0 \sqrt{D t}} 
+dv  
+e^{ -v^2 }
+-
+e^{ -i k_0 x }
+\int_{-\frac{L/2 +x}{2 \sqrt{D t}} + i k_0 \sqrt{D t}}^{\frac{L/2 - x}{2 \sqrt{Dt}} + i k_0 \sqrt{D t}} 
+dv  
+e^{ -v^2 }
+\right)
+=
+\frac{A}{4 i }
+e^{ -k_0^2 D t } 
+\left( 
+e^{ i k_0 x }
+\erf\left( 
+   -\frac{L/2 +x}{2 \sqrt{D t}} - i k_0 \sqrt{D t},
+   \frac{L/2 - x}{2 \sqrt{Dt}} - i k_0 \sqrt{D t} 
+\right)
+-
+e^{ -i k_0 x }
+\erf\left(
+   -\frac{L/2 +x}{2 \sqrt{D t}} + i k_0 \sqrt{D t},
+   \frac{L/2 - x}{2 \sqrt{Dt}} + i k_0 \sqrt{D t}
+\right)
+\right)
+\end{dmath}
+
+This is plotted for $A = D = L = 1$, $k_0 = 8 \pi$, and $t = 10^{-8}$ in \cref{fig:problemSet2Problem1iiSinePropagator:problemSet2Problem1iiSinePropagatorFig5}.
+
+\imageFigure{figures/problemSet2Problem1iiSinePropagatorFig5}{Verification at $t \rightarrow 0$ that the diffusion result is sine like}{fig:problemSet2Problem1iiSinePropagator:problemSet2Problem1iiSinePropagatorFig5}{0.3}
+
+The diffusion of this, again for $A = D = L = 1$, $k_0 = 8 \pi$, and $t \in [10^{-5}, 0.01]$ is plotted in \cref{fig:problemSet2Problem1iiSinePropagator:problemSet2Problem1iiSinePropagatorFig6}.  Again we see that we have the expected sine for small $t$.
+
+\imageFigure{figures/problemSet2Problem1iiSinePropagatorFig6}{Diffusion of the oscillatory term}{fig:problemSet2Problem1iiSinePropagator:problemSet2Problem1iiSinePropagatorFig6}{0.3}
+
+Putting both the rectangular and the windowed sine portions of the probability distribution together, we have the diffusion result for the entire distribution
+
+\begin{equation}\label{eqn:basicStatMechProblemSet2Problem1:460}
+\boxed{
+\begin{aligned}
+P(x, t)
+&=
+\inv{2 L} \erf
+\left( 
+-\frac{L/2 +x}{2 \sqrt{D t}} 
+,
+\frac{L/2 -x}{2 \sqrt{D t}} 
+\right) \\
+&+
+\frac{A}{4 i }
+e^{ -k_0^2 D t + i k_0 x }
+\erf\left( 
+   -\frac{L/2 +x}{2 \sqrt{D t}} - i k_0 \sqrt{D t},
+   \frac{L/2 - x}{2 \sqrt{Dt}} - i k_0 \sqrt{D t} 
+\right) \\
+&-
+\frac{A}{4 i }
+e^{ -k_0^2 D t -i k_0 x }
+\erf\left(
+   -\frac{L/2 +x}{2 \sqrt{D t}} + i k_0 \sqrt{D t},
+   \frac{L/2 - x}{2 \sqrt{Dt}} + i k_0 \sqrt{D t}
+\right)
+\end{aligned}
+}
+\end{equation}
+
+It is certainly ugly looking!  We see that the oscillation die off is dependent on the $\exp( -k_0^2 D t)$ term.  In time
+
+\begin{dmath}\label{eqn:basicStatMechProblemSet2Problem1:580}
+t = \inv{k_0^2 D},
+\end{dmath}
+
+that oscillation dies away to $1/e$ of its initial amplitude.  This dispersion is plotted at times $t = 10^{-5}$ and $t = 1/(k_0^2 D)$ for $L = D = 1$, $k_0 = 8 \pi$ and $A = 1/2$ in \cref{fig:problemSet2Problem1iiSinePropagator:problemSet2Problem1iiSinePropagatorFig7}.
+
+\imageFigure{figures/problemSet2Problem1iiSinePropagatorFig7}{Initial time distribution and dispersion of the oscillatory portion to $1/e$ of initial amplitude}{fig:problemSet2Problem1iiSinePropagator:problemSet2Problem1iiSinePropagatorFig7}{0.3}
+
+Similar to the individual plots of $P_{\mathrm{rect}}(x, t)$ and $P_{\mathrm{sin}}(x, t)$ above, we plot the time evolution of the total probability dispersion $P(x, t)$ in \cref{fig:problemSet2Problem1iiSinePropagator:problemSet2Problem1iiSinePropagatorFig8}.  We see in the plots above that the rectangular portion of this distribution will also continue to flatten over time after most of the oscillation has also died off.
+
+\imageFigure{figures/problemSet2Problem1iiSinePropagatorFig8}{Diffusion of uniform but oscillating probability distribution}{fig:problemSet2Problem1iiSinePropagator:problemSet2Problem1iiSinePropagatorFig8}{0.3}
+}
