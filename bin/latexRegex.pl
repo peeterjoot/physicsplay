@@ -22,3 +22,7 @@ s/P_s/P_{\\mathrm{sin}}/g ;
 #s/_ph/_{\\mathrm{ph}}/g ;
 #s/_T/_{\\mathrm{T}}/g ;
 #s/_av/_{\\mathrm{av}}/g ;
+s/\\pialphadot/\\dot{p}_{i_\\alpha}/g ;
+s/\\xialphadot/\\dot{x}_{i_\\alpha}/g ;
+s/\\pialpha/p_{i_\\alpha}/g ;
+s/\\xialpha/x_{i_\\alpha}/g ;
