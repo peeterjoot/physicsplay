@@ -1,16 +1,18 @@
 %
-% Copyright © 2013 Alexandre Léonard, Peeter Joot.  All Rights Reserved.
+% Copyright © 2013 Alexandre Léonard.  All Rights Reserved.
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
 %
 % pick one:
 %\input{../assignment.tex}
+%s/\\\begin{equation}\label{eqn:landauSection11Problem2b:n}Z\(.*\)\\Z\end{equation}/\\begin{equation}\\label{eqn:landauSection11Problem2b:n}Z\1Z\\end{equation}/
+%!tr Z '\n'
 \input{../blogpost.tex}
 \renewcommand{\basename}{landauSection11Problem2b}
 \renewcommand{\dirname}{notes/classicalmechanics/}
-\renewcommand{\email}{}
-\renewcommand{\authorname}{Alexandre L\'eonard, Peeter Joot}
+\renewcommand{\email}{alexandre.pascal.g.leonard@cern.ch}
+\renewcommand{\authorname}{Alexandre L\'eonard}
 %\newcommand{\dateintitle}{}
-%\newcommand{\keywords}{}
+\newcommand{\keywords}{period, residue, oscillation, Landau and Lifshitz, mechanics}
 
 \input{../peeter_prologue_print2.tex}
 
@@ -20,7 +22,7 @@
 %\chapter{A period determination problem from Landau and Lifshitz}
 \label{chap:landauSection11Problem2b}
 
-\makeproblem{description}{pr:landauSection11Problem2b:1}{A period problem from \citep{landau1960classical} \S 11 (problem 2b)}{ 
+\makeproblem{A period problem from \citep{landau1960classical} \S 11 (problem 2b)}{pr:landauSection11Problem2b:1}{ 
 
 Determine the period of oscillation, as a function of the energy, when a particle of mass $m$ moves in a field for which the potential energy is 
 
@@ -32,111 +34,144 @@ U = U_0 \tan^2\alpha x
 
 \makeanswer{pr:landauSection11Problem2b:1}{ 
 
-The answer is (according to Landau and Lifshitz):
-
+The answer is:
 \begin{equation}\label{eqn:landauSection11Problem2b:40}
-T = \frac{\pi}{\alpha}\sqrt{\frac{2m}{E+U_0}}
+T=\frac{\pi}{\alpha}\sqrt{\frac{2m}{E+U_0}}
 \end{equation}
 
-Starting from the formula
-
+My attempt:
+I start from the formula
 \begin{equation}\label{eqn:landauSection11Problem2b:60}
 T(E) = \sqrt{2m}\int_{x_1(E)}^{x_2(E)}\frac{dx}{\sqrt{E-U(x)}},
 \end{equation}
-
 where $x_1(E)$ and $x_2(E)$ are the limits of the motion. From the symmetry of our potential, it clear that we have:
-
 \begin{equation}\label{eqn:landauSection11Problem2b:80}
 T(E) = 2\sqrt{2m}\int_{0}^{x_2(E)}\frac{dx}{\sqrt{E-U(x)}}.
 \end{equation}
-
 Now we can easily find $x_2(E)$:
-
 \begin{equation}\label{eqn:landauSection11Problem2b:100}
 E = U_0\tan^2\alpha x_2 \quad \rightarrow \quad x_2 = \frac{1}{\alpha}\Atan{\sqrt{\frac{E}{U_0}}},
 \end{equation}
-
 and we are left with the following integral:
-
 \begin{equation}\label{eqn:landauSection11Problem2b:120}
 T(E) = 2\sqrt{2m}\int_{0}^{\frac{1}{\alpha}\Atan{\sqrt{\frac{E}{U_0}}}}\frac{dx}{\sqrt{E-U_0\tan^2\alpha x}}.
 \end{equation}
-
 First obvious change of variable is $y = \alpha x ~ \rightarrow ~ dy = \alpha dx$ which gives
-
 \begin{equation}\label{eqn:landauSection11Problem2b:140}
-T(E) = \frac{2}{\alpha}\sqrt{\frac{2m}{E}}\int_{0}^{\Atan{\sqrt{\frac{E}{U_0}}}}\frac{dy}{\sqrt{1 - \frac{U_0}{E}\tan^2 y}}.
+T(E) = \frac{2}{\alpha}\sqrt{2m}\int_{0}^{\Atan{\sqrt{\frac{E}{U_0}}}}\frac{dy}{\sqrt{E-U_0\tan^2 y}}.
 \end{equation}
-
-Now write $a^2 = U_0/E$ and make a change of variables that will eliminate the square root, yielding a cosine
-
+Factorizing $E$ under the square root leads to:
 \begin{equation}\label{eqn:landauSection11Problem2b:160}
-a \tan y = \sin z.
+T(E) = \frac{2}{\alpha}\sqrt{\frac{2m}{E}}\int_{0}^{\Atan{\sqrt{\frac{E}{U_0}}}}\frac{dy}{\sqrt{1 -\frac{U_0}{E}\tan^2 y}}.
 \end{equation}
 
+
+Now write $a^2=U_0/E$ and make a change of variables that will eliminate the square root:
 \begin{equation}\label{eqn:landauSection11Problem2b:180}
-\cos z dz
-=
-a \sec^2 y dy 
+a\tan y = \sin z.
 \end{equation}
-
 \begin{equation}\label{eqn:landauSection11Problem2b:200}
-I 
-= 
-\int \frac{dy}{\sqrt{1 - \frac{U_0}{E}\tan^2 y}}
-=
-\inv{a} \int \frac{\cos^2 y}{\cos z} dz.
+\cos z dz = a \sec^2y dy
 \end{equation}
-
-From \ref{eqn:landauSection11Problem2b:160}
-
+\begin{equation}\label{eqn:landauSection11Problem2b:640}
+\int_{0}^{\Atan{\sqrt{\frac{E}{U_0}}}} \frac{dy}{\sqrt{1 -\frac{U_0}{E}\tan^2 y}} = \frac{1}{a} \int_{0}^{\pi/2} \frac{\cos ^2 y \cos z dz}{\cos z} = a \int_{0}^{\pi/2} \frac{dz}{a^2 + \sin^2 z} 
+\end{equation}
+where we have used the square of the relation between $y$ and $z$ :
 \begin{equation}\label{eqn:landauSection11Problem2b:220}
-a^2 (1 - \cos^2 y) = \sin^2 z \cos^2 y,
+ a^2 (1 + \cos^2 y) = \sin^2z \cos^2y \quad\Leftrightarrow \quad \frac{a^2}{a^2+\sin^2z} = \cos^2y.
 \end{equation}
 
-or
-
+Let us now calculate the definite integral:
 \begin{equation}\label{eqn:landauSection11Problem2b:240}
-\frac{a^2}{a^2 + \sin^2 z } = \cos^2 y.
+\int_{0}^{\pi/2} \frac{dx}{a^2 + \sin^2 x}
 \end{equation}
 
-Yielding 
-
+\paragraph{First method: brute force}
+Here are the big lines to solve this integral (writing everything would really take some time. The only thing to guess is the proper change of variable. In our case the good one is the following:
 \begin{equation}\label{eqn:landauSection11Problem2b:260}
-I
-=
-a \int \frac{dz}{(a^2 + \sin^2 z)\cos z} 
+u = \tan \frac{x}{2} \quad \rightarrow \quad du = \frac{1}{2}(1+u^2) dx
+\end{equation}
+With a bit of not too complicated trigonometry, we obtain:
+\begin{equation}\label{eqn:landauSection11Problem2b:280}
+\sin x = \frac{2u}{1+u^2}, \quad \cos x = \frac{1-u^2}{1+u^2}
+\end{equation}
+Injecting these results into the integral yields to:
+\begin{equation}\label{eqn:landauSection11Problem2b:300}
+\int_{0}^{\pi/2} \frac{dx}{a^2 + \sin^2 x} = \int_{0}^{1} \frac{2}{(a^2 + \frac{4u^2}{(1+u^2)^2}) (1+u^2)}du = \int_{0}^{1} \frac{2(1+u^2)}{a^2(1+(2+\frac{4}{a^2})u^2 + u^4)}
 \end{equation}
 
-With $u = \sin z$, and $du = \cos z dz$ we have
+We have to compute the integral of the ratio between two polynomials, and we just have to follow the recipe from kinder garden. First we find the roots of the denominator, I call them $a_+$ and $a_-$:
+\begin{equation}\label{eqn:landauSection11Problem2b:320}
+a_+ = \frac{-2-a^2+2\sqrt{1+a}}{a^2}
+\end{equation}
+\begin{equation}\label{eqn:landauSection11Problem2b:340}
+a_- = \frac{-2-a^2-2\sqrt{1+a}}{a^2}
+\end{equation} 
+Note that $a$ being positive, $a_-$ and $a_+$ are negative (not hard to see ...) 
+and we get for the integral:
+\begin{equation}\label{eqn:landauSection11Problem2b:360}
+\int_{0}^{1} \frac{2(1+u^2)}{a^2(1+(2+\frac{4}{a^2})u^2 + u^4)} = \frac{2}{a^2}\int_{0}^{1} \frac{(1+u^2)}{(u^2-a_+)(u^2-a_-)}
+\end{equation}
+Rewrite the ratio as:
+\begin{equation}\label{eqn:landauSection11Problem2b:380}
+\frac{(1+u^2)}{(u^2-a_+)(u^2-a_-)} = \frac{A}{(u^2-a_+)}+ \frac{B}{(u^2-a_-)}
+\end{equation}
+we find $A = \frac{1+a_+}{a_+-a_-}$ and $B=\frac{1+a_-}{a_--a_+}$. Injecting these results into the integral, we get:
+\begin{equation}\label{eqn:landauSection11Problem2b:400}
+\frac{2}{a^2}\int_{0}^{1} \frac{(1+u^2)}{(u^2-a_+)(u^2-a_-)} = \frac{2}{a^2}\left[ \frac{1+a_+}{a_+-a_-}\int_0^1 \frac{1}{u^2+|a_+|}du + \frac{1+a_+}{a_--a+}\int_0^1\frac{1}{u^2+|a_-|}du\right]
+\end{equation}
+It is now possible, to integrate:
+\begin{equation}\label{eqn:landauSection11Problem2b:420}
+\frac{2}{a^2}\int_{0}^{1} \frac{(1+u^2)}{(u^2-a_+)(u^2-a_-)} = \frac{2}{a^2}\left[ \frac{1+a_+}{a_+-a_-}\frac{1}{\sqrt{|a_+|}}\Atan \frac{1}{\sqrt{|a_+|}}+ \frac{1+a_+}{a_--a+}\frac{1}{\sqrt{|a_-|}}\Atan \frac{1}{\sqrt{|a_-|}} \right]
+\end{equation}
 
-\begin{dmath}\label{eqn:landauSection11Problem2b:280}
-I
-=
-a \int \frac{du}{(a^2 + u^2)(1 - u^2)} 
-=
-\frac{a}{1 + a^2}
-\int du \left(
-\inv{a^2 + u^2} 
-- \frac{1/2}{u - 1}
-+ \frac{1/2}{u + 1}
-\right)
-=
-\frac{a}{1 + a^2}
-\left(
-\inv{a} \Atan\left( \frac{u}{a} \right) 
-- \inv{2} \ln (u - 1)
-+ \inv{2} \ln (u + 1)
-\right)
-=
-\frac{a}{1 + a^2}
-\left(
-\inv{a} \Atan\left( \frac{u}{a} \right) 
-+ \inv{2} \ln \frac{u + 1}{u - 1}
-\right)
-\end{dmath}
+This result is correct, but I wouldn't put all the pieces together to get the answer even if it must be possible...
 
-Now plug back in $u = \sqrt{U_0/E} \tan \alpha x$.  Does this give the expected answer after simplification?
+
+
+\paragraph{Second method: smart but uses deep results from mathematics}
+This method uses the Residue Theorem. I am not sure it is taught to many students but physicists, mathematicians, maybe engineers and I think that is all. Let me recall the problem: find the value of the definite integral:
+\begin{equation}\label{eqn:landauSection11Problem2b:440}
+\int_{0}^{\pi/2} \frac{dx}{a^2 + \sin^2 x}
+\end{equation}
+From the symmetry of the integrand we see that it is equivalent to calculate:
+\begin{equation}\label{eqn:landauSection11Problem2b:460}
+\frac{1}{4}\int_{0}^{2\pi} \frac{dx}{a^2 + \sin^2 x}
+\end{equation}
+Let me write the $\sin$ as a sum of complex numbers: 
+\begin{equation}\label{eqn:landauSection11Problem2b:480}
+ \sin x = \frac{e^{ix}-e^{-ix}}{2i}
+\end{equation}
+Setting $z=e^{ix}$ we have $dz = izdx$. Now, thinking of this integral as a contour integral in the complex plane, we see that the path is just the unit circle: $e^{ix}$ with $0\leq x \leq 2\pi$. So we must compute:
+\begin{equation}\label{eqn:landauSection11Problem2b:500}
+\frac{1}{4}\int_{0}^{2\pi} \frac{dx}{a^2 + \sin^2 x} =\frac{1}{4} \int_{C} \frac{-i}{a^2 + \left(\frac{z-z^{-1}}{2i}\right)^2} \frac{dz}{z} = i \int_C \frac{z}{z^4-(2+4a^2)z^2+1}dz
+\end{equation}
+Here we set $u=z^2$. Now we have to loop twice on the unit circle because $u=e^{2ix}$. But it is the same than looping only once and multiply the result by $2$. However, this factor $2$ cancels with the factor $2$ from: $du=2zdz$ and we get:
+\begin{equation}\label{eqn:landauSection11Problem2b:520}
+i \int_C \frac{z}{z^4-(2+4a^2)z^2+1}dz = i \int_C \frac{1}{u^2-(2+4a^2)u+1}du
+\end{equation}
+Here again we look for the roots of the denominators and find out which of those is contained inside the unit circle. The roots are given by:
+\begin{equation}\label{eqn:landauSection11Problem2b:540}
+u_+ = 1+2a^2+2a\sqrt{1+a^2}
+\end{equation}
+\begin{equation}\label{eqn:landauSection11Problem2b:560}
+u_- = 1+2a^2-2a\sqrt{1+a^2}
+\end{equation}
+From the expression of $u_+$ it is clear that $u_+$ lies on the real axis and is bigger than $1$. Now, $a>0$ and by looking carefully to $u_-$ we can figure out that $0 < u_- < 1$. 
+We have to find the residue of the integrand at the pole (the root) inside the unit circle. This is given by:
+\begin{equation}\label{eqn:landauSection11Problem2b:580}
+\text{Res}_{u_-} = \lim_{u\rightarrow u_-} \frac{(u-u_-)}{(u-u_+)(u-u_-)} = \frac{1}{u_- - u_+} = \frac{-1}{4a\sqrt{1+a^2}}
+\end{equation}
+And finally, the residue theorem tells us that the integral is equal to: $2\pi i \sum \text{Res}$, where the sum is over all the poles contained inside the path. So we get:
+\begin{equation}\label{eqn:landauSection11Problem2b:600}
+\int_{0}^{\pi/2} \frac{dx}{a^2 + \sin^2 x} =i \int_C \frac{1}{u^2-(2+4a^2)u+1}du = i 2\pi i  \frac{-1}{4a\sqrt{1+a^2}} = \frac{\pi}{2a\sqrt{1+a^2}}
+\end{equation}
+
+
+Putting everything together leads to the final correct answer:
+\begin{equation}\label{eqn:landauSection11Problem2b:620}
+T(E) = \frac{2}{\alpha}\sqrt{\frac{2m}{E}} \sqrt{\frac{U_0}{E}}\frac{\pi}{2\sqrt{\frac{U_0}{E}}\sqrt{1+\frac{U_0}{E}}} =\frac{\pi}{\alpha}\sqrt{\frac{2m}{E+U_0}} 
+\end{equation}
 } % makeanswer
 
 \EndArticle
