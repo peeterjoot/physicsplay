@@ -1,5 +1,6 @@
 THISDIR := blogit
 
+
 RAWTEXFILES := $(shell ls *.tex)
 INCOMPLETE += basicStatMechProblemSet3Problem1.tex
 INCOMPLETE += basicStatMechProblemSet3Problem2.tex
