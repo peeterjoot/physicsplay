@@ -12,7 +12,7 @@ SOURCE_DIRS += figures
 GENERATED_SOURCES += mathematica.tex 
 #GENERATED_PDFS += basicStatMechProblemSet1.pdf
 #GENERATED_PDFS += basicStatMechProblemSet2.pdf
-GENERATED_PDFS += basicStatMechProblemSet3.pdf
+#GENERATED_PDFS += basicStatMechProblemSet3.pdf
 
 include ../make.rules
 
