@@ -34,6 +34,7 @@
 #s/_classical/_{\\mathrm{classical}}/g ;
 #s/ENV/{(\\mathrm{E}, \\mathrm{N}, \mathrm{V})}/g ;
 #s/_corrected/_{\\mathrm{corrected}}/g ;
+s/_total/_{\\mathrm{total}}/g ;
 #s/_ideal/_{\\mathrm{ideal}}/g ;
 #s/\\tx/\\tilde{x}/g ;
 #s/\\tp/\\tilde{p}/g ;
