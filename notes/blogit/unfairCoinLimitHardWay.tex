@@ -26,7 +26,8 @@ k = \frac{N + X}{2}
 \end{equation}
 \end{subequations}
 
-Part of the problem was to calculate the limit for $N \gg 1$ and $N \gg X$.  I did this with the central limit theorem and got massively penalized (even though the problem didn't say we couldn't use the central limit theorem and it had been covered in class?)
+Part of the problem was to calculate the limit for $N \gg 1$ and $N \gg X$.  I did this with the central limit theorem, and presumed that I had the answer wrong since I did not get any marks for doing so.
+% and got massively penalized (even though the problem didn't say we couldn't use the central limit theorem and it had been covered in class, something that I should probably dispute)
 
 Here's a bash at it the hard way, using Stirling's approximation and Taylor series expansion for the logs.
 
@@ -64,6 +65,131 @@ N^{N
 ^{N-k} 
 \lr{ \frac{N s}{k} }^k
 \end{dmath}
+
+The $N r/(N-k)$ term looks like it can probably be coersed into $1/(1 - y/N)$ form that will allow for Taylor expansion of the log.  With that change of variables, we find
+
+%1 - \frac{y}{N} = \inv{N r}(N - k)
+\begin{equation}\label{eqn:unfairCoinLimitHardWay:80}
+k = N(1 - r) - y r  = N s + y r
+\end{equation}
+
+so 
+
+\begin{subequations}
+\begin{equation}\label{eqn:unfairCoinLimitHardWay:100}
+\frac{k}{Ns} = 1 + \frac{y r}{N s}
+\end{equation}
+\begin{equation}\label{eqn:unfairCoinLimitHardWay:120}
+\frac{N - k}{N r} = 1 - \frac{y}{N}
+\end{equation}
+\end{subequations}
+
+This is a bit unsymmetrical, so let's write $y r = x$ so that
+
+\begin{subequations}
+\begin{equation}\label{eqn:unfairCoinLimitHardWay:140}
+\frac{N - k}{N r} = 1 - \frac{x}{N r}
+\end{equation}
+\begin{equation}\label{eqn:unfairCoinLimitHardWay:160}
+\frac{k}{Ns} = 1 + \frac{x}{N s}
+\end{equation}
+\end{subequations}
+
+We've also got terms in $k$ and $N - k$ above that we need to express.  With $k = N s + x$, we have $N - k = N r - x$, and
+
+\begin{dmath}\label{eqn:unfairCoinLimitHardWay:180}
+\frac{(N - k) k}{N} 
+= \inv{N}(N r - x)(N s + x)
+= \inv{N}( -x^2 + N^2 r s + x N(r - s) )
+= -\frac{x^2}{N} + N r s + x( 2 r - 1 )
+\approx N r s
+\end{dmath}
+
+Taking logs of \ref{eqn:unfairCoinLimitHardWay:60} we have
+\begin{dmath}\label{eqn:unfairCoinLimitHardWay:200}
+\ln P_N(r, k) 
+\approx 
+\ln \sqrt{\frac{1}{2 \pi N r s}}
+- 
+(N r - x)
+\ln 
+\lr{ 1 - \frac{x}{N r} }
+- 
+(N s + x)
+\ln 
+\lr{ 1 + \frac{x}{N s} }
+\approx
+\ln \sqrt{\frac{1}{2 \pi N r s}}
++ 
+(x - N r)
+\lr{ 
+- \frac{x}{N r} 
+- \inv{2} 
+\lr{ \frac{x}{N r} }^2
+}
+- 
+(x + N s)
+\lr{ 
+\frac{x}{N s} 
+- \inv{2} 
+\lr{\frac{x}{N s} }^2
+}
+=
+\ln \sqrt{\frac{1}{2 \pi N r s}}
++ \inv{2} \frac{x^2}{N}
+\lr{ \inv{r} + \inv{s} }
+- \frac{x^2}{N}
+\lr{ \inv{r} + \inv{s} }
++ \frac{x^3}{(N)^2}
+\lr{ \inv{r^2} - \inv{s^2} }
+\end{dmath}
+
+Dropping the $O(1/N^2)$ term and noting that
+
+\begin{dmath}\label{eqn:unfairCoinLimitHardWay:220}
+-\inv{2} 
+\lr{ \inv{r} + \inv{s} }
+=
+-\inv{2 r s} (r + (1 - r)
+=
+-\inv{2 r s}
+\end{dmath}
+
+We have
+\begin{equation}\label{eqn:unfairCoinLimitHardWay:240}
+P_N(r, k) \approx
+\inv{\sqrt{2 \pi N r s}} 
+\exp
+\lr{ -\frac{x^2}{2 N r s} }.
+\end{equation}
+
+With 
+
+\begin{dmath}\label{eqn:unfairCoinLimitHardWay:260}
+x = k - N s
+= \inv{2} ( N + X ) - N s
+= \inv{2} ( N + X - 2 N s )
+= \inv{2} ( X + N ( 1 - 2 s) )
+= \inv{2} ( X - N ( 1 - 2 r) ),
+\end{dmath}
+
+we have
+
+\begin{equation}\label{eqn:unfairCoinLimitHardWay:280}
+\myBoxed{
+P_N(r, k) \approx
+\inv{\sqrt{2 \pi N r s}} 
+\exp
+\lr{ -\frac{
+\lr{X - N (1 - 2r) }^2
+}{8 N r s} }.
+}
+\end{equation}
+
+This recovers the result obtained with the central limit theorem (after that result was adjusted to account for parity).
+
+%Since the problem didn't say we couldn't use 
+% and got massively penalized (even though the problem didn't say we couldn't use the central limit theorem and it had been covered in class, something that I should probably dispute)
 
 %\EndArticle
 \EndNoBibArticle
