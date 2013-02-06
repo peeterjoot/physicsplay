@@ -1,0 +1,69 @@
+%
+% Copyright © 2013 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{unfairCoinLimitHardWay}
+\renewcommand{\dirname}{notes/phy452/}
+\newcommand{\keywords}{Statistical mechanics, PHY452H1S}
+
+\input{../peeter_prologue_print2.tex}
+
+\beginArtNoToc
+
+\generatetitle{Limit of unfair coin distribution, the hard way}
+%\chapter{Limit of unfair coin distribution, the hard way}
+\label{chap:unfairCoinLimitHardWay}
+
+We calculated the distribution for the sum of random variables associated with $N$ unfair coin tosses, where the probabilities were $r$, and $s = 1 - r$ for heads and tails respectively.  Assigning heads and tails values of $-1$ and $+1$ respectively, the probability distribution of the sum $X$ of the total numbers of heads and tails values for $N$ such tosses was found to be
+
+\begin{subequations}
+\begin{equation}\label{eqn:unfairCoinLimitHardWay:20}
+P_N(r, k) = \binom{N}{k} r^{N-k} s^k,
+\end{equation}
+\begin{equation}\label{eqn:unfairCoinLimitHardWay:40}
+k = \frac{N + X}{2}
+\end{equation}
+\end{subequations}
+
+Part of the problem was to calculate the limit for $N \gg 1$ and $N \gg X$.  I did this with the central limit theorem and got massively penalized (even though the problem didn't say we couldn't use the central limit theorem and it had been covered in class?)
+
+Here's a bash at it the hard way, using Stirling's approximation and Taylor series expansion for the logs.
+
+Application of Stirling's approximation gives us
+
+\begin{dmath}\label{eqn:unfairCoinLimitHardWay:60}
+P_N(r, k) 
+\approx 
+\frac{ 
+\sqrt{2 \pi N} \cancel{e^{-N}} N^N 
+}
+{
+\sqrt{2 \pi (N - k)} \cancel{e^{-N + k}} (N - k)^{N-k}
+\sqrt{2 \pi k} \cancel{e^{-k}} k^{k}
+}
+r^{N-k} s^k
+=
+\sqrt{\frac{N}{2 \pi k(N-k)}}
+N^{N
+\mathLabelBox
+[
+   labelstyle={xshift=2cm},
+   linestyle={out=270,in=90, latex-}
+]
+{
+-k + k
+}{Add and subtract}
+}
+\lr{ \frac{r}{N-k} }
+^{N-k} 
+\lr{ \frac{s}{k} }^k
+=
+\sqrt{\frac{N}{2 \pi k(N-k)}}
+\lr{ \frac{N r}{N-k} }
+^{N-k} 
+\lr{ \frac{N s}{k} }^k
+\end{dmath}
+
+%\EndArticle
+\EndNoBibArticle
