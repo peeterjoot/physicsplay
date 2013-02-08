@@ -5,23 +5,234 @@
 \input{../blogpost.tex}
 \renewcommand{\basename}{basicStatMechLecture8}
 \renewcommand{\dirname}{notes/phy452/}
-\newcommand{\keywords}{Statistical mechanics, PHY452H1S}
+\newcommand{\keywords}{Statistical mechanics, PHY452H1S, thermodynamics, adiabatic}
 \input{../peeter_prologue_print2.tex}
 
-%\usepackage[draft]{fixme}
-%\fxusetheme{color}
-%\fxwarning{review lecture 8}{work through this lecture in detail.}
+\usepackage[T1]{fontenc}
+%\newcommand{\dbar}[0]{d}
+\newcommand{\dbar}[0]{\text{\dj}}
 
 \beginArtNoToc
-\generatetitle{PHY452H1S Basic Statistical Mechanics.  Lecture 8: XXX.  Taught by Prof.\ Arun Paramekanti}
-%\chapter{XXX}
+\generatetitle{PHY452H1S Basic Statistical Mechanics.  Lecture 8: Midterm review, thermodynamics.  Taught by Prof.\ Arun Paramekanti}
+%\chapter{Midterm review, thermodynamics}
 \label{chap:basicStatMechLecture8}
 
 \section{Disclaimer}
 
 Peeter's lecture notes from class.  May not be entirely coherent.
 
-\section{XXX}
+\section{Exam review}
 
-%\EndArticle
+\begin{enumerate}
+\item Product of IID random vars.  What can we say about this with the CLT
+
+\begin{equation}\label{eqn:basicStatMechLecture8:20}
+X = x_1 x_2 \cdots x_N
+\end{equation}
+
+We can't apply CLT directly, but we can apply it to $\ln X$
+
+\begin{equation}\label{eqn:basicStatMechLecture8:40}
+Y = \ln X = \sum_i \ln x_i = \sum_i y_i
+\end{equation}
+
+So
+
+\begin{equation}\label{eqn:basicStatMechLecture8:60}
+\tilde{P}(Y) = \inv{\sqrt{ 2 \pi N \sigma_y^2}} \exp
+\lr{
+-\frac{(Y - N \mu_y)^2}{N \sigma_y^2}
+}
+\end{equation}
+
+Of interest here is how probabilities change under change of variables.  If $Y = \ln X$, this works like
+
+\begin{equation}\label{eqn:basicStatMechLecture8:80}
+P(X) dX = \tilde{P}(Y) dY
+\end{equation}
+\begin{equation}\label{eqn:basicStatMechLecture8:100}
+P(X) = \tilde{P}(Y = \ln X) \frac{dY}{dX}.
+\end{equation}
+
+This is illustrated roughly in \cref{fig:lecture8:lecture8Fig1}
+
+\imageFigure{lecture8Fig1}{Change of variables for a probability distribution}{fig:lecture8:lecture8Fig1}{0.3}
+
+\item Random walk
+
+This was a unit stepping problem as illustrated in \cref{fig:lecture8:lecture8Fig2}.
+
+\imageFigure{lecture8Fig2}{Unit one dimensional random walk}{fig:lecture8:lecture8Fig2}{0.15}
+
+\begin{dmath}\label{eqn:basicStatMechLecture8:120}
+\expectation{X} = \sum_i \expectation{x_i}
+\expectation{X^2} = 
+\expectation{
+\lr{\sum_{i = 1}^N x_i}
+\lr{\sum_{j = 1}^N x_i}
+}
+= 
+\expectation{
+\lr{\sum_{i = 1}^N x_i^2}
+\lr{\sum_{i \ne j = 1}^N x_i x_j}
+}
+\end{dmath}
+
+\item State and prove Liouville's theorem
+
+\begin{dmath}\label{eqn:basicStatMechLecture8:140}
+\frac{d\rho}{dt} = 
+\PD{t}{\rho} + 
+\sum_{i = 1}^{3N} 
+\PD{x_i}{
+\lr{\dot{x}_i \rho}
+}
++
+\PD{x_i}{
+\lr{\dot{x}_i \rho}
+}
+\end{dmath}
+
+\item Collisions in 1D
+
+This was a one direction collision problem for $N$ particles, a portion of which is illustrated in \cref{fig:lecture8:lecture8Fig3}.
+
+\imageFigure{lecture8Fig3}{One dimensional collision of particles}{fig:lecture8:lecture8Fig3}{0.15}
+
+The statement here that the collision was in 1D was a hint that we can actually calculate the result.
+
+Start with a pair of collisions and work out that the velocities are exchanged.
+
+\begin{equation}\label{eqn:basicStatMechLecture8:160}
+(v_i, v_{i+1}) \rightarrow (v_{i+1}, v_{i})
+\end{equation}
+
+We have only exchange velocities.  This won't result in all the phase space being explored, and was meant to show that things are extremely restrictive in 1D.
+
+\item Harmonic oscillator in 1D.
+
+This problem ends up essentially requiring the evaluation of the area in phase space of an ellipse in phase space as in \cref{fig:lecture8:lecture8Fig4}.
+
+\imageFigure{lecture8Fig4}{1D classical SHO phase space}{fig:lecture8:lecture8Fig4}{0.2}
+
+The result is $\pi a b \times \text{area}$.
+
+\end{enumerate}
+
+\section{Gibbs paradox}
+
+We'd been discussing Gibbs paradox, considering the doubled volume as in \cref{fig:lecture8:lecture8Fig5}.
+
+\imageFigure{lecture8Fig5}{Gibbs paradox two volumes allowed to mix}{fig:lecture8:lecture8Fig5}{0.2}
+
+and defined a \underlineAndIndex{statistical entropy} that requires division of $\Omega$ by $N!$.  We have
+
+\begin{equation}\label{eqn:basicStatMechLecture8:180}
+S_statistical = k_B \ln 
+\mathLabelBox
+[
+   labelstyle={xshift=2cm},
+   linestyle={out=270,in=90, latex-}
+]
+{
+\Omega
+}{Number of states}
+\end{equation}
+
+\section{Thermodynamics - phenomenology}
+
+Let's move on to discuss some concepts of thermodynamics
+
+\paragraph{First law of thermodynamics}%\index{First law of thermodynamics}
+
+This is the law of \underlineAndIndex{Energy conservation}!  \footnote{This requires some corrections if relativisitic systems are studied.}
+
+\begin{equation}\label{eqn:basicStatMechLecture8:200}
+\mathLabelBox
+[
+   labelstyle={xshift=-2cm},
+   linestyle={out=270,in=90, latex-}
+]
+{dE}{Change in energy}
+=
+\mathLabelBox
+[
+   labelstyle={below of=m\themathLableNode, below of=m\themathLableNode}
+]
+{\dbar W}{work done on the system}
++
+\mathLabelBox
+[
+   labelstyle={xshift=2cm},
+   linestyle={out=270,in=90, latex-}
+]
+{\dbar Q}{Heat supplied to the system}
+\end{equation}
+
+Here the $\dbar$ differentials indicate that the change depends is path dependent.  For example the number of times a piston is moved back and forth can be significant, even given a specific change in the total differential change in the piston position.  The total change of energy in such a change is not path dependent.
+
+Consider a piston setup compressing some gas taking the position of the pistion from $X \rightarrow X + dX$ as in \cref{fig:lecture8:lecture8Fig6}.
+
+\imageFigure{lecture8Fig6}{Piston and gas}{fig:lecture8:lecture8Fig6}{0.2}
+
+\begin{equation}\label{eqn:basicStatMechLecture8:220}
+\dbar W = \sum_i 
+\mathLabelBox
+[
+   labelstyle={below of=m\themathLableNode, below of=m\themathLableNode}
+]
+{f_i}{
+Generated force
+}
+\mathLabelBox
+[
+   labelstyle={xshift=2cm},
+   linestyle={out=270,in=90, latex-}
+]
+{dX_i}{
+Controllable macroscopic coordinate
+}
+\end{equation}
+
+What is $\dbar Q$?  These are the microscopic, and uncontrollable changes in energy.
+
+\paragraph{Processes}
+
+\begin{itemize}
+\item Change $X_i \rightarrow X_i + dX_i$
+\item Change $\dbar Q$
+\end{itemize}
+
+\paragraph{Adiabatic process}
+
+These are those that are thermally isolated, or 
+
+\begin{equation}\label{eqn:basicStatMechLecture8:240}
+\dbar Q = 0.
+\end{equation}
+
+The only way to change energy is to change the macroscopic $X_i$, so the change in energy is given by
+
+\begin{equation}\label{eqn:basicStatMechLecture8:260}
+dE = \dbar W = \sum_i f_i dX_i
+\end{equation}
+
+These are what we are used to thinking about as conservative systems.  Imagine, for example, a force applied to a spring, slowly so that there is no heat loss, we can figure out the total change in energy by summing differential changes to the spring.
+
+We can imagine that there is some way to change the position that results in a change of energy.  This is of course just the force as in \cref{fig:lecture8:lecture8Fig7}.
+
+\begin{equation}\label{eqn:basicStatMechLecture8:280}
+-\frac{dE}{dx_i} \sim \text{force}.
+\end{equation}
+
+\imageFigure{lecture8Fig7}{A possible energy position relationship}{fig:lecture8:lecture8Fig7}{0.3}
+
+We can imagine that we started with an initially thermally isolated system, with the macroscopic parameter unchanged, but somebody sneaks in and heats the system, before re-thermally isolating it.  We'd then have a system that perhaps looks like \cref{fig:lecture8:lecture8Fig8}.
+
+\imageFigure{lecture8Fig8}{Level curves for adiabatic and non-adiabatic changes to the system}{fig:lecture8:lecture8Fig8}{0.3}
+
+The jumps from one curve from another is the product of the sneaky heat suppliers.
+
+Now, if we think about this in a higher dimensional space, we'd instead have level surfaces.
+
 \EndNoBibArticle
