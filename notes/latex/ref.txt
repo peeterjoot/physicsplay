@@ -1,0 +1,37 @@
+The `cleveref` package will display equation references as eq.  I'd like to use this with `breqn` too (generally works well to break long equations if required), but my attempt to provide the labeling override using `crefname` didn't work:
+
+    \documentclass{article}
+
+    \usepackage{breqn}
+    \usepackage[english]{cleveref}
+
+    \crefname{dmath}{eq.}{eq.}
+    \Crefname{Dmath}{Eq.}{Eq.}
+
+    \begin{document}
+    \section{A section}
+
+    \begin{equation}\label{eqn:ref:1}
+    a + b = c
+    \end{equation}
+    \begin{dmath}\label{eqn:ref:2}
+    a + b = c
+    \end{dmath}
+
+    Clever reference to \cref{eqn:ref:1}.
+    Clever reference to \cref{eqn:ref:2}.
+
+    \end{document}
+
+In the pdf doc this displays as
+
+    Clever reference to eq. (1). Clever reference to section 1.
+
+The .aux shows why that is:
+
+    \newlabel{eqn:ref:1}{{1}{1}}
+    \newlabel{eqn:ref:1@cref}{{[equation][1][]1}{1}}
+    \newlabel{eqn:ref:2}{{2}{1}}
+    \newlabel{eqn:ref:2@cref}{{[section][1][]1}{1}}
+
+What's the right way to use crefname for dmath environments?

@@ -1,0 +1,36 @@
+\documentclass{article}
+
+\usepackage{breqn}
+\usepackage[english]{cleveref}
+
+%http://tex.stackexchange.com/questions/28566/cleveref-and-breqn-packages-dont-play-nice-together
+\makeatletter
+\let\cref@old@eq@setnumber\eq@setnumber
+\def\eq@setnumber{%
+\cref@old@eq@setnumber%
+\cref@constructprefix{equation}{\cref@result}%
+\protected@xdef\cref@currentlabel{%
+[equation][\arabic{equation}][\cref@result]\p@equation\theequation}}
+\makeatother
+
+%\crefname{dmath}{eq.}{eq.}
+%\Crefname{Dmath}{Eq.}{Eq.}
+
+\begin{document}
+\section{A section}
+
+\begin{equation}\label{eqn:ref:1}
+a + b = c
+\end{equation}
+\begin{dmath}\label{eqn:ref:2}
+a + b = c
+\end{dmath}
+\begin{dmath}\label[equation]{eqn:ref:3}
+a + b = c
+\end{dmath}
+
+Clever reference to \cref{eqn:ref:1}.
+Clever reference to \cref{eqn:ref:2}.
+Clever reference to \cref{eqn:ref:3}.
+
+\end{document}
