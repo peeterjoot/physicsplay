@@ -1,0 +1,201 @@
+%
+% Copyright © 2013 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+% pick one:
+%\input{../assignment.tex}
+\input{../blogpost.tex}
+\renewcommand{\basename}{pendulumPhaseSpace}
+\renewcommand{\dirname}{notes/phy452/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\renewcommand{\myBoxed}[1]{\mathLabelBox{#1}{}}
+
+\beginArtNoToc
+
+\generatetitle{1D pendulum problem in phase space}
+%\chapter{1D pendulum problem in phase space}
+%\label{chap:pendulumPhaseSpace}
+%\section{Motivation}
+%\section{Guts}
+
+Problem 2.6 in \citep{pathriastatistical} asks for some analysis of the (presumably small angle) pendulum problem in phase space, including an integration of $\oint p dq$ which relates the energy and period of the system to the area included within a phase space trajectory.  With coordinates as in \cref{fig:pendulumPhaseSpace:pendulumPhaseSpaceFig1}, our Lagrangian is
+
+\imageFigure{pendulumPhaseSpaceFig1}{1d pendulum}{fig:pendulumPhaseSpace:pendulumPhaseSpaceFig1}{0.3}
+
+\begin{equation}\label{eqn:pendulumPhaseSpace:20}
+\LL = \inv{2} m l^2 \thetadot^2 - g m l ( 1 - \cos\theta ).
+\end{equation}
+
+As a sign check we find for small $\theta$ from the Euler-Lagrange equations $\ddot{\theta} = -(g/l) \theta$ as expected.  For the Hamiltonian, we need the canonical momentum
+
+\begin{equation}\label{eqn:pendulumPhaseSpace:40}
+p_\theta = \PD{\thetadot}{\LL} = m l^2 \thetadot.
+\end{equation}
+
+Observe that this canonical momentum does not have dimensions of momentum, but that of angular momentum ($m l \thetadot \times l$).
+
+Our Hamiltonian is
+
+\begin{equation}\label{eqn:pendulumPhaseSpace:60}
+H = \inv{2 m l^2} p_\theta^2 + g m l ( 1 - \cos\theta ).
+\end{equation}
+
+Hamilton's equations for this system, in matrix form are
+
+\begin{equation}\label{eqn:pendulumPhaseSpace:80}
+\ddt{}
+\begin{bmatrix}
+\theta \\
+p_\theta
+\end{bmatrix}
+=
+\begin{bmatrix}
+\PD{p_\theta}{H} \\
+-\PD{\theta}{H} 
+\end{bmatrix}
+=
+\begin{bmatrix}
+p_\theta/m l^2 \\
+- g m l \sin\theta
+\end{bmatrix}
+\end{equation}
+
+With $\omega = g/l$, it is convient to non-dimensionalize this
+
+\begin{equation}\label{eqn:pendulumPhaseSpace:100}
+\ddt{}
+\begin{bmatrix}
+\theta \\
+p_\theta/ \omega m l^2
+\end{bmatrix}
+=
+\omega
+\begin{bmatrix}
+p_\theta/\omega m l^2 \\
+- \sin\theta
+\end{bmatrix}.
+\end{equation}
+
+Now we can make the small angle approximation.  Writing
+
+\begin{subequations}
+\begin{equation}\label{eqn:pendulumPhaseSpace:120}
+\Bu = \begin{bmatrix}
+\theta \\
+p_\theta/ \omega m l^2
+\end{bmatrix}
+\end{equation}
+\begin{equation}\label{eqn:pendulumPhaseSpace:140}
+i = 
+\begin{bmatrix}
+0 & 1 \\
+-1 & 0
+\end{bmatrix}
+\end{equation}
+\end{subequations}
+
+Our pendulum equation is reduced to
+
+\begin{equation}\label{eqn:pendulumPhaseSpace:160}
+\Bu' = i \omega \Bu,
+\end{equation}
+
+With a solution that we can read off by inspection
+
+\begin{equation}\label{eqn:pendulumPhaseSpace:180}
+\Bu 
+= e^{i \omega t} \Bu_0
+=
+\begin{bmatrix}
+\cos\omega t & \sin\omega t \\
+-\sin\omega t & \cos \omega t
+\end{bmatrix}
+\Bu_0
+\end{equation}
+
+Let's put the initial phase space point into polar form
+
+\begin{dmath}\label{eqn:pendulumPhaseSpace:200}
+\Bu_0^2
+= \theta_0^2 + \frac{p_0^2}{\omega^2 m^2 l^4}
+= 
+\frac{2}{\omega^2 m l^2}
+\lr{ \frac{p_0^2}{2 m l^2} + \inv{2} \omega^2 m l^2 \theta_0^2 }
+=
+\frac{2}{g m l}
+\lr{ \frac{p_0^2}{2 m l^2} + \inv{2} g m l \theta_0^2 }
+\end{dmath}
+
+This doesn't appear to be an exact match for \eqnref{eqn:pendulumPhaseSpace:60}, but we can write for small $\theta_0$
+
+\begin{dmath}\label{eqn:pendulumPhaseSpace:220}
+1 - \cos\theta_0
+=
+2 \sin^2 \lr{ \frac{\theta_0}{2} }
+\approx
+2 \lr{ \frac{\theta_0}{2} }^2
+=
+\frac{\theta_0^2}{2}.
+\end{dmath}
+
+This shows that we can rewrite our initial conditions as
+
+\begin{equation}\label{eqn:pendulumPhaseSpace:240}
+\Bu_0 = 
+\sqrt{ \frac{2 E}{g m l} }
+e^{i \phi }
+\begin{bmatrix}
+1 \\ 
+0
+\end{bmatrix},
+\end{equation}
+
+where 
+
+\begin{equation}\label{eqn:pendulumPhaseSpace:260}
+\tan \phi =
+\lr{ \omega m l^2 \theta_0/ p_0 }.
+\end{equation}
+
+Our time evolution in phase space is given by
+
+\begin{equation}\label{eqn:pendulumPhaseSpace:280}
+\begin{bmatrix}
+\theta(t) \\
+p_\theta(t)
+\end{bmatrix}
+=
+\sqrt{ \frac{2 E}{g m l} }
+\begin{bmatrix}
+\cos(\omega t + \phi) \\
+-
+ \omega m l^2
+\sin(\omega t + \phi)
+\end{bmatrix},
+\end{equation}
+
+or
+
+\begin{equation}\label{eqn:pendulumPhaseSpace:280}
+\myBoxed{
+\begin{bmatrix}
+\theta(t) \\
+p_\theta(t)
+\end{bmatrix}
+=
+\inv{\omega l}
+\sqrt{ \frac{2 E}{m} }
+\begin{bmatrix}
+\cos(\omega t + \phi) \\
+-
+ \omega m l^2
+\sin(\omega t + \phi)
+\end{bmatrix}.
+}
+\end{equation}
+
+\EndArticle
