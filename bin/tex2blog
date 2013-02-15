@@ -608,7 +608,10 @@ sub processRest
       s/\\C{(.*?)}/$latexInlineStart\\mathbb{C}^{$1}$latexInlineEnd/g;
       s/\\R{(.*?)}/$latexInlineStart\\mathbb{R}^{$1}$latexInlineEnd/g;
 
-      s/\\ref{(eqn:.*?)}/$equations{$1}/g ;
+      s/\\ref{(eqn:.*?)}/eq. $equations{$1}/g ;
+      s/\\ref{(fig:.*?)}/fig. $equations{$1}/g ;
+      s/\\cref{(fig:.*?)}/fig. $equations{$1}/g ;
+      s/\\eqref{(eqn:.*?)}/eq. $equations{$1}/g ;
       s/\\autoref{(eqn:.*?)}/($equations{$1})/g ;
 
       if ( $wiki )
@@ -848,6 +851,9 @@ sub expandPeetersMathModeMacros
    $out =~ s/\\pdot/\\dot{p}/g;
    $out =~ s/\\vdot/\\dot{v}/g;
    $out =~ s/\\color${r2}/$2/g;
+
+   # not a good replacement:
+   $out =~ s/\\dbar/d/g;
 
    $out =~ s/\\directproduct/\\otimes/g;
    $out =~ s/\\thetacap/\\hat{\\boldsymbol{\\theta}}/g;
