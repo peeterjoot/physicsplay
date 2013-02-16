@@ -2,17 +2,26 @@
 % Copyright © 2013 Peeter Joot.  All Rights Reserved.
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
 %
-% pick one:
-%\input{../assignment.tex}
 \input{../blogpost.tex}
 \renewcommand{\basename}{pendulumPhaseSpace}
 \renewcommand{\dirname}{notes/phy452/}
-%\newcommand{\dateintitle}{}
-%\newcommand{\keywords}{}
+\newcommand{\keywords}{Statistical mechanics, PHY452H1S, phase space, trajectory, pendulum, small angle, Hamiltonian, conjugate momentum, angular momentum}
 
 \input{../peeter_prologue_print2.tex}
 
-\renewcommand{\myBoxed}[1]{\mathLabelBox{#1}{}}
+%\newcounter{tikzNodeNum}
+%
+%\newcommand{\xmyBoxed}[2]{%
+%\tikz[baseline]{%
+%    \node[draw=red,rounded corners,anchor=base] (m#2)%
+%    {$\displaystyle#1$};%
+%}%
+%}
+%
+%\renewcommand{\myBoxed}[1]{%
+%   \stepcounter{tikzNodeNum}%
+%   \xmyBoxed{#1}{\thetikzNodeNum}%
+%}
 
 \beginArtNoToc
 
@@ -22,7 +31,7 @@
 %\section{Motivation}
 %\section{Guts}
 
-Problem 2.6 in \citep{pathriastatistical} asks for some analysis of the (presumably small angle) pendulum problem in phase space, including an integration of $\oint p dq$ which relates the energy and period of the system to the area included within a phase space trajectory.  With coordinates as in \cref{fig:pendulumPhaseSpace:pendulumPhaseSpaceFig1}, our Lagrangian is
+Problem 2.6 in \citep{pathriastatistical} asks for some analysis of the (presumably small angle) pendulum problem in phase space, including an integration of the phase space volume energy and period of the system to the area $A$ included within a phase space trajectory.  With coordinates as in \cref{fig:pendulumPhaseSpace:pendulumPhaseSpaceFig1}, our Lagrangian is
 
 \imageFigure{pendulumPhaseSpaceFig1}{1d pendulum}{fig:pendulumPhaseSpace:pendulumPhaseSpaceFig1}{0.3}
 
@@ -197,5 +206,47 @@ p_\theta(t)
 \end{bmatrix}.
 }
 \end{equation}
+
+This is plotted in \cref{fig:pendulumPhaseSpace:pendulumPhaseSpaceFig2}.
+
+\imageFigure{pendulumPhaseSpaceFig2}{Phase space trajectory for small angle pendulum}{fig:pendulumPhaseSpace:pendulumPhaseSpaceFig2}{0.2}
+
+The area of this ellipse is
+
+\begin{dmath}\label{eqn:pendulumPhaseSpace:300}
+A = \pi \inv{\omega^2 l^2} \frac{2 E}{m} \omega m l^2 
+= \frac{2 \pi}{\omega} E.
+\end{dmath}
+
+With $\tau$ for the period of the trajectory, this is 
+
+\begin{equation}\label{eqn:pendulumPhaseSpace:320}
+A = \tau E.
+\end{equation}
+
+As a final note, observe that the oriented integral from problem 2.5 of the text $\oint p_\theta d\theta$, is also this area.  This is a general property, which can be seen geometrically in \cref{fig:pendulumPhaseSpace:pendulumPhaseSpaceFig3}, where we see that the counterclockwise oriented integral of $\oint p dq$ would give the negative area.  The integrals along the $c_4, c_1$ paths give the area under the blob, whereas the integrals along the other paths where the sense is opposite, give the complete area under the top boundary.  Since they are oppositely sensed, adding them gives just the area of the blob.
+
+\imageFigure{pendulumPhaseSpaceFig3}{Area from oriented integral along path}{fig:pendulumPhaseSpace:pendulumPhaseSpaceFig3}{0.3}
+
+Let's do this $\oint p_\theta d\theta$ integral for the pendulum phase trajectories.  With
+
+\begin{subequations}
+\begin{equation}\label{eqn:pendulumPhaseSpace:340}
+\theta = \inv{\omega l} \sqrt{\frac{2 E}{m}} \cos(\omega t + \phi)
+\end{equation}
+\begin{equation}\label{eqn:pendulumPhaseSpace:360}
+p_\theta = -m l \sqrt{\frac{2 E}{m}} \sin(\omega t + \phi)
+\end{equation}
+\end{subequations}
+
+We have
+
+\begin{dmath}\label{eqn:pendulumPhaseSpace:380}
+\oint p_\theta d\theta 
+= \frac{m l}{\omega l} \frac{2 E}{m} \int_0^{2\pi/\omega} \sin^2( \omega t + \phi) \omega dt
+= 2 E \int_0^{2\pi/\omega} \frac{ 1 - \cos\lr{ 2(\omega t + \phi) } }{2} dt
+= E \frac{2 \pi}{\omega} 
+= E \tau.
+\end{dmath}
 
 \EndArticle
