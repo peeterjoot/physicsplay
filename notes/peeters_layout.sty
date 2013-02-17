@@ -285,15 +285,6 @@ ref={#1}
 }%
 }
 
-% phy452: this causes pdflatex to hang (and spin up the cpu) with last output at
-% figures/basicStatMechLecture2Fig8.pdf
-%
-% what is it doing?
-%
-\newcommand{\myFancyBox}[1]{%
-\tikz[baseline]\node [draw=red,rounded corners,anchor=base] {$\displaystyle#1$};%
-}
-
 
 % allowing for label placement:
 %
@@ -328,7 +319,21 @@ ref={#1}
    \vphantom{\mathWithDescriptionStarred[#1]{#2}{#3}{\themathLableNode}}%
 }
 
-\newcommand{\myBoxed}[1]{\boxed{#1}}
+% doesn't work: I think it gets expanded too early:
+%\newcommand{\labelBoxPlacementBelow}[0]{labelstyle={below of=m\themathLableNode,below of=m\themathLableNode}}
+
+%-------------------------------------------------------------------------------------
+
+% phy452: this causes pdflatex to hang (and spin up the cpu) with last output at
+% figures/basicStatMechLecture2Fig8.pdf
+%
+% what is it doing?
+%
+\newcommand{\myFancyBox}[1]{%
+\tikz[baseline]\node [draw=red,rounded corners,anchor=base] {$\displaystyle#1$};%
+}
+
+%\newcommand{\myBoxed}[1]{\boxed{#1}}
 %
 % both of these cause pdflatex to hang on phy452:
 %\newcommand{\myBoxed}[1]{\mathLabelBox{#1}{}}
@@ -360,5 +365,35 @@ ref={#1}
 %   \xmyBoxed{#1}{\thetikzNodeNum}%
 %}
 
-% doesn't work: I think it gets expanded too early:
-%\newcommand{\labelBoxPlacementBelow}[0]{labelstyle={below of=m\themathLableNode,below of=m\themathLableNode}}
+% http://tex.stackexchange.com/questions/98540/hf-tikz-doesnt-box-around-equation/
+%
+% You can still use:
+%
+%\tikzmarkin[rounded corners]{<id>}[<lower math content>][<upper math content>]. hf-tikz also provides the key disable rounded corners, setting that to false does the some thing as rounded corners. (Note that all the package options (like beamer, shade, nofill, .) are disabled as I overwrite the \tikzmarkin macro.) . Qrrbrbirlbel
+%
+
+\usepackage{hf-tikz}
+\newsavebox\qrrTikzmarkBox
+\RenewDocumentCommand{\tikzmarkin}{O{} m D(){0.1,-0.18} D(){-0.1,0.35} G{}}{%
+\if\relax\detokenize{#5}\relax
+    \dp\qrrTikzmarkBox=0pt\relax
+    \ht\qrrTikzmarkBox=0pt\relax
+\else
+    \sbox\qrrTikzmarkBox{$\displaystyle#5$}
+\fi
+\tikz[remember picture,overlay]
+\draw[line width=1pt,#1,draw=red,rounded corners]
+(pic cs:#2) ++([yshift=-\the\dp\qrrTikzmarkBox]#3) rectangle ([yshift=\the\ht\qrrTikzmarkBox]#4) node [anchor=text] (#2) {}
+;
+#5
+}
+
+\newcounter{boxNodeNum}
+
+\newcommand{\myBoxed}[1]{%
+   \stepcounter{boxNodeNum}%
+   \tikzmarkin{bb\theboxNodeNum}{#1}
+   \tikzmarkend{bb\theboxNodeNum}
+}
+
+%-------------------------------------------------------------------------------------

@@ -1,0 +1,45 @@
+\documentclass{article}
+
+% http://tex.stackexchange.com/questions/98540/hf-tikz-doesnt-box-around-equation/
+\usepackage{hf-tikz}
+\newsavebox\qrrTikzmarkBox
+\RenewDocumentCommand{\tikzmarkin}{O{} m D(){0.1,-0.18} D(){-0.1,0.35} G{}}{%
+\if\relax\detokenize{#5}\relax
+    \dp\qrrTikzmarkBox=0pt\relax
+    \ht\qrrTikzmarkBox=0pt\relax
+\else
+    \sbox\qrrTikzmarkBox{$\displaystyle#5$}
+\fi
+\tikz[remember picture,overlay]
+\draw[line width=1pt,#1,draw=red,rounded corners]
+(pic cs:#2) ++([yshift=-\the\dp\qrrTikzmarkBox]#3) rectangle ([yshift=\the\ht\qrrTikzmarkBox]#4) node [anchor=text] (#2) {}
+;
+#5
+}
+
+\newcounter{boxNodeNum}
+
+\newcommand{\myBoxed}[1]{%
+   \stepcounter{boxNodeNum}%
+   \tikzmarkin{bb\theboxNodeNum}{#1}
+   \tikzmarkend{bb\theboxNodeNum}
+}
+
+\begin{document}
+
+\[
+\myBoxed{x + y = 400}
+\]
+
+\[
+\myBoxed{
+\int_{
+    E - \frac{\Delta}{2} \le H \le E + \frac{\Delta}{2} \le H
+    }
+     d^{3N} x d^{3N} p
+    =
+    \left( \frac{2 \pi \Delta}{\omega} \right)^{3N}
+}
+\]
+
+\end{document}
