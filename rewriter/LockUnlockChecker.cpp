@@ -13,7 +13,7 @@ using namespace ento;
 REGISTER_TRAIT_WITH_PROGRAMSTATE(LockState, bool);
 
 namespace {
-   class LockUnlockChecker : public Checker<check::PreCall,check::EndPath > {
+   class LockUnlockChecker : public Checker<check::PreCall> {
       OwningPtr<BugType> NoUnlockBugType;
       OwningPtr<BugType> DoubleLockBugType;
       OwningPtr<BugType> DoubleUnlockBugType;

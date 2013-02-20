@@ -258,10 +258,8 @@ int main( int argc, char * argv[] )
             //printf( "-I : %s\n", optarg ) ;
             headerSearchOptions->AddPath( optarg,
                                           frontend::Quoted,
-                                          true,
-                                          false,
-                                          false ) ;
-
+                                          false, // IsFramework
+                                          false ) ; // IgnoreSysRoot
             break ;
          }
          case 'D':

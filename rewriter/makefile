@@ -33,6 +33,7 @@ LDFLAGS += -lclangAnalysis -lclangARCMigrate
 LDFLAGS += -lclangRewriteCore 
 LDFLAGS += -lclangEdit -lclangAST -lclangLex -lclangBasic
 LDFLAGS += -lLLVMMCParser
+LDFLAGS += -lLLVMBitReader
 
 LDFLAGS += $(shell $(LLVM_BIN_PATH)llvm-config --libs $(LLVM_LIBS))
 
