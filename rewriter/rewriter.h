@@ -96,7 +96,7 @@ bool VisitCallExpr( CallExpr * c )
 
 // c->getCalleeDecl()->dump() ;
 // tools/clang/examples/PrintFunctionNames/PrintFunctionNames.cpp:
-   if ( const NamedDecl * ND = dyn_cast<NamedDecl>( c->getCalleeDecl() ) )
+   if ( NamedDecl ND = c->getCalleeDecl().getAs<NamedDecl>() ) 
    {
 //      cout << ND->getNameAsString() << endl ;
       string s = ND->getNameAsString() ;
@@ -127,13 +127,13 @@ bool VisitCallExpr( CallExpr * c )
 // %s/sqlt_trace_error\> *( *[^,]\+ *, *\([^,]\+\) *, *\([^,]\+\) *, *strlen *( *\(.*\) *) *, *\3 *)/pdTraceError1( \1, 0, \2, PD_STRING(\3) )/c
 
 #if 0
-   if ( const ImplicitCastExpr * r = dyn_cast<ImplicitCastExpr>( c ) )
+   if ( ImplicitCastExpr r = c.getAs<ImplicitCastExpr>( ) )
    {
-      r->dump() ;
+      r.dump() ;
 //      cout << r->getName().str() << endl ;
    }
-   //if ( const DeclRefExpr * r = dyn_cast<DeclRefExpr>( c->getCallee() ) )
-   if ( const DeclRefExpr * r = dyn_cast<DeclRefExpr>( c ) )
+   //if ( DeclRefExpr r = c->getCallee().getAs<DeclRefExpr>( ) )
+   if ( DeclRefExpr r = c.getAs<DeclRefExpr>( ) )
    {
       r->dump() ;
 //      cout << r->getName().str() << endl ;

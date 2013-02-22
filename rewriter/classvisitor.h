@@ -66,9 +66,9 @@ inline QualType getQualTypeForDecl( DeclaratorDecl * f )
    // don't care if it's an array, just want the basic underlying type of the array.
    for ( ; ; )
    {
-      if ( const ArrayTypeLoc * pTypeLocIfArray = dyn_cast<ArrayTypeLoc>( &thisFieldTypeLoc ) )
+      if ( ArrayTypeLoc TypeLocIfArray = thisFieldTypeLoc.getAs<ArrayTypeLoc>() )
       {
-         thisFieldTypeLoc = pTypeLocIfArray->getElementLoc() ;
+         thisFieldTypeLoc = TypeLocIfArray.getElementLoc() ;
       }
       else
       {

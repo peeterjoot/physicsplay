@@ -30,9 +30,9 @@ void recurseOverConstructorDecls( CXXConstructorDecl * c, string subobject )
 
       const QualType &        ftype    = getQualTypeForDecl( f ) ; // type of the field.  Now check if that type has a constructor.
 
-      if ( const CXXConstructExpr * r = dyn_cast<CXXConstructExpr>( Init ) )
+      if ( CXXConstructExpr r = Init.getAs<CXXConstructExpr>( ) )
       {
-         CXXConstructorDecl * cInner   = r->getConstructor() ;
+         CXXConstructorDecl * cInner   = r.getConstructor() ;
          CXXRecordDecl *      frec     = ftype->getAsCXXRecordDecl() ;
 
 #if 0
@@ -102,9 +102,9 @@ bool VisitVarDecl( VarDecl * var )
       if ( IsGlobal && !var->isConstexpr() &&
            !Init->isConstantInitializer( m_context, baseType->isReferenceType() ) )
       {
-         if ( const CXXConstructExpr * r = dyn_cast<CXXConstructExpr>( Init ) )
+         if ( CXXConstructExpr r = Init.getAs<CXXConstructExpr>( ) )
          {
-            CXXConstructorDecl * c = r->getConstructor() ;
+            CXXConstructorDecl * c = r.getConstructor() ;
 
             recurseOverConstructorDecls( c, var->getName().str() ) ;
          }
