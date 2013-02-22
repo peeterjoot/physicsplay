@@ -79,6 +79,25 @@ inline QualType getQualTypeForDecl( DeclaratorDecl * f )
    return thisFieldTypeLoc.getType() ;
 }
 
+static QualType returnUnderlyingTypeIfArray( QualType q )
+{
+   const Type *   tUnderlying = q.getTypePtr() ;
+
+   if ( tUnderlying->isArrayType() )
+   {
+      while ( tUnderlying->isArrayType() )
+      {
+         //tUnderlying->dump() ;
+
+         tUnderlying = tUnderlying->getBaseElementTypeUnsafe() ;
+      }
+
+      q = tUnderlying->getLocallyUnqualifiedSingleStepDesugaredType() ;
+   }
+
+   return q ;
+}
+
 // By implementing RecursiveASTVisitor, we can specify which AST nodes
 // we're interested in by overriding relevant methods.
 class MyASTVisitor : public RecursiveASTVisitor<MyASTVisitor>
@@ -103,6 +122,10 @@ public:
 
 #if defined CLASSVISITOR
    #include "visitor.h"
+#endif
+
+#if defined MEMBERDUMPER
+   #include "memberdumper.h"
 #endif
 
 #if defined REWRITER

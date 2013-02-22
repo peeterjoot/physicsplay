@@ -42,6 +42,7 @@ EXES += globalvisitor
 EXES += rewriter
 EXES += testit
 EXES += dumper
+EXES += memberdumper
 EXES += LockUnlockChecker.so
 CLEAN_EXES += rewritersample
 
@@ -53,6 +54,7 @@ classvisitor.o : classvisitor.h visitor.h isystem.h depmap.h
 globalvisitor.o : classvisitor.h globalcons.h isystem.h
 rewriter.o : classvisitor.h rewriter.h isystem.h
 dumper.o : classvisitor.h dumper.h isystem.h
+memberdumper.o : classvisitor.h memberdumper.h isystem.h
 
 %.o : %.cpp
 	$(CXX) -c $< $(CFLAGS)
@@ -64,6 +66,9 @@ dumper: dumper.o
 	$(CXX) $< -o $@ $(LDFLAGS)
 
 classvisitor: classvisitor.o
+	$(CXX) $< -o $@ $(LDFLAGS)
+
+memberdumper: memberdumper.o
 	$(CXX) $< -o $@ $(LDFLAGS)
 
 rewriter: rewriter.o

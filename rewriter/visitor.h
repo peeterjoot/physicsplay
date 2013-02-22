@@ -27,25 +27,6 @@ void insertIntoMap( const string & theTypeName, const QualType & q, const string
    }
 }
 
-static QualType returnUnderlyingTypeIfArray( QualType q )
-{
-   const Type *   tUnderlying = q.getTypePtr() ;
-
-   if ( tUnderlying->isArrayType() )
-   {
-      while ( tUnderlying->isArrayType() )
-      {
-         //tUnderlying->dump() ;
-
-         tUnderlying = tUnderlying->getBaseElementTypeUnsafe() ;
-      }
-
-      q = tUnderlying->getLocallyUnqualifiedSingleStepDesugaredType() ;
-   }
-
-   return q ;
-}
-
 // Find typedefs:
 bool VisitTypedefDecl( TypedefDecl * dtDecl )
 {
