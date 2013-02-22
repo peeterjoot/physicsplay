@@ -184,6 +184,7 @@ int main( int argc, char * argv[] )
       ,{"verbosedeps", 0, 0, 'v'}
       ,{"symbolfile", 1, 0, 's'}
 #endif
+      //,{"opt-report-file", 1, 0, 'o'} // intel compiler
       ,{"help", 0, 0, 'h'}
    } ;
 
@@ -240,8 +241,11 @@ int main( int argc, char * argv[] )
                        /* option compatibility with actual compilers: */
                        "c"  // -c
                        "W:" // -Wformat ...
+                       "w:" // -we1573, -wd1901, ...
                        "O:" // -O2 -O0 ...
+                       "o:" // -O2 -O0 ...
                        "m:" // -msse4.2 ...
+                       "n:" // -no-ftz, -no-multibyte-chars, ...
                        "f:" // -fcheck-new ...
                        "g"  // -g
                        "",
@@ -266,10 +270,13 @@ int main( int argc, char * argv[] )
          }
 #endif
          case 'W':
+         case 'w':
          case 'c':
          case 'O':
+         case 'o':
          case 'm':
          case 'f':
+         case 'n':
          case 'g':
          {
             /* no-op */
