@@ -1,9 +1,9 @@
 THISDIR := blogit
 
 RAWTEXFILES := $(shell ls *.tex)
-INCOMPLETE += basicStatMechProblemSet4Problem1.tex
-INCOMPLETE += basicStatMechProblemSet4Problem2.tex
-INCOMPLETE += basicStatMechProblemSet4Problem3.tex
+INCOMPLETE += basicStatMechProblemSet5Problem1.tex
+INCOMPLETE += basicStatMechProblemSet5Problem2.tex
+INCOMPLETE += basicStatMechProblemSet5Problem3.tex
 
 # buildable:
 #INCOMPLETE += dotBlade.tex
@@ -51,9 +51,9 @@ all :: peeters_layout.sty
 all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
 
-basicStatMechProblemSet4.pdf : basicStatMechProblemSet4Problem1.tex 
-basicStatMechProblemSet4.pdf : basicStatMechProblemSet4Problem2.tex 
-basicStatMechProblemSet4.pdf : basicStatMechProblemSet4Problem3.tex 
+#basicStatMechProblemSet5.pdf : basicStatMechProblemSet5Problem1.tex 
+#basicStatMechProblemSet5.pdf : basicStatMechProblemSet5Problem2.tex 
+#basicStatMechProblemSet5.pdf : basicStatMechProblemSet5Problem3.tex 
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
