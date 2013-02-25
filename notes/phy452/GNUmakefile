@@ -13,6 +13,7 @@ GENERATED_SOURCES += mathematica.tex
 #GENERATED_PDFS += basicStatMechProblemSet1.pdf
 #GENERATED_PDFS += basicStatMechProblemSet2.pdf
 #GENERATED_PDFS += basicStatMechProblemSet3.pdf
+GENERATED_PDFS += basicStatMechProblemSet4.pdf
 
 include ../make.rules
 
@@ -26,4 +27,11 @@ basicStatMechProblemSet3.pdf : basicStatMechProblemSet3Problem1.tex
 basicStatMechProblemSet3.pdf : basicStatMechProblemSet3Problem2.tex
 basicStatMechProblemSet3.pdf : basicStatMechProblemSet3Problem3.tex
 
-basicStatMechProblemSet1.pdf basicStatMechProblemSet2.pdf basicStatMechProblemSet3.pdf : $(PDF_DEPS)
+basicStatMechProblemSet4.pdf : basicStatMechProblemSet4Problem1.tex
+basicStatMechProblemSet4.pdf : basicStatMechProblemSet4Problem2.tex
+basicStatMechProblemSet4.pdf : basicStatMechProblemSet4Problem3.tex
+
+basicStatMechProblemSet1.pdf : $(PDF_DEPS)
+basicStatMechProblemSet2.pdf : $(PDF_DEPS)
+basicStatMechProblemSet3.pdf : $(PDF_DEPS)
+basicStatMechProblemSet4.pdf : $(PDF_DEPS)
