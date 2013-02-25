@@ -10,3 +10,7 @@ struct withInheritance : public links<DATA_TYP>
 {
       int m_priKey;
 };
+
+struct moreInheritance : public withInheritance<int> {
+   int x ;
+} ;

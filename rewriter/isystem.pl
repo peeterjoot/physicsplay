@@ -82,17 +82,18 @@ print $output ;
 
 exit ;
 
+#  void AddPath(StringRef Path, frontend::IncludeDirGroup Group,
+#               bool IsFramework, bool IgnoreSysRoot) {
 sub genAddPath
 {
    my ( $externc, $path ) = @_ ;
 
+# externC param of AddPath now removed.
    return "
    headerSearchOptions->AddPath( $path,
                                  clang::frontend::Angled,
-                                 false, // IsUserSupplied
                                  false, // IsFramework
-                                 false, // IgnoreSysRoot
-                                 true, // IsInternal
-                                 $externc ) ; // ImplicitExternC
+                                 false  // IgnoreSysRoot
+                               ) ;
 " ;
 }

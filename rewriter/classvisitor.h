@@ -228,7 +228,9 @@ int main( int argc, char * argv[] )
 //
 // Should report this, but producing a standalone fragment to reproduce this is tricky.
 //
-   //#include "isystem.h"
+#if defined MEMBERDUMPER
+   #include "isystem.h"
+#endif
 
    for ( ; c != EOF ; )
    {
