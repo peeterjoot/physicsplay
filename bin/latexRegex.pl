@@ -46,3 +46,4 @@
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
 s/k_B/k_{\\mathrm{B}}/g ;
+s/_E/_{\\mathrm{E}}/g ;
