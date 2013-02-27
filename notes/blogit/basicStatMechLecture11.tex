@@ -209,7 +209,7 @@ d\{p_2\}
 \int 
 d\{x_1\}
 d\{p_1\}
-e^{\frac{S}{k_{\mathrm{B}}}(E - H_1), N - N_1}
+e^{\inv{k_{\mathrm{B}}} S(E - H_1, N - N_1)}
 \end{dmath}
 
 \begin{equation}\label{eqn:basicStatMechLecture11:280}
@@ -219,7 +219,7 @@ e^{\frac{S}{k_{\mathrm{B}}}(E - H_1), N - N_1}
 d\{x_1\}
 d\{p_1\}
 \mathLabelBox{
-e^{\frac{S}{k_{\mathrm{B}}}(E, N)}
+e^{\inv{k_{\mathrm{B}}}S(E, N)}
 e^{-\frac{N_1 }{k_{\mathrm{B}}}
 \lr{
 \PD{N}{S}
@@ -242,7 +242,7 @@ H_1 =
 
 \begin{equation}\label{eqn:basicStatMechLecture11:320}
 \mathcal{P} \propto
-e^{-\frac{H( \{x_1\} \{x_2\} ) }{k_{\mathrm{B}} T} }
+e^{-\frac{H( \{x_1\} \{p_1\} ) }{k_{\mathrm{B}} T} }
 \end{equation}
 
 and for the subsystem
@@ -271,7 +271,7 @@ Can we use results for this subvolume, can we use this to infer results for the 
 \rightarrow (N, V, T)
 \end{equation}
 
-We'd have to understand how large the differences between the energy fluctuations of the different subsystems are.  We've already assumed that we have minimal long range interactions since we've treated the subsystem $1$ above in isolation.
+We'd have to understand how large the differences between the energy fluctuations of the different subsystems are.  We've already assumed that we have minimal long range interactions since we've treated the subsystem $1$ above in isolation.  With $\beta = 1/(k_{\mathrm{B}} T)$ the average energy is
 
 \begin{equation}\label{eqn:basicStatMechLecture11:380}
 \expectation{E} 
@@ -286,7 +286,6 @@ e^{- \beta H }
 \int 
 d\{x_1\}
 d\{p_1\}
-H
 e^{- \beta H }
 }
 \end{equation}
@@ -304,17 +303,26 @@ e^{- \beta H }
 \int 
 d\{x_1\}
 d\{p_1\}
-H
 e^{- \beta H }
 }
 \end{equation}
 
-FIXME: something's not right here.
-
 We define the \underlineAndIndex{partition function}
 
 \begin{equation}\label{eqn:basicStatMechLecture11:420}
-Z \equiv \inv{h^{3N} N!}
+Z \equiv 
+\inv{h^{3N} N!}
+\int 
+d\{x_1\}
+d\{p_1\}
+e^{- \beta H }.
+\end{equation}
+
+Observe that the derivative of $Z$ is 
+
+\begin{equation}\label{eqn:basicStatMechLecture11:n}
+\PD{\beta}{Z} = 
+-\inv{h^{3N} N!}
 \int 
 d\{x_1\}
 d\{p_1\}
@@ -322,27 +330,89 @@ H
 e^{- \beta H },
 \end{equation}
 
-and recognize that 
+allowing us to express the average energy compactly in terms of the partition function
 
 \begin{equation}\label{eqn:basicStatMechLecture11:440}
 \expectation{E} = -\inv{Z} \PD{\beta}{Z} = - \PD{\beta}{\ln Z}.
 \end{equation}
 
-Noting that 
+Taking second derivatives we find the variance of the energy
 
-\begin{equation}\label{eqn:basicStatMechLecture11:460}
-\PD{\beta}{\expectation{E}} = 
-\PD{T}{\expectation{E}} \lr{
--\PD{\beta}{T}
+\begin{dmath}\label{eqn:basicStatMechLecture11:480}
+\PDSq{\beta}{\ln Z} 
+=
+\PD{\beta}{}
+\frac{
+\int 
+d\{x_1\}
+d\{p_1\}
+(-H)
+e^{- \beta H }
 }
+{
+\int 
+d\{x_1\}
+d\{p_1\}
+e^{- \beta H }
+}
+=
+\frac{
+\int 
+d\{x_1\}
+d\{p_1\}
+(-H)^2
+e^{- \beta H }
+}
+{
+\int 
+d\{x_1\}
+d\{p_1\}
+e^{- \beta H }
+}
+-
+\frac{
+\lr{
+\int 
+d\{x_1\}
+d\{p_1\}
+(-H)
+e^{- \beta H }
+}^2
+}
+{
+\lr{
+\int 
+d\{x_1\}
+d\{p_1\}
+e^{- \beta H }
+}^2
+}
+= \expectation{E^2} - \expectation{E}^2 = \sigma_{\mathrm{E}}^2
+\end{dmath}
+
+We also have
+
+\begin{dmath}\label{eqn:basicStatMechLecture11:460}
+\sigma_{\mathrm{E}}^2 = 
+-\PD{\beta}{\expectation{E}} = 
+\PD{T}{\expectation{E}} 
+\PD{\beta}{T}
+= 
+-\PD{T}{\expectation{E}} 
+\PD{\beta}{} \inv{k_{\mathrm{B}} \beta}
+= 
+\PD{T}{\expectation{E}} 
+\inv{k_{\mathrm{B}} \beta^2} 
 = k_{\mathrm{B}} T^2 \PD{T}{\expectation{E}}
+\end{dmath}
+
+Recalling that the heat capacity was defined by
+
+\begin{equation}\label{eqn:basicStatMechLecture11:n}
+C_V = \PD{T}{\expectation{E}},
 \end{equation}
 
-we find
-\begin{equation}\label{eqn:basicStatMechLecture11:480}
-\PDSq{\beta}{\ln Z} = \expectation{E^2} - \expectation{E}^2 = \sigma_{\mathrm{E}}^2
-\end{equation}
-
+we have
 \begin{equation}\label{eqn:basicStatMechLecture11:500}
 \sigma_{\mathrm{E}}^2 = k_{\mathrm{B}} T^2 C_V \propto N
 \end{equation}
