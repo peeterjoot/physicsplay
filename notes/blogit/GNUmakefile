@@ -51,9 +51,9 @@ all :: peeters_layout.sty
 all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
 
-#basicStatMechProblemSet5.pdf : basicStatMechProblemSet5Problem1.tex 
-#basicStatMechProblemSet5.pdf : basicStatMechProblemSet5Problem2.tex 
-#basicStatMechProblemSet5.pdf : basicStatMechProblemSet5Problem3.tex 
+basicStatMechProblemSet5.pdf : basicStatMechProblemSet5Problem1.tex 
+basicStatMechProblemSet5.pdf : basicStatMechProblemSet5Problem2.tex 
+basicStatMechProblemSet5.pdf : basicStatMechProblemSet5Problem3.tex 
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
