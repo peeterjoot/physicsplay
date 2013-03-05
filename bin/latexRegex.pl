@@ -1,6 +1,5 @@
 #s/\\Br_av/\\Br_{\\mathrm{av}}/g ;
 #s/\\down\b/\\downarrow/g ;
-#s/\\EE/\\mathcal{E}/g ;
 #s/\\Gamma_{cav}/\\Gamma_{\\mathrm{cav}}/g  ;
 #s/\\Gamma_{sp}/\\Gamma_{\\mathrm{sp}}/g  ;
 #s/\\Gamma_{st}/\\Gamma_{\\mathrm{st}}/g  ;
@@ -39,6 +38,7 @@
 #s/_subsystem/_{\\text{subsystem}}/g ;
 #s/_T/_{\\mathrm{T}}/g ;
 #s/_total/_{\\mathrm{total}}/g ;
+#s/_V/_{\\mathrm{V}}/g ;
 #s/ENV/{(\\mathrm{E}, \\mathrm{N}, \mathrm{V})}/g ;
 #s/N_c/N_{\\mathrm{c}}/g ;
 #s/n1/n_1/g ;
@@ -52,5 +52,5 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-s/_V/_{\\mathrm{V}}/g ;
+s/\\EE/\\mathcal{E}/g ;
 s/k_B/k_{\\mathrm{B}}/g ;
