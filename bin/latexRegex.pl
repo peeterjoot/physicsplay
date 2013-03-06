@@ -41,7 +41,7 @@
 #s/_total/_{\\mathrm{total}}/g ;
 #s/_V/_{\\mathrm{V}}/g ;
 #s/ENV/{(\\mathrm{E}, \\mathrm{N}, \mathrm{V})}/g ;
-#s/k_B/k_{\\mathrm{B}}/g ;
+s/k_B/k_{\\mathrm{B}}/g ;
 #s/N_c/N_{\\mathrm{c}}/g ;
 #s/n1/n_1/g ;
 #s/n2/n_2/g ;
