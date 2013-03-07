@@ -1,0 +1,45 @@
+#!/usr/bin/perl
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+
+my $filename ;
+my $showUsage ;
+
+GetOptions
+( 
+   'file=s'     => \$filename,
+   'help!'      => \$showUsage,
+) ;
+
+if ( $showUsage or !defined $filename )
+{
+   die "usage: findControlM -file filename\n" ;
+}
+
+open my $fh, "<$filename" or die "findControlM: could not open file '$filename' for read\n" ;
+#my $all = '' ;
+my $found = 0 ;
+
+while ( <$fh> )
+{
+   if ( s/// )
+   {
+      $found++ ;
+      last ;
+   }
+
+#   $all .= $_ ;
+}
+close $fh or die ;
+
+# didn't test this.  Instead just ran this one liner on the files found:
+# perl -p -i -e 's///g' 
+if ( $found )
+{
+   print "$filename\n" ;
+#   $fh = open ">$filename" or die "findControlM: could not open file '$filename' for write\n" ;
+#   print $fh $all ;
+#   close $fh or die ;
+}
