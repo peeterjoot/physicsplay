@@ -243,6 +243,7 @@ int main( int argc, char * argv[] )
                        /* option compatibility with actual compilers: */
                        "c"  // -c
                        "W:" // -Wformat ...
+                       "L:" // -L
                        "w:" // -we1573, -wd1901, ...
                        "O:" // -O2 -O0 ...
                        "o:" // -O2 -O0 ...
@@ -271,6 +272,7 @@ int main( int argc, char * argv[] )
             break ;
          }
 #endif
+         case 'L':
          case 'W':
          case 'w':
          case 'c':
