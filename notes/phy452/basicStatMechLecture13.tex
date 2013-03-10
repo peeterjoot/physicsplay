@@ -162,13 +162,19 @@ We can use this to find the average energy
 
 \begin{dmath}\label{eqn:basicStatMechLecture13:300}
 \expectation{H} 
-= -\PD{\beta}{F} 
-= T N \PD{\beta}{} \ln Z_1
-= \frac{T N}{Z_1}
+= -\PD{\beta}{(\beta F)} 
+= -N \PD{\beta}{} \ln Z_1
+= -\frac{N}{Z_1} \PD{\beta}{Z_1}.
+\end{dmath}
+
+The partition function derivative is
+
+\begin{dmath}\label{eqn:basicStatMechLecture13:n}
+\PD{\beta}{Z_1}
+= 
 \PD{\beta}{}
 \lr{ e^{ +\beta 3 J/4} + e^{ -\beta (J/4 - B)} + e^{ -\beta J/4} + e^{ -\beta (J/4 + B)} }
 = 
-\frac{T N}{Z_1}
 \lr{ 
    3 \frac{J}{4}
    e^{ +\beta 3 J/4} 
@@ -187,8 +193,7 @@ We can use this to find the average energy
     e^{ -\beta (J/4 + B)} 
 }
 =
-\frac{T N}{Z_1}
-e^{ - J/4} 
+e^{ - \beta J/4} 
 \lr{ 
    3 \frac{J}{4}
    e^{ \beta J} 
@@ -206,8 +211,8 @@ e^{ - J/4}
     e^{ -\beta B} 
 }
 =
-\frac{T N}{Z_1}
-e^{ - J/4} 
+\frac{N}{Z_1}
+e^{ - \beta J/4} 
 \lr{ 
    \frac{J}{4} \lr{
       3 
@@ -224,24 +229,80 @@ e^{ - J/4}
       e^{ -\beta B} 
    }
 }
-,
-\end{dmath}
-
-or
-
-\begin{equation}\label{eqn:basicStatMechLecture13:440}
-\expectation{H}
 =
-\frac{T N}{Z_1}
-e^{ - J/4} 
+e^{ - \beta J/4} 
 \lr{ 
    \frac{J}{4} \lr{
       3 e^{ \beta J} - 1
       - 2 \cosh (\beta B)
    }
-   + 2 B \sinh(\beta B).
-}
+   + 2 B \sinh(\beta B)
+}.
+\end{dmath}
+
+So that the average energy is
+\begin{equation}\label{eqn:basicStatMechLecture13:n}
+\expectation{H} 
+=
+-\frac{N}{Z_1} 
+e^{ - \beta J/4} 
+\lr{ 
+   \frac{J}{4} \lr{
+      3 e^{ \beta J} - 1
+      - 2 \cosh (\beta B)
+   }
+   + 2 B \sinh(\beta B)
+}.
 \end{equation}
+
+We could use this to calculate the specific heat directly, but let's express the specific heat first in terms of $\beta$ derivatives of $Z_1$.
+
+\begin{dmath}\label{eqn:basicStatMechLecture13:n}
+C_{\mathrm{V}} 
+=
+\PD{T}{\expectation{H}}
+=
+-
+\inv{T^2}
+\PD{\beta}{\expectation{H}}
+=
+-\beta^2
+\PD{\beta}{}
+\lr{
+-\frac{N}{Z_1} \PD{\beta}{Z_1}
+}
+=
+\beta^2 N
+\lr{
+-\inv{Z_1^2} \lr{\PD{\beta}{Z_1}}^2
++ \inv{Z_1} \PDSq{\beta}{Z_1}
+}
+=
+\frac{N \beta^2}{Z_1^2} 
+\lr{
+\PDSq{\beta}{Z_1}
+-
+\lr{\PD{\beta}{Z_1}}^2
+}.
+\end{dmath}
+
+After a bit of work, we find for the second partial of the partition function
+
+\begin{equation}\label{eqn:basicStatMechLecture13:n}
+\PDSq{\beta}{Z_1}
+= 
+e^{-\beta J/4}
+\lr{
+\lr{\frac{3 J}{4}}^2 e^{\beta J} + 2 \cosh(\beta B) 
+\lr{
+\lr{\frac{J}{4}}^2 + B^2
+}
+- J B \sinh( \beta B )
++ \lr{\frac{J}{4} }^2
+}.
+\end{equation}
+
+That gives us the specific heat, but it's a messy expression, and not particularly illuminating.  
 
 Our magnetization $\mu$ is
 
@@ -299,7 +360,7 @@ m \approx 2 e^{-\beta J}
 The specific heat has a similar behavior
 
 \begin{equation}\label{eqn:basicStatMechLecture13:400}
-C_V \sim e^{-\beta J}.
+C_{\mathrm{V}} \sim e^{-\beta J}.
 \end{equation}
 
 Considering a single spin $1/2$ system, we have energies as illustrated in \cref{fig:lecture13:lecture13Fig4}.
