@@ -54,4 +54,4 @@ s/k_B/k_{\\mathrm{B}}/g ;
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-#s/_V/_{\\mathrm{V}}/g ;
+s/_V/_{\\mathrm{V}}/g ;
