@@ -8,6 +8,8 @@
 %\newcommand{\dateintitle}{}
 \newcommand{\keywords}{Statistical mechanics, PHY452H1S}
 
+\newcommand{\nbref}[1]{notes/phy452/mathematica/#1}
+
 \input{../peeter_prologue_print2.tex}
 
 \beginArtNoToc
@@ -16,27 +18,159 @@
 %\chapter{Midterm II reflection}
 \label{chap:midterm2reflection}
 
-\makeoproblem{description}{pr:midterm2reflection:1}{2013 midterm II p1}{
+\makeoproblem{Magnetic field spin level splitting}{pr:midterm2reflection:1}{2013 midterm II p1}{
 %(5 points)
 A particle with spin $S$ has $2 S + 1$ states $-S, -S + 1, \cdots S-1, S$.  When exposed to a magnetic field, state splitting results in energy $E_m = \hbar m B$.  Calculate the partition function, and use this to find the temperature specific magnetization.  A ``sum the geometric series'' hint was given.
+} % makeoproblem
 
-Notes: I calculated:
+\makeanswer{pr:midterm2reflection:1}{ 
 
-\begin{equation}\label{eqn:midterm2reflection:n}
-M = -\expectation{E}/B
+Our partition function is
+
+\begin{dmath}\label{eqn:midterm2reflection:20}
+Z 
+= \sum_{m = -S}^S e^{-\hbar \beta m B}
+= 
+e^{-\hbar \beta S B}
+\sum_{m = -S}^S e^{-\hbar \beta (m + S) B}
+= 
+e^{\hbar \beta S B}
+\sum_{n = 0}^{2 S} e^{-\hbar \beta n B}.
+\end{dmath}
+
+Writing
+
+\begin{equation}\label{eqn:midterm2reflection:40}
+a = e^{-\hbar \beta B},
 \end{equation}
 
-%This may have been the wrong definition of magnetization.  <NAME?: Eng Sci guy (with Israli heritage?) used $\partial F/\partial B$.
+that is
 
-} % makeoproblem
-\makeanswer{pr:midterm2reflection:1}{ TODO. } % makeanswer
+\begin{dmath}\label{eqn:basicStatMechLecture13:60}
+Z = 
+a^{-S}
+\sum_{n = 0}^{2 S} a^n 
+=
+a^{-S} \frac{ a^{2 S + 1} - 1 }{a - 1}
+=
+\frac{ a^{S + 1} - a^{-S} }{a - 1}
+=
+\frac{ a^{S + 1/2} - a^{-S - 1/2} }{a^{1/2} - a^{-1/2}}.
+\end{dmath}
+
+Substitution of $a$ gives us
+\begin{equation}\label{eqn:midterm2reflection:80}
+\myBoxed{
+Z = 
+\frac
+{ \sinh( \hbar \beta B (S + 1/2) ) }
+{ \sinh( \hbar \beta B /2 )  }.
+}
+\end{equation}
+
+To calculate the magnetization $M$, I used
+
+\begin{equation}\label{eqn:midterm2reflection:100}
+M = -\expectation{H}/B.
+\end{equation}
+
+As \citep{kittel1980thermal} defines magnetization for a spin system.  It was pointed out to me after the test that magnetization was defined differently in class as
+
+\begin{equation}\label{eqn:midterm2reflection:140}
+\mu = \PD{F}{B}.
+\end{equation}
+
+These are, up to a sign, identical, at least in this case, since we have $\beta$ and $B$ travelling together in the partition function.  In terms of the average energy
+
+\begin{dmath}\label{eqn:basicStatMechLecture13:160}
+M = -\frac{\expectation{H}}{B}
+= \inv{B} \PD{\beta}{} \ln Z(\beta B)
+= \inv{Z B} \PD{\beta}{}Z(\beta B)
+= \inv{Z} \PD{(\beta B)}{} Z(\beta B)
+\end{dmath}
+
+Compare this to the in-class definition of magnetization
+
+\begin{dmath}\label{eqn:basicStatMechLecture13:180}
+\mu 
+= \PD{B}{F}
+= \PD{B}{} \lr{ - k_{\mathrm{B}} T \ln Z(\beta B) }
+= -\PD{B}{} \frac{\ln Z (\beta B)}{\beta}
+= -\inv{\beta Z} \PD{B}{} Z(\beta B)
+= -\inv{Z} \PD{(\beta B)}{} Z(\beta B).
+\end{dmath}
+
+For this derivative we have
+
+\begin{dmath}\label{eqn:basicStatMechLecture13:200}
+\PD{(\beta B)}{} \ln Z
+=
+\PD{(\beta B)}{} \ln 
+\frac
+{ \sinh( \hbar \beta B (S + 1/2) ) }
+{ \sinh( \hbar \beta B /2 )  }
+=
+\PD{(\beta B)}{} \lr{
+   \ln \sinh( \hbar \beta B (S + 1/2) ) 
+   - \ln \sinh( \hbar \beta B /2 ) 
+}
+=
+\frac{\hbar }{2}
+\lr{
+   (2 S + 1) \coth( \hbar \beta B (S + 1/2) ) 
+   - \coth( \hbar \beta B /2 ) 
+}.
+\end{dmath}
+
+This gives us
+\begin{dmath}\label{eqn:basicStatMechLecture13:220}
+\mu 
+= 
+-\inv{Z} 
+\frac{\hbar }{2}
+\lr{
+   (2 S + 1) \coth( \hbar \beta B (S + 1/2) ) 
+   - \coth( \hbar \beta B /2 ) 
+}
+=
+-
+\frac
+{ \sinh( \hbar \beta B /2 )  }
+{ \sinh( \hbar \beta B (S + 1/2) ) }
+\frac{\hbar }{2}
+\lr{
+   (2 S + 1) \coth( \hbar \beta B (S + 1/2) ) 
+   - \coth( \hbar \beta B /2 ) 
+}
+\end{dmath}
+
+After some simplification (done offline in \nbref{midtermTwoQ1FinalSimplificationMu.nb}) we get
+
+\begin{equation}\label{eqn:midterm2reflection:240}
+\myBoxed{
+\mu
+=
+\hbar 
+\frac{
+(s+1) \sinh(\hbar \beta B s)
+-s \sinh(\hbar \beta B (s+1))
+}{
+\cosh(\hbar \beta B(2 s+1)) - 1
+}.
+}
+\end{equation}
+
+I got something like this on the midterm, but recall doing it somehow much differently.
+%  To see how I'll have to wait and see when I get my graded results back.
+
+} % makeanswer
 
 \makeoproblem{description}{pr:midterm2reflection:2}{2013 midterm II p2}{ 
 %(10 points)
 
 Consider a single particle perturbation of a classical simple harmonic oscillator Hamiltonian 
 
-\begin{equation}\label{eqn:midterm2reflection:n}
+\begin{equation}\label{eqn:midterm2reflection:120}
 H = \inv{2} m \omega^2 \lr{x^2 + y^2} + \inv{2 m} \lr{p_x^2 + p_y^2} + a x^4 + by^6
 \end{equation}
 
@@ -45,7 +179,14 @@ Calculate the canonical partition function, mean energy and specific heat of thi
 There were some instructions about the form to put the integrals in.  I may not have followed those correctly since people were talking about Taylor expansion and I differentiated under the integral sign, leaving the $x$ and $y$ integrals unevaluated.
 } % makeoproblem
 
-\makeanswer{pr:midterm2reflection:2}{ TODO. } % makeanswer
+\makeanswer{pr:midterm2reflection:2}{ 
+
+The canonical partition function is
+
+\begin{dmath}\label{eqn:midterm2reflection:n}
+Z = 
+\int dx dy dp_x dp_y e^{-\beta H}
+\end{dmath}
+} % makeanswer
 
 \EndArticle
-%\EndNoBibArticle
