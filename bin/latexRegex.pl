@@ -7,7 +7,6 @@
 #s/\\Gamma_cav/\\Gamma_{\\mathrm{cav}}/g  ;
 #s/\\Gamma_sp/\\Gamma_{\\mathrm{sp}}/g  ;
 #s/\\Gamma_st/\\Gamma_{\\mathrm{st}}/g ;
-#s/\\PP/\\mathcal{P}/g ;
 #s/\\rcap_av/\\rcap_{\\mathrm{av}}/g ;
 #s/\\Shat/\\hat{S}/g ;
 #s/\\spacegrad_T/\\spacegrad_{\\mathrm{T}}/g ;
@@ -53,5 +52,8 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
+s/\\PP/\\mathcal{P}/g ;
 s/_V/_{\\mathrm{V}}/g ;
+s/_G/_{\\mathrm{G}}/g ;
+s/{QM}/{\\mathrm{QM}}/g ;
 s/k_B/k_{\\mathrm{B}}/g ;
