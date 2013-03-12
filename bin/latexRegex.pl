@@ -52,8 +52,8 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-s/\\PP/\\mathcal{P}/g ;
-s/_V/_{\\mathrm{V}}/g ;
-s/_G/_{\\mathrm{G}}/g ;
-s/{QM}/{\\mathrm{QM}}/g ;
+#s/\\PP/\\mathcal{P}/g ;
+#s/_V/_{\\mathrm{V}}/g ;
+#s/_G/_{\\mathrm{G}}/g ;
+#s/{QM}/{\\mathrm{QM}}/g ;
 s/k_B/k_{\\mathrm{B}}/g ;
