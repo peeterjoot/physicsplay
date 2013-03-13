@@ -38,7 +38,6 @@
 #s/_quantum/_{\\mathrm{quantum}}/g ;
 #s/_subsystem/_{\\text{subsystem}}/g ;
 #s/_T/_{\\mathrm{T}}/g ;
-#s/_total/_{\\mathrm{total}}/g ;
 #s/ENV/{(\\mathrm{E}, \\mathrm{N}, \mathrm{V})}/g ;
 #s/N_c/N_{\\mathrm{c}}/g ;
 #s/n1/n_1/g ;
@@ -56,4 +55,5 @@
 #s/_V/_{\\mathrm{V}}/g ;
 #s/_G/_{\\mathrm{G}}/g ;
 #s/{QM}/{\\mathrm{QM}}/g ;
-s/k_B/k_{\\mathrm{B}}/g ;
+#s/k_B/k_{\\mathrm{B}}/g ;
+s/_total/_{\\mathrm{total}}/g ;
