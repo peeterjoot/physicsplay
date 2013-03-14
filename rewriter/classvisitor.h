@@ -51,8 +51,11 @@ using namespace clang ;
 using namespace std ;
 
 #if defined CLASSVISITOR
-   const char * g_symbolfile = NULL ;
-   string g_typeSuppressed( "<>" ) ;
+   #include <fstream>
+
+   const char *   g_symbolfile = NULL ;
+   string         g_typeSuppressed( "<>" ) ;
+   ofstream       g_out ;
 
    #include "depmap.h"
 #endif
@@ -183,6 +186,7 @@ int main( int argc, char * argv[] )
 #if defined CLASSVISITOR
       ,{"verbosedeps", 0, 0, 'v'}
       ,{"symbolfile", 1, 0, 's'}
+      ,{"mapfile", 1, 0, 'M'}
 #endif
       //,{"opt-report-file", 1, 0, 'o'} // intel compiler
       ,{"help", 0, 0, 'h'}
@@ -268,6 +272,12 @@ int main( int argc, char * argv[] )
          case 's':
          {
             g_symbolfile = optarg ;
+
+            break ;
+         }
+         case 'M':
+         {
+            g_out.open( optarg ) ;
 
             break ;
          }
@@ -432,9 +442,9 @@ int main( int argc, char * argv[] )
 
       #if defined CLASSVISITOR
          g_depMap.dump() ;
-      #endif
 
-      #if defined REWRITER
+         g_out.close() ;
+      #elif defined REWRITER
          // At this point the rewriter's buffer should be full with the rewritten
          // file contents.
          const RewriteBuffer * RewriteBuf =

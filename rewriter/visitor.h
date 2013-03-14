@@ -81,8 +81,29 @@ bool VisitCXXRecordDecl( CXXRecordDecl * r )
       }
    }
 
+#if 0
+   // debug:
+cout << "r: " << r->getName().str() << endl ;
+#endif
+
    return true ;
 }
+
+#if 0
+bool VisitFunctionDecl( FunctionDecl * f )
+{
+   // Only function definitions (with bodies), not declarations.
+   if ( f->hasBody() )
+   {
+      DeclarationName DeclName = f->getNameInfo().getName() ;
+      string FuncName = DeclName.getAsString() ;
+
+      cout << "f: " << FuncName << endl ;
+   }
+
+   return true ;
+}
+#endif
 
 // Member's within class/struct/union:
 bool VisitFieldDecl( FieldDecl * f )
@@ -91,7 +112,19 @@ bool VisitFieldDecl( FieldDecl * f )
    const QualType & theMembersClassType = m_context.getRecordType( r ) ;
    const QualType & thisFieldQualType = returnUnderlyingTypeIfArray( getQualTypeForDecl( f ).getDesugaredType( m_context ) ) ;
 
-   insertIntoMap( theMembersClassType.getAsString( m_pp ), thisFieldQualType ) ;
+   const string & s = theMembersClassType.getAsString( m_pp ) ;
+
+#if 0
+   if ( (s == "stmmShmHeader") || (s == "OSSVLatchInternals") )
+   {
+      cout << "xx\n" ;
+   }
+#endif
+#if 0
+   cout << "s: " << s << endl ;
+#endif
+
+   insertIntoMap( s, thisFieldQualType ) ;
 
    return true ;
 }

@@ -30,7 +30,7 @@ class dependencyMap
     */
    void dumpOne( const string t, stringSet & seen, const string & indent )
    {
-      cout << indent << t << " : " << endl ;
+      g_out << indent << t << " : " << endl ;
       const string moreindent = indent + "   " ;
 
       for ( auto & v : m_typeDeps[ t ] )
@@ -40,7 +40,7 @@ class dependencyMap
          }
          else if ( seen.count( v ) )
          {
-            cout << moreindent << v << endl ;
+            g_out << moreindent << v << endl ;
          }
          else
          {
@@ -106,7 +106,7 @@ public:
    {
       for ( auto & k : m_typeDeps )
       {
-         cout << k.first << " : " ;
+         g_out << k.first << " : " ;
 
          stringSet s ;
 
@@ -118,13 +118,13 @@ public:
          {
             if ( g_typeSuppressed != v )
             {
-               cout << commaOrBlank << v ;
+               g_out << commaOrBlank << v ;
 
                commaOrBlank = ", " ;
             }
          }
 
-         cout << endl ;
+         g_out << endl ;
       }
    }
 
@@ -134,7 +134,7 @@ public:
       {
          for ( auto & v : m_typeDeps[ k.first ] )
          {
-            cout << v << endl ;
+            g_out << v << endl ;
          }
       }
    }
@@ -143,18 +143,18 @@ public:
    {
       for ( auto & k : m_typeDeps )
       {
-         cout << k.first << " : " ;
+         g_out << k.first << " : " ;
 
          const char * commaOrBlank = "" ;
 
          for ( auto & v : m_typeDeps[ k.first ] )
          {
-            cout << commaOrBlank << v ;
+            g_out << commaOrBlank << v ;
 
             commaOrBlank = ", " ;
          }
 
-         cout << endl ;
+         g_out << endl ;
       }
    }
 } g_depMap ;
