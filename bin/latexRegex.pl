@@ -7,6 +7,7 @@
 #s/\\Gamma_cav/\\Gamma_{\\mathrm{cav}}/g  ;
 #s/\\Gamma_sp/\\Gamma_{\\mathrm{sp}}/g  ;
 #s/\\Gamma_st/\\Gamma_{\\mathrm{st}}/g ;
+#s/\\PP/\\mathcal{P}/g ;
 #s/\\rcap_av/\\rcap_{\\mathrm{av}}/g ;
 #s/\\Shat/\\hat{S}/g ;
 #s/\\spacegrad_T/\\spacegrad_{\\mathrm{T}}/g ;
@@ -27,6 +28,7 @@
 #s/_eff/_{\\mathrm{eff}}/g ;
 #s/_final/_{\\mathrm{final}}/g ;
 #s/_full/_{\\text{full}}/g ;
+#s/_G/_{\\mathrm{G}}/g ;
 #s/_ideal/_{\\mathrm{ideal}}/g ;
 #s/_initial/_{\\mathrm{initial}}/g ;
 #s/_L/_{\\mathrm{L}}/g ;
@@ -38,7 +40,11 @@
 #s/_quantum/_{\\mathrm{quantum}}/g ;
 #s/_subsystem/_{\\text{subsystem}}/g ;
 #s/_T/_{\\mathrm{T}}/g ;
+#s/_total/_{\\mathrm{total}}/g ;
+#s/_V/_{\\mathrm{V}}/g ;
+#s/{QM}/{\\mathrm{QM}}/g ;
 #s/ENV/{(\\mathrm{E}, \\mathrm{N}, \mathrm{V})}/g ;
+#s/k_B/k_{\\mathrm{B}}/g ;
 #s/N_c/N_{\\mathrm{c}}/g ;
 #s/n1/n_1/g ;
 #s/n2/n_2/g ;
@@ -51,9 +57,4 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-#s/\\PP/\\mathcal{P}/g ;
-#s/_V/_{\\mathrm{V}}/g ;
-#s/_G/_{\\mathrm{G}}/g ;
-#s/{QM}/{\\mathrm{QM}}/g ;
-#s/k_B/k_{\\mathrm{B}}/g ;
-s/_total/_{\\mathrm{total}}/g ;
+s/_F/_{\\mathrm{F}}/g ;

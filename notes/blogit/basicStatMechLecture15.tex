@@ -9,15 +9,278 @@
 \input{../peeter_prologue_print2.tex}
 
 \beginArtNoToc
-\generatetitle{PHY452H1S Basic Statistical Mechanics.  Lecture 15: XXX.  Taught by Prof.\ Arun Paramekanti}
-%\chapter{XXX}
+\generatetitle{PHY452H1S Basic Statistical Mechanics.  Lecture 15: Grand Canonical/Fermion-Bosons.  Taught by Prof.\ Arun Paramekanti}
+%\chapter{Grand Canonical/Fermion-Bosons}
 \label{chap:basicStatMechLecture15}
 
 \section{Disclaimer}
 
 Peeter's lecture notes from class.  May not be entirely coherent.
 
-\section{XXX}
+\section{Grand Canonical/Fermion-Bosons}
+
+Was mentioned that three dimensions confines us to looking at either Fermions or Bosons, and that two dimensions is a rich subject (interchange of two particles isn't the same as one particle cycling around the other ending up in the same place -- how is that different than a particle cyling around another in a two dimensional space?)
+
+Definitions
+
+\begin{itemize}
+\item Fermion \index{Fermion}.  Antisymmetric under exchange.  $n_k = 0, 1$
+\item Boson \index{Boson}.  Symmetric under exchange.  $n_k = 0, 1, 2, \cdots$
+\end{itemize}
+
+In either case we have, as in 
+
+F1
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:20}
+\epsilon_k = \frac{\hbar^2 k^2}{2m}
+\end{dmath}
+
+Our Hamiltonian is
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:40}
+H = \sum_k \hat{n}_k \epsilon_k,
+\end{dmath}
+
+where we have a number operator
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:60}
+N = \sum \hat{n}_k,
+\end{dmath}
+
+such that 
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:80}
+\antisymmetric{N}{H} = 0.
+\end{dmath}
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:100}
+\ZG 
+= \sum_{N=0}^\infty e^{\beta \mu N}
+\sum_{n_k, \sum n_k = N} e^{-\beta \sum_k n_k \epsilon_k}.
+\end{dmath}
+
+While the second sum is constrained, because we are summing over all $n_k$, this is essentially an unconstrained sum, so we can write
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:120}
+\ZG
+= \sum_{n_k}
+e^{\beta \mu \sum_k n_k}
+e^{-\beta \sum_k n_k \epsilon_k}
+=
+\sum_{n_k} \lr{ \prod_k e^{-\beta(\epsilon_k - \mu) n_k}}
+=
+\prod_{n} \lr{ \sum_{n_k} e^{-\beta(\epsilon_k - \mu) n_k}}.
+\end{dmath}
+
+\paragraph{Fermions}
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:140}
+\sum_{n_k = 0}^1 e^{-\beta(\epsilon_k - \mu) n_k} 
+= 
+1 + e^{-\beta(\epsilon_k - \mu)}
+\end{dmath}
+
+\paragraph{Bosons}
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:160}
+\sum_{n_k = 0}^\infty e^{-\beta(\epsilon_k - \mu) n_k} = 
+\inv{
+1 - e^{-\beta(\epsilon_k - \mu)}
+}
+\end{dmath}
+
+($\epsilon_k - \mu \ge 0$).
+
+Our grand partition functions are then
+
+\begin{subequations}
+\begin{dmath}\label{eqn:basicStatMechLecture15:180}
+\ZG^f = \prod_k 
+\lr{ 1 + e^{-\beta(\epsilon_k - \mu)} }
+\end{dmath}
+\begin{dmath}\label{eqn:basicStatMechLecture15:200}
+\ZG^b = \prod_k 
+\inv{ 1 - e^{-\beta(\epsilon_k - \mu)} }
+\end{dmath}
+\end{subequations}
+
+We can use these to compute the average number of particles
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:220}
+\expectation{n_k^f} 
+= \frac{1 \times 0 + 
+e^{-\beta(\epsilon_k - \mu)} \times 1}
+{ 1 + e^{-\beta(\epsilon_k - \mu)} }
+=
+\inv{ 1 + e^{-\beta(\epsilon_k - \mu)} }
+\end{dmath}
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:240}
+\expectation{n_k^b} 
+= \frac{
+1 \times 0 + 
+e^{-\beta(\epsilon_k - \mu)} \times 1
++
+e^{-2 \beta(\epsilon_k - \mu)} \times 2 + \cdots
+}
+{ 
+1
++
+e^{-\beta(\epsilon_k - \mu)} 
++
+e^{-2 \beta(\epsilon_k - \mu)} 
+}
+%=
+%\inv{ e^{\beta(\epsilon_k - \mu)} - 1}.
+\end{dmath}
+
+This chemical potential over temperature exponential 
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:260}
+e^{\beta \mu} \equiv z,
+\end{dmath}
+
+is called the \underlineAndIndex{fugacity}.  The denominator has the form
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:280}
+D = 
+1 
++ z e^{-\beta \epsilon_k}
++ z^2 e^{-2 \beta \epsilon_k},
+\end{dmath}
+
+so we see that
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:300}
+z \PD{z}{D} = 
+  z e^{-\beta \epsilon_k}
++ 2 z^2 e^{-2 \beta \epsilon_k}
++ 3 z^3 e^{-3 \beta \epsilon_k}
++ \cdots
+\end{dmath}
+
+Thus the numerator is
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:320}
+N = z \PD{z}{D},
+\end{dmath}
+
+and
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:340}
+\expectation{n_k^b} 
+= \frac{z \PD{z}{D_k} }{D_k}
+= z \PD{z}{} \ln D_k
+= \cdots
+=
+\inv{ e^{\beta(\epsilon_k - \mu)} - 1}
+\end{dmath}
+
+\paragraph{What is the density $\rho$?}
+
+For Fermions
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:360}
+\rho = \frac{N}{V} =
+\inv{V} \sum_{\Bk}
+\inv{ e^{\beta(\epsilon_\Bk - \mu)} + 1}
+\end{dmath}
+
+Using a ``particle in a box'' quantizatation where $k_\alpha = 2 \pi m_\alpha/L$, in a $d$-dimensional space, we can approximate this as
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:380}
+\myBoxed{
+\rho = 
+\int \frac{d^d k}{(2 \pi)^d}
+\inv{ e^{\beta(\epsilon_k - \mu)} - 1}.
+}
+\end{dmath}
+
+This integral is actually difficult to evaluate.  For $T \rightarrow 0$ ($\beta \rightarrow \infty$, where
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:400}
+n_k = \Theta(\mu - \epsilon_k).
+\end{dmath}
+
+This is illustrated in, where we also show the smearing that occurs as temperature increases
+
+F2
+
+With 
+
+\begin{equation}\label{eqn:basicStatMechLecture15:420}
+E_{\mathrm{F}} = \mu(T = 0),
+\end{equation}
+
+we want to ask what is the radius of the ball for which
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:560}
+\epsilon_k = E_{\mathrm{F}}
+\end{dmath}
+
+or 
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:440}
+E_{\mathrm{F}} = \frac{\hbar^2 k_{\mathrm{F}}^2}{2m},
+\end{dmath}
+
+so that 
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:460}
+k_{\mathrm{F}} = \sqrt{\frac{2 m E_{\mathrm{F}}}{\hbar^2}},
+\end{dmath}
+
+so that our density where $\epsilon_k = \mu$ is
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:480}
+\rho
+=
+\int_{k \le k_{\mathrm{F}}} \frac{d^3 k}{(2 \pi)^3} \times 1 
+= 
+\inv{(2\pi)^3} 4 \pi \int^{k_{\mathrm{F}}} k^2 dk
+= \frac{4 \pi}{3} k_{\mathrm{F}}^3 \inv{(2 \pi)^3},
+\end{dmath}
+
+so that 
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:500}
+k_{\mathrm{F}} = (6 \pi^2 \rho)^{1/3},
+\end{dmath}
+
+Our chemical potential at zero temperature is then
+
+\begin{equation}\label{eqn:basicStatMechLecture15:520}
+\mu(T = 0) = \frac{\hbar^2}{2m} (6 \pi^2 \rho)^{2/3}.
+\end{equation}
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:540}
+\rho^{-1/3} = \mbox{interparticle spacing}.
+\end{dmath}
+
+We can convince ourself that the chemical potential must have the form
+
+F3
+
+Given large negative chemical potential at high temperatures our number distribution will have the form
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:580}
+\expectation{n_k} = e^{-\beta (\epsilon_k - \mu)} \propto e^{-\beta \epsilon_k}
+\end{dmath}
+
+We see that the classical Boltzman distribution is recovered for high temperatures.
+
+We can also calculate the chemical potential at high temperatures.  We'll find that this has the form
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:n}
+e^{\beta \mu} = \frac{4}{3} \rho \lambda_T^3,
+\end{dmath}
+
+where this quantity $\lambda_T$ is called the \underlineAndIndex{Thermal de Broglie wavelength}.
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:600}
+\lambda_T = \sqrt{\frac{ 2 \pi \hbar^2}{m \kB T}}.
+\end{dmath}
 
 %\EndArticle
 \EndNoBibArticle
