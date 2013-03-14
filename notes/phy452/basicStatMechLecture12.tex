@@ -18,13 +18,13 @@ We found
 
 \begin{subequations}
 \begin{equation}\label{eqn:basicStatMechLecture12:20}
-\frac{\sigma_{\mathrm{E}}}{E} \propto \frac{T \sqrt{C_V}}{E} k_{\mathrm{B}}^2
+\frac{\sigma_{\mathrm{E}}}{E} \propto \frac{T \sqrt{\CV}}{E} \kB^2
 \end{equation}
 \begin{equation}\label{eqn:basicStatMechLecture12:40}
 Z = \sum_{\{c\}} e^{-\beta E(c)}
 \end{equation}
 \begin{equation}\label{eqn:basicStatMechLecture12:60}
-C_V \sim N
+\CV \sim N
 \end{equation}
 \begin{equation}\label{eqn:basicStatMechLecture12:80}
 E \sim N
@@ -47,16 +47,16 @@ If we suppose that the energy is typically close to the average energy as in \cr
 \begin{dmath}\label{eqn:basicStatMechLecture12:120a}
 Z 
 \approx e^{-\beta \expectation{E}} \sum_{\{c\}} \delta_{E, \bar{E}}
-= e^{-\beta \expectation{E}} e^S/k_{\mathrm{B}},
+= e^{-\beta \expectation{E}} e^S/\kB,
 \end{dmath}
 
-where we've used $S = k_{\mathrm{B}} \ln \Omega$ to express the number of states where the energy matches the average energy $\Omega = \sum \delta_{E, \bar{E}}$.
+where we've used $S = \kB \ln \Omega$ to express the number of states where the energy matches the average energy $\Omega = \sum \delta_{E, \bar{E}}$.
 
 This gives us
 
 \begin{dmath}\label{eqn:basicStatMechLecture12:120}
 Z 
-= e^{-\beta (\expectation{E} - k_{\mathrm{B}} T S/k_{\mathrm{B}}) } 
+= e^{-\beta (\expectation{E} - \kB T S/\kB) } 
 = e^{-\beta (\expectation{E} - T S) } 
 \end{dmath}
 
@@ -80,7 +80,7 @@ F = \expectation{E} - T S.
 Equivalently, the log of the partition function provides us with the partition function
 
 \begin{equation}\label{eqn:basicStatMechLecture12:180}
-F = - k_{\mathrm{B}} T \ln Z.
+F = - \kB T \ln Z.
 \end{equation}
 
 Recalling our expression for the average energy, we can now write that in terms of the free energy
@@ -136,14 +136,12 @@ We can now write the total number of states as
 }{bath}
 \delta(E - \mathcal{E}_m -\lambda_n)
 =
-\sum_m e^{\inv{k_{\mathrm{B}}} S(E - \mathcal{E}_m)}
+\sum_m e^{\inv{\kB} S(E - \mathcal{E}_m)}
 \approx
 \sum_m 
-e^{\inv{k_{\mathrm{B}}} S(E)}
-e^{\beta \mathcal{E}_m}
+e^{\inv{\kB} S(E)}
+e^{-\beta \mathcal{E}_m}
 \end{dmath}
-
-FIXME: is that $\beta$ sign just above right?  Review this.
 
 \begin{dmath}\label{eqn:basicStatMechLecture12:300}
 Z 
@@ -188,10 +186,10 @@ Our minimum and maximum energies are
 
 \begin{subequations}
 \begin{equation}\label{eqn:basicStatMechLecture12:380}
-E_{\mathrm{min}} = -\frac{B}{2} N
+E_{\mathrm{min}} = -\frac{B}{2} \sum_{i = 1}^N (+1) = -\frac{B}{2} N
 \end{equation}
 \begin{equation}\label{eqn:basicStatMechLecture12:400}
-E_{\mathrm{max}} = -\frac{B}{2} N
+E_{\mathrm{max}} = \frac{B}{2} \sum_{i = 1}^N (-1) = \frac{B}{2} N.
 \end{equation}
 \end{subequations}
 
@@ -207,6 +205,8 @@ and the energy differences are
 \delta E \sim \frac{B N}{2^N} \sim \# e^{-\# N}.
 \end{equation}
 
+FIXME: where did this exponential come from?
+
 This is a measure of the average energy difference between two adjacent energy levels.  In a real system we cannot assume that we have non-interacting spins.  Any weak interaction will split our degenerate energy levels as in \cref{fig:lecture12:lecture12Fig4}.
 
 \imageFigure{figures/lecture12Fig4}{Interaction splitting}{fig:lecture12:lecture12Fig4}{0.2}
@@ -219,15 +219,22 @@ Z
 \lr{ -\frac{B}{2} \sum_i \sigma_i}
 }
 = 
+\mathLabelBox
+[
+   labelstyle={xshift=2cm},
+   linestyle={out=270,in=90, latex-}
+]
+{
 \lr{
-\sum_{\{\sigma_1\}} 
-\exp \lr{ -\frac{\beta B}{2} \sigma_i}
+\sum_{\sigma_1 \in \{-1,1\}} 
+\exp \lr{ -\frac{\beta B}{2} \sigma_1}
 }
 \lr{
-\sum_{\{\sigma_2\}} 
-\exp \lr{ -\frac{\beta B}{2} \sigma_i}
+\sum_{\sigma_2 \in \{-1,1\}} 
+\exp \lr{ -\frac{\beta B}{2} \sigma_2}
 }
 \cdots
+}{$N$ times.}
 =
 \lr{
 \exp \lr{ -\frac{\beta B}{2} (1)}
@@ -235,16 +242,16 @@ Z
 \exp \lr{ -\frac{\beta B}{2} (-1)}
 }^N
 = 
-\lr{ 2 \cosh\lr{ \frac{B}{2 k_B T}} }^N
+\lr{ 2 \cosh\lr{ \frac{B}{2 \kB T}} }^N
 \end{dmath}
 
 Our free energy is
 
 \begin{equation}\label{eqn:basicStatMechLecture12:480}
-F = - k_B T N \ln \lr{
+F = - \kB T N \ln \lr{
 2 \cosh
 \lr{
-\frac{B}{2 k_B T}
+\frac{B}{2 \kB T}
 }
 }
 \end{equation}
@@ -255,17 +262,23 @@ For the expected value of the spin we find
 \expectation{S_z} = \sum_i \expectation{S_{z_i}}
 \end{equation}
 
+where the expectation for a single particle's operator is
+
 \begin{dmath}\label{eqn:basicStatMechLecture12:520}
 \expectation{S_{z_i}}
 =
-\inv{2} \frac
+\frac
 {
-\sum_\sigma \sigma e^{\beta B \sigma/2}
+\sum_\sigma \frac{\sigma}{2} e^{\beta B \sigma/2}
 }
 {
 \sum_\sigma e^{\beta B \sigma/2}
 }
-= \inv{2} \tanh \lr{\frac{B}{2 k_B T}}
+=
+\inv{2}
+\frac{ 2 \sinh\lr{\beta B \sigma/2} }
+{ 2 \cosh\lr{\beta B \sigma/2} }
+= \inv{2} \tanh \lr{\frac{B}{2 \kB T}}
 \end{dmath}
 }
 

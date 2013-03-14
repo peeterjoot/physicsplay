@@ -1,5 +1,6 @@
 #s/\\Br_av/\\Br_{\\mathrm{av}}/g ;
 #s/\\down\b/\\downarrow/g ;
+#s/\\EE/\\mathcal{E}/g ;
 #s/\\Gamma_{cav}/\\Gamma_{\\mathrm{cav}}/g  ;
 #s/\\Gamma_{sp}/\\Gamma_{\\mathrm{sp}}/g  ;
 #s/\\Gamma_{st}/\\Gamma_{\\mathrm{st}}/g  ;
@@ -27,6 +28,7 @@
 #s/_eff/_{\\mathrm{eff}}/g ;
 #s/_final/_{\\mathrm{final}}/g ;
 #s/_full/_{\\text{full}}/g ;
+#s/_G/_{\\mathrm{G}}/g ;
 #s/_ideal/_{\\mathrm{ideal}}/g ;
 #s/_initial/_{\\mathrm{initial}}/g ;
 #s/_L/_{\\mathrm{L}}/g ;
@@ -40,8 +42,9 @@
 #s/_T/_{\\mathrm{T}}/g ;
 #s/_total/_{\\mathrm{total}}/g ;
 #s/_V/_{\\mathrm{V}}/g ;
+#s/{QM}/{\\mathrm{QM}}/g ;
 #s/ENV/{(\\mathrm{E}, \\mathrm{N}, \mathrm{V})}/g ;
-s/k_B/k_{\\mathrm{B}}/g ;
+#s/k_B/k_{\\mathrm{B}}/g ;
 #s/N_c/N_{\\mathrm{c}}/g ;
 #s/n1/n_1/g ;
 #s/n2/n_2/g ;
@@ -54,4 +57,4 @@ s/k_B/k_{\\mathrm{B}}/g ;
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-s/\\EE/\\mathcal{E}/g ;
+s/_F/_{\\mathrm{F}}/g ;
