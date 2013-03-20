@@ -51,16 +51,16 @@ where we have a number operator
 N = \sum \hat{n}_k,
 \end{dmath}
 
-such that 
+such that
 
 \begin{dmath}\label{eqn:basicStatMechLecture15:80}
 \antisymmetric{N}{H} = 0.
 \end{dmath}
 
 \begin{dmath}\label{eqn:basicStatMechLecture15:100}
-\ZG 
+\ZG
 = \sum_{N=0}^\infty e^{\beta \mu N}
-\sum_{n_k, \sum n_k = N} e^{-\beta \sum_k n_k \epsilon_k}.
+\sum_{n_k, \sum n_m = N} e^{-\beta \sum_m n_m \epsilon_m}.
 \end{dmath}
 
 While the second sum is constrained, because we are summing over all $n_k$, this is essentially an unconstrained sum, so we can write
@@ -68,77 +68,97 @@ While the second sum is constrained, because we are summing over all $n_k$, this
 \begin{dmath}\label{eqn:basicStatMechLecture15:120}
 \ZG
 = \sum_{n_k}
-e^{\beta \mu \sum_k n_k}
-e^{-\beta \sum_k n_k \epsilon_k}
+e^{\beta \mu \sum_m n_m}
+e^{-\beta \sum_n n_n \epsilon_n}
+= \sum_{n_k}
+e^{-\beta \sum_m (\epsilon_m - \mu) n_m}
 =
 \sum_{n_k} \lr{ \prod_k e^{-\beta(\epsilon_k - \mu) n_k}}
 =
-\prod_{n} \lr{ \sum_{n_k} e^{-\beta(\epsilon_k - \mu) n_k}}.
+\prod_{k} \lr{ \sum_{n_k} e^{-\beta(\epsilon_k - \mu) n_k}}.
 \end{dmath}
 
 \paragraph{Fermions}
 
 \begin{dmath}\label{eqn:basicStatMechLecture15:140}
-\sum_{n_k = 0}^1 e^{-\beta(\epsilon_k - \mu) n_k} 
-= 
+\sum_{n_k = 0}^1 e^{-\beta(\epsilon_k - \mu) n_k}
+=
 1 + e^{-\beta(\epsilon_k - \mu)}
 \end{dmath}
 
 \paragraph{Bosons}
 
 \begin{dmath}\label{eqn:basicStatMechLecture15:160}
-\sum_{n_k = 0}^\infty e^{-\beta(\epsilon_k - \mu) n_k} = 
+\sum_{n_k = 0}^\infty e^{-\beta(\epsilon_k - \mu) n_k} =
 \inv{
 1 - e^{-\beta(\epsilon_k - \mu)}
 }
 \end{dmath}
 
-($\epsilon_k - \mu \ge 0$).
+Observe that we require $\epsilon_k - \mu \ge 0$.
 
 Our grand partition functions are then
 
 \begin{subequations}
 \begin{dmath}\label{eqn:basicStatMechLecture15:180}
-\ZG^f = \prod_k 
+\ZG^f = \prod_k
 \lr{ 1 + e^{-\beta(\epsilon_k - \mu)} }
 \end{dmath}
 \begin{dmath}\label{eqn:basicStatMechLecture15:200}
-\ZG^b = \prod_k 
+\ZG^b = \prod_k
 \inv{ 1 - e^{-\beta(\epsilon_k - \mu)} }
 \end{dmath}
 \end{subequations}
 
+FIXME: Something with the index fudging above doesn't seem right to me.
+
 We can use these to compute the average number of particles
 
 \begin{dmath}\label{eqn:basicStatMechLecture15:220}
-\expectation{n_k^f} 
-= \frac{1 \times 0 + 
+\expectation{n_k^f}
+= \frac{1 \times 0 +
 e^{-\beta(\epsilon_k - \mu)} \times 1}
 { 1 + e^{-\beta(\epsilon_k - \mu)} }
 =
-\inv{ 1 + e^{-\beta(\epsilon_k - \mu)} }
+\frac
+{ e^{-\beta(\epsilon_k - \mu)} }
+{ 1 + e^{-\beta(\epsilon_k - \mu)} }
 \end{dmath}
 
+or
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:220b}
+\myBoxed{
+\expectation{n_k^f}
+=
+\inv
+{ e^{\beta(\epsilon_k - \mu)} + 1}
+}
+\end{dmath}
+
+For Bosons we have
 \begin{dmath}\label{eqn:basicStatMechLecture15:240}
-\expectation{n_k^b} 
+\expectation{n_k^b}
 = \frac{
-1 \times 0 + 
+0 \times 1
++
 e^{-\beta(\epsilon_k - \mu)} \times 1
 +
 e^{-2 \beta(\epsilon_k - \mu)} \times 2 + \cdots
 }
-{ 
+{
 1
 +
-e^{-\beta(\epsilon_k - \mu)} 
+e^{-\beta(\epsilon_k - \mu)}
 +
-e^{-2 \beta(\epsilon_k - \mu)} 
+e^{-2 \beta(\epsilon_k - \mu)}
++ \cdots
 }
 %=
 %\inv{ e^{\beta(\epsilon_k - \mu)} - 1}.
 \end{dmath}
 
-This chemical potential over temperature exponential 
+This chemical potential over temperature exponential
 
 \begin{dmath}\label{eqn:basicStatMechLecture15:260}
 e^{\beta \mu} \equiv z,
@@ -147,37 +167,55 @@ e^{\beta \mu} \equiv z,
 is called the \underlineAndIndex{fugacity}.  The denominator has the form
 
 \begin{dmath}\label{eqn:basicStatMechLecture15:280}
-D = 
-1 
+D =
+1
 + z e^{-\beta \epsilon_k}
-+ z^2 e^{-2 \beta \epsilon_k},
++ z^2 e^{-2 \beta \epsilon_k} + \cdots
 \end{dmath}
 
 so we see that
 
 \begin{dmath}\label{eqn:basicStatMechLecture15:300}
-z \PD{z}{D} = 
+z \PD{z}{D} 
+=
   z e^{-\beta \epsilon_k}
 + 2 z^2 e^{-2 \beta \epsilon_k}
 + 3 z^3 e^{-3 \beta \epsilon_k}
 + \cdots
+=
+  e^{-\beta (\epsilon_k - \mu)}
++ 2 e^{-2 \beta (\epsilon_k - \mu)}
++ 3 e^{-3 \beta (\epsilon_k - \mu)}
++ \cdots,
 \end{dmath}
 
-Thus the numerator is
+which is exactly the numerator, or
 
 \begin{dmath}\label{eqn:basicStatMechLecture15:320}
-N = z \PD{z}{D},
+N = z \PD{z}{D}.
 \end{dmath}
 
 and
 
 \begin{dmath}\label{eqn:basicStatMechLecture15:340}
-\expectation{n_k^b} 
+\expectation{n_k^b}
 = \frac{z \PD{z}{D_k} }{D_k}
 = z \PD{z}{} \ln D_k
-= \cdots
+= -z \PD{z}{} \ln \lr{ 1 - z e^{-\beta \epsilon_k} } 
+= z 
+\frac{ e^{-\beta \epsilon_k} } 
+{ 1 - z e^{-\beta \epsilon_k} } 
 =
-\inv{ e^{\beta(\epsilon_k - \mu)} - 1}
+\inv{ z^{-1} e^{\beta \epsilon_k} - 1}
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:basicStatMechLecture15:340a}
+\myBoxed{
+\expectation{n_k^b}
+=
+\inv{ e^{\beta(\epsilon_k - \mu)} - 1}.
+}
 \end{dmath}
 
 \paragraph{What is the density $\rho$?}
@@ -190,27 +228,62 @@ For Fermions
 \inv{ e^{\beta(\epsilon_\Bk - \mu)} + 1}
 \end{dmath}
 
-Using a ``particle in a box'' quantization where $k_\alpha = 2 \pi m_\alpha/L$, in a $d$-dimensional space, we can approximate this as
+The simplest such system is the ``free particle in a box'', with Hamiltonian
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:620}
+-\frac{\hbar^2}{2 m} \spacegrad^2 \Psi = \epsilon \Psi.
+\end{dmath}
+
+For a box with one corner fixed at the origin, and all sides of length $L$, we have solutions
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:640}
+\Psi = 
+\sin\lr{ \frac{\pi n_x x}{L} }
+\sin\lr{ \frac{\pi n_y y}{L} }
+\sin\lr{ \frac{\pi n_z z}{L} },
+\end{dmath}
+
+and an energy quantization given by
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:660}
+\frac{\hbar^2 \pi^2}{2 m L^2} \lr{n_x^2 + n_y^2 + n_z^2} = \epsilon.
+\end{dmath}
+
+With $\epsilon_{\Bk} = \hbar^2 \Bk^2/2m$, we have $k_\alpha = \pi m_\alpha/L$, and can make an integral approximation of the sum
+
+\begin{dmath}\label{eqn:basicStatMechLecture15:680}
+\inv{V} \sum_\Bk f_{\Bk}
+\approx
+\inv{V} \inv{2^3} \int dn_x dn_y dn_y f_\Bn
+=
+\inv{V} \inv{2^3} \int dk_x dk_y dk_y \lr{\frac{L}{\pi}}^3 f_\Bk
+=
+\frac{L^3}{V} \int \frac{d^3 \Bk}{(2 \pi)^3} f_\Bk.
+\end{dmath}
+
+Since $V = L^3$, the leading term cancels out.  Generalizing to other (possibly lower) dimensional spaces, our Fermionic density in a $d$-dimensional space is approximated by
 
 \begin{dmath}\label{eqn:basicStatMechLecture15:380}
 \myBoxed{
-\rho = 
+\rho =
 \int \frac{d^d k}{(2 \pi)^d}
-\inv{ e^{\beta(\epsilon_k - \mu)} - 1}.
+\inv{ e^{\beta(\epsilon_{\Bk} - \mu)} + 1}.
 }
 \end{dmath}
 
-This integral is actually difficult to evaluate.  For $T \rightarrow 0$ ($\beta \rightarrow \infty$, where
+This integral is actually difficult to evaluate.  However, for $T \rightarrow 0$ ($\beta \rightarrow \infty$), we can evaluate the limit.  
+If $\epsilon_\Bk -\mu(0) < 0$, the exponential term goes as $e^{-1/0}$ which tends to zero, so we have $\expectation{n_k^f} = 1$ for $\epsilon_\Bk < \mu(0)$.  When $\epsilon_\Bk - \mu(0) > 0$, the exponential term goes as $e^{1/0}$ which tends to infinity, so $\expectation{n_k^f} \rightarrow 1$ for $\epsilon_\Bk > \mu(0)$.  This can be summarized as
 
 \begin{dmath}\label{eqn:basicStatMechLecture15:400}
-n_k = \Theta(\mu - \epsilon_k).
+\evalbar{\expectation{n_k^f}}{T = 0}
+= \Theta(\mu(0) - \epsilon_k).
 \end{dmath}
 
-This is illustrated in, where we also show the smearing that occurs as temperature increases \cref{fig:lecture15:lecture15Fig2}.
+This is illustrated in \cref{fig:lecture15:lecture15Fig2}, where the smearing that occurs with increasing temperature is also indicated.  \citep{kittel1980thermal} \S 7 calls $E_F$ as defined above the \underlineAndIndex{Fermi energy}, the energy at which all the lowest order orbitals are exactly filled.  Without any limiting assumption, a discussion of why this energy is being equated with the $T = 0$ chemical potential energy can be found in \citep{pathriastatistical} \S 8.1 (where the exact integral is evaluated, or at least expressed).  When that integral approximation of the sum is performed exactly, we see that at $T = 0$, the illustrated cutoff occurs at this $E_F = \mu(0)$ point.
 
 \imageFigure{figures/lecture15Fig2}{Occupation numbers for different energies}{fig:lecture15:lecture15Fig2}{0.3}
 
-With 
+With
 
 \begin{equation}\label{eqn:basicStatMechLecture15:420}
 E_{\mathrm{F}} = \mu(T = 0),
@@ -222,13 +295,14 @@ we want to ask what is the radius of the ball for which
 \epsilon_k = E_{\mathrm{F}}
 \end{dmath}
 
-or 
+or
 
 \begin{dmath}\label{eqn:basicStatMechLecture15:440}
-E_{\mathrm{F}} = \frac{\hbar^2 k_{\mathrm{F}}^2}{2m},
+E_{\mathrm{F}} = \frac{\hbar^2 k_{\mathrm{F}}^2}{2m}.
 \end{dmath}
 
-so that 
+
+With this definition
 
 \begin{dmath}\label{eqn:basicStatMechLecture15:460}
 k_{\mathrm{F}} = \sqrt{\frac{2 m E_{\mathrm{F}}}{\hbar^2}},
@@ -239,13 +313,13 @@ so that our density where $\epsilon_k = \mu$ is
 \begin{dmath}\label{eqn:basicStatMechLecture15:480}
 \rho
 =
-\int_{k \le k_{\mathrm{F}}} \frac{d^3 k}{(2 \pi)^3} \times 1 
-= 
+\int_{k \le k_{\mathrm{F}}} \frac{d^3 k}{(2 \pi)^3} \times 1
+=
 \inv{(2\pi)^3} 4 \pi \int^{k_{\mathrm{F}}} k^2 dk
 = \frac{4 \pi}{3} k_{\mathrm{F}}^3 \inv{(2 \pi)^3},
 \end{dmath}
 
-so that 
+so that
 
 \begin{dmath}\label{eqn:basicStatMechLecture15:500}
 k_{\mathrm{F}} = (6 \pi^2 \rho)^{1/3},
@@ -275,7 +349,7 @@ We see that the classical Boltzmann distribution is recovered for high temperatu
 
 We can also calculate the chemical potential at high temperatures.  We'll find that this has the form
 
-\begin{dmath}\label{eqn:basicStatMechLecture15:n}
+\begin{dmath}\label{eqn:basicStatMechLecture15:700}
 e^{\beta \mu} = \frac{4}{3} \rho \lambda_T^3,
 \end{dmath}
 

@@ -58,3 +58,4 @@
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
 s/_F/_{\\mathrm{F}}/g ;
+s/\\ee/\\epsilon/g ;
