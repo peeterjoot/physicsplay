@@ -26,7 +26,7 @@
 #s/_div/_{\\mathrm{div}}/g ;
 #s/_E/_{\\mathrm{E}}/g ;
 #s/_eff/_{\\mathrm{eff}}/g ;
-#s/_F/_{\\mathrm{F}}/g ;
+s/_F/_{\\mathrm{F}}/g ;
 #s/_final/_{\\mathrm{final}}/g ;
 #s/_full/_{\\text{full}}/g ;
 #s/_G/_{\\mathrm{G}}/g ;
