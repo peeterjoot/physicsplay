@@ -40,7 +40,7 @@ s/_F/_{\\mathrm{F}}/g ;
 #s/_ph/_{\\mathrm{ph}}/g ;
 #s/_quantum/_{\\mathrm{quantum}}/g ;
 #s/_subsystem/_{\\text{subsystem}}/g ;
-#s/_T/_{\\mathrm{T}}/g ;
+s/_T/_{\\mathrm{T}}/g ;
 #s/_total/_{\\mathrm{total}}/g ;
 #s/_V/_{\\mathrm{V}}/g ;
 #s/{QM}/{\\mathrm{QM}}/g ;
