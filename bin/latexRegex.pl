@@ -59,3 +59,4 @@ s/_T/_{\\mathrm{T}}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
 s/\\ee/\\epsilon/g ;
+s/\\pp(.)/{($1)}/g ;
