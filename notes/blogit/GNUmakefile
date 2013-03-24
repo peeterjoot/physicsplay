@@ -1,9 +1,13 @@
 THISDIR := blogit
 
 RAWTEXFILES := $(shell ls *.tex)
-#INCOMPLETE += basicStatMechProblemSet6Problem1.tex
-#INCOMPLETE += basicStatMechProblemSet6Problem2.tex
-#INCOMPLETE += basicStatMechProblemSet6Problem3.tex
+INCOMPLETE += basicStatMechProblemSet6Problem1.tex
+INCOMPLETE += basicStatMechProblemSet6Problem2.tex
+INCOMPLETE += basicStatMechProblemSet6Problem3.tex
+INCOMPLETE += basicStatMechProblemSet6Problem4.tex
+INCOMPLETE += basicStatMechProblemSet6Problem5.tex
+INCOMPLETE += basicStatMechProblemSet6Problem6.tex
+INCOMPLETE += basicStatMechProblemSet6Problem7.tex
 
 # buildable:
 #INCOMPLETE += dotBlade.tex
@@ -51,9 +55,13 @@ all :: peeters_layout.sty
 all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
 
-#basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem1.tex 
-#basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem2.tex 
-#basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem3.tex 
+basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem1.tex 
+basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem2.tex 
+basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem3.tex 
+basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem4.tex 
+basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem5.tex 
+basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem6.tex 
+basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem7.tex 
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
