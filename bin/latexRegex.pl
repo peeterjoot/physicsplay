@@ -58,5 +58,5 @@
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
 s/\\ee/\\epsilon/g ;
 #s/\\pp(.)/{($1)}/g ;
-#s/_F/_{\\mathrm{F}}/g ;
+s/_F/_{\\mathrm{F}}/g ;
 #s/_T/_{\\mathrm{T}}/g ;
