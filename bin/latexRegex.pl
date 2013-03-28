@@ -7,6 +7,7 @@
 #s/\\Gamma_cav/\\Gamma_{\\mathrm{cav}}/g  ;
 #s/\\Gamma_sp/\\Gamma_{\\mathrm{sp}}/g  ;
 #s/\\Gamma_st/\\Gamma_{\\mathrm{st}}/g ;
+#s/\\pp(.)/{($1)}/g ;
 #s/\\PP/\\mathcal{P}/g ;
 #s/\\rcap_av/\\rcap_{\\mathrm{av}}/g ;
 #s/\\Shat/\\hat{S}/g ;
@@ -39,6 +40,7 @@
 #s/_ph/_{\\mathrm{ph}}/g ;
 #s/_quantum/_{\\mathrm{quantum}}/g ;
 #s/_subsystem/_{\\text{subsystem}}/g ;
+#s/_T/_{\\mathrm{T}}/g ;
 #s/_total/_{\\mathrm{total}}/g ;
 #s/_V/_{\\mathrm{V}}/g ;
 #s/{QM}/{\\mathrm{QM}}/g ;
@@ -57,6 +59,8 @@
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
 s/\\ee/\\epsilon/g ;
-#s/\\pp(.)/{($1)}/g ;
 s/_F/_{\\mathrm{F}}/g ;
-#s/_T/_{\\mathrm{T}}/g ;
+s/_B/_{\\mathrm{B}}/g ;
+#s/g32/g_{3/2}/g ;
+##s/zeta32/\\zeta(3/2)/g ; # doesn't work
+s/2pi([1-9])/(2 \\pi)^$1/g ;
