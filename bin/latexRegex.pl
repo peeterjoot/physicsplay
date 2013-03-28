@@ -64,3 +64,4 @@ s/_B/_{\\mathrm{B}}/g ;
 #s/g32/g_{3/2}/g ;
 ##s/zeta32/\\zeta(3/2)/g ; # doesn't work
 s/2pi([1-9])/(2 \\pi)^$1/g ;
+s/_c/_{\\mathrm{c}}/g ;
