@@ -5,7 +5,7 @@
 \input{../blogpost.tex}
 \renewcommand{\basename}{basicStatMechLecture19}
 \renewcommand{\dirname}{notes/phy452/}
-\newcommand{\keywords}{Statistical mechanics, PHY452H1S}
+\newcommand{\keywords}{Statistical mechanics, PHY452H1S, Boson, Bose condensate, fugacity, occupation number, density, zeta function}
 \input{../peeter_prologue_print2.tex}
 
 \beginArtNoToc
@@ -75,7 +75,7 @@ N = \sum_\Bk n_{\mathrm{B}}(\Bk) = \text{fixed}
 Observe that at large energies we have
 
 \begin{dmath}\label{eqn:basicStatMechLecture19:240}
-n_{\mathrm{B}}(\text{large} \Bk) \sim z e^{-\beta \epsilon_\Bk}
+n_{\mathrm{B}}(\text{large} \, \Bk) \sim z e^{-\beta \epsilon_\Bk}
 \end{dmath}
 
 For small energies
@@ -92,19 +92,46 @@ Let's calculate this density (assumed fixed for all temperatures)
 \begin{dmath}\label{eqn:basicStatMechLecture19:140}
 \rho = \frac{N}{V} 
 = \int \frac{d^3 \Bk}{(2 \pi)^3} \inv{z^{-1} e^{\beta \epsilon_\Bk} -1 }
-= \frac{2}{(2 \pi)^2} \int_0^\infty k^2 dk \inv{z^{-1} e^{\beta \hbar^2 k^2/2m} -1 }.
+= \frac{2}{(2 \pi)^2} 
+\int_0^\infty k^2 dk \inv{z^{-1} e^{\beta \hbar^2 k^2/2m} -1 }
+= \frac{2}{(2 \pi)^2} 
+\lr{
+\frac
+{2 m}
+{\beta \hbar^2}
+}
+^{3/2}
+\int_0^\infty 
+\lr{
+\frac
+{\beta \hbar^2}
+{2 m}
+}
+^{3/2}
+k^2 dk \inv{z^{-1} e^{\beta \hbar^2 k^2/2m} -1 }
 \end{dmath}
 
-With
+With the substitution 
 
 \begin{dmath}\label{eqn:basicStatMechLecture19:160}
 x^2 = \beta \frac{\hbar^2 k^2}{2m},
 \end{dmath}
 
-this leads to (FIXME: work out.)
+we find
 
 \begin{dmath}\label{eqn:basicStatMechLecture19:180}
-\rho \lambda^3 = \frac{4}{\sqrt{\pi}} \int_0^\infty dx \frac{x^2}{z^{-1} e^{x^2} - 1 }
+\rho \lambda^3 
+= \frac{2}{(2 \pi)^2} 
+\lr{
+\frac
+{2 \cancel{m}}
+{\cancel{\beta \hbar^2}}
+}
+^{3/2}
+\lr{ \frac{ 2 \pi \cancel{\hbar^2 \beta}}{\cancel{m}} }^{3/2}
+\int_0^\infty 
+x^2 dx \inv{z^{-1} e^{x^2} -1 }
+= \frac{4}{\sqrt{\pi}} \int_0^\infty dx \frac{x^2}{z^{-1} e^{x^2} - 1 }
 \equiv g_{3/2}(z).
 \end{dmath}
 
@@ -136,8 +163,6 @@ where the \underlineAndIndex{Riemann zeta function} is defined as
 \zeta(s) = \sum_{ n = 1 } \inv{n^s}.
 \end{dmath}
 
-F5
-
 \begin{dmath}\label{eqn:basicStatMechLecture19:340}
 g_{3/2}(z) = \rho \lambda^3
 \end{dmath}
@@ -150,7 +175,7 @@ At high temperatures we have
 
 (as $T$ does down, $\rho \lambda^3$ goes up)
 
-Looking at $g32(z = 1) = \rho \lambda^3(T_{\mathrm{c}})$ leads to
+Looking at $g_{3/2}(z = 1) = \rho \lambda^3(T_{\mathrm{c}})$ leads to
 
 \begin{dmath}\label{eqn:basicStatMechLecture19:380}
 \myBoxed{
@@ -162,13 +187,14 @@ Looking at $g32(z = 1) = \rho \lambda^3(T_{\mathrm{c}})$ leads to
 
 \paragraph{How do I satisfy number conservation?}
 
-Worked out by
+We have a problem here since as $T \rightarrow 0$ the $1/\lambda^3 \sim T^{3/2}$ term in $\rho$ above drops to zero, yet $g_{3/2}(z)$ cannot keep increasing without bounds to compensate and keep the density fixed.  The way to deal with this was worked out by
+
 \begin{itemize}
 \item Bose (1924) for photons (examining statistics for symmetric wave functions).
 \item Einstein (1925) for conserved particles.
 \end{itemize}
 
-We have a problem here since as $T \rightarrow 0$ the $1/\lambda^3 \sim T^{3/2}$ term in $\rho$ above drops to zero, yet $g_{3/2}(z)$ cannot keep increasing without bounds to compensate and keep the density fixed.  The way to deal with this is to introduce a non-zero density for $\Bk = 0$.  We'll adjust the approximation so that we have
+To deal with this issue, we (somewhat arbitrarily, because we need to) introduce a non-zero density for $\Bk = 0$.  This is an adjustment of the approximation so that we have
 
 \begin{dmath}\label{eqn:basicStatMechLecture19:400}
 \sum_{\Bk} \rightarrow \int \frac{d^3 \Bk}{(2 \pi)^3} \qquad \mbox{Except around $\Bk = 0$},
@@ -180,14 +206,14 @@ as in \cref{fig:lecture19:lecture19Fig6}, so that
 
 \begin{dmath}\label{eqn:basicStatMechLecture19:420}
 \sum_\Bk 
-= \mbox{Contribution at $\Bk = 0$} + V \int \frac{d^3 \Bk}{(2 \pi)^3}.
+= \lr{ \mbox{Contribution at $\Bk = 0$} } + V \int \frac{d^3 \Bk}{(2 \pi)^3}.
 \end{dmath}
 
 Given this, we have
 
 \begin{dmath}\label{eqn:basicStatMechLecture19:420b}
 N
-= N(\Bk = 0)
+= N_{\Bk = 0}
 + V \int \frac{d^3 \Bk}{(2 \pi)^3} n_{\mathrm{B}}(\Bk)
 \end{dmath}
 
@@ -197,15 +223,17 @@ We can illustrate this as in \cref{fig:lecture19:lecture19Fig7}.
 
 \begin{dmath}\label{eqn:basicStatMechLecture19:420c}
 \rho
-= \rho(\Bk = 0)
-+ \inv{\lambda^3} g32(z)
-= \rho(\Bk = 0)
+= \rho_{\Bk = 0}
++ \inv{\lambda^3} 
+g_{3/2}(z)
+= \rho_{\Bk = 0}
 + 
 \frac{ \lambda(T_{\mathrm{c}}) }{ \lambda(T)}
 \inv{ \lambda^3(T_{\mathrm{c}})}
+g_{3/2}(z)
 \end{dmath}
 
-At $T > T_{\mathrm{c}}$ we have $\rho_\Bk = 0$, whereas at $T < T_{\mathrm{c}}$ we must introduce a non-zero density if we want to be able to keep a constant density constraint.
+At $T > T_{\mathrm{c}}$ we have $\rho_{\Bk = 0}$, whereas at $T < T_{\mathrm{c}}$ we must introduce a non-zero density if we want to be able to keep a constant density constraint.
 
 %\EndArticle
 \EndNoBibArticle
