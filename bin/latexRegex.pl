@@ -1,5 +1,6 @@
 #s/\\Br_av/\\Br_{\\mathrm{av}}/g ;
 #s/\\down\b/\\downarrow/g ;
+s/\\ee/\\epsilon/g ;
 #s/\\EE/\\mathcal{E}/g ;
 #s/\\Gamma_{cav}/\\Gamma_{\\mathrm{cav}}/g  ;
 #s/\\Gamma_{sp}/\\Gamma_{\\mathrm{sp}}/g  ;
@@ -19,7 +20,9 @@
 #s/\bialpha\b/{i_\\alpha}/g ;
 #s/\tY\b/\\tilde{Y}/g ;
 #s/_av/_{\\mathrm{av}}/g ;
+#s/_B/_{\\mathrm{B}}/g ;
 #s/_bath/_{\\text{bath}}/g ;
+#s/_c/_{\\mathrm{c}}/g ;
 #s/_classical/_{\\mathrm{classical}}/g ;
 #s/_CM/_{\\mathrm{CM}}/g ;
 #s/_corrected/_{\\mathrm{corrected}}/g ;
@@ -58,10 +61,4 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-s/\\ee/\\epsilon/g ;
 s/_F/_{\\mathrm{F}}/g ;
-s/_B/_{\\mathrm{B}}/g ;
-#s/g32/g_{3/2}/g ;
-##s/zeta32/\\zeta(3/2)/g ; # doesn't work
-s/2pi([1-9])/(2 \\pi)^$1/g ;
-s/_c/_{\\mathrm{c}}/g ;
