@@ -61,4 +61,5 @@
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
 s/\\ee/\\epsilon/g ;
-s/_G/_{\\mathrm{G}}/g ;
+#s/_G/_{\\mathrm{G}}/g ;
+s/_BEC/_{\\mathrm{BEC}}/g ;
