@@ -21,6 +21,7 @@
 #s/_av/_{\\mathrm{av}}/g ;
 #s/_B/_{\\mathrm{B}}/g ;
 #s/_bath/_{\\text{bath}}/g ;
+#s/_BEC/_{\\mathrm{BEC}}/g ;
 #s/_c/_{\\mathrm{c}}/g ;
 #s/_classical/_{\\mathrm{classical}}/g ;
 #s/_CM/_{\\mathrm{CM}}/g ;
@@ -32,6 +33,7 @@
 #s/_F/_{\\mathrm{F}}/g ;
 #s/_final/_{\\mathrm{final}}/g ;
 #s/_full/_{\\text{full}}/g ;
+#s/_G/_{\\mathrm{G}}/g ;
 #s/_ideal/_{\\mathrm{ideal}}/g ;
 #s/_initial/_{\\mathrm{initial}}/g ;
 #s/_L/_{\\mathrm{L}}/g ;
@@ -60,6 +62,5 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
+s/\\DD/\\mathcal{D}/g ;
 s/\\ee/\\epsilon/g ;
-#s/_G/_{\\mathrm{G}}/g ;
-s/_BEC/_{\\mathrm{BEC}}/g ;
