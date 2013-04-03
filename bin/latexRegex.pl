@@ -21,7 +21,6 @@
 #s/_av/_{\\mathrm{av}}/g ;
 #s/_B/_{\\mathrm{B}}/g ;
 #s/_bath/_{\\text{bath}}/g ;
-#s/_BEC/_{\\mathrm{BEC}}/g ;
 #s/_c/_{\\mathrm{c}}/g ;
 #s/_classical/_{\\mathrm{classical}}/g ;
 #s/_CM/_{\\mathrm{CM}}/g ;
@@ -64,3 +63,4 @@
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
 s/\\DD/\\mathcal{D}/g ;
 s/\\ee/\\epsilon/g ;
+s/_BEC/_{\\mathrm{BEC}}/g ;
