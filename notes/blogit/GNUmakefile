@@ -9,6 +9,10 @@ INCOMPLETE += basicStatMechProblemSet6Problem5.tex
 INCOMPLETE += basicStatMechProblemSet6Problem6.tex
 INCOMPLETE += basicStatMechProblemSet6Problem7.tex
 
+INCOMPLETE += basicStatMechProblemSet7Problem1.tex
+INCOMPLETE += basicStatMechProblemSet7Problem2.tex
+INCOMPLETE += basicStatMechProblemSet7Problem3.tex
+
 # buildable:
 #INCOMPLETE += dotBlade.tex
 #INCOMPLETE += gaBasics.tex
@@ -62,6 +66,10 @@ basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem4.tex
 basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem5.tex 
 basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem6.tex 
 basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem7.tex 
+
+basicStatMechProblemSet7.pdf : basicStatMechProblemSet7Problem1.tex 
+basicStatMechProblemSet7.pdf : basicStatMechProblemSet7Problem2.tex 
+basicStatMechProblemSet7.pdf : basicStatMechProblemSet7Problem3.tex 
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
