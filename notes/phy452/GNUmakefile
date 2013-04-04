@@ -37,10 +37,10 @@ basicStatMechProblemSet5.pdf : basicStatMechProblemSet5Problem1.tex
 basicStatMechProblemSet5.pdf : basicStatMechProblemSet5Problem2.tex
 basicStatMechProblemSet5.pdf : basicStatMechProblemSet5Problem3.tex
 
-#basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem1.tex
-#basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem2.tex
-#basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem3.tex
-#basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem4.tex
+basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem1.tex
+basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem2.tex
+basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem3.tex
+basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem4.tex
 #basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem5.tex
 #basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem6.tex
 #basicStatMechProblemSet6.pdf : basicStatMechProblemSet6Problem7.tex
@@ -50,4 +50,4 @@ basicStatMechProblemSet2.pdf : $(PDF_DEPS)
 basicStatMechProblemSet3.pdf : $(PDF_DEPS)
 basicStatMechProblemSet4.pdf : $(PDF_DEPS)
 basicStatMechProblemSet5.pdf : $(PDF_DEPS)
-#basicStatMechProblemSet6.pdf : $(PDF_DEPS)
+basicStatMechProblemSet6.pdf : $(PDF_DEPS)
