@@ -55,7 +55,9 @@ using namespace std ;
 
    const char *   g_symbolfile = NULL ;
    string         g_typeSuppressed( "<>" ) ;
-   ofstream       g_out ;
+   ofstream       g_outFile ;
+
+   ostream *      g_out  = &cout ;
 
    #include "depmap.h"
 #endif
@@ -277,7 +279,8 @@ int main( int argc, char * argv[] )
          }
          case 'M':
          {
-            g_out.open( optarg ) ;
+            g_outFile.open( optarg ) ;
+            g_out = &g_outFile ;
 
             break ;
          }
@@ -443,7 +446,10 @@ int main( int argc, char * argv[] )
       #if defined CLASSVISITOR
          g_depMap.dump() ;
 
-         g_out.close() ;
+         if ( g_out == &g_outFile )
+         {
+            g_outFile.close() ;
+         }
       #elif defined REWRITER
          // At this point the rewriter's buffer should be full with the rewritten
          // file contents.
