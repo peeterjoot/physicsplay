@@ -1,5 +1,7 @@
 #s/\\Br_av/\\Br_{\\mathrm{av}}/g ;
+#s/\\DD/\\mathcal{D}/g ;
 #s/\\down\b/\\downarrow/g ;
+#s/\\ee/\\epsilon/g ;
 #s/\\EE/\\mathcal{E}/g ;
 #s/\\Gamma_{cav}/\\Gamma_{\\mathrm{cav}}/g  ;
 #s/\\Gamma_{sp}/\\Gamma_{\\mathrm{sp}}/g  ;
@@ -12,6 +14,7 @@
 #s/\\rcap_av/\\rcap_{\\mathrm{av}}/g ;
 #s/\\Shat/\\hat{S}/g ;
 #s/\\spacegrad_T/\\spacegrad_{\\mathrm{T}}/g ;
+s/\\tu/\\tilde{u}/g ;
 #s/\\tp/\\tilde{p}/g ;
 #s/\\tx/\\tilde{x}/g ;
 #s/\\up\b/\\uparrow/g ;
@@ -21,6 +24,7 @@
 #s/_av/_{\\mathrm{av}}/g ;
 #s/_B/_{\\mathrm{B}}/g ;
 #s/_bath/_{\\text{bath}}/g ;
+#s/_BEC/_{\\mathrm{BEC}}/g ;
 #s/_c/_{\\mathrm{c}}/g ;
 #s/_classical/_{\\mathrm{classical}}/g ;
 #s/_CM/_{\\mathrm{CM}}/g ;
@@ -61,6 +65,3 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-s/\\DD/\\mathcal{D}/g ;
-s/\\ee/\\epsilon/g ;
-s/_BEC/_{\\mathrm{BEC}}/g ;
