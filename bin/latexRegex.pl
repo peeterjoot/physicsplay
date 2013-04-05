@@ -1,7 +1,7 @@
 #s/\\Br_av/\\Br_{\\mathrm{av}}/g ;
-#s/\\DD/\\mathcal{D}/g ;
+s/\\DD/\\mathcal{D}/g ;
 #s/\\down\b/\\downarrow/g ;
-#s/\\ee/\\epsilon/g ;
+s/\\ee/\\epsilon/g ;
 #s/\\EE/\\mathcal{E}/g ;
 #s/\\Gamma_{cav}/\\Gamma_{\\mathrm{cav}}/g  ;
 #s/\\Gamma_{sp}/\\Gamma_{\\mathrm{sp}}/g  ;
@@ -33,7 +33,7 @@ s/\\tu/\\tilde{u}/g ;
 #s/_div/_{\\mathrm{div}}/g ;
 #s/_E/_{\\mathrm{E}}/g ;
 #s/_eff/_{\\mathrm{eff}}/g ;
-#s/_F/_{\\mathrm{F}}/g ;
+s/_F/_{\\mathrm{F}}/g ;
 #s/_final/_{\\mathrm{final}}/g ;
 #s/_full/_{\\text{full}}/g ;
 #s/_G/_{\\mathrm{G}}/g ;
