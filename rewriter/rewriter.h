@@ -75,9 +75,19 @@ bool VisitFunctionDecl( FunctionDecl * f )
 }
 #endif
 
-// http://stackoverflow.com/questions/9607852/print-arguments-of-a-function-using-clang-ast
-bool VisitCallExpr( CallExpr * c )
-{
+// %s/sqlt_fnc_entry *( *[^,]\+ *, *\([^,]\+\) *)/pdTraceEntry( \1 )/c
+// %s/sqlt_fnc_retcode *( *[^,]\+ *, *\([^,]\+\), *\([^,]\+\) *)/pdTraceExit( \1, \2 )/c
+// %s/sqlt_fnc_data\> *( *[^,]\+ *, *\([^,]\+\) *, *\([^,]\+\) *, *strlen *( *\(.*\) *) *, *\3 *)/pdTraceData1( \1, \2, PD_STRING( \3 ) )/c
+// %s/sqlt_fnc_data\> *( *[^,]\+ *, *\([^,]\+\) *, *\([^,]\+\) *, *\(sizeof *( *.* *)\) *, *\([^,]\+\) *)/pdTraceData1( \1, \2, PD_HEXDUMP( \4, \3 ) )/c
+// %s/sqlt_fnc_data\> *( *[^,]\+ *, *\([^,]\+\) *, *\([^,]\+\) *, *sizeof *( *\(.*\) *) *, *& *\3 *)/pdTraceData1( \1, \2, PD_HEXDUMP_SIZEOF( \3 ) )/c
+// %s/sqlt_fnc_data2\> *( *[^,]\+ *, *\([^,]\+\) *, *\([^,]\+\) *, *strlen *( *\(.*\) *) *, *\3, *strlen *( *\(.*\) *) *, *\4 *)/pdTraceData2( \1, \2, PD_STRING( \3 ), PD_STRING( \4 ) )/c
+// %s/sqlt_fnc_data2\> *( *[^,]\+ *, *\([^,]\+\) *, *\([^,]\+\) *, *\(sizeof *( *.* *)\) *, *\([^,]\+\) *, *\(sizeof *( *.* *)\) *, *\([^,]\+\) )/pdTraceData2( \1, \2, PD_HEXDUMP( \4, \3 ), PD_HEXDUMP( \6, \5 ) )/c
+// %s/\(sqlt_trace_error.*\)\/\*.*/\1/c
+// %s/\(sqlt_trace_error.*\)\/\/.*/\1/c
+// %s/sqlt_trace_error\> *( *[^,]\+ *, *\([^,]\+\) *, *\([^,]\+\) *, *sizeof *( *\(.*\) *) *, *& *\3 *)/pdTraceError( \1, \3, \2 )/c
+// %s/sqlt_trace_error\> *( *[^,]\+ *, *\([^,]\+\) *, *\([^,]\+\) *, *sizeof *( *\("[^"]\+"\) *) *- *1 *, *( *void *\* *) *\3 *)/pdTraceError1( \1, 0, \2, PD_STRING(\3) )/c
+// %s/sqlt_trace_error\> *( *[^,]\+ *, *\([^,]\+\) *, *\([^,]\+\) *, *strlen *( *\(.*\) *) *, *\3 *)/pdTraceError1( \1, 0, \2, PD_STRING(\3) )/c
+
 #if 0
    c->dump() ;
    (CallExpr 0x13ad1c0 'void'
@@ -93,72 +103,99 @@ bool VisitCallExpr( CallExpr * c )
                         (DeclRefExpr 0x13ad0d0 'int' lvalue ParmVar 0x13acde0 'x' 'int'))
                      (IntegerLiteral 0x13ad0f8 'int' 1)))
 #endif
-
-// c->getCalleeDecl()->dump() ;
-// tools/clang/examples/PrintFunctionNames/PrintFunctionNames.cpp:
-   if ( NamedDecl ND = c->getCalleeDecl().getAs<NamedDecl>() ) 
+bool VisitCallExpr( CallExpr * c )
+{
+   Decl * d = c->getCalleeDecl() ;
+   if ( d )
    {
-//      cout << ND->getNameAsString() << endl ;
-      string s = ND->getNameAsString() ;
+      d->dump() ;
 
-      if ( "sqlt_fnc_entry" == s )
+      // tools/clang/examples/PrintFunctionNames/PrintFunctionNames.cpp:
+      if ( const NamedDecl * ND = dyn_cast<NamedDecl>( d ) )
       {
-         string TypeS ;
+         // cout << ND->getNameAsString() << endl ;
+         string thisFunctionName = ND->getNameAsString() ;
 
-         llvm::raw_string_ostream s( TypeS ) ;
+         if ( "sqlt_fnc_entry" == thisFunctionName )
+         {
+            string TypeS0 ;
+            string TypeS1 ;
 
-         c->getArg( 0 )->printPretty( s, 0, m_pp ) ;
+            llvm::raw_string_ostream s0( TypeS0 ) ;
+            llvm::raw_string_ostream s1( TypeS1 ) ;
 
-         cout << "pdTraceEntry( " << s.str() << " )" << endl ;
+            c->getArg( 0 )->printPretty( s0, 0, m_pp ) ;
+            c->getArg( 1 )->printPretty( s1, 0, m_pp ) ;
+
+            cout << "pdTraceEntry( " << s0.str() << " )" << endl ;
+            cout << "pdTraceEntry( " << s1.str() << " )" << endl ;
+            cout << "TypeS: " << TypeS0 << endl ;
+            cout << "TypeS: " << TypeS1 << endl ;
+         }
+      }
+
+#if 0
+      if ( const ImplicitCastExpr * r = dyn_cast<ImplicitCastExpr>( c ) )
+      {
+         r->dump() ;
+   //      cout << r->getName().str() << endl ;
+      }
+      //if ( const DeclRefExpr * r = dyn_cast<DeclRefExpr>( c->getCallee() ) )
+      if ( const DeclRefExpr * r = dyn_cast<DeclRefExpr>( c ) )
+      {
+         r->dump() ;
+   //      cout << r->getName().str() << endl ;
+      }
+#endif
+
+#if 0
+      // This is the signature of the function.  Example: void (*)(int, int, int)
+      Expr * e = c->getCallee() ;
+      cout << e->getType().getAsString()
+           << endl ;
+#endif
+
+      // http://stackoverflow.com/questions/9607852/print-arguments-of-a-function-using-clang-ast
+      for ( int i = 0, j = c->getNumArgs() ; i < j ; i++ )
+      {
+          string TypeS ;
+
+          llvm::raw_string_ostream s( TypeS ) ;
+
+          Expr * p = c->getArg( i ) ;
+          p->dump() ;
+
+          if ( ParmVarDecl * v = dyn_cast<ParmVarDecl>( d ) )
+          {
+             cout << "v: \n" ;
+             v->dump() ;
+          }
+
+          p->printPretty( s, 0, m_pp ) ;
+
+          llvm::errs() << "arg: " << s.str() << "\n" ;
+      }
+
+      if ( d->getKind() == Decl::Function )
+      {
+         static IdentifierInfo * II_sqlt_fnc_entry = NULL ;
+
+         if ( !II_sqlt_fnc_entry )
+         {
+             II_sqlt_fnc_entry = &m_context.Idents.get( "sqlt_fnc_entry" ) ;
+         }
+
+         if ( const NamedDecl * ND = dyn_cast<NamedDecl>( d ) )
+         {
+            IdentifierInfo * FunI = ND->getIdentifier();
+
+            if ( FunI == II_sqlt_fnc_entry )
+            {
+               cout << "found II_sqlt_fnc_entry\n" ;
+            }
+         }
       }
    }
-
-// %s/sqlt_fnc_entry *( *[^,]\+ *, *\([^,]\+\) *)/pdTraceEntry( \1 )/c
-// %s/sqlt_fnc_retcode *( *[^,]\+ *, *\([^,]\+\), *\([^,]\+\) *)/pdTraceExit( \1, \2 )/c
-// %s/sqlt_fnc_data\> *( *[^,]\+ *, *\([^,]\+\) *, *\([^,]\+\) *, *strlen *( *\(.*\) *) *, *\3 *)/pdTraceData1( \1, \2, PD_STRING( \3 ) )/c
-// %s/sqlt_fnc_data\> *( *[^,]\+ *, *\([^,]\+\) *, *\([^,]\+\) *, *\(sizeof *( *.* *)\) *, *\([^,]\+\) *)/pdTraceData1( \1, \2, PD_HEXDUMP( \4, \3 ) )/c
-// %s/sqlt_fnc_data\> *( *[^,]\+ *, *\([^,]\+\) *, *\([^,]\+\) *, *sizeof *( *\(.*\) *) *, *& *\3 *)/pdTraceData1( \1, \2, PD_HEXDUMP_SIZEOF( \3 ) )/c
-// %s/sqlt_fnc_data2\> *( *[^,]\+ *, *\([^,]\+\) *, *\([^,]\+\) *, *strlen *( *\(.*\) *) *, *\3, *strlen *( *\(.*\) *) *, *\4 *)/pdTraceData2( \1, \2, PD_STRING( \3 ), PD_STRING( \4 ) )/c
-// %s/sqlt_fnc_data2\> *( *[^,]\+ *, *\([^,]\+\) *, *\([^,]\+\) *, *\(sizeof *( *.* *)\) *, *\([^,]\+\) *, *\(sizeof *( *.* *)\) *, *\([^,]\+\) )/pdTraceData2( \1, \2, PD_HEXDUMP( \4, \3 ), PD_HEXDUMP( \6, \5 ) )/c
-// %s/\(sqlt_trace_error.*\)\/\*.*/\1/c
-// %s/\(sqlt_trace_error.*\)\/\/.*/\1/c
-// %s/sqlt_trace_error\> *( *[^,]\+ *, *\([^,]\+\) *, *\([^,]\+\) *, *sizeof *( *\(.*\) *) *, *& *\3 *)/pdTraceError( \1, \3, \2 )/c
-// %s/sqlt_trace_error\> *( *[^,]\+ *, *\([^,]\+\) *, *\([^,]\+\) *, *sizeof *( *\("[^"]\+"\) *) *- *1 *, *( *void *\* *) *\3 *)/pdTraceError1( \1, 0, \2, PD_STRING(\3) )/c
-// %s/sqlt_trace_error\> *( *[^,]\+ *, *\([^,]\+\) *, *\([^,]\+\) *, *strlen *( *\(.*\) *) *, *\3 *)/pdTraceError1( \1, 0, \2, PD_STRING(\3) )/c
-
-#if 0
-   if ( ImplicitCastExpr r = c.getAs<ImplicitCastExpr>( ) )
-   {
-      r.dump() ;
-//      cout << r->getName().str() << endl ;
-   }
-   //if ( DeclRefExpr r = c->getCallee().getAs<DeclRefExpr>( ) )
-   if ( DeclRefExpr r = c.getAs<DeclRefExpr>( ) )
-   {
-      r->dump() ;
-//      cout << r->getName().str() << endl ;
-   }
-#endif
-
-#if 0
-   // This is the signature of the function.  Example: void (*)(int, int, int)
-   Expr * e = c->getCallee() ;
-   cout << e->getType().getAsString()
-        << endl ;
-#endif
-
-#if 0
-   for ( int i = 0, j = c->getNumArgs() ; i < j ; i++ )
-   {
-       string TypeS ;
-
-       llvm::raw_string_ostream s( TypeS ) ;
-
-       c->getArg( i )->printPretty( s, 0, m_pp ) ;
-
-       llvm::errs() << "arg: " << s.str() << "\n" ;
-   }
-#endif
 
    return true ;
 }
