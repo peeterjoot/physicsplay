@@ -17,7 +17,7 @@ Find the Fermi energy at density $n$.
 \makesubproblem{}{basicStatMech:problemSet6:5b}
 Define the internal energy $U$ as the average $\epsilon - m c^2$, and the pressure $P$ as the average force per unit area exerted on a perfectly-reflecting wall of the container.  Set up expressions for these quantities in the form of integrals, but you need not evaluate them.
 \makesubproblem{}{basicStatMech:problemSet6:5c}
-Show that $P C = 2 U/3$ at low densities, and $P V = U/3$ at high densities.  State the criteria for low and high densities.
+Show that $P V = 2 U/3$ at low densities, and $P V = U/3$ at high densities.  State the criteria for low and high densities.
 \makesubproblem{}{basicStatMech:problemSet6:5d}
 There may exist a gas of neutinos (and/or antineutinos) in the cosmos.  (Neutrinos are massless fermions of spin $1/2$.)  Calculate the Fermi energy (in eV) of such a gas, assuming a density of one particle per $\text{cm}^3$.
 } % makeoproblem
@@ -74,7 +74,7 @@ For the pressure calculation, let's suppose that we have a configuration with a 
 
 \imageFigure{../blogit/huang93Fig1}{Pressure against $x,y$ oriented plane}{fig:huang93:huang93Fig1}{0.3}
 
-It's argued in \citep{pathriastatistical} that the pressure for such a configuration is 
+It's argued in \citep{pathriastatistical} \S 6.4 that the pressure for such a configuration is 
 
 \begin{dmath}\label{eqn:huang93:120}
 P = n \int p_z u_z f(\Bu) d^3 \Bu,
@@ -86,17 +86,25 @@ where $n$ is the number density and $f(\Bu)$ is a normalized distribution functi
 
 \begin{dmath}\label{eqn:huang93:140}
 u_x 
-= \xdot 
+%= 
+%\xdot 
 = \PD{p_x}{\epsilon}
 = \PD{p_x}{}
 \sqrt{(p c)^2 + 
 \lr{m c^2}
 ^2}
-= \frac{ p_x/c^2 }{
+= 
+\frac{ p_x/c^2 }{
 \sqrt{(p c)^2 + 
 \lr{m c^2}
 ^2}
-}.
+},
+\end{dmath}
+
+Or
+
+\begin{dmath}\label{eqn:huang93:220}
+u_x = \frac{ p_x }{ c^2 \epsilon }.
 \end{dmath}
 
 For the volume element change of variables, we have
@@ -128,6 +136,125 @@ This allows us to express the velocity volume element in momentum space, and the
 \begin{dmath}\label{eqn:huang93:180}
 d^3 \Bu = \frac{c^6 \lr{ m c^2 }^2 } {\epsilon^5} d^3 \Bp.
 \end{dmath}
+
+We are now set to express the integral for the pressure.  The distribution function $1/(z^{-1}e^{\beta \epsilon} + 1)$ isn't normalized, so we must write
+
+\begin{dmath}\label{eqn:huang93:200}
+P 
+= 
+\frac{n 
+\int p_z u_z f(\Bu) d^3 \Bu
+}{
+\int f(\Bu) d^3 \Bu
+}
+= 
+\frac{n 
+\int p_z u_z f(\Bu) \inv{\epsilon^5} d^3 \Bp
+}{
+\int f(\Bu) \inv{\epsilon^5} d^3 \Bp
+}
+= 
+\frac{n 
+\int_0^\pi d\theta \sin\theta \cancel{\int_0^{2 \pi} d\phi} \int_0^\infty dp p^2 
+\frac{p_z^2}{c^2 \epsilon} 
+\inv{ z^{-1}e^{\beta \epsilon} + 1}
+\inv{\epsilon^5} 
+}{
+\int_0^\pi d\theta \sin\theta \cancel{\int_0^{2 \pi} d\phi} \int_0^\infty dp p^2 
+\inv{ z^{-1}e^{\beta \epsilon} + 1}
+\inv{\epsilon^5} 
+}.
+\end{dmath}
+
+The z momentum component can be written in spherical coordinates as $p_z^2 = p^2 \cos^2\theta$.  We can also make a change of variables, integrating over energy instead of momentum.
+
+\begin{dmath}\label{eqn:huang93:240}
+c^2 p^2 = \epsilon^2 - \lr{m c^2}^2
+,
+\end{dmath}
+
+Also following from this is
+%\begin{dmath}\label{eqn:huang93:260}
+%2 c p \frac{d (c p)}{d\epsilon} = 2 \epsilon,
+%\end{dmath}
+%
+%or
+
+\begin{dmath}\label{eqn:huang93:280}
+\frac{d (c p)}{d\epsilon} 
+= \frac{\epsilon}{c p}
+= 
+\frac{\epsilon}{\sqrt{\epsilon^2 -
+\lr{ m c^2 }^2
+}}
+.
+\end{dmath}
+
+Assembling all the bits gives us
+
+\begin{dmath}\label{eqn:huang93:300}
+P
+= 
+\frac{n}{c^4}
+\frac{
+\int_0^\pi d\theta \sin\theta \cos^2 \theta \int_{m c^2}^\infty \frac{d (cp)}{d\epsilon} d\epsilon (cp)^4 
+\inv{\epsilon^6} 
+\inv{ z^{-1}e^{\beta \epsilon} + 1}
+}
+{
+2 \int_{m c^2}^\infty \frac{d (c p)}{d\epsilon} d\epsilon (c p)^2 
+\inv{\epsilon^5} 
+\inv{ z^{-1}e^{\beta \epsilon} + 1}
+}
+= 
+\frac{n}{c^4}
+\frac{1}{3}
+\frac{
+\int_{m c^2}^\infty 
+d\epsilon 
+%\frac{d (cp)}{d\epsilon} 
+\frac{\epsilon}{\sqrt{\epsilon^2 - \lr{ m c^2 }^2 }}
+%(cp)^4 
+\lr{ \epsilon^2 - \lr{m c^2}^2 }^2
+\inv{\epsilon^6} 
+\inv{ z^{-1}e^{\beta \epsilon} + 1}
+}
+{
+\int_{m c^2}^\infty 
+%\frac{d (c p)}{d\epsilon} 
+d\epsilon 
+\frac{\epsilon}{\sqrt{\epsilon^2 - \lr{ m c^2 }^2 }}
+\lr{ \epsilon^2 - \lr{m c^2}^2 }
+\inv{\epsilon^5} 
+\inv{ z^{-1}e^{\beta \epsilon} + 1}
+},
+\end{dmath}
+
+which is
+
+\begin{dmath}\label{eqn:huang93:320}
+P
+= 
+\frac{n}{3 c^4}
+\frac{
+\int_{m c^2}^\infty 
+d\epsilon 
+\frac{\lr{ \epsilon^2 - \lr{m c^2}^2 }^{3/2}}
+{\epsilon^5
+\lr{ z^{-1}e^{\beta \epsilon} + 1}
+} 
+}
+{
+\int_{m c^2}^\infty 
+d\epsilon 
+\frac{\lr{ \epsilon^2 - \lr{m c^2}^2 }^{1/2}}
+{\epsilon^4
+\lr{ z^{-1}e^{\beta \epsilon} + 1}
+} 
+}.
+\end{dmath}
+
+Now for the average energy difference from $mc^2$.
 
 \makeSubAnswer{}{basicStatMech:problemSet6:5c}
 
