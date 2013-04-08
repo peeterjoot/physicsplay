@@ -32,10 +32,10 @@ We've found that the density of states associated with a 3D relativisitic system
 ^2},
 \end{equation}
 
-For a given density $\rho$, we can find the Fermi energy in the same way as we did for the non-relativisitic energies, with the exception that we have to integrate from a lowest energy of $\epsilon_0$ instead of $0$ (the energy at $\Bp = 0$).  That is
+For a given density $n$, we can find the Fermi energy in the same way as we did for the non-relativisitic energies, with the exception that we have to integrate from a lowest energy of $\epsilon_0$ instead of $0$ (the energy at $\Bp = 0$).  That is
 
 \begin{dmath}\label{eqn:huang93:40}
-\rho
+n
 = \frac{N}{V}
 =
 \lr{2 \inv{2} + 1}
@@ -59,13 +59,16 @@ d\epsilon \epsilon \sqrt{ \epsilon^2 -
 
 Solving for $\epsilon_{\mathrm{F}}$ we have
 \begin{dmath}\label{eqn:huang93:60}
+\myBoxed{
 \epsilon_{\mathrm{F}} =
 \sqrt{
-\lr{ \frac{3 (c h)^3 \rho}{2 \pi} }
+\lr{ \frac{3 (c h)^3 n}{2 \pi} }
 ^{2/3}
 + \epsilon_0^2
 }.
+}
 \end{dmath}
+
 
 \makeSubAnswer{}{basicStatMech:problemSet6:5b}
 
@@ -121,12 +124,12 @@ f(c \Bp)
 {\int \inv{ z^{-1} e^{\beta \epsilon} + 1 } d^3 (c \Bp)},
 \end{dmath}
 
-but before evaluating anything, let's make our change of variables for integration over all the system energies.  In spherical coordinates
+but before evaluating anything, we first want to change our integration variable from momentum to energy.  In spherical coordinates our volume element takes the form
 
 \begin{dmath}\label{eqn:huang93:380}
 d^3 (c \Bp)
 = 2 \pi (c p)^2 d (c p) \sin\theta d\theta
-= 2 \pi (c p)^2 \frac{d \epsilon}{d (cp)} d \epsilon \sin\theta d\theta.
+= 2 \pi (c p)^2 \frac{d (cp)}{d \epsilon} d \epsilon \sin\theta d\theta.
 \end{dmath}
 
 Implicit derivatives of
@@ -143,7 +146,7 @@ gives us
 %
 %or
 
-\begin{dmath}\label{eqn:huang93:280}
+\begin{equation}\label{eqn:huang93:280}
 \frac{d (c p)}{d\epsilon}
 = \frac{\epsilon}{c p}
 =
@@ -151,7 +154,7 @@ gives us
 \epsilon_0^2
 }}
 .
-\end{dmath}
+\end{equation}
 
 Our momentum volume element becomes
 
@@ -210,7 +213,7 @@ P
    d \epsilon
 }
 {
-   2 \int_{\epsilon_0}^\infty \inv{ z^{-1} e^{\beta \epsilon} + 1 }
+   \int_{\epsilon_0}^\infty \inv{ z^{-1} e^{\beta \epsilon} + 1 }
    \epsilon \sqrt{ \epsilon^2 - \epsilon_0^2} d \epsilon
 }
 = \frac{n \epsilon_0}{3}
@@ -221,32 +224,141 @@ P
    dx
 }
 {
-   2 \int_{1}^\infty \inv{ z^{-1} e^{\beta \epsilon_0 x} + 1 }
+   \int_{1}^\infty \inv{ z^{-1} e^{\beta \epsilon_0 x} + 1 }
    x \sqrt{ x^2 - 1} dx
-}
-= \frac{n \epsilon_0}{3}
-\frac{
-   \int_{0}^\infty
-   \lr{ (y + 1)^2 - 1}^{3/2}
-   \inv{ z^{-1} e^{\beta \epsilon_0 (y + 1)} + 1 }
-   dy
-}
-{
-   2 \int_{0}^\infty \inv{ z^{-1} e^{\beta \epsilon_0 (y + 1)} + 1 }
-   (y + 1) \sqrt{ (y + 1)^2 - 1} dy
 }.
 \end{dmath}
 
-%Now for the average energy difference from $\epsilon_0$.
+Letting $y = x - 1$, this is
 
-TODO.
+\begin{dmath}\label{eqn:huang93:500}
+\myBoxed{
+P
+= \frac{n \epsilon_0}{3}
+\frac{
+   \int_{0}^\infty
+   \frac{ \lr{ (y + 1)^2 - 1}^{3/2} }
+   { z^{-1} e^{\beta \epsilon_0 (y + 1)} + 1 }
+   dy
+}
+{
+   \int_{0}^\infty 
+\frac{(y + 1) \sqrt{ (y + 1)^2 - 1} }
+{ z^{-1} e^{\beta \epsilon_0 (y + 1)} + 1 }
+dy
+}.
+}
+\end{dmath}
+
+We could concievable expand the numerators of each of these integrals in power series, which could then be evaluated as a sum of $f^+_\nu(z e^{-\beta \epsilon_0})$ terms.
+
+Note that above the Fermi energy $n$ also has an integral representation
+
+\begin{dmath}\label{eqn:huang93:560}
+n 
+= 
+\int_{\epsilon_0}^\infty d\epsilon \mathcal{D}(\epsilon) 
+\inv
+{
+   z^{-1} e^{\beta \epsilon} + 1
+}
+= 
+\frac{4 \pi}{(c h)^3} 
+\int_{\epsilon_0}^\infty d\epsilon
+\frac{
+\epsilon \sqrt{\epsilon^2 - \epsilon_0 ^2} 
+}
+{
+   z^{-1} e^{\beta \epsilon} + 1
+}.
+\end{dmath}
+
+Switching to a dimensionless variable $y = \epsilon/\epsilon_0 - 1$, this is
+
+\begin{dmath}\label{eqn:huang93:580}
+\myBoxed{
+n 
+= 
+\frac{4 \pi \epsilon_0}{(c h)^3} 
+\int_{0}^\infty dy
+\frac{
+(y + 1)\sqrt{(y + 1)^2 - 1} 
+}
+{
+   z^{-1} e^{\beta \epsilon_0 (y + 1)} + 1
+}.
+}
+\end{dmath}
+
+Now for the average energy difference from the rest energy $\epsilon_0$
+
+\begin{dmath}\label{eqn:huang93:520}
+\expectation{\epsilon - \epsilon_0} 
+=
+\frac
+{
+   \int_{\epsilon_0}^\infty
+   \frac
+   {
+      (\epsilon - \epsilon_0) \epsilon \sqrt{\epsilon^2 - \epsilon_0^2} d\epsilon
+   }
+   {
+      z^{-1} e^{\beta \epsilon} + 1
+   }
+}
+{
+   \int_{\epsilon_0}^\infty
+   \frac
+   {
+       \epsilon \sqrt{\epsilon^2 - \epsilon_0^2} d\epsilon
+   }
+   {
+      z^{-1} e^{\beta \epsilon} + 1
+   }
+}.
+\end{dmath}
+
+Switching to a dimensionless variable $y = \epsilon/\epsilon_0 - 1$ the average energy difference from the rest energy is found to be
+
+% x = \epsilon - \epsilon_0
+% \epsilon = x + \epsilon_0
+\begin{dmath}\label{eqn:huang93:540}
+\myBoxed{
+\expectation{\epsilon - \epsilon_0}
+=
+\epsilon_0
+\frac
+{
+   \int_{0}^\infty
+   \frac
+   {
+      y (y + 1)\sqrt{(y + 1)^2 - 1} dy
+   }
+   {
+      z^{-1} e^{\beta \epsilon_0 (y + 1)} + 1
+   }
+}
+{
+   \int_{0}^\infty
+   \frac
+   {
+      (y + 1) \sqrt{(y + 1)^2 - 1} dy
+   }
+   {
+      z^{-1} e^{\beta \epsilon_0 (y + 1)} + 1
+   }
+}.
+}
+\end{dmath}
+
 \makeSubAnswer{}{basicStatMech:problemSet6:5c}
 
 TODO.
+
 \makeSubAnswer{}{basicStatMech:problemSet6:5d}
 
 \begin{dmath}\label{eqn:huang93:80}
-\evalbar{\epsilon_{\mathrm{F}}}{\rho = 1/(0.01)^3}
+\evalbar{\epsilon_{\mathrm{F}}}{n = 1/(0.01)^3}
 %ef[3 10^8, 6.62606957 10^(-34), rho, 0]
 %= 6.12402 \times 10^{-35} \text{J}
 = 6.12402 \times 10^{-35} \text{J} \times 6.24150934 \times 10^{18} \frac{\text{eV}}{\text{J}}
