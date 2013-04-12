@@ -421,7 +421,7 @@ This ratio of integrals is supposed to resolve to 1 and 2 in the low and high de
 \begin{equation}\label{eqn:huang93:720}
 \begin{aligned} \\
 x &= \beta \epsilon_0 y \\
-\theta &= \inv{\beta \epsilon_0} \\
+\theta &= \inv{\beta \epsilon_0} = \frac{\kB T}{\epsilon_0} \\
 \barmu &= \mu - \epsilon_0 \\
 \barz &= e^{\beta \barmu}.
 \end{aligned}
@@ -469,7 +469,7 @@ The density, pressure, and energy take the form
 
 We can rewrite the square roots in the number density and energy density expressions by expanding out the completion of the square
 
-\begin{dmath}\label{eqn:huang93:n}
+\begin{dmath}\label{eqn:huang93:800}
 (1 + \theta x) \sqrt{ (1 + \theta x)^2 - 1}
 =
 (1 + \theta x) 
@@ -480,7 +480,23 @@ We can rewrite the square roots in the number density and energy density express
 ,
 \end{dmath}
 
-Examining the low density limits with respect to $\barz$ first, we have
+Expanding the distribution about $\bar{z} e^{-x} = 0$, we have
+
+\begin{equation}\label{eqn:huang93:820}
+\frac{1}
+{
+   \barz^{-1} e^{x}
+}
+=
+\frac{z e^{-x}}
+{
+   1 + \barz e^{-x}
+}
+=
+z e^{-x} \sum_{s = 0}^\infty (-1)^s \lr{ \barz e^{-x} }^k,
+\end{equation}
+
+allowing us to write, in the low density limit with respect to $\barz$
 
 \begin{subequations}
 \begin{equation}\label{eqn:huang93:740}
@@ -489,41 +505,72 @@ Examining the low density limits with respect to $\barz$ first, we have
 3 
 \sqrt{2}
 \theta^{3/2} 
-\barz
+\sum_{s=0}^\infty
+(-1)^s
+\barz^{s + 1}
 \int_{0}^\infty dx x^{1/2}
 (1 + \theta x) \sqrt{ 1 + \frac{\theta x}{2}} 
-\frac{e^{-x}}
-{
-   1 + \barz e^{-x}
-}
+e^{-x(1 + s)} 
 \end{equation}
 \begin{equation}\label{eqn:huang93:760}
 \frac{P}{n_0 \epsilon_0}
 = 
    \theta
-\barz
+\sum_{s=0}^\infty
+(-1)^s
+\barz^{s + 1}
    \int_{0}^\infty
    dx
    \lr{ (\theta x + 1)^2 - 1}^{3/2} 
-\frac{e^{-x}}
-{
-   1 + \barz e^{-x}
-}
+e^{-x(1 + s)} 
 \end{equation}
 \begin{equation}\label{eqn:huang93:780}
 \frac{\expectation{\epsilon - \epsilon_0}}{V \epsilon_0 n_0} 
 =
-3 \sqrt{2} \theta^{5/2} \barz
+3 \sqrt{2} \theta^{5/2} 
+\sum_{s=0}^\infty
+(-1)^s
+\barz^{s + 1}
    \int_{0}^\infty dx
       x^{3/2} 
 (1 + \theta x) \sqrt{ 1 + \frac{\theta x}{2}} 
-\frac{e^{-x}}
-{
-   1 + \barz e^{-x}
-}
+e^{-x(1 + s)} 
 .
 \end{equation}
 \end{subequations}
+
+Of these the pressure integral is yields directly to Mathematica
+
+\begin{equation}\label{eqn:huang93:840}
+   \int_{0}^\infty
+   dx
+   \lr{ (\theta x + 1)^2 - 1}^{3/2} 
+e^{-x(1 + s)} 
+=
+\frac{e^{\frac{s+1}{\theta }} K_1\left(\frac{s+1}{\theta }\right)}{s+1},
+\end{equation}
+
+where $K_1(z)$ is a modified Bessel function \citep{wolframBesselK} of the second kind as plotted in \cref{fig:huang93:huang93Fig2}.
+
+\imageFigure{huang93Fig2}{Modified Bessel function of the second kind}{fig:huang93:huang93Fig2}{0.3}
+
+Our pressure is 
+\begin{equation}\label{eqn:huang93:860}
+\frac{P}{n_0 \epsilon_0}
+= 
+   \kB T
+\sum_{s=0}^\infty
+(-1)^s
+\frac{
+\lr{ \barz e^{\kB T/\epsilon_0} }^{s + 1}
+}{s + 1}
+K_1\left( (s+1) \kB T \right).
+\end{equation}
+
+With the Bessel function dying off fast, but a product of a linear and exponential terms in front, its not at all obvious what the asymptotic behaviour of these summands are.  These are plotted in \cref{fig:huang93:huang93Fig3} to give us a bit of a clue.
+
+\imageFigure{huang93Fig3}{Pressure summands $\frac{T k_B}{s + 1} e^{T k_B(s + 1)/\epsilon_0} K_1\left((s+1) T k_B\right)$, with $\epsilon_0 = 1$}{fig:huang93:huang93Fig3}{0.3}
+
 \makeSubAnswer{}{basicStatMech:problemSet6:5d}
 
 \begin{dmath}\label{eqn:huang93:80}
