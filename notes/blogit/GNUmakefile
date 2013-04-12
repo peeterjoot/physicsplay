@@ -1,5 +1,6 @@
 THISDIR := blogit
 
+INKSCAPE := "/cygdrive/c/Program Files (x86)/Inkscape/inkscape.exe"
 RAWTEXFILES := $(shell ls *.tex)
 
 # buildable:
@@ -107,6 +108,9 @@ myrefs.bib: ../myrefs.bib.in ../METADATA
 opt/%.pdf : %.pdf
 	mkdir -p opt
 	$(QPDF) --linearize $< $@
+
+%.pdf : %.svg
+	$(INKSCAPE) $^ --export-pdf=$@
 
 localclean ::
 	rm -f $(LOCAL_FILES)
