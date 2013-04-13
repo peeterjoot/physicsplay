@@ -43,6 +43,8 @@ ifneq ($(QPDF_DIR),)
    QPDF := $(QPDF_DIR)/bin/qpdf.exe
 endif
 
+all :: huang93Fig3sv.pdf huang93Fig4sv.pdf huang93Fig5sv.pdf huang93Fig2sv.pdf
+
 all :: Bibliography.bib
 all :: peeters_macros.sty
 all :: peeters_layout.sty
@@ -109,8 +111,14 @@ opt/%.pdf : %.pdf
 	mkdir -p opt
 	$(QPDF) --linearize $< $@
 
-%.pdf : %.svg
-	$(INKSCAPE) $^ --export-pdf=$@
+%.pdf : %.eps
+	epstopdf $^ --outfile=$@
+
+%.eps : %.svg
+	$(INKSCAPE) $^ --export-eps=$@
+
+#%.png : %.pdf
+#	$(INKSCAPE) $^ --export-png=$@
 
 localclean ::
 	rm -f $(LOCAL_FILES)
