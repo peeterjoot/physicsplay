@@ -43,18 +43,17 @@ ifneq ($(QPDF_DIR),)
    QPDF := $(QPDF_DIR)/bin/qpdf.exe
 endif
 
-all :: huang93Fig3sv.pdf
-all :: huang93Fig4sv.pdf
-all :: huang93Fig5sv.pdf
-all :: huang93Fig2sv.pdf
-
 all :: Bibliography.bib
 all :: peeters_macros.sty
 all :: peeters_layout.sty
 all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
 
-huang93.pdf : ../phy452/basicStatMechProblemSet6Problem5.tex
+huang93.pdf :: ../phy452/basicStatMechProblemSet6Problem5.tex
+huang93.pdf :: huang93Fig3sv.pdf
+huang93.pdf :: huang93Fig4sv.pdf
+huang93.pdf :: huang93Fig5sv.pdf
+huang93.pdf :: huang93Fig2sv.pdf
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
