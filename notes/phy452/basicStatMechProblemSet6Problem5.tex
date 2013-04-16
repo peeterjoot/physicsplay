@@ -258,7 +258,7 @@ P
    dy.
 \end{dmath}
 
-We could concievable expand the numerators of each of these integrals in power series, which could then be evaluated as a sum of $f^+_\nu(z e^{-\beta \epsilon_0})$ terms.
+We could conceivable expand the numerators of each of these integrals in power series, which could then be evaluated as a sum of $f^+_\nu(z e^{-\beta \epsilon_0})$ terms.
 
 Note that above the Fermi energy $n$ also has an integral representation
 
@@ -275,7 +275,7 @@ n
 \frac{8 \pi}{(c h)^3} 
 \int_{\epsilon_0}^\infty d\epsilon
 \frac{
-\epsilon \sqrt{\epsilon^2 - \epsilon_0 ^2} 
+\epsilon \sqrt{\epsilon^2 - \epsilon_0^2} 
 }
 {
    z^{-1} e^{\beta \epsilon} + 1
@@ -430,6 +430,7 @@ x &= \beta \epsilon_0 y \\
 The density, pressure, and energy take the form
 
 \begin{subequations}
+\label{eqn:huang93:730}
 \begin{equation}\label{eqn:huang93:740}
 \frac{n}{n_0}
 = 
@@ -547,37 +548,147 @@ Of these the pressure integral is yields directly to Mathematica
    \lr{ (\theta x + 1)^2 - 1}^{3/2} 
 e^{-x(1 + s)} 
 =
-\frac{e^{\frac{s+1}{\theta }} K_1\left(\frac{s+1}{\theta }\right)}{s+1},
+\frac{3 \theta}{(s + 1)^2} K_2\lr{ \frac{s+1}{\theta } },
 \end{equation}
 
-where $K_1(z)$ is a modified Bessel function \citep{wolframBesselK} of the second kind as plotted in \cref{fig:huang93:huang93Fig2}.
+where $K_2(z)$ is a modified Bessel function \citep{wolframBesselK} of the second kind as plotted in \cref{fig:huang93:huang93Fig2}.
 
 \imageFigure{huang93Fig2sv}{Modified Bessel function of the second kind}{fig:huang93:huang93Fig2}{0.3}
 
-Our pressure is 
+Plugging this into the series for the pressure, we have
 \begin{equation}\label{eqn:huang93:860}
 \frac{P}{n_0 \epsilon_0}
 = 
-\frac{\kB T}{\epsilon_0}
+3 \lr{ \frac{\kB T}{\epsilon_0} }^2
 \sum_{s=0}^\infty
 (-1)^s
 \frac{
 \lr{ \barz e^{\epsilon_0/\kB T} }^{s + 1}
-}{s + 1}
-K_1\left( (s+1) \epsilon_0/\kB T \right).
+}{(s + 1)^2}
+K_2\left( (s+1) \epsilon_0/\kB T \right).
 \end{equation}
 
-We've got Bessel and linear and exponential functions all in the mix, so the plot of \cref{fig:huang93:huang93Fig3} is helpful to get a first glance at the asympotic behavior of this function.
+Plotting the summands $3 (-1)^s \frac{\theta^2}{(s + 1)^2} \lr{ \barz e^{ 1/\theta} }^{s + 1} K_2\left((s+1)/\theta\right)$ for $\barz = 1$ in \cref{fig:huang93:huang93Fig3} shows that this mix of exponential Bessel and quadratic terms decreases with $s$.  
 
-\imageFigure{huang93Fig3sv}{Pressure summands $(-1)^s \frac{\theta}{s + 1} e^{ (s + 1)/\theta} K_1\left((s+1)/\theta\right)$ for $\barz = 1$}{fig:huang93:huang93Fig3}{0.3}
-
-Plotting the sum in \cref{fig:huang93:huang93Fig4sv} numerically (up to 10 terms, with no visible change after that), we end up with something that looks fairly exponential
-
-\imageFigure{huang93Fig4sv}{Ten terms of pressure sum with $\barz = 1$}{fig:huang93:huang93Fig4sv}{0.3}
-
-Plotting this sum in \cref{fig:huang93:huang93Fig5sv} (also numerically to 10 terms) as a function of both $\barz$ and $\theta$ we have something that looks roughly exponential in 
+Plotting this sum in \cref{fig:huang93:huang93Fig5sv} numerically to 10 terms, shows that we have a function that appears roughly bi-exponential in $\barz$ and $\theta$.
 
 \imageFigure{huang93Fig5sv}{Pressure to ten terms in $\barz$ and $\theta$}{fig:huang93:huang93Fig5sv}{0.3}
+
+\imageFigure{huang93Fig3sv}{Pressure summands}{fig:huang93:huang93Fig3}{0.3}
+
+For small $\barz$ it can be seen graphically that there is very little contribution from anything but the $s = 0$ term of this sum.  An expansion in series for a few terms in $\barz$ and $\theta$ gives us
+
+\begin{equation}\label{eqn:huang93:900}
+\begin{aligned}
+\frac{P}{\epsilon_0 n_0}
+&=
+\sqrt{\pi} \theta^{5/2} \left(
+\frac{3 \barz}{\sqrt{2}}
+-\frac{3 \barz^2}{8}
++\frac{\barz^3}{3 \sqrt{6}}
+-\frac{3 \barz^4}{32 \sqrt{2}}
++\frac{3 \barz^5}{25 \sqrt{10}}
+\right) 
+\\
+&+\sqrt{\pi} \theta^{7/2} \left(
+\frac{45 \barz}{8 \sqrt{2}}\right) 
+-\frac{45 \barz^2}{128}
++\frac{5 \barz^3}{24 \sqrt{6}}
+-\frac{45 \barz^4}{1024 \sqrt{2}}
++\frac{9 \barz^5}{200 \sqrt{10}}
+\\
+&+\sqrt{\pi} \theta^{9/2} \left(
+\frac{315 \barz}{128 \sqrt{2}}
+-\frac{315 \barz^2}{4096}
++\frac{35 \barz^3}{1152 \sqrt{6}}
+-\frac{315 \barz^4}{65536 \sqrt{2}}
++\frac{63 \barz^5}{16000 \sqrt{10}}
+\right).
+\end{aligned}
+\end{equation}
+
+This allows a $\kB T \ll m c^2$ and $\barz \ll 1$ approximation of the pressure
+
+\begin{equation}\label{eqn:huang93:940}
+\frac{P}{\epsilon_0 n_0} = \frac{3}{2} \sqrt{2 \pi} \barz \theta^{5/2}.
+\end{equation}
+
+%We've got Bessel and linear and exponential functions all in the mix, so the plot of 
+% is helpful to get a first glance at the asympotic behavior of this function.
+%
+%Plotting the sum in \cref{fig:huang93:huang93Fig4sv} numerically (up to 10 terms, with no visible change after that for small $\barz$ (like 0.2)), we end up with something that looks fairly exponential
+%\imageFigure{huang93Fig4sv}{Ten terms of pressure sum with $\barz = 1$}{fig:huang93:huang93Fig4sv}{0.3}
+
+\paragraph{Busted attempt to integrate the number density by parts}
+
+For the number density, it initially appears that we can evaluate the integral using integration from parts applied to \eqnref{eqn:huang93:730}
+
+\begin{dmath}\label{eqn:huang93:880}
+\frac{n}{n_0}
+= 
+\theta
+\int_{0}^\infty dx
+\frac{
+3 (\theta x + 1)\sqrt{(\theta x + 1)^2 - 1} 
+}
+{
+   \barz^{-1} e^{x} + 1
+}
+=
+\theta
+\int_{0}^\infty dx
+\lr{
+\frac{d}{dx}
+\lr{ (\theta x + 1)^2 - 1}^{3/2}
+}
+\frac{1}
+{
+   \barz^{-1} e^{x} + 1
+}
+=
+\evalrange{
+\theta
+\lr{ (\theta x + 1)^2 - 1}^{3/2}
+\frac{1}
+{
+   \barz^{-1} e^{x} + 1
+}
+}{0}{\infty}
+-
+\theta
+\int_{0}^\infty dx
+\lr{ (\theta x + 1)^2 - 1}^{3/2}
+\frac{ -\barz^{-1} e^{x} }
+{
+   \barz^{-1} e^{x} + 1
+}
+=
+\theta
+\int_{0}^\infty dx
+\lr{ (\theta x + 1)^2 - 1}^{3/2}
+\frac{ 1}
+{
+   1 + \barz e^{-x}
+}.
+\end{dmath}
+
+However, expanding in series as before gives us
+
+\begin{equation}\label{eqn:huang93:920}
+\frac{n}{n_0}
+=
+-
+\theta
+\sum_{s = 0} (-\barz)^s \int_{0}^\infty dx
+\lr{ (\theta x + 1)^2 - 1}^{3/2} e^{-x s}
+=
+-
+\theta
+\sum_{s = 0} (-\barz)^s \int_{0}^\infty dx
+\lr{ (\theta x + 1)^2 - 1}^{3/2} e^{-x s}.
+\end{equation}
+
+This is no longer nicely behaved, since the $s = 0$ integral does not converge!  Is there an invalid assumption here, or is the expression for $n$ wrong?
 
 \makeSubAnswer{}{basicStatMech:problemSet6:5d}
 

@@ -43,7 +43,10 @@ ifneq ($(QPDF_DIR),)
    QPDF := $(QPDF_DIR)/bin/qpdf.exe
 endif
 
-all :: huang93Fig3sv.pdf huang93Fig4sv.pdf huang93Fig5sv.pdf huang93Fig2sv.pdf
+all :: huang93Fig3sv.pdf
+all :: huang93Fig4sv.pdf
+all :: huang93Fig5sv.pdf
+all :: huang93Fig2sv.pdf
 
 all :: Bibliography.bib
 all :: peeters_macros.sty
