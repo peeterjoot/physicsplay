@@ -54,6 +54,7 @@ huang93.pdf : huang93Fig3sv.pdf
 huang93.pdf : huang93Fig4sv.pdf
 huang93.pdf : huang93Fig5sv.pdf
 huang93.pdf : huang93Fig2sv.pdf
+huang93.pdf : huang93Fig6sv.pdf
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
@@ -116,9 +117,12 @@ opt/%.pdf : %.pdf
 %.pdf : %.eps
 	epstopdf $^ --outfile=$@
 
+# not ideal when legends include Mathematica traditional form output.  braces get lost in the mix, either
+# with this conversion or the one from eps to pdf.
 %.eps : %.svg
 	$(INKSCAPE) $^ --export-eps=$@
 
+# generates a black image (so does png from svg)
 #%.png : %.pdf
 #	$(INKSCAPE) $^ --export-png=$@
 

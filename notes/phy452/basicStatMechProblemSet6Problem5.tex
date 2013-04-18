@@ -701,6 +701,156 @@ Here the binomial coefficient has the meaning given in the definitions of \statm
 (-1)^s \frac{-b}{-b + s} \binom{-b+s}{-b}.
 \end{equation}
 
+Expanding in series to a couple of orders in $\theta$ and $\barz$ we have
+
+\begin{equation}\label{eqn:huang93:1020}
+\frac{n}{n_0} = 
+\frac{\sqrt{2 \pi}}{36} \theta^{1/2} \left(\left(2 \sqrt{3} \barz - 9/\sqrt{2} \right) \barz +18 \right) \barz
++\frac{5 \sqrt{ 2 \pi}}{576} \theta^{3/2} \left(\left(4 \sqrt{3} \barz - 27/\sqrt{2}\right) \barz +108 \right) \barz
++ \cdots
+\end{equation}
+
+To first order in $\theta$ and $\barz$ this is
+
+\begin{equation}\label{eqn:huang93:1040}
+\frac{n}{n_0} = \inv{2} \sqrt{ 2 \pi } \barz \theta^{1/2},
+\end{equation}
+
+which allows a relation to pressure
+
+\begin{equation}\label{eqn:huang93:1060}
+P V = 3 N (\kB T)^2 /\epsilon_0.
+\end{equation}
+
+It's kind of odd seeming that this is quadradic in temperature.  Is there an error?
+
+\paragraph{Integrating the energy by parts}
+
+Starting from \eqnref{eqn:huang93:780} and integrating by parts we have
+
+\begin{dmath}\label{eqn:huang93:1080}
+\frac{\expectation{\epsilon - \epsilon_0}}{V \epsilon_0 n_0} 
+=
+3 \theta^2
+   \int_{0}^\infty dx
+   \frac
+   {
+      x (\theta x + 1)\sqrt{(\theta x + 1)^2 - 1} 
+   }
+   {
+      \barz^{-1} e^{x} + 1
+   }
+=
+-\theta^2
+   \int_{0}^\infty dx
+      \lr{(\theta x + 1)^2 - 1}^{3/2}
+\frac{d}{dx} 
+\lr{
+   \frac{x}
+   {
+      \barz^{-1} e^{x} + 1
+   }
+}
+=
+-\theta^2
+   \int_{0}^\infty dx
+      \lr{(\theta x + 1)^2 - 1}^{3/2}
+\lr{
+   \frac{1}
+   {
+      \barz^{-1} e^{x} + 1
+   }
+-
+   \frac{x \barz^{-1} e^{x} } 
+   {
+      \lr{\barz^{-1} e^{x} + 1}^2
+   }
+}
+=
+\theta^2
+   \int_{0}^\infty dx
+      \lr{(\theta x + 1)^2 - 1}^{3/2}
+   \frac{
+      (x - 1)\barz^{-1} e^{x} - 1
+} 
+   {
+      \lr{\barz^{-1} e^{x} + 1}^2
+   }
+=
+\theta^2
+   \int_{0}^\infty dx
+      \lr{(\theta x + 1)^2 - 1}^{3/2}
+   \frac{
+      (x - 1)\barz e^{-x} - \barz^2 e^{-2 x}
+} 
+   {
+      \lr{1 + \barz e^{-x}}^2
+   }
+= 
+\theta^2
+\sum_{s=0}^\infty \binom{-2}{s}
+   \int_{0}^\infty dx \lr{(\theta x + 1)^2 - 1}^{3/2}
+   \lr{
+      (x - 1)\barz e^{-x} - \barz^2 e^{-2 x}
+   } 
+(\barz e^{-x})^s
+= 
+\theta^2
+\sum_{s=0}^\infty \binom{-2}{s} \barz^{s + 1}
+   \int_{0}^\infty dx \lr{(\theta x + 1)^2 - 1}^{3/2}
+   \lr{
+      (x - 1) e^{-x(s + 1)} - \barz e^{-x(s + 2)}
+   }.
+\end{dmath}
+
+The integral with the factor of $x$ doesn't have a nice closed form as before (if you consider the $K_2$ a nice closed form), but instead evaluates to a confluent hypergeometric function \citep{wolframHyperGeometricU}.  That integral is
+
+\begin{dmath}\label{eqn:huang93:1100}
+\int_0^{\infty } x \left((\theta  x+1)^2-1\right)^{3/2} e^{-x (1+s)} dx = \frac{15 \sqrt{\pi } \theta^3 
+U\left(-\frac{3}{2},-4,\frac{2 (s+1)}{\theta }\right)
+}{8 (s+1)^5},
+\end{dmath}
+
+and looks like \cref{fig:huang93:huang93Fig6sv}.  Series expansion shows that this hypergeometricU function has a $\theta^{3/2}$ singularity at the origin
+
+\imageFigure{huang93Fig6sv}{Plot of HypergeometricU, and with $\theta^5$ scaling}{fig:huang93:huang93Fig6sv}{0.3}
+
+\begin{dmath}\label{eqn:huang93:1120}
+U\left(-\frac{3}{2},-4,\frac{2 (s+1)}{\theta }\right)
+=
+\frac{2 \sqrt{2} \sqrt{s+1} s+2 \sqrt{2} \sqrt{s+1}}{\theta^{3/2}}+\frac{21 \sqrt{s+1}}{2 \sqrt{2} \sqrt{\theta }}
++ \cdots
+\end{dmath}
+
+so our multiplication by $\theta^5$ brings us to zero as seen in the plot.  Evaluating the complete integral yields the unholy mess
+
+\begin{dmath}\label{eqn:huang93:1140}
+\frac{\expectation{\epsilon - \epsilon_0}}{V \epsilon_0 n_0} 
+=
+\sum_{s=0}^\infty \theta^2 (-1)^s (s+1) \barz^{s+1} \left(\frac{105 \sqrt{\pi } \theta^3 U\left(-\frac{1}{2},-4,\frac{2 (s+1)}{\theta }\right)}{16 (s+1)^5}-\frac{3 \sqrt{\pi } \theta^2 U\left(-\frac{1}{2},-2,\frac{2 (s+1)}{\theta }\right)}{2 (s+1)^3}-\frac{3 \sqrt{\pi } \theta^2 \barz U\left(-\frac{1}{2},-2,\frac{2 (s+2)}{\theta }\right)}{2 (s+2)^3}+\frac{(\theta -2) (-3 \theta +2 s+2) e^{\frac{s+1}{\theta }} K_2\left(\frac{s+1}{\theta }\right)}{\theta  (s+1)^2}-\frac{2 (\theta -2) e^{\frac{s+1}{\theta }} K_1\left(\frac{s+1}{\theta }\right)}{\theta  (s+1)}+\frac{\barz (-3 \theta +2 s+4) e^{\frac{s+2}{\theta }} K_2\left(\frac{s+2}{\theta }\right)}{(s+2)^2}-\frac{2 \barz e^{\frac{s+2}{\theta }} K_1\left(\frac{s+2}{\theta }\right)}{s+2}\right),
+\end{dmath}
+
+to first order in $\barz$ and $\theta$ this is
+
+\begin{dmath}\label{eqn:huang93:1160}
+\frac{\expectation{\epsilon - \epsilon_0}}{V \epsilon_0 n_0} 
+=
+\frac{9}{4} \sqrt{2 \pi} \barz \theta^{7/2}.
+\end{dmath}
+
+Comparing pressure and energy we have for low densities (where $\barz \approx 0$)
+
+\begin{equation}\label{eqn:huang93:1180}
+\inv{\epsilon_0 n_0 \sqrt{2 \pi} \barz \theta^{5/2}} = \frac{3}{2} \inv{P} = \frac{9}{4} \theta \frac{V}{U},
+\end{equation}
+
+or
+\begin{equation}\label{eqn:huang93:1200}
+\theta P V = \frac{2}{3} U.
+\end{equation}
+
+It appears that I've picked up an extra factor of $\theta$ somewhere, but at least I've got the $2/3$ low density expression.  Given that I've Taylor expanded everything anyways around $\barz$ and $\theta$ this could likely have been done right from the get go, instead of dragging along the messy geometric integrals.
+
 \makeSubAnswer{}{basicStatMech:problemSet6:5d}
 
 \begin{dmath}\label{eqn:huang93:80}
