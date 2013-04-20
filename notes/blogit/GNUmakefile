@@ -50,11 +50,11 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
 
 huang93.pdf : ../phy452/basicStatMechProblemSet6Problem5.tex
-#huang93.pdf : huang93Fig3sv.pdf
-#huang93.pdf : huang93Fig4sv.pdf
+huang93.pdf : huang93Fig3sv.pdf
+huang93.pdf : huang93Fig4sv.pdf
 #huang93.pdf : huang93Fig5sv.pdf
-#huang93.pdf : huang93Fig2sv.pdf
-#huang93.pdf : huang93Fig6sv.pdf
+huang93.pdf : huang93Fig2sv.pdf
+huang93.pdf : huang93Fig6sv.pdf
 
 #all :: huang93Fig3sv.png
 #all :: huang93Fig4sv.png
@@ -120,8 +120,8 @@ opt/%.pdf : %.pdf
 	mkdir -p opt
 	$(QPDF) --linearize $< $@
 
-#%.pdf : %.eps
-#	epstopdf $^ --outfile=$@
+%.pdf : %.eps
+	epstopdf $^ --outfile=$@
 
 # not ideal when legends include Mathematica traditional form output.  braces get lost in the mix, either
 # with this conversion or the one from eps to pdf.
