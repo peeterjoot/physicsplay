@@ -49,19 +49,6 @@ all :: peeters_layout.sty
 all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
 
-huang93.pdf : ../phy452/basicStatMechProblemSet6Problem5.tex
-huang93.pdf : huang93Fig3sv.pdf
-huang93.pdf : huang93Fig4sv.pdf
-#huang93.pdf : huang93Fig5sv.pdf
-huang93.pdf : huang93Fig2sv.pdf
-huang93.pdf : huang93Fig6sv.pdf
-
-#all :: huang93Fig3sv.png
-#all :: huang93Fig4sv.png
-#all :: huang93Fig5sv.png
-#all :: huang93Fig2sv.png
-#all :: huang93Fig6sv.png
-
 .gitignore : GNUmakefile
 	rm -f .gitignore
 	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/blogit/,' > $@

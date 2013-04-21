@@ -17,6 +17,13 @@ GENERATED_SOURCES += mathematica.tex
 #GENERATED_PDFS += basicStatMechProblemSet5.pdf
 #GENERATED_PDFS += basicStatMechProblemSet6.pdf
 
+PHY452_FIGURES += figures/huang93Fig3.pdf
+PHY452_FIGURES += figures/huang93Fig4.pdf
+PHY452_FIGURES += figures/huang93Fig2.pdf
+PHY452_FIGURES += figures/huang93Fig6.pdf
+
+phy452.pdf :: $(PHY452_FIGURES)
+
 include ../make.rules
 
 basicStatMechProblemSet1.pdf : basicStatMechProblemSet1Problem1.tex
