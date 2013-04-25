@@ -10,6 +10,9 @@ CFLAGS += $(shell $(LLVM_BIN_PATH)llvm-config --cxxflags)
 #CFLAGS := $(filter-out -fno-exceptions,$(CFLAGS))
 LDFLAGS += $(shell $(LLVM_BIN_PATH)llvm-config --ldflags)
 
+LLVMSRC := $(shell $(LLVM_BIN_PATH)/llvm-config --src-root)
+LLVMPREFIX := $(shell $(LLVM_BIN_PATH)/llvm-config --prefix)
+
 # HACK: llvm-config doesn't get along with clearcase as an install path and appears to be picking out my view storage dir.
 #
 # http://stackoverflow.com/questions/13650862/result-from-proc-self-exe-is-unfriendly-in-a-clearcase-view/13651141#13651141
@@ -44,9 +47,13 @@ EXES += testit
 EXES += dumper
 EXES += memberdumper
 EXES += LockUnlockChecker.so
+#EXES += $(LLVMPREFIX)/bin/ClangCheck
+EXES += $(LLVMPREFIX)/bin/RenameMethod
 CLEAN_EXES += rewritersample
 
 CFLAGS += -std=c++11
+
+#CFLAGS += -I$(LLVMSRC)/tools/clang/include
 
 all: $(EXES)
 
@@ -64,6 +71,19 @@ testit: testit.o
 
 dumper: dumper.o
 	$(CXX) $< -o $@ $(LDFLAGS)
+
+# exe doesn't work unless executed from the compiler prefix bin dir
+$(LLVMPREFIX)/bin/ClangCheck : ClangCheck
+	cp $< $@
+
+$(LLVMPREFIX)/bin/RenameMethod : RenameMethod
+	cp $< $@
+
+ClangCheck: ClangCheck.o
+	$(CXX) $< -o $@ $(LDFLAGS) -lclangFrontend -lclangSerialization -lclangDriver -lclangTooling -lclangParse -lclangSema -lclangAnalysis -lclangRewriteFrontend -lclangRewriteCore -lclangEdit -lclangAST -lclangLex -lclangBasic -lLLVMSupport
+
+RenameMethod: RenameMethod.o
+	$(CXX) $< -o $@ $(LDFLAGS) -lclangFrontend -lclangSerialization -lclangDriver -lclangTooling -lclangParse -lclangSema -lclangAnalysis -lclangRewriteFrontend -lclangRewriteCore -lclangEdit -lclangAST -lclangLex -lclangBasic -lLLVMSupport -lclangASTMatchers
 
 classvisitor: classvisitor.o
 	$(CXX) $< -o $@ $(LDFLAGS)
@@ -88,6 +108,9 @@ LockUnlockChecker.so: LockUnlockChecker.o
 
 isystem.h : isystem.pl
 	$< $(CXX) > $@
+
+ClangCheck.cpp : $(LLVMSRC)/tools/clang/tools/clang-check/ClangCheck.cpp
+	cp $< $@
 
 clean:
 	rm -rf *.o *.ll $(EXES) $(CLEAN_EXES) isystem.h
