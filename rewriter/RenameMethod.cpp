@@ -1,4 +1,7 @@
-// forked from: http://llvm.org/svn/llvm-project/cfe/branches/tooling/examples/rename-method/RenameMethod.cpp
+// forked basic infrastructure for a "renamer"
+//
+// from: http://llvm.org/svn/llvm-project/cfe/branches/tooling/examples/rename-method/RenameMethod.cpp
+//
 //=- examples/rename-method/RenameMethod.cpp ------------------------------===//
 //
 //                     The LLVM Compiler Infrastructure
@@ -18,6 +21,9 @@
 #include "clang/Tooling/CompilationDatabase.h"
 #include "clang/Tooling/Refactoring.h"
 #include "llvm/Support/CommandLine.h"
+#include "clang/Basic/SourceManager.h"
+#include "clang/Lex/Lexer.h"
+//#include <iostream>
 
 using namespace clang;
 using namespace clang::ast_matchers;
@@ -33,6 +39,8 @@ cl::list<std::string> SourcePaths(
   cl::desc("<source0> [... <sourceN>]"),
   cl::OneOrMore);
 
+// original RenameMethod.cpp callbacks:
+#if 0
 // Implements a callback that replaces the calls for the AST
 // nodes we matched.
 class CallRenamer : public MatchFinder::MatchCallback {
@@ -70,7 +78,6 @@ private:
   Replacements *Replace;
 };
 
-#if 0
 // Implements a callback that replaces the decls for the AST
 // nodes we matched.
 class DeclRenamer : public MatchFinder::MatchCallback {
@@ -104,6 +111,116 @@ private:
 };
 #endif
 
+class gmblkModifier : public MatchFinder::MatchCallback {
+public:
+  gmblkModifier(Replacements *Replace) : Replace(Replace) {}
+
+  // This method is called every time the registered matcher matches
+  // on the AST.
+	virtual void run(const MatchFinder::MatchResult &Result) {
+    const CallExpr *M = Result.Nodes.getStmtAs<CallExpr>("x");
+    //M->dump() ;
+    const Expr * a = M->getArg( 3 ) ;
+
+    // strip out the (presumed 'void **' casting) in sqlogmblk calls.
+    if ( const CStyleCastExpr * v = dyn_cast<CStyleCastExpr>( a ) )
+    {
+      //v->dump() ;
+      const Expr * theCastedValue = v->getSubExprAsWritten() ;
+      //theCastedValue->dump() ;
+
+      std::string replacement = decl2str( theCastedValue, Result.SourceManager ) ; 
+
+      Replace->insert(
+        Replacement(*Result.SourceManager,
+                    CharSourceRange::getTokenRange(
+                      SourceRange(v->getLocStart(), v->getLocEnd())),
+                    // ... with:
+                    replacement));
+    }
+  }
+
+private:
+  // Replacements are the RefactoringTool's way to keep track of code
+  // transformations, deduplicate them and apply them to the code when
+  // the tool has finished with all translation units.
+  Replacements *Replace;
+
+  // http://stackoverflow.com/a/11154162/189270
+  std::string decl2str(const Expr *d, const SourceManager *sm)
+   {
+      // This is the default LangOptions... not sure how to get the LangOptions that must have
+      // been supplied in newFrontendActionFactory() somewhere along the way
+      LangOptions lopt;
+
+      SourceLocation b(d->getLocStart()), _e(d->getLocEnd());
+      SourceLocation e(clang::Lexer::getLocForEndOfToken(_e, 0, *sm, lopt));
+
+      return std::string(sm->getCharacterData(b),
+          sm->getCharacterData(e) - sm->getCharacterData(b));
+   }
+};
+
+class gblkModifier : public MatchFinder::MatchCallback {
+public:
+  gblkModifier(Replacements *Replace) : Replace(Replace) {}
+
+  // This method is called every time the registered matcher matches
+  // on the AST.
+	virtual void run(const MatchFinder::MatchResult &Result) {
+    const CallExpr *M = Result.Nodes.getStmtAs<CallExpr>("y");
+    //M->dump() ;
+    const Expr * a = M->getArg( 2 ) ;
+
+    // strip out the (presumed 'void **' casting) in sqlogblk calls.
+    if ( const CStyleCastExpr * v = dyn_cast<CStyleCastExpr>( a ) )
+    {
+      //v->dump() ;
+      const Expr * theCastedValue = v->getSubExprAsWritten() ;
+      //theCastedValue->dump() ;
+
+      std::string replacement = decl2str( theCastedValue, Result.SourceManager ) ; 
+      replacement = "SQLO_MEM_DEFAULT, " + replacement ;
+
+      // rename the function:
+      Replace->insert(
+        Replacement(*Result.SourceManager,
+                    CharSourceRange::getTokenRange(
+                      SourceRange(M->getLocStart())),
+                    "sqlogmblk"));
+
+      // and insert the SQLO_MEM_DEFAULT param, and strip the void ** cast:
+      Replace->insert(
+        Replacement(*Result.SourceManager,
+                    CharSourceRange::getTokenRange(
+                      SourceRange(v->getLocStart(), v->getLocEnd())),
+                    // ... with:
+                    replacement));
+    }
+  }
+
+private:
+  // Replacements are the RefactoringTool's way to keep track of code
+  // transformations, deduplicate them and apply them to the code when
+  // the tool has finished with all translation units.
+  Replacements *Replace;
+
+  // http://stackoverflow.com/a/11154162/189270
+  std::string decl2str(const Expr *d, const SourceManager *sm)
+   {
+      // This is the default LangOptions... not sure how to get the LangOptions that must have
+      // been supplied in newFrontendActionFactory() somewhere along the way
+      LangOptions lopt;
+
+      SourceLocation b(d->getLocStart()), _e(d->getLocEnd());
+      SourceLocation e(clang::Lexer::getLocForEndOfToken(_e, 0, *sm, lopt));
+
+      return std::string(sm->getCharacterData(b),
+          sm->getCharacterData(e) - sm->getCharacterData(b));
+   }
+};
+
+
 int main(int argc, const char **argv) {
   // First see if we can create the compile command line from the
   // positional parameters after "--".
@@ -128,32 +245,17 @@ int main(int argc, const char **argv) {
   RefactoringTool Tool(*Compilations, SourcePaths);
   ast_matchers::MatchFinder Finder;
 
-  /*
-   * What I really want to match to:
-   *
-|   `-CallExpr 0x18afa48 </view/peeterj_clang8/vbs/engn/include/sqlomem.h:444:12, line:445:47> 'sqlzRc':'int'
-|     |-ImplicitCastExpr 0x18afa30 <line:444:12> 'sqlzRc (*)(SQLO_MEM_POOL_HANDLE, const size_t, Uint32, void **, const char *, const Uint, SQLO_RESOURCE_HANDLE)' <FunctionToPointerDecay>
-|     | `-DeclRefExpr 0x18afa08 <col:12> 'sqlzRc (SQLO_MEM_POOL_HANDLE, const size_t, Uint32, void **, const char *, const Uint, SQLO_RESOURCE_HANDLE)' lvalue Function 0x18a8d80 'sqlogmblkEx' 'sqlzRc (SQLO_MEM_POOL_HANDLE, const size_t, Uint32, void **, const char *, const Uint, SQLO_RESOURCE_HANDLE)'
-
-   */
-  CallRenamer gmblkCallCallback(&Tool.getReplacements(), "myfunc", "xxmyfunc");
+  gmblkModifier gmblkCallBack(&Tool.getReplacements());
   Finder.addMatcher(
-        callExpr( callee(functionDecl(hasName("myfunc")))).bind("myfunc"),
-    &gmblkCallCallback);
+        callExpr( callee(functionDecl(hasName("sqlogmblk"))) ).bind("x"),
+    &gmblkCallBack);
 
-#if 0
-  CallRenamer gmblkCallCallback(&Tool.getReplacements(), "sqlogmblk", "xxsqlogmblk");
+  gblkModifier gblkCallBack(&Tool.getReplacements());
   Finder.addMatcher(
-        callExpr( callee(functionDecl(hasName("sqlogmblk")))).bind("sqlogmblk"),
-    &gmblkCallCallback);
+        callExpr( callee(functionDecl(hasName("sqlogblk"))) ).bind("y"),
+    &gblkCallBack);
 
-  CallRenamer gblkCallCallback(&Tool.getReplacements(), "sqlogblk", "xxsqlogblk");
-
-  Finder.addMatcher(
-        callExpr( callee(functionDecl(hasName("sqlogblk")))).bind("sqlogblk"),
-    &gblkCallCallback);
-#endif
-
+// original RenameMethod.cpp matchers (modified for current clang source):
 #if 0
   Finder.addMatcher(
     // Match calls...
