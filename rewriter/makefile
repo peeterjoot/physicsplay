@@ -40,16 +40,17 @@ LDFLAGS += -lLLVMBitReader
 
 LDFLAGS += $(shell $(LLVM_BIN_PATH)llvm-config --libs $(LLVM_LIBS))
 
-EXES += classvisitor
-EXES += globalvisitor
-EXES += rewriter
-EXES += testit
-EXES += dumper
-EXES += memberdumper
-EXES += LockUnlockChecker.so
+#EXES += classvisitor
+#EXES += globalvisitor
+#EXES += rewriter
+#EXES += testit
+#EXES += dumper
+#EXES += memberdumper
+#EXES += LockUnlockChecker.so
 #EXES += $(LLVMPREFIX)/bin/ClangCheck
-EXES += $(LLVMPREFIX)/bin/RenameMethod
-CLEAN_EXES += rewritersample
+EXES += $(LLVMPREFIX)/bin/stripGmblkVoidPPcast
+#EXES += $(LLVMPREFIX)/bin/gblkToGmblk
+#CLEAN_EXES += rewritersample
 
 CFLAGS += -std=c++11
 
@@ -73,16 +74,16 @@ dumper: dumper.o
 	$(CXX) $< -o $@ $(LDFLAGS)
 
 # exe doesn't work unless executed from the compiler prefix bin dir
-$(LLVMPREFIX)/bin/ClangCheck : ClangCheck
-	cp $< $@
+#$(LLVMPREFIX)/bin/ClangCheck : ClangCheck
+#	cp $< $@
 
-$(LLVMPREFIX)/bin/RenameMethod : RenameMethod
-	cp $< $@
+#ClangCheck: ClangCheck.o
+#	$(CXX) $< -o $@ $(LDFLAGS) -lclangFrontend -lclangSerialization -lclangDriver -lclangTooling -lclangParse -lclangSema -lclangAnalysis -lclangRewriteFrontend -lclangRewriteCore -lclangEdit -lclangAST -lclangLex -lclangBasic -lLLVMSupport
 
-ClangCheck: ClangCheck.o
-	$(CXX) $< -o $@ $(LDFLAGS) -lclangFrontend -lclangSerialization -lclangDriver -lclangTooling -lclangParse -lclangSema -lclangAnalysis -lclangRewriteFrontend -lclangRewriteCore -lclangEdit -lclangAST -lclangLex -lclangBasic -lLLVMSupport
+$(LLVMPREFIX)/bin/stripGmblkVoidPPcast : stripGmblkVoidPPcast.o
+	$(CXX) $< -o $@ $(LDFLAGS) -lclangFrontend -lclangSerialization -lclangDriver -lclangTooling -lclangParse -lclangSema -lclangAnalysis -lclangRewriteFrontend -lclangRewriteCore -lclangEdit -lclangAST -lclangLex -lclangBasic -lLLVMSupport -lclangASTMatchers
 
-RenameMethod: RenameMethod.o
+$(LLVMPREFIX)/bin/gblkToGmblk : gblkToGmblk.o
 	$(CXX) $< -o $@ $(LDFLAGS) -lclangFrontend -lclangSerialization -lclangDriver -lclangTooling -lclangParse -lclangSema -lclangAnalysis -lclangRewriteFrontend -lclangRewriteCore -lclangEdit -lclangAST -lclangLex -lclangBasic -lLLVMSupport -lclangASTMatchers
 
 classvisitor: classvisitor.o
@@ -100,6 +101,12 @@ globalvisitor: globalvisitor.o
 rewritersample: rewritersample.o
 	$(CXX) $< -o $@ $(LDFLAGS)
 
+stripGmblkVoidPPcast.o : RenameMethod.cpp
+	$(CXX) -c $< $(CFLAGS) -DGMBLK_VOIDPP_MODE -DGBLK_TO_GMBLK -o $@
+
+gblkToGmblk.o : RenameMethod.cpp
+	$(CXX) -c $< $(CFLAGS) -o $@
+
 #	g++ -shared -fPIC `llvm-config --cxxflags` -I`llvm-config --src-root`/tools/clang/include \
 #		-I`llvm-config --obj-root`/tools/clang/include -o LockUnlockChecker.so LockUnlockChecker.cpp
 #
@@ -109,8 +116,8 @@ LockUnlockChecker.so: LockUnlockChecker.o
 isystem.h : isystem.pl
 	$< $(CXX) > $@
 
-ClangCheck.cpp : $(LLVMSRC)/tools/clang/tools/clang-check/ClangCheck.cpp
-	cp $< $@
+#ClangCheck.cpp : $(LLVMSRC)/tools/clang/tools/clang-check/ClangCheck.cpp
+#	cp $< $@
 
 clean:
 	rm -rf *.o *.ll $(EXES) $(CLEAN_EXES) isystem.h

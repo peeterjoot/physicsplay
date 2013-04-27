@@ -4,7 +4,7 @@
 //
 //=- examples/rename-method/RenameMethod.cpp ------------------------------===//
 //
-//                     The LLVM Compiler Infrastructure
+//                               The LLVM Compiler Infrastructure
 //
 // This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
@@ -31,83 +31,83 @@ using namespace clang::tooling;
 using namespace llvm;
 
 cl::opt<std::string> BuildPath(
-  cl::Positional,
-  cl::desc("<build-path>"));
+   cl::Positional,
+   cl::desc("<build-path>"));
 
 cl::list<std::string> SourcePaths(
-  cl::Positional,
-  cl::desc("<source0> [... <sourceN>]"),
-  cl::OneOrMore);
+   cl::Positional,
+   cl::desc("<source0> [... <sourceN>]"),
+   cl::OneOrMore);
 
 // original RenameMethod.cpp callbacks:
 #if 0
 // Implements a callback that replaces the calls for the AST
 // nodes we matched.
 class CallRenamer : public MatchFinder::MatchCallback {
-  const char * inputName ;
-  const char * replacementName ;
+   const char * inputName ;
+   const char * replacementName ;
 public:
-  CallRenamer(Replacements *Replace, const char * const srcName, const char * const repName) : Replace(Replace), inputName(srcName), replacementName(repName) {}
+   CallRenamer(Replacements *Replace, const char * const srcName, const char * const repName) : Replace(Replace), inputName(srcName), replacementName(repName) {}
 
-  // This method is called every time the registered matcher matches
-  // on the AST.
-  virtual void run(const MatchFinder::MatchResult &Result) {
-    const CallExpr *M = Result.Nodes.getStmtAs<CallExpr>(inputName);
-    // We can assume M is non-null, because the ast matchers guarantee
-    // that a node with this type was bound, as the matcher would otherwise
-    // not match.
+   // This method is called every time the registered matcher matches
+   // on the AST.
+   virtual void run(const MatchFinder::MatchResult &Result) {
+      const CallExpr *M = Result.Nodes.getStmtAs<CallExpr>(inputName);
+      // We can assume M is non-null, because the ast matchers guarantee
+      // that a node with this type was bound, as the matcher would otherwise
+      // not match.
 
-    if ( M )
-    {
-    Replace->insert(
-      // Replacements are a source manager independent way to express
-      // transformation on the source.
-      Replacement(*Result.SourceManager,
-                  // Replace the range of the member name...
-                  CharSourceRange::getTokenRange(
-                    SourceRange(M->getLocStart())),
-                  // ... with:
-                  replacementName));
-    }
-  }
+      if ( M )
+      {
+      Replace->insert(
+         // Replacements are a source manager independent way to express
+         // transformation on the source.
+         Replacement(*Result.SourceManager,
+                           // Replace the range of the member name...
+                           CharSourceRange::getTokenRange(
+                              SourceRange(M->getLocStart())),
+                           // ... with:
+                           replacementName));
+      }
+   }
 
 private:
-  // Replacements are the RefactoringTool's way to keep track of code
-  // transformations, deduplicate them and apply them to the code when
-  // the tool has finished with all translation units.
-  Replacements *Replace;
+   // Replacements are the RefactoringTool's way to keep track of code
+   // transformations, deduplicate them and apply them to the code when
+   // the tool has finished with all translation units.
+   Replacements *Replace;
 };
 
 // Implements a callback that replaces the decls for the AST
 // nodes we matched.
 class DeclRenamer : public MatchFinder::MatchCallback {
 public:
-  DeclRenamer(Replacements *Replace) : Replace(Replace) {}
+   DeclRenamer(Replacements *Replace) : Replace(Replace) {}
 
-  // This method is called every time the registered matcher matches
-  // on the AST.
-  virtual void run(const MatchFinder::MatchResult &Result) {
-    const CXXMethodDecl *D = Result.Nodes.getDeclAs<CXXMethodDecl>("method");
-    // We can assume D is non-null, because the ast matchers guarantee
-    // that a node with this type was bound, as the matcher would otherwise
-    // not match.
+   // This method is called every time the registered matcher matches
+   // on the AST.
+   virtual void run(const MatchFinder::MatchResult &Result) {
+      const CXXMethodDecl *D = Result.Nodes.getDeclAs<CXXMethodDecl>("method");
+      // We can assume D is non-null, because the ast matchers guarantee
+      // that a node with this type was bound, as the matcher would otherwise
+      // not match.
 
-    Replace->insert(
-      // Replacements are a source manager independent way to express
-      // transformation on the source.
-      Replacement(*Result.SourceManager,
-                  // Replace the range of the declarator identifier...
-                  CharSourceRange::getTokenRange(
-                    SourceRange(D->getLocation())),
-                  // ... with "Front".
-                  "Front"));
-  }
+      Replace->insert(
+         // Replacements are a source manager independent way to express
+         // transformation on the source.
+         Replacement(*Result.SourceManager,
+                           // Replace the range of the declarator identifier...
+                           CharSourceRange::getTokenRange(
+                              SourceRange(D->getLocation())),
+                           // ... with "Front".
+                           "Front"));
+   }
 
 private:
-  // Replacements are the RefactoringTool's way to keep track of code
-  // transformations, deduplicate them and apply them to the code when
-  // the tool has finished with all translation units.
-  Replacements *Replace;
+   // Replacements are the RefactoringTool's way to keep track of code
+   // transformations, deduplicate them and apply them to the code when
+   // the tool has finished with all translation units.
+   Replacements *Replace;
 };
 #endif
 
@@ -119,40 +119,40 @@ std::string decl2str( const Expr *d, const SourceManager *sm )
 
    if ( _b.isValid() && _e.isValid() )
    {
-     // This is the default LangOptions... not sure how to get the LangOptions that must have
-     // been supplied in newFrontendActionFactory() somewhere along the way
-     LangOptions lopt;
+      // This is the default LangOptions... not sure how to get the LangOptions that must have
+      // been supplied in newFrontendActionFactory() somewhere along the way
+      LangOptions lopt;
 
-     SourceLocation b(clang::Lexer::getLocForEndOfToken(_b, 0, *sm, lopt));
-     SourceLocation e(clang::Lexer::getLocForEndOfToken(_e, 0, *sm, lopt));
+      SourceLocation b(clang::Lexer::GetBeginningOfToken(_b, *sm, lopt));
+      SourceLocation e(clang::Lexer::getLocForEndOfToken(_e, 0, *sm, lopt));
   
-     const char * bs ;
-     const char * es ;
-     ptrdiff_t d ;
+      const char * bs ;
+      const char * es ;
+      ptrdiff_t d ;
 
-     if ( b.isValid() && e.isValid() )
-     {
-        bs = sm->getCharacterData(b) - 1 ;
-        es = sm->getCharacterData(e) ;
-        d = es - bs ;
-     }
-     else
-     {
-        bs = sm->getCharacterData(_b) ;
-        es = sm->getCharacterData(_e) ;
-        d = es - bs + 1 ;
-     }
+      if ( b.isValid() && e.isValid() )
+      {
+         bs = sm->getCharacterData(b) ;
+         es = sm->getCharacterData(e) ;
+         d = es - bs ;
+      }
+      else
+      {
+         bs = sm->getCharacterData(_b) ;
+         es = sm->getCharacterData(_e) ;
+         d = es - bs + 1 ;
+      }
 
-     r = std::string( bs, d ) ;
+      r = std::string( bs, d ) ;
   
-     //std::cout << "e: " << r << std::endl ;
-     //d->dump() ;
+      //std::cout << "e: " << r << std::endl ;
+      //d->dump() ;
    }
    else if ( 0 )
    {
       std::cout << "x: " << r << std::endl ;
       d->dump() ;
-       abort() ;
+      abort() ;
    }
 
    return r ;
@@ -160,223 +160,227 @@ std::string decl2str( const Expr *d, const SourceManager *sm )
 
 class gmblkModifier : public MatchFinder::MatchCallback {
 public:
-  gmblkModifier(Replacements *Replace) : Replace(Replace) {}
+   gmblkModifier(Replacements *Replace) : Replace(Replace) {}
 
-  // This method is called every time the registered matcher matches
-  // on the AST.
-  virtual void run(const MatchFinder::MatchResult &Result) {
-    const CallExpr *M = Result.Nodes.getStmtAs<CallExpr>("x");
-    const Expr * a = M->getArg( 3 ) ;
+   // This method is called every time the registered matcher matches
+   // on the AST.
+   virtual void run(const MatchFinder::MatchResult &Result) {
+      const CallExpr *M = Result.Nodes.getStmtAs<CallExpr>("x");
+      const Expr * a = M->getArg( 3 ) ;
 
-    // strip out the (presumed 'void **' casting) in sqlogmblk calls.
-    if ( const CStyleCastExpr * v = dyn_cast<CStyleCastExpr>( a ) )
-    {
+      // strip out the (presumed 'void **' casting) in sqlogmblk calls.
+      if ( const CStyleCastExpr * v = dyn_cast<CStyleCastExpr>( a ) )
+      {
 #if 0
 std::cout << "M: " << decl2str( M, Result.SourceManager ) << std::endl ;
-    M->dump() ;
+      M->dump() ;
 std::cout << "a: " << decl2str( a, Result.SourceManager ) << std::endl ;
-    a->dump() ;
+      a->dump() ;
 std::cout << "v: " << decl2str( v, Result.SourceManager ) << std::endl ;
-    v->dump() ;
+      v->dump() ;
 #endif
-      const Expr * theCastedValue = v->getSubExprAsWritten() ;
-      //theCastedValue->dump() ;
-      //std::cout << v->getCastKindName() << std::endl ; // -> CK_BitCast 
+         const Expr * theCastedValue = v->getSubExprAsWritten() ;
+         //theCastedValue->dump() ;
+         //std::cout << v->getCastKindName() << std::endl ; // -> CK_BitCast 
 
-      if ( theCastedValue )
-      {
-        std::string replacement = decl2str( theCastedValue, Result.SourceManager ) ; 
+         if ( theCastedValue )
+         {
+            std::string replacement = decl2str( theCastedValue, Result.SourceManager ) ; 
  
-        if ( replacement.length() )
-        {
-          std::string orig = decl2str( a, Result.SourceManager ) ;
-std::cout << "r: '" << replacement << "' -> '" << orig << "'\n" ;
+            if ( replacement.length() )
+            {
+               std::string orig = decl2str( a, Result.SourceManager ) ;
+std::cout << "orig: '" << orig << "' -> '" << replacement << "'\n" ;
 
-          Replace->insert(
-            Replacement(*Result.SourceManager,
-                        a->getLocStart(),
-                        orig.length(),
-                        replacement)
-            ) ;
-        } 
+               Replace->insert(
+                  Replacement(*Result.SourceManager,
+                              a->getLocStart(),
+                              orig.length(),
+                              replacement)
+                  ) ;
+            } 
+         }
       }
-    }
-  }
+   }
 
 private:
-  // Replacements are the RefactoringTool's way to keep track of code
-  // transformations, deduplicate them and apply them to the code when
-  // the tool has finished with all translation units.
-  Replacements *Replace;
+   // Replacements are the RefactoringTool's way to keep track of code
+   // transformations, deduplicate them and apply them to the code when
+   // the tool has finished with all translation units.
+   Replacements *Replace;
 
 };
 
 class gblkModifier : public MatchFinder::MatchCallback {
 public:
-  gblkModifier(Replacements *Replace) : Replace(Replace) {}
+   gblkModifier(Replacements *Replace) : Replace(Replace) {}
 
-  // This method is called every time the registered matcher matches
-  // on the AST.
-  virtual void run(const MatchFinder::MatchResult &Result) {
-    const CallExpr *M = Result.Nodes.getStmtAs<CallExpr>("y");
-    //M->dump() ;
-    const Expr * a = M->getArg( 2 ) ;
+   // This method is called every time the registered matcher matches
+   // on the AST.
+   virtual void run(const MatchFinder::MatchResult &Result) {
+      const CallExpr *M = Result.Nodes.getStmtAs<CallExpr>("y");
+      //M->dump() ;
+      const Expr * a = M->getArg( 2 ) ;
 
-    // 
-    // shortening and lengthening in two separate replacements isn't working in some situations:
-    //     -   rc = sqlogblk(heapptr, size, (void **)replypp);
-    //     +   rc = sqlogmblk(heapptr, size, SQLO_MEM_DEFAULT, p);
-    //
-    // but works fine for some reason if I copy this standalone?
-    //
-    // ... probably ought to be doing a single pass replacement of the whole call, renaming, inserting param, and removing the cast.
-    //
-    // For now, thought I may have to settle for two passes, but the other Matcher for gmblk actually kicks in after this one!
-    //
-        std::string replacement = decl2str( a, Result.SourceManager ) ; 
- 
-        if ( replacement.length() )
-        {
-          replacement = "SQLO_MEM_DEFAULT, " + replacement ;
-   
-          // rename the function:
-          Replace->insert(
-            Replacement(*Result.SourceManager,
-                        CharSourceRange::getTokenRange(
-                          SourceRange(M->getLocStart())),
-                        "sqlogmblk"));
-    
-          // and insert the SQLO_MEM_DEFAULT param
-          std::string orig = decl2str( a, Result.SourceManager ) ;
+      // 
+      // shortening and lengthening in two separate replacements seemed not to be working:
+      //       -    rc = sqlogblk(heapptr, size, (void **)replypp);
+      //       +    rc = sqlogmblk(heapptr, size, SQLO_MEM_DEFAULT, p);
+      //
+      // ... probably ought to be doing a single pass replacement of the whole call, renaming, inserting param, and removing the cast.
+      //
+      // However, the issue turns out to not be in this Match callback but the gmblk callback above.
+      //
+      // Note that we don't have to strip the void ** here, since the other Matcher for gmblk actually kicks in after this one (if not excluded.)
+      //
+      std::string replacement = decl2str( a, Result.SourceManager ) ; 
 
-          Replace->insert(
-            Replacement(*Result.SourceManager,
-                        a->getLocStart(),
-                        orig.length(),
-                        replacement)
-            ) ;
-        }
-#if 0
-    // strip out the (presumed 'void **' casting) in sqlogblk calls.
-    if ( const CStyleCastExpr * v = dyn_cast<CStyleCastExpr>( a ) )
-    {
-      //v->dump() ;
-      const Expr * theCastedValue = v->getSubExprAsWritten() ;
-      //theCastedValue->dump() ;
-
-      if ( theCastedValue )
+      if ( replacement.length() )
       {
-        std::string replacement = decl2str( theCastedValue, Result.SourceManager ) ; 
- 
-        if ( replacement.length() )
-        {
-          replacement = "SQLO_MEM_DEFAULT, " + replacement ;
-    
-          // rename the function:
-          Replace->insert(
-            Replacement(*Result.SourceManager,
-                        CharSourceRange::getTokenRange(
-                          SourceRange(M->getLocStart())),
-                        "sqlogmblk"));
-    
-          // and insert the SQLO_MEM_DEFAULT param, and strip the void ** cast:
-          std::string orig = decl2str( a, Result.SourceManager ) ;
+         replacement = "SQLO_MEM_DEFAULT, " + replacement ;
 
-          Replace->insert(
+         // rename the function:
+         Replace->insert(
             Replacement(*Result.SourceManager,
-                        a->getLocStart(),
-                        orig.length(),
-                        replacement)
+                              CharSourceRange::getTokenRange(
+                                 SourceRange(M->getLocStart())),
+                              "sqlogmblk"));
+
+         // and insert the SQLO_MEM_DEFAULT param
+         std::string orig = decl2str( a, Result.SourceManager ) ;
+
+         Replace->insert(
+            Replacement(*Result.SourceManager,
+                              a->getLocStart(),
+                              orig.length(),
+                              replacement)
             ) ;
-        }
       }
-    }
+#if 0
+      // strip out the (presumed 'void **' casting) in sqlogblk calls.
+      if ( const CStyleCastExpr * v = dyn_cast<CStyleCastExpr>( a ) )
+      {
+         //v->dump() ;
+         const Expr * theCastedValue = v->getSubExprAsWritten() ;
+         //theCastedValue->dump() ;
+
+         if ( theCastedValue )
+         {
+            std::string replacement = decl2str( theCastedValue, Result.SourceManager ) ; 
+ 
+            if ( replacement.length() )
+            {
+               replacement = "SQLO_MEM_DEFAULT, " + replacement ;
+      
+               // rename the function:
+               Replace->insert(
+                  Replacement(*Result.SourceManager,
+                                    CharSourceRange::getTokenRange(
+                                       SourceRange(M->getLocStart())),
+                                    "sqlogmblk"));
+      
+               // and insert the SQLO_MEM_DEFAULT param, and strip the void ** cast:
+               std::string orig = decl2str( a, Result.SourceManager ) ;
+
+               Replace->insert(
+                  Replacement(*Result.SourceManager,
+                                    a->getLocStart(),
+                                    orig.length(),
+                                    replacement)
+                  ) ;
+            }
+         }
+      }
 #endif
-  }
+   }
 
 private:
-  // Replacements are the RefactoringTool's way to keep track of code
-  // transformations, deduplicate them and apply them to the code when
-  // the tool has finished with all translation units.
-  Replacements *Replace;
+   // Replacements are the RefactoringTool's way to keep track of code
+   // transformations, deduplicate them and apply them to the code when
+   // the tool has finished with all translation units.
+   Replacements *Replace;
 };
 
 
 int main(int argc, const char **argv) {
-  // First see if we can create the compile command line from the
-  // positional parameters after "--".
-  OwningPtr<CompilationDatabase> Compilations(
-    FixedCompilationDatabase::loadFromCommandLine(argc, argv));
+   // First see if we can create the compile command line from the
+   // positional parameters after "--".
+   OwningPtr<CompilationDatabase> Compilations(
+      FixedCompilationDatabase::loadFromCommandLine(argc, argv));
 
-  // Do normal command line handling from the rest of the arguments.
-  cl::ParseCommandLineOptions(argc, argv);
+   // Do normal command line handling from the rest of the arguments.
+   cl::ParseCommandLineOptions(argc, argv);
 
-  if (!Compilations) {
-    // If the caller didn't specify a compile command line to use, try to
-    // load it from a build directory. For example when running cmake, use
-    // CMAKE_EXPORT_COMPILE_COMMANDS=ON to prepare your build directory to
-    // be useable with clang tools.
-    std::string ErrorMessage;
-    Compilations.reset(CompilationDatabase::loadFromDirectory(BuildPath,
-                                                              ErrorMessage));
-    if (!Compilations)
-      llvm::report_fatal_error(ErrorMessage);
-  }
+   if (!Compilations) {
+      // If the caller didn't specify a compile command line to use, try to
+      // load it from a build directory. For example when running cmake, use
+      // CMAKE_EXPORT_COMPILE_COMMANDS=ON to prepare your build directory to
+      // be useable with clang tools.
+      std::string ErrorMessage;
+      Compilations.reset(CompilationDatabase::loadFromDirectory(BuildPath,
+                                                                                             ErrorMessage));
+      if (!Compilations)
+         llvm::report_fatal_error(ErrorMessage);
+   }
 
-  RefactoringTool Tool(*Compilations, SourcePaths);
-  ast_matchers::MatchFinder Finder;
+   RefactoringTool Tool(*Compilations, SourcePaths);
+   ast_matchers::MatchFinder Finder;
 
-  gmblkModifier gmblkCallBack(&Tool.getReplacements());
-  Finder.addMatcher(
-        callExpr( callee(functionDecl(hasName("sqlogmblk"))) ).bind("x"),
-    &gmblkCallBack);
+#if defined GMBLK_VOIDPP_MODE 
+   gmblkModifier gmblkCallBack(&Tool.getReplacements());
+   Finder.addMatcher(
+            callExpr( callee(functionDecl(hasName("sqlogmblk"))) ).bind("x"),
+      &gmblkCallBack);
 
-  gblkModifier gblkCallBack(&Tool.getReplacements());
-  Finder.addMatcher(
-        callExpr( callee(functionDecl(hasName("sqlogblk"))) ).bind("y"),
-    &gblkCallBack);
+#endif
+#if defined GBLK_TO_GMBLK
+   gblkModifier gblkCallBack(&Tool.getReplacements());
+   Finder.addMatcher(
+            callExpr( callee(functionDecl(hasName("sqlogblk"))) ).bind("y"),
+      &gblkCallBack);
 
-  Finder.addMatcher(
-        callExpr( callee(functionDecl(hasName("sqlogtblk"))) ).bind("y"),
-    &gblkCallBack);
+   Finder.addMatcher(
+            callExpr( callee(functionDecl(hasName("sqlogtblk"))) ).bind("y"),
+      &gblkCallBack);
+#endif
 
 // original RenameMethod.cpp matchers (modified for current clang source):
 #if 0
-  Finder.addMatcher(
-    // Match calls...
-    memberCallExpr(
-      // Where the callee is a method called "Get"...
-      callee(methodDecl(hasName("Get"))),
-      // ... and the class on which the method is called is derived
-      // from ElementsBase ...
-      thisPointerType(recordDecl(
-        isDerivedFrom("ElementsBase"))),
-      // ... and bind the member expression to the ID "member", under which
-      // it can later be found in the callback.
-      callee(id("member", memberExpr()))),
-    &CallCallback);
+   Finder.addMatcher(
+      // Match calls...
+      memberCallExpr(
+         // Where the callee is a method called "Get"...
+         callee(methodDecl(hasName("Get"))),
+         // ... and the class on which the method is called is derived
+         // from ElementsBase ...
+         thisPointerType(recordDecl(
+            isDerivedFrom("ElementsBase"))),
+         // ... and bind the member expression to the ID "member", under which
+         // it can later be found in the callback.
+         callee(id("member", memberExpr()))),
+      &CallCallback);
 
-  DeclRenamer DeclCallback(&Tool.getReplacements());
-  Finder.addMatcher(
-    // Match declarations...
-    id("method", methodDecl(hasName("Get"),
-                        ofClass(isDerivedFrom("ElementsBase")))),
-    &DeclCallback);
+   DeclRenamer DeclCallback(&Tool.getReplacements());
+   Finder.addMatcher(
+      // Match declarations...
+      id("method", methodDecl(hasName("Get"),
+                                    ofClass(isDerivedFrom("ElementsBase")))),
+      &DeclCallback);
 
-  Finder.addMatcher(
-    // Match calls...
-    memberCallExpr(
-      // Where the callee is a method called "Get"...
-      callee(methodDecl(hasName("Get"))),
-      // ... and the class on which the method is called is derived
-      // from ElementsBase ...
-      thisPointerType(recordDecl(
-        isDerivedFrom("ElementsBase"))),
-      // ... and bind the member expression to the ID "member", under which
-      // it can later be found in the callback.
-      callee(id("member", memberExpr()))),
-    &CallCallback);
+   Finder.addMatcher(
+      // Match calls...
+      memberCallExpr(
+         // Where the callee is a method called "Get"...
+         callee(methodDecl(hasName("Get"))),
+         // ... and the class on which the method is called is derived
+         // from ElementsBase ...
+         thisPointerType(recordDecl(
+            isDerivedFrom("ElementsBase"))),
+         // ... and bind the member expression to the ID "member", under which
+         // it can later be found in the callback.
+         callee(id("member", memberExpr()))),
+      &CallCallback);
 #endif
 
-  return Tool.runAndSave(newFrontendActionFactory(&Finder));
+   return Tool.runAndSave(newFrontendActionFactory(&Finder));
 }
