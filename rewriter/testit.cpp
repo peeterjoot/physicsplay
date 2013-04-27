@@ -1,9 +1,39 @@
 #include <iostream>
 #include <string>
 #include <regex>
+//#include "boost::regex"
 
 using namespace std ;
 
+#if 0
+int main()
+{
+   std::cmatch res;
+   string str = "<h2>Egg prices</h2>";
+   std::regex rx("<h(.)>([^<]+)");
+   std::regex_search(str.c_str(), res, rx);
+   std::cout << res[1] << ". " << res[2] << "\n";
+
+   return 0 ;
+}
+#elif 1
+int main()
+{
+   // looks like gcc4.8 libstdc++ still has a busted regex library
+   //regex pattern("(.*)\\(void\\)(.*)");
+   regex pattern("(.*)void(.*)");
+   string input = "hi (void) 7 bye" ;
+
+   const string format = "$1$2" ;
+
+   //string altered = regex_replace( input, pattern, format, regex_constants::format_no_copy ) ;
+   string altered = regex_replace( input, pattern, format ) ;
+   //string altered = regex_replace( input, pattern, format, regex_constants::format_default ) ;
+   cout << altered << endl ;
+
+   return 0 ;
+}
+#elif 0
 int main()
 {
    // This should match any word
@@ -18,8 +48,7 @@ int main()
 
    return 0 ;
 }
-
-#if 0
+#elif 0
 int main()
 {
    regex tag( "(class )" ) ;
@@ -54,7 +83,7 @@ int main()
 
    return 0 ;
 }
-#elif 0
+#elif 1
 int main()
 {
    //regex tag( "^(class|struct|union) ") ; 
