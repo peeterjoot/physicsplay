@@ -23,7 +23,7 @@
 #include "llvm/Support/CommandLine.h"
 #include "clang/Basic/SourceManager.h"
 #include "clang/Lex/Lexer.h"
-//#include <iostream>
+#include <iostream>
 
 using namespace clang;
 using namespace clang::ast_matchers;
@@ -51,7 +51,7 @@ public:
 
   // This method is called every time the registered matcher matches
   // on the AST.
-	virtual void run(const MatchFinder::MatchResult &Result) {
+  virtual void run(const MatchFinder::MatchResult &Result) {
     const CallExpr *M = Result.Nodes.getStmtAs<CallExpr>(inputName);
     // We can assume M is non-null, because the ast matchers guarantee
     // that a node with this type was bound, as the matcher would otherwise
@@ -86,7 +86,7 @@ public:
 
   // This method is called every time the registered matcher matches
   // on the AST.
-	virtual void run(const MatchFinder::MatchResult &Result) {
+  virtual void run(const MatchFinder::MatchResult &Result) {
     const CXXMethodDecl *D = Result.Nodes.getDeclAs<CXXMethodDecl>("method");
     // We can assume D is non-null, because the ast matchers guarantee
     // that a node with this type was bound, as the matcher would otherwise
@@ -111,32 +111,95 @@ private:
 };
 #endif
 
+// http://stackoverflow.com/a/11154162/189270
+std::string decl2str( const Expr *d, const SourceManager *sm )
+{
+   std::string r ;
+   SourceLocation _b(d->getLocStart()), _e(d->getLocEnd());
+
+   if ( _b.isValid() && _e.isValid() )
+   {
+     // This is the default LangOptions... not sure how to get the LangOptions that must have
+     // been supplied in newFrontendActionFactory() somewhere along the way
+     LangOptions lopt;
+
+     SourceLocation b(clang::Lexer::getLocForEndOfToken(_b, 0, *sm, lopt));
+     SourceLocation e(clang::Lexer::getLocForEndOfToken(_e, 0, *sm, lopt));
+  
+     const char * bs ;
+     const char * es ;
+     ptrdiff_t d ;
+
+     if ( b.isValid() && e.isValid() )
+     {
+        bs = sm->getCharacterData(b) - 1 ;
+        es = sm->getCharacterData(e) ;
+        d = es - bs ;
+     }
+     else
+     {
+        bs = sm->getCharacterData(_b) ;
+        es = sm->getCharacterData(_e) ;
+        d = es - bs + 1 ;
+     }
+
+     r = std::string( bs, d ) ;
+  
+     //std::cout << "e: " << r << std::endl ;
+     //d->dump() ;
+   }
+   else if ( 0 )
+   {
+      std::cout << "x: " << r << std::endl ;
+      d->dump() ;
+       abort() ;
+   }
+
+   return r ;
+}
+
 class gmblkModifier : public MatchFinder::MatchCallback {
 public:
   gmblkModifier(Replacements *Replace) : Replace(Replace) {}
 
   // This method is called every time the registered matcher matches
   // on the AST.
-	virtual void run(const MatchFinder::MatchResult &Result) {
+  virtual void run(const MatchFinder::MatchResult &Result) {
     const CallExpr *M = Result.Nodes.getStmtAs<CallExpr>("x");
-    //M->dump() ;
     const Expr * a = M->getArg( 3 ) ;
 
     // strip out the (presumed 'void **' casting) in sqlogmblk calls.
     if ( const CStyleCastExpr * v = dyn_cast<CStyleCastExpr>( a ) )
     {
-      //v->dump() ;
+#if 0
+std::cout << "M: " << decl2str( M, Result.SourceManager ) << std::endl ;
+    M->dump() ;
+std::cout << "a: " << decl2str( a, Result.SourceManager ) << std::endl ;
+    a->dump() ;
+std::cout << "v: " << decl2str( v, Result.SourceManager ) << std::endl ;
+    v->dump() ;
+#endif
       const Expr * theCastedValue = v->getSubExprAsWritten() ;
       //theCastedValue->dump() ;
+      //std::cout << v->getCastKindName() << std::endl ; // -> CK_BitCast 
 
-      std::string replacement = decl2str( theCastedValue, Result.SourceManager ) ; 
+      if ( theCastedValue )
+      {
+        std::string replacement = decl2str( theCastedValue, Result.SourceManager ) ; 
+ 
+        if ( replacement.length() )
+        {
+          std::string orig = decl2str( a, Result.SourceManager ) ;
+std::cout << "r: '" << replacement << "' -> '" << orig << "'\n" ;
 
-      Replace->insert(
-        Replacement(*Result.SourceManager,
-                    CharSourceRange::getTokenRange(
-                      SourceRange(v->getLocStart(), v->getLocEnd())),
-                    // ... with:
-                    replacement));
+          Replace->insert(
+            Replacement(*Result.SourceManager,
+                        a->getLocStart(),
+                        orig.length(),
+                        replacement)
+            ) ;
+        } 
+      }
     }
   }
 
@@ -146,19 +209,6 @@ private:
   // the tool has finished with all translation units.
   Replacements *Replace;
 
-  // http://stackoverflow.com/a/11154162/189270
-  std::string decl2str(const Expr *d, const SourceManager *sm)
-   {
-      // This is the default LangOptions... not sure how to get the LangOptions that must have
-      // been supplied in newFrontendActionFactory() somewhere along the way
-      LangOptions lopt;
-
-      SourceLocation b(d->getLocStart()), _e(d->getLocEnd());
-      SourceLocation e(clang::Lexer::getLocForEndOfToken(_e, 0, *sm, lopt));
-
-      return std::string(sm->getCharacterData(b),
-          sm->getCharacterData(e) - sm->getCharacterData(b));
-   }
 };
 
 class gblkModifier : public MatchFinder::MatchCallback {
@@ -167,11 +217,46 @@ public:
 
   // This method is called every time the registered matcher matches
   // on the AST.
-	virtual void run(const MatchFinder::MatchResult &Result) {
+  virtual void run(const MatchFinder::MatchResult &Result) {
     const CallExpr *M = Result.Nodes.getStmtAs<CallExpr>("y");
     //M->dump() ;
     const Expr * a = M->getArg( 2 ) ;
 
+    // 
+    // shortening and lengthening in two separate replacements isn't working in some situations:
+    //     -   rc = sqlogblk(heapptr, size, (void **)replypp);
+    //     +   rc = sqlogmblk(heapptr, size, SQLO_MEM_DEFAULT, p);
+    //
+    // but works fine for some reason if I copy this standalone?
+    //
+    // ... probably ought to be doing a single pass replacement of the whole call, renaming, inserting param, and removing the cast.
+    //
+    // For now, thought I may have to settle for two passes, but the other Matcher for gmblk actually kicks in after this one!
+    //
+        std::string replacement = decl2str( a, Result.SourceManager ) ; 
+ 
+        if ( replacement.length() )
+        {
+          replacement = "SQLO_MEM_DEFAULT, " + replacement ;
+   
+          // rename the function:
+          Replace->insert(
+            Replacement(*Result.SourceManager,
+                        CharSourceRange::getTokenRange(
+                          SourceRange(M->getLocStart())),
+                        "sqlogmblk"));
+    
+          // and insert the SQLO_MEM_DEFAULT param
+          std::string orig = decl2str( a, Result.SourceManager ) ;
+
+          Replace->insert(
+            Replacement(*Result.SourceManager,
+                        a->getLocStart(),
+                        orig.length(),
+                        replacement)
+            ) ;
+        }
+#if 0
     // strip out the (presumed 'void **' casting) in sqlogblk calls.
     if ( const CStyleCastExpr * v = dyn_cast<CStyleCastExpr>( a ) )
     {
@@ -179,24 +264,34 @@ public:
       const Expr * theCastedValue = v->getSubExprAsWritten() ;
       //theCastedValue->dump() ;
 
-      std::string replacement = decl2str( theCastedValue, Result.SourceManager ) ; 
-      replacement = "SQLO_MEM_DEFAULT, " + replacement ;
+      if ( theCastedValue )
+      {
+        std::string replacement = decl2str( theCastedValue, Result.SourceManager ) ; 
+ 
+        if ( replacement.length() )
+        {
+          replacement = "SQLO_MEM_DEFAULT, " + replacement ;
+    
+          // rename the function:
+          Replace->insert(
+            Replacement(*Result.SourceManager,
+                        CharSourceRange::getTokenRange(
+                          SourceRange(M->getLocStart())),
+                        "sqlogmblk"));
+    
+          // and insert the SQLO_MEM_DEFAULT param, and strip the void ** cast:
+          std::string orig = decl2str( a, Result.SourceManager ) ;
 
-      // rename the function:
-      Replace->insert(
-        Replacement(*Result.SourceManager,
-                    CharSourceRange::getTokenRange(
-                      SourceRange(M->getLocStart())),
-                    "sqlogmblk"));
-
-      // and insert the SQLO_MEM_DEFAULT param, and strip the void ** cast:
-      Replace->insert(
-        Replacement(*Result.SourceManager,
-                    CharSourceRange::getTokenRange(
-                      SourceRange(v->getLocStart(), v->getLocEnd())),
-                    // ... with:
-                    replacement));
+          Replace->insert(
+            Replacement(*Result.SourceManager,
+                        a->getLocStart(),
+                        orig.length(),
+                        replacement)
+            ) ;
+        }
+      }
     }
+#endif
   }
 
 private:
@@ -204,20 +299,6 @@ private:
   // transformations, deduplicate them and apply them to the code when
   // the tool has finished with all translation units.
   Replacements *Replace;
-
-  // http://stackoverflow.com/a/11154162/189270
-  std::string decl2str(const Expr *d, const SourceManager *sm)
-   {
-      // This is the default LangOptions... not sure how to get the LangOptions that must have
-      // been supplied in newFrontendActionFactory() somewhere along the way
-      LangOptions lopt;
-
-      SourceLocation b(d->getLocStart()), _e(d->getLocEnd());
-      SourceLocation e(clang::Lexer::getLocForEndOfToken(_e, 0, *sm, lopt));
-
-      return std::string(sm->getCharacterData(b),
-          sm->getCharacterData(e) - sm->getCharacterData(b));
-   }
 };
 
 
@@ -253,6 +334,10 @@ int main(int argc, const char **argv) {
   gblkModifier gblkCallBack(&Tool.getReplacements());
   Finder.addMatcher(
         callExpr( callee(functionDecl(hasName("sqlogblk"))) ).bind("y"),
+    &gblkCallBack);
+
+  Finder.addMatcher(
+        callExpr( callee(functionDecl(hasName("sqlogtblk"))) ).bind("y"),
     &gblkCallBack);
 
 // original RenameMethod.cpp matchers (modified for current clang source):
