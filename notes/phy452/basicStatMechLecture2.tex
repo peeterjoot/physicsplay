@@ -277,7 +277,7 @@ Demonstrating this limit is left to \prref{basicStatMech:problemSet1:1}.
 
 \section{Stirling formula}
 
-To prove the Stirling formula we'll use the Gamma (related) function
+To prove the Stirling formula we'll use the Gamma (related) \index{gamma function} function
 
 \begin{equation}\label{eqn:basicStatMechLecture2:540}
 I(\alpha) = \Gamma(\alpha + 1) = \int_0^\infty dy e^{-y} y^\alpha
@@ -371,7 +371,7 @@ f''(y)
 = -\alpha \inv{y^2},
 \end{dmath}
 
-at $y = y^\conj = \alpha$ we have $f''(y^\conj) = -\inv{\alpha}$ and
+at $y = y^\conj = \alpha$ we have $f''(y^\conj) = -\inv{\alpha}$, so
 
 \begin{dmath}\label{eqn:basicStatMechLecture2:720}
 I(\alpha \gg 1) \approx 
@@ -386,58 +386,42 @@ e^{f(y^\conj)}
 e^{f(\alpha)}
 \int_0^\infty dy 
 e^{
--\frac{(y - \alpha)^2}{2 
-%\mathLabelBox
-%[
-%   labelstyle={below of=m\themathLableNode, below of=m\themathLableNode}
-%]
-%{
-\alpha
-%}{Question: Was this factor on the board.  I didn't have it in my notes?}
-}
-}
-%\approx
-%e^{f(\alpha)}
-%\int_0^\infty dy e^{-(y - \alpha)^2/2}
+-\frac{(y - \alpha)^2}{2 \alpha }
+}.
 \end{dmath}
 
-With a substitution $x = (y - \alpha)/\sqrt{2 \alpha}$ terms of the error function, this integral can be split into a constant term and an error function component, where the error function is
+With a substitution $x = (y - \alpha)/\sqrt{2 \alpha}$, this integral can be split into a constant term and an error function component, where the error function is
 
 \begin{equation}\label{eqn:basicStatMechLecture2:820b}
-\erf(z) = \frac{2}{\sqrt{\pi}} \int_0^\infty e^{-t^2} dt.
+\erf(z) = \frac{2}{\sqrt{\pi}} \int_0^z e^{-t^2} dt.
 \end{equation}
 
-We get (verified in \nbref{lecture2Figures.nb})
+That is
 
-%\begin{dmath}\label{eqn:basicStatMechLecture2:800}
-%\int_0^\infty dy 
-%e^{
-%-\frac{(y - \alpha)^2}{2 \alpha}
-%}
-%=
-%\inv{2}
-%\int_{-\infty}^\infty dy 
-%e^{
-%-
-%\frac{(y - \alpha)^2}{2 \alpha}
-%}
-%=
-%\frac{\sqrt{2 \alpha}}{2} 
-%\int_{-\infty}^\infty d
-%%\mathLabelBox
-%%[
-%%   labelstyle={xshift=2cm},
-%%   linestyle={out=90,in=270, latex-}
-%%]
-%%{
-%u
-%%}{$u= (y-\alpha)/\sqrt{2 \alpha}$}
-%e^{
-%-u^2
-%}
-%=
-%\frac{\sqrt{2 \pi \alpha}}{2} 
-%\end{dmath}
+\begin{dmath}\label{eqn:basicStatMechLecture2:820c}
+\int_0^\infty dy 
+e^{
+-\frac{(y - \alpha)^2}{2 \alpha }
+}
+= 
+\sqrt{ 2\alpha}
+\int_{-\alpha/\sqrt{2\alpha}}^\infty dx e^{-x^2}
+= 
+\sqrt{ 2\alpha}
+\int_{-\sqrt{\alpha/2}}^0 dx e^{-x^2}
++
+\sqrt{ 2\alpha}
+\int_0^\infty dx e^{-x^2}
+= 
+\sqrt{ 2\alpha}
+\lr{ 
+\frac{\sqrt{\pi}}{2} \erf\lr{ \sqrt{\frac{\alpha}{2}} }
++
+\frac{\sqrt{\pi}}{2} 
+},
+\end{dmath}
+
+or (as also verified in \nbref{lecture2Figures.nb})
 
 \begin{equation}\label{eqn:basicStatMechLecture2:820}
 \int_0^\infty dy 
@@ -457,14 +441,16 @@ Note that $\erf(z)$ tends to unity as $x \rightarrow \infty$, as illustrated in 
 e^{
 -\frac{(y - \alpha)^2}{2 \alpha}
 }
-\approx \sqrt{2 \pi \alpha}
+\approx \sqrt{2 \pi \alpha}.
 \end{equation}
+
+With
 
 \begin{equation}\label{eqn:basicStatMechLecture2:740}
-e^{f(\alpha)} = e^{-\alpha + \alpha \ln \alpha}
+e^{f(\alpha)} = e^{-\alpha + \alpha \ln \alpha},
 \end{equation}
 
-We have for $\alpha \gg 1$
+we have for $\alpha \gg 1$
 \begin{equation}\label{eqn:basicStatMechLecture2:760}
 I(\alpha) \approx e^{-\alpha} 
 \mathLabelBox
@@ -478,16 +464,22 @@ e^{\alpha \ln \alpha}
 {
 $\alpha^\alpha$
 }
-\sqrt{2 \pi \alpha}
+\sqrt{2 \pi \alpha}.
 \end{equation}
 
 This gives us the \underlineAndIndex{Stirling approximation}
 
 \begin{equation}\label{eqn:basicStatMechLecture2:480}
 \myBoxed{
-N! \approx \sqrt{ 2 \pi N} N^N e^{-N},
+N! \approx \sqrt{ 2 \pi N} N^N e^{-N}.
 }
 \end{equation}
+
+A plot of the relative difference between the stirling approximation and the factorial $(N! - \sqrt{ 2 \pi N} N^N e^{-N})/N!$ is given in \cref{fig:stirlingError:stirlingErrorFig3}
+
+\imageFigure{figures/stirlingErrorFig3}{Relative error of the Stirling approximation}{fig:stirlingError:stirlingErrorFig3}{0.3}
+
+%0.077863, 0.0404978, 0.0272984, 0.020576, 0.0165069, 0.0137803, 0.0118262, 0.0103573, 0.00921276, 0.00829596, 0.00754507, 0.00691879
 
 %\EndArticle
 %\EndNoBibArticle

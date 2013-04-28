@@ -25,6 +25,7 @@ HUANG93_DEPS += figures/huang93Fig2.pdf
 HUANG93_DEPS += figures/huang93Fig6.pdf
 
 THISBOOK_DEPS += $(HUANG93_DEPS)
+THISBOOK_DEPS += figures/stirlingErrorFig3.pdf
 
 include ../make.rules
 
