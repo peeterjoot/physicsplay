@@ -253,13 +253,41 @@ With the state counting that we've done, we want to look at entropy \index{entro
 }{phase space volume (number of configurations)}
 \end{equation}
 
-For an ideal gas we found in \eqnref{eqn:basicStatMechLecture6:380}
+For an ideal gas, with the quantum correction, but not the $N!$ correction of \eqnref{eqn:basicStatMechLecture6:380}, we have
 
 \begin{equation}\label{eqn:basicStatMechLecture6:380b}
-\Omega = \frac{V^N}{N!} \inv{h^{3N}} \frac{( 2 \pi m E)^{3 N/2 }}{E} \frac{1}{\Gamma( 3N/2 ) }
+\Omega = \frac{V^N}{h^{3N}} \frac{( 2 \pi m E)^{3 N/2 }}{E} \frac{1}{\Gamma( 3N/2 ) }
 \end{equation}
 
-Let's use the large $N$ approximation of this to justify why we are introducing an $N!$ dependence.
+For large $N$, Stirling's approximation gives us
+
+\begin{equation}\label{eqn:basicStatMechLecture6:380c}
+\begin{aligned}
+\frac{S}{\kB} 
+&= \ln \Omega  \\
+&\approx 
+N \ln \lr{ \frac{V}{h^3} }
++ \frac{3N}{2} \ln (2 \pi m) + \lr{ \frac{3N}{2} -1 } \ln E \\
+&\quad - \inv{2} \ln (2 \pi) + \lr{ \frac{3N}{2} -1 }
+- \lr{ \frac{3N}{2} -1 + \inv{2} } \ln \lr{ \frac{3 N}{2} -1 } \\
+&\approx
+N \ln \lr{ \frac{V}{h^3} }
++ \frac{3N}{2} \ln \lr{ \frac{ 2 \pi m E}{3 N/2} } + \frac{3 N}{2},
+\end{aligned}
+\end{equation}
+
+or
+\begin{dmath}\label{eqn:basicStatMechLecture6:380d}
+S = 
+\kB N \lr{ 
+\ln \lr{ \frac{V}{h^3}
+\lr{ \frac{ 4 \pi m E}{3 N} }^{3/2}
+}
++ \frac{3}{2}
+}.
+\end{dmath}
+
+This has a logical inconsistency that we'll now examine.
 
 \section{Gibbs paradox}
 \paragraph{Why $N!$?}
@@ -322,20 +350,40 @@ S_{\mathrm{total}}^{(\mathrm{E}, \mathrm{N}, \mathrm{V})}
 We have
 
 \begin{equation}\label{eqn:basicStatMechLecture7:500}
-S_{\mathrm{total}} = S_1 + S_2 + \kB (2 N) \ln 2
-= S_1 + S_2 + \kB \ln 2^{2 N}.
+S_{\mathrm{total}} = S_1 + S_2 + \kB (2 N) \ln 2 V
+= S_1 + S_2 + \kB \ln (2 V)^{2 N}.
 \end{equation}
 
 This is telling us that each particle could be in either the left or the right side, but we know that this uncertainty shouldn't be in the final answer.  We must drop this $\kB$ term.
 
-So, if we assume that these particles are identical, and divide $\Omega$ by $N!$, then we find
+It turns out that we can do exactly this by dividing $\Omega$ by $N!$.  Working directly from \eqnref{eqn:basicStatMechLecture6:380d} this adjustment is
 
-\begin{equation}\label{eqn:basicStatMechLecture7:520}
-S_{\mathrm{ideal}} = 
-\kB 
-\lr{
-N \ln \frac{V}{N} + \frac{3 N}{2} \ln \lr{ \frac{4 \pi m E }{3 N h^2} } + \frac{5 N}{2} 
+\begin{dmath}\label{eqn:basicStatMechLecture7:520}
+S_{\mathrm{ideal}} \rightarrow
+\kB \lr{ 
+N \ln \lr{ \frac{V}{h^3}
+\lr{ \frac{ 4 \pi m E}{3 N} }^{3/2}
 }
-\end{equation}
++ \frac{3 N}{2}
+- \ln N!
+}
+\approx
+\kB \lr{ 
+N \ln \lr{ \frac{V}{h^3}
+\lr{ \frac{ 4 \pi m E}{3 N} }^{3/2}
+}
++ \frac{3N}{2}
+- N \ln N + N
+}
+=
+\kB N \lr{ 
+\ln \lr{ \frac{V}{N h^3}
+\lr{ \frac{ 4 \pi m E}{3 N} }^{3/2}
+}
++ \frac{5}{2}
+}.
+\end{dmath}
+
+If we use this as the starting point of our doubling argument, we see that we'd have a $\ln (2 V/2N) = 0$ term and the entropies would be strictly additive as desired.
 
 %\EndNoBibArticle
