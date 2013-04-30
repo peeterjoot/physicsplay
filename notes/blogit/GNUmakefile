@@ -43,6 +43,10 @@ ifneq ($(QPDF_DIR),)
    QPDF := $(QPDF_DIR)/bin/qpdf.exe
 endif
 
+EPS_FILES := $(wildcard *.eps)
+PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))
+
+all :: $(PDFS_FROM_EPS)
 all :: Bibliography.bib
 all :: peeters_macros.sty
 all :: peeters_layout.sty

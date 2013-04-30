@@ -63,5 +63,5 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-s/\\DD/\\mathcal{D}/g ;
+#s/\\DD/\\mathcal{D}/g ;
 s/\\ee/\\epsilon/g ;
