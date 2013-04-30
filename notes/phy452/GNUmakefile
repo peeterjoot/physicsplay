@@ -24,8 +24,13 @@ HUANG93_DEPS += figures/huang93Fig4.pdf
 HUANG93_DEPS += figures/huang93Fig2.pdf
 HUANG93_DEPS += figures/huang93Fig6.pdf
 
-THISBOOK_DEPS += $(HUANG93_DEPS)
+#THISBOOK_DEPS += $(HUANG93_DEPS)
 THISBOOK_DEPS += figures/stirlingErrorFig3.pdf
+
+EPS_FILES := $(wildcard figures/*.eps)
+PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))
+
+THISBOOK_DEPS += $(PDFS_FROM_EPS)
 
 include ../make.rules
 
