@@ -1,0 +1,28 @@
+#!/usr/bin/perl
+
+my $binary = $ARGV[0] ;
+my @p = `objdump --section .note.gnu.build-id -s $binary | tail -2` ;
+foreach (@p)
+{
+   chomp ;
+   s/^ *[\da-f]+ *// ;
+   s/  .*// ;
+   s/ //g ;
+}
+
+my $buildid = "$p[0]$p[1]" ;
+$buildid =~ /^(..)(.*)/ ;
+
+my ($d, $r) = ($1, $2) ;
+
+print "build-id for '$binary': $buildid\n" ;
+
+my $cmd =
+"mkdir -p .build-id/$d
+rm -f .build-id/$d/$r.debug
+objcopy --only-keep-debug $binary .build-id/$d/$r.debug
+strip -g $binary
+" ;
+
+print $cmd ;
+system $cmd ;
