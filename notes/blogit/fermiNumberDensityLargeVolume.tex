@@ -5,7 +5,7 @@
 \input{../blogpost.tex}
 \renewcommand{\basename}{fermiNumberDensityLargeVolume}
 \renewcommand{\dirname}{notes/phy452/}
-\newcommand{\keywords}{Statistical mechanics, PHY452H1S, Fermi gas, number density, large volume, surface with binding sites}
+\newcommand{\keywords}{Statistical mechanics, PHY452H1S, Fermi gas, number density, large volume, surface with binding sites, chemical potential, classical limit}
 
 \input{../peeter_prologue_print2.tex}
 
@@ -41,12 +41,116 @@ Next consider a two-dimensional surface having binding sites where these Fermi a
 \makeanswer{pr:fermiNumberDensityLargeVolume:1}{
 
 \makeSubAnswer{}{pr:fermiNumberDensityLargeVolume:1:a}
-TODO.
+
+Since it was specified incorrectly in the original problem, let's start off by verifing the expression for the number of particles (and hence the number density)
+
+\begin{dmath}\label{eqn:fermiNumberDensityLargeVolume:60}
+\inv{\beta} \PD{\mu}{} \ln \ZG
+= 
+\inv{\beta} \PD{\mu}{} \ln \sum_N z^N e^{-\beta E_N}
+= 
+\inv{\beta} \inv{\Omega}
+\PD{\mu}{} \sum_N z^N e^{-\beta E_N}
+= 
+\inv{\beta} \inv{\Omega}
+\sum_N e^{-\beta E_N} \PD{\mu}{} e^{\mu \beta N}
+= 
+\inv{\Omega}
+\sum_N N z^N e^{-\beta E_N} 
+= \expectation{N}.
+\end{dmath}
+
+Moving on to the problem, we've seen that the Fermion grand canonical partition function can be written
+
+\begin{dmath}\label{eqn:fermiNumberDensityLargeVolume:80}
+\ZG = \prod_\epsilon \lr{ 1 + z e^{-\beta \epsilon}},
+\end{dmath}
+
+so that our density is
+
+\begin{dmath}\label{eqn:fermiNumberDensityLargeVolume:100}
+n 
+= \frac{N}{V}
+= \inv{ V \beta }
+\PD{\mu}{} \ln \prod_\epsilon \lr{ 1 + z e^{-\beta \epsilon}}
+= \inv{ V \beta }
+\sum_\epsilon \PD{\mu}{} \ln \lr{ 1 + z e^{-\beta \epsilon}}
+= \inv{ V \beta }
+\sum_\epsilon 
+\PD{\mu}{z}
+\frac{e^{-\beta \epsilon}}{
+1 + z e^{-\beta \epsilon}
+}
+= 
+\inv{ V }
+\sum_\epsilon 
+z
+\frac{e^{-\beta \epsilon}}{
+1 + z e^{-\beta \epsilon}
+}.
+\end{dmath}
+
+In the high temperature classical limit, where $z \ll 1$ we have
+
+\begin{dmath}\label{eqn:fermiNumberDensityLargeVolume:120}
+n 
+\approx
+\inv{ V }
+\sum_\epsilon 
+z e^{-\beta \epsilon}
+\approx
+z
+\int \frac{d^3 \Bk}{(2 \pi)^3}
+e^{-\beta \epsilon}
+=
+\frac{2 z}{(2 \pi)^2}
+\int_0^\infty k^2 dk
+e^{-\beta \frac{\Hbar^2 k^2}{2m} }
+=
+\frac{z}{2 \pi^2}
+\lr{ \frac{\beta \Hbar^2}{2m} }^{-3/2}
+\int_0^\infty x^2 e^{-x^2} dx 
+=
+\frac{z}{2 \pi^2}
+\lr{ \frac{2m}{\beta \Hbar^2} }^{3/2}
+\frac{\sqrt{\pi}}{4}
+=
+\frac{z}{8 \pi^{3/2}}
+\frac{\lr{8 \pi^2 m \kB T }^{3/2}}{h^3}
+=
+z
+\frac{\lr{ 2 \pi m \kB T }^{3/2}}{h^3}.
+\end{dmath}
+
+This is
+\begin{dmath}\label{eqn:fermiNumberDensityLargeVolume:140}
+\myBoxed{
+n = \frac{z}{\lambda^3},
+}
+\end{dmath}
+
+where
+\begin{dmath}\label{eqn:fermiNumberDensityLargeVolume:160}
+\lambda = \frac{h}{\sqrt{2 \pi m \kB T}}.
+\end{dmath}
+
+Inverting for $\mu$ we have
+
+\begin{dmath}\label{eqn:fermiNumberDensityLargeVolume:n}
+\mu = \inv{\beta} \ln z
+\end{dmath}
+
+or
+
+\begin{dmath}\label{eqn:fermiNumberDensityLargeVolume:n}
+\myBoxed{
+\mu = \kB T \ln \lr{ n \lambda^3 }.
+}
+\end{dmath}
 
 \makeSubAnswer{}{pr:fermiNumberDensityLargeVolume:1:b}
 TODO.
 
 } % makeanswer
-
 %\EndArticle
 \EndNoBibArticle
