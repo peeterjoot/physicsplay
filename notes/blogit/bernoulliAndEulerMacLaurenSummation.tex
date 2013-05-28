@@ -1,0 +1,284 @@
+%
+% Copyright © 2013 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{bernoulliAndEulerMacLarenSummation}
+\renewcommand{\dirname}{notes/phy452/}
+\newcommand{\keywords}{Bernoulli number, Bernoulli polynomial, Euler-MacLauren summation}
+
+\input{../peeter_prologue_print2.tex}
+
+\beginArtNoToc
+
+\generatetitle{Bernoulli polynomials and numbers and Euler-MacLauren summation}
+%\chapter{Bernoulli polynomials and numbers and Euler-MacLauren summation}
+\label{chap:bernoulliAndEulerMacLarenSummation}
+
+\paragraph{Motivation}
+
+In \citep{pathriastatistical} I saw the Euler-summation formula casually used in a few places, allowing an approximation of a sum with derivatives at the origin.  This rather powerful was used in passing, and seemed like it was worth some exploration.
+
+\paragraph{Bernoulli polynomials and numbers}
+
+An initial look to wikipedia in \citep{wiki:eulerMacLaurin} shows that to understand their derivation, we first need to understand some properties of Bernoulli polynomials \citep{ wiki:bernoulliPolynomial}, and Bernoulli numbers \citep{wiki:bernoulliNumber}.  The properties of interest required for the derivation of the Euler summation formula appear to follow fairly easily with the following choice for the definition of the Bernoulli polynomials $B_k(x)$ and Bernoulli numbers $B_k$
+
+\begin{subequations}
+\label{eqn:fermiNumberDensityLargeVolume:20a}
+\begin{dmath}\label{eqn:fermiNumberDensityLargeVolume:20}
+B_m(z) = \sum_{k = 0}^m \binom{m}{k} B_k z^{m - k}
+\end{dmath}
+\begin{dmath}\label{eqn:fermiNumberDensityLargeVolume:60}
+0 = \sum_{k = 0}^{m-1} \binom{m}{k} B_k \inv{m!}, \qquad \mbox{m > 1}
+\end{dmath}
+\end{subequations}
+
+With $B_0 = 1$ \eqnref{eqn:fermiNumberDensityLargeVolume:60} provides an iterative method to calculate all the higher Bernoulli numbers.  Without calculating the Bernoulli numbers explicitly, we see that we can related these to the values of the polynomials at the origin
+
+\begin{equation}\label{eqn:fermiNumberDensityLargeVolume:120}
+B_m(0) = B_m.
+\end{equation}
+
+Now, let's calculate the first few of these, to verify that we've got the conventions right.  Starting with $m = 2$ we have
+
+\begin{dmath}\label{eqn:fermiNumberDensityLargeVolume:80}
+0 
+= \sum_{k = 0}^{1} \binom{2}{k} B_k \inv{2!}
+= 
+\inv{2!}
+\lr{
+B_0 + 2 B_1
+},
+\end{dmath}
+
+or $B_1 = -1/2$.  Next with $m = 3$
+
+\begin{dmath}\label{eqn:fermiNumberDensityLargeVolume:100}
+0 
+= \sum_{k = 0}^{2} \binom{3}{k} B_k \inv{3!}
+= 
+\frac{B_0}{6} + \frac{B_1}{2} + \frac{B_2}{2}
+= 
+\inv{2} \lr{
+\inv{3} -\inv{2} + B_2
+}
+\end{dmath}
+
+or $B_2 = 1/6$.  Thus the first few Bernoulli polynomials are
+
+\begin{subequations}
+\begin{equation}\label{eqn:fermiNumberDensityLargeVolume:140}
+\begin{aligned}
+B_0(z) &= 1 \\
+B_1(z) &= z - \inv{2} \\
+B_2(z) &= z^2 - z + \inv{6}.
+\end{aligned}
+\end{equation}
+\end{subequations}
+
+The Bernoulli polynomials have a simple relation to their derivative.  Proceeding directly, taking derivatives we have
+
+\begin{dmath}\label{eqn:fermiNumberDensityLargeVolume:200}
+B_m'(z) 
+= 
+\sum_{k = 0}^{m-1} (m - k)\binom{m}{k} B_k z^{m - k -1}
+= 
+\sum_{k = 0}^{m-1} \frac{m!}{(m - k - 1)! k!} B_k z^{m - k -1}
+= 
+m
+\sum_{k = 0}^{m-1} \frac{(m - 1)!}{(m - 1 - k)! k!} B_k z^{m - 1 - k},
+\end{dmath}
+
+or
+\begin{equation}\label{eqn:fermiNumberDensityLargeVolume:220}
+\myBoxed{
+B_m'(z) 
+= 
+m B_{m-1}(z) 
+}
+\end{equation}
+
+There's a number of difference relations that the polynomials satisfy.  The one that we need is
+
+\begin{equation}\label{eqn:fermiNumberDensityLargeVolume:40}
+\myBoxed{
+B_m(z + 1) - B_m(z) = m z^{m -1}.
+}
+\end{equation}
+
+To prepare for demonstrating this difference in general, let's perform this calculation for $m = 3$ to remove some of the index abstraction from the mix.  That is
+
+\begin{dmath}\label{eqn:fermiNumberDensityLargeVolume:160}
+B_3(z + 1) - B_3(z) 
+= 
+\sum_{k = 0}^3 
+\binom{3}{k} B_k 
+\lr{ 
+\lr{z + 1}^{3 - k}
+- z^{3 - k}
+}
+=
+B_0
+\lr{ 
+\lr{z + 1}^3
+- z^3
+}
++ 3
+B_1
+\lr{ 
+\lr{z + 1}^2
+- z^2
+}
++ 3
+B_2
+\lr{ 
+\lr{z + 1}^1
+- z^1
+}
++ 
+B_3
+\cancel{
+\lr{ 
+\lr{z + 1}^0
+- z^0
+}
+}
+=
+B_0
+\lr{ 
+3 z^2 + 3 z + 1
+}
++ 3
+B_1
+\lr{ 
+2 z + 1
+}
++ 3
+B_2
+=
+3 z^2 
++ z^1 \lr{ 3 - 3 }
++ z^0 \lr{ 1 - \frac{3}{2} + \frac{3}{6} }
+= 3 z^2.
+\end{dmath}
+
+Evaluating this in general, we see that the term with the highest order Bernoulli number is immediately killed, and we'll have just one highest order monomial out of the mix.  We expect all the remaining monomial terms to be killed term by term.  That general difference is
+
+\begin{dmath}\label{eqn:fermiNumberDensityLargeVolume:180}
+B_m(z + 1) - B_m(z) 
+= 
+\sum_{k = 0}^{m - 1}
+\binom{m}{k} B_k 
+\lr{ 
+\lr{z + 1}^{m - k}
+- z^{m - k}
+}
+= 
+\sum_{k = 0}^{m - 1}
+\binom{m}{k} B_k 
+\sum_{s = 0}^{m - k - 1} \binom{m - k}{s} z^s
+= 
+m! \sum_{s = 0}^{m - 1}
+\frac{z^s}{s!}
+\sum_{k = 0}^{m - s - 1} 
+\frac{1}{\cancel{(m -k)!} k!} 
+\frac{\cancel{(m - k)!}}{(m - k - s)!} 
+B_k 
+= 
+\frac{m! }{(m -1)!} z^{m - 1}
+\sum_{k = 0}^{m - m + 1 - 1} 
+\frac{1}{ k! (m - k - m + 1)!} B_k 
++
+m! \sum_{s = 0}^{m - 2}
+\frac{z^s}{s!}
+\sum_{k = 0}^{m - s - 1} 
+\frac{1}{ k! (m - k - s)!} B_k 
+=
+m z^{m - 1}
++ 
+m! \sum_{s = 0}^{m - 2}
+\frac{z^s}{s!}
+\lr{
+\sum_{k = 0}^{(m-s) - 1} 
+\binom{m - s}{s} B_k \inv{(m - s)!}
+}.
+\end{dmath}
+
+This last sum up to $m -s -1$ has the form of \eqnref{eqn:fermiNumberDensityLargeVolume:60}, so is killed off.  This proves \eqnref{eqn:fermiNumberDensityLargeVolume:40} as desired.
+
+From this difference result we find
+
+\begin{dmath}\label{eqn:fermiNumberDensityLargeVolume:240}
+B_m(1) = B_m(0) = B_m.
+\end{dmath}
+
+Since we also have
+
+\begin{dmath}\label{eqn:fermiNumberDensityLargeVolume:260}
+B_m(1) 
+= \sum_{k = 0}^m \binom{m}{k} B_k 
+= 
+m! \sum_{k = 0}^{m-1} \binom{m}{k} B_k \inv{m!}
++
+B_m 
+= B_m,
+\end{dmath}
+
+we find that either of the end points in the $[0, 1]$ interval provide us with the Bernoulli numbers
+
+\begin{dmath}\label{eqn:fermiNumberDensityLargeVolume:280}
+\myBoxed{
+B_m(1) = B_m(0) = B_m.
+}
+\end{dmath}
+
+Integrating \eqnref{eqn:fermiNumberDensityLargeVolume:220} after an $m \rightarrow m + 1$ substitution, and comparing to the difference equation, we have
+
+\begin{equation}\label{eqn:fermiNumberDensityLargeVolume:300}
+(m + 1) z^m =
+B_{m + 1}(z + 1) - B_{m + 1}(z) 
+= (m + 1)\int_z^{z+1} B_m(z) dz,
+\end{equation}
+
+or
+\begin{equation}\label{eqn:fermiNumberDensityLargeVolume:320}
+\myBoxed{
+\int_z^{z+1} B_m(z) dz = z^m.
+}
+\end{equation}
+
+Evaluating this at $z = 0$ shows that our polynomials are odd functions around the center of the $[0, 1]$ interval, or
+
+\begin{equation}\label{eqn:fermiNumberDensityLargeVolume:340}
+\int_0^{1} B_m(z) dz = 0.
+\end{equation}
+
+We also obtain Bernoulli's sum of powers result
+
+\begin{dmath}\label{eqn:fermiNumberDensityLargeVolume:360}
+\int_0^n B_m(z) dz
+=
+\int_0^1 B_m(z) dz
++
+\int_1^2 B_m(z) dz
++
+\cdots
++
+\int_n^{n-1} B_m(z) dz
+=
+0 + 1^m + 2^m + \cdots (n-1)^m,
+\end{dmath}
+
+or
+
+\begin{equation}\label{eqn:fermiNumberDensityLargeVolume:380}
+\myBoxed{
+\sum_{k = 1}^{n-1} = \int_1^n B_m(z) dz.
+}
+\end{equation}
+
+We don't need this result for the Euler summation formula, but it's cool!
+
+\paragraph{Euler-MacLauren summation}
+
+\EndArticle
