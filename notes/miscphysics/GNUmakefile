@@ -16,7 +16,7 @@ SOURCE_DIRS += qm
 SOURCE_DIRS += relativity
 SOURCE_DIRS += sort
 
-LOCAL_FIGURE_FILES += pendulumDouble.png
+#LOCAL_FIGURE_FILES += pendulumDouble.png
 #ORIG_FIGURE_DIRS += ../gabook/figures
 ORIG_FIGURE_DIRS += ../phy354/figures/
 
