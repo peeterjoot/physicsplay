@@ -1,0 +1,30 @@
+THISDIR := phy487
+
+include ../make.vars
+
+SOURCE_DIRS += appendix
+# FIXME:
+# 1) including this incorrectly adds figures/*pdf to the ./.gitignore file
+# 2) also not seeing this result in figure dependencies. touch figures/etalonFig1.pdf
+SOURCE_DIRS += figures
+#SOURCE_DIRS += solutions
+
+GENERATED_SOURCES += mathematica.tex 
+
+#THISBOOK_DEPS += $(HUANG93_DEPS)
+#THISBOOK_DEPS += figures/stirlingErrorFig3.pdf
+
+EPS_FILES := $(wildcard figures/*.eps)
+PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))
+
+THISBOOK_DEPS += $(PDFS_FROM_EPS)
+
+include ../make.rules
+
+#huang93.pdf :: $(HUANG93_DEPS)
+#
+#condensedMatterProblemSet1.pdf :: condensedMatterProblemSet1Problem1.tex
+#condensedMatterProblemSet1.pdf :: condensedMatterProblemSet1Problem2.tex
+#condensedMatterProblemSet1.pdf :: condensedMatterProblemSet1Problem3.tex
+#
+#condensedMatterProblemSet1.pdf :: $(PDF_DEPS)
