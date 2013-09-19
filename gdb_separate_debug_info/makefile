@@ -1,3 +1,5 @@
+# http://stackoverflow.com/questions/16408893/gnu-ld-gdb-separate-debug-files-how-to-produce-the-debug-file-when-theres-too
+
 CXXFLAGS += -g
 TARGETS := uWithBuildId uWithDebugLink
 
