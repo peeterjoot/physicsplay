@@ -11,7 +11,6 @@ SOURCE_DIRS += figures
 
 GENERATED_SOURCES += mathematica.tex 
 
-#THISBOOK_DEPS += $(HUANG93_DEPS)
 #THISBOOK_DEPS += figures/stirlingErrorFig3.pdf
 
 EPS_FILES := $(wildcard figures/*.eps)
@@ -21,10 +20,8 @@ THISBOOK_DEPS += $(PDFS_FROM_EPS)
 
 include ../make.rules
 
-#huang93.pdf :: $(HUANG93_DEPS)
-#
-#condensedMatterProblemSet1.pdf :: condensedMatterProblemSet1Problem1.tex
-#condensedMatterProblemSet1.pdf :: condensedMatterProblemSet1Problem2.tex
-#condensedMatterProblemSet1.pdf :: condensedMatterProblemSet1Problem3.tex
-#
-#condensedMatterProblemSet1.pdf :: $(PDF_DEPS)
+condensedMatterProblemSet1.pdf :: condensedMatterProblemSet1Problem1.tex
+condensedMatterProblemSet1.pdf :: condensedMatterProblemSet1Problem2.tex
+condensedMatterProblemSet1.pdf :: condensedMatterProblemSet1Problem3.tex
+
+condensedMatterProblemSet1.pdf :: $(PDF_DEPS)
