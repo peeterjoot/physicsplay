@@ -147,4 +147,23 @@ in the Plot", "Subsection", CellMargins -> {{50, 50}, Inherited}]];
           }], ItemSize -> 30]}]]
   ]
 
+(*Begin["`Private`"]
+positionlabel[g_Graphics,{label_,x_}]:=Module[{p,b,bd,xi,m,ivp,sc},p=PlotRange[g];
+b=ImagePad[ImagePad[Binarize@Show[g,ImagePadding->0],-1],1,Black];
+bd=ImageDimensions[b];
+xi=bd MapThread[Rescale,{x,p}];
+m=MinFilter[b,1+Reverse[Rasterize[TraditionalForm@label,"RasterSize"]/2]];
+ivp=ImageValuePositions[m,1];
+sc=If[ivp=={},x,Scaled[First[Nearest[ivp,xi]]/bd]];
+Graphics@Inset[label,sc,Center]]
+End[]
+
+addlabels[g_Graphics,labels_]:=Fold[Show[#1,positionlabel[##]]&,g,labels]
+
+addlabels::usage = "The labels must be supplied as a list like {{label1,{x1,y1}},{label2,{x2,y2}},...}.
+Here's an example:g=Plot[Sin[x],{x,0,10},Frame\[Rule]True,Epilog\[Rule]{PointSize[Large],Point[{#,Sin[#]}&/@Range[0,10]]}];
+
+labels={Style[#,20],{#,Sin[#]}}&/@Range[0,10];"*)
+
+
 End[]
