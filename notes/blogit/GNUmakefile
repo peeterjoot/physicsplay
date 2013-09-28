@@ -12,9 +12,9 @@ RAWTEXFILES := $(shell ls *.tex)
 #INCOMPLETE += qmTwoExamReflection.tex
 #INCOMPLETE += qmTwoR1.tex
 
-#INCOMPLETE += condensedMatterProblemSet2Problem1.tex
-#INCOMPLETE += condensedMatterProblemSet2Problem2.tex
-#INCOMPLETE += condensedMatterProblemSet2Problem3.tex
+INCOMPLETE += condensedMatterProblemSet3Problem1.tex
+INCOMPLETE += condensedMatterProblemSet3Problem2.tex
+INCOMPLETE += condensedMatterProblemSet3Problem3.tex
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
@@ -61,9 +61,9 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 	rm -f .gitignore
 	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/blogit/,' > $@
 
-#condensedMatterProblemSet2.pdf : condensedMatterProblemSet2Problem1.tex
-#condensedMatterProblemSet2.pdf : condensedMatterProblemSet2Problem2.tex
-#condensedMatterProblemSet2.pdf : condensedMatterProblemSet2Problem3.tex
+condensedMatterProblemSet3.pdf : condensedMatterProblemSet3Problem1.tex
+condensedMatterProblemSet3.pdf : condensedMatterProblemSet3Problem2.tex
+condensedMatterProblemSet3.pdf : condensedMatterProblemSet3Problem3.tex
 
 video: $(VIDEO)
 
