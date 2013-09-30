@@ -1,4 +1,4 @@
-neeter Joot's geometric algebra biased math and physics latex source.
+Peeter Joot's geometric algebra biased math and physics latex source.
 
 #-------------------------------------------------------
 # grabbing a copy of the tree
@@ -76,6 +76,10 @@ notes/phy485/
 notes/phy452/
 
    Class notes and problems from 'Basic Statistical Mechanics', taught by Prof. Arun Paramekanti.
+
+notes/phy487/
+
+   Class notes and problems from 'Condensed Matter Physics', taught by Prof. Stephen Julian.
 
 sym/
 
