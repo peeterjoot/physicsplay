@@ -34,3 +34,6 @@ condensedMatterProblemSet2.pdf :: $(PDF_DEPS)
 
 condensedMatterLecture7PhononsQ.pdf :: $(PDF_DEPS)
 condensedMatterLecture7PhononsQ.pdf :: condensedMatterLecture7Phonons.tex
+
+condensedMatterLecture6q.pdf :: $(PDF_DEPS)
+condensedMatterLecture6q.pdf :: condensedMatterLecture6.tex
