@@ -1,6 +1,7 @@
 #s/\\Br_av/\\Br_{\\mathrm{av}}/g ;
 #s/\\DD/\\mathcal{D}/g ;
 #s/\\down\b/\\downarrow/g ;
+#s/\\ee/\\epsilon/g ;
 #s/\\EE/\\mathcal{E}/g ;
 #s/\\Gamma_{cav}/\\Gamma_{\\mathrm{cav}}/g  ;
 #s/\\Gamma_{sp}/\\Gamma_{\\mathrm{sp}}/g  ;
@@ -64,4 +65,7 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-s/\\ee/\\epsilon/g ;
+s/\\n\+(\d)(\d)\b/{n + $1, $2}/g ;
+s/\\n-(\d)(\d)\b/{n - $1, $2}/g ;
+s/\\n(\d)\b/{n, $1}/g ;
+s/\\na\b/{n, \\alpha}/g ;

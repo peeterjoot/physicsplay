@@ -14,16 +14,17 @@ Consider the one-dimensional chain of \cref{fig:two_springs:two_springsFig1} in 
 Find the coupled equations of motion for
 $u_{n,1}$ and $u_{n,2}$, and then make the ansatz
 \begin{eqnarray*}
-u_{n,\alpha} = u_{\alpha}(q) {\rm e}^{i(qx_n - \omega t)},
+%u_{n,\alpha} = u_{\alpha}(q) {\rm e}^{i(qx_n - \omega t)},
+u_{n,\alpha} = u_{\alpha}(q) e^{i(qx_n - \omega t)},
 \end{eqnarray*}
 to obtain coupled equations for $u_1(q)$ and $u_2(q)$.
 
 \makesubproblem{}{condensedMatter:problemSet4:2b}
-Solve these coupled equations, putting $k = k_\circ + \delta$
-and $k' = k_\circ - \delta$, to show that the dispersion relation is:
+Solve these coupled equations, putting $k = k_\nought + \delta$
+and $k' = k_\nought - \delta$, to show that the dispersion relation is:
 \begin{eqnarray*}
-\omega^2 = \frac{2k_\circ}{m}\left( 1 \pm \sqrt{ \cos^2\frac{qa}{2}
-               + \frac{\delta^2}{k_\circ^2} \sin^2 \frac{qa}{2}} \,\, \right).
+\omega^2 = \frac{2k_\nought}{m}\left( 1 \pm \sqrt{ \cos^2\frac{qa}{2}
+               + \frac{\delta^2}{k_\nought^2} \sin^2 \frac{qa}{2}} \,\, \right).
 \end{eqnarray*}
 
 \makesubproblem{}{condensedMatter:problemSet4:2c}
@@ -35,15 +36,15 @@ frequencies at $q=0$.
 
 \makesubproblem{}{condensedMatter:problemSet4:2d}
 Plot $\omega(q)$ vs.\ $q$ in the range $q=0$ to $q=2\pi/a$,
-for $\delta/k_0 = 0.9,0.1$ and 0.  % fixed this
+for $\delta/k_\nought = 0.9,0.1$ and 0.  % fixed this
 Indicate the boundary of the first
 Brillouin zone.  (I did this by programming my equation for
 $\omega(q)$ into a plotting package; you can also do it by hand.)
 
 \makesubproblem{}{condensedMatter:problemSet4:2e}
-For $\delta/k_\circ = 0.9$ explain why the two branches of the
+For $\delta/k_\nought = 0.9$ explain why the two branches of the
 phonon spectrum are so far apart.  What happens in the limit where
-$\delta = k_\circ$?  Explain the dispersion relation (or rather, lack
+$\delta = k_\nought$?  Explain the dispersion relation (or rather, lack
 thereof) of the acoustic and optical branches in this limit.
 
 \makesubproblem{}{condensedMatter:problemSet4:2f}
@@ -57,6 +58,143 @@ For $\delta = 0$, explain the form of your plot (hint: when
 
 \makeanswer{condensedMatter:problemSet4:2}{ 
 \makeSubAnswer{}{condensedMatter:problemSet4:2a}
+
+In order to avoid the mental trauma of trying to figure out all the signs for the spring constant potential coefficients, we can describe the system by the Lagrangian
+
+\begin{dmath}\label{eqn:condensedMatterProblemSet4Problem2:20}
+\LL = \sum_{n, \alpha} \frac{m}{2} \dot{u}_{n, \alpha}^2 
+- \frac{k'}{2}\lr{ u_{n, 1} - u_{n - 1, 2}}^2 
+- \frac{k}{2}\lr{ u_{n, 2} - u_{n, 1}}^2 
+- \frac{k'}{2}\lr{ u_{n + 1, 1} - u_{n, 2}}^2 
+- \cdots
+\end{dmath}
+
+The force equations then follow directly from the Euler-Lagrange equations
+
+\begin{dmath}\label{eqn:condensedMatterProblemSet4Problem2:40}
+0 = \ddt{} \PD{\dot{u}_{n, \alpha}}{\LL} 
+- \PD{u_{n, \alpha}}{\LL}.
+\end{dmath}
+
+That is
+
+\begin{subequations}
+\begin{dmath}\label{eqn:condensedMatterProblemSet4Problem2:60}
+0 = m \ddot{u}_{n, 1} 
++ 
+( k + k')
+u_{n, 1}
+- k
+u_{n, 2}
+- k'
+u_{n - 1, 2}
+\end{dmath}
+\begin{dmath}\label{eqn:condensedMatterProblemSet4Problem2:80}
+0 = m \ddot{u}_{n, 2} 
++ 
+( k + k')
+u_{n, 2}
+- k
+u_{n, 1}
+- k'
+u_{n + 1, 1}
+\end{dmath}
+\end{subequations}
+
+Using the trial solution
+
+\begin{dmath}\label{eqn:condensedMatterProblemSet4Problem2:100}
+u_{n,\alpha} = u_{\alpha}(q) e^{i(qx_{n, \alpha} - \omega t)}, 
+\end{dmath}
+
+\begin{subequations}
+\begin{dmath}\label{eqn:condensedMatterProblemSet4Problem2:120}
+0 = -m \omega^2 u_1 e^{i( q a n - \omega t)} 
++ 
+( k + k')
+u_1 e^{i( q a n - \omega t)}
+- k
+u_2 e^{i( q a (n + 1/2) - \omega t)}
+- k'
+u_2 e^{i( q a (n - 1/2) - \omega t)}
+\end{dmath}
+\begin{dmath}\label{eqn:condensedMatterProblemSet4Problem2:140}
+0 = -m \omega^2 u_2 e^{i( q a (n + 1/2) - \omega t)} 
++ 
+( k + k')
+u_2 e^{i( q a (n + 1/2) - \omega t)}
+- k
+u_1 e^{i( q a n - \omega t)}
+- k'
+u_1 e^{i( q a (n + 1) - \omega t)}
+\end{dmath}
+\end{subequations}
+
+Cancelling terms, substitution for $k$ and $k'$, and a bit of rearranging yields
+
+\begin{subequations}
+\begin{dmath}\label{eqn:condensedMatterProblemSet4Problem2:160}
+0 = -m \omega^2 u_1 
++ 
+2 k_\nought
+u_1 
+- (k_\nought + \delta)
+u_2 e^{i q a /2 }
+- (k_\nought - \delta)
+u_2 e^{-i q a /2 }
+\end{dmath}
+\begin{dmath}\label{eqn:condensedMatterProblemSet4Problem2:180}
+0 = -m \omega^2 u_2 
++ 
+2 k_\nought
+u_2 
+- (k_\nought + \delta)
+u_1 
+e^{-i q a /2 }
+- (k_\nought - \delta)
+u_1 e^{i q a/2 }.
+\end{dmath}
+\end{subequations}
+
+This has a solution when the determinant is zero
+\begin{dmath}\label{eqn:condensedMatterProblemSet4Problem2:200}
+0 = 
+\begin{vmatrix}
+-m \omega^2 +
+2 k_\nought &
+- 2 k_\nought \cos \lr{ q a /2 }
+- 2 i \delta \sin \lr{ q a /2 }
+%- (k_\nought + \delta) e^{i q a /2 }
+%- (k_\nought - \delta) e^{-i q a /2 } 
+\\
+- 2 k_\nought \cos \lr{ q a /2 }
++ 2 i \delta \sin \lr{ q a /2 }
+%- (k_\nought + \delta) e^{-i q a /2 }
+%- (k_\nought - \delta) e^{i q a/2 }
+& 
+-m \omega^2 + 2 k_\nought
+\end{vmatrix}
+=
+\lr{ -m \omega^2 + 2 k_\nought }^2
++ 4 \sqrt{
+k_\nought^2 \cos^2 \lr{ q a /2 }
++
+\delta^2 \sin^2 \lr{ q a /2 }
+},
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:condensedMatterProblemSet4Problem2:n}
+\omega^2 = 
+\frac{2 k_\nought }{m}
+\pm \frac{2 k_\nought}{m} \sqrt{
+\cos^2 \lr{ q a /2 }
++
+\frac{\delta^2}{k_\nought} \sin^2 \lr{ q a /2 }
+},
+\end{dmath}
+
+as desired.
 
 TODO.
 \makeSubAnswer{}{condensedMatter:problemSet4:2b}
