@@ -3,6 +3,10 @@ THISDIR := blogit
 INKSCAPE := "/cygdrive/c/Program Files (x86)/Inkscape/inkscape.exe"
 RAWTEXFILES := $(shell ls *.tex)
 
+CLEAN_TARGETS += $(PDFS) 
+CLEAN_TARGETS += *.ilg *.ind *.idx *.ps *.dvi *.log *.aux *.bbl *.blg *.lof *.log *.lot *.out *.toc *.stackdump *.brf
+CLEAN_TARGETS += *.synctex.gz
+
 # buildable:
 #INCOMPLETE += dotBlade.tex
 #INCOMPLETE += gaBasics.tex
@@ -12,8 +16,9 @@ RAWTEXFILES := $(shell ls *.tex)
 #INCOMPLETE += qmTwoExamReflection.tex
 #INCOMPLETE += qmTwoR1.tex
 
-INCOMPLETE += condensedMatterProblemSet4Problem1.tex
-INCOMPLETE += condensedMatterProblemSet4Problem2.tex
+INCOMPLETE += condensedMatterProblemSet5Problem1.tex
+INCOMPLETE += condensedMatterProblemSet5Problem2.tex
+INCOMPLETE += condensedMatterProblemSet5Problem3.tex
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
@@ -60,8 +65,9 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 	rm -f .gitignore
 	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/blogit/,' > $@
 
-condensedMatterProblemSet4.pdf : condensedMatterProblemSet4Problem1.tex
-condensedMatterProblemSet4.pdf : condensedMatterProblemSet4Problem2.tex
+#condensedMatterProblemSet5.pdf : condensedMatterProblemSet5Problem1.tex
+#condensedMatterProblemSet5.pdf : condensedMatterProblemSet5Problem2.tex
+#condensedMatterProblemSet5.pdf : condensedMatterProblemSet5Problem3.tex
 
 video: $(VIDEO)
 
@@ -97,7 +103,7 @@ gaBasics.pdf : gaBasics.tex
 clean :: mostlyclean localclean
 
 mostlyclean :: 
-	rm -f *.ps *.dvi $(PDFS) *.aux *.log *.bbl *.blg *.brf *.toc *.stackdump *.bib
+	rm -f $(CLEAN_TARGETS)
 
 peeters_layout.sty : ../peeters_layout.sty
 	cp $^ $@
