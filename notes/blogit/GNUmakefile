@@ -65,9 +65,9 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 	rm -f .gitignore
 	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/blogit/,' > $@
 
-#condensedMatterProblemSet5.pdf : condensedMatterProblemSet5Problem1.tex
-#condensedMatterProblemSet5.pdf : condensedMatterProblemSet5Problem2.tex
-#condensedMatterProblemSet5.pdf : condensedMatterProblemSet5Problem3.tex
+condensedMatterProblemSet5.pdf : condensedMatterProblemSet5Problem1.tex
+condensedMatterProblemSet5.pdf : condensedMatterProblemSet5Problem2.tex
+condensedMatterProblemSet5.pdf : condensedMatterProblemSet5Problem3.tex
 
 video: $(VIDEO)
 
