@@ -65,7 +65,9 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-s/\\n\+(\d)(\d)\b/{n + $1, $2}/g ;
-s/\\n-(\d)(\d)\b/{n - $1, $2}/g ;
-s/\\n(\d)\b/{n, $1}/g ;
-s/\\na\b/{n, \\alpha}/g ;
+#s/\\n\+(\d)(\d)\b/{n + $1, $2}/g ;
+#s/\\n-(\d)(\d)\b/{n - $1, $2}/g ;
+#s/\\n(\d)\b/{n, $1}/g ;
+#s/\\na\b/{n, \\alpha}/g ;
+s/\\bark\b/\\overbar{k}/g ;
+s/\\barm\b/\\overbar{m}/g ;

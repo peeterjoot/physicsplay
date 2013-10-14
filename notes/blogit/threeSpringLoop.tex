@@ -1,0 +1,318 @@
+%
+% Copyright © 2013 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{threeSpringLoop}
+\renewcommand{\dirname}{notes/FIXMEwheretodirname/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\beginArtNoToc
+
+\generatetitle{exponential solutions to second order linear system}
+%\chapter{exponential solutions to second order linear system}
+%\label{chap:threeSpringLoop}
+\section{Motivation}
+
+We're discussing specific forms to systems of coupled linear differential equations, such as a loop of ``spring'' connected masses (i.e. atoms interacting with harmonic oscillator potentials) as sketched in \cref{fig:threeSpringLoop:threeSpringLoopFig1}.
+
+\imageFigure{threeSpringLoopFig1}{Three springs loop}{fig:threeSpringLoop:threeSpringLoopFig1}{0.3}
+
+Instead of assuming a solution, let's see how far we can get attacking this problem systematically.
+
+\section{Guts}
+
+Suppose that we have a set of $N$ masses constrained to a circle interacting with harmonic potentials.  The Lagrangian for such a system (using modulo $N$ indexing) is
+
+\begin{dmath}\label{eqn:threeSpringLoop:60}
+\LL = \inv{2} \sum_{k = 0}^{2} m_k \dot{u}_k^2 
+- \inv{2} \sum_{k = 0}^2 \kappa_k \lr{ u_{k+1} - u_k }^2.
+\end{dmath}
+
+The force equations follow directly from the Euler-Lagrange equations
+
+\begin{dmath}\label{eqn:condensedMatterProblemSet4Problem2:40}
+0 = \ddt{} \PD{\dot{u}_{n, \alpha}}{\LL}
+- \PD{u_{n, \alpha}}{\LL}.
+\end{dmath}
+
+For the simple three particle system depicted above, this is
+
+\begin{dmath}\label{eqn:threeSpringLoop:80}
+\LL = 
+\inv{2} m_0 \dot{u}_0^2 
++\inv{2} m_1 \dot{u}_1^2 
++\inv{2} m_2 \dot{u}_2^2 
+- \inv{2} \kappa_0 \lr{ u_1 - u_0 }^2
+- \inv{2} \kappa_1 \lr{ u_2 - u_1 }^2
+- \inv{2} \kappa_2 \lr{ u_0 - u_2 }^2,
+\end{dmath}
+
+with equations of motion
+\begin{dmath}\label{eqn:threeSpringLoop:100}
+\begin{aligned}
+m_0 \ddot{u}_0 &= \kappa_0 \lr{ u_0 - u_1 } + \kappa_2 \lr{ u_0 - u_2 } \\
+m_1 \ddot{u}_1 &= \kappa_1 \lr{ u_1 - u_2 } + \kappa_0 \lr{ u_1 - u_0 } \\
+m_2 \ddot{u}_2 &= \kappa_2 \lr{ u_2 - u_0 } + \kappa_1 \lr{ u_2 - u_1 },
+\end{aligned}
+\end{dmath}
+
+Let's partially non-dimensionalize this.  First introduce average mass $\overbar{m}$ and spring constants $\overbar{\kappa}$, and rearrange slightly
+
+\begin{dmath}\label{eqn:threeSpringLoop:120}
+\begin{aligned}
+\frac{\overbar{m}}{\overbar{k}} \ddot{u}_0 &= \frac{\kappa_0 \overbar{m}}{\overbar{k} m_0} \lr{ u_0 - u_1 } + \frac{\kappa_2 \overbar{m}}{\overbar{k} m_0} \lr{ u_0 - u_2 } \\
+\frac{\overbar{m}}{\overbar{k}} \ddot{u}_1 &= \frac{\kappa_1 \overbar{m}}{\overbar{k} m_1} \lr{ u_1 - u_2 } + \frac{\kappa_0 \overbar{m}}{\overbar{k} m_1} \lr{ u_1 - u_0 } \\
+\frac{\overbar{m}}{\overbar{k}} \ddot{u}_2 &= \frac{\kappa_2 \overbar{m}}{\overbar{k} m_2} \lr{ u_2 - u_0 } + \frac{\kappa_1 \overbar{m}}{\overbar{k} m_2} \lr{ u_2 - u_1 }.
+\end{aligned}
+\end{dmath}
+
+With 
+
+\begin{subequations}
+\begin{dmath}\label{eqn:threeSpringLoop:140}
+\tau = \sqrt{\frac{\overbar{k}}{\overbar{m}}} t
+\end{dmath}
+\begin{dmath}\label{eqn:threeSpringLoop:160}
+\Bu = 
+\begin{bmatrix}
+u_0 \\
+u_1 \\
+u_2
+\end{bmatrix}
+\end{dmath}
+\begin{dmath}\label{eqn:threeSpringLoop:180}
+B = 
+\begin{bmatrix}
+\frac{\kappa_0 \overbar{m}}{\overbar{k} m_0} + \frac{\kappa_2 \overbar{m}}{\overbar{k} m_0} &
+-\frac{\kappa_0 \overbar{m}}{\overbar{k} m_0} &
+-\frac{\kappa_2 \overbar{m}}{\overbar{k} m_0} \\
+- \frac{\kappa_0 \overbar{m}}{\overbar{k} m_1} &
+\frac{\kappa_1 \overbar{m}}{\overbar{k} m_1} + \frac{\kappa_0 \overbar{m}}{\overbar{k} m_1} &
+-\frac{\kappa_1 \overbar{m}}{\overbar{k} m_1}  \\
+-\frac{\kappa_2 \overbar{m}}{\overbar{k} m_2} &
+- \frac{\kappa_1 \overbar{m}}{\overbar{k} m_2} &
+\frac{\kappa_2 \overbar{m}}{\overbar{k} m_2} + \frac{\kappa_1 \overbar{m}}{\overbar{k} m_2} 
+\end{bmatrix}.
+\end{dmath}
+\end{subequations}
+
+Our system takes the form
+
+\begin{dmath}\label{eqn:threeSpringLoop:200}
+\frac{d^2 \Bu}{d\tau^2} = B \Bu.
+\end{dmath}
+
+We can at least theoretically solve this in a simple fashion if we first convert it to a first order system.  We can do that by augmenting our vector of displacements with their first derivatives
+
+\begin{dmath}\label{eqn:threeSpringLoop:220}
+\Bw =
+\begin{bmatrix}
+\Bu \\
+\frac{d \Bu}{d\tau} 
+\end{bmatrix},
+\end{dmath}
+
+So that 
+\begin{equation}\label{eqn:threeSpringLoop:240}
+\frac{d \Bw}{d\tau} =
+\begin{bmatrix}
+0 & I \\
+B & 0
+\end{bmatrix} 
+\Bw
+= A \Bw.
+\end{equation}
+
+Now the solution is conceptually trivial
+
+\begin{dmath}\label{eqn:threeSpringLoop:260}
+\Bw = e^{A \tau} \Bw_0,
+\end{dmath}
+
+however, we are faced with the task of exponentiating the matrix $A$.  We need the powers of this matrix $A$
+
+\begin{subequations}
+\begin{equation}\label{eqn:threeSpringLoop:280}
+{\begin{bmatrix}
+0 & I \\
+B & 0
+\end{bmatrix} }^2
+=
+\begin{bmatrix}
+0 & I \\
+B & 0
+\end{bmatrix} 
+\begin{bmatrix}
+0 & I \\
+B & 0
+\end{bmatrix} 
+=
+\begin{bmatrix}
+B & 0 \\
+0 & B
+\end{bmatrix} 
+\end{equation}
+\begin{equation}\label{eqn:threeSpringLoop:300}
+{\begin{bmatrix}
+0 & I \\
+B & 0
+\end{bmatrix} }^3
+=
+\begin{bmatrix}
+B & 0 \\
+0 & B
+\end{bmatrix} 
+\begin{bmatrix}
+0 & I \\
+B & 0
+\end{bmatrix} 
+=
+\begin{bmatrix}
+0 & B \\
+B^2 & 0
+\end{bmatrix} 
+\end{equation}
+\begin{equation}\label{eqn:threeSpringLoop:320}
+{\begin{bmatrix}
+0 & I \\
+B & 0
+\end{bmatrix} }^4
+=
+\begin{bmatrix}
+0 & B \\
+B^2 & 0
+\end{bmatrix} 
+\begin{bmatrix}
+0 & I \\
+B & 0
+\end{bmatrix} 
+=
+\begin{bmatrix}
+B^2 & 0 \\
+0 & B^2
+\end{bmatrix},
+\end{equation}
+\end{subequations}
+
+allowing us to write out the matrix exponential
+\begin{dmath}\label{eqn:threeSpringLoop:340}
+e^{A \tau} = 
+\sum_{k = 0}^\infty \frac{\tau^{2k}}{(2k)!} 
+\begin{bmatrix}
+B^k & 0 \\
+0 & B^k
+\end{bmatrix}
++
+\sum_{k = 0}^\infty \frac{\tau^{2k + 1}}{(2k + 1)!} 
+\begin{bmatrix}
+0 & B^k \\
+B^{k+1} & 0
+\end{bmatrix}.
+\end{dmath}
+
+We can factor the odd powers of $A$ as
+\begin{dmath}\label{eqn:threeSpringLoop:360}
+\begin{bmatrix}
+0 & B^k \\
+B^{k+1} & 0
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 & B^{-1/2} \\
+B^{1/2} & 0
+\end{bmatrix}
+\begin{bmatrix}
+B^{k + 1/2} & 0 \\
+0 & B^{k + 1/2}
+\end{bmatrix},
+\end{dmath}
+
+so that
+
+\begin{dmath}\label{eqn:threeSpringLoop:380}
+e^{A \tau} = 
+\sum_{k = 0}^\infty \frac{\tau^{2k}}{(2k)!} 
+\begin{bmatrix}
+\sqrt{B}^{2k} & 0 \\
+0 & \sqrt{B}^{2k}
+\end{bmatrix}
++
+\begin{bmatrix}
+0 & B^{-1/2} \\
+B^{1/2} & 0
+\end{bmatrix}
+\sum_{k = 0}^\infty \frac{\tau^{2k + 1}}{(2k + 1)!} 
+\begin{bmatrix}
+\sqrt{B}^{2 k + 1} & 0 \\
+0 & \sqrt{B}^{2 k+1} 
+\end{bmatrix}
+=
+\cosh
+\begin{bmatrix}
+\sqrt{B} \tau & 0 \\
+0 & \sqrt{B} \tau
+\end{bmatrix}
++ 
+\begin{bmatrix}
+0 & 1/\sqrt{B} \tau \\
+\sqrt{B} \tau & 0
+\end{bmatrix}
+\sinh
+\begin{bmatrix}
+\sqrt{B} \tau & 0 \\
+0 & \sqrt{B} \tau
+\end{bmatrix}.
+\end{dmath}
+
+This is
+\begin{dmath}\label{eqn:threeSpringLoop:400}
+e^{A \tau}
+=
+\begin{bmatrix}
+\cosh \sqrt{B} \tau & (1/\sqrt{B}) \sinh \sqrt{B} \tau \\
+\sqrt{B} \sinh \sqrt{B} \tau & \cosh \sqrt{B} \tau 
+\end{bmatrix}.
+\end{dmath}
+
+The solution, written out is
+
+\begin{dmath}\label{eqn:threeSpringLoop:420}
+\begin{bmatrix}
+\Bu \\
+\Bu'
+\end{bmatrix}
+=
+\begin{bmatrix}
+\cosh \sqrt{B} \tau & (1/\sqrt{B}) \sinh \sqrt{B} \tau \\
+\sqrt{B} \sinh \sqrt{B} \tau & \cosh \sqrt{B} \tau 
+\end{bmatrix}
+\begin{bmatrix}
+\Bu_0 \\
+\Bu_0'
+\end{bmatrix},
+\end{dmath}
+
+so that 
+
+\begin{dmath}\label{eqn:threeSpringLoop:440}
+\Bu = \cosh \sqrt{B} \tau \Bu_0 + \inv{\sqrt{B}} \sinh \sqrt{B} \tau \Bu_0'.
+\end{dmath}
+
+As a check differentiation twice shows that this is in fact the general solution, since we have
+\begin{dmath}\label{eqn:threeSpringLoop:460}
+\Bu' = \sqrt{B} \sinh \sqrt{B} \tau \Bu_0 + \sinh \sqrt{B} \tau \Bu_0',
+\end{dmath}
+
+and
+\begin{dmath}\label{eqn:threeSpringLoop:480}
+\Bu'' = B \cosh \sqrt{B} \tau \Bu_0 + \sqrt{B} \cosh \sqrt{B} \tau \Bu_0'
+= B \lr{ \cosh \sqrt{B} \tau \Bu_0 + \inv{\sqrt{B}} \cosh \sqrt{B} \tau \Bu_0' }
+= B \Bu.
+\end{dmath}
+
+%\EndArticle
+\EndNoBibArticle
