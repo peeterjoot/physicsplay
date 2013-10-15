@@ -10,6 +10,8 @@
 
 \input{../peeter_prologue_print2.tex}
 
+\newcommand{\nought}[0]{\circ}
+
 \beginArtNoToc
 
 \generatetitle{Exponential solutions to second order linear system}
@@ -130,7 +132,7 @@ B & 0
 Now the solution is conceptually trivial
 
 \begin{dmath}\label{eqn:threeSpringLoop:260}
-\Bw = e^{A \tau} \Bw_0.
+\Bw = e^{A \tau} \Bw_\nought.
 \end{dmath}
 
 We are however, faced with the task of exponentiating the matrix $A$.  All the powers of this matrix $A$ will be required, but they turn out to be easy to calculate
@@ -214,7 +216,7 @@ B^{k+1} & 0
 \end{bmatrix}.
 \end{dmath}
 
-\paragraph{Attempt 1}
+\paragraph{Case I: No zero eigenvalues}
 
 Provided that $B$ has no zero eigenvalues, we could factor this as
 
@@ -294,8 +296,8 @@ The solution, written out is
 \sqrt{B} \sinh \sqrt{B} \tau & \cosh \sqrt{B} \tau 
 \end{bmatrix}
 \begin{bmatrix}
-\Bu_0 \\
-\Bu_0'
+\Bu_\nought \\
+\Bu_\nought'
 \end{bmatrix},
 \end{dmath}
 
@@ -303,23 +305,25 @@ so that
 
 \begin{dmath}\label{eqn:threeSpringLoop:440}
 \myBoxed{
-\Bu = \cosh \sqrt{B} \tau \Bu_0 + \inv{\sqrt{B}} \sinh \sqrt{B} \tau \Bu_0'.
+\Bu = \cosh \sqrt{B} \tau \Bu_\nought + \inv{\sqrt{B}} \sinh \sqrt{B} \tau \Bu_\nought'.
 }
 \end{dmath}
 
 As a check differentiation twice shows that this is in fact the general solution, since we have
 \begin{dmath}\label{eqn:threeSpringLoop:460}
-\Bu' = \sqrt{B} \sinh \sqrt{B} \tau \Bu_0 + \cosh \sqrt{B} \tau \Bu_0',
+\Bu' = \sqrt{B} \sinh \sqrt{B} \tau \Bu_\nought + \cosh \sqrt{B} \tau \Bu_\nought',
 \end{dmath}
 
 and
 \begin{dmath}\label{eqn:threeSpringLoop:480}
-\Bu'' = B \cosh \sqrt{B} \tau \Bu_0 + \sqrt{B} \sinh \sqrt{B} \tau \Bu_0'
-= B \lr{ \cosh \sqrt{B} \tau \Bu_0 + \inv{\sqrt{B}} \sinh \sqrt{B} \tau \Bu_0' }
+\Bu'' = B \cosh \sqrt{B} \tau \Bu_\nought + \sqrt{B} \sinh \sqrt{B} \tau \Bu_\nought'
+= B \lr{ \cosh \sqrt{B} \tau \Bu_\nought + \inv{\sqrt{B}} \sinh \sqrt{B} \tau \Bu_\nought' }
 = B \Bu.
 \end{dmath}
 
 Observe that this solution is a general solution to second order constant coefficient linear systems of the form we have in \eqnref{eqn:threeSpringLoop:120}.  However, to make it meaningful we do have the additional computational task of performing an eigensystem decomposition of the matrix $B$.  We expect negative eigenvalues that will give us oscillatory solutions (ie: the matrix square roots will have imaginary eigenvalues).
+
+\makeexample{An example diagonalization to try things out}{example:threeSpringLoop:1}{
 
 Let's do that diagonalization for the simplest of the three springs system as an example, with $\kappa_j = \overbar{k}$ and $m_j = \overbar{m}$, so that we have
 
@@ -337,9 +341,9 @@ A orthonormal eigensystem for $B$ is
 
 \begin{dmath}\label{eqn:threeSpringLoop:520}
 \left\{
-\Be_{-3}, 
-\Be_{-3}, 
-\Be_{0} 
+\Be_{-3, 1}, 
+\Be_{-3, 2}, 
+\Be_{0, 1} 
 \right\}
 =
 \left\{
@@ -406,383 +410,163 @@ U^\T
 \inv{\sqrt{3} i} B.
 \end{dmath}
 
-We also see, unfortunately that $B$ has a zero eigenvalue, so we can't compute $1/\sqrt{B}$.  We'll have to back and up and start again more carefully.
+We also see, unfortunately that $B$ has a zero eigenvalue, so we can't compute $1/\sqrt{B}$.  We'll have to back and up and start again differently.
+}
 
-\paragraph{Attempt 2}
+\paragraph{Case II: allowing for zero eigenvalues}
 
-Let's be more careful with the exponentiation that led to \eqnref{eqn:threeSpringLoop:440}.  Suppose that we can diagonalize our matrix $B$ as
+Now that we realize we have to deal with zero eigenvalues, a different approach suggests itself.  Instead of reducing our system using a Hamiltonian transformation to a first order system, let's utilize that diagonalization directly.  Our system is 
 
 \begin{dmath}\label{eqn:threeSpringLoop:600}
-B = 
-U 
-\begin{bmatrix}
-D & 0 \\
-0 & 0
-\end{bmatrix}
-U^{-1},
+\Bu'' = B \Bu = U D U^{-1} \Bu,
 \end{dmath}
 
-where $D$ is diagonal with no zero eigenvalues.  This time we have
+where $D = [ \lambda_i \delta_ij ]$ and
 
-\begin{subequations}
 \begin{dmath}\label{eqn:threeSpringLoop:620}
-A^{2k} = 
-\begin{bmatrix}
-U & 0 \\
-0 & U
-\end{bmatrix}
-\begin{bmatrix} %%%
-\begin{bmatrix}
-D^k & 0 \\
-0 &   0 \\
-\end{bmatrix} &
-0 \\
-0 & 
-\begin{bmatrix}
-D^k & 0 \\
-0 &   0 \\
-\end{bmatrix} \\
-\end{bmatrix} %%%
-\begin{bmatrix}
-U^{-1} & 0 \\
-0 & U^{-1}
-\end{bmatrix}
-\end{dmath}
-\begin{dmath}\label{eqn:threeSpringLoop:640}
-A^{2k + 1} = 
-\begin{bmatrix}
-U & 0 \\
-0 & U
-\end{bmatrix}
-\begin{bmatrix}
-0 
-&
-\begin{bmatrix}
-D^k & 0 \\
-0 &   0 \\
-\end{bmatrix} 
-\\
-\begin{bmatrix}
-D^{k+1} & 0 \\
-0 &   0 \\
-\end{bmatrix} 
-&
-0  
-\end{bmatrix}
-\begin{bmatrix}
-U^{-1} & 0 \\
-0 & U^{-1}
-\end{bmatrix}.
-\end{dmath}
-\end{subequations}
-
-Observe that we can factor the inner matrix of \eqnref{eqn:threeSpringLoop:640} as
-
-\begin{dmath}\label{eqn:threeSpringLoop:660}
-\begin{bmatrix}
-0 
-&
-\begin{bmatrix}
-D^k & 0 \\
-0 &   0 \\
-\end{bmatrix} 
-\\
-\begin{bmatrix}
-D^{k+1} & 0 \\
-0 &   0 \\
-\end{bmatrix} 
-&
-0  
-\end{bmatrix}
-%%%=
-%%%\begin{bmatrix}
-%%%0 & 1 \\
-%%%1 & 0
-%%%\end{bmatrix}
-%%%\begin{bmatrix}
-%%%\begin{bmatrix}
-%%%D^{k+1} & 0 \\
-%%%0 & 0
-%%%\end{bmatrix} 
-%%%& 0 \\
-%%%0 &
-%%%\begin{bmatrix}
-%%%D^{k} & 0 \\
-%%%0 & 0
-%%%\end{bmatrix}
-%%%\end{bmatrix}
-%%%=
-%%%\begin{bmatrix}
-%%%0 & 1 \\
-%%%1 & 0
-%%%\end{bmatrix}
-%%%\begin{bmatrix} %%%%
-%%%\begin{bmatrix}
-%%%D^{1/2} & 0 \\
-%%%0 & 0
-%%%\end{bmatrix} 
-%%%& 0 \\
-%%%0 &
-%%%\begin{bmatrix}
-%%%D^{-1/2} & 0 \\
-%%%0 & 0
-%%%\end{bmatrix}
-%%%\end{bmatrix} 	%%%
-%%%\begin{bmatrix}
-%%%\begin{bmatrix}
-%%%D^{k+1/2} & 0 \\
-%%%0 & 0
-%%%\end{bmatrix} 
-%%%& 0 \\
-%%%0 &
-%%%\begin{bmatrix}
-%%%D^{k + 1/2} & 0 \\
-%%%0 & 0
-%%%\end{bmatrix}
-%%%\end{bmatrix}
-%%%
-=
-\begin{bmatrix} %%%%
-0 &
-\begin{bmatrix}
-D^{-1/2} & 0 \\
-0 & 0
-\end{bmatrix} \\
-\begin{bmatrix}
-D^{1/2} & 0 \\
-0 & 0
-\end{bmatrix} &
-0 
-\end{bmatrix} %%%%
-\begin{bmatrix}
-\begin{bmatrix}
-D^{k+1/2} & 0 \\
-0 & 0
-\end{bmatrix} 
-& 0 \\
-0 &
-\begin{bmatrix}
-D^{k + 1/2} & 0 \\
-0 & 0
-\end{bmatrix}
-\end{bmatrix}
+\lr{ U^{-1} \Bu}'' = D \lr{ U^{-1} \Bu}.
 \end{dmath}
 
-Now we can compute the exponentiation.
-
-\begin{dmath}\label{eqn:threeSpringLoop:680}
-e^{A \tau}
-=
-\begin{bmatrix}
-U & 0 \\
-0 & U
-\end{bmatrix}
-\lr{
-\begin{bmatrix} %%%
-\begin{bmatrix}
-\cosh \sqrt{D} \tau & 0 \\
-0 & 1 \\
-\end{bmatrix} &
-0 \\
-0 & 
-\begin{bmatrix}
-\cosh \sqrt{D} \tau & 0 \\
-0 & 1 \\
-\end{bmatrix} \\
-\end{bmatrix} %%%
-+
-\begin{bmatrix} %%%%
-0 &
-\begin{bmatrix}
-1/\sqrt{D} & 0 \\
-0 & 0
-\end{bmatrix} \\
-\begin{bmatrix}
-\sqrt{D} & 0 \\
-0 & 0
-\end{bmatrix} &
-0 
-\end{bmatrix} %%%%
-\begin{bmatrix}
-\begin{bmatrix}
-\sinh \sqrt{D} \tau & 0 \\
-0 & 0
-\end{bmatrix} 
-& 0 \\
-0 &
-\begin{bmatrix}
-\sinh \sqrt{D} \tau & 0 \\
-0 & 0
-\end{bmatrix}
-\end{bmatrix}
-}
-\begin{bmatrix}
-U^{-1} & 0 \\
-0 & U^{-1}
-\end{bmatrix}
-\end{dmath}
-
-Combining all the inner matrices we have
-
-\begin{dmath}\label{eqn:threeSpringLoop:700}
-e^{A\tau}
-=
-\begin{bmatrix}
-U & 0 \\
-0 & U
-\end{bmatrix}
-\begin{bmatrix}
-%---- row 1
-\begin{bmatrix}
-\cosh \sqrt{D} \tau  & 0 \\
-0 & 1
-\end{bmatrix} &
-\begin{bmatrix}
-(1/\sqrt{D}) \sinh \sqrt D \tau & 0 \\
-0 & 0
-\end{bmatrix} \\
-%---- row 2
-\begin{bmatrix}
-\sqrt{D} \sinh \sqrt D \tau & 0 \\
-0 & 0
-\end{bmatrix} &
-\begin{bmatrix}
-\cosh \sqrt{D} \tau  & 0 \\
-0 & 1
-\end{bmatrix} \\
-%---- XX
-\end{bmatrix}
-\begin{bmatrix}
-U^{-1} & 0 \\
-0 & U^{-1}
-\end{bmatrix}
-\end{dmath}
-
-We now have the correction of \eqnref{eqn:threeSpringLoop:420} that allows for zero eigenvalues
+Let 
 
 \begin{dmath}\label{eqn:threeSpringLoop:720}
-\begin{bmatrix}
-\Bu \\
-\Bu'
-\end{bmatrix}
-=
-\begin{bmatrix}
-%---- row 1
-U 
-\begin{bmatrix}
-\cosh \sqrt{D} \tau  & 0 \\
-0 & 1
-\end{bmatrix} U^{-1} 
-&
-U \begin{bmatrix}
-(1/\sqrt{D}) \sinh \sqrt D \tau & 0 \\
-0 & 0
-\end{bmatrix} U^{-1}
-\\
-%---- row 2
-U \begin{bmatrix}
-\sqrt{D} \sinh \sqrt D \tau & 0 \\
-0 & 0
-\end{bmatrix} U^{-1}
-&
-U \begin{bmatrix}
-\cosh \sqrt{D} \tau  & 0 \\
-0 & 1
-\end{bmatrix} U^{-1}
-\\
-%---- XX
-\end{bmatrix}
-\begin{bmatrix}
-\Bu_0 \\
-\Bu_0'
-\end{bmatrix},
+\Bz = U^{-1} \Bu,
+\end{dmath}
+
+so that our system is just
+
+\begin{dmath}\label{eqn:threeSpringLoop:700}
+\Bz'' = D \Bz,
 \end{dmath}
 
 or
-\begin{dmath}\label{eqn:threeSpringLoop:740}
-\myBoxed{
-\Bu = 
-U 
-\begin{bmatrix}
-\cosh \sqrt{D} \tau  & 0 \\
-0 & 1
-\end{bmatrix} U^{-1} \Bu_0
+
+\begin{dmath}\label{eqn:threeSpringLoop:640}
+z_i'' = \lambda_i z_i.
+\end{dmath}
+
+This is $N$ equations, each decoupled and solvable by inspection.  Suppose we group the eigenvalues into sets $\{ \lambda_n < 0, \lambda_p > 0, \lambda_z = 0 \}$.  Our solution is then
+
+\begin{dmath}\label{eqn:threeSpringLoop:660}
+\Bz 
+= 
+\sum_{ \lambda_n < 0, \lambda_p > 0, \lambda_z = 0}
+\lr{
+a_n \cos \sqrt{-\lambda_n} \tau 
++ 
+b_n \sin \sqrt{-\lambda_n} \tau 
+}
+\Be_n
 +
-U \begin{bmatrix}
-(1/\sqrt{D}) \sinh \sqrt D \tau & 0 \\
-0 & 0
-\end{bmatrix} U^{-1} \Bu_0'
+\lr{
+a_p \cosh \sqrt{\lambda_p} \tau 
++ 
+b_p \sinh \sqrt{\lambda_p} \tau 
+}
+\Be_p
++
+\lr{
+a_z + b_z \tau
+} \Be_z.
+\end{dmath}
+
+Transforming back to lattice coordinates using $\Bu = U \Bz$, we have
+
+\begin{dmath}\label{eqn:threeSpringLoop:740}
+\Bu 
+= 
+\sum_{ \lambda_n < 0, \lambda_p > 0, \lambda_z = 0}
+\lr{
+a_n \cos \sqrt{-\lambda_n} \tau 
++ 
+b_n \sin \sqrt{-\lambda_n} \tau 
+}
+U \Be_n
++
+\lr{
+a_p \cosh \sqrt{\lambda_p} \tau 
++ 
+b_p \sinh \sqrt{\lambda_p} \tau 
+}
+U \Be_p
++
+\lr{
+a_z + b_z \tau
+} U \Be_z.
+\end{dmath}
+
+We see that the zero eigenvalues integration terms have no contribution to the lattice coordinates, since $U \Be_z = \lambda_z \Be_z = 0$, for all $\lambda_z = 0$.
+
+Taking dot products we see that the unknown coefficients can be specified in terms of $\Bu_\nought$ and $\Bu_\nought'$
+
+\begin{dmath}\label{eqn:threeSpringLoop:680}
+\Bu(\tau)
+= 
+\sum_{ \lambda_n < 0, \lambda_p > 0 }
+\lr{
+(\Bu_\nought \cdot \Be_n) 
+\cos \sqrt{-\lambda_n} \tau 
++ 
+\frac{\Bu_\nought' \cdot \Be_n}{\sqrt{-\lambda_n} } 
+\sin \sqrt{-\lambda_n} \tau 
+}
+\Be_n
++
+\lr{
+(\Bu_\nought \cdot \Be_p) 
+\cosh \sqrt{\lambda_p} \tau 
++ 
+\frac{\Bu_\nought' \cdot \Be_p}{\sqrt{-\lambda_p} } 
+\sinh \sqrt{\lambda_p} \tau 
+}
+\Be_p.
+\end{dmath}
+
+Supposing that we constrain ourself to looking at just the oscillatory solutions (i.e. the lattice does not shake itself to pieces), then we have
+
+\begin{dmath}\label{eqn:threeSpringLoop:680b}
+\myBoxed{
+\Bu(\tau)
+= 
+\sum_{ \lambda_n < 0 }
+\Be_n \Be_n^\T
+\lr{
+\Bu_\nought
+\cos \sqrt{-\lambda_n} \tau 
++ 
+\frac{\Bu_\nought' }{\sqrt{-\lambda_n} } 
+\sin \sqrt{-\lambda_n} \tau 
+}
+\Be_n.
 }
 \end{dmath}
 
-As one check we have $\Bu(\tau = 0) = \Bu$ as desired.  However, differentiating \eqnref{eqn:threeSpringLoop:740} once we should recover the second 
-row of \eqnref{eqn:threeSpringLoop:720}, but we get instead
+Observe that the dot products of the form $(\Ba \cdot \Be) \Be$ have been put into projector operator form to group terms more nicely.  The solution can be thought of as a weighted projector operator working as a time evolution operator from the initial state.
 
-\begin{dmath}\label{eqn:threeSpringLoop:780}
-\Bu' = 
-U 
+\makeexample{Our example interaction revisited}{example:threeSpringLoop:2}{
+
+Using the interaction example of \eqnref{eqn:threeSpringLoop:500} again, we can sum $\Be_{-3,1} \Be_{-3, 1}^\T + \Be_{-3,2} \Be_{-3, 2}^\T$ to find
+
+\begin{dmath}\label{eqn:threeSpringLoop:760}
+\Bu(\tau)
+= 
+\inv{3}
 \begin{bmatrix}
-\sqrt{D} \sinh \sqrt{D} \tau  & 0 \\
-0 & 0
-\end{bmatrix} U^{-1} \Bu_0
-+
-U 
-\begin{bmatrix}
-\cosh \sqrt D \tau & 0 \\
-0 & 0
-\end{bmatrix} U^{-1} \Bu_0'
+2 & -1 & -1 \\
+2 & 2 & -1 \\
+-1 & -1 & 2
+\end{bmatrix}
+\lr{
+\Bu_\nought 
+\cos \sqrt{3} \tau 
++ 
+\frac{ \Bu_\nought' }{\sqrt{3} } 
+\sin \sqrt{3} \tau 
+}.
 \end{dmath}
 
-Note that the second row of \eqnref{eqn:threeSpringLoop:720} has a additional term
-
-\begin{dmath}\label{eqn:threeSpringLoop:n}
-U 
-\begin{bmatrix}
-0 & 0 \\
-0 & 1
-\end{bmatrix} U^{-1} \Bu_0'.
-\end{dmath}
-
-What went wrong?
-
-%%%Differentiating twice we recover our equation of motion as expected
-%%%
-%%%\begin{dmath}\label{eqn:threeSpringLoop:760}
-%%%\Bu'' 
-%%%= 
-%%%U 
-%%%\begin{bmatrix}
-%%%D \cosh \sqrt{D} \tau  & 0 \\
-%%%0 & 0
-%%%\end{bmatrix} U^{-1} \Bu_0
-%%%+
-%%%U \begin{bmatrix}
-%%%\sqrt{D} \sinh \sqrt D \tau & 0 \\
-%%%0 & 0
-%%%\end{bmatrix} U^{-1} \Bu_0'
-%%%=
-%%%U 
-%%%\begin{bmatrix}
-%%%D & 0 \\
-%%%0 & 0
-%%%\end{bmatrix} U^{-1} U
-%%%\lr{
-%%%\begin{bmatrix}
-%%%\cosh \sqrt{D} \tau  & 0 \\
-%%%0 & 0
-%%%\end{bmatrix} U^{-1} \Bu_0
-%%%+
-%%%\begin{bmatrix}
-%%%(1/\sqrt{D}) \sinh \sqrt D \tau & 0 \\
-%%%0 & 0
-%%%\end{bmatrix} U^{-1} \Bu_0'
-%%%}
-%%%= B \Bu
-%%%\end{dmath}
-%%%
-%%%However, if I correct that error, the differentiation above doesn't work?
-
-\paragraph{Attempt 3}
+The leading matrix is an orthonormal projector of the initial conditions onto the eigen subspace for $\lambda_n = -3$.
+}
 
 \section{Fourier transform methods}
 
