@@ -572,5 +572,152 @@ The leading matrix is an orthonormal projector of the initial conditions onto th
 
 \section{Fourier transform methods}
 
+Let's now try another item from our usual toolbox on these sorts of second order systems, the Fourier transform.  For a one variable function of time let's write the transform pair as
+
+\begin{subequations}
+\begin{dmath}\label{eqn:threeSpringLoop:780}
+x(t) = \int_{-\infty}^{\infty} \tilde{x}(\omega) e^{-i \omega t} d\omega
+\end{dmath}
+\begin{dmath}\label{eqn:threeSpringLoop:800}
+\tilde{x}(\omega) = \inv{2\pi} \int_{-\infty}^{\infty} x(t) e^{i \omega t} dt
+\end{dmath}
+\end{subequations}
+
+\paragraph{One mass harmonic oscillator}
+
+The simplest second order system is that of the harmonic oscillator
+
+\begin{dmath}\label{eqn:threeSpringLoop:820}
+0 = \ddot{x}(t) + \omega_\nought^2 x.
+\end{dmath}
+
+Application of the transform gives
+
+\begin{dmath}\label{eqn:threeSpringLoop:840}
+0 
+= \lr{ \frac{d^2}{dt^2} + \omega_\nought^2 }
+\int_{-\infty}^{\infty} \tilde{x}(\omega) e^{-i \omega t} d\omega
+= 
+\int_{-\infty}^{\infty} 
+\lr{ \omega^2 - \omega_\nought^2 + }
+\tilde{x}(\omega) 
+e^{-i \omega t} d\omega.
+\end{dmath}
+
+How do we make sense of this?  It appears that we require a constraint
+
+\begin{dmath}\label{eqn:threeSpringLoop:860}
+0 = \lr{ \omega^2 - \omega_\nought^2 + } \tilde{x}(\omega).
+\end{dmath}
+
+Since $\omega$ is an integration variable, we can't just mandate that it equals the constant driving frequency $\pm \omega_\nought$.  It's clear that we require a constraint on the transform $\tilde{x}(\omega)$ as well.  As a trial solution, imagine that 
+
+\begin{dmath}\label{eqn:threeSpringLoop:880}
+\tilde{x}(\omega) = 
+\left\{
+\begin{array}{l l}
+\tilde{x}_\nought & \quad \mbox{if $\Abs{\omega - \pm \omega_\nought} < \omega_{\text{cutoff}}$} \\
+0 & \quad \mbox{otherwise}
+\end{array}
+\right.
+\end{dmath}
+
+This gives us
+
+\begin{dmath}\label{eqn:threeSpringLoop:900}
+0 = 
+\tilde{x}_\nought
+\int_
+{\pm \omega_\nought -\omega_{\text{cutoff}}}^
+{\pm \omega_\nought +\omega_{\text{cutoff}}}
+\lr{ \omega^2 - \omega_\nought^2 }
+e^{-i \omega t} d\omega.
+\end{dmath}
+
+Now it is clear that we can satisify our constraint only if the interval $[\pm \omega_\nought -\omega_{\text{cutoff}}, \pm \omega_\nought + \omega_{\text{cutoff}}]$ is made infinitesimal.  Specifically, we require both a $\omega^2 = \omega_\nought^2$ constraint and that the transform $\tilde{x}(\omega)$ have a delta function nature.  That is
+
+\begin{dmath}\label{eqn:threeSpringLoop:920}
+\tilde{x}(\omega) = 
+A \delta(\omega - \omega_\nought)
++ B \delta(\omega + \omega_\nought).
+\end{dmath}
+
+Substituition back into our transform gives
+
+\begin{dmath}\label{eqn:threeSpringLoop:940}
+x(t) 
+= A e^{-i \omega_\nought t}
++ B e^{i \omega_\nought t}.
+\end{dmath}
+
+We can verify quickly that this satisfies our harmonic equation $\ddot{x} = -\omega_\nought x$.
+
+\paragraph{Two mass harmonic oscillator}
+
+Having applied the transform technique to the very simplest second order system, we can now consider the next more complex system, that of two harmonically interacting masses (i.e. two masses on a frictionless spring).
+
+F1
+
+Our system is described by
+
+\begin{dmath}\label{eqn:threeSpringLoop:960}
+\LL = 
+\inv{2} m_1 \dot{u}_1^2
++ 
+\inv{2} m_2 \dot{u}_2^2
+-
+\inv{2} \kappa \lr{ u_2 - u_1 }^2,
+\end{dmath}
+
+and the pair of Euler-Lagrange equations
+
+\begin{dmath}\label{eqn:threeSpringLoop:980}
+0 = \frac{d}{dt} 
+\PD{\dot{u}_i}{\LL}
+- \PD{u_i}{\LL}.
+\end{dmath}
+
+The equations of motion are 
+\begin{dmath}\label{eqn:threeSpringLoop:1000}
+\begin{aligned}
+0 &= m_1 \ddot{u}_1 + \kappa \lr{ u_1 - u_2 } \\
+0 &= m_2 \ddot{u}_2 + \kappa \lr{ u_2 - u_1 } 
+\end{aligned}
+\end{dmath}
+
+Let
+
+\begin{dmath}\label{eqn:threeSpringLoop:1020}
+\begin{aligned}
+u_1(t) &= \int_{-\infty}^\infty \tilde{u}_1(\omega) e^{-i \omega t} d\omega \\
+u_2(t) &= \int_{-\infty}^\infty \tilde{u}_2(\omega) e^{-i \omega t} d\omega.
+\end{aligned}
+\end{dmath}
+
+Insertion of these transform pairs into our equations of motion produces a pair of simultaneous integral equations to solve
+
+\begin{dmath}\label{eqn:threeSpringLoop:n}
+\begin{aligned}
+0 &= 
+\int_{-\infty}^\infty 
+\lr{
+\lr{ -m_1 \omega^2 _+ \kappa} 
+\tilde{u}_1(\omega) 
+- \kappa
+\tilde{u}_2(\omega) 
+}
+e^{-i \omega t} d\omega \\
+0 &= 
+\int_{-\infty}^\infty 
+\lr{
+\lr{ -m_2 \omega^2 _+ \kappa} 
+\tilde{u}_2(\omega) 
+- \kappa
+\tilde{u}_1(\omega) 
+}
+e^{-i \omega t} d\omega.
+\end{aligned}
+\end{dmath}
+
 %\EndArticle
 \EndNoBibArticle
