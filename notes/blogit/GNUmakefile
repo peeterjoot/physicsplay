@@ -16,9 +16,9 @@ CLEAN_TARGETS += *.synctex.gz
 #INCOMPLETE += qmTwoExamReflection.tex
 #INCOMPLETE += qmTwoR1.tex
 
-INCOMPLETE += condensedMatterProblemSet5Problem1.tex
-INCOMPLETE += condensedMatterProblemSet5Problem2.tex
-INCOMPLETE += condensedMatterProblemSet5Problem3.tex
+#INCOMPLETE += condensedMatterProblemSet6Problem1.tex
+#INCOMPLETE += condensedMatterProblemSet6Problem2.tex
+#INCOMPLETE += condensedMatterProblemSet6Problem3.tex
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
@@ -65,9 +65,9 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 	rm -f .gitignore
 	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/blogit/,' > $@
 
-condensedMatterProblemSet5.pdf : condensedMatterProblemSet5Problem1.tex
-condensedMatterProblemSet5.pdf : condensedMatterProblemSet5Problem2.tex
-condensedMatterProblemSet5.pdf : condensedMatterProblemSet5Problem3.tex
+#condensedMatterProblemSet6.pdf : condensedMatterProblemSet6Problem1.tex
+#condensedMatterProblemSet6.pdf : condensedMatterProblemSet6Problem2.tex
+#condensedMatterProblemSet6.pdf : condensedMatterProblemSet6Problem3.tex
 
 video: $(VIDEO)
 
