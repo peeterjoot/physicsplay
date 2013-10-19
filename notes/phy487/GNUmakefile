@@ -32,6 +32,12 @@ condensedMatterProblemSet2.pdf :: condensedMatterProblemSet2Problem3.tex
 
 condensedMatterProblemSet2.pdf :: $(PDF_DEPS)
 
+condensedMatterProblemSet5.pdf :: condensedMatterProblemSet5Problem1.tex
+condensedMatterProblemSet5.pdf :: condensedMatterProblemSet5Problem2.tex
+condensedMatterProblemSet5.pdf :: condensedMatterProblemSet5Problem3.tex
+
+condensedMatterProblemSet5.pdf :: $(PDF_DEPS)
+
 condensedMatterLecture7PhononsQ.pdf :: $(PDF_DEPS)
 condensedMatterLecture7PhononsQ.pdf :: condensedMatterLecture7Phonons.tex
 
