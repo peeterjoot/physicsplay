@@ -69,6 +69,6 @@
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
 #s/\\bark\b/\\overbar{k}/g ;
 #s/\\barm\b/\\overbar{m}/g ;
-s/\\tx/\\tilde{x}/g ;
-s/\\omegac/\\omega_{\\text{cutoff}}/g ;
+#s/\\tx/\\tilde{x}/g ;
+#s/\\omegac/\\omega_{\\text{cutoff}}/g ;
 s/\\tu/\\tilde{u}/g ;

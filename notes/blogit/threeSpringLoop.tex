@@ -599,17 +599,48 @@ Application of the transform gives
 \int_{-\infty}^{\infty} \tilde{x}(\omega) e^{-i \omega t} d\omega
 = 
 \int_{-\infty}^{\infty} 
-\lr{ \omega^2 - \omega_\nought^2 + }
+\lr{ -\omega^2 + \omega_\nought^2 }
 \tilde{x}(\omega) 
 e^{-i \omega t} d\omega.
 \end{dmath}
 
-How do we make sense of this?  It appears that we require a constraint
+We clearly have a constraint that is a function of frequency, but one that has to hold for all time.  Let's transform this constraint to the frequency domain to consider that constraint independent of time.
 
-\begin{dmath}\label{eqn:threeSpringLoop:860}
-0 = \lr{ \omega^2 - \omega_\nought^2 + } \tilde{x}(\omega).
+\begin{dmath}\label{eqn:threeSpringLoop:1040}
+0 
+=
+\inv{2 \pi}
+\int_{-\infty}^{\infty} 
+dt e^{ i \omega t}
+\int_{-\infty}^{\infty} 
+\lr{ -{\omega'}^2 + \omega_\nought^2 }
+\tilde{x}(\omega') 
+e^{-i \omega' t} d\omega'
+=
+\int_{-\infty}^{\infty} 
+d\omega'
+\lr{ -{\omega'}^2 + \omega_\nought^2 }
+\tilde{x}(\omega') 
+\inv{2 \pi}
+\int_{-\infty}^{\infty} 
+dt e^{ i (\omega -\omega') t}
+=
+\int_{-\infty}^{\infty} 
+d\omega'
+\lr{ -{\omega'}^2 + \omega_\nought^2 }
+\tilde{x}(\omega') 
+\delta( \omega - \omega' )
+=
+\lr{ -{\omega}^2 + \omega_\nought^2 }
+\tilde{x}(\omega).
 \end{dmath}
 
+How do we make sense of this?  
+%It appears that we require a constraint
+%
+%\begin{dmath}\label{eqn:threeSpringLoop:860}
+%0 = \lr{ -\omega^2 + \omega_\nought^2 } \tilde{x}(\omega).
+%\end{dmath}
 Since $\omega$ is an integration variable, we can't just mandate that it equals the constant driving frequency $\pm \omega_\nought$.  It's clear that we require a constraint on the transform $\tilde{x}(\omega)$ as well.  As a trial solution, imagine that 
 
 \begin{dmath}\label{eqn:threeSpringLoop:880}
@@ -696,12 +727,12 @@ u_2(t) &= \int_{-\infty}^\infty \tilde{u}_2(\omega) e^{-i \omega t} d\omega.
 
 Insertion of these transform pairs into our equations of motion produces a pair of simultaneous integral equations to solve
 
-\begin{dmath}\label{eqn:threeSpringLoop:n}
+\begin{dmath}\label{eqn:threeSpringLoop:1060}
 \begin{aligned}
 0 &= 
 \int_{-\infty}^\infty 
 \lr{
-\lr{ -m_1 \omega^2 _+ \kappa} 
+\lr{ -m_1 \omega^2 + \kappa} 
 \tilde{u}_1(\omega) 
 - \kappa
 \tilde{u}_2(\omega) 
@@ -710,7 +741,7 @@ e^{-i \omega t} d\omega \\
 0 &= 
 \int_{-\infty}^\infty 
 \lr{
-\lr{ -m_2 \omega^2 _+ \kappa} 
+\lr{ -m_2 \omega^2 + \kappa} 
 \tilde{u}_2(\omega) 
 - \kappa
 \tilde{u}_1(\omega) 
@@ -718,6 +749,274 @@ e^{-i \omega t} d\omega \\
 e^{-i \omega t} d\omega.
 \end{aligned}
 \end{dmath}
+
+As with the single spring case, we can decouple these equations with an inverse transformation operation $\int e^{i \omega' t}/2\pi$, which gives us (after dropping primes)
+
+\begin{dmath}\label{eqn:threeSpringLoop:1080}
+0 
+= 
+\begin{bmatrix}
+\lr{ -m_1 \omega^2 + \kappa} &
+- \kappa \\
+- \kappa &
+\lr{ -m_2 \omega^2 + \kappa} 
+\end{bmatrix}
+\begin{bmatrix}
+\tilde{u}_1(\omega) \\
+\tilde{u}_2(\omega)
+\end{bmatrix}.
+\end{dmath}
+
+Taking determinants gives us the constraint on the frequency
+
+\begin{dmath}\label{eqn:threeSpringLoop:1100}
+0 = 
+\lr{ -m_1 \omega^2 + \kappa} 
+\lr{ -m_2 \omega^2 + \kappa} 
+- \kappa^2
+=
+m_1 m_2 \omega^4
+-(m_1 + m_2) 
+\omega^2 
+=
+\omega^2 
+\lr{
+m_1 m_2 \omega^2
+-\kappa (m_1 + m_2) 
+}.
+\end{dmath}
+
+Introducing a reduced mass 
+\begin{dmath}\label{eqn:threeSpringLoop:1140}
+\inv{\mu} = 
+\frac{1}{m_1}
++
+\frac{1}{m_2},
+\end{dmath}
+
+the pair of solutions are
+
+\begin{dmath}\label{eqn:threeSpringLoop:1120}
+\begin{aligned}
+\omega^2 &= 0 \\
+\omega^2 &
+%\frac{m_1 + m_2}
+%{
+%m_1 m_2 
+%} 
+%= 
+%\frac{\kappa}{m_2}
+%+
+%\frac{\kappa}{m_1}
+=
+\frac{\kappa}{\mu}
+\equiv \omega_\nought^2.
+\end{aligned}
+\end{dmath}
+
+As with the single mass oscillator, we require the functions $\tilde{u}{\omega}$ to also be expressed as delta functions.  The frequency constraint and that delta function requirement together can be expressed, for $j \in \{0, 1\}$ as
+
+\begin{dmath}\label{eqn:threeSpringLoop:1160}
+\tilde{u}_j(\omega) 
+= 
+  A_{j+} \delta( \omega - \omega_\nought )
++ A_{j0} \delta( \omega )
++ A_{j-} \delta( \omega + \omega_\nought ).
+\end{dmath}
+
+With a transformation back to time domain, we have functions of the form
+
+\begin{dmath}\label{eqn:threeSpringLoop:1180}
+\begin{aligned}
+u_1(t) 
+&= 
+  A_{j+} e^{ -i \omega_\nought t }
++ A_{j0} 
++ A_{j-} e^{ i \omega_\nought t } \\
+u_2(t) 
+&= 
+  B_{j+} e^{ -i \omega_\nought t }
++ B_{j0} 
++ B_{j-} e^{ i \omega_\nought t }.
+\end{aligned}
+\end{dmath}
+
+Back insertion of these into the equations of motion, we have
+
+\begin{dmath}\label{eqn:threeSpringLoop:1200}
+\begin{aligned}
+0 &=
+-m_1 \omega_\nought^2
+\lr{
+  A_{j+} e^{ -i \omega_\nought t }
++ A_{j-} e^{ i \omega_\nought t } 
+}
++ \kappa
+\lr{
+  \lr{ A_{j+} - B_{j+} } e^{ -i \omega_\nought t }
++ \lr{ A_{j-} - B_{j-} } e^{ i \omega_\nought t } 
++ A_{j0} - B_{j0} 
+} \\
+0 &=
+-m_2 \omega_\nought^2
+\lr{
+  B_{j+} e^{ -i \omega_\nought t }
++ B_{j-} e^{ i \omega_\nought t } 
+}
++ \kappa
+\lr{
+  \lr{ B_{j+} - A_{j+} } e^{ -i \omega_\nought t }
++ \lr{ B_{j-} - A_{j-} } e^{ i \omega_\nought t } 
++ B_{j0} - A_{j0} 
+}
+\end{aligned}
+\end{dmath}
+
+Equality requires identity for all powers of $e^{i \omega_\nought t}$, or
+
+\begin{dmath}\label{eqn:threeSpringLoop:1220}
+\begin{aligned}
+0 &= B_{j0} - A_{j0} \\
+0 &= -m_1 \omega_\nought^2 A_{j+} + \kappa \lr{ A_{j+} - B_{j+} } \\
+0 &= -m_1 \omega_\nought^2 A_{j-} + \kappa \lr{ A_{j-} - B_{j-} } \\
+0 &= -m_2 \omega_\nought^2 B_{j+} + \kappa \lr{ B_{j+} - A_{j+} } \\
+0 &= -m_2 \omega_\nought^2 B_{j-} + \kappa \lr{ B_{j-} - A_{j-} },
+\end{aligned}
+\end{dmath}
+
+or $B_{j0} = A_{j0}$ and
+
+\begin{dmath}\label{eqn:threeSpringLoop:1240}
+0 =
+\begin{bmatrix}
+\kappa -m_1 \omega_\nought^2 & 0 & - \kappa & 0 \\
+0 & \kappa -m_1 \omega_\nought^2 & 0 & - \kappa \\
+-\kappa & 0 & \kappa -m_2 \omega_\nought^2 & 0 \\
+0 & -\kappa & 0 & \kappa -m_2 \omega_\nought^2 
+\end{bmatrix}
+\begin{bmatrix}
+A_{j+} \\
+A_{j-} \\
+B_{j+} \\
+B_{j-} 
+\end{bmatrix}.
+\end{dmath}
+
+Observe that
+
+\begin{dmath}\label{eqn:threeSpringLoop:1260}
+\kappa - m_1 \omega_\nought^2
+=
+\kappa - m_1 \kappa \lr{ \inv{m_1} + \inv{m_2} }
+=
+\kappa \lr{ 1 - 1 - \frac{m_1}{m_2} }
+= -\kappa \frac{m_1}{m_2},
+\end{dmath}
+
+(with a similar alternate result).  We can rewrite \eqnref{eqn:threeSpringLoop:1240} as
+
+\begin{dmath}\label{eqn:threeSpringLoop:1280}
+0 =
+-\kappa
+\begin{bmatrix}
+m_1/m_2 & 0 &   1 & 0 \\
+0 & m_1/m_2 & 0 &   1 \\
+ 1 & 0 &  m_2/m_1 & 0 \\
+0 &  1 & 0 &  m_2/m_1 
+\end{bmatrix}
+\begin{bmatrix}
+A_{j+} \\
+A_{j-} \\
+B_{j+} \\
+B_{j-} 
+\end{bmatrix}.
+\end{dmath}
+
+It's clear that there's two pairs of linear dependencies here, so the determinant is zero as expected.  We can read off the remaining relations.  Our undetermined coefficients are given by
+\begin{dmath}\label{eqn:threeSpringLoop:1300}
+\begin{aligned}
+B_{j0} &= A_{j0} \\
+m_1 A_{j+} &= -m_2 B_{j+} \\
+m_1 A_{j-} &= -m_2 B_{j-} 
+\end{aligned}
+\end{dmath}
+
+\begin{dmath}\label{eqn:threeSpringLoop:1320}
+\myBoxed{
+\begin{aligned}
+u_1(t) 
+&= 
+  a
++ m_2 b e^{ -i \omega_\nought t }
++ m_2 c e^{ i \omega_\nought t } \\
+u_2(t) 
+&= 
+  a
+- m_1 b e^{ -i \omega_\nought t }
+- m_1 c e^{ i \omega_\nought t }.
+\end{aligned}
+}
+\end{dmath}
+
+Observe that the constant term is not really of interest, since it represents a constant displacement of both atoms (just a change of coordinates).
+
+\paragraph{Check:}
+
+\begin{dmath}\label{eqn:threeSpringLoop:1340}
+u_1(t) - u_2(t) 
+= 
++ (m_1 + m_2)b e^{ -i \omega_\nought t }
++ (m_1 + m_2)c e^{ i \omega_\nought t },
+\end{dmath}
+
+\begin{dmath}\label{eqn:threeSpringLoop:1360}
+m_1 \ddot{u}_1(t) + \kappa (u_1(t) - u_2(t) )
+=
+-m_1 m_2 \omega_\nought^2 
+\lr{
+  b e^{ -i \omega_\nought t }
++ c e^{ i \omega_\nought t } 
+}
++
+(m_1 + m_2) \kappa 
+\lr{
+b e^{ -i \omega_\nought t }
++ c e^{ i \omega_\nought t } 
+}
+=
+\lr{
+-m_1 m_2 \omega_\nought^2 + (m_1 + m_2) \kappa 
+}
+\lr{
+b e^{ -i \omega_\nought t }
++ c e^{ i \omega_\nought t } 
+}
+=
+\lr{
+-m_1 m_2 \kappa \frac{m_1 + m_2}{m_1 m_2} + (m_1 + m_2) \kappa 
+}
+\lr{
+b e^{ -i \omega_\nought t }
++ c e^{ i \omega_\nought t } 
+}
+= 0.
+\end{dmath}
+
+\section{Reflection}
+
+We've seen that we can solve any of these constant coefficient systems exactly using matrix methods, however, these will not be practical for large systems unless we have methods to solve for all the non-zero eigenvalues and their corresponding eigenvectors.  With the Fourier transform methods we find that our solutions in the frequency domain is of the form
+
+\begin{dmath}\label{eqn:threeSpringLoop:n}
+\tilde{u}_j(\omega) = \sum a_{kj} \delta( \omega - \omega_{kj} ),
+\end{dmath}
+
+or in the time domain
+
+\begin{dmath}\label{eqn:threeSpringLoop:n}
+u(t) = \sum a_{kj} e^{ - i \omega_{kj} t }.
+\end{dmath}
+
+We assumed exactly this form of solution in class.  The trial solution that we used in class factored out a phase shift from $a_{kj}$ of the form of $e^{ i q x_n }$, but that doesn't change the underling form of that assumed solution.  We have however found a good justification for the trial solution we utilized.
 
 %\EndArticle
 \EndNoBibArticle
