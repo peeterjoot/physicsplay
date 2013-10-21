@@ -1,7 +1,8 @@
+#s/\\bark\b/\\overbar{k}/g ;
+#s/\\barm\b/\\overbar{m}/g ;
 #s/\\Br_av/\\Br_{\\mathrm{av}}/g ;
 #s/\\DD/\\mathcal{D}/g ;
 #s/\\down\b/\\downarrow/g ;
-#s/\\ee/\\epsilon/g ;
 #s/\\EE/\\mathcal{E}/g ;
 #s/\\Gamma_{cav}/\\Gamma_{\\mathrm{cav}}/g  ;
 #s/\\Gamma_{sp}/\\Gamma_{\\mathrm{sp}}/g  ;
@@ -13,12 +14,16 @@
 #s/\\n(\d)\b/{n, $1}/g ;
 #s/\\n\+(\d)(\d)\b/{n + $1, $2}/g ;
 #s/\\na\b/{n, \\alpha}/g ;
+#s/\\omegac/\\omega_{\\text{cutoff}}/g ;
+#s/\\omegan/\\omega_\\nought/g ;
 #s/\\pp(.)/{($1)}/g ;
 #s/\\PP/\\mathcal{P}/g ;
 #s/\\rcap_av/\\rcap_{\\mathrm{av}}/g ;
 #s/\\Shat/\\hat{S}/g ;
 #s/\\spacegrad_T/\\spacegrad_{\\mathrm{T}}/g ;
 #s/\\tp/\\tilde{p}/g ;
+#s/\\tu/\\tilde{u}/g ;
+#s/\\tx/\\tilde{x}/g ;
 #s/\\up\b/\\uparrow/g ;
 #s/\^classical/^{\\mathrm{classical}}/g ;
 #s/\bialpha\b/{i_\\alpha}/g ;
@@ -67,9 +72,4 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-#s/\\bark\b/\\overbar{k}/g ;
-#s/\\barm\b/\\overbar{m}/g ;
-#s/\\tx/\\tilde{x}/g ;
-#s/\\omegac/\\omega_{\\text{cutoff}}/g ;
-#s/\\tu/\\tilde{u}/g ;
-s/\\omegan/\\omega_\\nought/g ;
+s/\\ee/\\epsilon/g ;
