@@ -71,4 +71,5 @@
 #s/\\barm\b/\\overbar{m}/g ;
 #s/\\tx/\\tilde{x}/g ;
 #s/\\omegac/\\omega_{\\text{cutoff}}/g ;
-s/\\tu/\\tilde{u}/g ;
+#s/\\tu/\\tilde{u}/g ;
+s/\\omegan/\\omega_\\nought/g ;
