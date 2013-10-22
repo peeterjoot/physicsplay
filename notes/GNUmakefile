@@ -50,3 +50,4 @@ all.pdf : $(ALLPDF)
 
 clean::
 	rm -f l currentBookCopyright.tex currentCopyright.latexPrologue myMathematica.html
+
