@@ -30,7 +30,7 @@
 
 We want to calculate the thermal properties of the free electron gas, characterized by energies of the form \cref{fig:qmSolidsL12:qmSolidsL12Fig1}.  At $T = 0$, the free electron gas fills up states up to $\EF$
 
-\imageFigure{qmSolidsL12Fig1}{Free electron energy distribution}{fig:qmSolidsL12:qmSolidsL12Fig1}{0.2}
+\imageFigure{figures/qmSolidsL12Fig1}{Free electron energy distribution}{fig:qmSolidsL12:qmSolidsL12Fig1}{0.2}
 
 
 \section{Fermi Dirac distribution for $T > 0$}
@@ -40,12 +40,12 @@ Note that we are following Einstein here, not the text.
 
 Consider a closed system and reservoir $r$, as in \cref{fig:qmSolidsL12:qmSolidsL12Fig4}, exchanging energy and particles, with a smaller system that has energy $\epsilon$ and $n$ particles.  The total energy and number of particles are respectively $U$ and $N$.
 
-\imageFigure{qmSolidsL12Fig4}{Two systems in contact}{fig:qmSolidsL12:qmSolidsL12Fig4}{0.2}
+\imageFigure{figures/qmSolidsL12Fig4}{Two systems in contact}{fig:qmSolidsL12:qmSolidsL12Fig4}{0.2}
 
 %%\cref{fig:qmSolidsL12:qmSolidsL12Fig3}.
-%\imageFigure{qmSolidsL12Fig3}{k space region}{fig:qmSolidsL12:qmSolidsL12Fig3}{0.3}
+%\imageFigure{figures/qmSolidsL12Fig3}{k space region}{fig:qmSolidsL12:qmSolidsL12Fig3}{0.3}
 %%\cref{fig:qmSolidsL12:qmSolidsL12Fig2}.
-%\imageFigure{qmSolidsL12Fig2}{Fermi energy in the energy distribution range}{fig:qmSolidsL12:qmSolidsL12Fig2}{0.2}
+%\imageFigure{figures/qmSolidsL12Fig2}{Fermi energy in the energy distribution range}{fig:qmSolidsL12:qmSolidsL12Fig2}{0.2}
 
 The probability of eigenstate $\epsilon$ with $n$ particles
 
@@ -67,13 +67,13 @@ e^{ \ln g_r(U - \epsilon, N - n) }
 }.
 \end{dmath}
 
-Introducing the Boltzmann entropy 
+Introducing the Boltzmann \textAndIndex{entropy}
 
 \begin{dmath}\label{eqn:condensedMatterLecture12:60}
 S_r = \kB \ln g_r,
 \end{dmath}
 
-we have approximately
+we have (approximately)
 
 \begin{dmath}\label{eqn:condensedMatterLecture12:80}
 P(\epsilon, n) \propto 
@@ -87,21 +87,52 @@ P(\epsilon, n) \propto
 Recall the thermodynamic relationship
 
 \begin{dmath}\label{eqn:condensedMatterLecture12:100}
-dU_r = T dS_r - \cancel{p dV_r} + \mu dN_r,
+dU_r 
+= T dS_r - \cancel{p dV_r} + \mu dN_r,
+= T 
+\lr{
+\PD{U_r}{S_r} dU_r
++\PD{N_r}{S_r} dN_r
+}
+%dS_r
+ - \cancel{p dV_r} + \mu dN_r.
 \end{dmath}
 
-from which we can define
+Taking wedge products \index{wedge product} we can construct a pair of 2-forms from this 
 
 \begin{subequations}
-\begin{dmath}\label{eqn:condensedMatterLecture12:120}
-\PDc{U_r}{S_r}{N} = \inv{T}
+\begin{dmath}\label{eqn:condensedMatterLecture12:360}
+\cancel{dU_r \wedge dU_r}
+= T 
+\lr{
+\PD{U_r}{S_r} \cancel{dU_r \wedge dU_r}
++\PD{N_r}{S_r} dN_r \wedge dU_r
+}
++ \mu dN_r \wedge dU_r
 \end{dmath}
-\begin{dmath}\label{eqn:condensedMatterLecture12:140}
-\PDc{N}{S_r}{U,V} = -\frac{\mu}{T},
+\begin{dmath}\label{eqn:condensedMatterLecture12:380}
+dU_r \wedge dN_r
+= T 
+\lr{
+\PD{U_r}{S_r} dU_r \wedge dN_r
++\PD{N_r}{S_r} \cancel{dN_r \wedge dN_r}
+}
++ \mu \cancel{dN_r \wedge dN_r}.
 \end{dmath}
 \end{subequations}
 
-giving approximately
+Reading off the factors of the 2-forms we have
+
+\begin{subequations}
+\begin{dmath}\label{eqn:condensedMatterLecture12:120}
+\PDc{U_r}{S_r}{P,V} = \inv{T}
+\end{dmath}
+\begin{dmath}\label{eqn:condensedMatterLecture12:140}
+\PDc{N}{S_r}{P,V} = -\frac{\mu}{T}.
+\end{dmath}
+\end{subequations}
+
+Insertion into our probability density gives us
 
 \begin{dmath}\label{eqn:condensedMatterLecture12:160}
 P(\epsilon, n) \propto e^{-(\epsilon - \mu n)/\kB T}.
@@ -124,7 +155,7 @@ It seems that we are labeling the system as having an energy eigenstate since we
 
 Select one energy level $(*)$, \cref{fig:qmSolidsL12:qmSolidsL12Fig5}, as the `system', and treat all other levels as the `reservoir'.
 
-\imageFigure{qmSolidsL12Fig5}{Selected energy level for system}{fig:qmSolidsL12:qmSolidsL12Fig5}{0.15}
+\imageFigure{figures/qmSolidsL12Fig5}{Selected energy level for system}{fig:qmSolidsL12:qmSolidsL12Fig5}{0.15}
 
 Note that $n_i \in \{0, 1\}$ due to the Pauli exclusion principle, and $\epsilon \in \{0, \epsilon_i\}$. 
 
@@ -149,20 +180,15 @@ or
 
 \begin{dmath}\label{eqn:condensedMatterLecture12:260}
 \myBoxed{
-\expectation{n_i} = \frac{ e^{-(\epsilon_i - \mu)/ \kB T } }
-{ e^{(\epsilon_i - \mu)/\kB T} + 1 }.
+\expectation{n_i} = \inv{ e^{(\epsilon_i - \mu)/\kB T} + 1 }.
 }
 \end{dmath}
 
 This is the \underlineAndIndex{Fermi-Dirac distribution}, as sketched roughly in
 \cref{fig:qmSolidsL12:qmSolidsL12Fig6}.
 
-\imageFigure{qmSolidsL12Fig6}{Fermi Dirac distribution}{fig:qmSolidsL12:qmSolidsL12Fig6}{0.2}
+\imageFigure{figures/qmSolidsL12Fig6}{Fermi Dirac distribution}{fig:qmSolidsL12:qmSolidsL12Fig6}{0.2}
 
-%F7
-%\cref{fig:qmSolidsL12:qmSolidsL12Fig7}.
-%\imageFigure{qmSolidsL12Fig7}{7: CAPTION}{fig:qmSolidsL12:qmSolidsL12Fig7}{0.2}
-%
 This solved a big mystery, since the equipartition theorem says 
 
 \begin{dmath}\label{eqn:condensedMatterLecture12:280}
@@ -198,21 +224,51 @@ U(T) - U(0)
 {thermal energy per thermally excited electron}
 \end{dmath}
 
-F7
+%F7
+%\cref{fig:qmSolidsL12:qmSolidsL12Fig7}.
+%\imageFigure{figures/qmSolidsL12Fig7}{7: CAPTION}{fig:qmSolidsL12:qmSolidsL12Fig7}{0.2}
+
+Plugging in the density of states from \eqnref{eqn:condensedMatterLecture11:340}
 
 \begin{dmath}\label{eqn:condensedMatterLecture12:340}
 C(T) 
 = \frac{dU}{dT} 
 \sim 2 \kB^2 D(\EF) T
-\sim \frac{2 \kB^2}{2 \pi^2} \lr{\frac{2 m}{\Hbar}}^{3/2} \sqrt{\EF} T
-\sim ...
+\sim 2 \kB^2 \frac{1}{2 \pi^2} \lr{ \frac{2m}{\Hbar^2} }^{3/2} \sqrt{\EF} T
+\end{dmath}
+
+From \eqnref{eqn:condensedMatterLecture11:380b} we have
+
+\begin{dmath}\label{eqn:condensedMatterLecture12:400}
+\sqrt{\EF} 
+= \frac{\EF^{3/2}}{\EF}
+= 
+\inv{\EF} 
+\lr{\frac{ \Hbar^2}{2m}}^{3/2} \lr{\lr{ 3 \pi^2 n}^{2/3}}^{3/2}
+=
+\inv{\EF} 
+3 \pi^2 n
+\lr{\frac{ \Hbar^2}{2m}}^{3/2},
+\end{dmath}
+
+so that
+\begin{dmath}\label{eqn:condensedMatterLecture12:420}
+C(T) 
+\sim \cancel{2} \kB^2 \frac{1}{\cancel{2 \pi^2}} \cancel{\lr{ \frac{2m}{\Hbar^2} }^{3/2} }
+\inv{\EF} 
+3 \cancel{\pi^2} n
+\cancel{\lr{\frac{ \Hbar^2}{2m}}^{3/2}}
+T
 \sim 3 \kB n 
 \mathLabelBox
+[
+   labelstyle={below of=m\themathLableNode, below of=m\themathLableNode}
+]
 {\frac{ \kB T}{ \EF }}
 {reduction from classical values}
 \end{dmath}
 
 %\cref{fig:qmSolidsL12:qmSolidsL12Fig8}.
-\imageFigure{qmSolidsL12Fig8}{Specific heat}{fig:qmSolidsL12:qmSolidsL12Fig8}{0.2}
+\imageFigure{figures/qmSolidsL12Fig8}{Specific heat}{fig:qmSolidsL12:qmSolidsL12Fig8}{0.2}
 
 %\EndNoBibArticle
