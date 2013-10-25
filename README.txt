@@ -122,3 +122,7 @@ notes/financials
 notes/dekker
    
    a dekker's algorithm related "paper" posted to my blog, discussing memory ordering.
+
+del2xml/del2xml
+
+   A script to take .csv formatted stuff and massage it into the xml format that rocketshuttle likes.
