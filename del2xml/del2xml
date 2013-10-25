@@ -9,14 +9,14 @@ my $help ;
 
 GetOptions
 ( 
-   'delimter=s'      => \$deltext,
+   'delimiter=s'      => \$deltext,
    'dollar!'         => \$dollar,
    'help!'           => \$help,
 ) ;
 
 if ( defined $help )
 {
-   print "del2xml [-help] [-delimter blah] [-dollar]\n" .
+   print "del2xml [-help] [-delimiter blah] [-dollar]\n" .
          "\n" .
          "Options:\n" .
          "\t-dollar\tUse '\$' as a delimiter.\n" .
@@ -43,21 +43,22 @@ else
 }
 
 my @headers ;
-my $tags ;
+my $numTags ;
 print "<head>\n" ;
 
 while ( <> )
 {
-   chomp ;
-   my @e = split( $delimiter, $_ ) ;
-   my $columns = scalar( @e ) ; 
+   chomp ; # take off the trailing newline character.
 
-   if ( defined $tags )
+   my @e = split( $delimiter, $_ ) ;
+   my $numColumns = scalar( @e ) ; 
+
+   if ( defined $numTags )
    {
-      die "columns != tags: $columns, $tags\n" if ( $columns != $tags ) ;
+      die "numColumns != numTags: $numColumns, $numTags\n" if ( $numColumns != $numTags ) ;
 
       print "<line>\n" ;
-      for ( my $i = 0 ; $i < scalar(@e) ; $i++ )
+      for ( my $i = 0 ; $i < $numColumns ; $i++ )
       {
          print "<$headers[$i]>$e[$i]</$headers[$i]>\n" ;
       }
@@ -66,7 +67,7 @@ while ( <> )
    else
    {
       @headers = @e ;
-      $tags = $columns ;
+      $numTags = $numColumns ;
    }
 }
 print "</head>\n" ;
