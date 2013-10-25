@@ -5,16 +5,16 @@ use warnings ;
 use Getopt::Long ;
 my $deltext ;
 my $dollar ;
-my $help ;
+my $printHelpAndExit ;
 
 GetOptions
 ( 
    'delimiter=s'      => \$deltext,
    'dollar!'         => \$dollar,
-   'help!'           => \$help,
+   'help!'           => \$printHelpAndExit,
 ) ;
 
-if ( defined $help )
+if ( defined $printHelpAndExit )
 {
    print "del2xml [-help] [-delimiter blah] [-dollar]\n" .
          "\n" .
@@ -42,10 +42,11 @@ else
    $delimiter = qr(\s*,\s*) ; # opt-spaces comma opt-spaces
 }
 
-my @headers ;
-my @rows ;
-my @sizes ;
+my @headers = () ;
+my @rows = () ;
+my @sizes = () ;
 my $numTags ;
+
 print q(<?xml version="1.0" encoding="utf-8"?>
 <DataSet xmlns="http://www.ibm.com/qmf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
@@ -71,9 +72,16 @@ while ( <> )
       my $i = 0 ;
       foreach (@e)
       {
-         if ( $sizes[$i] < length( $_ ) )
+         my $l = length( $_ ) ;
+
+#warn "$i\n" ;
+#warn "$sizes[$i]\n" ;
+#warn "$_\n" ;
+#warn "$l\n" ;
+
+         if ( $sizes[$i] < $l )
          {
-            $sizes[$i] = length( $_ )
+            $sizes[$i] = $l ;
          }
 
          $i++ ;
@@ -84,9 +92,8 @@ while ( <> )
    else
    {
       @headers = @e ;
-      my $i = 0 ;
 
-      foreach (@e)
+      for ( my $i = 0 ; $i < $numColumns ; $i++ )
       {
          $sizes[$i] = 0 ; #length( $_ ) ;
       }
