@@ -3,18 +3,18 @@
 use strict ;
 use warnings ;
 use Getopt::Long ;
-my $deltext ;
-my $dollar ;
-my $printHelpAndExit ;
+my $g_deltext ;
+my $g_dollar ;
+my $g_bPrintHelpAndExit ;
 
 GetOptions
 ( 
-   'delimiter=s'      => \$deltext,
-   'dollar!'         => \$dollar,
-   'help!'           => \$printHelpAndExit,
+   'delimiter=s'     => \$g_deltext,
+   'dollar!'         => \$g_dollar,
+   'help!'           => \$g_bPrintHelpAndExit,
 ) ;
 
-if ( defined $printHelpAndExit )
+if ( defined $g_bPrintHelpAndExit )
 {
    print "del2xml [-help] [-delimiter blah] [-dollar]\n" .
          "\n" .
@@ -28,24 +28,25 @@ if ( defined $printHelpAndExit )
    exit 1 ;
 }
 
-my $delimiter ;
-if ( defined $dollar )
+my $g_delimiter ;
+if ( defined $g_dollar )
 {
-   $delimiter = qr(\$) ;
+   $g_delimiter = qr(\$) ;
 }
-elsif ( defined $deltext )
+elsif ( defined $g_deltext )
 {
-   $delimiter = qr($deltext) ;
+   $g_delimiter = qr($g_deltext) ;
 }
 else
 {
-   $delimiter = qr(\s*,\s*) ; # opt-spaces comma opt-spaces
+   $g_delimiter = qr(\s*,\s*) ; # opt-spaces comma opt-spaces
 }
 
-my @headers = () ;
-my @rows = () ;
-my @sizes = () ;
-my $numTags ;
+my @g_headers = () ;
+my @g_rows = () ;
+my @g_sizes = () ;
+my $g_numTags ;
+my $g_rowIter = 0 ;
 
 print q(<?xml version="1.0" encoding="utf-8"?>
 <DataSet xmlns="http://www.ibm.com/qmf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -55,71 +56,18 @@ print q(<?xml version="1.0" encoding="utf-8"?>
       <SourceDescription/>
 ) ;
 
-my $rowIter = 0 ;
 while ( <> )
 {
    chomp ; # take off the trailing newline character.
 
-   my @e = split( $delimiter, $_ ) ;
-   my $numColumns = scalar( @e ) ; 
-
-   if ( defined $numTags )
-   {
-      die "numColumns != numTags: $numColumns, $numTags\n" if ( $numColumns != $numTags ) ;
-
-      $rows[$rowIter] = \@e ;
-
-      my $i = 0 ;
-      foreach (@e)
-      {
-         my $l = length( $_ ) ;
-
-#warn "$i\n" ;
-#warn "$sizes[$i]\n" ;
-#warn "$_\n" ;
-#warn "$l\n" ;
-
-         if ( $sizes[$i] < $l )
-         {
-            $sizes[$i] = $l ;
-         }
-
-         $i++ ;
-      }
-
-      $rowIter++ ;
-   }
-   else
-   {
-      @headers = @e ;
-
-      for ( my $i = 0 ; $i < $numColumns ; $i++ )
-      {
-         $sizes[$i] = 0 ; #length( $_ ) ;
-      }
-
-      $numTags = $numColumns ;
-   }
+   consumeOneLine( $_ ) ;
 }
 
-print "      <ColumnsAmount>$numTags</ColumnsAmount>\n" ;
+print "      <ColumnsAmount>$g_numTags</ColumnsAmount>\n" ;
 
-for ( my $c = 0 ; $c < $numTags ; $c++ )
+for ( my $c = 0 ; $c < $g_numTags ; $c++ )
 {
-   my $cpp = $c + 1 ;
-   my $n = $headers[ $c ] ;
-   my $s = $sizes[ $c ] ;
-
-   print qq(
-      <ColumnDescription id="$cpp">
-        <Name>$n</Name>
-        <Label>$n</Label>
-        <Type>char</Type>
-        <Width>$s</Width>
-        <Nullable>false</Nullable>
-        <Format>plain</Format>
-      </ColumnDescription>
-) ;
+   printOneColumnMetaData( $c ) ;
 }
 
 print q(
@@ -127,9 +75,9 @@ print q(
     <Data>
 ) ;
 
-for ( my $r = 0 ; $r < $rowIter ; $r++ )
+for ( my $r = 0 ; $r < $g_rowIter ; $r++ )
 {
-   printOneRow( $r, $rows[$r] ) ;
+   printOneDataRow( $r, $g_rows[$r] ) ;
 }
 
 print q(
@@ -143,17 +91,78 @@ print q(
 
 exit 0 ;
 
-sub printOneRow
+sub consumeOneLine
 {
-   my ($r, $cr) = @_ ;
+   my ( $line ) = @_ ;
+
+   my @e = split( $g_delimiter, $line ) ;
+   my $numColumns = scalar( @e ) ; 
+
+   if ( defined $g_numTags )
+   {
+      die "numColumns != numTags: $numColumns, $g_numTags\n" if ( $numColumns != $g_numTags ) ;
+
+      $g_rows[$g_rowIter] = \@e ;
+
+      my $i = 0 ;
+      foreach (@e)
+      {
+         my $l = length( $_ ) ;
+
+         if ( $g_sizes[$i] < $l )
+         {
+            $g_sizes[$i] = $l ;
+         }
+
+         $i++ ;
+      }
+
+      $g_rowIter++ ;
+   }
+   else
+   {
+      @g_headers = @e ;
+
+      for ( my $i = 0 ; $i < $numColumns ; $i++ )
+      {
+         $g_sizes[$i] = 0 ;
+      }
+
+      $g_numTags = $numColumns ;
+   }
+}
+
+sub printOneColumnMetaData
+{
+   my ( $c ) = @_ ;       
+
+   my $cpp = $c + 1 ;
+   my $n = $g_headers[ $c ] ;
+   my $s = $g_sizes[ $c ] ;
+
+   print qq(
+      <ColumnDescription id="$cpp">
+        <Name>$n</Name>
+        <Label>$n</Label>
+        <Type>char</Type>
+        <Width>$s</Width>
+        <Nullable>false</Nullable>
+        <Format>plain</Format>
+      </ColumnDescription>
+) ;
+}
+
+sub printOneDataRow
+{
+   my ( $r, $cr ) = @_ ;
    my @c = @$cr ;
 
 print qq(      <Row id="$r">\n) ;
 
-   for ( my $i = 0 ; $i < $numTags ; $i++ )
+   for ( my $i = 0 ; $i < $g_numTags ; $i++ )
    {
       my $cpp = $i + 1 ;
-      my $sz = $sizes[$i] ;
+      my $sz = $g_sizes[$i] ;
       my $cv = $c[$i] ;
       my $v = sprintf( "%-${sz}s", $cv ) ;
 
