@@ -1,0 +1,74 @@
+#!/usr/bin/perl
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+my $deltext ;
+my $dollar ;
+my $help ;
+
+GetOptions
+( 
+   'delimter=s'      => \$deltext,
+   'dollar!'         => \$dollar,
+   'help!'           => \$help,
+) ;
+
+if ( defined $help )
+{
+   print "del2xml [-help] [-delimter blah] [-dollar]\n" .
+         "\n" .
+         "Options:\n" .
+         "\t-dollar\tUse '\$' as a delimiter.\n" .
+         "\t-delimiter blah\tUse 'blah' as a delimiter.\n" .
+         "\n"
+         "Default delimiter is '[opt-spaces],[opt-spaces]\n"
+         "" ;
+
+   exit 1 ;
+}
+
+my $delimiter ;
+if ( defined $dollar )
+{
+   $delimiter = qr(\$) ;
+}
+elsif ( defined $deltext )
+{
+   $delimiter = qr($deltext) ;
+}
+else
+{
+   $delimiter = qr(\s*,\s*) ; # opt-spaces comma opt-spaces
+}
+
+my @headers ;
+my $tags ;
+my $out = "<head>\n" ;
+
+while ( <> )
+{
+   chomp ;
+   my @e = split( $delimiter, $_ ) ;
+   my $columns = scalar( @e ) ; 
+
+   if ( defined $tags )
+   {
+      die "columns != tags: $columns, $tags\n" if ( $columns != $tags ) ;
+
+      $out .= "<line>\n" ;
+      for ( my $i = 0 ; $i < scalar(@e) ; $i++ )
+      {
+         $out .= "<$headers[$i]>$e[$i]</$headers[$i]>\n" ;
+      }
+      $out .= "</line>\n" ;
+   }
+   else
+   {
+      @headers = @e ;
+      $tags = $columns ;
+   }
+}
+$out .= "</head>\n" ;
+
+print $out ;
