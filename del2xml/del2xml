@@ -43,13 +43,18 @@ else
 }
 
 my @headers ;
+my @rows ;
+my @sizes ;
 my $numTags ;
 print q(<?xml version="1.0" encoding="utf-8"?>
 <DataSet xmlns="http://www.ibm.com/qmf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-<ResultSet>
+  <ResultSet>
+    <MetaData>
+      <SourceDescription/>
 ) ;
 
+my $rowIter = 0 ;
 while ( <> )
 {
    chomp ; # take off the trailing newline character.
@@ -61,17 +66,92 @@ while ( <> )
    {
       die "numColumns != numTags: $numColumns, $numTags\n" if ( $numColumns != $numTags ) ;
 
-      print "<line>\n" ;
-      for ( my $i = 0 ; $i < $numColumns ; $i++ )
+      $rows[$rowIter] = \@e ;
+
+      my $i = 0 ;
+      foreach (@e)
       {
-         print "<$headers[$i]>$e[$i]</$headers[$i]>\n" ;
+         if ( $sizes[$i] < length( $_ ) )
+         {
+            $sizes[$i] = length( $_ )
+         }
+
+         $i++ ;
       }
-      print "</line>\n" ;
+
+      $rowIter++ ;
    }
    else
    {
       @headers = @e ;
+      my $i = 0 ;
+
+      foreach (@e)
+      {
+         $sizes[$i] = 0 ; #length( $_ ) ;
+      }
+
       $numTags = $numColumns ;
    }
 }
-print "</ResultSet>\n" ;
+
+print "      <ColumnsAmount>$numTags</ColumnsAmount>\n" ;
+
+for ( my $c = 0 ; $c < $numTags ; $c++ )
+{
+   my $cpp = $c + 1 ;
+   my $n = $headers[ $c ] ;
+   my $s = $sizes[ $c ] ;
+
+   print qq(
+      <ColumnDescription id="$cpp">
+        <Name>$n</Name>
+        <Label>$n</Label>
+        <Type>char</Type>
+        <Width>$s</Width>
+        <Nullable>false</Nullable>
+        <Format>plain</Format>
+      </ColumnDescription>
+) ;
+}
+
+print q(
+    </MetaData>
+    <Data>
+) ;
+
+for ( my $r = 0 ; $r < $rowIter ; $r++ )
+{
+   printOneRow( $r, $rows[$r] ) ;
+}
+
+print q(
+     </Data>
+  </ResultSet>
+
+  <Extensions/>
+
+</DataSet>
+) ;
+
+exit 0 ;
+
+sub printOneRow
+{
+   my ($r, $cr) = @_ ;
+   my @c = @$cr ;
+
+print qq(      <Row id="$r">\n) ;
+
+   for ( my $i = 0 ; $i < $numTags ; $i++ )
+   {
+      my $cpp = $i + 1 ;
+      my $sz = $sizes[$i] ;
+      my $cv = $c[$i] ;
+      my $v = sprintf( "%-${sz}s", $cv ) ;
+
+      print qq(        <Cell id="$cpp">$v</Cell>\n) ;
+   }
+
+print qq(      </Row>\n) ;
+}
