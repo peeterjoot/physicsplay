@@ -3,14 +3,18 @@
 use strict ;
 use warnings ;
 use Getopt::Long ;
+use List::Util 'sum' ;
+
 my $g_deltext ;
 my $g_dollar ;
 my $g_bPrintHelpAndExit ;
+my $g_varcharFraction = 0.5 ;
 
 GetOptions
 ( 
    'delimiter=s'     => \$g_deltext,
    'dollar!'         => \$g_dollar,
+   'varfrac=f'       => \$g_varcharFraction,
    'help!'           => \$g_bPrintHelpAndExit,
 ) ;
 
@@ -45,6 +49,14 @@ else
 my @g_headers = () ;
 my @g_rows = () ;
 my @g_sizes = () ;
+
+# categorization:
+my @g_charLen = () ;
+my @g_integer = () ;
+my @g_decimalPrecision = () ;
+my @g_decimalScale = () ;
+my @g_dateformat = () ;
+
 my $g_numTags ;
 my $g_rowIter = 0 ;
 
@@ -109,9 +121,34 @@ sub consumeOneLine
       {
          my $l = length( $_ ) ;
 
+         # save for average/stddev len calculation if char (to decide for char vs varchar).
+         $g_charLen[$i] += $l ;
+
          if ( $g_sizes[$i] < $l )
          {
             $g_sizes[$i] = $l ;
+         }
+
+         my $foundNonChar = 0 ;
+
+         if ( $_ =~ /^\d+$/ )
+         {
+            $g_integer[$i]++ ;
+
+            $foundNonChar = 1 ;
+         }
+
+#         if ( $_ =~ /^(\d+)\.(\d+)/ )
+#         {
+#               $g_decimal[$i]++ ;
+#
+#               $foundNonChar = 1 ;
+#         }
+
+         if ( $_ =~ qr(^\d\d/\d\d/\d\d\d\d$) )
+         {
+            $g_dateformat[$i]++ ;
+            $foundNonChar = 1 ;
          }
 
          $i++ ;
@@ -122,13 +159,18 @@ sub consumeOneLine
    else
    {
       @g_headers = @e ;
+      $g_numTags = $numColumns ;
 
+      # zero init of all these counting arrays:
       for ( my $i = 0 ; $i < $numColumns ; $i++ )
       {
          $g_sizes[$i] = 0 ;
       }
 
-      $g_numTags = $numColumns ;
+      @g_charLen     = @g_sizes ;
+      @g_integer     = @g_sizes ;
+#      @g_decimal     = @g_sizes ;
+      @g_dateformat  = @g_sizes ;
    }
 }
 
@@ -140,12 +182,52 @@ sub printOneColumnMetaData
    my $n = $g_headers[ $c ] ;
    my $s = $g_sizes[ $c ] ;
 
+   my $attr ;
+
+   if ( $g_integer[$c] == $g_rowIter )
+   {
+      $attr = qq(<Type>integer</Type>
+        <Width>$s</Width>) ;
+   }
+#   elsif ( $g_decimal[$c] == $g_rowIter )
+#   {
+#      # FIXME: http://stackoverflow.com/questions/2377174/how-do-i-interpret-precision-and-scale-of-a-number-in-a-database
+#
+#      # on decimal detection, will need to record the max scale and max prec (and distinguish from integer since valid ints are also 
+#      # valid decimal)
+#      $attr = qq(<Type>decimal</Type>
+#        <Scale>0</Scale>
+#        <Precision>$s</Precision>) ;
+#   }
+#   elsif ( $g_dateformat[$c] == $g_rowIter )
+#   {
+#      # FIXME: what attributes does date require?  May not have parsed in the correct format.  Don't enable without info.
+#      $attr = qq(<Type>date</Type>
+#        <Width>$s</Width>) ;
+#   }
+   else
+   {
+      my $varcharSpace = $g_charLen[$c] ;
+      my $charSpace = $s * $g_rowIter ;
+
+      # use varchar if it gets us at least a (by default) 50% savings in total space for the table.
+      if ( $varcharSpace < ($charSpace * $g_varcharFraction) )
+      {
+      $attr = qq(<Type>varchar</Type>
+        <Width>$s</Width>) ;
+      }
+      else
+      {
+      $attr = qq(<Type>char</Type>
+        <Width>$s</Width>) ;
+      }
+   }
+
    print qq(
       <ColumnDescription id="$cpp">
         <Name>$n</Name>
         <Label>$n</Label>
-        <Type>char</Type>
-        <Width>$s</Width>
+        $attr
         <Nullable>false</Nullable>
         <Format>plain</Format>
       </ColumnDescription>
@@ -157,17 +239,19 @@ sub printOneDataRow
    my ( $r, $cr ) = @_ ;
    my @c = @$cr ;
 
-print qq(      <Row id="$r">\n) ;
+   print qq(      <Row id="$r">\n) ;
 
    for ( my $i = 0 ; $i < $g_numTags ; $i++ )
    {
       my $cpp = $i + 1 ;
       my $sz = $g_sizes[$i] ;
       my $cv = $c[$i] ;
+
+      # FIXME: should varchar output be trailing space padded?  Integer and decimal probably shouldn't either.
       my $v = sprintf( "%-${sz}s", $cv ) ;
 
       print qq(        <Cell id="$cpp">$v</Cell>\n) ;
    }
 
-print qq(      </Row>\n) ;
+   print qq(      </Row>\n) ;
 }
