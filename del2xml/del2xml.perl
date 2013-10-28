@@ -155,6 +155,11 @@ sub consumeOneLine
             $foundNonChar = 1 ;
          }
 
+         #if ( $foundNonChar )
+         #{
+         #   # ...
+         #}
+
          $i++ ;
       }
 
