@@ -9,55 +9,74 @@
 
 using namespace std ;
 
-/** represents either a set of column tags from the first line, or the column data for a given row */
-typedef vector<string> columnData ;
-
 #if defined _MSC_VER
    #define mysnprintf _snprintf
 #else
    #define mysnprintf snprintf
 #endif
 
-/**
-   As we navigate over the rows, collect stats on what we find on the columns so that we can pick an SQL type later.
- */
-struct columnTypeInfo
+class csvToXml
 {
-   int   charLen ;
-   int   sizes ;
-   int   totalIntegersInColumn ;
-   int   totalDateFormatsInColumn ;
+   /** represents either a set of column tags from the first line, or the column data for a given row */
+   typedef vector<string> columnData ;
 
-   columnTypeInfo() : 
-      charLen(0),
-      sizes(0),
-      totalIntegersInColumn(0),
-      totalDateFormatsInColumn(0) 
-   { }
+   /**
+      As we navigate over the rows, collect stats on what we find on the columns so that we can pick an SQL type later.
+    */
+   struct columnTypeInfo
+   {
+      int   charLen ;
+      int   sizes ;
+      int   totalIntegersInColumn ;
+      int   totalDateFormatsInColumn ;
+
+      columnTypeInfo() : 
+         charLen(0),
+         sizes(0),
+         totalIntegersInColumn(0),
+         totalDateFormatsInColumn(0) 
+      { }
+   } ;
+
+   double                  m_varcharFraction ;
+   columnData              m_headers ;
+   vector<columnData>      m_rows ;
+   vector<columnTypeInfo>  m_typeInfo ;
+   int                     m_numTags ;
+   char                    m_delimiter ;
+
+   void parseArguments( int argc, char ** argv ) ;
+   void showHelpAndExit() ;
+   void printOneDataRow( int rowIndex ) ;
+   void printOneColumnMetaData( int c ) ;
+   void consumeOneLine( const string & line ) ;
+
+public:
+   csvToXml() :
+      m_varcharFraction( 0.5 ),
+      m_headers(),
+      m_rows(),
+      m_typeInfo(),
+      m_numTags( 0 ),
+      m_delimiter( ',' )
+   {
+   }
+
+   void driver( int argc, char ** argv ) ;
 } ;
-
-bool                    g_bPrintHelpAndExit ;
-double                  g_varcharFraction = 0.5 ;
-columnData              g_headers ;
-vector<columnData>      g_rows ;
-vector<columnTypeInfo>  g_typeInfo ;
-int                     g_numTags = 0 ;
-char                    g_delimiter = ',' ;
-
-static void showHelpAndExit() ;
-static void parseArguments( int argc, char ** argv ) ;
-static void printOneDataRow( int rowIndex ) ;
-static void printOneColumnMetaData( int c ) ;
-static void consumeOneLine( const string & line ) ;
 
 int main( int argc, char ** argv )
 {
-   parseArguments( argc, argv ) ;
+   csvToXml convert ;
 
-   if ( g_bPrintHelpAndExit )
-   {
-      showHelpAndExit() ;
-   }
+   convert.driver( argc, argv ) ;
+
+   return 0 ;
+}
+
+void csvToXml::driver( int argc, char ** argv )
+{
+   parseArguments( argc, argv ) ;
 
    printf( "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
            "<DataSet xmlns=\"http://www.ibm.com/qmf\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n"
@@ -68,14 +87,15 @@ int main( int argc, char ** argv )
 
    string s ;
 
+   // with an arg parser, would make sense to allow cin to be a named file.
    while ( getline( cin, s ) )
    {
       consumeOneLine( s ) ;
    }
 
-   printf( "      <ColumnsAmount>%d</ColumnsAmount>\n", g_numTags ) ;
+   printf( "      <ColumnsAmount>%d</ColumnsAmount>\n", m_numTags ) ;
 
-   for ( int c = 0 ; c < g_numTags ; c++ )
+   for ( int c = 0 ; c < m_numTags ; c++ )
    {
       printOneColumnMetaData( c ) ;
    }
@@ -83,7 +103,7 @@ int main( int argc, char ** argv )
    printf( "    </MetaData>\n"
            "    <Data>\n" ) ;
 
-   int numRows = g_rows.size() ;
+   int numRows = m_rows.size() ;
 
    for ( int r = 0 ; r < numRows ; r++ )
    {
@@ -96,23 +116,28 @@ int main( int argc, char ** argv )
            "  <Extensions/>\n"
            "\n"
            "</DataSet>\n" ) ;
-
-   return 0 ;
 }
 
-void parseArguments( int argc, char ** argv )
+void csvToXml::parseArguments( int argc, char ** argv )
 {
    if ( (2 == argc) && (1 == strlen(argv[1])) )
    {
-      g_delimiter = argv[1][0] ;
+      m_delimiter = argv[1][0] ;
    }
    else if ( argc > 1 )
    {
       showHelpAndExit() ;
    }
+
+#if 0 // not implemented.
+   if ( showHelp )
+   {
+      showHelpAndExit() ;
+   }
+#endif
 }
 
-void showHelpAndExit()
+void csvToXml::showHelpAndExit()
 {
    printf( "del2xml [delimiter] < input > output\n" 
            "\n"
@@ -132,19 +157,19 @@ static void split( vector<string> & e, char del, const string & line )
    }
 }
 
-void consumeOneLine( const string & line )
+void csvToXml::consumeOneLine( const string & line )
 {
    vector<string> e ;
 
-   split( e, g_delimiter, line ) ;
+   split( e, m_delimiter, line ) ;
 
    int numColumns = e.size( ) ; 
 
-   if ( g_numTags )
+   if ( m_numTags )
    {
-      assert( numColumns == g_numTags ) ;
+      assert( numColumns == m_numTags ) ;
 
-      g_rows.push_back( e ) ;
+      m_rows.push_back( e ) ;
 
       for ( int i = 0 ; i < numColumns ; i++ )
       {
@@ -152,11 +177,11 @@ void consumeOneLine( const string & line )
          int l = v.length( ) ;
 
          // save for average/stddev len calculation if char (to decide for char vs varchar).
-         g_typeInfo[ i ].charLen += l ;
+         m_typeInfo[ i ].charLen += l ;
 
-         if ( g_typeInfo[ i ].sizes < l )
+         if ( m_typeInfo[ i ].sizes < l )
          {
-            g_typeInfo[ i ].sizes = l ;
+            m_typeInfo[ i ].sizes = l ;
          }
 
          bool foundNonChar = 0 ;
@@ -166,14 +191,14 @@ void consumeOneLine( const string & line )
 
          if ( !err[0] )
          {
-            g_typeInfo[ i ].totalIntegersInColumn++ ;
+            m_typeInfo[ i ].totalIntegersInColumn++ ;
 
             foundNonChar = 1 ;
          }
 
 //         if ( v =~ /^(\d+)\.(\d+)/ )
 //         {
-//               g_decimal[ i ]++ ;
+//               m_decimal[ i ]++ ;
 //
 //               foundNonChar = 1 ;
 //         }
@@ -181,7 +206,7 @@ void consumeOneLine( const string & line )
 #if 0
          if ( v =~ qr(^\d\d/\d\d/\d\d\d\d$) )
          {
-            g_typeInfo[ i ].totalDateFormatsInColumn++ ;
+            m_typeInfo[ i ].totalDateFormatsInColumn++ ;
 
             foundNonChar = 1 ;
          }
@@ -195,30 +220,30 @@ void consumeOneLine( const string & line )
    }
    else
    {
-      g_headers = e ;
-      g_numTags = numColumns ;
+      m_headers = e ;
+      m_numTags = numColumns ;
 
-      g_typeInfo.resize( numColumns ) ;
+      m_typeInfo.resize( numColumns ) ;
    }
 }
 
-void printOneColumnMetaData( int c )
+void csvToXml::printOneColumnMetaData( int c )
 {
    int            cpp   = c + 1 ;
-   const char *   n     = g_headers[ c ].c_str() ;
-   int            s     = g_typeInfo[ c ].sizes ;
+   const char *   n     = m_headers[ c ].c_str() ;
+   int            s     = m_typeInfo[ c ].sizes ;
    char           attr[ 256 ] ;
 
-   int numRows = g_rows.size() ;
+   int numRows = m_rows.size() ;
 
-   if ( g_typeInfo[ c ].totalIntegersInColumn == numRows )
+   if ( m_typeInfo[ c ].totalIntegersInColumn == numRows )
    {
       mysnprintf( attr, sizeof(attr),
                   "<Type>integer</Type>\n"
                   "        <Width>%d</Width>", s ) ;
    }
 #if 0
-   elsif ( g_decimal[ c ] == numRows )
+   elsif ( m_decimal[ c ] == numRows )
    {
       // FIXME: http://stackoverflow.com/questions/2377174/how-do-i-interpret-precision-and-scale-of-a-number-in-a-database
 
@@ -229,7 +254,7 @@ void printOneColumnMetaData( int c )
                   "        <Scale>0</Scale>\n"
                   "        <Precision>%d</Precision>", s ) ;
    }
-   elsif ( g_dateformat[ c ] == numRows )
+   elsif ( m_dateformat[ c ] == numRows )
    {
       // FIXME: what attributes does date require?  May not have parsed in the correct format.  Don't enable without info.
       mysnprintf( attr, sizeof(attr), 
@@ -239,11 +264,11 @@ void printOneColumnMetaData( int c )
 #endif
    else
    {
-      int varcharSpace = g_typeInfo[ c ].charLen ;
+      int varcharSpace = m_typeInfo[ c ].charLen ;
       int charSpace = s * numRows ;
 
       // use varchar if it gets us at least a (by default) 50% savings in total space for the table.
-      if ( varcharSpace < (charSpace * g_varcharFraction) )
+      if ( varcharSpace < (charSpace * m_varcharFraction) )
       {
          mysnprintf( attr, sizeof(attr),
                      "<Type>varchar</Type>\n"
@@ -266,16 +291,16 @@ void printOneColumnMetaData( int c )
            "      </ColumnDescription>\n", cpp, n, n, attr ) ;
 }
 
-void printOneDataRow( int rowIndex )
+void csvToXml::printOneDataRow( int rowIndex )
 {
-   columnData & c = g_rows[ rowIndex ] ;
+   columnData & c = m_rows[ rowIndex ] ;
 
    printf( "      <Row id=\"%d\">\n", rowIndex ) ;
 
-   for ( int i = 0 ; i < g_numTags ; i++ )
+   for ( int i = 0 ; i < m_numTags ; i++ )
    {
       int cpp = i + 1 ;
-      int sz = g_typeInfo[ i ].sizes ;
+      int sz = m_typeInfo[ i ].sizes ;
       const char * cv = c[ i ].c_str() ;
 
       // FIXME: should varchar output be trailing space padded?  Integer and decimal probably shouldn't either.
