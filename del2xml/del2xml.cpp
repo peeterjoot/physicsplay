@@ -38,7 +38,6 @@ columnData              g_headers ;
 vector<columnData>      g_rows ;
 vector<columnTypeInfo>  g_typeInfo ;
 int                     g_numTags = 0 ;
-int                     g_rowIter = 0 ;
 char                    g_delimiter = ',' ; // FIXME: hardcoded.
 //string                  g_deltext ;
 //string                  g_dollar ;
@@ -82,7 +81,9 @@ int main( int argc, char ** argv )
    printf( "    </MetaData>\n"
            "    <Data>\n" ) ;
 
-   for ( int r = 0 ; r < g_rowIter ; r++ )
+   int numRows = g_rows.size() ;
+
+   for ( int r = 0 ; r < numRows ; r++ )
    {
       printOneDataRow( r ) ;
    }
@@ -205,11 +206,7 @@ void consumeOneLine( const string & line )
          {
             // ...
          }
-
-         i++ ;
       }
-
-      g_rowIter++ ;
    }
    else
    {
@@ -227,14 +224,16 @@ void printOneColumnMetaData( int c )
    int            s     = g_typeInfo[ c ].sizes ;
    char           attr[ 256 ] ;
 
-   if ( g_typeInfo[ c ].totalIntegersInColumn == g_rowIter )
+   int numRows = g_rows.size() ;
+
+   if ( g_typeInfo[ c ].totalIntegersInColumn == numRows )
    {
       snprintf( attr, sizeof(attr),
                 "<Type>integer</Type>\n"
                 "        <Width>%d</Width>", s ) ;
    }
 #if 0
-   elsif ( g_decimal[ c ] == g_rowIter )
+   elsif ( g_decimal[ c ] == numRows )
    {
       // FIXME: http://stackoverflow.com/questions/2377174/how-do-i-interpret-precision-and-scale-of-a-number-in-a-database
 
@@ -245,7 +244,7 @@ void printOneColumnMetaData( int c )
                 "        <Scale>0</Scale>\n"
                 "        <Precision>%d</Precision>", s ) ;
    }
-   elsif ( g_dateformat[ c ] == g_rowIter )
+   elsif ( g_dateformat[ c ] == numRows )
    {
       // FIXME: what attributes does date require?  May not have parsed in the correct format.  Don't enable without info.
       snprintf( attr, sizeof(attr), 
@@ -255,8 +254,8 @@ void printOneColumnMetaData( int c )
 #endif
    else
    {
-      int varcharSpace = g_typeInfo[ c ].totalIntegersInColumn++ ;
-      int charSpace = s * g_rowIter ;
+      int varcharSpace = g_typeInfo[ c ].charLen ;
+      int charSpace = s * numRows ;
 
       // use varchar if it gets us at least a (by default) 50% savings in total space for the table.
       if ( varcharSpace < (charSpace * g_varcharFraction) )
