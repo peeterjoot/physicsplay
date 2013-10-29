@@ -51,6 +51,17 @@ class csvToXml
    void printOneColumnMetaData( int c ) ;
    void consumeOneLine( const string & line ) ;
 
+   static void split( vector<string> & e, char del, const string & line )
+   {
+      stringstream ss( line ) ;
+      string s;
+
+      while ( getline( ss, s, del ) )
+      {
+         e.push_back( s ) ;
+      }
+   }
+
 public:
    csvToXml() :
       m_varcharFraction( 0.5 ),
@@ -144,17 +155,6 @@ void csvToXml::showHelpAndExit()
            "delimiter - a one character delimiter (like Z)\n" ) ;
 
    exit( 1 ) ;
-}
-
-static void split( vector<string> & e, char del, const string & line )
-{
-   stringstream ss( line ) ;
-   string s;
-
-   while ( getline( ss, s, del ) )
-   {
-      e.push_back( s ) ;
-   }
 }
 
 void csvToXml::consumeOneLine( const string & line )
