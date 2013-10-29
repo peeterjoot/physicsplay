@@ -52,7 +52,7 @@ static void consumeOneLine( const string & line ) ;
 
 int main( int argc, char ** argv )
 {
-   parseArguments( argc, argv ) ; // FIXME: not implemented.
+   parseArguments( argc, argv ) ;
 
    if ( g_bPrintHelpAndExit )
    {
