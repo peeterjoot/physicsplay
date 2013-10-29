@@ -12,6 +12,12 @@ using namespace std ;
 /** represents either a set of column tags from the first line, or the column data for a given row */
 typedef vector<string> columnData ;
 
+#if defined _MSC_VER
+   #define mysnprintf _snprintf
+#else
+   #define mysnprintf snprintf
+#endif
+
 /**
    As we navigate over the rows, collect stats on what we find on the columns so that we can pick an SQL type later.
  */
@@ -207,9 +213,9 @@ void printOneColumnMetaData( int c )
 
    if ( g_typeInfo[ c ].totalIntegersInColumn == numRows )
    {
-      snprintf( attr, sizeof(attr),
-                "<Type>integer</Type>\n"
-                "        <Width>%d</Width>", s ) ;
+      mysnprintf( attr, sizeof(attr),
+                  "<Type>integer</Type>\n"
+                  "        <Width>%d</Width>", s ) ;
    }
 #if 0
    elsif ( g_decimal[ c ] == numRows )
@@ -218,17 +224,17 @@ void printOneColumnMetaData( int c )
 
       // on decimal detection, will need to record the max scale and max prec (and distinguish from integer since valid ints are also 
       // valid decimal)
-      snprintf( attr, sizeof(attr),
-                "<Type>decimal</Type>\n"
-                "        <Scale>0</Scale>\n"
-                "        <Precision>%d</Precision>", s ) ;
+      mysnprintf( attr, sizeof(attr),
+                  "<Type>decimal</Type>\n"
+                  "        <Scale>0</Scale>\n"
+                  "        <Precision>%d</Precision>", s ) ;
    }
    elsif ( g_dateformat[ c ] == numRows )
    {
       // FIXME: what attributes does date require?  May not have parsed in the correct format.  Don't enable without info.
-      snprintf( attr, sizeof(attr), 
-                "<Type>date</Type>\n"
-                "        <Width>%d</Width>", s ) ;
+      mysnprintf( attr, sizeof(attr), 
+                  "<Type>date</Type>\n"
+                  "        <Width>%d</Width>", s ) ;
    }
 #endif
    else
@@ -239,15 +245,15 @@ void printOneColumnMetaData( int c )
       // use varchar if it gets us at least a (by default) 50% savings in total space for the table.
       if ( varcharSpace < (charSpace * g_varcharFraction) )
       {
-         snprintf( attr, sizeof(attr),
-                   "<Type>varchar</Type>\n"
-                   "        <Width>%d</Width>", s ) ;
+         mysnprintf( attr, sizeof(attr),
+                     "<Type>varchar</Type>\n"
+                     "        <Width>%d</Width>", s ) ;
       }
       else
       {
-         snprintf( attr, sizeof(attr), 
-                   "<Type>char</Type>\n"
-                   "        <Width>%d</Width>", s ) ;
+         mysnprintf( attr, sizeof(attr), 
+                     "<Type>char</Type>\n"
+                     "        <Width>%d</Width>", s ) ;
       }
    }
 
