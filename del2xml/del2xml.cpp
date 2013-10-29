@@ -100,38 +100,21 @@ int main( int argc, char ** argv )
 
 void parseArguments( int argc, char ** argv )
 {
-#if 0 // FIXME: hardcoded.
-   if ( defined g_dollar )
+   if ( (2 == argc) && (1 == strlen(argv[1])) )
    {
-      g_delimiter = qr(\$) ;
+      g_delimiter = argv[1][0] ;
    }
-   elsif ( defined g_deltext )
+   else if ( argc > 1 )
    {
-      g_delimiter = qr(g_deltext) ;
+      showHelpAndExit() ;
    }
-   else
-   {
-      g_delimiter = qr(\s*,\s*) ; // opt-spaces comma opt-spaces
-   }
-#endif
 }
 
 void showHelpAndExit()
 {
-   printf( "del2xml < input > output\n" ) ;
-
-#if 0
-   printf( "del2xml [-help] [-delimiter blah] [-dollar] [-varfrac vcFraction]\n"
+   printf( "del2xml [delimiter] < input > output\n" 
            "\n"
-           "Options:\n"
-           "\t-dollar            \tUse '$' as a delimiter.\n"
-           "\t-delimiter blah    \tUse 'blah' as a delimiter.\n"
-           "\t-varfrac vcFraction\tIf the size of the storage used in char representation times vcFraction\n"
-           "\t                   \tis greater than the space required for the same data in varchar\n"
-           "\t                   \tformat, use a varchar type instead of char.  vcFraction defaults to 0.5\n"
-           "\n"
-           "Default delimiter is '[optional-spaces],[optional-spaces]'\n" ) ;
-#endif
+           "delimiter - a one character delimiter (like Z)\n" ) ;
 
    exit( 1 ) ;
 }

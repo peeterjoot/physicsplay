@@ -86,8 +86,8 @@ for ( my $c = 0 ; $c < $g_numTags ; $c++ )
    printOneColumnMetaData( $c ) ;
 }
 
-print q(
-    </MetaData>
+print q
+(    </MetaData>
     <Data>
 ) ;
 
@@ -96,8 +96,8 @@ for ( my $r = 0 ; $r < $g_rowIter ; $r++ )
    printOneDataRow( $r, $g_rows[$r] ) ;
 }
 
-print q(
-     </Data>
+print q
+(     </Data>
   </ResultSet>
 
   <Extensions/>
@@ -232,8 +232,8 @@ sub printOneColumnMetaData
       }
    }
 
-   print qq(
-      <ColumnDescription id="$cpp">
+   print qq
+(      <ColumnDescription id="$cpp">
         <Name>$n</Name>
         <Label>$n</Label>
         $attr
