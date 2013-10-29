@@ -21,8 +21,6 @@ struct columnTypeInfo
    int   sizes ;
    int   totalIntegersInColumn ;
    int   totalDateFormatsInColumn ;
-//   bool  decimalPrecision ;
-//   bool  decimalScale ;
 
    columnTypeInfo() : 
       charLen(0),
@@ -38,9 +36,7 @@ columnData              g_headers ;
 vector<columnData>      g_rows ;
 vector<columnTypeInfo>  g_typeInfo ;
 int                     g_numTags = 0 ;
-char                    g_delimiter = ',' ; // FIXME: hardcoded.
-//string                  g_deltext ;
-//string                  g_dollar ;
+char                    g_delimiter = ',' ;
 
 static void showHelpAndExit() ;
 static void parseArguments( int argc, char ** argv ) ;
