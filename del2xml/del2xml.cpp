@@ -6,6 +6,8 @@
 #include <sstream>
 #include <cstdlib>
 #include <iostream>
+#include <climits>
+#include "commit.h"
 
 #if defined _MSC_VER
    #define __STDC__ 1
@@ -255,8 +257,6 @@ void csvToXml::parseArguments( int argc, char ** argv )
    }
 }
 
-#include "commit.h"
-
 void csvToXml::showHelpAndExit()
 {
    printf( "del2xml [--help] [--delimiter=Z] < input > output\n" 
@@ -303,37 +303,68 @@ void csvToXml::consumeOneLine( const string & line )
             m_typeInfo[ i ].sizes = l ;
          }
 
-         bool foundNonChar = 0 ;
-
          char * err = 0 ;
-         strtol( v.c_str(), &err, 10 ) ;
+         long longValue = strtol( v.c_str(), &err, 10 ) ;
 
          if ( !err[0] )
          {
             m_typeInfo[ i ].totalIntegerRowsForColumn++ ;
 
-            foundNonChar = 1 ;
+            if ( (longValue < SHRT_MAX) && (longValue > SHRT_MIN) )
+            {
+               m_typeInfo[ i ].totalSmallIntegerRowsForColumn++ ;
+            }
          }
 
-//         if ( v =~ /^(\d+)\.(\d+)/ )
-//         {
-//               m_decimal[ i ]++ ;
-//
-//               foundNonChar = 1 ;
-//         }
+         // Crude decimal predicate: can we convert input to double?
+         double doubleValue = strtod( v.c_str(), &err ) ;
 
-#if 0
-         if ( v =~ qr(^\d\d/\d\d/\d\d\d\d$) )
+         if ( !err[0] )
          {
-            m_typeInfo[ i ].totalDateRowsForColumn++ ;
-
-            foundNonChar = 1 ;
+            m_typeInfo[ i ].totalDecimalRowsForColumn++ ;
+    
+            // FIXME: would also have to figure out scale and precision before enabling.
          }
-#endif
 
-         if ( foundNonChar )
          {
-            // ...
+            unsigned d = 0, m = 0, y = 0, hr = 0, min = 0, sec = 0, usec = 0 ;
+            // 2012-03-14T10:28:53.205800
+            // 2012-03-14
+            int rc = sscanf( v.c_str(), "%04u-%02u-%02uT%02u:%02u:%02u.%06u", &y, &m, &d, &hr, &min, &sec, &usec ) ;
+
+            if ( (3 <= rc) &&
+                 (y != 0) &&
+                 (m != 0) &&
+                 (d != 0) &&
+                 (d <= 31) &&
+                 (m <= 12) &&
+                 (y <= 9999) )
+            {
+               if ( 3 == rc )
+               {
+                  m_typeInfo[ i ].totalDateRowsForColumn++ ;
+               }
+               else if ( (7 == rc) &&
+                         (hr < 24) &&
+                         (min < 60) &&
+                         (sec < 60) &&
+                         (usec < 1000000) )
+               {
+                  m_typeInfo[ i ].totalTimeStampRowsForColumn++ ;
+               }
+            }
+            else
+            {
+               // 09:29:40
+               rc = sscanf( v.c_str(), "%02u:%02u:%02u", &hr, &min, &sec ) ;
+               if ( (3 == rc) &&
+                    (hr < 24) &&
+                    (min < 60) &&
+                    (sec < 60) )
+               {
+                  m_typeInfo[ i ].totalTimeRowsForColumn++ ;
+               }
+            }
          }
       }
    }
@@ -385,22 +416,31 @@ void csvToXml::printOneColumnMetaData( int columnIndex )
                   "        <Scale>0</Scale>\n"
                   "        <Precision>%d</Precision>", s ) ;
    }
-   elsif ( m_dateformat[ columnIndex ] == numRows )
+#endif
+   else if ( m_typeInfo[ columnIndex ].totalTimeStampRowsForColumn == numRows )
+   {
+      m_typeInfo[ columnIndex ].columnMetaDataType = FLAG_TIMESTAMP_TYPE ;
+
+      mysnprintf( attr, sizeof(attr), 
+                  "<Type>timestamp</Type>\n"
+                  "        <Width>%d</Width>", s ) ;
+   }
+   else if ( m_typeInfo[ columnIndex ].totalDateRowsForColumn == numRows )
    {
       m_typeInfo[ columnIndex ].columnMetaDataType = FLAG_DATE_TYPE ;
 
-      // FIXME: what attributes does date require?  May not have parsed in the correct format.  Don't enable without info.
       mysnprintf( attr, sizeof(attr), 
                   "<Type>date</Type>\n"
                   "        <Width>%d</Width>", s ) ;
    }
+   else if ( m_typeInfo[ columnIndex ].totalTimeRowsForColumn == numRows )
+   {
+      m_typeInfo[ columnIndex ].columnMetaDataType = FLAG_TIME_TYPE ;
 
-// TODO: time
-// TODO: timestamp
-//      m_typeInfo[ columnIndex ].columnMetaDataType = FLAG_TIME_TYPE ;
-//      m_typeInfo[ columnIndex ].columnMetaDataType = FLAG_TIMESTAMP_TYPE ;
-
-#endif
+      mysnprintf( attr, sizeof(attr), 
+                  "<Type>time</Type>\n"
+                  "        <Width>%d</Width>", s ) ;
+   }
    else
    {
       m_typeInfo[ columnIndex ].columnMetaDataType = FLAG_CHAR_TYPE ;

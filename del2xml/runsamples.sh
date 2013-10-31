@@ -16,5 +16,5 @@ wc -l all.diff
 diff -wu *2.2.xml *3.2.xml > all.diff
 diff -wu sample.2.xml *3.2.xml >> all.diff
 diff -wu sample.2.xml sample.xml >> all.diff
-echo 'test2.  wc should be zero'
+echo 'test2.  should be minimal differences (and only compared to the original perl script)'
 wc -l all.diff
