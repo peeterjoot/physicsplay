@@ -255,11 +255,15 @@ void csvToXml::parseArguments( int argc, char ** argv )
    }
 }
 
+extern char commitString[] ;
+
 void csvToXml::showHelpAndExit()
 {
    printf( "del2xml [--help] [--delimiter=Z] < input > output\n" 
            "\n"
-           "-delimiter Z - a one character delimiter (in this case Z)\n" ) ;
+           "-delimiter Z - a one character delimiter (in this case Z)\n" 
+           "\n"
+           "version: %s\n", commitString ) ;
 
 //(del2xml [-help] [-delimiter blah] [-dollar] [-varfrac vcFraction]
 //\t-dollar            \tUse '\$' as a delimiter.
