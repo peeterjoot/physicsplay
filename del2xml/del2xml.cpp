@@ -25,15 +25,9 @@ class csvToXml
    /** represents either a set of column tags from the first line, or the column data for a given row */
    typedef vector<string> columnData ;
 
-   #define FLAG_CHAR_TYPE        1
-   #define FLAG_DATE_TYPE        2
-   #define FLAG_DECIMAL_TYPE     4
-   #define FLAG_INTEGER_TYPE     8
-   #define FLAG_SMALLINT_TYPE    16
-   #define FLAG_TIME_TYPE        32
-   #define FLAG_TIMESTAMP_TYPE   64
+   /*
+     Values for columnTypeInfo::columnMetaDataType, one for each of:
 
-/*
         <Type>char</Type>
         <Type>date</Type>
         <Type>decimal</Type>
@@ -41,7 +35,14 @@ class csvToXml
         <Type>smallint</Type>
         <Type>time</Type>
         <Type>timestamp</Type>
- */
+   */
+   #define FLAG_CHAR_TYPE        1
+   #define FLAG_DATE_TYPE        2
+   #define FLAG_DECIMAL_TYPE     4
+   #define FLAG_INTEGER_TYPE     8
+   #define FLAG_SMALLINT_TYPE    16
+   #define FLAG_TIME_TYPE        32
+   #define FLAG_TIMESTAMP_TYPE   64
 
    /**
       As we navigate over the rows, collect stats on what we find on the columns so that we can pick an SQL type later.
@@ -85,19 +86,59 @@ class csvToXml
       { }
    } ;
 
+   /// for (now dead) varchar vs char column type picking logic.
    double                  m_varcharFraction ;
+
+   /// names for the columns, picked from the first row of the .csv
    columnData              m_headers ;
+
+   /// one vector element for each row of data after the first of the .csv.  Each row is a vector of column data (in string form)
    vector<columnData>      m_rows ;
+
+   /// All the info used to pick the column data types (and what that pick is in the end.)
+
    vector<columnTypeInfo>  m_typeInfo ;
+
+   /// The number of columns found in the first row of the .csv.  This must match the number of columns found in each subsequent row.
    int                     m_numTags ;
+
+   /// The (single character) delimiter that has been passed to the driver to split each .csv line
    char                    m_delimiter ;
 
+   /// save the optional delimiter parameter if specified (or print the help)
    void parseArguments( int argc, char ** argv ) ;
+
+   /// print the help and exit.
    void showHelpAndExit() ;
+
+   /**
+      \param rowIndex zero indexed.  Second line of the .csv has index 0.
+    */
    void printOneDataRow( int rowIndex ) ;
-   void printOneColumnMetaData( int c ) ;
+
+   /**
+      \param columnIndex.  Zero indexed column number.
+    */
+   void printOneColumnMetaData( int columnIndex ) ;
+
+   /**
+      Called from the driver for each line of input.
+      Pushes another row onto m_rows and collects some of the column metadata as the row is parsed.
+    */
    void consumeOneLine( const string & line ) ;
 
+   /**
+      helper function.  perform a dumb single character delimited split of a line into an array of strings
+
+      \param e [out]
+          The output string array.  Assumed empty to start with.
+
+      \param del [in]
+          The split delimiter.
+
+      \param line [in]
+          The string to split.
+    */
    static void split( vector<string> & e, char del, const string & line )
    {
       stringstream ss( line ) ;
@@ -301,35 +342,35 @@ void csvToXml::consumeOneLine( const string & line )
    }
 }
 
-void csvToXml::printOneColumnMetaData( int c )
+void csvToXml::printOneColumnMetaData( int columnIndex )
 {
-   int            cpp   = c + 1 ;
-   const char *   n     = m_headers[ c ].c_str() ;
-   int            s     = m_typeInfo[ c ].sizes ;
+   int            cpp   = columnIndex + 1 ;
+   const char *   n     = m_headers[ columnIndex ].c_str() ;
+   int            s     = m_typeInfo[ columnIndex ].sizes ;
    char           attr[ 256 ] ;
 
    int numRows = m_rows.size() ;
 
-   if ( m_typeInfo[ c ].totalSmallIntegerRowsForColumn == numRows )
+   if ( m_typeInfo[ columnIndex ].totalSmallIntegerRowsForColumn == numRows )
    {
-      m_typeInfo[ c ].columnMetaDataType = FLAG_SMALLINT_TYPE ;
+      m_typeInfo[ columnIndex ].columnMetaDataType = FLAG_SMALLINT_TYPE ;
 
       mysnprintf( attr, sizeof(attr),
                   "<Type>smallint</Type>\n"
                   "        <Width>%d</Width>", s ) ;
    }
-   else if ( m_typeInfo[ c ].totalIntegerRowsForColumn == numRows )
+   else if ( m_typeInfo[ columnIndex ].totalIntegerRowsForColumn == numRows )
    {
-      m_typeInfo[ c ].columnMetaDataType = FLAG_INTEGER_TYPE ;
+      m_typeInfo[ columnIndex ].columnMetaDataType = FLAG_INTEGER_TYPE ;
 
       mysnprintf( attr, sizeof(attr),
                   "<Type>integer</Type>\n"
                   "        <Width>%d</Width>", s ) ;
    }
 #if 0
-   elsif ( m_decimal[ c ] == numRows )
+   elsif ( m_decimal[ columnIndex ] == numRows )
    {
-      m_typeInfo[ c ].columnMetaDataType = FLAG_DECIMAL_TYPE ;
+      m_typeInfo[ columnIndex ].columnMetaDataType = FLAG_DECIMAL_TYPE ;
 
       // FIXME: http://stackoverflow.com/questions/2377174/how-do-i-interpret-precision-and-scale-of-a-number-in-a-database
 
@@ -340,9 +381,9 @@ void csvToXml::printOneColumnMetaData( int c )
                   "        <Scale>0</Scale>\n"
                   "        <Precision>%d</Precision>", s ) ;
    }
-   elsif ( m_dateformat[ c ] == numRows )
+   elsif ( m_dateformat[ columnIndex ] == numRows )
    {
-      m_typeInfo[ c ].columnMetaDataType = FLAG_DATE_TYPE ;
+      m_typeInfo[ columnIndex ].columnMetaDataType = FLAG_DATE_TYPE ;
 
       // FIXME: what attributes does date require?  May not have parsed in the correct format.  Don't enable without info.
       mysnprintf( attr, sizeof(attr), 
@@ -352,17 +393,17 @@ void csvToXml::printOneColumnMetaData( int c )
 
 // TODO: time
 // TODO: timestamp
-//      m_typeInfo[ c ].columnMetaDataType = FLAG_TIME_TYPE ;
-//      m_typeInfo[ c ].columnMetaDataType = FLAG_TIMESTAMP_TYPE ;
+//      m_typeInfo[ columnIndex ].columnMetaDataType = FLAG_TIME_TYPE ;
+//      m_typeInfo[ columnIndex ].columnMetaDataType = FLAG_TIMESTAMP_TYPE ;
 
 #endif
    else
    {
-      m_typeInfo[ c ].columnMetaDataType = FLAG_CHAR_TYPE ;
+      m_typeInfo[ columnIndex ].columnMetaDataType = FLAG_CHAR_TYPE ;
 
 #if 0 // varchar not available for ROSI
 
-      int varcharSpace = m_typeInfo[ c ].charLen ;
+      int varcharSpace = m_typeInfo[ columnIndex ].charLen ;
       int charSpace = s * numRows ;
 
       // use varchar if it gets us at least a (by default) 50% savings in total space for the table.
@@ -396,13 +437,13 @@ void csvToXml::printOneDataRow( int rowIndex )
 
    printf( "      <Row id=\"%d\">\n", rowIndex ) ;
 
-   for ( int i = 0 ; i < m_numTags ; i++ )
+   for ( int columnIndex = 0 ; columnIndex < m_numTags ; columnIndex++ )
    {
-      int cpp = i + 1 ;
-      int sz = m_typeInfo[ i ].sizes ;
-      const char * cv = c[ i ].c_str() ;
+      int cpp = columnIndex + 1 ;
+      int sz = m_typeInfo[ columnIndex ].sizes ;
+      const char * cv = c[ columnIndex ].c_str() ;
 
-      if ( FLAG_CHAR_TYPE == m_typeInfo[ i ].columnMetaDataType )
+      if ( FLAG_CHAR_TYPE == m_typeInfo[ columnIndex ].columnMetaDataType )
       {
          // space pad the char output, but not for any other column types.
 
