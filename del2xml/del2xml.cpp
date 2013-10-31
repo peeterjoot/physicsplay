@@ -255,7 +255,7 @@ void csvToXml::parseArguments( int argc, char ** argv )
    }
 }
 
-extern char commitString[] ;
+#include "commit.h"
 
 void csvToXml::showHelpAndExit()
 {
