@@ -9,7 +9,9 @@ CXXFLAGS := $(CFLAGS)
 del2xml$(EXE) : $(OBJECTS)
 	g++ $(CFLAGS) -o $@ $(OBJECTS)
 
-commit.h: del2xml.cpp
+del2xml.$(OBJ) : commit.h
+
+commit.h: Makefile del2xml.cpp
 	echo 'char commitString[] = "'`~/bin/mkRevInfo -commit`'" ;' > $@
 
 clean:

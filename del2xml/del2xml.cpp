@@ -417,6 +417,7 @@ void csvToXml::printOneColumnMetaData( int columnIndex )
                   "        <Precision>%d</Precision>", s ) ;
    }
 #endif
+#if 0 // test.
    else if ( m_typeInfo[ columnIndex ].totalTimeStampRowsForColumn == numRows )
    {
       m_typeInfo[ columnIndex ].columnMetaDataType = FLAG_TIMESTAMP_TYPE ;
@@ -441,6 +442,7 @@ void csvToXml::printOneColumnMetaData( int columnIndex )
                   "<Type>time</Type>\n"
                   "        <Width>%d</Width>", s ) ;
    }
+#endif
    else
    {
       m_typeInfo[ columnIndex ].columnMetaDataType = FLAG_CHAR_TYPE ;
@@ -485,7 +487,23 @@ void csvToXml::printOneDataRow( int rowIndex )
    {
       int cpp = columnIndex + 1 ;
       int sz = m_typeInfo[ columnIndex ].sizes ;
-      const char * cv = c[ columnIndex ].c_str() ;
+
+      string tmp = c[ columnIndex ] ;
+      size_t f = (size_t)-1 ;
+
+      for ( ; ; )
+      {
+         f = tmp.find( "&", f + 1 ) ;
+         
+         if ( string::npos == f )
+         {
+            break ;
+         }
+
+         tmp.replace( f, 1, "&amp;" ) ;
+      }
+
+      const char * cv = tmp.c_str() ;
 
       if ( FLAG_CHAR_TYPE == m_typeInfo[ columnIndex ].columnMetaDataType )
       {
