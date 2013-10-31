@@ -216,16 +216,16 @@ sub printOneColumnMetaData
 #   }
    else
    {
-      my $varcharSpace = $g_charLen[$c] ;
-      my $charSpace = $s * $g_rowIter ;
-
-      # use varchar if it gets us at least a (by default) 50% savings in total space for the table.
-      if ( $varcharSpace < ($charSpace * $g_varcharFraction) )
-      {
-      $attr = qq(<Type>varchar</Type>
-        <Width>$s</Width>) ;
-      }
-      else
+#      my $varcharSpace = $g_charLen[$c] ;
+#      my $charSpace = $s * $g_rowIter ;
+#
+#      # use varchar if it gets us at least a (by default) 50% savings in total space for the table.
+#      if ( $varcharSpace < ($charSpace * $g_varcharFraction) )
+#      {
+#      $attr = qq(<Type>varchar</Type>
+#        <Width>$s</Width>) ;
+#      }
+#      else
       {
       $attr = qq(<Type>char</Type>
         <Width>$s</Width>) ;

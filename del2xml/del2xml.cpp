@@ -7,6 +7,11 @@
 #include <cstdlib>
 #include <iostream>
 
+#if defined _MSC_VER
+   #define __STDC__ 1
+#endif
+   #include <getopt.h>
+
 using namespace std ;
 
 #if defined _MSC_VER
@@ -20,21 +25,63 @@ class csvToXml
    /** represents either a set of column tags from the first line, or the column data for a given row */
    typedef vector<string> columnData ;
 
+   #define FLAG_CHAR_TYPE        1
+   #define FLAG_DATE_TYPE        2
+   #define FLAG_DECIMAL_TYPE     4
+   #define FLAG_INTEGER_TYPE     8
+   #define FLAG_SMALLINT_TYPE    16
+   #define FLAG_TIME_TYPE        32
+   #define FLAG_TIMESTAMP_TYPE   64
+
+/*
+        <Type>char</Type>
+        <Type>date</Type>
+        <Type>decimal</Type>
+        <Type>integer</Type>
+        <Type>smallint</Type>
+        <Type>time</Type>
+        <Type>timestamp</Type>
+ */
+
    /**
       As we navigate over the rows, collect stats on what we find on the columns so that we can pick an SQL type later.
     */
    struct columnTypeInfo
    {
+      /** the final type determination */
+      int   columnMetaDataType ;
+
+      /** sum of the lengths of all the character data.  For varchar vs. char type determination (disabled) */
       int   charLen ;
+
+      /** the maximum length of the all the rows for a column */
       int   sizes ;
-      int   totalIntegersInColumn ;
-      int   totalDateFormatsInColumn ;
+
+      /** count how many times the data looks like integer */
+      int   totalIntegerRowsForColumn ;
+
+      /** count how many times the data looks like small (short) integer */
+      int   totalSmallIntegerRowsForColumn ;
+
+      /** count how many times the data looks like a date format */
+      int   totalDateRowsForColumn ;
+
+      /** count how many times the data looks like a time format */
+      int   totalTimeRowsForColumn ;
+
+      /** count how many times the data looks like a timestamp format */
+      int   totalTimeStampRowsForColumn ;
+
+      /** count how many times the data looks like a decimal format */
+      int   totalDecimalRowsForColumn ;
 
       columnTypeInfo() : 
+         columnMetaDataType(0),
          charLen(0),
          sizes(0),
-         totalIntegersInColumn(0),
-         totalDateFormatsInColumn(0) 
+         totalIntegerRowsForColumn(0),
+         totalSmallIntegerRowsForColumn(0),
+         totalDateRowsForColumn(0) 
       { }
    } ;
 
@@ -131,28 +178,55 @@ void csvToXml::driver( int argc, char ** argv )
 
 void csvToXml::parseArguments( int argc, char ** argv )
 {
-   if ( (2 == argc) && (1 == strlen(argv[1])) )
-   {
-      m_delimiter = argv[1][0] ;
-   }
-   else if ( argc > 1 )
-   {
-      showHelpAndExit() ;
-   }
+   int c ;
 
-#if 0 // not implemented.
-   if ( showHelp )
-   {
-      showHelpAndExit() ;
+   const struct option long_options[] = {
+     { "help",       0, NULL, 'h' },
+     { "delimiter",  1, NULL, 'd' },
+     { NULL,         0, NULL, 0   }
+   } ;
+
+   while ( -1 != ( c = getopt_long( argc, argv, "hd:", long_options, NULL ) ) )
+   { 
+      switch ( c )
+      {
+         case 'd' :
+         {
+            if ( 1 == strlen( optarg ) )
+            {
+               m_delimiter = optarg[0] ;
+            }
+            else
+            {
+               printf( "%s: error: expected one character delimiter, found '%s'\n", argv[0], optarg ) ;
+
+               showHelpAndExit() ;
+            }
+
+            break ;
+         }
+         case 'h' :
+         default:
+         {
+            showHelpAndExit() ;
+         }
+      } 
    }
-#endif
 }
 
 void csvToXml::showHelpAndExit()
 {
-   printf( "del2xml [delimiter] < input > output\n" 
+   printf( "del2xml [--help] [--delimiter=Z] < input > output\n" 
            "\n"
-           "delimiter - a one character delimiter (like Z)\n" ) ;
+           "-delimiter Z - a one character delimiter (in this case Z)\n" ) ;
+
+//(del2xml [-help] [-delimiter blah] [-dollar] [-varfrac vcFraction]
+//\t-dollar            \tUse '\$' as a delimiter.
+//\t-varfrac vcFraction\tIf the size of the storage used in char representation times vcFraction
+//\t                   \tis greater than the space required for the same data in varchar
+//\t                   \tformat, use a varchar type instead of char.  vcFraction defaults to 0.5
+//
+//Default delimiter is '[optional-spaces],[optional-spaces]'
 
    exit( 1 ) ;
 }
@@ -191,7 +265,7 @@ void csvToXml::consumeOneLine( const string & line )
 
          if ( !err[0] )
          {
-            m_typeInfo[ i ].totalIntegersInColumn++ ;
+            m_typeInfo[ i ].totalIntegerRowsForColumn++ ;
 
             foundNonChar = 1 ;
          }
@@ -206,7 +280,7 @@ void csvToXml::consumeOneLine( const string & line )
 #if 0
          if ( v =~ qr(^\d\d/\d\d/\d\d\d\d$) )
          {
-            m_typeInfo[ i ].totalDateFormatsInColumn++ ;
+            m_typeInfo[ i ].totalDateRowsForColumn++ ;
 
             foundNonChar = 1 ;
          }
@@ -236,8 +310,18 @@ void csvToXml::printOneColumnMetaData( int c )
 
    int numRows = m_rows.size() ;
 
-   if ( m_typeInfo[ c ].totalIntegersInColumn == numRows )
+   if ( m_typeInfo[ c ].totalSmallIntegerRowsForColumn == numRows )
    {
+      m_typeInfo[ c ].columnMetaDataType = FLAG_SMALLINT_TYPE ;
+
+      mysnprintf( attr, sizeof(attr),
+                  "<Type>smallint</Type>\n"
+                  "        <Width>%d</Width>", s ) ;
+   }
+   else if ( m_typeInfo[ c ].totalIntegerRowsForColumn == numRows )
+   {
+      m_typeInfo[ c ].columnMetaDataType = FLAG_INTEGER_TYPE ;
+
       mysnprintf( attr, sizeof(attr),
                   "<Type>integer</Type>\n"
                   "        <Width>%d</Width>", s ) ;
@@ -245,6 +329,8 @@ void csvToXml::printOneColumnMetaData( int c )
 #if 0
    elsif ( m_decimal[ c ] == numRows )
    {
+      m_typeInfo[ c ].columnMetaDataType = FLAG_DECIMAL_TYPE ;
+
       // FIXME: http://stackoverflow.com/questions/2377174/how-do-i-interpret-precision-and-scale-of-a-number-in-a-database
 
       // on decimal detection, will need to record the max scale and max prec (and distinguish from integer since valid ints are also 
@@ -256,14 +342,26 @@ void csvToXml::printOneColumnMetaData( int c )
    }
    elsif ( m_dateformat[ c ] == numRows )
    {
+      m_typeInfo[ c ].columnMetaDataType = FLAG_DATE_TYPE ;
+
       // FIXME: what attributes does date require?  May not have parsed in the correct format.  Don't enable without info.
       mysnprintf( attr, sizeof(attr), 
                   "<Type>date</Type>\n"
                   "        <Width>%d</Width>", s ) ;
    }
+
+// TODO: time
+// TODO: timestamp
+//      m_typeInfo[ c ].columnMetaDataType = FLAG_TIME_TYPE ;
+//      m_typeInfo[ c ].columnMetaDataType = FLAG_TIMESTAMP_TYPE ;
+
 #endif
    else
    {
+      m_typeInfo[ c ].columnMetaDataType = FLAG_CHAR_TYPE ;
+
+#if 0 // varchar not available for ROSI
+
       int varcharSpace = m_typeInfo[ c ].charLen ;
       int charSpace = s * numRows ;
 
@@ -275,6 +373,7 @@ void csvToXml::printOneColumnMetaData( int c )
                      "        <Width>%d</Width>", s ) ;
       }
       else
+#endif
       {
          mysnprintf( attr, sizeof(attr), 
                      "<Type>char</Type>\n"
@@ -303,8 +402,16 @@ void csvToXml::printOneDataRow( int rowIndex )
       int sz = m_typeInfo[ i ].sizes ;
       const char * cv = c[ i ].c_str() ;
 
-      // FIXME: should varchar output be trailing space padded?  Integer and decimal probably shouldn't either.
-      printf( "        <Cell id=\"%d\">%-*s</Cell>\n", cpp, sz, cv ) ;
+      if ( FLAG_CHAR_TYPE == m_typeInfo[ i ].columnMetaDataType )
+      {
+         // space pad the char output, but not for any other column types.
+
+         printf( "        <Cell id=\"%d\">%-*s</Cell>\n", cpp, sz, cv ) ;
+      }
+      else
+      {
+         printf( "        <Cell id=\"%d\">%s</Cell>\n", cpp, cv ) ;
+      }
    }
 
    printf( "      </Row>\n" ) ;
