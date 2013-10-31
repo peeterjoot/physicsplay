@@ -259,9 +259,9 @@ void csvToXml::parseArguments( int argc, char ** argv )
 
 void csvToXml::showHelpAndExit()
 {
-   printf( "del2xml [--help] [--delimiter=Z] < input > output\n" 
+   printf( "del2xml [-h|--help] [-d Z|--delimiter=Z] < input > output\n" 
            "\n"
-           "-delimiter Z - a one character delimiter (in this case Z).  Default delimiter is ',' (comma)\n" 
+           "-delimiter=Z - a one character delimiter (in this case Z).  Default delimiter is ',' (comma)\n" 
            "\n"
            "version: %s\n", commitString ) ;
 
