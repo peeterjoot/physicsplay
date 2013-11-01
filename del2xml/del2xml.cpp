@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <climits>
+#include <fstream>
 #include "commit.h"
 
 #if defined _MSC_VER
@@ -107,6 +108,8 @@ class csvToXml
    /// The (single character) delimiter that has been passed to the driver to split each .csv line
    char                    m_delimiter ;
 
+   string                  m_filename ;
+
    /// save the optional delimiter parameter if specified (or print the help)
    void parseArguments( int argc, char ** argv ) ;
 
@@ -152,6 +155,72 @@ class csvToXml
       }
    }
 
+   // 
+   // These all check the row counts, not the attribute that will be set based on these checks if true
+   // (since that decision is also based on what other attributes match and the order of checking)
+   //
+   bool areRowsAllSmallInteger( int columnIndex ) const
+   {
+      return ( m_typeInfo[ columnIndex ].totalSmallIntegerRowsForColumn == m_rows.size() ) ;
+   }
+
+   bool areRowsAllInteger( int columnIndex ) const
+   {
+      return ( m_typeInfo[ columnIndex ].totalIntegerRowsForColumn == m_rows.size() ) ;
+   }
+
+   bool areRowsAllDecimal( int columnIndex ) const
+   {
+      return ( m_typeInfo[ columnIndex ].totalDecimalRowsForColumn == m_rows.size() ) ;
+   }
+
+   bool areRowsAllDate( int columnIndex ) const
+   {
+      return ( m_typeInfo[ columnIndex ].totalDateRowsForColumn == m_rows.size() ) ;
+   }
+
+   bool areRowsAllTime( int columnIndex ) const
+   {
+      return ( m_typeInfo[ columnIndex ].totalTimeRowsForColumn == m_rows.size() ) ;
+   }
+
+   bool areRowsAllTimeStamp( int columnIndex ) const
+   {
+      return ( m_typeInfo[ columnIndex ].totalTimeStampRowsForColumn == m_rows.size() ) ;
+   }
+
+   // these all increment the row count for this type:
+   void recordOneSmallIntegerForColumn( int columnIndex )
+   {
+      m_typeInfo[ columnIndex ].totalSmallIntegerRowsForColumn++ ;
+   }
+
+   void recordOneIntegerForColumn( int columnIndex )
+   {
+      m_typeInfo[ columnIndex ].totalIntegerRowsForColumn++ ;
+   }
+
+   void recordOneDecimalForColumn( int columnIndex )
+   {
+      m_typeInfo[ columnIndex ].totalDecimalRowsForColumn++ ;
+   }
+
+   void recordOneDateForColumn( int columnIndex )
+   {
+      m_typeInfo[ columnIndex ].totalDateRowsForColumn++ ;
+   }
+
+   void recordOneTimeForColumn( int columnIndex )
+   {
+      m_typeInfo[ columnIndex ].totalTimeRowsForColumn++ ;
+   }
+
+   void recordOneTimeStampForColumn( int columnIndex )
+   {
+      m_typeInfo[ columnIndex ].totalTimeStampRowsForColumn++ ;
+   }
+
+
 public:
    csvToXml() :
       m_varcharFraction( 0.5 ),
@@ -159,7 +228,8 @@ public:
       m_rows(),
       m_typeInfo(),
       m_numTags( 0 ),
-      m_delimiter( ',' )
+      m_delimiter( ',' ),
+      m_filename( )
    {
    }
 
@@ -187,11 +257,26 @@ void csvToXml::driver( int argc, char ** argv )
            "      <SourceDescription/>\n" ) ;
 
    string s ;
+   fstream f ;
 
-   // with an arg parser, would make sense to allow cin to be a named file.
-   while ( getline( cin, s ) )
+   if ( "" != m_filename )
    {
-      consumeOneLine( s ) ;
+      f.open( m_filename.c_str() ) ;
+   }
+
+   if ( f.is_open() )
+   {
+      while ( getline( f, s ) )
+      {
+         consumeOneLine( s ) ;
+      }
+   }
+   else
+   {
+      while ( getline( cin, s ) )
+      {
+         consumeOneLine( s ) ;
+      }
    }
 
    printf( "      <ColumnsAmount>%d</ColumnsAmount>\n", m_numTags ) ;
@@ -204,9 +289,7 @@ void csvToXml::driver( int argc, char ** argv )
    printf( "    </MetaData>\n"
            "    <Data>\n" ) ;
 
-   int numRows = m_rows.size() ;
-
-   for ( int r = 0 ; r < numRows ; r++ )
+   for ( int r = 0 ; r < m_rows.size() ; r++ )
    {
       printOneDataRow( r ) ;
    }
@@ -225,11 +308,12 @@ void csvToXml::parseArguments( int argc, char ** argv )
 
    const struct option long_options[] = {
      { "help",       0, NULL, 'h' },
+     { "file",       0, NULL, 'f' },
      { "delimiter",  1, NULL, 'd' },
      { NULL,         0, NULL, 0   }
    } ;
 
-   while ( -1 != ( c = getopt_long( argc, argv, "hd:", long_options, NULL ) ) )
+   while ( -1 != ( c = getopt_long( argc, argv, "hd:f:", long_options, NULL ) ) )
    { 
       switch ( c )
       {
@@ -248,6 +332,12 @@ void csvToXml::parseArguments( int argc, char ** argv )
 
             break ;
          }
+         case 'f' :
+         {
+            m_filename = optarg ;
+
+            break ;
+         }
          case 'h' :
          default:
          {
@@ -259,19 +349,17 @@ void csvToXml::parseArguments( int argc, char ** argv )
 
 void csvToXml::showHelpAndExit()
 {
-   printf( "del2xml [-h|--help] [-d Z|--delimiter=Z] < input > output\n" 
+   printf( "del2xml [-h|--help] [-d Z|--delimiter=Z] [-f filename|--file=filename|< input] > output\n" 
            "\n"
-           "-delimiter=Z - a one character delimiter (in this case Z).  Default delimiter is ',' (comma)\n" 
+           "-delimiter=Z - a one character delimiter (in this case Z).  Default delimiter is ',' (comma).\n" 
+           "-filename=n - filename to read from.  If unspecified stdin is assumed.\n"
            "\n"
            "version: %s\n", commitString ) ;
 
-//(del2xml [-help] [-delimiter blah] [-dollar] [-varfrac vcFraction]
-//\t-dollar            \tUse '\$' as a delimiter.
+// [-varfrac vcFraction]
 //\t-varfrac vcFraction\tIf the size of the storage used in char representation times vcFraction
 //\t                   \tis greater than the space required for the same data in varchar
 //\t                   \tformat, use a varchar type instead of char.  vcFraction defaults to 0.5
-//
-//Default delimiter is '[optional-spaces],[optional-spaces]'
 
    exit( 1 ) ;
 }
@@ -290,17 +378,17 @@ void csvToXml::consumeOneLine( const string & line )
 
       m_rows.push_back( e ) ;
 
-      for ( int i = 0 ; i < numColumns ; i++ )
+      for ( int columnIndex = 0 ; columnIndex < numColumns ; columnIndex++ )
       {
-         string v = e[ i ] ;
+         string v = e[ columnIndex ] ;
          int l = v.length( ) ;
 
          // save for average/stddev len calculation if char (to decide for char vs varchar).
-         m_typeInfo[ i ].charLen += l ;
+         m_typeInfo[ columnIndex ].charLen += l ;
 
-         if ( m_typeInfo[ i ].sizes < l )
+         if ( m_typeInfo[ columnIndex ].sizes < l )
          {
-            m_typeInfo[ i ].sizes = l ;
+            m_typeInfo[ columnIndex ].sizes = l ;
          }
 
          char * err = 0 ;
@@ -308,11 +396,11 @@ void csvToXml::consumeOneLine( const string & line )
 
          if ( !err[0] )
          {
-            m_typeInfo[ i ].totalIntegerRowsForColumn++ ;
+            recordOneIntegerForColumn( columnIndex ) ;
 
             if ( (longValue < SHRT_MAX) && (longValue > SHRT_MIN) )
             {
-               m_typeInfo[ i ].totalSmallIntegerRowsForColumn++ ;
+               recordOneSmallIntegerForColumn( columnIndex ) ;
             }
          }
 
@@ -321,7 +409,7 @@ void csvToXml::consumeOneLine( const string & line )
 
          if ( !err[0] )
          {
-            m_typeInfo[ i ].totalDecimalRowsForColumn++ ;
+            recordOneDecimalForColumn( columnIndex ) ;
     
             // FIXME: would also have to figure out scale and precision before enabling.
          }
@@ -342,7 +430,7 @@ void csvToXml::consumeOneLine( const string & line )
             {
                if ( 3 == rc )
                {
-                  m_typeInfo[ i ].totalDateRowsForColumn++ ;
+                  recordOneDateForColumn( columnIndex ) ;
                }
                else if ( (7 == rc) &&
                          (hr < 24) &&
@@ -350,7 +438,7 @@ void csvToXml::consumeOneLine( const string & line )
                          (sec < 60) &&
                          (usec < 1000000) )
                {
-                  m_typeInfo[ i ].totalTimeStampRowsForColumn++ ;
+                  recordOneTimeStampForColumn( columnIndex ) ;
                }
             }
             else
@@ -362,7 +450,7 @@ void csvToXml::consumeOneLine( const string & line )
                     (min < 60) &&
                     (sec < 60) )
                {
-                  m_typeInfo[ i ].totalTimeRowsForColumn++ ;
+                  recordOneTimeForColumn( columnIndex ) ;
                }
             }
          }
@@ -384,9 +472,7 @@ void csvToXml::printOneColumnMetaData( int columnIndex )
    int            s     = m_typeInfo[ columnIndex ].sizes ;
    char           attr[ 256 ] ;
 
-   int numRows = m_rows.size() ;
-
-   if ( m_typeInfo[ columnIndex ].totalSmallIntegerRowsForColumn == numRows )
+   if ( areRowsAllSmallInteger( columnIndex ) )
    {
       m_typeInfo[ columnIndex ].columnMetaDataType = FLAG_SMALLINT_TYPE ;
 
@@ -394,7 +480,7 @@ void csvToXml::printOneColumnMetaData( int columnIndex )
                   "<Type>smallint</Type>\n"
                   "        <Width>%d</Width>", s ) ;
    }
-   else if ( m_typeInfo[ columnIndex ].totalIntegerRowsForColumn == numRows )
+   else if ( areRowsAllInteger( columnIndex ) )
    {
       m_typeInfo[ columnIndex ].columnMetaDataType = FLAG_INTEGER_TYPE ;
 
@@ -403,7 +489,7 @@ void csvToXml::printOneColumnMetaData( int columnIndex )
                   "        <Width>%d</Width>", s ) ;
    }
 #if 0
-   elsif ( m_decimal[ columnIndex ] == numRows )
+   else if ( areRowsAllDecimal( columnIndex ) )
    {
       m_typeInfo[ columnIndex ].columnMetaDataType = FLAG_DECIMAL_TYPE ;
 
@@ -417,8 +503,8 @@ void csvToXml::printOneColumnMetaData( int columnIndex )
                   "        <Precision>%d</Precision>", s ) ;
    }
 #endif
-#if 0 // test.
-   else if ( m_typeInfo[ columnIndex ].totalTimeStampRowsForColumn == numRows )
+#if 1 // test.
+   else if ( areRowsAllTimeStamp( columnIndex ) )
    {
       m_typeInfo[ columnIndex ].columnMetaDataType = FLAG_TIMESTAMP_TYPE ;
 
@@ -426,7 +512,7 @@ void csvToXml::printOneColumnMetaData( int columnIndex )
                   "<Type>timestamp</Type>\n"
                   "        <Width>%d</Width>", s ) ;
    }
-   else if ( m_typeInfo[ columnIndex ].totalDateRowsForColumn == numRows )
+   else if ( areRowsAllDate( columnIndex ) )
    {
       m_typeInfo[ columnIndex ].columnMetaDataType = FLAG_DATE_TYPE ;
 
@@ -434,7 +520,7 @@ void csvToXml::printOneColumnMetaData( int columnIndex )
                   "<Type>date</Type>\n"
                   "        <Width>%d</Width>", s ) ;
    }
-   else if ( m_typeInfo[ columnIndex ].totalTimeRowsForColumn == numRows )
+   else if ( areRowsAllTime( columnIndex ) )
    {
       m_typeInfo[ columnIndex ].columnMetaDataType = FLAG_TIME_TYPE ;
 
@@ -450,7 +536,7 @@ void csvToXml::printOneColumnMetaData( int columnIndex )
 #if 0 // varchar not available for ROSI
 
       int varcharSpace = m_typeInfo[ columnIndex ].charLen ;
-      int charSpace = s * numRows ;
+      int charSpace = s * m_rows.size() ;
 
       // use varchar if it gets us at least a (by default) 50% savings in total space for the table.
       if ( varcharSpace < (charSpace * m_varcharFraction) )
