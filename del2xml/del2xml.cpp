@@ -85,7 +85,10 @@ class csvToXml
          sizes(0),
          totalIntegerRowsForColumn(0),
          totalSmallIntegerRowsForColumn(0),
-         totalDateRowsForColumn(0) 
+         totalDateRowsForColumn(0),
+         totalTimeRowsForColumn(0),
+         totalTimeStampRowsForColumn(0),
+         totalDecimalRowsForColumn(0) 
       { }
    } ;
 
