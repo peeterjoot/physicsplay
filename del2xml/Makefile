@@ -6,6 +6,8 @@ CFLAGS := -Wformat
 CFLAGS += -g
 CXXFLAGS := $(CFLAGS)
 
+all : del2xml$(EXE) build.bat
+
 del2xml$(EXE) : $(OBJECTS)
 	g++ $(CFLAGS) -o $@ $(OBJECTS)
 
