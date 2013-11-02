@@ -8,6 +8,7 @@
 #include <iostream>
 #include <climits>
 #include <fstream>
+#include <cctype>
 #include "commit.h"
 
 #if defined _MSC_VER
@@ -147,16 +148,7 @@ class csvToXml
       \param line [in]
           The string to split.
     */
-   static void split( vector<string> & e, char del, const string & line )
-   {
-      stringstream ss( line ) ;
-      string s;
-
-      while ( getline( ss, s, del ) )
-      {
-         e.push_back( s ) ;
-      }
-   }
+   void split( vector<string> & e, char del, const string & line ) const ;
 
    // 
    // These all check the row counts, not the attribute that will be set based on these checks if true
@@ -238,6 +230,42 @@ public:
 
    void driver( int argc, char ** argv ) ;
 } ;
+
+void csvToXml::split( vector<string> & e, char del, const string & line ) const
+{
+   stringstream ss( line ) ;
+   string s;
+   int columnNumber = 1 ;
+
+   while ( getline( ss, s, del ) )
+   {
+      size_t l = s.length() ;
+
+      string t ;
+      const char * sv = s.c_str() ;
+
+      for ( size_t i = 0 ; i < l ; i++ )
+      {
+         t.push_back( isprint( sv[i] ) ? sv[i] : ' ' ) ;
+      }
+
+      if ( t != s )
+      {
+         int rowNumber = m_rows.size() + 1 ;
+
+         fprintf( stderr,
+                  "Error: Row=%d, Column=%d: line:\n"
+                  "\t'%s'\n"
+                  "\tNon-printable characters found in string '%s'\n"
+                  "\tConverted to '%s'\n",
+                  rowNumber, columnNumber, line.c_str(), s.c_str(), t.c_str() ) ;
+      }
+
+      e.push_back( t ) ;
+
+      columnNumber++ ;
+   }
+}
 
 int main( int argc, char ** argv )
 {
