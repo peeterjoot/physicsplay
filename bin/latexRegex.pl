@@ -75,8 +75,8 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-s/\\Brn/\\Br - \Br_n/g;
-s/\\Brm/\\Br - \Br_m/g;
+s/\\Brn/\\Br - \\Br_n/g;
+s/\\Brm/\\Br - \\Br_m/g;
 s/\\Ha/\\hat{H}_A/g;
 s/\\Hc/\\hat{H}/g;
 s/\\hb2m/\\frac{\\Hbar}{2m}/g;
