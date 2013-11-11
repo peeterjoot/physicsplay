@@ -2,10 +2,11 @@
 #s/\\bark\b/\\overbar{k}/g ;
 #s/\\barm\b/\\overbar{m}/g ;
 #s/\\Br_av/\\Br_{\\mathrm{av}}/g ;
+#s/\\Brm/\\Br - \\Br_m/g;
+#s/\\Brn/\\Br - \\Br_n/g;
 #s/\\DD/\\mathcal{D}/g ;
 #s/\\down\b/\\downarrow/g ;
 #s/\\E0/{\\E_k^\\nought}/g ;
-#s/\\ee/\\epsilon/g ;
 #s/\\EE/\\mathcal{E}/g ;
 #s/\\Gamma_{cav}/\\Gamma_{\\mathrm{cav}}/g  ;
 #s/\\Gamma_{sp}/\\Gamma_{\\mathrm{sp}}/g  ;
@@ -13,6 +14,9 @@
 #s/\\Gamma_cav/\\Gamma_{\\mathrm{cav}}/g  ;
 #s/\\Gamma_sp/\\Gamma_{\\mathrm{sp}}/g  ;
 #s/\\Gamma_st/\\Gamma_{\\mathrm{st}}/g ;
+#s/\\Ha/\\hat{H}_A/g;
+#s/\\hb2m/\\frac{\\Hbar}{2m}/g;
+#s/\\Hc/\\hat{H}/g;
 #s/\\n-(\d)(\d)\b/{n - $1, $2}/g ;
 #s/\\n(\d)\b/{n, $1}/g ;
 #s/\\n\+(\d)(\d)\b/{n + $1, $2}/g ;
@@ -75,8 +79,4 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-s/\\Brn/\\Br - \\Br_n/g;
-s/\\Brm/\\Br - \\Br_m/g;
-s/\\Ha/\\hat{H}_A/g;
-s/\\Hc/\\hat{H}/g;
-s/\\hb2m/\\frac{\\Hbar}{2m}/g;
+s/\\ee/\\epsilon/g ;
