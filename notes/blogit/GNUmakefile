@@ -18,7 +18,6 @@ CLEAN_TARGETS += *.synctex.gz
 
 INCOMPLETE += condensedMatterProblemSet7Problem1.tex
 INCOMPLETE += condensedMatterProblemSet7Problem2.tex
-INCOMPLETE += condensedMatterProblemSet7Problem3.tex
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
@@ -67,7 +66,6 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 
 condensedMatterProblemSet7.pdf : condensedMatterProblemSet7Problem1.tex
 condensedMatterProblemSet7.pdf : condensedMatterProblemSet7Problem2.tex
-condensedMatterProblemSet7.pdf : condensedMatterProblemSet7Problem3.tex
 
 video: $(VIDEO)
 
