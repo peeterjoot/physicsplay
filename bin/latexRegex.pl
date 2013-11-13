@@ -78,5 +78,5 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-#s/\\ee/\\epsilon/g ;
+s/\\ee/\\epsilon/g ;
 s,\\E{(.*?)},{E_{k $1}^\\nought},g ;
