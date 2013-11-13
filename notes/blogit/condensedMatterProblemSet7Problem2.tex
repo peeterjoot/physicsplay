@@ -332,7 +332,146 @@ We find that the approximate separation at this point is zero.  Should we requir
 
 \makeSubAnswer{}{condensedMatter:problemSet7:2c}
 
-TODO.
+Let's start by assuming the periodic delta function potential has a Fourier representation, and computing the associated Fourier components
+
+\begin{dmath}\label{eqn:condensedMatterProblemSet7Problem2:500}
+V(x) 
+= V_\nought \sum_n \delta( x - n a )
+= \sum_h C_{G_h} e^{-i G_h x },
+\end{dmath}
+
+where
+\begin{dmath}\label{eqn:condensedMatterProblemSet7Problem2:520}
+G_h = G h = \frac{ 2 \pi }{a} h,
+\end{dmath}
+
+and $h$ is an integer.  Forming the Fourier integral
+
+\begin{dmath}\label{eqn:condensedMatterProblemSet7Problem2:540}
+\int_{-1/2}^{1/2} du V( u a ) e^{i h' G a u} 
+= \sum_h C_{G_h} 
+\int_{-1/2}^{1/2} du e^{i h' G a u}
+e^{-i G h a u }
+= \sum_h C_{G_h} 
+\int_{-1/2}^{1/2} du e^{2 \pi i (h' - h) u}
+= \sum_h C_{G_h} 
+\delta_{h, h'}
+= C_{G_{h'}}.
+\end{dmath}
+
+Integrating the LHS gives us
+
+\begin{dmath}\label{eqn:condensedMatterProblemSet7Problem2:560}
+C_{G_{h}} 
+=
+\int_{-1/2}^{1/2} du V( u a ) e^{i h G a u} 
+=
+V_\nought 
+\int_{-1/2}^{1/2} du 
+\sum_n
+\delta( (u - n) a ) e^{2 \pi i h u}.
+\end{dmath}
+
+Only one of the delta functions in the $\sum_n$ falls in $[-1/2, 1/2]$, so this integral is just $V_\nought/a$, leaving
+
+\begin{dmath}\label{eqn:condensedMatterProblemSet7Problem2:580}
+V(x) = \frac{V_\nought}{a} \sum_h e^{i G_h x}.
+\end{dmath}
+
+Schr\"{o}dinger's equation for this potential is
+
+\begin{dmath}\label{eqn:condensedMatterProblemSet7Problem2:600}
+0 = \sum_{k'} \lr{ \hkSq{\lr{k'}} - E } C_{k'} e^{i k' x} + \frac{V_\nought}{a} \sum_G e^{i G x} C_{k'} e^{i k' x},
+\end{dmath}
+
+Operating with $\int dx e^{-i k x}$ gives
+% -k + k' + G = 0
+% k' = k - G
+
+\begin{dmath}\label{eqn:condensedMatterProblemSet7Problem2:620}
+0 = \lr{ \hkSq{k} - E } C_{k} + \frac{V_\nought}{a} \sum_G C_{k - G}.
+\end{dmath}
+
+Noting that 
+
+\begin{dmath}\label{eqn:condensedMatterProblemSet7Problem2:640}
+0 = \lr{ \frac{V_\nought}{a} + \hkSq{k} - E } C_{k} + \frac{V_\nought}{a} \sum_{G \ne k} C_{k - G},
+\end{dmath}
+
+we could put this in matrix form, but that's not too helpful since the matrix is infinite dimensional.  It's possible to find an implicit relation for $E(k)$ by summing $C_k$, since
+
+\begin{dmath}\label{eqn:condensedMatterProblemSet7Problem2:660}
+C_k 
+= 
+\frac{V_\nought}{a} \sum_G C_{k - G} \inv{ E - \hkSq{k} },
+\end{dmath}
+
+and
+
+\begin{dmath}\label{eqn:condensedMatterProblemSet7Problem2:680}
+\cancel{\sum_k C_k }
+= 
+\frac{V_\nought}{a} \cancel{\sum_G C_{k - G}} \sum_k \inv{ E - \hkSq{k} },
+\end{dmath}
+
+or
+
+\begin{dmath}\label{eqn:condensedMatterProblemSet7Problem2:700}
+\frac{a}{V_\nought} = \sum_k \inv{ E - \hkSq{k} }.
+\end{dmath}
+
+While I'd guess that this can be summed using the Euler-MacLaren theorem, Mathematica says this is
+
+\begin{dmath}\label{eqn:condensedMatterProblemSet7Problem2:720}
+\sqrt{E} = 
+\frac{V_\nought}{a}
+\frac{2 \pi  m}{ \Hbar^2 }
+\cot \lr{2 \pi m \frac{\sqrt{E}}{\Hbar^2} }.
+\end{dmath}
+
+This implicit function has two discrete solutions, as illustrated by representitive plots in \cref{fig:ps7p2c:ps7p2cFig1}.  This could clearly be solved numerically.
+
+\imageFigure{ps7p2cFig1}{implicit function curves for delta-function-potential energy}{fig:ps7p2c:ps7p2cFig1}{0.3}
+
+None of this helps with an estimate of the gap at the crossing points.  Considering point (a) as representitive, let's make a crude approximation of \eqnref{eqn:condensedMatterProblemSet7Problem2:640} as
+
+\begin{dmath}\label{eqn:condensedMatterProblemSet7Problem2:640}
+0 \approx
+\begin{bmatrix}
+\frac{V_\nought}{a} + \hkSq{\lr{k - G}} - E & \frac{V_\nought}{a} \\
+\frac{V_\nought}{a} & \frac{V_\nought}{a} + \hkSq{k} - E 
+\end{bmatrix}
+\begin{bmatrix}
+C_{k - G} \\
+C_{k}
+\end{bmatrix}.
+\end{dmath}
+
+At the crossing (a) where $E_{k}^\nought = E_{k - G}^\nought$ we have
+
+\begin{dmath}\label{eqn:condensedMatterProblemSet7Problem2:740}
+0 \approx
+\begin{vmatrix}
+\frac{V_\nought}{a} + {E_{k}^\nought} - E & \frac{V_\nought}{a} \\
+\frac{V_\nought}{a} & \frac{V_\nought}{a} + {E_{k}^\nought} - E 
+\end{vmatrix},
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:condensedMatterProblemSet7Problem2:760}
+E_\pm \approx
+{E_{k}^\nought} - \frac{V_\nought}{a} 
+\pm \Abs{ \frac{V_\nought}{a} }.
+\end{dmath}
+
+The gap distance at this point (or the others) is thus approximately
+
+\begin{dmath}\label{eqn:condensedMatterProblemSet7Problem2:780}
+\myBoxed{
+\Delta E \approx 2 \frac{V_\nought}{a}.
+}
+\end{dmath}
+
 \makeSubAnswer{}{condensedMatter:problemSet7:2d}
 
 TODO.
