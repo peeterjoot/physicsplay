@@ -16,7 +16,7 @@ CLEAN_TARGETS += *.synctex.gz
 #INCOMPLETE += qmTwoExamReflection.tex
 #INCOMPLETE += qmTwoR1.tex
 
-#INCOMPLETE += condensedMatterProblemSet8Problem1.tex
+INCOMPLETE += condensedMatterProblemSet8Problem1.tex
 #INCOMPLETE += condensedMatterProblemSet8Problem2.tex
 #INCOMPLETE += condensedMatterProblemSet8Problem3.tex
 
@@ -65,7 +65,7 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 	rm -f .gitignore
 	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/blogit/,' > $@
 
-#condensedMatterProblemSet8.pdf : condensedMatterProblemSet8Problem1.tex
+condensedMatterProblemSet8.pdf : condensedMatterProblemSet8Problem1.tex
 #condensedMatterProblemSet8.pdf : condensedMatterProblemSet8Problem2.tex
 #condensedMatterProblemSet8.pdf : condensedMatterProblemSet8Problem3.tex
 
