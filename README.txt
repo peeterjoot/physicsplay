@@ -117,7 +117,7 @@ notes/gamma-matrix
 
 notes/financials
 
-   a mathematica notebook where I'd tried the stock grabbing function for an IBM stock history. 
+   some rudimentary use of Mathematica FinancialData[] (Plot stock data against linear fit, or difference from, for the same date range).
 
 notes/dekker
    
