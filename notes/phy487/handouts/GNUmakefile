@@ -34,6 +34,8 @@ ORDERED += Phy487_L18.pdf
 ORDERED += ../slides/19_lecture.pdf
 ORDERED += Phy487_L19.pdf
 ORDERED += Phy487_L020.pdf
+ORDERED += ../slides/21_lecture.pdf
+ORDERED += Phy487_L21.pdf
 
 all: handouts.pdf
 
