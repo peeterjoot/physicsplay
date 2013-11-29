@@ -10,7 +10,6 @@
 #s/\\DD/\\mathcal{D}/g ;
 #s/\\down\b/\\downarrow/g ;
 #s/\\E0/{\\E_k^\\nought}/g ;
-#s/\\ee/\\epsilon/g ;
 #s/\\ee/\\mathcal{E}/g ;
 #s/\\Gamma_{cav}/\\Gamma_{\\mathrm{cav}}/g  ;
 #s/\\Gamma_{sp}/\\Gamma_{\\mathrm{sp}}/g  ;
@@ -83,3 +82,16 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
+s/\\DC/D_{\\mathrm{C}}/g ;
+s/\\ND/N_{\\mathrm{D}}/g ;
+s/\\DV/D_{\\mathrm{V}}/g ;
+s/\\EC/E_{\\mathrm{C}}/g ;
+s/\\Ed/E_{\\mathrm{d}}/g ;
+s/\\ED/E_{\\mathrm{D}}/g ;
+s/\\Eg/E_{\\mathrm{g}}/g ;
+s/\\ee/\\epsilon/g ;
+s/\\Eb/E_{\\mathrm{binding}}/g ;
+s/\\ES/E_{\\mathrm{S}}/g ;
+s/\\EV/E_{\\mathrm{V}}/g ;
+s/\\Nec/N_{\\mathrm{eff}}^{\\mathrm{c}}/g ;
+s/\\Nev/N_{\\mathrm{eff}}^{\\mathrm{v}}/g ;
