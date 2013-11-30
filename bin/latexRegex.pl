@@ -89,7 +89,7 @@ s/\\EC/E_{\\mathrm{C}}/g ;
 s/\\Ed/E_{\\mathrm{d}}/g ;
 s/\\ED/E_{\\mathrm{D}}/g ;
 s/\\Eg/E_{\\mathrm{g}}/g ;
-s/\\ee/\\epsilon/g ;
+#s/\\ee/\\epsilon/g ;
 s/\\Eb/E_{\\mathrm{binding}}/g ;
 s/\\ES/E_{\\mathrm{S}}/g ;
 s/\\EV/E_{\\mathrm{V}}/g ;
