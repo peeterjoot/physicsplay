@@ -14,9 +14,10 @@
 #s/\\E0/{\\E_k^\\nought}/g ;
 #s/\\Eb/E_{\\mathrm{binding}}/g ;
 #s/\\EC/E_{\\mathrm{C}}/g ;
+#s/\\Ed/E_{\\mathrm{d}}/g ;
 #s/\\ED/E_{\\mathrm{D}}/g ;
 #s/\\ee/\\epsilon/g ;
-#s/\\ee/\\mathcal{E}/g ;
+s/\\ee/\\mathcal{E}/g ;
 #s/\\Eg/E_{\\mathrm{g}}/g ;
 #s/\\ES/E_{\\mathrm{S}}/g ;
 #s/\\EV/E_{\\mathrm{V}}/g ;
@@ -31,10 +32,13 @@
 #s/\\Hc/\\hat{H}/g;
 #s/\\Hc/H_{\\mathrm{c}}/g ;
 #s/\\lambdaL/\\lambda_{\\mathrm{L}}/g ;
+#s/\\me/m_{\\mathrm{e}}/g ;
 #s/\\n-(\d)(\d)\b/{n - $1, $2}/g ;
 #s/\\n(\d)\b/{n, $1}/g ;
 #s/\\n\+(\d)(\d)\b/{n + $1, $2}/g ;
 #s/\\na\b/{n, \\alpha}/g ;
+#s/\\ND/N_{\\mathrm{D}}/g ;
+#s/\\Nec/N_{\\mathrm{eff}}^{\\mathrm{C}}/g ;
 #s/\\Nev/N_{\\mathrm{eff}}^{\\mathrm{V}}/g ;
 #s/\\ns/n_{\\mathrm{s}}/g ;
 #s/\\omegac/\\omega_{\\text{cutoff}}/g ;
@@ -86,6 +90,13 @@
 #s/ENV/{(\\mathrm{E}, \\mathrm{N}, \mathrm{V})}/g ;
 #s/k_B/k_{\\mathrm{B}}/g ;
 #s/N_c/N_{\\mathrm{c}}/g ;
+s/\\Veff/V_{\\mathrm{eff}}/g ;
+s/\\Veph/V_{\\mathrm{e,ph}}/g ;
+s/\\0bcs/0_{\\mathrm{BCS}}/g ;
+s/\\nku/_{-\\Bk \\uparrow}/g ;
+s/\\pku/_{\\Bk \\uparrow}/g ;
+s/\\nkd/_{-\\Bk \\downarrow}/g ;
+s/\\pkd/_{\\Bk \\downarrow}/g ;
 #s/n1/n_1/g ;
 #s/n2/n_2/g ;
 #s/n3/n_3/g ;
@@ -97,7 +108,3 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-s/\\Ed/E_{\\mathrm{d}}/g ;
-s/\\ND/N_{\\mathrm{D}}/g ;
-s/\\me/m_{\\mathrm{e}}/g ;
-s/\\Nec/N_{\\mathrm{eff}}^{\\mathrm{C}}/g ;
