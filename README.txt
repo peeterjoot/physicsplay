@@ -107,17 +107,9 @@ notes/peterlue/
   
    A sample simple latex file for Peter.
 
-notes/mathematica/
-
-   A couple random mathematica notebooks
-
 notes/gamma-matrix
 
    Some C++ gamma matrix related code.  Forget exactly what it did.  Uses boost::ublas.
-
-notes/financials
-
-   some rudimentary use of Mathematica FinancialData[] (Plot stock data against linear fit, or difference from, for the same date range).
 
 notes/dekker
    
