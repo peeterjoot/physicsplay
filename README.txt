@@ -4,9 +4,11 @@ Peeter Joot's geometric algebra biased math and physics latex source.
 # grabbing a copy of the tree
 #
 
-mkdir ~/physicsplay
+git clone git@github.com:peeterjoot/physicsplay.git ~/physicsplay
 cd ~/physicsplay
-git clone git@github.com:peeterjoot/physicsplay.git ./
+for i in getopt mathematica figures ; do
+   git submodule update --init $i
+done
 
 #-------------------------------------------------------
 
