@@ -2,7 +2,9 @@ THISDIR := phy450
 
 include ../make.vars
 
-SOURCE_DIRS += figures
+FIGURES := ../../figures/$(THISDIR)
+
+SOURCE_DIRS += $(FIGURES)
 SOURCE_DIRS += solutions
 SOURCE_DIRS += lectures
 SOURCE_DIRS += problems

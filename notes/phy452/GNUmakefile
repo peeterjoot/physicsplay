@@ -2,11 +2,10 @@ THISDIR := phy452
 
 include ../make.vars
 
+FIGURES := ../../figures/$(THISDIR)
+
 SOURCE_DIRS += appendix
-# FIXME:
-# 1) including this incorrectly adds figures/*pdf to the ./.gitignore file
-# 2) also not seeing this result in figure dependencies. touch figures/etalonFig1.pdf
-SOURCE_DIRS += figures
+SOURCE_DIRS += $(FIGURES)
 #SOURCE_DIRS += solutions
 
 GENERATED_SOURCES += mathematica.tex 
@@ -19,15 +18,15 @@ GENERATED_SOURCES += mathematica.tex
 #GENERATED_PDFS += basicStatMechProblemSet7.pdf
 #GENERATED_PDFS += huang93.pdf
 
-HUANG93_DEPS += figures/huang93Fig3.pdf
-HUANG93_DEPS += figures/huang93Fig4.pdf
-HUANG93_DEPS += figures/huang93Fig2.pdf
-HUANG93_DEPS += figures/huang93Fig6.pdf
+HUANG93_DEPS += $(FIGURES)/huang93Fig3.pdf
+HUANG93_DEPS += $(FIGURES)/huang93Fig4.pdf
+HUANG93_DEPS += $(FIGURES)/huang93Fig2.pdf
+HUANG93_DEPS += $(FIGURES)/huang93Fig6.pdf
 
 #THISBOOK_DEPS += $(HUANG93_DEPS)
-THISBOOK_DEPS += figures/stirlingErrorFig3.pdf
+THISBOOK_DEPS += $(FIGURES)/stirlingErrorFig3.pdf
 
-EPS_FILES := $(wildcard figures/*.eps)
+EPS_FILES := $(wildcard $(FIGURES)/*.eps)
 PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))
 
 THISBOOK_DEPS += $(PDFS_FROM_EPS)
