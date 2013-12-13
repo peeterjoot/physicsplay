@@ -2,9 +2,11 @@ THISDIR := classicalmechanics
 
 include ../make.vars
 
+FIGURES := ../../figures/$(THISDIR)
+
 #ONCEFLAGS := -justonce
 
-SOURCE_DIRS += figures
+SOURCE_DIRS += $(FIGURES)
 SOURCE_DIRS += lectures
 SOURCE_DIRS += galagrangian
 SOURCE_DIRS += mine
