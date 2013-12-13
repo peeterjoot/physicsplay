@@ -6,7 +6,7 @@ SOURCE_DIRS += appendix
 # FIXME:
 # 1) including this incorrectly adds figures/*pdf to the ./.gitignore file
 # 2) also not seeing this result in figure dependencies. touch figures/etalonFig1.pdf
-FIGURES := ../../figures/phy487
+FIGURES := ../../figures/$(THISDIR)
 SOURCE_DIRS += $(FIGURES)
 
 GENERATED_SOURCES += mathematica.tex 

@@ -2,8 +2,11 @@ THISDIR := phy454
 
 include ../make.vars
 
+FIGURES := ../../figures/$(THISDIR)
+
 SOURCE_DIRS += appendix
 SOURCE_DIRS += figures
+SOURCE_DIRS += $(FIGURES)
 SOURCE_DIRS += elastic/displacements
 SOURCE_DIRS += elastic/strain
 SOURCE_DIRS += elastic/stress
