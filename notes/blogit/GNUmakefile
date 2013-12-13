@@ -15,31 +15,30 @@ CLEAN_TARGETS += *.synctex.gz
 #INCOMPLETE += pipeFlowConstPressureGradient.tex
 #INCOMPLETE += qmTwoExamReflection.tex
 #INCOMPLETE += qmTwoR1.tex
-
-INCOMPLETE += condensedMatterProblemSet10Problem1.tex
-INCOMPLETE += condensedMatterProblemSet10Problem2.tex
-INCOMPLETE += condensedMatterProblemSet10Problem3.tex
+#INCOMPLETE += condensedMatterProblemSet10Problem1.tex
+#INCOMPLETE += condensedMatterProblemSet10Problem2.tex
+#INCOMPLETE += condensedMatterProblemSet10Problem3.tex
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
 PDFS := $(TEXFILES:.tex=.pdf)
 
 # for gaBasics:
-ORIG_FILES += ../phy454/figures/couetteFlowFig1.png
-ORIG_FILES += ../phy454/figures/couetteFlowFig2.png
-ORIG_FILES += ../phy454/figures/couetteFlowFig3.png
-ORIG_FILES += ../phy454/figures/couetteFlowFig4.png
-ORIG_FILES += ../phy454/figures/couetteFlowFig5.png
-ORIG_FILES += ../phy454/figures/couetteFlowFig6.mp4
-
-ORIG_FILES += ../phy454/figures/twoCylinderFig1.png
-ORIG_FILES += ../phy454/figures/twoCylinderFig2.png
-ORIG_FILES += ../phy454/figures/twoCylindersFig3.mp4
-ORIG_FILES += ../phy454/figures/twoCylinderFig4.png
-ORIG_FILES += ../phy454/figures/twoCylindersFig6.png
-ORIG_FILES += ../phy454/figures/twoCylindersFig7.png
-ORIG_FILES += ../phy454/figures/twoCylindersFig8.png
-ORIG_FILES += ../phy454/figures/twoCylindersFig9.png
+#ORIG_FILES += ../phy454/figures/couetteFlowFig1.png
+#ORIG_FILES += ../phy454/figures/couetteFlowFig2.png
+#ORIG_FILES += ../phy454/figures/couetteFlowFig3.png
+#ORIG_FILES += ../phy454/figures/couetteFlowFig4.png
+#ORIG_FILES += ../phy454/figures/couetteFlowFig5.png
+#ORIG_FILES += ../phy454/figures/couetteFlowFig6.mp4
+#
+#ORIG_FILES += ../phy454/figures/twoCylinderFig1.png
+#ORIG_FILES += ../phy454/figures/twoCylinderFig2.png
+#ORIG_FILES += ../phy454/figures/twoCylindersFig3.mp4
+#ORIG_FILES += ../phy454/figures/twoCylinderFig4.png
+#ORIG_FILES += ../phy454/figures/twoCylindersFig6.png
+#ORIG_FILES += ../phy454/figures/twoCylindersFig7.png
+#ORIG_FILES += ../phy454/figures/twoCylindersFig8.png
+#ORIG_FILES += ../phy454/figures/twoCylindersFig9.png
 
 ##       src/internal.o
 #VIDEO += animatedTwoLayerFlowMu1GreaterThanMu2.mp4
@@ -65,8 +64,8 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 	rm -f .gitignore
 	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/blogit/,' > $@
 
-condensedMatterProblemSet10.pdf : condensedMatterProblemSet10Problem1.tex
-condensedMatterProblemSet10.pdf : condensedMatterProblemSet10Problem2.tex
+#condensedMatterProblemSet10.pdf : condensedMatterProblemSet10Problem1.tex
+#condensedMatterProblemSet10.pdf : condensedMatterProblemSet10Problem2.tex
 #condensedMatterProblemSet10.pdf : condensedMatterProblemSet10Problem3.tex
 
 video: $(VIDEO)

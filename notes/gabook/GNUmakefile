@@ -2,12 +2,14 @@ THISDIR := gabook
 
 include ../make.vars
 
+FIGURES := ../../figures/$(THISDIR)
+
 SOURCE_DIRS += appendix
 SOURCE_DIRS += basics
 SOURCE_DIRS += calculus
 SOURCE_DIRS += electrodynamics
 SOURCE_DIRS += emstress
-SOURCE_DIRS += figures
+SOURCE_DIRS += $(FIGURES)
 SOURCE_DIRS += fourier
 SOURCE_DIRS += lagrangian
 SOURCE_DIRS += lorentzforce
@@ -26,9 +28,6 @@ GENERATED_SOURCES += cronology.tex
 GENERATED_SOURCES += backmatter.tex
 
 include ../make.rules
-
-figures/%.png: %.png
-	cp $< $@
 
 listings/%.pl: %.pl
 	mkdir -p $(@D)
