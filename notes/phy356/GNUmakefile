@@ -2,8 +2,10 @@ THISDIR := phy356
 
 include ../make.vars
 
+FIGURES := ../../figures/$(THISDIR)
+
 SOURCE_DIRS += chapters
-SOURCE_DIRS += figures
+SOURCE_DIRS += $(FIGURES)
 
 GENERATED_PDFS += desaiTypos.pdf
 

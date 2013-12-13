@@ -1,10 +1,11 @@
 #
-# could consider moving: ../nonga/multiPendulumSphericalMatrix.tex here too.
+# could consider moving: .././classicalmechanics/mine/multiPendulumSphericalMatrix.tex here too.
 #
 THISDIR := papers
 
 # <modified from ../make.vars>
-SOURCE_DIRS += .
+FIGURES := ../../figures/$(THISDIR)
+SOURCE_DIRS += $(FIGURES)
 
 #GENERATED_SOURCES += currentBookCopyright.tex
 

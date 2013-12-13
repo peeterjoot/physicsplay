@@ -2,17 +2,16 @@ THISDIR := otherbook
 
 include ../make.vars
 
-ORIG_FIGURE_DIRS += ../classicalmechanics/figures
-ORIG_FIGURE_DIRS += ../gabook/figures
+FIGURES := ../../figures/$(THISDIR)
 
-LOCAL_FIGURE_FILES += hoopSpring.png
-LOCAL_FIGURE_FILES += parallelogramArea.png
+ORIG_FIGURE_DIRS += ../../figures/classicalmechanics
+ORIG_FIGURE_DIRS += ../../figures/gabook
+
+#LOCAL_FIGURE_FILES += hoopSpring.png
+#LOCAL_FIGURE_FILES += parallelogramArea.png
 
 SOURCE_DIRS += appendix
-# FIXME:
-# 1) including this incorrectly adds figures/*pdf to the ./.gitignore file
-# 2) also not seeing this result in figure dependencies. touch figures/etalonFig1.pdf
-SOURCE_DIRS += figures
+SOURCE_DIRS += $(FIGURES)
 #SOURCE_DIRS += solutions
 
 #GENERATED_SOURCES += mathematica.tex 
