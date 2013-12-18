@@ -29,7 +29,8 @@
 %\section{Displacement change of variables for coupled SHO}
 
 \makeproblem{Displacement change of variables for coupled SHO}{pr:coupledHarmonicUsingDisplacements:1}{
-Consider the simplest lattice problem, that of a pair of equal masses with harmonic coupling.  Make a change of variables to displacement coordinates $\Bu_i = \Br_i - \expectation{\Br_i}$, and solve the equations of motion without neglecting the terms linear in $\Bu_i$.  Compare this to the lattice equations where we have neglected the linear terms after expansion of the potential about the equilibrium point.
+To build intuition with the use of displacement coordinates in lattice problems, consider the simplest ``lattice'' problem, that of a pair of equal masses with harmonic coupling.  
+Make a change of variables to displacement coordinates $\Bu_i = \Br_i - \expectation{\Br_i}$, and solve the equation of motion for the separation without neglecting the terms linear in $\Bu_i$.
 } % makeproblem
 
 \makeanswer{pr:coupledHarmonicUsingDisplacements:1}{
@@ -37,8 +38,14 @@ Consider the simplest lattice problem, that of a pair of equal masses with harmo
 The Lagrangian for the system in non-displacement coordinates is
 
 \begin{dmath}\label{eqn:coupledHarmonicUsingDisplacements:20}
-\LL' 
-= \inv{2} m \sum_i \lr{ \dot{\Br}_i }^2 - \frac{K}{2} \lr{ \Br_1 - \Br_2 }^2
+\LL 
+= \inv{2} m \sum_i \lr{ \dot{\Br}_i }^2 - \frac{K}{2} \lr{ \Br_1 - \Br_2 }^2.
+\end{dmath}
+
+Expansion in displacement coordinates gives
+
+\begin{dmath}\label{eqn:coupledHarmonicUsingDisplacements:200}
+\LL 
 = \inv{2} m \sum_i \lr{ \dot{\Bu}_i }^2 - \frac{K}{2} \lr{ 
 \Bu_1 - \Bu_2 
 + \expectation{\Br_1 - \Br_2} 
@@ -49,10 +56,10 @@ The Lagrangian for the system in non-displacement coordinates is
 - \frac{K}{2} \expectation{\Br_1 - \Br_2}^2.
 \end{dmath}
 
-Dropping the constant term in $\expectation{\Br_1 - \Br_2}$ we have the Lagrangian in terms of the displacement coordinates
+Dropping the constant $\expectation{\Br_1 - \Br_2}^2$ term the displacement coordinate Lagrangian is
 
 \begin{dmath}\label{eqn:coupledHarmonicUsingDisplacements:40}
-\LL 
+\LL'
 = \inv{2} m \sum_i \lr{ \dot{\Bu}_i }^2 
 - \frac{K}{2} \lr{ \Bu_1 - \Bu_2 }^2
 - K \lr{ \Bu_1 - \Bu_2 } \cdot \expectation{\Br_1 - \Br_2}.
@@ -61,20 +68,31 @@ Dropping the constant term in $\expectation{\Br_1 - \Br_2}$ we have the Lagrangi
 To evaluate the Euler-Lagrange equations 
 
 \begin{dmath}\label{eqn:coupledHarmonicUsingDisplacements:60}
-\ddt{} \spacegrad_{\dot{\Bu}_i} \LL = 
-\spacegrad_{\Bu_i} \LL,
+\ddt{} \spacegrad_{\dot{\Bu}_i} \LL' = 
+\spacegrad_{\Bu_i} \LL',
 \end{dmath}
 
 we note that $\spacegrad_\Bx \Ba \cdot \Bx = \Ba$, yielding the coupled system
 
 \begin{dmath}\label{eqn:coupledHarmonicUsingDisplacements:80}
 \begin{aligned}
-m \ddot{\Bu}_1 &= - K \lr{ \Bu_1 - \Bu_2 } - \expectation{\Br_1 - \Br_2} \\
-m \ddot{\Bu}_2 &= - K \lr{ \Bu_2 - \Bu_1 } - \expectation{\Br_2 - \Br_1}.
+m \ddot{\Bu}_1 &= - K \lr{ \Bu_1 - \Bu_2 } - K \expectation{\Br_1 - \Br_2} \\
+m \ddot{\Bu}_2 &= - K \lr{ \Bu_2 - \Bu_1 } - K \expectation{\Br_2 - \Br_1}.
 \end{aligned}
 \end{dmath}
 
-Taking differences, we can solve for the difference of displacements
+The use of displacement coordinates have complicated the problem, rather than simplifying it, since we could have arrived at this result directly from \eqnref{eqn:coupledHarmonicUsingDisplacements:20}.
+
+With the intent to continue working in displacement coordinates, observe that we can rewrite \eqnref{eqn:coupledHarmonicUsingDisplacements:80} as
+
+\begin{dmath}\label{eqn:coupledHarmonicUsingDisplacements:80}
+\begin{aligned}
+m \ddot{\Br}_1 &= - K \lr{ \Br_1 - \Br_2 } \\
+m \ddot{\Br}_2 &= - K \lr{ \Br_2 - \Br_1 }.
+\end{aligned}
+\end{dmath}
+
+Returning to the displacement system, we can solve by taking the difference of the equations
 
 \begin{dmath}\label{eqn:coupledHarmonicUsingDisplacements:100}
 \frac{d^2}{dt^2} 
@@ -91,46 +109,68 @@ With no external forces acting on the system, the direction of the displacement 
 \end{aligned}
 \end{dmath}
 
-We find that this non-homogeneous system is has a general solution of the form
+We can solve for $u + a$, noting that $d^2(u + a)/dt^2 = \ddot{u}$, so
 
 \begin{dmath}\label{eqn:coupledHarmonicUsingDisplacements:140}
-u(t) = -2 a \sin^2 \lr{ \Omega (t - t_\nought)/2 } + u(t_\nought) \cos\lr{ \Omega (t - t_\nought) },
+u(t) + a = \lr{ u_\nought + a } \cos\lr{ \Omega (t - t_\nought) },
 \end{dmath}
 
-or
+where $t_\nought$ is one of the the times for which the amplitude is greatest.  Switching back to vector notation, we have
 
 \begin{dmath}\label{eqn:coupledHarmonicUsingDisplacements:160}
-\Bu_1(t) - \Bu_2(t) =
-2 
-\expectation{\Br_2 - \Br_1 } 
-\sin^2 \lr{ \Omega (t - t_\nought)/2 } 
-+ 
-\lr{ \Bu_1(t_\nought) -\Bu_2(t_\nought) }
+\myBoxed{
+\Bu_1(t) - \Bu_2(t)
+=
+-\expectation{\Br_1 - \Br_2}
++
+\lr{ \Bu_1(t_\nought) - \Bu_2(t_\nought) + \expectation{\Br_1 - \Br_2} }
+\cos\lr{ \Omega (t - t_\nought) }.
+}
+\end{dmath}
+
+%Grouping the $\expectation{ \Br_1 - \Br_2 }$ terms, this is
+%\begin{dmath}\label{eqn:coupledHarmonicUsingDisplacements:220}
+%\Bu_1(t) - \Bu_2(t)
+%=
+%-2 \expectation{\Br_1 - \Br_2} \sin^2\lr{ \Omega (t - t_\nought)/2}
+%+
+%\lr{ \Bu_1(t_\nought) - \Bu_2(t_\nought) }
+%\cos\lr{ \Omega (t - t_\nought) }.
+%\end{dmath}
+
+Going full circle, we can write this as
+
+\begin{dmath}\label{eqn:coupledHarmonicUsingDisplacements:180}
+\Br_1(t) - \Br_2(t) = 
+\lr{ \Br_1(t_\nought) - \Br_2(t_\nought) }
 \cos\lr{ \Omega (t - t_\nought) }.
 \end{dmath}
 
-As expected we find that the time average
+\paragraph{Average separation}
 
-\begin{dmath}\label{eqn:coupledHarmonicUsingDisplacements:180}
-\frac{2\pi}{\Omega} \int_{t_\nought}^{t_\nought + 2 \pi/\Omega} 
-dt \lr{ \Bu_1(t) - \Bu_2(t)} = \expectation{\Br_2 - \Br_1 }.
-\end{dmath}
-
-That can be written as
+Calculation of the time average $\expectation{f(t)} = \inv{T} \int_0^T f(t) dt$ of \eqnref{eqn:coupledHarmonicUsingDisplacements:180} yields
 
 \begin{dmath}\label{eqn:coupledHarmonicUsingDisplacements:n}
-\expectation{ \Bu_1(t) - \Bu_2(t) } = \expectation{\Br_2 - \Br_1 },
+\expectation{\Br_1(t) - \Br_2(t)} = 0,
 \end{dmath}
 
-%or
-%\begin{dmath}\label{eqn:coupledHarmonicUsingDisplacements:n}
-%\expectation{ \Bu_1(t) - \Bu_2(t) } = \expectation{\Br_2 - \Br_1 },
-%\end{dmath}
+a result that did not jive with my intuition.  I was somewhat loose with the use of average position $\expectation{\Br_i}$ when defining the displacement coordinates, and assumed along the way that the average operation was linear in the following ways
 
-equivalent to our definition of the displacement variables with respect to the equilibrium point $\Br_i = \Bu_i + \expectation{\Br_i}$?
+\begin{dmath}\label{eqn:coupledHarmonicUsingDisplacements:n}
+\begin{aligned}
+\expectation{\Ba - \Bb} &= -\expectation{\Bb - \Ba} \\
+\expectation{\Ba} - \expectation{\Bb} &= \expectation{\Ba} - \expectation{\Bb}
+\end{aligned}
+\end{dmath}
 
-FIXME.
+While the time average of the separation is zero, the mean square average separation is not
 
+\begin{dmath}\label{eqn:coupledHarmonicUsingDisplacements:260}
+\expectation{ \Abs{\Br_1(t) - \Br_2(t)}^2 } = \inv{2} 
+\Abs{\Br_1(t_0) - \Br_2(t_0)}^2.
+\end{dmath}
+
+I.e. the RMS absolute difference in position of the two masses is $1/\sqrt{2}$ of the maximum amplitude.  This quantity won't vanish due to the oscillatory nature of the vectors, and probably better describes the average geometric separation of the masses.
 } % makeanswer
 
 %\EndArticle
