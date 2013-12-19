@@ -1,0 +1,169 @@
+%
+% Copyright © 2013 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{twoMassHarmonic}
+\renewcommand{\dirname}{notes/classicalmechanics/}
+%\newcommand{\dateintitle}{}
+\newcommand{\keywords}{Lagrangian, Harmonic oscillator, center of mass, two body problem}
+
+\newcommand{\nought}[0]{\circ}
+
+\input{../peeter_prologue_print2.tex}
+
+\beginArtNoToc
+
+\generatetitle{Two body harmonic oscillator in 3D}
+%\chapter{Two body harmonic oscillator in 3D}
+%\label{chap:twoMassHarmonic}
+
+\makeproblem{Two body harmonic oscillator in 3D}{pr:twoMassHarmonic:1}{
+
+In lattice problems, we consider normal modes of harmonic coupled systems.  As review, before switching to displacement coordinates, solve the two body problem exactly using absolute coordinates.
+} % makeproblem
+
+\makeanswer{pr:twoMassHarmonic:1}{ 
+
+For the system illustrated in our Lagrangian is
+
+FIXME: figure
+
+\begin{dmath}\label{eqn:twoMassHarmonic:20}
+\LL = 
+\inv{2} m_1 \lr{ \dot{\Br}_1 }^2
++\inv{2} m_2 \lr{ \dot{\Br}_2 }^2
+- \frac{K}{2} \lr{ \Br_1 - \Br_2 }^2.
+\end{dmath}
+
+We wish to solve the equations of motion
+
+\begin{dmath}\label{eqn:twoMassHarmonic:40}
+\ddt{} \spacegrad_{\dot{\Br}_i} \LL = 
+\spacegrad_{\Br_i} \LL.
+\end{dmath}
+
+Noting that $\spacegrad_\Bx \Ba \cdot \Bx = \Ba$, the coupled system to solve is found to be
+
+\begin{dmath}\label{eqn:twoMassHarmonic:60}
+\begin{aligned}
+m_1 \ddot{\Br}_1 &= - K \lr{ \Br_1 - \Br_2 } \\
+m_2 \ddot{\Br}_2 &= - K \lr{ \Br_2 - \Br_1 }.
+\end{aligned}
+\end{dmath}
+
+These can be decoupled using differences and sums
+
+\begin{dmath}\label{eqn:twoMassHarmonic:80}
+\begin{aligned}
+m_2 \lr{ m_1 \ddot{\Br}_1 } - m_1 \lr{ m_2 \ddot{\Br}_2 } &= - (m_1 + m_2) K \lr{ \Br_1 - \Br_2 } \\
+m_1 \ddot{\Br}_1 + m_2 \ddot{\Br}_2 &= 0
+\end{aligned}
+\end{dmath}
+
+The second is the equation for the acceleration of the center of mass $\BR_{\mathrm{CM}}(t)$, and it directly integrable.  With $M = m_1 + m_2$, that is
+
+\begin{dmath}\label{eqn:twoMassHarmonic:100}
+M \BR_{\mathrm{CM}}(t) 
+= 
+m_1 \Br_1 + m_2 \Br_2 = 
+ (t - t_\nought) 
+M \BV_{\mathrm{CM}}
++ M \BR_{\mathrm{CM}}(t_\nought).
+\end{dmath}
+
+The first is the harmonic oscillation about the center of mass position.  Introducing the reduced mass
+
+\begin{dmath}\label{eqn:twoMassHarmonic:120}
+\mu = \frac{m_1 m_2}{m_1 + m_2},
+\end{dmath}
+
+that oscillation equation is
+
+\begin{dmath}\label{eqn:twoMassHarmonic:140}
+\frac{d^2}{dt^2}
+\lr{ \Br_1 - \Br_2 }
+= -\frac{K}{\mu} 
+\lr{ \Br_1 - \Br_2 }.
+\end{dmath}
+
+With 
+
+\begin{dmath}\label{eqn:twoMassHarmonic:160}
+\omega^2 = \frac{K}{\mu},
+\end{dmath}
+
+this difference has the solution
+
+\begin{dmath}\label{eqn:twoMassHarmonic:180}
+\Br_1(t) - \Br_2(t) = \lr{ \Br_1(t_\nought) - \Br_2(t_\nought) } \cos\lr{ \omega(t - t_\nought) }.
+\end{dmath}
+
+This form of solution allows for arbitrary phase shift, including both sine and cosine solutions.  For example, for cosine solutions, pick $t_\nought$ as the time for which the amplitude difference is maximized.  
+
+Writing $\Delta \Br_\nought = \lr{ \Br_1(t_\nought) - \Br_2(t_\nought) }$, the matrix inversion problem for 
+individual $\Br_i$ vectors is
+
+\begin{dmath}\label{eqn:twoMassHarmonic:200}
+\begin{bmatrix}
+1 & -1 \\
+m_1 & m_2 
+\end{bmatrix}
+\begin{bmatrix}
+\Br_1 \\
+\Br_2
+\end{bmatrix}
+=
+\begin{bmatrix}
+\Delta \Br_\nought
+\cos\lr{ \omega(t - t_\nought) } \\
+M \BR_{\mathrm{CM}}(t) 
+\end{bmatrix},
+\end{dmath}
+
+or
+
+\begin{dmath}\label{eqn:twoMassHarmonic:220}
+\begin{bmatrix}
+\Br_1 \\
+\Br_2
+\end{bmatrix}
+=
+\inv{m_2 + m_1}
+\begin{bmatrix}
+m_2 & 1 \\
+-m_1 & 1 
+\end{bmatrix}
+\begin{bmatrix}
+\Delta \Br_\nought
+\cos\lr{ \omega(t - t_\nought) } 
+\\
+M \BR_{\mathrm{CM}}(t) 
+\end{bmatrix}
+\end{dmath}
+
+The final solution is
+
+\begin{dmath}\label{eqn:twoMassHarmonic:240}
+\myBoxed{
+\begin{aligned}
+\Br_1(t) &=
+\frac{\mu}{m_1}
+\Delta \Br_\nought
+\cos\lr{ \omega(t - t_\nought) } 
++ \BR_{\mathrm{CM}}(t) \\
+\Br_2(t) &=
+-
+\frac{\mu}{m_2}
+\Delta \Br_\nought
+\cos\lr{ \omega(t - t_\nought) } 
++ \BR_{\mathrm{CM}}(t) 
+\end{aligned}
+}
+\end{dmath}
+
+FIXME: something not right here!  Seems to allow for masses to pass through each other, through the center of mass position.  Think that I need a different general solution to the difference equation, one that allows for both initial position and velocities.
+} % makeanswer
+
+%\EndArticle
+\EndNoBibArticle
