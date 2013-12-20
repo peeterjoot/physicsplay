@@ -1,6 +1,8 @@
 THISDIR := blogit
 
 INKSCAPE := "/cygdrive/c/Program Files (x86)/Inkscape/inkscape.exe"
+SDRAW := "/cygdrive/c/Program Files (x86)/LibreOffice 4/program/sdraw.exe"
+
 RAWTEXFILES := $(shell ls *.tex)
 
 CLEAN_TARGETS += $(PDFS) 
@@ -133,6 +135,12 @@ opt/%.pdf : %.pdf
 # will this work (running from eps created directly in Mathematica?)
 #%.png : %.eps
 #	$(INKSCAPE) $^ --export-png=$@
+
+%.eps : %.odg
+	$(SDRAW) --headless --convert-to eps $^
+
+%.png : %.odg
+	$(SDRAW) --headless --convert-to png $^
 
 # generates a black image (so does png from svg)
 #%.png : %.pdf
