@@ -118,7 +118,7 @@ Bibliography.bib : myrefs.bib
 # old style:
 myrefs.bib: ../myrefs.bib.in ../METADATA
 	cp ../myrefs.bib.in myrefs.bib
-	../METADATA -bib >> myrefs.bib
+	(cd .. ; ./METADATA -bib >> $(THISDIR)/myrefs.bib)
 
 opt/%.pdf : %.pdf
 	mkdir -p opt

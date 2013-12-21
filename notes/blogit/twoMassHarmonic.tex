@@ -20,7 +20,7 @@
 
 \makeproblem{Two body harmonic oscillator in 3D}{pr:twoMassHarmonic:1}{
 
-In lattice problems, we consider normal modes of harmonic coupled systems.  As review, before switching to displacement coordinates, solve the two body problem exactly using absolute coordinates.
+In lattice problems, we consider normal modes of harmonic coupled systems.  Show how it is natural to introduce displacement coordinates to correctly model such a system in a physically realistic fashion.
 } % makeproblem
 
 \makeanswer{pr:twoMassHarmonic:1}{ 
@@ -33,7 +33,7 @@ For the system illustrated in \cref{fig:twoMassSpringCoupling:twoMassSpringCoupl
 \LL = 
 \inv{2} m_1 \lr{ \dot{\Br}_1 }^2
 +\inv{2} m_2 \lr{ \dot{\Br}_2 }^2
-- \frac{K}{2} \lr{ \Br_1 - \Br_2 }^2.
+- \frac{K}{2} \lr{ \Br_2 - \Br_1 }^2.
 \end{dmath}
 
 We wish to solve the equations of motion
@@ -43,7 +43,7 @@ We wish to solve the equations of motion
 \spacegrad_{\Br_i} \LL.
 \end{dmath}
 
-Noting that $\spacegrad_\Bx \Ba \cdot \Bx = \Ba$, the coupled system to solve is found to be
+Noting that $\spacegrad_\Bx \Ba \cdot \Bx = \Ba$, the coupled system to solve is 
 
 \begin{dmath}\label{eqn:twoMassHarmonic:60}
 \begin{aligned}
@@ -56,12 +56,12 @@ These can be decoupled using differences and sums
 
 \begin{dmath}\label{eqn:twoMassHarmonic:80}
 \begin{aligned}
-m_2 \lr{ m_1 \ddot{\Br}_1 } - m_1 \lr{ m_2 \ddot{\Br}_2 } &= - (m_1 + m_2) K \lr{ \Br_1 - \Br_2 } \\
+m_1 \lr{ m_2 \ddot{\Br}_2 } - m_2 \lr{ m_1 \ddot{\Br}_1 } &= - (m_1 + m_2) K \lr{ \Br_2 - \Br_1 } \\
 m_1 \ddot{\Br}_1 + m_2 \ddot{\Br}_2 &= 0
 \end{aligned}
 \end{dmath}
 
-The second is the equation for the acceleration of the center of mass $\BR_{\mathrm{CM}}(t)$, and it directly integrable.  With $M = m_1 + m_2$, that is
+The second is the equation for the acceleration of the center of mass $\BR_{\mathrm{CM}}(t)$.  That center of mass relation is directly integrable.  With $M = m_1 + m_2$, that is
 
 \begin{dmath}\label{eqn:twoMassHarmonic:100}
 M \BR_{\mathrm{CM}}(t) 
@@ -82,12 +82,12 @@ that oscillation equation is
 
 \begin{dmath}\label{eqn:twoMassHarmonic:140}
 \frac{d^2}{dt^2}
-\lr{ \Br_1 - \Br_2 }
+\lr{ \Br_2 - \Br_1 }
 = -\frac{K}{\mu} 
-\lr{ \Br_1 - \Br_2 }.
+\lr{ \Br_2 - \Br_1 }.
 \end{dmath}
 
-With angular frequency $\omega^2 = \frac{K}{\mu}$, vector difference $\Delta \Br(t) = \Br_1(t) - \Br_2(t)$, and initial time values $\Delta \Br_\nought = \Delta \Br(t_\nought)$, and $\Delta \Bv_\nought = \Delta \Br'(t_\nought)$ the solution for $\Delta \Br(t)$, by inspection, is
+With angular frequency $\omega^2 = \frac{K}{\mu}$, vector difference $\Delta \Br(t) = \Br_2(t) - \Br_1(t)$, and initial time values $\Delta \Br_\nought = \Delta \Br(t_\nought)$, and $\Delta \Bv_\nought = \Delta \Br'(t_\nought)$ the solution for $\Delta \Br(t)$, by inspection, is
 
 \begin{dmath}\label{eqn:twoMassHarmonic:180}
 \Delta \Br(t) = 
@@ -101,7 +101,7 @@ To find for the individual $\Br_i$ vectors we have only to invert the matrix rel
 
 \begin{dmath}\label{eqn:twoMassHarmonic:200}
 \begin{bmatrix}
-1 & -1 \\
+-1 & 1 \\
 m_1 & m_2 
 \end{bmatrix}
 \begin{bmatrix}
@@ -123,10 +123,10 @@ or
 \Br_2
 \end{bmatrix}
 =
-\inv{m_2 + m_1}
+\frac{1}{m_2 + m_1}
 \begin{bmatrix}
-m_2 & 1 \\
--m_1 & 1 
+-m_2 & 1 \\
+m_1 & 1 
 \end{bmatrix}
 \begin{bmatrix}
 \Delta \Br(t) \\
@@ -137,19 +137,61 @@ M \BR_{\mathrm{CM}}(t)
 The final solution is
 
 \begin{dmath}\label{eqn:twoMassHarmonic:240}
-\myBoxed{
 \begin{aligned}
 \Br_1(t) &=
-\frac{\mu}{m_1}
+-\frac{\mu}{m_1}
 \Delta \Br(t) 
 + \BR_{\mathrm{CM}}(t) \\
 \Br_2(t) &=
--
 \frac{\mu}{m_2}
 \Delta \Br(t) 
 + \BR_{\mathrm{CM}}(t) 
 \end{aligned}
-}
+\end{dmath}
+
+Looking at this, it appears non-sensical.  At the very least, it is unphysical, and allows the masses to pass through each other.
+%This is illustrated in the animation of
+%\nbref{harmonicOscillatorTwoMasses.cdf}
+
+Our Lagrangian needs to model the equilbrium length of the spring.  
+
+In the abscence of any initial angular momentum, this problem is essentially one dimensional.  Let's consider a physically realistic harmonic oscillator system, with coupling that is relative to an equilibrium length (the length of an uncompressed or unstretched spring for example).  That system is illustrated in 
+
+FIXME: fig2.
+
+Adjusting for a rest length $a$ for the spring, the new system is described by
+
+\begin{dmath}\label{eqn:twoMassHarmonic:20}
+\LL = 
+\inv{2} m_1 \lr{ \dot{x}_1 }^2
++\inv{2} m_2 \lr{ \dot{x}_2 }^2
+- \frac{K}{2} \lr{ x_2 - x_1 - a }^2.
+\end{dmath}
+
+Now our equations of motion are
+
+\begin{dmath}\label{eqn:twoMassHarmonic:60}
+\begin{aligned}
+m_1 \ddot{x}_1 &= - K \lr{ x_1 - x_2 + a } \\
+m_2 \ddot{x}_2 &= - K \lr{ x_2 - x_1 - a }.
+\end{aligned}
+\end{dmath}
+
+With $u = x_2 - x_1 - a$, this is
+
+\begin{dmath}\label{eqn:twoMassHarmonic:260}
+\ddot{u} = -\frac{K}{\mu} u.
+\end{dmath}
+
+Solving and back substituting for $\Delta x(t) = x_2(t) - x_1(t)$, we have
+
+\begin{dmath}\label{eqn:twoMassHarmonic:280}
+\Delta x(t) 
+= 
+a +
+\lr{ \Delta x(0) - a } \cos\omega t
++
+\frac{ \Delta v(0) }{\omega} \sin\omega t.
 \end{dmath}
 
 } % makeanswer

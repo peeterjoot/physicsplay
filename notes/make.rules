@@ -58,7 +58,7 @@ $(THISDIR).tex : ../classicthesis.mine/ClassicThesis.tex
 	cp $< $@
 
 mathematica.tex : ../METADATA
-	../METADATA -mathematica -latex -$(THISDIR) > mathematica.tex
+	(cd .. ; ./METADATA -mathematica -latex -$(THISDIR) > $(THISDIR)/mathematica.tex)
 
 # plainnat.bib (as used by classicthesis) doesn't like @webpage:
 # http://tex.stackexchange.com/questions/56951/what-does-warning-entry-type-for-isnt-style-file-defined-mean/56954#56954
@@ -68,7 +68,7 @@ Bibliography.bib : myrefs.bib
 # old style: don't think I have any direct uses anymore, but am generating Bibliography.bib from this.
 myrefs.bib: ../myrefs.bib.in ../METADATA
 	cp ../myrefs.bib.in myrefs.bib
-	../METADATA -bib >> myrefs.bib
+	(cd .. ; ./METADATA -bib >> $(THISDIR)/myrefs.bib)
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
@@ -79,7 +79,7 @@ ifneq ($(PDFDEPENDENCIES),)
 endif
 
 cronology.tex : ../METADATA
-	../METADATA -$(THISDIR) > cronology.tex
+	(cd .. ; ./METADATA -$(THISDIR) > $(THISDIR)/cronology.tex)
 
 $(LOCAL_FILES) :
 	cp $(filter %$@, $(ORIG_FILES)) $@
