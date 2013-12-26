@@ -14,16 +14,18 @@
 
 \beginArtNoToc
 
-\generatetitle{Two body harmonic oscillator in 3D}
+\generatetitle{Harmonic oscillator and displacement coordinates}
 %\chapter{Two body harmonic oscillator in 3D}
 %\label{chap:twoMassHarmonic}
 
-\makeproblem{Two body harmonic oscillator in 3D}{pr:twoMassHarmonic:1}{
+%\makeproblem{Two body harmonic oscillator in 3D}{pr:twoMassHarmonic:1}{
+\paragraph{Motivation}
 
 In lattice problems, we consider normal modes of harmonic coupled systems.  Show how it is natural to introduce displacement coordinates to correctly model such a system in a physically realistic fashion.
-} % makeproblem
+%} % makeproblem
 
-\makeanswer{pr:twoMassHarmonic:1}{ 
+%\makeanswer{pr:twoMassHarmonic:1}{ 
+\paragraph{Two body harmonic oscillator in 3D}
 
 For the system illustrated in \cref{fig:twoMassSpringCoupling:twoMassSpringCouplingFig1} the Lagrangian is
 
@@ -153,9 +155,9 @@ Looking at this, it appears non-sensical.  At the very least, it is unphysical, 
 %This is illustrated in the animation of
 %\nbref{harmonicOscillatorTwoMasses.cdf}
 
-Our Lagrangian needs to model the equilbrium length of the spring.  
+Our Lagrangian needs to model the equilibrium length of the spring.  
 
-In the abscence of any initial angular momentum, this problem is essentially one dimensional.  
+In the absence of any initial angular momentum, this problem is essentially one dimensional.  
 
 \paragraph{1D system with non-zero equilibrium length}
 
@@ -202,7 +204,7 @@ Note that this does not model collision effects, should the initial position or 
 
 \paragraph{3D system with non-zero equilibrium length}
 
-The geometric of a 3D harmonically coupled system with a non-zero equilibrium lenth is sketched in
+The geometric of a 3D harmonically coupled system with a non-zero equilibrium length is sketched in
 
 FIXME:
 
@@ -272,9 +274,85 @@ By inspection the solution for the difference is
 
 with the individual mass position vectors still given by \eqnref{eqn:twoMassHarmonic:240}.
 
-We get a strong hint here why we wish to work with displacement coordinates.  Once we do so, there's no longer any requirement to include the Lagrange multipliers that specify the physical constraint.
+We get a strong hint here why we wish to work with displacement coordinates.  
+%Once we do so, there's no longer any requirement to include the Lagrange multipliers that specify the physical constraint.
 
-} % makeanswer
+\paragraph{A different formulation of the equilibrium position constraint}
 
+The use of the direction constraint above appeared somewhat forced.  Here's a more natural way of specifying that we have an equilibrium length constraint
+
+\begin{dmath}\label{eqn:twoMassHarmonic:440}
+\LL 
+= 
+\inv{2} m_1 \lr{ \dot{\Br}_1 }^2
++\inv{2} m_2 \lr{ \dot{\Br}_2 }^2
+- \frac{K}{2} \lr{ 
+\Abs{\Br_2 - \Br_1} - a
+}^2
+= 
+\inv{2} m_1 \lr{ \dot{\Br}_1 }^2
++\inv{2} m_2 \lr{ \dot{\Br}_2 }^2
+- \frac{K}{2} \lr{ 
+\lr{\Br_2 - \Br_1}^2 - 2 a \Abs{\Br_2 - \Br_1} + a^2
+}.
+\end{dmath}
+
+The evaluation of the absolute value gradient in the Euler-Lagrange equations can be done implicitly, computing the absolute square gradient in two different ways
+
+\begin{subequations}
+\begin{equation}\label{eqn:twoMassHarmonic:460}
+\PD{\Bx}{\Abs{\Bx}^2} 
+=
+\PD{\Bx}{\Bx^2} 
+=
+2 \Bx
+\end{equation}
+\begin{equation}\label{eqn:twoMassHarmonic:480}
+\PD{\Bx}{\Abs{\Bx}^2} 
+=
+2 \Abs{\Bx} \PD{\Bx}{\Abs{\Bx}},
+\end{equation}
+\end{subequations}
+
+so that
+\begin{dmath}\label{eqn:twoMassHarmonic:500}
+\PD{\Bx}{\Abs{\Bx}} = \frac{\Bx}{\Abs{\Bx}}.
+\end{dmath}
+
+This gives us
+
+\begin{dmath}\label{eqn:twoMassHarmonic:520}
+\begin{aligned}
+m_1 \ddot{\Br}_1 &= - K \lr{ \Br_1 - \Br_2 - a \frac{\Br_1 - \Br_2}{\Abs{\Br_2 - \Br_1}} } \\
+m_2 \ddot{\Br}_2 &= - K \lr{ \Br_2 - \Br_1 - a \frac{\Br_2 - \Br_1}{\Abs{\Br_2 - \Br_1}} }
+\end{aligned}
+\end{dmath}
+
+With $\Delta \Br = \Br_2 - \Br_1$ and $\widehat{\Delta \Br} = \lr{\Br_2 - \Br_1}/\Abs{\Br_2 - \Br_1}$, this gives
+
+\begin{dmath}\label{eqn:twoMassHarmonic:540}
+\mu \Delta \ddot{\Br} = - K \lr{ \Delta \Br - a \widehat{\Delta \Br} }.
+\end{dmath}
+
+Now everything is directed along $\widehat{\Delta \Br}$ (something free to rotate if the system has some angular momentum), which allows for the introduction of scalar displacement coordinates, relative to the center of the equilibrium position
+
+\begin{dmath}\label{eqn:twoMassHarmonic:560}
+\begin{aligned}
+\Br_1 &= \lr{ -\frac{a}{2} + u_1 } \widehat{\Delta \Br} \\
+\Br_2 &= \lr{ \frac{a}{2} + u_2 } \widehat{\Delta \Br}.
+\end{aligned}
+\end{dmath}
+
+FIXME: figure.
+
+With $\Delta u = u_2 - u_1$, \eqnref{eqn:twoMassHarmonic:540} takes the form
+
+\begin{dmath}\label{eqn:twoMassHarmonic:580}
+\mu \Delta \ddot{u} = - K \Delta u.
+\end{dmath}
+
+We see exactly how natural displacement coordinates are for the two mass problem.  We have also avoided the awkward requirement for a Lagrange multiplier constraint in the Lagrangian model of the system.
+
+%} % makeanswer
 %\EndArticle
 \EndNoBibArticle
