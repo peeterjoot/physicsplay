@@ -18,6 +18,7 @@
 #s/\\Ed/E_{\\mathrm{d}}/g ;
 #s/\\ED/E_{\\mathrm{D}}/g ;
 #s/\\ee/\\epsilon/g ;
+#s/\\ee/\\mathcal{E}/g ;
 #s/\\Eg/E_{\\mathrm{g}}/g ;
 #s/\\ES/E_{\\mathrm{S}}/g ;
 #s/\\EV/E_{\\mathrm{V}}/g ;
@@ -107,4 +108,7 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-#s/\\ee/\\mathcal{E}/g ;
+s/\\ee/\\Bepsilon/g ;
+
+s/\\n(\d)\b/{\\Bn, $1}/g ;                                      # \Bu_\n1 -> \Bu_{\\Bn, 1}
+s/\\n *(\+|-|\\pm) *(\(\d *, *\d\))(\d)\b/{\\Bn $1 $2, $3}/g ;  # \Bu_\n+(1,0)1 -> \Bu_{\Bn + (1,0), 1}
