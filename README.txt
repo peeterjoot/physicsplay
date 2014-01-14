@@ -83,6 +83,13 @@ notes/phy487/
 
    Class notes and problems from 'Condensed Matter Physics', taught by Prof. Stephen Julian.
 
+notes/resume/
+
+   A hack job of a resume produced for a google head hunter, since I was curious what sort of job he was offering
+   but didn't have any expectation I'd accept.
+
+   Later used for my M.Eng master application (added writing notes, removed the "other-projects" notes that google wanted).
+
 sym/
 
    A C++ geometric algebra symbolic calculator using the 'gasandbox' libraries.
