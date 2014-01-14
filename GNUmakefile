@@ -3,8 +3,6 @@ SUBDIRS := $(subst /GNUmakefile,,$(SUBMAKES))
 IGNOREDIRS += notes/atomic
 IGNOREDIRS += notes/bb
 IGNOREDIRS += notes/phy1530
-#IGNOREDIRS += notes/phy487 # hack:
-#D:\peeterj\Peeter_cygwinHome\physicsplay\notes\phy487\condensedMatterProblemSet8Problem1.tex:400: LaTeX Error: File `../../figures/phy487/qmSolidsPs8dFig2' not found.
 IGNOREDIRS += notes/gamma-matrix
 SUBDIRS := $(filter-out $(IGNOREDIRS),$(SUBDIRS))
 
