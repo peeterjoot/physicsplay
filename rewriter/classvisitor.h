@@ -380,7 +380,7 @@ int main( int argc, char * argv[] )
                                                             &targetOptions ) ;
 
    HeaderSearch headerSearch( headerSearchOptions,
-                              fileManager,
+                              sourceManager,
                               *pDiagnosticsEngine,
                               languageOptions,
                               pTargetInfo ) ;

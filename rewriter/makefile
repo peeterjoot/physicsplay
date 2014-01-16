@@ -37,19 +37,21 @@ LDFLAGS += -lclangRewriteCore
 LDFLAGS += -lclangEdit -lclangAST -lclangLex -lclangBasic
 LDFLAGS += -lLLVMMCParser
 LDFLAGS += -lLLVMBitReader
+LDFLAGS += -lLLVMOption
+LDFLAGS += -lLLVMTransformUtils
 
 LDFLAGS += $(shell $(LLVM_BIN_PATH)llvm-config --libs $(LLVM_LIBS))
 
-#EXES += classvisitor
-#EXES += globalvisitor
-#EXES += rewriter
-#EXES += testit
-#EXES += dumper
-#EXES += memberdumper
+EXES += classvisitor
+EXES += globalvisitor
+EXES += rewriter
+EXES += testit
+EXES += dumper
+EXES += memberdumper
 #EXES += LockUnlockChecker.so
 #EXES += $(LLVMPREFIX)/bin/ClangCheck
 EXES += $(LLVMPREFIX)/bin/stripGmblkVoidPPcast
-#EXES += $(LLVMPREFIX)/bin/gblkToGmblk
+EXES += $(LLVMPREFIX)/bin/gblkToGmblk
 #CLEAN_EXES += rewritersample
 
 CFLAGS += -std=c++11
@@ -116,8 +118,8 @@ LockUnlockChecker.so: LockUnlockChecker.o
 isystem.h : isystem.pl
 	$< $(CXX) > $@
 
-#ClangCheck.cpp : $(LLVMSRC)/tools/clang/tools/clang-check/ClangCheck.cpp
-#	cp $< $@
+ClangCheck.cpp : $(LLVMSRC)/tools/clang/tools/clang-check/ClangCheck.cpp
+	cp $< $@
 
 clean:
 	rm -rf *.o *.ll $(EXES) $(CLEAN_EXES) isystem.h
