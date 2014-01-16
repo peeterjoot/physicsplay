@@ -38,6 +38,9 @@ allnotes.pdf : $(ALLNOTES)
 subdirs:
 	$(foreach dir,$(SUBDIRS),make -C $(dir);)
 
+subclean:
+	$(foreach dir,$(SUBDIRS),make -C $(dir) clean;)
+
 %/.gitignore : %/GNUmakefile
 	make -C $(<D) .gitignore
 
