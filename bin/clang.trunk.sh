@@ -1,24 +1,26 @@
-#where=llvm
-where=llvmopt
+where=llvm
+#where=llvmopt
+#what=trunk
+what=tags/RELEASE_34/final
 
 #Checkout LLVM:
 #Change directory to where you want the llvm directory placed.
-svn co http://llvm.org/svn/llvm-project/llvm/trunk $where
+echo svn co http://llvm.org/svn/llvm-project/llvm/$what $where
 
 #Checkout Clang:
-cd $where/tools
-svn co http://llvm.org/svn/llvm-project/cfe/trunk clang
-cd ../..
+echo cd $where/tools
+echo svn co http://llvm.org/svn/llvm-project/cfe/$what clang
+echo cd ../..
 
 #Checkout extra Clang Tools: (optional)
-cd $where/tools/clang/tools
-svn co http://llvm.org/svn/llvm-project/clang-tools-extra/trunk extra
-cd ../../../..
+echo cd $where/tools/clang/tools
+echo svn co http://llvm.org/svn/llvm-project/clang-tools-extra/$what extra
+echo cd ../../../..
 
 #Checkout Compiler-RT:
-cd $where/projects
-svn co http://llvm.org/svn/llvm-project/compiler-rt/trunk compiler-rt
-cd ../..
+echo cd $where/projects
+echo svn co http://llvm.org/svn/llvm-project/compiler-rt/$what compiler-rt
+echo cd ../..
 
 #Build LLVM and Clang:
 #mkdir build (for building without polluting the source dir)
