@@ -1,6 +1,6 @@
 THISDIR := phy487
 
-include ../make.vars
+include ../make.bookvars
 
 SOURCE_DIRS += appendix
 # FIXME:

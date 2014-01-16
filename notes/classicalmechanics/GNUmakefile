@@ -1,6 +1,6 @@
 THISDIR := classicalmechanics
 
-include ../make.vars
+include ../make.bookvars
 
 FIGURES := ../../figures/$(THISDIR)
 

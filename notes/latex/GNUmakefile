@@ -1,19 +1,12 @@
+# FIXME: this makefile can probably now use:
+# ../include/make.vars
+# ../include/make.rules
+
 RAWTEXFILES := $(shell ls *.tex)
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
 PDFS := $(TEXFILES:.tex=.pdf)
-
-# logically symlinks, but MikTex doesn't like those:
-#ORIG_FILES += ../abbrvurl.bst
-#ORIG_FILES += ../alphaurl.bst
-#ORIG_FILES += ../eliblog.cls 
-#ORIG_FILES += ../eliblogwidescreen.cls 
-#ORIG_FILES += ../myrefs.bib 
-#ORIG_FILES += ../plainurl.bst
-#ORIG_FILES += ../unsrturl.bst
-#ORIG_FILES += ../mycommon.sty
-#ORIG_FILES += ../phy454/figures/couetteFlowFig1.png
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 

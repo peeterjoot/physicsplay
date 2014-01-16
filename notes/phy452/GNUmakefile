@@ -1,6 +1,6 @@
 THISDIR := phy452
 
-include ../make.vars
+include ../make.bookvars
 
 FIGURES := ../../figures/$(THISDIR)
 

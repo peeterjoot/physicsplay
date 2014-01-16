@@ -1,6 +1,6 @@
 THISDIR := gabook
 
-include ../make.vars
+include ../make.bookvars
 
 FIGURES := ../../figures/$(THISDIR)
 
