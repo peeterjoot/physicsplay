@@ -1,0 +1,1632 @@
+\input{../peeter_prologue.tex}
+
+% concatonation and reorganization of what was originally.
+% 
+% ../gabook/introGa.tex
+% ../gabook/gaWiki.tex
+% ../gabook/gaGradeDotWedge.tex
+
+%\newtheorem{theorem}{Theorem}[section]
+%\newtheorem{proposition}[theorem]{Proposition}
+%\newtheorem{corollary}[theorem]{Corollary}
+%\newtheorem{lemma}[theorem]{Lemma}
+%\newtheorem{remark}[theorem]{Remark}
+%\newtheorem{definition}[theorem]{Definition}
+\newtheorem{exersize}[theorem]{Exersize}
+
+
+\chapter{Introduction to Geometric Algebra.}
+\label{chap:gaBasics}
+\blogpage{http://sites.google.com/site/peeterjoot/math2009/gaBasics.pdf}
+\date{Aug 20, 2009}
+\revisionInfo{$RCSfile: gaBasics.txt,v $ Last $Revision: 1.1 $ $Date: 2009/08/22 14:18:06 $}
+
+\beginArtWithToc
+
+\section{What can we do with Geometric Algebra?}
+
+Geometric Algebra is a physics rebranding of what is known to mathematicians as Clifford Algebra.  The origin, rationale and pros and cons associated with this rebranding can be found discussed elsewhere.  Having learned the algebra first with the label Geometric Algebra (GA) I will continue to refer to it that way here.  Clifford Algebra will be reserved to describe more general algebras not required for any of the physical applications discussed herein.
+
+GA provides an algebraic system that has the scope to incorporate features of a number of algebraic and systems, including traditional cross and dot product based 3D vector algebra, complex numbers, quaternions, and the Pauli and Dirac matrix algebras.
+
+The number of applications for Geometric Algebra, both in mathematics and physics, are rather extensive and impressive.  The mathematical operations of projection, linear system solution, rotations, subspace intersection all have natural and powerful expressions in GA.  While matrixes are required for many of these when using traditional tools, we have matrix free product forms for many of these operations in GA.  Rotations have an exponential form very much like the polar form of complex numbers, and when working in a plane reduce to the complex form.  Vector calculus operations, such as Green{q}s theorem, the divergence theorem, and Stokes theorems (both the 3D and differential forms generalizations) have a natural representation in the context of differential forms.
+
+Physics applications of GA include means for expressing torque and angular momentum without a normal, allowing degeneralizations from 3D to pure planar contexts, as well as 4D (and higher) generalizations useful in relativistic applications.  We have a toolbox that allows many tensor quantities to be described in index free ways.  The student searching for order in the crazy mixed up set of dot and cross product relations of Maxwell{q}s equations, may be surprised that these can be reduced to a single equation $\grad F = J/\epsilon_0 c$.  We can write the Lorentz force and power equations in the index free covariant form $dp/d\tau = F \cdot v/c$.  Like rotations we have a matrix free exponential operator form for the Lorentz boosts.  Many more examples could be listed, but to avoid making filling this introductory description with too much that is scary sounding and discouraging, I will stop here.
+ 
+\section{How to introduce the geometric product?}
+
+The fundamental operation in Geometric Algebra is the Geometric product, a direct product of two or more vectors.  This product is generally not closed, since the result of a multiplication may lie in a different space than the original factors.
+
+It is common to introduce the geometric product of two vectors either using the dot plus wedge identity
+
+\begin{align}\label{eqn:how:foo1}
+\Bx \By \equiv \Bx \cdot \By + \Bx \wedge \By
+\end{align}
+
+An alternative approach is to flip this, using properties of the wedge and dot products, to implicitly define the properties of the geometric product
+
+\begin{align}\label{eqn:how:foo2}
+\Bx \cdot \By \equiv \inv{2}(\Bx \By + \By \Bx)
+\end{align}
+\begin{align}\label{eqn:how:foo3}
+\Bx \wedge \By \equiv \inv{2}(\Bx \By + \By \Bx)
+\end{align}
+
+The dot product $\Bx \cdot \By$ is familiar to anybody who has taken high school algebra and is a scalar (numeric) quantity.  The second term $\Bx \wedge \By$ is a qq(something-else), not a vector nor scalar, and presents a bit of a chicken and egg problem for instruction and learning.  To those that have not studied differential forms the wedge product will likely not be at all familiar.  One can in fact identify this quantity as a sort of planar vector, a quantity with a magnitude and orientation in space, but we will come back to this.
+
+Care is also required with the identities (\ref{eqn:how:foo2}), and (\ref{eqn:how:foo3}) since they only apply to the product of two vectors.  While generalized dot and wedge products for products of multiple vectors can be defined, trying to learn from a text that presents things this way can be difficult.  One is left trying to swim through a maze of unfamiliar identities not really knowing which ones are the fundamentals.
+
+These chicken and egg problems can be overcome and a number of texts do so quite well.  I will not attempting to replicate any of these, and instead refer to the GACS text (\cite{dorst2007gac}).  This is probably one of the clearest and most well written books that taking this route to introduce the algebra, and is highly recommended.
+
+What I will present here instead is an axiomatic like approach.  An attempt to present and motivate the axioms will be made.  How one can work from those axioms to determine the identities defining the many derived products such as the dot, wedge, generalized dot, generalized wedge, cross product, and commutator products will be discussed.  What does axiomatic like mean?  My goal is an illustration of how to develop some comfort with the tools and applications of Geometric Algebra.  For this initial learning exercise I think it is sufficient to know that a strict axiomatic extraction of properties and identities is possible, and to illustrate the path, but not actually follow it.
+
+The focus of this introduction will be Euclidean \R{N} spaces, where the metric (dot product of all orthonormal unit vectors) is positive definite.  Generalizing the arguments to non positive definite metric spaces is not actually too much more difficult.  While this generalization is actually very important for relativistic treatments, I defer to the Cambridge text (\cite{doran2003gap}) to make it.  That text does an excellent job presenting an axiomatic approach applicable to general metrics.
+
+\section{Modeling numbers as 1D vectors}
+
+Let us start with some thought about possible rules that we could make for the multiplication (or division) of vectors?
+
+Two such rules are assumed to be known, the dot product and the cross product.  Both of these logically map the vector product into a different space.  The dot product provides a mapping from vectors to scalars.  Considering all the pairs of vectors in a plane, the cross product provides a mapping into the from this planar subspace of \R{3} to the dual space for that plane, the set of vectors perpendicular to the plane.  Both of these product examples map pairs of vectors into a different space, so the reader should not necessarily be surprised when the choice for the geometric product ends up being one that also maps into a different space.
+
+We desire the rules for vector multiplication to apply to any number of finite dimensions.  This is not a problem with the dot product which is easily defined for any number of dimensions.  The cross product however, is intrinsically three dimensional.  One cannot unambiguously define a normal to the plane in a four dimensional space to this product does not generalize to higher dimensions.  We can generalize the cross product of three vectors to \R{4} since we can then once again define a normal, but a requirement for an additional direction in the product is not satisfactory.  As well as having no higher dimensional generalization of the cross product, we cannot even degeneralized this product to \R{2}.  With intrinsically planar two dimensional quantities like torque and angular momentum, we ought to have a tool that can express these without resorting to a normal in a space that we may not even be interested in.
+
+Since the desired product should work for \R{1}, as well as \R{2}, or \R{3} or \R{N}, lets first consider the simplest case, that of \R{1}.  If we can motivate a natural seeming multiplication for this space then that should be a good first step towards establishing a workable set of rules for the more general case.  This simple space is a fortunate choice since we have an isomorphic relationship between the real number line and a one dimensional vector space, and may be able to use our rules of multiplication for real numbers as guidance for vector multiplication.  To start down this path, it is therefore reasonable to review in detail the rules we have for real number multiplication.
+
+\begin{enumerate}
+\item Product of two positive numbers is positive.  Any consideration of countable sets of objects justifies this rule.
+
+\item Product of a positive and negative number is negative.  Example: multiplying a debt (negative number) increases the amount of the debt.
+
+\item Product of a negative and negative number is positive.
+
+\item Multiplication is distributive.  Product of a sum is the sum of the products.
+
+\begin{align*}
+a (b + c) = a b + a c
+\end{align*}
+\begin{align*}
+(a + b) c = a c + b c
+\end{align*}
+
+\item Multiplication is associative.  Changing the order that multiplication is grouped by does not change the result.
+
+\begin{align*}
+(a b) c = a (b c)
+\end{align*}
+
+\item Multiplication is commutative.  Switching the order of multiplication does not change the result.
+
+\begin{align*}
+a b = b a
+\end{align*}
+
+\end{enumerate}
+
+\begin{figure}[htp]
+\centering
+\includegraphics[totalheight=0.4\textheight]{rotateMinusOne}
+\caption{rotateMinusOne}\label{fig:rotateMinusOne}
+\end{figure}
+
+My personal grade school exposure to the negative times negative rule was without any sort of justification.  Eventually I found one that I liked, since this can be considered as a special case of the previous rule, as depicted in figure (\ref{fig:rotateMinusOne}).  Geometrically, a multiplication by -1 results in an inversion on the number line, or if one considers the number line to be a line in space, then this is a 180 degree rotation.  Two negative multiplications results in a 360 degree rotation, and thus takes the number back to its original positive or negative segment on its ``number line{q}{q}.
+
+\section{Rules for multiplication of vectors with the same direction}
+
+Having identified the rules for multiplication of numbers, one can use these to define multiplication rules for a simple case, one dimensional vectors.  Conceptually a one dimensional vector space can be thought of like a number line, or the set of all numbers as the set of all scalar multiples of a unit vector of a particular direction in space.
+
+It is reasonable to expect the rules for multiplication of two vectors with the same direction to have some of the same characteristics as multiplication of numbers.  Lets state this algebraically writing the directed distance from the origin to the points $a$ and $b$ in a vector notation
+
+FIXME: picture.
+
+\begin{align*}
+\Ba &= a\Be \\
+\Bb &= b\Be \\
+\end{align*}
+
+where $\Be$ is the unit vector alone the line in question.
+
+The product of these two vectors is
+
+\begin{align*}
+\Ba \Bb = a b \Be \Be
+\end{align*}
+
+Although no specific meaning has yet been given to the $\Be \Be$ term yet, one can make a few observations about a product of this form.
+
+\begin{enumerate}
+\item It is commutative, since $\Ba \Bb = \Bb \Ba = a b \Be \Be$.
+\item It is distributive since numeric multiplication is.
+\item The product of three such vectors is distributive (no matter the grouping of the multiplications there will be a numeric factor and a $\Be \Be \Be$ factor.
+\end{enumerate}
+
+These properties are consistent with half the properties of numeric multiplication.  If the other half of the numeric multiplication rules are assumed to also apply we have
+
+\begin{enumerate}
+\item Product of two vectors in the same direction is positive (rules 1 and 3 above).
+\item Product of two vectors pointing in opposite directions is negative (rule 2 above).
+\end{enumerate}
+
+This can only be possible by giving the following meaning to the square of a unit vector
+
+\begin{align*}
+\Be \Be = 1
+\end{align*}
+
+Alternately, one can state that the square of a vector is that vectors squared length.
+
+\begin{align*}
+\Ba \Ba = a^2
+\end{align*}
+
+This property, called the contraction property, is in fact one of the defining axioms of Geometric Algebra.
+Augmenting this with the associative and distributive properties we actually have all the defining properties of the geometric product.
+
+What we will see shortly is that in order to retain this squared vector length property for non-colinear
+vectors we will be forced to drop the commutative property of numeric multiplication:
+
+\begin{align*}
+\Ba \Bb \neq \Bb \Ba
+\end{align*}
+
+This is a choice that will later be observed to have important consequences.  There are many types of multiplications that do not have the commutative property.  Matrix multiplication is not even necessarily defined when the order is switched.  Other multiplication operations (wedge and cross products) change sign when the order is switched.
+
+Another important choice that will be made in defining the Geometric Algebra axioms is not imposing a requirement for the product of two vectors to also be a vector.  This also breaks from the number line analogy since the product of two numbers was still a number.  To help justify this one can consider a Cartesian pairing of points in a plane to be a product of non-colinear vectors.  Such a pairing has more degrees of freedom than a line, so it is perhaps natural that we have to allow for a product of vectors in different directions to be a qq(something-else) to be determined.
+\section{The Axioms}
+
+All of the axioms of Geometric Algebra have now been mentioned, with some justification for one of them (the contraction property), and some discussion for reasons for not including others (i.e. commutation).  To summarize, here is the complete set of axioms of Geometric Algebra
+
+\begin{definition}
+\begin{enumerate}
+\item{ Linearity }
+
+\begin{align*}
+\Ba (\Bx + \By) = a \Bx + b\By
+\end{align*}
+
+\item{ Associativity }
+
+\begin{align*}
+\Bx (\By \Bz) = (\Bx \By) \Bz = \Bx \By \Bz
+\end{align*}
+
+\item{ Contraction.  Square of a vector is its squared length.}
+
+\begin{align*}
+\Bx^2 = \Norm{\Bx}^2
+\end{align*}
+
+\end{enumerate}
+
+This last property is weakened for relativistic theory.  For that we want a Minkowski metric where the square of the time unit vector differs in sign from the square of the spatial unit vectors.  Still more general contraction properties are possible, where the contraction axiom is defined in terms of quadratic forms.  We reserve the term Clifford Algebra for study of these more general spaces, but for large amount of physics (perhaps excepting GR) restricting ourselves to the Euclidean and Minkowski metrics will be sufficient.
+
+Perhaps surprisingly, this is all there is to the algebra, and the rest of the considerable consequences could be found by a qq(sufficiently talented mathematician), as Feynman puts it.
+\section{Perpendicular products}
+
+Two immediate consequences of the axioms follow by considering the triangle law construction depicted in figure (\ref{fig:triangleLaw}).
+
+\begin{figure}[htp]
+\centering
+\includegraphics[totalheight=0.4\textheight]{triangleLaw}
+\caption{triangleLaw}\label{fig:triangleLaw}
+\end{figure}
+
+Using the contraction property we have for the squared difference of two vectors 
+
+\begin{align}\label{eqn:perp:foo1}
+\Norm{\Bb - \Ba}^2 = (\Bb - \Ba)^2 = \Bb^2 -(\Bb \Ba + \Ba \Bb) + \Ba^2
+\end{align}
+
+Observe that the left hand side is a scalar (by contraction), and the squared terms $\Ba^2 = \Norm{\Ba}^2$, $\Bb^2 = \Norm{\Bb}^2$ are also scalars.  So, while we cannot yet assign meaning to a general product of vectors, we can however conclude that a symmetric sum of vector products is also a scalar
+
+\begin{align}\label{eqn:perp:foo2}
+\Bb\Ba + \Ba\Bb = \text{scalar}
+\end{align}
+
+By Pythagorus{q}s theorem, we have for perpendicular Eudlidean vectors
+
+\begin{align}\label{eqn:perp:foo3}
+\Norm{\Bb - \Ba}^2 = \Norm{\Bb}^2 + \Norm{\Ba}^2
+\end{align}
+
+So we can for the specific case of perpendicular vectors observe that this symmetric product is in fact zero.  This gives us the second important relationship from the algebra, for vectors $\Ba \perp \Bb$, we have from (\ref{eqn:perp:foo2}), and (\ref{eqn:perp:foo3}) an antisymmetric relationship between products
+
+\begin{equation}\label{eqn:introGaFirst:perpabcommutesign}
+\Bb\Ba = -\Ba\Bb.
+\end{equation}
+
+Equation (\ref{eqn:introGaFirst:perpabcommutesign}) still does not assign any specific meaning to a general product of vectors.  We do however, know that whatever that meaning is, if those vectors are perpendicular, their product produces changes sign with commutation.
+
+\section{The dot product.}
+
+The triangle law for vectors in \R{N} is typically written
+
+\begin{align}\label{eqn:dotprod:foo1}
+\Norm{\Bb - \Ba}^2 
+&= \Norm{\Bb}^2 -2 \Norm{\Ba}\Norm{\Bb}\cos\theta + \Norm{\Ba}^2 \\
+&= \Norm{\Bb}^2 -2 \Ba \cdot \Bb + \Norm{\Ba}^2
+\end{align}
+
+A comparison with (\ref{eqn:perp:foo1}) shows that we can make the identification of the symmetric vector product with the dot product from traditional vector algebra.  That is
+
+\begin{equation}\label{eqn:introGaFirst:dotprod}
+\Ba \cdot \Bb \equiv \inv{2}(\Ba \Bb + \Bb \Ba)
+\end{equation}
+
+This equivalence can also be demonstrated directly by coordinate expansion.  There is a great deal of emphasis in the GA literature on coordinate free capability.  We all come schooled in linear algebra using coordinate based calculation, so lets relate this funny looking symmetric vector product to the dot product as we know it.  First write our pair of vectors in terms of assumed orthonormal \R{N} Euclidean basis vectors $\Be_i$
+
+\begin{align*}
+\Ba &= \sum_i{a_i \Be_i} \\
+\Bb &= \sum_j{b_j \Be_j}
+\end{align*}
+
+Here a summation range of $i,j \in [1,N]$ is implied.  Expanding out the first term in the symmetric product we have
+
+\begin{align*}
+\Ba\Bb 
+&= \sum_{ij}{a_i b_j \Be_i \Be_j} \\
+&= \sum_{i = j} {a_i b_j \Be_i \Be_j} 
+ + \sum_{i \ne j} {a_i b_j \Be_i \Be_j} \\
+\end{align*}
+
+Adding this and scaling to the second term of the symmetric product we have
+
+\begin{align*}
+\inv{2}(\Ba\Bb + \Bb\Ba)
+&= \inv{2}\sum_{i = j} {a_i b_j \Be_i \Be_j} + {b_i a_j \Be_i \Be_j}
+ + \inv{2}\sum_{i \ne j} {a_i b_j \Be_i \Be_j} + {b_i a_j \Be_i \Be_j} \\
+&= \sum_{i} a_i b_i \Be_i \Be_i + \inv{2}\sum_{i \ne j} {a_i b_j \Be_i \Be_j} + {b_i a_j \Be_i \Be_j} \\
+\end{align*}
+
+Since $\Be_i^2 = 1$, and $\Be_i \Be_j = -\Be_j \Be_i$ when $i \ne j$ (since $\Be_i \perp \Be_j$) we have after a changes of dummy indexes in this last sum just
+
+\begin{align}\label{eqn:dotprod:inCoords}
+\inv{2}(\Ba\Bb + \Bb\Ba) &= \sum_{i} a_i b_i
+\end{align}
+
+We see the explicit familiar coordinate representation of the dot product hiding there in the symmetric sum after all, and did not have to resort to equivalence with the triangle law.
+
+Exersize: If this is at all unclear, expand the symmetric sum explicitly for a pair of vectors in \R{2} or \R{3}.
+\section{Coordinate expansion of the geometric product. }
+
+A powerful feature of geometric algebra is that it allows for coordinate free results, and the avoidance of basis selection that coordinates require.  While this is true, explicit coordinate expansion, especially initially while making the transition from coordinate based vector algebra, is believed to add clarity to the subject.
+
+
+Despite not yet knowing what meaning to give to the geometric product of two general (non-colinear) vectors, given the axioms above and their consequences we actually have enough information to completely expand the geometric product of two vectors in terms of these coordinates:
+
+\begin{align*}
+\Ba\Bb 
+&= \sum_{ij}{a_i b_j \Be_i \Be_j} \\
+&= \sum_{i = j} {a_i b_j \Be_i \Be_j} 
+ + \sum_{i \ne j} {a_i b_j \Be_i \Be_j} \\
+&= \sum_{i} {a_i b_i \Be_i \Be_i} 
+ + \sum_{i < j} a_i b_j \Be_i \Be_j
+ + \sum_{j < i} a_i b_j \Be_i \Be_j \\
+&= \sum_{i} {a_i b_i} 
+ + \sum_{i < j} a_i b_j \Be_i \Be_j + a_j b_i \Be_j \Be_i \\
+&= \sum_{i} {a_i b_i} 
+ + \sum_{i < j} (a_i b_j - b_i a_j)\Be_i \Be_j \\
+\end{align*}
+
+This can be summarized nicely in terms of determinants:
+
+\begin{equation}\label{eqn:introGaFirst:geocoord}
+\Ba\Bb = \sum_{i} {a_i b_i} + \sum_{i < j} \DETuvij{a}{b}{i}{j} \Be_i \Be_j
+\end{equation}
+
+This shows, without requiring the ``triangle law{q}{q} expansion of \ref{eqn:introGaFirst:standarddot}, that the geometric product has a scalar component that we recognize as the Euclidean vector dot product.  It also shows that the remaining bit is a ``something else{q}{q} component.  This ``something else{q}{q} is called a bivector.  We don{q}t yet know what this bivector is or what to do with it, but will come back to that.
+
+Observe that an interchange of $\Ba$ and $\Bb$ leaves the scalar part of equation \ref{eqn:introGaFirst:geocoord} unaltered (ie: it is symmetric), whereas an interchange inverts the bivector (ie: it is the antisymmetric part).
+
+\section{Some specific examples to get a feel for things. }
+
+Moving from the abstract, consider a few specific geometric product example.
+
+\begin{itemize}
+\item Product of two non-colinear non-orthogonal vectors.
+\begin{align*}
+(\Be_1 + 2\Be_2) (\Be_1 - \Be_2)
+= \Be_1\Be_1 -2\Be_2\Be_2 + 2\Be_2\Be_1 - \Be_1\Be_2
+= -1 + 3\Be_2\Be_1 
+\end{align*}
+
+Such a product produces both scalar and bivector parts.
+
+\item Squaring a bivector
+\begin{align*}
+(\Be_1\Be_2)^2
+=
+(\Be_1\Be_2)(-\Be_2\Be_1)
+=
+-\Be_1(\Be_2\Be_2)\Be_1
+=
+-\Be_1\Be_1
+=
+-1
+\end{align*}
+
+This particular bivector squares to minus one very much like the imaginary number $i$.
+
+\item Product of two perpendicular vectors.
+
+\begin{align*}
+(\Be_1 + \Be_2) (\Be_1 - \Be_2) = 2\Be_2\Be_1
+\end{align*}
+
+Such a product generates just a bivector term.
+
+\item Product of a bivector and a vector in the plane.
+
+\begin{align*}
+(x\Be_1 + y\Be_2) \Be_1\Be_2
+=
+x\Be_2 - y\Be_1
+\end{align*}
+
+This rotates the vector counterclockwise by 90 degrees.
+
+\item General \R{3} geometric product of two vectors.
+
+\begin{align*}
+\Bx \By =
+(x_1\Be_1
++x_2\Be_2
++x_3\Be_3)
+(y_1\Be_1
++y_2\Be_2
++y_3\Be_3)
+\end{align*}
+\begin{align*}
+=
+\Bx \cdot \By 
++\DETuvij{x}{y}{2}{3} \Be_2 \Be_3
++\DETuvij{x}{y}{1}{3} \Be_1 \Be_3
++\DETuvij{x}{y}{1}{2} \Be_1 \Be_2
+\end{align*}
+
+Or,
+\begin{align*}
+\Bx \By =
+\Bx \cdot \By +
+\begin{vmatrix}
+\Be_2\Be_3 & \Be_3\Be_1 & \Be_1\Be_2 \\
+x_1 & x_2 & x_3 \\
+y_1 & y_2 & y_3 \\
+\end{vmatrix}
+\end{align*}
+
+Observe that if one identifies 
+$\Be_2\Be_3$, $\Be_3\Be_1$, and $\Be_1\Be_2$ with vectors 
+$\Be_1$,
+$\Be_2$,
+and $\Be_3$ respectively, this second term is the cross product.  A precise way to perform this identification will be described later.
+
+The key thing to observe here is that the structure of the cross product is naturally associated with the geometric product.  One can think of the geometric product as a complete product including elements of both the dot and cross product.  Unlike the cross product the geometric product is also well defined in two dimensions and greater than three.
+
+\end{itemize}
+
+These examples are all somewhat random, but give a couple hints of results to come.
+
+\section{Antisymmetric part of the geometric product. }
+
+Having identified the symmetric sum of vector products with the dot product we can write the geometric product of two arbitrary vectors in terms of this and it{q}s difference
+
+\begin{align*}
+\Ba \Bb 
+&= \inv{2}(\Ba \Bb + \Bb \Ba) + \inv{2}(\Ba \Bb - \Bb \Ba) \\
+&= \Ba \cdot \Bb + f(\Ba, \Bb) \\
+\end{align*}
+
+Let{q}s examine this second term, the bivector, a mapping of a pair of vectors into a different sort of object of yet unknown properties.
+
+\begin{align*}
+f(\Ba, k\Ba) = \inv{2}(\Ba k\Ba - k\Ba \Ba) = 0
+\end{align*}
+
+Property: Zero when the vectors are colinear.
+
+\begin{align*}
+f(\Ba, k\Ba + \Bb) = \inv{2}(\Ba (k\Ba + \Bb) - (k\Ba + m\Bb)\Ba) = f(\Ba, \Bb)
+\end{align*}
+
+Property: colinear contributions are rejected.
+
+\begin{align*}
+f(\alpha \Ba, \beta \Bb) = \inv{2}(\alpha \Ba \beta \Bb - \beta \Bb \alpha \Ba) = \alpha \beta f(\Ba, \Bb)
+\end{align*}
+
+Property: bilinearity.
+
+\begin{align*}
+f(\Bb, \Ba) 
+= \inv{2}(\Bb \Ba - \Ba\Bb) 
+= -\inv{2}(\Ba \Bb - \Bb\Ba) 
+= -f(\Ba, \Bb) 
+\end{align*}
+
+Property: Interchange inverts.
+
+Operationally, these are in fact the properties of what in the calculus of differential forms is called the wedge product (uncoincidentally, these are also all properties of the cross product as well.)
+
+Because the properties are identical the notation from differential forms is stolen, and we write
+
+\begin{equation}\label{eqn:introGaFirst:wedge}
+\Ba \wedge \Bb = \inv{2}(\Ba \Bb - \Bb \Ba)
+\end{equation}
+
+And as mentioned, the object that this wedge product produces from two vectors is called a bivector.
+
+Strictly speaking the wedge product of differential calculus is defined as an alternating, associative, multilinear form.  We have here bilinear, not multilinear and associativity is not meaningful until more than two factors are introduced, however when we get to the product of more than three vectors, we will find that the geometric vector product produces an entity with all of these properties.
+
+Returning to the product of two vectors we can now write
+
+\begin{equation}\label{eqn:introGaFirst:gaproddotwedge}
+\Ba \Bb = \Ba \cdot \Bb + \Ba \wedge \Bb
+\end{equation}
+
+This is often used as the initial definition of the geometric product.
+
+\section{Yes, but what is that wedge product thing. }
+
+Combination of the symmetric and antisymmetric decomposition in equation \ref{eqn:introGaFirst:gaproddotwedge} shows that the product of two vectors according to the axioms
+has a scalar part and a bivector part.  What is this bivector part geometrically?
+
+One can show that the equation of a plane can be written in terms of bivectors.  One can also show that
+the area of the parallelogram spanned by two vectors can be expressed in terms of the ``magnitude{q}{q} of a bivector.  Both of these
+show that a bivector characterizes a plane and can be thought of loosely as a ``plane vector{q}{q}.
+
+Neither the plane equation or the area result are hard to show, but we will get to those later.  A more direct way to get an intuitive feel for the geometric properties of the bivector can be obtained by first examining the square of a bivector.
+
+By subtracting the projection of one vector $\Ba$ from another $\Bb$, one can form the rejection of $\Ba$ from $\Bb$:
+
+\begin{align*}
+\Bb{q} = \Bb - (\Bb \cdot \acap)\acap
+\end{align*}
+
+With respect to the dot product, this vector is orthogonal to $\Ba$.  Since $\Ba \wedge \acap = 0$, this allows us to write the wedge product of vectors $\Ba$ and $\Bb$ as the direct product of two orthogonal vectors
+
+\begin{align*}
+\Ba \wedge \Bb 
+&= \Ba \wedge (\Bb - (\Bb \cdot \acap)\acap)) \\
+&= \Ba \wedge \Bb{q} \\
+&= \Ba \Bb{q} \\
+&= -\Bb{q} \Ba \\
+\end{align*}
+
+The square of the bivector can then be written
+
+\begin{align*}
+(\Ba \wedge \Bb)^2
+&= (\Ba \Bb{q})(-\Bb{q}\Ba) \\
+&= -\Ba^2 (\Bb{q})^2.
+\end{align*}
+
+Thus the square of a bivector is negative.  It{q}s thus natural to define a bivector norm:
+
+\begin{align*}
+\abs{\Ba \wedge \Bb} = \sqrt{-(\Ba \wedge \Bb)^2} = \sqrt{ (\Ba \wedge \Bb)(\Bb \wedge \Ba) }
+\end{align*}
+
+Dividing by this norm we have an entity that acts precisely like the imaginary number $i$.
+
+Looking back to equation \ref{eqn:introGaFirst:gaproddotwedge} one can now assign additional meaning to the two parts.  The first, the dot product, is a scalar (ie: a real number), and a second part, the wedge product, is a pure imaginary term.  Provided $\Ba \wedge \Bb \ne 0$, we can write $i = \frac{\Ba \wedge \Bb}{ \abs{\Ba \wedge \Bb} }$ and express the geometric product in complex number form:
+
+\begin{align*}
+\Ba \Bb = \Ba \cdot \Bb + i \abs{\Ba \wedge \Bb}
+\end{align*}
+
+The complex number system is the algebra of the plane, and the geometric product of two vectors can be used to completely characterize the algebra of an arbitrarily oriented plane in a higher order vector space.
+
+It actually will be very natural to define complex numbers in terms of the geometric product, and we will see later that the geometric product allows for the ad-hoc definition of ``complex number{q}{q} systems according to convenience in many ways.  
+
+We will also see that generalizations of complex numbers such as quaternion algebras also find their natural place as specific instances of geometric products.
+
+Concepts familiar from complex numbers such as conjugation, inversion, exponentials as rotations, and even things like the residue theory of complex contour integration, will all have a natural geometric algebra analogue.
+
+We will return to this, but first some more detailed initial examination of the wedge product properties is in order, as is a look at the product of greater than two vectors.
+
+
+
+\section{Examples}
+
+\section{Solutions to Exercises.}
+
+
+
+
+\section{3D vector Algebra equivalents}
+
+\section{GA Identities}
+
+FIXME: the stuff that needs to be revamped:
+\section{Introductory concepts.}
+\subsection{Motivation }
+
+As an exercise work out axiomatically some of the key vector identities of Geometric Algebra.
+
+Want to at least derive the vector bivector dot product distribution identity
+
+\begin{align}
+a \cdot ( b \wedge c) = (a \cdot b) c - (a \cdot c) b
+\end{align}
+
+At the same time attempt here to provide a naturally sequenced introduction to the algebra.
+
+\subsection{The Axioms }
+
+Two basic axioms are required, contraction and associative multiplication respectively
+
+\begin{align}
+a^2 &= \text{scalar} \\
+a (b c) &= (a b) c = a b c
+\end{align}
+
+Linearity and scalar multiplication should probably also be included for completeness, but even with those this is a surprisingly small set of rules.  The choice to impose these as the rules for vector multiplication will be seen to have a rich set of consequences once explored.  It will take a fair amount of work to extract all the consequences of this decision, and some of that will be done here.
+
+\subsection{Contraction and the metric }
+
+Defining $a^2$ itself requires introduction of a metric, the specification of the multiplication rules for a particular basis for the vector space.  For Euclidean spaces, a requirement that
+
+\begin{align}
+a^2 = \Abs{a}^2
+\end{align}
+
+is sufficient to implicitly define this metric.  However, for the Minkowski spaces of special relativity one wants the squares of time and spatial basis vectors to be opposing in sign.  Deferring the discussion of metric temporarily one can work with the axioms above to discover their implications, and in particular how these relate to the coordinate vector space constructions that are so familiar.
+
+\subsection{Symmetric sum of vector products }
+
+Squaring a vector sum provides the first interesting feature of the general vector product
+
+\begin{align}\label{sumSquared}
+(a + b)^2 %&= (a + b)(a + b) \\
+&= a^2 + b^2 + a b + b a
+\end{align}
+
+Observe that the LHS is a scalar by the contraction identity, and on the RHS we have scalars $a^2$ and $b^2$ by the same.  This implies that the symmetric sum of products
+
+\begin{align*}
+a b + b a
+\end{align*}
+
+is also a scalar, independent of any choice of metric.  Symmetric sums of this form have a place in physics over the space of operators, often instantiated in matrix form.  There one writes this as the commutator and denotes it as
+
+\begin{align}\label{eqn:intro_ga:anticommutator}
+\symmetric{a}{b} \equiv a b + b a
+\end{align}
+
+In an Euclidean space one can observe that equation \ref{sumSquared} has the same structure as the law of cosines so it should not be surprising that this symmetric sum is also related to the dot product.  For a Euclidean space where one the notion of perpendicularity can be expressed as
+
+\begin{align*}
+\Abs{ a + b }^2 = \Abs{a}^2 + \Abs{b}^2
+\end{align*}
+
+we can then see that an implication of the vector product is the fact that perpendicular vectors have the property
+
+\begin{align*}
+a b + ba = 0
+\end{align*}
+
+or
+
+\begin{align*}
+b a = - a b
+\end{align*}
+
+This notion of perpendicularity will also be seen to make sense for non-Euclidean spaces.
+
+Although it retracts from a purist Geometric Algebra approach where things can be done in a coordinate free fashion, the connection between the symmetric product and the standard vector dot product can be most easily shown by considering an expansion with respect to an orthonormal basis.
+
+Lets write two vectors in an orthonormal basis as
+
+\begin{align*}
+a &= \sum_\mu a^\mu e_\mu \\
+b &= \sum_\mu b^\mu e_\mu
+\end{align*}
+
+Here the choice to utilize raised indexes rather than lower for the coordinates is taken from physics where summation is typically implied when upper and lower indexes are matched as above.
+
+Forming the symmetric product we have
+
+\begin{align*}
+a b + b a
+&=
+\sum_{\mu,\nu} a^\mu e_\mu b^\nu e_\nu + b^\mu e_\mu a^\nu e_\nu \\
+&=
+\sum_{\mu,\nu} a^\mu b^\nu \left( e_\mu e_\nu + e_\nu e_\mu \right) \\
+&=
+2 \sum_{\mu} a^\mu b^\mu {e_\mu}^2 + \sum_{\mu \ne \nu} a^\mu b^\nu \left( e_\mu e_\nu + e_\nu e_\mu \right) \\
+\end{align*}
+
+For an Euclidean space we have ${e_\mu}^2 = 1$, and $e_\nu e_\mu = -e_\mu e_\nu$, so we are left with
+
+\begin{align*}
+\sum_{\mu} a^\mu b^\mu = \inv{2} ( a b + b a)
+\end{align*}
+
+This shows that we can make an identification between the symmetric product, and the anticommutator of physics with the dot product, and then define
+
+\begin{align}\label{eqn:intro_ga:dotDefined}
+a \cdot b \equiv \inv{2} \symmetric{a}{b} = \inv{2} (a b + ba)
+\end{align}
+
+\subsection{Antisymmetric product of two vectors (wedge product) }
+
+Having identified or defined the symmetric product with the dot product we are now prepared to examine a general product of two vectors.  Employing a symmetric + antisymmetric decomposition we can write such a general product as
+
+\begin{align*}
+a b = \underbrace{\inv{2}(a b + b a)}_{a \cdot b} + \underbrace{ \inv{2} ( a b - b a ) }_{ a \something b }
+\end{align*}
+
+What is this remaining vector operation between the two vectors
+
+\begin{align*}
+a \something b = \inv{2} ( a b - b a )
+\end{align*}
+
+One can continue the comparison with the quantum mechanics, and like the anticommutator operator that expressed our symmetric sum in equation \ref{eqn:intro_ga:anticommutator} one can introduce a commutator operator
+
+\begin{align}\label{eqn:intro_ga:commutator}
+\antisymmetric{a}{b} \equiv a b - b a
+\end{align}
+
+The commutator however, doesn{q}t naturally extend to more than two vectors, so as with the scalar part of the vector product (the dot product part), it is desirable to make a different identification for this part of the vector product.
+
+One observation that we can make is that this vector operation changes sign when the operations are reversed.  We have
+
+\begin{align*}
+b \something a = \inv{2} ( b a - a b) = - a \something b
+\end{align*}
+
+Similarly, if $a$ and $b$ are colinear, say $b = \alpha a$, this product is zero
+
+\begin{align*}
+a \something (\alpha a)
+&= \inv{2} ( a  (\alpha a) - (\alpha a) a ) \\
+&= 0
+\end{align*}
+
+This complete antisymmetry, aside from a potential difference in sign, are precisely the properties of the wedge product used in the mathematics of differential forms.  In this differential geometry the wedge product of $m$ one-forms (vectors in this context) can be defined as
+
+\begin{align}\label{eqn:intro_ga:wedge}
+a_1 \wedge a_2 \cdots \wedge a_m
+&= \inv{m!} \sum a_{i_1} a_{i_2} \cdots a_{i_m} \sgn(\pi(i_1 i_2 \cdots i_m))
+\end{align}
+
+Here $\sgn(\pi(\cdots))$ is the sign of the permutation of the indexes.  While we haven{q}t gotten yet to products of more than two vectors it is helpful to know that the wedge product will have a place in such a general product.   An equation like \ref{eqn:intro_ga:wedge} makes a lot more sense after writing it out in full for a few specific cases.  For two vectors $a_1$ and $a_2$ this is
+
+\begin{align}\label{eqn:intro_ga:wedgeTwo}
+a_1 \wedge a_2 = \inv{2}
+\left( a_1 a_2 (1) + a_2 a_1 (-1) \right)
+\end{align}
+
+and for three vectors this is
+
+\begin{align*}
+a_1 \wedge a_2 \wedge a_3 = \inv{6}
+(
+&a_1 a_2 a_3 (1) + a_1 a_3 a_2 (-1) \\
++&a_2 a_1 a_3 (-1) + a_3 a_1 a_2 (1) \\
++&a_2 a_3 a_1 (1) + a_3 a_2 a_1 (-1) )
+\end{align*}
+
+We will see later that this completely antisymmetrized sum, the wedge product of differential forms will have an important place in this algebra, but like the dot product it is a specific construction of the more general vector product.  The choice to identify the antisymmetric sum with the wedge product is an action that amounts to a definition of the wedge product.  Explicitly, and complementing the dot product definition of \ref{eqn:intro_ga:dotDefined} for the dot product of two vectors, we say
+
+\begin{align}\label{eqn:intro_ga:wedgeDefined}
+a \wedge b \equiv \inv{2} \antisymmetric{a}{b} = \inv{2} ( a b - b a )
+\end{align}
+
+Having made this definition, the symmetric and antisymmetric decomposition of two vectors leaves us with a peculiar looking hybrid construction:
+
+\begin{align}\label{eqn:intro_ga:dotPlusWedge}
+a b %&= \inv{2} (a b + b a) + \inv{2} ( a b - b a ) \\
+&= a \cdot b + a \wedge b
+\end{align}
+
+We had already seen that part of this vector product was not a vector, but was in fact a scalar.  We now see that the remainder is also not a vector but is instead something that resides in a different space.  In differential geometry this object is called a two form, or a simple element in $\bigwedge^2$.  Various labels are available for this object are available in Geometric (or Clifford) algebra, one of which is a 2-blade.  2-vector or bivector is also used in some circumstances, but in dimensions greater than three there are reasons to reserve these labels for a slightly more general construction.
+
+The definition of \ref{eqn:intro_ga:dotPlusWedge} is often used as the starting point in Geometric Algebra introductions.  While there is value to this approach I have personally found that the non-axiomatic approach becomes confusing if one attempts to sort out which of the many identities in the algebra are the fundamental ones.  That is why my preference is to treat this as a consequence rather than the starting point.
+
+\subsection{Expansion of the wedge product of two vectors }
+
+Many introductory geometric algebra treatments try very hard to avoid explicit coordinate treatment.  It is true that GA provides infrastructure for coordinate free treatment, however, this avoidance perhaps contributes to making the subject less accessible.  Since we are so used to coordinate geometry in vector and tensor algebra, let{q}s take advantage of this comfort, and express the wedge product explicitly in coordinate form to help get some comfort for it.
+
+Employing the definition of \ref{eqn:intro_ga:wedgeDefined}, and an orthonormal basis expansion in coordinates for two vectors $a$, and $b$, we have
+
+\begin{align*}
+2 (a \wedge b)
+&= ( a b - b a ) \\
+&= 
+\sum_{\mu,\nu} a^\mu b^\nu e_\mu e_\nu 
+-\sum_{\alpha,\beta} a^\alpha b^\beta e_\alpha e_\beta \\
+&= 
+\underbrace{\sum_{\mu} a^\mu b^\mu 
+- \sum_{\alpha} a^\alpha b^\alpha }_{=0}
++ \sum_{\mu \ne \nu} a^\mu b^\nu e_\mu e_\nu 
+- \sum_{\alpha \ne \beta} a^\alpha b^\beta e_\alpha e_\beta \\
+&=
+\sum_{\mu < \nu} (a^\mu b^\nu e_\mu e_\nu + a^\nu b^\mu e_\nu e_\mu)
+- \sum_{\alpha < \beta} (a^\alpha b^\beta e_\alpha e_\beta + a^\beta b^\alpha e_\beta e_\alpha )
+\\
+&=
+2 \sum_{\mu < \nu} ( a^\mu b^\nu - a^\nu b^\mu ) e_\mu e_\nu 
+\end{align*}
+
+So we have
+\begin{align}
+a \wedge b
+&= \sum_{\mu < \nu} \uDETuvij{a}{b}{\mu}{\nu} e_\mu e_\nu 
+\end{align}
+
+The similarity to the \R{3} vector cross product is not accidental.  This similarity can be made explicit by observing the following
+
+\begin{align*}
+e_1 e_2 &= e_1 e_2 (e_3 e_3) = (e_1 e_2 e_3) e_3 \\
+e_2 e_3 &= e_2 e_3 (e_1 e_1) = (e_1 e_2 e_3) e_1 \\
+e_1 e_3 &= e_1 e_3 (e_2 e_2) = -(e_1 e_2 e_3) e_2 \\
+\end{align*}
+
+This common factor, a product of three normal vectors, or grade three blade, is called the pseudoscalar for \R{3}.  We write $i = e_1 e_2 e_3$, and can then express the \R{3} wedge product in terms of the cross product
+
+\begin{align*}
+a \wedge b
+&= 
+\uDETuvij{a}{b}{2}{3} e_2 e_3 
++\uDETuvij{a}{b}{1}{3} e_1 e_3 
++\uDETuvij{a}{b}{1}{2} e_1 e_2  \\
+&= 
+(e_1 e_2 e_3) \left( \uDETuvij{a}{b}{2}{3} e_1 
+-\uDETuvij{a}{b}{1}{3} e_2 
++\uDETuvij{a}{b}{1}{2} e_3 \right) \\
+\end{align*}
+
+This is
+
+\begin{align}\label{eqn:intro_ga:wedgeAsCross}
+a \wedge b &= i (a \cross b)
+\end{align}
+
+With this identification we now also have a curious integrated relation where the dot and cross products are united into a single structure
+
+\begin{align}\label{eqn:intro_ga:scalarPlusIcross}
+a b = a \cdot b + i (a \cross b)
+\end{align}
+
+\subsection{Vector product in exponential form. }
+
+One naturally expects there is an inherent connection between the dot and cross products, especially when expressed in terms of the angle between the vectors, as in
+
+\begin{align*}
+a \cdot b &= \Abs{a}\Abs{b} \cos\theta_{a,b} \\
+a \cross b &= \Abs{a}\Abs{b} \sin\theta_{a,b} \ncap_{a,b}
+\end{align*}
+
+However, without the structure of the geometric product the specifics of what connection is isn{q}t obvious.  In particular the use of \ref{eqn:intro_ga:scalarPlusIcross} and the angle relations, one can easily blunder upon the natural complex structure of the geometric product
+
+\begin{align*}
+a b 
+&= a \cdot b + i (a \cross b) \\
+&=
+\Abs{a}\Abs{b} \left( \cos\theta_{a,b} + i\ncap_{a,b} \sin\theta_{a,b} \right) \\
+\end{align*}
+
+As we{q}ve seen pseudoscalar multiplication in \R{3} provides a mapping between a grade 2 blade and a vector, so this $i\ncap$ product is a 2-blade.
+
+In \R{3} we also have $i \ncap = \ncap i$ (exercise for reader) and also $i^2 = -1$ (again for the reader), so this 2-blade $i\ncap$ has all the properties of the $i$ of complex arithmetic.  We can, in fact, write
+
+\begin{align*}
+a b 
+&= a \cdot b + i (a \cross b) \\
+&=
+\Abs{a}\Abs{b} \exp( i\ncap_{a,b} \theta_{a,b} )
+\end{align*}
+
+In particular, for unit vectors $a$, $b$ one is able to quaternion exponentials of this form to rotate from one vector to the other
+
+\begin{align*}
+b &= a \exp( i\ncap_{a,b} \theta_{a,b} )
+\end{align*}
+
+This natural GA use of multivector exponentials to implement rotations is not restricted to \R{3} or even Euclidean space, and is one of the most powerful features of the algebra.
+
+\subsection{Pseudoscalar. }
+
+In general the pseudoscalar for \R{N} is a product of $N$ normal vectors and multiplication by such an object maps m-blades to (N-m) blades.
+
+For \R{2} the unit pseudoscalar has a negative square
+
+\begin{align*}
+(e_1 e_2) (e_1 e_2)
+&=
+- (e_2 e_1) (e_1 e_2) \\
+&=
+- e_2 (e_1 e_1) e_2 \\
+&=
+- e_2 e_2 \\
+&=
+-1
+\end{align*}
+
+and we{q}ve seen an example of such a planar pseudoscalar in the subspace of the span of two vectors above (where $\ncap i$ was a pseudoscalar for that subspace).  In general the sign of the square of the pseudoscalar depends on both the dimension and the metric of the space, so the ``complex{q}{q} exponentials that rotate one vector into another may represent hyperbolic rotations.
+
+For example we have for a four dimensional space the pseudoscalar square is
+
+\begin{align*}
+i^2 &=
+(e_0 e_1 e_2 e_3) (e_0 e_1 e_2 e_3) \\
+&=
+- e_0 e_0 e_1 e_2 e_3 e_1 e_2 e_3 \\
+&=
+- e_0 e_0 e_1 e_2 e_3 e_1 e_2 e_3 \\
+&=
+- e_0 e_0 e_1 e_1 e_2 e_3 e_2 e_3 \\
+&=
+e_0 e_0 e_1 e_1 e_2 e_2 e_3 e_3 \\
+\end{align*}
+
+For a Euclidean space where each of the ${e_k}^2 = 1$, we have $i^2 = 1$, but for a Minkowski space where one would have for $k\ne0$, ${e_0}^2 {e_k}^2 = -1$, we have $i^2 = -1$
+
+Such a mixed signature metric will allow for implementation of Lorentz transformations as exponentials (hyperbolic) rotations in a fashion very much like the quaternionic spatial rotations for Euclidean spaces.
+
+It is also worth pointing out that the pseudoscalar multiplication naturally provides a mapping operator into a dual space, as we{q}ve seen in the cross product example, mapping vectors to bivectors, or bivectors to vectors.  Pseudoscalar multiplication in fact provides an implementation of the Hodge duality operation of differential geometry.
+
+In higher than three dimensions, such as four, this duality operation can in fact map 2-blades to orthogonal 2-blades (orthogonal in the sense of having no common factors).  Take for example the typical example of a non-simple element from differential geometry
+
+\begin{align*}
+\omega = e_1 \wedge e_2 + e_3 \wedge e_4
+\end{align*}
+
+The two blades that compose this sum have no common factors and thus cannot be formed as the wedge product of two vectors.  These two blades are orthogonal in a sense that can be made more exact later.   As this time we just wish to make the observation that the pseudoscalar provides a natural duality operation between these two subspaces of $\bigwedge^2$.  Take for example
+
+\begin{align*}
+i e_1 \wedge e_2 
+&=
+ e_1 e_2 e_3 e_4 e_1 e_2  \\
+&=
+- e_1 e_1 e_2 e_3 e_4 e_2  \\
+&=
+- e_1 e_1 e_2 e_2 e_3 e_4 \\
+&\propto 
+e_3 e_4 \\
+\end{align*}
+
+\subsection{Higher order products. }
+
+FIXME.
+
+\section{Comparison of many traditional vector and GA identities.}
+
+\subsection{Three dimensional vector relationships vs N dimensional equivalents }
+
+Here are some comparisons between standard ${\mathbb R}^3$ vector relations and their corresponding wedge and geometric product equivalents.  All the wedge and geometric product equivalents here are good for more than three dimensions, and some also for two.  In two dimensions the cross product is undefined even if what it describes (like torque) is a perfectly well defined in a plane without introducing an arbitrary normal vector outside of the space.
+
+Many of these relationships only require the introduction of the wedge product to generalize, but since that may not be familiar to somebody with only a traditional background in vector algebra and calculus, some examples are given.
+
+\subsubsection{wedge and cross products are antisymmetric }
+\begin{align*}
+\Bv \times \Bu = - (\Bu \times \Bv)
+\end{align*}
+\begin{align*}
+\Bv \wedge \Bu = - (\Bu \wedge \Bv)
+\end{align*}
+
+\subsubsection{wedge and cross products are zero when identical }
+\begin{align*}
+\Bu \times \Bu = 0
+\end{align*}
+\begin{align*}
+\Bu \wedge \Bu = 0
+\end{align*}
+
+\subsubsection{wedge and cross products are linear }
+
+These are both linear in the first variable
+\begin{align*}
+(\Bv + \Bw) \times \Bw = \Bu \times \Bw + \Bv \times \Bw
+\end{align*}
+\begin{align*}
+(\Bv + \Bw) \wedge \Bw = \Bu \wedge \Bw + \Bv \wedge \Bw
+\end{align*}
+
+and are linear in the second variable
+\begin{align*}
+\Bu \times (\Bv + \Bw)= \Bu \times \Bv + \Bu \times \Bw
+\end{align*}
+\begin{align*}
+\Bu \wedge (\Bv + \Bw)= \Bu \wedge \Bv + \Bu \wedge \Bw
+\end{align*}
+
+\subsubsection{In general, cross product is not associative, but the wedge product is }
+
+\begin{align*}
+(\Bu \times \Bv) \times \Bw \neq \Bu \times (\Bv \times \Bw)
+\end{align*}
+\begin{align*}
+(\Bu \wedge \Bv) \wedge \Bw = \Bu \wedge (\Bv \wedge \Bw)
+\end{align*}
+
+\subsubsection{Wedge and cross product relationship to a plane }
+
+$\Bu \times \Bv$ is perpendicular to plane containing $\Bu$ and $\Bv$.
+$\Bu \wedge \Bv$ is an oriented representation of the plane containing $\Bu$ and $\Bv$.
+
+\subsubsection{norm of a vector }
+
+The norm (length) of a vector is defined in terms of the dot product
+
+\begin{align*}
+ {\Vert \Bu \Vert}^2 = \Bu \cdot \Bu
+\end{align*}
+
+Using the geometric product this is also true, but this can be also be expressed more compactly as
+
+\begin{align*}
+{\Vert \Bu \Vert}^2 = {\Bu}^2
+\end{align*}
+
+This follows from the definition of the geometric product and the fact that a vector wedge product with itself is zero
+
+\begin{align*}
+ \Bu \, \Bu = \Bu \cdot \Bu + \Bu \wedge \Bu = \Bu \cdot \Bu
+\end{align*}
+
+\subsubsection{Lagrange identity }
+
+In three dimensions the product of two vector lengths can be expressed in terms of the dot and cross products
+
+\begin{align*}
+{\Vert \Bu  \Vert}^2 {\Vert \Bv  \Vert}^2
+=
+({\Bu  \cdot \Bv })^2 + {\Vert \Bu  \times \Bv  \Vert}^2
+\end{align*}
+
+The corresponding generalization expressed using the geometric product is
+
+\begin{align*}
+{\Vert \Bu  \Vert}^2 {\Vert \Bv  \Vert}^2
+= ({\Bu  \cdot \Bv })^2 - (\Bu  \wedge \Bv )^2
+\end{align*}
+
+This follows from by expanding the geometric product of a pair of vectors with its reverse
+
+\begin{align*}
+(\Bu  \Bv )(\Bv  \Bu ) 
+= ({\Bu  \cdot \Bv } + {\Bu  \wedge \Bv }) ({\Bu  \cdot \Bv } - {\Bu  \wedge \Bv })
+\end{align*}
+
+\subsubsection{determinant expansion of cross and wedge products }
+
+\begin{align*}
+\Bu \times \Bv = \sum_{i<j}{ \begin{vmatrix}u_i & u_j\\v_i & v_j\end{vmatrix}  {\Be}_i \times {\Be}_j }
+\end{align*}
+\begin{align*}
+\Bu \wedge \Bv = \sum_{i<j}{ \begin{vmatrix}u_i & u_j\\v_i & v_j\end{vmatrix}  {\Be}_i \wedge {\Be}_j }
+\end{align*}
+
+Without justification or historical context, traditional linear algebra texts will often define the determinant as the first step of an elaborate sequence of definitions and theorems leading up to the solution of linear systems, Cramer{q}s rule and matrix inversion.
+
+An alternative treatment is to axiomatically introduce the wedge product, and then demonstrate that this can be used directly to solve linear systems.  This is shown below, and does not require sophisticated math skills to understand.
+
+It is then possible to define determinants as nothing more than the coefficients of the wedge product in terms of "unit k-vectors" (${\Be}_i \wedge {\Be}_j$ terms) expansions as above.
+
+A one by one determinant is the coefficient of $\Be _1$ for an $\mathbb R^1$ 1-vector.
+
+A two-by-two determinant is the coefficient of $\Be _1 \wedge \Be _2$ for an $\mathbb R^2$ bivector
+
+A three-by-three determinant is the coefficient of $\Be _1 \wedge \Be _2 \wedge \Be _3$ for an $\mathbb R^3$ trivector
+
+When linear system solution is introduced via the wedge product, Cramer{q}s rule follows as a side effect, and there is no need to lead up to the end results with definitions of minors, matrices, matrix invertablity, adjoints, cofactors, Laplace expansions, theorems on determinant multiplication and row column exchanges, and so forth.
+
+\subsubsection{Equation of a plane. }
+
+For the plane of all points ${\Br}$ through the plane passing through three independent points ${\Br}_0$, ${\Br}_1$, and ${\Br}_2$, the normal form of the equation is
+
+\begin{align*}
+(({\Br}_2 - {\Br}_0) \times ({\Br}_1 - {\Br}_0)) \cdot ({\Br} - {\Br}_0) = 0
+\end{align*}
+
+The equivalent wedge product equation is
+\begin{align*}
+({\Br}_2 - {\Br}_0) \wedge ({\Br}_1 - {\Br}_0) \wedge ({\Br} - {\Br}_0) = 0
+\end{align*}
+
+\subsubsection{Projective and rejective components of a vector }
+
+For three dimensions the projective and rejective components of a vector with respect to an arbitrary non-zero unit vector, can be expressed in terms of the dot and cross product
+
+\begin{align*}
+\Bv = (\Bv \cdot \ucap)\ucap + \ucap \times (\Bv \times \ucap)
+\end{align*}
+
+For the general case the same result can be written in terms of the dot and wedge product and the geometric product of that and the unit vector
+
+\begin{align*}
+\Bv = (\Bv \cdot \ucap)\ucap + (\Bv \wedge \ucap) \ucap
+\end{align*}
+
+It{q}s also worthwhile to point out that this result can also be expressed using right or left vector division as defined by the geometric product
+
+\begin{align*}
+\Bv = (\Bv \cdot \Bu)\frac{1}{\Bu} + (\Bv \wedge \Bu) \frac{1}{\Bu}
+\end{align*}
+\begin{align*}
+\Bv = \frac{1}{\Bu}(\Bu \cdot \Bv) + \frac{1}{\Bu}(\Bu \wedge \Bv)
+\end{align*}
+
+\subsubsection{Area (squared) of a parallelogram is norm of cross product }
+
+\begin{align*}
+A^2 = {\Vert \Bu \times \Bv \Vert}^2 = \sum_{i<j}{\begin{vmatrix}u_i & u_j\\v_i & v_j\end{vmatrix}}^2
+\end{align*}
+
+and is the negated square of a wedge product
+\begin{align*}
+A^2 = -(\Bu \wedge \Bv)^2 = \sum_{i<j}{\begin{vmatrix}u_i & u_j\\v_i & v_j\end{vmatrix}}^2
+\end{align*}
+
+Note that this squared bivector is a geometric product.
+
+\subsubsection{Angle between two vectors }
+
+\begin{align*}
+({\sin \theta})^2 = \frac{{\Vert \Bu \times \Bv \Vert}^2}{{\Vert \Bu \Vert}^2 {\Vert \Bv \Vert}^2}
+\end{align*}
+\begin{align*}
+({\sin \theta})^2 = -\frac{(\Bu \wedge \Bv)^2}{{ \Bu }^2 { \Bv }^2}
+\end{align*}
+
+\subsubsection{Volume of the parallelepiped formed by three vectors. }
+
+\begin{align*}
+V^2 = {\Vert (\Bu \times \Bv) \cdot \Bw \Vert}^2
+= {
+\begin{vmatrix}
+u_1 & u_2 & u_3 \\ 
+v_1 & v_2 & v_3 \\ 
+w_1 & w_2 & w_3 \\ 
+\end{vmatrix}
+}^2
+\end{align*}
+
+\begin{align*}
+V^2 = -(\Bu \wedge \Bv \wedge \Bw)^2
+= -\left(\sum_{i<j<k}
+\begin{vmatrix}
+u_i & u_j & u_k \\ 
+v_i & v_j & v_k \\ 
+w_i & w_j & w_k \\ 
+\end{vmatrix}
+\ecap_i \wedge \ecap_j \wedge \ecap_k 
+\right)^2
+= \sum_{i<j<k}
+{
+\begin{vmatrix}
+u_i & u_j & u_k \\ 
+v_i & v_j & v_k \\ 
+w_i & w_j & w_k \\ 
+\end{vmatrix}
+}^2
+\end{align*}
+
+
+\subsection{Some properties and examples }
+
+Some fundamental geometric algebra manipulations will be provided below, showing how this vector product can be used in calculation of projections, area, and rotations.  How some of these tie together and correlate concepts from other branches of mathematics, such as complex numbers, will also be shown.
+
+In some cases these examples provide details used above in the cross product and geometric product comparisons.
+
+\subsubsection{Inversion of a vector }
+
+One of the powerful properties of the Geometric product is that it provides the capability to express the inverse of a non-zero vector.  This is expressed by:
+
+\begin{align*}
+{\Ba}^{-1} = \frac{\Ba}{\Ba \Ba} = \frac{\Ba}{{\Vert \Ba \Vert}^2}. 
+\end{align*}
+
+\subsubsection{dot and wedge products defined in terms of the geometric product }
+
+Given a definition of the geometric product in terms of the dot and wedge products, adding and subtracting $\Ba  \Bb $ and $\Bb  \Ba $ demonstrates that the dot and wedge product of two vectors can also be defined in terms of the geometric product
+
+\subsubsection{The dot product }
+
+\begin{align*}
+\Ba \cdot\Bb  = \frac{1}{2}(\Ba \Bb  + \Bb \Ba )
+\end{align*}
+
+This is the symmetric component of the geometric product.  When two vectors are colinear the geometric and dot products of those vectors are equal.
+
+As a motivation for the dot product it is normal to show that this quantity occurs in the solution of the length of a general triangle where the third side is the vector sum of the first and second sides $\Bc  = \Ba  + \Bb $.
+
+\begin{align*}
+{\Vert \Bc  \Vert}^2 = \sum_{i}(a_i + b_i)^2 = {\Vert \Ba  \Vert}^2 + {\Vert \Bb  \Vert}^2 + 2 \sum_{i}a_i b_i
+\end{align*}
+
+The last sum is then given the name the dot product and other properties of this quantity are then shown (projection, angle between vectors, ...).
+
+This can also be expressed using the geometric product
+
+\begin{align*}
+\Bc ^2 = (\Ba  + \Bb )(\Ba  + \Bb ) = \Ba ^2 + \Bb ^2 + (\Ba \Bb  + \Bb \Ba )
+\end{align*}
+
+By comparison, the following equality exists
+
+\begin{align*}
+\sum_{i}a_i b_i = \frac{1}{2}(\Ba \Bb  + \Bb \Ba )
+\end{align*}
+
+Without requiring expansion by components one can define the dot product exclusively in terms of the geometric product due to its properties of contraction, distribution and associativity.  This is arguably a more natural way to define the geometric product.  Addition of two similar terms is not immediately required, especially since one of those terms is the wedge product which may also be unfamiliar.
+
+\subsubsection{The wedge product }
+
+\begin{align*}
+\Ba \wedge\Bb  = \frac{1}{2}(\Ba \Bb  - \Bb \Ba )
+\end{align*}
+
+This is the antisymmetric component of the geometric product.  When two vectors are orthogonal the geometric and wedge products of those vectors are equal.
+
+Switching the order of the vectors negates this antisymmetric geometric product component, and contraction property shows that this is zero if the vectors are equal.  These are the defining properties of the wedge product.
+
+\subsubsection{Note on symmetric and antisymmetric dot and wedge product formulas }
+
+A generalization of the dot product that allows computation of the component of a vector "in the direction" of a plane (bivector), or other k-vectors can be found below.  Since the signs change depending on the grades of the terms being multiplied, care is required with the formulas above to ensure that they are only used for a pair of vectors.
+
+\subsubsection{Reversing multiplication order.  Dot and wedge products compared to the real and imaginary parts of a complex number.  }
+
+Reversing the order of multiplication of two vectors, has the effect of the inverting the sign of just the wedge product term of the product.
+
+It is not a coincidence that this is a similar operation to the conjugate operation of complex numbers.
+
+The reverse of a product is written in the following fashion
+
+\begin{align*}
+{\Bb  \Ba } = ({\Ba  \Bb })^\dagger
+\end{align*}
+\begin{align*}
+{\Bc  \Bb  \Ba } = ({\Ba  \Bb  \Bc })^\dagger
+\end{align*}
+
+Expressed this way the dot and wedge products are
+
+\begin{align*}
+\Ba \cdot\Bb  = \frac{1}{2}(\Ba \Bb  + ({\Ba  \Bb })^\dagger)
+\end{align*}
+
+This is the symmetric component of the geometric product.  When two vectors are colinear the geometric and dot products of those vectors are equal.
+
+\begin{align*}
+\Ba \wedge\Bb  = \frac{1}{2}(\Ba \Bb  - ({\Ba  \Bb })^\dagger)
+\end{align*}
+
+These symmetric and antisymmetric pairs, the dot and wedge products extract the scalar and bivector components of a geometric product in the same fashion as the real and imaginary components of a complex number are also extracted by its symmetric and antisymmetric components
+
+\begin{align*}
+\mathop{Re}(z) = \frac{1}{2}(z + \bar{z})
+\end{align*}
+\begin{align*}
+\mathop{Im}(z) = \frac{1}{2}(z - \bar{z})
+\end{align*}
+
+This extraction of components also applies to higher order geometric product terms.  For example
+
+\begin{align*}
+\Ba \wedge\Bb \wedge \Bc 
+= \frac{1}{2}(\Ba \Bb \Bc  - ({\Ba  \Bb } \Bc )^\dagger)
+= \frac{1}{2}(\Bb \Bc \Ba  - ({\Bb  \Bc } \Ba )^\dagger)
+= \frac{1}{2}(\Bc \Ba \Bb  - ({\Bc  \Ba } \Bb )^\dagger)
+\end{align*}
+
+\subsubsection{Orthogonal decomposition of a vector }
+
+Using the Gram-Schmidt process a single vector can be decomposed into two components with respect to a reference vector, namely the projection onto a unit vector in a reference direction, and the difference between the vector and that projection.
+
+With, $ \ucap = \Bu / {\Vert \Bu \Vert}$, the projection of $\Bv$ onto $ \ucap$ is
+
+\begin{align*}
+ \mathrm{Proj}_{\ucap}\,\Bv  = \ucap (\ucap \cdot \Bv)
+\end{align*}
+
+Orthogonal to that vector is the difference, designated the rejection,
+
+\begin{align*}
+ \Bv - \ucap (\ucap \cdot \Bv) = \frac{1}{{\Vert \Bu \Vert}^2} ( {\Vert \Bu \Vert}^2 \Bv - \Bu (\Bu \cdot \Bv))
+\end{align*}
+
+The rejection can be expressed as a single geometric algebraic product in a few different ways
+
+\begin{align*}
+ \frac{ \Bu }{{\Bu}^2} ( \Bu \Bv - \Bu \cdot \Bv)
+= \frac{1}{\Bu} ( \Bu \wedge \Bv )
+= \ucap ( \ucap \wedge \Bv )
+= ( \Bv \wedge \ucap ) \ucap 
+\end{align*}
+
+The similarity in form between between the projection and the rejection is notable.  The sum of these recovers the original vector
+
+\begin{align*}%\label{eqn:gaWiki:orthoD}
+ \Bv = \ucap (\ucap \cdot \Bv) + \ucap ( \ucap \wedge \Bv )
+\end{align*}
+
+Here the projection is in its customary vector form.  An alternate formulation is possible that puts the projection in a form that differs from the usual vector formulation
+
+\begin{align*}
+ \Bv
+= \frac{1}{\Bu} (\Bu \cdot \Bv) + \frac{1}{\Bu} ( \Bu \wedge \Bv )
+= (\Bv \cdot \Bu) \frac{1}{\Bu}  + ( \Bv \wedge \Bu ) \frac{1}{\Bu} 
+\end{align*}
+
+\subsubsection{A quicker way to the end result }
+
+Working backwards from the end result, it can be observed that this orthogonal decomposition result can in fact follow more directly from the definition of the geometric product itself.
+
+\begin{align*}
+\Bv = \ucap \ucap \Bv
+= \ucap (\ucap \cdot \Bv + \ucap \wedge \Bv )
+\end{align*}
+
+With this approach, the original geometrical consideration is not necessarily obvious, but it is a much quicker way to get at the same algebraic result.
+
+However, the hint that one can work backwards, coupled with the knowledge that the wedge product can be used to solve sets of linear equations, the problem of orthogonal decomposition can be posed directly,
+
+FIXME: convert to reference.
+This linear equation solution method requires only the wedge product, and an example of that without GA can be found in the \href{http://www.grassmannalgebra.info/grassmannalgebra/book/bookpdf/TheExteriorProduct.pdf}{Grassman Algebra book chapter on the Exterior Product.}
+
+Let $\Bv = a \Bu + \Bx$, where $\Bu \cdot \Bx = 0$.  To discard the portions of $\Bv$ that are colinear with $\Bu$, take the wedge product
+
+\begin{align*}
+\Bu \wedge \Bv = \Bu \wedge (a \Bu + \Bx) = \Bu \wedge \Bx
+\end{align*}
+
+Here the geometric product can be employed
+
+\begin{align*}
+\Bu \wedge \Bv = \Bu \wedge \Bx = \Bu \Bx - \Bu \cdot \Bx = \Bu \Bx
+\end{align*}
+
+Because the geometric product is invertible, this can be solved for x
+
+\begin{align*}
+\Bx = \frac{1}{\Bu}(\Bu \wedge \Bv)
+\end{align*}
+
+The same techniques can be applied to similar problems, such as calculation of the component of a vector in a plane and perpendicular to the plane.
+
+\subsubsection{Area of parallelogram spanned by two vectors}
+
+\begin{figure}[htp]
+\centering
+\includegraphics[totalheight=0.4\textheight]{parallelogramArea}
+\caption{parallelogramArea}\label{fig:parallelogramArea}
+\end{figure}
+
+As depicted in figure (\ref{fig:parallelogramArea}), one can see that the area of a parallelogram spanned by two vectors is computed from the base times height.  In the figure $\Bu$ was picked as the base, with length $\Norm{\Bu}$.  Designating the second vector $\Bv$, we want the component of $\Bv$ perpendicular to $\ucap$ for the height.  An orthogonal decomposition of $\Bv$ into directions parallel and perpendicular to $\ucap$ can be performed in two ways.
+
+\begin{align*}
+\Bv &= \Bv \ucap \ucap = (\Bv \cdot \ucap) \ucap + (\Bv \wedge \ucap) \ucap \\
+    &= \ucap \ucap \Bv = \ucap (\ucap \cdot \Bv) + \ucap (\ucap \wedge \Bv)
+\end{align*}
+
+The height is the length of the perpendicular component expressed using the wedge as either $\ucap (\ucap \wedge \Bv)$ or $(\Bv \wedge \ucap) \ucap$.
+
+Multiplying base times height we have the parallelogram area
+
+\begin{align*}
+A(\Bu,\Bv) 
+&= \Vert \Bu \Vert \Vert \ucap ( \ucap \wedge \Bv ) \Vert \\
+&= \Vert \ucap ( \Bu \wedge \Bv ) \Vert \\
+\end{align*}
+
+Since the squared length of an Euclidean vector is the geometric square of that vector, we can compute the squared area of this parallogram by squaring this single scaled vector
+
+\begin{align*}
+A^2 &= (\ucap ( \Bu \wedge \Bv ) )^2
+\end{align*}
+
+Utilizing both encodings of the perpendicular to $\ucap$ component of $\Bv$ computed above we have for the squared area
+
+\begin{align*}
+A^2
+&= (\ucap( \Bu \wedge {\Bv} ) )^2 \\
+&= (( \Bv \wedge {\Bu} ) \ucap) (\ucap ( {\Bu} \wedge \Bv )) \\
+&= ( \Bv \wedge \Bu ) ( \Bu \wedge \Bv ) \\
+\end{align*}
+
+Since $\Bu \wedge \Bv = -\Bv \wedge \Bu$, we have finally
+
+\begin{align*}
+A^2 = -( \Bu \wedge \Bv )^2
+\end{align*}
+
+There are a few things of note here.  One is that the parallelogram area can easily be expressed in terms of the square of a bivector.  Another is that the square of a bivector has the same property as a purely imaginary number, a negative square.
+
+It can also be noted that a vector lying completely within a plane anticommutes with the bivector for that plane.  More generally components of vectors that lie within a plane commute with the bivector for that plane while the perpendicular components of that vector commute.  These commutation or anticommutation properties depend both on the vector and the grade of the object that one attempts to commute it with (these properties lie behind the generalized definitions of the dot and wedge product to be seen later).
+
+FIXME: relate to the cross product.  Also note the fact that this is all dimensional, and just just two or three (the last with the cross product).
+\subsubsection{Expansion of a bivector and a vector rejection in terms of the standard basis }
+
+If a vector is factored directly into projective and rejective terms using the geometric product $\Bv = \frac{1}{\Bu}( \Bu \cdot \Bv + \Bu \wedge \Bv)$, then it is not necessarily obvious that the rejection term, a product of vector and bivector is even a vector.  Expansion of the vector bivector product in terms of the standard basis vectors has the following form
+
+Let
+\begin{align*}
+\Br
+= \frac{1}{\Bu} ( \Bu \wedge \Bv )
+= \frac{\Bu}{\Bu^2} ( \Bu \wedge \Bv ) 
+= \frac{1}{{\Vert \Bu \Vert}^2} \Bu ( \Bu \wedge \Bv ) 
+\end{align*}
+
+It can be shown that
+\begin{align*}
+\Br = \frac{1}{{\Vert{\Bu}\Vert}^2} \sum_{i<j}\begin{vmatrix}u_i & u_j\\v_i & v_j\end{vmatrix}
+\begin{vmatrix}u_i & u_j\\ {\Be}_i & {\Be}_j\end{vmatrix}
+\end{align*}
+
+(a result that can be shown more easily straight from $\Br = \Bv - \ucap (\ucap \cdot \Bv)$).
+
+The rejective term is perpendicular to $\Bu$, since
+$\begin{vmatrix}
+u_i & u_j\\ u_i & u_j
+\end{vmatrix}
+ = 0$
+implies $\Br \cdot \Bu = \Bzero$.
+
+The magnitude of $\Br$, is
+
+\begin{align*}
+{\Vert \Br \Vert}^2 = \Br \cdot \Bv = \frac{1}{{\Vert{\Bu}\Vert}^2} \sum_{i<j}\begin{vmatrix}u_i & u_j\\v_i & v_j\end{vmatrix}^2
+\end{align*}.
+
+So, the quantity
+
+\begin{align*}
+{\Vert \Br \Vert}^2 {\Vert{\Bu}\Vert}^2 = \sum_{i<j}\begin{vmatrix}u_i & u_j\\v_i & v_j\end{vmatrix}^2
+\end{align*}
+
+is the squared area of the parallelogram formed by $\Bu$ and $\Bv$.
+
+It is also noteworthy that the bivector can be expressed as
+
+\begin{align*}
+\Bu \wedge \Bv = \sum_{i<j}{ \begin{vmatrix}u_i & u_j\\v_i & v_j\end{vmatrix}  {\Be}_i \wedge {\Be}_j }
+\end{align*}.
+
+Thus is it natural, if one considers each term ${\Be}_i \wedge {\Be}_j$ as a basis vector of the bivector space, to define the (squared) "length" of that bivector as the (squared) area.
+
+Going back to the geometric product expression for the length of the rejection $\frac{1}{\Bu} ( \Bu \wedge \Bv )$ we see that the length of the quotient, a vector, is in this case is the "length" of the bivector divided by the length of the divisor.
+
+This may not be a general result for the length of the product of two $k$-vectors, however it is a result that may help build some intuition about the significance of the algebraic operations.  Namely,
+
+When a vector is divided out of the plane (parallelogram span) formed from it and another vector, what remains is the perpendicular component of the remaining vector, and its length is the planar area divided by the length of the vector that was divided out.
+
+\subsubsection{Projection and rejection of a vector onto and perpendicular to a plane. }
+
+Like vector projection and rejection, higher dimensional analogs of that calculation are also possible using the geometric product.
+
+As an example, one can calculate the component of a vector perpendicular to a plane and the projection of that vector onto the plane.
+
+Let $\Bw = a \Bu + b \Bv + \Bx$, where $\Bu \cdot \Bx = \Bv \cdot \Bx = 0$.  As above, to discard the portions of $\Bw$ that are colinear with $\Bu$ or $\Bu$, take the wedge product
+
+\begin{align*}
+\Bw \wedge \Bu \wedge \Bv = (a \Bu + b \Bv + \Bx) \wedge \Bu \wedge \Bv = \Bx \wedge \Bu \wedge \Bv
+\end{align*}
+
+Having done this calculation with a vector projection, one can guess that this quantity equals $\Bx (\Bu \wedge \Bv)$.  One can also guess there is a vector and bivector dot product like quantity such that the allows the calculation of the component of a vector that is in the "direction of a plane".  Both of these guesses are correct, and the validating these facts is worthwhile.  However, skipping ahead slightly, this to be proved fact allows for a nice closed form solution of the vector component outside of the plane:
+
+\begin{align*}
+\Bx
+= (\Bw \wedge \Bu \wedge \Bv)\frac{1}{\Bu \wedge \Bv}
+= \frac{1}{\Bu \wedge \Bv}(\Bu \wedge \Bv  \wedge \Bw)
+\end{align*}
+
+Notice the similarities between this planar rejection result a the vector rejection result.  To calculation the component of a vector outside of a plane we take the volume spanned by three vectors (trivector) and "divide out" the plane.
+
+Independent of any use of the geometric product it can be shown that this rejection in terms of the standard basis is
+
+\begin{align*}
+\Bx = \frac{1}{(A_{u,v})^2} \sum_{i<j<k}
+\begin{vmatrix}w_i & w_j & w_k \\u_i & u_j & u_k \\v_i & v_j & v_k \\\end{vmatrix}
+\begin{vmatrix}u_i & u_j & u_k \\v_i & v_j & v_k \\ {\Be}_i & {\Be}_j & {\Be}_k \\ \end{vmatrix}
+\end{align*}
+
+Where
+
+\begin{align*}
+(A_{u,v})^2
+= \sum_{i<j} \begin{vmatrix}u_i & u_j\\v_i & v_j\end{vmatrix}
+= -(\Bu \wedge \Bv)^2
+\end{align*}
+
+is the squared area of the parallelogram formed by $\Bu$, and $\Bv$.
+
+The (squared) magnitude of $\Bx$ is
+
+\begin{align*}
+{\Vert \Bx \Vert}^2 =
+\Bx \cdot \Bw =
+\frac{1}{(A_{u,v})^2} \sum_{i<j<k}
+{\begin{vmatrix}w_i & w_j & w_k \\u_i & u_j & u_k \\v_i & v_j & v_k \\\end{vmatrix}}^2
+\end{align*}
+
+Thus, the (squared) volume of the parallelepiped (base area times perpendicular height) is
+
+\begin{align*}
+\sum_{i<j<k}
+{\begin{vmatrix}w_i & w_j & w_k \\u_i & u_j & u_k \\v_i & v_j & v_k \\\end{vmatrix}}^2
+\end{align*}
+
+Note the similarity in form to the w,u,v trivector itself
+
+\begin{align*}
+\sum_{i<j<k}
+{\begin{vmatrix}w_i & w_j & w_k \\u_i & u_j & u_k \\v_i & v_j & v_k \\\end{vmatrix}} {\Be}_i \wedge {\Be}_j \wedge {\Be}_k
+\end{align*}
+
+which, if you take the set of ${\Be}_i \wedge {\Be}_j \wedge {\Be}_k$ as a basis for the trivector space, suggests this is the natural way to define the length of a trivector.  Loosely speaking the length of a vector is a length, length of a bivector is area, and the length of a trivector is volume.
+
+\subsubsection{Product of a vector and bivector.  Defining the "dot product" of a plane and a vector. }
+
+In order to justify the normal to a plane result above, a general examination of the product of a vector and bivector is required.  Namely,
+
+\begin{align*}
+\Bw (\Bu \wedge \Bv)
+= \sum_{i,j<k}w_i {\Be}_i {\begin{vmatrix}u_j & u_k \\v_j & v_k \\\end{vmatrix}} {\Be}_j \wedge {\Be}_k
+\end{align*}
+
+This has two parts, the vector part where $i=j$ or $i=k$, and the trivector parts where no indexes equal.  After some index summation trickery, and grouping terms and so forth, this is
+
+
+\begin{align*}
+\Bw (\Bu \wedge \Bv) =
+\sum_{i<j}(w_i {\Be}_j 
+- w_j {\Be}_i )
+{\begin{vmatrix}u_i & u_j \\v_i & v_j \\\end{vmatrix}}
++
+\sum_{i<j<k}
+{\begin{vmatrix}w_i & w_j & w_k \\ u_i & u_j & u_k \\v_i & v_j & v_k \\\end{vmatrix}} 
+{\Be}_i \wedge {\Be}_j \wedge {\Be}_k
+\end{align*}
+
+The trivector term is $\Bw \wedge \Bu \wedge \Bv$.  Expansion of $(\Bu \wedge \Bv) \Bw$ yields the same trivector term.  This is the completely symmetric part, and the vector term is negated.  
+Like the geometric product of two vectors, this geometric product can be grouped into symmetric and antisymmetric parts, one of which is a pure k-vector.  In analogy the antisymmetric part of this product can be called a generalized dot product, and is roughly speaking the dot product of a "plane" (bivector), and a vector.
+
+The properties of this generalized dot product remain to be explored, but first here is a summary of the notation
+
+\begin{align*}
+\Bw (\Bu \wedge \Bv) = \Bw \cdot (\Bu \wedge \Bv) + \Bw \wedge \Bu \wedge \Bv
+\end{align*}
+
+\begin{align*}
+(\Bu \wedge \Bv) \Bw = - \Bw \cdot (\Bu \wedge \Bv) + \Bw \wedge \Bu \wedge \Bv
+\end{align*}
+
+\begin{align*}
+\Bw \wedge \Bu \wedge \Bv = \frac{1}{2}(\Bw (\Bu \wedge \Bv) + (\Bu \wedge \Bv) \Bw)
+\end{align*}
+
+\begin{align*}
+\Bw \cdot (\Bu \wedge \Bv) = \frac{1}{2}(\Bw (\Bu \wedge \Bv) - (\Bu \wedge \Bv) \Bw)
+\end{align*}
+
+Let $\Bw = \Bx + \By$, where $\Bx = a \Bu + b \Bv$, and $\By \cdot \Bu = \By \cdot \Bv = \Bzero$.  Expressing $\Bw$ and the $\Bu \wedge \Bv$, products in terms of these components is
+
+\begin{align*}
+\Bw (\Bu \wedge \Bv) = \Bx (\Bu \wedge \Bv) + \By (\Bu \wedge \Bv)
+= 
+\Bx \cdot (\Bu \wedge \Bv) + \By \cdot (\Bu \wedge \Bv) + \By \wedge \Bu \wedge \Bv
+\end{align*}
+
+With the conditions and definitions above, and some manipulation, it can be shown that the term $\By \cdot (\Bu \wedge \Bv) = \Bzero$, which then justifies the previous solution of the normal to a plane problem.  Since the vector term of the vector bivector product the name dot product is zero when the vector is perpendicular to the plane (bivector), and this vector, bivector "dot product" selects only the components that are in the plane, so in analogy to the vector-vector dot product this name itself is justified by more than the fact this is the non-wedge product term of the geometric vector-bivector product.
+
+\subsubsection{Complex numbers }
+There is a one to one correspondence between the geometric product of two $\mathbb{R}^2$ vectors and the field of complex numbers.
+
+Writing, a vector in terms of it{q}s components, and left multiplying by the unit vector ${\Be}_1$ yields
+
+\begin{align*}
+ Z = {\Be}_1 \BP = {\Be}_1 ( x {\Be}_1 + y {\Be}_2)
+= x (1) + y ({\Be}_1 {\Be}_2)
+= x (1) + y ({\Be}_1 \wedge {\Be}_2)
+\end{align*}
+
+The unit scalar and unit bivector pair $1, {\Be}_1 \wedge {\Be}_2$ can be considered an alternate basis for a two dimensional vector space.  This alternate vector representation is closed with respect to the geometric product
+
+\begin{align*}
+ Z_1 Z_2
+&= {\Be}_1 ( x_1 {\Be}_1 + y_1 {\Be}_2) {\Be}_1 ( x_2 {\Be}_1 + y_2 {\Be}_2) \\
+&= ( x_1 + y_1 {\Be}_1 {\Be}_2) ( x_2 + y_2 {\Be}_1 {\Be}_2) \\
+&= x_1 x_2 + y_1 y_2 ({\Be}_1 {\Be}_2) {\Be}_1 {\Be}_2) \\
++ (x_1 y_2 + x_2 y_1) {\Be}_1 {\Be}_2 \\
+\end{align*}
+
+This closure can be observed after calculation of the square of the unit bivector above, a quantity
+
+\begin{align*}
+({\Be}_1 \wedge {\Be}_2)^2 = {\Be}_1 {\Be}_2 {\Be}_1 {\Be}_2 = - {\Be}_1 {\Be}_1 {\Be}_2 {\Be}_2 = -1 
+\end{align*}
+
+that has the characteristics of the complex number $i^2 = -1$.
+
+This fact allows the simplification of the product above to
+
+\begin{align*}
+Z_1 Z_2
+= (x_1 x_2 - y_1 y_2) + (x_1 y_2 + x_2 y_1) ({\Be}_1 \wedge {\Be}_2)
+\end{align*}
+
+Thus what is traditionally the defining, and arguably arbitrary seeming, rule of complex number multiplication, is found to follow naturally from the higher order structure of the geometric product, once that is applied to a two dimensional vector space.
+
+It is also informative to examine how the length of a vector can be represented in terms of a complex number.  Taking the square of the length
+
+\begin{align*}
+\BP \cdot \BP &= ( x {\Be}_1 + y {\Be}_2) \cdot ( x {\Be}_1 + y {\Be}_2) \\
+&= ({\Be}_1 Z) {\Be}_1 Z \\
+&= (( x  - y {\Be}_1 {\Be}_2) {\Be}_1) {\Be}_1 Z \\
+&= ( x  - y ({\Be}_1 \wedge {\Be}_2)) Z \\
+\end{align*}
+
+This right multiplication of a vector with ${\Be}_1$, is named the conjugate
+
+\begin{align*}
+\overline{Z} = x  - y ({\Be}_1 \wedge {\Be}_2)
+\end{align*}
+
+And with that definition, the length of the original vector can be expressed as
+
+\begin{align*}
+\BP \cdot \BP = \overline{Z}Z
+\end{align*}
+
+This is also a natural definition of the length of a complex number, given the fact that the complex numbers can be considered an isomorphism with the two dimensional Euclidean vector space.
+
+\subsubsection{Rotation in an arbitrarily oriented plane}
+
+A point $\BP$, of radius $\Br$, located at an angle $\theta$ from the vector $\ucap$ in the direction from $\Bu$ to $\Bv$, can be expressed as
+
+\begin{align*}
+\BP = r( \ucap \cos{\theta} + 
+\frac{\ucap (\ucap \wedge \Bv)}{\Vert \ucap (\ucap \wedge \Bv) \Vert}  \sin{\theta})
+= 
+r \ucap
+( \cos{\theta} + 
+\frac{(\Bu \wedge \Bv)}{\Vert \ucap (\Bu \wedge \Bv) \Vert} \sin{\theta})
+\end{align*}
+
+Writing $ {\BI}_{\Bu ,\Bv } = \frac{\Bu \wedge \Bv}{\Vert \ucap (\Bu \wedge \Bv) \Vert}$, the square of this bivector has the property ${\BI _{\Bu ,\Bv }}^2 = -1$ of the imaginary unit complex number.
+
+This allows the point to be specified as a complex exponential
+
+\begin{align*}
+= \ucap r ( \cos\theta + \BI _{\Bu ,\Bv } \sin\theta )
+= \ucap r \exp( \BI _{\Bu ,\Bv } \theta )
+\end{align*}
+
+Complex numbers could be expressed in terms of the $\mathbb R^2$unit bivector ${\Be}_1 \wedge {\Be}_2$.  However this isomorphism really only requires a pair of linearly independent vectors in a plane (of arbitrary dimension).
+
+\subsubsection{Quaternions }
+
+Similar to complex numbers the geometric product of two $\mathbb{R}^3$ vectors can be used to define quaternions.  Pre and Post multiplication with ${\Be}_1{\Be}_2{\Be}_3$ can be used to express a vector in terms of the quaternion unit numbers $i, j, k$, as well as describe all the properties of those numbers.
+
+\subsubsection{Cross product as outer product }
+
+%The cross product of traditional vector algebra (on $\mathbb{R}^3$) find its place in geometric algebra $\mathcal{G}_3$
+
+Cross product can be written as a scaled outer product
+
+\begin{align*}
+\Ba \times\Bb  = -i(\Ba \wedge\Bb )
+\end{align*}
+
+\begin{align*}
+i^2 &= ({\Be}_1{\Be}_2{\Be}_3)^2 \\
+&= {\Be}_1{\Be}_2{\Be}_3{\Be}_1{\Be}_2{\Be}_3 \\
+&= -{\Be}_1{\Be}_2{\Be}_1{\Be}_3{\Be}_2{\Be}_3 \\
+&= {\Be}_1{\Be}_1{\Be}_2{\Be}_3{\Be}_2{\Be}_3 \\
+&= -{\Be}_3{\Be}_2{\Be}_2{\Be}_3 \\
+&= -1
+\end{align*}
+
+The equivalence of the $\mathbb{R}^3$ cross product and the wedge product expression above can be confirmed by direct multiplication of $-i = -{\Be}_1{\Be}_2{\Be}_3$ with a determinant expansion of the wedge product
+
+\begin{align*}
+\Bu \wedge \Bv = \sum_{1<=i<j<=3}(u_i v_j - v_i u_j) {\Be}_i \wedge {\Be}_j
+= \sum_{1<=i<j<=3}(u_i v_j - v_i u_j) {\Be}_i {\Be}_j
+\end{align*}
+
+\EndArticle

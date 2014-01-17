@@ -1,0 +1,1159 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+
+% 
+% 
+%\input{../peeter_prologue.tex}
+
+%\chapter{Geometric Algebra equivalants for Pauli Matrices}
+\chapter{Pauli Matrices}
+\label{chap:pauliMatrix}
+% does not work with underscore.
+%%\blogpage{http://sites.google.com/site/peeterjoot/math/pauli_matrix.pdf}
+%\date{Dec 06, 2008.  pauliMatrix.tex}
+%\date{Dec 06, 2008}
+%%\revisionInfo{$RCSfile: pauliMatrix.tex,v $ Last $Revision: 1.29 $ $Date: 2009/08/01 22:12:18 $}
+
+\beginArtWithToc
+
+\section{Motivation}
+
+Having learned Geometric (Clifford) Algebra from (\citep{doran2003gap}), (\citep{hestenes1999nfc}), (\citep{dorst2007gac}), and other sources before studying any quantum mechanics, trying to work with (and talk to people familiar with) the Pauli and Dirac matrix notation as used in traditional quantum mechanics becomes difficult.
+
+The aim of these notes is to work through equivalents to many Clifford algebra expressions entirely in commutator and anticommutator notations.  This will show the mapping between the (generalized) dot product and the wedge product, and also show how the different grade elements of the Clifford algebra $\Clifford{3}{0}$ manifest in their matrix forms.
+
+\section{Pauli Matrices}
+
+The matrices in question are:
+
+\begin{align}
+\sigma_1 &= \PauliX \\
+\sigma_2 &= \PauliY \\
+\sigma_3 &= \PauliZ
+\end{align}
+
+These all have positive square as do the traditional Euclidean unit vectors $\Be_i$, and so can be used algebraically as a vector basis for \R{3}.  So any vector that we can write in coordinates
+
+
+\begin{align*}
+\Bx = x^i \Be_i,
+\end{align*}
+
+we can equivalently write (an isomorphism) in terms of the Pauli matrix's
+
+\begin{align}\label{eqn:pauliMat:vectorInPauliBasis}
+x = x^i \sigma_i.
+\end{align}
+
+\subsection{Pauli Vector}
+%Pauli Matrix article
+(\citep{wiki:pauli}) introduces the Pauli vector as a mechanism for mapping between a vector basis and this matrix basis
+
+\begin{align*}
+\Bsigma = \sum \sigma_i \Be_i
+\end{align*}
+
+This is a curious looking construct with products of $2 x 2$ matrices and \R{3} vectors.  Obviously these are not the usual $3 x 1$ column vector representations.  This Pauli vector is thus really a notational construct.  If one takes the dot product of a vector expressed using the standard orthonormal Euclidean basis $\{\Be_i\}$ basis, and then takes the dot product with the Pauli matrix in a mechanical fashion
+
+\begin{align*}
+\Bx \cdot \Bsigma &=
+(x^i \Be_i) \cdot \sum \sigma_j \Be_j \\
+&= \sum_{i,j} x^i \sigma_j \Be_i \cdot \Be_j \\
+&= x^i \sigma_i \\
+\end{align*}
+
+one arrives at the matrix representation of the vector in the Pauli basis $\{\sigma_i\}$.  Does this construct have any value?  That I do not know, but for the rest of these notes the coordinate representation as in equation (\eqnref{eqn:pauliMat:vectorInPauliBasis}) will be used directly.
+
+\subsection{Matrix squares}
+
+It was stated that the Pauli matrices have unit square.  Direct calculation of this is straightforward, and confirms the assertion
+
+\begin{align*}
+{\sigma_1}^2 &= \PauliX \PauliX = \PauliI = I \\
+{\sigma_2}^2 &= \PauliY \PauliY = i^2 \PauliYNoI \PauliYNoI = \PauliI = I \\
+{\sigma_3}^2 &= \PauliZ \PauliZ = \PauliI = I \\
+\end{align*}
+
+Note that unlike the vector (Clifford) square the identity matrix and not a scalar.
+
+\subsection{Length}
+If we are to operate with Pauli matrices how do we express our most basic vector operation, the length?
+
+Examining a vector lying along one direction, say, $\Ba = \alpha\xcap$ we expect
+
+\begin{align*}
+\Ba^2 = \Ba \cdot \Ba = \alpha^2 \xcap \cdot \xcap = \alpha^2.
+\end{align*}
+
+Lets contrast this to the Pauli square for the same vector $y = \alpha\sigma_1$
+
+\begin{align*}
+y^2 = \alpha^2 {\sigma_1}^2 = \alpha^2 I
+\end{align*}
+
+The wiki article mentions trace, but no application for it.  Since $\traceB{I} = 2$, an observable application is that the trace operator provides a mechanism to convert a diagonal matrix to a scalar.  In particular for this scaled unit vector $y$ we have
+
+\begin{align*}
+\alpha^2 = \inv{2} \traceB{y^2}
+\end{align*}
+
+It is plausible to guess that the squared length will be related to the matrix square in the general case as well
+
+\begin{align*}
+\Abs{x}^2 = \inv{2}\traceB{x^2}
+\end{align*}
+
+Let us see if this works by performing the coordinate expansion
+
+\begin{align*}
+x^2
+&= (x^i \sigma_i)(x^j \sigma_j) \\
+&= x^i x^j \sigma_i \sigma_j \\
+\end{align*}
+
+A split into equal and different indices thus leaves
+
+\begin{align}\label{eqn:pauliMat:square}
+x^2
+&= \sum_{i < j} x^i x^j (\sigma_i \sigma_j + \sigma_j \sigma_i) + \sum_i (x^i)^2 {\sigma_i}^2
+\end{align}
+
+As an algebra that is isomorphic to the Clifford Algebra $\Clifford{3}{0}$ it is expected that the $\sigma_i \sigma_j$ matrices anticommute for $i \ne j$.  Multiplying these out verifies this
+
+\begin{align*}
+\begin{array}{l l l l}
+\sigma_1 \sigma_2 &= i \PauliX \PauliYNoI    &= i \PauliZ                                  &=  i \sigma_3 \\
+\sigma_2 \sigma_1 &= i \PauliYNoI \PauliX    &= i \begin{bmatrix}-1 & 0 \\0 & 1\end{bmatrix} &= -i \sigma_3 \\
+\sigma_3 \sigma_1 &= \PauliZ \PauliX         &=   \begin{bmatrix}0 & 1 \\-1 & 0\end{bmatrix} &=  i \sigma_2 \\
+\sigma_1 \sigma_3 &= \PauliX \PauliZ         &=   \begin{bmatrix}0 & -1 \\1 & 0\end{bmatrix} &= -i \sigma_2 \\
+\sigma_2 \sigma_3 &= i \PauliYNoI \PauliZ    &= i \PauliX                                  &=  i \sigma_1 \\
+\sigma_3 \sigma_2 &= i \PauliZ \PauliYNoI    &= i \begin{bmatrix}0 & -1 \\-1 & 0\end{bmatrix} &= -i \sigma_3 \\
+\end{array}.
+\end{align*}
+
+Thus in (\eqnref{eqn:pauliMat:square}) the sum over the $\{i < j\} = \{12, 23, 13\}$ indices is zero.
+
+Having computed this, our vector square leaves us with the vector length multiplied by the identity matrix
+
+\begin{align*}
+x^2 = \sum_i (x^i)^2 I.
+\end{align*}
+
+Invoking the trace operator will therefore extract just the scalar length desired
+
+\begin{align}
+\Abs{x}^2 = \inv{2} \traceB{x^2} = \sum_i (x^i)^2.
+\end{align}
+
+\subsubsection{Aside: Summarizing the multiplication table}
+
+It is worth pointing out that the multiplication table above used to confirm the antisymmetric behavior of the Pauli basis can be summarized as
+
+\begin{align}
+\sigma_a \sigma_b = 2 i \epsilon_{abc} \sigma_c
+\end{align}
+
+\subsection{Scalar product}
+
+Having found the expression for the length of a vector in the Pauli basis, the next logical desirable identity is the dot product.  One can guess that this will be the trace of a scaled symmetric product, but can motivate this without guessing in the usual fashion, by calculating the length of an orthonormal sum.
+
+Consider first the length of a general vector sum.  To calculate this we first wish to calculate the matrix square of this sum.
+
+\begin{align*}
+(x + y)^2 &= x^2 + y^2 + x y + y x \\
+\end{align*}
+
+If these vectors are perpendicular this equals $x^2 + y^2$.  Thus orthonormality implies that
+\begin{align*}
+x y + y x &= 0 \\
+\end{align*}
+
+or,
+
+\begin{align}
+y x &= - x y
+\end{align}
+
+We have already observed this by direct calculation for the Pauli matrices themselves.  Now, this is not any different than the usual description of perpendicularity in a Clifford Algebra, and it is notable that there are not any references to matrices in this argument.  One only requires that a well defined vector product exists, where the squared vector has a length interpretation.
+
+One matrix dependent observation that can be made is that since the left hand side and the $x^2$, and $y^2$ terms are all diagonal, this symmetric sum must also be diagonal.  Additionally, for the length of this vector sum we then have
+
+\begin{align*}
+{\Abs{x + y}}^2
+%&= x^2 + y^2 + x y + y x \\
+&= \Abs{x}^2 + \Abs{y}^2 + \inv{2}\traceB{x y + y x} \\
+\end{align*}
+
+For correspondence with the Euclidean dot product of two vectors we must then have
+
+\begin{align}
+\scalarProduct{x}{y} &= \inv{4}\traceB{x y + y x}.
+\end{align}
+
+Here $x \bullet y$ has been used to denote this scalar product (ie: a plain old number), since $x \cdot y$ will be used later for a matrix dot product (this times the identity matrix) which is more natural in many ways for this Pauli algebra.
+
+Observe the symmetric product that is found embedded in this scalar selection operation.  In physics this is known as the anticommutator, where the commutator is the antisymmetric sum.  In the physics notation the anticommutator (symmetric sum) is
+
+\begin{align}\label{eqn:pauliMat:anticommutator}
+\symmetric{x}{y} &= x y + y x
+\end{align}
+
+So this scalar selection can be written
+
+\begin{align}
+\scalarProduct{ x}{ y} = \inv{4}\trace{\symmetric{x}{y}}
+\end{align}
+
+Similarly, the commutator, an antisymmetric product, is denoted:
+
+\begin{align}\label{eqn:pauliMat:commutator}
+\antisymmetric{x}{y} &= x y - y x,
+\end{align}
+
+A close relationship between this commutator and the wedge product of Clifford Algebra is expected.
+
+\subsection{Symmetric and antisymmetric split}
+
+As with the Clifford product, the symmetric and antisymmetric split of a vector product is a useful concept.  This can be used to write the product of two Pauli basis vectors in terms of the anticommutator and commutator products
+
+\begin{align}
+x y &= \inv{2} \symmetric{x}{y} + \inv{2} \antisymmetric{x}{y} \\
+y x &= \inv{2} \symmetric{x}{y} - \inv{2} \antisymmetric{x}{y}
+\end{align}
+
+These follows from the definition of the anticommutator (\eqnref{eqn:pauliMat:anticommutator}) and commutator (\eqnref{eqn:pauliMat:commutator}) products above, and are the equivalents of the Clifford symmetric and antisymmetric split into dot and wedge products
+
+\begin{align}
+x y &= {x} \cdot {y} + {x} \wedge {y} \\
+y x &= {x} \cdot {y} - {x} \wedge {y}
+\end{align}
+
+Where the dot and wedge products are respectively
+
+\begin{align*}
+x \cdot y &= \inv{2}(x y + y x) \\
+x \wedge y &= \inv{2}(x y - y x)
+\end{align*}
+
+Note the factor of two differences in the two algebraic notations.  In particular very handy Clifford vector product reversal formula
+
+\begin{align*}
+y x = - x y + 2 x \cdot y
+\end{align*}
+
+has no factor of two in its Pauli anticommutator equivalent
+
+\begin{align}
+y x = - x y + \symmetric{x}{y}
+\end{align}
+
+\subsection{Vector inverse}
+
+It has been observed that the square of a vector is diagonal in this matrix representation, and can therefore be inverted for any non-zero vector
+
+\begin{align*}
+x^2 &= \Abs{x}^2 I \\
+(x^2)^{-1} &= \Abs{x}^{-2} I \\
+\implies \\
+x^2 (x^2)^{-1} &= I \\
+\end{align*}
+
+So it is therefore quite justifiable to define
+\begin{align*}
+x^{-2} = \inv{x^2} \equiv \Abs{x}^{-2} I \\
+\end{align*}
+
+This allows for the construction of a dual sided vector inverse operation.
+
+\begin{align*}
+x^{-1}
+&\equiv \inv{\Abs{x}^2} x \\
+&= \inv{x^2} x \\
+&= x \inv{x^2} \\
+\end{align*}
+
+This inverse is a scaled version of the vector itself.
+
+The diagonality of the squared matrix or the inverse of that allows for commutation with x.  This diagonality plays the same role as the scalar in a regular Clifford square.  In either case the square can commute with the vector, and that commutation allows the inverse to have both left and right sided action.
+
+Note that like the Clifford vector inverse when the vector is multiplied with this inverse, the product resides outside of the proper \R{3} Pauli basis since the identity matrix is required.
+
+\subsection{Coordinate extraction}
+
+Given a vector in the Pauli basis, we can extract the coordinates using the scalar product
+
+\begin{align*}
+x = \sum_i \inv{4}\trace{\symmetric{x}{\sigma_i}} \sigma_i
+\end{align*}
+
+But do not need to convert to strict scalar form if we are multiplying by a Pauli matrix.  So in anticommutator notation this takes the form
+
+\begin{align}\label{eqn:pauliMat:fourier}
+x &= x^i \sigma_i = \sum_i \inv{2}\symmetric{x}{\sigma_i} \sigma_i \\
+x^i &= \inv{2}\symmetric{x}{\sigma_i}
+\end{align}
+
+\subsection{Projection and rejection}
+
+The usual Clifford algebra trick for projective and rejective split maps naturally to matrix form.  Write
+
+\begin{align*}
+x 
+&= x a a^{-1} \\
+&= (x a) a^{-1} \\
+&= \left( \inv{2}\symmetric{x}{a} + \inv{2}\antisymmetric{x}{a} \right) a^{-1} \\
+&= \left( \inv{2}\left(x a + a x \right) + \inv{2} \left(x a - a x \right) \right) a^{-1} \\
+&= \inv{2}\left(x + a x a^{-1} \right) + \inv{2} \left(x - a x a^{-1} \right) \\
+\end{align*}
+
+Since $\symmetric{x}{a}$ is diagonal, this first term is proportional to $a^{-1}$, and thus lines in the direction of $a$ itself.  The second term is perpendicular to $a$.
+
+These are in fact the projection of $x$ in the direction of $a$ and rejection of $x$ from the direction of $a$ respectively.
+
+\begin{align*}
+x &= x_\parallel + x_\perp \\
+x_\parallel &= \Proj_a(x) = \inv{2}\symmetric{x}{a}a^{-1} = \inv{2}\left(x + a x a^{-1} \right) \\
+x_\perp &= \RejName_a(x) = \inv{2} \antisymmetric{x}{a} a^{-1} = \inv{2} \left( x - a x a^{-1} \right) \\
+\end{align*}
+
+To complete the verification of this note that the perpendicularity of the $x_\perp$ term can be verified by taking dot products
+
+\begin{align*}
+\inv{2}\symmetric{a}{x_\perp} 
+&= \inv{4}\left( a \left(x - a x a^{-1} \right) +\left(x - a x a^{-1} \right) a \right) \\
+&= \inv{4}\left( a x - a a x a^{-1} + x a - a x a^{-1} a \right) \\
+&= \inv{4}\left( a x - x a + x a - a x \right) \\
+&= 0
+\end{align*}
+
+\subsection{Space of the vector product}
+
+Expansion of the anticommutator and commutator in coordinate form shows that these entities lie in a different space than the vectors itself.
+
+For real coordinate vectors in the Pauli basis, all the commutator values are imaginary multiples and thus not representable
+
+\begin{align*}
+\antisymmetric{x}{y} 
+&= x^a \sigma_a y^b \sigma_b - y^a \sigma_a x^b \sigma_b \\
+&= (x^a y^b - y^a x^b) \sigma_a \sigma_b \\
+&= 2 i (x^a y^b - y^a x^b) \epsilon_{a b c} \sigma_c
+\end{align*}
+
+Similarly, the anticommutator is diagonal, which also falls outside the Pauli vector basis:
+
+\begin{align*}
+\symmetric{x}{y} 
+&= x^a \sigma_a y^b \sigma_b + y^a \sigma_a x^b \sigma_b \\
+&= (x^a y^b + y^a x^b) \sigma_a \sigma_b \\
+&= (x^a y^b + y^a x^b) ( I \delta_{a b} + i \epsilon_{a b c} \sigma_c) \\
+&= \sum_a (x^a y^a + y^a x^a) I  
++\sum_{a<b}(x^a y^b + y^a x^b) i (\mathLabelBox{\epsilon_{a b c} + \epsilon_{b a c}}{$=0$}) \sigma_c \\
+&= \sum_a (x^a y^a + y^a x^a) I \\
+&= 2 \sum_a x^a y^a I,
+\end{align*}
+
+These correspond to the Clifford dot product being scalar (grade zero), and the wedge defining a grade two space, where grade expresses the minimal degree that a product can be reduced to.  By example a Clifford product of normal unit vectors such as
+
+\begin{align*}
+\Be_1 \Be_3 \Be_4 \Be_1 \Be_3 \Be_4 \Be_3 &\propto \Be_3 \\
+\Be_2 \Be_3 \Be_4 \Be_1 \Be_3 \Be_4 \Be_3 \Be_5 &\propto \Be_1 \Be_2 \Be_3 \Be_5
+\end{align*}
+
+are grade one and four respectively.  The proportionality constant will be dependent on metric of the underlying vector space and the number of permutations required to group terms in pairs of matching indices.
+
+\subsection{Completely antisymmetrized product of three vectors}
+
+In a Clifford algebra no imaginary number is required to express the antisymmetric (commutator) product.  However, the bivector space can be enumerated using a dual basis defined by multiplication of the vector basis elements with the unit volume trivector.  That is also the case here and gives a geometrical meaning to the imaginaries of the Pauli formulation.
+
+How do we even write the unit volume element in Pauli notation?  This would be
+
+\begin{align*}
+\sigma_1 \wedge \sigma_2 \wedge \sigma_3 
+&= (\sigma_1 \wedge \sigma_2) \wedge \sigma_3 \\
+&= \inv{2} \antisymmetric{\sigma_1}{\sigma_2} \wedge \sigma_3 \\
+&= \inv{4} \left( \antisymmetric{\sigma_1}{\sigma_2} \sigma_3 + \sigma_3 \antisymmetric{\sigma_1}{\sigma_2} \right) \\
+\end{align*}
+
+So we have
+\begin{align}\label{eqn:pauliMat:triplewedgeproduct}
+\sigma_1 \wedge \sigma_2 \wedge \sigma_3 
+&= \inv{8} \symmetricBladeVecPauli{\sigma_1}{\sigma_2}{\sigma_3}
+\end{align}
+
+Similar expansion of $\sigma_1 \wedge \sigma_2 \wedge \sigma_3 = \sigma_1 \wedge (\sigma_2 \wedge \sigma_3)$, or $\sigma_1 \wedge \sigma_2 \wedge \sigma_3 = (\sigma_3 \wedge \sigma_1) \wedge \sigma_2$ shows that we must also have
+
+\begin{align}
+\symmetricBladeVecPauli{\sigma_1}{\sigma_2}{\sigma_3}
+= \symmetricVecBladePauli{\sigma_1}{\sigma_2}{\sigma_3}
+= \symmetricBladeVecPauli{\sigma_3}{\sigma_1}{\sigma_2}
+\end{align}
+
+Until now the differences in notation between the anticommutator/commutator and the dot/wedge product of the Pauli algebra and Clifford algebra respectively have only differed by factors of two, which is not much of a big deal.  However, having to express the naturally associative wedge product operation in the non-associative looking notation of equation (\eqnref{eqn:pauliMat:triplewedgeproduct}) is rather unpleasant seeming.  Looking at an expression of the form gives no mnemonic hint of the underlying associativity, and actually seems obfuscating.  I suppose that one could get used to it though.
+
+We expect to get a three by three determinant out of the trivector product.  Let us verify this by expanding this in Pauli notation for three general coordinate vectors
+
+\begin{align*}
+\symmetricBladeVecPauli{x}{y}{z} 
+&= \symmetricBladeVecPauli{x^a \sigma_a}{y^b \sigma_b}{ z^c \sigma_c} \\
+&= 2 i \epsilon_{a b d} x^a y^b z^c \symmetric{\sigma_d}{\sigma_c} \\
+&= 4 i \epsilon_{a b d} x^a y^b z^c \delta_{c d} I \\
+&= 4 i \epsilon_{a b c} x^a y^b z^c I \\
+&= 4 i 
+%\DETuvwijk{x}{y}{z}{a}{b}{c}
+\begin{vmatrix}
+ x_a & x_b & x_c \\
+ y_a & y_b & y_c \\
+ z_a & z_b & z_c
+\end{vmatrix} I
+\end{align*}
+
+In particular, our unit volume element is 
+
+\begin{align}
+\sigma_1 \wedge \sigma_2 \wedge \sigma_3 
+&= \inv{4} \symmetricBladeVecPauli{\sigma_1}{\sigma_2}{\sigma_3} = i I
+\end{align}
+
+So one sees that the complex number $i$ in the Pauli algebra can logically be replaced by the unit pseudoscalar $i I$, and relations involving $i$, like the commutator expansion of a vector product, is restored to the expected dual form of Clifford algebra
+
+\begin{align*}
+\sigma_a \wedge \sigma_b 
+&= \inv{2} \antisymmetric{\sigma_a}{\sigma_b} \\
+&= i \epsilon_{a b c} \sigma_c \\
+&= (\sigma_a \wedge \sigma_b \wedge \sigma_c) \sigma_c \\
+\end{align*}
+
+Or
+\begin{align}\label{eqn:pauliMat:dualBivector}
+\sigma_a \wedge \sigma_b &= (\sigma_a \wedge \sigma_b \wedge \sigma_c) \cdot \sigma_c
+\end{align}
+
+\subsection{Duality}
+
+We have seen that multiplication by $i$ is a duality operation, which is expected since $iI$ is the matrix equivalent of the unit pseudoscalar.  Logically this means that for a vector $x$, the product $(iI) x$ represents a plane quantity (torque, angular velocity/momentum, ...).  Similarly if $B$ is a plane object, then $(iI) B$ will have a vector interpretation.   
+
+In particular, for the antisymmetric (commutator) part of the vector product $x y$
+
+\begin{align*}
+\inv{2} \antisymmetric{x}{y}
+&= \inv{2} x^a y^b \antisymmetric{\sigma_a}{\sigma_b} \\
+&= x^a y^b i \epsilon_{a b c}{\sigma_c} \\
+\end{align*}
+
+a ``vector'' in the dual space spanned by $\{i \sigma_a\}$ is seen to be more naturally interpreted as a plane quantity (bivector in Clifford algebra).
+
+As in Clifford algebra, we can write the cross product in terms of the antisymmetric product
+
+\begin{align*}
+a \times b = \inv{2i} \antisymmetric{a}{b}.
+\end{align*}
+
+With the factor of $2$ in the denominator here (like the exponential form of sine), it is interesting
+to contrast this to the cross product in its trigonometric form
+
+\begin{align*}
+a \times b 
+&= \Abs{a}\Abs{b} \sin(\theta) \ncap \\
+&= \Abs{a}\Abs{b} \inv{2i} ( e^{i\theta} - e^{-i\theta}) \ncap
+\end{align*}
+
+This shows we can make the curious identity
+
+\begin{align*}
+\antisymmetric{\ahat}{\bhat} &= ( e^{i\theta} - e^{-i\theta}) \ncap
+\end{align*}
+
+If one did not already know about the dual sides half angle rotation formulation of Clifford algebra, this is a hint about how one could potentially work towards that.  We have the commutator (or wedge product) as a rotation operator that leaves the normal component of a vector untouched (commutes with the normal vector).
+
+\subsection{Complete algebraic space}
+
+Pauli equivalents for all the elements in the Clifford algebra have now been
+determined.
+
+\begin{itemize}
+\item scalar
+\begin{align*}
+\alpha \rightarrow \alpha I
+\end{align*}
+
+\item vector
+\begin{align*}
+u^i \sigma_i &\rightarrow 
+\begin{bmatrix}
+0 & u^1 \\
+u^1 & 0 \\
+\end{bmatrix}
++
+\begin{bmatrix}
+0 & -i u^2 \\
+i u^2 & 0 \\
+\end{bmatrix}
++
+\begin{bmatrix}
+u^3 & 0 \\
+0 & -u^3 \\
+\end{bmatrix} \\
+&=
+\begin{bmatrix}
+u^3 & u^1 -i u^2 \\
+u^1 + i u^2 & -u^3 \\
+\end{bmatrix}
+\end{align*}
+
+\item bivector
+\begin{align*}
+\sigma_1\sigma_2\sigma_3 v^a \sigma_a &\rightarrow i v^a \sigma_a \\
+&= \begin{bmatrix}
+iv^3 & iv^1 + v^2 \\
+iv^1 - v^2 & -i v^3 \\
+\end{bmatrix}
+\end{align*}
+\item pseudoscalar
+\begin{align*}
+\beta \sigma_1\sigma_2\sigma_3 \rightarrow i \beta I
+\end{align*}
+\end{itemize}
+
+Summing these we have the mapping from Clifford basis to Pauli matrix as follows
+
+\begin{align*}
+\alpha + \beta I
++ u^i \sigma_i
++ I v^a \sigma_a 
+&\rightarrow 
+\begin{bmatrix}
+(\alpha + u^3) + i(\beta + v^3) & (u^1 + v^2) +i (-u^2 + v^1) \\
+(u^1 - v^2) + i (u^2 - v^1) & (\alpha -u^3) + i(\beta - v^3)\\
+\end{bmatrix}
+\end{align*}
+
+Thus for any given sum of scalar, vector, bivector, and trivector elements we can completely express this in Pauli form as a general $2 x 2$ complex matrix.
+
+Provided that one can also extract the coordinates for each of the grades involved, this also provides a complete Clifford algebra characterization of an arbitrary complex $2 x 2$ matrix.
+
+Computationally this has some nice looking advantages.  Given any canned complex matrix software, one should be able to easily cook up with little work a working \R{3} Clifford calculator.
+
+As for the coordinate extraction, part of the work can be done by taking real and imaginary components.  Let an element of the general algebra be denoted
+
+\begin{align*}
+P = 
+\begin{bmatrix}
+z_{11} & z_{12} \\
+z_{21} & z_{22} \\
+\end{bmatrix}
+\end{align*}
+
+We therefore have
+\begin{align*}
+\Re(P) &=
+\begin{bmatrix}
+\alpha + u^3   & u^1 + v^2 \\
+u^1 - v^2      & \alpha -u^3 \\
+\end{bmatrix} \\
+\Im(P) &=
+\begin{bmatrix}
+\beta + v^3 & -u^2 + v^1 \\
+u^2 + v^1 & \beta - v^3 \\
+\end{bmatrix}
+\end{align*}
+
+By inspection, symmetric and antisymmetric sums of the real and imaginary parts recovers the coordinates as follows
+
+\begin{align*}
+\alpha   &= \inv{2} \Re( z_{11} + z_{22} ) \\
+u^3      &= \inv{2} \Re( z_{11} - z_{22} ) \\
+u^1      &= \inv{2} \Re( z_{12} + z_{21} ) \\
+v^2      &= \inv{2} \Re( z_{12} - z_{21} ) \\
+\beta    &= \inv{2} \Im( z_{11} + z_{22} ) \\
+v^3      &= \inv{2} \Im( z_{11} - z_{22} ) \\
+v^1      &= \inv{2} \Im( z_{12} + z_{21} ) \\
+u^2      &= \inv{2} \Im( -z_{12} + z_{21} ) \\
+\end{align*}
+
+In terms of grade selection operations the decomposition by grade
+
+\begin{align*}
+P = \gpgradezero{P} +\gpgradeone{P} +\gpgradetwo{P} +\gpgradethree{P},
+\end{align*}
+
+is
+
+\begin{align*}
+\gpgradezero{P} &= \inv{2} \Re( z_{11} + z_{22} ) = \inv{2} \Re(\trace P) \\
+\gpgradeone{P} &= \inv{2} \left(
+\Re( z_{12} + z_{21} ) \sigma_1
++\Im( -z_{12} + z_{21} ) \sigma_2
++\Re( z_{11} - z_{22} ) \sigma_3
+\right) \\
+\gpgradetwo{P}
+%&= \inv{2} \left(
+%\Im( z_{12} + z_{21} ) I \sigma_1
+%+\Re( z_{12} - z_{21} ) I \sigma_2
+%+\Im( z_{11} - z_{22} ) I \sigma_3
+%\right) \\
+&= \inv{2} \left(
+\Im( z_{12} + z_{21} ) \sigma_2 \wedge \sigma_3
++\Re( z_{12} - z_{21} ) \sigma_3 \wedge \sigma_1
++\Im( z_{11} - z_{22} ) \sigma_1 \wedge \sigma_2
+\right) \\
+\gpgradethree{P} &= \inv{2} \Im( z_{11} + z_{22} ) I = \inv{2} \Im(\trace P) \sigma_1 \wedge \sigma_2 \wedge \sigma_3
+\end{align*}
+
+Employing $\Im(z) = \Re(-iz)$, and $\Re(z) = \Im(iz)$ this can be made slightly more symmetrical, with Real operations selecting the vector coordinates and imaginary operations selecting the bivector coordinates.
+
+\begin{align*}
+\gpgradezero{P} &= \inv{2} \Re( z_{11} + z_{22} ) = \inv{2} \Re(\trace P) \\
+\gpgradeone{P} &= \inv{2} \left(
+\Re( z_{12} + z_{21} ) \sigma_1
++\Re( iz_{12} - iz_{21} ) \sigma_2
++\Re( z_{11} - z_{22} ) \sigma_3
+\right) \\
+\gpgradetwo{P}
+&= \inv{2} \left(
+\Im( z_{12} + z_{21} ) \sigma_2 \wedge \sigma_3
++\Im( iz_{12} - iz_{21} ) \sigma_3 \wedge \sigma_1
++\Im( z_{11} - z_{22} ) \sigma_1 \wedge \sigma_2
+\right) \\
+\gpgradethree{P} &= \inv{2} \Im( z_{11} + z_{22} ) I = \inv{2} \Im(\trace P) \sigma_1 \wedge \sigma_2 \wedge \sigma_3
+\end{align*}
+
+Finally, returning to the Pauli algebra, this also provides the following split of the Pauli multivector matrix into its geometrically significant components $P = \gpgradezero{P} +\gpgradeone{P} +\gpgradetwo{P} +\gpgradethree{P}$,
+
+\begin{align*}
+\gpgradezero{P} &= \inv{2} \Re( z_{11} + z_{22} ) I \\
+\gpgradeone{P} &= \inv{2} \left(
+\Re( z_{12} + z_{21} ) \sigma_1
++\Re( iz_{12} - iz_{21} ) \sigma_2
++\Re( z_{11} - z_{22} ) \sigma_3
+\right) \\
+\gpgradetwo{P}
+&= \inv{2} \left(
+\Im( z_{12} + z_{21} ) i\sigma_1
++\Im( iz_{12} - iz_{21} ) i\sigma_2
++\Im( z_{11} - z_{22} ) i\sigma_k
+\right) \\
+\gpgradethree{P} &= \inv{2} \Im( z_{11} + z_{22} ) iI 
+\end{align*}
+
+\subsection{Reverse operation}
+
+The reversal operation switches the order of the product of perpendicular vectors.  This will change the sign of grade two and three terms in the Pauli algebra.  Since $\sigma_2$ is imaginary, conjugation does not have the desired effect, but Hermitian conjugation (conjugate transpose) does the trick.
+
+Since the reverse operation can be written as Hermitian conjugation, one can also define the anticommutator and commutator in terms of reversion in a way that seems particularly natural for complex matrices.  That is
+
+\begin{align}
+\symmetric{a}{b} &= ab + (ab)^\conj \\
+\antisymmetric{a}{b} &= ab - (ab)^\conj \\
+\end{align}
+
+\subsection{Rotations}
+
+Rotations take the normal Clifford, dual sided quaterionic form.  A rotation about a unit normal $n$ will be
+
+\begin{align*}
+R(x) = e^{-i n \theta/2} x e^{i n \theta/2}
+\end{align*}
+
+The Rotor $R = e^{-i n \theta/2}$ commutes with any component of the vector x that is parallel to the normal (perpendicular to the plane), whereas it anticommutes with the components
+in the plane.  Writing the vector components perpendicular and parallel to the plane respectively as $x = x_\perp + x_\parallel$, the essence of the rotation action is this selective commutation or anti-commutation behavior
+
+\begin{align*}
+R x_\parallel R^\conj &= x_\parallel R^\conj \\
+R x_\perp R^\conj &= x_\perp R R^\conj = x_\perp
+\end{align*}
+
+Here the exponential has the obvious meaning in terms of exponential series, so for this bivector case we have
+
+\begin{align*}
+\exp(i\ncap\theta/2) &= \cos(\theta/2) I + i\ncap \sin(\theta/2)
+\end{align*}
+
+The unit bivector $B = i\ncap$ can also be defined explicitly in terms of two vectors $a$, and $b$ in the plane
+
+\begin{align*}
+B = \inv{\Abs{\antisymmetric{a}{b}}} \antisymmetric{a}{b}
+\end{align*}
+
+Where the bivector length is defined in terms of the conjugate square (bivector times bivector reverse)
+
+\begin{align*}
+\Abs{\antisymmetric{a}{b}}^2 = \antisymmetric{a}{b} {\antisymmetric{a}{b}}^\conj
+\end{align*}
+
+Examples to complete this subsection would make sense.  As one of the most powerful and useful operations in the algebra, it is a shame in terms of completeness to skimp on this.  However, except for some minor differences like substitution of the Hermitian conjugate operation for reversal, the use of the identity matrix $I$ in place of the scalar in the exponential expansion, the treatment is exactly the same as in the Clifford algebra.
+
+\subsection{Grade selection}
+
+Coordinate equations for grade selection were worked out above, but the observation that reversion and Hermitian conjugation are isomorphic operations can partially clean this up.  In particular a Hermitian conjugate symmetrization and anti-symmetrization of the general matrix provides a nice split into quaternion and dual quaternion parts (say $P = Q + R$ respectively).  That is
+
+\begin{align*}
+Q &= \gpgradezero{P} + \gpgradeone{P} = \inv{2}(P + P^\conj) \\
+R &= \gpgradetwo{P} + \gpgradethree{P} = \inv{2}(P - P^\conj)
+\end{align*}
+
+Now, having done that, how to determine $\gpgradezero{Q}$, $\gpgradeone{Q}$, $\gpgradetwo{R}$, and $\gpgradethree{R}$ becomes the next question.  Once that is done, the individual coordinates can be picked off easily enough.  For the vector parts, a Fourier decomposition as in equation (\eqnref{eqn:pauliMat:fourier}) will retrieve the desired coordinates.
+
+The dual vector coordinates can be picked off easily enough taking dot products with the dual basis vectors
+
+\begin{align}\label{eqn:pauliMat:dualfourier}
+B &= B^k i \sigma_k = \sum_k \inv{2}\symmetric{B}{\inv{i \sigma_k}} i\sigma_k \\
+B^k &= \inv{2}\symmetric{B}{\inv{i\sigma_k}}
+\end{align}
+
+For the quaternion part $Q$ the aim is to figure out how to isolate or subtract out the scalar part.  This is the only tricky bit because the diagonal bits are all mixed up with the $\sigma_3$ term which is also real, and diagonal.  Consideration of the sum
+
+\begin{align*}
+a I + b \sigma_3 = 
+\begin{bmatrix}
+a + b & 0 \\
+0 & a - b \\
+\end{bmatrix},
+\end{align*}
+
+shows that trace will recover the value $2a$, so we have
+
+\begin{align*}
+\gpgradezero{Q} &= \inv{2}\traceB{Q} I \\
+\gpgradeone{Q} &= Q - \inv{2}\traceB{Q} I.
+\end{align*}
+
+Next is isolation of the pseudoscalar part of the dual quaternion $R$.  As with the scalar part, consideration of the sum of the $i\sigma_3$ term and the $iI$ term is required
+
+\begin{align*}
+ia I + ib \sigma_3 = 
+\begin{bmatrix}
+ia + ib & 0 \\
+0 & ia - ib \\
+\end{bmatrix},
+\end{align*}
+
+So the trace of the dual quaternion provides the $2a$, leaving the bivector and pseudoscalar grade split
+
+\begin{align*}
+\gpgradethree{R} &= \inv{2}\traceB{R} I \\
+\gpgradetwo{R} &= R - \inv{2}\traceB{R} I.
+\end{align*}
+
+A final assembly of these results provides the following coordinate free grade selection operators
+
+\begin{align}
+\gpgradezero{P} &= \inv{4}\traceB{P + P^\conj} I \\
+\gpgradeone{P} &= \inv{2} (P + P^\conj) - \inv{4}\traceB{P + P^\conj} I \\
+\gpgradetwo{P} &= \inv{2} (P - P^\conj) - \inv{4}\traceB{P - P^\conj} I \\
+\gpgradethree{P} &= \inv{4}\traceB{P - P^\conj} I
+\end{align}
+
+\subsection{Generalized dot products}
+
+Here the equivalent of the generalized Clifford bivector/vector dot product will be computed, as well as the associated distribution equation
+
+\begin{align*}
+( a \wedge b ) \cdot c &= a (b \cdot c) - b (a \cdot c)
+\end{align*}
+
+To translate this write
+
+\begin{align}\label{eqn:pauliMat:cliffordBivectorVectorDot}
+( a \wedge b ) \cdot c &= \inv{2} \left( (a \wedge b) c - c (a \wedge b) \right)
+\end{align}
+
+Then with the identifications
+
+\begin{align*}
+a \cdot b &\equiv \inv{2} \symmetric{a}{b} \\
+a \wedge b &\equiv \inv{2} \antisymmetric{a}{b}
+\end{align*}
+
+we have
+
+\begin{align*}
+( a \wedge b ) \cdot c 
+&\equiv \inv{4} \antisymmetric{\antisymmetric{a}{b}}{c}  \\
+&= \inv{2} \left( a \symmetric{b}{c} - \symmetric{b}{c} a \right)
+\end{align*}
+
+From this we also get the strictly Pauli algebra identity
+
+\begin{align*}
+\antisymmetric{\antisymmetric{a}{b}}{c} &= {2} \left( a \symmetric{b}{c} - \symmetric{b}{c} a \right)
+\end{align*}
+
+But the geometric meaning of this is unfortunately somewhat obfuscated by the notation.
+
+\subsection{Generalized dot and wedge product}
+
+The fundamental definitions of dot and wedge products are in terms of grade
+
+\begin{align}
+\gpgrade{A}{r} \cdot \gpgrade{B}{s} = \gpgrade{AB}{{\Abs{r-s}}}
+\end{align}
+\begin{align}
+\gpgrade{A}{r} \wedge \gpgrade{B}{s} = \gpgrade{AB}{{r+s}}
+\end{align}
+
+Use of the trace and Hermitian conjugate split grade selection operations above, we can calculate these for each of the four grades in the Pauli algebra.
+
+\subsubsection{Grade zero}
+
+There are three dot products consider, vector/vector, bivector/bivector, and trivector/trivector.  In each case we want to compute
+
+\begin{align*}
+A \cdot B &= \gpgradezero{ A}{ B} \\
+&= \inv{4}\traceB{ AB + (AB)^\conj} I \\
+&= \inv{4}\traceB{ AB + B^\conj A^\conj} I
+\end{align*}
+
+For vectors we have $a^\conj = a$, since the Pauli basis is Hermitian, whereas for bivectors and trivectors we have $a^\conj = -a$.  Therefore, in all cases where $A$, and $B$ have equal grades we have
+
+\begin{align*}
+A \cdot B &= \gpgradezero{A}{B} I \\
+&= \inv{4}\traceB{ AB + B A} I \\
+&= \inv{4}\trace{\symmetric{ A}{ B}} I
+\end{align*}
+
+\subsubsection{Grade one}
+
+We have two dot products that produce vectors, bivector/vector, and trivector/bivector, and in each case we need to compute
+
+\begin{align*}
+\gpgradeone{ A B} &= \inv{2}( AB + (AB)^\conj ) -\inv{4}\traceB{ AB + (AB)^\conj }
+\end{align*}
+
+For the bivector/vector dot product we have
+
+\begin{align*}
+(Ba)^\conj = -a B
+\end{align*}
+
+For bivector $B = i b^k \sigma_k$, and vector $a = a^k \sigma_k$ our symmetric Hermitian sum in coordinates is
+
+\begin{align*}
+B a + (Ba)^\conj 
+&= B a - a B \\
+&= i b^k \sigma_k a^m \sigma_m - a^m \sigma_m i b^k \sigma_k \\
+\end{align*}
+
+Any $m=k$ terms will vanish, leaving only the bivector terms, which are traceless.  We therefore have
+
+\begin{align*}
+B \cdot a &= \gpgradeone{ B a} \\
+&= \inv{2}( B a - a B ) \\
+&= \inv{2} \antisymmetric{B}{a}.
+\end{align*}
+
+This result was borrowed without motivation from Clifford algebra in equation (\eqnref{eqn:pauliMat:cliffordBivectorVectorDot}), and thus not satisfactory in terms of a logically derived sequence.
+
+For a trivector $T$ dotted with bivector $B$ we have
+
+\begin{align*}
+(BT)^\conj = (-T)(-B) = TB = BT.
+\end{align*}
+
+This is also traceless, and the trivector/bivector dot product is therefore reduced to just
+
+\begin{align*}
+B \cdot T &= \gpgradeone{ B T} \\
+&= \inv{2} \symmetric{B}{T} \\
+&= {B}{T} \\
+&= T B.
+\end{align*}
+
+This is the duality relationship for bivectors.  Multiplication by the unit pseudoscalar (or any multiple of it), produces a vector, the dual of the original bivector.
+
+\subsubsection{Grade two}
+
+We have two products that produce a grade two term, the vector wedge product, and the vector/trivector dot product.  For either case we must compute
+
+\begin{align}\label{eqn:pauliMat:gradeTwo}
+\gpgradetwo{ A B} &= \inv{2}( AB - (AB)^\conj ) -\inv{4}\traceB{ AB - (AB)^\conj }
+\end{align}
+
+For a vector $a$, and trivector $T$ we need the antisymmetric Hermitian sum 
+
+\begin{align*}
+a T - (a T)^\conj &= a T + T a = 2 a T = 2 T a
+\end{align*}
+
+This is a pure bivector, and thus traceless, leaving just
+
+\begin{align}
+a \cdot T  &= \gpgradetwo{ a T} \\
+&= a T \\
+&= T a
+\end{align}
+
+Again we have the duality relation, pseudoscalar multiplication with a vector produces a bivector, and is equivalent to the dot product of the two.
+
+Now for the wedge product case, with vector $a = a^m \sigma_m$, and $b = b^k \sigma_k$ we must compute 
+
+\begin{align*}
+a b - (a b)^\conj
+&= a b - b a \\
+&= a^m \sigma_m b^k \sigma_k - b^k \sigma_k a^m \sigma_m
+\end{align*}
+
+All the $m = n$ terms vanish, leaving a pure bivector which is traceless, so only the first term of (\eqnref{eqn:pauliMat:gradeTwo}) is relevant, and is in this case a commutator
+
+\begin{align}
+a \wedge b  &= \gpgradetwo{ a b} \\
+&= \inv{2} \antisymmetric{ a}{b} 
+\end{align}
+
+\subsubsection{Grade three}
+
+There are two ways we can produce a grade three term in the algebra.  One is a wedge of a vector with a bivector, and the other is the wedge product of three vectors.  The triple wedge product is the grade three term of the product of the three
+
+\begin{align*}
+a \wedge b \wedge c
+&= \gpgradethree{ a b c} \\
+&= \inv{4} \traceB{ a b c - (a b c)^\conj} \\
+&= \inv{4} \traceB{ a b c - c b a} \\
+\end{align*}
+
+With a split of the $bc$ and $cb$ terms into symmetric and antisymmetric terms we have
+
+\begin{align*}
+a b c - c b a 
+&=
+ \inv{2} (a \symmetric{b}{c} - \symmetric{c}{b} a)
++\inv{2} (a \antisymmetric{b}{c} - \antisymmetric{c}{b} a)
+\end{align*}
+
+The symmetric term is diagonal so it commutes (equivalent to scalar commutation with a vector in Clifford algebra), and this therefore vanishes.  Writing $B = b \wedge c = \inv{2}\antisymmetric{b}{c}$, and noting that $\antisymmetric{b}{c} = -\antisymmetric{c}{b}$ we therefore have
+
+\begin{align*}
+a \wedge B
+&= \gpgradethree{ a B} \\
+&= \inv{4} \traceB{ a B + B a} \\
+&= \inv{4} \trace{ \symmetric{a}{B}} \\
+\end{align*}
+
+In terms of the original three vectors this is
+
+\begin{align*}
+a \wedge b \wedge c 
+&= \gpgradethree{ a B} \\
+&= \inv{8} \trace{ \symmetricVecBladePauli{a}{b}{c}}.
+%&= \inv{8} \trace{ \symmetricVecBladePauli{a}{b}{c}}.
+\end{align*}
+
+Since this could have been expanded by grouping $ab$ instead of $bc$ we also have
+
+\begin{align*}
+a \wedge b \wedge c 
+&= \inv{8} \trace{ \symmetricBladeVecPauli{a}{b}{c}}.
+\end{align*}
+%symmetricBladeVecPauli
+
+\subsection{Plane projection and rejection}
+
+Projection of a vector onto a plane follows like the vector projection case.  In the Pauli notation this is
+
+\begin{align*}
+x
+&= x B \inv{B} \\
+&= \inv{2} \symmetric{x}{B} \inv{B} + \inv{2} \antisymmetric{x}{B} \inv{B} \\
+\end{align*}
+
+Here the plane is a bivector, so if vectors $a$, and $b$ are in the plane, the orientation and attitude can be represented
+by the commutator
+
+%\newcommand{\symmetricVecBladePauli}[3]{\left\{{#1},\left[{#2},{#3}\right]\right\}}
+
+So we have
+\begin{align*}
+x 
+%&= \inv{2} \symmetricVecBladePauli{x}{a}{b} \inv{\antisymmetric{a}{b}} + \inv{2} \antisymmetric{x}{\antisymmetric{a}{b}} \inv{\antisymmetric{a}{b}} \\
+&= \inv{2} \symmetricVecBladePauli{x}{a}{b} \inv{\antisymmetric{a}{b}} + \inv{2} \antisymmetric{x}{\antisymmetric{a}{b}} \inv{\antisymmetric{a}{b}} \\
+\end{align*}
+
+Of these the second term is our projection onto the plane, while the first is the normal component of the vector.
+
+\section{Examples}
+
+\subsection{Radial decomposition}
+
+\subsubsection{Velocity and momentum}
+
+A decomposition of velocity into radial and perpendicular components should be straightforward in the Pauli algebra as it is in the Clifford algebra.
+
+With a radially expressed position vector
+
+\begin{align*}
+x = \Abs{x} \xhat,
+\end{align*}
+
+velocity can be written by taking derivatives
+\begin{align*}
+v = x' = \Abs{x}' \xhat + \Abs{x} \xhat'
+\end{align*}
+
+or as above in the projection calculation with
+\begin{align*}
+v
+&= v \inv{x} x \\
+&= \inv{2}\symmetric{v}{\inv{x}} x + \inv{2}\antisymmetric{v}{\inv{x}} x \\
+&= \inv{2}\symmetric{v}{\xhat} \xhat + \inv{2}\antisymmetric{v}{\xhat} \xhat
+\end{align*}
+
+By comparison we have
+
+\begin{align*}
+\Abs{x}' &= \inv{2}\symmetric{v}{\xhat} \\
+\xhat' &= \inv{2 \Abs{x}} \antisymmetric{v}{\xhat} \xhat
+\end{align*}
+
+In assembled form we have
+
+\begin{align*}
+v &= \inv{2}\symmetric{v}{\xhat} \xhat + x \omega \\
+\end{align*}
+
+Here the commutator has been identified with the angular velocity bivector $\omega$
+
+\begin{align*}
+\omega &= \inv{2 x^2}\antisymmetric{x}{v}.
+\end{align*}
+
+Similarly, the linear and angular momentum split of a momentum vector is
+
+\begin{align*}
+p_\parallel &= \inv{2}\symmetric{p}{\xhat} \xhat \\
+p_\perp &= \inv{2}\antisymmetric{p}{\xhat} \xhat
+\end{align*}
+
+and in vector form
+
+\begin{align*}
+p &= \inv{2}\symmetric{p}{\xhat} \xhat + m x \omega \\
+\end{align*}
+
+Writing $J = m x^2$ for the moment of inertia we have for our commutator
+
+\begin{align*}
+L = \inv{2}\antisymmetric{x}{p} = m x^2 \omega = J \omega
+\end{align*}
+
+With the identification of the commutator with the angular momentum bivector $L$ we have the total momentum as
+
+\begin{align*}
+p &= \inv{2}\symmetric{p}{\xhat} \xhat + \inv{x} L \\
+\end{align*}
+
+\subsubsection{Acceleration and force}
+
+Having computed velocity, and its radial split, the next logical thing to try is acceleration.
+
+The acceleration will be
+
+\begin{align*}
+a = v' = \Abs{x}'' \xhat + 2 \Abs{x}' \xhat' + \Abs{x} \xhat''
+\end{align*}
+
+We need to compute $\xhat''$ to continue, which is
+
+\begin{align*}
+\xhat''
+&= \left(\frac{1}{2 \Abs{x}^3} \antisymmetric{v}{x} x \right)' \\
+&= 
+\frac{-3}{2 \Abs{x}^4} \Abs{x}' \antisymmetric{v}{x} x 
++ \frac{1}{2 \Abs{x}^3} \antisymmetric{a}{x} x 
++ \frac{1}{2 \Abs{x}^3} \antisymmetric{v}{x} v \\
+&= 
+\frac{-3}{4 \Abs{x}^5} \symmetric{v}{x} \antisymmetric{v}{x} x 
++ \frac{1}{2 \Abs{x}^3} \antisymmetric{a}{x} x 
++ \frac{1}{2 \Abs{x}^3} \antisymmetric{v}{x} v
+\end{align*}
+
+Putting things back together is a bit messy, but starting so gives
+
+\begin{align*}
+a 
+&= \Abs{x}'' \xhat + 2 
+%\Abs{x}'
+%\xhat'
+\inv{4 \Abs{x}^4} \symmetric{v}{x} \antisymmetric{v}{x} x
+% + \Abs{x} \xhat''
++\frac{-3}{4 \Abs{x}^4} \symmetric{v}{x} \antisymmetric{v}{x} x 
++ \frac{1}{2 \Abs{x}^2} \antisymmetric{a}{x} x 
++ \frac{1}{2 \Abs{x}^2} \antisymmetric{v}{x} v \\
+&= 
+  \Abs{x}'' \xhat 
+- \frac{1}{4 \Abs{x}^4} \symmetric{v}{x} \antisymmetric{v}{x} x 
++ \frac{1}{2 \Abs{x}^2} \antisymmetric{a}{x} x 
++ \frac{1}{2 \Abs{x}^2} \antisymmetric{v}{x} v \\
+&= 
+  \Abs{x}'' \xhat 
++ \inv{4 \Abs{x}^4} \antisymmetric{v}{x} \left( -\symmetric{v}{x} x + 2 x^2 v \right)
++ \frac{1}{2 \Abs{x}^2} \antisymmetric{a}{x} x 
+\end{align*}
+
+The anticommutator can be eliminated above using
+
+\begin{align*}
+v x &= \inv{2} \symmetric{v}{x} + \inv{2}\antisymmetric{v}{x} \\
+\implies \\
+-\symmetric{v}{x} x + 2 x^2 v 
+&= -(2 v x - \antisymmetric{v}{x}) x + 2 x^2 v \\
+&= \antisymmetric{v}{x} x 
+\end{align*}
+
+Finally reassembly of the assembly is thus
+
+\begin{align*}
+a 
+&= \Abs{x}'' \xhat 
++ \inv{4 \Abs{x}^4} \antisymmetric{v}{x}^2 x
++ \frac{1}{2 \Abs{x}^2} \antisymmetric{a}{x} x \\
+&= \Abs{x}'' \xhat 
++ \omega^2 x
++ \frac{1}{2} \antisymmetric{a}{x} \inv{x} \\
+\end{align*}
+
+The second term is the inwards facing radially directed acceleration, while the last is the rejective component of the acceleration.
+
+It is usual to express this last term as the rate of change of angular momentum (torque).  Because $\antisymmetric{v}{v} = 0$, we have
+
+\begin{align*}
+\frac{d \antisymmetric{x}{v}}{dt} = \antisymmetric{x}{a}
+\end{align*}
+
+So, for constant mass, we can write the torque as
+
+\begin{align*}
+\tau
+&= \frac{d}{dt} \left( \inv{2} \antisymmetric{x}{p} \right) \\
+&= \frac{dL}{dt}
+\end{align*}
+
+and finally have for the force
+
+\begin{align*}
+F 
+&= m \Abs{x}'' \xhat + m \omega^2 x + \inv{x} \frac{dL}{dt} \\
+&= m \left(\Abs{x}'' - \frac{\Abs{\omega^2}}{\Abs{x}} \right) \xhat + \inv{x} \frac{dL}{dt}
+\end{align*}
+
+\section{Conclusion}
+
+Although many of the GA references that can be found downplay the Pauli algebra as unnecessarily employing matrices as a basis, I believe this shows that there are some nice computational and logical niceties in the complete formulation of the \R{3} Clifford algebra in this complex matrix formulation.  If nothing else it takes some of the abstraction away, which is good for developing intuition.  All of the generalized dot and wedge product relationships are easily derived showing specific examples of the general pattern for the dot and blade product equations which are sometimes supplied as definitions instead of consequences.
+
+Also, the matrix concepts (if presented right which I likely have not done) should also be accessible to most anybody out of high school these days since both matrix algebra and complex numbers are covered as basics these days (at least that is how I recall it from fifteen years back;)
+
+Hopefully, having gone through the exercise of examining all the equivalent constructions will be useful in subsequent Quantum physics study to see how the matrix algebra that is used in that subject is tied to the classical geometrical vector constructions.  
+
+Expressions that were scary and mysterious looking like
+
+\begin{align*}
+\antisymmetric{L_x}{L_y} = i \Hbar L_z
+\end{align*}
+
+are no longer so bad since some of the geometric meaning that backs this operator expression is now clear (this is a quantization of angular momentum in a specific plane, and encodes the plane orientation as well as the magnitude).  Knowing that $\antisymmetric{a}{b}$ was an antisymmetric sum, but not realizing the connection between that and the wedge product previously made me wonder ``where the hell did the i come from''?
+
+This commutator equation is logically and geometrically a plane operation.  It can therefore be expressed with a vector duality relationship employing the \R{3} unit pseudoscalar $iI = \sigma_1 \sigma_2 \sigma_3$.  This is a good nice step towards taking some of the mystery out of the math behind the physics of the subject (which has enough intrinsic mystery without the mathematical language adding to it).  
+
+It is unfortunate that QM uses this matrix operator formulation and none of classical physics does.  By the time one gets to QM learning an entirely new language is required despite the fact that there are many powerful applications of this algebra in the classical domain, not just for rotations which is recognized (in (\citep{goldstein1951cm}) for example where he uses the Pauli algebra to express his rotation quaternions.)
+
+%\EndArticle

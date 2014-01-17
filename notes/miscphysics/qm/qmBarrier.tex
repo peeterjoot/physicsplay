@@ -1,0 +1,1058 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+
+% 
+% 
+%\documentclass{article}
+
+%\input{../peeters_macros.tex}
+%\input{../peeters_macros2.tex}
+
+%\usepackage{listings}
+%\usepackage{txfonts} % for ointctr... (also appears to make "prettier" \int and \sum's)
+% makes \grad look funny though (almost like spacegrad, but narrower)
+%\usepackage[bookmarks=true]{hyperref}
+
+%\usepackage{color,cite,graphicx}
+   % use colour in the document, put your citations as [1-4]
+   % rather than [1,2,3,4] (it looks nicer, and the extended LaTeX2e
+   % graphics package. 
+%\usepackage{latexsym,amssymb,epsf} % do not remember if these are
+   % needed, but their inclusion can not do any damage
+
+
+\chapter{One dimensional rectangular Quantum barrier penetration problem}
+\label{chap:qmBarrier}
+%\author{Peeter Joot \quad peeter.joot@gmail.com }
+\date{ May 11, 2009.  qmBarrier.tex }
+
+%\begin{document}
+
+%\maketitle{}
+%\tableofcontents
+\section{Motivation}
+
+My first attempt at the probability current calculation for this
+while doing the chapter 11 problems of \citep{bohm1989qt} led to (algebraic) trouble.
+
+Here is a new try from scratch.
+
+There is very little physics here, just a lot of algebra, but let us try
+to get all this algebra correct this time.
+
+\section{Wave functions.  Find the coefficients}
+
+The potential is taken to be zero everywhere except $x \in [0,a]$, where it is
+$V$.  This divides the problem into three regions, I, II, and III, for 
+before ($x<0$), in and after the barrier, and the wave functions for the 
+$E <V$ case are respectively
+
+\begin{equation}
+\psi =
+\left\{
+\begin{array}{l l}
+A e^{i k x} + B e^{-i k x} & \quad \mbox{if $x <0$} \\
+C e^{ \beta(x-a)} + D e^{ -\beta(x-a)} & \quad \mbox{if $x \in [0,a]$} \\
+E_0 e^{i k(x-a)} & \quad \mbox{if $x >0$} \\
+\end{array}
+\right.
+\end{equation}
+
+Following \citep{mcmahon2005qmd} the wave functions have been written in terms of wave number 
+$k = \sqrt{2 m E_0}/\Hbar$, and $\beta = \sqrt{2 m (V-E_0)}/\Hbar$.  Unfortunately the 
+\citep{mcmahon2005qmd} has too many typos to attempt to follow directly.
+
+Unlike Bohm or QMD wave functions expressed using functions of $x-a$ are used here since a first
+attempt at solution indicated this would be natural.
+
+\subsection{Equality at \texorpdfstring{$x=a$}{x = a}}
+
+Equality of the wave functions and derivatives at $x=a$ gives
+
+\begin{align*}
+C + D &= E \\
+C - D &= \frac{i k}{\beta}E
+\end{align*}
+
+which has solutions
+
+\begin{align*}
+C &= \frac{E}{2}( 1 + i k/\beta ) \\
+D &= \frac{E}{2}( 1 - i k/\beta )
+\end{align*}
+
+Two of the free variables of the wave equation are now eliminated, and the wave function in the barrier region can now be written as
+\begin{align}\label{eqn:qm_barrier:psiInBarrier}
+\psi =
+\frac{E}{2}\left( \left( 1 + \frac{i k}{\beta} \right) e^{ \beta(x-a)} + \left( 1 - \frac{i k}{\beta} \right) e^{ -\beta(x-a)} \right)
+\end{align}
+
+\subsection{Equality at \texorpdfstring{$x=0$}{x equal zero}}
+
+Equating values and first derivatives at $x=0$ we have
+
+\begin{align*}
+A + B &=
+\frac{E}{2}\left( \left( 1 + \frac{i k}{\beta} \right) e^{ -\beta a} + \left( 1 - \frac{i k}{\beta} \right) e^{ \beta a } \right) \\
+A - B &=
+\frac{\beta E}{2 i k}\left( \left( 1 + \frac{i k}{\beta} \right) e^{ -\beta a} - \left( 1 - \frac{i k}{\beta} \right) e^{ \beta a } \right)
+\end{align*}
+
+Taking sums and differences we have
+
+\begin{align*}
+A &= \frac{E}{4}\left( \left(1 + \frac{\beta}{ik}\right)\left( 1 + \frac{i k}{\beta} \right) e^{ -\beta a} + \left(1 - \frac{\beta}{ik}\right)\left( 1 - \frac{i k}{\beta} \right) e^{ \beta a } \right) \\
+B &= \frac{E}{4}\left( \left(1 - \frac{\beta}{ik}\right)\left( 1 + \frac{i k}{\beta} \right) e^{ -\beta a} + \left(1 + \frac{\beta}{ik}\right)\left( 1 - \frac{i k}{\beta} \right) e^{ \beta a } \right) \\
+\end{align*}
+
+Expanding the products first for $B$
+
+\begin{align*}
+B 
+&= \frac{E}{4}\left( \left(\frac{-\beta}{ik} + \frac{ik}{\beta} \right) e^{ -\beta a} + \left(\frac{\beta}{ik} - \frac{ik}{\beta} \right) e^{ \beta a } \right) \\
+&= \frac{iE}{4}\left( \left(\frac{\beta}{k} + \frac{k}{\beta} \right) e^{ -\beta a} - \left(\frac{\beta}{k} + \frac{k}{\beta} \right) e^{ \beta a } \right) \\
+&= \frac{iE}{4}\left(\frac{\beta}{k} + \frac{k}{\beta} \right) \left( e^{ -\beta a} - e^{ \beta a } \right) \\
+&= \frac{-iE}{2}\left(\frac{\beta}{k} + \frac{k}{\beta} \right) \sinh\left( \beta a \right) \\
+\end{align*}
+
+Now for $A$ we have
+\begin{align*}
+A &= \frac{E}{4}\left( \left(2 + \frac{\beta}{ik} + \frac{ik}{\beta} \right) e^{ -\beta a} + \left(2 - \frac{\beta}{ik} - \frac{ik}{\beta} \right) e^{ \beta a } \right) \\
+\end{align*}
+
+The factor of exponentials are complex conjugates and can be put into polar form to simplify.  Writing
+
+\begin{align*}
+\gamma 
+&= 2 + \frac{\beta}{ik} + \frac{ik}{\beta} \\
+&= 2 + i \left( \frac{k}{\beta} -\frac{\beta}{k} \right) \\
+&= \mu e^{i \theta} 
+\end{align*}
+
+Where 
+
+\begin{align}\label{eqn:qm_barrier:muAndTheta}
+\mu^2 &= 4 + \left( \frac{k}{\beta} -\frac{\beta}{k} \right)^2 \\
+\theta &= \Atan\left( \inv{2} \left(\frac{k}{\beta} - \frac{\beta}{k} \right) \right)
+\end{align}
+
+We have
+
+\begin{align*}
+A 
+&= \frac{\mu E}{4}\left( e^{ i\theta -\beta a} + e^{ -(i \theta - \beta a) } \right) \\
+&= \frac{\mu E}{2}\cosh\left( i\theta -\beta a \right) \\
+\end{align*}
+
+For notational consistency it looks desirable to write something like
+
+\begin{align}\label{eqn:qm_barrier:nuDefined}
+\nu &= -i \left(\frac{\beta}{k} + \frac{k}{\beta} \right) 
+\end{align}
+
+Which leaves us with the wave function in the $x<0$ region as
+\begin{align}\label{eqn:qm_barrier:incidentAndReflected}
+\psi &=
+\frac{\mu E}{2}\cosh\left( i\theta -\beta a \right) e^{ i k x }
++\frac{\nu E}{2}\sinh\left( \beta a \right) e^{ -i k x }
+\end{align}
+
+Observed later (after trying to sum the transmission and reflection coefficients) is the fact that we can actually write
+
+\begin{align*}
+\mu^2 = \Abs{\nu}^2
+\end{align*}
+
+So an additional simplification of this wave function is possible.
+
+\begin{align}\label{eqn:qm_barrier:incidentAndReflectedSimplified}
+\psi &=
+\frac{E}{2} \left(\frac{\beta}{k} + \frac{k}{\beta} \right) 
+\left(
+\cosh\left( i\theta -\beta a \right) e^{ i k x }
+-i \sinh\left( \beta a \right) e^{ -i k x }
+\right)
+\end{align}
+
+\subsection{(Aside) Barrier wave function in polar form}
+
+Having seen how the polar form simplifies the final expression of the first region wave function, it can be seen that 
+something similar can be done in the barrier region.  
+
+In \eqnref{eqn:qm_barrier:psiInBarrier}, we can utilize polar form for the $1+ik/\beta$ constant and its conjugate.  Writing
+
+\begin{align}
+\tan\phi &= \frac{k}{\beta} = \sqrt{\frac{E_0}{V-E_0}}
+\end{align}
+
+we then have
+\begin{align*}
+\psi 
+&=
+\frac{E}{2}\sqrt{1 + \frac{k^2}{\beta^2}} \left( e^{i\phi} e^{ \beta(x-a)} + e^{-i\phi} e^{ -\beta(x-a)} \right) \\
+&=
+\frac{E}{2}\sqrt{\frac{V}{V-E_0}} \left( e^{i\phi} e^{ \beta(x-a)} + e^{-i\phi} e^{ -\beta(x-a)} \right) \\
+\end{align*}
+
+So we have in the $x \in [0,a]$ region
+\begin{align}\label{eqn:qm_barrier:inBarrierCosh}
+\psi &= E \sqrt{1 + \frac{k^2}{\beta^2}} \cosh\left( i\phi + \beta(x-a) \right) 
+\end{align}
+
+Or in terms of energies
+\begin{align}
+\psi &= E 
+\sqrt{\frac{V}{V-E_0}}
+\cosh\left( i\phi + \beta(x-a) \right) 
+\end{align}
+
+Utilizing 
+\eqnref{eqn:qm_barrier:inBarrierCosh}
+should produce the same result for $x<0$.  Equality at $x=0$ then gives
+
+\begin{align*}
+A + B &= E \sqrt{1 + \frac{k^2}{\beta^2}} \cosh\left( i\phi -\beta a \right) \\
+A - B &= E \frac{i\beta}{k} \sqrt{1 + \frac{k^2}{\beta^2}} \sinh\left( i\phi -\beta a \right) \\
+\end{align*}
+
+Or
+
+\begin{align*}
+A &= \frac{E}{2} \sqrt{1 + \frac{k^2}{\beta^2}} \left(
+\cosh\left( i\phi -\beta a \right) + \frac{i\beta}{k} \sinh\left( i\phi -\beta a \right) 
+\right) \\
+B &= \frac{E}{2} \sqrt{1 + \frac{k^2}{\beta^2}} \left(
+\cosh\left( i\phi -\beta a \right) - \frac{i\beta}{k} \sinh\left( i\phi -\beta a \right) 
+\right) \\
+\end{align*}
+
+This produces values for both $A$, $B$ very directly, but this 
+form of solution in the $x<0$ region begs for some additional reduction.  Let us
+defer trying that until after the $T$, and $R$ computations.
+
+\section{Probability currents and densities}
+
+\subsection{Probability densities}
+
+\subsubsection{Barrier region probability density}
+
+Using \eqnref{eqn:qm_barrier:inBarrierCosh} we have for the barrier region
+
+\begin{align*}
+\rho 
+&= \psi\psi^\conj \\
+&= \Abs{E}^2 
+\left(1 + \frac{k^2}{\beta^2}\right) \Abs{\cosh\left( i\phi + \beta(x-a) \right) }^2
+\end{align*}
+
+Utilizing the identities \eqnref{eqn:qm_barrier:coshSquared} \eqnref{eqn:qm_barrier:sinhSquared} \eqnref{eqn:qm_barrier:cosineTwiceArcTan}, we have
+
+\begin{align*}
+\rho 
+&= \inv{2} \Abs{E}^2 
+\left(1 + \frac{k^2}{\beta^2}\right) \left( \cosh( 2 \beta(x-a)) + \cos(2\phi) \right) \\
+&= \inv{2} \Abs{E}^2 
+\left(1 + \frac{k^2}{\beta^2}\right) \left( (2 \sinh^2( \beta(x-a)) + 1) + \frac{1 - k^2/\beta^2}{1 + k^2/\beta^2}\right) \\
+&= \inv{2} \Abs{E}^2 \left(
+\left(1 + \frac{k^2}{\beta^2}\right) (2 \sinh^2( \beta(x-a)) + 1) + 1 - \frac{k^2}{\beta^2} \right) \\
+\end{align*}
+
+This is
+\begin{align}\label{eqn:qm_barrier:pDensityInBarrier}
+\rho
+&= \Abs{E}^2 
+\left( 1 + \left(1 + \frac{k^2}{\beta^2}\right) \sinh^2( \beta(x-a)) \right) 
+\end{align}
+
+Or
+
+\begin{align}
+\rho
+&= \Abs{E}^2 
+\left( 1 + \frac{V}{V-E_0} \sinh^2( \beta(x-a)) \right) 
+\end{align}
+
+In particular observe that at $x=a$ we have $\rho = \Abs{E^2}$ the expected probability density for the entirety 
+of the $x>a$ transmission region.
+
+\subsubsection{Total probability density in the incident region}
+
+To calculate the current in the potential free region $x<0$, write for short
+
+\begin{align}\label{eqn:qm_barrier:forShort}
+\psi 
+&= u e^{ik x} + v e^{-ik x} = u \epsilon + v \epsilon^\conj
+\end{align}
+
+The probability density is
+
+\begin{align*}
+\rho 
+&=
+(u^\conj \epsilon^\conj + v^\conj \epsilon)
+(u \epsilon + v \epsilon^\conj) \\
+&= 
+\Abs{u}^2 + \Abs{v}^2 + 
+u^\conj v (\epsilon^\conj)^2 
++
+v^\conj u \epsilon^2 \\
+&=
+\Abs{u}^2 + \Abs{v}^2 + 
++ 2 \Re(v^\conj u \epsilon^2) \\
+\end{align*}
+
+Putting back in the factors from 
+\eqnref{eqn:qm_barrier:incidentAndReflectedSimplified}
+we have
+
+\begin{align*}
+\rho
+&=
+\frac{\Abs{E}^2}{4}
+\left(
+\frac{\beta}{k}
++\frac{k}{\beta}
+\right)^2 
+\left(
+\Abs{\cosh\left( i\theta -\beta a \right)}^2
++\sinh^2\left( \beta a \right) 
++ 2 \Re\left( i \sinh(\beta a) \cosh(i\theta - \beta a) e^{2 i k x} \right)
+\right)
+\end{align*}
+
+Now this can likely be reduced further without too much trouble but doing so does not seem terribly interesting.
+
+\subsection{Probability current densities}
+
+\subsubsection{Current densities outside of the barrier region}
+
+We want to calculate the probability currents in each of the regions, taking the $x$ components of the vector 
+probability current
+
+\begin{align}
+\BJ
+&=
+\frac{\Hbar}{2 m i}
+\left(
+\psi^\conj \grad \psi
+-\psi \grad \psi^\conj
+\right)
+\end{align}
+
+In the $x<0$ region we can calculate the incident, reflected, and the total currents.  For the incident current we have
+
+\begin{align*}
+J_i
+&= \frac{\Hbar}{2mi}\left( A^\conj e^{-i k x} (ik)A e^{i k x} -Ae^{i k x} (-ik)A^\conj e^{-i k x} \right) \\
+\end{align*}
+
+which reduces to just
+\begin{align}
+J_i &= \frac{\Hbar k \Abs{A}^2 }{m}
+\end{align}
+
+by comparison we then also have for the reflected and transmitted currents, respectively
+
+\begin{align}
+J_r &= \frac{\Hbar k \Abs{B}^2 }{m} \\
+J_t &= \frac{\Hbar k \Abs{E}^2 }{m}
+\end{align}
+
+That leaves only the current in the barrier region.
+
+\subsubsection{Current densities in the barrier region}
+
+Starting from \eqnref{eqn:qm_barrier:psiInBarrier}, writing $a = 1 + ik/\beta$, and $b=e^{\beta(x-a)}$ we have
+
+\begin{align*}
+\psi &= \frac{E}{2} (a b + a^\conj/b)
+\end{align*}
+
+For the current we then have
+
+\begin{align*}
+\inv{\beta}&\left(\psi^\conj \psi' - \psi (\psi^\conj)' \right) \\
+&=
+\frac{\Abs{E}^2}{4}
+\left(
+(a^\conj b + a/b) (a b - a^\conj/b)
+-(a b + a^\conj/b) (a^\conj b - a/b)
+\right) \\
+&=
+\frac{\Abs{E}^2}{2} \left(a^2 - (a^\conj)^2 \right) \\
+&=
+\frac{\Abs{E}^2}{2} \left( 
+(1 + ik/\beta)^2
+-(1 - ik/\beta)^2
+ \right) \\
+&=
+\Abs{E}^2 \frac{2ik}{\beta}
+\end{align*}
+
+So we have in the barrier
+
+\begin{align*}
+J_b 
+&=
+\frac{\Hbar k \Abs{E}^2 }{m}
+\end{align*}
+
+So despite the probability density itself varying with position once into and past the barrier, the current density itself
+retains this
+constant value.
+
+\subsubsection{Total current density in the incident region}
+
+As above for the density using the shorthand of \eqnref{eqn:qm_barrier:forShort}, the total current is
+
+\begin{align*}
+J &=
+\frac{\Hbar}{2mi}\left(
+(u^\conj \epsilon^\conj + v^\conj \epsilon)
+(i k )
+(u \epsilon - v \epsilon^\conj)
+-
+(u \epsilon + v \epsilon^\conj)
+(i k )
+(-u^\conj \epsilon^\conj + v^\conj \epsilon) 
+\right)
+\\
+&=
+\frac{\Hbar k}{m}\left( \Abs{u}^2 - \Abs{v}^2 \right)
+\end{align*}
+
+Putting back in the factors from 
+\eqnref{eqn:qm_barrier:incidentAndReflectedSimplified}
+we have
+
+\begin{align*}
+J &=
+\frac{\Hbar k}{m}\left( \Abs{u}^2 - \Abs{v}^2 \right)
+\end{align*}
+
+\begin{align*}
+J
+&=
+\frac{\Hbar k}{m}
+\frac{\Abs{E}^2}{4} \left(\frac{\beta}{k} + \frac{k}{\beta} \right)^2
+\left(
+\Abs{\cosh\left( i\theta -\beta a \right) }^2
+- \sinh^2\left( \beta a \right) 
+\right) \\
+&=
+\frac{\Hbar k}{m}
+\frac{\Abs{E}^2}{4} \left(\frac{\beta}{k} + \frac{k}{\beta} \right)^2
+%(cosh 2u)/2 = sinh^2 u + 1/2
+\left(
+\inv{2}\cosh(2\beta a) + \inv{2}\cos(2\theta) 
+- \sinh^2( \beta a ) 
+\right) \\
+&=
+\frac{\Hbar k}{m}
+\frac{\Abs{E}^2}{8} \left(\frac{\beta}{k} + \frac{k}{\beta} \right)^2
+\left(
+1 + \cos(2\theta) 
+\right) \\
+&=
+\frac{\Hbar k}{m}
+\frac{\Abs{E}^2}{8} \left(\frac{\beta}{k} + \frac{k}{\beta} \right)^2
+\left(
+1 + \frac{1 - \inv{4} \left(\frac{k}{\beta} - \frac{\beta}{k} \right)^2}{1 + \inv{4} \left(\frac{k}{\beta} - \frac{\beta}{k} \right)^2}
+\right) \\
+&=
+\frac{\Hbar k}{m}
+\frac{\Abs{E}^2}{8} 
+\left(
+\left(\frac{\beta}{k} + \frac{k}{\beta} \right)^2
++ 
+4 - \left(\frac{k}{\beta} - \frac{\beta}{k} \right)^2
+\right) \\
+&=
+\frac{\Hbar k}{m} \Abs{E}^2
+\end{align*}
+
+So we have 
+
+\begin{align}
+J = \frac{\Hbar k}{m} \Abs{E}^2 = J_b = J_t
+\end{align}
+
+The total probability current density equals the barrier probability current density and also the transmitted probability current density.  For
+this problem, with steady state flow we have conservation of total probability current density in all regions despite the fact that the probability 
+density itself varies both in the region and before it.
+
+\subsection{Transmission and reflection coefficients}
+
+\subsubsection{Transmission coefficient}
+
+From \eqnref{eqn:qm_barrier:incidentAndReflected} we can calculate the transmission
+coefficient
+
+\begin{align*}
+T 
+&= \Abs{\frac{J_t}{J_i}} \\
+&= \frac{\Abs{E}^2}{\Abs{A}^2} \\
+&= \Abs{\frac{2  } { \mu \cosh\left( i\theta -\beta a \right) }}^2 \\
+&= \frac{4} { 
+\left(4 + \left( \frac{k}{\beta} -\frac{\beta}{k} \right)^2 \right)
+\Abs{\cosh\left( i\theta -\beta a \right)}^2 }
+\end{align*}
+
+Utilizing \eqnref{eqn:qm_barrier:coshSquared}
+puts us a bit closer to a fully reduced expression for $T$
+
+\begin{align*}
+T 
+&= \frac{8} { 
+\left(4 + \left( \frac{k}{\beta} -\frac{\beta}{k} \right)^2 \right)
+\left( \cosh(2\beta a) + \cos(2\theta) \right)
+}
+\end{align*}
+
+To eliminate the $\theta$ we use \eqnref{eqn:qm_barrier:cosineTwiceArcTan}
+with $\alpha = ({k}/{\beta} - {\beta}/{k} )/2$, for
+
+\begin{align*}
+\cos(2\theta) 
+&= 
+\frac{ 1 - \left(\inv{2} \left(\frac{k}{\beta} - \frac{\beta}{k} \right)\right)^2 }
+{1 + \left(\inv{2} \left(\frac{k}{\beta} - \frac{\beta}{k} \right)\right)^2}
+\end{align*}
+
+So, finally we have
+
+\begin{align}\label{eqn:qm_barrier:Tcoeff1}
+T 
+&= \frac{8} { 
+\left(4 + \left( \frac{k}{\beta} -\frac{\beta}{k} \right)^2 \right)
+\cosh(2\beta a)
++ 
+4 - \left(\frac{k}{\beta} - \frac{\beta}{k} \right)^2 
+}
+\end{align}
+
+\subsubsection{Reflection coefficient}
+
+The reflection coefficient is
+\begin{align*}
+R 
+&= \Abs{\frac{J_r}{J_i}} \\
+&= \frac{\Abs{B}^2}{\Abs{A}^2} \\
+&= 
+\Abs{\frac{\nu \sinh\left( \beta a \right) }
+{\mu \cosh\left( i\theta -\beta a \right) }}^2 \\
+&= \frac{2 \Abs{\nu}^2 \sinh^2( \beta a)} { 
+\left(4 + \left( \frac{k}{\beta} -\frac{\beta}{k} \right)^2 \right)
+\cosh(2\beta a)
++ 
+4 - \left(\frac{k}{\beta} - \frac{\beta}{k} \right)^2 
+}
+\end{align*}
+
+So we have
+\begin{align}\label{eqn:qm_barrier:Rcoeff1}
+R 
+&= \frac{2 
+\left(\frac{\beta}{k} + \frac{k}{\beta} \right)^2 
+\sinh^2( \beta a)} { 
+\left(4 + \left( \frac{k}{\beta} -\frac{\beta}{k} \right)^2 \right)
+\cosh(2\beta a)
++ 
+4 - \left(\frac{k}{\beta} - \frac{\beta}{k} \right)^2 
+}
+\end{align}
+
+\subsubsection{Summing the Transmission and Reflection coefficients}
+
+The expectation is for the 
+sum of the Transmission and Reflection coefficients to be unity.
+
+Employing \eqnref{eqn:qm_barrier:sinhSquared} we have
+
+\begin{align*}
+T + R 
+&= \frac{8 + 2 
+\left(\frac{\beta}{k} + \frac{k}{\beta} \right)^2 
+%\sinh^2( \beta a)
+\inv{2} \left( \cosh(2 \beta a) -1 \right) 
+} { 
+\left(4 + \left( \frac{k}{\beta} -\frac{\beta}{k} \right)^2 \right)
+\cosh(2\beta a)
++ 
+4 - \left(\frac{k}{\beta} - \frac{\beta}{k} \right)^2 
+} \\
+&= \frac{ 
+\left(\frac{\beta}{k} + \frac{k}{\beta} \right)^2 
+\cosh(2 \beta a) + 8 - \left(\frac{\beta}{k} + \frac{k}{\beta} \right)^2 
+} { 
+\left(4 + \left( \frac{k}{\beta} -\frac{\beta}{k} \right)^2 \right)
+\cosh(2\beta a)
++ 
+4 - \left(\frac{k}{\beta} - \frac{\beta}{k} \right)^2 
+} \\
+\end{align*}
+
+Expanding out each of these four $\beta$, and $k$ terms and comparing shows that
+we indeed have $T + R = 1$.  This also shows that we can write the denominator for both of
+these 
+in a 
+slightly tidier form
+
+\begin{align*}
+&\left(4 + \left( \frac{k}{\beta} -\frac{\beta}{k} \right)^2 \right)
+\cosh(2\beta a)
++ 
+4 - \left(\frac{k}{\beta} - \frac{\beta}{k} \right)^2  \\
+&=
+\left( \frac{k}{\beta} +\frac{\beta}{k} \right)^2 
+\cosh(2\beta a)
++ 
+4 - \left(\frac{k}{\beta} - \frac{\beta}{k} \right)^2  \\
+&=
+\left( \frac{k}{\beta} +\frac{\beta}{k} \right)^2 
+\cosh(2\beta a)
++ 
+8 - \left(\frac{k}{\beta} + \frac{\beta}{k} \right)^2  \\
+&=
+\left( \frac{k}{\beta} +\frac{\beta}{k} \right)^2 
+%\cosh(2\beta a)
+\left( 2 \sinh^2(a \beta) + 1\right)
++ 
+8 - \left(\frac{k}{\beta} + \frac{\beta}{k} \right)^2  \\
+&=
+2 \left( \frac{k}{\beta} +\frac{\beta}{k} \right)^2 
+\sinh^2(a \beta) + 8 \\
+\end{align*}
+
+So finally from \eqnref{eqn:qm_barrier:Tcoeff1} and \eqnref{eqn:qm_barrier:Rcoeff1} we have
+\begin{align}
+T 
+&= \frac{4} { 
+\left( \frac{k}{\beta} +\frac{\beta}{k} \right)^2 
+\sinh^2(a \beta) + 4
+}
+\end{align}
+
+\begin{align}
+R 
+&= \frac{ 
+\left(\frac{\beta}{k} + \frac{k}{\beta} \right)^2 
+\sinh^2( \beta a)} { 
+\left( \frac{k}{\beta} +\frac{\beta}{k} \right)^2 
+\sinh^2(a \beta) + 4 
+}
+\end{align}
+
+In this form demonstrating that $T + R=1$ becomes trivial!
+
+The last desirable substitution to make is to express the $k$, and $\beta$ quotients in terms of $E_0$ and $V$.  This is
+
+\begin{align*}
+\left(\frac{k}{\beta} + \frac{\beta}{k}\right)^2
+&=
+\left(\sqrt{\frac{2mE}{2m(V-E_0)}} + \sqrt{\frac{2m(V-E_0)}{2mE}}\right)^2 \\
+&=
+\frac{E_0}{V-E_0} + \frac{V-E_0}{E_0} + 2 \\
+&=
+\frac{E_0^2 + (V-E_0)^2}{E_0(V-E_0)} + 2 \\
+&=
+\frac{2 E_0^2 + -2 E_0 V + V^2 }{E_0(V-E_0)} + 2 \\
+&=
+\frac{2 E_0 V -2 E_0^2 + 2 E_0^2 + -2 E_0 V + V^2 }{E_0(V-E_0)} \\
+&=
+\frac{V^2 }{E_0(V-E_0)} \\
+\end{align*}
+
+So, after masses and masses of algebra we have a result that is consistent with that of
+\href{http://en.wikipedia.org/wiki/Potential_barrier}{the wiki tunneling article}
+
+\begin{align}
+T 
+&= \frac{1} { \frac{V^2}{4E(V-E_0)} \sinh^2(a \beta) + 1 }
+\end{align}
+
+\begin{align}
+R 
+&= \frac{1} { \frac{4V(V-E_0)}{V^2 \sinh^2(a \beta)} + 1 }
+\end{align}
+
+\section{Appendix.  Messy trig stuff, and rough notes}
+
+\subsection{Complex \texorpdfstring{$\cosh$}{cosh} absolute square expansion}
+
+Expanding the $\cosh$ term we have
+
+\begin{align*}
+\Abs{\cosh\left( i\theta -\beta a \right)}^2
+&=
+\inv{4}
+\left(
+e^{i\theta - \beta a}
++ e^{-i\theta + \beta a}
+\right)
+\left(
+e^{-i\theta - \beta a}
++ e^{i\theta + \beta a}
+\right) \\
+&=
+\inv{4}\left(
+e^{2\beta a}
++ e^{-2\beta a}
++e^{2i\theta }
++e^{-2i\theta }
+\right) \\
+\end{align*}
+
+So we have
+\begin{align}\label{eqn:qm_barrier:coshSquared}
+\Abs{\cosh\left( i\theta -\beta a \right)}^2
+&=\inv{2}
+\left( \cosh(2\beta a) + \cos(2\theta) \right)
+\end{align}
+
+\subsection{Cosine of twice arctan}
+
+\begin{align*}
+\cos(2\Atan(\alpha)) 
+&= 
+2 \cos^2\left( \Atan(\alpha) \right) -1 \\
+\end{align*}
+
+Now let $\Atan(\alpha) = u$.  So we have
+
+\begin{align*}
+\alpha^2 
+&=
+\tan^2(u)  \\
+&=
+\frac{\sin^2(u)}{\cos^2(u)} \\
+&=
+\frac{1 -\cos^2(u)}{\cos^2(u)} \\
+\end{align*}
+
+Or
+\begin{align*}
+\cos^2(u) \alpha^2 &= 1 - \cos^2(u) \\
+\implies
+\cos^2(u) (\alpha^2 +1 ) &= 1 \\
+\end{align*}
+
+For 
+\begin{align*}
+\cos(2\Atan(\alpha)) 
+&= 
+2 \cos^2( u ) -1 \\
+&= 
+2 \inv{1 + \alpha^2} -1 \\
+\end{align*}
+
+\begin{align}\label{eqn:qm_barrier:cosineTwiceArcTan}
+\cos(2\Atan(\alpha)) 
+&= 
+\frac{1 - \alpha^2}{1 + \alpha^2}
+\end{align}
+
+\subsection{Hyperbolic sine squared}
+
+\begin{align*}
+\sinh^2(u) 
+&=
+\inv{4} (e^u - e^{-u}) (e^u - e^{-u}) \\
+&=
+\inv{4} \left(e^{2u} + e^{-2u} -2 \right) \\
+\end{align*}
+
+\begin{align}\label{eqn:qm_barrier:sinhSquared}
+\sinh^2(u) 
+&=
+\inv{2} \left( \cosh(2u) -1 \right) 
+\end{align}
+
+\subsection{Verify correctness of barrier solution}
+
+If we want to verify that \eqnref{eqn:qm_barrier:inBarrierCosh} 
+does still match both value and derivative to the $x>a$ wave function
+showing both of the following is required
+
+\begin{align*}
+1 &= \sqrt{1 + \frac{k^2}{\beta^2}} \cos\left( \Atan(k/\beta) \right) \\
+ik &=
+\sqrt{1 + \frac{k^2}{\beta^2}} \beta \sinh\left( i \Atan(k/\beta) \right)
+\end{align*}
+
+This last is
+\begin{align*}
+k/\beta &=
+\sqrt{1 + \frac{k^2}{\beta^2}} \sin\left( \Atan(k/\beta) \right)
+\end{align*}
+
+But these are just the identities
+
+\begin{align*}
+\sin\left( \Atan(u) \right) &= \frac{u}{\sqrt{1 + u^2}} \\
+\cos\left( \Atan(u) \right) &= \frac{1}{\sqrt{1 + u^2}}
+\end{align*}
+
+\subsection{Consistency check.  Current densities in the barrier region}
+
+Initially attempted to calculate the barrier current density using
+using \eqnref{eqn:qm_barrier:inBarrierCosh}, but got it
+wrong.  Found the mistake only later, and this calculation should provide
+a consistency check.
+
+\begin{align*}
+J_b
+= \frac{\Hbar \beta \Abs{E}^2}{2mi} \left(1 + \frac{k^2}{\beta^2} \right)
+( 
+&\cosh\left( -i\phi + \beta(x-a) \right) 
+\sinh\left( i\phi + \beta(x-a) \right) \\
+&-
+\cosh\left( i\phi + \beta(x-a) \right) 
+\sinh\left( -i\phi + \beta(x-a) \right) 
+) \\
+\end{align*}
+
+Writing $z = \beta(x-a) + i\phi$, the hyperbolic products above are
+
+\begin{align*}
+\cosh z^\conj \sinh z - \cosh z \sinh z^\conj
+&=
+\inv{4} \left(
+( e^{z^\conj} + e^{-z^\conj}) ( e^{z} - e^{-z}) 
+- ( e^{z} + e^{-z}) ( e^{z^\conj} - e^{-z^\conj}) 
+\right)
+\end{align*}
+
+Write $a = e^{z}$ we have
+
+\begin{align*}
+( e^{z^\conj} + e^{-z^\conj}) ( e^{z} - e^{-z}) 
+- ( e^{z} + e^{-z}) ( e^{z^\conj} - e^{-z^\conj}) 
+&=
+( a^\conj + 1/a^\conj ) ( a - 1/a )
+- 
+( a + 1/a ) ( a^\conj - 1/a^\conj )  \\
+&=
+2\left( \frac{a}{a^\conj} - \frac{a^\conj}{a} \right) \\
+&=
+\frac{2}{\Abs{a}^2}\left( a^2 - {a^\conj}^2 \right) \\
+&=
+\frac{ 4\Im(a^2) }{\Abs{a}^2}  \\
+&=
+4 i \sin( 2\phi ) \\
+&=
+8 i \sin( \phi ) \cos(\phi) \\
+&=
+8 i \frac{k/\beta}{1 + (k/\beta)^2} \\
+\end{align*}
+% tan \phi = k/\beta
+
+which gives 
+
+\begin{align*}
+J_b
+= \frac{\Hbar k \Abs{E}^2}{m} 
+\end{align*}
+
+In the initial incorrect calculation I got zero, which would imply that the result of \eqnref{eqn:qm_barrier:pDensityInBarrier} is also suspect.
+However, repeating the calculation for $\rho$ in the barrier region directly from \eqnref{eqn:qm_barrier:psiInBarrier} produces the same result.
+
+Writing, 
+\begin{align*}
+\psi &=
+\frac{E}{2}\left( \left( 1 + \frac{i k}{\beta} \right) e^{ \beta(x-a)} + \left( 1 - \frac{i k}{\beta} \right) e^{ -\beta(x-a)} \right) \\
+&=
+\frac{E}{2}\left( \mu \alpha + \mu^\conj/\alpha \right)
+\end{align*}
+
+the density is
+
+\begin{align*}
+\rho 
+&=
+\psi\psi^\conj \\
+&=
+\frac{\Abs{E}^2}{4}
+\left( \mu \alpha + \mu^\conj/\alpha \right) \left( \mu^\conj \alpha + \mu/\alpha \right) \\
+&=
+\frac{\Abs{E}^2}{4}
+\left( 
+\Abs{\mu}^2\left( \alpha^2 + \inv{\alpha^2}\right) 
++ \mu^2
++ {\mu^\conj}^2
+\right) \\
+&=
+\frac{\Abs{E}^2}{2}
+\left( 
+\left( 1 + \frac{k^2}{\beta^2} \right)\frac{ 
+e^{2\beta(x-a)}
++e^{-2\beta(x-a)}
+}{2}
++ \inv{2}\left( 
+1 + 2 i k/\beta - k^2/\beta^2
+1 - 2 i k/\beta - k^2/\beta^2
+\right)
+\right) \\
+&=
+\frac{\Abs{E}^2}{2}
+\left( 
+\left( 1 + \frac{k^2}{\beta^2} \right) \cosh(2\beta(x-a))
++ \left( 
+1 - k^2/\beta^2
+\right)
+\right) \\
+&=
+\frac{\Abs{E}^2}{2}
+\left( 
+\left( 1 + \frac{k^2}{\beta^2} \right) \left( 2 \sinh^2(\beta(x-a)) + 1 \right)
++ \left( 
+1 - k^2/\beta^2
+\right)
+\right) \\
+&=
+\Abs{E}^2
+\left( 
+\left( 1 + \frac{k^2}{\beta^2} \right) \sinh^2(\beta(x-a)) 
++1 
+\right) \\
+\end{align*}
+
+which is exactly \eqnref{eqn:qm_barrier:pDensityInBarrier}.
+
+\subsection{Verify continuity of simplified region I wave function}
+
+The wave function \eqnref{eqn:qm_barrier:incidentAndReflectedSimplified}
+should match the barrier wave function in value and derivative at
+$x=0$.  Let us verify this and ensure all the algebra worked out.
+
+At $x=0$ we have for the $x<0$ wave function value
+\begin{align*}
+\psi &=
+\frac{E}{2} \left(\frac{\beta}{k} + \frac{k}{\beta} \right) 
+\left(
+\cosh\left( i\theta -\beta a \right) -i \sinh\left( \beta a \right) 
+\right) \\
+\end{align*}
+
+Let us expand the trig part of this
+
+\begin{align*}
+\cosh\left( i\theta -\beta a \right) -i \sinh\left( \beta a \right) 
+&=
+\cos( \theta ) \cosh(\beta a ) 
+-i\sin( \theta ) \sinh(\beta a ) 
+-i \sinh( \beta a )  \\
+&=
+\cos( \theta ) \cosh(\beta a ) 
+-i \sinh( \beta a ) (1 + \sin(\theta))
+\end{align*}
+
+Since we have
+
+\begin{align*}
+\theta &= \Atan\left( \inv{2} \left(\frac{k}{\beta} - \frac{\beta}{k} \right) \right) \\
+\cos(\Atan(u)) &= \inv{\sqrt{1 + u^2}} \\
+\sin(\Atan(u)) &= \frac{u}{\sqrt{1 + u^2}} \\
+\end{align*}
+
+So we have
+\begin{align*}
+\cosh\left( i\theta -\beta a \right) -i \sinh\left( \beta a \right) 
+&=
+\inv{\sqrt{1 + \inv{4} \left(\frac{k}{\beta} - \frac{\beta}{k} \right)^2}}
+\left(\cosh(\beta a ) 
+-i
+\inv{2} \left(\frac{k}{\beta} - \frac{\beta}{k} \right) \sinh(\beta a ) \right)
+-i \sinh( \beta a ) \\
+&=
+\frac{2}{\frac{k}{\beta} + \frac{\beta}{k} }
+\left(\cosh(\beta a ) 
+-i
+\inv{2} \left(\frac{k}{\beta} - \frac{\beta}{k} \right) \sinh(\beta a ) \right)
+-i \sinh( \beta a )  \\
+&=
+\frac{ 2 \cosh(\beta a ) }{\frac{k}{\beta} + \frac{\beta}{k} }
+-i \sinh( \beta a ) \left( 1 + \frac{\frac{k}{\beta} - \frac{\beta}{k}}{ \frac{k}{\beta} + \frac{\beta}{k}} \right) \\
+&=
+\frac{ 2 }{\frac{k}{\beta} + \frac{\beta}{k} }
+\left(
+\cosh(\beta a ) - i \frac{k}{\beta}\sinh( \beta a ) 
+\right)
+\end{align*}
+
+and finally, after too much messy algebra, from the region I wave function at $x=0$ we have
+
+\begin{align*}
+\psi(0) &= E \left( \cosh(\beta a ) - i \frac{k}{\beta}\sinh( \beta a )  \right)
+\end{align*}
+
+Now compare to the barrier wave function \eqnref{eqn:qm_barrier:inBarrierCosh} at $x=0$
+
+\begin{align*}
+\psi(0) 
+&= E \sqrt{1 + \frac{k^2}{\beta^2}} \cosh\left( i\Atan(k/\beta) - \beta a \right)  \\
+&= E \sqrt{1 + \frac{k^2}{\beta^2}} 
+\left(
+\cos(\Atan(k/\beta))\cosh(\beta a)
+-i\sin(\Atan(k/\beta))\sinh(\beta a)
+\right) \\
+&= E 
+\left(
+\cosh(\beta a)
+-i\frac{k}{\beta} \sinh(\beta a)
+\right) \\
+\end{align*}
+
+Good.  First consistency check is done.  Now for equality of derivatives.
+
+For \eqnref{eqn:qm_barrier:incidentAndReflectedSimplified}, the derivative at $x=0$ is
+
+\begin{align*}
+\psi' 
+&=
+\frac{E}{2} \left(\frac{\beta}{k} + \frac{k}{\beta} \right) (ik)
+\left(
+\cosh\left( i\theta -\beta a \right) 
++i \sinh\left( \beta a \right) 
+\right) \\
+&=
+\frac{E}{2} \left(\frac{\beta}{k} + \frac{k}{\beta} \right) (ik)
+\left(
+\frac{ 2 \cosh(\beta a ) }{\frac{k}{\beta} + \frac{\beta}{k} }
+-i \sinh( \beta a ) \left( -1 + \frac{\frac{k}{\beta} - \frac{\beta}{k}}{ \frac{k}{\beta} + \frac{\beta}{k}} \right) 
+\right) \\
+&=
+i k E \left( \cosh(\beta a ) + i \frac{\beta}{k}\sinh(\beta a) \right) \\
+&=
+E \left( i k \cosh(\beta a ) - \beta \sinh(\beta a) \right) \\
+\end{align*}
+
+Comparing to the derivative of the barrier wave function \eqnref{eqn:qm_barrier:inBarrierCosh} at $x=0$
+
+\begin{align*}
+\psi'(0)
+&= E \sqrt{1 + \frac{k^2}{\beta^2}} \beta \sinh\left( i\phi - \beta a \right)  \\
+&= E \beta \sqrt{1 + \frac{k^2}{\beta^2}} 
+\left(
+i\sin(\phi)\cosh(\beta a)
+-\cos(\phi)\sinh(\beta a)
+\right) \\
+&= E \beta 
+\left(
+i\frac{k}{\beta}\cosh(\beta a)
+-\sinh(\beta a)
+\right) \\
+&= E 
+\left(
+ik \cosh(\beta a)
+- \beta \sinh(\beta a)
+\right) \\
+\end{align*}
+% tan \phi = k/\beta
+
+%\bibliographystyle{plainnat}
+%\bibliography{myrefs}
+
+%\end{document}

@@ -55,7 +55,7 @@ void recurseOverConstructorDecls( CXXConstructorDecl * c, string subobject )
          if ( frec->hasNonTrivialMoveConstructor() ) { cout << frec->getName().str() << " : CONSTRUCTOR: hasNonTrivialMoveConstructor" << endl ; }
 #endif
 
-         if ( !cInner->isImplicitlyDefined() &&
+         if ( cInner->isExplicitSpecified() &&
               ( frec->hasUserDeclaredConstructor() ||
                 frec->hasUserProvidedDefaultConstructor() ||
                 frec->hasUserDeclaredCopyConstructor() ||
@@ -63,7 +63,7 @@ void recurseOverConstructorDecls( CXXConstructorDecl * c, string subobject )
                 frec->hasConstexprDefaultConstructor() ||
                 frec->hasNonTrivialCopyConstructor() ||
                 frec->hasUserDeclaredMoveConstructor()  ||
-                frec->hasFailedImplicitMoveConstructor()  ||
+                //frec->hasFailedImplicitMoveConstructor()  || // not in clang 3.4?
                 frec->hasConstexprNonCopyMoveConstructor()  ||
                 frec->hasNonTrivialMoveConstructor()  ||
                 //frec->hasConstCopyConstructor() ||

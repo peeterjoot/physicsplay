@@ -1,0 +1,1029 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+
+% 
+% 
+%\input{../peeter_prologue_widescreen.tex}
+%\input{../peeter_prologue_print.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% based on: ../gabook/multiPendulumSpherical2.tex
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% The new paper is a definite improvement.  I think all is not lost.  There is a
+%% gem in your work, though unpolished and uncut.  But if we trim the excess
+%% material and focus on what facets to highlight, the value of your work would
+%% increase.  I shall first enumerate my general comments and suggestions.  Then I
+%% shall suggest research directions.  I am very much interested in the
+%% applications of geometric algebra to the double pendulum.
+%% 
+%% A.  Comments and Suggestions
+%% 
+%% 1.  Delete all material on matrices.  Readers already have difficulty imagining
+%% exponentials of bivectors.  How much more if these are elements of matrices.
+%% Reserve these for a future work.  Do not lay down all your cards.  In the last
+%% paragraph of your Conclusions, you can mention your future plans, just to let
+%% the reader know the depth of your work, in order to give the impression that
+%% you just do not want to overwhelm him at the moment.  This is a good tactic and
+%% it is used by many journal authors.
+%% 
+%% 2.  Since you are using e_1, e_2, and e_3, I suggest you start your theoretical
+%% framework with the orthonormality axiom e_je_k + e_ke_j = 2\delta_jk.  Then
+%% define the general element of the algebra and the special properties of the
+%% exponential function.
+%% 
+%% 3.  The distributivity and associativity axioms you need not write explicitly.
+%% Just mention that the elements of geometric algebra satisfy the distributivity
+%% and associativity axioms.  Period.
+%% 
+%% 4.  Delete Eq. (15).  If your paper is not about waves, do not mention waves.
+%% But if you will later talk about the double pendulum as coupled simple harmonic
+%% oscillators, then revise Eq. (15) in the context of oscillators not waves.
+%% 
+%% 6.  If you are using font 10, it is better to use two columns.  Font 12 is fine
+%% for one column double space.
+%% 
+%% 
+%% B.  Research Directions
+%% 
+%% 1.  Limit your discussion to the double spherical pendulum.  Everybody knows how
+%% to write the equations of motion using Lagrangian mechanics.  But I think
+%% geometric algebra has really something new to offer: it can rotate vectors in
+%% 3D using exponential functions.  Exponential functions are more compact and
+%% easier to differentiate than cosines and sines.  Expound on this.  Give
+%% diagrams, specially for spherical coordinate systems.
+%% 
+%% 3.  Can geometric algebra derive the equations of motion of the two masses in a
+%% double pendulum without constructing the Lagrangian?  The masses are connected
+%% by massless rods.  If you can do this, then this would be a good argument for
+%% the adoption of geometric algebra.  Vector are more geometrically appealing than
+%% scalars.
+%% 
+%% 3.  Can geometric algebra allow us to obtain the normal modes of oscillation of
+%% the double pendulum without using matrix inversion?  The strength of geometric
+%% algebra is in vectors.  So the best way to exploit the powers of geometric
+%% algebra is not to go to potentials and kinetic energies which are scalars, but
+%% to employ forces, positions, velocities, and accelerations which are vectors.
+%% Do not fight an enemy in his field of choice.  Choose the battlefield most
+%% advantageous to you and let your enemy come to you.  Then you shall win more
+%% battles, i.e. you shall get published more.
+%% 
+%% 4.  If you can do (3), then you can have a paper industry by extending your
+%% results to the vibrations of molecules.  Pesonen of Finland have dabbled on this
+%% using geometric algebra, but he still went via the route of kinetic and
+%% potential energies.
+%% 
+%% If this research program is interesting to you, I would be happy to lend a hand.
+%%  If you have other applications of geometric algebra, I would be happy to know
+%% them.  I believe that you have exceptional mathematical prowess and creative
+%% insights.  It would a sad loss if nobody gets to read your results.
+%% 
+%% 
+
+\chapter{Lagrangian and Euler-Lagrange equation evaluation for the spherical N-pendulum problem}
+%\author{Peeter Joot
+%\smallskip\\
+%\small{e-mail: peeter.joot$@$gmail.com}}
+%\date{\small{\today}}
+%\maketitle
+
+\label{chap:multiPendulumSphericalMatrix}
+%\revisionInfo{multiPendulumSphericalMatrix.tex}
+
+%I quickly realized when doing this that everything I had done with my GA
+%multivector approach can be done in exactly the same way with the
+%traditional coordinate representation.  It will produce exactly the
+%same results, but is just not something that occured to me initially.
+% Unless I can figure out something more interesting to do with the
+%multivector matrix formalism, then this particular worked example
+%does not likely supply anything really new-not-already-done worthy of a
+%scientific style paper.
+
+
+%This was an attempt to cleanup my previous N spherical pendulum treatment (ie. equations of motion for an idealized chain). Id used matrixes of multivector elements to arrive at an explicit expression for the kinetic energy for this system and then evaluated the Euler-Lagrange equations. I thought initially that this was pretty nifty, but as I was cleaning this up for an attempted arxiv post, I rudely realized that exactly the same result follows by factoring our a column vector of generalized coordinates (an angular velocity vector of sorts) from the scalar energy expressions (factoring a one by one matrix of scalar values into a product of matrixes).
+%
+%No use of geometric algebra is required. Without the use of geometic algebra with its compact representation for the spherical parameterized points on the unit sphere, I dont think Id have even attempted this generalized problem. However, the idea that makes the problem tractable is completely independent of GA, and renders the paper as written just an obfuscated way to tackle it (since only a handful of people know this algebraic approach).
+
+
+%%% %\documentclass[11pt,twocolumn]{article}
+%%% 
+%%% % small font:
+%%% %\documentclass[11pt]{article}
+%%% %\setlength\topmargin{-0.5in}
+%%% %\setlength\columnsep{0.2in}
+%%% %\setlength\headsep{0.0in}
+%%% %\setlength\textheight{9.5in}
+%%% %\setlength\textwidth{7in}
+%%% %\setlength\oddsidemargin{-0.25in}
+%%% %\setlength\evensidemargin{-0.25in}
+%%% 
+%%% % readable?  Font still seems small?
+%%% \documentclass[11pt]{article}
+%%% \setlength{\textwidth}{\paperwidth}
+%%% \addtolength{\textwidth}{-2in}
+%%% \setlength{\oddsidemargin}{0pt}
+%%% \setlength{\evensidemargin}{0pt}
+%%% \setlength{\headheight}{15pt}
+%%% \setlength{\headsep}{15pt}
+%%% \setlength{\topmargin}{0in}
+%%% \addtolength{\topmargin}{-\headheight}
+%%% \addtolength{\topmargin}{-\headsep}
+%%% \setlength{\footskip}{29pt}
+%%% \setlength{\textheight}{\paperheight}
+%%% \addtolength{\textheight}{-2.2in}
+%%% \setlength{\marginparwidth}{.5in}
+%%% \setlength{\marginparsep}{5pt}
+%%% 
+%%% 
+%%% %\usepackage{mathpazo}
+%%% \usepackage{color}
+%%% \usepackage{amsmath}
+%%% \usepackage{amsfonts}
+%%% \usepackage{graphicx}
+%%% %\usepackage[bookmarks=false]{hyperref}
+%%% \usepackage{hyperref}
+%%% \usepackage{subfigure}
+%%% \usepackage{titlesec}
+%%% \usepackage{indentfirst}
+%%% 
+%%% \newtheorem{theorem}{Theorem}[section]
+%%% \newtheorem{definition}[theorem]{Definition}
+%%% \newtheorem{axiom}[theorem]{Axiom}
+%%% 
+%%% \newcommand{\Abs}[1]{{\left\lvert{#1}\right\rvert}}
+%%% \newcommand{\evalbar}[2]{{\left.{#1}\right\vert}_{#2}}
+%%% \newcommand{\evalnobar}[2]{{#1}_{#2}}
+%%% \newcommand{\Bu}[0]{\mathbf{u}}
+%%% \newcommand{\Bv}[0]{\mathbf{v}}
+%%% \newcommand{\Be}[0]{\mathbf{e}}
+%%% \newcommand{\Ba}[0]{\mathbf{a}}
+%%% \newcommand{\Bb}[0]{\mathbf{b}}
+%%% \newcommand{\Bc}[0]{\mathbf{c}}
+%%% \newcommand{\Br}[0]{\mathbf{r}}
+%%% \newcommand{\Bx}[0]{\mathbf{x}}
+%%% \newcommand{\Bk}[0]{\mathbf{k}}
+%%% \newcommand{\Bq}[0]{\mathbf{q}}
+%%% \newcommand{\Bs}[0]{\mathbf{s}}
+%%% \newcommand{\Bt}[0]{\mathbf{t}}
+%%% \newcommand{\rcap}[0]{\hat{\Br}}
+%%% \newcommand{\inv}[1]{\frac{1}{#1}}
+%%% \newcommand{\grad}[0]{\nabla}
+%%% \newcommand{\LL}[0]{\mathcal{L}}
+%%% \newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+%%% \newcommand{\PDi}[2]{{\partial {#2}}/{\partial {#1}}}
+%%% \newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%%% \newcommand{\gpgradezero}[1] {\gpgrade{#1}{}}
+%%% \newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
+%%% \newcommand{\BTheta}[0]{\boldsymbol{\Theta}}
+%%% \newcommand{\Brho}[0]{\boldsymbol{\rho}}
+%%% \newcommand{\T}[0]{\text{T}}
+%%% 
+%%% \begin{document}
+
+% REWORK: CHANGE THE FOCUS TO WHAT IS NEW.  PUTTING GA ELEMENTS IN MATRIXES.
+% formerly not possible with vector elements since there was no product 
+% possible.
+%
+\section*{}
+{\small{\textbf{Abstract.}
+%Derivations of the equations of motion for the double planar pendulum, and for the single spherical pendulum are readily found as examples or problems in Lagrangian mechanics texts.  The generalization of this, treating the double or multiple pendulums, with the planar constraint removed is less common.  It is shown here that Geometric Algebra is an effective way to tackle the formulation of the equations of motion for the general unconstrained multiple pendulum problem.  The end result is free of any Geometric Algebra, with the equations of motion expressed as a single non-linear matrix algebra equation.
+%Geometric algebra provides a formalism that allows for coordinate and matrix free representations of vectors, linear transformations, and other mathematical structures.  The replacement of matrix techniques with direct geometric algebra methods is a well studied field, but this need not be an exclusive replacement.  While the geometric algebra multivector space does not constitute a field, operations on multivector element matrices can be defined in a consistent fashion.  This use of geometric algebraic objects in matrices provides a hybrid mathematical framework with immediate applications to mathematical physics.  
+The dynamics of chain like objects can be idealized as a multiple pendulum, treating the system as a set of point masses, joined by rigid massless connecting rods, and frictionless pivots.  The double planar pendulum and single mass spherical pendulum problems are well treated in Lagrangian physics texts, but due to complexity a similar treatment of the spherical N-pendulum problem is not pervasive.  We show that this problem can be tackled in a direct fashion, even in the general case with multiple masses and no planar constraints.  A matrix factorization of the kinetic energy into allows an explicit and compact specification of the Lagrangian.  Once that is obtained the equations of motion for this generalized pendulum system follow directly.
+
+%1. Around 250 words.
+%2. Begins with 1-2 sentences of Introduction, usually specific information.
+%3. The bulk of the Abstract is the data. This is told by a combination of the
+%Methods and Results. The summation of the data is given along with the technique
+%used to obtain the data. Specific details about procedure and results are omitted
+%unless they are very important.
+%4. At the end are 1-2 sentences of Discussion, explaining what the data means and
+%summarizing the work.
+%5. Somewhere in the abstract (either at the very beginning or very end) is usually a
+%phrase/sentence talking about the importance of work being done, or how it
+%affects the world/science.
+
+%QQ:
+%: %P.S. I am not a fan of mixing matrices and vectors, because matrices with vector
+%: %arguments are not, I believe, properly defined in general.  I prefer to stick
+%: %with the exponentials and do away with matrices.  But this is only my
+%: %idiosyncracy.
+%
+%me:
+%: This is perhaps needs to be part of what is discussed.  I had tried it
+%: in a more general context with a mix of scalar and bivector
+%: parameterized "angular velocities".  The results are perfectly well
+%: defined and one ends up with a generalized notion of Hermiticity.
+%: Parameterizing the Kinetic energy with the bivector rates does not end
+%: up being a helpful approach for the spherical pendulum system, since
+%: it is an really over specified with too many degrees of freedom.
+%: However, the multivector matrix approach developed there appears to be
+%: quite an effective and powerful tool.
+
+\section{Introduction}
+%2.  An article must have a good introduction.  Notes and assumptions must be
+%discussed in the body within the sections and not labeled as a separate
+%heading.  An introduction should survey what has been done before, pointing out
+%the results in Goldstein, for example, which are similar to what you did.  Start
+%with results in well-known texts; Hestenes and Doran's book are known among
+%geometric algebraists, but not among ordinary scientists, because geometric
+%algebra is still rarely taught in undergraduate and graduate physics and
+%mathematics.  Always start with what is familiar, then go to what is unfamiliar
+%(e.g. geometric algebra), but make sure that the reader still has his bearings.
+% Surveying the literature will increase the number of your references.  The more
+%references you have, the more chances of getting endorsed or accepted in ArXiv.
+%More references means that you have read much and you really know what you are
+%saying.
+%
+%After surveying the familiar and unfamiliar literature, you have to point out
+%the "hole" in the literature which you wish to fill.  Tell the reader how your
+%work is similar to what other people did and how it differs.  Was there a work
+%on N body spherical pendulums before even if not in geometric algebra?  How far
+%did Doran and Hestenes dipped their hands in this problem?  If you are only
+%repeating what they did, then there is no more use for writing the paper.  Here
+%is a sample paragraph:
+%
+%"Doran and Hestenes only discussed the single pendulum and derived the Lagrange
+%equations in matrix form via geometric algebra.  What I wish to do in this
+%paper is to extend their formulation to double and N spherical pendulums.  The
+%results will be shown to be equivalent to those in Goldstein, except that our
+%matrices can take on complex vector arguments, which allows us to write
+%equations in a more compact way and provide an immediate geometrical
+%interpretation to the solutions..."
+%
+%This is the most difficult part of the introduction.  It shall display your
+%mastery and authority in your subject area.
+%
+
+Derivation of the equations of motion for a planar motion constrained double pendulum system and a single spherical pendulum system are given as problems or examples in many texts covering Lagrangian mechanics.  Setup of the Lagrangian, particularly an explicit specification of the system kinetic energy, is the difficult aspect of the multiple mass pendulum problem.  Each mass in the system introduces additional interaction coupling terms, complicating the kinetic energy specification.  In this paper, we use matrix algebra to determine explicitly the Lagrangian for the spherical N pendulum system, and to evaluate the Euler-Lagrange equations for the system.
+
+It is well known that the general specification of the kinetic energy for a system of independent point masses takes the form of a symmetric quadratic form \citep{goldstein1951cm} \citep{hestenes1999nfc}.  However, actually calculating that energy explicitly for the general N-pendulum is likely thought too pedantic for even the most punishing instructor to inflict on students as a problem or example.
+
+Given a $3 \times 1$ coordinate vector of velocity components for each mass relative to the position of the mass it is connected to, we can factor this as a $(3 \times 2)(2 \times 1)$ product of matrices where the $2 \times 1$ matrix is a vector of angular velocity components in the spherical polar representation.  The remaining matrix factor contains all the trigonometric dependence.  Such a grouping can be used to tidily separate the kinetic energy into an explicit quadratic form, sandwiching a symmetric matrix between two vectors of generalized velocity coordinates.
+
+This paper is primarily a brute force and direct attack on the problem.  It contains no new science, only a systematic treatment of a problem that is omitted from mechanics texts, yet conceptually simple enough to deserve treatment.
+
+The end result of this paper is a complete and explicit specification of the Lagrangian and evaluation of the Euler-Lagrange equations for the chain-like N spherical pendulum system.  While this end result is essentially nothing more than a non-linear set of coupled differential equations, it is believed that the approach used to obtain it has some elegance.  Grouping all the rotational terms of the kinetic into a symmetric kernel appears to be a tidy way to tackle multiple discrete mass problems.  At the very least, the calculation performed can show that a problem perhaps thought to be too messy for a homework exersize yields nicely to an organized and systematic attack.
+
+% TODO:
+%The last part of the introduction is a paragraph enumerating the sections of the
+%paper, pointing out important results.  In movies, this is a preview or trailer.
+% If the reader thinks that he is interested to read the rest of the paper, he
+%will read it. If not, the reader will thank you for telling him what lies
+%ahead, saving him his precious time.
+%
+% WHERE: 
+%The standard orthonormal basis vectors will be denoted $\Be_1, \Be_2, \Be_3$ with $\Be_3$ upwards opposing a constant gravitational force of magnitude $g$.
+
+\section{Diving right in}
+
+We make the simplifying assumptions of point masses, rigid massless connecting rods, and frictionless pivots.
+
+\subsection{Single spherical pendulum}
+
+Using polar angle $\theta$ and azimuthal angle $\phi$, and writing $S_\theta = \sin\theta$, $C_\phi = \cos\phi$ and so forth, we have for the coordinate vector on the unit sphere
+
+\begin{align}\label{eqn:mp250}
+\rcap = 
+\begin{bmatrix}
+C_\phi S_\theta \\
+S_\phi S_\theta \\
+       C_\theta 
+\end{bmatrix}.
+\end{align}
+
+The Lagrangian for the pendulum is then 
+
+\begin{align}\label{eqn:mp251}
+\LL = \inv{2} m l \dot{\rcap}^T \dot{\rcap} - m g l C_\theta.
+\end{align}
+
+This is somewhat unsatisfying since the unit vector derivatives have not been evaluated.  Doing so we get
+
+\begin{align}\label{eqn:mp260}
+\dot{\rcap} = 
+\begin{bmatrix}
+C_\phi C_\theta \dot{\theta} - S_\phi S_\theta \dot{\phi} \\
+S_\phi C_\theta \dot{\theta} + C_\phi S_\theta \dot{\phi} \\
+      -S_\theta \dot{\theta}
+\end{bmatrix}.
+\end{align}
+
+This however, is an ugly beastie to take the norm of as is.  It is straightforward to show that this norm is just
+
+\begin{align}\label{eqn:mp261}
+\dot{\rcap}^\T \dot{\rcap} = \dot{\theta}^2 + S_\theta^2 \dot{\phi}^2,
+\end{align}
+
+however, the brute force multiplication that leads to this result is not easily generalized to the multiple pendulum problem.  Instead of actually expanding this now, lets defer that until later and instead write for a coordinate vector of angular velocity components
+
+\begin{align}\label{eqn:mp262}
+\Omega = 
+\begin{bmatrix}
+\dot{\theta} \\
+\dot{\phi} 
+\end{bmatrix}.
+\end{align}
+
+Now the unit polar derivative \eqnref{eqn:mp260} can be factored as
+
+\begin{subequations}
+\begin{align}\label{eqn:mp260b}
+\dot{\rcap} &= A^\T \Omega \\
+A
+&= 
+\begin{bmatrix}
+C_\phi C_\theta & S_\phi C_\theta & -S_\theta \\
+- S_\phi S_\theta &   C_\phi S_\theta & 0
+\end{bmatrix}
+.
+\end{align}
+\end{subequations}
+
+Our Lagrangian now takes the explicit form
+
+\begin{subequations}
+\begin{align}\label{eqn:mp251b}
+\LL &= \inv{2} m l \Omega^\T A A^\T \Omega - m g l C_\theta \\
+A A^\T &=
+\begin{bmatrix}
+1 & 0 \\
+0 & S_\theta^2
+\end{bmatrix}.
+\end{align}
+\end{subequations}
+
+%\subsection{Double spherical pendulum}
+%
+%A multiple (two) particle spherical pendulum is depicted in \cref{fig:pendulumDouble}
+%
+%\begin{figure}[htp]
+%\centering
+%\includegraphics[totalheight=0.4\textheight]{pendulumDouble}
+%\caption{Double spherical pendulum.}\label{fig:pendulumDouble}
+%\end{figure}
+%
+\subsection{N spherical pendulum}
+
+%4.  Make Section III as the meat of your article.  Divide this section into
+%three parts: A.  Single pendulum, B. Double Pendulum, C. N-Pendulum.  Since you
+%are not limited in the number of pages, subdivide each subsection into two: 1.
+%standard method used in Goldstein and 2. Geometric Algebra method.  In this way
+%the reader can readily compare and contrast the two methods.  You must show that
+%the two methods are equivalent, so that there is an assurance that the physics
+%is still correct despite the adoption of geometric algebra.
+%
+
+\subsubsection{The Lagrangian}
+
+The position vector for each particle can be expressed relative to the mass it is connected to (or the origin for the first particle), as in
+
+\begin{subequations}
+\label{eqn:mp340}
+\begin{align}
+z_k &= z_{k-1} + l_k \rcap_k \\
+\rcap_k &= {A_k}^\T \dot{\BTheta}_k \\
+A_k
+&= 
+\begin{bmatrix}
+C_{\phi_k} C_{\theta_k} & S_{\phi_k} C_{\theta_k} & -S_{\theta_k} \\
+- S_{\phi_k} S_{\theta_k} &   C_{\phi_k} S_{\theta_k} & 0
+\end{bmatrix} \\
+\BTheta_k &=
+\begin{bmatrix}
+\theta_k \\
+\phi_k
+\end{bmatrix}.
+\end{align}
+\end{subequations}
+
+Now, the relative velocity differential can be written utilizing these factors
+
+\begin{align}\label{eqn:mp360}
+(\dot{z}_k - \dot{z}_{k-1})^2 = l_k^2 {\dot{\BTheta}_k}^\T A_k A_k^\T \dot{\BTheta}_k.
+\end{align}
+
+Observe that the inner product is symmetric since $(A_k A_k^\T)^\T = A_k A_k^\T$.
+
+The normed velocity of the $k$th particle is then
+
+\begin{subequations}
+\begin{align}\label{eqn:mp370}
+\BTheta &=
+\begin{bmatrix}
+\BTheta_1 \\
+\BTheta_2 \\
+\vdots \\
+\BTheta_N \\
+\end{bmatrix} \\
+B_k &=
+\begin{bmatrix}
+l_1 A_1 \\
+l_2 A_2 \\
+\vdots \\
+l_k A_k \\
+0 \\
+\end{bmatrix} \\
+(\dot{z}_k)^2 &=
+\dot{\BTheta}^\T B_k B_k^\T \dot{\BTheta},
+\end{align}
+\end{subequations}
+
+where the zero matrix in $B_k$ is a $N-k$ by one zero.  Summing over all masses and adding in the potential energy we have for the Lagrangian of the system
+
+\begin{subequations}
+\begin{align}\label{eqn:mp380}
+K &=
+\inv{2} \sum_{k=1}^N m_k
+\dot{\BTheta}^\T
+B_k B_k^\T
+\dot{\BTheta} \\
+\mu_k &= \sum_{j=k}^N m_j \\
+\Phi &=
+g \sum_{k=1}^N \mu_k l_k \cos\theta_k \\
+\LL &= K - \Phi.
+\end{align}
+\end{subequations}
+
+The kinetic energy expressed completely and explicitly as a symmetric quadratic form.
+
+\subsubsection{Some tidy up}
+
+Before continuing with evaluation of the Euler-Lagrange equations it is helpful to make a couple of observations about the structure of the matrix products that make up our velocity terms
+
+\begin{align}\label{eqn:mp390}
+\dot{\BTheta}^\T
+B_k B_k^\T
+\dot{\BTheta}
+&=
+\dot{\BTheta}^\T
+\begin{bmatrix}
+\begin{bmatrix}
+l_1^2 A_1 A_1^\T & l_1 l_2 A_1 A_2^\T & \hdots & l_1 l_k A_1 A_k^\T \\
+l_2 l_1 A_2 A_1^\T & l_2^2 A_2 A_2^\T & \hdots & l_2 l_k A_2 A_k^\T \\
+\vdots \\
+l_k l_1 A_k A_1^\T & l_k l_2 A_k A_2^\T & \hdots & l_k^2 A_k A_k^\T
+\end{bmatrix} & 0 \\
+0 & 0
+\end{bmatrix}
+\dot{\BTheta}.
+\end{align}
+
+Pulling in the summation over $m_k$ we have
+
+\begin{align}\label{eqn:mp410}
+\sum_k m_k
+\dot{\BTheta}^\T
+B_k B_k^\T
+\dot{\BTheta}
+&=
+\dot{\BTheta}^\T
+{\begin{bmatrix}
+\mu_{\max(r,c)} l_r l_c \gpgradezeroNoOp{A_r A_c^\T}
+\end{bmatrix}}_{rc}
+\dot{\BTheta}.
+\end{align}
+
+It appears justifiable to label the $\mu_{\max(r,c)} l_r l_c$ factors of the angular velocity matrices as moments of inertia in a generalized sense.  Using this block matrix form, and scalar selection, we can now write the Lagrangian in a slightly tidier form
+
+\begin{subequations}
+\begin{align}\label{eqn:mp420}
+\mu_k &= \sum_{j=k}^N m_j \\
+Q &=
+{\begin{bmatrix}
+\mu_{\max(r,c)} l_r l_c A_r A_c^\T
+\end{bmatrix}}_{rc} \\
+K &=
+\inv{2} \dot{\BTheta}^\T \gpgradezeroNoOp{Q}
+\dot{\BTheta} \\
+\Phi &=
+g \sum_{k=1}^N \mu_k l_k \cos\theta_k \\
+\LL &= K - \Phi.
+\end{align}
+\end{subequations}
+
+After some expansion one can find that the block matrices $A_r A_c^\T$ contained in $Q$ are
+
+\begin{align}\label{eqn:mp430}
+\gpgradezeroNoOp{A_r A_c^\T}
+=
+\begin{bmatrix}
+C_{\phi_c - \phi_r}
+C_{\theta_r}
+C_{\theta_c}
++S_{\theta_r}
+S_{\theta_c} &
+-S_{\phi_c - \phi_r} C_{\theta_r} S_{\theta_c} \\
+S_{\phi_c - \phi_r} C_{\theta_c} S_{\theta_r} &
+C_{\phi_c - \phi_r} S_{\theta_r} S_{\theta_c}
+\end{bmatrix}.
+\end{align}
+
+The diagonal blocks are particularly simple and have no $\phi$ dependence
+
+\begin{align}\label{eqn:mp440}
+\gpgradezeroNoOp{A_r A_r^\T}
+=
+\begin{bmatrix}
+1 & 0 \\
+0 & \sin^2 \theta_r
+\end{bmatrix}
+\end{align}
+
+\subsubsection{Evaluating the Euler-Lagrange equations}
+
+It will be convenient to group the Euler-Lagrange equations into a column vector form, with a column vector of generalized coordinates and and derivatives, and position and velocity gradients in the associated phase space
+
+\begin{subequations}
+\label{eqn:mp230}
+\begin{dmath}
+\Bq               \equiv {\begin{bmatrix} q_r \end{bmatrix}}_r 
+\end{dmath}
+\begin{dmath}
+\dot{\Bq}         \equiv {\begin{bmatrix} \dot{q}_r \end{bmatrix}}_r 
+\end{dmath}
+\begin{dmath}
+\grad_{\Bq} \LL   \equiv {\begin{bmatrix} \PD{q_r}{\LL} \end{bmatrix}}_r 
+\end{dmath}
+\begin{dmath}
+\grad_{\dot{\Bq}} \LL   \equiv {\begin{bmatrix} \PD{\dot{q}_r}{\LL} \end{bmatrix}}_r.
+\end{dmath}
+\end{subequations}
+
+In this form the Euler-Lagrange equations take the form of a single vector equation
+
+\begin{align}\label{eqn:mp240}
+\grad_{\Bq} \LL   = \frac{d}{dt} \grad_{\dot{\Bq}} \LL.
+\end{align}
+
+We are now set to evaluate these generalized phase space gradients.  For the acceleration terms our computation reduces nicely to a function of only $\gpgradezeroNoOp{Q}$
+
+\begin{align*}
+\frac{d}{dt} \PD{\dot{\theta}_a}{\LL}
+&=
+\inv{2} \frac{d}{dt}
+\left(
+\PD{\dot{\theta}_a}{\dot{\BTheta}}^\T
+\gpgradezeroNoOp{Q}
+\dot{\BTheta}
++
+\dot{\BTheta}^\T
+\gpgradezeroNoOp{Q}
+\PD{\dot{\theta}_a}{\dot{\BTheta}}
+\right)  \\
+&=
+\frac{d}{dt} \left(
+{\begin{bmatrix}
+\delta_{ac}
+\begin{bmatrix}
+1 & 0
+\end{bmatrix}
+\end{bmatrix}}_c
+\gpgradezeroNoOp{Q}
+\dot{\BTheta}
+\right),
+\end{align*}
+
+and
+
+\begin{align*}
+\frac{d}{dt} \PD{\dot{\phi}_a}{\LL}
+&=
+\inv{2} \frac{d}{dt}
+\left(
+\PD{\dot{\phi}_a}{\dot{\BTheta}}^\T
+\gpgradezeroNoOp{Q}
+\dot{\BTheta}
++
+\dot{\BTheta}^\T
+\gpgradezeroNoOp{Q}
+\PD{\dot{\phi}_a}{\dot{\BTheta}}
+\right)  \\
+&=
+\frac{d}{dt} \left(
+{\begin{bmatrix}
+\delta_{ac}
+\begin{bmatrix}
+0 & 1
+\end{bmatrix}
+\end{bmatrix}}_c
+\gpgradezeroNoOp{Q}
+\dot{\BTheta}
+\right).
+\end{align*}
+
+The last groupings above made use of $\gpgradezeroNoOp{Q} = \gpgradezeroNoOp{Q}^\T$, and in particular $(\gpgradezeroNoOp{Q} + \gpgradezeroNoOp{Q}^\T)/2 = \gpgradezeroNoOp{Q}$.  We can now form a column matrix putting all the angular velocity gradient in a tidy block matrix representation
+
+\begin{align}\label{eqn:mp460}
+\grad_{\dot{\BTheta}} \LL =
+{\begin{bmatrix}
+\begin{bmatrix}
+\PD{\dot{\theta}_r}{\LL} \\
+\PD{\dot{\phi}_r}{\LL} \\
+\end{bmatrix}
+\end{bmatrix}}_r = \gpgradezeroNoOp{Q} \dot{\BTheta}.
+\end{align}
+
+A small aside on Hamiltonian form.  This velocity gradient is also the conjugate momentum of the Hamiltonian, so if we wish to express the Hamiltonian in terms of conjugate momenta, we require invertability of $\gpgradezeroNoOp{Q}$ at the point in time that we evaluate things.  Writing
+
+\begin{align}\label{eqn:mp470}
+P_{\BTheta} = \grad_{\dot{\BTheta}} \LL,
+\end{align}
+
+and noting that $(\gpgradezeroNoOp{Q}^{-1})^\T = \gpgradezeroNoOp{Q}^{-1}$, we get for the kinetic energy portion of the Hamiltonian
+
+\begin{align}\label{eqn:mp480}
+K = \inv{2} {P_{\BTheta}}^\T \gpgradezeroNoOp{Q}^{-1} P_{\BTheta}.
+\end{align}
+
+Now, the invertiblity of $\gpgradezeroNoOp{Q}$ cannot be taken for granted.  Even in the single particle case we do not have invertiblity.  For the single particle case we have
+
+\begin{align}\label{eqn:mp490}
+\gpgradezeroNoOp{Q} =
+m l^2
+\begin{bmatrix}
+1 & 0 \\
+0 & \sin^2 \theta
+\end{bmatrix},
+\end{align}
+
+so at $\theta = \pm \pi/2$ this quadratic form is singular, and the planar angular momentum becomes a constant of motion.
+
+Returning to the evaluation of the Euler-Lagrange equations, the problem is now reduced to calculating the right hand side of the following system
+
+\begin{align}\label{eqn:mp500}
+\frac{d}{dt} \left( \gpgradezeroNoOp{Q} \dot{\BTheta} \right) =
+{\begin{bmatrix}
+\begin{bmatrix}
+\PD{\theta_r}{\LL} \\
+\PD{\phi_r}{\LL} \\
+\end{bmatrix}
+\end{bmatrix}}_r.
+\end{align}
+
+With back substitution of \eqnref{eqn:mp430}, and \eqnref{eqn:mp440} we have a complete and explicit matrix expansion of the left hand side.  For the right hand side taking the $\theta_a$ and $\phi_a$ derivatives respectively we get
+
+\begin{subequations}
+\begin{align}\label{eqn:mp510}
+\PD{\theta_a}{\LL}
+=
+\inv{2} \dot{\BTheta}^\T
+{\begin{bmatrix}
+\mu_{\max(r,c)} l_r l_c \left(
+\PD{\theta_a}{A_r} A_c^\T
++A_r \PD{\theta_a}{A_c}^\T
+\right)
+\end{bmatrix}}_{rc}
+\dot{\BTheta}
+-g \mu_a l_a \sin\theta_a,
+\end{align}
+\begin{align}\label{eqn:mp520}
+\PD{\phi_a}{\LL}
+=
+\inv{2} \dot{\BTheta}^\T
+{\begin{bmatrix}
+\mu_{\max(r,c)} l_r l_c \left(
+\PD{\phi_a}{A_r} A_c^\T
++A_r \PD{\phi_a}{A_c}^\T
+\right)
+\end{bmatrix}}_{rc}
+\dot{\BTheta}.
+\end{align}
+\end{subequations}
+
+So to proceed we must consider the $\gpgradezeroNoOp{A_r A_c^\T}$ partials.  A bit of thought shows that the matrices of partials above are mostly zeros.  Illustrating by example, consider $\PDi{\theta_2}{\gpgradezeroNoOp{Q}}$, which in block matrix form is
+
+\begin{align}\label{eqn:mp530}
+\PD{\theta_2}{\gpgradezeroNoOp{Q}}
+=
+\begin{bmatrix}
+0 & \inv{2} \mu_2 l_1 l_2 \gpgradezeroNoOp{A_1 \PD{\theta_2}{A_2}^\T} & 0 & \hdots & 0 \\
+\inv{2} \mu_2 l_2 l_1 \gpgradezeroNoOp{\PD{\theta_2}{A_2} A_1^\T} &
+\inv{2} \mu_2 l_2 l_2 \left(A_2 \PD{\theta_2}{A_2}^\T + \PD{\theta_2}{A_2} A_2^\T \right) &
+\inv{2} \mu_3 l_2 l_3 \gpgradezeroNoOp{\PD{\theta_2}{A_2} A_3^\T} & \hdots &
+\inv{2} \mu_N l_2 l_N \gpgradezeroNoOp{\PD{\theta_2}{A_2} A_N^\T} \\
+0 & \inv{2} \mu_3 l_3 l_2 \gpgradezeroNoOp{A_3 \PD{\theta_2}{A_2}^\T} & 0 & \hdots & 0 \\
+0 & \vdots & 0 & \hdots & 0 \\
+0 & \inv{2} \mu_N l_N l_2 \gpgradezeroNoOp{A_N \PD{\theta_2}{A_2}^\T} & 0 & \hdots & 0 \\
+\end{bmatrix}.
+\end{align}
+
+Observe that the diagonal term has a scalar plus its transpose, so we can drop the one half factor and one of the summands for a total contribution to $\PDi{\theta_2}{\LL}$ of just
+
+\begin{align*}
+\mu_2 {l_2}^2 {\dot{\BTheta}_2}^\T \gpgradezeroNoOp{\PD{\theta_2}{A_2} A_2^\T} \dot{\BTheta}_2.
+\end{align*}
+
+Now consider one of the pairs of off diagonal terms.  Adding these we contributions to $\PDi{\theta_2}{\LL}$ of
+
+\begin{align*}
+\inv{2} \mu_2 l_1 l_2
+{\dot{\BTheta}_1}^\T
+\gpgradezeroNoOp{A_1 \PD{\theta_2}{A_2}^\T}
+\dot{\BTheta}_2
++\inv{2} \mu_2 l_2 l_1
+{\dot{\BTheta}_2}^\T
+\gpgradezeroNoOp{\PD{\theta_2}{A_2} A_1^\T}
+\dot{\BTheta}_1
+&=
+\inv{2} \mu_2 l_1 l_2
+{\dot{\BTheta}_1}^\T
+\left(
+A_1 \PD{\theta_2}{A_2}^\T
++A_1 \PD{\theta_2}{A_2}^\T
+\right)
+\dot{\BTheta}_2 \\
+&=
+\mu_2 l_1 l_2
+{\dot{\BTheta}_1}^\T
+\gpgradezeroNoOp{
+A_1 \PD{\theta_2}{A_2}^\T
+}
+\dot{\BTheta}_2.
+\end{align*}
+
+This has exactly the same form as the diagonal term, so summing over all terms we get for the position gradient components of the Euler-Lagrange equation just
+
+\begin{align}\label{eqn:mp540}
+\PD{\theta_a}{\LL}
+&=
+\sum_{k}
+\mu_{\max(k,a)} l_k l_a
+{\dot{\BTheta}_k}^\T
+\gpgradezeroNoOp{
+A_k \PD{\theta_a}{A_a}^\T
+}
+\dot{\BTheta}_a
+-g \mu_a l_a \sin\theta_a,
+\end{align}
+
+and
+
+\begin{align}\label{eqn:mp550}
+\PD{\phi_a}{\LL}
+&=
+\sum_{k}
+\mu_{\max(k,a)} l_k l_a
+{\dot{\BTheta}_k}^\T
+\gpgradezeroNoOp{
+A_k \PD{\phi_a}{A_a}^\T
+}
+\dot{\BTheta}_a.
+\end{align}
+
+The only thing that remains to do is evaluate the $\gpgradezeroNoOp{A_k \PDi{\phi_a}{A_a}^\T}$ matrices.
+
+Utilizing \eqnref{eqn:mp430}, one obtains easily
+
+\begin{align}\label{eqn:mp560}
+\gpgradezeroNoOp{ A_k \PD{\theta_c}{A_c}^\T }
+&=
+\begin{bmatrix}
+-C_{\phi_a - \phi_k} C_{\theta_k} S_{\theta_a} + S_{\theta_k} C_{\theta_a} &
+-S_{\phi_a - \phi_k} C_{\theta_k} C_{\theta_a} \\
+-S_{\phi_a - \phi_k} S_{\theta_a} S_{\theta_k} &
+C_{\phi_a - \phi_k} (1 + \delta_{k a}) S_{\theta_k} C_{\theta_a}
+\end{bmatrix},
+\end{align}
+
+and
+
+\begin{align}\label{eqn:mp570}
+\gpgradezeroNoOp{ A_k \PD{\phi_a}{A_a}^\T }
+&=
+\begin{bmatrix}
+-S_{\phi_a - \phi_k} C_{\theta_k} C_{\theta_a} + S_{\theta_k} S_{\theta_a} &
+-C_{\phi_a - \phi_k} C_{\theta_k} S_{\theta_a} \\
+C_{\phi_a - \phi_k} C_{\theta_a} S_{\theta_k} &
+-S_{\phi_a - \phi_k} S_{\theta_k} S_{\theta_a}
+\end{bmatrix}.
+\end{align}
+
+The right hand side of the Euler-Lagrange equations now becomes
+
+\begin{align}\label{eqn:mp580}
+\grad_{\BTheta} \LL =
+\sum_k
+{\begin{bmatrix}
+\begin{bmatrix}
+\mu_{\max(k,r)} l_k l_r {\dot{\BTheta}_k}^\T \gpgradezeroNoOp{ A_k \PD{\theta_r}{A_r}^\T } \dot{\BTheta}_r \\
+\mu_{\max(k,r)} l_k l_r {\dot{\BTheta}_k}^\T \gpgradezeroNoOp{ A_k \PD{\phi_r}{A_r}^\T } \dot{\BTheta}_r
+\end{bmatrix}
+\end{bmatrix}}_r
+- g
+{\begin{bmatrix}
+\mu_r l_r \sin\theta_r
+\begin{bmatrix}
+1 \\
+0
+\end{bmatrix}
+\end{bmatrix}}_r.
+\end{align}
+
+Between \eqnref{eqn:mp580}, \eqnref{eqn:mp460}, and a few other auxiliary relations, all above we have completed the task of evaluating the Euler-Lagrange equations for this multiple particle distinct mass system.  Unfortunately, just as the simple planar pendulum is a non-linear system, so is this.  Possible options for solution are numerical methods or solution restricted to a linear approximation in a small neighborhood of a particular phase space point.
+
+\section{Summary}
+
+Looking back it is hard to tell the trees from the forest.  Here is a summary of the results and definitions of importance.  First the Langrangian itself
+
+\begin{subequations}
+\begin{align}\label{eqn:mp420s}
+\mu_k &= \sum_{j=k}^N m_j \\
+\BTheta_k &=
+\begin{bmatrix}
+\theta_k \\
+\phi_k
+\end{bmatrix} \\
+\BTheta^\T &=
+\begin{bmatrix}
+\BTheta_1^\T &
+\BTheta_2^\T &
+\hdots &
+\BTheta_N^\T \\
+\end{bmatrix} \\
+A_k
+&= 
+\begin{bmatrix}
+C_{\phi_k} C_{\theta_k} & S_{\phi_k} C_{\theta_k} & -S_{\theta_k} \\
+- S_{\phi_k} S_{\theta_k} &   C_{\phi_k} S_{\theta_k} & 0
+\end{bmatrix} \\
+Q &=
+{\begin{bmatrix}
+\mu_{\max(r,c)} l_r l_c A_r A_c^\T
+\end{bmatrix}}_{rc} \\
+K &=
+\inv{2} \dot{\BTheta}^\T \gpgradezeroNoOp{Q}
+\dot{\BTheta} \\
+\Phi &=
+g \sum_{k=1}^N \mu_k l_k \cos\theta_k \\
+\LL &= K - \Phi.
+\end{align}
+\end{subequations}
+
+Evaluating the Euler-Lagrange equations for the system, we get
+
+\begin{align}\label{eqn:mp580s}
+0 = \grad_{\BTheta} \LL - \frac{d}{dt} \left(\grad_{\dot{\BTheta}} \LL \right) =
+\sum_k
+{\begin{bmatrix}
+\begin{bmatrix}
+\mu_{\max(k,r)} l_k l_r {\dot{\BTheta}_k}^\T \gpgradezeroNoOp{ A_k \PD{\theta_r}{A_r}^\T } \dot{\BTheta}_r \\
+\mu_{\max(k,r)} l_k l_r {\dot{\BTheta}_k}^\T \gpgradezeroNoOp{ A_k \PD{\phi_r}{A_r}^\T } \dot{\BTheta}_r
+\end{bmatrix}
+\end{bmatrix}}_r
+- g
+{\begin{bmatrix}
+\mu_r l_r \sin\theta_r
+\begin{bmatrix}
+1 \\
+0
+\end{bmatrix}
+\end{bmatrix}}_r
+-
+\frac{d}{dt} \left(
+\gpgradezeroNoOp{Q} \dot{\BTheta} \right) .
+\end{align}
+
+Making this explicit requires evaluation of some of the matrix products, and for those we found
+
+\begin{subequations}
+\begin{align}\label{eqn:mp430s}
+\gpgradezeroNoOp{A_r A_c^\T}
+&=
+\begin{bmatrix}
+C_{\phi_c - \phi_r}
+C_{\theta_r}
+C_{\theta_c}
++S_{\theta_r}
+S_{\theta_c} &
+-S_{\phi_c - \phi_r} C_{\theta_r} S_{\theta_c} \\
+S_{\phi_c - \phi_r} C_{\theta_c} S_{\theta_r} &
+C_{\phi_c - \phi_r} S_{\theta_r} S_{\theta_c}
+\end{bmatrix} \\
+\gpgradezeroNoOp{ A_k \PD{\theta_r}{A_r}^\T }
+&=
+\begin{bmatrix}
+-C_{\phi_r - \phi_k} C_{\theta_k} S_{\theta_r} + S_{\theta_k} C_{\theta_r} &
+-S_{\phi_r - \phi_k} C_{\theta_k} C_{\theta_r} \\
+-S_{\phi_r - \phi_k} S_{\theta_r} S_{\theta_k} &
+C_{\phi_r - \phi_k} (1 + \delta_{k r}) S_{\theta_k} C_{\theta_r}
+\end{bmatrix} \\
+\gpgradezeroNoOp{ A_k \PD{\phi_r}{A_r}^\T }
+&=
+\begin{bmatrix}
+-S_{\phi_r - \phi_k} C_{\theta_k} C_{\theta_r} + S_{\theta_k} S_{\theta_r} &
+-C_{\phi_r - \phi_k} C_{\theta_k} S_{\theta_r} \\
+C_{\phi_r - \phi_k} C_{\theta_r} S_{\theta_k} &
+-S_{\phi_r - \phi_k} S_{\theta_k} S_{\theta_r}
+\end{bmatrix}.
+\end{align}
+\end{subequations}
+
+
+\section{Conclusions and followup}
+
+This treatment was originally formulated in terms of Geometric Algebra, and matrices of multivector elements were used in the derivation.  Being able to compactly specify 3D rotations in a polar form and then factor those vectors into multivector matrix products provides some interesting power, and leads to a structured approach that would perhaps not be obvious otherwise.
+
+In such a formulation the system ends up with a natural Hermitian formulation, where the Hermitian conjugation operations is defined with the vector products reversed, and the matrix elements transposed.  Because the vector product is not commutative, some additional care is required in the handling and definition of such matrices, but that is not an insurrmountable problem.
+
+In retrospect it is clear that the same approach is possible with only matrices, and these notes are the result of ripping out all the multivector and Geometric Algebra references in a somewhat brute force fashion.  Somewhat sadly, the ``pretty'' Geometric Algebra methods originally being explored added some complexity to the problem that is not neccessary.  It is common to find Geometric Algebra papers and texts show how superior the new non-matrix methods are, and the approach originally used had what was felt to an elegant synthesis of both matrix and GA methods.  It is believed that there is still a great deal of potential in such a multivector matrix approach, even if, as in this case, such methods only provide the clarity to understand how to tackle the problem with traditional means.
+
+Because the goals changed in the process of assembling these notes, the reader is justified to complain that this stops prematurely.  Lots of math was performed, and then things just end.  There ought to be some followup herein to actually do some physics with the end results obtained.  Sorry about that.
+
+%5.  Make section IV as your conclusions.  Write this in three paragraphs: (1)
+%summary of what you did, (2) your conclusion stating the geometric algebra
+%approach is indeed better than the standard approach and provide the reasons,
+%and (3) give a recommendation for future work.
+
+%\bibliography{myrefs}
+%\bibliographystyle{unsrturl}
+
+%\section{graphics experiment}
+%
+%% TIP: draw the picture on graph paper and copy the numbers.
+%% http://www.ursoswald.ch/LaTeXGraphics/picture/picture.html
+%
+%Forces on the Catenary
+%
+%% features: arrows, axis's, gravity vector.
+%
+%\setlength{\unitlength}{3cm}
+%\begin{picture}(1.75, 2.75)(0, -0.1)
+%  \put(0,0){\vector(1,0){1.75}}
+%  \put(1.85, -0.03){$x$}
+%  \put(0,0){\vector(0,1){2.75}}
+%  \put(0.07, 2.70){$y$}
+%  \thicklines
+%  \qbezier(0.399, 0.467)(0.797, 0.998)
+%          (1.118, 1.962)
+%  \thinlines
+%  \multiput(0.399, 0)(0, 0.1){3}
+%           {\line(0,1){0.05}}
+%  \multiput(1.118, 0)(0, 0.1){20}
+%           {\line(0,1){0.05}}
+%  \put(0.399, -0.08){\makebox(0,0){$x_1$}}
+%  \put(1.118, -0.08){\makebox(0,0){$x_2$}}
+%  \multiput(0.399, 0.467)(0, -0.267){2}
+%           {\line(-1, 0){0.2}}
+%  \multiput(0.399, 0.467)(-0.2, 0){2}
+%           {\line(0, -1){0.267}}
+%  \put(0.399, 0.467){\vector(-1, 0){0.2}}
+%  \put(0.399, 0.467){\vector(0, -1){0.267}}
+%  \put(0.399, 0.467){\vector(-3, -4){0.2}}
+%  \put(0.32,0.55){\makebox(0,0){$H$}}
+%  \put(0.48, 0.33){\makebox(0,0){$V_1$}}
+%  \multiput(1.118, 1.962)(0, 0.6){2}
+%           {\line(1,0){0.2}}
+%  \multiput(1.118, 1.962)(0.2, 0){2}
+%           {\line(0,1){0.6}}
+%  \put(1.118, 1.962){\vector(1,0){0.2}}
+%  \put(1.118, 1.962){\vector(0,1){0.6}}
+%  \put(1.118, 1.962){\vector(1,3){0.2}}
+%  \put(1.22, 1.87){\makebox(0,0){$H$}}
+%  \put(1.02, 2.22){\makebox(0,0){$V_2$}}
+%  \put(0.797, 1.195){\vector(0,-1){0.333}}
+%  \put(0.777, 1.195){\line(1,0){0.04}}
+%  \put(0.83,1.0){$G$}
+%\end{picture}
+%
+%% feature: big dots.
+%Simultaneousness
+%
+%\setlength{\unitlength}{1mm}
+%\begin{picture}(60,50)
+%  \put(0 ,15){\vector(1,0){53}}
+%  \put(54,14){$x_A$}
+%  \put( 8,10){\vector(0,1){37}}
+%  \put( 0,46){$ct_A$}
+%  \multiput(13,9)(15,0){3}{\line(0,1){35}}
+%  \put(11,5){$A''$}
+%  \put(26,5){$A'$}
+%  \put(41,5){$A'''$}
+%  \multiput(13,37)(30,0){2}{\circle*{2}}
+%  \put(28,22){\circle*{2}}
+%  \put(28,22){\vector(1,1){14}}
+%  \put(15,39){$E_1$}
+%  \put(28,22){\vector(-1,1){14}}
+%  \put(45,39){$E_2$}
+%  \multiput(0,37)(4,0){13}{\line(1,0){2}}
+%\end{picture}
+%
+%
+%\begin{picture}(0,0)%
+%\includegraphics{3axisPl.pdf}%
+%\end{picture}%
+%\setlength{\unitlength}{3947sp}%
+%%
+%\begingroup\makeatletter\ifx\SetFigFont\undefined%
+%\gdef\SetFigFont#1#2#3#4#5{%
+%  \reset@font\fontsize{#1}{#2pt}%
+%  \fontfamily{#3}\fontseries{#4}\fontshape{#5}%
+%  \selectfont}%
+%\fi\endgroup%
+%\begin{picture}(6624,7149)(1189,-7498)
+%\end{picture}%
+
+%\end{document}

@@ -1,0 +1,1963 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+
+% 
+% 
+%\input{../peeter_prologue.tex}
+\documentclass[]{eliblog}
+
+%\input{../peeters_macros.tex}
+\usepackage{amsmath}
+\usepackage{mathpazo}
+
+\newcommand{\symmetricVecBladePauli}[3]{\left\{{#1},\left[{#2},{#3}\right]\right\}}
+\newcommand{\symmetricBladeVecPauli}[3]{\left\{\left[{#1},{#2}\right],{#3}\right\}}
+
+%
+% shorthand for bold symbols, convenient for vectors and matrices
+%
+\newcommand{\Ba}[0]{\mathbf{a}}
+\newcommand{\Bb}[0]{\mathbf{b}}
+\newcommand{\Bc}[0]{\mathbf{c}}
+\newcommand{\Bd}[0]{\mathbf{d}}
+\newcommand{\Be}[0]{\mathbf{e}}
+\newcommand{\Bf}[0]{\mathbf{f}}
+\newcommand{\Bg}[0]{\mathbf{g}}
+\newcommand{\Bh}[0]{\mathbf{h}}
+\newcommand{\Bi}[0]{\mathbf{i}}
+\newcommand{\Bj}[0]{\mathbf{j}}
+\newcommand{\Bk}[0]{\mathbf{k}}
+\newcommand{\Bl}[0]{\mathbf{l}}
+\newcommand{\Bm}[0]{\mathbf{m}}
+\newcommand{\Bn}[0]{\mathbf{n}}
+\newcommand{\Bo}[0]{\mathbf{o}}
+\newcommand{\Bp}[0]{\mathbf{p}}
+\newcommand{\Bq}[0]{\mathbf{q}}
+\newcommand{\Br}[0]{\mathbf{r}}
+\newcommand{\Bs}[0]{\mathbf{s}}
+\newcommand{\Bt}[0]{\mathbf{t}}
+\newcommand{\Bu}[0]{\mathbf{u}}
+\newcommand{\Bv}[0]{\mathbf{v}}
+\newcommand{\Bw}[0]{\mathbf{w}}
+\newcommand{\Bx}[0]{\mathbf{x}}
+\newcommand{\By}[0]{\mathbf{y}}
+\newcommand{\Bz}[0]{\mathbf{z}}
+\newcommand{\BA}[0]{\mathbf{A}}
+\newcommand{\BB}[0]{\mathbf{B}}
+\newcommand{\BC}[0]{\mathbf{C}}
+\newcommand{\BD}[0]{\mathbf{D}}
+\newcommand{\BE}[0]{\mathbf{E}}
+\newcommand{\BF}[0]{\mathbf{F}}
+\newcommand{\BG}[0]{\mathbf{G}}
+\newcommand{\BH}[0]{\mathbf{H}}
+\newcommand{\BI}[0]{\mathbf{I}}
+\newcommand{\BJ}[0]{\mathbf{J}}
+\newcommand{\BK}[0]{\mathbf{K}}
+\newcommand{\BL}[0]{\mathbf{L}}
+\newcommand{\BM}[0]{\mathbf{M}}
+\newcommand{\BN}[0]{\mathbf{N}}
+\newcommand{\BO}[0]{\mathbf{O}}
+\newcommand{\BP}[0]{\mathbf{P}}
+\newcommand{\BQ}[0]{\mathbf{Q}}
+\newcommand{\BR}[0]{\mathbf{R}}
+\newcommand{\BS}[0]{\mathbf{S}}
+\newcommand{\BT}[0]{\mathbf{T}}
+\newcommand{\BU}[0]{\mathbf{U}}
+\newcommand{\BV}[0]{\mathbf{V}}
+\newcommand{\BW}[0]{\mathbf{W}}
+\newcommand{\BX}[0]{\mathbf{X}}
+\newcommand{\BY}[0]{\mathbf{Y}}
+\newcommand{\BZ}[0]{\mathbf{Z}}
+
+\newcommand{\Bzero}[0]{\mathbf{0}}
+\newcommand{\Btheta}[0]{\boldsymbol{\theta}}
+\newcommand{\Btau}[0]{\boldsymbol{\tau}}
+\newcommand{\Bomega}[0]{\boldsymbol{\omega}}
+
+%
+% shorthand for unit vectors
+%
+\newcommand{\acap}[0]{\hat{\Ba}}
+\newcommand{\bcap}[0]{\hat{\Bb}}
+\newcommand{\ccap}[0]{\hat{\Bc}}
+\newcommand{\dcap}[0]{\hat{\Bd}}
+\newcommand{\ecap}[0]{\hat{\Be}}
+\newcommand{\fcap}[0]{\hat{\Bf}}
+\newcommand{\gcap}[0]{\hat{\Bg}}
+\newcommand{\hcap}[0]{\hat{\Bh}}
+\newcommand{\icap}[0]{\hat{\Bi}}
+\newcommand{\jCap}[0]{\hat{\Bj}}
+\newcommand{\kcap}[0]{\hat{\Bk}}
+\newcommand{\lcap}[0]{\hat{\Bl}}
+\newcommand{\mcap}[0]{\hat{\Bm}}
+\newcommand{\ncap}[0]{\hat{\Bn}}
+\newcommand{\ocap}[0]{\hat{\Bo}}
+\newcommand{\pcap}[0]{\hat{\Bp}}
+\newcommand{\qcap}[0]{\hat{\Bq}}
+\newcommand{\rcap}[0]{\hat{\Br}}
+\newcommand{\scap}[0]{\hat{\Bs}}
+\newcommand{\tcap}[0]{\hat{\Bt}}
+\newcommand{\ucap}[0]{\hat{\Bu}}
+\newcommand{\vcap}[0]{\hat{\Bv}}
+\newcommand{\wcap}[0]{\hat{\Bw}}
+\newcommand{\xcap}[0]{\hat{\Bx}}
+\newcommand{\ycap}[0]{\hat{\By}}
+\newcommand{\zcap}[0]{\hat{\Bz}}
+\newcommand{\thetacap}[0]{\hat{\Btheta}}
+
+%
+% to write R^n and C^n in a distinguishable fashion.  Perhaps change this
+% to the double lined characters upon figuring out how to do so.
+%
+\newcommand{\C}[1]{$\mathbb{C}^{#1}$}
+\newcommand{\R}[1]{$\mathbb{R}^{#1}$}
+
+%
+% various generally useful helpers
+%
+
+% derivative of #1 wrt. #2:
+\newcommand{\D}[2] {\frac {d#2} {d#1}}
+
+\newcommand{\inv}[1]{\frac{1}{#1}}
+\newcommand{\cross}[0]{\times}
+
+\newcommand{\abs}[1]{\lvert{#1}\rvert}
+\newcommand{\norm}[1]{\lVert{#1}\rVert}
+\newcommand{\innerprod}[2]{\langle{#1}, {#2}\rangle}
+\newcommand{\dotprod}[2]{{#1} \cdot {#2}}
+\newcommand{\bdotprod}[2]{\left({#1} \cdot {#2}\right)}
+\newcommand{\crossprod}[2]{{#1} \cross {#2}}
+\newcommand{\tripleprod}[3]{\dotprod{\left(\crossprod{#1}{#2}\right)}{#3}}
+
+\DeclareMathOperator{\Proj}{Proj}
+\DeclareMathOperator{\Span}{span}
+\DeclareMathOperator{\Sgn}{sgn}
+\DeclareMathOperator{\Area}{Area}
+\DeclareMathOperator{\Volume}{Volume}
+
+%
+% A few miscellaneous things specific to this document
+%
+\newcommand{\crossop}[1]{\crossprod{#1}{}}
+
+% R2 vector.
+\newcommand{\VectorTwo}[2]{
+\begin{bmatrix}
+ {#1} \\
+ {#2}
+\end{bmatrix}
+}
+
+\newcommand{\VectorN}[1]{
+\begin{bmatrix}
+{#1}_1 \\
+{#1}_2 \\
+\vdots \\
+{#1}_N \\
+\end{bmatrix}
+}
+
+\newcommand{\DETuvij}[4]{
+\begin{vmatrix}
+ {#1}_{#3} & {#1}_{#4} \\
+ {#2}_{#3} & {#2}_{#4}
+\end{vmatrix}
+}
+
+\newcommand{\DETuvwijk}[6]{
+\begin{vmatrix}
+ {#1}_{#4} & {#1}_{#5} & {#1}_{#6} \\
+ {#2}_{#4} & {#2}_{#5} & {#2}_{#6} \\
+ {#3}_{#4} & {#3}_{#5} & {#3}_{#6}
+\end{vmatrix}
+}
+
+\newcommand{\DETuvwxijkl}[8]{
+\begin{vmatrix}
+ {#1}_{#5} & {#1}_{#6} & {#1}_{#7} & {#1}_{#8} \\
+ {#2}_{#5} & {#2}_{#6} & {#2}_{#7} & {#2}_{#8} \\
+ {#3}_{#5} & {#3}_{#6} & {#3}_{#7} & {#3}_{#8} \\
+ {#4}_{#5} & {#4}_{#6} & {#4}_{#7} & {#4}_{#8} \\
+\end{vmatrix}
+}
+
+%\newcommand{\DETuvwxyijklm}[10]{
+%\begin{vmatrix}
+% {#1}_{#6} & {#1}_{#7} & {#1}_{#8} & {#1}_{#9} & {#1}_{#10} \\
+% {#2}_{#6} & {#2}_{#7} & {#2}_{#8} & {#2}_{#9} & {#2}_{#10} \\
+% {#3}_{#6} & {#3}_{#7} & {#3}_{#8} & {#3}_{#9} & {#3}_{#10} \\
+% {#4}_{#6} & {#4}_{#7} & {#4}_{#8} & {#4}_{#9} & {#4}_{#10} \\
+% {#5}_{#6} & {#5}_{#7} & {#5}_{#8} & {#5}_{#9} & {#5}_{#10}
+%\end{vmatrix}
+%}
+
+% R3 vector.
+\newcommand{\VectorThree}[3]{
+\begin{bmatrix}
+ {#1} \\
+ {#2} \\
+ {#3}
+\end{bmatrix}
+}
+
+%---------------------------------------------------------
+% peeters_macros2.tex:
+
+%<misc>
+%
+\newcommand{\Abs}[1]{{\left\lvert{#1}\right\rvert}}
+\newcommand{\Norm}[1]{\left\lVert{#1}\right\rVert}
+\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+\newcommand{\grad}[0]{\nabla}
+\newcommand{\LL}[0]{\mathcal{L}}
+
+% == \partial_{#1} {#2}
+\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+% inline variant
+\newcommand{\PDi}[2]{{\partial {#2}}/{\partial {#1}}}
+
+\newcommand{\PDD}[3]{\frac{\partial^2 {#3}}{\partial {#1}\partial {#2}}}
+%\newcommand{\PDd}[2]{\frac{\partial^2 {#2}}{{\partial{#1}}^2}}
+\newcommand{\PDsq}[2]{\frac{\partial^2 {#2}}{(\partial {#1})^2}}
+
+\newcommand{\Partial}[2]{\frac{\partial {#1}}{\partial {#2}}}
+\DeclareMathOperator{\RejName}{Rej}
+\newcommand{\Rej}[2]{\RejName_{#1}\left( {#2} \right)}
+\newcommand{\Rm}[1]{\mathbb{R}^{#1}}
+\newcommand{\Cm}[1]{\mathbb{C}^{#1}}
+\newcommand{\conj}[0]{{*}}
+
+%</misc>
+
+% <grade selection>
+%
+\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+
+\newcommand{\gpgradezero}[1] {\gpgrade{#1}{}}
+%\newcommand{\gpscalargrade}[1] {{\left\langle{{#1}}\right\rangle}}
+%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+
+%\newcommand{\gpgradeone}[1] {{\left\langle{{#1}}\right\rangle}_{1}}
+\newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
+
+\newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
+\newcommand{\gpgradethree}[1] {\gpgrade{#1}{3}}
+\newcommand{\gpgradefour}[1] {\gpgrade{#1}{4}}
+%
+% </grade selection>
+
+
+
+\newcommand{\adot}[0]{{\dot{a}}}
+\newcommand{\bdot}[0]{{\dot{b}}}
+% taken for centered dot:
+%\newcommand{\cdot}[0]{{\dot{c}}}
+%\newcommand{\ddot}[0]{{\dot{d}}}
+\newcommand{\edot}[0]{{\dot{e}}}
+\newcommand{\fdot}[0]{{\dot{f}}}
+\newcommand{\gdot}[0]{{\dot{g}}}
+\newcommand{\hdot}[0]{{\dot{h}}}
+\newcommand{\idot}[0]{{\dot{i}}}
+\newcommand{\jdot}[0]{{\dot{j}}}
+\newcommand{\kdot}[0]{{\dot{k}}}
+\newcommand{\ldot}[0]{{\dot{l}}}
+\newcommand{\mdot}[0]{{\dot{m}}}
+\newcommand{\ndot}[0]{{\dot{n}}}
+%\newcommand{\odot}[0]{{\dot{o}}}
+\newcommand{\pdot}[0]{{\dot{p}}}
+\newcommand{\qdot}[0]{{\dot{q}}}
+\newcommand{\rdot}[0]{{\dot{r}}}
+\newcommand{\sdot}[0]{{\dot{s}}}
+\newcommand{\tdot}[0]{{\dot{t}}}
+\newcommand{\udot}[0]{{\dot{u}}}
+\newcommand{\vdot}[0]{{\dot{v}}}
+\newcommand{\wdot}[0]{{\dot{w}}}
+\newcommand{\xdot}[0]{{\dot{x}}}
+\newcommand{\ydot}[0]{{\dot{y}}}
+\newcommand{\zdot}[0]{{\dot{z}}}
+\newcommand{\addot}[0]{{\ddot{a}}}
+\newcommand{\bddot}[0]{{\ddot{b}}}
+\newcommand{\cddot}[0]{{\ddot{c}}}
+%\newcommand{\dddot}[0]{{\ddot{d}}}
+\newcommand{\eddot}[0]{{\ddot{e}}}
+\newcommand{\fddot}[0]{{\ddot{f}}}
+\newcommand{\gddot}[0]{{\ddot{g}}}
+\newcommand{\hddot}[0]{{\ddot{h}}}
+\newcommand{\iddot}[0]{{\ddot{i}}}
+\newcommand{\jddot}[0]{{\ddot{j}}}
+\newcommand{\kddot}[0]{{\ddot{k}}}
+\newcommand{\lddot}[0]{{\ddot{l}}}
+\newcommand{\mddot}[0]{{\ddot{m}}}
+\newcommand{\nddot}[0]{{\ddot{n}}}
+\newcommand{\oddot}[0]{{\ddot{o}}}
+\newcommand{\pddot}[0]{{\ddot{p}}}
+\newcommand{\qddot}[0]{{\ddot{q}}}
+\newcommand{\rddot}[0]{{\ddot{r}}}
+\newcommand{\sddot}[0]{{\ddot{s}}}
+\newcommand{\tddot}[0]{{\ddot{t}}}
+\newcommand{\uddot}[0]{{\ddot{u}}}
+\newcommand{\vddot}[0]{{\ddot{v}}}
+\newcommand{\wddot}[0]{{\ddot{w}}}
+\newcommand{\xddot}[0]{{\ddot{x}}}
+\newcommand{\yddot}[0]{{\ddot{y}}}
+\newcommand{\zddot}[0]{{\ddot{z}}}
+
+%<bold and dot greek symbols>
+%
+
+\newcommand{\Deltadot}[0]{{\dot{\Delta}}}
+\newcommand{\Gammadot}[0]{{\dot{\Gamma}}}
+\newcommand{\Lambdadot}[0]{{\dot{\Lambda}}}
+\newcommand{\Omegadot}[0]{{\dot{\Omega}}}
+\newcommand{\Phidot}[0]{{\dot{\Phi}}}
+\newcommand{\Pidot}[0]{{\dot{\Pi}}}
+\newcommand{\Psidot}[0]{{\dot{\Psi}}}
+\newcommand{\Sigmadot}[0]{{\dot{\Sigma}}}
+\newcommand{\Thetadot}[0]{{\dot{\Theta}}}
+\newcommand{\Upsilondot}[0]{{\dot{\Upsilon}}}
+\newcommand{\Xidot}[0]{{\dot{\Xi}}}
+\newcommand{\alphadot}[0]{{\dot{\alpha}}}
+\newcommand{\betadot}[0]{{\dot{\beta}}}
+\newcommand{\chidot}[0]{{\dot{\chi}}}
+\newcommand{\deltadot}[0]{{\dot{\delta}}}
+\newcommand{\epsilondot}[0]{{\dot{\epsilon}}}
+\newcommand{\etadot}[0]{{\dot{\eta}}}
+\newcommand{\gammadot}[0]{{\dot{\gamma}}}
+\newcommand{\kappadot}[0]{{\dot{\kappa}}}
+\newcommand{\lambdadot}[0]{{\dot{\lambda}}}
+\newcommand{\mudot}[0]{{\dot{\mu}}}
+\newcommand{\nudot}[0]{{\dot{\nu}}}
+\newcommand{\omegadot}[0]{{\dot{\omega}}}
+\newcommand{\phidot}[0]{{\dot{\phi}}}
+\newcommand{\pidot}[0]{{\dot{\pi}}}
+\newcommand{\psidot}[0]{{\dot{\psi}}}
+\newcommand{\rhodot}[0]{{\dot{\rho}}}
+\newcommand{\sigmadot}[0]{{\dot{\sigma}}}
+\newcommand{\taudot}[0]{{\dot{\tau}}}
+\newcommand{\thetadot}[0]{{\dot{\theta}}}
+\newcommand{\upsilondot}[0]{{\dot{\upsilon}}}
+\newcommand{\varepsilondot}[0]{{\dot{\varepsilon}}}
+\newcommand{\varphidot}[0]{{\dot{\varphi}}}
+\newcommand{\varpidot}[0]{{\dot{\varpi}}}
+\newcommand{\varrhodot}[0]{{\dot{\varrho}}}
+\newcommand{\varsigmadot}[0]{{\dot{\varsigma}}}
+\newcommand{\varthetadot}[0]{{\dot{\vartheta}}}
+\newcommand{\xidot}[0]{{\dot{\xi}}}
+\newcommand{\zetadot}[0]{{\dot{\zeta}}}
+
+\newcommand{\Deltaddot}[0]{{\ddot{\Delta}}}
+\newcommand{\Gammaddot}[0]{{\ddot{\Gamma}}}
+\newcommand{\Lambdaddot}[0]{{\ddot{\Lambda}}}
+\newcommand{\Omegaddot}[0]{{\ddot{\Omega}}}
+\newcommand{\Phiddot}[0]{{\ddot{\Phi}}}
+\newcommand{\Piddot}[0]{{\ddot{\Pi}}}
+\newcommand{\Psiddot}[0]{{\ddot{\Psi}}}
+\newcommand{\Sigmaddot}[0]{{\ddot{\Sigma}}}
+\newcommand{\Thetaddot}[0]{{\ddot{\Theta}}}
+\newcommand{\Upsilonddot}[0]{{\ddot{\Upsilon}}}
+\newcommand{\Xiddot}[0]{{\ddot{\Xi}}}
+\newcommand{\alphaddot}[0]{{\ddot{\alpha}}}
+\newcommand{\betaddot}[0]{{\ddot{\beta}}}
+\newcommand{\chiddot}[0]{{\ddot{\chi}}}
+\newcommand{\deltaddot}[0]{{\ddot{\delta}}}
+\newcommand{\epsilonddot}[0]{{\ddot{\epsilon}}}
+\newcommand{\etaddot}[0]{{\ddot{\eta}}}
+\newcommand{\gammaddot}[0]{{\ddot{\gamma}}}
+\newcommand{\kappaddot}[0]{{\ddot{\kappa}}}
+\newcommand{\lambdaddot}[0]{{\ddot{\lambda}}}
+\newcommand{\muddot}[0]{{\ddot{\mu}}}
+\newcommand{\nuddot}[0]{{\ddot{\nu}}}
+\newcommand{\omegaddot}[0]{{\ddot{\omega}}}
+\newcommand{\phiddot}[0]{{\ddot{\phi}}}
+\newcommand{\piddot}[0]{{\ddot{\pi}}}
+\newcommand{\psiddot}[0]{{\ddot{\psi}}}
+\newcommand{\rhoddot}[0]{{\ddot{\rho}}}
+\newcommand{\sigmaddot}[0]{{\ddot{\sigma}}}
+\newcommand{\tauddot}[0]{{\ddot{\tau}}}
+\newcommand{\thetaddot}[0]{{\ddot{\theta}}}
+\newcommand{\upsilonddot}[0]{{\ddot{\upsilon}}}
+\newcommand{\varepsilonddot}[0]{{\ddot{\varepsilon}}}
+\newcommand{\varphiddot}[0]{{\ddot{\varphi}}}
+\newcommand{\varpiddot}[0]{{\ddot{\varpi}}}
+\newcommand{\varrhoddot}[0]{{\ddot{\varrho}}}
+\newcommand{\varsigmaddot}[0]{{\ddot{\varsigma}}}
+\newcommand{\varthetaddot}[0]{{\ddot{\vartheta}}}
+\newcommand{\xiddot}[0]{{\ddot{\xi}}}
+\newcommand{\zetaddot}[0]{{\ddot{\zeta}}}
+
+\newcommand{\BDelta}[0]{\boldsymbol{\Delta}}
+\newcommand{\BGamma}[0]{\boldsymbol{\Gamma}}
+\newcommand{\BLambda}[0]{\boldsymbol{\Lambda}}
+\newcommand{\BOmega}[0]{\boldsymbol{\Omega}}
+\newcommand{\BPhi}[0]{\boldsymbol{\Phi}}
+\newcommand{\BPi}[0]{\boldsymbol{\Pi}}
+\newcommand{\BPsi}[0]{\boldsymbol{\Psi}}
+\newcommand{\BSigma}[0]{\boldsymbol{\Sigma}}
+\newcommand{\BTheta}[0]{\boldsymbol{\Theta}}
+\newcommand{\BUpsilon}[0]{\boldsymbol{\Upsilon}}
+\newcommand{\BXi}[0]{\boldsymbol{\Xi}}
+\newcommand{\Balpha}[0]{\boldsymbol{\alpha}}
+\newcommand{\Bbeta}[0]{\boldsymbol{\beta}}
+\newcommand{\Bchi}[0]{\boldsymbol{\chi}}
+\newcommand{\Bdelta}[0]{\boldsymbol{\delta}}
+\newcommand{\Bepsilon}[0]{\boldsymbol{\epsilon}}
+\newcommand{\Beta}[0]{\boldsymbol{\eta}}
+\newcommand{\Bgamma}[0]{\boldsymbol{\gamma}}
+\newcommand{\Bkappa}[0]{\boldsymbol{\kappa}}
+\newcommand{\Blambda}[0]{\boldsymbol{\lambda}}
+\newcommand{\Bmu}[0]{\boldsymbol{\mu}}
+\newcommand{\Bnu}[0]{\boldsymbol{\nu}}
+%\newcommand{\Bomega}[0]{\boldsymbol{\omega}}
+\newcommand{\Bphi}[0]{\boldsymbol{\phi}}
+\newcommand{\Bpi}[0]{\boldsymbol{\pi}}
+\newcommand{\Bpsi}[0]{\boldsymbol{\psi}}
+\newcommand{\Brho}[0]{\boldsymbol{\rho}}
+\newcommand{\Bsigma}[0]{\boldsymbol{\sigma}}
+%\newcommand{\Btau}[0]{\boldsymbol{\tau}}
+%\newcommand{\Btheta}[0]{\boldsymbol{\theta}}
+\newcommand{\Bupsilon}[0]{\boldsymbol{\upsilon}}
+\newcommand{\Bvarepsilon}[0]{\boldsymbol{\varepsilon}}
+\newcommand{\Bvarphi}[0]{\boldsymbol{\varphi}}
+\newcommand{\Bvarpi}[0]{\boldsymbol{\varpi}}
+\newcommand{\Bvarrho}[0]{\boldsymbol{\varrho}}
+\newcommand{\Bvarsigma}[0]{\boldsymbol{\varsigma}}
+\newcommand{\Bvartheta}[0]{\boldsymbol{\vartheta}}
+\newcommand{\Bxi}[0]{\boldsymbol{\xi}}
+\newcommand{\Bzeta}[0]{\boldsymbol{\zeta}}
+%
+%</bold and dot greek symbols>
+%<infrequent>
+%
+%\newcommand{\AreaOp}[1]{\AName_{#1}}
+%\newcommand{\Babs}[0]{\abs{\BB}}
+%\newcommand{\Bcap}[0]{\hat{\BB}}
+%\newcommand{\BrPrimeRej}[0]{\rcap(\rcap \wedge \Br')}
+%\newcommand{\CA}[0]{\mathcal{A}}
+%\newcommand{\Cos}[1]{\cos{\left({#1}\right)}}
+%\newcommand{\Det}[1] {\abs{#1}}
+%\newcommand{\Dsq}[2] {\frac {\partial^2 {#1}} {\partial {#2}^2}}
+%\newcommand{\Exp}[1]{\exp{\left({#1}\right)}}
+%\newcommand{\Norm}[1]{\left\lVert{#1}\right\rVert}
+%\newcommand{\Sin}[1]{\sin{\left({#1}\right)}}
+%\newcommand{\T}[0]{\text{T}}
+%\newcommand{\VolumeOp}[1]{\VName_{#1}}
+%\newcommand{\agrad}[0]{\Ba \cdot \nabla}
+%\newcommand{\alphacap}[0]{\hat{\boldsymbol{\alpha}}}
+%\newcommand{\Fcap}[0]{\hat{\BF}}
+%\newcommand{\bithree}[0]{{\Bi}_3}
+%\newcommand{\bxa}[0]{\Bx\Ba}
+%\newcommand{\coordvec}[2]{
+%\newcommand{\costheta}[0]{\acap \cdot \xcap}
+%\newcommand{\ddt}[1]{\ddot{#1}}
+%\newcommand{\ddu}[1] {\frac {d{#1}} {du}}
+%\newcommand{\dsqxj}[2] {\frac {\partial^2 {#1}} {\partial {x_{#2}}^2}}
+%\newcommand{\dtheta}[1]{\frac{d {#1}}{d \theta}}
+%\newcommand{\dt}[1]{\dot{#1}}
+%\newcommand{\dt}[1]{\frac{d {#1}}{dt}}
+%\newcommand{\dxj}[2] {\frac {\partial {#1}} {\partial {x_{#2}}}}
+%\newcommand{\halfPhi}[0]{\frac{\phi}{2}}
+%\newcommand{\half}[0]{\inv{2}}
+%\newcommand{\inv}[1]{\frac{1}{#1}}
+%\newcommand{\laplacian}[0]{\nabla^2}
+%\newcommand{\matrixoftx}[3]{
+%\newcommand{\nrrp}[0]{\norm{\rcap \wedge \Br'}}
+%\newcommand{\oiint}{\bigcirc \hspace{-1.4em} \int \hspace{-.8em} \int}
+%\newcommand{\transpose}[1]{{#1}^{\text{T}}}
+%\newcommand{\transpose}[1]{{{#1}^{\TextTranspose}}}
+%\newcommand{\transpose}[1]{{{#1}^{\text{T}}}}
+%\newcommand{\barA}[0]{\bar{A}}
+%\newcommand{\barq}[0]{\bar{q}}
+%\newcommand{\qbardot}[0]{\dot{\bar{q}}}
+%
+%</infrequent>
+
+%---------------------------------------------------------
+% peeters_macros3.tex:
+
+%-------------------------------------------------------
+\DeclareMathOperator{\diag}{diag}
+
+%-------------------------------------------------------
+\newcommand{\symmetric}[2]{{\left\{{#1},{#2}\right\}}}
+\newcommand{\antisymmetric}[2]{\left[{#1},{#2}\right]}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\something}{something}
+
+\newcommand{\uDETuvij}[4]{
+\begin{vmatrix}
+ {#1}^{#3} & {#1}^{#4} \\
+ {#2}^{#3} & {#2}^{#4}
+\end{vmatrix}
+}
+
+\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+\newcommand{\transpose}[1]{{#1}^{\mathrm{T}}}
+\newcommand{\stardot}[0]{{*}}
+
+% bivector.tex:
+\newcommand{\laplacian}[0]{\nabla^2}
+\newcommand{\Dsq}[2] {\frac {\partial^2 {#1}} {\partial {#2}^2}}
+\newcommand{\dxj}[2] {\frac {\partial {#1}} {\partial {x_{#2}}}}
+\newcommand{\dsqxj}[2] {\frac {\partial^2 {#1}} {\partial {x_{#2}}^2}}
+\DeclareMathOperator{\ExpName}{e}
+%\DeclareMathOperator{\Exp}{e}
+%\newcommand{\Exp}[1]{\exp{\left({#1}\right)}}
+%\DeclareMathOperator{\Rej}{Rej}
+\DeclareMathOperator{\Rot}{R}
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+%\newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
+%\newcommand{\gpgradefour}[1] {\gpgrade{#1}{4}}
+
+% ga_wiki_torque.tex:
+\newcommand{\Fcap}[0]{\hat{\BF}}
+\newcommand{\bithree}[0]{{\Bi}_3}
+\newcommand{\nrrp}[0]{\norm{\rcap \wedge \Br'}}
+\newcommand{\dtheta}[1]{\frac{d {#1}}{d \theta}}
+
+% ga_wiki_unit_derivative.tex
+\newcommand{\dt}[1]{\frac{d {#1}}{dt}}
+\newcommand{\BrPrimeRej}[0]{\rcap(\rcap \wedge \Br')}
+
+% radial_vector_derivatives.tex:
+%\newcommand{\BrPrimeRej}[0]{\rcap(\rcap \wedge \Br')}
+
+% angular_velocity.tex
+
+%\newcommand{\dt}[1]{\frac{d {#1}}{dt}}
+%\newcommand{\Norm}[1]{\left\lVert{#1}\right\rVert}
+%\newcommand{\dtheta}[1]{\frac{d {#1}}{d \theta}}
+
+% reciprocal_frame.tex
+\DeclareMathOperator{\AbsName}{abs}
+
+%\DeclareMathOperator{\RejName}{Rej}
+%\newcommand{\Rej}[2]{\RejName_{#1}\left( {#2} \right)}
+
+\DeclareMathOperator{\AName}{A}
+\newcommand{\AreaOp}[1]{\AName_{#1}}
+
+\DeclareMathOperator{\VName}{V}
+\newcommand{\VolumeOp}[1]{\VName_{#1}}
+
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradeone}[1] {{\left\langle{{#1}}\right\rangle}_{1}}
+
+
+% projection_with_matrix_comparison.tex
+%\DeclareMathOperator{\Transpose}{T}
+\DeclareMathOperator{\rank}{rank}
+%\newcommand{\transpose}[1]{{{#1}^{\TextTranspose}}}
+%\newcommand{\transpose}[1]{{{#1}^{\text{T}}}}
+\newcommand{\T}[0]{{\text{T}}}
+%\newcommand{\BOmega}[0]{\boldsymbol{\Omega}}
+
+%\newcommand{\Det}[1] {\abs{#1}}
+
+% oblique_proj.tex
+%\newcommand{\T}[0]{\text{T}}
+%\newcommand{\Bbeta}[0]{\boldsymbol{\beta}}
+
+% spherical_polar.tex
+\newcommand{\phicap}[0]{\hat{\boldsymbol{\phi}}}
+\newcommand{\Lor}[2]{{{\Lambda^{#1}}_{#2}}}
+\newcommand{\ILor}[2]{{{ \{{\Lambda^{-1}\} }^{#1}}_{#2}}}
+
+% slerp.tex
+\DeclareMathOperator{\atan2}{atan2}
+
+% kvector_exponential.tex
+%\DeclareMathOperator{\Exp}{e}
+%\DeclareMathOperator{\Rej}{Rej}
+\newcommand{\Bcap}[0]{\hat{\BB}}
+\newcommand{\Babs}[0]{\abs{\BB}}
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+%\newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
+%\newcommand{\gpgradefour}[1] {\gpgrade{#1}{4}}
+
+\newcommand{\ddu}[1] {\frac {d{#1}} {du}}
+
+% vector_integral_relations.tex
+%\newcommand{\Oiint}{\bigcirc \hspace{-1.4em} \int \hspace{-.8em} \int}
+
+% legendre.tex
+\newcommand{\agrad}[0]{\Ba \cdot \nabla}
+\newcommand{\bxa}[0]{\Bx\Ba}
+\newcommand{\costheta}[0]{\acap \cdot \xcap}
+%\newcommand{\inv}[1]{\frac{1}{#1}}
+\newcommand{\half}[0]{\inv{2}}
+
+% ke_rotation.tex
+\newcommand{\DotT}[1]{\dot{#1}}
+\newcommand{\DDotT}[1]{\ddot{#1}}
+%\newcommand{\transpose}[1]{{#1}^{\text{T}}}
+%\newcommand{\Balpha}[0]{\boldsymbol{\alpha}}
+
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradeone}[1] {{\left\langle{{#1}}\right\rangle}_{1}}
+\newcommand{\gpscalargrade}[1] {{\left\langle{{#1}}\right\rangle}}
+%\newcommand{\BOmega}[0]{\boldsymbol{\Omega}}
+
+% gaussian_surface.tex
+%\newcommand{\phicap}[0]{\hat{\Bphi}}
+
+% newtonian_lagrangian_and_gradient.tex
+% PD macro that is backwards from current in macros2:
+\newcommand{\PDb}[2]{ \frac{\partial{#1}}{\partial {#2}} }
+
+% inertial_tensor.tex
+\newcommand{\matrixoftx}[3]{
+{
+\begin{bmatrix}
+{#1}
+\end{bmatrix}
+}_{#2}^{#3}
+}
+
+\newcommand{\coordvec}[2]{
+{
+\begin{bmatrix}
+{#1}
+\end{bmatrix}
+}_{#2}
+}
+
+% bohr.tex
+\newcommand{\K}[0]{\inv{4 \pi \epsilon_0}}
+
+% euler_lagrange.tex
+\newcommand{\barq}[0]{\bar{q}}
+\newcommand{\qbardot}[0]{\dot{\bar{q}}}
+\newcommand{\DD}[2]{\frac{d{#2}}{d{#1}}}
+\newcommand{\Xdot}[0]{\dot{X}}
+
+% rayleigh_jeans.tex
+\newcommand{\EE}[0]{\boldsymbol{\mathcal{E}}}
+\newcommand{\BCB}[0]{\boldsymbol{\mathcal{B}}}
+\newcommand{\HH}[0]{\boldsymbol{\mathcal{H}}}
+
+% 4d_fourier.tex
+
+%\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+\DeclareMathOperator{\sinc}{sinc}
+\DeclareMathOperator{\PV}{PV}
+%\newcommand{\FF}[0]{\mathcal{F}}
+%\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+
+% poisson.tex
+%\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+%\DeclareMathOperator{\sinc}{sinc}
+%\DeclareMathOperator{\PV}{PV}
+%\newcommand{\FF}[0]{\mathcal{F}}
+%\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+
+% fourier_maxwell.tex
+%\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+%\DeclareMathOperator{\sinc}{sinc}
+%\DeclareMathOperator{\sgn}{sgn}
+%\DeclareMathOperator{\PV}{PV}
+%\newcommand{\FF}[0]{\mathcal{F}}
+%\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+
+% firstorder_fourier_maxwell.tex
+%\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+%\DeclareMathOperator{\sinc}{sinc}
+%\DeclareMathOperator{\PV}{PV}
+%\newcommand{\FF}[0]{\mathcal{F}}
+%\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+
+% wave_fourier.tex
+%\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+%\DeclareMathOperator{\sinc}{sinc}
+%\DeclareMathOperator{\PV}{PV}
+%\newcommand{\FF}[0]{\mathcal{F}}
+%\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+
+% heat_fourier.tex
+%\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+%\DeclareMathOperator{\sinc}{sinc}
+%\newcommand{\FF}[0]{\mathcal{F}}
+%\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+
+% proj_generalized_dot_prod.tex
+%\newcommand{\T}[0]{\text{T}}
+
+% fourier_tx.tex
+%\newcommand{\FF}[0]{\mathcal{F}}
+\newcommand{\FM}[0]{\inv{\sqrt{2\pi\hbar}}}
+\newcommand{\Iinf}[1]{ \int_{-\infty}^\infty {#1}}
+%\DeclareMathOperator{\PV}{PV}
+
+% fourier_notation.tex
+%\newcommand{\FF}[0]{\mathcal{F}}
+%\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+%\DeclareMathOperator{\PV}{PV}
+%\DeclareMathOperator{\sinc}{sinc}
+
+% planewave.tex
+%\newcommand{\EE}[0]{\boldsymbol{\mathcal{E}}}
+%\newcommand{\HH}[0]{\boldsymbol{\mathcal{H}}}
+%\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+
+% dirac_lagrangian.tex
+%\newcommand{\Dslash}[0]{ \not\!D }
+
+% pauli_matrix.tex
+\newcommand{\Clifford}[2]{\mathcal{C}_{\{{#1},{#2}\}}}
+\DeclareMathOperator{\tr}{Tr}
+%\DeclareMathOperator{\Scalar}{Scalar}
+\DeclareMathOperator{\Real}{Re}
+\DeclareMathOperator{\Imag}{Im}
+\newcommand{\trace}[1]{\tr{#1}}
+\newcommand{\scalarProduct}[2]{{#1} \bullet {#2}}
+\newcommand{\traceB}[1]{\tr\left({#1}\right)}
+%\newcommand{\symmetric}[2]{{\left\{{#1},{#2}\right\}}}
+%\newcommand{\antisymmetric}[2]{\left[{#1},{#2}\right]}
+%\newcommand{\Bcap}[0]{\hat{\BB}}
+
+\newcommand{\xhat}[0]{\hat{x}}
+\newcommand{\ahat}[0]{\hat{a}}
+\newcommand{\bhat}[0]{\hat{b}}
+
+\newcommand{\PauliI}[0]{
+\begin{bmatrix}
+1 & 0 \\
+0 & 1 \\
+\end{bmatrix}
+}
+
+\newcommand{\PauliX}[0]{
+\begin{bmatrix}
+0 & 1 \\
+1 & 0 \\
+\end{bmatrix}
+}
+
+\newcommand{\PauliY}[0]{
+\begin{bmatrix}
+0 & -i \\
+i & 0 \\
+\end{bmatrix}
+}
+
+\newcommand{\PauliYNoI}[0]{
+\begin{bmatrix}
+0 & -1 \\
+1 & 0 \\
+\end{bmatrix}
+}
+
+\newcommand{\PauliZ}[0]{
+\begin{bmatrix}
+1 & 0 \\
+0 & -1 \\
+\end{bmatrix}
+}
+
+% gamma.tex
+%\newcommand{\scalarProduct}[2]{{#1} \bullet {#2}}
+%\newcommand{\symmetric}[2]{{\left\{{#1},{#2}\right\}}}
+%\newcommand{\antisymmetric}[2]{\left[{#1},{#2}\right]}
+
+%\newcommand{\PauliX}[0]{
+%\begin{bmatrix}
+%0 & 1 \\
+%1 & 0 \\
+%\end{bmatrix}
+%}
+
+%\newcommand{\PauliY}[0]{
+%\begin{bmatrix}
+%0 & -i \\
+%i & 0 \\
+%\end{bmatrix}
+%}
+
+%\newcommand{\PauliYNoI}[0]{
+%\begin{bmatrix}
+%0 & -1 \\
+%1 & 0 \\
+%\end{bmatrix}
+%}
+
+%\newcommand{\PauliZ}[0]{
+%\begin{bmatrix}
+%1 & 0 \\
+%0 & -1 \\
+%\end{bmatrix}
+%}
+
+% em_bivector_metric_dependencies.tex
+
+%\newcommand{\LL}[0]{\mathcal{L}}
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+%\newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
+%\newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
+%\newcommand{\gpgradefour}[1] {\gpgrade{#1}{4}}
+%\newcommand{\grad}[0]{\nabla}
+%\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+% == \partial_{#1} {#2}
+%\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+%\newcommand{\PDD}[3]{\frac{\partial^2 {#3}}{\partial {#1}\partial {#2}}}
+\newcommand{\PDsQ}[2]{\frac{\partial^2 {#2}}{\partial^2 {#1}}}
+
+% gem.tex
+\newcommand{\barh}[0]{\bar{h}}
+
+% mass_vary_lagrangian.tex
+%\newcommand{\LL}[0]{\mathcal{L}}
+%\newcommand{\grad}[0]{\nabla}
+%\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+%\newcommand{\xdot}[0]{\dot{x}}
+%\newcommand{\vdot}[0]{\dot{v}}
+%\newcommand{\mdot}[0]{\dot{m}}
+%\newcommand{\xddot}[0]{\ddot{x}}
+%\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+
+% fourvec_dotinvariance.tex
+%\newcommand{\Balpha}[0]{\boldsymbol{\alpha}}
+\newcommand{\alphacap}[0]{\hat{\boldsymbol{\alpha}}}
+%\newcommand{\Bcap}[0]{\hat{\BB}}
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+
+% lorentz.tex
+%\newcommand{\laplacian}[0]{\nabla^2}
+
+% field_lagrangian.tex
+%\newcommand{\LL}[0]{\mathcal{L}}
+%\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+\newcommand{\barA}[0]{\bar{A}}
+%\newcommand{\grad}[0]{\nabla}
+%\newcommand{\conj}[0]{{*}}
+
+%\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+%\newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
+%\newcommand{\gpgradefour}[1] {\gpgrade{#1}{4}}
+
+% lagrangian_field_density.tex
+%\newcommand{\LL}[0]{\mathcal{L}}
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+%\newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
+%\newcommand{\gpgradefour}[1] {\gpgrade{#1}{4}}
+%\newcommand{\grad}[0]{\nabla}
+%\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+%\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+\newcommand{\PDd}[2]{\frac{\partial^2 {#2}}{{\partial{#1}}^2}}
+%\newcommand{\PDD}[3]{\frac{\partial^2 {#3}}{\partial {#1}\partial {#2}}}
+
+%\newcommand{\barA}[0]{\bar{A}}
+
+% lorentz_force.tex
+%\newcommand{\grad}[0]{\nabla}
+%\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+%\newcommand{\LL}[0]{\mathcal{L}}
+%\newcommand{\xdot}[0]{\dot{x}}
+%\newcommand{\xddot}[0]{\ddot{x}}
+%\newcommand{\pdot}[0]{\dot{p}}
+%\newcommand{\pddot}[0]{\ddot{p}}
+%\newcommand{\fdot}[0]{\dot{f}}
+%\newcommand{\fddot}[0]{\ddot{f}}
+
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
+%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{}}
+%\newcommand{\grad}[0] {\nabla}
+%\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+
+%\newcommand{\pdot}[0]{\dot{p}}
+%\newcommand{\pddot}[0]{\ddot{p}}
+
+%\newcommand{\xdot}[0]{\dot{x}}
+%\newcommand{\xddot}[0]{\ddot{x}}
+%\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+
+% stokes_maxwell_application.tex
+%\newcommand{\grad}[0]{\nabla}
+%\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+%\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+%\newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
+%\newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
+%\newcommand{\gpgradethree}[1] {\gpgrade{#1}{3}}
+
+% lorentz_rotation.tex
+%\DeclareMathOperator{\Transpose}{T}
+%\newcommand{\T}[0]{\text{T}}
+
+% electron_rotor.tex
+\newcommand{\reverse}[1]{\tilde{{#1}}}
+%\newcommand{\ILambda}[0]{{(\Lambda^{-1})}}
+\newcommand{\ILambda}[0]{\Pi}
+
+% em_potential.tex
+%\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+%\newcommand{\grad}[0]{\nabla}
+\newcommand{\CA}[0]{\mathcal{A}}
+ 
+% maxwell_to_tensor.tex
+%\newcommand{\LL}[0]{\mathcal{L}}
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+%\newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
+%\newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
+%\newcommand{\gpgradefour}[1] {\gpgrade{#1}{4}}
+%\newcommand{\grad}[0]{\nabla}
+%\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+% == \partial_{#1} {#2}
+%\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+%\newcommand{\PDD}[3]{\frac{\partial^2 {#3}}{\partial {#1}\partial {#2}}}
+%\newcommand{\PDsQ}[2]{\frac{\partial^2 {#2}}{\partial^2 {#1}}}
+
+%\newcommand{\EE}[0]{\boldsymbol{\mathcal{E}}}
+%\newcommand{\HH}[0]{\boldsymbol{\mathcal{H}}}
+\newcommand{\Vcap}[0]{\hat{\BV}}
+
+% laplace.tex
+%\newcommand{\laplacian}[0]{\nabla^2}
+%\newcommand{\Dsq}[2] {\frac {\partial^2 {#1}} {\partial {#2}^2}}
+%\newcommand{\dxj}[2] {\frac {\partial {#1}} {\partial {x_{#2}}}}
+%\newcommand{\dsqxj}[2] {\frac {\partial^2 {#1}} {\partial {x_{#2}}^2}}
+%\DeclareMathOperator{\Rej}{Rej}
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+%\newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
+%\newcommand{\gpgradefour}[1] {\gpgrade{#1}{4}}
+
+% angular_acc.tex
+%\newcommand{\BOmega}[0]{\boldsymbol{\Omega}}
+%\DeclareMathOperator{\Rej}{Rej}
+
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
+
+% angular_acc_cross.tex
+%\newcommand{\Bomega}[0]{\boldsymbol{\omega}}
+
+% bladegradereduction.tex
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\Det}[1] {\abs{#1}}
+
+% canonical_momentum.tex
+%\newcommand{\xdot}[0]{\dot{x}}
+%\newcommand{\xddot}[0]{\ddot{x}}
+%\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+%\newcommand{\grad}[0]{\nabla}
+%\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+%\newcommand{\LL}[0]{\mathcal{L}}
+
+% cauchy_gradient.tex
+%\newcommand{\grad}[0]{\nabla}
+%\newcommand{\PDc}[2]{ \frac{\partial{#1}}{\partial {#2}} }
+
+% fourier_series_maxwell.tex
+%\newcommand{\EE}[0]{\boldsymbol{\mathcal{E}}}
+%\newcommand{\HH}[0]{\boldsymbol{\mathcal{H}}}
+%\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+
+% ga_maxwell.tex
+%\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+%\newcommand{\grad}[0]{\nabla}
+
+% gafp_lorentz.tex
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
+%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{}}
+%\newcommand{\grad}[0] {\nabla}
+%\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+
+% locate_satellite.tex
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
+
+% potential_fourier.tex
+%\newcommand{\EE}[0]{\boldsymbol{\mathcal{E}}}
+%\newcommand{\HH}[0]{\boldsymbol{\mathcal{H}}}
+%\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+
+% projection_and_moore_penrose_vector_inverse.tex
+%\newcommand{\T}[0]{{\text{T}}}
+
+% scalar_commutes.tex
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+%\newcommand{\Bsigma}[0]{\boldsymbol{\sigma}}
+
+% spacetimegrad.tex
+%\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+%\newcommand{\grad}[0]{\nabla}
+%\newcommand{\Partial}[2]{\frac{\partial {#1}}{\partial {#2}}}
+
+% stokes_revisited.tex
+%\newcommand{\grad}[0]{\nabla}
+%\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+%\newcommand{\PDD}[3]{\frac{\partial^2 {#3}}{\partial {#1}\partial {#2}}}
+%\newcommand{\PDsq}[2]{\frac{\partial^2 {#2}}{\partial^2 {#1}}}
+
+%\newcommand{\Rm}[1]{\mathbb{R}^{#1}}
+%\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+%\newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
+%\newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
+%\newcommand{\gpgradethree}[1] {\gpgrade{#1}{3}}
+
+% vector_integral_relations.tex
+%\newcommand{\grad}[0]{\nabla}
+%\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+%\newcommand{\PDD}[3]{\frac{\partial^2 {#3}}{\partial {#1}\partial {#2}}}
+%\newcommand{\Abs}[1]{\left\lvert{#1}\right\rvert}
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+%\newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
+%\newcommand{\gpgradethree}[1] {\gpgrade{#1}{3}}
+
+% mathmode version of \R{} macro:
+%\newcommand{\Rm}[1]{\mathbb{R}^{#1}}
+
+% vector_maxwells_projection.tex
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+%\newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
+%\newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
+%\newcommand{\grad}[0]{\nabla}
+%\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+% == \partial_{#1} {#2}
+%\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+
+% velocity_tx.tex
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+%\newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
+
+
+%------------------------------------------------------------------
+
+
+
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Mod}{mod}
+%\DeclareMathOperator{\PV}{PV}
+\DeclareMathOperator{\Prob}{Prob}
+%\DeclareMathOperator{\rank}{rank}
+%\DeclareMathOperator{\sgn}{sgn}
+%\DeclareMathOperator{\sinc}{sinc}
+%\DeclareMathOperator{\Atan2}{atan2}
+%\DeclareMathOperator{\atan}{atan}
+
+
+\newcommand{\expectation}[1]{\langle{#1}\rangle}
+%\newcommand{\gpgradefour}[1] {\gpgrade{#1}{4}}
+%\newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
+%\newcommand{\gpgradethree}[1] {\gpgrade{#1}{3}}
+%\newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
+%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{}}
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\grad}[0]{\boldsymbol{\nabla}}
+%\newcommand{\grad}[0]{\nabla}
+
+\newcommand{\rgrad}[0]{{\stackrel{ \rightarrow }{\grad}}}
+\newcommand{\lgrad}[0]{{\stackrel{ \leftarrow }{\grad}}}
+\newcommand{\lrgrad}[0]{{\stackrel{ \leftrightarrow }{\grad}}}
+\newcommand{\lrpartial}[0]{{\stackrel{ \leftrightarrow }{\partial}}}
+\newcommand{\rspacegrad}[0]{{\stackrel{ \rightarrow }{\spacegrad}}}
+\newcommand{\lspacegrad}[0]{{\stackrel{ \leftarrow }{\spacegrad}}}
+\newcommand{\lrspacegrad}[0]{{\stackrel{ \leftrightarrow }{\spacegrad}}}
+
+\newcommand{\ketbra}[2]{\ket{#1}\bra{#2}}
+\newcommand{\ket}[1]{\lvert {#1} \rangle}
+%\newcommand{\norm}[1]{\lVert#1\rVert}
+\newcommand{\questionEquals}[0]{\stackrel{?}{=}}
+\newcommand{\rightshift}[0]{\gg}
+%\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+%\newcommand{\antisymmetric}[2]{\left[{#1},{#2}\right]}
+%\newcommand{\symmetric}[2]{{\left\{{#1},{#2}\right\}}}
+
+%\newcommand{\Abs}[1]{\left\lvert{#1}\right\rvert}
+
+%\newcommand{\BB}[0]{\mathbf{B}}
+%\newcommand{\BE}[0]{\mathbf{E}}
+%\newcommand{\BF}[0]{\mathbf{F}}
+%\newcommand{\BS}[0]{\mathbf{S}}
+%\newcommand{\BV}[0]{\mathbf{V}}
+%\newcommand{\Bj}[0]{\mathbf{j}}
+
+\newcommand{\BraOpKet}[3]{\bra{#1} \hat{#2} \ket{#3} }
+%\newcommand{\Brho}[0]{\boldsymbol{\rho}}
+\newcommand{\CC}[0]{c^2}
+\newcommand{\Cos}[1]{\cos{\left({#1}\right)}}
+
+% not working anymore.  think it is a conflicting macro for \not.
+% compared to original usage in klien_gordon.ltx
+%
+%\newcommand{\Dslash}[0]{{\not}D}
+%\newcommand{\Dslash}[0]{{\not{}}D}
+%\newcommand{\Dslash}[0]{D\!\!\!/}
+
+\newcommand{\Expectation}[1]{\left\langle {#1} \right\rangle}
+\newcommand{\Exp}[1]{\exp{\left({#1}\right)}}
+\newcommand{\FF}[0]{\mathcal{F}}
+%\newcommand{\FM}[0]{\inv{\sqrt{2\pi\hbar}}}
+\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+\newcommand{\Innerprod}[2]{\left\langle{#1}, {#2}\right\rangle}
+%\newcommand{\LL}[0]{\mathcal{L}}
+
+%\newcommand{\PD}[2] {\frac {\partial #2} {\partial #1}}
+
+% backwards from ../peeterj_macros2:
+%\newcommand{\PDb}[2]{ \frac{\partial{#1}}{\partial {#2}} }
+
+%\newcommand{\PDD}[3]{\frac{\partial^2 {#3}}{\partial {#1}\partial {#2}}}
+\newcommand{\PDN}[3]{\frac{\partial^{#3} {#2}}{\partial {#1}^{#3}}}
+
+%\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+%\newcommand{\PDsQ}[2]{\frac{\partial^2 {#2}}{\partial^2 {#1}}}
+
+\newcommand{\Sch}[0]{{Schr\"{o}dinger} }
+\newcommand{\Sin}[1]{\sin{\left({#1}\right)}}
+\newcommand{\Sw}[0]{\mathcal{S}}
+%\newcommand{\T}[0]{\text{T}}
+%\newcommand{\T}[0]{{\text{T}}}
+
+\newcommand{\braket}[2]{\langle{#1} \vert {#2}\rangle}
+\newcommand{\bra}[1]{\langle {#1} \rvert}
+\newcommand{\curl}[0]{\grad \times}
+\newcommand{\delambert}[0]{\sum_{\alpha = 1}^4{\PDSq{x_\alpha}{}}}
+\newcommand{\delsquared}[0]{\nabla^2}
+\newcommand{\diverg}[0]{\grad \cdot}
+
+\newcommand{\halfPhi}[0]{\frac{\phi}{2}}
+\newcommand{\hatH}[0]{\hat{H}}
+\newcommand{\hatS}[0]{\hat{S}}
+\newcommand{\hatk}[0]{\hat{k}}
+\newcommand{\hatp}[0]{\hat{p}}
+\newcommand{\hatx}[0]{\hat{x}}
+
+
+\newcommand{\Rdot}[0]{\dot{R}}
+%\newcommand{\addot}[0]{\ddot{a}}
+%\newcommand{\adot}[0]{\dot{a}}
+%\newcommand{\fddot}[0]{\ddot{f}}
+%\newcommand{\fdot}[0]{\dot{f}}
+%\newcommand{\bddot}[0]{\ddot{b}}
+%\newcommand{\bdot}[0]{\dot{b}}
+\newcommand{\ddotOmega}[0]{\ddot{\Omega}}
+\newcommand{\ddotalpha}[0]{\ddot{\alpha}}
+\newcommand{\ddotomega}[0]{\ddot{\omega}}
+\newcommand{\ddotphi}[0]{\ddot{\phi}}
+\newcommand{\ddotpsi}[0]{\ddot{\psi}}
+\newcommand{\ddottheta}[0]{\ddot{\theta}}
+\newcommand{\dotOmega}[0]{\dot{\Omega}}
+\newcommand{\dotalpha}[0]{\dot{\alpha}}
+\newcommand{\dotomega}[0]{\dot{\omega}}
+\newcommand{\dotphi}[0]{\dot{\phi}}
+\newcommand{\dotpsi}[0]{\dot{\psi}}
+\newcommand{\dottheta}[0]{\dot{\theta}}
+%\newcommand{\pddot}[0]{\ddot{p}}
+%\newcommand{\pdot}[0]{\dot{p}}
+%\newcommand{\qddot}[0]{\ddot{q}}
+%\newcommand{\qdot}[0]{\dot{q}}
+%\newcommand{\rddot}[0]{\ddot{r}}
+%\newcommand{\rdot}[0]{\dot{r}}
+%\newcommand{\tddot}[0]{\ddot{t}}
+%\newcommand{\tdot}[0]{\dot{t}}
+%\newcommand{\uddot}[0]{\ddot{u}}
+%\newcommand{\udot}[0]{\dot{u}}
+%\newcommand{\xddot}[0]{\ddot{x}}
+%\newcommand{\xdot}[0]{\dot{x}}
+%\newcommand{\yddot}[0]{\ddot{y}}
+%\newcommand{\ydot}[0]{\dot{y}}
+%\newcommand{\zddot}[0]{\ddot{z}}
+%\newcommand{\zdot}[0]{\dot{z}}
+
+
+
+
+
+
+
+
+%-------------------------------------------------------------------
+% ORIGINS:
+%
+% bohm11.tex
+
+%\DeclareMathOperator{\sgn}{sgn}
+%\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+%\newcommand{\PDN}[3]{\frac{\partial^{#3} {#2}}{\partial {#1}^{#3}}}
+%\DeclareMathOperator{\sinc}{sinc}
+%\DeclareMathOperator{\PV}{PV}
+%\newcommand{\FF}[0]{\mathcal{F}}
+%\newcommand{\Sw}[0]{\mathcal{S}}
+%\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+%\newcommand{\FM}[0]{\inv{\sqrt{2\pi\hbar}}}
+%\newcommand{\expectation}[1]{\langle{#1}\rangle}
+%
+%
+
+% bohm_ch10.tex
+
+%\DeclareMathOperator{\sgn}{sgn}
+%\newcommand{\expectation}[1]{\langle{#1}\rangle}
+%\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+%\DeclareMathOperator{\PV}{PV}
+%
+%
+
+% bohm_ch9.tex
+
+%\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+%\newcommand{\PDN}[3]{\frac{\partial^{#3} {#2}}{\partial {#1}^{#3}}}
+%\DeclareMathOperator{\sinc}{sinc}
+%\DeclareMathOperator{\PV}{PV}
+%\newcommand{\FF}[0]{\mathcal{F}}
+%\newcommand{\Sw}[0]{\mathcal{S}}
+%\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+%\newcommand{\FM}[0]{\inv{\sqrt{2\pi\hbar}}}
+%\newcommand{\expectation}[1]{\langle{#1}\rangle}
+%
+%
+
+% commutator_herm.tex
+
+%\newcommand{\symmetric}[2]{{\left\{{#1},{#2}\right\}}}
+%\newcommand{\antisymmetric}[2]{\left[{#1},{#2}\right]}
+%
+%%\newcommand{\ket}[1]{\lvert {#1} \rangle}
+%%\newcommand{\bra}[1]{\langle {#1} \rvert}
+%%\newcommand{\braket}[2]{\langle{#1} \vert {#2}\rangle}
+%%\newcommand{\ketbra}[2]{\ket{#1}\bra{#2}}
+%%\newcommand{\BraOpKet}[3]{\bra{#1} \hat{#2} \ket{#3} }
+%%\newcommand{\Innerprod}[2]{\left\langle{#1}, {#2}\right\rangle}
+%\newcommand{\Expectation}[1]{\left\langle {#1} \right\rangle}
+%
+%
+
+% delta_ortho_series.tex
+
+%\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+%\newcommand{\ket}[1]{\lvert {#1} \rangle}
+%\newcommand{\bra}[1]{\langle {#1} \rvert}
+%\newcommand{\braket}[2]{\langle{#1} \vert {#2}\rangle}
+%\newcommand{\ketbra}[2]{\ket{#1}\bra{#2}}
+%\newcommand{\BraOpKet}[3]{\bra{#1} \hat{#2} \ket{#3} }
+%\newcommand{\Innerprod}[2]{\left\langle{#1}, {#2}\right\rangle}
+%
+%
+
+% distributions.tex
+
+%\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+%\DeclareMathOperator{\sinc}{sinc}
+%\DeclareMathOperator{\PV}{PV}
+%\newcommand{\FF}[0]{\mathcal{F}}
+%\newcommand{\Sw}[0]{\mathcal{S}}
+%\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+%
+%
+
+% ehrenfest.tex
+
+%\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+%
+%
+
+% fletcher.tex
+
+%\DeclareMathOperator{\Div}{div}
+%\DeclareMathOperator{\Mod}{mod}
+%\newcommand{\rightshift}[0]{\gg}
+%\newcommand{\questionEquals}[0]{\stackrel{?}{=}}
+%
+%
+
+% fvec.tex
+
+%\newcommand{\grad}[0]{\nabla}
+%\newcommand{\PD}[2]{ \frac{\partial{#1}}{\partial {#2}} }
+%
+%
+
+% gacs_q8_8.tex
+
+%\newcommand{\halfPhi}[0]{\frac{\phi}{2}}
+%\newcommand{\Sin}[1]{\sin{\left({#1}\right)}}
+%\newcommand{\Cos}[1]{\cos{\left({#1}\right)}}
+%\newcommand{\Exp}[1]{\exp{\left({#1}\right)}}
+%
+%
+
+% goldstein_ch1_2.tex
+
+%\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+%\newcommand{\Brho}[0]{\boldsymbol{\rho}}
+%\newcommand{\LL}[0]{\mathcal{L}}
+%\newcommand{\Abs}[1]{\left\lvert{#1}\right\rvert}
+%\newcommand{\qdot}[0]{\dot{q}}
+%\newcommand{\qddot}[0]{\ddot{q}}
+%\newcommand{\xdot}[0]{\dot{x}}
+%\newcommand{\xddot}[0]{\ddot{x}}
+%\newcommand{\ydot}[0]{\dot{y}}
+%\newcommand{\yddot}[0]{\ddot{y}}
+%\newcommand{\dotalpha}[0]{\dot{\alpha}}
+%\newcommand{\ddotalpha}[0]{\ddot{\alpha}}
+%\newcommand{\dottheta}[0]{\dot{\theta}}
+%\newcommand{\ddottheta}[0]{\ddot{\theta}}
+%\newcommand{\dotphi}[0]{\dot{\phi}}
+%\newcommand{\ddotphi}[0]{\ddot{\phi}}
+%% == \partial_{#1} {#2}
+%\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+%\newcommand{\PDD}[3]{\frac{\partial^2 {#3}}{\partial {#1}\partial {#2}}}
+%
+%% <grade selection>
+%%
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%
+%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{}}
+%%\newcommand{\gpscalargrade}[1] {{\left\langle{{#1}}\right\rangle}}
+%%\newcommand{\gpgradezero}[1] {\gpgrade{#1}{0}}
+%
+%%\newcommand{\gpgradeone}[1] {{\left\langle{{#1}}\right\rangle}_{1}}
+%\newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
+%
+%\newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
+%\newcommand{\gpgradethree}[1] {\gpgrade{#1}{3}}
+%\newcommand{\gpgradefour}[1] {\gpgrade{#1}{4}}
+%%
+%% </grade selection>
+%
+%
+%
+
+% harmonic_osc.tex
+
+%\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+%
+%
+
+% klein_gordon.tex
+
+%\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+%%\newcommand{\Dslash}[0]{D\!\!\!/}
+%\newcommand{\Dslash}[0]{{\not}D}
+%
+%
+
+% matrix_to_operator.tex
+
+%\newcommand{\T}[0]{{\text{T}}}
+%
+%
+
+% maxwell.tex
+
+%\newcommand{\norm}[1]{\lVert#1\rVert}
+%\newcommand{\grad}[0]{\boldsymbol{\nabla}}
+%\newcommand{\curl}[0]{\grad \times}
+%\newcommand{\diverg}[0]{\grad \cdot}
+%\newcommand{\delsquared}[0]{\nabla^2}
+%\newcommand{\delambert}[0]{\sum_{\alpha = 1}^4{\PDSq{x_\alpha}{}}}
+%
+%% partial derivative of #1 wrt. #2:
+%\newcommand{\PD}[2] {\frac {\partial #2} {\partial #1}}
+%% second partial derivative of #1 wrt. #2:
+%\newcommand{\PDSq}[2] {\frac {\partial^2 #2} {\partial {#1}^2}}
+%
+%%
+%% shorthand for bold symbols:
+%%
+%\newcommand{\Bj}[0]{\mathbf{j}}
+%\newcommand{\BB}[0]{\mathbf{B}}
+%\newcommand{\BE}[0]{\mathbf{E}}
+%\newcommand{\BF}[0]{\mathbf{F}}
+%\newcommand{\BS}[0]{\mathbf{S}}
+%\newcommand{\BV}[0]{\mathbf{V}}
+%
+%
+
+% mp_inverse_svd_rough_notes.tex
+
+%\newcommand{\T}[0]{\text{T}}
+%\DeclareMathOperator{\rank}{rank}
+%
+%
+
+% outermorphism_det.tex
+
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%\newcommand{\gpgradeone}[1] {\gpgrade{#1}{1}}
+%\newcommand{\gpgradetwo}[1] {\gpgrade{#1}{2}}
+%
+%
+
+% pauli_qm_relativity_intro.tex
+
+%\newcommand{\Sch}[0]{{Schr\"{o}dinger} }
+%
+%
+
+% pe.tex
+
+%
+%\newcommand{\grad}[0]{\nabla}
+
+% qm_susskind.tex
+
+%\newcommand{\ket}[1]{\lvert {#1} \rangle}
+%\newcommand{\bra}[1]{\langle {#1} \rvert}
+%\newcommand{\braket}[2]{\langle{#1} \vert {#2}\rangle}
+%\newcommand{\ketbra}[2]{\ket{#1}\bra{#2}}
+%\newcommand{\BraOpKet}[3]{\bra{#1} \hat{#2} \ket{#3} }
+%\newcommand{\hatH}[0]{\hat{H}}
+%\newcommand{\hatS}[0]{\hat{S}}
+%\newcommand{\hatk}[0]{\hat{k}}
+%\newcommand{\hatx}[0]{\hat{x}}
+%\newcommand{\hatp}[0]{\hat{p}}
+%\DeclareMathOperator{\Prob}{Prob}
+%
+%
+
+% schwartzchild_metric.tex
+
+%\newcommand{\grad}[0]{\nabla}
+%\newcommand{\Abs}[1]{\left\lvert{#1}\right\rvert}
+%\newcommand{\spacegrad}[0]{\boldsymbol{\nabla}}
+%\newcommand{\LL}[0]{\mathcal{L}}
+%\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+%\newcommand{\PDsQ}[2]{\frac{\partial^2 {#2}}{\partial^2 {#1}}}
+%\newcommand{\dotalpha}[0]{\dot{\alpha}}
+%\newcommand{\ddotalpha}[0]{\ddot{\alpha}}
+%
+%\newcommand{\dotomega}[0]{\dot{\omega}}
+%\newcommand{\ddotomega}[0]{\ddot{\omega}}
+%
+%\newcommand{\dotOmega}[0]{\dot{\Omega}}
+%\newcommand{\ddotOmega}[0]{\ddot{\Omega}}
+%
+%\newcommand{\CC}[0]{c^2}
+%
+%\newcommand{\dottheta}[0]{\dot{\theta}}
+%\newcommand{\ddottheta}[0]{\ddot{\theta}}
+%
+%\newcommand{\dotpsi}[0]{\dot{\psi}}
+%\newcommand{\ddotpsi}[0]{\ddot{\psi}}
+%
+%\newcommand{\adot}[0]{\dot{a}}
+%\newcommand{\addot}[0]{\ddot{a}}
+%\newcommand{\udot}[0]{\dot{u}}
+%\newcommand{\uddot}[0]{\ddot{u}}
+%\newcommand{\fdot}[0]{\dot{f}}
+%\newcommand{\fddot}[0]{\ddot{f}}
+%\newcommand{\bdot}[0]{\dot{b}}
+%\newcommand{\bddot}[0]{\ddot{b}}
+%\newcommand{\qdot}[0]{\dot{q}}
+%\newcommand{\qddot}[0]{\ddot{q}}
+%\newcommand{\tdot}[0]{\dot{t}}
+%\newcommand{\tddot}[0]{\ddot{t}}
+%
+%\newcommand{\Rdot}[0]{\dot{R}}
+%
+%\newcommand{\pdot}[0]{\dot{p}}
+%\newcommand{\pddot}[0]{\ddot{p}}
+%
+%\newcommand{\xdot}[0]{\dot{x}}
+%\newcommand{\xddot}[0]{\ddot{x}}
+%
+%\newcommand{\zdot}[0]{\dot{z}}
+%\newcommand{\zddot}[0]{\ddot{z}}
+%
+%\newcommand{\rdot}[0]{\dot{r}}
+%\newcommand{\rddot}[0]{\ddot{r}}
+%
+%
+
+% shear.tex
+
+%\newcommand{\gpgrade}[2] {{\left\langle{{#1}}\right\rangle}_{#2}}
+%
+%
+
+% tong_mf1.tex
+
+%\newcommand{\Abs}[1]{\left\lvert{#1}\right\rvert}
+%\newcommand{\grad}[0]{\nabla}
+%\newcommand{\LL}[0]{\mathcal{L}}
+%
+%\newcommand{\dotalpha}[0]{\dot{\alpha}}
+%\newcommand{\ddotalpha}[0]{\ddot{\alpha}}
+%
+%\newcommand{\dotomega}[0]{\dot{\omega}}
+%\newcommand{\ddotomega}[0]{\ddot{\omega}}
+%
+%\newcommand{\dottheta}[0]{\dot{\theta}}
+%\newcommand{\ddottheta}[0]{\ddot{\theta}}
+%
+%\newcommand{\dotpsi}[0]{\dot{\psi}}
+%\newcommand{\ddotpsi}[0]{\ddot{\psi}}
+%
+%\newcommand{\qdot}[0]{\dot{q}}
+%\newcommand{\qddot}[0]{\ddot{q}}
+%
+%\newcommand{\Rdot}[0]{\dot{R}}
+%
+%\newcommand{\pdot}[0]{\dot{p}}
+%\newcommand{\pddot}[0]{\ddot{p}}
+%
+%\newcommand{\xdot}[0]{\dot{x}}
+%\newcommand{\xddot}[0]{\ddot{x}}
+%
+%\newcommand{\zdot}[0]{\dot{z}}
+%\newcommand{\zddot}[0]{\ddot{z}}
+%
+%\newcommand{\rdot}[0]{\dot{r}}
+%\newcommand{\rddot}[0]{\ddot{r}}
+%
+%% == \partial_{#1} {#2}
+%\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+%\newcommand{\PDD}[3]{\frac{\partial^2 {#3}}{\partial {#1}\partial {#2}}}
+%
+%
+
+% wavepacket.tex
+
+%\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+%\newcommand{\IIinf}[0]{ \int_{-\infty}^\infty }
+%
+%
+
+% wavevariation.tex
+
+%\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+%
+%
+
+% qm_barrier
+%\DeclareMathOperator{\Atan2}{atan2}
+%\DeclareMathOperator{\atan}{atan}
+
+% twobodies.tex
+%\DeclareMathOperator{\sgn}{sgn}
+
+
+% sr_lagrangian_q.tex
+
+%\newcommand{\PD}[2]{\frac{\partial {#2}}{\partial {#1}}}
+%\newcommand{\xdot}[0]{\dot{x}}
+%\newcommand{\xddot}[0]{\ddot{x}}
+
+% stub_em_fields.tex
+
+%\newcommand{\EE}[0]{\boldsymbol{\mathcal{E}}}
+%\newcommand{\HH}[0]{\boldsymbol{\mathcal{H}}}
+%\newcommand{\PDSq}[2]{\frac{\partial^2 {#2}}{\partial {#1}^2}}
+
+% long_wire_q.tex
+
+%\newcommand{\grad}[0]{\nabla}
+
+% lorentz_tx_em_potential.tex
+%\newcommand{\LL}[0]{\mathcal{L}}
+%\newcommand{\grad}[0]{\nabla}
+%\newcommand{\pdot}[0]{\dot{p}}
+%\newcommand{\pddot}[0]{\ddot{p}}
+
+%------------------------------------------------------
+% cross_old.tex
+
+%%
+%% shorthand for bold symbols, convenient for vectors and matrices
+%%
+%\newcommand{\Ba}[0]{\mathbf{a}}
+%\newcommand{\Bb}[0]{\mathbf{b}}
+%\newcommand{\Bc}[0]{\mathbf{c}}
+%\newcommand{\Bd}[0]{\mathbf{d}}
+%\newcommand{\Be}[0]{\mathbf{e}}
+%\newcommand{\Bf}[0]{\mathbf{f}}
+%\newcommand{\Bg}[0]{\mathbf{g}}
+%\newcommand{\Bh}[0]{\mathbf{h}}
+%\newcommand{\Bi}[0]{\mathbf{i}}
+%\newcommand{\Bj}[0]{\mathbf{j}}
+%\newcommand{\Bk}[0]{\mathbf{k}}
+%\newcommand{\Bl}[0]{\mathbf{l}}
+%\newcommand{\Bm}[0]{\mathbf{m}}
+%\newcommand{\Bn}[0]{\mathbf{n}}
+%\newcommand{\Bo}[0]{\mathbf{o}}
+%\newcommand{\Bp}[0]{\mathbf{p}}
+%\newcommand{\Bq}[0]{\mathbf{q}}
+%\newcommand{\Br}[0]{\mathbf{r}}
+%\newcommand{\Bs}[0]{\mathbf{s}}
+%\newcommand{\Bt}[0]{\mathbf{t}}
+%\newcommand{\Bu}[0]{\mathbf{u}}
+%\newcommand{\Bv}[0]{\mathbf{v}}
+%\newcommand{\Bw}[0]{\mathbf{w}}
+%\newcommand{\Bx}[0]{\mathbf{x}}
+%\newcommand{\By}[0]{\mathbf{y}}
+%\newcommand{\Bz}[0]{\mathbf{z}}
+%\newcommand{\BA}[0]{\mathbf{A}}
+%\newcommand{\BB}[0]{\mathbf{B}}
+%\newcommand{\BC}[0]{\mathbf{C}}
+%\newcommand{\BD}[0]{\mathbf{D}}
+%\newcommand{\BE}[0]{\mathbf{E}}
+%\newcommand{\BF}[0]{\mathbf{F}}
+%\newcommand{\BG}[0]{\mathbf{G}}
+%\newcommand{\BH}[0]{\mathbf{H}}
+%\newcommand{\BI}[0]{\mathbf{I}}
+%\newcommand{\BJ}[0]{\mathbf{J}}
+%\newcommand{\BK}[0]{\mathbf{K}}
+%\newcommand{\BL}[0]{\mathbf{L}}
+%\newcommand{\BM}[0]{\mathbf{M}}
+%\newcommand{\BN}[0]{\mathbf{N}}
+%\newcommand{\BO}[0]{\mathbf{O}}
+%\newcommand{\BP}[0]{\mathbf{P}}
+%\newcommand{\BQ}[0]{\mathbf{Q}}
+%\newcommand{\BR}[0]{\mathbf{R}}
+%\newcommand{\BS}[0]{\mathbf{S}}
+%\newcommand{\BT}[0]{\mathbf{T}}
+%\newcommand{\BU}[0]{\mathbf{U}}
+%\newcommand{\BV}[0]{\mathbf{V}}
+%\newcommand{\BW}[0]{\mathbf{W}}
+%\newcommand{\BX}[0]{\mathbf{X}}
+%\newcommand{\BY}[0]{\mathbf{Y}}
+%\newcommand{\BZ}[0]{\mathbf{Z}}
+%
+%\newcommand{\Bzero}[0]{\mathbf{0}}
+%\newcommand{\Btheta}[0]{\boldsymbol{\theta}}
+%\newcommand{\Btau}[0]{\boldsymbol{\tau}}
+%\newcommand{\Bomega}[0]{\boldsymbol{\omega}}
+%
+%%
+%% shorthand for unit vectors
+%%
+%\newcommand{\acap}[0]{\hat{\Ba}}
+%\newcommand{\bcap}[0]{\hat{\Bb}}
+%\newcommand{\ccap}[0]{\hat{\Bc}}
+%\newcommand{\dcap}[0]{\hat{\Bd}}
+%\newcommand{\ecap}[0]{\hat{\Be}}
+%\newcommand{\fcap}[0]{\hat{\Bf}}
+%\newcommand{\gcap}[0]{\hat{\Bg}}
+%\newcommand{\hcap}[0]{\hat{\Bh}}
+%\newcommand{\icap}[0]{\hat{\Bi}}
+%\newcommand{\jCap}[0]{\hat{\Bj}}
+%\newcommand{\kcap}[0]{\hat{\Bk}}
+%\newcommand{\lcap}[0]{\hat{\Bl}}
+%\newcommand{\mcap}[0]{\hat{\Bm}}
+%\newcommand{\ncap}[0]{\hat{\Bn}}
+%\newcommand{\ocap}[0]{\hat{\Bo}}
+%\newcommand{\pcap}[0]{\hat{\Bp}}
+%\newcommand{\qcap}[0]{\hat{\Bq}}
+%\newcommand{\rcap}[0]{\hat{\Br}}
+%\newcommand{\scap}[0]{\hat{\Bs}}
+%\newcommand{\tcap}[0]{\hat{\Bt}}
+%\newcommand{\ucap}[0]{\hat{\Bu}}
+%\newcommand{\vcap}[0]{\hat{\Bv}}
+%\newcommand{\wcap}[0]{\hat{\Bw}}
+%\newcommand{\xcap}[0]{\hat{\Bx}}
+%\newcommand{\ycap}[0]{\hat{\By}}
+%\newcommand{\zcap}[0]{\hat{\Bz}}
+%\newcommand{\thetacap}[0]{\hat{\Btheta}}
+%
+%%
+%% to write R^n and C^n in a distinguishable fashion.  Perhaps change this
+%% to the double lined characters upon figuring out how to do so.
+%%
+%\newcommand{\C}[1]{${\BC}^{#1}$}
+%\newcommand{\R}[1]{${\BR}^{#1}$}
+%
+%%
+%% various generally useful helpers
+%%
+%
+%% derivative of #1 wrt. #2:
+%\newcommand{\D}[2] {\frac {d#2} {d#1}}
+
+%\newcommand{\inv}[1]{\frac{1}{#1}}
+%\newcommand{\cross}[0]{\times}
+
+%\newcommand{\abs}[1]{\lvert#1\rvert}
+%\newcommand{\norm}[1]{\lVert#1\rVert}
+%\newcommand{\innerprod}[2]{\langle{#1}, {#2}\rangle}
+%\newcommand{\dotprod}[2]{#1 \cdot #2}
+%\newcommand{\crossprod}[2]{#1 \cross #2}
+%\newcommand{\tripleprod}[3]{\dotprod{\crossprod{#1}{#2}}{#3}}
+
+%
+% A few miscellaneous things specific to this document
+%
+%\newcommand{\crossop}[1]{\crossprod{#1}{}}
+
+\newcommand{\PDP}[2]{\BP^{#1}\BD{\BP^{#2}}}
+\newcommand{\PDPDP}[3]{\Bv^T\BP^{#1}\BD\BP^{#2}\BD\BP^{#3}\Bv}
+
+\newcommand{\Mp}[0]{
+\begin{bmatrix}
+0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 \\
+1 & 0 & 0 & 0
+\end{bmatrix}
+}
+\newcommand{\Mpp}[0]{
+\begin{bmatrix}
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 \\
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0
+\end{bmatrix}
+}
+\newcommand{\Mppp}[0]{
+\begin{bmatrix}
+0 & 0 & 0 & 1 \\
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 0
+\end{bmatrix}
+}
+\newcommand{\Mpu}[0]{
+\begin{bmatrix}
+u_1 & 0 & 0 & 0 \\
+0 & u_2 & 0 & 0 \\
+0 & 0 & u_3 & 0 \\
+0 & 0 & 0 & u_4
+\end{bmatrix}
+}
+
+%---------------------------------------------------------
+
+\author{Peeter Joot}
+\email{peeter.joot@gmail.com}
+
+\chapter{Relativistic classical proton electron interaction}
+\label{chap:nuclearInteraction}
+%\useCCL
+\blogpage{http://sites.google.com/site/peeterjoot/math2009/nuclearInteraction.pdf}
+\date{Sept 13, 2009}
+\revisionInfo{$RCSfile: mathmlTest.tex,v $ Last $Revision: 1.1 $ $Date: 2009/10/22 01:12:18 $}
+
+\beginArtWithToc
+%\beginArtNoToc
+
+\section{Motivation}
+
+The problem of a solving for the relativistically correct trajectories of classically interacting proton and electron is one that I have wanted to try for a while.  Conceptually this is just about the simplest interaction problem in electrodynamics (other than motion of a particle in a field), but it is not obvious to me how to even set up the right equations to solve.  I should have the tools now to at least write down the equations to solve, and perhaps solve them too.
+
+Familiarity with Geometric Algebra, and the STA form of the Maxwell and Lorentz force equation will be assumed.  Writing $F = \BE + c I \BB$ for the Faraday bivector, these equations are respectively
+
+\begin{align}\label{eqn:nuclearInteraction:boo1}
+\grad F &= J/\epsilon_0 c \\
+m\frac{d^2 X}{d\tau} &= \frac{q}{c} F \cdot \frac{dX}{d\tau}
+\end{align}
+
+%  To avoid confusion no use of $F$ or $\BP$ for force will be used here, instead using $d\BP/d\tau$.
+The possibility of self interaction will also be ignored here.  From what I have read this self interaction is more complex than regular two particle interaction.
+
+\section{With only Coulomb interaction.}
+
+With just Coulomb (non-relativistic) interaction setup of the equations of motion for the relative vector difference between the particles is straightforward.  Let us write this out as a reference.  Whatever we come up with for the relativistic case should reduce to this at small velocities.
+
+Fixing notation, lets write the proton and electron positions respectively by $\Br_p$ and $\Br_e$, the proton charge as $Z e$, and the electron charge $-e$.  For the forces we have
+
+FIXME: picture
+
+\begin{align}\label{eqn:nuclearInteraction:hoo1}
+\text{Force on electron} &= m_e \frac{d^2 \Br_e}{dt^2} = - \inv{4 \pi \epsilon_0} Z e^2 \frac{\Br_e - \Br_p}{\Abs{\Br_e - \Br_p}^3} \\
+\text{Force on proton} &= m_p \frac{d^2 \Br_p}{dt^2} = \inv{4 \pi \epsilon_0} Z e^2 \frac{\Br_e - \Br_p}{\Abs{\Br_e - \Br_p}^3}
+\end{align}
+
+Subtracting the two after mass division yields the reduced mass equation for the relative motion
+
+\begin{align}\label{eqn:nuclearInteraction:hoo2}
+\frac{d^2 (\Br_e -\Br_p)}{dt^2} = - \inv{4 \pi \epsilon_0} Z e^2 \left( \inv{m_e} + \inv{m_p}\right) \frac{\Br_e - \Br_p}{\Abs{\Br_e - \Br_p}^3} 
+\end{align}
+
+This is now of the same form as the classical problem of two particle gravitational interaction, with the well known conic solutions.
+
+\section{Using the divergence equation instead.}
+
+While use of the Coulomb force above provides the equation of motion for the relative motion of the charges, how to generalize this to the relativistic case is not entirely clear.  For the relativistic case we need to consider all of Maxwell's equations, and not just the divergence equation.  Let us back up a step and setup the problem using the divergence equation instead of Coulomb's law.  This is a bit closer to the use of all of Maxwell's equations.
+
+To start off we need a discrete charge expression for the charge density, and can use the delta distribution to express this.
+
+\begin{align}\label{eqn:nuclearInteraction:boo2}
+0 = \int d^3 x \left( \spacegrad \cdot \BE - \inv{\epsilon_0} \left( Z e \delta^3(\Bx - \Br_p) - e \delta^3(\Bx - \Br_e) \right) \right)
+\end{align}
+
+Picking a volume element that only encloses one of the respective charges gives us the Coulomb law for the field produced by those charges as above
+
+\begin{align}\label{eqn:nuclearInteraction:boo3}
+0 &= \int_{\text{Volume around proton only}} d^3 x \left( \spacegrad \cdot \BE_p - \inv{\epsilon_0} Z e \delta^3(\Bx - \Br_p) \right) \\
+0 &= \int_{\text{Volume around electron only}} d^3 x \left( \spacegrad \cdot \BE_e + \inv{\epsilon_0} e \delta^3(\Bx - \Br_e) \right)
+\end{align}
+
+Here $\BE_p$ and $\BE_e$ denote the electric fields due to the proton and electron respectively.  Ignoring the possibility of self interaction the Lorentz forces on the particles are
+
+\begin{align*}
+\text{Force on proton/electron} = \text{charge of proton/electron times field due to electron/proton}
+\end{align*}
+
+In symbols, this is
+
+\begin{align}\label{eqn:nuclearInteraction:boo4}
+m_p \frac{d^2 \Br_p}{dt^2} &= Z e \BE_e \\
+m_e \frac{d^2 \Br_e}{dt^2} &= - e \BE_p
+\end{align}
+
+If we were to substitute back into the volume integrals we would have
+
+\begin{align}\label{eqn:nuclearInteraction:boo5}
+0 &= \int_{\text{Volume around proton only}} d^3 x \left( -\frac{m_e}{e}\spacegrad \cdot \frac{d^2 \Br_e}{dt^2} - \inv{\epsilon_0} Z e \delta^3(\Bx - \Br_p) \right) \\
+0 &= \int_{\text{Volume around electron only}} d^3 x \left( \frac{m_p}{Z e}\spacegrad \cdot \frac{d^2 \Br_p}{dt^2} + \inv{\epsilon_0} e \delta^3(\Bx - \Br_e) \right)
+\end{align}
+
+It is tempting to take the differences of these two equations so that we can write this in terms of the relative acceleration $d^2 (\Br_e - \Br_p)/dt^2$.  I did just this initially, and was surprised by a mass term of the form $1/m_e - 1/m_p$ instead of reduced mass, which cannot be right.  The key to avoiding this mistake is the proper considerations of the integration volumes.  Since the volumes are different and can in fact be entirely disjoint, subtracting these is not possible.  For this reason we have to be especially careful if a differential form of the divergence integrals (\ref{eqn:nuclearInteraction:boo4}) were to be used, as in
+
+\begin{align}\label{eqn:nuclearInteraction:boo6}
+\spacegrad \cdot \BE_p &= \inv{\epsilon_0} Z e \delta^3(\Bx - \Br_p) \\
+\spacegrad \cdot \BE_e &= -\inv{\epsilon_0} e \delta^3(\Bx - \Br_e) 
+\end{align}
+
+The domain of applicability of these equations is no longer explicit, since each has to omit a neighborhood around the other charge.  When using a delta distribution to express the point charge density it is probably best to stick with an explicit integral form.
+
+Comparing how far we can get starting with the Gauss's law instead of the Coulomb force, and looking forward to the relativistic case, it seems likely that solving the field equations due to the respective current densities will be the first required step.  Only then can we substitute that field solution back into the Lorentz force equation to complete the search for the particle trajectories.
+
+\section{Relativistic interaction.}
+
+First order of business is an expression for a point charge current density four vector.  Following Jackson \cite{jackson1975cew}, but switching to vector notation from coordinates, we can apparently employ an arbitrary parametrization for the four-vector particle trajectory $R = R^\mu \gamma_\mu$, as measured in the observer frame, and write
+
+\begin{align}\label{eqn:nuclearInteraction:boo7}
+J(X) = q c \int d\lambda \frac{dX}{d\lambda} \delta^4 (X - R(\lambda))
+\end{align}
+
+Here $X = X^\mu \gamma_\mu$ is the four vector event specifying the spacetime position of the current, also as measured in the observer frame.  Reparameterizating in terms of time should get us back something more familiar looking
+
+\begin{align*}
+J(X) 
+&= q c \int dt \frac{dX}{dt} \delta^4 (X - R(t)) \\
+&= q c \int dt \frac{d}{dt} (c t \gamma_0 + \gamma_k X^k)\delta^4 (X - R(t)) \\
+&= q c \int dt \frac{d}{dt} (c t + \Bx)\delta^4 (X - R(t)) \gamma_0 \\
+&= q c \int dt (c + \Bv)\delta^4 (X - R(t)) \gamma_0 \\
+&= q c \int dt' (c + \Bv(t'))\delta^3 (\Bx - \Br(t')) \delta(c t' - c t) \gamma_0 \\
+\end{align*}
+
+Note that the scaling property of the delta function implies $\delta(c t) = \delta(t)/c$.  With the split of the four-volume delta function $\delta^4(X - R(t)) = \delta^3(\Bx - \Br(t)) \delta( {x^0}' - x^0 )$, where $x^0 = c t$, we have an explanation for why Jackson had a factor of $c$ in his representation.  I initially thought this factor of $c$ was due to CGS vs SI units!  One more Jackson equation decoded.  We are left with the following spacetime split for a point charge current density four vector
+
+\begin{align}\label{eqn:nuclearInteraction:boo11}
+J(X) 
+&= q (c + \Bv(t))\delta^3 (\Bx - \Br(t)) \gamma_0 
+\end{align}
+
+Comparing to the continuous case where we have $J = \rho ( c + \Bv ) \gamma_0$, it appears that this works out right.  One thing worth noting is that in this time reparameterization I accidentally mixed up $X$, the observation event coordinates of $J(X)$, and $R$, the spacetime trajectory of the particle itself.  Despite this, I am saved by the delta function since no contributions to the current can occur on trajectories other than $R$, the worldline of the particle itself.  So in the final result it should be correct to interpret $\Bv$ as the spatial particle velocity as I did accidentally.
+
+With the time reparameterization of the current density, we have for the field due to our proton and electron
+
+\begin{align}\label{eqn:nuclearInteraction:boo8}
+0 &= \int d^3 x \left( \epsilon_0 c \grad F - Z e (c + \Bv_p(t))\delta^3 (\Bx - \Br_p(t)) + e (c + \Bv_e(t))\delta^3 (\Bx - \Br_e(t)) 
+\gamma_0 \right)
+\end{align}
+
+How to write this in a more tidy covariant form?  If we reparametrize with any of the other spatial coordinates, say $x$ we end up having to integrate the field gradient with a spacetime three form ($dt dy dz$ if parametrizing the current density with $x$).  Since the entire equation must be zero I suppose we can just integrate that once more, and simply write
+
+\begin{align}\label{eqn:nuclearInteraction:boo9}
+\text{constant} &= \int d^4 x \left( \grad F - \frac{e}{\epsilon_0 c}\int d\tau \frac{dX}{d\tau} \left( Z \delta^4 (X - R_p(\tau)) - \delta^4 (X - R_e(\tau)) \right) \right)
+\end{align}
+
+Like (\ref{eqn:nuclearInteraction:boo3}) we can pick spacetime volumes that surround just the individual particle worldlines, in which case we have a Coulomb's law like split where the field depends on just the enclosed current.  That is
+
+\begin{align}\label{eqn:nuclearInteraction:boo10}
+\text{constant} &= \int_{\text{spacetime volume around only the proton}} d^4 x \left( \grad F_p - \frac{Z e}{\epsilon_0 c} \int d\tau \frac{dX}{d\tau} \delta^4 (X - R_e(\tau)) \right) \\
+\text{constant} &= \int_{\text{spacetime volume around only the electron}} d^4 x \left( \grad F_e + \frac{e}{\epsilon_0 c} \int d\tau \frac{dX}{d\tau} \delta^4 (X - R_e(\tau)) \right)
+\end{align}
+
+Here $F_e$ is the field due to only the electron charge, whereas $F_p$ would be that part of the total field due to the proton charge.
+
+FIXME: attempt to draw a picture (one or two spatial dimensions) to develop some comfort with tossing out a phrase like ``spacetime volume surrounding a particle worldline''.
+
+Having expressed the equation for the total field (\ref{eqn:nuclearInteraction:boo9}), we are tracking a nice parallel to the setup for the non-relativistic treatment.  Next is the pair of Lorentz force equations.  As in the non-relativistic setup, if we only consider the field due to the other charge we have in 
+in covariant Geometric Algebra form, the following pair of proper force equations in terms of the particle worldline trajectories
+
+\begin{align}\label{eqn:nuclearInteraction:hoo6}
+\text{proper Force on electron} &= m_e \frac{d^2 R_e}{d\tau^2} = - e F_p \cdot \frac{d R_e}{c d\tau} \\
+\text{proper Force on proton} &= m_p \frac{d^2 R_p}{d\tau^2} = Z e F_e \cdot \frac{d R_p}{c d\tau}
+\end{align}
+
+We have the four sets of coupled multivector equations to be solved, so the question remains how to do so.  Each of the two Lorentz force equations supplies four equations with four unknowns, and the field equations are really two sets of eight equations with six unknown field variables each.  Then they are all tied up together is a big coupled mess.  Wow.  How do we solve this?
+
+With (\ref{eqn:nuclearInteraction:boo10}), and (\ref{eqn:nuclearInteraction:hoo6}) committed to pdf at least the first goal of writing down the equations is done.
+
+As for the actual solution.  Well, that is a problem for another night.  TO BE CONTINUED (if I can figure out an attack).
+
+%\section{BLAH: Relativistic interaction.}
+%
+%Any self interaction effects will not be o
+%Since we are not considering the effect of 
+%The superposition of the fields from the two point particles wou
+%We seek the individual fields 
+%For the relativistic case, lets write the proton and electron worldlines in the observer frame (the origin) respectively by $X_p = (ct, \Br_p)$ and $X_e = (ct,\Br_e)$, the observer frame proper time as $\tau$.  We should be able to calculate the total field at any point in space with superposition of the individual fields
+%
+%\begin{align}\label{eqn:nuclearInteraction:hoo3}
+%\text{Field due to electron acting on proton} &= F_e \equiv \BE_e + c I\BB_e \\
+%\text{Field due to proton acting on electron} &= F_p \equiv \BE_p + c I\BB_p
+%\end{align}
+%
+%
+%
+%It should be possible to obtain the fields $F_e$ and $F_p$ by solving for the pair of Maxwell's equations
+%
+%\begin{align}\label{eqn:nuclearInteraction:hoo4}
+%\grad F_e &= J_e/\epsilon_0 c \\
+%\grad F_p &= J_p/\epsilon_0 c
+%\end{align}
+%
+%Here the $J$'s are the four vector current densities, each dependent on the particle trajectories, also to be determined.
+%
+%Unfortunately we do not want the gradients of the fields, but the fields themselves, so life is made more complex.  That issue was avoided in the Coulomb case since we started not with $\spacegrad \cdot \BE = \rho/\epsilon_0$, but the solution to this divergence equation (the only part of Maxwell's equations left in the static limit).
+%
+%
+%
+%
+%
+%With the question of how to solve or even express the respective fields sidestepped for now, we can at least express the proper force Lorentz interactions.  That is
+%
+%\begin{align}\label{eqn:nuclearInteraction:hoo5}
+%J = Q \int d\tau' \frac{dX'}{d\tau'} \delta^4 (X' - X(\tau))
+%\end{align}
+%
+%
+%How to express $J_e$ and $J_p$ will have to be considered more carefully, and 
+%This is a set of second order four-vector equations, really eight equations, further coupled by the addition pair of eight equations for each of the fields.  What a mess!  So, where do we start?
+%
+%One possible starting point is to encode all of the particle tragectory in an active Lorentz transformation and solve for that transformation.  This technique was used successfully in \cite{doran2003gap} for the single particle in a field problem, so it seems worthwhile to at least give it a try.
+%
+%Suppose we relate our electron and proton event vector at two different proper times by a Lorentz transforms
+%
+%\begin{align*}
+%X_e' &= X_e(\tau_0 + d\tau) = \tilde{R_e} X_e(\tau_0) R_e = X_e(\tau_0) + d\tau {\left. \frac{dX_e}{d\tau} \right\vert}_{\tau = \tau_0} + \cdots \\
+%X_p' &= X_p(\tau_0 + d\tau) = \tilde{R_p} X_p(\tau_0) R_p = X_p(\tau_0) + d\tau {\left. \frac{dX_p}{d\tau} \right\vert}_{\tau = \tau_0} + \cdots
+%\end{align*}
+%
+%%\begin{align}\label{eqn:nuclearInteraction:hoo6}
+%%X' = X(\tau_0 + d\tau) = \tilde{R}(\tau) X(\tau_0) R(\tau)
+%%\end{align}
+%%
+%Inverting and taking derivatives, also utilizing $\tilde{R}{R} = 1$, we find the proper velocity expressed in terms of the commutator of the bivector $\Omega = (dR/d\tau) \tilde{R}$.   That is
+%
+%\begin{align*}
+%\frac{dX}{d\tau} 
+%&= \frac{d}{d\tau} \left( R X' \tilde{R} \right) \\
+%&= \frac{dR }{d\tau} \tilde{R} X + X \underbrace{R \frac{d\tilde{R}}{d\tau}}_{= - (dR/d\tau) \tilde{R}} \\
+%&= \antisymmetric{ \Omega }{X}
+%\end{align*}
+%
+
+\EndArticle
+%\EndNoBibArticle

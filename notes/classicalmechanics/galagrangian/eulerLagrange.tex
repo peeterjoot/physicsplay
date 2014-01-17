@@ -1,0 +1,720 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+
+% 
+% 
+\chapter{Euler Lagrange Equations}
+\label{chap:PJEulerLagrange}
+\label{chap:eulerLagrange}
+%\date{October 13, 2008.  eulerLagrange.tex}
+
+\section{Scalar form of Euler-Lagrange equations}
+
+\citep{lasenby1993mda} presents a multivector Lagrangian treatment.  To
+preparation for understanding that I have gone 
+back and derived the scalar
+case myself.  As in my recent field Lagrangian derivations Feynman's
+\citep{feynman1963flp} simple action procedure will be used.
+
+Write 
+
+\begin{align*}
+\LL &= \LL(q^i, \qdot^i, \lambda) \\
+q^i &= \barq^i + n^i \\
+S &= \int_{\partial \lambda} \LL d\lambda
+\end{align*}
+
+Here $\barq^i$ are the desired optimal solutions, and the functions $n^i$
+are all zero at the end points of the integration range $\partial \lambda$.
+
+A first order Taylor expansion of a multivariable function
+$f(a^i) = f(a^1, a^2, \cdots, a^n)$
+takes the form
+
+\begin{align*}
+f(a^i + x^i) \approx f(a^i) + \sum_i (a^i + x^i) \left. \PD{x^i}{f} \right\vert_{x^i = a^i}
+\end{align*}
+
+In this case the $x^i$ take the values $q^i$, and $\qdot^i$, so the first
+order Lagrangian approximation requires summation over differential contributions for both sets of terms
+
+\begin{align}\label{eqn:euler_lagrange:linearizedLagrangian}
+\LL(q^i, \qdot^i, \lambda) 
+&\approx \LL(\barq^i, \barqdot^i, \lambda) 
++ \sum_i (\barq^i + n^i) \left. \PD{q^i}{\LL} \right\vert_{q^i = \barq^i}
++ \sum_i (\barqdot^i + \ndot^i) \left. \PD{\qdot^i}{\LL} \right\vert_{q^i = \barq^i}
+\end{align}
+
+%Here subscript $0$ represents evaluation of the integrals at $q_j = \barq_j$, 
+%or $\qdot_j = \barqdot_j$.
+%
+Now form the action, and group the terms in fixed and variable sets
+
+\begin{align*}
+S &= \int \LL d\lambda \\
+&\approx
+\int d\lambda 
+\left(
+\LL(\barq^i, \barqdot^i, \lambda)
++ \sum_i \barq^i \left. \PD{q^i}{\LL} \right\vert_{q^i = \barq^i}
++ \sum_i \barqdot^i \left. \PD{\qdot^i}{\LL} \right\vert_{q^i = \barq^i}
+\right) \\
+&+
+\mathLabelBox{
+\sum_i \int d\lambda
+\left(
+n^i \left. \PD{q^i}{\LL} \right\vert_{q^i = \barq^i}
++\ndot^i \left. \PD{\qdot^i}{\LL} \right\vert_{q^i = \barq^i}
+\right)
+}{$\delta S$}
+\end{align*}
+
+For the optimal solution we want $\delta S = 0$ for all possible paths $n^i$.  Now do the integration by parts writing
+$u' = \ndot^i$, and $v = \partial \LL/{\partial \qdot^i}$ 
+
+\begin{align*}
+\int u' v = u v - \int u v'
+\end{align*}
+
+The action variation is then
+
+\begin{align*}
+\delta S =
++ \sum_i \left. \left( n^i \PD{\qdot^i}{\LL} \right) \right\vert_{\partial \lambda}
++ \sum_i \int d\lambda n^i
+\left(
+\left. \PD{q^i}{\LL} \right\vert_{q^i = \barq^i}
+-\frac{d}{d\lambda} \left. \PD{\qdot^i}{\LL} \right\vert_{q^i = \barq^i}
+\right)
+\end{align*}
+
+The non-integral term is zero since by definition $n^i = 0$ on the boundary of the desired integration region, so for the
+total variation to equal zero for all possible paths $n^i$ one must have
+
+\begin{align}\label{eqn:euler_lagrange:eulerlag}
+\PD{q^i}{\LL} -\frac{d}{d\lambda} \PD{\qdot^i}{\LL} = 0.
+\end{align}
+
+Evaluation of these derivatives at the optimal desired paths has been suppressed since these equations now define that path.
+
+\subsection{Some comparison to the Goldstein approach}
+
+\citep{goldstein1951cm} calls the quantity \eqnref{eqn:euler_lagrange:eulerlag} the functional derivative
+
+\begin{align*}
+\frac{\delta S}{\delta q^i} = \PD{q^i}{\LL} -\frac{d}{d\lambda} \PD{\qdot^i}{\LL}
+\end{align*}
+
+(with higher order derivatives if the Lagrangian has dependencies on more than generalized position and velocity terms).  Goldstein's 
+approach is also harder to follow than Feynman's (Goldstein introduces a parameter $\epsilon$, writing
+
+\begin{align}\label{eqn:euler_lagrange:epsilonvariation}
+q^i = \barq^i + \epsilon n^i
+\end{align}
+
+He then takes derivatives under the integral sign for the end result.
+
+While his approach is a bit harder to follow initially, that additional $\epsilon$ parametrization of the variation path also fits nicely with this
+linearization procedure.
+After the integration by parts and subsequent differentiation under integral sign nicely does the job of
+discarding all the ``fixed'' $\barq^i$ contributions to the action leaving:
+
+\begin{align*}
+\frac{dS}{d\epsilon} = \int d\lambda \sum_i n^i \left. \frac{\delta S}{\delta q^i} \right\vert_{q^i = \barq^i}
+\end{align*}
+
+Introducing this idea does firm things up, eliminating some handwaving.  To obtain the extremal solution it does
+make sense to set the derivative of the action equal to zero, and introducing an additional scalar variational control
+in the paths from the optimal solution provides that something to take derivatives with respect to.
+
+Goldstein also writes that this action derivative is then evaluated at $\epsilon = 0$.  This really says the same
+thing as Feynman... toss all the higher order terms, since factors of epsilon will be left associated with of these.
+With my initial read of Goldstein this was not the least bit clear... it was really yet another example of the classic
+physics approach of solving something with a first order linear approximation.
+
+\subsection{Noether's theorem}
+
+Also covered in 
+\citep{doran2003gap} is Noether's theorem in multivector form.  This is used
+to calculate the conserved quantity the Hamiltonian for Lagrangian's with no
+time dependence.  Lets try something similar for the scalar variable case,
+after which the multivector case may make more sense.
+
+At its heart Noether's theorem appears to describe change of variables in
+Lagrangians.
+
+Given a Lagrangian dependent on generalized coordinates $q^i$, and their
+first order derivatives, as well as the path parameter $\lambda$.
+
+\begin{align*}
+\LL &= \LL(q^i, \qdot^i, \lambda) \\
+q^i &= q^i(r^i(\lambda), \alpha)
+\end{align*}
+
+One 
+example of such a change of variables would be the Galilean transformation $q^i = x^i(t) + v t$, with $\lambda = t$.
+
+Application of the chain rule shows how to calculate the first order change
+of the Lagrangian with respect to the new parameter $\alpha$.
+
+\begin{align}\label{eqn:euler_lagrange:nothFirstChain}
+\frac{d\LL}{d\alpha}
+&=
+\PD{q^i}{\LL} \PD{\alpha}{q^i}
++\PD{\qdot^i}{\LL} \PD{\alpha}{\qdot^i}
+\end{align}
+
+If $q^i$, and $\qdot^i$ satisfy the Euler-Lagrange equations \eqnref{eqn:euler_lagrange:eulerlag}, then this can be written
+
+\begin{align}\label{eqn:euler_lagrange:noethchain}
+\frac{d\LL}{d\alpha}
+&=
+\left(\frac{d}{d\lambda} \PD{\qdot^i}{\LL}\right)
+\PD{\alpha}{q^i}
++\PD{\qdot^i}{\LL} \PD{\alpha}{\qdot^i}
+\end{align}
+
+If one additionally has
+\begin{align*}
+\PDsq{\alpha}{q^i} =\PDsq{\alpha}{\qdot^i} = 0,
+\end{align*}
+
+so that $\PDi{\alpha}{q^i}$, and $\PDi{\alpha}{\qdot^i}$ are dependent only
+on $\lambda$, then \eqnref{eqn:euler_lagrange:noethchain} can be written as a total derivative
+
+\begin{align}\label{eqn:euler_lagrange:noethTotalDer}
+\frac{d\LL}{d\alpha} = \frac{d}{d\lambda} \left( \PD{\qdot^i}{\LL} \PD{\alpha}{q^i} \right)
+\end{align}
+
+If there is an $\alpha$ dependence in these derivatives a weaker total derivative statement is still possible, by evaluating the 
+Lagrangian derivative and $\PDi{\alpha}{q^i}$ at some specific constant value of $\alpha$.  This is
+
+\begin{align*}
+\left.\frac{d\LL}{d\alpha}\right\vert_{\alpha = \alpha_0} = \frac{d}{d\lambda} \left( \PD{\qdot^i}{\LL} \left.\PD{\alpha}{q^i}\right\vert_{\alpha = \alpha_0} \right)
+\end{align*}
+
+
+\subsubsection{Hamiltonian}
+
+Hmm, the above equations do not much like the Noether's equation in \citep{doran2003gap}.  However, in this form, we can get at the Hamiltonian statement
+without any trouble.  Let us do that first, then return to Noether's
+
+Of particular interest is when the change of variables for the generalized coordinates is dependent on the parameter $\alpha = \lambda$.
+Given this type of transformation we can write
+\eqnref{eqn:euler_lagrange:noethTotalDer} as
+
+\begin{align}\label{eqn:euler_lagrange:ham1}
+\frac{d\LL}{d\lambda} = \frac{d}{d\lambda} \left( \PD{\qdot^i}{\LL} \PD{\lambda}{q^i} \right)
+\end{align}
+
+For this to be valid in this $\alpha = \lambda$ case, note that the Lagrangian
+itself may not be explicitly dependent on the parameter $\lambda$.  Such a dependence would mean that \eqnref{eqn:euler_lagrange:nothFirstChain}
+would require an additional $\PDi{\lambda}{\LL}$ term.
+
+The difference of the \eqnref{eqn:euler_lagrange:ham1} terms is called the Hamiltonian $H$
+
+\begin{align*}
+\frac{dH}{d\lambda} &= \frac{d}{d\lambda} \left( \PD{\qdot^i}{\LL} \qdot^i - \frac{d\LL}{d\lambda} \right) = 0 \\
+\end{align*}
+
+Or,
+\begin{align*}
+H &= \PD{\qdot^i}{\LL} \qdot^i - \frac{d\LL}{d\lambda},
+\end{align*}
+
+which is a conserved quantity 
+when the Lagrangian has no explicit $\lambda$ dependence.
+
+\subsubsection{Noether's take II}
+
+Noether's theorem is about conserved quantities under symmetry transformations.  Let us revisit the attempt at derivation once more cutting down the complexity
+even further, considering a transformation of a single generalized coordinate and the corresponding change to the Lagrangian under such a transformation.
+
+Write
+
+\begin{align*}
+q &\rightarrow q' = f(q, \alpha) \\
+\LL(q, \qdot, \lambda) &\rightarrow \LL' = \LL(q', \qdot', \lambda) = \LL(f, \fdot, \lambda)
+\end{align*}
+
+Now as before consider the derivative 
+
+\begin{align}\label{eqn:euler_lagrange:noethtmp1}
+\DD{\alpha}{\LL'} &= \PD{f}{\LL} \PD{\alpha}{f} + \PD{\fdot}{\LL} \PD{\alpha}{\fdot}
+\end{align}
+
+In terms of the transformed coordinates the Euler-Lagrange equations require
+
+\begin{align*}
+\PD{f}{\LL} = \frac{d}{d\lambda} \PD{\fdot}{\LL}
+\end{align*}
+
+and back-substitution into \eqnref{eqn:euler_lagrange:noethtmp1} gives
+\begin{align}\label{eqn:euler_lagrange:noethtmp2}
+\DD{\alpha}{\LL'} &= \frac{d}{d\lambda} \left( \PD{\fdot}{\LL} \right) \PD{\alpha}{f} + \PD{\fdot}{\LL} \PD{\alpha}{\fdot}
+\end{align}
+
+This can be written as a total derivative if 
+\begin{align*}
+\PD{\alpha}{\fdot} &= \frac{d}{d\lambda} \PD{\alpha}{f} \\
+\PD{\alpha}{} \frac{df}{d\lambda} &= \PDD{q}{\alpha}{f} \qdot + \PDsq{\alpha}{f} \alphadot \\
+\PD{\alpha}{} \left( \PD{q}{f} \qdot + \PD{\alpha}{f} \alphadot \right) &= \\
+\PDD{\alpha}{q}{f} \qdot + \PDsq{\alpha}{f} \alphadot + \PD{\alpha}{f} \PD{\alpha}{\alphadot} &= \\
+\end{align*}
+
+Thus given a constraint of sufficient continuity
+\begin{align*}
+\PDD{\alpha}{q}{f} &= \PDD{q}{\alpha}{f} \\
+\end{align*}
+
+and also that $\alphadot$ is not a function of $\alpha$
+
+\begin{align*}
+\PD{\alpha}{\alphadot} &= 0
+\end{align*}
+
+we have from \eqnref{eqn:euler_lagrange:noethtmp2}
+\begin{align*}
+\DD{\alpha}{\LL'}
+&= \frac{d}{d\lambda} \left( \PD{\fdot}{\LL} \PD{\alpha}{f} \right) \\
+\end{align*}
+
+Or
+\begin{align}
+\DD{\alpha}{\LL'}
+&= \frac{d}{d\lambda} \left( \PD{\qdot'}{\LL} \PD{\alpha}{q'} \right)
+\end{align}
+
+The details of generalizing this to multiple variables are almost the same, but does not really add anything to the understanding.  This generalization is included as an appendix below for completeness, but the end result is
+
+\begin{align}\label{eqn:euler_lagrange:noethersgeneral}
+\DD{\alpha}{\LL'}
+&= \frac{d}{d\lambda} \left( \sum_i 
+\PD{ {{\dot{q'}}^i} }{\LL} 
+%\PD{ {{\qdot}^i}' }{\LL} 
+\PD{\alpha}{{q^i}'} \right)
+\end{align}
+
+In words, when the transformed Lagrangian is symmetric (not a function of $\alpha$) under coordinate transformation then this
+inner quantity, a generalized momentum velocity product, is constant (conserved)
+
+\begin{align*}
+\sum_i \PD{{\dot{q'}^i}}{\LL} \PD{\alpha}{{q^i}'} = \text{constant}
+\end{align*}
+
+Transformations that leave the Lagrangian unchanged have this associated conserved quantity, which dimensionally, assuming a time parametrization, has units of
+energy ($mv^2$).
+
+FIXME: The $\PDi{\alpha}{\alphadot} = 0$ requirement is what is removed by evaluation at $\alpha = \alpha_0$.  This statement seems somewhat handwaving like.  Firm it up with an example and concrete justification.
+
+Note that it still does not quite match the multivector result from
+\citep{doran2003gap}, equation $12.10$
+
+\begin{align*}
+\left.\DD{\alpha}{\LL'}\right\vert_{\alpha=0}
+&= \frac{d}{dt} \sum_{i=1}^n \left( 
+\PD{\alpha}{X_i'} \conj \partial_{\Xdot_i}{\LL}
+\right) \\
+\end{align*}
+
+I believe there is a missing prime there, and it should read
+
+\begin{align*}
+\left.\DD{\alpha}{\LL'}\right\vert_{\alpha=0}
+&= \frac{d}{dt} \sum_{i=1}^n \left( 
+\PD{\alpha}{X_i'} \conj \partial_{\Xdot_i'}{\LL}
+\right) \\
+\end{align*}
+
+\section{Vector formulation of Euler-Lagrange equations}
+
+\subsection{Simple case.  Unforced purely kinetic Lagrangian}
+
+Before considering multivector Lagrangians, a step back to the simplest vector Lagrangian is in order
+
+\begin{align}\label{eqn:euler_lagrange:simpleKineticLagrangian}
+\LL = \inv{2}m \dot{\Bx} \cdot \dot{\Bx}
+\end{align}
+
+Writing $\Bx(\lambda) = \overbar{\Bx} + \epsilon \Bn$, and using the variational technique directly the equation of motion for this unforced path should follow directly
+in vector form
+
+\begin{align*}
+S = \int d\lambda \inv{2} m \dot{\overbar{\Bx}}^2 + \int m d\lambda \epsilon \dot{\overbar{\Bx}} \cdot \dot{\Bn} + \int d\lambda \inv{2} m \epsilon^2 \dot{\overbar{\Bn}}^2
+\end{align*}
+
+Integration by parts operating directly on the vector function we have
+
+\begin{align*}
+\left.\frac{d S}{d\epsilon}\right\vert_{\epsilon=0} 
+&= \left.{m \dot{\overbar{\Bx}} \cdot {\Bn}}\right\vert_{\partial \lambda} - \int m d\lambda \ddot{\overbar{\Bx}} \cdot {\Bn} \\
+&= - \int m d\lambda \ddot{\overbar{\Bx}} \cdot {\Bn} \\
+\end{align*}
+
+Introducing shorthand $\delta S/\delta \Bx$, for a vector functional derivative, we have
+\begin{align*}
+\left.\frac{d S}{d\epsilon}\right\vert_{\epsilon=0} &= \int d\lambda \Bn \cdot \frac{\delta S}{\delta \Bx},
+\end{align*}
+
+where the extremal condition is
+\begin{align*}
+\frac{\delta S}{\delta \Bx} = - m \ddot{\overbar{\Bx}} = 0.
+\end{align*}
+
+Here the expected and desired Euler Lagrange equation for the Lagrangian (constant velocity in some direction dependent on initial conditions) is arrived at directly in vector form without dropping down to coordinates and reassembling them to get back the vector expression.
+
+\subsection{Position and velocity gradients in the configuration space}
+
+Having tackled the simplest case, to generalize this we need a construct to do first order Taylor series expansion in the neighborhood of a vector
+position.  The (multivector) gradient is the obvious candidate operator to do the job.
+Before going down that road consider the scalar Lagrangian case once more, where we will see that it is natural to define position and velocity gradients
+in the configuration space.  It will also be observed that the chain rule essentially motivates the initially somewhat odd seeming reciprocal basis
+used to express the gradient when operating in a non-orthonormal frame.
+
+In \eqnref{eqn:euler_lagrange:linearizedLagrangian}, the linear differential increment in the neighborhood of the optimal solution had the form
+
+\begin{align}\label{eqn:euler_lagrange:gradientMotivator}
+\Delta \LL &=
++ \sum_i (\barq^i + n^i) \left. \PD{q^i}{\LL} \right\vert_{q^i = \barq^i}
++ \sum_i (\barqdot^i + \ndot^i) \left. \PD{\qdot^i}{\LL} \right\vert_{q^i = \barq^i}
+\end{align}
+
+If one defines a configuration space position and velocity gradients respectively as
+
+\begin{align*}
+\grad_{\Bq} &= \left(\PD{q^1}{}, \PD{q^2}{}, \cdots, \PD{q^n}{}\right) = f_k \PD{q^k}{} \\
+\grad_{\dot{\Bq}} &= \left(\PD{\qdot^1}{}, \PD{\qdot^2}{}, \cdots, \PD{\qdot^n}{}\right) = f_k \PD{\qdot^k}{}
+\end{align*}
+
+and forms a configuration space vector with respect to some linearly independent, but not necessarily orthonormal, basis
+
+\begin{align*}
+\Bq = q^i e_i
+\end{align*}
+
+then the chain rule dictates the relationship between the configuration vector basis and the basis with which the gradient must be expressed.  In
+particular, if we wish to write \eqnref{eqn:euler_lagrange:gradientMotivator} in terms of the configuration space gradients
+
+\begin{align*}
+\Delta \LL &=
+(\overbar{\Bq} + \Bn) \cdot \left.\grad_\Bq \LL \right\vert_{\Bq = \overbar{\Bq}}
++ (\dot{\overbar{\Bq}} + \dot{\Bn}) \cdot \left.\grad_{\dot{\Bq}} \LL \right\vert_{\dot{\Bq} = \dot{\overbar{\Bq}}}
+\end{align*}
+
+Then we must have a reciprocal relationship between the basis vector for the configuration space vectors $e_i$, and the corresponding vectors
+from which the gradient was formed
+
+\begin{align*}
+e_i \cdot f_j &= \delta_{i j} \\
+\implies \\
+f_j = e^j
+\end{align*}
+
+This gives us the position and velocity gradients in the configuration space
+
+\begin{align}
+\grad_{\Bq} &= e^k \PD{q^k}{} \\
+\grad_{\dot{\Bq}} &= e^k \PD{\qdot^k}{}.
+\end{align}
+
+Note also that the size of this configuration space does not have to be the same space as the problem.  With this definitions completion of the integration
+by parts yields the Euler-Lagrange equations in a hybrid configuration space vector form
+
+\begin{align}
+\grad_{\Bq} \LL = \frac{d}{d\lambda} \grad_{\dot{\Bq}} \LL
+\end{align}
+
+When the configuration space equals the geometrical space being operated in (ie: generalized coordinates are regular old coordinates), this 
+provides a nice explanation for why we must have the funny pairing of upper index coordinates in the partials of the gradient and reciprocal frame
+vectors multiplying all these partials.  Contrast to a text like \citep{doran2003gap} where the gradient (and spacetime gradient) are defined in this
+fashion instead, and one gradually sees that this does in fact work out.
+
+That said, the negative side of this vector notation is that 
+it obscures somewhat the Euler-Lagrange equations, which are not terribly complicated to begin with.  However, since this appears to be the form
+of the multivector form of the Euler-Lagrange equations it is likely worthwhile to see how this also expresses the simpler familiar scalar case too.
+
+\section{Example applications of Noether's theorem}
+
+Linear translation and rotational translation appear to be the usual first example
+applications.  \citep{TongDynamics} does this, as does the wikipedia article.
+Reading about those without actually working through it 
+myself never made complete sense (esp. want to do the angular momentum
+example).
+
+Noether's theorem is not really required to see that in the case of unforced motion 
+\eqnref{eqn:euler_lagrange:simpleKineticLagrangian}, translation of coordinates $\Bx \rightarrow \Bx + \Ba$
+will not change the equation of motion.  This is the conservation of linear momentum result
+so familiar from high school physics.
+
+\subsection{Angular momentum in a radial potential}
+
+The conservation of angular momentum case is more interesting.
+
+Suppose that one has a radial potential applied to a point particle
+
+\begin{align*}
+\LL = \inv{2}m \dot{\Bx}^2 - \phi(\Abs{\Bx}^k)
+\end{align*}
+
+and apply a rotational transformation to the coordinates $\Bx \rightarrow \exp(i\theta/2) \Bx \exp(-i\theta/2)$.
+
+Provided that this is a fixed rotation with $i$, and $\theta$ constant (not functions of time), the transformed squared velocity is:
+
+\begin{align*}
+\dot{\Bx}' \cdot \dot{\Bx}' 
+&= \gpgradezero{ \exp(i\theta/2) \dot{\Bx} \exp(-i\theta/2) \exp(i\theta/2) \dot{\Bx} \exp(-i\theta/2) } \\
+&= \gpgradezero{ \exp(i\theta/2) \dot{\Bx} \dot{\Bx} \exp(-i\theta/2) } \\
+&= \dot{\Bx}^2 \gpgradezero{ \exp(i\theta/2) \exp(-i\theta/2) } \\
+&= \dot{\Bx}^2 \\
+\end{align*}
+
+Since $\Abs{\Bx'} = \Abs{\Bx}$ the transformed Lagrangian is unchanged by any rotation of coordinates.
+
+Noether's equation \eqnref{eqn:euler_lagrange:noethersgeneral} takes the form
+
+\begin{align*}
+\PD{\theta}{\LL'} 
+&= \frac{d}{dt} \left( \PD{\theta}{\Bx'} \cdot \spacegrad_{\Bv'}{\LL} \right)
+\end{align*}
+
+Here the configuration space gradient is used to express the chain rule terms, picking the \R{3} standard basis vectors
+to express that gradient.
+
+The velocity term can be expanded as
+
+\begin{align*}
+\PD{\theta}{\Bx'} 
+&= \PD{\theta}{} \left( \exp(i\theta/2) \Bx \exp(-i\theta/2) \right) \\
+&= \inv{2}(i \Bx' - \Bx'i) \\
+&= i \cdot \Bx' \\
+\end{align*}
+
+The transformed conjugate momentum is 
+
+\begin{align*}
+\spacegrad_{\Bv'} \inv{2} m {\Bv'}^2 = m \Bv' = \Bp'
+\end{align*}
+
+so the conserved quantity is
+
+\begin{align*}
+(i \cdot \Bx') \cdot \Bp' = \text{constant}
+\end{align*}
+
+Temporarily expressing the bivector for the rotational plane in terms of a dual relationship, $i = I \Bn$, where $\Bn$ is a unit normal to the plane we have
+
+\begin{align*}
+(i \cdot \Bx') \cdot \Bp' 
+&= ((I \Bn) \cdot \Bx') \cdot \Bp' \\
+&= \inv{2} (I \Bn \Bx' - \Bx' I \Bn) \cdot \Bp' \\
+&= \inv{2} \gpgradezero{I (\Bn \Bx' - \Bx'\Bn) \Bp'} \\
+&= \inv{2} \gpgradezero{I \Bn \Bx'\Bp} - \gpgradezero{ I \Bn \Bp' \Bx' } \\
+&= \inv{2} \left( \gpgradezero{i (\Bx' \wedge \Bp')} - \gpgradezero{ i (\Bp' \wedge \Bx') }\right) \\
+&= i \cdot (\Bx' \wedge \Bp') \\
+\end{align*}
+
+Since $i$ is a constant bivector we have angular momentum (dropping primes), by virtue of Lagrangian transformational symmetry and Noether's theorem the angular momentum
+
+\begin{align}\label{eqn:euler_lagrange:angularmomentum}
+\Bx \wedge \Bp = \text{constant},
+\end{align}
+
+is a constant of motion for a point particle Lagrangian in a radial potential field.
+
+This is typically expressed in terms of the dual relationship using cross products
+
+\begin{align*}
+\Bx \cross \Bp = \text{constant}.
+\end{align*}
+
+Also observe the time derivative of the angular momentum in \eqnref{eqn:euler_lagrange:angularmomentum}
+
+\begin{align*}
+\frac{d}{dt} (\Bx \wedge \Bp) 
+&= \Bp/m \wedge \Bp + \Bx \wedge \dot{\Bp} \\
+&= \Bx \wedge \dot{\Bp} \\
+&= 0
+\end{align*}
+
+Which says that the torque on a particle in a radial potential is zero.  This finally supplies the rational for texts like
+\citep{lewis1965mbp}, which while implicitly talking about motion in a (radial) gravitational potential, says something to the effect 
+of ``in the absence of external torques the angular momentum is conserved''!
+
+What other more general non-radial potentials, if any, allow for this conservation statement?
+I had guess that something like
+the Lorentz force with velocity dependence in the potential will explicitly not have this conservation of angular momentum.
+\citep{TongDynamics} and
+\citep{goldstein1951cm} both cover Lagrangian transformation, and specifically cover this angular momentum issue, but 
+blundering through it myself as done here was required to really see where it was coming from and to apply the idea.
+%with my initial read of both I hhad not built up enough
+%comfort with the ideas to be able to understand nor apply the ideas myself.
+
+\subsection{Hamiltonian}
+
+Consider a general kinetic form and a possibly velocity dependent potential
+
+\begin{align*}
+\LL &= K - \phi = \inv{2} \sum_{ij} g_{ij} \qdot^i \qdot^j - \phi
+\end{align*}
+
+and form the Hamiltonian.  First calculate
+
+\begin{align*}
+\PD{\qdot^i}{\LL} &= m \sum_{j} g_{ij} \qdot^j - \PD{\qdot^i}{\phi} \\
+\implies \\
+\sum_i \qdot^i \PD{\qdot^i}{\LL} 
+&= m \sum_{ij} g_{ij} \qdot^i \qdot^j - \sum_i \qdot^i \PD{\qdot^i}{\phi} \\
+&= 2 K - \sum_i \qdot^i \PD{\qdot^i}{\phi} \\
+%&= 2 K - \Bv \cdot \spacegrad_{\Bv} {\phi} \\
+\end{align*}
+
+So, the Hamiltonian is
+\begin{align*}
+H &= K - \sum_i \qdot^i \PD{\qdot^i}{\phi} + \phi \\
+\end{align*}
+
+For the less general case where $\Bv^2 = g_{ij} \qdot^i \qdot^j$, this is
+\begin{align*}
+H &= K - \Bv \cdot \spacegrad_{\Bv} {\phi} + \phi \\
+\end{align*}
+
+a conserved quantity with respect to the time derivative.
+
+Similarly, for squared proper velocity $v^2 = g_{ij} \qdot^i \qdot^j$, and derivatives with respect to proper time
+
+\begin{align*}
+H &= K - v \cdot \grad_{v} {\phi} + \phi \\
+\end{align*}
+
+is conserved with respect to proper time.
+
+As an example, consider the Lorentz force Lagrangian.  For 
+proper velocity $v$, four potential $A$, and positive time metric signature $(\gamma_0)^2 = 1$, the Lorentz force Lagrangian is
+
+\begin{align}\label{eqn:euler_lagrange:lorentzforce}
+\LL = \inv{2}m v \cdot v + q A \cdot v/c
+\end{align}
+
+We therefore have
+
+\begin{align*}
+0 
+&= \frac{d}{d\tau}
+\left(
+\inv{2} m v^2 + v \cdot \grad_{v} (q A \cdot v/c) - q A \cdot v/c 
+\right) \\
+\end{align*}
+
+Or
+
+\begin{align*}
+\inv{2} m v^2 + v \cdot \grad_{v} (q A \cdot v/c) - q A \cdot v/c = \kappa
+\end{align*}
+
+Where $\kappa$ is some constant.  Since $\grad_v A^{\mu} = 0$, we have $\grad_v A\cdot v = A$, and
+
+\begin{align*}
+\kappa 
+&= \inv{2} m v^2 + v \cdot (q A/c) - q A \cdot v/c \\
+&= \inv{2} m v^2 \\
+\end{align*}
+
+At a glance this does not look terribly interesting, since 
+by definition of proper time we already know that $\inv{2} mv^2 = \inv{2}mc^2$ is a constant.
+
+However, suppose that one did not assume proper time to start with, and instead considered
+an arbitrarily parametrized coordinate worldline and their corresponding solutions 
+
+\begin{align*}
+x &= x(\lambda) \\
+\LL &= \inv{2}m \frac{dx}{d\lambda} \cdot \frac{dx}{d\lambda} + q A \cdot \frac{dx}{d\lambda}/c \\
+\PD{\lambda}{\LL} &= \frac{d}{d\lambda} \PD{\lambda}{\LL}
+\end{align*}
+
+The Hamiltonian conservation with respect to this parametrization then implies
+
+\begin{align*}
+\frac{d}{d\lambda} \left( \inv{2} m \frac{dx}{d\lambda} \cdot \frac{dx}{d\lambda} \right) &= 0
+\end{align*}
+
+So that, independent of the parametrization, the quantity $\inv{2} m \frac{dx}{d\lambda} \cdot \frac{dx}{d\lambda}$ is a constant.  This then follows as a consequence of Noether's theorem instead of by definition.
+Proper time then becomes that particular worldline parametrization $\lambda = \tau$ such that 
+$\inv{2} m \frac{dx}{d\tau} \cdot \frac{dx}{d\tau} = \inv{2} m c^2$.
+
+\subsection{Covariant Lorentz force Lagrangian}
+
+The Hamiltonian was used above to extract $v^2$ invariance from the Lorentz force Lagrangian under changes of proper time.  The next obvious
+Noether's application is for a Lorentz transformation of the interaction Lagrangian.  This was interesting enough seeming in its own right to 
+treat separately and has been moved to \chapcite{PJLorentzTxInteraction}.
+
+\subsection{Vector Lorentz force Lagrangian}
+
+FIXME: Try this with $\BA \cdot \Bv$ form of the Lagrangian and rotation... cross product terms should result.
+
+\subsection{An example where the transformation has to be evaluated at fixed point}
+
+FIXME: find an example of this and calculate with it.
+
+\subsection{Comparison to cyclic coordinates}
+
+FIXME: Also calculate with some examples where cyclic
+coordinates are discovered by actually computing the Euler-Lagrange equations
+... see how to observed this directly from the Lagrangian itself under transformation without actually evaluating the equations (despite the fact that
+this is simple for the cyclic case).
+
+\section{Appendix}
+
+\subsection{Noether's equation derivation, multivariable case}
+
+Employing a couple judicious regular expressions starting from the text for the single variable treatment, plus some minor summation sign addition does the job.
+
+\begin{align*}
+q^i &\rightarrow {q^i}' = f^i(q^i, \alpha) \\
+\LL(q^i, \qdot^i, \lambda) &\rightarrow \LL' = \LL({q^i}', {\dot{q'}^i}, \lambda) = \LL(f^i, \fdot^i, \lambda)
+\end{align*}
+
+Now as before consider the derivative 
+
+\begin{align}\label{eqn:euler_lagrange:gnoethtmp1}
+\DD{\alpha}{\LL'} &= \sum_i \PD{f^i}{\LL} \PD{\alpha}{f^i} + \PD{\fdot^i}{\LL} \PD{\alpha}{\fdot^i}
+\end{align}
+
+In terms of the transformed coordinates the Euler-Lagrange equations require
+
+\begin{align*}
+\PD{f^i}{\LL} = \frac{d}{d\lambda} \PD{\fdot^i}{\LL}
+\end{align*}
+
+and backsubstitution into \eqnref{eqn:euler_lagrange:gnoethtmp1} gives
+\begin{align}\label{eqn:euler_lagrange:gnoethtmp2}
+\DD{\alpha}{\LL'} &= \sum_i \frac{d}{d\lambda} \left( \PD{\fdot^i}{\LL} \right) \PD{\alpha}{f^i} + \PD{\fdot^i}{\LL} \PD{\alpha}{\fdot^i}
+\end{align}
+
+This can be written as a total derivative if 
+\begin{align*}
+\PD{\alpha}{\fdot^i} &= \frac{d}{d\lambda} \PD{\alpha}{f^i} \\
+\PD{\alpha}{} \frac{df}{d\lambda} &= \sum_j \PDD{q^j}{\alpha}{f^i} \qdot^j + \PDsq{\alpha}{f^i} \alphadot \\
+\PD{\alpha}{} \left( \sum_j \PD{q^j}{f^i} \qdot^j + \PD{\alpha}{f^i} \alphadot \right) &= \\
+\sum_j \PDD{\alpha}{q^j}{f^i} \qdot^j + \PDsq{\alpha}{f^i} \alphadot + \PD{\alpha}{f^i} \PD{\alpha}{\alphadot} &= \\
+\end{align*}
+
+Thus given constraints of sufficient continuity
+\begin{align*}
+\PDD{\alpha}{q^j}{f^i} &= \PDD{q^j}{\alpha}{f^i} \\
+\end{align*}
+
+and also that $\alphadot$ is not a function of $\alpha$
+
+\begin{align*}
+\PD{\alpha}{\alphadot} &= 0
+\end{align*}
+
+we have from \eqnref{eqn:euler_lagrange:gnoethtmp2}
+\begin{align*}
+\DD{\alpha}{\LL'}
+&= \frac{d}{d\lambda} \left( \sum_i \PD{\fdot^i}{\LL} \PD{\alpha}{f^i} \right) \\
+\end{align*}
+
+QED.

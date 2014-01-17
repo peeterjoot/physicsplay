@@ -1,0 +1,1145 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{qmTwoExamReflection}
+\renewcommand{\dirname}{notes/phy456/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+%\blogpage{http://sites.google.com/site/peeterjoot2/math2011/qmTwoExamReflection.pdf}
+%\date{Dec 13, 2011}
+
+\input{../peeter_prologue_print2.tex}
+
+\beginArtNoToc
+
+\generatetitle{PHY456H1F: Some exam reflection}
+\chapter{PHY456H1F: Some exam reflection}
+\label{chap:qmTwoExamReflection}
+
+\section{Problem 1.  Time evolution for a Harmonic oscillator where the ``spring'' is released}
+
+We have been given a harmonic oscillator
+
+\begin{equation}\label{eqn:qmTwoExamReflection:10}
+H = \frac{P^2}{2m} + \inv{2} k(t) X^2
+\end{equation}
+
+where $k = k_0$ initially, and $k \rightarrow 0$ over time, and been asked to determine the evolution of the ground state wave function.
+
+\subsection{Part a.  Sudden release}
+
+Here $k$ changes at time $t=0$ from its initial value $k_0$, very suddenly to a final value of $0$ in time $T$ as illustrated in \cref{fig:qmTwoExamReflection:qmTwoExamReflectionFig1}
+
+\imageFigure{../../figures/blogit/qmTwoExamReflectionFig1}{Flatting harmonic oscillator potential}{fig:qmTwoExamReflection:qmTwoExamReflectionFig1}{0.2}
+
+If the system is initially in its ground state, how will it evolve after $t = T$?
+
+This is a neat variation of the sudden time Hamiltonian problem, one that I intuitively knew what to do, but missed one detail.  Here is how I think I should have answered.
+
+Our starting point is the ``formal'' solution of the Hamiltonian equation
+
+\begin{equation}\label{eqn:qmTwoExamReflection:30}
+\ket{\psi(t)} - \ket{\psi(t_0)} = \inv{i\Hbar} \int_{t_0}^t H(t') \ket{\psi(t')} dt'
+\end{equation}
+
+As discussed in class, since we do not know $\ket{\psi(t)}$ it is not obvious that this is of any value, but if the Hamiltonian changes very quickly the ket $\ket{\psi(t)}$ in the integral can be approximated with an average value (or the initial value).  Assuming the Hamiltonian completes its rapid change in time $T$, we end up with the conclusion that
+
+\begin{equation}\label{eqn:qmTwoExamReflection:50}
+\ket{\psi(T)} \approx \ket{\psi(t_0)}
+\end{equation}
+
+This approximation is only valid at the single point in time $T$ after the Hamiltonian change, after which the initial wave function must be described in terms of the basis kets for the new Hamiltonian.  An initial state is then a superposition of states in the new basis, and the evolution follows in the normal fashion.
+
+Where this gets interesting in this case is that the final time Hamiltonian is that of a free particle, so we cannot express the initial state using a discrete basis of any sort
+
+\begin{equation}\label{eqn:qmTwoExamReflection:70}
+\psi(x, 0) = \sum_p c_p e^{i p x/\Hbar},
+\end{equation}
+
+instead we end up with a wave packet that has a continuous split of resulting states, even if the initial wave function was that of a single state (like in this problem, where it was the ground state of the initial time harmonic oscillator).  We must write
+
+\begin{equation}\label{eqn:qmTwoExamReflection:90}
+\psi(x, 0) = \inv{\sqrt{2 \pi \Hbar}} \int c(p, 0) e^{i p x/\Hbar} dp.
+\end{equation}
+
+I confused myself in the exam by using a wave number representation
+
+\begin{equation}\label{eqn:qmTwoExamReflection:110}
+\psi(x, 0) = \inv{\sqrt{2 \pi}} \int c(k, 0) e^{i k x} dk,
+\end{equation}
+
+and then not cluing in how to describe the time evolution of this wave packet.  Had I worked in the momentum representation intuition may have told me that this evolution would take the form
+
+\begin{equation}\label{eqn:qmTwoExamReflection:130}
+\psi(x, t) = \inv{\sqrt{2 \pi \Hbar}} \int c(p) e^{- i E_p t/\Hbar} e^{i p x/\Hbar} dp,
+\end{equation}
+
+where
+
+\begin{equation}\label{eqn:qmTwoExamReflection:150}
+E_p = \frac{p^2}{2m}.
+\end{equation}
+
+However intuition was not my friend at that point in time.  This is not something that should have been hard to figure out, since the evolution, regardless of whether we have a discrete basis, or a continuous one, is a consequence of the Hamiltonian action.  Using the momentum parametrized representation of a wave packet, with the time evolution undetermined
+
+\begin{equation}\label{eqn:qmTwoExamReflection:170}
+\psi(x, t) = \inv{\sqrt{2 \pi \Hbar}} \int c(p) U(p, t) e^{i p x/\Hbar} dp,
+\end{equation}
+
+we find
+
+\begin{align*}
+0 &=
+\left(H - i \Hbar \PD{t}{}\right)
+\psi(x, t) \\
+&=
+\left(H - i \Hbar \PD{t}{}\right)
+\inv{\sqrt{2 \pi \Hbar}} \int c(p) U(p, t) e^{i p x/\Hbar} dp \\
+&=
+\inv{\sqrt{2 \pi \Hbar}} \int c(p) \left(
+U(p, t) H e^{i p x/\Hbar}
+-i \Hbar \PD{t}{U(p, t)} e^{i p x/\Hbar}
+\right) dp  \\
+&=
+\inv{\sqrt{2 \pi \Hbar}} \int c(p) \left(
+U(p, t) \frac{p^2}{2m}
+-i \Hbar \PD{t}{U(p, t)}
+\right)
+e^{i p x/\Hbar}
+dp.
+\end{align*}
+
+Here we use the fact that the wave functions $e^{i p x/\Hbar}$ are the momentum space energy eigenkets of the free particle Hamiltonian, with eigenvalues $p^2/2m$.
+
+With this identically zero for all wave packets we must have
+
+\begin{equation}\label{eqn:qmTwoExamReflection:190}
+\PD{t}{U(p, t)}
+=
+\inv{i \Hbar}
+\frac{p^2}{2m}
+U(p, t).
+\end{equation}
+
+Integrating we have
+
+\begin{equation}\label{eqn:qmTwoExamReflection:210}
+U(p, t) = C \exp\left( -\frac{i p^2 t}{2m \Hbar} \right),
+\end{equation}
+
+but since $U(p, 0) = 1$, the constant $C$ is just equal to unity.
+
+Therefore the time evolution of the wave packet is given by
+
+\begin{equation}\label{eqn:qmTwoExamReflection:230}
+\psi(x, t) = \inv{\sqrt{2 \pi \Hbar}} \int c(p) e^{-i p^2 t/(2m \Hbar)} e^{i p x/\Hbar} dp.
+\end{equation}
+
+Rather ironically, while relaxing after the exam, leisurely reading a book \citep{pauli2000wm} that I had not touched since before starting PHY356 over a year ago, I find exactly this wave packet evolution described in \S 2.8, the spot just after I had left off so long ago.  He did it by analogy with the discrete case, but the idea is the same ... both are consequences of the Hamiltonian operation on the wave function.
+
+Understanding the general problem of wave packet evolution, given a Fourier description of that wave packet, we can now tackle the specific problem of the exam.
+
+From the formula sheet we look up the ground state function and find
+
+\begin{equation}\label{eqn:qmTwoExamReflection:250}
+\psi_0(x) = \inv{\sqrt{\alpha_0 \sqrt{\pi}}} e^{-\frac{x^2}{2\alpha_0^2}},
+\end{equation}
+
+where
+
+\begin{equation}\label{eqn:qmTwoExamReflection:270}
+\alpha_0^2
+= \frac{\Hbar}{m \omega_0}
+= \frac{\Hbar}{m \sqrt{\frac{k_0}{m}}}
+= \frac{\Hbar}{\sqrt{m k_0}}.
+\end{equation}
+
+Our representation of this state in the continuous basis follows from the computation of the Fourier coefficients
+
+\begin{align*}
+c(p)
+&=
+\inv{\sqrt{2 \pi \Hbar}} \int \psi_0(x) e^{i p x/\Hbar} dx \\
+&=
+\inv{\sqrt{2 \pi \Hbar \alpha_0 \sqrt{\pi}}}
+\int
+e^{-\frac{x^2}{2\alpha_0^2}}
+e^{i p x/\Hbar} dx \\
+&=
+\frac{\sqrt{2 \pi \alpha_0^2}}{\sqrt{2 \pi \Hbar \alpha_0 \sqrt{\pi}}}
+\inv{\alpha_0} \sqrt{\frac{\pi}{2}}
+e^{-\frac{p^2 \alpha_0^2}{2 \Hbar^2}} \\
+\end{align*}
+
+So, as a Fourier transform our time evolved state for times $t \ge T$, after the Hamiltonian has done abruptly changed to the free particle equation is
+
+\begin{equation}\label{eqn:qmTwoExamReflection:290}
+\psi(x, t - T) =
+\inv{2 \pi \Hbar} \sqrt{ \frac{2 \pi \alpha_0}{\sqrt{\pi}} }
+\int
+e^{-\frac{p^2 \alpha_0^2}{2 \Hbar^2}}
+e^{-i p^2 t/(2m \Hbar)} e^{i p x/\Hbar} dp.
+\end{equation}
+
+A final evaluation of this Fourier integral, with a substitution of $t - T \rightarrow t$ (since $T$ is very small), gives
+
+\begin{equation}\label{eqn:qmTwoExamReflection:310}
+\psi(x, t) =
+\sqrt{\frac{\alpha_0}{\sqrt{\pi} \left( \alpha_0^2 + \frac{i t \Hbar}{m} \right)}}
+\exp\left(
+-\frac{x^2}{2 \left(\alpha_0^2 + i t \Hbar/m\right)}
+\right)
+\end{equation}
+
+Observe that this matches the $t=0$ value of our wave function \eqnref{eqn:qmTwoExamReflection:250}, but over time this initial Harmonic oscillator wave function gradually flattens out, with some interesting looking phase evolution.
+
+To get a better idea of how this behaves over time, lets split our time dependent term $\alpha_0^2 + i t \Hbar/m$ into magnitude and phase.  We find
+
+\begin{equation}\label{eqn:qmTwoExamReflection:330}
+\Abs{\alpha_0^2 + i t \Hbar/m} = \alpha_0^2 \sqrt{1 + (t \omega_0)^2}
+\end{equation}
+
+Writing
+
+\begin{equation}\label{eqn:qmTwoExamReflection:350}
+\alpha_0^2 + i t \Hbar/m = \alpha_0^2 \sqrt{1 + (t \omega_0)^2} e^{i \phi}
+\end{equation}
+
+we find
+
+\begin{equation}\label{eqn:qmTwoExamReflection:370}
+\tan(\phi) = t \omega_0,
+\end{equation}
+
+or
+
+\begin{equation}\label{eqn:qmTwoExamReflection:370b}
+\phi = \tan^{-1}(t \omega_0).
+\end{equation}
+
+We can write the wave function after the Hamiltonian change as
+
+\begin{equation}\label{eqn:qmTwoExamReflection:310b}
+\psi(x, t) =
+\left( \inv{\alpha_0 \sqrt{\pi}} \right)^{1/4}
+\inv{\left( 1 + (t \omega_0)^2 \right)^{1/4}}
+e^{-i \phi/2}
+\exp\left(
+-\frac{x^2}{2 \alpha_0^2} \inv{\sqrt{1 + (t \omega_0)^2}} e^{-i \phi}
+\right)
+\end{equation}
+
+Observe that as $t \omega_0$ grows very large $\tan^{-1}(t \omega_0) \rightarrow \pi/2$, so
+
+\begin{equation}\label{eqn:qmTwoExamReflection:310c}
+\psi(x, t) \rightarrow
+\left( \inv{\alpha_0 \sqrt{\pi}} \right)^{1/4}
+\inv{\left( 1 + (t \omega_0)^2 \right)^{1/4}}
+\frac{1 - i}{\sqrt{2}}
+\exp\left(
+i\frac{x^2}{2 \alpha_0^2} \inv{\sqrt{1 + (t \omega_0)^2}}
+\right).
+\end{equation}
+
+We see the magnitude flatten out, and what was exponential spatial damping, becomes purely oscillatory.  That oscillation is a mix of higher and higher frequency far from the origin with smaller and smaller frequency over all space as time progresses.
+
+\subsection{Part b.  Slow flattening of the ``spring constant''}
+
+For this part of the question our spring constant decreases gradually as
+
+\begin{equation}\label{eqn:qmTwoExamReflection:990}
+k(t) = k_0 e^{-\beta t}.
+\end{equation}
+
+Note that it was actually $\alpha$ not $\beta$ in the question, but we have $\alpha$ in the harmonic oscillator wavefunctions on the formula sheet, so I am using $\beta$ instead
+
+\begin{align}\label{eqn:qmTwoExamReflection:1010}
+\psi_n(x) &= \inv{\sqrt{2^n n!}} \left(\inv{\alpha^2 \pi}\right)^{1/4} e^{-x^2/2\alpha^2} H_n(x/\alpha) \\
+\alpha^2 &= \frac{\Hbar}{m \omega}
+= \frac{\Hbar}{\sqrt{k m}}
+= \frac{\Hbar}{\sqrt{k_0 m}} e^{\beta t/2}
+\end{align}
+
+It will be helpful to write
+
+\begin{align}\label{eqn:qmTwoExamReflection:1030}
+\alpha_0 &= \sqrt{\frac{\Hbar}{\sqrt{k_0 m}}} \\
+\alpha &= \alpha_0 e^{\beta t/4}
+\end{align}
+
+\subsubsection{Simplest approximation}
+
+For the slow changing Hamiltonian we have a couple of possible strategies.  In both of these we employ time varying energy eigenvalues and eigenkets
+
+\begin{equation}\label{eqn:qmTwoExamReflection:390}
+H \ket{k(t)} = \Hbar \omega_k(t) \ket{k(t)},
+\end{equation}
+
+One of our strategies is to use an assumed representation in terms of the instantaneous eigenkets
+
+\begin{equation}\label{eqn:qmTwoExamReflection:410}
+\ket{\psi} = \sum_k c_k(t) \ket{k}.
+\end{equation}
+
+Applying the energy relation we find the relations between the coefficients $c_k$
+
+\begin{align*}
+0
+&= \left(
+H - i \Hbar \ddt{}
+\right)
+\sum_k c_k(t) \ket{k}
+\\
+&=
+\sum_k
+\left(
+\Hbar \omega_k
+c_k(t) \ket{k}
+-i \Hbar
+\ddt{c_k(t)} \ket{k}
+-i \Hbar
+c_k(t) \ket{k'}
+\right)
+\end{align*}
+
+Braing with $\bra{m}$, and splitting the last term in the sum into $k = m$ and $k \ne m$ terms we have
+
+\begin{equation}\label{eqn:qmTwoExamReflection:430}
+0
+=
+\omega_m
+c_m(t)
+-i
+\ddt{c_m(t)}
+-i
+c_m(t) \braket{m}{m'}
+-i
+\sum_{k \ne m}
+c_k(t) \braket{m}{k'}
+\end{equation}
+
+Writing
+
+\begin{equation}\label{eqn:qmTwoExamReflection:450}
+\Gamma_k = i \braket{k}{k'},
+\end{equation}
+
+and rearranging we have
+
+\begin{equation}\label{eqn:qmTwoExamReflection:470}
+\ddt{c_m(t)}
+=
+-i c_m(t)
+\left( \omega_m - \Gamma_m \right)
+-
+\sum_{k \ne m}
+c_k(t) \braket{m}{k'}
+\end{equation}
+
+The very simplest adiabatic approximation takes this and neglects the $k \ne m$ terms, allowing us to integrated for $c_m$
+
+\begin{equation}\label{eqn:qmTwoExamReflection:490}
+c_m(t)
+=
+c_m(0) \exp\left( -i \int_0^t dt' \left( \omega_m(t') - \Gamma_m(t') \right) \right).
+\end{equation}
+
+The wavefunction expressed in terms of the instantaneous eigenkets then takes the form
+
+\begin{equation}\label{eqn:qmTwoExamReflection:510}
+\ket{\psi}
+=
+\sum_k c_k(0) e^{-i \int_0^t dt' \omega_k(t') - \Gamma_k(t') } \ket{k}.
+\end{equation}
+
+\subsubsection{Further approximation}
+We can make an additional refinement to this decomposition into instantaneous eigenkets if we further allow $c_k(0)$ to vary with time, say
+
+\begin{equation}\label{eqn:qmTwoExamReflection:530}
+\ket{\psi}
+=
+\sum_k b_k(t) e^{-i \int_0^t dt' \omega_k(t') - \Gamma_k(t') } \ket{k}.
+\end{equation}
+
+Again applying Schr\"{o}dinger's equation, we can work towards finding the relations between the coefficients
+
+\begin{align*}
+0
+&=
+\left( i\frac{H}{\Hbar} + \ddt{} \right)
+\sum_k b_k(t) e^{-i \int_0^t dt' \omega_k(t') - \Gamma_k(t') } \ket{k}
+\\
+&=
+\sum_k e^{-i \int_0^t dt' \omega_k(t') - \Gamma_k(t') }
+\left(
++ \cancel{i b_k \omega_k \ket{k} }
++ b_k' \ket{k}
++ b_k \ket{k'}
++ b_k \left( \cancel{-i \omega_k} +i \Gamma_k \right) \ket{k}
+\right).
+\end{align*}
+
+Again bra with $\bra{m}$
+
+\begin{align*}
+0
+=
+e^{-i \int_0^t  \omega_m - \Gamma_m }
+\left(
++ b_m'
++ \cancel{i b_m \Gamma_m }
++ \cancel{b_m \braket{m}{m'} }
+\right)
++\sum_{k\ne m} e^{-i \int_0^t  \omega_k - \Gamma_k } b_k \braket{m}{k'}
+\end{align*}
+
+Rearranging we have
+
+\begin{equation}\label{eqn:qmTwoExamReflection:550}
+\ddt{b_m(t)} =
+-
+e^{i \int_0^t  \omega_m - \Gamma_m }
+\sum_{k\ne m} e^{-i \int_0^t \omega_k - \Gamma_k } b_k \braket{m}{k'}
+\end{equation}
+
+\subsubsection{Application of the first approximation}
+
+We have been told that the particle starts in the ground state.  Given this, then using our first approximation \eqnref{eqn:qmTwoExamReflection:510} we have
+
+\begin{equation}\label{eqn:qmTwoExamReflection:730}
+\ket{\psi(0)} = c_0(0) \ket{0},
+\end{equation}
+
+or
+
+\begin{equation}\label{eqn:qmTwoExamReflection:750}
+c_k(0) = \delta_{k 0}.
+\end{equation}
+
+We wish to compute
+
+\begin{equation}\label{eqn:qmTwoExamReflection:770}
+\ket{\psi(0)} = e^{-i \int_0^t (\omega_0(t') - \Gamma_0(t')) dt'} \ket{0}.
+\end{equation}
+
+First order of business is the computation of
+
+\begin{align*}
+\omega_0(t)
+&= \frac{E_0(t)}{\Hbar} \\
+&= \frac{\Hbar \omega(t)}{\Hbar}\left( 0 + \inv{2} \right) \\
+&= \inv{2} \sqrt{\frac{k(t)}{m}} \\
+&= \inv{2} \sqrt{\frac{k_0}{m}} e^{-\beta t/2}.
+\end{align*}
+
+So
+
+\begin{align*}
+\int_0^t \omega_0(t') dt'
+&=
+\inv{2} \sqrt{\frac{k_0}{m}}
+\int_0^t e^{-\beta t/2} \\
+&=
+\inv{2} \sqrt{\frac{k_0}{m}}
+{\left.{ \left(-\frac{2}{\beta}\right) e^{-\beta t/2} }\right\vert}_0^t \\
+&=
+\inv{\beta} \sqrt{\frac{k_0}{m}}
+\left( 1 - e^{-\beta t/2} \right)
+\end{align*}
+
+So we have
+
+\begin{equation}\label{eqn:qmTwoExamReflection:790}
+e^{-i \int_0^t \omega_0}
+=
+\exp\left(
+- \frac{i}{\beta} \sqrt{\frac{k_0}{m}}
+\left( 1 - e^{-\beta t/2} \right)
+\right)
+\end{equation}
+
+Now lets look at the Berry phase term due to the $\Gamma_0$ contribution.  For that we compute
+
+\begin{equation}\label{eqn:qmTwoExamReflection:850}
+\Gamma_0
+= i \braket{0}{0'}
+= i \int dx \braket{0}{x} \braket{x}{0'}.
+\end{equation}
+
+%With
+%\begin{align*}
+%\alpha^2
+%&= \frac{\Hbar}{m \omega} \\
+%&= \frac{\Hbar}{m} \sqrt{\frac{m}{k}} \\
+%&= \frac{\Hbar}{ \sqrt{m k_0 e^{-\beta t} } },
+%\end{align*}
+%
+%or
+%
+%\begin{equation}\label{eqn:qmTwoExamReflection:810}
+%\alpha^2
+%= \frac{\Hbar}{ \sqrt{m k_0} }
+%e^{\beta t/2}.
+%\end{equation}
+
+Our first few wavefunctions are
+
+\begin{align}\label{eqn:qmTwoExamReflection:830}
+\psi_0(x)
+&=
+\left(\inv{\alpha^2\pi}\right)^{1/4} e^{- x^2/2 \alpha^2} \\
+\psi_1(x)
+&=
+\left(\inv{\alpha^2\pi}\right)^{1/4} e^{- x^2/2 \alpha^2} \frac{x}{\alpha} \inv{\sqrt{2}} \\
+\psi_2(x)
+&=
+\left(\inv{\alpha^2\pi}\right)^{1/4} e^{- x^2/2 \alpha^2} \left( \frac{2 x^2}{\alpha^2} - 1 \right) \inv{\sqrt{2}}
+\end{align}
+
+and our contribution to the Berry phase is
+
+\begin{align*}
+\braket{x}{0'}
+&=
+\bra{x}\frac{d}{dt} \ket{0} \\
+&=
+\frac{d}{dt} \braket{x}{0} \\
+&=
+\frac{d}{dt} \frac{\alpha^{-1/2}}{\pi^{1/4}} e^{ - x^2/2 \alpha^2} \\
+&=
+\inv{\pi^{1/4}}
+\left(
+  -\inv{2} \alpha^{-3/2}
+  +
+  \alpha^{-1/2} \left(-\frac{x^2}{2}\right) \left( \frac{-2}{\alpha^3}\right)
+\right)
+\frac{d\alpha}{dt}
+e^{ - x^2/2 \alpha^2} \\
+&=
+\inv{\pi^{1/4}}
+e^{ - x^2/2 \alpha^2}
+\frac{d\alpha}{dt}
+\left(
+-\inv{2 \alpha^{3/2}} + \frac{x^2}{\alpha^{7/2}}
+\right) \\
+&=
+\inv{(\alpha^2 \pi)^{1/4}}
+e^{ - x^2/2 \alpha^2}
+\frac{d\alpha}{dt}
+\inv{\alpha}
+\left(
+-\inv{2} + \frac{x^2}{\alpha^2}
+\right) \\
+&=
+\inv{2}
+\inv{\alpha}
+\inv{(\alpha^2 \pi)^{1/4}}
+e^{ - x^2/2 \alpha^2}
+\frac{d\alpha}{dt}
+\left(
+2 \frac{x^2}{\alpha^2} - 1
+\right) \\
+&=
+\inv{\sqrt{2}} \inv{\alpha}
+\frac{d\alpha}{dt}
+\psi_2(x)
+\end{align*}
+
+From \eqnref{eqn:qmTwoExamReflection:1030} we note that
+
+\begin{equation}\label{eqn:qmTwoExamReflection:870}
+\frac{d\alpha}{dt} = \alpha \frac{\beta}{4}.
+\end{equation}
+
+so
+
+\begin{equation}\label{eqn:qmTwoExamReflection:1050}
+\bra{x} \frac{d}{dt} \ket{0}
+=
+\frac{\beta}{4 \sqrt{2}}
+\braket{x}{2}
+\end{equation}
+
+We are finally able to conclude that
+
+\begin{equation}\label{eqn:qmTwoExamReflection:910}
+\bra{x} \frac{d}{dt} \ket{0}
+=
+\frac{\beta}{4 \sqrt{2}}
+\braket{x}{2}
+\end{equation}
+
+Returning to \eqnref{eqn:qmTwoExamReflection:850} we find
+
+\begin{align*}
+\Gamma_0 &=
+i
+\frac{\beta}{4 \sqrt{2} \alpha_0}
+\int dx \braket{0}{x}
+\braket{x}{2} \\
+&=
+i
+\frac{\beta}{4 \sqrt{2} \alpha_0}
+\braket{0}{2}
+\end{align*}
+
+So the Berry phase term is zero
+
+\begin{equation}\label{eqn:qmTwoExamReflection:930}
+\Gamma_0(t) = 0
+\end{equation}
+
+Our perturbed state \eqnref{eqn:qmTwoExamReflection:770} therefore takes the form of \eqnref{eqn:qmTwoExamReflection:790}
+
+\begin{equation}\label{eqn:qmTwoExamReflection:950}
+\ket{\psi} =
+\exp\left(
+- \frac{i}{\beta} \sqrt{\frac{k_0}{m}}
+\left( 1 - e^{-\beta t/2} \right)
+\right) \ket{0}.
+\end{equation}
+
+In wave function form this is
+
+\begin{equation}\label{eqn:qmTwoExamReflection:970}
+\psi(x, t)
+=
+\exp\left(
+- \frac{i}{\beta} \sqrt{\frac{k_0}{m}}
+\left( 1 - e^{-\beta t/2} \right)
+\right)
+\left(\inv{\alpha^2\pi}\right)^{1/4} e^{- x^2/2 \alpha^2}.
+\end{equation}
+
+Note that $\alpha = \alpha(t)$ also has a time dependence \eqnref{eqn:qmTwoExamReflection:1030}, so we see a gradual spreading of the wavefunction with time.
+
+\subsubsection{Application of the second approximation}
+
+Should we wish to attempt to solve the set of differential equations specified by \eqnref{eqn:qmTwoExamReflection:550}, we will have to compute
+
+\begin{equation}\label{eqn:qmTwoExamReflection:1090}
+\bra{m} \frac{d}{dt} \ket{k} = \int dx \psi_m(x) \frac{d}{dt} \psi_k(x),
+\end{equation}
+
+for all pairs $m, k \ne 0, 0$ (we have done $0,0$ and found it to be zero).  If we write
+
+\begin{equation}\label{eqn:qmTwoExamReflection:1110}
+\mu = \inv{\alpha},
+\end{equation}
+
+Our wavefunctions take the form
+
+\begin{equation}\label{eqn:qmTwoExamReflection:1130}
+\psi_n(x) = \frac{e^{-\mu^2 x^2/2}}{\sqrt{2^n n! \sqrt{\pi}}} \sqrt{\mu} H_n(\mu x),
+\end{equation}
+
+where
+
+\begin{equation}\label{eqn:qmTwoExamReflection:1150}
+H_n(y) = (-1)^n e^{y^2} \frac{d^n}{dy^n} e^{-y^2}.
+\end{equation}
+
+From \citep{abramowitz1964handbook} we find the recurrence relation for the derivatives of the Hermite polynomials
+
+\begin{equation}\label{eqn:qmTwoExamReflection:1170}
+\frac{d H_n(y)}{dy} = 2 n H_{n-1}(y).
+\end{equation}
+
+We find
+
+\begin{align*}
+\frac{d}{d\mu} \left( \sqrt{2^n n! \sqrt{\pi} } n(x) \right)
+&=
+\left( \left(\inv{2 \mu} -x^2 \mu\right) H_n(\mu x)
++ (2 n) H_{n-1}(\mu x)
+\right)
+e^{-\mu^2 x^2/2} \sqrt{\mu} \\
+&=
+-\inv{\mu} \left( \mu^2 x^2 - \inv{2} \right) \psi_n(x)
++ \frac{ 2 n x}{ \sqrt{2n}} \psi_{n-1}(x),
+\end{align*}
+
+So
+\begin{equation}\label{eqn:qmTwoExamReflection:1190}
+\frac{d\psi_n}{d\mu}
+=
+- \alpha \left( \frac{x^2}{\alpha^2} - \inv{2} \right) \psi_n(x)
++ \sqrt{2 n} x \psi_{n-1}(x).
+\end{equation}
+
+Noting that
+
+\begin{align*}
+\frac{d}{dt}
+&=
+\frac{d\alpha}{dt} \frac{d\mu}{d\alpha} \frac{d}{d\mu} \\
+&=
+\frac{\beta}{4} \alpha \left(-\inv{\alpha^2} \right)
+\frac{d}{d\mu} \\
+&=
+-\frac{\beta}{4} \inv{\alpha}
+\frac{d}{d\mu} \\
+\end{align*}
+
+we find
+
+\begin{equation}\label{eqn:qmTwoExamReflection:1210}
+\frac{d\psi_n}{dt}
+=
+\frac{\beta}{4}
+\left(
+\left( \frac{x^2}{\alpha^2} - \inv{2} \right) \psi_n(x)
+- \sqrt{2 n} \frac{x}{\alpha} \psi_{n-1}(x).
+\right).
+\end{equation}
+
+We need the expectation integral
+
+\begin{align*}
+\int \psi_p(x) \left(\frac{x}{\alpha}\right)^2 \psi_n(x) dx
+&=
+\int \braket{p}{x} \frac{x^2}{\alpha^2} \braket{x}{n} dx \\
+&=
+\inv{\alpha^2} \bra{p} X^2 \ket{n}
+\end{align*}
+
+Since
+
+\begin{align}\label{eqn:qmTwoExamReflection:1230}
+X &= \inv{\sqrt{2}} \alpha (a^\dagger + a) \\
+X^2 &= \inv{2} \alpha^2 (a^\dagger + a)^2,
+\end{align}
+
+we want to compute
+
+\begin{align*}
+\bra{p} &(a^\dagger + a) \ket{n} \\
+&=
+\inv{2}
+\bra{p}
+(a^\dagger + a)
+\left(
+\sqrt{n} \ket{n-1} + \sqrt{n+1} \ket{n+1}
+\right) \\
+&=
+\inv{2}
+\bra{p}
+\left(
+\sqrt{n} \sqrt{n-1} \ket{n-2}
++
+\sqrt{n+1} \sqrt{n+1} \ket{n}
++
+\sqrt{n} \sqrt{n} \ket{n}
++
+\sqrt{n+1} \sqrt{n+2} \ket{n+2}
+\right) \\
+&=
+\bra{p}
+\left(
+\inv{2}
+\sqrt{n} \sqrt{n-1} \ket{n-2}
++
+\left( n + \inv{2} \right)\ket{n}
++
+\inv{2} \sqrt{n+1} \sqrt{n+2} \ket{n+2}
+\right)
+\end{align*}
+
+Also
+
+\begin{align*}
+\frac{X}{\alpha} \ket{n-1}
+&=
+\inv{\sqrt{2}} (a^\dagger + a) \ket{n-1} \\
+&=
+\inv{\sqrt{2}} \left(
+\sqrt{n-1} \ket{n-2}
++\sqrt{n} \ket{n}
+\right)
+\end{align*}
+
+Taking the two of these results we can form the braket of the time derivative operator using \eqnref{eqn:qmTwoExamReflection:1210} and find
+
+\begin{align*}
+\bra{p} \frac{d}{dt} \ket{n}
+&=
+\frac{\beta}{4}
+\bra{p}
+\left(
+\inv{2}
+\sqrt{n} \sqrt{n-1} \ket{n-2}
++
+\left( n + \inv{2} \right)\ket{n}
++
+\inv{2} \sqrt{n+1} \sqrt{n+2} \ket{n+2}
+-\inv{2} \ket{n}
+\right) \\
+&+
+\frac{\beta}{4}
+\bra{p}
+\left(
+-\sqrt{2n}
+\inv{\sqrt{2}} \left(
+\sqrt{n-1} \ket{n-2}
++\sqrt{n} \ket{n}
+\right)
+\right)
+\\
+\end{align*}
+
+Rather remarkably, all but the $\ket{n+2}$ terms cancel out, leaving just
+
+\begin{equation}\label{eqn:qmTwoExamReflection:1250}
+\bra{p} \frac{d}{dt} \ket{n}
+=
+\frac{\beta}{8} \sqrt{(n+1)(n+2)} \braket{p}{n+2}.
+\end{equation}
+
+From this we conclude that all the Berry phase terms
+
+\begin{equation}\label{eqn:qmTwoExamReflection:1270}
+\Gamma_n = i \bra{n} \frac{d}{dt} \ket{n} = 0,
+\end{equation}
+
+are zero, and our problem is simplified to solving the system
+
+\begin{equation}\label{eqn:qmTwoExamReflection:1290}
+\frac{d b_p}{dt} = - \sum_{n \ne p} e^{-i \int_0^t dt' \omega_{n p}(t')} b_n \bra{p} \frac{d}{dt} \ket{n},
+\end{equation}
+
+which describes the evolution of the state
+
+\begin{equation}\label{eqn:qmTwoExamReflection:1310}
+\ket{\psi} = \sum_k b_k(t) e^{-i \int_0^t dt' \omega_k(t')} \ket{k}.
+\end{equation}
+
+Our braket kills off all but one term in the sum for the coefficients
+
+\begin{align*}
+\frac{d b_p}{dt}
+&= -
+\frac{\beta}{8} \sum_{n \ne p}
+\sqrt{(n+1)(n+2)}
+e^{-i \int_0^t dt' \omega_{n p}(t')} b_n \delta_{p,n+2} \\
+&= - \frac{\beta}{8}
+\sqrt{p(p-1)}
+e^{-i \int_0^t dt' \omega_{p-2, p}(t')} b_{p-2}
+\end{align*}
+
+For both \eqnref{eqn:qmTwoExamReflection:1310}, and \eqnref{eqn:qmTwoExamReflection:1310} we require
+
+\begin{align*}
+\int_0^t \omega_k(t') dt'
+&=
+\Hbar \sqrt{\frac{k_0}{m}}
+\left( k + \inv{2} \right)
+\int_0^t
+dt'
+e^{-\beta t'/2} \\
+&=
+\frac{\Hbar}{\beta} \sqrt{\frac{k_0}{m}}
+\left( 2 k + 1 \right)
+(1 - e^{-\beta t/2}).
+\end{align*}
+
+So we find
+\begin{equation}\label{eqn:qmTwoExamReflection:1310}
+\ket{\psi} = \sum_k b_k(t) \exp
+\left(
+-i
+\frac{\Hbar}{\beta} \sqrt{\frac{k_0}{m}}
+\left( 2 k + 1 \right)
+(1 - e^{-\beta t/2})
+\right)
+\ket{k},
+\end{equation}
+
+and
+
+\begin{equation}\label{eqn:qmTwoExamReflection:1330}
+\frac{d b_p}{dt}
+= - \frac{\beta}{8}
+\sqrt{p(p-1)}
+\exp\left(
+\frac{4 i \Hbar}{\beta} \sqrt{\frac{k_0}{m}}
+(1 - e^{-\beta t/2})
+\right)
+b_{p-2}.
+\end{equation}
+
+Since we start initially in the ground state, we have $b_0(0) = 1$, but from \eqnref{eqn:qmTwoExamReflection:1330} we also have $db_0/dt = 0$, so $b_0 = \text{constant} = b_0(0)$.
+
+Similarly, we must have for this initial state $b_1 = 0$ everywhere, and our perturbed state is only a superposition of even numbered states after this slow change to the Hamiltonian.
+
+At least theoretically, we can solve this set of equations by straight term by term integration
+
+\begin{equation}\label{eqn:qmTwoExamReflection:1350}
+b_p(t)
+= - \frac{\beta}{8}
+\sqrt{p(p-1)}
+\exp\left(
+\frac{4 i \Hbar}{\beta} \sqrt{\frac{k_0}{m}}
+\right)
+\int_0^t
+b_{p-2}(t')
+\exp\left(
+\frac{-4 i \Hbar}{\beta} \sqrt{\frac{k_0}{m}} e^{-\beta t'/2}
+\right).
+\end{equation}
+
+However, even for $p=2$ we do not have a closed form solution.  We can utilize a change of variables, writing
+
+\begin{align}\label{eqn:qmTwoExamReflection:1370}
+z &= \frac{-4 i \Hbar}{\beta} \sqrt{\frac{k_0}{m}} \\
+u &= e^{-\beta t'/2}
+\end{align}
+
+For
+
+\begin{equation}\label{eqn:qmTwoExamReflection:1390}
+b_2(t) = -\frac{\sqrt{2} }{4} e^{-z} \int_{z e^{-\beta t/2}}^z \frac{e^{z u}}{u} du,
+\end{equation}
+
+or using the exponential integral
+
+\begin{equation}\label{eqn:qmTwoExamReflection:1410}
+\Ei(z) = \int_{-\infty}^z \frac{e^v}{v} dv,
+\end{equation}
+
+we have
+
+\begin{equation}\label{eqn:qmTwoExamReflection:1430}
+b_2(t) = -\frac{\sqrt{2} }{4} e^{-z} \left( \Ei(z) - \Ei( z e^{-\beta t/2}) \right).
+\end{equation}
+
+To go any further than this, we have to start integrating exponential integrals, and I had guess that gets even messier.  Observe that we have $b_2(0) = 0$ as expected, which is a good sanity check.  Presumably $\Abs{b_k}$ gets smaller and smaller for $k = 4$ and beyond.  How would this be checked?
+
+\subsection{Conditions for which the approximations are valid}
+
+The final part of this question was to determine how short the time interval must be for the sudden time approximation to be valid, and what are the constraints required for the adiabatic approximation to be valid.
+
+FIXME: TODO.
+
+\section{Problem 2.  Perturbation of \texorpdfstring{$n=2$}{n equal 2} hydrogen atom wave functions}
+
+\subsection{Part b.  Electric field and dipole moment perturbation}
+
+We are asked to determine how the eight way degeneracy of the hydrogen atom $n=2$ energy eigenstates change with the introduction of a perturbation
+
+\begin{equation}\label{eqn:qmTwoExamReflection:570}
+H' = -\Bmu_d \cdot \BE.
+\end{equation}
+
+We did not have to calculate these, but just understand how the degeneracy splits.  Trying this problem after the exam, I found that the matrix element of the perturbation Hamiltonian was not diagonal in the way I had found writing the exam.  I did this \href{https://github.com/peeterjoot/physicsplay/blob/master/notes/phy456/qmTwoExamReflection.cdf}{exactly in Mathematica}.
+
+With $\BE = E \zcap$, and setting our origin at the proton position, we have for the dipole momentum operator
+
+\begin{equation}\label{eqn:qmTwoExamReflection:590}
+\Bmu_d = \sum_i q_i R_i \Be_i = - e Z \zcap,
+\end{equation}
+
+so our Hamiltonian is
+\begin{equation}\label{eqn:qmTwoExamReflection:610}
+H' = e E Z.
+\end{equation}
+
+Using the basis
+
+\begin{equation}\label{eqn:qmTwoExamReflection:630}
+\beta = \{
+\ket{211}, \ket{210}, \ket{21,-1}, \ket{200}
+\}
+\end{equation}
+
+the Hamiltonian is
+
+\begin{equation}\label{eqn:qmTwoExamReflection:650}
+H' =
+e E a_0
+\begin{bmatrix}
+ 0 & 0 & 0 & 0 \\
+ 0 & 0 & 0 & -3 \\
+ 0 & 0 & 0 & 0 \\
+ 0 & -3 & 0 & 0
+\end{bmatrix}.
+\end{equation}
+
+So we find that the eigenvalues are
+
+\begin{equation}\label{eqn:qmTwoExamReflection:670}
+0, 0, \pm 3 e E a_0.
+\end{equation}
+
+A basis that will diagonalize the perturbation Hamiltonian is
+
+\begin{equation}\label{eqn:qmTwoExamReflection:690}
+\beta' = \{
+\ket{211}, \ket{21,-1},
+\inv{\sqrt{2}}
+\left(\ket{210}
++\ket{200}
+\right),
+\inv{\sqrt{2}}
+\left(\ket{210}
+-\ket{200}
+\right)
+\}.
+\end{equation}
+
+%Note the similarity to the singlet and one of the doublet states.  Is there a way we could have known to have used the singlet, doublet basis right from the start?
+
+\subsection{Part c.  Spin and orbital angular momentum perturbation}
+
+Instead of the electric field perturbation, now we use a magnetic field perturbation Hamiltonian
+
+\begin{equation}\label{eqn:qmTwoExamReflection:710}
+H' =
+-\gamma_s \BS \cdot \BB
+-\gamma_o \BL \cdot \BB,
+\end{equation}
+
+and consider how, again to first order, the degenerate energy levels split on perturbation.
+
+Let us look at the spin and angular momentum portions of the Hamiltonian separately to start with.
+
+For a spin perturbation
+
+\begin{equation}\label{eqn:qmTwoExamReflection:1450}
+H_s' = -\gamma_s \BS \cdot \BB.
+\end{equation}
+
+without assuming any specific orientation for $\BB$ we have
+
+\begin{align*}
+H_s'
+&= -\gamma_s \frac{\Hbar}{2} \left(
+\PauliX B_x + \PauliY B_y + \PauliZ B_z
+\right) \\
+&= -\gamma_s \frac{\Hbar}{2}
+\begin{bmatrix}
+B_z & B_x - i B_y \\
+B_x + i B_y & - B_z
+\end{bmatrix}.
+\end{align*}
+
+Writing $\mu = -\gamma_s \Hbar/2$ we want the eigenvalues $\lambda$ from the determinant
+
+\begin{align*}
+0 &=
+\begin{vmatrix}
+\mu B_z -\lambda & \mu B_x - i B_y \\
+\mu(B_x + i B_y) & - \mu B_z -\lambda
+\end{vmatrix} \\
+&=
+-(\mu^2 B_z^2 - \lambda^2) - \mu^2 (B_x^2 + B_y^2) \\
+&=
+\lambda^2 - \mu^2 \BB^2,
+\end{align*}
+
+or
+
+\begin{equation}\label{eqn:qmTwoExamReflection:1470}
+\lambda = \pm \frac{\gamma_s \Hbar \Abs{\BB}}{2}.
+\end{equation}
+
+To first order (and in fact to any order) the perturbed energy eigenvalues are
+
+\begin{equation}\label{eqn:qmTwoExamReflection:1490}
+E' = E_0 \pm \frac{\gamma_s \Hbar \Abs{\BB(t)}}{2}.
+\end{equation}
+
+We could also compute the spin eigenkets that diagonalize this Hamiltonian, but do not really need to.
+
+Let us look at the angular momentum operator part of the Hamiltonian in question, again assuming temporarily that we have only this perturbation
+
+\begin{equation}\label{eqn:qmTwoExamReflection:1510}
+H_l' = -\gamma_0 \BL \cdot \BB.
+\end{equation}
+
+Now let us assume that the magnetic field is oriented in the $z$ direction,
+with $\BB(t) = \zcap B(t)$, so that we have the position space representation
+
+\begin{equation}\label{eqn:qmTwoExamReflection:1530}
+\bra{\Br}
+-\gamma_0 (\BL \cdot \BB) \ket{\psi}
+=
+-\gamma_0 (-i \Hbar) \PD{\phi}{} B(t) \psi(\Br)
+\end{equation}
+
+With $u = r/a_0$ we have for our $n=2$ energy eigenkets $\Phi_{nlm}(r, \theta, \phi)$
+
+\begin{align}\label{eqn:qmTwoExamReflection:1550}
+\sqrt{32 \pi a_0^3} \Phi_{200} &= (2 - u) e^{-u/2} \\
+\sqrt{32 \pi a_0^3} \Phi_{210} &= u e^{-u/2} \cos\theta \\
+\sqrt{32 \pi a_0^3} \Phi_{21,\pm 1} &= \mp \inv{\sqrt{2}} u e^{-u/2} \sin\theta e^{\pm i \phi}
+\end{align}
+
+Clearly, once operated on by $\BL \cdot \BB$ only the $\Phi_{21,\pm1}$ wave functions are left non-zero.  With a basis $\{\ket{200}, \ket{210}, \ket{211}, \ket{21\overbar{1}}\}$ we have
+
+\begin{align*}
+\begin{bmatrix}
+-\gamma_0 \BL \cdot \BB
+\end{bmatrix}
+&=
+\gamma_0 i \Hbar B
+\begin{bmatrix}
+\bra{200} 0 \ket{200} & \bra{200} 0 \ket{210} & \bra{200} i \ket{211} & \bra{200} -i \ket{21\overbar{1}} \\
+\bra{210} 0 \ket{200} & \bra{21\overbar{1}} 0 \ket{210} & \bra{210} i \ket{211} & \bra{210} -i \ket{21\overbar{1}}  \\
+\bra{211} 0 \ket{200} & \bra{210} 0 \ket{210} & \bra{211} i \ket{211} & \bra{211} -i \ket{21\overbar{1}} \\
+\bra{211} 0 \ket{210} & \bra{21\overbar{1}} 0 \ket{210} & \bra{211} i \ket{211} & \bra{211} -i \ket{21\overbar{1}}
+\end{bmatrix} \\
+&=
+\gamma_0 \Hbar B
+\begin{bmatrix}
+0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 \\
+0 & 0 & -1 & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}.
+\end{align*}
+
+Now lets consider the matrix element of the perturbation Hamiltonian of the problem
+
+\begin{align*}
+\bra{n l m \sigma} &\left( -\gamma_s \BS \cdot \BB - \gamma_0 \BL \cdot \BB \right) \ket{n'l'm' \sigma'} \\
+&=
+\bra{n l m } \otimes \bra{\sigma} \left( -\gamma_s \BS \cdot \BB - \gamma_0 \BL \cdot \BB \right) \ket{n'l'm'} \otimes \ket{\sigma'} \\
+&=
+\bra{n l m } - \gamma_0 \BL \cdot \BB \ket{n'l'm'} \otimes \braket{\sigma}{\sigma'} +
+\braket{n l m }{n'l'm'} \otimes \bra{\sigma} -\gamma_s \BS \cdot \BB \ket{\sigma'} \\
+&=
+\begin{bmatrix}
+H_l' & \\
+& H_l'
+\end{bmatrix}
++
+\begin{bmatrix}
+H_s' & & & \\
+& H_s' & & \\
+& & H_s' & \\
+& & & H_s' \\
+\end{bmatrix} \\
+&=
+-\frac{\Hbar B}{2}
+\begin{bmatrix}
+\gamma_s & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & -\gamma_s & 0 & 0 & 0 & 0 & 0 & 0  \\
+0 & 0 & \gamma_s + 2 \gamma_0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & -\gamma_s - 2 \gamma_0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & \gamma_s & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & -\gamma_s & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & \gamma_s + 2 \gamma_0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & -\gamma_s - 2 \gamma_0
+\end{bmatrix}
+\end{align*}
+
+So, we have four eigenvalues, each with a second order degeneracy
+
+\begin{align}\label{eqn:qmTwoExamReflection:1570}
+&\pm \frac{\Hbar \gamma_s B}{2} \\
+&\pm \frac{\Hbar (\gamma_s + 2 \gamma_0) B}{2}
+\end{align}
+
+\EndArticle

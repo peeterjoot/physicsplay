@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
     // CompilerInstance will hold the instance of the Clang compiler for us,
     // managing the various objects needed to run the compiler.
     CompilerInstance TheCompInst;
-    TheCompInst.createDiagnostics(0, 0);
+    TheCompInst.createDiagnostics();
 
     // Initialize target info with the default triple for our platform.
     TargetOptions * TO = new TargetOptions ; // leaking since it appears TargetInfo frees this on destruction.
