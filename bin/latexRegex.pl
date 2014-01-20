@@ -3,10 +3,12 @@
 #s/\\bark\b/\\overbar{k}/g ;
 #s/\\barm\b/\\overbar{m}/g ;
 #s/\\bkF/\\Bk_{\\mathrm{F}}/g ;
+#s/\\bL/b_{\\mathrm{L}}/g ;
 #s/\\bpF/\\Bp_{\\mathrm{F}}/g ;
 #s/\\Br_av/\\Br_{\\mathrm{av}}/g ;
 #s/\\Brm/\\Br - \\Br_m/g;
 #s/\\Brn/\\Br - \\Br_n/g;
+#s/\\bT/b_{\\mathrm{T}}/g ;
 #s/\\bvF/\\Bv_{\\mathrm{F}}/g ;
 #s/\\DC/D_{\\mathrm{C}}/g ;
 #s/\\DD/\\mathcal{D}/g ;
@@ -49,11 +51,14 @@
 #s/\\nku/_{-\\Bk \\uparrow}/g ;
 #s/\\ns/n_{\\mathrm{s}}/g ;
 #s/\\omegac/\\omega_{\\text{cutoff}}/g ;
+#s/\\omegaD/\\omega_{\\mathrm{D}}/g ;
 #s/\\omegan/\\omega_\\nought/g ;
 #s/\\pkd/_{\\Bk \\downarrow}/g ;
 #s/\\pku/_{\\Bk \\uparrow}/g ;
 #s/\\pp(.)/{($1)}/g ;
 #s/\\PP/\\mathcal{P}/g ;
+#s/\\qL/q_{\\mathrm{L}}/g ;
+#s/\\qT/q_{\\mathrm{T}}/g ;
 #s/\\rcap_av/\\rcap_{\\mathrm{av}}/g ;
 #s/\\rhoel/\\rho_{\\mathrm{el}}/g ;
 #s/\\rhoph/\\rho_{\\mathrm{ph}}/g ;
@@ -112,8 +117,3 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-s/\\omegaD/\\omega_{\\mathrm{D}}/g ;
-s/\\qL/q_{\\mathrm{L}}/g ;
-s/\\qT/q_{\\mathrm{T}}/g ;
-s/\\bL/b_{\\mathrm{L}}/g ;
-s/\\bT/b_{\\mathrm{T}}/g ;
