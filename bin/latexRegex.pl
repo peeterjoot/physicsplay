@@ -17,6 +17,7 @@
 #s/\\EC/E_{\\mathrm{C}}/g ;
 #s/\\Ed/E_{\\mathrm{d}}/g ;
 #s/\\ED/E_{\\mathrm{D}}/g ;
+#s/\\ee/\\Bepsilon/g ;
 #s/\\ee/\\epsilon/g ;
 #s/\\ee/\\mathcal{E}/g ;
 #s/\\Eg/E_{\\mathrm{g}}/g ;
@@ -34,7 +35,10 @@
 #s/\\Hc/H_{\\mathrm{c}}/g ;
 #s/\\lambdaL/\\lambda_{\\mathrm{L}}/g ;
 #s/\\me/m_{\\mathrm{e}}/g ;
+#s/\\n *(\+|-|\\pm) *(\(\d *, *\d\))(\d)\b/{\\Bn $1 $2, $3}/g ;  # \Bu_\n+(1,0)1 -> \Bu_{\Bn + (1,0), 1}
+#s/\\n *(\+|-|\\pm) *(\(\d *, *\d\))\b/{\\Bn $1 $2}/g ;           # \Bu_\n+(1,0) -> \Bu_{\Bn + (1,0)}
 #s/\\n-(\d)(\d)\b/{n - $1, $2}/g ;
+#s/\\n(\d)\b/{\\Bn, $1}/g ;                                      # \Bu_\n1 -> \Bu_{\\Bn, 1}
 #s/\\n(\d)\b/{n, $1}/g ;
 #s/\\n\+(\d)(\d)\b/{n + $1, $2}/g ;
 #s/\\na\b/{n, \\alpha}/g ;
@@ -108,7 +112,8 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-s/\\ee/\\Bepsilon/g ;
-#s/\\n(\d)\b/{\\Bn, $1}/g ;                                      # \Bu_\n1 -> \Bu_{\\Bn, 1}
-#s/\\n *(\+|-|\\pm) *(\(\d *, *\d\))(\d)\b/{\\Bn $1 $2, $3}/g ;  # \Bu_\n+(1,0)1 -> \Bu_{\Bn + (1,0), 1}
-#s/\\n *(\+|-|\\pm) *(\(\d *, *\d\))\b/{\\Bn $1 $2}/g ;           # \Bu_\n+(1,0) -> \Bu_{\Bn + (1,0)}
+s/\\omegaD/\\omega_{\\mathrm{D}}/g ;
+s/\\qL/q_{\\mathrm{L}}/g ;
+s/\\qT/q_{\\mathrm{T}}/g ;
+s/\\bL/b_{\\mathrm{L}}/g ;
+s/\\bT/b_{\\mathrm{T}}/g ;
