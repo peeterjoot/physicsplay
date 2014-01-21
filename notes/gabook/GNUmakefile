@@ -4,6 +4,8 @@ include ../make.bookvars
 
 FIGURES := ../../figures/$(THISDIR)
 
+COPIED_FILES += ./macros_bm.sty
+
 SOURCE_DIRS += appendix
 SOURCE_DIRS += basics
 SOURCE_DIRS += calculus
