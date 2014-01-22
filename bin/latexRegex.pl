@@ -117,3 +117,8 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
+s/_\\I/_{\\mathrm{I}}/g;
+s/_\\R/_{\\mathrm{R}}/g;
+s/_\\T/_{\\mathrm{T}}/g;
+s/\\TE/\\tilde{\\BE}/g;
+s/\\TB/\\tilde{\\BB}/g;
