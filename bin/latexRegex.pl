@@ -64,6 +64,8 @@
 #s/\\rhoph/\\rho_{\\mathrm{ph}}/g ;
 #s/\\Shat/\\hat{S}/g ;
 #s/\\spacegrad_T/\\spacegrad_{\\mathrm{T}}/g ;
+#s/\\TB/\\tilde{\\BB}/g;
+#s/\\TE/\\tilde{\\BE}/g;
 #s/\\tp/\\tilde{p}/g ;
 #s/\\tu/\\tilde{u}/g ;
 #s/\\tx/\\tilde{x}/g ;
@@ -73,6 +75,9 @@
 #s/\^classical/^{\\mathrm{classical}}/g ;
 #s/\bialpha\b/{i_\\alpha}/g ;
 #s/\tY\b/\\tilde{Y}/g ;
+#s/_\\I/_{\\mathrm{I}}/g;
+#s/_\\R/_{\\mathrm{R}}/g;
+#s/_\\T/_{\\mathrm{T}}/g;
 #s/_av/_{\\mathrm{av}}/g ;
 #s/_B/_{\\mathrm{B}}/g ;
 #s/_bath/_{\\text{bath}}/g ;
@@ -117,8 +122,3 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-s/_\\I/_{\\mathrm{I}}/g;
-s/_\\R/_{\\mathrm{R}}/g;
-s/_\\T/_{\\mathrm{T}}/g;
-s/\\TE/\\tilde{\\BE}/g;
-s/\\TB/\\tilde{\\BB}/g;
