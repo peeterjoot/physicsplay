@@ -1,145 +1,17 @@
 ================================================================================================
 
+- make a macro for formatting eq. for references to external formala numbers.
+
+- \makeproblem doesn't wrap lines for the description when it is too long (which often appears to be the case).
+
+- have some coupled macro dependencies.  Should break these out, as done with macros_bm
+
+================================================================================================
+
 PHY487
 ------
 
-- two atom basis: calculate and plot 3D dispersion relation.
-- write up solution for one atom basis, aka. the exam question.  Have to assume that this can be done on paper.  
-- type up solution to midterm 2D Debye calculation.
-- verify that METADATA contains all the 487 mathematica notebooks.
-- incorportate any email correspondence into notes if appropriate.
-- various overfilled hbox equations.  pass through whole doc once and fixup.
-- Fourier series TODO from lecture 7 phonons.  >>> What was this?
-- Final check for TODO's and FIXME's before last publish.  Email prof once that's done.  would be nice to include a link to the demo if published by then.
-- looks like the METADATA sort isn't working properly.  phy487's mathematica.tex has Dec 2, Dec 1 entries around fermiInfoForElement in reverse order.
-- don't have any index references in any of:
-
-   condensedMatterLecture7Phonons.tex
-   condensedMatterLecture7PhononsQ.tex
-   condensedMatterLecture8.tex
-   condensedMatterLecture15.tex
-   condensedMatterLecture16.tex
-   condensedMatterLecture17.tex
-   condensedMatterLecture18.tex
-
-- have some coupled macro dependencies.  Should break these out.  example.  Use of \EE which now requires the 
-  bm package, this should induce a \usepackage{bm}.
-- L14.  {CAPTION} to fix.  Add a check of this to the style checker when written.
-- threeSpringLoop.tex have a rogue:
-
-   F1
-
-   reference with no image.
-- Is this right?  4 chapters range?
-
-   See: \citep{ibach2009solid} \S 6-9
-- follow up for email response:
-
-   Unlike the calculation in problem set 8, the band structure of the alkalai metals and alkalai earths is free-electron-like.  This means that the dispersion relation is parabolic, except near the Brillouin zone boundary.  So if the Fermi surface never gets close to a Brillouin zone boundary, E(k_F) \simeq \hbar^2 k_F^2/2m, independent of direction in k-space, so the Fermi surface is spherical.
-
-   You can tell that the Fermi surface doesn't go close to the BZ boundary by calculating the volume of the Fermi sphere, compared with the volume of the Brillouin zone.  This doesn't work for the tight-binding band structure, because the dispersion is anisotropic even far from the Brillouin zone.
-
-   1) try this calculation of \EF for the alkali metals, then compare to the BZ volume to verify.
-   2) revisit part ps8 (d), and figure out how to calculate the density of states (and thus \EF ...
-      at least I think)
-
-
-
-
-
-Nice to have (probably won't address).
--------------------------------------
-
-- Would be nice to automate the mathematica figures, allowing for make rules for them from notebooks. Target a different submodule repo for checked in binaries so that I can have a mix of generate from scratch when desired and build without mathematica as well.
-
-   Also, want a way to set background to transparent when exporting from Report style cell.
-
-- hack: using \S for chapter citation for ashcroft/mermin.  would be nice to be able to reference the un-numbered sections. 
-
-- In a standalone condensedMatterLecture19.tex why does the current \HH work, but \EE doesn't?
-
-- L17 doesn't make much sense.  Probably can't change that much.
-
-- don't like the Index/Bib parts, and all the space between the index part page and the actual index.
-
-- blogit/GNUmakefile clean rule doesn't clean up after eps -> pdf generated files.
-
-- using \EF different than stat mech.  synchronize later?
-
-- condensedMatterProblemSet1Problem2.tex: Incorporated orbital plots from Mathematica notebook.  Would be nice to have the contours labelled numerically.  Would also be nice to group these in blocks of three.  Think that the caption for \psi_4 doesn't match what I actually plotted.
-
-Of possible interest:
-
-http://tex.stackexchange.com/questions/133275/multiple-figures-in-latex
-
-DONE:
-
-- use k_\circ, k_o, k_0 switched to \nought macro (using \circ for consistency with homework).  revert to just 0 later?
-
-  (audit for k_0, k_\circ, k_o later to make sure everything is using the same style)
-
-   also: lambda_0, lambda_o
-   also: omega_0, omega_o
-
-      perl -p -i -e 's/lambda_0/lambda_\\nought/g;s/omega_0/omega_\\nought/g;' `cat l`
-
-   omega_D -> omega_{\mathrm{D}}
-   C_L -> C_{\mathrm{L}}
-   C_T -> C_{\mathrm{T}}
-
-
-- on ubuntu VM I've started trying to use pdfsizeopt to shrink the size of the generated pdf.  Can take it from 18.5 Mb to 15.5 Mb using those methods.  
-
-I've commented out the cool density plots to drop the size down from 18.5Mb to 13Mb without this direct pdf processing.  That processing on top of that change should make things a bit more manageable.  There's an addditional optimization (--use-multivalent=true ) that this tool is capable of, but I appear to have the wrong .jar package for that.  Not sure where to get the correct one?
-
-- added:
-
-\pdfminorversion=5
-\pdfobjcompresslevel=3
-
-As of L12, this puts the size at 18M.
-
-This idea based on one answer in http://tex.stackexchange.com/questions/18987/how-to-make-the-pdfs-produced-by-pdflatex-smaller
-
-This answer also suggested:
-
-   http://code.google.com/p/pdfsizeopt/
-
-   (which has been taken down).
-
-   A replacement (partial?) is here:
-
-   https://github.com/pts/pdfsizeopt
-
-   git@github.com:pts/pdfsizeopt.git
-
-
-      -- think this one isn't any good for cygwin.  Try it on linux.  Tried a .bat version phy487/u.bat, but that didn't work any better.
-
-
- - Saw on mathematica. SE a method to do rasterized print of figures (esp. 3D ones), that retains output non-rasterized for labels and axes, ....  Apply that to the contour plots switching up my export macros.
-
-ps8e: used:
-
-Export["qmSolidsPs8eFig3f.pdf", p, "AllowRasterization" -> True, 
- ImageSize -> 360, ImageResolution -> 600]
-
-image size down to 1M for 3D contour plot (from 8M)
-
-
- - \TF macro in thisbook.  Switch to it.
-
- - introduce a \newcommand to replace:
-
-   \paragraph{Examination hint:}
-
-   or other ad-hoc notes?
-
-- split up Metallic conduction chapter by chapter boundaries of I&L (then the problems too.)
-
-- use makeoproblem in problem set questions that came from the text book (and others for that sake showing what 
-  problem set they came from).
-
+- Email prof with last publish.  would be nice to include a link to the demo if published by then.
 
 ================================================================================================
 

@@ -8,6 +8,7 @@ git clone git@github.com:peeterjoot/physicsplay.git ~/physicsplay
 cd ~/physicsplay
 for i in getopt mathematica figures ; do
    git submodule update --init $i
+   (cd $i && git checkout master)
 done
 
 #-------------------------------------------------------

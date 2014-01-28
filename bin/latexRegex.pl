@@ -3,10 +3,12 @@
 #s/\\bark\b/\\overbar{k}/g ;
 #s/\\barm\b/\\overbar{m}/g ;
 #s/\\bkF/\\Bk_{\\mathrm{F}}/g ;
+#s/\\bL/b_{\\mathrm{L}}/g ;
 #s/\\bpF/\\Bp_{\\mathrm{F}}/g ;
 #s/\\Br_av/\\Br_{\\mathrm{av}}/g ;
 #s/\\Brm/\\Br - \\Br_m/g;
 #s/\\Brn/\\Br - \\Br_n/g;
+#s/\\bT/b_{\\mathrm{T}}/g ;
 #s/\\bvF/\\Bv_{\\mathrm{F}}/g ;
 #s/\\DC/D_{\\mathrm{C}}/g ;
 #s/\\DD/\\mathcal{D}/g ;
@@ -17,6 +19,7 @@
 #s/\\EC/E_{\\mathrm{C}}/g ;
 #s/\\Ed/E_{\\mathrm{d}}/g ;
 #s/\\ED/E_{\\mathrm{D}}/g ;
+#s/\\ee/\\Bepsilon/g ;
 #s/\\ee/\\epsilon/g ;
 #s/\\ee/\\mathcal{E}/g ;
 #s/\\Eg/E_{\\mathrm{g}}/g ;
@@ -34,7 +37,10 @@
 #s/\\Hc/H_{\\mathrm{c}}/g ;
 #s/\\lambdaL/\\lambda_{\\mathrm{L}}/g ;
 #s/\\me/m_{\\mathrm{e}}/g ;
+#s/\\n *(\+|-|\\pm) *(\(\d *, *\d\))(\d)\b/{\\Bn $1 $2, $3}/g ;  # \Bu_\n+(1,0)1 -> \Bu_{\Bn + (1,0), 1}
+#s/\\n *(\+|-|\\pm) *(\(\d *, *\d\))\b/{\\Bn $1 $2}/g ;           # \Bu_\n+(1,0) -> \Bu_{\Bn + (1,0)}
 #s/\\n-(\d)(\d)\b/{n - $1, $2}/g ;
+#s/\\n(\d)\b/{\\Bn, $1}/g ;                                      # \Bu_\n1 -> \Bu_{\\Bn, 1}
 #s/\\n(\d)\b/{n, $1}/g ;
 #s/\\n\+(\d)(\d)\b/{n + $1, $2}/g ;
 #s/\\na\b/{n, \\alpha}/g ;
@@ -45,16 +51,21 @@
 #s/\\nku/_{-\\Bk \\uparrow}/g ;
 #s/\\ns/n_{\\mathrm{s}}/g ;
 #s/\\omegac/\\omega_{\\text{cutoff}}/g ;
+#s/\\omegaD/\\omega_{\\mathrm{D}}/g ;
 #s/\\omegan/\\omega_\\nought/g ;
 #s/\\pkd/_{\\Bk \\downarrow}/g ;
 #s/\\pku/_{\\Bk \\uparrow}/g ;
 #s/\\pp(.)/{($1)}/g ;
 #s/\\PP/\\mathcal{P}/g ;
+#s/\\qL/q_{\\mathrm{L}}/g ;
+#s/\\qT/q_{\\mathrm{T}}/g ;
 #s/\\rcap_av/\\rcap_{\\mathrm{av}}/g ;
 #s/\\rhoel/\\rho_{\\mathrm{el}}/g ;
 #s/\\rhoph/\\rho_{\\mathrm{ph}}/g ;
 #s/\\Shat/\\hat{S}/g ;
 #s/\\spacegrad_T/\\spacegrad_{\\mathrm{T}}/g ;
+#s/\\TB/\\tilde{\\BB}/g;
+#s/\\TE/\\tilde{\\BE}/g;
 #s/\\tp/\\tilde{p}/g ;
 #s/\\tu/\\tilde{u}/g ;
 #s/\\tx/\\tilde{x}/g ;
@@ -64,6 +75,9 @@
 #s/\^classical/^{\\mathrm{classical}}/g ;
 #s/\bialpha\b/{i_\\alpha}/g ;
 #s/\tY\b/\\tilde{Y}/g ;
+#s/_\\I/_{\\mathrm{I}}/g;
+#s/_\\R/_{\\mathrm{R}}/g;
+#s/_\\T/_{\\mathrm{T}}/g;
 #s/_av/_{\\mathrm{av}}/g ;
 #s/_B/_{\\mathrm{B}}/g ;
 #s/_bath/_{\\text{bath}}/g ;
@@ -108,7 +122,3 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-s/\\ee/\\Bepsilon/g ;
-#s/\\n(\d)\b/{\\Bn, $1}/g ;                                      # \Bu_\n1 -> \Bu_{\\Bn, 1}
-#s/\\n *(\+|-|\\pm) *(\(\d *, *\d\))(\d)\b/{\\Bn $1 $2, $3}/g ;  # \Bu_\n+(1,0)1 -> \Bu_{\Bn + (1,0), 1}
-#s/\\n *(\+|-|\\pm) *(\(\d *, *\d\))\b/{\\Bn $1 $2}/g ;           # \Bu_\n+(1,0) -> \Bu_{\Bn + (1,0)}

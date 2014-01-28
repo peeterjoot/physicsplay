@@ -9,6 +9,8 @@ SOURCE_DIRS += appendix
 FIGURES := ../../figures/$(THISDIR)
 SOURCE_DIRS += $(FIGURES)
 
+COPIED_FILES += ./macros_bm.sty
+
 GENERATED_SOURCES += mathematica.tex 
 
 EPS_FILES := $(wildcard $(FIGURES)/*.eps)

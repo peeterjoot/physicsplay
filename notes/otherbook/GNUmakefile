@@ -4,6 +4,8 @@ include ../make.bookvars
 
 FIGURES := ../../figures/$(THISDIR)
 
+COPIED_FILES += ./macros_bm.sty
+
 ORIG_FIGURE_DIRS += ../../figures/classicalmechanics
 ORIG_FIGURE_DIRS += ../../figures/gabook
 
