@@ -28,5 +28,5 @@ GENERATED_SOURCES += backmatter.tex
 
 include ../make.rules
 
-backmatter.tex : ../classicthesis.mine/backmatter.tex
+backmatter.tex : ../phy487/backmatter.tex
 	cp $< $@
