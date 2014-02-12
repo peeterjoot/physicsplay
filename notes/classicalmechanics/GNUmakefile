@@ -16,6 +16,8 @@ GENERATED_SOURCES += mathematica.tex
 GENERATED_SOURCES += backmatter.tex
 GENERATED_SOURCES += cronology.tex
 
+#ONCEFLAGS := -justonce
+
 include ../make.rules
 
 backmatter.tex : ../classicthesis.mine/backmatter.tex
