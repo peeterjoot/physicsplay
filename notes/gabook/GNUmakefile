@@ -29,6 +29,8 @@ GENERATED_SOURCES += mathematica.tex
 GENERATED_SOURCES += cronology.tex
 GENERATED_SOURCES += backmatter.tex
 
+#ONCEFLAGS := -justonce
+
 include ../make.rules
 
 listings/%.pl: %.pl

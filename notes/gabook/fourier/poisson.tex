@@ -19,9 +19,11 @@ function.
 
 The Green's function for the Poisson equation
 
-\begin{align}
+\begin{equation}\label{eqn:poisson:50}
+\begin{aligned}
 G(\mathbf{x} - \Bx') = \frac{1}{4\pi\lvert{\mathbf{x} -\Bx'}\rvert}
-\end{align}
+\end{aligned}
+\end{equation}
 
 is not really derived, rather is just pointed out.  However, it is a nice closed form that does not have any integrals.  Contrast this to the Fourier transform method, where one ends up with a messy threefold integral that is not particularly obvious how to integrate.
 
@@ -39,17 +41,21 @@ As often illustrated with the Heat equation, we seek a Fourier transform solutio
 \end{equation}
 
 Our 3D Fourier transform pairs are defined as
-\begin{align*}
+\begin{equation}\label{eqn:poisson:70}
+\begin{aligned}
 \hat{f}(\mathbf{k}) &= \frac{1}{(\sqrt{2\pi})^3} \iiint f(\mathbf{x}) e^{-i \mathbf{k} \cdot \mathbf{x} } d^3 x \\
 {f}(\mathbf{x}) &= \frac{1}{(\sqrt{2\pi})^3} \iiint \hat{f}(\mathbf{k}) e^{i \mathbf{k} \cdot \mathbf{x} } d^3 k \\
-\end{align*}
+\end{aligned}
+\end{equation}
 
 Applying the transform we get
 
-\begin{align}\label{eqn:poisson:poissonSolution}
+\begin{equation}\label{eqn:poisson:poissonSolution}
+\begin{aligned}
 \phi(\mathbf{x}) &= \frac{1}{\epsilon_0} \iiint \rho(\mathbf{x}') G(\mathbf{x-x'}) d^3 x' \\
 G(\mathbf{x}) &= \frac{1}{(2 \pi)^3} \iiint \frac{1}{\mathbf{k}^2} e^{ i \mathbf{k} \cdot \mathbf{x} } d^3 k
-\end{align}
+\end{aligned}
+\end{equation}
 
 Green's functions are usually defined by their delta function operational properties.  Doing so, as defined above we have
 
@@ -84,19 +90,23 @@ Our task is to actually compute this from the Fourier integral.
 
 Now it seems to me that this integral $G$ only has to be evaluated around a small neighborhood of the origin.  For example if one evaluates one of the integrals
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:90}
+\begin{aligned}
 \int_{-\infty}^\infty \frac{1}{{k_1}^2 + {k_2}^2 + {k_3}^3 } e^{ i k_1 x_1 } dk_1
-\end{align*}
+\end{aligned}
+\end{equation}
 
 using a an upper half plane contour the result is zero unless $k_2 = k_3 = 0$.  So one is left with something loosely like
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:110}
+\begin{aligned}
 G(\mathbf{x}) &= \lim_{\epsilon \rightarrow 0} \frac{1}{(2 \pi)^3}
 \int_{k_1 = -\epsilon}^{\epsilon} dk_1
 \int_{k_2 = -\epsilon}^{\epsilon} dk_2
 \int_{k_3 = -\epsilon}^{\epsilon} dk_3
  \frac{1}{\mathbf{k}^2} e^{ i \mathbf{k} \cdot \mathbf{x} }
-\end{align*}
+\end{aligned}
+\end{equation}
 
 How to reduce this?  Somehow it must be possible to take this Fourier convolution kernel and somehow evaluate the integral to produce the electrostatics potential.
 
@@ -104,9 +114,11 @@ How to reduce this?  Somehow it must be possible to take this Fourier convolutio
 
 The answer of how to do so, as pointed out above, was found in \citep{byron1992mca}.  Instead of trying to evaluate this integral which has a pole at the origin, they cleverly evaluate a variant of it
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:130}
+\begin{aligned}
 I = \iiint \frac{1}{\mathbf{k}^2 + a^2} e^{ i \mathbf{k} \cdot \mathbf{x} } d^3 k
-\end{align*}
+\end{aligned}
+\end{equation}
 
 which splits and shifts the repeated pole into two first order poles away from the origin.
 After a change to spherical polar coordinates, the new integral can be evaluated, and the Poisson Green's function in potential form follows by
@@ -116,41 +128,49 @@ Very cool.  It seems worthwhile to go through the motions of this myself, omitti
 
 First we want the volume element in spherical polar form, and our vector.  That is
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:150}
+\begin{aligned}
 \rho &= k \cos\phi \\
 dA &= (\rho d\theta)(k d\phi) \\
 d^3 k &= dk dA = k^2 \cos\phi d\theta d\phi dk \\
 \Bk
 &= (\rho \cos\theta, \rho \sin\theta, k \sin\theta) \\
 &= k (\cos\phi \cos\theta, \cos\phi \sin\theta, \sin\phi) \\
-\end{align*}
+\end{aligned}
+\end{equation}
 
 FIXME: scan picture to show angle conventions picked.
 
 This produces
-\begin{align*}
+\begin{equation}\label{eqn:poisson:170}
+\begin{aligned}
 I &= \int_{\theta=0}^{2\pi} \int_{\phi=-\pi/2}^{\pi/2} 
 k^2 
 \int_{k=0}^\infty 
 \cos\phi d\theta d\phi dk  \\
 &\qquad \frac{1}{k^2 + a^2} \exp\left( i k (\cos\phi \cos\theta x_1 + \cos\phi \sin\theta + x_2 + \sin\phi x_3) \right)
-\end{align*}
+\end{aligned}
+\end{equation}
 
 Now, this is a lot less tractable than the Byron/Fuller treatment.  In particular they were able to make a $t = \cos\phi$ substitution, and if I try this I get
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:190}
+\begin{aligned}
 I = -\int_{\theta=0}^{2\pi} \int_{t=-1}^{1} \int_{k=0}^\infty \frac{1}{k^2 + a^2} \exp\left( i k (t \cos\theta x_1 + t \sin\theta x_2 + \sqrt{1-t^2} x_3) \right)
 k^2 dt d\theta dk \\
-\end{align*}
+\end{aligned}
+\end{equation}
 
 Now, this is still a whole lot different, and in particular it has $ik (t\sin\theta x_2 + \sqrt{1-t^2} x_3)$ in the exponential.  I puzzled over this for a while, but it becomes clear on writing.  Freedom to orient the axis along a preferable direction has been used, and some basis for which $\Bx = x_j \Be^j + = x \Be^1$ has been used!  We are now left with
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:210}
+\begin{aligned}
 I
 &= -\int_{\theta=0}^{2\pi} \int_{t=-1}^{1} \int_{k=0}^\infty \frac{1}{k^2 + a^2} \exp\left( i k t \cos\theta x \right) k^2 dt d\theta dk \\
 &= -\int_{\theta=0}^{2\pi} \int_{k=0}^\infty \frac{2}{(k^2 + a^2) \cos\theta} \sin\left( k t \cos\theta x \right) k d\theta dk \\
 &= -\int_{\theta=0}^{2\pi} \int_{k=-\infty}^\infty \frac{1}{(k^2 + a^2) \cos\theta} \sin\left( k t \cos\theta x \right) k d\theta dk \\
-\end{align*}
+\end{aligned}
+\end{equation}
 
 Here the fact that our integral kernel is even in $k$ has been used to double the range and half the kernel.
 
@@ -166,23 +186,28 @@ This is a set of integrals over concentric ring volume elements (FIXME: picture)
 
 Our volume element, measuring $\theta \in [0, \pi]$ from the z-axis, and $\phi$ as our position on the ring
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:230}
+\begin{aligned}
 \Bk \cdot \Bx &= k x \cos\theta \\
 \rho &= k \sin\theta \\
 dA &= (\rho d\phi)(k d\theta) \\
 d^3 k &= dk dA = k^2 \sin\theta d\theta d\phi dk \\
-\end{align*}
+\end{aligned}
+\end{equation}
 
 This gives us
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:250}
+\begin{aligned}
 I &= \int_{\theta=0}^{\pi} \int_{\phi=0}^{2\pi} \int_{k=0}^\infty \frac{1}{k^2 + a^2} \exp\left( i k x \cos\theta \right)
 k^2 \sin\theta d\theta d\phi dk \\
-\end{align*}
+\end{aligned}
+\end{equation}
 
 Now we can integrate immediately over $\phi$, and make a $t = \cos\theta$ substitution ($dt = -\sin\theta d\theta$)
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:270}
+\begin{aligned}
 I
 &= - 2\pi \int_{t=1}^{-1} \int_{k=0}^\infty \frac{1}{k^2 + a^2} \exp\left( i k x t \right) k^2 dt dk \\
 &= - \frac{2\pi}{ix} \int_{k=0}^\infty \frac{1}{k^2 + a^2}
@@ -198,36 +223,45 @@ e^{i k x }
 (-k) (-dk) \\
 &= \frac{2\pi}{ix} \int_{k=-\infty}^\infty \frac{1}{k^2 + a^2} e^{i k x } k dk \\
 &= \frac{2\pi}{ix} \int_{k=-\infty}^\infty \inv{k - ia} \frac{ k e^{ i k x } }{(k + ia)} dk \\
-\end{align*}
+\end{aligned}
+\end{equation}
 
 Now we have something that is in form for contour integration.  In the upper half plane we have a pole at $k= ia$.  Assuming that the
 integral over the big semicircular arc vanishes, we can just pick up the residue at that pole contributing.  The assumption that
 this vanishes is actually non-trivial looking since the $k/(k+ia)$ term at a big radius $R$ tends to $1$.  This is probably where
 Jordan's lemma comes in, so some study to understand that looks well justified.
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:290}
+\begin{aligned}
 0
 &= I - 2 \pi i {\left. \frac{2\pi}{ix} \frac{ k e^{ i k x } }{(k + ia)} \right\vert}_{k= ia} \\
 &= I - 2 \pi i \frac{2\pi}{ix} \frac{ e^{ - a x } }{2} \\
-\end{align*}
+\end{aligned}
+\end{equation}
 
 So we have
-\begin{align*}
+\begin{equation}\label{eqn:poisson:310}
+\begin{aligned}
 I = \frac{2 \pi^2}{x} e^{ - a x }
-\end{align*}
+\end{aligned}
+\end{equation}
 
 Now that we have this, the Green's function of \eqnref{eqn:poisson:poissonSolution} is
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:330}
+\begin{aligned}
 G(\mathbf{x})
 &= \lim_{a \rightarrow 0} \inv{(2\pi)^3} \frac{2 \pi^2}{x} e^{ - a x } \\
 &= \inv{4\pi\Abs{\Bx}}
-\end{align*}
+\end{aligned}
+\end{equation}
 
 Which gives
-\begin{align*}
+\begin{equation}\label{eqn:poisson:350}
+\begin{aligned}
 \phi(\Bx) &= \inv{4\pi \epsilon_0} \int \frac{\rho(\Bx')}{\Abs{\Bx - \Bx'}} dV'
-\end{align*}
+\end{aligned}
+\end{equation}
 
 Awesome!  All following from the choice to set $\BE = -\spacegrad \phi$, we have a solution for $\phi$ following directly
 from the divergence equation $\spacegrad \cdot \BE = \rho/\epsilon_0$ via Fourier transformation of this equation.
@@ -238,28 +272,36 @@ from the divergence equation $\spacegrad \cdot \BE = \rho/\epsilon_0$ via Fourie
 
 If we look at the general inhomogeneous Maxwell equation
 
-\begin{align}
+\begin{equation}\label{eqn:poisson:370}
+\begin{aligned}
 \grad F = J/\epsilon_0 c
-\end{align}
+\end{aligned}
+\end{equation}
 
 In terms of potential $F = \grad \wedge A$ and employing in the Lorentz gauge $\grad \cdot A = 0$, we have
 
-\begin{align}
+\begin{equation}\label{eqn:poisson:390}
+\begin{aligned}
 \grad^2 A = \left(\inv{c^2} \partial_{tt} - \sum \partial_{jj}\right) A = J/\epsilon_0 c
-\end{align}
+\end{aligned}
+\end{equation}
 
 As scalar equations with $A = A^\mu \gamma_\mu$, $J = J^\nu \gamma_\nu$ we have four equations all of the same form.
 
 A Green's function form for such wave equations was previously calculated in \chapcite{PJfourierMaxwellSecondOrder}.  That was
 
-\begin{align}
+\begin{equation}\label{eqn:poisson:410}
+\begin{aligned}
 \left( \inv{c^2} \PDSq{t}{} -\sum_j \PDSq{x^j}{} \right)\psi &= g
-\end{align}
+\end{aligned}
+\end{equation}
 
-\begin{align}
+\begin{equation}\label{eqn:poisson:430}
+\begin{aligned}
 {\psi}(\Bx, t) &= \IIinf \IIinf \IIinf \IIinf g(\Bx', t') G(\Bx - \Bx', t - t') d^3 x' dt' \\
 G(\Bx, t) &= \theta(t) \IIinf \IIinf \IIinf \frac{c}{(2\pi)^3 \Abs{\Bk}} \sin( \Abs{\Bk} c t ) \exp\left( i \Bk \cdot \Bx \right) d^3 k
-\end{align}
+\end{aligned}
+\end{equation}
 
 Here $\theta(t)$ is the unit step function, which meant we only sum the time contributions of the charge density for $t - t' > 0$, or $t' < t$.  That is the causal variant of the solution, which was arbitrary mathematically ($t > t'$ would have also worked).
 
@@ -267,21 +309,26 @@ Here $\theta(t)$ is the unit step function, which meant we only sum the time con
 
 Let us see if the spherical polar method works to reduce this equation too.  In particular we want to evaluate
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:450}
+\begin{aligned}
 I = \IIinf \IIinf \IIinf \inv{\Abs{\Bk}} \sin( \Abs{\Bk} c t ) \exp\left( i \Bk \cdot \Bx \right) d^3 k
-\end{align*}
+\end{aligned}
+\end{equation}
 
 Will we have a requirement to introduce a pole off the origin as above?  Perhaps like
-\begin{align*}
+\begin{equation}\label{eqn:poisson:470}
+\begin{aligned}
 \IIinf \IIinf \IIinf \inv{\Abs{\Bk} + \alpha} \sin( \Abs{\Bk} c t ) \exp\left( i \Bk \cdot \Bx \right) d^3 k
-\end{align*}
+\end{aligned}
+\end{equation}
 
 Let us omit it for now, but make the same spherical polar substitution used successfully above, writing
 %\begin{align*}
 %I = \IIinf \IIinf \IIinf \inv{\Abs{\Bk} } \sin( \Abs{\Bk} c t ) \exp\left( i \Bk \cdot \Bx \right) d^3 k
 %\end{align*}
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:490}
+\begin{aligned}
 I
 &= \int_{\theta=0}^{\pi} \int_{\phi=0}^{2\pi} \int_{k=0}^\infty \frac{1}{k }
 \sin\left( k c t \right) \exp\left( i k x \cos\theta \right)
@@ -289,11 +336,13 @@ k^2 \sin\theta d\theta d\phi dk \\
 &= 2 \pi \int_{\theta=0}^{\pi} \int_{k=0}^\infty %\frac{1}{k }
 \sin\left( k c t \right) \exp\left( i k x \cos\theta \right)
 k \sin\theta d\theta dk \\
-\end{align*}
+\end{aligned}
+\end{equation}
 
 Let $\tau = \cos\theta$, $-d\tau = \sin\theta d\theta$, for
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:510}
+\begin{aligned}
 I
 &= 2 \pi \int_{\tau=1}^{-1} \int_{k=0}^\infty %\frac{1}{k }
 \sin\left( k c t \right) \exp\left( i k x \tau \right)
@@ -309,70 +358,87 @@ dk \\
 &= \frac{2 \pi }{x} \int_{k=0}^\infty %\frac{1}{k }
 \left( \cos\left( k (x-c t) \right) -\cos\left( k (x+c t) \right) \right)
  dk \\
-\end{align*}
+\end{aligned}
+\end{equation}
 
 Okay, this is much simpler, but still not in a form that is immediately obvious how to apply contour integration to, since it has no poles.
 The integral
 kernel here is however an even function,
 so we can use the trick of doubling the integral range.
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:530}
+\begin{aligned}
 I &= \frac{\pi }{x} \int_{k=-\infty}^\infty \left( \cos\left( k (x-c t) \right) -\cos\left( k (x+c t) \right) \right) dk \\
-\end{align*}
+\end{aligned}
+\end{equation}
 
 Having done this, this integral is not really any more well defined.  With the Rigor police on holiday, let us assume we want the
 principle value of this integral
-\begin{align*}
+\begin{equation}\label{eqn:poisson:550}
+\begin{aligned}
 I
 &= \lim_{R \rightarrow \infty} \frac{\pi }{x} \int_{k=-R}^R \left( \cos\left( k (x-c t) \right) -\cos\left( k (x+c t) \right) \right) dk \\
 &= \lim_{R \rightarrow \infty} \frac{\pi }{x} \int_{k=-R}^R d \left( \frac{\sin\left( k (x-c t) \right)}{ x - c t} - \frac{\sin\left( k (x+c t) \right)}{x + c t} \right) \\
 &= \lim_{R \rightarrow \infty} \frac{2 \pi^2 }{x} \left( \frac{\sin\left( R (x-c t) \right)}{ \pi(x - c t)} - \frac{\sin\left( R (x+c t) \right)}{\pi(x + c t)} \right) \\
-\end{align*}
+\end{aligned}
+\end{equation}
 
 This $\sinc$ limit has been seen before being functionally identified with the delta function (the wikipedia article calls these ``nascent delta function''), so we can write
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:570}
+\begin{aligned}
 I &= \frac{2 \pi^2 }{x} \left( \delta(x-c t) - \delta(x+c t) \right)
-\end{align*}
+\end{aligned}
+\end{equation}
 
 For our Green's function we now have
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:590}
+\begin{aligned}
 G(\Bx, t)
 &= \theta(t) \frac{c }{(2\pi)^3} \frac{2 \pi^2 }{\Abs{\Bx}} \left( \delta(x-c t) - \delta(x+c t) \right) \\
 &= \theta(t) \frac{c }{4\pi \Abs{\Bx}} \left( \delta(x-c t) - \delta(x+c t) \right) \\
-\end{align*}
+\end{aligned}
+\end{equation}
 
 And finally, our wave function (switching variables to convolve with the charge density) instead of the Green's function
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:610}
+\begin{aligned}
 {\psi}(\Bx, t)
 &=
 \IIinf \IIinf \IIinf \IIinf g(\Bx - \Bx', t - t') \theta(t') \frac{c }{4\pi \Abs{\Bx'}} \delta(\Abs{\Bx'} - c t') d^3 x' dt' \\
 &-\IIinf \IIinf \IIinf \IIinf g(\Bx - \Bx', t - t') \theta(t') \frac{c }{4\pi \Abs{\Bx'}} \delta(\Abs{\Bx'} + c t') d^3 x' dt' \\
-\end{align*}
+\end{aligned}
+\end{equation}
 
 Let us break these into two parts
 
-\begin{align}\label{eqn:poisson:almostThere}
+\begin{equation}\label{eqn:poisson:almostThere}
+\begin{aligned}
 {\psi}(\Bx, t) &= {\psi}_{-}(\Bx, t) +{\psi}_{+}(\Bx, t)
-\end{align}
+\end{aligned}
+\end{equation}
 
 Where the first part, $\psi_{-}$ is for the $-ct'$ delta function and one $\psi_{-}$ for the $+ct'$.
 Making a $\tau = t-t'$ change of variables, this first portion is
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:630}
+\begin{aligned}
 {\psi}_{-}(\Bx, t)
 &= -\IIinf \IIinf \IIinf \IIinf g(\Bx - \Bx', \tau) \theta(t-\tau) \frac{c }{4\pi \Abs{\Bx'}} \delta(\Abs{\Bx'} - c t + c\tau) d^3 x' d\tau \\
 &= -\IIinf \IIinf \IIinf g(\Bx - \Bx'', t - \Abs{\Bx''}/c) \frac{c }{4\pi \Abs{\Bx''}} d^3 x'' \\
-\end{align*}
+\end{aligned}
+\end{equation}
 
 One more change of variables, $\Bx' = \Bx - \Bx''$, $d^3 x'' = -d^3 x$, gives the final desired retarded potential result.  The $\psi_{+}$ result is similar (see below), and assembling all we have
 
-\begin{align}
+\begin{equation}\label{eqn:poisson:650}
+\begin{aligned}
 {\psi}_{-}(\Bx, t) &= \IIinf \IIinf \IIinf g(\Bx', t - \Abs{\Bx - \Bx'}/c) \frac{c }{4\pi \Abs{\Bx - \Bx'}} d^3 x' \\
 {\psi}_{+}(\Bx, t) &= -\IIinf \IIinf \IIinf g(\Bx, t + \Abs{\Bx -\Bx'}/c) \frac{c }{4\pi \Abs{\Bx -\Bx'}} d^3 x'
-\end{align}
+\end{aligned}
+\end{equation}
 
 It looks like my initial interpretation of the causal nature of the unit step in the original functional form was not really right.  It is not
 until the Green's function is ``integrated'' do we get this causal and non-causal split into two specific solutions.
@@ -390,14 +456,16 @@ pulled out of a magic hat.
 \subsection{Omitted Details.  Advanced time solution}
 
 Similar to the above for $\psi_{+}$ we have
-\begin{align*}
+\begin{equation}\label{eqn:poisson:670}
+\begin{aligned}
 {\psi}_{+}(\Bx, t)
 &= -\IIinf \IIinf \IIinf \IIinf g(\Bx - \Bx', t - t') \theta(t') \frac{c }{4\pi \Abs{\Bx'}} \delta(\Abs{\Bx'} + c t') d^3 x' dt' \\
 &= \IIinf \IIinf \IIinf \IIinf g(\Bx - \Bx', \tau) \theta(t -\tau) \frac{c }{4\pi \Abs{\Bx'}} \delta(\Abs{\Bx'} + c (t -\tau)) d^3 x' d\tau \\
 &= \IIinf \IIinf \IIinf \IIinf g(\Bx - \Bx', \tau) \theta(t -\tau) \frac{c }{4\pi \Abs{\Bx'}} \delta(\Abs{\Bx'} + c t -c\tau) d^3 x' d\tau \\
 &= \IIinf \IIinf \IIinf g(\Bx - \Bx', t + \Abs{\Bx'}/c) \frac{c }{4\pi \Abs{\Bx'}} d^3 x' \\
 &= -\IIinf \IIinf \IIinf g(\Bx, t + \Abs{\Bx -\Bx'}/c) \frac{c }{4\pi \Abs{\Bx -\Bx'}} d^3 x' \\
-\end{align*}
+\end{aligned}
+\end{equation}
 
 Is there an extra factor of $-1$ here?
 
@@ -407,13 +475,16 @@ It is somewhat irregular seeming to treat the 3D case before what should be the 
 try evaluating the Green's function for the 1D wave equation too.
 
 We have found that Fourier transforms applied to the forced wave equation
-\begin{align}
+\begin{equation}\label{eqn:poisson:690}
+\begin{aligned}
 \left( \inv{v^2} \partial_{tt} -\partial_{xx} \right)\psi = g(x,t)
-\end{align}
+\end{aligned}
+\end{equation}
 
 result in the following integral solution.
 
-\begin{align}\label{eqn:poisson:oneDimResult}
+\begin{equation}\label{eqn:poisson:oneDimResult}
+\begin{aligned}
 {\psi}(x, t)
 &=
 \int_{x'=-\infty}^\infty
@@ -424,14 +495,16 @@ G(x, t) &=
 \sin( {k} v t )
 \exp( i k x )
 dk
-\end{align}
+\end{aligned}
+\end{equation}
 
 As in the 3D case above can this reduced to something that does not involve such an unpalatable integral.
 Given the 3D result, it would be reasonable to get a result involving $g(x \pm vt)$ terms.
 
 First let us get rid of the sine term, and express $G$ entirely in exponential form.  That is
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:710}
+\begin{aligned}
 G(x, t)
 &=
 \int_{k = -\infty}^\infty
@@ -443,17 +516,21 @@ dk \\
 \frac{v}{4\pi k i }
 \left(e^{ {k} (x + v t ) } - e^{ {k} (x - v t) }\right) 
 dk \\
-\end{align*}
+\end{aligned}
+\end{equation}
 
 Using the unit step function identification from \eqnref{eqn:poisson:heavysideUnitIntegral}, we have
 
-\begin{align}
+\begin{equation}\label{eqn:poisson:730}
+\begin{aligned}
 G(x, t) &= \frac{v}{2} \left(\theta(x + v t )  - \theta(x - v t) \right) 
-\end{align}
+\end{aligned}
+\end{equation}
 
 If this identification works our solution then becomes
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:750}
+\begin{aligned}
 {\psi}(x, t)
 &=
 \int_{x'=-\infty}^\infty
@@ -468,7 +545,8 @@ dx' dt' \\
 {g}(x-x', t-s/v)
 \frac{1}{2} \left(\theta(x' + s )  - \theta(x' - s) \right) 
 dx' ds
-\end{align*}
+\end{aligned}
+\end{equation}
 
 This is already much simpler than the original, but additional reduction should be possible by breaking this down into specific intervals.  An
 alternative, perhaps is to use integration by parts and the delta function as the derivative of the unit step identification.
@@ -477,7 +555,8 @@ alternative, perhaps is to use integration by parts and the delta function as th
 
 Let us try a pair of variable changes
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:770}
+\begin{aligned}
 {\psi}(x, t)
 &=
 % x' + s = u
@@ -494,12 +573,14 @@ du ds \\
 {g}(x-u -s, t-s/v)
 \frac{1}{2} \theta(u) 
 du ds \\
-\end{align*}
+\end{aligned}
+\end{equation}
 
 Like the retarded time potential solution to the 3D wave equation, we now have the wave function solution entirely specified by a
 weighted sum of the driving function
 
-\begin{align}
+\begin{equation}\label{eqn:poisson:790}
+\begin{aligned}
 {\psi}(x, t)
 &=
 \frac{1}{2}
@@ -507,7 +588,8 @@ weighted sum of the driving function
 \int_{s = 0}^\infty
 \left( {g}(x-u+s, t-s/v) - {g}(x-u -s, t-s/v) \right)
 du ds
-\end{align}
+\end{aligned}
+\end{equation}
 
 Can this be tidied at all?  Let us do a change of variables here, writing $-\tau = t -s/v$.
 
@@ -524,7 +606,8 @@ Can this be tidied at all?  Let us do a change of variables here, writing $-\tau
 % ds = -d\tau
 % \tau(0) = t
 % 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:810}
+\begin{aligned}
 {\psi}(x, t)
 &=
 \frac{1}{2}
@@ -539,7 +622,8 @@ du d\tau \\
 \int_{\tau = -\infty}^{t}
 \left( {g}(x+vt -(u + v\tau), -\tau) - {g}(x-v t -(u -v\tau), -\tau) \right)
 du d\tau \\
-\end{align*}
+\end{aligned}
+\end{equation}
 
 Is that any better?  I am not so sure, and intuition says there is a way to reduce this to a single integral summing
 only over spatial variation.
@@ -558,44 +642,53 @@ FIXME: First have to think about how exactly to do this differentiation.
 
 The wiki article on the Heaviside unit step function lists an integral form
 
-\begin{align}
+\begin{equation}\label{eqn:poisson:830}
+\begin{aligned}
 I_\epsilon &= \inv{2\pi i} \PV \IIinf \frac{e^{ix\tau}}{\tau - i\epsilon} d\tau \\
 \theta(x) &= \lim_{\epsilon \rightarrow 0} I_\epsilon
-\end{align}
+\end{aligned}
+\end{equation}
 
 How does this make sense?  For $x>0$ we can evaluate this with an upper half plane semi-circular contour (FIXME: picture).  Along the arc $z = R e^{i\phi}$ we have
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:850}
+\begin{aligned}
 \Abs{I_\epsilon}
 &= \Abs{\inv{2\pi i} \int_{\phi=0}^{\pi} \frac{e^{i R (\cos\phi + i \sin\phi)}}{ R e^{i\phi} - i \epsilon} R i e^{i\phi} d\phi} \\
 &\approx \Abs{\inv{2\pi} \int_{\phi=0}^{\pi} e^{i R \cos\phi } e^{- R \sin\phi } d\phi} \\
 &\le \inv{2\pi} \int_{\phi=0}^{\pi} e^{- R \sin\phi } d\phi \\
 &\le \inv{2\pi} \int_{\phi=0}^{\pi} e^{- R } d\phi \\
 &= \inv{2} e^{- R } \\
-\end{align*}
+\end{aligned}
+\end{equation}
 
 This tends to zero as $R \rightarrow \infty$, so evaluating the residue, we have for $x > 0$
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:870}
+\begin{aligned}
 {I_\epsilon}
 &= -(-2 \pi i) \inv{2\pi i} {\left. {e^{ix\tau}} \right\vert}_{\tau = i\epsilon} \\
 &= e^{-x\epsilon}
-\end{align*}
+\end{aligned}
+\end{equation}
 
 Now for $x<0$ an upper half plane contour will diverge, but the lower half plane can be used.  This gives us $I_\epsilon = 0$ in that region.
 All that remains is the $x=0$ case.  There we have
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:890}
+\begin{aligned}
 I_\epsilon(0)
 &= \inv{2\pi i} \PV \IIinf \inv{\tau - i\epsilon} d\tau \\
 &= \inv{2\pi i} \lim_{R \rightarrow \infty} \ln\left( \frac{R - i\epsilon} {-R - i\epsilon} \right) \\
 & \rightarrow \inv{2\pi i} \ln\left( -1 \right) \\
 &= \inv{2\pi i} i \pi \\
-\end{align*}
+\end{aligned}
+\end{equation}
 
 Summarizing we have
 
-\begin{align*}
+\begin{equation}\label{eqn:poisson:910}
+\begin{aligned}
 I_\epsilon(x) =
 \left\{
 \begin{array}{l l}
@@ -604,11 +697,14 @@ e^{-x\epsilon} & \quad \mbox{if $x > 0$} \\
 0 & \quad \mbox{if $x < 0$} \\
 \end{array}
 \right.
-\end{align*}
+\end{aligned}
+\end{equation}
 
 So in the limit this does work as an integral formulation of the unit step.  This will be used to (very loosely) identify
 
-\begin{align}\label{eqn:poisson:heavysideUnitIntegral}
+\begin{equation}\label{eqn:poisson:heavysideUnitIntegral}
+\begin{aligned}
 \theta(x) \sim \inv{2\pi i} \PV \IIinf \frac{e^{ix\tau}}{\tau} d\tau
-\end{align}
+\end{aligned}
+\end{equation}
 %\EndArticle
