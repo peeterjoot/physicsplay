@@ -20,7 +20,7 @@ my $doBib = 0 ;
 my $doHistory = 0 ;
 my $doMathematica = 0 ;
 my $latex = 0 ;
-my $doMathematicaFtp = 0 ;
+#my $doMathematicaFtp = 0 ;
 
 GetOptions
 (
@@ -36,7 +36,7 @@ GetOptions
    'miscphysics!'  => \$doNonga,
    'latex!'  => \$latex,
    'mathematica!'  => \$doMathematica,
-   'mathFtp!'  => \$doMathematicaFtp,
+#   'mathFtp!'  => \$doMathematicaFtp,
    'otherbook!' => \$doOtherbook,
    'all'        => sub {
                           $doGabook = 1 ;
@@ -243,9 +243,20 @@ elsif ( $doMathematica )
    {
       my $filter ;
 
-      if ( $doPhy454 )
+      if ( $doGabook )
       {
-         $filter = "phy454/" ;
+         $filter = "gabook/" ;
+      }
+
+     # mathematica for this one?
+     #if ( $doPhy356 )
+     #{
+     #   $filter = "phy356/" ;
+     #}
+
+      if ( $doPhy450 )
+      {
+         $filter = "phy450/" ;
       }
 
       if ( $doPhy456 )
@@ -253,9 +264,9 @@ elsif ( $doMathematica )
          $filter = "phy456/" ;
       }
 
-      if ( $doPhy450 )
+      if ( $doPhy454 )
       {
-         $filter = "phy450/" ;
+         $filter = "phy454/" ;
       }
 
       if ( $doPhy485 )
@@ -285,10 +296,10 @@ elsif ( $doMathematica )
       mathematicaIndex() ;
    }
 }
-elsif ( $doMathematicaFtp )
-{
-   mathematicaFtp() ;
-}
+#elsif ( $doMathematicaFtp )
+#{
+#   mathematicaFtp() ;
+#}
 else
 {
    dumpem( @All ) ;
@@ -296,55 +307,55 @@ else
 
 exit ;
 
-sub mathematicaFtp
-{
-   print "cd public_html\n" ;
-   my %dirs = () ;
-
-   foreach (@mathematica)
-   {
-      my $path = $_->{'path'} ;
-      my $dirname = $path ;
-      $dirname =~ s,/.*,, ;
-      $dirs{$dirname}++ ;
-   }
-
-   foreach (keys %dirs)
-   {
-      print "mkdir $_\n" ;
-   }
-
-   print "cd blogit\n" ;
-   print "lcd blogit\n" ;
-   print "prompt off\n" ;
-
-   foreach my $dirname (keys %dirs)
-   {
-      print "lcd ../$dirname\n" ;
-      print "cd ../$dirname\n" ;
-      print qq(mput *.nb\n) ;
-      print qq(mput *.cdf\n) ;
-      print qq(mput *.htm\n) ;
-   }
-
+#sub mathematicaFtp
+#{
+#   print "cd public_html\n" ;
+#   my %dirs = () ;
+#
 #   foreach (@mathematica)
 #   {
 #      my $path = $_->{'path'} ;
-#      my $filename = $path ;
-#      $filename =~ s,.*/,, ;
 #      my $dirname = $path ;
 #      $dirname =~ s,/.*,, ;
+#      $dirs{$dirname}++ ;
+#   }
 #
-#      #next unless ( $path =~ / / ) ;
-#      #my $nSpacePath = $path ;
-#      #$nSpacePath =~ s/ /_/g ;
-#      #print qq(git mv "$path" $nSpacePath\n) ;
+#   foreach (keys %dirs)
+#   {
+#      print "mkdir $_\n" ;
+#   }
 #
+#   print "cd blogit\n" ;
+#   print "lcd blogit\n" ;
+#   print "prompt off\n" ;
+#
+#   foreach my $dirname (keys %dirs)
+#   {
 #      print "lcd ../$dirname\n" ;
 #      print "cd ../$dirname\n" ;
-#      print qq(put "$filename"\n) ;
+#      print qq(mput *.nb\n) ;
+#      print qq(mput *.cdf\n) ;
+#      print qq(mput *.htm\n) ;
 #   }
-}
+#
+##   foreach (@mathematica)
+##   {
+##      my $path = $_->{'path'} ;
+##      my $filename = $path ;
+##      $filename =~ s,.*/,, ;
+##      my $dirname = $path ;
+##      $dirname =~ s,/.*,, ;
+##
+##      #next unless ( $path =~ / / ) ;
+##      #my $nSpacePath = $path ;
+##      #$nSpacePath =~ s/ /_/g ;
+##      #print qq(git mv "$path" $nSpacePath\n) ;
+##
+##      print "lcd ../$dirname\n" ;
+##      print "cd ../$dirname\n" ;
+##      print qq(put "$filename"\n) ;
+##   }
+#}
 
 sub mathematicaIndex
 {
