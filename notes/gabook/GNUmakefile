@@ -31,6 +31,8 @@ GENERATED_SOURCES += backmatter.tex
 
 #ONCEFLAGS := -justonce
 
+GENERATED_PDFS += stokes.pdf
+
 include ../make.rules
 
 listings/%.pl: %.pl
