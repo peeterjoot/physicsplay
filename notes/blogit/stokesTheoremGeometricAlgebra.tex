@@ -9,6 +9,9 @@
 
 \input{../peeter_prologue_print2.tex}
 
+% ointctr...
+\usepackage{txfonts}
+
 \beginArtNoToc
 
 \generatetitle{Stokes theorem in Geometric algebra}
@@ -60,7 +63,7 @@ The outer product, expressed using the wedge operator, of blades $u$, and $v$ of
 u \wedge v \equiv \gpgrade{ u v }{\Abs{r + s}}.
 \end{dmath}
 
-\section{Fundamental theorem of calculus}
+\section{Fundamental theorem of calculus, Stokes theorem for scalar functions.}
 
 % from vectorIntegralRelations.tex
 
@@ -71,7 +74,9 @@ Given any curve $C$ with end points $x_1$ and $x_2$, and a vector $f(x)$, this t
 \begin{theorem}
 \label{thm:stokesTheoremGeometricAlgebra:140}
 \begin{equation}
+\myBoxed{
 \int_C dx \cdot \grad f = f(x_2) - f(x_1).
+}
 \end{equation}
 \end{theorem}
 
@@ -84,8 +89,13 @@ dx = \gamma_{\mu} \frac{d x^{\mu}}{d\lambda} d\lambda.
 The differential dotted with the gradient is
 
 \begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:280}
-\grad f \cdot d\Br
-= \left(\gamma^{i} \partial_{i} f\right) \cdot \left(\gamma_{j} \frac{d x^{j}}{d\lambda} \right) d\lambda 
+dx
+\cdot 
+\grad f 
+= 
+\left(\gamma_{j} \frac{d x^{j}}{d\lambda} \right) d\lambda 
+\cdot 
+\left(\gamma^{i} \partial_{i} f\right) 
 = {\delta^{i}}_{j} \PD{x^{i}}{f} \frac{d x^{j}}{d\lambda} d\lambda 
 = \PD{x^{i}}{f} \frac{d x^{i}}{d\lambda} d\lambda 
 = \frac{d f}{d \lambda} d\lambda.
@@ -94,7 +104,8 @@ The differential dotted with the gradient is
 Integration clearly proves \cref{thm:stokesTheoremGeometricAlgebra:140} for this specific parameterization.  This result, however, is independent of the parameterization.  This can be shown by considering any other curve $C'$, parameterized by $\sigma$.  As above, for this curve the differential dotted with the gradient is
 
 \begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:320}
-\grad f \cdot d\Br
+dx \cdot
+\grad f 
 = \frac{d f}{d \sigma} d\sigma.
 \end{dmath}
 
@@ -120,11 +131,164 @@ This allows the fundamental theorem to be expressed in Stokes form
 \int_C dx \cdot \lr{ \grad \wedge f} = f(x_2) - f(x_1).
 \end{equation}
 
-\section{Stokes theorem for a surface}
+\section{Stokes theorem for vector functions on a surface}
 
-TODO.
-%\cref{fig:stokesTheoremGeometricAlgebraAreaIntegral:stokesTheoremGeometricAlgebraAreaIntegralFig1}.
+% based on stokesGradeTwo.tex
+
+The next task is to assign meaning to the Stokes theorem applied to vector functions
+
+\begin{theorem}\label{thm:stokesTheoremGeometricAlgebra:540}
+\begin{equation}
+\myBoxed{
+\int_S d^2 x \cdot \lr{ \grad \wedge f } = \ointclockwise f \cdot dx.
+}
+\end{equation}
+\end{theorem}
+
+There is an orientation to both the area element and the boundary integral.  These are illustrated in \cref{fig:stokesTheoremGeometricAlgebraAreaIntegral:stokesTheoremGeometricAlgebraAreaIntegralFig1}.
+
 \imageFigure{../../figures/gabook/stokesTheoremGeometricAlgebraAreaIntegralFig1}{Two variable surface integral parameterization}{fig:stokesTheoremGeometricAlgebraAreaIntegral:stokesTheoremGeometricAlgebraAreaIntegralFig1}{0.3}
+
+Given a two parameter surface of points $x(\alpha, \beta)$, the area element at a point can be formed by wedging two differential elements.  Let
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:540}
+\begin{aligned}
+dx_\alpha &= \PD{\alpha}{x} d\alpha \\
+dx_\beta &= \PD{\beta}{x} d\beta,
+\end{aligned}
+\end{equation}
+
+so that the area element is
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:560}
+d^2 x 
+= dx_\alpha \wedge dx_\beta
+=
+\gamma_i \wedge \gamma_j \PD{\alpha}{x^i} \PD{\beta}{x^j} d\alpha d\beta.
+\end{dmath}
+
+Presuming the area element is made small enough, and the surface is sufficiently smooth, this area element will lie in the subspace of the surface.  
+
+Expressed in terms of coordinates, the curl is
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:580}
+\grad \wedge f
+= 
+\lr{ \gamma^i \partial_i } \wedge \lr{ \gamma^j f_j }
+= 
+\gamma^i \wedge \gamma^j \partial_i f_j.
+\end{dmath}
+
+The curl and the area element dotted together provide the differential form for the surface integral
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:400}
+\begin{aligned}
+d^2 x \cdot \lr{ \grad \wedge f }
+&=
+\lr{ \gamma_i \wedge \gamma_j \PD{\alpha}{x^i} \PD{\beta}{x^j} d\alpha d\beta }
+\cdot
+\lr{
+\gamma^r \wedge \gamma^s \partial_r f_s
+}
+\\
+&=
+\partial_r f_s \PD{\alpha}{x^i} \PD{\beta}{x^j} (\gamma^r \wedge \gamma^s) \cdot (\gamma_i \wedge \gamma_j) 
+d\alpha d\beta \\
+&=
+\partial_r f_s \PD{\alpha}{x^i} \PD{\beta}{x^j} ( {\delta^r}_j {\delta^s}_i - {\delta^r}_i {\delta^s}_j ) 
+d\alpha d\beta \\
+&=
+\partial_r f_s \left( \PD{\alpha}{x^s} \PD{\beta}{x^r} - \PD{\alpha}{x^r} \PD{\beta}{x^s} \right) 
+d\alpha d\beta \\
+\end{aligned}
+\end{equation}
+
+As a sum over all the Jacobian factors that is
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:420}
+d^2 x  \cdot
+\lr{ \grad \wedge f }
+= -\partial_r f_s \frac{\partial (x^r, x^s)}{\partial (\alpha, \beta)} d\alpha d\beta.
+\end{equation}
+
+Now, consider the loop integral, integrating clockwise
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:440}
+\begin{aligned}
+\ointclockwise f \cdot dx
+&=
+I_1 + I_2 + I_3 + I_4 \\
+&=
+\int_{\beta_0}^{\beta_1} dx_\beta \cdot 
+f(\alpha_0, \beta)
++\int_{\alpha_0}^{\alpha_1} dx_\alpha \cdot 
+f(\alpha, \beta_1)
+-\int_{\beta_0}^{\beta_1} dx_\beta \cdot 
+f(\alpha_1, \beta)
+-\int_{\alpha_0}^{\alpha_1} dx_\alpha \cdot 
+f(\alpha, \beta_0) \\
+&=
+\int_{\alpha_0}^{\alpha_1} dx_\alpha \cdot 
+\lr{
+f(\alpha, \beta_1)
+-
+f(\alpha, \beta_0)
+}
+-\int_{\beta_0}^{\beta_1} dx_\beta \cdot \lr{
+f(\alpha_1, \beta) - f(\alpha_0, \beta)
+} \\
+&=
+\int_{\alpha_0}^{\alpha_1} d\alpha \PD{\alpha}{x^i}
+\lr{
+f_i(\alpha, \beta_1)
+-
+f_i(\alpha, \beta_0)
+}
+-\int_{\beta_0}^{\beta_1} d\beta \PD{\beta}{x^i}
+\lr{
+f_i(\alpha_1, \beta) - f_i(\alpha_0, \beta)
+} \\
+&=
+\int_{\alpha_0}^{\alpha_1} d\alpha 
+\PD{\alpha}{x^i}
+\int_{\beta_0}^{\beta_1} d\beta 
+\PD{\beta}{f_i}
+-
+\int_{\beta_0}^{\beta_1} d\beta 
+\PD{\beta}{x^i}
+\int_{\alpha_0}^{\alpha_1} d\alpha 
+\PD{\alpha}{f_i} 
+\\
+&=
+\int d\alpha d\beta
+\lr{
+\PD{\alpha}{x^i}
+\PD{\beta}{f_i}
+-
+\PD{\beta}{x^i}
+\PD{\alpha}{f_i} 
+} 
+\\
+&=
+\int d\alpha d\beta
+\lr{
+\PD{\alpha}{x^i}
+\PD{x^j}{f_i}
+\PD{\beta}{x^j}
+-
+\PD{\beta}{x^i}
+\PD{x^j}{f_i}
+\PD{\alpha}{x^j}
+} 
+\\
+&=
+\int d\alpha d\beta
+\partial_j f_i
+\PD{(\alpha, \beta)}{(x^i, x^j)}.
+\end{aligned}
+\end{equation}
+
+A change of variables and integration of \eqnref{eqn:stokesTheoremGeometricAlgebra:420} produces this same result, demonstrating this theorem for this particular parameterization.  Again, assuming an open region, a change of variables can be made to produce the same result for any other surface.
 
 %\EndArticle
 \EndNoBibArticle
