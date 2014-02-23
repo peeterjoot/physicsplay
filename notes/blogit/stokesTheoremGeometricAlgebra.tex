@@ -1,0 +1,130 @@
+%
+% Copyright © 2013 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{stokesTheoremGeometricAlgebra}
+\renewcommand{\dirname}{notes/gabook/}
+\newcommand{\keywords}{Stokes theorem, Geometric algebra, Clifford algebra, gradient, divergence, wedge product}
+
+\input{../peeter_prologue_print2.tex}
+
+\beginArtNoToc
+
+\generatetitle{Stokes theorem in Geometric algebra}
+%\chapter{Stokes theorem in Geometric algebra}
+\label{chap:stokesTheoremGeometricAlgebra}
+
+The generalization of Stokes theorem to higher dimesional spaces, expressed in the formalism of geometric algebra takes the form
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:120}
+\int_V d^N x \cdot (\grad \wedge f) = \int_{\partial V} d^{N-1} x \cdot f.
+\end{equation}
+
+To give this enough specific meaning to be useful takes some work.  That will be attempted here.
+
+\section{Notation}
+
+A finite vector space with basis $\{\gamma_1, \gamma_2, \cdots\}$ will be assumed.  This need not be a Euclidean vector space.  A dual or reciprocal basis $\{\gamma^1, \gamma^2, \cdots\}$ for this basis can be calculated, defined by the property
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:20}
+\gamma_i \cdot \gamma^j = {\delta_i}^j.
+\end{equation}
+
+Implicit summation over repeated indexes will be employed unless otherwise noted.  For example, the components of a vector $x$ with respect to the standard or reciprocal bases, are
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:40}
+x = \gamma_i x^i = \gamma_j x^j.
+\end{equation}
+
+The coordinates of the vector follow by taking dot products
+
+\begin{subequations}
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:60}
+x \cdot \gamma^j = \lr{ \gamma_i x^i } \cdot \gamma^j = x^i {\delta_i}^j = x^j
+\end{equation}
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:80}
+x \cdot \gamma_j = \lr{ \gamma^i x_i } \cdot \gamma_j = x_i {\delta^i}_j = x_j
+\end{equation}
+\end{subequations}
+
+The gradient will be expressed in mixed coordinates as
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:100}
+\grad \equiv \gamma^i \PD{x^i}{} = \gamma^i \partial_i.
+\end{equation}
+
+The outer product, expressed using the wedge operator, of blades $u$, and $v$ of grade $r$ and $s$ respectively is defined as
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:300}
+u \wedge v \equiv \gpgrade{ u v }{\Abs{r + s}}.
+\end{dmath}
+
+\section{Fundamental theorem of calculus}
+
+% from vectorIntegralRelations.tex
+
+The fundamental theorem of calculus, in its vector formulation, is the simplest specific example of Stokes theorem, relating the line integral of the gradient of a scalar function to the value of that function at the end points of the curve.
+
+Given any curve $C$ with end points $x_1$ and $x_2$, and a vector $f(x)$, this theorem states
+
+\begin{theorem}
+\label{thm:stokesTheoremGeometricAlgebra:140}
+\begin{equation}
+\int_C dx \cdot \grad f = f(x_2) - f(x_1).
+\end{equation}
+\end{theorem}
+
+The theorem follows by introducing a parameterization $\lambda$ for the points along the curve.  With such a parameterization, the differential element is
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:260}
+dx = \gamma_{\mu} \frac{d x^{\mu}}{d\lambda} d\lambda.
+\end{equation}
+
+The differential dotted with the gradient is
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:280}
+\grad f \cdot d\Br
+= \left(\gamma^{i} \partial_{i} f\right) \cdot \left(\gamma_{j} \frac{d x^{j}}{d\lambda} \right) d\lambda 
+= {\delta^{i}}_{j} \PD{x^{i}}{f} \frac{d x^{j}}{d\lambda} d\lambda 
+= \PD{x^{i}}{f} \frac{d x^{i}}{d\lambda} d\lambda 
+= \frac{d f}{d \lambda} d\lambda.
+\end{dmath}
+
+Integration clearly proves \cref{thm:stokesTheoremGeometricAlgebra:140} for this specific parameterization.  This result, however, is independent of the parameterization.  This can be shown by considering any other curve $C'$, parameterized by $\sigma$.  As above, for this curve the differential dotted with the gradient is
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:320}
+\grad f \cdot d\Br
+= \frac{d f}{d \sigma} d\sigma.
+\end{dmath}
+
+Utilizing a change of variables, this can be expressed in terms of the $\lambda$ parameterization
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:340}
+\frac{d f}{d \sigma} d\sigma
+= \frac{d f}{d \lambda} \frac{d\lambda}{d\sigma} d\sigma 
+= \frac{d f}{d \lambda} d\lambda.
+\end{equation}
+
+Thus, after integrating, regardless of the parameterization, this integral is dependent on only the end points.  There is probably something that should be said here about the region itself (i.e. an open region), but I will neglect that dtail here.
+
+Finally, but not intuitively, this line integral can be written in outer product notation.  Application of \eqnref{eqn:stokesTheoremGeometricAlgebra:300} to the gradient and the scalar function gives
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:360}
+\grad \wedge f = \gpgrade{\grad f}{1} = \grad f.
+\end{equation}
+
+This allows the fundamental theorem to be expressed in Stokes form
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:380}
+\int_C dx \cdot \lr{ \grad \wedge f} = f(x_2) - f(x_1).
+\end{equation}
+
+\section{Stokes theorem for a surface}
+
+TODO.
+%\cref{fig:stokesTheoremGeometricAlgebraAreaIntegral:stokesTheoremGeometricAlgebraAreaIntegralFig1}.
+\imageFigure{../../figures/gabook/stokesTheoremGeometricAlgebraAreaIntegralFig1}{Two variable surface integral parameterization}{fig:stokesTheoremGeometricAlgebraAreaIntegral:stokesTheoremGeometricAlgebraAreaIntegralFig1}{0.3}
+
+%\EndArticle
+\EndNoBibArticle
