@@ -21,7 +21,7 @@
 The generalization of Stokes theorem to higher dimesional spaces, expressed in the formalism of geometric algebra takes the form
 
 \begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:120}
-\int_V d^N x \cdot (\grad \wedge f) = \int_{\partial V} d^{N-1} x \cdot f.
+\int_V d^k x \cdot (\grad \wedge f) = \int_{\partial V} d^{k-1} x \cdot f.
 \end{equation}
 
 To give this enough specific meaning to be useful takes some work.  That will be attempted here.
@@ -57,11 +57,34 @@ The gradient will be expressed in mixed coordinates as
 \grad \equiv \gamma^i \PD{x^i}{} = \gamma^i \partial_i.
 \end{equation}
 
-The outer product, expressed using the wedge operator, of blades $u$, and $v$ of grade $r$ and $s$ respectively is defined as
+The outer and inner products respectively, expressed using the wedge and dot operators, of blades $u$, and $v$ of grade $r$ and $s$ respectively is defined as
 
+\begin{subequations}
 \begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:300}
-u \wedge v \equiv \gpgrade{ u v }{\Abs{r + s}}.
+u \wedge v \equiv \gpgrade{ u v }{\Abs{r + s}}
 \end{dmath}
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:780}
+u \cdot v \equiv \gpgrade{ u v }{\Abs{r - s}}.
+\end{dmath}
+\end{subequations}
+
+Written out explicitly for odd grade blades $A$ (vector, trivector, ...), and vector $a$ the dot and wedge products are respectively
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:800}
+\begin{aligned}
+a \wedge A &= \inv{2} (a A - A a) \\
+a \cdot A &= \inv{2} (a A + A a).
+\end{aligned}
+\end{equation}
+
+Similarly for even grade blades these are
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:820}
+\begin{aligned}
+a \wedge A &= \inv{2} (a A + A a) \\
+a \cdot A &= \inv{2} (a A - A a).
+\end{aligned}
+\end{equation}
 
 \section{Fundamental theorem of calculus, Stokes theorem for scalar functions.}
 
@@ -83,7 +106,7 @@ Given any curve $C$ with end points $x_1$ and $x_2$, and a vector $f(x)$, this t
 The theorem follows by introducing a parameterization $\lambda$ for the points along the curve.  With such a parameterization, the differential element is
 
 \begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:260}
-dx = \gamma_{\mu} \frac{d x^{\mu}}{d\lambda} d\lambda.
+dx = \gamma_i \frac{d x^i}{d\lambda} d\lambda.
 \end{equation}
 
 The differential dotted with the gradient is
@@ -135,12 +158,12 @@ This allows the fundamental theorem to be expressed in Stokes form
 
 % based on stokesGradeTwo.tex
 
-The next task is to assign meaning to the Stokes theorem applied to vector functions
+The next task is to assign meaning to the Stokes theorem applied to vector functions $f$
 
 \begin{theorem}\label{thm:stokesTheoremGeometricAlgebra:540}
 \begin{equation}
 \myBoxed{
-\int_S d^2 x \cdot \lr{ \grad \wedge f } = \ointclockwise f \cdot dx.
+\int_S d^2 x \cdot \lr{ \grad \wedge f } = \ointclockwise dx \cdot f.
 }
 \end{equation}
 \end{theorem}
@@ -289,6 +312,203 @@ f_i(\alpha_1, \beta) - f_i(\alpha_0, \beta)
 \end{equation}
 
 A change of variables and integration of \eqnref{eqn:stokesTheoremGeometricAlgebra:420} produces this same result, demonstrating this theorem for this particular parameterization.  Again, assuming an open region, a change of variables can be made to produce the same result for any other surface.
+
+\section{Stokes theorem for bivector functions over a volume}
+% also based on stokesGradeTwo.tex
+
+Moving on to bivector functions $f$, the task is to give specific meaning to
+
+\begin{theorem}\label{thm:stokesTheoremGeometricAlgebra:600}
+\begin{equation}
+\myBoxed{
+\int_V d^3 x \cdot \lr{ \grad \wedge f } = \iint_{\partial V} d^2 x \cdot f.
+}
+\end{equation}
+\end{theorem}
+
+A subspace of all the points $x(\alpha, \beta, \sigma)$ is illustrated in \cref{fig:stokesTheoremGeometricAlgebraAreaIntegral:stokesTheoremGeometricAlgebraAreaIntegralFig2}.
+
+\imageFigure{../../figures/gabook/stokesTheoremGeometricAlgebraAreaIntegralFig2}{Oriented surface of a three parameter subspace}{fig:stokesTheoremGeometricAlgebraAreaIntegral:stokesTheoremGeometricAlgebraAreaIntegralFig2}{0.3}
+
+This space is spanned by the differentials
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:620}
+\begin{aligned}
+dx_\alpha &= \PD{\alpha}{x} d\alpha \\
+dx_\beta &= \PD{\beta}{x} d\beta \\
+dx_\sigma &= \PD{\sigma}{x} d\sigma.
+\end{aligned}
+\end{equation}
+
+Oriented area elements for the front, right and top faces respectively are
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:640}
+\begin{aligned}
+dA_F &= dx_\alpha \wedge dx_\beta \\
+dA_R &= dx_\beta \wedge dx_\sigma \\
+dA_T &= dx_\sigma \wedge dx_\alpha.
+\end{aligned}
+\end{equation}
+
+These faces of the subspace are the surfaces of constant parametrization, respectively, $\sigma = \sigma_1$, $\alpha = \alpha_1$, and $\beta = \beta_1$.  For a bivector $f$, the flux through the surface is
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:660}
+\begin{aligned}
+\iint d^2 x \cdot f
+&=
+\int_{\alpha_0}^{\alpha_1}
+\int_{\beta_0}^{\beta_1}
+\lr{ dx_\alpha \wedge dx_\beta } \cdot 
+\lr{
+f(\alpha, \beta, \sigma_1) 
+- f(\alpha, \beta, \sigma_0) 
+} \\
+&+
+\int_{\sigma_0}^{\sigma_1}
+\int_{\beta_0}^{\beta_1}
+\lr{ dx_\beta \wedge dx_\sigma } \cdot 
+\lr{
+f(\alpha_1, \beta, \sigma) 
+- f(\alpha_0, \beta, \sigma) 
+} \\
+&+
+\int_{\sigma_0}^{\sigma_1}
+\int_{\alpha_0}^{\alpha_1}
+\lr{ dx_\sigma \wedge dx_\alpha } \cdot 
+\lr{
+f(\alpha, \beta_1, \sigma) 
+- f(\alpha, \beta_0, \sigma) 
+} \\
+&=
+\int_{\alpha_0}^{\alpha_1}
+\int_{\beta_0}^{\beta_1}
+\int_{\sigma_0}^{\sigma_1}
+\lr{
+\lr{ dx_\alpha \wedge dx_\beta } \cdot 
+\PD{\sigma}{f}
+d\sigma 
++
+\lr{ dx_\beta \wedge dx_\sigma } \cdot 
+\PD{\alpha}{f}
+d\alpha 
++
+\lr{ dx_\sigma \wedge dx_\alpha } \cdot 
+\PD{\beta}{f}
+d\beta 
+} \\
+&=
+\int_{\alpha_0}^{\alpha_1}
+\int_{\beta_0}^{\beta_1}
+\int_{\sigma_0}^{\sigma_1}
+d\alpha d\beta d\sigma \\
+&
+\qquad 
+\lr{
+\PD{\alpha}{x^i}
+\PD{\beta}{x^j}
+\PD{\sigma}{x^k}
+\lr{ \gamma_i \wedge \gamma_j } \cdot \PD{x^k}{f}
++
+\PD{\beta}{x^j}
+\PD{\sigma}{x^k}
+\PD{\alpha}{x^i}
+\lr{ \gamma_j \wedge \gamma_k } \cdot \PD{x^i}{f}
++
+\PD{\alpha}{x^i}
+\PD{\sigma}{x^k}
+\PD{\beta}{x^j}
+\lr{ \gamma_k \wedge \gamma_i } \cdot \PD{x^j}{f} } \\
+&=
+\int_{\alpha_0}^{\alpha_1}
+\int_{\beta_0}^{\beta_1}
+\int_{\sigma_0}^{\sigma_1}
+d\alpha d\beta d\sigma 
+\PD{\alpha}{x^i}
+\PD{\beta}{x^j}
+\PD{\sigma}{x^k}
+\lr{
+\lr{ \gamma_i \wedge \gamma_j } \cdot \PD{x^k}{f}
++
+\lr{ \gamma_j \wedge \gamma_k } \cdot \PD{x^i}{f}
++
+\lr{ \gamma_k \wedge \gamma_i } \cdot \PD{x^j}{f}
+}
+\end{aligned}
+\end{equation}
+
+Expanding $\int_V d^3 x \cdot (\grad \wedge f)$ to compare
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:760}
+d^3 x \cdot \lr{ \grad \wedge f }
+=
+\gpgradezero{
+d^3 x \lr{ \gamma^a \wedge \partial_a f }
+}
+=
+\inv{2} \gpgradezero{
+d^3 x \lr{ 
+\gamma^a \partial_a f 
++
+\partial_a f 
+\gamma^a 
+}
+}
+=
+\inv{2} \gpgradezero{
+d^3 x \gamma^a \partial_a f 
++ 
+\gamma^a 
+d^3 x \partial_a f 
+}
+=
+\inv{2} 
+\partial_a f  \cdot
+\gpgradetwo{
+d^3 x \gamma^a 
++ 
+\gamma^a 
+d^3 x 
+}
+=
+\partial_a f  \cdot
+\lr{
+d^3 x \cdot \gamma^a 
+}
+=
+d\alpha d\beta d\sigma
+\PD{\alpha}{x^i}
+\PD{\beta}{x^j}
+\PD{\sigma}{x^k}
+\partial_a f \cdot
+\lr{
+\lr{ \gamma_i \wedge \gamma_j \wedge \gamma_k }
+\cdot
+\gamma^a 
+}
+=
+d\alpha d\beta d\sigma
+\PD{\alpha}{x^i}
+\PD{\beta}{x^j}
+\PD{\sigma}{x^k}
+\partial_a f \cdot
+\lr{
+\lr{ \gamma_i \wedge \gamma_j } {\delta_k}^a
+-\lr{ \gamma_i \wedge \gamma_k } {\delta_j}^a
++\lr{ \gamma_j \wedge \gamma_k } {\delta_i}^a
+}
+=
+d\alpha d\beta d\sigma
+\PD{\alpha}{x^i}
+\PD{\beta}{x^j}
+\PD{\sigma}{x^k}
+\lr{
+\lr{ \gamma_i \wedge \gamma_j } \cdot \partial_k f 
+-\lr{ \gamma_i \wedge \gamma_k } \cdot \partial_j f 
++\lr{ \gamma_j \wedge \gamma_k } \cdot \partial_i f 
+}
+\end{dmath}
+
+Integrating this yields \eqnref{eqn:stokesTheoremGeometricAlgebra:660}, demonstrating Stokes theorem for this volume parameterization.  Given an open region a change of variables will show that this is true for any parameterization of the subspace.
 
 %\EndArticle
 \EndNoBibArticle
