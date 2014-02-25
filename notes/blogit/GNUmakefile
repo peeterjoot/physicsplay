@@ -92,7 +92,8 @@ gaBasics.pdf : gaBasics.tex
 	~/bin/mkRevInfo -date > ./.revinfo/gitCommitDate.tex
 	~/bin/mkRevInfo -commit > ./.revinfo/gitCommitString.tex
 	~/bin/mkRevInfo -repo > ./.revinfo/gitRepo.tex
-	perl ../make_pdflatex -nojustonce -file $<
+	perl ../make_pdflatex -justonce -file $<
+	#perl ../make_pdflatex -nojustonce -file $<
 
 #%.mp4 : %.avi
 #	/cygdrive/c/Temp/ffmpeg/bin/ffmpeg -i $< -vcodec libx264 $@
