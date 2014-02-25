@@ -37,7 +37,7 @@ A finite vector space with basis $\{\gamma_1, \gamma_2, \cdots\}$ will be assume
 Implicit summation over repeated indexes will be employed unless otherwise noted.  For example, the components of a vector $x$ with respect to the standard or reciprocal bases, are
 
 \begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:40}
-x = \gamma_i x^i = \gamma_j x^j.
+x = \gamma_i x^i = \gamma^j x_j.
 \end{equation}
 
 The coordinates of the vector follow by taking dot products
@@ -51,20 +51,46 @@ x \cdot \gamma_j = \lr{ \gamma^i x_i } \cdot \gamma_j = x_i {\delta^i}_j = x_j
 \end{equation}
 \end{subequations}
 
+Similarly, a bivector $f$ in coordinate representation has the form
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:1180}
+f = \inv{2} \gamma^i \wedge \gamma^j f_{ij} = \inv{2} \gamma_i \wedge \gamma_j f^{ij},
+\end{equation}
+
+where
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:1200}
+\begin{aligned}
+f_{ij} &= \lr{ f \cdot \gamma_j } \cdot \gamma_i \\
+f^{ij} &= \lr{ f \cdot \gamma^j } \cdot \gamma^i.
+\end{aligned}
+\end{equation}
+
 The gradient will be expressed in mixed coordinates as
 
 \begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:100}
-\grad \equiv \gamma^i \PD{x^i}{} = \gamma^i \partial_i.
+\grad \equiv \gamma^i \PD{x^i}{} \equiv \gamma^i \partial_i.
 \end{equation}
 
-The outer and inner products respectively, expressed using the wedge and dot operators, of blades $u$, and $v$ of grade $r$ and $s$ respectively is defined as
+To select from a multivector $a$ the grade $k$ portion, say $a_k$ we write
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:1220}
+a_k = \gpgrade{a}{k}.
+\end{equation}
+
+The scalar portion of a multivector $a$ will be written as 
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:1240}
+\gpgrade{a}{0} \equiv \gpgradezero{a}.
+\end{equation}
+
+The grade selection operators can be used to define the outer and inner products.  For blades $u$, and $v$ of grade $r$ and $s$ respectively, these are
 
 \begin{subequations}
 \begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:300}
-u \wedge v \equiv \gpgrade{ u v }{\Abs{r + s}}
+\gpgrade{ u v }{\Abs{r + s}} \equiv u \wedge v
 \end{dmath}
 \begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:780}
-u \cdot v \equiv \gpgrade{ u v }{\Abs{r - s}}.
+\gpgrade{ u v }{\Abs{r - s}} \equiv u \cdot v.
 \end{dmath}
 \end{subequations}
 
@@ -84,6 +110,14 @@ Similarly for even grade blades these are
 a \wedge A &= \inv{2} (a A + A a) \\
 a \cdot A &= \inv{2} (a A - A a).
 \end{aligned}
+\end{equation}
+
+It will be useful to employ the cyclic scalar reordering identity for the scalar selection operator
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:920}
+\gpgradezero{a b c} 
+= \gpgradezero{b c a}
+= \gpgradezero{c a b}.
 \end{equation}
 
 \section{Fundamental theorem of calculus, Stokes theorem for scalar functions.}
@@ -350,6 +384,18 @@ dA_T &= dx_\sigma \wedge dx_\alpha.
 \end{aligned}
 \end{equation}
 
+FIXME: There is an implicit assumption here that the wedge products of these one forms, which are functions of all the parameters, have been evaluated on the surfaces.  That is
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:641}
+\begin{aligned}
+dA_F &= \evalbar{dx_\alpha \wedge dx_\beta}{\sigma = \sigma_1} \\
+dA_R &= \evalbar{dx_\beta \wedge dx_\sigma}{\alpha = \alpha_1} \\
+dA_T &= \evalbar{dx_\sigma \wedge dx_\alpha}{\beta = \beta_1}.
+\end{aligned}
+\end{equation}
+
+This assumption is used below to turn the differences of $f$ on the faces into an integral without requiring the two forms to be functions of the surface parameters.  The other issue here is that the two forms for the back and front, or left and right, or top and bottom faces could have different orientations.  END FIXME.
+
 These faces of the subspace are the surfaces of constant parametrization, respectively, $\sigma = \sigma_1$, $\alpha = \alpha_1$, and $\beta = \beta_1$.  For a bivector $f$, the flux through the surface is
 
 \begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:660}
@@ -511,6 +557,141 @@ d\alpha d\beta d\sigma
 Integrating this yields \eqnref{eqn:stokesTheoremGeometricAlgebra:660}, demonstrating Stokes theorem for this volume parameterization.  Given an open region a change of variables will show that this is true for any parameterization of the subspace.
 
 Like the vector case, there is a requirement to be very specific about the meaning given to the oriented surfaces, and the corresponding oriented volume element.  That volume may be a subspace of a greater than three dimensional space.
+
+\section{Stokes theorem for trivector functions over a four volume}
+% from: stokesNoTensor.tex
+
+For integration of the curl of a trivector function, an integration over a four volume subspace is required.  
+The geometrical intuition required to understand, a-priori, how to express the oriented boundary of such a subspace may not come readily, but fortunately algebra is there to come to our aid.
+
+The workhorse of the Stokes proof for these higher grade objects is 
+
+\begin{lemma}\label{thm:stokesTheoremGeometricAlgebra:1260}
+For a blade $f$ of grade $k-1$
+
+\begin{equation}
+\myBoxed{
+( \grad \wedge f ) \cdot d^k x = \partial_i f \cdot \lr{ d^k x \cdot \gamma^i }.
+}
+\end{equation}
+\end{lemma}
+
+Writing the curl in coordinates and then the dot product as a scalar grade selection, this differential form is
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:840}
+\begin{aligned}
+( \grad \wedge f ) \cdot d^k x
+&=
+( \gamma^i \wedge \partial_i f ) \cdot d^k x \\
+&=
+\gpgradezero{ ( \gamma^i \wedge \partial_i f ) d^k x } \\
+\end{aligned}
+\end{equation}
+
+For odd grades $f$, using \eqnref{eqn:stokesTheoremGeometricAlgebra:820}, and \eqnref{eqn:stokesTheoremGeometricAlgebra:920}, this is
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:900}
+\begin{aligned}
+( \grad \wedge f ) \cdot d^k x
+&=
+\inv{2} \gpgradezero{ \gamma^i \partial_i f d^k x } - \inv{2} \gpgradezero{ \partial_i f \gamma^i d^k x } \\
+&=
+\inv{2} \gpgradezero{ \partial_i f (d^k x \gamma^i - \gamma^i d^k x)} \\
+&=
+\inv{2} \gpgradezero{ \partial_i f (d^k x \cdot \gamma^i - \gamma^i d^k x)} \\
+&=
+\gpgradezero{ \partial_i f (d^k x \cdot \gamma^i)}.
+\end{aligned}
+\end{equation}
+
+This is just \cref{thm:stokesTheoremGeometricAlgebra:1260} written as a scalar selection.  For even grades $f$, using \eqnref{eqn:stokesTheoremGeometricAlgebra:800}, and \eqnref{eqn:stokesTheoremGeometricAlgebra:920}, this is
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:910}
+\begin{aligned}
+( \grad \wedge f ) \cdot d^k x
+&=
+\inv{2} \gpgradezero{ \gamma^i \partial_i f d^k x } + \inv{2} \gpgradezero{ \partial_i f \gamma^i d^k x } \\
+&=
+\inv{2} \gpgradezero{ \partial_i f (d^k x \gamma^i + \gamma^i d^k x)} \\
+&=
+\inv{2} \gpgradezero{ \partial_i f (d^k x \cdot \gamma^i + \gamma^i d^k x)} \\
+&=
+\gpgradezero{ \partial_i f (d^k x \cdot \gamma^i)},
+\end{aligned}
+\end{equation}
+
+completing the proof of this lemma.
+
+Return now to the trivector function $f$ of interest, for which we assume a subspace parameterization $f = f(a_1, a_2, a_3, a_4)$.  The points within space $x = x(a_1, a_2, a_3, a_4)$ generate vector differentials
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:n}
+dx_m = da_m \PD{a_m}{x}.
+\end{equation}
+
+The volume element dot product is
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:1000}
+\begin{aligned}
+d^4 x \cdot \gamma^i
+&=
+( dx_1 \wedge dx_2 \wedge dx_3 \wedge dx_4 ) \cdot \gamma^i \\
+&= ( dx_1 \wedge dx_2 \wedge dx_3 ) dx_4 \cdot \gamma^i \\
+&-( dx_1 \wedge dx_2 \wedge dx_4 ) dx_3 \cdot \gamma^i \\
+&+( dx_1 \wedge dx_3 \wedge dx_4 ) dx_2 \cdot \gamma^i \\
+&-( dx_2 \wedge dx_3 \wedge dx_4 ) dx_1 \cdot \gamma^i  \\
+\end{aligned}
+\end{equation}
+
+Each of the vector differential dot products have the scalar values
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:1020}
+\begin{aligned}
+dx_m \cdot \gamma^i 
+&=
+da_m \PD{a_m}{x^j} \gamma_j \cdot \gamma^i \\
+&=
+da_m \PD{a_m}{x^i},
+\end{aligned}
+\end{equation}
+
+so that
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:1040}
+\begin{aligned}
+\partial_i f da_m \PD{a_m}{x^i} 
+&=
+da_m \PD{a_m}{x^i} \PD{x^i}{f} \\
+&=
+da_m \PD{a_m}{f}.
+\end{aligned}
+\end{equation}
+
+With very little work, the differential form \eqnref{eqn:stokesTheoremGeometricAlgebra:1000} is reduced to
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:1060}
+\begin{aligned}
+( \grad \wedge f ) \cdot d^4 x 
+&= da_4 \PD{a_4}{f} \cdot ( dx_1 \wedge dx_2 \wedge dx_3 ) \\
+&- da_3 \PD{a_3}{f} \cdot ( dx_1 \wedge dx_2 \wedge dx_4 ) \\
+&+ da_2 \PD{a_2}{f} \cdot ( dx_1 \wedge dx_3 \wedge dx_4 ) \\
+&- da_1 \PD{a_1}{f} \cdot ( dx_2 \wedge dx_3 \wedge dx_4 ) \\
+\end{aligned}
+\end{equation}
+
+Writing $a_m^1$ and $a_m^0$ for the end points of the parameters $a_m$, this is directly integrable
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:1100}
+\begin{aligned}
+\int ( \grad \wedge f ) \cdot d^4 x 
+&= \int \lr{f(a_1, a_2, a_3, a_4^1) - f(a_1, a_2, a_3, a_4^0)} \cdot ( dx_1 \wedge dx_2 \wedge dx_3 ) \\
+&- \int \lr{f(a_1, a_2, a_3^1, a_4) - f(a_1, a_2, a_3^0, a_4)} \cdot ( dx_1 \wedge dx_2 \wedge dx_4 ) \\
+&+ \int \lr{f(a_1, a_2^1, a_3, a_4) - f(a_1, a_2^0, a_3, a_4)} \cdot ( dx_1 \wedge dx_3 \wedge dx_4 ) \\
+&- \int \lr{f(a_1^1, a_2, a_3, a_4) - f(a_1^0, a_2, a_3, a_4)} \cdot ( dx_2 \wedge dx_3 \wedge dx_4 ).
+\end{aligned}
+\end{equation}
+
+FIXME: The differentials $dx_m$ are functions of all the free parameters.  We saw something similar in 
+\eqnref{eqn:stokesTheoremGeometricAlgebra:641}, not yet resolved.  Have to think this through.
 
 %\EndArticle
 \EndNoBibArticle

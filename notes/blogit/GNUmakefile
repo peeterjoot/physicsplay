@@ -55,6 +55,9 @@ endif
 EPS_FILES := $(wildcard *.eps)
 PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))
 
+#ONCEFLAGS := -justonce
+ONCEFLAGS := -nojustonce
+
 all :: $(PDFS_FROM_EPS)
 all :: Bibliography.bib
 all :: peeters_macros.sty
@@ -92,8 +95,7 @@ gaBasics.pdf : gaBasics.tex
 	~/bin/mkRevInfo -date > ./.revinfo/gitCommitDate.tex
 	~/bin/mkRevInfo -commit > ./.revinfo/gitCommitString.tex
 	~/bin/mkRevInfo -repo > ./.revinfo/gitRepo.tex
-	perl ../make_pdflatex -justonce -file $<
-	#perl ../make_pdflatex -nojustonce -file $<
+	perl ../make_pdflatex $(ONCEFLAGS) -file $<
 
 #%.mp4 : %.avi
 #	/cygdrive/c/Temp/ffmpeg/bin/ffmpeg -i $< -vcodec libx264 $@
