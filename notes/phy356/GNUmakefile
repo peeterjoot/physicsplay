@@ -8,8 +8,8 @@ SOURCE_DIRS += chapters
 SOURCE_DIRS += $(FIGURES)
 
 GENERATED_PDFS += desaiTypos.pdf
-GENERATED_PDFS += reproSaveSize.pdf
+#GENERATED_PDFS += reproSaveSize.pdf
 
-ONCEFLAGS := -justonce
+#ONCEFLAGS := -justonce
 
 include ../make.rules
