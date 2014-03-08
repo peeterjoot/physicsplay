@@ -1,0 +1,196 @@
+%
+% Copyright © 2013 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{curvilinearCoordinates}
+\renewcommand{\dirname}{notes/gabook/}
+%\newcommand{\dateintitle}{}
+\newcommand{\keywords}{curvilinear coordinates, geometric algebra, dual basis, reciprocal coordinates}
+
+\input{../peeter_prologue_print2.tex}
+
+\beginArtNoToc
+
+\generatetitle{Curvilinear coordinates and reciprocal basis}
+%\chapter{Curvilinear coordinates and reciprocal basis}
+%\label{chap:curvilinearCoordinates}
+%\section{Guts}
+
+\section{Motivation}
+
+Here I'd like to explore some ideas from \citep{aMacdonaldVAGC} where curvilinear coordinates, manifolds, and the vector derivative are introduced.  %The vector derivative is the projection of the gradient on the manifold's tangent space.
+
+\section{Notation}
+
+For simplicity, let's consider the concrete example of a 2D manifold, a surface in an $n$ dimensional vector space, parameterized by two variables
+
+\begin{equation}\label{eqn:curvilinearCoordinates:20}
+\Bx = \Bx(a,b) = \Bx(u^1, u^2).
+\end{equation}
+
+Note that the indices here do not represent exponentiation.  We can construct a basis for the manifold as
+
+\begin{equation}\label{eqn:curvilinearCoordinates:40}
+\Bx_i = \PD{u^i}{\Bx}.
+\end{equation}
+
+On the manifold we can calculate a reciprocal basis $\{\Bx^i\}$, defined by requiring, at each point on the surface
+
+\begin{equation}\label{eqn:curvilinearCoordinates:80}
+\Bx^i \cdot \Bx_j = {\delta^i}_j.
+\end{equation}
+
+Associated implicitly with this basis is a curvilinear coordinate representation defined by the projection operation
+
+\begin{equation}\label{eqn:curvilinearCoordinates:60}
+\Bx = x^i \Bx_i,
+\end{equation}
+
+(sums over mixed indexes are implied).   These coordinates can be calculated by taking dot products with the reciprocal frame vectors
+
+\begin{dmath}\label{eqn:curvilinearCoordinates:100}
+\Bx \cdot \Bx^i 
+= x^j \Bx_j \cdot \Bx^i 
+= x^j {\delta_j}^i 
+= x^i.
+\end{dmath}
+
+Let's pause for a couple examples, both of which have some interesting aspects.
+
+\makeexample{Circular coordinates on a disk}{example:curvilinearCoordinates:1}{
+Consider an infinite disk at height $z_0$, with the origin omitted, parameterized by circular coordinates as in \cref{fig:diskManifoldSurface:diskManifoldSurfaceFig1}.
+
+\imageFigure{../../figures/gabook/diskManifoldSurfaceFig1}{Plane with circular coordinates}{fig:diskManifoldSurface:diskManifoldSurfaceFig1}{0.3}
+
+Points on this surface are
+
+\begin{equation}\label{eqn:curvilinearCoordinates:120}
+\Bx(r, \theta) = (r \cos\theta, r \sin\theta, z_0).
+\end{equation}
+
+The manifold basis vectors, defined by \eqnref{eqn:curvilinearCoordinates:40} are
+
+\begin{equation}\label{eqn:curvilinearCoordinates:140}
+\begin{aligned}
+\Bx_r &= (\cos\theta, \sin\theta, 0) \\
+\Bx_\theta &= r (-\sin\theta, \cos\theta, 0).
+\end{aligned}
+\end{equation}
+
+By inspection, the reciprocal basis is
+
+\begin{equation}\label{eqn:curvilinearCoordinates:200}
+\begin{aligned}
+\Bx^r &= (\cos\theta, \sin\theta, 0) \\
+\Bx^\theta &= \inv{r} (-\sin\theta, \cos\theta, 0).
+\end{aligned}
+\end{equation}
+
+The first thing to note here is that we cannot reach the points $\Bx$ of \eqnref{eqn:curvilinearCoordinates:120} by linear combination of these basis vectors.  Instead these basis vectors only allow us to reach other points on the surface, when already there.  For example we cannot actually write
+
+\begin{equation}\label{eqn:curvilinearCoordinates:160}
+\Bx = x^r \Bx_r + x^\theta \Bx_\theta,
+\end{equation}
+
+unless $z_0 = 0$.  This is why \eqnref{eqn:curvilinearCoordinates:60} was described as a projective operation (and probably deserves an alternate notation).  To recover the original parameterized form of the position vector on the surface, we require
+
+\begin{equation}\label{eqn:curvilinearCoordinates:180}
+\Bx = x^r \Bx_r + x^\theta \Bx_\theta + z_0 \zcap.
+\end{equation}
+
+The coordinates $x^r, x^\theta$ follow by taking dot products
+
+\begin{subequations}
+\begin{dmath}\label{eqn:curvilinearCoordinates:220}
+x^r 
+= \Bx \cdot \Bx^r
+=
+(r \cos\theta, r \sin\theta, z_0) \cdot
+(\cos\theta, \sin\theta, 0) 
+=
+r \lr{ \cos^2 \theta + \sin^2 \theta}
+= r
+\end{dmath}
+\begin{dmath}\label{eqn:curvilinearCoordinates:240}
+x^\theta
+= \Bx \cdot \Bx^\theta
+=
+(r \cos\theta, r \sin\theta, z_0) \cdot
+\inv{r} (-\sin\theta, \cos\theta, 0) 
+=
+0.
+\end{dmath}
+\end{subequations}
+
+Therefore, a point on the plane, relative to the origin of the plane, in this case, requires just one of the tangent plane basis vectors
+
+\begin{dmath}\label{eqn:curvilinearCoordinates:260}
+\Bx = r \Bx_r.
+\end{dmath}
+}
+
+\makeexample{Circumference of a circle}{example:curvilinearCoordinates:2}{
+
+Now consider a circular perimeter, as illustrated in \cref{fig:circularPerimeterManifoldSurface:circularPerimeterManifoldSurfaceFig2}, with the single variable parameterization
+
+\imageFigure{../../figures/gabook/circularPerimeterManifoldSurfaceFig2}{Circular perimeter}{fig:circularPerimeterManifoldSurface:circularPerimeterManifoldSurfaceFig2}{0.3}
+
+\begin{dmath}\label{eqn:curvilinearCoordinates:280}
+\Bx = r_0 \lr{\cos\theta, \sin\theta}.
+\end{dmath}
+
+Our tangent space basis is
+\begin{dmath}\label{eqn:curvilinearCoordinates:300}
+\Bx_\theta = r_0 \lr{-\sin\theta, \cos\theta},
+\end{dmath}
+
+with, by inspection, a reciprocal basis
+\begin{dmath}\label{eqn:curvilinearCoordinates:320}
+\Bx^\theta = \inv{r_0} \lr{-\sin\theta, \cos\theta}.
+\end{dmath}
+
+Here we have a curious condition, since the tangent space basis vector is perpendicular to the position vector for the points on the circular surface.  So, should we attempt to calculate coordinates using \eqnref{eqn:curvilinearCoordinates:60}, we just get zero
+
+\begin{dmath}\label{eqn:curvilinearCoordinates:340}
+x^\theta 
+=
+\Bx \cdot \Bx^\theta
+=
+r_0 \lr{\cos\theta, \sin\theta} \cdot
+\inv{r_0} \lr{-\sin\theta, \cos\theta}
+= 0.
+\end{dmath}
+
+A coordinate representation using the tangent space basis is possible.  Assuming
+
+\begin{dmath}\label{eqn:curvilinearCoordinates:360}
+\Bx = x^\theta \Bx_\theta,
+\end{dmath}
+
+and writing $i = \Be_1 \Be_2$ for the pseudoscalar, we can write
+
+\begin{dmath}\label{eqn:curvilinearCoordinates:380}
+\begin{aligned}
+\Bx &= r_0 \Be_1 e^{i\theta} \\
+\Bx_\theta &= r_0 \Be_2 e^{i\theta},
+\end{aligned}
+\end{dmath}
+
+so that, by inversion, the $\theta$ coordinate is
+
+\begin{dmath}\label{eqn:curvilinearCoordinates:400}
+x^\theta 
+= 
+\Bx
+\inv{\Bx_\theta}
+=
+\lr{ r_0 \Be_1 e^{i\theta} }
+\lr{ \frac{ e^{-i\theta } \Be_2 }{r_0} }
+= i.
+\end{dmath}
+
+}
+
+\EndArticle
+%\EndNoBibArticle
