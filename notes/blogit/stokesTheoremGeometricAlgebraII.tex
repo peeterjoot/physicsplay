@@ -1,0 +1,180 @@
+%
+% Copyright © 2013 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{stokesTheoremGeometricAlgebra}
+\renewcommand{\dirname}{notes/gabook/}
+\newcommand{\keywords}{Stokes theorem, Geometric algebra, Clifford algebra, gradient, divergence, wedge product}
+
+\input{../peeter_prologue_print2.tex}
+
+% ointctr...
+\usepackage{txfonts}
+
+\beginArtNoToc
+
+\generatetitle{Stokes theorem in Geometric algebra}
+%\chapter{Stokes theorem in Geometric algebra}
+\label{chap:stokesTheoremGeometricAlgebra}
+
+The generalization of Stokes theorem to higher dimesional spaces, expressed in the formalism of geometric algebra takes the form
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:120}
+\int_V d^k \Bx \cdot (\boldpartial \wedge F) = \int_{\partial V} d^{k-1} \Bx \cdot F.
+\end{equation}
+
+Here $F \in \bigwedge^{k-1}$ is a blade, $d^k \Bx$ is a $m$ volume element on a manifold, $\boldpartial$ is the projection of the gradient onto the tangent space of the manifold, and $\partial V$ indicates integration over the boundary of $V$.
+
+It takes some work to give all this more concrete meaning.  That will be attempted here.
+
+\section{Basic notation}
+
+A finite vector space, not neccessarily Euclidean, with basis $\{\Be_1, \Be_2, \cdots\}$ will be assumed to be the generator of the geometric algebra.  A dual or reciprocal basis $\{\Be^1, \Be^2, \cdots\}$ for this basis can be calculated, defined by the property
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:20}
+\Be_i \cdot \Be^j = {\delta_i}^j.
+\end{equation}
+
+Implicit summation over repeated indexes will be employed unless otherwise noted.  For example, the components of a vector $\Bx$ with respect to the standard or reciprocal bases, are
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:40}
+\Bx = \Be_i x^i = \Be^j x_j.
+\end{equation}
+
+The coordinates of the vector follow by taking dot products
+
+\begin{subequations}
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:60}
+\Bx \cdot \Be^j = \lr{ \Be_i x^i } \cdot \Be^j = x^i {\delta_i}^j = x^j
+\end{equation}
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:80}
+\Bx \cdot \Be_j = \lr{ \Be^i x_i } \cdot \Be_j = x_i {\delta^i}_j = x_j
+\end{equation}
+\end{subequations}
+
+Similarly, a bivector $F$ in coordinate representation has the form
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:1180}
+F = \inv{2} \Be^i \wedge \Be^j F_{ij} = \inv{2} \Be_i \wedge \Be_j F^{ij},
+\end{equation}
+
+where
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:1200}
+\begin{aligned}
+F_{ij} &= \lr{ F \cdot \Be_j } \cdot \Be_i \\
+F^{ij} &= \lr{ F \cdot \Be^j } \cdot \Be^i.
+\end{aligned}
+\end{equation}
+
+With the directional derivative defined by
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:1260}
+\Ba \cdot \spacegrad f(\Bx) = \lim_{t \rightarrow 0} \frac{f(\Bx + t \Ba) - f(\Bx)}{t},
+\end{equation}
+
+the gradient $\spacegrad$, in terms of the standard and dual bases is
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:100}
+\spacegrad \equiv \Be^i \PD{x^i}{}.
+%\equiv \Be^i \partial_i,
+\end{equation}
+
+To select from a multivector $A$ the grade $k$ portion, say $A_k$ we write
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:1220}
+A_k = \gpgrade{A}{k}.
+\end{equation}
+
+The scalar portion of a multivector $A$ will be written as 
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:1240}
+\gpgrade{A}{0} \equiv \gpgradezero{A}.
+\end{equation}
+
+The grade selection operators can be used to define the outer and inner products.  For blades $U$, and $V$ of grade $r$ and $s$ respectively, these are
+
+\begin{subequations}
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:300}
+\gpgrade{ U V }{\Abs{r + s}} \equiv U \wedge V
+\end{dmath}
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:780}
+\gpgrade{ U V }{\Abs{r - s}} \equiv U \cdot V.
+\end{dmath}
+\end{subequations}
+
+Written out explicitly for odd grade blades $A$ (vector, trivector, ...), and vector $\Ba$ the dot and wedge products are respectively
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:800}
+\begin{aligned}
+\Ba \wedge A &= \inv{2} (\Ba A - A \Ba) \\
+\Ba \cdot A &= \inv{2} (\Ba A + A \Ba).
+\end{aligned}
+\end{equation}
+
+Similarly for even grade blades these are
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:820}
+\begin{aligned}
+\Ba \wedge A &= \inv{2} (\Ba A + A \Ba) \\
+\Ba \cdot A &= \inv{2} (\Ba A - A \Ba).
+\end{aligned}
+\end{equation}
+
+It will be useful to employ the cyclic scalar reordering identity for the scalar selection operator
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:920}
+\gpgradezero{\Ba \Bb \Bc} 
+= \gpgradezero{\Bb \Bc \Ba}
+= \gpgradezero{\Bc \Ba \Bb}.
+\end{equation}
+
+\section{Curvilinear coordinates}
+
+For simplicity, let's consider the concrete example of a 2D manifold, a surface in an $n$ dimensional vector space, parameterized by two variables
+
+\begin{equation}\label{eqn:curvilinearCoordinates:20}
+\Bx = \Bx(a,b) = \Bx(u^1, u^2).
+\end{equation}
+
+Note that the indices here do not represent exponentiation.  We can construct a basis for the manifold as
+
+\begin{equation}\label{eqn:curvilinearCoordinates:40}
+\Bx_i = \PD{u^i}{\Bx}.
+\end{equation}
+
+On the manifold we can calculate a reciprocal basis $\{\Bx^i\}$, defined by requiring, at each point on the surface
+
+\begin{equation}\label{eqn:curvilinearCoordinates:80}
+\Bx^i \cdot \Bx_j = {\delta^i}_j.
+\end{equation}
+
+Associated implicitly with this basis is a curvilinear coordinate representation defined by the projection operation
+
+\begin{equation}\label{eqn:curvilinearCoordinates:60}
+\Bx = x^i \Bx_i,
+\end{equation}
+
+(sums over mixed indexes are implied).   These coordinates can be calculated by taking dot products with the reciprocal frame vectors
+
+\begin{dmath}\label{eqn:curvilinearCoordinates:100}
+\Bx \cdot \Bx^i 
+= x^j \Bx_j \cdot \Bx^i 
+= x^j {\delta_j}^i 
+= x^i.
+\end{dmath}
+
+Since $\{\Bx_i\}$ can be used as the basis for the tangent space (the span of these partials) at the point of evaluation, the projection of the gradient onto that subspace is
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:n}
+\boldpartial = \Bx^i \PD{u^i}{}.
+\end{equation}
+
+FIXME: this statement doesn't work as a motivation.
+
+\section{Green's theorem}
+
+\section{Curl theorem}
+
+%\EndArticle
+\EndNoBibArticle
