@@ -24,7 +24,7 @@ The generalization of Stokes theorem to higher dimesional spaces, expressed in t
 \int_V d^k \Bx \cdot (\boldpartial \wedge F) = \int_{\partial V} d^{k-1} \Bx \cdot F.
 \end{equation}
 
-Here $F \in \bigwedge^{k-1}$ is a blade, $d^k \Bx$ is a $m$ volume element on a manifold, $\boldpartial$ is the projection of the gradient onto the tangent space of the manifold, and $\partial V$ indicates integration over the boundary of $V$.
+Here $F \in \bigwedge^{s}, s < k$ is a blade, $d^k \Bx$ is a $m$ volume element on a manifold, $\boldpartial$ is the projection of the gradient onto the tangent space of the manifold, and $\partial V$ indicates integration over the boundary of $V$.
 
 It takes some work to give all this more concrete meaning.  That will be attempted here.
 
@@ -131,50 +131,114 @@ It will be useful to employ the cyclic scalar reordering identity for the scalar
 
 \section{Curvilinear coordinates}
 
-For simplicity, let's consider the concrete example of a 2D manifold, a surface in an $n$ dimensional vector space, parameterized by two variables
+A manifold will be loosely defined herein as a parameterized surface.  For example, a 2D manifold can be considered a surface in an $n$ dimensional vector space, parameterized by two variables
 
-\begin{equation}\label{eqn:curvilinearCoordinates:20}
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:1280}
 \Bx = \Bx(a,b) = \Bx(u^1, u^2).
 \end{equation}
 
 Note that the indices here do not represent exponentiation.  We can construct a basis for the manifold as
 
-\begin{equation}\label{eqn:curvilinearCoordinates:40}
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:1300}
 \Bx_i = \PD{u^i}{\Bx}.
 \end{equation}
 
 On the manifold we can calculate a reciprocal basis $\{\Bx^i\}$, defined by requiring, at each point on the surface
 
-\begin{equation}\label{eqn:curvilinearCoordinates:80}
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:1320}
 \Bx^i \cdot \Bx_j = {\delta^i}_j.
 \end{equation}
 
 Associated implicitly with this basis is a curvilinear coordinate representation defined by the projection operation
 
-\begin{equation}\label{eqn:curvilinearCoordinates:60}
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:1340}
 \Bx = x^i \Bx_i,
 \end{equation}
 
 (sums over mixed indexes are implied).   These coordinates can be calculated by taking dot products with the reciprocal frame vectors
 
-\begin{dmath}\label{eqn:curvilinearCoordinates:100}
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:1360}
 \Bx \cdot \Bx^i 
 = x^j \Bx_j \cdot \Bx^i 
 = x^j {\delta_j}^i 
 = x^i.
 \end{dmath}
 
-Since $\{\Bx_i\}$ can be used as the basis for the tangent space (the span of these partials) at the point of evaluation, the projection of the gradient onto that subspace is
+When the complete vector space is spanned by $\{\Bx_i\}$ the gradient has the curvilinear representation
 
-\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:n}
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:1380}
+\spacegrad = \Bx^i \PD{u^i}{}.
+\end{dmath}
+
+When this basis does not span the space, this sum is the projection of the gradiient onto the tangent space at the point of evaluation, and is called the vector derivative
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:1400}
 \boldpartial = \Bx^i \PD{u^i}{}.
 \end{equation}
 
-FIXME: this statement doesn't work as a motivation.
+See \citep{aMacdonaldVAGC} for a more complete discussion of the gradient and vector derivatives in curvilinear coordinates.
 
 \section{Green's theorem}
 
 \section{Curl theorem}
 
-%\EndArticle
-\EndNoBibArticle
+\section{Appendix}
+
+We'd like to be able to distribute the inner product of two blades $A_s, B_r$ with grades $0 < r < s$
+
+\begin{lemma}\label{thm:stokesTheoremGeometricAlgebraII:1420}
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:1440}
+A_s \cdot \lr{ b \wedge B_r } = \lr{ A_s \cdot b } \cdot B_r.
+\end{dmath}
+\end{lemma}
+
+The proof is mechanical, but straightforward.  Start by expanding the wedge and dot products within a grade selection operator
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:1460}
+A_s \cdot \lr{ b \wedge B_r }
+=
+\gpgrade{A_s (b \wedge B_r)}{s - (r + 1)}
+=
+\inv{2} \gpgrade{A_s \lr{b B_r + (-1)^{r} B_r b} }{s - (r + 1)}
+\end{dmath}
+
+Solving for $B_r b$ in 
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:1480}
+2 b \cdot B_r = b B_r - (-1)^{r} B_r b,
+\end{dmath}
+
+we have
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:1500}
+A_s \cdot \lr{ b \wedge B_r }
+=
+\inv{2} \gpgrade{ A_s b B_r + A_s \lr{ b B_r - 2 b \cdot B_r } }{s - (r + 1)}
+=
+\gpgrade{ A_s b B_r }{s - (r + 1)}
+- 
+\cancel{\gpgrade{ A_s \lr{ b \cdot B_r } }{s - (r + 1)}}.
+\end{dmath}
+
+The last term above is zero since we are selecting the $s - r - 1$ grade element of a multivector with grades $s - r + 1$ and $s + r - 1$, which has no terms for $r > 0$.  Now we can expand the $A_s b$ multivector product, for
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:1520}
+A_s \cdot \lr{ b \wedge B_r }
+=
+\gpgrade{ \lr{ A_s \cdot b + A_s \wedge b} B_r }{s - (r + 1)}.
+\end{dmath}
+
+The latter multivector (with the wedge product factor) above has grades $s + 1 - r$ and $s + 1 + r$, so this selection operator finds nothing.  This leaves
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:1540}
+A_s \cdot \lr{ b \wedge B_r }
+=
+\gpgrade{ 
+\lr{ A_s \cdot b } \cdot B_r
++ \lr{ A_s \cdot b } \wedge B_r 
+}{s - (r + 1)}.
+\end{dmath}
+
+The first dot products term has grade $s - 1 - r$ and is selected, whereas the wedge term has grade $s - 1 + r \ne s - r - 1$ (for $r > 0$).  This completes the proof.
+
+\EndArticle
