@@ -15,13 +15,21 @@
 % http://mirror.its.dal.ca/ctan/macros/latex/exptl/thmtools/thmtools.pdf
 \usepackage{thmtools}
 %\declaretheorem[shaded={bgcolor=Lavender,textwidth=12em}]{theorem}
-\declaretheorem[shaded={bgcolor=Lavender}]{Theorem}
+
+% Liked this one (solid background)
+%\declaretheorem[shaded={bgcolor=Lavender}]{Theorem}
+
 %\declaretheorem[name=\"Ubung]{exercise}
-% don't really want lavendar (like the light blue) ... am I getting the default?
-\declaretheorem[shaded={bgcolor=Lavender}]{Lemma}
+
+% liked this one: (is Lavender the light blue that this produces?)
+%\declaretheorem[shaded={bgcolor=Lavender}]{Lemma}
+
 %\declaretheorem[shaded={rulecolor=Lavender, rulewidth=2pt, bgcolor={rgb}{1,1,1}}]{BoxII}
 
-%\usepackage[framemethod=tikz]{mdframed}
+
+
+\usepackage{tikz}
+\usepackage[framemethod=tikz]{mdframed}
 %%\theoremstyle{plain}
 %%\newmdtheoremenv[
 %%  linecolor=cyan,
@@ -39,23 +47,77 @@
 %  linewidth=1pt
 %]{mytBoxed}{}
 
+\newcounter{Theorem}[section]
+\newenvironment{Theorem}[1][]{%
+  \stepcounter{Theorem}%
+  \ifstrempty{#1}%
+  {\mdfsetup{%
+    frametitle={%
+      \tikz[baseline=(current bounding box.east),outer sep=0pt]
+      \node[line width=1pt,anchor=east,rectangle,draw=DarkOliveGreen,fill=white]
+    {\strut \color{DarkOliveGreen}{Theorem}~\theTheorem};}}
+  }%
+  {\mdfsetup{%
+    frametitle={%
+      \tikz[baseline=(current bounding box.east),outer sep=0pt]
+      \node[line width=1pt,anchor=east,rectangle,draw=DarkOliveGreen,fill=white]
+    {\strut \color{DarkOliveGreen}{Theorem}~\theTheorem:~\color{Maroon}{#1}};}}%
+  }%
+  \mdfsetup{innertopmargin=10pt,linecolor=DarkOliveGreen,%
+            linewidth=1pt,topline=true,%
+            frametitleaboveskip=\dimexpr-\ht\strutbox\relax,}
+  \begin{mdframed}[]\relax%
+  }{\end{mdframed}}
+
+\newcounter{Lemma}[section]
+\newenvironment{Lemma}[1][]{%
+  \stepcounter{Lemma}%
+  \ifstrempty{#1}%
+  {\mdfsetup{%
+    frametitle={%
+      \tikz[baseline=(current bounding box.east),outer sep=0pt]
+      \node[line width=1pt,anchor=east,rectangle,draw=DarkOliveGreen,fill=white]
+    {\strut \color{DarkOliveGreen}{Lemma}~\theLemma};}}
+  }%
+  {\mdfsetup{%
+    frametitle={%
+      \tikz[baseline=(current bounding box.east),outer sep=0pt]
+      \node[line width=1pt,anchor=east,rectangle,draw=DarkOliveGreen,fill=white]
+    {\strut \color{DarkOliveGreen}{Lemma}~\theLemma:~\color{Maroon}{#1}};}}%
+  }%
+  \mdfsetup{innertopmargin=10pt,linecolor=DarkOliveGreen,%
+            linewidth=1pt,topline=true,%
+            frametitleaboveskip=\dimexpr-\ht\strutbox\relax,}
+  \begin{mdframed}[]\relax%
+  }{\end{mdframed}}
+
 \beginArtNoToc
 
 \generatetitle{Stokes theorem in Geometric algebra}
 %\chapter{Stokes theorem in Geometric algebra}
 \label{chap:stokesTheoremGeometricAlgebra}
 
-For blades $F \in \bigwedge^{s}$, and $m$ volume element $d^k \Bx, s < k$, the generalization of Stokes theorem to higher dimensional spaces, expressed in the formalism of geometric algebra is
+The generalization of Stokes theorem to higher dimensional spaces, expressed in the formalism of geometric algebra is
 
-\begin{Theorem}\label{thm:stokesTheoremGeometricAlgebraII:1740}
+\begin{Theorem}[Stokes' Theorem]\label{thm:stokesTheoremGeometricAlgebraII:1740}
+
+For blades $F \in \bigwedge^{s}$, and $m$ volume element $d^k \Bx, s < k$, 
+
 \begin{equation*}%\label{eqn:stokesTheoremGeometricAlgebraII:120}
 \int_V d^k \Bx \cdot (\boldpartial \wedge F) = \int_{\partial V} d^{k-1} \Bx \cdot F.
 \end{equation*}
-\end{Theorem}
 
 Here the volume integral is over a $m$ dimensional surface (manifold), $\boldpartial$ is the projection of the gradient onto the tangent space of the manifold, and $\partial V$ indicates integration over the boundary of $V$.
 
-It takes some work to give all this more concrete meaning.  That will be attempted here.
+\end{Theorem}
+
+%\begin{theo}[Inhomogeneous Linear]
+%\begin{equation*}%\label{eqn:stokesTheoremGeometricAlgebraII:120}
+%\int_V d^k \Bx \cdot (\boldpartial \wedge F) = \int_{\partial V} d^{k-1} \Bx \cdot F.
+%\end{equation*}
+%\end{theo}
+
+It takes some work to give this more concrete meaning.  Rather than trying to attempt that work head on, we build up to the general result by first considering some specific examples.
 
 \section{Basic notation}
 
@@ -65,7 +127,9 @@ A finite vector space, not neccessarily Euclidean, with basis $\{\Be_1, \Be_2, \
 \Be_i \cdot \Be^j = {\delta_i}^j.
 \end{equation}
 
-Implicit summation over repeated indexes will be employed unless otherwise noted.  For example, the components of a vector $\Bx$ with respect to the standard or reciprocal bases, are
+This is an Euclidean space when $\Be_i = \Be^i, \forall i$.
+
+Implicit summation over repeated indexes, typically over mixed upper and lower indexes, will be assumed unless otherwise noted.  For example, the components of a vector $\Bx$ with respect to the standard or reciprocal bases, are
 
 \begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:40}
 \Bx = \Be_i x^i = \Be^j x_j.
@@ -193,6 +257,8 @@ Associated implicitly with this basis is a curvilinear coordinate representation
 = x^i.
 \end{dmath}
 
+Having used the same notation for coordinates with respect to the standard basis and its dual, we must rely on context to disambiguate the two.  In most cases to follow coordinates are with respect to a specific curvilinear basis.
+
 When the complete vector space is spanned by $\{\Bx_i\}$ the gradient has the curvilinear representation
 
 \begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:1380}
@@ -225,7 +291,7 @@ Given a two parameter ($u,v$) surface parameterization, the curvilinear coordina
 
 We assume that the vector space is of dimension two or greater but otherwise unrestricted, and need not have an Euclidean basis.  Here $f_\perp \Bx^\perp$ denotes the rejection of $\Bf$ from the tangent space at the point of evaluation.  Green's theorem relates the integral around a closed curve to an ``area'' integral on that surface
 
-\begin{Theorem}\label{thm:stokesTheoremGeometricAlgebraII:1660}
+\begin{Theorem}[Green's Theorem]\label{thm:stokesTheoremGeometricAlgebraII:1660}
 \begin{dmath*}%\label{eqn:stokesTheoremGeometricAlgebraII:1680}
 \ointctrclockwise \Bf \cdot d\Bl
 =
@@ -302,6 +368,10 @@ We can now sum over a larger area as in \cref{fig:loopIntegralInfinitesimalSum:l
 
 All the opposing oriented loop elements cancel, so the integral around the complete boundary of the surface $\Bx(u, v)$ is given by the $u,v$ area integral of the partials difference.
 
+We will see that Green's theorem is a special case of the Curl (Stokes) theorem.  This observation will also provide a geometric interpretation of the right hand side area integral of \cref{thm:stokesTheoremGeometricAlgebraII:1660}, and allow for a coordinate free representation.
+
+\paragraph{Special case:}
+
 An important special case of Green's theorem is for a Euclidean two dimensional space where the vector function is
 
 \begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:1720}
@@ -337,7 +407,6 @@ dx dy.
 %%\end{equation*}
 %%\end{mytBoxed*}
 
-We will see that Green's theorem is a special case of the Curl (Stokes) theorem.  This observation will also provide a geometric interpretation of the right hand side area integral of \cref{thm:stokesTheoremGeometricAlgebraII:1660}, and allow for a coordinate free representation.
 
 \section{Curl theorem}
 
@@ -473,18 +542,19 @@ FIXME: example.  Non-Euclidean space.
 
 \section{Three volume curl theorem}
 
-As an expositional example, let's now consider the curl of a vector field, integrated over a three parameter surface.
+As a further expositional example, let's now consider the curl of a vector field, integrated over a three parameter surface.
 
 \section{Stokes theorem}
 
 \section{Appendix}
 
-We'd like to be able to distribute the inner product of two blades $A_s, B_r$ with grades $0 < r < s$
+To expand a general inner product of the form $d^k \Bx \cdot (\boldpartial \wedge F)$ we require
 
-\begin{Lemma}\label{thm:stokesTheoremGeometricAlgebraII:1420}
-\begin{dmath*}%\label{eqn:stokesTheoremGeometricAlgebraII:1440}
+\begin{Lemma}[Distribution of inner products]\label{thm:stokesTheoremGeometricAlgebraII:1420}
+Given two blades $A_s, B_r$ with grades subject to $0 < r < s$, and a vector $b$, the inner product distributes according to
+\begin{equation*}
 A_s \cdot \lr{ b \wedge B_r } = \lr{ A_s \cdot b } \cdot B_r.
-\end{dmath*}
+\end{equation*}
 \end{Lemma}
 
 The proof is straightforward, but also mechanical.
