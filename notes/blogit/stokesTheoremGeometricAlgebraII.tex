@@ -27,7 +27,7 @@
 %\declaretheorem[shaded={rulecolor=Lavender, rulewidth=2pt, bgcolor={rgb}{1,1,1}}]{BoxII}
 
 
-
+%--------------------------------------------------------------------------
 \usepackage{tikz}
 \usepackage[framemethod=tikz]{mdframed}
 %%\theoremstyle{plain}
@@ -47,7 +47,8 @@
 %  linewidth=1pt
 %]{mytBoxed}{}
 
-\newcounter{Theorem}[chapter]
+\newcounter{Theorem}
+\numberwithin{Theorem}{chapter}
 \newenvironment{Theorem}[1][]{%
   \refstepcounter{Theorem}%
   \ifstrempty{#1}%
@@ -55,13 +56,13 @@
     frametitle={%
       \tikz[baseline=(current bounding box.east),outer sep=0pt]
       \node[line width=1pt,anchor=east,rectangle,draw=DarkOliveGreen,fill=white]
-    {\strut \color{DarkOliveGreen}{Theorem}~\thechapter.\theTheorem};}}
+    {\strut \color{DarkOliveGreen}{Theorem}~\theTheorem};}}
   }%
   {\mdfsetup{%
     frametitle={%
       \tikz[baseline=(current bounding box.east),outer sep=0pt]
       \node[line width=1pt,anchor=east,rectangle,draw=DarkOliveGreen,fill=white]
-    {\strut \color{DarkOliveGreen}{Theorem}~\thechapter.\theTheorem:~\color{Maroon}{#1}};}}%
+    {\strut \color{DarkOliveGreen}{Theorem}~\theTheorem:~\color{Maroon}{#1}};}}%
   }%
   \mdfsetup{innertopmargin=10pt,linecolor=DarkOliveGreen,%
             linewidth=1pt,topline=true,%
@@ -72,7 +73,8 @@
 \crefname{Theorem}{theorem}{theorems} 
 \Crefname{Theorem}{Theorem}{Theorems} 
 
-\newcounter{Lemma}[chapter]
+\newcounter{Lemma}
+\numberwithin{Lemma}{chapter}
 \newenvironment{Lemma}[1][]{%
   \refstepcounter{Lemma}%
   \ifstrempty{#1}%
@@ -80,13 +82,13 @@
     frametitle={%
       \tikz[baseline=(current bounding box.east),outer sep=0pt]
       \node[line width=1pt,anchor=east,rectangle,draw=DarkOliveGreen,fill=white]
-    {\strut \color{DarkOliveGreen}{Lemma}~\thechapter.\theLemma};}}
+    {\strut \color{DarkOliveGreen}{Lemma}~\theLemma};}}
   }%
   {\mdfsetup{%
     frametitle={%
       \tikz[baseline=(current bounding box.east),outer sep=0pt]
       \node[line width=1pt,anchor=east,rectangle,draw=DarkOliveGreen,fill=white]
-    {\strut \color{DarkOliveGreen}{Lemma}~\thechapter.\theLemma:~\color{Maroon}{#1}};}}%
+    {\strut \color{DarkOliveGreen}{Lemma}~\theLemma:~\color{Maroon}{#1}};}}%
   }%
   \mdfsetup{innertopmargin=10pt,linecolor=DarkOliveGreen,%
             linewidth=1pt,topline=true,%
@@ -96,6 +98,71 @@
 
 \crefname{Lemma}{lemma}{lemmas} 
 \Crefname{Lemma}{Lemma}{Lemmas} 
+
+%------------------------------------
+% Example from:
+%
+% http://ctan.cms.math.ca/tex-archive/macros/latex/contrib/mdframed/mdframed.pdf
+% 
+\usetikzlibrary{calc,arrows}
+\tikzset{
+excursus arrow/.style={%
+line width=2pt,
+draw=DarkOliveGreen!40,
+rounded corners=2ex,
+},
+excursus head/.style={
+fill=white,
+font=\bfseries\sffamily,
+text=DarkOliveGreen!80,
+anchor=base west,
+},
+}
+
+\mdfdefinestyle{digressionarrows}{%
+singleextra={%
+\path let \p1=(P), \p2=(O) in (\x2,\y1) coordinate (Q);
+\path let \p1=(Q), \p2=(O) in (\x1,{(\y1-\y2)/2}) coordinate (M);
+\path [excursus arrow, round cap-to]
+($(O)+(5em,0ex)$) -| (M) |- %
+($(Q)+(12em,0ex)$) .. controls +(0:16em) and +(185:6em) .. %
+++(23em,2ex);
+\node [excursus head] at ($(Q)+(2.5em,-0.75pt)$) {Digression};},
+firstextra={%
+\path let \p1=(P), \p2=(O) in (\x2,\y1) coordinate (Q);
+\path [excursus arrow,-to]
+(O) |- %
+($(Q)+(12em,0ex)$) .. controls +(0:16em) and +(185:6em) .. %
+++(23em,2ex);
+\node [excursus head] at ($(Q)+(2.5em,-2pt)$) {Digression};},
+secondextra={%
+\path let \p1=(P), \p2=(O) in (\x2,\y1) coordinate (Q);
+\path [excursus arrow,round cap-]
+($(O)+(5em,0ex)$) -| (Q);},
+middleextra={%
+\path let \p1=(P), \p2=(O) in (\x2,\y1) coordinate (Q);
+\path [excursus arrow]
+(O) -- (Q);},
+middlelinewidth=2.5em,middlelinecolor=white,
+hidealllines=true,topline=true,
+innertopmargin=0.5ex,
+innerbottommargin=2.5ex,
+innerrightmargin=2pt,
+innerleftmargin=2ex,
+skipabove=0.87\baselineskip,
+skipbelow=0.62\baselineskip,
+}
+%------------------------------------
+
+
+%--------------------------------------------------------------------------
+
+% temp hack: unable to connect to MikTex server to get md* package above.
+%\newcounter{theorem}
+%%\numberwithin{theorem}{chapter}
+%\newtheorem{Lemma}[theorem]{lemma}
+%\newtheorem{Theorem}{theorem}[chapter]
+%--------------------------------------------------------------------------
 
 \beginArtNoToc
 
@@ -550,6 +617,51 @@ FIXME: example.  Non-Euclidean space.
 
 As a further expositional example, let's now consider the curl of a vector field, integrated over a three parameter surface.
 
+Using \cref{thm:stokesTheoremGeometricAlgebraII:1420}, we have
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:1940}
+d^3 \Bx \cdot \lr{ \boldpartial \wedge \Bf }
+=
+\lr{ d^3 \Bx \cdot \Bx^i } \cdot \partial_i \Bf
+=
+du^1 du^2 du^3
+\lr{ 
+\lr{ \Bx_1 \wedge \Bx_2 \wedge \Bx_3 }
+ \cdot \Bx^i } \cdot \partial_i \Bf
+=
+du^1 du^2 du^3
+\lr{ 
+\lr{ \Bx_1 \wedge \Bx_2 } {\delta_3}^i 
++\lr{ \Bx_2 \wedge \Bx_3 } {\delta_1}^i 
++\lr{ \Bx_3 \wedge \Bx_1 } {\delta_2}^i 
+} \cdot \partial_i \Bf
+=
+du^1 du^2 du^3
+\lr{
+\lr{ \Bx_1 \wedge \Bx_2 } \cdot \partial_3 \Bf
++\lr{ \Bx_2 \wedge \Bx_3 } \cdot \partial_1 \Bf
++\lr{ \Bx_3 \wedge \Bx_1 } \cdot \partial_2 \Bf
+}.
+\end{dmath}
+
+\begin{mdframed}[style=digressionarrows]
+As was the case with the loop integral, we expect this to equal a completely antisymmetric sum over the coordinates of $\Bf$.  A bit of experimentation shows that such a sum, after dropping the parameter space volume element factor, is
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:1960}
+\Bx_1 \lr{ -\partial_2 f_3 + \partial_3 f_2 }
++\Bx_2 \lr{ -\partial_3 f_1 + \partial_1 f_3 }
++\Bx_3 \lr{ -\partial_1 f_2 + \partial_2 f_1 }
+=
+\Bx_1 \lr{ -\partial_2 \Bf \cdot \Bx_3 + \partial_3 \Bf \cdot \Bx_2 }
++\Bx_2 \lr{ -\partial_3 \Bf \cdot \Bx_1 + \partial_1 \Bf \cdot \Bx_3 }
++\Bx_3 \lr{ -\partial_1 \Bf \cdot \Bx_2 + \partial_2 \Bf \cdot \Bx_1 }
+= 
+\lr{ \Bx_3 \wedge \Bx_1 } \cdot \partial_2 \Bf
++\lr{ \Bx_1 \wedge \Bx_2 } \cdot \partial_3 \Bf
++\lr{ \Bx_2 \wedge \Bx_3 } \cdot \partial_1 \Bf.
+\end{dmath}
+\end{mdframed}
+
 \section{Stokes theorem}
 
 \section{Appendix}
@@ -557,7 +669,7 @@ As a further expositional example, let's now consider the curl of a vector field
 To expand a general inner product of the form $d^k \Bx \cdot (\boldpartial \wedge F)$ we require
 
 \begin{Lemma}[Distribution of inner products]\label{thm:stokesTheoremGeometricAlgebraII:1420}
-Given two blades $A_s, B_r$ with grades subject to $0 < r < s$, and a vector $b$, the inner product distributes according to
+Given two blades $A_s, B_r$ with grades subject to $s > r > 0$, and a vector $b$, the inner product distributes according to
 \begin{equation*}
 A_s \cdot \lr{ b \wedge B_r } = \lr{ A_s \cdot b } \cdot B_r.
 \end{equation*}
