@@ -465,7 +465,7 @@ Here Green's theorem takes the form
 dx dy.
 }
 
-\section{Curl theorem}
+\section{Curl theorem, two volume vector field}
 
 Having examined the right hand side of \cref{thm:stokesTheoremGeometricAlgebraII:1740} for the very simplest geometric object $\Bf$, let's look at the right hand side, the area integral in more detail.  We restrict our attention for now to vectors $\Bf$ still defined by \eqnref{eqn:stokesTheoremGeometricAlgebraII:1640}.  
 
@@ -589,15 +589,25 @@ With the shorthand $u = u^1, v = u^2$ eliminated, and after scaling by $-du^1 du
 \int d^2 \Bx \cdot (\boldpartial \wedge \Bf) = \ointclockwise \Bf \cdot d\Bl.
 }
 
-This is the very simplest special case of Stokes theorem.  
+This is the very simplest special case of Stokes theorem.   Comparing to the general form of Stokes \cref{thm:stokesTheoremGeometricAlgebraII:1740}, we see that the one volume surface area element can be written implicitly as
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:2100}
+d^1 \Bx \cdot \Bf = \Bf \cdot \lr{ d\Bx_2 -d\Bx_1 },
+\end{dmath}
+
+where it is implied that both the vector $\Bf$ and the differential elements are evaluated on the boundaries of the integration ranges respectively.  From this we can loosely express the ``surface'' differential element as
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:2120}
+d^1 \Bx = d\Bx_2 -d\Bx_1.
+\end{dmath}
 
 FIXME: example.  Euclidean space.
 
 FIXME: example.  Non-Euclidean space.
 
-\section{Three volume curl theorem}
+\section{Stokes theorem, three volume vector field}
 
-As a further expositional example, let's now consider the curl of a vector field, integrated over a three parameter surface.
+As a further expositional example, let's now consider the curl of a vector field, integrated over a three parameter surface.  With this generalization, let's start calling this Stokes theorem, instead of the Curl theorem.
 
 Using \cref{thm:stokesTheoremGeometricAlgebraII:1420}, we have
 
@@ -614,15 +624,15 @@ du^1 du^2 du^3
 du^1 du^2 du^3
 \lr{ 
 \lr{ \Bx_1 \wedge \Bx_2 } {\delta_3}^i 
+-\lr{ \Bx_1 \wedge \Bx_3 } {\delta_2}^i 
 +\lr{ \Bx_2 \wedge \Bx_3 } {\delta_1}^i 
-+\lr{ \Bx_3 \wedge \Bx_1 } {\delta_2}^i 
 } \cdot \partial_i \Bf
 =
 du^1 du^2 du^3
 \lr{
 \lr{ \Bx_1 \wedge \Bx_2 } \cdot \partial_3 \Bf
+-\lr{ \Bx_1 \wedge \Bx_3 } \cdot \partial_2 \Bf
 +\lr{ \Bx_2 \wedge \Bx_3 } \cdot \partial_1 \Bf
-+\lr{ \Bx_3 \wedge \Bx_1 } \cdot \partial_2 \Bf
 }.
 \end{dmath}
 
@@ -637,14 +647,125 @@ As was the case with the loop integral, we expect this to equal a completely ant
 \Bx_1 \lr{ -\partial_2 \Bf \cdot \Bx_3 + \partial_3 \Bf \cdot \Bx_2 }
 +\Bx_2 \lr{ -\partial_3 \Bf \cdot \Bx_1 + \partial_1 \Bf \cdot \Bx_3 }
 +\Bx_3 \lr{ -\partial_1 \Bf \cdot \Bx_2 + \partial_2 \Bf \cdot \Bx_1 }
+=
+\lr{ \Bx_1 \partial_3 \Bf \cdot \Bx_2 -\Bx_2 \partial_3 \Bf \cdot \Bx_1 }
++\lr{ \Bx_3 \partial_2 \Bf \cdot \Bx_1 -\Bx_1 \partial_2 \Bf \cdot \Bx_3 }
++\lr{ \Bx_2 \partial_1 \Bf \cdot \Bx_3 -\Bx_3 \partial_1 \Bf \cdot \Bx_2 }
 = 
-\lr{ \Bx_3 \wedge \Bx_1 } \cdot \partial_2 \Bf
-+\lr{ \Bx_1 \wedge \Bx_2 } \cdot \partial_3 \Bf
+ \lr{ \Bx_1 \wedge \Bx_2 } \cdot \partial_3 \Bf
++\lr{ \Bx_3 \wedge \Bx_1 } \cdot \partial_2 \Bf
 +\lr{ \Bx_2 \wedge \Bx_3 } \cdot \partial_1 \Bf.
 \end{dmath}
 \end{mdframed}
 
-\section{Stokes theorem}
+The key to the Stokes argument is again consideration of a differential volume element, for which the partial can be evaluated as the difference of the endpoints, with all else held constant.  Using a $(u,v,w)$ parameterization over such a differential volume element delimited by the parameterization ranges 
+$[u_0,u_0 + du]$, $[v_0,v_0 + dv]$, $[w_0,w_0 + dw]$, we have
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:2000}
+\begin{aligned}
+\int_{u = u_0}^{u_0 + du}
+\int_{v = v_0}^{v_0 + dv}
+\int_{w = w_0}^{w_0 + dw}
+d^3 \Bx \cdot \lr{ \boldpartial \wedge \Bf }
+&=
+\int_{u = u_0}^{u_0 + du}
+du 
+\int_{v = v_0}^{v_0 + dv}
+dv
+\evalrange{ \biglr{ \lr{ \Bx_u \wedge \Bx_v } \cdot \Bf } }{w = w_0}{w_0 + dw} \\
+&-
+\int_{u = u_0}^{u_0 + du}
+du 
+\int_{w = w_0}^{w_0 + dw}
+dw
+\evalrange{\biglr{ \lr{ \Bx_u \wedge \Bx_w } \cdot \Bf } }{v = v_0}{v_0 + dv} \\
+&+
+\int_{v = v_0}^{v_0 + dv}
+dv 
+\int_{w = w_0}^{w_0 + dw}
+dw
+\evalrange{
+\biglr{ \lr{ \Bx_v \wedge \Bx_w } \cdot \Bf } }{u = u_0}{u_0 + du}
+.
+\end{aligned}
+\end{equation}
+
+Extending this over the ranges $[u_0,u_0 + \Delta u]$, $[v_0,v_0 + \Delta v]$, $[w_0,w_0 + \Delta w]$, we have proved Stokes \cref{thm:stokesTheoremGeometricAlgebraII:1740} for vectors and a three parameter volume element, provided we have a surface element of the form
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:2020}
+d^2 \Bx =
+\evalrange{ \biglr{d\Bx_u \wedge d\Bx_v } }{w = w_0}{w_1}
+-
+\evalrange{ \biglr{d\Bx_u \wedge d\Bx_w } }{v = v_0}{v_1}
++
+\evalrange{ \biglr{d\Bx_v \wedge \Bx_w } }{ u = u_0 }{u_1},
+\end{dmath}
+
+where the evaluation of the dot products with $\Bf$ are also evaluated at the same points.
+
+\section{Stokes theorem, four volume vector field}
+
+It's becoming clear how this generalizes.  Let's examine one more specific expansion of the boundary surface volume element for a four volume parameterization.  This is the last special case of physical interest (for relativistic physics in $\bigwedge^{3,1}$ spaces).
+
+Using a parameterization $u^1 = x, u^2 = y, u^3 = z, u^4 = \tau = c t$, our four volume is
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:2040}
+d^4 \Bx 
+= 
+d\Bx_x \wedge
+d\Bx_y \wedge
+d\Bx_z \wedge
+d\Bx_\tau,
+\end{dmath}
+
+and the cooresponding boundary surface differential form we find using the same expansion
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:2060}
+d^4 \Bx \cdot \lr{ \boldpartial \wedge \Bf }
+=
+\lr{ d^4 \Bx \cdot \Bx^i } \cdot \partial_i \Bf
+=
+du^1 du^2 du^3 du^4
+\lr{ 
+\lr{ \Bx_1 \wedge \Bx_2 \wedge \Bx_3 \wedge \Bx_4 }
+ \cdot \Bx^i } \cdot \partial_i \Bf
+=
+du^1 du^2 du^3 du_4
+\lr{ 
+\lr{ \Bx_1 \wedge \Bx_2 \wedge \Bx_3 } {\delta_4}^i 
+-\lr{ \Bx_1 \wedge \Bx_2 \wedge \Bx_4 } {\delta_3}^i 
++\lr{ \Bx_1 \wedge \Bx_3 \wedge \Bx_4 } {\delta_2}^i 
+-\lr{ \Bx_2 \wedge \Bx_3 \wedge \Bx_4 } {\delta_1}^i 
+} \cdot \partial_i \Bf
+=
+du^1 du^2 du^3 du^4
+\lr{
+ \lr{ \Bx_1 \wedge \Bx_2 \wedge \Bx_3 } \cdot \partial_4 \Bf
+-\lr{ \Bx_1 \wedge \Bx_2 \wedge \Bx_4 } \cdot \partial_3 \Bf
++\lr{ \Bx_1 \wedge \Bx_3 \wedge \Bx_4 } \cdot \partial_2 \Bf
+-\lr{ \Bx_2 \wedge \Bx_3 \wedge \Bx_4 } \cdot \partial_1 \Bf
+}.
+\end{dmath}
+
+Our boundary value surface element is therefore
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:2080}
+d^3 \Bx =
+  \Bx_1 \wedge \Bx_2 \wedge \Bx_3 
+- \Bx_1 \wedge \Bx_2 \wedge \Bx_4
++ \Bx_1 \wedge \Bx_3 \wedge \Bx_4 
+- \Bx_2 \wedge \Bx_3 \wedge \Bx_4.
+\end{dmath}
+
+where it is implied that this (and the dot products with $\Bf$) are evaluated on the boundaries of the integration ranges of the omitted index.
+
+\section{Stokes theorem, four volume vector field}
+
+\section{Stokes theorem, three volume bivector field}
+
+\section{Stokes theorem, four volume bivector field}
+
+\section{Stokes theorem, general case}
 
 \section{Appendix}
 
