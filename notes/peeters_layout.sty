@@ -273,7 +273,7 @@ ref={#1}
 % an extra numeric parameter for the l1, l2, l3, m1, m2, m3 ... node and label markers
 % [which I'm sure could be automated].
 % 
-\usepackage{tikz}
+\RequirePackage{tikz}
 
 \newcounter{mathLableNode}
 
@@ -419,6 +419,60 @@ problem \ref{#1}%
 }
 
 %-------------------------------------------------------------------------------------
+% Example based on:
+%
+% http://ctan.cms.math.ca/tex-archive/macros/latex/contrib/mdframed/mdframed.pdf
+% 
+\RequirePackage{tikz}
+\PassOptionsToPackage{framemethod=tikz}{mdframed}
+\RequirePackage{mdframed}
 
+\usetikzlibrary{calc,arrows}
+\tikzset{
+  excursus arrow/.style={%
+    line width=2pt,
+    draw=DarkOliveGreen!40,
+    rounded corners=2ex,
+  },
+  excursus head/.style={
+    fill=white,
+    font=\bfseries\sffamily,
+    text=DarkOliveGreen!80,
+    anchor=base west,
+  },
+}
 
-
+\mdfdefinestyle{digressionarrows}{%
+  singleextra={%
+    \path let \p1=(P), \p2=(O) in (\x2,\y1) coordinate (Q);
+    \path let \p1=(Q), \p2=(O) in (\x1,{(\y1-\y2)/2}) coordinate (M);
+    \path [excursus arrow, round cap-to]
+    ($(O)+(5em,0ex)$) -| (M) |- %
+    ($(Q)+(12em,0ex)$) .. controls +(0:16em) and +(185:6em) .. %
+  ++(23em,2ex);
+  \node [excursus head] at ($(Q)+(2.5em,-0.75pt)$) {Digression};},
+  firstextra={%
+    \path let \p1=(P), \p2=(O) in (\x2,\y1) coordinate (Q);
+    \path [excursus arrow,-to]
+    (O) |- %
+    ($(Q)+(12em,0ex)$) .. controls +(0:16em) and +(185:6em) .. %
+    ++(23em,2ex);
+    \node [excursus head] at ($(Q)+(2.5em,-2pt)$) {Digression};},
+  secondextra={%
+    \path let \p1=(P), \p2=(O) in (\x2,\y1) coordinate (Q);
+    \path [excursus arrow,round cap-]
+    ($(O)+(5em,0ex)$) -| (Q);},
+  middleextra={%
+    \path let \p1=(P), \p2=(O) in (\x2,\y1) coordinate (Q);
+    \path [excursus arrow]
+    (O) -- (Q);},
+  middlelinewidth=2.5em,middlelinecolor=white,
+  hidealllines=true,topline=true,
+  innertopmargin=0.5ex,
+  innerbottommargin=2.5ex,
+  innerrightmargin=2pt,
+  innerleftmargin=2ex,
+  skipabove=0.87\baselineskip,
+  skipbelow=0.62\baselineskip,
+}
+%-------------------------------------------------------------------------------------
