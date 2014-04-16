@@ -4,6 +4,8 @@ include ../make.bookvars
 
 FIGURES := ../../figures/$(THISDIR)
 
+#ONCEFLAGS := -justonce
+
 SOURCE_DIRS += approx
 SOURCE_DIRS += handouts
 SOURCE_DIRS += mathematica
