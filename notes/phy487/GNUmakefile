@@ -2,6 +2,8 @@ THISDIR := phy487
 
 include ../make.bookvars
 
+#ONCEFLAGS := -justonce
+
 SOURCE_DIRS += appendix
 # FIXME:
 # 1) including this incorrectly adds figures/*pdf to the ./.gitignore file

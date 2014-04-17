@@ -152,23 +152,23 @@
 %\end{mydefinition}%
 %}
 
-% title, label, text
-\newcommand{\makeexample}[3]{%
-\begin{Exercise}[%
-title={#1},%
-label={#2},%
-name={Example},%
-counter={Example}%
-]%
-\noindent{\color{Maroon}{\rule{\linewidth}{0.5mm}}}
-\par
-#3%
-\par\noindent
-{\color{Maroon}{\rule{\linewidth}{0.5mm}}}
-\end{Exercise}%
-}
-%\addcontentsline{toc}{section}{Example \thechapter.\theExample\ #1}
-%\pdfbookmark[1]{Example \thechapter.\theExample\ #1}{ex\thechapter.\theExample}
+%%% title, label, text
+%%\newcommand{\makeexample}[3]{%
+%%\begin{Exercise}[%
+%%title={#1},%
+%%label={#2},%
+%%name={Example},%
+%%counter={Example}%
+%%]%
+%%\noindent{\color{Maroon}{\rule{\linewidth}{0.5mm}}}
+%%\par
+%%#3%
+%%\par\noindent
+%%{\color{Maroon}{\rule{\linewidth}{0.5mm}}}
+%%\end{Exercise}%
+%%}
+%%%\addcontentsline{toc}{section}{Example \thechapter.\theExample\ #1}
+%%%\pdfbookmark[1]{Example \thechapter.\theExample\ #1}{ex\thechapter.\theExample}
 
 \newcommand{\makeproblem}[3]{%
 \begin{Exercise}[%
@@ -577,6 +577,41 @@ problem \ref{#1}%
 \begin{definition}[#1]\label{#2}%
 #3%
 \end{definition}%
+}
+
+\newcounter{example}
+\numberwithin{example}{chapter}
+\newenvironment{example}[1][]{%
+  \refstepcounter{example}%
+  \ifstrempty{#1}%
+  {\mdfsetup{%
+    frametitle={%
+      \tikz[baseline=(current bounding box.east),outer sep=0pt]
+      \node[line width=1pt,anchor=east,rectangle,rounded corners,draw=DarkOliveGreen,fill=white]
+    {\strut \color{DarkOliveGreen}{Example}~\theexample};}}
+  }%
+  {\mdfsetup{%
+    frametitle={%
+      \tikz[baseline=(current bounding box.east),outer sep=0pt]
+      \node[line width=1pt,anchor=east,rectangle,rounded corners,draw=DarkOliveGreen,fill=white]
+    {\strut \color{DarkOliveGreen}{Example}~\theexample:~\color{Maroon}{#1}};}}%
+  }%
+  \mdfsetup{innertopmargin=10pt,linecolor=DarkOliveGreen,%
+            linewidth=1pt,topline=true,%
+            frametitleaboveskip=\dimexpr-\ht\strutbox\relax,%
+            backgroundcolor=Maroon!10}
+  \begin{mdframed}[]\relax%
+  }{\end{mdframed}}
+
+%\makeexample{blah blah}{example:foo:1}{
+%foo foo.
+%}
+%
+% title, label, text
+\newcommand{\makeexample}[3]{%
+\begin{example}[#1]\label{#2}%
+#3%
+\end{example}%
 }
 
 %-------------------------------------------------------------------------------------

@@ -43,6 +43,9 @@ src=#1% same path as in addresource!
 \newcommand{\movieFigure}[4]{\videoFigure{#1}{#2}{#3}{#4}{./StrobeMediaPlayback.swf}}
 %\newcommand{\movieFigure}[4]{\videoFigure{#1}{#2}{#3}{#4}{VPlayer.swf}}
 
+% http://tex.stackexchange.com/a/94063/15 -- used in \imageFigure below.
+\def\md@envname{mdframed}
+
 % \begin{figure} ... \end{figure} does not work with latex code that uses the exercise package,
 % and results in "LaTeX Error: Not in outer par mode" error.
 %
@@ -66,23 +69,33 @@ src=#1% same path as in addresource!
 % For the non-float case, the caption package is also required.
 % 
 % \imageFigure{path}{caption}{label}{width}
-\newcommand{\imageFigure}[4]{%
-  \ifinner%
-    % non float version
+\newcommand{\imageFigureNonFloat}[4]{%
     \begin{center}%
        \captionsetup{type=figure}%
        \includegraphics[totalheight=#4\textheight]{#1}%
        \caption{#2}%
        \label{#3}%
     \end{center}%
-  \else%
-    % float version
+}
+
+\newcommand{\imageFigureFloat}[4]{%
     \begin{figure}[htp]%
        \centering%
        \includegraphics[totalheight=#4\textheight]{#1}%
        \caption{#2}%
        \label{#3}%
     \end{figure}%
+}
+
+\newcommand{\imageFigure}[4]{%
+  \ifinner%
+    \imageFigureNonFloat{#1}{#2}{#3}{#4}%
+  \else%
+    \ifx\@currenvir\md@envname%
+       \imageFigureNonFloat{#1}{#2}{#3}{#4}%
+    \else%
+       \imageFigureFloat{#1}{#2}{#3}{#4}%
+    \fi%
   \fi%
 }
 
