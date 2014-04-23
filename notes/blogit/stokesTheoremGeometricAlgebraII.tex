@@ -1277,9 +1277,23 @@ Given a bivector $B$, and trivector $\Ba \wedge \Bb \wedge \Bc$ where $\Ba, \Bb$
 Proof: TODO.  This is also problem 1.1(c) from Exercises 2.1 in \citep{hestenes1999nfc}.
 
 \makelemma{Distribution of two trivectors}{thm:stokesTheoremGeometricAlgebraII:2560}{
-Given a trivector $T$ and three vectors $\Ba, \Bb$, and $\Bc$, we have
+Given a trivector $T$ and three vectors $\Ba, \Bb$, and $\Bc$, the entire inner product can be expanded in terms of any successive set inner products, subject to change of sign with interchange of any two of these
 
-\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:2580}
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:2580}
+\lr{ \Ba \wedge \Bb \wedge \Bc } \cdot T
+=
+ \Ba \cdot \lr{ \Bb \cdot \lr{ \Bc \cdot T } }
+=
+ -\Ba \cdot \lr{ \Bc \cdot \lr{ \Bb \cdot T } }
+=
+ \Bb \cdot \lr{ \Bc \cdot \lr{ \Ba \cdot T } }
+= \cdots
+\end{dmath}
+}
+
+We can first show that an asymmetric expansion of the wedge product gives
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:2660}
 \begin{aligned}
 \lr{ \Ba \wedge \Bb \wedge \Bc } \cdot T
 &=
@@ -1294,9 +1308,8 @@ Given a trivector $T$ and three vectors $\Ba, \Bb$, and $\Bc$, we have
 }.
 \end{aligned}
 \end{equation}
-}
 
-This follows from the asymmetric expansion of the wedge product.  Expanding within a scalar selection operator, and then expanding the products from the right, eliminating any terms that cannot contribute to a scalar term
+To show this, we first expand within a scalar selection operator
 
 \begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:2600}
 \begin{aligned}
@@ -1317,62 +1330,107 @@ This follows from the asymmetric expansion of the wedge product.  Expanding with
 + \Bc \Ba \Bb T
 - \Bc \Bb \Ba T
 } \\
-&=
-\inv{6}
-\gpgradezero
-{
-  \Ba \Bb \lr{ \Bc \cdot T + \cancel{\Bc \wedge T}}
-- \Ba \Bc \lr{ \Bb \cdot T + \cancel{\Bb \wedge T}}
-} \\
-&
-\quad+
-\inv{6}
-\gpgradezero{
-\Bb \Bc \lr{ \Ba \cdot T + \cancel{\Ba \wedge T}}
-- \Bb \Ba \lr{ \Bb \cdot T + \cancel{\Bb \wedge T}}
-} \\
-&
-\quad+
-\inv{6}
-\gpgradezero{
-\Bc \Ba \lr{ \Bb \cdot T + \cancel{\Bb \wedge T}}
-- \Bc \Bb \lr{ \Ba \cdot T + \cancel{\Ba \wedge T}}
-} \\
-&=
-%%
-\inv{6}
-\gpgradezero
-{
-  \Ba \lr{ \Bb \cdot \lr{ \Bc \cdot T } + \cancel{\Bb \wedge \lr{ \Bc \cdot T }}}
-- \Ba \lr{ \Bc \cdot \lr{ \Bb \cdot T } + \cancel{\Bc \wedge \lr{ \Bb \cdot T }}}
-} \\
-&
-\quad +
-\inv{6}
-\gpgradezero
-{
-\Bb \lr{ \Bc \cdot \lr{ \Ba \cdot T } + \cancel{\Bc \wedge \lr{ \Ba \cdot T }}}
-- \Bb \lr{ \Ba \cdot \lr{ \Bb \cdot T } + \cancel{\Ba \wedge \lr{ \Bb \cdot T }}}
-} \\
-&
-\quad +
-\inv{6}
-\gpgradezero
-{
-\Bc \lr{ \Ba \cdot \lr{ \Bb \cdot T } + \cancel{\Ba \wedge \lr{ \Bb \cdot T }}}
-- \Bc \lr{ \Bb \cdot \lr{ \Ba \cdot T } + \cancel{\Bb \wedge \lr{ \Ba \cdot T }}}
-} \\
-&=
-\inv{6}
-\biglr{
-  \Ba \cdot \lr{ \Bb \cdot \lr{ \Bc \cdot T } }
-- \Ba \cdot \lr{ \Bc \cdot \lr{ \Bb \cdot T } } \\
-&\quad + \Bb \cdot \lr{ \Bc \cdot \lr{ \Ba \cdot T } }
-- \Bb \cdot \lr{ \Ba \cdot \lr{ \Bb \cdot T } } \\
-&\quad + \Bc \cdot \lr{ \Ba \cdot \lr{ \Bb \cdot T } }
-- \Bc \cdot \lr{ \Bb \cdot \lr{ \Ba \cdot T } }
-}. \qedmarker
 \end{aligned}
 \end{equation}
+
+Now consider any single term from the scalar selection, such as the first.  This can be reordered using the vector dot product identity
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:2680}
+\gpgradezero
+{
+  \Ba \Bb \Bc T
+}
+=
+\gpgradezero
+{
+  \Ba \lr{ -\Bc \Bb + 2 \Bb \cdot \Bc } T
+}
+=
+-
+\gpgradezero
+{
+  \Ba \Bc \Bb T
+}
++ 
+2 \Bb \cdot \Bc \cancel{ 
+\gpgradezero
+{
+  \Ba T
+}
+}.
+\end{dmath}
+
+The vector-trivector product in the latter grade selection operation above contributes only bivector and quadvector terms, thus contributing nothing.  This can be repeated, showing that
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:2700}
+  \gpgradezero{ \Ba \Bb \Bc T } =
+- \gpgradezero{ \Ba \Bc \Bb T } =
++ \gpgradezero{ \Bb \Bc \Ba T } =
+- \gpgradezero{ \Bb \Ba \Bb T } =
++ \gpgradezero{ \Bc \Ba \Bb T } =
+- \gpgradezero{ \Bc \Bb \Ba T }.
+\end{dmath}
+
+%%%, then expand the products from the right, eliminating any terms that cannot contribute to a scalar term
+%%%&=
+%%%\inv{6}
+%%%\gpgradezero
+%%%{
+%%%  \Ba \Bb \lr{ \Bc \cdot T + \cancel{\Bc \wedge T}}
+%%%- \Ba \Bc \lr{ \Bb \cdot T + \cancel{\Bb \wedge T}}
+%%%} \\
+%%%&
+%%%\quad+
+%%%\inv{6}
+%%%\gpgradezero{
+%%%\Bb \Bc \lr{ \Ba \cdot T + \cancel{\Ba \wedge T}}
+%%%- \Bb \Ba \lr{ \Bb \cdot T + \cancel{\Bb \wedge T}}
+%%%} \\
+%%%&
+%%%\quad+
+%%%\inv{6}
+%%%\gpgradezero{
+%%%\Bc \Ba \lr{ \Bb \cdot T + \cancel{\Bb \wedge T}}
+%%%- \Bc \Bb \lr{ \Ba \cdot T + \cancel{\Ba \wedge T}}
+%%%} \\
+%%%&=
+%%%%%
+%%%\inv{6}
+%%%\gpgradezero
+%%%{
+%%%  \Ba \lr{ \Bb \cdot \lr{ \Bc \cdot T } + \cancel{\Bb \wedge \lr{ \Bc \cdot T }}}
+%%%- \Ba \lr{ \Bc \cdot \lr{ \Bb \cdot T } + \cancel{\Bc \wedge \lr{ \Bb \cdot T }}}
+%%%} \\
+%%%&
+%%%\quad +
+%%%\inv{6}
+%%%\gpgradezero
+%%%{
+%%%\Bb \lr{ \Bc \cdot \lr{ \Ba \cdot T } + \cancel{\Bc \wedge \lr{ \Ba \cdot T }}}
+%%%- \Bb \lr{ \Ba \cdot \lr{ \Bb \cdot T } + \cancel{\Ba \wedge \lr{ \Bb \cdot T }}}
+%%%} \\
+%%%&
+%%%\quad +
+%%%\inv{6}
+%%%\gpgradezero
+%%%{
+%%%\Bc \lr{ \Ba \cdot \lr{ \Bb \cdot T } + \cancel{\Ba \wedge \lr{ \Bb \cdot T }}}
+%%%- \Bc \lr{ \Bb \cdot \lr{ \Ba \cdot T } + \cancel{\Bb \wedge \lr{ \Ba \cdot T }}}
+%%%} \\
+%%%&=
+%%%\inv{6}
+%%%\biglr{
+%%%  \Ba \cdot \lr{ \Bb \cdot \lr{ \Bc \cdot T } }
+%%%- \Ba \cdot \lr{ \Bc \cdot \lr{ \Bb \cdot T } } \\
+%%%&\quad + \Bb \cdot \lr{ \Bc \cdot \lr{ \Ba \cdot T } }
+%%%- \Bb \cdot \lr{ \Ba \cdot \lr{ \Bb \cdot T } } \\
+%%%&\quad + \Bc \cdot \lr{ \Ba \cdot \lr{ \Bb \cdot T } }
+%%%- \Bc \cdot \lr{ \Bb \cdot \lr{ \Ba \cdot T } }
+%%%}.
+%%%\end{aligned}
+%%%\end{equation}
+
+
+% \qedmarker
 
 \EndArticle
