@@ -8,11 +8,13 @@ my $book = 0 ;
 my $onlyrepo = 0 ;
 my $onlycommit = 0 ;
 my $onlycommitdate = 0 ;
+my $mytime = 0 ;
 my $lastCommit ;
 my $commitDate ;
 
 GetOptions( 
    'book!'      => \$book,
+   'mytime!'    => \$mytime,
    'commit!'    => \$onlycommit,
    'date!'      => \$onlycommitdate,
    'repo!'      => \$onlyrepo,
@@ -55,7 +57,32 @@ close $fh ;
 my $url = "https://github.com/peeterjoot/physicsplay" ;
 #$url = "http://goo.gl/j2GYL" ;
 
-if ( $book )
+if ( $mytime )
+{
+   my $timeString = $commitDate ;
+   die unless ( $timeString =~ m,(.*)/\d+/(.*), ) ;
+
+   my ($mon, $year) = ( $1, $2 ) ;
+
+   my %longMonth = (
+      'Jan' => 'January',
+      'Feb' => 'February',
+      'Mar' => 'March',
+      'Apr' => 'April',
+      'May' => 'May',
+      'Jun' => 'June',
+      'Jul' => 'July',
+      'Aug' => 'August',
+      'Sep' => 'September',
+      'Oct' => 'October',
+      'Nov' => 'November',
+      'Dec' => 'December'
+   ) ;
+
+   print qq@\\newcommand{\\myTime}{$longMonth{$mon} $year}
+@ ;
+}
+elsif ( $book )
 {
    print qq@
 Sources for this notes compilation can be found in the github repository
