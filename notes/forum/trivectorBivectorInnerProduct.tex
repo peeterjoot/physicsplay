@@ -1,0 +1,170 @@
+%
+% Copyright © 2013 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{curvilinearCoordinates}
+\renewcommand{\dirname}{notes/gabook/}
+%\newcommand{\dateintitle}{}
+\newcommand{\keywords}{curvilinear coordinates, geometric algebra, dual basis, reciprocal coordinates}
+
+\input{../peeter_prologue_print2.tex}
+
+% for post to:
+% http://math.stackexchange.com/questions/766146/inner-product-of-trivector-and-bivector-in-geometric-algebra
+\beginArtNoToc
+
+Hestenes's New Foundations book \citep{hestenes1999nfc} sets a problem to show:
+
+\begin{dmath}\label{eqn:trivectorBivectorInnerProduct:20}
+\left( \Ba \wedge \Bb \wedge \Bc \right) \cdot B
+=
+\Ba \left( \left( \Bb \wedge \Bc \right) \cdot B \right)
++
+\Bb \left( \left( \Bc \wedge \Ba \right) \cdot B \right)
++
+\Bc \left( \left( \Ba \wedge \Bb \right) \cdot B \right).
+\end{dmath}
+
+I'm having trouble proving this.  Using an antisymmetric expansion of the wedge within a grade one selection, we have
+
+\begin{equation}\label{eqn:trivectorBivectorInnerProduct:40}
+\begin{aligned}
+\left( \Ba \wedge \Bb \wedge \Bc \right) \cdot B
+&=
+\inv{6}
+{\left\langle 
+\left( 
+\Ba \Bb \Bc
++\Bb \Bc \Ba
++\Bc \Ba \Bb
+-\Ba \Bc \Ba
+-\Bb \Ba \Bc
+-\Bc \Bb \Ba
+\right)
+B 
+\right\rangle}_1 \\
+&=
+\inv{3}
+{\left\langle 
+\Ba \left( \Bb \wedge \Bc \right) B
++\Bb \left( \Bc \wedge \Ba\right) B
++\Bc \left( \Ba \wedge \Bb\right) B
+\right\rangle}_1 \\
+&=
+\inv{3}
+\left(
+\Ba \left( \left( \Bb \wedge \Bc \right) \cdot B \right)
++\Bb \left( \left( \Bc \wedge \Ba\right) \cdot B \right)
++\Bc \left( \left( \Ba \wedge \Bb\right) \cdot B \right)
+\right) \\
+&\quad +
+\inv{3}
+\left(
+\Ba \cdot {\left\langle \left( \Bb \wedge \Bc \right) B \right\rangle}_2
++\Bb \cdot {\left\langle \left( \Bc \wedge \Ba\right) B \right\rangle}_2
++\Bc \cdot {\left\langle \left( \Ba \wedge \Bb\right) B \right\rangle}_2
+\right).
+\end{aligned}
+\end{equation}
+
+My attempts to reduce the latter terms have all gone in circles.  Any tips?
+
+\section{Answer}
+
+I figured it out.  The key is trying not to be so clever, instead expand in successive dot products and regroup.  With $B = \Bu \wedge \Bv$
+
+\begin{equation}\label{eqn:trivectorBivectorInnerProduct:60}
+\begin{aligned}
+\left(  \Ba \wedge \Bb \wedge \Bc  \right)
+\cdot B
+&=
+\gpgradeone{ 
+\left(  \Ba \wedge \Bb \wedge \Bc \right)
+ \left( \Bu \wedge \Bv \right) } \\
+&=
+\gpgradeone{ 
+\left(  \Ba \wedge \Bb \wedge \Bc  \right) 
+\left( 
+\Bu \Bv 
+- \Bu \cdot \Bv 
+\right) } \\
+&=
+\left( 
+\left(  \Ba \wedge \Bb \wedge \Bc  \right)
+ \cdot \Bu \right) \cdot \Bv \\
+&= 
+\left( \Ba \wedge \Bb \right) \cdot \Bv \left( \Bc \cdot \Bu \right)
++
+\left( \Bc \wedge \Ba \right) \cdot \Bv \left( \Bb \cdot \Bu \right)
++
+\left( \Bb \wedge \Bc \right) \cdot \Bv \left( \Ba \cdot \Bu \right) \\
+&=
+\Ba 
+\left(  \Bb \cdot \Bv  \right)
+\left( \Bc \cdot \Bu \right)
+-\Bb 
+\left(  \Ba \cdot \Bv  \right) 
+\left( \Bc \cdot \Bu \right) \\
+&\quad +
+\Bc 
+\left(  \Ba \cdot \Bv  \right)
+\left( \Bb \cdot \Bu \right)
+-
+\Ba 
+\left(  \Bc \cdot \Bv  \right)
+\left( \Bb \cdot \Bu \right) \\
+&\quad +
+\Bb 
+\left(  \Bc \cdot \Bv  \right) 
+\left( \Ba \cdot \Bu \right)
+-
+\Bc 
+\left(  \Bb \cdot \Bv  \right) 
+\left( \Ba \cdot \Bu \right) \\
+&=
+\Ba
+\left(  \left(  \Bb \cdot \Bv  \right) \left( \Bc \cdot \Bu \right) - \left(  \Bc \cdot \Bv  \right) \left( \Bb \cdot \Bu \right)  \right)
+\\
+&\quad +
+\Bb
+\left(  \left(  \Bc \cdot \Bv  \right) \left( \Ba \cdot \Bu \right) - \left(  \Ba \cdot \Bv  \right) \left( \Bc \cdot \Bu \right)  \right) 
+\\
+&\quad +
+\Bc
+\left(  \left(  \Ba \cdot \Bv  \right) \left( \Bb \cdot \Bu \right) - \left(  \Bb \cdot \Bv  \right) \left( \Ba \cdot \Bu \right)  \right)
+ \\
+&=
+\Ba 
+\left(  \Bb \wedge \Bc  \right)
+\cdot 
+\left(  \Bu \wedge \Bv  \right) 
+\\
+&\quad +
+\Bb 
+\left(  \Bc \wedge \Ba  \right)
+\cdot 
+\left(  \Bu \wedge \Bv  \right) 
+\\
+&\quad +
+\Bc 
+\left(  \Ba \wedge \Bb  \right)
+ \cdot 
+\left(  \Bu \wedge \Bv  \right) 
+\\
+&=
+\Ba 
+\left(  \Bb \wedge \Bc  \right) 
+\cdot B
++
+\Bb 
+\left(  \Bc \wedge \Ba  \right)
+ \cdot B
++
+\Bc 
+\left(  \Ba \wedge \Bb  \right) 
+\cdot B.
+\end{aligned}
+\end{equation}
+
+\EndArticle
