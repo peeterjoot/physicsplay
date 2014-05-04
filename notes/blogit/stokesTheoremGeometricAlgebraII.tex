@@ -854,7 +854,130 @@ Now compare this to the direct evaluation of the loop integral portion of Stokes
 This example highlights some of the power of Stokes theorem, since the reduction of the volume element differential form was seen to be quite a chore (and easy to make mistakes doing.)
 }
 
-FIXME: show the usual 3D cross product dual representation.
+\makeexample{Dual representation in three dimensions}{example:stokesTheoremGeometricAlgebraII:3660}{
+
+It's clear that there is a projective nature to the differential form $d^2 \Bx \cdot \lr{\boldpartial \wedge \Bf}$.  This projective nature allows us, in three dimensions, to reexpress Stokes theorem using the gradient instead of the vector derivative, and to utilize the cross product and a normal direction to the plane.
+
+When we parameterize a normal direction to the tangent space, so that for a 2D tangent space spanned by curvilinear coordinates $\Bx_1$ and $\Bx_2$ the vector $\Bx^3$ is normal to both, we can write our vector as
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:3700}
+\Bf = f_1 \Bx^1 + f_2 \Bx^2 + f_3 \Bx^3,
+\end{equation}
+
+and express the orientation of the tangent space area element in terms of a pseudoscalar that includes this normal direction
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:3680}
+\Bx_1 \wedge \Bx_2 
+=
+\Bx^3 \cdot \lr{ \Bx_1 \wedge \Bx_2 \wedge \Bx_3 } 
+=
+\Bx^3 \lr{ \Bx_1 \wedge \Bx_2 \wedge \Bx_3 }.
+\end{equation}
+
+Inserting this into an expansion of the curl form we have
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:3720}
+d^2 \Bx \cdot \lr{ \boldpartial \wedge \Bf }
+=
+du^1 du^2 \gpgradezero{
+\Bx^3 \lr{ \Bx_1 \wedge \Bx_2 \wedge \Bx_3 }
+\lr{
+\lr{
+\sum_{i=1,2} x^i \partial_i
+}
+\wedge
+\Bf
+}
+}
+=
+du^1 du^2 
+\Bx^3 \cdot 
+\lr{
+\lr{ \Bx_1 \wedge \Bx_2 \wedge \Bx_3 }
+\cdot \lr{\spacegrad \wedge \Bf}
+-
+\lr{ \Bx_1 \wedge \Bx_2 \wedge \Bx_3 }
+\cdot \lr{\Bx^3 \partial_3 \wedge \Bf}
+}.
+\end{dmath}
+
+Observe that this last term, the contribution of the component of the gradient perpendicular to the tangent space, has no $\Bx_3$ components
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:3740}
+\lr{ \Bx_1 \wedge \Bx_2 \wedge \Bx_3 }
+\cdot \lr{\Bx^3 \partial_3 \wedge \Bf}
+=
+\lr{ \Bx_1 \wedge \Bx_2 \wedge \Bx_3 }
+\cdot \lr{\Bx^3 \wedge \partial_3 \Bf}
+=
+\lr{
+   \lr{ \Bx_1 \wedge \Bx_2 \wedge \Bx_3 } \cdot \Bx^3
+}
+\cdot \partial_3 \Bf
+=
+\lr { \Bx_1 \wedge \Bx_2 } \cdot \partial_3 \Bf
+=
+\Bx_1 
+\lr{ \Bx_2 \cdot \partial_3 \Bf }
+-
+\Bx_2 
+\lr{ \Bx_1 \cdot \partial_3 \Bf },
+\end{dmath}
+
+leaving
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:3760}
+d^2 \Bx \cdot \lr{ \boldpartial \wedge \Bf }
+=
+du^1 du^2 \Bx^3 \cdot 
+\lr{
+\lr{ \Bx_1 \wedge \Bx_2 \wedge \Bx_3 } \cdot \lr{ \spacegrad \wedge \Bf}
+}.
+\end{dmath}
+
+Now scale the normal vector and its dual to have unit norm as follows
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:3780}
+\begin{aligned}
+\Bx^3 &= \alpha \xcap^3 \\
+\Bx_3 &= \inv{\alpha} \xcap_3,
+\end{aligned}
+\end{equation}
+
+so that for $\beta > 0$, the volume element can be 
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:3860}
+\Bx_1 \wedge \Bx_2 \wedge \xcap_3 = \beta I.
+\end{dmath}
+
+This scaling choice is illustrated in \cref{fig:outwardsNormal:outwardsNormalFig8}, and represents the ``outwards'' normal.  With such a scaling choice we have
+
+\imageFigure{../../figures/gabook/outwardsNormalFig8}{Outwards normal}{fig:outwardsNormal:outwardsNormalFig8}{0.15}
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:3800}
+\beta du^1 du^2 = dA,
+\end{dmath}
+
+and almost have the desired cross product representation
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:3820}
+d^2 \Bx \cdot \lr{ \boldpartial \wedge \Bf }
+=
+dA \xcap^3 \cdot \lr{ I \cdot \lr{\spacegrad \wedge \Bf} }
+=
+dA \xcap^3 \cdot \lr{ I \lr{\spacegrad \wedge \Bf} }.
+\end{dmath}
+
+With the duality identity $\Ba \wedge \Bb = I \lr{\Ba \cross \Bb}$, we have the traditional 3D representation of Stokes theorem
+
+\boxedEquation{eqn:stokesTheoremGeometricAlgebraII:3840}{
+\int d^2 \Bx \cdot \lr{ \boldpartial \wedge \Bf }
+=
+-
+\int
+dA \xcap^3 \cdot \lr{\spacegrad \cross \Bf} 
+= \ointclockwise \Bf \cdot d\Bl.
+}
+}
 
 \section{Stokes theorem, three variable volume element parameterization}
 
