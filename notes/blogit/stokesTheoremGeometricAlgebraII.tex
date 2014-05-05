@@ -71,6 +71,8 @@
 %%%  \begin{mdframed}[]\relax%
 %%%  }{\end{mdframed}}
 
+\newcommand{\nbref}[1]{\href{https://github.com/peeterjoot/mathematica/gabook/#1}{(http://goo.gl/l0MmC0) gabook/#1}}
+
 %--------------------------------------------------------------------------
 
 \beginArtNoToc
@@ -1098,10 +1100,133 @@ d^2 \Bx =
 
 where the evaluation of the dot products with $\Bf$ are also evaluated at the same points.
 
+\makeexample{Euclidean spherical polar parameterization of 3D subspace}{example:stokesTheoremGeometricAlgebraII:3880}{
+
+One of the beauties of Stokes theorem is that we don't have to calculate the dual basis on the tangent space to proceed with the integration.  In general this can get pretty messy.
+
+As an example, consider an Euclidean space where a 3D subspace is parameterized using spherical coordinates, as in
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:3900}
+\Bx(x, \rho, \theta, \phi) = 
+\Be_1 x + \Be_4 \rho \exp\lr{ \Be_4 \Be_2 e^{\Be_2 \Be_3 \phi} \theta}
+=
+\lr{x, \rho \sin\theta \cos\phi, \rho \sin\theta \sin\phi, \rho \cos\theta}.
+\end{equation}
+
+The tangent space basis for the subspace situated at some fixed $x = x_0$, is easy to calculate, and is found to be
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:3920}
+\begin{aligned}
+\Bx_\rho 
+&= \lr{0, \sin\theta \cos\phi, \sin\theta \sin\phi, \cos\theta} 
+ =
+\Be_4 \exp\lr{ \Be_4 \Be_2 e^{\Be_2 \Be_3 \phi} \theta} \\
+\Bx_\theta 
+&= 
+\rho 
+\lr{0,  \cos\theta \cos\phi,  \cos\theta \sin\phi, - \sin\theta}  
+=
+\rho \Be_2 e^{\Be_2 \Be_3 \phi} 
+\exp\lr{ \Be_4 \Be_2 e^{\Be_2 \Be_3 \phi} \theta } \\
+\Bx_\phi 
+&=
+\rho 
+\lr{0, -\sin\theta \sin\phi,  \sin\theta \cos\phi, 0}
+= 
+\rho \sin\theta \Be_3 e^{\Be_2 \Be_3 \phi}.
+\end{aligned}
+\end{equation}
+
+We can, in general, compute the reciprocal basis using the duality relation
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:3940}
+\Ba^\conj = 
+\lr{ \Bb \wedge \Bc } \inv{\Ba \wedge \Bb \wedge \Bc }.
+\end{equation}
+
+Niavely attempting this without algebraic software is a route that requires a lot of care, and is easy to make mistakes doing.  In this case it is really not neccessary since the tangent space basis only requires scaling to orthonormalize, satisfying for $i,j \in \setlr{\rho, \theta, \phi}$
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:3960}
+\Bx_i \cdot \Bx_j =
+\begin{bmatrix}
+ 1 & 0 & 0 \\
+ 0 & \rho^2 & 0 \\
+ 0 & 0 & \rho^2 \sin^2 \theta 
+\end{bmatrix}.
+\end{equation}
+
+This allows us to read off the dual basis for the tangent volume by inspection
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:3920}
+\begin{aligned}
+\Bx^\rho 
+&=
+\Be_4 \exp\lr{ \Be_4 \Be_2 e^{\Be_2 \Be_3 \phi} \theta} \\
+\Bx^\theta 
+&= 
+\inv{\rho} \Be_2 e^{\Be_2 \Be_3 \phi} 
+\exp\lr{ \Be_4 \Be_2 e^{\Be_2 \Be_3 \phi} \theta } \\
+\Bx^\phi 
+&=
+\inv{\rho \sin\theta} \Be_3 e^{\Be_2 \Be_3 \phi}.
+\end{aligned}
+\end{equation}
+
+Should we wish to explicitly calculate the curl on the tangent space, we would need these.  The area and volume elements are also messy to calculate manually.  This expansion can be found in the Mathematica notebook \nbref{sphericalSurfaceAndVolumeElements.nb}, and is
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:3980}
+\begin{aligned}
+\Bx_\theta \wedge \Bx_\phi &=
+\rho^2 \sin\theta \left( \Be_4 \Be_2 \sin\theta \sin\phi + \Be_2 \Be_3 \cos\theta + \Be_3 \Be_4 \sin\theta \cos\phi \right) \\
+\Bx_\phi \wedge \Bx_\rho &=
+\rho \sin\theta \left(
+-\Be_2 \Be_3 \sin\theta 
+-\Be_2 \Be_4 \cos\theta \sin\phi 
++
+\Be_3 \Be_4
+\cos\theta \cos\phi 
+\right) \\
+\Bx_\rho \wedge \Bx_\theta &= -\Be_4 \rho \left(
+\Be_2
+\cos\phi 
++
+\Be_3
+\sin\phi 
+\right) \\
+\Bx_\rho \wedge \Bx_\theta \wedge \Bx_\phi &= \Be_2 \Be_3 \Be_4 \rho^2 \sin\theta  
+\end{aligned}
+\end{equation}
+
+Those area elements have a Geometric algebra factorization that is perhaps useful
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:3990}
+\begin{aligned}
+\Bx_\theta \wedge \Bx_\phi &=
+-\rho^2 \sin\theta \Be_2 \Be_3 \exp\lr{
+-\Be_4 \Be_2 e^{\Be_2 \Be_3 \phi} \theta
+} \\
+\Bx_\phi \wedge \Bx_\rho &=
+\rho \sin\theta \Be_3 \Be_4 
+e^{\Be_2 \Be_3 \phi}
+\exp\lr{
+\Be_4 \Be_2 e^{\Be_2 \Be_3 \phi} \theta
+} \\
+\Bx_\rho \wedge \Bx_\theta &= -
+\rho 
+\Be_4 \Be_2 
+e^{\Be_2 \Be_3 \phi}
+\end{aligned}.
+\end{equation}
+
+
+}
+
+\makeexample{Minkowski hyperbolic-spherical polar parameterization of 3D subspace}{example:stokesTheoremGeometricAlgebraII:3920}{
+}
+
 FIXME: picture illustrating the orientation.
 
-%FIXME: compare to traditional cross product presentation of curl theorem.
-FIXME: work an example for both a vector and bivector field, perhaps also including a non-Euclidean space.
+%FIXME: work an example for both a vector and bivector field, perhaps also including a non-Euclidean space.
 
 \section{Stokes theorem, four variable volume element parameterization}
 
