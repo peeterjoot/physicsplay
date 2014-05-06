@@ -1102,9 +1102,7 @@ where the evaluation of the dot products with $\Bf$ are also evaluated at the sa
 
 \makeexample{Euclidean spherical polar parameterization of 3D subspace}{example:stokesTheoremGeometricAlgebraII:3880}{
 
-One of the beauties of Stokes theorem is that we don't have to calculate the dual basis on the tangent space to proceed with the integration.  In general this can get pretty messy.
-
-As an example, consider an Euclidean space where a 3D subspace is parameterized using spherical coordinates, as in
+Consider an Euclidean space where a 3D subspace is parameterized using spherical coordinates, as in
 
 \begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:3900}
 \Bx(x, \rho, \theta, \phi) = 
@@ -1197,7 +1195,7 @@ Should we wish to explicitly calculate the curl on the tangent space, we would n
 \end{aligned}
 \end{equation}
 
-Those area elements have a Geometric algebra factorization that is perhaps useful
+Those area elements have a Geometric algebra factorization that are perhaps useful
 
 \begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:3990}
 \begin{aligned}
@@ -1218,15 +1216,88 @@ e^{\Be_2 \Be_3 \phi}
 \end{aligned}.
 \end{equation}
 
+One of the beauties of Stokes theorem is that we don't actually have to calculate the dual basis on the tangent space to proceed with the integration.  For that calculation above, where we had a normal tangent basis, I still used software was used as an aid, so it is clear that this can generally get pretty messy.
 
+To apply Stokes theorem to a vector field we can use \eqnref{eqn:stokesTheoremGeometricAlgebraII:2020} to write down the integral directly
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:4010}
+\int_V d^3 \Bx \cdot \lr{ \boldpartial \wedge \Bf }
+=
+\int_{\partial V} d^2 \Bx \cdot \Bf
+=
+\int
+ \evalrange{ \lr{ \Bx_\theta \wedge \Bx_\phi } \cdot \Bf }{\rho = \rho_0}{\rho_1} d\theta d\phi
++
+\int
+\evalrange{ \lr{ \Bx_\phi \wedge \Bx_\rho } \cdot \Bf }{\theta = \theta_0}{\theta_1}  d\phi d\rho
++
+\int
+\evalrange{ \lr{ \Bx_\rho \wedge \Bx_\theta } \cdot \Bf }{\phi = \phi_0}{\phi_1}  d\rho d\theta.
+\end{dmath}
+
+Observe that \eqnref{eqn:stokesTheoremGeometricAlgebraII:4010} is a vector valued integal that expands to
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:4030}
+\int
+ \evalrange{ \lr{ \Bx_\theta f_\phi - \Bx_\phi f_\theta } }{\rho = \rho_0}{\rho_1} d\theta d\phi
++
+\int
+ \evalrange{ \lr{ \Bx_\phi f_\rho - \Bx_\rho f_\phi } }{\theta = \theta_0}{\theta_1} d\phi d\rho
++
+\int
+ \evalrange{ \lr{ \Bx_\rho f_\theta - \Bx_\theta f_\rho } }{\phi = \phi_0}{\phi_1} d\rho d\theta.
+\end{equation}
+
+This could easily be a difficult integral to evaluate since the vectors $\Bx_i$ evaluated at the endpoints are still functions of two parameters.  An easier integral would result from the application of Stokes theorem to a bivector valued field, say $B$, for which we have
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:4050}
+\int_V d^3 \Bx \cdot \lr{ \boldpartial \wedge B }
+=
+\int_{\partial V} d^2 \Bx \cdot B
+=
+\int
+ \evalrange{ \lr{ \Bx_\theta \wedge \Bx_\phi } \cdot B }{\rho = \rho_0}{\rho_1} d\theta d\phi
++
+\int
+\evalrange{ \lr{ \Bx_\phi \wedge \Bx_\rho } \cdot B }{\theta = \theta_0}{\theta_1}  d\phi d\rho
++
+\int
+\evalrange{ \lr{ \Bx_\rho \wedge \Bx_\theta } \cdot B }{\phi = \phi_0}{\phi_1}  d\rho d\theta
+=
+\int
+ \evalrange{ B_{\phi \theta} }{\rho = \rho_0}{\rho_1} d\theta d\phi
++
+\int
+\evalrange{ B_{\rho \phi} }{\theta = \theta_0}{\theta_1}  d\phi d\rho
++
+\int
+\evalrange{ B_{\theta \rho} }{\phi = \phi_0}{\phi_1}  d\rho d\theta.
+\end{dmath}
+
+There is a geometric interpretation to these oriented area integrals, especially when written out explicitly in terms of the differentials along the parameterization directions, as in
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:4070}
+\int_{\partial V} d^2 \Bx \cdot B
+=
+-\int
+ \evalrange{ \lr{ d\Bx_\phi \wedge d\Bx_\theta } \cdot B }{\rho = \rho_0}{\rho_1} 
+-
+\int
+\evalrange{ \lr{ d\Bx_\rho \wedge d\Bx_\phi } \cdot B }{\theta = \theta_0}{\theta_1} 
+-
+\int
+\evalrange{ \lr{ d\Bx_\theta \wedge d\Bx_\rho } \cdot B }{\phi = \phi_0}{\phi_1}.
+\end{equation}
+
+%Here the sign has been pulled out explicitly so that the upper evaluation range matches the top faces.
+When written out in this differential form, each of the respective area elements is an oriented area along one of the faces of the parameterization volume, much like the line integral that results from a two parameter volume curl integral.  This is visualized in \cref{fig:sphereicalParameterizationBoundaryFaces:sphereicalParameterizationBoundaryFacesFig9}.  In this figure, faces (1) and (3) are ``top faces'', those with signs matching the tops of the evaluation ranges \eqnref{eqn:stokesTheoremGeometricAlgebraII:4070}, whereas face (2) is a bottom face with a sign that is correspondingly reversed.
+
+\imageFigure{../../figures/gabook/sphereicalParameterizationBoundaryFacesFig9}{Boundary faces of a spherical parameterization region}{fig:sphereicalParameterizationBoundaryFaces:sphereicalParameterizationBoundaryFacesFig9}{0.25}
 }
 
 \makeexample{Minkowski hyperbolic-spherical polar parameterization of 3D subspace}{example:stokesTheoremGeometricAlgebraII:3920}{
+FIXME: write out the mathematica results and the corresponding factorizations.
 }
-
-FIXME: picture illustrating the orientation.
-
-%FIXME: work an example for both a vector and bivector field, perhaps also including a non-Euclidean space.
 
 \section{Stokes theorem, four variable volume element parameterization}
 
