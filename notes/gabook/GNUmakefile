@@ -31,7 +31,8 @@ GENERATED_SOURCES += backmatter.tex
 
 #ONCEFLAGS := -justonce
 
-GENERATED_PDFS += stokes.pdf
+GENERATED_PDFS += bigCollectionOfPartiallyIncorrectStokesTheoremMusings.pdf
+GENERATED_PDFS += synopsisOfBigCollectionOfPartiallyIncorrectStokesTheoremMusings.pdf
 
 include ../make.rules
 
