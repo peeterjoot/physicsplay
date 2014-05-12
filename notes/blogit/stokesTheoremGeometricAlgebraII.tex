@@ -539,6 +539,8 @@ where it is implied that both the vector $\Bf$ and the differential elements are
 d\Bl = -d^1 \Bx = d\Bx_1 -d\Bx_2.
 \end{equation}
 
+FIXME: this use of $d^1 \Bx$ isn't consistent with later uses of $d^{k-1} \Bx$.
+
 A more exact statement is
 
 \boxedEquation{eqn:stokesTheoremGeometricAlgebraII:3620}{
@@ -1612,6 +1614,100 @@ d^3 \Bx =
 
 where it is implied that this (and the dot products with $\Bf$) are evaluated on the boundaries of the integration ranges of the omitted index.  This same boundary form can be used for vector, bivector and trivector variations of Stokes theorem.
 
+\section{Duality and its relation to the pseudoscalar.}
+
+The duality relation \cref{thm:stokesTheoremGeometricAlgebraII:3200} can be recast in a couple other forms
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:4850}
+\Ba^\conj 
+= \frac{\Bb \cdot \lr{ \Ba \wedge \Bb }}{\lr{\Ba \wedge \Bb}^2}
+= \Bb \frac{\Ba \wedge \Bb }{\lr{\Ba \wedge \Bb}^2}
+= \Bb \frac{\Ba \wedge \Bb }{\Abs{\Ba \wedge \Bb }}
+      \frac{\Abs{\Ba \wedge \Bb}}{\Ba \wedge \Bb }
+\inv{\lr{\Ba \wedge \Bb}},
+\end{dmath}
+
+or
+\boxedEquation{eqn:stokesTheoremGeometricAlgebraII:4870}{
+\Ba^\conj 
+= \Bb \inv{\lr{\Ba \wedge \Bb}}.
+}
+
+If we scale the wedge product $\Ba \wedge \Bb$ by its absolute magnitude, this can serve as a pseudoscalar for the plane that spans $\setlr{\Ba, \Bb}$.  Writing
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:4910}
+I_{\Ba\Bb} = \frac{\Ba \wedge \Bb}{\Abs{\Ba \wedge \Bb}},
+\end{dmath}
+
+the unit vector in the direction of $\Ba^\conj$ is
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:4930}
+%\acap^\conj
+\aconjcap
+= \bcap \frac{\Abs{\Ba \wedge \Bb}}{\Ba \wedge \Bb},
+\end{dmath}
+
+%Note the notational abuse, since I don't mean the dual of $\acap$ here.  We can write this as
+or
+
+\boxedEquation{example:stokesTheoremGeometricAlgebraII:4950}{
+%\acap^\conj 
+\aconjcap
+= \bcap \inv{I_{\Ba \Bb}}.
+}
+
+Following the pattern of \eqnref{eqn:stokesTheoremGeometricAlgebraII:4870}, it is clear how to express the dual vectors for higher dimensional subspaces.  For example
+
+\maketheorem{Dual vector in a three vector subspace}{thm:stokesTheoremGeometricAlgebraII:4950}{
+In the subspace spanned by $\setlr{\Ba, \Bb, \Bc}$, the dual of $\Ba$ is
+
+\begin{equation*}
+\Ba^\conj = \Bb \wedge \Bc \inv{\Ba \wedge \Bb \wedge \Bc},
+\end{equation*}
+
+or for the unit vector in the direction of $\Ba^\conj$, 
+
+\begin{equation*}
+%\acap^\conj 
+\aconjcap
+= I_{\Bb \Bc} \inv{I_{\Ba \Bb \Bc} }.
+\end{equation*}
+}
+
+Consider the dot product of $\acap^\conj$ with $\Bu \in \setlr{\Ba, \Bb, \Bc}$.
+
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:4970}
+\Bu \cdot \Ba^\conj 
+= 
+\gpgradezero{ \Bu \Bb \wedge \Bc \inv{\Ba \wedge \Bb \wedge \Bc} }
+= 
+\gpgradezero{ \Bu \cdot \lr{ \Bb \wedge \Bc} \inv{\Ba \wedge \Bb \wedge \Bc} }
++
+\gpgradezero{ \Bu \wedge \Bb \wedge \Bc \inv{\Ba \wedge \Bb \wedge \Bc} }
+= 
+\cancel{\gpgradezero{ 
+\lr{ 
+\lr{ \Bu \cdot \Bb} \Bc
+-\lr{\Bu \cdot \Bc} \Bb
+}
+\inv{\Ba \wedge \Bb \wedge \Bc} }
+}
++
+\gpgradezero{ \Bu \wedge \Bb \wedge \Bc \inv{\Ba \wedge \Bb \wedge \Bc} }.
+\end{dmath}
+
+The canceled term is eliminated since it is the product of a vector and trivector producing no scalar term.  Subsituting $\Ba, \Bb, \Bc$, and noting that $\Bu \wedge \Bu = 0$, we have
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:4990}
+\begin{aligned}
+\Ba \cdot \Ba^\conj &= 1 \\
+\Bb \cdot \Ba^\conj &= 0 \\
+\Bc \cdot \Ba^\conj &= 0.
+\end{aligned}
+\end{equation}
+
+Since the pseudoscalar varient of this theorem follows by inspection, this completes the proof.
+
 \section{Divergence theorem.}
 
 When the curl integral is a scalar result we are able to apply duality relationships to obtain the divergence theorem for the cooresponding space.  We will be able to show that a relationship of the following form holds
@@ -1662,86 +1758,120 @@ where we will see that the vector $d^{k-1} \Bx I$ can roughly be characterized a
 (-1)^{k+1} d^k \Bx \lr{ \spacegrad \cdot \Bf} I
 =
 (-1)^{k+1} 
-s_k 
+I^2
 \int_V 
 dV
 \lr{ \spacegrad \cdot \Bf}.
 \end{dmath}
 
-The second last step uses \cref{thm:stokesTheoremGeometricAlgebraII:4690}, and the last writes $d^k \Bx = I_k I d^k u = s_k dV$, where $s_k$ depends on the metric (i.e. $I^2 = \pm 1$), and on the orientation of the pseudoscalar volume element.  We assume that the parameterization is non-degenerate over the integration volume (i.e. no $d\Bx_i = 0$), so the sign of this product cannot change.
+The second last step uses \cref{thm:stokesTheoremGeometricAlgebraII:4690}, and the last writes $d^k \Bx = I^2 \Abs{d^k \Bx} = I^2 dV$, where we have assumed (without loss of generality) that $d^k \Bx$ has the same orientation as the pseudoscalar for the space.  We also assume that the parameterization is non-degenerate over the integration volume (i.e. no $d\Bx_i = 0$), so the sign of this product cannot change.
 
-Let's now return to the normal vector $d^{k-1} \Bx I$.  With $d^{k-1} u_i = du^1 du^2 \cdots du^{i-1} du^{i+1} \cdots du^k$ (the $i$ indexed differential omitted), we have
+Let's now return to the normal vector $d^{k-1} \Bx I$.  With $d^{k-1} u_i = du^1 du^2 \cdots du^{i-1} du^{i+1} \cdots du^k$ (the $i$ indexed differential omitted), and $I_{ab\cdots c} = (\Bx_a \wedge \Bx_b \wedge \cdots \wedge \Bx_c)/\Abs{\Bx_a \wedge \Bx_b \wedge \cdots \wedge \Bx_c}$, we have
 
-\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:4750}
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:4750}
+\begin{aligned}
 d^{k-1} \Bx I
+&=
+d^{k-1} u_i \lr{ \Bx_1 \wedge \Bx_2 \wedge \cdots \wedge \Bx_k} \cdot \Bx^i I \\
+&= 
+I_{1 2 \cdots (k-1)} I \Abs{d\Bx_1 \wedge d\Bx_2 \wedge \cdots \wedge d\Bx_{k-1} } \\
+&\quad -I_{1 \cdots (k-2) k} I \Abs{d\Bx_1 \wedge \cdots \wedge d\Bx_{k-2} \wedge d\Bx_k}
++ \cdots
+\end{aligned}
+\end{equation}
+
+We've seen in \eqnref{example:stokesTheoremGeometricAlgebraII:4950} and \cref{thm:stokesTheoremGeometricAlgebraII:4950} that the dual of vector $\Ba$ with respect to the unit pseudoscalar $I_{\Bb \cdots \Bc \Bd}$ in a subspace spanned by $\setlr{\Ba, \cdots \Bc, \Bd}$ is
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:5010}
+\widehat{\Ba^\conj} = I_{\Bb \cdots \Bc \Bd} \inv{ I_{\Ba \cdots \Bc \Bd} },
+\end{equation}
+
+or 
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:5030}
+\widehat{\Ba^\conj} I_{\Ba \cdots \Bc \Bd}^2
 =
-d^{k-1} u_i \Bx \cdot \Bx^i I
+I_{\Bb \cdots \Bc \Bd}.
+\end{equation}
+
+This allows us to write
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:5050}
+d^{k-1} \Bx I
 = 
-d^{k-1} u_i I_k \Bx^i I
-= 
-(-1)^{k+1} d^{k-1} u_i I_k I \Bx^i
-%= 
-%d^{k-1} u_i \lr{\Bx_1 \wedge \Bx_2 \cdots \hat{\Bx}_i \cdots \wedge \Bx_k} \hat{\Bx}^i I
-%= dA_i \frac{I_{k-1}}{\Abs{I_{k-1}}} I.
-\end{dmath}
+I^2 \sum_i \widehat{\Bx^i} d{A'}_i
+\end{equation}
 
-In the second step were able to eliminate the dot product since $k$ is also the dimension of the space.  Since $I_k I$ is a scalar, \eqnref{eqn:stokesTheoremGeometricAlgebraII:4750} is a scalar multiple of $\Bx^i$, which is normal to the surface element $d\Bx_1 \wedge d\Bx_2 \wedge \cdots \wedge d\Bx_{i-1} \wedge d\Bx_{i+1} \wedge \cdots d\Bx_k$ (the wedge of all the differentials that omit $d\Bx_i$).  The scaling of this normal is the area of the bounding element.
+where $d{A'}_i = \pm dA_i$, and $dA_i$ is the area of the boundary area element normal to $\Bx^i$.  Note that the $I^2$ term will now cancel cleanly from both sides of the divergence equation, taking both the metric and the orientation specific dependencies with it.
 
-Without introducing the somewhat nebulous metric and orientation specific term $s_k$ the most general relationship that we can write is
+This leaves us with
 
-\boxedEquation{eqn:stokesTheoremGeometricAlgebraII:4830}{
-\int_V I_k I d^k u \lr{ \spacegrad \cdot \Bf} = 
-\int_{\partial V} d^{k-1} u_i I_k I \Bx^i \cdot \Bf.
-}
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:5070}
+\int_V dV \spacegrad \cdot \Bf = (-1)^{k+1} \int_{\partial V} d{A'}_i \widehat{\Bx^i} \cdot \Bf.
+\end{equation}
 
-Notice that the $(-1)^{k+1}$ factor that appeared on both sides has been canceled, however, we are not able to cancel the $I_k I$ product since $I_k = I_k(\Bx)$ is position dependent.
-
-Let's now move on to consider some specific cases.
+To spell out the details, we have to be very careful with the signs.  However, that is a job best left for specific examples.
 
 \makeexample{2D divergence theorem}{example:stokesTheoremGeometricAlgebraII:4690}{
+
+%%%The boundary differential form for a two parameter Stokes integral is
+%%%
+%%%\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:4890}
+%%%d^1 \Bx 
+%%%= du^2 \lr{ \Bx_1 \wedge \Bx_2 } \cdot \Bx^1
+%%%+ du^1 \lr{ \Bx_1 \wedge \Bx_2 } \cdot \Bx^2
+%%%=
+%%%= -du^2 \Bx_2
+%%%+ du^1 \Bx_1 
+%%%= d\Bx_1 
+%%% -d\Bx_2.
+%%%\end{dmath}
+%%%
+%%%Multiplying this by the pseudoscalar gives something that we expect to be related to the normals (i.e. length scaled dual basis vectors).
+%%%
+FIXME: TODO.
 }
 
 \makeexample{3D divergence theorem}{example:stokesTheoremGeometricAlgebraII:4470}{
 
-For a 3D system, and three parameter volume, duality applied to the bivector Stokes result provides the divergence theorem.  In this case we have $\boldpartial = \spacegrad$.  For a bivector $B$ let $I B = \Bf$.  Provided the orientation of the volume element picked is positive, we can write $d^3 \Bx = I dV$, so that the differential form for the curl is
-
-\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:4490}
-\begin{aligned}
-d^3 \Bx \cdot
-\lr{ \spacegrad \wedge B }
-&=
-\gpgradezero{ d^3 \Bx ( \spacegrad \wedge B ) } \\
-&=
-\inv{2} \gpgradezero{ I dV ( \spacegrad B + B\spacegrad ) } \\
-&=
-\inv{2} \gpgradezero{ I ( \spacegrad (-I \Bf) + (-I \Bf)\spacegrad ) } dV \\
-&=
-\spacegrad \cdot \Bf dV \\
-\end{aligned}
-\end{equation}
-
-FIXME: see paper notes.
-Similarly for the boundary integral
-, and $d^2 x = I \ncap dA$, so that the curl form is
-
-\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:4510}
-B \cdot d^2 x
-=
-\gpgradezero{ 
--I\Bf I \ncap dA
-} 
-=
-(\Bf \cdot \ncap) dA
- \\
-\end{dmath}
-
-This recovers the \R{3} divergence equation
-
-\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:4530}
-\int \spacegrad \cdot \Bf dV = \int (\Bf \cdot \ncap) dA
-\end{equation}
+%%%For a 3D system, and three parameter volume, duality applied to the bivector Stokes result provides the divergence theorem.  In this case we have $\boldpartial = \spacegrad$.  For a bivector $B$ let $I B = \Bf$.  Provided the orientation of the volume element picked is positive, we can write $d^3 \Bx = I dV$, so that the differential form for the curl is
+%%%
+%%%\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:4490}
+%%%\begin{aligned}
+%%%d^3 \Bx \cdot
+%%%\lr{ \spacegrad \wedge B }
+%%%&=
+%%%\gpgradezero{ d^3 \Bx ( \spacegrad \wedge B ) } \\
+%%%&=
+%%%\inv{2} \gpgradezero{ I dV ( \spacegrad B + B\spacegrad ) } \\
+%%%&=
+%%%\inv{2} \gpgradezero{ I ( \spacegrad (-I \Bf) + (-I \Bf)\spacegrad ) } dV \\
+%%%&=
+%%%\spacegrad \cdot \Bf dV \\
+%%%\end{aligned}
+%%%\end{equation}
+%%%
+%%%FIXME: see paper notes.
+%%%Similarly for the boundary integral
+%%%, and $d^2 x = I \ncap dA$, so that the curl form is
+%%%
+%%%\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:4510}
+%%%B \cdot d^2 x
+%%%=
+%%%\gpgradezero{ 
+%%%-I\Bf I \ncap dA
+%%%} 
+%%%=
+%%%(\Bf \cdot \ncap) dA
+%%% \\
+%%%\end{dmath}
+%%%
+%%%This recovers the \R{3} divergence equation
+%%%
+%%%\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:4530}
+%%%\int \spacegrad \cdot \Bf dV = \int (\Bf \cdot \ncap) dA
+%%%\end{equation}
+FIXME: TODO.
 }
-FIXME: TODO rest.
 
 \section{Volume integral coordinate representations}
 
