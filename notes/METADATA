@@ -620,12 +620,17 @@ sub printBib
 
       my $r = $_->{'REF'} ;
       $r = $_->{'BIBREF'} if ( exists $_->{'BIBREF'} ) ;
+      my $year = '' ;
+      if ( $_->{'DATE'} =~ /\b(20\d\d)$/ )
+      {
+         $year = "   year={$1},\n" ;
+      }
 
       print
 "\@webpage{$r,
    author={Peeter Joot},
    title={{$_->{'TITLE'}}},
-   url={$_->{'URL'}},
+$year   url={$_->{'URL'}}
 }
 
 " ;
@@ -641,13 +646,18 @@ sub printBookBib
       my $r = $_->{'REF'} ;
       $r = $_->{'BIBREF'} if ( exists $_->{'BIBREF'} ) ;
       my $chapter = $_->{'TITLE'} ;
+      my $year = '' ;
+      if ( $_->{'DATE'} =~ /\b(20\d\d)$/ )
+      {
+         $year = "   year={$1},\n" ;
+      }
 
       print
 "\@inbook{$tag:$r,
    author={Peeter Joot},
    title={{$title}},
    chapter={{$chapter}},
-   url={$url},
+$year   url={$url}
 }
 
 " ;
