@@ -1316,16 +1316,14 @@ The tangent space basis for the subspace situated at some fixed $x = x_0$, is ea
 \end{aligned}
 \end{equation}
 
-We can, in general, compute the reciprocal basis using the duality relation
+While we can use the general relation of \cref{thm:stokesTheoremGeometricAlgebraII:4950} to compute the reciprocal basis.  That is
 
 \begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:3940}
 \Ba^\conj = 
 \lr{ \Bb \wedge \Bc } \inv{\Ba \wedge \Bb \wedge \Bc }.
 \end{equation}
 
-FIXME: didn't prove this here, or refer to a theorem, but did prove the 2D duality relation.  Then proved this one separately in normal/dual section.  Move that proof to a lemma to reference in both places (leave the pseudoscalar parts).
-
-Naively attempting this without algebraic software is a route that requires a lot of care, and is easy to make mistakes doing.  In this case it is really not necessary since the tangent space basis only requires scaling to orthonormalize, satisfying for $i,j \in \setlr{\rho, \theta, \phi}$
+However, a naive attempt at applying this without algebraic software is a route that requires a lot of care, and is easy to make mistakes doing.  In this case it is really not necessary since the tangent space basis only requires scaling to orthonormalize, satisfying for $i,j \in \setlr{\rho, \theta, \phi}$
 
 \begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:3960}
 \Bx_i \cdot \Bx_j =
@@ -1769,7 +1767,7 @@ To spell out the details, we have to be very careful with the signs.  However, t
 %%%
 Let's start back at
 
-\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:n}
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:5230}
 \int_A \gpgradezero{ d^2 \Bx \spacegrad I \Bf } = \int_{\partial A} \lr{ d^1 \Bx I} \cdot \Bf.
 \end{dmath}
 
@@ -1839,15 +1837,39 @@ d^1 \Bx I =
 This provides us a divergence and normal relationship, with $-I^2$ terms on each side that can be cancelled.  Restoring explicit range evaluation, that is
 
 \begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:5210}
-\int_{\partial A} \lr{ d^1 \Bx I } \cdot \Bf
+%\int_{\partial A} \lr{ d^1 \Bx I } \cdot \Bf
+\int_A dA \spacegrad \cdot \Bf
 =
 \int_{\Delta u^2} \evalbar{ ds_2 \widehat{\Bx^1} \cdot \Bf}{\Delta u^1}
-+ \int_{\Delta u^1} \evalbar{ ds_1 \widehat{\Bx^2} \cdot \Bf}{\Delta u^2}.
++ \int_{\Delta u^1} \evalbar{ ds_1 \widehat{\Bx^2} \cdot \Bf}{\Delta u^2}
+=
+\int_{\Delta u^2} \evalbar{ ds_2 \widehat{\Bx^1} \cdot \Bf}{u^1(1)}
+-\int_{\Delta u^2} \evalbar{ ds_2 \widehat{\Bx^1} \cdot \Bf}{u^1(0)}
++ \int_{\Delta u^1} \evalbar{ ds_1 \widehat{\Bx^2} \cdot \Bf}{u^2(0)}
+- \int_{\Delta u^1} \evalbar{ ds_1 \widehat{\Bx^2} \cdot \Bf}{u^2(0)}.
 \end{dmath}
 
-Let's consider this graphically for an Euclidean metric as in
+Let's consider this graphically for an Euclidean metric as illustrated in \cref{fig:normalsOnSurfaceAreaElement:normalsOnSurfaceAreaElementFig10}.
 
-FIXME: pic illustrating that this has the form of integration dotted with the outward normal component.
+\imageFigure{../../figures/gabook/normalsOnSurfaceAreaElementFig10}{Normals on area element}{fig:normalsOnSurfaceAreaElement:normalsOnSurfaceAreaElementFig10}{0.25}
+
+We see that
+\begin{itemize}
+\item along $u^2(0)$ the outwards normal is $-\widehat{\Bx^2}$,
+\item along $u^2(1)$ the outwards normal is $\widehat{\Bx^2}$, 
+\item along $u^1(0)$ the outwards normal is $-\widehat{\Bx^1}$, and
+\item along $u^1(1)$ the outwards normal is $\widehat{\Bx^2}$.
+\end{itemize}
+
+Writing that outwards normal as $\ncap$, we have
+
+\boxedEquation{eqn:stokesTheoremGeometricAlgebraII:5250}{
+\int_A dA \spacegrad \cdot \Bf
+= 
+\ointctrclockwise ds \ncap \cdot \Bf.
+}
+
+Note that we can use the same algebraic notion of outward normal for non-Euclidean spaces, although cannot expect the geometry to look anything like that of the figure.
 }
 
 \makeexample{3D divergence theorem}{example:stokesTheoremGeometricAlgebraII:4470}{
@@ -2510,10 +2532,7 @@ The final result follows after permuting the indices slightly.
 
 } % makeanswer
 
-\section{Lemmas}
-
-%We require a few helping identities that would be distractions above.
-First, to expand a general inner product of the form $d^k \Bx \cdot (\boldpartial \wedge F)$ we require
+\section{Some helpful identities}
 
 \makelemma{Distribution of inner products}{thm:stokesTheoremGeometricAlgebraII:1420}{
 Given two blades $A_s, B_r$ with grades subject to $s > r > 0$, and a vector $b$, the inner product distributes according to
@@ -2522,8 +2541,9 @@ A_s \cdot \lr{ b \wedge B_r } = \lr{ A_s \cdot b } \cdot B_r.
 \end{equation*}
 }
 
-The proof is straightforward, but also mechanical.
-Start by expanding the wedge and dot products within a grade selection operator
+This will allow us, for example, to expand a general inner product of the form $d^k \Bx \cdot (\boldpartial \wedge F)$.
+
+The proof is straightforward, but also mechanical.  Start by expanding the wedge and dot products within a grade selection operator
 
 \begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:1460}
 A_s \cdot \lr{ b \wedge B_r }
