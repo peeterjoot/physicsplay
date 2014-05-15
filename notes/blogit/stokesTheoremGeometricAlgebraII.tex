@@ -101,7 +101,7 @@ This is simple enough looking, but there are some important details left out.  I
 
 I'd attempted to puzzle through these details previously.  A collection of these attempts, to be removed from my collection of geometric algebra notes, can be found in \citep{bigCollectionOfPartiallyIncorrectStokesTheoremMusings}.  I'd recently reviewed all of these and wrote a compact synopsis \citep{synopsisOfBigCollectionOfPartiallyIncorrectStokesTheoremMusings} of all those notes, but in the process of doing so, I realized there was a couple of fundamental problems with the approach I had used.  
 
-One detail that was that I failed to understand, was that we have a requirement for treating a infinitesimal region in the proof, then summing over such regions to express the boundary integral.  Understanding that the boundary integral form and its dot product with the blade whos curl we had taken are both evaluated only at the end points of the integral region is an important detail that follows from such an argument (as used in proof of Stokes theorem for a 3D Cartesian space in \citep{schwartz1987pe}.)  
+One detail that was that I failed to understand, was that we have a requirement for treating a infinitesimal region in the proof, then summing over such regions to express the boundary integral.  Understanding that the boundary integral form and its dot product are both evaluated only at the end points of the integral region is an important detail that follows from such an argument (as used in proof of Stokes theorem for a 3D Cartesian space in \citep{schwartz1987pe}.)  
 
 I also realized that my previous attempts could only work for the special cases where the dimension of the integration volume also equaled the dimension of the vector space.  The key to resolving this issue is the concept of the tangent space, and an understanding of how to express the projection of the gradient onto the tangent space.  These concepts are covered thoroughly in \citep{aMacdonaldVAGC}, which also introduces Stokes theorem as a special case of a more fundamental theorem for integration of geometric algebraic objects.  My objective, for now, is still just to understand the generalization of Stokes theorem, and will leave the fundamental theorem of geometric calculus to later.
 
@@ -212,9 +212,17 @@ It will be useful to employ the cyclic scalar reordering identity for the scalar
 = \gpgradezero{\Bc \Ba \Bb}.
 \end{equation}
 
+For an $N$ dimensional vector space, a product of $N$ orthonormal (up to a sign) unit vectors is referred to as a pseudoscalar for the space, typically denoted by $I$
+
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:n}
+I = \Be_1 \Be_2 \cdots \Be_N.
+\end{equation}
+
+The pseudoscalar may commute or anticommute with other blades in the space.  We may also form a pseudoscalar for a subspace spanned by vectors $\setlr{\Ba, \Bb, \cdots, \Bc}$ by unit scaling the wedge products of those vectors $\Ba \wedge \Bb \wedge \cdots \wedge \Bc$.
+
 \section{Curvilinear coordinates}
 
-A manifold will be loosely defined herein as a parameterized surface.  For example, a 2D manifold can be considered a surface in an $n$ dimensional vector space, parameterized by two variables
+For our purposes a manifold can be loosely defined as a parameterized surface.  For example, a 2D manifold can be considered a surface in an $n$ dimensional vector space, parameterized by two variables
 
 \begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:1280}
 \Bx = \Bx(a,b) = \Bx(u^1, u^2).
@@ -553,7 +561,7 @@ This is the very simplest special case of Stokes theorem.   When written in the 
 \int_{\partial A} \lr{ d\Bx_1 - d\Bx_2 } \cdot \Bf,
 \end{equation}
 
-we must remember that it is implied that both the vector $\Bf$ and the differential elements are evaluated on the boundaries of the integration ranges respectively.  A more exact statement is
+we must remember (the $\partial A$ is to remind us of this) that it is implied that both the vector $\Bf$ and the differential elements are evaluated on the boundaries of the integration ranges respectively.  A more exact statement is
 
 \boxedEquation{eqn:stokesTheoremGeometricAlgebraII:3620}{
 \int_{\partial A} d^1 \Bx \cdot \Bf
@@ -568,11 +576,21 @@ we must remember that it is implied that both the vector $\Bf$ and the different
 -\evalbar{f_2}{\Delta u^1} du^2.
 }
 
-FIXME: fit this back in.
+Expanded out in full this is
 
-We can see in \cref{fig:cylindricalPolarParameterization:cylindricalPolarParameterizationFig6} (with $u^1 = r, u^2 = \theta$) that this specifies a counterclockwise orientation, so for the clockwise orientation used above, we can loosely express the boundary differential form as
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:n}
+\int 
+\evalbar{\Bf \cdot d\Bx_1}{u^2(1)}
+-\evalbar{\Bf \cdot d\Bx_1}{u^2(0)}
++\evalbar{\Bf \cdot d\Bx_2}{u^1(0)}
+-\evalbar{\Bf \cdot d\Bx_2}{u^1(1)},
+\end{equation}
 
-\imageFigure{../../figures/gabook/cylindricalPolarParameterizationFig6}{Oriented polar parameterization loop}{fig:cylindricalPolarParameterization:cylindricalPolarParameterizationFig6}{0.15}
+which can be cross checked against 
+FIXME: figure
+to demonstrate that this specifies a clockwise orientation.
+
+%\imageFigure{../../figures/gabook/cylindricalPolarParameterizationFig6}{Oriented polar parameterization loop}{fig:cylindricalPolarParameterization:cylindricalPolarParameterizationFig6}{0.15}
 
 \makeexample{Green's theorem, a 2D Cartesian parameterization for a Euclidean space}{example:stokesTheoremGeometricAlgebraII:2920}{
 
@@ -1662,7 +1680,7 @@ or for the unit vector in the direction of $\Ba^\conj$,
 
 \section{Divergence theorem.}
 
-When the curl integral is a scalar result we are able to apply duality relationships to obtain the divergence theorem for the cooresponding space.  We will be able to show that a relationship of the following form holds
+When the curl integral is a scalar result we are able to apply duality relationships to obtain the divergence theorem for the corresponding space.  We will be able to show that a relationship of the following form holds
 
 \boxedEquation{eqn:stokesTheoremGeometricAlgebraII:4810}{
 \int_V dV \spacegrad \cdot \Bf = \int_{\partial V} dA_i \ncap^i \cdot \Bf.
@@ -1833,7 +1851,7 @@ d^1 \Bx I =
 +ds_1 \widehat{\Bx^2} } I^2.
 \end{dmath}
 
-This provides us a divergence and normal relationship, with $-I^2$ terms on each side that can be cancelled.  Restoring explicit range evaluation, that is
+This provides us a divergence and normal relationship, with $-I^2$ terms on each side that can be canceled.  Restoring explicit range evaluation, that is
 
 \begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:5210}
 %\int_{\partial A} \lr{ d^1 \Bx I } \cdot \Bf
@@ -1956,7 +1974,7 @@ d^2 \Bx I = \lr{
 +dA_3 \widehat{\Bx^3} } I^2.
 \end{dmath}
 
-We can now state the 3D divergence theorem, cancelling out the metric and orientation dependent term $I^2$ on both sides
+We can now state the 3D divergence theorem, canceling out the metric and orientation dependent term $I^2$ on both sides
 
 \begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:5470}
 \int_V dV \spacegrad \cdot \Bf
@@ -2057,7 +2075,7 @@ Here, we've written
 dA^{ijk} = \Abs{ d\Bx_i \wedge d\Bx_j \wedge d\Bx_k }.
 \end{dmath}
 
-Observe that the dual representation nicely removes the alternation of sign that we had in the Stokes theorem boundary integral, since each permuation of the vectors whos wedge products make up our pseudoscalar, change the sign once.
+Observe that the dual representation nicely removes the alternation of sign that we had in the Stokes theorem boundary integral, since each alternation of the wedged vectors in the pseudoscalar changes the sign once.
 
 As before, we define the outwards normals as $\ncap = \pm \widehat{\Bx^i}$ on the upper and lower integration ranges respectively.  The scalar area elements on these faces can be written in a dual form
 
@@ -3315,7 +3333,7 @@ Consider the dot product of $\acap^\conj$ with $\Bu \in \setlr{\Ba, \Bb, \Bc}$.
 \gpgradezero{ \Bu \wedge \Bb \wedge \Bc \inv{\Ba \wedge \Bb \wedge \Bc} }.
 \end{dmath}
 
-The canceled term is eliminated since it is the product of a vector and trivector producing no scalar term.  Subsituting $\Ba, \Bb, \Bc$, and noting that $\Bu \wedge \Bu = 0$, we have
+The canceled term is eliminated since it is the product of a vector and trivector producing no scalar term.  Substituting $\Ba, \Bb, \Bc$, and noting that $\Bu \wedge \Bu = 0$, we have
 
 \begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:4990}
 \begin{aligned}
