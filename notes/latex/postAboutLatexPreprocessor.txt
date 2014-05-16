@@ -1,0 +1,49 @@
+Not posted.  Look at the trace and demacro methods first.
+
+I have a [perl script for generating wordpress][1] (or physicsforums or wikipedia) style latex markup from standalone latex files, but it has grown into a bit of a monstrosity and has also recently met it's match, so I'm looking for options.  I know of other scripts for this sort of task, such as Luca's [wordpress to latex][2].  My script has support for many of the simple commands I use, such as:
+
+    \newcommand{\lr}[1]{\left(#1\right)}
+    \newcommand{\Ba}[0]{\mathbf{a}}
+    \newcommand{\Bb}[0]{\mathbf{b}}
+    \newcommand{\acap}[0]{\hat{\Ba}}
+    \newcommand{\bcap}[0]{\hat{\Bb}}
+    \newcommand{\ccap}[0]{\hat{\Bc}}
+    \newcommand{\inv}[1]{\frac{1}{#1}}
+    \newcommand{\cross}[0]{\times}
+    \newcommand{\abs}[1]{\lvert{#1}\rvert}
+    \newcommand{\norm}[1]{\lVert{#1}\rVert}
+    ...
+
+
+but all these are hardcoded in the perl, and not based on the .sty file that I've stuffed these into (i.e. brutally ugly and non-extendable way of doing things).
+
+I was hoping that there is something that could do just simple \newcommand replacement, ideally, given a file that is also \include'd and eliminate it from the latex text, replacing all the commands it contained.
+
+I found GPP referenced in [this post][3], but have not tried it yet.  In http://tex.stackexchange.com/a/3181/15 was a note to try \tracingmacros1.  Trying that I found the output was huge, and even after filtering it was huge:
+
+    $ grep --binary-files=text -e '->' latexStdout.txt > q
+    $ wc -l q
+    6148361 q
+
+This also didn't give any indication where each of the macros came from and would be hard to use for a more selective replacement.
+The trace package was referenced in a comment but I found the output of that pretty incomprehensible.
+
+The answer http://tex.stackexchange.com/a/144322/15 points out a de-macro package
+
+http://ctan.org/pkg/de-macro
+
+If I try that I get a python error that I don't know how to deal with:
+
+      File "./de-macro", line 643, in scan_numargs
+        raise "%s must be argument number after %s" % (numargs, name)
+    TypeError: exceptions must be old-style classes or derived from BaseException, not str
+
+I see [hints that there isn't a latex grammar available][4] that could be used to write a more robust standalone latex to latex preprocessor.  In other questions where people asked for latex preprocessors, there were suggestions to use \listfiles, which is nice but not helpful for selective replacement.
+
+Conceptually, I would think this would be an ideal job for latex itself, since it already knows how to do the parsing.  I'd imagine that for somebody who knew the latex backend, it might not be too hard to create a new output mode that was latex-text, but one with selective command preprocessing performed.  I'm assuming that no such method exists, but I thought that it was worth asking about.  If such a mode does not exist, has anybody scoped out the work that would be required to use latex itself for this task?
+
+
+  [1]: https://github.com/peeterjoot/physicsplay/blob/master/bin/tex2blog
+  [2]: http://lucatrevisan.wordpress.com/latex-to-wordpress/
+  [3]: http://tex.stackexchange.com/questions/45961/preprocessor-for-latex
+  [4]: http://tex.stackexchange.com/questions/4201/is-there-a-bnf-grammar-of-the-tex-language
