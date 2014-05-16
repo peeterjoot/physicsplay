@@ -733,8 +733,20 @@ sub expandPeetersMathModeMacros
       $out =~ s/\\abs${r1}/\\left\\lvert $1 \\right\\rvert/g;
    }
 
-   $out =~ s/\\lr${r1}/\\left( $1 \\right)/g;
+   my $lrDepth = 1 ;
+
+   while ( $out =~ s/\\lr\b/\\lr$lrDepth/ )
+   {
+      $lrDepth++ ;
+   }
+
+   for ( my $dd = $lrDepth - 1 ; $dd != 0 ; $dd-- )
+   {
+      $out =~ s/\\lr$dd${r1}/\\left( $1 \\right)/g;
+   }
+
    $out =~ s/\\biglr${r1}/\\Bigl( $1 \\Bigr)/g;
+   $out =~ s/\\setlr${r1}/\\left\\{ $1 \\right\\}/g;
 
    $out =~ s/\\Norm${r1}/\\left\\lVert $1 \\right\\rVert/g;
 
@@ -764,6 +776,11 @@ sub expandPeetersMathModeMacros
    $out =~ s/\\lrpartial/\\stackrel{ \\leftrightarrow }{\\partial}/g;
    $out =~ s/\\rspacegrad/\\stackrel{ \\rightarrow }{\\spacegrad}/g;
    $out =~ s/\\lspacegrad/\\stackrel{ \\leftarrow }{\\spacegrad}/g;
+
+   $out =~ s/\\qedmarker/\\qquad\\square/g ;
+   $out =~ s/\\rboldpartial/\\stackrel{ \\rightarrow }{\\boldpartial}/g ;
+   $out =~ s/\\lboldpartial/\\stackrel{ \\leftarrow }{\\boldpartial}/g ;
+   $out =~ s/\\boldpartial/\\boldsymbol{\\partial}/g ;
 
    $out =~ s/\\BCB/\\boldsymbol{\\mathcal{B}}/g;
    $out =~ s/\\EE/\\boldsymbol{\\mathcal{E}}/g;
@@ -798,6 +815,13 @@ sub expandPeetersMathModeMacros
    $out =~ s/\\hat(\w)/\\hat{$1}/g;
 
    $out =~ s/\\InvGamma/\\sqrt{1 - \\frac{\\Bv^2}{c^2}}/g;
+
+   $out =~ s/\\conjugateStar${r1}/{$1}^{*}/g;
+   $out =~ s/\\conj/{*}/g;
+
+#   $out =~ s/\\aconjcap/\\widehat{\\mathbf{a}^{*}}/g;
+   $out =~ s/\\aconjcap/\\widehat{\\Ba^{*}}/g;
+
 # this messes up \Bigr and \Bigl
 #   $out =~ s/\\B(.)/\\mathbf{$1}/g;
 # 
@@ -813,8 +837,6 @@ sub expandPeetersMathModeMacros
    $out =~ s/\\grad/\\nabla/g;
    $out =~ s/\\spacegrad/\\boldsymbol{\\nabla}/g;
    $out =~ s/\\delambertian/\\square/g;
-   $out =~ s/\\conjugateStar${r1}/{$1}^{*}/g;
-   $out =~ s/\\conj/{*}/g;
 
    $out =~ s,\\PDi${r2},{\\partial $2}/{\\partial $1},g ;
    $out =~ s,\\PDc${r3},\\left({\\partial $2}/{\\partial $1}\\right)_{$3},g ;

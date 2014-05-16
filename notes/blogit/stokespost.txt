@@ -1,0 +1,1517 @@
+<a href="https://sites.google.com/site/peeterjoot3/math2014/stokesTheoremGeometricAlgebra.pdf">[Click here for a PDF of this post with nicer formatting and figures if the post had any (especially if my latex to wordpress script has left FORMULA DOES NOT PARSE errors.)]</a>
+
+Understanding how to apply Stokes theorem to higher dimensional spaces, non-Euclidean metrics, and with curvilinear coordinates has been a long standing goal.  
+
+A traditional answer to these questions can be found in the formalism of differential forms, as covered for example in [2], and [8].  However, both of those texts, despite their small size, are intensely scary.  I also found it counter intuitive to have to express all physical quantities as forms, since there are many times when we don't have any pressing desire to integrate these.
+
+Later I encountered Denker's straight wire treatment [1], which states that the geometric algebra formulation of Stokes theorem has the form
+
+<p align="center">$latex \begin{aligned}\int_S \nabla \wedge F = \int_{\partial S} F\end{aligned} \hspace{\stretch{1}}(1.0.1)$</p>
+
+
+This is simple enough looking, but there are some important details left out.  In particular the grades do not match, so there must be some sort of implied projection or dot product operations too.  We also need to understand how to express the hypervolume and hypersurfaces when evaluating these integrals, especially when we want to use curvilinear coordinates.
+
+I'd attempted to puzzle through these details previously.  A collection of these attempts, to be removed from my collection of geometric algebra notes, can be found in [4].  I'd recently reviewed all of these and wrote a compact synopsis [5] of all those notes, but in the process of doing so, I realized there was a couple of fundamental problems with the approach I had used.  
+
+One detail that was that I failed to understand, was that we have a requirement for treating a infinitesimal region in the proof, then summing over such regions to express the boundary integral.  Understanding that the boundary integral form and its dot product are both evaluated only at the end points of the integral region is an important detail that follows from such an argument (as used in proof of Stokes theorem for a 3D Cartesian space in [7].)  
+
+I also realized that my previous attempts could only work for the special cases where the dimension of the integration volume also equaled the dimension of the vector space.  The key to resolving this issue is the concept of the tangent space, and an understanding of how to express the projection of the gradient onto the tangent space.  These concepts are covered thoroughly in [6], which also introduces Stokes theorem as a special case of a more fundamental theorem for integration of geometric algebraic objects.  My objective, for now, is still just to understand the generalization of Stokes theorem, and will leave the fundamental theorem of geometric calculus to later.
+
+Now that these details are understood, the purpose of these notes is to detail the Geometric algebra form of Stokes theorem, covering its generalization to higher dimensional spaces and non-Euclidean metrics (i.e. especially those used for special relativity and electromagnetism), and understanding how to properly deal with curvilinear coordinates.  This generalization has the form
+
+\maketheorem{Stokes' Theorem, curl form}{thm:stokesTheoremGeometricAlgebraII:1740}{
+
+For blades $latex F \in \bigwedge^{s}$, and $latex m$ volume element $latex d^k \mathbf{x}, s &lt; k$,
+
+<p align="center">$latex \begin{aligned}\int_V d^k \mathbf{x} \cdot (\boldsymbol{\partial} \wedge F) = \int_{\partial V} d^{k-1} \mathbf{x} \cdot F.\end{aligned} $</p>
+
+
+Here the volume integral is over a $latex m$ dimensional surface (manifold), $latex \boldsymbol{\partial}$ is the projection of the gradient onto the tangent space of the manifold, and $latex \partial V$ indicates integration over the boundary of $latex V$.
+}
+
+It takes some work to give this more concrete meaning.  I will attempt to do so in a gradual fashion, and provide a number of examples that illustrate some of the relevant details.
+
+<h1>Basic notation</h1>
+
+A finite vector space, not necessarily Euclidean, with basis $latex \left\{ {\mathbf{e}_1, \mathbf{e}_2, \cdots} \right\}$ will be assumed to be the generator of the geometric algebra.  A dual or reciprocal basis $latex \left\{ {\mathbf{e}^1, \mathbf{e}^2, \cdots} \right\}$ for this basis can be calculated, defined by the property
+
+<p align="center">$latex \begin{aligned}\mathbf{e}_i \cdot \mathbf{e}^j = {\delta_i}^j.\end{aligned} \hspace{\stretch{1}}(1.1.2)$</p>
+
+
+This is an Euclidean space when $latex \mathbf{e}_i = \mathbf{e}^i, \forall i$.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+To select from a multivector $latex A$ the grade $latex k$ portion, say $latex A_k$ we write
+
+<p align="center">$latex \begin{aligned}A_k = {\left\langle{{A}}\right\rangle}_{{k}}.\end{aligned} \hspace{\stretch{1}}(1.1.3)$</p>
+
+
+The scalar portion of a multivector $latex A$ will be written as
+
+<p align="center">$latex \begin{aligned}{\left\langle{{A}}\right\rangle}_{{0}} \equiv \left\langle{{A}}\right\rangle.\end{aligned} \hspace{\stretch{1}}(1.1.4)$</p>
+
+
+The grade selection operators can be used to define the outer and inner products.  For blades $latex U$, and $latex V$ of grade $latex r$ and $latex s$ respectively, these are
+
+<p align="center">$latex \begin{aligned}{\left\langle{{ U V }}\right\rangle}_{{\left\lvert {r + s} \right\rvert}} \equiv U \wedge V\end{aligned} \hspace{\stretch{1}}(1.0.5.5)$</p>
+
+<p align="center">$latex \begin{aligned}{\left\langle{{ U V }}\right\rangle}_{{\left\lvert {r - s} \right\rvert}} \equiv U \cdot V.\end{aligned} \hspace{\stretch{1}}(1.0.5.5)$</p>
+
+
+Written out explicitly for odd grade blades $latex A$ (vector, trivector, ...), and vector $latex \mathbf{a}$ the dot and wedge products are respectively
+
+<p align="center">$latex \begin{aligned}\begin{aligned}\mathbf{a} \wedge A &amp;= \frac{1}{{2}} (\mathbf{a} A - A \mathbf{a}) \\ \mathbf{a} \cdot A &amp;= \frac{1}{{2}} (\mathbf{a} A + A \mathbf{a}).\end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.6)$</p>
+
+
+Similarly for even grade blades these are
+
+<p align="center">$latex \begin{aligned}\begin{aligned}\mathbf{a} \wedge A &amp;= \frac{1}{{2}} (\mathbf{a} A + A \mathbf{a}) \\ \mathbf{a} \cdot A &amp;= \frac{1}{{2}} (\mathbf{a} A - A \mathbf{a}).\end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.7)$</p>
+
+
+It will be useful to employ the cyclic scalar reordering identity for the scalar selection operator
+
+<p align="center">$latex \begin{aligned}\left\langle{{\mathbf{a} \mathbf{b} \mathbf{c}}}\right\rangle= \left\langle{{\mathbf{b} \mathbf{c} \mathbf{a}}}\right\rangle= \left\langle{{\mathbf{c} \mathbf{a} \mathbf{b}}}\right\rangle.\end{aligned} \hspace{\stretch{1}}(1.0.8)$</p>
+
+
+For an $latex N$ dimensional vector space, a product of $latex N$ orthonormal (up to a sign) unit vectors is referred to as a pseudoscalar for the space, typically denoted by $latex I$
+
+<p align="center">$latex \begin{aligned}I = \mathbf{e}_1 \mathbf{e}_2 \cdots \mathbf{e}_N.\end{aligned} \hspace{\stretch{1}}(1.0.9)$</p>
+
+
+The pseudoscalar may commute or anticommute with other blades in the space.  We may also form a pseudoscalar for a subspace spanned by vectors $latex \left\{ {\mathbf{a}, \mathbf{b}, \cdots, \mathbf{c}} \right\}$ by unit scaling the wedge products of those vectors $latex \mathbf{a} \wedge \mathbf{b} \wedge \cdots \wedge \mathbf{c}$.
+
+<h1>Curvilinear coordinates</h1>
+
+For our purposes a manifold can be loosely defined as a parameterized surface.  For example, a 2D manifold can be considered a surface in an $latex n$ dimensional vector space, parameterized by two variables
+
+<p align="center">$latex \begin{aligned}\mathbf{x} = \mathbf{x}(a,b) = \mathbf{x}(u^1, u^2).\end{aligned} \hspace{\stretch{1}}(1.0.10)$</p>
+
+
+Note that the indices here do not represent exponentiation.  We can construct a basis for the manifold as
+
+<p align="center">$latex \begin{aligned}\mathbf{x}_i = \frac{\partial {\mathbf{x}}}{\partial {u^i}}.\end{aligned} \hspace{\stretch{1}}(1.0.11)$</p>
+
+
+On the manifold we can calculate a reciprocal basis $latex \left\{ {\mathbf{x}^i} \right\}$, defined by requiring, at each point on the surface
+
+<p align="center">$latex \begin{aligned}\mathbf{x}^i \cdot \mathbf{x}_j = {\delta^i}_j.\end{aligned} \hspace{\stretch{1}}(1.0.12)$</p>
+
+
+Associated implicitly with this basis is a curvilinear coordinate representation defined by the projection operation
+
+<p align="center">$latex \begin{aligned}\mathbf{x} = x^i \mathbf{x}_i,\end{aligned} \hspace{\stretch{1}}(1.0.13)$</p>
+
+
+(sums over mixed indices are implied).   These coordinates can be calculated by taking dot products with the reciprocal frame vectors
+
+<p align="center">$latex \begin{aligned}\mathbf{x} \cdot \mathbf{x}^i= x^j \mathbf{x}_j \cdot \mathbf{x}^i= x^j {\delta_j}^i= x^i.\end{aligned} \hspace{\stretch{1}}(1.0.13)$</p>
+
+
+
+In this document all coordinates are with respect to a specific curvilinear basis, and not with respect to the standard basis $latex \left\{ {\mathbf{e}_i} \right\}$ or its dual basis unless otherwise noted.
+
+Similar to the usual notation for derivatives with respect to the standard basis coordinates we form a lower index partial derivative operator
+
+<p align="center">$latex \begin{aligned}\frac{\partial {}}{\partial {u^i}} \equiv \partial_i,\end{aligned} \hspace{\stretch{1}}(1.0.13)$</p>
+
+
+so that when the complete vector space is spanned by $latex \left\{ {\mathbf{x}_i} \right\}$ the gradient has the curvilinear representation
+
+<p align="center">$latex \begin{aligned}\boldsymbol{\nabla} = \mathbf{x}^i \frac{\partial {}}{\partial {u^i}}.\end{aligned} \hspace{\stretch{1}}(1.0.13)$</p>
+
+
+This can be motivated by noting that the directional derivative is defined by
+
+<p align="center">$latex \begin{aligned}\mathbf{a} \cdot \boldsymbol{\nabla} f(\mathbf{x}) = \lim_{t \rightarrow 0} \frac{f(\mathbf{x} + t \mathbf{a}) - f(\mathbf{x})}{t}.\end{aligned} \hspace{\stretch{1}}(1.0.17)$</p>
+
+
+
+
+
+
+
+
+
+When the basis $latex \left\{ {\mathbf{x}_i} \right\}$ does not span the space, the projection of the gradient onto the tangent space at the point of evaluation
+
+<p align="center">$latex \begin{aligned}\boldsymbol{\partial} = \mathbf{x}^i \partial_i = \sum_i \mathbf{x}_i \frac{\partial {}}{\partial {u^i}}.\end{aligned} \hspace{\stretch{1}}(1.0.18)$</p>
+
+
+This is called the vector derivative.
+
+
+
+
+
+
+
+
+See [6] for a more complete discussion of the gradient and vector derivatives in curvilinear coordinates.
+
+<h1>Green's theorem</h1>
+
+Given a two parameter ($latex u,v$) surface parameterization, the curvilinear coordinate representation of a vector $latex \mathbf{f}$ has the form
+
+<p align="center">$latex \begin{aligned}\mathbf{f} = f_u \mathbf{x}^u + f_v \mathbf{x}^v + f_\perp \mathbf{x}^\perp.\end{aligned} \hspace{\stretch{1}}(1.19)$</p>
+
+
+We assume that the vector space is of dimension two or greater but otherwise unrestricted, and need not have an Euclidean basis.  Here $latex f_\perp \mathbf{x}^\perp$ denotes the rejection of $latex \mathbf{f}$ from the tangent space at the point of evaluation.  Green's theorem relates the integral around a closed curve to an ``area'' integral on that surface
+
+\maketheorem{Green's Theorem}{thm:stokesTheoremGeometricAlgebraII:1660}{
+<p align="center">$latex \begin{aligned}\ointctrclockwise \mathbf{f} \cdot d\mathbf{l}=\iint \left( {-\frac{\partial {f_u}}{\partial {v}}+\frac{\partial {f_v}}{\partial {u}}} \right)du dv\end{aligned} $</p>
+
+}
+
+Following the arguments used in [7] for Stokes theorem in three dimensions, we first evaluate the loop integral along the differential element of the surface at the point $latex \mathbf{x}(u_0, v_0)$ evaluated over the range $latex (du, dv)$, as shown in the infinitesimal loop of fig. 1.1.
+
+\imageFigure{../../figures/gabook/loopIntegralInfinitesimalFig1}{Infinitesimal loop integral}{fig:loopIntegralInfinitesimal:loopIntegralInfinitesimalFig1}{0.2}
+
+Over the infinitesimal area, the loop integral decomposes into
+
+<p align="center">$latex \begin{aligned}\ointctrclockwise \mathbf{f} \cdot d\mathbf{l}=\int \mathbf{f} \cdot d\mathbf{x}_1+\int \mathbf{f} \cdot d\mathbf{x}_2+\int \mathbf{f} \cdot d\mathbf{x}_3+\int \mathbf{f} \cdot d\mathbf{x}_4,\end{aligned} \hspace{\stretch{1}}(1.20)$</p>
+
+
+where the differentials along the curve are
+
+<p align="center">$latex \begin{aligned}\begin{aligned}d\mathbf{x}_1 &amp;= {\left.{{ \frac{\partial {\mathbf{x}}}{\partial {u}} }}\right\vert}_{{v = v_0}} du \\ d\mathbf{x}_2 &amp;= {\left.{{ \frac{\partial {\mathbf{x}}}{\partial {v}} }}\right\vert}_{{u = u_0 + du}} dv \\ d\mathbf{x}_3 &amp;= -{\left.{{ \frac{\partial {\mathbf{x}}}{\partial {u}} }}\right\vert}_{{v = v_0 + dv}} du \\ d\mathbf{x}_4 &amp;= -{\left.{{ \frac{\partial {\mathbf{x}}}{\partial {v}} }}\right\vert}_{{u = u_0}} dv.\end{aligned}\end{aligned} \hspace{\stretch{1}}(1.21)$</p>
+
+
+It is assumed that the parameterization change $latex (du, dv)$ is small enough that this loop integral can be considered planar (regardless of the dimension of the vector space).  Making use of the fact that $latex \mathbf{x}^\perp \cdot \mathbf{x}_\alpha = 0$ for $latex \alpha \in \left\{ {u,v} \right\}$, the loop integral is
+
+<p align="center">$latex \begin{aligned}\ointctrclockwise \mathbf{f} \cdot d\mathbf{l}=\int\left( {f_u \mathbf{x}^u + f_v \mathbf{x}^v + f_\perp \mathbf{x}^\perp} \right)\cdot\Bigl(\mathbf{x}_u(u, v_0) du - \mathbf{x}_u(u, v_0 + dv) du+\mathbf{x}_v(u_0 + du, v) dv - \mathbf{x}_v(u_0, v) dv\Bigr)=\intf_u(u, v_0) du - f_u(u, v_0 + dv) du+f_v(u_0 + du, v) dv - f_v(u_0, v) dv\end{aligned} \hspace{\stretch{1}}(1.22)$</p>
+
+
+With the distances being infinitesimal, these differences can be rewritten as partial differentials
+
+<p align="center">$latex \begin{aligned}\ointctrclockwise \mathbf{f} \cdot d\mathbf{l}=\iint \left( {-\frac{\partial {f_u}}{\partial {v}}+\frac{\partial {f_v}}{\partial {u}}} \right)du dv.\end{aligned} \hspace{\stretch{1}}(1.23)$</p>
+
+
+We can now sum over a larger area as in fig. 1.2
+
+\imageFigure{../../figures/gabook/loopIntegralInfinitesimalSumFig2}{Sum of infinitesimal loops}{fig:loopIntegralInfinitesimalSum:loopIntegralInfinitesimalSumFig2}{0.2}
+
+All the opposing oriented loop elements cancel, so the integral around the complete boundary of the surface $latex \mathbf{x}(u, v)$ is given by the $latex u,v$ area integral of the partials difference.
+
+We will see that Green's theorem is a special case of the Curl (Stokes) theorem.  This observation will also provide a geometric interpretation of the right hand side area integral of \cref{thm:stokesTheoremGeometricAlgebraII:1660}, and allow for a coordinate free representation.
+
+<b>Special case:</b>
+
+An important special case of Green's theorem is for a Euclidean two dimensional space where the vector function is
+
+<p align="center">$latex \begin{aligned}\mathbf{f} = P \mathbf{e}_1 + Q \mathbf{e}_2.\end{aligned} \hspace{\stretch{1}}(1.24)$</p>
+
+
+Here Green's theorem takes the form
+
+<p align="center">$latex \begin{aligned}\ointctrclockwise P dx + Q dy=\iint \left( {\frac{\partial {Q}}{\partial {x}}-\frac{\partial {P}}{\partial {y}}} \right)dx dy.\end{aligned} \hspace{\stretch{1}}(1.0.25)$</p>
+
+
+<h1>Curl theorem, two volume vector field</h1>
+
+Having examined the right hand side of \cref{thm:stokesTheoremGeometricAlgebraII:1740} for the very simplest geometric object $latex \mathbf{f}$, let's look at the right hand side, the area integral in more detail.  We restrict our attention for now to vectors $latex \mathbf{f}$ still defined by eq. 1.19.
+
+First we need to assign a meaning to $latex d^2 \mathbf{x}$.  By this, we mean the wedge products of the two differential elements.  With
+
+<p align="center">$latex \begin{aligned}d\mathbf{x}_i = du^i \frac{\partial {\mathbf{x}}}{\partial {u^i}} = du^i \mathbf{x}_i,\end{aligned} \hspace{\stretch{1}}(1.26)$</p>
+
+
+that area element is
+
+<p align="center">$latex \begin{aligned}d^2 \mathbf{x}= d\mathbf{x}_1 \wedge d\mathbf{x}_2= du^1 du^2 \mathbf{x}_1 \wedge \mathbf{x}_2.\end{aligned} \hspace{\stretch{1}}(1.0.27)$</p>
+
+
+This is the oriented area element that lies in the tangent plane at the point of evaluation, and has the magnitude of the area of that segment of the surface, as depicted in fig. 1.3.
+
+\imageFigure{../../figures/gabook/loopIntegralAreaElementsFig3}{Oriented area element tiling of a surface}{fig:loopIntegralAreaElements:loopIntegralAreaElementsFig3}{0.3}
+
+Observe that we have no requirement to introduce a normal to the surface to describe the direction of the plane.  The wedge product provides the information about the orientation of the place in the space, even when the vector space that our vector lies in has dimension greater than three.
+
+Proceeding with the expansion of the dot product of the area element with the curl, using eq. 1.0.6, eq. 1.0.7, and eq. 1.0.8, and a scalar selection operation, we have
+
+<p align="center">$latex \begin{aligned}d^2 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)=\left\langle{{d^2 \mathbf{x} \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)}}\right\rangle=\left\langle{{d^2 \mathbf{x}\frac{1}{{2}}\left( { \stackrel{ \rightarrow }{\boldsymbol{\partial}} \mathbf{f} - \mathbf{f} \stackrel{ \leftarrow }{\boldsymbol{\partial}} } \right)}}\right\rangle=\frac{1}{{2}}\left\langle{{d^2 \mathbf{x} \left( { \mathbf{x}^i \left( { \partial_i \mathbf{f}} \right) - \left( {\partial_i \mathbf{f}} \right) \mathbf{x}^i } \right)}}\right\rangle=\frac{1}{{2}}\left\langle{{\left( { \partial_i \mathbf{f} } \right) d^2 \mathbf{x} \mathbf{x}^i - \left( { \partial_i \mathbf{f} } \right) \mathbf{x}^i d^2 \mathbf{x}}}\right\rangle=\left\langle{{\left( { \partial_i \mathbf{f} } \right) \left( { d^2 \mathbf{x} \cdot \mathbf{x}^i } \right)}}\right\rangle=\partial_i \mathbf{f} \cdot\left( { d^2 \mathbf{x} \cdot \mathbf{x}^i } \right).\end{aligned} \hspace{\stretch{1}}(1.28)$</p>
+
+
+Let's proceed to expand the inner dot product
+
+<p align="center">$latex \begin{aligned}d^2 \mathbf{x} \cdot \mathbf{x}^i=du^1 du^2\left( { \mathbf{x}_1 \wedge \mathbf{x}_2 } \right) \cdot \mathbf{x}^i=du^1 du^2\left( {\mathbf{x}_2 \cdot \mathbf{x}^i \mathbf{x}_1-\mathbf{x}_1 \cdot \mathbf{x}^i \mathbf{x}_2} \right)=du^1 du^2\left( {{\delta_2}^i \mathbf{x}_1-{\delta_1}^i \mathbf{x}_2} \right).\end{aligned} \hspace{\stretch{1}}(1.29)$</p>
+
+
+The complete curl term is thus
+
+<p align="center">$latex \begin{aligned}d^2 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)=du^1 du^2\left( {\frac{\partial {\mathbf{f}}}{\partial {u^2}} \cdot \mathbf{x}_1-\frac{\partial {\mathbf{f}}}{\partial {u^1}} \cdot \mathbf{x}_2} \right)\end{aligned} \hspace{\stretch{1}}(1.30)$</p>
+
+
+This almost has the form of eq. 1.23, although that is not immediately obvious.  Working backwards, using the shorthand $latex u = u^1, v = u^2$, we can show that this coordinate representation can be eliminated
+
+<p align="center">$latex \begin{aligned}-du dv\left( {\frac{\partial {f_v}}{\partial {u}} -\frac{\partial {f_u}}{\partial {v}}} \right)=du dv\left( {\frac{\partial {}}{\partial {v}}\left( {\mathbf{f} \cdot \mathbf{x}_u} \right)-\frac{\partial {}}{\partial {u}}\left( {\mathbf{f} \cdot \mathbf{x}_v} \right)} \right)=du dv\left( {\frac{\partial {\mathbf{f}}}{\partial {v}} \cdot \mathbf{x}_u-\frac{\partial {\mathbf{f}}}{\partial {u}} \cdot \mathbf{x}_v+\mathbf{f} \cdot \left( {\frac{\partial {\mathbf{x}_u}}{\partial {v}}-\frac{\partial {\mathbf{x}_v}}{\partial {u}}} \right)} \right)=du dv \left( {\frac{\partial {\mathbf{f}}}{\partial {v}} \cdot \mathbf{x}_u-\frac{\partial {\mathbf{f}}}{\partial {u}} \cdot \mathbf{x}_v+\mathbf{f} \cdot \left( {\frac{\partial^2 \mathbf{x}}{\partial v \partial u}-\frac{\partial^2 \mathbf{x}}{\partial u \partial v}} \right)} \right)=du dv \left( {\frac{\partial {\mathbf{f}}}{\partial {v}} \cdot \mathbf{x}_u-\frac{\partial {\mathbf{f}}}{\partial {u}} \cdot \mathbf{x}_v} \right)=d^2 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right).\end{aligned} \hspace{\stretch{1}}(1.31)$</p>
+
+
+This relates the two parameter surface integral of the curl to the loop integral over its boundary
+
+<p align="center">$latex \begin{aligned}\int d^2 \mathbf{x} \cdot (\boldsymbol{\partial} \wedge \mathbf{f}) = \oint \mathbf{f} \cdot d\mathbf{l}.\end{aligned} \hspace{\stretch{1}}(1.0.32)$</p>
+
+
+This is the very simplest special case of Stokes theorem.   When written in the general form of Stokes \cref{thm:stokesTheoremGeometricAlgebraII:1740}
+
+<p align="center">$latex \begin{aligned}\int_A d^2 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f}} \right)=\int_{\partial A} d^1 \mathbf{x} \cdot \mathbf{f}=\int_{\partial A} \left( { d\mathbf{x}_1 - d\mathbf{x}_2 } \right) \cdot \mathbf{f},\end{aligned} \hspace{\stretch{1}}(1.0.33)$</p>
+
+
+we must remember (the $latex \partial A$ is to remind us of this) that it is implied that both the vector $latex \mathbf{f}$ and the differential elements are evaluated on the boundaries of the integration ranges respectively.  A more exact statement is
+
+<p align="center">$latex \begin{aligned}\int_{\partial A} d^1 \mathbf{x} \cdot \mathbf{f}=\int {\left.{{\mathbf{f} \cdot d\mathbf{x}_1}}\right\vert}_{{\Delta u^2}}-{\left.{{\mathbf{f} \cdot d\mathbf{x}_2}}\right\vert}_{{\Delta u^1}}=\int {\left.{{f_1}}\right\vert}_{{\Delta u^2}} du^1-{\left.{{f_2}}\right\vert}_{{\Delta u^1}} du^2.\end{aligned} \hspace{\stretch{1}}(1.0.34)$</p>
+
+
+Expanded out in full this is
+
+<p align="center">$latex \begin{aligned}\int {\left.{{\mathbf{f} \cdot d\mathbf{x}_1}}\right\vert}_{{u^2(1)}}-{\left.{{\mathbf{f} \cdot d\mathbf{x}_1}}\right\vert}_{{u^2(0)}}+{\left.{{\mathbf{f} \cdot d\mathbf{x}_2}}\right\vert}_{{u^1(0)}}-{\left.{{\mathbf{f} \cdot d\mathbf{x}_2}}\right\vert}_{{u^1(1)}},\end{aligned} \hspace{\stretch{1}}(1.0.35)$</p>
+
+
+which can be cross checked against fig. 1.4 to demonstrate that this specifies a clockwise orientation.  For the surface with oriented area $latex d\mathbf{x}_1 \wedge d\mathbf{x}_2$, the clockwise loop is designated with line elements (1)-(4), we see that the contributions around this loop (in boxes) match eq. 1.0.35.
+
+\imageFigure{../../figures/gabook/clockwiseLoopOnSurfaceFig12}{Clockwise loop}{fig:clockwiseLoopOnSurface:clockwiseLoopOnSurfaceFig12}{0.3}
+
+
+
+<h2>Example: Green's theorem, a 2D Cartesian parameterization for a Euclidean space</h2>{example:stokesTheoremGeometricAlgebraII:2920}{
+
+For a Cartesian 2D Euclidean parameterization of a vector field and the integration space, Stokes theorem should be equivalent to Green's theorem eq. 1.0.25.  Let's expand both sides of eq. 1.0.32 independently to verify equality.  The parameterization is
+
+<p align="center">$latex \begin{aligned}\mathbf{x}(x, y) = x \mathbf{e}_1 + y \mathbf{e}_2.\end{aligned} \hspace{\stretch{1}}(1.36)$</p>
+
+
+Here the dual basis is the basis, and the projection onto the tangent space is just the gradient
+
+<p align="center">$latex \begin{aligned}\boldsymbol{\partial} = \boldsymbol{\nabla}= \mathbf{e}_1 \frac{\partial {}}{\partial {x}}+ \mathbf{e}_2 \frac{\partial {}}{\partial {y}}.\end{aligned} \hspace{\stretch{1}}(1.0.37)$</p>
+
+
+The volume element is an area weighted pseudoscalar for the space
+
+<p align="center">$latex \begin{aligned}d^2 \mathbf{x} = dx dy \frac{\partial {\mathbf{x}}}{\partial {x}} \wedge \frac{\partial {\mathbf{x}}}{\partial {y}} = dx dy \mathbf{e}_1 \mathbf{e}_2,\end{aligned} \hspace{\stretch{1}}(1.0.38)$</p>
+
+
+and the curl of a vector $latex \mathbf{f} = f_1 \mathbf{e}_1 + f_2 \mathbf{e}_2$ is
+
+<p align="center">$latex \begin{aligned}\boldsymbol{\partial} \wedge \mathbf{f}=\left( {\mathbf{e}_1 \frac{\partial {}}{\partial {x}}+ \mathbf{e}_2 \frac{\partial {}}{\partial {y}}} \right) \wedge\left( {f_1 \mathbf{e}_1 + f_2 \mathbf{e}_2} \right)=\mathbf{e}_1 \mathbf{e}_2\left( {\frac{\partial {f_2}}{\partial {x}}-\frac{\partial {f_1}}{\partial {y}}} \right).\end{aligned} \hspace{\stretch{1}}(1.0.38)$</p>
+
+
+So, the LHS of Stokes theorem takes the coordinate form
+
+<p align="center">$latex \begin{aligned}\int d^2 \mathbf{x} \cdot (\boldsymbol{\partial} \wedge \mathbf{f}) =\iint dx dy\underbrace{\left\langle{{\mathbf{e}_1 \mathbf{e}_2 \mathbf{e}_1 \mathbf{e}_2}}\right\rangle}_{=-1}\left( {\frac{\partial {f_2}}{\partial {x}}-\frac{\partial {f_1}}{\partial {y}}} \right).\end{aligned} \hspace{\stretch{1}}(1.0.38)$</p>
+
+
+For the RHS, following fig. 1.5, we have
+
+<p align="center">$latex \begin{aligned}\oint \mathbf{f} \cdot d\mathbf{x}=f_2(x_0, y) dy+f_1(x, y_1) dx-f_2(x_1, y) dy-f_1(x, y_0) dx=\int dx \left( {f_1(x, y_1)-f_1(x, y_0)} \right)-\int dy \left( {f_2(x_1, y)-f_2(x_0, y)} \right).\end{aligned} \hspace{\stretch{1}}(1.0.38)$</p>
+
+
+As expected, we can also obtain this by integrating eq. 1.0.38.
+
+\imageFigure{../../figures/gabook/euclidean2DloopFig4}{Euclidean 2D loop}{fig:euclidean2Dloop:euclidean2DloopFig4}{0.15}
+}
+
+<h2>Example: Cylindrical parameterization</h2>{example:stokesTheoremGeometricAlgebraII:3060}{
+
+Let's now consider a cylindrical parameterization of a 4D space with Euclidean metric $latex ++++$ or Minkowski metric $latex +++-$.  For such a space let's do a brute force expansion of both sides of Stokes theorem to gain some confidence that all is well.
+
+With $latex \kappa = \mathbf{e}_3 \mathbf{e}_4$, such a space is conveniently parameterized as illustrated in fig. 1.6 as
+
+<p align="center">$latex \begin{aligned}\mathbf{x}(\rho, \theta, h) = x \mathbf{e}_1 + y \mathbf{e}_2 + \rho \mathbf{e}_3 e^{\kappa \theta}.\end{aligned} \hspace{\stretch{1}}(1.42)$</p>
+
+
+\imageFigure{../../figures/gabook/cylindricalPolarParameterizationFig7}{Cylindrical polar parameterization}{fig:cylindricalPolarParameterization:cylindricalPolarParameterizationFig7}{0.15}
+
+
+
+Note that the Euclidean case where $latex \left( {\mathbf{e}_4} \right)^2 = 1$ rejection of the non-axial components of $latex \mathbf{x}$ expands to
+
+<p align="center">$latex \begin{aligned}\left( { \left( { \mathbf{x} \wedge \mathbf{e}_1 \wedge \mathbf{e}_2} \right) \cdot \mathbf{e}^2 } \right) \cdot \mathbf{e}^1 =\rho \left( { \mathbf{e}_3 \cos\theta + \mathbf{e}_4 \sin \theta } \right),\end{aligned} \hspace{\stretch{1}}(1.43)$</p>
+
+
+whereas for the Minkowski case where $latex \left( {\mathbf{e}_4} \right)^2 = -1$ we have a hyperbolic expansion
+
+<p align="center">$latex \begin{aligned}\left( { \left( { \mathbf{x} \wedge \mathbf{e}_1 \wedge \mathbf{e}_2} \right) \cdot \mathbf{e}^2 } \right) \cdot \mathbf{e}^1 =\rho \left( { \mathbf{e}_3 \cosh\theta + \mathbf{e}_4 \sinh \theta } \right).\end{aligned} \hspace{\stretch{1}}(1.44)$</p>
+
+
+Within such a space consider the surface along $latex x = c, y = d$, for which the vectors are parameterized by
+
+<p align="center">$latex \begin{aligned}\mathbf{x}(\rho, \theta) = c \mathbf{e}_1 + d \mathbf{e}_2 + \rho \mathbf{e}_3 e^{\kappa \theta}.\end{aligned} \hspace{\stretch{1}}(1.45)$</p>
+
+
+The tangent space unit vectors are
+
+<p align="center">$latex \begin{aligned}\mathbf{x}_\rho= \frac{\partial {\mathbf{x}}}{\partial {\rho}} = \mathbf{e}_3 e^{\kappa \theta},\end{aligned} \hspace{\stretch{1}}(1.46)$</p>
+
+
+and
+<p align="center">$latex \begin{aligned}\mathbf{x}_\theta= \frac{\partial {\mathbf{x}}}{\partial {\theta}}= \rho \mathbf{e}_3 \mathbf{e}_3 \mathbf{e}_4 e^{\kappa \theta}= \rho \mathbf{e}_4 e^{\kappa \theta}.\end{aligned} \hspace{\stretch{1}}(1.47)$</p>
+
+
+Observe that both of these vectors have their origin at the point of evaluation, and aren't relative to the absolute origin used to parameterize the complete space. 
+
+We wish to compute the volume element for the tangent plane.  Noting that $latex \mathbf{e}_3$ and $latex \mathbf{e}_4$ both anticommute with $latex \kappa$ we have for $latex \mathbf{a} \in \text{span} \left\{ {\mathbf{e}_3, \mathbf{e}_4} \right\}$
+
+<p align="center">$latex \begin{aligned}\mathbf{a} e^{\kappa \theta} = e^{-\kappa \theta} \mathbf{a},\end{aligned} \hspace{\stretch{1}}(1.48)$</p>
+
+
+so
+<p align="center">$latex \begin{aligned}\mathbf{x}_\theta \wedge \mathbf{x}_\rho={\left\langle{{\mathbf{e}_3 e^{\kappa \theta} \rho \mathbf{e}_4 e^{\kappa \theta}}}\right\rangle}_{2}=\rho {\left\langle{{\mathbf{e}_3 e^{\kappa \theta} e^{-\kappa \theta} \mathbf{e}_4}}\right\rangle}_{2}=\rho \mathbf{e}_3 \mathbf{e}_4.\end{aligned} \hspace{\stretch{1}}(1.49)$</p>
+
+
+The tangent space volume element is thus
+
+<p align="center">$latex \begin{aligned}d^2 \mathbf{x} = \rho d\rho d\theta \mathbf{e}_3 \mathbf{e}_4.\end{aligned} \hspace{\stretch{1}}(1.50)$</p>
+
+
+With the tangent plane vectors both perpendicular we don't need the general \cref{thm:stokesTheoremGeometricAlgebraII:3200} to compute the reciprocal basis, but can do so by inspection
+
+<p align="center">$latex \begin{aligned}\mathbf{x}^\rho = e^{-\kappa \theta} \mathbf{e}^3,\end{aligned} \hspace{\stretch{1}}(1.0.51)$</p>
+
+
+and
+<p align="center">$latex \begin{aligned}\mathbf{x}^\theta = e^{-\kappa \theta} \mathbf{e}^4 \frac{1}{{\rho}}.\end{aligned} \hspace{\stretch{1}}(1.0.52)$</p>
+
+
+Observe that the latter depends on the metric signature.
+
+The vector derivative, the projection of the gradient on the tangent space, is
+
+<p align="center">$latex \begin{aligned}\boldsymbol{\partial}=\mathbf{x}^\rho \frac{\partial {}}{\partial {\rho}}+\mathbf{x}^\theta \frac{\partial {}}{\partial {\theta}}=e^{-\kappa \theta} \left( {\mathbf{e}^3 \partial_\rho + \frac{\mathbf{e}^4}{\rho} \partial_\theta } \right).\end{aligned} \hspace{\stretch{1}}(1.0.52)$</p>
+
+
+From this we see that acting with the vector derivative on a scalar radial only dependent function $latex f(\rho)$ is a vector function that has a radial direction, whereas the action of the vector derivative on an azimuthal only dependent function $latex g(\theta)$ is a vector function that has only an azimuthal direction.  The interpretation of the geometric product action of the vector derivative on a vector function is not as simple since the product will be a multivector.
+
+Expanding the curl in coordinates is messier, but yields in the end when tackled with sufficient care
+
+<p align="center">$latex \begin{aligned}\boldsymbol{\partial} \wedge \mathbf{f}={\left\langle{{e^{-\kappa \theta}\left( {   e^3 \partial_\rho + \frac{e^4}{\rho} \partial_\theta} \right)\left( {   \not{{e_1 x}} + \not{{e_2 y}} + e_3 e^{\kappa \theta } f_\rho + \frac{e^4}{\rho} e^{\kappa \theta } f_\theta} \right)}}\right\rangle}_{2}=\not{{{\left\langle{{e^{-\kappa \theta}   e^3 \partial_\rho \left( {   e_3 e^{\kappa \theta } f_\rho} \right)}}\right\rangle}_{2}}}+{\left\langle{{\not{{e^{-\kappa \theta}}}   e^3 \partial_\rho \left( {   \frac{e^4}{\rho} \not{{e^{\kappa \theta }}} f_\theta} \right)}}\right\rangle}_{2}+{\left\langle{{e^{-\kappa \theta}\frac{e^4}{\rho} \partial_\theta\left( {   e_3 e^{\kappa \theta } f_\rho} \right)}}\right\rangle}_{2}+{\left\langle{{e^{-\kappa \theta}\frac{e^4}{\rho} \partial_\theta\left( {   \frac{e^4}{\rho} e^{\kappa \theta } f_\theta} \right)}}\right\rangle}_{2}=\mathbf{e}^3 \mathbf{e}^4 \left( {-\frac{f_\theta}{\rho^2} + \frac{1}{{\rho}} \partial_\rho f_\theta- \frac{1}{{\rho}} \partial_\theta f_\rho} \right)+ \frac{1}{{\rho^2}}{\left\langle{{e^{-\kappa \theta} \left( {\mathbf{e}^4} \right)^2\left( {\mathbf{e}_3 \mathbf{e}_4 f_\theta+ \not{{\partial_\theta f_\theta}}} \right)e^{\kappa \theta}}}\right\rangle}_{2}=\mathbf{e}^3 \mathbf{e}^4 \left( {-\frac{f_\theta}{\rho^2} + \frac{1}{{\rho}} \partial_\rho f_\theta- \frac{1}{{\rho}} \partial_\theta f_\rho} \right)+ \frac{1}{{\rho^2}}{\left\langle{{\not{{e^{-\kappa \theta} }}\mathbf{e}_3 \mathbf{e}^4 f_\theta\not{{e^{\kappa \theta}}}}}\right\rangle}_{2}=\frac{\mathbf{e}^3 \mathbf{e}^4 }{\rho}\left( {\partial_\rho f_\theta- \partial_\theta f_\rho} \right).\end{aligned} \hspace{\stretch{1}}(1.0.52)$</p>
+
+
+After all this reduction, we can now state in coordinates the LHS of Stokes theorem explicitly
+
+<p align="center">$latex \begin{aligned}\int d^2 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)=\int \rho d\rho d\theta \left\langle{{\mathbf{e}_3 \mathbf{e}_4 \mathbf{e}^3 \mathbf{e}^4 }}\right\rangle\frac{1}{{\rho}}\left( {\partial_\rho f_\theta- \partial_\theta f_\rho} \right)=\int d\rho d\theta\left( {\partial_\theta f_\rho-\partial_\rho f_\theta} \right)=\int d\rho {\left.{{f_\rho}}\right\vert}_{{\Delta \theta}}- \int d\theta{\left.{{f_\theta}}\right\vert}_{{\Delta \rho}}.\end{aligned} \hspace{\stretch{1}}(1.0.52)$</p>
+
+
+Now compare this to the direct evaluation of the loop integral portion of Stokes theorem.  Expressing this using eq. 1.0.34, we have the same result
+
+<p align="center">$latex \begin{aligned}\int d^2 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)=\int {\left.{{f_\rho}}\right\vert}_{{\Delta \theta}} d\rho-{\left.{{f_\theta}}\right\vert}_{{\Delta \rho}} d\theta\end{aligned} \hspace{\stretch{1}}(1.0.56)$</p>
+
+
+This example highlights some of the power of Stokes theorem, since the reduction of the volume element differential form was seen to be quite a chore (and easy to make mistakes doing.)
+}
+
+<h2>Example: Composition of boost and rotation</h2>{example:stokesTheoremGeometricAlgebraII:4230}{
+
+Working in a $latex \bigwedge^{1,3}$ space with basis $latex \left\{ {\gamma_0, \gamma_1, \gamma_2, \gamma_3} \right\}$ where $latex \left( {\gamma_0} \right)^2 = 1$ and $latex \left( {\gamma_k} \right)^2 = -1, k \in \left\{ {1,2,3} \right\}$, an active composition of boost and rotation has the form
+
+<p align="center">$latex \begin{aligned}\begin{aligned}\mathbf{x}' &amp;= e^{i\alpha/2} \mathbf{x}_0 e^{-i\alpha/2} \\ \mathbf{x}'' &amp;= e^{-j\theta/2} \mathbf{x}' e^{j\theta/2}\end{aligned},\end{aligned} \hspace{\stretch{1}}(1.0.57)$</p>
+
+
+where $latex i$ is a bivector of a timelike unit vector and perpendicular spacelike unit vector, and $latex j$ is a bivector of two perpendicular spacelike unit vectors.  For example, $latex i = \gamma_0 \gamma_1$ and $latex j = \gamma_1 \gamma_2$.  For such $latex i,j$ the respective Lorentz transformation matrices are
+
+<p align="center">$latex \begin{aligned}{\begin{bmatrix}x^0 \\ x^1 \\ x^2 \\ x^3 \end{bmatrix}}'=\begin{bmatrix}\cosh\alpha &amp; -\sinh\alpha &amp; 0 &amp; 0 \\ -\sinh\alpha &amp; \cosh\alpha &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; 1 \end{bmatrix}\begin{bmatrix}x^0 \\ x^1 \\ x^2 \\ x^3 \end{bmatrix},\end{aligned} \hspace{\stretch{1}}(1.0.58)$</p>
+
+
+and
+
+<p align="center">$latex \begin{aligned}{\begin{bmatrix}x^0 \\ x^1 \\ x^2 \\ x^3 \end{bmatrix}}''=\begin{bmatrix}1 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; \cos\theta &amp; \sin\theta &amp; 0  \\ 0 &amp; -\sin\theta &amp; \cos\theta &amp; 0  \\ 0 &amp; 0 &amp; 0 &amp; 1 \end{bmatrix}{\begin{bmatrix}x^0 \\ x^1 \\ x^2 \\ x^3 \end{bmatrix}}'.\end{aligned} \hspace{\stretch{1}}(1.0.59)$</p>
+
+
+Let's calculate the tangent space vectors for this parameterization, assuming that the particle is at an initial spacetime position of $latex \mathbf{x}_0$.  That is
+
+<p align="center">$latex \begin{aligned}\mathbf{x} = e^{-j\theta/2} e^{i\alpha/2} \mathbf{x}_0e^{-i\alpha/2} e^{j\theta/2}.\end{aligned} \hspace{\stretch{1}}(1.0.60)$</p>
+
+
+To calculate the tangent space vectors for this subspace we note that
+
+<p align="center">$latex \begin{aligned}\frac{\partial {\mathbf{x}'}}{\partial {\alpha}} = \frac{i}{2} \mathbf{x}_0 - \mathbf{x}_0 \frac{i}{2} = i \cdot \mathbf{x}_0,\end{aligned} \hspace{\stretch{1}}(1.0.61)$</p>
+
+
+and
+<p align="center">$latex \begin{aligned}\frac{\partial {\mathbf{x}''}}{\partial {\theta}} = -\frac{j}{2} \mathbf{x}' + \mathbf{x}' \frac{j}{2} = \mathbf{x}' \cdot j.\end{aligned} \hspace{\stretch{1}}(1.0.62)$</p>
+
+
+The tangent space vectors are therefore
+
+<p align="center">$latex \begin{aligned}\begin{aligned}\mathbf{x}_\alpha &amp;= e^{-j\theta/2} \left( { i \cdot \mathbf{x}_0 } \right)e^{j\theta/2} \\ \mathbf{x}_\theta &amp;= \left( {e^{i\alpha/2} \mathbf{x}_0e^{-i\alpha/2} } \right) \cdot j.\end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.63)$</p>
+
+
+Continuing a specific example where $latex i = \gamma_0\gamma_1, j = \gamma_1 \gamma_2$ let's also pick $latex \mathbf{x}_0 = \gamma_0$, the spacetime position of a particle at the origin of a frame at that frame's $latex c t = 1$.  The tangent space vectors for the subspace parameterized by this transformation and this initial position is then reduced to 
+
+<p align="center">$latex \begin{aligned}\mathbf{x}_\alpha = -\gamma_1 e^{j \theta} = \gamma_1 \sin\theta + \gamma_2 \cos\theta,\end{aligned} \hspace{\stretch{1}}(1.0.63)$</p>
+
+
+and
+<p align="center">$latex \begin{aligned}\mathbf{x}_\theta = \left( { \gamma_0 e^{-i \alpha} } \right) \cdot j= \left( { \gamma_0\left( { \cosh\alpha - \gamma_0 \gamma_1 \sinh\alpha } \right)} \right) \cdot \left( { \gamma_1 \gamma_2} \right) = {\left\langle{{ \left( { \gamma_0 \cosh\alpha - \gamma_1 \sinh\alpha } \right) \gamma_1 \gamma_2 }}\right\rangle}_{1}= \gamma_2 \sinh\alpha.\end{aligned} \hspace{\stretch{1}}(1.0.63)$</p>
+
+
+By inspection the dual basis for this parameterization is
+
+<p align="center">$latex \begin{aligned}\begin{aligned}\mathbf{x}^\alpha &amp;= \gamma_1 e^{j \theta} \\ \mathbf{x}^\theta &amp;= \frac{\gamma^2}{\sinh\alpha} \end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.66)$</p>
+
+
+So, Stokes theorem, applied to a spacetime vector $latex \mathbf{f}$, for this subspace is
+
+<p align="center">$latex \begin{aligned}\int d\alpha d\theta \sinh\alpha \sin\theta \left( { \gamma_1 \gamma_2 } \right) \cdot \left( {\left( {\gamma_1 e^{j \theta} \partial_\alpha + \frac{\gamma^2}{\sinh\alpha} \partial_\theta} \right)\wedge \mathbf{f}} \right)=\int d\alpha {\left.{{\mathbf{f} \cdot \Bigl( {\gamma^1 e^{j \theta}} \Bigr)}}\right\vert}_{{\theta_0}}^{{\theta_1}}-\int d\theta {\left.{{\mathbf{f} \cdot \Bigl( { \gamma_2 \sinh\alpha } \Bigr)}}\right\vert}_{{\alpha_0}}^{{\alpha_1}}.\end{aligned} \hspace{\stretch{1}}(1.0.67)$</p>
+
+
+Since the point is to avoid the curl integral, we did not actually have to state it explicitly, nor was there any actual need to calculate the dual basis.
+}
+
+<h2>Example: Dual representation in three dimensions</h2>{example:stokesTheoremGeometricAlgebraII:3660}{
+
+It's clear that there is a projective nature to the differential form $latex d^2 \mathbf{x} \cdot \left( {\boldsymbol{\partial} \wedge \mathbf{f}} \right)$.  This projective nature allows us, in three dimensions, to re-express Stokes theorem using the gradient instead of the vector derivative, and to utilize the cross product and a normal direction to the plane.
+
+When we parameterize a normal direction to the tangent space, so that for a 2D tangent space spanned by curvilinear coordinates $latex \mathbf{x}_1$ and $latex \mathbf{x}_2$ the vector $latex \mathbf{x}^3$ is normal to both, we can write our vector as
+
+<p align="center">$latex \begin{aligned}\mathbf{f} = f_1 \mathbf{x}^1 + f_2 \mathbf{x}^2 + f_3 \mathbf{x}^3,\end{aligned} \hspace{\stretch{1}}(1.0.68)$</p>
+
+
+and express the orientation of the tangent space area element in terms of a pseudoscalar that includes this normal direction
+
+<p align="center">$latex \begin{aligned}\mathbf{x}_1 \wedge \mathbf{x}_2 =\mathbf{x}^3 \cdot \left( { \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_3 } \right) =\mathbf{x}^3 \left( { \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_3 } \right).\end{aligned} \hspace{\stretch{1}}(1.0.69)$</p>
+
+
+Inserting this into an expansion of the curl form we have
+
+<p align="center">$latex \begin{aligned}d^2 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)=du^1 du^2 \left\langle{{\mathbf{x}^3 \left( { \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_3 } \right)\left( {\left( {\sum_{i=1,2} x^i \partial_i} \right)\wedge\mathbf{f}} \right)}}\right\rangle=du^1 du^2 \mathbf{x}^3 \cdot \left( {\left( { \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_3 } \right)\cdot \left( {\boldsymbol{\nabla} \wedge \mathbf{f}} \right)-\left( { \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_3 } \right)\cdot \left( {\mathbf{x}^3 \partial_3 \wedge \mathbf{f}} \right)} \right).\end{aligned} \hspace{\stretch{1}}(1.0.69)$</p>
+
+
+Observe that this last term, the contribution of the component of the gradient perpendicular to the tangent space, has no $latex \mathbf{x}_3$ components
+
+<p align="center">$latex \begin{aligned}\left( { \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_3 } \right)\cdot \left( {\mathbf{x}^3 \partial_3 \wedge \mathbf{f}} \right)=\left( { \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_3 } \right)\cdot \left( {\mathbf{x}^3 \wedge \partial_3 \mathbf{f}} \right)=\left( {   \left( { \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_3 } \right) \cdot \mathbf{x}^3} \right)\cdot \partial_3 \mathbf{f}=\left( { \mathbf{x}_1 \wedge \mathbf{x}_2 } \right) \cdot \partial_3 \mathbf{f}=\mathbf{x}_1 \left( { \mathbf{x}_2 \cdot \partial_3 \mathbf{f} } \right)-\mathbf{x}_2 \left( { \mathbf{x}_1 \cdot \partial_3 \mathbf{f} } \right),\end{aligned} \hspace{\stretch{1}}(1.0.69)$</p>
+
+
+leaving
+<p align="center">$latex \begin{aligned}d^2 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)=du^1 du^2 \mathbf{x}^3 \cdot \left( {\left( { \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_3 } \right) \cdot \left( { \boldsymbol{\nabla} \wedge \mathbf{f}} \right)} \right).\end{aligned} \hspace{\stretch{1}}(1.0.69)$</p>
+
+
+Now scale the normal vector and its dual to have unit norm as follows
+
+<p align="center">$latex \begin{aligned}\begin{aligned}\mathbf{x}^3 &amp;= \alpha \hat{\mathbf{x}}^3 \\ \mathbf{x}_3 &amp;= \frac{1}{{\alpha}} \hat{\mathbf{x}}_3,\end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.73)$</p>
+
+
+so that for $latex \beta &gt; 0$, the volume element can be 
+
+<p align="center">$latex \begin{aligned}\mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \hat{\mathbf{x}}_3 = \beta I.\end{aligned} \hspace{\stretch{1}}(1.0.73)$</p>
+
+
+This scaling choice is illustrated in fig. 1.7, and represents the ``outwards'' normal.  With such a scaling choice we have
+
+\imageFigure{../../figures/gabook/outwardsNormalFig8}{Outwards normal}{fig:outwardsNormal:outwardsNormalFig8}{0.15}
+
+<p align="center">$latex \begin{aligned}\beta du^1 du^2 = dA,\end{aligned} \hspace{\stretch{1}}(1.75)$</p>
+
+
+and almost have the desired cross product representation
+
+<p align="center">$latex \begin{aligned}d^2 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)=dA \hat{\mathbf{x}}^3 \cdot \left( { I \cdot \left( {\boldsymbol{\nabla} \wedge \mathbf{f}} \right) } \right)=dA \hat{\mathbf{x}}^3 \cdot \left( { I \left( {\boldsymbol{\nabla} \wedge \mathbf{f}} \right) } \right).\end{aligned} \hspace{\stretch{1}}(1.76)$</p>
+
+
+With the duality identity $latex \mathbf{a} \wedge \mathbf{b} = I \left( {\mathbf{a} \times \mathbf{b}} \right)$, we have the traditional 3D representation of Stokes theorem
+
+<p align="center">$latex \begin{aligned}\int d^2 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)=-\intdA \hat{\mathbf{x}}^3 \cdot \left( {\boldsymbol{\nabla} \times \mathbf{f}} \right) = \oint \mathbf{f} \cdot d\mathbf{l}.\end{aligned} \hspace{\stretch{1}}(1.0.77)$</p>
+
+
+Note that the orientation of the loop integral in the traditional statement of the 3D Stokes theorem is counterclockwise instead of clockwise, as written here.
+}
+
+<h1>Stokes theorem, three variable volume element parameterization</h1>
+
+We can restate the identity of \cref{thm:stokesTheoremGeometricAlgebraII:1740} in an equivalent dot product form.
+
+<p align="center">$latex \begin{aligned}\int_V \left( { d^k \mathbf{x} \cdot \mathbf{x}^i } \right) \cdot \partial_i F = \int_{\partial V} d^{k-1} \mathbf{x} \cdot F.\end{aligned} \hspace{\stretch{1}}(1.0.78)$</p>
+
+
+Here $latex d^{k-1} \mathbf{x} = \sum_i d^k \mathbf{x} \cdot \mathbf{x}^i$, with the implicit assumption that it and the blade $latex F$ that it is dotted with, are both evaluated at the end points of integration variable $latex u^i$ that has been integrated against.
+
+We've seen one specific example of this above in the expansions of eq. 1.28, and eq. 1.29, however, the equivalent result of eq. 1.0.78, somewhat magically, applies to any degree blade and volume element provided the degree of the blade is less than that of the volume element (i.e. $latex s &lt; k$).  That magic follows directly from \cref{thm:stokesTheoremGeometricAlgebraII:1420}.
+
+As an expositional example, consider a three variable volume element parameterization, and a vector blade $latex \mathbf{f}$
+
+<p align="center">$latex \begin{aligned}d^3 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)=\left( { d^3 \mathbf{x} \cdot \mathbf{x}^i } \right) \cdot \partial_i \mathbf{f}=du^1 du^2 du^3\left( {\left( { \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_3 } \right) \cdot \mathbf{x}^i } \right) \cdot \partial_i \mathbf{f}=du^1 du^2 du^3\left( {\left( { \mathbf{x}_1 \wedge \mathbf{x}_2 } \right) {\delta_3}^i-\left( { \mathbf{x}_1 \wedge \mathbf{x}_3 } \right) {\delta_2}^i+\left( { \mathbf{x}_2 \wedge \mathbf{x}_3 } \right) {\delta_1}^i} \right) \cdot \partial_i \mathbf{f}=du^1 du^2 du^3\left( {\left( { \mathbf{x}_1 \wedge \mathbf{x}_2 } \right) \cdot \partial_3 \mathbf{f}-\left( { \mathbf{x}_1 \wedge \mathbf{x}_3 } \right) \cdot \partial_2 \mathbf{f}+\left( { \mathbf{x}_2 \wedge \mathbf{x}_3 } \right) \cdot \partial_1 \mathbf{f}} \right).\end{aligned} \hspace{\stretch{1}}(1.0.78)$</p>
+
+
+It should not be surprising that this has the structure found in the theory of differential forms.  Using the differentials for each of the parameterization ``directions'', we can write this dot product expansion as
+
+<p align="center">$latex \begin{aligned}d^3 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)=\left( {du^3 \left( { d\mathbf{x}_1 \wedge d\mathbf{x}_2 } \right) \cdot \partial_3 \mathbf{f}-du^2 \left( { d\mathbf{x}_1 \wedge d\mathbf{x}_3 } \right) \cdot \partial_2 \mathbf{f}+du^1 \left( { d\mathbf{x}_2 \wedge d\mathbf{x}_3 } \right) \cdot \partial_1 \mathbf{f}} \right).\end{aligned} \hspace{\stretch{1}}(1.0.78)$</p>
+
+
+Observe that the sign changes with each element of $latex d\mathbf{x}_1 \wedge d\mathbf{x}_2 \wedge d\mathbf{x}_3$ that is skipped.  In differential forms, the wedge product composition of 1-forms is an abstract quantity.  Here the differentials are just vectors, and their wedge product represents an oriented volume element.  This interpretation is likely available in the theory of differential forms too, but is arguably less obvious.
+
+\makedigression{
+As was the case with the loop integral, we expect that the coordinate representation has a representation that can be expressed as a number of antisymmetric terms.  A bit of experimentation shows that such a sum, after dropping the parameter space volume element factor, is
+
+<p align="center">$latex \begin{aligned}\mathbf{x}_1 \left( { -\partial_2 f_3 + \partial_3 f_2 } \right)+\mathbf{x}_2 \left( { -\partial_3 f_1 + \partial_1 f_3 } \right)+\mathbf{x}_3 \left( { -\partial_1 f_2 + \partial_2 f_1 } \right)=\mathbf{x}_1 \left( { -\partial_2 \mathbf{f} \cdot \mathbf{x}_3 + \partial_3 \mathbf{f} \cdot \mathbf{x}_2 } \right)+\mathbf{x}_2 \left( { -\partial_3 \mathbf{f} \cdot \mathbf{x}_1 + \partial_1 \mathbf{f} \cdot \mathbf{x}_3 } \right)+\mathbf{x}_3 \left( { -\partial_1 \mathbf{f} \cdot \mathbf{x}_2 + \partial_2 \mathbf{f} \cdot \mathbf{x}_1 } \right)=\left( { \mathbf{x}_1 \partial_3 \mathbf{f} \cdot \mathbf{x}_2 -\mathbf{x}_2 \partial_3 \mathbf{f} \cdot \mathbf{x}_1 } \right)+\left( { \mathbf{x}_3 \partial_2 \mathbf{f} \cdot \mathbf{x}_1 -\mathbf{x}_1 \partial_2 \mathbf{f} \cdot \mathbf{x}_3 } \right)+\left( { \mathbf{x}_2 \partial_1 \mathbf{f} \cdot \mathbf{x}_3 -\mathbf{x}_3 \partial_1 \mathbf{f} \cdot \mathbf{x}_2 } \right)= \left( { \mathbf{x}_1 \wedge \mathbf{x}_2 } \right) \cdot \partial_3 \mathbf{f}+\left( { \mathbf{x}_3 \wedge \mathbf{x}_1 } \right) \cdot \partial_2 \mathbf{f}+\left( { \mathbf{x}_2 \wedge \mathbf{x}_3 } \right) \cdot \partial_1 \mathbf{f}.\end{aligned} \hspace{\stretch{1}}(1.0.78)$</p>
+
+}
+
+To proceed with the integration, we must again consider an infinitesimal volume element, for which the partial can be evaluated as the difference of the endpoints, with all else held constant.  For this three variable parameterization, say, $latex (u,v,w)$, let's delimit such an infinitesimal volume element by the parameterization ranges $latex [u_0,u_0 + du]$, $latex [v_0,v_0 + dv]$, $latex [w_0,w_0 + dw]$.  The integral is
+
+<p align="center">$latex \begin{aligned}\begin{aligned}\int_{u = u_0}^{u_0 + du}\int_{v = v_0}^{v_0 + dv}\int_{w = w_0}^{w_0 + dw}d^3 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)&amp;=\int_{u = u_0}^{u_0 + du}du\int_{v = v_0}^{v_0 + dv}dv{\left.{{ \Bigl( { \left( { \mathbf{x}_u \wedge \mathbf{x}_v } \right) \cdot \mathbf{f} } \Bigr) }}\right\vert}_{{w = w_0}}^{{w_0 + dw}} \\ &amp;-\int_{u = u_0}^{u_0 + du}du\int_{w = w_0}^{w_0 + dw}dw{\left.{{\Bigl( { \left( { \mathbf{x}_u \wedge \mathbf{x}_w } \right) \cdot \mathbf{f} } \Bigr) }}\right\vert}_{{v = v_0}}^{{v_0 + dv}} \\ &amp;+\int_{v = v_0}^{v_0 + dv}dv\int_{w = w_0}^{w_0 + dw}dw{\left.{{\Bigl( { \left( { \mathbf{x}_v \wedge \mathbf{x}_w } \right) \cdot \mathbf{f} } \Bigr) }}\right\vert}_{{u = u_0}}^{{u_0 + du}}.\end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.82)$</p>
+
+
+Extending this over the ranges $latex [u_0,u_0 + \Delta u]$, $latex [v_0,v_0 + \Delta v]$, $latex [w_0,w_0 + \Delta w]$, we have proved Stokes \cref{thm:stokesTheoremGeometricAlgebraII:1740} for vectors and a three parameter volume element, provided we have a surface element of the form
+
+<p align="center">$latex \begin{aligned}d^2 \mathbf{x} ={\left.{{ \Bigl( {d\mathbf{x}_u \wedge d\mathbf{x}_v } \Bigr) }}\right\vert}_{{w = w_0}}^{{w_1}}-{\left.{{ \Bigl( {d\mathbf{x}_u \wedge d\mathbf{x}_w } \Bigr) }}\right\vert}_{{v = v_0}}^{{v_1}}+{\left.{{ \Bigl( {d\mathbf{x}_v \wedge \mathbf{x}_w } \Bigr) }}\right\vert}_{{ u = u_0 }}^{{u_1}},\end{aligned} \hspace{\stretch{1}}(1.0.82)$</p>
+
+
+where the evaluation of the dot products with $latex \mathbf{f}$ are also evaluated at the same points.
+
+<h2>Example: Euclidean spherical polar parameterization of 3D subspace</h2>{example:stokesTheoremGeometricAlgebraII:3880}{
+
+Consider an Euclidean space where a 3D subspace is parameterized using spherical coordinates, as in
+
+<p align="center">$latex \begin{aligned}\mathbf{x}(x, \rho, \theta, \phi) = \mathbf{e}_1 x + \mathbf{e}_4 \rho \exp\left( { \mathbf{e}_4 \mathbf{e}_2 e^{\mathbf{e}_2 \mathbf{e}_3 \phi} \theta} \right)=\left( {x, \rho \sin\theta \cos\phi, \rho \sin\theta \sin\phi, \rho \cos\theta} \right).\end{aligned} \hspace{\stretch{1}}(1.0.84)$</p>
+
+
+The tangent space basis for the subspace situated at some fixed $latex x = x_0$, is easy to calculate, and is found to be
+
+<p align="center">$latex \begin{aligned}\begin{aligned}\mathbf{x}_\rho &amp;= \left( {0, \sin\theta \cos\phi, \sin\theta \sin\phi, \cos\theta} \right)  =\mathbf{e}_4 \exp\left( { \mathbf{e}_4 \mathbf{e}_2 e^{\mathbf{e}_2 \mathbf{e}_3 \phi} \theta} \right) \\ \mathbf{x}_\theta &amp;= \rho \left( {0,  \cos\theta \cos\phi,  \cos\theta \sin\phi, - \sin\theta} \right)  =\rho \mathbf{e}_2 e^{\mathbf{e}_2 \mathbf{e}_3 \phi} \exp\left( { \mathbf{e}_4 \mathbf{e}_2 e^{\mathbf{e}_2 \mathbf{e}_3 \phi} \theta } \right) \\ \mathbf{x}_\phi &amp;=\rho \left( {0, -\sin\theta \sin\phi,  \sin\theta \cos\phi, 0} \right)= \rho \sin\theta \mathbf{e}_3 e^{\mathbf{e}_2 \mathbf{e}_3 \phi}.\end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.85)$</p>
+
+
+While we can use the general relation of \cref{thm:stokesTheoremGeometricAlgebraII:4950} to compute the reciprocal basis.  That is
+
+<p align="center">$latex \begin{aligned}\mathbf{a}^{*} = \left( { \mathbf{b} \wedge \mathbf{c} } \right) \frac{1}{{\mathbf{a} \wedge \mathbf{b} \wedge \mathbf{c} }}.\end{aligned} \hspace{\stretch{1}}(1.0.86)$</p>
+
+
+However, a naive attempt at applying this without algebraic software is a route that requires a lot of care, and is easy to make mistakes doing.  In this case it is really not necessary since the tangent space basis only requires scaling to orthonormalize, satisfying for $latex i,j \in \left\{ {\rho, \theta, \phi} \right\}$
+
+<p align="center">$latex \begin{aligned}\mathbf{x}_i \cdot \mathbf{x}_j =\begin{bmatrix} 1 &amp; 0 &amp; 0 \\  0 &amp; \rho^2 &amp; 0 \\  0 &amp; 0 &amp; \rho^2 \sin^2 \theta \end{bmatrix}.\end{aligned} \hspace{\stretch{1}}(1.0.87)$</p>
+
+
+This allows us to read off the dual basis for the tangent volume by inspection
+
+<p align="center">$latex \begin{aligned}\begin{aligned}\mathbf{x}^\rho &amp;=\mathbf{e}_4 \exp\left( { \mathbf{e}_4 \mathbf{e}_2 e^{\mathbf{e}_2 \mathbf{e}_3 \phi} \theta} \right) \\ \mathbf{x}^\theta &amp;= \frac{1}{{\rho}} \mathbf{e}_2 e^{\mathbf{e}_2 \mathbf{e}_3 \phi} \exp\left( { \mathbf{e}_4 \mathbf{e}_2 e^{\mathbf{e}_2 \mathbf{e}_3 \phi} \theta } \right) \\ \mathbf{x}^\phi &amp;=\frac{1}{{\rho \sin\theta}} \mathbf{e}_3 e^{\mathbf{e}_2 \mathbf{e}_3 \phi}.\end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.88)$</p>
+
+
+Should we wish to explicitly calculate the curl on the tangent space, we would need these.  The area and volume elements are also messy to calculate manually.  This expansion can be found in the Mathematica notebook \nbref{sphericalSurfaceAndVolumeElements.nb}, and is
+
+<p align="center">$latex \begin{aligned}\begin{aligned}\mathbf{x}_\theta \wedge \mathbf{x}_\phi &amp;=\rho^2 \sin\theta \left( \mathbf{e}_4 \mathbf{e}_2 \sin\theta \sin\phi + \mathbf{e}_2 \mathbf{e}_3 \cos\theta + \mathbf{e}_3 \mathbf{e}_4 \sin\theta \cos\phi \right) \\ \mathbf{x}_\phi \wedge \mathbf{x}_\rho &amp;=\rho \sin\theta \left(-\mathbf{e}_2 \mathbf{e}_3 \sin\theta -\mathbf{e}_2 \mathbf{e}_4 \cos\theta \sin\phi +\mathbf{e}_3 \mathbf{e}_4\cos\theta \cos\phi \right) \\ \mathbf{x}_\rho \wedge \mathbf{x}_\theta &amp;= -\mathbf{e}_4 \rho \left(\mathbf{e}_2\cos\phi +\mathbf{e}_3\sin\phi \right) \\ \mathbf{x}_\rho \wedge \mathbf{x}_\theta \wedge \mathbf{x}_\phi &amp;= \mathbf{e}_2 \mathbf{e}_3 \mathbf{e}_4 \rho^2 \sin\theta  \end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.89)$</p>
+
+
+Those area elements have a Geometric algebra factorization that are perhaps useful
+
+<p align="center">$latex \begin{aligned}\begin{aligned}\mathbf{x}_\theta \wedge \mathbf{x}_\phi &amp;=-\rho^2 \sin\theta \mathbf{e}_2 \mathbf{e}_3 \exp\left( {-\mathbf{e}_4 \mathbf{e}_2 e^{\mathbf{e}_2 \mathbf{e}_3 \phi} \theta} \right) \\ \mathbf{x}_\phi \wedge \mathbf{x}_\rho &amp;=\rho \sin\theta \mathbf{e}_3 \mathbf{e}_4 e^{\mathbf{e}_2 \mathbf{e}_3 \phi}\exp\left( {\mathbf{e}_4 \mathbf{e}_2 e^{\mathbf{e}_2 \mathbf{e}_3 \phi} \theta} \right) \\ \mathbf{x}_\rho \wedge \mathbf{x}_\theta &amp;= -\rho \mathbf{e}_4 \mathbf{e}_2 e^{\mathbf{e}_2 \mathbf{e}_3 \phi}\end{aligned}.\end{aligned} \hspace{\stretch{1}}(1.0.90)$</p>
+
+
+One of the beauties of Stokes theorem is that we don't actually have to calculate the dual basis on the tangent space to proceed with the integration.  For that calculation above, where we had a normal tangent basis, I still used software was used as an aid, so it is clear that this can generally get pretty messy.
+
+To apply Stokes theorem to a vector field we can use eq. 1.0.82 to write down the integral directly
+
+<p align="center">$latex \begin{aligned}\int_V d^3 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)=\int_{\partial V} d^2 \mathbf{x} \cdot \mathbf{f}=\int {\left.{{ \left( { \mathbf{x}_\theta \wedge \mathbf{x}_\phi } \right) \cdot \mathbf{f} }}\right\vert}_{{\rho = \rho_0}}^{{\rho_1}} d\theta d\phi+\int{\left.{{ \left( { \mathbf{x}_\phi \wedge \mathbf{x}_\rho } \right) \cdot \mathbf{f} }}\right\vert}_{{\theta = \theta_0}}^{{\theta_1}}  d\phi d\rho+\int{\left.{{ \left( { \mathbf{x}_\rho \wedge \mathbf{x}_\theta } \right) \cdot \mathbf{f} }}\right\vert}_{{\phi = \phi_0}}^{{\phi_1}}  d\rho d\theta.\end{aligned} \hspace{\stretch{1}}(1.0.90)$</p>
+
+
+Observe that eq. 1.0.90 is a vector valued integral that expands to
+
+<p align="center">$latex \begin{aligned}\int {\left.{{ \left( { \mathbf{x}_\theta f_\phi - \mathbf{x}_\phi f_\theta } \right) }}\right\vert}_{{\rho = \rho_0}}^{{\rho_1}} d\theta d\phi+\int {\left.{{ \left( { \mathbf{x}_\phi f_\rho - \mathbf{x}_\rho f_\phi } \right) }}\right\vert}_{{\theta = \theta_0}}^{{\theta_1}} d\phi d\rho+\int {\left.{{ \left( { \mathbf{x}_\rho f_\theta - \mathbf{x}_\theta f_\rho } \right) }}\right\vert}_{{\phi = \phi_0}}^{{\phi_1}} d\rho d\theta.\end{aligned} \hspace{\stretch{1}}(1.0.92)$</p>
+
+
+This could easily be a difficult integral to evaluate since the vectors $latex \mathbf{x}_i$ evaluated at the endpoints are still functions of two parameters.  An easier integral would result from the application of Stokes theorem to a bivector valued field, say $latex B$, for which we have
+
+<p align="center">$latex \begin{aligned}\int_V d^3 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge B } \right)=\int_{\partial V} d^2 \mathbf{x} \cdot B=\int {\left.{{ \left( { \mathbf{x}_\theta \wedge \mathbf{x}_\phi } \right) \cdot B }}\right\vert}_{{\rho = \rho_0}}^{{\rho_1}} d\theta d\phi+\int{\left.{{ \left( { \mathbf{x}_\phi \wedge \mathbf{x}_\rho } \right) \cdot B }}\right\vert}_{{\theta = \theta_0}}^{{\theta_1}}  d\phi d\rho+\int{\left.{{ \left( { \mathbf{x}_\rho \wedge \mathbf{x}_\theta } \right) \cdot B }}\right\vert}_{{\phi = \phi_0}}^{{\phi_1}}  d\rho d\theta=\int {\left.{{ B_{\phi \theta} }}\right\vert}_{{\rho = \rho_0}}^{{\rho_1}} d\theta d\phi+\int{\left.{{ B_{\rho \phi} }}\right\vert}_{{\theta = \theta_0}}^{{\theta_1}}  d\phi d\rho+\int{\left.{{ B_{\theta \rho} }}\right\vert}_{{\phi = \phi_0}}^{{\phi_1}}  d\rho d\theta.\end{aligned} \hspace{\stretch{1}}(1.0.92)$</p>
+
+
+There is a geometric interpretation to these oriented area integrals, especially when written out explicitly in terms of the differentials along the parameterization directions.  Pulling out a sign explicitly to match the geometry (as we had to also do for the line integrals in the two parameter volume element case), we can write this as
+
+<p align="center">$latex \begin{aligned}\int_{\partial V} d^2 \mathbf{x} \cdot B=-\int {\left.{{ \left( { d\mathbf{x}_\phi \wedge d\mathbf{x}_\theta } \right) \cdot B }}\right\vert}_{{\rho = \rho_0}}^{{\rho_1}} -\int{\left.{{ \left( { d\mathbf{x}_\rho \wedge d\mathbf{x}_\phi } \right) \cdot B }}\right\vert}_{{\theta = \theta_0}}^{{\theta_1}} -\int{\left.{{ \left( { d\mathbf{x}_\theta \wedge d\mathbf{x}_\rho } \right) \cdot B }}\right\vert}_{{\phi = \phi_0}}^{{\phi_1}}.\end{aligned} \hspace{\stretch{1}}(1.0.94)$</p>
+
+
+When written out in this differential form, each of the respective area elements is an oriented area along one of the faces of the parameterization volume, much like the line integral that results from a two parameter volume curl integral.  This is visualized in fig. 1.8.  In this figure, faces (1) and (3) are ``top faces'', those with signs matching the tops of the evaluation ranges eq. 1.0.94, whereas face (2) is a bottom face with a sign that is correspondingly reversed.
+
+\imageFigure{../../figures/gabook/sphereicalParameterizationBoundaryFacesFig9}{Boundary faces of a spherical parameterization region}{fig:sphereicalParameterizationBoundaryFaces:sphereicalParameterizationBoundaryFacesFig9}{0.25}
+}
+
+
+<h2>Example: Minkowski hyperbolic-spherical polar parameterization of 3D subspace</h2>{example:stokesTheoremGeometricAlgebraII:3920}{
+
+Working with a three parameter volume element in a Minkowski space does not change much.  For example in a 4D space with $latex \left( {\mathbf{e}_4} \right)^2 = -1$, we can employ a hyperbolic-spherical parameterization similar to that used above for the 4D Euclidean space
+
+<p align="center">$latex \begin{aligned}\mathbf{x}(x, \rho, \alpha, \phi)=\left\{ {x, \rho \sinh \alpha \cos\phi, \rho \sinh \alpha \sin\phi, \rho \cosh \alpha} \right\}=\mathbf{e}_1 x + \mathbf{e}_4 \rho \exp\left( { \mathbf{e}_4 \mathbf{e}_2 e^{\mathbf{e}_2 \mathbf{e}_3 \phi} \alpha } \right).\end{aligned} \hspace{\stretch{1}}(1.0.95)$</p>
+
+
+This has tangent space basis elements
+
+<p align="center">$latex \begin{aligned}\begin{aligned}\mathbf{x}_\rho &amp;= \sinh\alpha \left( { \cos\phi \mathbf{e}_2 + \sin\phi \mathbf{e}_3 } \right) + \cosh\alpha \mathbf{e}_4 = \mathbf{e}_4 \exp\left( {\mathbf{e}_4 \mathbf{e}_2 e^{\mathbf{e}_2 \mathbf{e}_3 \phi} \alpha} \right) \\ \mathbf{x}_\alpha &amp;=\rho \cosh\alpha \left( { \cos\phi \mathbf{e}_2 + \sin\phi \mathbf{e}_3} \right) + \rho \sinh\alpha \mathbf{e}_4=\rho \mathbf{e}_2 e^{\mathbf{e}_2 \mathbf{e}_3 \phi} \exp\left( {-\mathbf{e}_4 \mathbf{e}_2 e^{\mathbf{e}_2 \mathbf{e}_3 \phi} \alpha} \right) \\ \mathbf{x}_\phi &amp;=\rho \sinh\alpha \left( { \mathbf{e}_3 \cos\phi - \mathbf{e}_2 \sin\phi} \right) = \rho\sinh\alpha \mathbf{e}_3 e^{\mathbf{e}_2 \mathbf{e}_3 \phi}.\end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.96)$</p>
+
+
+This is a normal basis, but again not orthonormal.  Specifically, for $latex i,j \in \left\{ {\rho, \theta, \phi} \right\}$ we have
+<p align="center">$latex \begin{aligned}\mathbf{x}_i \cdot \mathbf{x}_j =\begin{bmatrix}-1 &amp; 0 &amp; 0 \\  0 &amp; \rho^2 &amp; 0 \\  0 &amp; 0 &amp; \rho^2 \sinh^2 \alpha \end{bmatrix},\end{aligned} \hspace{\stretch{1}}(1.0.97)$</p>
+
+
+where we see that the radial vector $latex \mathbf{x}_\rho$ is timelike.  We can form the dual basis again by inspection
+<p align="center">$latex \begin{aligned}\begin{aligned}\mathbf{x}_\rho &amp;= -\mathbf{e}_4 \exp\left( {\mathbf{e}_4 \mathbf{e}_2 e^{\mathbf{e}_2 \mathbf{e}_3 \phi} \alpha} \right) \\ \mathbf{x}_\alpha &amp;= \frac{1}{{\rho}} \mathbf{e}_2 e^{\mathbf{e}_2 \mathbf{e}_3 \phi} \exp\left( {-\mathbf{e}_4 \mathbf{e}_2 e^{\mathbf{e}_2 \mathbf{e}_3 \phi} \alpha} \right) \\ \mathbf{x}_\phi &amp;= \frac{1}{{\rho\sinh\alpha}} \mathbf{e}_3 e^{\mathbf{e}_2 \mathbf{e}_3 \phi}.\end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.98)$</p>
+
+
+The area elements are
+
+<p align="center">$latex \begin{aligned}\begin{aligned}\mathbf{x}_\alpha \wedge \mathbf{x}_\phi &amp;=\rho^2 \sinh\alpha \left(-\mathbf{e}_4 \mathbf{e}_3 \sinh\alpha \cos\phi+\cosh\alpha \mathbf{e}_2 \mathbf{e}_3+\sinh\alpha \sin\phi \mathbf{e}_2 \mathbf{e}_4\right) \\ \mathbf{x}_\phi \wedge \mathbf{x}_\rho &amp;=\rho \sinh\alpha \left(-\mathbf{e}_2 \mathbf{e}_3 \sinh\alpha-\mathbf{e}_2 \mathbf{e}_4 \cosh\alpha \sin\phi+\cosh\alpha \cos\phi \mathbf{e}_3 \mathbf{e}_4\right) \\ \mathbf{x}_\rho \wedge \mathbf{x}_\alpha &amp;=-\mathbf{e}_4 \rho \left(\cos\phi \mathbf{e}_2+\sin\phi \mathbf{e}_3\right),\end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.99)$</p>
+
+
+or
+
+<p align="center">$latex \begin{aligned}\begin{aligned}\mathbf{x}_\alpha \wedge \mathbf{x}_\phi &amp;=\rho^2 \sinh\alpha \mathbf{e}_2 \mathbf{e}_3 \exp\left( { \mathbf{e}_4 \mathbf{e}_2 e^{-\mathbf{e}_2 \mathbf{e}_3 \phi} \alpha } \right) \\ \mathbf{x}_\phi \wedge \mathbf{x}_\rho &amp;=\rho\sinh\alpha \mathbf{e}_3 \mathbf{e}_4 e^{\mathbf{e}_2 \mathbf{e}_3 \phi} \exp\left( {\mathbf{e}_4 \mathbf{e}_2 e^{\mathbf{e}_2 \mathbf{e}_3 \phi} \alpha} \right) \\ \mathbf{x}_\rho \wedge \mathbf{x}_\alpha &amp;=-\mathbf{e}_4 \mathbf{e}_2 \rho e^{\mathbf{e}_2 \mathbf{e}_3 \phi}.\end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.100)$</p>
+
+
+The volume element also reduces nicely, and is
+
+<p align="center">$latex \begin{aligned}\mathbf{x}_\rho \wedge \mathbf{x}_\alpha \wedge \mathbf{x}_\phi = \mathbf{e}_2 \mathbf{e}_3 \mathbf{e}_4 \rho^2 \sinh\alpha.\end{aligned} \hspace{\stretch{1}}(1.0.101)$</p>
+
+
+The area and volume element reductions were once again messy, done in software using \nbref{sphericalSurfaceAndVolumeElementsMinkowski.nb}.  However, we really only need eq. 1.0.96 to perform the Stokes integration.
+}
+
+<h1>Stokes theorem, four variable volume element parameterization</h1>
+
+Volume elements for up to four parameters are likely of physical interest, with the four volume elements of interest for relativistic physics in $latex \bigwedge^{3,1}$ spaces.  For example, we may wish to use a parameterization $latex u^1 = x, u^2 = y, u^3 = z, u^4 = \tau = c t$, with a four volume
+
+<p align="center">$latex \begin{aligned}d^4 \mathbf{x}=d\mathbf{x}_x \wedge d\mathbf{x}_y \wedge d\mathbf{x}_z \wedge d\mathbf{x}_\tau,\end{aligned} \hspace{\stretch{1}}(1.102)$</p>
+
+
+We follow the same procedure to calculate the corresponding boundary surface ``area'' element (with dimensions of volume in this case).  This is
+
+<p align="center">$latex \begin{aligned}d^4 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)=\left( { d^4 \mathbf{x} \cdot \mathbf{x}^i } \right) \cdot \partial_i \mathbf{f}=du^1 du^2 du^3 du^4\left( {\left( { \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_3 \wedge \mathbf{x}_4 } \right) \cdot \mathbf{x}^i } \right) \cdot \partial_i \mathbf{f}=du^1 du^2 du^3 du_4\left( {\left( { \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_3 } \right) {\delta_4}^i-\left( { \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_4 } \right) {\delta_3}^i+\left( { \mathbf{x}_1 \wedge \mathbf{x}_3 \wedge \mathbf{x}_4 } \right) {\delta_2}^i-\left( { \mathbf{x}_2 \wedge \mathbf{x}_3 \wedge \mathbf{x}_4 } \right) {\delta_1}^i} \right) \cdot \partial_i \mathbf{f}=du^1 du^2 du^3 du^4\left( { \left( { \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_3 } \right) \cdot \partial_4 \mathbf{f}-\left( { \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_4 } \right) \cdot \partial_3 \mathbf{f}+\left( { \mathbf{x}_1 \wedge \mathbf{x}_3 \wedge \mathbf{x}_4 } \right) \cdot \partial_2 \mathbf{f}-\left( { \mathbf{x}_2 \wedge \mathbf{x}_3 \wedge \mathbf{x}_4 } \right) \cdot \partial_1 \mathbf{f}} \right).\end{aligned} \hspace{\stretch{1}}(1.103)$</p>
+
+
+Our boundary value surface element is therefore
+
+<p align="center">$latex \begin{aligned}d^3 \mathbf{x} =  \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_3- \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_4+ \mathbf{x}_1 \wedge \mathbf{x}_3 \wedge \mathbf{x}_4- \mathbf{x}_2 \wedge \mathbf{x}_3 \wedge \mathbf{x}_4.\end{aligned} \hspace{\stretch{1}}(1.104)$</p>
+
+
+where it is implied that this (and the dot products with $latex \mathbf{f}$) are evaluated on the boundaries of the integration ranges of the omitted index.  This same boundary form can be used for vector, bivector and trivector variations of Stokes theorem.
+
+<h1>Duality and its relation to the pseudoscalar.</h1>
+
+Looking to eq. 1.0.181 of \cref{thm:stokesTheoremGeometricAlgebraII:3200}, and scaling the wedge product $latex \mathbf{a} \wedge \mathbf{b}$  by its absolute magnitude, we can express duality using that scaled bivector as a pseudoscalar for the plane that spans $latex \left\{ {\mathbf{a}, \mathbf{b}} \right\}$.  Let's introduce a subscript notation for such scaled blades
+
+<p align="center">$latex \begin{aligned}I_{\mathbf{a}\mathbf{b}} = \frac{\mathbf{a} \wedge \mathbf{b}}{\left\lvert {\mathbf{a} \wedge \mathbf{b}} \right\rvert}.\end{aligned} \hspace{\stretch{1}}(1.105)$</p>
+
+
+This allows us to express the unit vector in the direction of $latex \mathbf{a}^{*}$ as
+
+<p align="center">$latex \begin{aligned}\widehat{\mathbf{a}^{*}= \hat{\mathbf{b}} \frac{\left\lvert {\mathbf{a} \wedge \mathbf{b}} \right\rvert}{\mathbf{a} \wedge \mathbf{b}}= \hat{\mathbf{b}} \frac{1}{{I_{\mathbf{a} \mathbf{b}}}}.\end{aligned} \hspace{\stretch{1}}(1.0.106)$</p>
+
+
+Following the pattern of eq. 1.0.181, it is clear how to express the dual vectors for higher dimensional subspaces.  For example
+
+or for the unit vector in the direction of $latex \mathbf{a}^{*}$, 
+
+<p align="center">$latex \begin{aligned}\widehat{\mathbf{a}^{*}= I_{\mathbf{b} \mathbf{c}} \frac{1}{{I_{\mathbf{a} \mathbf{b} \mathbf{c}} }}.\end{aligned} $</p>
+
+
+<h1>Divergence theorem.</h1>
+
+When the curl integral is a scalar result we are able to apply duality relationships to obtain the divergence theorem for the corresponding space.  We will be able to show that a relationship of the following form holds
+
+<p align="center">$latex \begin{aligned}\int_V dV \boldsymbol{\nabla} \cdot \mathbf{f} = \int_{\partial V} dA_i \hat{\mathbf{n}}^i \cdot \mathbf{f}.\end{aligned} \hspace{\stretch{1}}(1.0.107)$</p>
+
+
+Here $latex \mathbf{f}$ is a vector, $latex \hat{\mathbf{n}}^i$ is normal to the boundary surface, and $latex dA_i$ is the area of this bounding surface element.  We wish to quantify these more precisely, especially because the orientation of the normal vectors are metric dependent.  Working a few specific examples will show the pattern nicely, but it is helpful to first consider some aspects of the general case.  
+
+First note that, for a scalar Stokes integral we are integrating the vector derivative curl of a blade $latex F \in \bigwedge^{k-1}$ over a k-parameter volume element.  Because the dimension of the space matches the number of parameters, the projection of the gradient onto the tangent space is exactly that gradient
+
+<p align="center">$latex \begin{aligned}\int_V d^k \mathbf{x} \cdot (\boldsymbol{\partial} \wedge F) =\int_V d^k \mathbf{x} \cdot (\boldsymbol{\nabla} \wedge F).\end{aligned} \hspace{\stretch{1}}(1.0.108)$</p>
+
+
+Multiplication of $latex F$ by the pseudoscalar will always produce a vector.  With the introduction of such a dual vector, as in
+
+<p align="center">$latex \begin{aligned}F = I \mathbf{f},\end{aligned} \hspace{\stretch{1}}(1.0.108)$</p>
+
+
+Stokes theorem takes the form
+<p align="center">$latex \begin{aligned}\int_V d^k \mathbf{x} \cdot {\left\langle{{\boldsymbol{\nabla} I \mathbf{f}}}\right\rangle}_{{k}}= \int_{\partial V} \left\langle{{ d^{k-1} \mathbf{x} I \mathbf{f}}}\right\rangle,\end{aligned} \hspace{\stretch{1}}(1.0.108)$</p>
+
+
+or
+<p align="center">$latex \begin{aligned}\int_V \left\langle{{ d^k \mathbf{x} \boldsymbol{\nabla} I \mathbf{f}}}\right\rangle= \int_{\partial V} \left( { d^{k-1} \mathbf{x} I} \right) \cdot \mathbf{f},\end{aligned} \hspace{\stretch{1}}(1.0.108)$</p>
+
+
+where we will see that the vector $latex d^{k-1} \mathbf{x} I$ can roughly be characterized as a normal to the boundary surface.  Using primes to indicate the scope of the action of the gradient, cyclic permutation within the scalar selection operator can be used to factor out the pseudoscalar
+
+<p align="center">$latex \begin{aligned}\int_V \left\langle{{ d^k \mathbf{x} \boldsymbol{\nabla} I \mathbf{f}}}\right\rangle=\int_V \left\langle{{ \mathbf{f}' d^k \mathbf{x} \boldsymbol{\nabla}' I}}\right\rangle=\int_V {\left\langle{{ \mathbf{f}' d^k \mathbf{x} \boldsymbol{\nabla}'}}\right\rangle}_{{k}} I=\int_V(-1)^{k+1} d^k \mathbf{x} \left( { \boldsymbol{\nabla} \cdot \mathbf{f}} \right) I=(-1)^{k+1} I^2\int_V dV\left( { \boldsymbol{\nabla} \cdot \mathbf{f}} \right).\end{aligned} \hspace{\stretch{1}}(1.0.108)$</p>
+
+
+The second last step uses \cref{thm:stokesTheoremGeometricAlgebraII:4690}, and the last writes $latex d^k \mathbf{x} = I^2 \left\lvert {d^k \mathbf{x}} \right\rvert = I^2 dV$, where we have assumed (without loss of generality) that $latex d^k \mathbf{x}$ has the same orientation as the pseudoscalar for the space.  We also assume that the parameterization is non-degenerate over the integration volume (i.e. no $latex d\mathbf{x}_i = 0$), so the sign of this product cannot change.
+
+Let's now return to the normal vector $latex d^{k-1} \mathbf{x} I$.  With $latex d^{k-1} u_i = du^1 du^2 \cdots du^{i-1} du^{i+1} \cdots du^k$ (the $latex i$ indexed differential omitted), and $latex I_{ab\cdots c} = (\mathbf{x}_a \wedge \mathbf{x}_b \wedge \cdots \wedge \mathbf{x}_c)/\left\lvert {\mathbf{x}_a \wedge \mathbf{x}_b \wedge \cdots \wedge \mathbf{x}_c} \right\rvert$, we have
+
+<p align="center">$latex \begin{aligned}\begin{aligned}d^{k-1} \mathbf{x} I&amp;=d^{k-1} u_i \left( { \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \cdots \wedge \mathbf{x}_k} \right) \cdot \mathbf{x}^i I \\ &amp;= I_{1 2 \cdots (k-1)} I \left\lvert {d\mathbf{x}_1 \wedge d\mathbf{x}_2 \wedge \cdots \wedge d\mathbf{x}_{k-1} } \right\rvert \\ &amp;\quad -I_{1 \cdots (k-2) k} I \left\lvert {d\mathbf{x}_1 \wedge \cdots \wedge d\mathbf{x}_{k-2} \wedge d\mathbf{x}_k} \right\rvert+ \cdots\end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.113)$</p>
+
+
+We've seen in eq. 1.0.106 and \cref{thm:stokesTheoremGeometricAlgebraII:4950} that the dual of vector $latex \mathbf{a}$ with respect to the unit pseudoscalar $latex I_{\mathbf{b} \cdots \mathbf{c} \mathbf{d}}$ in a subspace spanned by $latex \left\{ {\mathbf{a}, \cdots \mathbf{c}, \mathbf{d}} \right\}$ is
+
+<p align="center">$latex \begin{aligned}\widehat{\mathbf{a}^{*}} = I_{\mathbf{b} \cdots \mathbf{c} \mathbf{d}} \frac{1}{{ I_{\mathbf{a} \cdots \mathbf{c} \mathbf{d}} }},\end{aligned} \hspace{\stretch{1}}(1.0.114)$</p>
+
+
+or 
+<p align="center">$latex \begin{aligned}\widehat{\mathbf{a}^{*}} I_{\mathbf{a} \cdots \mathbf{c} \mathbf{d}}^2=I_{\mathbf{b} \cdots \mathbf{c} \mathbf{d}}.\end{aligned} \hspace{\stretch{1}}(1.0.115)$</p>
+
+
+This allows us to write
+
+<p align="center">$latex \begin{aligned}d^{k-1} \mathbf{x} I= I^2 \sum_i \widehat{\mathbf{x}^i} d{A'}_i\end{aligned} \hspace{\stretch{1}}(1.0.116)$</p>
+
+
+where $latex d{A'}_i = \pm dA_i$, and $latex dA_i$ is the area of the boundary area element normal to $latex \mathbf{x}^i$.  Note that the $latex I^2$ term will now cancel cleanly from both sides of the divergence equation, taking both the metric and the orientation specific dependencies with it.
+
+This leaves us with
+
+<p align="center">$latex \begin{aligned}\int_V dV \boldsymbol{\nabla} \cdot \mathbf{f} = (-1)^{k+1} \int_{\partial V} d{A'}_i \widehat{\mathbf{x}^i} \cdot \mathbf{f}.\end{aligned} \hspace{\stretch{1}}(1.0.117)$</p>
+
+
+To spell out the details, we have to be very careful with the signs.  However, that is a job best left for specific examples.
+
+<h2>Example: 2D divergence theorem</h2>{example:stokesTheoremGeometricAlgebraII:4690}{
+Let's start back at
+
+<p align="center">$latex \begin{aligned}\int_A \left\langle{{ d^2 \mathbf{x} \boldsymbol{\nabla} I \mathbf{f} }}\right\rangle = \int_{\partial A} \left( { d^1 \mathbf{x} I} \right) \cdot \mathbf{f}.\end{aligned} \hspace{\stretch{1}}(1.118)$</p>
+
+
+On the left our integral can be rewritten as
+
+<p align="center">$latex \begin{aligned}\int_A \left\langle{{ d^2 \mathbf{x} \boldsymbol{\nabla} I \mathbf{f} }}\right\rangle=-\int_A \left\langle{{ d^2 \mathbf{x} I \boldsymbol{\nabla} \mathbf{f} }}\right\rangle=-\int_A d^2 \mathbf{x} I \left( { \boldsymbol{\nabla} \cdot \mathbf{f} } \right)=- I^2 \int_A dA \boldsymbol{\nabla} \cdot \mathbf{f},\end{aligned} \hspace{\stretch{1}}(1.119)$</p>
+
+
+where $latex d^2 \mathbf{x} = I dA$ and we pick the pseudoscalar with the same orientation as the volume (area in this case) element $latex I = (\mathbf{x}_1 \wedge \mathbf{x}_2)/\left\lvert {\mathbf{x}_1 \wedge \mathbf{x}_2} \right\rvert$.
+
+For the boundary form we have
+
+<p align="center">$latex \begin{aligned}d^1 \mathbf{x} = du^2 \left( { \mathbf{x}_1 \wedge \mathbf{x}_2 } \right) \cdot \mathbf{x}^1+ du^1 \left( { \mathbf{x}_1 \wedge \mathbf{x}_2 } \right) \cdot \mathbf{x}^2= -du^2 \mathbf{x}_2 +du^1 \mathbf{x}_1.\end{aligned} \hspace{\stretch{1}}(1.120)$</p>
+
+
+The duality relations for the tangent space are
+
+<p align="center">$latex \begin{aligned}\begin{aligned}\mathbf{x}^2 &amp;= \mathbf{x}_1 \frac{1}{{\mathbf{x}_2 \wedge \mathbf{x}_1}} \\ \mathbf{x}^1 &amp;= \mathbf{x}_2 \frac{1}{{\mathbf{x}_1 \wedge \mathbf{x}_2}}\end{aligned},\end{aligned} \hspace{\stretch{1}}(1.0.121)$</p>
+
+
+or
+<p align="center">$latex \begin{aligned}\begin{aligned}\widehat{\mathbf{x}^2} &amp;= -\widehat{\mathbf{x}_1} \frac{1}{{I}} \\ \widehat{\mathbf{x}^1} &amp;= \widehat{\mathbf{x}_2} \frac{1}{{I}}\end{aligned}.\end{aligned} \hspace{\stretch{1}}(1.0.122)$</p>
+
+
+Back substitution into the line element gives
+
+<p align="center">$latex \begin{aligned}d^1 \mathbf{x} = -du^2 \left\lvert {\mathbf{x}_2} \right\rvert \widehat{\mathbf{x}_2}+du^1 \left\lvert {\mathbf{x}_1} \right\rvert \widehat{\mathbf{x}_1}=-du^2 \left\lvert {\mathbf{x}_2} \right\rvert \widehat{\mathbf{x}^1} I-du^1 \left\lvert {\mathbf{x}_1} \right\rvert \widehat{\mathbf{x}^2} I.\end{aligned} \hspace{\stretch{1}}(1.0.122)$</p>
+
+
+Writing (no sum) $latex du^i \left\lvert {\mathbf{x}_i} \right\rvert = ds_i$, we have
+
+<p align="center">$latex \begin{aligned}d^1 \mathbf{x} I = -\left( { ds_2 \widehat{\mathbf{x}^1} +ds_1 \widehat{\mathbf{x}^2} } \right) I^2.\end{aligned} \hspace{\stretch{1}}(1.0.122)$</p>
+
+
+This provides us a divergence and normal relationship, with $latex -I^2$ terms on each side that can be canceled.  Restoring explicit range evaluation, that is
+
+<p align="center">$latex \begin{aligned}\int_A dA \boldsymbol{\nabla} \cdot \mathbf{f}=\int_{\Delta u^2} {\left.{{ ds_2 \widehat{\mathbf{x}^1} \cdot \mathbf{f}}}\right\vert}_{{\Delta u^1}}+ \int_{\Delta u^1} {\left.{{ ds_1 \widehat{\mathbf{x}^2} \cdot \mathbf{f}}}\right\vert}_{{\Delta u^2}}=\int_{\Delta u^2} {\left.{{ ds_2 \widehat{\mathbf{x}^1} \cdot \mathbf{f}}}\right\vert}_{{u^1(1)}}-\int_{\Delta u^2} {\left.{{ ds_2 \widehat{\mathbf{x}^1} \cdot \mathbf{f}}}\right\vert}_{{u^1(0)}}+ \int_{\Delta u^1} {\left.{{ ds_1 \widehat{\mathbf{x}^2} \cdot \mathbf{f}}}\right\vert}_{{u^2(0)}}- \int_{\Delta u^1} {\left.{{ ds_1 \widehat{\mathbf{x}^2} \cdot \mathbf{f}}}\right\vert}_{{u^2(0)}}.\end{aligned} \hspace{\stretch{1}}(1.0.122)$</p>
+
+
+Let's consider this graphically for an Euclidean metric as illustrated in fig. 1.9.
+
+\imageFigure{../../figures/gabook/normalsOnSurfaceAreaElementFig10}{Normals on area element}{fig:normalsOnSurfaceAreaElement:normalsOnSurfaceAreaElementFig10}{0.25}
+
+We see that
+<ol>
+<li> along $latex u^2(0)$ the outwards normal is $latex -\widehat{\mathbf{x}^2}$,
+<li> along $latex u^2(1)$ the outwards normal is $latex \widehat{\mathbf{x}^2}$, 
+<li> along $latex u^1(0)$ the outwards normal is $latex -\widehat{\mathbf{x}^1}$, and
+<li> along $latex u^1(1)$ the outwards normal is $latex \widehat{\mathbf{x}^2}$.
+</ol>
+
+Writing that outwards normal as $latex \hat{\mathbf{n}}$, we have
+
+<p align="center">$latex \begin{aligned}\int_A dA \boldsymbol{\nabla} \cdot \mathbf{f}= \ointctrclockwise ds \hat{\mathbf{n}} \cdot \mathbf{f}.\end{aligned} \hspace{\stretch{1}}(1.0.126)$</p>
+
+
+Note that we can use the same algebraic notion of outward normal for non-Euclidean spaces, although cannot expect the geometry to look anything like that of the figure.
+}
+
+<h2>Example: 3D divergence theorem</h2>{example:stokesTheoremGeometricAlgebraII:4470}{
+As with the 2D example, let's start back with
+
+<p align="center">$latex \begin{aligned}\int_V \left\langle{{ d^3 \mathbf{x} \boldsymbol{\nabla} I \mathbf{f} }}\right\rangle = \int_{\partial V} \left( { d^2 \mathbf{x} I} \right) \cdot \mathbf{f}.\end{aligned} \hspace{\stretch{1}}(1.127)$</p>
+
+
+In a 3D space, the pseudoscalar commutes with all grades, so we have
+
+<p align="center">$latex \begin{aligned}\int_V \left\langle{{ d^3 \mathbf{x} \boldsymbol{\nabla} I \mathbf{f} }}\right\rangle=\int_V \left( { d^3 \mathbf{x} I } \right) \boldsymbol{\nabla} \cdot \mathbf{f}=I^2 \int_V dV \boldsymbol{\nabla} \cdot \mathbf{f},\end{aligned} \hspace{\stretch{1}}(1.128)$</p>
+
+
+where $latex d^3 \mathbf{x} I = dV I^2$, and we have used a pseudoscalar with the same orientation as the volume element
+
+<p align="center">$latex \begin{aligned}\begin{aligned}I &amp;= \widehat{ \mathbf{x}_{123} } \\ \mathbf{x}_{123} &amp;= \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_3.\end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.129)$</p>
+
+
+In the boundary integral our dual two form is
+
+<p align="center">$latex \begin{aligned}d^2 \mathbf{x} I=  du^1 du^2 \mathbf{x}_1 \wedge \mathbf{x}_2+du^3 du^1 \mathbf{x}_3 \wedge \mathbf{x}_1+du^2 du^3 \mathbf{x}_2 \wedge \mathbf{x}_3= \left( { dA_{3} \widehat{ \mathbf{x}_{12} } \frac{1}{{I}}+dA_{2} \widehat{ \mathbf{x}_{31} } \frac{1}{{I}}+dA_{1} \widehat{ \mathbf{x}_{23} } \frac{1}{{I}}} \right) I^2,\end{aligned} \hspace{\stretch{1}}(1.0.129)$</p>
+
+
+where $latex \mathbf{x}_{ij} = \mathbf{x}_i \wedge \mathbf{x}_j$, and
+
+<p align="center">$latex \begin{aligned}\begin{aligned}dA_1 &amp;= \left\lvert {d\mathbf{x}_2 \wedge d\mathbf{x}_3} \right\rvert \\ dA_2 &amp;= \left\lvert {d\mathbf{x}_3 \wedge d\mathbf{x}_1} \right\rvert \\ dA_3 &amp;= \left\lvert {d\mathbf{x}_1 \wedge d\mathbf{x}_2} \right\rvert.\end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.131)$</p>
+
+
+Observe that we can do a cyclic permutation of a 3 blade without any change of sign, for example
+
+<p align="center">$latex \begin{aligned}\mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_3 =-\mathbf{x}_2 \wedge \mathbf{x}_1 \wedge \mathbf{x}_3 =\mathbf{x}_2 \wedge \mathbf{x}_3 \wedge \mathbf{x}_1.\end{aligned} \hspace{\stretch{1}}(1.0.132)$</p>
+
+
+Because of this we can write the dual two form as we expressed the normals in \cref{thm:stokesTheoremGeometricAlgebraII:4950}
+
+<p align="center">$latex \begin{aligned}d^2 \mathbf{x} I = \left( {   dA_1    \widehat{\mathbf{x}_{23}}   \frac{1}{{\widehat{\mathbf{x}_{123}}}}   +   dA_2    \widehat{\mathbf{x}_{31}}   \frac{1}{{\widehat{\mathbf{x}_{231}}}}   +   dA_3    \widehat{\mathbf{x}_{12}}   \frac{1}{{\widehat{\mathbf{x}_{312}}}}} \right) I^2=\left( { dA_1 \widehat{\mathbf{x}^1}+dA_2 \widehat{\mathbf{x}^2}+dA_3 \widehat{\mathbf{x}^3} } \right) I^2.\end{aligned} \hspace{\stretch{1}}(1.0.132)$</p>
+
+
+We can now state the 3D divergence theorem, canceling out the metric and orientation dependent term $latex I^2$ on both sides
+
+<p align="center">$latex \begin{aligned}\int_V dV \boldsymbol{\nabla} \cdot \mathbf{f}=\int dA \hat{\mathbf{n}} \cdot \mathbf{f},\end{aligned} \hspace{\stretch{1}}(1.0.134)$</p>
+
+
+where (sums implied)
+
+<p align="center">$latex \begin{aligned}dA \hat{\mathbf{n}} = dA_i \widehat{\mathbf{x}^i},\end{aligned} \hspace{\stretch{1}}(1.0.135)$</p>
+
+
+and
+<p align="center">$latex \begin{aligned}\begin{aligned}{\left.{{\hat{\mathbf{n}}}}\right\vert}_{{u^i = u^i(1)}} &amp;= \widehat{\mathbf{x}^i} \\ {\left.{{\hat{\mathbf{n}}}}\right\vert}_{{u^i = u^i(0)}} &amp;= -\widehat{\mathbf{x}^i}\end{aligned}.\end{aligned} \hspace{\stretch{1}}(1.0.136)$</p>
+
+
+The outwards normals at the upper integration ranges of a three parameter surface are depicted in fig. 1.10.
+
+\imageFigure{../../figures/gabook/normalsOnVolumeAreaElementFig11}{Outwards normals on volume at upper integration ranges.}{fig:normalsOnVolumeAreaElement:normalsOnVolumeAreaElementFig11}{0.25}
+
+This sign alternation originates with the two form elements $latex \left( {d\mathbf{x}_i \wedge d\mathbf{x}_j} \right) \cdot F$ from the Stokes boundary integral, which were explicitly evaluated at the endpoints of the integral.  That is, for $latex k \ne i,j$,
+
+<p align="center">$latex \begin{aligned}\int_{\partial V} \left( { d\mathbf{x}_i \wedge d\mathbf{x}_j } \right) \cdot F\equiv\int_{\Delta u^i} \int_{\Delta u^j} {\left.{{\left( { \left( { d\mathbf{x}_i \wedge d\mathbf{x}_j } \right) \cdot F } \right)}}\right\vert}_{{u^k = u^k(1)}}-{\left.{{\left( { \left( { d\mathbf{x}_i \wedge d\mathbf{x}_j } \right) \cdot F } \right)}}\right\vert}_{{u^k = u^k(0)}}\end{aligned} \hspace{\stretch{1}}(1.0.137)$</p>
+
+
+In the context of the divergence theorem, this means that we are implicitly requiring the dot products $latex \widehat{\mathbf{x}^k} \cdot \mathbf{f}$ to be evaluated specifically at the end points of the integration where $latex u^k = u^k(1), u^k = u^k(0)$, accounting for the alternation of sign required to describe the normals as uniformly outwards.  
+}
+
+<h2>Example: 4D divergence theorem</h2>{example:stokesTheoremGeometricAlgebraII:5270}{
+Applying Stokes theorem to a trivector $latex T = I \mathbf{f}$ in the 4D case we find
+
+<p align="center">$latex \begin{aligned}-I^2 \int_V d^4 x \boldsymbol{\nabla} \cdot \mathbf{f} = \int_{\partial V} \left( { d^3 \mathbf{x} I} \right) \cdot \mathbf{f}.\end{aligned} \hspace{\stretch{1}}(1.138)$</p>
+
+
+Here the pseudoscalar has been picked to have the same orientation as the hypervolume element $latex d^4 \mathbf{x} = I d^4 x$.  Writing $latex \mathbf{x}_{ij \cdots k} = \mathbf{x}_i \wedge \mathbf{x}_j \wedge \cdots \mathbf{x}_k$ the dual of the three form is
+
+<p align="center">$latex \begin{aligned}d^3 \mathbf{x} I=\left( { du^1 du^2 du^3 \mathbf{x}_{123}-du^1 du^2 du^4 \mathbf{x}_{124}+du^1 du^3 du^4 \mathbf{x}_{134}-du^2 du^3 du^4 \mathbf{x}_{234}} \right) I=\left( {    dA^{123} \widehat{ \mathbf{x}_{123} }   -dA^{124} \widehat{ \mathbf{x}_{124} }   +dA^{134} \widehat{ \mathbf{x}_{134} }   -dA^{234} \widehat{ \mathbf{x}_{234} }} \right) I=\left( {    dA^{123} \widehat{ \mathbf{x}_{123} } \frac{1}{{\widehat{\mathbf{x}_{1234} }}}   -dA^{124} \widehat{ \mathbf{x}_{124} } \frac{1}{{\widehat{\mathbf{x}_{1234} }}}   +dA^{134} \widehat{ \mathbf{x}_{134} } \frac{1}{{\widehat{\mathbf{x}_{1234} }}}   -dA^{234} \widehat{ \mathbf{x}_{234} } \frac{1}{{\widehat{\mathbf{x}_{1234} }}}} \right) I^2=-\left( {    dA^{123} \widehat{ \mathbf{x}_{123} } \frac{1}{{\widehat{\mathbf{x}_{4123} }}}   +dA^{124} \widehat{ \mathbf{x}_{124} } \frac{1}{{\widehat{\mathbf{x}_{3412} }}}   +dA^{134} \widehat{ \mathbf{x}_{134} } \frac{1}{{\widehat{\mathbf{x}_{2341} }}}   +dA^{234} \widehat{ \mathbf{x}_{234} } \frac{1}{{\widehat{\mathbf{x}_{1234} }}}} \right) I^2=-\left( {    dA^{123} \widehat{ \mathbf{x}_{123} } \frac{1}{{\widehat{\mathbf{x}_{4123} }}}   +dA^{124} \widehat{ \mathbf{x}_{412} } \frac{1}{{\widehat{\mathbf{x}_{3412} }}}   +dA^{134} \widehat{ \mathbf{x}_{341} } \frac{1}{{\widehat{\mathbf{x}_{2341} }}}   +dA^{234} \widehat{ \mathbf{x}_{234} } \frac{1}{{\widehat{\mathbf{x}_{1234} }}}} \right) I^2=-\left( {    dA^{123} \widehat{ \mathbf{x}^{4} }   +dA^{124} \widehat{ \mathbf{x}^{3} }    +dA^{134} \widehat{ \mathbf{x}^{2} }    +dA^{234} \widehat{ \mathbf{x}^{1} } } \right) I^2\end{aligned} \hspace{\stretch{1}}(1.139)$</p>
+
+
+Here, we've written
+
+<p align="center">$latex \begin{aligned}dA^{ijk} = \left\lvert { d\mathbf{x}_i \wedge d\mathbf{x}_j \wedge d\mathbf{x}_k } \right\rvert.\end{aligned} \hspace{\stretch{1}}(1.140)$</p>
+
+
+Observe that the dual representation nicely removes the alternation of sign that we had in the Stokes theorem boundary integral, since each alternation of the wedged vectors in the pseudoscalar changes the sign once.
+
+As before, we define the outwards normals as $latex \hat{\mathbf{n}} = \pm \widehat{\mathbf{x}^i}$ on the upper and lower integration ranges respectively.  The scalar area elements on these faces can be written in a dual form
+
+<p align="center">$latex \begin{aligned}\begin{aligned}   dA_4 &amp;= dA^{123} \\    dA_3 &amp;= dA^{124} \\    dA_2 &amp;= dA^{134} \\    dA_1 &amp;= dA^{234} \end{aligned},\end{aligned} \hspace{\stretch{1}}(1.0.141)$</p>
+
+
+so that the 4D divergence theorem looks just like the 2D and 3D cases
+
+<p align="center">$latex \begin{aligned}\int_V d^4 x \boldsymbol{\nabla} \cdot \mathbf{f} = \int_{\partial V} d^3 x \hat{\mathbf{n}} \cdot \mathbf{f}.\end{aligned} \hspace{\stretch{1}}(1.0.142)$</p>
+
+
+Here we define the volume scaled normal as
+
+<p align="center">$latex \begin{aligned}d^3 x \hat{\mathbf{n}} = dA_i \widehat{\mathbf{x}^i}.\end{aligned} \hspace{\stretch{1}}(1.0.143)$</p>
+
+
+As before, we have made use of the implicit fact that the three form (and it's dot product with $latex \mathbf{f}$) was evaluated on the boundaries of the integration region, with a toggling of sign on the lower limit of that evaluation that is now reflected in what we have defined as the outwards normal.
+
+We also obtain explicit instructions from this formalism how to compute the ``outwards'' normal for this surface in a 4D space (unit scaling of the dual basis elements), something that we cannot compute using any sort of geometrical intuition.  For free we've obtained a result that applies to both Euclidean and Minkowski (or other non-Euclidean) spaces.
+}
+
+<h1>Volume integral coordinate representations</h1>
+
+It may be useful to formulate the curl integrals in tensor form.  For vectors $latex \mathbf{f}$, and bivectors $latex B$, the coordinate representations of those differential forms (\cref{pr:stokesTheoremGeometricAlgebraII:1}) are
+
+<p align="center">$latex \begin{aligned}d^2 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)=- d^2 u \epsilon^{ a b } \partial_a f_b\end{aligned} \hspace{\stretch{1}}(1.0.144a)$</p>
+
+<p align="center">$latex \begin{aligned}d^3 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)=-d^3 u \epsilon^{a b c} \mathbf{x}_a \partial_b f_{c}\end{aligned} \hspace{\stretch{1}}(1.0.144b)$</p>
+
+<p align="center">$latex \begin{aligned}d^4 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)=-\frac{1}{{2}} d^4 u \epsilon^{a b c d} \mathbf{x}_a \wedge \mathbf{x}_b \partial_{c} f_{d}\end{aligned} \hspace{\stretch{1}}(1.0.144c)$</p>
+
+<p align="center">$latex \begin{aligned}d^3 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge B } \right)=-\frac{1}{{2}}d^3 u \epsilon^{a b c} \partial_a B_{b c}\end{aligned} \hspace{\stretch{1}}(1.0.144d)$</p>
+
+<p align="center">$latex \begin{aligned}d^4 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge B } \right)=-\frac{1}{{2}} d^4 u \epsilon^{a b c d} \mathbf{x}_a \partial_b B_{cd}\end{aligned} \hspace{\stretch{1}}(1.0.144e)$</p>
+
+<p align="center">$latex \begin{aligned}d^4 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge T } \right)=-d^4 u\left( {\partial_4 T_{123}-\partial_3 T_{124}+\partial_2 T_{134}-\partial_1 T_{234}} \right).\end{aligned} \hspace{\stretch{1}}(1.0.144f)$</p>
+
+
+Here the bivector $latex B$ and trivector $latex T$ is expressed in terms of their curvilinear components on the tangent space
+
+<p align="center">$latex \begin{aligned}B = \frac{1}{{2}} \mathbf{x}^i \wedge \mathbf{x}^j B_{ij} + B_\perp\end{aligned} \hspace{\stretch{1}}(1.0.145a)$</p>
+
+<p align="center">$latex \begin{aligned}T = \frac{1}{{3!}} \mathbf{x}^i \wedge \mathbf{x}^j \wedge \mathbf{x}^k T_{ijk} + T_\perp,\end{aligned} \hspace{\stretch{1}}(1.0.145b)$</p>
+
+
+where
+
+<p align="center">$latex \begin{aligned}B_{ij} = \mathbf{x}_j \cdot \left( { \mathbf{x}_i \cdot B } \right) = -B_{ji}.\end{aligned} \hspace{\stretch{1}}(1.0.146a)$</p>
+
+<p align="center">$latex \begin{aligned}T_{ijk} = \mathbf{x}_k \cdot \left( { \mathbf{x}_j \cdot \left( { \mathbf{x}_i \cdot B } \right)} \right).\end{aligned} \hspace{\stretch{1}}(1.0.146b)$</p>
+
+
+For the trivector components are also antisymmetric, changing sign with any interchange of indices.
+
+Note that eq. 1.0.144d and eq. 1.0.144f appear much different on the surface, but both have the same structure.  This can be seen by writing for former as
+
+<p align="center">$latex \begin{aligned}d^3 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge B } \right)=-d^3 u\left( {    \partial_1 B_{2 3}  + \partial_2 B_{3 1}  + \partial_3 B_{1 2}} \right)=-d^3 u\left( {    \partial_3 B_{1 2}  - \partial_2 B_{1 3}  + \partial_1 B_{2 3}} \right).\end{aligned} \hspace{\stretch{1}}(1.0.146b)$</p>
+
+
+In both of these we have an alternation of sign, where the tensor index skips one of the volume element indices is sequence.  We've seen in the 4D divergence theorem that this alternation of sign can be related to a duality transformation.
+
+In integral form (no sum over indexes $latex i$ in $latex du^i$ terms), these are
+
+<p align="center">$latex \begin{aligned}\int d^2 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)=- \epsilon^{ a b } \int {\left.{{du^b f_b}}\right\vert}_{{\Delta u^a}}\end{aligned} \hspace{\stretch{1}}(1.0.148a)$</p>
+
+<p align="center">$latex \begin{aligned}\int d^3 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)=-\epsilon^{a b c} \intdu^a du^c{\left.{{\mathbf{x}_a f_{c}}}\right\vert}_{{\Delta u^b}}\end{aligned} \hspace{\stretch{1}}(1.0.148b)$</p>
+
+<p align="center">$latex \begin{aligned}\int d^4 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)=-\frac{1}{{2}} \epsilon^{a b c d} \intdu^a du^b du^d{\left.{{\mathbf{x}_a \wedge \mathbf{x}_b f_{d}}}\right\vert}_{{\Delta u^c}}\end{aligned} \hspace{\stretch{1}}(1.0.148c)$</p>
+
+<p align="center">$latex \begin{aligned}\int d^3 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge B } \right)=-\frac{1}{{2}}\epsilon^{a b c} \intdu^b du^c{\left.{{B_{b c}}}\right\vert}_{{\Delta u^a}}\end{aligned} \hspace{\stretch{1}}(1.0.148d)$</p>
+
+<p align="center">$latex \begin{aligned}\int d^4 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge B } \right)=-\frac{1}{{2}} \epsilon^{a b c d} \intdu^a du^c du^d{\left.{{\mathbf{x}_a B_{cd}}}\right\vert}_{{\Delta u^b}}\end{aligned} \hspace{\stretch{1}}(1.0.148e)$</p>
+
+<p align="center">$latex \begin{aligned}\int d^4 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge T } \right)=-\int \left( {du^1 du^2 du^3 {\left.{{T_{123}}}\right\vert}_{{\Delta u^4}}-du^1 du^2 du^4 {\left.{{T_{124}}}\right\vert}_{{\Delta u^3}}+du^1 du^3 du^4 {\left.{{T_{134}}}\right\vert}_{{\Delta u^2}}-du^2 du^3 du^4 {\left.{{T_{234}}}\right\vert}_{{\Delta u^1}}} \right).\end{aligned} \hspace{\stretch{1}}(1.0.148f)$</p>
+
+
+Of these, I suspect that only eq. 1.0.148a and eq. 1.0.148d are of use.
+
+<h1>Final remarks</h1>
+
+Because we have used curvilinear coordinates from the get go, we have arrived naturally at a formulation that works for both Euclidean and non-Euclidean geometries, and have demonstrated that Stokes (and the divergence theorem) holds regardless of the geometry or the parameterization.  We also know explicitly how to formulate both theorems for any parameterization that we choose, something much more valuable than knowledge that this is possible.
+
+For the divergence theorem we have introduced the concept of outwards normal (for example in 3D, eq. 1.0.136), which still holds for non-Euclidean geometries.  We may not be able to form intuitive geometrical interpretations for these normals, but do have an algebraic description of them.
+
+<h1>Appendix</h1>
+
+<h2>Problems</h2>
+
+<h2>Question: Expand volume elements in coordinates</h2>{
+Show that the coordinate representation for the volume element dotted with the curl can be represented as a sum of antisymmetric terms.  That is
+
+\makesubproblem{Prove
+eq. 1.0.144a
+}{pr:stokesTheoremGeometricAlgebraII:a}
+\makesubproblem{Prove
+eq. 1.0.144b
+}{pr:stokesTheoremGeometricAlgebraII:b}
+\makesubproblem{Prove
+eq. 1.0.144c
+}{pr:stokesTheoremGeometricAlgebraII:c}
+\makesubproblem{Prove
+eq. 1.0.144d
+}{pr:stokesTheoremGeometricAlgebraII:d}
+\makesubproblem{Prove
+eq. 1.0.144e
+}{pr:stokesTheoremGeometricAlgebraII:e}
+\makesubproblem{Prove
+eq. 1.0.144f
+}{pr:stokesTheoremGeometricAlgebraII:f}
+} 
+
+<h2>Answer</h2>{
+
+\makeSubAnswer{Two parameter volume, curl of vector}{pr:stokesTheoremGeometricAlgebraII:a}
+
+<p align="center">$latex \begin{aligned}d^2 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)=d^2 u\Bigl( { \left( { \mathbf{x}_1 \wedge \mathbf{x}_2 } \right) \cdot \mathbf{x}^i } \Bigr) \cdot \partial_i \mathbf{f}=d^2 u\left( {\mathbf{x}_1 \cdot \partial_2 \mathbf{f}-\mathbf{x}_2 \cdot \partial_1 \mathbf{f}} \right)=d^2 u\left( {\partial_2 f_1-\partial_1 f_2} \right)=- d^2 u \epsilon^{ab} \partial_{a} f_{b}. \qquad\square\end{aligned} \hspace{\stretch{1}}(1.149)$</p>
+
+
+\makeSubAnswer{Three parameter volume, curl of vector}{pr:stokesTheoremGeometricAlgebraII:b}
+
+<p align="center">$latex \begin{aligned}d^3 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)=d^3 u\Bigl( { \left( { \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_3 } \right) \cdot \mathbf{x}^i } \Bigr) \cdot \partial_i \mathbf{f}=d^3 u\Bigl( { \left( { \mathbf{x}_1 \wedge \mathbf{x}_2 } \right) \cdot \partial_3 \mathbf{f}+\left( { \mathbf{x}_3 \wedge \mathbf{x}_1 } \right) \cdot \partial_2 \mathbf{f}+\left( { \mathbf{x}_2 \wedge \mathbf{x}_3 } \right) \cdot \partial_1 \mathbf{f}} \Bigr)=d^3 u\Bigl( {\left( { \mathbf{x}_1 \partial_3 \mathbf{f} \cdot \mathbf{x}_2 -\mathbf{x}_2 \partial_3 \mathbf{f} \cdot \mathbf{x}_1 } \right)+\left( { \mathbf{x}_3 \partial_2 \mathbf{f} \cdot \mathbf{x}_1 -\mathbf{x}_1 \partial_2 \mathbf{f} \cdot \mathbf{x}_3 } \right)+\left( { \mathbf{x}_2 \partial_1 \mathbf{f} \cdot \mathbf{x}_3 -\mathbf{x}_3 \partial_1 \mathbf{f} \cdot \mathbf{x}_2 } \right)} \Bigr)=d^3 u\Bigl( {\mathbf{x}_1 \left( { -\partial_2 \mathbf{f} \cdot \mathbf{x}_3 + \partial_3 \mathbf{f} \cdot \mathbf{x}_2 } \right)+\mathbf{x}_2 \left( { -\partial_3 \mathbf{f} \cdot \mathbf{x}_1 + \partial_1 \mathbf{f} \cdot \mathbf{x}_3 } \right)+\mathbf{x}_3 \left( { -\partial_1 \mathbf{f} \cdot \mathbf{x}_2 + \partial_2 \mathbf{f} \cdot \mathbf{x}_1 } \right)} \Bigr)=d^3 u\Bigl( {\mathbf{x}_1 \left( { -\partial_2 f_3 + \partial_3 f_2 } \right)+\mathbf{x}_2 \left( { -\partial_3 f_1 + \partial_1 f_3 } \right)+\mathbf{x}_3 \left( { -\partial_1 f_2 + \partial_2 f_1 } \right)} \Bigr)= - d^3 u \epsilon^{abc} \partial_b f_c. \qquad\square\end{aligned} \hspace{\stretch{1}}(1.150)$</p>
+
+
+\makeSubAnswer{Four parameter volume, curl of vector}{pr:stokesTheoremGeometricAlgebraII:c}
+
+<p align="center">$latex \begin{aligned}\begin{aligned}d^4 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge \mathbf{f} } \right)&amp;=d^4 u\Bigl( { \left( { \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_3 \wedge \mathbf{x}_4 } \right) \cdot \mathbf{x}^i } \Bigr) \cdot \partial_i \mathbf{f} \\ &amp;=d^4 u\Bigl( {\left( { \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_3 } \right) \cdot \partial_4 \mathbf{f}-\left( { \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_4 } \right) \cdot \partial_3 \mathbf{f}+\left( { \mathbf{x}_1 \wedge \mathbf{x}_3 \wedge \mathbf{x}_4 } \right) \cdot \partial_2 \mathbf{f}-\left( { \mathbf{x}_2 \wedge \mathbf{x}_3 \wedge \mathbf{x}_4 } \right) \cdot \partial_1 \mathbf{f}} \Bigr) \\ &amp;=d^4 u\Bigl( {  \\ &amp;\quad\quad \left( { \mathbf{x}_1 \wedge \mathbf{x}_2 } \right) \mathbf{x}_3 \cdot \partial_4 \mathbf{f}-\left( { \mathbf{x}_1 \wedge \mathbf{x}_3 } \right) \mathbf{x}_2 \cdot \partial_4 \mathbf{f}+\left( { \mathbf{x}_2 \wedge \mathbf{x}_3 } \right) \mathbf{x}_1 \cdot \partial_4 \mathbf{f} \\ &amp;\quad-\left( { \mathbf{x}_1 \wedge \mathbf{x}_2 } \right) \mathbf{x}_4 \cdot \partial_3 \mathbf{f}+\left( { \mathbf{x}_1 \wedge \mathbf{x}_4 } \right) \mathbf{x}_2 \cdot \partial_3 \mathbf{f}-\left( { \mathbf{x}_2 \wedge \mathbf{x}_4 } \right) \mathbf{x}_1 \cdot \partial_3 \mathbf{f} \\ &amp;\quad+ \left( { \mathbf{x}_1 \wedge \mathbf{x}_3 } \right) \mathbf{x}_4 \cdot \partial_2 \mathbf{f}-\left( { \mathbf{x}_1 \wedge \mathbf{x}_4 } \right) \mathbf{x}_3 \cdot \partial_2 \mathbf{f}+\left( { \mathbf{x}_3 \wedge \mathbf{x}_4 } \right) \mathbf{x}_1 \cdot \partial_2 \mathbf{f} \\ &amp;\quad-\left( { \mathbf{x}_2 \wedge \mathbf{x}_3 } \right) \mathbf{x}_4 \cdot \partial_1 \mathbf{f}+\left( { \mathbf{x}_2 \wedge \mathbf{x}_4 } \right) \mathbf{x}_3 \cdot \partial_1 \mathbf{f}-\left( { \mathbf{x}_3 \wedge \mathbf{x}_4 } \right) \mathbf{x}_2 \cdot \partial_1 \mathbf{f} \\ &amp;\qquad} \Bigr) \\ &amp;=d^4 u\Bigl( {\mathbf{x}_1 \wedge \mathbf{x}_2 \partial_{[4} f_{3]}+\mathbf{x}_1 \wedge \mathbf{x}_3 \partial_{[2} f_{4]}+\mathbf{x}_1 \wedge \mathbf{x}_4 \partial_{[3} f_{2]}+\mathbf{x}_2 \wedge \mathbf{x}_3 \partial_{[4} f_{1]}+\mathbf{x}_2 \wedge \mathbf{x}_4 \partial_{[1} f_{3]}+\mathbf{x}_3 \wedge \mathbf{x}_4 \partial_{[2} f_{1]}} \Bigr) \\ &amp;=- \frac{1}{{2}} d^4 u \epsilon^{abcd} \mathbf{x}_a \wedge \mathbf{x}_b \partial_{c} f_{d}. \qquad\square\end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.151)$</p>
+
+
+\makeSubAnswer{Three parameter volume, curl of bivector}{pr:stokesTheoremGeometricAlgebraII:d}
+
+<p align="center">$latex \begin{aligned}\begin{aligned}d^3 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge B } \right)&amp;=d^3 u\Bigl( { \left( { \mathbf{x}_1 \wedge \mathbf{x}_2 \wedge \mathbf{x}_3 } \right) \cdot \mathbf{x}^i } \Bigr) \cdot \partial_i B \\ &amp;=d^3 u\Bigl( { \left( { \mathbf{x}_1 \wedge \mathbf{x}_2 } \right) \cdot \partial_3 B+\left( { \mathbf{x}_3 \wedge \mathbf{x}_1 } \right) \cdot \partial_2 B+\left( { \mathbf{x}_2 \wedge \mathbf{x}_3 } \right) \cdot \partial_1 B} \Bigr) \\ &amp;=\frac{1}{{2}} d^3 u\Bigl( { \mathbf{x}_1 \cdot \left( { \mathbf{x}_2 \cdot \partial_3 B } \right) -\mathbf{x}_2 \cdot \left( { \mathbf{x}_1 \cdot \partial_3 B } \right) \\ &amp;\qquad +\mathbf{x}_3 \cdot \left( { \mathbf{x}_1 \cdot \partial_2 B } \right) -\mathbf{x}_1 \cdot \left( { \mathbf{x}_3 \cdot \partial_2 B } \right) \\ &amp;\qquad +\mathbf{x}_2 \cdot \left( { \mathbf{x}_3 \cdot \partial_1 B } \right) -\mathbf{x}_3 \cdot \left( { \mathbf{x}_2 \cdot \partial_1 B } \right)} \Bigr) \\ &amp;=\frac{1}{{2}} d^3 u\Bigl( { \mathbf{x}_1 \cdot \left( { \mathbf{x}_2 \cdot \partial_3 B - \mathbf{x}_3 \cdot \partial_2 B } \right) \\ &amp;\qquad +\mathbf{x}_2 \cdot \left( { \mathbf{x}_3 \cdot \partial_1 B - \mathbf{x}_1 \cdot \partial_3 B } \right) \\ &amp;\qquad +\mathbf{x}_3 \cdot \left( { \mathbf{x}_1 \cdot \partial_2 B - \mathbf{x}_2 \cdot \partial_1 B } \right)} \Bigr) \\ &amp;=\frac{1}{{2}} d^3 u\Bigl( {\mathbf{x}_1 \cdot \left( { \partial_3 \left( { \mathbf{x}_2 \cdot B} \right) - \partial_2 \left( { \mathbf{x}_3 \cdot B} \right) } \right) \\ &amp;\qquad +\mathbf{x}_2 \cdot \left( { \partial_1 \left( { \mathbf{x}_3 \cdot B} \right) - \partial_3 \left( { \mathbf{x}_1 \cdot B} \right) } \right) \\ &amp;\qquad +\mathbf{x}_3 \cdot \left( { \partial_2 \left( { \mathbf{x}_1 \cdot B} \right) - \partial_1 \left( { \mathbf{x}_2 \cdot B} \right) } \right)} \Bigr) \\ &amp;=\frac{1}{{2}} d^3 u\Bigl( {\partial_2 \left( { \mathbf{x}_3 \cdot \left( { \mathbf{x}_1 \cdot B} \right) } \right) - \partial_3 \left( { \mathbf{x}_2 \cdot \left( { \mathbf{x}_1 \cdot B} \right) } \right) \\ &amp;\qquad+ \partial_3 \left( { \mathbf{x}_1 \cdot \left( { \mathbf{x}_2 \cdot B} \right) } \right) - \partial_1 \left( { \mathbf{x}_3 \cdot \left( { \mathbf{x}_2 \cdot B} \right) } \right) \\ &amp;\qquad+ \partial_1 \left( { \mathbf{x}_2 \cdot \left( { \mathbf{x}_3 \cdot B} \right) } \right) - \partial_2 \left( { \mathbf{x}_1 \cdot \left( { \mathbf{x}_3 \cdot B} \right) } \right)} \Bigr) \\ &amp;=\frac{1}{{2}} d^3 u\Bigl( {\partial_2 B_{13} - \partial_3 B_{12}+\partial_3 B_{21} - \partial_1 B_{23}+\partial_1 B_{32} - \partial_2 B_{31}} \Bigr) \\ &amp;=d^3 u\Bigl( {\partial_2 B_{13}+\partial_3 B_{21}+\partial_1 B_{32}} \Bigr) \\ &amp;= - \frac{1}{{2}} d^3 u \epsilon^{abc} \partial_a B_{bc}. \qquad\square\end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.152)$</p>
+
+
+\makeSubAnswer{Four parameter volume, curl of bivector}{pr:stokesTheoremGeometricAlgebraII:e}
+
+To start, we require \cref{thm:stokesTheoremGeometricAlgebraII:2460}.  For convenience lets also write our wedge products as a single indexed quantity, as in $latex \mathbf{x}_{abc}$ for $latex \mathbf{x}_a \wedge \mathbf{x}_b \wedge \mathbf{x}_c$.  The expansion is
+
+<p align="center">$latex \begin{aligned}\begin{aligned}d^4 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge B } \right)&amp;=d^4 u\left( { \mathbf{x}_{1234} \cdot \mathbf{x}^i } \right) \cdot \partial_i B  \\ &amp;=d^4 u\left( {\mathbf{x}_{123} \cdot \partial_4 B-\mathbf{x}_{124} \cdot \partial_3 B+\mathbf{x}_{134} \cdot \partial_2 B-\mathbf{x}_{234} \cdot \partial_1 B} \right) \\ &amp;=d^4 u\Bigl( {\mathbf{x}_1 \left( { \mathbf{x}_{23} \cdot \partial_4 B } \right)+\mathbf{x}_2 \left( { \mathbf{x}_{32} \cdot \partial_4 B } \right)+\mathbf{x}_3 \left( { \mathbf{x}_{12} \cdot \partial_4 B } \right) \\ &amp;\qquad -\mathbf{x}_1 \left( { \mathbf{x}_{24} \cdot \partial_3 B } \right)-\mathbf{x}_2 \left( { \mathbf{x}_{41} \cdot \partial_3 B } \right)-\mathbf{x}_4 \left( { \mathbf{x}_{12} \cdot \partial_3 B } \right) \\ &amp;\qquad +\mathbf{x}_1 \left( { \mathbf{x}_{34} \cdot \partial_2 B } \right)+\mathbf{x}_3 \left( { \mathbf{x}_{41} \cdot \partial_2 B } \right)+\mathbf{x}_4 \left( { \mathbf{x}_{13} \cdot \partial_2 B } \right) \\ &amp;\qquad -\mathbf{x}_2 \left( { \mathbf{x}_{34} \cdot \partial_1 B } \right)-\mathbf{x}_3 \left( { \mathbf{x}_{42} \cdot \partial_1 B } \right)-\mathbf{x}_4 \left( { \mathbf{x}_{23} \cdot \partial_1 B } \right)} \Bigr) \\ &amp;=d^4 u\Bigl( {\mathbf{x}_1 \left( { \mathbf{x}_{23} \cdot \partial_4 B+\mathbf{x}_{42} \cdot \partial_3 B+\mathbf{x}_{34} \cdot \partial_2 B} \right) \\ &amp;\qquad +\mathbf{x}_2 \left( { \mathbf{x}_{32} \cdot \partial_4 B+\mathbf{x}_{14} \cdot \partial_3 B+\mathbf{x}_{43} \cdot \partial_1 B} \right) \\ &amp;\qquad +\mathbf{x}_3 \left( { \mathbf{x}_{12} \cdot \partial_4 B+\mathbf{x}_{41} \cdot \partial_2 B+\mathbf{x}_{24} \cdot \partial_1 B} \right) \\ &amp;\qquad +\mathbf{x}_4 \left( { \mathbf{x}_{21} \cdot \partial_3 B+\mathbf{x}_{13} \cdot \partial_2 B+\mathbf{x}_{32} \cdot \partial_1 B} \right)} \Bigr) \\ &amp;=-\frac{1}{{2}} d^4 u \epsilon^{a b c d} \mathbf{x}_a \partial_b B_{c d}.  \qquad\square\end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.153)$</p>
+
+
+This last step uses an intermediate result from the eq. 1.0.152 expansion above, since each of the four terms has the same structure we have previously observed.
+
+\makeSubAnswer{Four parameter volume, curl of trivector}{pr:stokesTheoremGeometricAlgebraII:f}
+
+Using the $latex \mathbf{x}_{ijk}$ shorthand again, the initial expansion gives
+
+<p align="center">$latex \begin{aligned}d^4 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge T } \right)=d^4 u\left( {\mathbf{x}_{123} \cdot \partial_4 T-\mathbf{x}_{124} \cdot \partial_3 T+\mathbf{x}_{134} \cdot \partial_2 T-\mathbf{x}_{234} \cdot \partial_1 T} \right).\end{aligned} \hspace{\stretch{1}}(1.0.153)$</p>
+
+
+Applying \cref{thm:stokesTheoremGeometricAlgebraII:2560} to expand the inner products within the braces we have
+
+<p align="center">$latex \begin{aligned}\begin{aligned}\mathbf{x}_{123} \cdot \partial_4 T-&amp;\mathbf{x}_{124} \cdot \partial_3 T+\mathbf{x}_{134} \cdot \partial_2 T-\mathbf{x}_{234} \cdot \partial_1 T \\ &amp;=\mathbf{x}_1 \cdot \left( { \mathbf{x}_2 \cdot \left( { \mathbf{x}_3 \cdot \partial_4 T } \right) } \right)-\mathbf{x}_1 \cdot \left( { \mathbf{x}_2 \cdot \left( { \mathbf{x}_4 \cdot \partial_3 T } \right) } \right)  \\ &amp;\quad +\underbrace{\mathbf{x}_1 \cdot \left( { \mathbf{x}_3 \cdot \left( { \mathbf{x}_4 \cdot \partial_2 T } \right) } \right)-\mathbf{x}_2 \cdot \left( { \mathbf{x}_3 \cdot \left( { \mathbf{x}_4 \cdot \partial_1 T } \right) } \right)}_{\text{Apply cyclic permutations}}\\ &amp;=\mathbf{x}_1 \cdot \left( { \mathbf{x}_2 \cdot \left( { \mathbf{x}_3 \cdot \partial_4 T } \right) } \right)-\mathbf{x}_1 \cdot \left( { \mathbf{x}_2 \cdot \left( { \mathbf{x}_4 \cdot \partial_3 T } \right) } \right)  \\ &amp;\quad +\mathbf{x}_3 \cdot \left( { \mathbf{x}_4 \cdot \left( { \mathbf{x}_1 \cdot \partial_2 T } \right) } \right)-\mathbf{x}_3 \cdot \left( { \mathbf{x}_4 \cdot \left( { \mathbf{x}_2 \cdot \partial_1 T } \right) } \right)  \\ &amp;=\mathbf{x}_1 \cdot \left( { \mathbf{x}_2 \cdot\left( {\mathbf{x}_3 \cdot \partial_4 T-\mathbf{x}_4 \cdot \partial_3 T} \right) } \right)  \\ &amp;\quad +\mathbf{x}_3 \cdot \left( { \mathbf{x}_4 \cdot \left( {\mathbf{x}_1 \cdot \partial_2 T-\mathbf{x}_2 \cdot \partial_1 T} \right) } \right)  \\ &amp;=\mathbf{x}_1 \cdot \left( { \mathbf{x}_2 \cdot\left( {\partial_4 \left( { \mathbf{x}_3 \cdot T } \right)-\partial_3 \left( { \mathbf{x}_4 \cdot T } \right)} \right) } \right)  \\ &amp;\quad +\mathbf{x}_3 \cdot \left( { \mathbf{x}_4 \cdot \left( {\partial_2 \left( { \mathbf{x}_1 \cdot T } \right)-\partial_1 \left( { \mathbf{x}_2 \cdot T } \right)} \right) } \right)  \\ &amp;=\mathbf{x}_1 \cdot \partial_4 \left( { \mathbf{x}_2 \cdot \left( { \mathbf{x}_3 \cdot T } \right) } \right)+\mathbf{x}_2 \cdot \partial_3 \left( { \mathbf{x}_1 \cdot \left( { \mathbf{x}_4 \cdot T } \right) } \right) \\ &amp;\quad +\mathbf{x}_3 \cdot \partial_2 \left( { \mathbf{x}_4 \cdot \left( { \mathbf{x}_1 \cdot T } \right) } \right)+\mathbf{x}_4 \cdot \partial_1 \left( { \mathbf{x}_3 \cdot \left( { \mathbf{x}_2 \cdot T } \right) } \right) \\ &amp;-\mathbf{x}_1 \cdot \left( { \left( { \partial_4 \mathbf{x}_2} \right) \cdot \left( { \mathbf{x}_3 \cdot T } \right) } \right)-\mathbf{x}_2 \cdot \left( { \left( { \partial_3 \mathbf{x}_1} \right) \cdot \left( { \mathbf{x}_4 \cdot T } \right) } \right)  \\ &amp;\quad -\mathbf{x}_3 \cdot \left( { \left( { \partial_2 \mathbf{x}_4} \right) \cdot \left( { \mathbf{x}_1 \cdot T } \right) } \right)-\mathbf{x}_4 \cdot \left( { \left( { \partial_1 \mathbf{x}_3} \right) \cdot \left( { \mathbf{x}_2 \cdot T } \right) } \right)  \\ &amp;=\mathbf{x}_1 \cdot \partial_4 \left( { \mathbf{x}_2 \cdot \left( { \mathbf{x}_3 \cdot T } \right) } \right)+\mathbf{x}_2 \cdot \partial_3 \left( { \mathbf{x}_1 \cdot \left( { \mathbf{x}_4 \cdot T } \right) } \right) \\ &amp;\quad +\mathbf{x}_3 \cdot \partial_2 \left( { \mathbf{x}_4 \cdot \left( { \mathbf{x}_1 \cdot T } \right) } \right)+\mathbf{x}_4 \cdot \partial_1 \left( { \mathbf{x}_3 \cdot \left( { \mathbf{x}_2 \cdot T } \right) } \right) \\ &amp;+\frac{\partial^2 \mathbf{x}}{\partial u^4 \partial u^2}\cdot\not{{\left( {\mathbf{x}_1 \cdot \left( { \mathbf{x}_3 \cdot T } \right)+\mathbf{x}_3 \cdot \left( { \mathbf{x}_1 \cdot T } \right)} \right)}} \\ &amp;\quad +\frac{\partial^2 \mathbf{x}}{\partial u^1 \partial u^3}\cdot\not{{\left( {\mathbf{x}_2 \cdot \left( { \mathbf{x}_4 \cdot T } \right)+\mathbf{x}_4 \cdot \left( { \mathbf{x}_2 \cdot T } \right)} \right)}}.\end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.155)$</p>
+
+
+We can cancel those last terms using \cref{thm:stokesTheoremGeometricAlgebraII:2740}.  Using the same reverse chain rule expansion once more we have
+
+<p align="center">$latex \begin{aligned}\begin{aligned}\mathbf{x}_{123} \cdot \partial_4 T-&amp;\mathbf{x}_{124} \cdot \partial_3 T+\mathbf{x}_{134} \cdot \partial_2 T-\mathbf{x}_{234} \cdot \partial_1 T \\ &amp;=\partial_4 \left( { \mathbf{x}_1 \cdot \left( { \mathbf{x}_2 \cdot \left( { \mathbf{x}_3 \cdot T } \right) } \right) } \right)+\partial_3 \left( { \mathbf{x}_2 \cdot \left( { \mathbf{x}_1 \cdot \left( { \mathbf{x}_4 \cdot T } \right) } \right) } \right)+\partial_2 \left( { \mathbf{x}_3 \cdot \left( { \mathbf{x}_4 \cdot \left( { \mathbf{x}_1 \cdot T } \right) } \right) } \right)+\partial_1 \left( { \mathbf{x}_4 \cdot \left( { \mathbf{x}_3 \cdot \left( { \mathbf{x}_2 \cdot T } \right) } \right) } \right) \\ &amp;-\left( { \partial_4 \mathbf{x}_1} \right)\cdot\not{{\left( {\mathbf{x}_2 \cdot \left( { \mathbf{x}_3 \cdot T } \right)+\mathbf{x}_3 \cdot \left( { \mathbf{x}_2 \cdot T } \right)} \right)}}-\left( { \partial_3 \mathbf{x}_2} \right) \cdot\not{{\left( {\mathbf{x}_1 \cdot \left( { \mathbf{x}_4 \cdot T } \right)\mathbf{x}_4 \cdot \left( { \mathbf{x}_1 \cdot T } \right)} \right)}},\end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.156)$</p>
+
+
+or
+<p align="center">$latex \begin{aligned}d^4 \mathbf{x} \cdot \left( { \boldsymbol{\partial} \wedge T } \right)=d^4 u\Bigl( {\partial_4 T_{3 2 1}+\partial_3 T_{4 1 2}+\partial_2 T_{1 4 3}+\partial_1 T_{2 3 4}} \Bigr).\end{aligned} \hspace{\stretch{1}}(1.0.156)$</p>
+
+
+The final result follows after permuting the indices slightly.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+} 
+
+<h2>Some helpful identities</h2>
+
+\makelemma{Distribution of inner products}{thm:stokesTheoremGeometricAlgebraII:1420}{
+Given two blades $latex A_s, B_r$ with grades subject to $latex s &gt; r &gt; 0$, and a vector $latex b$, the inner product distributes according to
+<p align="center">$latex \begin{aligned}A_s \cdot \left( { b \wedge B_r } \right) = \left( { A_s \cdot b } \right) \cdot B_r.\end{aligned} $</p>
+
+}
+
+This will allow us, for example, to expand a general inner product of the form $latex d^k \mathbf{x} \cdot (\boldsymbol{\partial} \wedge F)$.
+
+The proof is straightforward, but also mechanical.  Start by expanding the wedge and dot products within a grade selection operator
+
+<p align="center">$latex \begin{aligned}A_s \cdot \left( { b \wedge B_r } \right)={\left\langle{{A_s (b \wedge B_r)}}\right\rangle}_{{s - (r + 1)}}=\frac{1}{{2}} {\left\langle{{A_s \left( {b B_r + (-1)^{r} B_r b} \right) }}\right\rangle}_{{s - (r + 1)}}\end{aligned} \hspace{\stretch{1}}(1.158)$</p>
+
+
+Solving for $latex B_r b$ in
+
+<p align="center">$latex \begin{aligned}2 b \cdot B_r = b B_r - (-1)^{r} B_r b,\end{aligned} \hspace{\stretch{1}}(1.159)$</p>
+
+
+we have
+
+<p align="center">$latex \begin{aligned}A_s \cdot \left( { b \wedge B_r } \right)=\frac{1}{{2}} {\left\langle{{ A_s b B_r + A_s \left( { b B_r - 2 b \cdot B_r } \right) }}\right\rangle}_{{s - (r + 1)}}={\left\langle{{ A_s b B_r }}\right\rangle}_{{s - (r + 1)}}-\not{{{\left\langle{{ A_s \left( { b \cdot B_r } \right) }}\right\rangle}_{{s - (r + 1)}}}}.\end{aligned} \hspace{\stretch{1}}(1.160)$</p>
+
+
+The last term above is zero since we are selecting the $latex s - r - 1$ grade element of a multivector with grades $latex s - r + 1$ and $latex s + r - 1$, which has no terms for $latex r &gt; 0$.  Now we can expand the $latex A_s b$ multivector product, for
+
+<p align="center">$latex \begin{aligned}A_s \cdot \left( { b \wedge B_r } \right)={\left\langle{{ \left( { A_s \cdot b + A_s \wedge b} \right) B_r }}\right\rangle}_{{s - (r + 1)}}.\end{aligned} \hspace{\stretch{1}}(1.161)$</p>
+
+
+The latter multivector (with the wedge product factor) above has grades $latex s + 1 - r$ and $latex s + 1 + r$, so this selection operator finds nothing.  This leaves
+
+<p align="center">$latex \begin{aligned}A_s \cdot \left( { b \wedge B_r } \right)={\left\langle{{\left( { A_s \cdot b } \right) \cdot B_r+ \left( { A_s \cdot b } \right) \wedge B_r}}\right\rangle}_{{s - (r + 1)}}.\end{aligned} \hspace{\stretch{1}}(1.162)$</p>
+
+
+The first dot products term has grade $latex s - 1 - r$ and is selected, whereas the wedge term has grade $latex s - 1 + r \ne s - r - 1$ (for $latex r &gt; 0$).  $latex \qquad\square$
+
+
+
+\makelemma{Distribution of two bivectors}{thm:stokesTheoremGeometricAlgebraII:2300}{
+For vectors $latex \mathbf{a}$, $latex \mathbf{b}$, and bivector $latex B$, we have
+
+<p align="center">$latex \begin{aligned}\left( { \mathbf{a} \wedge \mathbf{b} } \right) \cdot B = \frac{1}{{2}} \left( {\mathbf{a} \cdot \left( { \mathbf{b} \cdot B } \right)-\mathbf{b} \cdot \left( { \mathbf{a} \cdot B } \right)} \right).\end{aligned} \hspace{\stretch{1}}(1.0.163)$</p>
+
+}
+
+Proof follows by applying the scalar selection operator, expanding the wedge product within it, and eliminating any of the terms that cannot contribute grade zero values
+
+<p align="center">$latex \begin{aligned}\left( { \mathbf{a} \wedge \mathbf{b} } \right) \cdot B=\left\langle{{\frac{1}{{2}} \Bigl( { \mathbf{a} \mathbf{b} - \mathbf{b} \mathbf{a} } \Bigr) B}}\right\rangle=\frac{1}{{2}}\left\langle{{\mathbf{a} \left( { \mathbf{b} \cdot B + \not{{ \mathbf{b} \wedge B }} } \right)-\mathbf{b} \left( { \mathbf{a} \cdot B + \not{{ \mathbf{a} \wedge B }} } \right)}}\right\rangle=\frac{1}{{2}}\left\langle{{\mathbf{a} \cdot \left( { \mathbf{b} \cdot B } \right)+\not{{\mathbf{a} \wedge \left( { \mathbf{b} \cdot B } \right)}}-\mathbf{b} \cdot \left( { \mathbf{a} \cdot B } \right)-\not{{\mathbf{b} \wedge \left( { \mathbf{a} \cdot B } \right)}}}}\right\rangle=\frac{1}{{2}}\Bigl( {\mathbf{a} \cdot \left( { \mathbf{b} \cdot B } \right)-\mathbf{b} \cdot \left( { \mathbf{a} \cdot B } \right)} \Bigr)\qquad\square\end{aligned} \hspace{\stretch{1}}(1.0.163)$</p>
+
+
+\makelemma{Inner product of trivector with bivector}{thm:stokesTheoremGeometricAlgebraII:2460}{
+
+Given a bivector $latex B$, and trivector $latex \mathbf{a} \wedge \mathbf{b} \wedge \mathbf{c}$ where $latex \mathbf{a}, \mathbf{b}$ and $latex \mathbf{c}$ are vectors, the inner product is
+
+<p align="center">$latex \begin{aligned}\left( { \mathbf{a} \wedge \mathbf{b} \wedge \mathbf{c} } \right) \cdot B=\mathbf{a} \Bigl( { \left( { \mathbf{b} \wedge \mathbf{c} } \right) \cdot B } \Bigr)+\mathbf{b} \Bigl( { \left( { \mathbf{c} \wedge \mathbf{a} } \right) \cdot B } \Bigr)+\mathbf{c} \Bigl( { \left( { \mathbf{a} \wedge \mathbf{b} } \right) \cdot B } \Bigr).\end{aligned} \hspace{\stretch{1}}(1.165)$</p>
+
+}
+
+This is also problem 1.1(c) from Exercises 2.1 in [3], and submits to a dumb expansion in successive dot products with a final regrouping.  With $latex B = \mathbf{u} \wedge \mathbf{v}$
+
+<p align="center">$latex \begin{aligned}\begin{aligned}\left(  \mathbf{a} \wedge \mathbf{b} \wedge \mathbf{c}  \right)\cdot B&amp;={\left\langle{{\left(  \mathbf{a} \wedge \mathbf{b} \wedge \mathbf{c} \right) \left( \mathbf{u} \wedge \mathbf{v} \right) }}\right\rangle}_{1} \\ &amp;={\left\langle{{\left(  \mathbf{a} \wedge \mathbf{b} \wedge \mathbf{c}  \right)\left(\mathbf{u} \mathbf{v}- \mathbf{u} \cdot \mathbf{v}\right) }}\right\rangle}_{1} \\ &amp;=\left(\left(  \mathbf{a} \wedge \mathbf{b} \wedge \mathbf{c}  \right) \cdot \mathbf{u} \right) \cdot \mathbf{v} \\ &amp;=\left( \mathbf{a} \wedge \mathbf{b} \right) \cdot \mathbf{v} \left( \mathbf{c} \cdot \mathbf{u} \right)+\left( \mathbf{c} \wedge \mathbf{a} \right) \cdot \mathbf{v} \left( \mathbf{b} \cdot \mathbf{u} \right)+\left( \mathbf{b} \wedge \mathbf{c} \right) \cdot \mathbf{v} \left( \mathbf{a} \cdot \mathbf{u} \right) \\ &amp;=\mathbf{a}\left(  \mathbf{b} \cdot \mathbf{v}  \right)\left( \mathbf{c} \cdot \mathbf{u} \right)-\mathbf{b}\left(  \mathbf{a} \cdot \mathbf{v}  \right)\left( \mathbf{c} \cdot \mathbf{u} \right) \\ &amp;\quad +\mathbf{c}\left(  \mathbf{a} \cdot \mathbf{v}  \right)\left( \mathbf{b} \cdot \mathbf{u} \right)-\mathbf{a}\left(  \mathbf{c} \cdot \mathbf{v}  \right)\left( \mathbf{b} \cdot \mathbf{u} \right) \\ &amp;\quad +\mathbf{b}\left(  \mathbf{c} \cdot \mathbf{v}  \right)\left( \mathbf{a} \cdot \mathbf{u} \right)-\mathbf{c}\left(  \mathbf{b} \cdot \mathbf{v}  \right)\left( \mathbf{a} \cdot \mathbf{u} \right) \\ &amp;=\mathbf{a}\left(  \left(  \mathbf{b} \cdot \mathbf{v}  \right) \left( \mathbf{c} \cdot \mathbf{u} \right) - \left(  \mathbf{c} \cdot \mathbf{v}  \right) \left( \mathbf{b} \cdot \mathbf{u} \right)  \right)\\ &amp;\quad +\mathbf{b}\left(  \left(  \mathbf{c} \cdot \mathbf{v}  \right) \left( \mathbf{a} \cdot \mathbf{u} \right) - \left(  \mathbf{a} \cdot \mathbf{v}  \right) \left( \mathbf{c} \cdot \mathbf{u} \right)  \right)\\ &amp;\quad +\mathbf{c}\left(  \left(  \mathbf{a} \cdot \mathbf{v}  \right) \left( \mathbf{b} \cdot \mathbf{u} \right) - \left(  \mathbf{b} \cdot \mathbf{v}  \right) \left( \mathbf{a} \cdot \mathbf{u} \right)  \right) \\ &amp;=\mathbf{a}\left(  \mathbf{b} \wedge \mathbf{c}  \right)\cdot\left(  \mathbf{u} \wedge \mathbf{v}  \right)\\ &amp;\quad +\mathbf{b}\left(  \mathbf{c} \wedge \mathbf{a}  \right)\cdot\left(  \mathbf{u} \wedge \mathbf{v}  \right)\\ &amp;\quad +\mathbf{c}\left(  \mathbf{a} \wedge \mathbf{b}  \right) \cdot\left(  \mathbf{u} \wedge \mathbf{v}  \right)\\ &amp;=\mathbf{a}\left(  \mathbf{b} \wedge \mathbf{c}  \right)\cdot B+\mathbf{b}\left(  \mathbf{c} \wedge \mathbf{a}  \right) \cdot B+\mathbf{c}\left(  \mathbf{a} \wedge \mathbf{b}  \right)\cdot B. \qquad\square\end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.166)$</p>
+
+
+\makelemma{Distribution of two trivectors}{thm:stokesTheoremGeometricAlgebraII:2560}{
+Given a trivector $latex T$ and three vectors $latex \mathbf{a}, \mathbf{b}$, and $latex \mathbf{c}$, the entire inner product can be expanded in terms of any successive set inner products, subject to change of sign with interchange of any two adjacent vectors within the dot product sequence
+
+<p align="center">$latex \begin{aligned}\left( { \mathbf{a} \wedge \mathbf{b} \wedge \mathbf{c} } \right) \cdot T= \mathbf{a} \cdot \left( { \mathbf{b} \cdot \left( { \mathbf{c} \cdot T } \right) } \right)= -\mathbf{a} \cdot \left( { \mathbf{c} \cdot \left( { \mathbf{b} \cdot T } \right) } \right)= \mathbf{b} \cdot \left( { \mathbf{c} \cdot \left( { \mathbf{a} \cdot T } \right) } \right)=- \mathbf{b} \cdot \left( { \mathbf{a} \cdot \left( { \mathbf{c} \cdot T } \right) } \right)= \mathbf{c} \cdot \left( { \mathbf{a} \cdot \left( { \mathbf{b} \cdot T } \right) } \right)=- \mathbf{c} \cdot \left( { \mathbf{b} \cdot \left( { \mathbf{a} \cdot T } \right) } \right).\end{aligned} \hspace{\stretch{1}}(1.167)$</p>
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+To show this, we first expand within a scalar selection operator
+
+<p align="center">$latex \begin{aligned}\begin{aligned}\left( { \mathbf{a} \wedge \mathbf{b} \wedge \mathbf{c} } \right) \cdot T&amp;=\left\langle{{\left( { \mathbf{a} \wedge \mathbf{b} \wedge \mathbf{c} } \right) T}}\right\rangle \\ &amp;=\frac{1}{{6}}\left\langle{{  \mathbf{a} \mathbf{b} \mathbf{c} T- \mathbf{a} \mathbf{c} \mathbf{b} T+ \mathbf{b} \mathbf{c} \mathbf{a} T- \mathbf{b} \mathbf{a} \mathbf{b} T+ \mathbf{c} \mathbf{a} \mathbf{b} T- \mathbf{c} \mathbf{b} \mathbf{a} T}}\right\rangle \\ \end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.168)$</p>
+
+
+Now consider any single term from the scalar selection, such as the first.  This can be reordered using the vector dot product identity
+
+<p align="center">$latex \begin{aligned}\left\langle{{  \mathbf{a} \mathbf{b} \mathbf{c} T}}\right\rangle=\left\langle{{  \mathbf{a} \left( { -\mathbf{c} \mathbf{b} + 2 \mathbf{b} \cdot \mathbf{c} } \right) T}}\right\rangle=-\left\langle{{  \mathbf{a} \mathbf{c} \mathbf{b} T}}\right\rangle+2 \mathbf{b} \cdot \mathbf{c} \not{{\left\langle{{  \mathbf{a} T}}\right\rangle}}.\end{aligned} \hspace{\stretch{1}}(1.0.168)$</p>
+
+
+The vector-trivector product in the latter grade selection operation above contributes only bivector and quadvector terms, thus contributing nothing.  This can be repeated, showing that
+
+<p align="center">$latex \begin{aligned}  \left\langle{{ \mathbf{a} \mathbf{b} \mathbf{c} T }}\right\rangle =- \left\langle{{ \mathbf{a} \mathbf{c} \mathbf{b} T }}\right\rangle =+ \left\langle{{ \mathbf{b} \mathbf{c} \mathbf{a} T }}\right\rangle =- \left\langle{{ \mathbf{b} \mathbf{a} \mathbf{c} T }}\right\rangle =+ \left\langle{{ \mathbf{c} \mathbf{a} \mathbf{b} T }}\right\rangle =- \left\langle{{ \mathbf{c} \mathbf{b} \mathbf{a} T }}\right\rangle.\end{aligned} \hspace{\stretch{1}}(1.0.168)$</p>
+
+
+Substituting this back into eq. 1.0.168 proves \cref{thm:stokesTheoremGeometricAlgebraII:2560}.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\makelemma{Permutation of two successive dot products with trivector}{thm:stokesTheoremGeometricAlgebraII:2740}{
+Given a trivector $latex T$ and two vectors $latex \mathbf{a}$ and $latex \mathbf{b}$, alternating the order of the dot products changes the sign
+
+<p align="center">$latex \begin{aligned}\mathbf{a} \cdot \left( { \mathbf{b} \cdot T } \right)=-\mathbf{b} \cdot \left( { \mathbf{a} \cdot T } \right).\end{aligned} \hspace{\stretch{1}}(1.171)$</p>
+
+}
+
+This and \cref{thm:stokesTheoremGeometricAlgebraII:2560} are clearly examples of a more general identity, but I'll not try to prove that here.  To show this one, we have
+
+<p align="center">$latex \begin{aligned}\mathbf{a} \cdot \left( { \mathbf{b} \cdot T } \right)={\left\langle{{ \mathbf{a} \left( { \mathbf{b} \cdot T } \right) }}\right\rangle}_{1}=\frac{1}{{2}}{\left\langle{{ \mathbf{a} \mathbf{b} T + \mathbf{a} T \mathbf{b} }}\right\rangle}_{1}=\frac{1}{{2}}{\left\langle{{ \left( { -\mathbf{b} \mathbf{a} + \not{{2 \mathbf{a} \cdot \mathbf{b}}}} \right) T + \left( { \mathbf{a} \cdot T} \right) \mathbf{b} + \not{{ \mathbf{a} \wedge T}} \mathbf{b} }}\right\rangle}_{1}= \frac{1}{{2}}\left( {-\mathbf{b} \cdot \left( { \mathbf{a} \cdot T } \right)+\left( { \mathbf{a} \cdot T } \right) \cdot \mathbf{b}} \right)=-\mathbf{b} \cdot \left( { \mathbf{a} \cdot T } \right). \qquad\square\end{aligned} \hspace{\stretch{1}}(1.172)$</p>
+
+
+Cancellation of terms above was because they could not contribute to a grade one selection.   We also employed the relation $latex \mathbf{x} \cdot B = - B \cdot \mathbf{x}$ for bivector $latex B$ and vector $latex \mathbf{x}$.
+
+\makelemma{Duality in a plane}{thm:stokesTheoremGeometricAlgebraII:3200}{
+
+For a vector $latex \mathbf{a}$, and a plane containing $latex \mathbf{a}$ and $latex \mathbf{b}$, the dual $latex \mathbf{a}^{*}$ of this vector with respect to this plane is
+
+<p align="center">$latex \begin{aligned}\mathbf{a}^{*} = \frac{\mathbf{b} \cdot \left( { \mathbf{a} \wedge \mathbf{b} } \right)}{\left( {\mathbf{a} \wedge \mathbf{b}} \right)^2},\end{aligned} \hspace{\stretch{1}}(1.173)$</p>
+
+
+Satisfying
+
+<p align="center">$latex \begin{aligned}\mathbf{a}^{*} \cdot \mathbf{a} = 1,\end{aligned} \hspace{\stretch{1}}(1.174)$</p>
+
+
+and
+
+<p align="center">$latex \begin{aligned}\mathbf{a}^{*} \cdot \mathbf{b} = 0.\end{aligned} \hspace{\stretch{1}}(1.175)$</p>
+
+}
+
+To demonstrate, we start with the expansion of
+
+<p align="center">$latex \begin{aligned}\mathbf{b} \cdot \left( { \mathbf{a} \wedge \mathbf{b} } \right)=\left( { \mathbf{b} \cdot \mathbf{a} } \right) \mathbf{b}-\mathbf{b}^2 \mathbf{a}.\end{aligned} \hspace{\stretch{1}}(1.176)$</p>
+
+
+Dotting with $latex \mathbf{a}$ we have
+
+<p align="center">$latex \begin{aligned}\mathbf{a} \cdot \left( { \mathbf{b} \cdot \left( { \mathbf{a} \wedge \mathbf{b} } \right) } \right)=\mathbf{a} \cdot \left( {\left( { \mathbf{b} \cdot \mathbf{a} } \right) \mathbf{b}-\mathbf{b}^2 \mathbf{a}} \right)=\left( { \mathbf{b} \cdot \mathbf{a} } \right)^2 - \mathbf{b}^2 \mathbf{a}^2,\end{aligned} \hspace{\stretch{1}}(1.177)$</p>
+
+
+but dotting with $latex \mathbf{b}$ yields zero
+
+<p align="center">$latex \begin{aligned}\mathbf{b} \cdot \left( { \mathbf{b} \cdot \left( { \mathbf{a} \wedge \mathbf{b} } \right) } \right)=\mathbf{b} \cdot \left( {\left( { \mathbf{b} \cdot \mathbf{a} } \right) \mathbf{b}-\mathbf{b}^2 \mathbf{a}} \right)=\left( { \mathbf{b} \cdot \mathbf{a} } \right) \mathbf{b}^2 - \mathbf{b}^2 \left( { \mathbf{a} \cdot \mathbf{b} } \right)= 0.\end{aligned} \hspace{\stretch{1}}(1.178)$</p>
+
+
+To complete the proof, we note that the product in eq. 1.177 is just the wedge squared
+
+<p align="center">$latex \begin{aligned}\left( { \mathbf{a} \wedge \mathbf{b}} \right)^2=\left\langle{{\left( { \mathbf{a} \wedge \mathbf{b} } \right)^2}}\right\rangle=\left\langle{{\left( { \mathbf{a} \mathbf{b} - \mathbf{a} \cdot \mathbf{b} } \right)\left( { \mathbf{a} \mathbf{b} - \mathbf{a} \cdot \mathbf{b} } \right)}}\right\rangle=\left\langle{{\mathbf{a} \mathbf{b} \mathbf{a} \mathbf{b} - 2 \left( {\mathbf{a} \cdot \mathbf{b}} \right) \mathbf{a} \mathbf{b}}}\right\rangle+\left( { \mathbf{a} \cdot \mathbf{b} } \right)^2=\left\langle{{\mathbf{a} \mathbf{b} \left( { -\mathbf{b} \mathbf{a} + 2 \mathbf{a} \cdot \mathbf{b} } \right)}}\right\rangle-\left( { \mathbf{a} \cdot \mathbf{b} } \right)^2=\left( { \mathbf{a} \cdot \mathbf{b} } \right)^2-\mathbf{a}^2 \mathbf{b}^2.\end{aligned} \hspace{\stretch{1}}(1.179)$</p>
+
+
+This duality relation can be recast with a linear denominator
+
+<p align="center">$latex \begin{aligned}\mathbf{a}^{*} = \frac{\mathbf{b} \cdot \left( { \mathbf{a} \wedge \mathbf{b} } \right)}{\left( {\mathbf{a} \wedge \mathbf{b}} \right)^2}= \mathbf{b} \frac{\mathbf{a} \wedge \mathbf{b} }{\left( {\mathbf{a} \wedge \mathbf{b}} \right)^2}= \mathbf{b} \frac{\mathbf{a} \wedge \mathbf{b} }{\left\lvert {\mathbf{a} \wedge \mathbf{b} } \right\rvert}      \frac{\left\lvert {\mathbf{a} \wedge \mathbf{b}} \right\rvert}{\mathbf{a} \wedge \mathbf{b} }\frac{1}{{\left( {\mathbf{a} \wedge \mathbf{b}} \right)}},\end{aligned} \hspace{\stretch{1}}(1.180)$</p>
+
+
+or
+<p align="center">$latex \begin{aligned}\mathbf{a}^{*} = \mathbf{b} \frac{1}{{\left( {\mathbf{a} \wedge \mathbf{b}} \right)}}.\end{aligned} \hspace{\stretch{1}}(1.0.181)$</p>
+
+
+We can use this form after scaling it appropriately to express duality in terms of the pseudoscalar.
+
+\makelemma{Dual vector in a three vector subspace}{thm:stokesTheoremGeometricAlgebraII:4950}{
+In the subspace spanned by $latex \left\{ {\mathbf{a}, \mathbf{b}, \mathbf{c}} \right\}$, the dual of $latex \mathbf{a}$ is
+
+<p align="center">$latex \begin{aligned}\mathbf{a}^{*} = \mathbf{b} \wedge \mathbf{c} \frac{1}{{\mathbf{a} \wedge \mathbf{b} \wedge \mathbf{c}}},\end{aligned} $</p>
+
+
+}
+
+Consider the dot product of $latex \hat{\mathbf{a}}^{*}$ with $latex \mathbf{u} \in \left\{ {\mathbf{a}, \mathbf{b}, \mathbf{c}} \right\}$.
+
+<p align="center">$latex \begin{aligned}\mathbf{u} \cdot \mathbf{a}^{*} = \left\langle{{ \mathbf{u} \mathbf{b} \wedge \mathbf{c} \frac{1}{{\mathbf{a} \wedge \mathbf{b} \wedge \mathbf{c}}} }}\right\rangle= \left\langle{{ \mathbf{u} \cdot \left( { \mathbf{b} \wedge \mathbf{c}} \right) \frac{1}{{\mathbf{a} \wedge \mathbf{b} \wedge \mathbf{c}}} }}\right\rangle+\left\langle{{ \mathbf{u} \wedge \mathbf{b} \wedge \mathbf{c} \frac{1}{{\mathbf{a} \wedge \mathbf{b} \wedge \mathbf{c}}} }}\right\rangle= \not{{\left\langle{{ \left( { \left( { \mathbf{u} \cdot \mathbf{b}} \right) \mathbf{c}-\left( {\mathbf{u} \cdot \mathbf{c}} \right) \mathbf{b}} \right)\frac{1}{{\mathbf{a} \wedge \mathbf{b} \wedge \mathbf{c}}} }}\right\rangle}}+\left\langle{{ \mathbf{u} \wedge \mathbf{b} \wedge \mathbf{c} \frac{1}{{\mathbf{a} \wedge \mathbf{b} \wedge \mathbf{c}}} }}\right\rangle.\end{aligned} \hspace{\stretch{1}}(1.182)$</p>
+
+
+The canceled term is eliminated since it is the product of a vector and trivector producing no scalar term.  Substituting $latex \mathbf{a}, \mathbf{b}, \mathbf{c}$, and noting that $latex \mathbf{u} \wedge \mathbf{u} = 0$, we have
+
+<p align="center">$latex \begin{aligned}\begin{aligned}\mathbf{a} \cdot \mathbf{a}^{*} &amp;= 1 \\ \mathbf{b} \cdot \mathbf{a}^{*} &amp;= 0 \\ \mathbf{c} \cdot \mathbf{a}^{*} &amp;= 0.\end{aligned}\end{aligned} \hspace{\stretch{1}}(1.0.183)$</p>
+
+
+\makelemma{Pseudoscalar selection}{thm:stokesTheoremGeometricAlgebraII:4690}{
+
+For grade $latex k$ blade $latex K \in \bigwedge^k$ (i.e. a pseudoscalar), and vectors $latex \mathbf{a}, \mathbf{b}$, the grade $latex k$ selection of this blade sandwiched between the vectors is
+
+<p align="center">$latex \begin{aligned}{\left\langle{{ \mathbf{a} K \mathbf{b} }}\right\rangle}_{{k}} = (-1)^{k+1} {\left\langle{{K a b}}\right\rangle}_{{k}} = (-1)^{k+1} K \left( { \mathbf{a} \cdot \mathbf{b}} \right).\end{aligned} $</p>
+
+}
+
+To show this, we have to consider even and odd grades separately.  First for even $latex k$ we have
+
+<p align="center">$latex \begin{aligned}{\left\langle{{ \mathbf{a} K \mathbf{b} }}\right\rangle}_{{k}}={\left\langle{{ \left( { \mathbf{a} \cdot K + \not{{\mathbf{a} \wedge K}}} \right) \mathbf{b} }}\right\rangle}_{{k}}=\frac{1}{{2}} {\left\langle{{ \left( { \mathbf{a} K - K \mathbf{a} } \right) \mathbf{b} }}\right\rangle}_{{k}}=\frac{1}{{2}} {\left\langle{{ \mathbf{a} K \mathbf{b} }}\right\rangle}_{{k}}-\frac{1}{{2}} {\left\langle{{ K \mathbf{a} \mathbf{b} }}\right\rangle}_{{k}},\end{aligned} \hspace{\stretch{1}}(1.184)$</p>
+
+
+or
+<p align="center">$latex \begin{aligned}{\left\langle{{ \mathbf{a} K \mathbf{b} }}\right\rangle}_{{k}} = -{\left\langle{{ K \mathbf{a} \mathbf{b} }}\right\rangle}_{{k}} = -K \left( { \mathbf{a} \cdot \mathbf{b}} \right).\end{aligned} \hspace{\stretch{1}}(1.185)$</p>
+
+
+Similarly for odd $latex k$, we have
+
+<p align="center">$latex \begin{aligned}{\left\langle{{ \mathbf{a} K \mathbf{b} }}\right\rangle}_{{k}}={\left\langle{{ \left( { \mathbf{a} \cdot K + \not{{\mathbf{a} \wedge K}}} \right) \mathbf{b} }}\right\rangle}_{{k}}=\frac{1}{{2}} {\left\langle{{ \left( { \mathbf{a} K + K \mathbf{a} } \right) \mathbf{b} }}\right\rangle}_{{k}}=\frac{1}{{2}} {\left\langle{{ \mathbf{a} K \mathbf{b} }}\right\rangle}_{{k}}+\frac{1}{{2}} {\left\langle{{ K \mathbf{a} \mathbf{b} }}\right\rangle}_{{k}},\end{aligned} \hspace{\stretch{1}}(1.186)$</p>
+
+
+or
+<p align="center">$latex \begin{aligned}{\left\langle{{ \mathbf{a} K \mathbf{b} }}\right\rangle}_{{k}} = {\left\langle{{ K \mathbf{a} \mathbf{b} }}\right\rangle}_{{k}} = K \left( { \mathbf{a} \cdot \mathbf{b}} \right).\end{aligned} \hspace{\stretch{1}}(1.187)$</p>
+
+
+Adjusting for the signs completes the proof.
+
+<h1>References</h1>
+
+[1] John Denker. <em>Magnetic field for a straight wire.</em>, 2014. URL <a href="http://www.av8n.com/physics/straight-wire.pdf">http://www.av8n.com/physics/straight-wire.pdf</a>. [Online; accessed 11-May-2014].
+
+[2] H. Flanders. \emph{{Differential Forms With Applications to the Physical  Sciences}}. Courier Dover Publications, 1989.
+
+[3] D. Hestenes. <em>New Foundations for Classical Mechanics</em>. Kluwer Academic Publishers, 1999.
+
+[4] Peeter Joot. \emph{{Collection of old notes on Stokes theorem in Geometric  algebra}}, 2014\natexlab{a}. URL  <a href="https://sites.google.com/site/peeterjoot3/math2014/bigCollectionOfPartiallyIncorrectStokesTheoremMusings.pdf">https://sites.google.com/site/peeterjoot3/math2014/bigCollectionOfPartiallyIncorrectStokesTheoremMusings.pdf</a>.
+
+[5] Peeter Joot. \emph{{Synposis of old notes on Stokes theorem in Geometric  algebra}}, 2014\natexlab{b}. URL  <a href="https://sites.google.com/site/peeterjoot3/math2014/synopsisOfBigCollectionOfPartiallyIncorrectStokesTheoremMusings.pdf">https://sites.google.com/site/peeterjoot3/math2014/synopsisOfBigCollectionOfPartiallyIncorrectStokesTheoremMusings.pdf</a>.
+
+[6] A. Macdonald. <em>Vector and Geometric Calculus</em>. CreateSpace Independent Publishing Platform, 2012.
+
+[7] M. Schwartz. <em>Principles of Electrodynamics</em>. Dover Publications, 1987.
+
+[8] Michael Spivak. <em>Calculus on manifolds</em>, volume 1. Benjamin New York, 1965.
+
+
+
+
+<a href="http://peeterjoot.files.wordpress.com/2014/05/clockwiselooponsurfacefig12.png"><img class="alignnone size-medium wp-image-3989" src="http://peeterjoot.files.wordpress.com/2014/05/clockwiselooponsurfacefig12.png?w=300" alt="" width="300" height="203" /></a>
+
+<a href="http://peeterjoot.files.wordpress.com/2014/05/cylindricalpolarparameterizationfig7.png"><img class="alignnone size-medium wp-image-3990" src="http://peeterjoot.files.wordpress.com/2014/05/cylindricalpolarparameterizationfig7.png?w=300" alt="" width="300" height="203" /></a>
+
+<a href="http://peeterjoot.files.wordpress.com/2014/05/euclidean2dloopfig4.png"><img class="alignnone size-medium wp-image-3991" src="http://peeterjoot.files.wordpress.com/2014/05/euclidean2dloopfig4.png?w=300" alt="" width="300" height="244" /></a>
+
+<a href="http://peeterjoot.files.wordpress.com/2014/05/loopintegralareaelementsfig3.png"><img class="alignnone size-medium wp-image-3992" src="http://peeterjoot.files.wordpress.com/2014/05/loopintegralareaelementsfig3.png?w=300" alt="" width="300" height="252" /></a>
+
+<a href="http://peeterjoot.files.wordpress.com/2014/05/loopintegralinfinitesimalfig1.png"><img class="alignnone size-medium wp-image-3993" src="http://peeterjoot.files.wordpress.com/2014/05/loopintegralinfinitesimalfig1.png?w=300" alt="" width="300" height="258" /></a>
+
+<a href="http://peeterjoot.files.wordpress.com/2014/05/loopintegralinfinitesimalsumfig2.png"><img class="alignnone size-medium wp-image-3994" src="http://peeterjoot.files.wordpress.com/2014/05/loopintegralinfinitesimalsumfig2.png?w=300" alt="" width="300" height="296" /></a>
+
+<a href="http://peeterjoot.files.wordpress.com/2014/05/normalsonsurfaceareaelementfig10.png"><img class="alignnone size-medium wp-image-3995" src="http://peeterjoot.files.wordpress.com/2014/05/normalsonsurfaceareaelementfig10.png?w=287" alt="" width="287" height="300" /></a>
+
+<a href="http://peeterjoot.files.wordpress.com/2014/05/normalsonvolumeareaelementfig11.png"><img class="alignnone size-medium wp-image-3996" src="http://peeterjoot.files.wordpress.com/2014/05/normalsonvolumeareaelementfig11.png?w=300" alt="" width="300" height="280" /></a>
+
+<a href="http://peeterjoot.files.wordpress.com/2014/05/outwardsnormalfig8.png"><img class="alignnone size-medium wp-image-3997" src="http://peeterjoot.files.wordpress.com/2014/05/outwardsnormalfig8.png?w=300" alt="" width="300" height="292" /></a>
+
+<a href="http://peeterjoot.files.wordpress.com/2014/05/sphereicalparameterizationboundaryfacesfig9.png"><img class="alignnone size-medium wp-image-3998" src="http://peeterjoot.files.wordpress.com/2014/05/sphereicalparameterizationboundaryfacesfig9.png?w=300" alt="" width="300" height="282" /></a>
