@@ -931,11 +931,17 @@ sub expandPeetersMathModeMacros
    $out =~ s/\\BOne/\\mathbf{1}/g;
 
 
-   # HACK.  Can't use txfonts in wordpress.  At least suppress the can't parse
-   # message (unfortunately with loss of meaning).
+   # Can't use txfonts in wordpress.
    if ( $wordpress )
    {
-      $out =~ s/\\ointclockwise/\\oint/g;
+      # hack way:
+      #$out =~ s/\\ointclockwise/\\oint/g;
+
+      # 
+      # http://tex.stackexchange.com/a/178584/15
+      # 
+      $out =~ s/\\ointctrclockwise/\\mathop{\\rlap{\\ensuremath{\\mkern3.5mu\\circlearrowright}}\\int}/g ;
+      $out =~ s/\\ointclockwise/\\mathop{\\rlap{\\ensuremath{\\mkern3.5mu\\circlearrowleft}}\\int}/g ;
    }
 
    $out =~ s/\\Bzero/\\mathbf{0}/g;
