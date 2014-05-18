@@ -2,111 +2,70 @@
 % Copyright © 2013 Peeter Joot.  All Rights Reserved.
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
 %
-%%%%\input{../blogpost.tex}
-%%%%\renewcommand{\basename}{stokesTheoremGeometricAlgebra}
-%%%%\renewcommand{\dirname}{notes/gabook/}
-%%%%\newcommand{\keywords}{Stokes theorem, Geometric algebra, Clifford algebra, gradient, divergence, wedge product}
-%%%%
-%%%%\input{../peeter_prologue_print2.tex}
-%%%%
-%%%%% ointctr...
-%%%%\usepackage{txfonts}
-%%%%% \check:
-%%%%%\usepackage{amsmath,amssymb,latexsym}
-%%%%%\usepackage{latexsym}
-%%%%
-%%%%% \widecheck
-%%%%%\usepackage{mathabx}
-%%%%
-%%%%%%\declaretheorem[shaded={bgcolor=Lavender,textwidth=12em}]{theorem}
-%%%%%
-%%%%%% Liked this one (solid background)
-%%%%%%\declaretheorem[shaded={bgcolor=Lavender}]{Theorem}
-%%%%%
-%%%%%%\declaretheorem[name=\"Ubung]{exercise}
-%%%%%
-%%%%%% liked this one: (is Lavender the light blue that this produces?)
-%%%%%%\declaretheorem[shaded={bgcolor=Lavender}]{Lemma}
-%%%%%
-%%%%%%\declaretheorem[shaded={rulecolor=Lavender, rulewidth=2pt, bgcolor={rgb}{1,1,1}}]{BoxII}
-%%%%
-%%%%%--------------------------------------------------------------------------
-%%%%%\usepackage{tikz}
-%%%%%\usepackage[framemethod=tikz]{mdframed}
-%%%%%%\theoremstyle{plain}
-%%%%%%\newmdtheoremenv[
-%%%%%%  linecolor=cyan,
-%%%%%%  roundcorner=5pt,
-%%%%%%  linewidth=1pt
-%%%%%%]{mytBoxed}{mytBoxed}%[*]
-%%%%%
-%%%%%% works, but has a blank header line that still takes up space.
-%%%%%% also is whole page width, not just the equation as I was hoping for (i.e.
-%%%%%% a non-problematic replacement for myBoxed)
-%%%%%\mdtheorem[style=theoremstyle]{mytBoxed}{mytBoxed}
-%%%%%\mdtheorem[
-%%%%%  linecolor=cyan,
-%%%%%  roundcorner=5pt,
-%%%%%  linewidth=1pt
-%%%%%]{mytBoxed}{}
-%%%%
-%%%%
-%%%%%--------------------------------------------------------------------------
-%%%%
-%%%%%%%\newcounter{example}
-%%%%%%%\numberwithin{example}{chapter}
-%%%%%%%\newenvironment{example}[1][]{%
-%%%%%%%  \refstepcounter{example}%
-%%%%%%%  \ifstrempty{#1}%
-%%%%%%%  {\mdfsetup{%
-%%%%%%%    frametitle={%
-%%%%%%%      \tikz[baseline=(current bounding box.east),outer sep=0pt]
-%%%%%%%      \node[line width=1pt,anchor=east,rectangle,rounded corners,draw=DarkOliveGreen,fill=white]
-%%%%%%%    {\strut \color{DarkOliveGreen}{Example}~\theexample};}}
-%%%%%%%  }%
-%%%%%%%  {\mdfsetup{%
-%%%%%%%    frametitle={%
-%%%%%%%      \tikz[baseline=(current bounding box.east),outer sep=0pt]
-%%%%%%%      \node[line width=1pt,anchor=east,rectangle,rounded corners,draw=DarkOliveGreen,fill=white]
-%%%%%%%    {\strut \color{DarkOliveGreen}{Example}~\theexample:~\color{Maroon}{#1}};}}%
-%%%%%%%  }%
-%%%%%%%  \mdfsetup{innertopmargin=10pt,linecolor=DarkOliveGreen,%
-%%%%%%%            linewidth=1pt,topline=true,%
-%%%%%%%            frametitleaboveskip=\dimexpr-\ht\strutbox\relax,%
-%%%%%%%            backgroundcolor=Maroon!10}
-%%%%%%%  \begin{mdframed}[]\relax%
-%%%%%%%  }{\end{mdframed}}
-%%%%
-%%%%\newcommand{\nbref}[1]{\href{https://github.com/peeterjoot/mathematica/gabook/#1}{(http://goo.gl/l0MmC0) gabook/#1}}
-%%%%
-%%%%%--------------------------------------------------------------------------
-%%%%
-%%%%\beginArtNoToc
-%%%%
-%%%%\generatetitle{Stokes theorem in Geometric algebra}
-%%%%
-\chapter{Stokes theorem}
 \label{chap:stokesTheoremGeometricAlgebra}
 
-Understanding how to apply Stokes theorem to higher dimensional spaces, non-Euclidean metrics, and with curvilinear coordinates has been a long standing goal.  
+The subject of \textAndIndex{differential forms} is one way to obtain an understanding of how to apply \textAndIndex{Stokes theorem} to higher dimensional spaces, non-Euclidean metrics, and \textAndIndex{curvilinear coordinate} systems.
+%as covered for example in 
+%, and \citep{spivak1965calculus}.  However, both of those texts, despite their small size, are intensely scary.  
+%
+The formalism of differential forms requires reexpressing physical quantities as ``forms''.  A notable example, as given in \citep{flanders1989dfa}, introduces a \textAndIndex{two-form} for the Faraday field
 
-A traditional answer to these questions can be found in the formalism of differential forms, as covered for example in \citep{flanders1989dfa}, and \citep{spivak1965calculus}.  However, both of those texts, despite their small size, are intensely scary.  I also found it counter intuitive to have to express all physical quantities as forms, since there are many times when we don't have any pressing desire to integrate these.
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebraII:5850}
+\alpha 
+= 
+\lr{ E_1 dx^1 + E_2 dx^2 + E_3 dx^3 } \wedge (c dt)
++
+\lr{
+ H_1 dx^2 \wedge dx^3 
+ H_2 dx^3 \wedge dx^1 
+ H_3 dx^1 \wedge dx^2 
+}.
+\end{dmath}
 
-Later I encountered Denker's straight wire treatment \citep{DenkerWire}, which states that the geometric algebra formulation of Stokes theorem has the form
+With a metric for which $(c dt, c dt) = -1$, and a cooresponding notion of \textAndIndex{duality} (*), Maxwell's equations for freespace become
 
-\begin{equation}\label{eqn:vector_integral_relations:stokesGA}
-\int_S \grad \wedge F = \int_{\partial S} F
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebraII:5870}
+\begin{aligned}
+d\alpha &= 0 \\
+d\conj\alpha &= 0.
+\end{aligned}
 \end{equation}
 
-This is simple enough looking, but there are some important details left out.  In particular the grades do not match, so there must be some sort of implied projection or dot product operations too.  We also need to understand how to express the hypervolume and hypersurfaces when evaluating these integrals, especially when we want to use curvilinear coordinates.
+These are equivalent to the usual pair of tensor equations
 
-I'd attempted to puzzle through these details previously.  A collection of these attempts, to be removed from my collection of geometric algebra notes, can be found in \citep{bigCollectionOfPartiallyIncorrectStokesTheoremMusings}.  I'd recently reviewed all of these and wrote a compact synopsis \citep{synopsisOfBigCollectionOfPartiallyIncorrectStokesTheoremMusings} of all those notes, but in the process of doing so, I realized there was a couple of fundamental problems with the approach I had used.  
+\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:5890}
+\begin{aligned}
+\partial_i F^{ij} &= 0 \\
+\epsilon^{ijkl} \partial_j F_{kl} &= 0
+\end{aligned},
+\end{equation}
 
-One detail that was that I failed to understand, was that we have a requirement for treating a infinitesimal region in the proof, then summing over such regions to express the boundary integral.  Understanding that the boundary integral form and its dot product are both evaluated only at the end points of the integral region is an important detail that follows from such an argument (as used in proof of Stokes theorem for a 3D Cartesian space in \citep{schwartz1987pe}.)  
+or the Geometric Algebra equation
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:5910}
+\grad F = 0.
+\end{dmath}
 
-I also realized that my previous attempts could only work for the special cases where the dimension of the integration volume also equaled the dimension of the vector space.  The key to resolving this issue is the concept of the tangent space, and an understanding of how to express the projection of the gradient onto the tangent space.  These concepts are covered thoroughly in \citep{aMacdonaldVAGC}, which also introduces Stokes theorem as a special case of a more fundamental theorem for integration of geometric algebraic objects.  My objective, for now, is still just to understand the generalization of Stokes theorem, and will leave the fundamental theorem of geometric calculus to later.
+An aspect of differential forms that I found unintuitive, is that all physical quantities have to be expressed as forms, even when we have no pressing desire to integrate them.  It also seemed to me that it ought to be possible to express volume and area elements in parameterized spaces directly as wedge products.  For example, given a two parameter surface of all the points that can be traced out on $\Bx(u, v)$, we can express the (oriented) area of a patch of that surface directly as
 
-Now that these details are understood, the purpose of these notes is to detail the Geometric algebra form of Stokes theorem, covering its generalization to higher dimensional spaces and non-Euclidean metrics (i.e. especially those used for special relativity and electromagnetism), and understanding how to properly deal with curvilinear coordinates.  This generalization has the form
+\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:5930}
+dA = \lr{ du \PD{u}{\Bx} } \wedge \lr{ dv \PD{v}{\Bx} }.
+\end{dmath}
+
+With such a capability is the abstract notion of a form really required?  Can we stick with the vector notation that we are comfortable with, perhaps just generalizing slightly?  How would something like Stokes theorem, a basic tool needed to tackle so many problems in electromagnetism, be expressed so that it acted on vectors directly?
+
+An answer to this question was found in Denker's straight wire treatment \citep{DenkerWire}, which states that the geometric algebra formulation of Stokes theorem has the form
+
+\begin{equation}\label{eqn:vector_integral_relations:stokesGA}
+\int_S \grad \wedge F = \int_{\partial S} F.
+\end{equation}
+
+This looks simple enough, but there are some important details left out.  In particular the grades do not match, so there must be some sort of implied projection or dot product operations too.  We also need to understand how to express the hypervolume and hypersurfaces when evaluating these integrals, especially when we want to use curvilinear coordinates.
+
+If one restricts attention to the special case where the dimension of the integration volume also equaled the dimension of the vector space, so that the grade of the curl matches the grade of the space (i.e. integration of a two form $\int d^2 \Bx \cdot \lr{\spacegrad \wedge \Bf}$ in a two dimensional space), then some of those important details are not too hard to work out.  
+
+To treat a more general case, such as the same two form $\int d^2 \Bx \cdot (\spacegrad \wedge \Bf)$ in a space of dimension greater than two, we need to introduce the notion of tangent space.  That concept can also be found in differential forms, but can also be expressed directly in vector algebra.  Suppose, for example, that $\Bx(u,v,w)$ parameterizes a subspace, the the tangent space at the point of evaluation is the space that is spanned by $\setlr{ \PDi{u}{\Bx}, \PDi{v}{\Bx}, \PDi{w}{\Bx} }$.  Stokes theorem is expressed not in terms of the gradient $\spacegrad$, but the projection of the gradient onto the tangent space, which will be denoted by $\boldpartial$ and called the vector derivative.  The concept of tangent space and and vector derivative are covered thoroughly in \citep{aMacdonaldVAGC}, which also introduces Stokes theorem as a special case of a more fundamental theorem for integration of geometric algebraic objects.  
+
+The objective of this chapter is to detail the Geometric algebra form of Stokes theorem, and not the fundamental theorem of geometric calculus.  We wish to cover the generalization of Stokes theorem to higher dimensional spaces and non-Euclidean metrics (i.e. especially those used for special relativity and electromagnetism), and understanding how to properly deal with curvilinear coordinates.  This generalization has the form
 
 \maketheorem{Stokes' Theorem}{thm:stokesTheoremGeometricAlgebra:1740}{
 
@@ -121,7 +80,8 @@ Here the volume integral is over a $m$ dimensional surface (manifold), $\boldpar
 
 It takes some work to give this more concrete meaning.  I will attempt to do so in a gradual fashion, and provide a number of examples that illustrate some of the relevant details.
 
-\section{Basic notation}
+\section{Curvilinear coordinates}
+%\section{Basic notation}
 
 A finite vector space, not necessarily Euclidean, with basis $\setlr{\Be_1, \Be_2, \cdots}$ will be assumed to be the generator of the geometric algebra.  A dual or reciprocal basis $\setlr{\Be^1, \Be^2, \cdots}$ for this basis can be calculated, defined by the property
 
@@ -131,99 +91,99 @@ A finite vector space, not necessarily Euclidean, with basis $\setlr{\Be_1, \Be_
 
 This is an Euclidean space when $\Be_i = \Be^i, \forall i$.
 
-%%%Implicit summation over repeated indices, typically over mixed upper and lower indices, will be assumed unless otherwise noted.
-%%%For example, the components of a vector $\Bx$ with respect to the standard or reciprocal bases, are
-%%%
-%%%\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:40}
-%%%\Bx = \Be_i x^i = \Be^j x_j.
-%%%\end{equation}
-%%%
-%%%The coordinates of the vector follow by taking dot products
-%%%
-%%%\begin{subequations}
-%%%\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:60}
-%%%\Bx \cdot \Be^j = \lr{ \Be_i x^i } \cdot \Be^j = x^i {\delta_i}^j = x^j
-%%%\end{equation}
-%%%\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:80}
-%%%\Bx \cdot \Be_j = \lr{ \Be^i x_i } \cdot \Be_j = x_i {\delta^i}_j = x_j
-%%%\end{equation}
-%%%\end{subequations}
-%%%
-%%%Similarly, a bivector $F$ in coordinate representation has the form
-%%%
-%%%\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:1180}
-%%%F = \inv{2} \Be^i \wedge \Be^j F_{ij} = \inv{2} \Be_i \wedge \Be_j F^{ij},
-%%%\end{equation}
-%%%
-%%%where
-%%%\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:1200}
-%%%\begin{aligned}
-%%%F_{ij} &= \lr{ F \cdot \Be_j } \cdot \Be_i \\
-%%%F^{ij} &= \lr{ F \cdot \Be^j } \cdot \Be^i.
-%%%\end{aligned}
-%%%\end{equation}
-%%%
+%%% basic notation %%%%%%Implicit summation over repeated indices, typically over mixed upper and lower indices, will be assumed unless otherwise noted.
+%%% basic notation %%%%%%For example, the components of a vector $\Bx$ with respect to the standard or reciprocal bases, are
+%%% basic notation %%%%%%
+%%% basic notation %%%%%%\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:40}
+%%% basic notation %%%%%%\Bx = \Be_i x^i = \Be^j x_j.
+%%% basic notation %%%%%%\end{equation}
+%%% basic notation %%%%%%
+%%% basic notation %%%%%%The coordinates of the vector follow by taking dot products
+%%% basic notation %%%%%%
+%%% basic notation %%%%%%\begin{subequations}
+%%% basic notation %%%%%%\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:60}
+%%% basic notation %%%%%%\Bx \cdot \Be^j = \lr{ \Be_i x^i } \cdot \Be^j = x^i {\delta_i}^j = x^j
+%%% basic notation %%%%%%\end{equation}
+%%% basic notation %%%%%%\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:80}
+%%% basic notation %%%%%%\Bx \cdot \Be_j = \lr{ \Be^i x_i } \cdot \Be_j = x_i {\delta^i}_j = x_j
+%%% basic notation %%%%%%\end{equation}
+%%% basic notation %%%%%%\end{subequations}
+%%% basic notation %%%%%%
+%%% basic notation %%%%%%Similarly, a bivector $F$ in coordinate representation has the form
+%%% basic notation %%%%%%
+%%% basic notation %%%%%%\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:1180}
+%%% basic notation %%%%%%F = \inv{2} \Be^i \wedge \Be^j F_{ij} = \inv{2} \Be_i \wedge \Be_j F^{ij},
+%%% basic notation %%%%%%\end{equation}
+%%% basic notation %%%%%%
+%%% basic notation %%%%%%where
+%%% basic notation %%%%%%\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:1200}
+%%% basic notation %%%%%%\begin{aligned}
+%%% basic notation %%%%%%F_{ij} &= \lr{ F \cdot \Be_j } \cdot \Be_i \\
+%%% basic notation %%%%%%F^{ij} &= \lr{ F \cdot \Be^j } \cdot \Be^i.
+%%% basic notation %%%%%%\end{aligned}
+%%% basic notation %%%%%%\end{equation}
+%%% basic notation %%%%%%
+%%% basic notation %%%
+%%% basic notation %%%To select from a multivector $A$ the grade $k$ portion, say $A_k$ we write
+%%% basic notation %%%
+%%% basic notation %%%\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:1220}
+%%% basic notation %%%A_k = \gpgrade{A}{k}.
+%%% basic notation %%%\end{equation}
+%%% basic notation %%%
+%%% basic notation %%%The scalar portion of a multivector $A$ will be written as
+%%% basic notation %%%
+%%% basic notation %%%\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:1240}
+%%% basic notation %%%\gpgrade{A}{0} \equiv \gpgradezero{A}.
+%%% basic notation %%%\end{equation}
+%%% basic notation %%%
+%%% basic notation %%%The grade selection operators can be used to define the outer and inner products.  For blades $U$, and $V$ of grade $r$ and $s$ respectively, these are
+%%% basic notation %%%
+%%% basic notation %%%\begin{subequations}
+%%% basic notation %%%\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:300}
+%%% basic notation %%%\gpgrade{ U V }{\Abs{r + s}} \equiv U \wedge V
+%%% basic notation %%%\end{dmath}
+%%% basic notation %%%\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:780}
+%%% basic notation %%%\gpgrade{ U V }{\Abs{r - s}} \equiv U \cdot V.
+%%% basic notation %%%\end{dmath}
+%%% basic notation %%%\end{subequations}
+%%% basic notation %%%
+%%% basic notation %%%Written out explicitly for odd grade blades $A$ (vector, trivector, ...), and vector $\Ba$ the dot and wedge products are respectively
+%%% basic notation %%%
+%%% basic notation %%%\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:800}
+%%% basic notation %%%\begin{aligned}
+%%% basic notation %%%\Ba \wedge A &= \inv{2} (\Ba A - A \Ba) \\
+%%% basic notation %%%\Ba \cdot A &= \inv{2} (\Ba A + A \Ba).
+%%% basic notation %%%\end{aligned}
+%%% basic notation %%%\end{equation}
+%%% basic notation %%%
+%%% basic notation %%%Similarly for even grade blades these are
+%%% basic notation %%%
+%%% basic notation %%%\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:820}
+%%% basic notation %%%\begin{aligned}
+%%% basic notation %%%\Ba \wedge A &= \inv{2} (\Ba A + A \Ba) \\
+%%% basic notation %%%\Ba \cdot A &= \inv{2} (\Ba A - A \Ba).
+%%% basic notation %%%\end{aligned}
+%%% basic notation %%%\end{equation}
+%%% basic notation %%%
+%%% basic notation %%%It will be useful to employ the cyclic scalar reordering identity for the scalar selection operator
+%%% basic notation %%%
+%%% basic notation %%%\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:920}
+%%% basic notation %%%\gpgradezero{\Ba \Bb \Bc}
+%%% basic notation %%%= \gpgradezero{\Bb \Bc \Ba}
+%%% basic notation %%%= \gpgradezero{\Bc \Ba \Bb}.
+%%% basic notation %%%\end{equation}
+%%% basic notation %%%
+%%% basic notation %%%For an $N$ dimensional vector space, a product of $N$ orthonormal (up to a sign) unit vectors is referred to as a pseudoscalar for the space, typically denoted by $I$
+%%% basic notation %%%
+%%% basic notation %%%\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:5790}
+%%% basic notation %%%I = \Be_1 \Be_2 \cdots \Be_N.
+%%% basic notation %%%\end{equation}
+%%% basic notation %%%
+%%% basic notation %%%The pseudoscalar may commute or anticommute with other blades in the space.  We may also form a pseudoscalar for a subspace spanned by vectors $\setlr{\Ba, \Bb, \cdots, \Bc}$ by unit scaling the wedge products of those vectors $\Ba \wedge \Bb \wedge \cdots \wedge \Bc$.
+%%% basic notation %%%
+%\section{Curvilinear coordinates}
 
-To select from a multivector $A$ the grade $k$ portion, say $A_k$ we write
-
-\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:1220}
-A_k = \gpgrade{A}{k}.
-\end{equation}
-
-The scalar portion of a multivector $A$ will be written as
-
-\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:1240}
-\gpgrade{A}{0} \equiv \gpgradezero{A}.
-\end{equation}
-
-The grade selection operators can be used to define the outer and inner products.  For blades $U$, and $V$ of grade $r$ and $s$ respectively, these are
-
-\begin{subequations}
-\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:300}
-\gpgrade{ U V }{\Abs{r + s}} \equiv U \wedge V
-\end{dmath}
-\begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:780}
-\gpgrade{ U V }{\Abs{r - s}} \equiv U \cdot V.
-\end{dmath}
-\end{subequations}
-
-Written out explicitly for odd grade blades $A$ (vector, trivector, ...), and vector $\Ba$ the dot and wedge products are respectively
-
-\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:800}
-\begin{aligned}
-\Ba \wedge A &= \inv{2} (\Ba A - A \Ba) \\
-\Ba \cdot A &= \inv{2} (\Ba A + A \Ba).
-\end{aligned}
-\end{equation}
-
-Similarly for even grade blades these are
-
-\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:820}
-\begin{aligned}
-\Ba \wedge A &= \inv{2} (\Ba A + A \Ba) \\
-\Ba \cdot A &= \inv{2} (\Ba A - A \Ba).
-\end{aligned}
-\end{equation}
-
-It will be useful to employ the cyclic scalar reordering identity for the scalar selection operator
-
-\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:920}
-\gpgradezero{\Ba \Bb \Bc}
-= \gpgradezero{\Bb \Bc \Ba}
-= \gpgradezero{\Bc \Ba \Bb}.
-\end{equation}
-
-For an $N$ dimensional vector space, a product of $N$ orthonormal (up to a sign) unit vectors is referred to as a pseudoscalar for the space, typically denoted by $I$
-
-\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:5790}
-I = \Be_1 \Be_2 \cdots \Be_N.
-\end{equation}
-
-The pseudoscalar may commute or anticommute with other blades in the space.  We may also form a pseudoscalar for a subspace spanned by vectors $\setlr{\Ba, \Bb, \cdots, \Bc}$ by unit scaling the wedge products of those vectors $\Ba \wedge \Bb \wedge \cdots \wedge \Bc$.
-
-\section{Curvilinear coordinates}
-
-For our purposes a manifold can be loosely defined as a parameterized surface.  For example, a 2D manifold can be considered a surface in an $n$ dimensional vector space, parameterized by two variables
+For our purposes a \textAndIndex{manifold} can be loosely defined as a parameterized surface.  For example, a 2D manifold can be considered a surface in an $n$ dimensional vector space, parameterized by two variables
 
 \begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:1280}
 \Bx = \Bx(a,b) = \Bx(u^1, u^2).
@@ -235,7 +195,7 @@ Note that the indices here do not represent exponentiation.  We can construct a 
 \Bx_i = \PD{u^i}{\Bx}.
 \end{equation}
 
-On the manifold we can calculate a reciprocal basis $\setlr{\Bx^i}$, defined by requiring, at each point on the surface
+On the manifold we can calculate a \textAndIndex{reciprocal basis} $\setlr{\Bx^i}$, defined by requiring, at each point on the surface
 
 \begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:1320}
 \Bx^i \cdot \Bx_j = {\delta^i}_j.
@@ -247,7 +207,7 @@ Associated implicitly with this basis is a curvilinear coordinate representation
 \Bx = x^i \Bx_i,
 \end{equation}
 
-(sums over mixed indices are implied).   These coordinates can be calculated by taking dot products with the reciprocal frame vectors
+(sums over mixed indices are implied).   These coordinates can be calculated by taking dot products with the \textAndIndex{reciprocal frame vectors}
 
 \begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:1360}
 \Bx \cdot \Bx^i
@@ -257,7 +217,7 @@ Associated implicitly with this basis is a curvilinear coordinate representation
 \end{dmath}
 
 %Having used the same notation for coordinates with respect to the standard basis and its dual, we must rely on context to disambiguate the two.
-In this document all coordinates are with respect to a specific curvilinear basis, and not with respect to the standard basis $\setlr{\Be_i}$ or its dual basis unless otherwise noted.
+In this document all coordinates are with respect to a specific \textAndIndex{curvilinear basis}, and not with respect to the \textAndIndex{standard basis} $\setlr{\Be_i}$ or its \textAndIndex{dual basis} unless otherwise noted.
 
 Similar to the usual notation for derivatives with respect to the standard basis coordinates we form a lower index partial derivative operator
 
@@ -271,11 +231,11 @@ so that when the complete vector space is spanned by $\setlr{\Bx_i}$ the gradien
 \spacegrad = \Bx^i \PD{u^i}{}.
 \end{dmath}
 
-This can be motivated by noting that the directional derivative is defined by
-
-\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:1260}
-\Ba \cdot \spacegrad f(\Bx) = \lim_{t \rightarrow 0} \frac{f(\Bx + t \Ba) - f(\Bx)}{t}.
-\end{equation}
+%This can be motivated by noting that the directional derivative is defined by
+%
+%\begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:1260}
+%\Ba \cdot \spacegrad f(\Bx) = \lim_{t \rightarrow 0} \frac{f(\Bx + t \Ba) - f(\Bx)}{t}.
+%\end{equation}
 %%%
 %%%the gradient $\spacegrad$, in terms of the standard and dual bases is
 %%%
@@ -284,7 +244,7 @@ This can be motivated by noting that the directional derivative is defined by
 %%%%\equiv \Be^i \partial_i,
 %%%\end{equation}
 
-When the basis $\setlr{\Bx_i}$ does not span the space, the projection of the gradient onto the tangent space at the point of evaluation
+When the basis $\setlr{\Bx_i}$ does not span the space, the projection of the gradient onto the tangent space at the point of evaluation is
 
 \begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:1400}
 \boldpartial = \Bx^i \partial_i = \sum_i \Bx_i \PD{u^i}{}.
@@ -298,8 +258,8 @@ This is called the vector derivative.
 %\boldpartial = \Bx^i \partial_i.
 %\end{dmath}
 
-
-See \citep{aMacdonaldVAGC} for a more complete discussion of the gradient and vector derivatives in curvilinear coordinates.
+% redundant:
+%See \citep{aMacdonaldVAGC} for a more complete discussion of the gradient and vector derivatives in curvilinear coordinates.
 
 \section{Green's theorem}
 
@@ -312,6 +272,7 @@ Given a two parameter ($u,v$) surface parameterization, the curvilinear coordina
 We assume that the vector space is of dimension two or greater but otherwise unrestricted, and need not have an Euclidean basis.  Here $f_\perp \Bx^\perp$ denotes the rejection of $\Bf$ from the tangent space at the point of evaluation.  Green's theorem relates the integral around a closed curve to an ``area'' integral on that surface
 
 \maketheorem{Green's Theorem}{thm:stokesTheoremGeometricAlgebra:1660}{
+\index{Green's theorem}
 \begin{equation*}
 \ointctrclockwise \Bf \cdot d\Bl
 =
@@ -388,7 +349,7 @@ We can now sum over a larger area as in \cref{fig:loopIntegralInfinitesimalSum:l
 
 All the opposing oriented loop elements cancel, so the integral around the complete boundary of the surface $\Bx(u, v)$ is given by the $u,v$ area integral of the partials difference.
 
-We will see that Green's theorem is a special case of the Curl (Stokes) theorem.  This observation will also provide a geometric interpretation of the right hand side area integral of \cref{thm:stokesTheoremGeometricAlgebra:1660}, and allow for a coordinate free representation.
+We will see that Green's theorem is a special case of the Stokes theorem.  This observation will also provide a geometric interpretation of the right hand side area integral of \cref{thm:stokesTheoremGeometricAlgebra:1660}, and allow for a coordinate free representation.
 
 \paragraph{Special case:}
 
@@ -410,7 +371,7 @@ Here Green's theorem takes the form
 dx dy.
 }
 
-\section{Curl theorem, two volume vector field}
+\section{Stokes theorem, two volume vector field}
 
 Having examined the right hand side of \cref{thm:stokesTheoremGeometricAlgebra:1740} for the very simplest geometric object $\Bf$, let's look at the right hand side, the area integral in more detail.  We restrict our attention for now to vectors $\Bf$ still defined by \eqnref{eqn:stokesTheoremGeometricAlgebra:1640}.
 
@@ -428,7 +389,7 @@ d^2 \Bx
 = du^1 du^2 \Bx_1 \wedge \Bx_2.
 \end{equation}
 
-This is the oriented area element that lies in the tangent plane at the point of evaluation, and has the magnitude of the area of that segment of the surface, as depicted in \cref{fig:loopIntegralAreaElements:loopIntegralAreaElementsFig3}.
+This is the oriented area element that lies in the \textAndIndex{tangent plane} at the point of evaluation, and has the magnitude of the area of that segment of the surface, as depicted in \cref{fig:loopIntegralAreaElements:loopIntegralAreaElementsFig3}.
 
 \imageFigure{../../figures/gabook/loopIntegralAreaElementsFig3}{Oriented area element tiling of a surface}{fig:loopIntegralAreaElements:loopIntegralAreaElementsFig3}{0.3}
 
@@ -680,7 +641,7 @@ As expected, we can also obtain this by integrating \eqnref{eqn:stokesTheoremGeo
 
 \makeexample{Cylindrical parameterization}{example:stokesTheoremGeometricAlgebra:3060}{
 
-Let's now consider a cylindrical parameterization of a 4D space with Euclidean metric $++++$ or Minkowski metric $+++-$.  For such a space let's do a brute force expansion of both sides of Stokes theorem to gain some confidence that all is well.
+Let's now consider a cylindrical parameterization of a 4D space with Euclidean metric \index{metric!Euclidean} $++++$ or Minkowski metric \index{metric!Minkowski} $+++-$.  For such a space let's do a brute force expansion of both sides of Stokes theorem to gain some confidence that all is well.
 
 With $\kappa = \Be_3 \Be_4$, such a space is conveniently parameterized as illustrated in \cref{fig:cylindricalPolarParameterization:cylindricalPolarParameterizationFig7} as
 
@@ -1251,7 +1212,7 @@ du^3 \lr{ d\Bx_1 \wedge d\Bx_2 } \cdot \partial_3 \Bf
 }.
 \end{dmath}
 
-Observe that the sign changes with each element of $d\Bx_1 \wedge d\Bx_2 \wedge d\Bx_3$ that is skipped.  In differential forms, the wedge product composition of 1-forms is an abstract quantity.  Here the differentials are just vectors, and their wedge product represents an oriented volume element.  This interpretation is likely available in the theory of differential forms too, but is arguably less obvious.
+Observe that the sign changes with each element of $d\Bx_1 \wedge d\Bx_2 \wedge d\Bx_3$ that is skipped.  In differential forms, the wedge product composition of 1-forms \index{1-form} is an abstract quantity.  Here the differentials are just vectors, and their wedge product represents an oriented volume element.  This interpretation is likely available in the theory of differential forms too, but is arguably less obvious.
 
 \makedigression{
 As was the case with the loop integral, we expect that the coordinate representation has a representation that can be expressed as a number of antisymmetric terms.  A bit of experimentation shows that such a sum, after dropping the parameter space volume element factor, is
@@ -1321,7 +1282,7 @@ where the evaluation of the dot products with $\Bf$ are also evaluated at the sa
 
 \makeexample{Euclidean spherical polar parameterization of 3D subspace}{example:stokesTheoremGeometricAlgebra:3880}{
 
-Consider an Euclidean space where a 3D subspace is parameterized using spherical coordinates, as in
+Consider an Euclidean space where a 3D subspace is parameterized using spherical coordinates \index{coordinate!spherical}, as in
 
 \begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:3900}
 \Bx(x, \rho, \theta, \phi) = 
@@ -1389,7 +1350,7 @@ This allows us to read off the dual basis for the tangent volume by inspection
 \end{aligned}
 \end{equation}
 
-Should we wish to explicitly calculate the curl on the tangent space, we would need these.  The area and volume elements are also messy to calculate manually.  This expansion can be found in the Mathematica notebook \nbref{sphericalSurfaceAndVolumeElements.nb}, and is
+Should we wish to explicitly calculate the curl on the tangent space, we would need these.  The area and volume elements are also messy to calculate manually.  This expansion can be found in the \textAndIndex{Mathematica} notebook \nbref{sphericalSurfaceAndVolumeElements.nb}, and is
 
 \begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:3980}
 \begin{aligned}
@@ -1435,7 +1396,7 @@ e^{\Be_2 \Be_3 \phi}
 \end{aligned}.
 \end{equation}
 
-One of the beauties of Stokes theorem is that we don't actually have to calculate the dual basis on the tangent space to proceed with the integration.  For that calculation above, where we had a normal tangent basis, I still used software was used as an aid, so it is clear that this can generally get pretty messy.
+One of the beauties of Stokes theorem is that we don't actually have to calculate the \textAndIndex{dual basis} on the tangent space to proceed with the integration.  For that calculation above, where we had a normal tangent basis, I still used software was used as an aid, so it is clear that this can generally get pretty messy.
 
 To apply Stokes theorem to a vector field we can use \eqnref{eqn:stokesTheoremGeometricAlgebra:2020} to write down the integral directly
 
@@ -1516,7 +1477,7 @@ When written out in this differential form, each of the respective area elements
 
 \makeexample{Minkowski hyperbolic-spherical polar parameterization of 3D subspace}{example:stokesTheoremGeometricAlgebra:3920}{
 
-Working with a three parameter volume element in a Minkowski space does not change much.  For example in a 4D space with $\lr{\Be_4}^2 = -1$, we can employ a hyperbolic-spherical parameterization similar to that used above for the 4D Euclidean space
+Working with a three parameter volume element in a \textAndIndex{Minkowski space} does not change much.  For example in a 4D space with $\lr{\Be_4}^2 = -1$, we can employ a hyperbolic-spherical parameterization similar to that used above for the 4D Euclidean space
 
 \begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:4090}
 \Bx(x, \rho, \alpha, \phi)
@@ -1600,7 +1561,7 @@ The area and volume element reductions were once again messy, done in software u
 
 \section{Stokes theorem, four variable volume element parameterization}
 
-Volume elements for up to four parameters are likely of physical interest, with the four volume elements of interest for relativistic physics in $\bigwedge^{3,1}$ spaces.  For example, we may wish to use a parameterization $u^1 = x, u^2 = y, u^3 = z, u^4 = \tau = c t$, with a four volume
+Volume elements for up to four parameters are likely of physical interest, with the four volume elements of interest for \textAndIndex{relativistic physics} in $\bigwedge^{3,1}$ spaces.  For example, we may wish to use a parameterization $u^1 = x, u^2 = y, u^3 = z, u^4 = \tau = c t$, with a four volume
 
 \begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:2040}
 d^4 \Bx
@@ -1654,7 +1615,7 @@ where it is implied that this (and the dot products with $\Bf$) are evaluated on
 
 \section{Duality and its relation to the pseudoscalar.}
 
-Looking to \eqnref{eqn:stokesTheoremGeometricAlgebra:4870} of \cref{thm:stokesTheoremGeometricAlgebra:3200}, and scaling the wedge product $\Ba \wedge \Bb$  by its absolute magnitude, we can express duality using that scaled bivector as a pseudoscalar for the plane that spans $\setlr{\Ba, \Bb}$.  Let's introduce a subscript notation for such scaled blades
+Looking to \eqnref{eqn:stokesTheoremGeometricAlgebra:4870} of \cref{thm:stokesTheoremGeometricAlgebra:3200}, and scaling the wedge product $\Ba \wedge \Bb$  by its absolute magnitude, we can express duality using that scaled bivector as a \textAndIndex{pseudoscalar} for the plane that spans $\setlr{\Ba, \Bb}$.  Let's introduce a subscript notation for such scaled blades
 
 \begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:4910}
 I_{\Ba\Bb} = \frac{\Ba \wedge \Bb}{\Abs{\Ba \wedge \Bb}}.
@@ -1683,6 +1644,7 @@ or for the unit vector in the direction of $\Ba^\conj$,
 
 When the curl integral is a scalar result we are able to apply duality relationships to obtain the divergence theorem for the corresponding space.  We will be able to show that a relationship of the following form holds
 
+\index{divergence theorem}
 \boxedEquation{eqn:stokesTheoremGeometricAlgebra:4810}{
 \int_V dV \spacegrad \cdot \Bf = \int_{\partial V} dA_i \ncap^i \cdot \Bf.
 }
@@ -1783,6 +1745,7 @@ This leaves us with
 To spell out the details, we have to be very careful with the signs.  However, that is a job best left for specific examples.
 
 \makeexample{2D divergence theorem}{example:stokesTheoremGeometricAlgebra:4690}{
+\index{divergence theorem!2D}
 Let's start back at
 
 \begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:5230}
@@ -1801,7 +1764,7 @@ On the left our integral can be rewritten as
 - I^2 \int_A dA \spacegrad \cdot \Bf,
 \end{dmath}
 
-where $d^2 \Bx = I dA$ and we pick the pseudoscalar with the same orientation as the volume (area in this case) element $I = (\Bx_1 \wedge \Bx_2)/\Abs{\Bx_1 \wedge \Bx_2}$.
+where $d^2 \Bx = I dA$ and we pick the \textAndIndex{pseudoscalar} with the same orientation as the volume (area in this case) element $I = (\Bx_1 \wedge \Bx_2)/\Abs{\Bx_1 \wedge \Bx_2}$.
 
 For the boundary form we have
 
@@ -1891,6 +1854,7 @@ Note that we can use the same algebraic notion of outward normal for non-Euclide
 }
 
 \makeexample{3D divergence theorem}{example:stokesTheoremGeometricAlgebra:4470}{
+\index{divergence theorem!3D}
 As with the 2D example, let's start back with
 
 \begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:5330}
@@ -2015,6 +1979,7 @@ In the context of the divergence theorem, this means that we are implicitly requ
 }
 
 \makeexample{4D divergence theorem}{example:stokesTheoremGeometricAlgebra:5270}{
+\index{divergence theorem!4D}
 Applying Stokes theorem to a trivector $T = I \Bf$ in the 4D case we find
 
 \begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:5830}
@@ -2109,7 +2074,7 @@ We also obtain explicit instructions from this formalism how to compute the ``ou
 
 \section{Volume integral coordinate representations}
 
-It may be useful to formulate the curl integrals in tensor form.  For vectors $\Bf$, and bivectors $B$, the coordinate representations of those differential forms (\cref{pr:stokesTheoremGeometricAlgebra:1}) are
+It may be useful to formulate the curl integrals in \textAndIndex{tensor} form.  For vectors $\Bf$, and bivectors \index{bivector} $B$, the coordinate representations of those differential forms (\cref{pr:stokesTheoremGeometricAlgebra:1}) are
 
 \begin{subequations}
 \begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:2160}
@@ -2155,7 +2120,7 @@ d^4 u
 \end{equation}
 \end{subequations}
 
-Here the bivector $B$ and trivector $T$ is expressed in terms of their curvilinear components on the tangent space
+Here the bivector $B$ and \textAndIndex{trivector} $T$ is expressed in terms of their curvilinear components on the tangent space
 
 \begin{subequations}
 \begin{equation}\label{eqn:stokesTheoremGeometricAlgebra:2260}
@@ -2576,7 +2541,7 @@ Applying \cref{thm:stokesTheoremGeometricAlgebra:2560} to expand the inner produ
 {
 \Bx_1 \cdot \lr{ \Bx_3 \cdot \lr{ \Bx_4 \cdot \partial_2 T } }
 -\Bx_2 \cdot \lr{ \Bx_3 \cdot \lr{ \Bx_4 \cdot \partial_1 T } }
-}{Apply cyclic permutations}
+}{Apply cyclic permutations \index{cyclic permutation}}
 \\
 &=
 \Bx_1 \cdot \lr{ \Bx_2 \cdot \lr{ \Bx_3 \cdot \partial_4 T } }
@@ -3199,6 +3164,7 @@ Cancellation of terms above was because they could not contribute to a grade one
 
 \makelemma{Duality in a plane}{thm:stokesTheoremGeometricAlgebra:3200}{
 
+\index{dual}
 For a vector $\Ba$, and a plane containing $\Ba$ and $\Bb$, the dual $\Ba^\conj$ of this vector with respect to this plane is
 
 \begin{dmath}\label{eqn:stokesTheoremGeometricAlgebra:3220}
@@ -3346,7 +3312,7 @@ The canceled term is eliminated since it is the product of a vector and trivecto
 
 \makelemma{Pseudoscalar selection}{thm:stokesTheoremGeometricAlgebra:4690}{
 
-For grade $k$ blade $K \in \bigwedge^k$ (i.e. a pseudoscalar), and vectors $\Ba, \Bb$, the grade $k$ selection of this blade sandwiched between the vectors is
+For grade $k$ blade $K \in \bigwedge^k$ (i.e. a \textAndIndex{pseudoscalar}), and vectors $\Ba, \Bb$, the grade $k$ selection of this blade sandwiched between the vectors is
 
 \begin{equation*}
 \gpgrade{ \Ba K \Bb }{k} = (-1)^{k+1} \gpgrade{K a b}{k} = (-1)^{k+1} K \lr{ \Ba \cdot \Bb}.
@@ -3390,5 +3356,3 @@ or
 \end{dmath}
 
 Adjusting for the signs completes the proof.
-
-%\EndArticle

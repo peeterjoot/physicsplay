@@ -33,6 +33,7 @@ GENERATED_SOURCES += backmatter.tex
 
 GENERATED_PDFS += bigCollectionOfPartiallyIncorrectStokesTheoremMusings.pdf
 GENERATED_PDFS += synopsisOfBigCollectionOfPartiallyIncorrectStokesTheoremMusings.pdf
+GENERATED_PDFS += stokesTheoremGeometricAlgebra.pdf
 
 include ../make.rules
 
@@ -45,3 +46,5 @@ backmatter.tex : ../classicthesis.mine/backmatter.tex
 
 vpath %.png $(ORIG_FIGURE_DIRS)
 vpath %.pl $(ORIG_LISTING_DIRS)
+
+stokesTheoremGeometricAlgebra.pdf : calculus/stokesTheoremGeometricAlgebra.tex
