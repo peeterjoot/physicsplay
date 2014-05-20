@@ -16,6 +16,12 @@ use warnings ;
 #/math2013/liouvilleOneDim.pdf
 
 my @sites1 = (qw(2007-math-notes-archive/star_distance.pdf
+math2009/atomic.pdf
+math2009/miscphysics.pdf
+math2010/atomicSimple.pdf
+math2010/mutexRelease.pdf
+math2011/phy450.pdf
+math2011/phy456.pdf
 cross-1-15/cross_1_15.pdf
 cross/cross.pdf
 geometric-algebra/angular_velocity.pdf
@@ -335,6 +341,8 @@ math2011/variationHarmonicOscillator.pdf
 math2011/zeeTauMatrix.pdf)) ;
 
 my @sites2 = (qw(math2011/adiabaticApproximation.pdf
+math2012/phy454.pdf
+math2013/phy452.pdf
 math2011/ClebshGordan.pdf
 math2011/conditionalProbStatMech.pdf
 math2011/helmoltzGreens.pdf
@@ -493,54 +501,36 @@ my @urls = (qw(https://sites.google.com/site/peeterjoot
 https://sites.google.com/site/peeterjoot2
 https://sites.google.com/site/peeterjoot3)) ;
 
-if ( 1 )
+# download from old google sites:
+foreach my $p (@sites1)
 {
-   # download from old google sites:
-   foreach my $p (@sites1)
+   my $dir = dirname( $p ) ;
+
+   if ( !-e "sites/$p" )
    {
-      my $dir = dirname( $p ) ;
-   
       print "mkdir -p sites/$dir\n" ;
       print "(cd sites/$dir && wget $urls[0]/$p)\n" ;
    }
-   
-   foreach my $p (@sites2)
+}
+
+foreach my $p (@sites2)
+{
+   my $dir = dirname( $p ) ;
+
+   if ( !-e "sites/$p" )
    {
-      my $dir = dirname( $p ) ;
-   
       print "mkdir -p sites/$dir\n" ;
       print "(cd sites/$dir && wget $urls[1]/$p)\n" ;
    }
-   
-   foreach my $p (@sites3)
+}
+
+foreach my $p (@sites3)
+{
+   my $dir = dirname( $p ) ;
+
+   if ( !-e "sites/$p" )
    {
-      my $dir = dirname( $p ) ;
-   
       print "mkdir -p sites/$dir\n" ;
       print "(cd sites/$dir && wget $urls[2]/$p)\n" ;
-   }
-}
-else
-{
-   # check downloads:
-   foreach my $p (@sites1)
-   {
-      my $dir = dirname( $p ) ;
-   
-      print "sites/$p\n" if ( !-e "sites/$p" ) ;	
-   }
-   
-   foreach my $p (@sites2)
-   {
-      my $dir = dirname( $p ) ;
-   
-      print "sites/$p\n" if ( !-e "sites/$p" ) ;	
-   }
-   
-   foreach my $p (@sites3)
-   {
-      my $dir = dirname( $p ) ;
-   
-      print "sites/$p\n" if ( !-e "sites/$p" ) ;	
    }
 }
