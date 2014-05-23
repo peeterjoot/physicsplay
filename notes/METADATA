@@ -188,52 +188,52 @@ elsif ( $doBib )
    # generate cross reference's to gabook for miscphysics.pdf
    printBookBib( 'Exploring physics with Geometric Algebra',
                  'gabook',
-                 'http://sites.google.com/site/peeterjoot/math2009/gabook.pdf',
+                 'http://peeterjoot.com/archives/math2009/gabook.pdf',
                  @gabook ) ;
 
    printBookBib( 'Misc Physics and Math Play',
                  'miscphysics',
-                 'http://sites.google.com/site/peeterjoot/math2009/miscphysics.pdf',
+                 'http://peeterjoot.com/archives/math2009/miscphysics.pdf',
                  @miscphysics ) ;
 
    printBookBib( 'Quantum Mechanics I.',
                  'phy356',
-                 'http://sites.google.com/site/peeterjoot2/math2010/phy356.pdf',
+                 'http://peeterjoot.com/archives/math2010/phy356.pdf',
                  @phy356 ) ;
 
    printBookBib( 'Quantum Mechanics II.',
                  'phy456',
-                 'http://sites.google.com/site/peeterjoot2/math2011/phy456.pdf',
+                 'http://peeterjoot.com/archives/math2011/phy456.pdf',
                  @phy456 ) ;
 
    printBookBib( 'Relativistic Electrodynamics.',
                  'phy450',
-                 'http://sites.google.com/site/peeterjoot2/math2011/phy450.pdf',
+                 'http://peeterjoot.com/archives/math2011/phy450.pdf',
                  @phy450 ) ;
 
    printBookBib( 'Some classical mechanics notes.',
                  'classicalmechanics',
-                 'http://sites.google.com/site/peeterjoot2/math2013/classicalmechanics.pdf',
+                 'http://peeterjoot.com/archives/math2013/classicalmechanics.pdf',
                  @classicalmechanics ) ;
 
    printBookBib( 'Continuum mechanics.',
                  'phy454',
-                 'http://sites.google.com/site/peeterjoot2/math2012/phy454.pdf',
+                 'http://peeterjoot.com/archives/math2012/phy454.pdf',
                  @phy454 ) ;
 
    printBookBib( 'Basic statistical mechanics.',
                  'phy452',
-                 'http://sites.google.com/site/peeterjoot2/math2013/phy452.pdf',
+                 'http://peeterjoot.com/archives/math2013/phy452.pdf',
                  @phy452 ) ;
 
    printBookBib( 'Advanced classical optics.',
                  'phy485',
-                 'http://sites.google.com/site/peeterjoot2/math2012/phy485.pdf',
+                 'http://peeterjoot.com/archives/math2012/phy485.pdf',
                  @phy485 ) ;
 
    printBookBib( 'Condensed matter physics.',
                  'phy487',
-                 'http://sites.google.com/site/peeterjoot2/math2013/phy487.pdf',
+                 'http://peeterjoot.com/archives/math2013/phy487.pdf',
                  @phy487 ) ;
 }
 elsif ( $doMathematica )
@@ -618,6 +618,9 @@ sub datesort
 
 sub printBib
 {
+   use POSIX qw(strftime);
+   my $now_string = strftime "%d-%B-%Y", localtime;
+
    foreach (sort { $a->{SOURCE} cmp $b->{SOURCE} } @_)
    {
       next unless ( exists $_->{'URL'} ) ;
@@ -630,20 +633,24 @@ sub printBib
          $year = "   year={$1},\n" ;
       }
 
-      print
-"\@webpage{$r,
+      print qq(
+\@webpage{$r,
    author={Peeter Joot},
    title={{$_->{'TITLE'}}},
+   note = "[Online; accessed $now_string]",
 $year   url={$_->{'URL'}}
 }
 
-" ;
+) ;
    }
 }
 
 sub printBookBib
 {
    my ($title, $tag, $url, @rest) = @_ ;
+
+   use POSIX qw(strftime);
+   my $now_string = strftime "%d-%B-%Y", localtime;
 
    foreach ( sort { $a->{SOURCE} cmp $b->{SOURCE} } @rest )
    {
@@ -656,15 +663,16 @@ sub printBookBib
          $year = "   year={$1},\n" ;
       }
 
-      print
-"\@inbook{$tag:$r,
+      print qq(
+\@inbook{$tag:$r,
    author={Peeter Joot},
    title={{$title}},
    chapter={{$chapter}},
+   note = "[Online; accessed $now_string]",
 $year   url={$url}
 }
 
-" ;
+) ;
    }
 }
 
