@@ -506,10 +506,10 @@ foreach my $p (@sites1)
 {
    my $dir = dirname( $p ) ;
 
-   if ( !-e "sites/$p" )
+   if ( !-e "archives/$p" )
    {
-      print "mkdir -p sites/$dir\n" ;
-      print "(cd sites/$dir && wget $urls[0]/$p)\n" ;
+      print "mkdir -p archives/$dir\n" ;
+      print "(cd archives/$dir && wget $urls[0]/$p)\n" ;
    }
 }
 
@@ -517,10 +517,10 @@ foreach my $p (@sites2)
 {
    my $dir = dirname( $p ) ;
 
-   if ( !-e "sites/$p" )
+   if ( !-e "archives/$p" )
    {
-      print "mkdir -p sites/$dir\n" ;
-      print "(cd sites/$dir && wget $urls[1]/$p)\n" ;
+      print "mkdir -p archives/$dir\n" ;
+      print "(cd archives/$dir && wget $urls[1]/$p)\n" ;
    }
 }
 
@@ -528,9 +528,9 @@ foreach my $p (@sites3)
 {
    my $dir = dirname( $p ) ;
 
-   if ( !-e "sites/$p" )
+   if ( !-e "archives/$p" )
    {
-      print "mkdir -p sites/$dir\n" ;
-      print "(cd sites/$dir && wget $urls[2]/$p)\n" ;
+      print "mkdir -p archives/$dir\n" ;
+      print "(cd archives/$dir && wget $urls[2]/$p)\n" ;
    }
 }
