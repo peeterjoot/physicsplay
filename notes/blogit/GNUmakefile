@@ -21,6 +21,8 @@ CLEAN_TARGETS += *.synctex.gz
 #INCOMPLETE += condensedMatterProblemSet10Problem2.tex
 #INCOMPLETE += condensedMatterProblemSet10Problem3.tex
 
+INCOMPLETE += stokespost.tex
+
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
 PDFS := $(TEXFILES:.tex=.pdf)
