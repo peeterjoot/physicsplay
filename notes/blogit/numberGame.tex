@@ -1,0 +1,254 @@
+%
+% Copyright © 2013 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{numberGame}
+\renewcommand{\dirname}{notes/incoherentramblings/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+%%%\usepackage{listings}
+%%%\lstset{ %
+%%%language=sh,                % choose the language of the code
+%%%basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+%%%numbers=left,                   % where to put the line-numbers
+%%%numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+%%%stepnumber=1,                   % the step between two line-numbers. If it is 1 each line will be numbered
+%%%numbersep=5pt,                  % how far the line-numbers are from the code
+%%%backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+%%%showspaces=false,               % show spaces adding particular underscores
+%%%showstringspaces=false,         % underline spaces within strings
+%%%showtabs=false,                 % show tabs within strings adding particular underscores
+%%%frame=single,                   % adds a frame around the code
+%%%tabsize=2,              % sets default tabsize to 2 spaces
+%%%captionpos=b,                   % sets the caption-position to bottom
+%%%breaklines=true,        % sets automatic line breaking
+%%%breakatwhitespace=false,    % sets if automatic breaks should only happen at whitespace
+%%%%escapeinside={(*@}{@*)},
+%%%%alsodigit=-,
+%%%%escapeinside={\%}{)}          % if you want to add a comment within your code
+%%%}
+
+
+
+% http://tex.stackexchange.com/questions/6827/minus-signs-vanish-with-listings-and-breqn-any-solutions
+%\let\origlstlisting=\lstlisting
+%\let\endoriglstlisting=\endlstlisting
+%\renewenvironment{lstlisting}
+%    {\mathcode`\-=\hyphenmathcode
+%     \everymath{}\mathsurround=0pt\origlstlisting}
+%    {\endoriglstlisting}
+
+
+%\makeatletter
+%\lst@AddToHook{Init}{\mathligsoff}
+%\makeatother
+
+%\lstnewenvironment{perl}[1][]
+%  {\lstset{language=Perl}\lstset{%
+%   #1
+%}}
+%{}
+
+\beginArtNoToc
+
+%\normalfont
+%
+%\makeatletter
+%\texttt{\meaning\lst@InputCatcodes\relax}
+%\makeatother
+
+%\mathligsoff % http://tex.stackexchange.com/questions/184648/minus-sign-disappears-in-lstlisting-if-i-import-the-semantic-package
+
+\generatetitle{Sum of digits}
+%\chapter{sum of digits}
+%\label{chap:numberGame}
+
+In a previous post I wondered how to prove that for integer \(d \in [1,N]\)
+
+\begin{equation}\label{eqn:numberGame:20}
+((N-1) d) \Mod N + ((N-1) d) \Div N = N-1.
+\end{equation}
+
+Here's a proof in two steps.  First for \(N = 10\), and then by search and replace for arbitrary \(N\).
+
+\paragraph{\(N = 10\)}
+
+Let
+
+\begin{equation}\label{eqn:numberGame:40}
+x = 9 d = 10 a + b,
+\end{equation}
+
+where \(1 \le a, b < 9\), and let
+
+\begin{equation}\label{eqn:numberGame:180}
+y = a + b, 
+\end{equation}
+
+the sum of the digits in a base \(10\) numeral system.
+
+We wish to solve the following integer system of equations
+
+\begin{equation}\label{eqn:numberGame:60}
+\begin{aligned}
+9 d &= 10 a + b \\
+y &= a + b \\
+\end{aligned}.
+\end{equation}
+
+Scaling and subtracting we have
+
+\begin{equation}\label{eqn:numberGame:80}
+10 y - 9 d = 9 b,
+\end{equation}
+
+or
+
+\begin{equation}\label{eqn:numberGame:100}
+y = \frac{9}{10} \lr{ b + d }.
+\end{equation}
+
+Because \(y\) is an integer, we have to conclude that \(b + d\) is a power of \(10\), and \(b + d \ge 10\).  Because we have a constraint on the maximum value of this sum
+
+\begin{equation}\label{eqn:numberGame:120}
+b + d \le 2 ( 9 ),
+\end{equation}
+
+we can only conclude that 
+
+\begin{equation}\label{eqn:numberGame:140}
+b + d = 10.
+\end{equation}
+
+or
+\begin{equation}\label{eqn:numberGame:160}
+\myBoxed{
+b = 10 - d.
+}
+\end{equation}
+
+Back substitution into \eqnref{eqn:numberGame:40} we have
+
+\begin{equation}\label{eqn:numberGame:200}
+\begin{aligned}
+10 a 
+&= 9 d - b \\
+&= 9 d - 10 + d \\
+&= 10 d - 10 \\
+&= 10 \lr{ d - 1 },
+\end{aligned}
+\end{equation}
+
+or 
+\begin{equation}\label{eqn:numberGame:220}
+\myBoxed{
+a = d - 1.
+}
+\end{equation}
+
+Summing \eqnref{eqn:numberGame:220} and \eqnref{eqn:numberGame:160}, the sum of digits is
+
+\begin{equation}\label{eqn:numberGame:240}
+a + b = d - 1 + 10 - d = 9.
+\end{equation}
+
+\paragraph{For arbitrary \(N\)}
+
+There was really nothing special about \(9, 10\) in the above proof, so generalizing requires nothing more than some search and replace.  I used the following vim commands for this ``proof generalization''
+
+\begin{verbatim}
+:,/For arb/-1 y
+:+/For arb/+1
+:p
+:,$ s/\<9\>/(N-1)/cg
+:,$ s/\<10\>/N/cg
+:,$ s/numberGame:/&2:/g
+\end{verbatim}
+
+Let
+
+\begin{equation}\label{eqn:numberGame:2:40}
+x = (N-1) d = N a + b,
+\end{equation}
+
+where \(1 \le a, b < N-1\), and let
+
+\begin{equation}\label{eqn:numberGame:2:180}
+y = a + b, 
+\end{equation}
+
+the sum of the digits in a base \(N\) numeral system.
+
+We wish to solve the following integer system of equations
+
+\begin{equation}\label{eqn:numberGame:2:60}
+\begin{aligned}
+(N-1) d &= N a + b \\
+y &= a + b \\
+\end{aligned}.
+\end{equation}
+
+Scaling and subtracting we have
+
+\begin{equation}\label{eqn:numberGame:2:80}
+N y - (N-1) d = (N-1) b,
+\end{equation}
+
+or
+
+\begin{equation}\label{eqn:numberGame:2:100}
+y = \frac{N-1}{N} \lr{ b + d }.
+\end{equation}
+
+Because \(y\) is an integer, we have to conclude that \(b + d\) is a power of \(N\), and \(b + d \ge N\).  Because we have a constraint on the maximum value of this sum
+
+\begin{equation}\label{eqn:numberGame:2:120}
+b + d \le 2 ( N-1 ),
+\end{equation}
+
+we can only conclude that 
+
+\begin{equation}\label{eqn:numberGame:2:140}
+b + d = N.
+\end{equation}
+
+or
+\begin{equation}\label{eqn:numberGame:2:160}
+\myBoxed{
+b = N - d.
+}
+\end{equation}
+
+Back substitution into \eqnref{eqn:numberGame:2:40} we have
+
+\begin{equation}\label{eqn:numberGame:2:200}
+\begin{aligned}
+N a 
+&= (N-1) d - b \\
+&= (N-1) d - N + d \\
+&= N d - N \\
+&= N \lr{ d - 1 },
+\end{aligned}
+\end{equation}
+
+or 
+\begin{equation}\label{eqn:numberGame:2:220}
+\myBoxed{
+a = d - 1.
+}
+\end{equation}
+
+Summing \eqnref{eqn:numberGame:2:220} and \eqnref{eqn:numberGame:2:160}, the sum of digits is
+
+\begin{equation}\label{eqn:numberGame:2:260}
+a + b = d - 1 + N - d = N-1.
+\end{equation}
+
+This completes the proof of \eqnref{eqn:numberGame:20}.
+
+%\EndArticle
+\EndNoBibArticle
