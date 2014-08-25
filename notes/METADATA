@@ -21,6 +21,7 @@ my $doHistory = 0 ;
 my $doMathematica = 0 ;
 my $latex = 0 ;
 #my $doMathematicaFtp = 0 ;
+my $redacted = 0 ;
 
 GetOptions
 (
@@ -37,6 +38,7 @@ GetOptions
    'latex!'  => \$latex,
    'mathematica!'  => \$doMathematica,
    'otherbook!' => \$doOtherbook,
+   'redacted' => \$redacted,
    'all'        => sub {
                           $doGabook = 1 ;
                           $doNonga = 1 ;
@@ -54,7 +56,7 @@ GetOptions
    'history!'   => \$doHistory,
 
    'help'       => sub { die
-"METADATA [-help | -history | -bib] [-mathematica [-latex] | -other | -phy356 | -classicalmechanics | -phy456 | -phy454 | -phy485 | -phy450 | -phy452 -phy487 | -gabook]
+"METADATA [-help | -history | -bib] [-mathematica [-latex] | -other | -phy356 | -classicalmechanics | -phy456 | -phy454 | -phy485 | -phy450 | -phy452 -phy487 | -gabook] [-redacted]
 
 options:
 -history hypertext history.
@@ -370,6 +372,7 @@ The <a href="http://www.wolfram.com/cdf-player/">Wolfram CDF player</a> can also
 <ul>
 ) ;
 
+
    foreach (sort datesort @mathematica)
    {
       my $path = $_->{'path'} ;
@@ -526,10 +529,15 @@ my $out = "
 
       $foundCDF++ if ( $path =~ /\.cdf$/i ) ;
 
-      $out .= qq(\\item \\phantomsection \\label{path:$label} $date \\href{$fullpath}{$path}
+      my $problemSetSolution = $_->{'PROBLEMSET'} ;
+
+      if ( !$redacted or ($redacted and !defined $problemSetSolution) )
+      {
+         $out .= qq(\\item \\phantomsection \\label{path:$label} $date \\href{$fullpath}{$path}
 
 $desc
 ) ;
+      }
    }
 
    print $prologue1 ;
