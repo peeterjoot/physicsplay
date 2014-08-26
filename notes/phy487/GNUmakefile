@@ -13,7 +13,9 @@ SOURCE_DIRS += $(FIGURES)
 
 COPIED_FILES += ./macros_bm.sty
 
-REDACTED := -redacted
+# also toggle redacted classicthesis-config.tex
+# FIXME: changing this flag should be a dependency of mathematica.tex 
+#REDACTED := -redacted
 
 GENERATED_SOURCES += mathematica.tex 
 
