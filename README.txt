@@ -6,7 +6,7 @@ Peeter Joot's geometric algebra biased math and physics latex source.
 
 git clone git@github.com:peeterjoot/physicsplay.git ~/physicsplay
 cd ~/physicsplay
-for i in getopt mathematica figures ; do
+for i in getopt mathematica figures matlab ; do
    git submodule update --init $i
    (cd $i && git checkout master)
 done
