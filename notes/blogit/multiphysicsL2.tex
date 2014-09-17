@@ -12,25 +12,216 @@
 \newcommand{\keywords}{Condensed matter physics, ECE1254H}
 \input{../peeter_prologue_print2.tex}
 
-%\citep{harald2003solid} \S x.y
-%\citep{ibach2009solid} \S x.y
-%\reading \citep{ashcroft1976solid} \ch N.
-
-%\usepackage{mhchem}
-%\usepackage[version=3]{mhchem}
 %\usepackage{units}
 %\usepackage{bm} % \EE
 
 \beginArtNoToc
-\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture {N}: XXX.  Taught by Prof.\ Piero Triverio}
-%\chapter{XXX}
+\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture {N}: Assembling system equations automatically.  Taught by Prof.\ Piero Triverio}
+%\chapter{Assembling system equations automatically}
 \label{chap:multiphysicsLecture{N}}
 
 %\section{Disclaimer}
 %
 %Peeter's lecture notes from class.  May not be entirely coherent.
 
-\section{XXX}
+\section{Assembling system equations automatically.  Node/branch method}
+
+Sample circuit
+
+F7
+
+\paragraph{Step 1.  Choose unknowns:}  For this problem, let's take 
+
+\begin{itemize}
+\item 
+node voltages: $V_1, V_2, V_3, V_4$
+\item
+branch currents: $i_A, i_B, i_C, i_D, i_E$
+\end{itemize}
+
+We do not need to introduce additional labels for the source current sources.
+We always introduce a reference node and call that zero.
+
+For a circuit with $N$ nodes, and $B$ resistors, there will be $N-1$ unknown node voltages and $B$ unknown branch currents, for a total number of $N - 1 + B$ unknowns.
+
+\paragraph{Step 2.  Conservation equations:}  KCL
+
+\begin{itemize}
+	\item 0: $i_A + i_E - i_D = 0$
+	\item 1: $-i_A + i_B + i_{S,A} = 0$
+	\item 2: $-i_B + i_{S,B} - i_E + i_{S,C} = 0$
+	\item 3: $i_C - i_{S,C} = 0$
+	\item 4: $-i_{S,A} - i_{S,B} + i_D - i_C = 0$
+\end{itemize}
+
+Grouping unknown currents, this is
+
+\begin{itemize}
+	\item 0: $i_A + i_E - i_D = 0$
+	\item 1: $-i_A + i_B = -i_{S,A}$
+	\item 2: $-i_B -i_E = -i_{S,B} -i_{S,C}$
+	\item 3: $i_C = i_{S,C}$
+	\item 4: $i_D - i_C = i_{S,A} + i_{S,B}$
+\end{itemize}
+
+Note that one of these equations is redundant (sum 1-4).  In a circuit with $N$ nodes, we can write at most $N-1$ independent KCLs.
+
+In matrix form
+
+\begin{equation}\label{eqn:multiphysicsL1:20}
+\begin{bmatrix}
+	-1 & 1 & 0 & 0 & 0 \\
+	0 & -1 & 0 & 0 & -1 \\
+	0 & 0 & 1 & 0 & 0 \\
+	0 & 0 & -1 & 1 & 0 
+\end{bmatrix}
+\begin{bmatrix}
+	i_A \\
+	i_B \\
+	i_C \\
+	i_D \\
+	i_E \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+	-i_{S,A} \\
+	-i_{S,B} -i_{S,C} \\
+	i_{S,C} \\
+	i_{S,A} + i_{S,B} 
+\end{bmatrix}
+\end{equation}
+
+We call this first matrix of ones and minus ones the \textAndIndex{incidence matfix} $A$.  This matrix has $B$ columns and $N-1$ rows.  We call the known current matrix $\overbar{I}_S$, and the branch currents $\overbar{I}_B$.  That is
+
+\begin{equation}\label{eqn:multiphysicsL1:40}
+	A \overbar{I}_B = \overbar{I}_S.
+\end{equation}
+
+Observe that we have both a plus and minus one in all columns except for those columns impacted by our neglect of the reference node current conservation equation.
+
+\paragraph{Algorithm for filling $A$}
+
+In input file, to describe a resistor
+F8
+, you'll have a line
+
+%FIXME
+%R & \text{name} & n_1 & n_2 & \text{value}
+
+Algorthim
+
+FIXME:
+%% A = [] ; # zeros
+%% ic = 0 ;
+%% read a new resistor, adding one column to $A$, ic++
+%% if n_1 != 0, A(n_1, ic) = +1 ;
+%% if n_2 != 0, A(n_2, ic) = -1 ;
+
+\paragraph{Algorithm for filling $\overbar{I}_S$}
+
+Current sources, as in 
+F9
+will have the specification
+
+FIXME:
+%% \overbar{I}_S = zeros(N-1, 1)
+%% read a new current 
+%% \overbar{I}_S(n_1) -= val ;
+%% \overbar{I}_S(n_2) += val ;
+
+\paragraph{Step 3.  Constitutive equations:}  
+
+\begin{equation}\label{eqn:multiphysicsL1:60}
+\begin{bmatrix}
+i_A \\
+i_B \\
+i_C \\
+i_D \\
+i_E
+\end{bmatrix}
+=
+\begin{bmatrix}
+1/R_A & & & & \\
+      & 1/R_B & & & & \\
+      & & 1/R_C & & & \\
+      & & & 1/R_D & & \\
+      & & & & & 1/R_E
+\end{bmatrix}
+\begin{bmatrix}
+v_A \\
+v_B \\
+v_C \\
+v_D \\
+v_E
+\end{bmatrix}
+\end{equation}
+
+Or 
+
+\begin{equation}\label{eqn:multiphysicsL1:80}
+	\overbar{I}_B = \alpha \overbar{V}_B,
+\end{equation}
+
+where $\overbar{V}_B$ are the branch voltages, not unknowns of interest directly.  We can write
+
+\begin{equation}\label{eqn:multiphysicsL1:n}
+\begin{bmatrix}
+v_A \\
+v_B \\
+v_C \\
+v_D \\
+v_E
+\end{bmatrix}
+=
+\begin{bmatrix}
+	-1 & & &  \\
+	1 & -1 & & \\
+	& & 1 & -1 \\
+	& &  & 1 \\
+	& -1 & & 
+\end{bmatrix}
+\begin{bmatrix}
+v_1 \\
+v_2 \\
+v_3 \\
+v_4 
+\end{bmatrix}
+\end{equation}
+
+Observe that $\alpha$ is the transpose of $A$, allowing us to write
+
+\begin{equation}\label{eqn:multiphysicsL1:n}
+\overbar{V}_B = A^\T \overbar{V}_N.
+\end{equation}
+
+\paragraph{Solving}
+
+KCLs: A \bI_B = \bI_S
+constituative: \bI_B = \alpha \bV_B \implies \bI_B = \alpha A^\T \bV_N
+branch and node voltages: \bV_B = A^\T \bV_N
+
+In block matrix form, this is
+
+\begin{equation}\label{eqn:multiphysicsL1:n}
+\begin{bmatrix}
+	A & 0 \\
+	I & -\alpha A^\T
+\end{bmatrix}
+\begin{bmatrix}
+	\bI_B \\
+	\bV_N
+\end{bmatrix}
+=
+\begin{bmatrix}
+	\bI_S \\
+	0
+\end{bmatrix}.
+\end{equation}
+
+Is it square?
+%N-1 rows in A.  B columns.
+%B rows in I.
+%N-1 columns
 
 %\EndArticle
 \EndNoBibArticle
