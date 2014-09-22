@@ -1,0 +1,78 @@
+#! /usr/bin/perl
+
+# TODO for wp-mathjax:
+#
+# - find the inline equations and change them to: \( \)
+# - fixup the Click here text.
+# - \% and \$ in regular text should be transformed back to un-escaped.
+# - don't do most of the processing below.
+#
+#Rough notes of what's required in a new tex2blog script
+#
+#- title and prologue
+#- \\paragraph or \\subsection -> <h3> ...
+#- $...$ -> \(...\)
+#- \cref{FigN} -> fig. N
+#- \begin{itemize} -> <ul>
+#- \end{itemize} -> </ul>
+#- \item -> <li>
+#- {\em ...} -> <em> ... </em>
+
+use strict ;
+use warnings ;
+use Getopt::Long;
+
+my $filebase ;
+my $showUsage = 0 ;
+
+my $urlMessage ;
+#$urlMessage = "Click here for a PDF of this sequence of posts with nicer formatting" ;
+$urlMessage = "Click here for a PDF of this post with nicer formatting and figures if the post had any (especially if my latex to wordpress script has left FORMULA DOES NOT PARSE errors.)" ;
+
+GetOptions( 
+   'file=s'       => \$filebase,
+   'help!'        => \$showUsage,
+) ;
+
+if ( $showUsage or !defined $filebase )
+{
+   die "usage: ~/bin/tex2mathjax -f filenameWithoutTexSuffix [-help]"
+}
+
+my $rLines = slurpLatex( $filebase ) ;
+
+foreach (@$rLines)
+{
+   s,{ *\\em\s+(.*?)},<em>$1</em>,g;
+   s,\\cref/\\ref/g ;
+   s,\\eqnref/\\ref/g ;
+   s,\\Eqnref/\\ref/g ;
+   s,{dmath},{equation}/ ;
+
+   s,\\section{(.*)},<h2>$1</h2>,;
+   s,\\subsection{(.*)},<h3>$1</h3>,;
+}
+
+print "@lines" ;
+
+exit 0 ;
+
+sub slurpLatex
+{
+   my $failedOpen = 0 ;
+   my @lines = () ;
+
+   open my $fh, "<$filebase.tex" or $failedOpen = 1 ;
+   if ( $failedOpen )
+   {
+      open $fh, "<$filebase.ltx" or die "could not open '$filebase.tex' nor '$filebase.ltx'\n" ;
+   }
+
+   while (<$fh>)
+   {
+      push( @lines, $_ ) ;
+   }
+   close $fh ;
+
+   return \@lines ;
+}
