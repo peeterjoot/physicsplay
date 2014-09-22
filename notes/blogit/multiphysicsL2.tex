@@ -7,10 +7,15 @@
 % ~/bin/ct multiphysicsL1  multiphysicsLectureN tl1
 %
 \input{../blogpost.tex}
+
 \renewcommand{\basename}{multiphysicsLecture{N}}
 \renewcommand{\dirname}{notes/ece1254/}
 \newcommand{\keywords}{Condensed matter physics, ECE1254H}
 \input{../peeter_prologue_print2.tex}
+
+%\usepackage{listing}
+%\usepackage{algorithm}
+\usepackage{algorithmic}
 
 \beginArtNoToc
 \generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture {N}: Assembling system equations automatically.  Taught by Prof.\ Piero Triverio}
@@ -99,34 +104,49 @@ Observe that we have both a plus and minus one in all columns except for those c
 
 \paragraph{Algorithm for filling $A$}
 
-In the input file, to describe a resistor of \cref{fig:lecture2:lecture2Fig2}, you'll have a line
+In the input file, to describe a resistor of \cref{fig:lecture2:lecture2Fig2}, you'll have a line of the form
+
+%\captionedTable{Resistor spice line}{tab:lecture2:1}{
+\begin{tabular}{lllll}
+R & name & $n_1$ & $n_2$ & value
+\end{tabular}
+%}
 
 \imageFigure{../../figures/ece1254/lecture2Fig2}{Resistor node convention}{fig:lecture2:lecture2Fig2}{0.1}
 
+The algorithm to process resistor lines is
 
-%FIXME
-%R & \text{name} & n_1 & n_2 & \text{value}
-
-Algorthim
-
-FIXME:
-%% A = [] ; # zeros
-%% ic = 0 ;
-%% read a new resistor, adding one column to $A$, ic++
-%% if n_1 != 0, A(n_1, ic) = +1 ;
-%% if n_2 != 0, A(n_2, ic) = -1 ;
+\begin{algorithmic}
+\STATE $A \leftarrow 0$
+\STATE $ic \leftarrow 0$
+\FORALL{resistor lines}
+\STATE $ic \leftarrow ic + 1$, adding one column to $A$
+\IF{$n_1 != 0$}
+\STATE $A(n_1, ic) \leftarrow +1$
+\ENDIF
+\IF{$n_2 != 0$}
+\STATE $A(n_2, ic) \leftarrow -1$
+\ENDIF
+\ENDFOR
+\end{algorithmic}
 
 \paragraph{Algorithm for filling $\overbar{I}_S$}
 
-Current sources, as in \cref{fig:lecture2:lecture2Fig3}, a line will have the specification
+Current sources, as in \cref{fig:lecture2:lecture2Fig3}, a line will have the specification (FIXME: confirm... didn't write this down).
+
+\begin{tabular}{lllll}
+I & name & $n_1$ & $n_2$ & value
+\end{tabular}
 
 \imageFigure{../../figures/ece1254/lecture2Fig3}{Current source conventions}{fig:lecture2:lecture2Fig3}{0.1}
 
-FIXME:
-%% \overbar{I}_S = zeros(N-1, 1)
-%% read a new current 
-%% \overbar{I}_S(n_1) -= val ;
-%% \overbar{I}_S(n_2) += val ;
+\begin{algorithmic}
+\STATE $\overbar{I}_S = \text{zeros}(N-1, 1)$
+\FORALL{current lines}
+\STATE $\overbar{I}_S(n_1) \leftarrow \overbar{I}_S(n_1) - \text{value}$
+\STATE $\overbar{I}_S(n_2) \leftarrow \overbar{I}_S(n_1) + \text{value}$
+\ENDFOR
+\end{algorithmic}
 
 \paragraph{Step 3.  Constitutive equations:}  
 
@@ -195,9 +215,14 @@ Observe that $\alpha$ is the transpose of $A$, allowing us to write
 
 \paragraph{Solving}
 
+\begin{itemize}
+\item 
 KCLs: $A \overbar{I}_B = \overbar{I}_S$
+\item 
 constituative: $\overbar{I}_B = \alpha \overbar{V}_B \implies \overbar{I}_B = \alpha A^\T \overbar{V}_N$
+\item 
 branch and node voltages: $\overbar{V}_B = A^\T \overbar{V}_N$
+\end{itemize}
 
 In block matrix form, this is
 
@@ -217,10 +242,13 @@ In block matrix form, this is
 \end{bmatrix}.
 \end{equation}
 
-Is it square?
-%N-1 rows in A.  B columns.
-%B rows in I.
-%N-1 columns
+Is it square?  We see that it is after observing that we have
+
+\begin{itemize}
+\item $N-1$ rows in $A$, and $B$ columns.
+\item $B$ rows in $I$.
+\item $N-1$ columns.
+\end{itemize}
 
 %\EndArticle
 \EndNoBibArticle
