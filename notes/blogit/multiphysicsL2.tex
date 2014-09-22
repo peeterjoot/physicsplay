@@ -37,37 +37,46 @@ Consider the sample circuit of \cref{fig:lecture2:lecture2Fig1}.
 
 \begin{itemize}
 \item 
-node voltages: $V_1, V_2, V_3, V_4$
+node voltages: \(V_1, V_2, V_3, V_4\)
 \item
-branch currents: $i_A, i_B, i_C, i_D, i_E$
+branch currents: \(i_A, i_B, i_C, i_D, i_E\)
 \end{itemize}
 
 We do not need to introduce additional labels for the source current sources.
 We always introduce a reference node and call that zero.
 
-For a circuit with $N$ nodes, and $B$ resistors, there will be $N-1$ unknown node voltages and $B$ unknown branch currents, for a total number of $N - 1 + B$ unknowns.
+For a circuit with \(N\) 
+nodes, and 
+\(B\) resistors, there will be 
+\(N-1\) 
+unknown node voltages and \(B\) unknown branch currents, for a total number of 
+\(N - 1 + B\) unknowns.
 
 \paragraph{Step 2.  Conservation equations:}  KCL
 
 \begin{itemize}
-	\item 0: $i_A + i_E - i_D = 0$
-	\item 1: $-i_A + i_B + i_{S,A} = 0$
-	\item 2: $-i_B + i_{S,B} - i_E + i_{S,C} = 0$
-	\item 3: $i_C - i_{S,C} = 0$
-	\item 4: $-i_{S,A} - i_{S,B} + i_D - i_C = 0$
+	\item 0: \(i_A + i_E - i_D = 0\)
+	\item 1: \(-i_A + i_B + i_{S,A} = 0\)
+	\item 2: \(-i_B + i_{S,B} - i_E + i_{S,C} = 0\)
+	\item 3: \(i_C - i_{S,C} = 0\)
+	\item 4: \(-i_{S,A} - i_{S,B} + i_D - i_C = 0\)
 \end{itemize}
 
 Grouping unknown currents, this is
 
 \begin{itemize}
-	\item 0: $i_A + i_E - i_D = 0$
-	\item 1: $-i_A + i_B = -i_{S,A}$
-	\item 2: $-i_B -i_E = -i_{S,B} -i_{S,C}$
-	\item 3: $i_C = i_{S,C}$
-	\item 4: $i_D - i_C = i_{S,A} + i_{S,B}$
+	\item 0: \(i_A + i_E - i_D = 0\)
+	\item 1: \(-i_A + i_B = -i_{S,A}\)
+	\item 2: \(-i_B -i_E = -i_{S,B} -i_{S,C}\)
+	\item 3: \(i_C = i_{S,C}\)
+	\item 4: \(i_D - i_C = i_{S,A} + i_{S,B}\)
 \end{itemize}
 
-Note that one of these equations is redundant (sum 1-4).  In a circuit with $N$ nodes, we can write at most $N-1$ independent KCLs.
+Note that one of these equations is redundant (sum 1-4).  In a circuit with 
+\(N\) 
+nodes, we can write at most 
+\(N-1\)
+independent KCLs.
 
 In matrix form
 
@@ -94,7 +103,12 @@ In matrix form
 \end{bmatrix}
 \end{equation}
 
-We call this first matrix of ones and minus ones the \textAndIndex{incidence matrix} $A$.  This matrix has $B$ columns and $N-1$ rows.  We call the known current matrix $\overbar{I}_S$, and the branch currents $\overbar{I}_B$.  That is
+We call this first matrix of ones and minus ones the \textAndIndex{incidence matrix} 
+\(A\).  This matrix has 
+\(B\) columns and 
+\(N-1\) rows.  We call the known current matrix 
+\(\overbar{I}_S\), and the branch currents 
+\(\overbar{I}_B\).  That is
 
 \begin{equation}\label{eqn:multiphysicsL1:40}
 	A \overbar{I}_B = \overbar{I}_S.
@@ -102,13 +116,14 @@ We call this first matrix of ones and minus ones the \textAndIndex{incidence mat
 
 Observe that we have both a plus and minus one in all columns except for those columns impacted by our neglect of the reference node current conservation equation.
 
-\paragraph{Algorithm for filling $A$}
+\paragraph{Algorithm for filling \(A\)}
 
 In the input file, to describe a resistor of \cref{fig:lecture2:lecture2Fig2}, you'll have a line of the form
 
 %\captionedTable{Resistor spice line}{tab:lecture2:1}{
 \begin{tabular}{lllll}
-R & name & $n_1$ & $n_2$ & value
+R & name & \(n_1\) 
+& \(n_2\) & value
 \end{tabular}
 %}
 
@@ -117,34 +132,35 @@ R & name & $n_1$ & $n_2$ & value
 The algorithm to process resistor lines is
 
 \begin{algorithmic}
-\STATE $A \leftarrow 0$
-\STATE $ic \leftarrow 0$
+\STATE \(A \leftarrow 0\)
+\STATE \(ic \leftarrow 0\)
 \FORALL{resistor lines}
-\STATE $ic \leftarrow ic + 1$, adding one column to $A$
-\IF{$n_1 != 0$}
-\STATE $A(n_1, ic) \leftarrow +1$
+\STATE \(ic \leftarrow ic + 1\), adding one column to \(A\)
+\IF{\(n_1 != 0\)}
+\STATE \(A(n_1, ic) \leftarrow +1\)
 \ENDIF
-\IF{$n_2 != 0$}
-\STATE $A(n_2, ic) \leftarrow -1$
+\IF{\(n_2 != 0\)}
+\STATE \(A(n_2, ic) \leftarrow -1\)
 \ENDIF
 \ENDFOR
 \end{algorithmic}
 
-\paragraph{Algorithm for filling $\overbar{I}_S$}
+\paragraph{Algorithm for filling \(\overbar{I}_S\)}
 
 Current sources, as in \cref{fig:lecture2:lecture2Fig3}, a line will have the specification (FIXME: confirm... didn't write this down).
 
 \begin{tabular}{lllll}
-I & name & $n_1$ & $n_2$ & value
+I & name & \(n_1\) 
+& \(n_2\) & value
 \end{tabular}
 
 \imageFigure{../../figures/ece1254/lecture2Fig3}{Current source conventions}{fig:lecture2:lecture2Fig3}{0.1}
 
 \begin{algorithmic}
-\STATE $\overbar{I}_S = \text{zeros}(N-1, 1)$
+\STATE \(\overbar{I}_S = \text{zeros}(N-1, 1)\)
 \FORALL{current lines}
-\STATE $\overbar{I}_S(n_1) \leftarrow \overbar{I}_S(n_1) - \text{value}$
-\STATE $\overbar{I}_S(n_2) \leftarrow \overbar{I}_S(n_1) + \text{value}$
+\STATE \(\overbar{I}_S(n_1) \leftarrow \overbar{I}_S(n_1) - \text{value}\)
+\STATE \(\overbar{I}_S(n_2) \leftarrow \overbar{I}_S(n_1) + \text{value}\)
 \ENDFOR
 \end{algorithmic}
 
@@ -181,9 +197,9 @@ Or
 	\overbar{I}_B = \alpha \overbar{V}_B,
 \end{equation}
 
-where $\overbar{V}_B$ are the branch voltages, not unknowns of interest directly.  We can write
+where \(\overbar{V}_B\) are the branch voltages, not unknowns of interest directly.  We can write
 
-\begin{equation}\label{eqn:multiphysicsL1:n}
+\begin{equation}\label{eqn:multiphysicsL1:100}
 \begin{bmatrix}
 v_A \\
 v_B \\
@@ -207,9 +223,10 @@ v_4
 \end{bmatrix}
 \end{equation}
 
-Observe that $\alpha$ is the transpose of $A$, allowing us to write
+Observe that \(\alpha\) 
+is the transpose of \(A\), allowing us to write
 
-\begin{equation}\label{eqn:multiphysicsL1:n}
+\begin{equation}\label{eqn:multiphysicsL1:120}
 \overbar{V}_B = A^\T \overbar{V}_N.
 \end{equation}
 
@@ -217,16 +234,16 @@ Observe that $\alpha$ is the transpose of $A$, allowing us to write
 
 \begin{itemize}
 \item 
-KCLs: $A \overbar{I}_B = \overbar{I}_S$
+KCLs: \(A \overbar{I}_B = \overbar{I}_S\)
 \item 
-constitutive: $\overbar{I}_B = \alpha \overbar{V}_B \implies \overbar{I}_B = \alpha A^\T \overbar{V}_N$
+constitutive: \(\overbar{I}_B = \alpha \overbar{V}_B \implies \overbar{I}_B = \alpha A^\T \overbar{V}_N\)
 \item 
-branch and node voltages: $\overbar{V}_B = A^\T \overbar{V}_N$
+branch and node voltages: \(\overbar{V}_B = A^\T \overbar{V}_N\)
 \end{itemize}
 
 In block matrix form, this is
 
-\begin{equation}\label{eqn:multiphysicsL1:n}
+\begin{equation}\label{eqn:multiphysicsL1:140}
 \begin{bmatrix}
 	A & 0 \\
 	I & -\alpha A^\T
@@ -245,9 +262,12 @@ In block matrix form, this is
 Is it square?  We see that it is after observing that we have
 
 \begin{itemize}
-\item $N-1$ rows in $A$, and $B$ columns.
-\item $B$ rows in $I$.
-\item $N-1$ columns.
+\item \(N-1\) 
+rows in \(A\)
+, and \(B\) columns.
+\item \(B\) 
+rows in \(I\).
+\item \(N-1\) columns.
 \end{itemize}
 
 %\EndArticle

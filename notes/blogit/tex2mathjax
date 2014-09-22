@@ -3,20 +3,11 @@
 # TODO for wp-mathjax:
 #
 # - find the inline equations and change them to: \( \)
-# - fixup the Click here text.
-# - \% and \$ in regular text should be transformed back to un-escaped.
-# - don't do most of the processing below.
+#  ... should just use \( \) directly in new writing.
 #
-#Rough notes of what's required in a new tex2blog script
+# - title and prologue
 #
-#- title and prologue
-#- \\paragraph or \\subsection -> <h3> ...
-#- $...$ -> \(...\)
-#- \cref{FigN} -> fig. N
-#- \begin{itemize} -> <ul>
-#- \end{itemize} -> </ul>
-#- \item -> <li>
-#- {\em ...} -> <em> ... </em>
+# - \cref{FigN} -> fig. N
 
 use strict ;
 use warnings ;
@@ -26,8 +17,7 @@ my $filebase ;
 my $showUsage = 0 ;
 
 my $urlMessage ;
-#$urlMessage = "Click here for a PDF of this sequence of posts with nicer formatting" ;
-$urlMessage = "Click here for a PDF of this post with nicer formatting and figures if the post had any (especially if my latex to wordpress script has left FORMULA DOES NOT PARSE errors.)" ;
+$urlMessage = "Click here for a PDF of this post with nicer formatting" ;
 
 GetOptions( 
    'file=s'       => \$filebase,
@@ -36,24 +26,48 @@ GetOptions(
 
 if ( $showUsage or !defined $filebase )
 {
-   die "usage: ~/bin/tex2mathjax -f filenameWithoutTexSuffix [-help]"
+   die "usage: ~/bin/tex2mathjax -f filenameWithoutTexSuffix [-help]" ;
 }
 
 my $rLines = slurpLatex( $filebase ) ;
 
+print "[mathjax]\n" ;
+
 foreach (@$rLines)
 {
-   s,{ *\\em\s+(.*?)},<em>$1</em>,g;
-   s,\\cref/\\ref/g ;
-   s,\\eqnref/\\ref/g ;
-   s,\\Eqnref/\\ref/g ;
-   s,{dmath},{equation}/ ;
+   chomp ;
 
+   s,\\renewcommand{\\basename}{(.*?)},\\blogpage{http://peeterjoot.com/archives/math2014/$1.pdf}, ;
+   s,\\blogpage{(.*)},<a href="$1">[$urlMessage]</a>, ;
+
+   s/^ *%.*// ;
+   s/^ *\\input.*// ;
+   s/^ *\\renewcommand.*// ;
+   s/^ *\\newcommand.*// ;
+   s/^ *\\usepackage.*// ;
+   s/^ *\\beginArtNoToc.*// ;
+   s/^ *\\EndArticle.*// ;
+   s/^ *\\EndNoBibArticle.*// ;
+   s/^ *\\generatetitle{(.*)}/$1/ ;
+   s/^ *\\label{chap:.*// ;
+
+   s,{ *\\em\s+(.*?)},<em>$1</em>,g;
+
+   s/\bcref{/ref{/g ;
+   s/\beqnref/ref{/g ;
+   s/\bEqnref/ref{/g ;
+
+   s,{dmath},{equation}, ;
    s,\\section{(.*)},<h2>$1</h2>,;
    s,\\subsection{(.*)},<h3>$1</h3>,;
-}
+   s,\\paragraph{(.*)},<h3>$1</h3>,;
 
-print "@lines" ;
+   s,\\begin{itemize},<ul>, ;
+   s,\\end{itemize},</ul>, ;
+   s,\\item,<li>, ;
+
+   print "$_\n" ;
+}
 
 exit 0 ;
 
