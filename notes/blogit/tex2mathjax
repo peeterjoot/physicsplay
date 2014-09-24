@@ -19,6 +19,70 @@ my $showUsage = 0 ;
 my $urlMessage ;
 $urlMessage = "Click here for a PDF of this post with nicer formatting" ;
 
+my $r1 = qr/
+     (                   # start of capture buffer 1
+     {                   # match an opening brace
+         (?:               
+             [^{}]++     # one or more non braces, non backtracking
+               |                  
+             (?1)        # found { or }, so recurse to capture buffer 1
+         )*                 
+     }                   # match a closing brace
+     )                   # end of capture buffer 1
+     /x;
+
+my $r2 = qr/
+     (                   # start of capture buffer 1
+     {                   # match an opening brace
+         (?:               
+             [^{}]++     # one or more non braces, non backtracking
+               |                  
+             (?1)        # found { or }, so recurse to capture buffer 1
+         )*                 
+     }                   # match a closing brace
+     )                   # end of capture buffer 1
+     (                   # start of capture buffer 2
+     {                   # match an opening brace
+         (?:               
+             [^{}]++     # one or more non braces, non backtracking
+               |                  
+             (?1)        # found { or }, so recurse to capture buffer 2
+         )*                 
+     }                   # match a closing brace
+     )                   # end of capture buffer 2
+     /x;
+
+my $r3 = qr/
+     (                   # start of capture buffer 1
+     {                   # match an opening brace
+         (?:               
+             [^{}]++     # one or more non braces, non backtracking
+               |                  
+             (?1)        # found { or }, so recurse to capture buffer 1
+         )*                 
+     }                   # match a closing brace
+     )                   # end of capture buffer 1
+     (                   # start of capture buffer 2
+     {                   # match an opening brace
+         (?:               
+             [^{}]++     # one or more non braces, non backtracking
+               |                  
+             (?1)        # found { or }, so recurse to capture buffer 2
+         )*                 
+     }                   # match a closing brace
+     )                   # end of capture buffer 2
+     (                   # start of capture buffer 3
+     {                   # match an opening brace
+         (?:               
+             [^{}]++     # one or more non braces, non backtracking
+               |                  
+             (?1)        # found { or }, so recurse to capture buffer 3
+         )*                 
+     }                   # match a closing brace
+     )                   # end of capture buffer 3
+     /x;
+
+
 GetOptions( 
    'file=s'       => \$filebase,
    'help!'        => \$showUsage,
@@ -40,6 +104,11 @@ foreach (@$rLines)
    s,\\renewcommand{\\basename}{(.*?)},\\blogpage{http://peeterjoot.com/archives/math2014/$1.pdf}, ;
    s,\\blogpage{(.*)},<a href="$1">[$urlMessage]</a>, ;
 
+   # FIXME: these ones should be moved to the mathjax macros:
+   s/\\overbar${r1}/\\overline{$1}/g ;
+   s/\\textAndIndex${r1}/$1/g ;
+   s/\\implies/\\Rightarrow/g ;
+
    s/^ *%.*// ;
    s/^ *\\input.*// ;
    s/^ *\\renewcommand.*// ;
@@ -52,6 +121,12 @@ foreach (@$rLines)
    s/^ *\\label{chap:.*// ;
 
    s,{ *\\em\s+(.*?)},<em>$1</em>,g;
+
+#\cref{fig:lecture2:lecture2Fig1}
+   s/\\cref{(.*?)Fig(\d+)}/fig. $2/g ;
+
+#\imageFigure{../../figures/ece1254/lecture2Fig1}{Sample resistive circuit}{fig:lecture2:lecture2Fig1}{0.3}
+   s/^ *\\imageFigure{(.*?)Fig(\d+)}{(.*?)}.*/\1Fig\2: fig. $2.  $3/ ;
 
    s/\bcref{/ref{/g ;
    s/\beqnref/ref{/g ;
