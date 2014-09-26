@@ -2,26 +2,237 @@
 % Copyright © 2014 Peeter Joot.  All Rights Reserved.
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
 %
-% for template copy, run:
-%
-% ~/bin/ct multiphysicsL1  multiphysicsLN tl1
-%
 \input{../blogpost.tex}
 \renewcommand{\basename}{multiphysicsL4}
 \renewcommand{\dirname}{notes/ece1254/}
 \newcommand{\keywords}{Condensed matter physics, ECE1254H}
 \input{../peeter_prologue_print2.tex}
 
+\usepackage{kbordermatrix}
+
 \beginArtNoToc
-\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 4: XXX.  Taught by Prof.\ Piero Triverio}
-%\subsection{XXX}
+\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 4: Modified nodal analysis.  Taught by Prof.\ Piero Triverio}
+%\subsection{Modified nodal analysis}
 \label{chap:multiphysicsL4}
 
 \subsection{Disclaimer}
 
 Peeter's lecture notes from class.  These may be incoherent and rough.
 
-\subsection{XXX}
+\subsection{Modified nodal analysis}
+
+We add extra unknowns for 
+
+\begin{itemize}
+\item branch currents for voltage sources
+\item all elements for which it is impossible or inconvieient to write \( i = f(v_1, v_2) \).
+
+Imagine, for example, that we have a component illustrated in 
+
+F1
+
+\begin{equation}\label{eqn:multiphysicsL4:20}
+v_1 - v_2 = 3 i^2
+\end{equation}
+\item any current which is controlling dependent sources, as in
+
+F2
+
+\item Inductors
+\begin{equation}\label{eqn:multiphysicsL4:40}
+v_1 - v_2 = L \frac{di}{dt}.
+\end{equation}
+\end{itemize}
+
+\chapter{Solving large systems}
+
+We are interested in solving linear systems of the form
+
+\begin{equation}\label{eqn:multiphysicsL4:60}
+	M \overbar{x} = \overbar{b},
+\end{equation}
+
+possibly with thousands of elements.
+
+\sectionAndIndex{Gaussian elimination}
+
+\begin{equation}\label{eqn:multiphysicsL4:80}
+	\kbordermatrix{
+		  & 1      & 2      & 3      \\
+		1 & M_{11} & M_{12} & M_{13} \\
+		2 & M_{21} & M_{22} & M_{23} \\
+		3 & M_{31} & M_{32} & M_{33} \\
+	}
+\begin{bmatrix}
+	x_1 \\
+	x_2 \\
+	x_3 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+	b_1 \\
+	b_2 \\
+	b_3 \\
+\end{bmatrix}
+\end{equation}
+
+It's claimed for now, to be seen later, that back substitution is the fastest way to arrive at the solution, less computationally complex than completion the diagonalization.
+
+Steps
+
+\begin{equation}\label{eqn:multiphysicsL4:100}
+	(1) \cdot \frac{M_{21}}{M_{11}} \implies
+\begin{bmatrix}
+		M_{21} &  \frac{M_{21}}{M_{11}}  M_{12} &  \frac{M_{21}}{M_{11}}  M_{13} \\
+\end{bmatrix}
+\end{equation}
+
+\begin{equation}\label{eqn:multiphysicsL4:120}
+	(2) \cdot \frac{M_{31}}{M_{11}} \implies
+\begin{bmatrix}
+		M_{31} &  \frac{M_{31}}{M_{11}}  M_{32} &  \frac{M_{31}}{M_{11}}  M_{33} \\
+\end{bmatrix}
+\end{equation}
+
+This gives
+
+\begin{equation}\label{eqn:multiphysicsL4:140}
+\begin{bmatrix}
+		M_{11} & M_{12} & M_{13} \\
+	0 &  M_{22} - \frac{M_{21}}{M_{11}}  M_{12} & M_{23} - \frac{M_{21}}{M_{11}}  M_{13} \\
+	0 &  M_{32} - \frac{M_{31}}{M_{11}}  M_{32} & M_{33} - \frac{M_{31}}{M_{11}}  M_{33} \\
+\end{bmatrix}
+\begin{bmatrix}
+	x_1 \\
+	x_2 \\
+	x_3 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+	b_1 \\
+	b_2 - \frac{M_{21}}{M_{11}} b_1 \\
+	b_3 - \frac{M_{31}}{M_{11}} b_1 
+\end{bmatrix}.
+\end{equation}
+
+We can write this as
+
+\begin{equation}\label{eqn:multiphysicsL4:160}
+\begin{bmatrix}
+		M_{11} & M_{12} & M_{13} \\
+	0 &  M_{22}^{(2)} & M_{23}^{(3)} \\
+	0 &  M_{32}^{(2)} & M_{33}^{(3)} \\
+\end{bmatrix}
+\begin{bmatrix}
+	x_1 \\
+	x_2 \\
+	x_3 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+	b_1 \\
+	b_2^{(2)} \\
+	b_3^{(2)} \\
+\end{bmatrix}.
+\end{equation}
+
+Using \( M_{22}^{(2)} \) as the pivot this time, we form
+\begin{equation}\label{eqn:multiphysicsL4:180}
+\begin{bmatrix}
+		M_{11} & M_{12} & M_{13} \\
+	0 &  M_{22}^{(2)} & M_{23}^{(3)} \\
+	0 &             0 & M_{33}^{(3)} - \frac{M_{32}^{(2)}}{M_{22}^{(2)}} M_{23}^{(2)} \\
+\end{bmatrix}
+\begin{bmatrix}
+	x_1 \\
+	x_2 \\
+	x_3 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+	b_1 \\
+	b_2 - \frac{M_{21}}{M_{11}} b_1 \\
+	b_3 - \frac{M_{31}}{M_{11}} b_1 
+	- \frac{M_{32}^{(2)}}{M_{22}^{(2)}} b_{2}^{(2)} \\
+\end{bmatrix}.
+\end{equation}
+
+\sectionAndIndex{LU decomposition}
+
+Through Gaussian elimination, we have transformed the system from
+
+\begin{equation}\label{eqn:multiphysicsL4:200}
+	M x = b 
+\end{equation}
+
+to
+\begin{equation}\label{eqn:multiphysicsL4:220}
+	U x = y.
+\end{equation}
+
+Writing out our Gaussian transformation in the form \( U \overbar{x} = b \) we have
+
+\begin{equation}\label{eqn:multiphysicsL4:240}
+U \overbar{x} = 
+\begin{bmatrix}
+	1 & 0 & 0 \\
+	-\frac{M_{21}}{M_{11}} & 1 & 0 \\
+	\frac{M_{32}^{(2)}}{M_{22}^{(2)}} 
+	\frac{M_{21}}{M_{11}} 
+-
+\frac{M_{31}}{M_{11}}  
+&
+-
+\frac{M_{32}^{(2)}}{M_{22}^{(2)}}  
+& 1
+\end{bmatrix}
+\begin{bmatrix}
+	b_1 \\
+	b_2 \\
+	b_3
+\end{bmatrix}.
+\end{equation}
+
+We can verify that the operation matrix \( K^{-1} \), where \( K^{-1} U = M \) that takes us to this form is
+
+\begin{equation}\label{eqn:multiphysicsL4:260}
+\begin{bmatrix}
+	1 & 0 & 0 \\
+	\frac{M_{21}}{M_{11}} & 1 & 0 \\
+	\frac{M_{31}}{M_{11}} & 
+	\frac{M_{32}^{(2)}}{M_{22}^{(2)}} & 
+	1
+\end{bmatrix}
+\begin{bmatrix}
+	U_{11} & U_{12} & U_{13} \\
+	0      & U_{22} & U_{23} \\
+	0      & 0      & U_{33} \\
+\end{bmatrix}
+\overbar{x} = \overbar{b}
+\end{equation}
+
+Using this \textAndIndex{LU} decomposition is generally superior to standard Gaussian elimination, since we can use this for many different \(\overbar{b}\) vectors using the same amount of work.
+
+Our steps are
+
+\begin{dmath}\label{eqn:multiphysicsL4:280}
+b 
+= M x
+= L \lr{ U x}
+\equiv L y.
+\end{dmath}
+
+We can now solve \( L y = b \), using substitution for \( y_1 \), then \( y_2 \), and finally \( y_3 \).  This is called \textAndIndex{forward substitution}.
+
+Finally, we can now solve 
+
+\begin{dmath}\label{eqn:multiphysicsL4:300}
+	U x = y,
+\end{dmath}
+
+using \textAndIndex{back substitution}.
+
+Note that we produced the vector \( y \) as a side effect of performing the Gaussian elimination process.
 
 %\EndArticle
 \EndNoBibArticle
