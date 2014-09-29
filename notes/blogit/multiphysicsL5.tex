@@ -3,7 +3,7 @@
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
 %
 \input{../blogpost.tex}
-\renewcommand{\basename}{multiphysicsL{N}}
+\renewcommand{\basename}{multiphysicsL5}
 \renewcommand{\dirname}{notes/ece1254/}
 \newcommand{\keywords}{Condensed matter physics, ECE1254H}
 \input{../peeter_prologue_print2.tex}
@@ -11,16 +11,36 @@
 \usepackage{kbordermatrix}
 \usepackage{listings}
 
+% FIXME: -'s aren't showing up:
+\lstset{ %
+language=C++,                % choose the language of the code
+basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+numbers=left,                   % where to put the line-numbers
+numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+stepnumber=1,                   % the step between two line-numbers. If it is 1 each line will be numbered
+numbersep=5pt,                  % how far the line-numbers are from the code
+backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+showspaces=false,               % show spaces adding particular underscores
+showstringspaces=false,         % underline spaces within strings
+showtabs=false,                 % show tabs within strings adding particular underscores
+frame=single,                   % adds a frame around the code
+tabsize=2,              % sets default tabsize to 2 spaces
+captionpos=b,                   % sets the caption-position to bottom
+breaklines=true,        % sets automatic line breaking
+breakatwhitespace=false,    % sets if automatic breaks should only happen at whitespace
+%escapeinside={\%}{)}          % if you want to add a comment within your code
+}
+
 \beginArtNoToc
-\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture {N}: XXX.  Taught by Prof.\ Piero Triverio}
-%\chapter{XXX}
-\label{chap:multiphysicsL{N}}
+\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 5: Numerical error and conditioning.  Taught by Prof.\ Piero Triverio}
+%\chapter{Numerical error and conditioning}
+\label{chap:multiphysicsL5}
 
 \section{Disclaimer}
 
 Peeter's lecture notes from class.  These may be incoherent and rough.
 
-\section{XXX}
+\section{Numerical error and conditioning}
 
 Related to a theorem on one of the slides:
 
@@ -86,6 +106,68 @@ int main()
 }
 \end{lstlisting}
 
+Note that a union can be useful for exploring double precision representation
+
+%\begin{lstlisting}
+\begin{verbatim}
+#define __STDC_FORMAT_MACROS
+#include <stdio.h>
+#include <math.h>
+#include <inttypes.h>
+
+struct doubleRepresentation
+{
+#if defined __LITTLE_ENDIAN // The ENDIAN macros here assume that the compiler is GCC
+   uint64_t m : 52 ;
+   uint64_t e : 11 ;
+   uint64_t s : 1 ;
+#elif defined __BIG_ENDIAN
+   uint64_t m : 52 ;
+   uint64_t e : 11 ;
+   uint64_t s : 1 ;
+#else
+   #error unknown endian order.
+#endif
+} ;
+
+union doubleU
+{
+   double               d ;
+   uint64_t             u ;
+   doubleRepresentation r ;
+} ;
+
+void printDoubleRep( const double d )
+{
+   doubleU un ;
+   un.d = d ;
+
+   if ( un.u )
+   {
+      printf( "%g: %s1.0x%" PRIx64" x 2^%" PRId64 "\n", un.d, un.r.s ? "-" : "", un.r.m, (int64_t)un.r.e - 0x3ff ) ;
+   }
+   else
+   {
+      printf( "%g: 0\n", un.d ) ;
+   }
+}
+
+int main()
+{
+   double d1 = (1 + M_PI * 1e-17) - 1 ;
+   double d2 = M_PI * 1e-17 ;
+
+   printDoubleRep( d1 ) ;
+   printDoubleRep( d2 ) ;
+   printDoubleRep( 1 ) ;
+   printDoubleRep( -0.5 ) ;
+   printDoubleRep( 3 ) ;
+
+   return 0 ;
+}
+\end{verbatim}
+%\end{lstlisting}
+
 \section{Exploring uniqueness and existance}
 
 For a matrix system \( \overbar{M} x = \overbar{b} \) in column format, with
@@ -150,19 +232,19 @@ Some vector norms
 \item \(L_1\) norm
 
 \begin{dmath}\label{eqn:multiphysicsL5:260}
-\Abs{ \overbar{x} }_1 = \sum_i \Abs{ x_i }
+\Norm{ \overbar{x} }_1 = \sum_i \Abs{ x_i }
 \end{dmath}
 
 \item \(L_2\) norm
 
 \begin{dmath}\label{eqn:multiphysicsL5:280}
-\Abs{ \overbar{x} }_2 = \sqrt{ \sum_i \Abs{ x_i }^2 }
+\Norm{ \overbar{x} }_2 = \sqrt{ \sum_i \Abs{ x_i }^2 }
 \end{dmath}
 
 \item \(L_\infty\) norm
 
 \begin{dmath}\label{eqn:multiphysicsL5:300}
-\Abs{ \overbar{x} }_\infty = \max_i \Abs{ x_i }.
+\Norm{ \overbar{x} }_\infty = \max_i \Abs{ x_i }.
 \end{dmath}
 \end{itemize}
 
@@ -183,13 +265,13 @@ F3
 The 1-norm is
 
 \begin{dmath}\label{eqn:multiphysicsL5:340}
-\Abs{ M } = \max_{ \Abs{\overbar{x}} = 1 } \Abs{ M \overbar{x} },
+\Norm{ M } = \max_{ \Norm{\overbar{x}} = 1 } \Norm{ M \overbar{x} },
 \end{dmath}
 
 and the 2-norm is
 
 \begin{dmath}\label{eqn:multiphysicsL5:360}
-\Abs{ M }_2 = \max_{ \Abs{\overbar{x}}_2 = 1 } \Abs{ M \overbar{x} }_2.
+\Norm{ M }_2 = \max_{ \Norm{\overbar{x}}_2 = 1 } \Norm{ M \overbar{x} }_2.
 \end{dmath}
 
 \EndNoBibArticle
