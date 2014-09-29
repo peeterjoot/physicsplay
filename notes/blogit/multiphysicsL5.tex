@@ -8,6 +8,9 @@
 \newcommand{\keywords}{Condensed matter physics, ECE1254H}
 \input{../peeter_prologue_print2.tex}
 
+\usepackage{kbordermatrix}
+\usepackage{listings}
+
 \beginArtNoToc
 \generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture {N}: XXX.  Taught by Prof.\ Piero Triverio}
 %\chapter{XXX}
@@ -19,5 +22,174 @@ Peeter's lecture notes from class.  These may be incoherent and rough.
 
 \section{XXX}
 
-%\EndArticle
+Related to a theorem on one of the slides:
+
+\makedefinition{Strictly diagonally dominant}{dfn:multiphysicsL5:20}{
+
+A matrix \( [ M_{ij} ] \) is strictly diagonally dominant if
+
+\begin{dmath}\label{eqn:multiphysicsL5:40}
+	\Abs{M_{ii}} > \sum_{j \ne i} \Abs{ M_{ij} } \forall i
+\end{dmath}
+}
+
+For example, the stamp matrix
+
+\begin{equation}\label{eqn:multiphysicsL5:60}
+\kbordermatrix{
+    & i      & j \\
+i & \inv{R}  & -\inv{R} \\
+j & -\inv{R} & \inv{R}
+}
+\end{equation}
+
+is not strictly diagonally dominant.  For row $i$ this strict dominance can be achieved by adding a reference resistor
+
+\begin{equation}\label{eqn:multiphysicsL5:80}
+\kbordermatrix{
+    & i      & j \\
+i & \inv{R_0} + \inv{R}  & -\inv{R} \\
+j & -\inv{R} & \inv{R}
+}
+\end{equation}
+
+However, even with strict dominance, we can have trouble with ill posed (pertubative) systems.
+
+Round off error examples with double precision 
+
+\begin{dmath}\label{eqn:multiphysicsL5:100}
+\lr{ 1 - 1 } + \pi 10^{-17} = \pi 10^{-17},
+\end{dmath}
+
+vs.
+
+\begin{dmath}\label{eqn:multiphysicsL5:120}
+\lr{ 1 + \pi 10^{-17} } -1 = 0.
+\end{dmath}
+
+This is demonstrated by
+
+\begin{lstlisting}
+#include <stdio.h>
+#include <math.h>
+
+// produces:
+// 0 3.14159e-17
+int main()
+{
+   double d1 = (1 + M_PI * 1e-17) - 1 ;
+   double d2 = M_PI * 1e-17 ;
+
+   printf( "%g %g\n", d1, d2 ) ;
+
+   return 0 ;
+}
+\end{lstlisting}
+
+\section{Exploring uniqueness and existance}
+
+For a matrix system \( \overbar{M} x = \overbar{b} \) in column format, with
+
+\begin{dmath}\label{eqn:multiphysicsL5:140}
+\begin{bmatrix}
+\overbar{M}_1 & \overbar{M}_2 & \cdots & \overbar{M}_N 
+\end{bmatrix}
+\begin{bmatrix}
+	x_1 \\
+	x_2 \\
+	\vdots \\
+	x_N
+\end{bmatrix}
+= \overbar{b}.
+\end{dmath}
+
+This can be written as
+
+\begin{dmath}\label{eqn:multiphysicsL5:160}
+\mathLabelBox
+{
+	x_1 
+}
+{weight}
+	\overbar{M}_1 + x_2 \overbar{M}_2 + \cdots x_N \overbar{M}_N = \overbar{b}.
+\end{dmath}
+
+Linear dependence means
+
+\begin{dmath}\label{eqn:multiphysicsL5:180}
+y_1 \overbar{M}_1 + y_2 \overbar{M}_2 + \cdots y_N \overbar{M}_N = 0,
+\end{dmath}
+
+or \( M \overbar{y} = 0 \).
+
+With a linear dependency an additional solution, given solution \( \overbar{x} \) is \( \overbar{x}^1 = \overbar{x} + \alpha y \).  This becomes relavant for numerical processing since for a system 
+
+\begin{dmath}\label{eqn:multiphysicsL5:220}
+M \overbar{x}^1 = \overbar{b}
+\end{dmath}
+
+we can often find 
+
+\begin{dmath}\label{eqn:multiphysicsL5:200}
+M \overbar{x} + \alpha M \overbar{y} = \overbar{b},
+\end{dmath}
+
+where \( \alpha M \overbar{y} \) is of order \( 10^{-20} \).
+
+\section{Pertubation and norms}
+
+Consider a pertubation to the system \( M \overbar{x} = \overbar{b} \)
+
+\begin{dmath}\label{eqn:multiphysicsL5:240}
+	\lr{ M + \delta M } \lr{ \overbar{x} + \delta \overbar{x} } = \overbar{b}.
+\end{dmath}
+
+Some vector norms
+
+\begin{itemize}
+\item \(L_1\) norm
+
+\begin{dmath}\label{eqn:multiphysicsL5:260}
+\Abs{ \overbar{x} }_1 = \sum_i \Abs{ x_i }
+\end{dmath}
+
+\item \(L_2\) norm
+
+\begin{dmath}\label{eqn:multiphysicsL5:280}
+\Abs{ \overbar{x} }_2 = \sqrt{ \sum_i \Abs{ x_i }^2 }
+\end{dmath}
+
+\item \(L_\infty\) norm
+
+\begin{dmath}\label{eqn:multiphysicsL5:300}
+\Abs{ \overbar{x} }_\infty = \max_i \Abs{ x_i }.
+\end{dmath}
+\end{itemize}
+
+These are illustrated  for \( \overbar{x} = (x_1, x_2) \) in
+
+F2
+
+\section{matrix norm}
+
+For
+
+\begin{dmath}\label{eqn:multiphysicsL5:320}
+\overbar{y} = M \overbar{x}
+\end{dmath}
+
+F3
+
+The 1-norm is
+
+\begin{dmath}\label{eqn:multiphysicsL5:340}
+\Abs{ M } = \max_{ \Abs{\overbar{x}} = 1 } \Abs{ M \overbar{x} },
+\end{dmath}
+
+and the 2-norm is
+
+\begin{dmath}\label{eqn:multiphysicsL5:360}
+\Abs{ M }_2 = \max_{ \Abs{\overbar{x}}_2 = 1 } \Abs{ M \overbar{x} }_2.
+\end{dmath}
+
 \EndNoBibArticle
