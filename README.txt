@@ -56,33 +56,37 @@ notes/classicalmechanics/
 
    This collection of notes is not currently posted in pdf form in its entirety.
 
-notes/phy450/
+otes/phy450/
 
-    Class notes and problems from 'Relativistic Electrodynamics', taught by Prof. Erich Poppitz.
+   Class notes and problems from 'Relativistic Electrodynamics', taught by Prof. Erich Poppitz.
 
-notes/phy454/
+otes/phy454/
 
-   Class notes and problems from 'Continuum Mechanics', taught by Prof. Kausik S. Das.
+  Class notes and problems from 'Continuum Mechanics', taught by Prof. Kausik S. Das.
 
-notes/phy356/
+otes/phy356/
 
-   Class notes and problems from 'Quantum I', taught by Prof. Vatche Deyirmenjian.
+  Class notes and problems from 'Quantum I', taught by Prof. Vatche Deyirmenjian.
 
-notes/phy456/
+otes/phy456/
 
-   Class notes and problems from 'Quantum II', taught by Prof. John Sipe.
+  Class notes and problems from 'Quantum II', taught by Prof. John Sipe.
 
-notes/phy485/
+otes/phy485/
 
-   Class notes and problems from 'Advanced Classical Mechanics', taught by Prof. Joseph Thywissen.
+  Class notes and problems from 'Advanced Classical Mechanics', taught by Prof. Joseph Thywissen.
 
-notes/phy452/
+otes/phy452/
 
-   Class notes and problems from 'Basic Statistical Mechanics', taught by Prof. Arun Paramekanti.
+  Class notes and problems from 'Basic Statistical Mechanics', taught by Prof. Arun Paramekanti.
 
-notes/phy487/
+otes/phy487/
 
-   Class notes and problems from 'Condensed Matter Physics', taught by Prof. Stephen Julian.
+  Class notes and problems from 'Condensed Matter Physics', taught by Prof. Stephen Julian.
+
+notes/ece1254/
+
+  Class notes and problems from 'Modeling of Multiphysics Systems', taught by Prof. P. Triverio.
 
 notes/resume/
 
