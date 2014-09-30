@@ -23,7 +23,7 @@
 We are interested in solving linear systems of the form
 
 \begin{equation}\label{eqn:multiphysicsL4:60}
-	M \overbar{x} = \overbar{b},
+   M \overbar{x} = \overbar{b},
 \end{equation}
 
 possibly with thousands of elements.
@@ -31,22 +31,22 @@ possibly with thousands of elements.
 \sectionAndIndex{Gaussian elimination}
 
 \begin{equation}\label{eqn:multiphysicsL4:80}
-	\kbordermatrix{
-		  & 1      & 2      & 3      \\
-		1 & M_{11} & M_{12} & M_{13} \\
-		2 & M_{21} & M_{22} & M_{23} \\
-		3 & M_{31} & M_{32} & M_{33} \\
-	}
+   \kbordermatrix{
+        & 1      & 2      & 3      \\
+      1 & M_{11} & M_{12} & M_{13} \\
+      2 & M_{21} & M_{22} & M_{23} \\
+      3 & M_{31} & M_{32} & M_{33} \\
+   }
 \begin{bmatrix}
-	x_1 \\
-	x_2 \\
-	x_3 \\
+   x_1 \\
+   x_2 \\
+   x_3 \\
 \end{bmatrix}
 =
 \begin{bmatrix}
-	b_1 \\
-	b_2 \\
-	b_3 \\
+   b_1 \\
+   b_2 \\
+   b_3 \\
 \end{bmatrix}
 \end{equation}
 
@@ -55,16 +55,16 @@ It's claimed for now, to be seen later, that back substitution is the fastest wa
 Steps
 
 \begin{equation}\label{eqn:multiphysicsL4:100}
-	(1) \cdot \frac{M_{21}}{M_{11}} \implies
+   (1) \cdot \frac{M_{21}}{M_{11}} \implies
 \begin{bmatrix}
-		M_{21} &  \frac{M_{21}}{M_{11}}  M_{12} &  \frac{M_{21}}{M_{11}}  M_{13} \\
+      M_{21} &  \frac{M_{21}}{M_{11}}  M_{12} &  \frac{M_{21}}{M_{11}}  M_{13} \\
 \end{bmatrix}
 \end{equation}
 
 \begin{equation}\label{eqn:multiphysicsL4:120}
-	(2) \cdot \frac{M_{31}}{M_{11}} \implies
+   (2) \cdot \frac{M_{31}}{M_{11}} \implies
 \begin{bmatrix}
-		M_{31} &  \frac{M_{31}}{M_{11}}  M_{32} &  \frac{M_{31}}{M_{11}}  M_{33} \\
+      M_{31} &  \frac{M_{31}}{M_{11}}  M_{32} &  \frac{M_{31}}{M_{11}}  M_{33} \\
 \end{bmatrix}
 \end{equation}
 
@@ -74,28 +74,28 @@ This gives
 \begin{bmatrix}
 %\mathLabelBox
 %{
-		M_{11} 
+      M_{11} 
 %}
 %{Pivot}
-		& M_{12} & M_{13} \\
-	0 &  M_{22} - \frac{M_{21}}{
+      & M_{12} & M_{13} \\
+   0 &  M_{22} - \frac{M_{21}}{
 %\mathLabelBox
 %{
-	M_{11}
+   M_{11}
 %}{Multiplier}
 }  M_{12} & M_{23} - \frac{M_{21}}{M_{11}}  M_{13} \\
-	0 &  M_{32} - \frac{M_{31}}{M_{11}}  M_{32} & M_{33} - \frac{M_{31}}{M_{11}}  M_{33} \\
+   0 &  M_{32} - \frac{M_{31}}{M_{11}}  M_{32} & M_{33} - \frac{M_{31}}{M_{11}}  M_{33} \\
 \end{bmatrix}
 \begin{bmatrix}
-	x_1 \\
-	x_2 \\
-	x_3 \\
+   x_1 \\
+   x_2 \\
+   x_3 \\
 \end{bmatrix}
 =
 \begin{bmatrix}
-	b_1 \\
-	b_2 - \frac{M_{21}}{M_{11}} b_1 \\
-	b_3 - \frac{M_{31}}{M_{11}} b_1 
+   b_1 \\
+   b_2 - \frac{M_{21}}{M_{11}} b_1 \\
+   b_3 - \frac{M_{31}}{M_{11}} b_1 
 \end{bmatrix}.
 \end{equation}
 
@@ -103,41 +103,41 @@ Here the $M_{11}$ element is called the \textAndIndex{pivot}.  Each of the $M_{j
 
 \begin{equation}\label{eqn:multiphysicsL4:160}
 \begin{bmatrix}
-		M_{11} & M_{12} & M_{13} \\
-	0 &  M_{22}^{(2)} & M_{23}^{(3)} \\
-	0 &  M_{32}^{(2)} & M_{33}^{(3)} \\
+      M_{11} & M_{12} & M_{13} \\
+   0 &  M_{22}^{(2)} & M_{23}^{(3)} \\
+   0 &  M_{32}^{(2)} & M_{33}^{(3)} \\
 \end{bmatrix}
 \begin{bmatrix}
-	x_1 \\
-	x_2 \\
-	x_3 \\
+   x_1 \\
+   x_2 \\
+   x_3 \\
 \end{bmatrix}
 =
 \begin{bmatrix}
-	b_1 \\
-	b_2^{(2)} \\
-	b_3^{(2)} \\
+   b_1 \\
+   b_2^{(2)} \\
+   b_3^{(2)} \\
 \end{bmatrix}.
 \end{equation}
 
 Using \( M_{22}^{(2)} \) as the pivot this time, we form
 \begin{equation}\label{eqn:multiphysicsL4:180}
 \begin{bmatrix}
-		M_{11} & M_{12} & M_{13} \\
-	0 &  M_{22}^{(2)} & M_{23}^{(3)} \\
-	0 &             0 & M_{33}^{(3)} - \frac{M_{32}^{(2)}}{M_{22}^{(2)}} M_{23}^{(2)} \\
+      M_{11} & M_{12} & M_{13} \\
+   0 &  M_{22}^{(2)} & M_{23}^{(3)} \\
+   0 &             0 & M_{33}^{(3)} - \frac{M_{32}^{(2)}}{M_{22}^{(2)}} M_{23}^{(2)} \\
 \end{bmatrix}
 \begin{bmatrix}
-	x_1 \\
-	x_2 \\
-	x_3 \\
+   x_1 \\
+   x_2 \\
+   x_3 \\
 \end{bmatrix}
 =
 \begin{bmatrix}
-	b_1 \\
-	b_2 - \frac{M_{21}}{M_{11}} b_1 \\
-	b_3 - \frac{M_{31}}{M_{11}} b_1 
-	- \frac{M_{32}^{(2)}}{M_{22}^{(2)}} b_{2}^{(2)} \\
+   b_1 \\
+   b_2 - \frac{M_{21}}{M_{11}} b_1 \\
+   b_3 - \frac{M_{31}}{M_{11}} b_1 
+   - \frac{M_{32}^{(2)}}{M_{22}^{(2)}} b_{2}^{(2)} \\
 \end{bmatrix}.
 \end{equation}
 
@@ -146,12 +146,12 @@ Using \( M_{22}^{(2)} \) as the pivot this time, we form
 Through Gaussian elimination, we have transformed the system from
 
 \begin{equation}\label{eqn:multiphysicsL4:200}
-	M x = b 
+   M x = b 
 \end{equation}
 
 to
 \begin{equation}\label{eqn:multiphysicsL4:220}
-	U x = y.
+   U x = y.
 \end{equation}
 
 Writing out our Gaussian transformation in the form \( U \overbar{x} = b \) we have
@@ -159,10 +159,10 @@ Writing out our Gaussian transformation in the form \( U \overbar{x} = b \) we h
 \begin{equation}\label{eqn:multiphysicsL4:240}
 U \overbar{x} = 
 \begin{bmatrix}
-	1 & 0 & 0 \\
-	-\frac{M_{21}}{M_{11}} & 1 & 0 \\
-	\frac{M_{32}^{(2)}}{M_{22}^{(2)}} 
-	\frac{M_{21}}{M_{11}} 
+   1 & 0 & 0 \\
+   -\frac{M_{21}}{M_{11}} & 1 & 0 \\
+   \frac{M_{32}^{(2)}}{M_{22}^{(2)}} 
+   \frac{M_{21}}{M_{11}} 
 -
 \frac{M_{31}}{M_{11}}  
 &
@@ -171,9 +171,9 @@ U \overbar{x} =
 & 1
 \end{bmatrix}
 \begin{bmatrix}
-	b_1 \\
-	b_2 \\
-	b_3
+   b_1 \\
+   b_2 \\
+   b_3
 \end{bmatrix}.
 \end{equation}
 
@@ -181,16 +181,16 @@ We can verify that the operation matrix \( K^{-1} \), where \( K^{-1} U = M \) t
 
 \begin{equation}\label{eqn:multiphysicsL4:260}
 \begin{bmatrix}
-	1 & 0 & 0 \\
-	\frac{M_{21}}{M_{11}} & 1 & 0 \\
-	\frac{M_{31}}{M_{11}} & 
-	\frac{M_{32}^{(2)}}{M_{22}^{(2)}} & 
-	1
+   1 & 0 & 0 \\
+   \frac{M_{21}}{M_{11}} & 1 & 0 \\
+   \frac{M_{31}}{M_{11}} & 
+   \frac{M_{32}^{(2)}}{M_{22}^{(2)}} & 
+   1
 \end{bmatrix}
 \begin{bmatrix}
-	U_{11} & U_{12} & U_{13} \\
-	0      & U_{22} & U_{23} \\
-	0      & 0      & U_{33} \\
+   U_{11} & U_{12} & U_{13} \\
+   0      & U_{22} & U_{23} \\
+   0      & 0      & U_{33} \\
 \end{bmatrix}
 \overbar{x} = \overbar{b}
 \end{equation}
@@ -211,7 +211,7 @@ We can now solve \( L y = b \), using substitution for \( y_1 \), then \( y_2 \)
 Finally, we can now solve 
 
 \begin{dmath}\label{eqn:multiphysicsL4:300}
-	U x = y,
+   U x = y,
 \end{dmath}
 
 using \textAndIndex{back substitution}.
