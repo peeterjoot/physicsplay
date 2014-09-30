@@ -13,14 +13,14 @@
 \beginArtNoToc
 
 \generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 5: Numerical error and conditioning.  Taught by Prof.\ Piero Triverio}
-%\chapter{Numerical error and conditioning}
+\section{Numerical errors and conditioning}
 \label{chap:multiphysicsL5}
 
-\section{Disclaimer}
+%\subsection{Disclaimer}
+%
+%Peeter's lecture notes from class.  These may be incoherent and rough.
 
-Peeter's lecture notes from class.  These may be incoherent and rough.
-
-\section{Numerical error and conditioning}
+\subsection{Strict diagonal dominance}
 
 Related to a theorem on one of the slides:
 
@@ -29,7 +29,7 @@ Related to a theorem on one of the slides:
 A matrix \( [ M_{ij} ] \) is strictly diagonally dominant if
 
 \begin{dmath}\label{eqn:multiphysicsL5:40}
-   \Abs{M_{ii}} > \sum_{j \ne i} \Abs{ M_{ij} } \forall i
+   \Abs{M_{ii}} > \sum_{j \ne i} \Abs{ M_{ij} } \quad \forall i
 \end{dmath}
 }
 
@@ -88,7 +88,7 @@ int main()
 
 Note that a union and bitfield \citep{peeterjRoundingCpp} can be useful for exploring double precision representation.
 
-\section{Exploring uniqueness and existence}
+\subsection{Exploring uniqueness and existence}
 
 For a matrix system \( \overbar{M} x = \overbar{b} \) in column format, with
 
@@ -113,7 +113,16 @@ This can be written as
    x_1 
 }
 {weight}
-   \overbar{M}_1 + x_2 \overbar{M}_2 + \cdots x_N \overbar{M}_N = \overbar{b}.
+   \overbar{M}_1 + 
+\mathLabelBox
+[
+   labelstyle={below of=m\themathLableNode, below of=m\themathLableNode}
+]
+{
+   x_2 
+}
+{weight}
+   \overbar{M}_2 + \cdots x_N \overbar{M}_N = \overbar{b}.
 \end{dmath}
 
 Linear dependence means
@@ -134,13 +143,7 @@ columns of M linearly dependent & \(\overbar{x}\) exists.  Infinitely many solut
 \end{tabular}
 }
 
-With a linear dependency an additional solution, given solution \( \overbar{x} \) is \( \overbar{x}^1 = \overbar{x} + \alpha y \).  This becomes relevant for numerical processing since for a system 
-
-\begin{dmath}\label{eqn:multiphysicsL5:220}
-M \overbar{x}^1 = \overbar{b}
-\end{dmath}
-
-we can often find 
+With a linear dependency an additional solution, given solution \( \overbar{x} \) is \( \overbar{x}^1 = \overbar{x} + \alpha y \).  This becomes relevant for numerical processing since for a system \( M \overbar{x}^1 = \overbar{b} \) we can often find \( \alpha M \overbar{y} \), for which
 
 \begin{dmath}\label{eqn:multiphysicsL5:200}
 M \overbar{x} + \alpha M \overbar{y} = \overbar{b},
@@ -148,7 +151,7 @@ M \overbar{x} + \alpha M \overbar{y} = \overbar{b},
 
 where \( \alpha M \overbar{y} \) is of order \( 10^{-20} \).
 
-\section{Perturbation and norms}
+\subsection{Perturbation and norms}
 
 Consider a perturbation to the system \( M \overbar{x} = \overbar{b} \)
 
@@ -180,18 +183,18 @@ Some vector norms
 
 These are illustrated  for \( \overbar{x} = (x_1, x_2) \) in \cref{fig:lecture5:lecture5Fig2}.
 
-\imageFigure{../../figures/ece1254/lecture5Fig2}{Some vector norms}{fig:lecture5:lecture5Fig2}{0.2}
+\imageFigure{../../figures/ece1254/lecture5Fig2}{Some vector norms}{fig:lecture5:lecture5Fig2}{0.15}
 
-\section{Matrix norm}
+\subsection{Matrix norm}
 
 A matrix operation \( \overbar{y} = M \overbar{x} \) can be thought of as a transformation as in \cref{fig:lecture5:lecture5Fig3}.
 
-\imageFigure{../../figures/ece1254/lecture5Fig3}{Matrix as a transformation}{fig:lecture5:lecture5Fig3}{0.15}
+\imageFigure{../../figures/ece1254/lecture5Fig3}{Matrix as a transformation}{fig:lecture5:lecture5Fig3}{0.1}
 
 The 1-norm for a Matrix is defined as
 
 \begin{dmath}\label{eqn:multiphysicsL5:340}
-\Norm{ M } = \max_{ \Norm{\overbar{x}} = 1 } \Norm{ M \overbar{x} },
+\Norm{ M } = \max_{ \Norm{\overbar{x}}_1 = 1 } \Norm{ M \overbar{x} },
 \end{dmath}
 
 and the matrix 2-norm is defined as
