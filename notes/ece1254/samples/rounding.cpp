@@ -48,6 +48,8 @@ int main()
 
    printDoubleRep( d1 ) ;
    printDoubleRep( d2 ) ;
+   printDoubleRep( 1e-16 ) ;
+   printDoubleRep( 1e-15 ) ;
 //   printDoubleRep( 3 ) ;
 //   printDoubleRep( 1 ) ;
 //   printDoubleRep( -1 ) ;

@@ -38,11 +38,11 @@ It can be shown that
    \Norm{M}_2 = \max_i \sigma_i(M),
 \end{dmath}
 
-where \( \sigma_i(M) \) are the singular values.
+where \( \sigma_i(M) \) are the (SVD) singular values.
 
 \index{SVD}
 \index{Singular value decomposition}
-\makedefinition{Singular value decomposition}{dfn:multiphysicsL6:1}{
+\makedefinition{Singular value decomposition (SVD)}{dfn:multiphysicsL6:1}{
         Given \( M \in \text{\R{n \times m}} \), we can find a representation of \( M \)
 
 \begin{dmath}\label{eqn:multiphysicsL6:81}
@@ -64,15 +64,42 @@ where \( U \) and \( V\) are orthogonal matrices such that \( U^\T U = 1 \), and
 \end{bmatrix}
 \end{dmath}
 
-The values \( \sigma_i, \sigma_{i} > \sigma_{i+1} > 0 \) are called the singular values of \( M \), and \(r\) is the rank of \( M \).
+The values \( \sigma_i, i \le \min(n,m) \) are called the singular values of \( M \).  The singular values are subject to the ordering
+
+\begin{equation}\label{eqn:multiphysicsL6:261}
+\sigma_{1} \ge \sigma_{2} \ge \cdots \ge 0 
+\end{equation}
+
+If \(r\) is the rank of \( M \), then the \( \sigma_r \) above is the minimum non-zero singular value (but the zeros are also called singular values).  
 
 %The Matlab command to compute this is \underline{svd}.
 % O(4 n^3) div O(26 n^3) ???
 }
 
-example: 2 x 2 case (for column vectors \( \overbar{u}_i, \overbar{v}_j \)).
+Observe that the condition \( U^\T U = 1 \) is a statement of orthonormality.  In terms of column vectors \( \overbar{u}_i \), such a product written out explicitly is
 
-\begin{dmath}\label{eqn:multiphysicsL6:n}
+\begin{dmath}\label{eqn:multiphysicsL6:301}
+\begin{bmatrix}
+\overbar{u}_1^\T \\ \overbar{u}_2^\T \\ \vdots \\ \overbar{u}_n^\T 
+\end{bmatrix}
+\begin{bmatrix}
+\overbar{u}_1 & \overbar{u}_2 & \cdots & \overbar{u}_n 
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 &   & & \\
+  & 1 & & \\
+  &   & \ddots & \\
+  &   &        & 1
+\end{bmatrix}.
+\end{dmath}
+
+This is both normality \( \overbar{u}_i^\T \overbar{u}_i = 1 \), and orthonormality \( \overbar{u}_i^\T \overbar{u}_j = 1, i \ne j \).
+
+\makeexample{2 x 2 case}{example:multiphysicsL6:1}{
+(for column vectors \( \overbar{u}_i, \overbar{v}_j \)).
+
+\begin{dmath}\label{eqn:multiphysicsL6:281}
 M = 
 \begin{bmatrix}
 \overbar{u}_1 & \overbar{u}_2
@@ -90,10 +117,11 @@ M =
 Consider \( \overbar{y} = M \overbar{x} \), and take an \( \overbar{x} \) with \( \Norm{\overbar{x}}_2 = 1 \)
 
 F1
+}
 
 \section{Conditioning number}
 
-Given a pertubation of \( M \overbar{x} = \overbar{b} \) to 
+Given a perturbation of \( M \overbar{x} = \overbar{b} \) to 
 
 \begin{dmath}\label{eqn:multiphysicsL6:121}
         \lr{ M + \delta M }
@@ -158,21 +186,34 @@ or
 {\Norm{M}_2}
 }
 {
-relative pertubation of \( M \)
+relative perturbation of \( M \)
 }.
 \end{dmath}
 
 The \textAndIndex{conditioning number} can be shown to be
 
-\begin{dmath}\label{eqn:multiphysicsL6:241}
+\begin{equation}\label{eqn:multiphysicsL6:241}
         \cond(M) = 
         \frac
         {\sigma_{\mathrm{max}}}
         {\sigma_{\mathrm{min}}}
         \ge 1
-\end{dmath}
+\end{equation}
 
 FIXME: justify.
+
+\subsection{sensitivity to conditioning number}
+
+Double precision relative rounding errors can be of the order \( 10^{-16} \sim 2^{-54} \), which allows us to gauge the relative error of the solution
+
+\begin{tabular}{|llll|}
+	\hline
+	relative error of solution & \( \le \) & \( \cond(M) \) & \( \frac{ \Norm{ \delta M } }{\Norm{M} } \) \\
+	\hline
+	\( 10^{-15} \)             & \( \le \) & 10             & \( \sim 10^{-16} \) \\
+	\( 10^{-2} \)              & \( \le \) & \( 10^{14} \)  & \( 10^{-16} \) \\
+	\hline
+\end{tabular}
 
 %\EndArticle
 \EndNoBibArticle
