@@ -1,0 +1,178 @@
+%
+% Copyright © 2014 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{multiphysicsL6}
+\renewcommand{\dirname}{notes/ece1254/}
+\newcommand{\keywords}{Condensed matter physics, ECE1254H}
+\input{../peeter_prologue_print2.tex}
+
+%\usepackage{kbordermatrix}
+
+\beginArtNoToc
+\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 6: Matrix norm, singular decomposition, and conditioning number.  Taught by Prof.\ Piero Triverio}
+%\chapter{Matrix norm, singular decomposition, and conditioning number}
+\label{chap:multiphysicsL6}
+
+\section{Disclaimer}
+
+Peeter's lecture notes from class.  These may be incoherent and rough.
+
+\section{Matrix norm}
+
+We've defined the matrix norm of \( M \), for the system \( \overbar{y} = M \overbar{x} \) as
+
+\begin{dmath}\label{eqn:multiphysicsL6:21}
+\Norm{M} = \max_{\Norm{\overbar{x}} = 1} \Norm{ M \overbar{x} }.
+\end{dmath}
+
+We will typically use the \( L_2 \) norm, so that the matrix norm is
+\begin{dmath}\label{eqn:multiphysicsL6:41}
+\Norm{M}_2 = \max_{\Norm{\overbar{x}}_2 = 1} \Norm{ M \overbar{x} }_2.
+\end{dmath}
+
+It can be shown that 
+
+\begin{dmath}\label{eqn:multiphysicsL6:61}
+   \Norm{M}_2 = \max_i \sigma_i(M),
+\end{dmath}
+
+where \( \sigma_i(M) \) are the singular values.
+
+\index{SVD}
+\index{Singular value decomposition}
+\makedefinition{Singular value decomposition}{dfn:multiphysicsL6:1}{
+        Given \( M \in \text{\R{n \times m}} \), we can find a representation of \( M \)
+
+\begin{dmath}\label{eqn:multiphysicsL6:81}
+M = U \Sigma V^\T,
+\end{dmath}
+
+where \( U \) and \( V\) are orthogonal matrices such that \( U^\T U = 1 \), and \( V^\T V = 1 \), and
+
+\begin{dmath}\label{eqn:multiphysicsL6:101}
+   \Sigma = 
+\begin{bmatrix}
+  \sigma_1 &          &        &          &         &         &\\
+           & \sigma_2 &        &          &         &         &\\
+           &          & \ddots &          &         &         &\\
+           &          &        & \sigma_r &         &         &\\
+           &          &          &        &       0 &         &         \\
+           &          &          &        &         & \ddots  &         \\
+           &          &          &        &         &         & 0       \\
+\end{bmatrix}
+\end{dmath}
+
+The values \( \sigma_i, \sigma_{i} > \sigma_{i+1} > 0 \) are called the singular values of \( M \), and \(r\) is the rank of \( M \).
+
+%The Matlab command to compute this is \underline{svd}.
+% O(4 n^3) div O(26 n^3) ???
+}
+
+example: 2 x 2 case (for column vectors \( \overbar{u}_i, \overbar{v}_j \)).
+
+\begin{dmath}\label{eqn:multiphysicsL6:n}
+M = 
+\begin{bmatrix}
+\overbar{u}_1 & \overbar{u}_2
+\end{bmatrix}
+\begin{bmatrix}
+        \sigma_1 &  \\
+        & \sigma_2
+\end{bmatrix}
+\begin{bmatrix}
+\overbar{v}_1^\T \\
+\overbar{v}_2^\T 
+\end{bmatrix}
+\end{dmath}
+
+Consider \( \overbar{y} = M \overbar{x} \), and take an \( \overbar{x} \) with \( \Norm{\overbar{x}}_2 = 1 \)
+
+F1
+
+\section{Conditioning number}
+
+Given a pertubation of \( M \overbar{x} = \overbar{b} \) to 
+
+\begin{dmath}\label{eqn:multiphysicsL6:121}
+        \lr{ M + \delta M }
+        \lr{ \overbar{x} + \delta \overbar{x} } = \overbar{b},
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:multiphysicsL6:141}
+        \cancel{ M \overbar{x} - \overbar{b} } + \delta M \overbar{x} + M \delta \overbar{x} + \delta M \delta \overbar{x} = 0.
+\end{dmath}
+
+This gives
+
+\begin{dmath}\label{eqn:multiphysicsL6:161}
+        M \delta \overbar{x} = - \delta M \overbar{x} - \delta M \delta \overbar{x},
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:multiphysicsL6:181}
+        \delta \overbar{x} = - M^{-1} \delta M \lr{ \overbar{x} + \delta \overbar{x} }.
+\end{dmath}
+
+Taking norms
+
+\begin{dmath}\label{eqn:multiphysicsL6:201}
+\Norm{ \delta \overbar{x}}_2 = \Norm{
+        M^{-1} \delta M \lr{ \overbar{x} + \delta \overbar{x} }
+}_2
+\le
+\Norm{ M^{-1} }_2 \Norm{ \delta M }_2 \Norm{ \overbar{x} + \delta \overbar{x} }_2,
+\end{dmath}
+
+or 
+\begin{dmath}\label{eqn:multiphysicsL6:221}
+\mathLabelBox
+[
+   labelstyle={yshift=1.2em},
+   linestyle={}
+]
+{
+\frac{\Norm{ \delta \overbar{x}}_2 }{
+\Norm{ \overbar{x} + \delta \overbar{x}}_2 }
+}
+{relative error of solution}
+\le 
+\mathLabelBox
+[
+   labelstyle={below of=m\themathLableNode, below of=m\themathLableNode}
+]
+{
+\Norm{M}_2
+\Norm{M^{-1}}_2
+}
+{conditioning number of \(M\)}
+\mathLabelBox
+[
+   labelstyle={xshift=2cm},
+   linestyle={out=270,in=90, latex-}
+]
+{
+\frac{ \Norm{ \delta M}_2 }
+{\Norm{M}_2}
+}
+{
+relative pertubation of \( M \)
+}.
+\end{dmath}
+
+The \textAndIndex{conditioning number} can be shown to be
+
+\begin{dmath}\label{eqn:multiphysicsL6:241}
+        \cond(M) = 
+        \frac
+        {\sigma_{\mathrm{max}}}
+        {\sigma_{\mathrm{min}}}
+        \ge 1
+\end{dmath}
+
+FIXME: justify.
+
+%\EndArticle
+\EndNoBibArticle
