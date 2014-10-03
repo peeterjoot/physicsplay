@@ -1,0 +1,341 @@
+%
+% Copyright © 2014 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{svdNotes}
+\renewcommand{\dirname}{notes/ece1254/}
+%\newcommand{\dateintitle}{}
+\newcommand{\keywords}{Singular Value Decomposition, SVD, image space, orthonormal basis}
+
+\input{../peeter_prologue_print2.tex}
+
+\beginArtNoToc
+
+\generatetitle{Singular Value Decomposition}
+%\chapter{Singular Value Decomposition}
+%\label{chap:svdNotes}
+%\section{Motivation}
+
+We've been presented with the definition of the \textAndIndex{singular value decomposition} or \textAndIndex{SVD}, but not how to compute it.
+
+% FIXME: omit on integration
+Recall that the definition was
+
+\makedefinition{Singular value decomposition (SVD)}{dfn:multiphysicsL6:1}{
+   Given \( M \in \text{\R{m \times n}} \), we can find a representation of \( M \)
+
+\begin{dmath}\label{eqn:multiphysicsL6:81}
+M = U \Sigma V^\T,
+\end{dmath}
+
+where \( U \) and \( V\) are orthogonal matrices such that \( U^\T U = 1 \), and \( V^\T V = 1 \), and
+
+\begin{dmath}\label{eqn:multiphysicsL6:101}
+   \Sigma = 
+\begin{bmatrix}
+  \sigma_1 &     &   &     &    &    &\\
+      & \sigma_2 &   &     &    &    &\\
+      &     & \ddots &     &    &    &\\
+      &     &   & \sigma_r &    &    &\\
+      &     &     &   &       0 &    &    \\
+      &     &     &   &    & \ddots  &    \\
+      &     &     &   &    &    & 0       \\
+\end{bmatrix}
+\end{dmath}
+
+The values \( \sigma_i, i \le \min(n,m) \) are called the singular values of \( M \).  The singular values are subject to the ordering
+
+\begin{equation}\label{eqn:multiphysicsL6:261}
+\sigma_{1} \ge \sigma_{2} \ge \cdots \ge 0 
+\end{equation}
+
+If \(r\) is the rank of \( M \), then the \( \sigma_r \) above is the minimum non-zero singular value (but the zeros are also called singular values).  
+
+%The Matlab command to compute this is \underline{svd}.
+% O(4 n^3) div O(26 n^3) ???
+}
+
+Here I'll review some of the key ideas from the MIT OCW SVD lecture by Prof.\ Gilbert Strang \citep{ocw:svd}.  This is largely to avoid having to rewatch this again in a few years as I just did.
+
+The idea behind the SVD is to find an orthogonal basis that relates the image space of the transformation, as well as the basis for the vectors that the transformation applies to.  That is a relation of the form
+
+\begin{dmath}\label{eqn:svdNotes:281}
+\Bu_i = M \Bv_j
+\end{dmath}
+
+Where \( \Bv_j \) are orthonormal basis vectors, and \( \Bu_i \) are orthonormal basis vectors for the image space.  %Strang's lectures call these the row and column spaces (or reverse?) 
+
+Let's suppose that such a set of vectors can be computed and that \( M \) has a representation of the desired form
+
+\begin{dmath}\label{eqn:svdNotes:301}
+M = U \Sigma V^\conj
+\end{dmath}
+
+where 
+\begin{dmath}\label{eqn:svdNotes:321}
+U = 
+\begin{bmatrix}
+   \Bu_1 & \Bu_2 & \cdots & \Bu_m 
+\end{bmatrix},
+\end{dmath}
+
+and
+
+\begin{dmath}\label{eqn:svdNotes:341}
+V = 
+\begin{bmatrix}
+   \Bv_1 & \Bv_2 & \cdots & \Bv_n
+\end{bmatrix}.
+\end{dmath}
+
+By left or right multiplication of \( M \) with its (conjugate) transpose, we will see that the decomposed form of these products have a very simple form
+
+\begin{subequations}
+\begin{equation}\label{eqn:svdNotes:361}
+M^\conj M 
+=
+V \Sigma^\conj U^\conj U \Sigma V^\conj
+=
+V \Sigma^\conj \Sigma V^\conj,
+\end{equation}
+\begin{equation}\label{eqn:svdNotes:381}
+M M^\conj 
+=
+U \Sigma V^\conj V \Sigma^\conj U^\conj
+=
+U \Sigma \Sigma^\conj U^\conj.
+\end{equation}
+\end{subequations}
+
+Because \( \Sigma \) is diagonal, the products \( \Sigma^\conj \Sigma \) and \( \Sigma \Sigma^\conj \) are also both diagonal, and populated with the absolute squares of the singular values that we have presumed to exist.  Because \( \Sigma \Sigma^\conj \) is an \( m \times m \) matrix, whereas \( \Sigma^\conj \Sigma \) is an \( n \times n \) matrix, so the numbers of zeros in each of these will differ, but each will have the structure
+
+\begin{equation}\label{eqn:svdNotes:401}
+\Sigma^\conj \Sigma \sim \Sigma \Sigma^\conj \sim
+\begin{bmatrix}
+   \Abs{\sigma_1}^2 &     &   &     &    &    &\\
+      & \Abs{ \sigma_2 }^2 &   &     &    &    &\\
+      &     & \ddots &     &    &    &\\
+      &     &   & \Abs{ \sigma_r }^2 &    &    &\\
+      &     &     &   &       0 &    &    \\
+      &     &     &   &    & \ddots  &    \\
+      &     &     &   &    &    & 0       \\
+\end{bmatrix}
+\end{equation}
+
+This shows us one method of computing the singular value decomposition (for full rank systems), because we need only solve for the eigensystem of either \( M M^\conj \) or \( M^\conj M \) to find the singular values, and one of \( U \) or \( V \).  To form \( U \) we will be able to find \( r \) orthonormal eigenvectors of \( M M^\conj \) and then supplement that with a mutually orthonormal set of vectors from the Null space of \( M \).  We can form \( \Sigma \) by taking the square roots of the eigenvalues of \( M M^\conj \).  With both \( \Sigma \) and \( U \) computed, we can then compute \( V \) by inversion.  We could similarly solve for \( \Sigma \) and \( V \) by computing the eigensystem of \( M^\conj M \) and similarly supplementing those eigenvectors with vectors from the null space, and then compute \( U \) by inversion.
+
+Let's work the examples from the lecture to see how this works.
+
+\makeexample{Full rank 2x2 matrix}{example:svdNotes:1}{
+In the lecture the SVD decomposition is computed for
+
+\begin{equation}\label{eqn:svdNotes:421}
+M = 
+\begin{bmatrix}
+   4 & 4 \\
+   3 & -3
+\end{bmatrix}
+\end{equation}
+
+For this we have
+
+\begin{subequations}
+\begin{equation}\label{eqn:svdNotes:441}
+M M^\conj
+=
+\begin{bmatrix}
+32 &    0 \\
+0 &  18
+\end{bmatrix}
+\end{equation}
+\begin{equation}\label{eqn:svdNotes:461}
+M^\conj M
+=
+\begin{bmatrix}
+25 & 7 \\
+7 & 25 
+\end{bmatrix}
+\end{equation}
+\end{subequations}
+
+The first is already diagonalized so \( U = I \), and the singular values are found by inspection \( \{ \sqrt{32}, \sqrt{18} \} \), or
+
+\begin{equation}\label{eqn:svdNotes:541}
+\Sigma =
+\begin{bmatrix}
+\sqrt{32} & 0 \\
+0 & \sqrt{18}
+\end{bmatrix}
+\end{equation}
+
+Because the system is full rank we can solve for \( V \) by inversion
+
+\begin{equation}\label{eqn:svdNotes:481}
+\Sigma^{-1} U^\conj M  = V^\conj,
+\end{equation}
+
+or
+\begin{equation}\label{eqn:svdNotes:501}
+V = M^\conj U \lr{ \Sigma^{-1} }^\conj.
+\end{equation}
+
+In this case that is
+
+\begin{equation}\label{eqn:svdNotes:521}
+V = \inv{\sqrt{2}} 
+\begin{bmatrix}
+1 & 1 \\
+1 & -1
+\end{bmatrix}
+\end{equation}
+
+We could alternately compute \( V \) directly by diagonalizing \( M^\conj M \).  We see that the eigenvectors are \( \lr{ 1, \pm 1 }/\sqrt{2} \), with respective eigenvalues \( \{ 32, 18 \} \).
+
+This gives us \cref{eqn:svdNotes:541} and \cref{eqn:svdNotes:521}.  Again, because the system is full rank, we can compute \( U \) by inversion.  That is
+
+\begin{equation}\label{eqn:svdNotes:561}
+U = M V \Sigma^{-1}.
+\end{equation}
+
+Carrying out this calculation recovers \( U = I \) as expected.  Looks like I used a different matrix than Prof.\ Strang used in his lecture (alternate signs on the 3's).  He had some trouble that arrived from independent calculation of the respective eigenspaces.  Calculating one from the other avoids that trouble since there are different signed eigenvalues that can be chosen, and we are looking for specific mappings between the eigenspaces that satisfy the \( \Bu_i = M \Bv_j \) constraints encoded by the relationship \( M = U \Sigma V^\conj \).
+}
+
+Let's work a non-full rank example, as in the lecture.
+
+\makeexample{2x2 matrix without full rank}{example:svdNotes:2}{
+
+How about
+
+\begin{equation}\label{eqn:svdNotes:581}
+M = 
+\begin{bmatrix}
+1 & 1 \\
+2 & 2
+\end{bmatrix}.
+\end{equation}
+
+For this we have
+
+\begin{subequations}
+\begin{equation}\label{eqn:svdNotes:601}
+M^\conj M = 
+\begin{bmatrix}
+5 & 5 \\
+5 & 5
+\end{bmatrix}
+\end{equation}
+\begin{equation}\label{eqn:svdNotes:621}
+M M^\conj = 
+\begin{bmatrix}
+2 & 4 \\
+4 & 8
+\end{bmatrix}
+\end{equation}
+\end{subequations}
+
+For which the non-zero eigenvalue is \( 10 \) and the corresponding eigenvalue is 
+\begin{equation}\label{eqn:svdNotes:641}
+\Bv = 
+\inv{\sqrt{2}}
+\begin{bmatrix}
+1 \\
+1
+\end{bmatrix}.
+\end{equation}
+
+This gives us 
+
+\begin{equation}\label{eqn:svdNotes:661}
+\Sigma = 
+\begin{bmatrix}
+\sqrt{10} & 0 \\
+0 & 0
+\end{bmatrix}
+\end{equation}
+
+Since we require \( V \) to be orthonormal, there is only one choice (up to a sign) for the vector from the null space.
+
+Let's try
+
+\begin{equation}\label{eqn:svdNotes:681}
+V = 
+\inv{\sqrt{2}}
+\begin{bmatrix}
+1 & 1 \\
+1 & -1
+\end{bmatrix}
+\end{equation}
+
+We find that \( M M^\conj \) has eigenvalues \( \{ 10, 0 \} \) as expected.  The eigenvector for the non-zero eigenvalue is found to be
+
+\begin{equation}\label{eqn:svdNotes:701}
+\Bu = \inv{\sqrt{5}} 
+\begin{bmatrix}
+1 \\ 
+2
+\end{bmatrix}.
+\end{equation}
+
+It's easy to expand this to an orthonormal basis, but do we have to pick a specific sign relative to the choice that we've made for \( V \)?
+
+Let's try
+
+\begin{equation}\label{eqn:svdNotes:721}
+U = \inv{\sqrt{5}}
+\begin{bmatrix}
+1 & 2 \\
+2 & -1
+\end{bmatrix}.
+\end{equation}
+
+Multiplying out \( U \Sigma V^\conj \) we have
+
+\begin{dmath}\label{eqn:svdNotes:741}
+\inv{\sqrt{5}}
+\begin{bmatrix}
+1 & 2 \\
+2 & -1
+\end{bmatrix}
+\begin{bmatrix}
+\sqrt{10} & 0 \\
+0 & 0
+\end{bmatrix}
+\inv{\sqrt{2}}
+\begin{bmatrix}
+1 & 1 \\
+1 & -1
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & 2 \\
+2 & -1
+\end{bmatrix}
+\begin{bmatrix}
+1 & 0 \\
+0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+1 & 1 \\
+1 & -1
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & 0 \\
+2 & 0
+\end{bmatrix}
+\begin{bmatrix}
+1 & 1 \\
+1 & -1
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & 1 \\
+2 & 2
+\end{bmatrix}.
+\end{dmath}
+
+It appears that this works, although we haven't demonstrated why that should be, and we could have gotten lucky with signs.  There's some theoretical work to do here, but let's leave that for another day (or rely on software to do this computational task).
+}
+
+\EndArticle
