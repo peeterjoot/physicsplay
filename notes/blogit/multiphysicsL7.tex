@@ -1,0 +1,288 @@
+%
+% Copyright © 2014 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+% for template copy, run:
+%
+% ~/bin/ct multiphysicsL1  multiphysicsLectureN tl1
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{multiphysicsL7}
+\renewcommand{\dirname}{notes/ece1254/}
+\newcommand{\keywords}{Condensed matter physics, ECE1254H}
+\input{../peeter_prologue_print2.tex}
+
+%\usepackage{kbordermatrix}
+\usepackage{algorithmic}
+
+\beginArtNoToc
+\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 7: Sparse factorization.  Taught by Prof.\ Piero Triverio}
+%\chapter{Sparse factorization}
+\label{chap:multiphysicsL7}
+
+\section{Disclaimer}
+
+Peeter's lecture notes from class.  These may be incoherent and rough.
+
+\section{Fill ins}
+
+The problem of fill ins in LU computations arise in locations where rows and columns cross over zero positions.
+
+Rows and columns can be permuted to deal with these.  Here is an ad-hoc permutation of rows and columns that will result in less fill ins.
+
+\begin{equation}\label{eqn:multiphysicsL7:n}
+\begin{aligned}
+&\begin{bmatrix}
+a & b & c & 0 \\
+d & e & 0 & 0 \\
+0 & f & g & 0 \\
+0 & h & 0 & i \\
+\end{bmatrix}
+\begin{bmatrix}
+x_1 \\
+x_2 \\
+x_3 \\
+x_4
+\end{bmatrix}
+=
+\begin{bmatrix}
+b_1 \\
+b_2 \\
+b_3 \\
+b_4
+\end{bmatrix} \\
+\implies &
+\begin{bmatrix}
+a & c & 0 & b \\
+d & 0 & 0 & e \\
+0 & g & 0 & f \\
+0 & 0 & i & h \\
+\end{bmatrix}
+\begin{bmatrix}
+x_1 \\
+x_4 \\
+x_3 \\
+x_2 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+b_1 \\
+b_2 \\
+b_3 \\
+b_4 \\
+\end{bmatrix} \\
+\implies &
+\begin{bmatrix}
+0 & a & c & b \\
+0 & d & 0 & e \\
+0 & 0 & g & f \\
+i & 0 & 0 & h \\
+\end{bmatrix}
+\begin{bmatrix}
+x_3 \\
+x_4 \\
+x_1 \\
+x_2 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+b_1 \\
+b_2 \\
+b_3 \\
+b_4 \\
+\end{bmatrix} \\
+\implies &
+\begin{bmatrix}
+i & 0 & 0 & h \\
+0 & a & c & b \\
+0 & d & 0 & e \\
+0 & 0 & g & f \\
+\end{bmatrix}
+\begin{bmatrix}
+x_3 \\
+x_4 \\
+x_1 \\
+x_2 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+b_4 \\
+b_1 \\
+b_2 \\
+b_3 \\
+\end{bmatrix} \\
+\implies &
+\begin{bmatrix}
+i & 0 & 0 & h \\
+0 & c & a & b \\
+0 & 0 & d & e \\
+0 & g & 0 & f \\
+\end{bmatrix}
+\begin{bmatrix}
+x_3 \\
+x_1 \\
+x_4 \\
+x_2 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+b_4 \\
+b_1 \\
+b_2 \\
+b_3 \\
+\end{bmatrix} \\
+\end{aligned}
+\end{equation}
+
+\sectionAndIndex{Markowitz product}
+
+To facilitate such permutations the Markowitz product that estimates the amount of fill in required.  This is
+
+\makedefinition{Markowitz product}{dfn:multiphysicsL7:20}{
+\begin{equation*}
+\begin{aligned}
+		  \text{Markowitz product} =
+		  &\lr{\text{Non zeros in unfactored part of Row -1}} \times \\
+&\lr{\text{Non zeros in unfactored part of Col -1}}
+\end{aligned}
+\end{equation*}
+}
+
+\section{On slides}
+
+Covered:
+\begin{itemize}
+\item Markowitz product.  FIXME: Compute some examples.
+\item Markowitz reordering.  FIXME: Work an example.
+\item Graph approaches.  Delete the most connected nodes.  Claimed that the Markowitz products are the squares of the node degrees.  FIXME: work example to come to terms with this.
+\end{itemize}
+
+\section{Summary of factorization costs}
+
+\paragraph{LU (dense)}
+
+\begin{itemize}
+   \item cost: \( O(n^3) \)
+   \item cost depends only on size
+\end{itemize}
+
+Computation can be affordable up to a few thousand elements.
+
+\paragraph{LU (sparse)}
+
+\begin{itemize}
+   \item cost: Diagonal and tridiagonal are \( O(n) \), but we can have up to \( O(n^3) \) depending on sparsity and the method of dealing with the sparsity.
+   \item cost depends on size and sparsity
+\end{itemize}
+
+Computation can be affordable up to a few million elements.
+
+\paragraph{Iterative methods}
+
+Can be cheap if done right.  Convergence requires careful preconditioning.
+
+\section{Iterative methods}
+
+Suppose that we have an initial guess \( \overbar{x}_0 \).   Iterative methods are generally of the form
+
+\begin{algorithmic}
+\REPEAT
+\STATE \(\overbar{r} = \overbar{b} - M \overbar{x}_i\)
+\UNTIL{\(\Norm{\overbar{r}} < \epsilon \).}
+\end{algorithmic}
+
+The difference \( \overbar{r} \) is called the residual.  For as long as it is bigger than desired, continue improving the estimate \( \overbar{x}_i \).
+
+The matrix vector product \( M \overbar{x}_i \), if dense, is of \( O(n^2) \).  Suppose, for example, that we can perform the iteration in ten iterations.  If the matrix is dense, we can have \( 10 O(n^2) \) performance.  If sparse, this can be worse than just direct computation.
+
+\section{Gradient method}
+
+This is a method for iterative solution of the equation \( M \overbar{x} = \overbar{b} \).
+
+This requires symmetric positive definite matrix \( M = M^\T \), with \( M > 0 \).
+
+We introduce an \textAndIndex{energy function}
+
+\begin{equation}\label{eqn:multiphysicsL7:60}
+\Psi(\overbar{y}) \equiv \inv{2} \overbar{y}^\T M \overbar{y} - \overbar{y}^\T \overbar{b}
+\end{equation}
+
+F1
+
+Claim: This energy function has a minimum for 
+
+\begin{equation}\label{eqn:multiphysicsL7:80}
+\overbar{y} = M^{-1} \overbar{b} = \overbar{x}.
+\end{equation}
+
+FIXME: justify.
+
+This is called the gradient method because the gradient moves us along the path of steepest descent towards the minimum if it exists.
+
+The method is
+
+\begin{equation}\label{eqn:multiphysicsL7:100}
+\overbar{x}^{(k+1)} = \overbar{x}^{(k)} + 
+\mathLabelBox
+{ \alpha_k }{step size}
+\mathLabelBox
+[
+   labelstyle={below of=m\themathLableNode, below of=m\themathLableNode}
+]
+{
+\overbar{d}^{(k)}
+}{direction},
+\end{equation}
+
+where the direction is
+
+\begin{equation}\label{eqn:multiphysicsL7:120}
+\overbar{d}^{(k)} = - \spacegrad \Phi = r^{(k)}.
+\end{equation}
+
+\paragraph{Optimal step size}
+
+Note that for the minimization of \( \Phi \lr{ \overbar{x}^{(k+1)} } \), we note
+
+\begin{dmath}\label{eqn:multiphysicsL7:140}
+\Phi \lr{ \overbar{x}^{(k+1)} }
+= \Phi\lr{ \overbar{x}^{(k)} + \alpha_k \overbar{d}^{(k)} }
+= 
+\inv{2} 
+\lr{ \overbar{x}^{(k)} + \alpha_k \overbar{d}^{(k)} }^\T
+M
+\lr{ \overbar{x}^{(k)} + \alpha_k \overbar{d}^{(k)} }
+-
+\lr{ \overbar{x}^{(k)} + \alpha_k \overbar{d}^{(k)} }^\T \overbar{b}
+\end{dmath}
+
+If we take the derivative of this with respect to \( \alpha_k \) to find the minimum, we find (after work left to the user)
+
+\begin{equation}\label{eqn:multiphysicsL7:160}
+\alpha_k 
+= \frac{
+\lr{\overbar{r}^{(k)}}^\T 
+\overbar{r}^{(k)}
+}{
+\lr{\overbar{r}^{(k)}}^\T 
+M
+\overbar{r}^{(k)}
+}
+\end{equation}
+
+We will see that this method is not optimal when we pick one direction and keep going down that path.
+
+\section{Definitions and theorems}
+
+\makedefinition{Positive (negative) definite}{dfn:multiphysicsL7:40}{
+   A matrix \( M \) is positive (negative) definite, denoted \( M > 0 (<0) \) if \( \overbar{y}^\T M \overbar{y} > 0 (<0), \quad \forall \overbar{y} \).
+
+   If a matrix is neither positive, nor negative definite, it is called indefinite.
+}
+
+\maketheorem{Positive (negative) definite}{thm:multiphysicsL7:60}{
+   A symmetric matrix \( M > 0 (<0)\) iff \( \lambda_i > 0 (<0)\) for all eigenvalues \( \lambda_i \), or is indefinite iff its eigenvalues \( \lambda_i \) are of mixed sign.
+}
+
+%\EndArticle
+\EndNoBibArticle
