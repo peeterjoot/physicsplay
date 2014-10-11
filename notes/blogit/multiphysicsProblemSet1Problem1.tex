@@ -40,7 +40,7 @@ To understand how we can incorporate a voltage controlled voltage gain element i
 
 The voltage sources introduce relationships between the node voltages that involve no current terms
 
-\begin{equation}\label{eqn:multiphysicsProblemSet1:20}
+\begin{equation}\label{eqn:multiphysicsProblemSet1Problem1:20}
 \begin{aligned}
 V_2 - V_1 &= g \lr{ V_4 - V_3 } \\
 V_3 &= 5 V \\
@@ -76,9 +76,9 @@ However, since currents from these sources flow through other portions of the ci
 = 0 \)
 \end{enumerate}
 
-This is four equations and six unknowns, but can be supplemented with \cref{eqn:multiphysicsProblemSet1:20} to form the invertible matrix equation
+This is four equations and six unknowns, but can be supplemented with \cref{eqn:multiphysicsProblemSet1Problem1:20} to form the invertible matrix equation
 
-\begin{equation}\label{eqn:multiphysicsProblemSet1:40}
+\begin{equation}\label{eqn:multiphysicsProblemSet1Problem1:40}
 \begin{bmatrix}
 %  \lr{ V_1 - 0 } Z_2 - i_{2,1} + \lr{ V_1 - V_4 } Z_3  = 0 
 Z_2 + Z_3 & 0 & 0 & - Z_3 & -1 & 0 \\
@@ -120,7 +120,7 @@ If the specification of a voltage controlled voltage gain has the form
 
 then we see that the corresponding stamp has the form
 
-\begin{equation}\label{eqn:multiphysicsProblemSet1:80}
+\begin{equation}\label{eqn:multiphysicsProblemSet1Problem1:80}
 \kbordermatrix{
         & n_{+} & n_{-} & nc_{+} & nc_{-} &  i_{n_{+},n_{-}} \\
 n_{+}   & 0     & 0 & 0 & 0    & 1 \\
@@ -143,7 +143,7 @@ An illustration of an ideal op amp model from \citep{sedra1982microelectronic} i
 
 This corresponding netlist representation can be found in
 \par
-\href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps1/ps1.circuit.netlist}{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps1/ps1.circuit.netlist},
+\href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps1/testdata/ps1.circuit.netlist}{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps1/testdata/ps1.circuit.netlist},
 
 %\begin{verbatim}
 %R1 1 2 10000
@@ -158,25 +158,55 @@ This corresponding netlist representation can be found in
 %E2 4 0 5 3 1000000
 %\end{verbatim}
 
+The resulting system \( G \Bx = \Bb \) looks somewhat ill conditioned with both very large and very small numbers
+
+\begin{equation}\label{eqn:multiphysicsProblemSet1Problem1:100}
+\begin{bmatrix}
+10^{-4} & -10^{-4} & 0 & 0 & 0 & -1 & 0 & 0 \\
+-10^{-4} & 12.5 \times 10^{-6} & -25 \times 10^{-6} & -12.5 \times 10^{-6} & 0 & 0 & 0 & 0 \\
+0 & -25 \times 10^{-6} & 10^{-6} & 0 & -10^{-6} & 0 & 1 & 0 \\
+0 & -12.5 \times 10^{-6} & 0 & 5 \times 10^{-5} & -5 \times 10^{-5} & 0 & 0 & 1 \\
+0 & 0 & -1 \times 10^{-6} & -5 \times 10^{-5} & 5 \times 10^{-5} & 0 & 0 & 0 \\
+1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & -10^6 & -1 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & -10^6 & -1 & 10^6 & 0 & 0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+V_1 \\
+V_2 \\
+V_3 \\
+V_4 \\
+V_5 \\
+i_{1,0} \\
+i_{3,0} \\
+i_{5,0}
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 \\
+0 \\
+0 \\
+0 \\
+0 \\
+5 \\
+0 \\
+0
+\end{bmatrix}
+\end{equation}
+
+However, this system yields to both the \( G \backslash b \) solution and \( L U \) decomposition (even without pivots).  This is likely because the difference in min and max non-zero values is still within the range of the default matlab double precision arithmetic.
+
 %Which can be solved with
 %
 %\begin{verbatim}
 %clear all ; [G, b] = NodalAnalysis( 'ps1.circuit.netlist' ) ; G\(\backslash\)b
 %\end{verbatim}
-which has solution 
+%which has solution 
 
-\begin{equation}\label{eqn:multiphysicsProblemSet1:n}
-\begin{bmatrix}
-	V_1 \\
-	V_2 \\
-	V_3 \\
-	V_4 \\
-	V_5 \\
-	i_{1,0} \\
-	i_{3,0} \\
-	i_{5,0}
-\end{bmatrix}
-=
+The system of \cref{eqn:multiphysicsProblemSet1Problem1:100} yields the solution
+
+\begin{equation}\label{eqn:multiphysicsProblemSet1Problem1:120}
+\Bx =
 \begin{bmatrix}
     5.0000 \\
     0.0000 \\
@@ -189,10 +219,48 @@ which has solution
 \end{bmatrix}.
 \end{equation}
 
-The desired voltage difference requested for this problem is \( V_\circ = V_5 - V_0 = -13.4 V \).
+So the voltage difference of interest in this problem is \( V_\circ = V_5 - V_0 = -13.4 V \).
 
 \makeSubAnswer{}{multiphysics:problemSet1:1d}
 
-TODO.
-}
+The routines for the LU solution and substitutions are found in:
 
+\begin{itemize}
+	\item
+\href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps1/noPivotLU.m}{noPivotLU.m}
+	\item
+\href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps1/forwardSubst.m}{forwardSubst.m}
+	\item
+\href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps1/backSubst.m}{backSubst.m}
+	\item
+\href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps1/findMaxIndexOfColumnMatrix.m}{findMaxIndexOfColumnMatrix.m}
+	\item
+\href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps1/verifyUpperTriangular.m}{verifyUpperTriangular.m}
+	\item
+\href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps1/tests/ps1d.mat}{tests/ps1d.mat}
+\end{itemize}
+
+That last contains the driver code for these functions, as well as the direct matlab solution using the \( \backslash \) operator.
+
+%\begin{verbatim}
+%clear all ;
+%
+%[G, b] = NodalAnalysis( 'testdata/ps1.circuit.netlist' ) ;
+%
+%epsilon = eps( 1.0 ) * 100 ;
+%
+%[L, U] = noPivotLU( G, epsilon ) ;
+%y = forwardSubst( L, b, epsilon ) ;
+%x = backSubst( U, y, epsilon ) ;
+%
+%format short eng ;
+%G\b  % ps1: 1c.
+%x    % ps1: 1d.
+%\end{verbatim}
+
+
+An \( L U \) factorization that properly treated pivots was not numerically required for this problem.  An inefficient pivot \( L U \) factorization routine was implemented in \href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps1/withPivotLU.m}{withPivotLU.m}.
+
+%\par
+%\href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps1/}{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps1/}
+}
