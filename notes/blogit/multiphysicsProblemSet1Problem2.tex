@@ -30,7 +30,64 @@ Comment on the result. Discuss your findings in light of what we discussed in cl
 \makeanswer{multiphysics:problemSet1:2}{ 
 \makeSubAnswer{}{multiphysics:problemSet1:2a}
 
-TODO.
+The matlab code for this problem is implemented in
+
+\begin{itemize}
+\item 
+\href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps1/generateResistorGridNetlist.m}{generateResistorGridNetlist.m}
+\item 
+\href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps1/withPivotLU.m}{withPivotLU.m}
+\item 
+\href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps1/tests/ps2a.mat}{tests/ps2a.mat},
+\end{itemize}
+
+where the last is the driver.  We aren't lucky enough in this problem to end up with system equations \( G \Bx = \Bb \) that can be \( L U \) factored without pivots, and have to use the more general (and slower) factorization routine that generates the factors \( G = L' U\), where \( P L' \) is lower triangular, and \( P \) is a permutation matrix.  To solve such a system we do a forward substitution to solve for \( \By \) in
+
+\begin{equation}\label{eqn:multiphysicsProblemSet1Problem2:20}
+P L' \By = P \Bb,
+\end{equation}
+
+then back substitution of 
+
+\begin{equation}\label{eqn:multiphysicsProblemSet1Problem2:40}
+U \Bx = \By.
+\end{equation}
+
+% n(i,j)
+For a system that has the random current sources specified in \cref{tab:multiphysicsProblemSet1Problem2:1}, the voltage surface plot for this network is plotted with surf in \cref{fig:ps1p2a:ps1p2aFig1}.
+
+%\begin{tabular}[lll]
+%\hline
+%i & j & I mA \\
+%\hline
+%15 & 45 & 57 \\
+%8 & 23 & 64 \\
+%13 & 21 & 68 \\
+%\hline
+%\end{tabular}
+%}
+
+\captionedTable{current sources}{tab:multiphysicsProblemSet1Problem2:1}{
+\begin{tabular}{|l|l|l|}
+\hline
+%\rowcolor[HTML]{CBCEFB} 
+%{\color[HTML]{000000} i} & {\color[HTML]{000000} j} & {\color[HTML]{000000} I (mA)} \\ \hline
+i & j & I (mA) \\ \hline
+15                       & 45                       & 57                            \\ \hline
+8                        & 23                       & 64                            \\ \hline
+13                       & 21                       & 68                            \\ \hline
+\end{tabular}
+}
+
+% n(i,j) = 51(i-1) + j ; i = n % 51 ; j = n / 51
+%I1 810 0 DC 0.057568
+%I2 431 0 DC 0.0641784
+%I3 684 0 DC 0.0688671
+
+\imageFigure{../../figures/ece1254/ps1p2aFig2}{50 node resistor network plot}{fig:ps1p2a:ps1p2aFig1}{0.3}
+
+This plot is a more erratic looking than I would have expected, which makes me wonder if I have made an error in the code that constructs the system equations from the netlist.
+
 \makeSubAnswer{}{multiphysics:problemSet1:2b}
 
 TODO.
