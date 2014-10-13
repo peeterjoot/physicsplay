@@ -102,7 +102,7 @@ Explain the temperature distributions that you obtained from a physical standpoi
 
 \makeSubAnswer{ }{multiphysics:problemSet1:3a}
 
-To discretize the equation, let's divide the interval into \( N \) segments, as illustrated in \cref{fig:ps1p3:ps1p3Fig8}.
+To discretize the equation, let's divide the interval into \( N - 1 \) segments, as illustrated in \cref{fig:ps1p3:ps1p3Fig8}.
 
 \imageFigure{../../figures/ece1254/ps1p3Fig8}{Discretization intervals}{fig:ps1p3:ps1p3Fig8}{0.05}
 
@@ -110,14 +110,14 @@ Let
 
 \begin{equation}\label{eqn:multiphysicsProblemSet1Problem3:20}
 \begin{aligned}
-x^i &= i \Delta x
-, \quad i \in \{ 0, 1, \cdots, N+1 \} \\
+	x^i &= (i -1)\Delta x
+, \quad i \in \{ 1, \cdots, N \} \\
 H^i &= 50 \sin^2 \lr{ 2 \pi x^i } 
-, \quad i \in \{ 0, 1, \cdots, N+1 \} \\
+, \quad i \in \{ 1, \cdots, N \} \\
 T^i &= T( x^i ) 
-, \quad i \in \{ 0, 1, \cdots, N+1 \} \\
+, \quad i \in \{ 1, \cdots, N \} \\
 Q^i &= \frac{T^{i+1} - T^i}{\Delta x}
-, \quad i \in \{ 0, \cdots, N \} \\
+, \quad i \in \{ 1, \cdots, N-1 \} \\
 \end{aligned}
 \end{equation}
 
@@ -125,41 +125,52 @@ Here \( x^i \) are the discrete points at which the temperatures are evaluated w
 
 With \( Q^i = \lr{T^i - T^{i-1}}/{\Delta x} \) we have an equivalence to the circuit element \( I = \Delta V/R \).  This analogy makes sense physicsally since a smaller interval length has less resistance to heat flow.
 
-The linearized Poisson equation at interior nodes \( 1 \le i \le N \) is
+The linearized Poisson equation at interior nodes \( 1 < i < N \) is
 
 \begin{equation}\label{eqn:multiphysicsProblemSet1Problem3:40}
 Q^i - Q^{i-1} - \frac{\kappa_a \Delta x}{\kappa_m} \lr{ T^i - T_0 } + \frac{H^i \Delta x}{\kappa_m} = 0.
 \end{equation}
 
-Identification of the \( - \kappa_a \Delta x/\kappa_m \lr{ T^i - T_0 } \) term as a current \( I = \Delta V/R \) (with temperatures as voltages) means that we can identify \( R \sim \kappa_m \Delta x/\kappa_a \).  This allows us to create the equivalent circuit sketched in \cref{fig:ps1p3:ps1p3Fig9}.
-
-\imageFigure{../../figures/ece1254/ps1p3Fig9}{Equivalent circuit}{fig:ps1p3:ps1p3Fig9}{0.3}
-
+Identification of the \( - \kappa_a \Delta x/\kappa_m \lr{ T^i - T_0 } \) term as a current \( I = \Delta V/R \) (with temperatures as voltages) means that we can identify \( R \sim \kappa_m /(\kappa_a \Delta x) \).  
+%This allows us to create the equivalent circuit sketched in \cref{fig:ps1p3:ps1p3Fig9}.
+%
+%\imageFigure{../../figures/ece1254/ps1p3Fig9}{Equivalent circuit}{fig:ps1p3:ps1p3Fig9}{0.3}
+%
 At the endpoints things are a slightly different.  At \( x^0, x^{N+1} \) respectively, we have
 
 \begin{equation}\label{eqn:multiphysicsProblemSet1Problem3:60}
 \begin{aligned}
--q_0 + Q^0 - \frac{\kappa_a \Delta x}{\kappa_m} \lr{ T^0 - T_0 } + \frac{H^0 \Delta x}{\kappa_m} &= 0 \\
--q_1 -Q^{N} - \frac{\kappa_a \Delta x}{\kappa_m} \lr{ T^{N+1} - T_0 } + \frac{H^{N+1} \Delta x}{\kappa_m} &= 0. \\
+-q^0 + Q^1 - \frac{\kappa_a \Delta x}{\kappa_m} \lr{ T^1 - T_0 } + \frac{H^1 \Delta x}{\kappa_m} &= 0 \\
+-q^1 -Q^{N-1} - \frac{\kappa_a \Delta x}{\kappa_m} \lr{ T^{N} - T_0 } + \frac{H^{N} \Delta x}{\kappa_m} &= 0. \\
 \end{aligned}
 \end{equation}
 
-At these nodes is only one current term, but we also have to model the heat sinks.  This equivalent circuit is sketched in \cref{fig:ps1p3:ps1p3Fig10}.
-
-\imageFigure{../../figures/ece1254/ps1p3Fig10}{Endpoints in equivalent circuit}{fig:ps1p3:ps1p3Fig10}{0.3}
-
-Note: missed the \( \Delta x \) factors in the equivalent circuit figures.
-
-
+At these nodes is only one current term, but we also have to model the heat sinks.  This equivalent circuit containing all these elements is sketched in 
+%\cref{fig:ps1p3:ps1p3Fig10}.
+%\imageFigure{../../figures/ece1254/ps1p3Fig10}{Endpoints in equivalent circuit}{fig:ps1p3:ps1p3Fig10}{0.3}
+\cref{fig:ps1p3:ps1p3Fig11}.
+\imageFigure{../../figures/ece1254/ps1p3Fig11}{Equivalent circuit}{fig:ps1p3:ps1p3Fig11}{0.3}
 
 \makeSubAnswer{ }{multiphysics:problemSet1:3b}
 
-TODO.
+The numerical solution and plotting code was implemented in
+
+\begin{itemize}
+\item 
+\href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps1/generateHeatNetlist.m}{generateHeatNetlist.m}
+\item 
+\href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps1/plotHeatQ1.m}{plotHeatQ1.m}
+\end{itemize}
+
+FIXME: This plot, shown in \cref{fig:ps1p3:ps1p3Fig12n60}, for \( n = 60 \) shows an oscillatory pattern that varies directly with the number of intervals.  This is similar to the oscillatory 3D plot from the previous problem.  Again this indicates that my NodalAnalysis function that is doing the netlist to matrix equations transformation has an error.  I've been unable as yet to locate what that error is.
+
+\imageFigure{../../figures/ece1254/ps1p3Fig12n60}{CAPTION}{fig:ps1p3:ps1p3Fig12n60}{0.3}
+
 \makeSubAnswer{ }{multiphysics:problemSet1:3c}
 
 We'd like to keep the variation of the \( H_i \) term small.  That diffrence between two adjacent intervals scales with the squared sine
 
-\begin{dmath}\label{eqn:multiphysicsProblemSet1Problem3:n}
+\begin{dmath}\label{eqn:multiphysicsProblemSet1Problem3:80}
 \Delta \lr{ \sin^2 (2 \pi x) } 
 \approx
 4 \pi \sin \lr{ 2 \pi x} \cos \lr{ 2 \pi x } \Delta x
@@ -168,14 +179,14 @@ We'd like to keep the variation of the \( H_i \) term small.  That diffrence bet
 
 This is biggest when the sine is near unity.  If we want the heat terms to differ by no more than a fraction \( f \) we can determine \( \Delta x \) from
 
-\begin{dmath}\label{eqn:multiphysicsProblemSet1Problem3:n}
+\begin{dmath}\label{eqn:multiphysicsProblemSet1Problem3:100}
 f H^i \approx H^i - H^{i-1}
 \approx 2 \pi \Delta x H^i.
 = \frac{2 \pi}{N}  H^i.
 \end{dmath}
 
 That is
-\begin{dmath}\label{eqn:multiphysicsProblemSet1Problem3:n}
+\begin{dmath}\label{eqn:multiphysicsProblemSet1Problem3:120}
 N \approx \frac{2 \pi}{f}.
 \end{dmath}
 
