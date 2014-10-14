@@ -17,9 +17,9 @@ CLEAN_TARGETS += *.synctex.gz
 #INCOMPLETE += pipeFlowConstPressureGradient.tex
 #INCOMPLETE += qmTwoExamReflection.tex
 #INCOMPLETE += qmTwoR1.tex
-INCOMPLETE += multiphysicsProblemSet1Problem1.tex
-INCOMPLETE += multiphysicsProblemSet1Problem2.tex
-INCOMPLETE += multiphysicsProblemSet1Problem3.tex
+#INCOMPLETE += multiphysicsProblemSet2Problem1.tex
+#INCOMPLETE += multiphysicsProblemSet2Problem2.tex
+#INCOMPLETE += multiphysicsProblemSet2Problem3.tex
 
 INCOMPLETE += stokespost.tex
 

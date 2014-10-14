@@ -2,6 +2,10 @@ THISDIR := ece1254
 
 include ../make.bookvars
 
+INCOMPLETE += multiphysicsProblemSet1Problem1.tex
+INCOMPLETE += multiphysicsProblemSet1Problem2.tex
+INCOMPLETE += multiphysicsProblemSet1Problem3.tex
+
 #ONCEFLAGS := -justonce
 
 SOURCE_DIRS += appendix
@@ -26,8 +30,8 @@ THISBOOK_DEPS += $(PDFS_FROM_EPS)
 
 include ../make.rules
 
-#condensedMatterProblemSet1.pdf :: condensedMatterProblemSet1Problem1.tex
-#condensedMatterProblemSet1.pdf :: condensedMatterProblemSet1Problem2.tex
-#condensedMatterProblemSet1.pdf :: condensedMatterProblemSet1Problem3.tex
-#
-#condensedMatterProblemSet1.pdf :: $(PDF_DEPS)
+multiphysicsProblemSet1.pdf :: multiphysicsProblemSet1Problem1.tex
+multiphysicsProblemSet1.pdf :: multiphysicsProblemSet1Problem2.tex
+multiphysicsProblemSet1.pdf :: multiphysicsProblemSet1Problem3.tex
+
+multiphysicsProblemSet1.pdf :: $(PDF_DEPS)
