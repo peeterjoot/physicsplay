@@ -30,9 +30,10 @@ The problem of fill ins in LU computations arise in locations where rows and col
 
 Rows and columns can be permuted to deal with these.  Here is an ad-hoc permutation of rows and columns that will result in less fill ins.
 
-\begin{equation}\label{eqn:multiphysicsL7:n}
+\begin{equation}\label{eqn:multiphysicsL7:180}
 \begin{aligned}
-&\begin{bmatrix}
+&
+\begin{bmatrix}
 a & b & c & 0 \\
 d & e & 0 & 0 \\
 0 & f & g & 0 \\
@@ -148,11 +149,95 @@ To facilitate such permutations the Markowitz product that estimates the amount 
 \end{equation*}
 }
 
+\makeexample{Markowitz product}{example:multiphysicsL7:200}{
+
+In the slides the Markowitz product is computed for each of the diagonal elements, and the example looks like the product is really the product of the number of non-zero values in that row and column with the diagonal values excepted.  That seems to differ from the definition, and also differs from the description in \citep{pivotingSparsity}.
+
+For this matrix 
+\begin{equation}\label{eqn:multiphysicsL7:220}
+\begin{bmatrix}
+a & b & c & 0 \\
+d & e & 0 & 0 \\
+0 & f & g & 0 \\
+0 & h & 0 & i \\
+\end{bmatrix},
+\end{equation}
+
+those values would be:
+
+\begin{equation}\label{eqn:multiphysicsL7:240}
+\begin{aligned}
+M_{11} &= 2 \times 1 \qquad \text{b,c ; d}\\
+M_{22} &= 1 \times 3 \qquad \text{d ; b, f, h}\\
+M_{33} &= 1 \times 1 \qquad \text{c ; f}\\
+M_{44} &= 1 \times 0 \qquad \text{h ; }
+\end{aligned}
+\end{equation}
+
+As a second example, the products for matrix
+\begin{equation}\label{eqn:multiphysicsL7:260}
+M = \begin{bmatrix}
+1 & 2 & 0 & 0 \\
+0 & 1 & 2 & 0 \\
+0 & 2 & 0 & 4 \\
+2 & 1 & 2 & 0 \\
+\end{bmatrix}
+\end{equation}
+
+are
+\begin{equation}\label{eqn:multiphysicsL7:240}
+\begin{aligned}
+M_{11} &= 1 \\
+M_{22} &= 3 \\
+M_{33} &= 1 \\
+M_{44} &= 0 \\
+\end{aligned}
+\end{equation}
+
+We find that \( j = 4 \) is the diagonal slot with the lowest Markowitz product.
+}
+
+\sectionAndIndex{Markowitz reordering}
+
+The Markowitz Reordering procedure (copied directly from the slides) is
+
+\begin{itemize}
+\item 
+For i = 1 to n
+\item 
+Find diagonal \( j >= i \) with min Markowitz product
+\item 
+Swap rows \( j \leftrightarrow i \) and columns \( j \leftrightarrow i \)
+\item 
+Factor the new row \( i \) and update Markowitz products
+\end{itemize}
+
+\makeexample{Markowitz reordering}{example:multiphysicsL7:280}{
+
+Let's do a round of Markowitz reordering for the matrix
+
+FIXME.
+}
+
+\section{On slides}
+
+Graph approaches.  Delete the most connected nodes.  Claimed that the Markowitz products are the squares of the node degrees.  FIXME: work example to come to terms with this.
+
+\section{Summary of factorization costs}
+
+\paragraph{LU (dense)}
+
+\begin{itemize}
+   \item cost: \( O(n^3) \)
+   \item cost depends only on size
+\end{itemize}
+
+}
+
 \section{On slides}
 
 Covered:
 \begin{itemize}
-\item Markowitz product.  FIXME: Compute some examples.
 \item Markowitz reordering.  FIXME: Work an example.
 \item Graph approaches.  Delete the most connected nodes.  Claimed that the Markowitz products are the squares of the node degrees.  FIXME: work example to come to terms with this.
 \end{itemize}
