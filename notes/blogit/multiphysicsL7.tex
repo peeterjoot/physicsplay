@@ -377,48 +377,73 @@ Can be cheap if done right.  Convergence requires careful preconditioning.
 
 \section{Iterative methods}
 
-Suppose that we have an initial guess \( \overbar{x}_0 \).   Iterative methods are generally of the form
+Suppose that we have an initial guess \( \Bx_0 \).   Iterative methods are generally of the form
 
 \begin{algorithmic}
 \REPEAT
-\STATE \(\overbar{r} = \overbar{b} - M \overbar{x}_i\)
-\UNTIL{\(\Norm{\overbar{r}} < \epsilon \).}
+\STATE \(\Br = \Bb - M \Bx_i\)
+\UNTIL{\(\Norm{\Br} < \epsilon \).}
 \end{algorithmic}
 
-The difference \( \overbar{r} \) is called the residual.  For as long as it is bigger than desired, continue improving the estimate \( \overbar{x}_i \).
+The difference \( \Br \) is called the residual.  For as long as it is bigger than desired, continue improving the estimate \( \Bx_i \).
 
-The matrix vector product \( M \overbar{x}_i \), if dense, is of \( O(n^2) \).  Suppose, for example, that we can perform the iteration in ten iterations.  If the matrix is dense, we can have \( 10 \, O(n^2) \) performance.  If sparse, this can be worse than just direct computation.
+The matrix vector product \( M \Bx_i \), if dense, is of \( O(n^2) \).  Suppose, for example, that we can perform the iteration in ten iterations.  If the matrix is dense, we can have \( 10 \, O(n^2) \) performance.  If sparse, this can be worse than just direct computation.
 
 \section{Gradient method}
 
-This is a method for iterative solution of the equation \( M \overbar{x} = \overbar{b} \).
+This is a method for iterative solution of the equation \( M \Bx = \Bb \).
 
 This requires symmetric positive definite matrix \( M = M^\T \), with \( M > 0 \).
 
 We introduce an \textAndIndex{energy function}
 
 \begin{equation}\label{eqn:multiphysicsL7:60}
-\Psi(\overbar{y}) \equiv \inv{2} \overbar{y}^\T M \overbar{y} - \overbar{y}^\T \overbar{b}
+\Psi(\By) \equiv \inv{2} \By^\T M \By - \By^\T \Bb
 \end{equation}
 
 For a two variable system this is illustrated in \cref{fig:lecture7:lecture7Fig1}.
 
 \imageFigure{../../figures/ece1254/lecture7Fig1}{Positive definite energy function}{fig:lecture7:lecture7Fig1}{0.3}
 
-Claim: This energy function has a minimum for 
+\maketheorem{Energy function minimum}{thm:multiphysicsL7:460}{
+The energy function \cref{eqn:multiphysicsL7:60} has a minimum at
 
 \begin{equation}\label{eqn:multiphysicsL7:80}
-\overbar{y} = M^{-1} \overbar{b} = \overbar{x}.
+\By = M^{-1} \Bb = \Bx.
 \end{equation}
 
-FIXME: justify.
+To prove this, consider the coordinate representation
+
+\begin{equation}\label{eqn:multiphysicsL7:480}
+\Psi = \inv{2} y_a M_{ab} y_b - y_b b_b,
+\end{equation}
+
+for which the derivatives are
+\begin{dmath}\label{eqn:multiphysicsL7:500}
+\PD{y_i}{\Psi} = 
+\inv{2} M_{ib} y_b 
++
+\inv{2} y_a M_{ai} 
+- b_i
+=
+\lr{ M \By - \Bb }_i.
+\end{dmath}
+
+The last operation above was possible because \( M = M^\T \).  Setting all of these equal to zero, and rewriting this as a matrix relation we have
+
+\begin{equation}\label{eqn:multiphysicsL7:520}
+M \By = \Bb,
+\end{equation}
+
+as asserted.
+}
 
 This is called the gradient method because the gradient moves us along the path of steepest descent towards the minimum if it exists.
 
 The method is
 
 \begin{equation}\label{eqn:multiphysicsL7:100}
-\overbar{x}^{(k+1)} = \overbar{x}^{(k)} + 
+\Bx^{(k+1)} = \Bx^{(k)} + 
 \mathLabelBox
 { \alpha_k }{step size}
 \mathLabelBox
@@ -426,30 +451,30 @@ The method is
    labelstyle={below of=m\themathLableNode, below of=m\themathLableNode}
 ]
 {
-\overbar{d}^{(k)}
+\Bd^{(k)}
 }{direction},
 \end{equation}
 
 where the direction is
 
 \begin{equation}\label{eqn:multiphysicsL7:120}
-\overbar{d}^{(k)} = - \spacegrad \Phi = r^{(k)}.
+\Bd^{(k)} = - \spacegrad \Phi = r^{(k)}.
 \end{equation}
 
 \paragraph{Optimal step size}
 
-Note that for the minimization of \( \Phi \lr{ \overbar{x}^{(k+1)} } \), we note
+Note that for the minimization of \( \Phi \lr{ \Bx^{(k+1)} } \), we note
 
 \begin{dmath}\label{eqn:multiphysicsL7:140}
-\Phi \lr{ \overbar{x}^{(k+1)} }
-= \Phi\lr{ \overbar{x}^{(k)} + \alpha_k \overbar{d}^{(k)} }
+\Phi \lr{ \Bx^{(k+1)} }
+= \Phi\lr{ \Bx^{(k)} + \alpha_k \Bd^{(k)} }
 = 
 \inv{2} 
-\lr{ \overbar{x}^{(k)} + \alpha_k \overbar{d}^{(k)} }^\T
+\lr{ \Bx^{(k)} + \alpha_k \Bd^{(k)} }^\T
 M
-\lr{ \overbar{x}^{(k)} + \alpha_k \overbar{d}^{(k)} }
+\lr{ \Bx^{(k)} + \alpha_k \Bd^{(k)} }
 -
-\lr{ \overbar{x}^{(k)} + \alpha_k \overbar{d}^{(k)} }^\T \overbar{b}
+\lr{ \Bx^{(k)} + \alpha_k \Bd^{(k)} }^\T \Bb
 \end{dmath}
 
 If we take the derivative of this with respect to \( \alpha_k \) to find the minimum, we find (after work left to the user)
@@ -457,12 +482,12 @@ If we take the derivative of this with respect to \( \alpha_k \) to find the min
 \begin{equation}\label{eqn:multiphysicsL7:160}
 \alpha_k 
 = \frac{
-\lr{\overbar{r}^{(k)}}^\T 
-\overbar{r}^{(k)}
+\lr{\Br^{(k)}}^\T 
+\Br^{(k)}
 }{
-\lr{\overbar{r}^{(k)}}^\T 
+\lr{\Br^{(k)}}^\T 
 M
-\overbar{r}^{(k)}
+\Br^{(k)}
 }
 \end{equation}
 
@@ -471,7 +496,7 @@ We will see that this method is not optimal when we pick one direction and keep 
 \section{Definitions and theorems}
 
 \makedefinition{Positive (negative) definite}{dfn:multiphysicsL7:40}{
-   A matrix \( M \) is positive (negative) definite, denoted \( M > 0 (<0) \) if \( \overbar{y}^\T M \overbar{y} > 0 (<0), \quad \forall \overbar{y} \).
+   A matrix \( M \) is positive (negative) definite, denoted \( M > 0 (<0) \) if \( \By^\T M \By > 0 (<0), \quad \forall \By \).
 
    If a matrix is neither positive, nor negative definite, it is called indefinite.
 }
