@@ -137,7 +137,7 @@ b_3 \\
 
 \sectionAndIndex{Markowitz product}
 
-To facilitate such permutations the Markowitz product that estimates the amount of fill in required.  This is
+To facilitate such permutations the Markowitz product that estimates the amount of fill in required.
 
 \makedefinition{Markowitz product}{dfn:multiphysicsL7:20}{
 \begin{equation*}
@@ -149,9 +149,13 @@ To facilitate such permutations the Markowitz product that estimates the amount 
 \end{equation*}
 }
 
+In \citep{markowitz1957elimination} it is stated ``A still simpler alternative, which seems adequate generally, is to choose the pivot which minimizes the number of coefficents modified at each step (excluding those which are eliminated at the particular step).  This is equivalent to choosing the non-zero element with minimum \( (\rho_i - 1 )(\sigma_j -1) \).''  
+
+Note that this product is applied only to \( i j \) positions that are non-zero, something not explicitly mentioned in the slides, nor in other locations like \citep{pivotingSparsity}.
+
 \makeexample{Markowitz product}{example:multiphysicsL7:200}{
 
-In the slides the Markowitz product is computed for each of the diagonal elements, and the example looks like the product is really the product of the number of non-zero values in that row and column with the diagonal values excepted.  That seems to differ from the definition, and also differs from the description in \citep{pivotingSparsity}.
+%In the slides the Markowitz product is computed for each of the diagonal elements, and the example looks like the product is really the product of the number of non-zero values in that row and column with the diagonal values excepted.  That seems to differ from the definition, and also differs from the description in 
 
 For this matrix 
 \begin{equation}\label{eqn:multiphysicsL7:220}
@@ -163,38 +167,16 @@ d & e & 0 & 0 \\
 \end{bmatrix},
 \end{equation}
 
-those values would be:
+the Markowitz products are
 
-\begin{equation}\label{eqn:multiphysicsL7:240}
-\begin{aligned}
-M_{11} &= 2 \times 1 \qquad \text{b,c ; d}\\
-M_{22} &= 1 \times 3 \qquad \text{d ; b, f, h}\\
-M_{33} &= 1 \times 1 \qquad \text{c ; f}\\
-M_{44} &= 1 \times 0 \qquad \text{h ; }
-\end{aligned}
+\begin{equation}\label{eqn:multiphysicsL7:280}
+\begin{bmatrix}
+1 & 6 & 2 &   \\
+1 & 3 &   &   \\
+  & 3 & 1 &   \\
+  & 3 &   & 0 \\
+\end{bmatrix}.
 \end{equation}
-
-As a second example, the products for matrix
-\begin{equation}\label{eqn:multiphysicsL7:260}
-M = \begin{bmatrix}
-1 & 2 & 0 & 0 \\
-0 & 1 & 2 & 0 \\
-0 & 2 & 0 & 4 \\
-2 & 1 & 2 & 0 \\
-\end{bmatrix}
-\end{equation}
-
-are
-\begin{equation}\label{eqn:multiphysicsL7:240}
-\begin{aligned}
-M_{11} &= 1 \\
-M_{22} &= 3 \\
-M_{33} &= 1 \\
-M_{44} &= 0 \\
-\end{aligned}
-\end{equation}
-
-We find that \( j = 4 \) is the diagonal slot with the lowest Markowitz product.
 }
 
 \sectionAndIndex{Markowitz reordering}
@@ -214,14 +196,162 @@ Factor the new row \( i \) and update Markowitz products
 
 \makeexample{Markowitz reordering}{example:multiphysicsL7:280}{
 
-Let's do a round of Markowitz reordering for the matrix
+Looking at the Markowitz products \label{eqn:multiphysicsL7:280} a swap of rows and columns \( 1, 4 \) gives the modified matrix
 
-FIXME.
+\begin{equation}\label{eqn:multiphysicsL7:300}
+\begin{bmatrix}
+i & 0 & h & 0 \\
+0 & d & e & 0 \\
+0 & 0 & f & g \\
+0 & a & b & c \\
+\end{bmatrix}
+\end{equation}
+
+In this case, this reordering has completely avoided any requirement to do any actual Gaussian operations for this first stage reduction.
+
+Presuming that the Markowitz products for the remaining 3x3 submatrix are only computed from that submatrix, the new products are
+\begin{equation}\label{eqn:multiphysicsL7:320}
+\begin{bmatrix}
+&   &   &   \\
+& 1 & 2 &   \\
+&   & 2 & 1 \\
+& 2 & 4 & 2 \\
+\end{bmatrix}.
+\end{equation}
+
+We have a minimal product in the pivot position, which happens to already lie on the diagonal.  Note that it is not neccessarily the best for numerical stability.  It appears the off diagonal Markowitz products are not really of interest since the reordering algorithm swaps both rows and columns.
 }
 
-\section{On slides}
+\section{Graph representation}
 
-Graph approaches.  Delete the most connected nodes.  Claimed that the Markowitz products are the squares of the node degrees.  FIXME: work example to come to terms with this.
+It is possible to interpret the Markowitz products on the diagonal as connectivity of a graph that represents the interconnections of the nodes.  Consider the circuit of \cref{fig:lecture7:lecture7Fig2} as an example
+
+\imageFigure{../../figures/ece1254/lecture7Fig2}{Simple circuit}{fig:lecture7:lecture7Fig2}{0.3}
+
+The system equations for this circuit is of the form
+\begin{equation}\label{eqn:multiphysicsL7:340}
+\begin{bmatrix}
+x & x & x & 0 & 1 \\
+x & x & x & 0 & 0 \\
+x & x & x & x & 0 \\
+0 & 0 & x & x & -1 \\
+-1 & 0 & 0 & 1 & 0 \\
+\end{bmatrix}
+\begin{bmatrix}
+V_1 \\
+V_2 \\
+V_3 \\
+V_4 \\
+i \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 \\
+0 \\
+0 \\
+0 \\
+x \\
+\end{bmatrix}.
+\end{equation}
+
+The Markowitz products along the diagonal are
+\begin{equation}\label{eqn:multiphysicsL7:360}
+\begin{aligned}
+M_{11} &= 9 \\
+M_{22} &= 4 \\
+M_{33} &= 9 \\
+M_{44} &= 4 \\
+M_{55} &= 4 \\
+\end{aligned}
+\end{equation}
+
+Compare these to the number of interconnections of the graph \cref{fig:lecture7:lecture7Fig3} of the nodes in this circuit.  We see that these are the squares of the number of the node interconnects in each case.
+
+\imageFigure{../../figures/ece1254/lecture7Fig3}{Graph representation}{fig:lecture7:lecture7Fig3}{0.3}
+
+Here a 5th node was introduced for the current \( i \) between nodes \( 4 \) and \( 1 \).  Observe that the Markowitz product of this node was counted as the number of non-zero values excluding the \( 5,5 \) matrix position.  However, that doesn't matter too much since a Markowitz swap of row/column 1 with row/column 5 would put a zero in the \( 1,1 \) position of the matrix, which is not desirable.  We have to restrict the permutations of zero diagonal positions to pivots for numerical stability, or use a more advanced zero fill avoidance algorithm.
+
+The minimum diagonal Markowitz products are in positions 2 or 4, with respective Markowitz reorderings of the form
+
+\begin{equation}\label{eqn:multiphysicsL7:380}
+\begin{bmatrix}
+x & x & x & 0 & 0 \\
+x & x & x & 0 & 1 \\
+x & x & x & x & 0 \\
+0 & 0 & x & x & -1 \\
+0 & -1 & 0 & 1 & 0 \\
+\end{bmatrix}
+\begin{bmatrix}
+V_2 \\
+V_1 \\
+V_3 \\
+V_4 \\
+i \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 \\
+0 \\
+0 \\
+0 \\
+x \\
+\end{bmatrix},
+\end{equation}
+
+and
+\begin{equation}\label{eqn:multiphysicsL7:400}
+\begin{bmatrix}
+x &  0 & 0 & x & -1 \\
+0 &  x & x & x & 1 \\
+0 &  x & x & x & 0 \\
+x &  x & x & x & 0 \\
+1 & -1 & 0 & 0 & 0 \\
+\end{bmatrix}
+\begin{bmatrix}
+V_4 \\
+V_1 \\
+V_2 \\
+V_3 \\
+i \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 \\
+0 \\
+0 \\
+0 \\
+x \\
+\end{bmatrix}.
+\end{equation}
+
+The original system had 7 zeros that could potentially be filled in the remaining \( 4 \times 4 \) submatrix.  After a first round of Gaussian elimination, our system matrices have the respective forms
+
+\begin{subequations}
+\begin{equation}\label{eqn:multiphysicsL7:420}
+\begin{bmatrix}
+x & x & x & 0 & 0 \\
+0 & x & x & 0 & 1 \\
+0 & x & x & x & 0 \\
+0 & 0 & x & x & -1 \\
+0 & -1 & 0 & 1 & 0 \\
+\end{bmatrix}
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsL7:440}
+\begin{bmatrix}
+x &  0 & 0 & x & -1 \\
+0 &  x & x & x & 1 \\
+0 &  x & x & x & 0 \\
+0 &  x & x & x & 0 \\
+0 & -1 & 0 & x & x \\
+\end{bmatrix}
+\end{equation}
+\end{subequations}
+
+The remaining \( 4 \times 4 \) submatrices have interconnect graphs sketched in \cref{fig:lecture7:lecture7Fig4}.
+
+\imageFigure{../../figures/ece1254/lecture7Fig4}{Graphs after one round of Gaussian elimination}{fig:lecture7:lecture7Fig4}{0.3}
+
+From a graph point of view, we want to delete the most connected nodes.  This can be driven by the Markowitz products along the diagonal or directly with graph methods.
 
 \section{Summary of factorization costs}
 
@@ -231,27 +361,6 @@ Graph approaches.  Delete the most connected nodes.  Claimed that the Markowitz 
    \item cost: \( O(n^3) \)
    \item cost depends only on size
 \end{itemize}
-
-}
-
-\section{On slides}
-
-Covered:
-\begin{itemize}
-\item Markowitz reordering.  FIXME: Work an example.
-\item Graph approaches.  Delete the most connected nodes.  Claimed that the Markowitz products are the squares of the node degrees.  FIXME: work example to come to terms with this.
-\end{itemize}
-
-\section{Summary of factorization costs}
-
-\paragraph{LU (dense)}
-
-\begin{itemize}
-   \item cost: \( O(n^3) \)
-   \item cost depends only on size
-\end{itemize}
-
-Computation can be affordable up to a few thousand elements.
 
 \paragraph{LU (sparse)}
 
@@ -371,5 +480,5 @@ We will see that this method is not optimal when we pick one direction and keep 
    A symmetric matrix \( M > 0 (<0)\) iff \( \lambda_i > 0 (<0)\) for all eigenvalues \( \lambda_i \), or is indefinite iff its eigenvalues \( \lambda_i \) are of mixed sign.
 }
 
-%\EndArticle
-\EndNoBibArticle
+\EndArticle
+%\EndNoBibArticle
