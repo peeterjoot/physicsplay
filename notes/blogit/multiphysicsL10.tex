@@ -32,11 +32,9 @@ On slides, some examples to motivate:
 \item fluids
 \item diode (exponential)
 
-Example:
+Example in \cref{fig:lecture10:lecture10Fig1}.
 
-F1
-\cref{fig:lecture10:lecture10Fig1}.
-\imageFigure{../../figures/ece1254/lecture10Fig1}{CAPTION}{fig:lecture10:lecture10Fig1}{0.3}
+\imageFigure{../../figures/ece1254/lecture10Fig1}{Diode circuit}{fig:lecture10:lecture10Fig1}{0.2}
 
 \begin{equation}\label{eqn:multiphysicsL10:20}
 I_d = I_s \lr{ e^{V_d/V_t} - 1 } = \frac{10 - V_d}{10}.
@@ -116,11 +114,11 @@ Stated more accurately we have convergence provided
 \qquad \forall \tilde{x} \in [ x^\conj - \delta, x^\conj + \delta ],
 \end{equation}
 
-and \( \Abs{x^0 - x^\conj } < \delta \).  It could very easily be difficult to determine the convergence regions.
+and \( \Abs{x^0 - x^\conj } < \delta \).  This is illustrated in \cref{fig:lecture10:lecture10Fig3}.
 
-F3
-\cref{fig:lecture10:lecture10Fig3}.
-\imageFigure{../../figures/ece1254/lecture10Fig3}{CAPTION}{fig:lecture10:lecture10Fig3}{0.3}
+\imageFigure{../../figures/ece1254/lecture10Fig3}{Convergence region}{fig:lecture10:lecture10Fig3}{0.2}
+
+It could very easily be difficult to determine the convergence regions.
 
 We have some problems
 
@@ -139,11 +137,9 @@ Examples where we may want to use this:
 
 \section{Newton's method}
 
-The core idea of this method is sketched in
+The core idea of this method is sketched in \cref{fig:lecture10:lecture10Fig4}.  To find the intersection with the x-axis, we follow the slope closer to the intersection.
 
-F4
-\cref{fig:lecture10:lecture10Fig4}.
-\imageFigure{../../figures/ece1254/lecture10Fig4}{CAPTION}{fig:lecture10:lecture10Fig4}{0.3}
+\imageFigure{../../figures/ece1254/lecture10Fig4}{Newton's method}{fig:lecture10:lecture10Fig4}{0.2}
  
 To do this, we expand \( f(x) \) in Taylor series to first order around \( x^k \), and then solve for \( f(x) = 0 \) in that approximation
 
@@ -166,11 +162,24 @@ f(x) = x^3 - 2,
 
 it was found 
 
-F5
-\cref{fig:lecture10:lecture10Fig6}.
-\imageFigure{../../figures/ece1254/lecture10Fig6}{CAPTION}{fig:lecture10:lecture10Fig6}{0.3}
+\captionedTable{Numerical Newton's method example}{tab:multiphysicsL10:400}{
+\begin{tabular}{|l|l|l|}
+\hline
+k      & \( x^k \) & \( \Abs( x^k - x^\conj \) \\
+\hline
+0      & 10                        & 8.74                                                      \\
+1      & \( \cdot \)                    & 5.4                                                       \\
+\( \vdots \) & \( \cdot \)                  & \( \vdots \)                                                 \\
+8      & \( \cdot \)                  & \( 1.7 \times 10^{-3}  \)                  \\
+9      & \( \cdot  \)                 & \( 2.4 \times 10^{-6}   \)                 \\
+10     & \( \cdot   \)                & \( 6.6 \times 10^{-12}   \)                \\
+\hline
+\end{tabular}
+}
 
+The error tails off fast as illustrated roughly in \cref{fig:lecture10:lecture10Fig6}.
 
+\imageFigure{../../figures/ece1254/lecture10Fig6}{Error by iteration}{fig:lecture10:lecture10Fig6}{0.1}
 }
 
 \paragraph{Convergence analysis}
@@ -195,63 +204,73 @@ Evaluating at \( x^\conj \) we have
 \begin{equation}\label{eqn:multiphysicsL10:320}
 0 = f(x^k) 
 + \evalbar{ \PD{x}{f} }{x^k} \lr{ x^\conj - x^k }.
-+ \inv{2} \evalbar{ \PDSq{x}{f} }{\tilde{x} \in [x^\conj, x^k]} \lr{ x^\conj - x^k }.
++ \inv{2} \evalbar{ \PDSq{x}{f} }{\tilde{x} \in [x^\conj, x^k]} \lr{ x^\conj - x^k }^2.
 \end{equation}
+
+and subtracting this from \cref{eqn:multiphysicsL10:280} we are left with
 
 \begin{equation}\label{eqn:multiphysicsL10:340}
 0 = \evalbar{\PD{x}{f}}{x^k} \lr{ x^{k+1} - \cancel{x^k} - x^\conj + \cancel{x^k} }
 - \inv{2} \evalbar{\PDSq{x}{f}}{\tilde{x}} \lr{ x^\conj - x^k }^2.
 \end{equation}
 
-FIXME: make sense of what he did here.
+Solving for the difference from the solution, the error is
 
 \begin{equation}\label{eqn:multiphysicsL10:360}
 x^{k+1} - x^\conj 
-= \inv{2} \lr{ \PD{x}{f} }^{-1} \evalbar{\PDSq{x}{f}}{\tilde{x}} \lr{ x^k - x^\conj }^2
+= \inv{2} \lr{ \PD{x}{f} }^{-1} \evalbar{\PDSq{x}{f}}{\tilde{x}} \lr{ x^k - x^\conj }^2,
 \end{equation}
+
+or in absolute value
 
 \begin{equation}\label{eqn:multiphysicsL10:380}
 \Abs{ x^{k+1} - x^\conj } 
-= \inv{2} \Abs{ \PD{x}{f} }^{-1} \Abs{ \PDSq{x}{f} } \Abs{ x^k - x^\conj }^2
+= \inv{2} \Abs{ \PD{x}{f} }^{-1} \Abs{ \PDSq{x}{f} } \Abs{ x^k - x^\conj }^2.
 \end{equation}
 
-We see that convergence is quadratic in the error from the previous iteration.  We will have trouble if the derivative goes small at any point in the iteration region, for example in
+We see that convergence is quadratic in the error from the previous iteration.  We will have trouble if the derivative goes small at any point in the iteration region, for example in \cref{fig:lecture10:lecture10Fig7}, we could easily end up in the zero derivative region.
 
-F7
-\cref{fig:lecture10:lecture10Fig7}.
-\imageFigure{../../figures/ece1254/lecture10Fig7}{CAPTION}{fig:lecture10:lecture10Fig7}{0.3}
+\imageFigure{../../figures/ece1254/lecture10Fig7}{Newton's method with small derivative region}{fig:lecture10:lecture10Fig7}{0.3}
 
 \paragraph{When to stop iteration}
 
 One way to check is to look to see if the difference
 
-\begin{equation}\label{eqn:multiphysicsL10:n}
+\begin{equation}\label{eqn:multiphysicsL10:420}
 \Norm{ x^{k+1} - x^k } < \epsilon_{\Delta x},
 \end{equation}
 
 however, when the function has a very step slope
-
-F8 
-
+%
+%F8 
+%
 this may not be sufficient unless we also substitute our trial solution and see if we have the match desired.
 
-Alternatively, if the slope is shallow as in
+Alternatively, if the slope is shallow as in \cref{fig:lecture10:lecture10Fig7}, then checking for just \( \Abs{ f(x^{k+1} } < \epsilon_f \) may also mean we are off target.
 
-F9
+Finally, we may also need a relative error check to avoid false convergence.  In \cref{fig:lecture10:lecture10Fig10}, we may have both
 
-checking for just \( \Abs{ f(x^{k+1} } < \epsilon_f \) may also mean we are off target.
+\imageFigure{../../figures/ece1254/lecture10Fig10}{Possible relative error difference required}{fig:lecture10:lecture10Fig10}{0.3}
 
-Finally, we may also need a relative error check to avoid false convergence
+\begin{subequations}
+\begin{equation}\label{eqn:multiphysicsL10:440}
+\Abs{x^{k+1} - x^k} < \epsilon_{\Delta x}
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsL10:460}
+\Abs{f(x^{k+1}) } < \epsilon_{f},
+\end{equation}
+\end{subequations}
 
-F10
-\cref{fig:lecture10:lecture10Fig10}.
-\imageFigure{../../figures/ece1254/lecture10Fig10}{CAPTION}{fig:lecture10:lecture10Fig10}{0.3}
+however, we may also want a small relative difference
 
-Example:
+\begin{equation}\label{eqn:multiphysicsL10:480}
+\frac{\Abs{x^{k+1} - x^k}}{\Abs{x^k}} 
+< \epsilon_{f,r}.
+\end{equation}
 
-F11
-\cref{fig:lecture10:lecture10Fig11}.
-\imageFigure{../../figures/ece1254/lecture10Fig11}{CAPTION}{fig:lecture10:lecture10Fig11}{0.3}
+This can become problematic in real world engineering examples such as to diode of \cref{fig:lecture10:lecture10Fig11}, where we have shallow regions and fast growing or dropping regions.
+
+\imageFigure{../../figures/ece1254/lecture10Fig11}{Diode current curve}{fig:lecture10:lecture10Fig11}{0.3}
 
 \section{Theorems}
 
@@ -266,9 +285,9 @@ f(x_2) - f(x_1)
 
 where \( \tilde{x} \in [x_1, x_2] \).
 
-F2
-\cref{fig:lecture10:lecture10Fig2}.
-\imageFigure{../../figures/ece1254/lecture10Fig2}{CAPTION}{fig:lecture10:lecture10Fig2}{0.3}
+This is illustrated (roughly) in \cref{fig:lecture10:lecture10Fig2}.
+
+\imageFigure{../../figures/ece1254/lecture10Fig2}{Mean value theorem illustrated}{fig:lecture10:lecture10Fig2}{0.2}
 }
 
 %\EndArticle
