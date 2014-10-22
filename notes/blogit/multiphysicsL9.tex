@@ -13,6 +13,7 @@
 \input{../peeter_prologue_print2.tex}
 
 %\usepackage{kbordermatrix}
+\usepackage{easybmat}
 
 \beginArtNoToc
 \generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 9: Conjugate gradient methods.  Taught by Prof.\ Piero Triverio}
@@ -75,22 +76,16 @@ M_{i 2} &  \cdots M_{i i} & \cdots M_{i n}
 \end{bmatrix}
 \end{equation}
 
-This inequality covers a circular region in the complex plane as illustrated in
+This inequality covers a circular region in the complex plane as illustrated in \cref{fig:lecture9:lecture9Fig1} for a two eigenvalue system.
 
-\cref{fig:lecture9:lecture9Fig1}.
-\imageFigure{../../figures/ece1254/lecture9Fig1}{CAPTION}{fig:lecture9:lecture9Fig1}{0.3}
+\imageFigure{../../figures/ece1254/lecture9Fig1}{Gershgorin circles}{fig:lecture9:lecture9Fig1}{0.3}
 
 These are called \textAndIndex{Gershgorin circles}.
 
 \makeexample{Leaky bar}{example:multiphysicsL9:1}{
-For the leaky bar of 
+For the leaky bar of \cref{fig:lecture9:lecture9Fig2}, our matrix is
 
-F2
-\cref{fig:lecture9:lecture9Fig2}.
-\imageFigure{../../figures/ece1254/lecture9Fig2}{CAPTION}{fig:lecture9:lecture9Fig2}{0.3}
-
-
-Our matrix is
+\imageFigure{../../figures/ece1254/lecture9Fig2}{Leaky bar}{fig:lecture9:lecture9Fig2}{0.3}
 
 \begin{equation}\label{eqn:multiphysicsL9:100}
 M = 
@@ -104,12 +99,9 @@ M =
 \end{bmatrix}
 \end{equation}
 
-Our Gershgorin circles are
+Our Gershgorin circles are \cref{fig:lecture9:lecture9Fig3}.
 
-F3
-
-\cref{fig:lecture9:lecture9Fig3}.
-\imageFigure{../../figures/ece1254/lecture9Fig3}{CAPTION}{fig:lecture9:lecture9Fig3}{0.3}
+\imageFigure{../../figures/ece1254/lecture9Fig3}{Gershgorin circles for leaky bar}{fig:lecture9:lecture9Fig3}{0.3}
 
 We must then have
 
@@ -149,13 +141,26 @@ The exact eigenvalues for this system happens to be
 \{
  3.1069 
  0.2833,
- 1.3049 + 0.7545i, 1.3049 - 0.7545i 
+ 1.3049 \pm 0.7545i
 \}
 \end{equation}
 
 so the exact conditioning number is \( 3.1/0.28 \approx 11 \).
 
-FIXME: compare to estimate.
+Let's compare this to the estimates.  Those estimates are
+
+\begin{equation}\label{eqn:multiphysicsL9:n}
+\begin{aligned}
+\Abs{ \lambda_1 - 1 } &\le 1 \\
+\Abs{ \lambda_2 - 2 } &\le 2 \\
+\Abs{ \lambda_3 - 2 } &\le 2 \\
+\Abs{ \lambda_4 - 1 } &\le 1 \\
+\end{aligned}
+\end{equation}
+
+These are two circles at \( z = 1 \) of radius 1, and two circles at \( z = 2 \) of radius 2, as plotted in \cref{fig:GershgorinL9:GershgorinL9Fig9}.
+
+\imageFigure{../../figures/ece1254/GershgorinL9Fig9}{Gershgorin cirles for 4 eigenvalue system}{fig:GershgorinL9:GershgorinL9Fig9}{0.3}
 }
 
 \section{Preconditioning}
@@ -212,6 +217,17 @@ F4
 
 \cref{fig:lecture9:lecture9Fig4}.
 \imageFigure{../../figures/ece1254/lecture9Fig4}{CAPTION}{fig:lecture9:lecture9Fig4}{0.3}
+
+\begin{equation}\label{eqn:multiphysicsL9:n}
+\left[
+\begin{BMAT}(b){cc:cc}{cc:cc}
+0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 \\
+\end{BMAT}
+\right]
+\end{equation}
 
 \section{Preconditioned conjugate gradient}
 

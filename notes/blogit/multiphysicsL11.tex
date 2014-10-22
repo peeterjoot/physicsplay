@@ -7,23 +7,254 @@
 % ~/bin/ct multiphysicsL1  multiphysicsLectureN tl1
 %
 \input{../blogpost.tex}
-\renewcommand{\basename}{multiphysicsL{N}}
+\renewcommand{\basename}{multiphysicsL11}
 \renewcommand{\dirname}{notes/ece1254/}
 \newcommand{\keywords}{Condensed matter physics, ECE1254H}
 \input{../peeter_prologue_print2.tex}
 
-%\usepackage{kbordermatrix}
+\usepackage{algorithmic}
+\usepackage{kbordermatrix}
 
 \beginArtNoToc
-\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture {N}: XXX.  Taught by Prof.\ Piero Triverio}
-%\chapter{XXX}
-\label{chap:multiphysicsL{N}}
+\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 11: Nonlinear equations.  Taught by Prof.\ Piero Triverio}
+%\chapter{Nonlinear equations}
+\label{chap:multiphysicsL11}
 
 \section{Disclaimer}
 
 Peeter's lecture notes from class.  These may be incoherent and rough.
 
-\section{XXX}
+\section{Solution of N nonlinear equations in N unknowns}
+
+We'd now like to move from solutions of nonlinear functions in one variable:
+
+\begin{equation}\label{eqn:multiphysicsL11:200}
+f(x^\conj) = 0,
+\end{equation}
+
+to multivariable systems of the form
+
+\begin{equation}\label{eqn:multiphysicsL11:20}
+\begin{aligned}
+f_1(x_1, x_2, \cdots, x_N) &= 0 \\
+\vdots & \\
+f_N(x_1, x_2, \cdots, x_N) &= 0 \\
+\end{aligned},
+\end{equation}
+
+where our unknowns are
+\begin{equation}\label{eqn:multiphysicsL11:40}
+\Bx = 
+\begin{bmatrix}
+x_1 \\
+x_2 \\
+\vdots \\
+x_N \\
+\end{bmatrix}.
+\end{equation}
+
+%FIXME
+Form the vector \( F \) 
+%: \text{\R{N}} \rightarrow \text{\R{N}} \)
+
+\begin{equation}\label{eqn:multiphysicsL11:60}
+F(\Bx) = 
+\begin{bmatrix}
+f_1(x_1, x_2, \cdots, x_N) \\
+\vdots \\
+f_N(x_1, x_2, \cdots, x_N) \\
+\end{bmatrix},
+\end{equation}
+
+so that the equation to solve is 
+
+\boxedEquation{eqn:multiphyiscsL11:80}{
+F(\Bx) = 0.
+}
+%\end{equation}
+
+The Taylor expansion of \( F \) 
+%FIXME
+%: \text{\R}^N \rightarrow \text{\R}^N \) 
+around point \( \Bx_0 \) is
+
+\begin{equation}\label{eqn:multiphysicsL11:100}
+F(\Bx) = F(\Bx_0) + 
+\mathLabelBox
+{
+J_F(\Bx_0)
+}
+{Jacobian}
+\lr{ \Bx - \Bx_0},
+\end{equation}
+
+where the Jacobian is
+
+\begin{equation}\label{eqn:multiphysicsL11:120}
+J_F(\Bx_0)
+=
+\begin{bmatrix}
+\PD{x_1}{f_1} & \hdots & \PD{x_N}{f_1} \\
+              & \ddots &  \\
+\PD{x_1}{f_N} & \hdots & \PD{x_N}{f_N}
+\end{bmatrix}
+\end{equation}
+
+\section{Multivariable Newton's iteration}
+
+Given \( \Bx^k \), expand \( F(\Bx) \) around \( \Bx^k \)
+
+\begin{equation}\label{eqn:multiphysicsL11:140}
+F(\Bx) \approx F(\Bx^k) + J_F(\Bx^k) \lr{ \Bx - \Bx^k }
+\end{equation}
+
+With the approximation
+
+\begin{equation}\label{eqn:multiphysicsL11:160}
+0 = F(\Bx^k) + J_F(\Bx^k) \lr{ \Bx^{k + 1} - \Bx^k },
+\end{equation}
+
+then multiplying by the inverse \textAndIndex{Jacobian}, and rearranging, we have
+
+%\begin{equation}\label{eqn:multiphysicsL11:180}
+\boxedEquation{eqn:multiphyiscsL11:220}{
+\Bx^{k+1} = \Bx^k - J_F^{-1}(\Bx^k) F(\Bx^k).
+}
+%\end{equation}
+
+Our algorithm is
+\begin{algorithmic}
+\STATE Guess \( \Bx^0, k = 0 \).
+\REPEAT
+\STATE Compute \( F \) and \( J_F \) at \( \Bx^k \)
+\STATE Solve linear system  \( J_F(\Bx^k) \Delta \Bx^k = - F(\Bx^k) \)
+\STATE \( \Bx^{k+1} = \Bx^k + \Delta \Bx^k \)
+\STATE \( k = k + 1 \)
+\UNTIL{converged}
+\end{algorithmic}
+
+As with one variable, our convergence is after we have all of the convergence conditions satisfied
+
+\begin{equation}\label{eqn:multiphysicsL11:240}
+\begin{aligned}
+\Norm{ \Delta \Bx^k } &< \epsilon_1 \\
+\Norm{ F(\Bx^{k+1}) } &< \epsilon_2 \\
+\frac{\Norm{ \Delta \Bx^k }}{\Norm{\Bx^{k+1}}} &< \epsilon_3 \\
+\end{aligned}
+\end{equation}
+
+Typical termination is some multiple of eps, where eps is the machine precision.  This may be something like:
+
+\begin{equation}\label{eqn:multiphysicsL11:260}
+4 \times N \times \text{eps},
+\end{equation}
+
+where \( N \) is the ``size of the problem''.  Sometimes we may be able to find meaningful values for the problem.  For example, for a voltage problem, we may not be interested in precisions greater than a millivolt.
+
+\section{Automatic assembly of equations for nolinear system}
+
+\paragraph{Nonlinear circuits}
+
+We will start off considering a non-linear resistor, designated within a circuit as sketched in \cref{fig:lecture11:lecture11Fig2}.
+
+\imageFigure{../../figures/ece1254/lecture11Fig2}{Non-linear resistor}{fig:lecture11:lecture11Fig2}{0.1}
+
+Example: diode, with \( i = g(v) \), such as
+
+\begin{equation}\label{eqn:multiphysicsL11:280}
+i = I_0 \lr{ e^{v/{\eta V_T}} - 1 }.
+\end{equation}
+
+Consider the example circuit of \cref{fig:lecture11:lecture11Fig3}.  KCL's at each of the nodes are
+
+\imageFigure{../../figures/ece1254/lecture11Fig3}{Example circuit}{fig:lecture11:lecture11Fig3}{0.3}
+
+\begin{enumerate}
+\item \( I_A + I_B + I_D - I_s = 0 \)
+\item \( - I_B + I_C - I_D = 0 \)
+\end{enumerate}
+
+Introducing the consistuative equations this is
+
+\begin{enumerate}
+\item \( g_A(V_1) + g_B(V_1 - V_2) + g_D (V_1 - V_2) - I_s = 0 \)
+\item \( - g_B(V_1 - V_2) + g_C(V_2) - g_D (V_1 - V_2) = 0 \)
+\end{enumerate}
+
+In matrix form this is
+\begin{equation}\label{eqn:multiphysicsL11:300}
+\begin{bmatrix}
+g_D & -g_D \\
+-g_D & g_D
+\end{bmatrix}
+\begin{bmatrix}
+V_1 \\
+V_2
+\end{bmatrix}
++
+\begin{bmatrix}
+g_A(V_1) &+ g_B(V_1 - V_2) &            & - I_s \\
+         &- g_B(V_1 - V_2) & + g_C(V_2) & \\
+\end{bmatrix}
+=
+0
+%\begin{bmatrix}
+%I_s \\
+%0
+%\end{bmatrix}
+.
+\end{equation}
+
+We can write the entire system as
+
+%\begin{equation}\label{eqn:multiphysicsL11:320}
+\boxedEquation{eqn:multiphyiscsL11:320}{
+F(\Bx) = G \Bx + F'(\Bx) = 0.
+}
+%\end{equation}
+
+The first term, a product of a nodal matrix \( G \) represents the linear subnetwork, and is filled with the stamps we are already familiar with.
+
+The second term encodes the relationships of the nonlinear subnetwork.   This non-linear component has been marked with a prime to distinguish it from the complete network function that includes both linear and non-linear elements.
+
+Observe the similarity with the stamp analysis that we did previously.  With \( g_A() \) connected on one end to ground we have it only once in the resulting vector, whereas the nonlinear elements connected to two non-zero nodes in the network occur once with each sign.
+
+\paragraph{Stamp for nonlinear resistor}
+
+For the non-linear circuit element of \cref{fig:lecture11:lecture11Fig4}.
+
+\imageFigure{../../figures/ece1254/lecture11Fig4}{Non-linear resistor circuit element}{fig:lecture11:lecture11Fig4}{0.1}
+
+\begin{equation}\label{eqn:multiphysicsL11:340}
+F'(\Bx) = 
+\kbordermatrix{
+	& \\
+	n_1 \rightarrow & + g( V_{n_1} - V_{n_2} ) \\
+	n_2 \rightarrow & - g( V_{n_1} - V_{n_2} ) \\
+}
+\end{equation}
+
+\paragraph{Stamp for Jacobian}
+
+\begin{equation}\label{eqn:multiphysicsL11:360}
+J_F(\Bx^k) = G + J_{F'}(\Bx^k).
+\end{equation}
+
+Here the stamp for the Jacobian, an \( N \times N \) matrix, is
+
+\begin{equation}\label{eqn:multiphysicsL11:n}
+J_{F'}(\Bx^k) 
+=
+\kbordermatrix{
+       & V_1 & \cdots & V_{n_1} & V_{n_2} & \cdots & V_N \\
+1      &     &        &         &         &        &     \\
+\vdots &     &        &         &         &        &     \\
+n_1    &     &        & \PD{V_{n_1}}{g(V_{n_1} - V_{n_2})}   & \PD{V_{n_2}}{g(V_{n_1} - V_{n_2})}        &        &     \\
+n_2    &     &        & -\PD{V_{n_1}}{g(V_{n_1} - V_{n_2})}  & -\PD{V_{n_2}}{g(V_{n_1} - V_{n_2})}        &        &     \\
+\vdots &     &        &         &         &        &     \\
+N      &     &        &         &         &        &     \\
+}.
+\end{equation}
 
 %\EndArticle
 \EndNoBibArticle
