@@ -149,7 +149,7 @@ so the exact conditioning number is \( 3.1/0.28 \approx 11 \).
 
 Let's compare this to the estimates.  Those estimates are
 
-\begin{equation}\label{eqn:multiphysicsL9:n}
+\begin{equation}\label{eqn:multiphysicsL9:320}
 \begin{aligned}
 \Abs{ \lambda_1 - 1 } &\le 1 \\
 \Abs{ \lambda_2 - 2 } &\le 2 \\
@@ -211,27 +211,53 @@ Some options
 
 For a symmetric positive definite matrix \( M \), we can compute a LU decomposition of the form \( M = L L^\T \), called the \textAndIndex{Cholesky factorization}.
 
-Example:
+As an example consider the matrix
 
-F4
-
-\cref{fig:lecture9:lecture9Fig4}.
-\imageFigure{../../figures/ece1254/lecture9Fig4}{CAPTION}{fig:lecture9:lecture9Fig4}{0.3}
-
-\begin{equation}\label{eqn:multiphysicsL9:n}
-\left[
-\begin{BMAT}(b){cc:cc}{cc:cc}
-0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0 \\
+\begin{equation}\label{eqn:multiphysicsL9:340}
+M = \left[
+\begin{BMAT}(b){ccccc}{ccccc}
+\begin{matrix} 2 & \\ & 2 \end{matrix} & & & \text{(small)} &\\
+& \ddots & & & \\
+& & \begin{matrix} 6 & \\ & 6 \end{matrix} & & \\
+& & & \ddots & \\
+& \text{(small)} & & & \begin{matrix} 50 & \\ & 50 \end{matrix} \\
 \end{BMAT}
-\right]
+\right],
 \end{equation}
 
-\section{Preconditioned conjugate gradient}
+for which we can use the diagonal preconditioner
 
-On slides.
+\begin{equation}\label{eqn:multiphysicsL9:360}
+P = \left[
+\begin{BMAT}(b){ccccc}{ccccc}
+\begin{matrix} 1/2 & \\ & 1/2 \end{matrix} & & & &\\
+& \ddots & & & \\
+& & \begin{matrix} 1/6 & \\ & 1/6 \end{matrix} & & \\
+& & & \ddots & \\
+& & & & \begin{matrix} 1/50 & \\ & 1/50 \end{matrix} \\
+\end{BMAT}
+\right].
+\end{equation}
+
+Our preconditioned matrix will now have the form
+
+\begin{equation}\label{eqn:multiphysicsL9:340}
+M' = \left[
+\begin{BMAT}(b){ccccc}{ccccc}
+\begin{matrix} 1 & \\ & 1 \end{matrix} & & & \text{(small)} &\\
+& \ddots & & & \\
+& & \begin{matrix} 1 & \\ & 1 \end{matrix} & & \\
+& & & \ddots & \\
+& \text{(small)} & & & \begin{matrix} 1 & \\ & 1 \end{matrix} \\
+\end{BMAT}
+\right],
+\end{equation}
+
+so that the Gershgorin circles can all be found within a small radius of unity as sketched in \cref{fig:lecture9:lecture9Fig8}.
+
+\imageFigure{../../figures/ece1254/lecture9Fig8}{Gershgorin circles after preconditioning}{fig:lecture9:lecture9Fig8}{0.3}
+
+\section{Preconditioned conjugate gradient}
 
 We avoid the actually inverting the preconditioner by requiring that the LU decomposition of \( P \) be easily computed, so that we can solve 
 
@@ -241,14 +267,7 @@ P \Bz^k = \Br^k
 
 by successive forward and back substitution.
 
-FIXME:
-\cref{fig:lecture9:lecture9Fig5}.
-\imageFigure{../../figures/ece1254/lecture9Fig5}{CAPTION}{fig:lecture9:lecture9Fig5}{0.3}
-\cref{fig:lecture9:lecture9Fig6}.
-\imageFigure{../../figures/ece1254/lecture9Fig6}{CAPTION}{fig:lecture9:lecture9Fig6}{0.3}
-\cref{fig:lecture9:lecture9Fig7}.
-\imageFigure{../../figures/ece1254/lecture9Fig7}{CAPTION}{fig:lecture9:lecture9Fig7}{0.3}
-\cref{fig:lecture9:lecture9Fig8}.
-\imageFigure{../../figures/ece1254/lecture9Fig8}{CAPTION}{fig:lecture9:lecture9Fig8}{0.3}
+More on slides...
+
 %\EndArticle
 \EndNoBibArticle
