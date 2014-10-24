@@ -123,5 +123,5 @@
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
 #s/\\b(.)_/\\overbar{$1}_/g ;
-s/\\bar(.)/\\overbar{$1}/g ;
-#s/\\i(\d)/{($1)}/g;
+#s/\\bar(.)/\\overbar{$1}/g ;
+s/\\i(\d)/{($1)}/g;

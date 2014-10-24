@@ -1,10 +1,6 @@
 %
-% Copyright © 2014 Peeter Joot.  All Rights Reserved.
+% Copyright © 2014  Ahmed Dorrah, Peeter Joot.  All Rights Reserved.
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
-%
-% for template copy, run:
-%
-% ~/bin/ct multiphysicsL1  multiphysicsLectureN tl1
 %
 \input{../blogpost.tex}
 \renewcommand{\basename}{multiphysicsL8}
@@ -15,15 +11,221 @@
 %\usepackage{kbordermatrix}
 
 \beginArtNoToc
-\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 8: XXX.  Taught by Prof.\ Piero Triverio}
-%\chapter{XXX}
+\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 8: Conjugate gradient method.  Taught by Prof.\ Piero Triverio}
+%\chapter{Conjugate gradient method}
 \label{chap:multiphysicsL8}
 
 \section{Disclaimer}
 
 Peeter's lecture notes from class.  These may be incoherent and rough.
 
-\section{XXX}
+\section{Recap: Summary of Gradient method}
+
+We'd like to solve
+\begin{equation}\label{eqn:multiphysicsL8:20}
+M \Bx = \Bb,
+\end{equation}
+
+and introduce the residual between the application of any trial solution \( \By \) to \( M \) and \( \Bb \) 
+
+\begin{equation}\label{eqn:multiphysicsL8:40}
+\Br = \Bb - M \By.
+\end{equation}
+
+We seek to minimize the energy function
+
+\begin{equation}\label{eqn:multiphysicsL8:60}
+\Psi(\By) = \inv{2} \By^\T M \By - \By^\T \Bb, 
+\end{equation}
+
+and follow the direction of steepest decent \( \Br^{(k)} = - \spacegrad \Psi \) with the hope of finding the minumum of the energy function.  That iteration is described by
+
+\begin{equation}\label{eqn:multiphysicsL8:80}
+\Bx^{(k + 1 )} =
+\Bx^{(k  )} + \alpha_k \Br^{(k)},
+\end{equation}
+
+as illustrated in \cref{fig:lecture8:lecture8Fig1}.
+
+\imageFigure{../../figures/ece1254/lecture8Fig1}{Gradient descent}{fig:lecture8:lecture8Fig1}{0.3}
+
+The problem of the \textAndIndex{Gradient method} is that it introduces multiple paths as sketched in \cref{fig:lecture8:lecture8Fig2}.
+
+\imageFigure{../../figures/ece1254/lecture8Fig2}{Gradient descent iteration}{fig:lecture8:lecture8Fig2}{0.3}
+
+which lengthens the total distance that has to be traversed in the iteration.
+
+\sectionAndIndex{Conjugate gradient method}
+
+The Conjugate gradient method makes the residual at step \( k \) orthogonal to all previous search directions
+
+\begin{enumerate}
+\item \( \Br^{(1)} \perp \Bd^{(0)} \)
+\item \( \Br^{(1)} \perp \Bd^{(0)}, \Bd^{(1)} \)
+\item \( \cdots \)
+\end{enumerate}
+
+After \( n \) iterations, the residual will be zero.
+
+\paragraph{First iteration}
+
+Given an initial guess \( \Bx^{(0)} \), we proceed as in the gradient method
+
+\begin{equation}\label{eqn:multiphysicsL8:100}
+\Bd^{(0)} = - \spacegrad \Psi(\Bx^{(0)}) = \Br^{(0)},
+\end{equation}
+
+\begin{equation}\label{eqn:multiphysicsL8:120}
+\Bx^{(1)} = \Bx^{(0)} + \alpha_0 \Br^{(0)},
+\end{equation}
+
+with
+
+\begin{equation}\label{eqn:multiphysicsL8:140}
+\alpha_0 = \frac
+{ \lr{\Br^{(0)}}^\T \Br^{(0)} }
+{ \lr{\Br^{(0)}}^\T M \Br^{(0)} },
+\end{equation}
+
+so that the residual is
+\begin{dmath}\label{eqn:multiphysicsL8:160}
+\Br^{(1)} 
+= \Bb - M \Bx^{(1)} 
+= \Bb - M \Bx^{(0)} - \alpha_0 M \Br^{(0)}
+= \Bb - \alpha M \Br^{(0)}.
+\end{dmath}
+
+We want  \( \Br^{(1)} \perp \Bd^{(0)} \).  
+
+\paragraph{Proof:}
+
+\begin{dmath}\label{eqn:multiphysicsL8:180}
+\innerprod{\Bd^{(0)}}{ \Br^{(1)}}
+=
+\innerprod{\Bd^{(0)}}{ \Br^{(0)}}
+-\alpha_0
+\innerprod{\Bd^{(0)}}{ M \Br^{(0)}}
+=
+\innerprod{\Bd^{(0)}}{ \Br^{(0)}}
+-\alpha_0
+\innerprod{\Br^{(0)}}{ M \Br^{(0)}}.
+\end{dmath}
+
+\paragraph{Second iteration}
+
+\begin{equation}\label{eqn:multiphysicsL8:200}
+\Bx^{(2)} = \Bx^{(1)} + \alpha_1 \Bd^{(1)}.
+\end{equation}
+
+The conditions to satisfy are
+\begin{subequations}
+\begin{equation}\label{eqn:multiphysicsL8:220}
+\Bd^{(0)} \perp \Br^{(2)}
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsL8:240}
+\Bd^{(1)} \perp \Br^{(2)}
+\end{equation}
+\end{subequations}
+
+We can confirm that condition of \cref{eqn:multiphysicsL8:220} is satisfied 
+
+\begin{dmath}\label{eqn:multiphysicsL8:260}
+\innerprod{\Bd^{(0)}}{ \Br^{(2)}}
+=
+\innerprod{\Bd^{(0)}}{ \Bb - M \Bx^{(2)}}
+=
+\innerprod{\Bd^{(0)}}{ \Bb - M \Bx^{(1)} - \alpha_1 M \Bd^{(1)}}
+=
+\mathLabelBox
+[
+   labelstyle={xshift=2cm},
+   linestyle={out=270,in=90, latex-}
+]
+{
+\innerprod{\Bd^{(0)}}{\Bb - M \Bx^{(1)}}
+}
+{\(= 0\) because \( \Bd^{(0)} \perp \Br^{(1)}\) }
+-\alpha_1
+\innerprod{\Bd^{(0)}}{ \alpha_1 M \Bd^{(1)}}
+\end{dmath}
+
+This will be zero if we can impose an M orthogonality or conjugate zero condition
+
+\begin{equation}\label{eqn:multiphysicsL8:280}
+\innerprod{\Bd^{(0)}}{M \Bd^{(1)}} = 0
+\end{equation}
+
+We impose \cref{eqn:multiphysicsL8:280} to find a new search direction \( \Bd^{(1)} = \Br^{(1)} - \beta_0 \Bd^{(0)} \).  The \( \Br^{(1)} \) is the term from the standard gradient method, and the \( \beta_0 \Bd^{(0)} \) term is the conjugate gradient correction.  This gives \( \beta_0 \)
+
+\begin{equation}\label{eqn:multiphysicsL8:300}
+\beta_0 = \frac
+{
+\innerprod{\Bd^{(0)}}{M \Br^{(1)}}
+}
+{
+\innerprod{\Bd^{(0)}}{M \Bd^{(0)}}
+}
+\end{equation}
+
+Imposing \cref{eqn:multiphysicsL8:240} gives us
+
+\begin{equation}\label{eqn:multiphysicsL8:320}
+\alpha_1 = \frac
+{
+\innerprod{\Bd^{(0)}}{\Br^{(1)}}
+}
+{
+\innerprod{\Bd^{(1)}}{M \Bd^{(1)}}
+}.
+\end{equation}
+
+\paragraph{Next iteration}
+
+\begin{equation}\label{eqn:multiphysicsL8:340}
+\begin{aligned}
+\Bx^{(k + 1)} &= \Bx^{(k )} + \alpha_k \Bd^{(k)} \\
+\Bd^{(k )} &= \Br^{(k )} - \beta_{k-1} \Bd^{(k-1)}
+\end{aligned}
+\end{equation}
+
+The conditions to impose are
+
+\begin{equation}\label{eqn:multiphysicsL8:360}
+\begin{aligned}
+	\Bd^{(0)} & \perp \Br^{(k + 1)} \\
+	\vdots & \vdots \\
+	\Bd^{(k-1)} & \perp \Br^{(k + 1)}
+\end{aligned}
+\end{equation}
+
+However, we have only \( 2 \) degrees of freedom \( \alpha, \beta \), but have many conditions to impose.
+
+Impose the following to find \( \beta_{k-1} \)
+
+\begin{equation}\label{eqn:multiphysicsL8:380}
+	\Bd^{(k-1)} \perp \Br^{(k + 1)}
+\end{equation}
+
+(See slides)
+
+\section{Order analysis}
+
+Note that for \( \Bx, \By \) in \R{n}, \( \innerprod{\Bx}{\By} = \Bx^\T \By \) is \( O(n) \), and \( M \Bx \) is \( O(n^2) \).  Comparing to LU, where \( k < n \)
+
+\captionedTable{LU vs Conjugate gradient order}{tab:multiphysicsL8:400}{
+\begin{tabular}{lll}
+                   & Full     & Sparse         \\
+LU                 & \( O(n^3) \)   & \( O(n^{1.2-1.8}) \) \\
+Conjugate gradient & \( O(k n^2) \) & \( 5.4          \)  
+\end{tabular}
+}
+
+\paragraph{Final comments}
+
+\begin{enumerate}
+\item How to select \( \Bx^{(0)} \) ?  We can get an initial rough estimate by solving a simplified version of the problem.
+\item Do we have to save a memory space to store \( M \) ?  No.  If \( \By = M \Bz \), we can calculate the product without physically storing the full matrix \( M \).
+\end{enumerate}
 
 %\EndArticle
 \EndNoBibArticle
