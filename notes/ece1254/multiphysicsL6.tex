@@ -22,15 +22,15 @@
 \section{Singular value decomposition}
 %\section{Matrix norm}
 
-Recall that the matrix norm of \( M \), for the system \( \overbar{y} = M \overbar{x} \) was defined as
+Recall that the matrix norm of \( M \), for the system \( \By = M \Bx \) was defined as
 
 \begin{dmath}\label{eqn:multiphysicsL6:21}
-\Norm{M} = \max_{\Norm{\overbar{x}} = 1} \Norm{ M \overbar{x} }.
+\Norm{M} = \max_{\Norm{\Bx} = 1} \Norm{ M \Bx }.
 \end{dmath}
 
 We will typically use the \( L_2 \) norm, so that the matrix norm is
 \begin{dmath}\label{eqn:multiphysicsL6:41}
-\Norm{M}_2 = \max_{\Norm{\overbar{x}}_2 = 1} \Norm{ M \overbar{x} }_2.
+\Norm{M}_2 = \max_{\Norm{\Bx}_2 = 1} \Norm{ M \Bx }_2.
 \end{dmath}
 
 It can be shown that 
@@ -77,14 +77,14 @@ If \(r\) is the rank of \( M \), then the \( \sigma_r \) above is the minimum no
 % O(4 n^3) div O(26 n^3) ???
 }
 
-Observe that the condition \( U^\T U = 1 \) is a statement of orthonormality.  In terms of column vectors \( \overbar{u}_i \), such a product written out explicitly is
+Observe that the condition \( U^\T U = 1 \) is a statement of orthonormality.  In terms of column vectors \( \Bu_i \), such a product written out explicitly is
 
 \begin{dmath}\label{eqn:multiphysicsL6:301}
 \begin{bmatrix}
-\overbar{u}_1^\T \\ \overbar{u}_2^\T \\ \vdots \\ \overbar{u}_m^\T 
+\Bu_1^\T \\ \Bu_2^\T \\ \vdots \\ \Bu_m^\T 
 \end{bmatrix}
 \begin{bmatrix}
-\overbar{u}_1 & \overbar{u}_2 & \cdots & \overbar{u}_m 
+\Bu_1 & \Bu_2 & \cdots & \Bu_m 
 \end{bmatrix}
 =
 \begin{bmatrix}
@@ -95,27 +95,27 @@ Observe that the condition \( U^\T U = 1 \) is a statement of orthonormality.  I
 \end{bmatrix}.
 \end{dmath}
 
-This is both normality \( \overbar{u}_i^\T \overbar{u}_i = 1 \), and orthonormality \( \overbar{u}_i^\T \overbar{u}_j = 1, i \ne j \).
+This is both normality \( \Bu_i^\T \Bu_i = 1 \), and orthonormality \( \Bu_i^\T \Bu_j = 1, i \ne j \).
 
 \makeexample{2 x 2 case}{example:multiphysicsL6:1}{
-(for column vectors \( \overbar{u}_i, \overbar{v}_j \)).
+(for column vectors \( \Bu_i, \Bv_j \)).
 
 \begin{dmath}\label{eqn:multiphysicsL6:281}
 M = 
 \begin{bmatrix}
-\overbar{u}_1 & \overbar{u}_2
+\Bu_1 & \Bu_2
 \end{bmatrix}
 \begin{bmatrix}
         \sigma_1 &  \\
         & \sigma_2
 \end{bmatrix}
 \begin{bmatrix}
-\overbar{v}_1^\T \\
-\overbar{v}_2^\T 
+\Bv_1^\T \\
+\Bv_2^\T 
 \end{bmatrix}
 \end{dmath}
 
-Consider \( \overbar{y} = M \overbar{x} \), and take an \( \overbar{x} \) with \( \Norm{\overbar{x}}_2 = 1 \)
+Consider \( \By = M \Bx \), and take an \( \Bx \) with \( \Norm{\Bx}_2 = 1 \)
 
 Note: I've chosen not to sketch what was drawn on the board in class.  See instead the animated gif of the same in \citep{wiki:svd}, or the Wolfram online SVD demo in \citep{wolframdemo:svd}.
 }
@@ -124,37 +124,37 @@ A very nice video treatment of SVD by Prof Gilbert Strang can be found in \citep
 
 \section{Conditioning number}
 
-Given a perturbation of \( M \overbar{x} = \overbar{b} \) to 
+Given a perturbation of \( M \Bx = \Bb \) to 
 
 \begin{dmath}\label{eqn:multiphysicsL6:121}
         \lr{ M + \delta M }
-        \lr{ \overbar{x} + \delta \overbar{x} } = \overbar{b},
+        \lr{ \Bx + \delta \Bx } = \Bb,
 \end{dmath}
 
 or
 \begin{dmath}\label{eqn:multiphysicsL6:141}
-        \cancel{ M \overbar{x} - \overbar{b} } + \delta M \overbar{x} + M \delta \overbar{x} + \delta M \delta \overbar{x} = 0.
+        \cancel{ M \Bx - \Bb } + \delta M \Bx + M \delta \Bx + \delta M \delta \Bx = 0.
 \end{dmath}
 
 This gives
 
 \begin{dmath}\label{eqn:multiphysicsL6:161}
-        M \delta \overbar{x} = - \delta M \overbar{x} - \delta M \delta \overbar{x},
+        M \delta \Bx = - \delta M \Bx - \delta M \delta \Bx,
 \end{dmath}
 
 or
 \begin{dmath}\label{eqn:multiphysicsL6:181}
-        \delta \overbar{x} = - M^{-1} \delta M \lr{ \overbar{x} + \delta \overbar{x} }.
+        \delta \Bx = - M^{-1} \delta M \lr{ \Bx + \delta \Bx }.
 \end{dmath}
 
 Taking norms
 
 \begin{dmath}\label{eqn:multiphysicsL6:201}
-\Norm{ \delta \overbar{x}}_2 = \Norm{
-        M^{-1} \delta M \lr{ \overbar{x} + \delta \overbar{x} }
+\Norm{ \delta \Bx}_2 = \Norm{
+        M^{-1} \delta M \lr{ \Bx + \delta \Bx }
 }_2
 \le
-\Norm{ M^{-1} }_2 \Norm{ \delta M }_2 \Norm{ \overbar{x} + \delta \overbar{x} }_2,
+\Norm{ M^{-1} }_2 \Norm{ \delta M }_2 \Norm{ \Bx + \delta \Bx }_2,
 \end{dmath}
 
 or 
@@ -165,8 +165,8 @@ or
    linestyle={}
 ]
 {
-\frac{\Norm{ \delta \overbar{x}}_2 }{
-\Norm{ \overbar{x} + \delta \overbar{x}}_2 }
+\frac{\Norm{ \delta \Bx}_2 }{
+\Norm{ \Bx + \delta \Bx}_2 }
 }
 {relative error of solution}
 \le 
