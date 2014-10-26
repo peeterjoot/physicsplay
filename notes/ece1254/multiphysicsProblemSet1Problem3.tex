@@ -5,54 +5,30 @@
 \makeproblem{Heat conduction}{multiphysics:problemSet1:3}{ 
 \makesubproblem
 {
-In this problem we will examine the heat conducting bar basic example \(\cdots\)
-%, but will consider the case of a ¿leaky¿ bar to give you prac-
-%tice developing a numerical technique for a new physical problem. With
-%an appropriate input file, the simulator you developed in problem 1 can
-%be used to solve numerically the one-dimensional Poisson equation with
-%arbitrary boundary conditions. The Poisson equation can be used to de-
-%termine steady-state temperature distribution in a heat-conducting bar,
-%as in
-%¿ 2 T(x)
-%¿x 2
-%=
-%¿ a
-%¿ m
-%(T(x) ¿ T 0 ) ¿
-%H(x)
-%¿ m
-%(2)
-%where T(x) is the temperature at a point in space x, H(x) is the heat
-%generated at x, ¿ m is the thermal conductivity along the metal bar, and
-%¿ a is the thermal conductivity from the bar to the surrounding air. The
-%temperature T 0 is the surrounding air temperature. The ratio
-%¿ a
-%¿ m
-%will be
-%small as heat moves much more easily along the bar than dissipates from
-%the bar into the surrounding air.
-%Use your Matlab simulator to numerically solve the above Poisson equa-
-%tion for T(x), x ¿ [0,1], given H(x) = 50(sin(2¿x)) 2 for x ¿ [0,1],
-%¿ a = 0.001, and ¿ m = 0.1. In addition, assume the ambient air tem-
-%perature is T 0 = 400, and T(0) = 250 and T(1) = 250. The boundary
-%conditions at x = 0 and x = 1 model heat sink connections to a cool
-%metal cabinet at both ends of the package. That is, it is assumed that
-%the heat sink connections will insure both ends of the package are fixed
-%at near room temperature.
-%4
-%To represent equation (2) as a circuit, you must first discretize your
-%bar along the spatial variable x in small sections of length ¿x, and
-%approximate the derivatives using a finite difference formula, e.g.,
-%¿ 2 T(x)
-%¿x 2
-%¿
-%T(x+¿x)¿T(x)
-%¿x
-%¿
-%T(x)¿T(x¿¿x)
-%¿x
-%¿x
-%(3)
+In this problem we will examine the heat conducting bar basic
+example, but will consider the case of a ``leaky'' bar to give you practice developing a numerical technique for a new physical problem. With
+an appropriate input file, the simulator you developed in problem 1 can
+be used to solve numerically the one-dimensional Poisson equation with
+arbitrary boundary conditions. The Poisson equation can be used to determine steady-state temperature distribution in a heat-conducting bar, as in
+
+\begin{equation}\label{eqn:multiphysicsProblemSet1Problem3:10}
+\PDSq{x}{T(x)} = \frac{\kappa_a}{\kappa_m}\lr{ T(x) - T_0 } - \frac{H(x)}{\kappa_m}
+\end{equation}
+
+where \( T(x) \) is the temperature at a point in space x, \( H(x) \) is the heat generated at x, \( \kappa_m \) is the thermal conductivity along the metal bar, and \( \kappa_a \) is the thermal conductivity from the bar to the surrounding air. The temperature \( T_0 \) is the surrounding air temperature. The ratio \( \kappa_a/\kappa_m \) will be small as heat moves much more easily along the bar than dissipates from the bar into the surrounding air.
+
+Use your Matlab simulator to numerically solve the above Poisson equation for \( T(x), x \in [0,1] \) , given \( H(x) = 50 \sin^2(2 \pi x) \) for \( x \in [0,1], \kappa_a = 0.001, and \kappa_m = 0.1 \). In addition, assume the ambient air temperature is \( T_0 = 400 \), and \( T(0) = 250 \) and \( T(1) = 250 \). The boundary conditions at \( x = 0 \) and \( x = 1 \) model heat sink connections to a cool metal cabinet at both ends of the package. That is, it is assumed that the heat sink connections will insure both ends of the package are fixed at near room temperature.
+
+To represent equation \cref{eqn:multiphysicsProblemSet1Problem3:10} as a circuit, you must first discretize your bar along the spatial variable x in small sections of length \( \Delta x\), and approximate the derivatives using a finite difference formula, e.g., 
+
+\begin{equation}\label{eqn:multiphysicsProblemSet1Problem3:11}
+\PDSq{x}{T(x)} \approx
+\inv{\Delta x} \lr{
+\frac{T(x + \Delta x) - T(x)}{\Delta x}
+-\frac{T(x) - T(x - \Delta x)}{\Delta x}
+}
+\end{equation}
+
 Then, interpret the discretized equation as a KCL using the electrothermal analogy where temperature corresponds to node voltage, and heat flow to current. Draw the equivalent circuit you obtained.
 }{multiphysics:problemSet1:3a}
 
@@ -68,22 +44,16 @@ In your numerical calculation, how did you choose \(\Delta x\)? Justify the choi
 
 \makesubproblem
 {
-Now use your simulator to numerically solve the above equation \(\cdots\)
-%for T(x), x ¿ [0,1], given H(x) = 50 for x ¿ [0,1], ¿ a = 0.001, and
-%¿ m = 0.1. In addition, assume the ambient air temperature is T 0 = 400,
-%and there is not heat flow at both ends of the bar. The zero heat flow
-%boundary condition at x = 0 and x = 1 implies that there are no heat
-%sinks at the ends of the package. Since heat flow is given by
-%heatflow = ¿ ¿T
-%¿x
-%zero heat flow at the boundaries means that T(0) and T(1) are unknown,
-%but
-%¿T
-%¿x (0) = 0 and
-%¿T
-%¿x (1) = 0.
-%Given the zero-heat-flow boundary condition, what is the new equivalent
-%circuit? How the different boundary condition maps into the equivalent circuit?
+	Now use your simulator to numerically solve the above equation for \( T(x), x \in [0,1]\), given \( H(x) = 50 \) for \( x \in [0,1], \kappa_a = 0.001 \) , and \( \kappa_m = 0.1\). In addition, assume the ambient air temperature is \(T_0 = 400\), and there is not heat flow at both ends of the bar. The zero heat flow boundary condition at \( x = 0 \) and \( x = 1 \) implies that there are no heat sinks at the ends of the package. Since heat flow is given by 
+	
+\begin{equation}\label{eqn:multiphysicsProblemSet1Problem3:12}
+\text{heatflow} = \kappa \PD{x}{T}.
+\end{equation}
+
+zero heat flow at the boundaries means that \( T(0) \) and \( T(1) \) are unknown, but \( \PDi{x}{T}(0) = 0 \), and \( PDi{x}{T}(1) = 0 \).
+
+Given the zero-heat-flow boundary condition, what is the new equivalent
+circuit? How the different boundary condition maps into the equivalent circuit?
 }{multiphysics:problemSet1:3d}
 
 \makesubproblem
