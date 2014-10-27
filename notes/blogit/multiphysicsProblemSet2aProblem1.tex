@@ -91,8 +91,8 @@ We've seen in class that a circuit with resistors and voltage sources has the MN
 
 \begin{equation}\label{eqn:multiphysicsProblemSet2a:80}
 \begin{bmatrix}
-G & -A_V^\T \\
-A_V & 0 
+\BG & -\BA_V^\T \\
+\BA_V & 0 
 \end{bmatrix}
 \begin{bmatrix}
 \BV \\
@@ -110,15 +110,130 @@ First let's show that the \textAndIndex{nodal matrix} \( \BG \) is symmetric.  R
 this was formed as the sum of stamp matrices of the form
 %\imageFigure{../../figures/ece1254/lecture2Fig2}{Resistor node specification}{fig:lecture2:lecture2Fig2}{0.3}
 
-\begin{equation}\label{eqn:multiphysicsProblemSet2a:n}
+\begin{equation}\label{eqn:multiphysicsProblemSet2a:100}
 \kbordermatrix{
     & n_1      & n_2 \\
 n_1 & \inv{R}  & -\inv{R} \\
 n_2 & -\inv{R} & \inv{R}
-}
+}.
 \end{equation}
 
+To apply this to an actual system, we must be more precise, because subsets of the stamps may not apply to \( \BG \) for resistors connected to the reference node.  Suppose that all we can enumerate \( N \) resistors, each connecting all pairs of nodes \( i, j \), where \( i < j \) with a resistance \( R_{ij} \).  The \( r,s\) element of nodal matrix is then the sum over all the stamps, as follows
 
+\begin{dmath}\label{eqn:multiphysicsProblemSet2a:120}
+\lr{\BG}_{r,s} 
+= 
+\sum_{0 < i < j \le N} \inv{R_{ij}} \lr{ 
+    \delta_{ri} \delta_{si}
+   +\delta_{rj} \delta_{sj}
+   -\delta_{ri} \delta_{sj}
+   -\delta_{rj} \delta_{si}
+} 
++
+\sum_{i = 0, 0 < j \le N} \inv{R_{0j}} 
+   \delta_{rj} \delta_{sj}
+= \sum_{0 < i < j \le N} \inv{R_{ij}} \lr{ 
+   \delta_{ri} \lr{ \delta_{si} - \delta_{sj} }
+   +\delta_{rj} \lr{ \delta_{sj} - \delta_{si} }
+}
++
+\sum_{i = 0, 0 < j \le N} \inv{R_{0j}} 
+   \delta_{rj} \delta_{sj}
+= \sum_{0 < i < j \le N} \inv{R_{ij}} 
+   \lr{ \delta_{ri} - \delta_{rj}} \lr{ \delta_{si} - \delta_{sj} }
++
+\sum_{i = 0, 0 < j \le N} \inv{R_{0j}} 
+   \delta_{rj} \delta_{sj}.
+\end{dmath}
+
+Here the sum is over all the sets of nodes \( i, j \), but we allow for multiplicities in \( R_{ij} \) between any pair of nodes \( i, j \) (i.e. a parallel resistors between any pair of nodes).
+
+Transposition requires swapping the indexes
+
+\begin{equation}\label{eqn:multiphysicsProblemSet2a:140}
+\lr{\BG^\T}_{r,s} 
+= \sum_{0 < i < j \le N} \inv{R_{ij}} 
+   \lr{ \delta_{si} - \delta_{sj}} \lr{ \delta_{ri} - \delta_{rj} }
++
+\sum_{i = 0, 0 < j \le N} \inv{R_{0j}} 
+   \delta_{sj} \delta_{rj},
+\end{equation}
+
+which is clearly equivalent to \cref{eqn:multiphysicsProblemSet2a:120}, proving that \( \BG \) is symmetric.
+
+In order to prove that the nodal matrix is positive semi-definite, we need to show that all the eigenvalues \( \lambda_i \ge 0 \), or show that 
+
+\begin{equation}\label{eqn:multiphysicsProblemSet2a:260}
+\Bx^\T \BG \Bx \ge 0, \quad \forall \Bx.
+\end{equation}
+
+While we know that the eigenvalues are all real since the matrix is symmetric, non-negative eigenvalues cannot be ruled out without some thought.  
+Gershgorin's theorem takes on a simple form because the eigenvalues are real, but using it to demonstrate the lower bound it provides is non-negative is non-trivial (and perhaps not possible).
+However, because of delta filtering and the nice factorization of the products in the sum above, we can show \cref{eqn:multiphysicsProblemSet2a:260} directly.
+
+%It's possible that Gershgorin's could be used to provetheorem to prove that the eigenvalues are all greater than or equal to zero.
+%%%
+%%%For row \( r \) of this matrix, that theorem states
+%%%
+%%%\begin{equation}\label{eqn:multiphysicsProblemSet2a:160}
+%%%\Abs{\lambda - G_{rr} }
+%%%\le \sum_{s \ne r} \Abs{ G_{rs} }.
+%%%\end{equation}
+%%%
+%%%Because the eigenvalues are real, this can be written as
+%%%
+%%%\begin{equation}\label{eqn:multiphysicsProblemSet2a:180}
+%%%G_{rr} - \sum_{s \ne r} \Abs{ G_{rs} } \le \lambda \le G_{rr} + \sum_{s \ne r} \Abs{ G_{rs} },
+%%%\end{equation}
+%%%
+%%%so if we want to show that \( \lambda \ge 0 \), this is equivalent to showing
+%%%
+%%%\begin{equation}\label{eqn:multiphysicsProblemSet2a:200}
+%%%G_{rr} \ge \sum_{s \ne r} \Abs{ G_{rs} },
+%%%\end{equation}
+%%%
+%%%or
+%%%\begin{equation}\label{eqn:multiphysicsProblemSet2a:220}
+%%%\sum_{0 < i < j \le N} \inv{R_{ij}} 
+%%%\biglr{
+%%%   \lr{ \delta_{ri} - \delta_{rj}}^2
+%%%   -
+%%%   \sum_{r \ne s} \Abs{\lr{ \delta_{ri} - \delta_{rj}} \lr{ \delta_{si} - \delta_{sj} } }
+%%%   } \ge 0.
+%%%\end{equation}
+%%%
+%%%This will clearly be the case if the inequality holds for each \( i, j \), or
+%%%
+%%%\begin{equation}\label{eqn:multiphysicsProblemSet2a:240}
+%%%   \lr{ \delta_{ri} - \delta_{rj}}^2
+%%%   \ge
+%%%   \sum_{r \ne s} \Abs{\lr{ \delta_{ri} - \delta_{rj}} \lr{ \delta_{si} - \delta_{sj} }} .
+%%%\end{equation}
+
+\begin{dmath}\label{eqn:multiphysicsProblemSet2a:280}
+\Bx^\T \BG \Bx
+= 
+\Bx^\T \sum_s \sum_{0 < i < j \le N} \inv{R_{ij}} 
+   \lr{ \delta_{ri} - \delta_{rj}} \lr{ \delta_{si} - \delta_{sj} } x_s
++
+\Bx^\T \sum_s \sum_{i = 0, 0 < j \le N} \inv{R_{0j}} 
+   \delta_{rj} \delta_{sj} x_s
+=
+\sum_r x_r \sum_{0 < i < j \le N} \inv{R_{ij}} 
+   \lr{ \delta_{ri} - \delta_{rj}} \lr{ x_i - x_j }
++
+\sum_r x_r \sum_{i = 0, 0 < j \le N} \inv{R_{0j}} 
+   \delta_{rj} x_j
+=
+\sum_{0 < i < j \le N} \inv{R_{ij}} 
+   \lr{ x_i - x_j }^2
++
+\sum_{i = 0, 0 < j \le N} \inv{R_{0j}} 
+   x_j^2
+\ge 0.
+\end{dmath}
+
+With all the sums involving only resistors (positive) and squares of real numbers (voltages), we've shown that the matrix is semi-positive definite as desired.
 
 \makeSubAnswer{}{multiphysics:problemSet2a:1b}
 
