@@ -12,18 +12,246 @@
 \newcommand{\keywords}{Condensed matter physics, ECE1254H}
 \input{../peeter_prologue_print2.tex}
 
-%\usepackage{kbordermatrix}
+\usepackage{kbordermatrix}
+\usepackage{algorithmic}
 
 \beginArtNoToc
-\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 12: XXX.  Taught by Prof.\ Piero Triverio}
-%\chapter{XXX}
+\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 12: Struts and Joints, Node branch formulation.  Taught by Prof.\ Piero Triverio}
+%\chapter{Struts and Joints, Node branch formulation}
 \label{chap:multiphysicsL12}
 
 \section{Disclaimer}
 
 Peeter's lecture notes from class.  These may be incoherent and rough.
 
-\section{XXX}
+\section{Struts and Joints, Node branch formulation}
+
+Let's consider the simple strut system of \cref{fig:lecture12:lecture12Fig1} again.
+
+\imageFigure{../../figures/ece1254/lecture12Fig1}{Simple strut system}{fig:lecture12:lecture12Fig1}{0.3}
+
+Our unknowns are
+
+\begin{enumerate}
+\item Forces
+
+At each of the points we have a force with two components
+
+\begin{dmath}\label{eqn:multiphysicsL12:20}
+\Bf_A = \lr{ f_{A,x}, f_{A,y} }
+\end{dmath}
+
+We construct a total force vector
+
+\begin{equation}\label{eqn:multiphysicsL12:40}
+\Bf = 
+\begin{bmatrix}
+f_{A,x} \\
+f_{A,y} \\
+f_{B,x} \\
+f_{B,y} \\
+\vdots 
+\end{bmatrix}
+\end{equation}
+\item
+Positions of the joints
+
+\begin{equation}\label{eqn:multiphysicsL12:60}
+\Br =
+\begin{bmatrix}
+x_1 \\
+y_1 \\
+y_1 \\
+y_2 \\
+\vdots 
+\end{bmatrix}
+\end{equation}
+\end{enumerate}
+
+Our given variables are
+\begin{enumerate}
+\item The load force \( \Bf_L \).
+\item The joint positions at rest.
+\item parameter of struts.
+\end{enumerate}
+
+\paragraph{Conservation laws}
+The conservation laws are 
+
+\begin{subequations}
+\begin{equation}\label{eqn:multiphysicsL12:80}
+\Bf_A + \Bf_B + \Bf_C = 0
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsL12:100}
+-\Bf_C + \Bf_D + \Bf_L = 0
+\end{equation}
+\end{subequations}
+
+which we can put in matrix form 
+
+\begin{equation}\label{eqn:multiphysicsL12:120}
+\kbordermatrix{ 
+    &   &   &   &   &   &   &   &   \\
+%    & . & . & . & . & . & . & . & . \\
+x_1 & 1 & 0 & 1 & 0 & 1 & 0 & 0 & 0 \\
+y_1 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 \\
+x_2 & 0 & 0 & 0 & 0 & -1 & 0 & 1 & 0 \\
+y_2 & 0 & 1 & 0 & 1 & 0 & -1 & 0 & 1 \\
+}
+\begin{bmatrix}
+f_{A,x} \\
+f_{A,y} \\
+f_{B,x} \\
+f_{B,y} \\
+f_{C,x} \\
+f_{C,y} \\
+f_{D,x} \\
+f_{D,y}
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 \\
+0 \\
+-f_{L,x} \\
+-f_{L,y}
+\end{bmatrix}
+\end{equation}
+
+Here the block matrix is called the \textAndIndex{incidence matrix} \( \BA \), and we write
+
+%\begin{equation}\label{eqn:multiphysicsL12:140}
+\boxedEquation{eqn:multiphysicsL12:160}{
+A \Bf = \Bf_L.
+}
+%\end{equation}
+
+\paragraph{Constitutive laws}
+
+Given a pair of nodes as in \cref{fig:lecture12:lecture12Fig2}.
+
+\imageFigure{../../figures/ece1254/lecture12Fig2}{Strut spanning nodes}{fig:lecture12:lecture12Fig2}{0.2}
+
+
+each component has an equation relating the reaction forces of that strut based on the positions
+
+\begin{subequations}
+\begin{equation}\label{eqn:multiphysicsL12:180}
+f_{c,x} = S_x \lr{ x_1 - x_2, y_1 - y_2, p_c }
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsL12:200}
+f_{c,y} = S_y \lr{ x_1 - x_2, y_1 - y_2, p_c },
+\end{equation}
+\end{subequations}
+
+where \( p_c \) represent the parameters of the system.  We write
+
+\begin{equation}\label{eqn:multiphysicsL12:220}
+\Bf =
+\begin{bmatrix}
+f_{A,x} \\
+f_{A,y} \\
+f_{B,x} \\
+f_{B,y} \\
+\vdots 
+\end{bmatrix}
+=
+\begin{bmatrix}
+S_x \lr{ x_1 - x_2, y_1 - y_2, p_c } \\
+S_y \lr{ x_1 - x_2, y_1 - y_2, p_c } \\
+\vdots 
+\end{bmatrix},
+\end{equation}
+
+or 
+%\begin{equation}\label{eqn:multiphysicsL12:240}
+\boxedEquation{eqn:multiphysicsL12:260}{
+\Bf = S(\Br)
+}
+%\end{equation}
+
+\paragraph{Putting the pieces together} 
+
+The node branch formulation is
+
+\begin{equation}\label{eqn:multiphysicsL12:280}
+\begin{aligned}
+A \Bf - \Bf_L &= 0 \\
+\Bf - S(\Br) &= 0
+\end{aligned}
+\end{equation}
+
+We'll want to approximate this system using the Jacobian methods discussed, and can expect the cost of that Jacobian calculation to potentially be expensive.  To move to the \textAndIndex{nodal formulation} we eliminate forces (the equivalent of currents in this system)
+
+%\begin{equation}\label{eqn:multiphysicsL12:300}
+\boxedEquation{eqn:multiphysicsL12:320}{
+A S(\Br) - \Bf_L = 0
+}
+%\end{equation}
+
+We cannot use this nodal formulation when we have struts that are so stiff that the positions of some of the nodes are fixed, but can work around that as before by introducing an additional unknown for each component of such a strut.
+
+\section{Damped Newton's method}
+\index{Newton's method!damped}
+
+We want to be able to deal with the oscillation that we can have in examples like that of \cref{fig:lecture12:lecture12Fig3}.
+
+\imageFigure{../../figures/ece1254/lecture12Fig3}{Oscillatory Newton's iteration}{fig:lecture12:lecture12Fig3}{0.2}
+
+
+Large steps can be dangerous.  We want to modify Newton's method as follows
+
+Our algorithm is
+\begin{algorithmic}
+\STATE Guess \( \Bx^0, k = 0 \).
+\REPEAT
+\STATE Compute \( F \) and \( J_F \) at \( \Bx^k \)
+\STATE Solve linear system  \( J_F(\Bx^k) \Delta \Bx^k = - F(\Bx^k) \)
+\STATE \( \Bx^{k+1} = \Bx^k + \alpha^k \Delta \Bx^k \)
+\STATE \( k = k + 1 \)
+\UNTIL{converged}
+\end{algorithmic}
+
+with \( \alpha^k = 1 \) we have standard Newton's method.  We want to pick \( \alpha^k \) so that we minimize
+
+\section{Continuation parameters}
+\index{continuation parameter}
+
+Newton's method converges given a close initial guess.  We can generate a sequence of problems where the previous problem generates a good initial guess for the next problem.
+
+An example is a heat conducting bar, with a final heat distribution.  We can start the numeric iteration with \( T = 0 \), and gradually increase the temperatures until we achieve the final desired heat distribution.
+
+Suppose that we want to solve 
+
+\begin{equation}\label{eqn:multiphysicsL12:340}
+F(\Bx) = 0.
+\end{equation}
+
+We modify this problem by introducing
+
+\begin{equation}\label{eqn:multiphysicsL12:360}
+\tilde{F}(\Bx(\lambda), \lambda) = 0,
+\end{equation}
+
+where 
+
+\begin{itemize}
+\item \( \tilde{F}(\Bx(0), 0) = 0 \) is easy to solve
+\item \( \tilde{F}(\Bx(1), 1) = 0 \) is equivalent to \( F(\Bx) = 0 \).
+\item (more on slides)
+\end{itemize}
+
+The source load stepping algorithm is
+
+\begin{itemize}
+\item Solve \(\tilde{F}(\Bx(0), 0) = 0 \), with \( \Bx(\lambda_{\text{prev}} = \Bx(0) \)
+\item (more on slides)
+\end{itemize}
+
+This can still have problems, for example, when the parameterization is multivalued as in \cref{fig:lecture12:lecture12Fig4}.
+
+\imageFigure{../../figures/ece1254/lecture12Fig4}{Multivalued parameterization}{fig:lecture12:lecture12Fig4}{0.2}
+
+We can attempt to adjust \( \lambda \) so that we move along the parameterization curve.
 
 %\EndArticle
 \EndNoBibArticle
