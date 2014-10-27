@@ -6,25 +6,25 @@
 %
 % ~/bin/ct multiphysicsL1  multiphysicsLectureN tl1
 %
-\input{../blogpost.tex}
-\renewcommand{\basename}{multiphysicsL12}
-\renewcommand{\dirname}{notes/ece1254/}
-\newcommand{\keywords}{Condensed matter physics, ECE1254H}
-\input{../peeter_prologue_print2.tex}
-
-\usepackage{kbordermatrix}
-\usepackage{algorithmic}
-
-\beginArtNoToc
-\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 12: Struts and Joints, Node branch formulation.  Taught by Prof.\ Piero Triverio}
-%\chapter{Struts and Joints, Node branch formulation}
-\label{chap:multiphysicsL12}
-
-\section{Disclaimer}
-
-Peeter's lecture notes from class.  These may be incoherent and rough.
-
-\section{Struts and Joints, Node branch formulation}
+%\input{../blogpost.tex}
+%\renewcommand{\basename}{multiphysicsL12}
+%\renewcommand{\dirname}{notes/ece1254/}
+%\newcommand{\keywords}{Condensed matter physics, ECE1254H}
+%\input{../peeter_prologue_print2.tex}
+%
+%\usepackage{kbordermatrix}
+%\usepackage{algorithmic}
+%
+%\beginArtNoToc
+%\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 12: Struts and Joints, Node branch formulation.  Taught by Prof.\ Piero Triverio}
+%%\chapter{Struts and Joints, Node branch formulation}
+%\label{chap:multiphysicsL12}
+%
+%\section{Disclaimer}
+%
+%Peeter's lecture notes from class.  These may be incoherent and rough.
+%
+%\section{Struts and Joints, Node branch formulation}
 
 Let's consider the simple strut system of \cref{fig:lecture12:lecture12Fig1} again.
 
@@ -190,68 +190,3 @@ A S(\Br) - \Bf_L = 0
 
 We cannot use this nodal formulation when we have struts that are so stiff that the positions of some of the nodes are fixed, but can work around that as before by introducing an additional unknown for each component of such a strut.
 
-\section{Damped Newton's method}
-\index{Newton's method!damped}
-
-We want to be able to deal with the oscillation that we can have in examples like that of \cref{fig:lecture12:lecture12Fig3}.
-
-\imageFigure{../../figures/ece1254/lecture12Fig3}{Oscillatory Newton's iteration}{fig:lecture12:lecture12Fig3}{0.2}
-
-
-Large steps can be dangerous.  We want to modify Newton's method as follows
-
-Our algorithm is
-\begin{algorithmic}
-\STATE Guess \( \Bx^0, k = 0 \).
-\REPEAT
-\STATE Compute \( F \) and \( J_F \) at \( \Bx^k \)
-\STATE Solve linear system  \( J_F(\Bx^k) \Delta \Bx^k = - F(\Bx^k) \)
-\STATE \( \Bx^{k+1} = \Bx^k + \alpha^k \Delta \Bx^k \)
-\STATE \( k = k + 1 \)
-\UNTIL{converged}
-\end{algorithmic}
-
-with \( \alpha^k = 1 \) we have standard Newton's method.  We want to pick \( \alpha^k \) so that we minimize
-
-\section{Continuation parameters}
-\index{continuation parameter}
-
-Newton's method converges given a close initial guess.  We can generate a sequence of problems where the previous problem generates a good initial guess for the next problem.
-
-An example is a heat conducting bar, with a final heat distribution.  We can start the numeric iteration with \( T = 0 \), and gradually increase the temperatures until we achieve the final desired heat distribution.
-
-Suppose that we want to solve 
-
-\begin{equation}\label{eqn:multiphysicsL12:340}
-F(\Bx) = 0.
-\end{equation}
-
-We modify this problem by introducing
-
-\begin{equation}\label{eqn:multiphysicsL12:360}
-\tilde{F}(\Bx(\lambda), \lambda) = 0,
-\end{equation}
-
-where 
-
-\begin{itemize}
-\item \( \tilde{F}(\Bx(0), 0) = 0 \) is easy to solve
-\item \( \tilde{F}(\Bx(1), 1) = 0 \) is equivalent to \( F(\Bx) = 0 \).
-\item (more on slides)
-\end{itemize}
-
-The source load stepping algorithm is
-
-\begin{itemize}
-\item Solve \(\tilde{F}(\Bx(0), 0) = 0 \), with \( \Bx(\lambda_{\text{prev}} = \Bx(0) \)
-\item (more on slides)
-\end{itemize}
-
-This can still have problems, for example, when the parameterization is multivalued as in \cref{fig:lecture12:lecture12Fig4}.
-
-\imageFigure{../../figures/ece1254/lecture12Fig4}{Multivalued parameterization}{fig:lecture12:lecture12Fig4}{0.2}
-
-We can attempt to adjust \( \lambda \) so that we move along the parameterization curve.
-
-%\EndArticle
-\EndNoBibArticle
