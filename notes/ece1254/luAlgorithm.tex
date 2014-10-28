@@ -16,7 +16,7 @@
 %%\chapter{Illustrating the LU algorthm with pivots by example}
 %%\label{chap:luAlgorithm}
 
-Two previous examples of LU factorizations were given.  I found one more to be the key to understanding how to implement this as a matlab algorithm, required for our problem set.
+Two previous examples of LU factorizations were given.  I found one more to be the key to understanding how to implement this as a matlab algorithm, required for \cref{multiphysics:problemSet1:2}.
 
 A matrix that contains both pivots and elementary matrix operations is
 
@@ -30,9 +30,9 @@ M=
 \end{bmatrix}
 \end{equation}
 
-Our objective is to apply a sequence of row permutations or elementary row operations to \( M \) that put \( M \) into upper triangular form.  At the same time we wish to track the all the inverse operations.  When no permutations were required to produce \( U \), then we end up with a factorization \( M = L' U \) where \( L' \) is lower triangular.
+The objective is to apply a sequence of row permutations or elementary row operations to \( M \) that put \( M \) into upper triangular form, while also tracking all the inverse operations.  When no permutations were required to produce \( U \), then a factorization \( M = L' U \) is produced where \( L' \) is lower triangular.
 
-Let's express the row operations that we apply to \( M \) as
+The row operations to be applied to \( M \) are
 
 \begin{equation}\label{eqn:luAlgorithm:40}
 U = 
@@ -51,7 +51,7 @@ L' = L_0 L_1 L_2 \cdots L_{k-1} L_k
 
 Here \( L_0 = I \), the identity matrix, and \( L_i^{-1} \) is either a permutation matrix interchanging two rows of the identity matrix, or it is an elementary row operation encoding the operation \( r_j \rightarrow r_j - M r_i \), where \( r_i \) is the pivot row, and \( r_j, j > i \) are the rows that we are applying the Gaussian elimination operations to.
 
-For our example matrix, we see that we cannot use the \( M_{1 1} \) as the pivot element since it is zero.  In general, for numeric stability, we wish to use the row with the biggest absolute value in the column that we are operating on.  In this case that is row 3.  Our first row operation is therefore a \( 1,3 \) permutation
+For this example matrix, the \( M_{1 1} \) value cannot be used as the pivot element since it is zero.  In general, for numeric stability, we wish to use the row with the biggest absolute value in the column that we are operating on.  In this case that is row 3.  Our first row operation is therefore a \( 1,3 \) permutation
 
 \begin{equation}\label{eqn:luAlgorithm:80}
 L_1^{-1} = 
@@ -93,15 +93,15 @@ M
 
 Computationally, we do not wish to actually do a matrix multiplication to achieve this permutation.  Instead we want to just swap the two rows in question.
 
-The inverse of this operation is the same permutation, so for \( L' \) we compute the first stage
+The inverse of this operation is the same permutation, so for \( L' \) the first stage computation is
 
 \begin{equation}\label{eqn:luAlgorithm:120}
 L \sim L_0 L_1 = L_1.
 \end{equation}
 
-As before, we don't wish to do a matrix operation.  Since we have applied the permutation matrix from the right, it results in an exchange of columns \(1,3\) of our \( L_0 \) matrix (which happens to be identity at this point).  We can implement that matrix operation as a column exchange directly using submatrix notation.
+As before, a matrix operation would be very expensive.  When the application of the permutation matrix is from the right, it results in an exchange of columns \(1,3\) of our \( L_0 \) matrix (which happens to be identity at this point).  So the matrix operation can be done as a column exchange directly using submatrix notation.
 
-We now proceed down the column, doing all the non-zero row elimination operations required.  In this case, we have only one
+Now proceed down the column, doing all the non-zero row elimination operations required.  In this case, there is only one operation todo
 
 \begin{equation}\label{eqn:luAlgorithm:140}
 r_4 \rightarrow r_4 - \frac{1}{2} r_1.
