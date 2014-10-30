@@ -1,0 +1,93 @@
+%
+% Copyright © 2014  Ahmed Dorrah, Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+
+The conjugate gradient algorithm presented in the slides (without preconditioning) was
+
+\begin{algorithmic}
+\STATE \( \Bd^{(0)} = \Br^{(0)} \)
+\REPEAT
+\STATE \( \alpha_k = \frac{ \lr{ \Bd^{(k)} }^\T \Br^{(k)} }{ \lr{ \Bd^{(k)} }^\T M \Bd^{(k)} } \)
+\STATE \( \Bx^{(k+1)} = \Bx^{(k)} + \alpha_k \Bd^{(k)} \)
+\STATE \( \Br^{(k+1)} = \Br^{(k)} - \alpha_k M \Bd^{(k)} \)
+\STATE \( \beta_k = \frac{ \lr{ M \Bd^{(k)} }^\T \Br^{(k+1)} }{ \lr{ M \Bd^{(k)} }^\T \Bd^{(k)} } \)
+\STATE \( \Bd^{(k+1)} = \Br^{(k+1)} - \beta_k \Bd^{(k)} \)
+\UNTIL{converged}
+\end{algorithmic}
+
+The repeated calculations are undesirable for actually coding this algorithm.  First introduce a temporary for the matrix product.  Introducing a temporary variable helps a bit
+
+\begin{algorithmic}
+\STATE \( \Bd^{(0)} = \Br^{(0)} \)
+\REPEAT
+\STATE \( \Bq = M \Bd^{(k)} \)
+\STATE \( \alpha_k = \frac{ \lr{ \Bd^{(k)} }^\T \Br^{(k)} }{ \lr{ \Bd^{(k)} }^\T \Bq } \)
+\STATE \( \Bx^{(k+1)} = \Bx^{(k)} + \alpha_k \Bd^{(k)} \)
+\STATE \( \Br^{(k+1)} = \Br^{(k)} - \alpha_k \Bq \)
+\STATE \( \beta_k = \frac{ \Bq^\T \Br^{(k+1)} }{ \Bq^\T \Bd^{(k)} } \)
+\STATE \( \Bd^{(k+1)} = \Br^{(k+1)} - \beta_k \Bd^{(k)} \)
+\UNTIL{converged}
+\end{algorithmic}
+
+However, this still has a lot more computation than the algorithm specified in \citep{shewchuk1994introduction} \S B.2.  It looks like the orthogonality properties can be used to recast the \( \Bd^{(k)} \cdot \Br^{(k)} \) products in terms of \( \Br^{(k)} \)
+
+\begin{equation}\label{eqn:multiphysicsL8:400}
+\lr{ \Bd^{(k)} }^\T \Br^{(k)} 
+=
+\Br^{(k)} \cdot \lr{ \Br^{(k)} + \beta_{k-1} \Bd^{(k-1)} 
+},
+\end{equation}
+
+but since the new residual is orthogonal to all the previous search directions \( \Br^{(k)} \cdot \Bd^{(k-1)} = 0 \).  The transformed direction vector \( \Bq \) is a scaled difference of residuals.  Taking dot products
+
+\begin{dmath}\label{eqn:multiphysicsL8:420}
+\Bq \cdot \Br^{(k+1)}
+=
+\inv{\alpha_k} \lr{ \Br^{(k)} - \Br^{(k+1)} } \cdot \Br^{(k+1)}
+=
+\inv{\alpha_k} \lr{ \cancel{\Bd^{(k)}} - \beta_{k-1} \cancel{\Bd^{(k-1)}} - \Br^{(k+1)} } \cdot \Br^{(k+1)}
+=
+-\inv{\alpha_k} \Br^{(k+1)} \cdot \Br^{(k+1)}.
+\end{dmath}
+
+This gives
+
+\begin{subequations}
+\begin{equation}\label{eqn:multiphysicsL8:440}
+\alpha_k = \frac{ \lr{ \Br^{(k)} }^\T \Br^{(k)} }{ \lr{ \Bd^{(k)} }^\T \Bq }
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsL8:460}
+\beta_k = -\frac{ \lr{\Br^{(k+1)}}^\T \Br^{(k+1)} }{ \alpha_k \Bq^\T \Bd^{(k)} },
+\end{equation}
+\end{subequations}
+
+A final elimination of \( \alpha_k \) from \cref{eqn:multiphysicsL8:460} gives
+
+\begin{equation}\label{eqn:multiphysicsL8:480}
+\beta_k = 
+-\frac{ \lr{\Br^{(k+1)}}^\T \Br^{(k+1)} }{ 
+\lr{ \Br^{(k)} }^\T \Br^{(k)} 
+}.
+\end{equation}
+
+All the pieces put together yield
+
+\begin{algorithmic}
+\STATE \( \Bd^{(0)} = \Br^{(0)} \)
+\REPEAT
+\STATE \( \Bq = M \Bd^{(k)} \)
+\STATE \( \alpha_k = \frac{ \lr{ \Br^{(k)} }^\T \Br^{(k)} }{ \lr{ \Bd^{(k)} }^\T \Bq } \)
+\STATE \( \Bx^{(k+1)} = \Bx^{(k)} + \alpha_k \Bd^{(k)} \)
+\STATE \( \Br^{(k+1)} = \Br^{(k)} - \alpha_k \Bq \)
+\STATE \( \beta_k = 
+-\frac{ \lr{\Br^{(k+1)}}^\T \Br^{(k+1)} }{ 
+\lr{ \Br^{(k)} }^\T \Br^{(k)} 
+}
+\)
+\STATE \( \Bd^{(k+1)} = \Br^{(k+1)} - \beta_k \Bd^{(k)} \)
+\UNTIL{converged}
+\end{algorithmic}
+
+This is now consistent with eqns 45-49 of \citep{shewchuk1994introduction}, with the exception that the sign of the \( \beta_k \) term has been flipped.
+

@@ -87,27 +87,17 @@ versus the iteration counter for three cases: \( R = 0.1\Omega, R = 1\Omega, R =
 \makeanswer{multiphysics:problemSet2a:1}{ 
 \makeSubAnswer{}{multiphysics:problemSet2a:1a}
 
-We've seen in class that a circuit with resistors and voltage sources has the MNA form
+\paragraph{Symmetry}
+
+A circuit with only resistors and constant current sources has the MNA form
 
 \begin{equation}\label{eqn:multiphysicsProblemSet2a:80}
-\begin{bmatrix}
-\BG & -\BA_V^\T \\
-\BA_V & 0 
-\end{bmatrix}
-\begin{bmatrix}
-\BV \\
-\BI
-\end{bmatrix}
-=
-\begin{bmatrix}
-\BI_S \\
-\BV_S
-\end{bmatrix}.
+\BG \BV = \BI_S.
 \end{equation}
 
-First let's show that the \textAndIndex{nodal matrix} \( \BG \) is symmetric.  Recall that 
+The current sources, appearing only in the vector \( \BI_S \), do not effect the symmetry of the \textAndIndex{nodal matrix} \( \BG \).  To show that \( \BG \)  is symmetric, recall that 
 %for resistor node specification corresponding to \cref{fig:lecture2:lecture2Fig2} 
-this was formed as the sum of stamp matrices of the form
+this was the sum of stamp matrices of the form
 %\imageFigure{../../figures/ece1254/lecture2Fig2}{Resistor node specification}{fig:lecture2:lecture2Fig2}{0.3}
 
 \begin{equation}\label{eqn:multiphysicsProblemSet2a:100}
@@ -118,7 +108,7 @@ n_2 & -\inv{R} & \inv{R}
 }.
 \end{equation}
 
-To apply this to an actual system, we must be more precise, because subsets of the stamps may not apply to \( \BG \) for resistors connected to the reference node.  Suppose that all we can enumerate \( N \) resistors, each connecting all pairs of nodes \( i, j \), where \( i < j \) with a resistance \( R_{ij} \).  The \( r,s\) element of nodal matrix is then the sum over all the stamps, as follows
+To apply this to an actual system, more precision is required, since subsets of the stamps may not apply to \( \BG \) for resistors connected to the reference node.  Suppose that all \( N \) resistors can be enumerated, each connecting all pairs of nodes \( i, j \), where \( i < j \) with a resistance \( R_{ij} \).  The \( r,s\) element of nodal matrix is then the sum over all the stamps, as follows
 
 \begin{dmath}\label{eqn:multiphysicsProblemSet2a:120}
 \lr{\BG}_{r,s} 
@@ -146,7 +136,7 @@ To apply this to an actual system, we must be more precise, because subsets of t
    \delta_{rj} \delta_{sj}.
 \end{dmath}
 
-Here the sum is over all the sets of nodes \( i, j \), but we allow for multiplicities in \( R_{ij} \) between any pair of nodes \( i, j \) (i.e. a parallel resistors between any pair of nodes).
+Here the sum is over all the sets of nodes \( i, j \), with an allowance for multiplicities in \( R_{ij} \) between any pair of nodes \( i, j \) (i.e. a parallel resistors between any pair of nodes).
 
 Transposition requires swapping the indexes
 
@@ -161,15 +151,18 @@ Transposition requires swapping the indexes
 
 which is clearly equivalent to \cref{eqn:multiphysicsProblemSet2a:120}, proving that \( \BG \) is symmetric.
 
-In order to prove that the nodal matrix is positive semi-definite, we need to show that all the eigenvalues \( \lambda_i \ge 0 \), or show that 
+\paragraph{Positive semi-definite}
+%One way to prove that the nodal matrix is positive semi-definite, would be to show that all the eigenvalues \( \lambda_i \ge 0 \).  
+%Although the eigenvalues are all real (symmetric matrix), non-negative eigenvalues cannot be ruled out without some thought.  With real eigenvalues Gershgorin's theorem takes on a simple form, but using that to demonstrate the lower bound it provides is non-negative turns out to be non-trivial (and perhaps not possible).
+%
+%It turns out to be more profitable to ignore the nature of the eigenvalues and 
+The positive semi-definite nature of the nodal matrix can be demonstrated directly from the defining property
 
 \begin{equation}\label{eqn:multiphysicsProblemSet2a:260}
 \Bx^\T \BG \Bx \ge 0, \quad \forall \Bx.
 \end{equation}
 
-While we know that the eigenvalues are all real since the matrix is symmetric, non-negative eigenvalues cannot be ruled out without some thought.  
-Gershgorin's theorem takes on a simple form because the eigenvalues are real, but using it to demonstrate the lower bound it provides is non-negative is non-trivial (and perhaps not possible).
-However, because of delta filtering and the nice factorization of the products in the sum above, we can show \cref{eqn:multiphysicsProblemSet2a:260} directly.
+The delta filtering and the nice factorization of the products in the \( \BG \) summation facilitate this
 
 %It's possible that Gershgorin's could be used to provetheorem to prove that the eigenvalues are all greater than or equal to zero.
 %%%
@@ -233,7 +226,12 @@ However, because of delta filtering and the nice factorization of the products i
 \ge 0.
 \end{dmath}
 
-With all the sums involving only resistors (positive) and squares of real numbers (voltages), we've shown that the matrix is semi-positive definite as desired.
+With all the sums involving only resistors (positive) and squares of real numbers (voltages), the nodal matrix has been shown to be semi-positive definite as desired.
+
+\paragraph{Conjugate gradient algorthim}
+
+%FIXME: remove this on integration into the notes compilation.
+\input{../ece1254/conjugateGradientAlgorithm.tex}
 
 \makeSubAnswer{}{multiphysics:problemSet2a:1b}
 
