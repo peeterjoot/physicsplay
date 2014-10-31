@@ -15,7 +15,7 @@
 \paragraph{LU (sparse)}
 
 \begin{itemize}
-   \item cost: Diagonal and tridiagonal are \( O(n) \), but we can have up to \( O(n^3) \) depending on sparsity and the method of dealing with the sparsity.
+   \item cost: Diagonal and tridiagonal are \( O(n) \), but can be up to \( O(n^3) \) depending on sparsity and the method of dealing with the sparsity.
    \item cost depends on size and sparsity
 \end{itemize}
 
@@ -27,7 +27,7 @@ Can be cheap if done right.  Convergence requires careful preconditioning.
 
 \section{Iterative methods}
 
-Suppose that we have an initial guess \( \Bx_0 \).   Iterative methods are generally of the form
+Given an initial guess of \( \Bx_0 \), any iterative methods are generally of the form
 
 \begin{algorithmic}
 \REPEAT
@@ -37,15 +37,13 @@ Suppose that we have an initial guess \( \Bx_0 \).   Iterative methods are gener
 
 The difference \( \Br \) is called the residual.  For as long as it is bigger than desired, continue improving the estimate \( \Bx_i \).
 
-The matrix vector product \( M \Bx_i \), if dense, is of \( O(n^2) \).  Suppose, for example, that we can perform the iteration in ten iterations.  If the matrix is dense, we can have \( 10 \, O(n^2) \) performance.  If sparse, this can be worse than just direct computation.
+The matrix vector product \( M \Bx_i \), if dense, is of \( O(n^2) \).  Suppose, for example, that the solution can be found in ten iterations.  If the matrix is dense, performance can be of \( 10 \, O(n^2) \).  If sparse, this can be worse than just direct computation.
 
 \section{Gradient method}
 
 This is a method for iterative solution of the equation \( M \Bx = \Bb \).
 
-This requires symmetric positive definite matrix \( M = M^\T \), with \( M > 0 \).
-
-We introduce an \textAndIndex{energy function}
+This requires symmetric positive definite matrix \( M = M^\T \), with \( M > 0 \), for which an \textAndIndex{energy function} is defined
 
 \begin{equation}\label{eqn:multiphysicsL7:60}
 \Psi(\By) \equiv \inv{2} \By^\T M \By - \By^\T \Bb
@@ -79,7 +77,7 @@ for which the derivatives are
 \lr{ M \By - \Bb }_i.
 \end{dmath}
 
-The last operation above was possible because \( M = M^\T \).  Setting all of these equal to zero, and rewriting this as a matrix relation we have
+The last operation above was possible because \( M = M^\T \).  Setting all of these equal to zero, and rewriting this as a matrix relation gives
 
 \begin{equation}\label{eqn:multiphysicsL7:520}
 M \By = \Bb,
@@ -113,7 +111,7 @@ where the direction is
 
 \paragraph{Optimal step size}
 
-Note that for the minimization of \( \Phi \lr{ \Bx^{(k+1)} } \), we note
+The next iteration expansion of the energy function \( \Phi \lr{ \Bx^{(k+1)} } \) is
 
 \begin{dmath}\label{eqn:multiphysicsL7:140}
 \Phi \lr{ \Bx^{(k+1)} }
@@ -124,10 +122,10 @@ Note that for the minimization of \( \Phi \lr{ \Bx^{(k+1)} } \), we note
 M
 \lr{ \Bx^{(k)} + \alpha_k \Bd^{(k)} }
 -
-\lr{ \Bx^{(k)} + \alpha_k \Bd^{(k)} }^\T \Bb
+\lr{ \Bx^{(k)} + \alpha_k \Bd^{(k)} }^\T \Bb.
 \end{dmath}
 
-If we take the derivative of both sides with respect to \( \alpha_k \) to find the minimum, we have
+To find the minimum, the derivative of both sides with respect to \( \alpha_k \) is required
 
 \begin{equation}\label{eqn:multiphysicsL7:540}
 0 = 
@@ -174,7 +172,7 @@ M
 }
 \end{equation}
 
-We will see that this method is not optimal when we pick one direction and keep going down that path.
+This this method is not optimal when a new direction is picked each step of the iteration.
 
 %\EndArticle
 %\EndNoBibArticle

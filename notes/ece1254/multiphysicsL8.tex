@@ -19,24 +19,27 @@
 
 \section{Recap: Summary of Gradient method}
 
-We'd like to solve
+The gradient method allowed for a low cost iterative solution of a linear system
+
 \begin{equation}\label{eqn:multiphysicsL8:20}
 M \Bx = \Bb,
 \end{equation}
 
-and introduce the residual between the application of any trial solution \( \By \) to \( M \) and \( \Bb \) 
+without a requirement for complete factorization.
+The residual was defined as the difference between the application of any trial solution \( \By \) to \( M \) and \( \Bb \) 
 
 \begin{equation}\label{eqn:multiphysicsL8:40}
 \Br = \Bb - M \By.
 \end{equation}
 
-We seek to minimize the energy function
+An energy function was introduced
 
 \begin{equation}\label{eqn:multiphysicsL8:60}
 \Psi(\By) = \inv{2} \By^\T M \By - \By^\T \Bb, 
 \end{equation}
 
-and follow the direction of steepest decent \( \Br^{(k)} = - \spacegrad \Psi \) with the hope of finding the minimum of the energy function.  That iteration is described by
+which has an extremum at the point of solution.  The goal was to attempt to
+following the direction of steepest decent \( \Br^{(k)} = - \spacegrad \Psi \) with the hope of finding the minimum of the energy function.  That iteration is described by
 
 \begin{equation}\label{eqn:multiphysicsL8:80}
 \Bx^{(k + 1 )} =
@@ -68,7 +71,7 @@ After \( n \) iterations, the residual will be zero.
 
 \paragraph{First iteration}
 
-Given an initial guess \( \Bx^{(0)} \), we proceed as in the gradient method
+Given an initial guess \( \Bx^{(0)} \), proceed as in the gradient method
 
 \begin{equation}\label{eqn:multiphysicsL8:100}
 \Bd^{(0)} = - \spacegrad \Psi(\Bx^{(0)}) = \Br^{(0)},
@@ -94,7 +97,7 @@ so that the residual is
 = \Bb - \alpha M \Br^{(0)}.
 \end{dmath}
 
-We want  \( \Br^{(1)} \perp \Bd^{(0)} \).  
+An orthogonality condition \( \Br^{(1)} \perp \Bd^{(0)} \) is desired.
 
 \paragraph{Proof:}
 
@@ -126,7 +129,7 @@ The conditions to satisfy are
 \end{equation}
 \end{subequations}
 
-We can confirm that condition of \cref{eqn:multiphysicsL8:220} is satisfied 
+Observe that the orthogonality condition of \cref{eqn:multiphysicsL8:220} is satisfied 
 
 \begin{dmath}\label{eqn:multiphysicsL8:260}
 \innerprod{\Bd^{(0)}}{ \Br^{(2)}}
@@ -148,13 +151,15 @@ We can confirm that condition of \cref{eqn:multiphysicsL8:220} is satisfied
 \innerprod{\Bd^{(0)}}{ \alpha_1 M \Bd^{(1)}}
 \end{dmath}
 
-This will be zero if we can impose an M orthogonality or conjugate zero condition
+This will be zero if an \( M \) orthogonality or conjugate zero condition can be imposed
 
 \begin{equation}\label{eqn:multiphysicsL8:280}
-\innerprod{\Bd^{(0)}}{M \Bd^{(1)}} = 0
+\innerprod{\Bd^{(0)}}{M \Bd^{(1)}} = 0.
 \end{equation}
 
-We impose \cref{eqn:multiphysicsL8:280} to find a new search direction \( \Bd^{(1)} = \Br^{(1)} - \beta_0 \Bd^{(0)} \).  The \( \Br^{(1)} \) is the term from the standard gradient method, and the \( \beta_0 \Bd^{(0)} \) term is the conjugate gradient correction.  This gives \( \beta_0 \)
+To find a new search direction \( \Bd^{(1)} = \Br^{(1)} - \beta_0 \Bd^{(0)} \),
+\cref{eqn:multiphysicsL8:280} is now imposed.
+The \( \Br^{(1)} \) is the term from the standard gradient method, and the \( \beta_0 \Bd^{(0)} \) term is the conjugate gradient correction.  This gives \( \beta_0 \)
 
 \begin{equation}\label{eqn:multiphysicsL8:300}
 \beta_0 = \frac
@@ -197,7 +202,7 @@ The conditions to impose are
 \end{aligned}
 \end{equation}
 
-However, we have only \( 2 \) degrees of freedom \( \alpha, \beta \), but have many conditions to impose.
+However, there are only \( 2 \) degrees of freedom \( \alpha, \beta \), despite having many conditions to impose.
 
 Impose the following to find \( \beta_{k-1} \)
 
@@ -232,8 +237,8 @@ Conjugate gradient & \( O(k n^2) \) & \( 5.4          \) \\ \hline
 \paragraph{Final comments}
 
 \begin{enumerate}
-\item How to select \( \Bx^{(0)} \) ?  We can get an initial rough estimate by solving a simplified version of the problem.
-\item Do we have to save a memory space to store \( M \) ?  No.  If \( \By = M \Bz \), we can calculate the product without physically storing the full matrix \( M \).
+\item How to select \( \Bx^{(0)} \) ?  An initial rough estimate can often be found by solving a simplified version of the problem.
+\item Is it neccessary to reserve memory space to store \( M \)?  No.  If \( \By = M \Bz \), the product can be calculated without physically storing the full matrix \( M \).
 \end{enumerate}
 
 %\EndArticle

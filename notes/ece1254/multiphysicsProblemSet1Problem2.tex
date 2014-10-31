@@ -40,7 +40,7 @@ The matlab code for this problem is implemented in
 \end{itemize}
 
 where the last is the driver callable with
-\( \mathrm{problem2driver}(0) \).  We aren't lucky enough in this problem to end up with system equations \( G \Bx = \Bb \) that can be \( L U \) factored without pivots, and have to use the more general (and slower) factorization routine that generates the factors \( G = L' U\), where \( P L' \) is lower triangular, and \( P \) is a permutation matrix.  To solve such a system we do a forward substitution to solve for \( \By \) in
+\( \mathrm{problem2driver}(0) \).  This problem produces system equations \( G \Bx = \Bb \) that cannot be \( L U \) factored without pivots.  A more general (and slower) factorization routine that generates the factors \( G = L' U\), where \( P L' \) is lower triangular, and \( P \) is a permutation matrix is required.  This system can be solved with forward substitution for \( \By \)
 
 \begin{equation}\label{eqn:multiphysicsProblemSet1Problem2:20}
 P L' \By = P \Bb,
@@ -106,13 +106,13 @@ for
 \ln( t ) = \ln \kappa + \alpha \ln n.
 \end{equation}
 
-For grid sizes \( n \in \{ 4,8,12,16,20,24,28,32,36,40,44 \} \), we find
+For grid sizes \( n \in \{ 4,8,12,16,20,24,28,32,36,40,44 \} \), a fit
 
 \begin{equation}\label{eqn:multiphysicsProblemSet1Problem2:n}
 t(n) = 197 \times 10^{-6} n^{2.5}
 \end{equation}
 
-This linear fit of the log log plot of timings vs grid sizes is plotted along with raw data in \cref{fig:ps1p2c:ps1p2cFig4}.  The corresponding power fit and the original timing data is plotted in \cref{fig:ps1p2c:ps1p2cFig5}.
+is found.  This linear fit of the log log plot of timings vs grid sizes is plotted along with raw data in \cref{fig:ps1p2c:ps1p2cFig4}.  The corresponding power fit and the original timing data is plotted in \cref{fig:ps1p2c:ps1p2cFig5}.
 
 \imageFigure{../../figures/ece1254/ps1p2cFig4}{Log log plot of timings vs grid sizes and its linear fit}{fig:ps1p2c:ps1p2cFig4}{0.3}
 
@@ -120,5 +120,7 @@ This linear fit of the log log plot of timings vs grid sizes is plotted along wi
 
 \makeSubAnswer{}{multiphysics:problemSet1:2d}
 
-Notice that the linear fit is not actually a good match for large \( n \), but we have time \( O(2.4) \) for the \( L U \) decomposition for small \( n \).  For large \( n \) the sparsity of the system generates a large amount of fill in work.
+Notice that the linear fit is not actually a good match for large \( n \).
+For small \( n \) the \( L U \) decomposition has \( O(2.4) \) time.
+For large \( n \) the sparsity of the system generates a large amount of fill in work.
 }

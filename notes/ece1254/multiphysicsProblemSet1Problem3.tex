@@ -93,7 +93,8 @@ Q^i &= \frac{T^{i+1} - T^i}{\Delta x}
 
 Here \( x^i \) are the discrete points at which the temperatures are evaluated with and \( \Delta x = 1/N \). The values \( H^i, T^i \) are the heats and temperatures respectively, and \( Q^i \) is a temperature current (proportional to the heat flow) in the interval \( i \) flowing from node \( i + 1 \) to \( i \).
 
-With \( Q^i = \lr{T^i - T^{i-1}}/{\Delta x} \) we have an equivalence to the circuit element \( I = \Delta V/R \).  This analogy makes sense physically since a smaller interval length has less resistance to heat flow.
+With \( Q^i = \lr{T^i - T^{i-1}}/{\Delta x} \) 
+an equivalence to the circuit element \( I = \Delta V/R \) exists.  This analogy makes sense physically since a smaller interval length has less resistance to heat flow.
 
 The linearized Poisson equation at interior nodes \( 1 < i < N \) is
 
@@ -101,12 +102,12 @@ The linearized Poisson equation at interior nodes \( 1 < i < N \) is
 Q^i - Q^{i-1} - \frac{\kappa_a \Delta x}{\kappa_m} \lr{ T^i - T_0 } + \frac{H^i \Delta x}{\kappa_m} = 0.
 \end{equation}
 
-Identification of the \( - \kappa_a \Delta x/\kappa_m \lr{ T^i - T_0 } \) term as a current \( I = \Delta V/R \) (with temperatures as voltages) means that we can identify \( R \sim \kappa_m /(\kappa_a \Delta x) \).  
+Identification of the \( - \kappa_a \Delta x/\kappa_m \lr{ T^i - T_0 } \) term as a current \( I = \Delta V/R \) (with temperatures as voltages) means that an identification \( R \sim \kappa_m /(\kappa_a \Delta x) \) is possible.  
 %This allows us to create the equivalent circuit sketched in \cref{fig:ps1p3:ps1p3Fig9}.
 %
 %\imageFigure{../../figures/ece1254/ps1p3Fig9}{Equivalent circuit}{fig:ps1p3:ps1p3Fig9}{0.3}
 %
-At the endpoints things are a slightly different.  At \( x^0, x^{N+1} \) respectively, we have
+At the endpoints things are a slightly different.  At \( x^0, x^{N+1} \) respectively, the relations are
 
 \begin{equation}\label{eqn:multiphysicsProblemSet1Problem3:60}
 \begin{aligned}
@@ -115,7 +116,7 @@ At the endpoints things are a slightly different.  At \( x^0, x^{N+1} \) respect
 \end{aligned}
 \end{equation}
 
-At these nodes is only one current term, but we also have to model the heat sinks.  This equivalent circuit containing all these elements is sketched in 
+At these nodes is only one current term, but the heat sinks must also be modelled.  This equivalent circuit containing all these elements is sketched in 
 %\cref{fig:ps1p3:ps1p3Fig10}.
 %\imageFigure{../../figures/ece1254/ps1p3Fig10}{Endpoints in equivalent circuit}{fig:ps1p3:ps1p3Fig10}{0.3}
 \cref{fig:ps1p3:ps1p3Fig11}.
@@ -141,7 +142,7 @@ This plot was generated with a call to \( \mathrm{plotHeatQ}(60, 1, 0) \).
 
 \makeSubAnswer{ }{multiphysics:problemSet1:3c}
 
-We'd like to keep the variation of the \( H_i \) term small.  That difference between two adjacent intervals scales with the squared sine
+It is desirable to keep the variation of the \( H_i \) term small.  That difference between two adjacent intervals scales with the squared sine
 
 \begin{dmath}\label{eqn:multiphysicsProblemSet1Problem3:80}
 \Delta \lr{ \sin^2 (2 \pi x) } 
@@ -150,7 +151,7 @@ We'd like to keep the variation of the \( H_i \) term small.  That difference be
 = 2 \pi \sin \lr{ 4 \pi x } \Delta x
 \end{dmath}
 
-This is biggest when the sine is near unity.  If we want the heat terms to differ by no more than a fraction \( f \) we can determine \( \Delta x \) from
+This is biggest when the sine is near unity.  If the heat terms are to differ by no more than a fraction \( f \) then \( \Delta x \) can be determined from
 
 \begin{dmath}\label{eqn:multiphysicsProblemSet1Problem3:100}
 f H^i \approx H^i - H^{i-1}
@@ -163,7 +164,7 @@ That is
 N \approx \frac{2 \pi}{f}.
 \end{dmath}
 
-For example, if we desire \( f = 1/10 \) we can pick \( N \approx 60 \), which was what was used in the plot above.
+For example, if \( f = 1/10 \) is desired, then \( N \approx 60 \) can be picked.  That was the value used in the plot above.
 
 \makeSubAnswer{ }{multiphysics:problemSet1:3d}
 
@@ -175,7 +176,7 @@ For example, if we desire \( f = 1/10 \) we can pick \( N \approx 60 \), which w
 %%%\int_{x' = a}^x dx' \lr{ \frac{\kappa_a}{\kappa_m} \lr{ T(x') - T_0 } - \frac{H(x')}{\kappa_m} }.
 %%%\end{equation}
 %%%
-%%%We see that the zero constraint at \( x = 0 \) can be satisfied by setting the integration boundary constant \(a = 0\).  With \( H(x') \) is constant for this part of the problem that condition is
+%%%The zero constraint at \( x = 0 \) can be satisfied by setting the integration boundary constant \(a = 0\).  With \( H(x') \) is constant for this part of the problem that condition is
 %%%
 %%%\begin{equation}\label{eqn:multiphysicsProblemSet1Problem3:160}
 %%%0 
@@ -224,7 +225,7 @@ For example, if we desire \( f = 1/10 \) we can pick \( N \approx 60 \), which w
 %%%Modeling this constraint numerically does not generate meaningful seeming results.
 
 %%% Try 2:
-%%% This generates a numerically unstable result.  Changing N keeps flipping the orientation of the temperature curve, and the desired zero derivative at the endpoints isn't there.  Instead we have a zero derivative in the interior.
+%%% This generates a numerically unstable result.  Changing N keeps flipping the orientation of the temperature curve, and the desired zero derivative at the endpoints isn't there.  Instead there is a zero derivative in the interior.
 %%%
 %%%Zero heat flow can be modelled by replacing the resistance that couples nodes \(1, 2\) and nodes \( N-1, N \) with a zero valued current source.
 %%%
@@ -254,13 +255,13 @@ With uniform heat sources and no heat sinks at the boundaries the plot of the re
 Note that matlab appears to introduce a non-horizontal jiggle in its rendering of the line.  There appears to be no such variation in the data itself, which can be demonstrated by displaying the min and the max values in a call to 
 \( \mathrm{plotHeatQ}(60, 0, 0) \).
 
-This is a somewhat boring heat source, and leaves room to doubt that the boundary constraints are matched by more than luck.  The sinusoidal heat distribution from \ref{multiphysics:problemSet1:3a}, shows a more interesting temperature curve.  We also see that this has the desired zero heat flow constraints.  Such a plot is given in \cref{fig:ps3d:ps3dFig16WithSineSource}, and was generated with a call to \( \mathrm{plotHeatQ}(60, 0, 1) \).
+This is a somewhat boring heat source, and leaves room to doubt that the boundary constraints are matched by more than luck.  The sinusoidal heat distribution from \ref{multiphysics:problemSet1:3a}, shows a more interesting temperature curve, also exhibiting the desired zero heat flow constraints.  Such a plot is given in \cref{fig:ps3d:ps3dFig16WithSineSource}, and was generated with a call to \( \mathrm{plotHeatQ}(60, 0, 1) \).
 
 \imageFigure{../../figures/ece1254/ps3dFig16WithSineSource}{Sinusoidal heat source with zero heat flow constraint.}{fig:ps3d:ps3dFig16WithSineSource}{0.3}
 
 \makeSubAnswer{ }{multiphysics:problemSet1:3f}
 
-With the uniform heating distribution \( H(x) = 50 \) and no heat sinks, we expect the heat in the bar to have a uniform steady state distribution, and this is what we see above in the visualization of the numerical solution.  We also see that the temperature of the bar raises considerably above the ambient temperature.  Eventually the \( T(x) - T_0 \) term in the PDE gets big enough that more significant leakage into the air occurs despite the small ratio of \( \kappa_a/\kappa_m \), limiting the steady state temperature of the bar.
+With the uniform heating distribution \( H(x) = 50 \) and no heat sinks, the heat in the bar is expected to have a uniform steady state distribution.  This is what is seen above in the visualization of the numerical solution.  The temperature of the bar is also seen to rise considerably above the ambient temperature.  Eventually the \( T(x) - T_0 \) term in the PDE gets big enough that more significant leakage into the air occurs despite the small ratio of \( \kappa_a/\kappa_m \), limiting the steady state temperature of the bar.
 }
 
 %\section{Matlab Sources}

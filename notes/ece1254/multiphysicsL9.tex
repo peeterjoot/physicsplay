@@ -26,7 +26,7 @@
 
 \section{Conjugate gradient convergence}
 
-For \( k \ll n \), convergence orders are
+For \( k \ll n \), convergence orders are given in \cref{tab:multiphysicsL9:20}.  A matrix norm, similar to \( \Norm{ \Bx } = \sqrt{ \Bx^\T \Bx } \), is defined
 
 \captionedTable{Convergence}{tab:multiphysicsL9:20}{
 \begin{tabular}{|l|l|}
@@ -36,8 +36,6 @@ Direct & \(O(n^3)\)   \\ \hline
 C.G.   & \(O(k n^2)\) \\ \hline
 \end{tabular}
 }
-
-We define a matrix norm, similar to \( \Norm{ \Bx } = \sqrt{ \Bx^\T \Bx } \), with
 
 \begin{equation}\label{eqn:multiphysicsL9:40}
 \Norm{\Bx}_M \equiv \sqrt{ \Bx^\T M \Bx }.
@@ -55,7 +53,7 @@ K(M) = \frac
 
 ... 
 
-We need some fast ways to estimate the conditioning number.
+Some fast ways to estimate the conditioning number are required.
 
 \sectionAndIndex{Gershgorin circle theorem}
 
@@ -103,7 +101,7 @@ The Gershgorin circles are \cref{fig:lecture9:lecture9Fig3}.
 
 \imageFigure{../../figures/ece1254/lecture9Fig3}{Gershgorin circles for leaky bar}{fig:lecture9:lecture9Fig3}{0.3}
 
-We must then have
+This puts a bound on the eigenvalues
 
 \begin{equation}\label{eqn:multiphysicsL9:120}
 1 \le \lambda(M) \le 5,
@@ -177,13 +175,11 @@ and introduce an easy to invert matrix \( P \) to change the problem to
 P^{-1} M \Bx = P^{-1} \Bb.
 \end{equation}
 
-This system has the same solution, but we want to choose \( P \) to maximize the convergence speed.
+This system has the same solution, but allows for choosing \( P \) to maximize the convergence speed.
 
 \section{Symmetric preconditioning}
 
-We want to precondition in a way that preserves the symmetric positive definite nature of the matrix so that we can continue to use conjugate gradient methods.
-
-Take \( P \) and split into square root factors
+Because the conjugate gradient methods requires a symmetric matrix, it is desirable to pick a preconditioning method that preserves the symmetric (and positive definite) nature of the matrix.  This is possible by splitting \( P \) into square root factors
 
 \begin{equation}\label{eqn:multiphysicsL9:220}
 P = P^{1/2} P^{1/2},
@@ -196,7 +192,7 @@ P^{-1/2} M
 \mathLabelBox{P^{-1/2} P^{1/2}}{\(= I\)} \Bx = P^{-1/2} \Bb.
 \end{equation}
 
-and introduce a change of variables \( \By = P^{1/2} \Bx \), so that we solve
+Now introduce a change of variables \( \By = P^{1/2} \Bx \), transforming the system to solve into
 
 \begin{equation}\label{eqn:multiphysicsL9:260}
 P^{-1/2} M P^{-1/2} \By = \Bb'.
@@ -205,11 +201,11 @@ P^{-1/2} M P^{-1/2} \By = \Bb'.
 Some options
 \begin{itemize}
 \item Diagonal preconditioner: \( \BP = \text{diag}\{M\} \)
-\item Incomplete LU or Cholesky factorization.  Cheap, approximate decomposition where we pick \( M \simeq L U = P \).  An incomplete LU factorization would be easy to invert since lower or upper triangular matrices are easy to invert.  In matlab we can use the \( \text{ilu}() \) function to do an incomplete LU factorization.
+\item Incomplete LU or Cholesky factorization.  Cheap, approximate decomposition where a preconditioner \( M \simeq L U = P \) is picked.  An incomplete LU factorization would be easy to invert since lower or upper triangular matrices are easy to invert.  In MATLAB the \( \text{ilu}() \) function can be used to do an incomplete LU factorization.
 \item ... (many preconditioner are available).
 \end{itemize}
 
-For a symmetric positive definite matrix \( M \), we can compute a LU decomposition of the form \( M = L L^\T \), called the \textAndIndex{Cholesky factorization}.
+For a symmetric positive definite matrix \( M \), an LU decomposition of the form \( M = L L^\T \), is called the \textAndIndex{Cholesky factorization}.
 
 As an example consider the matrix
 
@@ -225,7 +221,7 @@ M = \left[
 \right],
 \end{equation}
 
-for which we can use the diagonal preconditioner
+for which a diagonal preconditioner can be used
 
 \begin{equation}\label{eqn:multiphysicsL9:360}
 P = \left[
@@ -259,13 +255,13 @@ so that the Gershgorin circles can all be found within a small radius of unity a
 
 \section{Preconditioned conjugate gradient}
 
-We avoid the actually inverting the preconditioner by requiring that the LU decomposition of \( P \) be easily computed, so that we can solve 
+It is possible to avoid inverting the preconditioner by requiring that the LU decomposition of \( P \) be easily computed.  Then 
 
 \begin{equation}\label{eqn:multiphysicsL9:300}
 P \Bz^k = \Br^k
 \end{equation}
 
-by successive forward and back substitution.
+can be solved by successive forward and back substitution.
 
 More on slides...
 
