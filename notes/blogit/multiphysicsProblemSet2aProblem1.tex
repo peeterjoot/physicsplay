@@ -14,9 +14,9 @@ Consider an electrical network made by:
 \item \( N \times N \) square grid of resistors of value \( R \), where \( N \) is the number of resistors per edge. The grid nodes are numbered from \( 1 \) to \( (N +1)^2 \) .  Node 1 is a corner node
 \item resistor \( R_g \) between each node of the grid and the reference node.
 \item a non-ideal voltage source connected between node 1 and ground.  The voltage source has value \( V_s \) and internal (series) resistance \( R_s \)
-\item three current sources between three randomly-selected nodes of the grid and ground. The source current must flow from the grid to the reference node as shown in \cref{fig:problemSet2a:problemSet2aFig1} (and not viceversa!).  Choose the current source values randomly between 10 mA and 100 mA.
+\item three current sources between three randomly-selected nodes of the grid and ground. The source current must flow from the grid to the reference node as shown in \cref{fig:problemSet2a:problemSet2aFig1} (and not vice versa!)  Choose the current source values randomly between 10 mA and 100 mA.
 
-\imageFigure{../../figures/ece1254/problemSet2aFig1}{Subcircuit}{fig:problemSet2a:problemSet2aFig1}{0.3}
+\imageFigure{../../figures/ece1254/problemSet2aFig1}{Subcircuit}{fig:problemSet2a:problemSet2aFig1}{0.2}
 \end{itemize}
 Write a MATLAB routine that generates a SPICE compatible netlist for this system (you can reuse the code you developed for the first problem set). Generate the modified nodal analysis equations
 
@@ -228,10 +228,39 @@ The delta filtering and the nice factorization of the products in the \( \BG \) 
 
 With all the sums involving only resistors (positive) and squares of real numbers (voltages), the nodal matrix has been shown to be semi-positive definite as desired.
 
-\paragraph{Conjugate gradient algorthim}
-
 %FIXME: remove this on integration into the notes compilation.
 \input{../ece1254/conjugateGradientAlgorithm.tex}
+
+\paragraph{Generation and solution of the netlist equations}
+
+Code for the netlist generation, the nodal equation generation were implemented in
+
+\begin{itemize}
+\item 
+\href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps2a/generateResistorGridNetlist.m}{generateResistorGridNetlist.m}
+\item 
+\href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps2a/NodalAnalysis.m}{NodalAnalysis.m}
+\end{itemize}
+
+The CG iteration for this matrix (at least for my initial guess) not only did not converge, but diverged.  For example using \href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps2a/conjugateGradientQuarteroniPrecond.m}{conjugateGradientQuarteroniPrecond.m} the relative error increased with the iteration count as follows
+
+\captionedTable{caption}{tab:multiphysicsProblemSet2a:n}{
+\begin{tabular}{|l|l|}
+\hline
+Iteration & Relative error \\ \hline
+0 & 5884 \\ \hline
+200 & 18080084 \\ \hline
+400 & 93323009 \\ \hline
+600 & 236176069 \\ \hline
+800 & 452170345 \\ \hline
+1000 & 745234778 \\ \hline
+1200 & 1118441441 \\ \hline
+1400 & 1574322955 \\ \hline
+1600 & 2115039344 \\ \hline
+\end{tabular}
+}
+
+The driver for the calls to the functions listed above can be found in \href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps2a/usenetlist.m}{usenetlist.m}
 
 \makeSubAnswer{}{multiphysics:problemSet2a:1b}
 
