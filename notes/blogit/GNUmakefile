@@ -73,6 +73,7 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 
 multiphysicsProblemSet2a.pdf : multiphysicsProblemSet2aProblem1.tex
 multiphysicsProblemSet2a.pdf : ../ece1254/conjugateGradientAlgorithm.tex
+multiphysicsProblemSet2a.pdf : ../ece1254/simpleNortonEquivalents.tex
 multiphysicsProblemSet2b.pdf : multiphysicsProblemSet2bProblem1.tex
 multiphysicsProblemSet2b.pdf : multiphysicsProblemSet2bProblem2.tex
 

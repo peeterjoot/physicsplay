@@ -244,49 +244,37 @@ Code for the netlist generation, the nodal equation generation were implemented 
 \href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps2a/NodalAnalysis.m}{NodalAnalysis.m}
 \end{itemize}
 
-Calls to the functions listed above can be found in driver script \href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps2a/usenetlistProblemB.m}{usenetlistProblemB.m}
+Calls to the functions listed above can be found in driver script \href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps2a/usenetlistProblemBD.m}{usenetlistProblemBD.m} called with \( \mathrm{usenetlistProblemBD(1, 1e-10)} \).
 
-The CG iteration for this matrix (at least for my initial guess) did not converge.
+The CG iteration for this matrix did not converge.  
+%It is possible that better initial iteration vectors \( \Bx^{(0) \) could have allowed for convergence.
+% FIXME: ... that would be testable by seeding the iteration with something near the G\b value.  
 
 \makeSubAnswer{}{multiphysics:problemSet2a:1c}
 
-Not only did the CG for the circuit above not converge, it diverged.  For example using \href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps2a/conjugateGradientQuarteroniPrecond.m}{conjugateGradientQuarteroniPrecond.m} the relative error increased with the iteration count as follows
+The CG iterations for the circuit above not converge, oscilating, and eventually appearing to slowly diverge.  A sampling of that lack of convergence is illustrated in \cref{tab:multiphysicsProblemSet2a:300}, data collected using the CG implementation \href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps2a/conjugateGradientQuarteroniPrecond.m}{conjugateGradientQuarteroniPrecond.m} called with \( \epsilon = 10^{-10} \) as noted above.
 
-\captionedTable{caption}{tab:multiphysicsProblemSet2a:n}{
+\captionedTable{Sampling of relative error at various iteration counts}{tab:multiphysicsProblemSet2a:300}{
 \begin{tabular}{|l|l|}
 \hline
 Iteration & Relative error \\ \hline
-0 & \( 5.0 \times 10^3 \) \\ \hline
-200 & \( 8.1 \times 10^1 \) \\ \hline
-400 & \( 5.3 \times 10^2 \) \\ \hline
-600 & \( 1.1 \times 10^3 \) \\ \hline
-800 & \( 2.6 \times 10^3 \) \\ \hline
-1000 & \( 5.2 \times 10^3 \) \\ \hline
-1200 & \( 7.8 \times 10^3 \) \\ \hline
-1400 & \( 9.9 \times 10^3 \) \\ \hline
-1600 & \( 1.2 \times 10^4 \) \\ \hline
+0 & \( 5.2015 \times 10^3 \) \\ \hline
+200 & \( 0.0527 \times 10^3 \) \\ \hline
+400 & \( 0.3300 \times 10^3 \) \\ \hline
+600 & \( 0.7012 \times 10^3 \) \\ \hline
+800 & \( 1.6846 \times 10^3 \) \\ \hline
+1000 & \( 3.4659 \times 10^3 \) \\ \hline
+1200 & \( 5.2740 \times 10^3 \) \\ \hline
+1400 & \( 6.6699 \times 10^3 \) \\ \hline
+1600 & \( 7.8395 \times 10^3 \) \\ \hline
 \end{tabular}
 }
 
-FIXME: adjust numbers above to:
-
-debug: 0: delta: 21482.472896, relErr: 5363.175395
-debug: 200: delta: 252.243472, relErr: 62.973476
-debug: 400: delta: 1591.954165, relErr: 397.436992
-debug: 600: delta: 3442.182463, relErr: 859.353035
-debug: 800: delta: 8458.570263, relErr: 2111.712005
-debug: 1000: delta: 16670.848650, relErr: 4161.936371
-debug: 1200: delta: 24714.657118, relErr: 6170.101626
-debug: 1400: delta: 30840.794351, relErr: 7699.513469
-debug: 1600: delta: 36279.223574, relErr: 9057.236574
-
-This lack of convergence is not suprising since the circuit has voltage sources, which results in a non-symmetric nodal matrix.
+This lack of convergence is not suprising since the circuit has voltage sources, which results in a non-symmetric nodal matrix.  \citep{shewchuk1994introduction} suggests resetting the residual periodically to avoid cumulative numerical error, and it seems possible that the divergence observed here is also exasperated by such cumulative numerical error.
 
 \makeSubAnswer{}{multiphysics:problemSet2a:1d}
 
-This voltage source and resistance can be converted to a parallel current and resistive circuit (as can more general constant source resistive circuits, as detailed in \citep{wiki:nortons} and \citep{irwin2007bec} \S 5.1)
-
-TODO.
+\input{../ece1254/simpleNortonEquivalents.tex}
 
 \makeSubAnswer{}{multiphysics:problemSet2a:1e}
 
