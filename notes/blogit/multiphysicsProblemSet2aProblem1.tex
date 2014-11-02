@@ -66,7 +66,7 @@ Try to make your code for the conjugate gradient method as efficient as possible
 \makesubproblem{}{multiphysics:problemSet2a:1h}
 Generate nodal analysis \cref{eqn:multiphysicsProblemSet2a:20} for ``2D grid'' with
 \( N = 20\). Plot the eigenvalues of \( \BG \) and the Gershgorin circles in three
-cases: \( R = 0.1 \Omega, R = 1 \Omega, R = 10 \Omega \). Verify Gershgoring Circle theorem
+cases: \( R = 0.1 \Omega, R = 1 \Omega, R = 10 \Omega \). Verify Gershgorin Circle theorem
 in the three cases.
 \makesubproblem{}{multiphysics:problemSet2a:1i}
  Repeat the previous point for the preconditioned nodal matrix, and compare the circles obtained in the two cases.
@@ -252,7 +252,7 @@ The CG iteration for this matrix did not converge.
 
 \makeSubAnswer{}{multiphysics:problemSet2a:1c}
 
-The CG iterations for the circuit above not converge, oscilating, and eventually appearing to slowly diverge.  A sampling of that lack of convergence is illustrated in \cref{tab:multiphysicsProblemSet2a:300}, data collected using the CG implementation \href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps2a/conjugateGradientQuarteroniPrecond.m}{conjugateGradientQuarteroniPrecond.m} called with \( \epsilon = 10^{-10} \) as noted above.
+The CG iterations for the circuit above not converge, oscillating, and eventually appearing to slowly diverge.  A sampling of that lack of convergence is illustrated in \cref{tab:multiphysicsProblemSet2a:300}, data collected using the CG implementation \href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps2a/conjugateGradientQuarteroniPrecond.m}{conjugateGradientQuarteroniPrecond.m} called with \( \epsilon = 10^{-10} \) as noted above.
 
 \captionedTable{Sampling of relative error at various iteration counts}{tab:multiphysicsProblemSet2a:300}{
 \begin{tabular}{|l|l|}
@@ -270,7 +270,7 @@ Iteration & Relative error \\ \hline
 \end{tabular}
 }
 
-This lack of convergence is not suprising since the circuit has voltage sources, which results in a non-symmetric nodal matrix.  \citep{shewchuk1994introduction} suggests resetting the residual periodically to avoid cumulative numerical error, and it seems possible that the divergence observed here is also exasperated by such cumulative numerical error.
+This lack of convergence is not surprising since the circuit has voltage sources, which results in a non-symmetric nodal matrix.  \citep{shewchuk1994introduction} suggests resetting the residual periodically to avoid cumulative numerical error, and it seems possible that the divergence observed here is also exasperated by such cumulative numerical error.
 
 \makeSubAnswer{}{multiphysics:problemSet2a:1d}
 
@@ -282,14 +282,17 @@ A test of this transformation can be found in
 \makeSubAnswer{}{multiphysics:problemSet2a:1e}
 
 The time required to generate the nodal equations on my machine was reasonable for \( N \le 196 \).  For \( N = 256 \) Matlab ran out of memory generating the nodal equations.  With 
-\href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps2a/generateNodalEquationsPartE.m}{generateNodalEquationsPartE.m} 
-the nodal equation variables \( G, b \) for \( N \in \{ 8, 16, 32, 64, 128, 196 \} \), were \textbf{save}()d to .mat files for subsequent use.
+\href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps2a/generateNodalEquationsPartEH.m}{generateNodalEquationsPartEH.m} 
+the nodal equation variables \( G, b \) for \( N \in \{ 8, 16, 32, 64, 128, 196 \} \), were \textbf{save}()d to .mat files for subsequent use using a call to 
+\textbf{generateNodalEquationsPartEH}(1)
+.  Timing data was collected and plotted in
+\href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps2a/partEcollectTimings.m}{partEcollectTimings.m}.
 
 LU timing data was collected for only \( N \le 32 \), and is plotted in \cref{fig:luTimings:luTimingsFig1}.
 
 \imageFigure{../../figures/ece1254/luTimingsFig1}{LU solution times}{fig:luTimings:luTimingsFig1}{0.3}
 
-While I was able to generate the nodal equations for \( N = 196 \), attempting to solve that set of nodal equations with the methods specifed made my system unresponsive (with Matlab eventually using 9Gb of memory before I killed it).  Timing data was collected for \( N \le 128 \), and is plotted with and without tridiagonal preconditioning in \cref{fig:timingsCG:timingsCGFig2}.
+While I was able to generate the nodal equations for \( N = 196 \), attempting to solve that set of nodal equations with the methods specified made my system unresponsive (with Matlab eventually using 9Gb of memory before I killed it).  Timing data was collected for \( N \le 128 \), and is plotted with and without tridiagonal preconditioning in \cref{fig:timingsCG:timingsCGFig2}.
 
 \imageFigure{../../figures/ece1254/timingsCGFig2}{CG solution times}{fig:timingsCG:timingsCGFig2}{0.3}
 
@@ -299,7 +302,7 @@ The iteration counts with and without tridiagonal preconditioning are plotted in
 
 \makeSubAnswer{}{multiphysics:problemSet2a:1f}
 
-Preconditing is seen to reduce the number of iterations required to meet the desired relative error.  However, this increased the time required to solve the system in the initial implementation of the preconditioned algorithm.
+Preconditioning is seen to reduce the number of iterations required to meet the desired relative error.  However, this increased the time required to solve the system in the initial implementation of the preconditioned algorithm.
 
 \makeSubAnswer{}{multiphysics:problemSet2a:1g}
 
@@ -317,10 +320,27 @@ With this optimization the time required for CG with the preconditioner applicat
 
 \makeSubAnswer{}{multiphysics:problemSet2a:1h}
 
-TODO.
+Nodal equations were generated with \textbf{generateNodalEquationsPartEH}(0).  
+The Gershgorin circles and eigenvalues were plotted with \textbf{partH}(0).  
+Plots for \( R = 0.1, 1, 10 \) can be found respectively in \cref{fig:gershgorinPlotR0_1:gershgorinPlotR0_1Fig6}, \cref{fig:gershgorinPlotR1:gershgorinPlotR1Fig8}, and \cref{fig:gershgorinPlotR10:gershgorinPlotR10Fig7}.
+
+\imageFigure{../../figures/ece1254/gershgorinPlotR0_1Fig6}{Gershgorin circles and eigenvalues for ``2D grid'' \( N = 20, R = 0.1 \Omega\).}{fig:gershgorinPlotR0_1:gershgorinPlotR0_1Fig6}{0.3}
+\imageFigure{../../figures/ece1254/gershgorinPlotR1Fig7}{Gershgorin circles and eigenvalues for ``2D grid'' \( N = 20, R = 1 \Omega\).}{fig:gershgorinPlotR1:gershgorinPlotR1Fig7}{0.3}
+\imageFigure{../../figures/ece1254/gershgorinPlotR10Fig8}{Gershgorin circles and eigenvalues for ``2D grid'' \( N = 20, R = 10 \Omega\).}{fig:gershgorinPlotR10:gershgorinPlotR10Fig8}{0.3}
+
+No eigenvalues are found outside of some surrounding Gershgorin circle.
+
 \makeSubAnswer{}{multiphysics:problemSet2a:1i}
 
-TODO.
+The Gershgorin circles and eigenvalues with tridiagonally preconditioned \( G \) were plotted with \textbf{partH}(1).  
+Plots for \( R = 0.1, 1, 10 \) can be found respectively in \cref{fig:gershgorinPlotPreconditionedR0_1:gershgorinPlotPreconditionedR0_1Fig9}, \cref{fig:gershgorinPlotPreconditionedR10:gershgorinPlotPreconditionedR10Fig11}, and \cref{fig:gershgorinPlotPreconditionedR1:gershgorinPlotPreconditionedR1Fig10}.
+
+\imageFigure{../../figures/ece1254/gershgorinPlotPreconditionedR0_1Fig9}{Gershgorin circles and eigenvalues for tridiagonally preconditioned ``2D grid'' \( N = 20, R = 10 \Omega\).}{fig:gershgorinPlotPreconditionedR0_1:gershgorinPlotPreconditionedR0_1Fig9}{0.3}
+\imageFigure{../../figures/ece1254/gershgorinPlotPreconditionedR10Fig11}{Gershgorin circles and eigenvalues for tridiagonally preconditioned ``2D grid'' \( N = 20, R = 10 \Omega\).}{fig:gershgorinPlotPreconditionedR10:gershgorinPlotPreconditionedR10Fig11}{0.3}
+\imageFigure{../../figures/ece1254/gershgorinPlotPreconditionedR1Fig10}{Gershgorin circles and eigenvalues for tridiagonally preconditioned ``2D grid'' \( N = 20, R = 10 \Omega\).}{fig:gershgorinPlotPreconditionedR1:gershgorinPlotPreconditionedR1Fig10}{0.3}
+
+The imaginary component of the eigenvalues observed in these plots show that the transformation \( G \rightarrow P^{-1/2} G P^{-1/2} \) was not a symmetric-matrix preserving transformation.  It was effective in rescaling the eigenvalues of the problem, especially for \( R = 0.1 \).  Having seen that the original non-symmetric (voltage source) nodal matrix system was not solvable using CG, I wonder if it is it possible that the destruction of the symmetric nature of the matrix made the iteration converge more slowly?  Note that the tridiagonal preconditioner used in this case was nothing more fancy than the original matrix \( G \) with all non-tridiagonal terms zeroed.
+
 \makeSubAnswer{}{multiphysics:problemSet2a:1j}
 
 TODO.
