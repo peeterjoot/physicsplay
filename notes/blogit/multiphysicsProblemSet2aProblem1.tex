@@ -276,12 +276,31 @@ This lack of convergence is not suprising since the circuit has voltage sources,
 
 \input{../ece1254/simpleNortonEquivalents.tex}
 
+A test of this transformation can be found in
+\href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps2a/compareBD.m}{ compareBD.m} which compares the voltages at each of the interior node locations with and without this source transformation.  The norm of the difference in voltage vectors produced by these respective netlist solutions (\( 4.6 \times 10^{-12} \)) is effectively zero.
+
 \makeSubAnswer{}{multiphysics:problemSet2a:1e}
 
-TODO.
+The time required to generate the nodal equations on my machine was reasonable for \( N \le 196 \).  For \( N = 256 \) Matlab ran out of memory generating the nodal equations.  With 
+\href{https://raw.github.com/peeterjoot/matlab/master/ece1254/ps2a/generateNodalEquationsPartE.m}{generateNodalEquationsPartE.m} 
+the nodal equation variables \( G, b \) for \( N \in \{ 8, 16, 32, 64, 128, 196 \} \), were \textbf{save}()d to .mat files for subsequent use.
+
+LU timing data was collected for only \( N \le 32 \), and is plotted in \cref{fig:luTimings:luTimingsFig1}.
+
+\imageFigure{../../figures/ece1254/luTimingsFig1}{LU solution times}{fig:luTimings:luTimingsFig1}{0.3}
+
+While I was able to generate the nodal equations for \( N = 196 \), attempting to solve that set of nodal equations with the methods specifed made my system unresponsive (with Matlab eventually using 9Gb of memory before I killed it).  Timing data was collected for \( N \le 128 \), and is plotted with and without tridiagonal preconditioning in \cref{fig:timingsCG:timingsCGFig2}.
+
+\imageFigure{../../figures/ece1254/timingsCGFig2}{CG solution times}{fig:timingsCG:timingsCGFig2}{0.3}
+
+The iteration counts with and without tridiagonal preconditioning are plotted in \cref{fig:iterationsCG:iterationsCGFig3}.
+
+\imageFigure{../../figures/ece1254/iterationsCGFig3}{CG iteration counts for convergence}{fig:iterationsCG:iterationsCGFig3}{0.3}
+
 \makeSubAnswer{}{multiphysics:problemSet2a:1f}
 
-TODO.
+Preconditing is seen to reduce the number of iterations required to meet the desired relative error.  However, this increased the time required to solve the system in the initial implementation of the preconditioned algorithm.
+
 \makeSubAnswer{}{multiphysics:problemSet2a:1g}
 
 TODO.
@@ -295,4 +314,3 @@ TODO.
 
 TODO.
 }
-
