@@ -303,7 +303,18 @@ Preconditing is seen to reduce the number of iterations required to meet the des
 
 \makeSubAnswer{}{multiphysics:problemSet2a:1g}
 
-TODO.
+Preconditioning is seen to have a runtime cost.  Without it there are also additional optimization available, as detailed above under ``CG without preconditioning''.  The runtime benefits of those optimizations turn out to be fairly small (at least compared to the additional preconditioning cost) and are plotted in \cref{fig:timingsCGwithOpt:timingsCGwithOptFig4}.
+
+\imageFigure{../../figures/ece1254/timingsCGwithOptFig4}{Benefits of CG optimized for no preconditioning}{fig:timingsCGwithOpt:timingsCGwithOptFig4}{0.3}
+
+As implemented, all the repeated calculations are already avoided, with temporarily used to hold any results used multiple times.  The only clear opportunity for gain is by precalculating LU factors for the preconditioning matrix instead of using \( G \backslash r \) in each iteration.
+
+Using \( [ L, U, P ] = \textbf{lu}(A) \) command, we can replace \( A \backslash b \) with \( U\backslash(L\backslash(P * b)) \).
+
+With this optimization the time required for CG with the preconditioner application begins to look closer to linear, but this optimization is not enough to drop the time required down to that of CG without the preconditioner.  This is plotted in \cref{fig:timingsCGwithOptLU:timingsCGwithOptLUFig5}.
+
+\imageFigure{../../figures/ece1254/timingsCGwithOptLUFig5}{LU optimization for the CG preconditioner.}{fig:timingsCGwithOptLU:timingsCGwithOptLUFig5}{0.3}
+
 \makeSubAnswer{}{multiphysics:problemSet2a:1h}
 
 TODO.
