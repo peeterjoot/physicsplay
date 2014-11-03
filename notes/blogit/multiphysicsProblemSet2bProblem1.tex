@@ -49,10 +49,58 @@ Does using the derivative help?
 \makeanswer{multiphysics:problemSet2b:1}{ 
 \makeSubAnswer{}{multiphysics:problemSet2b:1a}
 
-TODO.
+The zero of \( f(x) = x - 5 + 10^{-6} \exp(80 x) \) is sought.  This function is plotted in \cref{fig:ps2bPlotDiode:ps2bPlotDiodeFig2}.  It is clear looking at the low slope at \( x < 0.1 \) that any guess in the \( x < 0.1 \) region, or an iteration that lands in that region, is going to blast \( x \) into a really large range, for which the value of \( f(x) \) will be correspondingly large.
+
+\imageFigure{../../figures/ece1254/ps2bPlotDiodeFig2}{Diode plot}{fig:ps2bPlotDiode:ps2bPlotDiodeFig2}{0.3}
+
+A call to
+
+[x, f, iter, absF, diffX] = \textbf{newtonsDiode}( 0, 1e-6, 1e-6, 1e-6, 1000 ) ;
+
+was used to find the zero \( f(0.192322) = 0 \).  This terminated with \( \text{iter} = 390 \).
+
 \makeSubAnswer{}{multiphysics:problemSet2b:1b}
 
-TODO.
+This iteration was stopped when all of \( f(x) < 10^{-6}, \Abs{\Delta x} < 10^{-6} \) and the relative error \( \Abs{\Delta x}/\Abs{x} < 10^{-6} \).  The last was the final convergence criteria to have been met in this application of Newton's method.
+
+A selection of the convergence threshold values for this Newton's implementation are tabulated in \ref{tab:multiphysicsProblemSet2bProblem1:100}.
+
+\captionedTable{Diode Newton's method convergence}{tab:multiphysicsProblemSet2bProblem1:100}{
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+i &  x &  \( x - 5 + 10^{-6} e^{80 x} \) &  \(\Abs{\Delta x} \) &  \( \Abs{\Delta x}/\Abs{x} \) \\ \hline
+0   &  0.000000 &  -5.0 &  0.0 &  0.0 \\ \hline
+1   &  4.999599 &  \( 5.1 \times 10^{167} \) &  5.0 &  \( \infty \) \\ \hline
+2   &  4.987099 &  \( 1.9 \times 10^{167} \) &  \( 1.3 \times 10^{-2} \) &  \( 2.5 \times 10^{-3} \) \\ \hline
+3   &  4.974599 &  \( 6.8 \times 10^{166} \) &  \( 1.3 \times 10^{-2} \) &  \( 2.5 \times 10^{-3} \) \\ \hline
+4   &  4.962099 &  \( 2.5 \times 10^{166} \) &  \( 1.3 \times 10^{-2} \) &  \( 2.5 \times 10^{-3} \) \\ \hline
+5   &  4.949599 &  \( 9.3 \times 10^{165} \) &  \( 1.3 \times 10^{-2} \) &  \( 2.5 \times 10^{-3} \) \\ \hline
+%6   &  4.937099 &  \( 3.4 \times 10^{165} \) &  \( 1.3 \times 10^{-2} \) &  \( 2.5 \times 10^{-3} \) \\ \hline
+%7   &  4.924599 &  \( 1.3 \times 10^{165} \) &  \( 1.3 \times 10^{-2} \) &  \( 2.5 \times 10^{-3} \) \\ \hline
+%8   &  4.912099 &  \( 4.6 \times 10^{164} \) &  \( 1.3 \times 10^{-2} \) &  \( 2.5 \times 10^{-3} \) \\ \hline
+%9   &  4.899599 &  \( 1.7 \times 10^{164} \) &  \( 1.3 \times 10^{-2} \) &  \( 2.5 \times 10^{-3} \) \\ \hline
+50  &  4.387099 &  \( 2.7 \times 10^{146} \) &  \( 1.3 \times 10^{-2} \) &  \( 2.8 \times 10^{-3} \) \\ \hline
+100 &  3.762099 &  \( 5.1 \times 10^{124} \) &  \( 1.3 \times 10^{-2} \) &  \( 3.3 \times 10^{-3} \) \\ \hline
+150 &  3.137099 &  \( 9.9 \times 10^{102} \) &  \( 1.3 \times 10^{-2} \) &  \( 4.0 \times 10^{-3} \) \\ \hline
+200 &  2.512099 &  \( 1.9 \times 10^{81} \) &  \( 1.3 \times 10^{-2} \) &  \( 5.0 \times 10^{-3} \) \\ \hline
+250 &  1.887099 &  \( 3.7 \times 10^{59} \) &  \( 1.2 \times 10^{-2} \) &  \( 6.6 \times 10^{-3} \) \\ \hline
+300 &  1.262099 &  \( 7.1 \times 10^{37} \) &  \( 1.2 \times 10^{-2} \) &  \( 9.8 \times 10^{-3} \) \\ \hline
+350 &  0.637099 &  \( 1.4 \times 10^{16} \) &  \( 1.2 \times 10^{-2} \) &  \( 1.9 \times 10^{-2} \) \\ \hline
+381 &  0.249672 &  \( 4.7 \times 10^{2} \) &  \( 1.2 \times 10^{-2} \) &  \( 4.8 \times 10^{-2} \) \\ \hline
+382 &  0.237298 &  \( 1.7 \times 10^{2} \) &  \( 1.2 \times 10^{-2} \) &  \( 5.0 \times 10^{-2} \) \\ \hline
+383 &  0.225138 &  \( 6.2 \times 10^{1} \) &  \( 1.2 \times 10^{-2} \) &  \( 5.1 \times 10^{-2} \) \\ \hline
+384 &  0.213539 &  \( 2.1 \times 10^{1} \) &  \( 1.2 \times 10^{-2} \) &  \( 5.2 \times 10^{-2} \) \\ \hline
+385 &  0.203324 &  6.8  &  \( 1.0 \times 10^{-2} \) &  \( 4.8 \times 10^{-2} \) \\ \hline
+386 &  0.196004 &  1.7  &  \( 7.3 \times 10^{-3} \) &  \( 3.6 \times 10^{-2} \) \\ \hline
+387 &  0.192813 &  \( 1.9 \times 10^{-1} \) &  \( 3.2 \times 10^{-3} \) &  \( 1.6 \times 10^{-2} \) \\ \hline
+388 &  0.192331 &  \( 3.7 \times 10^{-3} \) &  \( 4.8 \times 10^{-4} \) &  \( 2.5 \times 10^{-3} \) \\ \hline
+389 &  0.192322 &  \( 1.4 \times 10^{-6} \) &  \( 9.5 \times 10^{-6} \) &  \( 5.0 \times 10^{-5} \) \\ \hline
+390 &  0.192322 &  \( 2.0 \times 10^{-13} \) &  \( 3.6 \times 10^{-9} \) &  \( 1.9 \times 10^{-8} \) \\ \hline
+\end{tabular}
+}
+
+
+
 \makeSubAnswer{}{multiphysics:problemSet2b:1c}
 
 TODO.
