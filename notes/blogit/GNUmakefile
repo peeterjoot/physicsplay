@@ -17,7 +17,6 @@ CLEAN_TARGETS += *.synctex.gz
 #INCOMPLETE += pipeFlowConstPressureGradient.tex
 #INCOMPLETE += qmTwoExamReflection.tex
 #INCOMPLETE += qmTwoR1.tex
-INCOMPLETE += multiphysicsProblemSet2aProblem1.tex
 INCOMPLETE += multiphysicsProblemSet2bProblem1.tex
 INCOMPLETE += multiphysicsProblemSet2bProblem2.tex
 
@@ -71,9 +70,6 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 	rm -f .gitignore
 	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/blogit/,' > $@
 
-multiphysicsProblemSet2a.pdf : multiphysicsProblemSet2aProblem1.tex
-multiphysicsProblemSet2a.pdf : ../ece1254/conjugateGradientAlgorithm.tex
-multiphysicsProblemSet2a.pdf : ../ece1254/simpleNortonEquivalents.tex
 multiphysicsProblemSet2b.pdf : multiphysicsProblemSet2bProblem1.tex
 multiphysicsProblemSet2b.pdf : multiphysicsProblemSet2bProblem2.tex
 

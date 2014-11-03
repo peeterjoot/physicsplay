@@ -5,6 +5,7 @@ include ../make.bookvars
 INCOMPLETE += multiphysicsProblemSet1Problem1.tex
 INCOMPLETE += multiphysicsProblemSet1Problem2.tex
 INCOMPLETE += multiphysicsProblemSet1Problem3.tex
+INCOMPLETE += multiphysicsProblemSet2aProblem1.tex
 
 #ONCEFLAGS := -justonce
 
@@ -33,5 +34,9 @@ include ../make.rules
 multiphysicsProblemSet1.pdf :: multiphysicsProblemSet1Problem1.tex
 multiphysicsProblemSet1.pdf :: multiphysicsProblemSet1Problem2.tex
 multiphysicsProblemSet1.pdf :: multiphysicsProblemSet1Problem3.tex
+
+multiphysicsProblemSet2a.pdf : multiphysicsProblemSet2aProblem1.tex
+multiphysicsProblemSet2a.pdf : ../ece1254/conjugateGradientAlgorithm.tex
+multiphysicsProblemSet2a.pdf : ../ece1254/simpleNortonEquivalents.tex
 
 multiphysicsProblemSet1.pdf :: $(PDF_DEPS)
