@@ -51,7 +51,90 @@ What happens when \( V = 100 \)?
 \makeanswer{multiphysics:problemSet2b:2}{ 
 \makeSubAnswer{}{multiphysics:problemSet2b:2a}
 
-TODO.
+Before starting consider \cref{fig:ps2bFiniteElement:ps2bFiniteElementFig3}.  that illustrates the partitioning of a possible solution.  This shows why \( \Delta x = 1/(N+1) \).
+
+\imageFigure{../../figures/ece1254/ps2bFiniteElementFig3}{Partitioning intervals}{fig:ps2bFiniteElement:ps2bFiniteElementFig3}{0.3}
+
+In matrix form the nodal equations are
+
+%2 \psi_i - \psi_{i+1} - \psi_{i-1} + \Delta x^2 \lr{ e^{\psi_i} - e^{-\psi_i} } = 0,
+%2 \psi_2 - \psi_{3} - \psi_{1} + \Delta x^2 \lr{ e^{\psi_2} - e^{-\psi_2} } = 0,
+%2 \psi_N-1 - \psi_{N} - \psi_{N-2} + \Delta x^2 \lr{ e^{\psi_N-1} - e^{-\psi_N-1} } = 0,
+\begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:100}
+\begin{bmatrix}
+ 2 & -1 &         &    & \\
+-1 &  2 & -1      &    & \\
+   &    & \ddots  &    & \\
+   &    &    -1   & 2  &  -1  \\
+   &    &         & -1 &  2  \\
+\end{bmatrix}
+\begin{bmatrix}
+\psi_1 \\
+\psi_2 \\
+\vdots \\
+\psi_{N-1} \\
+\psi_N \\
+\end{bmatrix}
++
+\lr{\Delta x}^2
+\begin{bmatrix}
+e^{\psi_1} - e^{-\psi_1} \\
+e^{\psi_2} - e^{-\psi_2} \\
+\vdots \\
+e^{\psi_{N-1}} - e^{-\psi_{N-1}} \\
+e^{\psi_N} - e^{-\psi_N} \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+-V \\
+0 \\
+\vdots \\
+0 \\
+V
+\end{bmatrix}.
+\end{equation}
+
+The difference of exponentials can be expanded in Taylor series
+
+\begin{dmath}\label{eqn:multiphysicsProblemSet2bProblem2:120}
+e^{\psi_i} - e^{-\psi_i}
+=
+\lr{ 1 + \psi_i + \psi_i^3/2 + \psi_i^3/6 + \cdots }
+- 
+\lr{ 1 - \psi_i + \psi_i^3/2 - \psi_i^3/6 + \cdots }
+=
+2 \psi_i + \inv{3} \psi_i^3 + \cdots,
+\end{dmath}
+
+so the Jacobian is just \( 2 I \), which is never singular.  The linear approximation of the nodal equations is
+
+\begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:140}
+\begin{bmatrix}
+ 2 \lr{1 + \lr{\Delta x}^2} & -1 &         &    & \\
+-1 &  2 \lr{1 + \lr{\Delta x}^2} & -1      &    & \\
+   &    & \ddots  &    & \\
+   &    &    -1   & 2 \lr{ 1 + \lr{\Delta x}^2 } &  -1  \\
+   &    &         & -1 &  2 \lr{ 1 + \lr{\Delta x}^2 } \\
+\end{bmatrix}
+\begin{bmatrix}
+\psi_1 \\
+\psi_2 \\
+\vdots \\
+\psi_{N-1} \\
+\psi_N \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+-V \\
+0 \\
+\vdots \\
+0 \\
+V
+\end{bmatrix}.
+\end{equation}
+
+FIXME: does he want us to show that this complete Jacobian is non-singular (which is what matters since that's what has to be inverted to apply newton's method).
+
 \makeSubAnswer{}{multiphysics:problemSet2b:2b}
 
 TODO.
