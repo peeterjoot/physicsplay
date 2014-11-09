@@ -2,7 +2,7 @@
 % Copyright © 2014 Peeter Joot.  All Rights Reserved.
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
 %
-\makeproblem{Finite element methods}{multiphysics:problemSet2b:2}{ 
+\makeproblem{Finite element methods}{multiphysics:problemSet2b:2}{
 
 When modeling distributions of charged particles governed by drift-diffusion equations, equilibrium analysis typically leads to the following nonlinear Poisson equation
 
@@ -48,7 +48,7 @@ What happens when \( V = 100 \)?
 
 } % makeproblem
 
-\makeanswer{multiphysics:problemSet2b:2}{ 
+\makeanswer{multiphysics:problemSet2b:2}{
 \makeSubAnswer{}{multiphysics:problemSet2b:2a}
 
 Before starting consider \cref{fig:ps2bFiniteElement:ps2bFiniteElementFig3}.  that illustrates the partitioning of a possible solution.  This shows why \( \Delta x = 1/(N+1) \).
@@ -94,28 +94,21 @@ V
 \end{bmatrix}.
 \end{equation}
 
-The difference of exponentials can be expanded in Taylor series
+Let
 
-\begin{dmath}\label{eqn:multiphysicsProblemSet2bProblem2:120}
-e^{\psi_i} - e^{-\psi_i}
-=
-\lr{ 1 + \psi_i + \psi_i^3/2 + \psi_i^3/6 + \cdots }
-- 
-\lr{ 1 - \psi_i + \psi_i^3/2 - \psi_i^3/6 + \cdots }
-=
-2 \psi_i + \inv{3} \psi_i^3 + \cdots,
-\end{dmath}
-
-so the Jacobian is just \( 2 I \), which is never singular.  The linear approximation of the nodal equations is
-
-\begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:140}
+\begin{subequations}
+\begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:160}
+G =
 \begin{bmatrix}
- 2 \lr{1 + \lr{\Delta x}^2} & -1 &         &    & \\
--1 &  2 \lr{1 + \lr{\Delta x}^2} & -1      &    & \\
+ 2 & -1 &         &    & \\
+-1 &  2 & -1      &    & \\
    &    & \ddots  &    & \\
-   &    &    -1   & 2 \lr{ 1 + \lr{\Delta x}^2 } &  -1  \\
-   &    &         & -1 &  2 \lr{ 1 + \lr{\Delta x}^2 } \\
+   &    &    -1   & 2  &  -1  \\
+   &    &         & -1 &  2  \\
 \end{bmatrix}
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:180}
+\Bx =
 \begin{bmatrix}
 \psi_1 \\
 \psi_2 \\
@@ -123,21 +116,272 @@ so the Jacobian is just \( 2 I \), which is never singular.  The linear approxim
 \psi_{N-1} \\
 \psi_N \\
 \end{bmatrix}
-=
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:200}
+H = 2 \lr{ \Delta x }^2
+{\begin{bmatrix}
+\sinh \psi_i
+\end{bmatrix}}_i
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:240}
+\Bb =
 \begin{bmatrix}
 -V \\
 0 \\
 \vdots \\
 0 \\
 V
-\end{bmatrix}.
+\end{bmatrix},
+\end{equation}
+\end{subequations}
+
+and
+
+\begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:220}
+F(\Bx) = G \Bx + H(\Bx) - \Bb.
 \end{equation}
 
-FIXME: does he want us to show that this complete Jacobian is non-singular (which is what matters since that's what has to be inverted to apply newton's method).
+The zeros of \( F(\Bx) \) are sought.  Expansion of \( F(\Bx) \) in Taylor series produces the Jacobian term that is to be shown non-singular.  That Taylor expansion, around \( \Bx^0 \) is
+
+\begin{dmath}\label{eqn:multiphysicsProblemSet2bProblem2:260}
+F(\Bx^1)
+= G \Bx^0 + H(\Bx^0) - \Bb +
+{\begin{bmatrix}
+\evalbar{\PD{\psi_j}{} \lr{G_{ik} \psi_k + H_i} }{\psi_j = \psi_j^0} \lr{ \psi_j^1 - \psi_j^0}
+\end{bmatrix}}_i
+= G \Bx^0 + H(\Bx^0) - \Bb +
+J(\Bx^0) \lr{ \Bx^1 - \Bx^0 },
+\end{dmath}
+
+where the Jacobian evaluated at \( \Bx^0 \) is
+
+\begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:280}
+J(\Bx^0) =
+G + 
+\evalbar{
+{\begin{bmatrix}
+\PD{\psi_j}{H_i}
+\end{bmatrix}}_{ij}
+}{\psi_j = \psi_j^0}.
+\end{equation}
+
+In this case the Jacobian is the sum of a constant matrix and one with hyperbolic cosines along the diagonal
+
+\begin{subequations}
+\begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:520}
+J_H(\Bx^0) = 2 \lr{ \Delta x }^2 
+{\begin{bmatrix}
+\cosh\psi_i \delta_{ij}
+\end{bmatrix}}_{ij}.
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:320}
+J(\Bx^0) = G + J_H(\Bx^0)
+\end{equation}
+\end{subequations}
+
+This Jacobian is symmetric, so the eigenvalues are real.  Gershgorin's theorem for the interior rows states that
+
+\begin{dmath}\label{eqn:multiphysicsProblemSet2bProblem2:440}
+\Abs{\lambda_i - \lr{ 2 + 2 \lr{\Delta x}^2 \cosh(\psi_i) }} < 2,
+\end{dmath}
+
+or
+
+\begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:460}
+2 \lr{\Delta x}^2 \cosh(\psi_i) < \lambda_i
+< 4 + 2 \lr{\Delta x}^2 \cosh(\psi_i).
+\end{equation}
+
+For the first and last rows Gershgorin's theorem requires
+
+\begin{dmath}\label{eqn:multiphysicsProblemSet2bProblem2:480}
+\Abs{\lambda_i - \lr{ 2 + 2 \lr{\Delta x}^2 \cosh(\psi_i) }} < 1,
+\end{dmath}
+%-\lambda_i + \lr{ 1 + 2 \lr{\Delta x}^2 \cosh(\psi_i) } < 0
+
+or
+\begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:500}
+1 + 2 \lr{\Delta x}^2 \cosh(\psi_i) < \lambda_i
+< 3 + 2 \lr{\Delta x}^2 \cosh(\psi_i).
+\end{equation}
+
+\Cref{eqn:multiphysicsProblemSet2bProblem2:460} shows that the lower bound on any of the eigenvalues is \( 2 \lr{ \Delta x}^2 \), so while not strictly singular anywhere, the Jacobian can potentially be nearly singular.
 
 \makeSubAnswer{}{multiphysics:problemSet2b:2b}
 
-TODO.
+Despite the Jacobian being non-singular, there is the possibility that it can have near zero eigenvalues.  This could trigger oscillatory behaviour if the iteration changes too much at once (motivating the use of damping).  To apply the damping method outlined in the class slides, the bounds \( beta \) and \( \rho \) of 
+
+\begin{subequations}
+\begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:540}
+\Norm{ J^{-1} } \le \beta
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:560}
+\Norm{ J(\Bx') - J(\Bx) } \le \rho \Norm{ \Bx' - \Bx},
+\end{equation}
+\end{subequations}
+
+are required.  The Jacobian \( J = G + J_H \) is the sum of a tridiagonal matrix \( G \) and a positive definite diagonal matrix \( J_H \).  Since \( J_H \) only increases the magnitude of all the diagonals, it seems reasonable to make the approximation
+
+\begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:580}
+\Norm{ J^{-1} } \le \Norm{ G },
+\end{equation}
+
+a value that is constant and can be precomputed before any iteration.  For the Lipshitz bound
+
+\begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:600}
+\begin{aligned}
+\Norm{ J(\Bx') - J(\Bx) }
+&= 
+\Norm{ G + J_H(\Bx') - \lr{ G + J_H(\Bx)} } \\
+&= 
+2 \lr{ \Delta x }^2 
+\Norm{
+{\begin{bmatrix}
+\lr{\cosh \psi_i' - \cosh \psi_i} \delta_{ij}
+\end{bmatrix}}_{ij}
+} \\
+&=
+2 \lr{ \Delta x }^2 
+\Norm{
+{\begin{bmatrix}
+\lr{ \inv{2} \lr{\psi_i'}^2 - \inv{2} \psi_i^2 }\delta_{ij}
+\end{bmatrix}}_{ij}
+} \\
+&\lesssim
+\lr{ \Delta x }^2 \lr{ 2 V }
+\Norm{
+{\begin{bmatrix}
+\lr{ \psi_i' - \psi_i }\delta_{ij}
+\end{bmatrix}}_{ij}
+} \\
+&\approx
+\lr{ \Delta x }^2 V \Norm{ \Bx' - \Bx }.
+\end{aligned}
+\end{equation}
+
+This yields a pair of crude approximations that can be used to determine the damping constant
+
+\begin{subequations}
+\begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:620}
+\beta = \Norm{ G^{-1} }
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:640}
+\rho = 2 \lr{ \Delta x }^2 V.
+\end{equation}
+\end{subequations}
+
+The damping algorthim of the class slides was
+
+\begin{algorithmic}
+\IF{\( \Norm{F} \le \inv{\beta^2 \rho} \)}
+\STATE \( \alpha = 1 \)
+\ELSE
+\STATE \( \alpha = \inv{\beta^2 \rho \Norm{F}} \)
+\ENDIF
+\end{algorithmic}
+
+%%% Newton's method is make the approximation \( F(\Bx^1) \approx 0 \), and to solve for \( \Bx^1 \) in
+%%% 
+%%% \begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:300}
+%%% \Bx^1 = \Bx^0 - \lr{ J(\Bx^0) }^{-1} F(\Bx^0),
+%%% \end{equation}
+%%% 
+%%% however, rather than calculate the inverse of the Jacobian, LU factorization can be used to solve for \( \Bx^1 - \Bx^0 \).  With a constant Jacobian such a pre-factorization should be very effective in this case.
+%%% 
+%%% %%%The difference of exponentials can be expanded in Taylor series
+%%% %%%
+%%% %%%\begin{dmath}\label{eqn:multiphysicsProblemSet2bProblem2:120}
+%%% %%%e^{\psi_i} - e^{-\psi_i}
+%%% %%%=
+%%% %%%\lr{ 1 + \psi_i + \psi_i^3/2 + \psi_i^3/6 + \cdots }
+%%% %%%-
+%%% %%%\lr{ 1 - \psi_i + \psi_i^3/2 - \psi_i^3/6 + \cdots }
+%%% %%%=
+%%% %%%2 \psi_i + \inv{3} \psi_i^3 + \cdots,
+%%% %%%\end{dmath}
+%%% %%%
+%%% %%%so the Jacobian is just \( 2 I \), which is never singular.  The linear approximation of the nodal equations is
+%%% %%%
+%%% %%%\begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:140}
+%%% %%%\begin{bmatrix}
+%%% %%% 2 \lr{1 + \lr{\Delta x}^2} & -1 &         &    & \\
+%%% %%%-1 &  2 \lr{1 + \lr{\Delta x}^2} & -1      &    & \\
+%%% %%%   &    & \ddots  &    & \\
+%%% %%%   &    &    -1   & 2 \lr{ 1 + \lr{\Delta x}^2 } &  -1  \\
+%%% %%%   &    &         & -1 &  2 \lr{ 1 + \lr{\Delta x}^2 } \\
+%%% %%%\end{bmatrix}
+%%% %%%\begin{bmatrix}
+%%% %%%\psi_1 \\
+%%% %%%\psi_2 \\
+%%% %%%\vdots \\
+%%% %%%\psi_{N-1} \\
+%%% %%%\psi_N \\
+%%% %%%\end{bmatrix}
+%%% %%%=
+%%% %%%\begin{bmatrix}
+%%% %%%-V \\
+%%% %%%0 \\
+%%% %%%\vdots \\
+%%% %%%0 \\
+%%% %%%V
+%%% %%%\end{bmatrix}.
+%%% %%%\end{equation}
+%%% %%%
+%%% %%%FIXME: does he want us to show that this complete Jacobian is non-singular (which is what matters since that's what has to be inverted to apply newton's method).
+%%% 
+%%% In order to apply damped Newton's method, we are looking to minimize \( \Norm{F \lr{ \Bx^0 + \alpha \Delta} }^2 \) with respect to \( \alpha \).  Here \( \Delta = -J^{-1} F \), the direction of the iteration adjustment.  That comes from solving
+%%% 
+%%% \begin{dmath}\label{eqn:multiphysicsProblemSet2bProblem2:380}
+%%% 0 
+%%% = \PD{\alpha}{} \Norm{ F( \Bx^0 + \alpha \Delta ) }^2 
+%%% = 2 F \cdot \PD{ \alpha }{F}
+%%% = 2 \lr{ G \lr{ \Bx^0 + \alpha \Delta } - \Bb + H } \cdot \lr{
+%%% G \Delta + 
+%%% 2 \lr{ \Delta x }^2
+%%% {\begin{bmatrix}
+%%% \Delta_i \cosh\lr{ \psi_i + \alpha \Delta_i }
+%%% \end{bmatrix}}_i
+%%% }
+%%% \end{dmath}
+%%% 
+%%% Writing 
+%%% 
+%%% \begin{dmath}\label{eqn:multiphysicsProblemSet2bProblem2:400}
+%%% H' = 
+%%% 2 \lr{ \Delta x }^2
+%%% {\begin{bmatrix}
+%%% \Delta_i \cosh\lr{ \psi_i + \alpha \Delta_i }
+%%% \end{bmatrix}}_i 
+%%% \approx
+%%% 2 \lr{ \Delta x }^2
+%%% {\begin{bmatrix}
+%%% \Delta_i \cosh \psi_i 
+%%% \end{bmatrix}}_i
+%%% = J_H(\Bx^0) \Delta
+%%% ,
+%%% \end{dmath}
+%%% 
+%%% then to zeroth order in \( \alpha \) this has solution
+%%% 
+%%% \begin{dmath}\label{eqn:multiphysicsProblemSet2bProblem2:420}
+%%% \alpha 
+%%% = -\frac{F(\Bx^0) \cdot \lr{ G \Delta + H' }}{
+%%% (G \Delta) \cdot \lr{ G \Delta + H' }
+%%% }
+%%% =
+%%% - \frac{F^\T J \Delta}{\Delta^\T G J \Delta}
+%%% .
+%%% \end{dmath}
+%%% 
+%%% % BOGUS thought, the 2's along the diagonal will dominate.
+%%% %With \( 2 ( 1 + \lr{ \Delta x}^2 ) \approx \) along the diagonal of the The inverse Jacobian being \( O(N^2) \) 
+%%% %
+%%% %\begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:360}
+%%% %\lr{ J(\Bx^0) }^{-1} = \frac{(N+1)^2}{2} I,
+%%% %\end{equation}
+%%% %
+%%% %the step sizes could be large unless damping is used.
+
 \makeSubAnswer{}{multiphysics:problemSet2b:2c}
 
 TODO.
