@@ -4,7 +4,8 @@
 #
 # - title and prologue
 # - remove mathLabelBoxes -> underbrace
-# - \citep and references fixups (steal code from ~/bin/tex2blog)
+# - \citep and references fixups (code partially stolen from ~/bin/tex2blog, but \citep{} fixups still todo.)
+# - \boxedEquation -> equation \boxed{}
 # - \cref removals.
 # - \makeexample, \maketheorem, \makedefinition
 # - \captionedTable
@@ -96,6 +97,8 @@ if ( $showUsage or !defined $filebase )
 
 my $rLines = slurpLatex( $filebase ) ;
 
+my $bibString = processBib() ;
+
 print "[mathjax]\n" ;
 
 foreach (@$rLines)
@@ -150,6 +153,8 @@ foreach (@$rLines)
    print "$_\n" ;
 }
 
+print $bibString ;
+
 exit 0 ;
 
 sub slurpLatex
@@ -170,4 +175,72 @@ sub slurpLatex
    close $fh ;
 
    return \@lines ;
+}
+
+# side effect (disabled: populates the %refnumbers hash.)
+sub processBib
+{
+   my $bibOut = '' ;
+
+   my $haveBib = 1 ;
+   open my $fh, "<$filebase.bbl" or $haveBib = 0 ;
+
+   if ( $haveBib )
+   {
+      my $curNum = 1 ;
+
+      while (<$fh>)
+      {
+         chomp ;
+
+         s,\\begin{thebibliography}.*,<h1>References</h1>, ;
+
+         #\bibitem[Joot({\natexlab{a}})]{PJLorentzWave}
+         s/\\bibitem.*]{/\\bibitem{/ ;
+         if ( s/\\bibitem{(.*?)}// )
+         {
+            $bibOut .= "\n\n" ;
+            #$refnumbers{$1} = $curNum ;
+            $bibOut .= "[$curNum] " ;
+
+            $curNum++ ;
+         }
+         else
+         {
+            next if (/Available from:/ or
+                     /\\providecommand/ or
+                     /\\expandafter/ or
+                     0 ) ;
+
+            if ( /\\end{thebibliography}/ )
+            {
+               $bibOut =~ s,\\url{(.*?)},<a href="$1">$1</a>,;
+               $bibOut .= "\n" ;
+               last ;
+            }
+
+            s/~/ /g ;
+            s,{ *\\em\s+(.*?)},<em>$1</em>,g;
+            s,\\em *{(.*?)},<em>$1</em>,g ;
+            s,\\emph *{(.*?)},<em>$1</em>,g ;
+            s/\\newblock// ;
+
+            # \url can be split across lines, as in the following:
+            #  \url{http://en.wikipedia.org/w/index.php?title=Relativistic_Doppler_effect&o%
+            #ldid=298724264}.
+            #
+            #In case it isn't do a first check here before stripping out {}'s
+            #
+            s,\\url{(.*?)},<a href="$1">$1</a>,sg;
+            s/{(.*?)}/$1/g ;
+
+            #die "'$_'\n" if /\\url/ ;
+            $bibOut .= "$_" ;
+         }
+      }
+
+      close $fh ;
+   }
+
+   return $bibOut ;
 }
