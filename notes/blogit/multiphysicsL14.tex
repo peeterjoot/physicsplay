@@ -12,11 +12,9 @@
 \newcommand{\keywords}{ECE1254H}
 \input{../peeter_prologue_print2.tex}
 
-%\usepackage{kbordermatrix}
-
 \beginArtNoToc
-\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 14: XXX.  Taught by Prof.\ Piero Triverio}
-%\chapter{XXX}
+\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 14: Backward Euler method and trapezoidal methods.  Taught by Prof.\ Piero Triverio}
+%\chapter{Backward Euler method and trapazoidal methods}
 \label{chap:multiphysicsL14}
 
 \section{Disclaimer}
@@ -75,7 +73,7 @@ Rearranging
 B u(t_n).
 \end{equation}
 
-Assuming that matrices \( G, C \) are constant, and \( \Delta t \) is fixed, a matrix inversion can be avoided, and a single LU decomposition can be used.  For \( N \) sampling points (not counting \( t_0 = 0 \)), \( N \) sets of backward and forward subsitutions will be required to compute \( x_1 \) from \( x_0 \), and so forth.
+Assuming that matrices \( G, C \) are constant, and \( \Delta t \) is fixed, a matrix inversion can be avoided, and a single LU decomposition can be used.  For \( N \) sampling points (not counting \( t_0 = 0 \)), \( N \) sets of backward and forward substitutions will be required to compute \( x_1 \) from \( x_0 \), and so forth.
 
 Backwards Euler is an implicit method.
 
@@ -99,7 +97,7 @@ x_{n+1} =
 + \Delta t B u(t_n) 
 \end{equation}
 \item This is an explicit method
-\item This can be cheap but instable.
+\item This can be cheap but unstable.
 \end{itemize}
 
 \section{Trapezoidal rule (TR)}
@@ -108,7 +106,7 @@ x_{n+1} =
 
 The derivative can be approximated using an average of the pair of derivatives as illustrated in \cref{fig:lecture14:lecture14Fig2}.
 
-\imageFigure{../../figures/ece1254/lecture14Fig2}{Trapazoidal derivative approximation}{fig:lecture14:lecture14Fig2}{0.3}
+\imageFigure{../../figures/ece1254/lecture14Fig2}{Trapezoidal derivative approximation}{fig:lecture14:lecture14Fig2}{0.3}
 
 \begin{equation}\label{eqn:multiphysicsL14:200}
 \frac{x_n - x_{n-1}}{\Delta t} \approx  \frac{ 
@@ -119,7 +117,7 @@ The derivative can be approximated using an average of the pair of derivatives a
 {2}.
 \end{equation}
 
-Applicaiton to \cref{eqn:multiphysicsL14:40} for \( t_{n-1}, t_n \) respectively gives
+Application to \cref{eqn:multiphysicsL14:40} for \( t_{n-1}, t_n \) respectively gives
 
 \begin{equation}\label{eqn:multiphysicsL14:220}
 \begin{aligned}
@@ -139,17 +137,33 @@ G \frac{ x_{n-1} + x_n }{2} + C
 = B 
 \frac{u(t_{n-1}) 
 +
-u(t_{n}) }{2}.
+u(t_{n}) }{2},
 \end{equation}
 
-FIXME: skipping steps.
+and inserting the trapezoidal approximation 
+
+\begin{equation}\label{eqn:multiphysicsL14:280}
+G \frac{ x_{n-1} + x_n }{2} 
++ 
+C 
+\frac{
+x_{n} -
+x_{n-1}
+}{\Delta t}
+= B 
+\frac{u(t_{n-1}) 
++
+u(t_{n}) }{2},
+\end{equation}
+
+and a final rearrangement yields
 
 %\begin{equation}\label{eqn:multiphysicsL14:260}
 \boxedEquation{eqn:multiphysicsL14:260}{
 \lr{ G + \frac{2}{\Delta t} C } x_n
 =
 - 
-\lr{ G - \frac{2}{\Delta t} C } x_{n+1}
+\lr{ G - \frac{2}{\Delta t} C } x_{n_1}
 + B
 \lr{u(t_{n-1}) 
 +
@@ -159,12 +173,13 @@ u(t_{n}) }.
 
 This is
 \begin{itemize}
-\item an implicit method
-\item ...
-\item ... BE, for the same computational cost
+\item also an implicit method.
+\item requires LU of \( G - 2 C /\Delta t \).
+\item more accurate than BE, for the same computational cost.
 \end{itemize}
 
 In all of these methods, accumulation of error is something to be very careful of, and in some cases such error accumulation can even be exponential.
 
-%\EndArticle
+This is effectively a way to introduce central differences.  On the slides this is seen to be more effective at avoiding either artificial damping and error accumulation that can be seen in backwards and forwards Euler method respectively.
+
 \EndNoBibArticle
