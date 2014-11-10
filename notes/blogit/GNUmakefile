@@ -17,8 +17,8 @@ CLEAN_TARGETS += *.synctex.gz
 #INCOMPLETE += pipeFlowConstPressureGradient.tex
 #INCOMPLETE += qmTwoExamReflection.tex
 #INCOMPLETE += qmTwoR1.tex
-INCOMPLETE += multiphysicsProblemSet2bProblem1.tex
-INCOMPLETE += multiphysicsProblemSet2bProblem2.tex
+#INCOMPLETE += multiphysicsProblemSet2bProblem1.tex
+#INCOMPLETE += multiphysicsProblemSet2bProblem2.tex
 
 INCOMPLETE += stokespost.tex
 
@@ -70,8 +70,8 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 	rm -f .gitignore
 	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/blogit/,' > $@
 
-multiphysicsProblemSet2b.pdf : multiphysicsProblemSet2bProblem1.tex
-multiphysicsProblemSet2b.pdf : multiphysicsProblemSet2bProblem2.tex
+#multiphysicsProblemSet2b.pdf : multiphysicsProblemSet2bProblem1.tex
+#multiphysicsProblemSet2b.pdf : multiphysicsProblemSet2bProblem2.tex
 
 video: $(VIDEO)
 

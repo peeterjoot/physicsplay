@@ -6,6 +6,8 @@ INCOMPLETE += multiphysicsProblemSet1Problem1.tex
 INCOMPLETE += multiphysicsProblemSet1Problem2.tex
 INCOMPLETE += multiphysicsProblemSet1Problem3.tex
 INCOMPLETE += multiphysicsProblemSet2aProblem1.tex
+INCOMPLETE += multiphysicsProblemSet2bProblem1.tex
+INCOMPLETE += multiphysicsProblemSet2bProblem2.tex
 
 #ONCEFLAGS := -justonce
 
@@ -31,12 +33,16 @@ THISBOOK_DEPS += $(PDFS_FROM_EPS)
 
 include ../make.rules
 
+multiphysicsProblemSet1.pdf :: $(PDF_DEPS)
 multiphysicsProblemSet1.pdf :: multiphysicsProblemSet1Problem1.tex
 multiphysicsProblemSet1.pdf :: multiphysicsProblemSet1Problem2.tex
 multiphysicsProblemSet1.pdf :: multiphysicsProblemSet1Problem3.tex
 
-multiphysicsProblemSet2a.pdf : multiphysicsProblemSet2aProblem1.tex
-multiphysicsProblemSet2a.pdf : ../ece1254/conjugateGradientAlgorithm.tex
-multiphysicsProblemSet2a.pdf : ../ece1254/simpleNortonEquivalents.tex
+multiphysicsProblemSet2a.pdf :: $(PDF_DEPS)
+multiphysicsProblemSet2a.pdf :: multiphysicsProblemSet2aProblem1.tex
+multiphysicsProblemSet2a.pdf :: ../ece1254/conjugateGradientAlgorithm.tex
+multiphysicsProblemSet2a.pdf :: ../ece1254/simpleNortonEquivalents.tex
 
-multiphysicsProblemSet1.pdf :: $(PDF_DEPS)
+multiphysicsProblemSet2b.pdf :: $(PDF_DEPS)
+multiphysicsProblemSet2b.pdf :: multiphysicsProblemSet2bProblem1.tex
+multiphysicsProblemSet2b.pdf :: multiphysicsProblemSet2bProblem2.tex
