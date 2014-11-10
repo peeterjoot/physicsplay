@@ -74,7 +74,7 @@ otes/phy456/
 
 otes/phy485/
 
-  Class notes and problems from 'Advanced Classical Mechanics', taught by Prof. Joseph Thywissen.
+  Class notes and problems from 'Advanced Classical Optics', taught by Prof. Joseph Thywissen.
 
 otes/phy452/
 
