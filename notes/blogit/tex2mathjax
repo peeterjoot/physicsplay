@@ -4,7 +4,6 @@
 #
 # - title and prologue
 # - remove mathLabelBoxes -> underbrace
-# - \citep and references fixups (code partially stolen from ~/bin/tex2blog, but \citep{} fixups still todo.)
 # - \boxedEquation -> equation \boxed{}
 # - \cref removals.
 # - \makeexample, \maketheorem, \makedefinition
@@ -97,6 +96,8 @@ if ( $showUsage or !defined $filebase )
 
 my $rLines = slurpLatex( $filebase ) ;
 
+my %refnumbers ;
+
 my $bibString = processBib() ;
 
 print "[mathjax]\n" ;
@@ -125,6 +126,7 @@ foreach (@$rLines)
    s/^ *\\EndNoBibArticle.*// ;
    s/^ *\\generatetitle{(.*)}/$1/ ;
    s/^ *\\label{chap:.*// ;
+   s/\\citep{(.*?)}/[$refnumbers{$1}]/g;
 
    s,{ *\\em\s+(.*?)},<em>$1</em>,g;
 
@@ -177,7 +179,7 @@ sub slurpLatex
    return \@lines ;
 }
 
-# side effect (disabled: populates the %refnumbers hash.)
+# side effect: populates the %refnumbers hash.
 sub processBib
 {
    my $bibOut = '' ;
@@ -200,7 +202,7 @@ sub processBib
          if ( s/\\bibitem{(.*?)}// )
          {
             $bibOut .= "\n\n" ;
-            #$refnumbers{$1} = $curNum ;
+            $refnumbers{$1} = $curNum ;
             $bibOut .= "[$curNum] " ;
 
             $curNum++ ;
