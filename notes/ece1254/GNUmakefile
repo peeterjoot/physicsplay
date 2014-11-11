@@ -25,6 +25,7 @@ COPIED_FILES += ./macros_bm.sty
 #REDACTED := -redacted
 
 GENERATED_SOURCES += matlab.tex 
+GENERATED_SOURCES += mathematica.tex 
 
 EPS_FILES := $(wildcard $(FIGURES)/*.eps)
 PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))
