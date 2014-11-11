@@ -21,10 +21,10 @@ SOURCE_DIRS += $(FIGURES)
 COPIED_FILES += ./macros_bm.sty
 
 # also toggle redacted classicthesis-config.tex
-# FIXME: changing this flag should be a dependency of mathematica.tex 
+# FIXME: changing this flag should be a dependency of matlab.tex 
 #REDACTED := -redacted
 
-GENERATED_SOURCES += mathematica.tex 
+GENERATED_SOURCES += matlab.tex 
 
 EPS_FILES := $(wildcard $(FIGURES)/*.eps)
 PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))

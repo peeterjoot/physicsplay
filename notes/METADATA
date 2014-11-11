@@ -20,6 +20,7 @@ my $doOtherbook = 0 ;
 my $doBib = 0 ;
 my $doHistory = 0 ;
 my $doMathematica = 0 ;
+my $doMatlab = 0 ;
 my $latex = 0 ;
 #my $doMathematicaFtp = 0 ;
 my $redacted = 0 ;
@@ -39,6 +40,7 @@ GetOptions
    'miscphysics!'  => \$doNonga,
    'latex!'  => \$latex,
    'mathematica!'  => \$doMathematica,
+   'matlab!'  => \$doMatlab,
    'otherbook!' => \$doOtherbook,
    'redacted' => \$redacted,
    'all'        => sub {
@@ -59,7 +61,7 @@ GetOptions
    'history!'   => \$doHistory,
 
    'help'       => sub { die
-"METADATA [-help | -history | -bib] [-mathematica [-latex] | -other | -phy356 | -classicalmechanics | -phy456 | -phy454 | -phy485 | -phy450 | -phy452 | -phy487 | -gabook | -ece1254 ] [-redacted]
+"METADATA [-help | -history | -bib] [-mathematica [-latex] | -matlab [-latex] | -other | -phy356 | -classicalmechanics | -phy456 | -phy454 | -phy485 | -phy450 | -phy452 | -phy487 | -gabook | -ece1254 ] [-redacted]
 
 options:
 -history hypertext history.
@@ -84,6 +86,7 @@ require "phy454/METADATA" ;
 require "phy450/METADATA" ;
 require "otherbook/METADATA" ;
 require "../mathematica/METADATA" ;
+require "../matlab/METADATA" ;
 
 my @gabook = gabookMeta() ;
 my @miscphysics = miscMeta() ;
@@ -98,6 +101,7 @@ my @phy454 = phy454Meta() ;
 my @phy450 = phy450Meta() ;
 my @otherbook = otherbookMeta() ;
 my @mathematica = mathematicaMeta() ;
+my @matlab = matlabMeta() ;
 
 my %monthsOfYear = (
 'January' => 1,
@@ -316,6 +320,24 @@ elsif ( $doMathematica )
    {
       mathematicaIndex() ;
    }
+}
+elsif ( $doMatlab )
+{
+   if ( $latex )
+   {
+      my $filter ;
+
+      if ( $doEce1254 )
+      {
+         $filter = "ece1254/" ;
+      }
+
+      matlabIndexLatex( $filter ) ;
+   }
+#   else
+#   {
+#      matlabIndex() ;
+#   }
 }
 #elsif ( $doMathematicaFtp )
 #{
@@ -565,6 +587,66 @@ $desc
    {
       print $prologueCDF ;
    }
+
+   print "$out
+
+\\end{itemize}
+%-------------------------------------------------------
+" ;
+}
+
+sub matlabIndexLatex
+{
+   my ($filter) = @_ ;
+
+   my $urlpath = "https://raw.github.com/peeterjoot/matlab/master/" ;
+
+   my $prologue1 =
+"
+%-------------------------------------------------------
+These Matlab notebooks, some just trivial ones used to generate figures, others more elaborate, and perhaps some even polished, can be found in
+
+\\href{$urlpath}{$urlpath}.
+
+These notebooks are text files, but a matlab product is required to execute them.
+" ;
+
+my $out = "
+\\begin{itemize}
+" ;
+
+   my $foundCDF = 0 ;
+
+   foreach ( sort datesort @matlab )
+   {
+      my $path = $_->{'path'} ;
+      my $date = $_->{'DATE'} ;
+      my $desc = $_->{'WHAT'} ;
+
+      if ( $filter )
+      {
+         next unless ( $path =~ /$filter/ ) ;
+      }
+
+      my $fullpath = "https://raw.github.com/peeterjoot/matlab/master/$path" ;
+
+      my $label = $path ;
+      $label =~ s,/,:,g ;
+
+      $foundCDF++ if ( $path =~ /\.cdf$/i ) ;
+
+      my $problemSetSolution = $_->{'PROBLEMSET'} ;
+
+      if ( !$redacted or ($redacted and !defined $problemSetSolution) )
+      {
+         $out .= qq(\\item \\phantomsection \\label{path:$label} $date \\href{$fullpath}{$path}
+
+$desc
+) ;
+      }
+   }
+
+   print $prologue1 ;
 
    print "$out
 
