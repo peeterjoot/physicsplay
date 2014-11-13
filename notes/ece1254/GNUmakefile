@@ -34,6 +34,12 @@ THISBOOK_DEPS += $(PDFS_FROM_EPS)
 
 include ../make.rules
 
+proj :: ece1254projectReport.pdf
+all :: proj
+
+ece1254projectReport.pdf :: $(PDF_DEPS)
+ece1254projectReport.pdf :: ece1254projectReport.tex
+
 multiphysicsProblemSet1.pdf :: $(PDF_DEPS)
 multiphysicsProblemSet1.pdf :: multiphysicsProblemSet1Problem1.tex
 multiphysicsProblemSet1.pdf :: multiphysicsProblemSet1Problem2.tex
