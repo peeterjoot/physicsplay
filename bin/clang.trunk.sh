@@ -1,7 +1,9 @@
 where=llvm
 #where=llvmopt
 #what=trunk
-what=tags/RELEASE_34/final
+
+#svn ls http://llvm.org/svn/llvm-project/llvm/tags/
+what=tags/RELEASE_350/final
 
 #Checkout LLVM:
 #Change directory to where you want the llvm directory placed.
