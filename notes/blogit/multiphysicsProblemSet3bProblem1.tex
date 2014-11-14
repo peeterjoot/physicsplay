@@ -2,13 +2,161 @@
 % Copyright © 2014 Peeter Joot.  All Rights Reserved.
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
 %
-\makeproblem{description}{multiphysics:problemSet3b:1}{ 
+\makeproblem{Model order reduction methods}{multiphysics:problemSet3b:1}{ 
+
+In this problem you will apply different model order reduction methods to
+the heat conducting bar. Use Backward Euler for time integration.
+
 \makesubproblem{}{multiphysics:problemSet3b:1a}
+In this problem we shall introduce a heat source \( u(t) \) and its
+spatial distribution in the form of \( h(x) \).
+
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:20}
+\PD{t}{T(x,t)}
+=
+\PDSq{x}{T(x,t)}
+- \alpha T(x,t) + h(x)u(t) \qquad x \in [0,1]
+\end{equation}
+
+where \( T(x,t) \) is the temperature at location \( x \) at time \( t \). The boundary condition is that no heat flows away from the two ends of the bar, i.e.
+
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:40}
+\evalbar{\PD{x}{T}}{x = 0}
+=
+\evalbar{\PD{x}{T}}{x = 1}
+= 0.
+\end{equation}
+
+The term with \( \alpha \) models the heat dissipation from the bar to the surrounding
+environment. Let \( \alpha = 0.01 \). You can assume zero initial conditions. Explain
+how this heat equation can be formulated into an equivalent dynamical system in the form
+
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:60}
+\BG \Bx(t) + \BC \dot{\Bx}(t) = \BB \Bu(t)
+\end{equation}
+
+Explain the choice of your matrices \( \BG,\BC,\BB \). What do the states \( x(t) \) of
+your dynamical system correspond to, physically? We define the output \( y(t) \)
+as \( y(t) = L^\T x(t) \), where \( {}^\T \) denotes the matrix transpose.
+
+\makesubproblem{}{multiphysics:problemSet3b:1b}
+We are interested in the following scenarios:
+
+\begin{itemize}
+	\item [\textbf{Case 1}]
+\par
+Input: heat flow at the left end of the bar
+\par
+Output: temperature at the right end
+	\item [\textbf{Case 2}]
+\par
+Input: heat flow at the left end of the bar
+\par
+Output: average temperature along the bar
+	\item [\textbf{Case 3}]
+\par
+Input: uniform heating
+\par
+Output: temperature at the right end
+	\item [\textbf{Case 4}]
+\par
+Input: uniform heating
+\par
+Output: average temperature along the bar
+\end{itemize}
+
+Explain how you will pick the matrices \( \BB, \BL \) in each case.
+\textbf{In all remaining questions, consider only case 1.}
+
+\makesubproblem{}{multiphysics:problemSet3b:1c}
+
+Write a Matlab routine \matlabFunc{PlotFreqResp}(w,G,C,B,L) which takes
+in \( \omega,G,C,B,L \) as input and plots the system frequency response. Here \( \omega \) 
+is a vector of frequencies in rad/s. For \( N = 500 \) (500 nodes) plot the real
+and imaginary part of the frequency response for case 1.
+
+\makesubproblem{}{multiphysics:problemSet3b:1d}
+
+Reduce the dynamical system for \( N = 500 \) using the modal
+truncation method. Retain the modes that are associated with the ``slowest'' eigenvalues. Note that you will have to convert your system from the
+modified nodal analysis representation to the state-space representation. Use
+\( q = 1, 2, 4, 10, 50 \) (\( q = \text{number of states in the reduced system} \)). Plot the
+frequency response of the original system and frequency response of the reduced system in the same plot. Select a ``reasonably small'' order \( q \) for the
+reduced model, that ensures a reasonable approximation of the original system. Clearly explain how did you pick that \( q \), which factors did you look at.
+
+\makesubproblem{}{multiphysics:problemSet3b:1e}
+
+Using your time domain solver, compute the output of the
+original system (\( N=500 \)) and of the reduced model (with the order \( q \) you
+selected) for following inputs:
+
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:80}
+u_1(t) =
+\left\{
+\begin{array}{l l}
+1 & \quad \mbox{if \( t \ge 0 \)} \\
+0 & \quad \mbox{if \( t < 0 \)} 
+\end{array}
+\right.
+\end{equation}
+
+For \( u_1(t) \) pick \( t_{\textrm{stop}} \) such that the system reaches steady state. Take the second input \( u_2(t) \) as
+
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:100}
+u_2(t) = \sin(0.01 t) \quad \text{for} t_{\textrm{stop}} = 10000
+\end{equation}
+
+Be sure to pick an appropriate time step and explain your choice. How much
+speed-up did you get for your reduced models for time domain simulations?
+Explain your results.
+\paragraph{Hints:} To plot the frequency response, use the command \matlabFunc{semilogx}(x,y).
+You can generate the frequency vector with the command: \( \omega \) = \matlabFunc{logspace}(-8,4,500).
+
+\makesubproblem{}{multiphysics:problemSet3b:1f}
+Repeat 
+part \ref{multiphysics:problemSet3b:1d}
+using the PRIMA model order reduction algorithm (see provided routine \textbf{prima.m}). In order to maximize the efficiency of
+the reduced model, after you generate it with prima, bring it to state-space
+form (by multiplying by \(\BC^{-1}\) ). Then, make the \( \BA \) matrix of the state space
+model diagonal. In this way, the reduced model becomes sparse rather than
+full, and can be solved more quickly.
+
+\makesubproblem{}{multiphysics:problemSet3b:1g}
+
+Repeat 
+part \ref{multiphysics:problemSet3b:1e}
+using the PRIMA model order reduction algorithm.
+
+\makesubproblem{}{multiphysics:problemSet3b:1h}
+
+Compare the results obtained with the two methods. A table
+with a few columns will suffice.
+
 } % makeproblem
 
 \makeanswer{multiphysics:problemSet3b:1}{ 
 \makeSubAnswer{}{multiphysics:problemSet3b:1a}
 
 TODO.
-}
+\makeSubAnswer{}{multiphysics:problemSet3b:1b}
 
+TODO.
+\makeSubAnswer{}{multiphysics:problemSet3b:1c}
+
+TODO.
+\makeSubAnswer{}{multiphysics:problemSet3b:1d}
+
+TODO.
+\makeSubAnswer{}{multiphysics:problemSet3b:1e}
+
+TODO.
+\makeSubAnswer{}{multiphysics:problemSet3b:1f}
+
+TODO.
+\makeSubAnswer{}{multiphysics:problemSet3b:1g}
+
+TODO.
+\makeSubAnswer{}{multiphysics:problemSet3b:1h}
+
+TODO.
+}
