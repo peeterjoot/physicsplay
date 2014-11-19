@@ -100,6 +100,130 @@ methods, and comment the obtained results.
 \makeanswer{multiphysics:problemSet3a:1}{ 
 \makeSubAnswer{}{multiphysics:problemSet3a:1a}
 
+To understand how to handle inductors \index{MNA!inductor} in the MNA equations, consider two representitive examples
+
+\makeexample{Simple RLC circuit}{example:multiphysicsProblemSet3a:30}{
+First consider an RLC circuit with a current source as sketched in \cref{fig:problemSet3a:problemSet3aFig3}.
+
+\imageFigure{../../figures/ece1254/problemSet3aFig3}{RLC circuit with current source}{fig:problemSet3a:problemSet3aFig3}{0.3}
+
+With \( Z = 1/R \), the KCLs plus the inductor voltage relation, are
+\begin{enumerate}
+\item \( -i_s + Z V_1 + C \frac{d(V_1 - V_2)}{dt} = 0 \)
+\item \( C \frac{d(V_2 - V_1)}{dt} + i_L = 0 \)
+\item \( -(V_2 - 0) + L \frac{di_L}{dt} = 0 \)
+\end{enumerate}
+
+This can be put into matrix form as
+
+\begin{equation}\label{eqn:multiphysicsProblemSet3a:n}
+\begin{bmatrix}
+Z & 0 & 0 \\
+0 & 0 & 1 \\
+0 & -1 & 0 \\
+\end{bmatrix}
+\begin{bmatrix}
+V_1 \\
+V_2 \\
+i_L
+\end{bmatrix}
++
+\begin{bmatrix}
+C & -C & 0 \\
+-C & C & 0 \\
+0 & 0 & L \\
+\end{bmatrix}
+%\frac{d}{dt}
+{\begin{bmatrix}
+V_1 \\
+V_2 \\
+i_L
+\end{bmatrix}}'
+=
+\begin{bmatrix}
+i_s \\
+0 \\
+0
+\end{bmatrix}
+\end{equation}
+}
+
+\makeexample{RLC circuit with voltage source}{example:multiphysicsProblemSet3a:50}{
+Now consider the more complex circuit of \cref{fig:problemSet3a:problemSet3aFig4}, with an inductor between two not ground nodes, as well as a voltage source, which will also require the MNA matrix to be augmented.  The equations, starting with the KCLs by node number, are
+
+\begin{enumerate}
+\item \( -i_{s_1} + Z (V_1 - V_2) = 0 \)
+\item \( Z (V_2 - V_1) + C_1 \frac{d(V_2 - 0)}{dt} + C_2 \frac{d(V_2 - V_3)}{dt} = 0 \)
+\item \( C_2 \frac{d(V_3 - V_2)}{dt} + i_{L_{3,4}} - i_{L_{0,3}} = 0 \)
+\item \( -i_{L_{3,4}} - i_{s_2} = 0 \)
+\item \( V_1 = V_{s_1} \)
+\item \( -(V_3 - V_4) + L_2 \frac{d}{dt} i_{L_{3,4}} = 0 \)
+\item \( -(0 - V_3) + L_1 \frac{d}{dt} i_{L_{0,3}} = 0 \)
+\end{enumerate}
+
+\imageFigure{../../figures/ece1254/problemSet3aFig4}{More complex RLC circuit}{fig:problemSet3a:problemSet3aFig4}{0.3}
+
+In matrix form, this is
+\begin{equation}\label{eqn:multiphysicsProblemSet3a:n}
+\begin{bmatrix}
+Z & -Z & 0 & 0 & -1 & 0 & 0 \\
+-Z & Z & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & \tikzLeftMark{}{1} & -1 \\
+0 & 0 & 0 & 0 & 0 & -1\tikzRightMark{} & 0 \\
+1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & \tikzLeftMarkSecond{}-1 & 1\tikzRightMarkSecond{} & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 & 0 & 0 & 0 \\
+\end{bmatrix}
+\begin{bmatrix}
+V_1 \\
+V_2 \\
+V_3 \\
+V_4 \\
+i_{s_1} \\
+i_{L_{3,4}} \\
+i_{L_{0,3}} \\
+\end{bmatrix}
++
+\begin{bmatrix}
+0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & C_1 + C_2 & -C_3 & 0 & 0 & 0 & 0 \\
+0 & -C_2 & C_2 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & \tikzLeftMarkThird{}L_2\tikzRightMarkThird{} & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & L_1 \\
+\end{bmatrix}
+{\begin{bmatrix}
+V_1 \\
+V_2 \\
+V_3 \\
+V_4 \\
+i_{s_1} \\
+i_{L_{3,4}} \\
+i_{L_{0,3}} \\
+\end{bmatrix}}'
+=
+\begin{bmatrix}
+0 \\
+0 \\
+0 \\
+i_{s_2} \\
+V_{s_1} \\
+0 \\
+0 \\
+\end{bmatrix}
+\end{equation}
+
+\DrawFirstBox{}
+\DrawSecondBox{}
+\DrawThirdBox{}
+
+}
+
 TODO.
 \makeSubAnswer{}{multiphysics:problemSet3a:1b}
 
