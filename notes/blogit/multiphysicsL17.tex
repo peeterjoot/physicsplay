@@ -1,0 +1,115 @@
+%
+% Copyright © 2014 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+% for template copy, run:
+%
+% ~/bin/ct multiphysicsL1  multiphysicsLectureN tl1
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{multiphysicsL17}
+\renewcommand{\dirname}{notes/ece1254/}
+\newcommand{\keywords}{ECE1254H}
+\input{../peeter_prologue_print2.tex}
+
+%\usepackage{kbordermatrix}
+
+\beginArtNoToc
+\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 17: Stability.  Taught by Prof.\ Piero Triverio}
+%\chapter{Stability}
+\label{chap:multiphysicsL17}
+
+\section{Disclaimer}
+
+Peeter's lecture notes from class.  These may be incoherent and rough.
+
+\section{Stability (continued)}
+
+Continuing with the simple continuous time test system
+
+\begin{equation}\label{eqn:multiphysicsL17:20}
+\dot{x}(t) = \lambda x(t)
+\end{equation}
+
+With the application of a trial solution \( x(t) = e^{s t} \), the resulting characteristic equation is
+
+\begin{equation}\label{eqn:multiphysicsL17:40}
+s = \lambda,
+\end{equation}
+
+and stability follows, provided that \( \Real(\lambda) < 0 \) as sketched in \cref{fig:lecture17:lecture17Fig1}.
+
+\imageFigure{../../figures/ece1254/lecture17Fig1}{Stability region}{fig:lecture17:lecture17Fig1}{0.2}
+
+Utilizing LMS methods, for example TR, the discrete time system results, such as
+
+\begin{equation}\label{eqn:multiphysicsL17:60}
+\gamma_{-1} x_{n+1} + 
+\gamma_{0} x_{n} + 
+\gamma_1 x_{n-1} 
++ \cdots
+= 0.
+\end{equation}
+
+% n+1 = k
+% n = k-1
+% n + j = k - 1 + j
+With a substitution \( x_{n + j} = z^{k - 1 + j} \), a characteristic polynomial results
+
+\begin{equation}\label{eqn:multiphysicsL17:80}
+\gamma_{-1} z^{k} + 
+\gamma_{0} z^{k-1} + 
+\gamma_1 z^{k-2} + \cdots = 0.
+\end{equation}
+
+This is stable provided \( \Abs{z_l} < 1 \), as illustrated in \cref{fig:lecture17:lecture17Fig2}.
+
+\imageFigure{../../figures/ece1254/lecture17Fig2}{Stability region in z-domain}{fig:lecture17:lecture17Fig2}{0.3}
+
+... SWITCHED TO SLIDES.
+
+\makedefinition{Stiff}{dfn:multiphysicsL17:100}{
+A \textAndIndex{stiff} system is one that has multiple timescales, as characterized by a significant range of eigenvalues.
+}
+
+\makedefinition{Lossless system}{dfn:multiphysicsL17:120}{
+Lossless \index{pole!lossless} poles are those that reside strictly on the imaginary axis.
+}
+
+\makedefinition{Lossly system}{dfn:multiphysicsL17:140}{
+Lossly poles \index{pole!lossly} are those that reside strictly to the left of the imaginary axis.
+}
+
+\makedefinition{Active system}{dfn:multiphysicsL17:160}{
+Active poles \index{pole!active} are those that reside strictly to the right of the imaginary axis.
+}
+
+\makedefinition{A-stable}{dfn:multiphysicsL17:170}{
+See slides.
+}
+
+\maketheorem{Dahlquist's theorem}{thm:multiphysicsL17:180}{
+There are no LMS methods of order greater than 2 that are A-stable.  Also known as the Dahlquist barrier.  The TR method has the lowest error of the A-stable LMS methods.
+}
+
+\paragraph{Some recent developments}
+
+The backward differentiation formulas (BDF) are of \( \text{order} > 2 \).  They are not A-stable, but can be sufficient with stability sketched in \cref{fig:lecture17:lecture17Fig3}.
+
+\imageFigure{../../figures/ece1254/lecture17Fig3}{BDF stability region}{fig:lecture17:lecture17Fig3}{0.2}
+
+Also available are the Obreshkov formulas \citep{butcherOrder}, which are both A-stable and of \( \text{order} > 2 \).  There is a cost to both of these methods: computation of the derivatives at each step.
+
+\chapter{Model order reduction}
+
+Many examples on slides.
+
+\makedefinition{Admittance}{dfn:multiphysicsL17:190}{
+Given an impedance \( Z \), the \textAndIndex{admittance} \( Y \) is defined as
+
+\begin{equation*}
+Y = \inv{Z}.
+\end{equation*}
+}
+
+\EndArticle
