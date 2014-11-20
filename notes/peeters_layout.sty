@@ -621,47 +621,79 @@ problem \ref{#1}%
 \end{example}%
 }
 
-%----------------------------------------------------------------------------------------
-% 
-% http://tex.stackexchange.com/questions/40028/highlight-elements-in-the-matrix/40059#40059
+%%----------------------------------------------------------------------------------------
+%% 
+%% http://tex.stackexchange.com/questions/40028/highlight-elements-in-the-matrix/40059#40059
+%%
+%% The following two macros allow marking left/upper, right/lower node positions for box drawing, and then drawing the box.
+%% unique node numbers must be passed to these.
+%\newcommand{\tikzmark}[1]{\tikz[overlay,remember picture] \node (#1) {};}
 %
-% The following two macros allow marking left/upper, right/lower node positions for box drawing, and then drawing the box.
-% unique node numbers must be passed to these.
-\newcommand{\tikzmark}[1]{\tikz[overlay,remember picture] \node (#1) {};}
+%\newcommand{\firstDrawNodeBox}[3][]{%
+%    \tikz[overlay,remember picture]{%
+%    \draw[DarkOliveGreen,#1]%
+%      ($(#2)+(-0.4em,0.9em)$) rectangle%
+%      ($(#3)+(0.5em,-0.3em)$);}%
+%}
+%
+%% here's some logic to allow for three boxes to be drawn with preceding marks, with counter increments after
+%% the boxes are drawn.
+%\newcounter{FirstBoxCounter}
+%\newcounter{SecondBoxCounter}
+%\newcounter{ThirdBoxCounter}
+%
+%\newcommand{\tikzLeftMark}[0]{\tikzmark{tbFirstLeft\theFirstBoxCounter}}
+%\newcommand{\tikzLeftMarkSecond}[0]{\tikzmark{tbSecondLeft\theSecondBoxCounter}}
+%\newcommand{\tikzLeftMarkThird}[0]{\tikzmark{tbThirdLeft\theThirdBoxCounter}}
+%
+%\newcommand{\tikzRightMark}[0]{\tikzmark{tbFirstRight\theFirstBoxCounter}}
+%\newcommand{\tikzRightMarkSecond}[0]{\tikzmark{tbSecondRight\theSecondBoxCounter}}
+%\newcommand{\tikzRightMarkThird}[0]{\tikzmark{tbThirdRight\theThirdBoxCounter}}
+%
+%\newcommand{\DrawFirstBox}[0]{%
+%   \firstDrawNodeBox[thick]{tbFirstLeft\theFirstBoxCounter}{tbFirstRight\theFirstBoxCounter}%
+%   \stepcounter{FirstBoxCounter}%
+%}
+%\newcommand{\DrawSecondBox}[0]{%
+%   \firstDrawNodeBox[thick]{tbSecondLeft\theSecondBoxCounter}{tbSecondRight\theSecondBoxCounter}%
+%   \stepcounter{SecondBoxCounter}%
+%}
+%\newcommand{\DrawThirdBox}[0]{%
+%   \firstDrawNodeBox[thick]{tbThirdLeft\theThirdBoxCounter}{tbThirdRight\theThirdBoxCounter}%
+%   \stepcounter{ThirdBoxCounter}%
+%}
+%
+%% example invokation in: notes/latex/matrixHighlight2.tex
+%------------------------------------------------------------------------------------------------------
+% 
+% http://tex.stackexchange.com/a/213022/15
+%
+
+%\usepackage{tikz}
+\RequirePackage{tikz}
+\usetikzlibrary{calc,tikzmark}
 
 \newcommand{\DrawNodeBox}[3][]{%
-    \tikz[overlay,remember picture]{%
+  \tikz[overlay,remember picture]{%
     \draw[DarkOliveGreen,#1]%
-      ($(#2)+(-0.4em,0.9em)$) rectangle%
-      ($(#3)+(0.5em,-0.3em)$);}%
+    ($({pic cs:#2})+(-0.4em,0.9em)$) rectangle%
+    ($({pic cs:#3})+(0.5em,-0.3em)$);}%
 }
 
-% here's some logic to allow for three boxes to be drawn with preceding marks, with counter increments after
-% the boxes are drawn.
-\newcounter{FirstBoxCounter}
-\newcounter{SecondBoxCounter}
-\newcounter{ThirdBoxCounter}
+\newcounter{MyBoxCounter}
+\setcounter{MyBoxCounter}{0}
 
-\newcommand{\tikzLeftMark}[0]{\tikzmark{tbFirstLeft\theFirstBoxCounter}}
-\newcommand{\tikzLeftMarkSecond}[0]{\tikzmark{tbSecondLeft\theSecondBoxCounter}}
-\newcommand{\tikzLeftMarkThird}[0]{\tikzmark{tbThirdLeft\theThirdBoxCounter}}
+\gdef\MyStepBoxCounter{\stepcounter{MyBoxCounter}}
 
-\newcommand{\tikzRightMark}[0]{\tikzmark{tbFirstRight\theFirstBoxCounter}}
-\newcommand{\tikzRightMarkSecond}[0]{\tikzmark{tbSecondRight\theSecondBoxCounter}}
-\newcommand{\tikzRightMarkThird}[0]{\tikzmark{tbThirdRight\theThirdBoxCounter}}
-
-\newcommand{\DrawFirstBox}[0]{%
-   \DrawNodeBox[thick]{tbFirstLeft\theFirstBoxCounter}{tbFirstRight\theFirstBoxCounter}%
-   \stepcounter{FirstBoxCounter}%
-}
-\newcommand{\DrawSecondBox}[0]{%
-   \DrawNodeBox[thick]{tbSecondLeft\theSecondBoxCounter}{tbSecondRight\theSecondBoxCounter}%
-   \stepcounter{SecondBoxCounter}%
-}
-\newcommand{\DrawThirdBox}[0]{%
-   \DrawNodeBox[thick]{tbThirdLeft\theThirdBoxCounter}{tbThirdRight\theThirdBoxCounter}%
-   \stepcounter{ThirdBoxCounter}%
+\newcommand\DrawMyBox[2][]{%
+  \DrawNodeBox[#1]{tbleft#2\theMyBoxCounter}{tbright#2\theMyBoxCounter}%
+  \gdef\MyStepBoxCounter{\stepcounter{MyBoxCounter}}%
 }
 
-% example invokation in: notes/latex/matrixHighlight2.tex
+\newcommand\mytikzmark[2]{%
+  \MyStepBoxCounter%
+  \global\let\MyStepBoxCounter\relax%
+  \tikzmark{tb#1#2\theMyBoxCounter}%
+}
+
 %------------------------------------------------------------------------------------------------------
