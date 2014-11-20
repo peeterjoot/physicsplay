@@ -2,7 +2,7 @@
 % Copyright © 2014 Peeter Joot.  All Rights Reserved.
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
 %
-\makeproblem{Modeling inductors and capacitors}{multiphysics:problemSet3a:1}{ 
+\makeproblem{Modeling inductors and capacitors and time dependence}{multiphysics:problemSet3a:1}{ 
 
 In this problem you will first extend the circuit simulator that you developed
 in the previous problem sets to include capacitors and inductors. Then, you
@@ -219,9 +219,60 @@ V_{s_1} \\
 \DrawThirdBox{}
 }
 
+\makeexample{Final example}{example:multiphysicsProblemSet3a:n}{
+Finally consider a simple example with a single inductor in an interior node as sketched in \cref{fig:ps3aExample3:ps3aExample3Fig1}.
+For this example a labelling convention compatible with the implementation to be will be chosen.  This is important to ensure the signs are correct.
 
+\imageFigure{../../figures/ece1254/ps3aExample3Fig1}{A final RLC example circuit}{fig:ps3aExample3:ps3aExample3Fig1}{0.3}
 
-From the above, the inductor stamp structure can be observed.  For an inductance \( L \) between nodes \( n_i, n_j \) and a current \( i_{L_{n_i, n_j}} \) directed from \( n_i \) to \( n_j \) that \( \BG \) portion of that stamp is
+The equations are
+
+\begin{enumerate}
+\item \( -i_s + Z (V_1 - 0) -i_{L_{2,1}} = 0 \)
+\item \( i_{L_{2,1}} + C \frac{d(V_2 - 0)}{dt} = 0 \)
+\item \( -(V_2 - V_1) + L \frac{d}{dt} i_{L_{2,1}} = 0 \),
+\end{enumerate}
+
+which have the matrix form
+
+\begin{equation}\label{eqn:multiphysicsL17:n}
+\begin{bmatrix}
+Z & 0 & \tikzLeftMarkSecond{}{-1} \\
+0 & 0 & 1 \tikzRightMarkSecond{} \\
+\tikzLeftMark{} 1 & -1 \tikzRightMark{} & 0 \\
+\end{bmatrix}
+\begin{bmatrix}
+V_1 \\
+V_2 \\
+i_{L_{2,1}} 
+\end{bmatrix}
++
+\begin{bmatrix}
+0 & 0 & 0 \\
+0 & C & 0 \\
+0 & 0 & \tikzLeftMarkThird{}L\tikzRightMarkThird{} \\
+\end{bmatrix}
+{
+\begin{bmatrix}
+V_1 \\
+V_2 \\
+i_{L_{2,1}} 
+\end{bmatrix}
+}'
+=
+\begin{bmatrix}
+i_s \\
+0 \\
+0
+\end{bmatrix}
+\end{equation}
+
+\DrawFirstBox{}
+\DrawSecondBox{}
+\DrawThirdBox{}
+}
+
+From the above examples, the inductor stamp structure can be observed.  For an inductance \( L \) between nodes \( n_i, n_j \) and a current \( i_{L_{n_i, n_j}} \) directed from \( n_i \) to \( n_j \) that \( \BG \) portion of that stamp is
 
 \begin{equation}\label{eqn:multiphysicsProblemSet3a:70}
 \kbordermatrix{

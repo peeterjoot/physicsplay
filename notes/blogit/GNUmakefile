@@ -17,6 +17,8 @@ CLEAN_TARGETS += *.synctex.gz
 #INCOMPLETE += pipeFlowConstPressureGradient.tex
 #INCOMPLETE += qmTwoExamReflection.tex
 #INCOMPLETE += qmTwoR1.tex
+INCOMPLETE += ps3amatlab.tex
+INCOMPLETE += ps3bmatlab.tex
 INCOMPLETE += multiphysicsProblemSet3aProblem1.tex
 INCOMPLETE += multiphysicsProblemSet3bProblem1.tex
 
@@ -72,6 +74,8 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 
 multiphysicsProblemSet3a.pdf : multiphysicsProblemSet3aProblem1.tex
 multiphysicsProblemSet3b.pdf : multiphysicsProblemSet3bProblem1.tex
+multiphysicsProblemSet3a.pdf : ps3amatlab.tex
+multiphysicsProblemSet3b.pdf : ps3bmatlab.tex
 
 video: $(VIDEO)
 
@@ -148,6 +152,12 @@ opt/%.pdf : %.pdf
 # generates a black image (so does png from svg)
 #%.png : %.pdf
 #	$(INKSCAPE) $^ --export-png=$@
+
+ps3amatlab.tex : ../METADATA ../../matlab/METADATA
+	(cd .. ; ./METADATA -matlab -latex -ece1254 -filter ece1254/ps3a/ ) > $@
+
+ps3bmatlab.tex : ../METADATA ../../matlab/METADATA
+	(cd .. ; ./METADATA -matlab -latex -ece1254 -filter ece1254/ps3b/ ) > $@
 
 localclean ::
 	rm -f $(LOCAL_FILES)
