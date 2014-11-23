@@ -100,7 +100,7 @@ methods, and comment the obtained results.
 \makeanswer{multiphysics:problemSet3a:1}{ 
 \makeSubAnswer{}{multiphysics:problemSet3a:1a}
 
-To understand how to handle inductors \index{MNA!inductor} in the MNA equations, consider a few representitive examples
+To understand how to handle inductors \index{MNA!inductor} in the MNA equations, consider a few representative examples
 
 \makeexample{Simple RLC circuit}{example:multiphysicsProblemSet3a:30}{
 First consider an RLC circuit with a current source as sketched in \cref{fig:problemSet3a:problemSet3aFig3}.
@@ -219,9 +219,9 @@ V_{s_1} \\
 \DrawMyBox[thick, Maroon, rounded corners]{3}
 }
 
-\makeexample{Final example}{example:multiphysicsProblemSet3a:n}{
+\makeexample{Final example}{example:multiphysicsProblemSet3a:91}{
 Finally consider a simple example with a single inductor in an interior node as sketched in \cref{fig:ps3aExample3:ps3aExample3Fig1}.
-For this example a labelling convention compatible with the implementation to be will be chosen.  This is important to ensure the signs are correct.
+For this example a labeling convention compatible with the implementation to be will be chosen.  This is important to ensure the signs are correct.
 
 \imageFigure{../../figures/ece1254/ps3aExample3Fig1}{A final RLC example circuit}{fig:ps3aExample3:ps3aExample3Fig1}{0.3}
 
@@ -235,7 +235,7 @@ The equations are
 
 which have the matrix form
 
-\begin{equation}\label{eqn:multiphysicsL17:n}
+\begin{equation}\label{eqn:multiphysicsL17:111}
 \begin{bmatrix}
 Z & 0 & \mytikzmark{left}{1}{-1} \\
 0 & 0 & 1 \mytikzmark{right}{1} \\
@@ -299,7 +299,7 @@ See \nbcite{ps3a:NodalAnalysis.m}{ps3a/NodalAnalysis.m} for the matlab code to g
 
 \makeSubAnswer{}{multiphysics:problemSet3a:1b}
 
-\captionedTable{RLC values per segment}{tab:multiphysicsProblemSet3a:n}{
+\captionedTable{RLC values per segment}{tab:multiphysicsProblemSet3a:131}{
 \begin{tabular}{|l||l|l|l|l|}
 \hline
 Level  & n        & R (\( \Omega \))  & Inductance (nH) & Capacitance (pF) \\ \hline
@@ -311,13 +311,33 @@ Level  & n        & R (\( \Omega \))  & Inductance (nH) & Capacitance (pF) \\ \h
 \end{tabular}
 }
 
-Code to implement the netlist for this circuit, including the terminating chip loads, have been implemented in \matlabFuncPath{generateNetlistSegmentForLevel}{ps3a:generateNetlistSegmentForLevel.m}(),
+Since there is only one source in the system, the clock that feeds the transmission line network, the source vector \( \BB \Bu(t) \) has just one non-zero element.  This allows the system equations to be expressed in a simple fashion that requires no support of time dependent functions in the \matlabFuncPath{NodalAnalysis}{ps3a:NodalAnalysis.m}() code.  If the clock amplitude is \( v_{\textrm{clk}}(t) \), then the system equations have the form
+
+\begin{equation}\label{eqn:multiphysicsProblemSet3a:151}
+\BG \Bx(t) + \BC \dot{\Bx}(t) = \Bb v_{\textrm{clk}}(t),
+\end{equation}
+
+and \( \BG, \BC, \Bb \) are the MNA matrices for a constant unit voltage at the source (clock) node.
+
+Code to implement such a netlist for this network, including the terminating chip loads, can be found in \matlabFuncPath{generateNetlistSegmentForLevel}{ps3a:generateNetlistSegmentForLevel.m}(),
 \matlabFuncPath{generateNetlistSegment}{ps3a:generateNetlistSegment.m}(), and
 \matlabFuncPath{generateNetlist}{ps3a:generateNetlist.m}(), the last of which takes the filename for the netlist output.
 
 \makeSubAnswer{}{multiphysics:problemSet3a:1c}
 
-TODO.
+The system equations for BE are
+
+\begin{equation}\label{eqn:multiphysicsProblemSet3a:171}
+\BG \Bx_n + \BC \frac{ \Bx_n - \Bx_{n-1} }{\Delta t} = \Bb v_{\textrm{clk}}(t_n),
+\end{equation}
+
+or
+\begin{equation}\label{eqn:multiphysicsProblemSet3a:191}
+\lr{ \BG + \inv{\Delta t} \BC } \Bx_n = \BC \frac{ \Bx_{n-1} }{\Delta t} + \Bb v_{\textrm{clk}}(t_n).
+\end{equation}
+
+This is the system to solve at each time step for \( \Bx_n \).  A one time LU factorization of \( \BG + \BC/\Delta t \) should expedite those calculations.
+
 \makeSubAnswer{}{multiphysics:problemSet3a:1d}
 
 TODO.
