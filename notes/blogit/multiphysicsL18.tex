@@ -11,15 +11,149 @@
 %\usepackage{kbordermatrix}
 
 \beginArtNoToc
-\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 18: XXX.  Taught by Prof.\ Piero Triverio}
-%\chapter{XXX}
+\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 18: Model order reduction.  Taught by Prof.\ Piero Triverio}
+%\chapter{Model order reduction}
 \label{chap:multiphysicsL18}
 
 \section{Disclaimer}
 
 Peeter's lecture notes from class.  These may be incoherent and rough.
 
-\section{XXX}
+\section{Model order reduction}
+\index{model order reduction}
+
+The system equations of interest for model order reduction (\textAndIndex{MOR}) are
+
+\begin{subequations}
+\label{eqn:multiphysicsL18:10}
+\begin{equation}\label{eqn:multiphysicsL18:20}
+\BG \Bx(t) + C \dot{\Bx}(t) = B \Bu(t)
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsL18:40}
+\By(t) = \BL^\T \Bx(t).
+\end{equation}
+\end{subequations}
+
+Here 
+\begin{itemize}
+\item \( \Bu(t) \) is a vector of inputs.
+\item \( \By(t) \) is a vector of interesting outputs, as filtered by the matrix \( \BL \), and
+\item \( \Bx(t) \) is the state vector, of size \( N \).
+\end{itemize}
+
+The aim is illustrated in \cref{fig:lecture18:lecture18Fig1}.
+
+\imageFigure{../../figures/ece1254/lecture18Fig1}{Find a simplified model that has the same input-output characteristics}{fig:lecture18:lecture18Fig1}{0.2}
+
+\paragraph{Review: transfer function}
+
+\begin{subequations}
+\begin{equation}\label{eqn:multiphysicsL18:60}
+\BG \BX(s) + \BC \lr{ s \BX(s) - \cancel{\BX(0)} } = \BB \BU(s)
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsL18:80}
+\BY(s) = \BL^\T \BX(s).
+\end{equation}
+\end{subequations}
+
+Grouping terms
+
+\begin{equation}\label{eqn:multiphysicsL18:100}
+\lr{ \BG + s \BC } \BX(s) = \BB \BU(s),
+\end{equation}
+
+and inverting allows for solution for the state vector output in the frequency domain
+
+\begin{equation}\label{eqn:multiphysicsL18:120}
+\BX(s) = \lr{ \BG + s \BC }^{-1} \BB \BU(s)
+\end{equation}
+
+The vector of outputs of interest are
+
+\begin{equation}\label{eqn:multiphysicsL18:140}
+\BY(s) = 
+%\mytikzmark{left}{1}
+\myBoxed{
+L^\T \lr{ \BG + s \BC }^{-1} \BB 
+}
+%\mytikzmark{right}{1}
+\BU(s)
+\end{equation}
+
+%\DrawMyBox[thick, Maroon, rounded corners]{1}
+
+The boxed portion is the transfer function
+
+\begin{equation}\label{eqn:multiphysicsL18:160}
+\BH(s) = L^\T \lr{ \BG + s \BC }^{-1} \BB.
+\end{equation}
+
+... Switched to slides.
+
+\paragraph{Geometrical interpretation to the change of variables}
+
+\begin{dmath}\label{eqn:multiphysicsL18:180}
+x(t) = 
+\mathLabelBox
+[
+   labelstyle={xshift=2cm},
+   linestyle={out=270,in=90, latex-}
+]
+{
+\BV 
+}
+{\(N \times N\)}
+\Bw(t) 
+= 
+\begin{bmatrix}
+\Bv_1 & \Bv_2 & \cdots & \Bv_N
+\end{bmatrix}
+\begin{bmatrix}
+w_1(t) \\
+w_2(t) \\
+\vdots \\
+w_N(t)
+\end{bmatrix}
+=
+\Bv_1 w_1(t) +
+\Bv_2 w_2(t) +
+\cdots
+\Bv_N w_N(t).
+\end{dmath}
+
+The key to MOR is to find a way to select the important portions of these \( \Bv_i, w_i(t) \) vectors-function pairs.  This projects the system equations onto an approximation that retains the most interesting characteristics.
+
+\section{Moment matching}
+
+Referring back to \cref{eqn:multiphysicsL18:10} and it's Laplace transform representation, an \textAndIndex{input-to-state transfer function} \( \BF(s) \) is defined by
+
+\begin{equation}\label{eqn:multiphysicsL18:220}
+\BX(s) = \lr{ \BG + s \BC }^{-1} \BB \BU(s) = \BF(s) \BU(s)
+\end{equation}
+
+This can be expanded around the DC value ( \( s = 0 \) )
+
+\begin{dmath}\label{eqn:multiphysicsL18:200}
+\BF(s) = M_0 + M_1 s + M_2 s^2 + \cdots M_{q-1} s^{q-1} + 
+\mathLabelBox
+[
+   labelstyle={xshift=2cm},
+   linestyle={out=270,in=90, latex-}
+]
+{
+M_q 
+}
+{
+moments
+}
+s^q + \cdots
+\end{dmath}
+
+A reduced model of order \( q \) is defined as
+
+\begin{dmath}\label{eqn:multiphysicsL18:240}
+\BF(s) = M_0 + M_1 s + M_2 s^2 + \cdots M_{q-1} s^{q-1} + \tilde{M}_q s^q.
+\end{dmath}
 
 %\EndArticle
 \EndNoBibArticle

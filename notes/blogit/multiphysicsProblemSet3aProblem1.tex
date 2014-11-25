@@ -341,11 +341,17 @@ or
 \lr{ \BG + \inv{\Delta t} \BC } \Bx_n = \BC \frac{ \Bx_{n-1} }{\Delta t} + \Bb v_{\textrm{clk}}(t_n).
 \end{equation}
 
-This is the system to solve at each time step for \( \Bx_n \).  A one time LU factorization of \( \BG + \BC/\Delta t \) should expedite those calculations.
+This is the system to solve at each time step for \( \Bx_n \).  A one time LU factorization of \( \BG + \BC/\Delta t \) was used to hoist most of the inversion cost out of the time stepping loop.  The load voltage and the reference clock source is plotted in \cref{fig:ps3aBE:ps3aBEFig1}, calculated using \matlabFuncPath{driver}{ps3a:driver.m}(), and a \( 5 \) ps timestep.
+
+\mathImageFigure{../../figures/ece1254/ps3aBEFig1}{Load (chip) voltage calculated with BE}{fig:ps3aBE:ps3aBEFig1}{0.5}{ps3a:driver.m}
 
 \makeSubAnswer{}{multiphysics:problemSet3a:1d}
 
-TODO.
+Iterative refinement of the timestep was used to determine a reasonable seeming stopping point.  With a rise and fall time of 100 ps, something smaller than that was clearly required, and 50 ps was tried first to get a rough idea of the output signal, checking against expectations for correctness.  A plot at this timestep clearly shows artifacts of the discretization, which is removed at a timestep of 10 ps.  Further reduction of the timestep to 5 ps sharpens the curve slightly, and can still be completed with a reasonable computation time.  A final reduction of the timestep to 1 ps adds very little additional correction, 
+all at the leading and trailing edges of the signal, but adds significantly to the time required for the calculation.  Plots with these range of timesteps are shown in \cref{fig:ps3aBE:ps3aBEFig2}.
+
+\imageFigure{../../figures/ece1254/ps3aBEFig2}{Chip voltage at a variety of timesteps}{fig:ps3aBE:ps3aBEFig2}{0.5}
+
 \makeSubAnswer{}{multiphysics:problemSet3a:1e}
 
 TODO.
