@@ -8,18 +8,200 @@
 \newcommand{\keywords}{ECE1254H}
 \input{../peeter_prologue_print2.tex}
 
-%\usepackage{kbordermatrix}
+\usepackage{algorithmic}
 
 \beginArtNoToc
-\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 19: XXX.  Taught by Prof.\ Piero Triverio}
-%\chapter{XXX}
+\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 19: Model order reduction (cont)..  Taught by Prof.\ Piero Triverio}
+%\chapter{Model order reduction (cont).}
 \label{chap:multiphysicsL19}
 
 \section{Disclaimer}
 
 Peeter's lecture notes from class.  These may be incoherent and rough.
 
-\section{XXX}
+\section{Model order reduction (cont).}
+
+An approximation of the following system is sought
+
+\begin{subequations}
+\begin{equation}\label{eqn:multiphysicsL19:20}
+\BG \Bx(t) + C \dot{\Bx}(t) = B \Bu(t)
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsL19:40}
+\By(t) = \BL^\T \Bx(t).
+\end{equation}
+\end{subequations}
+
+The strategy is to attempt to find a \( N \times q \) projector \( \BV \) of the form
+
+\begin{equation}\label{eqn:multiphysicsL19:60}
+\BV = 
+\begin{bmatrix}
+\Bv_1 & \Bv_2 & \cdots & \Bv_q 
+\end{bmatrix}
+\end{equation}
+
+so that the solution of the constrained q-variable state vector \( \Bx_q \) is sought after letting
+
+\begin{equation}\label{eqn:multiphysicsL19:80}
+\Bx(t) = \BV \Bx_q(t).
+\end{equation}
+
+\section{Moment matching}
+\index{moment matching}
+
+\begin{equation}\label{eqn:multiphysicsL19:100}
+\BF(s) 
+= \lr{ \BG + s \BC }^{-1} \BB
+= \BM_0 + \BM_1 s + \BM_2 s^2 + \cdots + \BM_{q-1} s^{q-1} + M_q s^q + \cdots
+\end{equation}
+
+The reduced model is created such that 
+
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:120}
+\BF_q(s) 
+= 
+\BM_0 + \BM_1 s + \BM_2 s^2 + \cdots + \BM_{q-1} s^{q-1} + \tilde{\BM}_q s^q.
+\end{equation}
+
+Form an \( N \times q \) projection matrix
+
+\begin{equation}\label{eqn:multiphysicsL19:140}
+\BV_q \equiv 
+\begin{bmatrix}
+\BM_0 & \BM_1 & \cdots & \BM_{q-1}
+\end{bmatrix}
+\end{equation}
+
+With the substitution of \cref{eqn:multiphysicsL19:80} the system equations in the time domain, illustrated graphically in \cref{fig:lecture19:lecture19Fig1}, becomes
+
+\imageFigure{../../figures/ece1254/lecture19Fig1}{Projected system}{fig:lecture19:lecture19Fig1}{0.3}
+
+
+This is a system of \( N \) equations, in \( q \) unknowns.  A set of moments from the frequency domain have been used to project the time domain system.  This relies on the following unproved theorem (references to come)
+
+\maketheorem{Theorem}{thm:multiphysicsL19:280}{
+If \( \Span\{ \Bv_q \} = \Span \{ \BM_0, \BM_1, \cdots, \BM_{q-1} \} \), then the reduced model will match the first \( q \) moments.
+}
+
+Left multiplication by \( \BV_q^\T \) yields \cref{fig:lecture19:lecture19Fig2}.
+
+\imageFigure{../../figures/ece1254/lecture19Fig2}{Reduced projected system}{fig:lecture19:lecture19Fig2}{0.3}
+
+This is now a system of \( q \) equations in \( q \) unknowns.
+
+With 
+
+\begin{subequations}
+\begin{equation}\label{eqn:multiphysicsL19:160}
+\BG_q = \BV_q^\T \BG \BV_q
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsL19:180}
+\BC_q = \BV_q^\T \BC \BV_q
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsL19:200}
+\BB_q = \BV_q^\T \BB
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsL19:220}
+\BL_q^\T = \BL^\T \BV_q
+\end{equation}
+\end{subequations}
+
+the system is reduced to
+
+\begin{subequations}
+\begin{equation}\label{eqn:multiphysicsL19:240}
+\BG_q \Bx_q(t) + \BC_q \dot{\Bx}_q(t) = \BB_q \Bu(t).
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsL19:260}
+\By(t) \approx \BL_q^\T \Bx_q(t)
+\end{equation}
+\end{subequations}
+
+\paragraph{Moments calculation}
+
+Using
+\begin{equation}\label{eqn:multiphysicsL19:300}
+\lr{ \BG + s \BC }^{-1} \BB = \BM_0 + \BM_1 s + \BM_2 s^2 + \cdots
+\end{equation}
+
+thus
+\begin{dmath}\label{eqn:multiphysicsL19:320}
+\BB = 
+\lr{ \BG + s \BC }
+\BM_0 + 
+\lr{ \BG + s \BC }
+\BM_1 s + 
+\lr{ \BG + s \BC }
+\BM_2 s^2 + \cdots
+=
+\BG \BM_0
++ s \lr{ C \BM_0 + \BG \BM_1 }
++ s^2 \lr{ C \BM_1 + \BG \BM_2 }
++ \cdots
+\end{dmath}
+
+Since \( \BB \) is a zeroth order matrix, setting all the coefficients of \( s \) equal to zero provides a method to solve for the moments
+
+\begin{equation}\label{eqn:multiphysicsL19:340}
+\begin{aligned}
+\BB &= \BG \BM_0 \\
+-\BC \BM_0 &= \BG \BM_1 \\
+-\BC \BM_1 &= \BG \BM_2 \\
+\end{aligned}
+\end{equation}
+
+The moment \( \BM_0 \) can be found with LU of \( \BG \), plus the forward and backward substitutions.  Proceeding recursively, using the already computed LU factorization, each subsequent moment calculation requires only one pair of forward and backward substitutions.
+
+Numerically, each moment has the exact value 
+
+\begin{equation}\label{eqn:multiphysicsL19:360}
+\BM_q = \lr{- \BG^{-1} \BC }^q \BM_0.
+\end{equation}
+
+As \( q \rightarrow \infty \), this goes to some limit, say \( \Bw \).  The value \( \Bw \) is related to the largest eigenvalue of \( -\BG^{-1} \BC \).  Incidentally, this can be used to find the largest eigenvalue of \( -\BG^{-1} \BC \).
+
+The largest eigenvalue of this matrix will dominate these factors, and can cause some numerical trouble.  For this reason it is desirable to avoid such explicit moment determination, instead using implicit methods.
+
+The key is to utilize \cref{thm:multiphysicsL19:280}, and look instead for an alternate basis \( \{ \Bv_q \} \) that also spans \( \{ \BM_0, \BM_1, \cdots, \BM_q \} \).
+
+\paragraph{ Space generate by the moments }
+
+Write 
+
+\begin{equation}\label{eqn:multiphysicsL19:380}
+\BM_q = \BA^q \BR,
+\end{equation}
+
+where in this case
+
+\begin{equation}\label{eqn:multiphysicsL19:400}
+\begin{aligned}
+\BA &= - \BG^{-1} \BC \\
+\BR &= \BM_0 = -\BG \BB
+\end{aligned}
+\end{equation}
+
+The span of interest is
+
+\begin{equation}\label{eqn:multiphysicsL19:420}
+\Span \{ \BR, \BA \BR, \BA^2 \BR, \cdots, \BA^{q-1} \BR \}.
+\end{equation}
+
+Such a sequence is called a \textAndIndex{Krylov subspace}.  One method to compute such a basis, the \textAndIndex{Arnoldi process}, relies on \textAndIndex{Gram-Schmidt} orthonormalization methods:
+
+\begin{algorithmic}
+\STATE \( \BV_0 = \BR/\Norm{\BR} \)
+\FORALL{ \( i \in [0, q-2] \) }
+	\STATE \( \BV_{i+1} = \BA \BV_i \)
+	\FORALL{ \( j \in [0, i] \) }
+		\STATE \( \BV_{i+1} = \BV_{i+1} - \lr{ \BV_{i+1}^\T \BV_j } \BV_j \)
+	\ENDFOR
+	\STATE \( \BV_{i+1} = \BV_{i+1}/\Norm{\BV_{i+1}} \)
+\ENDFOR
+\end{algorithmic}
+
+Some numerical examples and plots on the class slides.
 
 %\EndArticle
 \EndNoBibArticle
