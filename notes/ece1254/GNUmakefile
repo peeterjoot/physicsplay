@@ -37,6 +37,12 @@ include ../make.rules
 proj :: ece1254projectReport.pdf
 all :: proj
 
+multiphysicsProblemSet3a.pdf : multiphysicsProblemSet3aProblem1.tex
+multiphysicsProblemSet3a.pdf : ps3amatlab.tex
+
+ps3amatlab.tex : ../METADATA ../../matlab/METADATA
+	(cd .. ; ./METADATA -matlab -latex -ece1254 -filter ece1254/ps3a/ ) > $@
+
 ece1254projectReport.pdf :: $(PDF_DEPS)
 ece1254projectReport.pdf :: ece1254projectReport.tex
 
