@@ -84,11 +84,17 @@ modified nodal analysis representation to the state-space representation. Use
 frequency response of the original system and frequency response of the reduced system in the same plot. Select a ``reasonably small'' order \( q \) for the
 reduced model, that ensures a reasonable approximation of the original system. Clearly explain how did you pick that \( q \), which factors did you look at.
 
+\paragraph{Hints:} To plot the frequency response, use the command \matlabFunc{semilogx}(x,y).
+You can generate the frequency vector with the command: \( \omega \) = \matlabFunc{logspace}(-8,4,500).
+
 \makesubproblem{}{multiphysics:problemSet3b:1e}
 
 Using your time domain solver, compute the output of the
 original system (\( N=500 \)) and of the reduced model (with the order \( q \) you
-selected) for following inputs:
+selected) for each of the following two inputs:
+
+\begin{enumerate}
+\item Take the first input \( u(t) = u_1(t) \) as
 
 \begin{equation}\label{eqn:multiphysicsProblemSet3b:80}
 u_1(t) =
@@ -100,17 +106,18 @@ u_1(t) =
 \right.
 \end{equation}
 
-For \( u_1(t) \) pick \( t_{\textrm{stop}} \) such that the system reaches steady state. Take the second input \( u_2(t) \) as
+For \( u_1(t) \) pick \( t_{\textrm{stop}} \) such that the system reaches steady state. 
+
+\item Take the second input \( u(t) = u_2(t) \) as
 
 \begin{equation}\label{eqn:multiphysicsProblemSet3b:100}
 u_2(t) = \sin(0.01 t) \quad \mbox{for \( t_{\textrm{stop}} = 10000 \)}
 \end{equation}
+\end{enumerate}
 
 Be sure to pick an appropriate time step and explain your choice. How much
 speed-up did you get for your reduced models for time domain simulations?
 Explain your results.
-\paragraph{Hints:} To plot the frequency response, use the command \matlabFunc{semilogx}(x,y).
-You can generate the frequency vector with the command: \( \omega \) = \matlabFunc{logspace}(-8,4,500).
 
 \makesubproblem{}{multiphysics:problemSet3b:1f}
 Repeat 
@@ -199,6 +206,7 @@ At the initial node \( x^1 \) , this second partial is zero, assuming we have \(
 Therefore \cref{eqn:multiphysicsProblemSet3b:20} takes the form
 
 \begin{subequations}
+\label{eqn:multiphysicsProblemSet3b:230}
 \begin{equation}\label{eqn:multiphysicsProblemSet3b:240}
 \ddt{w^1(t)} + \alpha w^1 = h^1 u(t)
 \end{equation}
@@ -223,8 +231,54 @@ w^{i}(t) - 2 w^{i-1}(t) + w^{i-2}(t)
 \end{equation}
 \end{subequations}
 
-To put into the form of \cref{eqn:multiphysicsProblemSet3b:60}, let
+These must be supplemented with the boundary value constraints
 
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:500}
+\begin{aligned}
+w^1 - w^2 &= 0 \\
+w^N - w^{N+1} &= 0.
+\end{aligned}
+\end{equation}
+
+After substitution into \cref{eqn:multiphysicsProblemSet3b:230}, the system with boundary value constraints is
+
+\begin{subequations}
+\label{eqn:multiphysicsProblemSet3b:520}
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:540}
+\ddt{w^2(t)} + \alpha w^2 = h^1 u(t)
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:560}
+\ddt{w^{2}(t)}   
++ \alpha w^{2} = h^{2} u(t)
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:580}
+\ddt{w^3(t)}
+-
+\inv{\lr{\Delta x}^2} 
+\lr{ 
+w^{3}(t) - w^{2}(t)(t)
+}
++ \alpha w^{3}(t) = h^3 u(t)
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:600}
+\ddt{w^i(t)}
+-
+\inv{\lr{\Delta x}^2} 
+\lr{ 
+w^{i}(t) - 2 w^{i-1}(t) + w^{i-2}(t)
+}
++ \alpha w^{i}(t) = h^i u(t), \qquad i \in [4, N]
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:620}
+\ddt{w^{N}(t)} + 
+\frac{w^N - w^{N-1}}{\lr{\Delta x}^2}
++ \alpha w^{N} = h^{N+1} u(t).
+\end{equation}
+\end{subequations}
+
+FIXME: need a better way.  Introduce currents?
+
+To put into the form of \cref{eqn:multiphysicsProblemSet3b:60}, let
 \begin{subequations}
 \begin{equation}\label{eqn:multiphysicsProblemSet3b:300}
 \BG = 
@@ -270,13 +324,15 @@ u(t).
 
 The vector \( \Bx \) represents a vector of temperatures at each of the sampling points.
 
+FIXME: have to incorporate boundary value constraints.
+
 \makeSubAnswer{}{multiphysics:problemSet3b:1b}
 
 \begin{itemize}
    \item [\textbf{Case 1}]
 \begin{equation}\label{eqn:multiphysicsProblemSet3b:380}
 \begin{aligned}
-\BB &= h(1)
+\BB &= h(0)
 \begin{bmatrix}
 1 & 0  & \hdots & 0 \\
 0 & 0  & \hdots & 0 \\
@@ -293,7 +349,7 @@ The vector \( \Bx \) represents a vector of temperatures at each of the sampling
    \item [\textbf{Case 2}]
 \begin{equation}\label{eqn:multiphysicsProblemSet3b:420}
 \begin{aligned}
-\BB &= h(1)
+\BB &= h(0)
 \begin{bmatrix}
 1 & 0  & \hdots & 0 \\
 0 & 0  & \hdots & 0 \\
