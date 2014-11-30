@@ -74,6 +74,8 @@ Write a Matlab routine \matlabFunc{PlotFreqResp}(\(\omega\),G,C,B,L) which takes
 in \( \omega,G,C,B,L \) as input and plots the system frequency response. Here \( \omega \) 
 is a vector of frequencies in rad/s. For \( N = 500 \) (500 nodes) plot the real
 and imaginary part of the frequency response for case 1.
+\paragraph{Hints:} To plot the frequency response, use the command \matlabFunc{semilogx}(x,y).
+You can generate the frequency vector with the command: \( \omega \) = \matlabFunc{logspace}(-8,4,500).
 
 \makesubproblem{}{multiphysics:problemSet3b:1d}
 
@@ -84,8 +86,6 @@ modified nodal analysis representation to the state-space representation. Use
 frequency response of the original system and frequency response of the reduced system in the same plot. Select a ``reasonably small'' order \( q \) for the
 reduced model, that ensures a reasonable approximation of the original system. Clearly explain how did you pick that \( q \), which factors did you look at.
 
-\paragraph{Hints:} To plot the frequency response, use the command \matlabFunc{semilogx}(x,y).
-You can generate the frequency vector with the command: \( \omega \) = \matlabFunc{logspace}(-8,4,500).
 
 \makesubproblem{}{multiphysics:problemSet3b:1e}
 
@@ -145,186 +145,93 @@ with a few columns will suffice.
 \makeSubAnswer{}{multiphysics:problemSet3b:1a}
 
 A spatial discretization with width \( \Delta x = 1 / N \)
-as illustrated in \cref{fig:ps3bDiscretization:ps3bDiscretizationFig1}
+is illustrated in \cref{fig:ps3bDiscretization:ps3bDiscretizationFig1}
 
 \imageFigure{../../figures/ece1254/ps3bDiscretizationFig1}{Discretization interval}{fig:ps3bDiscretization:ps3bDiscretizationFig1}{0.2}
 
+Let
+
 \begin{equation}\label{eqn:multiphysicsProblemSet3b:120}
 \begin{aligned}
-x^i &= (i -1)\Delta x , \quad i \in \{ 1, \cdots, N + 1 \} \\
-%t^j &= (j -1)\delta t , \quad j \in \{ 1, \cdots \} \\
-w^{i}(t) &= T( x^i, t ) \\
-h^i &= h( x^i ) \\
+x^k &= (k -1)\Delta x , \quad k \in \{ 1, \cdots, N + 1 \} \\
+\tau^{k}(t) &= T( x^k, t ) \\
+h^k &= h( x^k ) \\
+i^k(t) &= \frac{ \tau^k - \tau^{k-1}}{\Delta x}
 \end{aligned}
 \end{equation}
 
-%With respect to time the BE approximation of the time partials is
-%
-%\begin{equation}\label{eqn:multiphysicsProblemSet3b:140}
-%\evalbar{\PD{t}{T}(x, t)}{x = x^i, t = t^j} \approx
-%\frac{T^{ij} - T^{i,j-1}}{\delta t}.
-%\end{equation}
-%
+The temperature has an electric circuit equivalent to voltage, and the heat flow \( i^k \) has the structure of an electric circuit current \( I = \Delta V/R \), through a resistance \( \Delta x \).
 
-To evaluate the spatial second partial using BE, let \( Q(x) = \PD{x}{T} \), so
+In the interior the discretization of the heat equation takes the form of a KCL equation
 
-\begin{dmath}\label{eqn:multiphysicsProblemSet3b:200}
-\PDSq{x}{T}
-=
-\PD{x}{Q(x)}
-\approx \frac{Q^i- Q^{i-1}}{\Delta x}.
-\end{dmath}
-
-In the interior, where \( Q^i \approx (w^i - w^{i-1})/(\Delta x) \), this is
-
-\begin{equation}\label{eqn:multiphysicsProblemSet3b:160}
-\evalbar{\PDSq{x}{T}(x, t)}{x = x^i} \approx
-\inv{\lr{\Delta x}^2} 
-\lr{ 
-w^{i} - 2 w^{i-1} + w^{i-2} 
-},
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:640}
+0 =
+\lr{\Delta x}^2 \ddt{\tau^k}
+-\lr{ i^k - i^{k-1} }
++ \lr{\Delta x}^2 \alpha \tau^k - \lr{\Delta x}^2 h^k u(t).
 \end{equation}
 
-whereas at the final node
+This is illustrated in \cref{fig:ps3bInteriorNode:ps3bInteriorNodeFig1}.
 
-\begin{dmath}\label{eqn:multiphysicsProblemSet3b:220}
-\evalbar{\PD{x}{Q(x)}}{x = x^{N+1}}
-\approx \frac{0 - Q^{N}}{\Delta x}
-\approx
-\frac{-w^N + w^{N-1}}{\lr{\Delta x}^2}.
-\end{dmath}
+\imageFigure{../../figures/ece1254/ps3bInteriorNodeFig1}{Equivalent circuit for heat equation}{fig:ps3bInteriorNode:ps3bInteriorNodeFig1}{0.3}
 
-At the initial node \( x^1 \) , this second partial is zero, assuming we have \( \PDi{x}{Q} = 0 \) for any \( x < 0 \) as well as \( x = 0 \) as specified.  This leaves just the first interior node, where
+The initial node where \( i^1 = 0 \), or \( \tau^2 = \tau^1 \), can be modelled with a zero voltage source, replacing the resistance.  This is illustrated in \cref{fig:ps3bInitialNode:ps3bInitialNodeFig2}.
 
-\begin{dmath}\label{eqn:multiphysicsProblemSet3b:280}
-\evalbar{\PD{x}{Q(x)}}{x = x^{2}}
-\approx \frac{Q^2 - 0}{\Delta x}
-\approx
-\frac{w^2 - w^{1}}{\lr{\Delta x}^2}.
-\end{dmath}
+\imageFigure{../../figures/ece1254/ps3bInitialNodeFig2}{Initial node}{fig:ps3bInitialNode:ps3bInitialNodeFig2}{0.3}
 
-Therefore \cref{eqn:multiphysicsProblemSet3b:20} takes the form
+Similarly, the terminal node boundary value constraint \( i^{N+1} = 0 \), or \( \tau^N = \tau^{N+1} \) can also be modelled by a zero voltage source, as illustrated in \cref{fig:ps3bTerminalNode:ps3bTerminalNodeFig3}.
+
+\imageFigure{../../figures/ece1254/ps3bTerminalNodeFig3}{Terminal node}{fig:ps3bTerminalNode:ps3bTerminalNodeFig3}{0.3}
+
+The pattern of \( \BG \) is illustrated well by the \( N = 6 \) case
 
 \begin{subequations}
-\label{eqn:multiphysicsProblemSet3b:230}
-\begin{equation}\label{eqn:multiphysicsProblemSet3b:240}
-\ddt{w^1(t)} + \alpha w^1 = h^1 u(t)
-\end{equation}
-\begin{equation}\label{eqn:multiphysicsProblemSet3b:270}
-\ddt{w^{2}(t)}   
--\frac{w^2 - w^{1}}{\lr{\Delta x}^2}
-+ \alpha w^{2} = h^{2} u(t)
-\end{equation}
-\begin{equation}\label{eqn:multiphysicsProblemSet3b:180}
-\ddt{w^i(t)}
--
-\inv{\lr{\Delta x}^2} 
-\lr{ 
-w^{i}(t) - 2 w^{i-1}(t) + w^{i-2}(t)
-}
-+ \alpha w^{i}(t) = h^i u(t), \qquad i \in [3, N]
-\end{equation}
-\begin{equation}\label{eqn:multiphysicsProblemSet3b:260}
-\ddt{w^{N+1}(t)} + 
-\frac{w^N - w^{N-1}}{\lr{\Delta x}^2}
-+ \alpha w^{N+1} = h^{N+1} u(t).
-\end{equation}
-\end{subequations}
-
-These must be supplemented with the boundary value constraints
-
-\begin{equation}\label{eqn:multiphysicsProblemSet3b:500}
-\begin{aligned}
-w^1 - w^2 &= 0 \\
-w^N - w^{N+1} &= 0.
-\end{aligned}
-\end{equation}
-
-After substitution into \cref{eqn:multiphysicsProblemSet3b:230}, the system with boundary value constraints is
-
-\begin{subequations}
-\label{eqn:multiphysicsProblemSet3b:520}
-\begin{equation}\label{eqn:multiphysicsProblemSet3b:540}
-\ddt{w^2(t)} + \alpha w^2 = h^1 u(t)
-\end{equation}
-\begin{equation}\label{eqn:multiphysicsProblemSet3b:560}
-\ddt{w^{2}(t)}   
-+ \alpha w^{2} = h^{2} u(t)
-\end{equation}
-\begin{equation}\label{eqn:multiphysicsProblemSet3b:580}
-\ddt{w^3(t)}
--
-\inv{\lr{\Delta x}^2} 
-\lr{ 
-w^{3}(t) - w^{2}(t)(t)
-}
-+ \alpha w^{3}(t) = h^3 u(t)
-\end{equation}
-\begin{equation}\label{eqn:multiphysicsProblemSet3b:600}
-\ddt{w^i(t)}
--
-\inv{\lr{\Delta x}^2} 
-\lr{ 
-w^{i}(t) - 2 w^{i-1}(t) + w^{i-2}(t)
-}
-+ \alpha w^{i}(t) = h^i u(t), \qquad i \in [4, N]
-\end{equation}
-\begin{equation}\label{eqn:multiphysicsProblemSet3b:620}
-\ddt{w^{N}(t)} + 
-\frac{w^N - w^{N-1}}{\lr{\Delta x}^2}
-+ \alpha w^{N} = h^{N+1} u(t).
-\end{equation}
-\end{subequations}
-
-FIXME: need a better way.  Introduce currents?
-
-To put into the form of \cref{eqn:multiphysicsProblemSet3b:60}, let
-\begin{subequations}
-\begin{equation}\label{eqn:multiphysicsProblemSet3b:300}
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:660}
 \BG = 
 \begin{bmatrix}
-\alpha \phantom{ - N^2} &               &               &               &                 &        \\
-\phantom{2} N^2         & \alpha - N^2  &               &               &                 &        \\
--N^2                    & 2 N^2         & \alpha -N^2   &               &                 &        \\
-                        & -N^2          & 2 N^2         & \alpha -N^2   &                 &        \\
-                        &               & \qquad\ddots  &               &                 &        \\
-                        &               & -N^2          & 2 N^2         & \alpha -N^2     &        \\
-                        &               &               & -N^2          & \phantom{2} N^2 & \alpha \phantom{ -N^2} \\
+    \alpha \lr{ \Delta x}^2 &       0 &       0 &       0 &       0 &       0 &       0 & -1 &       0 \\
+         0 &  N + \alpha \lr{ \Delta x}^2 & -N &       0 &       0 &       0 &       0 &  1 &       0 \\
+         0 & -N & 2 N + \alpha \lr{ \Delta x}^2 & -N &       0 &       0 &       0 &       0 &       0 \\
+         0 &       0 & -N & 2 N + \alpha \lr{ \Delta x}^2 & -N &       0 &       0 &       0 &       0 \\
+         0 &       0 &       0 & -N & 2 N + \alpha \lr{ \Delta x}^2 & -N &       0 &       0 &       0 \\
+         0 &       0 &       0 &       0 & -N &  N + \alpha \lr{ \Delta x}^2 &       0 &       0 & -1 \\
+         0 &       0 &       0 &       0 &       0 &       0 &  \alpha \lr{ \Delta x}^2 &       0 &  1 \\
+    1 & -1 &       0 &       0 &       0 &       0 &       0 &       0 &       0 \\
+         0 &       0 &       0 &       0 &       0 &  1 & -1 &       0 &       0 \\
 \end{bmatrix}
 \end{equation}
-\begin{equation}\label{eqn:multiphysicsProblemSet3b:480}
-\BB =
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:680}
+\Bx = 
 \begin{bmatrix}
-h^1 &     &        &            &           \\
-    & h^2 &        &            &           \\
-    &     & \ddots &            &           \\
-    &     &        & h^N        &           \\
-    &     &        &            & h^{N+1}   \\
+\tau^1 \\
+\tau^2 \\
+\vdots \\
+\tau^{N+1} \\
+i^1 \\
+i^N
 \end{bmatrix}
 \end{equation}
-\begin{equation}\label{eqn:multiphysicsProblemSet3b:360}
-\BC = \BI, \qquad
-\Bx =
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:700}
+\BC = \lr{\Delta x}^2 
 \begin{bmatrix}
-w^1 \\
-w^2 \\
-\vdots \\
-w^{N+1}
-\end{bmatrix}, \qquad
-\Bu(t) = 
-\begin{bmatrix}
-1 \\
-1 \\
-\vdots \\
-1
+\BI_{N+1} & \Bzero_2 \\
+\Bzero_2 & \Bzero_2 
 \end{bmatrix}
-u(t).
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:720}
+\BB \Bu
+=
+\lr{\Delta x}^2 u(t)
+\begin{bmatrix}
+h^1 \\
+h^2 \\
+\vdots \\
+h^{N+1} \\
+0 \\
+0 \\
+\end{bmatrix}
 \end{equation}
 \end{subequations}
-
-The vector \( \Bx \) represents a vector of temperatures at each of the sampling points.
-
-FIXME: have to incorporate boundary value constraints.
 
 \makeSubAnswer{}{multiphysics:problemSet3b:1b}
 
@@ -333,16 +240,20 @@ FIXME: have to incorporate boundary value constraints.
 \begin{equation}\label{eqn:multiphysicsProblemSet3b:380}
 \begin{aligned}
 \BB &= h(0)
+%\begin{bmatrix}
+%1 & 0  & \hdots & 0 \\
+%0 & 0  & \hdots & 0 \\
+%\vdots  & 0 & \ddots & 0 \\
+%0 & 0  & \hdots & 0 \\
+%\end{bmatrix} \\
 \begin{bmatrix}
-1 & 0  & \hdots & 0 \\
-0 & 0  & \hdots & 0 \\
-\vdots  & 0 & \ddots & 0 \\
-0 & 0  & \hdots & 0 \\
+1 & 0 \\
+0        & \Bzero_{N+2}
 \end{bmatrix} \\
 \BL^T &= 
 \kbordermatrix{
-  & 1 & 2 & \cdots & N & N+1 \\
-  & 0 & 0 & \cdots & 0 & 1
+ & 1 & 2 & \cdots & N & N+1 & & \\
+ & 0 & 0 & \cdots & 0 & 1 & 0 & 0
 }
 \end{aligned}
 \end{equation}
@@ -350,46 +261,73 @@ FIXME: have to incorporate boundary value constraints.
 \begin{equation}\label{eqn:multiphysicsProblemSet3b:420}
 \begin{aligned}
 \BB &= h(0)
+%\begin{bmatrix}
+%1 & 0  & \hdots & 0 \\
+%0 & 0  & \hdots & 0 \\
+%\vdots  & 0 & \ddots & 0 \\
+%0 & 0  & \hdots & 0 \\
+%\end{bmatrix} \\
 \begin{bmatrix}
-1 & 0  & \hdots & 0 \\
-0 & 0  & \hdots & 0 \\
-\vdots  & 0 & \ddots & 0 \\
-0 & 0  & \hdots & 0 \\
+1 & 0 \\
+0        & \Bzero_{N+2}
 \end{bmatrix} \\
 \BL^T &= 
 \inv{N+1}
-\begin{bmatrix}
-1 & 1 & \cdots & 1 & 1
-\end{bmatrix}
+%\begin{bmatrix}
+%1 & 1 & \cdots & 1 & 1 & 0 & 0
+%\end{bmatrix}
+\kbordermatrix{
+ & 1 & 2 & \cdots & N & N+1 & & \\
+ & 1 & 1 & \cdots & 1 & 1 & 0 & 0
+}
 \end{aligned}
 \end{equation}
    \item [\textbf{Case 3}]
 \begin{equation}\label{eqn:multiphysicsProblemSet3b:440}
 \begin{aligned}
-\BB &= h(1) \BI_{N+1} \\
+\BB &= h(1) 
+\begin{bmatrix}
+\BI_{N+1} & \Bzero_2 \\
+\Bzero_2 & \Bzero_2
+\end{bmatrix} \\
 \BL^T &= 
 \kbordermatrix{
-  & 1 & 2 & \cdots & N & N+1 \\
-  & 0 & 0 & \cdots & 0 & 1
+  & 1 & 2 & \cdots & N & N+1 &   & \\
+  & 0 & 0 & \cdots & 0 & 1   & 0 & 0
 }
 \end{aligned}
 \end{equation}
    \item [\textbf{Case 4}]
 \begin{equation}\label{eqn:multiphysicsProblemSet3b:460}
 \begin{aligned}
-\BB &= h(1) \BI_{N+1} \\
+\BB &= h(1) 
+\begin{bmatrix}
+\BI_{N+1} & \Bzero_2 \\
+\Bzero_2 & \Bzero_2
+\end{bmatrix} 
+\\
 \BL^T &= 
 \inv{N+1}
-\begin{bmatrix}
-1 & 1 & \cdots & 1 & 1
-\end{bmatrix}
+%\begin{bmatrix}
+%1 & 1 & \cdots & 1 & 1 & 0 & 0
+%\end{bmatrix}
+\kbordermatrix{
+ & 1 & 2 & \cdots & N & N+1 & & \\
+ & 1 & 1 & \cdots & 1 & 1 & 0 & 0
+}
 \end{aligned}
 \end{equation}
 \end{itemize}
 
+
 \makeSubAnswer{}{multiphysics:problemSet3b:1c}
 
-The frequency response plotting function was implemented in \matlabFuncPath{PlotFreqResp}{ps3b:PlotFreqResp.m}().
+The MLN equations for the \( N = 500 \) case were generated indirectly using
+\matlabFuncPath{generateNetlist}{ps3b:generateNetlist.m}(), to create a netlist file, with the previous implementation of
+\matlabFuncPath{NodalAnalysis}{ps2a:NodalAnalysis.m}() doing the grunt work.
+A driver \matlabFuncPath{plotFreqPartC}{ps3b:plotFreqPartC.m}() calls these and \matlabFuncPath{PlotFreqResp}{ps3b:PlotFreqResp.m}() to produce the plot of \cref{fig:ps3bFreqResponsePartC:ps3bFreqResponsePartCFig1}.
+
+\imageFigure{../../figures/ece1254/ps3bFreqResponsePartCFig1}{\( N = 500 \) frequency response for case 1.}{fig:ps3bFreqResponsePartC:ps3bFreqResponsePartCFig1}{0.3}
 
 REST: TODO.
 \makeSubAnswer{}{multiphysics:problemSet3b:1d}
