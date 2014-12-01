@@ -63,6 +63,7 @@ all :: $(PDFS_FROM_EPS)
 all :: Bibliography.bib
 all :: peeters_macros.sty
 all :: peeters_layout.sty
+all :: macros_bm.sty
 all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
 
@@ -113,6 +114,9 @@ peeters_layout.sty : ../peeters_layout.sty
 	cp $^ $@
 
 peeters_macros.sty : ../peeters_macros.sty
+	cp $^ $@
+
+macros_bm.sty : ../macros_bm.sty
 	cp $^ $@
 
 Bibliography.bib : myrefs.bib

@@ -8,18 +8,141 @@
 \newcommand{\keywords}{ECE1254H}
 \input{../peeter_prologue_print2.tex}
 
-%\usepackage{kbordermatrix}
+%\usepackage{macros_bm}
 
 \beginArtNoToc
-\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 20: Model order reduction.  Taught by Prof.\ Piero Triverio}
-%\chapter{Model order reduction}
+\generatetitle{ECE1254H Modeling of Multiphysics Systems.  Lecture 20: Observability and controllability.  Taught by Prof.\ Piero Triverio}
+%\chapter{Observability and controllability}
 \label{chap:multiphysicsL20}
 
 \section{Disclaimer}
 
 Peeter's lecture notes from class.  These may be incoherent and rough.
 
-\section{Model order reduction}
+\section{Truncated Balanced Realization (1000 ft overview)}
+\index{truncated balanced realization}
+\index{TBR}
+
+Consider a model in state space form
+\begin{equation}\label{eqn:multiphysicsLecture20:20}
+\begin{aligned}
+\dot{\Bx} &= \BA \Bx(t) + \BB \Bu(t) \\
+\By &= \BC \Bx(t) + \BD \Bu(t).
+\end{aligned}
+\end{equation}
+
+The system has the form
+
+\begin{equation}\label{eqn:multiphysicsLecture20:40}
+\Bu(t) 
+\mathLabelBox
+%[
+%   labelstyle={xshift=2cm},
+%   linestyle={out=270,in=90, latex-}
+%]
+{
+\rightarrow 
+}
+{controllability}
+\Bx(t) 
+\mathLabelBox
+[
+   labelstyle={xshift=2cm},
+   linestyle={out=270,in=90, latex-}
+]
+{
+\rightarrow 
+}
+{observability}
+\By(t).
+\end{equation}
+
+\index{Controlability}
+\index{Observability}
+\makedefinition{Observability}{dfn:multiphysicsL20:60}{
+The system is observable if \( \forall t \), the initial state \( \Bx(t_0) \) can bre determined knowing \( \Bu(t), \By(t), \qquad t \in [t_0, t_1] \).
+
+\paragraph{Equivalent condition (if A stable)}
+If A stable, the observability Gramian \( \BW_0 > 0 \)
+
+\begin{equation}\label{eqn:multiphysicsLecture20:80}
+\BW_0 = \int_0^\infty e^{\BA^\T \tau} \BC^\T \BC e^{\BA \tau} d\tau
+\end{equation}
+}
+
+This \textAndIndex{Gramian} expression results from a calculation of the ``energy'' of the homogeneous system (no input \( \Bu(t) \) ), for which the system is in an initial state \( \Bx_0 \) at \( t = 0 \), with output
+
+\begin{equation}\label{eqn:multiphysicsLecture20:100}
+\By(t) = \BC e^{\BA t} \Bx_0
+\end{equation}
+
+The output energy is
+
+\begin{dmath}\label{eqn:multiphysicsLecture20:120}
+\int_0^\infty \By^\T \By dt
+=
+\int_0^\infty \Bx_0^\T
+e^{\BA^\T t} \BC^\T \BC e^{\BA t} \Bx_0 dt
+= 
+\Bx_0^\T \BW_0 \Bx_0
+= \mathcal{E}_0
+\end{dmath}
+
+Consider the eigenvalues and vectors of \( \BW_0 \)
+
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:140}
+\BW_0 \Bx_{0, i} = \lambda_{0, i} \Bx_{0, i}.
+\end{equation}
+
+If \( \Bx_0 = \Bx_{0,i} \) this implies
+
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:160}
+\mathcal{E}_0
+=
+\Bx_{0,i}^\T
+\lambda_{0, i}
+\Bx_{0,i}
+\end{equation}
+
+The eigenvalues of the observability Gramian can provide some useful information about what states are observable.
+
+\makedefinition{Controllability}{dfn:multiphysicsL20:180}{
+If for any initial state \( \Bx(t_0) \) , there is a final time \( t_1 > t_0 \), and a final state \( \Bx_1 \) such that there exists an input \( \Bu^\conj(t) \) such that \( \Bx(t_1) = \Bx_1 \).
+}
+
+\maketheorem{Controllability Gramian}{dfn:multiphysicsL20:200}{
+The system is controlable if and only if the controllability Grammian \( \BW_c > 0 \).
+}
+
+What is the energy of the input \( \Bu^\conj(t) \) that is needed to set up \( \Bx_1 \)?  On the slides it is shown that this is
+
+\begin{dmath}\label{eqn:multiphysicsProblemSet3b:200}
+\mathcal{E}_1
+= \Bx_1^\T \BW_c^{-1} \Bx_1.
+\end{dmath}
+
+if \( \Bx_1 \) is an eigenvector of \( \BW_c \) with eigenvvalue \( \lambda_1 \), then this reduces to
+
+\begin{dmath}\label{eqn:multiphysicsProblemSet3b:220}
+\mathcal{E}_1
+= \inv{\lambda_1} \Bx_1^\T \Bx_1
+= \inv{\lambda_1}.
+\end{dmath}
+
+These eigenvalues provide information about how much energy is required to achieve any given state.
+
+The purpose of considering observability and controllability is to help determine what modes can be safely discarded to reduce the model order.  A state that cannot be achived without excessive energy cost is not likely to be of interest.
+
+While the explicit form of the controlability Gramian has not been given, it becomes of less interest since it is possible to make a change of variables, such that the controllability and observability Gramians become equal and diagonal.
+
+\begin{dmath}\label{eqn:multiphysicsProblemSet3b:240}
+\begin{aligned}
+\mytilde{\BW_c} &= T \BW_c T^\T \\
+\mytilde{\BW_o} &= T^{-\T} \BW_o T^{-1}
+\end{aligned}
+\end{dmath}
+
+Using these provides a balanced method to detemine the most important modes to retain.  
 
 %\EndArticle
 \EndNoBibArticle
