@@ -325,14 +325,118 @@ h^{N+1} \\
 The MLN equations for the \( N = 500 \) case were generated indirectly using
 \matlabFuncPath{generateNetlist}{ps3b:generateNetlist.m}(), to create a netlist file, with the previous implementation of
 \matlabFuncPath{NodalAnalysis}{ps2a:NodalAnalysis.m}() doing the grunt work.
-A driver \matlabFuncPath{plotFreqPartC}{ps3b:plotFreqPartC.m}() calls these and \matlabFuncPath{PlotFreqResp}{ps3b:PlotFreqResp.m}() to produce the plot of \cref{fig:ps3bFreqResponsePartC:ps3bFreqResponsePartCFig1}.
+A call to \matlabFuncPath{plotFreqPartC}{ps3b:plotFreqPartC.m}(500, 1, 0) was used to 
+%calls these and \matlabFuncPath{PlotFreqResp}{ps3b:PlotFreqResp.m}() to 
+produce the plot of \cref{fig:ps3bFreqResponsePartC:ps3bFreqResponsePartCFig1}.
 
-\imageFigure{../../figures/ece1254/ps3bFreqResponsePartCFig1}{\( N = 500 \) frequency response for case 1.}{fig:ps3bFreqResponsePartC:ps3bFreqResponsePartCFig1}{0.3}
+\mathImageFigure{../../figures/ece1254/ps3bFreqResponsePartCFig1}{\( N = 500 \) frequency response for case 1.}{fig:ps3bFreqResponsePartC:ps3bFreqResponsePartCFig1}{0.3}{ps3b:PlotFreqResp.m}
 
-REST: TODO.
 \makeSubAnswer{}{multiphysics:problemSet3b:1d}
 
-TODO.
+\paragraph{Background}
+
+It is helpful to review the modal truncation method before attempting to implement it.  The starting point is the system equations
+
+\begin{subequations}
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:740}
+\BG \Bx + \BC \dot{\Bx} = \BB \Bu
+\end{equation}
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:760}
+\By = \BL^\T \Bx.
+\end{equation}
+\end{subequations}
+
+Assuming that \( \BC \) is invertible, \cref{eqn:multiphysicsProblemSet3b:740} can be rewritten in \textAndIndex{state space form}
+
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:780}
+\dot{\Bx} = -\BC^{-1} \BG \Bx + \BC^{-1} \BB \Bu.
+\end{equation}
+
+Introduce a diagonalization of \( \BA = - \BC^{-1} \BG \), and associated change of variables
+
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:800}
+\begin{aligned}
+\BA &= \BV \Bwedge \BV^{-1} \\
+\Bw &= \BV^{-1} \Bx \\
+\Bb(t) &= \BV^{-1} \BC^{-1} \BB \Bu(t),
+\end{aligned}
+\end{equation}
+
+so that
+
+%\begin{equation}\label{eqn:multiphysicsProblemSet3b:820}
+\boxedEquation{eqn:multiphysicsProblemSet3b:820}{
+\begin{aligned}
+\dot{\Bw} &= \Bwedge \Bw + \Bb \\
+\By &= \BL^\T \BV \Bw.
+\end{aligned}
+}
+%\end{equation}
+
+Also observe that the frequency response can be calculated directly from this alternate set of system equations, since
+
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:840}
+\BY(s) = \BL^\T \BV \lr{ s \BI - \Bwedge }^{-1} \Bb(s).
+\end{equation}
+
+\Cref{eqn:multiphysicsProblemSet3b:820} is the starting point for the modal truncation method, a strategic selection of which of the eigenvalues of \( \Bwedge \) should be either retained or ignored.  Suppose, for example, after some sort criteria, the first \( q \) eigenvalues of \( \Bwedge \) are deemed of interest.  
+%If the columns of \( \BV \), in eigenvalue order, are \( \setlr{\Bv_1, \Bv_2, \cdots } \), then 
+If \( \mytilde{\Bwedge} \) is the \( q \times q \) submatrix of \( \Bwedge \), 
+\( \mytilde{\Bw}, \mytilde{\Bb} \) are formed from the first \( q \) rows of \( \Bw \) and \( \Bb \) respectively,
+and \( \mytilde{\BL} \) has the first \( q \) rows of \( \BV^\T \BL \), then
+
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:860}
+\begin{aligned}
+\dot{\mytilde{\Bw}} &= \mytilde{\Bwedge} \mytilde{\Bw} + \mytilde{\Bb}  \\
+\By &\approx \mytilde{\BL}^\T \mytilde{\Bw}.
+\end{aligned}
+\end{equation}
+
+\paragraph{Model modification}
+
+The modelling of the zero heat flow condition using a zero voltage source is problematic for the modal truncation method, since the matrix \( \BC \) is not invertible.  Restoring the resistor \( \Delta x \) between nodes \( 1,2 \) and nodes \( N, N+1 \), and adding a (very large) parallel resistor and (very small) capacitor from the end points into ``space'' also works to model this boundary value constraint.  For the final node, this is illustrated in \cref{fig:ps3bTerminalNode:ps3bTerminalNodeFig4}.
+
+\imageFigure{../../figures/ece1254/ps3bTerminalNodeFig4}{Alternate modelling of the boundary value constraints.}{fig:ps3bTerminalNode:ps3bTerminalNodeFig4}{0.3}
+
+Using resistor and capacitor values (somewhat arbitrarily chosen) of \( 10^8 \) and \( 10^{-8} \) respectively, results in the same frequency response, and allows for inversion of \( \BC \).
+%to put the equations in state-space form.
+
+\paragraph{Model reduction results}
+
+No differences for the frequency response of the original vs model truncation models are visible in the plots, even for \( q = 1 \), as shown in \cref{fig:ps3bFreqResponsePartCq1:ps3bFreqResponsePartCq1Fig1}.
+This is likely because most of the eigenvalues of \( - \BC^{-1} \BG \) are very fast, so the smallest magnitude eigenvalue dominates.  The first few of these, sorted smallest first, are
+
+\imageFigure{../../figures/ece1254/ps3bFreqResponsePartCq1Fig1}{Overlaid plots with modal reduced and original models}{fig:ps3bFreqResponsePartCq1:ps3bFreqResponsePartCq1Fig1}{0.3}
+
+\begin{equation}\label{eqn:multiphysicsProblemSet3b:n}
+\lambda_i =
+\begin{bmatrix}
+   -10.0000 \times 10^{-3} \\
+    -1.0000  \\
+    -1.0000  \\
+    -4.9151 \times 10^3 \\
+   -19.6602 \times 10^3 \\
+   -44.2348 \times 10^3 \\
+   -78.6378 \times 10^3 \\
+  -122.8680 \times 10^3 \\
+  -176.9235 \times 10^3 \\
+  -240.8023 \times 10^3 \\
+  -314.5019 \times 10^3 \\
+  -398.0192 \times 10^3 \\
+  -491.3512 \times 10^3 \\
+  -594.4940 \times 10^3 \\
+  -707.4437 \times 10^3 \\
+  -830.1957 \times 10^3 \\
+  -962.7454 \times 10^3 \\
+    -1.1051 \times 10^6 \\
+    -1.2572 \times 10^6 \\
+\end{bmatrix}
+\end{equation}
+
+There are six orders of magnitude difference between the first and fourth eigenvalues.  The complete range of absolute values of these eigenvalues are plotted in \cref{fig:ps3bEigenvalues:ps3bEigenvaluesFig1}.
+
+\imageFigure{../../figures/ece1254/ps3bEigenvaluesFig1}{Log-log plot of \( -\BC^{-1} \BG \) eigenvalue magnitude}{fig:ps3bEigenvalues:ps3bEigenvaluesFig1}{0.3}
+
 \makeSubAnswer{}{multiphysics:problemSet3b:1e}
 
 TODO.
