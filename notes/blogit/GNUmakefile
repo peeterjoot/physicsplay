@@ -17,8 +17,6 @@ CLEAN_TARGETS += *.synctex.gz
 #INCOMPLETE += pipeFlowConstPressureGradient.tex
 #INCOMPLETE += qmTwoExamReflection.tex
 #INCOMPLETE += qmTwoR1.tex
-INCOMPLETE += ps3bmatlab.tex
-INCOMPLETE += multiphysicsProblemSet3bProblem1.tex
 
 INCOMPLETE += stokespost.tex
 
@@ -70,9 +68,6 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 .gitignore : GNUmakefile
 	rm -f .gitignore
 	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/blogit/,' > $@
-
-multiphysicsProblemSet3b.pdf : multiphysicsProblemSet3bProblem1.tex
-multiphysicsProblemSet3b.pdf : ps3bmatlab.tex
 
 video: $(VIDEO)
 
@@ -153,8 +148,6 @@ opt/%.pdf : %.pdf
 #%.png : %.pdf
 #	$(INKSCAPE) $^ --export-png=$@
 
-ps3bmatlab.tex : ../METADATA ../../matlab/METADATA
-	(cd .. ; ./METADATA -matlab -latex -ece1254 -filter ece1254/ps3b/ ) > $@
 
 localclean ::
 	rm -f $(LOCAL_FILES)

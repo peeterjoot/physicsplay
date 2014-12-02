@@ -26,6 +26,8 @@ COPIED_FILES += ./macros_bm.sty
 
 GENERATED_SOURCES += matlab.tex 
 GENERATED_SOURCES += mathematica.tex 
+GENERATED_SOURCES += ps3amatlab.tex
+GENERATED_SOURCES += ps3bmatlab.tex
 
 EPS_FILES := $(wildcard $(FIGURES)/*.eps)
 PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))
@@ -37,11 +39,17 @@ include ../make.rules
 proj :: ece1254projectReport.pdf
 all :: proj
 
-multiphysicsProblemSet3a.pdf : multiphysicsProblemSet3aProblem1.tex
-multiphysicsProblemSet3a.pdf : ps3amatlab.tex
+ps3bmatlab.tex : ../METADATA ../../matlab/METADATA
+	(cd .. ; ./METADATA -matlab -latex -ece1254 -filter ece1254/ps3b/ ) > $@
 
 ps3amatlab.tex : ../METADATA ../../matlab/METADATA
 	(cd .. ; ./METADATA -matlab -latex -ece1254 -filter ece1254/ps3a/ ) > $@
+
+multiphysicsProblemSet3a.pdf : multiphysicsProblemSet3aProblem1.tex
+multiphysicsProblemSet3a.pdf : ps3amatlab.tex
+
+multiphysicsProblemSet3b.pdf : multiphysicsProblemSet3bProblem1.tex
+multiphysicsProblemSet3b.pdf : ps3bmatlab.tex
 
 ece1254projectReport.pdf :: $(PDF_DEPS)
 ece1254projectReport.pdf :: ece1254projectReport.tex
