@@ -18,8 +18,6 @@ SOURCE_DIRS += appendix
 FIGURES := ../../figures/$(THISDIR)
 SOURCE_DIRS += $(FIGURES)
 
-COPIED_FILES += ./macros_bm.sty
-
 # also toggle redacted classicthesis-config.tex
 # FIXME: changing this flag should be a dependency of matlab.tex 
 #REDACTED := -redacted
@@ -53,6 +51,7 @@ multiphysicsProblemSet3b.pdf : ps3bmatlab.tex
 
 ece1254projectReport.pdf :: $(PDF_DEPS)
 ece1254projectReport.pdf :: ece1254projectReport.tex
+ece1254projectReport.pdf :: discreteFourierInversion.tex
 
 multiphysicsProblemSet1.pdf :: $(PDF_DEPS)
 multiphysicsProblemSet1.pdf :: multiphysicsProblemSet1Problem1.tex

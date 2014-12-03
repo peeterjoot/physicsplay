@@ -116,6 +116,8 @@
 % have to be run twice to clear warning/error messages.
 
 \usepackage{peeters_macros}
+\usepackage[english]{cleveref}
+\usepackage{peeters_layout}
 % \citep:
 \PassOptionsToPackage{square,numbers}{natbib}
 \usepackage{natbib}
@@ -473,10 +475,10 @@
 \newcommand\MYhyperrefoptions{bookmarks=true,bookmarksnumbered=true,
 pdfpagemode={UseOutlines},plainpages=false,pdfpagelabels=true,
 colorlinks=true,linkcolor={black},citecolor={black},urlcolor={black},
-pdftitle={FIXME TITLE},%<!CHANGE!
-pdfsubject={FIXME SUBJECT},%<!CHANGE!
+pdftitle={Harmonic balance solutions to non-linear circuits},
+pdfsubject={Multiphyiscs modeling},
 pdfauthor={Mike Royle, Peeter Joot},
-pdfkeywords={FIXME keywords}}%<^!CHANGE!
+pdfkeywords={ECE1254, Harmonic balance, non-linear circuit, diode, discrete Fourier transform}}
 %\ifCLASSINFOpdf
 %\usepackage[\MYhyperrefoptions,pdftex]{hyperref}
 %\else
@@ -542,9 +544,7 @@ pdfkeywords={FIXME keywords}}%<^!CHANGE!
 % can use linebreaks \\ within to get better formatting as desired
 % Do not put math or special symbols in the title.
 \title{ECE1254 Final project \\ 
-FIXME TITLE
-%thermal simulator for 3D integrated circuits with liquid cooling
-%harmonic balance
+Harmonic balance solutions to non-linear circuits
 }
 %
 %
@@ -644,12 +644,12 @@ FIXME TITLE
 % in the abstract or keywords.
 \IEEEtitleabstractindextext{%
 \begin{abstract}
-The abstract goes here.
+FIXME: The abstract goes here.
 \end{abstract}
 
-% Note that keywords are not normally used for peerreview papers.
+% Note that keywords are not normally used for peerreview papers.  Sync these up with the pdfkeywords above.
 \begin{IEEEkeywords}
-ECE1254, keyword, another kkeyword
+ECE1254, Harmonic balance, non-linear circuit, diode, discrete Fourier transform
 \end{IEEEkeywords}}
 
 
@@ -718,12 +718,7 @@ ECE1254, keyword, another kkeyword
 % 
 % Here we have the typical use of a "T" for an initial drop letter
 % and "HIS" in caps to complete the first word.
-\IEEEPARstart{F}{ixme} some contents here.
-more contents more contents more contents more contents more contents more contents more contents more contents more contents more contents more contents more contents more contents.
-more contents more contents more contents more contents more contents more contents more contents more contents more contents more contents more contents more contents more contents.
-more contents more contents more contents more contents more contents more contents more contents more contents more contents more contents more contents more contents more contents.
-
-Citation test \citep{shewchuk1994introduction}
+\IEEEPARstart{T}{he} purpose of this project is to extend the circuit solution system developed in ece1254 to non linear circuits with periodic single frequency sources, specifically adding the capability to solve diode models to the RLC solution capacities developed previously.  Anharmonic effects will be ignored, and it will be assumed that only periodic outputs with harmonics that are multiples of the input frequency will be observed.  Such a solution will be modelled using the \emph{Harmonic Balance} method described in \citep{giannini2004NonlinearMicrowaveCircuitDesign}.  This method models the time variation of the inputs and outputs as discrete time Fourier series, expressing them in a matrix form that can be handled readily in software.
 
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
@@ -733,8 +728,29 @@ Citation test \citep{shewchuk1994introduction}
 % 
 %\hfill December 27, 2012
 
-\subsection{Subsection Heading Here}
-FIXME: Subsection text here.
+\subsection{Discrete Fourier Transform}
+
+Following \citep{giannini2004NonlinearMicrowaveCircuitDesign} \S A.4, the circuit sources and outputs are assumed to be periodic (\( \omega_0 T = 2 \pi \)), and bandwidth limited, described by the following discrete Fourier transform pair
+
+%\begin{equation}\label{eqn:discreteFourier:60}
+\boxedEquation{eqn:discreteFourier:60}{
+\begin{aligned}
+x(t_k) &= \sum_{n = -N}^N X_n e^{ j n \omega_0 t_k} \\
+X_n &= \inv{2 N + 1} \sum_{k = -N}^N x(t_k) e^{-j n \omega_0 t_k},
+\end{aligned}
+}
+%\end{equation}
+
+The times at which the signal is evaluated are evaluated only at the Nykvist times 
+\index{Nykvist time instant}
+\( t_k \), 
+
+\begin{equation}\label{eqn:discreteFourier:20}
+t_k = \frac{T k}{2 N + 1}, \qquad k \in [-N, \cdots N]
+\end{equation}
+
+all contained within the interior of the \( [-T/2, T/2] \) range of interest.  
+A proof of this inversion relationship is given in \cref{appendix:discreteFourierInversion}.
 
 % needed in second column of first page if using \IEEEpubid
 %\IEEEpubidadjcol
@@ -839,30 +855,34 @@ FIXME: The conclusion goes here.
 
 
 
-% if have a single appendix:
-%\appendix[Proof of the Zonklar Equations]
-% or
-%\appendix  % for no appendix heading
-% do not use \section anymore after \appendix, only \section*
-% is possibly needed
+%%%% if have a single appendix:
+%%%%\appendix[Proof of the Zonklar Equations]
+%%%% or
+%%%%\appendix  % for no appendix heading
+%%%% do not use \section anymore after \appendix, only \section*
+%%%% is possibly needed
+%%%
+%%%
+%%%% use appendices with more than one appendix
+%%%% then use \section to start each appendix
+%%%% you must declare a \section before using any
+%%%% \subsection or using \label (\appendices by itself
+%%%% starts a section numbered zero.)
+%%%%
+%%%
+%%%
+%%%\appendices
+%%%\section{Proof of the First Zonklar Equation}
+%%%FIXME: Appendix one text goes here.
+%%%
+%%%% you can choose not to have a title for an appendix
+%%%% if you want by leaving the argument blank
+%%%\section{}
+%%%FIXME: Appendix two text goes here.
 
-% use appendices with more than one appendix
-% then use \section to start each appendix
-% you must declare a \section before using any
-% \subsection or using \label (\appendices by itself
-% starts a section numbered zero.)
-%
-
-
-\appendices
-\section{Proof of the First Zonklar Equation}
-FIXME: Appendix one text goes here.
-
-% you can choose not to have a title for an appendix
-% if you want by leaving the argument blank
-\section{}
-FIXME: Appendix two text goes here.
-
+\appendix[Discrete Fourier Transform inversion]
+\label{appendix:discreteFourierInversion}
+\input{discreteFourierInversion.tex}
 
 % use section* for acknowledgement
 \ifCLASSOPTIONcompsoc

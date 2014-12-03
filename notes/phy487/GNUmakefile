@@ -11,8 +11,6 @@ SOURCE_DIRS += appendix
 FIGURES := ../../figures/$(THISDIR)
 SOURCE_DIRS += $(FIGURES)
 
-COPIED_FILES += ./macros_bm.sty
-
 # also toggle redacted classicthesis-config.tex
 # FIXME: changing this flag should be a dependency of mathematica.tex 
 #REDACTED := -redacted
