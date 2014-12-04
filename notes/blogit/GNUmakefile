@@ -61,6 +61,7 @@ all :: $(PDFS_FROM_EPS)
 all :: Bibliography.bib
 all :: peeters_macros.sty
 all :: peeters_layout.sty
+all :: peeters_layout_exercise.sty
 all :: macros_bm.sty
 all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
@@ -106,6 +107,9 @@ mostlyclean ::
 	rm -f $(CLEAN_TARGETS)
 
 peeters_layout.sty : ../peeters_layout.sty
+	cp $^ $@
+
+peeters_layout_exercise.sty : ../peeters_layout_exercise.sty
 	cp $^ $@
 
 peeters_macros.sty : ../peeters_macros.sty

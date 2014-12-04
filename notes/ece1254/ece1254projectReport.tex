@@ -732,8 +732,8 @@ ECE1254, Harmonic balance, non-linear circuit, diode, discrete Fourier transform
 
 Following \citep{giannini2004NonlinearMicrowaveCircuitDesign} \S A.4, the circuit sources and outputs are assumed to be periodic (\( \omega_0 T = 2 \pi \)), and bandwidth limited, described by the following discrete Fourier transform pair
 
-%\begin{equation}\label{eqn:discreteFourier:60}
-\boxedEquation{eqn:discreteFourier:60}{
+%\begin{equation}\label{eqn:ece1254projectReport:60}
+\boxedEquation{eqn:ece1254projectReport:60}{
 \begin{aligned}
 x(t_k) &= \sum_{n = -N}^N X_n e^{ j n \omega_0 t_k} \\
 X_n &= \inv{2 N + 1} \sum_{k = -N}^N x(t_k) e^{-j n \omega_0 t_k},
@@ -745,12 +745,36 @@ The times at which the signal is evaluated are evaluated only at the Nykvist tim
 \index{Nykvist time instant}
 \( t_k \), 
 
-\begin{equation}\label{eqn:discreteFourier:20}
+\begin{equation}\label{eqn:ece1254projectReport:20}
 t_k = \frac{T k}{2 N + 1}, \qquad k \in [-N, \cdots N]
 \end{equation}
 
 all contained within the interior of the \( [-T/2, T/2] \) range of interest.  
 A proof of this inversion relationship is given in \cref{appendix:discreteFourierInversion}.
+
+A matrix representation of the transform pair is desired.  
+Let \( x_k = x(t_k) \), and 
+substitute \( t_k \) from \cref{eqn:ece1254projectReport:20}
+
+\begin{equation}\label{eqn:ece1254projectReport:140}
+\begin{aligned}
+x_k &= \sum_{n = -N}^N X_n e^{ 2 \pi j n k /(2 N + 1)} \\
+X_n &= \inv{2 N + 1} \sum_{k = -N}^N x_k e^{- 2 \pi j n k /(2 N + 1)}.
+\end{aligned}
+\end{equation}
+
+%IntroFor  vectors of Fourier components 
+%\( 
+%\Bx = {\begin{bmatrix}x_k\end{bmatrix}}_k, 
+%\BX = {\begin{bmatrix}X_n\end{bmatrix}}_n \), the transform pair can be written
+%
+%\begin{equation}\label{eqn:discreteFourier:n}
+%\Bx =
+%\begin{bmatrix}
+%e^{2 \pi j N N/(2 N + 1)} &
+%e^{-2 \pi j n N/(2 N + 1)} &
+%\end{bmatrix}
+%\end{equation}
 
 % needed in second column of first page if using \IEEEpubid
 %\IEEEpubidadjcol
@@ -882,7 +906,52 @@ FIXME: The conclusion goes here.
 
 \appendix[Discrete Fourier Transform inversion]
 \label{appendix:discreteFourierInversion}
-\input{discreteFourierInversion.tex}
+
+To find \( X_n \) evaluate the sum
+
+\begin{equation}\label{eqn:ece1254projectReport:80}
+\begin{aligned}
+\sum_{k = -N}^N &x(t_k) e^{-j m \omega_0 t_k} \\
+&=
+\sum_{k = -N}^N 
+\lr{
+\sum_{n = -N}^N X_n e^{ j n \omega_0 t_k}
+}
+e^{-j m \omega_0 t_k} \\
+&=
+\sum_{n = -N}^N X_n 
+\sum_{k = -N}^N 
+e^{ j (n -m )\omega_0 t_k}
+\end{aligned}
+\end{equation}
+
+This interior sum has the value \( 2 N + 1 \) when \( n = m \).  For \( n \ne m \), and 
+\( a = e^{j (n -m ) \frac{2 \pi}{2 N + 1}} \), this is
+
+\begin{dmath}\label{eqn:ece1254projectReport:100}
+\sum_{k = -N}^N 
+e^{ j (n -m )\omega_0 t_k}
+=
+\sum_{k = -N}^N 
+e^{ j (n -m )\omega_0 \frac{T k}{2 N + 1}}
+=
+\sum_{k = -N}^N a^k
+=
+a^{-N} \sum_{k = -N}^N a^{k+ N}
+=
+a^{-N} \sum_{r = 0}^{2 N} a^{r}
+=
+a^{-N} \frac{a^{2 N + 1} - 1}{a - 1}.
+\end{dmath}
+
+Since \( a^{2 N + 1} = e^{2 \pi j (n - m)} = 1 \), this sum is zero when \( n \ne m \).  This means that
+
+\begin{equation}\label{eqn:ece1254projectReport:120}
+\sum_{k = -N}^N 
+e^{ j (n -m )\omega_0 t_k} = (2 N + 1) \delta_{n,m}.
+\end{equation}
+
+Substitution back into \cref{eqn:ece1254projectReport:80} proves the Fourier inversion relation \cref{eqn:ece1254projectReport:60}.
 
 % use section* for acknowledgement
 \ifCLASSOPTIONcompsoc

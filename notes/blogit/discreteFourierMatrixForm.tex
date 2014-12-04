@@ -1,0 +1,144 @@
+%
+% Copyright © 2014 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{discreteFourierMatrixForm}
+\renewcommand{\dirname}{notes/ece1254/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\beginArtNoToc
+
+\generatetitle{Matrix form for discrete time Fourier transform}
+%\chapter{Matrix form for discrete time Fourier transform}
+%\label{chap:discreteFourierMatrixForm}
+
+The discrete time Fourier transform has been seen to have the form
+
+\begin{subequations}
+\begin{equation}\label{eqn:discreteFourierMatrixForm:20}
+x_k = \sum_{n = -N}^N X_n e^{ 2 \pi j n k /(2 N + 1)} 
+\end{equation}
+\begin{equation}\label{eqn:discreteFourierMatrixForm:40}
+X_n = \inv{2 N + 1} \sum_{k = -N}^N x_k e^{- 2 \pi j n k /(2 N + 1)}.
+\end{equation}
+\end{subequations}
+
+A matrix representation of this form is desired.  Let
+
+\begin{subequations}
+\begin{equation}\label{eqn:discreteFourier:60}
+\Bx = 
+\begin{bmatrix}
+x_N \\
+\vdots \\
+x_0 \\
+\vdots \\
+x_{-N}
+\end{bmatrix}
+\end{equation}
+\begin{equation}\label{eqn:discreteFourier:80}
+\BX = 
+\begin{bmatrix}
+X_N \\
+\vdots \\
+X_0 \\
+\vdots \\
+X_{-N}
+\end{bmatrix}
+\end{equation}
+\end{subequations}
+
+\Cref{eqn:discreteFourier:60} written out in full is
+\begin{equation}\label{eqn:discreteFourierMatrixForm:100}
+\begin{aligned}
+x_k 
+&= X_N e^{ 2 \pi j N k /(2 N + 1)}  \\
+&+ X_{N-1} e^{ 2 \pi j \lr{N-1} k /(2 N + 1)}  \\
+&+ \cdots \\
+&+ X_0  \\
+&+ \cdots \\
+&+ X_{1-N} e^{ -2 \pi j \lr{N-1} k /(2 N + 1)}  \\
+&+ X_{-N} e^{ -2 \pi j N k /(2 N + 1)}.
+\end{aligned}
+\end{equation}
+
+With \( \alpha = e^{ 2 \pi j /(2 N + 1) } \) the matrix form is
+
+\begin{equation}\label{eqn:discreteFourierMatrixForm:120}
+\Bx = 
+\begin{bmatrix}
+ \alpha^{ N N } &  \alpha^{ \lr{N-1} N }  & \cdots & 1 & \cdots &  \alpha^{ -\lr{N-1} N }  &  \alpha^{ -N N } \\
+ \alpha^{ N \lr{N-1} } &  \alpha^{ \lr{N-1} \lr{N-1} }  & \cdots & 1 & \cdots &  \alpha^{ -\lr{N-1} \lr{N-1} }  &  \alpha^{ -N \lr{N-1} } \\
+ \vdots              &  \vdots                      & \vdots      & \vdots & \vdots      &  \vdots                    &  \vdots               \\
+ 1              &  1                      & 1      & 1 & 1      &  1                    &  1               \\
+ \vdots              &  \vdots                      & \vdots      & \vdots & \vdots      &  \vdots                    &  \vdots               \\
+ \alpha^{ -N \lr{N-1} } &  \alpha^{ -\lr{N-1} \lr{N-1} }  & \cdots & 1 & \cdots &  \alpha^{ {N-1} \lr{N-1} }  &  \alpha^{ N \lr{N-1} } \\
+ \alpha^{ -N N } &  \alpha^{ -N N }  & \cdots & 1 & \cdots &  \alpha^{ \lr{N-1} N }  &  \alpha^{ N N } \\
+\end{bmatrix}
+\BX
+\end{equation}
+
+Similarily, from \cref{eqn:discreteFourierMatrixForm:40}, the inverse relation expands out to 
+
+\begin{equation}\label{eqn:discreteFourierMatrixForm:140}
+\begin{aligned}
+( 2 N + 1 ) X_n 
+&= x_N e^{- 2 \pi j n N /(2 N + 1)}  \\
+&+ x_{N-1} e^{- 2 \pi j n \lr{N-1}/(2 N + 1)}  \\
+&\cdots  \\
+&+ x_0 \\
+&\cdots  \\
+&+ x_{1-N} e^{ 2 \pi j n \lr{ N-1 }/(2 N + 1)}  \\
+&+ x_{-N} e^{ 2 \pi j n N/(2 N + 1)},
+\end{aligned}
+\end{equation}
+
+with a matrix form of
+
+\begin{equation}\label{eqn:discreteFourierMatrixForm:160}
+( 2 N + 1 ) \BX =
+\begin{bmatrix}
+\alpha^{- N N } & \alpha^{- N \lr{N-1}} &\cdots & 1 &\cdots & \alpha^{ N \lr{ N-1 }} & \alpha^{ N N} \\
+\alpha^{- \lr{N-1} N } & \alpha^{- \lr{N-1} \lr{N-1}} &\cdots & 1 &\cdots & \alpha^{ \lr{N-1} \lr{ N-1 }} & \alpha^{ \lr{N-1} N} \\
+\vdots               & \vdots                     &  \vdots    & \vdots & \vdots     & \vdots                      &  \vdots            \\
+1               & 1                     &  1    & 1 & 1     & 1                      &  1            \\
+\vdots               & \vdots                     &  \vdots    & \vdots & \vdots     & \vdots                      &  \vdots            \\
+\alpha^{\lr{N-1} N } & \alpha^{ \lr{N-1} \lr{N-1}} &\cdots & 1 &\cdots & \alpha^{ -\lr{N-1} \lr{ N-1 }} & \alpha^{ -\lr{N-1} N} \\
+\alpha^{ N N } & \alpha^{ N \lr{N-1}} &\cdots & 1 &\cdots & \alpha^{ -N \lr{ N-1 }} & \alpha^{ -N N} \\
+\end{bmatrix}
+\end{equation}
+
+Lettting
+
+\begin{equation}\label{eqn:discreteFourierMatrixForm:220}
+\BF = 
+\begin{bmatrix}
+ \alpha^{ N N } &  \alpha^{ \lr{N-1} N }  & \cdots & 1 & \cdots &  \alpha^{ -\lr{N-1} N }  &  \alpha^{ -N N } \\
+ \alpha^{ N \lr{N-1} } &  \alpha^{ \lr{N-1} \lr{N-1} }  & \cdots & 1 & \cdots &  \alpha^{ -\lr{N-1} \lr{N-1} }  &  \alpha^{ -N \lr{N-1} } \\
+ \vdots              &  \vdots                      & \vdots      & \vdots & \vdots      &  \vdots                    &  \vdots               \\
+ 1              &  1                      & 1      & 1 & 1      &  1                    &  1               \\
+ \vdots              &  \vdots                      & \vdots      & \vdots & \vdots      &  \vdots                    &  \vdots               \\
+ \alpha^{ -N \lr{N-1} } &  \alpha^{ -\lr{N-1} \lr{N-1} }  & \cdots & 1 & \cdots &  \alpha^{ {N-1} \lr{N-1} }  &  \alpha^{ N \lr{N-1} } \\
+ \alpha^{ -N N } &  \alpha^{ -N N }  & \cdots & 1 & \cdots &  \alpha^{ \lr{N-1} N }  &  \alpha^{ N N } \\
+\end{bmatrix},
+\end{equation}
+
+the discrete transform pair has the following compactly matrix representation
+
+\begin{subequations}
+\begin{equation}\label{eqn:discreteFourierMatrixForm:180}
+\Bx = \BF \BX
+\end{equation}
+\begin{equation}\label{eqn:discreteFourierMatrixForm:200}
+\BX = \inv{2 N + 1} \overbar{\BF} \Bx,
+\end{equation}
+\end{subequations}
+
+where \( \overbar{\BF} \) is the complex conjugate of \( \BF \).
+
+%\EndArticle
+\EndNoBibArticle
