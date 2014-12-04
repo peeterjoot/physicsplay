@@ -16,13 +16,89 @@
 %\chapter{Matrix form for discrete time Fourier transform}
 %\label{chap:discreteFourierMatrixForm}
 
+\section{Transform pair}
+
+In \citep{phy487:discreteFourierTransform} a verification of the discrete Fourier transform pairs was performed.  A much different looking discrete Fourier transform pair is given in \citep{giannini2004NonlinearMicrowaveCircuitDesign} \S A.4.  This transform pair samples the points at what are called the \textAndIndex{Nykvist time instants} given by
+
+\begin{equation}\label{eqndiscreteFourierMatrixForm:20}
+t_k = \frac{T k}{2 N + 1}, \qquad k \in [-N, \cdots N]
+\end{equation}
+
+Note that the endpoints of these sampling points are not \( \pm T/2 \), but are instead at
+
+\begin{equation}\label{eqndiscreteFourierMatrixForm:40}
+\pm \frac{T}{2} \inv{1 + 1/N},
+\end{equation}
+
+which are slightly within the interior of the \( [-T/2, T/2] \) range of interest.  The reason for this slightly odd seeming selection of sampling times becomes clear if one calculate the inversion relations.
+
+Given a periodic (\( \omega_0 T = 2 \pi \)) bandwidth limited signal evaluated only at the Nykvist times \( t_k \), 
+
+%\begin{equation}\label{eqndiscreteFourierMatrixForm:60}
+\boxedEquation{eqndiscreteFourierMatrixForm:80}{
+x(t_k) = \sum_{n = -N}^N X_n e^{ j n \omega_0 t_k},
+}
+%\end{equation}
+
+assume that an inversion relation can be found.  To find \( X_n \) evaluate the sum
+
+\begin{dmath}\label{eqndiscreteFourierMatrixForm:100}
+\sum_{k = -N}^N x(t_k) e^{-j m \omega_0 t_k}
+=
+\sum_{k = -N}^N 
+\lr{
+\sum_{n = -N}^N X_n e^{ j n \omega_0 t_k}
+}
+e^{-j m \omega_0 t_k}
+=
+\sum_{n = -N}^N X_n 
+\sum_{k = -N}^N 
+e^{ j (n -m )\omega_0 t_k}
+\end{dmath}
+
+This interior sum has the value \( 2 N + 1 \) when \( n = m \).  For \( n \ne m \), and 
+\( a = e^{j (n -m ) \frac{2 \pi}{2 N + 1}} \), this is
+
+\begin{dmath}\label{eqndiscreteFourierMatrixForm:120}
+\sum_{k = -N}^N 
+e^{ j (n -m )\omega_0 t_k}
+=
+\sum_{k = -N}^N 
+e^{ j (n -m )\omega_0 \frac{T k}{2 N + 1}}
+=
+\sum_{k = -N}^N a^k
+=
+a^{-N} \sum_{k = -N}^N a^{k+ N}
+=
+a^{-N} \sum_{r = 0}^{2 N} a^{r}
+=
+a^{-N} \frac{a^{2 N + 1} - 1}{a - 1}.
+\end{dmath}
+
+Since \( a^{2 N + 1} = e^{2 \pi j (n - m)} = 1 \), this sum is zero when \( n \ne m \).  This means that
+
+\begin{equation}\label{eqndiscreteFourierMatrixForm:140}
+\sum_{k = -N}^N 
+e^{ j (n -m )\omega_0 t_k} = (2 N + 1) \delta_{n,m},
+\end{equation}
+
+which provides the desired Fourier inversion relation
+
+%\begin{equation}\label{eqndiscreteFourierMatrixForm:160}
+\boxedEquation{eqndiscreteFourierMatrixForm:180}{
+X_m = \inv{2 N + 1} \sum_{k = -N}^N x(t_k) e^{-j m \omega_0 t_k}.
+}
+%\end{equation}
+
+\section{Matrix form}
+
 The discrete time Fourier transform has been seen to have the form
 
 \begin{subequations}
-\begin{equation}\label{eqn:discreteFourierMatrixForm:20}
+\begin{equation}\label{eqn:discreteFourierMatrixForm:200}
 x_k = \sum_{n = -N}^N X_n e^{ 2 \pi j n k /(2 N + 1)} 
 \end{equation}
-\begin{equation}\label{eqn:discreteFourierMatrixForm:40}
+\begin{equation}\label{eqn:discreteFourierMatrixForm:220}
 X_n = \inv{2 N + 1} \sum_{k = -N}^N x_k e^{- 2 \pi j n k /(2 N + 1)}.
 \end{equation}
 \end{subequations}
@@ -30,7 +106,7 @@ X_n = \inv{2 N + 1} \sum_{k = -N}^N x_k e^{- 2 \pi j n k /(2 N + 1)}.
 A matrix representation of this form is desired.  Let
 
 \begin{subequations}
-\begin{equation}\label{eqn:discreteFourier:60}
+\begin{equation}\label{eqndiscreteFourierMatrixForm:240}
 \Bx = 
 \begin{bmatrix}
 x_N \\
@@ -40,7 +116,7 @@ x_0 \\
 x_{-N}
 \end{bmatrix}
 \end{equation}
-\begin{equation}\label{eqn:discreteFourier:80}
+\begin{equation}\label{eqndiscreteFourierMatrixForm:260}
 \BX = 
 \begin{bmatrix}
 X_N \\
@@ -52,8 +128,8 @@ X_{-N}
 \end{equation}
 \end{subequations}
 
-\Cref{eqn:discreteFourier:60} written out in full is
-\begin{equation}\label{eqn:discreteFourierMatrixForm:100}
+\Cref{eqn:discreteFourierMatrixForm:200} written out in full is
+\begin{equation}\label{eqn:discreteFourierMatrixForm:280}
 \begin{aligned}
 x_k 
 &= X_N e^{ 2 \pi j N k /(2 N + 1)}  \\
@@ -68,7 +144,7 @@ x_k
 
 With \( \alpha = e^{ 2 \pi j /(2 N + 1) } \) the matrix form is
 
-\begin{equation}\label{eqn:discreteFourierMatrixForm:120}
+\begin{equation}\label{eqn:discreteFourierMatrixForm:300}
 \Bx = 
 \begin{bmatrix}
  \alpha^{ N N } &  \alpha^{ \lr{N-1} N }  & \cdots & 1 & \cdots &  \alpha^{ -\lr{N-1} N }  &  \alpha^{ -N N } \\
@@ -82,9 +158,9 @@ With \( \alpha = e^{ 2 \pi j /(2 N + 1) } \) the matrix form is
 \BX
 \end{equation}
 
-Similarily, from \cref{eqn:discreteFourierMatrixForm:40}, the inverse relation expands out to 
+Similarily, from \cref{eqn:discreteFourierMatrixForm:220}, the inverse relation expands out to 
 
-\begin{equation}\label{eqn:discreteFourierMatrixForm:140}
+\begin{equation}\label{eqn:discreteFourierMatrixForm:320}
 \begin{aligned}
 ( 2 N + 1 ) X_n 
 &= x_N e^{- 2 \pi j n N /(2 N + 1)}  \\
@@ -99,7 +175,7 @@ Similarily, from \cref{eqn:discreteFourierMatrixForm:40}, the inverse relation e
 
 with a matrix form of
 
-\begin{equation}\label{eqn:discreteFourierMatrixForm:160}
+\begin{equation}\label{eqn:discreteFourierMatrixForm:340}
 ( 2 N + 1 ) \BX =
 \begin{bmatrix}
 \alpha^{- N N } & \alpha^{- N \lr{N-1}} &\cdots & 1 &\cdots & \alpha^{ N \lr{ N-1 }} & \alpha^{ N N} \\
@@ -114,7 +190,7 @@ with a matrix form of
 
 Lettting
 
-\begin{equation}\label{eqn:discreteFourierMatrixForm:220}
+\begin{equation}\label{eqn:discreteFourierMatrixForm:360}
 \BF = 
 \begin{bmatrix}
  \alpha^{ N N } &  \alpha^{ \lr{N-1} N }  & \cdots & 1 & \cdots &  \alpha^{ -\lr{N-1} N }  &  \alpha^{ -N N } \\
@@ -130,15 +206,15 @@ Lettting
 the discrete transform pair has the following compactly matrix representation
 
 \begin{subequations}
-\begin{equation}\label{eqn:discreteFourierMatrixForm:180}
+\begin{equation}\label{eqn:discreteFourierMatrixForm:380}
 \Bx = \BF \BX
 \end{equation}
-\begin{equation}\label{eqn:discreteFourierMatrixForm:200}
+\begin{equation}\label{eqn:discreteFourierMatrixForm:400}
 \BX = \inv{2 N + 1} \overbar{\BF} \Bx,
 \end{equation}
 \end{subequations}
 
 where \( \overbar{\BF} \) is the complex conjugate of \( \BF \).
 
-%\EndArticle
-\EndNoBibArticle
+\EndArticle
+%\EndNoBibArticle
