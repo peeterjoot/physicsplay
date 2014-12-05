@@ -127,6 +127,15 @@ foreach (@$rLines)
    s/^ *\\EndNoBibArticle.*// ;
    s/^ *\\generatetitle{(.*)}/$1/ ;
    s/^ *\\label{chap:.*// ;
+
+#   if ( /\\citep{(.*?)}/ )
+#   {
+#      print "REF: $1\n" ;
+#      foreach ( keys %refnumbers )
+#      {
+#         print "R: $_\n" ;
+#      }
+#   }
    s/\\citep{(.*?)}/[$refnumbers{$1}]/g;
 
    s,{ *\\em\s+(.*?)},<em>$1</em>,g;
@@ -160,24 +169,33 @@ print $bibString ;
 
 exit 0 ;
 
-sub slurpLatex
+sub slurpFile
 {
+   my ($filename) = @_ ;
    my $failedOpen = 0 ;
    my @lines = () ;
 
-   open my $fh, "<$filebase.tex" or $failedOpen = 1 ;
+   open my $fh, "<$filename" or $failedOpen = 1 ;
    if ( $failedOpen )
    {
-      open $fh, "<$filebase.ltx" or die "could not open '$filebase.tex' nor '$filebase.ltx'\n" ;
+      warn "could not open '$filename'\n" ;
    }
-
-   while (<$fh>)
+   else
    {
-      push( @lines, $_ ) ;
+      while ( <$fh> )
+      {
+         push( @lines, $_ ) ;
+      }
+
+      close $fh ;
    }
-   close $fh ;
 
    return \@lines ;
+}
+
+sub slurpLatex
+{
+   return slurpFile( "$filebase.tex" ) ;
 }
 
 # side effect: populates the %refnumbers hash.
@@ -185,64 +203,64 @@ sub processBib
 {
    my $bibOut = '' ;
 
-   my $haveBib = 1 ;
-   open my $fh, "<$filebase.bbl" or $haveBib = 0 ;
+   my $rLines = slurpFile( "$filebase.bbl" ) ;
 
-   if ( $haveBib )
+   my $curNum = 1 ;
+
+   foreach ( @$rLines )
    {
-      my $curNum = 1 ;
+      chomp ;
 
-      while (<$fh>)
+      s,\\begin{thebibliography}.*,<h1>References</h1>, ;
+
+# this doesn't always work.  Need multiline search, as biblines like:
+#
+#     \bibitem[Giannini and
+#       Leuzzi(2004)]{giannini2004NonlinearMicrowaveCircuitDesign}
+#
+# ... are possible.
+
+      s/\\bibitem.*]{/\\bibitem{/ ;
+      if ( s/\\bibitem{(.*?)}// )
       {
-         chomp ;
+         $bibOut .= "\n\n" ;
+         $refnumbers{$1} = $curNum ;
+         $bibOut .= "[$curNum] " ;
 
-         s,\\begin{thebibliography}.*,<h1>References</h1>, ;
-
-         #\bibitem[Joot({\natexlab{a}})]{PJLorentzWave}
-         s/\\bibitem.*]{/\\bibitem{/ ;
-         if ( s/\\bibitem{(.*?)}// )
-         {
-            $bibOut .= "\n\n" ;
-            $refnumbers{$1} = $curNum ;
-            $bibOut .= "[$curNum] " ;
-
-            $curNum++ ;
-         }
-         else
-         {
-            next if (/Available from:/ or
-                     /\\providecommand/ or
-                     /\\expandafter/ or
-                     0 ) ;
-
-            if ( /\\end{thebibliography}/ )
-            {
-               $bibOut =~ s,\\url{(.*?)},<a href="$1">$1</a>,;
-               $bibOut .= "\n" ;
-               last ;
-            }
-
-            s/~/ /g ;
-            s,{ *\\em\s+(.*?)},<em>$1</em>,g;
-            s,\\em *{(.*?)},<em>$1</em>,g ;
-            s,\\emph *{(.*?)},<em>$1</em>,g ;
-            s/\\newblock// ;
-
-            # \url can be split across lines, as in the following:
-            #  \url{http://en.wikipedia.org/w/index.php?title=Relativistic_Doppler_effect&o%
-            #ldid=298724264}.
-            #
-            #In case it isn't do a first check here before stripping out {}'s
-            #
-            s,\\url{(.*?)},<a href="$1">$1</a>,sg;
-            s/{(.*?)}/$1/g ;
-
-            #die "'$_'\n" if /\\url/ ;
-            $bibOut .= "$_" ;
-         }
+         $curNum++ ;
       }
+      else
+      {
+         next if (/Available from:/ or
+                  /\\providecommand/ or
+                  /\\expandafter/ or
+                  0 ) ;
 
-      close $fh ;
+         if ( /\\end{thebibliography}/ )
+         {
+            $bibOut =~ s,\\url{(.*?)},<a href="$1">$1</a>,;
+            $bibOut .= "\n" ;
+            last ;
+         }
+
+         s/~/ /g ;
+         s,{ *\\em\s+(.*?)},<em>$1</em>,g;
+         s,\\em *{(.*?)},<em>$1</em>,g ;
+         s,\\emph *{(.*?)},<em>$1</em>,g ;
+         s/\\newblock// ;
+
+         # \url can be split across lines, as in the following:
+         #  \url{http://en.wikipedia.org/w/index.php?title=Relativistic_Doppler_effect&o%
+         #ldid=298724264}.
+         #
+         #In case it isn't do a first check here before stripping out {}'s
+         #
+         s,\\url{(.*?)},<a href="$1">$1</a>,sg;
+         s/{(.*?)}/$1/g ;
+
+         #die "'$_'\n" if /\\url/ ;
+         $bibOut .= "$_" ;
+      }
    }
 
    return $bibOut ;
