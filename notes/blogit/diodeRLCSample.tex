@@ -18,7 +18,8 @@
 
 To get a feel for how to generate the MLN equations for a circuit that has both RLC and non-linear components, consider the circuit of \cref{fig:diodeRLC:diodeRLCFig1}.
 
-\imageFigure{../../figures/ece1254/diodeRLCFig1}{An RLC circuit with a diode.}{fig:diodeRLC:diodeRLCFig1}{0.3}
+%\imageFigure{../../figures/ece1254/diodeRLCFig1}{An RLC circuit with a diode.}{fig:diodeRLC:diodeRLCFig1}{0.3}
+\imageFigure{../../figures/ece1254/diodeRLCFig3}{An RLC circuit with a diode.}{fig:diodeRLC:diodeRLCFig1}{0.1}
 
 The KCL equations for this circuit are
 
@@ -30,7 +31,7 @@ The KCL equations for this circuit are
 \item \( i_d = I_0 \lr{ e^{(v_1 - v_2)/v_T} - 1} \)
 \end{enumerate}
 
-FIXME: for the diode, is that the right voltage sign with respect to the current direction?
+%FIXME: for the diode, is that the right voltage sign with respect to the current direction?
 
 With \( Z = 1/R \), these can be put into the standard MLN matrix form as
 
@@ -131,6 +132,202 @@ W_n^{(1)} \\
 }
 \end{equation}
 
-The time dependence in the linear terms is nicely taken of by this transformation to the frequency domain.  However, we have a fairly messy structure with sums of Fourier components instead of the nice Fourier component vectors that we see in \S A.4 of \citep{giannini2004NonlinearMicrowaveCircuitDesign}.  That reference does consider multivariable problems like this one, so it looks like fully digesting that methodology is the next step.
+The time dependence in the linear terms is nicely taken of by this transformation to the frequency domain.  However, we have a fairly messy structure with sums of Fourier components instead of the nice Fourier component vectors that we see in \S A.4 of \citep{giannini2004NonlinearMicrowaveCircuitDesign}.  
+%That reference does consider multivariable problems like this one, so it looks like fully digesting that methodology is the next step.
+
+Introducing discrete time sampling vectors 
+
+\begin{equation}\label{eqn:diodeRLCSample:100}
+\Bv_a = 
+\begin{bmatrix}
+v_a(t_N) \\
+v_a(t_{N-1}) \\
+\vdots \\
+v_a(t_{1-N}) \\
+v_a(t_{-N}) \\
+\end{bmatrix}, \qquad
+\Bu_a = 
+\begin{bmatrix}
+u_b(t_N) \\
+u_b(t_{N-1}) \\
+\vdots \\
+u_b(t_{1-N}) \\
+u_b(t_{-N}) \\
+\end{bmatrix}, \qquad
+\Bw_a = 
+\begin{bmatrix}
+w_c(t_N) \\
+w_c(t_{N-1}) \\
+\vdots \\
+w_c(t_{1-N}) \\
+w_c(t_{-N}) \\
+\end{bmatrix},
+\end{equation}
+
+and Fourier component vectors
+
+\begin{equation}\label{eqn:diodeRLCSample:120}
+\BV_a = 
+\begin{bmatrix}
+V^{(a)}_N \\
+V^{(a)}_{N-1} \\
+\vdots \\
+V^{(a)}_{1-N} \\
+V^{(a)}_{-N} \\
+\end{bmatrix}, \qquad
+\BU_b = 
+\begin{bmatrix}
+U^{(b)}_N \\
+U^{(b)}_{N-1} \\
+\vdots \\
+U^{(b)}_{1-N} \\
+U^{(b)}_{-N} \\
+\end{bmatrix}, \qquad
+\BW_c = 
+\begin{bmatrix}
+W^{(c)}_N \\
+W^{(c)}_{N-1} \\
+\vdots \\
+W^{(c)}_{1-N} \\
+W^{(c)}_{-N} \\
+\end{bmatrix}.
+\end{equation}
+
+With \( \alpha = e^{ 2 \pi j /(2 N + 1) } \), and
+
+\begin{equation}\label{eqn:diodeRLCSample:140}
+\BF = 
+\begin{bmatrix}
+ \alpha^{ N N } &  \alpha^{ \lr{N-1} N }  & \cdots & 1 & \cdots &  \alpha^{ -\lr{N-1} N }  &  \alpha^{ -N N } \\
+ \alpha^{ N \lr{N-1} } &  \alpha^{ \lr{N-1} \lr{N-1} }  & \cdots & 1 & \cdots &  \alpha^{ -\lr{N-1} \lr{N-1} }  &  \alpha^{ -N \lr{N-1} } \\
+ \vdots              &  \vdots                      & \vdots      & \vdots & \vdots      &  \vdots                    &  \vdots               \\
+ 1              &  1                      & 1      & 1 & 1      &  1                    &  1               \\
+ \vdots              &  \vdots                      & \vdots      & \vdots & \vdots      &  \vdots                    &  \vdots               \\
+ \alpha^{ -N \lr{N-1} } &  \alpha^{ -\lr{N-1} \lr{N-1} }  & \cdots & 1 & \cdots &  \alpha^{ {N-1} \lr{N-1} }  &  \alpha^{ N \lr{N-1} } \\
+ \alpha^{ -N N } &  \alpha^{ -N N }  & \cdots & 1 & \cdots &  \alpha^{ \lr{N-1} N }  &  \alpha^{ N N } \\
+\end{bmatrix},
+\end{equation}
+
+in each case the time domain sampling vectors are related to the Fourier components by relations of the form
+
+\begin{equation}\label{eqn:diodeRLCSample:160}
+\Bx = \BF \BX.
+\end{equation}
+
+
+The time dependent term of
+\cref{eqn:diodeRLCSample:80}
+can be put into block matrix form
+
+\begin{equation}\label{eqn:diodeRLCSample:200}
+\sum_{n=-N}^N 
+e^{j n \omega_0 t_k}
+j \omega_0 n \BC
+\begin{bmatrix}
+V_n^{(1)} \\
+V_n^{(2)} \\
+\vdots
+\end{bmatrix}
+=
+j \omega_0 
+\begin{bmatrix}
+\BN \BF \BV^{(1)} \\
+\BN \BF \BV^{(2)} \\
+\vdots
+\end{bmatrix},
+\end{equation}
+
+where 
+
+\begin{equation}\label{eqn:diodeRLCSample:220}
+\BN = 
+\begin{bmatrix}
+N &     &        &     &    \\
+  & N-1 &        &     &    \\
+  &     & \ddots &     &    \\
+  &     &        & 1-N &    \\
+  &     &        &     & -N \\
+\end{bmatrix}.
+\end{equation}
+
+The MNA equations now take the following block matrix form
+
+\begin{equation}\label{eqn:diodeRLCSample:180}
+0 =
+\BG
+\begin{bmatrix}
+\BF \BV^{(1)} \\
+\BF \BV^{(2)} \\
+\vdots
+\end{bmatrix}
++
+j \omega_0 \BC
+\begin{bmatrix}
+\BN \BF \BV^{(1)} \\
+\BN \BF \BV^{(2)} \\
+\vdots
+\end{bmatrix}
+- \BB
+\begin{bmatrix}
+\BF \BU^{(1)} \\
+\BF \BU^{(2)}
+\end{bmatrix}
+- \mytilde{\BB}
+\begin{bmatrix}
+\BF \BW^{(1)}
+\end{bmatrix}.
+\end{equation}
+
+In the most general form allowing an arbitrary number of \( \BU^{(i)} \) and \( \BW^{(i)} \), we have
+
+FIXME: this isn't quite right as a representation of \cref{eqn:diodeRLCSample:180}
+
+\begin{equation}\label{eqn:diodeRLCSample:240}
+\lr{ \BG
+\begin{bmatrix}
+\BF &        &     \\
+    & \ddots &     \\
+    &        & \BF \\
+\end{bmatrix}
++
+j \omega_0 \BC
+\begin{bmatrix}
+\BN \BF &        &     \\
+    & \ddots &     \\
+    &        & \BN \BF \\
+\end{bmatrix}
+}
+\begin{bmatrix}
+\BV^{(1)} \\
+\BV^{(2)} \\
+\vdots
+\end{bmatrix}
+= \BB
+\begin{bmatrix}
+ \BF &        &     \\
+    & \ddots &     \\
+    &        &  \BF \\
+\end{bmatrix}
+\begin{bmatrix}
+\BU^{(1)} \\
+\BU^{(2)} \\
+\vdots
+\end{bmatrix}
++ \mytilde{\BB}
+\begin{bmatrix}
+ \BF &        &     \\
+    & \ddots &     \\
+    &        &  \BF \\
+\end{bmatrix}
+\begin{bmatrix}
+\BW^{(1)} \\
+\BW^{(2)} \\
+\vdots
+\end{bmatrix},
+\end{equation}
+
+Note that the \( \BN \BF \) block matrix factors of \( \BB \), and \( \mytilde{\BB} \) are different sizes in general, and in turn different from the block matrices of \( \BF \) and \( \BN \BF \) on the LHS.
+
+The end result is that we now have a block matrix formulation in the frequency domain for a vector of all the unknowns \( \BV^{(1)} \).  This can at least theoretically, be solved.  With non-linear circuit elements like diodes this is further complicated by the fact that the Fourier coefficients \( \BW^{(i)} \) are also functions of \( \BV^{(j)} \).
 
 \EndArticle
