@@ -477,7 +477,7 @@ pdfpagemode={UseOutlines},plainpages=false,pdfpagelabels=true,
 colorlinks=true,linkcolor={black},citecolor={black},urlcolor={black},
 pdftitle={Harmonic balance solutions to non-linear circuits},
 pdfsubject={Multiphyiscs modeling},
-pdfauthor={Mike Royle, Peeter Joot},
+pdfauthor={Michael Royle, Peeter Joot},
 pdfkeywords={ECE1254, Harmonic balance, non-linear circuit, diode, discrete Fourier transform}}
 %\ifCLASSINFOpdf
 %\usepackage[\MYhyperrefoptions,pdftex]{hyperref}
@@ -569,7 +569,7 @@ Harmonic balance solutions to non-linear circuits
 % journal papers have the author affiliations above the "Manuscript
 % received ..."  text while in non-compsoc journals this is reversed. Sigh.
 
-\author{ Mike~Royle%~\IEEEmembership{Fellow,~OSA,}
+\author{ Michael~Royle%~\IEEEmembership{Fellow,~OSA,}
    ,Peeter~Joot%~\IEEEmembership{Member,~IEEE,}
 %        and~Jane~Doe,~\IEEEmembership{Life~Fellow,~IEEE}% <-this % stops a space
 %\IEEEcompsocitemizethanks{\IEEEcompsocthanksitem M. Shell is with the Department
@@ -728,6 +728,7 @@ ECE1254, Harmonic balance, non-linear circuit, diode, discrete Fourier transform
 % 
 %\hfill December 27, 2012
 
+\section{Background}
 \subsection{Discrete Fourier Transform}
 
 Following \citep{giannini2004NonlinearMicrowaveCircuitDesign} \S A.4, the circuit sources and outputs are assumed to be periodic (\( \omega_0 T = 2 \pi \)), and bandwidth limited, described by the following discrete Fourier transform pair
@@ -766,29 +767,29 @@ X_n &= \inv{2 N + 1} \sum_{k = -N}^N x_k e^{- 2 \pi j n k /(2 N + 1)}.
 With \( 
 \Bx = 
 {\begin{bmatrix}
-x_N &
+x_{-N} &
 \cdots &
 x_0 &
 \cdots &
-x_{-N}
+x_{N}
 \end{bmatrix}}^\T,
 \BX = 
 {\begin{bmatrix}
-X_N &
+X_{-N} &
 \cdots &
 X_0 &
 \cdots &
-X_{-N}
+X_{N}
 \end{bmatrix}}^\T 
 \),  \( \alpha = e^{ 2 \pi j /(2 N + 1) } \), and \( \BF \) defined as
 
 \begin{equation}\label{eqn:discreteFourierMatrixForm:360}
 \begin{bmatrix}
- \alpha^{ N N }         &  \alpha^{ \lr{N-1} N }          & . &  \alpha^{ -\lr{N-1} N }        &  \alpha^{ -N N }         \\
- \alpha^{ N \lr{N-1} }  &  \alpha^{ \lr{N-1} \lr{N-1} }   & . & \alpha^{ -\lr{N-1} \lr{N-1} }  &  \alpha^{ -N \lr{N-1} }  \\
+ \alpha^{ N N }         &  \alpha^{-  \lr{N-1} N }          & . &  \alpha^{\lr{N-1} N }        &  \alpha^{N N }         \\
+ \alpha^{ N \lr{N-1} }  &  \alpha^{-  \lr{N-1} \lr{N-1} }   & . & \alpha^{\lr{N-1} \lr{N-1} }  &  \alpha^{N \lr{N-1} }  \\
  .                      &  .                              & . &  .                             &  .                       \\
- \alpha^{ -N \lr{N-1} } &  \alpha^{ -\lr{N-1} \lr{N-1} }  & . & \alpha^{ {N-1} \lr{N-1} }      &    \alpha^{ N \lr{N-1} } \\
- \alpha^{ -N N }        &  \alpha^{ -N N }                & . & \alpha^{ \lr{N-1} N }          &  \alpha^{ N N } \\
+ \alpha^{-N \lr{N-1} } &  \alpha^{\lr{N-1} \lr{N-1} }  & . & \alpha^{-  {N-1} \lr{N-1} }      &    \alpha^{-  N \lr{N-1} } \\
+ \alpha^{-N N }        &  \alpha^{-  (1-N) N }                & . & \alpha^{-  \lr{N-1} N }          &  \alpha^{-  N N } \\
 \end{bmatrix},
 \end{equation}
 
@@ -805,24 +806,67 @@ the transform pair has the matrix form
 
 where \( \overbar{\BF} \) is the complex conjugate of \( \BF \).
 
-%IntroFor  vectors of Fourier components 
-%\( 
-%\Bx = {\begin{bmatrix}x_k\end{bmatrix}}_k, 
-%\BX = {\begin{bmatrix}X_n\end{bmatrix}}_n \), the transform pair can be written
-%
-%\begin{equation}\label{eqn:discreteFourier:n}
-%\Bx =
-%\begin{bmatrix}
-%e^{2 \pi j N N/(2 N + 1)} &
-%e^{-2 \pi j n N/(2 N + 1)} &
-%\end{bmatrix}
-%\end{equation}
-
 % needed in second column of first page if using \IEEEpubid
 %\IEEEpubidadjcol
 
-\subsubsection{Subsubsection Heading Here}
-FIXME: Subsubsection text here.
+\subsection{Harmonic balance equations}
+
+The time domain MNA equations for an RLC network with non-linear sources can be put into the form
+
+\begin{equation}\label{eqn:ece1254projectReport:420}
+\BG \Bx(t) + \BC \dot{\Bx}(t) = \BB \Bu(t) + \BD \Bw(t).
+\end{equation}
+
+The dimensions of these matrices, with \( R \) equal to the number of unknowns, are
+
+\begin{itemize}
+\item 
+\( \BG, \BC \in \text{\R{R \times R}} \)
+\item 
+\( \BB \in \text{\C{R \times M}} \)
+\item 
+\( \BD \in \text{\R{R \times S}} \)
+\item 
+\( \Bx(t) \in \text{\R{R \times 1}} \)
+\item 
+\( \Bu(t) \in \text{\R{M \times 1}} \)
+\item 
+\( \Bw(t) \in \text{\R{S \times 1}} \)
+\end{itemize}
+
+The matrix \( \Bu(t) \) contains has a non-zero value for each source frequency source in the system.  For example, if there is a DC source, and one source at twice the fundamental frequency, this would be
+
+\begin{equation}\label{eqn:ece1254projectReport:440}
+\Bu(t) = 
+\begin{bmatrix}
+e^{ -j \omega_0 2 t } \\
+1 \\
+e^{ j \omega_0 2 t }
+\end{bmatrix}.
+\end{equation}
+
+In an implementation of code that generates MNA equations it is useful to store just the frequencies associated with these sources, and not any sort of actual time dependence representation.  For the example of \cref{eqn:ece1254projectReport:440} a matrix of this form would be stored
+
+\begin{equation}\label{eqn:ece1254projectReport:460}
+\Bu =
+\begin{bmatrix}
+- 2 \omega_0 \\
+0 \\
+2 \omega_0 
+\end{bmatrix}.
+\end{equation}
+
+The matrix \( \Bw(t) \) contains one row for each unique non-linear source, not including the magnitude of that source.  For example, if the only non-linear source in the system is a diode modelled by \( i_d(t) = I_0 \lr{ e^{ v/v_T} - 1 } \), then \( \BD \) would be a \( R \times 1 \) matrix and \( \Bw(t) \) would be a \( 1 \times 1 \) matrix
+
+\begin{equation}\label{eqn:ece1254projectReport:480}
+\Bw =
+\begin{bmatrix}
+e^{ v/v_T }
+\end{bmatrix}
+\end{equation}
+
+%\subsubsection{Subsubsection Heading Here}
+%FIXME: Subsubsection text here.
 
 
 % An example of a floating figure using the graphicx package.
@@ -1067,7 +1111,7 @@ The authors would like to thank Prof.\ Piero Triverio.
 %\end{IEEEbiography}
 
 % if you will not have a photo at all:
-\begin{IEEEbiographynophoto}{Mike Royle}
+\begin{IEEEbiographynophoto}{Michael Royle}
 Hi Mike.  anything you want to say about yourself?
 \end{IEEEbiographynophoto}
 %\begin{IEEEbiographynophoto}{Peeter Joot}

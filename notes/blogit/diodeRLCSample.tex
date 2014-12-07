@@ -88,7 +88,7 @@ e^{(v_2 - v_3)/v_T}
 Let's write this as 
 
 \begin{equation}\label{eqn:diodeRLCSample:40}
-\BG \BX(t) + \BC \dot{\BX}(t) = \BB \Bu(t) + \mytilde{\BB} \Bw(t).
+\BG \BX(t) + \BC \dot{\BX}(t) = \BB \Bu(t) + \BD \Bw(t).
 \end{equation}
 
 Here \( \Bu(t) \) collects up all the unique signature sources (for example sources with each different frequency in the system), and \( \Bw(t) \) is a vector of all the unique non-linear (time dependent) terms.
@@ -107,12 +107,10 @@ w_c(t) &= \sum_{n = -N}^N W_n^{(c)} e^{j \omega_0 n t}.
 
 For example, in this circuit, if the source was zero phase signal at the fundamental frequency of our Fourier basis (\( i_s(t) = e^{j \omega_0 t} \)), the only non-zero Fourier components \( U_n^{(a)} \) would be \( U_0^{(1)} = 1, U_1^{(2)} = 1 \).
 
-First evaluating the derivatives, and then evaluating the result at each of the Nykvist times \( t_k \), yields a \( (2 N + 1) \times 1 \) matrix equation
+First evaluating the derivatives, and then evaluating the result at each of the Nykvist times \( t_k \), yields a \( (2 N + 1) \times 1 \) equations
 
 \begin{equation}\label{eqn:diodeRLCSample:80}
-0 = 
-{\begin{bmatrix}
-\sum_{n=-N}^N 
+0 = \sum_{n=-N}^N 
 e^{j n \omega_0 t_k}
 \lr{
 \lr{
@@ -123,51 +121,68 @@ V_n^{(1)} \\
 V_n^{(2)} \\
 \vdots
 \end{bmatrix}
-- \BB
+-
+\BB
 \begin{bmatrix}
 U_n^{(1)} \\
 U_n^{(2)} \\
 \end{bmatrix}
-- \mytilde{\BB}
+-\BD
 \begin{bmatrix}
 W_n^{(1)} \\
 \end{bmatrix}
 }
-\end{bmatrix}}_{k \in [-N, N]}
 \end{equation}
 
-%The time dependence in the linear terms is nicely taken of by this transformation to the frequency domain.  This 
-%
-%
-%However, we have a fairly messy structure with sums of Fourier components instead of the nice Fourier component vectors that we see in \S A.4 of \citep{giannini2004NonlinearMicrowaveCircuitDesign}.  
-%That reference does consider multivariable problems like this one, so it looks like fully digesting that methodology is the next step.
+With the assumption of periodicity, each of these equations must separately equal zero for each \( ( n, k ) \) pair so that
 
-Introducing discrete time sampling vectors 
+\begin{equation}\label{eqn:diodeRLCSample:240}
+\lr{
+\BG + j \omega_0 n \BC
+}
+\begin{bmatrix}
+V_n^{(1)} \\
+V_n^{(2)} \\
+\vdots
+\end{bmatrix}
+=
+\BB
+\begin{bmatrix}
+U_n^{(1)} \\
+U_n^{(2)} \\
+\end{bmatrix}
++\BD
+\begin{bmatrix}
+W_n^{(1)} \\
+\end{bmatrix}
+\end{equation}
+
+The next goal is to put this in block matrix form.  First introducing discrete time sampling vectors 
 
 \begin{equation}\label{eqn:diodeRLCSample:100}
 \Bv_a = 
 \begin{bmatrix}
-v_a(t_N) \\
-v_a(t_{N-1}) \\
-\vdots \\
-v_a(t_{1-N}) \\
 v_a(t_{-N}) \\
+v_a(t_{1-N}) \\
+\vdots \\
+v_a(t_{N-1}) \\
+v_a(t_{N}) \\
 \end{bmatrix}, \qquad
 \Bu_a = 
 \begin{bmatrix}
-u_b(t_N) \\
-u_b(t_{N-1}) \\
-\vdots \\
-u_b(t_{1-N}) \\
 u_b(t_{-N}) \\
+u_b(t_{1-N}) \\
+\vdots \\
+u_b(t_{N-1}) \\
+u_b(t_{N}) \\
 \end{bmatrix}, \qquad
 \Bw_a = 
 \begin{bmatrix}
-w_c(t_N) \\
-w_c(t_{N-1}) \\
-\vdots \\
-w_c(t_{1-N}) \\
 w_c(t_{-N}) \\
+w_c(t_{1-N}) \\
+\vdots \\
+w_c(t_{N-1}) \\
+w_c(t_{N}) \\
 \end{bmatrix},
 \end{equation}
 
@@ -176,27 +191,27 @@ and Fourier component vectors
 \begin{equation}\label{eqn:diodeRLCSample:120}
 \BV_a = 
 \begin{bmatrix}
-V^{(a)}_N \\
-V^{(a)}_{N-1} \\
-\vdots \\
-V^{(a)}_{1-N} \\
 V^{(a)}_{-N} \\
+V^{(a)}_{1-N} \\
+\vdots \\
+V^{(a)}_{N-1} \\
+V^{(a)}_{N} \\
 \end{bmatrix}, \qquad
 \BU_b = 
 \begin{bmatrix}
-U^{(b)}_N \\
-U^{(b)}_{N-1} \\
-\vdots \\
-U^{(b)}_{1-N} \\
 U^{(b)}_{-N} \\
+U^{(b)}_{1-N} \\
+\vdots \\
+U^{(b)}_{N-1} \\
+U^{(b)}_{N} \\
 \end{bmatrix}, \qquad
 \BW_c = 
 \begin{bmatrix}
-W^{(c)}_N \\
-W^{(c)}_{N-1} \\
-\vdots \\
-W^{(c)}_{1-N} \\
 W^{(c)}_{-N} \\
+W^{(c)}_{1-N} \\
+\vdots \\
+W^{(c)}_{N-1} \\
+W^{(c)}_{N} \\
 \end{bmatrix}.
 \end{equation}
 
@@ -221,156 +236,603 @@ in each case the time domain sampling vectors are related to the Fourier compone
 \Bx = \BF \BX.
 \end{equation}
 
-With
+\section{Block matrix form, with physical parameter ordering}
+
+To understand how to put \cref{eqn:diodeRLCSample:240} in block matrix form, it is helpful to consider a specific example.  Consider again the specific example of the RLC circuit above, which has the form
+
+\begin{equation}\label{eqn:diodeRLCSample:260}
+\begin{bmatrix}
+0 & 0 & 0 & 0 \\
+0 & Z & -Z & 1 \\
+0 & -Z & Z + j \omega_0 n C & 0 \\
+0 & -1 & 0 & + j \omega_0 n L \\
+\end{bmatrix}
+\begin{bmatrix}
+V_n^{(1)} \\
+V_n^{(2)} \\
+V_n^{(3)} \\
+I_n^{(L)} \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+I_n^{(1)} \\
+I_n^{(2)} \\
+I_n^{(3)} \\
+I_n^{(4)} \\
+\end{bmatrix}
+\end{equation}
+
+Here the \( I^{(i)} \) terms are the DFT representations of both the linear and non-linear sources.  
+
+Suppose for example that \( N = 1 \).  One way to write \cref{eqn:diodeRLCSample:260} would be
+
+\begin{equation}\label{eqn:diodeRLCSample:320}
+\begin{aligned}
+&
+\begin{bmatrix}
+I_{-1}^{(1)} \\
+I_0^{(1)} \\
+I_{1}^{(1)} \\
+I_{-1}^{(2)} \\
+I_0^{(2)} \\
+I_{1}^{(2)} \\
+I_{-1}^{(3)} \\
+I_0^{(3)} \\
+I_{1}^{(3)} \\
+I_{-1}^{(4)} \\
+I_0^{(4)} \\
+I_{1}^{(4)} \\
+\end{bmatrix}
+=
+\left[
+\begin{array}{c|c|c|c}
+% row 1:
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} &
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} &
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} &
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} \\ \hline
+% row 2:
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} &
+\begin{matrix}
+Z & 0 & 0 \\
+0 & Z & 0 \\
+0 & 0 & Z \\
+\end{matrix} &
+\begin{matrix}
+-Z & 0 & 0 \\
+0 & -Z & 0 \\
+0 & 0 & -Z \\
+\end{matrix} &
+\begin{matrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+\end{matrix} \\ \hline
+% row 3:
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} &
+\begin{matrix}
+-Z & 0 & 0 \\
+0 & -Z & 0 \\
+0 & 0 & -Z \\
+\end{matrix} &
+\begin{matrix}
+Z & 0 & 0 \\
+0 & Z & 0 \\
+0 & 0 & Z \\
+\end{matrix} &
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} \\ \hline
+% row 4:
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} &
+\begin{matrix}
+-1 & 0 & 0 \\
+0 & -1 & 0 \\
+0 & 0 & -1 \\
+\end{matrix} &
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} &
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} \\
+\end{array}
+\right]
+\begin{bmatrix}
+V_{-1}^{(1)} \\
+V_{0}^{(1)} \\
+V_{1}^{(1)} \\
+V_{-1}^{(2)} \\
+V_{0}^{(2)} \\
+V_{1}^{(2)} \\
+V_{-1}^{(3)} \\
+V_{0}^{(3)} \\
+V_{1}^{(3)} \\
+I_{-1}^{(L)} \\
+I_{0}^{(L)} \\
+I_{1}^{(L)} \\
+\end{bmatrix} \\
+&+
+\left[
+\begin{array}{c|c|c|c}
+% row 1:
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} &
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} &
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} &
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} \\ \hline
+% row 2:
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} &
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} &
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} &
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} \\ \hline
+% row 3:
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} &
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} &
+\begin{matrix}
+j \omega_0 (-1) C & 0 & 0 \\
+0 & j \omega_0 (0) C & 0 \\
+0 & 0 & j \omega_0 (1) C \\
+\end{matrix} &
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} \\ \hline
+% row 4:
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} &
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} &
+\begin{matrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+\end{matrix} &
+\begin{matrix}
+j \omega_0 (-1) L & 0 & 0 \\
+0 & j \omega_0 (0) L & 0 \\
+0 & 0 & j \omega_0 (1) L \\
+\end{matrix} \\
+\end{array}
+\right]
+\begin{bmatrix}
+V_{-1}^{(1)} \\
+V_{0}^{(1)} \\
+V_{1}^{(1)} \\
+V_{-1}^{(2)} \\
+V_{0}^{(2)} \\
+V_{1}^{(2)} \\
+V_{-1}^{(3)} \\
+V_{0}^{(3)} \\
+V_{1}^{(3)} \\
+I_{-1}^{(L)} \\
+I_{0}^{(L)} \\
+I_{1}^{(L)} \\
+\end{bmatrix} \\
+\end{aligned}
+\end{equation}
+
+With a vector of fourier coeffient vectors
+
+\begin{equation}\label{eqn:diodeRLCSample:280}
+\BV =
+\begin{bmatrix}
+\BV^{(1)} \\
+\BV^{(2)} \\
+\BV^{(3)} \\
+\BI^{(L)}
+\end{bmatrix}, \qquad
+\BI =
+\begin{bmatrix}
+\BI^{(1)} \\
+\BI^{(2)} \\
+\BI^{(3)} \\
+\BI^{(4)}
+\end{bmatrix}.
+\end{equation}
+
+and a \( (2 N + 1) \times (2 N + 1) \) matrix of indexes
+
 \begin{equation}\label{eqn:diodeRLCSample:220}
 \BN = 
 \begin{bmatrix}
-N &     &        &     &    \\
-  & N-1 &        &     &    \\
+-N &     &        &     &    \\
+  & 1-N &        &     &    \\
   &     & \ddots &     &    \\
-  &     &        & 1-N &    \\
-  &     &        &     & -N \\
+  &     &        & N-1 &    \\
+  &     &        &     & N \\
 \end{bmatrix},
 \end{equation}
 
-a block matrix form of \cref{eqn:diodeRLCSample:80} is now close
+the complete block diagonalization is
 
-\begin{equation}\label{eqn:diodeRLCSample:260}
-0 = 
+%\begin{equation}\label{eqn:diodeRLCSample:300}
+\boxedEquation{eqn:diodeRLCSample:300}{
 {\begin{bmatrix}
-\BG
-\begin{bmatrix}
-[\BF \BV^{(1)}]_k \\
-[\BF \BV^{(2)}]_k \\
-\vdots
+g_{rs} \BI_{2 N + 1} + 
+j \omega_0 c_{rs} \BN 
+\end{bmatrix}
+}_{rs}
+\BV
+= 
+\BI.
+}
+%\end{equation}
+
+\section{Block matrix form, with frequency ordering}
+
+It turns out that a better way of ordering the vector of Fourier components is using a frequency ordering that interleaves the physical parameters.  With such an ordering the DFT MNA equations are
+
+\begin{equation}\label{eqn:diodeRLCSample:340}
+\begin{aligned}
+\BI =
+&\begin{bmatrix}
+I_{-1}^{(1)} \\
+I_{-1}^{(2)} \\
+I_{-1}^{(3)} \\
+I_{-1}^{(4)} \\
+I_0^{(1)} \\
+I_0^{(2)} \\
+I_0^{(3)} \\
+I_0^{(4)} \\
+I_{1}^{(1)} \\
+I_{1}^{(2)} \\
+I_{1}^{(3)} \\
+I_{1}^{(4)} \\
 \end{bmatrix}
 +
-j \omega_0
+\left[
+\begin{array}{c|c|c}
+\begin{matrix}
+0 & 0  & 0  & 0  \\
+0 & Z  & -Z & 1 \\
+0 & -Z & Z & 0 \\
+0 & -1 & 0 & 0 \\
+\end{matrix} & 0 & 0 \\ \hline
+0 & 
+\begin{matrix}
+0 & 0  & 0  & 0 \\
+0 & Z  & -Z & 1 \\
+0 & -Z & Z & 0 \\
+0 & -1 & 0 & 0 \\
+\end{matrix} & 0 \\ \hline
+0 & 0 & 
+\begin{matrix}
+0 & 0  & 0  & 0 \\
+0 & Z  & -Z & 1 \\
+0 & -Z & Z & 0 \\
+0 & -1 & 0 & 0 \\
+\end{matrix} \\
+\end{array}
+\right]
 \begin{bmatrix}
-[\BN \BF \BV^{(1)}]_k \\
-[\BN \BF \BV^{(2)}]_k \\
-\vdots
-\end{bmatrix}
-- \BB
+V_{-1}^{(1)} \\
+V_{-1}^{(2)} \\
+V_{-1}^{(3)} \\
+I_{-1}^{(L)} \\
+V_{0}^{(1)} \\
+V_{0}^{(2)} \\
+V_{0}^{(3)} \\
+I_{0}^{(L)} \\
+V_{1}^{(1)} \\
+V_{1}^{(2)} \\
+V_{1}^{(3)} \\
+I_{1}^{(L)} \\
+\end{bmatrix} \\
+&+
+j \omega_0 
+\left[
+\begin{array}{c|c|c}
+(-1)
 \begin{bmatrix}
-[\BF \BU^{(1)}]_k \\
-[\BF \BU^{(2)}]_k \\
-\end{bmatrix}
-- \mytilde{\BB}
+0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 \\
+0 & 0 & C & 0 \\
+0 & 0 & 0 & L \\
+\end{bmatrix} & 0 & 0 \\ \hline
+0 & 
+(0)
 \begin{bmatrix}
-[\BF \BW^{(1)}]_k \\
-\end{bmatrix}
-\end{bmatrix}}_{k \in [-N, N]}
+0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 \\
+0 & 0 & C & 0 \\
+0 & 0 & 0 & L \\
+\end{bmatrix} & 0 \\ \hline
+0 & 0 & 
+(1)
+\begin{bmatrix}
+0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 \\
+0 & 0 & C & 0 \\
+0 & 0 & 0 & L \\
+\end{bmatrix} \\
+\end{array}
+\right]
+\begin{bmatrix}
+V_{-1}^{(1)} \\
+V_{-1}^{(2)} \\
+V_{-1}^{(3)} \\
+I_{-1}^{(L)} \\
+V_{0}^{(1)} \\
+V_{0}^{(2)} \\
+V_{0}^{(3)} \\
+I_{0}^{(L)} \\
+V_{1}^{(1)} \\
+V_{1}^{(2)} \\
+V_{1}^{(3)} \\
+I_{1}^{(L)} \\
+\end{bmatrix} \\
+\end{aligned}
 \end{equation}
 
-What is desired here is to factor out a matrix of the form \( {\begin{bmatrix} {\BV^{(1)}}^\T & {\BV^{(1)}}^\T & \cdots \end{bmatrix}}^\T \).  How can this be done?
+This ordering matches that of \citep{giannini2004NonlinearMicrowaveCircuitDesign}.
 
-%
-%FIXME: this is where the errors occur.  Went from \( t \) to \( t_k \), but shoudl have an array here over all the values of \( k \).
-%
-%The time dependent term of
-%\cref{eqn:diodeRLCSample:80}
-%can be put into block matrix form
-%
-%\begin{equation}\label{eqn:diodeRLCSample:200}
-%\sum_{n=-N}^N 
-%e^{j n \omega_0 t_k}
-%j \omega_0 n \BC
-%\begin{bmatrix}
-%V_n^{(1)} \\
-%V_n^{(2)} \\
-%\vdots
-%\end{bmatrix}
-%=
-%j \omega_0 
-%\begin{bmatrix}
-%\BN \BF \BV^{(1)} \\
-%\BN \BF \BV^{(2)} \\
-%\vdots
-%\end{bmatrix},
-%\end{equation}
-%
-%where 
-%
+\section{Representing the linear sources}
 
-%The MNA equations now take the following block matrix form
-%
-%\begin{equation}\label{eqn:diodeRLCSample:180}
-%0 =
-%\BG
-%\begin{bmatrix}
-%\BF \BV^{(1)} \\
-%\BF \BV^{(2)} \\
-%\vdots
-%\end{bmatrix}
-%+
-%j \omega_0 \BC
-%\begin{bmatrix}
-%\BN \BF \BV^{(1)} \\
-%\BN \BF \BV^{(2)} \\
-%\vdots
-%\end{bmatrix}
-%- \BB
-%\begin{bmatrix}
-%\BF \BU^{(1)} \\
-%\BF \BU^{(2)}
-%\end{bmatrix}
-%- \mytilde{\BB}
-%\begin{bmatrix}
-%\BF \BW^{(1)}
-%\end{bmatrix}.
-%\end{equation}
-%
-%In the most general form allowing an arbitrary number of \( \BU^{(i)} \) and \( \BW^{(i)} \), we have
-%
-%FIXME: this isn't quite right as a representation of \cref{eqn:diodeRLCSample:180}
-%
-%\begin{equation}\label{eqn:diodeRLCSample:240}
-%\lr{ \BG
-%\begin{bmatrix}
-%\BF &        &     \\
-%    & \ddots &     \\
-%    &        & \BF \\
-%\end{bmatrix}
-%+
-%j \omega_0 \BC
-%\begin{bmatrix}
-%\BN \BF &        &     \\
-%    & \ddots &     \\
-%    &        & \BN \BF \\
-%\end{bmatrix}
-%}
-%\begin{bmatrix}
-%\BV^{(1)} \\
-%\BV^{(2)} \\
-%\vdots
-%\end{bmatrix}
-%= \BB
-%\begin{bmatrix}
-% \BF &        &     \\
-%    & \ddots &     \\
-%    &        &  \BF \\
-%\end{bmatrix}
-%\begin{bmatrix}
-%\BU^{(1)} \\
-%\BU^{(2)} \\
-%\vdots
-%\end{bmatrix}
-%+ \mytilde{\BB}
-%\begin{bmatrix}
-% \BF &        &     \\
-%    & \ddots &     \\
-%    &        &  \BF \\
-%\end{bmatrix}
-%\begin{bmatrix}
-%\BW^{(1)} \\
-%\BW^{(2)} \\
-%\vdots
-%\end{bmatrix},
-%\end{equation}
-%
-%Note that the \( \BN \BF \) block matrix factors of \( \BB \), and \( \mytilde{\BB} \) are different sizes in general, and in turn different from the block matrices of \( \BF \) and \( \BN \BF \) on the LHS.
-%
-%The end result is that we now have a block matrix formulation in the frequency domain for a vector of all the unknowns \( \BV^{(1)} \).  This can at least theoretically, be solved.  With non-linear circuit elements like diodes this is further complicated by the fact that the Fourier coefficients \( \BW^{(i)} \) are also functions of \( \BV^{(j)} \).
+Assuming real sources with frequencies that are only multiples of the fundamental harmonic, a reasonable way to represent them in storage is with a pair of matrices
 
+\begin{equation}\label{eqn:diodeRLCSample:360}
+\begin{bmatrix}
+\BI \sim \BB \Bomega
+\end{bmatrix}.
+\end{equation}
+
+If \( R \) is the dimension of \(\BG\) and \( \BC \), then \( \BB \) is a \( R \times S \) dimension matrix, where \( S \) is the sum of
+
+\begin{itemize}
+\item 1, if there are any DC sources, plus
+\item 2 times the number of unique frequency sources.
+\end{itemize}
+
+For example, if there is a DC source and one AC source with frequency \( \nu \), then for column vectors \( \Bb_i \) this pair is of the form
+
+\begin{equation}\label{eqn:diodeRLCSample:380}
+\BU \Bomega =
+\begin{bmatrix}
+\Bb_{-1} & \Bb_0 & \Bb_1
+\end{bmatrix}
+\begin{bmatrix}
+- 2 \pi \nu \\
+0 \\
+2 \pi \nu
+\end{bmatrix}.
+\end{equation}
+
+This representation produces the time domain representation exactly when there are only DC sources, and can be used to construct the Fourier coefficients by inspection when there are AC sources.  For example, for \( N = 1 \) in the example above, the Fourier coefficent vector is 
+
+\begin{equation}\label{eqn:diodeRLCSample:400}
+\BI 
+=
+\begin{bmatrix}
+\Bb_{-1} \\
+\Bb_{0} \\
+\Bb_{1} \\
+\end{bmatrix}.
+\end{equation}
+
+If \( N = 2 \) was used, then we would have instead
+
+\begin{equation}\label{eqn:diodeRLCSample:420}
+\BI 
+=
+\begin{bmatrix}
+\Bzero \\
+\Bb_{-1} \\
+\Bb_{0} \\
+\Bb_{1} \\
+\Bzero \\
+\end{bmatrix}.
+\end{equation}
+
+\section{Representing non-linear sources}
+
+The time domain MNA \cref{eqn:diodeRLCSample:40} include a wide range of matrix dimensions.  It is now clear how to handle the transition to the frequency domain for all the linear terms.  Working a simple diode example to understand how to handle the non-linear terms is useful.  Consider the circuit of \cref{fig:diodeWithResistor:diodeWithResistorFig1}.
+
+\imageFigure{../../figures/ece1254/diodeWithResistorFig1}{Simple diode circuit}{fig:diodeWithResistor:diodeWithResistorFig1}{0.3}
+
+With \( Z = 1/R, Z_g = 1/R_g \), the KCL equations are
+
+\begin{enumerate}
+\item \( \lr{ v_1 - v_2 } Z_s = i_s - i_d \)
+\item \( \lr{ v_2 - v_1 } Z_s + v_2 Z_g = -i_s + i_d \)
+\end{enumerate}
+
+Using the model \( i_d = I^{(0)} \lr{ e^{ (v_1 - v_2)/V_T } - 1 } \), with source \( i_s = I^{(s)} \cos( \omega_0 t ) \),
+this has the block matrix form
+
+\begin{subequations}
+\begin{equation}\label{eqn:diodeRLCSample:580}
+\BG = 
+\begin{bmatrix}
+Z_s & -Z_s \\
+-Z_s & Z_s + Z_g \\
+\end{bmatrix}, \qquad
+\Bx = 
+\begin{bmatrix}
+v_1(t) \\
+v_2(t) \\
+\end{bmatrix}
+\end{equation}
+\begin{equation}\label{eqn:diodeRLCSample:600}
+\BB =
+\begin{bmatrix}
+I^{(s)}/2 & -I^{(0)} & I^{(s)}/2 \\
+-I^{(s)}/2 & I^{(0)} & -I^{(s)}/2
+\end{bmatrix}, \qquad
+\Bu(t) = 
+\begin{bmatrix}
+e^{-j \omega_0 t} \\
+1  \\
+e^{j \omega_0 t} 
+\end{bmatrix}
+\end{equation}
+\begin{equation}\label{eqn:diodeRLCSample:620}
+\BD
+=
+\begin{bmatrix}
+I^{(0)} \\
+-I^{(0)} 
+\end{bmatrix}, \qquad
+\Bw(t) = e^{(v_1(t) - v_2(t))/V_T}.
+\end{equation}
+\end{subequations}
+
+If \( E_n \) is the nth DFT coefficient for \( e(t) = e^{(v_1(t) - v_2(t))/V_T} \), then the DFT equations for the \( N = 1 \) DFT is
+
+\begin{equation}\label{eqn:diodeRLCSample:n}
+\begin{aligned}
+\lr{ V_{-1}^{(1)} - V_{-1}^{(2)} } Z_s &= I^{(s)}/2 - I^{(0)} E_{-1}  \\
+\lr{ V_{-1}^{(2)} - V_{-1}^{(1)} } Z_s + V_{-1}^{(2)} Z_g &= -I^{(s)}/2 + I^{(0)} E_{-1}  \\
+\lr{ V_{0}^{(1)} - V_{0}^{(2)} } Z_s &= I^{(0)} - I^{(0)} E_{0}  \\
+\lr{ V_{0}^{(2)} - V_{0}^{(1)} } Z_s + V_{0}^{(2)} Z_g &= -I^{(0)} + I^{(0)} E_{0}  \\
+\lr{ V_{1}^{(1)} - V_{1}^{(2)} } Z_s &= I^{(s)}/2 - I^{(0)} E_{1}  \\
+\lr{ V_{1}^{(2)} - V_{1}^{(1)} } Z_s + V_{1}^{(2)} Z_g &= -I^{(s)}/2 + I^{(0)} E_{1} 
+\end{aligned}
+\end{equation}
+
+Let \( \Bb = [ \Bb_{-1}\, \Bb_0\, \Bb_1 ] \), and \( \BD = [ \Bd_1 ] \).  The block matrix equivalent form, by inspection, is
+
+\begin{equation}\label{eqn:diodeRLCSample:n}
+\begin{bmatrix}
+\BG & 0 & 0 \\
+0 & \BG & 0  \\
+0 & 0 & \BG 
+\end{bmatrix}
+\begin{bmatrix}
+V_{-1}^{(1)} \\
+V_{-1}^{(2)} \\
+V_{0}^{(1)} \\
+V_{0}^{(2)} \\
+V_{1}^{(1)} \\
+V_{1}^{(2)}
+\end{bmatrix}
+=
+\begin{bmatrix}
+\Bb_{-1} \\
+\Bb_{0} \\
+\Bb_{1} \\
+\end{bmatrix}
++
+\begin{bmatrix}
+\Bd_1 E_{-1} \\
+\Bd_1 E_{0} \\
+\Bd_1 E_{1}
+\end{bmatrix}.
+\end{equation}
+
+%%%\section{Tensor construction of Harmonic balance equations}
+%%%
+%%%In tensor form the time domain equations are
+%%%
+%%%\begin{equation}\label{eqn:diodeRLCSample:500}
+%%%0 =
+%%%g_{ik} x^{(k)}(t) + c_{ik} x^{(k)}(t) - b_{ir} u^{(r)}(t) - d_{is} w^{(s)}(t).
+%%%\end{equation}
+%%%
+%%%Assuming that both the unknowns vector \( \Bx \) and its derivative have Fourier representations
+%%%
+%%%\begin{equation}\label{eqn:diodeRLCSample:520}
+%%%\begin{aligned}
+%%%x^{(k)}(t) &= \sum_{n = -N}^N X_n^{(k)} e^{j \omega_0 n t} \\
+%%%\dot{x}^{(k)}(t) &= \sum_{n = -N}^N X_n^{(k)} j \omega_0 n e^{j \omega_0 n t},
+%%%\end{aligned}
+%%%\end{equation}
+%%%
+%%%the time domain equations can be written out in terms of the Fourier components as
+%%%
+%%%\begin{equation}\label{eqn:diodeRLCSample:540}
+%%%0 =
+%%%\sum_{n = -N}^N
+%%%e^{j \omega_0 n t}
+%%%\lr{ g_{ik} + c_{ik} j \omega_0 n } X_n^{(k)} - b_{ir} U_n^{(r)} - d_{is} W_n^{(s)}.
+%%%\end{equation}
+%%%
+%%%By assumption of periodicity, this is required to be zero for each unique \( e^{j \omega_0 n t} \), producing the Harmonic Balance (frequency domain), equations
+%%%
+%%%\begin{equation}\label{eqn:diodeRLCSample:560}
+%%%\lr{ g_{ik} + c_{ik} j \omega_0 n } X_n^{(k)} = b_{ir} U_n^{(r)} + d_{is} W_n^{(s)}.
+%%%\end{equation}
+%%%
+%%%Here \( i \in [ 1, R ], n \in [ -N, N ] \), so we have \( R \times (2 N + 1) \) equations to solve.
+%%%
 \EndArticle
