@@ -759,7 +759,7 @@ I^{(0)} \\
 
 If \( E_n \) is the nth DFT coefficient for \( e(t) = e^{(v_1(t) - v_2(t))/V_T} \), then the DFT equations for the \( N = 1 \) DFT is
 
-\begin{equation}\label{eqn:diodeRLCSample:n}
+\begin{equation}\label{eqn:diodeRLCSample:640}
 \begin{aligned}
 \lr{ V_{-1}^{(1)} - V_{-1}^{(2)} } Z_s &= I^{(s)}/2 - I^{(0)} E_{-1}  \\
 \lr{ V_{-1}^{(2)} - V_{-1}^{(1)} } Z_s + V_{-1}^{(2)} Z_g &= -I^{(s)}/2 + I^{(0)} E_{-1}  \\
@@ -772,7 +772,7 @@ If \( E_n \) is the nth DFT coefficient for \( e(t) = e^{(v_1(t) - v_2(t))/V_T} 
 
 Let \( \Bb = [ \Bb_{-1}\, \Bb_0\, \Bb_1 ] \), and \( \BD = [ \Bd_1 ] \).  The block matrix equivalent form, by inspection, is
 
-\begin{equation}\label{eqn:diodeRLCSample:n}
+\begin{equation}\label{eqn:diodeRLCSample:660}
 \begin{bmatrix}
 \BG & 0 & 0 \\
 0 & \BG & 0  \\
@@ -800,39 +800,91 @@ V_{1}^{(2)}
 \end{bmatrix}.
 \end{equation}
 
-%%%\section{Tensor construction of Harmonic balance equations}
-%%%
-%%%In tensor form the time domain equations are
-%%%
-%%%\begin{equation}\label{eqn:diodeRLCSample:500}
-%%%0 =
-%%%g_{ik} x^{(k)}(t) + c_{ik} x^{(k)}(t) - b_{ir} u^{(r)}(t) - d_{is} w^{(s)}(t).
-%%%\end{equation}
-%%%
-%%%Assuming that both the unknowns vector \( \Bx \) and its derivative have Fourier representations
-%%%
-%%%\begin{equation}\label{eqn:diodeRLCSample:520}
-%%%\begin{aligned}
-%%%x^{(k)}(t) &= \sum_{n = -N}^N X_n^{(k)} e^{j \omega_0 n t} \\
-%%%\dot{x}^{(k)}(t) &= \sum_{n = -N}^N X_n^{(k)} j \omega_0 n e^{j \omega_0 n t},
-%%%\end{aligned}
-%%%\end{equation}
-%%%
-%%%the time domain equations can be written out in terms of the Fourier components as
-%%%
-%%%\begin{equation}\label{eqn:diodeRLCSample:540}
-%%%0 =
-%%%\sum_{n = -N}^N
-%%%e^{j \omega_0 n t}
-%%%\lr{ g_{ik} + c_{ik} j \omega_0 n } X_n^{(k)} - b_{ir} U_n^{(r)} - d_{is} W_n^{(s)}.
-%%%\end{equation}
-%%%
-%%%By assumption of periodicity, this is required to be zero for each unique \( e^{j \omega_0 n t} \), producing the Harmonic Balance (frequency domain), equations
-%%%
-%%%\begin{equation}\label{eqn:diodeRLCSample:560}
-%%%\lr{ g_{ik} + c_{ik} j \omega_0 n } X_n^{(k)} = b_{ir} U_n^{(r)} + d_{is} W_n^{(s)}.
-%%%\end{equation}
-%%%
-%%%Here \( i \in [ 1, R ], n \in [ -N, N ] \), so we have \( R \times (2 N + 1) \) equations to solve.
-%%%
+This shows the stamping pattern required to form the non-linear portion of the Harmonic balance equations.  For the diode exponentials, these non-linear term will be of the form
+
+\begin{equation}\label{eqn:diodeRLCSample:680}
+\BD \Bw(t)
+=
+\begin{bmatrix}
+\Bd_1 & \Bd_2 & \cdots & \Bd_S
+\end{bmatrix}
+\begin{bmatrix}
+w_1(t) \\
+w_2(t) \\
+\vdots \\
+w_S(t) \\
+\end{bmatrix},
+\end{equation}
+
+where \( w_i(t) = \exp( (v_{i,1}(t) - v_{i,2}(t))/V_{T,i} ) \).  If the DFT coordinates of these functions are \( E_n^{(i)} \), then the frequency domain representation is
+
+\begin{equation}\label{eqn:diodeRLCSample:700}
+\sum_{i = 1}^S 
+\begin{bmatrix}
+\Bd_i E_{-N}^{(i)} \\
+\Bd_i E_{1-N}^{(i)} \\
+\vdots \\
+\Bd_i E_{N-1}^{(i)} \\
+\Bd_i E_{N}^{(i)} \\
+\end{bmatrix}.
+\end{equation}
+
+This is a \( R (2 N + 1) \times 1 \) matrix, as expected.
+
+The computation of these DFT coordinates is a bit messy since they are time dependent, and thus dependent on the (unknown) values of \( V_n^{(1)} \).  Consider the above circuit as an example where we have
+
+\begin{equation}\label{eqn:diodeRLCSample:720}
+w(t) = \exp\lr{ (v_1(t) - v_2(t))/V_T }.
+\end{equation}
+
+The DFT inverse is
+
+\begin{equation}\label{eqn:diodeRLCSample:740}
+E_n = \sum_{k=-N}^N \exp\lr{ (v_1(t_k) - v_2(t_k))/V_T } e^{-j \omega_0 n t_k }.
+\end{equation}
+
+With \( \BE = ( E_{-N}, E_{1-N}, \cdots, E_{N-1}, E_N ) \), this is
+
+\begin{dmath}\label{eqn:diodeRLCSample:760}
+\BE = 
+\inv{2 N + 1} \overbar{\BF} 
+\begin{bmatrix}
+\exp\lr{ (v_{-N}^{(1)} - v_{-N}^{(2)})/v_T } \\
+\exp\lr{ (v_{1-N}^{(1)} - v_{1-N}^{(2)})/v_T } \\
+\vdots \\
+\exp\lr{ (v_{N-1}^{(1)} - v_{N-1}^{(2)})/v_T } \\
+\exp\lr{ (v_{N}^{(1)} - v_{N}^{(2)})/v_T } \\
+\end{bmatrix}
+=
+\inv{2 N + 1} \overbar{\BF} 
+\begin{bmatrix}
+\exp\lr{ {[\BF (\BV^{(1)} - \BV^{(2)})/v_T]}_{-N} } \\
+\exp\lr{ {[\BF (\BV^{(1)} - \BV^{(2)})/v_T]}_{1-N} } \\
+\vdots \\ 
+\exp\lr{ {[\BF (\BV^{(1)} - \BV^{(2)})/v_T]}_{N-1} } \\
+\exp\lr{ {[\BF (\BV^{(1)} - \BV^{(2)})/v_T]}_{N} }
+\end{bmatrix}.
+\end{dmath}
+
+With the introduction a term by term exponentiation operator
+
+\begin{equation}\label{eqn:diodeRLCSample:780}
+\exp[ \Bx ] = 
+\begin{bmatrix}
+\exp(x_1) \\
+\exp(x_2) \\
+\vdots \\
+\end{bmatrix},
+\end{equation}
+
+this one Fourier coefficient vector is
+
+\begin{equation}\label{eqn:diodeRLCSample:800}
+\BE =
+\inv{2 N + 1} \overbar{\BF} 
+\exp[ \BF (\BV^{(1)} - \BV^{(2)}) ].
+\end{equation}
+
+This is now completely expressed in terms of the unknown Fourier component vectors, each a subset of the aggreggated ``voltage'', range selectable with the Matlab operation \( \BV^{(i)} = \BV(i:R:end) \).  
+
 \EndArticle
