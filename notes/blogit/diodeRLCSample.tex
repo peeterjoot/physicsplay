@@ -800,7 +800,19 @@ V_{1}^{(2)}
 \end{bmatrix}.
 \end{equation}
 
-This shows the stamping pattern required to form the non-linear portion of the Harmonic balance equations.  For the diode exponentials, these non-linear term will be of the form
+This shows the stamping pattern required to form the non-linear portion of the Harmonic balance equations.  The general pattern can be written as
+
+%\begin{equation}\label{eqn:diodeRLCSample:820}
+\boxedEquation{eqn:diodeRLCSample:820}{
+\mathcal{G} \BV = \BI + \mathcal{I}(\BV),
+}
+%\end{equation}
+
+Here \( \mathcal{G} \) is block diagonal, and in general has blocks of \( \BG + j \omega_0 n \BC \).  The matrix \( \BI \) was generated from the Fourier coeffients of all the linear sources, and \( \mathcal{I}(\BV) \) encodes all the non-linear contributions to the system.
+
+\paragraph{More general non-linear structure, for multiple diodes}
+
+For the diode exponentials, these non-linear term will be of the form
 
 \begin{equation}\label{eqn:diodeRLCSample:680}
 \BD \Bw(t)
@@ -819,6 +831,8 @@ w_S(t) \\
 where \( w_i(t) = \exp( (v_{i,1}(t) - v_{i,2}(t))/V_{T,i} ) \).  If the DFT coordinates of these functions are \( E_n^{(i)} \), then the frequency domain representation is
 
 \begin{equation}\label{eqn:diodeRLCSample:700}
+\mathcal{I}(\BV)
+=
 \sum_{i = 1}^S 
 \begin{bmatrix}
 \Bd_i E_{-N}^{(i)} \\
@@ -882,9 +896,178 @@ this one Fourier coefficient vector is
 \begin{equation}\label{eqn:diodeRLCSample:800}
 \BE =
 \inv{2 N + 1} \overbar{\BF} 
-\exp[ \BF (\BV^{(1)} - \BV^{(2)}) ].
+\exp[ \BF (\BV^{(1)} - \BV^{(2)})/v_T ].
 \end{equation}
 
 This is now completely expressed in terms of the unknown Fourier component vectors, each a subset of the aggreggated ``voltage'', range selectable with the Matlab operation \( \BV^{(i)} = \BV(i:R:end) \).  
+
+\section{Newton's method}
+
+In order to solve the system, Newton's method on the Fourier coeffients is required.  Solutions to \( \FF(\BV) = 0 \) are sought, where
+
+\begin{equation}\label{eqn:diodeRLCSample:840}
+\FF(\BV) = \mathcal{G} \BV - \BI - \mathcal{I}(\BV).
+\end{equation}
+
+Here the sources current vector DFT coordinates have been split into the linear contributions \( \BI \) and nonlinear contributions \( \mathcal{I} \) defined by \cref{eqn:diodeRLCSample:700}.
+
+Working with ones-indexed coordinates of \( \BV = [V_k]_k \), where \( k \in [1, R(2 N + 1) ] \), the Jacobian is
+
+\begin{equation}\label{eqn:diodeRLCSample:860}
+\BJ = \mathcal{G} - {[ \PDi{V_s}{\mathcal{I}_r} ]}_{rs}.
+\end{equation}
+
+To calculate these partials we need the partials of the coordinates of \( \BE \) of
+\cref{eqn:diodeRLCSample:800}.  The kth coordinate of \( \BV^{(1)}, \BV^{(2)} \) in terms of the coordinates of the \( R(2 N + 1) \) vector of unknowns \( \BV \) are
+
+\begin{equation}\label{eqn:diodeRLCSample:880}
+\begin{aligned}
+[\BV^{(1)}]_k &= V_{1 + (k-1) R} \\
+[\BV^{(2)}]_k &= V_{2 + (k-1) R}
+\end{aligned}
+\end{equation}
+
+Using summation convention, with sums over any repeated indexes implied, those coordinates are
+
+\begin{equation}\label{eqn:diodeRLCSample:900}
+E_r =
+\inv{2 N + 1} \overbar{F}_{r a} 
+\exp\lr{ F_{ab} 
+(
+V_{1 + (b-1) R} -
+V_{2 + (b-1) R}
+)/v_T }.
+\end{equation}
+
+The partials now follow immediately
+
+\begin{equation}\label{eqn:diodeRLCSample:920}
+\PD{V_s}{E_r} =
+\inv{2 N + 1} \inv{v_T} \overbar{F}_{r a} F_{ab}
+\exp\lr{ F_{ab} 
+(
+V_{1 + (b-1) R} -
+V_{2 + (b-1) R}
+)/v_T }
+\lr{ 
+\delta_{s,1 + (b-1) R} -
+\delta_{s,2 + (b-1) R}
+}.
+\end{equation}
+
+\paragraph{Generalization}
+
+To generalize this, suppose that the diode exponential was associated with voltages spanning nodes \( m, n\) so that
+
+\begin{equation}\label{eqn:diodeRLCSample:980}
+\BE =
+\inv{2 N + 1} \overbar{\BF} 
+\exp[ \BF (\BV^{(m)} - \BV^{(n)})/v_T ].
+\end{equation}
+
+In this case, the coordinates of the physical ``voltages'' are
+
+\begin{equation}\label{eqn:diodeRLCSample:1020}
+\begin{aligned}
+[\BV^{(m)}]_k &= V_{m + (k-1) R} \\
+[\BV^{(n)}]_k &= V_{n + (k-1) R}
+\end{aligned},
+\end{equation}
+
+so
+
+\begin{equation}\label{eqn:diodeRLCSample:1040}
+E_r =
+\inv{2 N + 1} \overbar{F}_{r a} 
+\exp\lr{ F_{ab} 
+(
+V_{m + (b-1) R} -
+V_{n + (b-1) R}
+)/v_T }.
+\end{equation}
+
+The Jacobian partials are
+
+\begin{equation}\label{eqn:diodeRLCSample:1060}
+\PD{V_s}{E_r} =
+\inv{2 N + 1} \inv{v_T} \overbar{F}_{r a} F_{ab}
+\exp\lr{ F_{ab} 
+(
+V_{m + (b-1) R} -
+V_{n + (b-1) R}
+)/v_T }
+\lr{ 
+\delta_{s,m + (b-1) R} -
+\delta_{s,n + (b-1) R}
+}.
+\end{equation}
+
+Note that this Jacobian
+
+\begin{equation}\label{eqn:diodeRLCSample:1080}
+\BJ_\BE = 
+{
+\begin{bmatrix}
+\PD{V_s}{E_r}
+\end{bmatrix}}_{rs}
+\end{equation}
+
+is a \( (2 N + 1) \times R(2N + 1) \) matrix.
+
+The full Jacobian of \( \mathcal{I}(\BV) \) is
+
+\begin{equation}\label{eqn:diodeRLCSample:700}
+\BJ_{\mathcal{I}}(\BV)
+=
+\sum_{i = 1}^S 
+\begin{bmatrix}
+\Bd_i \PD{\BV}{E_{-N}^{(i)}} \\
+\Bd_i \PD{\BV}{E_{1-N}^{(i)}} \\
+\vdots \\
+\Bd_i \PD{\BV}{E_{N-1}^{(i)}} \\
+\Bd_i \PD{\BV}{E_{N}^{(i)}} \\
+\end{bmatrix}.
+\end{equation}
+
+Where \( \PDi{\BV}{E_{k}^{(i)}} \) is the kth row of \( \BJ_{\BE^{(i)}} \).  The complete Jacobian is
+
+\begin{equation}\label{eqn:diodeRLCSample:1100}
+\BJ = \mathcal{G} - \BJ_{\mathcal{I}}(\BV).
+\end{equation}
+
+%%%\paragraph{Optimization attempt}
+%%%
+%%%Note that \cref{eqn:diodeRLCSample:920} is zero unless one of \( s - 1 \Mod R = 0 \), or \( s - 2 \Mod R = 0 \).  For example, this is zero for \( s = 3 \), 
+%%%but if \( s = R + 1 \) (where \( b = 2 \)) is
+%%%
+%%%\begin{equation}\label{eqn:diodeRLCSample:940}
+%%%\PD{V_{R+1}}{E_r} =
+%%%\inv{2 N + 1} \inv{v_T} \overbar{F}_{r a} F_{a2}
+%%%\exp\lr{ F_{a2} V_{R+1} /v_T },
+%%%\end{equation}
+%%%
+%%%and for \( s = R + 2 \) is
+%%%
+%%%\begin{equation}\label{eqn:diodeRLCSample:960}
+%%%\PD{V_{R+2}}{E_r} =
+%%%-\inv{2 N + 1} \inv{v_T} \overbar{F}_{r a} F_{a2}
+%%%\exp\lr{ -F_{a2} V_{R+2} /v_T }.
+%%%\end{equation}
+%%%
+%%%In the more general case, with explicit summation restored, the Jacobian coordinates can be seen to have the following banded structure
+%%%
+%%%\begin{equation}\label{eqn:diodeRLCSample:1000}
+%%%\begin{aligned}
+%%%\PD{V_{q R+m}}{E_r} &=
+%%%\inv{2 N + 1} \inv{v_T} \sum_{a = 1}^{2 N + 1} \overbar{F}_{r a} F_{a, q + 1}
+%%%\exp\lr{ F_{a,q+1} V_{q R+m} /v_T } \\
+%%%\PD{V_{q R+n}}{E_r} &=
+%%%-\inv{2 N + 1} \inv{v_T} \sum_{a = 1}^{2 N + 1} \overbar{F}_{r a} F_{a, q + 1}
+%%%\exp\lr{ -F_{a, q + 1} V_{q R+n} /v_T } \\
+%%%\PD{V_{s}}{E_r} &= 0, \qquad \mbox{ \( s \notin \setlr{q R + m, q R + n} \) }.
+%%%\end{aligned}
+%%%\end{equation}
+%%%
+%%%Note that the \( q \) values are all integers in the range \( [0, 2 N ] \).
 
 \EndArticle

@@ -118,9 +118,39 @@
 \usepackage{peeters_macros}
 \usepackage[english]{cleveref}
 \usepackage{peeters_layout}
+\usepackage{subfig}
+
+% (The subfig.sty package must be loaded for this to work.)
+
 % \citep:
 \PassOptionsToPackage{square,numbers}{natbib}
 \usepackage{natbib}
+
+
+%\begin{figure*}[!t]
+%\centering
+%\subfloat[Case I]{\includegraphics[width=2.5in]{box}%
+%\label{fig_first_case}}
+%\hfil
+%\subfloat[Case II]{\includegraphics[width=2.5in]{box}%
+%\label{fig_second_case}}
+%\caption{Simulation results.}
+%\label{fig_sim}
+%\end{figure*}
+
+% An .eps filename suffix will be assumed under latex, 
+% and a .pdf suffix will be assumed for pdflatex; or what has been declared
+% via \DeclareGraphicsExtensions.
+
+% \imageFigure{path}{caption}{label}{width}
+\renewcommand{\imageFigure}[4]{%
+%\begin{figure}[!t]%
+%\centering%
+%\includegraphics[width=2.5in]{#1}%
+%\caption{#2}%
+%\label{#3}%
+%\end{figure}%
+}
 
 % *** CITATION PACKAGES ***
 %
@@ -475,10 +505,10 @@
 \newcommand\MYhyperrefoptions{bookmarks=true,bookmarksnumbered=true,
 pdfpagemode={UseOutlines},plainpages=false,pdfpagelabels=true,
 colorlinks=true,linkcolor={black},citecolor={black},urlcolor={black},
-pdftitle={Harmonic balance solutions to non-linear circuits},
+pdftitle={Harmonic Balance solutions to non-linear circuits},
 pdfsubject={Multiphyiscs modeling},
 pdfauthor={Michael Royle, Peeter Joot},
-pdfkeywords={ECE1254, Harmonic balance, non-linear circuit, diode, discrete Fourier transform}}
+pdfkeywords={ECE1254, Harmonic Balance, non-linear circuit, diode, discrete Fourier transform}}
 %\ifCLASSINFOpdf
 %\usepackage[\MYhyperrefoptions,pdftex]{hyperref}
 %\else
@@ -544,7 +574,7 @@ pdfkeywords={ECE1254, Harmonic balance, non-linear circuit, diode, discrete Four
 % can use linebreaks \\ within to get better formatting as desired
 % Do not put math or special symbols in the title.
 \title{ECE1254 Final project \\ 
-Harmonic balance solutions to non-linear circuits
+Harmonic Balance solutions to non-linear circuits
 }
 %
 %
@@ -644,12 +674,17 @@ Harmonic balance solutions to non-linear circuits
 % in the abstract or keywords.
 \IEEEtitleabstractindextext{%
 \begin{abstract}
-FIXME: The abstract goes here.
+With this work the circuit solution system developed in ECE1254 for linear constant source circuits is extended to compute steady state responses to periodic sources.
+It is assumed that all input frequencies are multiples of a single fundamental frequency.
+The capability to solve diode models is also added to the RLC solution capacities developed previously.
+Anharmonic effects will be ignored, and it will be assumed that only periodic outputs with harmonics that are multiples of the input frequencies will be observed.
+The solution utilizes the \emph{Harmonic Balance} method described in \citep{giannini2004NonlinearMicrowaveCircuitDesign}, where
+time variation of the inputs and outputs is expressed as discrete time Fourier series expressed in a matrix form that can be handled readily by software.
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers.  Sync these up with the pdfkeywords above.
 \begin{IEEEkeywords}
-ECE1254, Harmonic balance, non-linear circuit, diode, discrete Fourier transform
+ECE1254, Harmonic Balance, non-linear circuit, diode, discrete Fourier transform
 \end{IEEEkeywords}}
 
 
@@ -718,7 +753,102 @@ ECE1254, Harmonic balance, non-linear circuit, diode, discrete Fourier transform
 % 
 % Here we have the typical use of a "T" for an initial drop letter
 % and "HIS" in caps to complete the first word.
-\IEEEPARstart{T}{he} purpose of this project is to extend the circuit solution system developed in ece1254 to non linear circuits with periodic single frequency sources, specifically adding the capability to solve diode models to the RLC solution capacities developed previously.  Anharmonic effects will be ignored, and it will be assumed that only periodic outputs with harmonics that are multiples of the input frequency will be observed.  Such a solution will be modelled using the \emph{Harmonic Balance} method described in \citep{giannini2004NonlinearMicrowaveCircuitDesign}.  This method models the time variation of the inputs and outputs as discrete time Fourier series, expressing them in a matrix form that can be handled readily in software.
+\IEEEPARstart{T}{he}
+Harmonic Balance method is an approach to determine the steady state response of nonlinear
+circuits.
+As only the steady state response of the circuit is of interest, the state of the circuit
+only needs to be determined over one period.
+Furthermore, it is assumed that for a sinusoidal input of a
+fundamental frequency, the output signal will consist of a summation of sinusoids of integer multiples of
+the input signal frequency (harmonics).
+The final assumption is that a finite number of these harmonics,
+\( N \), will be sufficient to accurately represent the output signal.
+From the DFT, to obtain \( N \) discrete frequencies, \( N \) linearly spaced (in time) samples of a
+signal are required.
+Or conversely, for \( N \) discrete frequencies, a signal with \( N \) time samples is required.
+The Harmonic Balance exploits the linear, time-invariant nature of circuits.
+In the time domain, the Modified Nodal Analysis (MNA) procdure results in a set of \( R \) equations.
+Translated into the 
+frequency domain, the result is \( R \times (2 N + 1) \) independent sets of equations.
+One way to
+think of this, is that each frequency can be considered its own independent circuit.
+
+The objective is to represent the linear circuit elements of the system in the form 
+
+\begin{equation}\label{eqn:ece1254projectReport:560}
+\BI = \BY \BV,
+\end{equation}
+
+with an ordering of the vector components given by
+
+\begin{equation}\label{eqn:ece1254projectReport:580}
+\BI = 
+\begin{bmatrix}
+I^{(1)}_{-N} \\
+I^{(2)}_{-N} \\
+%I^{(3)}_{-N} \\
+\vdots \\
+I^{(1)}_{1-N} \\
+I^{(2)}_{1-N} \\
+%I^{(3)}_{1-N} \\
+\vdots \\
+I^{(1)}_{N-1} \\
+I^{(2)}_{N-1} \\
+%I^{(3)}_{N-1} \\
+\vdots \\
+I^{(1)}_{N} \\
+I^{(2)}_{N} \\
+%I^{(3)}_{N} \\
+\vdots \\
+\end{bmatrix},
+\qquad \BV = 
+\begin{bmatrix}
+V^{(1)}_{-N} \\
+V^{(2)}_{-N} \\
+%V^{(3)}_{-N} \\
+\vdots \\
+V^{(1)}_{1-N} \\
+V^{(2)}_{1-N} \\
+%V^{(3)}_{1-N} \\
+\vdots \\
+V^{(1)}_{N-1} \\
+V^{(2)}_{N-1} \\
+%V^{(3)}_{N-1} \\
+\vdots \\
+V^{(1)}_{N} \\
+V^{(2)}_{N} \\
+%V^{(3)}_{N} \\
+\vdots \\
+\end{bmatrix}
+\end{equation}
+
+The superscript index of each element corresponds to the physical circuit node it is related to (i.e.
+current flowing to the node, or the node voltage).  
+Those unknown physical circuit elements are generated using a modified nodal analysis procedure.
+The subscript corresponds to the harmonic frequency, so the end result is as if there is a 
+node voltage for each harmonic frequency.
+
+Ordering the vectors this way allows a block diagonal admittance matrix to be generated (\citep{giannini2004NonlinearMicrowaveCircuitDesign}
+ \S 1.85)
+, consisting of the admittance matrix that would be seen for each frequency.
+%Peeter: I believe your code would give us the G and C matrices that arise from LMS formulations. This is
+%great as we can generate each block Y(n?0) = G - jn?0C.
+This ordering of the vectors requires a modification of the standard DFT matrix (A.11 or A.17).
+The standard DFT matrix is square with dimensions \( (2 N + 1 ) \times (2 N + 1 ) \).
+However, with the elements of \( \BV \) are grouped by frequency,
+this must be altered so that every value in each frequency group is multiplied by the same value in the DFT matrix.
+For \( R \) values in each group (corresponds to \( R \) unknowns of a circuit) the values in the original 
+matrix will be spaced by \( R \), padded with zeros.
+And these modified rows will be repeated and shifted
+right 1, \( M \) times.
+The resulting DFT matrix has dimension \( ( R (2 N + 1 ) \times R (2 N + 1) ) \)
+%(or use 2Nh +1)
+For the case of nonlinear components, there will be a current, \( \mathcal{I}(\Bv) \), produced at each time sample to be determined.
+By taking the DFT of these currents, the discrete frequency
+components of the nonlinear currents are obtained.
+Each nth-frequency component of this current would be added
+to the equation of the nth-set of MNA equations corresponding to the nodes the element is connected
+to.
 
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
@@ -730,6 +860,7 @@ ECE1254, Harmonic balance, non-linear circuit, diode, discrete Fourier transform
 
 \section{Background}
 \subsection{Discrete Fourier Transform}
+%\citep{giannini2004NonlinearMicrowaveCircuitDesign}
 
 Following \citep{giannini2004NonlinearMicrowaveCircuitDesign} \S A.4, the circuit sources and outputs are assumed to be periodic (\( \omega_0 T = 2 \pi \)), and bandwidth limited, described by the following discrete Fourier transform pair
 
@@ -784,12 +915,13 @@ X_{N}
 \),  \( \alpha = e^{ 2 \pi j /(2 N + 1) } \), and \( \BF \) defined as
 
 \begin{equation}\label{eqn:discreteFourierMatrixForm:360}
+\small
 \begin{bmatrix}
- \alpha^{ N N }         &  \alpha^{-  \lr{N-1} N }          & . &  \alpha^{\lr{N-1} N }        &  \alpha^{N N }         \\
- \alpha^{ N \lr{N-1} }  &  \alpha^{-  \lr{N-1} \lr{N-1} }   & . & \alpha^{\lr{N-1} \lr{N-1} }  &  \alpha^{N \lr{N-1} }  \\
- .                      &  .                              & . &  .                             &  .                       \\
- \alpha^{-N \lr{N-1} } &  \alpha^{\lr{N-1} \lr{N-1} }  & . & \alpha^{-  {N-1} \lr{N-1} }      &    \alpha^{-  N \lr{N-1} } \\
- \alpha^{-N N }        &  \alpha^{-  (1-N) N }                & . & \alpha^{-  \lr{N-1} N }          &  \alpha^{-  N N } \\
+ \alpha^{N N } &  \alpha^{\lr{N-1} N }  & . &  \alpha^{- \lr{N-1} N }  &  \alpha^{- N N } \\
+ \alpha^{N \lr{N-1} } &  \alpha^{\lr{N-1} \lr{N-1} }  & . &  \alpha^{- \lr{N-1} \lr{N-1} }  &  \alpha^{- N \lr{N-1} } \\
+ .              &  .                      & .      & .                           &  .               \\
+ \alpha^{- N \lr{N-1} } &  \alpha^{- \lr{N-1} \lr{N-1} }  & . &  \alpha^{{N-1} \lr{N-1} }  &  \alpha^{N \lr{N-1} } \\
+ \alpha^{- N N } &  \alpha^{- N N }  & . &  \alpha^{\lr{N-1} N }  &  \alpha^{N N } \\
 \end{bmatrix},
 \end{equation}
 
@@ -809,7 +941,7 @@ where \( \overbar{\BF} \) is the complex conjugate of \( \BF \).
 % needed in second column of first page if using \IEEEpubid
 %\IEEEpubidadjcol
 
-\subsection{Harmonic balance equations}
+\subsection{Harmonic Balance equations}
 
 The time domain MNA equations for an RLC network with non-linear sources can be put into the form
 
@@ -834,7 +966,7 @@ With \( R \) equal to the number of unknowns, \( S \) equal to the number of non
 \( \Bw(t) \in \text{\R{S \times 1}} \)
 \end{itemize}
 
-The matrix \( \Bu(t) \) contains has a non-zero value for each source frequency source in the system.  For example, if there is a DC source, and one source at twice the fundamental frequency, this would be
+The matrix \( \Bu(t) \) contains has a non-zero value for each source frequency source in the system.  For example, if there is a DC source (or a diode for which the model includes a DC source), and one source at twice the fundamental frequency, this would be
 
 \begin{equation}\label{eqn:ece1254projectReport:440}
 \Bu(t) = 
@@ -881,7 +1013,7 @@ the derivative has the form
 
 The Fourier component representation of the MNA equations can be written as
 
-\begin{equation}\label{eqn:ece1254projectReport:420}
+\begin{equation}\label{eqn:ece1254projectReport:600}
 \begin{aligned}
 0 = \sum_{n = -N}^N e^{j \omega_0 n t}
 &\Biglr{
@@ -889,19 +1021,19 @@ The Fourier component representation of the MNA equations can be written as
 \begin{bmatrix}
 X_n^{(1)} \\
 X_n^{(2)} \\
-\vdots
+\vdots \\
 \end{bmatrix} \\
    &- \BB 
 \begin{bmatrix}
 U_n^{(1)} \\
 U_n^{(2)} \\
-\vdots
+\vdots \\
 \end{bmatrix}
    - \BD 
 \begin{bmatrix}
 W_n^{(1)} \\
 W_n^{(2)} \\
-\vdots
+\vdots \\
 \end{bmatrix}
 }.
 \end{aligned}
@@ -918,29 +1050,166 @@ assumption of periodicity, each of these equations must separately equal zero fo
 \begin{bmatrix}
 V_n^{(1)} \\
 V_n^{(2)} \\
-\vdots
+\vdots \\
 \end{bmatrix}
 =
 \BB
 \begin{bmatrix}
 U_n^{(1)} \\
 U_n^{(2)} \\
-\vdots
+\vdots \\
 \end{bmatrix}
 +\BD
 \begin{bmatrix}
 W_n^{(1)} \\
 W_n^{(2)} \\
-\vdots
+\vdots \\
 \end{bmatrix}.
 \end{dmath}
 
 FIXME: describe block matrix formulation next.
 
 \section{Results}
-%\subsubsection{Subsubsection Heading Here}
-FIXME: Stuff here.
 
+Simulation results for a few representive circuit types are given below
+
+\begin{itemize}
+\item Simple rectifier circuit \cref{fig:simpleRectifierCircuit:simpleRectifierCircuit}.
+\item Typical rectifier circuit \cref{fig:typicalRectifierCircuit:typicalRectifierCircuit}.
+\item Low pass filter, Cut off Frequency is 5 MHz, Input Frequencies are 1 and 8 MHz \cref{fig:lowPassFilter:lowPassFilter}.
+\item Bridge rectifier circuit (multiple non-linear elements) \cref{fig:bridgeRectifier:bridgeRectifier}.
+\item Bridge rectifier circuit with capactitive filter \cref{fig:bridgeRectifierCapFilter:bridgeRectifierCapFilter}.
+\end{itemize}
+
+\begin{figure*}[!t]
+\centering
+\subfloat[Simple rectifier circuit diagram]{\includegraphics[width=1.5in]{../../figures/ece1254/report/simpleRectifierCircuitFig1}%
+\label{fig:simpleRectifierCircuit:simpleRectifierCircuitFig1}}
+\subfloat[Parameters]{%
+\small
+\begin{tabular}[b]{|l|r|} \hline
+  Parameter & Value \\ \hline\hline
+  \( \nu_0 \) & 1 MHz \\ \hline
+  \( I_0 \) & 10 mA (peak) \\ \hline
+  \( R_1 \) & 1 k \(\Omega\) \\ \hline
+  \( D_1, I_0 \) & 10 pA \\ \hline
+  \( D_1, V_T \) & 25 mV \\ \hline
+\end{tabular}
+\label{tab:simpleRectifierCircuit:simpleRectifierCircuitParameters}}
+\hfil
+\subfloat[Output.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/simpleRectifierCircuitFig2}%
+\label{fig:simpleRectifierCircuit:simpleRectifierCircuitFig2}}
+\subfloat[Number of harmonics retained.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/simpleRectifierCircuitFig4}%
+\label{fig:simpleRectifierCircuit:simpleRectifierCircuitFig4}}
+\caption{Simple rectifier circuit and simulation results.}
+\label{fig:simpleRectifierCircuit:simpleRectifierCircuit}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centering
+\subfloat[Typical rectifier circuit diagram]{\includegraphics[width=1.5in]{../../figures/ece1254/report/typicalRectifierCircuitFig1}%
+\label{fig:typicalRectifierCircuit:typicalRectifierCircuitFig1}}
+\subfloat[Parameters]{%
+\small
+\begin{tabular}[b]{|l|r|} \hline
+  Parameter & Value \\ \hline\hline
+  \( \nu_0 \) & 1 MHz \\ \hline
+  \( V_1 \) & 10 V (peak) \\ \hline
+  \( R_1 \) & 1 k \(\Omega\) \\ \hline
+  \( C_1 \) & 1 \(\mu\) F \\ \hline
+  \( D_1, I_0 \) & 10 pA \\ \hline
+  \( D_1, V_T \) & 25 mV \\ \hline
+\end{tabular}
+\label{tab:typicalRectifierCircuit:typicalRectifierCircuitParameters}}
+\hfil
+\subfloat[Output.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/typicalRectifierCircuitFig2}%
+\label{fig:typicalRectifierCircuit:typicalRectifierCircuitFig2}}
+\subfloat[Number of harmonics retained.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/typicalRectifierCircuitFig3}%
+\label{fig:typicalRectifierCircuit:typicalRectifierCircuitFig3}}
+\caption{Typical rectifier circuit and simulation results.}
+\label{fig:typicalRectifierCircuit:typicalRectifierCircuit}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centering
+\subfloat[Low pass filter circuit diagram]{\includegraphics[width=1.5in]{../../figures/ece1254/report/lowPassFilterFig1}%
+\label{fig:lowPassFilter:lowPassFilterFig1}}
+%\subfloat[Parameters]{%
+%\small
+%\begin{tabular}[b]{|l|r|} \hline
+%  Parameter & Value \\ \hline\hline
+%  \( \nu_0 \) & 1 MHz \\ \hline
+%  \( V_1 \) & 10 V (peak) \\ \hline
+%  \( R_1 \) & 1 k \(\Omega\) \\ \hline
+%  \( C_1 \) & 1 \(\mu\) F \\ \hline
+%  \( D_1, I_0 \) & 10 pA \\ \hline
+%  \( D_1, V_T \) & 25 mV \\ \hline
+%\end{tabular}
+%\label{tab:lowPassFilter:lowPassFilterParameters}}
+\hfil
+\subfloat[Source and output voltages.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/lowPassFilterFig2}%
+\label{fig:lowPassFilter:lowPassFilterFig2}}
+\subfloat[Input voltage spectrum.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/lowPassFilterFig3}%
+\label{fig:lowPassFilter:lowPassFilterFig3}}
+\subfloat[Output voltage spectrum.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/lowPassFilterFig4}%
+\label{fig:lowPassFilter:lowPassFilterFig3}}
+\caption{Low pass filter circuit and simulation results.}
+\label{fig:lowPassFilter:lowPassFilter}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centering
+\subfloat[Bridge rectifier circuit diagram]{\includegraphics[width=1.5in]{../../figures/ece1254/report/bridgeRectifierFig1}%
+\label{fig:bridgeRectifier:bridgeRectifierFig1}}
+%\subfloat[Parameters]{%
+%\small
+%\begin{tabular}[b]{|l|r|} \hline
+%  Parameter & Value \\ \hline\hline
+%  \( \nu_0 \) & 1 MHz \\ \hline
+%  \( V_1 \) & 10 V (peak) \\ \hline
+%  \( R_1 \) & 1 k \(\Omega\) \\ \hline
+%  \( C_1 \) & 1 \(\mu\) F \\ \hline
+%  \( D_1, I_0 \) & 10 pA \\ \hline
+%  \( D_1, V_T \) & 25 mV \\ \hline
+%\end{tabular}
+%\label{tab:bridgeRectifier:bridgeRectifierParameters}}
+\hfil
+\subfloat[Source and output voltages.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/bridgeRectifierFig2}%
+\label{fig:bridgeRectifier:bridgeRectifierFig2}}
+\subfloat[Source current.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/bridgeRectifierFig3}%
+\label{fig:bridgeRectifier:bridgeRectifierFig3}}
+\subfloat[Diode voltages.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/bridgeRectifierFig4}%
+\label{fig:bridgeRectifier:bridgeRectifierFig3}}
+\caption{Bridge rectifier circuit and simulation results.}
+\label{fig:bridgeRectifier:bridgeRectifier}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centering
+\subfloat[Bridge rectifier with capacitive filter circuit diagram]{\includegraphics[width=1.5in]{../../figures/ece1254/report/bridgeRectifierCapFilterFig1}%
+\label{fig:bridgeRectifierCapFilter:bridgeRectifierCapFilterFig1}}
+\subfloat[Parameters]{%
+\small
+\begin{tabular}[b]{|l|r|} \hline
+  Parameter & Value \\ \hline\hline
+  \( \nu_0 \) & 1 MHz \\ \hline
+  \( V_1 \) & 3.5 V (peak) \\ \hline
+  \( R_1 \) & 1 k \(\Omega\) \\ \hline
+  \( C_1 \) & 1 \(\mu\) F \\ \hline
+  \( D_i, I_0 \) & 10 pA \\ \hline
+  \( D_i, V_T \) & 25 mV \\ \hline
+\end{tabular}
+\label{tab:bridgeRectifierCapFilter:bridgeRectifierCapFilterParameters}}
+\hfil
+\subfloat[Source and output voltages.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/bridgeRectifierCapFilterFig2}%
+\label{fig:bridgeRectifierCapFilter:bridgeRectifierCapFilterFig2}}
+\subfloat[Source current.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/bridgeRectifierCapFilterFig3}%
+\label{fig:bridgeRectifierCapFilter:bridgeRectifierCapFilterFig3}}
+\subfloat[Diode voltages.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/bridgeRectifierCapFilterFig4}%
+\label{fig:bridgeRectifierCapFilter:bridgeRectifierCapFilterFig3}}
+\caption{Bridge rectifier circuit with capacitive filter and simulation results.}
+\label{fig:bridgeRectifierCapFilter:bridgeRectifierCapFilter}
+\end{figure*}
 
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
@@ -1183,16 +1452,12 @@ The authors would like to thank Prof.\ Piero Triverio.
 %Biography text here.
 %\end{IEEEbiography}
 
-% if you will not have a photo at all:
-\begin{IEEEbiographynophoto}{Michael Royle}
-Hi Mike.  anything you want to say about yourself?
-\end{IEEEbiographynophoto}
-%\begin{IEEEbiographynophoto}{Peeter Joot}
-%Part time ECE electromagnetics M.Eng student, Systems programmer with IBM DB2 since 1997.
-%\end{IEEEbiographynophoto}
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{../../figures/ece1254/MikeRoyle}}]{Michael Royle}
+M.A.Sc. Student, Electromagnetics Group, University of Toronto. B.Eng., Memorial University, '13. 
+\end{IEEEbiography}
 
 \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{../../figures/ece1254/peeter}}]{Peeter Joot}
-Part time ECE electromagnetics M.Eng student, Systems programmer with IBM DB2 since 1997.
+Systems programmer for IBM (DB2 product).  M.Eng. (part time), Electromagnetics, University of Toronto. B.A.Sc. Engineering Science (Computer), UofT '97. 
 \end{IEEEbiography}
 
 % insert where needed to balance the two columns on the last page with
