@@ -26,6 +26,7 @@ GENERATED_SOURCES += matlab.tex
 GENERATED_SOURCES += mathematica.tex 
 GENERATED_SOURCES += ps3amatlab.tex
 GENERATED_SOURCES += ps3bmatlab.tex
+GENERATED_SOURCES += projmatlab.tex
 
 EPS_FILES := $(wildcard $(FIGURES)/*.eps)
 PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))
@@ -34,8 +35,11 @@ THISBOOK_DEPS += $(PDFS_FROM_EPS)
 
 include ../make.rules
 
+#all :: proj
 proj :: ece1254projectReport.pdf
-all :: proj
+
+projmatlab.tex : ../METADATA ../../matlab/METADATA
+	(cd .. ; ./METADATA -matlab -latex -ece1254 -filter ece1254/HarmonicBalance ) > $@
 
 ps3bmatlab.tex : ../METADATA ../../matlab/METADATA
 	(cd .. ; ./METADATA -matlab -latex -ece1254 -filter ece1254/ps3b/ ) > $@
@@ -49,9 +53,10 @@ multiphysicsProblemSet3a.pdf : ps3amatlab.tex
 multiphysicsProblemSet3b.pdf : multiphysicsProblemSet3bProblem1.tex
 multiphysicsProblemSet3b.pdf : ps3bmatlab.tex
 
-ece1254projectReport.pdf :: $(PDF_DEPS)
+ece1254projectReport.pdf :: projmatlab.tex
 ece1254projectReport.pdf :: ece1254projectReport.tex
-ece1254projectReport.pdf :: discreteFourierInversion.tex
+#ece1254projectReport.pdf :: discreteFourierInversion.tex
+ece1254projectReport.pdf :: ./peeters_macros.sty ./peeters_layout.sty ./peeters_layout_exercise.sty ./macros_bm.sty 
 
 multiphysicsProblemSet1.pdf :: $(PDF_DEPS)
 multiphysicsProblemSet1.pdf :: multiphysicsProblemSet1Problem1.tex

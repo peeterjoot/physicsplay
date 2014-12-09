@@ -598,15 +598,20 @@ sub matlabIndexLatex
    my $urlpath = "https://raw.github.com/peeterjoot/matlab/master/" ;
 
    my $prologue1 ;
+   my $withHyperlinks = 1 ;
 
-   if ( $filter =~ m@/ps@ )
+   if ( $filter =~ m@/HarmonicBalance@ )
    {
-   $prologue1 = "
-" ;
-}
+      $prologue1 = "" ;
+      $withHyperlinks = 0 ;
+   }
+   elsif ( $filter =~ m@/ps@ )
+   {
+      $prologue1 = "" ;
+   }
    else
    {
-   $prologue1 =
+      $prologue1 =
 "
 %-------------------------------------------------------
 These Matlab notebooks, some just trivial ones used to generate figures, others more elaborate, and perhaps some even polished, can be found in
@@ -620,8 +625,6 @@ These notebooks are text files, but a matlab product is required to execute them
 my $out = "
 \\begin{itemize}
 " ;
-
-   my $foundCDF = 0 ;
 
    foreach ( sort datesort @matlab )
    {
@@ -639,13 +642,29 @@ my $out = "
       my $label = $path ;
       $label =~ s,/,:,g ;
 
-      $foundCDF++ if ( $path =~ /\.cdf$/i ) ;
-
       my $problemSetSolution = $_->{'PROBLEMSET'} ;
+      my $reference ;
+      my $phantomsection = "" ;
+      my $withdate = "" ;
+
+      if ( $withHyperlinks )
+      {
+         $reference = "\\href{$fullpath}{$path}" ;
+         $withdate = "$date" ;
+         
+         $phantomsection = "\\phantomsection \\label{path:$label}" ;
+      }
+      else
+      {
+         # this hackery is to cater to the ieee report class
+
+         $reference = "$path" ;
+         $reference =~ s,ece1254/,, ;
+      }
 
       if ( !$redacted or ($redacted and !defined $problemSetSolution) )
       {
-         $out .= qq(\\item \\phantomsection \\label{path:$label} $date \\href{$fullpath}{$path}
+         $out .= qq(\\item $phantomsection $withdate $reference
 
 $desc
 ) ;
