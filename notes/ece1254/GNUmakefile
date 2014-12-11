@@ -28,8 +28,8 @@ GENERATED_SOURCES += ps3amatlab.tex
 GENERATED_SOURCES += ps3bmatlab.tex
 GENERATED_SOURCES += projmatlab.tex
 
-EPS_FILES := $(wildcard $(FIGURES)/*.eps)
-PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))
+#EPS_FILES := $(wildcard $(FIGURES)/report/*.eps)
+#PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))
 
 THISBOOK_DEPS += $(PDFS_FROM_EPS)
 
@@ -37,6 +37,10 @@ include ../make.rules
 
 #all :: proj
 proj :: ece1254projectReport.pdf
+
+#ece1254projectReport.pdf :: $(PDFS_FROM_EPS)
+
+#epsconv : $(PDFS_FROM_EPS)
 
 projmatlab.tex : ../METADATA ../../matlab/METADATA
 	(cd .. ; ./METADATA -matlab -latex -ece1254 -filter ece1254/HarmonicBalance ) > $@
