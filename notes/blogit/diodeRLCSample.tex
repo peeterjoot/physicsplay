@@ -804,11 +804,11 @@ This shows the stamping pattern required to form the non-linear portion of the H
 
 %\begin{equation}\label{eqn:diodeRLCSample:820}
 \boxedEquation{eqn:diodeRLCSample:820}{
-\mathcal{G} \BV = \BI + \mathcal{I}(\BV),
+\BY \BV = \BI + \mathcal{I}(\BV),
 }
 %\end{equation}
 
-Here \( \mathcal{G} \) is block diagonal, and in general has blocks of \( \BG + j \omega_0 n \BC \).  The matrix \( \BI \) was generated from the Fourier coeffients of all the linear sources, and \( \mathcal{I}(\BV) \) encodes all the non-linear contributions to the system.
+Here \( \BY \) is block diagonal, and in general has blocks of \( \BG + j \omega_0 n \BC \).  The matrix \( \BI \) was generated from the Fourier coeffients of all the linear sources, and \( \mathcal{I}(\BV) \) encodes all the non-linear contributions to the system.
 
 \paragraph{More general non-linear structure, for multiple diodes}
 
@@ -906,7 +906,7 @@ This is now completely expressed in terms of the unknown Fourier component vecto
 In order to solve the system, Newton's method on the Fourier coeffients is required.  Solutions to \( \FF(\BV) = 0 \) are sought, where
 
 \begin{equation}\label{eqn:diodeRLCSample:840}
-\FF(\BV) = \mathcal{G} \BV - \BI - \mathcal{I}(\BV).
+\FF(\BV) = \BY \BV - \BI - \mathcal{I}(\BV).
 \end{equation}
 
 Here the sources current vector DFT coordinates have been split into the linear contributions \( \BI \) and nonlinear contributions \( \mathcal{I} \) defined by \cref{eqn:diodeRLCSample:700}.
@@ -914,7 +914,7 @@ Here the sources current vector DFT coordinates have been split into the linear 
 Working with ones-indexed coordinates of \( \BV = [V_k]_k \), where \( k \in [1, R(2 N + 1) ] \), the Jacobian is
 
 \begin{equation}\label{eqn:diodeRLCSample:860}
-\BJ = \mathcal{G} - {[ \PDi{V_s}{\mathcal{I}_r} ]}_{rs}.
+\BJ = \BY - {[ \PDi{V_s}{\mathcal{I}_r} ]}_{rs}.
 \end{equation}
 
 To calculate these partials we need the partials of the coordinates of \( \BE \) of
@@ -1032,7 +1032,7 @@ The full Jacobian of \( \mathcal{I}(\BV) \) is
 Where \( \PDi{\BV}{E_{k}^{(i)}} \) is the kth row of \( \BJ_{\BE^{(i)}} \).  The complete Jacobian is
 
 \begin{equation}\label{eqn:diodeRLCSample:1100}
-\BJ = \mathcal{G} - \BJ_{\mathcal{I}}(\BV).
+\BJ = \BY - \BJ_{\mathcal{I}}(\BV).
 \end{equation}
 
 %%%\paragraph{Optimization attempt}
@@ -1069,5 +1069,196 @@ Where \( \PDi{\BV}{E_{k}^{(i)}} \) is the kth row of \( \BJ_{\BE^{(i)}} \).  The
 %%%\end{equation}
 %%%
 %%%Note that the \( q \) values are all integers in the range \( [0, 2 N ] \).
+
+\section{A matrix formulation of Harmonic Balance non-linear currents}
+
+Because it was simple, a coordinate expansion of the Jacobian of the non-linear currents was good to get a feeling for the structure of the equations.  However, a Jacobian of that form is impossibly slow to compute for larger \( N \).  
+It seems plausible that eliminating the coordinate expansion, 
+expressing both the currrent and the Jacobian directly in terms of the Harmonic Balance unknowns vector \( \BV \), would lead to a simpler set of equations that could be implemented in a computationally more effective way.
+
+To aid in this discovery, consider the simple RC load diode circuit of \cref{fig:diodeWithResistor:diodeWithResistorAndCapacitorFig1}.  It's not too hard to start from scratch with the time domain nodal equations for this circuit, which are
+
+\imageFigure{../../figures/ece1254/diodeWithResistorAndCapacitorFig1}{Simple diode and resistor circuit}{fig:diodeWithResistor:diodeWithResistorAndCapacitorFig1}{0.3}
+
+
+\begin{enumerate}
+\item \( 0 = i_s - i_d \)
+\item \( Z v^{(2)} + C dv^{(2)}/dt = i_d  \)
+\item \( i_d = I_0 \lr{ e^{(v^{(1)} - v^{(2)})/V_T} - 1} \)
+\end{enumerate}
+
+To setup for matrix form, let
+
+\begin{subequations}
+\begin{equation}\label{eqn:diodeRLCSample:1240}
+\Bv(t) =
+\begin{bmatrix}
+v^{(1)}(t) \\
+v^{(2)}(t) \\
+\end{bmatrix}
+\end{equation}
+\begin{equation}\label{eqn:diodeRLCSample:1140}
+\BG =
+\begin{bmatrix}
+0 & 0 \\
+0 & Z \\
+\end{bmatrix}
+\end{equation}
+\begin{equation}\label{eqn:diodeRLCSample:1160}
+\BC =
+\begin{bmatrix}
+0 & 0 \\
+0 & C \\
+\end{bmatrix}
+\end{equation}
+\begin{equation}\label{eqn:diodeRLCSample:1180}
+\Bd = 
+\begin{bmatrix}
+1 \\
+-1
+\end{bmatrix}
+\end{equation}
+\begin{equation}\label{eqn:diodeRLCSample:1200}
+\Bb = 
+\begin{bmatrix}
+1 \\
+0
+\end{bmatrix},
+\end{equation}
+\end{subequations}
+
+so that the time domain equations can be written as
+
+\begin{dmath}\label{eqn:diodeRLCSample:1220}
+\BG \Bv(t)
++ \BC \Bv'(t)
+=
+\Bb i_s(t)
++
+I_0
+\Bd 
+\lr{
+e^{ (v^{(1)}(t) - v^{(2)}(t))/V_T} - 1
+}
+=
+\begin{bmatrix}
+\Bb & -I_0 \Bd
+\end{bmatrix}
+\begin{bmatrix}
+i_s(t) \\
+1
+\end{bmatrix}
++
+I_0 \Bd
+e^{ (v^{(1)}(t) - v^{(2)}(t))/V_T}.
+\end{dmath}
+
+Harmonic Balance is essentially the 
+assumption that the input and outputs are assumed to be a bandwidth limited periodic signal, and the non-linear components can be approximated by the same
+
+\begin{subequations}
+\begin{equation}\label{eqn:diodeRLCSample:1260}
+i_s(t) = \sum_{n=-N}^N I^{(s)}_n e^{ j \omega_0 n t },
+\end{equation}
+\begin{equation}\label{eqn:diodeRLCSample:1280}
+v^{(k)}(t) = 
+\sum_{n=-N}^N V^{(k)}_n e^{ j \omega_0 n t },
+\end{equation}
+\begin{equation}\label{eqn:diodeRLCSample:1300}
+g(t) = 
+e^{ (v^{(1)}(t) - v^{(2)}(t))/V_T}
+\simeq
+\sum_{n=-N}^N G_n e^{ j \omega_0 n t },
+\end{equation}
+\end{subequations}
+
+The approximation in \cref{eqn:diodeRLCSample:1300} is an equality only at the Nykvist sampling times \( t_k = T k/(2 N + 1) \).  The Fourier series provides a periodic extension to other times that will approximate the underlying periodic non-linear relation.
+
+With all the time dependence locked into the exponentials, the derivatives are really easy to calculate
+
+\begin{equation}\label{eqn:diodeRLCSample:1280}
+\frac{d}{dt} v^{(k)}(t) = 
+\sum_{n=-N}^N j \omega_0 n V^{(k)}_n e^{ j \omega_0 n t }.
+\end{equation}
+
+Inserting all of these into \cref{eqn:diodeRLCSample:1220} gives
+
+\begin{equation}\label{eqn:diodeRLCSample:1320}
+\sum_{n=-N}^N e^{ j \omega_0 n t} \lr{ \BG + j \omega_0 n \BC } 
+\begin{bmatrix}
+V^{(1)}_n \\
+V^{(2)}_n \\
+\end{bmatrix}
+=
+\sum_{n=-N}^N e^{ j \omega_0 n t} 
+\lr{
+-I_0 \Bd \delta_{n 0}
++
+\Bb I^{(s)}_n
++ I_0 \Bd G_n
+}.
+\end{equation}
+
+The periodic assumption requires equality for each \( e^{j \omega_0 n t} \), or
+
+\begin{equation}\label{eqn:diodeRLCSample:1340}
+\lr{ \BG + j \omega_0 n \BC } 
+\begin{bmatrix}
+V^{(1)}_n \\
+V^{(2)}_n \\
+\end{bmatrix}
+=
+-I_0 \Bd \delta_{n 0}
++
+\Bb I^{(s)}_n
++ I_0 \Bd G_n.
+\end{equation}
+
+For illustration, consider the \( N = 1 \) case, where the block matrix form is
+
+\begin{equation}\label{eqn:diodeRLCSample:1360}
+\begin{bmatrix}
+\BG + j \omega_0 (-1) \BC & 0 & 0 \\
+0 & \BG + j \omega_0 (0) \BC & 0 \\
+0 & 0 & \BG + j \omega_0 (1) \BC  
+\end{bmatrix}
+\begin{bmatrix}
+\begin{bmatrix}
+V^{(1)}_{-1} \\
+V^{(2)}_{-1} \\
+\end{bmatrix} \\
+\begin{bmatrix}
+V^{(1)}_{0} \\
+V^{(2)}_{0} \\
+\end{bmatrix} \\
+\begin{bmatrix}
+V^{(1)}_{1} \\
+V^{(2)}_{1} \\
+\end{bmatrix}
+\end{bmatrix}
+=
+\begin{bmatrix}
+\Bb I^{(s)}_{-1} \\
+\Bb I^{(s)}_{0} - I_0 \Bd \\
+\Bb I^{(s)}_{1} \\
+\end{bmatrix}
++
+I_0
+\begin{bmatrix}
+\Bd G_{-1} \\
+\Bd G_{0} \\
+\Bd G_{1} \\
+\end{bmatrix}.
+\end{equation}
+
+The structure of this equation is
+
+\begin{equation}\label{eqn:diodeRLCSample:1380}
+\BY \BV = \BI + \mathcal{I}(\BV).
+\end{equation}
+
+The structure of this last non-linear term is what has to be examined.
+
+%Assuming periodic inputs and outputs the frequency domain equivalent 
 
 \EndArticle
