@@ -1165,10 +1165,10 @@ v^{(k)}(t) =
 \sum_{n=-N}^N V^{(k)}_n e^{ j \omega_0 n t },
 \end{equation}
 \begin{equation}\label{eqn:diodeRLCSample:1300}
-g(t) = 
+\epsilon(t) = 
 e^{ (v^{(1)}(t) - v^{(2)}(t))/V_T}
 \simeq
-\sum_{n=-N}^N G_n e^{ j \omega_0 n t },
+\sum_{n=-N}^N E_n e^{ j \omega_0 n t },
 \end{equation}
 \end{subequations}
 
@@ -1195,7 +1195,7 @@ V^{(2)}_n \\
 -I_0 \Bd \delta_{n 0}
 +
 \Bb I^{(s)}_n
-+ I_0 \Bd G_n
++ I_0 \Bd E_n
 }.
 \end{equation}
 
@@ -1211,7 +1211,7 @@ V^{(2)}_n \\
 -I_0 \Bd \delta_{n 0}
 +
 \Bb I^{(s)}_n
-+ I_0 \Bd G_n.
++ I_0 \Bd E_n.
 \end{equation}
 
 For illustration, consider the \( N = 1 \) case, where the block matrix form is
@@ -1245,20 +1245,74 @@ V^{(2)}_{1} \\
 +
 I_0
 \begin{bmatrix}
-\Bd G_{-1} \\
-\Bd G_{0} \\
-\Bd G_{1} \\
+\Bd E_{-1} \\
+\Bd E_{0} \\
+\Bd E_{1} \\
 \end{bmatrix}.
 \end{equation}
 
 The structure of this equation is
 
 \begin{equation}\label{eqn:diodeRLCSample:1380}
-\BY \BV = \BI + \mathcal{I}(\BV).
+\BY \BV = \BI + \mathcal{I}(\BV),
 \end{equation}
 
-The structure of this last non-linear term is what has to be examined.
+The non-linear current \( \mathcal{I}(\BV) \) needs to be examined further.  How much of this can be precomputed, and what is the simplest way to compute the Jacobian?
 
-%Assuming periodic inputs and outputs the frequency domain equivalent 
+With 
+
+\begin{equation}\label{eqn:diodeRLCSample:1400}
+\BE =
+\begin{bmatrix}
+E_{-1} \\
+E_{0} \\
+E_{1} \\
+\end{bmatrix}, \qquad
+\Bepsilon =
+\begin{bmatrix}
+\epsilon_{-1} \\
+\epsilon_{0} \\
+\epsilon_{1} \\
+\end{bmatrix},
+\end{equation}
+
+the non-linear current is
+
+\begin{dmath}\label{eqn:diodeRLCSample:1420}
+\mathcal{I} = 
+I_0
+\begin{bmatrix}
+\Bd E_{-1} \\
+\Bd E_{0} \\
+\Bd E_{1} \\
+\end{bmatrix}
+=
+I_0
+\begin{bmatrix}
+\Bd \begin{bmatrix} 1 & 0 & 0 \end{bmatrix} \BE \\
+\Bd \begin{bmatrix} 0 & 1 & 0 \end{bmatrix} \BE \\
+\Bd \begin{bmatrix} 0 & 0 & 1 \end{bmatrix} \BE
+\end{bmatrix}.
+\end{dmath}
+
+The Fourier vector \( \BE = \BF^{-1} \Bepsilon \) can be factored out, leaving
+
+\begin{dmath}\label{eqn:diodeRLCSample:1420}
+\mathcal{I} = 
+I_0
+\begin{bmatrix}
+\Bd E_{-1} \\
+\Bd E_{0} \\
+\Bd E_{1} \\
+\end{bmatrix}
+=
+I_0
+\begin{bmatrix}
+\Bd & 0 & 0 \\
+0 & \Bd & 0 \\
+0 &     & \Bd \\
+\end{bmatrix}
+\BF^{-1} \Be.
+\end{dmath}
 
 \EndArticle

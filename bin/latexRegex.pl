@@ -19,8 +19,8 @@
 #s/\\EC/E_{\\mathrm{C}}/g ;
 #s/\\Ed/E_{\\mathrm{d}}/g ;
 #s/\\ED/E_{\\mathrm{D}}/g ;
-#s/\\ee/\\Bepsilon/g ;
-#s/\\ee/\\epsilon/g ;
+s/\\Be\b/\\Bepsilon/g ;
+s/\\ee/\\epsilon/g ;
 #s/\\ee/\\mathcal{E}/g ;
 #s/\\Eg/E_{\\mathrm{g}}/g ;
 #s/\\ES/E_{\\mathrm{S}}/g ;
@@ -128,3 +128,4 @@ s/\\i(\d)/{($1)}/g;
 #s/\\ik\+1/{(k+1)}/g;
 #s/\\ik\-1/{(k-1)}/g;
 #s/\\ik/{(k)}/g;
+s/\\II/\\mathcal{I}/g ;
