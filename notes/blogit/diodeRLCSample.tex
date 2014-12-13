@@ -1300,19 +1300,121 @@ The Fourier vector \( \BE = \BF^{-1} \Bepsilon \) can be factored out, leaving
 \begin{dmath}\label{eqn:diodeRLCSample:1420}
 \mathcal{I} = 
 I_0
-\begin{bmatrix}
-\Bd E_{-1} \\
-\Bd E_{0} \\
-\Bd E_{1} \\
-\end{bmatrix}
-=
-I_0
+\BD
+\BF^{-1} \Bepsilon,
+\end{dmath}
+
+where
+\begin{dmath}\label{eqn:diodeRLCSample:1480}
+\BD =
 \begin{bmatrix}
 \Bd & 0 & 0 \\
 0 & \Bd & 0 \\
-0 &     & \Bd \\
-\end{bmatrix}
-\BF^{-1} \Be.
+0 & 0   & \Bd \\
+\end{bmatrix}.
 \end{dmath}
+
+The next step is finding an appropriate form for \( \Bepsilon \)
+
+\begin{dmath}\label{eqn:diodeRLCSample:1440}
+\Bepsilon = 
+\begin{bmatrix}
+\epsilon(t_{-1}) \\
+\epsilon(t_{0}) \\
+\epsilon(t_{1}) \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+\exp\lr{ \lr{ v^{(1)}_{-1} - v^{(2)}_{-1} }/V_T } \\
+\exp\lr{ \lr{ v^{(1)}_{0} - v^{(2)}_{0} }/V_T } \\
+\exp\lr{ \lr{ v^{(1)}_{1} - v^{(2)}_{1} }/V_T }
+\end{bmatrix}
+=
+\begin{bmatrix}
+\exp\lr{ 
+\begin{bmatrix}
+1 & 0 & 0 
+\end{bmatrix}
+\lr{ \Bv^{(1)} - \Bv^{(2)} }/V_T } \\
+\exp\lr{ 
+\begin{bmatrix}
+0 & 1 & 0 
+\end{bmatrix}
+\lr{ \Bv^{(1)} - \Bv^{(2)} }/V_T } \\
+\exp\lr{ 
+\begin{bmatrix}
+0 & 0 & 1 
+\end{bmatrix}
+\lr{ \Bv^{(1)} - \Bv^{(2)} }/V_T } \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+\exp\lr{ 
+\begin{bmatrix}
+1 & 0 & 0 
+\end{bmatrix}
+\BF
+\lr{ \BV^{(1)} - \BV^{(2)} }/V_T } \\
+\exp\lr{ 
+\begin{bmatrix}
+0 & 1 & 0 
+\end{bmatrix}
+\BF
+\lr{ \BV^{(1)} - \BV^{(2)} }/V_T } \\
+\exp\lr{ 
+\begin{bmatrix}
+0 & 0 & 1 
+\end{bmatrix}
+\BF
+\lr{ \BV^{(1)} - \BV^{(2)} }/V_T } \\
+\end{bmatrix}.
+\end{dmath}
+
+It would be nice to have the difference of frequency domain vectors expressed in terms of \( \BV \), which can be done with a bit of rearrangement
+
+\begin{dmath}\label{eqn:diodeRLCSample:1460}
+\BV^{(1)} - \BV^{(2)} 
+=
+\begin{bmatrix}
+V^{(1)}_{-1} - V^{(2)}_{-1} \\
+V^{(1)}_{0} - V^{(2)}_{0} \\
+V^{(1)}_{1} - V^{(2)}_{1} \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & -1 & 0 & 0 & 0 & 0 \\
+0 &  0 & 1 & -1 & 0 & 0 \\
+0 &  0 & 0 & 0 & 1 & -1 \\
+\end{bmatrix}
+\begin{bmatrix}
+V_{-1}^{(1)} \\
+V_{-1}^{(2)} \\
+V_{0}^{(1)} \\
+V_{0}^{(2)} \\
+V_{1}^{(1)} \\
+V_{1}^{(2)} \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+\Bd^\T & 0 & 0 \\
+0 & \Bd^\T & 0 \\
+0 & 0 & \Bd^\T \\
+\end{bmatrix}
+\BV
+= \BD^\T \BV
+\end{dmath}
+
+The non-linear current can now be completely expressed in terms of \( \BV \) 
+
+\begin{dmath}\label{eqn:diodeRLCSample:1500}
+\mathcal{I} = I_0 \BD \BF^{-1} 
+{\begin{bmatrix}
+\exp\lr{
+\lr{\BF \BD^\T \BV/V_T}_i
+}
+\end{bmatrix}}_{i}.
+\end{dmath}
+
+The last matrix of exponentials is an \( (2 N + 1) \times 1 \) vector with \( i \in [1, R] \), and each component of that vector of exponentials selects one component of the \( 2 N + 1 \) dimensional vector \( \BF \BD^\T \BV \).
 
 \EndArticle
