@@ -1176,7 +1176,7 @@ The approximation in \cref{eqn:diodeRLCSample:1300} is an equality only at the N
 
 With all the time dependence locked into the exponentials, the derivatives are really easy to calculate
 
-\begin{equation}\label{eqn:diodeRLCSample:1280}
+\begin{equation}\label{eqn:diodeRLCSample:1281}
 \frac{d}{dt} v^{(k)}(t) = 
 \sum_{n=-N}^N j \omega_0 n V^{(k)}_n e^{ j \omega_0 n t }.
 \end{equation}
@@ -1484,7 +1484,7 @@ h_{kj}
 \exp\lr{ \Bh_k^\T \BV }.
 \end{dmath}
 
-With \( \BU = [h_{ij} \exp\lr{ \Bh_i^\T \BV }]_{ij} \), 
+Factoring out \( \BU = [h_{ij} \exp\lr{ \Bh_i^\T \BV }]_{ij} \), 
 
 \begin{dmath}\label{eqn:diodeRLCSample:1640}
 \BJ^{\mathcal{I}}
@@ -1492,20 +1492,29 @@ With \( \BU = [h_{ij} \exp\lr{ \Bh_i^\T \BV }]_{ij} \),
 = 
 \BA 
 \begin{bmatrix}
-\begin{bmatrix} h_{11} & h_{12} & \cdots \end{bmatrix} \exp\lr{ \Bh_1^\T \BV } \\
-\begin{bmatrix} h_{21} & h_{22} & \cdots \end{bmatrix} \exp\lr{ \Bh_2^\T \BV } \\
-\vdots \\
+\begin{bmatrix} h_{11} & h_{12} & \cdots h_{1, R(2 N + 1)}\end{bmatrix} \exp\lr{ \Bh_1^\T \BV } \\
+\begin{bmatrix} h_{21} & h_{22} & \cdots h_{2, R(2 N + 1)}\end{bmatrix} \exp\lr{ \Bh_2^\T \BV } \\
+\begin{bmatrix} h_{31} & h_{32} & \cdots h_{3, R(2 N + 1)}\end{bmatrix} \exp\lr{ \Bh_3^\T \BV } \\
 \end{bmatrix}
 =
 \BA
 \begin{bmatrix}
 \Bh_1^\T \exp\lr{ \Bh_1^\T \BV } \\
 \Bh_2^\T \exp\lr{ \Bh_2^\T \BV } \\
-\vdots
-\end{bmatrix},
+\Bh_3^\T \exp\lr{ \Bh_3^\T \BV } \\
+\end{bmatrix}.
 \end{dmath}
 
-or
+A quick sanity check of dimensions seems worthwhile, and shows that all is well
+
+\begin{itemize}
+\item \( \BA \) : \( R(2 N + 1) \times 2 N + 1 \)
+\item \( \BU \) : \( 2 N + 1 \times R(2 N + 1) \)
+\item \( \BJ^{\mathcal{I}} \) : \( R(2 N + 1) \times R(2 N + 1) \)
+\end{itemize}
+
+The Jacobian of the non-linear current is now completely determined
+
 %\begin{dmath}\label{eqn:diodeRLCSample:1660}
 \boxedEquation{eqn:diodeRLCSample:1660}{
 \BJ^{\mathcal{I}}( \BV ) =
@@ -1513,7 +1522,7 @@ I_0 \BD \BF^{-1}
 \begin{bmatrix}
 \Bh_1^\T \exp\lr{ \Bh_1^\T \BV } \\
 \Bh_2^\T \exp\lr{ \Bh_2^\T \BV } \\
-\vdots
+\Bh_3^\T \exp\lr{ \Bh_3^\T \BV } \\
 \end{bmatrix}.
 %\end{dmath}
 }
