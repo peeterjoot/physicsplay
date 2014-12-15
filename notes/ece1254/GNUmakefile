@@ -43,7 +43,7 @@ proj :: ece1254projectReport.pdf
 #epsconv : $(PDFS_FROM_EPS)
 
 projmatlab.tex : ../METADATA ../../matlab/METADATA
-	(cd .. ; ./METADATA -matlab -latex -ece1254 -filter ece1254/HarmonicBalance ) > $@
+	(cd .. ; ./METADATA -matlab -latex -ece1254 -filter ece1254/proj ) > $@
 
 ps3bmatlab.tex : ../METADATA ../../matlab/METADATA
 	(cd .. ; ./METADATA -matlab -latex -ece1254 -filter ece1254/ps3b/ ) > $@
