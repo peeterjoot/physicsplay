@@ -1292,27 +1292,36 @@ I_0
 \Bd \begin{bmatrix} 1 & 0 & 0 \end{bmatrix} \BE \\
 \Bd \begin{bmatrix} 0 & 1 & 0 \end{bmatrix} \BE \\
 \Bd \begin{bmatrix} 0 & 0 & 1 \end{bmatrix} \BE
-\end{bmatrix}.
-\end{dmath}
-
-The Fourier vector \( \BE = \BF^{-1} \Bepsilon \) can be factored out, leaving
-
-\begin{dmath}\label{eqn:diodeRLCSample:1420}
-\mathcal{I} = 
+\end{bmatrix}
+=
 I_0
-\BD
-\BF^{-1} \Bepsilon,
+\begin{bmatrix}
+\Bd & 0 & 0 \\
+0 & \Bd & 0 \\
+0 & 0 & \Bd 
+\end{bmatrix}
+\BF^{-1} \Bepsilon
 \end{dmath}
 
-where
+In the last step \( \BE = \BF^{-1} \Bepsilon \) has been factored out (in its inverse Fourier form).  With
+
 \begin{dmath}\label{eqn:diodeRLCSample:1480}
 \BD =
 \begin{bmatrix}
 \Bd & 0 & 0 \\
 0 & \Bd & 0 \\
 0 & 0   & \Bd \\
-\end{bmatrix}.
+\end{bmatrix},
 \end{dmath}
+
+the current is
+
+%\begin{dmath}\label{eqn:diodeRLCSample:1540}
+\boxedEquation{eqn:diodeRLCSample:1540}{
+\mathcal{I}(\BV) = 
+I_0 \BD \BF^{-1} \Bepsilon(\BV).
+}
+%\end{dmath}
 
 The next step is finding an appropriate form for \( \Bepsilon \)
 
@@ -1401,20 +1410,138 @@ V_{1}^{(2)} \\
 0 & 0 & \Bd^\T \\
 \end{bmatrix}
 \BV
-= \BD^\T \BV
+= \BD^\T \BV,
 \end{dmath}
 
-The non-linear current can now be completely expressed in terms of \( \BV \) 
+%To summarize, let
+%
+%\begin{dmath}\label{eqn:diodeRLCSample:1500}
+%\begin{aligned}
+%\BA^{(1)} &= 
+%I_0 \begin{bmatrix} \Bd & 0 & 0 \end{bmatrix} \BF^{-1} \\
+%\BA^{(2)} &= 
+%I_0 \begin{bmatrix} 0 & \Bd & 0 \end{bmatrix} \BF^{-1} \\ 
+%\BA^{(3)} &= 
+%I_0 \begin{bmatrix} 0 & 0 & \Bd \end{bmatrix} \BF^{-1} \\
+%\end{aligned},
+%\end{dmath}
+%
+%and
+\begin{equation}\label{eqn:diodeRLCSample:1520}
+\BH 
+= 
+\BF \BD^\T /V_T
+=
+\begin{bmatrix}
+\Bh_1^\T \\
+\Bh_2^\T \\
+\Bh_3^\T
+\end{bmatrix},
+\end{equation}
 
-\begin{dmath}\label{eqn:diodeRLCSample:1500}
-\mathcal{I} = I_0 \BD \BF^{-1} 
-{\begin{bmatrix}
-\exp\lr{
-\lr{\BF \BD^\T \BV/V_T}_i
+which allows the non-linear current to can now be completely expressed in terms of \( \BV \).  
+
+%\begin{dmath}\label{eqn:diodeRLCSample:1560}
+\boxedEquation{eqn:diodeRLCSample:1560}{
+\Bepsilon(\BV)
+=
+\begin{bmatrix}
+e^{\Bh_1^\T \BV} \\
+e^{\Bh_2^\T \BV} \\
+e^{\Bh_3^\T \BV} \\
+\end{bmatrix}.
 }
-\end{bmatrix}}_{i}.
+%\end{dmath}
+
+\paragraph{Jacobian}
+
+With a compact matrix representation of the non-linear current, attention can now be turned to the Jacobian of the non-linear current.  Let \( \BA = I_0 \BD \BF^{-1} = [ a_{ij} ]_{ij} \), the current (with summation implied) is
+
+\begin{dmath}\label{eqn:diodeRLCSample:1580}
+\mathcal{I} = 
+\begin{bmatrix}
+a_{ik} \epsilon_k,
+\end{bmatrix}
 \end{dmath}
 
-The last matrix of exponentials is an \( (2 N + 1) \times 1 \) vector with \( i \in [1, R] \), and each component of that vector of exponentials selects one component of the \( 2 N + 1 \) dimensional vector \( \BF \BD^\T \BV \).
+with coordinates
+
+\begin{dmath}\label{eqn:diodeRLCSample:1600}
+\mathcal{I}_i = a_{ik} \epsilon_k = a_{ik} \exp\lr{ \Bh_k^\T \BV }.
+\end{dmath}
+
+so the Jacobian components are
+
+\begin{dmath}\label{eqn:diodeRLCSample:1620}
+[\BJ^{\mathcal{I}}]_{ij} 
+= 
+a_{ik} \epsilon_k = a_{ik} 
+\PD{V_j}{}
+\exp\lr{ \Bh_k^\T \BV }
+= 
+a_{ik} 
+h_{kj}
+\exp\lr{ \Bh_k^\T \BV }.
+\end{dmath}
+
+With \( \BU = [h_{ij} \exp\lr{ \Bh_i^\T \BV }]_{ij} \), 
+
+\begin{dmath}\label{eqn:diodeRLCSample:1640}
+\BJ^{\mathcal{I}}
+= \BA \BU
+= 
+\BA 
+\begin{bmatrix}
+\begin{bmatrix} h_{11} & h_{12} & \cdots \end{bmatrix} \exp\lr{ \Bh_1^\T \BV } \\
+\begin{bmatrix} h_{21} & h_{22} & \cdots \end{bmatrix} \exp\lr{ \Bh_2^\T \BV } \\
+\vdots \\
+\end{bmatrix}
+=
+\BA
+\begin{bmatrix}
+\Bh_1^\T \exp\lr{ \Bh_1^\T \BV } \\
+\Bh_2^\T \exp\lr{ \Bh_2^\T \BV } \\
+\vdots
+\end{bmatrix},
+\end{dmath}
+
+or
+%\begin{dmath}\label{eqn:diodeRLCSample:1660}
+\boxedEquation{eqn:diodeRLCSample:1660}{
+\BJ^{\mathcal{I}}( \BV ) =
+I_0 \BD \BF^{-1} 
+\begin{bmatrix}
+\Bh_1^\T \exp\lr{ \Bh_1^\T \BV } \\
+\Bh_2^\T \exp\lr{ \Bh_2^\T \BV } \\
+\vdots
+\end{bmatrix}.
+%\end{dmath}
+}
+
+\paragraph{Newton's method solution}
+
+All the pieces required for a Newton's method solution are now in place.  The goal is to find a value of \( \BV \) that provides the zero
+
+\begin{dmath}\label{eqn:diodeRLCSample:1680}
+f(\BV) = \BY \BV - \BI - \mathcal{I}(\BV).
+\end{dmath}
+
+Expansion to first order around an initial guess \( \BV^0 \), gives
+
+\begin{dmath}\label{eqn:diodeRLCSample:1700}
+f( \BV^0 + \Delta \BV ) = f(\BV^0) + \BJ(\BV^0) \Delta \BV \approx 0,
+\end{dmath}
+
+where the full Jacobian of \( f(\BV) \) is
+
+\begin{dmath}\label{eqn:diodeRLCSample:1720}
+\BJ(\BV) = \BY - \BJ^{\mathcal{I}}(\BV).
+\end{dmath}
+
+The Newton's method refinement of the initial guess follows by inversion
+
+\begin{dmath}\label{eqn:diodeRLCSample:1740}
+\Delta \BV = -\lr{ \BY - \BJ^{\mathcal{I}}(\BV^0) }^{-1} f(\BV^0).
+\end{dmath}
 
 \EndArticle
