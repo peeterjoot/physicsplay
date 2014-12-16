@@ -143,14 +143,14 @@
 % via \DeclareGraphicsExtensions.
 
 % \imageFigure{path}{caption}{label}{width}
-\renewcommand{\imageFigure}[4]{%
+%\renewcommand{\imageFigure}[4]{%
 %\begin{figure}[!t]%
 %\centering%
 %\includegraphics[width=2.5in]{#1}%
 %\caption{#2}%
 %\label{#3}%
 %\end{figure}%
-}
+%}
 
 % *** CITATION PACKAGES ***
 %
@@ -567,6 +567,7 @@ pdfkeywords={ECE1254, Harmonic Balance, non-linear circuit, diode, discrete Four
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
+%\graphicspath{{../../figures/ece1254/report_svg}}
 
 \begin{document}
 %
@@ -833,25 +834,6 @@ Ordering the vectors this way allows a block diagonal admittance matrix to be ge
 %Peeter: I believe your code would give us the G and C matrices that arise from LMS formulations. This is
 %great as we can generate each block Y(n?0) = G - jn?0C.
 
-FIXME: move the following to background.  Group under alternative implementations.
-
-This ordering of the vectors requires a modification of the standard DFT matrix (A.11 or A.17).
-The standard DFT matrix is square with dimensions \( (2 N + 1 ) \times (2 N + 1 ) \).
-
-However, with the elements of \( \BV \) are grouped by frequency,
-this must be altered so that every value in each frequency group is multiplied by the same value in the DFT matrix.
-For \( R \) values in each group (corresponds to \( R \) unknowns of a circuit) the values in the original 
-matrix will be spaced by \( R \), padded with zeros.
-And these modified rows will be repeated and shifted
-right 1, \( M \) times.
-The resulting DFT matrix has dimension \( ( R (2 N + 1 ) \times R (2 N + 1) ) \)
-%(or use 2Nh +1)
-For the case of nonlinear components, there will be a current, \( \mathcal{I}(\Bv) \), produced at each time sample to be determined.
-By taking the DFT of these currents, the discrete frequency
-components of the nonlinear currents are obtained.
-Each nth-frequency component of this current would be added
-to the equation of the nth-set of MNA equations corresponding to the nodes the element is connected
-to.
 
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
@@ -920,11 +902,11 @@ X_{N}
 \begin{equation}\label{eqn:discreteFourierMatrixForm:360}
 \small
 \begin{bmatrix}
- \alpha^{N N } &  \alpha^{\lr{N-1} N }  & . &  \alpha^{- \lr{N-1} N }  &  \alpha^{- N N } \\
- \alpha^{N \lr{N-1} } &  \alpha^{\lr{N-1} \lr{N-1} }  & . &  \alpha^{- \lr{N-1} \lr{N-1} }  &  \alpha^{- N \lr{N-1} } \\
+ \alpha^{\lr{-N} \lr{-N} } &  \alpha^{\lr{1-N} \lr{-N} }  & . &  \alpha^{ \lr{N-1} \lr{-N} }  &  \alpha^{\lr{ N} \lr{-N} } \\
+ \alpha^{\lr{-N} \lr{1-N} } &  \alpha^{\lr{1-N} \lr{1-N} }  & . &  \alpha^{ \lr{N-1} \lr{1-N} }  &  \alpha^{\lr{ N} \lr{1-N} } \\
  .              &  .                      & .      & .                           &  .               \\
- \alpha^{- N \lr{N-1} } &  \alpha^{- \lr{N-1} \lr{N-1} }  & . &  \alpha^{{N-1} \lr{N-1} }  &  \alpha^{N \lr{N-1} } \\
- \alpha^{- N N } &  \alpha^{- N N }  & . &  \alpha^{\lr{N-1} N }  &  \alpha^{N N } \\
+ \alpha^{\lr{-N} \lr{N-1} } &  \alpha^{\lr{1-N} \lr{N-1} }  & . &  \alpha^{\lr{N-1} \lr{N-1} }  &  \alpha^{\lr{N} \lr{N-1} } \\
+ \alpha^{\lr{-N} \lr{N} } &  \alpha^{\lr{1-N} \lr{N} }  & . &  \alpha^{\lr{N-1}\lr{ N} }  &  \alpha^{\lr{N}\lr{ N} } \\
 \end{bmatrix},
 \end{equation}
 
@@ -941,6 +923,7 @@ the transform pair has the matrix form
 
 where \( \overbar{\BF} \) is the complex conjugate of \( \BF \).
 
+%Different conventions for the transform pairs are possible.  This 
 % needed in second column of first page if using \IEEEpubid
 %\IEEEpubidadjcol
 
@@ -949,27 +932,12 @@ where \( \overbar{\BF} \) is the complex conjugate of \( \BF \).
 The time domain MNA equations for an RLC network with non-linear sources can be put into the form
 
 \begin{equation}\label{eqn:ece1254projectReport:420}
-\BG \Bx(t) + \BC \dot{\Bx}(t) = \BB \Bu(t) + \BD \Bw(t).
+\BG \Bx(t) + \BC \dot{\Bx}(t) = \sum_{i = 1}^M \Bb_i u_i(t) + \sum_{i = 1}^S I_i \Bd_i w_i(t).
 \end{equation}
 
-With \( R \) equal to the number of unknowns, \( S \) equal to the number of non-linear elements, \( M \) equal to the number of (positive, negative and zero) frequency sources, the dimensions of these matrices are
+With \( R \) equal to the number of unknowns, \( S \) equal to the number of non-linear elements, \( M \) equal to the number of (positive, negative and zero) frequency sources, the dimensions of these matrices are \( \BG, \BC \in \text{\R{R \times R}} \), and \( \Bb_i, \Bd_i, \Bx(t) \in \text{\C{R \times 1}} \).
 
-\begin{itemize}
-\item 
-\( \BG, \BC \in \text{\R{R \times R}} \)
-\item 
-\( \BB \in \text{\C{R \times M}} \)
-\item 
-\( \BD \in \text{\R{R \times S}} \)
-\item 
-\( \Bx(t) \in \text{\R{R \times 1}} \)
-\item 
-\( \Bu(t) \in \text{\R{M \times 1}} \)
-\item 
-\( \Bw(t) \in \text{\R{S \times 1}} \)
-\end{itemize}
-
-The matrix \( \Bu(t) \) contains has a non-zero value for each source frequency source in the system.  For example, if there is a DC source (or a diode for which the model includes a DC source), and one source at twice the fundamental frequency, this would be
+The linear sources can be grouped into a vector.  For example, with a constant source, and one source at the twice the fundamental frequency, this would be
 
 \begin{equation}\label{eqn:ece1254projectReport:440}
 \Bu(t) = 
@@ -977,10 +945,10 @@ The matrix \( \Bu(t) \) contains has a non-zero value for each source frequency 
 e^{ -j \omega_0 2 t } \\
 1 \\
 e^{ j \omega_0 2 t }
-\end{bmatrix}.
+\end{bmatrix},
 \end{equation}
 
-In an implementation of code that generates MNA equations it is useful to store just the frequencies associated with these sources, and not any sort of actual time dependence representation.  For the example of \cref{eqn:ece1254projectReport:440} a matrix of this form would be stored
+In an implementation of code that generates MNA equations it is convienient to store just the frequencies associated with these sources, which carries the same information without needing to encode the time dependence explicitly, as in
 
 \begin{equation}\label{eqn:ece1254projectReport:460}
 \Bu =
@@ -991,14 +959,7 @@ In an implementation of code that generates MNA equations it is useful to store 
 \end{bmatrix}.
 \end{equation}
 
-The matrix \( \Bw(t) \) contains one row for each unique non-linear source, not including the magnitude of that source.  For example, if the only non-linear source in the system is a diode modelled by \( i_d(t) = I_0 \lr{ e^{ v/v_T} - 1 } \), then \( \BD \) would be a \( R \times 1 \) matrix and \( \Bw(t) \) would be a \( 1 \times 1 \) matrix
-
-\begin{equation}\label{eqn:ece1254projectReport:480}
-\Bw =
-\begin{bmatrix}
-e^{ v/v_T }
-\end{bmatrix}.
-\end{equation}
+For the non-linear sources, the magnitudes \( I_i \) have been factored out, so that the vectors \( \Bd_i \) contain only the values \( 0, \pm 1 \).  The reasons for this will become clear in the example to follow.
 
 \subsection{Frequency domain representation of MNA equations}
 
@@ -1018,35 +979,33 @@ The Fourier component representation of the MNA equations can be written as
 
 \begin{equation}\label{eqn:ece1254projectReport:600}
 \begin{aligned}
-0 = \sum_{n = -N}^N e^{j \omega_0 n t}
-&\Biglr{
+0 &= \sum_{n = -N}^N e^{j \omega_0 n t}
+\Biglr{
    \lr{ \BG + j \omega_0 n \BC } 
 \begin{bmatrix}
 X_n^{(1)} \\
 X_n^{(2)} \\
 \vdots \\
 \end{bmatrix} \\
-   &- \BB 
+&- 
+[ \Bb_1 \cdots \Bb_M ]
 \begin{bmatrix}
 U_n^{(1)} \\
 U_n^{(2)} \\
 \vdots \\
 \end{bmatrix}
-   - \BD 
-\begin{bmatrix}
-W_n^{(1)} \\
-W_n^{(2)} \\
-\vdots \\
-\end{bmatrix}
+- \sum_{i = 1}^S I_i \Bd_i
+W_n^{(i)} 
 }.
 \end{aligned}
 \end{equation}
 
-All the time dependence is moved into the exponentials.  
+%All the time dependence is moved into the exponentials.  
 Given the 
 assumption of periodicity, each of these equations must separately equal zero for each \( ( n, i ) \) pair, or
 
-\begin{dmath}\label{eqn:ece1254projectReport:540}
+\begin{equation}\label{eqn:ece1254projectReport:540}
+\begin{aligned}
 \lr{
 \BG + j \omega_0 n \BC
 }
@@ -1055,22 +1014,571 @@ V_n^{(1)} \\
 V_n^{(2)} \\
 \vdots \\
 \end{bmatrix}
-=
-\BB
+&= 
+[\Bb_i \cdots \Bb_M]
 \begin{bmatrix}
 U_n^{(1)} \\
 U_n^{(2)} \\
 \vdots \\
-\end{bmatrix}
-+\BD
+\end{bmatrix} \\
+&+ \sum_{i = 1}^S I_i \Bd_i
+W_n^{(i)} 
+%&+
+%[I_1 \Bd_1 \cdots I_S \Bd_S]
+%\begin{bmatrix}
+%W_n^{(1)} \\
+%W_n^{(2)} \\
+%\vdots \\
+%\end{bmatrix}
+.
+\end{aligned}
+\end{equation}
+
+Using the ordering of \cref{eqn:ece1254projectReport:580}, the structure of this equation is
+
+%\begin{equation}\label{eqn:ece1254projectReport:1340}
+\boxedEquation{eqn:ece1254projectReport:1340}{
+\BY \BV = \BI + \mathcal{I}(\BV),
+}
+%\end{equation}
+
+where \( \BY \) is block diagonal
+
+\begin{equation}\label{eqn:ece1254projectReport:1360}
+\small{
 \begin{bmatrix}
-W_n^{(1)} \\
-W_n^{(2)} \\
-\vdots \\
-\end{bmatrix}.
+\BG + j \omega_0 (-N) \BC &        &                                   & \\
+                            \qquad\ddots &                                   & \\
+                                   &  \BG + j \omega_0 (0) \BC         & \\
+                                   &                            \qquad\ddots & \\
+                                   &                                   & \BG + j \omega_0 (N) \BC  
+\end{bmatrix}
+}
+\end{equation}
+
+How to construct the Harmonic Balance stamps for the constant current \( \BI \) and non-linear current \( \BI(\BV) \) is nicely illustrated by example to follow.
+
+\subsection{Example.  RC circuit with a diode.}
+
+%FIXME: section reference here, not figure reference?
+A diode with an RC load is illustrated in \cref{fig:diodeWithResistor:diodeWithResistorAndCapacitorFig1}.  With
+
+\begin{figure*}[!t]
+%\centering
+\begin{center}%
+\includegraphics[width=2.5in]{../../figures/ece1254/diodeWithResistorAndCapacitorFig1}
+\caption{Simple non-linear circuit}
+\label{fig:diodeWithResistor:diodeWithResistorAndCapacitorFig1}
+\end{center}%
+\end{figure*}
+
+%\begin{enumerate}
+%\item \( 0 = i_s - i_d \)
+%\item \( Z v^{(2)} + C dv^{(2)}/dt = i_d  \)
+%\item \( i_d = I_0 \lr{ e^{(v^{(1)} - v^{(2)})/V_T} - 1} \)
+%\end{enumerate}
+%
+%To setup for matrix form, let
+
+\begin{equation}\label{eqn:ece1254projectReport:640}
+\begin{aligned}
+\BG &=
+\begin{bmatrix}
+0 & 0 \\
+0 & Z \\
+\end{bmatrix}, \quad
+\BC =
+\begin{bmatrix}
+0 & 0 \\
+0 & C \\
+\end{bmatrix}, \\
+\Bv(t) &=
+\begin{bmatrix}
+v^{(1)}(t) \\
+v^{(2)}(t) \\
+\end{bmatrix}, \quad
+\Bd = 
+\begin{bmatrix}
+1 \\
+-1
+\end{bmatrix}, \quad
+\Bb = 
+\begin{bmatrix}
+1 \\
+0
+\end{bmatrix},
+\end{aligned}
+\end{equation}
+
+the time domain equations for this circuit are
+
+\begin{equation}\label{eqn:ece1254projectReport:1320}
+\begin{aligned}
+\BG \Bv(t)
+&+ \BC \Bv'(t)
+%=
+%\Bb i_s(t)
+%+
+%I_0
+%\Bd 
+%\lr{
+%e^{ (v^{(1)}(t) - v^{(2)}(t))/V_T} - 1
+%}
+=
+\begin{bmatrix}
+\Bb & -I_0 \Bd
+\end{bmatrix}
+\begin{bmatrix}
+i_s(t) \\
+1
+\end{bmatrix} \\
+&+
+I_0 \Bd
+e^{ (v^{(1)}(t) - v^{(2)}(t))/V_T}.
+\end{aligned}
+\end{equation}
+
+For the exponential, let the transform pair be
+%Introduce a transform pair 
+%Harmonic Balance is essentially the 
+%assumption that the input and outputs are assumed to be a bandwidth limited periodic signal, and the non-linear components can be approximated by the same
+
+%\begin{subequations}
+%\begin{equation}\label{eqn:ece1254projectReport:740}
+%i_s(t) = \sum_{n=-N}^N I^{(s)}_n e^{ j \omega_0 n t },
+%\end{equation}
+%\begin{equation}\label{eqn:ece1254projectReport:760}
+%v^{(k)}(t) = 
+%\sum_{n=-N}^N V^{(k)}_n e^{ j \omega_0 n t },
+%\end{equation}
+\begin{equation}\label{eqn:ece1254projectReport:1300}
+\epsilon(t) = 
+e^{ (v^{(1)}(t) - v^{(2)}(t))/V_T}
+\simeq
+\sum_{n=-N}^N E_n e^{ j \omega_0 n t }.
+\end{equation}
+%\end{subequations}
+
+%This is an 
+%approximation for which equality only occurs 
+This is an approximation at any times other than the Nykvist sampling times \( t_k = T k/(2 N + 1) \).
+%.  The Fourier series provides a periodic extension to other times that will approximate the underlying periodic non-linear relation.
+
+%With all the time dependence locked into the exponentials, the derivatives are really easy to calculate
+%
+%\begin{equation}\label{eqn:ece1254projectReport:780}
+%\frac{d}{dt} v^{(k)}(t) = 
+%\sum_{n=-N}^N j \omega_0 n V^{(k)}_n e^{ j \omega_0 n t }.
+%\end{equation}
+%
+%Inserting all of these into \cref{eqn:ece1254projectReport:1320} gives
+%
+%\begin{equation}\label{eqn:ece1254projectReport:800}
+%\sum_{n=-N}^N e^{ j \omega_0 n t} \lr{ \BG + j \omega_0 n \BC } 
+%\begin{bmatrix}
+%V^{(1)}_n \\
+%V^{(2)}_n \\
+%\end{bmatrix}
+%=
+%\sum_{n=-N}^N e^{ j \omega_0 n t} 
+%\lr{
+%-I_0 \Bd \delta_{n 0}
+%+
+%\Bb I^{(s)}_n
+%+ I_0 \Bd E_n
+%}.
+%\end{equation}
+%
+%The periodic assumption requires equality for each \( e^{j \omega_0 n t} \), or
+
+The frequency domain representation is
+
+\begin{equation}\label{eqn:ece1254projectReport:820}
+\lr{ \BG + j \omega_0 n \BC } 
+\begin{bmatrix}
+V^{(1)}_n \\
+V^{(2)}_n \\
+\end{bmatrix}
+=
+-I_0 \Bd \delta_{n 0}
++
+\Bb I^{(s)}_n
++ I_0 \Bd E_n.
+\end{equation}
+
+To illustrate the stamping procedure for the constant current consider the \( N = 1 \) case.  The block matrix form for the constant current can be seen to be
+
+\begin{equation}\label{eqn:ece1254projectReport:840}
+\BI
+=
+\begin{bmatrix}
+\Bb I^{(s)}_{-1} \\
+\Bb I^{(s)}_{0} - I_0 \Bd \\
+\Bb I^{(s)}_{1} \\
+\end{bmatrix}
+\end{equation}
+
+The non-linear current \( \mathcal{I}(\BV) \) needs to be examined further.  How much of this can be precomputed, and what is the simplest way to compute the Jacobian?
+
+Continuing to use \( N = 1 \) to illustrate, a vector of Fourier components for the exponentials can be formed
+
+\begin{equation}\label{eqn:ece1254projectReport:880}
+\BE =
+\begin{bmatrix}
+E_{-1} \\
+E_{0} \\
+E_{1} \\
+\end{bmatrix}, \quad
+\Bepsilon =
+\begin{bmatrix}
+\epsilon_{-1} \\
+\epsilon_{0} \\
+\epsilon_{1} \\
+\end{bmatrix},
+\end{equation}
+
+which allows the non-linear current to be expressed as
+
+\begin{equation}\label{eqn:ece1254projectReport:900}
+\begin{aligned}
+\mathcal{I} &= 
+I_0
+\begin{bmatrix}
+\Bd E_{-1} \\
+\Bd E_{0} \\
+\Bd E_{1} \\
+\end{bmatrix}
+=
+I_0
+\begin{bmatrix}
+\Bd \begin{bmatrix} 1 & 0 & 0 \end{bmatrix} \BE \\
+\Bd \begin{bmatrix} 0 & 1 & 0 \end{bmatrix} \BE \\
+\Bd \begin{bmatrix} 0 & 0 & 1 \end{bmatrix} \BE
+\end{bmatrix} \\
+&=
+I_0
+\begin{bmatrix}
+\Bd & 0 & 0 \\
+0 & \Bd & 0 \\
+0 & 0 & \Bd 
+\end{bmatrix}
+\BF^{-1} \Bepsilon
+\end{aligned}
+\end{equation}
+
+In the last step \( \BE = \BF^{-1} \Bepsilon \) has been factored out (in its inverse Fourier form).  With
+
+\begin{dmath}\label{eqn:ece1254projectReport:920}
+\BD =
+\begin{bmatrix}
+\Bd & 0 & 0 \\
+0 & \Bd & 0 \\
+0 & 0   & \Bd \\
+\end{bmatrix},
 \end{dmath}
 
-FIXME: describe block matrix formulation next.
+the current can now be written in a compact form
+
+%\begin{dmath}\label{eqn:ece1254projectReport:940}
+\boxedEquation{eqn:ece1254projectReport:960}{
+\mathcal{I}(\BV) = 
+I_0 \BD \BF^{-1} \Bepsilon(\BV),
+}
+%\end{dmath}
+
+however, an appropriate form for \( \Bepsilon \) must still be found.
+
+\begin{equation}\label{eqn:ece1254projectReport:980}
+\begin{aligned}
+\Bepsilon &= 
+\begin{bmatrix}
+\epsilon(t_{-1}) \\
+\epsilon(t_{0}) \\
+\epsilon(t_{1}) \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+\exp\lr{ \lr{ v^{(1)}_{-1} - v^{(2)}_{-1} }/V_T } \\
+\exp\lr{ \lr{ v^{(1)}_{0} - v^{(2)}_{0} }/V_T } \\
+\exp\lr{ \lr{ v^{(1)}_{1} - v^{(2)}_{1} }/V_T }
+\end{bmatrix} \\
+%%%&=
+%%%\begin{bmatrix}
+%%%\exp\lr{ 
+%%%\begin{bmatrix}
+%%%1 & 0 & 0 
+%%%\end{bmatrix}
+%%%\lr{ \Bv^{(1)} - \Bv^{(2)} }/V_T } \\
+%%%\exp\lr{ 
+%%%\begin{bmatrix}
+%%%0 & 1 & 0 
+%%%\end{bmatrix}
+%%%\lr{ \Bv^{(1)} - \Bv^{(2)} }/V_T } \\
+%%%\exp\lr{ 
+%%%\begin{bmatrix}
+%%%0 & 0 & 1 
+%%%\end{bmatrix}
+%%%\lr{ \Bv^{(1)} - \Bv^{(2)} }/V_T } \\
+%%%\end{bmatrix} \\
+%%%&=
+%%%\begin{bmatrix}
+%%%\exp\lr{ 
+%%%\begin{bmatrix}
+%%%1 & 0 & 0 
+%%%\end{bmatrix}
+%%%\BF
+%%%\lr{ \BV^{(1)} - \BV^{(2)} }/V_T } \\
+%%%\exp\lr{ 
+%%%\begin{bmatrix}
+%%%0 & 1 & 0 
+%%%\end{bmatrix}
+%%%\BF
+%%%\lr{ \BV^{(1)} - \BV^{(2)} }/V_T } \\
+%%%\exp\lr{ 
+%%%\begin{bmatrix}
+%%%0 & 0 & 1 
+%%%\end{bmatrix}
+%%%\BF
+%%%\lr{ \BV^{(1)} - \BV^{(2)} }/V_T } \\
+%%%\end{bmatrix}.
+\end{aligned}
+\end{equation}
+
+Each of the time domain voltage differences can be cast into vector form, and then expressed in the frequency domain.  For example
+
+\begin{equation}\label{eqn:ece1254projectReport:1380}
+\begin{aligned}
+v^{(1)}_{-1} - v^{(2)}_{-1} 
+&=
+\begin{bmatrix}
+1 & 0 & 0 
+\end{bmatrix}
+\lr{ \Bv^{(1)} - \Bv^{(2)} } \\
+&=
+\begin{bmatrix}
+1 & 0 & 0 
+\end{bmatrix}
+\BF
+\lr{ \BV^{(1)} - \BV^{(2)} }
+\end{aligned}
+\end{equation}
+
+This difference of Fourier component vectors needs to be expressed in terms of the big vector of unknown Fourier components \( \BV \)
+
+\begin{dmath}\label{eqn:ece1254projectReport:1000}
+\BV^{(1)} - \BV^{(2)} 
+=
+\begin{bmatrix}
+V^{(1)}_{-1} - V^{(2)}_{-1} \\
+V^{(1)}_{0} - V^{(2)}_{0} \\
+V^{(1)}_{1} - V^{(2)}_{1} \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & -1 & 0 & 0 & 0 & 0 \\
+0 &  0 & 1 & -1 & 0 & 0 \\
+0 &  0 & 0 & 0 & 1 & -1 \\
+\end{bmatrix}
+\begin{bmatrix}
+V_{-1}^{(1)} \\
+V_{-1}^{(2)} \\
+V_{0}^{(1)} \\
+V_{0}^{(2)} \\
+V_{1}^{(1)} \\
+V_{1}^{(2)} \\
+\end{bmatrix}
+\end{dmath}
+
+This is just
+
+\begin{equation}\label{eqn:ece1254projectReport:1400}
+\BV^{(1)} - \BV^{(2)} 
+=
+\begin{bmatrix}
+\Bd^\T & 0 & 0 \\
+0 & \Bd^\T & 0 \\
+0 & 0 & \Bd^\T \\
+\end{bmatrix}
+\BV
+= \BD^\T \BV.
+\end{equation}
+
+With
+%\begin{equation}\label{eqn:ece1254projectReport:1040}
+\boxedEquation{eqn:ece1254projectReport:1040}{
+\BH 
+= 
+\BF \BD^\T /V_T
+=
+\begin{bmatrix}
+\Bh_1^\T \\
+\Bh_2^\T \\
+\Bh_3^\T
+\end{bmatrix},
+}
+%\end{equation}
+
+a compact matrix representation of the non-linear current is now complete
+
+%\begin{dmath}\label{eqn:ece1254projectReport:1060}
+\boxedEquation{eqn:ece1254projectReport:1080}{
+\Bepsilon(\BV)
+=
+\begin{bmatrix}
+e^{\Bh_1^\T \BV} \\
+e^{\Bh_2^\T \BV} \\
+e^{\Bh_3^\T \BV} \\
+\end{bmatrix}.
+}
+%\end{dmath}
+
+\subsection{Jacobian}
+
+With a compact matrix representation of the non-linear current, attention can now be turned to the Jacobian of the non-linear current.  Let \( \BA = I_0 \BD \BF^{-1} = [ a_{ij} ]_{ij} \).  The coordinates of the non-linear current (with summation implied) are
+
+\begin{dmath}\label{eqn:ece1254projectReport:1120}
+\mathcal{I}_i = a_{ik} \epsilon_k = a_{ik} \exp\lr{ \Bh_k^\T \BV }.
+\end{dmath}
+
+so the Jacobian components are
+
+\begin{dmath}\label{eqn:ece1254projectReport:1140}
+[\BJ^{\mathcal{I}}]_{ij} 
+= 
+a_{ik} \epsilon_k = a_{ik} 
+\PD{V_j}{}
+\exp\lr{ \Bh_k^\T \BV }
+= 
+a_{ik} 
+h_{kj}
+\exp\lr{ \Bh_k^\T \BV }.
+\end{dmath}
+
+Back in matrix form, after factoring out the \( \BA \), the Jacobian is
+
+\begin{dmath}\label{eqn:ece1254projectReport:1140}
+\BJ^{\mathcal{I}}
+= 
+\BA
+{\begin{bmatrix}
+h_{ij}
+\exp\lr{ \Bh_i^\T \BV }
+\end{bmatrix}}_{ij}.
+\end{dmath}
+
+The second factor has all the rows of \( \BH \), but each multiplied by an exponential, so the Jacobian for the non-linear current 
+is now completely determined
+
+%\begin{dmath}\label{eqn:ece1254projectReport:1180}
+\boxedEquation{eqn:ece1254projectReport:1200}{
+\BJ^{\mathcal{I}}( \BV ) =
+I_0 \BD \BF^{-1} 
+\begin{bmatrix}
+\Bh_1^\T \exp\lr{ \Bh_1^\T \BV } \\
+\Bh_2^\T \exp\lr{ \Bh_2^\T \BV } \\
+\vdots
+\end{bmatrix}.
+%\end{dmath}
+}
+
+%Assembling all the Jacobian coordinates back into matrix form gives
+% Factoring out \( \BU = [h_{ij} \exp\lr{ \Bh_i^\T \BV }]_{ij} \), 
+%
+%\begin{dmath}\label{eqn:ece1254projectReport:1160}
+%\BJ^{\mathcal{I}}
+%=
+%\BA
+%\begin{bmatrix}
+%\Bh_1^\T \exp\lr{ \Bh_1^\T \BV } \\
+%\Bh_2^\T \exp\lr{ \Bh_2^\T \BV } \\
+%\vdots
+%\end{bmatrix}.
+%\end{dmath}
+
+A quick sanity check of dimensions seems worthwhile, and shows that all is well
+
+\begin{itemize}
+\item \( \BA \) : \( R(2 N + 1) \times 2 N + 1 \)
+\item \( \BU \) : \( 2 N + 1 \times R(2 N + 1) \)
+\item \( \BJ^{\mathcal{I}} \) : \( R(2 N + 1) \times R(2 N + 1) \)
+\end{itemize}
+
+This derivation was done exclusively with the exponential nonlinearity that is found in the diode model, but is easy to generalize.  
+If the nonlinearity is of the form
+\( I_0 g((v^{(1)} - v^{(2)})/V_T) \), then the non-linear current and its Jacobian will have the same structural form
+
+\begin{subequations}
+\begin{equation}\label{eqn:ece1254projectReport:1440}
+\mathcal{I}(\BV)
+I_0 \BD \BF^{-1} 
+\begin{bmatrix}
+\Bh_1^\T g(\Bh_1^\T \BV) \\
+\Bh_2^\T g(\Bh_2^\T \BV) \\
+\vdots
+\end{bmatrix}
+\end{equation}
+\begin{dmath}\label{eqn:ece1254projectReport:1420}
+\BJ^{\mathcal{I}}( \BV ) =
+I_0 \BD \BF^{-1} 
+\begin{bmatrix}
+\Bh_1^\T \evalbar{ g'(x)}{x= \Bh_1^\T \BV } \\
+\Bh_2^\T \evalbar{ g'(x)}{x= \Bh_2^\T \BV } \\
+\vdots
+\end{bmatrix}.
+\end{dmath}
+\end{subequations}
+
+\subsection{Newton's method solution}
+
+All the pieces required for a Newton's method solution are now in place.  The goal is to find a value of \( \BV \) that provides the zero
+
+\begin{dmath}\label{eqn:ece1254projectReport:1220}
+f(\BV) = \BY \BV - \BI - \mathcal{I}(\BV).
+\end{dmath}
+
+Expansion to first order around an initial guess \( \BV^0 \), gives
+
+\begin{dmath}\label{eqn:ece1254projectReport:1240}
+f( \BV^0 + \Delta \BV ) = f(\BV^0) + \BJ(\BV^0) \Delta \BV \approx 0,
+\end{dmath}
+
+where the full Jacobian of \( f(\BV) \) is
+
+\begin{dmath}\label{eqn:ece1254projectReport:1260}
+\BJ(\BV) = \BY - \BJ^{\mathcal{I}}(\BV).
+\end{dmath}
+
+The Newton's method refinement of the initial guess follows by inversion
+
+\begin{dmath}\label{eqn:ece1254projectReport:1280}
+\Delta \BV = -\lr{ \BY - \BJ^{\mathcal{I}}(\BV^0) }^{-1} f(\BV^0).
+\end{dmath}
+
+The non-linearities of some of the circuits that were solved as tests required source stepping, as the Jacobian grew beyond the representable range of the double matrix representation in some cases and became uninvertable.  A heuristic that was found effective was to half the step size for each Newton's method iteration that the Jacobian became ill-conditioned, and to double it for each iteration where convergence was achieved.
+
+\subsection{Alternative handling of the non-linear currents and Jacobians}
+
+Two methods for the calculation of the non-linear currents and Jacobians were developed while coding this Harmonic Balance implementation.  
+Our first implementation used 
+a ``big \( \BF \)'' DFT matrix, of size \( ( R (2 N + 1 ) \times R (2 N + 1) ) \).  
+%The non-linear current was calculated in the time domain as \( \II(\Bv) \).
+With the elements of \( \BV \) grouped by frequency, a DFT matrix that operated on \( \BV \) was formed where
+every value in each frequency group was multiplied by the same value in the DFT matrix.
+%For \( R \) values in each group (corresponds to \( R \) unknowns of a circuit) the values in the original 
+%matrix will be spaced by \( R \), padded with zeros.
+%And these modified rows will be repeated and shifted
+%right 1, \( M \) times.
+%The resulting DFT matrix has dimension 
+%(or use 2Nh +1)
+%For the case of nonlinear components, there will be a current, 
+The nonlinear currents \( \mathcal{I}(\Bv) \), produced at each time sample to be determined were calculated.  Using the 
+``big'' DFT of these currents, the discrete frequency
+components of the nonlinear currents were obtained.
+Each nth-frequency component of this current would be added
+to the equation of the nth-set of MNA equations corresponding to the nodes the element is connected
+to.
+
+This non-linear current calculation was then refined to work completely in the frequency domain, precalculating a number of the common expressions that were found in both the current and its Jacobian.  This refinement used the (standard) DFT matrix \( \BF \) of dimensions \( (2 N + 1 ) \times (2 N + 1 ) \), as described above.  
 
 \section{Results}
 
@@ -1103,7 +1611,10 @@ In the plots of cputime and error vs N, the error is the biggest difference betw
 }
 \label{tab:simpleRectifierCircuit:simpleRectifierCircuitParameters}}
 \hfil
-\subfloat[Output.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/simpleRectifierCircuitVoltageFig2}%
+\subfloat[Output.]{
+   \includegraphics[width=1.5in]{../../figures/ece1254/report/simpleRectifierCircuitVoltageFig2}%
+%   \def\svgwidth{1.5in}
+%   \input{../../figures/ece1254/report_svg/simpleRectifierCircuitVoltageFig2.pdf_tex}%
 \label{fig:simpleRectifierCircuit:simpleRectifierCircuitFig2}}
 \subfloat[cputime vs error for variety of N.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/simpleRectifierCircuitErrorAndCpuTimesFig3}%
 \label{fig:simpleRectifierCircuit:simpleRectifierCircuitFig4}}
@@ -1436,8 +1947,7 @@ Relavant matlab scripts include
 \fi
 
 
-The authors would like to thank Prof.\ Piero Triverio.
-
+The authors would like to thank Prof.\ Piero Triverio for teaching this course and for valuable discussions of the material.
 
 % Can use something like this to put references on a page
 % by themselves when using endfloat and the captionsoff option.
