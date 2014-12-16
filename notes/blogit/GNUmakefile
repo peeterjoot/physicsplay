@@ -152,8 +152,5 @@ opt/%.pdf : %.pdf
 #%.png : %.pdf
 #	$(INKSCAPE) $^ --export-png=$@
 
-copy: 
-	cp discreteFourierMatrixForm.pdf diodeRLCSample.pdf ../ece1254/ece1254projectReport.pdf proj/
-
 localclean ::
 	rm -f $(LOCAL_FILES)

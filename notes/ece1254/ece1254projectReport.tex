@@ -765,75 +765,40 @@ The final assumption is that a finite number of these harmonics,
 \( N \), will be sufficient to accurately represent the output signal.
 From the DFT, to obtain \( N \) discrete frequencies, \( N \) linearly spaced (in time) samples of a
 signal are required.
-Or conversely, for \( N \) discrete frequencies, a signal with \( N \) time samples is required.
+Conversely, for \( N \) discrete frequencies, a signal with \( N \) time samples is required.
 The Harmonic Balance exploits the linear, time-invariant nature of circuits.
-In the time domain, the Modified Nodal Analysis (MNA) procdure results in a set of \( R \) equations.
+In the time domain, the Modified Nodal Analysis (MNA) procedure results in a set of \( R \) equations.
 Translated into the 
 frequency domain, the result is \( R \times (2 N + 1) \) independent sets of equations.
 One way to
 think of this, is that each frequency can be considered its own independent circuit.
 
-The objective is to represent the linear circuit elements of the system in the form 
+The objective is to represent the system in the form 
 
 \begin{equation}\label{eqn:ece1254projectReport:560}
-\BI = \BY \BV,
+\BI(\BV) = \BY \BV.
 \end{equation}
 
-with an ordering of the vector components given by
+where the current \( \BI \) includes both the contributions of the linear sources (voltage and current sources), and includes non-linear contributions due to elements such as diodes.  The admittance matrix \( \BY \) has a block diagonal structure, with each block having a frequency dependency.  The vector \( \BV \) contains the Fourier coefficients of all the voltage and current unknowns in the system, including a term for each unknown at each frequency included in the Fourier series.  When the system includes non-linear elements, iterative methods will be required to solve for \( \BV \).
 
-\begin{equation}\label{eqn:ece1254projectReport:580}
-\BI = 
-\begin{bmatrix}
-I^{(1)}_{-N} \\
-I^{(2)}_{-N} \\
-%I^{(3)}_{-N} \\
-\vdots \\
-I^{(1)}_{1-N} \\
-I^{(2)}_{1-N} \\
-%I^{(3)}_{1-N} \\
-\vdots \\
-I^{(1)}_{N-1} \\
-I^{(2)}_{N-1} \\
-%I^{(3)}_{N-1} \\
-\vdots \\
-I^{(1)}_{N} \\
-I^{(2)}_{N} \\
-%I^{(3)}_{N} \\
-\vdots \\
-\end{bmatrix},
-\qquad \BV = 
-\begin{bmatrix}
-V^{(1)}_{-N} \\
-V^{(2)}_{-N} \\
-%V^{(3)}_{-N} \\
-\vdots \\
-V^{(1)}_{1-N} \\
-V^{(2)}_{1-N} \\
-%V^{(3)}_{1-N} \\
-\vdots \\
-V^{(1)}_{N-1} \\
-V^{(2)}_{N-1} \\
-%V^{(3)}_{N-1} \\
-\vdots \\
-V^{(1)}_{N} \\
-V^{(2)}_{N} \\
-%V^{(3)}_{N} \\
-\vdots \\
-\end{bmatrix}
-\end{equation}
+The MNA infrastructure developed during the course assignments was extended to allow AC current and voltage sources, with the following new netlist syntax
 
-The superscript index of each element corresponds to the physical circuit node it is related to (i.e.
-current flowing to the node, or the node voltage).  
-Those unknown physical circuit elements are generated using a modified nodal analysis procedure.
-The subscript corresponds to the harmonic frequency, so the end result is as if there is a 
-node voltage for each harmonic frequency.
+\begin{center}
+\textbf{Ilabel \(n_1\) \(n_2\) AC \(m\) \(\nu\) \([\phi]\)}
+\end{center} 
+\begin{center}
+\textbf{Ilabel \(n_1\) \(n_2\) AC \(m\) \(\nu\) \([\phi]\)}
+\end{center} 
 
-Ordering the vectors this way allows a block diagonal admittance matrix to be generated (\citep{giannini2004NonlinearMicrowaveCircuitDesign}
- \S 1.85)
-, consisting of the admittance matrix that would be seen for each frequency.
-%Peeter: I believe your code would give us the G and C matrices that arise from LMS formulations. This is
-%great as we can generate each block Y(n?0) = G - jn?0C.
+which are used to represent sources of the form \( m \cos\lr{ 2 \pi \nu - \phi } \), with currents directed from node \( n_1 \) to \( n_2 \), and voltages measured at \( n_1 \) relative to \( n_2 \).  The phase \( \phi \) defaults to zero if unspecified.
 
+The syntax used for the diode netlist extension was
+
+\begin{center}
+\textbf{Dlabel \(n_1\) \(n_2\) \(I_0\) \(V_T\)},
+\end{center} 
+
+representing a diode modelled as a current source \( i_d(t) = I_0 \lr{ e^{ \lr{v^{(n_1)}(t) - v^{(n_2)}(t)}/V_T } - 1 } \).
 
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
@@ -948,7 +913,7 @@ e^{ j \omega_0 2 t }
 \end{bmatrix},
 \end{equation}
 
-In an implementation of code that generates MNA equations it is convienient to store just the frequencies associated with these sources, which carries the same information without needing to encode the time dependence explicitly, as in
+In an implementation of code that generates MNA equations it is convenient to store just the frequencies associated with these sources, which carries the same information without needing to encode the time dependence explicitly, as in
 
 \begin{equation}\label{eqn:ece1254projectReport:460}
 \Bu =
@@ -963,7 +928,7 @@ For the non-linear sources, the magnitudes \( I_i \) have been factored out, so 
 
 \subsection{Frequency domain representation of MNA equations}
 
-Assuming a bandlimited periodic representation of the unknowns vector \( \Bx \) in \cref{eqn:ece1254projectReport:420}
+Assuming a bandwidth limited periodic representation of the unknowns vector \( \Bx \) in \cref{eqn:ece1254projectReport:420}
 
 \begin{equation}\label{eqn:ece1254projectReport:500}
 x^{(i)}(t) = \sum_{n=-N}^N X_n^{(i)} e^{j \omega_0 t},
@@ -1034,7 +999,63 @@ W_n^{(i)}
 \end{aligned}
 \end{equation}
 
-Using the ordering of \cref{eqn:ece1254projectReport:580}, the structure of this equation is
+It is desirable to use an ordering of the vector components given by
+
+\begin{equation}\label{eqn:ece1254projectReport:580}
+\BI = 
+\begin{bmatrix}
+I^{(1)}_{-N} \\
+I^{(2)}_{-N} \\
+%I^{(3)}_{-N} \\
+\vdots \\
+I^{(1)}_{1-N} \\
+I^{(2)}_{1-N} \\
+%I^{(3)}_{1-N} \\
+\vdots \\
+I^{(1)}_{N-1} \\
+I^{(2)}_{N-1} \\
+%I^{(3)}_{N-1} \\
+\vdots \\
+I^{(1)}_{N} \\
+I^{(2)}_{N} \\
+%I^{(3)}_{N} \\
+\vdots \\
+\end{bmatrix},
+\qquad \BV = 
+\begin{bmatrix}
+V^{(1)}_{-N} \\
+V^{(2)}_{-N} \\
+%V^{(3)}_{-N} \\
+\vdots \\
+V^{(1)}_{1-N} \\
+V^{(2)}_{1-N} \\
+%V^{(3)}_{1-N} \\
+\vdots \\
+V^{(1)}_{N-1} \\
+V^{(2)}_{N-1} \\
+%V^{(3)}_{N-1} \\
+\vdots \\
+V^{(1)}_{N} \\
+V^{(2)}_{N} \\
+%V^{(3)}_{N} \\
+\vdots \\
+\end{bmatrix}
+\end{equation}
+
+The superscript index of each element corresponds to the physical circuit node it is related to (i.e.
+current flowing to the node, or the node voltage).  
+Those unknown physical circuit elements are generated using a modified nodal analysis procedure.
+The subscript corresponds to the harmonic frequency, so the end result is as if there is a 
+node voltage for each harmonic frequency.
+
+Ordering the vectors this way allows a block diagonal admittance matrix to be generated (\citep{giannini2004NonlinearMicrowaveCircuitDesign}
+ \S 1.85)
+, consisting of the admittance matrix that would be seen for each frequency.
+%Peeter: I believe your code would give us the G and C matrices that arise from LMS formulations. This is
+%great as we can generate each block Y(n?0) = G - jn?0C.
+
+%Using the ordering of \cref{eqn:ece1254projectReport:580}, 
+The structure of this equation is
 
 %\begin{equation}\label{eqn:ece1254projectReport:1340}
 \boxedEquation{eqn:ece1254projectReport:1340}{
@@ -1056,7 +1077,7 @@ where \( \BY \) is block diagonal
 }
 \end{equation}
 
-How to construct the Harmonic Balance stamps for the constant current \( \BI \) and non-linear current \( \BI(\BV) \) is nicely illustrated by example to follow.
+Construction of the Harmonic Balance stamps for the constant current \( \BI \) and non-linear current \( \BI(\BV) \) is nicely illustrated by the example to follow.
 
 \subsection{Example.  RC circuit with a diode.}
 
@@ -1554,14 +1575,14 @@ The Newton's method refinement of the initial guess follows by inversion
 \Delta \BV = -\lr{ \BY - \BJ^{\mathcal{I}}(\BV^0) }^{-1} f(\BV^0).
 \end{dmath}
 
-The non-linearities of some of the circuits that were solved as tests required source stepping, as the Jacobian grew beyond the representable range of the double matrix representation in some cases and became uninvertable.  A heuristic that was found effective was to half the step size for each Newton's method iteration that the Jacobian became ill-conditioned, and to double it for each iteration where convergence was achieved.
+The non-linearities of some of the circuits that were solved as tests required source stepping, as the Jacobian grew beyond the representable range of the double matrix representation in some cases and became uninvertible.  A heuristic that was found effective was to half the step size for each Newton's method iteration that the Jacobian became ill-conditioned, and to double it for each iteration where convergence was achieved.
 
 \subsection{Alternative handling of the non-linear currents and Jacobians}
 
 Two methods for the calculation of the non-linear currents and Jacobians were developed while coding this Harmonic Balance implementation.  
 Our first implementation used 
 a ``big \( \BF \)'' DFT matrix, of size \( ( R (2 N + 1 ) \times R (2 N + 1) ) \).  
-%The non-linear current was calculated in the time domain as \( \II(\Bv) \).
+%The non-linear current was calculated in the time domain as \( \mathcal{I}(\Bv) \).
 With the elements of \( \BV \) grouped by frequency, a DFT matrix that operated on \( \BV \) was formed where
 every value in each frequency group was multiplied by the same value in the DFT matrix.
 %For \( R \) values in each group (corresponds to \( R \) unknowns of a circuit) the values in the original 
@@ -1578,11 +1599,11 @@ Each nth-frequency component of this current would be added
 to the equation of the nth-set of MNA equations corresponding to the nodes the element is connected
 to.
 
-This non-linear current calculation was then refined to work completely in the frequency domain, precalculating a number of the common expressions that were found in both the current and its Jacobian.  This refinement used the (standard) DFT matrix \( \BF \) of dimensions \( (2 N + 1 ) \times (2 N + 1 ) \), as described above.  
+This non-linear current calculation was then refined to work completely in the frequency domain, precalculating a number of the common expressions that were found in both the current and its Jacobian.  This refinement used the (standard) DFT matrix \( \BF \) of dimensions \( (2 N + 1 ) \times (2 N + 1 ) \), as described above.
 
 \section{Results}
 
-Simulation results for a few representive circuit types are given below
+Simulation results for a few representative circuit types are given below
 
 \begin{itemize}
 \item Simple rectifier circuit \cref{fig:simpleRectifierCircuit:simpleRectifierCircuit}.
@@ -1913,7 +1934,7 @@ The Matlab code for this work is available under the ece1254/proj path in the gi
 git@github.com:peeterjoot/matlab.git
 \end{center}
 
-Relavant matlab scripts include
+Relevant matlab scripts include
 
 %Under:
 %

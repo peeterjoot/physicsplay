@@ -62,6 +62,9 @@ ece1254projectReport.pdf :: ece1254projectReport.tex
 #ece1254projectReport.pdf :: discreteFourierInversion.tex
 ece1254projectReport.pdf :: ./peeters_macros.sty ./peeters_layout.sty ./peeters_layout_exercise.sty ./macros_bm.sty 
 
+copy: 
+	cp ece1254projectReport.pdf proj/
+
 multiphysicsProblemSet1.pdf :: $(PDF_DEPS)
 multiphysicsProblemSet1.pdf :: multiphysicsProblemSet1Problem1.tex
 multiphysicsProblemSet1.pdf :: multiphysicsProblemSet1Problem2.tex
