@@ -152,6 +152,16 @@
 %\end{figure}%
 %}
 
+% \imageFigureHere{path}{caption}{label}{width}
+\newcommand{\imageFigureHere}[4]{%
+\begin{figure}[!h]%
+\centering%
+\includegraphics[width=#4]{#1}%
+\caption{#2}%
+\label{#3}%
+\end{figure}%
+}
+
 % *** CITATION PACKAGES ***
 %
 \ifCLASSOPTIONcompsoc
@@ -675,7 +685,7 @@ Harmonic Balance solutions to non-linear circuits
 % in the abstract or keywords.
 \IEEEtitleabstractindextext{%
 \begin{abstract}
-With this work the circuit solution system developed in ECE1254 for linear constant source RLC circuits is extended to compute steady state responses to periodic sources, and to include support for a simple non-linear diode model.
+With this work the circuit solution system developed in ECE1254 for linear constant source RLC circuits is extended to compute steady state responses to periodic sources, to include support for a simple non-linear diode model, and to include support for Taylor expanded conductance circuit elements.
 It is assumed that all input frequencies are multiples of a single fundamental frequency.
 Anharmonic effects will be ignored, and it will be assumed that only periodic outputs with harmonics that are multiples of the input frequencies will be observed.
 The solution utilizes the \emph{Harmonic Balance} method described in \citep{giannini2004NonlinearMicrowaveCircuitDesign}, where
@@ -781,16 +791,16 @@ The objective is to represent the system in the form
 
 where the current \( \BI \) includes both the contributions of the linear sources (voltage and current sources), and includes non-linear contributions due to elements such as diodes.  The admittance matrix \( \BY \) has a block diagonal structure, with each block having a frequency dependency.  The vector \( \BV \) contains the Fourier coefficients of all the voltage and current unknowns in the system, including a term for each unknown at each frequency included in the Fourier series.  When the system includes non-linear elements, iterative methods will be required to solve for \( \BV \).
 
-The MNA infrastructure developed during the course assignments was extended to allow AC current and voltage sources, with the following new netlist syntax
+The MNA infrastructure developed during the course assignments was extended to allow AC current and voltage sources.  The following new netlist syntax
 
 \begin{center}
 \textbf{Ilabel \(n_1\) \(n_2\) AC \(m\) \(\nu\) \([\phi]\)}
 \end{center} 
 \begin{center}
-\textbf{Ilabel \(n_1\) \(n_2\) AC \(m\) \(\nu\) \([\phi]\)}
+\textbf{Vlabel \(n_1\) \(n_2\) AC \(m\) \(\nu\) \([\phi]\)}
 \end{center} 
 
-which are used to represent sources of the form \( m \cos\lr{ 2 \pi \nu - \phi } \), with currents directed from node \( n_1 \) to \( n_2 \), and voltages measured at \( n_1 \) relative to \( n_2 \).  The phase \( \phi \) defaults to zero if unspecified.
+was used to represent sources of the form \( m \cos\lr{ 2 \pi \nu - \phi } \), with currents directed from node \( n_1 \) to \( n_2 \), and voltages measured at \( n_1 \) relative to \( n_2 \).  The phase \( \phi \) defaults to zero if unspecified.
 
 The syntax used for the diode netlist extension was
 
@@ -799,6 +809,14 @@ The syntax used for the diode netlist extension was
 \end{center} 
 
 representing a diode modelled as a current source \( i_d(t) = I_0 \lr{ e^{ \lr{v^{(n_1)}(t) - v^{(n_2)}(t)}/V_T } - 1 } \).
+
+Finally, non-linear conductances \( g(t) = I_0 \lr{v^{(n_1)}(t) - v^{(n_2)}(t)}^k \) may be specified as
+
+\begin{center}
+\textbf{Plabel \(n_1\) \(n_2\) \(I_0\) \(V_T\) \( k \)},
+\end{center} 
+
+Any number of these may be specified in parallel to form an arbitrary Taylor expansion.
 
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
@@ -1081,17 +1099,19 @@ Construction of the Harmonic Balance stamps for the constant current \( \BI \) a
 
 \subsection{Example.  RC circuit with a diode.}
 
-%FIXME: section reference here, not figure reference?
-A diode with an RC load is illustrated in \cref{fig:diodeWithResistor:diodeWithResistorAndCapacitorFig1}.  With
-
-\begin{figure*}[!t]
+\imageFigureHere{../../figures/ece1254/diodeWithResistorAndCapacitorFig1}{Simple non-linear circuit}{fig:diodeWithResistorAndCapacitorFig1}{3in}
+%\begin{figure}[!h]
 %\centering
-\begin{center}%
-\includegraphics[width=2.5in]{../../figures/ece1254/diodeWithResistorAndCapacitorFig1}
-\caption{Simple non-linear circuit}
-\label{fig:diodeWithResistor:diodeWithResistorAndCapacitorFig1}
-\end{center}%
-\end{figure*}
+%\includegraphics[width=2.5in]{../../figures/ece1254/diodeWithResistorAndCapacitorFig1}
+%\caption{Simple non-linear circuit}
+%\label{fig:diodeWithResistorAndCapacitorFig1}
+%\end{figure}
+
+%FIXME: section reference here, not figure reference?
+A diode with an RC load is illustrated in 
+\cref{fig:diodeWithResistorAndCapacitorFig1}.
+%fig. \ref{fig:diodeWithResistorAndCapacitorFig1}.
+With
 
 %\begin{enumerate}
 %\item \( 0 = i_s - i_d \)
@@ -1603,76 +1623,8 @@ This non-linear current calculation was then refined to work completely in the f
 
 \section{Results}
 
-Simulation results for a few representative circuit types are given below
+\subsection{Low pass filter}
 
-\begin{itemize}
-\item Simple rectifier circuit \cref{fig:simpleRectifierCircuit:simpleRectifierCircuit}.
-\item Typical rectifier circuit \cref{fig:typicalRectifierCircuit:typicalRectifierCircuit}.
-\item Low pass filter, Cut off Frequency is 5 MHz, Input Frequencies are 1 and 8 MHz \cref{fig:lowPassFilter:lowPassFilter}.
-\item Bridge rectifier circuit (multiple non-linear elements) \cref{fig:bridgeRectifier:bridgeRectifier}.
-\item Bridge rectifier circuit with capactitive filter \cref{fig:bridgeRectifierCapFilter:bridgeRectifierCapFilter}.
-\end{itemize}
-
-In the plots of cputime and error vs N, the error is the biggest difference between the solution for the N in question compared to a ``sufficiently large'' value of N (100).
-
-\begin{figure*}[!t]
-\centering
-\subfloat[Simple rectifier circuit diagram]{\includegraphics[width=2in]{../../figures/ece1254/report/simpleRectifierCircuitFig1}%
-\label{fig:simpleRectifierCircuit:simpleRectifierCircuitFig1}}
-\subfloat[Parameters]{%
-\tiny{
-\begin{tabular}[b]{|l|r|} \hline
-  Parameter & Value \\ \hline\hline
-  \( \nu_0 \) & 1 MHz \\ \hline
-  \( I_0 \) & 10 mA (peak) \\ \hline
-  \( R_1 \) & 1 k \(\Omega\) \\ \hline
-  \( D_1, I_0 \) & 10 pA \\ \hline
-  \( D_1, V_T \) & 25 mV \\ \hline
-\end{tabular}
-}
-\label{tab:simpleRectifierCircuit:simpleRectifierCircuitParameters}}
-\hfil
-\subfloat[Output.]{
-   \includegraphics[width=1.5in]{../../figures/ece1254/report/simpleRectifierCircuitVoltageFig2}%
-%   \def\svgwidth{1.5in}
-%   \input{../../figures/ece1254/report_svg/simpleRectifierCircuitVoltageFig2.pdf_tex}%
-\label{fig:simpleRectifierCircuit:simpleRectifierCircuitFig2}}
-\subfloat[cputime vs error for variety of N.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/simpleRectifierCircuitErrorAndCpuTimesFig3}%
-\label{fig:simpleRectifierCircuit:simpleRectifierCircuitFig4}}
-\caption{Simple rectifier circuit and simulation results.}
-\label{fig:simpleRectifierCircuit:simpleRectifierCircuit}
-\end{figure*}
-
-\begin{figure*}[!t]
-\centering
-\subfloat[Typical rectifier circuit diagram]{\includegraphics[width=2.5in]{../../figures/ece1254/report/typicalRectifierCircuitFig1}%
-\label{fig:typicalRectifierCircuit:typicalRectifierCircuitFig1}}
-\subfloat[Parameters]{%
-\tiny{
-\begin{tabular}[b]{|l|r|} \hline
-  Parameter & Value \\ \hline\hline
-  \( \nu_0 \) & 1 MHz \\ \hline
-  \( V_1 \) & 10 V (peak) \\ \hline
-  \( R_1 \) & 1 k \(\Omega\) \\ \hline
-  \( C_1 \) & 1 \(\mu\) F \\ \hline
-  \( D_1, I_0 \) & 10 pA \\ \hline
-  \( D_1, V_T \) & 25 mV \\ \hline
-\end{tabular}
-}
-\label{tab:typicalRectifierCircuit:typicalRectifierCircuitParameters}}
-\hfil
-\subfloat[Source and output voltages.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/typicalRectifierCircuitSourceAndOutputVoltagesFig2}%
-\label{fig:typicalRectifierCircuit:typicalRectifierCircuitFig2}}
-\subfloat[cputime vs error for variety of N.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/typicalRectifierCircuitErrorAndCpuTimesFig3}%
-\label{fig:typicalRectifierCircuit:typicalRectifierCircuitFig3}}
-\caption{Typical rectifier circuit and simulation results.}
-\label{fig:typicalRectifierCircuit:typicalRectifierCircuit}
-\end{figure*}
-
-\begin{figure*}[!t]
-\centering
-\subfloat[Low pass filter circuit diagram]{\includegraphics[width=1.5in]{../../figures/ece1254/report/lowPassFilterFig1}%
-\label{fig:lowPassFilter:lowPassFilterFig1}}
 %\subfloat[Parameters]{%
 %\small
 %\begin{tabular}[b]{|l|r|} \hline
@@ -1685,52 +1637,216 @@ In the plots of cputime and error vs N, the error is the biggest difference betw
 %  \( D_1, V_T \) & 25 mV \\ \hline
 %\end{tabular}
 %\label{tab:lowPassFilter:lowPassFilterParameters}}
-\hfil
-\subfloat[Source and output voltages.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/lowPassFilterSourceAndOutputVoltagesFig2}%
-\label{fig:lowPassFilter:lowPassFilterFig2}}
-\subfloat[Input voltage spectrum.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/lowPassFilterInputVoltageSpectrumFig3}%
-\label{fig:lowPassFilter:lowPassFilterFig3}}
-\subfloat[Output voltage spectrum.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/lowPassFilterOutputVoltageSpectrumFig4}%
-\label{fig:lowPassFilter:lowPassFilterFig3}}
-\caption{Low pass filter circuit and simulation results.}
-\label{fig:lowPassFilter:lowPassFilter}
-\end{figure*}
+
+\imageFigureHere{../../figures/ece1254/report/lowPassFilterFig1}{Low pass filter}{fig:lowPassFilterFig1}{3.0in}
+%\begin{figure}[!h]
+%\centering
+%\includegraphics[width=2.5in]{../../figures/ece1254/report/lowPassFilterFig1}
+%\caption{Low pass filter}
+%\label{fig:lowPassFilterFig1}
+%\end{figure}
+
+A low pass filter with a cut off frequency of 5 MHz is shown in 
+\cref{fig:lowPassFilterFig1}.
+%fig. \ref{fig:lowPassFilterFig1}.
+With 
+inputs 
+ranging from 1 to 8 Mhz, this serves as a basic sanity test of the Harmonic Balance linear network solver.
+The time domain input signal and the corresponding filtered output, with a visible reduction in higher frequency components, 
+is shown in \cref{fig:lowPassFilterFig2}.  
+
+\imageFigureHere{../../figures/ece1254/report/lowPassFilterSourceAndOutputVoltagesFig2}{Source and output}{fig:lowPassFilterFig2}{3.0in}
+%\begin{figure}[!h]
+%\centering
+%\includegraphics[width=1.5in]{../../figures/ece1254/report/lowPassFilterSourceAndOutputVoltagesFig2}
+%\caption{Source and output voltages.}
+%\label{fig:lowPassFilterFig2}
+%\end{figure}
+
+The magnitudes of the frequency domain components in the input signal are shown in \cref{fig:lowPassFilterFig3}.
+
+\imageFigureHere{../../figures/ece1254/report/lowPassFilterInputVoltageSpectrumFig3}{Input voltage spectrum.}{fig:lowPassFilterFig3}{3.0in}
+
+The output spectrum, seen in \cref{fig:lowPassFilterFig4},
+shows attenuation at all frequencies.  However, all the higher frequency contributions are cut down significantly, as expected.
+
+\imageFigureHere{../../figures/ece1254/report/lowPassFilterOutputVoltageSpectrumFig4}{Output voltage spectrum.}{fig:lowPassFilterFig4}{3.0in}
+
+\subsection{Half wave rectifier}
+
+A half wave rectifier, sketched in \cref{fig:HalfWaveRectifierFig1}, was suggested as a first test of the non-linear Harmonic Balance system.
+
+\imageFigureHere{../../figures/ece1254/HalfWaveRectifierFig1}{Half wave rectifier circuit.}{fig:HalfWaveRectifierFig1}{3in}
+
+%Simulation of this circuit with this Harmonic Balance system has the expected voltage characteristics as seen in
+%\cref{fig:HalfWaveRectifierFig2}.
+Many of the circuits considered in this report were solved using source stepping of the modified system
+
+\begin{equation}\label{eqn:ece1254projectReport:1460}
+f(\BV, \lambda) = \BY \BV - \lambda \BI - \mathcal{I}(\BV),
+\end{equation}
+
+with \( \lambda \in [0, 1] \), each time feeding the previous solution of \( \BV \) as the initial guess with the new source step value \( \lambda \).
+
+That did not work for this system, which is ill-conditioned for \( \lambda = 0 \).  The Newton's method procedure was modifed to use \( \lambda \in [d\lambda, 1] \) if the Jacobian for \cref{eqn:ece1254projectReport:1460} was ill conditioned or NaN at \( \lambda = 1 \).  With that refinement of the source stepping algorithm, Harmonic Balance simulation of this half wave rectifier produces the expected results, as plotted in \cref{fig:HalfWaveRectifierFig2}.
+
+\imageFigureHere{../../figures/ece1254/report/halfWaveRectifierVoltageFig2}{Half wave rectifier voltages.}{fig:HalfWaveRectifierFig2}{3in}
 
 
+\subsection{AC to DC conversion}
 
+Adding a capacitor to the half wave rectifier, as sketched in \cref{fig:typicalRectifierCircuitFig1}, adds an imaginary component to the admittance matrix \( \BY \), while still only requiring a single non-linear component.
 
+\imageFigureHere{../../figures/ece1254/report/typicalRectifierCircuitFig1}{DC rectifier circuit}{fig:typicalRectifierCircuitFig1}{4.0in}
+%%%\begin{figure}[!h]
+%%%%\subfloat[AC to DC rectifier circuit]{%
+%%%\subfloat{%
+%%%   \includegraphics[width=2.5in]{../../figures/ece1254/report/typicalRectifierCircuitFig1}%
+%%%   \label{fig:typicalRectifierCircuitFig1}%
+%%%}
+%%%%\subfloat[Parameters]{%
+%%%\subfloat{%
+%%%\tiny{
+%%%\begin{tabular}[b]{|l|r|} \hline
+%%%  Parameter & Value \\ \hline\hline
+%%%  \( \nu_0 \) & 1 MHz \\ \hline
+%%%  \( V_1 \) & 10 V (peak) \\ \hline
+%%%  \( R_1 \) & 1 k \(\Omega\) \\ \hline
+%%%  \( C_1 \) & 1 \(\mu\) F \\ \hline
+%%%  \( D_1, I_0 \) & 10 pA \\ \hline
+%%%  \( D_1, V_T \) & 25 mV \\ \hline
+%%%\end{tabular}
+%%%}
+%%%\label{tab:typicalRectifierCircuit:typicalRectifierCircuitParameters}}
+%%%%\hfil
+%%%%\subfloat[Source and output voltages.]
+%%%%\hfil
+%%%%\subfloat[cputime vs error for variety of N.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/typicalRectifierCircuitErrorAndCpuTimesFig3}%
+%%%%\label{fig:typicalRectifierCircuitFig3}}
+%%%\caption{AC to DC rectifier}
+%%%\label{fig:typicalRectifierCircuit}
+%%%\end{figure}
 
-\begin{figure*}[!t]
-\centering
-\subfloat[Bridge rectifier circuit diagram]{\includegraphics[width=1.5in]{../../figures/ece1254/report/bridgeRectifierCircuitDiagramFig1}%
-\label{fig:bridgeRectifier:bridgeRectifierFig1}}
+Plots of the simulation results with 
+capacitor values of \( 1 \, \mu \) F, and \( 1 \) nF can be found in
+\cref{fig:typicalRectifierCircuitFig3}, and 
+\cref{fig:typicalRectifierCircuitFig4} respectively.  Further reduction of the capacitor size would eventually produce the original half wave rectifier results.
+
+\imageFigureHere{../../figures/ece1254/report/typicalRectifierCircuitSourceAndOutputVoltagesFig2}{DC rectifier voltages at \( 1 \mu \) F}{fig:typicalRectifierCircuitFig3}{3.0in}
+\imageFigureHere{../../figures/ece1254/report/typicalRectifierCircuitSmallerCapSourceAndOutputVoltagesFig2}{DC rectifier voltages at \( 1 \) nF}{fig:typicalRectifierCircuitFig4}{3.0in}
+
+\subsection{Bridge rectifier}
+
+The 
+bridge rectifier circuit of 
+\cref{fig:bridgeRectifierCircuitDiagramFig1} 
+was used as a test system that included multiple non-linear elements.
+
+\imageFigureHere{../../figures/ece1254/report/bridgeRectifierCircuitDiagramFig1}{Bridge rectifier}{fig:bridgeRectifierCircuitDiagramFig1}{3.0in}
+
+Current will flow through only one pair of the diodes at any given point.  The inversion of any negative source voltages at the output node is seen in the plot of 
+
+\imageFigureHere{../../figures/ece1254/report/bridgeRectifierOutputVoltageFig2}{Source and output voltages}{fig:bridgeRectifierFig2}{3.0in}
+
+%\begin{figure}[!h]
+%\centering
+%%\subfloat[Bridge rectifier circuit diagram]{\includegraphics[width=1.5in]{../../figures/ece1254/report/}%
+%%\label{fig:bridgeRectifierFig1}}
+%%\subfloat[Parameters]{%
+%%\small
+%%\begin{tabular}[b]{|l|r|} \hline
+%%  Parameter & Value \\ \hline\hline
+%%  \( \nu_0 \) & 1 MHz \\ \hline
+%%  \( V_1 \) & 10 V (peak) \\ \hline
+%%  \( R_1 \) & 1 k \(\Omega\) \\ \hline
+%%  \( C_1 \) & 1 \(\mu\) F \\ \hline
+%%  \( D_1, I_0 \) & 10 pA \\ \hline
+%%  \( D_1, V_T \) & 25 mV \\ \hline
+%%\end{tabular}
+%%\label{tab:bridgeRectifier:bridgeRectifierParameters}}
+%%\hfil
+%%\subfloat[Source and output voltages.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/bridgeRectifierOutputVoltageFig2}%
+%%\label{fig:bridgeRectifierFig2}}
+%\hfil
+%\subfloat[Source current.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/bridgeRectifierSourceCurrentFig3}%
+%\label{fig:bridgeRectifierFig3}}
+%\hfil
+%\subfloat[Diode voltages.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/bridgeRectifierDiodeVoltagesFig4}%
+%\label{fig:bridgeRectifierFig3}}
+%\caption{Bridge rectifier circuit and simulation results.}
+%\label{fig:bridgeRectifier}
+%\end{figure}
+
+\subsection{Cpu time and error vs N}
+
+%\imageFigureHere{../../figures/ece1254/report/bridgeRectifierCircuitDiagramFig1}{Bridge rectifier}{fig:bridgeRectifierFig1}{2.0in}
+
+The bridge rectifier circuit of
+\cref{fig:bridgeRectifierCircuitDiagramFig1} was also used for
+measurements of error and cpu times for range of values of \( N \).  These are plotted as a log-log plots in 
+\cref{fig:bridgeRectifierFig5}.
+Here error is measured as the biggest absolute difference between the solution for a given value of \( N \) vs 
+a ``sufficiently large'' value of N (100).
+
+\imageFigureHere{../../figures/ece1254/report/bridgeRectifierErrorAndCpuTimesFig5}{Error and Cpu vs N}{fig:bridgeRectifierFig5}{3.0in}
+
+Observe that the relations are both nearly linear in the log-log plots, indicating that the error and cpu both have the form \( a N^m \).  Measuring the respective slopes (using the matlab function polyfit), the cpu time is found to be \( O(N^{1.5}) \), and the error is \( O(1/N^2) \), at least for this particular circuit.
+
+%\begin{figure*}[!h]
+%\centering
+%\subfloat[Simple rectifier circuit diagram]{\includegraphics[width=2in]{../../figures/ece1254/report/simpleRectifierCircuitFig1}%
+%\label{fig:simpleRectifierCircuitFig1}}
 %\subfloat[Parameters]{%
-%\small
+%\tiny{
 %\begin{tabular}[b]{|l|r|} \hline
 %  Parameter & Value \\ \hline\hline
 %  \( \nu_0 \) & 1 MHz \\ \hline
-%  \( V_1 \) & 10 V (peak) \\ \hline
+%  \( I_0 \) & 10 mA (peak) \\ \hline
 %  \( R_1 \) & 1 k \(\Omega\) \\ \hline
-%  \( C_1 \) & 1 \(\mu\) F \\ \hline
 %  \( D_1, I_0 \) & 10 pA \\ \hline
 %  \( D_1, V_T \) & 25 mV \\ \hline
 %\end{tabular}
-%\label{tab:bridgeRectifier:bridgeRectifierParameters}}
-\hfil
-\subfloat[Source and output voltages.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/bridgeRectifierOutputVoltageFig2}%
-\label{fig:bridgeRectifier:bridgeRectifierFig2}}
-\subfloat[Source current.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/bridgeRectifierSourceCurrentFig3}%
-\label{fig:bridgeRectifier:bridgeRectifierFig3}}
-\subfloat[Diode voltages.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/bridgeRectifierDiodeVoltagesFig4}%
-\label{fig:bridgeRectifier:bridgeRectifierFig3}}
-\caption{Bridge rectifier circuit and simulation results.}
-\label{fig:bridgeRectifier:bridgeRectifier}
-\end{figure*}
+%}
+%\label{tab:simpleRectifierCircuit:simpleRectifierCircuitParameters}}
+%\hfil
+%\subfloat[Output.]{
+%   \includegraphics[width=1.5in]{../../figures/ece1254/report/simpleRectifierCircuitVoltageFig2}%
+%%   \def\svgwidth{1.5in}
+%%   \input{../../figures/ece1254/report_svg/simpleRectifierCircuitVoltageFig2.pdf_tex}%
+%\label{fig:simpleRectifierCircuitFig2}}
+%%\subfloat[cputime vs error for variety of N.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/simpleRectifierCircuitErrorAndCpuTimesFig3}%
+%\caption{Simple rectifier circuit and simulation results.}
+%\label{fig:simpleRectifierCircuit}
+%\end{figure*}
 
-\begin{figure*}[!t]
+
+
+
+
+
+
+%\begin{figure*}[!h]
+%\hfil
+%\subfloat[Source current.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/bridgeRectifierCapFilterSourceCurrentFig3}%
+%\label{fig:bridgeRectifierCapFilterFig3}}
+%\caption{Bridge rectifier circuit with capacitive filter and simulation results.}
+%\label{fig:bridgeRectifierCapFilter}
+%\end{figure*}
+
+\subsection{Taylor series non-linearities}
+
+As a test for the power series non-linear support of this implementation, two of the diodes in the bridge rectifier circuit were replaced with equivalent four term Taylor expansions.  The results are plotted in
+
+\imageFigureHere{../../figures/ece1254/report/bridgeRectifierPowSourceAndOutputVoltagesFig2}{Source and output voltages for partial approximate bridge rectifier.}{fig:bridgeRectifierPowSourceAndOutputVoltagesFig2}{3.0in}
+
+\subsection{Stiff systems}
+
+For the low pass and rectifier circuits above, use of source stepping was sufficient (and required) to ensure convergence.  However, introduction of a capacitor into a bridge rectifier circuit, as shown in \cref{fig:bridgeRectifierCapFilterFig1} is enough to cause a number of Matlab messages ``Matrix is close to singular or badly scaled'' along with associated very small conditioning numbers.
+
+\begin{figure}[!h]
 \centering
 \subfloat[Bridge rectifier with capacitive filter circuit diagram]{\includegraphics[width=2.0in]{../../figures/ece1254/report/bridgeRectifierCapFilterFig1}%
-\label{fig:bridgeRectifierCapFilter:bridgeRectifierCapFilterFig1}}
+\label{fig:bridgeRectifierCapFilterFig1}}
 \subfloat[Parameters]{%
 \tiny{
 \begin{tabular}[b]{|l|r|} \hline
@@ -1743,17 +1859,20 @@ In the plots of cputime and error vs N, the error is the biggest difference betw
   \( D_i, V_T \) & 25 mV \\ \hline
 \end{tabular}
 }
-\label{tab:bridgeRectifierCapFilter:bridgeRectifierCapFilterParameters}}
-\hfil
-\subfloat[Source and output voltages.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/bridgeRectifierCapFilterSourceAndOutputVoltagesFig2}%
-\label{fig:bridgeRectifierCapFilter:bridgeRectifierCapFilterFig2}}
-\subfloat[Source current.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/bridgeRectifierCapFilterSourceCurrentFig3}%
-\label{fig:bridgeRectifierCapFilter:bridgeRectifierCapFilterFig3}}
-\subfloat[Diode voltages.]{\includegraphics[width=1.5in]{../../figures/ece1254/report/bridgeRectifierCapFilterDiodeVoltagesFig4}%
-\label{fig:bridgeRectifierCapFilter:bridgeRectifierCapFilterFig3}}
-\caption{Bridge rectifier circuit with capacitive filter and simulation results.}
-\label{fig:bridgeRectifierCapFilter:bridgeRectifierCapFilter}
-\end{figure*}
+\label{tab:bridgeRectifierCapFilterParameters}}
+\end{figure}
+
+The circuit simulation produces the expected a DC rectified signal as plotted in \cref{fig:bridgeRectifierCapFilterFig2}.
+
+\imageFigureHere{../../figures/ece1254/report/bridgeRectifierCapFilterSourceAndOutputVoltagesFig2}{Source and output voltages.}{fig:bridgeRectifierCapFilterFig2}{3.0in}
+
+Artifacts of the conditioning problems show up in the simulated outputs for the voltages through the diodes as plotted in \cref{fig:bridgeRectifierCapFilterFig3}.
+
+\imageFigureHere{../../figures/ece1254/report/bridgeRectifierCapFilterDiodeVoltagesFig4}{Diode voltages.}{fig:bridgeRectifierCapFilterFig3}{3.0in}
+
+The doubling and halfing heuristic used for the step sizes is insufficient for this circuit.
+Even after 
+reducing the step size by a many orders of magnitude, and capping the step doubling at the initial step size, the solutions for this circuit stubbornly refused to converge without Matlab numerical conditioning diagnostics.  For this circuit, and surely others, it appears that additional strategies beyond source stepping are required to compute a solution without hitting numerical instabilities.
 
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
