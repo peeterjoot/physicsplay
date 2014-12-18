@@ -64,7 +64,7 @@ all :: peeters_layout.sty
 all :: peeters_layout_exercise.sty
 all :: macros_bm.sty
 all :: $(LOCAL_FILES) $(PDFS) .gitignore
-HarmonicBalance.pdf : hbFigure.sty
+HarmonicBalance.pdf : hbFigure.sty ../ece1254/HarmonicBalanceAbstract.tex ../ece1254/HarmonicBalanceText.tex
 #all :: ftMaxVacuum.pdf
 
 .gitignore : GNUmakefile
