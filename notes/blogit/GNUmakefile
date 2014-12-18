@@ -64,6 +64,7 @@ all :: peeters_layout.sty
 all :: peeters_layout_exercise.sty
 all :: macros_bm.sty
 all :: $(LOCAL_FILES) $(PDFS) .gitignore
+HarmonicBalance.pdf : hbFigure.sty
 #all :: ftMaxVacuum.pdf
 
 .gitignore : GNUmakefile
@@ -107,6 +108,9 @@ mostlyclean ::
 	rm -f $(CLEAN_TARGETS)
 
 peeters_layout.sty : ../peeters_layout.sty
+	cp $^ $@
+
+hbFigure.sty : ../ece1254/hbFigure.sty
 	cp $^ $@
 
 peeters_layout_exercise.sty : ../peeters_layout_exercise.sty
