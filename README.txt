@@ -88,6 +88,10 @@ notes/ece1254/
 
   Class notes and problems from 'Modeling of Multiphysics Systems', taught by Prof. P. Triverio.
 
+notes/ece1229/
+
+  Class notes and problems from 'Advanced Antenna Theory', taught by Prof. G.V. Eleftheriades.
+
 notes/resume/
 
    A hack job of a resume produced for a google head hunter, since I was curious what sort of job he was offering
