@@ -2,6 +2,8 @@ THISDIR := phy450
 
 include ../make.bookvars
 
+#ONCEFLAGS := -justonce
+
 FIGURES := ../../figures/$(THISDIR)
 
 SOURCE_DIRS += $(FIGURES)
