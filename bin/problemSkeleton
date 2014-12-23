@@ -1,0 +1,81 @@
+#!/usr/bin/perl
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+
+my $showUsage = 0 ;
+my $filename ;
+my $number = 0 ;
+my $description = 'description' ;
+my $lastpartnumber = 0 ;
+
+GetOptions
+(
+   'filename=s' => \$filename,
+   'number=i'   => \$number,
+   'part=s'     => \$lastpartnumber,
+   'help!'      => \$showUsage,
+) ;
+
+my $usage = "Example: pp -filename f -number 2 -part c
+
+This generates a \\makeproblem skeleton for pr:basename:2 with parts a,b,c
+" ;
+
+if ( $showUsage || !defined $filename )
+{
+   die $usage ;
+}
+
+my $basename = $filename ;
+$basename =~ s/\..*// ;
+
+my @partlabels = () ;
+
+if ( $lastpartnumber )
+{
+   my $firstpart = $lastpartnumber ;
+   if ( $lastpartnumber =~ /[a-z]/ )
+   {
+      $firstpart = 'a' ;
+   }
+   else
+   {
+      $firstpart = '1' ;
+   }
+
+   @partlabels = ($firstpart..$lastpartnumber) ;   
+}
+
+#print "@partlabels\n" ;
+
+print "
+\\makeproblem{
+$description
+}{pr:$basename:$number}{ 
+" ;
+
+foreach (@partlabels)
+{
+print "
+\\makesubproblem{}{pr:$basename:$number:$_}
+" ;
+}
+
+print "
+} % makeproblem
+
+\\makeanswer{pr:$basename:$number}{ 
+" ;
+
+foreach (@partlabels)
+{
+print "
+\\makeSubAnswer{}{pr:$basename:$number:$_}
+" ;
+}
+
+print "
+} % makeanswer
+" ;
