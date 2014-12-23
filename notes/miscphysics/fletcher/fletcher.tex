@@ -33,8 +33,8 @@
 
 Statement in some code is
 
-``$(x \& 0xFFFFFFFF) + (x \rightshift 32)$ is a faster way to do $x \Mod 0xFFFFFFFF$, except the max result may be
-$0x1FFFFFFFE$, so need another round of this.''
+``\((x \& 0xFFFFFFFF) + (x \rightshift 32)\) is a faster way to do \(x \Mod 0xFFFFFFFF\), except the max result may be
+\(0x1FFFFFFFE\), so need another round of this.''
 
 How can this be justified?
 
@@ -44,7 +44,7 @@ Suppose we have
 
 \begin{equation}\label{eqn:fletcher:modPower2}
 \begin{aligned}
-x = y \times 2^B + r \quad \mbox{where $r \le 2^{B-1}$}
+x = y \times 2^B + r \quad \mbox{where \(r \le 2^{B-1}\)}
 \end{aligned}
 \end{equation}
 
@@ -87,10 +87,10 @@ x \Mod (2^B -1) &= (y + r) \Mod (2^B -1) \\
 \end{equation}
 
 The net effect is that the original desired modulus calculation has been reduced to one of a lesser numerical order.  In particular, for the
-code in question we have $B=32$, and an unsigned 64-bit value $x$.  This means the value $y \le 0xFFFFFFFF$, whereas $r \le 0xFFFFFFFF$, so the new value
-$y + r \le 0x1FFFFFFFE$ with up to 31 bits knocked off.  A second round of reduction can give a value no more than $0xFFFFFFFE + 1 = 0xFFFFFFFF$.
+code in question we have \(B=32\), and an unsigned 64-bit value \(x\).  This means the value \(y \le 0xFFFFFFFF\), whereas \(r \le 0xFFFFFFFF\), so the new value
+\(y + r \le 0x1FFFFFFFE\) with up to 31 bits knocked off.  A second round of reduction can give a value no more than \(0xFFFFFFFE + 1 = 0xFFFFFFFF\).
 
-The conclusion is that this ``fast modulus'' is not exactly a modulus replacement.  Instead it is either the true modulus (ie: $x \Mod 0xFFFFFFFF < 0xFFFFFFFF$), but may for some $x$ actually be equal to $0xFFFFFFFF$.  This almost modulus operation was however sufficient in the code in question, since the idea was only to reduce the magnitude to a 32-bit quantity.
+The conclusion is that this ``fast modulus'' is not exactly a modulus replacement.  Instead it is either the true modulus (ie: \(x \Mod 0xFFFFFFFF < 0xFFFFFFFF\)), but may for some \(x\) actually be equal to \(0xFFFFFFFF\).  This almost modulus operation was however sufficient in the code in question, since the idea was only to reduce the magnitude to a 32-bit quantity.
 
 \section{Fletcher64}
 
@@ -106,7 +106,7 @@ A 32-bit word extension of the \href{http://en.wikipedia.org/wiki/Fletcher%27s_c
 \end{aligned}
 \end{equation}
 
-Where $\Mod_{32}(x)$ is the fast modulus operation described above.
+Where \(\Mod_{32}(x)\) is the fast modulus operation described above.
 
 The summation equivalent to the loop above is
 \begin{equation}\label{eqn:fletcher:122}
@@ -169,7 +169,7 @@ With 32K page sizes and 4 byte words we have a max number of iterations for the 
 \end{aligned}
 \end{equation}
 
-Assuming the biggest size value of $M = A_i = 0xFFFFFFFF$ when do our summation variables wrap?
+Assuming the biggest size value of \(M = A_i = 0xFFFFFFFF\) when do our summation variables wrap?
 
 \begin{equation}\label{eqn:fletcher:242}
 \begin{aligned}
@@ -178,7 +178,7 @@ S_2 &= \sum_{i=0}^{n-1} (n-i)A_i <= M \sum_{i=0}^{n-1} (n-i) = M n(n-1)/2 < M n^
 \end{aligned}
 \end{equation}
 
-The overflow point is dominated by the $S_2$ sum, so if our max accumulator value is $M_a$ we want
+The overflow point is dominated by the \(S_2\) sum, so if our max accumulator value is \(M_a\) we want
 
 \begin{equation}\label{eqn:fletcher:262}
 \begin{aligned}
@@ -195,7 +195,7 @@ For 64-bit max accumulator and 32-bit words we have
 \end{aligned}
 \end{equation}
 
-which is far bigger than $8192$.
+which is far bigger than \(8192\).
 
 % google calc:
 %log( (2^64-1)/8192 + 1)/log( 2 )
