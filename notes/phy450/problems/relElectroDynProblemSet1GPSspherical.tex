@@ -14,7 +14,7 @@ Here is the play I did the first time around.
 
 It is fairly easy to find interesting info about the mechanisms that real GPS works using.  NASA has a nice \href{http://www.nasm.si.edu/gps/work.html}{How does GPS work} page \citep{nasaGPS}, and How stuff works has a nice \href{http://electronics.howstuffworks.com/gadgets/travel/gps.htm}{How GPS Receivers Work} article \citep{howStuffWorksGPS}.  Reading these one finds that the GPS clocks are actually kept synchronized.  The typical GPS receiver obviously has a clock, since we have countdown timers for time until arrival, is that clock accurate enough compared to the satellite atomic clocks to be used for the GPS location algorithm?  What is done in fact is to use the local receiver time to seed the iterative algorithms, allowing the local time to be calculated eventually with an accuracy that actually approaches that of the satellite's atomic clocks.  Some of the sources of error, like reflection of the signals, delaying them, and interference by atmosphere are also discussed in these articles.  Also interesting is that there is a table lookup of the satellites position implemented in the GPS receivers.  This table lookup is used to seed the iterative algorithms, and can be used to reduce calculation error.
 
-Our basic GPS problem is to calculate the intersection of a number of ``spherical'' hypersurfaces.  This is made more interesting by the fact that this is both a non-linear and an over-specified problem.  Let us consider the geometric problem to get an idea of how to set up this problem.  Suppose that we have a set of $k$ satellites, located at position $\Bp_i, i \in [1,k]$, and we know that these are located with distance $d_i$ from our position $\Bx$.
+Our basic GPS problem is to calculate the intersection of a number of ``spherical'' hypersurfaces.  This is made more interesting by the fact that this is both a non-linear and an over-specified problem.  Let us consider the geometric problem to get an idea of how to set up this problem.  Suppose that we have a set of \(k\) satellites, located at position \(\Bp_i, i \in [1,k]\), and we know that these are located with distance \(d_i\) from our position \(\Bx\).
 
 Our problem is then to find the simultaneous solution to the following set of equations
 
@@ -27,7 +27,7 @@ Our problem is then to find the simultaneous solution to the following set of eq
 \end{aligned}
 \end{equation}
 
-Observe that even if we reduce this to a one dimensional problem in a single variable $x$, we still have a non-linear system
+Observe that even if we reduce this to a one dimensional problem in a single variable \(x\), we still have a non-linear system
 
 \begin{equation}\label{eqn:relativisticElectrodynamicsA1:300b}
 \begin{aligned}
@@ -38,7 +38,7 @@ Observe that even if we reduce this to a one dimensional problem in a single var
 \end{aligned}
 \end{equation}
 
-We also need to be aware of the fact that each of the positions $p_i$, and the respective distances $d_i$ will in reality both have associated errors, so there is not likely any specific single value of $x$ that ``solves'' this problem, unless it is setup in a contrived and perfect fashion.  This intrinsic error, and the $k$ equations, one unknown nature of the problem (or three unknowns for spatial, or four for spatial and time position) suggests a least squares approach, but it will have to be one that also incorporates iteration.
+We also need to be aware of the fact that each of the positions \(p_i\), and the respective distances \(d_i\) will in reality both have associated errors, so there is not likely any specific single value of \(x\) that ``solves'' this problem, unless it is setup in a contrived and perfect fashion.  This intrinsic error, and the \(k\) equations, one unknown nature of the problem (or three unknowns for spatial, or four for spatial and time position) suggests a least squares approach, but it will have to be one that also incorporates iteration.
 
 We can setup our problem in matrix form, where we are looking for a solution to 
 
@@ -57,7 +57,7 @@ F_i(x)
 = 0.
 \end{equation}
 
-We seek the spacetime event vector $x = (c t, \Bx)$ for the spatial location and the exact local time at the location of the GPS receiver.  Given any approximation of the solution, we can refine the solution using Newton's root finding method by taking partials, forming the Jacobian matrix for our function $F(x)$.  That is
+We seek the spacetime event vector \(x = (c t, \Bx)\) for the spatial location and the exact local time at the location of the GPS receiver.  Given any approximation of the solution, we can refine the solution using Newton's root finding method by taking partials, forming the Jacobian matrix for our function \(F(x)\).  That is
 
 \begin{equation}\label{eqn:relativisticElectrodynamicsA1:320}
 F(x_0 + \Delta x) \approx F(x_0) + \evalbar{\PD{x^j}{F_i(x)}}{x_0} \Delta x^j = F(x_0) + J(x_0) \Delta x = 0
@@ -75,14 +75,14 @@ where
 J^\dagger = (J^\T J)^{-1} J^\T.
 \end{equation}
 
-This is a solution in the least squares sense that given $b = J x$, the norm $\Abs{ J \overbar{x} - b}$ is minimized by $\overbar{x} = J^\dagger b$.
+This is a solution in the least squares sense that given \(b = J x\), the norm \(\Abs{ J \overbar{x} - b}\) is minimized by \(\overbar{x} = J^\dagger b\).
 
 This iterative method of solution, in the context of finding fitting circles and ellipses can be found discussed in detail in \citep{gander1994least}.
 
 
 \paragraph{Goofing around with the geometry of it all}
 
-For our toy model we have two satellites $A$ and $B$ both moving in the positive x-axis direction at velocity $V_x$ at height $h$.  As seen above, we do not require the velocity of the satellites to setup the problem, and could express the problem to solve as the numerical solution of the set of equations
+For our toy model we have two satellites \(A\) and \(B\) both moving in the positive x-axis direction at velocity \(V_x\) at height \(h\).  As seen above, we do not require the velocity of the satellites to setup the problem, and could express the problem to solve as the numerical solution of the set of equations
 
 \begin{equation}\label{eqn:relativisticElectrodynamicsA1:350}
 F(x) = 
@@ -92,7 +92,7 @@ F(x) =
 \end{bmatrix} = 0.
 \end{equation}
 
-If we assume that our GPS receiver's clock is synchronized sufficiently with satellites $A$ and $B$, this single variable problem admits a closed form for one iteration of the least squares process.  However, since we are asked for a result that includes a $V_x/c$ term, we can augment our matrix equation by two additional rows, with a secondary set of data points introduced at an offset time interval.  That is
+If we assume that our GPS receiver's clock is synchronized sufficiently with satellites \(A\) and \(B\), this single variable problem admits a closed form for one iteration of the least squares process.  However, since we are asked for a result that includes a \(V_x/c\) term, we can augment our matrix equation by two additional rows, with a secondary set of data points introduced at an offset time interval.  That is
 
 \begin{equation}\label{eqn:relativisticElectrodynamicsA1:360}
 F(x) = 
@@ -104,7 +104,7 @@ F(x) =
 \end{bmatrix} = 0.
 \end{equation}
 
-With $t$, $\delta t$, $x_A'$, and $x_B'$ given, and an initial seed value for the iterative procedure assumed to be the midpoint $x_0 = (x_A' + x_B')/2$, we can calculate a first approximation to the receiver position $x_1 = x_0 + \Delta x$ using the Newton's procedure outlined above.
+With \(t\), \(\delta t\), \(x_A'\), and \(x_B'\) given, and an initial seed value for the iterative procedure assumed to be the midpoint \(x_0 = (x_A' + x_B')/2\), we can calculate a first approximation to the receiver position \(x_1 = x_0 + \Delta x\) using the Newton's procedure outlined above.
 
 For this system our Jacobian elements are all differentials of the following form
 
@@ -124,7 +124,7 @@ J =
 \end{bmatrix}
 \end{equation}
 
-Our deviation from the midpoint to first order in $V_x/c$ is
+Our deviation from the midpoint to first order in \(V_x/c\) is
 
 \begin{equation}\label{eqn:relativisticElectrodynamicsA1:390}
 \Delta x = - \evalbar{ \frac{J^\T F}{J^T J} }{x = (x_A' + x_B')/2}
