@@ -11,8 +11,8 @@ CLEAN_TARGETS += *.synctex.gz
 
 # buildable:
 #INCOMPLETE += dotBlade.tex
-#INCOMPLETE += gaBasics.tex
-#INCOMPLETE += gaMintro.tex
+INCOMPLETE += gaBasics.tex
+INCOMPLETE += gaMintro.tex
 #INCOMPLETE += maxwellsFromGA.tex
 #INCOMPLETE += pipeFlowConstPressureGradient.tex
 #INCOMPLETE += qmTwoExamReflection.tex
