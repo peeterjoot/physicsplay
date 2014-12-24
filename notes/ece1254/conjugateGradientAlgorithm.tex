@@ -7,7 +7,7 @@
 
 The conjugate gradient algorithm presented in the slides (without preconditioning) was
 
-\begin{algorithmic}
+\makealgorithm{conjugate gradient}{alg:conjugateGradientAlgorithm:401}{
 \STATE \( \Bd^{(0)} = \Br^{(0)} \)
 \REPEAT
 \STATE \( \alpha_k = \frac{ \lr{ \Bd^{(k)} }^\T \Br^{(k)} }{ \lr{ \Bd^{(k)} }^\T M \Bd^{(k)} } \)
@@ -16,11 +16,11 @@ The conjugate gradient algorithm presented in the slides (without preconditionin
 \STATE \( \beta_k = \frac{ \lr{ M \Bd^{(k)} }^\T \Br^{(k+1)} }{ \lr{ M \Bd^{(k)} }^\T \Bd^{(k)} } \)
 \STATE \( \Bd^{(k+1)} = \Br^{(k+1)} - \beta_k \Bd^{(k)} \)
 \UNTIL{converged}
-\end{algorithmic}
+}
 
 The repeated calculations are undesirable for actually coding this algorithm.  First introduce a temporary for the matrix product
 
-\begin{algorithmic}
+\makealgorithm{conjugate gradient with temporaries}{alg:conjugateGradientAlgorithm:402}{
 \STATE \( \Bd^{(0)} = \Br^{(0)} \)
 \REPEAT
 \STATE \( \Bq = M \Bd^{(k)} \)
@@ -30,7 +30,7 @@ The repeated calculations are undesirable for actually coding this algorithm.  F
 \STATE \( \beta_k = \frac{ \Bq^\T \Br^{(k+1)} }{ \Bq^\T \Bd^{(k)} } \)
 \STATE \( \Bd^{(k+1)} = \Br^{(k+1)} - \beta_k \Bd^{(k)} \)
 \UNTIL{converged}
-\end{algorithmic}
+}
 
 This has a lot more computation than the algorithm specified in \citep{shewchuk1994introduction} \S B.2.  It looks like the orthogonality properties can be used to recast the \( \Bd^{(k)} \cdot \Br^{(k)} \) products in terms of \( \Br^{(k)} \)
 
@@ -77,7 +77,7 @@ A final elimination of \( \alpha_k \) from \cref{eqn:conjugateGradientAlgorithm:
 
 All the pieces put together yield
 
-\begin{algorithmic}
+\makealgorithm{optimized conjugate gradient}{alg:conjugateGradientAlgorithm:403}{
 \STATE \( \Bd^{(0)} = \Br^{(0)} \)
 \REPEAT
 \STATE \( \Bq = M \Bd^{(k)} \)
@@ -91,13 +91,13 @@ All the pieces put together yield
 \)
 \STATE \( \Bd^{(k+1)} = \Br^{(k+1)} - \beta_k \Bd^{(k)} \)
 \UNTIL{converged}
-\end{algorithmic}
+}
 
 This is now consistent with eqns 45-49 of \citep{shewchuk1994introduction}, with the exception that the sign of the \( \beta_k \) term has been flipped.
 
 Since all the previous state does not have to be tracked the indexes can be dropped after introducing a couple temporary variables for the squared residuals
 
-\begin{algorithmic}
+\makealgorithm{optimized conjugate gradient, more temporaries}{alg:conjugateGradientAlgorithm:404}{
 \STATE \( \Bx = \Bx^{(0)} \)
 \STATE \( \Bq = M \Bx \)
 \STATE \( \Br = \Bb - \Bq\)
@@ -113,7 +113,7 @@ Since all the previous state does not have to be tracked the indexes can be drop
 \STATE \( \delta = \delta' \)
 \STATE \( \Bd = \Br + \beta \Bd \)
 \UNTIL{converged}
-\end{algorithmic}
+}
 
 This is coded in \nbcite{ps2a:conjugateGradientPainlessB2.m}{ps2a/conjugateGradientPainlessB2.m}.  That implementation allows for a preconditioner, but applies the preconditioner in a dump and inefficient way.
 
@@ -236,7 +236,7 @@ This is coded in \nbcite{ps2a:conjugateGradientPainlessB2.m}{ps2a/conjugateGradi
 
 An optimized preconditioned CG algorithm can be found in \citep{quarteroni2007numerical} \S 4.3.5.  Given \( \Bx^{(0)} \), that algorithm is
 
-\begin{algorithmic}
+\makealgorithm{conjugate gradient with preconditioning}{alg:conjugateGradientAlgorithm:405}{
 \STATE \( \Br^{(0)} = \Bb - A \Bx^{(0)} \)
 \STATE \( \Bz^{(0)} = P^{-1} \Br^{(0)} \) 
 \STATE \( \Bp^{(0)} = \Bz^{(0)} \)
@@ -248,11 +248,11 @@ An optimized preconditioned CG algorithm can be found in \citep{quarteroni2007nu
 \STATE \( \beta_k = \frac{ \lr{ \Bz^{(k+1)}}^\T \Br^{(k+1)} }{ \lr{ \Bz^{(k)} }^\T \Br^{(k)}} \)
 \STATE \( \Bp^{(k+1)} = \Bz^{(k+1)} + \beta_k \Bp^{(k)} \)
 \UNTIL{converged}
-\end{algorithmic}
+}
 
 To adapt this to code, drop the indexes and introduce some temporaries
 
-\begin{algorithmic}
+\makealgorithm{conjugate gradient with preconditioning and temporaries}{alg:conjugateGradientAlgorithm:406}{
 \STATE \( \Br = \Bb - A \Bx \)
 \STATE \( P \Bz = \Br \) 
 \STATE \( \Bp = \Bz \)
@@ -268,6 +268,6 @@ To adapt this to code, drop the indexes and introduce some temporaries
 \STATE \( \delta = \delta' \)
 \STATE \( \Bp = \Bz + \beta \Bp \)
 \UNTIL{converged}
-\end{algorithmic}
+}
 
 This is coded in \nbcite{ps2a:conjugateGradientQuarteroniPrecond.m}{ps2a/conjugateGradientQuarteroniPrecond.m}
