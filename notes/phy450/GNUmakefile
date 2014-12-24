@@ -18,3 +18,6 @@ include ../make.rules
 
 backmatter.tex : ../classicthesis.mine/backmatter.tex
 	cp $< $@
+
+poppitz.tex : mkpref
+	./mkpref > $@
