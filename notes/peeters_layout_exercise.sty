@@ -1,6 +1,7 @@
 %-----------------------------------------------------------------------------------
 
 \RequirePackage{exercise}
+\RequirePackage{mdframed}
 
    %-----------------------------------------------------------------------------------
    % remove the centerline that we have in exercise.sty
@@ -224,14 +225,53 @@
   \begin{mdframed}[]\relax%
   }{\end{mdframed}}
 
+\RequirePackage{algorithmic} % for makealgorithm
+
 \newcommand{\makealgorithm}[3]{%
 \begin{algorithmbox}[#1]\label{#2}%
+\begin{algorithmic}%
 #3%
+\end{algorithmic}%
 \end{algorithmbox}%
 }
 
 %\crefname{algorithmbox}{algorithm}{algorithms} 
 %\Crefname{algorithmbox}{Algorithm}{Algorithms} 
+
+\newcounter{aside}
+\numberwithin{aside}{chapter}
+\newenvironment{aside}[1][]{%
+  \refstepcounter{aside}%
+  \ifstrempty{#1}%
+  {\mdfsetup{%
+    frametitle={%
+      \tikz[baseline=(current bounding box.east),outer sep=0pt]
+      \node[line width=1pt,anchor=east,rectangle,rounded corners,draw=DarkOliveGreen,fill=white]
+    {\strut \color{DarkOliveGreen}{Aside}~\theaside};}}
+  }%
+  {\mdfsetup{%
+    frametitle={%
+      \tikz[baseline=(current bounding box.east),outer sep=0pt]
+      \node[line width=1pt,anchor=east,rectangle,rounded corners,draw=DarkOliveGreen,fill=white]
+    {\strut \color{DarkOliveGreen}{Aside}~\theaside:~\color{Maroon}{#1}};}}%
+  }%
+  \mdfsetup{innertopmargin=10pt,linecolor=DarkOliveGreen,%
+            linewidth=1pt,topline=true,%
+            frametitleaboveskip=\dimexpr-\ht\strutbox\relax,%
+            backgroundcolor=Maroon!10}
+  \begin{mdframed}[]\relax%
+  }{\end{mdframed}}
+
+%\makeaside{blah blah}{aside:foo:1}{
+%foo foo.
+%}
+%
+% title, label, text
+\newcommand{\makeaside}[3]{%
+\begin{aside}[#1]\label{#2}%
+#3%
+\end{aside}%
+}
 
 
 %-------------------------------------------------------------------------------------
