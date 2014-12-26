@@ -2,7 +2,7 @@
 % Copyright © 2014 Peeter Joot.  All Rights Reserved.
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
 %
-\makeproblem{Modeling inductors and capacitors and time dependence}{multiphysics:problemSet3a:1}{ 
+\makeproblem{Modeling inductors and capacitors and time dependence.}{multiphysics:problemSet3a:1}{ 
 
 In this problem you will first extend the circuit simulator that you developed
 in the previous problem sets to include capacitors \index{capacitor} and inductors \index{inductor}. Then, you
@@ -65,7 +65,7 @@ voltage source with the following characteristics: amplitude 1 V, rise/fall
 time 100 ps, period 2 ns, duty cycle 50\%, initial delay 100 ps. The clock
 source voltage is depicted in \cref{fig:problemSet3a:problemSet3aFig2}.
 
-\imageFigure{../../figures/ece1254/problemSet3aFig2}{Clock signal}{fig:problemSet3a:problemSet3aFig2}{0.3}
+\imageFigure{../../figures/ece1254/problemSet3aFig2}{Clock signal.}{fig:problemSet3a:problemSet3aFig2}{0.3}
 
 Model each chip block with a 5 k \( \Omega \) resistor in parallel with a 5 f F capacitor. Write a matlab function that generates a spice-compatible netlist
 of the clock distribution network. Report in a table the values of the
@@ -105,11 +105,11 @@ methods, and comment the obtained results.
 
 To understand how to handle inductors \index{MNA!inductor} in the MNA equations, consider a few representative examples
 
-\makeexample{Simple RLC circuit}{example:multiphysicsProblemSet3a:30}{
+\makeexample{Simple RLC circuit.}{example:multiphysicsProblemSet3a:30}{
 First consider an RLC circuit with a current source as sketched in \cref{fig:problemSet3a:problemSet3aFig3}.
 
 %\imageFigure{../../figures/ece1254/problemSet3aFig3}{RLC circuit with current source}{fig:problemSet3a:problemSet3aFig3}{0.2}
-\imageFigure{../../figures/ece1254/RLC-circuit-with-current-source.pdf}{RLC circuit with current source}{fig:problemSet3a:problemSet3aFig3}{0.2}
+\imageFigure{../../figures/ece1254/RLC-circuit-with-current-source.pdf}{RLC circuit with current source.}{fig:problemSet3a:problemSet3aFig3}{0.2}
 
 With \( Z = 1/R \), the KCLs plus the inductor voltage relation, are
 \begin{enumerate}
@@ -152,7 +152,7 @@ i_s \\
 \end{equation}
 }
 
-\makeexample{RLC circuit with voltage source}{example:multiphysicsProblemSet3a:50}{
+\makeexample{RLC circuit with voltage source.}{example:multiphysicsProblemSet3a:50}{
 Now consider the more complex circuit of \cref{fig:problemSet3a:problemSet3aFig4}, with an inductor between two not ground nodes, as well as a voltage source, which will also require the MNA matrix to be augmented.  The equations, starting with the KCLs by node number, are
 
 \begin{enumerate}
@@ -166,7 +166,7 @@ Now consider the more complex circuit of \cref{fig:problemSet3a:problemSet3aFig4
 \end{enumerate}
 
 %\imageFigure{../../figures/ece1254/problemSet3aFig4}{More complex RLC circuit}{fig:problemSet3a:problemSet3aFig4}{0.2}
-\imageFigure{../../figures/ece1254/more-complex-RLC-circuit.pdf}{More complex RLC circuit}{fig:problemSet3a:problemSet3aFig4}{0.2}
+\imageFigure{../../figures/ece1254/more-complex-RLC-circuit.pdf}{More complex RLC circuit.}{fig:problemSet3a:problemSet3aFig4}{0.2}
 
 In matrix form, this is
 \begin{equation}\label{eqn:multiphysicsProblemSet3a:50}
@@ -226,12 +226,12 @@ V_{s_1} \\
 \DrawMyBox[thick, Maroon, rounded corners]{3}
 }
 
-\makeexample{Final example}{example:multiphysicsProblemSet3a:91}{
+\makeexample{Final example.}{example:multiphysicsProblemSet3a:91}{
 Finally consider a simple example with a single inductor in an interior node as sketched in \cref{fig:ps3aExample3:ps3aExample3Fig1}.
 For this example a labeling convention compatible with the implementation to be will be chosen.  This is important to ensure the signs are correct.
 
 %ps3aExample3Fig1
-\imageFigure{../../figures/ece1254/final-RLC-example-circuit.pdf}{A final RLC example circuit}{fig:ps3aExample3:ps3aExample3Fig1}{0.2}
+\imageFigure{../../figures/ece1254/final-RLC-example-circuit.pdf}{A final RLC example circuit.}{fig:ps3aExample3:ps3aExample3Fig1}{0.2}
 
 
 The equations are
@@ -349,14 +349,14 @@ or
 
 This is the system to solve at each time step for \( \Bx_n \).  A one time LU factorization of \( \BG + \BC/\Delta t \) was used to hoist most of the inversion cost out of the time stepping loop.  The load voltage and the reference clock source is plotted in \cref{fig:ps3aBE:ps3aBEFig1}, calculated using \matlabFuncPath{calculateSolutionForTimestep}{ps3a:calculateSolutionForTimestep.m}(0.05, 1), using a \( 5 \) ps timestep.
 
-\mathImageFigure{../../figures/ece1254/ps3aBEFig1}{Load (chip) voltage calculated with BE}{fig:ps3aBE:ps3aBEFig1}{0.5}{ps3a:driver.m}
+\mathImageFigure{../../figures/ece1254/ps3aBEFig1}{Load (chip) voltage calculated with BE.}{fig:ps3aBE:ps3aBEFig1}{0.5}{ps3a:driver.m}
 
 \makeSubAnswer{}{multiphysics:problemSet3a:1d}
 
 Iterative refinement of the timestep was used to determine a reasonable seeming stopping point.  With a rise and fall time of 100 ps, something smaller than that was clearly required, and 50 ps was tried first to get a rough idea of the output signal, checking against expectations for correctness.  A plot at this timestep clearly shows artifacts of the discretization, which is removed at a timestep of 10 ps.  Further reduction of the timestep to 5 ps sharpens the curve slightly, and can still be completed with a reasonable computation time.  A final reduction of the timestep to 1 ps adds very little additional correction, 
 all at the leading and trailing edges of the signal, but adds significantly to the time required for the calculation.  Plots with these range of timesteps are shown in \cref{fig:ps3aBE:ps3aBEFig2}.
 
-\imageFigure{../../figures/ece1254/ps3aBEFig2}{Chip voltage at a variety of timesteps}{fig:ps3aBE:ps3aBEFig2}{0.5}
+\imageFigure{../../figures/ece1254/ps3aBEFig2}{Chip voltage at a variety of timesteps.}{fig:ps3aBE:ps3aBEFig2}{0.5}
 
 \makeSubAnswer{}{multiphysics:problemSet3a:1e}
 
@@ -387,14 +387,14 @@ the TR system equations take the form
 %
 As with BE a \( \BL \BU = \BP \BA \) factorization can be computed once outside of the loop.  In \cref{fig:ps3aTR:ps3aTRFig4} are plots of such TR solutions with a range of timesteps, calculated using \matlabFuncPath{calculateSolutionForTimestep}{ps3a:calculateSolutionForTimestep.m}(..., 0).
 
-\imageFigure{../../figures/ece1254/ps3aTRFig4}{TR solutions}{fig:ps3aTR:ps3aTRFig4}{0.5}
+\imageFigure{../../figures/ece1254/ps3aTRFig4}{TR solutions.}{fig:ps3aTR:ps3aTRFig4}{0.5}
 
 To facilitate calculation of the error at different timesteps a linear interpolation function \matlabFuncPath{interpolate}{ps3a:interpolate.m}() was used to construct a vector for each of the measurements with the timescale of the reference 1 ps TR solution.
 
 Plots of the errors for each of these, relative to the reference solution are given in \cref{fig:ps3aErrorBE:ps3aErrorBEFig5}, and \cref{fig:ps3aErrorTR:ps3aErrorTRFig6}, for BE and TR respectively.  
 
-\imageFigure{../../figures/ece1254/ps3aErrorBEFig5}{BE error relative to 1 ps TR reference solution}{fig:ps3aErrorBE:ps3aErrorBEFig5}{0.3}
-\imageFigure{../../figures/ece1254/ps3aErrorTRFig6}{TR error relative to 1 ps TR reference solution}{fig:ps3aErrorTR:ps3aErrorTRFig6}{0.3}
+\imageFigure{../../figures/ece1254/ps3aErrorBEFig5}{BE error relative to 1 ps TR reference solution.}{fig:ps3aErrorBE:ps3aErrorBEFig5}{0.3}
+\imageFigure{../../figures/ece1254/ps3aErrorTRFig6}{TR error relative to 1 ps TR reference solution.}{fig:ps3aErrorTR:ps3aErrorTRFig6}{0.3}
 
 At a very course granularity timestep the largest TR error is larger than with BE at the same timestep, however, the TR error is smaller at any given timestep for finer granularity timesteps.  This variation of maximum error with timestep for these methods is tabulated in \cref{tab:multiphysicsProblemSet3a:271}, where the error values are in volts and the cpu times in seconds.  As expected, the cpu cost measurements at fixed timestep for BE and TR do not have statistically significant differences.
 
@@ -425,7 +425,7 @@ The plots and tabulated data above was produced with a call to \matlabFuncPath{d
 
 In \cref{fig:ps3aLogLogError:ps3aLogLogErrorFig7} is a log-log plot of timestep vs error.
 
-\imageFigure{../../figures/ece1254/ps3aLogLogErrorFig7}{LogLog plot of timestep vs error for BE and TR}{fig:ps3aLogLogError:ps3aLogLogErrorFig7}{0.3}
+\imageFigure{../../figures/ece1254/ps3aLogLogErrorFig7}{LogLog plot of timestep vs error for BE and TR.}{fig:ps3aLogLogError:ps3aLogLogErrorFig7}{0.3}
 
 Close to linear relationships in the log-log plots indicate that the BE and TR error vs timestep have a power relationship of differing degree, where the slope is related to the degree.
 
@@ -453,5 +453,5 @@ With \( \Delta t = 5 \text{ns}/(N -1) \sim 1/N \) this indicates that
 
 This set of proportionality relationships is plotted in \cref{fig:ps3aLogLogExponential:ps3aLogLogExponentialFig7}.  While this ignores the exact proportionality constantts and scale factors, this plot illustrates the order of the experimentally determined relationship of the number of timestep intervals to the error for BE and TR.
 
-\mathImageFigure{../../figures/ece1254/ps3aLogLogExponentialFig7}{error vs \( N^m \)}{fig:ps3aLogLogExponential:ps3aLogLogExponentialFig7}{0.3}{ps3a:loglogExponential.m}
+\mathImageFigure{../../figures/ece1254/ps3aLogLogExponentialFig7}{Error vs \( N^m \).}{fig:ps3aLogLogExponential:ps3aLogLogExponentialFig7}{0.3}{ps3a:loglogExponential.m}
 }
