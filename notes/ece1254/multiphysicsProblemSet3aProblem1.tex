@@ -308,7 +308,7 @@ See \nbcite{ps3a:NodalAnalysis.m}{ps3a/NodalAnalysis.m} for the matlab code to g
 
 \makeSubAnswer{}{multiphysics:problemSet3a:1b}
 
-\captionedTable{RLC values per segment}{tab:multiphysicsProblemSet3a:131}{
+\captionedTable{RLC values per segment.}{tab:multiphysicsProblemSet3a:131}{
 \begin{tabular}{|l||l|l|l|l|}
 \hline
 Level  & n        & R (\( \Omega \))  & Inductance (nH) & Capacitance (pF) \\ \hline
@@ -347,16 +347,17 @@ or
 \lr{ \BG + \inv{\Delta t} \BC } \Bx_n = \BC \frac{ \Bx_{n-1} }{\Delta t} + \Bb v_{\textrm{clk}}(t_n).
 \end{equation}
 
-This is the system to solve at each time step for \( \Bx_n \).  A one time LU factorization of \( \BG + \BC/\Delta t \) was used to hoist most of the inversion cost out of the time stepping loop.  The load voltage and the reference clock source is plotted in \cref{fig:ps3aBE:ps3aBEFig1}, calculated using \matlabFuncPath{calculateSolutionForTimestep}{ps3a:calculateSolutionForTimestep.m}(0.05, 1), using a \( 5 \) ps timestep.
+This is the system to solve at each time step for \( \Bx_n \).  A one time LU factorization of \( \BG + \BC/\Delta t \) was used to hoist most of the inversion cost out of the time stepping loop.  The load voltage and the reference clock source is plotted in \cref{fig:ps3aBE:ps3aBEFig1}, calculated using %%\matlabFuncPath{calculateSolutionForTimestep}{ps3a:calculateSolutionForTimestep.m}(0.05, 1)
+\matlabFuncPath{driver}{ps3a:driver.m}(0, 1), using a \( 5 \) ps timestep.
 
-\mathImageFigure{../../figures/ece1254/ps3aBEFig1}{Load (chip) voltage calculated with BE.}{fig:ps3aBE:ps3aBEFig1}{0.5}{ps3a:driver.m}
+\mathImageFigure{../../figures/ece1254/ps3aBEFig1.pdf}{Load (chip) voltage calculated with BE.}{fig:ps3aBE:ps3aBEFig1}{0.5}{ps3a:driver.m}
 
 \makeSubAnswer{}{multiphysics:problemSet3a:1d}
 
 Iterative refinement of the timestep was used to determine a reasonable seeming stopping point.  With a rise and fall time of 100 ps, something smaller than that was clearly required, and 50 ps was tried first to get a rough idea of the output signal, checking against expectations for correctness.  A plot at this timestep clearly shows artifacts of the discretization, which is removed at a timestep of 10 ps.  Further reduction of the timestep to 5 ps sharpens the curve slightly, and can still be completed with a reasonable computation time.  A final reduction of the timestep to 1 ps adds very little additional correction, 
 all at the leading and trailing edges of the signal, but adds significantly to the time required for the calculation.  Plots with these range of timesteps are shown in \cref{fig:ps3aBE:ps3aBEFig2}.
 
-\imageFigure{../../figures/ece1254/ps3aBEFig2}{Chip voltage at a variety of timesteps.}{fig:ps3aBE:ps3aBEFig2}{0.5}
+\mathImageFigure{../../figures/ece1254/ps3aBEFig2.pdf}{Chip voltage at a variety of timesteps.}{fig:ps3aBE:ps3aBEFig2}{0.5}{ps3a:driver.m}
 
 \makeSubAnswer{}{multiphysics:problemSet3a:1e}
 
@@ -387,14 +388,14 @@ the TR system equations take the form
 %
 As with BE a \( \BL \BU = \BP \BA \) factorization can be computed once outside of the loop.  In \cref{fig:ps3aTR:ps3aTRFig4} are plots of such TR solutions with a range of timesteps, calculated using \matlabFuncPath{calculateSolutionForTimestep}{ps3a:calculateSolutionForTimestep.m}(..., 0).
 
-\imageFigure{../../figures/ece1254/ps3aTRFig4}{TR solutions.}{fig:ps3aTR:ps3aTRFig4}{0.5}
+\mathImageFigure{../../figures/ece1254/ps3aTRFig4.pdf}{TR solutions.}{fig:ps3aTR:ps3aTRFig4}{0.5}{ps3a:driver.m}
 
 To facilitate calculation of the error at different timesteps a linear interpolation function \matlabFuncPath{interpolate}{ps3a:interpolate.m}() was used to construct a vector for each of the measurements with the timescale of the reference 1 ps TR solution.
 
 Plots of the errors for each of these, relative to the reference solution are given in \cref{fig:ps3aErrorBE:ps3aErrorBEFig5}, and \cref{fig:ps3aErrorTR:ps3aErrorTRFig6}, for BE and TR respectively.  
 
-\imageFigure{../../figures/ece1254/ps3aErrorBEFig5}{BE error relative to 1 ps TR reference solution.}{fig:ps3aErrorBE:ps3aErrorBEFig5}{0.3}
-\imageFigure{../../figures/ece1254/ps3aErrorTRFig6}{TR error relative to 1 ps TR reference solution.}{fig:ps3aErrorTR:ps3aErrorTRFig6}{0.3}
+\imageFigure{../../figures/ece1254/ps3aErrorBEFig5.pdf}{BE error relative to 1 ps TR reference solution.}{fig:ps3aErrorBE:ps3aErrorBEFig5}{0.3}
+\imageFigure{../../figures/ece1254/ps3aErrorTRFig6.pdf}{TR error relative to 1 ps TR reference solution.}{fig:ps3aErrorTR:ps3aErrorTRFig6}{0.3}
 
 At a very course granularity timestep the largest TR error is larger than with BE at the same timestep, however, the TR error is smaller at any given timestep for finer granularity timesteps.  This variation of maximum error with timestep for these methods is tabulated in \cref{tab:multiphysicsProblemSet3a:271}, where the error values are in volts and the cpu times in seconds.  As expected, the cpu cost measurements at fixed timestep for BE and TR do not have statistically significant differences.
 
@@ -406,7 +407,7 @@ At a very course granularity timestep the largest TR error is larger than with B
 %    BE, 5         0.0688      19.45 \pm 0.06
 %    TR, 5         0.0409      19.59 \pm 0.07
 %    BE, 1         0.0261      96.9  \pm 0.2
-\captionedTable{Error and CPU usage for BE and TR methods at various timesteps}{tab:multiphysicsProblemSet3a:271}{
+\captionedTable{Error and CPU usage for BE and TR methods at various timesteps.}{tab:multiphysicsProblemSet3a:271}{
 \begin{tabular}{|l||l|l|l|l|}
 \hline
 timestep (ps) & error (BE) & error (TR) & cpu (BE) & cpu (TR) \\ 
@@ -425,9 +426,9 @@ The plots and tabulated data above was produced with a call to \matlabFuncPath{d
 
 In \cref{fig:ps3aLogLogError:ps3aLogLogErrorFig7} is a log-log plot of timestep vs error.
 
-\imageFigure{../../figures/ece1254/ps3aLogLogErrorFig7}{LogLog plot of timestep vs error for BE and TR.}{fig:ps3aLogLogError:ps3aLogLogErrorFig7}{0.3}
+\imageFigure{../../figures/ece1254/ps3aLogLogErrorFig7.pdf}{LogLog plot of timestep vs error for BE and TR.}{fig:ps3aLogLogError:ps3aLogLogErrorFig7}{0.3}
 
-Close to linear relationships in the log-log plots indicate that the BE and TR error vs timestep have a power relationship of differing degree, where the slope is related to the degree.
+Close to linear relationships in the log-log plots indicate that the BE and TR 	 timestep have a power relationship of differing degree, where the slope is related to the degree.
 
 Those lines are found to be
 
@@ -451,7 +452,7 @@ With \( \Delta t = 5 \text{ns}/(N -1) \sim 1/N \) this indicates that
 \end{dmath}
 \end{subequations}
 
-This set of proportionality relationships is plotted in \cref{fig:ps3aLogLogExponential:ps3aLogLogExponentialFig7}.  While this ignores the exact proportionality constantts and scale factors, this plot illustrates the order of the experimentally determined relationship of the number of timestep intervals to the error for BE and TR.
+This set of proportionality relationships is plotted in \cref{fig:ps3aLogLogExponential:ps3aLogLogExponentialFig7}.  While this ignores the exact proportionality constants and scale factors, this plot illustrates the order of the experimentally determined relationship of the number of timestep intervals to the error for BE and TR.
 
-\mathImageFigure{../../figures/ece1254/ps3aLogLogExponentialFig7}{Error vs \( N^m \).}{fig:ps3aLogLogExponential:ps3aLogLogExponentialFig7}{0.3}{ps3a:loglogExponential.m}
+\mathImageFigure{../../figures/ece1254/ps3aLogLogExponentialFig7.pdf}{Error vs \( N^m \).}{fig:ps3aLogLogExponential:ps3aLogLogExponentialFig7}{0.3}{ps3a:loglogExponential.m}
 }
