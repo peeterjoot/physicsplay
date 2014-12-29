@@ -62,7 +62,7 @@ ece1254projectReport.pdf :: ece1254projectReport.tex ../ece1254/HarmonicBalanceA
 ece1254projectReport.pdf :: ./peeters_macros.sty ./peeters_layout.sty ./peeters_layout_exercise.sty ./macros_bm.sty 
 
 copy: 
-	cp ece1254projectReport.pdf ../blogit/HarmonicBalance.pdf proj/
+	cp ece1254.pdf ece1254projectReport.pdf ../blogit/HarmonicBalance.pdf proj/
 
 multiphysicsProblemSet1.pdf :: $(PDF_DEPS)
 multiphysicsProblemSet1.pdf :: multiphysicsProblemSet1Problem1.tex
