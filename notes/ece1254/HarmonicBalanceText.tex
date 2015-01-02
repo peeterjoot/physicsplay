@@ -781,11 +781,9 @@ With that refinement of the source stepping algorithm, HB simulation of this hal
 %produces the expected results, as plotted in 
 Adding a capacitor to the half wave rectifier, adds an imaginary component to the admittance matrix \( \BY \), while still only requiring a single non-linear component, where the use of a large enough capacitor value produces a DC rectified signal from an AC input.
 Plots of the simulation results with
-capacitor values of \( 0, 1 \, \mu \text{F}, 1 \text{nF} \) are plotted in \cref{fig:HalfWaveRectifierFig2}.
+capacitor values of \( 0, 1 \, \text{nF}, 10 \, \text{nF}, 1000 \text{nF} \) are plotted in \cref{fig:HalfWaveRectifierFig2}.
 
-\imageFigureHere{../../figures/ece1254/report/halfWaveRectifierRangeOfCapValues}{Half wave rectifier voltages.}{fig:HalfWaveRectifierFig2}{3in}{proj:makefigures.m}
-
-%\imageFigureHere{../../figures/ece1254/report/halfWaveRectifierVoltageFig2}{Half wave rectifier voltages.}{fig:HalfWaveRectifierFig2}{3in}{proj:makefigures.m}
+\imageFigureHere{../../figures/ece1254/report/halfWaveRectifierRangeOfCapValuesMultiSource.pdf}{Half wave rectifier voltages.}{fig:HalfWaveRectifierFig2}{3in}{proj:makefigures.m}
 
 %\subsection{AC to DC conversion}
 
@@ -799,15 +797,16 @@ capacitor values of \( 0, 1 \, \mu \text{F}, 1 \text{nF} \) are plotted in \cref
 
 The
 bridge rectifier circuit of
-\cref{fig:bridgeRectifierCircuitDiagramFig1}
+\cref{fig:bridgeRectifierCapFilterFig1}, in configurations with zero and non-zero capacitance values, 
 was used as a test system that included multiple non-linear elements.
 
-\imageFigureHere{../../figures/ece1254/bridgeRectifier}{Bridge rectifier.}{fig:bridgeRectifierCircuitDiagramFig1}{2.5in}{proj:makefigures.m}
+%\imageFigureHere{../../figures/ece1254/bridgeRectifier}{Bridge rectifier.}{fig:bridgeRectifierCircuitDiagramFig1}{2.5in}{proj:makefigures.m}
+\imageFigureHere{../../figures/ece1254/bridgeRectifierWithCap}{Bridge rectifier.}{fig:bridgeRectifierCapFilterFig1}{2.5in}{proj:makefigures.m}
 
 Current will flow through only one pair of the diodes at any given point.
-The inversion of any negative source voltages at the output node is seen in the plot of
+In the zero-capacitance configuration, using a three frequency source, inversion of any negative source voltages is observed in \cref{fig:bridgeRectifierFig2} at the output node.
 
-\imageFigureHere{../../figures/ece1254/report/bridgeRectifierOutputVoltageFig2}{Source and output voltages.}{fig:bridgeRectifierFig2}{3.0in}{proj:makefigures.m}
+\imageFigureHere{../../figures/ece1254/report/bridgeRectifierSourceAndOutputVoltagesFig2.pdf}{Source and output voltages.}{fig:bridgeRectifierFig2}{3.0in}{proj:makefigures.m}
 
 %\begin{figure}[!h]
 %%\subfloat[Parameters]{%
@@ -825,8 +824,7 @@ The inversion of any negative source voltages at the output node is seen in the 
 
 \subsection{Cpu time and error vs N}
 
-The bridge rectifier circuit of
-\cref{fig:bridgeRectifierCircuitDiagramFig1} was also used for
+The bridge rectifier circuit, with \( C1 = 0 \) was also used for
 measurements of error and cpu times for range of values of \( N \).
 These are plotted as a log-log plots in
 \cref{fig:bridgeRectifierFig5}.
@@ -869,7 +867,7 @@ I_0 \sum_{k=1}^8
 \inv{k!} \lr{(v^{(n_1)} - v^{(n_2)})/V_T}^k
 \end{dmath}
 
-The results are plotted in \cref{fig:bridgeRectifierPowSourceAndOutputVoltagesFig2}.
+The results are plotted in \cref{fig:bridgeRectifierPowSourceAndOutputVoltagesFig2} for a single frequency source.
 
 \imageFigureHere{../../figures/ece1254/report/bridgeRectifierPowSourceAndOutputVoltagesFig2}{Source and output voltages for partial approximate bridge rectifier.}{fig:bridgeRectifierPowSourceAndOutputVoltagesFig2}{3.0in}{proj:makefigures.m}
 
@@ -881,9 +879,8 @@ When possible, as with the exponential, encoding direct support for the function
 \subsection{Stiff systems}
 
 For the low pass and rectifier circuits above, use of source stepping was sufficient (and required) to ensure convergence.
-However, introduction of a capacitor into a bridge rectifier circuit, as shown in \cref{fig:bridgeRectifierCapFilterFig1} is enough to cause a number of Matlab messages ``Matrix is close to singular or badly scaled'' along with associated very small conditioning numbers.
+However, introduction of a non-zero value for the capacitor of the bridge rectifier circuit \cref{fig:bridgeRectifierCapFilterFig1} is enough to cause a number of Matlab messages ``Matrix is close to singular or badly scaled'' along with associated very small conditioning numbers.
 
-\imageFigureHere{../../figures/ece1254/bridgeRectifierWithCap}{Bridge rectifier with capactive load.}{fig:bridgeRectifierCapFilterFig1}{2.5in}{proj:makefigures.m}
 
 %\begin{figure}[!h]
 %\subfloat[Parameters]{%
@@ -905,7 +902,7 @@ The circuit simulation produces the expected a DC rectified signal as plotted in
 
 \imageFigureHere{../../figures/ece1254/report/bridgeRectifierCapFilterSourceAndOutputVoltagesFig2}{Source and output voltages.}{fig:bridgeRectifierCapFilterFig2}{3.0in}{proj:makefigures.m}
 
-Artifacts of the conditioning problems show up in the simulated outputs for the voltages through the diodes as plotted in \cref{fig:bridgeRectifierCapFilterFig3}.
+Artifacts of the conditioning problems show up in the simulated outputs for the voltages through the diodes as plotted in \cref{fig:bridgeRectifierCapFilterFig3} for a single frequency source.
 
 \imageFigureHere{../../figures/ece1254/report/bridgeRectifierCapFilterDiodeVoltagesFig4}{Diode voltages.}{fig:bridgeRectifierCapFilterFig3}{3.0in}{proj:makefigures.m}
 
@@ -916,7 +913,7 @@ For this circuit, and surely others, it appears that additional strategies beyon
 
 \section{Conclusion}
 
-When the steady state solution of a uniformly discretized linear or non-linear system is desired, the Harmonic Balance method is a natural way to express the system equations, and once solved provides both the frequency and time domain representation of the system response.  Some of the nonlinear circuits for which HB solutions were sought proved troublesome, even with source stepping and fine mesh sizes, so it is clear that developing a generic and numerically robust HB system would require additional study and careful implementation.
+When the steady state solution of a uniformly discretized linear or non-linear system with periodic sources is desired, the Harmonic Balance method is a natural way to express the system equations, and once solved provides both the frequency and time domain representation of the system response.  Some of the nonlinear circuits for which HB solutions were sought proved troublesome, even with source stepping and fine mesh sizes, so it is clear that developing a generic and numerically robust HB system would require additional study and careful implementation.
 
 \appendices
 
