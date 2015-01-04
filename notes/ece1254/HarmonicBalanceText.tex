@@ -43,13 +43,23 @@ The netlist parser was also extended to allow the specification of diode lines o
 
 This represents a diode modelled as a current source \( i_d(t) = I_0 \lr{ e^{ \lr{v^{(n_1)}(t) - v^{(n_2)}(t)}/V_T } - 1 } \).  The constant portion of this model is added into the linear portion of the resulting matrix equations.  The non-linear contributions of each diode line are returned from NodalAnalysis() as a list of structures with fields (io, type, vt, vp, vn), with type = 'exp'.
 
-Finally, non-linear conductances \( g(t) = I_0 \lr{v^{(n_1)}(t) - v^{(n_2)}(t)}^k \) may be specified with lines of the form
+In addition to the diode model, two non-linear power-law circuit elements were implemented.  The first is a non-linear conductance \( g(t) = I_0 \lr{ \lr{v^{(n_1)}(t) - v^{(n_2)}(t)}/V_T}^k \) that is specified with lines of the form
 
 \begin{center}
 \textbf{Plabel \(n_1\) \(n_2\) \(I_0\) \(V_T\) \( k \)},
 \end{center}
 
-Any number of these may be specified in parallel to form an arbitrary Taylor expansion.  Each such non-linear element is returned from NodalAnalysis() as a list of structures with fields (io, type, vt, vp, vn, exponent), with type = 'power'.
+Any number of these may be specified in parallel to form an arbitrary Taylor expansion.
+
+The second non-linear power-law circuit element that was implemented was a non-linear voltage controlled voltage source 
+\( v_{n_1} - v_{n_2} = g \lr{ \lr{v_{n_1}^{(c)}(t) - v_{n_2}^{(c)}(t)}/V_T}^k \)
+that is specified with lines of the form
+
+\begin{center}
+\textbf{Elabel \(n_1\) \(n_2\) \(n^{(c)}_1\) \(n^{(c)}_2\) \(g\) \(V_T\) \( k \)},
+\end{center}
+
+Each of the power-law non-linear elements is returned from NodalAnalysis() as a list of structures with fields (io, type, vt, vp, vn, exponent), with type = 'power'.
 
 \section{Background}
 \subsection{Discrete Fourier Transform}
@@ -857,7 +867,7 @@ Measuring the respective slopes (using the matlab function polyfit), the cpu tim
 %\label{fig:simpleRectifierCircuitFig2}}
 %\end{figure*}
 
-\subsection{Taylor series non-linearities}
+\subsection{Power law non-linearities}
 
 As a test for the implementation's support of \textbf{Plabel} form conductance models (voltage differences scaled and raised to a power),
 two of the diodes in the bridge rectifier circuit were replaced with an 8 term Taylor approximation
@@ -877,6 +887,16 @@ This is not a numerically smart approximation as computation of the nonlinear cu
 Those calculations also require the multiplication of pairs of very large and small numbers (the exponents and the inverse factorials) introducing more chance for round off error than using the exponential directly.
 When possible, as with the exponential, encoding direct support for the functional form of a non-linear conductance in the current and Jacobian calculation code is likely always superior.
 %Despite that, there are likely some conductance models that have a good approximation as a set of power series terms.
+
+As a test for the non-linear voltage controlled \textbf{Elabel} elements, the circuit of \cref{fig:squareAndCubeAmp} containing a pair of simple non-linear amplifiers was simulated with a single frequency source, with results plotted in \cref{fig:PowerLawAmplifiersvoltageFig1}.
+
+\imageFigureHere{../../figures/ece1254/report/squareAndCubeAmp.pdf}{Non-linear power-law amplifiers.}{fig:squareAndCubeAmp}{3.0in}{proj:makefigures.m}
+
+\imageFigureHere{../../figures/ece1254/report/PowerLawAmplifiersvoltageFig1.pdf}{Non-linear power-law amplifiers voltages.}{fig:PowerLawAmplifiersvoltageFig1}{3.0in}{proj:makefigures.m}
+
+Observe that the time domain output of the squaring-amplifier
+has the expected doubling of the fundamental frequency, and is shifted into the \( v > 0 \) region 
+consistent with \( \cos^2(\omega_0 t) = \lr{\cos(2 \omega_0 t) + 1}/2 \).
 
 \subsection{Stiff systems}
 
