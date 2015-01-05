@@ -600,6 +600,52 @@ e^{\Bh_3^\T \BV} \\
 }
 %\end{dmath}
 
+\subsection{Other non-linear sources}
+
+The procedure above can be adapted without significant modification to other non-linear current sources that are dependent on the difference in the voltages across their nodes (such as the power-law current sources specified by Pnnnnn lines in the HB netlist parser.)  A small change is required for voltage controlled sources.  Recall that the \( \BG \) stamp for such a source included a source line of the form
+
+\begin{equation}\label{eqn:ece1254projectReport:1121}
+\kbordermatrix{
+        & n_{+} & n_{-} & nc_{+} & nc_{-} &  i_{n_{+},n_{-}} \\
+\setlr{n_{+},n_{-}}        &    -1 & 1 & g & -g   & 0 \\
+}.
+\end{equation}
+
+This must be changed to a pair of stamps, one for \( \BG \)
+
+\begin{equation}\label{eqn:ece1254projectReport:1121}
+\kbordermatrix{
+        & n_{+} & n_{-} & nc_{+} & nc_{-} &  i_{n_{+},n_{-}} \\
+\setlr{n_{+},n_{-}}        &    -1 & 1 & 0 & 0   & 0 \\
+},
+\end{equation}
+
+and one for the corresponding line of \( \mathcal{I}(\BV) \).  If that line is \( m \), let 
+
+\begin{equation}\label{eqn:ece1254projectReport:1122}
+\Bd_e = 
+{[\delta_{i,m}]}_i,
+\end{equation}
+
+so that non-linear current for this source is
+
+\begin{equation}\label{eqn:ece1254projectReport:1124}
+\mathcal{I}(\BV) = -g 
+\begin{bmatrix}
+\Bd_e &  &  \\
+   & \Bd_e & \\
+   &  & \ddots 
+\end{bmatrix}
+\BF^{-1}
+\begin{bmatrix}
+ \lr{\Bh_1 \BV}^k \\
+ \lr{\Bh_2 \BV}^k \\
+ \vdots
+\end{bmatrix},
+\end{equation}
+
+where the \( \Bh_i \) are constructed with \cref{eqn:ece1254projectReport:920} as done for exponential non-linear currents.
+
 \subsection{Jacobian}
 
 With a compact matrix representation of the non-linear current, attention can now be turned to the Jacobian of the non-linear current.
@@ -666,6 +712,7 @@ If the nonlinearity is of the form
 \begin{subequations}
 \begin{equation}\label{eqn:ece1254projectReport:1440}
 \mathcal{I}(\BV)
+=
 I_0 \BD \BF^{-1}
 \begin{bmatrix}
 \Bh_1^\T g(\Bh_1^\T \BV) \\
@@ -683,6 +730,8 @@ I_0 \BD \BF^{-1}
 \end{bmatrix}.
 \end{dmath}
 \end{subequations}
+
+Note that for voltage controlled voltage sources the leading \( I_0 \BD \BF^{-1} \) factor must be modified according to \cref{eqn:ece1254projectReport:1124}.
 
 \subsection{Newton's method solution}
 
