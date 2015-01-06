@@ -1,3 +1,7 @@
+%
+% Copyright © 2014 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
 \section{Introduction}
 
 \IEEEPARstart{T}{he}
@@ -21,7 +25,7 @@ The admittance matrix \( \BY \) has a block diagonal structure, with each block 
 The vector \( \BV \) contains the Fourier coefficients of all the voltage and current unknowns in the system, including a term for each unknown at each frequency included in the Fourier series.
 When the system includes non-linear elements, iterative methods will be required to solve for \( \BV \).
 
-\subsection{Modifications to the netlist syntax}
+\mysubsection{Modifications to the netlist syntax}
 
 The Matlab based MNA implementation developed during the course assignments only had explicit support for DC sources, although it was possible to use the resulting MNA equations for non-constant sources with a suitable re-interpretation of the returned matrix equations.  For this HB work it was worthwhile to explicitly extend the netlist syntax to constant and oscillatory sources, allowing netlist lines of the form  
 
@@ -62,7 +66,7 @@ that is specified with lines of the form
 Each of the power-law non-linear elements is returned from NodalAnalysis() as a list of structures with fields (io, type, vt, vp, vn, exponent), with type = 'power'.
 
 \section{Background}
-\subsection{Discrete Fourier Transform}
+\mysubsection{Discrete Fourier Transform}
 
 An outline of DFT procedure is presented in \citep{giannini2004NonlinearMicrowaveCircuitDesign} \S A.4.  Due to some errors and inconsistencies in that text, it is worthwhile to restate the underlying ideas in their entirety.  This may not follow the convention that the authors of that text may have intended to use.
 
@@ -142,7 +146,7 @@ the transform pair has the matrix form
 
 where \( \overbar{\BF} \) is the complex conjugate of \( \BF \).
 
-\subsection{Harmonic Balance equations}
+\mysubsection{Harmonic Balance equations}
 
 The time domain MNA equations for an RLC network with non-linear sources can be put into the form
 
@@ -178,7 +182,7 @@ In an implementation of code that generates MNA equations it is convenient to st
 For the non-linear sources, the magnitudes \( I_i \) have been factored out, so that the vectors \( \Bd_i \) contain only the values \( 0, \pm 1 \).
 The reasons for this will become clear in the example to follow.
 
-\subsection{Frequency domain representation of MNA equations}
+\mysubsection{Frequency domain representation of MNA equations}
 
 Assuming a bandwidth limited periodic representation of the unknowns vector \( \Bx \) in \cref{eqn:ece1254projectReport:420}
 
@@ -194,6 +198,30 @@ the derivative has the form
 
 The Fourier component representation of the MNA equations can be written as
 
+\singleAndDoubleColumnVariations
+{
+\begin{dmath}\label{eqn:ece1254projectReport:600}
+0 = \sum_{n = -N}^N e^{j \omega_0 n t}
+\Biglr{
+   \lr{ \BG + j \omega_0 n \BC }
+\begin{bmatrix}
+X_n^{(1)} \\
+X_n^{(2)} \\
+\vdots \\
+\end{bmatrix}
+-
+[ \Bb_1 \cdots \Bb_M ]
+\begin{bmatrix}
+U_n^{(1)} \\
+U_n^{(2)} \\
+\vdots \\
+\end{bmatrix}
+- \sum_{i = 1}^S I_i \Bd_i
+W_n^{(i)}
+}.
+\end{dmath}
+}
+{
 \begin{equation}\label{eqn:ece1254projectReport:600}
 \begin{aligned}
 0 &= \sum_{n = -N}^N e^{j \omega_0 n t}
@@ -216,10 +244,35 @@ W_n^{(i)}
 }.
 \end{aligned}
 \end{equation}
+}
 
 Given the
 assumption of periodicity, each of these equations must separately equal zero for each \( ( n, i ) \) pair, or
 
+\singleAndDoubleColumnVariations
+{
+\begin{dmath}\label{eqn:ece1254projectReport:540}
+\lr{
+\BG + j \omega_0 n \BC
+}
+\begin{bmatrix}
+V_n^{(1)} \\
+V_n^{(2)} \\
+\vdots \\
+\end{bmatrix}
+=
+[\Bb_i \cdots \Bb_M]
+\begin{bmatrix}
+U_n^{(1)} \\
+U_n^{(2)} \\
+\vdots \\
+\end{bmatrix} 
++ \sum_{i = 1}^S I_i \Bd_i
+W_n^{(i)}
+.
+\end{dmath}
+}
+{
 \begin{equation}\label{eqn:ece1254projectReport:540}
 \begin{aligned}
 \lr{
@@ -242,6 +295,7 @@ W_n^{(i)}
 .
 \end{aligned}
 \end{equation}
+}
 
 %An implementation may group the vectors \( \Bd_i \) into a matrix, or even compute it on the fly
 
@@ -325,7 +379,7 @@ where \( \BY \) is block diagonal
 
 Construction of the HB stamps for the constant current \( \BI \) and non-linear current \( \BI(\BV) \) is nicely illustrated by the example to follow.
 
-\subsection{Example.  RC circuit with a diode.}
+\mysubsection{Example.  RC circuit with a diode.}
 
 \imageFigureHere{../../figures/ece1254/diode-RC-current-source.pdf}{Simple non-linear circuit.}{fig:diodeWithResistorAndCapacitorFig1}{3in}{proj:makefigures.m}
 
@@ -365,6 +419,25 @@ v^{(2)}(t) \\
 
 the time domain equations for this circuit are
 
+\singleAndDoubleColumnVariations
+{
+\begin{dmath}\label{eqn:ece1254projectReport:1320}
+\BG \Bv(t)
++\BC \Bv'(t)
+=
+\begin{bmatrix}
+\Bb & -I_0 \Bd
+\end{bmatrix}
+\begin{bmatrix}
+i_s(t) \\
+1
+\end{bmatrix} 
++
+I_0 \Bd
+e^{ (v^{(1)}(t) - v^{(2)}(t))/V_T}.
+\end{dmath}
+}
+{
 \begin{equation}\label{eqn:ece1254projectReport:1320}
 \begin{aligned}
 \BG \Bv(t)
@@ -382,6 +455,7 @@ I_0 \Bd
 e^{ (v^{(1)}(t) - v^{(2)}(t))/V_T}.
 \end{aligned}
 \end{equation}
+}
 
 For the exponential, let the transform pair be
 
@@ -600,7 +674,7 @@ e^{\Bh_3^\T \BV} \\
 }
 %\end{dmath}
 
-\subsection{Other non-linear sources}
+\mysubsection{Other non-linear sources}
 
 The procedure above can be adapted without significant modification to other non-linear current sources that are dependent on the difference in the voltages across their nodes (such as the power-law current sources specified by Pnnnnn lines in the HB netlist parser.)  A small change is required for voltage controlled sources.  Recall that the \( \BG \) stamp for such a source included a source line of the form
 
@@ -646,7 +720,7 @@ so that non-linear current for this source is
 
 where the \( \Bh_i \) are constructed with \cref{eqn:ece1254projectReport:920} as done for exponential non-linear currents.
 
-\subsection{Jacobian}
+\mysubsection{Jacobian}
 
 With a compact matrix representation of the non-linear current, attention can now be turned to the Jacobian of the non-linear current.
 Let \( \BA = I_0 \BD \BF^{-1} = [ a_{ij} ]_{ij} \).
@@ -733,7 +807,7 @@ I_0 \BD \BF^{-1}
 
 Note that for voltage controlled voltage sources the leading \( I_0 \BD \BF^{-1} \) factor must be modified as specified in \cref{eqn:ece1254projectReport:1124}.
 
-\subsection{Newton's method solution}
+\mysubsection{Newton's method solution}
 
 All the pieces required for a Newton's method solution are now in place.
 The goal is to find a value of \( \BV \) that provides the zero
@@ -763,7 +837,7 @@ The Newton's method refinement of the initial guess follows by inversion
 The non-linearities of some of the circuits that were solved as tests required source stepping, as the Jacobian grew beyond the representable range of the double matrix representation in some cases and became uninvertible.
 A heuristic that was found effective was to half the step size for each Newton's method iteration that the Jacobian became ill-conditioned, and to double it for each iteration where convergence was achieved.
 
-\subsection{Alternative handling of the non-linear currents and Jacobians}
+\mysubsection{Alternative handling of the non-linear currents and Jacobians}
 
 Two methods for the calculation of the non-linear currents and Jacobians were developed while coding this HB implementation.
 Our first implementation used
@@ -782,7 +856,7 @@ This non-linear current calculation was later refined to work completely in the 
 
 \section{Results}
 
-\subsection{Low pass filter}
+\mysubsection{Low pass filter}
 
 %\subfloat[Parameters]{%
 %\small
@@ -819,7 +893,7 @@ However, all the higher frequency contributions are cut down significantly, as e
 
 \imageFigureHere{../../figures/ece1254/report/lowPassFilterOutputVoltageSpectrumFig4.pdf}{Output voltage spectrum.}{fig:lowPassFilterFig4}{3.0in}{proj:makefigures.m}
 
-\subsection{Half wave rectifier}
+\mysubsection{Half wave rectifier}
 
 The half wave rectifier of \cref{fig:typicalRectifierCircuitFig1}, was suggested (with \( C = 0 \)) as a first test of the non-linear HB system.
 
@@ -844,7 +918,7 @@ capacitor values of \( 0, 1 \, \text{nF}, 10 \, \text{nF}, 1000 \text{nF} \) are
 
 \imageFigureHere{../../figures/ece1254/report/halfWaveRectifierRangeOfCapValuesMultiSource.pdf}{Half wave rectifier voltages.}{fig:HalfWaveRectifierFig2}{3in}{proj:makefigures.m}
 
-%\subsection{AC to DC conversion}
+%\mysubsection{AC to DC conversion}
 
 %\cref{fig:typicalRectifierCircuitFig3}, and
 %\cref{fig:typicalRectifierCircuitFig4} respectively.
@@ -852,7 +926,7 @@ capacitor values of \( 0, 1 \, \text{nF}, 10 \, \text{nF}, 1000 \text{nF} \) are
 %\imageFigureHere{../../figures/ece1254/report/typicalRectifierCircuitSourceAndOutputVoltagesFig2}{DC rectifier voltages at \( 1 \mu \) F.}{fig:typicalRectifierCircuitFig3}{3.0in}{proj:makefigures.m}
 %\imageFigureHere{../../figures/ece1254/report/typicalRectifierCircuitSmallerCapSourceAndOutputVoltagesFig2}{DC rectifier voltages at \( 1 \) nF.}{fig:typicalRectifierCircuitFig4}{3.0in}{proj:makefigures.m}
 
-\subsection{Bridge rectifier}
+\mysubsection{Bridge rectifier}
 
 The bridge rectifier circuit of
 \cref{fig:bridgeRectifierCapFilterFig1}, in configurations with zero and non-zero capacitance values, 
@@ -880,7 +954,7 @@ In the zero-capacitance configuration, using a three frequency source, inversion
 %%\end{tabular}
 %\end{figure}
 
-\subsection{Cpu time and error vs N}
+\mysubsection{Cpu time and error vs N}
 
 The bridge rectifier circuit, with \( C1 = 0 \) was also used for
 measurements of error and cpu times for range of values of \( N \).
@@ -913,7 +987,7 @@ Measuring the respective slopes (using the matlab function polyfit), the cpu tim
 %\label{fig:simpleRectifierCircuitFig2}}
 %\end{figure*}
 
-\subsection{Power law non-linearities}
+\mysubsection{Power law non-linearities}
 
 As a test for the implementation's support of \textbf{Plabel} form conductance models (voltage differences scaled and raised to a power),
 two of the diodes in the bridge rectifier circuit were replaced with an 8 term Taylor approximation
@@ -944,7 +1018,7 @@ Observe that the time domain output of the squaring-amplifier
 has the expected doubling of the fundamental frequency, and is shifted into the \( v > 0 \) region 
 consistent with \( \cos^2(\omega_0 t) = \lr{\cos(2 \omega_0 t) + 1}/2 \).
 
-\subsection{Stiff systems}
+\mysubsection{Stiff systems}
 
 For the low pass and rectifier circuits above, use of source stepping was sufficient (and required) to ensure convergence.
 However, introduction of a non-zero value for the capacitor of the bridge rectifier circuit \cref{fig:bridgeRectifierCapFilterFig1} is enough to cause a number of Matlab messages ``Matrix is close to singular or badly scaled'' along with associated very small conditioning numbers.
