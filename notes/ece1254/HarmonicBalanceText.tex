@@ -12,7 +12,7 @@ As only the steady state response of the circuit is of interest, the state of th
 The input sources are sampled at a set of \( 2 N + 1 \) discrete evenly spaced times, where these points in time are assumed to be close enough that the inputs at intermediate times are not significantly different from the sampled values.
 Because the sources and responses are all assumed to be periodic, a Fourier series representation of the signals can be used.
 The system equations are expressed in terms of the Fourier components, using the Discrete Fourier Transform (DFT).  It will be shown how the results from the Modified Nodal Analysis (MNA) procedure, an automated method of assembling the equations for a set of linear circuit elements, can be used to generate the HB system equations.  If the MNA procedure results in a set of \( R \) equations, then the HB equations will be a set of \( R \times (2 N + 1) \) equations.  
-For linear systems, HB can be interpreted as an independent circuit for each frequency, with non-linearities in the system coupling these circuits.
+For linear systems, HB can be interpreted as an independent circuit for each frequency, with nonlinearities in the system coupling these circuits.
 
 The objective of HB is to represent the system in the form
 
@@ -20,12 +20,13 @@ The objective of HB is to represent the system in the form
 \BI(\BV) = \BY \BV.
 \end{equation}
 
-where the (frequency domain) current \( \BI \) includes contributions associated with the linear sources (voltage and current sources), as well as any non-linear contributions due to elements such as diodes.
+where the (frequency domain) current \( \BI \) includes contributions associated with the linear sources (voltage and current sources), as well as any nonlinear contributions due to elements such as diodes.
 The admittance matrix \( \BY \) has a block diagonal structure, with each block having a frequency dependency.
 The vector \( \BV \) contains the Fourier coefficients of all the voltage and current unknowns in the system, including a term for each unknown at each frequency included in the Fourier series.
-When the system includes non-linear elements, iterative methods will be required to solve for \( \BV \).
+When the system includes nonlinear elements, iterative methods will be required to solve for \( \BV \).
 
 \mysubsection{Modifications to the netlist syntax}
+\index{netlist syntax}
 
 The Matlab based MNA implementation developed during the course assignments only had explicit support for DC sources, although it was possible to use the resulting MNA equations for non-constant sources with a suitable re-interpretation of the returned matrix equations.  For this HB work it was worthwhile to explicitly extend the netlist syntax to constant and oscillatory sources, allowing netlist lines of the form  
 
@@ -45,9 +46,9 @@ The netlist parser was also extended to allow the specification of diode lines o
 \textbf{Dlabel \(n_1\) \(n_2\) \(I_0\) \(V_T\)},
 \end{center}
 
-This represents a diode modelled as a current source \( i_d(t) = I_0 \lr{ e^{ \lr{v^{(n_1)}(t) - v^{(n_2)}(t)}/V_T } - 1 } \).  The constant portion of this model is added into the linear portion of the resulting matrix equations.  The non-linear contributions of each diode line are returned from NodalAnalysis() as a list of structures with fields (io, type, vt, vp, vn), with type = 'exp'.
+This represents a diode modelled as a current source \( i_d(t) = I_0 \lr{ e^{ \lr{v^{(n_1)}(t) - v^{(n_2)}(t)}/V_T } - 1 } \).  The constant portion of this model is added into the linear portion of the resulting matrix equations.  The nonlinear contributions of each diode line are returned from NodalAnalysis() as a list of structures with fields (io, type, vt, vp, vn), with type = 'exp'.
 
-In addition to the diode model, two non-linear power-law circuit elements were implemented.  The first is a non-linear conductance \( g(t) = I_0 \lr{ \lr{v^{(n_1)}(t) - v^{(n_2)}(t)}/V_T}^k \) that is specified with lines of the form
+In addition to the diode model, two nonlinear power-law circuit elements were implemented.  The first is a nonlinear conductance \( g(t) = I_0 \lr{ \lr{v^{(n_1)}(t) - v^{(n_2)}(t)}/V_T}^k \) that is specified with lines of the form
 
 \begin{center}
 \textbf{Plabel \(n_1\) \(n_2\) \(I_0\) \(V_T\) \( k \)},
@@ -55,7 +56,7 @@ In addition to the diode model, two non-linear power-law circuit elements were i
 
 Any number of these may be specified in parallel to form an arbitrary Taylor expansion.
 
-The second non-linear power-law circuit element that was implemented was a non-linear voltage controlled voltage source 
+The second nonlinear power-law circuit element that was implemented was a nonlinear voltage controlled voltage source 
 \( v_{n_1} - v_{n_2} = g \lr{ \lr{v_{n_1}^{(c)}(t) - v_{n_2}^{(c)}(t)}/V_T}^k \)
 that is specified with lines of the form
 
@@ -63,10 +64,11 @@ that is specified with lines of the form
 \textbf{Elabel \(n_1\) \(n_2\) \(n^{(c)}_1\) \(n^{(c)}_2\) \(g\) \(V_T\) \( k \)},
 \end{center}
 
-Each of the power-law non-linear elements is returned from NodalAnalysis() as a list of structures with fields (io, type, vt, vp, vn, exponent), with type = 'power'.
+Each of the power-law nonlinear elements is returned from NodalAnalysis() as a list of structures with fields (io, type, vt, vp, vn, exponent), with type = 'power'.
 
 \section{Background}
 \mysubsection{Discrete Fourier Transform}
+\index{discrete Fourier transform}
 
 An outline of DFT procedure is presented in \citep{giannini2004NonlinearMicrowaveCircuitDesign} \S A.4.  Due to some errors and inconsistencies in that text, it is worthwhile to restate the underlying ideas in their entirety.  This may not follow the convention that the authors of that text may have intended to use.
 
@@ -147,14 +149,15 @@ the transform pair has the matrix form
 where \( \overbar{\BF} \) is the complex conjugate of \( \BF \).
 
 \mysubsection{Harmonic Balance equations}
+\index{harmonic balance}
 
-The time domain MNA equations for an RLC network with non-linear sources can be put into the form
+The time domain MNA equations for an RLC network with nonlinear sources can be put into the form
 
 \begin{equation}\label{eqn:ece1254projectReport:420}
 \BG \Bx(t) + \BC \dot{\Bx}(t) = \sum_{i = 1}^M \Bb_i u_i(t) + \sum_{i = 1}^S I_i \Bd_i w_i(t).
 \end{equation}
 
-With \( R \) equal to the number of unknowns, \( S \) equal to the number of non-linear elements, \( M \) equal to the number of (positive, negative and zero) frequency sources, the dimensions of these matrices are \( \BG, \BC \in \text{\R{R \times R}} \), and \( \Bb_i, \Bd_i, \Bx(t) \in \text{\C{R \times 1}} \).
+With \( R \) equal to the number of unknowns, \( S \) equal to the number of nonlinear elements, \( M \) equal to the number of (positive, negative and zero) frequency sources, the dimensions of these matrices are \( \BG, \BC \in \text{\R{R \times R}} \), and \( \Bb_i, \Bd_i, \Bx(t) \in \text{\C{R \times 1}} \).
 
 The linear sources can be grouped into a vector.
 For example, with a constant source, and one source at the twice the fundamental frequency, this would be
@@ -179,10 +182,11 @@ In an implementation of code that generates MNA equations it is convenient to st
 \end{bmatrix}.
 \end{equation}
 
-For the non-linear sources, the magnitudes \( I_i \) have been factored out, so that the vectors \( \Bd_i \) contain only the values \( 0, \pm 1 \).
+For the nonlinear sources, the magnitudes \( I_i \) have been factored out, so that the vectors \( \Bd_i \) contain only the values \( 0, \pm 1 \).
 The reasons for this will become clear in the example to follow.
 
 \mysubsection{Frequency domain representation of MNA equations}
+\index{frequency domain}
 
 Assuming a bandwidth limited periodic representation of the unknowns vector \( \Bx \) in \cref{eqn:ece1254projectReport:420}
 
@@ -377,11 +381,13 @@ where \( \BY \) is block diagonal
 }
 \end{equation}
 
-Construction of the HB stamps for the constant current \( \BI \) and non-linear current \( \BI(\BV) \) is nicely illustrated by the example to follow.
+Construction of the HB stamps for the constant current \( \BI \) and nonlinear current \( \BI(\BV) \) is nicely illustrated by the example to follow.
 
 \mysubsection{Example.  RC circuit with a diode.}
+\index{rc circuit}
+\index{diode}
 
-\imageFigureHere{../../figures/ece1254/diode-RC-current-source.pdf}{Simple non-linear circuit.}{fig:diodeWithResistorAndCapacitorFig1}{3in}{proj:makefigures.m}
+\imageFigureHere{../../figures/ece1254/diode-RC-current-source.pdf}{Simple nonlinear circuit.}{fig:diodeWithResistorAndCapacitorFig1}{3in}{proj:makefigures.m}
 
 A diode with an RC load and AC current source is illustrated in
 \cref{fig:diodeWithResistorAndCapacitorFig1}.
@@ -496,7 +502,7 @@ The block matrix form for the constant current can be seen to be
 \end{bmatrix}
 \end{equation}
 
-The non-linear current \( \mathcal{I}(\BV) \) needs to be examined further.
+The nonlinear current \( \mathcal{I}(\BV) \) needs to be examined further.
 How much of this can be precomputed, and what is the simplest way to compute the Jacobian?
 
 Continuing to use \( N = 1 \) to illustrate, a vector of Fourier components for the exponentials can be formed
@@ -516,7 +522,7 @@ E_{1} \\
 \end{bmatrix},
 \end{equation}
 
-which allows the non-linear current to be expressed as
+which allows the nonlinear current to be expressed as
 
 \begin{equation}\label{eqn:ece1254projectReport:900}
 \begin{aligned}
@@ -660,7 +666,7 @@ With
 }
 %\end{equation}
 
-a compact matrix representation of the non-linear current is now complete
+a compact matrix representation of the nonlinear current is now complete
 
 %\begin{dmath}\label{eqn:ece1254projectReport:1080}
 \boxedEquation{eqn:ece1254projectReport:1080}{
@@ -674,9 +680,10 @@ e^{\Bh_3^\T \BV} \\
 }
 %\end{dmath}
 
-\mysubsection{Other non-linear sources}
+\mysubsection{Other nonlinear sources}
+\index{voltage controlled voltage source!nonlinear}
 
-The procedure above can be adapted without significant modification to other non-linear current sources that are dependent on the difference in the voltages across their nodes (such as the power-law current sources specified by Pnnnnn lines in the HB netlist parser.)  A small change is required for voltage controlled sources.  Recall that the \( \BG \) stamp for such a source included a source line of the form
+The procedure above can be adapted without significant modification to other nonlinear current sources that are dependent on the difference in the voltages across their nodes (such as the power-law current sources specified by Pnnnnn lines in the HB netlist parser.)  A small change is required for voltage controlled sources.  Recall that the \( \BG \) stamp for such a source included a source line of the form
 
 \begin{equation}\label{eqn:ece1254projectReport:1121}
 \kbordermatrix{
@@ -701,7 +708,7 @@ and one for the corresponding line of \( \mathcal{I}(\BV) \).  If that line is \
 {[\delta_{i,m}]}_i,
 \end{equation}
 
-so that non-linear current for this source is
+so that nonlinear current for this source is
 
 \begin{equation}\label{eqn:ece1254projectReport:1124}
 \mathcal{I}(\BV) = -g 
@@ -718,13 +725,14 @@ so that non-linear current for this source is
 \end{bmatrix},
 \end{equation}
 
-where the \( \Bh_i \) are constructed with \cref{eqn:ece1254projectReport:920} as done for exponential non-linear currents.
+where the \( \Bh_i \) are constructed with \cref{eqn:ece1254projectReport:920} as done for exponential nonlinear currents.
 
 \mysubsection{Jacobian}
+\index{Jacobian}
 
-With a compact matrix representation of the non-linear current, attention can now be turned to the Jacobian of the non-linear current.
+With a compact matrix representation of the nonlinear current, attention can now be turned to the Jacobian of the nonlinear current.
 Let \( \BA = I_0 \BD \BF^{-1} = [ a_{ij} ]_{ij} \).
-The coordinates of the non-linear current (with summation implied) are
+The coordinates of the nonlinear current (with summation implied) are
 
 \begin{dmath}\label{eqn:ece1254projectReport:1120}
 \mathcal{I}_i = a_{ik} \epsilon_k = a_{ik} \exp\lr{ \Bh_k^\T \BV }.
@@ -756,7 +764,7 @@ h_{ij}
 \end{bmatrix}}_{ij}.
 \end{dmath}
 
-The second factor has all the rows of \( \BH \), but each multiplied by an exponential, so the Jacobian for the non-linear current
+The second factor has all the rows of \( \BH \), but each multiplied by an exponential, so the Jacobian for the nonlinear current
 is now completely determined
 
 %\begin{dmath}\label{eqn:ece1254projectReport:1200}
@@ -781,7 +789,7 @@ A quick sanity check of dimensions seems worthwhile, and shows that all is well
 
 This derivation was done exclusively with the exponential nonlinearity that is found in the diode model, but is easy to generalize.
 If the nonlinearity is of the form
-\( I_0 g((v^{(1)} - v^{(2)})/V_T) \), then the non-linear current and its Jacobian will have the same structural form
+\( I_0 g((v^{(1)} - v^{(2)})/V_T) \), then the nonlinear current and its Jacobian will have the same structural form
 
 \begin{subequations}
 \begin{equation}\label{eqn:ece1254projectReport:1440}
@@ -808,6 +816,7 @@ I_0 \BD \BF^{-1}
 Note that for voltage controlled voltage sources the leading \( I_0 \BD \BF^{-1} \) factor must be modified as specified in \cref{eqn:ece1254projectReport:1124}.
 
 \mysubsection{Newton's method solution}
+\index{Newton's method}
 
 All the pieces required for a Newton's method solution are now in place.
 The goal is to find a value of \( \BV \) that provides the zero
@@ -834,12 +843,12 @@ The Newton's method refinement of the initial guess follows by inversion
 \Delta \BV = -\lr{ \BY - \BJ^{\mathcal{I}}(\BV^0) }^{-1} f(\BV^0).
 \end{dmath}
 
-The non-linearities of some of the circuits that were solved as tests required source stepping, as the Jacobian grew beyond the representable range of the double matrix representation in some cases and became uninvertible.
+The nonlinearities of some of the circuits that were solved as tests required source stepping, as the Jacobian grew beyond the representable range of the double matrix representation in some cases and became uninvertible.
 A heuristic that was found effective was to half the step size for each Newton's method iteration that the Jacobian became ill-conditioned, and to double it for each iteration where convergence was achieved.
 
-\mysubsection{Alternative handling of the non-linear currents and Jacobians}
+\mysubsection{Alternative handling of the nonlinear currents and Jacobians}
 
-Two methods for the calculation of the non-linear currents and Jacobians were developed while coding this HB implementation.
+Two methods for the calculation of the nonlinear currents and Jacobians were developed while coding this HB implementation.
 Our first implementation used
 a ``big \( \BF \)'' DFT matrix, of size \( ( R (2 N + 1 ) \times R (2 N + 1) ) \).
 With the elements of \( \BV \) grouped by frequency, a DFT matrix that operated on \( \BV \) was formed where
@@ -852,11 +861,12 @@ Each nth-frequency component of this current would be added
 to the equation of the nth-set of MNA equations corresponding to the nodes the element is connected
 to.
 
-This non-linear current calculation was later refined to work completely in the frequency domain, precalculating the matrices \( \BF \BD^\T/V_T \) and \( I_0 \BD \BF^{-1} \) for each non-linear source, where \( \BF \) was the (standard) DFT matrix with dimensions \( (2 N + 1 ) \times (2 N + 1 ) \), as described above.
+This nonlinear current calculation was later refined to work completely in the frequency domain, precalculating the matrices \( \BF \BD^\T/V_T \) and \( I_0 \BD \BF^{-1} \) for each nonlinear source, where \( \BF \) was the (standard) DFT matrix with dimensions \( (2 N + 1 ) \times (2 N + 1 ) \), as described above.
 
 \section{Results}
 
 \mysubsection{Low pass filter}
+\index{low pass filter}
 
 %\subfloat[Parameters]{%
 %\small
@@ -894,8 +904,9 @@ However, all the higher frequency contributions are cut down significantly, as e
 \imageFigureHere{../../figures/ece1254/report/lowPassFilterOutputVoltageSpectrumFig4.pdf}{Output voltage spectrum.}{fig:lowPassFilterFig4}{3.0in}{proj:makefigures.m}
 
 \mysubsection{Half wave rectifier}
+\index{half wave rectifier}
 
-The half wave rectifier of \cref{fig:typicalRectifierCircuitFig1}, was suggested (with \( C = 0 \)) as a first test of the non-linear HB system.
+The half wave rectifier of \cref{fig:typicalRectifierCircuitFig1}, was suggested (with \( C = 0 \)) as a first test of the nonlinear HB system.
 
 %\imageFigureHere{../../figures/ece1254/halfWaveRectifier}{Half wave rectifier circuit.}{fig:HalfWaveRectifierFig1}{3in}{proj:makefigures.m}
 \imageFigureHere{../../figures/ece1254/halfWaveRectifierWithCap.pdf}{Half wave rectifier circuit.}{fig:typicalRectifierCircuitFig1}{3.0in}{proj:makefigures.m}
@@ -912,7 +923,7 @@ That did not work for this system, which is ill-conditioned for \( \lambda = 0 \
 To handle this sort of ill conditioning the Newton's method procedure was modified to use \( \lambda \in [d\lambda, 1] \) if the Jacobian for \cref{eqn:ece1254projectReport:1460} was ill conditioned or NaN at \( \lambda = 0 \).
 With that refinement of the source stepping algorithm, HB simulation of this half wave rectifier converges.
 %produces the expected results, as plotted in 
-Adding a capacitor to the half wave rectifier, adds an imaginary component to the admittance matrix \( \BY \), while still only requiring a single non-linear component, where the use of a large enough capacitor value produces a DC rectified signal from an AC input.
+Adding a capacitor to the half wave rectifier, adds an imaginary component to the admittance matrix \( \BY \), while still only requiring a single nonlinear component, where the use of a large enough capacitor value produces a DC rectified signal from an AC input.
 Plots of the simulation results with
 capacitor values of \( 0, 1 \, \text{nF}, 10 \, \text{nF}, 1000 \text{nF} \) are plotted in \cref{fig:HalfWaveRectifierFig2}.
 
@@ -927,10 +938,11 @@ capacitor values of \( 0, 1 \, \text{nF}, 10 \, \text{nF}, 1000 \text{nF} \) are
 %\imageFigureHere{../../figures/ece1254/report/typicalRectifierCircuitSmallerCapSourceAndOutputVoltagesFig2}{DC rectifier voltages at \( 1 \) nF.}{fig:typicalRectifierCircuitFig4}{3.0in}{proj:makefigures.m}
 
 \mysubsection{Bridge rectifier}
+\index{bridge rectifier}
 
 The bridge rectifier circuit of
 \cref{fig:bridgeRectifierCapFilterFig1}, in configurations with zero and non-zero capacitance values, 
-was used as a test system that included multiple non-linear elements.
+was used as a test system that included multiple nonlinear elements.
 
 %\imageFigureHere{../../figures/ece1254/bridgeRectifier}{Bridge rectifier.}{fig:bridgeRectifierCircuitDiagramFig1}{2.5in}{proj:makefigures.m}
 \imageFigureHere{../../figures/ece1254/bridgeRectifierWithCap.pdf}{Bridge rectifier.}{fig:bridgeRectifierCapFilterFig1}{2.5in}{proj:makefigures.m}
@@ -987,7 +999,7 @@ Measuring the respective slopes (using the matlab function polyfit), the cpu tim
 %\label{fig:simpleRectifierCircuitFig2}}
 %\end{figure*}
 
-\mysubsection{Power law non-linearities}
+\mysubsection{Power law nonlinearities}
 
 As a test for the implementation's support of \textbf{Plabel} form conductance models (voltage differences scaled and raised to a power),
 two of the diodes in the bridge rectifier circuit were replaced with an 8 term Taylor approximation
@@ -1005,10 +1017,10 @@ The results are plotted in \cref{fig:bridgeRectifierPowSourceAndOutputVoltagesFi
 
 This is not a numerically smart approximation as computation of the nonlinear currents and the Jacobian requires much more work.
 Those calculations also require the multiplication of pairs of very large and small numbers (the exponents and the inverse factorials) introducing more chance for round off error than using the exponential directly.
-When possible, as with the exponential, encoding direct support for the functional form of a non-linear conductance in the current and Jacobian calculation code is likely always superior.
+When possible, as with the exponential, encoding direct support for the functional form of a nonlinear conductance in the current and Jacobian calculation code is likely always superior.
 %Despite that, there are likely some conductance models that have a good approximation as a set of power series terms.
 
-As a test for the non-linear voltage controlled \textbf{Elabel} elements, the circuit of \cref{fig:squareAndCubeAmp} containing a pair of simple non-linear amplifiers was simulated with a single frequency source, with results plotted in \cref{fig:PowerLawAmplifiersvoltageFig1}.
+As a test for the nonlinear voltage controlled \textbf{Elabel} elements, the circuit of \cref{fig:squareAndCubeAmp} containing a pair of simple nonlinear amplifiers was simulated with a single frequency source, with results plotted in \cref{fig:PowerLawAmplifiersvoltageFig1}.
 
 \imageFigureHere{../../figures/ece1254/report/squareAndCubeAmp.pdf}{Non-linear power-law amplifiers.}{fig:squareAndCubeAmp}{3.0in}{proj:makefigures.m}
 
@@ -1019,6 +1031,7 @@ has the expected doubling of the fundamental frequency, and is shifted into the 
 consistent with \( \cos^2(\omega_0 t) = \lr{\cos(2 \omega_0 t) + 1}/2 \).
 
 \mysubsection{Stiff systems}
+\index{stiff}
 
 For the low pass and rectifier circuits above, use of source stepping was sufficient (and required) to ensure convergence.
 However, introduction of a non-zero value for the capacitor of the bridge rectifier circuit \cref{fig:bridgeRectifierCapFilterFig1} is enough to cause a number of Matlab messages ``Matrix is close to singular or badly scaled'' along with associated very small conditioning numbers.
@@ -1055,7 +1068,7 @@ For this circuit, and surely others, it appears that additional strategies beyon
 
 \section{Conclusion}
 
-When the steady state solution of a uniformly discretized linear or non-linear system with periodic sources is desired, the Harmonic Balance method is a natural way to express the system equations, and once solved provides both the frequency and time domain representation of the system response.  Some of the nonlinear circuits for which HB solutions were sought proved troublesome, even with source stepping and fine mesh sizes, so it is clear that developing a generic and numerically robust HB system would require additional study and careful implementation.
+When the steady state solution of a uniformly discretized linear or nonlinear system with periodic sources is desired, the Harmonic Balance method is a natural way to express the system equations, and once solved provides both the frequency and time domain representation of the system response.  Some of the nonlinear circuits for which HB solutions were sought proved troublesome, even with source stepping and fine mesh sizes, so it is clear that developing a generic and numerically robust HB system would require additional study and careful implementation.
 
 \appendices
 
