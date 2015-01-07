@@ -70,7 +70,7 @@ source voltage is depicted in \cref{fig:problemSet3a:problemSet3aFig2}.
 
 \imageFigure{../../figures/ece1254/problemSet3aFig2}{Clock signal.}{fig:problemSet3a:problemSet3aFig2}{0.3}
 
-Model each chip block with a 5 k \( \Omega \) resistor in parallel with a 5 f F capacitor. Write a matlab function that generates a spice-compatible netlist
+Model each chip block with a 5 k \( \Omega \) resistor in parallel with a 5 f F capacitor. Write a Matlab function that generates a spice-compatible netlist
 of the clock distribution network. Report in a table the values of the
 resistors, inductors and capacitors that you used in each section.
 
@@ -117,9 +117,9 @@ First consider an RLC circuit with a current source as sketched in \cref{fig:pro
 
 With \( Z = 1/R \), the KCLs plus the inductor voltage relation, are
 \begin{enumerate}
-\item \( -i_s + Z V_1 + C \frac{d(V_1 - V_2)}{dt} = 0 \)
-\item \( C \frac{d(V_2 - V_1)}{dt} + i_L = 0 \)
-\item \( -(V_2 - 0) + L \frac{di_L}{dt} = 0 \)
+\item \( -i_{\textrm{s}} + Z V_1 + C \frac{d(V_1 - V_2)}{dt} = 0 \)
+\item \( C \frac{d(V_2 - V_1)}{dt} + i_{\textrm{L}} = 0 \)
+\item \( -(V_2 - 0) + L \frac{di_{\textrm{L}}}{dt} = 0 \)
 \end{enumerate}
 
 This can be put into matrix form as
@@ -133,7 +133,7 @@ Z & 0 & 0 \\
 \begin{bmatrix}
 V_1 \\
 V_2 \\
-i_L
+i_{\textrm{L}}
 \end{bmatrix}
 +
 \begin{bmatrix}
@@ -145,11 +145,11 @@ C & -C & 0 \\
 {\begin{bmatrix}
 V_1 \\
 V_2 \\
-i_L
+i_{\textrm{L}}
 \end{bmatrix}}'
 =
 \begin{bmatrix}
-i_s \\
+i_{\textrm{s}} \\
 0 \\
 0
 \end{bmatrix}
@@ -163,11 +163,11 @@ Now consider the more complex circuit of \cref{fig:problemSet3a:problemSet3aFig4
 \begin{enumerate}
 \item \( -i_{s_1} + Z (V_1 - V_2) = 0 \)
 \item \( Z (V_2 - V_1) + C_1 \frac{d(V_2 - 0)}{dt} + C_2 \frac{d(V_2 - V_3)}{dt} = 0 \)
-\item \( C_2 \frac{d(V_3 - V_2)}{dt} + i_{L_{3,4}} - i_{L_{0,3}} = 0 \)
-\item \( -i_{L_{3,4}} - i_{s_2} = 0 \)
+\item \( C_2 \frac{d(V_3 - V_2)}{dt} + i_{\textrm{L}_{3,4}} - i_{\textrm{L}_{0,3}} = 0 \)
+\item \( -i_{\textrm{L}_{3,4}} - i_{s_2} = 0 \)
 \item \( V_1 = V_{s_1} \)
-\item \( -(V_3 - V_4) + L_2 \frac{d}{dt} i_{L_{3,4}} = 0 \)
-\item \( -(0 - V_3) + L_1 \frac{d}{dt} i_{L_{0,3}} = 0 \)
+\item \( -(V_3 - V_4) + L_2 \frac{d}{dt} i_{\textrm{L}_{3,4}} = 0 \)
+\item \( -(0 - V_3) + L_1 \frac{d}{dt} i_{\textrm{L}_{0,3}} = 0 \)
 \end{enumerate}
 
 %\imageFigure{../../figures/ece1254/problemSet3aFig4}{More complex RLC circuit}{fig:problemSet3a:problemSet3aFig4}{0.2}
@@ -191,8 +191,8 @@ V_2 \\
 V_3 \\
 V_4 \\
 i_{s_1} \\
-i_{L_{3,4}} \\
-i_{L_{0,3}} \\
+i_{\textrm{L}_{3,4}} \\
+i_{\textrm{L}_{0,3}} \\
 \end{bmatrix} \\
 &+
 \begin{bmatrix}
@@ -210,8 +210,8 @@ V_2 \\
 V_3 \\
 V_4 \\
 i_{s_1} \\
-i_{L_{3,4}} \\
-i_{L_{0,3}} \\
+i_{\textrm{L}_{3,4}} \\
+i_{\textrm{L}_{0,3}} \\
 \end{bmatrix}}'
 =
 \begin{bmatrix}
@@ -242,9 +242,9 @@ For this example a labeling convention compatible with the implementation to be 
 The equations are
 
 \begin{enumerate}
-\item \( -i_s + Z (V_1 - 0) -i_{L_{2,1}} = 0 \)
-\item \( i_{L_{2,1}} + C \frac{d(V_2 - 0)}{dt} = 0 \)
-\item \( -(V_2 - V_1) + L \frac{d}{dt} i_{L_{2,1}} = 0 \),
+\item \( -i_{\textrm{s}} + Z (V_1 - 0) -i_{\textrm{L}_{2,1}} = 0 \)
+\item \( i_{\textrm{L}_{2,1}} + C \frac{d(V_2 - 0)}{dt} = 0 \)
+\item \( -(V_2 - V_1) + L \frac{d}{dt} i_{\textrm{L}_{2,1}} = 0 \),
 \end{enumerate}
 
 which have the matrix form
@@ -259,7 +259,7 @@ Z & 0 & \mytikzmark{left}{1}{-1} \\
 \begin{bmatrix}
 V_1 \\
 V_2 \\
-i_{L_{2,1}} 
+i_{\textrm{L}_{2,1}} 
 \end{bmatrix}
 +
 \begin{bmatrix}
@@ -271,12 +271,12 @@ i_{L_{2,1}}
 \begin{bmatrix}
 V_1 \\
 V_2 \\
-i_{L_{2,1}} 
+i_{\textrm{L}_{2,1}} 
 \end{bmatrix}
 }'
 =
 \begin{bmatrix}
-i_s \\
+i_{\textrm{s}} \\
 0 \\
 0
 \end{bmatrix}
@@ -287,14 +287,14 @@ i_s \\
 \DrawMyBox[thick, Maroon, rounded corners]{3}
 }
 
-From the above examples, the inductor stamp structure can be observed.  For an inductance \( L \) between nodes \( n_i, n_j \) and a current \( i_{L_{n_i, n_j}} \) directed from \( n_i \) to \( n_j \) that \( \BG \) portion of that stamp is
+From the above examples, the inductor stamp structure can be observed.  For an inductance \( L \) between nodes \( n_i, n_j \) and a current \( i_{\textrm{L}_{n_i, n_j}} \) directed from \( n_i \) to \( n_j \) that \( \BG \) portion of that stamp is
 
 \begin{equation}\label{eqn:multiphysicsProblemSet3a:70}
 \kbordermatrix{
-                 & n_i & n_j  & i_{L_{n_i, n_j}} \\
+                 & n_i & n_j  & i_{\textrm{L}_{n_i, n_j}} \\
 n_i              &     &      & 1                \\
 n_j              &     &      & -1               \\
-i_{L_{n_i, n_j}} & -1  & 1    &                  \\
+i_{\textrm{L}_{n_i, n_j}} & -1  & 1    &                  \\
 },
 \end{equation}
 
@@ -302,14 +302,14 @@ and the \( \BC \) portion of that stamp with just
 
 \begin{equation}\label{eqn:multiphysicsProblemSet3a:71}
 \kbordermatrix{
-                 & i_{L_{n_i, n_j}} \\
-i_{L_{n_i, n_j}} & L                \\
+                 & i_{\textrm{L}_{n_i, n_j}} \\
+i_{\textrm{L}_{n_i, n_j}} & L                \\
 }.
 \end{equation}
 
 The trickiest aspect of application of this stamp is likely determining the right rows and columns to allocate for each inductor current, leaving sufficient space for the voltage source currents rows and columns, as well as space for any voltage controlled voltage gain stamps.
 
-See \nbcite{ps3a:NodalAnalysis.m}{ps3a/NodalAnalysis.m} for the matlab code to generate MNA equations also including capacitor and inductor support.
+See \nbcite{ps3a:NodalAnalysis.m}{ps3a/NodalAnalysis.m} for the Matlab code to generate MNA equations also including capacitor and inductor support.
 
 \makeSubAnswer{}{multiphysics:problemSet3a:1b}
 
@@ -325,7 +325,7 @@ Level  & n        & R (\( \Omega \))  & Inductance (nH) & Capacitance (pF) \\ \h
 \end{tabular}
 }
 
-Since there is only one source in the system, the clock that feeds the transmission line network, the source vector \( \BB \Bu(t) \) has just one non-zero element.  This allows the system equations to be expressed in a simple fashion that requires no support of time dependent functions in the \matlabFuncPath{NodalAnalysis}{ps3a:NodalAnalysis.m}() code.  If the clock amplitude is \( v_{\textrm{clk}}(t) \), then the system equations have the form
+Since there is only one source in the system, the clock that feeds the transmission line network, the source vector \( \BB \Bu(t) \) has just one non-zero element.  This allows the system equations to be expressed in a simple fashion that requires no support of time dependent functions in the \matlabFuncPath{NodalAnalysis()}{ps3a:NodalAnalysis.m} code.  If the clock amplitude is \( v_{\textrm{clk}}(t) \), then the system equations have the form
 
 \begin{equation}\label{eqn:multiphysicsProblemSet3a:151}
 \BG \Bx(t) + \BC \dot{\Bx}(t) = \Bb v_{\textrm{clk}}(t),
@@ -333,11 +333,11 @@ Since there is only one source in the system, the clock that feeds the transmiss
 
 and \( \BG, \BC, \Bb \) are the MNA matrices for a constant unit voltage at the source (clock) node.
 
-Code to implement such a netlist for this network, including the terminating chip loads, can be found in \matlabFuncPath{generateNetlistSegmentForLevel}{ps3a:generateNetlistSegmentForLevel.m}(),
-\matlabFuncPath{generateNetlistSegment}{ps3a:generateNetlistSegment.m}(), and
-\matlabFuncPath{generateNetlist}{ps3a:generateNetlist.m}(), the last of which takes the filename for the netlist output.
+Code to implement such a netlist for this network, including the terminating chip loads, can be found in \matlabFuncPath{generateNetlistSegmentForLevel()}{ps3a:generateNetlistSegmentForLevel.m},
+\matlabFuncPath{generateNetlistSegment()}{ps3a:generateNetlistSegment.m}, and
+\matlabFuncPath{generateNetlist()}{ps3a:generateNetlist.m}, the last of which takes the filename for the netlist output.
 
-The function \matlabFuncPath{vclock}{ps3a:vclock.m}(t) implements the clock signal \( v_{\textrm{clk}}(t) \), for \( t \) in nanoseconds.
+The function \matlabFuncPath{vclock(t)}{ps3a:vclock.m} implements the clock signal \( v_{\textrm{clk}}(t) \), for \( t \) in nanoseconds.
 
 \makeSubAnswer{}{multiphysics:problemSet3a:1c}
 
@@ -352,8 +352,8 @@ or
 \lr{ \BG + \inv{\Delta t} \BC } \Bx_n = \BC \frac{ \Bx_{n-1} }{\Delta t} + \Bb v_{\textrm{clk}}(t_n).
 \end{equation}
 
-This is the system to solve at each time step for \( \Bx_n \).  A one time LU factorization of \( \BG + \BC/\Delta t \) was used to hoist most of the inversion cost out of the time stepping loop.  The load voltage and the reference clock source is plotted in \cref{fig:ps3aBE:ps3aBEFig1}, calculated using %%\matlabFuncPath{calculateSolutionForTimestep}{ps3a:calculateSolutionForTimestep.m}(0.05, 1)
-\matlabFuncPath{driver}{ps3a:driver.m}(0, 1), using a \( 5 \) ps timestep.
+This is the system to solve at each time step for \( \Bx_n \).  A one time LU factorization of \( \BG + \BC/\Delta t \) was used to hoist most of the inversion cost out of the time stepping loop.  The load voltage and the reference clock source is plotted in \cref{fig:ps3aBE:ps3aBEFig1}, calculated using %%\matlabFuncPath{calculateSolutionForTimestep(0.05, 1)}{ps3a:calculateSolutionForTimestep.m}
+\matlabFuncPath{driver(0, 1)}{ps3a:driver.m}, using a \( 5 \) ps timestep.
 
 \mathImageFigure{../../figures/ece1254/ps3aBEFig1.pdf}{Load (chip) voltage calculated with BE.}{fig:ps3aBE:ps3aBEFig1}{0.5}{ps3a:driver.m}
 
@@ -391,11 +391,11 @@ the TR system equations take the form
 %v_{\textrm{clk}}(t_{n}) }.
 %\end{dmath}
 %
-As with BE a \( \BL \BU = \BP \BA \) factorization can be computed once outside of the loop.  In \cref{fig:ps3aTR:ps3aTRFig4} are plots of such TR solutions with a range of timesteps, calculated using \matlabFuncPath{calculateSolutionForTimestep}{ps3a:calculateSolutionForTimestep.m}(..., 0).
+As with BE a \( \BL \BU = \BP \BA \) factorization can be computed once outside of the loop.  In \cref{fig:ps3aTR:ps3aTRFig4} are plots of such TR solutions with a range of timesteps, calculated using \matlabFuncPath{calculateSolutionForTimestep(..., 0)}{ps3a:calculateSolutionForTimestep.m}.
 
 \mathImageFigure{../../figures/ece1254/ps3aTRFig4.pdf}{TR solutions.}{fig:ps3aTR:ps3aTRFig4}{0.5}{ps3a:driver.m}
 
-To facilitate calculation of the error at different timesteps a linear interpolation function \matlabFuncPath{interpolate}{ps3a:interpolate.m}() was used to construct a vector for each of the measurements with the timescale of the reference 1 ps TR solution.
+To facilitate calculation of the error at different timesteps a linear interpolation function \matlabFuncPath{interpolate()}{ps3a:interpolate.m} was used to construct a vector for each of the measurements with the timescale of the reference 1 ps TR solution.
 
 Plots of the errors for each of these, relative to the reference solution are given in \cref{fig:ps3aErrorBE:ps3aErrorBEFig5}, and \cref{fig:ps3aErrorTR:ps3aErrorTRFig6}, for BE and TR respectively.  
 
@@ -425,7 +425,7 @@ timestep (ps) & error (BE) & error (TR) & cpu (BE) & cpu (TR) \\
 \end{tabular}
 }
 
-The plots and tabulated data above was produced with a call to \matlabFuncPath{driver}{ps3a:driver.m}(1, 0).  
+The plots and tabulated data above was produced with a call to \matlabFuncPath{driver(1, 0)}{ps3a:driver.m}.
 
 \makeSubAnswer{}{multiphysics:problemSet3a:1f}
 
@@ -439,10 +439,10 @@ Those lines are found to be
 
 \begin{subequations}
 \begin{dmath}\label{eqn:multiphysicsProblemSet3a:471}
-\ln(\textrm{err}_{BE}) = -3.6366 + 0.6067 \ln( {\Delta t}_{BE} )
+\ln(\textrm{err}_{\textrm{BE}}) = -3.6366 + 0.6067 \ln( {\Delta t}_{\textrm{BE}} )
 \end{dmath}
 \begin{dmath}\label{eqn:multiphysicsProblemSet3a:491}
-\ln(\textrm{err}_{TR}) = -4.8835 + 1.0480 \ln( {\Delta t}_{TR} )
+\ln(\textrm{err}_{\textrm{TR}}) = -4.8835 + 1.0480 \ln( {\Delta t}_{\textrm{TR}} )
 \end{dmath}
 \end{subequations}
 
@@ -450,10 +450,10 @@ With \( \Delta t = 5 \text{ns}/(N -1) \sim 1/N \) this indicates that
 
 \begin{subequations}
 \begin{dmath}\label{eqn:multiphysicsProblemSet3a:671}
-\textrm{err}_{BE} \propto N^{-0.6}
+\textrm{err}_{\textrm{BE}} \propto N^{-0.6}
 \end{dmath}
 \begin{dmath}\label{eqn:multiphysicsProblemSet3a:691}
-\textrm{err}_{TR} \propto N^{-1.05}
+\textrm{err}_{\textrm{TR}} \propto N^{-1.05}
 \end{dmath}
 \end{subequations}
 

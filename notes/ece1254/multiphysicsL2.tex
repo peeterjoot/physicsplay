@@ -37,7 +37,7 @@ Consider the sample circuit of \cref{fig:lecture2:lecture2Fig1}.
 \item
 node voltages: \(V_1, V_2, V_3, V_4\)
 \item
-branch currents: \(i_A, i_B, i_C, i_D, i_E\)
+branch currents: \(i_{\textrm{A}}, i_{\textrm{B}}, i_{\textrm{C}}, i_{\textrm{D}}, i_{\textrm{E}}\)
 \end{itemize}
 
 No additional labels are required for the source current sources.
@@ -53,21 +53,21 @@ unknown node voltages \index{node voltage} and \(B\) unknown branch currents \in
 \paragraph{Step 2.  Conservation equations:}  KCL
 
 \begin{itemize}
-   \item 0: \(i_A + i_E - i_D = 0\)
-   \item 1: \(-i_A + i_B + i_{S,A} = 0\)
-   \item 2: \(-i_B + i_{S,B} - i_E + i_{S,C} = 0\)
-   \item 3: \(i_C - i_{S,C} = 0\)
-   \item 4: \(-i_{S,A} - i_{S,B} + i_D - i_C = 0\)
+   \item 0: \(i_{\textrm{A}} + i_{\textrm{E}} - i_{\textrm{D}} = 0\)
+   \item 1: \(-i_{\textrm{A}} + i_{\textrm{B}} + i_{\textrm{S},\textrm{A}} = 0\)
+   \item 2: \(-i_{\textrm{B}} + i_{\textrm{S},\textrm{B}} - i_{\textrm{E}} + i_{\textrm{S},\textrm{C}} = 0\)
+   \item 3: \(i_{\textrm{C}} - i_{\textrm{S},\textrm{C}} = 0\)
+   \item 4: \(-i_{\textrm{S},\textrm{A}} - i_{\textrm{S},\textrm{B}} + i_{\textrm{D}} - i_{\textrm{C}} = 0\)
 \end{itemize}
 
 Grouping unknown currents, this is
 
 \begin{itemize}
-   \item 0: \(i_A + i_E - i_D = 0\)
-   \item 1: \(-i_A + i_B = -i_{S,A}\)
-   \item 2: \(-i_B -i_E = -i_{S,B} -i_{S,C}\)
-   \item 3: \(i_C = i_{S,C}\)
-   \item 4: \(i_D - i_C = i_{S,A} + i_{S,B}\)
+   \item 0: \(i_{\textrm{A}} + i_{\textrm{E}} - i_{\textrm{D}} = 0\)
+   \item 1: \(-i_{\textrm{A}} + i_{\textrm{B}} = -i_{\textrm{S},\textrm{A}}\)
+   \item 2: \(-i_{\textrm{B}} -i_{\textrm{E}} = -i_{\textrm{S},\textrm{B}} -i_{\textrm{S},\textrm{C}}\)
+   \item 3: \(i_{\textrm{C}} = i_{\textrm{S},\textrm{C}}\)
+   \item 4: \(i_{\textrm{D}} - i_{\textrm{C}} = i_{\textrm{S},\textrm{A}} + i_{\textrm{S},\textrm{B}}\)
 \end{itemize}
 
 Note that one of these equations is redundant (sum 1-4).  In a circuit with
@@ -82,18 +82,18 @@ nodes, are are at most \(N-1\) independent KCLs.  In matrix form
    0 & 0 & -1 & 1 & 0
 \end{bmatrix}
 \begin{bmatrix}
-   i_A \\
-   i_B \\
-   i_C \\
-   i_D \\
-   i_E \\
+   i_{\textrm{A}} \\
+   i_{\textrm{B}} \\
+   i_{\textrm{C}} \\
+   i_{\textrm{D}} \\
+   i_{\textrm{E}} \\
 \end{bmatrix}
 =
 \begin{bmatrix}
-   -i_{S,A} \\
-   -i_{S,B} -i_{S,C} \\
-   i_{S,C} \\
-   i_{S,A} + i_{S,B}
+   -i_{\textrm{S},\textrm{A}} \\
+   -i_{\textrm{S},\textrm{B}} -i_{\textrm{S},\textrm{C}} \\
+   i_{\textrm{S},\textrm{C}} \\
+   i_{\textrm{S},\textrm{A}} + i_{\textrm{S},\textrm{B}}
 \end{bmatrix}
 \end{equation}
 
@@ -101,11 +101,11 @@ This first matrix of ones and minus ones is called the \textAndIndex{incidence m
 \(A\).  This matrix has
 \(B\) columns and
 \(N-1\) rows.  The matrix of known currents is called
-\(\BI_S\), and the branch currents called
-\(\BI_B\).  That is
+\(\BI_{\textrm{S}}\), and the branch currents called
+\(\BI_{\textrm{B}}\).  That is
 
 \begin{equation}\label{eqn:multiphysicsL2:40}
-   A \BI_B = \BI_S.
+   A \BI_{\textrm{B}} = \BI_{\textrm{S}}.
 \end{equation}
 
 Observe that there is a plus and minus one in all columns except for those columns impacted by the neglect of the reference node current conservation equation.
@@ -114,12 +114,9 @@ Observe that there is a plus and minus one in all columns except for those colum
 
 In the input file, to describe a resistor of \cref{fig:lecture2:lecture2Fig2}, you'll have a line of the form
 
-%\captionedTable{Resistor spice line.}{tab:lecture2:1}{
-\begin{tabular}{lllll}
-R & name & \(n_1\)
-& \(n_2\) & value
-\end{tabular}
-%}
+\begin{center}
+\textbf{Rlabel \(n_1\) \(n_2\) value}
+\end{center}
 
 \imageFigure{../../figures/ece1254/lecture2Fig2}{Resistor node convention.}{fig:lecture2:lecture2Fig2}{0.1}
 
@@ -140,23 +137,22 @@ The algorithm to process resistor lines is
 \ENDFOR
 }
 
-\paragraph{Algorithm for filling \(\BI_S\)}
+\paragraph{Algorithm for filling \(\BI_{\textrm{S}}\)}
 
-Current sources, as in \cref{fig:lecture2:lecture2Fig3}, a line will have the specification (FIXME: confirm... didn't write this down).
+Current sources, as in \cref{fig:lecture2:lecture2Fig3}, a line will have the specification
 
-\begin{tabular}{lllll}
-I & name & \(n_1\)
-& \(n_2\) & value
-\end{tabular}
+\begin{center}
+\textbf{Ilabel \(n_1\) \(n_2\) value}
+\end{center}
 
 \imageFigure{../../figures/ece1254/lecture2Fig3}{Current source conventions.}{fig:lecture2:lecture2Fig3}{0.1}
 
 \index{stamp!current}
 \makealgorithm{Current line handling.}{alg:multiphysicsL2:2}{
-\STATE \(\BI_S = \text{zeros}(N-1, 1)\)
+\STATE \(\BI_{\textrm{S}} = \text{zeros}(N-1, 1)\)
 \FORALL{current lines}
-\STATE \(\BI_S(n_1) \leftarrow \BI_S(n_1) - \text{value}\)
-\STATE \(\BI_S(n_2) \leftarrow \BI_S(n_2) + \text{value}\)
+\STATE \(\BI_{\textrm{S}}(n_1) \leftarrow \BI_{\textrm{S}}(n_1) - \text{value}\)
+\STATE \(\BI_{\textrm{S}}(n_2) \leftarrow \BI_{\textrm{S}}(n_2) + \text{value}\)
 \ENDFOR
 }
 
@@ -164,44 +160,44 @@ I & name & \(n_1\)
 
 \begin{equation}\label{eqn:multiphysicsL2:60}
 \begin{bmatrix}
-i_A \\
-i_B \\
-i_C \\
-i_D \\
-i_E
+i_{\textrm{A}} \\
+i_{\textrm{B}} \\
+i_{\textrm{C}} \\
+i_{\textrm{D}} \\
+i_{\textrm{E}}
 \end{bmatrix}
 =
 \begin{bmatrix}
-1/R_A & & & & \\
-      & 1/R_B & & & & \\
-      & & 1/R_C & & & \\
-      & & & 1/R_D & & \\
-      & & & & & 1/R_E
+1/R_{\textrm{A}} & & & & \\
+      & 1/R_{\textrm{B}} & & & & \\
+      & & 1/R_{\textrm{C}} & & & \\
+      & & & 1/R_{\textrm{D}} & & \\
+      & & & & & 1/R_{\textrm{E}}
 \end{bmatrix}
 \begin{bmatrix}
-v_A \\
-v_B \\
-v_C \\
-v_D \\
-v_E
+v_{\textrm{A}} \\
+v_{\textrm{B}} \\
+v_{\textrm{C}} \\
+v_{\textrm{D}} \\
+v_{\textrm{E}}
 \end{bmatrix}
 \end{equation}
 
 Or
 
 \begin{equation}\label{eqn:multiphysicsL2:80}
-   \BI_B = \alpha \BV_B,
+   \BI_{\textrm{B}} = \alpha \BV_{\textrm{B}},
 \end{equation}
 
-where \(\BV_B\) are the branch voltages, not unknowns of interest directly.  That can be written
+where \(\BV_{\textrm{B}}\) are the branch voltages, not unknowns of interest directly.  That can be written
 
 \begin{equation}\label{eqn:multiphysicsL2:100}
 \begin{bmatrix}
-v_A \\
-v_B \\
-v_C \\
-v_D \\
-v_E
+v_{\textrm{A}} \\
+v_{\textrm{B}} \\
+v_{\textrm{C}} \\
+v_{\textrm{D}} \\
+v_{\textrm{E}}
 \end{bmatrix}
 =
 \begin{bmatrix}
@@ -223,18 +219,18 @@ Observe that this %\(\alpha\)  %FIXME: label
 is the transpose of \(A\), so
 
 \begin{equation}\label{eqn:multiphysicsL2:120}
-\BV_B = A^\T \BV_N.
+\BV_{\textrm{B}} = A^\T \BV_{\textrm{N}}.
 \end{equation}
 
 \paragraph{Solving}
 
 \begin{itemize}
 \item
-KCLs: \(A \BI_B = \BI_S\)
+KCLs: \(A \BI_{\textrm{B}} = \BI_{\textrm{S}}\)
 \item
-constitutive: \(\BI_B = \alpha \BV_B \implies \BI_B = \alpha A^\T \BV_N\)
+constitutive: \(\BI_{\textrm{B}} = \alpha \BV_{\textrm{B}} \implies \BI_{\textrm{B}} = \alpha A^\T \BV_{\textrm{N}}\)
 \item
-branch and node voltages: \(\BV_B = A^\T \BV_N\)
+branch and node voltages: \(\BV_{\textrm{B}} = A^\T \BV_{\textrm{N}}\)
 \end{itemize}
 
 In block matrix form, this is
@@ -245,12 +241,12 @@ In block matrix form, this is
    I & -\alpha A^\T
 \end{bmatrix}
 \begin{bmatrix}
-   \BI_B \\
-   \BV_N
+   \BI_{\textrm{B}} \\
+   \BV_{\textrm{N}}
 \end{bmatrix}
 =
 \begin{bmatrix}
-   \BI_S \\
+   \BI_{\textrm{S}} \\
    0
 \end{bmatrix}.
 \end{equation}

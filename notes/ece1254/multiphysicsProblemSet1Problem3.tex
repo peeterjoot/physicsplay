@@ -13,12 +13,12 @@ be used to solve numerically the one-dimensional Poisson equation with
 arbitrary boundary conditions. The Poisson equation can be used to determine steady-state temperature distribution in a heat-conducting bar, as in
 
 \begin{equation}\label{eqn:multiphysicsProblemSet1Problem3:10}
-\PDSq{x}{T(x)} = \frac{\kappa_a}{\kappa_m}\lr{ T(x) - T_0 } - \frac{H(x)}{\kappa_m}
+\PDSq{x}{T(x)} = \frac{\kappa_{\textrm{a}}}{\kappa_{\textrm{m}}}\lr{ T(x) - T_0 } - \frac{H(x)}{\kappa_{\textrm{m}}}
 \end{equation}
 
-where \( T(x) \) is the temperature at a point in space x, \( H(x) \) is the heat generated at x, \( \kappa_m \) is the thermal conductivity along the metal bar, and \( \kappa_a \) is the thermal conductivity from the bar to the surrounding air. The temperature \( T_0 \) is the surrounding air temperature. The ratio \( \kappa_a/\kappa_m \) will be small as heat moves much more easily along the bar than dissipates from the bar into the surrounding air.
+where \( T(x) \) is the temperature at a point in space x, \( H(x) \) is the heat generated at x, \( \kappa_{\textrm{m}} \) is the thermal conductivity along the metal bar, and \( \kappa_{\textrm{a}} \) is the thermal conductivity from the bar to the surrounding air. The temperature \( T_0 \) is the surrounding air temperature. The ratio \( \kappa_{\textrm{a}}/\kappa_{\textrm{m}} \) will be small as heat moves much more easily along the bar than dissipates from the bar into the surrounding air.
 
-Use your Matlab simulator to numerically solve the above Poisson equation for \( T(x), x \in [0,1] \) , given \( H(x) = 50 \sin^2(2 \pi x) \) for \( x \in [0,1], \kappa_a = 0.001, and \kappa_m = 0.1 \). In addition, assume the ambient air temperature is \( T_0 = 400 \), and \( T(0) = 250 \) and \( T(1) = 250 \). The boundary conditions at \( x = 0 \) and \( x = 1 \) model heat sink connections to a cool metal cabinet at both ends of the package. That is, it is assumed that the heat sink connections will insure both ends of the package are fixed at near room temperature.
+Use your Matlab simulator to numerically solve the above Poisson equation for \( T(x), x \in [0,1] \) , given \( H(x) = 50 \sin^2(2 \pi x) \) for \( x \in [0,1], \kappa_{\textrm{a}} = 0.001, and \kappa_{\textrm{m}} = 0.1 \). In addition, assume the ambient air temperature is \( T_0 = 400 \), and \( T(0) = 250 \) and \( T(1) = 250 \). The boundary conditions at \( x = 0 \) and \( x = 1 \) model heat sink connections to a cool metal cabinet at both ends of the package. That is, it is assumed that the heat sink connections will insure both ends of the package are fixed at near room temperature.
 
 To represent equation \cref{eqn:multiphysicsProblemSet1Problem3:10} as a circuit, you must first discretize your bar along the spatial variable x in small sections of length \( \Delta x\), and approximate the derivatives using a finite difference formula, e.g., 
 
@@ -45,7 +45,7 @@ In your numerical calculation, how did you choose \(\Delta x\)? Justify the choi
 
 \makesubproblem
 {
-	Now use your simulator to numerically solve the above equation for \( T(x), x \in [0,1]\), given \( H(x) = 50 \) for \( x \in [0,1], \kappa_a = 0.001 \) , and \( \kappa_m = 0.1\). In addition, assume the ambient air temperature is \(T_0 = 400\), and there is not heat flow at both ends of the bar. The zero heat flow boundary condition at \( x = 0 \) and \( x = 1 \) implies that there are no heat sinks at the ends of the package. Since heat flow is given by 
+	Now use your simulator to numerically solve the above equation for \( T(x), x \in [0,1]\), given \( H(x) = 50 \) for \( x \in [0,1], \kappa_{\textrm{a}} = 0.001 \) , and \( \kappa_{\textrm{m}} = 0.1\). In addition, assume the ambient air temperature is \(T_0 = 400\), and there is not heat flow at both ends of the bar. The zero heat flow boundary condition at \( x = 0 \) and \( x = 1 \) implies that there are no heat sinks at the ends of the package. Since heat flow is given by 
 	
 \begin{equation}\label{eqn:multiphysicsProblemSet1Problem3:12}
 \text{heatflow} = \kappa \PD{x}{T}.
@@ -102,10 +102,10 @@ an equivalence to the circuit element \( I = \Delta V/R \) exists.  This analogy
 The linearized Poisson equation at interior nodes \( 1 < i < N \) is
 
 \begin{equation}\label{eqn:multiphysicsProblemSet1Problem3:40}
-Q^i - Q^{i-1} - \frac{\kappa_a \Delta x}{\kappa_m} \lr{ T^i - T_0 } + \frac{H^i \Delta x}{\kappa_m} = 0.
+Q^i - Q^{i-1} - \frac{\kappa_{\textrm{a}} \Delta x}{\kappa_{\textrm{m}}} \lr{ T^i - T_0 } + \frac{H^i \Delta x}{\kappa_{\textrm{m}}} = 0.
 \end{equation}
 
-Identification of the \( - \kappa_a \Delta x/\kappa_m \lr{ T^i - T_0 } \) term as a current \( I = \Delta V/R \) (with temperatures as voltages) means that an identification \( R \sim \kappa_m /(\kappa_a \Delta x) \) is possible.  
+Identification of the \( - \kappa_{\textrm{a}} \Delta x/\kappa_{\textrm{m}} \lr{ T^i - T_0 } \) term as a current \( I = \Delta V/R \) (with temperatures as voltages) means that an identification \( R \sim \kappa_{\textrm{m}} /(\kappa_{\textrm{a}} \Delta x) \) is possible.  
 %This allows Zus to create the equivalent circuit sketched in \cref{fig:ps1p3:ps1p3Fig9}.
 %
 %\imageFigure{../../figures/ece1254/ps1p3Fig9}{Equivalent circuit.}{fig:ps1p3:ps1p3Fig9}{0.3}
@@ -114,8 +114,8 @@ At the endpoints things are a slightly different.  At \( x^0, x^{N+1} \) respect
 
 \begin{equation}\label{eqn:multiphysicsProblemSet1Problem3:60}
 \begin{aligned}
--q^0 + Q^1 - \frac{\kappa_a \Delta x}{\kappa_m} \lr{ T^1 - T_0 } + \frac{H^1 \Delta x}{\kappa_m} &= 0 \\
--q^1 -Q^{N-1} - \frac{\kappa_a \Delta x}{\kappa_m} \lr{ T^{N} - T_0 } + \frac{H^{N} \Delta x}{\kappa_m} &= 0. \\
+-q^0 + Q^1 - \frac{\kappa_{\textrm{a}} \Delta x}{\kappa_{\textrm{m}}} \lr{ T^1 - T_0 } + \frac{H^1 \Delta x}{\kappa_{\textrm{m}}} &= 0 \\
+-q^1 -Q^{N-1} - \frac{\kappa_{\textrm{a}} \Delta x}{\kappa_{\textrm{m}}} \lr{ T^{N} - T_0 } + \frac{H^{N} \Delta x}{\kappa_{\textrm{m}}} &= 0. \\
 \end{aligned}
 \end{equation}
 
@@ -140,7 +140,7 @@ The numerical solution and plotting code was implemented in
 %ps1p3Fig12n60.png
 \mathImageFigure{../../figures/ece1254/ps1p3Fig12n60.pdf}{Plot of numerical solution for \( n = 60 \).}{fig:ps1p3:ps1p3Fig12n60}{0.3}{ps1:plotHeatQ.m}
 
-This plot was generated with a call to \matlabFuncPath{plotHeatQ}{ps1:plotHeatQ.m}(60, 1, 0). %, 'ps1p3Fig12').
+This plot was generated with a call to \matlabFuncPath{plotHeatQ(60, 1, 0)}{ps1:plotHeatQ.m}. %, 'ps1p3Fig12').
 
 \makeSubAnswer{ }{multiphysics:problemSet1:3c}
 
@@ -175,7 +175,7 @@ For example, if \( f = 1/10 \) is desired, then \( N \approx 60 \) can be picked
 %%%\begin{equation}\label{eqn:multiphysicsProblemSet1Problem3:140}
 %%%\PD{x}{T}
 %%%= 
-%%%\int_{x' = a}^x dx' \lr{ \frac{\kappa_a}{\kappa_m} \lr{ T(x') - T_0 } - \frac{H(x')}{\kappa_m} }.
+%%%\int_{x' = a}^x dx' \lr{ \frac{\kappa_{\textrm{a}}}{\kappa_{\textrm{m}}} \lr{ T(x') - T_0 } - \frac{H(x')}{\kappa_{\textrm{m}}} }.
 %%%\end{equation}
 %%%
 %%%The zero constraint at \( x = 0 \) can be satisfied by setting the integration boundary constant \(a = 0\).  With \( H(x') \) is constant for this part of the problem that condition is
@@ -185,11 +185,11 @@ For example, if \( f = 1/10 \) is desired, then \( N \approx 60 \) can be picked
 %%%= 
 %%%\evalbar{\PD{x}{T} }{x = 1}
 %%%=
-%%%\frac{\kappa_a}{\kappa_m} 
+%%%\frac{\kappa_{\textrm{a}}}{\kappa_{\textrm{m}}} 
 %%%\int_0^1 dx' 
 %%%T(x')
 %%%- 
-%%%\frac{\kappa_a}{\kappa_m} T_0 - \frac{H}{\kappa_m},
+%%%\frac{\kappa_{\textrm{a}}}{\kappa_{\textrm{m}}} T_0 - \frac{H}{\kappa_{\textrm{m}}},
 %%%\end{equation}
 %%%
 %%%or
@@ -198,25 +198,25 @@ For example, if \( f = 1/10 \) is desired, then \( N \approx 60 \) can be picked
 %%%\int_0^1 dx' 
 %%%T(x')
 %%%= 
-%%%T_0 + \frac{H}{\kappa_a}.
+%%%T_0 + \frac{H}{\kappa_{\textrm{a}}}.
 %%%\end{equation}
 %%%
 %%%To discretize this condition the integral can be approximated with a sum.  
 %%%
 %%%\begin{equation}\label{eqn:multiphysicsProblemSet1Problem3:200}
-%%%\sum_{i = 1}^N \Delta x T^i = T_0 + \frac{H}{\kappa_a}.
+%%%\sum_{i = 1}^N \Delta x T^i = T_0 + \frac{H}{\kappa_{\textrm{a}}}.
 %%%\end{equation}
 %%%
 %%%That is
 %%%
 %%%\begin{equation}\label{eqn:multiphysicsProblemSet1Problem3:220}
-%%%\sum_{i = 1}^N \lr{ T^i - T_0 } = N \frac{H}{\kappa_a}.
+%%%\sum_{i = 1}^N \lr{ T^i - T_0 } = N \frac{H}{\kappa_{\textrm{a}}}.
 %%%\end{equation}
 %%%
 %%%This can be expressed as a sum of unity gain voltage gain elements and a fixed voltage source, tying the voltage at the final node.
 %%%
 %%%\begin{equation}\label{eqn:multiphysicsProblemSet1Problem3:240}
-%%%T^i - T_0 = -\sum_{i = 1}^{N-1} \lr{ T^i - T_0 } + N \frac{H}{\kappa_a}.
+%%%T^i - T_0 = -\sum_{i = 1}^{N-1} \lr{ T^i - T_0 } + N \frac{H}{\kappa_{\textrm{a}}}.
 %%%\end{equation}
 %%%
 %%%This and a four node example are illustrated in \cref{fig:ps1p3:ps1p3Fig13}, and \cref{fig:ps1p3:ps1p3Fig14nEquals4Example} respectively.
@@ -255,15 +255,15 @@ With uniform heat sources and no heat sinks at the boundaries the plot of the re
 \mathImageFigure{../../figures/ece1254/ps3dFig15WithFlatSourcen60.pdf}{Temperature distribution with uniform heat source and no heat sinks.}{fig:ps3d:ps3dFig15WithFlatSource}{0.3}{ps1:plotHeatQ.m}
 
 Note that Matlab appears to introduce a non-horizontal jiggle in its rendering of the line.  There appears to be no such variation in the data itself, which can be demonstrated by displaying the min and the max values in a call to 
-\matlabFuncPath{plotHeatQ}{ps1:plotHeatQ.m}(60, 0, 0). %, 'ps3dFig15WithFlatSource').
+\matlabFuncPath{plotHeatQ(60, 0, 0)}{ps1:plotHeatQ.m}. %, 'ps3dFig15WithFlatSource').
 
-This is a somewhat boring heat source, and leaves room to doubt that the boundary constraints are matched by more than luck.  The sinusoidal heat distribution from \ref{multiphysics:problemSet1:3a}, shows a more interesting temperature curve, also exhibiting the desired zero heat flow constraints.  Such a plot is given in \cref{fig:ps3d:ps3dFig16WithSineSource}, and was generated with a call to \matlabFuncPath{plotHeatQ}{ps1:plotHeatQ.m}(60, 0, 1). %, 'ps3dFig16WithSineSource').
+This is a somewhat boring heat source, and leaves room to doubt that the boundary constraints are matched by more than luck.  The sinusoidal heat distribution from \ref{multiphysics:problemSet1:3a}, shows a more interesting temperature curve, also exhibiting the desired zero heat flow constraints.  Such a plot is given in \cref{fig:ps3d:ps3dFig16WithSineSource}, and was generated with a call to \matlabFuncPath{plotHeatQ(60, 0, 1)}{ps1:plotHeatQ.m}. %, 'ps3dFig16WithSineSource').
 
 \mathImageFigure{../../figures/ece1254/ps3dFig16WithSineSourcen60.pdf}{Sinusoidal heat source with zero heat flow constraint.}{fig:ps3d:ps3dFig16WithSineSource}{0.3}{ps1:plotHeatQ.m}
 
 \makeSubAnswer{ }{multiphysics:problemSet1:3f}
 
-With the uniform heating distribution \( H(x) = 50 \) and no heat sinks, the heat in the bar is expected to have a uniform steady state distribution.  This is what is seen above in the visualization of the numerical solution.  The temperature of the bar is also seen to rise considerably above the ambient temperature.  Eventually the \( T(x) - T_0 \) term in the PDE gets big enough that more significant leakage into the air occurs despite the small ratio of \( \kappa_a/\kappa_m \), limiting the steady state temperature of the bar.
+With the uniform heating distribution \( H(x) = 50 \) and no heat sinks, the heat in the bar is expected to have a uniform steady state distribution.  This is what is seen above in the visualization of the numerical solution.  The temperature of the bar is also seen to rise considerably above the ambient temperature.  Eventually the \( T(x) - T_0 \) term in the PDE gets big enough that more significant leakage into the air occurs despite the small ratio of \( \kappa_{\textrm{a}}/\kappa_{\textrm{m}} \), limiting the steady state temperature of the bar.
 
 \paragraph{Grading comment:}
 

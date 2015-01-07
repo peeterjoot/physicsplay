@@ -29,11 +29,11 @@ An-RLC-circuit-with-a-diode.pdf
 The KCL equations for this circuit are
 
 \begin{enumerate}
-\item \( 0 = i_s - i_d \)
-\item \( i_L + \frac{v_2 - v_3}{R} = i_d \)
+\item \( 0 = i_{\textrm{s}} - i_{\textrm{d}} \)
+\item \( i_{\textrm{L}} + \frac{v_2 - v_3}{R} = i_{\textrm{d}} \)
 \item \( \frac{v_3 - v_2}{R} + C \frac{dv_3}{dt} = 0 \)
-\item \( -v_2 + L \frac{d i_L}{dt} = 0 \)
-\item \( i_d = I_0 \lr{ e^{(v_1 - v_2)/v_T} - 1} \)
+\item \( -v_2 + L \frac{d i_{\textrm{L}}}{dt} = 0 \)
+\item \( i_{\textrm{d}} = I_0 \lr{ e^{(v_1 - v_2)/v_{\textrm{T}}} - 1} \)
 \end{enumerate}
 
 %FIXME: for the diode, is that the right voltage sign with respect to the current direction?
@@ -51,7 +51,7 @@ With \( Z = 1/R \), these can be put into the standard MLN matrix form as
 v_1 \\
 v_2 \\
 v_3 \\
-i_L \\
+i_{\textrm{L}} \\
 \end{bmatrix}
 +
 \begin{bmatrix}
@@ -64,7 +64,7 @@ i_L \\
 v_1 \\
 v_2 \\
 v_3 \\
-i_L \\
+i_{\textrm{L}} \\
 \end{bmatrix}}'
 =
 \begin{bmatrix}
@@ -75,7 +75,7 @@ i_L \\
 \end{bmatrix}
 \begin{bmatrix}
 1 \\
-i_s(t) \\
+i_{\textrm{s}}(t) \\
 \end{bmatrix}
 +
 \begin{bmatrix}
@@ -85,7 +85,7 @@ i_s(t) \\
  0  \\
 \end{bmatrix}
 \begin{bmatrix}
-e^{(v_2 - v_3)/v_T}
+e^{(v_2 - v_3)/v_{\textrm{T}}}
 \end{bmatrix}
 \end{equation}
 
@@ -109,7 +109,7 @@ w_c(t) &= \sum_{n = -N}^N W_n^{(c)} e^{j \omega_0 n t}.
 \end{aligned}
 \end{equation}
 
-For example, in this circuit, if the source was zero phase signal at the fundamental frequency of our Fourier basis (\( i_s(t) = e^{j \omega_0 t} \)), the only non-zero Fourier components \( U_n^{(a)} \) would be \( U_0^{(1)} = 1, U_1^{(2)} = 1 \).
+For example, in this circuit, if the source was zero phase signal at the fundamental frequency of our Fourier basis (\( i_{\textrm{s}}(t) = e^{j \omega_0 t} \)), the only non-zero Fourier components \( U_n^{(a)} \) would be \( U_0^{(1)} = 1, U_1^{(2)} = 1 \).
 
 First evaluating the derivatives, and then evaluating the result at each of the Nykvist times \( t_k \), yields a \( (2 N + 1) \times 1 \) equations
 
@@ -715,22 +715,22 @@ The time domain MNA \cref{eqn:diodeRLCSample:40} include a wide range of matrix 
 %diodeWithResistorFig1
 \imageFigure{../../figures/ece1254/simple-diode-circuit.pdf}{Simple diode circuit.}{fig:diodeWithResistor:diodeWithResistorFig1}{0.3}
 
-With \( Z = 1/R, Z_g = 1/R_g \), the KCL equations are
+With \( Z = 1/R, Z_{\textrm{g}} = 1/R_{\textrm{g}} \), the KCL equations are
 
 \begin{enumerate}
-\item \( \lr{ v_1 - v_2 } Z_s = i_s - i_d \)
-\item \( \lr{ v_2 - v_1 } Z_s + v_2 Z_g = -i_s + i_d \)
+\item \( \lr{ v_1 - v_2 } Z_{\textrm{s}} = i_{\textrm{s}} - i_{\textrm{d}} \)
+\item \( \lr{ v_2 - v_1 } Z_{\textrm{s}} + v_2 Z_{\textrm{g}} = -i_{\textrm{s}} + i_{\textrm{d}} \)
 \end{enumerate}
 
-Using the model \( i_d = I^{(0)} \lr{ e^{ (v_1 - v_2)/V_T } - 1 } \), with source \( i_s = I^{(s)} \cos( \omega_0 t ) \),
+Using the model \( i_{\textrm{d}} = I^{(0)} \lr{ e^{ (v_1 - v_2)/V_{\textrm{T}} } - 1 } \), with source \( i_{\textrm{s}} = I^{(s)} \cos( \omega_0 t ) \),
 this has the block matrix form
 
 \begin{subequations}
 \begin{equation}\label{eqn:diodeRLCSample:580}
 \BG = 
 \begin{bmatrix}
-Z_s & -Z_s \\
--Z_s & Z_s + Z_g \\
+Z_{\textrm{s}} & -Z_{\textrm{s}} \\
+-Z_{\textrm{s}} & Z_{\textrm{s}} + Z_{\textrm{g}} \\
 \end{bmatrix}, \qquad
 \Bx = 
 \begin{bmatrix}
@@ -758,20 +758,20 @@ e^{j \omega_0 t}
 I^{(0)} \\
 -I^{(0)} 
 \end{bmatrix}, \qquad
-\Bw(t) = e^{(v_1(t) - v_2(t))/V_T}.
+\Bw(t) = e^{(v_1(t) - v_2(t))/V_{\textrm{T}}}.
 \end{equation}
 \end{subequations}
 
-If \( E_n \) is the nth DFT coefficient for \( e(t) = e^{(v_1(t) - v_2(t))/V_T} \), then the DFT equations for the \( N = 1 \) DFT is
+If \( E_n \) is the nth DFT coefficient for \( e(t) = e^{(v_1(t) - v_2(t))/V_{\textrm{T}}} \), then the DFT equations for the \( N = 1 \) DFT is
 
 \begin{equation}\label{eqn:diodeRLCSample:640}
 \begin{aligned}
-\lr{ V_{-1}^{(1)} - V_{-1}^{(2)} } Z_s &= I^{(s)}/2 - I^{(0)} E_{-1}  \\
-\lr{ V_{-1}^{(2)} - V_{-1}^{(1)} } Z_s + V_{-1}^{(2)} Z_g &= -I^{(s)}/2 + I^{(0)} E_{-1}  \\
-\lr{ V_{0}^{(1)} - V_{0}^{(2)} } Z_s &= I^{(0)} - I^{(0)} E_{0}  \\
-\lr{ V_{0}^{(2)} - V_{0}^{(1)} } Z_s + V_{0}^{(2)} Z_g &= -I^{(0)} + I^{(0)} E_{0}  \\
-\lr{ V_{1}^{(1)} - V_{1}^{(2)} } Z_s &= I^{(s)}/2 - I^{(0)} E_{1}  \\
-\lr{ V_{1}^{(2)} - V_{1}^{(1)} } Z_s + V_{1}^{(2)} Z_g &= -I^{(s)}/2 + I^{(0)} E_{1} 
+\lr{ V_{-1}^{(1)} - V_{-1}^{(2)} } Z_{\textrm{s}} &= I^{(s)}/2 - I^{(0)} E_{-1}  \\
+\lr{ V_{-1}^{(2)} - V_{-1}^{(1)} } Z_{\textrm{s}} + V_{-1}^{(2)} Z_{\textrm{g}} &= -I^{(s)}/2 + I^{(0)} E_{-1}  \\
+\lr{ V_{0}^{(1)} - V_{0}^{(2)} } Z_{\textrm{s}} &= I^{(0)} - I^{(0)} E_{0}  \\
+\lr{ V_{0}^{(2)} - V_{0}^{(1)} } Z_{\textrm{s}} + V_{0}^{(2)} Z_{\textrm{g}} &= -I^{(0)} + I^{(0)} E_{0}  \\
+\lr{ V_{1}^{(1)} - V_{1}^{(2)} } Z_{\textrm{s}} &= I^{(s)}/2 - I^{(0)} E_{1}  \\
+\lr{ V_{1}^{(2)} - V_{1}^{(1)} } Z_{\textrm{s}} + V_{1}^{(2)} Z_{\textrm{g}} &= -I^{(s)}/2 + I^{(0)} E_{1} 
 \end{aligned}
 \end{equation}
 
@@ -854,13 +854,13 @@ This is a \( R (2 N + 1) \times 1 \) matrix, as expected.
 The computation of these DFT coordinates is a bit messy since they are time dependent, and thus dependent on the (unknown) values of \( V_n^{(1)} \).  Consider the above circuit as an example where we have
 
 \begin{equation}\label{eqn:diodeRLCSample:720}
-w(t) = \exp\lr{ (v_1(t) - v_2(t))/V_T }.
+w(t) = \exp\lr{ (v_1(t) - v_2(t))/V_{\textrm{T}} }.
 \end{equation}
 
 The DFT inverse is
 
 \begin{equation}\label{eqn:diodeRLCSample:740}
-E_n = \sum_{k=-N}^N \exp\lr{ (v_1(t_k) - v_2(t_k))/V_T } e^{-j \omega_0 n t_k }.
+E_n = \sum_{k=-N}^N \exp\lr{ (v_1(t_k) - v_2(t_k))/V_{\textrm{T}} } e^{-j \omega_0 n t_k }.
 \end{equation}
 
 With \( \BE = ( E_{-N}, E_{1-N}, \cdots, E_{N-1}, E_N ) \), this is
@@ -869,20 +869,20 @@ With \( \BE = ( E_{-N}, E_{1-N}, \cdots, E_{N-1}, E_N ) \), this is
 \BE = 
 \inv{2 N + 1} \overbar{\BF} 
 \begin{bmatrix}
-\exp\lr{ (v_{-N}^{(1)} - v_{-N}^{(2)})/v_T } \\
-\exp\lr{ (v_{1-N}^{(1)} - v_{1-N}^{(2)})/v_T } \\
+\exp\lr{ (v_{-N}^{(1)} - v_{-N}^{(2)})/v_{\textrm{T}} } \\
+\exp\lr{ (v_{1-N}^{(1)} - v_{1-N}^{(2)})/v_{\textrm{T}} } \\
 \vdots \\
-\exp\lr{ (v_{N-1}^{(1)} - v_{N-1}^{(2)})/v_T } \\
-\exp\lr{ (v_{N}^{(1)} - v_{N}^{(2)})/v_T } \\
+\exp\lr{ (v_{N-1}^{(1)} - v_{N-1}^{(2)})/v_{\textrm{T}} } \\
+\exp\lr{ (v_{N}^{(1)} - v_{N}^{(2)})/v_{\textrm{T}} } \\
 \end{bmatrix}
 =
 \inv{2 N + 1} \overbar{\BF} 
 \begin{bmatrix}
-\exp\lr{ {[\BF (\BV^{(1)} - \BV^{(2)})/v_T]}_{-N} } \\
-\exp\lr{ {[\BF (\BV^{(1)} - \BV^{(2)})/v_T]}_{1-N} } \\
+\exp\lr{ {[\BF (\BV^{(1)} - \BV^{(2)})/v_{\textrm{T}}]}_{-N} } \\
+\exp\lr{ {[\BF (\BV^{(1)} - \BV^{(2)})/v_{\textrm{T}}]}_{1-N} } \\
 \vdots \\ 
-\exp\lr{ {[\BF (\BV^{(1)} - \BV^{(2)})/v_T]}_{N-1} } \\
-\exp\lr{ {[\BF (\BV^{(1)} - \BV^{(2)})/v_T]}_{N} }
+\exp\lr{ {[\BF (\BV^{(1)} - \BV^{(2)})/v_{\textrm{T}}]}_{N-1} } \\
+\exp\lr{ {[\BF (\BV^{(1)} - \BV^{(2)})/v_{\textrm{T}}]}_{N} }
 \end{bmatrix}.
 \end{dmath}
 
@@ -902,7 +902,7 @@ this one Fourier coefficient vector is
 \begin{equation}\label{eqn:diodeRLCSample:800}
 \BE =
 \inv{2 N + 1} \overbar{\BF} 
-\exp[ \BF (\BV^{(1)} - \BV^{(2)})/v_T ].
+\exp[ \BF (\BV^{(1)} - \BV^{(2)})/v_{\textrm{T}} ].
 \end{equation}
 
 This is now completely expressed in terms of the unknown Fourier component vectors, each a subset of the aggregated ``voltage'', range selectable with the Matlab operation \( \BV^{(i)} = \BV(i:R:end) \).  
@@ -942,19 +942,19 @@ E_r =
 (
 V_{1 + (b-1) R} -
 V_{2 + (b-1) R}
-)/v_T }.
+)/V_{\textrm{T}} }.
 \end{equation}
 
 The partials now follow immediately
 
 \begin{equation}\label{eqn:diodeRLCSample:920}
 \PD{V_s}{E_r} =
-\inv{2 N + 1} \inv{v_T} \overbar{F}_{r a} F_{ab}
+\inv{2 N + 1} \inv{V_{\textrm{T}}} \overbar{F}_{r a} F_{ab}
 \exp\lr{ F_{ab} 
 (
 V_{1 + (b-1) R} -
 V_{2 + (b-1) R}
-)/v_T }
+)/V_{\textrm{T}} }
 \lr{ 
 \delta_{s,1 + (b-1) R} -
 \delta_{s,2 + (b-1) R}
@@ -968,7 +968,7 @@ To generalize this, suppose that the diode exponential was associated with volta
 \begin{equation}\label{eqn:diodeRLCSample:980}
 \BE =
 \inv{2 N + 1} \overbar{\BF} 
-\exp[ \BF (\BV^{(m)} - \BV^{(n)})/v_T ].
+\exp[ \BF (\BV^{(m)} - \BV^{(n)})/V_{\textrm{T}} ].
 \end{equation}
 
 In this case, the coordinates of the physical ``voltages'' are
@@ -989,19 +989,19 @@ E_r =
 (
 V_{m + (b-1) R} -
 V_{n + (b-1) R}
-)/v_T }.
+)/V_{\textrm{T}} }.
 \end{equation}
 
 The Jacobian partials are
 
 \begin{equation}\label{eqn:diodeRLCSample:1060}
 \PD{V_s}{E_r} =
-\inv{2 N + 1} \inv{v_T} \overbar{F}_{r a} F_{ab}
+\inv{2 N + 1} \inv{V_{\textrm{T}}} \overbar{F}_{r a} F_{ab}
 \exp\lr{ F_{ab} 
 (
 V_{m + (b-1) R} -
 V_{n + (b-1) R}
-)/v_T }
+)/V_{\textrm{T}} }
 \lr{ 
 \delta_{s,m + (b-1) R} -
 \delta_{s,n + (b-1) R}
@@ -1048,16 +1048,16 @@ Where \( \PDi{\BV}{E_{k}^{(i)}} \) is the kth row of \( \BJ_{\BE^{(i)}} \).  The
 %%%
 %%%\begin{equation}\label{eqn:diodeRLCSample:940}
 %%%\PD{V_{R+1}}{E_r} =
-%%%\inv{2 N + 1} \inv{v_T} \overbar{F}_{r a} F_{a2}
-%%%\exp\lr{ F_{a2} V_{R+1} /v_T },
+%%%\inv{2 N + 1} \inv{V_{\textrm{T}}} \overbar{F}_{r a} F_{a2}
+%%%\exp\lr{ F_{a2} V_{R+1} /V_{\textrm{T}} },
 %%%\end{equation}
 %%%
 %%%and for \( s = R + 2 \) is
 %%%
 %%%\begin{equation}\label{eqn:diodeRLCSample:960}
 %%%\PD{V_{R+2}}{E_r} =
-%%%-\inv{2 N + 1} \inv{v_T} \overbar{F}_{r a} F_{a2}
-%%%\exp\lr{ -F_{a2} V_{R+2} /v_T }.
+%%%-\inv{2 N + 1} \inv{V_{\textrm{T}}} \overbar{F}_{r a} F_{a2}
+%%%\exp\lr{ -F_{a2} V_{R+2} /V_{\textrm{T}} }.
 %%%\end{equation}
 %%%
 %%%In the more general case, with explicit summation restored, the Jacobian coordinates can be seen to have the following banded structure
@@ -1065,11 +1065,11 @@ Where \( \PDi{\BV}{E_{k}^{(i)}} \) is the kth row of \( \BJ_{\BE^{(i)}} \).  The
 %%%\begin{equation}\label{eqn:diodeRLCSample:1000}
 %%%\begin{aligned}
 %%%\PD{V_{q R+m}}{E_r} &=
-%%%\inv{2 N + 1} \inv{v_T} \sum_{a = 1}^{2 N + 1} \overbar{F}_{r a} F_{a, q + 1}
-%%%\exp\lr{ F_{a,q+1} V_{q R+m} /v_T } \\
+%%%\inv{2 N + 1} \inv{V_{\textrm{T}}} \sum_{a = 1}^{2 N + 1} \overbar{F}_{r a} F_{a, q + 1}
+%%%\exp\lr{ F_{a,q+1} V_{q R+m} /V_{\textrm{T}} } \\
 %%%\PD{V_{q R+n}}{E_r} &=
-%%%-\inv{2 N + 1} \inv{v_T} \sum_{a = 1}^{2 N + 1} \overbar{F}_{r a} F_{a, q + 1}
-%%%\exp\lr{ -F_{a, q + 1} V_{q R+n} /v_T } \\
+%%%-\inv{2 N + 1} \inv{V_{\textrm{T}}} \sum_{a = 1}^{2 N + 1} \overbar{F}_{r a} F_{a, q + 1}
+%%%\exp\lr{ -F_{a, q + 1} V_{q R+n} /V_{\textrm{T}} } \\
 %%%\PD{V_{s}}{E_r} &= 0, \qquad \mbox{ \( s \notin \setlr{q R + m, q R + n} \) }.
 %%%\end{aligned}
 %%%\end{equation}
@@ -1089,9 +1089,9 @@ To aid in this discovery, consider the simple RC load diode circuit of \cref{fig
 
 
 \begin{enumerate}
-\item \( 0 = i_s - i_d \)
-\item \( Z v^{(2)} + C dv^{(2)}/dt = i_d  \)
-\item \( i_d = I_0 \lr{ e^{(v^{(1)} - v^{(2)})/V_T} - 1} \)
+\item \( 0 = i_{\textrm{s}} - i_{\textrm{d}} \)
+\item \( Z v^{(2)} + C dv^{(2)}/dt = i_{\textrm{d}}  \)
+\item \( i_{\textrm{d}} = I_0 \lr{ e^{(v^{(1)} - v^{(2)})/V_{\textrm{T}}} - 1} \)
 \end{enumerate}
 
 To setup for matrix form, let
@@ -1140,24 +1140,24 @@ so that the time domain equations can be written as
 \BG \Bv(t)
 + \BC \Bv'(t)
 =
-\Bb i_s(t)
+\Bb i_{\textrm{s}}(t)
 +
 I_0
 \Bd 
 \lr{
-e^{ (v^{(1)}(t) - v^{(2)}(t))/V_T} - 1
+e^{ (v^{(1)}(t) - v^{(2)}(t))/V_{\textrm{T}}} - 1
 }
 =
 \begin{bmatrix}
 \Bb & -I_0 \Bd
 \end{bmatrix}
 \begin{bmatrix}
-i_s(t) \\
+i_{\textrm{s}}(t) \\
 1
 \end{bmatrix}
 +
 I_0 \Bd
-e^{ (v^{(1)}(t) - v^{(2)}(t))/V_T}.
+e^{ (v^{(1)}(t) - v^{(2)}(t))/V_{\textrm{T}}}.
 \end{dmath}
 
 Harmonic Balance is essentially the 
@@ -1165,7 +1165,7 @@ assumption that the input and outputs are assumed to be a bandwidth limited peri
 
 \begin{subequations}
 \begin{equation}\label{eqn:diodeRLCSample:1260}
-i_s(t) = \sum_{n=-N}^N I^{(s)}_n e^{ j \omega_0 n t },
+i_{\textrm{s}}(t) = \sum_{n=-N}^N I^{(s)}_n e^{ j \omega_0 n t },
 \end{equation}
 \begin{equation}\label{eqn:diodeRLCSample:1280}
 v^{(k)}(t) = 
@@ -1173,7 +1173,7 @@ v^{(k)}(t) =
 \end{equation}
 \begin{equation}\label{eqn:diodeRLCSample:1300}
 \epsilon(t) = 
-e^{ (v^{(1)}(t) - v^{(2)}(t))/V_T}
+e^{ (v^{(1)}(t) - v^{(2)}(t))/V_{\textrm{T}}}
 \simeq
 \sum_{n=-N}^N E_n e^{ j \omega_0 n t },
 \end{equation}
@@ -1341,9 +1341,9 @@ The next step is finding an appropriate form for \( \Bepsilon \)
 \end{bmatrix}
 =
 \begin{bmatrix}
-\exp\lr{ \lr{ v^{(1)}_{-1} - v^{(2)}_{-1} }/V_T } \\
-\exp\lr{ \lr{ v^{(1)}_{0} - v^{(2)}_{0} }/V_T } \\
-\exp\lr{ \lr{ v^{(1)}_{1} - v^{(2)}_{1} }/V_T }
+\exp\lr{ \lr{ v^{(1)}_{-1} - v^{(2)}_{-1} }/V_{\textrm{T}} } \\
+\exp\lr{ \lr{ v^{(1)}_{0} - v^{(2)}_{0} }/V_{\textrm{T}} } \\
+\exp\lr{ \lr{ v^{(1)}_{1} - v^{(2)}_{1} }/V_{\textrm{T}} }
 \end{bmatrix}
 =
 \begin{bmatrix}
@@ -1351,17 +1351,17 @@ The next step is finding an appropriate form for \( \Bepsilon \)
 \begin{bmatrix}
 1 & 0 & 0 
 \end{bmatrix}
-\lr{ \Bv^{(1)} - \Bv^{(2)} }/V_T } \\
+\lr{ \Bv^{(1)} - \Bv^{(2)} }/V_{\textrm{T}} } \\
 \exp\lr{ 
 \begin{bmatrix}
 0 & 1 & 0 
 \end{bmatrix}
-\lr{ \Bv^{(1)} - \Bv^{(2)} }/V_T } \\
+\lr{ \Bv^{(1)} - \Bv^{(2)} }/V_{\textrm{T}} } \\
 \exp\lr{ 
 \begin{bmatrix}
 0 & 0 & 1 
 \end{bmatrix}
-\lr{ \Bv^{(1)} - \Bv^{(2)} }/V_T } \\
+\lr{ \Bv^{(1)} - \Bv^{(2)} }/V_{\textrm{T}} } \\
 \end{bmatrix}
 =
 \begin{bmatrix}
@@ -1370,19 +1370,19 @@ The next step is finding an appropriate form for \( \Bepsilon \)
 1 & 0 & 0 
 \end{bmatrix}
 \BF
-\lr{ \BV^{(1)} - \BV^{(2)} }/V_T } \\
+\lr{ \BV^{(1)} - \BV^{(2)} }/V_{\textrm{T}} } \\
 \exp\lr{ 
 \begin{bmatrix}
 0 & 1 & 0 
 \end{bmatrix}
 \BF
-\lr{ \BV^{(1)} - \BV^{(2)} }/V_T } \\
+\lr{ \BV^{(1)} - \BV^{(2)} }/V_{\textrm{T}} } \\
 \exp\lr{ 
 \begin{bmatrix}
 0 & 0 & 1 
 \end{bmatrix}
 \BF
-\lr{ \BV^{(1)} - \BV^{(2)} }/V_T } \\
+\lr{ \BV^{(1)} - \BV^{(2)} }/V_{\textrm{T}} } \\
 \end{bmatrix}.
 \end{dmath}
 
@@ -1437,7 +1437,7 @@ V_{1}^{(2)} \\
 \begin{equation}\label{eqn:diodeRLCSample:1520}
 \BH 
 = 
-\BF \BD^\T /V_T
+\BF \BD^\T /V_{\textrm{T}}
 =
 \begin{bmatrix}
 \Bh_1^\T \\

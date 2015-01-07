@@ -37,6 +37,7 @@ include ../make.rules
 
 #all :: proj
 proj :: ece1254projectReport.pdf
+#HarmonicBalance.pdf : hbFigure.sty ../ece1254/HarmonicBalanceAbstract.tex ../ece1254/HarmonicBalanceText.tex
 
 #ece1254projectReport.pdf :: $(PDFS_FROM_EPS)
 

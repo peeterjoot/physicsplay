@@ -14,20 +14,20 @@ Consider an arbitrary circuit made by positive resistors and independent DC curr
 Consider an electrical network made by:
 \begin{itemize}
 \item \( N \times N \) square grid of resistors of value \( R \), where \( N \) is the number of resistors per edge. The grid nodes are numbered from \( 1 \) to \( (N +1)^2 \) .  Node 1 is a corner node
-\item resistor \( R_g \) between each node of the grid and the reference node.
-\item a non-ideal voltage source connected between node 1 and ground.  The voltage source has value \( V_s \) and internal (series) resistance \( R_s \)
+\item resistor \( R_{\textrm{g}} \) between each node of the grid and the reference node.
+\item a non-ideal voltage source connected between node 1 and ground.  The voltage source has value \( V_{\textrm{s}} \) and internal (series) resistance \( R_{\textrm{s}} \)
 \item three current sources between three randomly-selected nodes of the grid and ground. The source current must flow from the grid to the reference node as shown in \cref{fig:problemSet2a:problemSet2aFig1} (and not vice versa!)  Choose the current source values randomly between 10 mA and 100 mA.
 
 \imageFigure{../../figures/ece1254/problemSet2aFig1}{Subcircuit.}{fig:problemSet2a:problemSet2aFig1}{0.2}
 \end{itemize}
-Write a MATLAB routine that generates a SPICE compatible netlist for this system (you can reuse the code you developed for the first problem set). Generate the modified nodal analysis equations
+Write a Matlab routine that generates a SPICE compatible netlist for this system (you can reuse the code you developed for the first problem set). Generate the modified nodal analysis equations
 
 \begin{equation}\label{eqn:multiphysicsProblemSet2a:20}
 \BG \Bx = \Bb 
 \end{equation}
 
-for a grid with \( N = 40, R = 0.1 \Omega, R_g = 1M \Omega, V_s = 2V, R_s = 0.1 \Omega\).
-Then, write in MATLAB your own routine for the conjugate gradient
+for a grid with \( N = 40, R = 0.1 \Omega, R_{\textrm{g}} = 1M \Omega, V_{\textrm{s}} = 2V, R_{\textrm{s}} = 0.1 \Omega\).
+Then, write in Matlab your own routine for the conjugate gradient
 method. Give to the user the possibility of specifying a preconditioning
 matrix P. The routine shall stop iterations when the residual norm
 satisfies
@@ -94,10 +94,10 @@ versus the iteration counter for three cases: \( R = 0.1\Omega, R = 1\Omega, R =
 A circuit with only resistors and constant current sources has the MNA form
 
 \begin{equation}\label{eqn:multiphysicsProblemSet2a:80}
-\BG \BV = \BI_S.
+\BG \BV = \BI_{\textrm{S}}.
 \end{equation}
 
-The current sources, appearing only in the vector \( \BI_S \), do not effect the symmetry of the \textAndIndex{nodal matrix} \( \BG \).  To show that \( \BG \)  is symmetric, recall that 
+The current sources, appearing only in the vector \( \BI_{\textrm{S}} \), do not effect the symmetry of the \textAndIndex{nodal matrix} \( \BG \).  To show that \( \BG \)  is symmetric, recall that 
 %for resistor node specification corresponding to \cref{fig:lecture2:lecture2Fig2} 
 this was the sum of stamp matrices of the form
 %\imageFigure{../../figures/ece1254/lecture2Fig2}{Resistor node specification.}{fig:lecture2:lecture2Fig2}{0.3}
@@ -245,7 +245,7 @@ Code for the netlist generation, the nodal equation generation were implemented 
 \item \nbcite{ps2a:NodalAnalysis.m}{ps2a/NodalAnalysis.m}
 \end{itemize}
 
-These were called from \matlabFuncPath{usenetlistProblemBD}{ps2a:usenetlistProblemBD.m}(1, 1e-10).
+These were called from \matlabFuncPath{usenetlistProblemBD(1, 1e-10)}{ps2a:usenetlistProblemBD.m}.
 %\nbcite{ps2a:usenetlistProblemBD.m}{ps2a/usenetlistProblemBD.m}
 
 The CG iteration for this matrix did not converge.  
@@ -280,20 +280,20 @@ This lack of convergence is not surprising since the circuit has voltage sources
 Application of Norton's theorem yields an equivalent current source value of
 
 \begin{equation}\label{eqn:multiphysicsProblemSet2a:21}
-I_s 
+I_{\textrm{s}} 
 =
-\frac{V_s}{R_S},
+\frac{V_{\textrm{s}}}{R_{\textrm{S}}},
 \end{equation}
 
-placed in parallel with a resistance of \( R_S \).  An exploration of Norton equivalents can be found in \cref{chap:simpleNortonEquivalents}.
+placed in parallel with a resistance of \( R_{\textrm{S}} \).  An exploration of Norton equivalents can be found in \cref{chap:simpleNortonEquivalents}.
 
 A test of this transformation can be found in \nbcite{ps2a:compareBD.m}{ps2a/compareBD.m} which compares the voltages at each of the interior node locations with and without this source transformation.  The norm of the difference in voltage vectors produced by these respective netlist solutions (\( 4.6 \times 10^{-12} \)) is effectively zero.
 
 \makeSubAnswer{}{multiphysics:problemSet2a:1e}
 
 The time required to generate the nodal equations on my machine was reasonable for \( N \le 196 \).  For \( N = 256 \) Matlab ran out of memory generating the nodal equations.  With \nbcite{ps2a:generateNodalEquationsPartEH.m}{ps2a/generateNodalEquationsPartEH.m} 
-the nodal equation variables \( G, b \) for \( N \in \{ 8, 16, 32, 64, 128, 196 \} \), were \matlabFunc{save}()d to .mat files for subsequent use using a call to 
-\matlabFuncPath{generateNodalEquationsPartEH}{ps2a:generateNodalEquationsPartEH.m}(1)
+the nodal equation variables \( G, b \) for \( N \in \{ 8, 16, 32, 64, 128, 196 \} \), were \matlabFunc{save()}d to .mat files for subsequent use using a call to 
+\matlabFuncPath{generateNodalEquationsPartEH(1)}{ps2a:generateNodalEquationsPartEH.m}
 .  Timing data was collected and plotted in
 \nbcite{ps2a:partEcollectTimings.m}{ps2a/partEcollectTimings.m}.
 
@@ -319,9 +319,9 @@ Preconditioning is seen to have a runtime cost.  Without it there are also addit
 
 \mathImageFigure{../../figures/ece1254/timingsCGwithOptFig4.pdf}{Benefits of CG optimized for no preconditioning.}{fig:timingsCGwithOpt:timingsCGwithOptFig4}{0.3}{ps2a:partEcollectTimings.m}
 
-As implemented, all the repeated calculations are already avoided, with temporarily used to hold any results used multiple times.  The only clear opportunity for gain is by precalculating LU factors for the preconditioning matrix instead of using \( G \backslash r \) in each iteration.
+As implemented, all the repeated calculations are already avoided, with temporarily used to hold any results used multiple times.  The only clear opportunity for gain is by precalculating LU factors for the preconditioning matrix instead of using \matlabText{G \(\backslash\) r} in each iteration.
 
-Using \( [ L, U, P ] = \matlabFunc{lu}(A) \) command, we can replace \( A \backslash b \) with \( U\backslash(L\backslash(P * b)) \).
+Using \matlabFunc{[ L, U, P ] = lu(A)} command, we can replace \matlabText{A \(\backslash\) b } with \matlabText{U \(\backslash\)(L\(\backslash\)(P * b))}.
 
 With this optimization the time required for CG with the preconditioner application begins to look closer to linear, but this optimization is not enough to drop the time required down to that of CG without the preconditioner.  This is plotted in \cref{fig:timingsCGwithOptLU:timingsCGwithOptLUFig5}.
 
@@ -329,8 +329,8 @@ With this optimization the time required for CG with the preconditioner applicat
 
 \makeSubAnswer{}{multiphysics:problemSet2a:1h}
 
-Nodal equations were generated with \matlabFuncPath{generateNodalEquationsPartEH}{ps2a:generateNodalEquationsPartEH.m}(0).  
-The Gershgorin circles and eigenvalues were plotted with \matlabFuncPath{partH}{ps2a:partH.m}(1, 0).  
+Nodal equations were generated with \matlabFuncPath{generateNodalEquationsPartEH(0)}{ps2a:generateNodalEquationsPartEH.m}.  
+The Gershgorin circles and eigenvalues were plotted with \matlabFuncPath{partH(1, 0)}{ps2a:partH.m}.
 Plots for \( R = 0.1, 1, 10 \) can be found respectively in \cref{fig:gershgorinPlotR0_1:gershgorinPlotR0_1Fig6}, \cref{fig:gershgorinPlotR1:gershgorinPlotR1Fig7}, and \cref{fig:gershgorinPlotR10:gershgorinPlotR10Fig8}.
 
 \mathImageFigure{../../figures/ece1254/gershgorinPlotR0_1Fig6.pdf}{Gershgorin circles and eigenvalues for ``2D grid'' \( N = 20, R = 0.1 \Omega\).}{fig:gershgorinPlotR0_1:gershgorinPlotR0_1Fig6}{0.3}{ps2a:partH.m}
@@ -341,7 +341,7 @@ No eigenvalues are found outside of some surrounding Gershgorin circle.
 
 \makeSubAnswer{}{multiphysics:problemSet2a:1i}
 
-The Gershgorin circles and eigenvalues with tridiagonally preconditioned \( G \) were plotted with \matlabFuncPath{partH}{ps2a:partH.m}(1, 1).  
+The Gershgorin circles and eigenvalues with tridiagonally preconditioned \( G \) were plotted with \matlabFuncPath{partH(1, 1)}{ps2a:partH.m}.  
 Plots for \( R = 0.1, 1, 10 \) can be found respectively in 
 \cref{fig:gershgorinPlotPreconditionedR0_1:gershgorinPlotPreconditionedR0_1Fig9}, 
 \cref{fig:gershgorinPlotPreconditionedR1:gershgorinPlotPreconditionedR1Fig10},
@@ -359,7 +359,7 @@ Note that the tridiagonal preconditioner used in this case was nothing more fanc
 
 \makeSubAnswer{}{multiphysics:problemSet2a:1j}
 
-Residual vs iteration plots for \( N = 20 \) were generated with \matlabFuncPath{partH}{ps2a:partH.m}(0, 1).  For \( R = 0.1 \Omega, 1 \Omega \), and \( 10 \Omega \) respectively these are, respectively \cref{fig:residualsByIterationR0_1:residualsByIterationR0_1Fig6}, \cref{fig:residualsByIterationR1_0:residualsByIterationR1_0Fig7}, \cref{fig:residualsByIterationR10_0:residualsByIterationR10_0Fig8}.
+Residual vs iteration plots for \( N = 20 \) were generated with \matlabFuncPath{partH(0, 1)}{ps2a:partH.m}.  For \( R = 0.1 \Omega, 1 \Omega \), and \( 10 \Omega \) respectively these are, respectively \cref{fig:residualsByIterationR0_1:residualsByIterationR0_1Fig6}, \cref{fig:residualsByIterationR1_0:residualsByIterationR1_0Fig7}, \cref{fig:residualsByIterationR10_0:residualsByIterationR10_0Fig8}.
 
 \mathImageFigure{../../figures/ece1254/residualsByIterationR0_1Fig6.pdf}{Residual vs iteration \( R = 0.1 \Omega \).}{fig:residualsByIterationR0_1:residualsByIterationR0_1Fig6}{0.3}{ps2a:partH.m}
 \mathImageFigure{../../figures/ece1254/residualsByIterationR1_0Fig7.pdf}{Residual vs iteration \( R = 1 \Omega \).}{fig:residualsByIterationR1_0:residualsByIterationR1_0Fig7}{0.3}{ps2a:partH.m}

@@ -5,7 +5,7 @@
 \index{modified nodal analysis}
 \makeproblem{Modified Nodal Analysis.}{multiphysics:problemSet1:1}{ 
 \makesubproblem{
-Write a Matlab routine [G,b]=\matlabFunc{NodalAnalysis}(filename) that generates the modified nodal analysis (MNA) equations
+Write a Matlab routine \matlabFunc{[G,b]=NodalAnalysis(filename)} that generates the modified nodal analysis (MNA) equations
 
 \begin{equation}\label{eqn:multiphysicsProblemSet1Problem1:10}
 \BG \Bx = \Bb
@@ -41,7 +41,7 @@ The controlling voltage is between the nodes nodectrl+ and nodectrl-, and the la
 }{multiphysics:problemSet1:1a}
 \makesubproblem{Explain how did you include the controlled source into the modified nodal analysis formulation. Which general rule can be given to
 ``stamp'' a voltage-controlled voltage source into MNA?}{multiphysics:problemSet1:1b}
-\makesubproblem{Consider the circuit shown in the figure \cref{fig:ps1Orig:ps1OrigFig1}. Write an input file for the netlist parser developed in the previous point, and use it to generate the matrices G and b for the circuit. The operational amplifiers have an input resistance of \(1 M \Omega\)? and a gain of 10^6 . Model them with a resistor and a voltage-controlled voltage source. Use the Matlab command \(\backslash\) to solve the linear system \cref{eqn:multiphysicsProblemSet1Problem1:10} and determine the voltage \(V_\circ\) shown in the figure.}{multiphysics:problemSet1:1c}
+\makesubproblem{Consider the circuit shown in the figure \cref{fig:ps1Orig:ps1OrigFig1}. Write an input file for the netlist parser developed in the previous point, and use it to generate the matrices G and b for the circuit. The operational amplifiers have an input resistance of \(1 M \Omega\)? and a gain of \(10^6\) . Model them with a resistor and a voltage-controlled voltage source. Use the Matlab command \matlabText{\(\backslash\)} to solve the linear system \cref{eqn:multiphysicsProblemSet1Problem1:10} and determine the voltage \(V_\circ\) shown in the figure.}{multiphysics:problemSet1:1c}
 \imageFigure{../../figures/ece1254/ps1OrigFig1}{Circuit to solve.}{fig:ps1Orig:ps1OrigFig1}{0.4}
 \makesubproblem{Implement your own LU factorization routine. Repeat the previous point using your own LU factorization and forward/backward substitution routines to solve the circuit equations. Report the computed \(V_\circ\).}{multiphysics:problemSet1:1d}
 } % makeproblem
@@ -56,7 +56,8 @@ A netlist parser can be found in
 Assumptions made in that implementation include
 
 \begin{itemize}
-\item The ``label'' following the R, I, V, E is numeric.  This appears to be the case in all the example spice circuits of \href{http://www.allaboutcircuits.com/vol_5/chpt_7/8.html}{http://www.allaboutcircuits.com/vol_5/chpt_7/8.html}
+\item The ``label'' following the R, I, V, E is numeric.  This appears to be the case in all the example spice circuits of \citep{allaboutcircuitsExampleCircuitsAndNetlists}.
+%\href{http://www.allaboutcircuits.com/vol_5/chpt_7/8.html}{http://www.allaboutcircuits.com/vol_5/chpt_7/8.html}
 \item .end terminates the netlist parsing.
 \item The first line of netlist is a (title) comment unless it starts with R, I, V, E.
 \item The netlist file will always include a 0 (ground) node.  No error checking was added to verify that is the case.
@@ -232,7 +233,7 @@ i_{5,0}
 \end{bmatrix}
 \end{equation}
 
-However, this system yields to both the \( G \backslash b \) solution and \( L U \) decomposition (even without pivots).  This is likely because the difference in min and max non-zero values is still within the range of the default Matlab double precision arithmetic.
+However, this system yields to both the \matlabText{G \(\backslash\) b} solution and \( L U \) decomposition (even without pivots).  This is likely because the difference in min and max non-zero values is still within the range of the default Matlab double precision arithmetic.
 
 %Which can be solved with
 %
@@ -272,7 +273,7 @@ The routines for the LU solution and substitutions are found in:
 	\item \nbcite{ps1:ps1d.m}{ps1/ps1d.m}
 \end{itemize}
 
-That last contains is a driver for these functions, callable with \matlabFuncPath{ps1d}{ps1:ps1d.m}().  That will produce the netlist, and its solution, both directly and with the \( \backslash \) operator.
+That last contains is a driver for these functions, callable with \matlabFuncPath{ps1d()}{ps1:ps1d.m}.  That will produce the netlist, and its solution, both directly and with the \matlabText{\(\backslash\)} operator.
 
 An \( L U \) factorization that properly treated pivots was not numerically required for this part of the problem, but was implemented for \ref{multiphysics:problemSet1:2}.
 

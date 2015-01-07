@@ -43,25 +43,25 @@ The phase \( \phi \) defaults to zero if unspecified.
 The netlist parser was also extended to allow the specification of diode lines of the form
 
 \begin{center}
-\textbf{Dlabel \(n_1\) \(n_2\) \(I_0\) \(V_T\)},
+\textbf{Dlabel \(n_1\) \(n_2\) \(I_0\) \(V_{\textrm{T}}\)},
 \end{center}
 
-This represents a diode modelled as a current source \( i_d(t) = I_0 \lr{ e^{ \lr{v^{(n_1)}(t) - v^{(n_2)}(t)}/V_T } - 1 } \).  The constant portion of this model is added into the linear portion of the resulting matrix equations.  The nonlinear contributions of each diode line are returned from NodalAnalysis() as a list of structures with fields (io, type, vt, vp, vn), with type = 'exp'.
+This represents a diode modelled as a current source \( i_{\textrm{d}}(t) = I_0 \lr{ e^{ \lr{v^{(n_1)}(t) - v^{(n_2)}(t)}/V_{\textrm{T}} } - 1 } \).  The constant portion of this model is added into the linear portion of the resulting matrix equations.  The nonlinear contributions of each diode line are returned from NodalAnalysis() as a list of structures with fields (io, type, vt, vp, vn), with type = 'exp'.
 
-In addition to the diode model, two nonlinear power-law circuit elements were implemented.  The first is a nonlinear conductance \( g(t) = I_0 \lr{ \lr{v^{(n_1)}(t) - v^{(n_2)}(t)}/V_T}^k \) that is specified with lines of the form
+In addition to the diode model, two nonlinear power-law circuit elements were implemented.  The first is a nonlinear conductance \( g(t) = I_0 \lr{ \lr{v^{(n_1)}(t) - v^{(n_2)}(t)}/V_{\textrm{T}}}^k \) that is specified with lines of the form
 
 \begin{center}
-\textbf{Plabel \(n_1\) \(n_2\) \(I_0\) \(V_T\) \( k \)},
+\textbf{Plabel \(n_1\) \(n_2\) \(I_0\) \(V_{\textrm{T}}\) \( k \)},
 \end{center}
 
 Any number of these may be specified in parallel to form an arbitrary Taylor expansion.
 
 The second nonlinear power-law circuit element that was implemented was a nonlinear voltage controlled voltage source 
-\( v_{n_1} - v_{n_2} = g \lr{ \lr{v_{n_1}^{(c)}(t) - v_{n_2}^{(c)}(t)}/V_T}^k \)
+\( v_{n_1} - v_{n_2} = g \lr{ \lr{v_{n_1}^{(\textrm{c})}(t) - v_{n_2}^{(\textrm{c})}(t)}/V_{\textrm{T}}}^k \)
 that is specified with lines of the form
 
 \begin{center}
-\textbf{Elabel \(n_1\) \(n_2\) \(n^{(c)}_1\) \(n^{(c)}_2\) \(g\) \(V_T\) \( k \)},
+\textbf{Elabel \(n_1\) \(n_2\) \(n^{(\textrm{c})}_1\) \(n^{(\textrm{c})}_2\) \(g\) \(V_{\textrm{T}}\) \( k \)},
 \end{center}
 
 Each of the power-law nonlinear elements is returned from NodalAnalysis() as a list of structures with fields (io, type, vt, vp, vn, exponent), with type = 'power'.
@@ -435,12 +435,12 @@ the time domain equations for this circuit are
 \Bb & -I_0 \Bd
 \end{bmatrix}
 \begin{bmatrix}
-i_s(t) \\
+i_{\textrm{s}}(t) \\
 1
 \end{bmatrix} 
 +
 I_0 \Bd
-e^{ (v^{(1)}(t) - v^{(2)}(t))/V_T}.
+e^{ (v^{(1)}(t) - v^{(2)}(t))/V_{\textrm{T}}}.
 \end{dmath}
 }
 {
@@ -453,12 +453,12 @@ e^{ (v^{(1)}(t) - v^{(2)}(t))/V_T}.
 \Bb & -I_0 \Bd
 \end{bmatrix}
 \begin{bmatrix}
-i_s(t) \\
+i_{\textrm{s}}(t) \\
 1
 \end{bmatrix} \\
 &+
 I_0 \Bd
-e^{ (v^{(1)}(t) - v^{(2)}(t))/V_T}.
+e^{ (v^{(1)}(t) - v^{(2)}(t))/V_{\textrm{T}}}.
 \end{aligned}
 \end{equation}
 }
@@ -467,7 +467,7 @@ For the exponential, let the transform pair be
 
 \begin{equation}\label{eqn:ece1254projectReport:1300}
 \epsilon(t) =
-e^{ (v^{(1)}(t) - v^{(2)}(t))/V_T}
+e^{ (v^{(1)}(t) - v^{(2)}(t))/V_{\textrm{T}}}
 \simeq
 \sum_{n=-N}^N E_n e^{ j n \omega_0 t }.
 \end{equation}
@@ -485,7 +485,7 @@ V^{(2)}_n \\
 =
 -I_0 \Bd \delta_{n 0}
 +
-\Bb I^{(s)}_n
+\Bb I^{(\textrm{s})}_n
 + I_0 \Bd E_n.
 \end{equation}
 
@@ -496,9 +496,9 @@ The block matrix form for the constant current can be seen to be
 \BI
 =
 \begin{bmatrix}
-\Bb I^{(s)}_{-1} \\
-\Bb I^{(s)}_{0} - I_0 \Bd \\
-\Bb I^{(s)}_{1} \\
+\Bb I^{(\textrm{s})}_{-1} \\
+\Bb I^{(\textrm{s})}_{0} - I_0 \Bd \\
+\Bb I^{(\textrm{s})}_{1} \\
 \end{bmatrix}
 \end{equation}
 
@@ -584,9 +584,9 @@ however, an appropriate form for \( \Bepsilon \) must still be found.
 \end{bmatrix}
 =
 \begin{bmatrix}
-\exp\lr{ \lr{ v^{(1)}_{-1} - v^{(2)}_{-1} }/V_T } \\
-\exp\lr{ \lr{ v^{(1)}_{0} - v^{(2)}_{0} }/V_T } \\
-\exp\lr{ \lr{ v^{(1)}_{1} - v^{(2)}_{1} }/V_T }
+\exp\lr{ \lr{ v^{(1)}_{-1} - v^{(2)}_{-1} }/V_{\textrm{T}} } \\
+\exp\lr{ \lr{ v^{(1)}_{0} - v^{(2)}_{0} }/V_{\textrm{T}} } \\
+\exp\lr{ \lr{ v^{(1)}_{1} - v^{(2)}_{1} }/V_{\textrm{T}} }
 \end{bmatrix} \\
 \end{aligned}
 \end{equation}
@@ -656,7 +656,7 @@ With
 \boxedEquation{eqn:ece1254projectReport:1040}{
 \BH
 =
-\BF \BD^\T /V_T
+\BF \BD^\T /V_{\textrm{T}}
 =
 \begin{bmatrix}
 \Bh_1^\T \\
@@ -704,7 +704,7 @@ This must be changed to a pair of stamps, one for \( \BG \)
 and one for the corresponding line of \( \mathcal{I}(\BV) \).  If that line is \( m \), let 
 
 \begin{equation}\label{eqn:ece1254projectReport:1122}
-\Bd_e = 
+\Bd_{\textrm{e}} = 
 {[\delta_{i,m}]}_i,
 \end{equation}
 
@@ -713,8 +713,8 @@ so that nonlinear current for this source is
 \begin{equation}\label{eqn:ece1254projectReport:1124}
 \mathcal{I}(\BV) = -g 
 \begin{bmatrix}
-\Bd_e &  &  \\
-   & \Bd_e & \\
+\Bd_{\textrm{e}} &  &  \\
+   & \Bd_{\textrm{e}} & \\
    &  & \ddots 
 \end{bmatrix}
 \BF^{-1}
@@ -789,7 +789,7 @@ A quick sanity check of dimensions seems worthwhile, and shows that all is well
 
 This derivation was done exclusively with the exponential nonlinearity that is found in the diode model, but is easy to generalize.
 If the nonlinearity is of the form
-\( I_0 g((v^{(1)} - v^{(2)})/V_T) \), then the nonlinear current and its Jacobian will have the same structural form
+\( I_0 g((v^{(1)} - v^{(2)})/V_{\textrm{T}}) \), then the nonlinear current and its Jacobian will have the same structural form
 
 \begin{subequations}
 \begin{equation}\label{eqn:ece1254projectReport:1440}
@@ -861,7 +861,7 @@ Each nth-frequency component of this current would be added
 to the equation of the nth-set of MNA equations corresponding to the nodes the element is connected
 to.
 
-This nonlinear current calculation was later refined to work completely in the frequency domain, precalculating the matrices \( \BF \BD^\T/V_T \) and \( I_0 \BD \BF^{-1} \) for each nonlinear source, where \( \BF \) was the (standard) DFT matrix with dimensions \( (2 N + 1 ) \times (2 N + 1 ) \), as described above.
+This nonlinear current calculation was later refined to work completely in the frequency domain, precalculating the matrices \( \BF \BD^\T/V_{\textrm{T}} \) and \( I_0 \BD \BF^{-1} \) for each nonlinear source, where \( \BF \) was the (standard) DFT matrix with dimensions \( (2 N + 1 ) \times (2 N + 1 ) \), as described above.
 
 \section{Results}
 
@@ -877,7 +877,7 @@ This nonlinear current calculation was later refined to work completely in the f
 %  \( R_1 \) & 1 k \(\Omega\) \\ \hline
 %  \( C_1 \) & 1 \(\mu\) F \\ \hline
 %  \( D_1, I_0 \) & 10 pA \\ \hline
-%  \( D_1, V_T \) & 25 mV \\ \hline
+%  \( D_1, V_{\textrm{T}} \) & 25 mV \\ \hline
 %\end{tabular}
 %\label{tab:lowPassFilter:lowPassFilterParameters}}
 
@@ -962,7 +962,7 @@ In the zero-capacitance configuration, using a three frequency source, inversion
 %%  \( R_1 \) & 1 k \(\Omega\) \\ \hline
 %%  \( C_1 \) & 1 \(\mu\) F \\ \hline
 %%  \( D_1, I_0 \) & 10 pA \\ \hline
-%%  \( D_1, V_T \) & 25 mV \\ \hline
+%%  \( D_1, V_{\textrm{T}} \) & 25 mV \\ \hline
 %%\end{tabular}
 %\end{figure}
 
@@ -989,7 +989,7 @@ Measuring the respective slopes (using the matlab function polyfit), the cpu tim
 %  \( I_0 \) & 10 mA (peak) \\ \hline
 %  \( R_1 \) & 1 k \(\Omega\) \\ \hline
 %  \( D_1, I_0 \) & 10 pA \\ \hline
-%  \( D_1, V_T \) & 25 mV \\ \hline
+%  \( D_1, V_{\textrm{T}} \) & 25 mV \\ \hline
 %\end{tabular}
 %}
 %\subfloat[Output.]{
@@ -1005,10 +1005,10 @@ As a test for the implementation's support of \textbf{Plabel} form conductance m
 two of the diodes in the bridge rectifier circuit were replaced with an 8 term Taylor approximation
 
 \begin{dmath}\label{eqn:ece1254projectReport:1480}
-i_d(t) = I_0 \lr{ e^{(v^{(n_1)} - v^{(n_2)})/V_T} - 1}
+i_{\textrm{d}}(t) = I_0 \lr{ e^{(v^{(n_1)} - v^{(n_2)})/V_{\textrm{T}}} - 1}
 \approx
 I_0 \sum_{k=1}^8
-\inv{k!} \lr{(v^{(n_1)} - v^{(n_2)})/V_T}^k
+\inv{k!} \lr{(v^{(n_1)} - v^{(n_2)})/V_{\textrm{T}}}^k
 \end{dmath}
 
 The results are plotted in \cref{fig:bridgeRectifierPowSourceAndOutputVoltagesFig2} for a single frequency source.
@@ -1034,7 +1034,7 @@ consistent with \( \cos^2(\omega_0 t) = \lr{\cos(2 \omega_0 t) + 1}/2 \).
 \index{stiff}
 
 For the low pass and rectifier circuits above, use of source stepping was sufficient (and required) to ensure convergence.
-However, introduction of a non-zero value for the capacitor of the bridge rectifier circuit \cref{fig:bridgeRectifierCapFilterFig1} is enough to cause a number of Matlab messages ``Matrix is close to singular or badly scaled'' along with associated very small conditioning numbers.
+However, introduction of a non-zero value for the capacitor of the bridge rectifier circuit \cref{fig:bridgeRectifierCapFilterFig1} is enough to cause a number of Matlab messages ``\matlabText{Matrix is close to singular or badly scaled}'' along with associated very small conditioning numbers.
 
 
 %\begin{figure}[!h]
@@ -1047,7 +1047,7 @@ However, introduction of a non-zero value for the capacitor of the bridge rectif
 %  \( R_1 \) & 1 k \(\Omega\) \\ \hline
 %  \( C_1 \) & 1 \(\mu\) F \\ \hline
 %  \( D_i, I_0 \) & 10 pA \\ \hline
-%  \( D_i, V_T \) & 25 mV \\ \hline
+%  \( D_i, V_{\textrm{T}} \) & 25 mV \\ \hline
 %\end{tabular}
 %}
 %\label{tab:bridgeRectifierCapFilterParameters}}

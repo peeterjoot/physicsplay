@@ -32,23 +32,23 @@ Equations are \textAndIndex{KCL} at each node except \(0\).
 \begin{enumerate}
 \item
       \(
-      \frac{V_1 - 0}{R_A} +
-      \frac{V_1 - V_2}{R_B} + i_{S,A} = 0
+      \frac{V_1 - 0}{R_{\textrm{A}}} +
+      \frac{V_1 - V_2}{R_{\textrm{B}}} + i_{\textrm{S},\textrm{A}} = 0
       \)
 \item
       \(
-      \frac{V_2 - 0}{R_E} +
-      \frac{V_2 - V_1}{R_B} + i_{S,B} + i_{S,C} = 0
+      \frac{V_2 - 0}{R_{\textrm{E}}} +
+      \frac{V_2 - V_1}{R_{\textrm{B}}} + i_{\textrm{S},\textrm{B}} + i_{\textrm{S},\textrm{C}} = 0
       \)
 \item
       \(
-      \frac{V_3 - V_4}{R_C} - i_{S,C} = 0
+      \frac{V_3 - V_4}{R_{\textrm{C}}} - i_{\textrm{S},\textrm{C}} = 0
       \)
 \item
       \(
-      \frac{V_4 - 0}{R_D}
-      +\frac{V_4 - V_3}{R_C}
-      - i_{S,A} - i_{S,B} = 0
+      \frac{V_4 - 0}{R_{\textrm{D}}}
+      +\frac{V_4 - V_3}{R_{\textrm{C}}}
+      - i_{\textrm{S},\textrm{A}} - i_{\textrm{S},\textrm{B}} = 0
       \)
 \end{enumerate}
 
@@ -56,10 +56,10 @@ In matrix form this is
 
 \begin{equation}\label{eqn:multiphysicsL3:20}
 \begin{bmatrix}
-   \inv{R_A} + \inv{R_B} & - \inv{R_B} & 0 & 0 \\
-   -\inv{R_B} & \inv{R_B} + \inv{R_E} & 0 & 0 \\
-   0 & 0 & \inv{R_C} & -\inv{R_C} \\
-   0 & 0 & -\inv{R_C} & \inv{R_C} + \inv{R_D}
+   \inv{R_{\textrm{A}}} + \inv{R_{\textrm{B}}} & - \inv{R_{\textrm{B}}} & 0 & 0 \\
+   -\inv{R_{\textrm{B}}} & \inv{R_{\textrm{B}}} + \inv{R_{\textrm{E}}} & 0 & 0 \\
+   0 & 0 & \inv{R_{\textrm{C}}} & -\inv{R_{\textrm{C}}} \\
+   0 & 0 & -\inv{R_{\textrm{C}}} & \inv{R_{\textrm{C}}} + \inv{R_{\textrm{D}}}
 \end{bmatrix}
 \begin{bmatrix}
    V_1 \\
@@ -69,17 +69,17 @@ In matrix form this is
 \end{bmatrix}
 =
 \begin{bmatrix}
-   -i_{S,A} \\
--i_{S,B} - i_{S,C} \\
-   i_{S,C} \\
-   i_{S,A} + i_{S,B}
+   -i_{\textrm{S},\textrm{A}} \\
+-i_{\textrm{S},\textrm{B}} - i_{\textrm{S},\textrm{C}} \\
+   i_{\textrm{S},\textrm{C}} \\
+   i_{\textrm{S},\textrm{A}} + i_{\textrm{S},\textrm{B}}
 \end{bmatrix}
 \end{equation}
 
 Introducing the \textAndIndex{nodal matrix} \(G\), this is written as
 
 \begin{equation}\label{eqn:multiphysicsL3:40}
-   G \BV_N = \BI_S
+   G \BV_N = \BI_{\textrm{S}}
 \end{equation}
 
 There is a recurring pattern in the nodal matrix, designated the 
@@ -107,8 +107,8 @@ Note that some care is required to use this nodal analysis method since the inve
 The node branch equations were
 
 \begin{itemize}
-   \item KCL: \( A \BI_B = \BI_S\)
-   \item Constitutive: \( \BI_B = \alpha A^\T \BV_N\),
+   \item KCL: \( A \BI_{\textrm{B}} = \BI_{\textrm{S}}\)
+   \item Constitutive: \( \BI_{\textrm{B}} = \alpha A^\T \BV_N\),
    \item Nodal equations: \(
 \mathLabelBox
 {
@@ -116,10 +116,10 @@ The node branch equations were
 }
 {\(G\)}
       \BV_N
-      = \BI_S \)
+      = \BI_{\textrm{S}} \)
 \end{itemize}
 
-where \(\BI_B\) was the branch currents, \(A\) was the \textAndIndex{incidence matrix}, and \(\alpha = \begin{bmatrix}\inv{R_1} & & \\ & \inv{R_2} & \\ & & \ddots \end{bmatrix} \).
+where \(\BI_{\textrm{B}}\) was the branch currents, \(A\) was the \textAndIndex{incidence matrix}, and \(\alpha = \begin{bmatrix}\inv{R_1} & & \\ & \inv{R_2} & \\ & & \ddots \end{bmatrix} \).
 
 The \textAndIndex{stamp} can be observed in the multiplication of the contribution for a single resistor.  The incidence matrix has the form \( G = A \alpha A^\T \)
 %as illustrated in \cref{fig:lecture3:lecture3Fig3}.
@@ -176,7 +176,7 @@ source is also introduced for each voltage source circuit element.  The unknowns
 
 \begin{itemize}
    \item node voltages (\(N-1\)): \( V_1, V_2, \cdots V_5 \)
-   \item branch currents for selected components (\(K\)): \( i_{S,C}, i_{S,D} \)
+   \item branch currents for selected components (\(K\)): \( i_{\textrm{S},\textrm{C}}, i_{\textrm{S},\textrm{D}} \)
 \end{itemize}
 
 Compared to standard nodal analysis, two less unknowns for this system are required.  The equations are
@@ -184,36 +184,36 @@ Compared to standard nodal analysis, two less unknowns for this system are requi
 \begin{enumerate}
 \item
    \(
-   -\frac{V_5-V_1}{R_A}
-   +\frac{V_1-V_2}{R_B}
-   + i_{S,A} = 0
+   -\frac{V_5-V_1}{R_{\textrm{A}}}
+   +\frac{V_1-V_2}{R_{\textrm{B}}}
+   + i_{\textrm{S},\textrm{A}} = 0
    \)
 \item
    \(
-    \frac{V_2-V_5}{R_E}
-   +\frac{V_2-V_1}{R_B}
-   + i_{S,B}
-   - i_{S,C}
+    \frac{V_2-V_5}{R_{\textrm{E}}}
+   +\frac{V_2-V_1}{R_{\textrm{B}}}
+   + i_{\textrm{S},\textrm{B}}
+   - i_{\textrm{S},\textrm{C}}
    = 0
    \)
 \item
    \(
-   i_{S,C} +
-   \frac{V_3-V_4}{R_C} = 0
+   i_{\textrm{S},\textrm{C}} +
+   \frac{V_3-V_4}{R_{\textrm{C}}} = 0
    \)
 \item
    \(
-   \frac{V_4-0}{R_D}
-   +\frac{V_4-V_3}{R_C}
-   - i_{S,A}
-   - i_{S,B}
+   \frac{V_4-0}{R_{\textrm{D}}}
+   +\frac{V_4-V_3}{R_{\textrm{C}}}
+   - i_{\textrm{S},\textrm{A}}
+   - i_{\textrm{S},\textrm{B}}
    = 0
    \)
 \item
    \(
-   \frac{V_5-V_2}{R_E}
-   +\frac{V_5-V_1}{R_A}
-   - i_{S,D} = 0
+   \frac{V_5-V_2}{R_{\textrm{E}}}
+   +\frac{V_5-V_1}{R_{\textrm{A}}}
+   - i_{\textrm{S},\textrm{D}} = 0
    \)
 \end{enumerate}
 
@@ -221,14 +221,14 @@ Put into giant matrix form, this is
 
 \begin{equation}\label{eqn:multiphysicsL3:120}
    \kbordermatrix{
-      & G         &           &        &           &              &        & A_V      &    \\
-      & Z_A + Z_B & -Z_B      & .      & .         & -Z_A         & \vrule &          &    \\
-      & -Z_B      & Z_B - Z_E & .      & .         & -Z_E         & \vrule & -1       &    \\
-      & .         & .         & Z_C    & -Z_C      & .            & \vrule & +1       &    \\
-      & .         & .         & -Z_C   & Z_C + Z_D & .            & \vrule &          &    \\
-      & -Z_A      & -Z_E      &        &           & Z_A + Z_E    & \vrule &          & -1 \\
+      & G         &           &        &           &              &        & A_{\textrm{V}}      &    \\
+      & Z_{\textrm{A}} + Z_{\textrm{B}} & -Z_{\textrm{B}}      & .      & .         & -Z_{\textrm{A}}         & \vrule &          &    \\
+      & -Z_{\textrm{B}}      & Z_{\textrm{B}} - Z_{\textrm{E}} & .      & .         & -Z_{\textrm{E}}         & \vrule & -1       &    \\
+      & .         & .         & Z_{\textrm{C}}    & -Z_{\textrm{C}}      & .            & \vrule & +1       &    \\
+      & .         & .         & -Z_{\textrm{C}}   & Z_{\textrm{C}} + Z_{\textrm{D}} & .            & \vrule &          &    \\
+      & -Z_{\textrm{A}}      & -Z_{\textrm{E}}      &        &           & Z_{\textrm{A}} + Z_{\textrm{E}}    & \vrule &          & -1 \\
       \cline{2-9}
-        -A_V^\T &           & +1        & -1     &           &              & \vrule &  \\
+        -A_{\textrm{V}}^\T &           & +1        & -1     &           &              & \vrule &  \\
                 &           &           &        &           & 1            & \vrule &
    }
 \begin{bmatrix}
@@ -238,26 +238,26 @@ Put into giant matrix form, this is
    V_4 \\
    V_5 \\
 %   \cline{1} \\
-   i_{S,C} \\
-   i_{S,D}
+   i_{\textrm{S},\textrm{C}} \\
+   i_{\textrm{S},\textrm{D}}
 \end{bmatrix}
 =
 \begin{bmatrix}
-   -i_{S,A} \\
-   -i_{S,B} \\
+   -i_{\textrm{S},\textrm{A}} \\
+   -i_{\textrm{S},\textrm{B}} \\
    0 \\
-   i_{S,A} + i_{S,B} \\
+   i_{\textrm{S},\textrm{A}} + i_{\textrm{S},\textrm{B}} \\
    0 \\
 %   \cline{1}
-   V_{S,C} \\
-   V_{S,D}
+   V_{\textrm{S},\textrm{C}} \\
+   V_{\textrm{S},\textrm{D}}
 \end{bmatrix}
 \end{equation}
 
 %\cref{fig:lecture3:lecture3Fig5}
 %\imageFigure{../../figures/ece1254/lecture3Fig5}{Nodal and voltage incidence matrices.}{fig:lecture3:lecture3Fig5}{0.3}
 
-Call the extension to the \textAndIndex{nodal matrix} \(G\), the \textAndIndex{voltage incidence matrix} \(A_V\).
+Call the extension to the \textAndIndex{nodal matrix} \(G\), the \textAndIndex{voltage incidence matrix} \(A_{\textrm{V}}\).
 
 % from L4:
 \paragraph{Review}
