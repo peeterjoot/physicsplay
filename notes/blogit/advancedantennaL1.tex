@@ -8,17 +8,24 @@
 \newcommand{\keywords}{ECE1229H}
 \input{../peeter_prologue_print2.tex}
 
-\newcommand{Prad}[0]{P_{\textrm{rad}}}
-\newcommand{Pav}[0]{P_{\textrm{av}}}
-\newcommand{Umax}[0]{U_{\textrm{max}}}
-\newcommand{Wav}[0]{\BW_{\textrm{av}}}
-\newcommand{Wiso}[0]{\BW_{\textrm{iso}}}
-\newcommand{Uiso}[0]{U_{\textrm{iso}}}
-\newcommand{timeaverage}[1]{\left[#1\right]}
-
 %\usepackage{kbordermatrix}
+\usepackage{esint} % oiint
+\usepackage{peeters_layout_exercise}
+\usepackage{siunitx}
+
+\newcommand{\tiso}[0]{{\textrm{iso}}}
+\newcommand{\tin}[0]{{\textrm{in}}}
+\newcommand{\trad}[0]{{\textrm{rad}}}
+\newcommand{\tmax}[0]{{\textrm{max}}}
+\newcommand{\tA}[0]{{\textrm{A}}}
+\newcommand{\tav}[0]{{\textrm{av}}}
+\newcommand{\tdB}[0]{{\textrm{dB}}}
+\newcommand{\tdBi}[0]{{\textrm{dBi}}}
+
+\newcommand{\timeaverage}[1]{\left[#1\right]}
 
 \beginArtNoToc
+
 \generatetitle{ECE1229H Advanced Antenna Theory.  Lecture 1: Introduction.  Taught by Prof.\ G.V. Eleftheriades}
 %\chapter{Introduction}
 \label{chap:advancedantennaL1}
@@ -41,7 +48,7 @@ Issues of interest:
 \item directional reception when desired
 \end{itemize}
 
-If we have a source we can do the opposite, using the antenna to broadcast instead of receive.
+If we have a source we can do the opposite, using the antenna to broadcast instead of receive.  This is, in fact, how all the antenna discussion to follow proceeds, where we talk of the power radiated by the antenna.  Perhaps this is because it is easier to develop the mathematics for the field produced by a moving charge distribution, than the mathematics to determine the currents produced by a field acting on a free charge distribution?
 
 \section{Antenna Pattern}
 
@@ -76,17 +83,17 @@ See fig. 2.2 and 2.3 in \citep{balanis2012antenna} for a couple examples of the 
 Time average Poynting vector (average power density, \( W/m^2 \))
 
 \begin{dmath}\label{eqn:advancedantennaL1:380}
-\Wav(x,y,z) = \inv{2} \Re \timeaverage{ \BE \cross \BH^\conj}.
+\BW_\tav(x,y,z) = \inv{2} \Real \timeaverage{ \BE \cross \BH^\conj}.
 \end{dmath}
 
 Here \( \BE, \BH \) are phasors (peak values).
 
-In the far-field \( \Wav \) is real and is referred to as the \underlineAndIndex{radiation density}
+In the far-field \( \BW_\tav \) is real and is referred to as the \underlineAndIndex{radiation density}
 
 The average power (W) radiated by an antenna is
 
 \begin{dmath}\label{eqn:advancedantennaL1:400}
-\Prad = \Pav = \oiint_S \Wav \cdot \ncap ds = \inv{2} \oiint \Re \timeaverage{ \BE \cross \BH^\conj } \cdot d \Bs
+P_\trad = P_\tav = \oiint_S \BW_\tav \cdot \ncap ds = \inv{2} \oiint \Real \timeaverage{ \BE \cross \BH^\conj } \cdot d \Bs
 \end{dmath}
 
 The integration element is illustrated in \cref{fig:farfieldsurfaceElement:farfieldsurfaceElementFig1}.
@@ -98,7 +105,7 @@ The integration element is illustrated in \cref{fig:farfieldsurfaceElement:farfi
 It radiates equally in all directions.  Such an antenna does not really exist, but is a convient fiction with an average power density 
 
 \begin{dmath}\label{eqn:advancedantennaL1:420}
-\Wiso = \rcap \frac{P_0}{4 \pi r^2 } \qquad \((W/m^2)\)
+\BW_\tiso = \rcap \frac{P_0}{4 \pi r^2 } \qquad (W/m^2)
 \end{dmath}
 
 Note that this has no angular dependence.
@@ -106,7 +113,7 @@ Note that this has no angular dependence.
 The total radiated power, integrating over a far field spherical surface is
 
 \begin{dmath}\label{eqn:advancedantennaL1:440}
-\oiint_S \Wiso \cdot \rcap d\Bs 
+\oiint_S \BW_\tiso \cdot \rcap d\Bs 
 = \frac{P_0}{4 \pi} \oiint \inv{r^2} ds
 = \frac{P_0}{4 \pi} \int_0^{2 \pi} \int_0^\pi r^2 \inv{r^2} \sin\theta d\theta d\phi
 = \frac{P_0}{4 \pi} \iint d\Omega
@@ -121,7 +128,7 @@ Here \( d\Omega = \sin\theta d\theta d\phi \) is an element of solid angle.
 Power radiated per unit solid angle
 
 \begin{dmath}\label{eqn:advancedantennaL1:460}
-U = r^2 \Wav \qquad (W/\text{solid-angle})
+U = r^2 \BW_\tav \qquad (W/\text{solid-angle})
 \end{dmath}
 
 \section{Typical far-field radiation intensity}
@@ -148,52 +155,52 @@ where the intrinsic impedance of free space is
 For a spherical wave write
 
 \begin{dmath}\label{eqn:advancedantennaL1:500}
-\BE(r, \theta, \phi) = \BE^0\lr{ \theta, \phi } \frac{e^{-j k r}{r}
+\BE(r, \theta, \phi) = \BE^0\lr{ \theta, \phi } \frac{e^{-j k r}}{r}
 \end{dmath}
 
 so that
 
 \begin{dmath}\label{eqn:advancedantennaL1:40}
-\Prad 
-= \oiint_\Omega U d\Omega
+P_\trad 
+= \oiint_\Omega U\lr{ \theta, \phi } d\Omega
 = \int_0^{2 \pi} \int_0^\pi U \sin\theta d\theta d\phi.
 \end{dmath}
 
-For an isotropic antenna where \( P_0 = \Prad \),
+For an isotropic antenna where \( P_0 = P_\trad \),
 
 \begin{dmath}\label{eqn:advancedantennaL1:520}
-\Uiso = r^2 \Wiso = \frac{P_0}{2 \pi}
+U_\tiso = r^2 \BW_\tiso = \frac{P_0}{2 \pi}
 \end{dmath}
 
-FIXME: \( \Wiso \) a vector, \(\Uiso\) not?
+FIXME: \( \BW_\tiso \) a vector, \(U_\tiso\) not?
 
 \section{Directivity}
 
-The ratio of the radiation intensity in a given direction from an antenna to the radition intensity of an isotropic source (radiating the same power \(\Prad\)) is
+The ratio of the radiation intensity in a given direction from an antenna to the radition intensity of an isotropic source (radiating the same power \(P_\trad\)) is
 
 \begin{dmath}\label{eqn:advancedantennaL1:60}
 D(\theta, \phi) 
-= \frac{U(\theta, \phi)}{\Uiso}
+= \frac{U(\theta, \phi)}{U_\tiso}
 = \frac{U(\theta, \phi)}{
 \mathLabelBox
 {
-\Prad/{4 \pi}
+P_\trad/{4 \pi}
 }
 {average radiation intensity}
 }
-= 4 \pi \frac{U(\theta, \phi)}{\Prad} \qquad (\text{dimensionless})
+= 4 \pi \frac{U(\theta, \phi)}{P_\trad} \qquad (\text{dimensionless})
 \end{dmath}
 
-where \( \Prad \) is defined by \cref{eqn:advancedantennaL1:160}.
+where \( P_\trad \) is defined by \cref{eqn:advancedantennaL1:160}.
 
 \begin{equation}\label{eqn:advancedantennaL1:80}
-D_{max} = 4 \pi \frac{U_{max}}{\Prad}
+D_{max} = 4 \pi \frac{U_{max}}{P_\trad}
 \end{equation}
 
 Many times \( D \) is calculated at the direction of maximum intensity
 
 \begin{dmath}\label{eqn:advancedantennaL1:540}
-\Dmax = 4 \pi \frac{\Umax}{\Prad} \qquad (\text{dimensionless})
+D_\tmax = 4 \pi \frac{U_\tmax}{P_\trad} \qquad (\text{dimensionless})
 \end{dmath}
 
 What is the power density (\(W/m^2\)) radiated at point \( (r, \theta) \)?
@@ -206,7 +213,7 @@ W(\theta) =
    labelstyle={below of=m\themathLableNode, below of=m\themathLableNode}
 ]
 {
-\frac{\Prad}{4 \pi r^2} 
+\frac{P_\trad}{4 \pi r^2} 
 }
 {isotropic radiator}
 \mathLabelBox
@@ -222,117 +229,167 @@ D(\theta).
 
 Calling this gain is somewhat misrepresentitive, since the antenna does not amplify at all.  However, since it is able to focus the power (not radiated isotropically), there will typically be larger than the isotropic intensity at the points where the field is found.
 
-%%%XX
-%%%\section{}
-%%%
-%%%Example:
-%%%
-%%%The radiated power ensity of an infitesimal dipole is given by
-%%%
-%%%\begin{dmath}\label{eqn:advancedantennaL1:120}
-%%%W_{av} = \rcap \frac{A_0 \sin^2 \theta}{r^2}
-%%%\end{dmath}
-%%%
-%%%F5
-%%%
-%%%\begin{dmath}\label{eqn:advancedantennaL1:140}
-%%%U(\theta, \phi) = r^2 W_{av} = A_0 \sin^2 \theta
-%%%\end{dmath}
-%%%
-%%%(radiation intensity pattern)
-%%%
-%%%D(\theta, \phi) = \frac{4 \pi U}{\Prad}, 
-%%%
-%%%\begin{dmath}\label{eqn:advancedantennaL1:160}
-%%%\Prad = \\iint_\Omega U\lr{ \theta, \phi } d\Omega
-%%%= \int_0^{2 \pi} \int_0 A_0 \sin^2 \theta \sin \theta d\theta d\phi
-%%%= A_0 \frac{8 \pi}{3}
-%%%\end{dmath}
-%%%
-%%%\begin{dmath}\label{eqn:advancedantennaL1:180}
-%%%D\lr{ \theta, \phi } 
-%%%= \frac{ 4 \cancel{\pi} \cancel{A_0} \sin^2 \theta }{ \cancel{A_0} \frac{8 \cancel{\pi}}{3}}
-%%%= \frac{3}{2} \sin^2 \theta
-%%%\end{dmath}
-%%%
-%%%Maximum directivity at \( \theta = 0 \), is \( D = 3/2 = 1.5 \).
-%%%
-%%%\begin{dmath}\label{eqn:advancedantennaL1:200}
-%%%10 \log_{10} D = 1.76 dBi
-%%%\end{dmath}
-%%%
-%%%FIXME: What is dBi ?
-%%%
-%%%\paragraph{Important note} 
-%%%
-%%%Integrating over a far field sphere
-%%%
-%%%\begin{dmath}\label{eqn:advancedantennaL1:220}
-%%%\iint U d\Omega = \Prad \implies
-%%%\end{dmath}
-%%%
-%%%\begin{dmath}\label{eqn:advancedantennaL1:240}
-%%%\iint D d\Omega = \frac{4 \pi}{\Prad} \iint U d\Omega = 4 \pi  4 \pi underlined with !
-%%%\end{dmath}
-%%%
-%%%This can be used to check that the directivity is correct.
-%%%
-%%%\section{Summary}
-%%%
-%%%The maximum directivity is given by 
-%%%
-%%%\begin{dmath}\label{eqn:advancedantennaL1:260}
-%%%D_0 = 4 \pi \frac{\Umax}{\Prad} = 4 \pi \frac{U\lr{ \theta, \phi }}_\tmax }{
-%%%\iiint_\Omega loop
-%%%...
-%%%}
-%%%\end{dmath}
-%%%
-%%%\( \Omega \) is the solid angle
-%%%
-%%%\begin{dmath}\label{eqn:advancedantennaL1:280}
-%%%4 \pi = \int_0^{2 \pi} \int_0^\pi \sin\theta d\theta d\phi = \iint d\Omega
-%%%\end{dmath}
-%%%
-%%%Let us define \( \Omega_\tA \) , a beam solid angle for the antenna
-%%%
-%%%\begin{dmath}\label{eqn:advancedantennaL1:300}
-%%%UbtpMax = 
-%%%\OmegaA = \inv{\UbtpMax} ...
-%%%\end{dmath}
-%%%
-%%%\begin{dmath}\label{eqn:advancedantennaL1:320}
-%%%D_0 = \frac{4 \pi}{\OmegaA} \approx \frac{4 \pi}{\theta_{1r} \theta_{2r}}
-%%%\end{dmath}
-%%%
-%%%Here
-%%%\theta_{1r}, \theta_{2r} are typically the half power angles in the \(\BE\) and \(\BH\) planes respectively.
-%%%
-%%%\paragraph{Example}
-%%%
-%%%For the upper half plane \( 0 \le \theta \le \pi/2 \), \( 0 \le \phi \le 2 \pi \)
-%%%
-%%%\begin{dmath}\label{eqn:advancedantennaL1:340}
-%%%U = A_0 \cos\theta
-%%%\end{dmath}
-%%%
-%%%Find the directivity
-%%%
-%%%At \( \theta = \pi/3 \) (\(60^\degree\))
-%%%
-%%%...
-%%%
-%%%Works better for more directed 
-%%%
+\makeexample{Radiated power ensity of an infitesimal dipole}{example:advancedantennaL1:1}{
+
+\begin{dmath}\label{eqn:advancedantennaL1:120}
+\BW_\tav = \rcap \frac{A_0 \sin^2 \theta}{r^2}
+\end{dmath}
+
+F5
+
+\begin{dmath}\label{eqn:advancedantennaL1:140}
+U(\theta, \phi) = r^2 W_{av} = A_0 \sin^2 \theta
+\end{dmath}
+
+(radiation intensity pattern)
+
+\begin{dmath}\label{eqn:advancedantennaL1:560}
+D(\theta, \phi) = \frac{4 \pi U}{P_\trad}, 
+\end{dmath}
+
+\begin{dmath}\label{eqn:advancedantennaL1:160}
+P_\trad 
+= \oiint_\Omega U\lr{ \theta, \phi } d\Omega
+= \int_0^{2 \pi} \int_0 A_0 \sin^2 \theta \sin \theta d\theta d\phi
+= A_0 \frac{8 \pi}{3}
+\end{dmath}
+
+Hence
+\begin{dmath}\label{eqn:advancedantennaL1:180}
+D\lr{ \theta, \phi } 
+= \frac{ 4 \cancel{\pi} \cancel{A_0} \sin^2 \theta }{ \cancel{A_0} \frac{8 \cancel{\pi}}{3}}
+= \frac{3}{2} \sin^2 \theta
+\end{dmath}
+
+Maximum directivity at \( \theta = 0 \), is \( D = 3/2 = 1.5 \).
+
+\begin{dmath}\label{eqn:advancedantennaL1:200}
+10 \log_{10} D = 1.76 \, \tdBi
+\end{dmath}
+
+Note that \( \tdBi \) is used to indicate that the gain is with respect to an ``isotropic'' radiator.  This is detailed more in \citep{digidbivsdbd}.
+
+\paragraph{Important note} 
+
+Integrating over a far field sphere
+
+\begin{dmath}\label{eqn:advancedantennaL1:220}
+\iint U d\Omega = P_\trad \implies
+\end{dmath}
+
+\begin{equation}\label{eqn:advancedantennaL1:240}
+\iint D d\Omega = \frac{4 \pi}{P_\trad} \iint U d\Omega = 
+\mytikzmark{left}{1}
+4 \pi
+\mytikzmark{right}{1}
+\end{equation}
+
+\DrawMyBox[thick, Maroon, rounded corners]{1}
+This can be used to check that the directivity is correct.
+}
+
+\section{Maximum directivity}
+
+The maximum directivity is given by 
+
+\begin{dmath}\label{eqn:advancedantennaL1:260}
+D_0 = 4 \pi \frac{U_\tmax}{P_\trad} = 4 \pi \frac{U\lr{ \theta, \phi }_\tmax }{
+\oiint_\Omega U\lr{ \theta, \phi } d\Omega
+}
+\end{dmath}
+
+Here \( \Omega \) is the \( 4 \pi \) solid angle
+
+\begin{dmath}\label{eqn:advancedantennaL1:280}
+4 \pi = \int_0^{2 \pi} \int_0^\pi \sin\theta d\theta d\phi = \iint d\Omega.
+\end{dmath}
+
+Let us define \( \Omega_\tA \), a beam solid angle for the antenna
+
+\begin{dmath}\label{eqn:advancedantennaL1:300}
+\Omega_\tA = \inv{U\lr{ \theta, \phi }_\tmax} \int_0^{2\pi} \int_0^\pi U\lr{ \theta, \phi } \sin\theta d\theta d\phi
+\end{dmath}
+
+Fx.
+
+Then
+\begin{dmath}\label{eqn:advancedantennaL1:320}
+D_0 = \frac{4 \pi}{\Omega_\tA}
+\end{dmath}
+
+i.e the ration of the entire solid angle (\(4 \pi\)) to that of the main beam of the antenna.
+
+\begin{dmath}\label{eqn:advancedantennaL1:580}
+D_0 = \frac{4 \pi}{\Omega_\tA}
+\approx \frac{4 \pi}{\theta_{1r} \theta_{2r}}
+\end{dmath}
+
+where the beam solid angle is approximated (good for narrow beams with directive antennas) by
+
+\begin{dmath}\label{eqn:advancedantennaL1:600}
+\Omega_\tA \approx \theta_{1r} \theta_{2r}
+\end{dmath}
+
+The values \( \theta_{1r}, \theta_{2r} \) are the half power beamwidth angles in two orthoganal planes (typically the \(\BE\) and \(\BH\) planes respectively.)
+
+\makeexample{Upper half plane radiator}{example:advancedantennaL1:620}{
+
+Find the directivity, given an upper half plane \( 0 \le \theta \le \pi/2 \), \( 0 \le \phi \le 2 \pi \) radiator of the form
+
+\begin{dmath}\label{eqn:advancedantennaL1:340}
+U = A_0 \cos\theta,
+\end{dmath}
+
+At \( \theta = \pi/3 \) (\ang{60}), \( U = A_0/2 \) which is the half-max power point.  Thus the full beamwidth at half-maximum is 
+
+\begin{dmath}\label{eqn:advancedantennaL1:640}
+\theta_{1r} = \theta_{2r} = \frac{2 \pi}{3}.
+\end{dmath}
+
+(These are the \underline{full} half-max angles)
+
+If we use the approximate formula
+
+\begin{dmath}\label{eqn:advancedantennaL1:660}
+D_0 = \frac{4 \pi}{
+\theta_{1r} \theta_{2r} }
+=
+\frac{4\pi}{\lr{2\pi/3}^2} = 2.86.
+\end{dmath}
+
+Exact solution is 
+
+%U = A_0 \cos\theta
+\begin{dmath}\label{eqn:advancedantennaL1:680}
+U_\tmax = A_0 \qquad (\theta = 0)
+\end{dmath}
+\begin{dmath}\label{eqn:advancedantennaL1:700}
+P_\trad 
+= \int_0^{2 \pi} \int_0^\pi A_0 \cos\theta \sin\theta d\theta d\phi 
+= 2 \pi A_0 \int_0^{\pi/2} \sin\theta \cos\theta d\theta
+= \pi A_0 \int_0^{\pi/2} \sin 2\theta d\theta
+= \pi A_0.
+\end{dmath}
+
+so,
+\begin{dmath}\label{eqn:advancedantennaL1:720}
+D_0 = \frac{ 4\pi A_0 }{\pi A_0} = 4.
+\end{dmath}
+
+This is bigger than the \( 2.86 \) approximation, since this is a wide beam.  That approximation works better for a more directed radiator.
+}
+
+\section{Directivity measurement}
+
 %%%\section{Directivity vs. Gain}
 %%%
-%%%Gain = 4 \pi \frac{Uthetaphi}{\Pin}
+%%%Gain = 4 \pi \frac{Uthetaphi}{P_\tin}
 %%%
 %%%F6
 %%%
 %%%Due to material losses in the antenna 
 %%%
-%%%\Prad < \Pin and so
+%%%P_\trad < P_\tin and so
 %%%
 %%%D = ...
 %%%
@@ -388,7 +445,7 @@ Calling this gain is somewhat misrepresentitive, since the antenna does not ampl
 %%%
 %%%then in the time domain \( e^{j \omega t} \) : 
 %%%
-%%%\Re{ [\BE_a e^{j \omega t} ] } \implies
+%%%\Real{ [\BE_a e^{j \omega t} ] } \implies
 %%%
 %%%[ \xcap \cos(\omega t) + \ycap \sin(\omega t) ] \inv{\sqrt{2}}
 %%%

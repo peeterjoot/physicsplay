@@ -131,3 +131,5 @@ s/\\ee/\\epsilon/g ;
 #s/\\II/\\mathcal{I}/g ;
 s/\\btp/\\lr{ \\theta, \\phi }/g ;
 #s/\\Prad/P_{\\textrm{rad}}/g ;
+s/\\intsphere/\\int_0^{2 \\pi} \\int_0^\\pi/g ;
+s/\\domega/\\sin\\theta d\\theta d\\phi/g ;
