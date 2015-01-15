@@ -1,0 +1,111 @@
+%
+% Copyright © 2015 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{optimizationToyProblem}
+\renewcommand{\dirname}{notes/FIXMEwheretodirname/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\beginArtNoToc
+
+\generatetitle{Toy problem for optimization}
+%\chapter{Toy problem for optimization}
+%\label{chap:optimizationToyProblem}
+\section{Motivation}
+
+I recently worked on an implementation of the ``Harmonic Balance'' method, a frequency domain solution method for periodic steady state circuit response.
+
+One of the requirements of this method is that all the sources of the system are integral multiples of some fundamental frequency \( \omega_0 \).  Suppose for example, a system has two sources, of the form
+
+\begin{itemize}
+\item 
+\( \cos( 5 \omega_0 t ) \)
+\item 
+\( \cos( 7 \omega_0 t ) \),
+\end{itemize}
+
+where \( \omega_0 \) is, say, \( 2 \pi \).  Our implementation ended up an array of angular frequencies of the form
+
+\begin{dmath}\label{eqn:optimizationToyProblem:20}
+\begin{bmatrix}
+31.4159  & 43.9823
+\end{bmatrix}
+\end{dmath}
+
+Given a numerical array like this, how does one find the fundamental frequency \( \omega_0 \)?  Note that any integer fraction of this value can also be used to solve the system, so the task is to find the biggest such value.
+
+This was not a critical issue in our implementaton, since we were able to hack around the issue by requiring a source that had exactly the fundamental frequency, and then just picked the smallest such frequency.  Many alternative workarounds were also possible, such as explicitly specifying the fundamental frequency in the circuit specification, by making a small modification to the parser.  That said, this got me wondering how such a mixed integer-float problem could be tackled.
+
+\section{Formulation as an optimization problem}
+
+We are given a set of floating point numbers
+
+\begin{dmath}\label{eqn:optimizationToyProblem:40}
+\Ba = 
+\begin{bmatrix}
+a_1 \\
+a_2 \\
+\vdots \\
+a_N \\
+\end{bmatrix}.
+\end{dmath}
+
+All of these values are presumed to be integer multiples of \( \omega_0 \), satisfying
+
+\begin{equation}\label{eqn:optimizationToyProblem:60}
+a_i = \omega_0 n_i, \qquad n_i \in \mathbb{Z}.
+\end{equation}
+
+The integer vector \( \Bn = 
+\begin{bmatrix}
+n_i
+\end{bmatrix} \) is not known.  The value of this vector is not actually of interest, but will be known once \( \omega_0 \) is found.  The objective is to find the maximum value of \( \omega_0 \) subject to the constraints \cref{eqn:optimizationToyProblem:60}.  To eliminate the possibility of multiple solutions, the values of \( n_i \) must also be minimized.
+
+This problem, despite its apparent simplicity, is quadratic in the unknowns, requiring a non-linear solver, or reformulation.  Shuvomoy Das Gupta, who ran the JuMP (Julia optimization) tutorial at UofT, pointed out that an exponential transformation does the trick to linearize the system
+
+\begin{subequations}
+\begin{dmath}\label{eqn:optimizationToyProblem:80}
+\Ba = 
+\begin{bmatrix}
+e^{b_1} \\
+e^{b_2} \\
+\vdots \\
+e^{b_N} \\
+\end{bmatrix}
+\end{dmath}
+\begin{dmath}\label{eqn:optimizationToyProblem:100}
+\Bn = 
+\begin{bmatrix}
+e^{m_1} \\
+e^{m_2} \\
+\vdots \\ 
+e^{m_N} \\
+\end{bmatrix}
+\end{dmath}
+\begin{dmath}\label{eqn:optimizationToyProblem:120}
+\omega_0 = e^{\alpha}
+\end{dmath}
+\end{subequations}
+
+An equivalent system is thus
+
+\begin{dmath}\label{eqn:optimizationToyProblem:140}
+m_i + \alpha = b_i,
+\end{dmath}
+
+where \( m_i = \log a_i \), and the original variables can be recovered by taking exponentials.
+
+\Cref{eqn:optimizationToyProblem:140} is the mapping of the constraints of the original system after the transformation.  How do the objectives map after transformation?  Here we are saved by the fact that the logarithm is monotonically increasing, so the new objectives are to find
+
+\begin{dmath}\label{eqn:optimizationToyProblem:160}
+\max \alpha, \min m_i.
+\end{dmath}
+
+In a cursory examination of the optimization material of the tutorial, it looks like the modelling software is well suited to finding solutions with the form \( \max \Bc^\T \Bx \), or \( \min \Bc^\T \Bx \), where \( \Bx \) is a free variable, and \( \Bc \) is a constant vector.  Is there a way to put the objective \cref{eqn:optimizationToyProblem:160} into such a form?
+
+%\EndArticle
+\EndNoBibArticle
