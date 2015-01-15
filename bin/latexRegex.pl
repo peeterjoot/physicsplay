@@ -130,4 +130,4 @@ s/\\ee/\\epsilon/g ;
 #s/\\ik/{(k)}/g;
 #s/\\II/\\mathcal{I}/g ;
 s/\\btp/\\lr{ \\theta, \\phi }/g ;
-s/\\Prad/P_{\\textrm{rad}}/g ;
+#s/\\Prad/P_{\\textrm{rad}}/g ;
