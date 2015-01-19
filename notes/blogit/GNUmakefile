@@ -51,7 +51,8 @@ ifneq ($(QPDF_DIR),)
    QPDF := $(QPDF_DIR)/bin/qpdf.exe
 endif
 
-EPS_FILES := $(wildcard *.eps)
+#EPS_FILES := $(wildcard *.eps)
+EPS_FILES := $(wildcard ../../figures/ece1229/*.eps)
 PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))
 
 #ONCEFLAGS := -justonce
