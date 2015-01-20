@@ -4,7 +4,7 @@
 %
 \input{../blogpost.tex}
 \renewcommand{\basename}{chapter2Notes}
-\renewcommand{\dirname}{notes/FIXMEwheretodirname/}
+\renewcommand{\dirname}{notes/ece1229/}
 %\newcommand{\dateintitle}{}
 %\newcommand{\keywords}{}
 
@@ -17,11 +17,43 @@
 \newcommand{\tdB}[0]{{\textrm{dB}}}
 \newcommand{\tdBi}[0]{{\textrm{dBi}}}
 
+%\newcommand{\calE}[0]{{\mathcal{E}}}
+%\newcommand{\calH}[0]{{\mathcal{H}}}
+%\newcommand{\calB}[0]{{\mathcal{B}}}
+%\newcommand{\calW}[0]{{\mathcal{W}}}
+
+% http://tex.stackexchange.com/a/2784/15
+%\usepackage{bm}
+%\newcommand{\bcE}[0]{{\bm{\mathcal{E}}}}
+%\newcommand{\bcH}[0]{{\bm{\mathcal{H}}}}
+%\newcommand{\bcB}[0]{{\bm{\mathcal{B}}}}
+%\newcommand{\bcW}[0]{{\bm{\mathcal{W}}}}
+
 \newcommand{\timeaverage}[1]{\left[#1\right]}
 
-\newcommand{\ch}[0]{ch.}
+\newcommand{\chaptext}[0]{ch.}
 
 \input{../peeter_prologue_print2.tex}
+
+\usepackage{macros_bm}
+\usepackage{macros_mathematica}
+
+%\mathematicaListing{
+%\begin{shaded}
+%\begin{mat}
+%\end{mat}
+%\end{shaded}
+%
+%\usepackage{listings}
+%\usepackage{framed}
+%\usepackage{xcolor}
+%\usepackage{amsmath}
+%\colorlet{shadecolor}{gray!20}
+%
+%\lstnewenvironment{mat}
+%{\lstset{language=mathematica,mathescape,columns=flexible}}
+%{}
+%
 
 \beginArtNoToc
 
@@ -29,7 +61,7 @@
 %\chapter{Fundamental parameters of Antennas}
 %\label{chap:chapter2Notes}
 
-Reading notes for \ch 2 \citep{balanis2012antenna}.
+Reading notes for \chaptext 2 \citep{balanis2005antenna}.
 
 \section{Typical far-field radiation intensity}
 
@@ -53,37 +85,81 @@ TODO: Derive \cref{eqn:advancedantennaL1:20}, from the Poynting relation.  Want 
 \BE(r, \theta, \phi) = \BE^0\lr{ \theta, \phi } \frac{e^{-j k r}}{r}.
 \end{dmath}
 
-\section{Intensity plots}
+\section{Poynting vector}
 
-FIXME: rewrite this descriptive text when I'm not so tired.
-
-Should we wish to plot the average power density \( \BP_\trad = \rcap \sin^2\theta /r^2 \), at the point \( (r,\theta, \phi) \), as sketched in the \( \phi = 0 \) plane in \cref{fig:antennaIntensityPlot:antennaIntensityPlotFig1}, and in spherical coordinates in \cref{fig:antennaIntensityPlot:antennaIntensityPlotFig2}.
-
-\imageFigure{../../figures/ece1229/antennaIntensityPlotFig1}{power density components in a plane}{fig:antennaIntensityPlot:antennaIntensityPlotFig1}{0.3}
-\imageFigure{../../figures/ece1229/antennaIntensityPlotFig2}{power density components in spherical coordinates}{fig:antennaIntensityPlot:antennaIntensityPlotFig2}{0.3}
-
-Noting that in the plane
-
-\begin{dmath}\label{eqn:chapter2Notes:520}
-\rcap = \lr{\cos\theta, \sin\theta},
+The Poynting vector was written in an unfamiliar form
+ 
+\begin{dmath}\label{eqn:chapter2Notes:560}
+\bcW = \bcE \cross \bcH.
 \end{dmath}
 
-and in 3D 
+I'm used to seeing the \( \ifrac{c}{4\pi} \) factor, and thought there was something like that in SI units too.  
+Per \citep{griffith1981introduction} that something is a \( \mu_0 \), as in
 
-\begin{dmath}\label{eqn:chapter2Notes:540}
-\rcap = \lr{\sin\theta \cos\phi, \sin\theta\sin\phi, \cos\theta}.
+\begin{dmath}\label{eqn:chapter2Notes:580}
+\bcW = \inv{\mu_0} \bcE \cross \bcB.
 \end{dmath}
 
-For the choice of \( \BP_\trad \) above \( U \) happens to not depend on \( r \), so the surface parameterized by \( \rcap U = r^2 \BP_\trad \) visualizes the intensity at all points on the surface.  For more general \( r \) dependence, it is pointed out in 
-\citep{griffith1981introduction} that such antenna radiation intensity plots
-can be made by considering the values of \( U \) at fixed \( r \).  The surfaces for \( U = \sin\theta, \sin^2\theta \) in the plane are parametrically plotted in \cref{fig:SineAndSinSq:SineAndSinSqFig3}, and for cosines in \cref{fig:CoSineAndCoSineSq:CoSineAndCoSineSqFig1}.
+Note that the use of \( \bcH \) instead of \( \bcB \) is what wipes out the requirement for the \( \ifrac{1}{\mu_0} \) term since \( \bcH = \bcB/\mu_0 \), at least in the abscence of magnetization.
+
+\section{Field plots}
+
+We can plot the fields, or intensity (or log plots in \( \tdB \) of these).
+It is pointed out in 
+\citep{griffith1981introduction}
+that when there is \( r \) dependence these plots are done by considering the values of at fixed \( r \).
+
+The field plots are conceptually the simplest, since that vector parametrizes a surface.  Any such radial field with magnitude \( f(r, \theta, \phi) \) can be plotted in Mathematica in the \( \phi = 0 \) plane at \( r = r_0 \), or in 3D (respectively) with code like \cref{eqn:chapter2Notes:600}
+
+%\mathematicaListing{
+% can't use the newcommand with pure-function parameters (#1 is also a latex beastie).
+\begin{figure}
+\caption{Plot methods for fields and intensities}\label{eqn:chapter2Notes:600}
+\begin{shaded}
+\begin{mat}
+rcap = {Cos[#], Sin[#]} & ;
+scap = {Sin[#1] Cos[#2], Sin[#1] Sin[#2], Cos[#1]} & ;
+ParametricPlot[ f[$r_0$, $\theta$, 0] rcap, {$\theta$, 0, Pi}]
+ParametricPlot3D[ f[$r_0$, $\theta$, $\phi$] scap, {$\theta$, 0, Pi}, {$\phi$, 0, 2 Pi}]
+\end{mat}
+\end{shaded}
+\end{figure}
+
+Intensity plots can use the same code, with the only difference being the interpretation.  The surface doesn't represent the value of a vector valued radial function, but is the magnitude of a scalar valued function evaluated at \( f( r_0, \theta, \phi \).
+
+%For example, to plot an average power density with the form \( \BP_\trad = \rcap \sin^2\theta /r^2 \), at the point \( (r,\theta, \phi) \), 
+%as sketched in the \( \phi = 0 \) plane in \cref{fig:antennaIntensityPlot:antennaIntensityPlotFig1}, and in spherical coordinates in \cref{fig:antennaIntensityPlot:antennaIntensityPlotFig2}.
+%
+%\imageFigure{../../figures/ece1229/antennaIntensityPlotFig1}{power density components in a plane}{fig:antennaIntensityPlot:antennaIntensityPlotFig1}{0.3}
+%\imageFigure{../../figures/ece1229/antennaIntensityPlotFig2}{power density components in spherical coordinates}{fig:antennaIntensityPlot:antennaIntensityPlotFig2}{0.3}
+%
+%Noting that in the plane
+%
+%\begin{dmath}\label{eqn:chapter2Notes:520}
+%\rcap = \lr{\cos\theta, \sin\theta},
+%\end{dmath}
+%
+%and in 3D 
+%
+%\begin{dmath}\label{eqn:chapter2Notes:540}
+%\rcap = \lr{\sin\theta \cos\phi, \sin\theta\sin\phi, \cos\theta}.
+%\end{dmath}
+
+%A plot of nt to 
+%For the choice of \( \BP_\trad \) above \( U \) happens to not depend on \( r \), so the surface parameterized by \( \rcap U = r^2 \BP_\trad \) visualizes the intensity at all points on the surface.
+%For more general \( r \) dependence, it is pointed out in 
+%\citep{griffith1981introduction}
+%that such antenna radiation intensity plots
+%can be made by considering the values of \( U \) at fixed \( r \).
+
+The surfaces for \( U = \sin\theta, \sin^2\theta \) in the plane are parametrically plotted in \cref{fig:SineAndSinSq:SineAndSinSqFig3}, and for cosines in \cref{fig:CoSineAndCoSineSq:CoSineAndCoSineSqFig1} to compare with textbook figures.
 
 \imageFigure{../../figures/ece1229/CoSineAndCoSineSqFig1}{Cosinusoidal radiation intensities}{fig:CoSineAndCoSineSq:CoSineAndCoSineSqFig1}{0.3}
 \imageFigure{../../figures/ece1229/SineAndSinSqFig3}{Sinusoidal radiation intenities}{fig:SineAndSinSq:SineAndSinSqFig3}{0.3}
 
-ParametricPlot3D visualizations of \( U = \sin^2 \theta\) and 
+Visualizations of \( U = \sin^2 \theta\) and 
 \( U = \cos^2 \theta\) can be found in \cref{fig:SineSq3D:SineSq3DFig4} and
-\cref{fig:CoSineSq3D:CoSineSq3DFig2} respectively.
+\cref{fig:CoSineSq3D:CoSineSq3DFig2} respectively.  Even for such simple functions these look pretty cool.
 
 \imageFigure{../../figures/ece1229/SineSq3DFig4}{Square sinuoidal radiation intensity}{fig:SineSq3D:SineSq3DFig4}{0.3}
 \imageFigure{../../figures/ece1229/CoSineSq3DFig2}{Square cosinuoidal radiation intensity}{fig:CoSineSq3D:CoSineSq3DFig2}{0.3}
@@ -92,7 +168,8 @@ FIXME: nbref.
 
 \section{dB vs dBi}
 
-Note that \( \tdBi \) is used to indicate that the gain is with respect to an ``isotropic'' radiator.  This is detailed more in \citep{digidbivsdbd}.
+Note that \( \tdBi \) is used to indicate that the gain is with respect to an ``isotropic'' radiator.
+This is detailed more in \citep{digidbivsdbd}.
 
 \section{Trig integrals}
 
@@ -132,10 +209,13 @@ FIXME: nbref.
 
 \begin{itemize}
 \item Time average.
-Both our Prof and the text \citep{balanis2012antenna} use square brackets \( \timeaverage{\cdots} \) for time averages. 
-\item Our Prof writes omega as a circle floating above a face up square bracket.  I've used \( \Omega \) in these notes.
-FIXME: figure.
+Both Prof. Eleftheriades 
+and the text \citep{balanis2005antenna} use square brackets \( \timeaverage{\cdots} \) for time averages. 
+\item Prof. Eleftheriades 
+writes omega as a circle floating above a face up square bracket, as in \cref{fig:greekStyleOmega:greekStyleOmegaFig1}.
 \end{itemize}
+
+\imageFigure{../../figures/ece1229/greekStyleOmegaFig1}{``I'm Greek'' style Omega \( \Omega \)}{fig:greekStyleOmega:greekStyleOmegaFig1}{0.05}
 
 \EndArticle
 %\EndNoBibArticle
