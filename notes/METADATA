@@ -15,6 +15,7 @@ my $doPhy485 = 0 ;
 my $doPhy450 = 0 ;
 my $doPhy487 = 0 ;
 my $doEce1254 = 0 ;
+my $doEce1229 = 0 ;
 my $doOtherbook = 0 ;
 
 my $doBib = 0 ;
@@ -37,6 +38,7 @@ GetOptions
    'phy452!'               => \$doPhy452,
    'phy487!'               => \$doPhy487,
    'ece1254!'              => \$doEce1254,
+   'ece1229!'              => \$doEce1229,
    'phy450!'               => \$doPhy450,
    'miscphysics!'          => \$doNonga,
    'latex!'                => \$latex,
@@ -59,11 +61,12 @@ GetOptions
                           $doPhy450 = 1 ;
                           $doPhy487 = 1 ;
                           $doEce1254 = 1 ;
+                          $doEce1229 = 1 ;
                           $doOtherbook = 1 ;
                        },
 
    'help'       => sub { die
-"METADATA [-help | -history | -bib] [-mathematica [-latex] | -matlab [-latex] | -other | -phy356 | -classicalmechanics | -phy456 | -phy454 | -phy485 | -phy450 | -phy452 | -phy487 | -gabook | -ece1254 ] [-redacted] [-filter dirname/]
+"METADATA [-help | -history | -bib] [-mathematica [-latex] | -matlab [-latex] | -other | -phy356 | -classicalmechanics | -phy456 | -phy454 | -phy485 | -phy450 | -phy452 | -phy487 | -gabook | -ece1254 | -ece1229 ] [-redacted] [-filter dirname/]
 
 options:
 -history hypertext history.
@@ -84,6 +87,7 @@ require "phy485/METADATA" ;
 require "phy452/METADATA" ;
 require "phy487/METADATA" ;
 require "ece1254/METADATA" ;
+require "ece1229/METADATA" ;
 require "phy454/METADATA" ;
 require "phy450/METADATA" ;
 require "otherbook/METADATA" ;
@@ -99,6 +103,7 @@ my @phy485 = phy485Meta() ;
 my @phy452 = phy452Meta() ;
 my @phy487 = phy487Meta() ;
 my @ece1254 = ece1254Meta() ;
+my @ece1229 = ece1229Meta() ;
 my @phy454 = phy454Meta() ;
 my @phy450 = phy450Meta() ;
 my @otherbook = otherbookMeta() ;
@@ -156,6 +161,11 @@ if ( !defined $filter )
    if ( $doEce1254 )
    {
       $filter = "ece1254/" ;
+   }
+
+   if ( $doEce1229 )
+   {
+      $filter = "ece1229/" ;
    }
 }
 
@@ -239,6 +249,11 @@ if ( $doEce1254 )
    push( @All, @ece1254 ) ;
 }
 
+if ( $doEce1229 )
+{
+   push( @All, @ece1229 ) ;
+}
+
 if ( $doPhy450 )
 {
    push( @All, @phy450 ) ;
@@ -255,7 +270,7 @@ if ( $doHistory )
 }
 elsif ( $doBib )
 {
-   printBib( @gabook, @miscphysics, @phy356, @classicalmechanics, @phy456, @phy454, @phy485, @phy452, @phy450, @phy487, @ece1254, @otherbook ) ;
+   printBib( @gabook, @miscphysics, @phy356, @classicalmechanics, @phy456, @phy454, @phy485, @phy452, @phy450, @phy487, @ece1254, @ece1229, @otherbook ) ;
 
    # generate cross reference's to gabook for miscphysics.pdf
    printBookBib( 'Exploring physics with Geometric Algebra',
@@ -309,9 +324,14 @@ elsif ( $doBib )
                  @phy487 ) ;
 
    printBookBib( 'Modeling of Multiphysics Systems.',
-                 'ece487',
+                 'ece1254',
                  'http://peeterjoot.com/archives/math2014/ece1254.pdf',
                  @ece1254 ) ;
+
+   printBookBib( 'Modeling of Multiphysics Systems.',
+                 'ece1229',
+                 'http://peeterjoot.com/archives/math2014/ece1229.pdf',
+                 @ece1229 ) ;
 }
 elsif ( $doMathematica )
 {
