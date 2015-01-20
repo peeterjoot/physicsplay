@@ -17,6 +17,12 @@ INCOMPLETE += gaMintro.tex
 #INCOMPLETE += pipeFlowConstPressureGradient.tex
 #INCOMPLETE += qmTwoExamReflection.tex
 #INCOMPLETE += qmTwoR1.tex
+INCOMPLETE += advancedantennaProblemSet1Problem1.tex
+INCOMPLETE += advancedantennaProblemSet1Problem2.tex
+INCOMPLETE += advancedantennaProblemSet1Problem3.tex
+INCOMPLETE += advancedantennaProblemSet1Problem4.tex
+INCOMPLETE += advancedantennaProblemSet1Problem5.tex
+INCOMPLETE += advancedantennaProblemSet1Problem6.tex
 
 INCOMPLETE += stokespost.tex
 
@@ -104,6 +110,13 @@ gaBasics.pdf : gaBasics.tex
 	/cygdrive/c/Temp/ffmpeg/bin/ffmpeg -i $< -vcodec libx264 $@
 
 clean :: mostlyclean localclean
+
+advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem1.tex
+advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem2.tex
+advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem3.tex
+advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem4.tex
+advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem5.tex
+advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem6.tex
 
 mostlyclean :: 
 	rm -f $(CLEAN_TARGETS)
