@@ -91,6 +91,23 @@
 
 Reading notes for \chaptext 2 \citep{balanis2005antenna}.
 
+\section{Poynting vector}
+
+The Poynting vector was written in an unfamiliar form
+ 
+\begin{dmath}\label{eqn:chapter2Notes:560}
+\bcW = \bcE \cross \bcH.
+\end{dmath}
+
+I'm used to seeing the \( \ifrac{c}{4\pi} \) factor, and thought there was something like that in SI units too.  
+Per \citep{griffith1981introduction} that something is a \( \mu_0 \), as in
+
+\begin{dmath}\label{eqn:chapter2Notes:580}
+\bcW = \inv{\mu_0} \bcE \cross \bcB.
+\end{dmath}
+
+Note that the use of \( \bcH \) instead of \( \bcB \) is what wipes out the requirement for the \( \ifrac{1}{\mu_0} \) term since \( \bcH = \bcB/\mu_0 \), at least in the abscence of magnetization.
+
 \section{Typical far-field radiation intensity}
 
 It was mentioned that
@@ -116,45 +133,54 @@ To get an understanding where this comes from, consider the far field radial sol
 \begin{subequations}
 \begin{dmath}\label{eqn:chapter2Notes:740}
 \begin{aligned}
-\BE &= \frac{\mu_0 p_0 \omega^2 }{4 \pi } \frac{\sin\theta}{r} \cos\lr{w t - k r} \thetacap \\
-\BB &= \frac{\mu_0 p_0 \omega^2 }{4 \pi c} \frac{\sin\theta}{r} \cos\lr{w t - k r} \phicap \\
+\bcE &= -\frac{\mu_0 p_0 \omega^2 }{4 \pi } \frac{\sin\theta}{r} \cos\lr{w t - k r} \thetacap \\
+\bcB &= -\frac{\mu_0 p_0 \omega^2 }{4 \pi c} \frac{\sin\theta}{r} \cos\lr{w t - k r} \phicap \\
 \end{aligned}
 \end{dmath}
 \begin{dmath}\label{eqn:chapter2Notes:760}
 \begin{aligned}
-\BE &= \frac{\mu_0 m_0 \omega^2 }{4 \pi c} \frac{\sin\theta}{r} \cos\lr{w t - k r} \phicap \\
-\BB &= \frac{\mu_0 m_0 \omega^2 }{4 \pi c^2} \frac{\sin\theta}{r} \cos\lr{w t - k r} \thetacap \\
+\bcE &= \frac{\mu_0 m_0 \omega^2 }{4 \pi c} \frac{\sin\theta}{r} \cos\lr{w t - k r} \phicap \\
+\bcB &= -\frac{\mu_0 m_0 \omega^2 }{4 \pi c^2} \frac{\sin\theta}{r} \cos\lr{w t - k r} \thetacap \\
 \end{aligned}
 \end{dmath}
 \end{subequations}
 
-In neither case is there a component in the direction of propagation, and in both cases
+In neither case is there a component in the direction of propagation, and in both cases (using \( \mu_0 \epsilon_0 = 1/c^2\))
 
 \begin{dmath}\label{eqn:chapter2Notes:780}
-\Abs{\BH} 
-= \frac{\Abs{\BE}}{\mu_0 c}
-= \Abs{\BE} \sqrt{\frac{\epsilon_0}{\mu_0}}
-= \Abs{\BE} /\eta_0.
+\Abs{\bcH} 
+= \frac{\Abs{\bcE}}{\mu_0 c}
+= \Abs{\bcE} \sqrt{\frac{\epsilon_0}{\mu_0}}
+= \inv{\eta_0}\Abs{\bcE} .
 \end{dmath}
 
-FIXME: construct a superposition \( \alpha \BE_e + \beta \BE_m \) for these pairs of dipole solutions, and then work out the Poynting vector for the superposition.  It should supply the relation \cref{eqn:advancedantennaL1:20}.
+A superposition of the phasors for such dipole fields, in the far field, will have the form
 
-\section{Poynting vector}
-
-The Poynting vector was written in an unfamiliar form
- 
-\begin{dmath}\label{eqn:chapter2Notes:560}
-\bcW = \bcE \cross \bcH.
+\begin{dmath}\label{eqn:chapter2Notes:800}
+\begin{aligned}
+\BE &= \inv{r} \lr{ E_\theta(\theta, \phi) \thetacap + E_\phi(\theta, \phi) \phicap } \\
+\BB &= \inv{r c} \lr{ E_\theta(\theta, \phi) \thetacap - E_\phi(\theta, \phi) \phicap },
+\end{aligned}
 \end{dmath}
 
-I'm used to seeing the \( \ifrac{c}{4\pi} \) factor, and thought there was something like that in SI units too.  
-Per \citep{griffith1981introduction} that something is a \( \mu_0 \), as in
+with a corresponding time averaged Poynting vector 
 
-\begin{dmath}\label{eqn:chapter2Notes:580}
-\bcW = \inv{\mu_0} \bcE \cross \bcB.
+\begin{dmath}\label{eqn:chapter2Notes:820}
+\BS 
+= \inv{2 \mu_0} \BE \cross \BB^\conj
+= 
+\inv{2 \mu_0 c r^2} 
+\lr{ E_\theta \thetacap + E_\phi \phicap } \cross
+\lr{ E_\theta^\conj \thetacap - E_\phi^\conj \phicap } 
+=
+\frac{\thetacap \cross \phicap}{2 \mu_0 c r^2} 
+\lr{ \Abs{E_\theta}^2 + \Abs{E_\phi}^2 },
+=
+\frac{\rcap}{2 \eta_0 r^2} 
+\lr{ \Abs{E_\theta}^2 + \Abs{E_\phi}^2 },
 \end{dmath}
 
-Note that the use of \( \bcH \) instead of \( \bcB \) is what wipes out the requirement for the \( \ifrac{1}{\mu_0} \) term since \( \bcH = \bcB/\mu_0 \), at least in the abscence of magnetization.
+verifying \cref{eqn:advancedantennaL1:20} for a superposition of electric and magnetic dipole fields.  This can likely be shown for more general fields too.
 
 \section{Field plots}
 
@@ -258,7 +284,48 @@ have some of the sine and cosine integrals that are pervasive in this chapter.
 
 \section{Polarization vectors}
 
-FIXME: todo.  Here the class notes include something not in the text.
+The text introduces polarization vectors \( \rhocap \) , but doesn't spell out their form.  Consider a plane wave field of the form
+
+\begin{dmath}\label{eqn:chapter2Notes:840}
+\BE 
+= 
+E_x e^{j \phi_x} e^{j \lr{ \omega t - k z }} \xcap
++
+E_y e^{j \phi_y} e^{j \lr{ \omega t - k z }} \ycap.
+\end{dmath}
+
+The \( x, y \) plane directionality of this phasor can be written
+
+\begin{dmath}\label{eqn:chapter2Notes:860}
+\Brho = 
+E_x e^{j \phi_x} \xcap
++
+E_y e^{j \phi_y} \ycap,
+\end{dmath}
+
+so that
+
+\begin{dmath}\label{eqn:chapter2Notes:880}
+\BE = \Brho e^{j \lr{ \omega t - k z }}.
+\end{dmath}
+
+Separating this direction and magnitude into factors
+
+\begin{dmath}\label{eqn:chapter2Notes:900}
+\Brho = \Abs{\BE} \rhocap,
+\end{dmath}
+
+allows the phasor to be expressed as
+
+\begin{dmath}\label{eqn:chapter2Notes:920}
+\BE = \rhocap \Abs{\BE} e^{j \lr{ \omega t - k z }}.
+\end{dmath}
+
+As an example, suppose that \( E_x = E_y \), and set \( \phi_x = 0 \).  Then 
+
+\begin{dmath}\label{eqn:chapter2Notes:940}
+\rhocap = \xcap + \ycap e^{j \phi_y}.
+\end{dmath}
 
 \section{Phasor power}
 
@@ -310,6 +377,64 @@ Observe that we have to be careful to use the absolute value of the current phas
 \BS = \BV_\trms \BI^\conj_\trms.
 \end{dmath}
 
+\section{RCS geometry examples}
+
+\paragraph{flat plate}
+
+F1: LxW
+
+\begin{dmath}\label{eqn:chapter2Notes:960}
+\sigma_\tmax = \frac{4 \pi \lr{L W}^2}{\lambda^2}
+\end{dmath}
+
+\paragraph{sphere}
+
+In the optical limit
+
+F2:
+
+\begin{dmath}\label{eqn:chapter2Notes:980}
+\sigma_\tmax = \pi r^2
+\end{dmath}
+
+Note that this is smaller than the physical area \( 4 \pi r^2 \).
+
+\paragraph{cylinder}
+
+F3: r x h
+
+\begin{dmath}\label{eqn:chapter2Notes:1000}
+\sigma_\tmax = \frac{ 2 \pi r h^2}{\lambda}
+\end{dmath}
+
+FIXME: check notes when posted.  any others?   Also a plot of scattering off sphere.
+
+% chapter 3 notes:
+\section{Maxwell's equation review}.
+
+We work with electric AND magnetic charge densities.
+
+In engineering we call:
+
+E,H : primary fields
+D,B : induced
+
+FIXME: Start with standard form, and derive the phasor forms of the equations.
+
+%E,H,D,B,M,J,D,B, \rho_m, \rho_m
+
+FIXME: 
+\section{Constituativity relations}
+
+See slides.
+
+In AM radio, will see ferrite cores with the inductors, which introduces non-unit \( \mu_r \).  This is to increase the radiation resistance.
+
+\section{Boundary conditions}
+
+For good electric conductor \( \BE = 0 \).
+For good magnetic conductor \( \BB = 0 \).
+
 \section{Notation}
 
 \begin{itemize}
@@ -317,8 +442,11 @@ Observe that we have to be careful to use the absolute value of the current phas
 Both Prof. Eleftheriades 
 and the text \citep{balanis2005antenna} use square brackets \( \timeaverage{\cdots} \) for time averages. 
 \item Prof. Eleftheriades 
-writes omega as a circle floating above a face up square bracket, as in \cref{fig:greekStyleOmega:greekStyleOmegaFig1}.
-\item Bold vectors are usually phasors, with caligraphic script used for the time domain fields.  Example: \( \BE(x,y,z,t) = E(x,y) e^{j \omega t - k z}, \bcE(x, y, z, t) = \Real \BE \).
+writes omega as a circle floating above a face up square bracket, as in \cref{fig:greekStyleOmega:greekStyleOmegaFig1}, and \( \sigma \) like a number 6.
+FIXME: fig. (do screen cap)
+FIXME: J looks like pi with a tail.
+\item Bold vectors are usually phasors, with calligraphic script used for the time domain fields.  Example: \( \BE(x,y,z,t) = \ecap E(x,y) e^{j \lr{\omega t - k z}}, \bcE(x, y, z, t) = \Real \BE \).
+\item Phasor frequency terms are written as \( e^{j \omega t} \), not \( e^{-j \omega t} \), as done in physics. (Is that true in griffiths or jackson)?
 \end{itemize}
 
 \imageFigure{../../figures/ece1229/greekStyleOmegaFig1}{``I'm Greek'' style Omega \( \Omega \)}{fig:greekStyleOmega:greekStyleOmegaFig1}{0.05}
@@ -328,4 +456,3 @@ writes omega as a circle floating above a face up square bracket, as in \cref{fi
 \input{../ece1229/mathematica.tex}
 
 \EndArticle
-%\EndNoBibArticle
