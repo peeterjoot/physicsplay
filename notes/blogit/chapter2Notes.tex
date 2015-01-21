@@ -11,6 +11,7 @@
 \newcommand{\tiso}[0]{{\textrm{iso}}}
 \newcommand{\tin}[0]{{\textrm{in}}}
 \newcommand{\trad}[0]{{\textrm{rad}}}
+\newcommand{\trms}[0]{{\textrm{rms}}}
 \newcommand{\tmax}[0]{{\textrm{max}}}
 \newcommand{\tA}[0]{{\textrm{A}}}
 \newcommand{\tav}[0]{{\textrm{av}}}
@@ -97,7 +98,9 @@ It was mentioned that
 \begin{dmath}\label{eqn:advancedantennaL1:20}
 U(\theta, \phi) 
 = 
-\frac{r^2}{2 \eta_0} \Abs{ \BE(r, \theta, \phi) }^2,
+\frac{r^2}{2 \eta_0} \Abs{ \BE( r, \theta, \phi) }^2 
+=
+\frac{1}{2 \eta_0} \lr{ \Abs{ E_\theta(\theta, \phi) }^2 + \Abs{ E_\phi(\theta, \phi) }^2},
 \end{dmath}
 
 where the intrinsic impedance of free space is
@@ -106,11 +109,35 @@ where the intrinsic impedance of free space is
 \eta_0 = \sqrt{\frac{\mu_0}{\epsilon_0}} = 377 \Omega.
 \end{dmath}
 
-TODO: Derive \cref{eqn:advancedantennaL1:20}, from the Poynting relation.  Want to calculate \( \BB \) for a spherical wave
+(this is also eq. 2-19 in the text.)
 
-\begin{dmath}\label{eqn:advancedantennaL1:500}
-\BE(r, \theta, \phi) = \BE^0\lr{ \theta, \phi } \frac{e^{-j k r}}{r}.
+To get an understanding where this comes from, consider the far field radial solutions to the electric and magnetic dipole problems, which have the respective forms (from \citep{griffith1981introduction}) of
+
+\begin{subequations}
+\begin{dmath}\label{eqn:chapter2Notes:740}
+\begin{aligned}
+\BE &= \frac{\mu_0 p_0 \omega^2 }{4 \pi } \frac{\sin\theta}{r} \cos\lr{w t - k r} \thetacap \\
+\BB &= \frac{\mu_0 p_0 \omega^2 }{4 \pi c} \frac{\sin\theta}{r} \cos\lr{w t - k r} \phicap \\
+\end{aligned}
 \end{dmath}
+\begin{dmath}\label{eqn:chapter2Notes:760}
+\begin{aligned}
+\BE &= \frac{\mu_0 m_0 \omega^2 }{4 \pi c} \frac{\sin\theta}{r} \cos\lr{w t - k r} \phicap \\
+\BB &= \frac{\mu_0 m_0 \omega^2 }{4 \pi c^2} \frac{\sin\theta}{r} \cos\lr{w t - k r} \thetacap \\
+\end{aligned}
+\end{dmath}
+\end{subequations}
+
+In neither case is there a component in the direction of propagation, and in both cases
+
+\begin{dmath}\label{eqn:chapter2Notes:780}
+\Abs{\BH} 
+= \frac{\Abs{\BE}}{\mu_0 c}
+= \Abs{\BE} \sqrt{\frac{\epsilon_0}{\mu_0}}
+= \Abs{\BE} /\eta_0.
+\end{dmath}
+
+FIXME: construct a superposition \( \alpha \BE_e + \beta \BE_m \) for these pairs of dipole solutions, and then work out the Poynting vector for the superposition.  It should supply the relation \cref{eqn:advancedantennaL1:20}.
 
 \section{Poynting vector}
 
@@ -229,6 +256,60 @@ have some of the sine and cosine integrals that are pervasive in this chapter.
 \end{tabular}
 }
 
+\section{Polarization vectors}
+
+FIXME: todo.  Here the class notes include something not in the text.
+
+\section{Phasor power}
+
+In \S 2.13 the phasor power is written as
+
+\begin{dmath}\label{eqn:chapter2Notes:620}
+I^2 R/2,
+\end{dmath}
+
+where \( I, R \) are the magnitudes of phasors in the circuit.
+
+I vaguely recall this relation, but had to refer back to 
+\citep{irwin2007bec}
+for the details.
+This relation expresses average power over a period associated with the frequency of the phasor
+
+\begin{dmath}\label{eqn:chapter2Notes:640}
+P 
+= \inv{T} \int_{t_0}^{t_0 + T} p(t) dt
+= \inv{T} \int_{t_0}^{t_0 + T} \Abs{\BV} \cos\lr{ \omega t + \phi_V } \Abs{\BI} \cos\lr{ \omega t + \phi_I} dt
+= \inv{T} \int_{t_0}^{t_0 + T} \Abs{\BV} \Abs{\BI}
+\lr{
+   \cos\lr{ \phi_V - \phi_I } + \cos\lr{ 2 \omega t + \phi_V + \phi_I} 
+}
+dt
+= \inv{2} \Abs{\BV} \Abs{\BI} \cos\lr{ \phi_V - \phi_I }.
+\end{dmath}
+
+Introducing the impedence for this circuit element
+
+\begin{dmath}\label{eqn:chapter2Notes:660}
+\BZ = \frac{ \Abs{\BV} e^{j\phi_V} }{ \Abs{\BI} e^{j\phi_I} } = \frac{\Abs{\BV}}{\Abs{\BI}} e^{j\lr{\phi_V - \phi_I}},
+\end{dmath}
+
+this average power can be written in phasor form
+
+\begin{dmath}\label{eqn:chapter2Notes:680}
+\BP = \inv{2} \Abs{\BI}^2 \BZ,
+\end{dmath}
+
+with
+\begin{dmath}\label{eqn:chapter2Notes:700}
+P = \Real \BP.
+\end{dmath}
+
+Observe that we have to be careful to use the absolute value of the current phasor \( \BI \), since \( \BI^2 \) differs in phase from \( \Abs{\BI}^2 \).  This explains the conjugation in the \citep{irwin2007bec} definition of complex power, which had the form
+
+\begin{dmath}\label{eqn:chapter2Notes:720}
+\BS = \BV_\trms \BI^\conj_\trms.
+\end{dmath}
+
 \section{Notation}
 
 \begin{itemize}
@@ -237,6 +318,7 @@ Both Prof. Eleftheriades
 and the text \citep{balanis2005antenna} use square brackets \( \timeaverage{\cdots} \) for time averages. 
 \item Prof. Eleftheriades 
 writes omega as a circle floating above a face up square bracket, as in \cref{fig:greekStyleOmega:greekStyleOmegaFig1}.
+\item Bold vectors are usually phasors, with caligraphic script used for the time domain fields.  Example: \( \BE(x,y,z,t) = E(x,y) e^{j \omega t - k z}, \bcE(x, y, z, t) = \Real \BE \).
 \end{itemize}
 
 \imageFigure{../../figures/ece1229/greekStyleOmegaFig1}{``I'm Greek'' style Omega \( \Omega \)}{fig:greekStyleOmega:greekStyleOmegaFig1}{0.05}
