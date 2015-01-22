@@ -22,6 +22,7 @@ GENERATED_SOURCES += mathematica.tex
 #PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))
 
 THISBOOK_DEPS += $(PDFS_FROM_EPS)
+THISBOOK_DEPS += macros_mathematica.sty
 
 include ../make.rules
 
