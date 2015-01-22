@@ -67,6 +67,7 @@ ONCEFLAGS := -nojustonce
 all :: $(PDFS_FROM_EPS)
 all :: Bibliography.bib
 all :: peeters_macros.sty
+all :: ece1229.sty
 all :: peeters_layout.sty
 all :: peeters_layout_exercise.sty
 all :: macros_bm.sty
@@ -122,6 +123,9 @@ mostlyclean ::
 	rm -f $(CLEAN_TARGETS)
 
 peeters_layout.sty : ../peeters_layout.sty
+	cp $^ $@
+
+ece1229.sty : ../ece1229/ece1229.sty
 	cp $^ $@
 
 hbFigure.sty : ../ece1254/hbFigure.sty
