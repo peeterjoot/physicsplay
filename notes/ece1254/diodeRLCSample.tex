@@ -809,11 +809,11 @@ This shows the stamping pattern required to form the nonlinear portion of the Ha
 
 %\begin{equation}\label{eqn:diodeRLCSample:820}
 \boxedEquation{eqn:diodeRLCSample:820}{
-\BY \BV = \BI + \mathcal{I}(\BV),
+\BY \BV = \BI + \calI(\BV),
 }
 %\end{equation}
 
-Here \( \BY \) is block diagonal, and in general has blocks of \( \BG + j \omega_0 n \BC \).  The matrix \( \BI \) was generated from the Fourier coefficients of all the linear sources, and \( \mathcal{I}(\BV) \) encodes all the nonlinear contributions to the system.
+Here \( \BY \) is block diagonal, and in general has blocks of \( \BG + j \omega_0 n \BC \).  The matrix \( \BI \) was generated from the Fourier coefficients of all the linear sources, and \( \calI(\BV) \) encodes all the nonlinear contributions to the system.
 
 \paragraph{More general nonlinear structure, for multiple diodes}
 \index{nonlinear!diode}
@@ -837,7 +837,7 @@ w_S(t) \\
 where \( w_i(t) = \exp( (v_{i,1}(t) - v_{i,2}(t))/V_{T,i} ) \).  If the DFT coordinates of these functions are \( E_n^{(i)} \), then the frequency domain representation is
 
 \begin{equation}\label{eqn:diodeRLCSample:700}
-\mathcal{I}(\BV)
+\calI(\BV)
 =
 \sum_{i = 1}^S 
 \begin{bmatrix}
@@ -912,15 +912,15 @@ This is now completely expressed in terms of the unknown Fourier component vecto
 In order to solve the system, Newton's method on the Fourier coefficients is required.  Solutions to \( \calF(\BV) = 0 \) are sought, where
 
 \begin{equation}\label{eqn:diodeRLCSample:840}
-\calF(\BV) = \BY \BV - \BI - \mathcal{I}(\BV).
+\calF(\BV) = \BY \BV - \BI - \calI(\BV).
 \end{equation}
 
-Here the sources current vector DFT coordinates have been split into the linear contributions \( \BI \) and nonlinear contributions \( \mathcal{I} \) defined by \cref{eqn:diodeRLCSample:700}.
+Here the sources current vector DFT coordinates have been split into the linear contributions \( \BI \) and nonlinear contributions \( \calI \) defined by \cref{eqn:diodeRLCSample:700}.
 
 Working with ones-indexed coordinates of \( \BV = [V_k]_k \), where \( k \in [1, R(2 N + 1) ] \), the Jacobian is
 
 \begin{equation}\label{eqn:diodeRLCSample:860}
-\BJ = \BY - {[ \PDi{V_s}{\mathcal{I}_r} ]}_{rs}.
+\BJ = \BY - {[ \PDi{V_s}{\calI_r} ]}_{rs}.
 \end{equation}
 
 To calculate these partials we need the partials of the coordinates of \( \BE \) of
@@ -1020,10 +1020,10 @@ Note that this Jacobian
 
 is a \( (2 N + 1) \times R(2N + 1) \) matrix.
 
-The full Jacobian of \( \mathcal{I}(\BV) \) is
+The full Jacobian of \( \calI(\BV) \) is
 
 \begin{equation}\label{eqn:diodeRLCSample:1120}
-\BJ_{\mathcal{I}}(\BV)
+\BJ_{\calI}(\BV)
 =
 \sum_{i = 1}^S 
 \begin{bmatrix}
@@ -1038,7 +1038,7 @@ The full Jacobian of \( \mathcal{I}(\BV) \) is
 Where \( \PDi{\BV}{E_{k}^{(i)}} \) is the kth row of \( \BJ_{\BE^{(i)}} \).  The complete Jacobian is
 
 \begin{equation}\label{eqn:diodeRLCSample:1100}
-\BJ = \BY - \BJ_{\mathcal{I}}(\BV).
+\BJ = \BY - \BJ_{\calI}(\BV).
 \end{equation}
 
 %%%\paragraph{Optimization attempt}
@@ -1261,10 +1261,10 @@ I_0
 The structure of this equation is
 
 \begin{equation}\label{eqn:diodeRLCSample:1380}
-\BY \BV = \BI + \mathcal{I}(\BV),
+\BY \BV = \BI + \calI(\BV),
 \end{equation}
 
-The nonlinear current \( \mathcal{I}(\BV) \) needs to be examined further.  How much of this can be precomputed, and what is the simplest way to compute the Jacobian?
+The nonlinear current \( \calI(\BV) \) needs to be examined further.  How much of this can be precomputed, and what is the simplest way to compute the Jacobian?
 
 With 
 
@@ -1286,7 +1286,7 @@ E_{1} \\
 the nonlinear current is
 
 \begin{dmath}\label{eqn:diodeRLCSample:1420}
-\mathcal{I} = 
+\calI = 
 I_0
 \begin{bmatrix}
 \Bd E_{-1} \\
@@ -1325,7 +1325,7 @@ the current is
 
 %\begin{dmath}\label{eqn:diodeRLCSample:1540}
 \boxedEquation{eqn:diodeRLCSample:1540}{
-\mathcal{I}(\BV) = 
+\calI(\BV) = 
 I_0 \BD \BF^{-1} \Bepsilon(\BV).
 }
 %\end{dmath}
@@ -1466,7 +1466,7 @@ e^{\Bh_3^\T \BV} \\
 With a compact matrix representation of the nonlinear current, attention can now be turned to the Jacobian of the nonlinear current.  Let \( \BA = I_0 \BD \BF^{-1} = [ a_{ij} ]_{ij} \), the current (with summation implied) is
 
 \begin{dmath}\label{eqn:diodeRLCSample:1580}
-\mathcal{I} = 
+\calI = 
 \begin{bmatrix}
 a_{ik} \epsilon_k,
 \end{bmatrix}
@@ -1475,13 +1475,13 @@ a_{ik} \epsilon_k,
 with coordinates
 
 \begin{dmath}\label{eqn:diodeRLCSample:1600}
-\mathcal{I}_i = a_{ik} \epsilon_k = a_{ik} \exp\lr{ \Bh_k^\T \BV }.
+\calI_i = a_{ik} \epsilon_k = a_{ik} \exp\lr{ \Bh_k^\T \BV }.
 \end{dmath}
 
 so the Jacobian components are
 
 \begin{dmath}\label{eqn:diodeRLCSample:1620}
-[\BJ^{\mathcal{I}}]_{ij} 
+[\BJ^{\calI}]_{ij} 
 = 
 a_{ik} \epsilon_k = a_{ik} 
 \PD{V_j}{}
@@ -1495,7 +1495,7 @@ h_{kj}
 Factoring out \( \BU = [h_{ij} \exp\lr{ \Bh_i^\T \BV }]_{ij} \), 
 
 \begin{dmath}\label{eqn:diodeRLCSample:1640}
-\BJ^{\mathcal{I}}
+\BJ^{\calI}
 = \BA \BU
 = 
 \BA 
@@ -1518,14 +1518,14 @@ A quick sanity check of dimensions seems worthwhile, and shows that all is well
 \begin{itemize}
 \item \( \BA \) : \( R(2 N + 1) \times 2 N + 1 \)
 \item \( \BU \) : \( 2 N + 1 \times R(2 N + 1) \)
-\item \( \BJ^{\mathcal{I}} \) : \( R(2 N + 1) \times R(2 N + 1) \)
+\item \( \BJ^{\calI} \) : \( R(2 N + 1) \times R(2 N + 1) \)
 \end{itemize}
 
 The Jacobian of the nonlinear current is now completely determined
 
 %\begin{dmath}\label{eqn:diodeRLCSample:1660}
 \boxedEquation{eqn:diodeRLCSample:1660}{
-\BJ^{\mathcal{I}}( \BV ) =
+\BJ^{\calI}( \BV ) =
 I_0 \BD \BF^{-1} 
 \begin{bmatrix}
 \Bh_1^\T \exp\lr{ \Bh_1^\T \BV } \\
@@ -1541,7 +1541,7 @@ I_0 \BD \BF^{-1}
 All the pieces required for a Newton's method solution are now in place.  The goal is to find a value of \( \BV \) that provides the zero
 
 \begin{dmath}\label{eqn:diodeRLCSample:1680}
-f(\BV) = \BY \BV - \BI - \mathcal{I}(\BV).
+f(\BV) = \BY \BV - \BI - \calI(\BV).
 \end{dmath}
 
 Expansion to first order around an initial guess \( \BV^0 \), gives
@@ -1553,13 +1553,13 @@ f( \BV^0 + \Delta \BV ) = f(\BV^0) + \BJ(\BV^0) \Delta \BV \approx 0,
 where the full Jacobian of \( f(\BV) \) is
 
 \begin{dmath}\label{eqn:diodeRLCSample:1720}
-\BJ(\BV) = \BY - \BJ^{\mathcal{I}}(\BV).
+\BJ(\BV) = \BY - \BJ^{\calI}(\BV).
 \end{dmath}
 
 The Newton's method refinement of the initial guess follows by inversion
 
 \begin{dmath}\label{eqn:diodeRLCSample:1740}
-\Delta \BV = -\lr{ \BY - \BJ^{\mathcal{I}}(\BV^0) }^{-1} f(\BV^0).
+\Delta \BV = -\lr{ \BY - \BJ^{\calI}(\BV^0) }^{-1} f(\BV^0).
 \end{dmath}
 
 %\EndArticle
