@@ -3,12 +3,22 @@
 my @chars = ("A".."Z") ;
 push( @chars, ("a".."z") ) ;
 
-foreach my $c (@chars)
+if ( 0 )
 {
-   print "\\newcommand{\\cal$c}[0]{{\\mathcal{$c}}}\n" ;
-}
+   foreach my $c (@chars)
+   {
+      print "\\newcommand{\\cal$c}[0]{{\\mathcal{$c}}}\n" ;
+   }
 
-foreach my $c (@chars)
+   foreach my $c (@chars)
+   {
+      print "\\newcommand{\\bc$c}[0]{{\\bm{\\mathcal{$c}}}}\n" ;
+   }
+}
+else
 {
-   print "\\newcommand{\\bc$c}[0]{{\\bm{\\mathcal{$c}}}}\n" ;
+   foreach my $c (@chars)
+   {
+      print "\\newcommand{\\txt$c}[0]{{\\textrm{$c}}}\n" ;
+   }
 }
