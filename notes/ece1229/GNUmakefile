@@ -28,3 +28,11 @@ include ../make.rules
 
 #epsconv : $(PDFS_FROM_EPS)
 
+advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem1.tex
+advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem2.tex
+advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem3.tex
+advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem4.tex
+advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem5.tex
+advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem6.tex
+
+
