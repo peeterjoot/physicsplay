@@ -42,7 +42,7 @@
 #s/\\ik/{(k)}/g;
 #s/\\ik\+1/{(k+1)}/g;
 #s/\\ik\-1/{(k-1)}/g;
-#s/\\intsphere/\\int_0^{2 \\pi} \\int_0^\\pi/g ;
+s/\\intsphere/\\int_0^{2 \\pi} \\int_0^\\pi/g ;
 #s/\\lambdaL/\\lambda_{\\mathrm{L}}/g ;
 #s/\\me/m_{\\mathrm{e}}/g ;
 #s/\\n *(\+|-|\\pm) *(\(\d *, *\d\))(\d)\b/{\\Bn $1 $2, $3}/g ;  # \Bu_\n+(1,0)1 -> \Bu_{\Bn + (1,0), 1}
