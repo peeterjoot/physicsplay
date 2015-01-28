@@ -22,7 +22,7 @@ These are notes for the UofT course ECE1229, Advanced Antenna Theory, taught by 
 
 Unlike most of the other classes I have taken, I am not attempting to take comprehensive notes for this class.  The class is taught on slides that match the textbook so closely, there is little value to me taking notes that just replicate the text.  Instead, I am annotating my copy of textbook with little details instead.  My usual notes collection for the class will contain musings of details that were unclear, or in some cases, details that were provided in class, but are not in the text (and too long to pencil into my book.)
 
-\section{Maxwell's equation review}.
+\section{Maxwell's equation review}
 
 For reasons that are yet to be seen (and justified), we work with a generalization of Maxwell's equations to include 
 electric AND magnetic charge densities.
@@ -70,7 +70,7 @@ In engineering the fields
 are designated primary fields, whereas
 
 \begin{itemize}
-	\item \( \BD \) : Electric flux density (or displacement vector) (\si{C/m}, \si{Columns/meter}).
+	\item \( \BD \) : Electric flux density (or displacement vector) (\si{C/m}, \si{Coulombs/meter}).
 	\item \( \BB \) : Magnetic flux density (\si{W/m}, \si{Webers/meter}).
 \end{itemize}
 
@@ -83,9 +83,9 @@ are designated the induced fields.  The currents and charges are
 	\item \( \rho_m \) : Magnetic charge density (\si{W/m^3}).
 \end{itemize}
 
-Observe that \( \spacegrad \cdot \lr{ \spacegrad \cross \Bx } = 0 \) for any vector \( \Bx \).  From \cref{eqn:chapter3Notes:99} this implies that
+Because \( \spacegrad \cdot \lr{ \spacegrad \cross \Bf } = 0 \) for any (sufficiently continuous) vector \( \Bf \), divergence relations between the currents and the charges follow from \cref{eqn:chapter3Notes:99}
 
-\begin{dmath}\label{eqn:chapter3Notes:n}
+\begin{dmath}\label{eqn:chapter3Notes:180}
 0 
 = -\spacegrad \cdot \BM - j \omega \spacegrad \cdot \BB 
 = -\spacegrad \cdot \BM - j \omega \rho_m,
@@ -93,49 +93,84 @@ Observe that \( \spacegrad \cdot \lr{ \spacegrad \cross \Bx } = 0 \) for any vec
 
 and
 
-\begin{dmath}\label{eqn:chapter3Notes:n}
+\begin{dmath}\label{eqn:chapter3Notes:200}
 0 
 = \spacegrad \cdot \BJ + j \omega \spacegrad \cdot \BD
 = \spacegrad \cdot \BJ + j \omega \rho,
 \end{dmath}
 
-providing the continuity equations for the currents and charges
+These are the phasor forms of the continuity equations
 
 \begin{subequations}
-\begin{dmath}\label{eqn:chapter3Notes:n}
+\begin{dmath}\label{eqn:chapter3Notes:220}
 \spacegrad \cdot \BM = - j \omega \rho_m
 \end{dmath}
-\begin{dmath}\label{eqn:chapter3Notes:n}
+\begin{dmath}\label{eqn:chapter3Notes:240}
 \spacegrad \cdot \BJ = -j \omega \rho.
 \end{dmath}
 \end{subequations}
 
 \paragraph{Integral forms}
 
-The integral forms of Maxwell's equations follow from Stokes' theorem and the divergence theorems.  Stokes' theorem is
+The integral forms of Maxwell's equations follow from Stokes' theorem and the divergence theorems.  Stokes' theorem is a relation between the integral of the curl and the outwards normal differential area element of a surface, to the boundary of that surface, and applies to any surface with that boundary
 
-\begin{dmath}\label{eqn:chapter3Notes:n}
-\iint_{dS} \lr{ \spacegrad \cross \Bx } \cdot d\BS = \int_C \Bx \cdot d\Bl,
+\begin{dmath}\label{eqn:chapter3Notes:260}
+\iint
+d\BA \cdot \lr{\spacegrad \cross \Bf} 
+= \ointctrclockwise \Bf \cdot d\Bl.
 \end{dmath}
 
-where the integral is over any surface that is bounded by the curve \( C \).
+The divergence theorem, a special case of the general Stokes' theorem is
 
-F1: show orientation.  
-
-The divergence theorem is
-
-\begin{dmath}\label{eqn:chapter3Notes:n}
-\oiint_{dS} \spacegrad \cdot \Bx dV
-= \int_C \Bx \cdot d\BA,
+\begin{dmath}\label{eqn:chapter3Notes:280}
+\iiint_{V} \spacegrad \cdot \Bf dV
+= \iint_{\partial V} \Bf \cdot d\BA,
 \end{dmath}
 
-where the integral is over the surface of the volume.
+where the integral is over the surface of the volume, and the area element of the bounding integral has an outwards normal orientation.
 
-FIXME:  use maketheorem env.
+See \citep{gabook:stokesTheoremGeometricAlgebra} for a derivation of this and various generalizations.
+
+Applying these to \cref{eqn:chapter3Notes:99} gives
+
+\begin{subequations}
+\begin{dmath}\label{eqn:chapter3Notes:320}
+\ointctrclockwise d\Bl \cdot \BE = - 
+\iint d\BA \cdot \lr{
+\BM + j \omega \BB
+}
+\end{dmath}
+\begin{dmath}\label{eqn:chapter3Notes:340}
+\ointctrclockwise d\Bl \cdot \BH =  
+\iint d\BA \cdot \lr{
+\BJ + j \omega \BD
+}
+\end{dmath}
+\begin{dmath}\label{eqn:chapter3Notes:360}
+\iint_{\partial V} d\BA \cdot \BD = \iiint \rho dV
+\end{dmath}
+\begin{dmath}\label{eqn:chapter3Notes:380}
+\iint_{\partial V} d\BA \cdot \BB = \iiint \rho_m dV
+\end{dmath}
+\end{subequations}
 
 \section{Constituativity relations}
 
-See slides.
+For linear isotropic homogeneous materials, the following constitutive relations apply
+
+\begin{itemize}
+\item \( \BD = \epsilon \BE \)
+\item \( \BB = \mu \BH \)
+\item \( \BJ = \sigma \BE \)
+\end{itemize}
+
+where
+FIXME
+% \begin{itemize}
+% \item \( \epsilon = \epsilon \BE \)
+% \item \( \BB = \mu \BH \)
+% \item \( \BJ = \sigma \BE \)
+% \end{itemize}
 
 In AM radio, will see ferrite cores with the inductors, which introduces non-unit \( \mu_r \).  This is to increase the radiation resistance.
 
@@ -160,7 +195,7 @@ Some overview of an approach that uses such tensor Green's functions is outlined
 
 - problem.  Show
 
-\begin{dmath}\label{eqn:chapter3Notes:n}
+\begin{dmath}\label{eqn:chapter3Notes:300}
 \spacegrad^2 \phi_e + k^2 \phi_e = \rho_e/\epsilon
 \end{dmath}
 
