@@ -17,6 +17,10 @@ INCOMPLETE += gaMintro.tex
 #INCOMPLETE += pipeFlowConstPressureGradient.tex
 #INCOMPLETE += qmTwoExamReflection.tex
 #INCOMPLETE += qmTwoR1.tex
+INCOMPLETE += advancedantennaProblemSet2Problem1.tex
+INCOMPLETE += advancedantennaProblemSet2Problem2.tex
+INCOMPLETE += advancedantennaProblemSet2Problem3.tex
+INCOMPLETE += advancedantennaProblemSet2Problem4.tex
 
 INCOMPLETE += stokespost.tex
 

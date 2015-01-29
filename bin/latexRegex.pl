@@ -66,7 +66,7 @@ s/\\intsphere/\\int_0^{2 \\pi} \\int_0^\\pi/g ;
 #s/\\pp(.)/{($1)}/g ;
 #s/\\PP/\\mathcal{P}/g ;
 #s/\\Prad/P_{\\textrm{rad}}/g ;
-#s/\\profE/Prof. Eleftheriades/g;
+s/\\profE/Prof. Eleftheriades/g;
 #s/\\qL/q_{\\mathrm{L}}/g ;
 #s/\\qT/q_{\\mathrm{T}}/g ;
 #s/\\rcap_av/\\rcap_{\\mathrm{av}}/g ;
