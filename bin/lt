@@ -1,0 +1,107 @@
+#! /usr/bin/perl
+
+use strict ;
+use warnings ;
+use Getopt::Long;
+
+my $filename = "WHAT" ;
+my $equation ;
+my $dmath ;
+my $aligned ;
+my $example ;
+my $subequations ;
+my $showUsage = 0 ;
+
+GetOptions( 
+   'file=s'        => \$filename,
+   'example:s'     => \$example,
+   'equation:i'    => \$equation,
+   'subequations!' => \$subequations,
+   'dmath:i'       => \$dmath,
+   'aligned!'      => \$aligned,
+   'help!'         => \$showUsage,
+) ;
+
+if ( $showUsage )
+{
+   die 
+"usage: generate Latex environment Templates, (for use within vim).
+
+:,!~/bin/lt -f % [-example='blah blah'|-equation|-dmath|-aligned|-subequations]
+
+Examples:
+
+Just a dmath env:
+
+:,!~/bin/lt -f % -d
+
+A equation env with an aligned in it
+
+:,!~/bin/lt -f % -eq -a
+
+A makeexample block
+
+:,!~/bin/lt -f % -ex='The linear case.'
+
+The kitchen sink
+
+:,!~/bin/lt -eq -f % -subeq -exa='blah blah' -dmath=3 -aligned
+" ;
+}
+
+$filename =~ s/\.tex$// ;
+$filename =~ s,.*/,, ;
+
+if ( defined $example )
+{
+   print "\\makeexample{$example}{example:$filename:n}{\n" ;
+}
+
+if ( defined $subequations )
+{
+   print "\\begin{subequations}\n\\label{eqn:$filename:n}\n" ;
+}
+
+generateEquation( 'dmath', $dmath ) ;
+
+generateEquation( 'equation', $equation ) ;
+
+if ( defined $subequations )
+{
+   print "\\end{subequations}\n" ;
+}
+
+if ( defined $example )
+{
+   print "} % example\n" ;
+}
+
+exit 0 ;
+
+sub generateAligned
+{
+   if ( defined $aligned )
+   {
+      print "\\begin{aligned}\n" .
+            "\\end{aligned}\n" ;
+   }
+}
+
+sub generateEquation
+{
+   my ($envname, $var) = @_ ;
+
+   if ( defined $var )
+   {
+      $var = 1 if ( $var == 0 ) ;
+
+      for ( my $i = 0 ; $i < $var ; $i++ )
+      {
+         print "\\begin{$envname}\\label{eqn:$filename:n}\n" ;
+
+         generateAligned() ;
+
+         print "\\end{$envname}\n" ;
+      }
+   }
+}
