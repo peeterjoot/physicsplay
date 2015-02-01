@@ -9,12 +9,14 @@ my $equation ;
 my $dmath ;
 my $aligned ;
 my $example ;
+my $problem ;
 my $subequations ;
 my $showUsage = 0 ;
 
 GetOptions( 
    'file=s'        => \$filename,
    'example:s'     => \$example,
+   'problem:s'     => \$problem,
    'equation:i'    => \$equation,
    'subequations!' => \$subequations,
    'dmath:i'       => \$dmath,
@@ -57,6 +59,11 @@ if ( defined $example )
    print "\\makeexample{$example}{example:$filename:n}{\n" ;
 }
 
+if ( defined $problem )
+{
+   print "\\makeproblem{$problem}{problem:$filename:n}{\n" ;
+}
+
 if ( defined $subequations )
 {
    print "\\begin{subequations}\n\\label{eqn:$filename:n}\n" ;
@@ -73,7 +80,13 @@ if ( defined $subequations )
 
 if ( defined $example )
 {
-   print "} % example\n" ;
+   print "} % example\n\n" ;
+}
+
+if ( defined $problem )
+{
+   print "} % problem\n\n" .
+         "\\makeanswer{problem:$filename:n}{\nTODO.\n} % answer\n" ;
 }
 
 exit 0 ;
