@@ -6,10 +6,12 @@ use Getopt::Long;
 
 my $filename = "WHAT" ;
 my $equation ;
+my $boxed ;
 my $dmath ;
 my $aligned ;
 my $example ;
 my $problem ;
+my $section ;
 my $subequations ;
 my $showUsage = 0 ;
 
@@ -17,10 +19,12 @@ GetOptions(
    'file=s'        => \$filename,
    'example:s'     => \$example,
    'problem:s'     => \$problem,
+   'section:s'     => \$section,
    'equation:i'    => \$equation,
    'subequations!' => \$subequations,
+   'boxed'         => \$boxed,
    'dmath:i'       => \$dmath,
-   'aligned!'      => \$aligned,
+   'aligned'       => \$aligned,
    'help!'         => \$showUsage,
 ) ;
 
@@ -54,9 +58,16 @@ The kitchen sink
 $filename =~ s/\.tex$// ;
 $filename =~ s,.*/,, ;
 
+my $printedEquation = 0 ;
+
 if ( defined $example )
 {
    print "\\makeexample{$example}{example:$filename:n}{\n" ;
+}
+
+if ( defined $section )
+{
+   print "\\section{$section}\n" ;
 }
 
 if ( defined $problem )
@@ -69,9 +80,16 @@ if ( defined $subequations )
    print "\\begin{subequations}\n\\label{eqn:$filename:n}\n" ;
 }
 
+generateEquation( 'boxed', $boxed ) ;
+
 generateEquation( 'dmath', $dmath ) ;
 
 generateEquation( 'equation', $equation ) ;
+
+if ( !$printedEquation && defined $aligned )
+{
+   generateAligned( ) ;
+}
 
 if ( defined $subequations )
 {
@@ -103,18 +121,34 @@ sub generateAligned
 sub generateEquation
 {
    my ($envname, $var) = @_ ;
+   my $begin ;
+   my $end ;
+
+   if ( $envname eq 'boxed' )
+   {
+      $begin = "\\boxedEquation{eqn:$filename:n}{\n" .
+               "%\\begin{$envname}\\label{eqn:$filename:n}\n" ;
+      $end = "%\\end{$envname}\n" .
+             "}\n" ;
+   }
+   else
+   {
+      $begin = "\\begin{$envname}\\label{eqn:$filename:n}\n" ;
+      $end = "\\end{$envname}\n" ;
+   }
 
    if ( defined $var )
    {
+      $printedEquation = 1 ;
       $var = 1 if ( $var == 0 ) ;
 
       for ( my $i = 0 ; $i < $var ; $i++ )
       {
-         print "\\begin{$envname}\\label{eqn:$filename:n}\n" ;
+         print $begin ;
 
          generateAligned() ;
 
-         print "\\end{$envname}\n" ;
+         print $end ;
       }
    }
 }
