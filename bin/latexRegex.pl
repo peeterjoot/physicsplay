@@ -4,6 +4,7 @@
 #s/\\bar(.)/\\overbar{$1}/g ;
 #s/\\bark\b/\\overbar{k}/g ;
 #s/\\barm\b/\\overbar{m}/g ;
+#s/\\Be\b/\\Bepsilon/g ;
 #s/\\bkF/\\Bk_{\\mathrm{F}}/g ;
 #s/\\bL/b_{\\mathrm{L}}/g ;
 #s/\\bpF/\\Bp_{\\mathrm{F}}/g ;
@@ -11,7 +12,6 @@
 #s/\\Brm/\\Br - \\Br_m/g;
 #s/\\Brn/\\Br - \\Br_n/g;
 #s/\\bT/b_{\\mathrm{T}}/g ;
-#s/\\btp/\\lr{ \\theta, \\phi }/g ;
 #s/\\bvF/\\Bv_{\\mathrm{F}}/g ;
 #s/\\DC/D_{\\mathrm{C}}/g ;
 #s/\\DD/\\mathcal{D}/g ;
@@ -23,6 +23,7 @@
 #s/\\EC/E_{\\mathrm{C}}/g ;
 #s/\\Ed/E_{\\mathrm{d}}/g ;
 #s/\\ED/E_{\\mathrm{D}}/g ;
+#s/\\ee/\\epsilon/g ;
 #s/\\ee/\\mathcal{E}/g ;
 #s/\\Eg/E_{\\mathrm{g}}/g ;
 #s/\\ES/E_{\\mathrm{S}}/g ;
@@ -42,7 +43,6 @@
 #s/\\ik/{(k)}/g;
 #s/\\ik\+1/{(k+1)}/g;
 #s/\\ik\-1/{(k-1)}/g;
-s/\\intsphere/\\int_0^{2 \\pi} \\int_0^\\pi/g ;
 #s/\\lambdaL/\\lambda_{\\mathrm{L}}/g ;
 #s/\\me/m_{\\mathrm{e}}/g ;
 #s/\\n *(\+|-|\\pm) *(\(\d *, *\d\))(\d)\b/{\\Bn $1 $2, $3}/g ;  # \Bu_\n+(1,0)1 -> \Bu_{\Bn + (1,0), 1}
@@ -66,7 +66,6 @@ s/\\intsphere/\\int_0^{2 \\pi} \\int_0^\\pi/g ;
 #s/\\pp(.)/{($1)}/g ;
 #s/\\PP/\\mathcal{P}/g ;
 #s/\\Prad/P_{\\textrm{rad}}/g ;
-s/\\profE/Prof. Eleftheriades/g;
 #s/\\qL/q_{\\mathrm{L}}/g ;
 #s/\\qT/q_{\\mathrm{T}}/g ;
 #s/\\rcap_av/\\rcap_{\\mathrm{av}}/g ;
@@ -132,5 +131,6 @@ s/\\profE/Prof. Eleftheriades/g;
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-#s/\\Be\b/\\Bepsilon/g ;
-#s/\\ee/\\epsilon/g ;
+s/\\btp/\\lr{ \\theta, \\phi }/g ;
+#s/\\intsphere/\\int_0^{2 \\pi} \\int_0^\\pi/g ;
+s/\\profE/Prof. Eleftheriades/g;
