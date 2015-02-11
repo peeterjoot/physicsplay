@@ -23,6 +23,7 @@ my $doHistory = 0 ;
 my $doMathematica = 0 ;
 my $doMatlab = 0 ;
 my $latex = 0 ;
+my $cdf = 0 ;
 #my $doMathematicaFtp = 0 ;
 my $redacted = 0 ;
 my $filter ;
@@ -42,6 +43,7 @@ GetOptions
    'phy450!'               => \$doPhy450,
    'miscphysics!'          => \$doNonga,
    'latex!'                => \$latex,
+   'cdf!'              => \$cdf,
    'mathematica!'          => \$doMathematica,
    'matlab!'               => \$doMatlab,
    'otherbook!'            => \$doOtherbook,
@@ -66,7 +68,7 @@ GetOptions
                        },
 
    'help'       => sub { die
-"METADATA [-help | -history | -bib] [-mathematica [-latex] | -matlab [-latex] | -other | -phy356 | -classicalmechanics | -phy456 | -phy454 | -phy485 | -phy450 | -phy452 | -phy487 | -gabook | -ece1254 | -ece1229 ] [-redacted] [-filter dirname/]
+"METADATA [-help | -history | -bib] [-mathematica [-latex|-cdf] | -matlab [-latex] | -other | -phy356 | -classicalmechanics | -phy456 | -phy454 | -phy485 | -phy450 | -phy452 | -phy487 | -gabook | -ece1254 | -ece1229 ] [-redacted] [-filter dirname/]
 
 options:
 -history hypertext history.
@@ -339,9 +341,16 @@ elsif ( $doMathematica )
    {
       mathematicaIndexLatex( $filter ) ;
    }
+   elsif ( $cdf )
+   {
+      # generate index of cdf files for one mathematica/ subdir (which is presumed to have a set of standalone
+      # html wrappers for each of the cdfs to be listed).
+      mathematicaCDFIndex( $filter ) ;
+   }
    else
    {
-      mathematicaIndex() ;
+      # This generates my mathematica.html that I update once in a while on the webpage.
+      mathematicaIndex( $filter ) ;
    }
 }
 elsif ( $doMatlab )
@@ -533,6 +542,58 @@ $desc
       {
          unlink "$pathWithoutSuffix.htm" ;
       }
+   }
+
+   print "\n" .
+         "</ul>\n" .
+         "</body>\n" .
+         "</html>\n" .
+         "" ;
+}
+
+sub mathematicaCDFIndex
+{
+   my ($filter) = @_ ;
+
+   print qq(
+<html>
+<body>
+<title>
+Mathematica notebooks for $filter.
+</title>
+
+The <a href="http://www.wolfram.com/cdf-player/">Wolfram CDF player</a> is required to view a number of these notebooks after download.  Enabling plugins in the browser will also be required once the CDF plugin is installed.
+
+<ul>
+) ;
+
+   foreach (sort datesort @mathematica)
+   {
+      my $path = $_->{'path'} ;
+      my $filename = $path ;
+      $filename =~ s,.*/,, ;
+      my $date = $_->{'DATE'} ;
+      my $desc = $_->{'WHAT'} ;
+
+      if ( $filter )
+      {
+         next unless ( $path =~ /$filter/ ) ;
+      }
+
+      my $htmlPath = $path ;
+      next unless ( $htmlPath =~ s/\.cdf$/.html/ ) ;
+
+      next unless ( -e "../mathematica/$htmlPath" ) ;
+
+      $htmlPath =~ s,.*/,, ;
+
+      print qq(
+<li> $date
+<a href="$htmlPath">$htmlPath</a>
+<p>
+$desc
+</li>
+) ;
    }
 
    print "\n" .
