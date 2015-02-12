@@ -1,0 +1,142 @@
+%
+% Copyright © 2012 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+
+\makeproblem{Free particle propagator (2007 PHY355H1F 1f)}{problem:qmIexamPractice:2}{
+
+For a free particle moving in one-dimension, the propagator (i.e. the coordinate representation of the evolution operator),
+
+\begin{equation}\label{eqn:qmIexamPractice2007Dec:1f:10}
+G(x,x';t) = \bra{x} U(t) \ket{x'}
+\end{equation}
+
+is given by
+
+\begin{equation}\label{eqn:qmIexamPractice2007Dec:1f:20}
+G(x,x';t) = \sqrt{\frac{m}{2 \pi i \Hbar t}} e^{i m (x-x')^2/ (2 \Hbar t)}.
+\end{equation}
+} % problem
+
+\makeanswer{problem:qmIexamPractice:2}{
+
+This problem is actually fairly straightforward, but it is nice to work it having had a similar problem set question where we were asked about this time evolution operator matrix element (ie: what it is physical meaning is).  Here we have a concrete example of the form of this matrix operator.
+
+Proceeding directly, we have
+
+\begin{equation}\label{eqn:qmIexamPractice:450}
+\begin{aligned}
+\bra{x} U \ket{x'}
+&=
+\int \braket{x}{p'} \bra{p'} U \ket{p} \braket{p}{x'} dp dp' \\
+&=
+\int u_{p'}(x) \bra{p'} e^{-i P^2 t/(2 m \Hbar)} \ket{p} u_p^\conj(x') dp dp' \\
+&=
+\int u_{p'}(x) e^{-i p^2 t/(2 m \Hbar)} \delta(p-p') u_p^\conj(x') dp dp' \\
+&=
+\int u_{p}(x) e^{-i p^2 t/(2 m \Hbar)} u_p^\conj(x') dp \\
+&=
+\inv{(\sqrt{2 \pi \Hbar})^2} \int e^{i p (x-x')/\Hbar} e^{-i p^2 t/(2 m \Hbar)} dp \\
+&=
+\inv{2 \pi \Hbar} \int e^{i p (x-x')/\Hbar} e^{-i p^2 t/(2 m \Hbar)} dp \\
+&=
+\inv{2 \pi} 
+\int e^{i k (x-x')} e^{-i \Hbar k^2 t/(2 m)} dk \\
+&=
+\inv{2 \pi} 
+\int dk e^{- \left(k^2 \frac{ i \Hbar t}{2m} - i k (x-x')
+\right)
+} \\
+&=
+\inv{2 \pi} 
+\int dk e^{- \frac{ i \Hbar t}{2m}\left(k - i \frac{2m}{i \Hbar t}\frac{(x-x')}{2} \right)^2
+- \frac{i^2 2 m (x-x')^2}{4 i \Hbar t} 
+} \\
+&=
+\inv{2 \pi}  \sqrt{\pi} \sqrt{\frac{2m}{i \Hbar t}}
+e^{\frac{ i m (x-x')^2}{2 \Hbar t}},
+\end{aligned}
+\end{equation}
+
+which is the desired result.  Now, let us look at how this would be used.  We can express our time evolved state using this matrix element by introducing an identity
+
+\begin{equation}\label{eqn:qmIexamPractice:470}
+\begin{aligned}
+\braket{x}{\psi(t)} 
+&=
+\bra{x} U \ket{\psi(0)} \\
+&=
+\int dx' \bra{x} U \ket{x'} \braket{x'}{\psi(0)} \\
+&=
+\sqrt{\frac{m}{2 \pi i \Hbar t}} 
+\int dx' 
+e^{i m (x-x')^2/ (2 \Hbar t)}
+\braket{x'}{\psi(0)} \\
+\end{aligned}
+\end{equation}
+
+This gives us
+\begin{equation}\label{eqn:qmIexamPractice2007Dec:1f:40}
+\psi(x, t)
+=
+\sqrt{\frac{m}{2 \pi i \Hbar t}} 
+\int dx' 
+e^{i m (x-x')^2/ (2 \Hbar t)} \psi(x', 0)
+\end{equation}
+
+However, note that our free particle wave function at time zero is
+
+\begin{equation}\label{eqn:qmIexamPractice2007Dec:1f:50}
+\psi(x, 0) = \frac{e^{i p x/\Hbar}}{\sqrt{2 \pi \Hbar}}
+\end{equation}
+
+So the convolution integral \eqnref{eqn:qmIexamPractice2007Dec:1f:40} does not exist.  We likely have to require that the solution be not a pure state, but instead a superposition of a set of continuous states (a wave packet in position or momentum space related by Fourier transforms).  That is
+
+\begin{equation}\label{eqn:qmIexamPractice2007Dec:1f:60}
+\begin{aligned}
+\psi(x, 0) &= 
+\inv{\sqrt{2 \pi \Hbar}} \int \hat{\psi}(p, 0) e^{i p x/\Hbar} dp \\
+\hat{\psi}(p, 0) &= 
+\inv{\sqrt{2 \pi \Hbar}} \int \psi(x'', 0) e^{-i p x''/\Hbar} dx''
+\end{aligned}
+\end{equation}
+
+The time evolution of this wave packet is then determined by the propagator, and is
+
+\begin{equation}\label{eqn:qmIexamPractice2007Dec:1f:70}
+\psi(x,t) =
+\sqrt{\frac{m}{2 \pi i \Hbar t}} 
+\inv{\sqrt{2 \pi \Hbar}} 
+\int dx' dp
+e^{i m (x-x')^2/ (2 \Hbar t)}
+\hat{\psi}(p, 0) e^{i p x'/\Hbar} ,
+\end{equation}
+
+or in terms of the position space wave packet evaluated at time zero
+
+\begin{equation}\label{eqn:qmIexamPractice2007Dec:1f:80}
+\psi(x,t) =
+\sqrt{\frac{m}{2 \pi i \Hbar t}}
+\inv{2 \pi}
+\int dx' dx'' dk
+e^{i m (x-x')^2/ (2 \Hbar t)}
+e^{i k (x' - x'')} \psi(x'', 0)
+\end{equation}
+
+We see that the propagator also ends up with a Fourier transform structure, and we have
+
+\begin{equation}\label{eqn:qmIexamPractice2007Dec:1f:90}
+\begin{aligned}
+\psi(x,t) &= \int dx' U(x, x' ; t) \psi(x', 0) \\
+U(x, x' ; t) &=
+\sqrt{\frac{m}{2 \pi i \Hbar t}}
+\inv{2 \pi}
+\int du dk
+e^{i m (x - x' - u)^2/ (2 \Hbar t)}
+e^{i k u }
+\end{aligned}
+\end{equation}
+
+Does that Fourier transform exist?  I had not be surprised if it ended up with a delta function representation.  I will hold off attempting to evaluate and reduce it until another day.
+
+} % answer
