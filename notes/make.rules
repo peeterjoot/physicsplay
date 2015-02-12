@@ -1,8 +1,9 @@
 LOCAL_COPIED_FILES += $(addprefix figures/,$(LOCAL_FIGURE_FILES))
 LOCAL_COPIED_FILES += $(addprefix listings/,$(LOCAL_LISTING_FILES))
 
-LOCAL_FRONTBACK_FILES := $(foreach e,$(notdir $(ORIG_FRONTBACK_FILES)),FrontBackmatter/$(e))
-LOCAL_COPIED_FILES += $(LOCAL_FRONTBACK_FILES)
+LOCAL_CT_FRONTBACK_FILES := $(foreach e,$(notdir $(CLASSICTHESIS_FRONTBACK_FILES)),FrontBackmatter/$(e))
+LOCAL_MY_CT_FRONTBACK_FILES := $(foreach e,$(notdir $(MY_CLASSICTHESIS_FRONTBACK_FILES)),FrontBackmatter/$(e))
+LOCAL_COPIED_FILES += $(LOCAL_CT_FRONTBACK_FILES) $(LOCAL_MY_CT_FRONTBACK_FILES)
 
 BOOKDEPENDENCIES := $(foreach ext,$(DEPENDENCYEXTENSIONS),$(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.$(ext))))
 BOOKDEPENDENCIES := $(foreach ext,$(DEPENDENCYEXTENSIONS),$(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.$(ext))))
@@ -88,8 +89,11 @@ cronology.tex : ../METADATA
 $(LOCAL_FILES) :
 	cp $(filter %$@, $(ORIG_FILES)) $@
 
-$(LOCAL_FRONTBACK_FILES) :
-	cp $(filter %$@, $(ORIG_FRONTBACK_FILES)) $@
+$(LOCAL_CT_FRONTBACK_FILES) : %.tex : ../classicthesis/%.tex
+	cp $< $@
+
+$(LOCAL_MY_CT_FRONTBACK_FILES) : %.tex : ../classicthesis.mine/%.tex
+	cp $< $@
 
 %.sty : ../%.sty
 	cp $^ $@
