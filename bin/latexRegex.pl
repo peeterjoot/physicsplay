@@ -12,6 +12,7 @@
 #s/\\Brm/\\Br - \\Br_m/g;
 #s/\\Brn/\\Br - \\Br_n/g;
 #s/\\bT/b_{\\mathrm{T}}/g ;
+#s/\\btp/\\lr{ \\theta, \\phi }/g ;
 #s/\\bvF/\\Bv_{\\mathrm{F}}/g ;
 #s/\\DC/D_{\\mathrm{C}}/g ;
 #s/\\DD/\\mathcal{D}/g ;
@@ -43,6 +44,7 @@
 #s/\\ik/{(k)}/g;
 #s/\\ik\+1/{(k+1)}/g;
 #s/\\ik\-1/{(k-1)}/g;
+#s/\\intsphere/\\int_0^{2 \\pi} \\int_0^\\pi/g ;
 #s/\\lambdaL/\\lambda_{\\mathrm{L}}/g ;
 #s/\\me/m_{\\mathrm{e}}/g ;
 #s/\\n *(\+|-|\\pm) *(\(\d *, *\d\))(\d)\b/{\\Bn $1 $2, $3}/g ;  # \Bu_\n+(1,0)1 -> \Bu_{\Bn + (1,0), 1}
@@ -131,6 +133,6 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-s/\\btp/\\lr{ \\theta, \\phi }/g ;
-#s/\\intsphere/\\int_0^{2 \\pi} \\int_0^\\pi/g ;
+s/\\aut/{\\textrm{AUT}}/g;
+s/\\sg/{\\textrm{sg}}/g;
 s/\\profE/Prof. Eleftheriades/g;
