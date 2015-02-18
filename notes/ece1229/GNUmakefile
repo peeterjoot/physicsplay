@@ -17,6 +17,7 @@ SOURCE_DIRS += $(FIGURES)
 
 #GENERATED_SOURCES += matlab.tex 
 GENERATED_SOURCES += mathematica.tex 
+GENERATED_SOURCES += julia.tex 
 
 #EPS_FILES := $(wildcard $(FIGURES)/report/*.eps)
 #PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))

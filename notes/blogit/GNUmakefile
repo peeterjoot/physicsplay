@@ -17,11 +17,11 @@ INCOMPLETE += gaMintro.tex
 #INCOMPLETE += pipeFlowConstPressureGradient.tex
 #INCOMPLETE += qmTwoExamReflection.tex
 #INCOMPLETE += qmTwoR1.tex
-INCOMPLETE += advancedantennaProblemSet2Problem1.tex
-INCOMPLETE += advancedantennaProblemSet2Problem2.tex
-INCOMPLETE += advancedantennaProblemSet2Problem3.tex
-INCOMPLETE += advancedantennaProblemSet2Problem4.tex
-INCOMPLETE += advancedantennaProblemSet2Problem5.tex
+INCOMPLETE += advancedantennaProblemSet3Problem1.tex
+INCOMPLETE += advancedantennaProblemSet3Problem2.tex
+INCOMPLETE += advancedantennaProblemSet3Problem3.tex
+INCOMPLETE += advancedantennaProblemSet3Problem4.tex
+#INCOMPLETE += advancedantennaProblemSet3Problem5.tex
 
 INCOMPLETE += stokespost.tex
 
@@ -87,11 +87,11 @@ local : $(LOCAL_FILES)
 $(LOCAL_FILES) : 
 	cp $(filter %$@, $(ORIG_FILES)) $@
 
-advancedantennaProblemSet2.pdf : advancedantennaProblemSet2Problem1.tex
-advancedantennaProblemSet2.pdf : advancedantennaProblemSet2Problem2.tex
-advancedantennaProblemSet2.pdf : advancedantennaProblemSet2Problem3.tex
-advancedantennaProblemSet2.pdf : advancedantennaProblemSet2Problem4.tex
-advancedantennaProblemSet2.pdf : advancedantennaProblemSet2Problem5.tex
+advancedantennaProblemSet3.pdf : advancedantennaProblemSet3Problem1.tex
+advancedantennaProblemSet3.pdf : advancedantennaProblemSet3Problem2.tex
+advancedantennaProblemSet3.pdf : advancedantennaProblemSet3Problem3.tex
+advancedantennaProblemSet3.pdf : advancedantennaProblemSet3Problem4.tex
+#advancedantennaProblemSet3.pdf : advancedantennaProblemSet3Problem5.tex
 
 gaBasics.pdf : gaBasics.tex
 

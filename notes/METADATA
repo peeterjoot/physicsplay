@@ -22,6 +22,7 @@ my $doBib = 0 ;
 my $doHistory = 0 ;
 my $doMathematica = 0 ;
 my $doMatlab = 0 ;
+my $doJulia = 0 ;
 my $latex = 0 ;
 my $cdf = 0 ;
 #my $doMathematicaFtp = 0 ;
@@ -46,6 +47,7 @@ GetOptions
    'cdf!'              => \$cdf,
    'mathematica!'          => \$doMathematica,
    'matlab!'               => \$doMatlab,
+   'julia!'                => \$doJulia,
    'otherbook!'            => \$doOtherbook,
    'redacted'              => \$redacted,
    'filter=s'              => \$filter,
@@ -68,7 +70,7 @@ GetOptions
                        },
 
    'help'       => sub { die
-"METADATA [-help | -history | -bib] [-mathematica [-latex|-cdf] | -matlab [-latex] | -other | -phy356 | -classicalmechanics | -phy456 | -phy454 | -phy485 | -phy450 | -phy452 | -phy487 | -gabook | -ece1254 | -ece1229 ] [-redacted] [-filter dirname/]
+"METADATA [-help | -history | -bib] [-mathematica [-latex|-cdf] | -matlab [-latex] | -julia | -other | -phy356 | -classicalmechanics | -phy456 | -phy454 | -phy485 | -phy450 | -phy452 | -phy487 | -gabook | -ece1254 | -ece1229 ] [-redacted] [-filter dirname/]
 
 options:
 -history hypertext history.
@@ -95,6 +97,7 @@ require "phy450/METADATA" ;
 require "otherbook/METADATA" ;
 require "../mathematica/METADATA" ;
 require "../matlab/METADATA" ;
+require "../julia/METADATA" ;
 
 my @gabook = gabookMeta() ;
 my @miscphysics = miscMeta() ;
@@ -111,6 +114,7 @@ my @phy450 = phy450Meta() ;
 my @otherbook = otherbookMeta() ;
 my @mathematica = mathematicaMeta() ;
 my @matlab = matlabMeta() ;
+my @julia = juliaMeta() ;
 
 if ( !defined $filter )
 {
@@ -362,6 +366,17 @@ elsif ( $doMatlab )
 #   else
 #   {
 #      matlabIndex() ;
+#   }
+}
+elsif ( $doJulia )
+{
+   if ( $latex )
+   {
+      juliaIndexLatex( $filter ) ;
+   }
+#   else
+#   {
+#      juliaIndex() ;
 #   }
 }
 #elsif ( $doMathematicaFtp )
@@ -699,7 +714,7 @@ sub matlabIndexLatex
 %-------------------------------------------------------
 These Matlab notebooks, some just trivial ones used to generate figures, others more elaborate, and perhaps some even polished, can be found in
 
-\\href{$urlpath}{$urlpath}.
+\\href{https://github.com/peeterjoot/matlab}{https://github.com/peeterjoot/matlab}.
 
 These notebooks are text files, but a matlab product is required to execute them.
 " ;
@@ -760,6 +775,83 @@ my $out = "
          $reference = "$path" ;
          $reference =~ s,ece1254/proj/,, ;
       }
+
+      if ( !$redacted or ($redacted and !defined $problemSetSolution) )
+      {
+         $out .= qq(\\item $phantomsection $withdate $reference
+
+$desc
+) ;
+      }
+   }
+
+   print $prologue1 ;
+
+   print "$out
+
+\\end{itemize}
+%-------------------------------------------------------
+" ;
+}
+
+sub juliaIndexLatex
+{
+   my ($filter) = @_ ;
+
+   my $urlpath = "https://raw.github.com/peeterjoot/julia/master/" ;
+
+   my $withHyperlinks = 1 ;
+
+   my $prologue1 = "
+%-------------------------------------------------------
+These Julia notebooks, can be found in
+
+\\href{https://github.com/peeterjoot/julia}{https://github.com/peeterjoot/julia}.
+
+These notebooks are text files.  The julia program, available freely at \\href{www.julialang.org}{www.julialang.org}, is required to execute them.
+" ;
+
+   my $out = "
+\\begin{itemize}
+" ;
+
+   foreach ( sort datesort @julia )
+   {
+      my $path = $_->{'path'} ;
+      my $date = $_->{'DATE'} ;
+      my $desc = $_->{'WHAT'} ;
+
+      if ( $filter =~ m@/proj@ )
+      {
+         my $short = $_->{'SHORT'} ;
+         if ( defined $short )
+         {
+            $desc = $short ;
+         }
+
+         my $filterif = $_->{'FILTERIF'} ;
+
+         if ( defined $filterif )
+         {
+            next ;
+         }
+      }
+
+      if ( $filter )
+      {
+         next unless ( $path =~ /$filter/ ) ;
+      }
+
+      my $fullpath = "https://raw.github.com/peeterjoot/julia/master/$path" ;
+
+      my $label = $path ;
+      $label =~ s,/,:,g ;
+
+      my $problemSetSolution = $_->{'PROBLEMSET'} ;
+      my $reference = "\\href{$fullpath}{$path}" ;
+      my $withdate = "$date" ;
+      
+      my $phantomsection = "\\phantomsection \\label{path:$label}" ;
 
       if ( !$redacted or ($redacted and !defined $problemSetSolution) )
       {
@@ -949,6 +1041,7 @@ sub printHistory
       print qq($date <a href="$url">$title</a><br>$what<br>\n\n) ;
    }
 }
+
 
 
 
