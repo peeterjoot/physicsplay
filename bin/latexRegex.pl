@@ -135,6 +135,6 @@
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
 #s/\\aut/{\\textrm{AUT}}/g;
 #s/\\sg/{\\textrm{sg}}/g;
-#s/\\profE/Prof. Eleftheriades/g;
+s/\\profE/Prof. Eleftheriades/g;
 s/\^a/^{(a)}/g;
 s/\^b/^{(b)}/g;
