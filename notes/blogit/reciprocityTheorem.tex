@@ -1,0 +1,185 @@
+%
+% Copyright © 2015 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{reciprocityTheorem}
+\renewcommand{\dirname}{notes/FIXMEwheretodirname/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+\usepackage{peeters_layout_exercise}
+
+\beginArtNoToc
+
+\generatetitle{Reciprocity theorem}
+%\chapter{Reciprocity theorem}
+%\label{chap:reciprocityTheorem}
+%\section{Motivation}
+%\section{Guts}
+
+The class slides presented a derivation of the \textAndIndex{reciprocity theorem}, a theorem that contained the integral of
+
+\begin{equation}\label{eqn:reciprocityTheorem:360}
+\int \lr{ \BE^{(a)} \cross \BH^{(b)} - \BE^{(b)} \cross \BH^{(a)} } \cdot d\BS = \cdots
+\end{equation}
+
+over a surface, where the RHS was a volume integral involving the fields and (electric and magnetic) current sources.  
+The idea was to consider two different source loading configurations of the same system, and to show that the fields and sources in the two configurations can be related.
+
+To derive the result in question, a simple way to start is to look at the divergence of the difference of cross products above.  This will require the phasor form of the two cross product Maxwell's equations
+
+\begin{subequations}
+\label{eqn:reciprocityTheorem:99}
+\begin{dmath}\label{eqn:reciprocityTheorem:100}
+\spacegrad \cross \BE = - (\BM + j \omega \mu_0 \BH) % \BM^{(a)} + j \omega \mu_0 \BH^{(a)}
+\end{dmath}
+\begin{dmath}\label{eqn:reciprocityTheorem:120}
+\spacegrad \cross \BH = \BJ + j \omega \epsilon_0 \BE, % \BJ^{(a)} + j \omega \epsilon_0 \BE^{(a)}
+\end{dmath}
+\end{subequations}
+
+so the divergence is
+
+\begin{dmath}\label{eqn:reciprocityTheorem:380}
+\begin{aligned}
+\spacegrad \cdot 
+\lr{ \BE^{(a)} \cross \BH^{(b)} - \BE^{(b)} \cross \BH^{(a)} }
+&=
+\BH^{(b)} \cdot \lr{ \spacegrad \cross \BE^{(a)} } -\BE^{(a)} \cdot \lr{ \spacegrad \cross \BH^{(b)} } \\
+&-\BH^{(a)} \cdot \lr{ \spacegrad \cross \BE^{(b)} } +\BE^{(b)} \cdot \lr{ \spacegrad \cross \BH^{(a)} } \\
+&=
+-\BH^{(b)} \cdot \lr{ \BM^{(a)} + j \omega \mu_0 \BH^{(a)} } -\BE^{(a)} \cdot \lr{ \BJ^{(b)} + j \omega \epsilon_0 \BE^{(b)} } \\
+&+\BH^{(a)} \cdot \lr{ \BM^{(b)} + j \omega \mu_0 \BH^{(b)} } +\BE^{(b)} \cdot \lr{ \BJ^{(a)} + j \omega \epsilon_0 \BE^{(a)} }.
+\end{aligned}
+\end{dmath}
+
+The non-source terms cancel, leaving
+
+%\begin{dmath}\label{eqn:reciprocityTheorem:440}
+\boxedEquation{eqn:reciprocityTheorem:440}{
+\spacegrad \cdot 
+\lr{ \BE^{(a)} \cross \BH^{(b)} - \BE^{(b)} \cross \BH^{(a)} }
+=
+-\BH^{(b)} \cdot \BM^{(a)} -\BE^{(a)} \cdot \BJ^{(b)} 
++\BH^{(a)} \cdot \BM^{(b)} +\BE^{(b)} \cdot \BJ^{(a)} 
+}
+%\end{dmath}
+
+\section{far field integral form}
+Employing the divergence theorem over a sphere the identity above takes the form
+
+\begin{dmath}\label{eqn:reciprocityTheorem:480}
+\int_S
+\lr{ \BE^{(a)} \cross \BH^{(b)} - \BE^{(b)} \cross \BH^{(a)} } \cdot \rcap dS
+=
+\int_V \lr{
+-\BH^{(b)} \cdot \BM^{(a)} -\BE^{(a)} \cdot \BJ^{(b)} 
++\BH^{(a)} \cdot \BM^{(b)} +\BE^{(b)} \cdot \BJ^{(a)} 
+}
+dV
+\end{dmath}
+
+In the far field, the cross products are strictly radial.  That surface integral can be written as
+
+\begin{dmath}\label{eqn:reciprocityTheorem:500}
+\int_S
+\lr{ \BE^{(a)} \cross \BH^{(b)} - \BE^{(b)} \cross \BH^{(a)} } \cdot \rcap dS
+=
+\inv{\mu_0}
+\int_S
+\lr{ \BE^{(a)} \cross \lr{ \rcap \cross \BE^{(b)}} - \BE^{(b)} \cross \lr{ \rcap \cross \BE^{(a)}} } \cdot \rcap dS
+=
+\inv{\mu_0}
+\int_S
+\lr{ \BE^{(a)} \cdot \BE^{(b)} - \BE^{(b)} \cdot \BE^{(a)}
+}
+dS
+= 0
+\end{dmath}
+
+The above expansions used \cref{eqn:reciprocityTheorem:540} to expand the terms of the form
+
+\begin{dmath}\label{eqn:reciprocityTheorem:560}
+\lr{ \BA \cross \lr{ \rcap \cross \BC } } \cdot \rcap 
+= \BA \cdot \BC -\lr{ \BA \cdot \rcap } \lr{ \BC \cdot \rcap },
+\end{dmath}
+
+in which only the first dot product survives due to the transverse nature of the fields.
+
+So in the far field we have a direct relation between the fields and sources of two source configurations of the same system of the form
+
+\boxedEquation{eqn:reciprocityTheorem:580}{
+%\begin{dmath}\label{eqn:reciprocityTheorem:580}
+%\boxed{
+\int_V \lr{
+\BH^{(a)} \cdot \BM^{(b)} +\BE^{(b)} \cdot \BJ^{(a)} 
+}
+dV
+=
+\int_V \lr{
+\BH^{(b)} \cdot \BM^{(a)} +\BE^{(a)} \cdot \BJ^{(b)} 
+}
+dV
+%}
+%\end{dmath}
+}
+
+\section{Application to antenna}
+
+This is the underlying reason that we are able to pose the problem of what an antenna can recieve, in terms of what the antenna can transmit.
+
+\section{Identities}
+
+\makelemma{Divergence of a cross product}{thm:polarizationReview:400}{
+\begin{equation*}
+\spacegrad \cdot \lr{ \BA \cross \BB } = 
+\BB \lr{\spacegrad \cross \BA}
+-\BA \lr{\spacegrad \cross \BB}.
+\end{equation*}
+}
+
+Proof.
+
+\begin{dmath}\label{eqn:reciprocityTheorem:420}
+\spacegrad \cdot \lr{ \BA \cross \BB } 
+= 
+\partial_a \epsilon_{a b c} A_b B_c
+= 
+\epsilon_{a b c} (\partial_a A_b )B_c
+-
+\epsilon_{b a c} A_b (\partial_a B_c)
+=
+\BB \cdot (\spacegrad \cross \BA)
+-\BB \cdot (\spacegrad \cross \BA).
+\end{dmath}
+
+\makelemma{Triple cross product dotted}{thm:polarizationReview:520}{
+\begin{equation*}
+\lr{ \BA \cross \lr{ \BB \cross \BC } } \cdot \BD
+=
+\lr{ \BA \cdot \BC } \lr{ \BB \cdot \BD }
+-\lr{ \BA \cdot \BB } \lr{ \BC \cdot \BD }
+\end{equation*}
+}
+
+Proof.
+
+\begin{dmath}\label{eqn:reciprocityTheorem:540}
+\lr{ \BA \cross \lr{ \BB \cross \BC } } \cdot \BD
+=
+\epsilon_{a b c} A_b \epsilon_{r s c } B_r C_s D_a
+=
+\delta_{[a b]}^{r s}
+A_b B_r C_s D_a
+=
+A_s B_r C_s D_r
+-A_r B_r C_s D_s
+= 
+\lr{ \BA \cdot \BC } \lr{ \BB \cdot \BD }
+-\lr{ \BA \cdot \BB } \lr{ \BC \cdot \BD }.
+\end{dmath}
+
+%\EndArticle
+\EndNoBibArticle
