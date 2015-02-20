@@ -1,0 +1,240 @@
+%
+% Copyright © 2015 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{energyMomentumWithMagneticSources}
+\renewcommand{\dirname}{notes/ece1229/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{macros_bm}
+
+\beginArtNoToc
+
+\generatetitle{energy momentum conservation with magnetic sources}
+%\chapter{energy momentum conservation with magnetic sources}
+%\label{chap:energyMomentumWithMagneticSources}
+%\section{Motivation}
+%\section{Guts}
+
+\section{Maxwell's equations with magnetic sources}
+
+The form of Maxwell's equations to be used here are expressed in terms of \( \bcE \) and \( \bcH \), assume linear media, and do not assume a phasor representation
+
+\begin{subequations}
+\label{eqn:energyMomentumWithMagneticSources:100}
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:120}
+\spacegrad \cross \bcE = - \bcM - \mu_0 \PD{t}{\bcH}
+\end{dmath}
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:140}
+\spacegrad \cross \bcH = \bcJ + \epsilon_0 \PD{t}{\bcE}
+\end{dmath}
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:160}
+\spacegrad \cdot \bcE = \rho/\epsilon_0
+\end{dmath}
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:180}
+\spacegrad \cdot \bcH = \rho_m/\mu_0.
+\end{dmath}
+\end{subequations}
+
+\section{Energy momentum conservation}
+
+With magnetic sources the Poynting and energy conservation relationship has to be adjusted slightly.  Let's derive that result, starting with the divergence of the Poynting vector
+
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:20}
+\spacegrad \cdot \lr{ \bcE \cross \bcH }
+=
+\bcH \cdot \lr{ \spacegrad \cross \bcE }
+-\bcE \cdot \lr{ \spacegrad \cross \bcH }
+=
+-\bcH \cdot \lr{ \mu_0 \partial_t \bcH + \bcM }
+-\bcE \cdot \lr{ \bcJ + \epsilon_0 \partial_t \bcE }
+=
+- \mu_0 \bcH \cdot \partial_t \bcH - \bcH \cdot \bcM
+- \epsilon_0 \bcE \cdot \partial_t \bcE - \bcE \cdot \bcJ,
+\end{dmath}
+
+or
+
+\boxedEquation{eqn:energyMomentumWithMagneticSources:40}{
+%\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:40}
+%\boxed{
+\inv{2} \PD{t}{} \lr{ \epsilon_0 \bcE^2 + \mu_0 \bcH^2 }
++
+\spacegrad \cdot \lr{ \bcE \cross \bcH }
+=
+- \bcH \cdot \bcM
+- \bcE \cdot \bcJ.
+%\end{dmath}
+}
+
+The usual relationship is only modified by one additional term.  Recall from electrodynamics \citep{phy450:relativisticElectrodynamicsL23} that \cref{eqn:energyMomentumWithMagneticSources:40} (when the magnetic current density \( \bcM \) is omitted) is just one of four components of the energy momentum conservation equation
+
+\begin{equation}\label{eqn:energyMomentumWithMagneticSources:80}
+\partial_\mu T^{\mu \nu} = - \inv{c} F^{\nu \lambda} j_\lambda.
+\end{equation}
+
+Note that \cref{eqn:energyMomentumWithMagneticSources:80} was likely not in SI units.  The next task is to generalize this classical relationship to incorporate the magnetic sources used in antenna theory.  With an eye towards the relativistic nature of the energy momentum tensor, it is natural to assume that the remainder of the energy momentum tensor conservation relation can be found by taking the time derivatives of the Poynting vector.
+
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:200}
+\PD{t}{} \lr{ \bcE \cross \bcH }
+=
+\PD{t}{\bcE} \cross \bcH 
++ \bcE \cross \PD{t}{\bcH }
+=
+\inv{\epsilon_0}
+\lr{ \spacegrad \cross \bcH - \bcJ } \cross \bcH
++ 
+\inv{\mu_0} 
+\bcE \cross 
+\lr{
+-
+\spacegrad \cross \bcE - \bcM },
+\end{dmath}
+
+or
+
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:220}
+\inv{c^2} \PD{t}{} \lr{ \bcE \cross \bcH }
++
+\mu_0 \bcJ \cross \bcH
++\epsilon_0
+\bcE \cross \bcM
+=
+-\mu_0 \bcH \cross \lr{ \spacegrad \cross \bcH } 
+- \epsilon_0 \bcE \cross \lr{ \spacegrad \cross \bcE }.
+\end{dmath}
+
+The \( \mu_0 \bcJ \cross \bcH = \bcJ \cross \BB \) is a portion of the Lorentz force equation in its density form.  To put 
+\cref{eqn:energyMomentumWithMagneticSources:220} into the desired form, the remainder of the 
+Lorentz force force equation
+\( \rho \bcE = \epsilon_0 \bcE \spacegrad \cdot \bcE \) must be added to both sides.  To extend the magnetic current term to its full dual (magnetic) Lorentz force structure, the quantity to add to both sides is \( \rho_m \bcH = \mu_0 \bcH \spacegrad \cdot \bcH \).  Performing these manipulations gives
+
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:240}
+\inv{c^2} \PD{t}{} \lr{ \bcE \cross \bcH }
++
+\rho \BE + \mu_0 \bcJ \cross \bcH
++ \rho_m \bcH 
++ \epsilon_0 \bcE \cross \bcM
+=
+\mu_0 
+\lr{
+\bcH \spacegrad \cdot \bcH
+-\bcH \cross \lr{ \spacegrad \cross \bcH } 
+}
++ \epsilon_0 
+\lr{
+ \bcE \spacegrad \cdot \bcE
+-
+\bcE \cross \lr{ \spacegrad \cross \bcE }
+}.
+\end{dmath}
+
+It seems slightly surprising the sign of the magnetic equivalent of the Lorentz force terms have an alternation of sign.  This is, however, consistent with the duality transformations outlined in (\citep{} table 3.2)
+
+\begin{subequations}
+\label{eqn:energyMomentumWithMagneticSources:260}
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:280}
+\rho \rightarrow \rho_m
+\end{dmath}
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:300}
+\bcJ \rightarrow \bcM
+\end{dmath}
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:320}
+\mu_0 \rightarrow \epsilon_0
+\end{dmath}
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:340}
+\bcE \rightarrow \bcH
+\end{dmath}
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:360}
+\bcH \rightarrow -\bcE,
+\end{dmath}
+\end{subequations}
+
+for
+
+\begin{equation}\label{eqn:energyMomentumWithMagneticSources:380}
+\rho \BE + \mu_0 \bcJ \cross \bcH
+\rightarrow
+\rho_m \BH + \epsilon_0 \bcM \cross \lr{ -\bcE}
+=
+\rho_m \BH + \epsilon_0 \bcE \cross \bcM.
+\end{equation}
+
+Comfortable that the LHS has the desired structure, the RHS can expressed as a divergence.  Just expanding one of the differences of vector products on the RHS does not obviously show that this is possible, for example
+
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:400}
+\Be_a \cdot 
+\lr{
+\bcE \spacegrad \cdot \bcE
+-
+\bcE \cross \lr{ \spacegrad \cross \bcE }
+}
+=
+E_a \partial_b E_b
+-
+\epsilon_{a b c} E_b \epsilon_{c r s} \partial_r E_s
+=
+E_a \partial_b E_b
+-
+\delta_{a b}^{[r s]} E_b \partial_r E_s
+=
+E_a \partial_b E_b
+-
+E_b \lr{ 
+\partial_a E_b
+-\partial_b E_a
+}
+=
+  E_a \partial_b E_b
+- E_b \partial_a E_b
++ E_b \partial_b E_a.
+\end{dmath}
+
+This happens to equal
+
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:420}
+\spacegrad \cdot \lr{ \lr{E_a E_b - \inv{2} \delta_{a b} \bcE^2 } \Be_b }
+=
+\partial_b 
+\lr{E_a E_b - \inv{2} \delta_{a b} \bcE^2 } 
+=
+E_b \partial_b E_a
++ E_a \partial_b E_b
+-
+\inv{2} \delta_{a b} 2 E_c \partial_b E_c
+=
+  E_b \partial_b E_a
++ E_a \partial_b E_b
+- E_b \partial_a E_b.
+\end{dmath}
+
+This allows a final formulation of the remaining energy momentum conservation equation in its divergence form.  Let
+
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:440}
+T^{a b} = 
+\epsilon_0 \lr{ E_a E_b - \inv{2} \delta_{a b} \bcE^2 }
++ \mu_0 \lr{ H_a H_b - \inv{2} \delta_{a b} \bcH^2 },
+\end{dmath}
+
+so that the remaining energy momentum conservation equation, extended to both electric and magnetic sources, is
+
+\boxedEquation{eqn:energyMomentumWithMagneticSources:460}{
+%\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:460}
+%\boxed{
+\inv{c^2} \PD{t}{} \lr{ \bcE \cross \bcH }
++
+\rho \BE + \mu_0 \bcJ \cross \bcH
++ \rho_m \bcH 
++ \epsilon_0 \bcE \cross \bcM
+=
+\Be_a \spacegrad \cdot \lr{ T^{a b} \Be_b }.
+}
+%\end{dmath}
+
+On the LHS we have the rate of change of momentum density, the electric Lorentz force density terms, the dual (magnetic) Lorentz force density terms, and on the RHS the the momentum flux terms.
+
+\EndArticle
