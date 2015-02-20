@@ -15,7 +15,7 @@
 %\beginArtNoToc
 %
 %\generatetitle{energy momentum conservation with magnetic sources}
-\section{Energy momentum conservation}
+%\section{Energy momentum conservation}
 %%\label{chap:energyMomentumWithMagneticSources}
 %%\section{Motivation}
 %\section{Guts}
@@ -100,14 +100,15 @@ Note that \cref{eqn:energyMomentumWithMagneticSources:80} was likely not in SI u
 or
 
 \begin{dmath}\label{eqn:energyMomentumWithMagneticSources:220}
+\begin{aligned}
 \inv{c^2} \PD{t}{} \lr{ \bcE \cross \bcH }
-+
-\mu_0 \bcJ \cross \bcH
-+\epsilon_0
-\bcE \cross \bcM
-=
--\mu_0 \bcH \cross \lr{ \spacegrad \cross \bcH } 
-- \epsilon_0 \bcE \cross \lr{ \spacegrad \cross \bcE }.
+&
++ \mu_0 \bcJ \cross \bcH
++ \epsilon_0 \bcE \cross \bcM \\
+&=
+-\mu_0 \bcH \cross \lr{ \spacegrad \cross \bcH }  \\
+&\quad - \epsilon_0 \bcE \cross \lr{ \spacegrad \cross \bcE }.
+\end{aligned}
 \end{dmath}
 
 The \( \mu_0 \bcJ \cross \bcH = \bcJ \cross \BB \) is a portion of the Lorentz force equation in its density form.  To put 
@@ -228,15 +229,266 @@ so that the remaining energy momentum conservation equation, extended to both el
 %\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:460}
 %\boxed{
 \inv{c^2} \PD{t}{} \lr{ \bcE \cross \bcH }
-+
-\rho \BE + \mu_0 \bcJ \cross \bcH
-+ \rho_m \bcH 
-+ \epsilon_0 \bcE \cross \bcM
++ \lr{ \rho \BE + \mu_0 \bcJ \cross \bcH }
++ \lr{ \rho_m \bcH + \epsilon_0 \bcE \cross \bcM }
 =
 \Be_a \spacegrad \cdot \lr{ T^{a b} \Be_b }.
 }
 %\end{dmath}
 
 On the LHS we have the rate of change of momentum density, the electric Lorentz force density terms, the dual (magnetic) Lorentz force density terms, and on the RHS the the momentum flux terms.
+
+\paragraph{In the frequency domain}
+
+In the frequency domain with \( \bcE = \Real \BE e^{j \omega t}, \bcH = \Real \BH e^{j \omega t} \).  Using the electric field dot product as an example, note that we can write
+
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:480}
+\bcE = \inv{2} \lr{ \BE e^{j \omega t} + \BE^\conj e^{-j \omega t} },
+\end{dmath}
+
+so
+
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:500}
+\bcE^2 
+= 
+\inv{2} \lr{ \BE e^{j \omega t} + \BE^\conj e^{-j \omega t} }
+\cdot
+\inv{2} \lr{ \BE e^{j \omega t} + \BE^\conj e^{-j \omega t} }
+=
+\inv{4} \lr{ 
+\BE^2 e^{2 j \omega t}
++ \BE \cdot \BE^\conj + \BE^\conj \cdot \BE
++\lr{\BE^\conj}^2 e^{-2 j \omega t}
+}
+=
+\inv{2} \Real
+\lr{
+\BE \cdot \BE^\conj 
++
+\BE^2 e^{2 j \omega t}
+}.
+\end{dmath}
+
+Similarly, for the cross product
+
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:540}
+\bcE \cross \bcH
+=
+\inv{4}
+\lr{
+\BE \cross \BH e^{2 j \omega t}
++ \BE \cross \BH^\conj + \BE^\conj \cross \BH
++ \lr{ \BE^\conj \cross \BH^\conj } e^{-2 j \omega t}
+}
+=
+\inv{2}
+\Real
+\lr{
+\BE \cross \BH^\conj 
++
+\BE \cross \BH e^{2 j \omega t}
+}.
+\end{dmath}
+
+Given phasor representations of the sources \( \bcM = \BM e^{j \omega t}, \bcJ = \BJ e^{j \omega t} \), \cref{eqn:energyMomentumWithMagneticSources:40} can be recast into (a messy) phasor form
+
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:560}
+\begin{aligned}
+\inv{2} &\Real \inv{2} \PD{t}{} \lr{ 
+\epsilon_0 \BE \cdot \BE^\conj 
++ \mu_0 \BH \cdot \BH^\conj 
++ \epsilon_0 \BE^2 e^{ 2 j \omega t}
++ \mu_0 \BH^2 e^{ 2 j \omega t}
+} \\
+&+
+\inv{2} \Real \spacegrad \cdot \lr{ 
+\BE \cross \BH^\conj
++\BE \cross \BH e^{ 2 j \omega t}
+} \\
+&=
+\inv{2} \Real
+\lr{
+- \BH \cdot \BM^\conj
+- \BE \cdot \BJ^\conj
+- \BH \cdot \BM e^{2 j \omega t}
+- \BE \cdot \BJ e^{2 j \omega t}
+}.
+\end{aligned}
+\end{dmath}
+
+In particular, when averaged over one period, the oscillatory terms vanish.  The time averaged equivalent of the Poynting theorem is thus
+
+\boxedEquation{eqn:energyMomentumWithMagneticSources:580}{
+%\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:580}
+0 = 
+\timeaverage{
+\Real 
+\lr{
+\inv{2} \PD{t}{} \lr{ 
+\epsilon_0 \BE \cdot \BE^\conj 
++ \mu_0 \BH \cdot \BH^\conj 
+} 
++
+\spacegrad \cdot \lr{ 
+\BE \cross \BH^\conj
+} 
++
+\BH \cdot \BM^\conj
++
+\BE \cdot \BJ^\conj
+}}_{\textrm{av}}.
+%\end{dmath}
+}
+
+\paragraph{Comparison to the reciprocity theorem result}
+
+The reciprocity theorem had a striking similarity to the Poynting theorem above, which isn't suprising since both were derived by calculating the divergence of a Poynting like quantity.  
+%Repeating the divergence calculation of the reciprocity derivation in the time domain shows that the reciprocity theorem as stated also has a dependency on single frequency sources and fields
+Here's a repetition of the reciprocity divergence calculation without the single frequency (phasor) assumption
+
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:600}
+\begin{aligned}
+\spacegrad \cdot &\lr{
+\bcE^{(a)} \cross \bcH^{(b)}
+-\bcE^{(b)} \cross \bcH^{(a)}
+} \\
+&=
+\bcH^{(b)} \cdot \lr{ \spacegrad \cross \bcE^{(a)} } -\bcE^{(a)} \cdot \lr{ \spacegrad \cross \bcH^{(b)} } \\
+&\quad
+-\bcH^{(a)} \cdot \lr{ \spacegrad \cross \bcE^{(b)} } +\bcE^{(b)} \cdot \lr{ \spacegrad \cross \bcH^{(a)} } \\
+&=
+-\bcH^{(b)} \cdot \lr{ \mu_0 \partial_t \bcH^{(a)} + \bcM^{(a)} }
+-\bcE^{(a)} \cdot \lr{ \bcJ^{(b)} + \epsilon_0 \partial_t \bcE^{(b)} } \\
+&\quad 
++\bcH^{(a)} \cdot \lr{ \mu_0 \partial_t \bcH^{(b)} + \bcM^{(b)} }
++\bcE^{(b)} \cdot \lr{ \bcJ^{(a)} + \epsilon_0 \partial_t \bcE^{(a)} } \\
+&=
+\epsilon_0
+\lr{
+ \bcE^{(b)} \cdot \partial_t \bcE^{(a)} 
+-\bcE^{(a)} \cdot \partial_t \bcE^{(b)} 
+}
++ 
+\mu_0
+\lr{
+ \bcH^{(a)} \cdot \partial_t \bcH^{(b)} 
+-\bcH^{(b)} \cdot \partial_t \bcH^{(a)} 
+} \\
+&+\bcH^{(a)} \cdot \bcM^{(b)} 
+-\bcH^{(b)} \cdot \bcM^{(a)} 
++\bcE^{(b)} \cdot \bcJ^{(a)} 
+-\bcE^{(a)} \cdot \bcJ^{(b)} 
+\end{aligned}
+\end{dmath}
+
+What do these time derivative terms look like in the frequency domain?
+
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:620}
+\bcE^{(b)} \cdot \partial_t \bcE^{(a)} 
+=
+\inv{4} 
+\lr{
+\BE^{(b)} e^{j \omega t}
++
+{\BE^{(b)}}^\conj e^{-j \omega t}
+}
+\cdot 
+\partial_t
+\lr{
+\BE^{(a)} e^{j \omega t}
++
+{\BE^{(a)}}^\conj e^{-j \omega t}
+}
+=
+\frac{j \omega}{4} 
+\lr{
+\BE^{(b)} e^{j \omega t}
++
+{\BE^{(b)}}^\conj e^{-j \omega t}
+}
+\cdot 
+\lr{
+\BE^{(a)} e^{j \omega t}
+-
+{\BE^{(a)}}^\conj e^{-j \omega t}
+}
+=
+\frac{\omega}{4} 
+\lr{
+j \BE^{(a)} \cdot { \BE^{(b)} }^\conj
+-j \BE^{(b)} \cdot { \BE^{(a)} }^\conj
++j \BE^{(a)} \cdot \BE^{(b)} e^{ 2 j \omega t }
+-j { \BE^{(a)}}^\conj \cdot { \BE^{(b)} }^\conj e^{ -2 j \omega t }
+}
+=
+\inv{2} \Real
+\lr{
+  j \omega \BE^{(a)} \cdot { \BE^{(b)} }^\conj
++ j \omega \BE^{(a)} \cdot \BE^{(b)} e^{ 2 j \omega t }
+}
+\end{dmath}
+
+Taking the difference,
+
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:640}
+\bcE^{(b)} \cdot \partial_t \bcE^{(a)} 
+-\bcE^{(a)} \cdot \partial_t \bcE^{(b)} 
+=
+\inv{2} \Real
+\lr{
+  j \omega \BE^{(a)} \cdot { \BE^{(b)} }^\conj
+- j \omega \BE^{(b)} \cdot { \BE^{(a)} }^\conj
++ j \omega \BE^{(a)} \cdot \BE^{(b)} e^{ 2 j \omega t }
+- j \omega \BE^{(b)} \cdot \BE^{(a)} e^{ 2 j \omega t }
+}
+=
+- \omega \Imag
+\lr{
+  \BE^{(a)} \cdot { \BE^{(b)} }^\conj
++ \BE^{(a)} \cdot \BE^{(b)} e^{ 2 j \omega t }
+},
+\end{dmath}
+
+so we have
+
+\begin{dmath}\label{eqn:energyMomentumWithMagneticSources:660}
+0 
+=
+\timeaverage{
+\spacegrad \cdot \Real \lr{
+\BE^{(a)} \cross {\BH^{(b)}}^\conj
+-\BE^{(b)} \cross {\BH^{(a)}}^\conj
+} 
++ 
+\omega \Imag
+\lr{
+\epsilon_0
+\BE^{(a)} \cdot { \BE^{(b)} }^\conj
++
+\mu_0
+\BH^{(a)} \cdot { \BH^{(b)} }^\conj
+}
++ \Real
+\lr{
+-\BH^{(a)} \cdot { \BM^{(b)} }^\conj
++\BH^{(b)} \cdot { \BM^{(a)} }^\conj
+-\BE^{(b)} \cdot { \BJ^{(a)} }^\conj
++\BE^{(a)} \cdot { \BJ^{(b)} }^\conj
+}
+}_{\textrm{av}}.
+\end{dmath}
+
+Observe that the perfect cancellation of the time derivative terms only occurs when the cross product differences were those of the phasors.  When those cross differences are those of the actual fields, like those in the Poynting theorem, there is a frequency dependent term is that expansion.
+
+\paragraph{Followup Questions}
+
+FIXME: TODO.
+
+\begin{enumerate}
+\item
+What do the energy momentum conservation equations look like in geometric algebra form with magnetic sources?
+\item
+What do the energy momentum conservation equations look like in tensor form with magnetic sources?
+\end{enumerate}
 
 %\EndArticle

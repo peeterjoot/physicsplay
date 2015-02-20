@@ -87,6 +87,8 @@ local : $(LOCAL_FILES)
 $(LOCAL_FILES) : 
 	cp $(filter %$@, $(ORIG_FILES)) $@
 
+energyMomentumWithMagneticSources.pdf : ../ece1229/energyMomentumWithMagneticSources.tex
+
 advancedantennaProblemSet3.pdf : advancedantennaProblemSet3Problem1.tex
 advancedantennaProblemSet3.pdf : advancedantennaProblemSet3Problem2.tex
 advancedantennaProblemSet3.pdf : advancedantennaProblemSet3Problem3.tex

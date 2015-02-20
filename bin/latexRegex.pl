@@ -1,5 +1,6 @@
 #s,\\E{(.*?)},{E_{k $1}^\\nought},g ;
 #s/\\0bcs/0_{\\mathrm{BCS}}/g ;
+#s/\\aut/{\\textrm{AUT}}/g;
 #s/\\b(.)_/\\overbar{$1}_/g ;
 #s/\\bar(.)/\\overbar{$1}/g ;
 #s/\\bark\b/\\overbar{k}/g ;
@@ -68,11 +69,13 @@
 #s/\\pp(.)/{($1)}/g ;
 #s/\\PP/\\mathcal{P}/g ;
 #s/\\Prad/P_{\\textrm{rad}}/g ;
+#s/\\profE/Prof. Eleftheriades/g;
 #s/\\qL/q_{\\mathrm{L}}/g ;
 #s/\\qT/q_{\\mathrm{T}}/g ;
 #s/\\rcap_av/\\rcap_{\\mathrm{av}}/g ;
 #s/\\rhoel/\\rho_{\\mathrm{el}}/g ;
 #s/\\rhoph/\\rho_{\\mathrm{ph}}/g ;
+#s/\\sg/{\\textrm{sg}}/g;
 #s/\\Shat/\\hat{S}/g ;
 #s/\\spacegrad_T/\\spacegrad_{\\mathrm{T}}/g ;
 #s/\\TB/\\tilde{\\BB}/g;
@@ -133,8 +136,5 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-#s/\\aut/{\\textrm{AUT}}/g;
-#s/\\sg/{\\textrm{sg}}/g;
-s/\\profE/Prof. Eleftheriades/g;
 s/\^a/^{(a)}/g;
 s/\^b/^{(b)}/g;
