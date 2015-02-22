@@ -4,7 +4,7 @@
 %
 \input{../blogpost.tex}
 \renewcommand{\basename}{gaMagneticSourcesToTensorToVector}
-\renewcommand{\dirname}{notes/FIXMEwheretodirname/}
+\renewcommand{\dirname}{notes/ece1229/}
 %\newcommand{\dateintitle}{}
 %\newcommand{\keywords}{}
 
@@ -20,7 +20,7 @@
 %\section{Motivation}
 %\section{Guts}
 
-Following the principle of relating new formalisms to things previously learned, I'd like to know what Maxwell's equations look like in tensor form when magnetic sources are included.  As a verification that the previous Geometric Algebra form of Maxwell's equation that includes magnetic sources is correct, I'll start with the GA form of Maxwell's equation, find the tensor form, and then verify that the vector form of Maxwell's equations can be recovered from the tensor form.
+Following the principle that one should always relate new formalisms to things previously learned, I'd like to know what Maxwell's equations look like in tensor form when magnetic sources are included.  As a verification that the previous Geometric Algebra form of Maxwell's equation that includes magnetic sources is correct, I'll start with the GA form of Maxwell's equation, find the tensor form, and then verify that the vector form of Maxwell's equations can be recovered from the tensor form.
 
 \paragraph{Tensor form}
 
@@ -80,34 +80,37 @@ To unpack the magnetic source portion of Maxwell's equation, put it first into d
 
 \begin{dmath}\label{eqn:gaMagneticSourcesToTensorToVector:140}
 M 
-= -I \grad \wedge F
-= -\frac{I}{2} \lr{ \grad F + F \grad }
-= -\frac{1}{2} \lr{ -\grad I F + I F \grad }
-= - \grad \cdot \lr{ I F }.
+= - \lr{ \grad \wedge F} I
+= -\frac{1}{2} \lr{ \grad F + F \grad } I
+= -\frac{1}{2} \lr{ \grad F I -  F I \grad }
+= - \grad \cdot \lr{  F I }.
 \end{dmath}
 
 Dotting with \( \gamma^\mu \) gives
 
 \begin{dmath}\label{eqn:gaMagneticSourcesToTensorToVector:160}
 M^\mu 
-= \gamma^\mu \cdot \lr{ \grad \cdot \lr{ -I F } }
-= \gamma^\mu \cdot \lr{ \gamma^\nu \partial_\nu \cdot \lr{ -\frac{I}{2} \gamma^\alpha \wedge \gamma^\beta F_{\alpha \beta} } }
+= \gamma^\mu \cdot \lr{ \grad \cdot \lr{ - F I } }
+= \gamma^\mu \cdot \lr{ \gamma^\nu \partial_\nu \cdot \lr{ -\frac{1}{2} \gamma^\alpha \wedge \gamma^\beta I F_{\alpha \beta} } }
 = -\inv{2} 
 \gpgradezero{ 
-\gamma^\mu \cdot \lr{ \gamma^\nu \cdot \lr{ I \gamma^\alpha \wedge \gamma^\beta } } 
+\gamma^\mu \cdot \lr{ \gamma^\nu \cdot \lr{  \gamma^\alpha \wedge \gamma^\beta I } } 
 }
 \partial_\nu F_{\alpha \beta}.
 \end{dmath}
 
-That scalar grade selection is a complete antisymmetrization of the indexes
+This scalar grade selection is a complete antisymmetrization of the indexes
 
 \begin{dmath}\label{eqn:gaMagneticSourcesToTensorToVector:180}
 \gpgradezero{ 
-\gamma^\mu \cdot \lr{ \gamma^\nu \cdot \lr{ I \gamma^\alpha \wedge \gamma^\beta } } 
+\gamma^\mu \cdot \lr{ \gamma^\nu \cdot \lr{  \gamma^\alpha \wedge \gamma^\beta I } } 
 }
 =
 \gpgradezero{ 
-\gamma^\mu \cdot \lr{ \gamma^\nu \cdot \lr{ \gamma_0 \gamma_1 \gamma_2 \gamma_3 \gamma^\alpha \gamma^\beta } } 
+\gamma^\mu \cdot \lr{ \gamma^\nu \cdot \lr{ 
+\gamma^\alpha \gamma^\beta 
+\gamma_0 \gamma_1 \gamma_2 \gamma_3 
+} } 
 }
 =
 \gpgradezero{ 
@@ -137,20 +140,20 @@ M^\mu.
 The electromagnetic field has been identified with the electric and magnetic fields by
 
 \begin{dmath}\label{eqn:gaMagneticSourcesToTensorToVector:220}
-F = \bcE + I c \mu_0 \bcH,
+F = \bcE + c \mu_0 \bcH I ,
 \end{dmath}
 
 or in coordinates
 
 \begin{dmath}\label{eqn:gaMagneticSourcesToTensorToVector:240}
 \inv{2} \gamma_\mu \wedge \gamma_\nu F^{\mu \nu} 
-=  E^a \gamma_a \gamma_0 + I c \mu_0 H^a \gamma_a \gamma_0.
+=  E^{(a)} \gamma_a \gamma_0 + c \mu_0 H^{(a)} \gamma_a \gamma_0 I.
 \end{dmath}
 
 By forming the dot product sequence \( F^{\alpha \beta} = \gamma^\beta \cdot \lr{ \gamma^\alpha \cdot F } \), the electric and magnetic field components can be related to the tensor components.  The electric field components follow by inspection and are
 
 \begin{dmath}\label{eqn:gaMagneticSourcesToTensorToVector:260}
-E^b = \gamma^0 \cdot \lr{ \gamma^b \cdot F } = F^{b 0}.
+E^{(b)} = \gamma^0 \cdot \lr{ \gamma^{(b)} \cdot F } = F^{b 0}.
 \end{dmath}
 
 The magnetic field relation to the tensor components follow from
@@ -158,15 +161,15 @@ The magnetic field relation to the tensor components follow from
 \begin{dmath}\label{eqn:gaMagneticSourcesToTensorToVector:280}
 F^{r s} 
 = F_{r s} 
-= \gamma_s \cdot \lr{ \gamma_r \cdot \lr{ I c \mu_0 H^a \gamma_a \gamma_0 } }
+= \gamma_s \cdot \lr{ \gamma_r \cdot \lr{ c \mu_0 H^{(a)} \gamma_a \gamma_0 I } }
 = 
-c \mu_0 H^a \gpgradezero{ I \gamma_s \gamma_r \gamma_a \gamma_0 }
+c \mu_0 H^{(a)} \gpgradezero{ \gamma_s \gamma_r \gamma_a \gamma_0 I }
 = 
-c \mu_0 H^a \gpgradezero{ -\cancel{\gamma^0} \gamma^1 \gamma^2 \gamma^3 \gamma_s \gamma_r \gamma_a \cancel{\gamma_0} }
+c \mu_0 H^{(a)} \gpgradezero{ -\cancel{\gamma^0} \gamma^1 \gamma^2 \gamma^3 \gamma_s \gamma_r \gamma_a \cancel{\gamma_0} }
 =
-- c \mu_0 H^a \delta^{[3 2 1]}_{s r a}
+- c \mu_0 H^{(a)} \delta^{[3 2 1]}_{s r a}
 = 
-c \mu_0 H^a \epsilon_{ s r a }.
+c \mu_0 H^{(a)} \epsilon_{ s r a }.
 \end{dmath}
 
 Expanding this for each pair of spacelike coordinates gives
@@ -202,9 +205,120 @@ H^3 &= -\inv{c \mu_0} F^{1 2}.
 
 \paragraph{Recover the vector equations from the tensor equations}
 
-... when done.
+Starting with the non-dual Maxwell tensor equation, expanding the timelike index gives
 
-This takes things full circle, going from the vector differential Maxwell's equations, to the Geometric Algebra form of Maxwell's equation, to Maxwell's equations in tensor form, and back to the vector form.
+\begin{dmath}\label{eqn:gaMagneticSourcesToTensorToVector:480}
+\inv{c \epsilon_0} J^0
+= \inv{\epsilon_0} \rho
+= 
+\partial_\nu F^{\nu 0}
+= 
+ \partial_1 F^{1 0}
++\partial_2 F^{2 0}
++\partial_3 F^{3 0}
+\end{dmath}
+
+This is Gauss's law
+
+%\begin{dmath}\label{eqn:gaMagneticSourcesToTensorToVector:500}
+\boxedEquation{eqn:gaMagneticSourcesToTensorToVector:500}{
+\spacegrad \cdot \bcE
+= 
+\rho/\epsilon_0.
+}
+%\end{dmath}
+
+For a spacelike index, any one is representative.  Expanding index 1 gives
+
+\begin{dmath}\label{eqn:gaMagneticSourcesToTensorToVector:520}
+\inv{c \epsilon_0} J^1 
+= \partial_\nu F^{\nu 1}
+= \inv{c} \partial_t F^{0 1}
++ \partial_2 F^{2 1}
++ \partial_3 F^{3 1}
+= -\inv{c} E^1
++ \partial_2 (c \mu_0 H^3)
++ \partial_3 (-c \mu_0 H^2)
+= 
+\lr{ -\inv{c} \PD{t}{\bcE} + c \mu_0 \spacegrad \cross \bcH } \cdot \Be_1.
+\end{dmath}
+
+Extending this to the other indexes and multiplying through by \( \epsilon_0 c \) recovers the Ampere-Maxwell equation (assuming linear media)
+
+%\begin{dmath}\label{eqn:gaMagneticSourcesToTensorToVector:540}
+\boxedEquation{eqn:gaMagneticSourcesToTensorToVector:540}{
+\spacegrad \cross \bcH = \bcJ + \PD{t}{\bcD}.
+}
+%\end{dmath}
+
+The expansion of the 0th free (timelike) index of the dual Maxwell tensor equation is
+
+\begin{dmath}\label{eqn:gaMagneticSourcesToTensorToVector:400}
+M^0
+=
+\inv{2} \epsilon^{\nu \alpha \beta 0}
+\partial_\nu F_{\alpha \beta}
+=
+-\inv{2} \epsilon^{0 \nu \alpha \beta}
+\partial_\nu F_{\alpha \beta}
+=
+-\inv{2} 
+\lr{
+ \partial_1 (F_{2 3} - F_{3 2})
++\partial_2 (F_{3 1} - F_{1 3})
++\partial_3 (F_{1 2} - F_{2 1})
+}
+=
+-
+\lr{
+ \partial_1 F_{2 3} 
++\partial_2 F_{3 1} 
++\partial_3 F_{1 2} 
+}
+=
+-
+\lr{
+ \partial_1 (- c \mu_0 H^1 ) +
+ \partial_2 (- c \mu_0 H^2 ) +
+ \partial_3 (- c \mu_0 H^3 )
+},
+\end{dmath}
+
+but \( M^0 = c \rho_m \), giving us Gauss's law for magnetism (with magnetic charge density included)
+
+%\begin{dmath}\label{eqn:gaMagneticSourcesToTensorToVector:420}
+\boxedEquation{eqn:gaMagneticSourcesToTensorToVector:420}{
+\spacegrad \cdot \bcH = \rho_m/\mu_0.
+}
+%\end{dmath}
+
+For the spacelike indexes of the dual Maxwell equation, only one need be computed (say 1), and cyclic permutation will provide the rest.  That is
+
+\begin{dmath}\label{eqn:gaMagneticSourcesToTensorToVector:440}
+M^1 
+= \inv{2} \epsilon^{\nu \alpha \beta 1} \partial_\nu F_{\alpha \beta}
+= 
+ \inv{2} \lr{ \partial_2 \lr{F_{3 0} - F_{0 3}} }
++\inv{2} \lr{ \partial_3 \lr{F_{0 2} - F_{0 2}} }
++\inv{2} \lr{ \partial_0 \lr{F_{2 3} - F_{3 2}} }
+= 
+-             \partial_2 F^{3 0} 
++             \partial_3 F^{2 0} 
++             \partial_0 F_{2 3} 
+=
+-\partial_2 E^3 + \partial_3 E^2 + \inv{c} \PD{t}{} \lr{ - c \mu_0 H^1 } 
+= - \lr{ \spacegrad \cross \bcE + \mu_0 \PD{t}{\bcH} } \cdot \Be_1.
+\end{dmath}
+
+Extending this to the rest of the coordinates gives the Maxwell-Faraday equation (as extended to include magnetic current density sources)
+
+%\begin{dmath}\label{eqn:gaMagneticSourcesToTensorToVector:460}
+\boxedEquation{eqn:gaMagneticSourcesToTensorToVector:460}{
+\spacegrad \cross \bcE = -\bcM - \mu_0 \PD{t}{\bcH}.
+}
+%\end{dmath}
+
+This takes things full circle, going from the vector differential Maxwell's equations, to the Geometric Algebra form of Maxwell's equation, to Maxwell's equations in tensor form, and back to the vector form.  Not only is the tensor form of Maxwell's equations with magnetic sources now known, the translation from the tensor and vector formalism has also been verified, and miraculously no signs or factors of 2 were lost or gained in the process.
 
 %\EndArticle
 \EndNoBibArticle
