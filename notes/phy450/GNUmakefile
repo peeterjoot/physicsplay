@@ -18,5 +18,7 @@ include ../make.rules
 backmatter.tex : ../classicthesis.mine/backmatter.tex
 	cp $< $@
 
+phy450.pdf :: poppitz.tex
+
 poppitz.tex : mkpref
 	./mkpref > $@

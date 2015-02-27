@@ -20,7 +20,7 @@ INCOMPLETE += gaMintro.tex
 INCOMPLETE += advancedantennaProblemSet3Problem1.tex
 INCOMPLETE += advancedantennaProblemSet3Problem2.tex
 INCOMPLETE += advancedantennaProblemSet3Problem3.tex
-INCOMPLETE += advancedantennaProblemSet3Problem4.tex
+#INCOMPLETE += advancedantennaProblemSet3Problem4.tex
 #INCOMPLETE += advancedantennaProblemSet3Problem5.tex
 
 INCOMPLETE += stokespost.tex
@@ -92,7 +92,7 @@ energyMomentumWithMagneticSources.pdf : ../ece1229/energyMomentumWithMagneticSou
 advancedantennaProblemSet3.pdf : advancedantennaProblemSet3Problem1.tex
 advancedantennaProblemSet3.pdf : advancedantennaProblemSet3Problem2.tex
 advancedantennaProblemSet3.pdf : advancedantennaProblemSet3Problem3.tex
-advancedantennaProblemSet3.pdf : advancedantennaProblemSet3Problem4.tex
+#advancedantennaProblemSet3.pdf : advancedantennaProblemSet3Problem4.tex
 #advancedantennaProblemSet3.pdf : advancedantennaProblemSet3Problem5.tex
 
 gaBasics.pdf : gaBasics.tex
