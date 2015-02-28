@@ -86,6 +86,8 @@
 #s/\\up\b/\\uparrow/g ;
 #s/\\Veff/V_{\\mathrm{eff}}/g ;
 #s/\\Veph/V_{\\mathrm{e,ph}}/g ;
+#s/\^a/^{(a)}/g;
+#s/\^b/^{(b)}/g;
 #s/\^classical/^{\\mathrm{classical}}/g ;
 #s/\bialpha\b/{i_\\alpha}/g ;
 #s/\tY\b/\\tilde{Y}/g ;
@@ -136,5 +138,5 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-s/\^a/^{(a)}/g;
-s/\^b/^{(b)}/g;
+s/_eo/_{\\textrm{eo}}/g ;
+s/_mo/_{\\textrm{mo}}/g ;
