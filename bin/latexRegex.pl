@@ -138,5 +138,5 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-s/_eo/_{\\textrm{eo}}/g ;
-s/_mo/_{\\textrm{mo}}/g ;
+#s/_eo/_{\\textrm{eo}}/g ;
+#s/_mo/_{\\textrm{mo}}/g ;
