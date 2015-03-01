@@ -654,10 +654,22 @@ my $out = "
       my $path = $_->{'path'} ;
       my $date = $_->{'DATE'} ;
       my $desc = $_->{'WHAT'} ;
+      my $thisfilter = $_->{'FILTER'} ;
 
       if ( $filter )
       {
-         next unless ( $path =~ /$filter/ ) ;
+         my $match = ( $path =~ m@$filter@ ) ;
+
+         # Subfiltering for problem sets.  This is a hack.
+         if ( !$match 
+              and ( defined $thisfilter )
+              and ( $thisfilter =~ m@$filter@ )
+              and ( $filter =~ m@/ps@) )
+         {
+            $match = 1 ;
+         }
+
+         next unless ( $match ) ;
       }
 
       my $fullpath = "https://raw.github.com/peeterjoot/mathematica/master/$path" ;
