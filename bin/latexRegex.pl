@@ -68,7 +68,7 @@
 #s/\\pku/_{\\Bk \\uparrow}/g ;
 #s/\\pp(.)/{($1)}/g ;
 #s/\\PP/\\mathcal{P}/g ;
-#s/\\Prad/P_{\\textrm{rad}}/g ;
+s/\\Prad/P_{\\textrm{rad}}/g ;
 #s/\\profE/Prof. Eleftheriades/g;
 #s/\\qL/q_{\\mathrm{L}}/g ;
 #s/\\qT/q_{\\mathrm{T}}/g ;
@@ -140,6 +140,13 @@
 #s/pidotalpha/\\dot{p}_{i_\\alpha}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-s/\\LOS/{\\textrm{LOS}}/g;
-s/\\yz/{\\textrm{yz}}/g;
-s/\\zx/{\\textrm{zx}}/g;
+#s/\\LOS/{\\textrm{LOS}}/g;
+#s/\\yz/{\\textrm{yz}}/g;
+#s/\\zx/{\\textrm{zx}}/g;
+s/\\AF/\\textrm{AF}/g;
+s/0\\iso/_{0,\\textrm{iso}}/g;
+s/r\\iso/_{r,\\textrm{iso}}/g;
+s/0\\ccube/_{0,\\textrm{ccube}}/g;
+s/r\\ccube/_{r,\\textrm{ccube}}/g;
+s/\\ccube/{\\textrm{ccube}}/g;
+s/\\iso/{\\textrm{iso}}/g;
