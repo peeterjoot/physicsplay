@@ -36,4 +36,5 @@ advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem4.tex
 advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem5.tex
 advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem6.tex
 
-
+#ps3mathematica.tex : ../METADATA ../../mathematica/METADATA
+#	(cd .. ; ./METADATA -mathematica -latex -ece1229 -filter ece1229/ps3/ ) > $@
