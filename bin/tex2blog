@@ -61,6 +61,9 @@ my $mathmlHtml = 0 ;
 # for use with physics Forums.
 my $pf = 0 ; 
 
+# stackexchange (physics and math)
+my $se = 0 ; 
+
 # wikipedia output.
 my $wiki = 0 ; 
 
@@ -140,15 +143,16 @@ GetOptions(
    'mathml!'      => \$mathml,
    'wordpress!'   => \$wordpress,
    'pf!'          => \$pf,
+   'se!'          => \$se,
    'wikipedia!'   => \$wiki,
    'html!'        => \$mathmlHtml,
    'file=s'       => \$filebase,
    'help!'        => \$showUsage,
 ) ;
 
-if ( $showUsage or (1 != ( $mathml + $wordpress + $mathmlHtml + $pf + $wiki )) )
+if ( $showUsage or (1 != ( $mathml + $wordpress + $mathmlHtml + $pf + $wiki + $se )) )
 {
-   die "usage: ~/bin/tex2blog -f filenameWithoutTexSuffix {-pf | -html | -mathml | -wordpress -wiki} [-help]"
+   die "usage: ~/bin/tex2blog -f filenameWithoutTexSuffix {-pf | -se | -html | -mathml | -wordpress -wiki} [-help]"
 }
 
 if ( $mathmlHtml )
@@ -289,6 +293,10 @@ sub processOneEquation
          #      $fgString = "&fg=000000" ; # omit.
 
          $eq = "<latexSepLineStart>\\begin{aligned}$eq\\end{aligned} $curEquationLabel$fgString<latexSepLineEnd>" ;
+      }
+      elsif ( $se )
+      {
+         $eq = "<latexSepLineStart>$eq<latexSepLineEnd>" ;
       }
       else # wiki, and pf
       {
@@ -520,7 +528,15 @@ sub processRest
    my $bProcessingItemize = 0 ;
    my $bProcessingEnumerate = 0 ;
 
-   if ( $pf )
+   if ( $se )
+   {
+      $latexInlineStart = '$' ;
+      $latexInlineEnd = '$' ;
+
+      $latexSepLineStart = '$$' ;
+      $latexSepLineEnd = '$$' ;
+   }
+   elsif ( $pf )
    {
       $latexInlineStart = '[itex]' ;
       $latexInlineEnd = '[/itex]' ;
@@ -945,6 +961,7 @@ sub expandPeetersMathModeMacros
    }
 
    $out =~ s/\\Bzero/\\mathbf{0}/g;
+   $out =~ s/\\bcB/\\boldsymbol{\\mathcal{B}}/g;
 
    $out =~ s/\\Hbar/\\hbar/g;
    $out =~ s/\\Atan/\\arctan/g;
