@@ -20,6 +20,7 @@ INCOMPLETE += gaMintro.tex
 INCOMPLETE += censor1l.tex
 INCOMPLETE += censor1p.tex
 INCOMPLETE += censor1pg.tex
+INCOMPLETE += ps3mathematica.tex
 #INCOMPLETE += ps4mathematica.tex
 INCOMPLETE += advancedantennaProblemSet4Problem1.tex
 INCOMPLETE += advancedantennaProblemSet4Problem2.tex
@@ -94,6 +95,8 @@ $(LOCAL_FILES) :
 
 energyMomentumWithMagneticSources.pdf : ../ece1229/energyMomentumWithMagneticSources.tex
 
+cornerCubeTakeII.pdf : ps3mathematica.tex
+
 advancedantennaProblemSet4.pdf : advancedantennaProblemSet4Problem1.tex
 advancedantennaProblemSet4.pdf : advancedantennaProblemSet4Problem2.tex
 advancedantennaProblemSet4.pdf : advancedantennaProblemSet4Problem3.tex
@@ -159,6 +162,9 @@ Bibliography.bib : myrefs.bib
 myrefs.bib: ../myrefs.bib.in ../METADATA
 	cp ../myrefs.bib.in myrefs.bib
 	(cd .. ; ./METADATA -bib >> $(THISDIR)/myrefs.bib)
+
+ps3mathematica.tex : ../METADATA ../../mathematica/METADATA
+	(cd .. ; ./METADATA -mathematica -latex -ece1229 -filter ece1229/ps3/ ) > $@
 
 #ps4mathematica.tex : ../METADATA ../../mathematica/METADATA
 #	(cd .. ; ./METADATA -mathematica -latex -ece1229 -filter ece1229/ps4/ ) > $@
