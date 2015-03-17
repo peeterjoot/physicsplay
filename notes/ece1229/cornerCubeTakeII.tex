@@ -162,7 +162,7 @@ The array factor can be picked off by inspection
 %\begin{dmath}\label{eqn:cornerCubeTakeII:500}
 \boxedEquation{eqn:cornerCubeTakeII:500}{
 \textrm{AF} 
-= 2
+= 2 I_0
 \lr{
 \cos\lr{ k s \sin\theta \cos\lr{ \phi - \pi/4}}
 -\cos\lr{ k s \sin\theta \cos\lr{ \phi + \pi/4}}
@@ -196,14 +196,14 @@ For the corner cube the maximization problem is trickier.  As a first approximat
 
 \begin{dmath}\label{eqn:cornerCubeTakeII:980}
 \textrm{AF} 
-= 2 \lr{ 
+= 2 I_0 \lr{ 
 1 - \frac{(k s \sin\theta)^2}{2} \cos^2( \phi - \pi/4 )
 -1 + \frac{(k s \sin\theta)^2}{2} \cos^2( \phi + \pi/4 )
 }
 =
-2 \frac{(k s \sin\theta)^2}{2} \lr{ -\cos^2( \phi - \pi/4 ) + \cos^2( \phi + \pi/4 ) }
+2 I_0 \frac{(k s \sin\theta)^2}{2} \lr{ -\cos^2( \phi - \pi/4 ) + \cos^2( \phi + \pi/4 ) }
 =
--(k s \sin\theta)^2 \sin( 2 \phi ),
+- I_0(k s \sin\theta)^2 \sin( 2 \phi ),
 \end{dmath}
 
 so for small \( k s \)
@@ -242,10 +242,40 @@ B_0 (k s)^4
 The approximate directivity of the corner cube is
 
 \begin{equation}\label{eqn:cornerCubeTakeII:700}
-D_{0,\textrm{ccube}} \approx \frac{4 \pi \times B_0 (ks)^4}{B_0 (ks)^4 4 \pi \frac{2}{35}} = \frac{35}{2}.
+D_{0,\textrm{ccube}} \approx \frac{4 \pi \times B_0 (ks)^4}{B_0 (ks)^4 4 \pi \frac{2}{35}} = \frac{35}{2} \approx 17.5.
 \end{equation}
 
 almost 12 times greater than the directivity of the isolated radiator.
+
+The posted solution omits the \( \sin^2 \theta \) contribution from the element factor.  That results in
+
+\begin{dmath}\label{eqn:cornerCubeTakeII:601}
+P_{\textrm{rad}}
+\approx
+B_0
+(k s)^4
+\int_0^{\pi/2} d\phi \sin^2(2 \phi)
+\int_0^{\pi} d\theta \sin^5 \theta 
+=
+B_0 (k s)^4 
+\lr{ \frac{\pi}{4} } \times
+\lr{ \frac{16}{15} }
+= B_0 (k s)^4 4 \pi \frac{1}{15},
+\end{dmath}
+
+and
+
+\begin{equation}\label{eqn:cornerCubeTakeII:701}
+D_{0,\textrm{ccube}} \approx \frac{4 \pi \times B_0 (ks)^4}{B_0 (ks)^4 4 \pi \frac{1}{15}} = 15.
+\end{equation}
+
+Note that the baseline directivity without the \( \sin^2\theta \)  element factor is unity, since
+
+\begin{equation}\label{eqn:cornerCubeTakeII:702}
+4 \pi /2 \pi \int_0^\pi \sin\theta d\theta = 1,
+\end{equation}
+
+so such a relative approximation is still correct for the dipole up to an order of magnitude.
 
 \makeSubAnswer{}{advancedantenna:problemSet3TakeII:3b}
 
@@ -280,7 +310,7 @@ The x-y plane is found at \( \theta = \pi/2 \) where the array factor is
 }.
 \end{dmath}
 
-This is plotted against both \( \alpha = s/\lambda \), and \( \phi \) in \cref{fig:arrayFactorXY:arrayFactorXYCorrectedFig4}, which shows that there are generally four lobes for any value of \( s \), except for the smallest values where the pattern is near zero.
+This is plotted against both \( \alpha = s/\lambda = \sqrt{2} h/\lambda\), and \( \phi \) in \cref{fig:arrayFactorXY:arrayFactorXYCorrectedFig4}, which shows that there are generally four lobes for any value of \( s \), except for the smallest values where the pattern is near zero.
 
 \mathImageFigure{../../figures/ece1229/arrayFactorXYCorrectedFig4}{Plot of \( \Abs{\textrm{AF}}^2 \) in XY plane with \( \alpha = h/\lambda \).}{fig:arrayFactorXY:arrayFactorXYCorrectedFig4}{0.3}{ps3:ps3Q3plotsCorrected.nb}
 
@@ -305,12 +335,21 @@ The code for the numerical calculations can be found in \nbref{ps3:ps3Q3plotsCor
 
 \begin{equation}\label{eqn:cornerCubeTakeII:820}
 \begin{aligned}
-D_0[h = \lambda/8] &= 5.93207 \\
-D_0[h = \lambda/4] &= 9.07849 \\
-D_0[h = \lambda/2] &= 18.3207.
+D_0[h = \lambda/8] &= 17.1 \\
+D_0[h = \lambda/4] &= 15.9 \\
+D_0[h = \lambda/2] &= 14.3.
 \end{aligned}
 \end{equation}
 
+If the \( \sin^2\theta \) contribution of the element factor is omitted (as the posted solution does in the directivity approximation), the directivities are all slightly less
+
+\begin{equation}\label{eqn:cornerCubeTakeII:821}
+\begin{aligned}
+D_0[h = \lambda/8] &= 14.6 \\
+D_0[h = \lambda/4] &= 13.2 \\
+D_0[h = \lambda/2] &= 15.1.
+\end{aligned}
+\end{equation}
 }
 
 %\section{Mathematica Sources}
