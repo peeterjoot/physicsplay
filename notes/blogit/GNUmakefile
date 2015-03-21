@@ -25,7 +25,7 @@ INCOMPLETE += censor1pg.tex
 INCOMPLETE += advancedantennaProblemSet4Problem1.tex
 INCOMPLETE += advancedantennaProblemSet4Problem2.tex
 INCOMPLETE += advancedantennaProblemSet4Problem3.tex
-#INCOMPLETE += advancedantennaProblemSet4Problem4.tex
+INCOMPLETE += advancedantennaProblemSet4Problem4.tex
 #INCOMPLETE += advancedantennaProblemSet4Problem5.tex
 
 INCOMPLETE += stokespost.tex
@@ -100,8 +100,8 @@ energyMomentumWithMagneticSources.pdf : ../ece1229/energyMomentumWithMagneticSou
 advancedantennaProblemSet4.pdf : advancedantennaProblemSet4Problem1.tex
 advancedantennaProblemSet4.pdf : advancedantennaProblemSet4Problem2.tex
 advancedantennaProblemSet4.pdf : advancedantennaProblemSet4Problem3.tex
+advancedantennaProblemSet4.pdf : advancedantennaProblemSet4Problem4.tex
 #advancedantennaProblemSet4.pdf : ps4mathematica.tex
-#advancedantennaProblemSet4.pdf : advancedantennaProblemSet4Problem4.tex
 #advancedantennaProblemSet4.pdf : advancedantennaProblemSet4Problem5.tex
 
 gaBasics.pdf : gaBasics.tex

@@ -1,6 +1,5 @@
 #s,\\E{(.*?)},{E_{k $1}^\\nought},g ;
 #s/\\0bcs/0_{\\mathrm{BCS}}/g ;
-#s/\\AF/\\textrm{AF}/g;
 #s/\\aut/{\\textrm{AUT}}/g;
 #s/\\b(.)_/\\overbar{$1}_/g ;
 #s/\\bar(.)/\\overbar{$1}/g ;
@@ -149,4 +148,5 @@
 #s/r\\iso/_{r,\\textrm{iso}}/g;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-s/\\profE/Prof. Eleftheriades/g;
+s/\\AF/\\textrm{AF}/g;
+#s/\\profE/Prof. Eleftheriades/g;
