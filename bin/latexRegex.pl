@@ -149,4 +149,4 @@
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
 s/\\AF/\\textrm{AF}/g;
-#s/\\profE/Prof. Eleftheriades/g;
+s/\\profE/Prof. Eleftheriades/g;
