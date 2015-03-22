@@ -71,7 +71,7 @@ ONCEFLAGS := -nojustonce
 all :: $(PDFS_FROM_EPS)
 all :: Bibliography.bib
 all :: peeters_macros.sty
-all :: peeters_qed.sty
+all :: macros_qed.sty
 all :: ece1229.sty
 all :: peeters_layout.sty
 all :: peeters_layout_exercise.sty
