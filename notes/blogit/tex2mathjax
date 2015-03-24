@@ -12,6 +12,8 @@
 # - '\ ' slash space removal.
 # - http://tex.stackexchange.com/questions/178576/how-to-manually-format-ointctrclockwise
 #   ... have that in ~/bin/tex2blog
+# - fixed newline issue in processBib (dos2unix).  sync that with ~/bin/tex2blog by moving that function into module (after 
+#   reconsiling other differences).
 
 use strict ;
 use warnings ;
@@ -220,6 +222,11 @@ sub processBib
    {
       chomp ;
 
+      # dos2unix:
+      s/\r$// ;
+
+#print "bibdebug: '$_'\n" ;
+
       s,\\begin{thebibliography}.*,<h1>References</h1>, ;
 
 # this doesn't always work.  Need multiline search, as biblines like:
@@ -257,6 +264,7 @@ sub processBib
          s,\\em *{(.*?)},<em>$1</em>,g ;
          s,\\emph *{(.*?)},<em>$1</em>,g ;
          s/\\newblock// ;
+         s/&/&amp;/g;
 
          # \url can be split across lines, as in the following:
          #  \url{http://en.wikipedia.org/w/index.php?title=Relativistic_Doppler_effect&o%
