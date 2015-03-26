@@ -15,7 +15,7 @@ SOURCE_DIRS += $(FIGURES)
 # FIXME: changing this flag should be a dependency of matlab.tex 
 #REDACTED := -redacted
 
-#GENERATED_SOURCES += matlab.tex 
+GENERATED_SOURCES += matlab.tex 
 GENERATED_SOURCES += mathematica.tex 
 GENERATED_SOURCES += julia.tex 
 
