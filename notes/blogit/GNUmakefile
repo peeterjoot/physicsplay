@@ -23,6 +23,7 @@ INCOMPLETE += censor1pg.tex
 #INCOMPLETE += ps3mathematica.tex
 INCOMPLETE += ps4mathematica.tex
 INCOMPLETE += ps4matlab.tex
+INCOMPLETE += ps4julia.tex
 INCOMPLETE += advancedantennaProblemSet4Problem1.tex
 INCOMPLETE += advancedantennaProblemSet4Problem2.tex
 INCOMPLETE += advancedantennaProblemSet4Problem3.tex
@@ -104,6 +105,7 @@ advancedantennaProblemSet4.pdf : advancedantennaProblemSet4Problem3.tex
 advancedantennaProblemSet4.pdf : advancedantennaProblemSet4Problem4.tex
 advancedantennaProblemSet4.pdf : ps4mathematica.tex
 advancedantennaProblemSet4.pdf : ps4matlab.tex
+advancedantennaProblemSet4.pdf : ps4julia.tex
 #advancedantennaProblemSet4.pdf : advancedantennaProblemSet4Problem5.tex
 
 gaBasics.pdf : gaBasics.tex
@@ -173,6 +175,9 @@ ps4mathematica.tex : ../METADATA ../../mathematica/METADATA
 
 ps4matlab.tex : ../METADATA ../../matlab/METADATA
 	(cd .. ; ./METADATA -matlab -latex -ece1229 -filter ece1229/ps4/ ) > $@
+
+ps4julia.tex : ../METADATA ../../julia/METADATA
+	(cd .. ; ./METADATA -julia -latex -ece1229 -filter ece1229/ps4/ ) > $@
 
 opt/%.pdf : %.pdf
 	mkdir -p opt
