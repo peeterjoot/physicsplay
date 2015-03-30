@@ -27,6 +27,8 @@ THISBOOK_DEPS += macros_mathematica.sty
 
 include ../make.rules
 
+#all :: advancedantennaProblemSet4.pdf
+
 #epsconv : $(PDFS_FROM_EPS)
 
 advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem1.tex
@@ -36,5 +38,22 @@ advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem4.tex
 advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem5.tex
 advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem6.tex
 
-#ps3mathematica.tex : ../METADATA ../../mathematica/METADATA
-#	(cd .. ; ./METADATA -mathematica -latex -ece1229 -filter ece1229/ps3/ ) > $@
+advancedantennaProblemSet4.pdf : advancedantennaProblemSet4Problem1.tex
+advancedantennaProblemSet4.pdf : advancedantennaProblemSet4Problem2.tex
+advancedantennaProblemSet4.pdf : advancedantennaProblemSet4Problem3.tex
+advancedantennaProblemSet4.pdf : advancedantennaProblemSet4Problem4.tex
+advancedantennaProblemSet4.pdf : ps4mathematica.tex
+advancedantennaProblemSet4.pdf : ps4matlab.tex
+advancedantennaProblemSet4.pdf : ps4julia.tex
+
+ps4mathematica.tex : ../METADATA ../../mathematica/METADATA
+	(cd .. ; ./METADATA -mathematica -latex -ece1229 -filter ece1229/ps4/ ) > $@
+
+ps4matlab.tex : ../METADATA ../../matlab/METADATA
+	(cd .. ; ./METADATA -matlab -latex -ece1229 -filter ece1229/ps4/ ) > $@
+
+ps4julia.tex : ../METADATA ../../julia/METADATA
+	(cd .. ; ./METADATA -julia -latex -ece1229 -filter ece1229/ps4/ ) > $@
+
+ps3mathematica.tex : ../METADATA ../../mathematica/METADATA
+	(cd .. ; ./METADATA -mathematica -latex -ece1229 -filter ece1229/ps3/ ) > $@
