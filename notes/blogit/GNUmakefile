@@ -21,11 +21,8 @@ INCOMPLETE += censor1l.tex
 INCOMPLETE += censor1p.tex
 INCOMPLETE += censor1pg.tex
 #INCOMPLETE += ps3mathematica.tex
-INCOMPLETE += advancedantennaProblemSet4Problem1.tex
-INCOMPLETE += advancedantennaProblemSet4Problem2.tex
-INCOMPLETE += advancedantennaProblemSet4Problem3.tex
-INCOMPLETE += advancedantennaProblemSet4Problem4.tex
-#INCOMPLETE += advancedantennaProblemSet4Problem5.tex
+INCOMPLETE += advancedantennaProblemSet5Problem1.tex
+INCOMPLETE += advancedantennaProblemSet5Problem2.tex
 
 INCOMPLETE += stokespost.tex
 
@@ -94,7 +91,8 @@ $(LOCAL_FILES) :
 
 energyMomentumWithMagneticSources.pdf : ../ece1229/energyMomentumWithMagneticSources.tex
 
-#cornerCubeTakeII.pdf : ps3mathematica.tex
+advancedantennaProblemSet5.pdf : advancedantennaProblemSet5Problem1.tex
+advancedantennaProblemSet5.pdf : advancedantennaProblemSet5Problem2.tex
 
 gaBasics.pdf : gaBasics.tex
 
