@@ -181,5 +181,8 @@ opt/%.pdf : %.pdf
 #%.png : %.pdf
 #	$(INKSCAPE) $^ --export-png=$@
 
+dist: presentation.pdf
+	cp presentation.pdf pr/
+
 localclean ::
 	rm -f $(LOCAL_FILES)
