@@ -7,9 +7,11 @@ PDFLATEX := pdflatex -file-line-error -synctex=1 --max-print-line=1000 --c-style
 DIST := /cygdrive/c/Users/IBM_ADMIN/Dropbox/ece1229-handouts/project/report
 
 all : presentation.pdf
+#all : pr.pdf
 
 #presentation.pdf : $(FIGURES)
-presentation.pdf : Bibliography.bib
+presentation.pdf : Bibliography.bib xingqi.tex peeter.tex
+#pr.pdf : Bibliography.bib xingqi.tex peeter.tex
 
 #$(PNGFIGURES) : %.png: $(FIGPATH)/%.png
 #	cp $< $@
@@ -29,10 +31,7 @@ dist :
 	cp make.sh $(PNGPATHS) $(JPGPATHS) *.pdf Bibliography.bib *.tex $(DIST)
 
 clean :
-	rm -f *.snm *.aux *.out *.toc *.nav *.pdf *.synctex.gz *.log *.blg *.bbl
-
-veryclean : clean
-	rm -f *.png *.pdf *.bib
+	rm -f *.snm *.aux *.out *.toc *.nav *.pdf *.synctex.gz *.log *.blg *.bbl *.png *.pdf *.bib
 
 Bibliography.bib : ../myrefs.bib.in
 	cp ../myrefs.bib.in myrefs.bib
