@@ -1,15 +1,21 @@
 FIGPATH := ../../figures/ece1229/project
-FIGUREPATHS := $(wildcard $(FIGPATH)/*.png)
-FIGURES := $(notdir $(FIGUREPATHS))
+PNGPATHS := $(wildcard $(FIGPATH)/*.png)
+JPGPATHS := $(wildcard $(FIGPATH)/*.jpg)
+#PNGFIGURES := $(notdir $(PNGPATHS))
+#JPGFIGURES := $(notdir $(JPGPATHS))
 PDFLATEX := pdflatex -file-line-error -synctex=1 --max-print-line=1000 --c-style-errors --halt-on-error
 DIST := /cygdrive/c/Users/IBM_ADMIN/Dropbox/ece1229-handouts/project/report
 
 all : presentation.pdf
 
-presentation.pdf : $(FIGURES) Bibliography.bib
+#presentation.pdf : $(FIGURES)
+presentation.pdf : Bibliography.bib
 
-$(FIGURES) : %.png: $(FIGPATH)/%.png
-	cp $< $@
+#$(PNGFIGURES) : %.png: $(FIGPATH)/%.png
+#	cp $< $@
+#
+#$(JPGFIGURES) : %.jpg: $(FIGPATH)/%.jpg
+#	cp $< $@
 
 %.pdf :: %.tex
 	$(PDFLATEX) $<
@@ -20,7 +26,7 @@ $(FIGURES) : %.png: $(FIGPATH)/%.png
 	bibtex $(basename $@)
 
 dist : 
-	cp make.sh *.png *.pdf Bibliography.bib *.tex $(DIST)
+	cp make.sh $(PNGPATHS) $(JPGPATHS) *.pdf Bibliography.bib *.tex $(DIST)
 
 clean :
 	rm -f *.snm *.aux *.out *.toc *.nav *.pdf *.synctex.gz *.log *.blg *.bbl
