@@ -10,8 +10,7 @@ all : presentation.pdf
 #all : pr.pdf
 
 #presentation.pdf : $(FIGURES)
-presentation.pdf : Bibliography.bib xingqi.tex peeter.tex
-#pr.pdf : Bibliography.bib xingqi.tex peeter.tex
+presentation.pdf : Bibliography.bib xingqi.tex peeter.tex figpath.sty
 
 #$(PNGFIGURES) : %.png: $(FIGPATH)/%.png
 #	cp $< $@
@@ -28,7 +27,8 @@ presentation.pdf : Bibliography.bib xingqi.tex peeter.tex
 	bibtex $(basename $@)
 
 dist : 
-	cp make.sh $(PNGPATHS) $(JPGPATHS) *.pdf Bibliography.bib *.tex $(DIST)
+	cp make.sh $(PNGPATHS) $(JPGPATHS) *.pdf Bibliography.bib peeter.tex  presentation.tex  xingqi.tex $(DIST)
+	cp figpathdist.sty $(DIST)/figpath.sty
 
 clean :
 	rm -f *.snm *.aux *.out *.toc *.nav *.pdf *.synctex.gz *.log *.blg *.bbl *.png *.pdf *.bib
