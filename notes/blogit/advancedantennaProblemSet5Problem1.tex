@@ -2,7 +2,7 @@
 % Copyright © 2015 Peeter Joot.  All Rights Reserved.
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
 %
-\makeproblem{Aperature antenna}{advancedantenna:problemSet5:1}{ 
+\makeproblem{Aperature antenna}{advancedantenna:problemSet5:1}{
 
 A rectangular aperture lies along the x-y plane and has dimensions \( a \times b \). Let the electric
 field aperture distribution be given by,
@@ -11,7 +11,7 @@ field aperture distribution be given by,
 \BE_{\textrm{ap}} = \ycap \cos\lr{ \frac{\pi}{a} x }.
 \end{dmath}
 
-The aperture is cut out of an infinite perfectly electric conductor. 
+The aperture is cut out of an infinite perfectly electric conductor.
 The origin of the coordinate system is at the center of the aperture.
 
 Using the theory of radiation from apertures based on the equivalnce principle, calculate:
@@ -35,13 +35,219 @@ From the plot determine the levels of the first sidelobe in the E and H planes.
 From the plot determine the 3dB beamwidth of the main lobe in the E and H planes.
 } % makeproblem
 
-\makeanswer{advancedantenna:problemSet5:1}{ 
+\makeanswer{advancedantenna:problemSet5:1}{
+
+FIXME: figure.
+
+The equivalent source for this electric field is a magnetic current
+
+\begin{equation}\label{eqn:advancedantennaProblemSet5Problem1:40}
+\BM_\txts
+= - 2 \zcap \cross \ycap \cos\lr{ \frac{\pi}{a} x }
+= 2 \xcap \cos\lr{ \frac{\pi}{a} x }.
+\end{equation}
+
+producing an electric vector potential that is approximately
+
+\begin{dmath}\label{eqn:advancedantennaProblemSet5Problem1:60}
+\BF
+= \frac{\epsilon}{4 \pi r} \int_{-a/2}^{a/2} dx' \int_{-b/2}^{b/2} dy' \BM_\txts e^{-j k ( r - \rcap \cdot \Br' ) }
+= \frac{\epsilon}{2 \pi r} e^{-j k r} \xcap \int_{-a/2}^{a/2} dx' \int_{-b/2}^{b/2} dy' \cos\lr{ \frac{\pi}{a} x' } e^{j k \rcap \cdot \Br' }
+= \frac{\epsilon}{2 \pi r} e^{-j k r} \xcap \int_{-a/2}^{a/2} dx' \int_{-b/2}^{b/2} dy' \cos\lr{ \frac{\pi}{a} x' }
+e^{j k \sin\theta \lr{\cos\phi x' + \sin\phi y'} }
+= \frac{\epsilon}{4 \pi r} e^{-j k r} \xcap \int_{-a/2}^{a/2} dx'
+\lr{
+e^{j k \sin\theta \cos\phi x' + j \pi x'/a}
++
+e^{j k \sin\theta \cos\phi x' - j \pi x'/a}
+}
+\int_{-b/2}^{b/2} dy'
+e^{j k \sin\theta \sin\phi y' }.
+\end{dmath}
+
+A symmetric interval around the origin has been chosen to avoid the introduction of complex phases.
+
+Each of these integrals is of the form
+
+\begin{dmath}\label{eqn:advancedantennaProblemSet5Problem1:80}
+\int_{-c/2}^{c/2} dz'
+e^{j \alpha z' }
+=
+\evalrange{ \frac{e^{j \alpha z' }}{j \alpha} }{-c/2}{c/2}
+=
+\frac{ e^{j \alpha c/2} - e^{-j \alpha c/2} }{ j \alpha }
+=
+\frac{\sin\lr{\alpha c /2} }{\alpha/2}.
+\end{dmath}
+
+With 
+
+\begin{subequations}
+\label{eqn:advancedantennaProblemSet5Problem1:360}
+\begin{dmath}\label{eqn:advancedantennaProblemSet5Problem1:380}
+X = k \sin\theta \cos\phi
+\end{dmath}
+\begin{dmath}\label{eqn:advancedantennaProblemSet5Problem1:400}
+Y = k \sin\theta \sin\phi,
+\end{dmath}
+\end{subequations}
+
+the electric vector potential is
+
+\begin{dmath}\label{eqn:advancedantennaProblemSet5Problem1:100}
+\BF
+= \frac{\epsilon}{4 \pi r} e^{-j k r} \xcap
+\lr{
+\frac{ \sin\lr{ (X + \pi/a) a/2 } }{ (X + \pi/a)/2}
++
+\frac{ \sin\lr{ (X - \pi/a) a/2 } }{ (X - \pi/a)/2}
+}
+\frac{ \sin\lr{ Y b/2 } }{ Y/2}
+= \frac{\epsilon}{2 \pi r} e^{-j k r} \xcap
+\frac{
+(X - \pi/a) \sin\lr{ X a/2 + \pi/2 }
++
+(X + \pi/a) \sin\lr{ X a/2 - \pi/2 }
+}{ X^2 - (\pi/a)^2}
+\frac{ \sin\lr{ Y b/2 } }{ Y/2}.
+\end{dmath}
+
+Since
+\begin{subequations}
+\label{eqn:advancedantennaProblemSet5Problem1:120}
+\begin{dmath}\label{eqn:advancedantennaProblemSet5Problem1:140}
+\sin( z + \pi/2 ) + \sin( z - \pi/2 ) = 0
+\end{dmath}
+\begin{dmath}\label{eqn:advancedantennaProblemSet5Problem1:160}
+\sin( z + \pi/2 ) - \sin( z - \pi/2 ) = 2 \cos z,
+\end{dmath}
+\end{subequations}
+
+this reduces to
+
+\begin{dmath}\label{eqn:advancedantennaProblemSet5Problem1:180}
+\BF
+=
+-\frac{\epsilon}{r a} e^{-j k r} \xcap
+\frac{
+\cos\lr{ X a/2 }
+}{ X^2 - (\pi/a)^2}
+\frac{ \sin\lr{ Y b/2 } }{ Y/2}.
+\end{dmath}
+
+The far field magnetic field is
+
+\begin{dmath}\label{eqn:advancedantennaProblemSet5Problem1:200}
+\BH
+= -j \omega \BF_T
+=
+j k c \frac{\epsilon}{r a} e^{-j k r} \lr{ \xcap - \lr{\xcap \cdot \rcap} \rcap }
+\frac{
+\cos\lr{ X a/2 }
+}{ X^2 - (\pi/a)^2}
+\frac{ \sin\lr{ Y b/2 } }{ Y/2}
+=
+\frac{j k}{r a \eta} e^{-j k r} \lr{ \xcap - \lr{ \xcap \cdot \rcap} \rcap }
+\frac{
+\cos\lr{ X a/2 }
+}{ X^2 - (\pi/a)^2}
+\frac{ \sin\lr{ Y b/2 } }{ Y/2}.
+\end{dmath}
+
+Since
+
+\begin{dmath}\label{eqn:advancedantennaProblemSet5Problem1:280}
+\xcap = \sin\theta \cos\phi \rcap + \cos\theta \cos\phi \thetacap - \sin\phi \phicap,
+\end{dmath}
+
+the far field magnetic field is
+
+\boxedEquation{eqn:advancedantennaProblemSet5Problem1:420}{
+\BH
+=
+\frac{j k}{r a \eta} e^{-j k r} \lr{ \cos\theta \cos\phi \thetacap - \sin\phi \phicap}
+\frac{
+\cos\lr{ X a/2 }
+}{ X^2 - (\pi/a)^2}
+\frac{ \sin\lr{ Y b/2 } }{ Y/2}.
+}
+
+This can be related to the electric field noting that that the dual of the far field relationship
+
+\begin{dmath}\label{eqn:advancedantennaProblemSet5Problem1:220}
+\BH_A = \inv{\eta} \rcap \cross \BE_A,
+\end{dmath}
+
+is
+
+\begin{dmath}\label{eqn:advancedantennaProblemSet5Problem1:240}
+-\BE_F = \eta \rcap \cross \BH_F,
+\end{dmath}
+
+so the far field electric field is
+
+\begin{dmath}\label{eqn:advancedantennaProblemSet5Problem1:260}
+\BE
+= -\eta \rcap \cross \BH
+=
+-\frac{j k}{r a \eta} e^{-j k r} \rcap \cross \xcap
+\frac{
+\cos\lr{ X a/2 }
+}{ X^2 - (\pi/a)^2}
+\frac{ \sin\lr{ Y b/2 } }{ Y/2}.
+\end{dmath}
+
+That electric field direction is
+
+\begin{dmath}\label{eqn:advancedantennaProblemSet5Problem1:300}
+\rcap \cross \xcap
+=
+\cos\theta \cos\phi \rcap \cross \thetacap - \sin\phi \rcap \cross \phicap
+=
+\cos\theta \cos\phi \phicap + \sin\phi \thetacap,
+\end{dmath}
+
+so the electric field is
+
+\boxedEquation{eqn:advancedantennaProblemSet5Problem1:440}{
+\BE 
+=
+-\frac{j k}{r a \eta} e^{-j k r} \lr{ \cos\theta \cos\phi \phicap + \sin\phi \thetacap }
+\frac{
+\cos\lr{ X a/2 }
+}{ X^2 - (\pi/a)^2}
+\frac{ \sin\lr{ Y b/2 } }{ Y/2}.
+}
+
+Note that the electric and magnetic fields are perpendicular, as expected.
+
 \makeSubAnswer{}{advancedantenna:problemSet5:1a}
 
-TODO.
+The polar coordinate of the electric field is
+
+\begin{dmath}\label{eqn:advancedantennaProblemSet5Problem1:320}
+E_\theta =
+-\frac{j k}{r a \eta} e^{-j k r} \sin\phi
+\frac{
+\cos\lr{ X a/2 }
+}{ X^2 - (\pi/a)^2}
+\frac{ \sin\lr{ Y b/2 } }{ Y/2}.
+\end{dmath}
+
 \makeSubAnswer{}{advancedantenna:problemSet5:1b}
 
-TODO.
+The azimuthal coordinate of the electric field is
+
+\begin{dmath}\label{eqn:advancedantennaProblemSet5Problem1:340}
+E_\phi
+=
+-\frac{j k}{r a \eta} e^{-j k r} \cos\theta \cos\phi
+\frac{
+\cos\lr{ X a/2 }
+}{ X^2 - (\pi/a)^2}
+\frac{ \sin\lr{ Y b/2 } }{ Y/2}.
+\end{dmath}
+
 \makeSubAnswer{}{advancedantenna:problemSet5:1c}
 
 TODO.
