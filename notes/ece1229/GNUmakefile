@@ -46,6 +46,19 @@ advancedantennaProblemSet4.pdf : ps4mathematica.tex
 advancedantennaProblemSet4.pdf : ps4matlab.tex
 advancedantennaProblemSet4.pdf : ps4julia.tex
 
+advancedantennaProblemSet5.pdf : ps5matlab.tex
+advancedantennaProblemSet5.pdf : ps5mathematica.tex
+#INCOMPLETE += ps5mathematica.tex
+#INCOMPLETE += ps5matlab.tex
+#INCOMPLETE += advancedantennaProblemSet5Problem1.tex
+#INCOMPLETE += advancedantennaProblemSet5Problem2.tex
+
+ps5matlab.tex : ../METADATA ../../matlab/METADATA
+	(cd .. ; ./METADATA -matlab -latex -ece1229 -filter ece1229/ps5/ ) > $@
+
+ps5mathematica.tex : ../METADATA ../../mathematica/METADATA
+	(cd .. ; ./METADATA -mathematica -latex -ece1229 -filter ece1229/ps5/ ) > $@
+
 ps4mathematica.tex : ../METADATA ../../mathematica/METADATA
 	(cd .. ; ./METADATA -mathematica -latex -ece1229 -filter ece1229/ps4/ ) > $@
 
