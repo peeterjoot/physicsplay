@@ -20,7 +20,7 @@ INCOMPLETE += gaMintro.tex
 INCOMPLETE += censor1l.tex
 INCOMPLETE += censor1p.tex
 INCOMPLETE += censor1pg.tex
-#INCOMPLETE += ps5mathematica.tex
+INCOMPLETE += ps5mathematica.tex
 INCOMPLETE += ps5matlab.tex
 INCOMPLETE += advancedantennaProblemSet5Problem1.tex
 INCOMPLETE += advancedantennaProblemSet5Problem2.tex
@@ -78,9 +78,13 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
 
 advancedantennaProblemSet5.pdf : ps5matlab.tex
+advancedantennaProblemSet5.pdf : ps5mathematica.tex
 
 ps5matlab.tex : ../METADATA ../../matlab/METADATA
 	(cd .. ; ./METADATA -matlab -latex -ece1229 -filter ece1229/ps5/ ) > $@
+
+ps5mathematica.tex : ../METADATA ../../mathematica/METADATA
+	(cd .. ; ./METADATA -mathematica -latex -ece1229 -filter ece1229/ps5/ ) > $@
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
