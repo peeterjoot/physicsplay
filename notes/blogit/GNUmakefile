@@ -68,6 +68,7 @@ ONCEFLAGS := -nojustonce
 all :: $(PDFS_FROM_EPS)
 all :: Bibliography.bib
 all :: peeters_macros.sty
+all :: matlab.sty
 all :: macros_qed.sty
 all :: ece1229.sty
 all :: peeters_layout.sty
@@ -150,6 +151,9 @@ macros_bm.sty : ../macros_bm.sty
 	cp $^ $@
 
 macros_qed.sty : ../macros_qed.sty
+	cp $^ $@
+
+matlab.sty : ../matlab.sty
 	cp $^ $@
 
 macros_mathematica.sty : ../macros_mathematica.sty
