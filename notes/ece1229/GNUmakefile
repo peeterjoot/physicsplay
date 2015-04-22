@@ -59,6 +59,7 @@ advancedantennaProblemSet5.pdf : advancedantennaProblemSet5Problem1.tex
 advancedantennaProblemSet5.pdf : advancedantennaProblemSet5Problem2.tex
 advancedantennaProblemSet5.pdf : ps5matlab.tex
 advancedantennaProblemSet5.pdf : ps5mathematica.tex
+advancedantennaProblemSet5.pdf : matlab.sty
 
 ps5matlab.tex : ../METADATA ../../matlab/METADATA
 	(cd .. ; ./METADATA -matlab -latex -ece1229 -filter ece1229/ps5/ ) > $@
