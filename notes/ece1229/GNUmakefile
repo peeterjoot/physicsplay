@@ -27,9 +27,7 @@ THISBOOK_DEPS += macros_mathematica.sty
 
 include ../make.rules
 
-#all :: advancedantennaProblemSet4.pdf
-
-#epsconv : $(PDFS_FROM_EPS)
+problemSets : advancedantennaProblemSet1.pdf advancedantennaProblemSet2.pdf advancedantennaProblemSet3.pdf advancedantennaProblemSet4.pdf advancedantennaProblemSet5.pdf
 
 advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem1.tex
 advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem2.tex
@@ -37,6 +35,17 @@ advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem3.tex
 advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem4.tex
 advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem5.tex
 advancedantennaProblemSet1.pdf : advancedantennaProblemSet1Problem6.tex
+
+advancedantennaProblemSet2.pdf : advancedantennaProblemSet2Problem1.tex
+advancedantennaProblemSet2.pdf : advancedantennaProblemSet2Problem2.tex
+advancedantennaProblemSet2.pdf : advancedantennaProblemSet2Problem3.tex
+advancedantennaProblemSet2.pdf : advancedantennaProblemSet2Problem4.tex
+advancedantennaProblemSet2.pdf : advancedantennaProblemSet2Problem5.tex
+
+advancedantennaProblemSet3.pdf : advancedantennaProblemSet3Problem1.tex
+advancedantennaProblemSet3.pdf : advancedantennaProblemSet3Problem2.tex
+advancedantennaProblemSet3.pdf : advancedantennaProblemSet3Problem3.tex
+advancedantennaProblemSet3.pdf : ps3mathematica.tex
 
 advancedantennaProblemSet4.pdf : advancedantennaProblemSet4Problem1.tex
 advancedantennaProblemSet4.pdf : advancedantennaProblemSet4Problem2.tex
@@ -46,12 +55,10 @@ advancedantennaProblemSet4.pdf : ps4mathematica.tex
 advancedantennaProblemSet4.pdf : ps4matlab.tex
 advancedantennaProblemSet4.pdf : ps4julia.tex
 
+advancedantennaProblemSet5.pdf : advancedantennaProblemSet5Problem1.tex
+advancedantennaProblemSet5.pdf : advancedantennaProblemSet5Problem2.tex
 advancedantennaProblemSet5.pdf : ps5matlab.tex
 advancedantennaProblemSet5.pdf : ps5mathematica.tex
-#INCOMPLETE += ps5mathematica.tex
-#INCOMPLETE += ps5matlab.tex
-#INCOMPLETE += advancedantennaProblemSet5Problem1.tex
-#INCOMPLETE += advancedantennaProblemSet5Problem2.tex
 
 ps5matlab.tex : ../METADATA ../../matlab/METADATA
 	(cd .. ; ./METADATA -matlab -latex -ece1229 -filter ece1229/ps5/ ) > $@
