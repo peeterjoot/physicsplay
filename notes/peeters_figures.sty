@@ -2,6 +2,7 @@
 \RequirePackage{graphicx}
 \RequirePackage{caption}
 \RequirePackage{subfig}
+\RequirePackage{stackengine}
 
 % http://tex.stackexchange.com/a/94063/15 -- used in \imageFigure below.
 \def\md@envname{mdframed}
@@ -60,6 +61,86 @@
     \fi%
   \fi%
 }
+
+%--------------------------------------------------------------------------------------------------
+
+\newcommand{\twoFiguresFloat}[5]{%
+   \begin{figure}[htp]%
+       \centering%
+       \subfloat[][]{\includegraphics[#5]{#1}}%
+       \qquad%
+       \subfloat[][]{\includegraphics[#5]{#2}}%
+       \caption{#3}%
+       \label{#4}%
+   \end{figure}%
+}
+
+\newcommand{\twoFiguresNonFloat}[5]{%
+   \begin{center}%
+       \captionsetup{type=figure}%
+       \stackunder{\includegraphics[#5]{#1}}{(a)}%
+       \qquad%
+       \stackunder{\includegraphics[#5]{#2}}{(b)}%
+       \caption{#3}%
+       \label{#4}%
+   \end{center}%
+}
+
+% \imageTwoFigures{path1}{path2}{fancy plots}{fig:blah}{scale=0.3}
+\newcommand{\imageTwoFigures}[5]{%
+  \ifinner%
+    \twoFiguresNonFloat{#1}{#2}{#3}{#4}{#5}%
+  \else%
+    \ifx\@currenvir\md@envname%
+       \twoFiguresNonFloat{#1}{#2}{#3}{#4}{#5}%
+    \else%
+       \twoFiguresFloat{#1}{#2}{#3}{#4}{#5}%
+    \fi%
+  \fi%
+}
+
+%--------------------------------------------------------------------------------------------------
+
+\newcommand{\threeFiguresOneLineFloat}[6]{%
+   \begin{figure}[htp]%
+       \centering%
+       \subfloat[][]{\includegraphics[#6]{#1}}%
+       \qquad%
+       \subfloat[][]{\includegraphics[#6]{#2}}%
+       \qquad%
+       \subfloat[][]{\includegraphics[#6]{#3}}%
+       \caption{#4}%
+       \label{#5}%
+   \end{figure}%
+}
+
+\newcommand{\threeFiguresOneLineNonFloat}[6]{%
+   \begin{center}%
+       \captionsetup{type=figure}%
+       \stackunder{\includegraphics[#6]{#1}}{(a)}%
+       \qquad%
+       \stackunder{\includegraphics[#6]{#2}}{(b)}%
+       \qquad%
+       \stackunder{\includegraphics[#6]{#3}}{(c)}%
+       \caption{#4}%
+       \label{#5}%
+   \end{center}%
+}
+
+% \imageThreeFiguresOneLine{path1}{path2}{path3}{fancy plots}{fig:blah}{scale=0.3}
+\newcommand{\imageThreeFiguresOneLine}[6]{%
+  \ifinner%
+    \threeFiguresOneLineNonFloat{#1}{#2}{#3}{#4}{#5}{#6}%
+  \else%
+    \ifx\@currenvir\md@envname%
+       \threeFiguresOneLineNonFloat{#1}{#2}{#3}{#4}{#5}{#6}%
+    \else%
+       \threeFiguresOneLineFloat{#1}{#2}{#3}{#4}{#5}{#6}%
+    \fi%
+  \fi%
+}
+
+
 %--------------------------------------------------------------------------------------------------
 
 \newcommand{\fourFiguresTwoLinesFloat}[7]{%
@@ -80,13 +161,13 @@
 \newcommand{\fourFiguresTwoLinesNonFloat}[7]{%
    \begin{center}%
        \captionsetup{type=figure}%
-       \includegraphics[#7]{#1}%
+       \stackunder{\includegraphics[#7]{#1}}{(a)}%
        \qquad%
-       \includegraphics[#7]{#2}%
+       \stackunder{\includegraphics[#7]{#2}}{(b)}%
        \par\vspace{5mm}%
-       \includegraphics[#7]{#3}%
+       \stackunder{\includegraphics[#7]{#3}}{(c)}%
        \qquad%
-       \includegraphics[#7]{#4}%
+       \stackunder{\includegraphics[#7]{#4}}{(d)}%
        \caption{#5}%
        \label{#6}%
    \end{center}%
@@ -101,6 +182,59 @@
        \fourFiguresTwoLinesNonFloat{#1}{#2}{#3}{#4}{#5}{#6}{#7}%
     \else%
        \fourFiguresTwoLinesFloat{#1}{#2}{#3}{#4}{#5}{#6}{#7}%
+    \fi%
+  \fi%
+}
+
+%--------------------------------------------------------------------------------------------------
+
+\newcommand{\sixFiguresThreeLinesFloat}[9]{%
+   \begin{figure}[htp]%
+       \centering%
+       \subfloat[][]{\includegraphics[#9]{#1}}%
+       \qquad%
+       \subfloat[][]{\includegraphics[#9]{#2}}%
+       \qquad%
+       \subfloat[][]{\includegraphics[#9]{#3}}%
+       \qquad%
+       \subfloat[][]{\includegraphics[#9]{#4}}%
+       \qquad%
+       \subfloat[][]{\includegraphics[#9]{#5}}%
+       \qquad%
+       \subfloat[][]{\includegraphics[#9]{#6}}%
+       \caption{#7}%
+       \label{#8}%
+   \end{figure}%
+}
+
+\newcommand{\sixFiguresThreeLinesNonFloat}[9]{%
+   \begin{center}%
+       \captionsetup{type=figure}%
+       \stackunder{\includegraphics[#9]{#1}}{(a)}%
+       \qquad%
+       \stackunder{\includegraphics[#9]{#2}}{(b)}%
+       \par\vspace{5mm}%
+       \stackunder{\includegraphics[#9]{#3}}{(c)}%
+       \qquad%
+       \stackunder{\includegraphics[#9]{#4}}{(d)}%
+       \par\vspace{5mm}%
+       \stackunder{\includegraphics[#9]{#5}}{(c)}%
+       \qquad%
+       \stackunder{\includegraphics[#9]{#6}}{(d)}%
+       \caption{#7}%
+       \label{#8}%
+   \end{center}%
+}
+
+% \imageSixFiguresThreeLines{path1}{path2}{path3}{path4}{path5}{path6}{fancy plots}{fig:blah}{scale=0.3}
+\newcommand{\imageSixFiguresThreeLines}[9]{%
+  \ifinner%
+    \sixFiguresThreeLinesNonFloat{#1}{#2}{#3}{#4}{#5}{#6}{#7}{#8}{#9}%
+  \else%
+    \ifx\@currenvir\md@envname%
+       \sixFiguresThreeLinesNonFloat{#1}{#2}{#3}{#4}{#5}{#6}{#7}{#8}{#9}%
+    \else%
+       \sixFiguresThreeLinesFloat{#1}{#2}{#3}{#4}{#5}{#6}{#7}{#8}{#9}%
     \fi%
   \fi%
 }
