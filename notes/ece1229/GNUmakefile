@@ -19,8 +19,8 @@ GENERATED_SOURCES += matlab.tex
 GENERATED_SOURCES += mathematica.tex 
 GENERATED_SOURCES += julia.tex 
 
-#EPS_FILES := $(wildcard $(FIGURES)/report/*.eps)
-#PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))
+EPS_FILES := $(wildcard $(FIGURES)/*.eps)
+PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))
 
 THISBOOK_DEPS += $(PDFS_FROM_EPS)
 THISBOOK_DEPS += macros_mathematica.sty
