@@ -28,9 +28,10 @@ The two infinitesimally thin pillboxes of
 are used in the argument.
 
 \imageTwoFigures{../../figures/ece1229/pillboxForTangentialFieldsFig1}{../../figures/ece1229/pillboxForNormalFieldsFig2}{Pillboxes for tangential and normal field relations}{fig:pillboxForTangentialFields:pillboxForTangentialFieldsFig1}{scale=0.3}
-%\imageFigure{../../figures/ece1229/pillboxForNormalFieldsFig2}{CAPTION: pillboxForNormalFieldsFig2}{fig:pillboxForNormalFields:pillboxForNormalFieldsFig2}{0.3}
-%\imageFigure{../../figures/ece1229/pillboxForTangentialFieldsFig1}{CAPTION: pillboxForTangentialFieldsFig1}{fig:pillboxForTangentialFields:pillboxForTangentialFieldsFig1}{0.3}
+%\imageFigure{../../figures/ece1229/pillboxForNormalFieldsFig2}{CAPTION: }{fig:pillboxForNormalFields:pillboxForNormalFieldsFig2}{0.3}
+%\imageFigure{../../figures/ece1229/pillboxForTangentialFieldsFig1}{CAPTION: }{fig:pillboxForTangentialFields:pillboxForTangentialFieldsFig1}{0.3}
 
+\index{Maxwell's equations!differential}
 Maxwell's equations with both magnetic and electric sources are
 
 \begin{subequations}
@@ -48,6 +49,8 @@ Maxwell's equations with both magnetic and electric sources are
 \end{equation}
 \end{subequations}
 
+\index{Stokes' theorem}
+\index{divergence theorem}
 After application of Stokes' and the divergence theorems Maxwell's equations have the integral form
 
 \begin{subequations}
@@ -69,7 +72,19 @@ After application of Stokes' and the divergence theorems Maxwell's equations hav
 \end{equation}
 \end{subequations}
 
+\index{Gauss's law!differential form}
+\index{Gauss's law!differential form, magnetic}
+\index{Maxwell-Faraday equation!differential form}
+\index{Ampere's law!differential form}
+\index{Gauss's law!integral form}
+\index{Gauss's law!integral form, magnetic}
+\index{Maxwell-Faraday equation!integral form}
+\index{Ampere's law!integral form}
+
 \section{Maxwell-Faraday equation}
+
+\index{electric surface current density}
+\index{electric field!tangential}
 
 First consider one of the loop integrals, like \cref{eqn:normalAndTangentialFields:100}.  For an infinestismal loop, that integral is
 
@@ -134,15 +149,21 @@ This is satisfied when
 
 where \( \ncap \) is the normal between the interfaces.  I'd failed to understand when reading this derivation initially, how the \( \bcB \) contribution was killed off.  i.e. If the vanishing area in the surface integral kills off the \( \bcB \) contribution, why do we have a \( \bcM \) contribution left.  The key to this is understanding that this magnetic current is considered to be confined very closely to the surface getting larger as \( \Delta y \) gets smaller.
 
+Also note that the units of \( \bcM_s \) are volts/meter like the electric field (not volts/squared-meter like \( \bcM \).)
+
 \section{Ampere's law}
 
-Assuming an electric surface current density of the form
+\index{electric surface current density}
+\index{magnetic field!tangential}
+As above, assume a linear electric surface current density of the form
 
-\begin{dmath}\label{eqn:normalAndTangentialFields:n}
+\begin{dmath}\label{eqn:normalAndTangentialFields:300}
 \bcJ_s = \lim_{\Delta y \rightarrow 0} \lr{\bcJ \cdot \ncap} \ncap \Delta y,
 \end{dmath}
 
-Ampere's law, following the same arguments, implies
+in units of amperes/meter (not amperes/meter-squared like \( \bcJ \).)
+
+To apply the arguments above to Ampere's law, only the sign needs to be adjusted 
 
 \boxedEquation{eqn:normalAndTangentialFields:280}{
 \lr{ \bcH^{(1)} -\bcH^{(2)} } \cross \ncap = \bcJ_s.
@@ -150,10 +171,63 @@ Ampere's law, following the same arguments, implies
 
 \section{Gauss's law}
 
-\begin{equation}\label{eqn:normalAndTangentialFields:140}
+Using the cylindrical pillbox surface with radius \( \Delta r \), height \( \Delta y \), and top and bottom surface areas \( \Delta A = \pi \lr{\Delta r}^2 \), the LHS of Gauss's law \cref{eqn:normalAndTangentialFields:140} expands to
+
+\begin{dmath}\label{eqn:normalAndTangentialFields:320}
 \int_{\partial V} \bcD \cdot d\BA
-=
+\approx
+\mathcal{D}^{(2)}_y \Delta A
++ \mathcal{D}^{(2)}_\rho 2 \pi \Delta r \frac{\Delta y}{2}
++ \mathcal{D}^{(1)}_\rho 2 \pi \Delta r \frac{\Delta y}{2}
+-\mathcal{D}^{(1)}_y \Delta A
+\approx
+\lr{ \mathcal{D}^{(2)}_y 
+-\mathcal{D}^{(1)}_y } \Delta A.
+\end{dmath}
+
+As with the Stokes integrals above it is assumed that the height is infinestimal with respect to the radial dimension.  Letting that height \( \Delta y \rightarrow 0 \) kills  off the radially directed contributions of the flux through the sidewalls.
+
+The RHS expands to approximately
+
+\begin{dmath}\label{eqn:normalAndTangentialFields:340}
 \int_V \rho_\txte\,dV
-\end{equation}
+\approx
+\Delta A \Delta y \rho_\txte.
+\end{dmath}
+
+Define a highly localized surface current density (coulombs/meter-squared) as
+
+\begin{dmath}\label{eqn:normalAndTangentialFields:360}
+\sigma_\txte = \lim_{\Delta y \rightarrow 0} \Delta y \rho_\txte.
+\end{dmath}
+
+Equating \cref{eqn:normalAndTangentialFields:340} with \cref{eqn:normalAndTangentialFields:320} gives
+
+\begin{dmath}\label{eqn:normalAndTangentialFields:380}
+\lr{ \mathcal{D}^{(2)}_y 
+-\mathcal{D}^{(1)}_y } \Delta A
+=
+\Delta A \sigma_\txte,
+\end{dmath}
+
+or
+
+\boxedEquation{eqn:normalAndTangentialFields:400}{
+\lr{ \bcD^{(2)} - \bcD^{(1)} } \cdot \ncap = \sigma_\txte.
+}
+
+\section{Gauss's law for magnetism}
+
+The same argument can be applied to the magnetic flux.  Define a highly localized magnetic surface current density (webers/meter-squared) as
+
+\begin{dmath}\label{eqn:normalAndTangentialFields:440}
+\sigma_\txtm = \lim_{\Delta y \rightarrow 0} \Delta y \rho_\txtm,
+\end{dmath}
+
+yielding the boundary relation
+
+\boxedEquation{eqn:normalAndTangentialFields:420}{
+\lr{ \bcB^{(2)} - \bcB^{(1)} } \cdot \ncap = \sigma_\txtm.
+}
 
 \EndArticle
