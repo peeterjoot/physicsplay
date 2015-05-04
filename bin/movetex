@@ -67,14 +67,14 @@ $curDirName =~ s,.*/,, ;
 my @newDirCommands = () ;
 my @newDeps = () ;
 
-#print "grep -e includegraphics -e input.*pdf_tex $filebase.$suffix | sed 's/%.*//'\n" ;
+#print "grep --text -e includegraphics -e input.*pdf_tex $filebase.$suffix | sed 's/%.*//'\n" ;
 #die ;
 my $gpat = "-e includegraphics -e imageFigure -e pdfTexFigure 'input.*pdf_tex'" ;
 
 # FIXME: want these as dependencies, but not in the git repo:
 #$gpat .= ' -e movieFigure' ;
 
-my @ig = split(/[\n\r\l]+/, `grep $gpat $filebase.$suffix | sed 's/%.*//'`) ;
+my @ig = split(/[\n\r\l]+/, `grep --text $gpat $filebase.$suffix | sed 's/%.*//'`) ;
 foreach (@ig)
 {
    next if ( $_ eq '' ) ;
@@ -109,15 +109,15 @@ foreach (@ig)
    }
 }
 
-my $title = `grep 'chapter{' $filebase.$suffix` ;
+my $title = `grep --text 'chapter{' $filebase.$suffix` ;
 chomp $title ;
 if (! ($title =~ s/.*{(.*?)}.*/$1/) )
 {
-   $title = `grep 'generatetitle{' $filebase.$suffix` ;
+   $title = `grep --text 'generatetitle{' $filebase.$suffix` ;
    chomp $title ;
 }
 
-my $date = `grep 'date{' $filebase.$suffix` ;
+my $date = `grep --text 'date{' $filebase.$suffix` ;
 chomp $date ;
 $date =~ s/.*{(.*?)}.*/$1/ ; 
 
