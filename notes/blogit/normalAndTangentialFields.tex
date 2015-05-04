@@ -1,0 +1,159 @@
+%
+% Copyright © 2015 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{normalAndTangentialFields}
+\renewcommand{\dirname}{notes/FIXMEwheretodirname/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+\usepackage{peeters_figures}
+\usepackage{macros_bm}
+\usepackage{txfonts} % oint...
+
+\beginArtNoToc
+
+\generatetitle{Tangential and normal field components}
+%\chapter{Tangential and normal field components}
+%\label{chap:normalAndTangentialFields}
+
+The integral forms of Maxwell's equations can be used to derive relations for the tangential and normal field components to the sources.  These relations were mentioned in class.  It's a little late, but lets go over the derivation.  This isn't all review from first year electromagnetism since we are now using a magnetic source modifications of Maxwell's equations.
+
+The derivation below follows that of \citep{balanis1989advanced:maxwell} closely, but I am trying it myself to ensure that I understand the assumptions.
+
+The two infinitesimally thin pillboxes of
+\cref{fig:pillboxForTangentialFields:pillboxForTangentialFieldsFig1}
+are used in the argument.
+
+\imageTwoFigures{../../figures/ece1229/pillboxForTangentialFieldsFig1}{../../figures/ece1229/pillboxForNormalFieldsFig2}{Pillboxes for tangential and normal field relations}{fig:pillboxForTangentialFields:pillboxForTangentialFieldsFig1}{scale=0.3}
+%\imageFigure{../../figures/ece1229/pillboxForNormalFieldsFig2}{CAPTION: pillboxForNormalFieldsFig2}{fig:pillboxForNormalFields:pillboxForNormalFieldsFig2}{0.3}
+%\imageFigure{../../figures/ece1229/pillboxForTangentialFieldsFig1}{CAPTION: pillboxForTangentialFieldsFig1}{fig:pillboxForTangentialFields:pillboxForTangentialFieldsFig1}{0.3}
+
+Maxwell's equations with both magnetic and electric sources are
+
+\begin{subequations}
+\begin{equation}\label{eqn:normalAndTangentialFields:20}
+\spacegrad \cross \bcE = -\PD{t}{\bcB} -\bcM
+\end{equation}
+\begin{equation}\label{eqn:normalAndTangentialFields:40}
+\spacegrad \cross \bcH = \bcJ + \PD{t}{\bcD}
+\end{equation}
+\begin{equation}\label{eqn:normalAndTangentialFields:60}
+\spacegrad \cdot \bcD = \rho_\txte
+\end{equation}
+\begin{equation}\label{eqn:normalAndTangentialFields:80}
+\spacegrad \cdot \bcB = \rho_\txtm.
+\end{equation}
+\end{subequations}
+
+After application of Stokes' and the divergence theorems Maxwell's equations have the integral form
+
+\begin{subequations}
+\begin{equation}\label{eqn:normalAndTangentialFields:100}
+\ointctrclockwise \bcE \cdot d\Bl = -\int d\BA \cdot \lr{ \PD{t}{\bcB} + \bcM }
+\end{equation}
+\begin{equation}\label{eqn:normalAndTangentialFields:120}
+\ointctrclockwise \bcH \cdot d\Bl = \int d\BA \cdot \lr{ \PD{t}{\bcD} + \bcJ }
+\end{equation}
+\begin{equation}\label{eqn:normalAndTangentialFields:140}
+\int_{\partial V} \bcD \cdot d\BA
+=
+\int_V \rho_\txte\,dV
+\end{equation}
+\begin{equation}\label{eqn:normalAndTangentialFields:160}
+\int_{\partial V} \bcB \cdot d\BA
+=
+\int_V \rho_\txtm\,dV.
+\end{equation}
+\end{subequations}
+
+\section{Maxwell-Faraday equation}
+
+First consider one of the loop integrals, like \cref{eqn:normalAndTangentialFields:100}.  For an infinestismal loop, that integral is
+
+\begin{dmath}\label{eqn:normalAndTangentialFields:180}
+\ointctrclockwise \bcE \cdot d\Bl 
+\approx
+\mathcal{E}^{(1)}_x \Delta x 
++ \mathcal{E}^{(1)} \frac{\Delta y}{2}
++ \mathcal{E}^{(2)} \frac{\Delta y}{2}
+-\mathcal{E}^{(2)}_x \Delta x 
+- \mathcal{E}^{(2)} \frac{\Delta y}{2}
+- \mathcal{E}^{(1)} \frac{\Delta y}{2}
+\approx
+\lr{ \mathcal{E}^{(1)}_x 
+-\mathcal{E}^{(2)}_x } \Delta x 
++ \inv{2} \PD{x}{\mathcal{E}^{(2)}} \Delta x \Delta y
++ \inv{2} \PD{x}{\mathcal{E}^{(1)}} \Delta x \Delta y.
+\end{dmath}
+
+We let \( \Delta y \rightarrow 0 \) which kills off all but the first difference term.
+
+The RHS of \cref{eqn:normalAndTangentialFields:180} is approximately
+
+\begin{dmath}\label{eqn:normalAndTangentialFields:200}
+-\int d\BA \cdot \lr{ \PD{t}{\bcB} + \bcM }
+\approx
+- \Delta x \Delta y \lr{ \PD{t}{\mathcal{B}_z} + \mathcal{M}_z }.
+\end{dmath}
+
+If the magnetic field contribution is assumed to be small in comparison to the magnetic current (i.e. infinite magnetic conductance), and if a linear magnetic current source of the form is also assumed
+
+\begin{dmath}\label{eqn:normalAndTangentialFields:220}
+\bcM_s = \lim_{\Delta y \rightarrow 0} \lr{\bcM \cdot \zcap} \zcap \Delta y,
+\end{dmath}
+
+then the Maxwell-Faraday equation takes the form
+
+\begin{dmath}\label{eqn:normalAndTangentialFields:240}
+\lr{ \mathcal{E}^{(1)}_x 
+-\mathcal{E}^{(2)}_x } \Delta x 
+\approx 
+- \Delta x \bcM_s \cdot \zcap.
+\end{dmath}
+
+While \( \bcM \) may have components that are not normal to the interface, the surface current need only have a normal component, since only that component contributes to the surface integral.
+
+The coordinate expression of \cref{eqn:normalAndTangentialFields:240} can be written as
+
+\begin{dmath}\label{eqn:normalAndTangentialFields:260}
+- \bcM_s \cdot \zcap
+=
+\lr{ \bcE^{(1)} -\bcE^{(2)} } \cdot \lr{ \ycap \cross \zcap }
+=
+\lr{ \lr{ \bcE^{(1)} -\bcE^{(2)} } \cross \ycap } \cdot \zcap.
+\end{dmath}
+
+This is satisfied when
+
+\boxedEquation{eqn:normalAndTangentialFields:280}{
+\lr{ \bcE^{(1)} -\bcE^{(2)} } \cross \ncap = - \bcM_s,
+}
+
+where \( \ncap \) is the normal between the interfaces.  I'd failed to understand when reading this derivation initially, how the \( \bcB \) contribution was killed off.  i.e. If the vanishing area in the surface integral kills off the \( \bcB \) contribution, why do we have a \( \bcM \) contribution left.  The key to this is understanding that this magnetic current is considered to be confined very closely to the surface getting larger as \( \Delta y \) gets smaller.
+
+\section{Ampere's law}
+
+Assuming an electric surface current density of the form
+
+\begin{dmath}\label{eqn:normalAndTangentialFields:n}
+\bcJ_s = \lim_{\Delta y \rightarrow 0} \lr{\bcJ \cdot \ncap} \ncap \Delta y,
+\end{dmath}
+
+Ampere's law, following the same arguments, implies
+
+\boxedEquation{eqn:normalAndTangentialFields:280}{
+\lr{ \bcH^{(1)} -\bcH^{(2)} } \cross \ncap = \bcJ_s.
+}
+
+\section{Gauss's law}
+
+\begin{equation}\label{eqn:normalAndTangentialFields:140}
+\int_{\partial V} \bcD \cdot d\BA
+=
+\int_V \rho_\txte\,dV
+\end{equation}
+
+\EndArticle

@@ -41,7 +41,7 @@
 #s/\\hb2m/\\frac{\\Hbar}{2m}/g;
 #s/\\Hc/\\hat{H}/g;
 #s/\\Hc/H_{\\mathrm{c}}/g ;
-#s/\\i(\d)/{($1)}/g;
+s/\\i(\d)/{($1)}/g;
 #s/\\II/\\mathcal{I}/g ;
 #s/\\ik/{(k)}/g;
 #s/\\ik\+1/{(k+1)}/g;
@@ -148,5 +148,5 @@
 #s/r\\iso/_{r,\\textrm{iso}}/g;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-s/\\AF/\\textrm{AF}/g;
-s/\\profE/Prof. Eleftheriades/g;
+#s/\\AF/\\textrm{AF}/g;
+#s/\\profE/Prof. Eleftheriades/g;
