@@ -1,0 +1,138 @@
+%
+% Copyright © 2015 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{impedanceTransformation}
+\renewcommand{\dirname}{notes/ece1229/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_figures}
+
+\beginArtNoToc
+
+\generatetitle{Impedance transformation}
+%\section{Impedance transformation}
+%\label{chap:impedanceTransformation}
+
+In our final problem set we used the impedance transformation for calculations related to a microslot antenna.  This transformation wasn't familiar to me, and is apparently covered in the third year ECE fields class.  I found a derivation of this in \citep{balanis1989advanced:reflectionAndTx}, but the idea is really simple and follows from the reflection coefficient calculation for a normal reflection configuration.
+
+Consider a normal field reflection between two interfaces, as sketched in \cref{fig:normalTransmission:normalTransmissionFig1}.
+
+\imageFigure{../../figures/ece1229/normalTransmissionFig1}{Normal reflection and transmission between two media.}{fig:normalTransmission:normalTransmissionFig1}{0.3}
+
+The fields are
+\begin{subequations}
+\label{eqn:impedanceTransformation:20}
+\begin{dmath}\label{eqn:impedanceTransformation:40}
+\BE^\txti = \xcap E_0 e^{-j k_1 z}
+\end{dmath}
+\begin{dmath}\label{eqn:impedanceTransformation:60}
+\BH^\txti = \ycap \frac{E_0}{\eta_1} e^{-j k_1 z}
+\end{dmath}
+\begin{dmath}\label{eqn:impedanceTransformation:80}
+\BE^\txtr = \xcap \Gamma E_0 e^{j k_1 z}
+\end{dmath}
+\begin{dmath}\label{eqn:impedanceTransformation:100}
+\BH^\txtr = -\ycap \Gamma \frac{E_0}{\eta_1} e^{j k_1 z}
+\end{dmath}
+\begin{dmath}\label{eqn:impedanceTransformation:120}
+\BE^\txtt = \xcap E_0 T e^{-j k_2 z}
+\end{dmath}
+\begin{dmath}\label{eqn:impedanceTransformation:140}
+\BH^\txtt = \ycap \frac{E_0}{\eta_1} T e^{-j k_2 z}.
+\end{dmath}
+\end{subequations}
+
+The field orientations have been picked so that the tangential component of the electric field is \( \xcap \) oriented for all of the incident, reflected, and transmitted components.  Requiring equality of the tangential field components at the interface gives
+
+\begin{subequations}
+\label{eqn:impedanceTransformation:160}
+\begin{dmath}\label{eqn:impedanceTransformation:180}
+1 + \Gamma = T
+\end{dmath}
+\begin{dmath}\label{eqn:impedanceTransformation:200}
+\inv{\eta_1} - \frac{\Gamma}{\eta_1} = \frac{T}{\eta_2}.
+\end{dmath}
+\end{subequations}
+
+Solving for the transmission coeffecient gives
+
+\begin{dmath}\label{eqn:impedanceTransformation:220}
+T 
+= \frac{2}{ 1 + \frac{\eta_1}{\eta_2} } 
+= \frac{2 \eta_2}{ \eta_2 + \eta_1 },
+\end{dmath}
+
+and for the reflection coeffiecient
+
+\begin{dmath}\label{eqn:impedanceTransformation:240}
+\Gamma 
+= T - 1
+= \frac{2 \eta_2 - \eta_1 - \eta_2}{ \eta_2 + \eta_1 }
+= \frac{\eta_2 - \eta_1 }{ \eta_2 + \eta_1 }.
+\end{dmath}
+
+The total fields in medium 1 at the point \( z = -l \) are
+
+\begin{subequations}
+\label{eqn:impedanceTransformation:260}
+\begin{dmath}\label{eqn:impedanceTransformation:280}
+\BE^\txti + \BE^\txtr 
+= 
+\xcap E_0 \lr{ e^{ -j k_1 (-l)} + \Gamma e^{ j k_1 (-l) } }
+\end{dmath}
+\begin{dmath}\label{eqn:impedanceTransformation:300}
+\BH^\txti + \BH^\txtr 
+= 
+\ycap \frac{E_0}{\eta_1} \lr{ e^{ -j k_1 (-l)} - \Gamma e^{ j k_1 (-l) }}.
+\end{dmath}
+\end{subequations}
+
+The ratio of the electric field strength to the magnetic field strength is defined as the input impedance
+
+\begin{equation}\label{eqn:impedanceTransformation:320}
+Z_{\textrm{in}} \equiv \evalbar{\frac{E^\txti + E^\txtr}{H^\txti + H^\txtr}}{ z = -l}.
+\end{equation}
+
+That is
+
+\begin{dmath}\label{eqn:impedanceTransformation:340}
+Z_{\textrm{in}} 
+=
+\eta_1 \frac{
+e^{ j k_1 l} + \Gamma e^{ -j k_1 l } 
+}{
+e^{ j k_1 l} - \Gamma e^{ -j k_1 l }
+}
+=
+\eta_1 \frac{
+\lr{ \eta_1 + \eta_2} e^{ j k_1 l} + \lr{ \eta_2 - \eta_1} e^{ -j k_1 l } 
+}{
+\lr{ \eta_1 + \eta_2} e^{ j k_1 l} - \lr{ \eta_2 - \eta_1} e^{ -j k_1 l }
+}
+=
+\eta_1 \frac{
+\eta_2 \cos( k_1 l ) + \eta_1 j \sin( k_1 l) 
+}{
+\eta_2 j \sin( k_1 l ) + \eta_1 \cos( k_1 l) 
+},
+\end{dmath}
+
+or
+
+\boxedEquation{eqn:impedanceTransformation:360}{
+Z_{\textrm{in}} 
+=
+\eta_1 \frac{
+\eta_2 + j \eta_1 \tan( k_1 l) 
+}{
+\eta_1 + j \eta_2 \tan( k_1 l )
+}.
+}
+
+\EndArticle
+%\EndNoBibArticle
