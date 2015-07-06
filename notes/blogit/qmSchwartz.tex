@@ -1,0 +1,174 @@
+%
+% Copyright © 2015 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{qmSchwartz}
+\renewcommand{\dirname}{notes/phy1520/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+%\usepackage{braket}
+\usepackage{peeters_braket}
+
+\beginArtNoToc
+
+\generatetitle{Schwartz inequality in bra-ket notation}
+%\chapter{Schwartz inequality in bra-ket notation}
+%\label{chap:qmSchwartz}
+\section{Motivation}
+
+In \citep{sakurai2014modern} the Schwartz inequality
+
+\boxedEquation{eqn:qmSchwartz:20}{
+%\begin{dmath}\label{eqn:qmSchwartz:20}
+\braket{a}{a} 
+\braket{b}{b} 
+\ge \Abs{\braket{a}{b}}^2,
+%\end{dmath}
+}
+
+is used in the derivation of the uncertainty relation.  The proof of the Schwartz inequality uses a sneaky substitution that doesn't seem obvious, and is even less obvious since there is a typo in the value to be substituted.  Let's understand where that sneakiness is coming from.
+
+\section{Without being sneaky}
+
+My ancient first year linear algebra text \citep{nicholson1990elementary} contains a non-sneaky proof, but it only works for real vector spaces.  Recast in bra-ket notation, this method examines the bounds of the norms of sums and differences of unit states (i.e. \( \braket{a}{a} = \braket{b}{b} = 1 \).)
+
+\begin{dmath}\label{eqn:qmSchwartz:40}
+\braket{a - b}{a - b} 
+= \braket{a}{a} + \braket{b}{b} - \braket{a}{b} - \braket{b}{a}
+= 2 - 2 \Real \braket{a}{b}
+\ge 0,
+\end{dmath}
+
+so
+\begin{dmath}\label{eqn:qmSchwartz:60}
+1 \ge \Real \braket{a}{b}.
+\end{dmath}
+
+Similarily
+
+\begin{dmath}\label{eqn:qmSchwartz:80}
+\braket{a + b}{a + b} 
+= \braket{a}{a} + \braket{b}{b} + \braket{a}{b} + \braket{b}{a}
+= 2 + 2 \Real \braket{a}{b}
+\ge 0,
+\end{dmath}
+
+so
+\begin{dmath}\label{eqn:qmSchwartz:100}
+\Real \braket{a}{b} \ge -1.
+\end{dmath}
+
+This means that for normalized state vectors
+
+\begin{equation}\label{eqn:qmSchwartz:120}
+-1 \le \Real \braket{a}{b} \le 1,
+\end{equation}
+
+or
+\begin{dmath}\label{eqn:qmSchwartz:140}
+\Abs{\Real \braket{a}{b}} \le 1.
+\end{dmath}
+
+%Because this bra-ket is just a complex number, we must also have
+%
+%\begin{equation}\label{eqn:qmSchwartz:160}
+%1 \ge \Abs{\Real \braket{a}{b}} \ge \Abs{\braket{a}{b}}.
+%\end{equation}
+
+Writing out the unit vectors explicitly, that last inequality is
+
+\begin{dmath}\label{eqn:qmSchwartz:180}
+\Abs{ \Real \braket{ \frac{a}{\sqrt{\braket{a}{a}}} }{ \frac{b}{\sqrt{\braket{b}{b}}} } } \le 1,
+%1 \le \Abs{ \Braket{ \frac{a}{\sqrt{\braket{a|a}}} | \frac{b}{\sqrt{\braket{b|b}}} } },
+%1 \le \Abs{ \Bra{ \frac{a}{\sqrt{\braket{a|a}}} } \cdot \Ket{ \frac{b}{\sqrt{\braket{b|b}}} } },
+\end{dmath}
+
+squaring and rearranging gives
+
+\begin{dmath}\label{eqn:qmSchwartz:200}
+\Abs{\Real \braket{a}{b}}^2 \le
+\braket{a}{a} 
+\braket{b}{b}.
+\end{dmath}
+
+This is similar to, but not identical to the Schwartz inequality.  Since \( \Abs{\Real \braket{a}{b}} \le \Abs{\braket{a}{b}} \) the Schwartz inequality cannot be demonstrated with this argument.  This first year algebra method works nicely for demonstrating the inequality for real vector spaces, so a different argument is required for a complex vector space (i.e. quantum mechanics state space.)
+
+\section{Arguing with projected and rejected components}
+
+Notice that the equality condition in the inequality holds when the vectors are colinear, and the largest inequality holds when the vectors are normal to each other.  Given those geometrical observations, it seems reasonable to examine the norms of projected or rejected components of a vector.  To do so in bra-ket notation, the correct form of a projection operation must be determined.  Care is required to get the ordering of the bra-kets right when expressing such a projection.
+
+Suppose we wish to calculation the rejection of \( \ket{a} \) from \( \ket{b} \), that is \( \ket{b - \alpha a}\), such that
+
+\begin{dmath}\label{eqn:qmSchwartz:220}
+0 
+= \braket{a}{b - \alpha a}
+= \braket{a}{b} - \alpha \braket{a}{a},
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:qmSchwartz:240}
+\alpha =
+\frac{\braket{a}{b} }{ \braket{a}{a} }.
+\end{dmath}
+
+Therefore, the projection of \( \ket{b} \) on \( \ket{a} \) is
+
+\begin{equation}\label{eqn:qmSchwartz:260}
+\Proj_{\ket{a}} \ket{b} 
+= \frac{\braket{a}{b} }{ \braket{a}{a} } \ket{a}
+= \frac{\braket{b}{a}^\conj }{ \braket{a}{a} } \ket{a}.
+\end{equation}
+
+The conventional way to write this in QM is in the operator form
+
+\begin{dmath}\label{eqn:qmSchwartz:300}
+\Proj_{\ket{a}} \ket{b} 
+= \frac{\ket{a}\bra{a}}{\braket{a}{a}} \ket{b}.
+\end{dmath}
+
+In this form the rejection of \( \ket{a} \) from \( \ket{b} \) can be expressed as
+
+\begin{dmath}\label{eqn:qmSchwartz:280}
+\RejName_{\ket{a}} \ket{b} = \ket{b} - \frac{\ket{a}\bra{a}}{\braket{a}{a}} \ket{b}.
+\end{dmath}
+
+This state vector is normal to \( \ket{a} \) as desired
+
+\begin{dmath}\label{eqn:qmSchwartz:320}
+\braket{a}{b - \frac{\braket{a}{b} }{ \braket{a}{a} } a }
+=
+\braket{a}{ b}  - \frac{ \braket{a}{b} }{ \cancel{\braket{a}{a}} } \cancel{\braket{a}{a}}
+= 0.
+\end{dmath}
+
+How about it's length?  That is
+
+\begin{equation}\label{eqn:qmSchwartz:340}
+\begin{aligned}
+\braket{b - \frac{\braket{a}{b} }{ \braket{a}{a} } a}{b - \frac{\braket{a}{b} }{ \braket{a}{a} } a } 
+&=
+\braket{b}{b} - 2 \frac{\Abs{\braket{a}{b}}^2}{\braket{a}{a}} +\frac{\Abs{\braket{a}{b}}^2 }{ \braket{a}{a}^2 } \braket{a}{a} \\
+&=
+\braket{b}{b} - \frac{\Abs{\braket{a}{b}}^2}{\braket{a}{a}}.
+\end{aligned}
+\end{equation}
+
+Observe that this must be greater to or equal to zero, so
+
+\begin{equation}\label{eqn:qmSchwartz:360}
+\braket{b}{b} \ge \frac{ \Abs{ \braket{a}{b} }^2 }{ \braket{a}{a} }.
+\end{equation}
+
+Rearranging this gives \cref{eqn:qmSchwartz:20} as desired.  The Schwartz proof in \citep{sakurai2014modern} obscures the geometry involved and starts with 
+
+\begin{dmath}\label{eqn:qmSchwartz:380}
+\braket{b + \lambda a}{b + \lambda a} \ge 0,
+\end{dmath}
+
+where the ``proof'' is nothing more than a statement that one can ``pick'' \( \lambda = -\braket{b}{a}/\braket{a}{a} \).  The Pythagorean context of the Schwartz inequality is not mentioned, and without thinking about it, one is left wondering what sort of magic hat that \( \lambda \) selection came from.
+
+\EndArticle
