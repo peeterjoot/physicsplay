@@ -1,0 +1,265 @@
+%
+% Copyright © 2015 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{pauliMatrixXYgeometry}
+\renewcommand{\dirname}{notes/phy1540/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{siunitx}
+
+\beginArtNoToc
+
+\generatetitle{An observation about the geometry of Pauli x,y matrices}
+%\chapter{An observation about the geometry of Pauli x,y matrices}
+%\label{chap:pauliMatrixXYgeometry}
+
+\section{Motivation}
+
+The conventional form for the Pauli matrices is
+
+\begin{equation}\label{eqn:pauliMatrixXYgeometry:20}
+\begin{aligned}
+\sigma_x &= \PauliX \\
+\sigma_y &= \PauliY \\
+\sigma_z &= \PauliZ
+\end{aligned}.
+\end{equation}
+
+In \citep{desai2009quantum} these forms are derived based on the commutation relations
+
+\begin{equation}\label{eqn:pauliMatrixXYgeometry:40}
+\antisymmetric{\sigma_r}{\sigma_s} = 2 i \epsilon_{r s t} \sigma_t,
+\end{equation}
+
+by defining raising and lowering operators \( \sigma_{\pm} = \sigma_x \pm i \sigma_y \) and figuring out what form the matrix must take.  I noticed an interesting geometrical relation hiding in that derivation if \( \sigma_{+} \) is not assumed to be real.
+
+\section{Derivation}
+
+For completeness, I'll repeat the argument of \citep{desai2009quantum}, which builds on the commutation relations of the raising and lowering operators.  Those are
+
+\begin{dmath}\label{eqn:pauliMatrixXYgeometry:60}
+\antisymmetric{\sigma_z}{\sigma_{\pm}}
+=
+\sigma_z \lr{ \sigma_x \pm i \sigma_y }
+-\lr{ \sigma_x \pm i \sigma_y } \sigma_z
+=
+\antisymmetric{\sigma_z}{\sigma_x} \pm i \antisymmetric{\sigma_z}{\sigma_y}
+=
+2 i \sigma_y \pm i (-2 i) \sigma_x
+= \pm 2 \lr{ \sigma_x \pm i \sigma_y }
+= \pm 2 \sigma_{\pm},
+\end{dmath}
+
+and
+
+\begin{dmath}\label{eqn:pauliMatrixXYgeometry:80}
+\antisymmetric{\sigma_{+}}{\sigma_{-}}
+=
+\lr{ \sigma_x + i \sigma_y } \lr{ \sigma_x - i \sigma_y }
+-\lr{ \sigma_x - i \sigma_y } \lr{ \sigma_x + i \sigma_y }
+=
+-i \sigma_x \sigma_y + i \sigma_y \sigma_x
+- i \sigma_x \sigma_y + i \sigma_y \sigma_x
+= 2 i \antisymmetric{ \sigma_y }{\sigma_x}
+= 2 i (-2i) \sigma_z
+= 4 \sigma_z
+\end{dmath}
+
+From these a matrix representation containing unknown values can be assumed.  Let
+
+\begin{dmath}\label{eqn:pauliMatrixXYgeometry:100}
+\sigma_{+} = 
+\begin{bmatrix}
+a & b \\
+c & d
+\end{bmatrix}.
+\end{dmath}
+
+The commutator with \( \sigma_z \) can be computed
+
+\begin{dmath}\label{eqn:pauliMatrixXYgeometry:120}
+\antisymmetric{\sigma_z}{\sigma_{+}}
+=
+\PauliZ
+\begin{bmatrix}
+a & b \\
+c & d
+\end{bmatrix}
+-
+\begin{bmatrix}
+a & b \\
+c & d
+\end{bmatrix}
+\PauliZ
+=
+\begin{bmatrix}
+a & b \\
+-c & -d
+\end{bmatrix}
+-
+\begin{bmatrix}
+a & -b \\
+c & -d
+\end{bmatrix}
+=
+2 
+\begin{bmatrix}
+0 & b \\
+-c & 0 
+\end{bmatrix}
+\end{dmath}
+
+Now compare this with \cref{eqn:pauliMatrixXYgeometry:60}
+
+\begin{dmath}\label{eqn:pauliMatrixXYgeometry:140}
+2 
+\begin{bmatrix}
+0 & b \\
+-c & 0 
+\end{bmatrix}
+=
+2 \sigma_{+}
+=
+2 
+\begin{bmatrix}
+a & b \\
+d & d 
+\end{bmatrix}.
+\end{dmath}
+
+This shows that \( a = 0 \), and \( d = 0 \).  Similarly the \( \sigma_z \) commutator with the lowering operator is
+
+\begin{dmath}\label{eqn:pauliMatrixXYgeometry:160}
+\antisymmetric{\sigma_z}{\sigma_{-}}
+=
+\PauliZ
+\begin{bmatrix}
+0 & -c^\conj \\
+b^\conj & 0
+\end{bmatrix}
+-
+\begin{bmatrix}
+0 & -c^\conj \\
+b^\conj & 0
+\end{bmatrix}
+\PauliZ
+=
+\begin{bmatrix}
+0 & -c^\conj \\
+-b^\conj & 0
+\end{bmatrix}
+-
+\begin{bmatrix}
+0 & c^\conj \\
+b^\conj & 0
+\end{bmatrix}
+=
+-2 
+\begin{bmatrix}
+0 & c^\conj \\
+b^\conj & 0
+\end{bmatrix}
+\end{dmath}
+
+Again comparing to \cref{eqn:pauliMatrixXYgeometry:60}, we have
+\begin{dmath}\label{eqn:pauliMatrixXYgeometry:180}
+-2 
+\begin{bmatrix}
+0 & c^\conj \\
+b^\conj & 0
+\end{bmatrix}
+= - 2 \sigma_{-}
+= - 2 
+\begin{bmatrix}
+0 & -c^\conj \\
+b^\conj & 0
+\end{bmatrix},
+\end{dmath}
+
+so \( c = 0 \).  Computing the commutator of the raising and lowering operators fixes \( b \)
+
+\begin{dmath}\label{eqn:pauliMatrixXYgeometry:200}
+\antisymmetric{\sigma_{+}}{\sigma_{-}}
+=
+\begin{bmatrix}
+0 & b \\
+0 & 0 \\
+\end{bmatrix}
+\begin{bmatrix}
+0 & 0 \\
+b^\conj & 0 \\
+\end{bmatrix}
+-
+\begin{bmatrix}
+0 & 0 \\
+b^\conj & 0 \\
+\end{bmatrix}
+\begin{bmatrix}
+0 & b \\
+0 & 0 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+\Abs{b}^2 & 0 \\
+0 & 0
+\end{bmatrix}
+-
+\begin{bmatrix}
+0 & 0
+0 & -\Abs{b}^2 \\
+\end{bmatrix}
+=
+\Abs{b}^2 \PauliZ
+=
+\Abs{b}^2 \sigma_z.
+\end{dmath}
+
+From \cref{eqn:pauliMatrixXYgeometry:80} it must be that \( \Abs{b}^2 = 4\), so the most general form of the raising operator is
+
+\begin{dmath}\label{eqn:pauliMatrixXYgeometry:220}
+\sigma_{+}
+=
+2
+\begin{bmatrix}
+0 & e^{i \phi}  \\
+0 & 0
+\end{bmatrix}.
+\end{dmath}
+
+\section{Observation}
+
+The conventional choice is to set \( \phi = 0 \), but I found it interesting to see the form of \( \sigma_x, \sigma_y \) without that choice.  That is
+
+\begin{dmath}\label{eqn:pauliMatrixXYgeometry:240}
+\sigma_x = \inv{2} \lr{ \sigma_{+} + \sigma_{-} }
+=
+\begin{bmatrix}
+0 & e^{i \phi}  \\
+e^{-i \phi} & 0 \\
+\end{bmatrix}
+\end{dmath}
+
+\begin{dmath}\label{eqn:pauliMatrixXYgeometry:260}
+\sigma_y = \inv{2 i} \lr{ \sigma_{+} - \sigma_{-} }
+=
+\begin{bmatrix}
+0 & -i e^{i \phi}  \\
+-i e^{-i \phi} & 0 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 & e^{i (\phi - \pi/2) }  \\
+e^{-i (\phi - \pi/2)} & 0 \\
+\end{bmatrix}.
+\end{dmath}
+
+Notice that the Pauli matrices \( \sigma_x \) and \( \sigma_y \) actually both have the same form as \( \sigma_x \), but the phase of the complex argument of each differs by \ang{90}.  That \ang{90} separation isn't obvious in the standard form \cref{eqn:pauliMatrixXYgeometry:20}.
+
+It's a small detail, but I thought it was kind of cool that the orthogonality of these matrix unit vector representations is built directly into the structure of their matrix representations.
+
+\EndArticle
