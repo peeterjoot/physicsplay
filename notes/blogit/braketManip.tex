@@ -1,0 +1,189 @@
+%
+% Copyright © 2015 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{braketManip}
+\renewcommand{\dirname}{notes/phy1520/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+
+\beginArtNoToc
+
+\generatetitle{bra-ket manipulation problems}
+%\chapter{bra-ket manipulation problems}
+%\label{chap:braketManip}
+\makeoproblem{Some bra-ket manipulation problems.}{problem:braketManip:1.4}{\citep{sakurai2014modern} pr. 1.4}{
+
+Using braket logic expand
+
+\makesubproblem{}{problem:braketManip:1.4:a}
+\begin{equation}\label{eqn:braketManip:20}
+\trace{X Y}
+\end{equation}
+\makesubproblem{}{problem:braketManip:1.4:b}
+\begin{equation}\label{eqn:braketManip:40}
+(X Y)^\dagger
+\end{equation}
+\makesubproblem{}{problem:braketManip:1.4:c}
+\begin{equation}\label{eqn:braketManip:60}
+e^{i f(A)},
+\end{equation}
+
+where \( A \) is Hermitian with a complete set of eigenvalues.
+
+\makesubproblem{}{problem:braketManip:1.4:d}
+\begin{equation}\label{eqn:braketManip:80}
+\sum_{a'} \Psi_{a'}(\Bx')^\conj \Psi_{a'}(\Bx''),
+\end{equation}
+
+where \( \Psi_{a'}(\Bx'') = \braket{\Bx'}{a'} \).
+
+} % problem
+
+\makeanswer{problem:braketManip:1.4}{
+
+\makeSubAnswer{}{problem:braketManip:1.4:a}
+
+\begin{dmath}\label{eqn:braketManip:100}
+\tr{X Y}
+= \sum_a \bra{a} X Y \ket{a}
+= \sum_{a,b} \bra{a} X \ket{b}\bra{b} Y \ket{a}
+= \sum_{a,b} 
+\bra{b} Y \ket{a}
+\bra{a} X \ket{b}
+= \sum_{a,b} 
+\bra{b} Y 
+X \ket{b}
+= \tr{ Y X }.
+\end{dmath}
+
+\makeSubAnswer{}{problem:braketManip:1.4:b}
+
+\begin{dmath}\label{eqn:braketManip:120}
+\bra{a} \lr{ X Y}^\dagger \ket{b}
+= 
+\lr{ \bra{b} X Y \ket{a} }^\conj
+= 
+\sum_c \lr{ \bra{b} X \ket{c}\bra{c} Y \ket{a} }^\conj
+= 
+\sum_c \lr{ \bra{b} X \ket{c} }^\conj \lr{ \bra{c} Y \ket{a} }^\conj
+= 
+\sum_c 
+\lr{ \bra{c} Y \ket{a} }^\conj
+\lr{ \bra{b} X \ket{c} }^\conj 
+= 
+\sum_c 
+\bra{a} Y^\dagger \ket{c}
+\bra{c} X^\dagger \ket{b}
+=
+\bra{a} Y^\dagger 
+X^\dagger \ket{b},
+\end{dmath}
+
+so \( \lr{ X Y }^\dagger = Y^\dagger X^\dagger \).
+
+\makeSubAnswer{}{problem:braketManip:1.4:c}
+
+Let's presume that the function \( f \) has a Taylor series representation
+
+\begin{dmath}\label{eqn:braketManip:140}
+f(A) = \sum_r b_r A^r.
+\end{dmath}
+
+If the eigenvalues of \( A \) are given by
+
+\begin{dmath}\label{eqn:braketManip:160}
+A \ket{a_s} = a_s \ket{a_s},
+\end{dmath}
+
+this operator can be expanded like
+
+\begin{dmath}\label{eqn:braketManip:180}
+A 
+= \sum_{a_s} A \ket{a_s} \bra{a_s}
+= \sum_{a_s} a_s \ket{a_s} \bra{a_s},
+\end{dmath}
+
+To compute powers of this operator, consider first the square
+
+\begin{dmath}\label{eqn:braketManip:200}
+A^2 = 
+= 
+\sum_{a_s} a_s \ket{a_s} \bra{a_s}
+\sum_{a_r} a_r \ket{a_r} \bra{a_r}
+=
+\sum_{a_s, a_r} a_s a_r \ket{a_s} \bra{a_s} \ket{a_r} \bra{a_r}
+=
+\sum_{a_s, a_r} a_s a_r \ket{a_s} \delta_{s r} \bra{a_r}
+=
+\sum_{a_s} a_s^2 \ket{a_s} \bra{a_s}.
+\end{dmath}
+
+The pattern for higher powers will clearly just be
+
+\begin{dmath}\label{eqn:braketManip:220}
+A^k = 
+\sum_{a_s} a_s^k \ket{a_s} \bra{a_s},
+\end{dmath}
+
+so the expansion of \( f(A) \) will be
+
+\begin{dmath}\label{eqn:braketManip:240}
+f(A) 
+= \sum_r b_r A^r
+= \sum_r b_r 
+\sum_{a_s} a_s^r \ket{a_s} \bra{a_s}
+= 
+\sum_{a_s} \lr{ \sum_r b_r a_s^r } \ket{a_s} \bra{a_s}
+= 
+\sum_{a_s} f(a_s) \ket{a_s} \bra{a_s}.
+\end{dmath}
+
+The exponential expansion is
+
+\begin{dmath}\label{eqn:braketManip:260}
+e^{i f(A)} 
+=
+\sum_t \frac{i^t}{t!} f^t(A)
+=
+\sum_t \frac{i^t}{t!} 
+\lr{ \sum_{a_s} f(a_s) \ket{a_s} \bra{a_s} }^t
+=
+\sum_t \frac{i^t}{t!} 
+\sum_{a_s} f^t(a_s) \ket{a_s} \bra{a_s} 
+= 
+\sum_{a_s} 
+e^{i f(a_s) }
+\ket{a_s} \bra{a_s}.
+\end{dmath}
+
+\makeSubAnswer{}{problem:braketManip:1.4:d}
+
+\begin{dmath}\label{eqn:braketManip:n}
+\sum_{a'} \Psi_{a'}(\Bx')^\conj \Psi_{a'}(\Bx'')
+=
+\sum_{a'} 
+\braket{\Bx'}{a'}^\conj 
+\braket{\Bx''}{a'}
+=
+\sum_{a'} 
+\braket{a'}{\Bx'}
+\braket{\Bx''}{a'}
+=
+\sum_{a'} 
+\braket{\Bx''}{a'}
+\braket{a'}{\Bx'}
+=
+\braket{\Bx''}{\Bx'}
+= \delta_{\Bx'' - \Bx'}.
+\end{dmath}
+
+} % answer
+
+\EndArticle
