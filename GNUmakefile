@@ -24,6 +24,7 @@ ALLNOTES += notes/phy452/phy452.pdf
 ALLNOTES += notes/phy487/phy487.pdf
 ALLNOTES += notes/ece1254/ece1254.pdf
 ALLNOTES += notes/ece1229/ece1229.pdf
+ALLNOTES += notes/phy1520/phy1520.pdf
 
 all :: .gitignore subdirs
 
