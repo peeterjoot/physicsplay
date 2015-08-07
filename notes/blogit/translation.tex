@@ -1,0 +1,163 @@
+%
+% Copyright © 2015 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{translation}
+\renewcommand{\dirname}{notes/phy1520/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+
+\beginArtNoToc
+
+\generatetitle{Translation operator problems}
+%\chapter{Translation operator problems}
+%\label{chap:translation}
+
+\makeoproblem{Polynomial commutators.}{problem:translation:29}{\citep{sakurai2014modern} pr. 1.29}{
+
+\makesubproblem{}{problem:translation:29:a}
+For power series \( F, G \), verify
+
+\begin{equation}\label{eqn:translation:180}
+\antisymmetric{x_i}{G(\Bp)} = i \Hbar \PD{p_i}{G}, \qquad
+\antisymmetric{p_i}{F(\Bx)} = -i \Hbar \PD{x_i}{F}.
+\end{equation}
+
+\makesubproblem{}{problem:translation:29:b}
+
+Evaluate \( \antisymmetric{x^2}{p^2} \), and compare to the classical Poisson bracket \( \antisymmetric{x^2}{p^2}_{\textrm{classical}} \).
+
+} % problem
+
+\makeanswer{problem:translation:29}{
+\makeSubAnswer{}{problem:translation:29:a}
+\makeSubAnswer{}{problem:translation:29:b}
+} % answer
+
+\makeoproblem{Translation operator and position expectation.}{problem:translation:30}{\citep{sakurai2014modern} pr. 1.30}{
+
+The translation operator for a finite spatial displacement is given by
+
+\begin{dmath}\label{eqn:translation:20}
+J(\Bl) = \exp\lr{ -i \Bp \cdot \Bl/\Hbar },
+\end{dmath}
+
+where \( \Bp \) is the momentum operator.
+
+\makesubproblem{}{problem:translation:1.30:a}
+
+Evaluate 
+
+\begin{dmath}\label{eqn:translation:40}
+\antisymmetric{x_i}{J(\Bl)}.
+\end{dmath}
+
+\makesubproblem{}{problem:translation:1.30:b}
+Demonstrate how the expectation value \( \expectation{\Bx} \) changes under translation.
+
+} % problem
+
+\makeanswer{problem:translation:30}{
+
+\makeSubAnswer{}{problem:translation:1.30:a}
+
+For clarity, let's set \( x_i = y \).  The general result will be clear despite doing so.
+
+\begin{dmath}\label{eqn:translation:60}
+\antisymmetric{y}{J(\Bl)}
+=
+\sum_{k= 0} \inv{k!} \lr{\frac{-i}{\Hbar}} 
+\antisymmetric{y}{
+\lr{ \Bp \cdot \Bl }^k
+}.
+\end{dmath}
+
+The commutator expands as
+
+\begin{dmath}\label{eqn:translation:80}
+\antisymmetric{y}{
+\lr{ \Bp \cdot \Bl }^k 
+}
++ \lr{ \Bp \cdot \Bl }^k y
+=
+y \lr{ \Bp \cdot \Bl }^k 
+=
+y \lr{ p_x l_x + p_y l_y + p_z l_z } \lr{ \Bp \cdot \Bl }^{k-1} 
+=
+\lr{ p_x l_x y + y p_y l_y + p_z l_z y } \lr{ \Bp \cdot \Bl }^{k-1} 
+=
+\lr{ p_x l_x y + l_y \lr{ p_y y + i \Hbar } + p_z l_z y } \lr{ \Bp \cdot \Bl }^{k-1} 
+=
+\lr{ \Bp \cdot \Bl } y \lr{ \Bp \cdot \Bl }^{k-1} 
++ i \Hbar l_y \lr{ \Bp \cdot \Bl }^{k-1} 
+= \cdots
+=
+\lr{ \Bp \cdot \Bl }^{k-1} y \lr{ \Bp \cdot \Bl }^{k-(k-1)} 
++ (k-1) i \Hbar l_y \lr{ \Bp \cdot \Bl }^{k-1} 
+=
+\lr{ \Bp \cdot \Bl }^{k} y 
++ k i \Hbar l_y \lr{ \Bp \cdot \Bl }^{k-1}.
+\end{dmath}
+
+In the above expansion, the commutation of \( y \) with \( p_x, p_z \) has been used.  This gives, for \( k \ne 0 \),
+
+\begin{dmath}\label{eqn:translation:100}
+\antisymmetric{y}{
+\lr{ \Bp \cdot \Bl }^k 
+}
+=
+k i \Hbar l_y \lr{ \Bp \cdot \Bl }^{k-1}.
+\end{dmath}
+
+Note that this also holds for the \( k = 0 \) case, since \( y \) commutes with the identity operator.  Plugging back into the \( J \) commutator, we have
+
+\begin{dmath}\label{eqn:translation:120}
+\antisymmetric{y}{J(\Bl)}
+=
+\sum_{k = 1} \inv{k!} \lr{\frac{-i}{\Hbar}} 
+k i \Hbar l_y \lr{ \Bp \cdot \Bl }^{k-1}
+=
+l_y \sum_{k = 1} \inv{(k-1)!} \lr{\frac{-i}{\Hbar}} 
+\lr{ \Bp \cdot \Bl }^{k-1}
+=
+l_y J(\Bl).
+\end{dmath}
+
+The same pattern clearly applies with the other \( x_i \) values, providing the desired relation.
+
+\begin{equation}\label{eqn:translation:140}
+\antisymmetric{\Bx}{J(\Bl)} = \sum_{m = 1}^3 \Be_m l_m J(\Bl) = \Bl J(\Bl).
+\end{equation}
+
+\makeSubAnswer{}{problem:translation:1.30:b}
+
+Suppose that the translated state is defined as \( \ket{\alpha_{\Bl}} = J(\Bl) \ket{\alpha} \).  The expectation value with respect to this state is
+
+\begin{dmath}\label{eqn:translation:160}
+\expectation{\Bx'} 
+= 
+\bra{\alpha_{\Bl}} \Bx \ket{\alpha_{\Bl}}
+= 
+\bra{\alpha} J^\dagger(\Bl) \Bx J(\Bl) \ket{\alpha}
+= 
+\bra{\alpha} J^\dagger(\Bl) \lr{ \Bx J(\Bl) } \ket{\alpha}
+= 
+\bra{\alpha} J^\dagger(\Bl) \lr{ J(\Bl) \Bx + \Bl J(\Bl) } \ket{\alpha}
+= 
+\bra{\alpha} J^\dagger J \Bx + \Bl J^\dagger J \ket{\alpha}
+= 
+\bra{\alpha} \Bx \ket{\alpha} + \Bl \braket{\alpha}{\alpha}
+= 
+\expectation{\Bx} + \Bl.
+\end{dmath}
+
+} % answer
+
+\EndArticle
