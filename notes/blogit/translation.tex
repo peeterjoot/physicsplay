@@ -13,6 +13,7 @@
 \usepackage{peeters_layout_exercise}
 \usepackage{peeters_braket}
 \usepackage{peeters_figures}
+\usepackage{peeters_qed}
 
 \beginArtNoToc
 
@@ -26,8 +27,8 @@
 For power series \( F, G \), verify
 
 \begin{equation}\label{eqn:translation:180}
-\antisymmetric{x_i}{G(\Bp)} = i \Hbar \PD{p_i}{G}, \qquad
-\antisymmetric{p_i}{F(\Bx)} = -i \Hbar \PD{x_i}{F}.
+\antisymmetric{x_k}{G(\Bp)} = i \Hbar \PD{p_k}{G}, \qquad
+\antisymmetric{p_k}{F(\Bx)} = -i \Hbar \PD{x_k}{F}.
 \end{equation}
 
 \makesubproblem{}{problem:translation:29:b}
@@ -38,7 +39,164 @@ Evaluate \( \antisymmetric{x^2}{p^2} \), and compare to the classical Poisson br
 
 \makeanswer{problem:translation:29}{
 \makeSubAnswer{}{problem:translation:29:a}
+
+Let 
+
+\begin{equation}\label{eqn:translation:200}
+\begin{aligned}
+G(\Bp) &= \sum_{k l m} a_{k l m} p_1^k p_2^l p_3^m \\
+F(\Bx) &= \sum_{k l m} b_{k l m} x_1^k x_2^l x_3^m.
+\end{aligned}
+\end{equation}
+
+It is simpler to work with a specific \( x_k \), say \( x_k = y \).  The validity of the general result will still be clear doing so.  Expanding the commutator gives
+
+\begin{dmath}\label{eqn:translation:220}
+\antisymmetric{y}{G(\Bp)} 
+= 
+\sum_{k l m} a_{k l m} \antisymmetric{y}{p_1^k p_2^l p_3^m }
+=
+\sum_{k l m} a_{k l m} \lr{
+y p_1^k p_2^l p_3^m  - p_1^k p_2^l p_3^m  y
+}
+=
+\sum_{k l m} a_{k l m} \lr{
+p_1^k y p_2^l p_3^m  - p_1^k y p_2^l p_3^m
+}
+=
+\sum_{k l m} a_{k l m} 
+p_1^k 
+\antisymmetric{y}{p_2^l}
+p_3^m.
+\end{dmath}
+
+From \cref{eqn:translation:100}, we have \( \antisymmetric{y}{p_2^l} = l i \Hbar p_2^{l-1} \), so
+
+\begin{dmath}\label{eqn:translation:240}
+\antisymmetric{y}{G(\Bp)} 
+=
+\sum_{k l m} a_{k l m} 
+p_1^k 
+\antisymmetric{y}{p_2^l}
+\lr{ l 
+i \Hbar p_2^{l-1} 
+}
+p_3^m
+=
+i \Hbar \PD{y}{G(\Bp)}.
+\end{dmath}
+
+It is straightforward to show that
+\( \antisymmetric{p}{x^l} = -l i \Hbar x^{l-1} \), allowing for a similar computation of the momentum commutator
+
+\begin{dmath}\label{eqn:translation:260}
+\antisymmetric{p_y}{F(\Bx)} 
+= 
+\sum_{k l m} b_{k l m} \antisymmetric{p_y}{x_1^k x_2^l x_3^m }
+=
+\sum_{k l m} b_{k l m} \lr{
+p_y x_1^k x_2^l x_3^m  - x_1^k x_2^l x_3^m  p_y
+}
+=
+\sum_{k l m} b_{k l m} \lr{
+x_1^k p_y x_2^l x_3^m  - x_1^k p_y x_2^l x_3^m
+}
+=
+\sum_{k l m} b_{k l m} 
+x_1^k 
+\antisymmetric{p_y}{x_2^l}
+x_3^m
+=
+\sum_{k l m} b_{k l m} 
+x_1^k 
+\lr{ -l i \Hbar x_2^{l-1}}
+x_3^m
+=
+-i \Hbar \PD{p_y}{F(\Bx)}.
+\end{dmath}
+
 \makeSubAnswer{}{problem:translation:29:b}
+
+It isn't clear to me how the results above can be used directly to compute \( \antisymmetric{x^2}{p^2} \).  However, when the first term of such a commutator is a monomomial, it can be expanded in terms of an \( x \) commutator 
+
+\begin{dmath}\label{eqn:translation:280}
+\antisymmetric{x^2}{G(\Bp)}
+= x^2 G - G x^2
+= x \lr{ x G } - G x^2
+= x \lr{ \antisymmetric{ x }{ G } + G x } - G x^2
+= x \antisymmetric{ x }{ G } + \lr{ x G } x - G x^2
+= x \antisymmetric{ x }{ G } + \lr{ \antisymmetric{ x }{ G } + \cancel{G x} } x - \cancel{G x^2}
+= x \antisymmetric{ x }{ G } + \antisymmetric{ x }{ G } x.
+\end{dmath}
+
+Similarily, 
+
+\begin{dmath}\label{eqn:translation:300}
+\antisymmetric{x^3}{G(\Bp)} = x^2 \antisymmetric{ x }{ G } + x \antisymmetric{ x }{ G } x + \antisymmetric{ x }{ G } x^2.
+\end{dmath}
+
+An induction hypothesis can be formed
+
+\begin{dmath}\label{eqn:translation:320}
+\antisymmetric{x^k}{G(\Bp)} = \sum_{j = 0}^{k-1} x^{k-1-j} \antisymmetric{ x }{ G } x^j,
+\end{dmath}
+
+and demonstrated
+
+\begin{dmath}\label{eqn:translation:340}
+\antisymmetric{x^{k+1}}{G(\Bp)} 
+= 
+x^{k+1} G - G x^{k+1} 
+=
+x \lr{ x^{k} G } - G x^{k+1} 
+=
+x \lr{ \antisymmetric{x^{k}}{G} + G x^k } - G x^{k+1} 
+=
+x \antisymmetric{x^{k}}{G} + \lr{ x G } x^k - G x^{k+1} 
+=
+x \antisymmetric{x^{k}}{G} + \lr{ \antisymmetric{x}{G} + G x } x^k - G x^{k+1} 
+=
+x \antisymmetric{x^{k}}{G} + \antisymmetric{x}{G} x^k
+=
+x \sum_{j = 0}^{k-1} x^{k-1-j} \antisymmetric{ x }{ G } x^j + \antisymmetric{x}{G} x^k
+=
+\sum_{j = 0}^{k-1} x^{(k+1)-1-j} \antisymmetric{ x }{ G } x^j + \antisymmetric{x}{G} x^k
+=
+\sum_{j = 0}^{k} x^{(k+1)-1-j} \antisymmetric{ x }{ G } x^j. \qedmarker
+\end{dmath}
+
+That was a bit overkill for this problem, but may be useful later.  Application of this to the problem gives
+
+\begin{dmath}\label{eqn:translation:360}
+\antisymmetric{x^2}{p^2}
+=
+x \antisymmetric{x}{p^2}
++ \antisymmetric{x}{p^2} x
+=
+x i \Hbar \PD{x}{p^2}
++ i \Hbar \PD{x}{p^2} x
+=
+x 2 i \Hbar p
++ 2 i \Hbar p x
+= i \Hbar \lr{ 2 x p + 2 p x }.
+\end{dmath}
+
+The classical commutator is
+\begin{dmath}\label{eqn:translation:380}
+\antisymmetric{x^2}{p^2}_{\textrm{classical}}
+=
+\PD{x}{x^2} \PD{p}{p^2} - \PD{p}{x^2} \PD{x}{p^2}
+=
+2 x 2 p
+= 2 x p + 2 p x.
+\end{dmath} 
+
+This demonstrates the expected relation between the classical and quantum commutators
+
+\begin{equation}\label{eqn:translation:400}
+\antisymmetric{x^2}{p^2} = i \Hbar \antisymmetric{x^2}{p^2}_{\textrm{classical}}.
+\end{equation}
+
 } % answer
 
 \makeoproblem{Translation operator and position expectation.}{problem:translation:30}{\citep{sakurai2014modern} pr. 1.30}{
