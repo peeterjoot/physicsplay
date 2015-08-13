@@ -150,4 +150,5 @@
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
 #s/\\i(\d)/{($1)}/g;
-s/\^\\i(.)/^{($1)}/g;
+#s/\^\\i(.)/^{($1)}/g;
+s/[Ss]chrodinger/Schr\\"{o}dinger/g;
