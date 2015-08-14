@@ -1,0 +1,103 @@
+%
+% Copyright © 2015 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{positionCommutator}
+\renewcommand{\dirname}{notes/phy1520/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+
+\beginArtNoToc
+
+\generatetitle{Heisenberg picture position commutator}
+%\chapter{Heisenberg picture position commutator}
+%\label{chap:positionCommutator}
+
+
+\makeoproblem{Heisenberg picture position commutator}{problem:positionCommutator:2.5}{\citep{sakurai2014modern} pr. 2.5}{
+Evaluate 
+
+\begin{dmath}\label{eqn:positionCommutator:20}
+\antisymmetric{x(t)}{x(0)},
+\end{dmath}
+
+for a Heisenberg picture operator \( x(t) \) for a free particle.
+} % problem
+
+\makeanswer{problem:positionCommutator:2.5}{
+
+The free particle Hamiltonian is 
+
+\begin{dmath}\label{eqn:positionCommutator:40}
+H = \frac{p^2}{2m},
+\end{dmath}
+
+so the time evolution operator is
+
+\begin{dmath}\label{eqn:positionCommutator:60}
+U(t) = e^{-i p^2 t/(2 m \Hbar)}.
+\end{dmath}
+
+The Heisenberg picture position operator is
+
+\begin{dmath}\label{eqn:positionCommutator:80}
+x^\txtH 
+= U^\dagger x U
+= e^{i p^2 t/(2 m \Hbar)} x e^{-i p^2 t/(2 m \Hbar)} 
+= \sum_{k = 0}^\infty \inv{k!} \lr{ \frac{i p^2 t}{2 m \Hbar} }^k 
+x
+e^{-i p^2 t/(2 m \Hbar)} 
+= \sum_{k = 0}^\infty \inv{k!} \lr{ \frac{i t}{2 m \Hbar} }^k p^{2k} x
+e^{-i p^2 t/(2 m \Hbar)} 
+= 
+\sum_{k = 0}^\infty \inv{k!} \lr{ \frac{i t}{2 m \Hbar} }^k \lr{ \antisymmetric{p^{2k}}{x} + x p^{2k} }
+e^{-i p^2 t/(2 m \Hbar)} 
+= x + 
+\sum_{k = 0}^\infty \inv{k!} \lr{ \frac{i t}{2 m \Hbar} }^k \antisymmetric{p^{2k}}{x}
+e^{-i p^2 t/(2 m \Hbar)} 
+= x + 
+\sum_{k = 0}^\infty \inv{k!} \lr{ \frac{i t}{2 m \Hbar} }^k \lr{ -i \Hbar \PD{p}{p^{2k}} }
+e^{-i p^2 t/(2 m \Hbar)} 
+= x + 
+\sum_{k = 0}^\infty \inv{k!} \lr{ \frac{i t}{2 m \Hbar} }^k \lr{ -i \Hbar 2 k p^{2 k -1} }
+e^{-i p^2 t/(2 m \Hbar)} 
+= x + 
+-2 i \Hbar p \frac{i t}{2 m \Hbar} \sum_{k = 1}^\infty \inv{(k-1)!} \lr{ \frac{i t}{2 m \Hbar} }^{k-1} p^{2(k - 1)}
+e^{-i p^2 t/(2 m \Hbar)} 
+= x + t \frac{p}{m}.
+\end{dmath}
+
+This has the structure of a classical free particle \( x(t) = x + v t \), but in this case \( x,p \) are operators.
+
+The evolved position commutator is
+\begin{dmath}\label{eqn:positionCommutator:100}
+\antisymmetric{x(t)}{x(0)}
+=
+\antisymmetric{x + t p/m}{x}
+=
+\frac{t}{m} \antisymmetric{p}{x}
+=
+-i \Hbar \frac{t}{m}.
+\end{dmath}
+
+Compare this to the classical Poisson bracket
+\begin{dmath}\label{eqn:positionCommutator:120}
+\antisymmetric{x(t)}{x(0)}_{\textrm{classical}}
+= 
+\PD{x}{}\lr{x + p t/m} \PD{p}{x} - \PD{p}{}\lr{x + p t/m} \PD{x}{x} 
+= 
+- \frac{t}{m}.
+\end{dmath}
+
+This has the expected relation \( \antisymmetric{x(t)}{x(0)} = i \Hbar \antisymmetric{x(t)}{x(0)}_{\textrm{classical}} \).
+
+} % answer
+
+\EndArticle
