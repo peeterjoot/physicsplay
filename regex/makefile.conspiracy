@@ -1,16 +1,18 @@
-#-------------------------------------------------
-#CLANGPATH=$(HOME)/clang350.debug
-#RUNTIMEPATH=$(CLANGPATH)/lib64
-#CXX := $(CLANGPATH)/bin/clang++
-
-#CONFIG_RELEASE = Debug+Asserts
-##CFLAGS += -I$(CLANGPATH)/include
-##LLVM_BIN_PATH := $(CLANGPATH)/bin/
-#-------------------------------------------------
 GCCPATH := $(HOME)/local/gcc520
-CXX := $(GCCPATH)/bin/g++
-RUNTIMEPATH=$(GCCPATH)/lib64
-#-------------------------------------------------
+RUNTIMEPATH := $(GCCPATH)/lib64
+
+ifdef USE_GCC
+   CXX := $(GCCPATH)/bin/g++
+else
+   ifdef USE_CLANG35
+      CLANGPATH=$(HOME)/clang350.debug
+      RUNTIMEPATH=$(CLANGPATH)/lib64
+   else
+      # this clang built with gcc-5.2 runtime:
+      CLANGPATH=$(HOME)/local/clang362.opt
+   endif
+   CXX := $(CLANGPATH)/bin/clang++
+endif
 
 #CFLAGS += -gdwarf-2
 
