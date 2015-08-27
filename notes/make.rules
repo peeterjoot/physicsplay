@@ -26,6 +26,8 @@ CLEAN_TARGETS += $(LOCAL_COPIED_FILES)
 CLEAN_TARGETS += $(COPIED_FILES)
 CLEAN_TARGETS += $(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.aux))
 
+include ../make.latexmk
+
 define dopdflatex
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo > ./.revinfo/lastCommit.tex
@@ -34,7 +36,7 @@ define dopdflatex
 	~/bin/mkRevInfo -date > ./.revinfo/gitCommitDate.tex
 	~/bin/mkRevInfo -commit > ./.revinfo/gitCommitString.tex
 	~/bin/mkRevInfo -repo > ./.revinfo/gitRepo.tex
-	../make_pdflatex $(ONCEFLAGS) -file $<
+	$(LATEXMK) $<
 endef
 
 all :: $(MAIN_TARGETS)

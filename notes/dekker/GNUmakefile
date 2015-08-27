@@ -9,6 +9,8 @@ pdfs := $(files:.tex=.pdf)
 
 PDF_GENERATED_DEPS += peeters_macros.sty peeters_layout.sty Bibliography.bib myrefs.bib
 
+include ../make.latexmk
+
 all :: $(pdfs) .gitignore
 
 .gitignore : GNUmakefile
@@ -34,7 +36,7 @@ myrefs.bib: ../myrefs.bib.in ../METADATA
 	../METADATA -bib >> myrefs.bib
 
 %.pdf : %.tex
-	../make_pdflatex -file $<
+	$(LATEXMK) $<
 
 clean ::
 	rm -f *.ps *.dvi *.pdf *.aux *.log $(PDF_GENERATED_DEPS) *.o $(MUTEX)

@@ -1,0 +1,25 @@
+# http://tex.stackexchange.com/questions/7204/errors-warnings-in-latex-output
+PDFLATEXOPTS += -file-line-error
+
+# http://tex.stackexchange.com/questions/57253/in-a-multiple-file-latex-document-is-there-a-way-to-tag-each-page-with-the-file#comment120203_57253
+PDFLATEXOPTS += -synctex=1
+
+# for minted package:
+PDFLATEXOPTS += -shell-escape
+
+# http://tex.stackexchange.com/questions/52988/avoid-linebreaks-in-latex-console-log-output
+PDFLATEXOPTS += --max-print-line=1000
+
+# http://docs.miktex.org/2.9/manual/pdftex.html
+PDFLATEXOPTS += --c-style-errors
+
+# http://tex.stackexchange.com/questions/1191/reducing-the-console-output-of-latex
+#PDFLATEXOPTS += '-interaction batchmode'
+
+# This gets unfriendly sometimes, but is useful if tex gets confused somewhere
+# very early in the source file.
+PDFLATEXOPTS += --halt-on-error
+
+LATEXMK := latexmk -pdf 
+
+LATEXMK += $(foreach opt,$(PDFLATEXOPTS),-latexoption='$(opt)')

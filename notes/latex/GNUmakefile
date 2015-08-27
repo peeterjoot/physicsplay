@@ -49,7 +49,7 @@ $(LOCAL_FILES) :
 	~/bin/mkRevInfo -date > ./.revinfo/gitCommitDate.tex
 	~/bin/mkRevInfo -commit > ./.revinfo/gitCommitString.tex
 	~/bin/mkRevInfo -repo > ./.revinfo/gitRepo.tex
-	perl ../make_pdflatex -nojustonce -file $<
+	$(LATEXMK) $<
 
 clean :: mostlyclean localclean
 

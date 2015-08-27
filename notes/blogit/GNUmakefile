@@ -101,13 +101,15 @@ gaBasics.pdf : gaBasics.tex
 #gaBasics.tex : gaBasics.txt
 #	./wordToTex < gaBasics.txt > gaBasics.tex
 
+include ../make.latexmk
+
 %.pdf : %.tex
 	mkdir -p ./.revinfo/
 	~/bin/mkRevInfo > ./.revinfo/lastCommit.tex
 	~/bin/mkRevInfo -date > ./.revinfo/gitCommitDate.tex
 	~/bin/mkRevInfo -commit > ./.revinfo/gitCommitString.tex
 	~/bin/mkRevInfo -repo > ./.revinfo/gitRepo.tex
-	perl ../make_pdflatex $(ONCEFLAGS) -file $<
+	$(LATEXMK) $<
 
 #%.mp4 : %.avi
 #	/cygdrive/c/Temp/ffmpeg/bin/ffmpeg -i $< -vcodec libx264 $@

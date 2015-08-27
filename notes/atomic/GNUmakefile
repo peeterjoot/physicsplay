@@ -9,6 +9,8 @@ ORIG_FILES += ../plainurl.bst
 ORIG_FILES += ../unsrturl.bst
 ORIG_FILES += ../eliblog.cls
 
+include ../make.latexmk
+
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
 all :: $(PDFS) .gitignore
@@ -23,7 +25,7 @@ $(LOCAL_FILES) : $(ORIG_FILES)
 	cp $(filter %$@, $(ORIG_FILES)) $@
 
 %.pdf : %.tex
-	../make_pdflatex -file $<
+	$(LATEXMK) $<
 
 clean ::
 	rm -f *.ps *.dvi *.pdf *.aux *.log
