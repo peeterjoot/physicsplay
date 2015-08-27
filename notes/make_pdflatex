@@ -7,7 +7,6 @@ use Getopt::Long;
 my $rc = $? ;
 my $built = 0 ;
 my $forcebib = 0 ;
-my $pdflatex = 'pdflatex' ;
 my $verbose = 1 ;
 my $filename ;
 my $justonce = 0 ;
@@ -21,93 +20,114 @@ GetOptions(
 
 die "usage: make_pdflatex [-forcebib] [-[no]verbose] -filename filename.tex\n" if (! defined $filename) ;
 
-#my $pwd = `pwd` ; chomp $pwd ;
+my @options = (
+   # http://tex.stackexchange.com/questions/7204/errors-warnings-in-latex-output
+   '-file-line-error',
 
-# http://tex.stackexchange.com/questions/7204/errors-warnings-in-latex-output
-$pdflatex .= ' -file-line-error' ;
+   # http://tex.stackexchange.com/questions/57253/in-a-multiple-file-latex-document-is-there-a-way-to-tag-each-page-with-the-file#comment120203_57253
+   '-synctex=1',
 
-# http://tex.stackexchange.com/questions/57253/in-a-multiple-file-latex-document-is-there-a-way-to-tag-each-page-with-the-file#comment120203_57253
-$pdflatex .= ' -synctex=1' ;
+   # for minted package:
+   '-shell-escape',
 
-# for minted package:
-#$pdflatex .= ' -shell-escape' ;
+   # http://tex.stackexchange.com/questions/52988/avoid-linebreaks-in-latex-console-log-output
+   '--max-print-line=1000',
 
-# http://tex.stackexchange.com/questions/52988/avoid-linebreaks-in-latex-console-log-output
-$pdflatex .= ' --max-print-line=1000' ;
+   # http://docs.miktex.org/2.9/manual/pdftex.html
+   '--c-style-errors',
 
-# http://docs.miktex.org/2.9/manual/pdftex.html
-$pdflatex .= ' --c-style-errors' ;
-
-if ( 0 )
-{
    # http://tex.stackexchange.com/questions/1191/reducing-the-console-output-of-latex
-   $pdflatex .= ' -interaction batchmode' ;
+   #' -interaction batchmode',
+
+   # This gets unfriendly sometimes, but is useful if tex gets confused somewhere
+   # very early in the source file.
+   '--halt-on-error',
+) ;
+
+if ( 1 )
+{
+   # junk my script after reading:
+   # http://tex.stackexchange.com/questions/263106/best-way-to-compile-a-latex-project
+   my $pdflatex = 'latexmk -pdf' ;
+
+   foreach (@options)
+   {
+      $pdflatex .= " -latexoption='$_'" ;
+   }
+
+   print "### $pdflatex $filename\n" if ( $verbose ) ;
+
+   system( "$pdflatex $filename" ) ;
 }
 else
 {
-   # This gets unfriendly sometimes, but is useful if tex gets confused somewhere 
-   # very early in the source file.
+   my $pdflatex = 'pdflatex' ;
 
-   $pdflatex .= ' --halt-on-error' ;
-}
-
-for ( my $i = 0 ; $i < 3 ; $i++ )
-{
-   my $genbib = 0 ;
-   my $genindex = 0 ;
-   my $indexFile ;
-
-   my $basename = $filename ;
-   $basename =~ s/\..*// ;
-
-   print "$i: ### $pdflatex $filename\n" if ( $verbose ) ;
-
-   system( "$pdflatex $filename" ) ;
-   $rc = $? >> 8 ;
-
-   open my $fh, "<$basename.log" or die "could not open '$basename.log'\n" ;
-
-   while (<$fh>)
+   foreach (@options)
    {
-      print ;
-
-      if (    /Rerun to get cross-references/
-           or /There were multiply-defined labels/
-           or /Warning: Citation/
-           or /Warning: Label\(s\) may have changed./
-           or /Rerun to get outlines right/
-           or /Rerun to get bibliographical references right/
-           or ($forcebib and !$i)
-         )
-      {
-         $genbib = 1 ;
-      }
-
-      # only do the makeindex on the first pass.
-      if ( /Writing index file (\S+)/ and !$i )
-      {
-         $indexFile = $1 ;
-         $genindex = 1 ;
-      }
-   }
-   close $fh ;
-   $rc = $? ;
-
-   if ( $genindex )
-   {
-      print "$i: ### makeindex $indexFile\n" if ( $verbose ) ;
-      system( "makeindex $indexFile" ) ;
-   }  
-
-   if ( $genbib )
-   {
-      print "$i: ### bibtex $basename\n" if ( $verbose ) ;
-      system( "bibtex $basename" ) ;
+      $pdflatex .= " $_" ;
    }
 
-   last unless ( $genbib or $genindex ) ;
+   my $pwd = `pwd` ; chomp $pwd ;
 
-   exit if ($justonce) ;
+   for ( my $i = 0 ; $i < 3 ; $i++ )
+   {
+      my $genbib = 0 ;
+      my $genindex = 0 ;
+      my $indexFile ;
+
+      my $basename = $filename ;
+      $basename =~ s/\..*// ;
+
+      print "$i: ### $pdflatex $filename\n" if ( $verbose ) ;
+
+      system( "$pdflatex $filename" ) ;
+      $rc = $? >> 8 ;
+
+      open my $fh, "<$basename.log" or die "could not open '$basename.log'\n" ;
+
+      while (<$fh>)
+      {
+         print ;
+
+         if (    /Rerun to get cross-references/
+              or /There were multiply-defined labels/
+              or /Warning: Citation/
+              or /Warning: Label\(s\) may have changed./
+              or /Rerun to get outlines right/
+              or /Rerun to get bibliographical references right/
+              or ($forcebib and !$i)
+            )
+         {
+            $genbib = 1 ;
+         }
+
+         # only do the makeindex on the first pass.
+         if ( /Writing index file (\S+)/ and !$i )
+         {
+            $indexFile = $1 ;
+            $genindex = 1 ;
+         }
+      }
+      close $fh ;
+      $rc = $? ;
+
+      if ( $genindex )
+      {
+         print "$i: ### makeindex $indexFile\n" if ( $verbose ) ;
+         system( "makeindex $indexFile" ) ;
+      }
+
+      if ( $genbib )
+      {
+         print "$i: ### bibtex $basename\n" if ( $verbose ) ;
+         system( "bibtex $basename" ) ;
+      }
+
+      last unless ( $genbib or $genindex ) ;
+
+      exit if ($justonce) ;
+   }
+
+   exit $rc ;
 }
-
-exit $rc ;
