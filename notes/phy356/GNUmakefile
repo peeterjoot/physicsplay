@@ -13,3 +13,5 @@ GENERATED_PDFS += desaiTypos.pdf
 #ONCEFLAGS := -justonce
 
 include ../make.rules
+
+desaiTypos.pdf :: desaiTyposInnards.tex
