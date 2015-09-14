@@ -78,3 +78,6 @@ multiphysicsProblemSet2a.pdf :: ../ece1254/simpleNortonEquivalents.tex
 multiphysicsProblemSet2b.pdf :: $(PDF_DEPS)
 multiphysicsProblemSet2b.pdf :: multiphysicsProblemSet2bProblem1.tex
 multiphysicsProblemSet2b.pdf :: multiphysicsProblemSet2bProblem2.tex
+
+clean ::
+	rm -f ece1254projectReport.pdf
