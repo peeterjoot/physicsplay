@@ -1,0 +1,185 @@
+%
+% Copyright © 2015 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{gaugeTx}
+\renewcommand{\dirname}{notes/phy1520/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+
+\beginArtNoToc
+
+\generatetitle{Gauge transformation}
+%\chapter{Gauge transformation}
+%\label{chap:gaugeTx}
+
+\makeproblem{}{problem:gaugeTx:0}{
+Given a gauge transformation of the free particle Hamiltonian to
+
+\begin{dmath}\label{eqn:gaugeTx:20}
+H = \inv{2 m} \BPi \cdot \BPi + e \phi,
+\end{dmath}
+
+where
+
+\begin{dmath}\label{eqn:gaugeTx:40}
+\BPi = \Bp - \frac{e}{c} \BA,
+\end{dmath}
+
+calculate 
+\( m d\Bx/dt \), 
+\( \antisymmetric{\Pi_i}{\Pi_j} \), and
+\( m d^2\Bx/dt^2 \), where 
+\( \Bx \) is the Heisenburg picture position operator, and the fields are functions only of position \( \phi = \phi(\Bx), \BA = \BA(\Bx) \).
+
+} % problem
+
+\makeanswer{problem:gaugeTx:0}{
+The final results for these calculations are found in \citep{sakurai2014modern}, but seem worth deriving to exersize our commutator muscles.
+
+\paragraph{Heisenberg picture velocity operator}
+
+The first order of business is the Heisenberg picture velocity operator, but first note
+
+\begin{dmath}\label{eqn:gaugeTx:60}
+\BPi \cdot \BPi
+= \lr{ \Bp - \frac{e}{c} \BA} \cdot \lr{ \Bp - \frac{e}{c} \BA}
+= \Bp^2 - \frac{e}{c} \lr{ \BA \cdot \Bp + \Bp \cdot \BA } + \frac{e^2}{c^2} \BA^2.
+\end{dmath}
+
+The time evolution of the Heisenburg picture position operator is therefore
+
+\begin{dmath}\label{eqn:gaugeTx:80}
+\ddt{\Bx} 
+= \inv{i\Hbar} \antisymmetric{\Bx}{H}
+= \inv{i\Hbar 2 m} \antisymmetric{\Bx}{\BPi^2}
+= \inv{i\Hbar 2 m} \antisymmetric{\Bx}{\Bp^2 - \frac{e}{c} \lr{ \BA \cdot \Bp + \Bp \cdot \BA } + \frac{e^2}{c^2} \BA^2 }
+= \inv{i\Hbar 2 m} 
+\lr{ 
+\antisymmetric{\Bx}{\Bp^2}
+- \frac{e}{c} \antisymmetric{\Bx}{ \BA \cdot \Bp + \Bp \cdot \BA }
+}
+.
+\end{dmath}
+
+For the \( \Bp^2 \) commutator we have
+
+\begin{dmath}\label{eqn:gaugeTx:100}
+\antisymmetric{x_r}{\Bp^2}
+=
+i \Hbar \PD{p_r}{\Bp^2}
+=
+2 i \Hbar p_r,
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:gaugeTx:120}
+\antisymmetric{\Bx}{\Bp^2}
+=
+2 i \Hbar \Bp.
+\end{dmath}
+
+Computing the remaining commutator, we've got
+
+\begin{equation}\label{eqn:gaugeTx:140}
+\begin{aligned}
+\antisymmetric{x_r}{\Bp \cdot \BA + \BA \cdot \Bp}
+&= x_r p_s A_s - p_s A_s x_r \\
+&\quad+ x_r A_s p_s - A_s p_s x_r \\
+&= \lr{ \antisymmetric{x_r}{p_s} + p_s x_r } A_s - p_s A_s x_r \\
+&\quad+ x_r A_s p_s - A_s \lr{ \antisymmetric{p_s}{x_r} + x_r p_s } \\
+&= \antisymmetric{x_r}{p_s} A_s + \cancel{p_s A_s x_r   - p_s A_s x_r} \\
+&\quad+ \cancel{x_r A_s p_s - x_r A_s p_s} + A_s \antisymmetric{x_r}{p_s} \\
+&= 2 i \Hbar \delta_{r s} A_s \\
+&= 2 i \Hbar A_r,
+\end{aligned}
+\end{equation}
+
+so
+
+\begin{equation}\label{eqn:gaugeTx:160}
+\antisymmetric{\Bx}{\Bp \cdot \BA + \BA \cdot \Bp} = 2 i \Hbar \BA.
+\end{equation}
+
+Assembling these results gives
+
+%\begin{equation}\label{eqn:gaugeTx:180}
+\boxedEquation{eqn:gaugeTx:180}{
+\ddt{\Bx} = \inv{m} \lr{ \Bp - \frac{e}{c} \BA } = \inv{m} \BPi,
+}
+%\end{equation}
+
+as asserted in the text.
+
+\paragraph{Kinetic Momentum communtators}
+
+\begin{dmath}\label{eqn:gaugeTx:200}
+\antisymmetric{\Pi_r}{\Pi_s}
+=
+\antisymmetric{p_r - e A_r/c}{p_s - e A_s/c}
+=
+\cancel{\antisymmetric{p_r}{p_s}}
+- \frac{e}{c} \lr{ \antisymmetric{p_r}{A_s} + \antisymmetric{A_r}{p_s}}
++ \frac{e^2}{c^2} \cancel{\antisymmetric{A_r}{A_s}}.
+=
+- \frac{e}{c} \lr{ (-i\Hbar) \PD{x_r}{A_s} + (i\Hbar) \PD{x_s}{A_r} }
+=
+- \frac{i e \Hbar}{c} \lr{ -\PD{x_r}{A_s} + \PD{x_s}{A_r} }.
+= 
+- \frac{i e \Hbar}{c} \epsilon_{t s r} B_t,
+\end{dmath}
+
+or
+%\begin{dmath}\label{eqn:gaugeTx:220}
+\boxedEquation{eqn:gaugeTx:220}{
+\antisymmetric{\Pi_r}{\Pi_s}
+= 
+\frac{i e \Hbar}{c} \epsilon_{r s t} B_t.
+}
+%\end{dmath}
+
+\paragraph{Quantum Lorentz force}
+
+For the force equation we have
+
+\begin{dmath}\label{eqn:gaugeTx:240}
+m \frac{d^2 \Bx}{dt^2} 
+= \ddt{\BPi}
+= \inv{i \Hbar} \antisymmetric{\BPi}{H}
+= \inv{i \Hbar 2 m } \antisymmetric{\BPi}{\BPi^2}
++ \inv{i \Hbar } \antisymmetric{\BPi}{e \phi}.
+\end{dmath}
+
+For the \( \phi \) commutator consider one component
+
+\begin{dmath}\label{eqn:gaugeTx:260}
+\antisymmetric{\Pi_r}{e \phi} 
+=
+e \antisymmetric{p_r - \frac{e}{c} A_r}{\phi}
+=
+e \antisymmetric{p_r}{\phi}
+=
+e (-i\Hbar) \PD{x_r}{\phi},
+\end{dmath}
+
+or
+\begin{equation}\label{eqn:gaugeTx:280}
+\inv{i \Hbar} \antisymmetric{\BPi}{e \phi} 
+=
+- e \spacegrad \phi
+=
+e \BE.
+\end{equation}
+
+
+
+} % answer
+
+\EndArticle
