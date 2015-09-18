@@ -20,8 +20,10 @@ INCOMPLETE += gaMintro.tex
 INCOMPLETE += censor1l.tex
 INCOMPLETE += censor1p.tex
 INCOMPLETE += censor1pg.tex
-
 INCOMPLETE += stokespost.tex
+INCOMPLETE += gradQuantumProblemSet1Problem1.tex
+INCOMPLETE += gradQuantumProblemSet1Problem2.tex
+INCOMPLETE += gradQuantumProblemSet1Problem3.tex
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
