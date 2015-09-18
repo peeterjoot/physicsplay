@@ -93,8 +93,9 @@ $(LOCAL_FILES) :
 
 energyMomentumWithMagneticSources.pdf : ../ece1229/energyMomentumWithMagneticSources.tex
 
-advancedantennaProblemSet5.pdf : advancedantennaProblemSet5Problem1.tex
-advancedantennaProblemSet5.pdf : advancedantennaProblemSet5Problem2.tex
+gradQuantumProblemSet1.pdf : gradQuantumProblemSet1Problem1.tex
+gradQuantumProblemSet1.pdf : gradQuantumProblemSet1Problem2.tex
+gradQuantumProblemSet1.pdf : ../phy1520/moreBraKetProblemsP12.tex
 
 gaBasics.pdf : gaBasics.tex
 
