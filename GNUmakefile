@@ -2,7 +2,7 @@ SUBMAKES := $(wildcard notes/*/GNUmakefile)
 SUBDIRS := $(subst /GNUmakefile,,$(SUBMAKES))
 IGNOREDIRS += notes/atomic
 IGNOREDIRS += notes/bb
-IGNOREDIRS += notes/phy1530
+IGNOREDIRS += notes/peterlue
 IGNOREDIRS += notes/gamma-matrix
 SUBDIRS := $(filter-out $(IGNOREDIRS),$(SUBDIRS))
 
