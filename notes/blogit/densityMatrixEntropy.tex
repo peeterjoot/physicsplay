@@ -1,0 +1,115 @@
+%
+% Copyright © 2015 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{densityMatrixEntropy}
+\renewcommand{\dirname}{notes/phy1520/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+
+\beginArtNoToc
+
+\generatetitle{Entropy when density operator has zero eigenvalues}
+%\chapter{Entropy when density operator has zero eigenvalues}
+%\label{chap:densityMatrixEntropy}
+
+In the class notes and the text \citep{sakurai2014modern} the Von Neumann entropy is defined as
+
+\begin{dmath}\label{eqn:densityMatrixEntropy:20}
+S = -\Tr \rho \ln \rho.
+\end{dmath}
+
+In one of our problems I had trouble evaluating this, having calculated a density operator matrix representation
+
+\begin{dmath}\label{eqn:densityMatrixEntropy:40}
+\rho = E \wedge E^{-1},
+\end{dmath}
+
+where
+
+\begin{dmath}\label{eqn:densityMatrixEntropy:60}
+E = \inv{\sqrt{2}} 
+\begin{bmatrix}
+1 & 1 \\
+1 & -1
+\end{bmatrix},
+\end{dmath}
+
+and
+\begin{dmath}\label{eqn:densityMatrixEntropy:100}
+\wedge = 
+\begin{bmatrix}
+1 & 0 \\
+0 & 0
+\end{bmatrix}.
+\end{dmath}
+
+The usual method of evaluating a function of a matrix is to assume the function has a power series representation, and that a similarity transformation of the form \( A = E \wedge E^{-1} \) is possible, so that
+
+\begin{dmath}\label{eqn:densityMatrixEntropy:80}
+f(A) = E f(\wedge) E^{-1},
+\end{dmath}
+
+however, when attempting to do this with the matrix of \cref{eqn:densityMatrixEntropy:40} leads to an undesirable result
+
+\begin{dmath}\label{eqn:densityMatrixEntropy:120}
+\ln \rho = 
+\inv{2} 
+\begin{bmatrix}
+1 & 1 \\
+1 & -1
+\end{bmatrix}
+\begin{bmatrix}
+\ln 1 & 0 \\
+0 & \ln 0
+\end{bmatrix}
+\begin{bmatrix}
+1 & 1 \\
+1 & -1
+\end{bmatrix}.
+\end{dmath}
+
+The \( \ln 0 \) makes the evaluation of this matrix logarithm rather unpleasant.  To give meaning to the entropy expression, we have to do two things, the first is treating the trace operation as a higher precedence than the logarithms that it contains.  That is
+
+\begin{dmath}\label{eqn:densityMatrixEntropy:140}
+-\Tr ( \rho \ln \rho )
+=
+-\Tr ( E \wedge E^{-1} E \ln \wedge E^{-1} )
+=
+-\Tr ( E \wedge \ln \wedge E^{-1} )
+=
+-\Tr ( E^{-1} E \wedge \ln \wedge )
+=
+-\Tr ( \wedge \ln \wedge )
+=
+- \sum_k \wedge_{kk} \ln \wedge_{kk}.
+\end{dmath}
+
+Now the matrix of the logarithm need not be evaluated, but we still need to give meaning to \( \wedge_{kk} \ln \wedge_{kk} \) for zero diagonal entries.  This can be done by considering a limiting scenerio
+
+\begin{dmath}\label{eqn:densityMatrixEntropy:160}
+-\lim_{a \rightarrow 0} a \ln a
+=
+-\lim_{x \rightarrow \infty} e^{-x} \ln e^{-x}
+=
+\lim_{x \rightarrow \infty} x e^{-x}
+=
+0.
+\end{dmath}
+
+The entropy can now be expressed in the unambiguous form, summing over all the non-zero eigenvalues of the density operator
+
+%\begin{dmath}\label{eqn:densityMatrixEntropy:180}
+\boxedEquation{eqn:densityMatrixEntropy:180}{
+S = - \sum_{ \wedge_{kk} \ne 0} \wedge_{kk} \ln \wedge_{kk}.
+}
+%\end{dmath}
+
+\EndArticle
