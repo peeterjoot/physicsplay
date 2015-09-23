@@ -42,6 +42,7 @@
 #s/\\hb2m/\\frac{\\Hbar}{2m}/g;
 #s/\\Hc/\\hat{H}/g;
 #s/\\Hc/H_{\\mathrm{c}}/g ;
+#s/\\i(\d)/{($1)}/g;
 #s/\\II/\\mathcal{I}/g ;
 #s/\\ik/{(k)}/g;
 #s/\\ik\+1/{(k+1)}/g;
@@ -91,6 +92,7 @@
 #s/\\Veph/V_{\\mathrm{e,ph}}/g ;
 #s/\\yz/{\\textrm{yz}}/g;
 #s/\\zx/{\\textrm{zx}}/g;
+#s/\^\\i(.)/^{($1)}/g;
 #s/\^a/^{(a)}/g;
 #s/\^b/^{(b)}/g;
 #s/\^classical/^{\\mathrm{classical}}/g ;
@@ -149,6 +151,4 @@
 #s/r\\iso/_{r,\\textrm{iso}}/g;
 #s/xialpha\b/x_{i_\\alpha}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-#s/\\i(\d)/{($1)}/g;
-#s/\^\\i(.)/^{($1)}/g;
 s/[Ss]chrodinger/Schr\\"{o}dinger/g; # Schrodinger
