@@ -1,0 +1,109 @@
+%
+% Copyright © 2015 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{solenoidConstantField}
+\renewcommand{\dirname}{notes/phy1520/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+%\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+
+\beginArtNoToc
+
+\generatetitle{Constant magnetic solenoid field}
+%\chapter{Constant magnetic solenoid field}
+%\label{chap:solenoidConstantField}
+
+In \citep{sakurai2014modern} the following vector potential
+
+\begin{dmath}\label{eqn:solenoidConstantField:20}
+\BA = \frac{B \rho_a^2}{2 \rho} \phicap,
+\end{dmath}
+
+is introduced in a discussion on the Aharonov-Bohm effect, for configurations where the interior field of a solenoid is either a constant \( \BB \) or zero.
+
+I wasn't able to make sense of this since the field I was calculating was zero for all \( \rho \ne 0 \)
+
+\begin{dmath}\label{eqn:solenoidConstantField:40}
+\BB 
+= \spacegrad \cross \BA
+= \lr{ \rhocap \partial_\rho + \zcap \partial_z + \frac{\phicap}{\rho} \partial_\phi } \cross \frac{B \rho_a^2}{2 \rho} \phicap
+= \lr{ \rhocap \partial_\rho + \frac{\phicap}{\rho} \partial_\phi } \cross \frac{B \rho_a^2}{2 \rho} \phicap
+= 
+\frac{B \rho_a^2}{2} 
+\rhocap \cross \phicap \partial_\rho \lr{ \inv{\rho} }
++
+\frac{B \rho_a^2}{2 \rho}
+\frac{\phicap}{\rho} \cross \partial_\phi \phicap
+= 
+\frac{B \rho_a^2}{2 \rho^2} \lr{ -\zcap + \phicap \cross \partial_\phi \phicap}.
+\end{dmath}
+
+Note that the \( \rho \) partial requires that \( \rho \ne 0 \).  To expand the cross product in the second term let \( j = \Be_1 \Be_2 \), and expand using a Geometric Algebra representation of the unit vector
+
+\begin{dmath}\label{eqn:solenoidConstantField:60}
+\phicap \cross \partial_\phi \phicap
+=
+\Be_2 e^{j \phi} \cross \lr{ \Be_2 \Be_1 \Be_2 e^{j \phi} }
+=
+- \Be_1 \Be_2 \Be_3
+\gpgradetwo{
+\Be_2 e^{j \phi} (-\Be_1) e^{j \phi} 
+}
+=
+\Be_1 \Be_2 \Be_3 \Be_2 \Be_1
+= \Be_3
+= \zcap.
+\end{dmath}
+
+So, provided \( \rho \ne 0 \), \( \BB = 0 \).
+
+The errata \citep{sakurai2014modernErrata} provides the clarification, showing that a \( \rho > \rho_a \) constraint is required for this potential to produce the desired results.  Continuity at \( \rho = \rho_a \) means that in the interior (or at least on the boundary) we must have one of 
+
+\begin{dmath}\label{eqn:solenoidConstantField:80}
+\BA = \frac{B \rho_a}{2} \phicap,
+\end{dmath}
+
+or
+
+\begin{dmath}\label{eqn:solenoidConstantField:100}
+\BA = \frac{B \rho}{2} \phicap.
+\end{dmath}
+
+The first doesn't work, but the second does
+
+\begin{dmath}\label{eqn:solenoidConstantField:120}
+\BB 
+= \spacegrad \cross \BA
+= \lr{ \rhocap \partial_\rho + \zcap \partial_z + \frac{\phicap}{\rho} \partial_\phi } \cross \frac{B \rho}{2 } \phicap
+=
+\frac{B }{2 } \rhocap \cross \phicap
++ 
+\frac{B \rho}{2 } 
+\frac{\phicap}{\rho} \cross \partial_\phi \phicap
+= B \zcap.
+\end{dmath}
+
+So the vector potential that we want for a constant \( B \zcap \) field in the interior \( \rho < \rho_a \) of a cylindrical space, we need
+
+\begin{dmath}\label{eqn:solenoidConstantField:140}
+\BA =
+\left\{
+\begin{array}{l l}
+\frac{B \rho_a^2}{2 \rho} \phicap & \quad \mbox{if \( \rho \ge \rho_a \) } \\
+\frac{B \rho}{2} \phicap & \quad \mbox{if \( \rho \le \rho_a \).} 
+\end{array}
+\right.
+\end{dmath}
+
+An example of the magnitude of potential is graphed in \cref{fig:solenoidPotential:solenoidPotentialFig1}.
+
+\imageFigure{../../figures/phy1520/solenoidPotentialFig1}{Vector potential for constant field in cylindrical region.}{fig:solenoidPotential:solenoidPotentialFig1}{0.3}
+
+\EndArticle
