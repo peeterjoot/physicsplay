@@ -11,6 +11,7 @@
 %\usepackage{phy1520}
 \usepackage{peeters_braket}
 \usepackage{peeters_layout_exercise}
+\usepackage{mathtools}
 
 \beginArtNoToc
 %\generatetitle{PHY1520H Graduate Quantum Mechanics.  Lecture 3: Density matrix (cont.).  Taught by Prof.\ Arun Paramekanti}
@@ -51,53 +52,71 @@ The quanitity in braces is just a complex number.
 After expanding the pure state \( \ket{\Psi} \) in terms of basis states for each of the two partitions
 
 \begin{dmath}\label{eqn:qmLecture3:60}
-\ket{\Psi} = \sum_{m,n} C_{m, n} \ket{m}_\txtL \ket{n}_\txtR,
+\ket{\Psi} 
+= \sum_{m,n} C_{m, n} \ket{m}_\txtL \ket{n}_\txtR,
 \end{dmath}
 
-we have
+With \( \txtL \) and \( \txtR \) implied for \( \ket{m}, \ket{n} \) indexed states respectively, this can be written
+
+\begin{dmath}\label{eqn:qmLecture3:460}
+\ket{\Psi} 
+= \sum_{m,n} C_{m, n} \ket{m} \ket{n}.
+\end{dmath}
+
+The density operator is
 
 \begin{dmath}\label{eqn:qmLecture3:80}
 \hat{\rho} = 
 \sum_{m,n} 
 C_{m, n} 
 C_{m', n'}^\conj
-\ket{m}_\txtL \ket{n}_\txtR
+\ket{m} \ket{n}
 \sum_{m',n'}
-\bra{m'}_\txtL \bra{n'}_\txtR.
+\bra{m'} \bra{n'}.
 \end{dmath}
 
-Suppose we trace over the right partition of the state space
+Suppose we trace over the right partition of the state space, defining such a trace as the reduced density operator \( \hat{\rho}_{\textrm{red}} \)
 
 \begin{dmath}\label{eqn:qmLecture3:100}
-\Tr(\hat{\rho})
-= \sum_{\tilde{n}} \bra{\tilde{n}}_\txtR \hat{\rho} \ket{ \tilde{n} }_\txtR
+\hat{\rho}_{\textrm{red}} 
+\equiv
+\Tr_\txtR(\hat{\rho})
+= \sum_{\tilde{n}} \bra{\tilde{n}} \hat{\rho} \ket{ \tilde{n}}
 = \sum_{\tilde{n}} 
+\bra{\tilde{n} }
+\lr{
+\sum_{m,n}
+C_{m, n} 
+\ket{m} \ket{n}
+}
+\lr{
+\sum_{m',n'}
+C_{m', n'}^\conj
+\bra{m'} \bra{n'}
+}
+\ket{ \tilde{n} }
+= 
+\sum_{\tilde{n}} 
 \sum_{m,n}
 \sum_{m',n'}
 C_{m, n} 
 C_{m', n'}^\conj
-\bra{\tilde{n}}_\txtR 
-\ket{m}_\txtL \ket{n}_\txtR
-\bra{m'}_\txtL \bra{n'}_\txtR
-\ket{ \tilde{n} }_\txtR
-= \sum_{\tilde{n}} 
-\sum_{m,n}
-\sum_{m',n'}
-C_{m, n} 
-C_{m', n'}^\conj
-\ket{m}_\txtL \delta_{n n'}
-\bra{m'}_\txtL 
+\ket{m} \delta_{\tilde{n} n}
+\bra{m' }
 \delta_{ \tilde{n} n' }
 =
-...
+\sum_{\tilde{n}, m, m'} 
+C_{m, \tilde{n}} 
+C_{m', \tilde{n}}^\conj
+\ket{m} \bra{m' }
 \end{dmath}
-FIXME: complete.
-FIXME: somewhere in here the reduced density matrix was introduced.
+
+Computing the matrix element of \( \hat{\rho}_{\textrm{red}} \), we have
 
 \begin{dmath}\label{eqn:qmLecture3:120}
-\bra{\tilde{m}} \hat{\rho} \ket{\tilde{m}}
+\bra{\tilde{m}} \hat{\rho}_{\textrm{red}} \ket{\tilde{m}}
 = 
-\sum_{m, m', \tilde{n}} C_{m, \tilde{n}} C_{m', \tilde{n}}^\conj \braket{ \tilde{m}}{m}_\txtL \braket{m'}{\tilde{m}}_\txtL
+\sum_{m, m', \tilde{n}} C_{m, \tilde{n}} C_{m', \tilde{n}}^\conj \braket{ \tilde{m}}{m} \braket{m'}{\tilde{m}}
 = 
 \sum_{\tilde{n}} \Abs{C_{\tilde{m}, \tilde{n}} }^2.
 \end{dmath}
