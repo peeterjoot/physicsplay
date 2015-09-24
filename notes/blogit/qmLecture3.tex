@@ -10,11 +10,12 @@
 
 %\usepackage{phy1520}
 \usepackage{peeters_braket}
+\usepackage{peeters_layout_exercise}
 
 \beginArtNoToc
-%\generatetitle{PHY1520H Graduate Quantum Mechanics.  Lecture 3: XXX.  Taught by Prof.\ Arun Paramekanti}
-%\generatetitle{XXX}
-%\chapter{XXX}
+%\generatetitle{PHY1520H Graduate Quantum Mechanics.  Lecture 3: Density matrix (cont.).  Taught by Prof.\ Arun Paramekanti}
+%\generatetitle{Density matrix (cont.)}
+%\chapter{Density matrix (cont.)}
 \label{chap:chapter3Notes}
 
 \paragraph{Disclaimer}
@@ -23,7 +24,255 @@ Peeter's lecture notes from class.  These may be incoherent and rough.
 
 These are notes for the UofT course PHY1520, Graduate Quantum Mechanics, taught by Prof. Paramekanti, covering \textchapref{{1}} \citep{sakurai2014modern} content.
 
-\paragraph{YYY}
+\paragraph{Density matrix (cont.)}
+
+Example of partitioned system with four total states (two spin 1/2 particles)
+
+F1
+
+Example of partitioned system with eight total states (three spin 1/2 particles)
+
+F2
+
+The density matrix 
+
+\begin{dmath}\label{eqn:qmLecture3:20}
+\hat{\rho} = \ket{\Psi}\bra{\Psi}
+\end{dmath}
+
+is clearly an operator as can be seen by applying it to a state
+
+\begin{dmath}\label{eqn:qmLecture3:40}
+\hat{\rho} \ket{\phi} = \ket{\Psi} \lr{ \braket{ \Psi }{\phi} }.
+\end{dmath}
+
+The quanitity in braces is just a complex number.
+
+After expanding the pure state \( \ket{\Psi} \) in terms of basis states for each of the two partitions
+
+\begin{dmath}\label{eqn:qmLecture3:60}
+\ket{\Psi} = \sum_{m,n} C_{m, n} \ket{m}_\txtL \ket{n}_\txtR,
+\end{dmath}
+
+we have
+
+\begin{dmath}\label{eqn:qmLecture3:80}
+\hat{\rho} = 
+\sum_{m,n} 
+C_{m, n} 
+C_{m', n'}^\conj
+\ket{m}_\txtL \ket{n}_\txtR
+\sum_{m',n'}
+\bra{m'}_\txtL \bra{n'}_\txtR.
+\end{dmath}
+
+Suppose we trace over the right partition of the state space
+
+\begin{dmath}\label{eqn:qmLecture3:100}
+\Tr(\hat{\rho})
+= \sum_{\tilde{n}} \bra{\tilde{n}}_\txtR \hat{\rho} \ket{ \tilde{n} }_\txtR
+= \sum_{\tilde{n}} 
+\sum_{m,n}
+\sum_{m',n'}
+C_{m, n} 
+C_{m', n'}^\conj
+\bra{\tilde{n}}_\txtR 
+\ket{m}_\txtL \ket{n}_\txtR
+\bra{m'}_\txtL \bra{n'}_\txtR
+\ket{ \tilde{n} }_\txtR
+= \sum_{\tilde{n}} 
+\sum_{m,n}
+\sum_{m',n'}
+C_{m, n} 
+C_{m', n'}^\conj
+\ket{m}_\txtL \delta_{n n'}
+\bra{m'}_\txtL 
+\delta_{ \tilde{n} n' }
+=
+...
+\end{dmath}
+FIXME: complete.
+FIXME: somewhere in here the reduced density matrix was introduced.
+
+\begin{dmath}\label{eqn:qmLecture3:120}
+\bra{\tilde{m}} \hat{\rho} \ket{\tilde{m}}
+= 
+\sum_{m, m', \tilde{n}} C_{m, \tilde{n}} C_{m', \tilde{n}}^\conj \braket{ \tilde{m}}{m}_\txtL \braket{m'}{\tilde{m}}_\txtL
+= 
+\sum_{\tilde{n}} \Abs{C_{\tilde{m}, \tilde{n}} }^2.
+\end{dmath}
+
+This is the probability that the left partition is in state \( \tilde{m} \).
+
+\paragraph{Average of an observable}
+
+Suppose we have two spin half particles.  For such a system the total magnetization is
+
+\begin{dmath}\label{eqn:qmLecture3:140}
+S_{\textrm{Total}} = 
+S_1^z
++
+S_1^z,
+\end{dmath}
+
+as sketched in
+
+F3
+
+The average of some observable is 
+
+\begin{dmath}\label{eqn:qmLecture3:160}
+\expectation{\hatA}
+= \sum_{m, n, m', n'} C_{m, n}^\conj C_{m', n'}
+\bra{m}\bra{n} \hatA \ket{n'} \ket{m'}.
+\end{dmath}
+
+Consider the trace of the density operator observable product
+
+\begin{dmath}\label{eqn:qmLecture3:180}
+\Tr( \hat{\rho} \hatA )
+= \sum_{m, n} \braket{m n}{\Psi} \bra{\Psi} \hatA \ket{m, n}.
+\end{dmath}
+
+Let
+
+\begin{dmath}\label{eqn:qmLecture3:200}
+\ket{\Psi} = \sum_{m, n} C_{m n} \ket{m, n},
+\end{dmath}
+
+so that
+
+\begin{dmath}\label{eqn:qmLecture3:220}
+\Tr( \hat{\rho} \hatA ) 
+= \sum_{m, n, m', n', m'', n''} C_{m', n'} C_{m'', n''}^\conj
+\braket{m n}{m', n'} \bra{m'', n''} \hatA \ket{m, n}.
+= \sum_{m, n, m'', n''} C_{m, n} C_{m'', n''}^\conj
+\bra{m'', n''} \hatA \ket{m, n}.
+\end{dmath}
+
+This is just
+
+%\begin{dmath}\label{eqn:qmLecture3:240}
+\boxedEquation{eqn:qmLecture3:240}{
+\bra{\Psi} \hatA \ket{\Psi} = \Tr( \hat{\rho} \hatA ).
+}
+%\end{dmath}
+
+\paragraph{Left observables}
+
+Consider 
+
+\begin{dmath}\label{eqn:qmLecture3:260}
+\bra{\Psi} \hatA_\txtL \ket{\Psi}
+= \Tr(\hat{\rho} \hatA_\txtL)
+= 
+\Tr_\txtL
+\Tr_\txtR
+(\hat{\rho} \hatA_\txtL)
+= 
+\Tr_\txtL
+\lr{
+\lr{
+\Tr_\txtR \hat{\rho} 
+}
+\hatA_\txtL)
+}
+= 
+\Tr_\txtL
+\lr{
+\hat{\rho}_{\textrm{red}}
+\hatA_\txtL)
+}.
+\end{dmath}
+
+We see
+
+\begin{dmath}\label{eqn:qmLecture3:280}
+\bra{\Psi} \hatA_\txtL \ket{\Psi}
+= 
+\Tr_\txtL \lr{ \hat{\rho}_{\textrm{red}, \txtL} \hatA_\txtL }.
+\end{dmath}
+
+We find that we don't need to know the state of the complete system to answer questions about portions of the system, but instead just need \( \hat{\rho} \), a ``probability operator'' that provides all the required information about the partitioning of the system.
+
+\paragraph{Pure states vs. mixed states}
+
+For pure states we can assign a state vector and talk about reduced scenerios.  For mixed states we must work with reduced density matrices.
+
+\makeexample{Two particle spin half pure states}{example:qmLecture3:1}{
+
+Consider 
+
+\begin{dmath}\label{eqn:qmLecture3:300}
+\ket{\psi_1} = \inv{\sqrt{2}} \lr{ \ket{ \uparrow \downarrow } - \ket{ \downarrow \uparrow } }
+\end{dmath}
+
+\begin{dmath}\label{eqn:qmLecture3:320}
+\ket{\psi_2} = \inv{\sqrt{2}} \lr{ \ket{ \uparrow \downarrow } + \ket{ \uparrow \uparrow } }.
+\end{dmath}
+
+For the first pure state the density operator is
+\begin{dmath}\label{eqn:qmLecture3:360}
+\hat{\rho} = \inv{2} 
+\lr{ \ket{ \uparrow \downarrow } - \ket{ \downarrow \uparrow } }
+\lr{ \bra{ \uparrow \downarrow } - \bra{ \downarrow \uparrow } }
+\end{dmath}
+
+What are the reduced density matrices?
+
+\begin{dmath}\label{eqn:qmLecture3:340}
+\hat{\rho}_\txtL
+= \Tr_\txtR \lr{ \hat{\rho} }
+= 
+\inv{2} (-1)(-1) \ket{\downarrow}\bra{\downarrow} 
++\inv{2} (+1)(+1) \ket{\uparrow}\bra{\uparrow},
+\end{dmath}
+
+so the matrix representation of this reduced density operator is
+
+\begin{dmath}\label{eqn:qmLecture3:380}
+\hat{\rho}_\txtL 
+=
+\inv{2}
+\begin{bmatrix}
+1 & 0 \\
+0 & 1
+\end{bmatrix}.
+\end{dmath}
+
+For the second pure state the density operator is
+\begin{dmath}\label{eqn:qmLecture3:400}
+\hat{\rho} = \inv{2} 
+\lr{ \ket{ \uparrow \downarrow } + \ket{ \uparrow \uparrow } }
+\lr{ \bra{ \uparrow \downarrow } + \bra{ \uparrow \uparrow } }.
+\end{dmath}
+
+This has a reduced density matrice
+
+\begin{dmath}\label{eqn:qmLecture3:420}
+\hat{\rho}_\txtL
+= \Tr_\txtR \lr{ \hat{\rho} }
+= 
+\inv{2} \ket{\uparrow}\bra{\uparrow} 
++\inv{2} \ket{\uparrow}\bra{\uparrow},
+= 
+\ket{\uparrow}\bra{\uparrow} .
+\end{dmath}
+
+This has a matrix representation
+
+\begin{dmath}\label{eqn:qmLecture3:440}
+\hat{\rho}_\txtL 
+=
+\begin{bmatrix}
+1 & 0 \\
+0 & 0
+\end{bmatrix}.
+\end{dmath}
+
+In this second example, we have more information about the left partition.  That will be seen as a zero enganglement entropy in the problem set.  In contrast we have less information about the first state, and will find a non-zero positive entanglement entropy in that case.
+
+} % example
 
 \EndArticle
 %\EndNoBibArticle

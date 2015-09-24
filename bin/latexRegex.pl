@@ -150,5 +150,11 @@
 #s/r\\ccube/_{r,\\textrm{ccube}}/g;
 #s/r\\iso/_{r,\\textrm{iso}}/g;
 #s/xialpha\b/x_{i_\\alpha}/g ;
+s/\\hatrho\b/\\hat{\\rho}/g ;
+s/\\rhohat\b/\\hat{\\rho}/g ;
+s/\\hatrho_/\\hat{\\rho}_/g ;
+s/\\rhohat_/\\hat{\\rho}_/g ;
+s/\\tn\b/\\tilde{n}/g ;
+s/\\tm\b/\\tilde{m}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
 s/[Ss]chrodinger/Schr\\"{o}dinger/g; # Schrodinger
