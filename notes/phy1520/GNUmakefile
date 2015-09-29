@@ -13,7 +13,7 @@ SOURCE_DIRS += $(FIGURES)
 #REDACTED := -redacted
 
 #GENERATED_SOURCES += matlab.tex 
-#GENERATED_SOURCES += mathematica.tex 
+GENERATED_SOURCES += mathematica.tex 
 GENERATED_SOURCES += julia.tex 
 
 EPS_FILES := $(wildcard $(FIGURES)/*.eps)
