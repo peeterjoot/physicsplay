@@ -21,6 +21,9 @@ INCOMPLETE += censor1l.tex
 INCOMPLETE += censor1p.tex
 INCOMPLETE += censor1pg.tex
 INCOMPLETE += stokespost.tex
+INCOMPLETE += gradQuantumProblemSet2Problem1.tex
+INCOMPLETE += gradQuantumProblemSet2Problem2.tex
+INCOMPLETE += gradQuantumProblemSet2Problem3.tex
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
@@ -93,6 +96,10 @@ energyMomentumWithMagneticSources.pdf : ../ece1229/energyMomentumWithMagneticSou
 gradQuantumProblemSet1.pdf : ../phy1520/gradQuantumProblemSet1Problem1.tex
 gradQuantumProblemSet1.pdf : ../phy1520/gradQuantumProblemSet1Problem2.tex
 gradQuantumProblemSet1.pdf : ../phy1520/moreBraKetProblemsP12.tex
+
+gradQuantumProblemSet2.pdf : gradQuantumProblemSet2Problem1.tex
+gradQuantumProblemSet2.pdf : gradQuantumProblemSet2Problem2.tex
+gradQuantumProblemSet2.pdf : gradQuantumProblemSet2Problem3.tex
 
 gaBasics.pdf : gaBasics.tex
 
