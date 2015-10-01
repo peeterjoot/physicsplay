@@ -93,10 +93,6 @@ $(LOCAL_FILES) :
 
 energyMomentumWithMagneticSources.pdf : ../ece1229/energyMomentumWithMagneticSources.tex
 
-gradQuantumProblemSet1.pdf : ../phy1520/gradQuantumProblemSet1Problem1.tex
-gradQuantumProblemSet1.pdf : ../phy1520/gradQuantumProblemSet1Problem2.tex
-gradQuantumProblemSet1.pdf : ../phy1520/moreBraKetProblemsP12.tex
-
 gradQuantumProblemSet2.pdf : gradQuantumProblemSet2Problem1.tex
 gradQuantumProblemSet2.pdf : gradQuantumProblemSet2Problem2.tex
 gradQuantumProblemSet2.pdf : gradQuantumProblemSet2Problem3.tex

@@ -24,10 +24,15 @@ THISBOOK_DEPS += $(PDFS_FROM_EPS)
 
 include ../make.rules
 
-#problemSets : gradQuantumProblemSet1.pdf gradQuantumProblemSet2.pdf
+julia.tex : ../../julia/METADATA
 
-#gradQuantumProblemSet5.pdf : gradQuantumProblemSet5Problem1.tex
-#gradQuantumProblemSet5.pdf : gradQuantumProblemSet5Problem2.tex
+problemSets :: gradQuantumProblemSet1.pdf
+#problemSets :: gradQuantumProblemSet2.pdf
+
+gradQuantumProblemSet1.pdf : gradQuantumProblemSet1Problem1.tex
+gradQuantumProblemSet1.pdf : gradQuantumProblemSet1Problem2.tex
+gradQuantumProblemSet1.pdf : moreBraKetProblemsP12.tex
+
 #gradQuantumProblemSet5.pdf : ps5matlab.tex
 #gradQuantumProblemSet5.pdf : ps5mathematica.tex
 #gradQuantumProblemSet5.pdf : matlab.sty
