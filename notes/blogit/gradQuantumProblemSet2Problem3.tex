@@ -2,6 +2,7 @@
 % Copyright © 2015 Peeter Joot.  All Rights Reserved.
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
 %
+
 \makeproblem{Correlation function}{gradQuantum:problemSet2:3}{ 
 Consider \( \expectation{x(0)x(t)} \) and \( \expectation{p(0)p(t)} \) where operators are in the Heisenberg representation. These are called correlation functions. Evaluate this for the 1D harmonic oscillator in an energy eigenstate \( \ket{n} \).
 } % makeproblem
@@ -11,6 +12,148 @@ Consider \( \expectation{x(0)x(t)} \) and \( \expectation{p(0)p(t)} \) where ope
 %
 \makeanswer{gradQuantum:problemSet2:3}{ 
 
-TODO.
+In the Heisenberg representation the position and momentum operators evolve as
+
+\begin{equation}\label{eqn:gradQuantumProblemSet2Problem3:20}
+\begin{aligned}
+x(t) &= x(0) \cos(\omega t) + \frac{p(0)}{m \omega} \sin(\omega t) \\
+p(t) &= p(0) \cos(\omega t) - m \omega x(0) \sin(\omega t).
+\end{aligned}
+\end{equation}
+
+To evaluate the expectation operations, we'll want the ladder operator representations of the position and momentum operators
+
+\begin{equation}\label{eqn:gradQuantumProblemSet2Problem3:40}
+\begin{aligned}
+x(0) &= \frac{x_0}{\sqrt{2}} \evalbar{\lr{ a + a^\dagger }}{t = 0} \\
+p(0) &= \frac{i \Hbar}{x_0 \sqrt{2}} \evalbar{\lr{ a^\dagger - a}}{t = 0},
+\end{aligned}
+\end{equation}
+
+where
+
+\begin{equation}\label{eqn:gradQuantumProblemSet2Problem3:60}
+x_0 = \sqrt{\frac{\Hbar}{m \omega}}.
+\end{equation}
+
+The expectations of interest, with the raising and lowering operators evaluated at \( t = 0 \), are
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem3:80}
+\bra{n} x(0) x(0) \ket{n}
+=
+\frac{x_0^2}{2} \bra{n} \lr{ a + a^\dagger }^2 \ket{n}
+=
+\frac{x_0^2}{2} 
+\lr{ \sqrt{n+1} \bra{n+1} + \sqrt{n} \bra{n-1} } 
+\lr{ \sqrt{n+1} \ket{n+1} + \sqrt{n} \ket{n-1} } 
+=
+\frac{x_0^2}{2} \lr{ 2 n + 1 },
+\end{dmath}
+
+and
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem3:100}
+\bra{n} x(0) p(0) \ket{n}
+=
+\frac{i \Hbar}{2} 
+\bra{n} \lr{ a + a^\dagger } \lr{ a^\dagger - a }  \ket{n}
+=
+\frac{i \Hbar}{2} 
+\lr{ \sqrt{n+1} \bra{n+1} + \sqrt{n} \bra{n-1} } 
+\lr{ \sqrt{n+1} \ket{n+1} - \sqrt{n} \ket{n-1} } 
+=
+\frac{i \Hbar}{2},
+\end{dmath}
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem3:101}
+\bra{n} p(0) p(0) \ket{n}
+=
+\frac{-\Hbar^2 }{ 2 x_0^2}
+\bra{n} \lr{ a^\dagger - a } \lr{ a^\dagger - a }  \ket{n}
+=
+\frac{-\Hbar^2 }{ 2 x_0^2}
+\lr{ \sqrt{n+1} \bra{n+1} - \sqrt{n} \bra{n-1} } 
+\lr{ \sqrt{n+1} \ket{n+1} - \sqrt{n} \ket{n-1} } 
+=
+\frac{(-\Hbar^2) }{ 2 x_0^2}
+\lr{
+2 n + 1
+},
+\end{dmath}
+
+and finally
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem3:120}
+\bra{n} p(0) x(0) \ket{n}
+=
+\bra{n} 
+\lr{
+\antisymmetric{p(0)}{x(0)} + x(0) p(0)
+}
+\ket{n}
+=
+-i \Hbar + \frac{i\Hbar}{2}
+=
+\frac{i \Hbar}{2}.
+\end{dmath}
+
+Now we are ready to compute the correlations.  The position correlation is
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem3:140}
+\bra{n} x(0) x(t) \ket{n}
+=
+\bra{n} x(0) \lr{
+x(0) \cos(\omega t) + \frac{p(0)}{m \omega} \sin(\omega t) 
+} \ket{n}
+=
+\cos(\omega t) \bra{n} x(0) x(0) \ket{n}
++
+\frac{1}{m \omega} \sin(\omega t) \bra{n} x(0) p(0) \ket{n}
+=
+\cos(\omega t) 
+\frac{x_0^2}{2} \lr{ 2 n + 1 }
++ \frac{1}{m \omega} \sin(\omega t) \frac{i \Hbar}{2},
+\end{dmath}
+
+which is
+
+%\begin{equation}\label{eqn:gradQuantumProblemSet2Problem3:160}
+\boxedEquation{eqn:gradQuantumProblemSet2Problem3:180}{
+\bra{n} x(0) x(t) \ket{n}
+=
+\frac{x_0^2}{2}
+\lr{
+\lr{ 2 n + 1 }
+\cos(\omega t) 
++ i \sin(\omega t)
+}.
+}
+%\end{equation}
+
+The momentum correlation is
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem3:200}
+\bra{n} p(0) p(t) \ket{n}
+=
+\bra{n} p(0) \lr{
+p(0) \cos(\omega t) - m \omega x(0) \sin(\omega t)
+} \ket{n}
+=
+\cos(\omega t) 
+\lr{ 2 n + 1 }
+\frac{(-\Hbar^2) }{ 2 x_0^2}
+- m \omega \sin(\omega t) \frac{i \Hbar}{2}.
+\end{dmath}
+
+With \( p_0^2 = m \omega \Hbar \), this is
+
+\boxedEquation{eqn:gradQuantumProblemSet2Problem3:n}{
+\bra{n} p(0) p(t) \ket{n}
+=
+-\frac{p_0^2}{2} \lr{ 
+\lr{ 2 n + 1 }
+\cos(\omega t) 
++ i \sin(\omega t)
+}.
 }
 
+}
