@@ -1,7 +1,7 @@
 /*
  * Simple symbolic (multi)vector calculator.
  *
- * Peeter Joot (peeter.joot@gmail.com).
+ * Peeter Joot (peeterjoot@protonmail.com).
  */
 
 

@@ -1,5 +1,5 @@
 \ProvidesClass{peeterblog}[Peeter Joot, Copyright (c) 2012]
-\typeout{ Latex class for Peeter's blog posts. peeter.joot@gmail.com }
+\typeout{ Latex class for Peeter's blog posts. peeterjoot@protonmail.com }
 
 \LoadClass[ twoside,openright,numbers=noenddot,headinclude,
             footinclude=true,cleardoublepage=empty,abstractoff,

@@ -4,7 +4,7 @@
 \typeout{ ==========> Assignment Class (assignment.cls) 2002 <============= }
 \typeout{ Eli Lansey (c) 2009 }
 \typeout{ In case of questions, contact elansey@gmail.com }
-\typeout{ Further hacked by Peeter Joot for his own purposes. peeter.joot@gmail.com }
+\typeout{ Further hacked by Peeter Joot for his own purposes. peeterjoot@protonmail.com }
 \typeout{}
 
 \DeclareOption*{%
