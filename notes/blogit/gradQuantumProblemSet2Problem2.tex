@@ -17,15 +17,15 @@ H = \frac{\Bp^2}{2m} + V(\Bx).
 Calculate \( \antisymmetric{\Bx \cdot \Bp}{H} \) and show that
 
 \begin{dmath}\label{eqn:gradQuantumProblemSet2Problem2:41}
-\ddt{} \expectation{ \Bx \cdot \Bp } = \expectation{ \frac{\Bp^2}{2m} } - \expectation{ \Bx \cdot \spacegrad V }.
+\ddt{} \expectation{ \Bx \cdot \Bp } = \expectation{ \frac{\Bp^2}{m} } - \expectation{ \Bx \cdot \spacegrad V }.
 \end{dmath}
 
 
 \makesubproblem{}{gradQuantum:problemSet2:2b}
+When the l.h.s. vanishes, the result that the r.h.s. is zero is called the quantum virial theorem. 
 Under what conditions does the left-hand side vanish?  
 
 \makesubproblem{}{gradQuantum:problemSet2:2c}
-When the l.h.s. vanishes, the result that the r.h.s. is zero is called the quantum virial theorem. 
 Consider the 3D isotropic harmonic oscillator, and show explicitly that its eigenstates obey the virial theorem. 
 
 \makesubproblem{}{gradQuantum:problemSet2:2d}
@@ -63,7 +63,7 @@ Evaluating those commutators separately, gives
 \begin{aligned}
 \antisymmetric{ x_r }{\Bp^2}
 &=
-\antisymmetric{ x_r }{p_r^2}\qquad \text{no sum} \\
+\antisymmetric{ x_r }{p_r^2}\qquad \text{(no sum)} \\
 &=
 2 i \Hbar p_r,
 \end{aligned}
@@ -88,17 +88,60 @@ so
 \frac{\Bp^2}{m} - \Bx \cdot \spacegrad V(\Bx).
 \end{dmath}
 
-Evaluating the expectation of this identity with respect to stationary states (i.e. states that are independent of time), we have
+Evaluating the expectation of this identity with respect to a stationary state \( \ket{\psi} \) (i.e. a state independent of time), we have
 
 \begin{dmath}\label{eqn:gradQuantumProblemSet2Problem2:120}
+\bra{\psi} \ddt{} \Bx \cdot \Bp \ket{\psi}
+=
+\ddt{} \bra{\psi} \Bx \cdot \Bp \ket{\psi}
+=
 \ddt{} \expectation{ \Bx \cdot \Bp } 
 = \expectation{\frac{\Bp^2}{m}} - \expectation{\Bx \cdot \spacegrad V(\Bx)}.
 \end{dmath}
 
-Note that taking the expectation with respect to stationary states was required to reverse the order of the time derivative and the expectation operation.
+Because the expectation was with respect to a stationary state, the time derivative could be moved outside of the expectation operation.
 
 \makeSubAnswer{}{gradQuantum:problemSet2:2b}
-TODO.
+
+This derivative will be equal zero when
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem2:160}
+0 
+=
+\ddt{} \expectation{ \Bx \cdot \Bp } 
+=
+\bra{\psi} \ddt{} \Bx \cdot \Bp \ket{\psi}
+=
+\bra{\psi} \ddt{\Bx} \cdot \Bp + \Bx \cdot \ddt{\Bp} \ket{\psi}
+=
+\bra{\psi} \PD{\Bp}{H} \cdot \Bp - \Bx \cdot \PD{\Bx}{H} \ket{\psi},
+\end{dmath}
+
+or when
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem2:180}
+\expectation{ \PD{\Bp}{H} \cdot \Bp } = \expectation{\Bx \cdot \PD{\Bx}{H}}.
+\end{dmath}
+
+Consider the SHO Hamiltonian for example.  For that we have
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem2:200}
+\expectation{ \PD{\Bp}{H} \cdot \Bp }
+= 
+\expectation{\frac{\Bp}{m} \cdot \Bp}
+= 
+\expectation{\frac{\Bp^2}{m}},
+\end{dmath}
+
+and
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem2:220}
+\expectation{ \Bx \cdot \PD{\Bx}{H} }
+=
+\expectation{ \Bx \cdot m \omega^2 \Bx }
+= 
+m \omega^2 \expectation{ \Bx^2 }.
+\end{dmath}
+
+In one dimension, with expectation relative to state \( \ket{n} \) these both equal \( \Hbar \omega (n + 1/2) \), the energy of state \( \ket{n} \).  It seems plausible that there is an additional argument that could be used to show that is the case more generally.
 
 \makeSubAnswer{}{gradQuantum:problemSet2:2c}
 When \cref{eqn:gradQuantumProblemSet2Problem2:120} is zero, we have the quantum equivalent of the virial theorem, relating the average kinetic energy to the potential
@@ -107,11 +150,261 @@ When \cref{eqn:gradQuantumProblemSet2Problem2:120} is zero, we have the quantum 
 2 \expectation{T} = \expectation{\Bx \cdot \spacegrad V(\Bx)}
 \end{dmath}
 
-Let's now evaluate these expectations operations with respect to the 3D SHO eigenstates.
+To evaluate these expectations operations with respect to the 3D SHO eigenstates, let
 
-TODO.
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem2:240}
+\begin{aligned}
+a_x(t) &= a_x e^{-i \omega t} \\
+a_y(t) &= a_y e^{-i \omega t} \\
+a_z(t) &= a_z e^{-i \omega t},
+\end{aligned}
+\end{dmath}
+
+Note that
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem2:480}
+\expectation{ \Bx \cdot \spacegrad V }
+=
+m \omega^2 \expectation{ \Bx^2(t) } 
+=
+m \omega^2 \frac{x_0^2}{2} 
+\sum_{k=1}^3 
+\expectation{ \lr{a_k(t) + a_k^\dagger(t)}^2 } 
+=
+\frac{ \Hbar \omega }{2}
+\sum_{k=1}^3 
+\bra{\psi} \lr{a_k(t) + a_k^\dagger(t)}^2 \ket{\psi}
+=
+\frac{ \Hbar \omega }{2}
+\sum_{k=1}^3 
+\bra{\psi} \lr{a_k  e^{-i \omega t} + a_k^\dagger e^{i \omega t}}^2 \ket{\psi},
+\end{dmath}
+
+and
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem2:500}
+\expectation{ \frac{\Bp^2}{m} }
+=
+\frac{-\Hbar^2}{2 m x_0^2} 
+\sum_{k=1}^3 
+\expectation{ \lr{a_k^\dagger(t) - a_k(t) }^2 } 
+=
+\frac{ \Hbar \omega }{2} 
+\sum_{k=1}^3 
+\bra{\psi} 
+\lr{ a_k(t) - a_k^\dagger(t) }
+\lr{ a_k^\dagger(t) - a_k(t) }
+\ket{\psi}
+=
+\frac{ \Hbar \omega }{2} 
+\sum_{k=1}^3 
+\bra{\psi} 
+\lr{ a_k e^{-i \omega t}- a_k^\dagger e^{i \omega t}}
+\lr{ a_k^\dagger e^{i \omega t} - a_k e^{-i \omega t}}
+\ket{\psi}.
+\end{dmath}
+
+In both cases the pairs of raising and lowering operators have been factored into conjugate pairs so that only the action of the latter on \( \ket{\psi} \) need be considered.  Considering the \( x \) component for example, we've got
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem2:540}
+\lr{ a_x^\dagger e^{i \omega t} \pm a_x e^{-i \omega t}}
+\ket{n_x, n_y, n_z}
+=
+e^{i \omega t} \sqrt{n_x + 1} \ket{n_x + 1, n_y, n_z}
+\pm
+e^{-i \omega t} \sqrt{n_x} \ket{n_x - 1, n_y, n_z}.
+\end{dmath}
+
+This gives
+
+\begin{equation}\label{eqn:gradQuantumProblemSet2Problem2:560}
+\expectation{ \Bx \cdot \spacegrad V } = \expectation{ \frac{\Bp^2}{m} }
+=
+\frac{\Hbar \omega}{2}
+\lr{
+(n_x + 1) + n_x
++(n_y + 1) + n_y
++(n_z + 1) + n_z
+},
+\end{equation}
+
+or
+
+\boxedEquation{eqn:gradQuantumProblemSet2Problem2:580}{
+\expectation{ \Bx \cdot \spacegrad V } = \expectation{ \frac{\Bp^2}{m} }
+=
+\Hbar \omega 
+\lr{ n_x + n_y + n_z + \frac{3}{2} }.
+}
+
+Neither expectation has any time dependence, and the virial theorem has been confirmed.
 
 \makeSubAnswer{}{gradQuantum:problemSet2:2d}
 
-TODO.
+With \( \ket{\psi} = \ket{0,0,0} + \ket{0,0,2} \), the gradient portion of the RHS is
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem2:260}
+\begin{aligned}
+\expectation{ \Bx \cdot \spacegrad V }
+&=
+%m \omega^2 \expectation{ \Bx^2(t) } \\
+%&=
+%m \omega^2 \frac{x_0^2}{2}
+\frac{\Hbar \omega}{2}
+\Biglr{ 
+\bra{\psi} \lr{ a_x e^{-i \omega t} + a_x^\dagger e^{i \omega t} }^2 \ket{\psi} \\
+&\qquad  +\bra{\psi} \lr{ a_y e^{-i \omega t} + a_y^\dagger e^{i \omega t} }^2 \ket{\psi} \\
+&\qquad  +\bra{\psi} \lr{ a_z e^{-i \omega t} + a_z^\dagger e^{i \omega t} }^2 \ket{\psi} } \\
+&= 
+\frac{\Hbar \omega}{2}
+\bra{0_x} \lr{ a_x e^{-i \omega t} + a_x^\dagger e^{i \omega t} }^2 \ket{0_x}
+\braket{0_y}{0_y}\lr{\bra{0_z} + \bra{2_z}}\lr{\ket{0_z} + \ket{2_z}} \\
+&+
+\frac{\Hbar \omega}{2}
+\braket{0_x}{0_x}
+\bra{0_y} \lr{ a_y e^{-i \omega t} + a_y^\dagger e^{i \omega t} }^2 \ket{0_y}
+\lr{\bra{0_z} + \bra{2_z}}\lr{\ket{0_z} + \ket{2_z}} \\
+&+
+\frac{\Hbar \omega}{2}
+\braket{0_x}{0_x}\braket{0_y}{0_y}
+\lr{\bra{0_z} + \bra{2_z}}\lr{ a_z e^{-i \omega t} + a_z^\dagger e^{i \omega t} }^2 
+\lr{\ket{0_z} + \ket{2_z}}
+\end{aligned}
+\end{dmath}
+
+For the \( x^2 \) and \( y^2 \) expectations we have
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem2:280}
+\frac{\Hbar \omega}{2} 1 \times 2 \times
+\bra{0} \lr{ a e^{-i \omega t} + a^\dagger e^{i \omega t} }^2 \ket{0}
+=
+\Hbar \omega
+\lr{ e^{i \omega t} \ket{1} }^\dagger
+e^{i \omega t} \ket{1}
+=
+\Hbar \omega,
+\end{dmath}
+
+for the \( z^2 \) expectation we have
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem2:300}
+\lr{ a e^{-i \omega t} + a^\dagger e^{i \omega t} } \lr{\ket{0} + \ket{2}}
+=
+e^{i \omega t} \lr{ \ket{1} + \sqrt{3} \ket{3} }
++ e^{-i \omega t} \sqrt{2} \ket{1}
+=
+\lr{ e^{i \omega t} + e^{-i \omega t} \sqrt{2} } \ket{1}
++ \sqrt{3} \ket{3},
+\end{dmath}
+
+so
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem2:320}
+\begin{aligned}
+\frac{\Hbar \omega}{2}
+\braket{0_x}{0_x}\braket{0_y}{0_y}
+\lr{\bra{0_z} + \bra{2_z}}\lr{ a_z e^{-i \omega t} + a_z^\dagger e^{i \omega t} }^2 
+\lr{\ket{0_z} + \ket{2_z}}
+&=
+\frac{\Hbar \omega}{2}
+\lr{
+\Abs{ e^{i \omega t} + e^{-i \omega t} \sqrt{2} }^2
++ 3
+} \\
+&=
+\frac{\Hbar \omega}{2}
+\lr{
+1 + 2 + 2 \sqrt{2} \cos( 2 \omega t ) + 3
+} \\
+&=
+\Hbar \omega
+\lr{ 3 + \sqrt{2} \cos( 2 \omega t ) }.
+\end{aligned}
+\end{dmath}
+
+Adding up all the pieces we have
+
+%\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem2:340}
+\boxedEquation{eqn:gradQuantumProblemSet2Problem2:340}{
+\expectation{ \Bx \cdot \spacegrad V }
+=
+\Hbar \omega
+\lr{ 5 + \sqrt{2} \cos( 2 \omega t ) }.
+}
+%\end{dmath}
+
+For the kinetic portion, we've got
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem2:360}
+\expectation{\frac{\Bp^2}{m}}
+=
+%\frac{\Hbar^2}{2 x_0^2 m} 
+\frac{\Hbar \omega}{2}
+\sum_{k=1}^3 
+\bra{\psi} 
+\lr{ a_k e^{-i\omega t} - a_k^\dagger e^{i\omega t} }
+\lr{ a_k^\dagger e^{i\omega t} - a_k e^{-i\omega t} } \ket{\psi}.
+\end{dmath}
+
+As before the squared momentum operator has been factored into conjugate pairs, so only the action on \( \ket{\psi} \) need be computed.  For the \( x \) component of that operation we have
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem2:380}
+\lr{ a_x^\dagger e^{i\omega t} - a_x e^{-i\omega t} } \lr{ \ket{0,0,0} + \ket{0,0,2} } 
+=
+a_x^\dagger e^{i\omega t} \lr{ \ket{0,0,0} + \ket{0,0,2} } 
+=
+e^{i\omega t} 
+\lr{ \ket{1,0,0} + \ket{1,0,2} }.
+\end{dmath}
+
+The \( y \) component, by inspection, must be
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem2:400}
+\lr{ a_x^\dagger e^{i\omega t} - a_x e^{-i\omega t} } \lr{ \ket{0,0,0} + \ket{0,0,2} } 
+=
+e^{i\omega t} 
+\lr{ \ket{0,1,0} + \ket{0,1,2} }.
+\end{dmath}
+
+The \( z \) component is slightly messier to compute
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem2:420}
+\lr{ a_z^\dagger e^{i\omega t} - a_z e^{-i\omega t} } \lr{ \ket{0,0,0} + \ket{0,0,2} } 
+=
+e^{i\omega t} \lr{ \ket{0,0,1} + \sqrt{3} \ket{0,0,3} } 
+- e^{-i\omega t} \sqrt{2} \ket{0,0,1}
+=
+\lr{ e^{i\omega t} - e^{-i\omega t} \sqrt{2} } \ket{0,0,1}
++ e^{i\omega t} \sqrt{3} \ket{0,0,3}.
+\end{dmath}
+
+Noting that  \( \ifrac{\Hbar^2}{2 x_0^2 m} = \Hbar \omega/2 \), summation of all the component contributions gives
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem2:440}
+\expectation{\frac{\Bp^2}{m}}
+=
+\frac{\Hbar \omega}{2} \lr{ 
+ \braket{1,0,0}{1,0,0} + \braket{1,0,2}{1,0,2} 
++\braket{0,1,0}{0,1,0} + \braket{0,1,2}{1,0,2} 
++(\sqrt{3})^2 \braket{0,0,3}{0,0,3}
++ \Abs{e^{i\omega t} - e^{-i\omega t} \sqrt{2}}^2
+}
+=
+\frac{\Hbar \omega}{2} \lr{ 4 + 3 + 1 + 2 + 2 \sqrt{2} \cos(2 \omega t)},
+\end{dmath}
+
+or
+\boxedEquation{eqn:gradQuantumProblemSet2Problem2:460}{
+\expectation{\frac{\Bp^2}{m}}
+=
+\Hbar \omega \lr{ 5 + \sqrt{2} \cos(2 \omega t) }.
+}
+
+This matches \cref{eqn:gradQuantumProblemSet2Problem2:340} as expected, confirming for this state that 
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem2:520}
+0 = \expectation{\frac{\Bp^2}{m}} - \expectation{ \Bx \cdot \spacegrad V },
+\end{dmath}
+
+even when the state is not an eigenstate for which all the time dependence will perfectly cancel out after taking expectations.
 }
