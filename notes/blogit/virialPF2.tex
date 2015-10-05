@@ -1,0 +1,99 @@
+%
+% Copyright © 2015 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{virialPF2}
+\renewcommand{\dirname}{notes/phy1520/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+
+\beginArtNoToc
+
+\generatetitle{XXX}
+%\chapter{XXX}
+%\label{chap:virialPF2}
+
+The expansion you've done isn't quite valid, because $X_k$ and $P_k$ operators are Heisenberg picture operators
+
+\begin{dmath}\label{eqn:virialPF2:20}
+\begin{aligned}
+X_{k,H}(t) &= U^\dagger(t) X_k U(t) \\
+P_{k,H}(t) &= U^\dagger(t) P_k U(t).
+\end{aligned}
+\end{dmath}
+
+Also note that the state vectors in question (say, $\ket{\psi}$ is not time dependent), since the time dependence is in the operators themselves.
+
+If the Hamiltonian isn't explicitly time dependent, that time evolution operator is $U(t) = e^{-i H t/\Hbar}$.  If I try plugging that in I just get to the starting point of the virial theorem derivation (i.e. evaluate the commutator of $\Bx \cdot \Bp$ with the Hamiltonian)
+
+\begin{dmath}\label{eqn:virialPF2:40}
+\begin{aligned}
+\frac{d}{dt} \bra{\psi} X_{k,H} P_{k,H} \ket{\psi}
+&=
+\frac{d}{dt} \bra{\psi} U^\dagger X_{k} P_{k} U \ket{\psi} \\
+&=
+\bra{\psi} 
+\left( U^\dagger X_{k} P_{k} \ddt{U}
++
+\ddt{U^\dagger} X_{k} P_{k} U  
+\right)
+\ket{\psi}
+\\
+&=
+\bra{\psi} 
+\left( 
+-U^\dagger X_{k} P_{k} \frac{i H}{\Hbar} U
++ 
+U^\dagger \frac{i H}{\Hbar} 
+X_{k} P_{k} U  
+\right)
+\ket{\psi}
+\\
+&=
+\frac{1}{i\Hbar}
+\bra{\psi} U^\dagger 
+\left( 
+X_{k} P_{k} H
+- 
+H X_{k} P_{k} 
+\right)
+U  
+\ket{\psi}
+\\
+%&=
+%\frac{i}{\Hbar}
+%\bra{\psi} U^\dagger \antisymmetric{ X_{k} P_{k} }{H} U
+%\ket{\psi}
+%\\
+&=
+\frac{1}{i\Hbar}
+\bra{\psi} \antisymmetric{ X_{k,H} P_{k,H} }{H} 
+\ket{\psi}.
+\end{aligned}
+\end{dmath}
+
+This is just the Heisenberg picture time evolution equation for a Heisenberg picture operator $A_H$
+
+\begin{dmath}\label{eqn:virialPF2:60}
+\frac{d A_H}{dt} = 
+\frac{1}{i \Hbar} \antisymmetric{ A_H, H }.
+\end{dmath}
+
+Expanding those commutators will give you
+
+\begin{dmath}\label{eqn:virialPF2:80}
+\ddt{} \expectation{\Bx \cdot \Bp}
+=
+\expectation{\frac{\Bp}{m}} - \expectation{ \Bx \cdot \spacegrad V},
+\end{dmath}
+
+but that's not any closer to figuring out when the LHS is zero.
+
+\EndArticle
