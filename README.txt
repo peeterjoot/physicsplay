@@ -54,33 +54,31 @@ notes/classicalmechanics/
    I only ended up doing the first problem set from that course, although I still indend to go back and
    revisit the rest to ensure I've got these basics down.
 
-   This collection of notes is not currently posted in pdf form in its entirety.
-
-otes/phy450/
+notes/phy450/
 
    Class notes and problems from 'Relativistic Electrodynamics', taught by Prof. Erich Poppitz.
 
-otes/phy454/
+notes/phy454/
 
   Class notes and problems from 'Continuum Mechanics', taught by Prof. Kausik S. Das.
 
-otes/phy356/
+notes/phy356/
 
   Class notes and problems from 'Quantum I', taught by Prof. Vatche Deyirmenjian.
 
-otes/phy456/
+notes/phy456/
 
   Class notes and problems from 'Quantum II', taught by Prof. John Sipe.
 
-otes/phy485/
+notes/phy485/
 
   Class notes and problems from 'Advanced Classical Optics', taught by Prof. Joseph Thywissen.
 
-otes/phy452/
+notes/phy452/
 
   Class notes and problems from 'Basic Statistical Mechanics', taught by Prof. Arun Paramekanti.
 
-otes/phy487/
+notes/phy487/
 
   Class notes and problems from 'Condensed Matter Physics', taught by Prof. Stephen Julian.
 
@@ -91,6 +89,10 @@ notes/ece1254/
 notes/ece1229/
 
   Class notes and problems from 'Advanced Antenna Theory', taught by Prof. G.V. Eleftheriades.
+
+notes/phy1520/
+
+  Class notes and problems from 'Graduate Quantum Mechanics', taught by Prof. Arun Paramekanti. (in progress)
 
 notes/resume/
 
