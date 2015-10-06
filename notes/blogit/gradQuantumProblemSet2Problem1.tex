@@ -28,12 +28,262 @@ The time evolution of any observed quantity in quantum mechanics can be describe
 Show that both prescriptions yield the same result for any matrix elements or measured quantities.
 
 \makesubproblem{}{gradQuantum:problemSet2:1e}
-Using the Heisenberg picture, compute the time evolution of \( \expectation{x}(t), \expectation{p}(t), \expectation{x^2}(t)\), and \( \expectation{p^2}(t) \) in the coherent state \( \ket{z} \).  Comment on connections to classical dynamics of the oscillator in phase space.
+Using the Heisenberg picture, compute the time evolution of \( \expectation{x(t)}, \expectation{p(t)}, \expectation{x^2(t)}\), and \( \expectation{p^2(t)} \) in the coherent state \( \ket{z} \).  Comment on connections to classical dynamics of the oscillator in phase space.
 } % makeproblem
 
 \makeanswer{gradQuantum:problemSet2:1}{
 \makeSubAnswer{}{gradQuantum:problemSet2:1a}
 
-TODO.
+Let 
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:20}
+\ket{z} = \sum_{n=0}^\infty c_n \ket{n},
+\end{dmath}
+
+The defining identity for \( \ket{z} \) becomes
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:40}
+a \ket{z} 
+= 
+\sum_{n=0}^\infty c_n a \ket{n}
+= 
+\sum_{n=1}^\infty c_n \sqrt{n} \ket{n-1}
+= 
+\sum_{n=0}^\infty c_{n+1} \sqrt{n+1} \ket{n}
+= 
+\sum_{n=0}^\infty c_{n} z \ket{n}.
+\end{dmath}
+
+Equating like terms provides a recurrence relation for \( c_n \)
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:60}
+c_{n} = \frac{c_{n-1} z}{\sqrt{n}},
+\end{dmath}
+
+or
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:80}
+\begin{aligned}
+c_1 &= \frac{c_0 z}{\sqrt{1}} \\
+c_2 &= \frac{c_1 z}{\sqrt{2}} = \frac{c_0 z^2}{\sqrt{2 \times 1}}  \\
+c_3 &= \frac{c_2 z}{\sqrt{3}} = \frac{c_0 z^3}{\sqrt{3!}},
+\end{aligned}
+\end{dmath}
+
+or more generally
+
+\boxedEquation{eqn:gradQuantumProblemSet2Problem1:100}{
+c_n = \frac{c_0 z^n}{\sqrt{n!}}.
 }
 
+or 
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:120}
+\ket{z} 
+= c_0 
+\sum_{n=0}^\infty \frac{z^n}{\sqrt{n!}} \ket{n}.
+\end{dmath}
+
+A similar recurrence relation can be constructed for \( \ket{n} \)
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:140}
+\ket{n} 
+= a^\dagger \frac{\ket{ n - 1 }}{\sqrt{n}}
+= (a^\dagger)^2 \frac{\ket{ n - 2 }}{\sqrt{(n)(n-1)}}
+= (a^\dagger)^{n-1} \frac{\ket{ n - (n-1) }}{\sqrt{n(n-1)(n-2)...(n- (n-2))}}
+= (a^\dagger)^{n} \frac{\ket{ 0 }}{\sqrt{n!}},
+\end{dmath}
+
+so that
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:160}
+\ket{z} 
+= c_0 
+\sum_{n=0}^\infty \frac{(a^\dagger z)^n}{n!} \ket{0},
+\end{dmath}
+
+or
+\boxedEquation{eqn:gradQuantumProblemSet2Problem1:180}{
+\ket{z} 
+= c_0 e^{a^\dagger z} \ket{0}.
+}
+
+The normalization follows nicely from the \cref{eqn:gradQuantumProblemSet2Problem1:120} representation
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:200}
+\begin{aligned}
+\braket{z}{z}
+&= 
+\Abs{c_0}^2
+\sum_{n,m=0}^\infty 
+\bra{m} \frac{(z^\conj)^m}{\sqrt{m!}} 
+\frac{z^n}{\sqrt{n!}} \ket{n} \\
+&= \Abs{c_0}^2
+\sum_{n=0}^\infty 
+\bra{n} \frac{\Abs{z}^{2n}}{n!} \ket{n} \\
+&= \Abs{c_0}^2
+\sum_{n=0}^\infty 
+\frac{\Abs{z}^{2n}}{n!}  \\
+&= \Abs{c_0}^2 e^{\Abs{z}^2} \\
+&= 1.
+\end{aligned}
+\end{dmath}
+
+Picking a real value for the constant provides a z-dependent normalization for the state
+
+\boxedEquation{eqn:gradQuantumProblemSet2Problem1:220}{
+c_0 = e^{-\Abs{z}^2/2},
+}
+
+or
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:240}
+\ket{z} = e^{-\Abs{z}^2/2 + a^\dagger z} \ket{0}.
+\end{dmath}
+
+\makeSubAnswer{}{gradQuantum:problemSet2:1b}
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:260}
+\begin{aligned}
+\braket{z}{z'}
+&=
+e^{-\Abs{z}^2/2 } e^{-\Abs{z'}^2/2 }
+\sum_{n,m=0}^\infty 
+\bra{m} \frac{(z^\conj)^m}{\sqrt{m!}} 
+\frac{(z')^n}{\sqrt{n!}} \ket{n}  \\
+&=
+e^{-\Abs{z}^2/2 -\Abs{z'}^2/2 }
+\sum_{n=0}^\infty 
+\bra{n} \frac{(z^\conj)^n}{\sqrt{n!}} 
+\frac{(z')^n}{\sqrt{n!}} \ket{n}  \\
+&=
+\exp\lr{ -\Abs{z}^2/2 -\Abs{z'}^2/2 + z^\conj z' }.
+\end{aligned}
+\end{dmath}
+
+This can be rewritten in terms of the absolute difference between the two z values
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:280}
+\braket{z}{z'} = 
+\exp\lr{ -\inv{2} \lr{ \Abs{z - z'}^2 - 2 i \Imag\lr{ z' z^\conj } } },
+\end{dmath}
+
+however I'm not sure that's any prettier.
+
+\makeSubAnswer{}{gradQuantum:problemSet2:1c}
+
+First note that 
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:300}
+\bra{z} a^\dagger
+=
+\lr{a \ket{z}}^\dagger
+= 
+\lr{z \ket{z}}^\dagger
+= 
+\bra{z} z^\conj,
+\end{dmath}
+
+so
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:320}
+\expectation{x} 
+= 
+\frac{x_0}{\sqrt{2}} \bra{z} a + a^\dagger \ket{z}
+= 
+\frac{x_0}{\sqrt{2}} \bra{z} z + z^\conj \ket{z}
+= 
+\frac{x_0}{\sqrt{2}} \lr{ z + z^\conj }
+= 
+\frac{2 x_0}{\sqrt{2}} \Real z
+= 
+\sqrt{2} x_0 \Real z
+\end{dmath}
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:340}
+\expectation{p} 
+= 
+\frac{i \Hbar}{x_0 \sqrt{2}} \bra{z} a^\dagger - a\ket{z}
+= 
+\frac{-i \Hbar}{x_0 \sqrt{2}} \bra{z} z - z^\conj \ket{z}
+= 
+\frac{\sqrt{2} \Hbar}{x_0} \Imag z,
+\end{dmath}
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:360}
+\expectation{x^2} 
+= 
+\frac{x_0^2}{2} \bra{z} \lr{a + a^\dagger}^2 \ket{z}
+= 
+\frac{x_0^2}{2} \bra{z} \lr{a^2 + (a^\dagger)^2 + a a^\dagger + a^\dagger a} \ket{z}
+= 
+\frac{x_0^2}{2} \bra{z} \lr{a^2 + (a^\dagger)^2 + \antisymmetric{a}{a^\dagger} + 2 a^\dagger a} \ket{z}
+= 
+\frac{x_0^2}{2} \lr{z^2 + (z^\conj)^2 + 1 + 2 z^\conj z} 
+= 
+\frac{x_0^2}{2} \lr{(z + z^\conj)^2 + 1},
+\end{dmath}
+
+and
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:380}
+\expectation{p^2} 
+= 
+\frac{- \Hbar^2}{2 x_0^2} \bra{z} \lr{a^\dagger - a}^2 \ket{z}
+= 
+\frac{- \Hbar^2}{2 x_0^2} \bra{z} \lr{(a^\dagger)^2 + a^2 - a a^\dagger - a^\dagger a} \ket{z}
+= 
+\frac{- \Hbar^2}{2 x_0^2} \bra{z} \lr{(a^\dagger)^2 + a^2 - \antisymmetric{a}{a^\dagger} - 2 a^\dagger a} \ket{z}
+= 
+\frac{- \Hbar^2}{2 x_0^2} \lr{(z^\conj)^2 + z^2 - 1 - 2 z^\conj z}
+= 
+\frac{\Hbar^2}{2 x_0^2} \lr{ 1 - (z - z^\conj)^2 }.
+\end{dmath}
+
+As a check against what was stated in class, observe that the minimum uncertainty are satisfied
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:400}
+\expectation{x^2} - \expectation{x}^2
+=
+\frac{x_0^2}{2} \lr{ (z + z^\conj)^2 + 1 - (z + z^\conj)^2 }
+= \frac{x_0^2}{2},
+\end{dmath}
+
+and
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:420}
+\expectation{p^2} - \expectation{p}^2
+=
+\frac{\Hbar^2}{2 x_0^2} \lr{ 1 - (z + z^\conj)^2 - -(z - z^\conj)^2 }
+=
+\frac{\Hbar^2}{2 x_0^2},
+\end{dmath}
+
+so we have
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:440}
+\Delta x \Delta p = \frac{\Hbar}{2}.
+\end{dmath}
+
+\makeSubAnswer{}{gradQuantum:problemSet2:1d}
+
+TODO.
+\makeSubAnswer{}{gradQuantum:problemSet2:1e}
+
+With time evolution in the mix using the Heisenberg representation of the annihilation operator \( a(t) = a e^{-i \omega t} \), the \( x \) expectation is
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:460}
+\expectation{x(t)}
+=
+\frac{x_0^2}{2} \bra{z} \lr{ a e^{-i \omega t} + a^\dagger e^{i \omega t} } \ket{z}
+=
+\frac{x_0^2}{2} \lr{ z e^{-i \omega t} + z^\conj e^{i \omega t} } .
+\end{dmath}
+
+It's clear how to generalize the stationary state calculations in \partref{gradQuantum:problemSet2:1c}, and can do so by inspection
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:480}
+\begin{aligned}
+\expectation{x} &= \frac{x_0}{\sqrt{2}} \lr{ z e^{-i \omega t} + z^\conj e^{i \omega t} } \\
+\expectation{p} &= \frac{-i \Hbar}{x_0 \sqrt{2}} (z e^{-i \omega t} - z^\conj e^{i \omega t} ) \\
+\expectation{x^2} &= \frac{x_0^2}{2} \lr{(z e^{-i \omega t} + z^\conj e^{i \omega t} )^2 + 1} \\
+\expectation{p^2} &= \frac{\Hbar^2}{2 x_0^2} \lr{ 1 - (z e^{-i \omega t} - z^\conj e^{i \omega t})^2 }.
+\end{aligned}
+\end{dmath}
+
+}
