@@ -158,3 +158,4 @@ s/\\tn\b/\\tilde{n}/g ;
 s/\\tm\b/\\tilde{m}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
 s/[Ss]chrodinger/Schr\\"{o}dinger/g; # Schrodinger
+s/[Ss]chro\b/Schr\\"{o}dinger/g; # Schrodinger
