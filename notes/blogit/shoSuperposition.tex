@@ -1,0 +1,196 @@
+%
+% Copyright © 2015 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{shoSuperposition}
+\renewcommand{\dirname}{notes/phy1520/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+
+\beginArtNoToc
+
+\generatetitle{1D SHO linear superposition that maximizes expectation}
+%\chapter{1D SHO linear superposition that maximizes expectation}
+%\label{chap:shoSuperposition}
+
+\makeoproblem{1D SHO linear superposition that maximizes expectation}{problem:shoSuperposition:1}{\citep{sakurai2014modern} pr. 2.17}{
+
+For a 1D SHO
+
+\makesubproblem{}{problem:shoSuperposition:1:a}
+
+Construct a linear combination of \( \ket{0}, \ket{1} \) that maximizes \( \expectation{x} \) without using wave functions.
+
+\makesubproblem{}{problem:shoSuperposition:1:b}
+
+How does this state evolve with time?
+
+\makesubproblem{}{problem:shoSuperposition:1:c}
+
+Evaluate \( \expectation{x} \) using the Schr\"{o}dinger picture.
+
+\makesubproblem{}{problem:shoSuperposition:1:d}
+
+Evaluate \( \expectation{x} \) using the Heisenberg picture.
+
+\makesubproblem{}{problem:shoSuperposition:1:e}
+
+Evaluate \( \expectation{(\Delta x)^2} \).
+
+} % problem
+
+\makeanswer{problem:shoSuperposition:1}{
+
+\makeSubAnswer{}{problem:shoSuperposition:1:a}
+
+Forming 
+
+\begin{dmath}\label{eqn:shoSuperposition:20}
+\ket{\psi} = \frac{\ket{0} + \sigma \ket{1}}{\sqrt{1 + \Abs{\sigma}^2}}
+\end{dmath}
+
+the position expectation is
+
+\begin{dmath}\label{eqn:shoSuperposition:40}
+\bra{\psi} x \ket{\psi}
+= 
+\inv{1 + \Abs{\sigma}^2} \lr{ \bra{0} + \sigma^\conj \bra{1} } \frac{x_0}{\sqrt{2}} \lr{ a^\dagger + a } \lr{ \ket{0} + \sigma \ket{1} }.
+\end{dmath}
+
+Evaluating the action of the operators on the kets, we've got
+
+\begin{dmath}\label{eqn:shoSuperposition:60}
+\lr{ a^\dagger + a } \lr{ \ket{0} + \sigma \ket{1} }
+=
+\ket{1} + \sqrt{2} \sigma \ket{2} + \sigma \ket{0}.
+\end{dmath}
+
+The \( \ket{2} \) term is killed by the bras, leaving
+
+\begin{dmath}\label{eqn:shoSuperposition:80}
+\expectation{x} 
+=
+\inv{1 + \Abs{\sigma}^2} \frac{x_0}{\sqrt{2}} \lr{ \sigma + \sigma^\conj}
+=
+\frac{\sqrt{2} x_0 \Real \sigma}{1 + \Abs{\sigma}^2}.
+\end{dmath}
+
+Any imaginary component in \( \sigma \) will reduce the expectation, so we are constrained to picking a real value.
+
+The derivative of
+
+\begin{dmath}\label{eqn:shoSuperposition:100}
+f(\sigma) = \frac{\sigma}{1 + \sigma^2},
+\end{dmath}
+
+is
+
+\begin{dmath}\label{eqn:shoSuperposition:120}
+f'(\sigma) = \frac{1 - \sigma^2}{(1 + \sigma^2)^2}.
+\end{dmath}
+
+That has zeros at \( \sigma = \pm 1 \).  The second derivative is
+
+\begin{dmath}\label{eqn:shoSuperposition:140}
+f''(\sigma) = \frac{-2 \sigma (3 - \sigma^2)}{(1 + \sigma^2)^3}.
+\end{dmath}
+
+That will be negative (maximum for the extreme value) at \( \sigma = 1 \), so the linear superposition of these first two energy eigenkets that maximizes the position expectation is
+
+\begin{dmath}\label{eqn:shoSuperposition:160}
+\psi = \inv{\sqrt{2}}\lr{ \ket{0} + \ket{1} }.
+\end{dmath}
+
+That maximized position expectation is
+
+\begin{dmath}\label{eqn:shoSuperposition:180}
+\expectation{x} 
+=
+\frac{x_0}{\sqrt{2}}.
+\end{dmath}
+
+\makeSubAnswer{}{problem:shoSuperposition:1:b}
+
+The time evolution is given by
+
+\begin{dmath}\label{eqn:shoSuperposition:200}
+\ket{\Psi(t)} 
+= e^{-iH t/\Hbar} \inv{\sqrt{2}}\lr{ \ket{0} + \ket{1} }
+= \inv{\sqrt{2}}\lr{ e^{-i(0+ \ifrac{1}{2})\Hbar \omega t/\Hbar} \ket{0} + e^{-i(1+ \ifrac{1}{2})\Hbar \omega t/\Hbar} \ket{1} }
+= \inv{\sqrt{2}}\lr{ e^{-i \omega t/2} \ket{0} + e^{-3 i \omega t/2} \ket{1} }.
+\end{dmath}
+
+\makeSubAnswer{}{problem:shoSuperposition:1:c}
+
+The position expectation in the Schr\"{o}dinger representation is
+
+\begin{dmath}\label{eqn:shoSuperposition:220}
+\expectation{x(t)} 
+= 
+\inv{2}
+\lr{ e^{i \omega t/2} \bra{0} + e^{3 i \omega t/2} \bra{1} } \frac{x_0}{\sqrt{2}} \lr{ a^\dagger + a }
+\lr{ e^{-i \omega t/2} \ket{0} + e^{-3 i \omega t/2} \ket{1} }
+= 
+\frac{x_0}{2\sqrt{2}} 
+\lr{ e^{i \omega t/2} \bra{0} + e^{3 i \omega t/2} \bra{1} } 
+\lr{ e^{-i \omega t/2} \ket{1} + e^{-3 i \omega t/2} \sqrt{2} \ket{2} + e^{-3 i \omega t/2} \ket{0} }
+=
+\frac{x_0}{\sqrt{2}} \cos(\omega t).
+\end{dmath}
+
+\makeSubAnswer{}{problem:shoSuperposition:1:d}
+
+\begin{dmath}\label{eqn:shoSuperposition:240}
+\expectation{x(t)} 
+= 
+\inv{2}
+\lr{ \bra{0} + \bra{1} } \frac{x_0}{\sqrt{2}} 
+\lr{ a^\dagger e^{i\omega t} + a e^{-i \omega t} } 
+\lr{ \ket{0} + \ket{1} } 
+=
+\frac{x_0}{2 \sqrt{2}} 
+\lr{ \bra{0} + \bra{1} } 
+\lr{ e^{i\omega t} \ket{1} + \sqrt{2} e^{i\omega t} \ket{2} + e^{-i \omega t} \ket{0} } 
+=
+\frac{x_0}{\sqrt{2}} \cos(\omega t),
+\end{dmath}
+
+matching the calculation using the Schr\"{o}dinger picture.
+
+\makeSubAnswer{}{problem:shoSuperposition:1:e}
+
+Let's use the Heisenberg picture for the uncertainty calculation.  Using the calculation above we have
+
+\begin{dmath}\label{eqn:shoSuperposition:260}
+\expectation{x^2} 
+=
+\inv{2} \frac{x_0^2}{2}
+\lr{ e^{-i\omega t} \bra{1} + \sqrt{2} e^{-i\omega t} \bra{2} + e^{i \omega t} \bra{0} } 
+\lr{ e^{i\omega t} \ket{1} + \sqrt{2} e^{i\omega t} \ket{2} + e^{-i \omega t} \ket{0} } 
+=
+\frac{x_0^2}{4} \lr{ 1 + 2 + 1}
+=
+x_0^2.
+\end{dmath}
+
+The uncertainty is
+\begin{dmath}\label{eqn:shoSuperposition:280}
+\expectation{(\Delta x)^2} = 
+\expectation{x^2} - \expectation{x}^2
+=
+x_0^2 - \frac{x_0^2}{2} \cos^2(\omega t)
+=
+\frac{x_0^2}{2} \lr{ 2 - \cos^2(\omega t) }
+=
+\frac{x_0^2}{2} \lr{ 1 + \sin^2(\omega t) }
+\end{dmath}
+} % answer
+
+\EndArticle
