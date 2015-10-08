@@ -21,7 +21,7 @@ Using the wavefunction \( \ket{z} \), compute \( \expectation{x}, \expectation{p
 The time evolution of any observed quantity in quantum mechanics can be described in two ways:
 
 \begin{enumerate}[(a)]
-\item Schrodinger: the wavefunction evolves as \( \ket{\psi(t)} = e^{-i H t/\Hbar} \ket{\psi(0)} \) and the operator \( A \) is time-independent, or
+\item Schr\"{o}dinger: the wavefunction evolves as \( \ket{\psi(t)} = e^{-i H t/\Hbar} \ket{\psi(0)} \) and the operator \( A \) is time-independent, or
 \item Heisenberg: the wavefunction is fixed to its value at \( t = 0 \), say \(  \ket{\psi} \) , and operators evolve as \( A(t) = e^{i H t/\Hbar} A e^{-i H t/\Hbar}\) .
 \end{enumerate}
 
@@ -192,10 +192,14 @@ so
 \frac{x_0}{\sqrt{2}} \bra{z} z + z^\conj \ket{z}
 = 
 \frac{x_0}{\sqrt{2}} \lr{ z + z^\conj }
+%= 
+%\frac{2 x_0}{\sqrt{2}} \Real z
+%= 
+%\sqrt{2} x_0 \Real z
+%= 
+%\sqrt{\frac{2 \Hbar}{ m \omega}} \Real z,
 = 
-\frac{2 x_0}{\sqrt{2}} \Real z
-= 
-\sqrt{2} x_0 \Real z
+\sqrt{\frac{2 \Hbar}{ m \omega}} \frac{ z + z^\conj }{2},
 \end{dmath}
 
 \begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:340}
@@ -204,8 +208,12 @@ so
 \frac{i \Hbar}{x_0 \sqrt{2}} \bra{z} a^\dagger - a\ket{z}
 = 
 \frac{-i \Hbar}{x_0 \sqrt{2}} \bra{z} z - z^\conj \ket{z}
+%= 
+%\frac{\sqrt{2} \Hbar}{x_0} \Imag z
+%= 
+%\sqrt{ 2 m \Hbar \omega } \Imag z,
 = 
-\frac{\sqrt{2} \Hbar}{x_0} \Imag z,
+\sqrt{ 2 m \Hbar \omega } \frac{z - z^\conj}{2i}
 \end{dmath}
 
 \begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:360}
@@ -219,7 +227,9 @@ so
 = 
 \frac{x_0^2}{2} \lr{z^2 + (z^\conj)^2 + 1 + 2 z^\conj z} 
 = 
-\frac{x_0^2}{2} \lr{(z + z^\conj)^2 + 1},
+\frac{x_0^2}{2} \lr{(z + z^\conj)^2 + 1}
+= 
+\frac{\Hbar}{2 m \omega} \lr{(z + z^\conj)^2 + 1},
 \end{dmath}
 
 and
@@ -234,7 +244,7 @@ and
 = 
 \frac{- \Hbar^2}{2 x_0^2} \lr{(z^\conj)^2 + z^2 - 1 - 2 z^\conj z}
 = 
-\frac{\Hbar^2}{2 x_0^2} \lr{ 1 - (z - z^\conj)^2 }.
+\frac{m \Hbar \omega}{2} \lr{ 1 - (z - z^\conj)^2 }.
 \end{dmath}
 
 As a check against what was stated in class, observe that the minimum uncertainty are satisfied
@@ -262,7 +272,32 @@ so we have
 
 \makeSubAnswer{}{gradQuantum:problemSet2:1d}
 
-TODO.
+Suppose that \( \setlr{ \ket{\psi} } \) is a basis for the observable \( A \).  In the Heisenberg picture the matrix element for that operator is
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:501}
+\bra{\psi} A(t) \ket{\psi'}
+=
+\bra{\psi} e^{i H t/\Hbar} A e^{-i H t/\Hbar} \ket{\psi'}
+=
+\sum_{\psi'',\psi'''}
+\bra{\psi} e^{i H t/\Hbar} \ket{\psi''} \bra{\psi''} A \ket{\psi'''} \bra{\psi'''} e^{-i H t/\Hbar} \ket{\psi'}.
+\end{dmath}
+
+This product of three matrix elements has the structure of a similarity transformation \( \tilde{U}^\dagger \tilde{A} \tilde{U} \), where \( \tilde{U} \) is the matrix element of the time evolution operator and \( \tilde{A} \) is the matrix element of the observable \( A \).
+
+Compare this to the Schr\"{o}dinger picture matrix element with respect to time evolved states
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:521}
+\bra{\psi(t)} A \ket{\psi'(t)}
+=
+\lr{ \bra{\psi} e^{i H t/\Hbar} } A \lr{ e^{-i H t/\Hbar} \ket{\psi'} }
+=
+\sum_{\psi'',\psi'''}
+\bra{\psi} e^{i H t/\Hbar} \ket{\psi''} \bra{\psi''} A \ket{\psi'''} \bra{\psi'''} e^{-i H t/\Hbar} \ket{\psi'}.
+\end{dmath}
+
+This has exactly the same structure as in the Heisenberg picture.  Since average quantities are matrix elements with respect to the same pair of states, this shows that measurements are independent of whether the Heisenberg or Schr\"{o}dinger picture is used to describe those measurements.
+
 \makeSubAnswer{}{gradQuantum:problemSet2:1e}
 
 With time evolution in the mix using the Heisenberg representation of the annihilation operator \( a(t) = a e^{-i \omega t} \), the \( x \) expectation is
@@ -279,12 +314,30 @@ It's clear how to generalize the stationary state calculations in \partref{gradQ
 
 \begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:480}
 \begin{aligned}
-\expectation{x} &= \frac{x_0}{\sqrt{2}} \lr{ z e^{-i \omega t} + z^\conj e^{i \omega t} } \\
-\expectation{p} &= \frac{-i \Hbar}{x_0 \sqrt{2}} (z e^{-i \omega t} - z^\conj e^{i \omega t} ) \\
-\expectation{x^2} &= \frac{x_0^2}{2} \lr{(z e^{-i \omega t} + z^\conj e^{i \omega t} )^2 + 1} \\
-\expectation{p^2} &= \frac{\Hbar^2}{2 x_0^2} \lr{ 1 - (z e^{-i \omega t} - z^\conj e^{i \omega t})^2 }.
+\expectation{x} &= \sqrt{ \frac{\Hbar}{2 m \omega} } \lr{ z e^{-i \omega t} + z^\conj e^{i \omega t} } \\
+\expectation{p} &= -i \sqrt{ \frac{m \Hbar \omega}{2} } (z e^{-i \omega t} - z^\conj e^{i \omega t} ) \\
+\expectation{x^2} &= \frac{\Hbar}{2 m \omega} \lr{(z e^{-i \omega t} + z^\conj e^{i \omega t} )^2 + 1} = \expectation{x}^2 + \frac{\Hbar}{2 m \omega} \\
+\expectation{p^2} &= \frac{m \Hbar \omega}{2} \lr{ 1 - (z e^{-i \omega t} - z^\conj e^{i \omega t})^2 } = \expectation{p}^2 + \frac{m \Hbar \omega}{2}.
 \end{aligned}
 \end{dmath}
 
-TODO: comment on relation to classical.
+In class, symmetric and antisymmetric conjugate sums of \( z \) were identified as position and momentum, with
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:541}
+\begin{aligned}
+x_0 &\equiv \sqrt{\frac{2 \Hbar}{m \omega}} \Real z = \sqrt{\frac{\Hbar}{2 m \omega}} \lr{ z + z^\conj } \\
+p_0 &\equiv \sqrt{2 m \Hbar \omega} \Imag z = -i \sqrt{\frac{m \Hbar \omega}{2}} \lr{ z - z^\conj }.
+\end{aligned}
+\end{dmath}
+
+With that identification the expectation values above are
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet2Problem1:481}
+\begin{aligned}
+\expectation{x} &= x_0 \cos(\omega t) + \frac{p_0}{m \omega} \sin(\omega t) \\
+\expectation{p} &= p_0 \cos(\omega t) - m \omega x_0 \sin(\omega t) \\
+\end{aligned}
+\end{dmath}
+
+These expectations are analogous to the phase space trajectories of classical particles.
 }
