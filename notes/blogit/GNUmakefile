@@ -90,9 +90,9 @@ $(LOCAL_FILES) :
 
 energyMomentumWithMagneticSources.pdf : ../ece1229/energyMomentumWithMagneticSources.tex
 
-gradQuantumProblemSet2.pdf : ../phy1520/gradQuantumProblemSet2Problem1.tex
-gradQuantumProblemSet2.pdf : ../phy1520/gradQuantumProblemSet2Problem2.tex
-gradQuantumProblemSet2.pdf : ../phy1520/gradQuantumProblemSet2Problem3.tex
+gradQuantumProblemSet3.pdf : ../phy1520/gradQuantumProblemSet3Problem1.tex
+gradQuantumProblemSet3.pdf : ../phy1520/gradQuantumProblemSet3Problem2.tex
+gradQuantumProblemSet3.pdf : ../phy1520/gradQuantumProblemSet3Problem3.tex
 
 gaBasics.pdf : gaBasics.tex
 
