@@ -26,115 +26,126 @@ provide a crude counting of the number of states per energy level (i.e., the deg
 
 \makeSubAnswer{}{gradQuantum:problemSet3:2a}
 
-Given the circular constraint, working in cylindrical coordinates \( ( r, \phi, z ) \) probably makes sense.  The cylindrical representation of the vector potential can be found using Pauli basis for \R{3}
+Following \citep{desai2009quantum}, the Hamiltonian for magnetic field driven motion constrained to a plane, can be factored into raising and lowering style operators
 
 \begin{dmath}\label{eqn:gradQuantumProblemSet3Problem2:40}
-\BA 
-= \frac{B_0}{2} \lr{ -y, x, 0 }
-= \frac{B_0 r}{2} \lr{ -\sin\phi, \cos\phi, 0 }
-= \frac{B_0 r}{2} \lr{ - \sigma_1 \sin\phi + \sigma_2 \cos\phi }
-= \frac{B_0 r}{2} \sigma_2 \lr{ \cos\phi - \sigma_2 \sigma_1 \sin\phi }
-= \frac{B_0 r}{2} \sigma_2 e^{ \sigma_1 \sigma_2 \phi} 
-= \frac{B_0 r}{2} \phicap.
-\end{dmath}
-
-The gradient in cyclindrical coordinates is
-
-\begin{dmath}\label{eqn:gradQuantumProblemSet3Problem2:60}
-\spacegrad = \rcap \PD{r}{} + \frac{\phicap}{r} \PD{\phi}{} + \zcap \PD{z}{}.
-\end{dmath}
-
-The projection of the gradient onto the circular path retains just the \( \phicap \) component.
-
-\begin{dmath}\label{eqn:gradQuantumProblemSet3Problem2:120}
-\boldpartial = \Proj_{\textrm{circle}} \spacegrad = \frac{\phicap}{R} \PD{\phi}{} 
-\end{dmath}
-
-%Also note that \( \rcap, \phicap, \zcap \) is a right handed triplet \( \rcap \cross \phicap = \zcap \).
-%
-%\begin{dmath}\label{eqn:gradQuantumProblemSet3Problem2:100}
-%\rcap \cross \phicap
-%= -\sigma_1 \sigma_2 \sigma_3 \lr{ \sigma_1 e^{ \sigma_1 \sigma_2 \phi} } \wedge \lr{ \sigma_2 e^{ \sigma_1 \sigma_2 \phi} }
-%= -\sigma_1 \sigma_2 \sigma_3 \gpgradetwo{ \sigma_1 e^{ \sigma_1 \sigma_2 \phi} \sigma_2 e^{ \sigma_1 \sigma_2 \phi} }
-%= -\sigma_1 \sigma_2 \sigma_3 \gpgradetwo{ \sigma_1 \sigma_2 }
-%= -\sigma_1 \sigma_2 \sigma_3 \sigma_1 \sigma_2
-%= \sigma_3.
-%\end{dmath}
-
-The Hamiltonian is
-
-\begin{dmath}\label{eqn:gradQuantumProblemSet3Problem2:140}
 H 
-= \inv{ 2 m} \lr{ -i \Hbar \boldpartial - \frac{Q B_0 R}{2} \phicap }^2
-= \inv{2 m} \lr{ -i \Hbar \frac{\phicap}{R} \PD{\phi}{} - \frac{Q B_0 R}{2} \phicap }^2.
+= \inv{2 m} \lr{ \Bp - \frac{e}{c} \BA }^2
+= \inv{2 m} \lr{ \Pi_x^2 + \Pi_y^2 }^2
+= \inv{2 m} \lr{ \lr{ \Pi_x - i \Pi_y }\lr{ \Pi_x + i \Pi_y } - i \lr{ \Pi_x \Pi_y - \Pi_y \Pi_x } },
 \end{dmath}
 
-Because \( \phicap \) is \( \phi \) dependent, it appears that some care is required to evaluate this, but we end up with the good luck that the \( \phicap \) variation is orthogonal to the circular gradient
-
-\begin{dmath}\label{eqn:gradQuantumProblemSet3Problem2:80}
-\PD{\phi}{\phicap} 
-= \sigma_2 \sigma_1 \sigma_2 e^{ \sigma_1 \sigma_2 \phi}
-= -\sigma_1 e^{ \sigma_1 \sigma_2 \phi}
-= -\rcap,
+That commutator term is proportional to the magnetic field strength
+\begin{dmath}\label{eqn:gradQuantumProblemSet3Problem2:60}
+\Pi_x \Pi_y - \Pi_y \Pi_x
+=
+\antisymmetric{\Pi_x}{\Pi_y}
+=
+\antisymmetric{p_x - \frac{e}{c} A_x}{p_y - \frac{e}{c} A_y}
+=
+\cancel{\antisymmetric{p_x}{p_y}} - \frac{e}{c} \lr{ \antisymmetric{A_x}{p_y} + \antisymmetric{p_x}{A_y} } + \lr{\frac{e}{c}}^2 \cancel{\antisymmetric{A_x}{A_y}}
+= 
+- \frac{e}{c} (-i \Hbar) \lr{ \PD{x}{A_y} - \PD{y}{A_x} }
+= 
+i \frac{e \Hbar}{c} B_z
+= 
+i \frac{e \Hbar B_0}{c},
 \end{dmath}
 
 so
-\begin{dmath}\label{eqn:gradQuantumProblemSet3Problem2:160}
-\phicap \partial_\phi \cdot (\phicap \psi)
-=
-\psi \phicap \cdot \partial_\phi \phicap
-+ \phicap \cdot \phicap \partial_\phi \psi
-=
-\psi \phicap \cdot (-\rcap)
-+ \phicap \cdot \phicap \partial_\phi \psi
-=
-\partial_\phi \psi.
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet3Problem2:80}
+H 
+= \inv{2 m} \lr{ \Pi_x - i \Pi_y }\lr{ \Pi_x + i \Pi_y } + \frac{e \Hbar B_0}{2 m c}.
 \end{dmath}
 
-Expanding the Hamiltonian's action on a wavefunction gives
+Writing 
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet3Problem2:100}
+\omega = \frac{e B_0}{m c},
+\end{dmath}
+
+this appears to have the structure of the 1D Harmonic oscillator
+\begin{dmath}\label{eqn:gradQuantumProblemSet3Problem2:120}
+H 
+= \inv{2 m} \lr{ \Pi_x - i \Pi_y }\lr{ \Pi_x + i \Pi_y } + \frac{\Hbar \omega}{2}.
+\end{dmath}
+
+Observe that 
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet3Problem2:140}
+\antisymmetric{ \Pi_x + i \Pi_y }{ \Pi_x - i \Pi_y }
+=
+i \antisymmetric{ \Pi_y }{ \Pi_x } - i \antisymmetric{ \Pi_x }{ \Pi_y }
+=
+- 2 i \antisymmetric{ \Pi_x }{ \Pi_y }
+=
+\frac{2 e \Hbar B_0}{c}
+=
+2 m \omega.
+\end{dmath}
+
+With
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet3Problem2:160}
+b = \inv{\sqrt{2 m \omega \Hbar}} \lr{ \Pi_x + i \Pi_y },
+\end{dmath}
+
+the Hamiltonian has the form
 
 \begin{dmath}\label{eqn:gradQuantumProblemSet3Problem2:180}
-H \psi 
-= 
-\inv{2 m} \lr{ -i \Hbar \frac{\phicap}{R} \PD{\phi}{} - \frac{Q B_0 R}{2} \phicap } \cdot \lr{ -i \Hbar \frac{\phicap}{R} \PD{\phi}{\psi} - \frac{Q B_0 R}{2} \phicap \psi }
-= 
-\inv{2 m}
-\lr{ \lr{ \frac{-i \Hbar}{R} }^2 \PDSq{\phi}{\psi}
--i \Hbar \frac{1}{R} \lr{ - \frac{Q B_0 R}{2} } \PD{\phi}{\psi}
-- \frac{Q B_0 R}{2} \lr{ -i \Hbar \frac{1}{R} \PD{\phi}{\psi} - \frac{Q B_0 R}{2} \psi }
-}
-= 
-\inv{2 m}
-\lr{
--\lr{ \frac{\Hbar}{R} }^2 \PDSq{\phi}{\psi}
-+ i \Hbar Q B_0 \PD{\phi}{\psi}
-+ \lr{ \frac{Q B_0 R}{2} }^2 \psi
-}.
+H = \Hbar \omega \lr{ b^\dagger b + \inv{2} },
 \end{dmath}
 
-The function \( \psi = e^{i n \phi} \) turns out to be an eigenfunction for this Hamiltonian, provided there is a constraint on the energy eigenvalues given by
+where
 
 \begin{dmath}\label{eqn:gradQuantumProblemSet3Problem2:200}
-H \psi 
-= E \psi 
-= 
-\inv{2 m}
-\lr{
-+\lr{ \frac{\Hbar}{R} }^2 n^2 
-+ i (i n) \Hbar Q B_0
-+ \lr{ \frac{Q B_0 R}{2} }^2
-} \psi
-=
-\inv{2 m}
-\lr{ \frac{\Hbar}{R} n - \frac{Q B_0 R}{2} }^2 \psi,
+\antisymmetric{b}{b^\dagger} = 1,
 \end{dmath}
 
-so the possible levels are
+just like the 1D SHO.  The energy levels are therefore
 
-\boxedEquation{eqn:gradQuantumProblemSet3Problem2:220}{
-E_n = \frac{\Hbar^2}{2 m R^2} \lr{ n - \frac{Q B_0 R^2}{2 \Hbar} }^2.
-}
+\begin{dmath}\label{eqn:gradQuantumProblemSet3Problem2:220}
+E_n = \Hbar \omega \lr{ n + \inv{2} }.
+\end{dmath}
+
+For the symmetric gauge where \( A_x = -y, A_y = x \), the lowering operator has the form
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet3Problem2:n}
+b 
+= \inv{\sqrt{2 m \omega \Hbar}} \lr{ p_x + i p_y - \frac{e}{c} \frac{B_0}{2} ( -y + i x ) }
+= \frac{-i \Hbar}{\sqrt{2 m \omega \Hbar}} \lr{ \partial_x + i \partial_y + \frac{e B_0}{2 \Hbar c} ( i y + x ) }
+= \frac{-i \Hbar}{\sqrt{2 m \omega \Hbar}} \lr{ \partial_x + i \partial_y + \frac{m \omega}{2 \Hbar} ( x + i y) }.
+\end{dmath}
+
+Introducing two independent variables
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet3Problem2:n}
+\begin{aligned}
+z &= x + i y \\
+z^\conj &= x - i y,
+\end{aligned}
+\end{dmath}
+
+the lowering operator takes the form
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet3Problem2:n}
+b = -i \sqrt{\frac{\Hbar}{2 m \omega}} \lr{ \PD{z^\conj} + \frac{m \omega}{2 \Hbar} z }.
+\end{dmath}
+
+Solving \( b \ket{0} = 0 \), and writing \( u_0(z, z^\conj) = \braket{z,z^\conj}{0} \), we have
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet3Problem2:n}
+u_0(z, z^\conj) = z^q e^{- \frac{m \omega}{2 \Hbar} z z^\conj },
+\end{dmath}
+
+%Application of the raising operator gives
+%
+%u_1(z,z^\conj) 
+%= \braket{z,z^\conj}{1} 
+%= \bra{z,z^\conj} b^\dagger \ket{0} 
+%\propto \lr{ \PD{z} + \frac{m \omega}{2 \Hbar} z^\conj }
 
 \makeSubAnswer{}{gradQuantum:problemSet3:2b}
-TODO:  I don't see anything that puts a bound on the number of states per energy level?
+TODO
 }
