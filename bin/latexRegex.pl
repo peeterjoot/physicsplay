@@ -39,6 +39,8 @@
 #s/\\Gamma_sp/\\Gamma_{\\mathrm{sp}}/g  ;
 #s/\\Gamma_st/\\Gamma_{\\mathrm{st}}/g ;
 #s/\\Ha/\\hat{H}_A/g;
+#s/\\hatrho\b/\\hat{\\rho}/g ;
+#s/\\hatrho_/\\hat{\\rho}_/g ;
 #s/\\hb2m/\\frac{\\Hbar}{2m}/g;
 #s/\\Hc/\\hat{H}/g;
 #s/\\Hc/H_{\\mathrm{c}}/g ;
@@ -78,12 +80,16 @@
 #s/\\qT/q_{\\mathrm{T}}/g ;
 #s/\\rcap_av/\\rcap_{\\mathrm{av}}/g ;
 #s/\\rhoel/\\rho_{\\mathrm{el}}/g ;
+#s/\\rhohat\b/\\hat{\\rho}/g ;
+#s/\\rhohat_/\\hat{\\rho}_/g ;
 #s/\\rhoph/\\rho_{\\mathrm{ph}}/g ;
 #s/\\sg/{\\textrm{sg}}/g;
 #s/\\Shat/\\hat{S}/g ;
 #s/\\spacegrad_T/\\spacegrad_{\\mathrm{T}}/g ;
 #s/\\TB/\\tilde{\\BB}/g;
 #s/\\TE/\\tilde{\\BE}/g;
+#s/\\tm\b/\\tilde{m}/g ;
+#s/\\tn\b/\\tilde{n}/g ;
 #s/\\tp/\\tilde{p}/g ;
 #s/\\tu/\\tilde{u}/g ;
 #s/\\tx/\\tilde{x}/g ;
@@ -150,12 +156,7 @@
 #s/r\\ccube/_{r,\\textrm{ccube}}/g;
 #s/r\\iso/_{r,\\textrm{iso}}/g;
 #s/xialpha\b/x_{i_\\alpha}/g ;
-s/\\hatrho\b/\\hat{\\rho}/g ;
-s/\\rhohat\b/\\hat{\\rho}/g ;
-s/\\hatrho_/\\hat{\\rho}_/g ;
-s/\\rhohat_/\\hat{\\rho}_/g ;
-s/\\tn\b/\\tilde{n}/g ;
-s/\\tm\b/\\tilde{m}/g ;
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
-s/[Ss]chrodinger/Schr\\"{o}dinger/g; # Schrodinger
 s/[Ss]chro\b/Schr\\"{o}dinger/g; # Schrodinger
+s/[Ss]chrodinger/Schr\\"{o}dinger/g; # Schrodinger
+s/\\inc\b/{\\textrm{inc}}/g ;
