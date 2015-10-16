@@ -94,6 +94,10 @@ gradQuantumProblemSet3.pdf : ../phy1520/gradQuantumProblemSet3Problem1.tex
 gradQuantumProblemSet3.pdf : ../phy1520/gradQuantumProblemSet3Problem2.tex
 gradQuantumProblemSet3.pdf : ../phy1520/gradQuantumProblemSet3Problem3.tex
 
+gradQuantumProblemSet4.pdf : ../phy1520/gradQuantumProblemSet4Problem1.tex
+gradQuantumProblemSet4.pdf : ../phy1520/gradQuantumProblemSet4Problem2.tex
+gradQuantumProblemSet4.pdf : ../phy1520/gradQuantumProblemSet4Problem3.tex
+
 gaBasics.pdf : gaBasics.tex
 
 # gaBasics.doc is currently my source for this document:
