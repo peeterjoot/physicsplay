@@ -159,5 +159,7 @@
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
 s/[Ss]chro\b/Schr\\"{o}dinger/g; # Schrodinger
 s/[Ss]chrodinger/Schr\\"{o}dinger/g; # Schrodinger
-#s/\\inc\b/{\\textrm{inc}}/g ;
-s/P_D/\\hat{\\calP}_{\\textrm{Dirac}}/g;
+s/\\inc\b/{\\textrm{inc}}/g ;
+s/\\ref\b/{\\textrm{ref}}/g ;
+s/\\trans\b/{\\textrm{trans}}/g ;
+#s/P_D/\\hat{\\calP}_{\\textrm{Dirac}}/g;
