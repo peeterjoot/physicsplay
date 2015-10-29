@@ -49,6 +49,7 @@
 #s/\\ik/{(k)}/g;
 #s/\\ik\+1/{(k+1)}/g;
 #s/\\ik\-1/{(k-1)}/g;
+#s/\\inc\b/{\\textrm{inc}}/g ;
 #s/\\intsphere/\\int_0^{2 \\pi} \\int_0^\\pi/g ;
 #s/\\iso/{\\textrm{iso}}/g;
 #s/\\lambdaL/\\lambda_{\\mathrm{L}}/g ;
@@ -79,6 +80,7 @@
 #s/\\qL/q_{\\mathrm{L}}/g ;
 #s/\\qT/q_{\\mathrm{T}}/g ;
 #s/\\rcap_av/\\rcap_{\\mathrm{av}}/g ;
+#s/\\ref\b/{\\textrm{ref}}/g ;
 #s/\\rhoel/\\rho_{\\mathrm{el}}/g ;
 #s/\\rhohat\b/\\hat{\\rho}/g ;
 #s/\\rhohat_/\\hat{\\rho}_/g ;
@@ -91,6 +93,7 @@
 #s/\\tm\b/\\tilde{m}/g ;
 #s/\\tn\b/\\tilde{n}/g ;
 #s/\\tp/\\tilde{p}/g ;
+#s/\\trans\b/{\\textrm{trans}}/g ;
 #s/\\tu/\\tilde{u}/g ;
 #s/\\tx/\\tilde{x}/g ;
 #s/\\up\b/\\uparrow/g ;
@@ -149,6 +152,7 @@
 #s/n3/n_3/g ;
 #s/Ndown/N_{\\downarrow}/g ;
 #s/Nup/N_{\\uparrow}/g ;
+#s/P_D/\\hat{\\calP}_{\\textrm{Dirac}}/g;
 #s/P_r/P_{\\mathrm{rect}}/g ;
 #s/P_s/P_{\\mathrm{sin}}/g ;
 #s/pialpha\b/p_{i_\\alpha}/g ;
@@ -159,7 +163,4 @@
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
 s/[Ss]chro\b/Schr\\"{o}dinger/g; # Schrodinger
 s/[Ss]chrodinger/Schr\\"{o}dinger/g; # Schrodinger
-s/\\inc\b/{\\textrm{inc}}/g ;
-s/\\ref\b/{\\textrm{ref}}/g ;
-s/\\trans\b/{\\textrm{trans}}/g ;
-#s/P_D/\\hat{\\calP}_{\\textrm{Dirac}}/g;
+s/hatPi/hat{\\Pi}/g ;
