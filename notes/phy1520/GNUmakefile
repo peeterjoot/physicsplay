@@ -33,6 +33,14 @@ gradQuantumProblemSet1.pdf : gradQuantumProblemSet1Problem1.tex
 gradQuantumProblemSet1.pdf : gradQuantumProblemSet1Problem2.tex
 gradQuantumProblemSet1.pdf : moreBraKetProblemsP12.tex
 
+gradQuantumProblemSet3.pdf : ../phy1520/gradQuantumProblemSet3Problem1.tex
+gradQuantumProblemSet3.pdf : ../phy1520/gradQuantumProblemSet3Problem2.tex
+gradQuantumProblemSet3.pdf : ../phy1520/gradQuantumProblemSet3Problem3.tex
+
+gradQuantumProblemSet4.pdf : ../phy1520/gradQuantumProblemSet4Problem1.tex
+gradQuantumProblemSet4.pdf : ../phy1520/gradQuantumProblemSet4Problem2.tex
+gradQuantumProblemSet4.pdf : ../phy1520/gradQuantumProblemSet4Problem3.tex
+
 #gradQuantumProblemSet5.pdf : ps5matlab.tex
 #gradQuantumProblemSet5.pdf : ps5mathematica.tex
 #gradQuantumProblemSet5.pdf : matlab.sty
