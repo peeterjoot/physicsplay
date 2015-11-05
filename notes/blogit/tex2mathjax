@@ -34,7 +34,7 @@ use strict ;
 use warnings ;
 use Getopt::Long;
 
-my $filebase ;
+my $filename ;
 my $showUsage = 0 ;
 
 my $urlMessage ;
@@ -105,16 +105,16 @@ my $r3 = qr/
 
 
 GetOptions( 
-   'file=s'       => \$filebase,
+   'file=s'       => \$filename,
    'help!'        => \$showUsage,
 ) ;
 
-if ( $showUsage or !defined $filebase )
+if ( $showUsage or !defined $filename )
 {
-   die "usage: ~/bin/tex2mathjax -f filenameWithoutTexSuffix [-help]" ;
+   die "usage: ~/bin/tex2mathjax -f filename [-help]" ;
 }
 
-my $rLines = slurpLatex( $filebase ) ;
+my $rLines = slurpLatex( $filename ) ;
 
 my %refnumbers ;
 
@@ -186,6 +186,10 @@ foreach (@$rLines)
    s,\\subsection{(.*)},<h3>$1</h3>,;
    s,\\paragraph{(.*)},<h3>$1</h3>,;
 
+   # FIXME: convert to mathjax macros:
+   s,\\largestIntGreaterThan{(.*)},\\lfloor$1\\rfloor,;
+   s,\\largestIntLessThan{(.*)},\\lceil$1\\rceil,;
+
    s,\\begin{itemize},<ul>, ;
    s,\\end{itemize},</ul>, ;
    s,\\begin{enumerate},<ol>, ;
@@ -234,7 +238,7 @@ sub slurpFile
 
 sub slurpLatex
 {
-   return slurpFile( "$filebase.tex" ) ;
+   return slurpFile( $filename ) ;
 }
 
 # side effect: populates the %refnumbers hash.
@@ -242,6 +246,8 @@ sub processBib
 {
    my $bibOut = '' ;
 
+   my $filebase = $filename ;
+   $filebase =~ s/\.tex$// ;
    my $rLines = slurpFile( "$filebase.bbl" ) ;
 
    my $curNum = 1 ;
