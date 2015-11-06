@@ -23,6 +23,7 @@ my $subproblem ;
 my $subanswer ;
 my $item ;
 my $enum ;
+my $labelbox ;
 
 GetOptions( 
    'file=s'        => \$filename,
@@ -43,6 +44,7 @@ GetOptions(
    'dmath:i'       => \$dmath,
    'number:i'      => \$number,
    'aligned'       => \$aligned,
+   'labelbox=s'    => \$labelbox,
    'help!'         => \$showUsage,
 ) ;
 
@@ -51,7 +53,7 @@ if ( $showUsage )
    die 
 "usage: generate Latex environment Templates, (for use within vim).
 
-:,!~/bin/lt -f % [-example='blah blah'|-equation|-dmath|-aligned|-subequations]
+:,!~/bin/lt -f % [-example='blah blah'|-equation|-dmath|-aligned|-subequations|-labelbox=up|down|default]
 
 Examples:
 
@@ -97,6 +99,24 @@ if ( defined $problem )
 if ( defined $oproblem )
 {
    print "\\makeoproblem{$oproblem}{problem:$filename:$number}{\\citep{$citep} pr. X.$number}{\n" ;
+}
+
+if ( defined $labelbox )
+{
+   my %howv = (
+      'down' => "[ labelstyle={below of=m\\themathLableNode, below of=m\\themathLableNode} ]\n",
+      'up' => "[ labelstyle={yshift=1.2em}, linestyle={} ]\n",
+      'default' => '',
+   ) ;
+
+   my $orientation = $howv{$labelbox} ;
+   if ( !defined $orientation )
+   {
+      $orientation = '' ;
+   }
+
+   print "\\mathLabelBox${orientation}{ }{ }\n" ;
+#   print "\\mathLabelBox{ }{ }\n" ;
 }
 
 if ( defined $subequations )
