@@ -27,7 +27,6 @@
 #s/\\EC/E_{\\mathrm{C}}/g ;
 #s/\\Ed/E_{\\mathrm{d}}/g ;
 #s/\\ED/E_{\\mathrm{D}}/g ;
-#s/\\ee/\\epsilon/g ;
 #s/\\ee/\\mathcal{E}/g ;
 #s/\\Eg/E_{\\mathrm{g}}/g ;
 #s/\\ES/E_{\\mathrm{S}}/g ;
@@ -163,4 +162,13 @@
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
 s/[Ss]chro\b/Schr\\"{o}dinger/g; # Schrodinger
 s/[Ss]chrodinger/Schr\\"{o}dinger/g; # Schrodinger
-s/hatPi/hat{\\Pi}/g ;
+s/\\hatPi/\\hat{\\Pi}/g ;
+s/\\hatx/\\hat{x}/g ;
+s/\\haty/\\hat{y}/g ;
+s/\\hatp/\\hat{p}/g ;
+s/\\hatL/\\hat{L}/g ;
+s/\\hatH/\\hat{H}/g ;
+s/\\Te/\\hat{T}_{\\epsilon}/g ;
+s/\\Ta/\\hat{T}_{a}/g ;
+s/\\Tme/\\hat{T}_{-\\epsilon}/g ;
+s/\\ee/\\epsilon/g ;
