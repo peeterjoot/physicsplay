@@ -162,13 +162,22 @@
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
 s/[Ss]chro\b/Schr\\"{o}dinger/g; # Schrodinger
 s/[Ss]chrodinger/Schr\\"{o}dinger/g; # Schrodinger
+s/\\ee/\\epsilon/g ;
+s/\\hatH/\\hat{H}/g ;
+s/\\hatL/\\hat{L}/g ;
+s/\\hatp/\\hat{p}/g ;
+s/\\hatr/\\hat{r}/g ;
+s/\\hatS/\\hat{S}/g ;
 s/\\hatPi/\\hat{\\Pi}/g ;
 s/\\hatx/\\hat{x}/g ;
 s/\\haty/\\hat{y}/g ;
-s/\\hatp/\\hat{p}/g ;
-s/\\hatL/\\hat{L}/g ;
-s/\\hatH/\\hat{H}/g ;
-s/\\Te/\\hat{T}_{\\epsilon}/g ;
 s/\\Ta/\\hat{T}_{a}/g ;
+s/\\Te/\\hat{T}_{\\epsilon}/g ;
 s/\\Tme/\\hat{T}_{-\\epsilon}/g ;
-s/\\ee/\\epsilon/g ;
+s/\\tpsi/\\tilde{\\Psi}/g ;
+s/\\kpsi/\\ket{\\Psi}/g ;
+s/\\ktpsi/\\ket{\\tilde{\\Psi}}/g ;
+s/\\up\b/\\ket{\\uparrow}/g ;
+s/\\down\b/\\ket{\\downarrow}/g ;
+s/\\L_p\b/\\hat{L}_{+}/g ;
+s/\\L_m\b/\\hat{L}_{-}/g ;

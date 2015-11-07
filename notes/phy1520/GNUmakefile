@@ -25,6 +25,7 @@ THISBOOK_DEPS += $(PDFS_FROM_EPS)
 include ../make.rules
 
 julia.tex : ../../julia/METADATA
+mathematica.tex : ../../mathematica/METADATA
 
 problemSets :: gradQuantumProblemSet1.pdf
 #problemSets :: gradQuantumProblemSet2.pdf
