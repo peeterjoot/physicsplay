@@ -181,3 +181,6 @@ s/\\up\b/\\ket{\\uparrow}/g ;
 s/\\down\b/\\ket{\\downarrow}/g ;
 s/\\L_p\b/\\hat{L}_{+}/g ;
 s/\\L_m\b/\\hat{L}_{-}/g ;
+s/\\L_z\b/\\hat{L}_z/g ;
+s/\\L_x\b/\\hat{L}_x/g ;
+s/\\L_y\b/\\hat{L}_y/g ;
