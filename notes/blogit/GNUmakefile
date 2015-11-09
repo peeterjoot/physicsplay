@@ -71,6 +71,7 @@ all :: ece1229.sty
 all :: peeters_layout.sty
 all :: peeters_layout_exercise.sty
 all :: macros_bm.sty
+all :: macros_cal.sty
 all :: macros_mathematica.sty
 all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
@@ -146,6 +147,9 @@ peeters_braket.sty : ../peeters_braket.sty
 	cp $^ $@
 
 macros_bm.sty : ../macros_bm.sty
+	cp $^ $@
+
+macros_cal.sty : ../macros_cal.sty
 	cp $^ $@
 
 macros_qed.sty : ../macros_qed.sty
