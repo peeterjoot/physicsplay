@@ -168,6 +168,7 @@ s/\\hatL/\\hat{L}/g ;
 s/\\hatp/\\hat{p}/g ;
 s/\\hatr/\\hat{r}/g ;
 s/\\hatS/\\hat{S}/g ;
+s/\\hatT/\\hat{T}/g ;
 s/\\hatPi/\\hat{\\Pi}/g ;
 s/\\hatx/\\hat{x}/g ;
 s/\\haty/\\hat{y}/g ;
