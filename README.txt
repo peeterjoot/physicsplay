@@ -27,9 +27,13 @@ notes/atomic/
 
    Some informal papers on atomic operations and memory barriers.
 
-notes/gabook/
+notes/gabookI/
 
-   'Exploring physics with Geometric Algebra' -- a too large collection of Geometric Algebra related math and physics.
+   The first part of 'Exploring physics with Geometric Algebra' -- a too large collection of Geometric Algebra related math and physics.
+
+notes/gabookII/
+
+   The second part of 'Exploring physics with Geometric Algebra' -- a too large collection of Geometric Algebra related math and physics.
 
 notes/miscphysics/
 

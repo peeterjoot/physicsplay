@@ -8,7 +8,8 @@ SUBDIRS := $(filter-out $(IGNOREDIRS),$(SUBDIRS))
 
 GITIGNORES := $(addsuffix /.gitignore,$(SUBDIRS))
 
-ALLNOTES += notes/gabook/gabook.pdf
+ALLNOTES += notes/gabookI/gabookI.pdf
+ALLNOTES += notes/gabookII/gabookII.pdf
 ALLNOTES += notes/miscphysics/miscphysics.pdf
 ALLNOTES += notes/classicalmechanics/classicalmechanics.pdf
 #ALLNOTES += notes/dekker/dekker.pdf
