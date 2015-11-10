@@ -7,18 +7,19 @@ FIGURES := ../../figures/$(THISDIR)
 SOURCE_DIRS += appendix
 SOURCE_DIRS += basics
 SOURCE_DIRS += calculus
-SOURCE_DIRS += electrodynamics
-SOURCE_DIRS += emstress
 SOURCE_DIRS += $(FIGURES)
-SOURCE_DIRS += fourier
-SOURCE_DIRS += lagrangian
-SOURCE_DIRS += lorentzforce
 SOURCE_DIRS += mathematica
 SOURCE_DIRS += physics
 SOURCE_DIRS += projection
-SOURCE_DIRS += qm
-SOURCE_DIRS += relativity
 SOURCE_DIRS += rotation
+
+#SOURCE_DIRS += electrodynamics
+#SOURCE_DIRS += emstress
+#SOURCE_DIRS += fourier
+#SOURCE_DIRS += lagrangian
+#SOURCE_DIRS += lorentzforce
+#SOURCE_DIRS += relativity
+#SOURCE_DIRS += qm
 
 ORIG_LISTING_DIRS += ../algebra
 LOCAL_LISTING_FILES += levi.pl
