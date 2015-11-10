@@ -1,4 +1,4 @@
-THISDIR := gabook
+THISDIR := gabookI
 
 include ../make.bookvars
 
