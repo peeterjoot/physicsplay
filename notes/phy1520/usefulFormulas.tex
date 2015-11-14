@@ -64,7 +64,7 @@ A \sim ( \bra{a_{\textrm{row}}} A \ket{a_{\textrm{column}}} )
 \begin{equation}\label{eqn:usefulFormulas:540}
 \begin{aligned}
 \rho &= \psi^\conj \psi \\
-\Bj &= \frac{\Hbar}{m} \Imag\lr{ \psi^\conj \spacegrad \psi} = -\frac{i \Hbar}{2 m} \lr{ \psi^\conj \spacegrad \psi - \psi \spacegrad \psi }
+\Bj &= \frac{\Hbar}{m} \Imag\lr{ \psi^\conj \spacegrad \psi} = -\frac{i \Hbar}{2 m} \lr{ \psi^\conj \spacegrad \psi - \psi \spacegrad \psi^\conj }
 \end{aligned}
 \end{equation}
 
@@ -107,8 +107,12 @@ A_{\textrm{H}} = U^\dagger A U
 \end{dmath}
 
 \begin{dmath}\label{eqn:usefulFormulas:1460}
-\ddt{} \expectation{ \Bx \cdot \Bp } = \expectation{ \frac{\Bp }{m} } - \expectation{ \Bx \cdot \spacegrad V }
+\ddt{} \expectation{ \Bx \cdot \Bp } = \expectation{ \frac{\Bp^2 }{m} } - \expectation{ \Bx \cdot \spacegrad V }
 \end{dmath}
+
+\begin{equation}\label{eqn:usefulFormulas:520}
+e^{A} B e^{-A} = B + \antisymmetric{A}{B} + \inv{2!} \antisymmetric{A}{\antisymmetric{A}{B}} + \cdots
+\end{equation}
 
 \paragraph{Density operator}
 
@@ -135,7 +139,8 @@ S = - \Tr( \rho \ln \rho ) = - \Tr( \rho_{kk} \ln \rho_{kk} )
 \begin{equation}\label{eqn:usefulFormulas:1320}
 \begin{aligned}
 \ket{\psi_{mn}} &= \ket{a_m}_1 \otimes \ket{a_n} \\
-\rho &= \sum_{m,n } c_{m, n} \ket{\psi_{mn}} \bra{\psi_{mn}} \\
+\ket{\psi} &= \sum_{m n} c_{mn} \ket{\psi_{mn}} \\
+\rho &= \ket{\psi} \bra{\psi} \\
 \Tr_2(\rho) &= \rho_{2} = \sum_a \prescript{}{2}{\bra{a}} \rho \ket{a}_2 \\
 \sum_a \prescript{}{1}{\bra{a}} \Tr_2(\rho) \ket{a}_1 &= \sum_n \Abs{c_{mn}}^2
 \end{aligned}
@@ -222,8 +227,16 @@ p_0^2 = m \omega \Hbar
 x(t) = \frac{x_0}{\sqrt{2}} \lr{ a e^{-i\omega t} + a^\dagger e^{i \omega t} }
 \end{dmath}
 \begin{dmath}\label{eqn:usefulFormulas:260}
-p(t) = \frac{i \Hbar}{\sqrt{2} x_0} \lr{ a e^{-i\omega t} + a^\dagger e^{i \omega t} }
+p(t) = \frac{i \Hbar}{\sqrt{2} x_0} \lr{ 
+a^\dagger e^{i \omega t} 
+-
+a e^{-i\omega t} 
+}
 \end{dmath}
+\begin{equation}\label{eqn:usefulFormulas:1640}
+a,a^\dagger = \inv{\sqrt{2} x_0} \lr{ x \mp x_0^2 \frac{d}{dx} }
+\end{equation}
+
 \begin{dmath}\label{eqn:usefulFormulas:280}
 a \ket{n} = \sqrt{n} \ket{n-1}
 \end{dmath}
@@ -274,6 +287,10 @@ a = \inv{x_0 \sqrt{2}} \lr{ x + \frac{ i p }{m\omega} }
 \braket{x}{n} = \inv{ \pi^{1/4} \sqrt{ 2^n n! } } x_0^{-(n+1/2)} \lr{ x - x_0^2 \frac{d}{dx} }^n e^{-(x/x_0)^2/2}
 \end{equation} 
 
+\begin{equation}\label{eqn:usefulFormulas:1660}
+\ket{n} = \frac{\lr{a^\dagger}^n}{\sqrt{n!}} \ket{0}
+\end{equation}
+
 \paragraph{Coherent states}
 
 \begin{equation}\label{eqn:usefulFormulas:1140}
@@ -286,20 +303,6 @@ a \ket{z} = z \ket{z}
 
 \begin{equation}\label{eqn:usefulFormulas:1180}
 \bra{z} a a^\dagger \ket{z} = \bra{z} 1 + a^\dagger a \ket{z}
-\end{equation}
-
-\paragraph{Heisenberg picture}
-
-\begin{equation}\label{eqn:usefulFormulas:480}
-U = e^{-i H t/\Hbar}
-\end{equation}
-
-\begin{equation}\label{eqn:usefulFormulas:500}
-A_\txtH = U^\dagger A U
-\end{equation}
-
-\begin{equation}\label{eqn:usefulFormulas:520}
-e^{A} B e^{-A} = B + \antisymmetric{A}{B} + \inv{2!} \antisymmetric{A}{\antisymmetric{A}{B}} + \cdots
 \end{equation}
 
 \begin{dmath}\label{eqn:usefulFormulas:1360}
@@ -322,24 +325,24 @@ e^{A} B e^{-A} = B + \antisymmetric{A}{B} + \inv{2!} \antisymmetric{A}{\antisymm
 \end{aligned}
 \end{equation}
 
-\paragraph{Aharonov-Bohm and Magnetic fields}
-
 \begin{dmath}\label{eqn:usefulFormulas:1340}
 \BA =
 \left\{
 \begin{array}{l l}
-\frac{B \rho_a^2}{2 \rho} \phicap & \quad \mbox{if \( \rho \ge \rho_a \) } \\
-\frac{B \rho}{2} \phicap & \quad \mbox{if \( \rho < \rho_a \).}
+\frac{B \rho_a^2}{2 \rho} \phicap & \quad \mbox{if \( \rho \ge \rho_a \) } \implies \BB = 0 \\
+\frac{B \rho}{2} \phicap & \quad \mbox{if \( \rho < \rho_a \)} \implies \BB = B \zcap
 \end{array}
 \right.
 \end{dmath}
 
-\begin{equation}\label{eqn:usefulFormulas:1380}
-H = \inv{2m} \lr{ \Bp - \frac{q}{c} \BA } + q \phi
-\end{equation}
-
 \begin{equation}\label{eqn:usefulFormulas:1400}
 \Phi \equiv \oint \BA \cdot d\Bl
+\end{equation}
+
+\paragraph{Aharonov-Bohm and Magnetic fields}
+
+\begin{equation}\label{eqn:usefulFormulas:1380}
+H = \inv{2m} \lr{ \Bp - \frac{q}{c} \BA } + q \phi
 \end{equation}
 
 \begin{equation}\label{eqn:usefulFormulas:1480}
@@ -353,7 +356,7 @@ b &= \inv{ \sqrt{ 2 m \omega \Hbar }} \lr{ \Pi_x + i \Pi_y }
 \end{equation}
 
 \begin{equation}\label{eqn:usefulFormulas:1500}
-\BA = \frac{B_0}{2} \lr{ -y, x, 0}, \BA = B_0 \lr{ x, 0, 0 } \implies \BB = B_0 \zcap
+\BA = \frac{B_0}{2} \lr{ -y, x, 0}, \BA = B_0 \lr{ 0, x, 0 } \implies \BB = B_0 \zcap
 \end{equation}
 
 \paragraph{Dirac equation}
@@ -370,7 +373,7 @@ m c^2 & - \hat{p} c + V
 
 \begin{equation}\label{eqn:usefulFormulas:1260}
 \begin{aligned}
-\psi &= e^{\pm i k - i E t/\Hbar} \\
+\psi &= e^{\pm i k x - i E t/\Hbar} \\
 \ket{ +k ; \pm \epsilon } &= 
 \begin{bmatrix}
 \cos\theta \\
