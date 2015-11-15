@@ -38,7 +38,7 @@ The action of the Hamiltonian on
 
 \begin{dmath}\label{eqn:diracAlternate:40}
 \psi = 
-e^{i k x}
+e^{i k x - i E t/\Hbar}
 \begin{bmatrix}
 \psi_1 \\
 \psi_2
@@ -53,21 +53,17 @@ H \psi
 m c^2 + V_0 & c (-i \Hbar) i k \\
 c (-i \Hbar) i k & - m c^2 + V_0
 \end{bmatrix}
-e^{i k x}
 \begin{bmatrix}
 \psi_1 \\
 \psi_2
 \end{bmatrix}
+e^{i k x - i E t/\Hbar}
 =
 \begin{bmatrix}
 m c^2 + V_0 & c \Hbar k \\
 c \Hbar k & - m c^2 + V_0
 \end{bmatrix}
-e^{i k x}
-\begin{bmatrix}
-\psi_1 \\
-\psi_2
-\end{bmatrix}
+\psi.
 \end{dmath}
 
 Writing
@@ -180,37 +176,56 @@ E^{-1},
 \end{dmath}
 
 where
-\begin{dmath}\label{eqn:diracAlternate:240}
-E = 
+\begin{equation}\label{eqn:diracAlternate:240}
+\begin{aligned}
+E &= 
 \inv{\sqrt{2 \epsilon} }
 \begin{bmatrix}
 \frac{c \Hbar k}{ \sqrt{ \epsilon - m c^2 } } & -\frac{c \Hbar k}{ \sqrt{ \epsilon + m c^2 } } \\
 \sqrt{ \epsilon - m c^2 } & \sqrt{ \epsilon + m c^2 }
-\end{bmatrix}
-\end{dmath}
+\end{bmatrix}, \qquad k > 0 \\
+E &= 
+\inv{\sqrt{2 \epsilon} }
+\begin{bmatrix}
+-\frac{c \Hbar k}{ \sqrt{ \epsilon - m c^2 } } & -\frac{c \Hbar k}{ \sqrt{ \epsilon + m c^2 } } \\
+-\sqrt{ \epsilon - m c^2 } & \sqrt{ \epsilon + m c^2 }
+\end{bmatrix}, \qquad k < 0.
+\end{aligned}
+\end{equation}
 
-Observe that there's redundancy in this matrix since \( \ifrac{c \Hbar k}{ \sqrt{ \epsilon - m c^2 } } = \sqrt{ \epsilon + m c^2 } \), and \( \ifrac{c \Hbar k}{ \sqrt{ \epsilon + m c^2 } } = \sqrt{ \epsilon - m c^2 } \), which allows the transformation matrix to be written in the form of a rotation matrix
+Here the signs have been adjusted to ensure the transformation matrix has a unit determinant.
 
-\begin{dmath}\label{eqn:diracAlternate:260}
-E = 
+Observe that there's redundancy in this matrix since \( \ifrac{c \Hbar \Abs{k}}{ \sqrt{ \epsilon - m c^2 } } = \sqrt{ \epsilon + m c^2 } \), and \( \ifrac{c \Hbar \Abs{k}}{ \sqrt{ \epsilon + m c^2 } } = \sqrt{ \epsilon - m c^2 } \), which allows the transformation matrix to be written in the form of a rotation matrix
+
+\begin{equation}\label{eqn:diracAlternate:260}
+\begin{aligned}
+E &= 
 \inv{\sqrt{2 \epsilon} }
 \begin{bmatrix}
 \frac{c \Hbar k}{ \sqrt{ \epsilon - m c^2 } } & -\frac{c \Hbar k}{ \sqrt{ \epsilon + m c^2 } } \\
 \frac{c \Hbar k}{ \sqrt{ \epsilon + m c^2 } } & \frac{c \Hbar k}{ \sqrt{ \epsilon - m c^2 } }
-\end{bmatrix}.
-\end{dmath}
+\end{bmatrix}, \qquad k > 0 \\
+E &= 
+\inv{\sqrt{2 \epsilon} }
+\begin{bmatrix}
+-\frac{c \Hbar k}{ \sqrt{ \epsilon - m c^2 } } & -\frac{c \Hbar k}{ \sqrt{ \epsilon + m c^2 } } \\
+\frac{c \Hbar k}{ \sqrt{ \epsilon + m c^2 } }  & -\frac{c \Hbar k}{ \sqrt{ \epsilon - m c^2 } }
+\end{bmatrix}, \qquad k < 0 \\
+\end{aligned}
+\end{equation}
 
-This has unit determinant, so with
+With
 
 \begin{equation}\label{eqn:diracAlternate:280}
 \begin{aligned}
-\cos\theta &= \frac{c \Hbar k}{ \sqrt{ 2 \epsilon( \epsilon - m c^2) } } \\
-\sin\theta &= \frac{c \Hbar k}{ \sqrt{ 2 \epsilon( \epsilon + m c^2) } }
-\end{aligned},
+\cos\theta &= \frac{c \Hbar \Abs{k}}{ \sqrt{ 2 \epsilon( \epsilon - m c^2) } } = \frac{\sqrt{ \epsilon + m c^2} }{ \sqrt{ 2 \epsilon}}\\
+\sin\theta &= \frac{c \Hbar k}{ \sqrt{ 2 \epsilon( \epsilon + m c^2) } } = \frac{\sgn(k) \sqrt{ \epsilon - m c^2}}{ \sqrt{ 2 \epsilon } },
+\end{aligned}
 \end{equation}
 
-the transformation matrix is
-\begin{equation}\label{eqn:diracAlternate:300}
+the transformation matrix (and eigenkets) is
+%\begin{equation}\label{eqn:diracAlternate:300}
+\boxedEquation{eqn:diracAlternate:300}{
 E = 
 \begin{bmatrix}
 \ket{V_0 + \epsilon} & \ket{V_0 - \epsilon} 
@@ -220,7 +235,39 @@ E =
 \cos\theta & -\sin\theta \\
 \sin\theta & \cos\theta
 \end{bmatrix}.
-\end{equation}
+}
+%\end{equation}
+
+Observe that \cref{eqn:diracAlternate:280} can be simplified by using double angle formulas
+
+\begin{dmath}\label{eqn:diracAlternate:320}
+\cos(2 \theta) 
+= 
+\frac{\lr{ \epsilon + m c^2} }{ 2 \epsilon }
+-
+\frac{\lr{ \epsilon - m c^2}}{ 2 \epsilon }
+=
+\frac{1}{ 2 \epsilon } \lr{ \epsilon + m c^2 - \epsilon + m c^2 }
+=
+\frac{m c^2 }{ \epsilon },
+\end{dmath}
+
+and
+\begin{dmath}\label{eqn:diracAlternate:340}
+\sin(2\theta) 
+= 
+2 \frac{1}{2 \epsilon} \sgn(k ) \sqrt{ \epsilon^2 - (m c^2)^2 }
+= 
+\frac{\Hbar k c}{\epsilon}.
+\end{dmath}
+
+This allows all the \( \theta \) dependence on \( \Hbar k c \) and \( m c^2 \) to be expressed as a ratio of momenta
+
+%\begin{dmath}\label{eqn:diracAlternate:360}
+\boxedEquation{eqn:diracAlternate:360}{
+\tan(2\theta) = \frac{\Hbar k}{m c}.
+}
+%\end{dmath}
 
 %\EndArticle
 \EndNoBibArticle
