@@ -21,6 +21,10 @@
 #s/\\DC/D_{\\mathrm{C}}/g ;
 #s/\\DD/\\mathcal{D}/g ;
 #s/\\domega/\\sin\\theta d\\theta d\\phi/g ;
+#s/\\down\b/\\downarrow/g ;
+#s/\\down\b/\\ket{\\downarrow}/g ;
+#s/\\downdown\b/\\ket{\\downarrow \\downarrow}/g ;
+#s/\\downup\b/\\ket{\\downarrow \\uparrow}/g ;
 #s/\\DV/D_{\\mathrm{V}}/g ;
 #s/\\E0/{\\E_k^\\nought}/g ;
 #s/\\Eb/E_{\\mathrm{binding}}/g ;
@@ -130,7 +134,10 @@
 #s/\\trans\b/{\\textrm{trans}}/g ;
 #s/\\tu/\\tilde{u}/g ;
 #s/\\tx/\\tilde{x}/g ;
+#s/\\up\b/\\ket{\\uparrow}/g ;
 #s/\\up\b/\\uparrow/g ;
+#s/\\updown\b/\\ket{\\uparrow \\downarrow}/g ;
+#s/\\upup\b/\\ket{\\uparrow \\uparrow}/g ;
 #s/\\Veff/V_{\\mathrm{eff}}/g ;
 #s/\\Veph/V_{\\mathrm{e,ph}}/g ;
 #s/\\yz/{\\textrm{yz}}/g;
@@ -197,11 +204,4 @@
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
 s/[Ss]chro\b/Schr\\"{o}dinger/g; # Schrodinger
 s/[Ss]chrodinger/Schr\\"{o}dinger/g; # Schrodinger
-#s/\\ee/\\epsilon/g ;
-#s/\\down\b/\\downarrow/g ;
-#s/\\down\b/\\ket{\\downarrow}/g ;
-#s/\\up\b/\\ket{\\uparrow}/g ;
-s/\\upup\b/\\ket{\\uparrow \\uparrow}/g ;
-s/\\updown\b/\\ket{\\uparrow \\downarrow}/g ;
-s/\\downup\b/\\ket{\\downarrow \\uparrow}/g ;
-s/\\downdown\b/\\ket{\\downarrow \\downarrow}/g ;
+s/\\ee/\\epsilon/g ;
