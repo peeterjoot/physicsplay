@@ -54,10 +54,7 @@
 #s/\\hatx/\\hat{x}/g ;
 #s/\\haty/\\hat{y}/g ;
 #s/\\hb2m/\\frac{\\Hbar}{2m}/g;
-#s/\\hBL/\\hat{\\BL}/g ;
-#s/\\hBp/\\hat{\\Bp}/g ;
 #s/\\hBP/\\hat{\\BP}/g ;
-#s/\\hBr/\\hat{\\Br}/g ;
 #s/\\hBR/\\hat{\\BR}/g ;
 #s/\\Hc/\\hat{H}/g;
 #s/\\Hc/H_{\\mathrm{c}}/g ;
@@ -72,7 +69,6 @@
 #s/\\ketab\b/\\ket{a,b}/g ;
 #s/\\kpsi/\\ket{\\Psi}/g ;
 #s/\\ktpsi/\\ket{\\tilde{\\Psi}}/g ;
-#s/\\L_/\\hat{L}_/g ;
 #s/\\L_m\b/\\hat{L}_{-}/g ;
 #s/\\L_p\b/\\hat{L}_{+}/g ;
 #s/\\L_pm\b/\\hat{L}_{\\pm}/g ;
@@ -128,7 +124,6 @@
 #s/\\Tme/\\hat{T}_{-\\epsilon}/g ;
 #s/\\tmin\b/{\\textrm{min}}/g ;
 #s/\\tn\b/\\tilde{n}/g ;
-#s/\\tot\b/\\textrm{tot}/g ;
 #s/\\tp/\\tilde{p}/g ;
 #s/\\tpsi/\\tilde{\\Psi}/g ;
 #s/\\trans\b/{\\textrm{trans}}/g ;
@@ -205,3 +200,8 @@
 s/[Ss]chro\b/Schr\\"{o}dinger/g; # Schrodinger
 s/[Ss]chrodinger/Schr\\"{o}dinger/g; # Schrodinger
 s/\\ee/\\epsilon/g ;
+s/\\hBL/\\hat{\\BL}/g ;
+s/\\hBp/\\hat{\\Bp}/g ;
+s/\\hBr/\\hat{\\Br}/g ;
+s/\\L_/\\hat{L}_/g ;
+s/\\tot\b/{\\textrm{tot}}/g ;
