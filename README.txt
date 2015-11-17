@@ -6,10 +6,7 @@ Peeter Joot's geometric algebra biased math and physics latex source.
 
 git clone git@github.com:peeterjoot/physicsplay.git ~/physicsplay
 cd ~/physicsplay
-for i in getopt mathematica figures matlab clang julia ; do
-   git submodule update --init $i
-   (cd $i && git checkout master)
-done
+bin/cloneplay.sh
 
 #-------------------------------------------------------
 
@@ -29,11 +26,24 @@ notes/atomic/
 
 notes/gabookI/
 
-   The first part of 'Exploring physics with Geometric Algebra' -- a too large collection of Geometric Algebra related math and physics.
+   The first part of 'Exploring physics with Geometric Algebra' -- a too large collection of Geometric Algebra related math and physics.  Book I has lots of geometry and some basic physics:
+
+      Basics and Geometry
+      Projection
+      Rotation
+      Calculus
+      General Physics
 
 notes/gabookII/
 
-   The second part of 'Exploring physics with Geometric Algebra' -- a too large collection of Geometric Algebra related math and physics.
+   The second part of 'Exploring physics with Geometric Algebra' -- a too large collection of Geometric Algebra related math and physics.  Book II contains stuff about
+
+      Relativity
+      Electrodynamics
+      Lorentz Force
+      Electrodynamics Stress Energy
+      Quantum Mechanics
+      Fourier treatments
 
 notes/miscphysics/
 
