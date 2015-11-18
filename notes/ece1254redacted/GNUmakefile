@@ -2,6 +2,8 @@ THISDIR := ece1254
 
 include ../make.bookvars
 
+THISBOOK_DEPS += kbordermatrix.sty
+
 INCOMPLETE += multiphysicsProblemSet1Problem1.tex
 INCOMPLETE += multiphysicsProblemSet1Problem2.tex
 INCOMPLETE += multiphysicsProblemSet1Problem3.tex
@@ -62,3 +64,7 @@ $(ECE1254STY) : %.sty : ../$(THISDIR)/%.sty
 
 clean ::
 	rm -f $(ECE1254TEX) $(ECE1254STY)
+
+myrefs.bib : 
+	(cd ../ece1254 ; make myrefs.bib)
+	cp ../ece1254/myrefs.bib .

@@ -32,6 +32,7 @@ GENERATED_SOURCES += projmatlab.tex
 #PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))
 
 THISBOOK_DEPS += $(PDFS_FROM_EPS)
+THISBOOK_DEPS += kbordermatrix.sty
 
 include ../make.rules
 

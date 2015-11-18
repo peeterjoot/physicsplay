@@ -3,6 +3,7 @@ THISDIR := phy450
 include ../make.bookvars
 
 #ONCEFLAGS := -justonce
+THISBOOK_DEPS += poppitz.tex
 
 FIGURES := ../../figures/$(THISDIR)
 
@@ -17,8 +18,6 @@ include ../make.rules
 
 backmatter.tex : ../classicthesis.mine/backmatter.tex
 	cp $< $@
-
-phy450.pdf :: poppitz.tex
 
 poppitz.tex : mkpref
 	./mkpref > $@

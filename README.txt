@@ -157,6 +157,5 @@ del2xml/del2xml
 
 BUGS that prevent 'make' from being successful without handholding:
 
-1) notes/phy450/ - poppitz.tex make rule not sequenced right.
-2) eps -> pdf rules aren't right.  Have to build in notes/blogit/ before any other notes/*/ dir.
+   - The eps -> pdf rules aren't right.  Have to build in notes/blogit/ before any other notes/*/ dir.
 
