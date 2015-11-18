@@ -4,6 +4,8 @@ IGNOREDIRS += notes/atomic
 IGNOREDIRS += notes/bb
 IGNOREDIRS += notes/peterlue
 IGNOREDIRS += notes/gamma-matrix
+IGNOREDIRS += notes/ece1254
+IGNOREDIRS += notes/ece1254redacted
 SUBDIRS := $(filter-out $(IGNOREDIRS),$(SUBDIRS))
 
 GITIGNORES := $(addsuffix /.gitignore,$(SUBDIRS))
