@@ -42,9 +42,10 @@ gradQuantumProblemSet4.pdf : ../phy1520/gradQuantumProblemSet4Problem1.tex
 gradQuantumProblemSet4.pdf : ../phy1520/gradQuantumProblemSet4Problem2.tex
 gradQuantumProblemSet4.pdf : ../phy1520/gradQuantumProblemSet4Problem3.tex
 
-#gradQuantumProblemSet5.pdf : ps5matlab.tex
-#gradQuantumProblemSet5.pdf : ps5mathematica.tex
-#gradQuantumProblemSet5.pdf : matlab.sty
+gradQuantumProblemSet5.pdf : ../phy1520/gradQuantumProblemSet5Problem1.tex
+gradQuantumProblemSet5.pdf : ../phy1520/gradQuantumProblemSet5Problem2.tex
+gradQuantumProblemSet5.pdf : ../phy1520/gradQuantumProblemSet5Problem3.tex
+gradQuantumProblemSet5.pdf : ../phy1520/gradQuantumProblemSet5Problem4.tex
 
 #ps5matlab.tex : ../METADATA ../../matlab/METADATA
 #	(cd .. ; ./METADATA -matlab -latex -phy1520 -filter phy1520/ps5/ ) > $@
