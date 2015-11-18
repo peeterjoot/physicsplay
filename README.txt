@@ -152,3 +152,11 @@ notes/dekker
 del2xml/del2xml
 
    A script to take .csv formatted stuff and massage it into the xml format that rocketshuttle likes.
+
+#-------------------------------------------------------
+
+BUGS that prevent 'make' from being successful without handholding:
+
+1) notes/phy450/ - poppitz.tex make rule not sequenced right.
+2) eps -> pdf rules aren't right.  Have to build in notes/blogit/ before any other notes/*/ dir.
+
