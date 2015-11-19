@@ -1,0 +1,189 @@
+%
+% Copyright © 2015 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{diracPotential}
+\renewcommand{\dirname}{notes/phy1520/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+
+\beginArtNoToc
+
+\generatetitle{Dirac delta function potential}
+%\chapter{Dirac delta function potential}
+%\label{chap:diracPotential}
+
+\paragraph{Q:Dirac delta function potential}
+
+Problem 2.24/2.25 \citep{sakurai2014modern} introduces a Dirac delta function potential
+
+\begin{dmath}\label{eqn:diracPotential:20}
+H = \frac{p^2}{2m} - V_0 \delta(x),
+\end{dmath}
+
+which vanishes after \( t = 0 \).  Solve for the bound state for \( t < 0 \) and then the time evolution after that.
+
+\paragraph{A:}
+
+The first part of this problem was assigned back in phy356, where we solved this for a rectangular potential that had the limiting form of a delta function potential.  However, this problem can be solved directly by considering the \( \Abs{x} > 0 \) and \( x = 0 \) regions separately.
+
+For \( \Abs{x} > 0 \) Schr\"{o}dinger's equation takes the form
+
+\begin{dmath}\label{eqn:diracPotential:40}
+E \psi = -\frac{\Hbar^2}{2m} \frac{d^2 \psi}{dx^2}.
+\end{dmath}
+
+With 
+
+\begin{dmath}\label{eqn:diracPotential:60}
+\kappa = 
+\frac{\sqrt{-2 m E}}{\Hbar},
+\end{dmath}
+
+this has solutions
+
+\begin{dmath}\label{eqn:diracPotential:80}
+\psi = e^{\pm \kappa x}.
+\end{dmath}
+
+For \( x > 0 \) we must have
+\begin{dmath}\label{eqn:diracPotential:100}
+\psi = a e^{-\kappa x},
+\end{dmath}
+
+and for \( x < 0 \) 
+\begin{dmath}\label{eqn:diracPotential:120}
+\psi = b e^{\kappa x}.
+\end{dmath}
+
+requiring that \( \psi \) is continuous at \( x = 0 \) means \( a = b \), or
+
+\begin{dmath}\label{eqn:diracPotential:140}
+\psi = \psi(0) e^{-\kappa \Abs{x}}.
+\end{dmath}
+
+For the \( x = 0 \) region, consider an interval \( [-\epsilon, \epsilon] \) region around the origin.  We must have
+
+\begin{dmath}\label{eqn:diracPotential:160}
+E \int_{-\epsilon}^\epsilon \psi(x) dx = \frac{-\Hbar^2}{2m} \int_{-\epsilon}^\epsilon \frac{d^2 \psi}{dx^2} dx - V_0 \int_{-\epsilon}^\epsilon \delta(x) \psi(x) dx.
+\end{dmath}
+
+The RHS is zero
+
+\begin{dmath}\label{eqn:diracPotential:180}
+E \int_{-\epsilon}^\epsilon \psi(x) dx 
+= 
+E \frac{ e^{-\kappa (\epsilon)} - 1}{-\kappa}
+-E \frac{ 1 - e^{\kappa (-\epsilon)}}{\kappa}
+\rightarrow
+0.
+\end{dmath}
+
+That leaves
+\begin{dmath}\label{eqn:diracPotential:200}
+V_0 \int_{-\epsilon}^\epsilon \delta(x) \psi(x) dx
+=
+\frac{-\Hbar^2}{2m} \int_{-\epsilon}^\epsilon \frac{d^2 \psi}{dx^2} dx 
+=
+\frac{-\Hbar^2}{2m} \evalrange{\frac{d \psi}{dx}}{-\epsilon}{\epsilon}
+=
+\frac{-\Hbar^2}{2m} 
+\psi(0)
+\lr
+{
+-\kappa e^{-\kappa (\epsilon)}
+-
+\kappa e^{\kappa (-\epsilon)}
+}.
+\end{dmath}
+
+In the \( \epsilon \rightarrow 0 \) limit this gives
+
+\begin{dmath}\label{eqn:diracPotential:220}
+V_0 = \frac{\Hbar^2 \kappa}{m}.
+\end{dmath}
+
+Equating relations for \( \kappa \) we have
+
+\begin{equation}\label{eqn:diracPotential:240}
+\kappa = \frac{m V_0}{\Hbar^2} = \frac{\sqrt{-2 m E}}{\Hbar},
+\end{equation}
+
+or
+
+\begin{equation}\label{eqn:diracPotential:260}
+E = -\inv{2 m} \lr{ \frac{m V_0}{\Hbar} }^2,
+\end{equation}
+
+with
+
+\begin{equation}\label{eqn:diracPotential:280}
+\psi(x, t < 0) = C \exp\lr{ -i E t/\hbar - \kappa \Abs{x}}.
+\end{equation}
+
+The normalization requires 
+
+\begin{dmath}\label{eqn:diracPotential:300}
+1 
+= 2 \Abs{C}^2 \int_0^\infty e^{- 2 \kappa x} dx
+= 2 \Abs{C}^2 \evalrange{\frac{e^{- 2 \kappa x}}{-2 \kappa}}{0}{\infty}
+= \frac{\Abs{C}^2}{\kappa},
+\end{dmath}
+
+so
+%\begin{equation}\label{eqn:diracPotential:320}
+\boxedEquation{eqn:diracPotential:340}{
+\psi(x, t < 0) = \inv{\sqrt{\kappa}} \exp\lr{ -i E t/\hbar - \kappa \Abs{x}}.
+}
+%\end{equation}
+
+There is only one bound state for such a potential.  After turning off the potential, any plane wave
+
+\begin{equation}\label{eqn:diracPotential:360}
+\psi(x, t) = e^{i k x - i E(k) t/\Hbar},
+\end{equation}
+
+where
+
+\begin{equation}\label{eqn:diracPotential:380}
+k = \frac{\sqrt{2 m E}}{\Hbar},
+\end{equation}
+
+is a solution.  In particular, at \( t = 0 \), the wave packet
+
+\begin{equation}\label{eqn:diracPotential:400}
+\psi(x,0) = \inv{\sqrt{2\pi}} \int_{-\infty}^\infty e^{i k x} A(k) dk,
+\end{equation}
+
+is a solution.  To solve for \( A(k) \), we require
+
+\begin{dmath}\label{eqn:diracPotential:420}
+\inv{\sqrt{2\pi}} \int_{-\infty}^\infty e^{i k x} A(k) dk
+= \inv{\sqrt{\kappa}} e^{ - \kappa \Abs{x} },
+\end{dmath}
+
+or
+%\begin{dmath}\label{eqn:diracPotential:440}
+\boxedEquation{eqn:diracPotential:460}{
+A(k) = 
+\inv{\sqrt{2\pi \kappa}} \int_{-\infty}^\infty e^{-i k x} 
+e^{ - m V_0 \Abs{x}/\Hbar^2 }
+dx.
+}
+%\end{dmath}
+
+The initial time state established by the delta function potential evolves as
+%\begin{equation}\label{eqn:diracPotential:480}
+\boxedEquation{eqn:diracPotential:500}{
+\psi(x, t > 0) = \inv{\sqrt{2\pi}} \int_{-\infty}^\infty e^{i k x - i \Hbar k^2 t/2m} A(k) dk.
+}
+%\end{equation}
+
+\EndArticle
