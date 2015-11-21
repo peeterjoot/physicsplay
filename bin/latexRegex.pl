@@ -69,7 +69,7 @@
 #s/\\ketab\b/\\ket{a,b}/g ;
 #s/\\kpsi/\\ket{\\Psi}/g ;
 #s/\\ktpsi/\\ket{\\tilde{\\Psi}}/g ;
-#s/\\L_m\b/\\hat{L}_{-}/g ;
+s/\\L_m\b/\\hat{L}_{-}/g ;
 #s/\\L_p\b/\\hat{L}_{+}/g ;
 #s/\\L_pm\b/\\hat{L}_{\\pm}/g ;
 #s/\\L_x\b/\\hat{L}_x/g ;
@@ -205,3 +205,8 @@ s/\\hBp/\\hat{\\Bp}/g ;
 s/\\hBr/\\hat{\\Br}/g ;
 s/\\L_/\\hat{L}_/g ;
 s/\\tot\b/{\\textrm{tot}}/g ;
+s/\\32\b/\\frac{3}{2}/g;
+s/\\23\b/\\frac{2}{3}/g;
+s/\\12\b/\\frac{1}{2}/g;
+s/\\1\b/{(1)}/g;
+s/\\2\b/{(2)}/g;
