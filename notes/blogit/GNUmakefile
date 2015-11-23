@@ -90,11 +90,9 @@ local : $(LOCAL_FILES)
 $(LOCAL_FILES) : 
 	cp $(filter %$@, $(ORIG_FILES)) $@
 
-energyMomentumWithMagneticSources.pdf : ../ece1229/energyMomentumWithMagneticSources.tex
-
-gradQuantumProblemSet6.pdf : ../phy1520/gradQuantumProblemSet6Problem1.tex
-gradQuantumProblemSet6.pdf : ../phy1520/gradQuantumProblemSet6Problem2.tex
-gradQuantumProblemSet6.pdf : ../phy1520/gradQuantumProblemSet6Problem3.tex
+#gradQuantumProblemSet7.pdf : ../phy1520/gradQuantumProblemSet7Problem1.tex
+#gradQuantumProblemSet7.pdf : ../phy1520/gradQuantumProblemSet7Problem2.tex
+#gradQuantumProblemSet7.pdf : ../phy1520/gradQuantumProblemSet7Problem3.tex
 
 gaBasics.pdf : gaBasics.tex
 
