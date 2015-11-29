@@ -1,5 +1,11 @@
 #s,\\E{(.*?)},{E_{k $1}^\\nought},g ;
+#s/\\0\b/{(0)}/g;
 #s/\\0bcs/0_{\\mathrm{BCS}}/g ;
+#s/\\1\b/{(1)}/g;
+#s/\\12\b/\\frac{1}{2}/g;
+#s/\\2\b/{(2)}/g;
+#s/\\23\b/\\frac{2}{3}/g;
+#s/\\32\b/\\frac{3}{2}/g;
 #s/\\AF/\\textrm{AF}/g;
 #s/\\aut/{\\textrm{AUT}}/g;
 #s/\\b(.)_/\\overbar{$1}_/g ;
@@ -54,7 +60,10 @@
 #s/\\hatx/\\hat{x}/g ;
 #s/\\haty/\\hat{y}/g ;
 #s/\\hb2m/\\frac{\\Hbar}{2m}/g;
+#s/\\hBL/\\hat{\\BL}/g ;
+#s/\\hBp/\\hat{\\Bp}/g ;
 #s/\\hBP/\\hat{\\BP}/g ;
+#s/\\hBr/\\hat{\\Br}/g ;
 #s/\\hBR/\\hat{\\BR}/g ;
 #s/\\Hc/\\hat{H}/g;
 #s/\\Hc/H_{\\mathrm{c}}/g ;
@@ -69,7 +78,8 @@
 #s/\\ketab\b/\\ket{a,b}/g ;
 #s/\\kpsi/\\ket{\\Psi}/g ;
 #s/\\ktpsi/\\ket{\\tilde{\\Psi}}/g ;
-s/\\L_m\b/\\hat{L}_{-}/g ;
+#s/\\L_/\\hat{L}_/g ;
+#s/\\L_m\b/\\hat{L}_{-}/g ;
 #s/\\L_p\b/\\hat{L}_{+}/g ;
 #s/\\L_pm\b/\\hat{L}_{\\pm}/g ;
 #s/\\L_x\b/\\hat{L}_x/g ;
@@ -124,6 +134,7 @@ s/\\L_m\b/\\hat{L}_{-}/g ;
 #s/\\Tme/\\hat{T}_{-\\epsilon}/g ;
 #s/\\tmin\b/{\\textrm{min}}/g ;
 #s/\\tn\b/\\tilde{n}/g ;
+#s/\\tot\b/{\\textrm{tot}}/g ;
 #s/\\tp/\\tilde{p}/g ;
 #s/\\tpsi/\\tilde{\\Psi}/g ;
 #s/\\trans\b/{\\textrm{trans}}/g ;
@@ -200,13 +211,3 @@ s/\\L_m\b/\\hat{L}_{-}/g ;
 s/[Ss]chro\b/Schr\\"{o}dinger/g; # Schrodinger
 s/[Ss]chrodinger/Schr\\"{o}dinger/g; # Schrodinger
 s/\\ee/\\epsilon/g ;
-s/\\hBL/\\hat{\\BL}/g ;
-s/\\hBp/\\hat{\\Bp}/g ;
-s/\\hBr/\\hat{\\Br}/g ;
-s/\\L_/\\hat{L}_/g ;
-s/\\tot\b/{\\textrm{tot}}/g ;
-s/\\32\b/\\frac{3}{2}/g;
-s/\\23\b/\\frac{2}{3}/g;
-s/\\12\b/\\frac{1}{2}/g;
-s/\\1\b/{(1)}/g;
-s/\\2\b/{(2)}/g;

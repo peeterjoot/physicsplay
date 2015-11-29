@@ -92,9 +92,9 @@ $(LOCAL_FILES) :
 
 ensemblesForSpinOneHalf.pdf : ../phy1520/ensemblesForSpinOneHalf.tex
 
-#gradQuantumProblemSet7.pdf : ../phy1520/gradQuantumProblemSet7Problem1.tex
-#gradQuantumProblemSet7.pdf : ../phy1520/gradQuantumProblemSet7Problem2.tex
-#gradQuantumProblemSet7.pdf : ../phy1520/gradQuantumProblemSet7Problem3.tex
+gradQuantumProblemSet7.pdf : ../phy1520/gradQuantumProblemSet7Problem1.tex
+gradQuantumProblemSet7.pdf : ../phy1520/gradQuantumProblemSet7Problem2.tex
+gradQuantumProblemSet7.pdf : ../phy1520/gradQuantumProblemSet7Problem3.tex
 
 gaBasics.pdf : gaBasics.tex
 
