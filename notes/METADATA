@@ -5,6 +5,8 @@ use strict ;
 use Getopt::Long;
 
 my $doGabook = 0 ;
+my $doGabookI = 0 ;
+my $doGabookII = 0 ;
 my $doNonga = 0 ;
 my $doPhy356 = 0 ;
 my $doClassicalMechanics = 0 ;
@@ -33,8 +35,8 @@ my $filter ;
 GetOptions
 (
    'gabook!'               => \$doGabook,
-   'gabookI!'              => \$doGabook,
-   'gabookII!'             => \$doGabook,
+   'gabookI!'              => \$doGabookI,
+   'gabookII!'             => \$doGabookII,
    'phy356!'               => \$doPhy356,
    'classicalmechanics!'   => \$doClassicalMechanics,
    'phy456!'               => \$doPhy456,
@@ -59,6 +61,8 @@ GetOptions
    'history!'              => \$doHistory,
    'all'        => sub {
                           $doGabook = 1 ;
+                          $doGabookI = 1 ;
+                          $doGabookII = 1 ;
                           $doNonga = 1 ;
                           $doPhy356 = 1 ;
                           $doClassicalMechanics = 1 ;
@@ -75,7 +79,7 @@ GetOptions
                        },
 
    'help'       => sub { die
-"METADATA [-help | -history | -bib] [-mathematica [-latex|-cdf] | -matlab [-latex] | -julia | -other | -phy356 | -classicalmechanics | -phy456 | -phy454 | -phy485 | -phy450 | -phy452 | -phy487 | -gabook | -ece1254 | -ece1229 | -phy1520 ] [-redacted] [-filter dirname/]
+"METADATA [-help | -history | -bib] [-mathematica [-latex|-cdf] | -matlab [-latex] | -julia | -other | -phy356 | -classicalmechanics | -phy456 | -phy454 | -phy485 | -phy450 | -phy452 | -phy487 | -gabook | -gabookI | -gabookII | -ece1254 | -ece1229 | -phy1520 ] [-redacted] [-filter dirname/]
 
 options:
 -history hypertext history.
@@ -88,6 +92,7 @@ i.e.
 ) ;
 
 require "gabookI/METADATA" ;
+require "gabookII/METADATA" ;
 require "miscphysics/METADATA" ;
 require "phy356/METADATA" ;
 require "classicalmechanics/METADATA" ;
@@ -105,7 +110,8 @@ require "../mathematica/METADATA" ;
 require "../matlab/METADATA" ;
 require "../julia/METADATA" ;
 
-my @gabook = gabookMeta() ;
+my @gabookI = gabookIMeta() ;
+my @gabookII = gabookIIMeta() ;
 my @miscphysics = miscMeta() ;
 my @phy356 = phy356Meta() ;
 my @classicalmechanics = classicalMechMeta() ;
@@ -128,6 +134,16 @@ if ( !defined $filter )
    if ( $doGabook )
    {
       $filter = "gabook" ;
+   }
+
+   if ( $doGabookI )
+   {
+      $filter = "gabookI" ;
+   }
+
+   if ( $doGabookII )
+   {
+      $filter = "gabookII" ;
    }
 
    # mathematica for this one?
@@ -219,7 +235,18 @@ my @All ;
 
 if ( $doGabook )
 {
-   push( @All, @gabook ) ;
+   push( @All, @gabookI ) ;
+   push( @All, @gabookII ) ;
+}
+
+if ( $doGabookI )
+{
+   push( @All, @gabookI ) ;
+}
+
+if ( $doGabookII )
+{
+   push( @All, @gabookII ) ;
 }
 
 if ( $doOtherbook )
@@ -293,13 +320,23 @@ if ( $doHistory )
 }
 elsif ( $doBib )
 {
-   printBib( @gabook, @miscphysics, @phy356, @classicalmechanics, @phy456, @phy454, @phy485, @phy452, @phy450, @phy487, @ece1254, @ece1229, @otherbook, @phy1520 ) ;
+   printBib( @gabookI, @gabookII, @miscphysics, @phy356, @classicalmechanics, @phy456, @phy454, @phy485, @phy452, @phy450, @phy487, @ece1254, @ece1229, @otherbook, @phy1520 ) ;
 
-   # generate cross reference's to gabook for miscphysics.pdf
-   printBookBib( 'Exploring physics with Geometric Algebra',
-                 'gabook',
-                 'http://peeterjoot.com/archives/math2009/gabook.pdf',
-                 @gabook ) ;
+   ## generate cross reference's to gabook for miscphysics.pdf
+   #printBookBib( 'Exploring physics with Geometric Algebra',
+   #              'gabook',
+   #              'http://peeterjoot.com/archives/math2009/gabook.pdf',
+   #              @gabook ) ;
+
+   printBookBib( 'Exploring physics with Geometric Algebra, Book I',
+                 'gabookI',
+                 'http://peeterjoot.com/archives/math2015/gabookI.pdf',
+                 @gabookI ) ;
+
+   printBookBib( 'Exploring physics with Geometric Algebra, Book II',
+                 'gabookII',
+                 'http://peeterjoot.com/archives/math2015/gabookII.pdf',
+                 @gabookII ) ;
 
    printBookBib( 'Misc Physics and Math Play',
                  'miscphysics',

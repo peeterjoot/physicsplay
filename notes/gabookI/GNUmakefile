@@ -46,4 +46,7 @@ backmatter.tex : ../classicthesis.mine/backmatter.tex
 vpath %.png $(ORIG_FIGURE_DIRS)
 vpath %.pl $(ORIG_LISTING_DIRS)
 
+mathematica.tex : ../METADATA ../../mathematica/METADATA
+	(cd .. ; ./METADATA -mathematica -latex -gabook $(REDACTED) > $(THISDIR)/mathematica.tex)
+
 stokesTheoremGeometricAlgebra.pdf : calculus/stokesTheoremGeometricAlgebra.tex
