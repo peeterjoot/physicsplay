@@ -3,10 +3,14 @@
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
 %
 \makeproblem{Helium-4 atom}{gradQuantum:problemSet7:2}{ 
-%\makesubproblem{}{gradQuantum:problemSet7:2a}
 
-Consider the Helium atom with atomic number \( Z=2 \), which leads to the nuclear charge \( Z=2e \), and two electrons with charge \( -e \) each. Show that ignoring electron-electron interactions leads to a ground state energy \( E_{\textrm{He}} = 4 E_\txtH \)
+Consider the Helium atom with atomic number \( Z=2 \), which leads to the nuclear charge \( Z=2e \), and two electrons with charge \( -e \) each. 
+
+\makesubproblem{}{gradQuantum:problemSet7:2a}
+Show that ignoring electron-electron interactions leads to a ground state energy \( E_{\textrm{He}} = 4 E_\txtH \)
 where \( E_\txtH \) is the ground state energy of the hydrogen atom. 
+
+\makesubproblem{}{gradQuantum:problemSet7:2b}
 Consider the full problem which retains the Coulomb interaction between the electrons, i.e.
 
 \begin{dmath}\label{eqn:gradQuantumProblemSet7Problem2:20}
@@ -36,8 +40,230 @@ Compare with numerical estimates of the energy.
 } % makeproblem
 
 \makeanswer{gradQuantum:problemSet7:2}{ 
-%\makeSubAnswer{}{gradQuantum:problemSet7:2a}
+\makeSubAnswer{}{gradQuantum:problemSet7:2a}
 
+To calculate \( \Bp_j^2 \psi \) first compute the Laplacian of an exponential
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet7Problem2:60}
+\spacegrad^2 e^{\phi}
+=
+\spacegrad \cdot \spacegrad e^\phi
+=
+\spacegrad \cdot \lr{ e^\phi \spacegrad \phi }
+=
+e^\phi \spacegrad^2 \phi + \lr{ \spacegrad \phi }^2 e^\phi
+=
+\lr{ \spacegrad^2 \phi + \lr{ \spacegrad \phi }^2  } e^\phi.
+\end{dmath}
+
+For \( \phi = -r/a \), we have
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet7Problem2:80}
+\spacegrad \phi 
+=
+- \inv{a} \spacegrad \sqrt{ \Bx^2 }
+=
+- \inv{a} \spacegrad \sqrt{ x_k x_k }
+=
+- \inv{a} \inv{2 r} \Be_j ( 2 \partial_j x_k ) x_k 
+=
+- \frac{\Bx}{a r},
+\end{dmath}
+
+and
+\begin{dmath}\label{eqn:gradQuantumProblemSet7Problem2:100}
+\spacegrad^2 \phi
+=
+-\inv{a} \spacegrad \cdot \frac{ \Bx}{ r}
+=
+-\inv{a} \lr{
+\inv{r} \spacegrad \cdot \Bx
++
+\Bx \cdot \spacegrad \inv{ r }
+}
+=
+-\inv{a} \lr{
+\frac{3}{r}
++
+\Bx \cdot \lr{ -\inv{r^3} \Bx }
+}
+=
+-\inv{a} \lr{
+\frac{3}{r}
+-
+\frac{1}{r}
+}
+=
+-\frac{2}{a r}.
+\end{dmath}
+
+This gives
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet7Problem2:120}
+\spacegrad^2 e^{-r/a} = \inv{a} \lr{ \inv{a} -\frac{2}{r} } e^{-r/a},
+\end{dmath}
+
+so the kinetic portion of the Hamiltonian action on this trial function is
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet7Problem2:140}
+\frac{\Bp_1^2}{2m} \psi
++
+\frac{\Bp_2^2}{2m} \psi
+=
+-\frac{\Hbar^2}{2m a} \lr{ \frac{2}{a} -\frac{2}{ r_1}  -\frac{2}{ r_2} } e^{-(r_1 + r_2)/a}
+=
+\frac{\Hbar^2}{m a} \lr{ \frac{1}{r_1} + \frac{1}{r_2} - \inv{a} } e^{-(r_1 + r_2)/a}.
+\end{dmath}
+
+With \( a = a_0 \), the wavefunction \( \psi = e^{-r/a} \) is the unnormalized eigenfunction for the Hydrogen ground state, which means that the Hydrogen ground state energy is given by
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet7Problem2:160}
+E_\txtH
+= 
+\frac{
+   \bra{ \psi } 
+   \lr{ -\frac{\Hbar^2}{2m a} \lr{ \inv{a} -\frac{2}{ r} } - e^2 \inv{4 \pi \epsilon_0 r} }
+   \ket{ \psi }
+}
+{ \braket{ \psi }{ \psi } }
+=
+   \lr{ \frac{\Hbar^2}{m a} - e^2 \inv{4 \pi \epsilon_0 } } 
+\frac{
+\bra{ \psi } \inv{r} \ket{ \psi }
+}
+{ 
+   \braket{ \psi }{ \psi } 
+}
+   - \frac{\Hbar^2}{2m a^2} .
+\end{dmath}
+
+For the normalization factor we have
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet7Problem2:180}
+\begin{aligned}
+\braket{ \psi }{ \psi }
+&=
+4 \pi \int_0^\infty r^2 dr e^{-2 r/a} \\
+&=
+{4 \pi}\frac{a^3}{2^3} \int_0^\infty r^2 dr e^{-r} \\
+&=
+\inv{2} { \pi}{a^3} \int_0^\infty 2r dr e^{-r} \\
+&=
+{\pi}{a^3} \int_0^\infty dr e^{-r} \\
+&=
+{\pi}{a^3},
+\end{aligned}
+\end{dmath}
+
+and for the inverse radial expectation we have
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet7Problem2:200}
+\bra{ \psi } \inv{r} \ket{ \psi }
+=
+4 \pi \int_0^\infty r dr e^{-2 r/a}
+=
+{4 \pi}\frac{a^2}{2^2} \int_0^\infty r dr e^{-r}
+=
+{\pi}{a^2},
+\end{dmath}
+
+so
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet7Problem2:220}
+E_\txtH 
+= 
+\lr{ \frac{\Hbar^2}{m a} - e^2 \inv{4 \pi \epsilon_0 } } \frac{\pi a^2}{\pi a^3}
+   - \frac{\Hbar^2}{2m a^2} ,
+\end{dmath}
+
+which simplifies to
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet7Problem2:240}
+E_\txtH 
+= 
+\frac{\Hbar^2}{2 m a^2} - \frac{e^2}{4 \pi \epsilon_0 a }.
+\end{dmath}
+
+Now, assuming that \( \psi = e^{-(r_1 + r_2)/a} \) is the unnormalized ground state wavefunction for the Helium atom without electron-electron interaction, that ground state energy is given by
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet7Problem2:260}
+E_{\textrm{He}}
+= 
+\frac{
+   \bra{ \psi } 
+   \lr{ 
+      -\frac{\Hbar^2}{m a} \lr{ \inv{a} -\frac{1}{ r_1}  -\frac{1}{ r_2} } 
+      - 2 e^2 \inv{4 \pi \epsilon_0 } \lr{ \inv{r_1} + \inv{r_2} } 
+   }
+   \ket{ \psi }
+}
+{ \braket{ \psi }{ \psi } }
+=
+   \lr{ \frac{\Hbar^2}{m a} - e^2 \inv{2 \pi \epsilon_0 } } 
+\frac{
+\bra{ \psi } \inv{r_1} + \inv{r_2} \ket{ \psi }
+}
+{ 
+   \braket{ \psi }{ \psi } 
+}
+   - \frac{\Hbar^2}{m a^2} .
+\end{dmath}
+
+This time the normalization is given by
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet7Problem2:280}
+\begin{aligned}
+\braket{ \psi }{ \psi } 
+&= 
+\lr{ 4 \pi}^2 
+\int_0^\infty r_1^2 dr_1 e^{-2 r_1/a}
+\int_0^\infty r_2^2 dr_2 e^{-2 r_2/a} \\
+&=
+\lr{ 4 \pi}^2 \lr{ \frac{a}{2} }^6
+\lr{ \int_0^\infty r^2 dr e^{-r} }^2 \\
+&=
+2^{4 - 6 + 2}
+\pi^2 a^6 \\
+&= \pi^2 a^6.
+\end{aligned}
+\end{dmath}
+
+We also need the inverse radial expectations, say, that of \( 1/r_1 \), which is
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet7Problem2:300}
+\bra{ \psi } \inv{r_1} \ket{ \psi } 
+= 
+\lr{ 4 \pi}^2 
+\int_0^\infty r_1 dr_1 e^{-2 r_1/a}
+\int_0^\infty r_2^2 dr_2 e^{-2 r_2/a}
+=
+\lr{ 4 \pi}^2 \lr{ \frac{a}{2} }^5
+\lr{ \int_0^\infty r dr e^{-r} }
+\lr{ \int_0^\infty r^2 dr e^{-r} }
+=
+2^{4 - 5 + 1}
+\pi^2 a^5
+= \pi^2 a^5.
+\end{dmath}
+
+This gives
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet7Problem2:320}
+E_{\textrm{He}}
+=
+   \lr{ \frac{\Hbar^2}{m a} - e^2 \inv{2 \pi \epsilon_0 } } 
+\frac{ 2 \pi^2 a^5 }
+{ 
+   \pi^2 a^6
+}
+   - \frac{\Hbar^2}{m a^2} 
+=
+   \frac{\Hbar^2}{m a^2} - e^2 \inv{\pi \epsilon_0 a },
+\end{dmath}
+
+%or
+
+\makeSubAnswer{}{gradQuantum:problemSet7:2b}
 TODO.
 
 }
