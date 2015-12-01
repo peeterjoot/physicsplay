@@ -258,7 +258,7 @@ E_\txtH
 }
 %\end{dmath}
 
-Numerically this is \( -14 \si{eV} \).
+Numerically this is about \( -13.6 \si{eV} \).
 
 \paragraph{Calculating Helium ground state energy}
 
@@ -314,7 +314,7 @@ E_{\textrm{He}}
    \frac{\Hbar^2}{m a^2} - e^2 \inv{\pi \epsilon_0 a }.
 \end{dmath}
 
-It appears that the value of \( a \) that minimizes this energy is not the bohr radius for this wave function, so the assumption that \( \psi(r_1, r_2) = e^{-(r_1 + r_2/a_0} \) was an eigenfunction for the Hamiltonian was incorrect.  Performing the variation, we find that the minimum energy is found at 
+It appears that the value of \( a \) that minimizes this energy is not the bohr radius for this wave function, so the assumption that \( \psi(r_1, r_2) = e^{-(r_1 + r_2)/a_0} \) was an eigenfunction for the Hamiltonian was incorrect.  Performing the variation, we find that the minimum energy is found at 
 
 \begin{dmath}\label{eqn:gradQuantumProblemSet7Problem2:640}
 a = \inv{2} \frac{4 \pi \epsilon_0 \Hbar^2}{m e^2},
@@ -331,7 +331,9 @@ E_{\textrm{He}}
 \frac{e^2}{\pi \epsilon_0 a_0}.
 }
 
-This is \( E_{\textrm{He}} = 8 E_\txtH\), a value of \( 110 eV \) not \( E_{\textrm{He}} = 4 E_\txtH\) as expected.  FIXME: This probably indicates that the ground state wavefunction for the no electron-electron interaction Helium Hamiltonian is not of the form that was guessed.
+This is \( E_{\textrm{He}} = 8 E_\txtH\), a value of \( 110 eV \) not \( E_{\textrm{He}} = 4 E_\txtH\) as expected.  
+
+FIXME: This probably indicates that the ground state wavefunction for the no electron-electron interaction Helium Hamiltonian is not of the form that was guessed.  Without the interaction term, the equations should be separable.  Do that and see if that gives this \( 4 \times \) result directly.
 
 \makeSubAnswer{}{gradQuantum:problemSet7:2b}
 
@@ -348,42 +350,42 @@ A demonstration of this identity and the contour used to evaluate this integral 
 \frac{e^2}{4 \pi \epsilon_0} \bra{\psi} \inv{\Abs{\Br_1 - \Br_2}} \ket{\psi}
 =
 \frac{e^2}{4 \pi \epsilon_0}
-(2\pi)^2
-\int dr_1 d\theta_1 r_1^2 \sin(\theta_1)
-\int dr_2 d\theta_2 r_2^2 \sin(\theta_2)
-e^{ -(r_1 + r_2)/a}
+\int 2 \pi dr_1 d\theta_1 r_1^2 \sin(\theta_1)
+\int 2 \pi dr_2 d\theta_2 r_2^2 \sin(\theta_2)
+e^{ -2(r_1 + r_2)/a}
 \inv{2 \pi^2} 
 \int d^3 k \frac{e^{i \Bk \cdot \lr{ \Br_1 - \Br_2} }}{\Bk^2}
 =
-\frac{e^2}{2 \pi \epsilon_0}
+\frac{e^2}{4 \pi \epsilon_0}
+\inv{2 \pi^2} 
 \int d^3 k \inv{\Bk^2}
-\int dr_1 d\theta_1 r_1^2 \sin(\theta_1) e^{-r_1/a + i \Bk \cdot \Br_1}
-\int dr_2 d\theta_2 r_2^2 \sin(\theta_2) e^{-r_2/a - i \Bk \cdot \Br_2}
+\int 2 \pi dr_1 d\theta_1 r_1^2 \sin(\theta_1) e^{-2r_1/a + i \Bk \cdot \Br_1}
+\int 2 \pi dr_2 d\theta_2 r_2^2 \sin(\theta_2) e^{-2r_2/a - i \Bk \cdot \Br_2}
 \end{dmath}
 
 The spatial domain integrals can now be evaluated separately.  With a coordinate system picked so that \( \Bk = \pm k \zcap \), that gives
 
 \begin{dmath}\label{eqn:gradQuantumProblemSet7Problem2:460}
 \begin{aligned}
-\int dr d\theta r^2 \sin(\theta) e^{-r/a + i \Bk \cdot \Br}
+2 \pi \int dr d\theta r^2 \sin(\theta) e^{-2r/a + i \Bk \cdot \Br}
 &=
-\int_0^\infty dr r^2 e^{-r/a}
+2 \pi \int_0^\infty dr r^2 e^{-2r/a}
 \int_0^\pi d\theta
 \frac{d}{d\theta} (-\cos(\theta)) 
 e^{\pm i k r \cos\theta} \\
 &=
-\int_0^\infty dr r^2 e^{-r/a}
+2 \pi \int_0^\infty dr r^2 e^{-2r/a}
 \int_{-1}^1 du
 e^{\mp i k r u} \\
 &=
-\int_0^\infty dr r^2 e^{-r/a}
+2 \pi \int_0^\infty dr r^2 e^{-2r/a}
 \frac{e^{\mp i k r} - e^{\pm i k r} }{ \mp i k r } \\
 &=
-\frac{2}{k} \int_0^\infty dr r e^{-r/a} \sin( k r ) \\
+2 \pi \frac{2}{k} \int_0^\infty dr r e^{-2r/a} \sin( k r ) \\
 &=
-\frac{2}{k} \int_0^\infty dr r e^{-r/a} \sin( k r ) \\
+2 \pi \frac{2}{k} \int_0^\infty dr r e^{-2r/a} \sin( k r ) \\
 &= 
-\frac{4 a^3}{\lr{1 + a^2 k^2 }^2}.
+\frac{16 \pi a^3}{\lr{1 + a^2 k^2 }^2}.
 \end{aligned}
 \end{dmath}
 
@@ -392,23 +394,26 @@ The specific orientation used to evaluate the integral no longer matters, and we
 \begin{dmath}\label{eqn:gradQuantumProblemSet7Problem2:480}
 \frac{e^2}{4 \pi \epsilon_0} \bra{\psi} \inv{\Abs{\Br_1 - \Br_2}} \ket{\psi}
 =
-\frac{e^2}{2 \pi \epsilon_0}
+\frac{e^2}{4 \pi \epsilon_0}
+\inv{2 \pi^2} 
 \int d^3 k \inv{\Bk^2}
-\frac{4^2 a^6}{\lr{1 + a^2 k^2 }^4}
+\frac{(16 \pi a^3)^2}{\lr{1 + a^2 k^2 }^4}
 =
-\frac{8 e^2 a^6}{\pi \epsilon_0}
+\frac{e^2}{4 \pi \epsilon_0}
+\inv{2 \pi^2} 
 (4\pi) 
+16^2 \pi^2 a^6
 \int dk k^2 \inv{\Bk^2}
 \inv{\lr{1 + a^2 k^2 }^4}
+%=
+%\frac{32 e^2 a^6}{\epsilon_0}
+%\int dk 
+%\inv{\lr{1 + a^2 k^2 }^4}
+%=
+%\frac{32 e^2 a^6}{\epsilon_0}
+%\frac{5 \pi}{32 a}
 =
-\frac{32 e^2 a^6}{\epsilon_0}
-\int dk 
-\inv{\lr{1 + a^2 k^2 }^4}
-=
-\frac{32 e^2 a^6}{\epsilon_0}
-\frac{5 \pi}{32 a}
-=
-\frac{5 e^2 a^5 \pi}{\epsilon_0},
+\frac{5 \pi e^2 a^5}{32 \epsilon_0},
 \end{dmath}
 
 and finally
@@ -416,9 +421,9 @@ and finally
 \begin{dmath}\label{eqn:gradQuantumProblemSet7Problem2:500}
 \frac{e^2}{4 \pi \epsilon_0} \bra{\psi} \inv{\Abs{\Br_1 - \Br_2}} \ket{\psi}/\braket{\psi}{\psi}
 =
-\frac{5 e^2 a^5 \pi}{\epsilon_0 } \inv{\pi^2 a^6}
+\frac{5 \pi e^2 a^5}{32 \epsilon_0 } \inv{\pi^2 a^6}
 =
-\frac{5 e^2 }{\epsilon_0 \pi a}.
+\frac{5 e^2 }{32 \pi \epsilon_0 a}.
 \end{dmath}
 
 With the electron-electron interaction, the total energy for the Helium ground state is
@@ -426,7 +431,7 @@ With the electron-electron interaction, the total energy for the Helium ground s
 \begin{dmath}\label{eqn:gradQuantumProblemSet7Problem2:520}
 E_{\textrm{He}}
 = 
-\frac{\Hbar^2}{m a^2} + 4 e^2 \inv{\pi \epsilon_0 a }.
+\frac{\Hbar^2}{m a^2} -\frac{27}{32} e^2 \inv{\pi \epsilon_0 a }.
 \end{dmath}
 
 For the minimum we want to solve
@@ -436,14 +441,16 @@ For the minimum we want to solve
 = 
 \PD{a}{E}
 = 
--2 \frac{\Hbar^2}{m a^3} - 4 e^2 \inv{\pi \epsilon_0 a^2 },
+-2 \frac{\Hbar^2}{m a^3} + \frac{27}{32} e^2 \inv{\pi \epsilon_0 a^2 },
 \end{dmath}
 
 which has the minimum at
 
 \begin{dmath}\label{eqn:gradQuantumProblemSet7Problem2:560}
-a = - \frac{\Hbar^2 \pi \epsilon_0}{2m e^2}.
+a = - \frac{64 \Hbar^2 \pi \epsilon_0}{27 m e^2}.
 \end{dmath}
+
+Note that \( m \) should really be treated as the reduced mass of the electron, but doing so isn't numerically significant.  The final result for the variational ground state energy is
 
 %Noting that \( a_0 = \Hbar^2/m e^2 \),
 %the ground state energy, after substituting this value of \( a \) is
@@ -452,9 +459,18 @@ a = - \frac{\Hbar^2 \pi \epsilon_0}{2m e^2}.
 \boxedEquation{eqn:gradQuantumProblemSet7Problem2:600}{
 E_{\textrm{He}}
 = 
--\frac{4 m e^4}{\Hbar^2 \pi^2 \epsilon_0^2}.
- %= - \frac{4 e^2}{ a_0 \pi^2 \epsilon_0^2}.
+- \lr{\frac{27}{16}}^2 \frac{e^2}{4 \pi \epsilon_0 a_0} \approx -77.5 \si{eV}
 }
 %\end{dmath}
+
+In atomic units this is 
+
+\begin{dmath}\label{eqn:gradQuantumProblemSet7Problem2:n}
+E_{\textrm{He}}
+= 
+- \lr{\frac{27}{16}}^2 \frac{e^2}{a_0} \approx -2.848 \frac{e^2}{a_0}.
+\end{dmath}
+
+In \citep{desai2009quantum} the measured value is stated as \( -2.90 \ifrac{e^2}{a_0} \).  Table 1 of \citep{aznabayev2015energy}, which lists high precision calculations of all the energy levels, has \( -2.903724 \ifrac{e^2}{a_0} \) for the 1s energy level.
 
 }
