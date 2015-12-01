@@ -211,3 +211,6 @@ s/[Ss]chro\b/Schr\\"{o}dinger/g; # Schrodinger
 s/[Ss]chrodinger/Schr\\"{o}dinger/g; # Schrodinger
 s/\\0\b/{(0)}/g;
 s/\\ee/\\epsilon/g ;
+s/\\max\b/{\\mathrm{max}}/g ;
+s/\\min\b/{\\mathrm{min}}/g ;
+s/\\at\b/{\\mathrm{at}}/g ;
