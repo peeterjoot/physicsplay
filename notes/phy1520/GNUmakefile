@@ -59,8 +59,10 @@ gradQuantumProblemSet6.pdf : ../phy1520/gradQuantumProblemSet6Problem1.tex
 gradQuantumProblemSet6.pdf : ../phy1520/gradQuantumProblemSet6Problem2.tex
 gradQuantumProblemSet6.pdf : ../phy1520/gradQuantumProblemSet6Problem3.tex
 
-#ps5matlab.tex : ../METADATA ../../matlab/METADATA
-#	(cd .. ; ./METADATA -matlab -latex -phy1520 -filter phy1520/ps5/ ) > $@
-#
-#ps5mathematica.tex : ../METADATA ../../mathematica/METADATA
-#	(cd .. ; ./METADATA -mathematica -latex -phy1520 -filter phy1520/ps5/ ) > $@
+gradQuantumProblemSet7.pdf : ../phy1520/gradQuantumProblemSet7Problem1.tex
+gradQuantumProblemSet7.pdf : ../phy1520/gradQuantumProblemSet7Problem2.tex
+gradQuantumProblemSet7.pdf : ../phy1520/gradQuantumProblemSet7Problem3.tex
+gradQuantumProblemSet7.pdf : ps7mathematica.tex
+
+ps7mathematica.tex : ../METADATA ../../mathematica/METADATA
+	(cd .. ; ./METADATA -mathematica -latex -phy1520 -filter phy1520/ps7/ ) > $@
