@@ -21,6 +21,7 @@ INCOMPLETE += censor1l.tex
 INCOMPLETE += censor1p.tex
 INCOMPLETE += censor1pg.tex
 INCOMPLETE += stokespost.tex
+INCOMPLETE += ps7mathematica.tex
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
@@ -95,6 +96,7 @@ ensemblesForSpinOneHalf.pdf : ../phy1520/ensemblesForSpinOneHalf.tex
 gradQuantumProblemSet7.pdf : ../phy1520/gradQuantumProblemSet7Problem1.tex
 gradQuantumProblemSet7.pdf : ../phy1520/gradQuantumProblemSet7Problem2.tex
 gradQuantumProblemSet7.pdf : ../phy1520/gradQuantumProblemSet7Problem3.tex
+gradQuantumProblemSet7.pdf : ps7mathematica.tex
 
 gaBasics.pdf : gaBasics.tex
 
@@ -172,8 +174,9 @@ myrefs.bib: ../myrefs.bib.in ../METADATA
 	cp ../myrefs.bib.in myrefs.bib
 	(cd .. ; ./METADATA -bib >> $(THISDIR)/myrefs.bib)
 
-#ps3mathematica.tex : ../METADATA ../../mathematica/METADATA
-#	(cd .. ; ./METADATA -mathematica -latex -ece1229 -filter ece1229/ps3/ ) > $@
+ps7mathematica.tex : ../METADATA ../../mathematica/METADATA
+	(cd .. ; ./METADATA -mathematica -latex -phy1520 -filter phy1520/ps7/ ) > $@
+
 opt/%.pdf : %.pdf
 	mkdir -p opt
 	$(QPDF) --linearize $< $@
