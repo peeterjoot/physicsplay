@@ -1,8 +1,6 @@
 #s,\\E{(.*?)},{E_{k $1}^\\nought},g ;
 #s/\\0bcs/0_{\\mathrm{BCS}}/g ;
-#s/\\1\b/{(1)}/g;
 #s/\\12\b/\\frac{1}{2}/g;
-#s/\\2\b/{(2)}/g;
 #s/\\23\b/\\frac{2}{3}/g;
 #s/\\32\b/\\frac{3}{2}/g;
 #s/\\AF/\\textrm{AF}/g;
@@ -210,6 +208,8 @@
 s/[Ss]chro\b/Schr\\"{o}dinger/g; # Schrodinger
 s/[Ss]chrodinger/Schr\\"{o}dinger/g; # Schrodinger
 s/\\0\b/{(0)}/g;
+s/\\1\b/{(1)}/g;
+s/\\2\b/{(2)}/g;
 s/\\ee/\\epsilon/g ;
 s/\\max\b/{\\mathrm{max}}/g ;
 s/\\min\b/{\\mathrm{min}}/g ;
