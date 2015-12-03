@@ -25,7 +25,7 @@ Peeter's lecture notes from class.  These may be incoherent and rough.
 
 These are notes for the UofT course PHY1520, Graduate Quantum Mechanics, taught by Prof. Paramekanti, covering \textchapref{{5}} \citep{sakurai2014modern} content.
 
-\paragraph{Pertubation theory}
+\section{Simplest pertubation example.}
 
 Given a \( 2 \times 2 \) Hamiltonian \( H = H_0 + V \), where
 
@@ -34,34 +34,50 @@ H =
 \begin{bmatrix}
 a & c \\
 c^\conj & b
-\end{bmatrix}
-\end{dmath}
-
-which has eigenvalues
-
-\begin{dmath}\label{eqn:qmLecture20:40}
-\lambda_\pm = \frac{a + b}{2} \pm \sqrt{ \lr{ \frac{a - b}{2}}^2 + \Abs{c}^2 }.
-\end{dmath}
-
-If \( c = 0 \), 
-
-\begin{dmath}\label{eqn:qmLecture20:60}
-H_0 = 
-\begin{bmatrix}
-a & 0 \\
-0 & b
 \end{bmatrix},
 \end{dmath}
 
-so 
+note that if \( c = 0 \) is
+
+\begin{equation}\label{eqn:qmLecture20:60}
+H = H_0 = 
+\begin{bmatrix}
+a & 0 \\
+0 & b
+\end{bmatrix}.
+\end{equation}
+
+The off diagonal terms can be considered to be a pertubation
 
 \begin{dmath}\label{eqn:qmLecture20:80}
 V = 
 \begin{bmatrix}
 0 & c \\
 c^\conj & 0
-\end{bmatrix}.
+\end{bmatrix},
 \end{dmath}
+
+with \( H = H_0 + V \).
+
+\paragraph{Energy levels after pertubation}
+
+We can solve for the eigenvalues of \( H \) easily, finding
+
+\begin{dmath}\label{eqn:qmLecture20:40}
+\lambda_\pm = \frac{a + b}{2} \pm \sqrt{ \lr{ \frac{a - b}{2}}^2 + \Abs{c}^2 }.
+\end{dmath}
+
+Plots of a few \( a,b \) variations of \( \lambda_{\pm} \) are shown in \cref{fig:lecture20:lecture20Fig3}.  The quadratic (non-degenerate) domain is found near the \( c = 0 \) points of all but the first ( \( a = b \) ) plot, and the degenerate (linear in \( \Abs{c}^2 \)) regions are visible for larger values of \( c \).
+
+% FIXME: nbref: from phy1520:visualizationOfEigenvaluesOfTwoByTwoHermitianMatrix.nb
+\imageFourFiguresTwoLines
+{../../figures/phy1520/lecture20Fig3}
+{../../figures/phy1520/lecture20Fig4}
+{../../figures/phy1520/lecture20Fig5}
+{../../figures/phy1520/lecture20Fig6}
+{Plots of \( \lambda_{\pm} \) for \((a,b) \in \setlr{(1,1),(1,0),(1,5),(-8,8)}\)}{fig:lecture20:lecture20Fig3}{scale=0.4}
+
+\paragraph{Some approximations}
 
 Suppose that \( \Abs{c} \ll \Abs{a - b} \), then
 
@@ -75,41 +91,58 @@ If  \( a > b \), then
 \lambda_\pm \approx \frac{a + b}{2} \pm \frac{a - b}{2} \lr{ 1 + 2 \frac{\Abs{c}^2}{\lr{a - b}^2} }.
 \end{dmath}
 
-\begin{equation}\label{eqn:qmLecture20:140}
-\begin{aligned}
-\lambda_{+} &= a + \frac{\Abs{c}^2}{a - b} \\
-\lambda_{-} &= b + \frac{\Abs{c}^2}{a - b}.
-\end{aligned}
-\end{equation}
+\begin{dmath}\label{eqn:qmLecture20:140}
+\lambda_{+} 
+= \frac{a + b}{2} + \frac{a - b}{2} \lr{ 1 + 2 \frac{\Abs{c}^2}{\lr{a - b}^2} }
+= a + \lr{a - b} \frac{\Abs{c}^2}{\lr{a - b}^2}
+= a + \frac{\Abs{c}^2}{a - b},
+\end{dmath}
 
-This adiabatic evolution displays a ``level repulsion'', quadradic in \( \Abs{c} \) as sketched in \cref{fig:lecture20:lecture20Fig1}, and is described as a non-degenerate perbutation.
+and
+\begin{dmath}\label{eqn:qmLecture20:680}
+\lambda_{-} 
+= \frac{a + b}{2} - \frac{a - b}{2} \lr{ 1 + 2 \frac{\Abs{c}^2}{\lr{a - b}^2} }
+=
+b + \lr{a - b} \frac{\Abs{c}^2}{\lr{a - b}^2} 
+= b + \frac{\Abs{c}^2}{a - b}.
+\end{dmath}
 
-\imageFigure{../../figures/phy1520/lecture20Fig1}{Adiabatic (non-degenerate) pertubation}{fig:lecture20:lecture20Fig1}{0.2}
+This adiabatic evolution displays a ``level repulsion'', quadradic in \( \Abs{c} \),
+% as sketched in \cref{fig:lecture20:lecture20Fig1}, 
+and is described as a non-degenerate perbutation.
+
+%\imageFigure{../../figures/phy1520/lecture20Fig1}{Adiabatic (non-degenerate) pertubation}{fig:lecture20:lecture20Fig1}{0.2}
 
 If \( \Abs{c} \gg \Abs{a -b} \), then
 
 \begin{dmath}\label{eqn:qmLecture20:160}
-\lambda_\pm \approx \frac{a + b}{2} \pm \Abs{c} \pm \frac{\lr{a - b}^2}{4 \Abs{c}} 
+\lambda_\pm 
+= \frac{a + b}{2} \pm \Abs{c} \sqrt{ 1 + \inv{\Abs{c}^2} \lr{ \frac{a - b}{2}}^2 }
+\approx \frac{a + b}{2} \pm \Abs{c} \lr{ 1 + \inv{2 \Abs{c}^2} \lr{ \frac{a - b}{2}}^2 }
+= \frac{a + b}{2} \pm \Abs{c} \pm \frac{\lr{a - b}^2}{8 \Abs{c}}.
 \end{dmath}
 
-Here we loose the adiabaticity, and have ``level repulsion'' that is linear in \( \Abs{c} \), as sketched in \cref{fig:lecture20:lecture20Fig2}.  We no longer have the sign of \( a - b \) in the expansion.  This is described as a degenerate perbutation.
+Here we loose the adiabaticity, and have ``level repulsion'' that is linear in \( \Abs{c} \).
+%, as sketched in \cref{fig:lecture20:lecture20Fig2}.  
+We no longer have the sign of \( a - b \) in the expansion.  This is described as a degenerate perbutation.
 
-\imageFigure{../../figures/phy1520/lecture20Fig2}{Degenerate perbutation}{fig:lecture20:lecture20Fig2}{0.2}
+%\imageFigure{../../figures/phy1520/lecture20Fig2}{Degenerate perbutation}{fig:lecture20:lecture20Fig2}{0.2}
 
-\paragraph{General non-degenerate pertubation}
+\section{General non-degenerate pertubation}
 
-Given an unperturbed system with
+Given an unperturbed system with solutions of the form
 
 \begin{equation}\label{eqn:qmLecture20:180}
 H_0 \ket{n^{(0)}} = E_n^{(0)} \ket{n^{(0)}},
 \end{equation}
 
-where the pertubated Hamiltonian equation is
+we want to solve the perturbed Hamiltonian equation 
+
 \begin{equation}\label{eqn:qmLecture20:200}
 \lr{ H_0 + \lambda V } \ket{ n } = \lr{ E_n^{(0)} + \Delta n } \ket{n}.
 \end{equation}
 
-Here \( \Delta n \) is an energy shift as that goes to zero as \( \lambda \rightarrow 0 \).  We can write this has
+Here \( \Delta n \) is an energy shift as that goes to zero as \( \lambda \rightarrow 0 \).  We can write this as
 
 \begin{equation}\label{eqn:qmLecture20:220}
 \lr{ E_n^{(0)} - H_0 } \ket{ n } = \lr{ \lambda V - \Delta_n } \ket{n}.
@@ -127,13 +160,13 @@ This gets us into trouble if \( \lambda \rightarrow 0 \), which can be fixed by 
 \ket{n} = \lr{ E_n^{(0)} - H_0 }^{-1} \lr{ \lambda V - \Delta_n } \ket{n} + \ket{ n^{(0)} },
 \end{equation}
 
-which is also a solution to \cref{eqn:qmLecture20:220}.  We want to ask if 
+which can be seen to be a solution to \cref{eqn:qmLecture20:220}.  We want to ask if 
 
 \begin{equation}\label{eqn:qmLecture20:280}
 \lr{ \lambda V - \Delta_n } \ket{n} ,
 \end{equation}
 
-contain a bit of \( \ket{ n^{(0)} } \)?  To determine this act with \( \bra{n^{(0)}} \) on the left
+contains a bit of \( \ket{ n^{(0)} } \)?  To determine this act with \( \bra{n^{(0)}} \) on the left
 
 \begin{dmath}\label{eqn:qmLecture20:300}
 \bra{ n^{(0)} } \lr{ \lambda V - \Delta_n } \ket{n}
@@ -145,7 +178,7 @@ contain a bit of \( \ket{ n^{(0)} } \)?  To determine this act with \( \bra{n^{(
 0.
 \end{dmath}
 
-We see that \( \ket{n} \) is entirely orthogonal to \( \ket{n^{(0)}} \).
+This shows that \( \ket{n} \) is entirely orthogonal to \( \ket{n^{(0)}} \).
 
 Define a projection operator
 
@@ -164,16 +197,22 @@ Define a rejection operator
 \ket{m^{(0)}}\bra{m^{(0)}}.
 \end{dmath}
 
-This allow us to write
+Because \( \ket{n} \) has no component in the direction \( \ket{n^{(0)}} \), the rejection operator can be inserted much like we normally do with the identity operator, yielding
 
 \begin{dmath}\label{eqn:qmLecture20:360}
-\ket{n} = \lr{ E_n^{(0)} - H_0 }^{-1} \overbar{P}_n \lr{ \lambda V - \Delta_n } \ket{n} + \ket{ n^{(0)} }.
+\ket{n}' = \lr{ E_n^{(0)} - H_0 }^{-1} \overbar{P}_n \lr{ \lambda V - \Delta_n } \ket{n} + \ket{ n^{(0)} },
 \end{dmath}
 
-If we suppose that the unknown state and unknown energy difference operator can be expanded in a \( \lambda \) power series, say
+valid for any initial \( \ket{n} \).
+
+\paragraph{Power series pertubation expansion}
+
+Instead of iterating, suppose that the unknown state and unknown energy difference operator can be expanded in a \( \lambda \) power series, say
 
 \begin{dmath}\label{eqn:qmLecture20:380}
-\ket{n} = \ket{n_0} 
+\ket{n} 
+= 
+\ket{n_0} 
 + \lambda \ket{n_1} 
 + \lambda^2 \ket{n_2} 
 + \lambda^3 \ket{n_3} + \cdots
@@ -223,27 +262,72 @@ E_n^{(0)} - E_m^{(0)}
 }
 %\end{equation}
 
-Note that
+From \cref{eqn:qmLecture20:220}, note that
 
-%\begin{equation}\label{eqn:qmLecture20:500}
-\boxedEquation{eqn:qmLecture20:520}{
-\Delta_n = \bra{n^{(0)}} \lambda V \ket{n}
+\begin{equation}\label{eqn:qmLecture20:500}
+\Delta_n = 
+\frac{\bra{n^{(0)}} \lambda V \ket{n}}{\braket{n^0}{n}},
+\end{equation}
+
+however, we will normalize by setting \( \braket{n^0}{n} = 1 \), so
+
+%\begin{equation}\label{eqn:qmLecture20:521}
+\boxedEquation{eqn:qmLecture20:521}{
+\Delta_n = 
+\bra{n^{(0)}} \lambda V \ket{n}.
 }
 %\end{equation}
 
 \paragraph{to \( O(\lambda^0) \) }
 
+If all \( \lambda^n, n > 0 \) are zero, then we have
+
+\begin{subequations}
+\label{eqn:qmLecture20:780}
+\begin{dmath}\label{eqn:qmLecture20:740}
+\ket{n_0} 
+=
+ \ket{ n^{(0)} }
++
+\sum_{m \ne n} 
+\frac{\ket{m^{(0)}}\bra{m^{(0)}}}
+{
+E_n^{(0)} - E_m^{(0)}
+}
+ \lr{ - \Delta_{n_0} } \ket{n_0} 
+\end{dmath}
+\begin{dmath}\label{eqn:qmLecture20:800}
+\Delta_{n_0} \braket{n^{(0)}}{n_0} = 0
+\end{dmath}
+\end{subequations}
+
+so
+
 \begin{dmath}\label{eqn:qmLecture20:540}
 \begin{aligned}
 \ket{n_0} &= \ket{n^{(0)}} \\
-\Delta_{n} &= 0.
+\Delta_{n_0} &= 0.
 \end{aligned}
 \end{dmath}
 
 \paragraph{to \( O(\lambda^1) \) }
 
+Requiring identity for all \( \lambda^1 \) terms means
+
+\begin{dmath}\label{eqn:qmLecture20:760}
+\ket{n_1} \lambda
+=
+\sum_{m \ne n} 
+\frac{\ket{m^{(0)}}\bra{m^{(0)}}}
+{
+E_n^{(0)} - E_m^{(0)}
+}
+ \lr{ \lambda V - \Delta_{n_1} \lambda } \ket{n_0},
+\end{dmath}
+
+so
+
 \begin{dmath}\label{eqn:qmLecture20:560}
-\ket{n_1} 
 \ket{n_1} 
 = 
 \sum_{m \ne n} 
@@ -253,10 +337,16 @@ Note that
 {
 E_n^{(0)} - E_m^{(0)}
 }
-\lr{ V - \Delta_{n_1} } \ket{n_0}
+\lr{ V - \Delta_{n_1} } \ket{n_0}.
 \end{dmath}
 
-So
+With the assumption that \( \ket{n^{(0)}} \) is normalized, and with the shorthand
+
+\begin{dmath}\label{eqn:qmLecture20:600}
+V_{m n} = \bra{ m^{(0)}} V \ket{n^{(0)}},
+\end{dmath}
+
+that is
 
 \begin{equation}\label{eqn:qmLecture20:580}
 \begin{aligned}
@@ -269,25 +359,66 @@ So
 {
 E_n^{(0)} - E_m^{(0)}
 }
-\bra{ m^{(0)}} V \ket{n_0} \\
-\Delta_{n_1} &= \bra{ n^{(0)} } V \ket{ n^0}
+V_{m n}
+%\bra{ m^{(0)}} V \ket{n_0} 
+\\
+\Delta_{n_1} &= \bra{ n^{(0)} } V \ket{ n^0} = V_{nn}.
 \end{aligned}
 \end{equation}
 
-Writing 
-
-\begin{dmath}\label{eqn:qmLecture20:600}
-V_{m n} = \bra{ m^{(0)}} V \ket{n_0} ,
-\end{dmath}
-
 \paragraph{to \( O(\lambda^2) \) }
 
-The second order pertubation states is
+The second order pertubation states are found by selecting only the \( \lambda^2 \) contributions to
+
+\begin{dmath}\label{eqn:qmLecture20:820}
+\lambda^2 \ket{n_2} 
+=
+\sum_{m \ne n} 
+\frac{\ket{m^{(0)}}\bra{m^{(0)}}}
+{
+E_n^{(0)} - E_m^{(0)}
+}
+ \lr{ \lambda V - (\lambda \Delta_{n_1} + \lambda^2 \Delta_{n_2}) } 
+\lr{
+\ket{n_0} 
++ \lambda \ket{n_1} 
+}.
+\end{dmath}
+
+Because \( \ket{n_0} = \ket{n^{(0)}} \), the \( \lambda^2 \Delta_{n_2} \) is killed, leaving
+
+\begin{dmath}\label{eqn:qmLecture20:840}
+\ket{n_2} 
+=
+\sum_{m \ne n} 
+\frac{\ket{m^{(0)}}\bra{m^{(0)}}}
+{
+E_n^{(0)} - E_m^{(0)}
+}
+ \lr{ V - \Delta_{n_1} } 
+\ket{n_1}
+=
+\sum_{m \ne n} 
+\frac{\ket{m^{(0)}}\bra{m^{(0)}}}
+{
+E_n^{(0)} - E_m^{(0)}
+}
+ \lr{ V - \Delta_{n_1} } 
+\sum_{l \ne n} 
+\frac{
+\ket{l^{(0)}} 
+}
+{
+E_n^{(0)} - E_l^{(0)}
+}
+V_{l n},
+\end{dmath}
+
+which can be written as
 
 \begin{dmath}\label{eqn:qmLecture20:620}
-\begin{aligned}
 \ket{n_2}
-&= 
+= 
 \sum_{l,m \ne n} 
 \ket{m^{(0)}}
 \frac{V_{m l} V_{l n}}
@@ -301,13 +432,45 @@ The second order pertubation states is
 \frac{V_{n n} V_{m n}}
 {
 \lr{ E_n^{(0)} - E_m^{(0)} }^2
-} \\
-\Delta_{n_2} &= 
-\sum_{m \ne n} \frac{V_{n m} V_{m n} }{E_n^{(0)} - E_m^{(0)}}
-\end{aligned}
+}.
+\end{dmath}
+
+For the second energy pertubation we have
+
+\begin{dmath}\label{eqn:qmLecture20:860}
+\lambda^2 \Delta_{n_2} = 
+\bra{n^{(0)}} \lambda V \lr{ \lambda \ket{n_1} },
+\end{dmath}
+
+or
+
+\begin{dmath}\label{eqn:qmLecture20:880}
+\Delta_{n_2} 
+= 
+\bra{n^{(0)}} V \ket{n_1} 
+= 
+\bra{n^{(0)}} V 
+\sum_{m \ne n} 
+\frac{
+\ket{m^{(0)}} 
+}
+{
+E_n^{(0)} - E_m^{(0)}
+}
+V_{m n}.
+\end{dmath}
+
+That is
+
+\begin{dmath}\label{eqn:qmLecture20:900}
+\Delta_{n_2} 
+= 
+\sum_{m \ne n} \frac{V_{n m} V_{m n} }{E_n^{(0)} - E_m^{(0)}}.
 \end{dmath}
 
 \paragraph{to \( O(\lambda^3) \) }
+
+Similarily, it can be shown that
 
 \begin{dmath}\label{eqn:qmLecture20:640}
 \Delta_{n_3} = 
@@ -318,10 +481,10 @@ The second order pertubation states is
 -
 \sum_{ m \ne n} \frac{V_{n m} V_{n n} V_{m n} }{
 \lr{ E_n^{(0)} - E_m^{(0)} }^2
-}
+}.
 \end{dmath}
 
-In general 
+In general, the energy pertubation is given by
 
 \begin{dmath}\label{eqn:qmLecture20:660}
 \Delta_n^{(l)} = \bra{n^{(0)}} V \ket{n^{(l-1)}}.
