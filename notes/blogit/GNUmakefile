@@ -21,7 +21,7 @@ INCOMPLETE += censor1l.tex
 INCOMPLETE += censor1p.tex
 INCOMPLETE += censor1pg.tex
 INCOMPLETE += stokespost.tex
-#INCOMPLETE += ps8mathematica.tex
+INCOMPLETE += ps8mathematica.tex
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
@@ -97,7 +97,7 @@ gradQuantumProblemSet8.pdf : ../phy1520/gradQuantumProblemSet8Problem1.tex
 gradQuantumProblemSet8.pdf : ../phy1520/gradQuantumProblemSet8Problem2.tex
 gradQuantumProblemSet8.pdf : ../phy1520/gradQuantumProblemSet8Problem3.tex
 gradQuantumProblemSet8.pdf : ../phy1520/gradQuantumProblemSet8Problem4.tex
-#gradQuantumProblemSet8.pdf : ps8mathematica.tex
+gradQuantumProblemSet8.pdf : ps8mathematica.tex
 
 gaBasics.pdf : gaBasics.tex
 
@@ -175,8 +175,8 @@ myrefs.bib: ../myrefs.bib.in ../METADATA
 	cp ../myrefs.bib.in myrefs.bib
 	(cd .. ; ./METADATA -bib >> $(THISDIR)/myrefs.bib)
 
-#ps8mathematica.tex : ../METADATA ../../mathematica/METADATA
-#	(cd .. ; ./METADATA -mathematica -latex -phy1520 -filter phy1520/ps8/ ) > $@
+ps8mathematica.tex : ../METADATA ../../mathematica/METADATA
+	(cd .. ; ./METADATA -mathematica -latex -phy1520 -filter phy1520/ps8/ ) > $@
 
 opt/%.pdf : %.pdf
 	mkdir -p opt
