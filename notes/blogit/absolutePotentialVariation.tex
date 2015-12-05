@@ -1,0 +1,177 @@
+%
+% Copyright © 2015 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{absolutePotentialVariation}
+\renewcommand{\dirname}{notes/phy1520/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+
+\beginArtNoToc
+
+\generatetitle{Energy estimate for an absolute value potential}
+%\chapter{Energy estimate for an absolute value potential}
+%\label{chap:absolutePotentialVariation}
+
+%Here's a simple problem, a lot like the problem set 6 variational calculation.
+
+\makeoproblem{Energy estimate for an absolute value potential.}{problem:absolutePotentialVariation:1}{\citep{sakurai2014modern} pr. 5.21}{
+
+Estimate the lowest eigenvalue \( \lambda \) of the differential equation 
+
+\begin{dmath}\label{eqn:absolutePotentialVariation:20}
+\frac{d^2}{dx^2}\psi + \lr{ \lambda - \Abs{x} } \psi = 0.
+\end{dmath}
+
+Using \( \alpha \) variation with the trial function
+
+\begin{dmath}\label{eqn:absolutePotentialVariation:40}
+\psi = 
+\left\{
+\begin{array}{l l}
+c(\alpha - \Abs{x}) & \quad \mbox{\(\Abs{x} < \alpha \) } \\
+0 & \quad \mbox{\(\Abs{x} > \alpha \) } 
+\end{array}
+\right.
+\end{dmath}
+
+} % problem
+
+\makeanswer{problem:absolutePotentialVariation:1}{
+First rewrite the differential equation in a Hamiltonian like fashion
+
+\begin{equation}\label{eqn:absolutePotentialVariation:60}
+H \psi = -\frac{d^2}{\psi}{dx^2} + \Abs{x} \psi = \lambda \psi.
+\end{equation}
+
+We need the derivatives of the trial distribution.  The first derivative is
+
+\begin{dmath}\label{eqn:absolutePotentialVariation:80}
+\frac{d}{dx} \psi
+=
+-c \frac{d}{dx} \Abs{x}
+=
+-c \frac{d}{dx} \lr{ x \theta(x) - x \theta(-x) }
+=
+-c \lr{ 
+ \theta(x) - \theta(-x) 
++
+x \delta(x) + x \delta(-x) 
+}
+=
+-c \lr{ 
+ \theta(x) - \theta(-x) 
++
+2 x \delta(x) 
+}.
+\end{dmath}
+
+The second derivative is
+\begin{dmath}\label{eqn:absolutePotentialVariation:100}
+\frac{d^2}{dx^2} \psi
+=
+-c \frac{d}{dx} \lr{ 
+ \theta(x) - \theta(-x) 
++
+2 x \delta(x) 
+}
+=
+-c \lr{ 
+ \delta(x) + \delta(-x) 
++
+2 \delta(x) 
++
+2 x \delta'(x) 
+}
+=
+-c \lr{ 
+4 \delta(x) 
++
+2 x \frac{-\delta(x) }{x}
+}
+=
+-2 c \delta(x).
+\end{dmath}
+
+This gives
+
+\begin{dmath}\label{eqn:absolutePotentialVariation:120}
+H \psi = -2 c \delta(x) + \Abs{x} c \lr{ \alpha - \Abs{x} }.
+\end{dmath}
+
+We are now set to compute some of the inner products.  The normalization is the simplest
+
+\begin{dmath}\label{eqn:absolutePotentialVariation:140}
+\begin{aligned}
+\braket{\psi}{\psi} 
+&= c^2 \int_{-\alpha}^\alpha ( \alpha - \Abs{x} )^2 dx \\
+&= 2 c^2 \int_{0}^\alpha ( x - \alpha )^2 dx \\
+&= 2 c^2 \int_{-\alpha}^0 u^2 du \\
+&= 2 c^2 \lr{ -\frac{(-\alpha)^3}{3} } \\
+&= \frac{2}{3} c^2 \alpha^3.
+\end{aligned}
+\end{dmath}
+
+For the energy
+\begin{dmath}\label{eqn:absolutePotentialVariation:160}
+\begin{aligned}
+\braket{\psi}{H \psi}
+&=
+c^2 \int dx \lr{ \alpha - \Abs{x} } \lr{ -2 \delta(x) + \Abs{x} \lr{ \alpha - \Abs{x} } } \\
+&=
+c^2 \lr{ - 2 \alpha + \int_{-\alpha}^\alpha dx \lr{ \alpha - \Abs{x} }^2 \Abs{x} } \\
+&=
+c^2 \lr{ - 2 \alpha + 2 \int_{-\alpha}^0 du u^2 \lr{ u + \alpha } } \\
+&=
+c^2 \lr{ - 2 \alpha + 2 \evalrange{\lr{ \frac{u^4}{4} + \alpha \frac{u^3}{3} }}{-\alpha}{0} } \\
+&=
+c^2 \lr{ - 2 \alpha - 2 \lr{ \frac{\alpha^4}{4} - \frac{\alpha^4}{3} } } \\
+&=
+c^2 \lr{ - 2 \alpha + \inv{6} \alpha^4 }.
+\end{aligned}
+\end{dmath}
+
+The energy estimate is 
+
+\begin{dmath}\label{eqn:absolutePotentialVariation:180}
+\overbar{E} 
+= 
+\frac{\braket{\psi}{H \psi}}{\braket{\psi}{\psi}}
+=
+\frac{ - 2 \alpha + \inv{6} \alpha^4 }{ \frac{2}{3} \alpha^3}
+=
+- \frac{3}{\alpha^2} + \inv{4} \alpha.
+\end{dmath}
+
+This has its minimum at
+\begin{dmath}\label{eqn:absolutePotentialVariation:200}
+0 = -\frac{6}{\alpha^3} + \inv{4},
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:absolutePotentialVariation:220}
+\alpha = 2 \times 3^{1/3}.
+\end{dmath}
+
+Back subst into the energy gives
+
+\begin{dmath}\label{eqn:absolutePotentialVariation:240}
+\overbar{E} 
+=
+- \frac{3}{4 \times 3^{2/3}} + \inv{2} 3^{1/3}
+= \frac{3^{4/3}}{4}
+\approx 1.08.
+\end{dmath}
+
+The problem says the exact answer is 1.019, so the variation gets within 6 \%.
+
+} % answer
+
+\EndArticle
