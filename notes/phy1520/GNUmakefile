@@ -64,5 +64,14 @@ gradQuantumProblemSet7.pdf : ../phy1520/gradQuantumProblemSet7Problem2.tex
 gradQuantumProblemSet7.pdf : ../phy1520/gradQuantumProblemSet7Problem3.tex
 gradQuantumProblemSet7.pdf : ps7mathematica.tex
 
+gradQuantumProblemSet8.pdf : ../phy1520/gradQuantumProblemSet8Problem1.tex
+gradQuantumProblemSet8.pdf : ../phy1520/gradQuantumProblemSet8Problem2.tex
+gradQuantumProblemSet8.pdf : ../phy1520/gradQuantumProblemSet8Problem3.tex
+gradQuantumProblemSet8.pdf : ../phy1520/gradQuantumProblemSet8Problem4.tex
+gradQuantumProblemSet8.pdf : ps8mathematica.tex
+
 ps7mathematica.tex : ../METADATA ../../mathematica/METADATA
 	(cd .. ; ./METADATA -mathematica -latex -phy1520 -filter phy1520/ps7/ ) > $@
+
+ps8mathematica.tex : ../METADATA ../../mathematica/METADATA
+	(cd .. ; ./METADATA -mathematica -latex -phy1520 -filter phy1520/ps8/ ) > $@
