@@ -84,7 +84,8 @@
 #s/\\L_z\b/\\hat{L}_z/g ;
 #s/\\lambdaL/\\lambda_{\\mathrm{L}}/g ;
 #s/\\LOS/{\\textrm{LOS}}/g;
-#s/\\m\b/{-}/g ;
+s/\\m\b/{-}/g ;
+s/\\p\b/{+}/g ;
 #s/\\me/m_{\\mathrm{e}}/g ;
 #s/\\n *(\+|-|\\pm) *(\(\d *, *\d\))(\d)\b/{\\Bn $1 $2, $3}/g ;  # \Bu_\n+(1,0)1 -> \Bu_{\Bn + (1,0), 1}
 #s/\\n *(\+|-|\\pm) *(\(\d *, *\d\))\b/{\\Bn $1 $2}/g ;           # \Bu_\n+(1,0) -> \Bu_{\Bn + (1,0)}
@@ -103,7 +104,6 @@
 #s/\\omegac/\\omega_{\\text{cutoff}}/g ;
 #s/\\omegaD/\\omega_{\\mathrm{D}}/g ;
 #s/\\omegan/\\omega_\\nought/g ;
-#s/\\p\b/{+}/g ;
 #s/\\pkd/_{\\Bk \\downarrow}/g ;
 #s/\\pku/_{\\Bk \\uparrow}/g ;
 #s/\\pp(.)/{($1)}/g ;
@@ -207,10 +207,10 @@
 #s/xidotalpha/\\dot{x}_{i_\\alpha}/g ;
 s/[Ss]chro\b/Schr\\"{o}dinger/g; # Schrodinger
 s/[Ss]chrodinger/Schr\\"{o}dinger/g; # Schrodinger
-s/\\0\b/{(0)}/g;
-s/\\1\b/{(1)}/g;
-s/\\2\b/{(2)}/g;
-s/\\ee/\\epsilon/g ;
-s/\\max\b/{\\mathrm{max}}/g ;
-s/\\min\b/{\\mathrm{min}}/g ;
-s/\\at\b/{\\mathrm{at}}/g ;
+#s/\\0\b/{(0)}/g;
+#s/\\1\b/{(1)}/g;
+#s/\\2\b/{(2)}/g;
+#s/\\ee/\\epsilon/g ;
+#s/\\max\b/{\\mathrm{max}}/g ;
+#s/\\min\b/{\\mathrm{min}}/g ;
+#s/\\at\b/{\\mathrm{at}}/g ;
