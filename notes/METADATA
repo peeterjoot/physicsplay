@@ -741,12 +741,25 @@ my $out = "
 
       my $problemSetSolution = $_->{'PROBLEMSET'} ;
 
-      if ( !$redacted or ($redacted and !defined $problemSetSolution) )
-      {
-         $out .= qq(\\item \\phantomsection \\label{path:$label} $date \\href{$fullpath}{$path}
+      my $thisitem = qq(\\item \\phantomsection \\label{path:$label} $date \\href{$fullpath}{$path}
 
 $desc
 ) ;
+      if ( defined $problemSetSolution )
+      {
+         $out .= "
+\\ifthenelse{\\boolean{redacted}}%
+{%
+\\relax%
+}%
+{%
+$thisitem%
+}%
+" ;
+      }
+      else
+      {
+         $out .= $thisitem ;
       }
    }
 
