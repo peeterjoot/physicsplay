@@ -17,8 +17,8 @@ GENERATED_SOURCES += mathematica.tex
 
 PHY1520TEX := $(notdir $(wildcard ../$(THISDIR)/*.tex))
 PHY1520TEX += FrontBackmatter/preface.tex
-PHY1520STY := thisbook.sty
-PHY1520STY := phy1520.sty
+PHY1520STY += thisbook.sty
+PHY1520STY += phy1520.sty
 
 THISBOOK_DEPS += $(GENERATED_SOURCES)
 THISBOOK_DEPS += $(PHY1520TEX)
