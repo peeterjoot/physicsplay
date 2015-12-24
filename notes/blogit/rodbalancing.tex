@@ -14,6 +14,7 @@
 \usepackage{peeters_braket}
 \usepackage{peeters_figures}
 \usepackage{siunitx}
+\usepackage{macros_cal}
 
 \beginArtNoToc
 
@@ -54,7 +55,7 @@ Using \( \Delta E \Delta t \ge \frac{\Hbar}{2} \), we can say that the time befo
 Alternately, given a circular area profile, diameter \( D \), density \( \rho \) and length \( L \), this time is
 
 \begin{dmath}\label{eqn:rodbalancing:80}
-\Delta 
+\Delta t
 = 
 \frac{4 \Hbar}{g \rho \pi D^2 L^2 }.
 \end{dmath}
@@ -73,7 +74,107 @@ For a fragment of human hair with density \( \rho = 1300 \si{kg/m^3} \), diamete
 
 which is still tiny.  There's a few options, one of which is that the uncertainty principle alone cannot be used in isolation to determine the stability of such a system, and another is that this crude energy-time uncertainty is not specific enough.  With the estimate above, clearly the scales much be reduced drastically to gain larger stability times.
 
-%\input{../phy1520/usefulFormulas.tex}
+\paragraph{Classical equations of motion for the inverted pendulum.}
+
+Let's setup the classical for the inverted pendulum.  Measuring a polar angle \( \theta \) in a plane down from the z-axis towards the x-axis, a line density \( \sigma = M/L \), the total potential energy of the rod is
+
+\begin{dmath}\label{eqn:rodbalancing:140}
+\phi 
+= g \int_0^L \sigma \rho \cos\theta d\rho
+= g \sigma \frac{L^2}{2} \cos\theta
+= g \frac{M}{L} \frac{L^2}{2} \cos\theta
+= \inv{2} g M L \cos\theta.
+\end{dmath}
+
+The total velocity contributions to the Lagrangian are
+
+\begin{dmath}\label{eqn:rodbalancing:160}
+T 
+=
+\inv{2} \int_0^L \sigma \rho^2 d\rho \lr{ \ddt{} \lr{ \zcap e^{\zcap \xcap \theta}} }^2
+=
+\inv{2} \sigma \frac{L^3}{3} \lr{ \xcap \dot{\theta} e^{\zcap \xcap \theta} }^2
+=
+\inv{2} \sigma \frac{L^3}{3} {\dot{\theta}}^2
+=
+\inv{2} \frac{M}{L} \frac{L^3}{3} {\dot{\theta}}^2
+=
+\inv{6} M L^2 {\dot{\theta}}^2.
+\end{dmath}
+
+The Lagrangian for the classical system is
+
+\begin{dmath}\label{eqn:rodbalancing:180}
+\LL = 
+\inv{6} M L^2 {\dot{\theta}}^2 - \inv{2} g M L \cos\theta.
+\end{dmath}
+
+The conjugate-momentum is
+
+\begin{dmath}\label{eqn:rodbalancing:200}
+P_\theta = \PD{\dot{\theta}}{\LL} = \inv{3} M L^2 \dot{\theta},
+\end{dmath}
+
+and the Euler-Lagrange equations for this system are
+
+\begin{dmath}\label{eqn:rodbalancing:220}
+\ddt{} P_\theta
+= \PD{\theta}{\LL},
+\end{dmath}
+
+which is
+
+\begin{dmath}\label{eqn:rodbalancing:240}
+\inv{3} M L^2 \ddot{\theta} = \inv{2} g M L \sin\theta,
+\end{dmath}
+
+or
+
+\begin{dmath}\label{eqn:rodbalancing:260}
+\ddot{\theta} = \frac{3 g}{2 L} \sin\theta,
+\end{dmath}
+
+in the small angle approximation this is 
+
+\begin{dmath}\label{eqn:rodbalancing:280}
+\ddot{\theta} = \frac{3 g}{2 L} \theta,
+\end{dmath}
+
+like the SHO but with a positive sign (and corresponding hyperbolic solutions).
+
+\paragraph{Hamiltonian}
+
+To express the Hamiltonian, we need to rewrite the kinetic energy in terms of the conjugate momentum \( P_\theta \)
+
+\begin{dmath}\label{eqn:rodbalancing:300}
+H 
+= \inv{6} M L^2 \lr{ \frac{3 P_\theta}{M L^2} }^2 + \inv{2} g M L \cos\theta
+= \frac{3}{2 M L^2} P_\theta^2 + \inv{2} g M L \cos\theta.
+\end{dmath}
+
+Re-parameterizing in terms of the arc length \( s = L \theta \), introducing an angular frequency \( \omega^2 = 3 g/2L \), and reduced mass \( \mu = M/3 \) this is
+
+\begin{dmath}\label{eqn:rodbalancing:380}
+H
+= \frac{1}{2 \mu} P_{s}^2 + \mu \omega^2 L^2 \cos(s/L).
+\end{dmath}
+
+It can also be quantized immediately by writing
+
+\begin{dmath}\label{eqn:rodbalancing:360}
+P_s = -i \Hbar \PD{s}{}.
+\end{dmath}
+
+\paragraph{Small angle approximation}
+
+The small angle approximation to this Hamiltonian is
+
+\begin{dmath}\label{eqn:rodbalancing:340}
+H = \frac{1}{2 \mu } P_{s}^2 - \inv{2} \mu \omega^2 s^2 + \mu \omega^2 L^2.
+\end{dmath}
+
+This is a pretty result, differing from the SHO Hamiltonian by the sign on the potential, and a shift \( \mu \omega^2 L^2 = M g L/2 \) in the zero point energy.  However, this can only be of use if there is also some sort of potential that limits the range of the radial motion, since the
+hyperbolic nature of the solutions will quickly invalidate the small angle approximation.  In the ice pick scenerio there is such an infinite potential, but it is the table surface at \( \theta = \pi/2 \), which does not impose a small angle limitation.
 
 \EndArticle
 %\EndNoBibArticle
