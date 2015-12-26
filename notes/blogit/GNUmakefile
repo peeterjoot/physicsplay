@@ -91,13 +91,13 @@ local : $(LOCAL_FILES)
 $(LOCAL_FILES) : 
 	cp $(filter %$@, $(ORIG_FILES)) $@
 
-ensemblesForSpinOneHalf.pdf : ../phy1520/ensemblesForSpinOneHalf.tex
+ensemblesForSpinOneHalf.pdf : ../phy2403/ensemblesForSpinOneHalf.tex
 
-#gradQuantumProblemSet8.pdf : ../phy1520/gradQuantumProblemSet8Problem1.tex
-#gradQuantumProblemSet8.pdf : ../phy1520/gradQuantumProblemSet8Problem2.tex
-#gradQuantumProblemSet8.pdf : ../phy1520/gradQuantumProblemSet8Problem3.tex
-#gradQuantumProblemSet8.pdf : ../phy1520/gradQuantumProblemSet8Problem4.tex
-#gradQuantumProblemSet8.pdf : ps8mathematica.tex
+qftProblemSet1.pdf : ../phy2403/qftProblemSet1Problem1.tex
+#qftProblemSet1.pdf : ../phy2403/qftProblemSet1Problem2.tex
+#qftProblemSet1.pdf : ../phy2403/qftProblemSet1Problem3.tex
+#qftProblemSet1.pdf : ../phy2403/qftProblemSet1Problem4.tex
+#qftProblemSet1.pdf : ps8mathematica.tex
 
 gaBasics.pdf : gaBasics.tex
 
@@ -176,7 +176,7 @@ myrefs.bib: ../myrefs.bib.in ../METADATA
 	(cd .. ; ./METADATA -bib >> $(THISDIR)/myrefs.bib)
 
 #ps8mathematica.tex : ../METADATA ../../mathematica/METADATA
-#	(cd .. ; ./METADATA -mathematica -latex -phy1520 -filter phy1520/ps8/ ) > $@
+#	(cd .. ; ./METADATA -mathematica -latex -phy2403 -filter phy2403/ps8/ ) > $@
 
 opt/%.pdf : %.pdf
 	mkdir -p opt

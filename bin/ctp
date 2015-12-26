@@ -1,9 +1,19 @@
-n=8
-~/bin/ct gradQuantumProblemSet$n gradQuantumProblemSetN #tp$n
-perl -p -i -e "s/{N}/$n/g" gradQuantumProblemSet$n.tex
+n=1
 
-for i in 1 2 3 ; do 
-   cp ../gradQuantumProblemSetNProblemM.tex ../phy1520/gradQuantumProblemSet${n}Problem$i.tex
-   perl -p -i -e "s/{N}/$n/g;s/{M}/$i/g;" ../phy1520/gradQuantumProblemSet${n}Problem$i.tex
-   git add ../phy1520/gradQuantumProblemSet${n}Problem$i.tex
+CCCNNNN=PHY2403H
+courseDesc=qft
+CourseTitle="Quantum Field Theory"
+cdirname=phy2403
+
+~/bin/ct ${courseDesc}ProblemSet$n problemSetN
+perl -p -i \
+-e "s/{N}/$n/g;s/CCCNNNN/$CCCNNNN/g;s/courseDesc/$courseDesc/g;s/CourseTitle/$CourseTitle/g;s/cdirname/$cdirname/g;" \
+${courseDesc}ProblemSet$n.tex
+
+for i in 1 2 3 4 5 6 ; do 
+   cp ../problemSetNProblemM.tex ../$cdirname/${courseDesc}problemSet${n}Problem$i.tex
+   perl -p -i \
+-e "s/{N}/$n/g;s/{M}/$i/g;s/courseDesc/$courseDesc/g;" \
+../$cdirname/${courseDesc}problemSet${n}Problem$i.tex
+   git add ../$cdirname/${courseDesc}problemSet${n}Problem$i.tex
 done
