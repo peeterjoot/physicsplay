@@ -2,12 +2,148 @@
 % Copyright © 2015 Peeter Joot.  All Rights Reserved.
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
 %
-\makeproblem{description}{qft:problemSet1:3}{ 
+\makeproblem{One dimensional string}{qft:problemSet1:3}{ 
+
+A string of length \( a \), mass per unit length \( \sigma \) and under tension \(T\) is fixed at each end. The Lagrangian governing the time evolution of the transverse displacement \( y(x,t) \) is
+
+\begin{dmath}\label{eqn:qftproblemSet1Problem3:20}
+\LL = \int_0^a dx \lr{ \frac{\sigma}{2} \lr{ \PD{t}{y} }^2 - \frac{T}{2} \lr{ \PD{x}{y} }^2 }
+\end{dmath}
+
+where \( x \) identifies position along the string from one end point. 
 \makesubproblem{}{qft:problemSet1:3a}
+By expressing the displacement as a sine series Fourier expansion of the form
+
+\begin{dmath}\label{eqn:qftproblemSet1Problem3:40}
+y(x,t) = \sqrt{\frac{2}{a}} \sum_{n=1}^\infty \sin\lr{ \frac{ n \pi x }{a} } q_n(t) 
+\end{dmath}
+
+show that the Lagrangian becomes
+
+\begin{dmath}\label{eqn:qftproblemSet1Problem3:60}
+\LL = \sum_{n=1}^\infty \lr{ \frac{\sigma}{2} \dot{q}_n^2 - \frac{T}{2} \lr{ \frac{ n \pi }{2} }^2 q_n^2 } .
+\end{dmath}
+
+\makesubproblem{}{qft:problemSet1:3b}
+Derive the equations of motion. Hence, show that the string is equivalent to an infinite set of decoupled
+harmonic oscillators, and find their frequencies.
 } % makeproblem
 
 \makeanswer{qft:problemSet1:3}{ 
 \makeSubAnswer{}{qft:problemSet1:3a}
 
-TODO.
+First observe that the functions \( \braket{x}{n} = \sqrt{\frac{2}{a}} \sin\lr{ n \pi x/a } \) are orthonormal over the \( [0,a] \) domain.
+
+\begin{dmath}\label{eqn:qftProblemSet1Problem3:80}
+\begin{aligned}
+\braket{ n }{n}
+&=
+\frac{2}{a}
+\int_0^a \sin^2\lr{ n \pi x/a } dx \\
+&=
+2
+\int_0^1 \sin^2\lr{ n \pi u } du \\
+&=
+\int_0^1 \lr{ 1 - \cos\lr{ 2 n \pi u } } du \\
+&=
+1,
+\end{aligned}
+\end{dmath}
+
+and for \( n \ne m \)
+
+\begin{dmath}\label{eqn:qftProblemSet1Problem3:100}
+\begin{aligned}
+\braket{n}{m}
+&=
+\frac{2}{a}
+\int_0^a \sin\lr{ n \pi x/a } \sin\lr{ m \pi x/a } dx \\
+&=
+2
+\int_0^1 \sin\lr{ n \pi u } \sin\lr{ m \pi u } du \\
+&=
+-\inv{2}
+\int_0^1 
+\lr{ e^{i n \pi u} - e^{-i n \pi u} }
+\lr{ e^{i m \pi u} - e^{-i m \pi u} }
+du \\
+&=
+-
+\int_0^1 
+du
+\lr{
+\cos( ( n + m) \pi u ) - \cos( (m - n) \pi u )
+} \\
+&= 0,
+\end{aligned}
+\end{dmath}
+
+so 
+
+\begin{dmath}\label{eqn:qftProblemSet1Problem3:120}
+\LL 
+= 
+\int_0^a dx 
+\frac{2}{a}
+\sum_{m,n = 1}^\infty
+\sin\lr{ \frac{ n \pi x }{a} } 
+\sin\lr{ \frac{ m \pi x }{a} } 
+\lr{ \frac{\sigma}{2} \dot{q}_n \dot{q}_m
+- \frac{T}{2} 
+\lr{ \frac{n \pi}{a} }
+\lr{ \frac{m \pi}{a} } q_n q_m
+}
+=
+\sum_{m,n = 1}^\infty \delta_{nm}
+\lr{ \frac{\sigma}{2} \dot{q}_n \dot{q}_m
+- \frac{T}{2} 
+\lr{ \frac{n \pi}{a} }
+\lr{ \frac{m \pi}{a} }
+q_n q_m
+}
+=
+\sum_{n = 1}^\infty 
+\lr{ \frac{\sigma}{2} \lr{\dot{q}_n}^2
+- \frac{T}{2} 
+\lr{ \frac{n \pi}{a} }^2 q_n^2
+}.
+\end{dmath}
+
+\makeSubAnswer{}{qft:problemSet1:3b}
+
+We have an Euler-Lagrange equation for each \( q_n \).  The conjugate momenta are
+
+\begin{equation}\label{eqn:qftProblemSet1Problem3:140}
+\PD{\dot{q}_n}{\LL} = \sigma \dot{q}_n.
+\end{equation}
+
+We also have
+\begin{equation}\label{eqn:qftProblemSet1Problem3:160}
+\PD{q_n}{\LL} = - T \lr{ \frac{n \pi}{a} }^2 q_n,
+\end{equation}
+
+so we have
+
+\begin{equation}\label{eqn:qftProblemSet1Problem3:180}
+\ddot{q}_n = - \frac{T}{\sigma} \lr{ \frac{n \pi}{a} }^2 q_n.
+\end{equation}
+
+These have solutions
+
+\begin{equation}\label{eqn:qftProblemSet1Problem3:200}
+q_n(t) = A_{\pm} \exp\lr{ \pm i \sqrt{ \frac{T}{\sigma} } \frac{n \pi}{a} t }.
+\end{equation}
+
+The angular frequencies are 
+
+\begin{equation}\label{eqn:qftProblemSet1Problem3:220}
+\omega_n = 2 \pi \nu_n = \sqrt{ \frac{T}{\sigma} } \frac{n \pi}{a},
+\end{equation}
+
+so the frequencies are
+
+\begin{equation}\label{eqn:qftProblemSet1Problem3:240}
+\nu_n = \sqrt{ \frac{T}{\sigma} } \frac{n }{2 a}.
+\end{equation}
+
 }
