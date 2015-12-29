@@ -7,6 +7,8 @@
 #s/\\aut/{\\textrm{AUT}}/g;
 #s/\\b(.)_/\\overbar{$1}_/g ;
 #s/\\bar(.)/\\overbar{$1}/g ;
+s/\\barphi/\\overbar{\\phi}/g ;
+s/\\phibar/\\overbar{\\phi}/g ;
 #s/\\bark\b/\\overbar{k}/g ;
 #s/\\barm\b/\\overbar{m}/g ;
 #s/\\Be\b/\\Bepsilon/g ;

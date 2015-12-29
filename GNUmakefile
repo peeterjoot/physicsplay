@@ -3,6 +3,8 @@ SUBDIRS := $(subst /GNUmakefile,,$(SUBMAKES))
 IGNOREDIRS += notes/atomic
 IGNOREDIRS += notes/bb
 IGNOREDIRS += notes/peterlue
+# not ready yet:
+IGNOREDIRS += notes/phy2403
 IGNOREDIRS += notes/gamma-matrix
 SUBDIRS := $(filter-out $(IGNOREDIRS),$(SUBDIRS))
 
