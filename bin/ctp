@@ -5,15 +5,17 @@ courseDesc=qft
 CourseTitle="Quantum Field Theory"
 cdirname=phy2403
 
+y=`perl -e 'use POSIX qw/strftime/ ; my $y = strftime( "%Y", localtime ) ; print "$y\n";'`
+
 ~/bin/ct ${courseDesc}ProblemSet$n problemSetN
 perl -p -i \
--e "s/{N}/$n/g;s/CCCNNNN/$CCCNNNN/g;s/courseDesc/$courseDesc/g;s/CourseTitle/$CourseTitle/g;s/cdirname/$cdirname/g;" \
+-e "s/{N}/$n/g;s/CCCNNNN/$CCCNNNN/g;s/courseDesc/$courseDesc/g;s/CourseTitle/$CourseTitle/g;s/cdirname/$cdirname/g;s/CCYY/$y;" \
 ${courseDesc}ProblemSet$n.tex
 
 for i in 1 2 3 4 5 6 ; do 
    cp ../problemSetNProblemM.tex ../$cdirname/${courseDesc}problemSet${n}Problem$i.tex
    perl -p -i \
--e "s/{N}/$n/g;s/{M}/$i/g;s/courseDesc/$courseDesc/g;" \
+-e "s/{N}/$n/g;s/{M}/$i/g;s/courseDesc/$courseDesc/g;s/CCYY/$y;" \
 ../$cdirname/${courseDesc}problemSet${n}Problem$i.tex
    git add ../$cdirname/${courseDesc}problemSet${n}Problem$i.tex
 done
