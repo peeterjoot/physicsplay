@@ -93,12 +93,11 @@ $(LOCAL_FILES) :
 
 ensemblesForSpinOneHalf.pdf : ../phy2403/ensemblesForSpinOneHalf.tex
 
-qftProblemSet1.pdf : ../phy2403/qftProblemSet1Problem1.tex
-qftProblemSet1.pdf : ../phy2403/qftProblemSet1Problem2.tex
-qftProblemSet1.pdf : ../phy2403/qftProblemSet1Problem3.tex
-qftProblemSet1.pdf : ../phy2403/qftProblemSet1Problem4.tex
-qftProblemSet1.pdf : ../phy2403/qftProblemSet1Problem5.tex
-qftProblemSet1.pdf : ../phy2403/qftProblemSet1Problem6.tex
+qftProblemSet2.pdf : ../phy2403/qftProblemSet2Problem1.tex
+qftProblemSet2.pdf : ../phy2403/qftProblemSet2Problem2.tex
+qftProblemSet2.pdf : ../phy2403/qftProblemSet2Problem3.tex
+qftProblemSet2.pdf : ../phy2403/qftProblemSet2Problem4.tex
+qftProblemSet2.pdf : ../phy2403/qftProblemSet2Problem5.tex
 #qftProblemSet1.pdf : ps8mathematica.tex
 
 gaBasics.pdf : gaBasics.tex
