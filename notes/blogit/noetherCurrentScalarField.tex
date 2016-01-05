@@ -1,0 +1,160 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+%{
+\input{../blogpost.tex}
+\renewcommand{\basename}{noetherCurrentScalarField}
+\renewcommand{\dirname}{notes/phy1520/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+\usepackage{macros_cal}
+
+\beginArtNoToc
+
+\generatetitle{Energy-momentum tensor for a scalar field}
+%\chapter{Energy-momentum tensor for a scalar field}
+%\label{chap:noetherCurrentScalarField}
+% \citep{sakurai2014modern} pr X.Y
+It is claimed in \citep{qftLectureNotes} (3.2.1) that the momentum components of the energy-momentum tensor simplifies to
+
+\begin{dmath}\label{eqn:noetherCurrentScalarField:20}
+\Be_n \int d^3 x T^{0 n} = \int d^3 k \Bk a_k^\dagger a_k.
+\end{dmath}
+
+Let's calculate this.
+
+First, from the Noether current for the scalar field Lagrangian in question, what is the energy-momentum tensor explicitly?
+
+\begin{dmath}\label{eqn:noetherCurrentScalarField:40}
+T^{\mu \nu}
+= \Pi^\mu \partial^\nu \phi - g^{\mu \nu} \LL
+= \Pi^\mu \partial^\nu \phi - g^{\mu \nu} \inv{2} \lr{ \partial_\alpha \phi \partial^\alpha \phi - \mu^2 \phi^2 }
+= \Pi^\mu \Pi^\nu - g^{\mu \nu} \inv{2} \lr{ \Pi_\alpha \Pi^\alpha - \mu^2 \phi^2 }
+= \Pi^\mu \Pi^\nu - \inv{2} g^{\mu \nu} g_{\alpha\beta} \Pi^\beta \Pi^\alpha + \inv{2} g^{\mu \nu} \mu^2 \phi^2.
+\end{dmath}
+
+The canonical momenta are
+
+\begin{dmath}\label{eqn:noetherCurrentScalarField:60}
+\Pi^\mu 
+=
+\partial^\mu
+\int \frac{d^3 k}{(2\pi)^{3/2} \sqrt{ 2 \omega_k }} \lr{ a_k e^{-i k \cdot x} + a_k^\dagger e^{i k \cdot x} },
+\end{dmath}
+
+but
+\begin{dmath}\label{eqn:noetherCurrentScalarField:80}
+\partial^\mu e^{i k \cdot x}
+=
+\partial^\mu \exp\lr{ i k^\alpha x_\alpha }
+=
+i k^\mu \exp\lr{ i k \cdot x },
+\end{dmath}
+
+so
+\begin{dmath}\label{eqn:noetherCurrentScalarField:100}
+\Pi^\mu 
+=
+i
+\int \frac{d^3 k k^\mu}{(2\pi)^{3/2} \sqrt{ 2 \omega_k }} \lr{ - a_k e^{-i k \cdot x} + a_k^\dagger e^{i k \cdot x} }
+=
+i
+\int \frac{d^3 k k^\mu}{(2\pi)^{3/2} \sqrt{ 2 \omega_k }} \lr{ - a_k e^{-i \omega_k t + \Bk \cdot \Bx} + a_k^\dagger e^{i \omega_k t - i \Bk \cdot \Bx} }.
+\end{dmath}
+
+This gives
+\begin{dmath}\label{eqn:noetherCurrentScalarField:120}
+\int d^3 x \Pi^\mu \Pi^\nu 
+=
+-\inv{2} \int d^3 x \inv{(2\pi)^3}
+\int d^3 k d^3 j \frac{k^\mu j^\nu}{\sqrt{\omega_k \omega_j}}
+\lr{ - a_k e^{-i \omega_k t + \Bk \cdot \Bx} + a_k^\dagger e^{i \omega_k t - i \Bk \cdot \Bx} }
+\lr{ - a_j e^{-i \omega_j t + \Bj \cdot \Bx} + a_j^\dagger e^{i \omega_j t - i \Bj \cdot \Bx} }
+=
+-\inv{2} \int d^3 x \inv{(2\pi)^3}
+\int d^3 k d^3 j \frac{k^\mu j^\nu}{\sqrt{\omega_k \omega_j}}
+\lr{
+  a_k a_j e^{-i (\omega_j + \omega_k) t + (\Bj + \Bk) \cdot \Bx} 
+- a_k a_j^\dagger e^{i (\omega_j - \omega_k) t - i (\Bj -\Bk) \cdot \Bx} 
+- a_k^\dagger a_j e^{-i (\omega_j -\omega_k) t - (\Bk - \Bj) \cdot \Bx} 
++ a_k^\dagger a_j^\dagger e^{i (\omega_j + \omega_k) t - i (\Bj + \Bk) \cdot \Bx} 
+}
+=
+-\inv{2} 
+\int d^3 k d^3 j \frac{k^\mu j^\nu}{\sqrt{\omega_k \omega_j}}
+\lr{
+  a_k a_j e^{-i (\omega_j + \omega_k) t } \delta^3(\Bj + \Bk)
+- a_k a_j^\dagger e^{i (\omega_j - \omega_k) t } \delta^3(\Bj -\Bk)
+- a_k^\dagger a_j e^{-i (\omega_j -\omega_k) t } \delta^3 (\Bk - \Bj)
++ a_k^\dagger a_j^\dagger e^{i (\omega_j + \omega_k) t } \delta^3 (\Bj + \Bk)
+}.
+\end{dmath}
+
+There are two cases here to consider.  The first is \( \nu = 0 \), for which we have
+
+\begin{dmath}\label{eqn:noetherCurrentScalarField:140}
+\int d^3 x \Pi^\mu \Pi^0
+=
+-\inv{2} 
+\int d^3 k k^\mu 
+\lr{
+  a_k a_{-k} e^{-2 i \omega_k t }
+- a_k a_k^\dagger 
+- a_k^\dagger a_k 
++ a_k^\dagger a_{-k}^\dagger e^{2 i \omega_k t }
+}.
+\end{dmath}
+
+For \( \nu \ne 0 \), we have
+
+\begin{dmath}\label{eqn:noetherCurrentScalarField:160}
+\int d^3 x \Pi^\mu \Pi^\nu
+=
+-\inv{2} 
+\int d^3 k \frac{k^\mu k^\nu}{\omega_k}
+\lr{
+- a_k a_{-k} e^{- 2 i \omega_k t } 
+- a_k a_k^\dagger 
+- a_k^\dagger a_k 
+- a_k^\dagger a_{-k}^\dagger e^{ 2 i \omega_k t } 
+}
+=
+ \inv{2} 
+\int d^3 k \frac{k^\mu k^\nu}{\omega_k}
+\lr{
+  a_k a_{-k} e^{- 2 i \omega_k t } 
++ a_k a_k^\dagger 
++ a_k^\dagger a_k 
++ a_k^\dagger a_{-k}^\dagger e^{ 2 i \omega_k t } 
+}
+\end{dmath}
+
+For the mass term it was previously found that
+
+\begin{dmath}\label{eqn:noetherCurrentScalarField:180}
+\inv{2} \int d^3 x \mu^2 \phi^2
+=
+\frac{\mu^2}{4}
+\int
+d^3 k
+\inv{ \omega_k }
+\lr{
+ a_{-k} a_k e^{- 2 i \omega_k t }
++a_{-k}^\dagger a_k^\dagger e^{2 i \omega_k t }
++a_k a_k^\dagger
++a_k^\dagger a_k
+}.
+\end{dmath}
+
+Those are all the pieces needed to assemble the (integrated) energy-momentum tensor.
+
+%}
+\EndArticle
+%\EndNoBibArticle
