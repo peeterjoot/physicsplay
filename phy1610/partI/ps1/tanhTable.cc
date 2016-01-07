@@ -1,4 +1,6 @@
 /**
+   \file tanhTable.cc
+
    A program that generates a table of data. 
 
    The table should have two columns, one column with x values ranging from -2.0 to 2.0, and a second column with values y=tanh(2x). 
@@ -18,7 +20,13 @@
    Register sized unsigned integer type.
  */
 using Uint = std::uintptr_t ;
-#define strToUint std::stoul // FIXME: Unix and bit-size specific.  Would want stoull on Win64 where sizeof(long)=4
+
+/**
+   wrapper for stoul to match the type of Uint above.
+ 
+   FIXME: This is Unix and bit-size specific.  Would want stoull on Win64 where sizeof(long)=4
+ */
+#define strToUint std::stoul
 
 /**
    Provide and use a function f that takes x as input and returns the value of tanh(2x).
@@ -76,8 +84,11 @@ void computeAndPrintTable( const double x1, const double x2, const Uint n )
    std::cout << std::endl ;
 }
 
+/** exit code for successful exectution */
 #define RC_SUCCESS      0
+/** exit code when -help (or bad option is supplied) */
 #define RC_HELP         1
+/** exit code if there's a parse error */
 #define RC_PARSE_ERROR  2
 
 /** print the usage string for the program for --help (or unrecognized options)
@@ -89,6 +100,9 @@ void showHelpAndExit()
    std::exit( RC_HELP ) ;
 }
 
+/**
+  Parse command line arguments and invoke the table generating function.
+ */
 int main( int argc, char ** argv )
 {
    Uint n{100} ;
