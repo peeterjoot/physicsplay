@@ -12,8 +12,6 @@
 #include <cstring>
 #include <cstdlib>
 #include <string>
-
-/* linux specific argument parsing */
 #include <getopt.h>
 
 /**
@@ -24,7 +22,7 @@ using Uint = std::uintptr_t ;
 /**
    wrapper for stoul to match the type of Uint above.
  
-   FIXME: This is Unix and bit-size specific.  Would want stoull on Win64 where sizeof(long)=4
+   FIXME: This is Unix and bit-size specific.  Would want stoull on Win64 where sizeof(long)=4 && sizeof(long) != sizeof(pointer)
  */
 #define strToUint std::stoul
 
