@@ -1,18 +1,143 @@
-/* 
-A program that generates a table of data. 
+/**
+   A program that generates a table of data. 
 
-The table should have two columns, one column with x values ranging from -2.0 to 2.0, and a second column with values y=tanh(2x). 
+   The table should have two columns, one column with x values ranging from -2.0 to 2.0, and a second column with values y=tanh(2x). 
 
-In particular, your program should:
+   In particular, your program should:
+*/
+#include <cmath>
+#include <cassert>
+#include <cstdint>
+#include <iostream>
+#include <cstring>
+#include <cstdlib>
+#include <string>
 
-(a) Provide and use a function f that takes x as input and returns the value of tanh(2x).
-(b) Divides the interval [-2,2] into n=100 segments.
-(c) Compute the value (x) of the midpoint of each segment and the value (y) of the function f at those midpoints.
+/* linux specific argument parsing */
+#include <getopt.h>
 
-Write out the x and y values in tabular form (i.e. two-column ascii text), either to a file or to screen.
+/**
+   Register sized unsigned integer type.
  */
+using Uint = std::uintptr_t ;
+#define strToUint std::stoul // FIXME: Unix and bit-size specific.  Would want stoull on Win64 where sizeof(long)=4
 
-double f(double x)
+/**
+   (a) Provide and use a function f that takes x as input and returns the value of tanh(2x).
+ */
+inline double f(const double x)
 {
-   return tanh( 2 * x ) ;
+   return std::tanh( 2 * x ) ;
+}
+
+/**
+   (c) Compute the value (x) of the midpoint of each segment and the value (y) of the function f at those midpoints.
+*/
+inline double midpoint(const double x1, const double x2)
+{
+   return ( x1 + x2 )/2.0 ;
+}
+
+/**
+   (b) Divides the interval [-2,2] into n=100 segments.
+
+   Write out the x and y values in tabular form (i.e. two-column ascii text), either to a file or to screen.
+*/
+void computeAndPrintTable( const double x1, const double x2, const Uint n )
+{
+   assert( x1 < x2 ) ;
+   assert( n != 0 ) ;
+
+   const double intervalWidth{(x2 - x1)/n} ;
+   double x = midpoint( x1, x1 + intervalWidth ) ;
+   
+   for ( Uint i{0} ; i < n ; i++, x += intervalWidth )
+   {
+      const double y{f( x )} ;
+      std::cout << x << "\t" << y << "\n" ;
+   }
+
+   // done: flush the stream.
+   std::cout << std::endl ;
+}
+
+#define RC_SUCCESS      0
+#define RC_HELP         1
+#define RC_PARSE_ERROR  2
+
+/** print the usage string for the program for --help (or unrecognized options)
+ */
+void showHelpAndExit()
+{
+   std::cerr << "usage: tanhTable [--number=n|-n n] [-lower=x1|-l x1] [--upper=x2] [--help]" << std::endl ;
+
+   std::exit( RC_HELP ) ;
+}
+
+int main( int argc, char ** argv )
+{
+   Uint n{100} ;
+   double x1{-2.0} ;
+   double x2{+2.0} ;
+   int c ;
+   int line{0} ;
+
+   const struct option long_options[] = {
+     { "help",   0, NULL, 'h' },
+     { "number", 1, NULL, 'n' },
+     { "lower",  1, NULL, 'l' },
+     { "upper",  1, NULL, 'u' },
+     { NULL,     0, NULL, 0   }
+   } ;
+
+   try {
+      while ( -1 != ( c = getopt_long( argc, argv, "hn:l:u:", long_options, NULL ) ) )
+      { 
+         switch ( c )
+         {
+            case 'n' :
+            {
+               line = __LINE__ ;
+               n = strToUint( optarg ) ;
+
+               break ;
+            }
+            case 'l' :
+            {
+               line = __LINE__ ;
+               x1 = std::stod( optarg ) ;
+
+               break ;
+            }
+            case 'u' :
+            {
+               line = __LINE__ ;
+               x2 = std::stod( optarg ) ;
+
+               break ;
+            }
+            case 'h' :
+            default:
+            {
+               showHelpAndExit() ;
+            }
+         } 
+      }
+   }
+   catch (...)
+   {
+      std::cerr 
+         << __FILE__
+         << ":"
+         << line << ": uncaught exception (parse error)\n"
+         << "option: -" << (char)c << "\n"
+         << "argument: " << optarg << "\n"
+         << std::endl ;
+
+      std::exit( RC_PARSE_ERROR ) ;
+   }
+
+   computeAndPrintTable( x1, x2, n ) ;
+
+   return RC_SUCCESS ;
 }
