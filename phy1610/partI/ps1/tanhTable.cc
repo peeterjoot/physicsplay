@@ -2,8 +2,6 @@
    A program that generates a table of data. 
 
    The table should have two columns, one column with x values ranging from -2.0 to 2.0, and a second column with values y=tanh(2x). 
-
-   In particular, your program should:
 */
 #include <cmath>
 #include <cassert>
@@ -23,7 +21,7 @@ using Uint = std::uintptr_t ;
 #define strToUint std::stoul // FIXME: Unix and bit-size specific.  Would want stoull on Win64 where sizeof(long)=4
 
 /**
-   (a) Provide and use a function f that takes x as input and returns the value of tanh(2x).
+   Provide and use a function f that takes x as input and returns the value of tanh(2x).
  */
 inline double f(const double x)
 {
@@ -31,7 +29,13 @@ inline double f(const double x)
 }
 
 /**
-   (c) Compute the value (x) of the midpoint of each segment and the value (y) of the function f at those midpoints.
+   Compute the value (x) of the midpoint of each segment and the value (y) of the function f at those midpoints.
+
+   \param x1 [in]
+      lower range of the table domain
+
+   \param x2 [in]
+      upper range of the table domain
 */
 inline double midpoint(const double x1, const double x2)
 {
@@ -39,9 +43,20 @@ inline double midpoint(const double x1, const double x2)
 }
 
 /**
-   (b) Divides the interval [-2,2] into n=100 segments.
+   Divides the interval [-2,2] into n=100 segments.
 
    Write out the x and y values in tabular form (i.e. two-column ascii text), either to a file or to screen.
+
+   Note: the problem description doesn't say to print any sort of header row, or special delimiters.  I've used a tab delimiter and no header row.
+
+   \param x1 [in]
+      lower range of the table domain
+
+   \param x2 [in]
+      upper range of the table domain
+
+   \param n [in]
+      number of intervals to divide the domain into
 */
 void computeAndPrintTable( const double x1, const double x2, const Uint n )
 {
