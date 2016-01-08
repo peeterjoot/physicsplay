@@ -9,6 +9,8 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <memory>
+#include <array>
 
 /// Physical parameters.
 struct physical
@@ -90,11 +92,19 @@ int main(int argc, char* argv[])
    std::cout << "#nsteps  " << nsteps  << std::endl;   
    std::cout << "#nper   " << nper   << std::endl;
 
-   // Define and allocate arrays
-   double* rho_prev = new double[npnts]; // time step t-1
-   double* rho     = new double[npnts]; // time step t
-   double* rho_next = new double[npnts]; // time step t+1
-   double* x      = new double[npnts]; // x values
+   using values = std::array<double, npnts> ;
+   using valuePointer = std::unique_ptr< values > ;
+
+   // Define and allocate arrays, deallocated when the pointers go out of scope.
+   valuePointer rho_prev = std::make_unique< values >() ;
+   valuePointer rho      = std::make_unique< values >() ;
+   valuePointer rho_next = std::make_unique< values >() ;
+   valuePointer x        = std::make_unique< values >() ;
+
+//   double* rho_prev = new double[npnts]; // time step t-1
+//   double* rho     = new double[npnts]; // time step t
+//   double* rho_next = new double[npnts]; // time step t+1
+//   double* x      = new double[npnts]; // x values
 
    // Initialize
    for (int i = 0; i < npnts; i++) {
@@ -144,10 +154,10 @@ int main(int argc, char* argv[])
    }
 
    // Deallocate memory
-   delete[] rho_prev;
-   delete[] rho;
-   delete[] rho_next;
-   delete[] x;
+//   delete[] rho_prev;
+//   delete[] rho;
+//   delete[] rho_next;
+//   delete[] x;
 
    return 0;
 }
