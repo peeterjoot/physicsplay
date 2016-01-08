@@ -2,9 +2,9 @@ CXXFLAGS += -std=c++11
 THISDIR := phy1610/partI/ps2
 
 # toggle these for debug vs. optimize
-CXXFLAGS += -g
-#CXXFLAGS += -DNDEBUG
-#CXXFLAGS += -O2
+#CXXFLAGS += -g
+CXXFLAGS += -DNDEBUG
+CXXFLAGS += -O2
 
 #TARGETS += wave1dorig
 TARGETS += wave1d

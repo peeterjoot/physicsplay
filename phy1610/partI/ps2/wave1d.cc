@@ -10,7 +10,7 @@
 #include <fstream>
 #include <cmath>
 #include <memory>
-#include <array>
+#include <vector>
 
 /// Physical parameters.
 struct physical
@@ -46,10 +46,12 @@ struct simulation
 struct output
 {
    double  outtime ;   //< how often should a snapshot of the wave be written out? 
+   bool    verbose ;   //< print output or just compute it?
 
    output()
    {
-      outtime =  1.0;
+      outtime = 1.0;
+      verbose = true ;
    }
 } ;
 
@@ -74,6 +76,7 @@ struct parameters : public physical,simulation,output
          infile >> runtime;
          infile >> dx;
          infile >> outtime;
+         infile >> verbose;
          infile.close();
       }
 
@@ -84,49 +87,47 @@ struct parameters : public physical,simulation,output
       nper    = outtime/dt;  // how many step s between snapshots
 
       // Report all the values
-      std::cout << "#c       " << c      << std::endl;
-      std::cout << "#tau     " << tau    << std::endl;
-      std::cout << "#x1      " << x1     << std::endl;
-      std::cout << "#x2      " << x2     << std::endl;
-      std::cout << "#runtime " << runtime << std::endl;
-      std::cout << "#dx      " << dx     << std::endl;
-      std::cout << "#outtime " << outtime << std::endl; 
-      std::cout << "#ngrid   " << ngrid   << std::endl;
-      std::cout << "#dt      " << dt     << std::endl;
-      std::cout << "#nsteps  " << nsteps  << std::endl;   
-      std::cout << "#nper    " << nper   << std::endl;
+      if ( verbose )
+      {
+         std::cout << "#c       " << c       << "\n"
+                   << "#tau     " << tau     << "\n"
+                   << "#x1      " << x1      << "\n"
+                   << "#x2      " << x2      << "\n"
+                   << "#runtime " << runtime << "\n"
+                   << "#dx      " << dx      << "\n"
+                   << "#outtime " << outtime << "\n"
+                   << "#ngrid   " << ngrid   << "\n"
+                   << "#dt      " << dt      << "\n"
+                   << "#nsteps  " << nsteps  << "\n"
+                   << "#nper    " << nper    << std::endl;
+      }
    }
 } ;
 
 class wave1d
 {
-   double* rho_prev ; // time step t-1
-   double* rho      ; // time step t
-   double* rho_next ; // time step t+1
-   double* x        ; // x values
+   std::vector<double> rho_prev ; // time step t-1
+   std::vector<double> rho      ; // time step t
+   std::vector<double> rho_next ; // time step t+1
+   std::vector<double> x        ; // x values
    const parameters & p ;
 
 public:
    wave1d( const parameters & p_ ) :
-      rho_prev(nullptr),
-      rho(nullptr),
-      rho_next(nullptr),
-      x(nullptr),
+      rho_prev(),
+      rho(),
+      rho_next(),
+      x(),
       p(p_)
    {
-      rho_prev = new double[p.npnts];
-      rho      = new double[p.npnts];
-      rho_next = new double[p.npnts];
-      x        = new double[p.npnts];
+      rho_prev.resize( p.npnts, 0.0 ) ;
+      rho.resize( p.npnts, 0.0 ) ;
+      rho_next.resize( p.npnts, 0.0 ) ;
+      x.resize( p.npnts, 0.0 ) ;
    }
 
    ~wave1d()
    {
-      // Deallocate memory.
-      delete[] rho_prev;
-      delete[] rho;
-      delete[] rho_next;
-      delete[] x;
    }
 
    void initializeAndExcite()
@@ -134,9 +135,11 @@ public:
       // Initialize
       for (int i = 0; i < p.npnts; i++) {
          x[i] = p.x1 + ((i-1)*(p.x2-p.x1))/p.ngrid; 
-         rho[i] = 0.0;
-         rho_prev[i] = 0.0;
-         rho_next[i] = 0.0;
+
+         // resize does this, since the fill value was specified.
+         //rho[i] = 0.0;
+         //rho_prev[i] = 0.0;
+         //rho_next[i] = 0.0;
       }
 
       // Excite
@@ -146,13 +149,21 @@ public:
       }
    }
 
-   void compute()
+   /**
+      Show the state of the computation.
+
+      \param time [in]
+         N * dt at the time of the display.
+     */
+   void display( double time )
    {
-      // Output initial signal
-      std::cout << "\n#t = " << 0 << "\n";
+      std::cout << "# t = " << time << "\n";
       for (int i = 1; i <= p.ngrid; i++) 
          std::cout << x[i] << " " << rho[i] << "\n";
+   }
 
+   void compute()
+   {
       // Take timesteps
       for (int s = 0; s < p.nsteps; s++) {
 
@@ -168,18 +179,23 @@ public:
          }
 
          // Rotate array pointers so t+1 becomes the new t etc.
-         double* temp = rho_prev;
-         rho_prev = rho;
-         rho     = rho_next;
-         rho_next = temp;  
+         // Note that vector::swap doesn't touch the elements themselves, just
+         // the vector metadata.
+         std::vector<double> temp ;
+         temp    .swap( rho_prev ) ;
+         rho_prev.swap( rho ) ;
+         rho     .swap( rho_next ) ;
+         rho_next.swap( temp ) ;
 
          // Output density
-         if ((s+1)%p.nper == 0) {
-            std::cout << "\n\n# t = " << s*p.dt << "\n";
-            for (int i = 1; i <= p.ngrid; i++) 
-               std::cout << x[i] << " " << rho[i] << "\n";
+         if ( ((s+1)%p.nper == 0) && p.verbose ) {
+            display( s * p.dt ) ;
          }
       }
+
+//      if ( p.verbose ) {
+//         display( (p.nsteps -1) * p.dt ) ;
+//      }
    }
 } ;
 
@@ -190,6 +206,12 @@ int main(int argc, char* argv[])
    wave1d w( p ) ;
 
    w.initializeAndExcite() ;
+
+   if ( p.verbose )
+   {
+      // Output initial signal
+      w.display( 0.0 ) ;
+   }
    w.compute() ;
 
    return 0;
