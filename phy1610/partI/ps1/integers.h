@@ -29,9 +29,9 @@ using Uint = std::uintptr_t ;
 inline void strToUintAssumptions()
 {
 #if defined _WIN64
-   static_assert( sizeof(Uint) == sizeof(unsigned long long) ) ;
+   static_assert( sizeof(Uint) == sizeof(unsigned long long), "bad assumptions about sizeof uintptr_t, long long" ) ;
 #else
-   static_assert( sizeof(Uint) == sizeof(unsigned long) ) ;
+   static_assert( sizeof(Uint) == sizeof(unsigned long), "bad assumptions about sizeof uintptr_t, long" ) ;
 #endif
 }
 
