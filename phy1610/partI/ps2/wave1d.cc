@@ -84,17 +84,17 @@ struct parameters : public physical,simulation,output
       nper    = outtime/dt;  // how many step s between snapshots
 
       // Report all the values
-      std::cout << "#c      " << c      << std::endl;
-      std::cout << "#tau    " << tau    << std::endl;
-      std::cout << "#x1     " << x1     << std::endl;
-      std::cout << "#x2     " << x2     << std::endl;
+      std::cout << "#c       " << c      << std::endl;
+      std::cout << "#tau     " << tau    << std::endl;
+      std::cout << "#x1      " << x1     << std::endl;
+      std::cout << "#x2      " << x2     << std::endl;
       std::cout << "#runtime " << runtime << std::endl;
-      std::cout << "#dx     " << dx     << std::endl;
+      std::cout << "#dx      " << dx     << std::endl;
       std::cout << "#outtime " << outtime << std::endl; 
       std::cout << "#ngrid   " << ngrid   << std::endl;
-      std::cout << "#dt     " << dt     << std::endl;
+      std::cout << "#dt      " << dt     << std::endl;
       std::cout << "#nsteps  " << nsteps  << std::endl;   
-      std::cout << "#nper   " << nper   << std::endl;
+      std::cout << "#nper    " << nper   << std::endl;
    }
 } ;
 
@@ -181,7 +181,7 @@ public:
          }
       }
    }
-}
+} ;
 
 int main(int argc, char* argv[])
 {

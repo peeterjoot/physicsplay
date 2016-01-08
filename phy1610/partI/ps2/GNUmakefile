@@ -6,6 +6,7 @@ CXXFLAGS += -g
 #CXXFLAGS += -DNDEBUG
 #CXXFLAGS += -O2
 
+#TARGETS += wave1dorig
 TARGETS += wave1d
 TARGETS += .gitignore
 #TARGETS += waveparams.txt
@@ -15,6 +16,9 @@ all: $(TARGETS)
 CLEANTARGETS += $(TARGETS)
 # doxygen:
 CLEANTARGETS += html latex
+
+# from run.sh
+CLEANTARGETS += out0 out1
 
 .gitignore: GNUmakefile
 	echo $(addprefix $(THISDIR)/,$(CLEANTARGETS)) | tr ' ' '\n' > $@
