@@ -98,67 +98,99 @@ struct parameters : public physical,simulation,output
    }
 } ;
 
+class wave1d
+{
+   double* rho_prev ; // time step t-1
+   double* rho      ; // time step t
+   double* rho_next ; // time step t+1
+   double* x        ; // x values
+   const parameters & p ;
+
+public:
+   wave1d( const parameters & p_ ) :
+      rho_prev(nullptr),
+      rho(nullptr),
+      rho_next(nullptr),
+      x(nullptr),
+      p(p_)
+   {
+      rho_prev = new double[p.npnts];
+      rho      = new double[p.npnts];
+      rho_next = new double[p.npnts];
+      x        = new double[p.npnts];
+   }
+
+   ~wave1d()
+   {
+      // Deallocate memory.
+      delete[] rho_prev;
+      delete[] rho;
+      delete[] rho_next;
+      delete[] x;
+   }
+
+   void initializeAndExcite()
+   {
+      // Initialize
+      for (int i = 0; i < p.npnts; i++) {
+         x[i] = p.x1 + ((i-1)*(p.x2-p.x1))/p.ngrid; 
+         rho[i] = 0.0;
+         rho_prev[i] = 0.0;
+         rho_next[i] = 0.0;
+      }
+
+      // Excite
+      for (int i = p.npnts/4 + 1; i < 3*p.npnts/4; i++) {
+         rho[i] = 0.25 - fabs(double(i-p.npnts/2)/double(p.npnts));
+         rho_prev[i] = rho[i];
+      }
+   }
+
+   void compute()
+   {
+      // Output initial signal
+      std::cout << "\n#t = " << 0 << "\n";
+      for (int i = 1; i <= p.ngrid; i++) 
+         std::cout << x[i] << " " << rho[i] << "\n";
+
+      // Take timesteps
+      for (int s = 0; s < p.nsteps; s++) {
+
+         // Set zero dirichlet boundary conditions
+         rho[0] = 0.0;
+         rho[p.ngrid+1] = 0.0;
+
+         // Evolve
+         for (int i = 1; i <= p.ngrid; i++) {
+            double laplacian = pow(p.c/p.dx,2)*(rho[i+1] + rho[i-1] - 2*rho[i]);
+            double friction = (rho[i] - rho_prev[i])/p.tau;
+            rho_next[i] = 2*rho[i] - rho_prev[i] + p.dt*(laplacian*p.dt-friction);
+         }
+
+         // Rotate array pointers so t+1 becomes the new t etc.
+         double* temp = rho_prev;
+         rho_prev = rho;
+         rho     = rho_next;
+         rho_next = temp;  
+
+         // Output density
+         if ((s+1)%p.nper == 0) {
+            std::cout << "\n\n# t = " << s*p.dt << "\n";
+            for (int i = 1; i <= p.ngrid; i++) 
+               std::cout << x[i] << " " << rho[i] << "\n";
+         }
+      }
+   }
+}
+
 int main(int argc, char* argv[])
 {
    parameters p( argc, argv ) ;
-   
-   double* rho_prev = new double[p.npnts]; // time step t-1
-   double* rho     = new double[p.npnts]; // time step t
-   double* rho_next = new double[p.npnts]; // time step t+1
-   double* x      = new double[p.npnts]; // x values
 
-   // Initialize
-   for (int i = 0; i < p.npnts; i++) {
-      x[i] = p.x1 + ((i-1)*(p.x2-p.x1))/p.ngrid; 
-      rho[i] = 0.0;
-      rho_prev[i] = 0.0;
-      rho_next[i] = 0.0;
-   }
+   wave1d w( p ) ;
 
-   // Excite
-   for (int i = p.npnts/4 + 1; i < 3*p.npnts/4; i++) {
-      rho[i] = 0.25 - fabs(double(i-p.npnts/2)/double(p.npnts));
-      rho_prev[i] = rho[i];
-   }
-
-   // Output initial signal
-   std::cout << "\n#t = " << 0 << "\n";
-   for (int i = 1; i <= p.ngrid; i++) 
-      std::cout << x[i] << " " << rho[i] << "\n";
-
-   // Take timesteps
-   for (int sc = 0; sc < p.nsteps; sc++) {
-
-      // Set zero dirichlet boundary conditions
-      rho[0] = 0.0;
-      rho[p.ngrid+1] = 0.0;
-
-      // Evolve
-      for (int i = 1; i <= p.ngrid; i++) {
-         double laplacian = pow(p.c/p.dx,2)*(rho[i+1] + rho[i-1] - 2*rho[i]);
-         double friction = (rho[i] - rho_prev[i])/p.tau;
-         rho_next[i] = 2*rho[i] - rho_prev[i] + p.dt*(laplacian*p.dt-friction);
-      }
-
-      // Rotate array pointers so t+1 becomes the new t etc.
-      double* temp = rho_prev;
-      rho_prev = rho;
-      rho     = rho_next;
-      rho_next = temp;  
-
-      // Output density
-      if ((sc+1)%p.nper == 0) {
-         std::cout << "\n\n# t = " << sc*p.dt << "\n";
-         for (int i = 1; i <= p.ngrid; i++) 
-            std::cout << x[i] << " " << rho[i] << "\n";
-      }
-   }
-
-   // Deallocate memory
-   delete[] rho_prev;
-   delete[] rho;
-   delete[] rho_next;
-   delete[] x;
+   w.initializeAndExcite() ;
+   w.compute() ;
 
    return 0;
 }
