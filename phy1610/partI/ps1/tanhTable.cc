@@ -7,25 +7,12 @@
 */
 #include <cmath>
 #include <cassert>
-#include <cstdint>
 #include <iostream>
 #include <cstring>
 #include <cstdlib>
-#include <string>
 #include <getopt.h>
 
-/**
-   Register sized unsigned integer type.
- */
-using Uint = std::uintptr_t ;
-
-/**
-   wrapper for stoul to match the type of Uint above.
- 
-   FIXME: This is Unix and bit-size specific.  Would want stoull on Win64 where sizeof(long)=4 && sizeof(long) != sizeof(pointer)
- */
-#define strToUint std::stoul
-
+#include "integers.h"
 /**
    Provide and use a function f that takes x as input and returns the value of tanh(2x).
  */
