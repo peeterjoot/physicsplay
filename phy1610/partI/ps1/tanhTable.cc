@@ -13,6 +13,7 @@
 #include <getopt.h>
 
 #include "integers.h"
+
 /**
    Provide and use a function f that takes x as input and returns the value of tanh(2x).
  */
