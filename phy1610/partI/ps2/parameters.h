@@ -9,10 +9,10 @@
 /// Physical parameters.
 struct physical
 {
-   double  c      ;  //< wave speed
-   double  tau    ;  //< damping time
-   double  x1     ;  //< left most x value
-   double  x2     ;  //< right most x value
+   double  c      ;  ///< wave speed
+   double  tau    ;  ///< damping time
+   double  x1     ;  ///< left most x value
+   double  x2     ;  ///< right most x value
 
    /**
      set physical parameters to some defaults
@@ -23,8 +23,8 @@ struct physical
 /// Simulation parameters
 struct simulation
 {
-   double  runtime ;  //< how long should the simulation try to compute?
-   double  dx     ;   //< spatial grid size
+   double  runtime ;  ///< how long should the simulation try to compute?
+   double  dx     ;   ///< spatial grid size
 
    /**
      set simulation parameters to some defaults
@@ -35,8 +35,8 @@ struct simulation
 /// Output parameters
 struct output
 {
-   double  outtime ;   //< how often should a snapshot of the wave be written out? 
-   bool    verbose ;   //< print output or just compute it?
+   double  outtime ;   ///< how often should a snapshot of the wave be written out? 
+   bool    verbose ;   ///< print output or just compute it?
 
    /**
      set output parameters to some defaults
@@ -47,11 +47,11 @@ struct output
 /// Derived parameters and parsing
 struct parameters : public physical,simulation,output
 {
-   Sint32   ngrid   ;  // number of x points
-   Sint32   npnts   ;  // number of x points including boundary points
-   double dt      ;  // time step size
-   Sint32   nsteps  ;  // number of steps of that size to reach runtime
-   Sint32   nper    ;  // how many step s between snapshots
+   Sint32   ngrid   ;  ///< number of x points
+   Sint32   npnts   ;  ///< number of x points including boundary points
+   double   dt      ;  ///< time step size
+   Sint32   nsteps  ;  ///< number of steps of that size to reach runtime
+   Sint32   nper    ;  ///< how many step s between snapshots
 
    /** 
       Read the parameter values from a file (argv[1]) if specified on the command line.

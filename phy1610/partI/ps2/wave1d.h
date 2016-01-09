@@ -11,17 +11,19 @@
 
    The compute method of this class solves the 1-dim wave equation
 
+   \f[
       \frac{\partial^2u}{\partial t^2} - c^2 \frac{\partial^2u}{\partial x^2} + (\frac{1}{\tau}) \frac{\partial u}{\partial t} = 0  
+   \f]
 
-   with boundary conditions u(x_1,t)=u(x_2,t)=0,
+   with boundary conditions \f[ u(x_1,t)=u(x_2,t)=0 \f],
 
    and initial conditions of a triangle form:
-    u(x,0) = 0 for x<x_1+L/4  
-    u(x,0) = (x-x_1-L/4)/L for x_1+L/4<(x_1+x_2)/2  
-    u(x,0) = 0.5-(x-x_1-L/4)/L for x_1+L/4<(x_1+x_2)/2 
-    u(x,0) = 0 for x>x_2-L/4 
+    \f[u(x,0) = 0 \f] for \f[ x<x_1+L/4  \f]
+    \f[u(x,0) = (x-x_1-L/4)/L \f] for \f[ x_1+L/4<(x_1+x_2)/2  \f]
+    \f[u(x,0) = 0.5-(x-x_1-L/4)/L \f] for \f[ x_1+L/4<(x_1+x_2)/2 \f]
+    \f[u(x,0) = 0 \f] for \f[ x>x_2-L/4 \f]
 
-   where L=x_2-x_1. 
+   where \f[L=x_2-x_1. \f]
  */
 class wave1d
 {
