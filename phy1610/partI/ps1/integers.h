@@ -3,8 +3,8 @@
 
    Some convienence definitions for integer types.
  */
-#if !defined integers_h
-#define integers_h
+#if !defined phy1610_ps1_integers_h_included
+#define phy1610_ps1_integers_h_included
 
 #include <cstdint>
 #include <string>
