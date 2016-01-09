@@ -3,8 +3,6 @@
 
    Simulates a one-dimensional damped wave equation
 
-FIXME: something I did regresses things.  
-
    \author Ramses van Zon
  */
 
@@ -29,7 +27,7 @@ wave1d::wave1d( const parameters & p_ ) :
 void wave1d::initializeAndExcite()
 {
    // Initialize
-   for ( Uint i = 0 ; i < p.npnts ; i++ )
+   for ( Sint i = 0 ; i < p.npnts ; i++ )
    {
       x[i] = p.x1 + ((i-1)*(p.x2-p.x1))/p.ngrid ;
 
@@ -40,7 +38,7 @@ void wave1d::initializeAndExcite()
    }
 
    // Excite
-   for ( Uint i = p.npnts/4 + 1 ; i < 3*p.npnts/4 ; i++ )
+   for ( Sint i = p.npnts/4 + 1 ; i < 3*p.npnts/4 ; i++ )
    {
       rho[i] = 0.25 - fabs(double(i-p.npnts/2)/double(p.npnts)) ;
       rho_prev[i] = rho[i] ;
@@ -84,7 +82,7 @@ void wave1d::compute()
       rho_next.swap( temp ) ;
 
       // Output density
-      if ( ((s+1)%p.nper == 0) && p.verbose )
+      if ( ((s+1) % p.nper == 0) && p.verbose )
       {
          display( s * p.dt ) ;
       }

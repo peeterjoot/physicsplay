@@ -15,6 +15,11 @@
 using Uint = std::uintptr_t ;
 
 /**
+   Register sized signed integer type for loop counters and so forth.
+ */
+using Sint = std::intptr_t ;
+
+/**
    wrapper for stoul to match the type of Uint above.
  */
 #if defined _WIN64

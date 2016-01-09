@@ -5,6 +5,7 @@
 
 #include "integers.h"
 
+#define Sint32 int
 /// Physical parameters.
 struct physical
 {
@@ -46,11 +47,11 @@ struct output
 /// Derived parameters and parsing
 struct parameters : public physical,simulation,output
 {
-   Uint   ngrid   ;  // number of x points
-   Uint   npnts   ;  // number of x points including boundary points
+   Sint32   ngrid   ;  // number of x points
+   Sint32   npnts   ;  // number of x points including boundary points
    double dt      ;  // time step size
-   Uint   nsteps  ;  // number of steps of that size to reach s.runtime
-   Uint   nper    ;  // how many step s between snapshots
+   Sint32   nsteps  ;  // number of steps of that size to reach runtime
+   Sint32   nper    ;  // how many step s between snapshots
 
    /** 
       Read the parameter values from a file (argv[1]) if specified on the command line.
