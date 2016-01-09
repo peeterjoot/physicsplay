@@ -1,6 +1,3 @@
-# read in dependency files:
--include $(wildcard *.d)
-
 OSNAME := $(shell uname -o)
 
 #CXX := clang
@@ -13,7 +10,6 @@ CXXFLAGS += -MMD
 CXXFLAGS += -I../ps1
 
 # PRODUCTION := 1
-
 ifdef PRODUCTION
    CXXFLAGS += -DNDEBUG
    CXXFLAGS += -O2
@@ -32,11 +28,6 @@ TARGETS += .gitignore
 WAVE1D_SOURCES += parameters.cc wave1d.cc
 WAVE1D_OBJECTS := $(subst .cc,.o,$(WAVE1D_SOURCES))
 
-all: $(TARGETS)
-
-wave1d : $(WAVE1D_OBJECTS)
-	$(CXX) -o $@ $(WAVE1D_OBJECTS)
-
 CLEANTARGETS += $(TARGETS)
 # doxygen:
 CLEANTARGETS += html latex
@@ -49,14 +40,16 @@ CLEANTARGETS += *.o
 # clean dependency files if any
 CLEANTARGETS += $(subst .cc,.d,$(wildcard *.cc))
 
+all : $(TARGETS)
+
+wave1d : $(WAVE1D_OBJECTS)
+	$(CXX) -o $@ $(WAVE1D_OBJECTS)
+
 .gitignore: GNUmakefile
 	echo $(addprefix $(THISDIR)/,$(CLEANTARGETS)) | tr ' ' '\n' > $@
 
 clean::
 	rm -rf $(CLEANTARGETS)
 
-#base:
-#	wget https://support.scinet.utoronto.ca/education/get.php/wave1d.cc
-#
-#waveparams.txt:
-#	wget https://support.scinet.utoronto.ca/education/get.php/waveparams.txt
+# read in dependency files:
+-include $(wildcard *.d)

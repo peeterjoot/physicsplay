@@ -1,6 +1,3 @@
-# read in dependency files:
--include $(wildcard *.d)
-
 CXXFLAGS += -std=c++11
 THISDIR := phy1610/partI/ps1
 
@@ -39,3 +36,6 @@ CLEANTARGETS += $(subst .cc,.d,$(wildcard *.cc))
 
 clean::
 	rm -rf $(CLEANTARGETS)
+
+# read in dependency files:
+-include $(wildcard *.d)

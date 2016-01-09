@@ -2,7 +2,9 @@
    \file wave1d.cc
 
    Simulates a one-dimensional damped wave equation
-  
+
+FIXME: something I did regresses things.  
+
    \author Ramses van Zon
  */
 
