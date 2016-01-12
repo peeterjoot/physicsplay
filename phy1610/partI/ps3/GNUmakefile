@@ -36,6 +36,8 @@ CLEANTARGETS += out0 out1
 
 CLEANTARGETS += *.o
 
+CLEANTARGETS += output.dat
+
 # clean dependency files if any
 CLEANTARGETS += $(subst .cc,.d,$(wildcard *.cc))
 

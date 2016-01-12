@@ -4,6 +4,7 @@
 #define phy1610_ps3_mymatrix_h_included
 
 #include <vector>
+#include <string>
 #include "integers.h"
 
 /**
@@ -44,6 +45,13 @@ public:
    MyMatrix( const Uint r_, const Uint c_ ) ;
 
    /**
+      destructor.  nothing needed explicitly (vector cleans up after itself)
+    */
+   ~MyMatrix( )
+   {
+   }
+
+   /**
       number of rows in the matrix.
     */
    inline Uint get_rows() const
@@ -73,9 +81,15 @@ public:
     */
    void set_element( const Uint i, const Uint j, const float v ) ;
 
-   float get_element( const Uint i, const Uint j ) const ;
+//   float get_element( const Uint i, const Uint j ) const ;
 
-   void output( const string filename ) const ;
+   /**
+      Write the matrix to a file
+
+      \param filename [in]
+         path to the file to write the data to.
+    */
+   void output( const std::string filename ) const ;
 } ;
 
 #endif

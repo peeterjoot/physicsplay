@@ -5,6 +5,7 @@
  */
 #include "MyMatrix.h"
 #include <string>
+#include <fstream>
 #include <stdexcept>
 
 MyMatrix::MyMatrix( const Uint r_, const Uint c_ ) : elem(), r{r_}, c{c_}
@@ -26,7 +27,7 @@ void MyMatrix::set_element( const Uint i, const Uint j, const float v )
    {
       std::string s = 
                       std::string( "i = " ) + std::to_string( i )
-                    + std::string( ", j = " ) + std::to_string( j ),
+                    + std::string( ", j = " ) + std::to_string( j )
                     + std::string( "; r = " ) + std::to_string( r )
                     + std::string( ", c = " ) + std::to_string( c ) ;
 
@@ -39,6 +40,7 @@ void MyMatrix::set_element( const Uint i, const Uint j, const float v )
    elem[ pos(i, j) ] = v ;
 }
 
+/*
 float MyMatrix::get_element( const Uint i, const Uint j ) const
 {
    if ( i >= r || j >= c )
@@ -54,16 +56,21 @@ float MyMatrix::get_element( const Uint i, const Uint j ) const
 
    return elem[ pos( i, j ) ] ;
 }
+*/
 
-void MyMatrix::output( const string filename ) const
+void MyMatrix::output( const std::string filename ) const
 {
-   // fixme: output to file.
+   std::ofstream out( filename ) ;
+
    for ( Uint i = 0 ; i < r ; i++ )
    {
       for ( Uint j = 0 ; j < c ; j++ )
       {
-         std::cout << get_element( i, j ) << " " ;
+         out << elem[ pos( i, j ) ] << " " ;
       }
-      std::cout << std::endl ;
+
+      out << std::endl ;
    }
+
+   // destructor will close the file.
 }
