@@ -8,7 +8,7 @@
 #include <fstream>
 #include <stdexcept>
 
-MyMatrix::MyMatrix( const Uint r_, const Uint c_ ) : elem(), r{r_}, c{c_}
+inline void MyMatrix::check_cons_dimensions() const
 {
    if ( 0 == r || 0 == c )
    {
@@ -17,8 +17,20 @@ MyMatrix::MyMatrix( const Uint r_, const Uint c_ ) : elem(), r{r_}, c{c_}
 
       throw std::out_of_range( s ) ;
    }
+}
+
+MyMatrix::MyMatrix( const Uint r_, const Uint c_ ) : elem(), r{r_}, c{c_}
+{
+   check_cons_dimensions() ;
 
    elem.resize( r * c ) ;
+}
+
+MyMatrix::MyMatrix( const Uint r_, const Uint c_, const float fill ) : elem(), r{r_}, c{c_}
+{
+   check_cons_dimensions() ;
+
+   elem.resize( r * c, fill ) ;
 }
 
 void MyMatrix::set_element( const Uint i, const Uint j, const float v )
@@ -40,7 +52,6 @@ void MyMatrix::set_element( const Uint i, const Uint j, const float v )
    elem[ pos(i, j) ] = v ;
 }
 
-/*
 float MyMatrix::get_element( const Uint i, const Uint j ) const
 {
    if ( i >= r || j >= c )
@@ -56,7 +67,6 @@ float MyMatrix::get_element( const Uint i, const Uint j ) const
 
    return elem[ pos( i, j ) ] ;
 }
-*/
 
 void MyMatrix::output( const std::string filename ) const
 {

@@ -31,10 +31,14 @@ class MyMatrix
    {
       return ( i*c + j ) ;
    }
+
+   /** throws std::out_of_range if r == 0, or c == 0.  Called in all constructors.
+    */
+   inline void check_cons_dimensions() const ;
 public:
 
    /**
-      construct a matrix element.
+      Construct an uninitialized matrix with a specified size.
 
       \param r_ [in]
          number of rows
@@ -43,6 +47,20 @@ public:
          number of columns
     */
    MyMatrix( const Uint r_, const Uint c_ ) ;
+
+   /**
+      construct a matrix element with a default value used for all elements.
+
+      \param r_ [in]
+         number of rows
+
+      \param c_ [in]
+         number of columns
+
+      \param fill [in]
+         initial value for the matrix elements.
+    */
+   MyMatrix( const Uint r_, const Uint c_, const float fill ) ;
 
    /**
       destructor.  nothing needed explicitly (vector cleans up after itself)
@@ -81,7 +99,16 @@ public:
     */
    void set_element( const Uint i, const Uint j, const float v ) ;
 
-//   float get_element( const Uint i, const Uint j ) const ;
+   /**
+      get the (i,j) matrix element.
+
+      \param i [in]
+         row index
+
+      \param j [in]
+         column index
+    */
+   float get_element( const Uint i, const Uint j ) const ;
 
    /**
       Write the matrix to a file
