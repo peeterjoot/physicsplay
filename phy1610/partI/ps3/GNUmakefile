@@ -21,11 +21,15 @@ THISDIR := phy1610/partI/ps3
 
 #TARGETS += makethisworkorig
 TARGETS += makethiswork
+TARGETS += test
 TARGETS += .gitignore
 #TARGETS += waveparams.txt
 
 MAKETHISWORK_SOURCES += MyMatrix.cc makethiswork.cc
 MAKETHISWORK_OBJECTS := $(subst .cc,.o,$(MAKETHISWORK_SOURCES))
+
+TEST_SOURCES += MyMatrix.cc test.cc
+TEST_OBJECTS := $(subst .cc,.o,$(TEST_SOURCES))
 
 CLEANTARGETS += $(TARGETS)
 # doxygen:
@@ -45,6 +49,9 @@ all : $(TARGETS)
 
 makethiswork : $(MAKETHISWORK_OBJECTS)
 	$(CXX) -o $@ $(MAKETHISWORK_OBJECTS)
+
+test : $(TEST_OBJECTS)
+	$(CXX) -o $@ $(TEST_OBJECTS) -lboost_unit_test_framework
 
 .gitignore: GNUmakefile
 	echo $(addprefix $(THISDIR)/,$(CLEANTARGETS)) | tr ' ' '\n' > $@
