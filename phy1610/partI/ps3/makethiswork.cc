@@ -25,9 +25,9 @@ int main(int argc, char* argv[])
         MyMatrix a(r,c);
 
         // fill the 2d array
-        for (int i=0; i<a.get_rows(); i++) 
+        for (Uint i=0; i<a.get_rows(); i++) 
         {
-            for (int j=0; j<a.get_columns(); j++) 
+            for (Uint j=0; j<a.get_columns(); j++) 
             {
                 double x = i/float(a.get_rows())-0.5;
                 double y = j/float(a.get_columns())-0.5; // corrected version: this said "i/float(....) before

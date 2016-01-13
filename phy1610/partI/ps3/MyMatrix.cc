@@ -58,7 +58,7 @@ float MyMatrix::get_element( const Uint i, const Uint j ) const
    {
       std::string s = 
                       std::string( "i = " ) + std::to_string( i )
-                    + std::string( ", j = " ) + std::to_string( j ),
+                    + std::string( ", j = " ) + std::to_string( j )
                     + std::string( "; r = " ) + std::to_string( r )
                     + std::string( ", c = " ) + std::to_string( c ) ;
 
