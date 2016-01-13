@@ -3,6 +3,8 @@
 
 bool epred( const std::out_of_range & e ) { return true ; }
 
+#define BOOST_TEST_DYN_LINK
+#define BOOST_TEST_MAIN
 #define BOOST_TEST_MODULE test
 //#include <boost/test/included/unit_test.hpp>
 #include <boost/test/unit_test.hpp>

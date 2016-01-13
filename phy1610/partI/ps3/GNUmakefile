@@ -22,7 +22,7 @@ THISDIR := phy1610/partI/ps3
 
 #TARGETS += makethisworkorig
 TARGETS += makethiswork
-#TARGETS += test
+TARGETS += test
 TARGETS += .gitignore
 #TARGETS += waveparams.txt
 

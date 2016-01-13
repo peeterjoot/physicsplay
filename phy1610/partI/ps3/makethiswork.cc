@@ -9,7 +9,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cmath>
-#include "mymatrix.h"
+#include "MyMatrix.h"
 
 int main(int argc, char* argv[])
 {
