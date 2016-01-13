@@ -33,7 +33,3 @@ ticktock.o: ticktock.cc ticktock.h
 clean:
 	\rm -f  ${OBJS}
 
-profile.txt: mm
-	./mm > profile.txt
-	@echo "ERROR: You need to implement the rest of this as part of the assignment!" >> profile.txt
-

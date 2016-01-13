@@ -5,8 +5,9 @@ CXXFLAGS += -D_GLIBCXX_USE_C99
 
 # generate dependency files with each compilation:
 CXXFLAGS += -MMD
-
+CXXFLAGS += -Wall
 CXXFLAGS += -I../ps1
+CXXFLAGS += -std=c++11
 
 # PRODUCTION := 1
 ifdef PRODUCTION
@@ -14,48 +15,45 @@ ifdef PRODUCTION
    CXXFLAGS += -O2
 else
    CXXFLAGS += -g
+   CXXFLAGS += -pg -O0
+   LDFLAGS += -pg -O0
 endif
 
-CXXFLAGS += -Wall
-CXXFLAGS += -std=c++11
-THISDIR := phy1610/partI/ps3
+THISDIR := phy1610/partI/ps4
 
-#TARGETS += makethisworkorig
-TARGETS += makethiswork
+TARGETS += mm
 TARGETS += test
 TARGETS += .gitignore
-#TARGETS += waveparams.txt
 
-MAKETHISWORK_SOURCES += MyMatrix.cc makethiswork.cc
-MAKETHISWORK_OBJECTS := $(subst .cc,.o,$(MAKETHISWORK_SOURCES))
-
-TEST_SOURCES += MyMatrix.cc test.cc
-TEST_OBJECTS := $(subst .cc,.o,$(TEST_SOURCES))
+MM_SOURCES += mm.cc mymatrix.cc mymultiply.cc ticktock.cc
+MM_OBJECTS := $(subst .cc,.o,$(MM_SOURCES))
 
 CLEANTARGETS += $(TARGETS)
 # doxygen:
 CLEANTARGETS += html latex
 
-# from run.sh
-CLEANTARGETS += out0 out1
-
 CLEANTARGETS += *.o
-
-CLEANTARGETS += output.dat
 
 # clean dependency files if any
 CLEANTARGETS += $(subst .cc,.d,$(wildcard *.cc))
 
 all : $(TARGETS)
 
-makethiswork : $(MAKETHISWORK_OBJECTS)
-	$(CXX) -o $@ $(MAKETHISWORK_OBJECTS)
+mm : $(MM_OBJECTS)
+	$(CXX) -o $@ $(MM_OBJECTS) $(LDFLAGS)
 
-test : $(TEST_OBJECTS)
-	$(CXX) -o $@ $(TEST_OBJECTS) -lboost_unit_test_framework
+profile: profile.txt
+	@cat profile.txt
+
+#test : $(TEST_OBJECTS)
+#	$(CXX) -o $@ $(TEST_OBJECTS) $(LDFLAGS) -lboost_unit_test_framework
 
 .gitignore: GNUmakefile
 	echo $(addprefix $(THISDIR)/,$(CLEANTARGETS)) | tr ' ' '\n' > $@
+
+profile.txt: mm
+	./mm > profile.txt
+	@echo "ERROR: You need to implement the rest of this as part of the assignment!" >> profile.txt
 
 clean::
 	rm -rf $(CLEANTARGETS)

@@ -17,6 +17,7 @@ else
    CXXFLAGS += -g
 endif
 
+CXXFLAGS += -Wall
 CXXFLAGS += -std=c++11
 THISDIR := phy1610/partI/ps2
 

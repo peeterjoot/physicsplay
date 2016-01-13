@@ -10,6 +10,8 @@ CXXFLAGS += -D_GLIBCXX_USE_C99
 # generate dependency files with each compilation:
 CXXFLAGS += -MMD
 
+CXXFLAGS += -Wall
+
 # PRODUCTION := 1
 
 ifdef PRODUCTION
