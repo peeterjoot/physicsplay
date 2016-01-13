@@ -22,9 +22,13 @@ THISDIR := phy1610/partI/ps3
 
 #TARGETS += makethisworkorig
 TARGETS += makethiswork
-TARGETS += test
 TARGETS += .gitignore
 #TARGETS += waveparams.txt
+
+ifneq ("$(OSNAME)","Cygwin")
+   # get cxx11 abi link errors attempting to use boost unit_test
+   TARGETS += test
+endif
 
 MAKETHISWORK_SOURCES += MyMatrix.cc makethiswork.cc
 MAKETHISWORK_OBJECTS := $(subst .cc,.o,$(MAKETHISWORK_SOURCES))
