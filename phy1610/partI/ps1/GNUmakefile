@@ -1,5 +1,5 @@
 CXXFLAGS += -std=c++11
-THISDIR := phy1610/partI/ps1
+THISDIR := phy1610/2015/partI/ps1
 
 OSNAME := $(shell uname -o)
 
@@ -10,7 +10,7 @@ CXXFLAGS += -D_GLIBCXX_USE_C99
 # generate dependency files with each compilation:
 CXXFLAGS += -MMD
 
-CXXFLAGS += -Wall
+CXXFLAGS += -Wall -Werror
 
 # PRODUCTION := 1
 

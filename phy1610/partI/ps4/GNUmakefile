@@ -28,7 +28,7 @@ ifdef PROFILED
    LDFLAGS += -pg -g
 endif
 
-THISDIR := phy1610/partI/ps4
+THISDIR := phy1610/2015/partI/ps4
 
 TARGETS += profile.txt
 TARGETS += mm
