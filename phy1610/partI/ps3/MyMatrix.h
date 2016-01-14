@@ -17,11 +17,14 @@
  */
 class MyMatrix
 {
+   /// this class is generic with the exception of this float dependence
+   typedef float valueType ;
+
    /// storage.
-#if defined WITH_VECTOR
-   std::vector<float> elem ;
+#if defined WITH_ARRAY
+   valueType * elem ;
 #else
-   float * elem ;
+   std::vector<valueType> elem ;
 #endif
    Uint r ;    ///< rows
    Uint c ;    ///< columns
@@ -49,7 +52,7 @@ class MyMatrix
    /**
       no range checking exceptions.
     */
-   inline float get_element_unchecked( const Uint i, const Uint j ) const
+   inline valueType get_element_unchecked( const Uint i, const Uint j ) const
    {
       return elem[ pos( i, j ) ] ;
    }
@@ -57,12 +60,12 @@ class MyMatrix
    /**
       throws out_of_range exception if i,j exceed acceptible range.  Not inlined to firewall away the exception object creation code.
     */
-   float get_element_checked( const Uint i, const Uint j ) const ;
+   valueType get_element_checked( const Uint i, const Uint j ) const ;
 
    /**
       no range checking exceptions.
     */
-   inline void set_element_unchecked( const Uint i, const Uint j, const float v )
+   inline void set_element_unchecked( const Uint i, const Uint j, const valueType v )
    {
       elem[ pos( i, j ) ] = v ;
    }
@@ -70,8 +73,10 @@ class MyMatrix
    /**
       throws out_of_range exception if i,j exceed acceptible range.  Not inlined to firewall away the exception object creation code.
     */
-   void set_element_checked( const Uint i, const Uint j, const float v ) ;
+   void set_element_checked( const Uint i, const Uint j, const valueType v ) ;
 public:
+
+   MyMatrix( ) : elem{}, r{0}, c{0} {} 
 
    /**
       Construct an uninitialized matrix with a specified size.
@@ -96,14 +101,14 @@ public:
       \param fill [in]
          initial value for the matrix elements.
     */
-   MyMatrix( const Uint r_, const Uint c_, const float fill ) ;
+   MyMatrix( const Uint r_, const Uint c_, const valueType fill ) ;
 
    /**
       destructor.  nothing needed explicitly (vector cleans up after itself)
     */
    ~MyMatrix( )
    {
-#if !defined WITH_VECTOR
+#if defined WITH_ARRAY
       if ( elem )
       {
          delete[] elem ; 
@@ -142,7 +147,7 @@ public:
       \param checked [in]
          throw std::out_of_range if the i >= r, j >= c
     */
-   inline void set_element( const Uint i, const Uint j, const float v, const bool checked = MYMATRIX_RANGE_CHECKED_FLAG )
+   inline void set_element( const Uint i, const Uint j, const valueType v, const bool checked = MYMATRIX_RANGE_CHECKED_FLAG )
    {
       if ( !checked )
       {
@@ -164,7 +169,7 @@ public:
       \param j [in]
          column index
     */
-   inline float get_element( const Uint i, const Uint j, const bool checked = MYMATRIX_RANGE_CHECKED_FLAG ) const
+   inline valueType get_element( const Uint i, const Uint j, const bool checked = MYMATRIX_RANGE_CHECKED_FLAG ) const
    {
       if ( !checked )
       {
@@ -183,8 +188,22 @@ public:
 
       \param filename [in]
          path to the file to write the data to.
+
+      \param binaryMode [in]
+         specify true for binary mode output.
     */
-   void output( const std::string filename ) const ;
+   void output( const std::string filename, const bool binaryMode = false ) const ;
+
+   /**
+      Read the matrix to a file
+
+      \param filename [in]
+         path to the file to write the data to.
+
+      \param binaryMode [in]
+         specify true for binary mode output.
+    */
+   void input( const std::string filename, const bool binaryMode = false ) ;
 } ;
 
 #endif

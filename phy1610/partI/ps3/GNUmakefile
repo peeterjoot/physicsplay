@@ -6,6 +6,8 @@ CXXFLAGS += -D_GLIBCXX_USE_C99
 # generate dependency files with each compilation:
 CXXFLAGS += -MMD
 
+#CXXFLAGS += -DWITH_ARRAY
+
 CXXFLAGS += -I../ps1
 
 # PRODUCTION := 1

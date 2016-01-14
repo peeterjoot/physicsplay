@@ -3,12 +3,12 @@ OSNAME := $(shell uname -o)
 # for windows (cygwin):
 CXXFLAGS += -D_GLIBCXX_USE_C99
 
-# generate dependency files with each compilation:
-#CXXFLAGS += -DWITH_VECTOR
+#CXXFLAGS += -DWITH_ARRAY
 
 # 16X slower with range checking (and associated function calls).
 #CXXFLAGS += -DMYMATRIX_DO_RANGE_CHECKING
 
+# generate dependency files with each compilation:
 CXXFLAGS += -MMD
 CXXFLAGS += -Wall -Werror
 CXXFLAGS += -I../ps1
