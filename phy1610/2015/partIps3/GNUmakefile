@@ -20,7 +20,7 @@ endif
 
 CXXFLAGS += -Wall -Werror
 CXXFLAGS += -std=c++11
-THISDIR := phy1610/2015/partI/ps3
+THISDIR := phy1610/2015/partIps3
 
 #TARGETS += makethisworkorig
 TARGETS += makethiswork

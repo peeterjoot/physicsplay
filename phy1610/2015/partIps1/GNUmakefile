@@ -1,5 +1,5 @@
 CXXFLAGS += -std=c++11
-THISDIR := phy1610/2015/partI/ps1
+THISDIR := phy1610/2015/partIps1
 
 OSNAME := $(shell uname -o)
 

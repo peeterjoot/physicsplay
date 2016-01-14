@@ -19,7 +19,7 @@ endif
 
 CXXFLAGS += -Wall -Werror
 CXXFLAGS += -std=c++11
-THISDIR := phy1610/2015/partI/ps2
+THISDIR := phy1610/2015/partIps2
 
 #TARGETS += wave1dorig
 TARGETS += wave1d

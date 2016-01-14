@@ -1,5 +1,5 @@
 SUBMAKES += $(wildcard notes/*/GNUmakefile)
-SUBMAKES += $(wildcard phy1610/*/*/*/GNUmakefile)
+SUBMAKES += $(wildcard phy1610/*/*/GNUmakefile)
 SUBDIRS := $(subst /GNUmakefile,,$(SUBMAKES))
 IGNOREDIRS += notes/atomic
 IGNOREDIRS += notes/bb
