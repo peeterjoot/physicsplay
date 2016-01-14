@@ -12,7 +12,7 @@
 #ifndef MYMULTIPLYH
 #define MYMULTIPLYH
 
-#include "mymatrix.h"
+#include "MyMatrix.h"
 
 // Matrix-multiply matrix a and b into matrix c
 // memory of c should already be allocates.

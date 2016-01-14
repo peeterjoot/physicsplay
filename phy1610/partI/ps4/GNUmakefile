@@ -4,35 +4,45 @@ OSNAME := $(shell uname -o)
 CXXFLAGS += -D_GLIBCXX_USE_C99
 
 # generate dependency files with each compilation:
+#CXXFLAGS += -DWITH_VECTOR
+
+# 16X slower with range checking (and associated function calls).
+#CXXFLAGS += -DMYMATRIX_DO_RANGE_CHECKING
+
 CXXFLAGS += -MMD
-CXXFLAGS += -Wall
+CXXFLAGS += -Wall -Werror
 CXXFLAGS += -I../ps1
+CXXFLAGS += -I../ps3
 CXXFLAGS += -std=c++11
 
-# PRODUCTION := 1
+PRODUCTION := 1
+PROFILED := 1
 ifdef PRODUCTION
    CXXFLAGS += -DNDEBUG
    CXXFLAGS += -O2
 else
    CXXFLAGS += -g
-   CXXFLAGS += -pg -O0
-   LDFLAGS += -pg -O0
+endif
+ifdef PROFILED
+   CXXFLAGS += -pg -g
+   LDFLAGS += -pg -g
 endif
 
 THISDIR := phy1610/partI/ps4
 
 TARGETS += mm
-TARGETS += test
+#TARGETS += test
 TARGETS += .gitignore
 
-MM_SOURCES += mm.cc mymatrix.cc mymultiply.cc ticktock.cc
+MM_SOURCES += mm.cc ../ps3/MyMatrix.cc mymultiply.cc ticktock.cc
 MM_OBJECTS := $(subst .cc,.o,$(MM_SOURCES))
 
 CLEANTARGETS += $(TARGETS)
 # doxygen:
 CLEANTARGETS += html latex
 
-CLEANTARGETS += *.o
+CLEANTARGETS += $(MM_OBJECTS)
+CLEANTARGETS += profile.txt
 
 # clean dependency files if any
 CLEANTARGETS += $(subst .cc,.d,$(wildcard *.cc))
@@ -52,8 +62,8 @@ profile: profile.txt
 	echo $(addprefix $(THISDIR)/,$(CLEANTARGETS)) | tr ' ' '\n' > $@
 
 profile.txt: mm
-	./mm > profile.txt
-	@echo "ERROR: You need to implement the rest of this as part of the assignment!" >> profile.txt
+	./mm > $@
+	gprof --line ./mm >> $@
 
 clean::
 	rm -rf $(CLEANTARGETS)

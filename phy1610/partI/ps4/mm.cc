@@ -7,7 +7,7 @@
 // Ramses van Zon, January 2015
 //
 
-#include "mymatrix.h"
+#include "MyMatrix.h"
 #include "mymultiply.h"
 #include "ticktock.h"
 
@@ -24,8 +24,8 @@ void initialize(MyMatrix& a, double x)
     double y = x;
 
     // loop over rows (i) and columns (j)
-    for (int i=0; i<a.get_rows(); i++) {
-        for (int j=0; j<a.get_columns(); j++) {
+    for (Uint i=0; i<a.get_rows(); i++) {
+        for (Uint j=0; j<a.get_columns(); j++) {
             a.set_element(i, j, y);
             // increment y such that the last set element is x+1
             y += 1.0/(nelements-1);  

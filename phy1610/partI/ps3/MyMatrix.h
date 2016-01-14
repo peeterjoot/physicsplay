@@ -7,12 +7,22 @@
 #include <string>
 #include "integers.h"
 
+#if defined MYMATRIX_DO_RANGE_CHECKING
+   #define MYMATRIX_RANGE_CHECKED_FLAG true
+#else
+   #define MYMATRIX_RANGE_CHECKED_FLAG false
+#endif
 /**
   A simple matrix class.
  */
 class MyMatrix
 {
-   std::vector<float> elem ; ///< storage.
+   /// storage.
+#if defined WITH_VECTOR
+   std::vector<float> elem ;
+#else
+   float * elem ;
+#endif
    Uint r ;    ///< rows
    Uint c ;    ///< columns
 
@@ -35,6 +45,32 @@ class MyMatrix
    /** throws std::out_of_range if r == 0, or c == 0.  Called in all constructors.
     */
    inline void check_cons_dimensions() const ;
+
+   /**
+      no range checking exceptions.
+    */
+   inline float get_element_unchecked( const Uint i, const Uint j ) const
+   {
+      return elem[ pos( i, j ) ] ;
+   }
+
+   /**
+      throws out_of_range exception if i,j exceed acceptible range.  Not inlined to firewall away the exception object creation code.
+    */
+   float get_element_checked( const Uint i, const Uint j ) const ;
+
+   /**
+      no range checking exceptions.
+    */
+   inline void set_element_unchecked( const Uint i, const Uint j, const float v )
+   {
+      elem[ pos( i, j ) ] = v ;
+   }
+
+   /**
+      throws out_of_range exception if i,j exceed acceptible range.  Not inlined to firewall away the exception object creation code.
+    */
+   void set_element_checked( const Uint i, const Uint j, const float v ) ;
 public:
 
    /**
@@ -67,6 +103,12 @@ public:
     */
    ~MyMatrix( )
    {
+#if !defined WITH_VECTOR
+      if ( elem )
+      {
+         delete[] elem ; 
+      }
+#endif
    }
 
    /**
@@ -96,8 +138,22 @@ public:
 
       \param v [in]
          value to set
+
+      \param checked [in]
+         throw std::out_of_range if the i >= r, j >= c
     */
-   void set_element( const Uint i, const Uint j, const float v ) ;
+   inline void set_element( const Uint i, const Uint j, const float v, const bool checked = MYMATRIX_RANGE_CHECKED_FLAG )
+   {
+      if ( !checked )
+      {
+         // fast path (inlined) for performance.
+         return set_element_unchecked( i, j, v ) ;
+      }
+      else
+      {
+         return set_element_checked( i, j, v ) ;
+      }
+   }
 
    /**
       get the (i,j) matrix element.
@@ -108,7 +164,19 @@ public:
       \param j [in]
          column index
     */
-   float get_element( const Uint i, const Uint j ) const ;
+   inline float get_element( const Uint i, const Uint j, const bool checked = MYMATRIX_RANGE_CHECKED_FLAG ) const
+   {
+      if ( !checked )
+      {
+         // fast path (inlined) for performance.
+         return get_element_unchecked( i, j ) ;
+      }
+      else
+      {
+         // with range checking.
+         return get_element_checked( i, j ) ;
+      }
+   }
 
    /**
       Write the matrix to a file
