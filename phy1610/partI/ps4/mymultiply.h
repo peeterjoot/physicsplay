@@ -15,8 +15,8 @@
 #include "MyMatrix.h"
 
 // Matrix-multiply matrix a and b into matrix c
-// memory of c should already be allocates.
+// memory of c should already be allocated.
 
-void multiply(MyMatrix &a, MyMatrix &b, MyMatrix &c);
+void multiply(MyMatrix &a, MyMatrix &b, MyMatrix &c, const Uint tilesize = 0 );
 
 #endif

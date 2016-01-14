@@ -30,6 +30,7 @@ endif
 
 THISDIR := phy1610/partI/ps4
 
+TARGETS += profile.txt
 TARGETS += mm
 #TARGETS += test
 TARGETS += .gitignore
