@@ -92,11 +92,8 @@ void computeAndPrintTable( const double x1, const double x2, const Uint n )
    {
       const double y{f( x )} ;
       const double z{g( x )} ;
-      std::cout << x << "\t" << y << "\t" << z << "\n" ;
+      std::cout << x << "\t" << y << "\t" << z << std::endl ;
    }
-
-   // done: flush the stream.
-   std::cout << std::endl ;
 }
 
 /** exit code for successful exectution */

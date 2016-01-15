@@ -20,6 +20,7 @@ else
    CXXFLAGS += -g
 endif
 
+TARGETS += lissajous.txt
 TARGETS += lissajous
 TARGETS += .gitignore
 
@@ -34,6 +35,9 @@ CLEANTARGETS += $(subst .cc,.d,$(wildcard *.cc))
 
 .gitignore: GNUmakefile
 	echo $(addprefix $(THISDIR)/,$(CLEANTARGETS)) | tr ' ' '\n' > $@
+
+lissajous.txt : lissajous
+	./lissajous > $@
 
 clean::
 	rm -rf $(CLEANTARGETS)
