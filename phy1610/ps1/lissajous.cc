@@ -108,7 +108,7 @@ void computeAndPrintTable( const double x1, const double x2, const Uint n )
  */
 void showHelpAndExit()
 {
-   std::cerr << "usage: lissajous [--number=n|-n n] [-lower=x1|-l x1] [--upper=x2] [--help]" << std::endl ;
+   std::cerr << "usage: lissajous [--number=n|-n n] [-lower=x1|-l x1] [--upper=x2|-u x2] [--help]" << std::endl ;
 
    std::exit( RC_HELP ) ;
 }

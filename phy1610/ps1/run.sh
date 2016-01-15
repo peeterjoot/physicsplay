@@ -1,6 +1,3 @@
-# built with gcc 5.2.1, on ubuntu 15.10:
-# g++ -std=c++11 -I../inc -Wall -Werror -D_GLIBCXX_USE_C99 -MMD -g    lissajous.cc   -o lissajous
-
 # default behaviour: print the [-5,5] 100 entry table:
 ./lissajous | tee lissajous.txt
 
@@ -19,5 +16,7 @@
 ./lissajous -u h
 
 # print help and exit:
-./lissajous --help
+./lissajous --help 2>&1 | tee lissajous.help.txt
 ./lissajous -h
+
+usage: lissajous [--number=n|-n n] [-lower=x1|-l x1] [--upper=x2|-u x2] [--help]
