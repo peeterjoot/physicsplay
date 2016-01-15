@@ -61,7 +61,7 @@ inline double g( const double x )
    \param x2 [in]
       upper range of the table domain
 */
-inline double midpoint(const double x1, const double x2)
+inline double midpoint( const double x1, const double x2 )
 {
    return ( x1 + x2 )/2.0 ;
 }
