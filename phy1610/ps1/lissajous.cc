@@ -29,6 +29,7 @@
 
 #include "integers.h"
 
+// Fixed constants from the problem specification.
 #define SINE_MULTIPLIER 2
 #define COSINE_MULTIPLIER 3
 #define LOWER_INTERVAL_BOUND -5.0
@@ -68,8 +69,8 @@ inline double midpoint(const double x1, const double x2)
 /**
    Divides the interval (say [-5,5]) into n (=100 say) segments.
 
-   Writes out the values for x, f(x), g(x) in tabular form, three columns tab delimited, with no header rows or any other visual
-   separation.
+   Writes out the values for x, f(x), g(x) in tabular form, three columns
+   space delimited, with no header rows or any other visual separation.
 
    \param x1 [in]
       lower range of the table domain
@@ -92,7 +93,7 @@ void computeAndPrintTable( const double x1, const double x2, const Uint n )
    {
       const double y{f( x )} ;
       const double z{g( x )} ;
-      std::cout << x << "\t" << y << "\t" << z << std::endl ;
+      std::cout << x << " " << y << " " << z << std::endl ;
    }
 }
 
