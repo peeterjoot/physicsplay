@@ -8,7 +8,7 @@ CXXFLAGS += -MMD
 
 #CXXFLAGS += -DWITH_ARRAY
 
-CXXFLAGS += -I../ps1
+CXXFLAGS += -I../../inc
 
 # PRODUCTION := 1
 ifdef PRODUCTION
@@ -20,7 +20,7 @@ endif
 
 CXXFLAGS += -Wall -Werror
 CXXFLAGS += -std=c++11
-THISDIR := phy1610/2015/partIps3
+THISDIR := phy1610/2015/ps3
 
 #TARGETS += makethisworkorig
 TARGETS += makethiswork

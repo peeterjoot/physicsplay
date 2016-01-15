@@ -1,19 +1,18 @@
+THISDIR := phy1610/ps1
+
+#OSNAME := $(shell uname -o)
+
 CXXFLAGS += -std=c++11
-THISDIR := phy1610/2015/partIps1
+CXXFLAGS += -I../inc
+CXXFLAGS += -Wall -Werror
 
-OSNAME := $(shell uname -o)
-
-#CXX := clang
 # for windows (cygwin):
 CXXFLAGS += -D_GLIBCXX_USE_C99
 
 # generate dependency files with each compilation:
 CXXFLAGS += -MMD
 
-CXXFLAGS += -Wall -Werror
-
 # PRODUCTION := 1
-
 ifdef PRODUCTION
    CXXFLAGS += -DNDEBUG
    CXXFLAGS += -O2
@@ -21,7 +20,7 @@ else
    CXXFLAGS += -g
 endif
 
-TARGETS += tanhTable
+TARGETS += lissajous
 TARGETS += .gitignore
 
 all: $(TARGETS)

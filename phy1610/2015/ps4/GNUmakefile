@@ -11,7 +11,7 @@ CXXFLAGS += -D_GLIBCXX_USE_C99
 # generate dependency files with each compilation:
 CXXFLAGS += -MMD
 CXXFLAGS += -Wall -Werror
-CXXFLAGS += -I../ps1
+CXXFLAGS += -I../../inc
 CXXFLAGS += -I../ps3
 CXXFLAGS += -std=c++11
 
@@ -28,7 +28,7 @@ ifdef PROFILED
    LDFLAGS += -pg -g
 endif
 
-THISDIR := phy1610/2015/partIps4
+THISDIR := phy1610/2015/ps4
 
 TARGETS += profile.txt
 TARGETS += mm

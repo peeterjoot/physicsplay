@@ -1,15 +1,21 @@
+CXXFLAGS += -std=c++11
+THISDIR := phy1610/2016/ps1
+
 OSNAME := $(shell uname -o)
 
 #CXX := clang
 # for windows (cygwin):
 CXXFLAGS += -D_GLIBCXX_USE_C99
 
+CXXFLAGS += -I../../inc
+
 # generate dependency files with each compilation:
 CXXFLAGS += -MMD
 
-CXXFLAGS += -I../ps1
+CXXFLAGS += -Wall -Werror
 
 # PRODUCTION := 1
+
 ifdef PRODUCTION
    CXXFLAGS += -DNDEBUG
    CXXFLAGS += -O2
@@ -17,34 +23,17 @@ else
    CXXFLAGS += -g
 endif
 
-CXXFLAGS += -Wall -Werror
-CXXFLAGS += -std=c++11
-THISDIR := phy1610/2015/partIps2
-
-#TARGETS += wave1dorig
-TARGETS += wave1d
+TARGETS += tanhTable
 TARGETS += .gitignore
-#TARGETS += waveparams.txt
 
-WAVE1D_SOURCES += parameters.cc wave1d.cc
-WAVE1D_OBJECTS := $(subst .cc,.o,$(WAVE1D_SOURCES))
+all: $(TARGETS)
 
 CLEANTARGETS += $(TARGETS)
 # doxygen:
 CLEANTARGETS += html latex
 
-# from run.sh
-CLEANTARGETS += out0 out1
-
-CLEANTARGETS += *.o
-
 # clean dependency files if any
 CLEANTARGETS += $(subst .cc,.d,$(wildcard *.cc))
-
-all : $(TARGETS)
-
-wave1d : $(WAVE1D_OBJECTS)
-	$(CXX) -o $@ $(WAVE1D_OBJECTS)
 
 .gitignore: GNUmakefile
 	echo $(addprefix $(THISDIR)/,$(CLEANTARGETS)) | tr ' ' '\n' > $@
