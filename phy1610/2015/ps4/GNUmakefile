@@ -47,7 +47,7 @@ CLEANTARGETS += profile.txt
 CLEANTARGETS += *.dat
 
 # clean dependency files if any
-CLEANTARGETS += $(subst .o,.d,$(filter %.o,$(CLEANTARGETS)))
+CLEANTARGETS += $(subst .o,.d,$(MM_OBJECTS))
 
 all : $(TARGETS)
 
