@@ -183,8 +183,8 @@ int main( int argc, char * argv[] )
       F.fdf.fdf = &quadratic_fdf ;
       F.fdf.params = &params ;
       s.fdf = gsl_root_fdfsolver_alloc( T.fdf ) ;
-      gsl_root_fdfsolver_set( s.fdf, &F.fdf, x ) ;
-      printf( "using %s method\n", gsl_root_fdfsolver_name(s) ) ;
+      gsl_root_fdfsolver_set( s.fdf, &F.fdf, x_hi ) ;
+      printf( "using %s method\n", gsl_root_fdfsolver_name(s.fdf) ) ;
    }
    else
    {
@@ -192,8 +192,8 @@ int main( int argc, char * argv[] )
       F.f.params = &params ;
 
       s.f = gsl_root_fsolver_alloc( T.f ) ;
-      gsl_root_fsolver_set( s.f, &F, x_lo, x_hi ) ;
-      printf( "using %s method\n", gsl_root_fsolver_name(s) ) ;
+      gsl_root_fsolver_set( s.f, &F.f, x_lo, x_hi ) ;
+      printf( "using %s method\n", gsl_root_fsolver_name(s.f) ) ;
    }
 
    printf( "%5s [%9s, %9s] %9s %10s %9s\n",
@@ -201,11 +201,13 @@ int main( int argc, char * argv[] )
 
    if ( useFdfSolver )
    {
+      double x, x0 ;
+      x = x_hi ;
       do {
          iter++ ;
-         status = gsl_root_fdfsolver_iterate( s ) ;
+         status = gsl_root_fdfsolver_iterate( s.fdf ) ;
          x0 = x ;
-         x = gsl_root_fdfsolver_root( s ) ;
+         x = gsl_root_fdfsolver_root( s.fdf ) ;
          status = gsl_root_test_delta( x, x0, 0, 1e-3 ) ;
 
          if (status == GSL_SUCCESS)
@@ -216,16 +218,16 @@ int main( int argc, char * argv[] )
 
       } while ( status == GSL_CONTINUE && iter < max_iter ) ;
 
-      gsl_root_fdfsolver_free(s) ;
+      gsl_root_fdfsolver_free( s.fdf ) ;
    }
    else
    {
       do {
          iter++ ;
-         status = gsl_root_fsolver_iterate( s ) ;
-         r = gsl_root_fsolver_root( s ) ;
-         x_lo = gsl_root_fsolver_x_lower( s ) ;
-         x_hi = gsl_root_fsolver_x_upper( s ) ;
+         status = gsl_root_fsolver_iterate( s.f ) ;
+         r = gsl_root_fsolver_root( s.f ) ;
+         x_lo = gsl_root_fsolver_x_lower( s.f ) ;
+         x_hi = gsl_root_fsolver_x_upper( s.f ) ;
          status = gsl_root_test_interval( x_lo, x_hi, 0, 0.001 ) ;
          if ( status == GSL_SUCCESS )
          {
@@ -237,7 +239,7 @@ int main( int argc, char * argv[] )
 
       } while ( status == GSL_CONTINUE && iter < max_iter ) ;
 
-      gsl_root_fsolver_free( s ) ;
+      gsl_root_fsolver_free( s.f ) ;
    }
 
    return status ;
