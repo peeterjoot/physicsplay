@@ -1,0 +1,38 @@
+Homework 8: PDEs
+
+ 
+In homework 2 you modularized the code "wave1d.cc", which solves the damped 1D wave equation:
+\frac{\partial^2u}{\partial t^2} - c^2 \frac{\partial^2u}{\partial x^2} + (\frac{1}{\tau}) \frac{\partial u}{\partial t} = 0  
+
+
+with boundary conditions \small u(x_1,t)=u(x_2,t)=0,
+
+and initial conditions of a triangle form:
+
+ \small u(x,0) = 0                                                 for    \small x<x_1+L/4  
+ \small u(x,0) = (x-x_1-L/4)/L                  for    \small x_1+L/4 < x < (x_1+x_2)/2  
+ \small u(x,0) = 0.5-(x-x_1-L/4)/L      for    \small (x_1 + x_2)/2 < x < x_2 - L/4 
+ \small u(x,0) = 0                                                 for    \small x>x_2-L/4 
+
+ where \small L=x_2-x_1. 
+
+The code reads the parameters used from a file passed as a command argument, i.e. if the executable is named: 'wave1dsolver', by executing "./wave1dsolver waveparams.txt", it will use the parameters defined in 'waveparams.txt'.  Notice that if not file is indicated in the command line, the solver will assume some default values hard-coded within the code. 
+
+ASSIGNMENT: modularize the code (if you haven't already done so) and re-implement the timestepping portion of the code two different ways, as discussed below, using matrix operators as shown in class.  The timestepping portion of the equation is
+
+\small u_{i+1} = \left[2 - \frac{\Delta t}{\tau} + \Delta t^2 F\right] u_i - \left[1 - \frac{\Delta t}{\tau}\right]u_{i-1}
+
+where \small F is the Laplacian operator and i is the time index.
+
+Create a matrix operator to calculate the first term on the right hand side.
+Use cblas routines to calculate the matrix-vector and scalar-vector operations needed to increment the timestep.
+Save the output in a netCDF file. 
+Implement your matrix-vector operation two ways: 1) using a full matrix including all zeros and 2) using a matrix stored in banded format, with appropriate multiplication routines, such as dgbmv.  Implement the operations in separate files, with separate entries in your Makefile.
+Use the "time" command to determine which method is faster.  Discuss.
+Please submit:
+
+all source, header, make  and discussion files for the new program.
+the output of 'git log' for your code development. We expect to see several commits, and meaningful comments.
+ 
+
+Deadline: March 12, 2015, 9:00 A
