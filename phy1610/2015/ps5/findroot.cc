@@ -85,7 +85,7 @@ int main( int argc, char * argv[] )
 
    int c{0} ;
    int line{0} ;
-   const bool useFdfSolver = false ;
+   bool useFdfSolver = false ;
    T.f = NULL ;
 
    const struct option long_options[] = {
@@ -178,10 +178,12 @@ int main( int argc, char * argv[] )
 
    if ( useFdfSolver )
    {
-      F.fdf.function = &quadratic_fdf ;
+      F.fdf.f = &quadratic ;
+      F.fdf.df = &quadratic_deriv ;
+      F.fdf.fdf = &quadratic_fdf ;
       F.fdf.params = &params ;
       s.fdf = gsl_root_fdfsolver_alloc( T.fdf ) ;
-      gsl_root_fdfsolver_set( s.fdf, &F, x_lo, x_hi ) ;
+      gsl_root_fdfsolver_set( s.fdf, &F.fdf, x ) ;
       printf( "using %s method\n", gsl_root_fdfsolver_name(s) ) ;
    }
    else
