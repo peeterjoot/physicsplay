@@ -27,10 +27,16 @@ TARGETS += makethiswork
 TARGETS += .gitignore
 #TARGETS += waveparams.txt
 
-ifneq ("$(OSNAME)","Cygwin")
-   # get cxx11 abi link errors attempting to use boost unit_test
-   TARGETS += test
+ifeq ("$(OSNAME)","Cygwin")
+   # get cxx11 abi link errors attempting to use boost unit_test with the pre-compiled boost library
+   CXXFLAGS += -DUSE_SINGLE_HEADER_BOOST_TEST_FRAMEWORK
+
+   # for putenv and mkstemp
+   CXXFLAGS += -U__STRICT_ANSI__
+else
+   TEST_LDLIBS += -lboost_unit_test_framework
 endif
+TARGETS += test
 
 MAKETHISWORK_SOURCES += MyMatrix.cc makethiswork.cc
 MAKETHISWORK_OBJECTS := $(subst .cc,.o,$(MAKETHISWORK_SOURCES))
@@ -59,7 +65,7 @@ makethiswork : $(MAKETHISWORK_OBJECTS)
 	$(CXX) -o $@ $(MAKETHISWORK_OBJECTS)
 
 test : $(TEST_OBJECTS)
-	$(CXX) -o $@ $(TEST_OBJECTS) -lboost_unit_test_framework
+	$(CXX) -o $@ $(TEST_OBJECTS) $(TEST_LDLIBS)
 
 .gitignore: GNUmakefile
 	echo $(addprefix $(THISDIR)/,$(CLEANTARGETS)) | tr ' ' '\n' > $@
