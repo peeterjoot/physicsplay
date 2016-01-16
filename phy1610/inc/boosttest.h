@@ -7,7 +7,11 @@
    #include <boost/test/included/unit_test.hpp>
 #else
    #define BOOST_TEST_DYN_LINK
-   #include <stdlib.h> // HACK: need putenv, mkstemp in global namespace for this include w/ cygwin
+
+   #if defined __STRICT_ANSI__
+      #error cygwin boost/test/unit_test.hpp requires putenv and mkstemp in the global namespace.  Add -U__STRICT_ANSI__
+   #endif
+
    #include <boost/test/unit_test.hpp>
 #endif
 
