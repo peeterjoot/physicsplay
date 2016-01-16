@@ -62,31 +62,44 @@ void showHelpAndExit()
    std::exit( RC_HELP ) ;
 }
 
+enum class solver
+{
+   undefined,
+   bisection,
+   falsepos,
+   brent,
+   newton,
+   secant,
+   steffenson
+} ;
+
+const void * solverMethod[] =
+{
+   nullptr,
+   (const void *)gsl_root_fsolver_bisection,
+   (const void *)gsl_root_fsolver_falsepos,
+   (const void *)gsl_root_fsolver_brent,
+   (const void *)gsl_root_fdfsolver_newton,
+   (const void *)gsl_root_fdfsolver_secant,
+   (const void *)gsl_root_fdfsolver_steffenson,
+} ;
+
+inline bool isFdfSolver( solver s )
+{
+   return s >= solver::newton ;
+}
+
 int main( int argc, char * argv[] )
 {
    int status ;
    int iter = 0, max_iter = 100 ;
-   union {
-      const gsl_root_fsolver_type *f ;
-      const gsl_root_fdfsolver_type *fdf ;
-   } T ;
-   union {
-      gsl_root_fsolver *f ;
-      gsl_root_fdfsolver *fdf ;
-   } s ;
+   solver whichSolver = solver::undefined ;
    double r = 0, r_expected = sqrt( 5.0 ) ;
-   double x_lo = 0.0, x_hi = 5.0 ;
 
-   union {
-      gsl_function f ;
-      gsl_function_fdf fdf ;
-   } F ;
    struct quadratic_params params = { 1.0, 0.0, -5.0 } ;
 
    int c{0} ;
    int line{0} ;
-   bool useFdfSolver = false ;
-   T.f = NULL ;
 
    const struct option long_options[] = {
      { "help",       0, NULL, 'h' },
@@ -107,45 +120,42 @@ int main( int argc, char * argv[] )
             case 'i' :
             {
                line = __LINE__ ;
-               T.f = gsl_root_fsolver_bisection ;
+               whichSolver = solver::bisection ;
 
                break ;
             }
             case 'f' :
             {
                line = __LINE__ ;
-               T.f = gsl_root_fsolver_falsepos ;
+               whichSolver = solver::falsepos ;
 
                break ;
             }
             case 'b' :
             {
                line = __LINE__ ;
-               T.f = gsl_root_fsolver_brent ;
+               whichSolver = solver::brent ;
 
                break ;
             }
             case 'n' :
             {
                line = __LINE__ ;
-               T.fdf = gsl_root_fdfsolver_newton ;
-               useFdfSolver = true ;
+               whichSolver = solver::newton ;
 
                break ;
             }
             case 's' :
             {
                line = __LINE__ ;
-               T.fdf = gsl_root_fdfsolver_secant ;
-               useFdfSolver = true ;
+               whichSolver = solver::secant ;
 
                break ;
             }
             case 'S' :
             {
                line = __LINE__ ;
-               T.fdf = gsl_root_fdfsolver_steffenson ;
-               useFdfSolver = true ;
+               whichSolver = solver::steffenson ;
 
                break ;
             }
@@ -170,44 +180,37 @@ int main( int argc, char * argv[] )
       std::exit( RC_PARSE_ERROR ) ;
    }
 
-   if ( !T.f )
+   if ( whichSolver == solver::undefined )
    {
       std::cerr << "solver unspecified" << std::endl ;
       showHelpAndExit() ;
    }
 
-   if ( useFdfSolver )
+   if ( isFdfSolver( whichSolver ) )
    {
-      F.fdf.f = &quadratic ;
-      F.fdf.df = &quadratic_deriv ;
-      F.fdf.fdf = &quadratic_fdf ;
-      F.fdf.params = &params ;
-      s.fdf = gsl_root_fdfsolver_alloc( T.fdf ) ;
-      gsl_root_fdfsolver_set( s.fdf, &F.fdf, x_hi ) ;
-      printf( "using %s method\n", gsl_root_fdfsolver_name(s.fdf) ) ;
-   }
-   else
-   {
-      F.f.function = &quadratic ;
-      F.f.params = &params ;
+      const gsl_root_fdfsolver_type *T = (const gsl_root_fdfsolver_type *)solverMethod[ (int)whichSolver ] ;
+      gsl_root_fdfsolver *s ;
+      gsl_function_fdf F ;
 
-      s.f = gsl_root_fsolver_alloc( T.f ) ;
-      gsl_root_fsolver_set( s.f, &F.f, x_lo, x_hi ) ;
-      printf( "using %s method\n", gsl_root_fsolver_name(s.f) ) ;
-   }
+      double x, x0 = 5.0 ;
 
-   printf( "%5s [%9s, %9s] %9s %10s %9s\n",
-           "iter", "lower", "upper", "root", "err", "err(est)") ;
+      F.f = &quadratic ;
+      F.df = &quadratic_deriv ;
+      F.fdf = &quadratic_fdf ;
+      F.params = &params ;
+      s = gsl_root_fdfsolver_alloc( T ) ;
+      gsl_root_fdfsolver_set( s, &F, x0 ) ;
 
-   if ( useFdfSolver )
-   {
-      double x, x0 ;
-      x = x_hi ;
+      printf( "using %s method\n", gsl_root_fdfsolver_name( s ) ) ;
+
+      printf( "%5s [%9s, %9s] %9s %10s %9s\n",
+              "iter", "lower", "upper", "root", "err", "err(est)" ) ;
+
       do {
          iter++ ;
-         status = gsl_root_fdfsolver_iterate( s.fdf ) ;
+         status = gsl_root_fdfsolver_iterate( s ) ;
          x0 = x ;
-         x = gsl_root_fdfsolver_root( s.fdf ) ;
+         x = gsl_root_fdfsolver_root( s ) ;
          status = gsl_root_test_delta( x, x0, 0, 1e-3 ) ;
 
          if (status == GSL_SUCCESS)
@@ -218,16 +221,32 @@ int main( int argc, char * argv[] )
 
       } while ( status == GSL_CONTINUE && iter < max_iter ) ;
 
-      gsl_root_fdfsolver_free( s.fdf ) ;
+      gsl_root_fdfsolver_free( s ) ;
    }
    else
    {
+      double x_lo = 0.0, x_hi = 5.0 ;
+
+      const gsl_root_fsolver_type *T = (const gsl_root_fsolver_type *)solverMethod[ (int)whichSolver ] ;
+      gsl_root_fsolver *s ;
+      gsl_function F ;
+
+      F.function = &quadratic ;
+      F.params = &params ;
+
+      s = gsl_root_fsolver_alloc( T ) ;
+      gsl_root_fsolver_set( s, &F, x_lo, x_hi ) ;
+      printf( "using %s method\n", gsl_root_fsolver_name( s ) ) ;
+
+      printf( "%5s [%9s, %9s] %9s %10s %9s\n",
+              "iter", "lower", "upper", "root", "err", "err(est)" ) ;
+
       do {
          iter++ ;
-         status = gsl_root_fsolver_iterate( s.f ) ;
-         r = gsl_root_fsolver_root( s.f ) ;
-         x_lo = gsl_root_fsolver_x_lower( s.f ) ;
-         x_hi = gsl_root_fsolver_x_upper( s.f ) ;
+         status = gsl_root_fsolver_iterate( s ) ;
+         r = gsl_root_fsolver_root( s ) ;
+         x_lo = gsl_root_fsolver_x_lower( s ) ;
+         x_hi = gsl_root_fsolver_x_upper( s ) ;
          status = gsl_root_test_interval( x_lo, x_hi, 0, 0.001 ) ;
          if ( status == GSL_SUCCESS )
          {
@@ -239,7 +258,7 @@ int main( int argc, char * argv[] )
 
       } while ( status == GSL_CONTINUE && iter < max_iter ) ;
 
-      gsl_root_fsolver_free( s.f ) ;
+      gsl_root_fsolver_free( s ) ;
    }
 
    return status ;
