@@ -32,7 +32,7 @@ TARGETS += .gitignore
 FINDROOT_SOURCES += findroot.cc
 FINDROOT_OBJECTS := $(subst .cc,.o,$(FINDROOT_SOURCES))
 
-#FINDROOT_LDLIBS += -lgsl
+FINDROOT_LDLIBS += -lgsl
 FINDROOT_LDLIBS += -lgslcblas
 
 #TEST_SOURCES += test.cc
