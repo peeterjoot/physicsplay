@@ -98,6 +98,13 @@ fSolver::~fSolver()
    gsl_root_fsolver_free( s ) ;
 }
 
+enum class intervalAdjustment
+{
+   undefined,
+   left,
+   right
+} ;
+
 int fSolver::iterate( const double x_lo, const double x_hi, const Uint max_iter, const double r_expected, const double err )
 {
    FUNCTION_PARAM_STRUCT params = FUNCTION_PARAM_INIT ;
@@ -106,12 +113,13 @@ int fSolver::iterate( const double x_lo, const double x_hi, const Uint max_iter,
    double r ;
    double x_min = x_lo ;
    double x_max = x_hi ;
+   intervalAdjustment lastAdjustment = intervalAdjustment::undefined ;
 
    // Brent's method (and probably the other interval methods) abort if
    // the root is not bracketed.  use the interval expansion method described
    // in the lectures if this is the case.
    //
-   while ( true )
+   while ( iter < max_iter )
    {
       double f_min = F.function( x_min, F.params ) ;
       double f_max = F.function( x_max, F.params ) ;
@@ -119,22 +127,45 @@ int fSolver::iterate( const double x_lo, const double x_hi, const Uint max_iter,
       double s_min = std::copysign( 1.0, f_min ) ;
       double s_max = std::copysign( 1.0, f_max ) ;
 
-      if ( s_min == s_max ) 
+      if ( s_min != s_max )
       {
-         double a_min = std::abs( f_min ) ;
-         double a_max = std::abs( f_max ) ;
-         double width = x_max - x_min ;
+         break ;
+      }
+      else
+      {
+         if ( lastAdjustment == intervalAdjustment::undefined )
+         {
+            double a_min = std::abs( f_min ) ;
+            double a_max = std::abs( f_max ) ;
 
-         if ( a_min < a_max )
+            // Try an initial guess that follows the slope towards
+            if ( a_min < a_max )
+            {
+               lastAdjustment = intervalAdjustment::right ;
+            }
+            else
+            {
+               lastAdjustment = intervalAdjustment::left ;
+            }
+         }
+
+         double width = x_max - x_min ;
+         if ( lastAdjustment == intervalAdjustment::right )
          {
             x_min -= width/2 ;
+            lastAdjustment = intervalAdjustment::left ;
          }
          else
          {
             x_max += width/2 ;
+            lastAdjustment = intervalAdjustment::right ;
          }
       }
+
+      iter++ ;
    } ;
+
+   iter = 0 ;
 
    int status = gsl_root_fsolver_set( s, &F, x_min, x_max ) ;
    if ( status )

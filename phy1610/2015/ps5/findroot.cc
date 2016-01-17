@@ -42,7 +42,7 @@ int main( int argc, char * argv[] )
 
    try {
       while ( -1 != ( c = getopt_long( argc, argv, "hifbnsS", long_options, NULL ) ) )
-      { 
+      {
          switch ( c )
          {
             case 'i' :
@@ -92,12 +92,12 @@ int main( int argc, char * argv[] )
             {
                showHelpAndExit() ;
             }
-         } 
+         }
       }
    }
    catch (...)
    {
-      std::cerr 
+      std::cerr
          << __FILE__
          << ":"
          << line << ": uncaught exception (parse error)\n"
