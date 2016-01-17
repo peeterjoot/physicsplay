@@ -18,9 +18,9 @@ endif
 
 CXXFLAGS += -Wall -Werror
 CXXFLAGS += -std=c++11
-THISDIR := phy1610/2015/ps6
+THISDIR := phy1610/2015/ps7
 
-TARGETS += solveode
+TARGETS += eigen
 TARGETS += .gitignore
 #TARGETS += waveparams.txt
 
@@ -29,11 +29,11 @@ TARGETS += .gitignore
 #   TARGETS += test
 #endif
 
-SOLVEODE_SOURCES += solveode.cc
-SOLVEODE_OBJECTS := $(subst .cc,.o,$(SOLVEODE_SOURCES))
+EIGEN_SOURCES += eigen.cc
+EIGEN_OBJECTS := $(subst .cc,.o,$(EIGEN_SOURCES))
 
-SOLVEODE_LDLIBS += -lgsl
-SOLVEODE_LDLIBS += -lgslcblas
+#EIGEN_LDLIBS += -lgsl
+#EIGEN_LDLIBS += -lgslcblas
 
 #ifeq ("$(OSNAME)","Cygwin")
 #   # get cxx11 abi link errors attempting to use boost unit_test with the pre-compiled boost library
@@ -53,15 +53,15 @@ CLEANTARGETS += $(TARGETS)
 # doxygen:
 CLEANTARGETS += html latex
 
-CLEANTARGETS += $(SOLVEODE_OBJECTS) $(TEST_OBJECTS)
+CLEANTARGETS += $(EIGEN_OBJECTS) $(TEST_OBJECTS)
 
 # clean dependency files if any
-CLEANTARGETS += $(subst .o,.d,$(TEST_OBJECTS) $(SOLVEODE_OBJECTS))
+CLEANTARGETS += $(subst .o,.d,$(TEST_OBJECTS) $(EIGEN_OBJECTS))
 
 all : $(TARGETS)
 
-solveode : $(SOLVEODE_OBJECTS)
-	$(CXX) -o $@ $(SOLVEODE_OBJECTS) $(SOLVEODE_LDLIBS)
+eigen : $(EIGEN_OBJECTS)
+	$(CXX) -o $@ $(EIGEN_OBJECTS) $(EIGEN_LDLIBS)
 
 #test : $(TEST_OBJECTS)
 #	$(CXX) -o $@ $(TEST_OBJECTS) $(TEST_LDLIBS)
