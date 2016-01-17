@@ -170,79 +170,101 @@ int main( int argc, char * argv[] )
       showHelpAndExit() ;
    }
 
-   if ( isFdfSolver( whichSolver ) )
+   double x0 = 5.0 ;
+   //while ( x0 <= 5.0 )
    {
-      const gsl_root_fdfsolver_type *T = (const gsl_root_fdfsolver_type *)solverMethod[ (int)whichSolver ] ;
-      gsl_root_fdfsolver *s ;
-      gsl_function_fdf F ;
+      if ( isFdfSolver( whichSolver ) )
+      {
+         const gsl_root_fdfsolver_type *T = (const gsl_root_fdfsolver_type *)solverMethod[ (int)whichSolver ] ;
+         gsl_root_fdfsolver *s ;
+         gsl_function_fdf F ;
 
-      double x, x0 = 5.0 ;
+         double x ;
 
-      F.f = FUNCTION_TO_SOLVE_F ;
-      F.df = FUNCTION_TO_SOLVE_DF ;
-      F.fdf = FUNCTION_TO_SOLVE_FDF ;
-      F.params = &params ;
-      s = gsl_root_fdfsolver_alloc( T ) ;
-      gsl_root_fdfsolver_set( s, &F, x0 ) ;
+         F.f = FUNCTION_TO_SOLVE_F ;
+         F.df = FUNCTION_TO_SOLVE_DF ;
+         F.fdf = FUNCTION_TO_SOLVE_FDF ;
+         F.params = &params ;
+         s = gsl_root_fdfsolver_alloc( T ) ;
+         gsl_root_fdfsolver_set( s, &F, x0 ) ;
 
-      printf( "using %s method\n", gsl_root_fdfsolver_name( s ) ) ;
+         printf( "using %s method\n", gsl_root_fdfsolver_name( s ) ) ;
 
-      printf( "%5s [%9s, %9s] %9s %10s %9s\n",
-              "iter", "lower", "upper", "root", "err", "err(est)" ) ;
+         printf( "%5s [%9s, %9s] %9s %10s %9s\n",
+                 "iter", "lower", "upper", "root", "err", "err(est)" ) ;
 
-      do {
-         iter++ ;
-         status = gsl_root_fdfsolver_iterate( s ) ;
-         x0 = x ;
-         x = gsl_root_fdfsolver_root( s ) ;
-         status = gsl_root_test_delta( x, x0, 0, 1e-3 ) ;
+         do {
+            iter++ ;
+            status = gsl_root_fdfsolver_iterate( s ) ;
+            x0 = x ;
+            x = gsl_root_fdfsolver_root( s ) ;
+            status = gsl_root_test_delta( x, x0, 0, 1e-3 ) ;
 
-         if (status == GSL_SUCCESS)
-           printf ("Converged:\n") ;
+            if (status == GSL_SUCCESS)
+              printf ("Converged:\n") ;
 
-         printf( "%5d %10.7f %+10.7f %10.7f\n",
-                 iter, x, x - r_expected, x - x0 ) ;
+            printf( "%5d %10.7f %+10.7f %10.7f\n",
+                    iter, x, x - r_expected, x - x0 ) ;
 
-      } while ( status == GSL_CONTINUE && iter < max_iter ) ;
+         } while ( status == GSL_CONTINUE && iter < max_iter ) ;
 
-      gsl_root_fdfsolver_free( s ) ;
-   }
-   else
-   {
-      double x_lo = 0.0, x_hi = 5.0 ;
+         gsl_root_fdfsolver_free( s ) ;
+      }
+      else
+      {
+         double x_lo = 0.0, x_hi = x0 ;
 
-      const gsl_root_fsolver_type *T = (const gsl_root_fsolver_type *)solverMethod[ (int)whichSolver ] ;
-      gsl_root_fsolver *s ;
-      gsl_function F ;
+         const gsl_root_fsolver_type *T = (const gsl_root_fsolver_type *)solverMethod[ (int)whichSolver ] ;
+         gsl_root_fsolver *s ;
+         gsl_function F ;
 
-      F.function = FUNCTION_TO_SOLVE_F ;
-      F.params = &params ;
+         F.function = FUNCTION_TO_SOLVE_F ;
+         F.params = &params ;
 
-      s = gsl_root_fsolver_alloc( T ) ;
-      gsl_root_fsolver_set( s, &F, x_lo, x_hi ) ;
-      printf( "using %s method\n", gsl_root_fsolver_name( s ) ) ;
+         s = gsl_root_fsolver_alloc( T ) ;
 
-      printf( "%5s [%9s, %9s] %9s %10s %9s\n",
-              "iter", "lower", "upper", "root", "err", "err(est)" ) ;
-
-      do {
-         iter++ ;
-         status = gsl_root_fsolver_iterate( s ) ;
-         r = gsl_root_fsolver_root( s ) ;
-         x_lo = gsl_root_fsolver_x_lower( s ) ;
-         x_hi = gsl_root_fsolver_x_upper( s ) ;
-         status = gsl_root_test_interval( x_lo, x_hi, 0, 0.001 ) ;
-         if ( status == GSL_SUCCESS )
+         status = gsl_root_fsolver_set( s, &F, x_lo, x_hi ) ;
+         if ( status )
          {
-             printf ("Converged:\n") ;
+            std::cout << std::string( gsl_strerror (status) ) << std::endl;
+         }
+         else
+         {
+            printf( "using %s method\n", gsl_root_fsolver_name( s ) ) ;
+
+            printf( "%5s [%9s, %9s] %9s %10s %9s\n",
+                    "iter", "lower", "upper", "root", "err", "err(est)" ) ;
+
+            do {
+               iter++ ;
+
+               status = gsl_root_fsolver_iterate( s ) ;
+               if ( status )
+               {
+                  std::cout << std::string( gsl_strerror (status) ) << std::endl;
+               }
+
+               r = gsl_root_fsolver_root( s ) ;
+
+               x_lo = gsl_root_fsolver_x_lower( s ) ;
+               x_hi = gsl_root_fsolver_x_upper( s ) ;
+
+               status = gsl_root_test_interval( x_lo, x_hi, 0, 0.001 ) ;
+               if ( status == GSL_SUCCESS )
+               {
+                   printf ("Converged:\n") ;
+               }
+
+               printf( "%5d [%.7f, %.7f] %.7f %+.7f %.7f\n",
+                       iter, x_lo, x_hi, r, r - r_expected, x_hi - x_lo ) ;
+
+            } while ( status == GSL_CONTINUE && iter < max_iter ) ;
          }
 
-         printf( "%5d [%.7f, %.7f] %.7f %+.7f %.7f\n",
-                 iter, x_lo, x_hi, r, r - r_expected, x_hi - x_lo ) ;
+         gsl_root_fsolver_free( s ) ;
+      }
 
-      } while ( status == GSL_CONTINUE && iter < max_iter ) ;
-
-      gsl_root_fsolver_free( s ) ;
+   //   x0 += 0.5 ;
    }
 
    return status ;
