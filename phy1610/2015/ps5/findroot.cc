@@ -1,6 +1,7 @@
 #include <getopt.h>
 #include <cstdlib>
 #include <iostream>
+#include "mysolver.h"
 
 /** exit code for successful exectution */
 #define RC_SUCCESS      0
@@ -113,6 +114,7 @@ int main( int argc, char * argv[] )
       showHelpAndExit() ;
    }
 
+   // FIXME: parameterize iteration interval, max_iter, and precis.
    double x0 = 0.5 ;
    while ( x0 <= 10.0 )
    {
