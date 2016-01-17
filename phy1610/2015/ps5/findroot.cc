@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <new>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_roots.h>
@@ -87,42 +88,44 @@ public:
       F.f = FUNCTION_TO_SOLVE_F ;
       F.df = FUNCTION_TO_SOLVE_DF ;
       F.fdf = FUNCTION_TO_SOLVE_FDF ;
-      F.params = &params ;
+
+      // turn off the print and abort on error behavior
+      gsl_set_error_handler_off() ;
 
       s = gsl_root_fdfsolver_alloc( T ) ;
-   // FIXME: throw on allocation error.
+      if ( !s )
+      {
+         throw std::bad_alloc() ;
+      }
    }
 
    ~fdfSolver()
    {
-      if ( s )
-      {  
-         gsl_root_fdfsolver_free( s ) ;
-      }
+      gsl_root_fdfsolver_free( s ) ;
    }
 
-   void iterate( const double x0, const Uint max_iter, const double r_expected )
+   int iterate( const double x0, const Uint max_iter, const double r_expected )
    {
       int status ;
       double x ;
+      double xPrev = x0 ;
       Uint iter = 0 ;
-      double r = 0.0 ;
       FUNCTION_PARAM_STRUCT params = FUNCTION_PARAM_INIT ;
 
       F.params = &params ;
-      status = gsl_root_fdfsolver_set( s, &F, x0 ) ;
+      status = gsl_root_fdfsolver_set( s, &F, xPrev ) ;
 
       printf( "using %s method\n", gsl_root_fdfsolver_name( s ) ) ;
 
-      printf( "%5s [%9s, %9s] %9s %10s %9s\n",
-              "iter", "lower", "upper", "root", "err", "err(est)" ) ;
+      printf( "%5s %9s %10s %9s\n",
+              "iter", "root", "err", "err(est)" ) ;
 
       do {
          iter++ ;
          status = gsl_root_fdfsolver_iterate( s ) ;
-         x0 = x ;
+         xPrev = x ;
          x = gsl_root_fdfsolver_root( s ) ;
-         status = gsl_root_test_delta( x, x0, 0, 1e-3 ) ;
+         status = gsl_root_test_delta( x, xPrev, 0, 1e-3 ) ;
 
          if (status == GSL_SUCCESS)
          {
@@ -130,9 +133,11 @@ public:
          }
 
          printf( "%5d %10.7f %+10.7f %10.7f\n",
-                 (int)iter, x, x - r_expected, x - x0 ) ;
+                 (int)iter, x, x - r_expected, x - xPrev ) ;
 
       } while ( status == GSL_CONTINUE && iter < max_iter ) ;
+
+      return status ;
    }
 } ;
 
@@ -146,24 +151,32 @@ public:
    fSolver( const solver whichSolver ) : T((const gsl_root_fsolver_type *)solverMethod[ (int)whichSolver ])
    {
       F.function = FUNCTION_TO_SOLVE_F ;
-      s = gsl_root_fsolver_alloc( T ) ;
-   // FIXME: throw on allocation error.
-   }
 
-   ~fdfSolver()
-   {
-      if ( s )
-      {  
-         gsl_root_fsolver_free( s ) ;
+      // turn off the print and abort on error behavior
+      gsl_set_error_handler_off() ;
+
+      s = gsl_root_fsolver_alloc( T ) ;
+      if ( !s )
+      {
+         throw std::bad_alloc() ;
       }
    }
 
-   void iterate( const double x_lo, const double x_hi, const Uint max_iter, const double r_expected )
+   ~fSolver()
+   {
+      gsl_root_fsolver_free( s ) ;
+   }
+
+   int iterate( const double x_lo, const double x_hi, const Uint max_iter, const double r_expected )
    {
       FUNCTION_PARAM_STRUCT params = FUNCTION_PARAM_INIT ;
       F.params = &params ;
+      Uint iter = 0 ;
+      double r ;
+      double x_min = x_lo ;
+      double x_max = x_hi ;
 
-      status = gsl_root_fsolver_set( s, &F, x_lo, x_hi ) ;
+      int status = gsl_root_fsolver_set( s, &F, x_min, x_max ) ;
       if ( status )
       {
          std::cout << std::string( gsl_strerror (status) ) << std::endl;
@@ -186,22 +199,22 @@ public:
 
             r = gsl_root_fsolver_root( s ) ;
 
-            x_lo = gsl_root_fsolver_x_lower( s ) ;
-            x_hi = gsl_root_fsolver_x_upper( s ) ;
+            x_min = gsl_root_fsolver_x_lower( s ) ;
+            x_max = gsl_root_fsolver_x_upper( s ) ;
 
-            status = gsl_root_test_interval( x_lo, x_hi, 0, 0.001 ) ;
+            status = gsl_root_test_interval( x_min, x_max, 0, 0.001 ) ;
             if ( status == GSL_SUCCESS )
             {
                 printf ("Converged:\n") ;
             }
 
             printf( "%5d [%.7f, %.7f] %.7f %+.7f %.7f\n",
-                    iter, x_lo, x_hi, r, r - r_expected, x_hi - x_lo ) ;
+                    (int)iter, x_min, x_max, r, r - r_expected, x_max - x_min ) ;
 
          } while ( status == GSL_CONTINUE && iter < max_iter ) ;
       }
 
-      gsl_root_fsolver_free( s ) ;
+      return status ;
    }
 } ;
 
@@ -297,11 +310,12 @@ int main( int argc, char * argv[] )
       showHelpAndExit() ;
    }
 
-   double x0 = 5.0 ;
-   //while ( x0 <= 5.0 )
+   double x0 = 0.5 ;
+   while ( x0 <= 10.0 )
    {
       #define MAX_ITER 100
 
+      // Newton's method bounces around
       if ( isFdfSolver( whichSolver ) )
       {
          fdfSolver s( whichSolver ) ;
@@ -312,11 +326,11 @@ int main( int argc, char * argv[] )
       {
          fSolver s( whichSolver ) ;
 
-         s.iterate( x_lo, x0, MAX_ITER, FUNCTION_EXPECTED_ROOT ) ;
+         s.iterate( 0.0, x0, MAX_ITER, FUNCTION_EXPECTED_ROOT ) ;
       }
 
-   //   x0 += 0.5 ;
+      x0 += 0.5 ;
    }
 
-   return status ;
+   return 0 ;
 }
