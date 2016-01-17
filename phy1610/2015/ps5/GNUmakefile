@@ -30,6 +30,8 @@ TARGETS += .gitignore
 #endif
 
 FINDROOT_SOURCES += findroot.cc
+#FINDROOT_SOURCES += quadratic.cc
+FINDROOT_SOURCES += ps5function.cc
 FINDROOT_OBJECTS := $(subst .cc,.o,$(FINDROOT_SOURCES))
 
 FINDROOT_LDLIBS += -lgsl

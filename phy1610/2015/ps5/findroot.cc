@@ -7,41 +7,25 @@
 #include <iostream>
 #include "integers.h"
 
-struct quadratic_params
-{
-    double a, b, c ;
-} ;
+#if 0
+   #include "quadratic.h"
 
-double quadratic( double x, void * params ) ;
-double quadratic_deriv( double x, void * params ) ;
-void quadratic_fdf( double x, void * params, double *y, double *dy ) ;
+   #define FUNCTION_TO_SOLVE_F quadratic
+   #define FUNCTION_TO_SOLVE_DF quadratic_deriv
+   #define FUNCTION_TO_SOLVE_FDF quadratic_fdf
 
-double quadratic( double x, void * params )
-{
-   struct quadratic_params *p = (struct quadratic_params *) params ;
-   double a = p->a ;
-   double b = p->b ;
-   double c = p->c ;
-   return (a * x + b) * x + c ;
-}
+   #define FUNCTION_PARAM_STRUCT quadratic_params
+   #define FUNCTION_PARAM_INIT { 1.0, 0.0, -5.0 }
+#else
+   #include "ps5function.h"
 
-double quadratic_deriv( double x, void * params )
-{
-   struct quadratic_params *p = (struct quadratic_params *) params ;
-   double a = p->a ;
-   double b = p->b ;
-   return 2.0 * a * x + b ;
-}
+   #define FUNCTION_TO_SOLVE_F ps5function
+   #define FUNCTION_TO_SOLVE_DF ps5function_deriv
+   #define FUNCTION_TO_SOLVE_FDF ps5function_fdfquadratic_fd5function
 
-void quadratic_fdf( double x, void * params, double *y, double *dy )
-{
-   struct quadratic_params *p = (struct quadratic_params *) params ;
-   double a = p->a ;
-   double b = p->b ;
-   double c = p->c ;
-   *y = (a * x + b) * x + c ;
-   *dy = 2.0 * a * x + b ;
-}
+   #define FUNCTION_PARAM_STRUCT ps5function_params
+   #define FUNCTION_PARAM_INIT { }
+#endif
 
 /** exit code for successful exectution */
 #define RC_SUCCESS      0
@@ -96,7 +80,7 @@ int main( int argc, char * argv[] )
    solver whichSolver = solver::undefined ;
    double r = 0, r_expected = sqrt( 5.0 ) ;
 
-   struct quadratic_params params = { 1.0, 0.0, -5.0 } ;
+   FUNCTION_PARAM_STRUCT params = FUNCTION_PARAM_INIT ;
 
    int c{0} ;
    int line{0} ;
@@ -194,9 +178,9 @@ int main( int argc, char * argv[] )
 
       double x, x0 = 5.0 ;
 
-      F.f = &quadratic ;
-      F.df = &quadratic_deriv ;
-      F.fdf = &quadratic_fdf ;
+      F.f = FUNCTION_TO_SOLVE_F ;
+      F.df = FUNCTION_TO_SOLVE_DF ;
+      F.fdf = FUNCTION_TO_SOLVE_FDF ;
       F.params = &params ;
       s = gsl_root_fdfsolver_alloc( T ) ;
       gsl_root_fdfsolver_set( s, &F, x0 ) ;
@@ -231,7 +215,7 @@ int main( int argc, char * argv[] )
       gsl_root_fsolver *s ;
       gsl_function F ;
 
-      F.function = &quadratic ;
+      F.function = FUNCTION_TO_SOLVE_F ;
       F.params = &params ;
 
       s = gsl_root_fsolver_alloc( T ) ;
