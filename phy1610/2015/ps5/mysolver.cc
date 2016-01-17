@@ -7,6 +7,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_errno.h>
 #include <stdio.h>
+#include <cmath>
 #include "integers.h"
 #include "mysolver.h"
 
@@ -67,7 +68,7 @@ int fdfSolver::iterate( const double x0, const Uint max_iter, const double r_exp
 
       if (status == GSL_SUCCESS)
       {
-          printf ("Converged:\n") ;
+         std::cout << "Converged:" << std::endl ;
       }
 
       printf( "%5d %10.7f %+10.7f %10.7f\n",
@@ -106,6 +107,35 @@ int fSolver::iterate( const double x_lo, const double x_hi, const Uint max_iter,
    double x_min = x_lo ;
    double x_max = x_hi ;
 
+   // Brent's method (and probably the other interval methods) abort if
+   // the root is not bracketed.  use the interval expansion method described
+   // in the lectures if this is the case.
+   //
+   while ( true )
+   {
+      double f_min = F.function( x_min, F.params ) ;
+      double f_max = F.function( x_max, F.params ) ;
+
+      double s_min = std::copysign( 1.0, f_min ) ;
+      double s_max = std::copysign( 1.0, f_max ) ;
+
+      if ( s_min == s_max ) 
+      {
+         double a_min = std::abs( f_min ) ;
+         double a_max = std::abs( f_max ) ;
+         double width = x_max - x_min ;
+
+         if ( a_min < a_max )
+         {
+            x_min -= width/2 ;
+         }
+         else
+         {
+            x_max += width/2 ;
+         }
+      }
+   } ;
+
    int status = gsl_root_fsolver_set( s, &F, x_min, x_max ) ;
    if ( status )
    {
@@ -125,6 +155,7 @@ int fSolver::iterate( const double x_lo, const double x_hi, const Uint max_iter,
          if ( status )
          {
             std::cout << std::string( gsl_strerror (status) ) << std::endl;
+            break ;
          }
 
          r = gsl_root_fsolver_root( s ) ;
@@ -135,13 +166,13 @@ int fSolver::iterate( const double x_lo, const double x_hi, const Uint max_iter,
          status = gsl_root_test_interval( x_min, x_max, 0, err ) ;
          if ( status == GSL_SUCCESS )
          {
-             printf ("Converged:\n") ;
+             std::cout << "Converged:" << std::endl ;
          }
 
          printf( "%5d [%.7f, %.7f] %.7f %+.7f %.7f\n",
                  (int)iter, x_min, x_max, r, r - r_expected, x_max - x_min ) ;
 
-      } while ( status == GSL_CONTINUE && iter < max_iter ) ;
+      } while ( (status == GSL_CONTINUE) && (iter < max_iter) ) ;
    }
 
    return status ;
