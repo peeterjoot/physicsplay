@@ -32,6 +32,8 @@ TARGETS += .gitignore
 EIGEN_SOURCES += eigen.cc
 EIGEN_OBJECTS := $(subst .cc,.o,$(EIGEN_SOURCES))
 
+EIGEN_LDLIBS += -llapacke -lblas
+
 #EIGEN_LDLIBS += -lgsl
 #EIGEN_LDLIBS += -lgslcblas
 

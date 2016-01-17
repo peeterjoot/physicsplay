@@ -69,7 +69,7 @@ int main(int argc, char** argv)
 #define ATriL A
     // Note that it is larger than necessary. It will contain the eigenvectors at the end.
   int lda = 3;
-  double w[3] = { 0, 0, 0 }; // Container for the eigenvalues.
+  //double w[3] = { 0, 0, 0 }; // Container for the eigenvalues.
   int lwork = 15; // Size of the worker array. Set to (NB+2)*N where NB here is the largest blocksize.
     // Note, however, that the definition of NB is more complex.
     // Compare http://ftp.mcs.anl.gov/pub/MINPACK-2/lapack/ilaenv.f
