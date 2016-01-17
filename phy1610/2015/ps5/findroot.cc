@@ -21,7 +21,7 @@
 
    #define FUNCTION_TO_SOLVE_F ps5function
    #define FUNCTION_TO_SOLVE_DF ps5function_deriv
-   #define FUNCTION_TO_SOLVE_FDF ps5function_fdfquadratic_fd5function
+   #define FUNCTION_TO_SOLVE_FDF ps5function_fdf
 
    #define FUNCTION_PARAM_STRUCT ps5function_params
    #define FUNCTION_PARAM_INIT { }

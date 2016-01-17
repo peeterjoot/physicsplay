@@ -5,7 +5,7 @@ double ps5function( double x, void * params )
 {
    double xx = x * x ;
    double exx = std::exp( 1.0 - xx ) ;
-   double es *= std::exp( std::sin( x ) ) ;
+   double es = std::exp( std::sin( x ) ) ;
 
    return (exx - 1.0) * es ;
 }
