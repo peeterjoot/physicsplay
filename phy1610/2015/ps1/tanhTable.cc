@@ -97,7 +97,7 @@ int main( int argc, char ** argv )
    int c ;
    int line{0} ;
 
-   const struct option long_options[] = {
+   const struct option long_options[]{
      { "help",   0, NULL, 'h' },
      { "number", 1, NULL, 'n' },
      { "lower",  1, NULL, 'l' },

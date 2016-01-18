@@ -22,23 +22,31 @@ THISDIR := phy1610/2015/ps5
 
 TARGETS += findroot
 TARGETS += .gitignore
-#TARGETS += waveparams.txt
 
-#ifneq ("$(OSNAME)","Cygwin")
-#   # get cxx11 abi link errors attempting to use boost unit_test
-#   TARGETS += test
-#endif
+GSL_LDLIBS += -lgsl
+GSL_LDLIBS += -lgslcblas
+
+ifeq ("$(OSNAME)","Cygwin")
+   # get cxx11 abi link errors attempting to use boost unit_test with the pre-compiled boost library
+   CXXFLAGS += -DUSE_SINGLE_HEADER_BOOST_TEST_FRAMEWORK
+
+   # for putenv and mkstemp
+   CXXFLAGS += -U__STRICT_ANSI__
+else
+   TEST_LDLIBS += -lboost_unit_test_framework
+endif
+TARGETS += test
+TEST_LDLIBS += $(GSL_LDLIBS)
 
 FINDROOT_SOURCES += findroot.cc solverMethod.cc
 #FINDROOT_SOURCES += quadratic.cc
 FINDROOT_SOURCES += ps5function.cc
 FINDROOT_OBJECTS := $(subst .cc,.o,$(FINDROOT_SOURCES))
 
-FINDROOT_LDLIBS += -lgsl
-FINDROOT_LDLIBS += -lgslcblas
+FINDROOT_LDLIBS += $(GSL_LDLIBS)
 
-#TEST_SOURCES += test.cc
-#TEST_OBJECTS := $(subst .cc,.o,$(TEST_SOURCES))
+TEST_SOURCES += test.cc solverMethod.cc ps5function.cc
+TEST_OBJECTS := $(subst .cc,.o,$(TEST_SOURCES))
 
 CLEANTARGETS += $(TARGETS)
 # doxygen:
@@ -54,8 +62,8 @@ all : $(TARGETS)
 findroot : $(FINDROOT_OBJECTS)
 	$(CXX) -o $@ $(FINDROOT_OBJECTS) $(FINDROOT_LDLIBS)
 
-#test : $(TEST_OBJECTS)
-#	$(CXX) -o $@ $(TEST_OBJECTS) -lboost_unit_test_framework
+test : $(TEST_OBJECTS)
+	$(CXX) -o $@ $(TEST_OBJECTS) $(TEST_LDLIBS)
 
 .gitignore: GNUmakefile
 	echo $(addprefix $(THISDIR)/,$(CLEANTARGETS)) | tr ' ' '\n' > $@
