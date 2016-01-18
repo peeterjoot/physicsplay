@@ -11,8 +11,8 @@
 #include "integers.h"
 #include "mysolver.h"
 
-template <class T paramType>
-fdfSolver::fdfSolver( const solver whichSolver ) : T( solverToFdfMethod( whichSolver ) ), params{}
+template <class paramType>
+fdfSolver<paramType>::fdfSolver( const solver whichSolver ) : T( solverToFdfMethod( whichSolver ) ), params{}
 {
    F.f = paramType::function ;
    F.df = paramType::derivative ;
@@ -29,20 +29,20 @@ fdfSolver::fdfSolver( const solver whichSolver ) : T( solverToFdfMethod( whichSo
    }
 }
 
-template <class T paramType>
-fdfSolver::~fdfSolver()
+template <class paramType>
+fdfSolver<paramType>::~fdfSolver()
 {
    gsl_root_fdfsolver_free( s ) ;
 }
 
-template <class T paramType>
-int fdfSolver::iterate( const double x0, const Uint max_iter, const double err )
+template <class paramType>
+int fdfSolver<paramType>::iterate( const double x0, const Uint max_iter, const double err )
 {
    int status ;
    double x ;
    double xPrev = x0 ;
    Uint iter = 0 ;
-   const double r_expected = expectedRoot() ;
+   const double r_expected = params.expectedRoot() ;
 
    status = gsl_root_fdfsolver_set( s, &F, xPrev ) ;
 
@@ -71,7 +71,8 @@ int fdfSolver::iterate( const double x0, const Uint max_iter, const double err )
    return status ;
 }
 
-fSolver::fSolver( const solver whichSolver ) : T( solverToMethod( whichSolver ) ), params{}
+template <class paramType>
+fSolver<paramType>::fSolver( const solver whichSolver ) : T( solverToMethod( whichSolver ) ), params{}
 {
    F.function = paramType::function ;
    F.params = &params ;
@@ -86,16 +87,17 @@ fSolver::fSolver( const solver whichSolver ) : T( solverToMethod( whichSolver ) 
    }
 }
 
-template <class T paramType>
-fSolver::~fSolver()
+template <class paramType>
+fSolver<paramType>::~fSolver()
 {
    gsl_root_fsolver_free( s ) ;
 }
 
-template <class T paramType>
-void increaseIntervalIfNotBracketed( double & x_min, double & x_max, const Uint max_iter )
+template <class paramType>
+bool fSolver<paramType>::increaseIntervalIfNotBracketed( double & x_min, double & x_max, const Uint max_iter )
 {
    Uint iter = 0 ;
+   bool foundOne = false ;
 
    // Brent's method (and probably the other interval methods) abort if
    // the root is not bracketed.  use the interval expansion method described
@@ -111,6 +113,7 @@ void increaseIntervalIfNotBracketed( double & x_min, double & x_max, const Uint 
 
       if ( s_min != s_max )
       {
+         foundOne = true ;
          break ;
       }
       else
@@ -119,7 +122,7 @@ void increaseIntervalIfNotBracketed( double & x_min, double & x_max, const Uint 
          double a_max = std::abs( f_max ) ;
 
          double width = x_max - x_min ;
-         if ( a_min < x_max )
+         if ( a_min < a_max )
          {
             x_min -= width/2 ;
          }
@@ -131,16 +134,18 @@ void increaseIntervalIfNotBracketed( double & x_min, double & x_max, const Uint 
 
       iter++ ;
    }
+
+   return foundOne ;
 }
 
-template <class T paramType>
-int fSolver::iterate( const double x_lo, const double x_hi, const Uint max_iter, const double err )
+template <class paramType>
+int fSolver<paramType>::iterate( const double x_lo, const double x_hi, const Uint max_iter, const double err )
 {
    Uint iter = 0 ;
    double r ;
    double x_min = x_lo ;
    double x_max = x_hi ;
-   const double r_expected = expectedRoot() ;
+   const double r_expected = params.expectedRoot() ;
 
    increaseIntervalIfNotBracketed( x_min, x_max, max_iter ) ;
 

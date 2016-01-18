@@ -17,7 +17,7 @@ struct quadratic
    static double derivative( double x, void * params ) ;
    static void functionAndDerivative( double x, void * params, double * y, double * dy ) ;
 
-   static inline expectedRoot()
+   static inline double expectedRoot()
    {
       return std::sqrt( 5.0 ) ;
    }

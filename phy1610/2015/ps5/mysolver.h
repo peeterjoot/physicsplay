@@ -32,7 +32,7 @@ const gsl_root_fdfsolver_type * solverToFdfMethod( const solver whichSolver ) ;
 /**
    gsl based derivative root solver.
  */
-template <class T paramType>
+template <class paramType>
 class fdfSolver
 {
    const gsl_root_fdfsolver_type *  T ;
@@ -69,11 +69,9 @@ public:
 /**
    gsl based interval based root solver.
  */
-template <class T paramType>
+template <class paramType>
 class fSolver
 {
-   typedef ps5function paramStruct ;
-
    const gsl_root_fsolver_type *  T ;
    gsl_function                   F ;
    gsl_root_fsolver *             s ;
@@ -101,6 +99,10 @@ public:
 
       \param iter_max [in]
          maximum number of times to attempt increasing the interval looking for a sign alternation.
+
+      \retval
+         true if a bracketing interval was found.
+         false if a bracketing interval was not found.
     */
    bool increaseIntervalIfNotBracketed( double & x_min, double & x_max, const Uint iter_max ) ;
 

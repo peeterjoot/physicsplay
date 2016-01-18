@@ -9,7 +9,7 @@ struct ps5function
    static double derivative( double x, void * params ) ;
    static void functionAndDerivative( double x, void * params, double * y, double * dy ) ;
 
-   static inline expectedRoot()
+   static inline double expectedRoot()
    {
       // -1.0 is also a root.
       return 1.0 ;
