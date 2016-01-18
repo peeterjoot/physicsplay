@@ -29,7 +29,7 @@ TARGETS += .gitignore
 #   TARGETS += test
 #endif
 
-FINDROOT_SOURCES += findroot.cc mysolver.cc
+FINDROOT_SOURCES += findroot.cc
 #FINDROOT_SOURCES += quadratic.cc
 FINDROOT_SOURCES += ps5function.cc
 FINDROOT_OBJECTS := $(subst .cc,.o,$(FINDROOT_SOURCES))

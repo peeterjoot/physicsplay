@@ -3,15 +3,24 @@
 #if !defined phy1610_ps5_quadratic_h_included
 #define phy1610_ps5_quadratic_h_included
 
-#include "externc.h"
+#include <cmath>
 
-struct quadratic_params
+struct quadratic
 {
-    double a, b, c ;
-} ;
+   double a ;
+   double b ;
+   double c ;
 
-EXTERNC double quadratic( double x, void * params ) ;
-EXTERNC double quadratic_deriv( double x, void * params ) ;
-EXTERNC void quadratic_fdf( double x, void * params, double *y, double *dy ) ;
+   quadratic() : a{1.0}, b{0.0}, c{-5.0} {}
+
+   static double function( double x, void * params ) ;
+   static double derivative( double x, void * params ) ;
+   static void functionAndDerivative( double x, void * params, double * y, double * dy ) ;
+
+   static inline expectedRoot()
+   {
+      return std::sqrt( 5.0 ) ;
+   }
+} ;
 
 #endif

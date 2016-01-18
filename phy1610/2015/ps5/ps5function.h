@@ -3,14 +3,17 @@
 #if !defined phy1610_ps5_ps5function_h_included
 #define phy1610_ps5_ps5function_h_included
 
-#include "externc.h"
-
-struct ps5function_params
+struct ps5function
 {
-} ;
+   static double function( double x, void * params ) ;
+   static double derivative( double x, void * params ) ;
+   static void functionAndDerivative( double x, void * params, double * y, double * dy ) ;
 
-EXTERNC double ps5function( double x, void * params ) ;
-EXTERNC double ps5function_deriv( double x, void * params ) ;
-EXTERNC void ps5function_fdf( double x, void * params, double *y, double *dy ) ;
+   static inline expectedRoot()
+   {
+      // -1.0 is also a root.
+      return 1.0 ;
+   }
+} ;
 
 #endif

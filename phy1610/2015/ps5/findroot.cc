@@ -1,7 +1,8 @@
 #include <getopt.h>
 #include <cstdlib>
 #include <iostream>
-#include "mysolver.h"
+#include "ps5function.h"
+#include "mysolver.cc" // for template instantiations
 
 /** exit code for successful exectution */
 #define RC_SUCCESS      0
@@ -114,7 +115,7 @@ int main( int argc, char * argv[] )
       showHelpAndExit() ;
    }
 
-   // FIXME: parameterize iteration interval, max_iter, and precis.
+   // FIXME: parameterize iteration interval, max_iter, and precision.
    double x0 = 0.5 ;
    while ( x0 <= 10.0 )
    {
@@ -124,15 +125,15 @@ int main( int argc, char * argv[] )
       // Newton's method bounces around
       if ( isFdfSolver( whichSolver ) )
       {
-         fdfSolver s( whichSolver ) ;
+         fdfSolver<ps5function> s( whichSolver ) ;
 
-         s.iterate( x0, MAX_ITER, FUNCTION_EXPECTED_ROOT, ERROR_PRECISION ) ;
+         s.iterate( x0, MAX_ITER, ERROR_PRECISION ) ;
       }
       else
       {
-         fSolver s( whichSolver ) ;
+         fSolver<ps5function> s( whichSolver ) ;
 
-         s.iterate( 0.0, x0, MAX_ITER, FUNCTION_EXPECTED_ROOT, ERROR_PRECISION ) ;
+         s.iterate( 0.0, x0, MAX_ITER, ERROR_PRECISION ) ;
       }
 
       x0 += 0.5 ;

@@ -11,22 +11,13 @@
 #include "integers.h"
 #include "mysolver.h"
 
-static const void * solverMethod[] =
+template <class T paramType>
+fdfSolver::fdfSolver( const solver whichSolver ) : T( solverToFdfMethod( whichSolver ) ), params{}
 {
-   nullptr,
-   (const void *)gsl_root_fsolver_bisection,
-   (const void *)gsl_root_fsolver_falsepos,
-   (const void *)gsl_root_fsolver_brent,
-   (const void *)gsl_root_fdfsolver_newton,
-   (const void *)gsl_root_fdfsolver_secant,
-   (const void *)gsl_root_fdfsolver_steffenson,
-} ;
-
-fdfSolver::fdfSolver( const solver whichSolver ) : T((const gsl_root_fdfsolver_type *)solverMethod[ (int)whichSolver ])
-{
-   F.f = FUNCTION_TO_SOLVE_F ;
-   F.df = FUNCTION_TO_SOLVE_DF ;
-   F.fdf = FUNCTION_TO_SOLVE_FDF ;
+   F.f = paramType::function ;
+   F.df = paramType::derivative ;
+   F.fdf = paramType::functionAndDerivative ;
+   F.params = &params ;
 
    // turn off the print and abort on error behavior
    gsl_set_error_handler_off() ;
@@ -38,20 +29,21 @@ fdfSolver::fdfSolver( const solver whichSolver ) : T((const gsl_root_fdfsolver_t
    }
 }
 
+template <class T paramType>
 fdfSolver::~fdfSolver()
 {
    gsl_root_fdfsolver_free( s ) ;
 }
 
-int fdfSolver::iterate( const double x0, const Uint max_iter, const double r_expected, const double err )
+template <class T paramType>
+int fdfSolver::iterate( const double x0, const Uint max_iter, const double err )
 {
    int status ;
    double x ;
    double xPrev = x0 ;
    Uint iter = 0 ;
-   FUNCTION_PARAM_STRUCT params = FUNCTION_PARAM_INIT ;
+   const double r_expected = expectedRoot() ;
 
-   F.params = &params ;
    status = gsl_root_fdfsolver_set( s, &F, xPrev ) ;
 
    printf( "using %s method\n", gsl_root_fdfsolver_name( s ) ) ;
@@ -79,9 +71,10 @@ int fdfSolver::iterate( const double x0, const Uint max_iter, const double r_exp
    return status ;
 }
 
-fSolver::fSolver( const solver whichSolver ) : T((const gsl_root_fsolver_type *)solverMethod[ (int)whichSolver ])
+fSolver::fSolver( const solver whichSolver ) : T( solverToMethod( whichSolver ) ), params{}
 {
-   F.function = FUNCTION_TO_SOLVE_F ;
+   F.function = paramType::function ;
+   F.params = &params ;
 
    // turn off the print and abort on error behavior
    gsl_set_error_handler_off() ;
@@ -93,27 +86,16 @@ fSolver::fSolver( const solver whichSolver ) : T((const gsl_root_fsolver_type *)
    }
 }
 
+template <class T paramType>
 fSolver::~fSolver()
 {
    gsl_root_fsolver_free( s ) ;
 }
 
-enum class intervalAdjustment
+template <class T paramType>
+void increaseIntervalIfNotBracketed( double & x_min, double & x_max, const Uint max_iter )
 {
-   undefined,
-   left,
-   right
-} ;
-
-int fSolver::iterate( const double x_lo, const double x_hi, const Uint max_iter, const double r_expected, const double err )
-{
-   FUNCTION_PARAM_STRUCT params = FUNCTION_PARAM_INIT ;
-   F.params = &params ;
    Uint iter = 0 ;
-   double r ;
-   double x_min = x_lo ;
-   double x_max = x_hi ;
-   intervalAdjustment lastAdjustment = intervalAdjustment::undefined ;
 
    // Brent's method (and probably the other interval methods) abort if
    // the root is not bracketed.  use the interval expansion method described
@@ -133,39 +115,34 @@ int fSolver::iterate( const double x_lo, const double x_hi, const Uint max_iter,
       }
       else
       {
-         if ( lastAdjustment == intervalAdjustment::undefined )
-         {
-            double a_min = std::abs( f_min ) ;
-            double a_max = std::abs( f_max ) ;
-
-            // Try an initial guess that follows the slope towards
-            if ( a_min < a_max )
-            {
-               lastAdjustment = intervalAdjustment::right ;
-            }
-            else
-            {
-               lastAdjustment = intervalAdjustment::left ;
-            }
-         }
+         double a_min = std::abs( f_min ) ;
+         double a_max = std::abs( f_max ) ;
 
          double width = x_max - x_min ;
-         if ( lastAdjustment == intervalAdjustment::right )
+         if ( a_min < x_max )
          {
             x_min -= width/2 ;
-            lastAdjustment = intervalAdjustment::left ;
          }
          else
          {
             x_max += width/2 ;
-            lastAdjustment = intervalAdjustment::right ;
          }
       }
 
       iter++ ;
-   } ;
+   }
+}
 
-   iter = 0 ;
+template <class T paramType>
+int fSolver::iterate( const double x_lo, const double x_hi, const Uint max_iter, const double err )
+{
+   Uint iter = 0 ;
+   double r ;
+   double x_min = x_lo ;
+   double x_max = x_hi ;
+   const double r_expected = expectedRoot() ;
+
+   increaseIntervalIfNotBracketed( x_min, x_max, max_iter ) ;
 
    int status = gsl_root_fsolver_set( s, &F, x_min, x_max ) ;
    if ( status )
