@@ -35,6 +35,9 @@ inline bool isFdfSolver( solver s )
 /**
    Return the gsl function pointer for the specified solution method.
 
+   If called for a gsl_root_fdfsolver_type method, that method will be inappropriately
+   cast to gsl_root_fsolver_type.
+
    \param whichSolver [in]
       One of solver::bisection, solver::falsepos, solver::brent.
  */
@@ -43,6 +46,9 @@ const gsl_root_fsolver_type * solverToMethod( const solver whichSolver ) ;
 
 /**
    Return the gsl function pointer for the specified solution method.
+
+   If called for a gsl_root_fsolver_type method, that method will be inappropriately
+   cast to gsl_root_fdfsolver_type.
 
    \param whichSolver [in]
       One of solver::newton, solver::secant, solver::steffenson.

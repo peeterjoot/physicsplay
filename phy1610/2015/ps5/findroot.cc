@@ -32,6 +32,9 @@ void showHelpAndExit()
    std::exit( RC_HELP ) ;
 }
 
+/**
+   Parse arguments and run the selected root solver.
+ */
 int main( int argc, char * argv[] )
 {
    solver whichSolver{solver::undefined} ;
