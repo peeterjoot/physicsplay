@@ -20,13 +20,33 @@ enum class solver
    steffenson
 } ;
 
+/**
+   Return true for any of:
+
+   solver::newton,
+   solver::secant,
+   solver::steffenson
+ */
 inline bool isFdfSolver( solver s )
 {
    return s >= solver::newton ;
 }
 
+/**
+   Return the gsl function pointer for the specified solution method.
+
+   \param whichSolver [in]
+      One of solver::bisection, solver::falsepos, solver::brent.
+ */
 const gsl_root_fsolver_type * solverToMethod( const solver whichSolver ) ;
 
+
+/**
+   Return the gsl function pointer for the specified solution method.
+
+   \param whichSolver [in]
+      One of solver::newton, solver::secant, solver::steffenson.
+ */
 const gsl_root_fdfsolver_type * solverToFdfMethod( const solver whichSolver ) ;
 
 /**
@@ -35,10 +55,10 @@ const gsl_root_fdfsolver_type * solverToFdfMethod( const solver whichSolver ) ;
 template <class paramType>
 class fdfSolver
 {
-   const gsl_root_fdfsolver_type *  T ;
-   gsl_function_fdf                 F ;
-   gsl_root_fdfsolver *             s ;
-   paramType                        params ;
+   const gsl_root_fdfsolver_type *  T ; ///< gsl function pointer
+   gsl_function_fdf                 F ; ///< gsl function object
+   gsl_root_fdfsolver *             s ; ///< gsl handle for root search
+   paramType                        params ; ///< parameter object and associated functions.
 
 public:
    /**
@@ -62,6 +82,9 @@ public:
 
       \param err [in]
          Required root precision.
+
+      \retval
+         gsl library status code.
     */
    int iterate( const double x0, const Uint max_iter, const double err ) ;
 } ;
@@ -72,10 +95,10 @@ public:
 template <class paramType>
 class fSolver
 {
-   const gsl_root_fsolver_type *  T ;
-   gsl_function                   F ;
-   gsl_root_fsolver *             s ;
-   paramType                      params ;
+   const gsl_root_fsolver_type *  T ; ///< gsl function pointer
+   gsl_function                   F ; ///< gsl function object
+   gsl_root_fsolver *             s ; ///< gsl handle for root search
+   paramType                      params ; ///< parameter object and associated functions.
 
 public:
    /**
@@ -123,6 +146,9 @@ public:
 
       \param err [in]
          Required root precision.
+
+      \retval
+         gsl library status code.
     */
    int iterate( const double x_lo, const double x_hi, const Uint max_iter, const double err ) ;
 } ;

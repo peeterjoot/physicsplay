@@ -1,3 +1,8 @@
+/**
+   \file quadradic.cc
+
+   These functions are taken directly from the gsl documentation examples for the fsolver and fdfsolver interfaces.
+ */
 #include "quadratic.h"
 
 double quadratic::function( double x, void * params )
