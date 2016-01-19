@@ -4,6 +4,7 @@
 #define phy1610_ps5_mysolver_h_included
 
 #include <gsl/gsl_roots.h>
+#include <vector>
 #include "integers.h"
 
 /**
@@ -157,6 +158,36 @@ public:
          gsl library status code.
     */
    int iterate( const double x_lo, const double x_hi, const Uint max_iter, const double err ) ;
+} ;
+
+/**
+   Parameters for running the solver as specified in the problem:
+   - varying initial values x0 for x, or for varying starting intervals [0.0,x0], where x0 ranges from 0 to 10 in steps of 0.5.
+ */
+template <class paramType>
+struct solverParams
+{
+   double m_x0 ;                 ///< initial upper bound for the first interval (fsolver) or root guess (fdfsolver)
+   double m_xUpper ;             ///< upper bound for all the intervals (i.e. 10)
+   double m_intervalStep ;       ///< step size
+   Uint   m_max_iter ;           ///< max number of iterations when running a fsolver method
+   Uint   m_max_iter_deriv ;     ///< max number of iterations when running an fdfsolver method
+   double m_err ;                ///< desired error for convergence
+   double m_intervalXMin ;       ///< lower bound for all the fsolver intervals
+
+   /** set the default values for these parameters */
+   solverParams() :
+      m_x0{0.5},
+      m_xUpper{10.0},
+      m_intervalStep{0.5},
+      m_max_iter{100},
+      m_max_iter_deriv{1000},
+      m_err{1e-4},
+      m_intervalXMin{0.0}
+   {
+   }
+
+   void runSolver( const std::vector<solver> & howToSolve ) const ;
 } ;
 
 #endif

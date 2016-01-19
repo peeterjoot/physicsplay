@@ -191,3 +191,31 @@ int fSolver<paramType>::iterate( const double x_lo, const double x_hi, const Uin
 
    return status ;
 }
+
+template <class paramType>
+void solverParams<paramType>::runSolver( const std::vector<solver> & howToSolve ) const
+{
+   auto xmin = m_x0 ;
+
+   for ( auto method : howToSolve )
+   {
+      while ( xmin <= m_xUpper )
+      {
+         // Newton's method bounces around
+         if ( isFdfSolver( method ) )
+         {
+            fdfSolver<paramType> s( method ) ;
+
+            s.iterate( xmin, m_max_iter_deriv, m_err ) ;
+         }
+         else
+         {
+            fSolver<paramType> s( method ) ;
+
+            s.iterate( m_intervalXMin, m_x0, m_max_iter, m_err ) ;
+         }
+
+         xmin += m_intervalStep ;
+      }
+   }
+}

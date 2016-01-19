@@ -32,62 +32,14 @@ void showHelpAndExit()
    std::exit( RC_HELP ) ;
 }
 
-struct solverParams
-{
-   double m_x0 ;
-   double m_xUpper ;
-   double m_intervalStep ;
-   Uint   m_max_iter ;
-   Uint   m_max_iter_deriv ;
-   double m_err ;
-   double m_intervalXMin ;
-
-   solverParams() :
-      m_x0{0.5},
-      m_xUpper{10.0},
-      m_intervalStep{0.5},
-      m_max_iter{100},
-      m_max_iter_deriv{1000},
-      m_err{1e-4},
-      m_intervalXMin{0.0}
-   {
-   }
-
-   void runSolver( const vector<solver> & howToSolve ) const
-   {
-      auto xmin = m_x0 ;
-
-      for ( auto method : howToSolve )
-      {
-         while ( xmin <= m_xUpper )
-         {
-            // Newton's method bounces around
-            if ( isFdfSolver( method ) )
-            {
-               fdfSolver<ps5function> s( method ) ;
-
-               s.iterate( xmin, m_max_iter_deriv, m_err ) ;
-            }
-            else
-            {
-               fSolver<ps5function> s( method ) ;
-
-               s.iterate( m_intervalXMin, m_x0, m_max_iter, m_err ) ;
-            }
-
-            xmin += m_intervalStep ;
-         }
-      }
-   }
-} ;
 
 /**
    Parse arguments and run the selected root solver.
  */
 int main( int argc, char * argv[] )
 {
-   vector<solver> howToSolve ;
-   solverParams p ;
+   std::vector<solver> howToSolve ;
+   solverParams<ps5function> p ;
    int    c{0} ;
    int    line{0} ;
 
