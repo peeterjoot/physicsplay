@@ -61,10 +61,10 @@ const gsl_root_fdfsolver_type * solverToFdfMethod( const solver whichSolver ) ;
 template <class paramType>
 class fdfSolver
 {
-   const gsl_root_fdfsolver_type *  T ; ///< gsl function pointer
-   gsl_function_fdf                 F ; ///< gsl function object
-   gsl_root_fdfsolver *             s ; ///< gsl handle for root search
-   paramType                        params ; ///< parameter object and associated functions.
+   const gsl_root_fdfsolver_type *  m_T ; ///< gsl function pointer
+   gsl_function_fdf                 m_F ; ///< gsl function object
+   gsl_root_fdfsolver *             m_s ; ///< gsl handle for root search
+   paramType                        m_params ; ///< parameter object and associated functions.
 
 public:
    /**
@@ -101,10 +101,10 @@ public:
 template <class paramType>
 class fSolver
 {
-   const gsl_root_fsolver_type *  T ; ///< gsl function pointer
-   gsl_function                   F ; ///< gsl function object
-   gsl_root_fsolver *             s ; ///< gsl handle for root search
-   paramType                      params ; ///< parameter object and associated functions.
+   const gsl_root_fsolver_type *  m_T ; ///< gsl function pointer
+   gsl_function                   m_F ; ///< gsl function object
+   gsl_root_fsolver *             m_s ; ///< gsl handle for root search
+   paramType                      m_params ; ///< parameter object and associated functions.
 
 public:
    /**

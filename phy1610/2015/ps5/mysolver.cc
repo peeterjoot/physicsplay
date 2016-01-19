@@ -12,18 +12,18 @@
 #include "mysolver.h"
 
 template <class paramType>
-fdfSolver<paramType>::fdfSolver( const solver whichSolver ) : T( solverToFdfMethod( whichSolver ) ), params{}
+fdfSolver<paramType>::fdfSolver( const solver whichSolver ) : m_T( solverToFdfMethod( whichSolver ) ), m_params{}
 {
-   F.f = paramType::function ;
-   F.df = paramType::derivative ;
-   F.fdf = paramType::functionAndDerivative ;
-   F.params = &params ;
+   m_F.f = paramType::function ;
+   m_F.df = paramType::derivative ;
+   m_F.fdf = paramType::functionAndDerivative ;
+   m_F.params = &m_params ;
 
    // turn off the print and abort on error behavior
    gsl_set_error_handler_off() ;
 
-   s = gsl_root_fdfsolver_alloc( T ) ;
-   if ( !s )
+   m_s = gsl_root_fdfsolver_alloc( m_T ) ;
+   if ( !m_s )
    {
       throw std::bad_alloc() ;
    }
@@ -32,7 +32,7 @@ fdfSolver<paramType>::fdfSolver( const solver whichSolver ) : T( solverToFdfMeth
 template <class paramType>
 fdfSolver<paramType>::~fdfSolver()
 {
-   gsl_root_fdfsolver_free( s ) ;
+   gsl_root_fdfsolver_free( m_s ) ;
 }
 
 template <class paramType>
@@ -40,22 +40,22 @@ int fdfSolver<paramType>::iterate( const double x0, const Uint max_iter, const d
 {
    int status ;
    double x ;
-   double xPrev = x0 ;
-   Uint iter = 0 ;
-   const double r_expected = params.expectedRoot() ;
+   double xPrev { x0 } ;
+   Uint iter { 0 } ;
+   const double r_expected { m_params.expectedRoot() } ;
 
-   status = gsl_root_fdfsolver_set( s, &F, xPrev ) ;
+   status = gsl_root_fdfsolver_set( m_s, &m_F, xPrev ) ;
 
-   printf( "using %s method\n", gsl_root_fdfsolver_name( s ) ) ;
+   printf( "using %s method\n", gsl_root_fdfsolver_name( m_s ) ) ;
 
    printf( "%5s %9s %10s %9s\n",
            "iter", "root", "err", "err(est)" ) ;
 
    do {
       iter++ ;
-      status = gsl_root_fdfsolver_iterate( s ) ;
+      status = gsl_root_fdfsolver_iterate( m_s ) ;
       xPrev = x ;
-      x = gsl_root_fdfsolver_root( s ) ;
+      x = gsl_root_fdfsolver_root( m_s ) ;
       status = gsl_root_test_delta( x, xPrev, 0, err ) ;
 
       if (status == GSL_SUCCESS)
@@ -72,16 +72,16 @@ int fdfSolver<paramType>::iterate( const double x0, const Uint max_iter, const d
 }
 
 template <class paramType>
-fSolver<paramType>::fSolver( const solver whichSolver ) : T( solverToMethod( whichSolver ) ), params{}
+fSolver<paramType>::fSolver( const solver whichSolver ) : m_T( solverToMethod( whichSolver ) ), m_params{}
 {
-   F.function = paramType::function ;
-   F.params = &params ;
+   m_F.function = paramType::function ;
+   m_F.params = &m_params ;
 
    // turn off the print and abort on error behavior
    gsl_set_error_handler_off() ;
 
-   s = gsl_root_fsolver_alloc( T ) ;
-   if ( !s )
+   m_s = gsl_root_fsolver_alloc( m_T ) ;
+   if ( !m_s )
    {
       throw std::bad_alloc() ;
    }
@@ -90,7 +90,7 @@ fSolver<paramType>::fSolver( const solver whichSolver ) : T( solverToMethod( whi
 template <class paramType>
 fSolver<paramType>::~fSolver()
 {
-   gsl_root_fsolver_free( s ) ;
+   gsl_root_fsolver_free( m_s ) ;
 }
 
 template <class paramType>
@@ -105,11 +105,11 @@ bool fSolver<paramType>::increaseIntervalIfNotBracketed( double & x_min, double 
    //
    while ( iter < max_iter )
    {
-      double f_min = F.function( x_min, F.params ) ;
-      double f_max = F.function( x_max, F.params ) ;
+      double f_min { m_F.function( x_min, m_F.params ) } ;
+      double f_max { m_F.function( x_max, m_F.params ) } ;
 
-      double s_min = std::copysign( 1.0, f_min ) ;
-      double s_max = std::copysign( 1.0, f_max ) ;
+      double s_min { std::copysign( 1.0, f_min ) } ;
+      double s_max { std::copysign( 1.0, f_max ) } ;
 
       if ( s_min != s_max )
       {
@@ -118,10 +118,11 @@ bool fSolver<paramType>::increaseIntervalIfNotBracketed( double & x_min, double 
       }
       else
       {
-         double a_min = std::abs( f_min ) ;
-         double a_max = std::abs( f_max ) ;
+         double a_min { std::abs( f_min ) } ;
+         double a_max { std::abs( f_max ) } ;
 
-         double width = x_max - x_min ;
+         double width { x_max - x_min } ;
+
          if ( a_min < a_max )
          {
             x_min -= width/2 ;
@@ -141,22 +142,22 @@ bool fSolver<paramType>::increaseIntervalIfNotBracketed( double & x_min, double 
 template <class paramType>
 int fSolver<paramType>::iterate( const double x_lo, const double x_hi, const Uint max_iter, const double err )
 {
-   Uint iter = 0 ;
+   Uint iter { 0 } ;
    double r ;
-   double x_min = x_lo ;
-   double x_max = x_hi ;
-   const double r_expected = params.expectedRoot() ;
+   double x_min{ x_lo } ;
+   double x_max{ x_hi } ;
+   const double r_expected { m_params.expectedRoot() } ;
 
    increaseIntervalIfNotBracketed( x_min, x_max, max_iter ) ;
 
-   int status = gsl_root_fsolver_set( s, &F, x_min, x_max ) ;
+   int status { gsl_root_fsolver_set( m_s, &m_F, x_min, x_max ) } ;
    if ( status )
    {
       std::cout << std::string( gsl_strerror (status) ) << std::endl;
    }
    else
    {
-      printf( "using %s method\n", gsl_root_fsolver_name( s ) ) ;
+      printf( "using %s method\n", gsl_root_fsolver_name( m_s ) ) ;
 
       printf( "%5s [%9s, %9s] %9s %10s %9s\n",
               "iter", "lower", "upper", "root", "err", "err(est)" ) ;
@@ -164,17 +165,17 @@ int fSolver<paramType>::iterate( const double x_lo, const double x_hi, const Uin
       do {
          iter++ ;
 
-         status = gsl_root_fsolver_iterate( s ) ;
+         status = gsl_root_fsolver_iterate( m_s ) ;
          if ( status )
          {
             std::cout << std::string( gsl_strerror (status) ) << std::endl;
             break ;
          }
 
-         r = gsl_root_fsolver_root( s ) ;
+         r = gsl_root_fsolver_root( m_s ) ;
 
-         x_min = gsl_root_fsolver_x_lower( s ) ;
-         x_max = gsl_root_fsolver_x_upper( s ) ;
+         x_min = gsl_root_fsolver_x_lower( m_s ) ;
+         x_max = gsl_root_fsolver_x_upper( m_s ) ;
 
          status = gsl_root_test_interval( x_min, x_max, 0, err ) ;
          if ( status == GSL_SUCCESS )
