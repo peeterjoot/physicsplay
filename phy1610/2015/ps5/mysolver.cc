@@ -35,40 +35,75 @@ fdfSolver<paramType>::~fdfSolver()
    gsl_root_fdfsolver_free( m_s ) ;
 }
 
-template <class paramType>
-int fdfSolver<paramType>::iterate( const double x0, const Uint max_iter, const double err )
+/**
+   Test for any return code that isn't one of GSL_CONTINUE or GSL_SUCCESS.
+ */
+inline bool isGslStatusFatal( int status )
 {
-   int status ;
-   double x ;
-   double xPrev { x0 } ;
-   Uint iter { 0 } ;
+   return ( (status != GSL_CONTINUE) && (status != GSL_SUCCESS) ) ;
+}
+
+template <class paramType>
+void fdfSolver<paramType>::iterate( const iterationParameters & p, iterationResults & r )
+{
    const double r_expected { m_params.expectedRoot() } ;
 
-   status = gsl_root_fdfsolver_set( m_s, &m_F, xPrev ) ;
+   r.m_xPrev      = p.m_x0 ;
+   r.m_converged  = false ;
+   r.m_x          = p.m_x0 ;
+   r.m_iter       = 0 ;
+   r.m_status     = gsl_root_fdfsolver_set( m_s, &m_F, r.m_xPrev ) ;
+   r.m_solvername = gsl_root_fdfsolver_name( m_s ) ;
 
-   printf( "using %s method\n", gsl_root_fdfsolver_name( m_s ) ) ;
-
-   printf( "%5s %9s %10s %9s\n",
-           "iter", "root", "err", "err(est)" ) ;
+   if ( p.m_verbose )
+   {
+      printf( "%5s %9s %10s %9s\n",
+              "iter", "root", "err", "err(est)" ) ;
+   }
 
    do {
-      iter++ ;
-      status = gsl_root_fdfsolver_iterate( m_s ) ;
-      xPrev = x ;
-      x = gsl_root_fdfsolver_root( m_s ) ;
-      status = gsl_root_test_delta( x, xPrev, 0, err ) ;
+      m_iter++ ;
 
-      if (status == GSL_SUCCESS)
+      // Can return GSL_EBADFUNC, GSL_EZERODIV (singular value or divide by zero)
+      r.m_status = gsl_root_fdfsolver_iterate( m_s ) ;
+      if ( isGslStatusFatal( r.m_status ) )
       {
-         std::cout << "Converged:" << std::endl ;
+         break ;
       }
 
-      printf( "%5d %10.7f %+10.7f %10.7f\n",
-              (int)iter, x, x - r_expected, x - xPrev ) ;
+      r.m_xPrev = r.m_x ;
+      r.m_x = gsl_root_fdfsolver_root( m_s ) ;
 
-   } while ( status == GSL_CONTINUE && iter < max_iter ) ;
+      //
+      // gsl_root_test_delta deals with relative error in a smart way.  Such an error is
+      // usually defined as: e_r = |x - x_0|/|x|, so we want |x - x_0|/|x| < e_r for a desired e_r.
+      // That is problematic when the root is near zero.
+      //
+      // Instead this tests for relative error by checking that
+      //    |x - x_0| < |x| e_r + e_a, where e_r is the desired relative error and e_a is the
+      // desired absolute error, so if the root is near zero, only the absolute error check
+      // will be relavant.
+      //
+      r.m_status = gsl_root_test_delta( r.m_x, r.m_xPrev, p.m_errabs, p.m_errrel ) ;
+      if ( isGslStatusFatal( r.m_status ) )
+      {
+         break ;
+      }
 
-   return status ;
+      if ( p.m_verbose )
+      {
+         printf( "%5d %10.7f %+10.7f %10.7f\n",
+                 (int)r.m_iter, r.m_x, r.m_x - r_expected, r.m_x - r.m_xPrev ) ;
+      }
+
+   } while ( r.m_status == GSL_CONTINUE && m_iter < max_iter ) ;
+
+   if ( r.m_status == GSL_SUCCESS )
+   {
+      r.m_converged = true ;
+   }
+
+   r.m_strerror = gsl_strerror( r.m_status ) ;
 }
 
 template <class paramType>

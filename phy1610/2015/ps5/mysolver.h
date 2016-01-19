@@ -5,6 +5,7 @@
 
 #include <gsl/gsl_roots.h>
 #include <vector>
+#include <string>
 #include "integers.h"
 
 /**
@@ -12,7 +13,6 @@
  */
 enum class solver
 {
-   undefined,
    bisection,
    falsepos,
    brent,
@@ -78,22 +78,40 @@ public:
     */
    ~fdfSolver() ;
 
+   /** Output parameters for an gsl fdf solver iteration.
+    */
+   struct iterationResults
+   {
+      std::string m_solvername ; ///< gsl_root_fdfsolver_name().
+      bool        m_converged ;  ///< did the iteration converge in the specfied number of iterations.
+      double      m_x ;          ///< The point at which the root was found (or the last place we looked).
+      double      m_xPrev ;      ///< The previous iteration point when finished.
+      Uint        m_iter ;       ///< The number of iterations performed before root is found or we give up.
+      int         m_status ;     ///< The last successful or unsuccessful gsl function return code.
+      std::string m_strerror ;   ///< gsl_strerror() output for m_status.
+   } ;
+
+   /**
+      Input parameters for an gsl fdf solver iteration.
+    */
+   struct iterationParameters
+   {
+      const double   m_x0 ;        ///< Initial guess for the root.
+      const Uint     m_max_iter ;  ///< Maximum number of iterations before giving up.
+      const double   m_relerr ;    ///< the relative error criteria for convergence.
+      const double   m_abserr ;    ///< the absolute error criteria for convergence.
+   } ;
+
    /**
       Perform the root solution iteration.
 
-      \param x0 [in]
-         Initial guess.
-
-      \param max_iter [in]
-         Abort iteration if not finished in this many iterations.
-
-      \param err [in]
-         Required root precision.
+      \param p [in]
+         Input parameters for the root solving iteration.
 
       \retval
-         gsl library status code.
+         Output parameters for the root solving iteration.
     */
-   int iterate( const double x0, const Uint max_iter, const double err ) ;
+   void iterate( const iterationParameters & p, iterationResults & r )
 } ;
 
 /**
