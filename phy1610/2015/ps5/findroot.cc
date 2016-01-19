@@ -32,16 +32,62 @@ void showHelpAndExit()
    std::exit( RC_HELP ) ;
 }
 
+struct solverParams
+{
+   double m_x0 ;
+   double m_xUpper ;
+   double m_intervalStep ;
+   Uint   m_max_iter ;
+   Uint   m_max_iter_deriv ;
+   double m_err ;
+   double m_intervalXMin ;
+
+   solverParams() :
+      m_x0{0.5},
+      m_xUpper{10.0},
+      m_intervalStep{0.5},
+      m_max_iter{100},
+      m_max_iter_deriv{1000},
+      m_err{1e-4},
+      m_intervalXMin{0.0}
+   {
+   }
+
+   void runSolver( const vector<solver> & howToSolve ) const
+   {
+      auto xmin = m_x0 ;
+
+      for ( auto method : howToSolve )
+      {
+         while ( xmin <= m_xUpper )
+         {
+            // Newton's method bounces around
+            if ( isFdfSolver( method ) )
+            {
+               fdfSolver<ps5function> s( method ) ;
+
+               s.iterate( xmin, m_max_iter_deriv, m_err ) ;
+            }
+            else
+            {
+               fSolver<ps5function> s( method ) ;
+
+               s.iterate( m_intervalXMin, m_x0, m_max_iter, m_err ) ;
+            }
+
+            xmin += m_intervalStep ;
+         }
+      }
+   }
+} ;
+
+/**
+   Parse arguments and run the selected root solver.
+ */
 int main( int argc, char * argv[] )
 {
-   solver whichSolver{solver::undefined} ;
-   double x0{0.5} ;
-   double xUpper{10.0} ;
-   double intervalStep{0.5} ;
-   Uint   max_iter{100} ;
-   Uint   max_iter_deriv{1000} ;
-   double err{1e-4} ;
-   double intervalXMin{0.0} ;
+   vector<solver> howToSolve ;
+   solverParams p ;
    int    c{0} ;
    int    line{0} ;
 
@@ -70,78 +116,78 @@ int main( int argc, char * argv[] )
             case 'x' :
             {
                line = __LINE__ ; 
-               x0 = std::stod( optarg ) ;
+               p.m_x0 = std::stod( optarg ) ;
                break ;
             }
             case 'X' :
             {
                line = __LINE__ ; 
-               xUpper = std::stod( optarg ) ;
+               p.m_xUpper = std::stod( optarg ) ;
                break ;
             }
             case 'w' :
             {
                line = __LINE__ ; 
-               intervalStep = std::stod( optarg ) ;
+               p.m_intervalStep = std::stod( optarg ) ;
                break ;
             }
             case 'm' :
             {
                line = __LINE__ ; 
-               max_iter = strToUint( optarg ) ;
+               p.m_max_iter = strToUint( optarg ) ;
                break ;
             }
             case 'd' :
             {
                line = __LINE__ ; 
-               max_iter_deriv = strToUint( optarg ) ;
+               p.m_max_iter_deriv = strToUint( optarg ) ;
                break ;
             }
             case 'e' :
             {
                line = __LINE__ ; 
-               err = std::stod( optarg ) ;
+               p.m_err = std::stod( optarg ) ;
                break ;
             }
             case 'i' :
             {
                line = __LINE__ ;
-               whichSolver = solver::bisection ;
+               howToSolve.push_back( solver::bisection ) ;
 
                break ;
             }
             case 'f' :
             {
                line = __LINE__ ;
-               whichSolver = solver::falsepos ;
+               howToSolve.push_back( solver::falsepos ) ;
 
                break ;
             }
             case 'b' :
             {
                line = __LINE__ ;
-               whichSolver = solver::brent ;
+               howToSolve.push_back( solver::brent ) ;
 
                break ;
             }
             case 'n' :
             {
                line = __LINE__ ;
-               whichSolver = solver::newton ;
+               howToSolve.push_back( solver::newton ) ;
 
                break ;
             }
             case 's' :
             {
                line = __LINE__ ;
-               whichSolver = solver::secant ;
+               howToSolve.push_back( solver::secant ) ;
 
                break ;
             }
             case 'S' :
             {
                line = __LINE__ ;
-               whichSolver = solver::steffenson ;
+               howToSolve.push_back( solver::steffenson ) ;
 
                break ;
             }
@@ -166,30 +212,13 @@ int main( int argc, char * argv[] )
       std::exit( RC_PARSE_ERROR ) ;
    }
 
-   if ( whichSolver == solver::undefined )
+   if ( 0 == howToSolve.size() )
    {
       std::cerr << "solver unspecified" << std::endl ;
       showHelpAndExit() ;
    }
 
-   while ( x0 <= xUpper )
-   {
-      // Newton's method bounces around
-      if ( isFdfSolver( whichSolver ) )
-      {
-         fdfSolver<ps5function> s( whichSolver ) ;
-
-         s.iterate( x0, max_iter_deriv, err ) ;
-      }
-      else
-      {
-         fSolver<ps5function> s( whichSolver ) ;
-
-         s.iterate( intervalXMin, x0, max_iter, err ) ;
-      }
-
-      x0 += intervalStep ;
-   }
+   p.runSolver( howToSolve ) ;
 
    return 0 ;
 }
