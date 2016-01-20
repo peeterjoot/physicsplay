@@ -44,26 +44,24 @@ struct solverParams
    Uint   m_max_iter ;           ///< max number of iterations when running a fsolver method
    Uint   m_max_iter_deriv ;     ///< max number of iterations when running an fdfsolver method
    double m_err ;                ///< desired error for convergence
-   double m_intervalXMin ;       ///< lower bound for all the fsolver intervals
 
    /** set the default values for these parameters */
    solverParams() :
-      m_x0{0.5},
+      m_x0{0.0},
       m_xUpper{10.0},
       m_intervalStep{0.5},
       m_max_iter{100},
       m_max_iter_deriv{15000},
-      m_err{1e-4},
-      m_intervalXMin{0.0}
+      m_err{1e-4}
    {
    }
 
    void runSolver( const std::vector<solver> & howToSolve ) const
    {
-      auto xmin = m_x0 ;
-
       for ( auto method : howToSolve )
       {
+         auto xmin = m_x0 + m_intervalStep ;
+
          while ( xmin <= m_xUpper )
          {
             // Newton's method bounces around
@@ -87,12 +85,12 @@ struct solverParams
             {
                fSolver<ps5function> s( method ) ;
 
-               fSolver<ps5function>::inputs p( m_intervalXMin, m_x0, m_max_iter, m_err, m_err ) ;
+               fSolver<ps5function>::inputs p( m_x0, xmin, m_max_iter, m_err, m_err ) ;
                fSolver<ps5function>::results r ;
 
                s.iterate( p, r ) ;
 
-               std::cout << "Using " << r.m_solvername << " on: [ " << m_intervalXMin << ", " << m_x0 << " ]\n"
+               std::cout << "Using " << r.m_solvername << " on: [ " << m_x0 << ", " << xmin << " ]\n"
                          << "Iterations:\t" << r.m_iter << "\n"
                          << "Converged:\t" << r.m_converged << "\n"
                          << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
