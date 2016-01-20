@@ -2,8 +2,8 @@
 
     Some unit tests.
  */
-#include "mysolver.cc"
-#include "ps5function.h"
+#include "ps5solver.h"
+#include <iostream>
 
 #define BOOST_TEST_MAIN
 #define BOOST_TEST_MODULE test
@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE( testsSolver )
 
       s.iterate( p, r ) ;
 
-      BOOST_REQUIRE( r.m_converged && std::abs(r.m_x -ps5function::expectedRoot()) < err ) ;
+      BOOST_REQUIRE( r.m_converged && fabs(r.m_x -ps5function::expectedRoot()) < err ) ;
    }
  
    {
@@ -43,6 +43,6 @@ BOOST_AUTO_TEST_CASE( testsSolver )
 
       s.iterate( p, r ) ;
 
-      BOOST_REQUIRE( r.m_converged && std::abs(r.m_r -ps5function::expectedRoot()) < err ) ;
+      BOOST_REQUIRE( r.m_converged && fabs(r.m_r -ps5function::expectedRoot()) < err ) ;
    }
 }

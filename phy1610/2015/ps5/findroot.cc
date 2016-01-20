@@ -1,8 +1,7 @@
 #include <getopt.h>
 #include <cstdlib>
 #include <iostream>
-#include "ps5function.h"
-#include "mysolver.cc" // for template instantiations
+#include "ps5solver.h"
 
 /** exit code for successful exectution */
 #define RC_SUCCESS      0
@@ -79,7 +78,7 @@ struct solverParams
                          << "Converged:\t" << r.m_converged << "\n"
                          << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
                          << "Root:\t" << r.m_x << "\n"
-                         << "Abserr:\t" << std::abs(r.m_x - r.m_xPrev) << "\n" << std::endl ;
+                         << "Abserr:\t" << fabs(r.m_x - r.m_xPrev) << "\n" << std::endl ;
             }
             else
             {

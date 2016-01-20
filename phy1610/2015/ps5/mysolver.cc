@@ -154,8 +154,8 @@ bool fSolver<paramType>::increaseIntervalIfNotBracketed( double & x_min, double 
       }
       else
       {
-         double a_min { std::abs( f_min ) } ;
-         double a_max { std::abs( f_max ) } ;
+         double a_min { fabs( f_min ) } ;
+         double a_max { fabs( f_max ) } ;
 
          double width { x_max - x_min } ;
 
