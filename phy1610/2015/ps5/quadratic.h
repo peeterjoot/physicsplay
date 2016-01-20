@@ -23,6 +23,11 @@ struct quadratic
    static double derivative( double x, void * params ) ;
    static void functionAndDerivative( double x, void * params, double * y, double * dy ) ;
 
+   double operator() ( const double x ) const
+   {
+      return function( x, const_cast<quadratic*>(this) ) ; 
+   }
+
    static inline double expectedRoot()
    {
       return std::sqrt( 5.0 ) ;

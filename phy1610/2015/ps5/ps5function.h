@@ -53,12 +53,21 @@ struct ps5function
      */
    static void functionAndDerivative( double x, void * params, double * y, double * dy ) ;
 
+   /** 
+      Convience method to evaluate the function at this point without explicitly using function pointers.
+    */
+   double operator() ( const double x ) const
+   {
+      // gsl functions take void *, not const void *, to this needs coersion:
+      return function( x, const_cast<ps5function*>(this) ) ; 
+   }
+
    /**
       For verbose output loops to show how close we are to the expected root.
     */
    static inline double expectedRoot()
    {
-      // -1.0 is also a root.
+      // -1.0 is also a root, but we expect the positive root for bracket methods that contain x = 1.
       return 1.0 ;
    }
 } ;
