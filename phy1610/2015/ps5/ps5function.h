@@ -4,14 +4,14 @@
 #define phy1610_ps5_ps5function_h_included
 
 /**
-   A gsl function parameter object, also supplying the function pointers for both the interval and 
+   A gsl function parameter object, also supplying the function pointers for both the interval and
    derivative solvers.
  */
 struct ps5function
 {
    /**
-      Returns \f[ 
-                 f(x) = (\exp(1-x^2) -1) e^{\sin x} 
+      Returns \f[
+                 f(x) = (\exp(1-x^2) -1) e^{\sin x}
               \f]
 
       \param x [in]
@@ -24,7 +24,7 @@ struct ps5function
 
    /**
       Returns \f[ \frac{d}{dx} \left(
-                 (\exp(1-x^2) -1) e^{\sin x} 
+                 (\exp(1-x^2) -1) e^{\sin x}
                  \right)
               \f]
 

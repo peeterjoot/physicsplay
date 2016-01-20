@@ -1,4 +1,5 @@
-/** \file mysolver.h
+/**
+   \file mysolver.h
  */
 #if !defined phy1610_ps5_mysolver_h_included
 #define phy1610_ps5_mysolver_h_included
@@ -57,6 +58,49 @@ const gsl_root_fsolver_type * solverToMethod( const solver whichSolver ) ;
 const gsl_root_fdfsolver_type * solverToFdfMethod( const solver whichSolver ) ;
 
 /**
+   Output parameters for gsl solver iteration.
+ */
+struct iterationResults
+{
+   std::string m_solvername ; ///< gsl_root_fdfsolver_name().
+   bool        m_converged ;  ///< did the iteration converge in the specfied number of iterations.
+   Uint        m_iter ;       ///< The number of iterations performed before root is found or we give up.
+   int         m_status ;     ///< The last successful or unsuccessful gsl function return code.
+   std::string m_strerror ;   ///< gsl_strerror() output for m_status.
+
+   iterationResults() :
+      m_solvername{},
+      m_converged{false},
+      m_iter{0},
+      m_status{0},
+      m_strerror{}
+   {
+   }
+} ;
+
+/**
+   Input parameters for gsl solver iteration.
+ */
+struct iterationParameters
+{
+   const Uint     m_max_iter ;  ///< Maximum number of iterations before giving up.
+   const double   m_relerr ;    ///< the relative error criteria for convergence.
+   const double   m_abserr ;    ///< the absolute error criteria for convergence.
+   const bool     m_verbose ;   ///< verbose output
+
+   iterationParameters( const Uint     max_iter,
+                        const double   relerr,
+                        const double   abserr,
+                        const bool     verbose ) :
+         m_max_iter{max_iter},
+         m_relerr{relerr},
+         m_abserr{abserr},
+         m_verbose{verbose}
+   {
+   }
+} ;
+
+/**
    gsl based derivative root solver.
  */
 template <class paramType>
@@ -80,26 +124,35 @@ public:
 
    /** Output parameters for an gsl fdf solver iteration.
     */
-   struct iterationResults
+   struct results : public iterationResults
    {
-      std::string m_solvername ; ///< gsl_root_fdfsolver_name().
-      bool        m_converged ;  ///< did the iteration converge in the specfied number of iterations.
       double      m_x ;          ///< The point at which the root was found (or the last place we looked).
       double      m_xPrev ;      ///< The previous iteration point when finished.
-      Uint        m_iter ;       ///< The number of iterations performed before root is found or we give up.
-      int         m_status ;     ///< The last successful or unsuccessful gsl function return code.
-      std::string m_strerror ;   ///< gsl_strerror() output for m_status.
+
+      results() :
+         iterationResults{},
+         m_x{0},
+         m_xPrev{0}
+      {
+      }
    } ;
 
    /**
       Input parameters for an gsl fdf solver iteration.
     */
-   struct iterationParameters
+   struct inputs : public iterationParameters
    {
       const double   m_x0 ;        ///< Initial guess for the root.
-      const Uint     m_max_iter ;  ///< Maximum number of iterations before giving up.
-      const double   m_relerr ;    ///< the relative error criteria for convergence.
-      const double   m_abserr ;    ///< the absolute error criteria for convergence.
+
+      inputs( const double   x0,
+              const Uint     max_iter,
+              const double   relerr,
+              const double   abserr,
+              const bool     verbose = false ) :
+           iterationParameters( max_iter, relerr, abserr, verbose ),
+           m_x0{x0}
+      {
+      }
    } ;
 
    /**
@@ -111,7 +164,7 @@ public:
       \retval
          Output parameters for the root solving iteration.
     */
-   void iterate( const iterationParameters & p, iterationResults & r )
+   void iterate( const inputs & p, results & r ) ;
 } ;
 
 /**
@@ -155,57 +208,54 @@ public:
    bool increaseIntervalIfNotBracketed( double & x_min, double & x_max, const Uint iter_max ) ;
 
    /**
+      Output parameters for an gsl fsolver iteration.
+    */
+   struct results : public iterationResults
+   {
+      double      m_xLo ;        ///< Final lower bound for the interval
+      double      m_xHi ;        ///< Final upper bound for the interval
+      double      m_r ;          ///< The root at the conclusion of the iteration
+
+      results() :
+         iterationResults{},
+         m_xLo{0},
+         m_xHi{0},
+         m_r{0}
+      {
+      }
+   } ;
+
+   /**
+      Input parameters for an gsl fsolver iteration.
+    */
+   struct inputs : public iterationParameters
+   {
+      const double   m_xLo ;        ///< Initial lower bound for the interval that contains the root (or at least contains a zero crossing)
+      const double   m_xHi ;        ///< Initial upper bound for the interval that contains the root (or at least contains a zero crossing)
+
+      inputs( const double   xLo,
+              const double   xHi,
+              const Uint     max_iter,
+              const double   relerr,
+              const double   abserr,
+              const bool     verbose = false ) :
+           iterationParameters( max_iter, relerr, abserr, verbose ),
+           m_xLo{xLo},
+           m_xHi{xHi}
+      {
+      }
+   } ;
+
+   /**
       Perform the root solution iteration.
 
-      \param x_lo [in]
-         Initial lower bound for the interval that contains the root.
-
-      \param x_hi [in]
-         Initial upper bound for the interval that contains the root.
-
-      \param max_iter [in]
-         Abort iteration if not finished in this many iterations.
-
-      \param r_expected [in]
-         Expected root (for informational purposes in verbose print loop).
-
-      \param err [in]
-         Required root precision.
+      \param p [in]
+         Input parameters for the root solving iteration.
 
       \retval
-         gsl library status code.
+         Output parameters for the root solving iteration.
     */
-   int iterate( const double x_lo, const double x_hi, const Uint max_iter, const double err ) ;
-} ;
-
-/**
-   Parameters for running the solver as specified in the problem:
-   - varying initial values x0 for x, or for varying starting intervals [0.0,x0], where x0 ranges from 0 to 10 in steps of 0.5.
- */
-template <class paramType>
-struct solverParams
-{
-   double m_x0 ;                 ///< initial upper bound for the first interval (fsolver) or root guess (fdfsolver)
-   double m_xUpper ;             ///< upper bound for all the intervals (i.e. 10)
-   double m_intervalStep ;       ///< step size
-   Uint   m_max_iter ;           ///< max number of iterations when running a fsolver method
-   Uint   m_max_iter_deriv ;     ///< max number of iterations when running an fdfsolver method
-   double m_err ;                ///< desired error for convergence
-   double m_intervalXMin ;       ///< lower bound for all the fsolver intervals
-
-   /** set the default values for these parameters */
-   solverParams() :
-      m_x0{0.5},
-      m_xUpper{10.0},
-      m_intervalStep{0.5},
-      m_max_iter{100},
-      m_max_iter_deriv{1000},
-      m_err{1e-4},
-      m_intervalXMin{0.0}
-   {
-   }
-
-   void runSolver( const std::vector<solver> & howToSolve ) const ;
+   void iterate( const inputs & p, results & r ) ;
 } ;
 
 #endif
