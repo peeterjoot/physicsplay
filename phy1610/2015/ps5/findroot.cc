@@ -52,7 +52,7 @@ struct solverParams
       m_xUpper{10.0},
       m_intervalStep{0.5},
       m_max_iter{100},
-      m_max_iter_deriv{1000},
+      m_max_iter_deriv{15000},
       m_err{1e-4},
       m_intervalXMin{0.0}
    {
@@ -71,7 +71,7 @@ struct solverParams
             {
                fdfSolver<ps5function> s( method ) ;
 
-               fdfSolver<ps5function>::inputs p( xmin, m_max_iter, m_err, m_err ) ;
+               fdfSolver<ps5function>::inputs p( xmin, m_max_iter_deriv, m_err, m_err ) ;
                fdfSolver<ps5function>::results r ;
 
                s.iterate( p, r ) ;
@@ -81,7 +81,7 @@ struct solverParams
                          << "Converged:\t" << r.m_converged << "\n"
                          << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
                          << "Root:\t" << r.m_x << "\n"
-                         << "Abserr:\t" << std::abs(r.m_x - r.m_xPrev) << std::endl ;
+                         << "Abserr:\t" << std::abs(r.m_x - r.m_xPrev) << "\n" << std::endl ;
             }
             else
             {
@@ -97,7 +97,7 @@ struct solverParams
                          << "Converged:\t" << r.m_converged << "\n"
                          << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
                          << "Root:\t" << r.m_r << "\n"
-                         << "Abserr:\t" << r.m_xHi - r.m_xLo << std::endl ;
+                         << "Abserr:\t" << r.m_xHi - r.m_xLo << "\n" << std::endl ;
             }
 
             xmin += m_intervalStep ;
