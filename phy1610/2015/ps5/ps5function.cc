@@ -24,8 +24,8 @@ void ps5function::functionAndDerivative( double x, void * params, double *y, dou
    double xSquared = x * x ;
    double eOneMinusXSquared = std::exp( 1.0 - xSquared ) ;
    double eSinX = std::exp( std::sin( x ) ) ;
-   double cosX = std::cos( x ) ) ;
+   double cosX = std::cos( x ) ;
 
    *y = (eOneMinusXSquared - 1.0) * eSinX ;
-   *dy = -( (2 * x + cosX) * eOneMinusXSquared + cosX ) * eSinX ;
+   *dy = *y * cosX - 2 * x * eOneMinusXSquared * eSinX ;
 }
