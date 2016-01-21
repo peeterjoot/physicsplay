@@ -6,7 +6,7 @@
 #include <cmath>
 
 /**
-   A gsl function parameter object, also supplying the function pointers for both the interval and 
+   A gsl function parameter object, also supplying the function pointers for both the interval and
    derivative solvers.
 
    These functions supply the quadradic function taken directly from the gsl documentation.

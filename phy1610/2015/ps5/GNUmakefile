@@ -36,17 +36,21 @@ else
    TEST_LDLIBS += -lboost_unit_test_framework
 endif
 TARGETS += test
-TEST_LDLIBS += $(GSL_LDLIBS)
 
-FINDROOT_SOURCES += findroot.cc solverMethod.cc
-#FINDROOT_SOURCES += quadratic.cc
-FINDROOT_SOURCES += ps5function.cc
+COMMON_SOURCES += solverMethod.cc
+COMMON_SOURCES += ps5function.cc
+COMMON_SOURCES += ps5solver.cc
+#COMMON_SOURCES += quadratic.cc
+
+FINDROOT_SOURCES += findroot.cc
+FINDROOT_SOURCES += $(COMMON_SOURCES)
 FINDROOT_OBJECTS := $(subst .cc,.o,$(FINDROOT_SOURCES))
-
 FINDROOT_LDLIBS += $(GSL_LDLIBS)
 
-TEST_SOURCES += test.cc solverMethod.cc ps5function.cc
+TEST_SOURCES += test.cc
+TEST_SOURCES += $(COMMON_SOURCES)
 TEST_OBJECTS := $(subst .cc,.o,$(TEST_SOURCES))
+TEST_LDLIBS += $(GSL_LDLIBS)
 
 CLEANTARGETS += $(TARGETS)
 # doxygen:

@@ -1,8 +1,7 @@
 #include <getopt.h>
 #include <cstdlib>
 #include <iostream>
-#include "ps5function.h"
-#include "mysolver.cc" // for template instantiations
+#include "ps5solver.h"
 
 /** exit code for successful exectution */
 #define RC_SUCCESS      0
@@ -32,6 +31,77 @@ void showHelpAndExit()
    std::exit( RC_HELP ) ;
 }
 
+/**
+   Parameters for running the solver as specified in the problem:
+   - varying initial values x0 for x, or for varying starting intervals [0.0,x0], where x0 ranges from 0 to 10 in steps of 0.5.
+ */
+struct solverParams
+{
+   double m_x0 ;                 ///< initial upper bound for the first interval (fsolver) or root guess (fdfsolver)
+   double m_xUpper ;             ///< upper bound for all the intervals (i.e. 10)
+   double m_intervalStep ;       ///< step size
+   Uint   m_max_iter ;           ///< max number of iterations when running a fsolver method
+   Uint   m_max_iter_deriv ;     ///< max number of iterations when running an fdfsolver method
+   double m_err ;                ///< desired error for convergence
+
+   /** set the default values for these parameters */
+   solverParams() :
+      m_x0{0.0},
+      m_xUpper{10.0},
+      m_intervalStep{0.5},
+      m_max_iter{100},
+      m_max_iter_deriv{15000},
+      m_err{1e-4}
+   {
+   }
+
+   void runSolver( const std::vector<solver> & howToSolve ) const
+   {
+      for ( auto method : howToSolve )
+      {
+         auto xmin = m_x0 + m_intervalStep ;
+
+         while ( xmin <= m_xUpper )
+         {
+            // Newton's method bounces around
+            if ( isFdfSolver( method ) )
+            {
+               fdfSolver<ps5function> s( method ) ;
+
+               fdfSolver<ps5function>::inputs p( xmin, m_max_iter_deriv, m_err, m_err ) ;
+               fdfSolver<ps5function>::results r ;
+
+               s.iterate( p, r ) ;
+
+               std::cout << "Using " << r.m_solvername << " with x_0 = " << xmin << "\n"
+                         << "Iterations:\t" << r.m_iter << "\n"
+                         << "Converged:\t" << r.m_converged << "\n"
+                         << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
+                         << "Root:\t" << r.m_x << "\n"
+                         << "Abserr:\t" << fabs(r.m_x - r.m_xPrev) << "\n" << std::endl ;
+            }
+            else
+            {
+               fSolver<ps5function> s( method ) ;
+
+               fSolver<ps5function>::inputs p( m_x0, xmin, m_max_iter, m_err, m_err ) ;
+               fSolver<ps5function>::results r ;
+
+               s.iterate( p, r ) ;
+
+               std::cout << "Using " << r.m_solvername << " on: [ " << m_x0 << ", " << xmin << " ]\n"
+                         << "Iterations:\t" << r.m_iter << "\n"
+                         << "Converged:\t" << r.m_converged << "\n"
+                         << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
+                         << "Root:\t" << r.m_r << "\n"
+                         << "Abserr:\t" << r.m_xHi - r.m_xLo << "\n" << std::endl ;
+            }
+
+            xmin += m_intervalStep ;
+         }
+      }
+   }
+} ;
 
 /**
    Parse arguments and run the selected root solver.
@@ -39,7 +109,7 @@ void showHelpAndExit()
 int main( int argc, char * argv[] )
 {
    std::vector<solver> howToSolve ;
-   solverParams<ps5function> p ;
+   solverParams p ;
    int    c{0} ;
    int    line{0} ;
 
@@ -67,37 +137,37 @@ int main( int argc, char * argv[] )
          {
             case 'x' :
             {
-               line = __LINE__ ; 
+               line = __LINE__ ;
                p.m_x0 = std::stod( optarg ) ;
                break ;
             }
             case 'X' :
             {
-               line = __LINE__ ; 
+               line = __LINE__ ;
                p.m_xUpper = std::stod( optarg ) ;
                break ;
             }
             case 'w' :
             {
-               line = __LINE__ ; 
+               line = __LINE__ ;
                p.m_intervalStep = std::stod( optarg ) ;
                break ;
             }
             case 'm' :
             {
-               line = __LINE__ ; 
+               line = __LINE__ ;
                p.m_max_iter = strToUint( optarg ) ;
                break ;
             }
             case 'd' :
             {
-               line = __LINE__ ; 
+               line = __LINE__ ;
                p.m_max_iter_deriv = strToUint( optarg ) ;
                break ;
             }
             case 'e' :
             {
-               line = __LINE__ ; 
+               line = __LINE__ ;
                p.m_err = std::stod( optarg ) ;
                break ;
             }
