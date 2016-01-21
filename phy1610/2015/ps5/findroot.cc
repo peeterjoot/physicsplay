@@ -57,6 +57,8 @@ struct solverParams
 
    void runSolver( const std::vector<solver> & howToSolve ) const
    {
+      ps5function f ;
+
       for ( auto method : howToSolve )
       {
          auto xmin = m_x0 + m_intervalStep ;
@@ -78,6 +80,7 @@ struct solverParams
                          << "Converged:\t" << r.m_converged << "\n"
                          << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
                          << "Root:\t" << r.m_x << "\n"
+                         << "F(Root):\t" << f(r.m_x) << "\n"
                          << "Abserr:\t" << fabs(r.m_x - r.m_xPrev) << "\n" << std::endl ;
             }
             else
@@ -94,6 +97,7 @@ struct solverParams
                          << "Converged:\t" << r.m_converged << "\n"
                          << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
                          << "Root:\t" << r.m_r << "\n"
+                         << "F(Root):\t" << f(r.m_r) << "\n"
                          << "Abserr:\t" << r.m_xHi - r.m_xLo << "\n" << std::endl ;
             }
 
