@@ -74,21 +74,54 @@ void fdfSolver<paramType>::iterate( const inputs & p, results & r )
          r.m_xPrev = r.m_x ;
          r.m_x = gsl_root_fdfsolver_root( m_s ) ;
 
-         //
-         // gsl_root_test_delta deals with relative error in a smart way.  Such an error is
-         // usually defined as: e_r = |x - x_0|/|x|, so we want |x - x_0|/|x| < e_r for a desired e_r.
-         // That is problematic when the root is near zero.
-         //
-         // Instead this tests for relative error by checking that
-         //    |x - x_0| < |x| e_r + e_a, where e_r is the desired relative error and e_a is the
-         // desired absolute error, so if the root is near zero, only the absolute error check
-         // will be relavant.
-         //
-         r.m_status = gsl_root_test_delta( r.m_x, r.m_xPrev, p.m_abserr, p.m_relerr ) ;
+         /*
+            gsl_root_test_delta deals with relative error in a (seemingly) smart way.  Such an error is
+            usually defined as: e_r = |x - x_0|/|x|, so we want |x - x_0|/|x| < e_r for a desired e_r.
+            That is problematic when the root is near zero.
+
+            Instead this tests for relative error by checking that
+               |x - x_0| < |x| e_r + e_a, where e_r is the desired relative error and e_a is the
+            desired absolute error, so if the root is near zero, only the absolute error check
+            will be relavant.
+
+            However, testing shows that the use of gsl_root_test_delta with both absolute and relative
+            errors specified simulateously can be error prone.  The following call demonstrates this:
+
+               int status = gsl_root_test_delta( -12731.567231222018, -12730.345460737482, 1e-4, 1e-4) ;
+
+            stepping into gsl_root_test_delta in the debugger (apt-get source gsl), I see:
+
+               const double tolerance = epsabs + epsrel * fabs(x1)  ;
+
+               if (fabs(x1 - x0) < tolerance || x1 == x0)
+               (gdb) p fabs(x1 - x0)
+               $6 = 1
+               (gdb) p tolerance
+               $7 = 1.2732567231222016
+
+            This large valued (apparent) root, makes the relative error comparison come out
+            indicating convergence, but that dwarfs the absolute error comparison which should have failed.
+            We end up terminating the iteration prematurely, having not actually found the root.  Back
+            substitution into the function shows that is the case.
+
+            I think the gsl guys are trying to be too clever here combining the abs and rel error
+            checks using a sum.  I think this should be too separate checks if both are supplied and
+            GSL_SUCCESS only if both conditions are met separately.  Do this manually instead:
+         */
+         r.m_status = gsl_root_test_delta( r.m_x, r.m_xPrev, 0.0, p.m_relerr ) ;
          if ( isGslStatusFatal( r.m_status ) )
          {
             break ;
          }
+         else if ( r.m_status == GSL_SUCCESS )
+         {
+            r.m_status = gsl_root_test_delta( r.m_x, r.m_xPrev, p.m_abserr, 0.0 ) ;
+            if ( isGslStatusFatal( r.m_status ) )
+            {
+               break ;
+            }
+         }
+         // Option: could potentially also (or instead) have a gsl_root_test_residual based exit criteria.
 
          if ( p.m_verbose )
          {
@@ -210,10 +243,20 @@ void fSolver<paramType>::iterate( const inputs & p, results & r )
          r.m_xLo = gsl_root_fsolver_x_lower( m_s ) ;
          r.m_xHi = gsl_root_fsolver_x_upper( m_s ) ;
 
-         r.m_status = gsl_root_test_interval( r.m_xLo, r.m_xHi, p.m_abserr, p.m_relerr ) ;
+         // avoiding simulaneous absolute and relative error checks as with the fdf solver iteration
+         // (see comments above)
+         r.m_status = gsl_root_test_interval( r.m_xLo, r.m_xHi, 0.0, p.m_relerr ) ;
          if ( isGslStatusFatal( r.m_status ) )
          {
             break ;
+         }
+         else if ( r.m_status == GSL_SUCCESS )
+         {
+            r.m_status = gsl_root_test_interval( r.m_xLo, r.m_xHi, p.m_abserr, 0.0 ) ;
+            if ( isGslStatusFatal( r.m_status ) )
+            {
+               break ;
+            }
          }
 
          if ( p.m_verbose )

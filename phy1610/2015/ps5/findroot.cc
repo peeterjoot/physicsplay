@@ -1,6 +1,7 @@
 #include <getopt.h>
 #include <cstdlib>
 #include <iostream>
+#include <sstream>
 #include "ps5solver.h"
 
 /** exit code for successful exectution */
@@ -75,13 +76,23 @@ struct solverParams
 
                s.iterate( p, r ) ;
 
-               std::cout << "Using " << r.m_solvername << " with x_0 = " << xmin << "\n"
-                         << "Iterations:\t" << r.m_iter << "\n"
-                         << "Converged:\t" << r.m_converged << "\n"
-                         << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
-                         << "Root:\t" << r.m_x << "\n"
-                         << "F(Root):\t" << f(r.m_x) << "\n"
-                         << "Abserr:\t" << fabs(r.m_x - r.m_xPrev) << "\n" << std::endl ;
+               std::ostringstream out ;
+               out << "Using " << r.m_solvername << " with x_0 = " << xmin << "\n"
+                   << "Iterations:\t" << r.m_iter << "\n"
+                   << "Converged:\t" << r.m_converged << "\n"
+                   << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
+                   << "Root:\t" << r.m_x << "\n"
+                   << "F(Root):\t" << f(r.m_x) << "\n"
+                   << "Abserr:\t" << fabs(r.m_x - r.m_xPrev) << "\n" << std::endl ;
+
+               if ( r.m_converged )
+               {
+                  std::cout << out.str() ;
+               }
+               else
+               {
+                  std::cerr << out.str() ;
+               }
             }
             else
             {
@@ -92,13 +103,23 @@ struct solverParams
 
                s.iterate( p, r ) ;
 
-               std::cout << "Using " << r.m_solvername << " on: [ " << m_x0 << ", " << xmin << " ]\n"
-                         << "Iterations:\t" << r.m_iter << "\n"
-                         << "Converged:\t" << r.m_converged << "\n"
-                         << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
-                         << "Root:\t" << r.m_r << "\n"
-                         << "F(Root):\t" << f(r.m_r) << "\n"
-                         << "Abserr:\t" << r.m_xHi - r.m_xLo << "\n" << std::endl ;
+               std::ostringstream out ;
+               out << "Using " << r.m_solvername << " on: [ " << m_x0 << ", " << xmin << " ]\n"
+                   << "Iterations:\t" << r.m_iter << "\n"
+                   << "Converged:\t" << r.m_converged << "\n"
+                   << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
+                   << "Root:\t" << r.m_r << "\n"
+                   << "F(Root):\t" << f(r.m_r) << "\n"
+                   << "Abserr:\t" << r.m_xHi - r.m_xLo << "\n" << std::endl ;
+
+               if ( r.m_converged )
+               {
+                  std::cout << out.str() ;
+               }
+               else
+               {
+                  std::cerr << out.str() ;
+               }
             }
 
             xmin += m_intervalStep ;

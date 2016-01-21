@@ -1,41 +1,21 @@
-- DEBUG: Get some bogus numbers for Newton's method for some initial guess values:
+- Not all the initial values for a Newton's method guess converge.  Example
 
-   Using newton with x_0 = 8.5
-   Iterations:     6126
-   Converged:      1
-   Status: 0 (success)
-   Root:   -39126
-   F(Root):        -0.559229     <<< shouldn't pass the error exit criteria.
-   Abserr: 1.18052
+   ./findroot --newton -x 8 -X 9.1 -w 1 --der 22000
+   Using newton with x_0 = 9
+   Iterations:     22000
+   Converged:      0
+   Status: -2 (the iteration has not converged yet)
+   Root:   -20946
+   F(Root):        -2.36466
+   Abserr: 3.93296
 
-trouble with secant too, and even more with Steffenson:
+It looks like each iteration takes the iterator a bit further down the endless sinuoidal portion of the function.
 
-   Using steffenson with x_0 = 3
-   Root: 407.431
-   F(Root): -0.436807
+To fix: implement a strategy such as that of Numerical Recipes in C, or http://cs.nyu.edu/~sk1759/report.pdf
 
-   Using steffenson with x_0 = 4
-   Root: -503.548
-   F(Root): -0.458847
+(where bisection is used if the Newton's guess takes us outside a previously determined zero crossing interval).
 
-   Using steffenson with x_0 = 4.5
-   Root: 117.807
-   F(Root): -0.367881
-
-   Using steffenson with x_0 = 7
-   Root: -1339.76
-   F(Root): -0.370843
-
-   Using steffenson with x_0 = 7.5
-   Root: -215.19
-   F(Root): -0.367895
-
-   Using steffenson with x_0 = 8.5
-   Root: -39.267
-   F(Root): -0.367881
-
-
-for completeness ought to implement an interval search method to look for an initial interval that has opposite signs within the initial interval if the interval expansion method doesn't find bound a root.
+- for completeness ought to implement an interval search method to look for an initial interval that has opposite signs within the initial interval if the interval expansion method doesn't find bound a root.
 
 ---------------
 DONE:
