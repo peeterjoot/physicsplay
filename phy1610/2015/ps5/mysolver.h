@@ -67,13 +67,17 @@ struct iterationResults
    Uint        m_iter ;       ///< The number of iterations performed before root is found or we give up.
    int         m_status ;     ///< The last successful or unsuccessful gsl function return code.
    std::string m_strerror ;   ///< gsl_strerror() output for m_status.
+   double      m_x ;          ///< The root at the conclusion of the iteration
+   double      m_xPrev ;      ///< The previous iteration point when finished (for fdf solvers)
 
    iterationResults() :
       m_solvername{},
       m_converged{false},
       m_iter{0},
       m_status{0},
-      m_strerror{}
+      m_strerror{},
+      m_x{0.0},
+      m_xPrev{0}
    {
    }
 } ;
@@ -109,11 +113,11 @@ struct intervalIterationInputs : public iterationParameters
    const double   m_xHi ;        ///< Initial upper bound for the interval that contains the root (or at least contains a zero crossing)
 
    intervalIterationInputs( const double   xLo,
-           const double   xHi,
-           const Uint     max_iter,
-           const double   relerr,
-           const double   abserr,
-           const bool     verbose = false ) :
+                            const double   xHi,
+                            const Uint     max_iter,
+                            const double   relerr,
+                            const double   abserr,
+                            const bool     verbose = false ) :
         iterationParameters( max_iter, relerr, abserr, verbose ),
         m_xLo{xLo},
         m_xHi{xHi}
@@ -126,15 +130,37 @@ struct intervalIterationInputs : public iterationParameters
  */
 struct intervalIterationResults : public iterationResults
 {
-   double      m_xLo ;        ///< Final lower bound for the interval
-   double      m_xHi ;        ///< Final upper bound for the interval
-   double      m_r ;          ///< The root at the conclusion of the iteration
+   double      m_xLo ;              ///< Final lower bound for the interval
+   double      m_xHi ;              ///< Final upper bound for the interval
+   Uint        m_numBisections ;    ///< For iterateBracketed, the number of bisection iterations.
 
    intervalIterationResults() :
       iterationResults{},
-      m_xLo{0},
-      m_xHi{0},
-      m_r{0}
+      m_xLo{0.0},
+      m_xHi{0.0},
+      m_numBisections{0}
+   {
+   }
+} ;
+
+/** Output parameters for an gsl fdf solver iteration.
+ */
+using derivativeIterationResults = iterationResults ;
+
+/**
+   Input parameters for an gsl fdf solver iteration.
+ */
+struct derivativeIterationInputs : public iterationParameters
+{
+   const double   m_x0 ;        ///< Initial guess for the root.
+
+   derivativeIterationInputs( const double   x0,
+                              const Uint     max_iter,
+                              const double   relerr,
+                              const double   abserr,
+                              const bool     verbose = false ) :
+        iterationParameters( max_iter, relerr, abserr, verbose ),
+        m_x0{x0}
    {
    }
 } ;
@@ -161,40 +187,6 @@ public:
     */
    ~fdfSolver() ;
 
-   /** Output parameters for an gsl fdf solver iteration.
-    */
-   struct results : public iterationResults
-   {
-      double      m_x ;                ///< The point at which the root was found (or the last place we looked).
-      double      m_xPrev ;            ///< The previous iteration point when finished.
-      Uint        m_numBisections ;    ///< For iterateBracketed, the number of bisection iterations.
-
-      results() :
-         iterationResults{},
-         m_x{0},
-         m_xPrev{0}
-      {
-      }
-   } ;
-
-   /**
-      Input parameters for an gsl fdf solver iteration.
-    */
-   struct inputs : public iterationParameters
-   {
-      const double   m_x0 ;        ///< Initial guess for the root.
-
-      inputs( const double   x0,
-              const Uint     max_iter,
-              const double   relerr,
-              const double   abserr,
-              const bool     verbose = false ) :
-           iterationParameters( max_iter, relerr, abserr, verbose ),
-           m_x0{x0}
-      {
-      }
-   } ;
-
    /**
       Perform the root solution iteration.
 
@@ -204,7 +196,7 @@ public:
       \retval
          Output parameters for the root solving iteration.
     */
-   void iterate( const inputs & p, results & r ) ;
+   void iterate( const derivativeIterationInputs & p, derivativeIterationResults & r ) ;
 
    /**
       Perform the root solution iteration, but use bisection at any point that the
@@ -263,9 +255,6 @@ public:
     */
    ~fSolver() ;
 
-   using inputs = intervalIterationInputs ;
-   using results = intervalIterationResults ;
-
    /**
       Perform the root solution iteration.
 
@@ -275,7 +264,7 @@ public:
       \retval
          Output parameters for the root solving iteration.
     */
-   void iterate( const inputs & p, results & r ) ;
+   void iterate( const intervalIterationInputs & p, intervalIterationResults & r ) ;
 } ;
 
 #endif

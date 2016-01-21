@@ -24,25 +24,41 @@ BOOST_AUTO_TEST_CASE( testsSolver )
 
    std::cout << "[a,b] = " << "[ " << x_min << ", " << x_max << " ]" << std::endl ;
 
+   // test when the bracket has an upper bound on the root, and when the bracket doesn't contain the
+   // root (the bracket expansion code should deal with the latter).
+   //
+   for ( auto u : {ps5function::expectedRoot()/2, ps5function::expectedRoot()} )
    {
-      fdfSolver<ps5function> s( solver::newton ) ;
+      {
+         fdfSolver<ps5function> s( solver::newton ) ;
 
-      fdfSolver<ps5function>::inputs p( ps5function::expectedRoot(), maxIter, err, err ) ;
-      fdfSolver<ps5function>::results r ;
+         derivativeIterationInputs p( u, maxIter, err, err ) ;
+         derivativeIterationResults r ;
 
-      s.iterate( p, r ) ;
+         s.iterate( p, r ) ;
 
-      BOOST_REQUIRE( r.m_converged && fabs(r.m_x -ps5function::expectedRoot()) < err ) ;
-   }
- 
-   {
-      fSolver<ps5function> s( solver::falsepos ) ;
+         BOOST_REQUIRE( r.m_converged && fabs(r.m_x -ps5function::expectedRoot()) < err ) ;
+      }
 
-      fSolver<ps5function>::inputs p( 0, ps5function::expectedRoot(), maxIter, err, err ) ;
-      fSolver<ps5function>::results r ;
+      {
+         fdfSolver<ps5function> s( solver::newton ) ;
 
-      s.iterate( p, r ) ;
+         intervalIterationInputs p( 0, u, maxIter, err, err ) ;
+         intervalIterationResults r ;
 
-      BOOST_REQUIRE( r.m_converged && fabs(r.m_r -ps5function::expectedRoot()) < err ) ;
+         s.iterateBracketed( p, r ) ;
+
+         BOOST_REQUIRE( r.m_converged && fabs(r.m_x -ps5function::expectedRoot()) < err ) ;
+      }
+    
+      {
+         fSolver<ps5function> s( solver::falsepos ) ;
+         intervalIterationInputs p( 0, u, maxIter, err, err ) ;
+         intervalIterationResults r ;
+
+         s.iterate( p, r ) ;
+
+         BOOST_REQUIRE( r.m_converged && fabs(r.m_x -ps5function::expectedRoot()) < err ) ;
+      }
    }
 }

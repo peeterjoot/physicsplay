@@ -107,7 +107,7 @@ inline int root_test_delta( const double x1, const double x2, const double abser
 }
 
 template <class paramType>
-void fdfSolver<paramType>::iterate( const inputs & p, results & r )
+void fdfSolver<paramType>::iterate( const derivativeIterationInputs & p, derivativeIterationResults & r )
 {
    const double r_expected { m_params.expectedRoot() } ;
 
@@ -138,7 +138,7 @@ void fdfSolver<paramType>::iterate( const inputs & p, results & r )
          r.m_x = gsl_root_fdfsolver_root( m_s ) ;
 
          // Option: could potentially also (or instead) have a gsl_root_test_residual based exit criteria.
-         r.m_status = root_test_delta( r.m_r, r.m_xPrev, p.m_abserr, p.m_relerr ) ;
+         r.m_status = root_test_delta( r.m_x, r.m_xPrev, p.m_abserr, p.m_relerr ) ;
          if ( isGslStatusFatal( r.m_status ) )
          {
             break ;
@@ -166,14 +166,14 @@ void fdfSolver<paramType>::iterateBracketed( const intervalIterationInputs & p, 
 {
    const double r_expected { m_params.expectedRoot() } ;
 
-   double xPrev { p.m_xLo } ;
+   r.m_xPrev      = p.m_xLo ;
    r.m_xLo        = p.m_xLo ;
-   r.m_rHi        = p.m_xHi ;
-   r.m_r          = p.m_xLo ;
-   r.m_status     = gsl_root_fdfsolver_set( m_s, &m_F, xPrev ) ;
+   r.m_xHi        = p.m_xHi ;
+   r.m_x          = p.m_xLo ;
+   r.m_status     = gsl_root_fdfsolver_set( m_s, &m_F, r.m_xPrev ) ;
    r.m_solvername = gsl_root_fdfsolver_name( m_s ) ;
 
-   increaseIntervalIfNotBracketed( m_params, r.m_rLo, r.m_rHi, p.m_max_iter ) ;
+   increaseIntervalIfNotBracketed( m_params, r.m_xLo, r.m_xHi, p.m_max_iter ) ;
 
    if ( p.m_verbose )
    {
@@ -184,7 +184,7 @@ void fdfSolver<paramType>::iterateBracketed( const intervalIterationInputs & p, 
    if ( !r.m_status )
    {
       double fl { m_params( r.m_xLo ) } ;
-      double fh { m_params( r.m_xHi ) } ;
+      //double fh { m_params( r.m_xHi ) } ;
 
       do {
 
@@ -196,46 +196,48 @@ void fdfSolver<paramType>::iterateBracketed( const intervalIterationInputs & p, 
             break ;
          }
 
-         r.m_r = gsl_root_fdfsolver_root( m_s ) ;
-         if ( r.m_r < r.m_rLo || r.m_r > r.m_rHi )
+         r.m_xPrev = r.m_x ;
+         r.m_x = gsl_root_fdfsolver_root( m_s ) ;
+         if ( (r.m_x < r.m_xLo) || (r.m_x > r.m_xHi) )
          {
             // out of bounds for the zero crossing interval that we are working on.  Use bisection
             // instead.
 
             // compute an x* sitting at the midpoint:
-            r.m_r = (r.m_xLo + r.m_xHi)/2.0 ;
-            r.m_status = gsl_root_fdfsolver_set( m_s, &m_F, r.m_r ) ;
-         }
-         else
-         {
-            r.m_status = root_test_delta( r.m_r, r.m_xPrev, p.m_abserr, p.m_relerr ) ;
+            r.m_x = (r.m_xLo + r.m_xHi)/2.0 ;
+            r.m_status = gsl_root_fdfsolver_set( m_s, &m_F, r.m_x ) ;
+            if ( isGslStatusFatal( r.m_status ) )
+            {
+               break ;
+            }
          }
 
+         r.m_status = root_test_delta( r.m_x, r.m_xPrev, p.m_abserr, p.m_relerr ) ;
          if ( isGslStatusFatal( r.m_status ) )
          {
             break ;
          }
 
          // maintain the interval:
-         double fr { m_params( r.m_r ) } ;
+         double fr { m_params( r.m_x ) } ;
 
          if ( fr * fl < 0.0 )
          {
             // If the sign of the new f(x*) differs from f(x_0), then replace x_1 with x*.
-            r.m_xHi = r.m_r ;
-            fh = fr ;
+            r.m_xHi = r.m_x ;
+            //fh = fr ;
          }
          else
          {
             // otherwise replace x_0 with x*
-            r.m_xLo = r.m_r ;
+            r.m_xLo = r.m_x ;
             fl = fr ;
          }
 
          if ( p.m_verbose )
          {
             printf( "%5d [%.7f, %.7f] %.7f %+.7f %.7f\n",
-                    (int)r.m_iter, r.m_rLo, r.m_rHi, r.m_r, r.m_r - r_expected, r.m_rHi - r.m_rLo ) ;
+                    (int)r.m_iter, r.m_xLo, r.m_xHi, r.m_x, r.m_x - r_expected, r.m_xHi - r.m_xLo ) ;
          }
 
       } while ( r.m_status == GSL_CONTINUE && r.m_iter < p.m_max_iter ) ;
@@ -318,13 +320,13 @@ bool increaseIntervalIfNotBracketed( const paramType & f, double & x_min, double
 }
 
 template <class paramType>
-void fSolver<paramType>::iterate( const inputs & p, results & r )
+void fSolver<paramType>::iterate( const intervalIterationInputs & p, intervalIterationResults & r )
 {
    const double r_expected { m_params.expectedRoot() } ;
 
    r.m_xLo        = p.m_xLo ;
    r.m_xHi        = p.m_xHi ;
-   r.m_r          = p.m_xLo ;
+   r.m_x          = p.m_xLo ;
    r.m_status     = gsl_root_fsolver_set( m_s, &m_F, r.m_xLo, r.m_xHi ) ;
    r.m_solvername = gsl_root_fsolver_name( m_s ) ;
 
@@ -347,7 +349,7 @@ void fSolver<paramType>::iterate( const inputs & p, results & r )
             break ;
          }
 
-         r.m_r = gsl_root_fsolver_root( m_s ) ;
+         r.m_x = gsl_root_fsolver_root( m_s ) ;
 
          r.m_xLo = gsl_root_fsolver_x_lower( m_s ) ;
          r.m_xHi = gsl_root_fsolver_x_upper( m_s ) ;
@@ -371,7 +373,7 @@ void fSolver<paramType>::iterate( const inputs & p, results & r )
          if ( p.m_verbose )
          {
             printf( "%5d [%.7f, %.7f] %.7f %+.7f %.7f\n",
-                    (int)r.m_iter, r.m_xLo, r.m_xHi, r.m_r, r.m_r - r_expected, r.m_xHi - r.m_xLo ) ;
+                    (int)r.m_iter, r.m_xLo, r.m_xHi, r.m_x, r.m_x - r_expected, r.m_xHi - r.m_xLo ) ;
          }
 
       } while ( (r.m_status == GSL_CONTINUE) && (r.m_iter < p.m_max_iter) ) ;

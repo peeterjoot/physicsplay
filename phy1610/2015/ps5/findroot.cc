@@ -20,6 +20,7 @@ void showHelpAndExit()
                 "\t [--newton|-n] [--secant|-s] [--steffenson|-S]}\n"
                 "\t[--xlower=x0|-x x0] [--xupper=x1|-X x1] [--interval=w|-w w]\n"
                 "\t[--maxiter=m|-m m] [--derivmaxiter=m|-d m] [--err=e|-e e]\n"
+                "\t[--bracketed|-r]\n"
                 "\t[--help]\n"
                 "\n"
                 "- At least one of --bisection, --falsepos, --brent, --newton, --secant, --steffenson must be specified\n"
@@ -27,6 +28,7 @@ void showHelpAndExit()
                 "  defaulting to [0,10,0.5]\n"
                 "- maxiter for interval root methods defaults to 100.\n"
                 "- derivmaxiter for derivative root methods defaults to 1000.\n"
+                "- specify bracketed to use safe derivative iteration.\n"
                 << std::endl ;
 
    std::exit( RC_HELP ) ;
@@ -44,6 +46,7 @@ struct solverParams
    Uint   m_max_iter ;           ///< max number of iterations when running a fsolver method
    Uint   m_max_iter_deriv ;     ///< max number of iterations when running an fdfsolver method
    double m_err ;                ///< desired error for convergence
+   bool   m_bracketed ;          ///< use interval method for derivative solvers.
 
    /** set the default values for these parameters */
    solverParams() :
@@ -66,60 +69,75 @@ struct solverParams
 
          while ( xmin <= m_xUpper )
          {
+            bool converged = false ;
+            bool bracketedResult = true ;
+            std::ostringstream out ;
+
+            intervalIterationInputs pi( m_x0, xmin, m_max_iter, m_err, m_err ) ;
+            intervalIterationResults ri ;
+
+            derivativeIterationInputs pd( xmin, m_max_iter_deriv, m_err, m_err ) ;
+            derivativeIterationResults rd ;
+
             // Newton's method bounces around
-            if ( isFdfSolver( method ) )
+            if ( isFdfSolver( method ) && m_bracketed )
+            {
+               bracketedResult = false ;
+               fdfSolver<ps5function> s( method ) ;
+
+               s.iterateBracketed( pi, ri ) ;
+            }
+            else if ( isFdfSolver( method ) )
             {
                fdfSolver<ps5function> s( method ) ;
 
-               fdfSolver<ps5function>::inputs p( xmin, m_max_iter_deriv, m_err, m_err ) ;
-               fdfSolver<ps5function>::results r ;
-
-               s.iterate( p, r ) ;
-
-               std::ostringstream out ;
-               out << "Using " << r.m_solvername << " with x_0 = " << xmin << "\n"
-                   << "Iterations:\t" << r.m_iter << "\n"
-                   << "Converged:\t" << r.m_converged << "\n"
-                   << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
-                   << "Root:\t" << r.m_x << "\n"
-                   << "F(Root):\t" << f(r.m_x) << "\n"
-                   << "Abserr:\t" << fabs(r.m_x - r.m_xPrev) << "\n" << std::endl ;
-
-               if ( r.m_converged )
-               {
-                  std::cout << out.str() ;
-               }
-               else
-               {
-                  std::cerr << out.str() ;
-               }
+               s.iterate( pd, rd ) ;
             }
             else
             {
                fSolver<ps5function> s( method ) ;
 
-               fSolver<ps5function>::inputs p( m_x0, xmin, m_max_iter, m_err, m_err ) ;
-               fSolver<ps5function>::results r ;
+               s.iterate( pi, ri ) ;
+            }
 
-               s.iterate( p, r ) ;
+            if ( bracketedResult )
+            {
+               converged = ri.m_converged ;
 
-               std::ostringstream out ;
-               out << "Using " << r.m_solvername << " on: [ " << m_x0 << ", " << xmin << " ]\n"
-                   << "Iterations:\t" << r.m_iter << "\n"
-                   << "Converged:\t" << r.m_converged << "\n"
-                   << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
-                   << "Root:\t" << r.m_r << "\n"
-                   << "F(Root):\t" << f(r.m_r) << "\n"
-                   << "Abserr:\t" << r.m_xHi - r.m_xLo << "\n" << std::endl ;
+               out << "Using " << ri.m_solvername << " on: [ " << m_x0 << ", " << xmin << " ]\n"
+                   << "Iterations:\t" << ri.m_iter << "\n" ;
 
-               if ( r.m_converged )
+               if ( isFdfSolver( method ) )
                {
-                  std::cout << out.str() ;
+                  out << "Bisection Corrections:\t" << ri.m_numBisections << "\n" ;
                }
-               else
-               {
-                  std::cerr << out.str() ;
-               }
+
+               out << "Converged:\t" << ri.m_converged << "\n"
+                   << "Status:\t" << ri.m_status << " (" << ri.m_strerror << ")" << "\n"
+                   << "Root:\t" << ri.m_x << "\n"
+                   << "F(Root):\t" << f(ri.m_x) << "\n"
+                   << "Abserr (bracket):\t" << ri.m_xHi - ri.m_xLo << "\n" << std::endl ;
+            }
+            else
+            {
+               converged = rd.m_converged ;
+
+               out << "Using " << rd.m_solvername << " with x_0 = " << xmin << "\n"
+                   << "Iterations:\t" << rd.m_iter << "\n"
+                   << "Converged:\t" << rd.m_converged << "\n"
+                   << "Status:\t" << rd.m_status << " (" << rd.m_strerror << ")" << "\n"
+                   << "Root:\t" << rd.m_x << "\n"
+                   << "F(Root):\t" << f(rd.m_x) << "\n"
+                   << "Abserr:\t" << fabs(rd.m_x - rd.m_xPrev) << "\n" << std::endl ;
+            }
+
+            if ( converged )
+            {
+               std::cout << out.str() ;
+            }
+            else
+            {
+               std::cerr << out.str() ;
             }
 
             xmin += m_intervalStep ;
@@ -152,14 +170,21 @@ int main( int argc, char * argv[] )
      { "maxiter",       1, NULL, 'm' },
      { "derivmaxiter",  1, NULL, 'd' },
      { "err",           1, NULL, 'e' },
+     { "bracketed",     0, NULL, 'r' },
      { NULL,            0, NULL, 0   }
    } ;
 
    try {
-      while ( -1 != ( c = getopt_long( argc, argv, "hifbnsSx:X:w:m:d:e:", long_options, NULL ) ) )
+      while ( -1 != ( c = getopt_long( argc, argv, "hifbnsSx:X:w:m:d:e:r", long_options, NULL ) ) )
       {
          switch ( c )
          {
+            case 'r' :
+            {
+               line = __LINE__ ;
+               p.m_bracketed = true ;
+               break ;
+            }
             case 'x' :
             {
                line = __LINE__ ;
