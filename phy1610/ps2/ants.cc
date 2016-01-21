@@ -1,5 +1,13 @@
+/**
+   \file ants.cc
+
+   Code that simulates ants walking on a table.
+   The direction in which they walk, depends on where they are on the table, and they can fall of the edge.
+   The program prints the number of ants left on the table after every time step.
+ */
 #include <cmath>
 #include <iostream>
+
 int main()
 {
     // ants walk on a table
@@ -67,4 +75,4 @@ int main()
         }
     }
     return 0;
-}     
+}
