@@ -3,28 +3,29 @@
 
 double ps5function::function( double x, void * params )
 {
-   double xx = x * x ;
-   double exx = std::exp( 1.0 - xx ) ;
-   double es = std::exp( std::sin( x ) ) ;
+   double xSquared = x * x ;
+   double eOneMinusXSquared = std::exp( 1.0 - xSquared ) ;
+   double eSinX = std::exp( std::sin( x ) ) ;
 
-   return (exx - 1.0) * es ;
+   return (eOneMinusXSquared - 1.0) * eSinX ;
 }
 
 double ps5function::derivative( double x, void * params )
 {
-   double xx = x * x ;
-   double exx = std::exp( 1.0 - xx ) ;
-   double es = std::exp( std::sin( x ) ) ;
+   double xSquared = x * x ;
+   double eOneMinusXSquared = std::exp( 1.0 - xSquared ) ;
+   double eSinX = std::exp( std::sin( x ) ) ;
 
-   return -( 2 * x * exx + std::cos(x) ) * es ;
+   return -( 2 * x * eOneMinusXSquared + std::cos(x) ) * eSinX ;
 }
 
 void ps5function::functionAndDerivative( double x, void * params, double *y, double *dy )
 {
-   double xx = x * x ;
-   double exx = std::exp( 1.0 - xx ) ;
-   double es = std::exp( std::sin( x ) ) ;
+   double xSquared = x * x ;
+   double eOneMinusXSquared = std::exp( 1.0 - xSquared ) ;
+   double eSinX = std::exp( std::sin( x ) ) ;
+   double cosX = std::cos( x ) ) ;
 
-   *y = (exx - 1.0) * es ;
-   *dy = -( 2 * x * exx + std::cos(x) ) * es ;
+   *y = (eOneMinusXSquared - 1.0) * eSinX ;
+   *dy = -( (2 * x + cosX) * eOneMinusXSquared + cosX ) * eSinX ;
 }
