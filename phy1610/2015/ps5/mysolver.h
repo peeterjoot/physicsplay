@@ -101,6 +101,45 @@ struct iterationParameters
 } ;
 
 /**
+   Input parameters for an gsl fsolver iteration.
+ */
+struct intervalIterationInputs : public iterationParameters
+{
+   const double   m_xLo ;        ///< Initial lower bound for the interval that contains the root (or at least contains a zero crossing)
+   const double   m_xHi ;        ///< Initial upper bound for the interval that contains the root (or at least contains a zero crossing)
+
+   intervalIterationInputs( const double   xLo,
+           const double   xHi,
+           const Uint     max_iter,
+           const double   relerr,
+           const double   abserr,
+           const bool     verbose = false ) :
+        iterationParameters( max_iter, relerr, abserr, verbose ),
+        m_xLo{xLo},
+        m_xHi{xHi}
+   {
+   }
+} ;
+
+/**
+   Output parameters for an gsl fsolver iteration.
+ */
+struct intervalIterationResults : public iterationResults
+{
+   double      m_xLo ;        ///< Final lower bound for the interval
+   double      m_xHi ;        ///< Final upper bound for the interval
+   double      m_r ;          ///< The root at the conclusion of the iteration
+
+   intervalIterationResults() :
+      iterationResults{},
+      m_xLo{0},
+      m_xHi{0},
+      m_r{0}
+   {
+   }
+} ;
+
+/**
    gsl based derivative root solver.
  */
 template <class paramType>
@@ -126,8 +165,9 @@ public:
     */
    struct results : public iterationResults
    {
-      double      m_x ;          ///< The point at which the root was found (or the last place we looked).
-      double      m_xPrev ;      ///< The previous iteration point when finished.
+      double      m_x ;                ///< The point at which the root was found (or the last place we looked).
+      double      m_xPrev ;            ///< The previous iteration point when finished.
+      Uint        m_numBisections ;    ///< For iterateBracketed, the number of bisection iterations.
 
       results() :
          iterationResults{},
@@ -165,7 +205,41 @@ public:
          Output parameters for the root solving iteration.
     */
    void iterate( const inputs & p, results & r ) ;
+
+   /**
+      Perform the root solution iteration, but use bisection at any point that the
+      gsl iteration takes the root outside of the 
+
+      \param p [in]
+         Input parameters for the root solving iteration.
+
+      \retval
+         Output parameters for the root solving iteration.
+    */
+   void iterateBracketed( const intervalIterationInputs & p, intervalIterationResults & r ) ;
 } ;
+
+/**
+   Attempt to increase the initial interval to find one that brackets the root.
+
+   \param f [in]
+      Parameter function object.
+
+   \param x_min [in|out]
+      starting lower bound on the interval.
+
+   \param x_max [in|out]
+      starting upper bound on the interval.
+
+   \param iter_max [in]
+      maximum number of times to attempt increasing the interval looking for a sign alternation.
+
+   \retval
+      true if a bracketing interval was found.
+      false if a bracketing interval was not found.
+ */
+template <class paramType>
+bool increaseIntervalIfNotBracketed( const paramType & f, double & x_min, double & x_max, const Uint iter_max ) ;
 
 /**
    gsl based interval based root solver.
@@ -189,62 +263,8 @@ public:
     */
    ~fSolver() ;
 
-   /**
-      Attempt to increase the initial interval to find one that brackets the root.
-
-      \param x_min [in|out]
-         starting lower bound on the interval.
-
-      \param x_max [in|out]
-         starting upper bound on the interval.
-
-      \param iter_max [in]
-         maximum number of times to attempt increasing the interval looking for a sign alternation.
-
-      \retval
-         true if a bracketing interval was found.
-         false if a bracketing interval was not found.
-    */
-   bool increaseIntervalIfNotBracketed( double & x_min, double & x_max, const Uint iter_max ) ;
-
-   /**
-      Output parameters for an gsl fsolver iteration.
-    */
-   struct results : public iterationResults
-   {
-      double      m_xLo ;        ///< Final lower bound for the interval
-      double      m_xHi ;        ///< Final upper bound for the interval
-      double      m_r ;          ///< The root at the conclusion of the iteration
-
-      results() :
-         iterationResults{},
-         m_xLo{0},
-         m_xHi{0},
-         m_r{0}
-      {
-      }
-   } ;
-
-   /**
-      Input parameters for an gsl fsolver iteration.
-    */
-   struct inputs : public iterationParameters
-   {
-      const double   m_xLo ;        ///< Initial lower bound for the interval that contains the root (or at least contains a zero crossing)
-      const double   m_xHi ;        ///< Initial upper bound for the interval that contains the root (or at least contains a zero crossing)
-
-      inputs( const double   xLo,
-              const double   xHi,
-              const Uint     max_iter,
-              const double   relerr,
-              const double   abserr,
-              const bool     verbose = false ) :
-           iterationParameters( max_iter, relerr, abserr, verbose ),
-           m_xLo{xLo},
-           m_xHi{xHi}
-      {
-      }
-   } ;
+   using inputs = intervalIterationInputs ;
+   using results = intervalIterationResults ;
 
    /**
       Perform the root solution iteration.

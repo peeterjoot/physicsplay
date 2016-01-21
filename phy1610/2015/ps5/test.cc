@@ -15,12 +15,12 @@ BOOST_AUTO_TEST_CASE( testsSolver )
    Uint maxIter = 100 ;
    const double err = 1e-4 ;
 
-   fSolver<ps5function> sb( solver::brent ) ;
+   ps5function f ;
 
    // The root is at 1.0, so this should adjust the upper bound of the interval higher:
    double x_min = 0.0 ;
    double x_max = 1.0 ;
-   BOOST_REQUIRE( sb.increaseIntervalIfNotBracketed( x_min, x_max, 10 ) == true && x_max > 1.0 ) ;
+   BOOST_REQUIRE( increaseIntervalIfNotBracketed( f, x_min, x_max, 10 ) == true && x_max > 1.0 ) ;
 
    std::cout << "[a,b] = " << "[ " << x_min << ", " << x_max << " ]" << std::endl ;
 
