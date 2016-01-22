@@ -35,6 +35,7 @@ endif
 
 TARGETS += antsTest.diff
 ANTS_SOURCES += ants.cc
+ANTS_SOURCES += ants_on_table.cc
 ANTS_SOURCES += $(COMMON_SOURCES)
 ANTS_OBJECTS := $(subst .cc,.o,$(ANTS_SOURCES))
 
