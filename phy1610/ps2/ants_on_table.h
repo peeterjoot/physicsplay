@@ -39,7 +39,7 @@ public:
     */
    void initialize( const int total_ants ) ;
 
-	/**
+   /**
       \brief ants walk on a table
 
       \param number_of_time_intervals [in]

@@ -11,5 +11,5 @@ int main()
    ants.initialize( TOTAL_NUMBER_OF_ANTS ) ;
    ants.simulation( NUMBER_OF_TIME_INTERVALS ) ;
 
-	return 0 ;
+   return 0 ;
 }
