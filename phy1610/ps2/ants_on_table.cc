@@ -61,12 +61,13 @@ float ants_on_table::total_number_of_ants() const
    return totants ;
 }
 
-#define RADIUS_OF_POSITION_ADJUSTMENT 1.9
-#define NOT_WALKING_ANTS_FRACTION 0.8
-#define FALLEN_ANTS_FRACTION 0.2
 
 void ants_on_table::simulation( const int number_of_time_intervals )
 {
+   static const float RADIUS_OF_POSITION_ADJUSTMENT { 1.9 } ;
+   static const float NOT_WALKING_ANTS_FRACTION { 0.8 } ;
+   static const float FALLEN_ANTS_FRACTION { 0.2 } ;
+
    rarray<float, 2> new_number_of_ants( m_table_grid_size, m_table_grid_size ) ;
 
    for ( int t = 0 ; t < number_of_time_intervals ; t++ )
