@@ -100,7 +100,6 @@ void ants_on_table::simulation( const int number_of_time_intervals )
       // removed the totants calculation.  It's done at the top of the loop again anyways.
       // Note: could use the rarray deep copy here, but is that smart enough to avoid a reallocation
       // when the sizes are compatible?
-      m_number_of_ants = new_number_of_ants ;
 		for ( int i = 0 ; i < m_table_grid_size ; i++ )
 		{
 			for ( int j = 0 ; j < m_table_grid_size ; j++ )
