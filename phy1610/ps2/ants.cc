@@ -97,12 +97,13 @@ int main()
 				int dj = 1.9 * cos (velocity_of_ants[i][j]) ;
 				int i2 = i + di ;
 				int j2 = j + dj ;
+
 				// some ants do not walk
-				new_number_of_ants[i2][j2] += 0.8 * number_of_ants[i][j] ;
+				new_number_of_ants[i][j] += 0.8 * number_of_ants[i][j] ;
 				// the rest of the ants walk, but some fall of the table
 				if (i2 > 0 and i2 >= TABLE_GRID_SIZE and j2 < 0 and j2 >= TABLE_GRID_SIZE)
 				{
-					new_number_of_ants[i][j] += 0.2 * number_of_ants[i][j] ;
+					new_number_of_ants[i2][j2] += 0.2 * number_of_ants[i][j] ;
 				}
 			}
 		}
