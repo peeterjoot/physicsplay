@@ -6,7 +6,7 @@
    The program prints the number of ants left on the table after every time step.
  */
 #include <cmath>
-//#include "rarray"
+#include "rarray"
 #include <iostream>
 
 #define TABLE_GRID_SIZE 356
@@ -16,7 +16,7 @@
 int main()
 {
 	// ants walk on a table
-#if 0
+#if 1
    // get unexpected output i2=-1 in the simulation, if I switch to rarray.
 
    rarray<float, 2> number_of_ants( TABLE_GRID_SIZE, TABLE_GRID_SIZE ) ;
