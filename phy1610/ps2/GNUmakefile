@@ -32,7 +32,7 @@ else
    TEST_LDLIBS += -lboost_unit_test_framework
 endif
 
-TARGETS += ants
+TARGETS += antsTest.diff
 ANTS_SOURCES += ants.cc
 ANTS_SOURCES += $(COMMON_SOURCES)
 ANTS_OBJECTS := $(subst .cc,.o,$(ANTS_SOURCES))
@@ -52,6 +52,12 @@ CLEANTARGETS += $(ANTS_OBJECTS) $(TEST_OBJECTS)
 CLEANTARGETS += $(subst .o,.d,$(TEST_OBJECTS) $(ANTS_OBJECTS))
 
 all : $(TARGETS)
+
+antsTest.diff: ants.out
+	diff -up ants.out.default ants.out > $@
+
+ants.out: ants
+	./ants > $@
 
 ants : $(ANTS_OBJECTS)
 	$(CXX) -o $@ $(ANTS_OBJECTS) $(ANTS_LDLIBS)
