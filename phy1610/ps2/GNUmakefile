@@ -34,6 +34,8 @@ else
 endif
 
 TARGETS += antsTest.diff
+TARGETS += ants
+TARGETS += ants.out
 ANTS_SOURCES += ants.cc
 ANTS_SOURCES += ants_on_table.cc
 ANTS_SOURCES += $(COMMON_SOURCES)
