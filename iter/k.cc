@@ -20,7 +20,7 @@ struct data
 
    class iterator 
    {
-      data* itr;
+      data * itr;
       int count ;
 
    public:
