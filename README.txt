@@ -153,6 +153,10 @@ del2xml/del2xml
 
    A script to take .csv formatted stuff and massage it into the xml format that rocketshuttle likes.
 
+phy1610/
+
+   Programming assignents from the UofT (scinet) 2016 Scientific computing course.  Also included is some of the programming assignments from the 2015 course(s) which I did before I officially signed up for this in the 2016 term.
+
 #-------------------------------------------------------
 
 BUGS that prevent 'make' from being successful without handholding:
