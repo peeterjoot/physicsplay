@@ -13,9 +13,9 @@
  */
 class ants_on_table
 {
-   int                  m_table_grid_size ;
-   rarray<float, 2>     m_number_of_ants ;
-   rarray<float, 2>     m_velocity_of_ants ;
+   int                  m_table_grid_size ;  ///< table grid size.
+   rarray<float, 2>     m_number_of_ants ;   ///< number of ants at each grid location after each timestep.
+   rarray<float, 2>     m_velocity_of_ants ; ///< velocity of each ant at specified grid point.
 
 public:
 
@@ -47,11 +47,11 @@ public:
      */
    class iterator
    {
-      ants_on_table *   m_ants_p ;
-      int               m_timevalue ;
-      rarray<float, 2>  m_new_number_of_ants ;
+      ants_on_table *   m_ants_p ;              ///< pointer to the simulation object modified by the iterator.
+      int               m_timevalue ;           ///< The timestep value that the iterator is on.
+      rarray<float, 2>  m_new_number_of_ants ;  ///< A temporary array used in each timestep.  Anchored here to avoid reallocation.
 
-      // Allow ants_on_table to construct a starting iterator, but nothing else.
+      // Allow ants_on_table::initialize() to construct a starting iterator, but nothing else.
       friend class ants_on_table ;
 
       /**
@@ -100,13 +100,13 @@ public:
    } ;
 
    /**
-      Reset the simulation, putting in a new number of total ants, and initial counts and velocities.
+      Reset the simulation, putting in a new number of total ants, and initial counts and velocities, and return
+      an iterator that can be used for the subsequent timestep iterations.
     */
    iterator initialize( const int total_ants ) ;
 
    /**
-      \brief ants walk on a table
-
+      Perform one iteration of the ants walking on the table simulation.
     */
    void timestep( iterator & i ) ;
 } ;
