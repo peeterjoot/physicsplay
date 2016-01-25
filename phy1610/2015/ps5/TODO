@@ -1,3 +1,29 @@
+- interval expansion not working? :
+
+   ./findroot --bisection 1>/dev/null
+   Using bisection on: [ 0, 0.5 ]
+   Iterations:     0
+   Converged:      0
+   Status: 4 (invalid argument supplied by user)
+   Root:   0
+   F(Root):        1.71828
+   Abserr (bracket):       1.6875
+
+- for completeness ought to implement an interval search method to look for an initial interval that has opposite signs within the initial interval if the interval expansion method doesn't find bound a root.
+
+---------------
+DONE:
+
+- Finish doxygen markup for the rest of the code is commented.
+- collect the results from the iterate function into a structure (iterations, result, rc, ...) to use in test.
+- need rc checking in more places (gsl doc sample relied on abort handler).  Read the docs to see how each function can fail.  use gsl_strerror and gsl_errno as appropriate.
+- switch to iostream for mysolver.cc bits that remain from the gsl docs example for consistency.: removed most <stdio.h> stuff now.  Some left for a verbose mode based on the old gsl sample code.
+- Using the Boost.Test framework (see lecture 6 of the software development part), write a test for each of these functions to ensure that they get the right value of the roots if you start at the root (by the way, what are the root precisely?).
+- debug: -1 should be a root too.  plot the function.  Got errors with:
+
+   ./findroot -x -10 -X 0 --brent
+
+(fixed)
 - Not all the initial values for a Newton's method guess converge.  Example
 
    ./findroot --newton -x 8 -X 9.1 -w 1 --der 22000
@@ -15,18 +41,3 @@ To fix: implement a strategy such as that of Numerical Recipes in C, or http://c
 
 (where bisection is used if the Newton's guess takes us outside a previously determined zero crossing interval).
 
-- for completeness ought to implement an interval search method to look for an initial interval that has opposite signs within the initial interval if the interval expansion method doesn't find bound a root.
-
----------------
-DONE:
-
-- Finish doxygen markup for the rest of the code is commented.
-- collect the results from the iterate function into a structure (iterations, result, rc, ...) to use in test.
-- need rc checking in more places (gsl doc sample relied on abort handler).  Read the docs to see how each function can fail.  use gsl_strerror and gsl_errno as appropriate.
-- switch to iostream for mysolver.cc bits that remain from the gsl docs example for consistency.: removed most <stdio.h> stuff now.  Some left for a verbose mode based on the old gsl sample code.
-- Using the Boost.Test framework (see lecture 6 of the software development part), write a test for each of these functions to ensure that they get the right value of the roots if you start at the root (by the way, what are the root precisely?).
-- debug: -1 should be a root too.  plot the function.  Got errors with:
-
-   ./findroot -x -10 -X 0 --brent
-
- (fixed)
