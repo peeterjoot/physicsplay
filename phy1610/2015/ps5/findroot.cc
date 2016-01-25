@@ -55,7 +55,8 @@ struct solverParams
       m_intervalStep{0.5},
       m_max_iter{100},
       m_max_iter_deriv{15000},
-      m_err{1e-4}
+      m_err{1e-4},
+      m_bracketed{false}
    {
    }
 
@@ -70,7 +71,7 @@ struct solverParams
          while ( xmin <= m_xUpper )
          {
             bool converged = false ;
-            bool bracketedResult = true ;
+            bool bracketedResult = false ;
             std::ostringstream out ;
 
             intervalIterationInputs pi( m_x0, xmin, m_max_iter, m_err, m_err ) ;
@@ -82,7 +83,7 @@ struct solverParams
             // Newton's method bounces around
             if ( isFdfSolver( method ) && m_bracketed )
             {
-               bracketedResult = false ;
+               bracketedResult = true ;
                fdfSolver<ps5function> s( method ) ;
 
                s.iterateBracketed( pi, ri ) ;
@@ -96,6 +97,7 @@ struct solverParams
             else
             {
                fSolver<ps5function> s( method ) ;
+               bracketedResult = true ;
 
                s.iterate( pi, ri ) ;
             }
