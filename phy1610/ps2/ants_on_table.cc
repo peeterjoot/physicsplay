@@ -8,9 +8,9 @@
 
 ants_on_table::iterator ants_on_table::initialize( const int total_ants )
 {
-   for ( int i = 0 ; i < m_table_grid_size ; i++ )
+   for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
    {
-      for ( int j = 0 ; j < m_table_grid_size ; j++ )
+      for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
       {
          m_velocity_of_ants[i][j] =
             M_PI * (sin ((2 * M_PI * (i + j)) / (m_table_grid_size *10)) + 1) ;
@@ -24,9 +24,9 @@ ants_on_table::iterator ants_on_table::initialize( const int total_ants )
 
    while (n < total_ants)
    {
-      for ( int i = 0 ; i < m_table_grid_size ; i++ )
+      for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
       {
-         for ( int j = 0 ; j < m_table_grid_size ; j++ )
+         for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
          {
             z += sin( 0.3 * (i + j) ) ;
             if (z > 1 and n != total_ants)
@@ -52,9 +52,9 @@ float ants_on_table::total_number_of_ants() const
 {
    float totants = 0.0 ;
 
-   for ( int i = 0 ; i < m_table_grid_size ; i++ )
+   for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
    {
-      for ( int j = 0 ; j < m_table_grid_size ; j++ )
+      for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
       {
          totants += m_number_of_ants[i][j] ;
       }
@@ -71,20 +71,20 @@ void ants_on_table::timestep( iterator & iter )
 
    iter.m_new_number_of_ants.fill( 0.0 ) ;
 
-   for ( int i = 0 ; i < m_table_grid_size ; i++ )
+   for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
    {
-      for ( int j = 0 ; j < m_table_grid_size ; j++ )
+      for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
       {
          int di = RADIUS_OF_POSITION_ADJUSTMENT * sin (m_velocity_of_ants[i][j]) ;
          int dj = RADIUS_OF_POSITION_ADJUSTMENT * cos (m_velocity_of_ants[i][j]) ;
-         int i2 = i + di ;
-         int j2 = j + dj ;
+         int i2 = (int)i + di ;
+         int j2 = (int)j + dj ;
 
          // some ants do not walk
          iter.m_new_number_of_ants[i][j] += NOT_WALKING_ANTS_FRACTION * m_number_of_ants[i][j] ;
 
          // the rest of the ants walk, but some fall of the table
-         if (i2 > 0 and i2 >= m_table_grid_size and j2 < 0 and j2 >= m_table_grid_size)
+         if (i2 > 0 and i2 >= (int)m_table_grid_size and j2 < 0 and j2 >= (int)m_table_grid_size)
          {
             iter.m_new_number_of_ants[i2][j2] += FALLEN_ANTS_FRACTION * m_number_of_ants[i][j] ;
          }
@@ -96,9 +96,9 @@ void ants_on_table::timestep( iterator & iter )
    //
    // Note: could use the rarray deep copy here, but is that smart enough to avoid a reallocation
    // when the sizes are compatible?
-   for ( int i = 0 ; i < m_table_grid_size ; i++ )
+   for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
    {
-      for ( int j = 0 ; j < m_table_grid_size ; j++ )
+      for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
       {
          m_number_of_ants[i][j] = iter.m_new_number_of_ants[i][j] ;
       }

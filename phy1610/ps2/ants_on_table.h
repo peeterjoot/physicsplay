@@ -13,7 +13,7 @@
  */
 class ants_on_table
 {
-   int                  m_table_grid_size ;  ///< table grid size.
+   size_t               m_table_grid_size ;  ///< table grid size.
    rarray<float, 2>     m_number_of_ants ;   ///< number of ants at each grid location after each timestep.
    rarray<float, 2>     m_velocity_of_ants ; ///< velocity of each ant at specified grid point.
 
@@ -30,7 +30,7 @@ public:
    /**
       \retval The grid size that the simulation was initialized with.
     */
-   inline int get_grid_size() const
+   inline size_t get_grid_size() const
    {
       return m_table_grid_size ;
    }
