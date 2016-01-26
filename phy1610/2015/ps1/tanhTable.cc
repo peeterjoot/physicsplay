@@ -70,20 +70,24 @@ void computeAndPrintTable( const double x1, const double x2, const Uint n )
    std::cout << std::endl ;
 }
 
-/** exit code for successful exectution */
-#define RC_SUCCESS      0
-/** exit code when -help (or bad option is supplied) */
-#define RC_HELP         1
-/** exit code if there's a parse error */
-#define RC_PARSE_ERROR  2
+enum class RETURNCODES : int 
+{
+   SUCCESS,      ///< exit code for successful exectution
+   HELP,         ///< exit code when -help (or bad option is supplied)
+   PARSE_ERROR,  ///< exit code if there's a parse error */
+
+   LAST
+} ;
 
 /** print the usage string for the program for --help (or unrecognized options)
  */
 void showHelpAndExit()
 {
+   static_assert( (int)RETURNCODES::LAST <= 256, "exit code doesn't fit in waitpid waitstatus byte." ) ;
+
    std::cerr << "usage: tanhTable [--number=n|-n n] [-lower=x1|-l x1] [--upper=x2] [--help]" << std::endl ;
 
-   std::exit( RC_HELP ) ;
+   std::exit( (int)RETURNCODES::HELP ) ;
 }
 
 /**
@@ -149,10 +153,10 @@ int main( int argc, char ** argv )
          << "argument: " << optarg << "\n"
          << std::endl ;
 
-      std::exit( RC_PARSE_ERROR ) ;
+      std::exit( (int)RETURNCODES::PARSE_ERROR ) ;
    }
 
    computeAndPrintTable( x1, x2, n ) ;
 
-   return RC_SUCCESS ;
+   return (int)RETURNCODES::SUCCESS ;
 }

@@ -30,11 +30,11 @@
 #include "integers.h"
 
 // Fixed constants from the problem specification.
-#define SINE_MULTIPLIER 2
-#define COSINE_MULTIPLIER 3
-#define LOWER_INTERVAL_BOUND -5.0
-#define UPPER_INTERVAL_BOUND 5.0
-#define NUMBER_OF_SAMPLES 100
+const int SINE_MULTIPLIER           { 2 } ;
+const int COSINE_MULTIPLIER         { 3 } ;
+const double LOWER_INTERVAL_BOUND   { -5.0 } ;
+const double UPPER_INTERVAL_BOUND   { 5.0 } ;
+const size_t NUMBER_OF_SAMPLES      { 100 } ;
 
 /**
    Provide and use a function f that takes x as input and returns the value of sin(2x).
@@ -97,20 +97,24 @@ void computeAndPrintTable( const double x1, const double x2, const Uint n )
    }
 }
 
-/** exit code for successful exectution */
-#define RC_SUCCESS      0
-/** exit code when -help (or bad option is supplied) */
-#define RC_HELP         1
-/** exit code if there's a parse error */
-#define RC_PARSE_ERROR  2
+enum class RETURNCODES : int 
+{
+   SUCCESS,      ///< exit code for successful exectution
+   HELP,         ///< exit code when -help (or bad option is supplied)
+   PARSE_ERROR,  ///< exit code if there's a parse error */
+
+   LAST
+} ;
 
 /** print the usage string for the program for --help (or unrecognized options)
  */
 void showHelpAndExit()
 {
+   static_assert( (int)RETURNCODES::LAST <= 256, "exit code doesn't fit in waitpid waitstatus byte." ) ;
+
    std::cerr << "usage: lissajous [--number=n|-n n] [-lower=x1|-l x1] [--upper=x2|-u x2] [--help]" << std::endl ;
 
-   std::exit( RC_HELP ) ;
+   std::exit( (int)RETURNCODES::HELP ) ;
 }
 
 /**
@@ -176,10 +180,10 @@ int main( int argc, char ** argv )
          << "argument: " << optarg << "\n"
          << std::endl ;
 
-      std::exit( RC_PARSE_ERROR ) ;
+      std::exit( (int)RETURNCODES::PARSE_ERROR ) ;
    }
 
    computeAndPrintTable( x1, x2, n ) ;
 
-   return RC_SUCCESS ;
+   return (int)RETURNCODES::SUCCESS ;
 }

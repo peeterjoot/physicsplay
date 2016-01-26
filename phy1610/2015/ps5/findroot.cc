@@ -4,17 +4,21 @@
 #include <sstream>
 #include "ps5solver.h"
 
-/** exit code for successful exectution */
-#define RC_SUCCESS      0
-/** exit code when -help (or bad option is supplied) */
-#define RC_HELP         1
-/** exit code if there's a parse error */
-#define RC_PARSE_ERROR  2
+enum class RETURNCODES : int
+{
+   SUCCESS,      ///< exit code for successful exectution
+   HELP,         ///< exit code when -help (or bad option is supplied)
+   PARSE_ERROR,  ///< exit code if there's a parse error */
+
+   LAST
+} ;
 
 /** print the usage string for the program for --help (or unrecognized options)
  */
 void showHelpAndExit()
 {
+   static_assert( (int)RETURNCODES::LAST <= 256, "exit code doesn't fit in waitpid waitstatus byte." ) ;
+
    std::cerr << "usage: findroot\n"
                 "\t{[--bisection|-i] [--falsepos|-f] [--brent|-b]\n"
                 "\t [--newton|-n] [--secant|-s] [--steffenson|-S]}\n"
@@ -31,7 +35,7 @@ void showHelpAndExit()
                 "- specify bracketed to use safe derivative iteration.\n"
                 << std::endl ;
 
-   std::exit( RC_HELP ) ;
+   std::exit( (int)RETURNCODES::HELP ) ;
 }
 
 /**
@@ -285,7 +289,7 @@ int main( int argc, char * argv[] )
          << "argument: " << optarg << "\n"
          << std::endl ;
 
-      std::exit( RC_PARSE_ERROR ) ;
+      std::exit( (int)RETURNCODES::PARSE_ERROR ) ;
    }
 
    if ( 0 == howToSolve.size() )
@@ -296,5 +300,5 @@ int main( int argc, char * argv[] )
 
    p.runSolver( howToSolve ) ;
 
-   return 0 ;
+   return (int)RETURNCODES::SUCCESS ;
 }
