@@ -3,9 +3,9 @@
 
 int main()
 {
-   const size_t TABLE_GRID_SIZE        { 356 } ;
-   const int NUMBER_OF_TIME_INTERVALS  { 40 } ;
-   const int TOTAL_NUMBER_OF_ANTS      { 1010 } ;
+   constexpr size_t TABLE_GRID_SIZE        { 356 } ;
+   constexpr int NUMBER_OF_TIME_INTERVALS  { 40 } ;
+   constexpr int TOTAL_NUMBER_OF_ANTS      { 1010 } ;
 
    ants_on_table ants( TABLE_GRID_SIZE ) ;
 

@@ -5,9 +5,12 @@
 #include "ants_on_table.h"
 #include <cmath>
 #include <iostream>
+#include <cassert>
 
 ants_on_table::iterator ants_on_table::initialize( const int total_ants )
 {
+   assert( total_ants ) ;
+
    for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
    {
       for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
@@ -46,6 +49,7 @@ ants_on_table::ants_on_table( const size_t table_grid_size ) :
    m_number_of_ants( table_grid_size, table_grid_size ),
    m_velocity_of_ants( table_grid_size, table_grid_size )
 {
+   assert( table_grid_size ) ;
 }
 
 float ants_on_table::total_number_of_ants() const
@@ -65,9 +69,9 @@ float ants_on_table::total_number_of_ants() const
 
 void ants_on_table::timestep( iterator & iter )
 {
-   static const double RADIUS_OF_POSITION_ADJUSTMENT { 1.9 } ;
-   static const double NOT_WALKING_ANTS_FRACTION { 0.8 } ;
-   static const double FALLEN_ANTS_FRACTION { 0.2 } ;
+   constexpr double RADIUS_OF_POSITION_ADJUSTMENT { 1.9 } ;
+   constexpr double NOT_WALKING_ANTS_FRACTION { 0.8 } ;
+   constexpr double FALLEN_ANTS_FRACTION { 0.2 } ;
 
    iter.m_new_number_of_ants.fill( 0.0 ) ;
 
@@ -115,6 +119,7 @@ ants_on_table::iterator::iterator( ants_on_table * p_ants )
 ants_on_table::iterator::iterator( const int n )
    : m_ants_p(nullptr), m_timevalue(n), m_new_number_of_ants()
 {
+   assert( n > 0 ) ;
 }
 
 ants_on_table::iterator& ants_on_table::iterator::operator++ ()

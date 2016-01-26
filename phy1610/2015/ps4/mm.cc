@@ -44,7 +44,7 @@ int main()
     TickTock write ;
 
     // construct the matrices a,b, and c to be of size n x n, where n = 500
-    const int n = 500 ;
+    constexpr int n = 500 ;
     create.tick() ;
     MyMatrix a(n, n) ;
     MyMatrix b(n, n) ;

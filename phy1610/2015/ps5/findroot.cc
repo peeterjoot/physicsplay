@@ -67,8 +67,8 @@ struct solverParams
    void runSolver( const std::vector<solver> & howToSolve ) const
    {
       ps5function f ;
-      const Uint maxIncr = 8 ;
-      const Uint maxSubDiv = 8 ;
+      constexpr Uint maxIncr = 8 ;
+      constexpr Uint maxSubDiv = 8 ;
 
       for ( auto method : howToSolve )
       {
@@ -164,7 +164,7 @@ int main( int argc, char * argv[] )
    int    c{0} ;
    int    line{0} ;
 
-   const struct option long_options[]{
+   constexpr struct option long_options[]{
      { "help",          0, NULL, 'h' },
      { "bisection",     0, NULL, 'i' },
      { "falsepos",      0, NULL, 'f' },

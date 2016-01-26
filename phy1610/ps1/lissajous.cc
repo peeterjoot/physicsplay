@@ -30,11 +30,11 @@
 #include "integers.h"
 
 // Fixed constants from the problem specification.
-const int SINE_MULTIPLIER           { 2 } ;
-const int COSINE_MULTIPLIER         { 3 } ;
-const double LOWER_INTERVAL_BOUND   { -5.0 } ;
-const double UPPER_INTERVAL_BOUND   { 5.0 } ;
-const size_t NUMBER_OF_SAMPLES      { 100 } ;
+constexpr int SINE_MULTIPLIER           { 2 } ;
+constexpr int COSINE_MULTIPLIER         { 3 } ;
+constexpr double LOWER_INTERVAL_BOUND   { -5.0 } ;
+constexpr double UPPER_INTERVAL_BOUND   { 5.0 } ;
+constexpr size_t NUMBER_OF_SAMPLES      { 100 } ;
 
 /**
    Provide and use a function f that takes x as input and returns the value of sin(2x).
@@ -125,10 +125,14 @@ int main( int argc, char ** argv )
    Uint n{NUMBER_OF_SAMPLES} ;
    double x1{LOWER_INTERVAL_BOUND} ;
    double x2{UPPER_INTERVAL_BOUND} ;
+
+   static_assert( NUMBER_OF_SAMPLES != 0, "NUMBER_OF_SAMPLES should be non-zero" ) ;
+   static_assert( LOWER_INTERVAL_BOUND < UPPER_INTERVAL_BOUND, "Interval bounds unordered" ) ;
+
    int c{0} ;
    int line{0} ;
 
-   const struct option long_options[]{
+   constexpr struct option long_options[]{
      { "help",   0, NULL, 'h' },
      { "number", 1, NULL, 'n' },
      { "lower",  1, NULL, 'l' },

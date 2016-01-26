@@ -11,10 +11,10 @@
 
 #include "boosttest.h"
 
-const Uint maxIter = 100 ;
-const Uint maxSubDivisions = 4 ;
-const Uint maxExpansionIters = 4 ;
-const double err = 1e-4 ;
+static constexpr Uint maxIter = 100 ;
+static constexpr Uint maxSubDivisions = 4 ;
+static constexpr Uint maxExpansionIters = 4 ;
+static constexpr double err = 1e-4 ;
 
 BOOST_AUTO_TEST_CASE( testsSolver )
 {
