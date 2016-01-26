@@ -173,7 +173,15 @@ void fdfSolver<paramType>::iterateBracketed( const intervalIterationInputs & p, 
    r.m_status     = gsl_root_fdfsolver_set( m_s, &m_F, r.m_xPrev ) ;
    r.m_solvername = gsl_root_fdfsolver_name( m_s ) ;
 
-   increaseIntervalIfNotBracketed( m_params, r.m_xLo, r.m_xHi, p.m_max_iter ) ;
+   if ( p.m_maxExpansionIterations )
+   {
+      increaseIntervalIfNotBracketed( m_params, r.m_xLo, r.m_xHi, p.m_maxExpansionIterations ) ;
+   }
+
+   if ( p.m_maxSubDivisions > 1 )
+   {
+      decreaseIntervalIfNotBracketed( m_params, r.m_xLo, r.m_xHi, p.m_maxSubDivisions ) ;
+   }
 
    if ( p.m_verbose )
    {
@@ -278,6 +286,8 @@ bool increaseIntervalIfNotBracketed( const paramType & f, double & x_min, double
 {
    Uint iter = 0 ;
    bool foundOne = false ;
+   double x1 = x_min ;
+   double x2 = x_max ;
 
    // Brent's method (and probably the other interval methods) abort if
    // the root is not bracketed.  use the interval expansion method described
@@ -285,8 +295,8 @@ bool increaseIntervalIfNotBracketed( const paramType & f, double & x_min, double
    //
    while ( iter < max_iter )
    {
-      double f_min { f( x_min ) } ;
-      double f_max { f( x_max ) } ;
+      double f_min { f( x1 ) } ;
+      double f_max { f( x2 ) } ;
 
       double s_min { std::copysign( 1.0, f_min ) } ;
       double s_max { std::copysign( 1.0, f_max ) } ;
@@ -294,6 +304,9 @@ bool increaseIntervalIfNotBracketed( const paramType & f, double & x_min, double
       if ( s_min != s_max )
       {
          foundOne = true ;
+         x_min = x1 ;
+         x_max = x2 ;
+
          break ;
       }
       else
@@ -301,19 +314,64 @@ bool increaseIntervalIfNotBracketed( const paramType & f, double & x_min, double
          double a_min { fabs( f_min ) } ;
          double a_max { fabs( f_max ) } ;
 
-         double width { x_max - x_min } ;
+         double width { x2 - x1 } ;
 
          if ( a_min < a_max )
          {
-            x_min -= width/2 ;
+            x1 -= width/2 ;
          }
          else
          {
-            x_max += width/2 ;
+            x2 += width/2 ;
          }
       }
 
       iter++ ;
+   }
+
+   return foundOne ;
+}
+
+template <class paramType>
+bool decreaseIntervalIfNotBracketed( const paramType & f, double & x_min, double & x_max, const Uint max_subdivisions )
+{
+   bool foundOne = false ;
+
+   assert( max_subdivisions > 1 ) ;
+
+   double f1 = f( x_min ) ;
+   double s1 = std::copysign( 1.0, f1 ) ;
+   double x1 = x_min ;
+   double x2 = x_max ;
+   double f2 = f( x2 ) ;
+   double s2 = std::copysign( 1.0, f2 ) ;
+
+   if ( s1 != s2 )
+   {
+      return true ;
+   }
+
+   const double w = (x_max - x_min)/max_subdivisions ;
+
+   // This is a dumb search, and just plods through all the subdivisions serially, looking for the first
+   // value of f(x) that changes sign.
+   //
+   for ( Uint i = 0 ; i < max_subdivisions ; i++ )
+   {
+      x2 = x1 + w ;
+      f2 = f( x2 ) ;
+      s2 = std::copysign( 1.0, f2 ) ;
+
+      if ( s1 != s2 )
+      {
+         x_min = x1 ;
+         x_max = x2 ;
+         foundOne = true ;
+         break ;
+      }
+
+      x1 = x2 ;
+      f1 = f2 ;
    }
 
    return foundOne ;
@@ -327,10 +385,19 @@ void fSolver<paramType>::iterate( const intervalIterationInputs & p, intervalIte
    r.m_xLo        = p.m_xLo ;
    r.m_xHi        = p.m_xHi ;
    r.m_x          = p.m_xLo ;
+
+   if ( p.m_maxExpansionIterations )
+   {
+      increaseIntervalIfNotBracketed( m_params, r.m_xLo, r.m_xHi, p.m_maxExpansionIterations ) ;
+   }
+
+   if ( p.m_maxSubDivisions > 1 )
+   {
+      decreaseIntervalIfNotBracketed( m_params, r.m_xLo, r.m_xHi, p.m_maxSubDivisions ) ;
+   }
+
    r.m_status     = gsl_root_fsolver_set( m_s, &m_F, r.m_xLo, r.m_xHi ) ;
    r.m_solvername = gsl_root_fsolver_name( m_s ) ;
-
-   increaseIntervalIfNotBracketed( m_params, r.m_xLo, r.m_xHi, p.m_max_iter ) ;
 
    if ( !r.m_status )
    {

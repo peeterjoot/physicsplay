@@ -54,7 +54,7 @@ struct solverParams
       m_xUpper{10.0},
       m_intervalStep{0.5},
       m_max_iter{100},
-      m_max_iter_deriv{15000},
+      m_max_iter_deriv{100},
       m_err{1e-4},
       m_bracketed{false}
    {
@@ -63,6 +63,8 @@ struct solverParams
    void runSolver( const std::vector<solver> & howToSolve ) const
    {
       ps5function f ;
+      const Uint maxIncr = 8 ;
+      const Uint maxSubDiv = 8 ;
 
       for ( auto method : howToSolve )
       {
@@ -74,7 +76,7 @@ struct solverParams
             bool bracketedResult = false ;
             std::ostringstream out ;
 
-            intervalIterationInputs pi( m_x0, xmin, m_max_iter, m_err, m_err ) ;
+            intervalIterationInputs pi( m_x0, xmin, m_max_iter, maxIncr, maxSubDiv, m_err, m_err ) ;
             intervalIterationResults ri ;
 
             derivativeIterationInputs pd( xmin, m_max_iter_deriv, m_err, m_err ) ;
