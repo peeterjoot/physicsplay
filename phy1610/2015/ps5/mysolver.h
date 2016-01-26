@@ -111,16 +111,22 @@ struct intervalIterationInputs : public iterationParameters
 {
    const double   m_xLo ;        ///< Initial lower bound for the interval that contains the root (or at least contains a zero crossing)
    const double   m_xHi ;        ///< Initial upper bound for the interval that contains the root (or at least contains a zero crossing)
+   const Uint     m_maxExpansionIterations ; ///< If > 0, a number of attempts will be made to find a root bracket.
+   const Uint     m_maxSubDivisions ; ///< If > 1, this will be used to subdivide the interval if the endpoints do not bracket a root.
 
    intervalIterationInputs( const double   xLo,
                             const double   xHi,
                             const Uint     max_iter,
+                            const Uint     max_expansion_iters,
+                            const Uint     max_subdivisions,
                             const double   relerr,
                             const double   abserr,
                             const bool     verbose = false ) :
         iterationParameters( max_iter, relerr, abserr, verbose ),
         m_xLo{xLo},
-        m_xHi{xHi}
+        m_xHi{xHi},
+        m_maxExpansionIterations{max_expansion_iters},
+        m_maxSubDivisions{max_subdivisions}
    {
    }
 } ;
@@ -200,7 +206,7 @@ public:
 
    /**
       Perform the root solution iteration, but use bisection at any point that the
-      gsl iteration takes the root outside of the 
+      gsl iteration takes the root outside of the
 
       \param p [in]
          Input parameters for the root solving iteration.
@@ -213,6 +219,8 @@ public:
 
 /**
    Attempt to increase the initial interval to find one that brackets the root.
+
+   If a larger bracket that contains the root isn't found, then the values of x_min and x_max are left unchanged.
 
    \param f [in]
       Parameter function object.
@@ -232,6 +240,30 @@ public:
  */
 template <class paramType>
 bool increaseIntervalIfNotBracketed( const paramType & f, double & x_min, double & x_max, const Uint iter_max ) ;
+
+/**
+   Attempt to decrease the initial interval to find one that brackets the root.
+
+   If a smallest bracket that contains the root isn't found, then the values of x_min and x_max are left unchanged.
+
+   \param f [in]
+      Parameter function object.
+
+   \param x_min [in|out]
+      starting lower bound on the interval.
+
+   \param x_max [in|out]
+      starting upper bound on the interval.
+
+   \param max_divisions [in]
+      maximum number of subdivisions to attempt increasing the interval looking for a sign alternation.
+
+   \retval
+      true if a bracketing interval was found.
+      false if a bracketing interval was not found.
+ */
+template <class paramType>
+bool decreaseIntervalIfNotBracketed( const paramType & f, double & x_min, double & x_max, const Uint max_divisions ) ;
 
 /**
    gsl based interval based root solver.

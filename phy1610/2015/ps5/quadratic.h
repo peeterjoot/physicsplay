@@ -25,7 +25,7 @@ struct quadratic
 
    double operator() ( const double x ) const
    {
-      return function( x, const_cast<quadratic*>(this) ) ; 
+      return function( x, const_cast<quadratic*>(this) ) ;
    }
 
    static inline double expectedRoot()

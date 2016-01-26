@@ -15,7 +15,7 @@ int main()
    {
       double y, dy ;
 
-      ps5function::functionAndDerivative( x, &f, &y, &dy ) ; 
+      ps5function::functionAndDerivative( x, &f, &y, &dy ) ;
 
       std::cout << x << ", " << y << ", " << dy << std::endl ;
    }

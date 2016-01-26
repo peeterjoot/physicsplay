@@ -42,7 +42,8 @@ DISPLAY_OBJECTS := $(subst .cc,.o,$(DISPLAY_SOURCES))
 
 COMMON_SOURCES += solverMethod.cc
 COMMON_SOURCES += ps5function.cc
-COMMON_SOURCES += ps5solver.cc
+COMMON_SOURCES += squareRootTwoFunction.cc
+COMMON_SOURCES += instantiations.cc
 #COMMON_SOURCES += quadratic.cc
 
 TARGETS += findroot
@@ -73,6 +74,9 @@ showps5 : $(DISPLAY_OBJECTS)
 
 findroot : $(FINDROOT_OBJECTS)
 	$(CXX) -o $@ $(FINDROOT_OBJECTS) $(FINDROOT_LDLIBS)
+
+runtests: test
+	./test --report_level=detailed
 
 test : $(TEST_OBJECTS)
 	$(CXX) -o $@ $(TEST_OBJECTS) $(TEST_LDLIBS)
