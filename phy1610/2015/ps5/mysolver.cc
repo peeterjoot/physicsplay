@@ -11,6 +11,7 @@
 #include <cassert>
 #include "integers.h"
 #include "mysolver.h"
+#include "signof.h"
 
 template <class paramType>
 fdfSolver<paramType>::fdfSolver( const solver whichSolver ) : m_T( solverToFdfMethod( whichSolver ) ), m_params{}
@@ -298,8 +299,8 @@ bool increaseIntervalIfNotBracketed( const paramType & f, double & x_min, double
       double f_min { f( x1 ) } ;
       double f_max { f( x2 ) } ;
 
-      double s_min { std::copysign( 1.0, f_min ) } ;
-      double s_max { std::copysign( 1.0, f_max ) } ;
+      double s_min { signof( f_min ) } ;
+      double s_max { signof( f_max ) } ;
 
       if ( s_min != s_max )
       {
@@ -340,11 +341,11 @@ bool decreaseIntervalIfNotBracketed( const paramType & f, double & x_min, double
    assert( max_subdivisions > 1 ) ;
 
    double f1 = f( x_min ) ;
-   double s1 = std::copysign( 1.0, f1 ) ;
+   double s1 = signof( f1 ) ;
    double x1 = x_min ;
    double x2 = x_max ;
    double f2 = f( x2 ) ;
-   double s2 = std::copysign( 1.0, f2 ) ;
+   double s2 = signof( f2 ) ;
 
    if ( s1 != s2 )
    {
@@ -360,7 +361,7 @@ bool decreaseIntervalIfNotBracketed( const paramType & f, double & x_min, double
    {
       x2 = x1 + w ;
       f2 = f( x2 ) ;
-      s2 = std::copysign( 1.0, f2 ) ;
+      s2 = signof( f2 ) ;
 
       if ( s1 != s2 )
       {

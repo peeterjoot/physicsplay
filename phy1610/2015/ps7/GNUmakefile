@@ -20,14 +20,11 @@ CXXFLAGS += -Wall -Werror
 CXXFLAGS += -std=c++11
 THISDIR := phy1610/2015/ps7
 
-TARGETS += eigen
+ifneq ("$(OSNAME)","Cygwin")
+   # don't have lapacke.h
+   TARGETS += eigen
+endif
 TARGETS += .gitignore
-#TARGETS += waveparams.txt
-
-#ifneq ("$(OSNAME)","Cygwin")
-#   # get cxx11 abi link errors attempting to use boost unit_test
-#   TARGETS += test
-#endif
 
 EIGEN_SOURCES += eigen.cc
 EIGEN_OBJECTS := $(subst .cc,.o,$(EIGEN_SOURCES))

@@ -20,7 +20,9 @@ void multiply(MyMatrix &a, MyMatrix &b, MyMatrix &c, const Uint tilesize )
    // store dimensions of the arrays
    const Uint n = a.get_rows() ;
    const Uint m = a.get_columns() ;
+#if !defined NDEBUG
    const Uint r = b.get_columns() ;
+#endif
    const Uint s = b.get_rows() ;
 
    // ensure sizes are compatible
