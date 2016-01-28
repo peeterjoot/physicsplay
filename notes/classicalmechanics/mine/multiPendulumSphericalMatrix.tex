@@ -593,142 +593,145 @@ T
 %is still correct despite the adoption of geometric algebra.
 %
 
-\subsubsection{The Lagrangian}
+%%%\subsubsection{The Lagrangian}
+%%%
+%%%The position vector for each particle can be expressed relative to the mass it is connected to (or the origin for the first particle), as in
+%%%
+%%%Now, the relative velocity differential can be written utilizing these factors
+%%%
+%%%\begin{equation}\label{eqn:multiPendulumSphericalMatrix:360}
+%%%\begin{aligned}
+%%%(\dot{\Bu}_k - \dot{\Bu}_{k-1})^2 = l_k^2 {\dot{\BTheta}_k}^\T A_k A_k^\T \dot{\BTheta}_k.
+%%%\end{aligned}
+%%%\end{equation}
+%%%
+%%%Observe that the inner product is symmetric since \((A_k A_k^\T)^\T = A_k A_k^\T\).
+%%%
+%%%The normed velocity of the \(k\)th particle is then
 
-The position vector for each particle can be expressed relative to the mass it is connected to (or the origin for the first particle), as in
+Having writtin things out explictly for the two particle case, the generalization to N particles is straightforward
 
-Now, the relative velocity differential can be written utilizing these factors
-
-\begin{equation}\label{eqn:multiPendulumSphericalMatrix:360}
-\begin{aligned}
-(\dot{\Bu}_k - \dot{\Bu}_{k-1})^2 = l_k^2 {\dot{\BTheta}_k}^\T A_k A_k^\T \dot{\BTheta}_k.
-\end{aligned}
-\end{equation}
-
-Observe that the inner product is symmetric since \((A_k A_k^\T)^\T = A_k A_k^\T\).
-
-The normed velocity of the \(k\)th particle is then
-
-\begin{subequations}
 \begin{equation}\label{eqn:multiPendulumSphericalMatrix:370}
 \begin{aligned}
-\BTheta &=
+\BTheta^\T &=
 \begin{bmatrix}
-\BTheta_1 \\
-\BTheta_2 \\
-\vdots \\
-\BTheta_N \\
+\BTheta_1^\T & 
+\BTheta_2^\T & 
+\cdots & 
+\BTheta_N^\T 
 \end{bmatrix} \\
-B_k &=
-\begin{bmatrix}
-l_1 A_1 \\
-l_2 A_2 \\
-\vdots \\
-l_k A_k \\
-0 \\
-\end{bmatrix} \\
-(\dot{\Bu}_k)^2 &=
-\dot{\BTheta}^\T B_k B_k^\T \dot{\BTheta},
-\end{aligned}
-\end{equation}
-\end{subequations}
-
-where the zero matrix in \(B_k\) is a \(N-k\) by one zero.  Summing over all masses and adding in the potential energy we have for the Lagrangian of the system
-
-\begin{subequations}
-\begin{equation}\label{eqn:multiPendulumSphericalMatrix:380}
-\begin{aligned}
-K &=
-\inv{2} \sum_{k=1}^N m_k
-\dot{\BTheta}^\T
-B_k B_k^\T
-\dot{\BTheta} \\
+Q_{ij} &= 
+\mu_{\max(i,j)} l_i l_j A_i A_j^\T \\
+K &= \inv{2} \dot{\Theta}^\T Q \dot{\Theta} \\
+%B_k &=
+%\begin{bmatrix}
+%l_1 A_1 \\
+%l_2 A_2 \\
+%\vdots \\
+%l_k A_k \\
+%0 \\
+%\end{bmatrix} \\
+%(\dot{\Bu}_k)^2 &=
+%\dot{\BTheta}^\T B_k B_k^\T \dot{\BTheta},
 \mu_k &= \sum_{j=k}^N m_j \\
 \Phi &=
 g \sum_{k=1}^N \mu_k l_k \cos\theta_k \\
 \LL &= K - \Phi.
 \end{aligned}
 \end{equation}
-\end{subequations}
 
-The kinetic energy expressed completely and explicitly as a symmetric quadratic form.
-
-\subsubsection{Some tidy up}
-
-Before continuing with evaluation of the Euler-Lagrange equations it is helpful to make a couple of observations about the structure of the matrix products that make up our velocity terms
-
-\begin{equation}\label{eqn:multiPendulumSphericalMatrix:390}
-\begin{aligned}
-\dot{\BTheta}^\T
-B_k B_k^\T
-\dot{\BTheta}
-&=
-\dot{\BTheta}^\T
-\begin{bmatrix}
-\begin{bmatrix}
-l_1^2 A_1 A_1^\T & l_1 l_2 A_1 A_2^\T & \hdots & l_1 l_k A_1 A_k^\T \\
-l_2 l_1 A_2 A_1^\T & l_2^2 A_2 A_2^\T & \hdots & l_2 l_k A_2 A_k^\T \\
-\vdots \\
-l_k l_1 A_k A_1^\T & l_k l_2 A_k A_2^\T & \hdots & l_k^2 A_k A_k^\T
-\end{bmatrix} & 0 \\
-0 & 0
-\end{bmatrix}
-\dot{\BTheta}.
-\end{aligned}
-\end{equation}
-
-Pulling in the summation over \(m_k\) we have
-
-\begin{equation}\label{eqn:multiPendulumSphericalMatrix:410}
-\begin{aligned}
-\sum_k m_k
-\dot{\BTheta}^\T
-B_k B_k^\T
-\dot{\BTheta}
-&=
-\dot{\BTheta}^\T
-{\begin{bmatrix}
-\mu_{\max(r,c)} l_r l_c \gpgradezeroNoOp{A_r A_c^\T}
-\end{bmatrix}}_{rc}
-\dot{\BTheta}.
-\end{aligned}
-\end{equation}
-
-It appears justifiable to label the \(\mu_{\max(r,c)} l_r l_c\) factors of the angular velocity matrices as moments of inertia in a generalized sense.  Using this block matrix form, and scalar selection, we can now write the Lagrangian in a slightly tidier form
-
-\begin{subequations}
-\begin{equation}\label{eqn:multiPendulumSphericalMatrix:420}
-\begin{aligned}
-\mu_k &= \sum_{j=k}^N m_j \\
-Q &=
-{\begin{bmatrix}
-\mu_{\max(r,c)} l_r l_c A_r A_c^\T
-\end{bmatrix}}_{rc} \\
-K &=
-\inv{2} \dot{\BTheta}^\T \gpgradezeroNoOp{Q}
-\dot{\BTheta} \\
-\Phi &=
-g \sum_{k=1}^N \mu_k l_k \cos\theta_k \\
-\LL &= K - \Phi.
-\end{aligned}
-\end{equation}
-\end{subequations}
-
-After some expansion one can find that the block matrices \(A_r A_c^\T\) contained in \(Q\) are
+%%%where the zero matrix in \(B_k\) is a \(N-k\) by one zero.  Summing over all masses and adding in the potential energy we have for the Lagrangian of the system
+%%%
+%%%\begin{subequations}
+%%%\begin{equation}\label{eqn:multiPendulumSphericalMatrix:380}
+%%%\begin{aligned}
+%%%K &=
+%%%\inv{2} \sum_{k=1}^N m_k
+%%%\dot{\BTheta}^\T
+%%%B_k B_k^\T
+%%%\dot{\BTheta} \\
+%%%\end{aligned}
+%%%\end{equation}
+%%%\end{subequations}
+%%%
+%%%The kinetic energy expressed completely and explicitly as a symmetric quadratic form.
+%%%
+%%%\subsubsection{Some tidy up}
+%%%
+%%%Before continuing with evaluation of the Euler-Lagrange equations it is helpful to make a couple of observations about the structure of the matrix products that make up our velocity terms
+%%%
+%%%\begin{equation}\label{eqn:multiPendulumSphericalMatrix:390}
+%%%\begin{aligned}
+%%%\dot{\BTheta}^\T
+%%%B_k B_k^\T
+%%%\dot{\BTheta}
+%%%&=
+%%%\dot{\BTheta}^\T
+%%%\begin{bmatrix}
+%%%\begin{bmatrix}
+%%%l_1^2 A_1 A_1^\T & l_1 l_2 A_1 A_2^\T & \hdots & l_1 l_k A_1 A_k^\T \\
+%%%l_2 l_1 A_2 A_1^\T & l_2^2 A_2 A_2^\T & \hdots & l_2 l_k A_2 A_k^\T \\
+%%%\vdots \\
+%%%l_k l_1 A_k A_1^\T & l_k l_2 A_k A_2^\T & \hdots & l_k^2 A_k A_k^\T
+%%%\end{bmatrix} & 0 \\
+%%%0 & 0
+%%%\end{bmatrix}
+%%%\dot{\BTheta}.
+%%%\end{aligned}
+%%%\end{equation}
+%%%
+%%%Pulling in the summation over \(m_k\) we have
+%%%
+%%%\begin{equation}\label{eqn:multiPendulumSphericalMatrix:410}
+%%%\begin{aligned}
+%%%\sum_k m_k
+%%%\dot{\BTheta}^\T
+%%%B_k B_k^\T
+%%%\dot{\BTheta}
+%%%&=
+%%%\dot{\BTheta}^\T
+%%%{\begin{bmatrix}
+%%%\mu_{\max(r,c)} l_r l_c \gpgradezeroNoOp{A_r A_c^\T}
+%%%\end{bmatrix}}_{rc}
+%%%\dot{\BTheta}.
+%%%\end{aligned}
+%%%\end{equation}
+%%%
+%%%It appears justifiable to label the \(\mu_{\max(r,c)} l_r l_c\) factors of the angular velocity matrices as moments of inertia in a generalized sense.  Using this block matrix form, and scalar selection, we can now write the Lagrangian in a slightly tidier form
+%%%
+%%%\begin{subequations}
+%%%\begin{equation}\label{eqn:multiPendulumSphericalMatrix:420}
+%%%\begin{aligned}
+%%%\mu_k &= \sum_{j=k}^N m_j \\
+%%%Q &=
+%%%{\begin{bmatrix}
+%%%\mu_{\max(r,c)} l_r l_c A_r A_c^\T
+%%%\end{bmatrix}}_{rc} \\
+%%%K &=
+%%%\inv{2} \dot{\BTheta}^\T \gpgradezeroNoOp{Q}
+%%%\dot{\BTheta} \\
+%%%\Phi &=
+%%%g \sum_{k=1}^N \mu_k l_k \cos\theta_k \\
+%%%\LL &= K - \Phi.
+%%%\end{aligned}
+%%%\end{equation}
+%%%\end{subequations}
+%%%
+After some expansion one can find that the block matrices \(A_i A_j^\T\) contained in \(Q\) are
 
 \begin{equation}\label{eqn:multiPendulumSphericalMatrix:430}
 \begin{aligned}
-\gpgradezeroNoOp{A_r A_c^\T}
+\gpgradezeroNoOp{A_i A_j^\T}
 =
 \begin{bmatrix}
-C_{\phi_c - \phi_r}
-C_{\theta_r}
-C_{\theta_c}
-+S_{\theta_r}
-S_{\theta_c} &
--S_{\phi_c - \phi_r} C_{\theta_r} S_{\theta_c} \\
-S_{\phi_c - \phi_r} C_{\theta_c} S_{\theta_r} &
-C_{\phi_c - \phi_r} S_{\theta_r} S_{\theta_c}
+C_{\phi_j - \phi_i}
+C_{\theta_i}
+C_{\theta_j}
++S_{\theta_i}
+S_{\theta_j} &
+-S_{\phi_j - \phi_i} C_{\theta_i} S_{\theta_j} \\
+S_{\phi_j - \phi_i} C_{\theta_j} S_{\theta_i} &
+C_{\phi_j - \phi_i} S_{\theta_i} S_{\theta_j}
 \end{bmatrix}.
 \end{aligned}
 \end{equation}
@@ -737,16 +740,16 @@ The diagonal blocks are particularly simple and have no \(\phi\) dependence
 
 \begin{equation}\label{eqn:multiPendulumSphericalMatrix:440}
 \begin{aligned}
-\gpgradezeroNoOp{A_r A_r^\T}
+\gpgradezeroNoOp{A_i A_i^\T}
 =
 \begin{bmatrix}
 1 & 0 \\
-0 & \sin^2 \theta_r
+0 & \sin^2 \theta_i
 \end{bmatrix}
 \end{aligned}
 \end{equation}
 
-\subsubsection{Evaluating the Euler-Lagrange equations}
+\section{Evaluating the Euler-Lagrange equations}
 
 It will be convenient to group the Euler-Lagrange equations into a column vector form, with a column vector of generalized coordinates and and derivatives, and position and velocity gradients in the associated phase space
 

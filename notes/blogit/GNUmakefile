@@ -77,6 +77,10 @@ all :: macros_lcal.sty
 all :: macros_mathematica.sty
 all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
+all :: multiPendulumSphericalMatrix.pdf
+
+multiPendulumSphericalMatrix.tex : ../classicalmechanics/multiPendulumSphericalMatrix.tex
+	cp $^ $@
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
