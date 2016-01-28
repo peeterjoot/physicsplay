@@ -6,7 +6,7 @@ CXXFLAGS += -D_GLIBCXX_USE_C99
 # generate dependency files with each compilation:
 CXXFLAGS += -MMD
 
-CXXFLAGS += -I../../inc
+#CXXFLAGS += -I../inc
 CXXFLAGS += -I../../rarray
 #CXXFLAGS += -I$(HOME)/local/rarray/include
 
@@ -56,6 +56,16 @@ CLEANTARGETS += $(ANTS_OBJECTS) $(TEST_OBJECTS)
 # clean dependency files if any
 CLEANTARGETS += $(subst .o,.d,$(TEST_OBJECTS) $(ANTS_OBJECTS))
 
+TARFILES += ants.cc
+TARFILES += ants.out.default
+TARFILES += ants.out
+TARFILES += ants_on_table.cc
+TARFILES += ants_on_table.h
+TARFILES += git.log
+TARFILES += GNUmakefile
+CLEANTARGETS += git.log
+CLEANTARGETS += ps2.tar
+
 all : $(TARGETS)
 
 antsTest.diff: ants.out
@@ -72,6 +82,13 @@ test : $(TEST_OBJECTS)
 
 .gitignore: GNUmakefile
 	echo $(addprefix $(THISDIR)/,$(CLEANTARGETS)) | tr ' ' '\n' > $@
+
+git.log : 
+	git log --stat . > $@
+
+ps2.tar : $(TARFILES)
+	rm -f $@
+	tar cf $@ $(TARFILES)
 
 clean::
 	rm -rf $(CLEANTARGETS)
