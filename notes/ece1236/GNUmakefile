@@ -27,12 +27,7 @@ include ../make.rules
 #julia.tex : ../../julia/METADATA
 #mathematica.tex : ../../mathematica/METADATA
 
-#problemSets :: gradQuantumProblemSet1.pdf
-#gradQuantumProblemSet8.pdf : ../ece1236/gradQuantumProblemSet8Problem1.tex
-#gradQuantumProblemSet8.pdf : ../ece1236/gradQuantumProblemSet8Problem2.tex
-#gradQuantumProblemSet8.pdf : ../ece1236/gradQuantumProblemSet8Problem3.tex
-#gradQuantumProblemSet8.pdf : ../ece1236/gradQuantumProblemSet8Problem4.tex
-#gradQuantumProblemSet8.pdf : ps8mathematica.tex
+#problemSets :: uwavesproblemSet1.pdf
 #
 #ps7mathematica.tex : ../METADATA ../../mathematica/METADATA
 #	(cd .. ; ./METADATA -mathematica -latex -ece1236 -filter ece1236/ps7/ ) > $@

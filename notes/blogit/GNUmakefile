@@ -91,6 +91,8 @@ local : $(LOCAL_FILES)
 $(LOCAL_FILES) : 
 	cp $(filter %$@, $(ORIG_FILES)) $@
 
+multiPendulumSphericalMatrix.pdf : ../classicalmechanics/mine/multiPendulumSphericalMatrix.tex
+
 ensemblesForSpinOneHalf.pdf : ../phy2403/ensemblesForSpinOneHalf.tex
 
 qftProblemSet2.pdf : ../phy2403/qftProblemSet2Problem1.tex
@@ -99,6 +101,12 @@ qftProblemSet2.pdf : ../phy2403/qftProblemSet2Problem3.tex
 qftProblemSet2.pdf : ../phy2403/qftProblemSet2Problem4.tex
 qftProblemSet2.pdf : ../phy2403/qftProblemSet2Problem5.tex
 #qftProblemSet1.pdf : ps8mathematica.tex
+
+uwavesProblemSet1.pdf : ../ece1236/uwavesproblemSet1Problem1.tex
+uwavesProblemSet1.pdf : ../ece1236/uwavesproblemSet1Problem2.tex
+uwavesProblemSet1.pdf : ../ece1236/uwavesproblemSet1Problem3.tex
+uwavesProblemSet1.pdf : ../ece1236/uwavesproblemSet1Problem4.tex
+uwavesProblemSet1.pdf : ../ece1236/uwavesproblemSet1Problem5.tex
 
 gaBasics.pdf : gaBasics.tex
 
