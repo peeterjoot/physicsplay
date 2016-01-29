@@ -2,6 +2,23 @@
 #include <iostream>
 #include "ticktock.h"
 
+//#define USE_TICK_TOCK
+/** easy way to turn off tick tocks when profiling */
+class ProfTickTock 
+#if defined USE_TICK_TOCK
+   : private TickTock
+#endif
+{
+public:
+#if defined USE_TICK_TOCK
+   using TickTock::tick ;
+   using TickTock::silent_tock ;
+#else
+   void tick() {}              
+   double silent_tock() const { return 0.0 ; }
+#endif
+} ;
+
 int main()
 {
     // ants walk on a table
@@ -34,7 +51,7 @@ int main()
         }
     }
 
-    TickTock t ;
+    ProfTickTock timer ;
 
     double s_totants { 0 } ;
     double s_init { 0.0 } ;
@@ -43,23 +60,23 @@ int main()
 
     // run simulation
     for (int t = 0; t < 40; t++) {
-t.tick() ;
+timer.tick() ;
         float totants = 0.0;
         for (int i=0;i<356;i++) {
             for (int j=0;j<356;j++) {
                 totants += number_of_ants[i][j];
             }
         }
-s_totants += t.silent_tock() ;
+s_totants += timer.silent_tock() ;
         std::cout << t<< " " << totants << std::endl;
-t.tick() ;
+timer.tick() ;
         for (int i=0;i<356;i++) {
             for (int j=0;j<356;j++) {
                 new_number_of_ants[i][j] = 0.0;
             }
         }
-s_init += t.silent_tock() ;
-t.tick() ;
+s_init += timer.silent_tock() ;
+timer.tick() ;
         for (int i=0;i<356;i++) {
             for (int j=0;j<356;j++) {
                 int di = 1.9*sin(velocity_of_ants[i][j]);
@@ -74,15 +91,15 @@ t.tick() ;
                 }
             }
         }
-s_core += t.silent_tock() ;
-t.tick();
+s_core += timer.silent_tock() ;
+timer.tick();
         for (int i=0;i<356;i++) {
             for (int j=0;j<356;j++) {
                 number_of_ants[i][j] = new_number_of_ants[i][j];
                 totants += number_of_ants[i][j];
             }
         }
-s_secondtot += t.silent_tock() ;
+s_secondtot += timer.silent_tock() ;
     }
 
 std::cout << "totants time: \t" << s_totants << std::endl ;
