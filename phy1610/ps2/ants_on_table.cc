@@ -88,7 +88,7 @@ void ants_on_table::timestep( iterator & iter )
          iter.m_new_number_of_ants[i][j] += NOT_WALKING_ANTS_FRACTION * m_number_of_ants[i][j] ;
 
          // the rest of the ants walk, but some fall of the table
-         if (i2 > 0 and i2 >= (int)m_table_grid_size and j2 < 0 and j2 >= (int)m_table_grid_size)
+         if (i2 >= 0 and i2 < (int)m_table_grid_size and j2 >= 0 and j2 < (int)m_table_grid_size)
          {
             iter.m_new_number_of_ants[i2][j2] += FALLEN_ANTS_FRACTION * m_number_of_ants[i][j] ;
          }
