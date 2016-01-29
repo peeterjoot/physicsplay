@@ -79,16 +79,17 @@ CLEANTARGETS += $(ALL_OBJECTS)
 # clean dependency files if any
 CLEANTARGETS += $(subst .o,.d,$(ALL_OBJECTS))
 
-#TARFILES += ants.cc
-#TARFILES += ticktock.cc
-#TARFILES += ants.out.default
-#TARFILES += ants.out
-#TARFILES += ants_on_table.cc
-#TARFILES += ants_on_table.h
-#TARFILES += git.log
-#TARFILES += GNUmakefile
+TARFILES += ants.cc
+TARFILES += ticktock.cc
+TARFILES += ants.out.default
+TARFILES += ants.out
+TARFILES += ants_on_table.cc
+TARFILES += ants_on_table.h
+TARFILES += git.log
+TARFILES += GNUmakefile
+TARFILES += runreport.txt
 CLEANTARGETS += git.log
-#CLEANTARGETS += ps2.tar
+CLEANTARGETS += ps3.tar
 
 GPROF := gprof --line --no-graph --brief
 
@@ -119,9 +120,9 @@ test : $(TEST_OBJECTS)
 git.log : 
 	git log --stat . > $@
 
-#ps2.tar : $(TARFILES)
-#	rm -f $@
-#	tar cf $@ $(TARFILES)
+ps3.tar : clean $(TARFILES)
+	rm -f $@
+	tar cf $@ $(TARFILES)
 
 clean::
 	rm -rf $(CLEANTARGETS)
