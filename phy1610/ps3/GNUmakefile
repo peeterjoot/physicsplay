@@ -1,7 +1,6 @@
 OSNAME := $(shell uname -o)
 
-# for windows (cygwin):
-CXXFLAGS += -D_GLIBCXX_USE_C99
+#CXXFLAGS += -DUSE_TICK_TOCK
 
 # generate dependency files with each compilation:
 CXXFLAGS += -MMD
@@ -32,6 +31,8 @@ THISDIR := phy1610/ps3
 TARGETS += .gitignore
 
 ifeq ("$(OSNAME)","Cygwin")
+   CXXFLAGS += -D_GLIBCXX_USE_C99
+
    # get cxx11 abi link errors attempting to use boost unit_test with the pre-compiled boost library
    CXXFLAGS += -DUSE_SINGLE_HEADER_BOOST_TEST_FRAMEWORK
 
@@ -42,9 +43,10 @@ else
 endif
 
 #TARGETS += antsTest.diff
+TARGETS += ticktock.cc
+TARGETS += ants_on_table.h
 TARGETS += ants.cc
 TARGETS += ants_on_table.cc
-TARGETS += ants_on_table.h
 TARGETS += ants
 TARGETS += origants
 #TARGETS += ants.out
@@ -71,23 +73,30 @@ CLEANTARGETS += $(TARGETS)
 # doxygen:
 CLEANTARGETS += html latex
 
-CLEANTARGETS += $(ANTS_OBJECTS) $(TEST_OBJECTS)
+ALL_OBJECTS += $(ANTS_OBJECTS) $(TEST_OBJECTS) $(ORIGANTS_OBJECTS)
+CLEANTARGETS += $(ALL_OBJECTS)
 
 # clean dependency files if any
-CLEANTARGETS += $(subst .o,.d,$(TEST_OBJECTS) $(ANTS_OBJECTS))
+CLEANTARGETS += $(subst .o,.d,$(ALL_OBJECTS))
 
-TARFILES += ants.cc
-TARFILES += ticktock.cc
-TARFILES += ants.out.default
-TARFILES += ants.out
-TARFILES += ants_on_table.cc
-TARFILES += ants_on_table.h
-TARFILES += git.log
-TARFILES += GNUmakefile
+#TARFILES += ants.cc
+#TARFILES += ticktock.cc
+#TARFILES += ants.out.default
+#TARFILES += ants.out
+#TARFILES += ants_on_table.cc
+#TARFILES += ants_on_table.h
+#TARFILES += git.log
+#TARFILES += GNUmakefile
 CLEANTARGETS += git.log
-CLEANTARGETS += ps2.tar
+#CLEANTARGETS += ps2.tar
+
+GPROF := gprof --line --no-graph --brief
 
 all : $(TARGETS)
+
+ants_on_table.cc : ants_on_table.h
+
+ants.cc : ants_on_table.h
 
 antsTest.diff: ants.out
 	diff -up ../ps2/ants.out.default ants.out > $@
@@ -96,13 +105,13 @@ ants.out: ants
 	./ants > $@
 
 ants : $(ANTS_OBJECTS)
-	$(CXX) -o $@ $(ANTS_OBJECTS) $(ANTS_LDLIBS) $(LDFLAGS)
+	$(CXX) $(LDFLAGS) -o $@ $(ANTS_OBJECTS) $(ANTS_LDLIBS)
 
 origants : $(ORIGANTS_OBJECTS)
-	$(CXX) -o $@ $(ORIGANTS_OBJECTS) $(ANTS_LDLIBS) $(LDFLAGS)
+	$(CXX) $(LDFLAGS) -o $@ $(ORIGANTS_OBJECTS) $(ANTS_LDLIBS)
 
 test : $(TEST_OBJECTS)
-	$(CXX) -o $@ $(TEST_OBJECTS) $(TEST_LDLIBS) $(LDFLAGS)
+	$(CXX) $(LDFLAGS) -o $@ $(TEST_OBJECTS) $(TEST_LDLIBS)
 
 .gitignore: GNUmakefile
 	echo $(addprefix $(THISDIR)/,$(CLEANTARGETS)) | tr ' ' '\n' > $@
@@ -110,21 +119,24 @@ test : $(TEST_OBJECTS)
 git.log : 
 	git log --stat . > $@
 
-ps2.tar : $(TARFILES)
-	rm -f $@
-	tar cf $@ $(TARFILES)
+#ps2.tar : $(TARFILES)
+#	rm -f $@
+#	tar cf $@ $(TARFILES)
 
 clean::
 	rm -rf $(CLEANTARGETS)
 
 ants.cc : ../ps2/ants.cc
-	cp $^ $@
+	cp ../ps2/ants.cc $@
 
 ticktock.cc : $(TICKTOCK)/ticktock.cc
 	cp $^ $@
 
+$(TICKTOCK) : 
+	(cd ; git clone https://github.com/vanzonr/ticktock.git)
+
 ants_on_table.cc : ../ps2/ants_on_table.cc
-	cp $^ $@
+	cp ../ps2/ants_on_table.cc $@
 
 ants_on_table.h : ../ps2/ants_on_table.h
 	cp $^ $@
@@ -132,12 +144,12 @@ ants_on_table.h : ../ps2/ants_on_table.h
 profile.mine.txt: ants
 	rm -f gmon.out
 	./ants > mine.out
-	gprof --line ./ants > $@
+	$(GPROF) ./ants > $@
 
 profile.orig.txt: origants
 	rm -f gmon.out
 	./origants > orig.out
-	gprof --line ./origants > $@
+	$(GPROF) ./origants > $@
 
 # read in dependency files:
 -include $(wildcard *.d)

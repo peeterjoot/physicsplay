@@ -1,25 +1,8 @@
 #include <cmath>
 #include <iostream>
-#include "ticktock.h"
+#include "optticktock.h"
 
-//#define USE_TICK_TOCK
-/** easy way to turn off tick tocks when profiling */
-class ProfTickTock 
-#if defined USE_TICK_TOCK
-   : private TickTock
-#endif
-{
-public:
-#if defined USE_TICK_TOCK
-   using TickTock::tick ;
-   using TickTock::silent_tock ;
-#else
-   void tick() {}              
-   double silent_tock() const { return 0.0 ; }
-#endif
-} ;
-
-int main()
+void compute()
 {
     // ants walk on a table
     float number_of_ants[356][356];
@@ -102,10 +85,17 @@ timer.tick();
 s_secondtot += timer.silent_tock() ;
     }
 
+#if defined USE_TICK_TOCK
 std::cout << "totants time: \t" << s_totants << std::endl ;
 std::cout << "init time: \t" << s_init << std::endl ;
 std::cout << "core time: \t" << s_core << std::endl ;
 std::cout << "totants2 time: \t" << s_secondtot << std::endl ;
+#endif
+}             
+
+int main()
+{
+    compute() ;
 
     return 0;
-}             
+}
