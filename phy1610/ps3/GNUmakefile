@@ -80,11 +80,9 @@ CLEANTARGETS += $(ALL_OBJECTS)
 CLEANTARGETS += $(subst .o,.d,$(ALL_OBJECTS))
 
 TARFILES += ants.cc
-TARFILES += ticktock.cc
-TARFILES += ants.out.default
-TARFILES += ants.out
 TARFILES += ants_on_table.cc
 TARFILES += ants_on_table.h
+TARFILES += optticktock.h
 TARFILES += git.log
 TARFILES += GNUmakefile
 TARFILES += runreport.txt
