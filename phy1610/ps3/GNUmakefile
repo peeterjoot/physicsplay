@@ -1,18 +1,17 @@
 OSNAME := $(shell uname -o)
 
-#CXXFLAGS += -DUSE_TICK_TOCK
-
 # generate dependency files with each compilation:
 CXXFLAGS += -MMD
 
-#CXXFLAGS += -I../inc
+CXXFLAGS += -I../inc
 CXXFLAGS += -I../../rarray
 
 TICKTOCK := $(HOME)/ticktock
 CXXFLAGS += -I$(TICKTOCK)
 
 PRODUCTION := 1
-PROFILED := 1
+#PROFILED := 1
+#USETICKTOCK := 1
 ifdef PRODUCTION
    CXXFLAGS += -DNDEBUG
    CXXFLAGS += -O2
@@ -22,6 +21,9 @@ endif
 ifdef PROFILED
    CXXFLAGS += -pg -g
    LDFLAGS += -pg -g
+endif
+ifdef USETICKTOCK
+   CXXFLAGS += -DUSE_TICK_TOCK
 endif
 
 CXXFLAGS += -Wall -Werror
@@ -82,7 +84,8 @@ CLEANTARGETS += $(subst .o,.d,$(ALL_OBJECTS))
 TARFILES += ants.cc
 TARFILES += ants_on_table.cc
 TARFILES += ants_on_table.h
-TARFILES += optticktock.h
+# FIXME: want in tarfile but not with a relative path:
+#TARFILES += ../inc/optticktock.h
 TARFILES += git.log
 TARFILES += GNUmakefile
 TARFILES += runreport.txt

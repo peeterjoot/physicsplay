@@ -17,6 +17,23 @@ class ants_on_table
    rarray<float, 2>     m_number_of_ants ;   ///< number of ants at each grid location after each timestep.
    rarray<float, 2>     m_velocity_of_ants ; ///< velocity of each ant at specified grid point.
 
+   struct timerData
+   {
+      double m_init ;
+      double m_core ;
+      double m_update ;
+      double m_totants ;
+
+      timerData() :
+         m_init{ 0.0 },
+         m_core{ 0.0 },
+         m_update{ 0.0 },
+         m_totants{ 0.0 }
+      {
+      }
+   } ;
+
+   mutable timerData    m_timerData ;
 public:
 
    /**
@@ -26,6 +43,11 @@ public:
          Total number of grid intervals in each direction.
     */
    ants_on_table( const size_t table_grid_size ) ;
+   
+   /**
+      (implicit) deallocation of member data, and if tick-tocks are enabled, print out of the timer-data.
+    */
+   ~ants_on_table( ) ;
 
    /**
       \retval The grid size that the simulation was initialized with.

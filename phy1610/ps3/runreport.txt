@@ -1,39 +1,71 @@
-#(cd ; git clone https://github.com/vanzonr/ticktock.git )
+1. Profile the original code ants.cc and your modular implementation (done in HW#2). For doing so, please use the following methods:
 
-#make profile.mine.txt 
-#make profile.orig.txt 
-(time ./origants) 2>&1 | tail -3 | tee time.orig.out
-(time ./ants) 2>&1 | tail -3 | tee time.mine.out
+  ----------------------------------------------------------------------------------------------------- 
+  a) the time command,
+
+  Commands:
+
+    (time ./origants) 2>&1 | tail -3 | tee time.orig.out
+    (time ./ants) 2>&1 | tail -3 | tee time.mine.out
+
+  Results:
+
+      # mine (mine is probably a bit faster since there's a double counting of totants in the original)
+      real	0m0.716s
+      user	0m0.696s
+      sys	0m0.000s
+
+      # orig
+      real	0m0.726s
+      user	0m0.692s
+      sys	0m0.000s
+
+  ----------------------------------------------------------------------------------------------------- 
+  b) Instrumenting both the original and modularized version of the code (in the places you consider appropriate) with tick-tock calls. 
+
+   # monolithic code:
+
+      $ USETICKTOCK=1 make origants
+      g++ -DUSE_TICK_TOCK -MMD -I../inc -I../../rarray -I/home/peeterj/ticktock -DNDEBUG -O2 -Wall -Werror -std=c++11   -c -o origants.o origants.cc
+      cp /home/peeterj/ticktock/ticktock.cc ticktock.cc
+      g++ -DUSE_TICK_TOCK -MMD -I../inc -I../../rarray -I/home/peeterj/ticktock -DNDEBUG -O2 -Wall -Werror -std=c++11   -c -o ticktock.o ticktock.cc
+      g++  -o origants origants.o  ticktock.o  
+
+      $ ./origants | tail -4
+      totants time: 	0.0044603
+      init time:  	0.00213101
+      core time:  	0.285268
+      update time: 	0.00305058
 
 
-# mine (mine is probably a bit faster since there's a double counting of totants in the original)
-real	0m0.716s
-user	0m0.696s
-sys	0m0.000s
+   # modular code:
 
-# orig
-real	0m0.726s
-user	0m0.692s
-sys	0m0.000s
+      $ USETICKTOCK=1 make ants
+      g++ -DUSE_TICK_TOCK -MMD -I../inc -I../../rarray -I/home/peeterj/ticktock -DNDEBUG -O2 -Wall -Werror -std=c++11   -c -o ants.o ants.cc
+      g++ -DUSE_TICK_TOCK -MMD -I../inc -I../../rarray -I/home/peeterj/ticktock -DNDEBUG -O2 -Wall -Werror -std=c++11   -c -o ticktock.o ticktock.cc
+      g++ -DUSE_TICK_TOCK -MMD -I../inc -I../../rarray -I/home/peeterj/ticktock -DNDEBUG -O2 -Wall -Werror -std=c++11   -c -o ants_on_table.o ants_on_table.cc
+      g++  -o ants ants.o ticktock.o ants_on_table.o  
 
-$ make origants
-g++ -MMD -I../../rarray -I/home/peeterj/ticktock -DNDEBUG -O2 -pg -g -Wall -Werror -std=c++11 -c -o origants.o origants.cc
-cp /home/peeterj/ticktock/ticktock.cc ticktock.cc
-g++ -MMD -I../../rarray -I/home/peeterj/ticktock -DNDEBUG -O2 -pg -g -Wall -Werror -std=c++11 -c -o ticktock.o ticktock.cc
-g++ -o origants origants.o ticktock.o -pg -g
+      $ ./ants | tail -4
 
+      totants time:   0.00463142
+      init time:      0.00416679
+      core time:      0.307519
+      update time:    0.00398114
+
+  It appears that the rarray implementation may impose a 25%-100% increase in time in the fill and array-copy portions of the code, but 
+  not really much additional cost in the core compute loop.  As guessed that is the most costly part of the timestep logic.
+
+  ----------------------------------------------------------------------------------------------------- 
+  c) and gprof (the compilation commands for gprof should also go into the Makefile).
+
+   
 $ make profile.orig.txt
 rm -f gmon.out
 ./origants > orig.out
 gprof --line --no-graph ./origants > profile.orig.txt
 
 
-
-$ make ants
-g++ -MMD -I../../rarray -I/home/peeterj/ticktock -DNDEBUG -O2 -pg -g -Wall -Werror -std=c++11 -c -o ants.o ants.cc
-g++ -MMD -I../../rarray -I/home/peeterj/ticktock -DNDEBUG -O2 -pg -g -Wall -Werror -std=c++11 -c -o ticktock.o ticktock.cc
-g++ -MMD -I../../rarray -I/home/peeterj/ticktock -DNDEBUG -O2 -pg -g -Wall -Werror -std=c++11 -c -o ants_on_table.o ants_on_table.cc
-g++ -o ants ants.o ticktock.o ants_on_table.o -pg -g
 
 $ make profile.mine.txt
 rm -f gmon.out

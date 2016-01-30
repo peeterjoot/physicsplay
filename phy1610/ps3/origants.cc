@@ -34,12 +34,12 @@ void compute()
         }
     }
 
-    ProfTickTock timer ;
+    TickTockOrNoOp timer ;
 
     double s_totants { 0 } ;
     double s_init { 0.0 } ;
     double s_core { 0.0 } ;
-    double s_secondtot { 0.0 } ;
+    double s_update { 0.0 } ;
 
     // run simulation
     for (int t = 0; t < 40; t++) {
@@ -82,14 +82,14 @@ timer.tick();
                 totants += number_of_ants[i][j];
             }
         }
-s_secondtot += timer.silent_tock() ;
+s_update += timer.silent_tock() ;
     }
 
 #if defined USE_TICK_TOCK
 std::cout << "totants time: \t" << s_totants << std::endl ;
 std::cout << "init time: \t" << s_init << std::endl ;
 std::cout << "core time: \t" << s_core << std::endl ;
-std::cout << "totants2 time: \t" << s_secondtot << std::endl ;
+std::cout << "update time: \t" << s_update << std::endl ;
 #endif
 }             
 

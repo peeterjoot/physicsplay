@@ -10,7 +10,7 @@
 /**
    tick tock code or no-op, depending on whether USE_TICK_TOCK is defined.
  */
-class ProfTickTock 
+class TickTockOrNoOp 
 #if defined USE_TICK_TOCK
    : private TickTock
 #endif

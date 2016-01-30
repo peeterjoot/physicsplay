@@ -3,6 +3,7 @@
  */
 
 #include "ants_on_table.h"
+#include "optticktock.h"
 #include <cmath>
 #include <iostream>
 #include <cassert>
@@ -52,10 +53,23 @@ ants_on_table::ants_on_table( const size_t table_grid_size ) :
    assert( table_grid_size ) ;
 }
 
+ants_on_table::~ants_on_table( )
+{
+   #if defined USE_TICK_TOCK
+      std::cout << "totants time: \t" << m_timerData.m_totants << std::endl ;
+      std::cout << "init time: \t"    << m_timerData.m_init    << std::endl ;
+      std::cout << "core time: \t"    << m_timerData.m_core    << std::endl ;
+      std::cout << "update time: \t"  << m_timerData.m_update  << std::endl ;
+   #endif
+}
+
 float ants_on_table::total_number_of_ants() const
 {
    float totants = 0.0 ;
 
+   TickTockOrNoOp timer ; 
+
+   timer.tick() ;
    for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
    {
       for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
@@ -63,6 +77,8 @@ float ants_on_table::total_number_of_ants() const
          totants += m_number_of_ants[i][j] ;
       }
    }
+
+   m_timerData.m_totants += timer.silent_tock() ;
 
    return totants ;
 }
@@ -73,8 +89,13 @@ void ants_on_table::timestep( iterator & iter )
    constexpr double NOT_WALKING_ANTS_FRACTION { 0.8 } ;
    constexpr double FALLEN_ANTS_FRACTION { 0.2 } ;
 
-   iter.m_new_number_of_ants.fill( 0.0 ) ;
+   TickTockOrNoOp timer ; 
 
+   timer.tick() ;
+   iter.m_new_number_of_ants.fill( 0.0 ) ;
+   m_timerData.m_init += timer.silent_tock() ;
+
+   timer.tick() ;
    for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
    {
       for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
@@ -94,7 +115,9 @@ void ants_on_table::timestep( iterator & iter )
          }
       }
    }
+   m_timerData.m_core += timer.silent_tock() ;
 
+   timer.tick() ;
    // removed the totants calculation (it was done at the top of the loop, but not used in
    // the timestep calculation itself).
    //
@@ -107,6 +130,7 @@ void ants_on_table::timestep( iterator & iter )
          m_number_of_ants[i][j] = iter.m_new_number_of_ants[i][j] ;
       }
    }
+   m_timerData.m_update += timer.silent_tock() ;
 }
 
 ants_on_table::iterator::iterator( ants_on_table * p_ants )

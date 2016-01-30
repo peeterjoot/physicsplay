@@ -6,7 +6,7 @@ CXXFLAGS += -D_GLIBCXX_USE_C99
 # generate dependency files with each compilation:
 CXXFLAGS += -MMD
 
-#CXXFLAGS += -I../inc
+CXXFLAGS += -I../inc
 CXXFLAGS += -I../../rarray
 #CXXFLAGS += -I$(HOME)/local/rarray/include
 
@@ -34,7 +34,7 @@ else
    TEST_LDLIBS += -lboost_unit_test_framework
 endif
 
-TARGETS += antsTest.diff
+#TARGETS += antsTest.diff
 TARGETS += ants
 TARGETS += ants.out
 ANTS_SOURCES += ants.cc
