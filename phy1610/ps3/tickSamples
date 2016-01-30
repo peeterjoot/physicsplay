@@ -1,0 +1,104 @@
+#!/usr/bin/perl
+
+#$ apt-cache search perl Statistics::Basic
+#$ sudo apt-get install libstatistics-basic-perl
+#
+use Statistics::Basic qw(:all);
+use strict ;
+use warnings ;
+
+my %totants = () ;
+my %init = () ;
+my %core = () ;
+my %update = () ;
+my $N = 10 ;
+
+setup( 'ants' ) ;
+setup( 'origants' ) ;
+
+for ( my $i = 0 ; $i < $N ; $i++ )
+{
+   readTimes( 'ants' ) ;
+   readTimes( 'origants' ) ;
+}
+
+printResults() ;
+
+exit 0 ;
+
+sub printResults
+{
+   printf( "%7s\t%8s\t%8s\t%8s\t%8s\t%8s\n", 'what', 'orig avg', 'orig dev', 'my avg', 'my dev', 'my/orig' ) ;
+
+   printOneResult( "totants", $totants{'ants'}, $totants{'origants'} ) ;
+   printOneResult( "init", $init{'ants'}, $init{'origants'} ) ;
+   printOneResult( "core", $core{'ants'}, $core{'origants'} ) ;
+   printOneResult( "update", $update{'ants'}, $update{'origants'} ) ;
+}
+
+sub printOneResult
+{
+   my ( $what, $mine, $orig ) = @_ ;
+
+   my $vec  = vector( $mine );
+   my $mymean = mean( $vec );
+   my $mystddev  = stddev( $vec ); 
+
+   $vec  = vector( $orig );
+   my $origmean = mean( $vec );
+   my $origstddev  = stddev( $vec ); 
+
+   printf( "%7s\t%0.6f\t%0.6f\t%0.6f\t%0.6f\t%0.6f\n", $what, $origmean, $origstddev, $mymean, $mystddev, $mymean/$origmean ) ;
+}
+
+sub setup
+{
+   my ( $what ) = @_ ;
+
+   $totants{$what} = [ ] ;
+   $init{$what} = [ ] ;
+   $core{$what} = [ ] ;
+   $update{$what} = [ ] ;
+}
+
+sub readTimes
+{
+   my ( $what ) = @_ ;
+
+   # collect up info from one of:
+   #./ants | tail -4 
+   #./origants | tail -4 
+
+   open( my $fh, "./$what | tail -4 |" ) or die ;
+
+   while ( <$fh> )
+   {
+      chomp ;
+
+      my $a ;
+
+      if ( s/^totants time:\s*// )
+      {
+         $a = $totants{$what} ;
+      }
+
+      if ( s/^core time:\s*// )
+      {
+         $a = $core{$what} ;
+      }
+
+      if ( s/^update time:\s*// )
+      {
+         $a = $update{$what} ;
+      }
+
+      if ( s/^init time:\s*// )
+      {
+         $a = $init{$what} ;
+      }
+
+      push( @{$a}, $_ ) ;
+   }
+
+   close( $fh ) ;
+}

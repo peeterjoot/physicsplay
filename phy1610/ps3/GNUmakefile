@@ -1,5 +1,3 @@
-OSNAME := $(shell uname -o)
-
 # generate dependency files with each compilation:
 CXXFLAGS += -MMD
 
@@ -32,6 +30,7 @@ THISDIR := phy1610/ps3
 
 TARGETS += .gitignore
 
+OSNAME := $(shell uname -o)
 ifeq ("$(OSNAME)","Cygwin")
    CXXFLAGS += -D_GLIBCXX_USE_C99
 
@@ -46,15 +45,15 @@ endif
 
 #TARGETS += antsTest.diff
 TARGETS += ticktock.cc
-TARGETS += ants_on_table.h
-TARGETS += ants.cc
-TARGETS += ants_on_table.cc
+#TARGETS += ants_on_table.h
+#TARGETS += ants.cc
+#TARGETS += ants_on_table.cc
 TARGETS += ants
 TARGETS += origants
 #TARGETS += ants.out
-ANTS_SOURCES += ants.cc
+ANTS_SOURCES += ../ps2/ants.cc
 ANTS_SOURCES += ticktock.cc
-ANTS_SOURCES += ants_on_table.cc
+ANTS_SOURCES += ../ps2/ants_on_table.cc
 ANTS_SOURCES += $(COMMON_SOURCES)
 ANTS_OBJECTS := $(subst .cc,.o,$(ANTS_SOURCES))
 
@@ -81,9 +80,10 @@ CLEANTARGETS += $(ALL_OBJECTS)
 # clean dependency files if any
 CLEANTARGETS += $(subst .o,.d,$(ALL_OBJECTS))
 
-TARFILES += ants.cc
-TARFILES += ants_on_table.cc
-TARFILES += ants_on_table.h
+TARFILES += ../ps2/ants.cc
+TARFILES += tickSamples
+TARFILES += ../ps2/ants_on_table.cc
+TARFILES += ../ps2/ants_on_table.h
 # FIXME: want in tarfile but not with a relative path:
 #TARFILES += ../inc/optticktock.h
 TARFILES += git.log
@@ -96,15 +96,15 @@ GPROF := gprof --line --no-graph --brief
 
 all : $(TARGETS)
 
-ants_on_table.cc : ants_on_table.h
-
-ants.cc : ants_on_table.h
-
-antsTest.diff: ants.out
-	diff -up ../ps2/ants.out.default ants.out > $@
-
-ants.out: ants
-	./ants > $@
+#ants_on_table.cc : ants_on_table.h
+#
+#ants.cc : ants_on_table.h
+#
+#antsTest.diff: ants.out
+#	diff -up ../ps2/ants.out.default ants.out > $@
+#
+#ants.out: ants
+#	./ants > $@
 
 ants : $(ANTS_OBJECTS)
 	$(CXX) $(LDFLAGS) -o $@ $(ANTS_OBJECTS) $(ANTS_LDLIBS)
@@ -128,8 +128,8 @@ ps3.tar : clean $(TARFILES)
 clean::
 	rm -rf $(CLEANTARGETS)
 
-ants.cc : ../ps2/ants.cc
-	cp ../ps2/ants.cc $@
+#ants.cc : ../ps2/ants.cc
+#	cp ../ps2/ants.cc $@
 
 ticktock.cc : $(TICKTOCK)/ticktock.cc
 	cp $^ $@
@@ -137,11 +137,11 @@ ticktock.cc : $(TICKTOCK)/ticktock.cc
 $(TICKTOCK) : 
 	(cd ; git clone https://github.com/vanzonr/ticktock.git)
 
-ants_on_table.cc : ../ps2/ants_on_table.cc
-	cp ../ps2/ants_on_table.cc $@
+#ants_on_table.cc : ../ps2/ants_on_table.cc
+#	cp ../ps2/ants_on_table.cc $@
 
-ants_on_table.h : ../ps2/ants_on_table.h
-	cp $^ $@
+#ants_on_table.h : ../ps2/ants_on_table.h
+#	cp $^ $@
 
 profile.mine.txt: ants
 	rm -f gmon.out

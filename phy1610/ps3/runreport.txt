@@ -20,6 +20,8 @@
       user	0m0.692s
       sys	0m0.000s
 
+   Not much variation was observed between back to back measurements using time.
+
   ----------------------------------------------------------------------------------------------------- 
   b) Instrumenting both the original and modularized version of the code (in the places you consider appropriate) with tick-tock calls. 
 
@@ -53,8 +55,20 @@
       core time:      0.307519
       update time:    0.00398114
 
-  It appears that the rarray implementation may impose a 25%-100% increase in time in the fill and array-copy portions of the code, but 
-  not really much additional cost in the core compute loop.  As guessed that is the most costly part of the timestep logic.
+  Measuring a few times (10), we get:
+
+      $ ./tickSamples
+         what orig avg        orig dev          my avg          my dev         my/orig
+      totants 0.004504        0.000072        0.004461        0.000066        0.990361
+         init 0.002013        0.000018        0.003207        0.000075        1.593369
+         core 0.288641        0.002347        0.297983        0.002639        1.032364
+       update 0.003281        0.000094        0.003565        0.000222        1.086505
+
+   Observe that the times for most of the parts of the code are all pretty comparable,
+   with the exception of the fill operation, which appears to be much more expensive
+   with the rarray implementation compared to the raw C++ array.  Despite that, the
+   core compute loop takes the most time in either the original or the modularized
+   implementation.
 
   ----------------------------------------------------------------------------------------------------- 
   c) and gprof (the compilation commands for gprof should also go into the Makefile).
@@ -64,8 +78,6 @@ $ make profile.orig.txt
 rm -f gmon.out
 ./origants > orig.out
 gprof --line --no-graph ./origants > profile.orig.txt
-
-
 
 $ make profile.mine.txt
 rm -f gmon.out
