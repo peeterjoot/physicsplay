@@ -98,14 +98,14 @@ void ants_on_table::timestep( iterator & iter )
       for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
       {
          float v = m_velocity_of_ants( i, j ) ;
-         //float n = m_number_of_ants( i, j ) ;
+         float n = m_number_of_ants( i, j ) ;
 
          int di = RADIUS_OF_POSITION_ADJUSTMENT * sin( v ) ;
          int dj = RADIUS_OF_POSITION_ADJUSTMENT * cos( v ) ;
          int i2 = (int)i + di ;
          int j2 = (int)j + dj ;
 
-         float fallen = FALLEN_ANTS_FRACTION * m_number_of_ants( i, j ) ;
+         float fallen = FALLEN_ANTS_FRACTION * n ;
 
          // some ants do not walk
          iter.m_new_number_of_ants.assign( i, j, WALKING_ANTS_PER_FALLEN * fallen ) ;
