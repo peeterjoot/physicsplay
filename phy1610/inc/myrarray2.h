@@ -7,6 +7,10 @@
 #include <algorithm>
 #include <numeric>
 
+#if defined MYRARRAY_USING_RARRAY
+   #include "rarray"
+#endif
+
 /**
    A simple 2x2 dynamically allocated array construct.
  */
@@ -14,7 +18,9 @@ class myrarray2
 {
    using valueType = float ;
 
-#if defined MYRARRAY2_USE_STD_VECTOR
+#if defined MYRARRAY_USING_RARRAY
+   rarray<valueType, 2>    m_storage ;
+#elif defined MYRARRAY2_USE_STD_VECTOR
    std::vector<valueType>  m_storage ;
 #else
    valueType *             m_storage ;
@@ -22,7 +28,7 @@ class myrarray2
    size_t                  m_sz ;
 
 public:
-#if defined MYRARRAY2_USE_STD_VECTOR
+#if defined MYRARRAY2_USE_STD_VECTOR || defined MYRARRAY_USING_RARRAY
    inline myrarray2( ) : m_storage{}, m_sz{0}
 #else
    inline myrarray2( ) : m_storage{nullptr}, m_sz{0}
@@ -30,7 +36,9 @@ public:
    {
    }
 
-#if defined MYRARRAY2_USE_STD_VECTOR
+#if defined MYRARRAY_USING_RARRAY
+   inline myrarray2( const size_t sz ) : m_storage( sz, sz ), m_sz{sz}
+#elif defined MYRARRAY2_USE_STD_VECTOR
    inline myrarray2( const size_t sz ) : m_storage( sz * sz ), m_sz{sz}
 #else
    inline myrarray2( const size_t sz ) : m_storage{ new float[sz * sz] }, m_sz{sz}
@@ -40,7 +48,9 @@ public:
 
    inline void fill( const valueType v )
    {
-#if defined MYRARRAY2_USE_STD_VECTOR
+#if defined MYRARRAY_USING_RARRAY
+      m_storage.fill( v ) ;
+#elif defined MYRARRAY2_USE_STD_VECTOR
       std::fill( m_storage.begin(), m_storage.end(), v ) ;
 #else
       std::fill( &m_storage[0], &m_storage[m_sz * m_sz], v ) ;
@@ -49,24 +59,36 @@ public:
 
    inline void swap( myrarray2 & other )
    {
-//#if defined MYRARRAY2_USE_STD_VECTOR
-//      m_storage.swap( other ) ;
-//#else
       std::swap( m_storage, other.m_storage ) ; // should also work for vector backed storage.
-//#endif
       std::swap( m_sz, other.m_sz ) ;
    }
 
    inline valueType sum( ) const
    {
-#if defined MYRARRAY2_USE_STD_VECTOR
-      return std::accumulate( m_storage.begin(), m_storage.end(), 0.0 ) ;
+      valueType total ;
+
+#if defined MYRARRAY_USING_RARRAY
+      total = 0.0 ;
+
+      for ( size_t i = 0 ; i < m_sz ; i++ )
+      {
+         for ( size_t j = 0 ; j < m_sz ; j++ )
+         {
+            total += m_storage[i][j] ;
+         }
+      }
+#elif defined MYRARRAY2_USE_STD_VECTOR
+      total = std::accumulate( m_storage.begin(), m_storage.end(), 0.0 ) ;
 #else
-      return std::accumulate( &m_storage[0], &m_storage[m_sz * m_sz], 0.0 ) ;
+      total = std::accumulate( &m_storage[0], &m_storage[m_sz * m_sz], 0.0 ) ;
 #endif
+
+      return total ;
    }
 
-#if defined MYRARRAY2_USE_STD_VECTOR
+#if defined MYRARRAY_USING_RARRAY
+   inline myrarray2( const size_t sz, const valueType v ) : m_storage( sz, sz ), m_sz{sz}
+#elif defined MYRARRAY2_USE_STD_VECTOR
    inline myrarray2( const size_t sz, const valueType v ) : m_storage( sz * sz, v ), m_sz{sz}
 #else
    inline myrarray2( const size_t sz, const valueType v ) : m_storage{ new float[sz * sz] }, m_sz{sz}
@@ -79,21 +101,37 @@ public:
 
    inline valueType operator()( const size_t r, const size_t c ) const
    {
+#if defined MYRARRAY_USING_RARRAY
+      return m_storage[ r ][ c ] ;
+#else
       return m_storage[ r * m_sz + c ] ;
+#endif
    }
 
    inline void assign( const size_t r, const size_t c, const valueType v )
    {
+#if defined MYRARRAY_USING_RARRAY
+      m_storage[ r ][ c ] = v ;
+#else
       m_storage[ r * m_sz + c ] = v ;
+#endif
    }
 
    inline void add( const size_t r, const size_t c, const valueType v )
    {
+#if defined MYRARRAY_USING_RARRAY
+      m_storage[ r ][ c ] += v ;
+#else
       m_storage[ r * m_sz + c ] += v ;
+#endif
    }
 
    inline myrarray2 & operator = ( const myrarray2 & b )
    {
+#if defined MYRARRAY_USING_RARRAY
+      m_storage = b.m_storage ;
+      m_sz = b.m_sz ;
+#else
       if ( m_sz == b.m_sz )
       {
 #if defined MYRARRAY2_USE_STD_VECTOR
@@ -118,6 +156,7 @@ public:
 #endif
          m_sz = b.m_sz ;
       }
+#endif
 
       return *this ;
    }

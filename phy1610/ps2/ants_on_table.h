@@ -4,13 +4,7 @@
 #if !defined phy1610_ps2_ants_on_table_h_included
 #define phy1610_ps2_ants_on_table_h_included
 
-#if defined USE_MYRARRAY2
-   #include "myrarray2.h"
-#else
-   #include "rarray"
-
-   using myrarray2 = rarray<float, 2> ;
-#endif
+#include "myrarray2.h"
 
 /**
    Code that simulates ants walking on a table.

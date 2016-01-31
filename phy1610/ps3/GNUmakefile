@@ -30,8 +30,9 @@ ifdef USE_SUBRARRAY
 endif
 # make this the default:
 #ifdef USE_MYARRAY2
-   CXXFLAGS += -DUSE_MYRARRAY2
+   #CXXFLAGS += -DUSE_MYRARRAY2
    #CXXFLAGS += -DMYRARRAY2_USE_STD_VECTOR
+   #CXXFLAGS += -DMYRARRAY_USING_RARRAY
 #endif
 
 CXXFLAGS += -Wall -Werror
@@ -106,15 +107,11 @@ GPROF := gprof --line --no-graph --brief
 
 all : $(TARGETS)
 
-#ants_on_table.cc : ants_on_table.h
-#
-#ants.cc : ants_on_table.h
-#
-#antsTest.diff: ants.out
-#	diff -up ../ps2/ants.out.default ants.out > $@
-#
-#ants.out: ants
-#	./ants > $@
+antsTest.diff: ants.out
+	diff -up ../ps2/ants.out.default ants.out > $@
+
+ants.out: ants
+	./ants > $@
 
 ants : $(ANTS_OBJECTS)
 	$(CXX) $(LDFLAGS) -o $@ $(ANTS_OBJECTS) $(ANTS_LDLIBS)

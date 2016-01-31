@@ -17,7 +17,6 @@ ifdef PRODUCTION
 else
    CXXFLAGS += -g
 endif
-CXXFLAGS += -DUSE_MYRARRAY2
 
 CXXFLAGS += -Wall -Werror
 CXXFLAGS += -std=c++11
