@@ -67,20 +67,25 @@ public:
    {
       valueType total ;
 
-#if defined MYRARRAY_USING_RARRAY
       total = 0.0 ;
 
+#if defined MYRARRAY_USING_RARRAY
       for ( size_t i = 0 ; i < m_sz ; i++ )
       {
          for ( size_t j = 0 ; j < m_sz ; j++ )
          {
+#if defined MYRARRAY_USING_RARRAY
             total += m_storage[i][j] ;
+#else
+            total += m_storage[ i * m_sz + j ] ;
+#endif
          }
       }
+
 #elif defined MYRARRAY2_USE_STD_VECTOR
-      total = std::accumulate( m_storage.begin(), m_storage.end(), 0.0 ) ;
+      total = std::accumulate( m_storage.begin(), m_storage.end(), 0.0f ) ;
 #else
-      total = std::accumulate( &m_storage[0], &m_storage[m_sz * m_sz], 0.0 ) ;
+      total = std::accumulate( &m_storage[0], &m_storage[m_sz * m_sz], 0.0f ) ;
 #endif
 
       return total ;
