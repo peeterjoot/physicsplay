@@ -4,7 +4,13 @@
 #if !defined phy1610_ps2_ants_on_table_h_included
 #define phy1610_ps2_ants_on_table_h_included
 
-#include "rarray"
+#if defined USE_MYRARRAY2
+   #include "myrarray2.h"
+#else
+   #include "rarray"
+
+   using myrarray2 = rarray<float, 2> ;
+#endif
 
 /**
    Code that simulates ants walking on a table.
@@ -14,8 +20,8 @@
 class ants_on_table
 {
    size_t               m_table_grid_size ;  ///< table grid size.
-   rarray<float, 2>     m_number_of_ants ;   ///< number of ants at each grid location after each timestep.
-   rarray<float, 2>     m_velocity_of_ants ; ///< velocity of each ant at specified grid point.
+   myrarray2            m_number_of_ants ;   ///< number of ants at each grid location after each timestep.
+   myrarray2            m_velocity_of_ants ; ///< velocity of each ant at specified grid point.
 
    struct timerData
    {
@@ -71,7 +77,7 @@ public:
    {
       ants_on_table *   m_ants_p ;              ///< pointer to the simulation object modified by the iterator.
       int               m_timevalue ;           ///< The timestep value that the iterator is on.
-      rarray<float, 2>  m_new_number_of_ants ;  ///< A temporary array used in each timestep.  Anchored here to avoid reallocation.
+      myrarray2         m_new_number_of_ants ;  ///< A temporary array used in each timestep.  Anchored here to avoid reallocation.
 
       // Allow ants_on_table::initialize() to construct a starting iterator, but nothing else.
       friend class ants_on_table ;

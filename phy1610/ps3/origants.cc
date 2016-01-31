@@ -41,8 +41,12 @@ void compute()
     double s_core { 0.0 } ;
     double s_update { 0.0 } ;
 
+#if !defined NUMBER_OF_TIME_INTERVALS
+   constexpr int NUMBER_OF_TIME_INTERVALS { 40 } ; 
+#endif
+
     // run simulation
-    for (int t = 0; t < 40; t++) {
+    for (int t = 0; t < NUMBER_OF_TIME_INTERVALS; t++) {
 timer.tick() ;
         float totants = 0.0;
         for (int i=0;i<356;i++) {

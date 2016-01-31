@@ -17,6 +17,7 @@ ifdef PRODUCTION
 else
    CXXFLAGS += -g
 endif
+CXXFLAGS += -DUSE_MYRARRAY2
 
 CXXFLAGS += -Wall -Werror
 CXXFLAGS += -std=c++11
@@ -34,7 +35,7 @@ else
    TEST_LDLIBS += -lboost_unit_test_framework
 endif
 
-#TARGETS += antsTest.diff
+TARGETS += antsTest.diff
 TARGETS += ants
 TARGETS += ants.out
 ANTS_SOURCES += ants.cc

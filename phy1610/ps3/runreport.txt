@@ -73,15 +73,330 @@
   ----------------------------------------------------------------------------------------------------- 
   c) and gprof (the compilation commands for gprof should also go into the Makefile).
 
+  For the monolithic code, we have:
    
-$ make profile.orig.txt
-rm -f gmon.out
-./origants > orig.out
-gprof --line --no-graph ./origants > profile.orig.txt
+      $ PROFILED=1 make profile.orig.txt
+      rm -f gmon.out
+      ./origants > orig.out
+      gprof --line --no-graph ./origants > profile.orig.txt
 
-$ make profile.mine.txt
-rm -f gmon.out
-./ants > mine.out
-gprof --line --no-graph ./ants > profile.mine.txt
+           %   cumulative   self              self     total
+          time   seconds   seconds    calls  Ts/call  Ts/call  name
+          40.15      0.02     0.02                             compute() (origants.cc:50 @ 400fa0)
+          40.15      0.04     0.02                             compute() (origants.cc:73 @ 401130)
+          20.08      0.05     0.01                             compute() (origants.cc:70 @ 4010d1)
 
+   These top three profile hits are:
+
+                for (int t = 0; t < 40; t++) {
+                    float totants = 0.0;
+                    for (int i=0;i<356;i++) {
+                        for (int j=0;j<356;j++) {
+            1>>                totants += number_of_ants[i][j];
+                        }
+                    }
+                    std::cout << t<< " " << totants << std::endl;
+                    for (int i=0;i<356;i++) {
+                        for (int j=0;j<356;j++) {
+                            new_number_of_ants[i][j] = 0.0;
+                        }
+                    }
+                    for (int i=0;i<356;i++) {
+                        for (int j=0;j<356;j++) {
+                            int di = 1.9*sin(velocity_of_ants[i][j]);
+                            int dj = 1.9*cos(velocity_of_ants[i][j]);
+                            int i2 = i + di;
+                            int j2 = j + dj;
+                            // some ants do not walk
+            3>>                new_number_of_ants[i][j]+=0.8*number_of_ants[i][j];
+                            // the rest of the ants walk, but some fall of the table
+                            if (i2>=0 and i2<356 and j2>=0 and j2<356) {
+            2>>                    new_number_of_ants[i2][j2]+=0.2*number_of_ants[i][j];
+                            }
+                        }
+                    }
+                    for (int i=0;i<356;i++) {
+                        for (int j=0;j<356;j++) {
+                            number_of_ants[i][j] = new_number_of_ants[i][j];
+                            totants += number_of_ants[i][j];
+                        }
+                    }
+                }
+
+   Curiously, the total ants calculation shows up as significant in the profiling output, but had very little wall clock time associated with it
+   at least according to the tick/tock data.  This suggests that the time spend isn't large enough to get good profile sampling.  Bumping up the
+   iteration count from 40 to 400, I get a much different distribution:
+
+       26.77      0.12     0.12                             compute() (origants.cc:73 @ 401130)
+       14.50      0.19     0.07                             compute() (origants.cc:56 @ 40106f)
+       12.27      0.24     0.06                             compute() (origants.cc:70 @ 4010d1)
+        8.92      0.28     0.04                             compute() (origants.cc:50 @ 400fa0)
+        6.69      0.31     0.03                             compute() (origants.cc:67 @ 4010e6)
+        6.69      0.34     0.03                             compute() (origants.cc:81 @ 4011b8)
+        4.46      0.36     0.02                             compute() (origants.cc:67 @ 4010c9)
+        4.46      0.38     0.02                             compute() (origants.cc:68 @ 4010ea)
+        4.46      0.40     0.02                             compute() (origants.cc:70 @ 401104)
+        4.46      0.42     0.02                             compute() (origants.cc:70 @ 401120)
+        2.23      0.43     0.01                             compute() (origants.cc:58 @ 401060)
+        2.23      0.44     0.01                             compute() (origants.cc:68 @ 401100)
+        1.12      0.45     0.01                             compute() (origants.cc:67 @ 4010bd)
+        1.12      0.45     0.01                             compute() (origants.cc:70 @ 4010c5)
+
+   The top 6 locations from that profiling run are:
+
+             for (int t = 0; t < 400; t++) {
+                 float totants = 0.0;
+                 for (int i=0;i<356;i++) {
+                     for (int j=0;j<356;j++) {
+(9%)     4>>             totants += number_of_ants[i][j];
+                     }
+                 }
+                 std::cout << t<< " " << totants << std::endl;
+(14%)    2>>     for (int i=0;i<356;i++) {
+                     for (int j=0;j<356;j++) {
+                         new_number_of_ants[i][j] = 0.0;
+                     }
+                 }
+                 for (int i=0;i<356;i++) {
+                     for (int j=0;j<356;j++) {
+                         int di = 1.9*sin(velocity_of_ants[i][j]);
+                         int dj = 1.9*cos(velocity_of_ants[i][j]);
+(7%)     5>>             int i2 = i + di;
+                         int j2 = j + dj;
+                         // some ants do not walk
+(12%)    3>>             new_number_of_ants[i][j]+=0.8*number_of_ants[i][j];
+                         // the rest of the ants walk, but some fall of the table
+                         if (i2>=0 and i2<356 and j2>=0 and j2<356) {
+(27%)    1>>                 new_number_of_ants[i2][j2]+=0.2*number_of_ants[i][j];
+                         }
+                     }
+                 }
+                 for (int i=0;i<356;i++) {
+                     for (int j=0;j<356;j++) {
+(7%)     6>>             number_of_ants[i][j] = new_number_of_ants[i][j];
+                         totants += number_of_ants[i][j];
+                     }
+                 }
+             }
+
+
+   How about for the modular code:
+
+      $ PROFILED=1 make profile.mine.txt
+      rm -f gmon.out
+      ./ants > mine.out
+      gprof --line --no-graph ./ants > profile.mine.txt
+
+   In this case, the non-zero profiling hits with the default 40 iterations are:
+
+    40.08      0.02     0.02                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:114 @ 401ce1)
+    20.04      0.03     0.01                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:109 @ 401c84)
+    20.04      0.04     0.01                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:112 @ 401ca0)
+    20.04      0.05     0.01                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:130 @ 401d4f)
+
+   These points in the code are all in the timestep function:
+
+         for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
+         {
+            for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
+            {
+               int di = RADIUS_OF_POSITION_ADJUSTMENT * sin (m_velocity_of_ants[i][j]) ;
+               int dj = RADIUS_OF_POSITION_ADJUSTMENT * cos (m_velocity_of_ants[i][j]) ;
+               int i2 = (int)i + di ;
+               int j2 = (int)j + dj ;
+
+               // some ants do not walk
+      2>>         iter.m_new_number_of_ants[i][j] += NOT_WALKING_ANTS_FRACTION * m_number_of_ants[i][j] ;
+
+               // the rest of the ants walk, but some fall of the table
+      3>>         if (i2 >= 0 and i2 < (int)m_table_grid_size and j2 >= 0 and j2 < (int)m_table_grid_size)
+               {
+      1>>            iter.m_new_number_of_ants[i2][j2] += FALLEN_ANTS_FRACTION * m_number_of_ants[i][j] ;
+               }
+            }
+         }
+
+         // removed the totants calculation (it was done at the top of the loop, but not used in
+         // the timestep calculation itself).
+         //
+         // Note: could use the rarray deep copy here, but is that smart enough to avoid a reallocation
+         // when the sizes are compatible?
+         for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
+         {
+            for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
+            {
+      4>>         m_number_of_ants[i][j] = iter.m_new_number_of_ants[i][j] ;
+            }
+         }
+
+   After bumping up the number of iterations to 400, I'd expect a different distribution, and that is the case:
+
+      Each sample counts as 0.01 seconds.
+        %   cumulative   self              self     total
+       time   seconds   seconds    calls  Ts/call  Ts/call  name
+       14.66      0.06     0.06                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:116 @ 401ce1)
+        9.78      0.10     0.04                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:110 @ 401c84)
+        7.33      0.13     0.03                             ra::rarray<float, 2>::operator[](int) (rarray:1323 @ 401cc0)
+        7.33      0.16     0.03                             ants_on_table::total_number_of_ants() const (ants_on_table.cc:77 @ 401b2a)
+        7.33      0.19     0.03                             ra::subrarray<float, 1>::operator[](int) const (rarray:1370 @ 401cc2)
+        7.33      0.22     0.03                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:116 @ 401cc5)
+        4.89      0.24     0.02                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:99 @ 401bd2)
+        4.89      0.26     0.02                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:105 @ 401c6d)
+        4.89      0.28     0.02                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:110 @ 401c71)
+        4.89      0.30     0.02                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:113 @ 401ca0)
+        4.89      0.32     0.02                             ants_on_table::total_number_of_ants() const (ants_on_table.cc:75 @ 401b23)
+        2.44      0.33     0.01                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:110 @ 401c5c)
+        2.44      0.34     0.01                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:110 @ 401c69)
+        2.44      0.35     0.01                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:106 @ 401c92)
+        2.44      0.36     0.01                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:132 @ 401d4f)
+        2.44      0.37     0.01                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:132 @ 401d57)
+
+   We've got two hits in the rarray [] operators.  For the rest of the >5% sampling points in ants_on_table.cc, we are at:
+
+
+            for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
+            {
+(5%)     >>9   for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
+               {
+(7%)     >>3      totants += m_number_of_ants[i][j] ;
+               }
+            }
+
+            return totants ;
+         }
+
+         void ants_on_table::timestep( iterator & iter )
+         {
+            constexpr double RADIUS_OF_POSITION_ADJUSTMENT { 1.9 } ;
+            constexpr double NOT_WALKING_ANTS_FRACTION { 0.8 } ;
+            constexpr double FALLEN_ANTS_FRACTION { 0.2 } ;
+
+            iter.m_new_number_of_ants.fill( 0.0 ) ;
+
+(7%)     >>5   for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
+            {
+               for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
+               {
+                  int di = RADIUS_OF_POSITION_ADJUSTMENT * sin (m_velocity_of_ants[i][j]) ;
+                  int dj = RADIUS_OF_POSITION_ADJUSTMENT * cos (m_velocity_of_ants[i][j]) ;
+(7%)     >>6      int i2 = (int)i + di ;
+                  int j2 = (int)j + dj ;
+
+                  // some ants do not walk
+                  iter.m_new_number_of_ants[i][j] +=
+(10%,5%)    >>2,7         NOT_WALKING_ANTS_FRACTION * m_number_of_ants[i][j] ;
+
+                  // the rest of the ants walk, but some fall of the table
+         >>8      if (i2 >= 0 and i2 < (int)m_table_grid_size and j2 >= 0 and j2 < (int)m_table_grid_size)
+                  {
+                     iter.m_new_number_of_ants[i2][j2] +=
+(15%,7%)    >>1,4            FALLEN_ANTS_FRACTION * m_number_of_ants[i][j] ;
+                  }
+               }
+            }
+
+   Restructuring a bit to see if some of the rarray references can be avoided (again with 400 iterations):
+
+      Each sample counts as 0.01 seconds.
+        %   cumulative   self              self     total
+       time   seconds   seconds    calls  Ts/call  Ts/call  name
+1>>    32.36      0.16     0.16                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:117 @ 401cdb)
+2>>    14.61      0.23     0.07                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:112 @ 401c5f)
+3>>    11.48      0.28     0.06                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:115 @ 401caa)
+        6.26      0.31     0.03                             ra::rarray<float, 2>::base(float* const*) (rarray:1758 @ 401ba2)
+4>>     5.22      0.34     0.03                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:107 @ 401c9b)
+5>>     4.18      0.36     0.02                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:109 @ 401c74)
+        4.18      0.38     0.02                             ra::subrarray<float, 1>::operator[](int) const (rarray:1370 @ 401c28)
+        3.13      0.39     0.02                             ra::rarray<float, 2>::operator[](int) (rarray:1323 @ 401cc6)
+        3.13      0.41     0.02                             ra::subrarray<float, 1>::operator[](int) const (rarray:1370 @ 401cc2)
+6>>     2.09      0.42     0.01                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:99 @ 401bd2)
+7>>     2.09      0.43     0.01                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:112 @ 401c52)
+8>>     2.09      0.44     0.01                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:106 @ 401c5a)
+9>>     2.09      0.45     0.01                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:112 @ 401c89)
+10>>    2.09      0.46     0.01                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:117 @ 401ccb)
+11>>    2.09      0.47     0.01                             ants_on_table::total_number_of_ants() const (ants_on_table.cc:77 @ 401b2a)
+
+
+                  float ants_on_table::total_number_of_ants() const
+                  {
+                     float totants = 0.0 ;
+                  ...
+                     for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
+                     {
+                        for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
+                        {
+         11>>              totants += m_number_of_ants[i][j] ;
+                        }
+                     }
+
+                  void ants_on_table::timestep( iterator & iter )
+                  {
+                     ...
+         6>>         for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
+                     {
+                        for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
+                        {
+                           double v = m_velocity_of_ants[i][j] ;
+                           int di = RADIUS_OF_POSITION_ADJUSTMENT * sin( v ) ;
+                           int dj = RADIUS_OF_POSITION_ADJUSTMENT * cos( v ) ;
+         8>>               int i2 = (int)i + di ;
+(5%)     4>>               int j2 = (int)j + dj ;
+
+(4%)     5>>               double fallen = FALLEN_ANTS_FRACTION * m_number_of_ants[i][j] ;
+
+                           // some ants do not walk
+(15,2,2)% 2,7,9>>          iter.m_new_number_of_ants[i][j] += WALKING_ANTS_PER_FALLEN * fallen ;
+
+                           // the rest of the ants walk, but some fall of the table
+(11%)    3>>               if (i2 >= 0 and i2 < (int)m_table_grid_size and j2 >= 0 and j2 < (int)m_table_grid_size)
+                           {
+(32,2)%  1,10>>               iter.m_new_number_of_ants[i2][j2] += fallen ;
+                           }
+                        }
+                     }
+            
+   To improve performance I tried explicitly using ra::subrarray<float, 1> types to precompute the first array access in the first portion of the loop, but this did not make much difference:
+
+   Without subrarray:
+      $ ./tickSamples
+         what orig avg        orig dev          my avg          my dev         my/orig
+      totants 0.044129        0.000149        0.044381        0.000312        1.005690
+         init 0.018694        0.000155        0.030416        0.000217        1.627054
+         core 2.834516        0.006800        2.917328        0.018118        1.029216
+       update 0.031004        0.000176        0.031955        0.000208        1.030686
+      $ ./tickSamples
+         what orig avg        orig dev          my avg          my dev         my/orig
+      totants 0.044431        0.000241        0.044292        0.000173        0.996886
+         init 0.018735        0.000257        0.030487        0.000112        1.627236
+         core 2.857861        0.024919        2.938002        0.063145        1.028042
+       update 0.031277        0.000519        0.032074        0.000349        1.025487
+
+   With subrarray:
+      $ ./tickSamples
+         what orig avg        orig dev          my avg          my dev         my/orig
+      totants 0.045202        0.001752        0.045034        0.001412        0.996282
+         init 0.019247        0.001127        0.031167        0.001273        1.619284
+         core 2.945287        0.127582        2.998193        0.118894        1.017963
+       update 0.034084        0.005016        0.035315        0.004244        1.036143
+      $ ./tickSamples
+         what orig avg        orig dev          my avg          my dev         my/orig
+      totants 0.044354        0.000176        0.044516        0.000253        1.003647
+         init 0.018689        0.000108        0.030455        0.000175        1.629523
+         core 2.846350        0.016463        2.977409        0.116107        1.046045
+       update 0.031498        0.000491        0.033372        0.000628        1.059495
+
+   Replacing rarray with a plane 1D vector backed 2D array implementation (myrarray2), removes the regression in the fill codepath.  Now let's see what the profiled output looks like:
+
+   $ USE_MYARRAY2=1 PROFILED=1 make clean profile.mine.txt
+
+       18.79      0.06     0.06                             myrarray2::add(unsigned long, unsigned long, float) (myrarray2.h:49 @ 401a3e)
+       15.66      0.11     0.05                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:119 @ 401937)
+       15.66      0.16     0.05                             ants_on_table::total_number_of_ants() const (ants_on_table.cc:92 @ 4018a8)
+       12.53      0.20     0.04                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:136 @ 4019cf)
+        9.40      0.23     0.03                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:155 @ 401a11)
+        9.40      0.26     0.03                             __gnu_cxx::__enable_if<std::__is_scalar<float>::__value, void>::__type std::__fill_a<float*, float>(float*, float*, float const&) (stl_algobase.h:708 @ 401910)
+        6.26      0.28     0.02                             myrarray2::assign(unsigned long, unsigned long, float) (myrarray2.h:44 @ 4019f7)
+        6.26      0.30     0.02                             myrarray2::assign(unsigned long, unsigned long, float) (myrarray2.h:44 @ 401ab5)
+        3.13      0.31     0.01                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:137 @ 401a03)
+        3.13      0.32     0.01                             myrarray2::operator()(unsigned long, unsigned long) const (myrarray2.h:39 @ 401ab0)
 
