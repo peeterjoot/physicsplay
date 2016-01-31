@@ -28,10 +28,11 @@ endif
 ifdef USE_SUBRARRAY
    CXXFLAGS += -DUSE_SUBRARRAY
 endif
-ifdef USE_MYARRAY2
+# make this the default:
+#ifdef USE_MYARRAY2
    CXXFLAGS += -DUSE_MYRARRAY2
-   CXXFLAGS += -DMYRARRAY2_USE_STD_VECTOR
-endif
+   #CXXFLAGS += -DMYRARRAY2_USE_STD_VECTOR
+#endif
 
 CXXFLAGS += -Wall -Werror
 CXXFLAGS += -std=c++11

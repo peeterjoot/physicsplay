@@ -476,3 +476,16 @@
       totants 0.044450        0.000338        0.044384        0.000267        0.998513
 
    --------------------------------------------------------------------
+
+   I thought it was curious that sine and cosine weren't showing up in the profiling samples.  Looking at the compiled code I see why they aren't there
+   separately:
+
+    618: 48 8d 7d c8             lea    -0x38(%rbp),%rdi
+    61c: f3 43 0f 5a 44 a5 00    cvtss2sd 0x0(%r13,%r12,4),%xmm0
+    623: e8 00 00 00 00          callq  628 <_ZN13ants_on_table8timestepERNS_8iteratorE+0xf8>
+            624: R_X86_64_PC32   sincos-0x4
+                                 ^^^^^^
+
+   The compiler is using a single function call to compute both.
+
+   --------------------------------------------------------------------
