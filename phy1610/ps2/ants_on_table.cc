@@ -80,23 +80,28 @@ float ants_on_table::total_number_of_ants() const
    TickTockOrNoOp timer ; 
 
    timer.tick() ;
+#if defined USE_MYRARRAY2
+   // performance neutral compared to #else, but simpler code.
+   totants = m_number_of_ants.sum() ;
+#else
    for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
    {
-#if defined USE_SUBRARRAY
+      #if defined USE_SUBRARRAY
       auto ai = m_number_of_ants[i] ;
-#endif
+      #endif
 
       for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
       {
-#if defined USE_MYRARRAY2
+      #if defined USE_MYRARRAY2
          totants += m_number_of_ants( i, j ) ;
-#elif defined USE_SUBRARRAY
+      #elif defined USE_SUBRARRAY
          totants += ai[j] ;
-#else
+      #else
          totants += m_number_of_ants[i][j] ;
-#endif
+      #endif
       }
    }
+#endif
 
    m_timerData.m_totants += timer.silent_tock() ;
 
@@ -165,27 +170,33 @@ void ants_on_table::timestep( iterator & iter )
    m_timerData.m_core += timer.silent_tock() ;
 
    timer.tick() ;
-   // removed the totants calculation (it was done at the top of the loop, but not used in
-   // the timestep calculation itself).
-   //
-   // Note: could use the rarray deep copy here, but is that smart enough to avoid a reallocation
-   // when the sizes are compatible?
-   for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
-   {
-#if defined USE_SUBRARRAY
-      auto ni = iter.m_new_number_of_ants[i] ;
-#endif
-      for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
-      {
-#if defined USE_SUBRARRAY
-         m_number_of_ants[i][j] = ni[j] ;
-#elif defined USE_MYRARRAY2
-         m_number_of_ants.assign(i, j, iter.m_new_number_of_ants( i, j ) ) ;
+
+#if defined USE_MYRARRAY2
+      m_number_of_ants.swap( iter.m_new_number_of_ants ) ;
 #else
-         m_number_of_ants[i][j] = iter.m_new_number_of_ants[i][j] ;
-#endif
+      // removed the totants calculation (it was done at the top of the loop, but not used in
+      // the timestep calculation itself).
+      //
+      // Note: could use the rarray deep copy here, but is that smart enough to avoid a reallocation
+      // when the sizes are compatible?
+      for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
+      {
+         #if defined USE_SUBRARRAY
+         auto ni = iter.m_new_number_of_ants[i] ;
+         #endif
+
+         for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
+         {
+         #if defined USE_SUBRARRAY
+            m_number_of_ants[i][j] = ni[j] ;
+         #elif defined USE_MYRARRAY2
+            m_number_of_ants.assign(i, j, iter.m_new_number_of_ants( i, j ) ) ;
+         #else
+            m_number_of_ants[i][j] = iter.m_new_number_of_ants[i][j] ;
+         #endif
+         }
       }
-   }
+#endif
    m_timerData.m_update += timer.silent_tock() ;
 }
 

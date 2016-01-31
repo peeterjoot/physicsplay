@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <numeric>
 
 /**
    A simple 2x2 dynamically allocated array construct.
@@ -39,7 +40,30 @@ public:
 
    inline void fill( const valueType v )
    {
+#if defined MYRARRAY2_USE_STD_VECTOR
+      std::fill( m_storage.begin(), m_storage.end(), v ) ;
+#else
       std::fill( &m_storage[0], &m_storage[m_sz * m_sz], v ) ;
+#endif
+   }
+
+   inline void swap( myrarray2 & other )
+   {
+//#if defined MYRARRAY2_USE_STD_VECTOR
+//      m_storage.swap( other ) ;
+//#else
+      std::swap( m_storage, other.m_storage ) ; // should also work for vector backed storage.
+//#endif
+      std::swap( m_sz, other.m_sz ) ;
+   }
+
+   inline valueType sum( ) const
+   {
+#if defined MYRARRAY2_USE_STD_VECTOR
+      return std::accumulate( m_storage.begin(), m_storage.end(), 0.0 ) ;
+#else
+      return std::accumulate( &m_storage[0], &m_storage[m_sz * m_sz], 0.0 ) ;
+#endif
    }
 
 #if defined MYRARRAY2_USE_STD_VECTOR
@@ -72,7 +96,11 @@ public:
    {
       if ( m_sz == b.m_sz )
       {
+#if defined MYRARRAY2_USE_STD_VECTOR
+         std::copy( b.m_storage.begin(), b.m_storage.end(), m_storage.begin() ) ;
+#else
          std::copy( &b.m_storage[0], &b.m_storage[m_sz * m_sz], &m_storage[0] ) ;
+#endif
       }
       else
       {

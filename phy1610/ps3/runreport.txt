@@ -452,4 +452,27 @@
                   }
                }
             }
+   
+   --------------------------------------------------------------------
 
+   An obvious small optimization that we can make is to replace the "update" portion of the timestep code (copying the new_number_of_ants into the number of ants array element by element), with a swap of the array pointers.  That reduces most of the tick/tock time for that part of the code:
+
+      $ USETICKTOCK=1 make clean ants ; mkdir t ; cp ants t/origants
+      $ USE_MYARRAY2=1 USETICKTOCK=1 make clean ants ; cp t/origants . ; ./tickSamples
+
+         what orig avg        orig dev          my avg          my dev         my/orig
+       update 0.033553        0.000860        0.000015        0.000003        0.000440 
+              ^^^^^^^^                        ^^^^^^^^                        ^^^^^^^^
+
+   --------------------------------------------------------------------
+
+   Another optimization attempt: 
+
+   flatten the totants calculation, not using 2D indexing (thought that the compiler might do more loop unrolling).  That doesn't appear to be
+   the case, at least at -O2, with results slightly better and worse in two back to back sets of measurements:
+
+         what orig avg        orig dev          my avg          my dev         my/orig
+      totants 0.044348        0.000224        0.044383        0.000247        1.000770
+      totants 0.044450        0.000338        0.044384        0.000267        0.998513
+
+   --------------------------------------------------------------------
