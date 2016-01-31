@@ -400,3 +400,56 @@
         3.13      0.31     0.01                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:137 @ 401a03)
         3.13      0.32     0.01                             myrarray2::operator()(unsigned long, unsigned long) const (myrarray2.h:39 @ 401ab0)
 
+   with float[] as the backing store instead of std::vector<float> we can concentrate on the timestep code itself
+
+    23.59      0.08     0.08                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:119 @ 4017c7)
+    20.64      0.15     0.07                             myrarray2::add(unsigned long, unsigned long, float) (myrarray2.h:68 @ 4018b9)
+     8.85      0.18     0.03                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:142 @ 401883)
+     8.85      0.21     0.03                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:136 @ 40185f)
+     7.37      0.24     0.03                             myrarray2::assign(unsigned long, unsigned long, float) (myrarray2.h:63 @ 401887)
+     5.90      0.26     0.02                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:142 @ 40186d)
+     5.90      0.28     0.02                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:137 @ 401893)
+     5.90      0.30     0.02                             __gnu_cxx::__enable_if<std::__is_scalar<float>::__value, void>::__type std::__fill_a<float*, float>(float*, float*, float const&) (stl_algobase.h:708 @ 4017a0)
+     2.95      0.31     0.01                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:155 @ 4018a1)
+     2.95      0.32     0.01                             myrarray2::assign(unsigned long, unsigned long, float) (myrarray2.h:63 @ 401945)
+     2.95      0.33     0.01                             ants_on_table::total_number_of_ants() const (ants_on_table.cc:92 @ 401738)
+
+
+         float ants_on_table::total_number_of_ants() const
+         {
+            ...
+
+               for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
+               {
+7>>               totants += m_number_of_ants( i, j ) ;
+               }
+            }
+            ...
+         }
+
+         void ants_on_table::timestep( iterator & iter )
+         {
+            ...
+>>1         for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
+            {
+               for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
+               {
+                  float v = m_velocity_of_ants( i, j ) ;
+                  int di = RADIUS_OF_POSITION_ADJUSTMENT * sin( v ) ;
+                  int dj = RADIUS_OF_POSITION_ADJUSTMENT * cos( v ) ;
+3>>               int i2 = (int)i + di ;
+5>>               int j2 = (int)j + dj ;
+
+2,4>>               float fallen = FALLEN_ANTS_FRACTION * m_number_of_ants( i, j ) ;
+
+                  // some ants do not walk
+                  iter.m_new_number_of_ants.assign( i, j, WALKING_ANTS_PER_FALLEN * fallen ) ;
+
+                  // the rest of the ants walk, but some fall of the table
+6>>               if (i2 >= 0 and i2 < (int)m_table_grid_size and j2 >= 0 and j2 < (int)m_table_grid_size)
+                  {
+                     iter.m_new_number_of_ants.add( i2, j2, fallen ) ;
+                  }
+               }
+            }
+
