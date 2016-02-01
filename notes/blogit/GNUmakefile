@@ -99,11 +99,12 @@ multiPendulumSphericalMatrix.pdf : ../classicalmechanics/mine/multiPendulumSpher
 
 ensemblesForSpinOneHalf.pdf : ../phy2403/ensemblesForSpinOneHalf.tex
 
-qftProblemSet2.pdf : ../phy2403/qftProblemSet2Problem1.tex
-qftProblemSet2.pdf : ../phy2403/qftProblemSet2Problem2.tex
-qftProblemSet2.pdf : ../phy2403/qftProblemSet2Problem3.tex
-qftProblemSet2.pdf : ../phy2403/qftProblemSet2Problem4.tex
-qftProblemSet2.pdf : ../phy2403/qftProblemSet2Problem5.tex
+# FIXME: these don't appear to be added?
+qftProblemSet2.pdf : ../phy2403/qftproblemSet2Problem1.tex
+qftProblemSet2.pdf : ../phy2403/qftproblemSet2Problem2.tex
+qftProblemSet2.pdf : ../phy2403/qftproblemSet2Problem3.tex
+qftProblemSet2.pdf : ../phy2403/qftproblemSet2Problem4.tex
+qftProblemSet2.pdf : ../phy2403/qftproblemSet2Problem5.tex
 #qftProblemSet1.pdf : ps8mathematica.tex
 
 uwavesProblemSet1.pdf : ../ece1236/uwavesproblemSet1Problem1.tex
