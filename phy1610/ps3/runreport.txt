@@ -73,6 +73,8 @@
   ----------------------------------------------------------------------------------------------------- 
   c) and gprof (the compilation commands for gprof should also go into the Makefile).
 
+   Write a report comparing the results between both codes. Identify "bottle-necks" in each code (look at lines for the 'monolithic'-original code and lines and functions for you modular version), and make recommendations on how to improve the performance.
+
   For the monolithic code, we have:
    
       $ PROFILED=1 make profile.orig.txt
@@ -489,3 +491,69 @@
    The compiler is using a single function call to compute both.
 
    --------------------------------------------------------------------
+
+   With the tweaks made above the biggest hitter is the now the add operation:
+
+       33.42      0.10     0.10                             myrarray2::add(unsigned long, unsigned long, float) (myrarray2.h:130 @ 4018b0)
+       15.04      0.15     0.05                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:105 @ 401858)
+       13.37      0.19     0.04                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:96 @ 4017bf)
+       10.03      0.22     0.03                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:114 @ 40189a)
+        6.68      0.24     0.02                             ants_on_table::timestep(ants_on_table::iterator&) (ants_on_table.cc:106 @ 40188b)
+        6.68      0.26     0.02                             myrarray2::assign(unsigned long, unsigned long, float) (myrarray2.h:121 @ 40187f)
+        3.34      0.27     0.01                             float std::accumulate<float*, float>(float*, float*, float) (stl_numeric.h:127 @ 401728)
+        3.34      0.28     0.01                             float std::accumulate<float*, float>(float*, float*, float) (stl_numeric.h:126 @ 40172c)
+
+   The top six of these are:
+
+         3>>for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
+            {
+               for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
+               {
+                  float v = m_velocity_of_ants( i, j ) ;
+                  float n = m_number_of_ants( i, j ) ;
+
+                  int di = RADIUS_OF_POSITION_ADJUSTMENT * sin( v ) ;
+                  int dj = RADIUS_OF_POSITION_ADJUSTMENT * cos( v ) ;
+         2>>      int i2 = (int)i + di ;
+         5>>      int j2 = (int)j + dj ;
+
+                  float fallen = FALLEN_ANTS_FRACTION * n ;
+
+                  // some ants do not walk
+         6>>      iter.m_new_number_of_ants.assign( i, j, WALKING_ANTS_PER_FALLEN * fallen ) ;
+
+                  // the rest of the ants walk, but some fall of the table
+         4>>      if (i2 >= 0 and i2 < (int)m_table_grid_size and j2 >= 0 and j2 < (int)m_table_grid_size)
+                  {
+         1>>            iter.m_new_number_of_ants.add( i2, j2, fallen ) ;
+                  }
+               }
+            }
+
+   All the calculations in the inner scope are dependent on both i and j (through v, and n), so no expressions
+   can be hoisted into higher level scopes.
+
+   Compared to the profiling samples in the original ants.cc we've managed to reduce the number of hits in the
+   - fill codepath
+   - update codepath
+   - hoist one repeated expression ( 0.2 * number_of_ants[i][j] )
+
+(12%)    3>>             new_number_of_ants[i][j]+=0.8*number_of_ants[i][j];
+                         // the rest of the ants walk, but some fall of the table
+                         if (i2>=0 and i2<356 and j2>=0 and j2<356) {
+(27%)    1>>                 new_number_of_ants[i2][j2]+=0.2*number_of_ants[i][j];
+
+    out of the if scope and use it in both places.
+
+   There aren't any further obvious optimizations that I can think of other than parallelizing the whole loop.  Unfortunately, the
+   m_new_number_of_ants addition operation prevents easy parallization of the loop since multiple threads may both have to access
+   the same element.  This could be solved if separate arrays were used for the iter.m_new_number_of_ants.add operation, so that
+   those updates could be done independently of the iter.m_new_number_of_ants.assign updates.  The drawback would be that an aggregation
+   operation would be required, however that aggregation operation could then also be parallelized since each thread could
+   work on separate ranges of indexes.  Such a parallelization (and parallelized aggregation phase) would also allow the 
+   totants value to be computed as a side effect of the aggregation, something we can't do when the inner scope is touching
+   both [i][j] and [i2][j2] positions in new_number_of_ants.
+
+   --------------------------------------------------------------------
+
+
