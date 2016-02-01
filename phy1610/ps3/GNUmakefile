@@ -2,10 +2,8 @@
 CXXFLAGS += -MMD
 
 CXXFLAGS += -I../inc
-CXXFLAGS += -I../../rarray
-
-TICKTOCK := $(HOME)/ticktock
-CXXFLAGS += -I$(TICKTOCK)
+CXXFLAGS += -I$(HOME)/rarray
+CXXFLAGS += -I$(HOME)/ticktock
 
 PRODUCTION := 1
 #PROFILED := 1
@@ -48,7 +46,6 @@ else
 endif
 
 #TARGETS += antsTest.diff
-TARGETS += ticktock.cc
 #TARGETS += ants_on_table.h
 #TARGETS += ants.cc
 #TARGETS += ants_on_table.cc
@@ -69,6 +66,8 @@ ORIGANTS_OBJECTS += ticktock.o
 #TEST_SOURCES += $(COMMON_SOURCES)
 #TEST_OBJECTS := $(subst .cc,.o,$(TEST_SOURCES))
 
+CLEANTARGETS += ants.out
+CLEANTARGETS += antsTest.diff
 CLEANTARGETS += gmon.out
 CLEANTARGETS += orig.out
 CLEANTARGETS += mine.out
@@ -83,18 +82,6 @@ CLEANTARGETS += $(ALL_OBJECTS)
 
 # clean dependency files if any
 CLEANTARGETS += $(subst .o,.d,$(ALL_OBJECTS))
-
-TARFILES += ../ps2/ants.cc
-TARFILES += tickSamples
-TARFILES += ../ps2/ants_on_table.cc
-TARFILES += ../ps2/ants_on_table.h
-# FIXME: want in tarfile but not with a relative path:
-#TARFILES += ../inc/optticktock.h
-TARFILES += git.log
-TARFILES += GNUmakefile
-TARFILES += runreport.txt
-CLEANTARGETS += git.log
-CLEANTARGETS += ps3.tar
 
 GPROF := gprof --line --no-graph --brief
 
@@ -118,30 +105,8 @@ test : $(TEST_OBJECTS)
 .gitignore: GNUmakefile
 	echo $(addprefix $(THISDIR)/,$(CLEANTARGETS)) | tr ' ' '\n' > $@
 
-git.log : 
-	git log --stat . > $@
-
-ps3.tar : clean $(TARFILES)
-	rm -f $@
-	tar cf $@ $(TARFILES)
-
 clean::
 	rm -rf $(CLEANTARGETS)
-
-#ants.cc : ../ps2/ants.cc
-#	cp ../ps2/ants.cc $@
-
-ticktock.cc : $(TICKTOCK)/ticktock.cc
-	cp $^ $@
-
-$(TICKTOCK) : 
-	(cd ; git clone https://github.com/vanzonr/ticktock.git)
-
-#ants_on_table.cc : ../ps2/ants_on_table.cc
-#	cp ../ps2/ants_on_table.cc $@
-
-#ants_on_table.h : ../ps2/ants_on_table.h
-#	cp $^ $@
 
 profile.mine.txt: ants
 	rm -f gmon.out

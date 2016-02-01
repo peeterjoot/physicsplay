@@ -1,0 +1,30 @@
+PS3 += inc/boosttest.h
+PS3 += inc/myrarray2.h
+PS3 += inc/optticktock.h
+PS3 += ps2/ants.cc
+PS3 += ps2/description.txt
+PS3 += ps2/ants_on_table.h
+PS3 += ps2/ants_on_table.cc
+PS3 += ps2/GNUmakefile
+PS3 += ps2/ants.out.default
+PS3 += ps2/Doxyfile
+PS3 += ps3/description.txt
+PS3 += ps3/origants.cc
+PS3 += ps3/GNUmakefile
+PS3 += ps3/runreport.txt
+PS3 += ps3/tickSamples
+PS3 += ps3/ticktock.cc
+
+TICKTOCK := $(HOME)/ticktock
+
+all : ps3/ticktock.cc
+
+ps3.tar : $(PS3)
+	rm -f $@
+	tar cf $@ $(PS3)
+
+$(TICKTOCK) : 
+	(cd ; git clone https://github.com/vanzonr/ticktock.git)
+
+ps3/ticktock.cc : $(TICKTOCK)/ticktock.cc
+	cp $^ $@

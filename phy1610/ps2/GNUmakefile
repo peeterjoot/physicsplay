@@ -7,8 +7,7 @@ CXXFLAGS += -D_GLIBCXX_USE_C99
 CXXFLAGS += -MMD
 
 CXXFLAGS += -I../inc
-CXXFLAGS += -I../../rarray
-#CXXFLAGS += -I$(HOME)/local/rarray/include
+CXXFLAGS += -I$(HOME)/rarray
 
 # PRODUCTION := 1
 ifdef PRODUCTION
