@@ -15,8 +15,8 @@
 \usepackage{mathtools}
 
 \beginArtNoToc
-\generatetitle{ECE1236H Microwave and Millimeter-Wave Techniques.  Lecture 2: XXX.  Taught by Prof.\ G.V. Eleftheriades}
-%\chapter{XXX}
+\generatetitle{ECE1236H Microwave and Millimeter-Wave Techniques.  Lecture 2: Wave equation.  Taught by Prof.\ G.V. Eleftheriades}
+%\chapter{Wave equation}
 \label{chap:uwaves2}
 
 \paragraph{Disclaimer}
@@ -25,7 +25,249 @@ Peeter's lecture notes from class.  These may be incoherent and rough.
 
 These are notes for the UofT course ECE1236H, Microwave and Millimeter-Wave Techniques, taught by Prof. G.V. Eleftheriades, covering \textchapref{{1}} \citep{pozar2009microwave} content.
 
-\paragraph{YYY}
+\section{Plane waves}
+
+In simple media with no sources
+
+\begin{subequations}
+\label{eqn:uwavesLecture2:20}
+\begin{equation}\label{eqn:uwavesLecture2:40}
+\spacegrad \cross \BE = - \PD{t}{\BB} = - \mu \PD{t}{\BH},
+\end{equation}
+\begin{equation}\label{eqn:uwavesLecture2:60}
+\spacegrad \cdot \BH = 0.
+\end{equation}
+\begin{equation}\label{eqn:uwavesLecture2:80}
+\spacegrad \cross \BH = 
+\BJ + \PD{t}{\BD} = 
+\lr{ \sigma + \epsilon \PD{t}{} } \BE
+\end{equation}
+\begin{equation}\label{eqn:uwavesLecture2:100}
+\spacegrad \cdot \BE = \frac{\rho}{\epsilon} = 0
+\end{equation}
+\end{subequations}
+
+Here \( \BJ = \sigma \BE \) is considered to be an induced current, and the \( \rho/\epsilon \) term vanishes since we have no sources.
+
+From Faraday's law \cref{eqn:uwavesLecture2:40}
+
+\begin{dmath}\label{eqn:uwavesLecture2:120}
+\spacegrad \cross \lr{ \spacegrad \cross \BE }
+= - \mu \PD{t}{} \lr { \spacegrad \cross \BH }
+= - \mu \PD{t}{} \lr { \sigma + \epsilon \PD{t}{} } \BE
+= - \mu \sigma \PD{t}{\BE} - \epsilon \mu \PDSq{t}{\BE}.
+\end{dmath}
+
+We can also use the vector identity
+
+\begin{dmath}\label{eqn:uwavesLecture2:140}
+\spacegrad \cross \lr{ \spacegrad \cross \BF } = \spacegrad \lr{ \spacegrad \cdot \BF } - \spacegrad^2 \BF,
+\end{dmath}
+
+so 
+\begin{dmath}\label{eqn:uwavesLecture2:160}
+\spacegrad \cross \lr{ \spacegrad \cross \BE }
+=
+\spacegrad \lr{ \cancel{\spacegrad \cdot \BE} } - \spacegrad^2 \BE,
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:uwavesLecture2:180}
+0 = \spacegrad^2 \BE - \mu \sigma \PD{t}{\BE} - \epsilon \mu \PDSq{t}{\BE}.
+\end{dmath}
+
+The \( \mu \sigma \PDi{t}{\BE} \) term is a damping contribution.
+
+Similarily for the magnetic field
+\begin{dmath}\label{eqn:uwavesLecture2:200}
+0 = \spacegrad^2 \BH - \mu \sigma \PD{t}{\BH} - \epsilon \mu \PDSq{t}{\BH}.
+\end{dmath}
+
+This is the wave or Helmholtz equation.
+
+Note that for the no loss condition \( \sigma = 0 \), we have the undamped wave equations
+\begin{subequations}
+\label{eqn:uwavesLecture2:220}
+\begin{dmath}\label{eqn:uwavesLecture2:240}
+\spacegrad^2 \BE = \epsilon \mu \PDSq{t}{\BE}.
+\end{dmath}
+\begin{dmath}\label{eqn:uwavesLecture2:260}
+\spacegrad^2 \BH = \epsilon \mu \PDSq{t}{\BH}.
+\end{dmath}
+\end{subequations}
+
+This is one wave equation for each of \( E_x, E_y, E_z, H_x, H_y\) and \( H_z \).
+
+\paragraph{Propagation in one direction}
+
+Consider the undamped propagation along the z direction of \( E_x(z, t) \), which must satisfy
+\begin{dmath}\label{eqn:uwavesLecture2:400}
+\spacegrad^2 E_x = \epsilon \mu \PDSq{t}{E_x},
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:uwavesLecture2:420}
+\PDSq{z}{E_x} = \epsilon \mu \PDSq{t}{E_x}.
+\end{dmath}
+
+This is analogous to the voltage transmission line equation
+\begin{dmath}\label{eqn:uwavesLecture2:440}
+\PDSq{z}{V} = L C \PDSq{t}{V},
+\end{dmath}
+
+With solution 
+
+\begin{equation}\label{eqn:uwavesLecture2:280}
+V(z, t) = 
+V_0^{+} f(z - v_\phi t)
++
+V_0^{-} f(z + v_\phi t),
+\end{equation}
+
+where \( v_\phi = \ifrac{1}{\sqrt{L C}} \) is the phase velocity, \( f(z - v_\phi t)\) is the forward wave, and \( f(z + v_\phi t) \) is the reflected wave.  By analogy the solution to the 1D wave equation is
+
+\begin{equation}\label{eqn:uwavesLecture2:300}
+E_x(z, t) = 
+E_0^{+} f(z - v_\phi t)
++
+E_0^{-} f(z + v_\phi t),
+\end{equation}
+
+where \( v_\phi = \ifrac{1}{\sqrt{\epsilon \mu}} \) is the phase velocity.
+
+For myself, the transmission line equation is something that I only encountered in this class, so this analogy isn't a great one.  That said, wave equation solutions are very familiar, so not much motivation for the structure of the solution is really required.
+
+\paragraph{More rigorous derivation of the 1D solution}
+
+Suppose that we assume the form of the solution is
+
+\begin{equation}\label{eqn:uwavesLecture2:320}
+\BE = \BE_0 f(z - v_\phi t ),
+\end{equation}
+
+where \( \BE_0 \) is a constant vector, so this describes a wave propagation in the z-direction, but without a-priori knowledge of the direction of this vector in space.
+
+For source free media, we have
+
+\begin{dmath}\label{eqn:uwavesLecture2:340}
+\spacegrad \cdot ( \BE_0 f ) 
+= \spacegrad f \cdot \BE_0 + f \cancel{ \spacegrad \cdot \BE }
+= (\zcap f') \cdot \BE_0.
+\end{dmath}
+
+Because \( \BE_0 \cdot \zcap = 0 \), the vector \( \BE_0 \) is perpendicular to the direction of propagation ( z ).  The next task is to find the magnetic field that couples to this electric field solution.  Suppose the coordinate axis are picked so that 
+
+\begin{equation}\label{eqn:uwavesLecture2:360}
+\BE(z, t) = \BE_0 E_x( z \pm v_\phi t).
+\end{equation}
+
+Using Faraday's law \( \spacegrad \cross \BE = -\mu \PDi{t}{\BH} \) gives
+\begin{dmath}\label{eqn:uwavesLecture2:380}
+\spacegrad \cross (\BE_0 E_x)
+=
+(\spacegrad \cross \BE_0) E_x
+-\BE_0 \cross \spacegrad E_x
+=
+-\BE_0 \cross \spacegrad E_x
+=
+-\BE_0 \cross \zcap \PD{z}{E_x},
+\end{dmath}
+
+so
+
+\begin{dmath}\label{eqn:uwavesLecture2:460}
+-\mu \PD{t}{\BH} = 
+\lr{ \zcap \cross \BE_0 } \PD{z}{E_x}.
+\end{dmath}
+
+Because of the \( E_x( z \pm v_\phi t ) \) dependence on \( z, t \), we must have
+
+\begin{dmath}\label{eqn:uwavesLecture2:480}
+\PD{z}{E_x} = \pm \inv{v_\phi} \PD{t}{E_x},
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:uwavesLecture2:500}
+-\mu \PD{t}{\BH} = 
+\lr{ \zcap \cross \BE_0 } 
+= \pm \inv{v_\phi} \PD{t}{E_x}.
+\end{dmath}
+
+Integrating with respect to \( t \) and assuming a zero integration constant (physical justification for that?), we have
+
+\begin{dmath}\label{eqn:uwavesLecture2:520}
+\BH = \mp E_x(z, t) \frac{\zcap \cross \BE_0}{v_\phi \mu}.
+\end{dmath}
+
+The \( v_\phi \mu \) product is the intrinsic wave impedance of the medium
+
+\begin{dmath}\label{eqn:uwavesLecture2:540}
+v_\phi \mu = \frac{\mu}{\sqrt{\epsilon\mu}} = \sqrt{\frac{\mu}{\epsilon}} = \eta.
+\end{dmath}
+
+The magnetic field can be written in terms of the propagation direction \( \ncap = \mp \zcap \) has
+
+\begin{equation}\label{eqn:uwavesLecture2:560}
+\BH 
+= \mp \frac{\zcap \cross \BE}{\eta}
+= \frac{\ncap \cross \BE}{\eta}.
+\end{equation}
+
+Note that in free space we have \( \eta \approx 377 \Omega \).
+
+\paragraph{summary}
+
+For 1D wave propagation along the z axis we have
+
+\begin{equation}\label{eqn:uwavesLecture2:580}
+\begin{aligned}
+\spacegrad^2 \BE &= \epsilon \mu \PDSq{t}{\BE} \\
+\spacegrad^2 \BH &= \epsilon \mu \PDSq{t}{\BH} \\
+\end{aligned}
+\end{equation}
+
+where 
+
+\begin{equation}\label{eqn:uwavesLecture2:600}
+\begin{aligned}
+\BE &= \BE_0 f( z \mp v_\phi t ) \\
+0 &= \BE_0 \cdot \zcap \\
+\BH &= \pm \frac{\zcap \cross \BE_0}{\eta} f( z \mp v_\phi t )
+\end{aligned}
+\end{equation}
+
+Note that \( \pm \zcap \) is the direction of propagation, with \( +z \) being the forward wave, and \( -z \) the backwards wave.
+
+The phase velocity is
+
+\begin{equation}\label{eqn:uwavesLecture2:620}
+v_\phi = \frac{1}{\sqrt{\mu\epsilon}},
+\end{equation}
+
+and the intrinsic wave impedance is 
+
+\begin{equation}\label{eqn:uwavesLecture2:640}
+\eta = \sqrt{\frac{\mu}{\epsilon}}.
+\end{equation}
+
+Notes:
+
+\begin{itemize}
+\item \( \BE, \BH \) are perpendicular to the direction of propagation \( \zcap \).  These are transverse waves.
+\item \( \Abs{\BE}/\Abs{\BH} = \eta \).  An analogy with transmission lines is
+\begin{equation}\label{eqn:uwavesLecture2:660}
+\begin{aligned}
+V &\leftrightarrow E \\
+I &\leftrightarrow H \\
+Z_0 &\leftrightarrow \eta
+\end{aligned}
+\end{equation}
+\item \( \BE, \BH \) are orthogonal to each other
+
+F1: B.5
+\end{itemize}
+
+\section{Time harmonic fields}
 
 \EndArticle
 %\EndNoBibArticle
