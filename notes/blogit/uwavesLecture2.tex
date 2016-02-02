@@ -13,8 +13,10 @@
 %\usepackage{peeters_layout_exercise}
 \usepackage{peeters_figures}
 \usepackage{enumerate}
+\usepackage{siunitx}
 \usepackage{mathtools}
 \usepackage{macros_cal}
+\usepackage{macros_bm}
 
 \beginArtNoToc
 \generatetitle{ECE1236H Microwave and Millimeter-Wave Techniques.  Lecture 2: Wave equation.  Taught by Prof.\ G.V. Eleftheriades}
@@ -346,6 +348,252 @@ Note that \( \BD(\Br, \omega) = \epsilon(\omega) \BE(\Br, \omega) \) becomes a c
 This describes the delay between the \( \BE \) field and the \( \BD \) field, the polarization.
 
 \paragraph{1D propagation, and sinusoidal waves}
+
+In a source free, lossless ( \( \sigma = 0 \) ) simple medium the electric field satisfies
+
+\begin{equation}\label{eqn:uwavesLecture2:900}
+\spacegrad^2 \BE - \epsilon \mu \PDSq{t}{\BE} = 0 
+\end{equation}
+
+In a phasor form the field is
+
+\begin{equation}\label{eqn:uwavesLecture2:920}
+\BE(\Br, t) = \Real\lr{ \BE(\Br) e^{j \omega t} }, 
+\end{equation}
+
+so the wave equation becomes
+
+\begin{equation}\label{eqn:uwavesLecture2:940}
+\spacegrad^2 \BE - \epsilon \mu (j\omega)^2 \BE = 0,
+\end{equation}
+
+or
+\boxedEquation{eqn:uwavesLecture2:960}{
+\spacegrad^2 \BE + \beta^2 \BE = 0.
+}
+
+where the propagation constant, or wave number is
+
+\begin{equation}\label{eqn:uwavesLecture2:980}
+\beta = \omega \sqrt{\epsilon \mu} = \frac{\omega}{v_\phi} = \frac{2 \pi}{\lambda},
+\end{equation}
+
+where \( \omega = 2 \pi f \) is the angular frequency and \( T = 1/f \) is the period.  For 1D propagation along the z-axis the fields are
+
+\begin{equation}\label{eqn:uwavesLecture2:1000}
+\begin{aligned}
+E_x(z, t) &= E_0^{+} \cos(\omega t - \beta z) \\
+H_x(z, t) &= \frac{E_0^{+}}{\eta} \cos(\omega t - \beta z).
+\end{aligned}
+\end{equation}
+
+These correspond to phasors
+\begin{equation}\label{eqn:uwavesLecture2:1020}
+\begin{aligned}
+E_x(z) &= E_0^{+} e^{-j k z } \\
+H_x(z) &= \frac{E_0^{+}}{\eta} e^{-j k z }.
+\end{aligned}
+\end{equation}
+
+F3: B.10
+
+\paragraph{Plane waves}
+
+Consider 
+
+\begin{equation}\label{eqn:uwavesLecture2:1040}
+E_x(z, t) = E_0^{+} \cos(\omega t - \beta z),
+\end{equation}
+
+which had the phasor form \( E_x = E_0^{+} e^{-j \beta z} \).  The phase of the wave is given by
+
+\begin{equation}\label{eqn:uwavesLecture2:1060}
+\Phi = \omega t - \beta z.
+\end{equation}
+
+At a fixed time \( t \), the locus of the points with the same phase is given by the equation 
+
+\begin{equation}\label{eqn:uwavesLecture2:1080}
+\beta z = \omega t - \Phi = \textrm{constant}.
+\end{equation}
+
+\( \beta z = \textrm{constant} \) describes planes perpendicular to the \( z \) axis.
+
+F4: B.11
+
+Notes
+
+\begin{itemize}
+\item Since the equiphase surfaces are planes, we deal with plane waves.
+\item \( \beta( z + \lambda ) = \beta z + 2 \pi \).  i.e. wavefronts are separated in space by one wavelength \( \lambda \).
+\item velocity of wavefront \( \beta dz = \omega dt \) means that phase velocity is
+
+\begin{equation}\label{eqn:uwavesLecture2:1100}
+\frac{dz}{dt} = \frac{\omega}{\beta} = \inv{\sqrt{\mu \epsilon} }.
+\end{equation}
+\end{itemize}
+
+\section{Poynting Theorem}
+
+\paragraph{Poynting vector}
+
+Consider a volume V, surrounded by a closed surface S
+
+F5: B.9
+
+The instananeous power density outflowing the surfaces S s given by the Poynting vector 
+
+\begin{equation}\label{eqn:uwavesLecture2:1120}
+\BP = \bcE \cross \bcH, \qquad (\si{W/m^2}),
+\end{equation}
+
+where \( \bcE \) and \( \bcH \) are time-dependent fields.  For time harmonic fields
+
+\begin{equation}\label{eqn:uwavesLecture2:1140}
+\begin{aligned}
+\bcE &= \Real \lr{ \BE e^{j \omega t} } \\
+\bcH &= \Real \lr{ \BH e^{j \omega t} }
+\end{aligned}
+\end{equation}
+
+Hence 
+
+\begin{dmath}\label{eqn:uwavesLecture2:1160}
+\BP 
+= \bcE \cross \bcH
+= \inv{4} 
+\lr{ \BE e^{j \omega t} +  \BE^\conj e^{-j \omega t} }
+\cross
+\lr{ \BH e^{j \omega t} +  \BH^\conj e^{-j \omega t} }
+=
+\inv{4}
+\lr{
+(\BE \cross \BH) e^{2 j \omega t} 
++ (\BE^\conj \cross \BH)
++ (\BE \cross \BH^\conj)
+(\BE^\conj \cross \BH^\conj) e^{-2 j \omega t} 
+}.
+\end{dmath}
+
+Therefore the time-average Poynting vector is
+
+\boxedEquation{eqn:uwavesLecture2:1180}{
+\BS = \inv{T} \int_0^T \BP dt 
+= \inv{2} \Real\lr{ \BE \cross \BH^\conj } \qquad (\si{W/m^2}).
+}
+
+The total time-average power outflowing S is
+
+\begin{equation}\label{eqn:uwavesLecture2:1200}
+P = \inv{2} \oint \Real\lr{ \BE \cross \BH^\conj } \cdot d\BS.
+\end{equation}
+
+\paragraph{Poynting theorem}
+
+Consider again a volume V enclosed in a surface S.  Assume that electric currents may exist in V and that V is filled with a material characterized by \( \epsilon, \mu \) and a conductivity \( \sigma \), where \( \epsilon = \epsilon' -j \epsilon'' \), and \( \mu = \mu' - j \mu'' \) as illustrate in F6
+
+F6: B.11
+
+From Faraday's law \( \spacegrad \cross \BE = - j \omega \mu \BH \), and Ampere's law 
+\( \spacegrad \cross \BH = \BJ + j \omega \epsilon \BE \), we have
+
+\begin{equation}\label{eqn:uwavesLecture2:1220}
+\begin{aligned}
+\BH^\conj \cdot \lr{ \spacegrad \cross \BE } &= - j \omega \mu \Abs{\BH}^2 \\
+\BE \cdot \lr{ \spacegrad \cross \BH^\conj } &= \BJ^\conj \cdot \BE - j \omega \epsilon^\conj \Abs{\BE}^2
+\end{aligned}
+\end{equation}
+
+We assume that the current is a sum of sources and induced currents \( \BJ = \BJ_\txts + \BJ_{\mathrm{ind}} \), where \( \BJ_{\mathrm{ind}} = \sigma \BE \).  Recall that
+
+\begin{equation}\label{eqn:uwavesLecture2:1240}
+\spacegrad \cdot \lr{ \BE \cross \BH^\conj } = 
+\BH^\conj \cdot \lr{ \spacegrad \cross \BE }
+-\BE^\conj \cdot \lr{ \spacegrad \cross \BH^\conj }.
+\end{equation}
+
+Hence 
+
+\begin{equation}\label{eqn:uwavesLecture2:1260}
+\spacegrad \cdot \lr{ \BE \cross \BH^\conj } 
+= 
+- j \omega \mu \Abs{\BH}^2 - \BJ_\txts^\conj \cdot \BE - \sigma \Abs{\BE}^2 + j \omega \epsilon^\conj \Abs{\BE}^2.
+\end{equation}
+
+Now integrate over V, using the divergence theorem
+
+\begin{dmath}\label{eqn:uwavesLecture2:1280}
+\int_V 
+\spacegrad \cdot \lr{ \BE \cross \BH^\conj } dV 
+=
+\oint \lr{ \BE \cross \BH^\conj } \cdot d\BS
+=
+- \sigma \int_V \Abs{\BE}^2 dV
++ j \omega \int_V \lr{ \epsilon^\conj \Abs{\BE}^2 -\mu \Abs{\BH}^2 } dV
+- \int_V \BJ_\txts^\conj \cdot \BE dV,
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:uwavesLecture2:1300}
+-\inv{2} \int_V \BJ_\txts^\conj \cdot \BE dV,
+=
++ \inv{2} \oint \lr{ \BE \cross \BH^\conj } \cdot d\BS
++ \frac{\sigma}{2} \int_V \Abs{\BE}^2 dV
+- j \frac{\omega}{2} \int_V \lr{ \epsilon^\conj \Abs{\BE}^2 -\mu \Abs{\BH}^2 } dV
+=
++ \inv{2} \oint \lr{ \BE \cross \BH^\conj } \cdot d\BS
++ \frac{\sigma}{2} \int_V \Abs{\BE}^2 dV
++ \frac{\omega}{2} \int_V \lr{ \epsilon'' \Abs{\BE}^2 + \mu'' \Abs{\BH}^2 } dV
++ j \frac{\omega}{2} \int_V \lr{ -\epsilon' \Abs{\BE}^2 + \mu' \Abs{\BH}^2 } dV
+\end{dmath}
+
+This is the mathematical manifestation of Poynting's theorem which is nothing else but the conservation of power with volume V.  We can now identify the following terms:
+
+\begin{itemize}
+\item Power generated by current sources
+\begin{equation}\label{eqn:uwavesLecture2:1320}
+P_\txts = -\inv{2} \int_V \BJ_\txts^\conj \cdot \BE dV
+\end{equation}
+\item Complex power flowing out of V 
+\begin{equation}\label{eqn:uwavesLecture2:1340}
+P_\txto = \inv{2} \oint \lr{ \BE \cross \BH^\conj } \cdot d\BS
+\end{equation}
+\item Power loss due to materials 
+\begin{equation}\label{eqn:uwavesLecture2:1360}
+P_\txtm = \frac{\omega}{2} \int_V \lr{ \epsilon'' \Abs{\BE}^2 + \mu'' \Abs{\BH}^2 } dV
+\end{equation}
+\item Ohmic losses 
+\begin{equation}\label{eqn:uwavesLecture2:1380}
+P_\txtc = \frac{\sigma}{2} \int_V \Abs{\BE}^2 dV
+\end{equation}
+\item Time average stored electric energy 
+\begin{equation}\label{eqn:uwavesLecture2:1400}
+W_\txte = \inv{4} \epsilon' \int_V \Abs{\BE}^2 dV
+\end{equation}
+\item Time average stored magnetic energy 
+\begin{equation}\label{eqn:uwavesLecture2:1420}
+W_\txte = \inv{4} \mu' \int_V \Abs{\BH}^2 dV
+\end{equation}
+\end{itemize}
+
+The Poynting theorem is a complex power balance of the form
+\begin{equation}\label{eqn:uwavesLecture2:1440}
+P_\txts = P_\txto + P_\txtm + P_\txtc + 2 j \omega \lr{ W_\txtm - W_\txte }
+\end{equation}
+
+The real part of the above equation is related to the time average power.  i.e.
+
+\begin{equation}\label{eqn:uwavesLecture2:1460}
+\Real(P_\txts) = \Real(P_\txto) + P_\txtm + P_\txtc.
+\end{equation}
+
+On the other hand the imaginary part is related to the net stored energy with V.  i.e.
+
+\begin{equation}\label{eqn:uwavesLecture2:1480}
+\Imag( P_\txts ) = 2 \omega \lr{ W_\txtm - W_\txte } + \Imag( P_\txto ).
+\end{equation}
+
+We can now use Poynting theorem to calculate losses in waveguides.
 
 \EndArticle
 %\EndNoBibArticle
