@@ -6,8 +6,7 @@ SDRAW := "/cygdrive/c/Program Files (x86)/LibreOffice 4/program/sdraw.exe"
 RAWTEXFILES := $(shell ls *.tex)
 
 CLEAN_TARGETS += $(PDFS) 
-CLEAN_TARGETS += *.ilg *.ind *.idx *.ps *.dvi *.log *.aux *.bbl *.blg *.lof *.log *.lot *.out *.toc *.stackdump *.brf
-CLEAN_TARGETS += *.synctex.gz
+include ../make.cleanvars
 
 # buildable:
 #INCOMPLETE += dotBlade.tex
