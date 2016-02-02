@@ -210,6 +210,7 @@ s/[Ss]chrodinger/Schr\\"{o}dinger/g; # Schrodinger
 #s/\\updown\b/\\ket{\\uparrow \\downarrow}/g ;
 #s/\\upup\b/\\ket{\\uparrow \\uparrow}/g ;
 #s/\\Veff/V_{\\mathrm{eff}}/g ;
+s/\\eff/{\\mathrm{eff}}/g ;
 #s/\\Veph/V_{\\mathrm{e,ph}}/g ;
 #s/_V/_{\\mathrm{V}}/g ;
 #s/xialpha\b/x_{i_\\alpha}/g ;
