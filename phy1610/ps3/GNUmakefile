@@ -57,7 +57,7 @@ ANTS_OBJECTS := $(subst .cc,.o,$(ANTS_SOURCES))
 ORIGANTS_OBJECTS += origants.o 
 ORIGANTS_OBJECTS += ticktock.o 
 
-TARGETS += test
+TARGETS += testdriver
 TEST_SOURCES += ../ps2/ants_on_table.cc
 TEST_SOURCES += testdriver.cc
 TEST_SOURCES += $(COMMON_SOURCES)
