@@ -1,0 +1,672 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\section{Requirements}
+
+A transmission line requires two conductors as sketched in \cref{fig:deck4Txline:deck4TxlineFig1}, which shows a 2-wire line such a telephone line, a coaxial cable as found in cable TV distribution, and a microstrip line as found in cell phone RF interconnects.
+
+\imageFigure{../../figures/ece1236/deck4TxlineFig1}{Transmission line examples.}{fig:deck4Txline:deck4TxlineFig1}{0.2}
+
+A two-wire line becomes a transmission line when the wavelength of operation becomes comparable to the size of the line (or higher spectral component for pulses).  In general a transmission line much support (TEM) transverse electromagnetic modes.
+
+\section{Time harmonic solutions on transmission lines}
+
+In \cref{fig:deck4Txline:deck4TxlineFig2}, an electronic representation of a transmission line circuit is sketched.
+
+\imageFigure{../../figures/ece1236/deck4TxlineFig2}{Transmission line equivalent circuit.}{fig:deck4Txline:deck4TxlineFig2}{0.2}
+
+In this circuit all the elements have per-unit length units.  With \( I = C dV/dt \sim j \omega C V \), \( v = I R \), and \( V = L dI/dt \sim j \omega L I \), the KVL equation is
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:20}
+V(z) - V(z + \Delta z) = I(z) \Delta z \lr{ R + j \omega L },
+\end{dmath}
+
+or in the \( \Delta z \rightarrow 0 \) limit
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:40}
+\PD{z}{V} = -I(z) \lr{ R + j \omega L }.
+\end{dmath}
+
+The KCL equation at the interior node is
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:60}
+-I(z) + I(z + \Delta z) + \lr{ j \omega C + G} V(z + \Delta z) = 0,
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:80}
+\PD{z}{I} = -V(z) \lr{ j \omega C + G}.
+\end{dmath}
+
+This pair of equations is known as the \textAndIndex{telegrapher's equations}
+
+\boxedEquation{eqn:uwaves4TransmissionLines:100}{
+\begin{aligned}
+\PD{z}{V} &= -I(z) \lr{ R + j \omega L } \\
+\PD{z}{I} &= -V(z) \lr{ j \omega C + G}.
+\end{aligned}
+}
+
+The second derivatives are
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:120}
+\begin{aligned}
+\PDSq{z}{V} &= -\PD{z}{I} \lr{ R + j \omega L } \\
+\PDSq{z}{I} &= -\PD{z}{V} \lr{ j \omega C + G},
+\end{aligned}
+\end{equation}
+
+which allow the \( V, I \) to be decoupled
+\boxedEquation{eqn:uwaves4TransmissionLines:140}{
+\begin{aligned}
+\PDSq{z}{V} &= V(z) \lr{ j \omega C + G} \lr{ R + j \omega L } \\
+\PDSq{z}{I} &= I(z) \lr{ R + j \omega L } \lr{ j \omega C + G},
+\end{aligned}
+}
+
+With a complex propagation constant
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:160}
+\gamma
+= \alpha + j \beta 
+= \sqrt{ \lr{ j \omega C + G} \lr{ R + j \omega L } } 
+= 
+\sqrt{ R G - \omega^2 L C + j \omega ( L G + R C ) },
+\end{dmath}
+
+the decouple equations have the structure of a wave equation for a lossy line in the frequency domain
+
+
+\boxedEquation{eqn:uwaves4TransmissionLines:180}{
+\begin{aligned}
+\PDSq{z}{V} - \gamma^2 V &= 0  \\
+\PDSq{z}{I} - \gamma^2 I &= 0.
+\end{aligned}
+}
+
+We write the solutions to these equations as
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:200}
+\begin{aligned}
+V(z) &= V_0^{+} e^{-\gamma z} + V_0^{-} e^{+\gamma z} \\
+I(z) &= I_0^{+} e^{-\gamma z} - I_0^{-} e^{+\gamma z} \\
+\end{aligned}
+\end{equation}
+
+Only one of \( V \) or \( I \) is required since they are dependent through \cref{eqn:uwaves4TransmissionLines:100}, as can be seen by taking derivatives
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:220}
+\PD{z}{V} 
+= \gamma \lr{ -V_0^{+} e^{-\gamma z} + V_0^{-} e^{+\gamma z} }
+= 
+-I(z) \lr{ R + j \omega L },
+\end{dmath}
+
+so
+\begin{equation}\label{eqn:uwaves4TransmissionLines:240}
+I(z) 
+=
+\frac{\gamma}{ R + j \omega L } \lr{ V_0^{+} e^{-\gamma z} - V_0^{-} e^{+\gamma z} }.
+\end{equation}
+
+Introducing the characteristic impedance \( Z_0 \) of the line
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:260}
+Z_0 
+= \frac{R + j \omega L}{\gamma} 
+= \sqrt{ \frac{R + j \omega L}{G + j \omega C} },
+\end{dmath}
+
+we have
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:280}
+I(z) 
+=
+\inv{Z_0} \lr{ V_0^{+} e^{-\gamma z} - V_0^{-} e^{+\gamma z} }.
+=
+I_0^{+} e^{-\gamma z} - I_0^{-} e^{+\gamma z},
+\end{dmath}
+
+where
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:300}
+\begin{aligned}
+I_0^{+} &= \frac{V_0^{+}}{Z_0} \\
+I_0^{-} &= \frac{V_0^{-}}{Z_0}.
+\end{aligned}
+\end{equation}
+
+\section{Mapping TL geometry to per unit length \( C \) and \( L \) elements}
+
+\makeexample{Coaxial cable.}{example:uwaves4TransmissionLines:1}{
+
+From electrostatics and magnetostatics the per unit length induction and capacitance constants for a co-axial cable can be calculated.    For the cylindrical configuration sketched in \cref{fig:deck4Txline:deck4TxlineFig3}
+
+\imageFigure{../../figures/ece1236/deck4TxlineFig3}{Coaxial cable.}{fig:deck4Txline:deck4TxlineFig3}{0.2}
+
+From Gauss' law the total charge can be calculated assuming that the ends of the cable can be neglected
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:520}
+Q 
+= \int \spacegrad \cdot \BD dV 
+= \oint \BD \cdot d\BA 
+= \epsilon_0 \epsilon_r E ( 2 \pi r ) l,
+\end{dmath}
+
+This provides the radial electric field magnitude, in terms of the total charge
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:320}
+E = 
+\frac{Q/l}{\epsilon_0 \epsilon_r ( 2 \pi r ) },
+\end{equation}
+
+which must be a radial field as sketched in \cref{fig:deck4Txline:deck4TxlineFig4}.
+
+\imageFigure{../../figures/ece1236/deck4TxlineFig4}{Radial electric field for coaxial cable.}{fig:deck4Txline:deck4TxlineFig4}{0.2}
+
+The potential difference from the inner transmission surface to the outer is
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:340}
+V 
+= \int_a^b E dr 
+= 
+\frac{Q/l}{2 \pi \epsilon_0 \epsilon_r }
+\int_a^b \frac{dr}{r}
+=
+\frac{Q/l}{2 \pi \epsilon_0 \epsilon_r } \ln \frac{b}{a}.
+\end{dmath}
+
+Therefore the capacitance per unit length is
+
+% i = C dV/dt => \int i dt = q = C V
+\begin{equation}\label{eqn:uwaves4TransmissionLines:360}
+C = \frac{Q/l}{V} = \frac{2 \pi \epsilon_0 \epsilon_r }{ \ln \frac{b}{a} } .
+\end{equation}
+
+% V = L di/dt = d\phi/dt
+The inductance per unit length can be calculated form Ampere's law
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:380}
+\int \lr{ \spacegrad \cross \BH } \cdot d\BS
+=
+\int \BJ \cdot d\BS + \PD{t}{} \int \cancel{\BD \cdot d\Bl}
+I 
+=
+\oint \BH \cdot d\Bl
+=
+H ( 2 \pi r )
+=
+\frac{B}{\mu_0} ( 2 \pi r )
+\end{dmath}
+
+The flux is
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:400}
+\Phi 
+= \int \BB \cdot d\BA
+= \frac{\mu_0 I}{ 2 \pi } \int_A \inv{r} d dr
+= \frac{\mu_0 I}{ 2 \pi } \int_a^b \inv{r} l d dr
+= \frac{\mu_0 I l}{ 2 \pi } \ln \frac{b}{a}.
+\end{dmath}
+
+The inductance per unit length is
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:420}
+L = \frac{\Phi/l}{I} = \frac{\mu_0}{ 2 \pi } \ln \frac{b}{a}.
+\end{equation}
+
+%\cref{fig:deck4Txline:deck4TxlineFig5}.
+%\imageFigure{../../figures/ece1236/deck4TxlineFig5}{CAPTION: deck4TxlineFig5}{fig:deck4Txline:deck4TxlineFig5}{0.2}
+
+For a lossless line where \( R = G = 0 \), we have \( \gamma = \sqrt{ (j \omega L)(j \omega C)} = j \omega \sqrt{L C} \),
+so the phase velocity for a (lossless) coaxial cable is
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:440}
+v_\phi 
+= \frac{\omega}{\beta} 
+= \frac{\omega}{\Imag(\gamma)}
+= \frac{\omega}{\omega \sqrt{LC})}
+= \frac{1}{\sqrt{LC})}.
+\end{dmath}
+
+This gives
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:460}
+v_\phi^2 
+= \inv{ L }  \inv{C}
+= 
+\frac{ 2 \pi }{ \mu_0 \ln \frac{b}{a} }
+\frac
+{\ln \frac{b}{a}}
+{2 \pi \epsilon_0 \epsilon_r }
+=
+\frac{1 }{ \mu_0 \epsilon_0 \epsilon_r }
+=
+\frac{1 }{ \mu_0 \epsilon }.
+\end{dmath}
+
+So
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:480}
+v_\phi = \inv{\sqrt{\epsilon \mu_0}},
+\end{dmath}
+
+which is the speed of light in the medium (\(\epsilon_r\)) that fills the co-axial cable.
+
+This is \underline{not} a coincidence.  In any two-wire homogeneously filled transmission line, the phase velocity is equal to the speed of light in the unbounded medium that fills the line.
+
+The characteristic impedance (again assuming the lossless \( R = G = 0 \) case) is
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:500}
+Z_0 
+= \sqrt{ \frac{\cancel{R} + j \omega L}{\cancel{G} + j \omega C} } 
+= \sqrt{ \frac{L}{C} }
+= \sqrt{
+\frac{\mu_0}{ 2 \pi } \ln \frac{b}{a}
+\frac{ \ln \frac{b}{a} } 
+{2 \pi \epsilon_0 \epsilon_r }
+}
+=
+\sqrt{ \frac{\mu_0}{\epsilon} } \frac{ \ln \frac{b}{a} }{ 2 \pi }.
+\end{dmath}
+
+Note that \( \eta = \sqrt{\mu_0/\epsilon_0} = 120 \pi \Omega \) is the intrinsic impedance of free space.  The values \( a, b \) in \cref{eqn:uwaves4TransmissionLines:500} can be used to tune the characteristic impedance of the transmission line.
+
+} % example
+
+\section{Lossless line.}
+
+The lossless lossless case where \( R = G = 0 \) was considered above.  The results were
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:540}
+\gamma = j \omega \sqrt{ L C },
+\end{dmath}
+
+so \( \alpha = 0 \) and \( \beta = \omega \sqrt{LC} \), and the phase velocity was
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:560}
+v_\phi = \inv{\sqrt{LC}},
+\end{dmath}
+
+the characteristic impedance is
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:580}
+Z_0 = \sqrt{\frac{L}{C}},
+\end{dmath}
+
+and the signals are
+\begin{equation}\label{eqn:uwaves4TransmissionLines:600}
+\begin{aligned}
+V(z) &= V_0^{+} e^{-j \beta z} + V_0^{-} e^{j \beta z} \\
+I(z) &= \inv{Z_0} \lr{ V_0^{+} e^{-j \beta z} - V_0^{-} e^{j \beta z} } 
+\end{aligned}
+\end{equation}
+
+In the time domain for an infinite line, we have
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:620}
+v(z, t) 
+= \Real\lr{ V(z) e^{j \omega t} } 
+= V_0^{+} \Real\lr{ e^{-j \beta z} e^{j \omega t} }
+= V_0^{+} \cos( \omega t - \beta z ).
+\end{dmath}
+
+In this case the shape and amplitude of the waveform are preserved as sketched in \cref{fig:deck4Txline:deck4TxlineFig7}.
+
+\imageFigure{../../figures/ece1236/deck4TxlineFig7}{Lossless line signal preservation.}{fig:deck4Txline:deck4TxlineFig7}{0.2}
+
+\section{Low loss line.}
+
+Assume \( R \ll \omega L \) and \( G \ll \omega C \).  In this case we have
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:640}
+\gamma 
+= \sqrt{ (R + j \omega L) ( G + j \omega C ) }
+= 
+j \omega \sqrt{L C} \sqrt{ 
+\lr{ 1 + \frac{R}{j\omega L} }
+\lr{ 1 + \frac{G}{j\omega C} }
+}
+\approx
+j \omega \sqrt{L C} 
+\lr{ 1 + \frac{R}{2 j\omega L} }
+\lr{ 1 + \frac{G}{2 j\omega C} }
+\approx
+j \omega \sqrt{L C} 
+\lr{ 1 + \frac{R}{2 j\omega L}  + \frac{G}{2 j\omega C} }
+=
+j \omega \sqrt{L C} 
++ j \omega \frac{R \sqrt{C/L}}{2 j\omega} 
++ j \omega \frac{G \sqrt{L/C}}{2 j\omega} 
+=
+j \omega \sqrt{L C} 
++ 
+\inv{2} \lr{
+R \sqrt{\frac{C}{L}}
++
+G \sqrt{\frac{L}{C}}
+},
+\end{dmath}
+
+so
+\begin{equation}\label{eqn:uwaves4TransmissionLines:660}
+\begin{aligned}
+\alpha &= 
+\inv{2} \lr{
+R \sqrt{\frac{C}{L}}
++
+G \sqrt{\frac{L}{C}}
+} \\
+\beta &= \omega \sqrt{L C}.
+\end{aligned}
+\end{equation}
+
+Observe that this value for \( \beta \) is the same as the lossless case to first order.  We also have
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:680}
+Z_0 
+= \sqrt{ \frac{R + j \omega L}{G + j \omega C} }
+\approx
+\sqrt{ \frac{L}{C} },
+\end{dmath}
+
+also the same as the lossless case.  We must also have \( v_\phi = 1/\sqrt{L C} \).  To consider a time domain signal note that
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:700}
+V(z) 
+= V_0^{+} e^{-\gamma z} 
+= V_0^{+} e^{-\alpha z} e^{-j \beta z},
+\end{dmath}
+
+so 
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:720}
+v(z, t) 
+= \Real \lr{ V(z) e^{j \omega t} }
+= \Real \lr{ V_0^{+} e^{-\alpha z} e^{-j \beta z} e^{j \omega t} }
+= V_0^{+} e^{-\alpha z} \cos( \omega t - \beta z ).
+\end{dmath}
+
+The phase factor can be written
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:740}
+\omega t - \beta z 
+= 
+\omega \lr{ t - \frac{\beta}{\omega} z }
+\omega \lr{ t - z/v_\phi },
+\end{dmath}
+
+so the signal still moves with the phase velocity \( v_\phi = 1/\sqrt{LC} \), but in a diminishing envelope as sketched in \cref{fig:deck4Txline:deck4TxlineFig8}.
+
+\imageFigure{../../figures/ece1236/deck4TxlineFig8}{Time domain envelope for loss loss line.}{fig:deck4Txline:deck4TxlineFig8}{0.2}
+
+Notes
+
+\begin{itemize}
+\item The shape is preserved but the amplitude has an exponential attenuation along the line.
+\item In this case, since \( \beta(\omega) \) is a linear function to first order, we have no dispersion.  All of the Fourier components of a pulse travel with the same phase velocity since \( v_\phi = \omega/\beta \) is constant.  i.e.  \( v(z, t) = e^{-\alpha z} f( t - z/v_\phi ) \).  We should expect dispersion when the \( R/\omega L \) and \( G/\omega C \) start becoming more significant.
+\end{itemize}
+
+\section{Distortionless line.}
+
+Motivated by the early telegraphy days, when low loss materials were not available.  Therefore lines with a constant attenuation and constant phase velocity (i.e. no dispersion) were reqiured in order to eliminate distortion of the signals.  This can be achieved by setting 
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:760}
+\frac{R}{L} = \frac{G}{C}.
+\end{equation}
+
+When that is done we have
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:780}
+\gamma 
+= \sqrt{ (R + j \omega L) ( G + j \omega C ) }
+= j \omega \sqrt{L C} \sqrt{ 
+\lr{ 1 + \frac{R}{j \omega L} }
+\lr{ 1 + \frac{G}{j \omega C} }
+}
+= j \omega \sqrt{L C} \sqrt{ 
+\lr{ 1 + \frac{R}{j \omega L} }
+\lr{ 1 + \frac{R}{j \omega L} }
+}
+= j \omega \sqrt{L C} 
+\lr{ 1 + \frac{R}{j \omega L} }
+= R \sqrt{\frac{C}{L} } 
++ j \omega \sqrt{L C}
+= \sqrt{R G }
++ j \omega \sqrt{L C}.
+\end{dmath}
+
+We have 
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:800}
+\begin{aligned}
+\alpha &= \sqrt{R G } \\
+\beta &= \omega \sqrt{L C}.
+\end{aligned}
+\end{equation}
+
+The phase velocity is the same as that of the lossless and low-loss lines
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:820}
+v_\phi = \frac{\omega}{\beta} = \inv{\sqrt{L C}}.
+\end{equation}
+
+\section{Terminated lossless line.}
+
+Consider the load configuration sketched in \cref{fig:deck4Txline:deck4TxlineFig9}.
+
+\imageFigure{../../figures/ece1236/deck4TxlineFig9}{Terminated line.}{fig:deck4Txline:deck4TxlineFig9}{0.2}
+
+Recall that
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:840}
+\begin{aligned}
+V(z) &= V_0^{+} e^{-j \beta z} + V_0^{-} e^{+j \beta z} \\
+I(z) &= \frac{V_0^{+}}{Z_0} e^{-j \beta z} - \frac{V_0^{-}}{Z_0} e^{+j \beta z} \\
+\end{aligned}
+\end{equation}
+
+At the load (\( z = 0 \)), we have
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:860}
+\begin{aligned}
+V(0) &= V_0^{+} + V_0^{-} \\
+I(0) &= \inv{Z_0} \lr{ V_0^{+} - V_0^{-} }
+\end{aligned}
+\end{equation}
+
+So
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:880}
+Z_L 
+= \frac{V(0)}{I(0)}
+= Z_0 \frac{ V_0^{+} + V_0^{-} }{ V_0^{+} - V_0^{-} }
+= Z_0 \frac{ 1 + \Gamma_L }{1 - \Gamma_L },
+\end{dmath}
+
+where
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:900}
+\Gamma_L \equiv \frac{V_0^{-} }{V_0^{+}},
+\end{equation}
+
+is the reflection coefficient at the load.
+
+The phasors for the signals take the form
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:920}
+\begin{aligned}
+V(z) &= V_0^{+} \lr{ e^{-j \beta z} + \Gamma_L e^{+j \beta z} } \\
+I(z) &= \frac{V_0^{+}}{Z_0} \lr{ e^{-j \beta z} - \Gamma_L e^{+j \beta z} }.
+\end{aligned}
+\end{equation}
+
+Observe that we can rearranging for \( \Gamma_L \) in terms of the impedances
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:940}
+\lr{ 1 - \Gamma_L } Z_L = Z_0 \frac{ 1 + \Gamma_L },
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:960}
+\Gamma_L \lr{ Z_0 + Z_L } = Z_L - Z_0,
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:980}
+\Gamma_L 
+= \frac{Z_L - Z_0}
+{ Z_0 + Z_L } .
+\end{dmath}
+
+\paragraph{Power}
+
+The average (time) power on the line is 
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:1000}
+P_{ \textrm{av}} 
+= \inv{2} \Real\lr{ V(Z) I^\conj(z) }
+= 
+\inv{2} \Real
+\lr{
+V_0^{+} \lr{ e^{-j \beta z} + \Gamma_L e^{+j \beta z} } 
+\lr{\frac{V_0^{+}}{Z_0}}^\conj \lr{ e^{j \beta z} - \Gamma_L^\conj e^{-j \beta z} }
+}
+= \frac{ \Abs{V_0^{+}}^2 }{2 Z_0 } \Real\lr{
+1 + \Gamma_L e^{2 j \beta z} - \Gamma_L^\conj e^{-2 j \beta z} - \Abs{\Gamma_L}^2
+}
+= \frac{ \Abs{V_0^{+}}^2 }{2 Z_0 } \lr{
+1 - \Abs{\Gamma_L}^2
+}.
+\end{dmath}
+
+where we've made use of the fact that \( Z_0 = \sqrt{L/C} \) is real for the lossless line, and the fact that a conjugate difference \( A - A^\conj = 2 j \Imag(A) \) is purely imaginary.
+
+This can be written as
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:1020}
+P_{ \textrm{av}} = P^{+} - P^{-},
+\end{dmath}
+
+where
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:1040}
+\begin{aligned}
+P^{+} &= \frac{ \Abs{V_0^{+}}^2 }{2 Z_0 } \\
+P^{+} &= \frac{ \Abs{V_0^{+}}^2 }{2 Z_0 } \Abs{\Gamma_L}^2.
+\end{aligned}
+\end{equation}
+
+This difference is the power delivered to the load.  This is not z-dependent because we are considering the lossless case.  Maximum power is delivered to the load when \( \Gamma_L = 0 \), which occurs when the impedances are matched.
+
+\section{Return loss and insertion loss.  Defined.}
+
+Return loss (dB) is defined as
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:1060}
+\textrm{RL} 
+= 10 \log_{10} \frac{P_{\textrm{inc}}}{P_{\textrm{refl}}} 
+= 10 \log_{10} \inv{\Abs{\Gamma}^2}
+= -20 \log_{10} \Abs{\Gamma}.
+\end{dmath}
+
+Insertion loss (dB) is defined as
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:1080}
+\textrm{IL} 
+= 10 \log_{10} \frac{P_{\textrm{inc}}}{P_{\textrm{trans}}} 
+= 10 \log_{10} \frac{P^{+}}{P^{+} - P^{-}}
+= 10 \log_{10} \inv{1 - \Abs{\Gamma}^2}
+= -10 \log_{10} \lr{ 1 - \Abs{\Gamma}^2 }.
+\end{dmath}
+
+\section{Standing wave ratio}
+
+Consider again the lossless loaded configuration of \cref{fig:deck4Txline:deck4TxlineFig9}.  Now let \( z = - l \), where \( l \) is the distance from the load.  The phasors at this point on the line are
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:n}
+\begin{aligned}
+V(-l) &= V_0^{+} \lr{ e^{j \beta l} + \Gamma_L e^{-j \beta l} } \\
+I(-l) &= \frac{V_0^{+}}{Z_0} \lr{ e^{j \beta l} - \Gamma_L  e^{-j \beta l} } \\
+\end{aligned}
+\end{equation}
+
+The absolute voltage at this point is
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:n}
+\Abs{V(-l)} 
+= \Abs{V_0^{+}} \Abs{ e^{j \beta l} + \Gamma_L e^{-j \beta l} }
+= \Abs{V_0^{+}} \Abs{ 1 + \Gamma_L e^{-2 j \beta l} }
+= \Abs{V_0^{+}} \Abs{ 1 + \Abs{\Gamma_L} e^{j \Theta_L} e^{-2 j \beta l} },
+\end{dmath}
+
+where the complex valued \( \Gamma_L \) is given by \( \Gamma_L = \Abs{\Gamma_L} e^{j \Theta_L} \).
+
+This gives
+\begin{equation}\label{eqn:uwaves4TransmissionLines:n}
+\Abs{V(-l)} 
+= \Abs{V_0^{+}} \Abs{ 1 + \Abs{\Gamma_L} e^{j(\Theta_L -2 \beta l)} }.
+\end{equation}
+
+The voltage magnitude oscillates as one moves along the line.  The maximum occurs when \( e^{j (\Theta_L -2 \beta l)}  = 1 \)
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:n}
+V_\max = \Abs{V_0^{+}} \Abs{ 1 + \Abs{\Gamma_L} }.
+\end{equation}
+
+This occurs when \( \Theta_L - 2 \beta l = 2 k \pi \) for \( k = 0, 1, 2, \cdots \).  The minimum occurs when \( e^{j (\Theta_L -2 \beta l)}  = -1 \)
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:n}
+V_\min = \Abs{V_0^{+}} \Abs{ 1 - \Abs{\Gamma_L} },
+\end{equation}
+
+which occurs when \( \Theta_L - 2 \beta l = (2 k - 1 )\pi \) for \( k = 1, 2, \cdots \).  The \textAndIndex{standing wave ratio} is defined as
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:n}
+\textrm{SWR} = \frac{V_\max}{V_\min} = \frac{ 1 + \Abs{\Gamma_L} }{ 1 - \Abs{\Gamma_L} }.
+\end{equation}
+
+This is a measure of the mismatch of a line.  This is sketched in \cref{fig:deck4Txline:deck4TxlineFig10}.
+
+\imageFigure{../../figures/ece1236/deck4TxlineFig10}{SWR extremes.}{fig:deck4Txline:deck4TxlineFig10}{0.2}
+
+Notes:
+
+\begin{itemize}
+\item Since \( 0 \le \Abs{\Gamma_L} \le 1 \), we have \( 1 \le \textrm{SWR} \le \infty \).  The lower bound is for a matched line, and open, short, or purely reactive termination leads to the infinities.
+\item The distance between two successive maxima (or minima) can be determined by setting \( \Theta_L - 2 \beta l = 2 k \pi \) for two consecutive values of \( k \).  For \( k = 0 \), suppose that \( V_\max \) occurs at \( d_1 \)
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:n}
+\Theta_L - 2 \beta d_1 = 2 (0) \pi,
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:n}
+d_1 = \frac{\Theta_L}{2 \beta}.
+\end{dmath}
+
+For \( k = 1 \), let the max occur at \( d_2 \)
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:n}
+\Theta_L - 2 \beta d_2 = 2 (1) \pi,
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:n}
+d_2 = \frac{\Theta_L - 2 \pi}{2 \beta}.
+\end{dmath}
+
+The difference is
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:n}
+d_1 - d_2 
+= \frac{\Theta_L}{2 \beta} - \frac{\Theta_L - 2 \pi}{2 \beta} 
+= \frac{\pi}{\beta}
+= \frac{\pi}{2 \pi/\lambda}
+= \frac{\lambda}{2}.
+\end{dmath}
+
+The distance between two consequtive maxima (or minima) of the SWR is \( \lambda/2 \).
+
+\end{itemize}
+
+\section{Impedance Transformation.}
+

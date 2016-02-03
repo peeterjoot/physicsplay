@@ -78,6 +78,8 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
 all :: multiPendulumSphericalMatrix.pdf
 
+uwaves4TransmissionLines.pdf : ../ece1236/uwaves4TransmissionLinesCore.tex
+
 multiPendulumSphericalMatrix.tex : ../classicalmechanics/multiPendulumSphericalMatrix.tex
 	cp $^ $@
 
