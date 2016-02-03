@@ -79,6 +79,8 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
 all :: multiPendulumSphericalMatrix.pdf
 
+u5: uwavesDeck5SmithChart.pdf
+
 #uwaves4TransmissionLines.pdf : ../ece1236/uwaves4TransmissionLinesCore.tex
 uwavesDeck5SmithChart.pdf : uwavesDeck5SmithChartCore.tex
 uwavesDeck6LCmatching.pdf : uwavesDeck6LCmatchingCore.tex

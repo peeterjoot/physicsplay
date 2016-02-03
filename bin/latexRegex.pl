@@ -1,5 +1,8 @@
 #s/\\0\b/{(0)}/g;
 s/\\av\b/{\\textrm{av}}/g;
+#s/\\or\b/\\overbar{r}/g;
+s/\\oX\b/\\overbar{X}/g;
+s/\\oG\b/\\overbar{\\Gamma}/g;
 #s/\\0bcs/0_{\\mathrm{BCS}}/g ;
 #s/0\\ccube/_{0,\\textrm{ccube}}/g;
 #s/0\\iso/_{0,\\textrm{iso}}/g;
@@ -116,7 +119,7 @@ s/\\in\b/{\\textrm{in}}/g ;
 #s/\\lambdaL/\\lambda_{\\mathrm{L}}/g ;
 #s/_laser/_{\\mathrm{laser}}/g ;
 #s/\\L_/\\hat{L}_/g ;
-s/_\\L/_\\txt{L}/g ;
+s/_\\L/_\\txtL/g ;
 #s/\\L_m\b/\\hat{L}_{-}/g ;
 #s/\\LOS/{\\textrm{LOS}}/g;
 #s/\\L_p\b/\\hat{L}_{+}/g ;
