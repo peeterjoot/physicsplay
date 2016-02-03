@@ -34,3 +34,17 @@ Part 1)
 
 -----------------------------------------
 Part 2)
+
+   $ make clean test
+   ...
+   ./testdriver --report_level=detailed
+   Running 1 test case...
+
+   Test suite "test" passed with:
+     10296 assertions out of 10296 passed
+     1 test case out of 1 passed
+
+     Test case "timestep" passed with:
+       10296 assertions out of 10296 passed
+
+

@@ -2,6 +2,7 @@
 CXXFLAGS += -MMD
 
 CXXFLAGS += -I../inc
+CXXFLAGS += -I../ps2
 CXXFLAGS += -I$(HOME)/rarray
 CXXFLAGS += -I$(HOME)/ticktock
 
@@ -45,13 +46,8 @@ else
    TEST_LDLIBS += -lboost_unit_test_framework
 endif
 
-#TARGETS += antsTest.diff
-#TARGETS += ants_on_table.h
-#TARGETS += ants.cc
-#TARGETS += ants_on_table.cc
 TARGETS += ants
 TARGETS += origants
-#TARGETS += ants.out
 ANTS_SOURCES += ../ps2/ants.cc
 ANTS_SOURCES += ticktock.cc
 ANTS_SOURCES += ../ps2/ants_on_table.cc
@@ -61,10 +57,11 @@ ANTS_OBJECTS := $(subst .cc,.o,$(ANTS_SOURCES))
 ORIGANTS_OBJECTS += origants.o 
 ORIGANTS_OBJECTS += ticktock.o 
 
-#TARGETS += test
-#TEST_SOURCES += test.cc
-#TEST_SOURCES += $(COMMON_SOURCES)
-#TEST_OBJECTS := $(subst .cc,.o,$(TEST_SOURCES))
+TARGETS += test
+TEST_SOURCES += ../ps2/ants_on_table.cc
+TEST_SOURCES += testdriver.cc
+TEST_SOURCES += $(COMMON_SOURCES)
+TEST_OBJECTS := $(subst .cc,.o,$(TEST_SOURCES))
 
 CLEANTARGETS += ants.out
 CLEANTARGETS += antsTest.diff
@@ -99,7 +96,10 @@ ants : $(ANTS_OBJECTS)
 origants : $(ORIGANTS_OBJECTS)
 	$(CXX) $(LDFLAGS) -o $@ $(ORIGANTS_OBJECTS) $(ANTS_LDLIBS)
 
-test : $(TEST_OBJECTS)
+test: testdriver
+	./testdriver --report_level=detailed
+
+testdriver : $(TEST_OBJECTS)
 	$(CXX) $(LDFLAGS) -o $@ $(TEST_OBJECTS) $(TEST_LDLIBS)
 
 .gitignore: GNUmakefile

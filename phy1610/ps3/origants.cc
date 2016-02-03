@@ -4,27 +4,29 @@
 
 void compute()
 {
+    int totalGridSize = 356 ;
+
     // ants walk on a table
-    float number_of_ants[356][356];
-    float new_number_of_ants[356][356];
-    float velocity_of_ants[356][356];
+    float number_of_ants[totalGridSize][totalGridSize];
+    float new_number_of_ants[totalGridSize][totalGridSize];
+    float velocity_of_ants[totalGridSize][totalGridSize];
     const int total_ants = 1010; // initial number of ants
     // initialize
-    for (int i=0;i<356;i++) {
-        for (int j=0;j<356;j++) {
-            velocity_of_ants[i][j] = M_PI*(sin((2*M_PI*(i+j))/3560)+1);
+    for (int i=0;i<totalGridSize;i++) {
+        for (int j=0;j<totalGridSize;j++) {
+            velocity_of_ants[i][j] = M_PI*(sin((2*M_PI*(i+j))/(totalGridSize *10))+1);
         }
     }
     int n = 0;
     float z = 0;
-    for (int i=0;i<356;i++) {
-        for (int j=0;j<356;j++) {
+    for (int i=0;i<totalGridSize;i++) {
+        for (int j=0;j<totalGridSize;j++) {
             number_of_ants[i][j] = 0.0;
         }
     }
     while (n < total_ants) {
-        for (int i=0;i<356;i++) {
-            for (int j=0;j<356;j++) {
+        for (int i=0;i<totalGridSize;i++) {
+            for (int j=0;j<totalGridSize;j++) {
                 z += sin(0.3*(i+j));
                 if (z>1 and n!=total_ants) {
                     number_of_ants[i][j] += 1;
@@ -49,23 +51,23 @@ void compute()
     for (int t = 0; t < NUMBER_OF_TIME_INTERVALS; t++) {
 timer.tick() ;
         float totants = 0.0;
-        for (int i=0;i<356;i++) {
-            for (int j=0;j<356;j++) {
+        for (int i=0;i<totalGridSize;i++) {
+            for (int j=0;j<totalGridSize;j++) {
                 totants += number_of_ants[i][j];
             }
         }
 s_totants += timer.silent_tock() ;
         std::cout << t<< " " << totants << std::endl;
 timer.tick() ;
-        for (int i=0;i<356;i++) {
-            for (int j=0;j<356;j++) {
+        for (int i=0;i<totalGridSize;i++) {
+            for (int j=0;j<totalGridSize;j++) {
                 new_number_of_ants[i][j] = 0.0;
             }
         }
 s_init += timer.silent_tock() ;
 timer.tick() ;
-        for (int i=0;i<356;i++) {
-            for (int j=0;j<356;j++) {
+        for (int i=0;i<totalGridSize;i++) {
+            for (int j=0;j<totalGridSize;j++) {
                 int di = 1.9*sin(velocity_of_ants[i][j]);
                 int dj = 1.9*cos(velocity_of_ants[i][j]);
                 int i2 = i + di;
@@ -73,15 +75,15 @@ timer.tick() ;
                 // some ants do not walk
                 new_number_of_ants[i][j]+=0.8*number_of_ants[i][j];
                 // the rest of the ants walk, but some fall of the table
-                if (i2>=0 and i2<356 and j2>=0 and j2<356) {
+                if (i2>=0 and i2<totalGridSize and j2>=0 and j2<totalGridSize) {
                     new_number_of_ants[i2][j2]+=0.2*number_of_ants[i][j];
                 }
             }
         }
 s_core += timer.silent_tock() ;
 timer.tick();
-        for (int i=0;i<356;i++) {
-            for (int j=0;j<356;j++) {
+        for (int i=0;i<totalGridSize;i++) {
+            for (int j=0;j<totalGridSize;j++) {
                 number_of_ants[i][j] = new_number_of_ants[i][j];
                 totants += number_of_ants[i][j];
             }

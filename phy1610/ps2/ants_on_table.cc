@@ -52,7 +52,7 @@ ants_on_table::ants_on_table( const size_t table_grid_size ) :
    m_number_of_ants( table_grid_size, table_grid_size ),
    m_velocity_of_ants( table_grid_size, table_grid_size )
 {
-   assert( table_grid_size ) ;
+   assert( table_grid_size > 1 ) ;
 }
 
 ants_on_table::~ants_on_table( )
