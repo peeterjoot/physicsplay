@@ -22,9 +22,9 @@ TICKTOCK := $(HOME)/ticktock
 
 all : ps3/ticktock.cc
 
-ps3.tar : $(PS3) makefile
+ps3.tar.gz : $(PS3) makefile
 	rm -f $@
-	tar cf $@ $(PS3)
+	tar zcf $@ $(PS3)
 
 git.log : 
 	git log --stat inc ps2 ps3 > $@
