@@ -30,7 +30,7 @@ These are notes for the UofT course ECE1236H, Microwave and Millimeter-Wave Tech
 
 A transmission line requires two conductors as sketched in \cref{fig:deck4Txline:deck4TxlineFig1}, which shows a 2-wire line such a telephone line, a coaxial cable as found in cable TV distribution, and a microstrip line as found in cell phone RF interconnects.
 
-\imageFigure{../../figures/ece1236/deck4TxlineFig1}{Transmission line examples.}{fig:deck4Txline:deck4TxlineFig1}{0.3}
+\imageFigure{../../figures/ece1236/deck4TxlineFig1}{Transmission line examples.}{fig:deck4Txline:deck4TxlineFig1}{0.2}
 
 A two-wire line becomes a transmission line when the wavelength of operation becomes comparable to the size of the line (or higher spectral component for pulses).  In general a transmission line much support (TEM) transverse electromagnetic modes.
 
@@ -137,7 +137,9 @@ I(z)
 Introducing the characteristic impedance \( Z_0 \) of the line
 
 \begin{dmath}\label{eqn:uwaves4TransmissionLines:260}
-Z_0 = \frac{R + j \omega L}{\gamma} = \sqrt{ \frac{R + j \omega L}{G + j \omega C} },
+Z_0 
+= \frac{R + j \omega L}{\gamma} 
+= \sqrt{ \frac{R + j \omega L}{G + j \omega C} },
 \end{dmath}
 
 we have
@@ -169,7 +171,7 @@ From electrostatics and magnetostatics the per unit length induction and capacit
 
 From Gauss' law the total charge can be calculated assuming that the ends of the cable can be neglected
 
-\begin{dmath}\label{eqn:uwaves4TransmissionLines:n}
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:520}
 Q 
 = \int \spacegrad \cdot \BD dV 
 = \oint \BD \cdot d\BA 
@@ -239,7 +241,7 @@ L = \frac{\Phi/l}{I} = \frac{\mu_0}{ 2 \pi } \ln \frac{b}{a}.
 \end{equation}
 
 %\cref{fig:deck4Txline:deck4TxlineFig5}.
-%\imageFigure{../../figures/ece1236/deck4TxlineFig5}{CAPTION: deck4TxlineFig5}{fig:deck4Txline:deck4TxlineFig5}{0.3}
+%\imageFigure{../../figures/ece1236/deck4TxlineFig5}{CAPTION: deck4TxlineFig5}{fig:deck4Txline:deck4TxlineFig5}{0.2}
 
 For a lossless line where \( R = G = 0 \), we have \( \gamma = \sqrt{ (j \omega L)(j \omega C)} = j \omega \sqrt{L C} \),
 so the phase velocity for a (lossless) coaxial cable is
@@ -285,13 +287,151 @@ Z_0
 = \sqrt{ \frac{\cancel{R} + j \omega L}{\cancel{G} + j \omega C} } 
 = \sqrt{ \frac{L}{C} }
 = \sqrt{
-\frac{\Phi/l}{I} = \frac{\mu_0}{ 2 \pi } \ln \frac{b}{a}
+\frac{\mu_0}{ 2 \pi } \ln \frac{b}{a}
 \frac{ \ln \frac{b}{a} } 
 {2 \pi \epsilon_0 \epsilon_r }
 }
+=
+\sqrt{ \frac{\mu_0}{\epsilon} } \frac{ \ln \frac{b}{a} }{ 2 \pi }.
 \end{dmath}
 
+Note that \( \eta = \sqrt{\mu_0/\epsilon_0} = 120 \pi \Omega \) is the intrinsic impedance of free space.  The values \( a, b \) in \cref{eqn:uwaves4TransmissionLines:500} can be used to tune the characteristic impedance of the transmission line.
+
 } % example
+
+\section{Lossless line.}
+
+The lossless lossless case where \( R = G = 0 \) was considered above.  The results were
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:540}
+\gamma = j \omega \sqrt{ L C },
+\end{dmath}
+
+so \( \alpha = 0 \) and \( \beta = \omega \sqrt{LC} \), and the phase velocity was
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:560}
+v_\phi = \inv{\sqrt{LC}},
+\end{dmath}
+
+the characteristic impedance is
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:580}
+Z_0 = \sqrt{\frac{L}{C}},
+\end{dmath}
+
+and the signals are
+\begin{equation}\label{eqn:uwaves4TransmissionLines:600}
+\begin{aligned}
+V(z) &= V_0^{+} e^{-j \beta z} + V_0^{-} e^{j \beta z} \\
+I(z) &= \inv{Z_0} \lr{ V_0^{+} e^{-j \beta z} - V_0^{-} e^{j \beta z} } 
+\end{aligned}
+\end{equation}
+
+In the time domain for an infinite line, we have
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:620}
+v(z, t) 
+= \Real\lr{ V(z) e^{j \omega t} } 
+= V_0^{+} \Real\lr{ e^{-j \beta z} e^{j \omega t} }
+= V_0^{+} \cos( \omega t - \beta z ).
+\end{dmath}
+
+In this case the shape and amplitude of the waveform are preserved as sketched in \cref{fig:deck4Txline:deck4TxlineFig7}.
+
+\imageFigure{../../figures/ece1236/deck4TxlineFig7}{Lossless line signal preservation.}{fig:deck4Txline:deck4TxlineFig7}{0.2}
+
+\section{Low loss line.}
+
+Assume \( R \ll \omega L \) and \( G \ll \omega C \).  In this case we have
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:640}
+\gamma 
+= \sqrt{ (R + j \omega L) ( G + j \omega C ) }
+= 
+j \omega \sqrt{L C} \sqrt{ 
+\lr{ 1 + \frac{R}{j\omega L} }
+\lr{ 1 + \frac{G}{j\omega C} }
+}
+\approx
+j \omega \sqrt{L C} 
+\lr{ 1 + \frac{R}{2 j\omega L} }
+\lr{ 1 + \frac{G}{2 j\omega C} }
+\approx
+j \omega \sqrt{L C} 
+\lr{ 1 + \frac{R}{2 j\omega L}  + \frac{G}{2 j\omega C} }
+=
+j \omega \sqrt{L C} 
++ j \omega \frac{R \sqrt{C/L}}{2 j\omega} 
++ j \omega \frac{G \sqrt{L/C}}{2 j\omega} 
+=
+j \omega \sqrt{L C} 
++ 
+\inv{2} \lr{
+R \sqrt{\frac{C}{L}}
++
+G \sqrt{\frac{L}{C}}
+},
+\end{dmath}
+
+so
+\begin{equation}\label{eqn:uwaves4TransmissionLines:660}
+\begin{aligned}
+\alpha &= 
+\inv{2} \lr{
+R \sqrt{\frac{C}{L}}
++
+G \sqrt{\frac{L}{C}}
+} \\
+\beta &= \omega \sqrt{L C}.
+\end{aligned}
+\end{equation}
+
+Observe that this value for \( \beta \) is the same as the lossless case to first order.  We also have
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:680}
+Z_0 
+= \sqrt{ \frac{R + j \omega L}{G + j \omega C} }
+\approx
+\sqrt{ \frac{L}{C} },
+\end{dmath}
+
+also the same as the lossless case.  We must also have \( v_\phi = 1/\sqrt{L C} \).  To consider a time domain signal note that
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:700}
+V(z) 
+= V_0^{+} e^{-\gamma z} 
+= V_0^{+} e^{-\alpha z} e^{-j \beta z},
+\end{dmath}
+
+so 
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:720}
+v(z, t) 
+= \Real \lr{ V(z) e^{j \omega t} }
+= \Real \lr{ V_0^{+} e^{-\alpha z} e^{-j \beta z} e^{j \omega t} }
+= V_0^{+} e^{-\alpha z} \cos( \omega t - \beta z ).
+\end{dmath}
+
+The phase factor can be written
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:740}
+\omega t - \beta z 
+= 
+\omega \lr{ t - \frac{\beta}{\omega} z }
+\omega \lr{ t - z/v_\phi },
+\end{dmath}
+
+so the signal still moves with the phase velocity \( v_\phi = 1/\sqrt{LC} \), but in a diminishing envelope as sketched in \cref{fig:deck4Txline:deck4TxlineFig8}.
+
+\imageFigure{../../figures/ece1236/deck4TxlineFig8}{Time domain envelope for loss loss line.}{fig:deck4Txline:deck4TxlineFig8}{0.2}
+
+Notes
+
+\begin{itemize}
+\item The shape is preserved but the amplitude has an exponential attenuation along the line.
+\item In this case, since \( \beta(\omega) \) is a linear function to first order, we have no dispersion.  All of the Fourier components of a pulse travel with the same phase velocity since \( v_\phi = \omega/\beta \) is constant.  i.e.  \( v(z, t) = e^{-\alpha z} f( t - z/v_\phi ) \).  We should expect dispersion when the \( R/\omega L \) and \( G/\omega C \) start becoming more significant.
+\end{itemize}
+
+\section{Distortionless line.}
 
 \EndArticle
 %\EndNoBibArticle
