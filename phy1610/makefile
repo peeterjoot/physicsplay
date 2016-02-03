@@ -14,14 +14,20 @@ PS3 += ps3/GNUmakefile
 PS3 += ps3/runreport.txt
 PS3 += ps3/tickSamples
 PS3 += ps3/ticktock.cc
+PS3 += ps3/testdriver.cc
+PS3 += README.ps3.txt
+PS3 += git.log
 
 TICKTOCK := $(HOME)/ticktock
 
 all : ps3/ticktock.cc
 
-ps3.tar : $(PS3)
+ps3.tar : $(PS3) makefile
 	rm -f $@
 	tar cf $@ $(PS3)
+
+git.log : 
+	git log --stat inc ps2 ps3 > $@
 
 $(TICKTOCK) : 
 	(cd ; git clone https://github.com/vanzonr/ticktock.git)
