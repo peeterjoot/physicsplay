@@ -433,6 +433,267 @@ Notes
 
 \section{Distortionless line.}
 
+Motivated by the early telegraphy days, when low loss materials were not available.  Therefore lines with a constant attenuation and constant phase velocity (i.e. no dispersion) were reqiured in order to eliminate distortion of the signals.  This can be achieved by setting 
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:760}
+\frac{R}{L} = \frac{G}{C}.
+\end{equation}
+
+When that is done we have
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:780}
+\gamma 
+= \sqrt{ (R + j \omega L) ( G + j \omega C ) }
+= j \omega \sqrt{L C} \sqrt{ 
+\lr{ 1 + \frac{R}{j \omega L} }
+\lr{ 1 + \frac{G}{j \omega C} }
+}
+= j \omega \sqrt{L C} \sqrt{ 
+\lr{ 1 + \frac{R}{j \omega L} }
+\lr{ 1 + \frac{R}{j \omega L} }
+}
+= j \omega \sqrt{L C} 
+\lr{ 1 + \frac{R}{j \omega L} }
+= R \sqrt{\frac{C}{L} } 
++ j \omega \sqrt{L C}
+= \sqrt{R G }
++ j \omega \sqrt{L C}.
+\end{dmath}
+
+We have 
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:800}
+\begin{aligned}
+\alpha &= \sqrt{R G } \\
+\beta &= \omega \sqrt{L C}.
+\end{aligned}
+\end{equation}
+
+The phase velocity is the same as that of the lossless and low-loss lines
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:820}
+v_\phi = \frac{\omega}{\beta} = \inv{\sqrt{L C}}.
+\end{equation}
+
+\section{Terminated lossless line.}
+
+Consider the load configuration sketched in \cref{fig:deck4Txline:deck4TxlineFig9}.
+
+\imageFigure{../../figures/ece1236/deck4TxlineFig9}{Terminated line.}{fig:deck4Txline:deck4TxlineFig9}{0.2}
+
+Recall that
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:840}
+\begin{aligned}
+V(z) &= V_0^{+} e^{-j \beta z} + V_0^{-} e^{+j \beta z} \\
+I(z) &= \frac{V_0^{+}}{Z_0} e^{-j \beta z} - \frac{V_0^{-}}{Z_0} e^{+j \beta z} \\
+\end{aligned}
+\end{equation}
+
+At the load (\( z = 0 \)), we have
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:860}
+\begin{aligned}
+V(0) &= V_0^{+} + V_0^{-} \\
+I(0) &= \inv{Z_0} \lr{ V_0^{+} - V_0^{-} }
+\end{aligned}
+\end{equation}
+
+So
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:880}
+Z_L 
+= \frac{V(0)}{I(0)}
+= Z_0 \frac{ V_0^{+} + V_0^{-} }{ V_0^{+} - V_0^{-} }
+= Z_0 \frac{ 1 + \Gamma_L }{1 - \Gamma_L },
+\end{dmath}
+
+where
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:900}
+\Gamma_L \equiv \frac{V_0^{-} }{V_0^{+}},
+\end{equation}
+
+is the reflection coefficient at the load.
+
+The phasors for the signals take the form
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:920}
+\begin{aligned}
+V(z) &= V_0^{+} \lr{ e^{-j \beta z} + \Gamma_L e^{+j \beta z} } \\
+I(z) &= \frac{V_0^{+}}{Z_0} \lr{ e^{-j \beta z} - \Gamma_L e^{+j \beta z} }.
+\end{aligned}
+\end{equation}
+
+Observe that we can rearranging for \( \Gamma_L \) in terms of the impedances
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:940}
+\lr{ 1 - \Gamma_L } Z_L = Z_0 \frac{ 1 + \Gamma_L },
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:960}
+\Gamma_L \lr{ Z_0 + Z_L } = Z_L - Z_0,
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:980}
+\Gamma_L 
+= \frac{Z_L - Z_0}
+{ Z_0 + Z_L } .
+\end{dmath}
+
+\paragraph{Power}
+
+The average (time) power on the line is 
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:1000}
+P_{ \textrm{av}} 
+= \inv{2} \Real\lr{ V(Z) I^\conj(z) }
+= 
+\inv{2} \Real
+\lr{
+V_0^{+} \lr{ e^{-j \beta z} + \Gamma_L e^{+j \beta z} } 
+\lr{\frac{V_0^{+}}{Z_0}}^\conj \lr{ e^{j \beta z} - \Gamma_L^\conj e^{-j \beta z} }
+}
+= \frac{ \Abs{V_0^{+}}^2 }{2 Z_0 } \Real\lr{
+1 + \Gamma_L e^{2 j \beta z} - \Gamma_L^\conj e^{-2 j \beta z} - \Abs{\Gamma_L}^2
+}
+= \frac{ \Abs{V_0^{+}}^2 }{2 Z_0 } \lr{
+1 - \Abs{\Gamma_L}^2
+}.
+\end{dmath}
+
+where we've made use of the fact that \( Z_0 = \sqrt{L/C} \) is real for the lossless line, and the fact that a conjugate difference \( A - A^\conj = 2 j \Imag(A) \) is purely imaginary.
+
+This can be written as
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:1020}
+P_{ \textrm{av}} = P^{+} - P^{-},
+\end{dmath}
+
+where
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:1040}
+\begin{aligned}
+P^{+} &= \frac{ \Abs{V_0^{+}}^2 }{2 Z_0 } \\
+P^{+} &= \frac{ \Abs{V_0^{+}}^2 }{2 Z_0 } \Abs{\Gamma_L}^2.
+\end{aligned}
+\end{equation}
+
+This difference is the power delivered to the load.  This is not z-dependent because we are considering the lossless case.  Maximum power is delivered to the load when \( \Gamma_L = 0 \), which occurs when the impedances are matched.
+
+\section{Return loss and insertion loss.  Defined.}
+
+Return loss (dB) is defined as
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:1060}
+\textrm{RL} 
+= 10 \log_{10} \frac{P_{\textrm{inc}}}{P_{\textrm{refl}}} 
+= 10 \log_{10} \inv{\Abs{\Gamma}^2}
+= -20 \log_{10} \Abs{\Gamma}.
+\end{dmath}
+
+Insertion loss (dB) is defined as
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:1080}
+\textrm{IL} 
+= 10 \log_{10} \frac{P_{\textrm{inc}}}{P_{\textrm{trans}}} 
+= 10 \log_{10} \frac{P^{+}}{P^{+} - P^{-}}
+= 10 \log_{10} \inv{1 - \Abs{\Gamma}^2}
+= -10 \log_{10} \lr{ 1 - \Abs{\Gamma}^2 }.
+\end{dmath}
+
+\section{Standing wave ratio}
+
+Consider again the lossless loaded configuration of \cref{fig:deck4Txline:deck4TxlineFig9}.  Now let \( z = - l \), where \( l \) is the distance from the load.  The phasors at this point on the line are
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:n}
+\begin{aligned}
+V(-l) &= V_0^{+} \lr{ e^{j \beta l} + \Gamma_L e^{-j \beta l} } \\
+I(-l) &= \frac{V_0^{+}}{Z_0} \lr{ e^{j \beta l} - \Gamma_L  e^{-j \beta l} } \\
+\end{aligned}
+\end{equation}
+
+The absolute voltage at this point is
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:n}
+\Abs{V(-l)} 
+= \Abs{V_0^{+}} \Abs{ e^{j \beta l} + \Gamma_L e^{-j \beta l} }
+= \Abs{V_0^{+}} \Abs{ 1 + \Gamma_L e^{-2 j \beta l} }
+= \Abs{V_0^{+}} \Abs{ 1 + \Abs{\Gamma_L} e^{j \Theta_L} e^{-2 j \beta l} },
+\end{dmath}
+
+where the complex valued \( \Gamma_L \) is given by \( \Gamma_L = \Abs{\Gamma_L} e^{j \Theta_L} \).
+
+This gives
+\begin{equation}\label{eqn:uwaves4TransmissionLines:n}
+\Abs{V(-l)} 
+= \Abs{V_0^{+}} \Abs{ 1 + \Abs{\Gamma_L} e^{j(\Theta_L -2 \beta l)} }.
+\end{equation}
+
+The voltage magnitude oscillates as one moves along the line.  The maximum occurs when \( e^{j (\Theta_L -2 \beta l)}  = 1 \)
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:n}
+V_\max = \Abs{V_0^{+}} \Abs{ 1 + \Abs{\Gamma_L} }.
+\end{equation}
+
+This occurs when \( \Theta_L - 2 \beta l = 2 k \pi \) for \( k = 0, 1, 2, \cdots \).  The minimum occurs when \( e^{j (\Theta_L -2 \beta l)}  = -1 \)
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:n}
+V_\min = \Abs{V_0^{+}} \Abs{ 1 - \Abs{\Gamma_L} },
+\end{equation}
+
+which occurs when \( \Theta_L - 2 \beta l = (2 k - 1 )\pi \) for \( k = 1, 2, \cdots \).  The \textAndIndex{standing wave ratio} is defined as
+
+\begin{equation}\label{eqn:uwaves4TransmissionLines:n}
+\textrm{SWR} = \frac{V_\max}{V_\min} = \frac{ 1 + \Abs{\Gamma_L} }{ 1 - \Abs{\Gamma_L} }.
+\end{equation}
+
+This is a measure of the mismatch of a line.  This is sketched in \cref{fig:deck4Txline:deck4TxlineFig10}.
+
+\imageFigure{../../figures/ece1236/deck4TxlineFig10}{SWR extremes.}{fig:deck4Txline:deck4TxlineFig10}{0.2}
+
+Notes:
+
+\begin{itemize}
+\item Since \( 0 \le \Abs{\Gamma_L} \le 1 \), we have \( 1 \le \textrm{SWR} \le \infty \).  The lower bound is for a matched line, and open, short, or purely reactive termination leads to the infinities.
+\item The distance between two successive maxima (or minima) can be determined by setting \( \Theta_L - 2 \beta l = 2 k \pi \) for two consecutive values of \( k \).  For \( k = 0 \), suppose that \( V_\max \) occurs at \( d_1 \)
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:n}
+\Theta_L - 2 \beta d_1 = 2 (0) \pi,
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:n}
+d_1 = \frac{\Theta_L}{2 \beta}.
+\end{dmath}
+
+For \( k = 1 \), let the max occur at \( d_2 \)
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:n}
+\Theta_L - 2 \beta d_2 = 2 (1) \pi,
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:n}
+d_2 = \frac{\Theta_L - 2 \pi}{2 \beta}.
+\end{dmath}
+
+The difference is
+
+\begin{dmath}\label{eqn:uwaves4TransmissionLines:n}
+d_1 - d_2 
+= \frac{\Theta_L}{2 \beta} - \frac{\Theta_L - 2 \pi}{2 \beta} 
+= \frac{\pi}{\beta}
+= \frac{\pi}{2 \pi/\lambda}
+= \frac{\lambda}{2}.
+\end{dmath}
+
+The distance between two consequtive maxima (or minima) of the SWR is \( \lambda/2 \).
+
+\end{itemize}
+
+\section{Impedance Transformation.}
+
 \EndArticle
 %\EndNoBibArticle
 %}
