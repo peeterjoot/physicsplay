@@ -104,6 +104,7 @@ s/\\ee/\\epsilon/g ;
 #s/\\ik/{(k)}/g;
 #s/_\\I/_{\\mathrm{I}}/g;
 #s/\\inc\b/{\\textrm{inc}}/g ;
+s/\\in\b/{\\textrm{in}}/g ;
 #s/_initial/_{\\mathrm{initial}}/g ;
 #s/\\intsphere/\\int_0^{2 \\pi} \\int_0^\\pi/g ;
 #s/\\iso/{\\textrm{iso}}/g;
