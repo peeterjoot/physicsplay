@@ -21,6 +21,7 @@ INCOMPLETE += censor1p.tex
 INCOMPLETE += censor1pg.tex
 INCOMPLETE += stokespost.tex
 #INCOMPLETE += ps8mathematica.tex
+INCOMPLETE += $(wildcard uwaves*Core.tex)
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
@@ -78,7 +79,9 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
 all :: multiPendulumSphericalMatrix.pdf
 
-uwaves4TransmissionLines.pdf : ../ece1236/uwaves4TransmissionLinesCore.tex
+#uwaves4TransmissionLines.pdf : ../ece1236/uwaves4TransmissionLinesCore.tex
+uwavesDeck5SmithChart.pdf : uwavesDeck5SmithChartCore.tex
+uwavesDeck6LCmatching.pdf : uwavesDeck6LCmatchingCore.tex
 
 multiPendulumSphericalMatrix.tex : ../classicalmechanics/multiPendulumSphericalMatrix.tex
 	cp $^ $@
