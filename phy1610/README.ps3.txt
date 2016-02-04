@@ -47,4 +47,14 @@ Part 2)
      Test case "timestep" passed with:
        10296 assertions out of 10296 passed
 
+-----------------------------------------
+Part 3) (ps4)
 
+peeterj[12:06]:	thanks
+system[12:05]:	User peeterj has logged in.
+rzon[12:05]:	red nodes
+system[12:03]:	User sjella3 has logged in.
+peeterj[11:55]:	for problem set 4, should we be running the profiling on the
+"blue" nodes or the "red" nodes?
+
+FIXME: dynamic allocation in myrarray for vector storage.

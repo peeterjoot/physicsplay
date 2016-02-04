@@ -4,6 +4,7 @@ CXXFLAGS += -MMD
 CXXFLAGS += -I../inc
 CXXFLAGS += -I../ps2
 CXXFLAGS += -I$(HOME)/rarray
+CXXFLAGS += -I$(SCINET_RARRAY_INC)
 CXXFLAGS += -I$(HOME)/ticktock
 
 PRODUCTION := 1
@@ -110,7 +111,8 @@ clean::
 
 profile.mine.txt: ants
 	rm -f gmon.out
-	./ants > mine.out
+	./ants -t 400 > mine.out
+	#./ants > mine.out
 	$(GPROF) ./ants > $@
 
 profile.orig.txt: origants
