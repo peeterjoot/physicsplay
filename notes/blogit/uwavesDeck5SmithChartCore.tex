@@ -103,7 +103,7 @@ With \( l = \lambda/2 \)
 = \pi.
 \end{dmath}
 
-Since \( \tan \pi = 0 \), the input impededence is
+Since \( \tan \pi = 0 \), the input impedance is
 
 \begin{dmath}\label{eqn:uwavesDeck5SmithChartCore:200}
 Z_{\textrm{in}} 
@@ -123,7 +123,7 @@ With \( l = \lambda/4 \)
 = \frac{\pi}{2}.
 \end{dmath}
 
-We have \( \tan \beta l \rightarrow \infty \), so the input impededence is
+We have \( \tan \beta l \rightarrow \infty \), so the input impedance is
 
 \begin{dmath}\label{eqn:uwavesDeck5SmithChartCore:240}
 Z_{\textrm{in}} 
@@ -141,7 +141,7 @@ Z_{\textrm{in}}
 }
 %\end{equation}
 
-is called the \textAndIndex{impedence inverter}.
+is called the \textAndIndex{impedance inverter}.
 
 \begin{itemize}
 \item A large impedance is transformed into a small one and vice-versa.
@@ -210,7 +210,7 @@ If we let \( \overbar{Z}_{\textrm{in}} = \overbar{\Gamma}_\txtL + j \overbar{X}_
 \end{aligned}
 \end{equation}
 
-It is left as an exersize to demonstrate that these can be rearranged into
+It is left as an exercise to demonstrate that these can be rearranged into
 
 \begin{equation}\label{eqn:uwavesDeck5SmithChartCore:440}
 \begin{aligned}
@@ -219,7 +219,95 @@ It is left as an exersize to demonstrate that these can be rearranged into
 \end{aligned}
 \end{equation}
 
-which trace out circles in the \( \Gamma_r, \Gamma_i \) plane, one for the real part of \( \Gamma \) and one for the imaginary part.
+which trace out circles in the \( \Gamma_r, \Gamma_i \) plane, one for the real part of \( \Gamma \) and one for the imaginary part.  This provides a graphical way for implementing the impedance transformation.  
+
+\paragraph{Real impedance circle}
+
+The circle for the real part is centered at 
+
+\begin{dmath}\label{eqn:uwavesDeck5SmithChartCore:580}
+\lr{ \frac{\overbar{\Gamma}_L}{1 + \overbar{\Gamma}_L }, 0 },
+\end{dmath}
+
+with radius
+\begin{dmath}\label{eqn:uwavesDeck5SmithChartCore:600}
+\inv{1 + \overbar{\Gamma}_L }.
+\end{dmath}
+
+All these circles pass through the point \( (1,0) \), since
+\begin{dmath}\label{eqn:uwavesDeck5SmithChartCore:620}
+\frac{\overbar{\Gamma}_L}{1 + \overbar{\Gamma}_L } + \inv{1 + \overbar{\Gamma}_L }
+=
+\frac{1 + \overbar{\Gamma}_L}{1 + \overbar{\Gamma}_L }
+= 1.
+\end{dmath}
+
+For reactive loads where \( \overbar{\Gamma}_L = 0 \), we have \( \Gamma_r^2 + \Gamma_i^2 = 1 \), a circle through the origin with unit radius.
+
+For matched loads where \( \overbar{\Gamma}_L = 1 \) the circle is centered at \( (1/2, 0) \), with radius \( 1/2 \).
+
+\paragraph{Imaginary impedance circle}
+
+The circle obtained by equating imaginary parts are constant reactance circles with center
+
+\begin{dmath}\label{eqn:uwavesDeck5SmithChartCore:640}
+\lr{ 1, \inv{\overbar{X}_L } }, 
+\end{dmath}
+
+with radius 
+
+\begin{dmath}\label{eqn:uwavesDeck5SmithChartCore:660}
+\inv{\overbar{X}_L}.
+\end{dmath}
+
+These circles also pass through the point \( (1,0) \).  These circles are orthogonal to the constant resistance circles.
+
+\makeexample{Perform a transformation along a lossless line.}{example:uwavesDeck5SmithChartCore:680}{
+F8
+
+Given 
+
+\begin{dmath}\label{eqn:uwavesDeck5SmithChartCore:700}
+\overbar{Z} = \frac{1 + \Gamma}{1 - \Gamma},
+\end{dmath}
+
+\begin{dmath}\label{eqn:uwavesDeck5SmithChartCore:720}
+\Gamma = \Gamma_L e^{-2 j \beta l},
+\end{dmath}
+
+and
+
+\begin{dmath}\label{eqn:uwavesDeck5SmithChartCore:740}
+\Gamma_L = \Abs{\Gamma_L} e^{j \Theta_L }
+\end{dmath}
+
+The total reflection coefficient is
+
+\begin{dmath}\label{eqn:uwavesDeck5SmithChartCore:760}
+\Gamma = \Abs{\Gamma_L} e^{j (\Theta_L - 2 \beta l) }
+\end{dmath}
+
+If \( \Gamma_L = \Abs{\Gamma_L} e^{j \Theta_L } \) is plotted on the Smith chart, then in order to move towards the generator, a subtraction from \( \Theta_L \) of \( 2 \beta l \) is required.
+
+The class slides do this for a few loads.
+} % example
+
+\begin{enumerate}
+\item Plot the load on the Smith Chart.
+\item Trace the constant VSWR circle.% (blue).
+\item Move toward the generator until the constant resistance=1 circle is reached This determines the distance \(d\).
+\item Now the input impedance is of the form \(Z_A = 1 + j X\).
+\item We now have to use the stub to cancel out the \( j X \) and make \( Z_{\textrm{in}} = 1 \) (matched).
+\item This can be done on the Smith Chart. If \( X>0 \) then we need a capacitive stub (open). If \( X<0 \) then we need an inductive stub (shorted).
+\item Say we need a capacitive stub (open): Start from the position of the open. Now the constant VSWR circle is the exterior unit
+circle. Move toward the generator until you hit negative \( X \). This determines the length of the stub \( l \).
+\end{enumerate}
+
+Notes:
+\begin{enumerate}[(a)]
+\item In step (3) there are two points where the R=1 circle is intersected . Usually we chose the shortest one 
+\item By adding multiples of half-wavelength lengths to either \(d\) or \(l\) an infinite number of solutions can be constructed.
+\end{enumerate}
 
 \makeproblem{Find the smith chart circle equations}{problem:uwavesDeck5SmithChartCore:1}{
 Prove \cref{eqn:uwavesDeck5SmithChartCore:440}.
