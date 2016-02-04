@@ -1,8 +1,8 @@
 #s/\\0\b/{(0)}/g;
 s/\\av\b/{\\textrm{av}}/g;
 #s/\\or\b/\\overbar{r}/g;
-s/\\oX\b/\\overbar{X}/g;
-s/\\oG\b/\\overbar{\\Gamma}/g;
+s/\\oX/\\overbar{X}/g;
+s/\\oG/\\overbar{\\Gamma}/g;
 #s/\\0bcs/0_{\\mathrm{BCS}}/g ;
 #s/0\\ccube/_{0,\\textrm{ccube}}/g;
 #s/0\\iso/_{0,\\textrm{iso}}/g;
