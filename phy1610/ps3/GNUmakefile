@@ -26,6 +26,8 @@ endif
 ifdef USETICKTOCK
    CXXFLAGS += -DUSE_TICK_TOCK
    CXXFLAGS += -DNUMBER_OF_TIME_INTERVALS=400
+
+   TEST_OBJECTS += ticktock.o
 endif
 #CXXFLAGS += -DMYRARRAY2_USE_STD_VECTOR
 #CXXFLAGS += -DMYRARRAY_USING_RARRAY
@@ -64,7 +66,7 @@ TARGETS += testdriver
 TEST_SOURCES += ../ps2/ants_on_table.cc
 TEST_SOURCES += testdriver.cc
 TEST_SOURCES += $(COMMON_SOURCES)
-TEST_OBJECTS := $(subst .cc,.o,$(TEST_SOURCES))
+TEST_OBJECTS += $(subst .cc,.o,$(TEST_SOURCES))
 
 CLEANTARGETS += ants.out
 CLEANTARGETS += antsTest.diff
@@ -114,7 +116,6 @@ clean::
 profile.mine.txt: ants
 	rm -f gmon.out
 	./ants -t 400 > mine.out
-	#./ants > mine.out
 	$(GPROF) ./ants > $@
 
 profile.orig.txt: origants

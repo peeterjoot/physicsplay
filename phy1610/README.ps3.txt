@@ -7,6 +7,8 @@ It has been assumed that the following has been run as prep for build:
 
    (cd ; git clone git@github.com:vanzonr/rarray ; git clone https://github.com/vanzonr/ticktock.git)
 
+git.log contains the git log
+
 -----------------------------------------
 Part 1)
 
