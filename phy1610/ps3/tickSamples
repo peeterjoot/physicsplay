@@ -8,6 +8,7 @@ use strict ;
 use warnings ;
 
 my %totants = () ;
+my %iotime = () ;
 my %init = () ;
 my %core = () ;
 my %update = () ;
@@ -30,6 +31,7 @@ sub printResults
 {
    printf( "%7s\t%8s\t%8s\t%8s\t%8s\t%8s\n", 'what', 'orig avg', 'orig dev', 'my avg', 'my dev', 'my/orig' ) ;
 
+   printOneResult( "iotime", $iotime{'ants'}, $iotime{'origants'} ) ;
    printOneResult( "totants", $totants{'ants'}, $totants{'origants'} ) ;
    printOneResult( "init", $init{'ants'}, $init{'origants'} ) ;
    printOneResult( "core", $core{'ants'}, $core{'origants'} ) ;
@@ -56,6 +58,7 @@ sub setup
    my ( $what ) = @_ ;
 
    $totants{$what} = [ ] ;
+   $iotime{$what} = [ ] ;
    $init{$what} = [ ] ;
    $core{$what} = [ ] ;
    $update{$what} = [ ] ;
@@ -76,6 +79,11 @@ sub readTimes
       chomp ;
 
       my $a ;
+
+      if ( s/^io time time:\s*// )
+      {
+         $a = $iotime{$what} ;
+      }
 
       if ( s/^totants time:\s*// )
       {
