@@ -19,8 +19,8 @@ setup( 'origants' ) ;
 
 for ( my $i = 0 ; $i < $N ; $i++ )
 {
-   readTimes( 'ants' ) ;
-   readTimes( 'origants' ) ;
+   readTimes( 'ants', '-t 400' ) ;
+   readTimes( 'origants', '' ) ;
 }
 
 printResults() ;
@@ -66,13 +66,13 @@ sub setup
 
 sub readTimes
 {
-   my ( $what ) = @_ ;
+   my ( $what, $args ) = @_ ;
 
    # collect up info from one of:
-   #./ants | tail -4 
-   #./origants | tail -4 
+   #./ants | tail -5 
+   #./origants | tail -5 
 
-   open( my $fh, "./$what | tail -4 |" ) or die ;
+   open( my $fh, "./$what $args | tail -5 |" ) or die ;
 
    while ( <$fh> )
    {
@@ -80,7 +80,7 @@ sub readTimes
 
       my $a ;
 
-      if ( s/^io time time:\s*// )
+      if ( s/^io time:\s*// )
       {
          $a = $iotime{$what} ;
       }
