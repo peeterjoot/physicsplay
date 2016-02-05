@@ -17,6 +17,10 @@ PS3 += ps3/ticktock.cc
 PS3 += ps3/testdriver.cc
 PS3 += README.ps3.txt
 PS3 += git.log
+PS3 += ps4.sh
+PS3 += ants.batch.2016-02-04-18:46:27
+PS3 += ants.batch.2016-02-04-18:46:27/ants.out
+PS3 += ants.batch.2016-02-04-18:46:27/profile.rednode.out
 
 TICKTOCK := $(HOME)/ticktock
 
