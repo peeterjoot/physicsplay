@@ -11,6 +11,7 @@
    #include "rarray"
 #endif
 
+//FIXME: should use dynamic allocation in myrarray for vector storage.
 /**
    A class to manage the storage of and simple operations on a 2x2 dynamically allocated square array.
 

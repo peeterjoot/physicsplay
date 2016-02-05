@@ -2,6 +2,7 @@
 #include "integers.h"
 #include <iostream>
 #include <getopt.h>
+#include "optticktock.h"
 
 /**
    return codes for this exe.
@@ -40,6 +41,8 @@ int main( int argc, char ** argv )
    int total_number_of_ants { 1010 } ; 
    int c{0} ;
    int line{0} ;
+   TickTockOrNoOp timer ; 
+   float ioTime { 0.0 } ;
 
    constexpr struct option long_options[]{
      { "help",           0, NULL, 'h' },
@@ -103,8 +106,18 @@ int main( int argc, char ** argv )
 
    for ( ; i != end ; ++i )
    {
-      std::cout << i() << " " << *i << std::endl ;
+      float totants = i() ; 
+
+      timer.tick() ;
+
+      std::cout << totants << " " << *i << std::endl ;
+
+      ioTime += timer.silent_tock() ;
    }
+
+   #if defined USE_TICK_TOCK
+      std::cout << "io time: \t" << ioTime << std::endl ;
+   #endif
 
    return (int)RETURNCODES::SUCCESS ;
 }

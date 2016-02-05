@@ -1,3 +1,5 @@
+PS3 += scinet.env.ps2_3
+PS3 += inc/integers.h
 PS3 += inc/boosttest.h
 PS3 += inc/myrarray2.h
 PS3 += inc/optticktock.h
@@ -17,14 +19,15 @@ PS3 += ps3/ticktock.cc
 PS3 += ps3/testdriver.cc
 PS3 += README.ps3.txt
 PS3 += git.log
+PS3 += ps4.sh
 
 TICKTOCK := $(HOME)/ticktock
 
 all : ps3/ticktock.cc
 
-ps3.tar.gz : $(PS3) makefile
+ps4.tar.gz : $(PS3) makefile
 	rm -f $@
-	tar zcf $@ $(PS3)
+	tar zcf $@ $(PS3) ants.batch.2016-02-04-*/*
 
 git.log : 
 	git log --stat inc ps2 ps3 > $@

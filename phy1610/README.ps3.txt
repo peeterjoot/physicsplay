@@ -7,6 +7,8 @@ It has been assumed that the following has been run as prep for build:
 
    (cd ; git clone git@github.com:vanzonr/rarray ; git clone https://github.com/vanzonr/ticktock.git)
 
+git.log contains the git log
+
 -----------------------------------------
 Part 1)
 
@@ -50,11 +52,36 @@ Part 2)
 -----------------------------------------
 Part 3) (ps4)
 
-peeterj[12:06]:	thanks
-system[12:05]:	User peeterj has logged in.
-rzon[12:05]:	red nodes
-system[12:03]:	User sjella3 has logged in.
-peeterj[11:55]:	for problem set 4, should we be running the profiling on the
-"blue" nodes or the "red" nodes?
+The script:
 
-FIXME: dynamic allocation in myrarray for vector storage.
+   ps4.sh
+
+was used to submit a job to run the ants profiling.  For this submission I ran
+with increased numbers of ants and number of timesteps:
+
+   ants -t 1000 -n 10000
+
+(1000 timesteps, 10000 initial ants)
+
+The outputs for that can be found in:
+
+   ants.batch.2016-02-04-18:46:27/ants.out
+   ants.batch.2016-02-04-18:46:27/profile.rednode.out
+
+To compile on the gpc dev node I ran:
+
+   . ./scinet.env.ps2_3
+
+Then:
+
+   (cd ps3 && make)
+
+or for profiled output:
+
+   (cd ps3 && PROFILED=1 make clean ants origants)
+
+or for tick-tock output:
+
+   (cd ps3 && USETICKTOCK=1 make clean ants origants)
+
+

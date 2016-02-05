@@ -8,7 +8,9 @@ CXXFLAGS += -MMD
 
 CXXFLAGS += -I../inc
 CXXFLAGS += -I$(HOME)/rarray
+ifdef SCINET_RARRAY_INC
 CXXFLAGS += -I$(SCINET_RARRAY_INC)
+endif
 
 # PRODUCTION := 1
 ifdef PRODUCTION

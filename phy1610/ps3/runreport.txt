@@ -64,11 +64,28 @@
          core 0.288641        0.002347        0.297983        0.002639        1.032364
        update 0.003281        0.000094        0.003565        0.000222        1.086505
 
+   (Note that the tickSamples script requires the perl module Statistics/Basic.pm to be installed ...
+    which does not appear to be available on gpc.)
+
    Observe that the times for most of the parts of the code are all pretty comparable,
    with the exception of the fill operation, which appears to be much more expensive
    with the rarray implementation compared to the raw C++ array.  Despite that, the
    core compute loop takes the most time in either the original or the modularized
    implementation.
+
+   As an afterthought, I added tick/tock's for the io time in the (modularized)
+   ants driver.  When there are a number of timesteps the IO time is only a small
+   fraction of the total:
+
+   ./ants -t 1000 -n 10000 > a
+
+      io time:        0.541718
+      totants time:   0.523645
+      init time:      0.100761
+      core time:      9.67048
+      update time:    0.00010864
+
+   (1000 timesteps with 10000 initial ants)
 
   ----------------------------------------------------------------------------------------------------- 
   c) and gprof (the compilation commands for gprof should also go into the Makefile).

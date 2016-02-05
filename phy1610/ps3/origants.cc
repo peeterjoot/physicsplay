@@ -38,6 +38,7 @@ void compute()
 
     TickTockOrNoOp timer ;
 
+    double s_io { 0 } ;
     double s_totants { 0 } ;
     double s_init { 0.0 } ;
     double s_core { 0.0 } ;
@@ -57,7 +58,11 @@ timer.tick() ;
             }
         }
 s_totants += timer.silent_tock() ;
+
+timer.tick() ;
         std::cout << t<< " " << totants << std::endl;
+s_io += timer.silent_tock() ;
+
 timer.tick() ;
         for (int i=0;i<totalGridSize;i++) {
             for (int j=0;j<totalGridSize;j++) {
@@ -92,6 +97,7 @@ s_update += timer.silent_tock() ;
     }
 
 #if defined USE_TICK_TOCK
+std::cout << "io time: \t" << s_io << std::endl ;
 std::cout << "totants time: \t" << s_totants << std::endl ;
 std::cout << "init time: \t" << s_init << std::endl ;
 std::cout << "core time: \t" << s_core << std::endl ;
