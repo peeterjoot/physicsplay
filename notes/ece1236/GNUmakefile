@@ -13,7 +13,7 @@ SOURCE_DIRS += $(FIGURES)
 #REDACTED := -redacted
 
 GENERATED_SOURCES += matlab.tex 
-#GENERATED_SOURCES += mathematica.tex 
+GENERATED_SOURCES += mathematica.tex 
 #GENERATED_SOURCES += julia.tex 
 
 EPS_FILES := $(wildcard $(FIGURES)/*.eps)
@@ -25,7 +25,7 @@ THISBOOK_DEPS += $(PDFS_FROM_EPS)
 include ../make.rules
 
 #julia.tex : ../../julia/METADATA
-#mathematica.tex : ../../mathematica/METADATA
+mathematica.tex : ../../mathematica/METADATA
 matlab.tex : ../../matlab/METADATA
 
 #problemSets :: uwavesproblemSet1.pdf
