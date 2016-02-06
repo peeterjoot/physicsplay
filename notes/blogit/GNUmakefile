@@ -109,6 +109,8 @@ ensemblesForSpinOneHalf.pdf :: ../phy2403/ensemblesForSpinOneHalf.tex
 #qftProblemSet2.pdf : ../phy2403/qftproblemSet2Problem5.tex
 #qftProblemSet1.pdf : ps8mathematica.tex
 
+s1 : uwavesProblemSet1.pdf
+
 uwavesProblemSet1.pdf : ../ece1236/uwavesproblemSet1Problem1.tex \
 ../ece1236/uwavesproblemSet1Problem2.tex \
 ../ece1236/uwavesproblemSet1Problem3.tex \
