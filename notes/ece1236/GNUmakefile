@@ -28,6 +28,9 @@ include ../make.rules
 mathematica.tex : ../../mathematica/METADATA
 matlab.tex : ../../matlab/METADATA
 
+#uwaves4TransmissionLines.pdf : ../ece1236/uwaves4TransmissionLinesCore.tex
+#uwavesDeck5SmithChart.pdf :: ../ece1236/uwavesDeck5SmithChartCore.tex
+
 #problemSets :: uwavesproblemSet1.pdf
 #
 #ps7mathematica.tex : ../METADATA ../../mathematica/METADATA

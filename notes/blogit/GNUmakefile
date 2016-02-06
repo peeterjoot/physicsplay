@@ -79,13 +79,9 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
 all :: multiPendulumSphericalMatrix.pdf
 
-#u5: uwavesDeck5SmithChart.pdf
-
-#uwaves4TransmissionLines.pdf : ../ece1236/uwaves4TransmissionLinesCore.tex
-#uwavesDeck5SmithChart.pdf : ../ece1236/uwavesDeck5SmithChartCore.tex
 uwavesDeck6LCmatching.pdf : uwavesDeck6LCmatchingCore.tex
 
-multiPendulumSphericalMatrix.tex : ../classicalmechanics/multiPendulumSphericalMatrix.tex
+multiPendulumSphericalMatrix.tex :: ../classicalmechanics/multiPendulumSphericalMatrix.tex
 	cp $^ $@
 
 .gitignore : GNUmakefile
@@ -103,21 +99,21 @@ $(LOCAL_FILES) :
 
 multiPendulumSphericalMatrix.pdf : ../classicalmechanics/mine/multiPendulumSphericalMatrix.tex
 
-ensemblesForSpinOneHalf.pdf : ../phy2403/ensemblesForSpinOneHalf.tex
+ensemblesForSpinOneHalf.pdf :: ../phy2403/ensemblesForSpinOneHalf.tex
 
 # FIXME: these don't appear to be added?
-qftProblemSet2.pdf : ../phy2403/qftproblemSet2Problem1.tex
-qftProblemSet2.pdf : ../phy2403/qftproblemSet2Problem2.tex
-qftProblemSet2.pdf : ../phy2403/qftproblemSet2Problem3.tex
-qftProblemSet2.pdf : ../phy2403/qftproblemSet2Problem4.tex
-qftProblemSet2.pdf : ../phy2403/qftproblemSet2Problem5.tex
+#qftProblemSet2.pdf : ../phy2403/qftproblemSet2Problem1.tex
+#qftProblemSet2.pdf : ../phy2403/qftproblemSet2Problem2.tex
+#qftProblemSet2.pdf : ../phy2403/qftproblemSet2Problem3.tex
+#qftProblemSet2.pdf : ../phy2403/qftproblemSet2Problem4.tex
+#qftProblemSet2.pdf : ../phy2403/qftproblemSet2Problem5.tex
 #qftProblemSet1.pdf : ps8mathematica.tex
 
-uwavesProblemSet1.pdf : ../ece1236/uwavesproblemSet1Problem1.tex
-uwavesProblemSet1.pdf : ../ece1236/uwavesproblemSet1Problem2.tex
-uwavesProblemSet1.pdf : ../ece1236/uwavesproblemSet1Problem3.tex
-uwavesProblemSet1.pdf : ../ece1236/uwavesproblemSet1Problem4.tex
-uwavesProblemSet1.pdf : ../ece1236/uwavesproblemSet1Problem5.tex
+uwavesProblemSet1.pdf : ../ece1236/uwavesproblemSet1Problem1.tex \
+../ece1236/uwavesproblemSet1Problem2.tex \
+../ece1236/uwavesproblemSet1Problem3.tex \
+../ece1236/uwavesproblemSet1Problem4.tex \
+../ece1236/uwavesproblemSet1Problem5.tex
 
 gaBasics.pdf : gaBasics.tex
 
