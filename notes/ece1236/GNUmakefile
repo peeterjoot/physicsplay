@@ -14,7 +14,7 @@ SOURCE_DIRS += $(FIGURES)
 
 GENERATED_SOURCES += matlab.tex 
 GENERATED_SOURCES += mathematica.tex 
-#GENERATED_SOURCES += julia.tex 
+GENERATED_SOURCES += julia.tex 
 
 EPS_FILES := $(wildcard $(FIGURES)/*.eps)
 PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))
@@ -24,7 +24,7 @@ THISBOOK_DEPS += $(PDFS_FROM_EPS)
 
 include ../make.rules
 
-#julia.tex : ../../julia/METADATA
+julia.tex : ../../julia/METADATA
 mathematica.tex : ../../mathematica/METADATA
 matlab.tex : ../../matlab/METADATA
 
