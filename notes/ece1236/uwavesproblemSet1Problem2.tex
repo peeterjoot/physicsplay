@@ -4,11 +4,13 @@
 %
 \makeproblem{Transmission line with non-magnetic dielectric.}{uwaves:problemSet1:2}{ 
 %\makesubproblem{}{uwaves:problemSet1:2a}
-A transmission line is filled with a non-magnetic dielectric of \( \epsilon_r = 2.5\). The line has a capacitance per unit length of \( C = 200 \si{pF/m}\) and a resistance per unit length of \( R = 2 \Omega/\si{m} \).
+A transmission line is filled with a non-magnetic dielectric of \( \epsilon_r = 2.5\). The line has a capacitance per unit length of \( C = 200 \,\si{pF/m}\) and a resistance per unit length of \( R = 2 \Omega/\si{m} \).
 Calculate the corresponding phase velocity, characteristic impedance and attenuation constant \( \alpha \) (assume \(G = 0\)).
 } % makeproblem
 
 \makeanswer{uwaves:problemSet1:2}{ 
+
+%\makeSubAnswer{}{uwaves:problemSet1:2a}
 
 The impedance of the line is
 
@@ -27,8 +29,8 @@ for lossless, low-loss, and distortionless lines.  If we assume that is the case
 \begin{dmath}\label{eqn:uwavesproblemSet1Problem2:60}
 v_\phi 
 = \frac{c}{\sqrt{\epsilon_r}}
-= \frac{3 \times 10^9}{\sqrt{2.5}} \si{m/s},
-= 1.9 \times 10^9 \si{m/s},
+= \frac{3 \times 10^9}{\sqrt{2.5}}
+= 1.9 \times 10^9 \,\si{m/s},
 \end{dmath}
 
 we have
@@ -36,8 +38,8 @@ we have
 \begin{dmath}\label{eqn:uwavesproblemSet1Problem2:80}
 L 
 = \inv{v_\phi^2 C}
-= \frac{1}{(1.9 \times 10^9)^2 (200 \times 10^{-12}} \si{H/m}
-= 1.4 \si{ n H/m }.
+= \frac{1}{(1.9 \times 10^9)^2 (200 \times 10^{-12})} \,\si{H/m}
+= 1.4 \,\si{ n H/m }.
 \end{dmath}
 
 The characteristic impedance is
@@ -47,10 +49,69 @@ Z_0
 = \sqrt{\frac{ 2 + j \omega 1.4 \times 10^{-9} }{ j \omega 200 \times 10^{-12} }} \Omega.
 \end{dmath}
 
-The attenuation factor is 
+This is a rather ugly looking result, but it turns out that this system is close to lossless at \si{GHz} frequencies.  Numerically, the impedance is very close to real, meaning that the resistance isn't high enough to make much difference.  At frequencies starting at 1 \,\si{GHz}, we have
+
+\begin{equation}\label{eqn:uwavesproblemSet1Problem2:140}
+\begin{aligned}
+Z_0(1 \,\si{GHz}) &= 2.669 \phase{ \ang{-6.454} } \\
+Z_0(2 \,\si{GHz}) &= 2.644 \phase{ \ang{-3.269} } \\
+Z_0(3 \,\si{GHz}) &= 2.639 \phase{ \ang{-2.184} } \\
+Z_0(10 \,\si{GHz}) &= 2.636 \phase{ \ang{-0.6564} } \\
+\end{aligned}
+\end{equation}
+
+whereas with \( R = 0 \) we have almost the same value as the 10 \si{GHz} impedance
+
+\begin{equation}\label{eqn:uwavesproblemSet1Problem2:160}
+Z_0 = 2.635.
+\end{equation}
+
+For the attenuation factor first note that 
 \begin{dmath}\label{eqn:uwavesproblemSet1Problem2:120}
-\alpha = \Real \lr{ \lr{ 2 + j \omega 1.4 \times 10^{-9} } \lr{ j \omega 200 \times 10^{-12} } }^{1/2}
+\gamma 
+= \lr{ \lr{ 2 + j \omega 1.4 \times 10^{-9} } \lr{ j \omega 200 \times 10^{-12} } }^{1/2}
+= \lr{ \lr{ 2 + j 2 \pi f 1.4 } \lr{ j 0.4 \pi f } }^{1/2}
+= f \sqrt{ 0.4 \pi } \lr{ (2/f) j - 2.8 \pi }^{1/2},
 \end{dmath}
 
-%\makeSubAnswer{}{uwaves:problemSet1:2a}
+where \( f \) is in \si{GHz}.  We see that for \( f \in [1, 10] \), this \( \gamma \) is close to purely imaginary, as is also the case for \( R = 0 \).  Specifically
+
+\begin{equation}\label{eqn:uwavesproblemSet1Problem2:180}
+\begin{aligned}
+\gamma(1 \,\si{GHz})/f &= 3.354 \phase{ \ang{83.55} } \\
+\gamma(2 \,\si{GHz})/f &= 3.322 \phase{ \ang{86.73} } \\
+\gamma(3 \,\si{GHz})/f &= 3.316 \phase{ \ang{87.82} } \\
+\gamma(10 \,\si{GHz})/f &= 3.312 \phase{ \ang{89.34} } \\
+\end{aligned}
+\end{equation}
+
+Whereas for \( R = 0 \) we have
+
+\begin{equation}\label{eqn:uwavesproblemSet1Problem2:200}
+\gamma/f = 3.312 j.
+\end{equation}
+
+It appears that \( \alpha \sim 0 \) for this system in the \si{GHz} range.  For the same frequencies, some specific values are
+
+\begin{equation}\label{eqn:uwavesproblemSet1Problem2:220}
+\begin{aligned}
+\alpha(1 \,\si{GHz}) &= 0.377 \\
+\alpha(2 \,\si{GHz}) &= 0.3789 \\
+\alpha(3 \,\si{GHz}) &= 0.3792 \\
+\alpha(10 \,\si{GHz}) &= 0.3794.
+\end{aligned}
+\end{equation}
+
+Note however, that for lower frequencies, where the wavelength is larger, this is actually a fairly significant attenuation, not very zeroish.  For the same respective frequencies we have
+
+\begin{equation}\label{eqn:uwavesproblemSet1Problem2:240}
+\begin{aligned}
+e^{-\lambda \alpha} &= 0.489 \\
+e^{-\lambda \alpha} &= 0.6981 \\
+e^{-\lambda \alpha} &= 0.7868 \\
+e^{-\lambda \alpha} &= 0.9305.
+\end{aligned}
+\end{equation}
+
+The numerical calculations made for this problem can be found in \nbref{ps1:ps1_2.jl}. 
 }
