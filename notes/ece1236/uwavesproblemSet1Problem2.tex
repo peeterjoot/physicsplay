@@ -2,7 +2,7 @@
 % Copyright © 2016 Peeter Joot.  All Rights Reserved.
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
 %
-\makeproblem{Transmission line with non-magnetic dielectric.}{uwaves:problemSet1:2}{ 
+\makeproblem{Low-loss transmission line with non-magnetic dielectric.}{uwaves:problemSet1:2}{ 
 %\makesubproblem{}{uwaves:problemSet1:2a}
 A transmission line is filled with a non-magnetic dielectric of \( \epsilon_r = 2.5\). The line has a capacitance per unit length of \( C = 200 \,\si{pF/m}\) and a resistance per unit length of \( R = 2 \Omega/\si{m} \).
 Calculate the corresponding phase velocity, characteristic impedance and attenuation constant \( \alpha \) (assume \(G = 0\)).
@@ -42,14 +42,31 @@ L
 = 1.4 \,\si{ n H/m }.
 \end{dmath}
 
-The characteristic impedance is
+For frequencies in the \si{GHz} range are the low-loss conditions satified?  With \( G = 0 \), the condition \( G \ll \omega C \) is clearly true.  How about \( R \ll \omega L \)?  For \( f \) in \si{GHz} we have
+
+\begin{dmath}\label{eqn:uwavesproblemSet1Problem2:300}
+\omega L 
+= 2( 1.4) \pi f
+= 8.8 f.
+\end{dmath}
+
+We have \( 2 < 8.8 f \) for frequencies above 1 \si{GHz}, which is probably good enough to apply the low loss approximations.
+
+Without such approximations, our impedance expression is a bit of an ugly beast
+
 \begin{dmath}\label{eqn:uwavesproblemSet1Problem2:100}
 Z_0 
 = \sqrt{\frac{ R + j \omega L }{ G + j \omega C }}
 = \sqrt{\frac{ 2 + j \omega 1.4 \times 10^{-9} }{ j \omega 200 \times 10^{-12} }} \Omega.
 \end{dmath}
 
-This is a rather ugly looking result, but it turns out that this system is close to lossless at \si{GHz} frequencies.  Numerically, the impedance is very close to real, meaning that the resistance isn't high enough to make much difference.  At frequencies starting at 1 \,\si{GHz}, we have
+The low-loss approximation for the impedence, with \( R = 0 \), is
+
+\begin{equation}\label{eqn:uwavesproblemSet1Problem2:160}
+Z_0 = 2.635.
+\end{equation}
+
+Compare this to the exact expansion of \cref{eqn:uwavesproblemSet1Problem2:100} at frequencies starting at 1 \,\si{GHz}
 
 \begin{equation}\label{eqn:uwavesproblemSet1Problem2:140}
 \begin{aligned}
@@ -60,11 +77,7 @@ Z_0(10 \,\si{GHz}) &= 2.636 \phase{ \ang{-0.6564} } \\
 \end{aligned}
 \end{equation}
 
-whereas with \( R = 0 \) we have almost the same value as the 10 \si{GHz} impedance
-
-\begin{equation}\label{eqn:uwavesproblemSet1Problem2:160}
-Z_0 = 2.635.
-\end{equation}
+The 10 \si{GHz} impedance is almost exactly the same as the low-loss approximation.
 
 For the attenuation factor first note that 
 \begin{dmath}\label{eqn:uwavesproblemSet1Problem2:120}
@@ -85,13 +98,15 @@ where \( f \) is in \si{GHz}.  We see that for \( f \in [1, 10] \), this \( \gam
 \end{aligned}
 \end{equation}
 
-Whereas for \( R = 0 \) we have
-
-\begin{equation}\label{eqn:uwavesproblemSet1Problem2:200}
-\gamma/f = 3.312 j.
-\end{equation}
-
-It appears that \( \alpha \sim 0 \) for this system in the \si{GHz} range.  For the same frequencies, some specific values are
+We want the real component of this.  
+%Whereas for \( R = 0 \) we have
+%
+%\begin{equation}\label{eqn:uwavesproblemSet1Problem2:200}
+%\gamma/f = 3.312 j.
+%\end{equation}
+%
+%It appears that \( \alpha \sim 0 \) for this system in the \si{GHz} range.  
+For the same frequencies, some specific values of the real part, are
 
 \begin{equation}\label{eqn:uwavesproblemSet1Problem2:220}
 \begin{aligned}
@@ -102,7 +117,8 @@ It appears that \( \alpha \sim 0 \) for this system in the \si{GHz} range.  For 
 \end{aligned}
 \end{equation}
 
-Note however, that for lower frequencies, where the wavelength is larger, this is actually a fairly significant attenuation, not very zeroish.  For the same respective frequencies we have
+How much attenuation is this, relative to the wavelength in question?  
+For lower frequencies, where the wavelength is larger, this is actually a fairly significant attenuation.  For the same respective frequencies we have
 
 \begin{equation}\label{eqn:uwavesproblemSet1Problem2:240}
 \begin{aligned}
@@ -110,6 +126,29 @@ e^{-\lambda \alpha} &= 0.489 \\
 e^{-\lambda \alpha} &= 0.6981 \\
 e^{-\lambda \alpha} &= 0.7868 \\
 e^{-\lambda \alpha} &= 0.9305.
+\end{aligned}
+\end{equation}
+
+Let's see how the 
+low-loss line approximation fares for both the real (\(\alpha\)) and imaginary (\(\beta\)) components of \( \gamma \)? For the same frequencies, with the \( \omega \) in \si{GHz} units, are
+
+\begin{equation}\label{eqn:uwavesproblemSet1Problem2:260}
+\begin{aligned}
+\gamma &= 0.377 + 0.5305 j \omega \\
+\gamma &= 0.3789 + 0.5279 j \omega \\
+\gamma &= 0.3792 + 0.5274 j \omega \\
+\gamma &= 0.3794 + 0.5271 j \omega.
+\end{aligned}
+\end{equation}
+
+These compare well to the low-loss approximations using \( Z_0 = \sqrt{L/C}, \alpha = (R/Z_0 + G Z_0)/2, \beta = \omega \sqrt{LC} \)
+
+\begin{equation}\label{eqn:uwavesproblemSet1Problem2:280}
+\begin{aligned}
+\gamma &= 0.3795 + 0.527 j \omega \\
+\gamma &= 0.3795 + 0.527 j \omega \\
+\gamma &= 0.3795 + 0.527 j \omega \\
+\gamma &= 0.3795 + 0.527 j \omega .
 \end{aligned}
 \end{equation}
 
