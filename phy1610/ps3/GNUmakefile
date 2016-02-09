@@ -17,18 +17,24 @@ ifdef PRODUCTION
 else
    CXXFLAGS += -g
 endif
+
+ONSCINET=1
+ifdef ONSCINET
+   CXXFLAGS += -DSCINET_GPROF_HACKING 
+endif
+
 ifdef PROFILED
    CXXFLAGS += -pg -g
    LDFLAGS += -pg -g
    #LDFLAGS += -O2
 
-	# now only for origants.cc
+   # now only for origants.cc
    CXXFLAGS += -DNUMBER_OF_TIME_INTERVALS=400
 endif
 ifdef USETICKTOCK
    CXXFLAGS += -DUSE_TICK_TOCK
 
-	# now only for origants.cc
+   # now only for origants.cc
    CXXFLAGS += -DNUMBER_OF_TIME_INTERVALS=400
 
    TEST_OBJECTS += ticktock.o
@@ -57,12 +63,14 @@ endif
 
 TARGETS += ants
 TARGETS += origants
-#ANTS_SOURCES += timestep.cc
+ifndef ONSCINET
+   ANTS_SOURCES += timestep.cc
+   ANTS_SOURCES += initialize.cc
+endif
 ANTS_SOURCES += ants.cc
 ifdef USETICKTOCK
 ANTS_SOURCES += ticktock.cc
 endif
-#ANTS_SOURCES += initialize.cc
 ANTS_SOURCES += ants_on_table.cc
 ANTS_SOURCES += output.cc
 ANTS_SOURCES += $(COMMON_SOURCES)
@@ -75,8 +83,10 @@ endif
 
 TARGETS += testdriver
 TEST_SOURCES += ants_on_table.cc
-TEST_SOURCES += timestep.cc
-TEST_SOURCES += initialize.cc
+ifndef ONSCINET
+   TEST_SOURCES += timestep.cc
+   TEST_SOURCES += initialize.cc
+endif
 TEST_SOURCES += testdriver.cc
 TEST_SOURCES += $(COMMON_SOURCES)
 TEST_OBJECTS += $(subst .cc,.o,$(TEST_SOURCES))
@@ -93,10 +103,11 @@ CLEANTARGETS += $(TARGETS)
 CLEANTARGETS += html latex
 
 ALL_OBJECTS += $(ANTS_OBJECTS) $(TEST_OBJECTS) $(ORIGANTS_OBJECTS)
-CLEANTARGETS += $(ALL_OBJECTS)
+#CLEANTARGETS += $(ALL_OBJECTS)
 
 # clean dependency files if any
-CLEANTARGETS += $(subst .o,.d,$(ALL_OBJECTS))
+#CLEANTARGETS += $(subst .o,.d,$(ALL_OBJECTS))
+CLEANTARGETS += *.o *.d
 
 GPROF := gprof --line --no-graph --brief
 

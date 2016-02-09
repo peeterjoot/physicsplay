@@ -42,9 +42,12 @@ float ants_on_table::total_number_of_ants() const
    return totants ;
 }
 
-// gprof is behaving in a flaky way on the scinet systems (at least on the gpc-f104n084-ib0 "blue node").
-// If I compile these files separately, I get no profiling line/instruction output for functions in these
-// files.
-// I don't have this trouble on my personal ubuntu VMware image.
-#include "timestep.cc"
-#include "initialize.cc"
+#ifdef SCINET_GPROF_HACKING
+   // gprof is behaving in a flaky way on the scinet systems (at least on the gpc-f104n084-ib0 "blue node").
+   // If I compile these files separately, I get no profiling line/instruction output for functions in these
+   // files.
+   //
+   // I don't have this gprof trouble on my personal ubuntu VMware image.
+   #include "timestep.cc"
+   #include "initialize.cc"
+#endif
