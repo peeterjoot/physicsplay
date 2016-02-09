@@ -20,10 +20,15 @@ endif
 ifdef PROFILED
    CXXFLAGS += -pg -g
    LDFLAGS += -pg -g
+   #LDFLAGS += -O2
+
+	# now only for origants.cc
    CXXFLAGS += -DNUMBER_OF_TIME_INTERVALS=400
 endif
 ifdef USETICKTOCK
    CXXFLAGS += -DUSE_TICK_TOCK
+
+	# now only for origants.cc
    CXXFLAGS += -DNUMBER_OF_TIME_INTERVALS=400
 
    TEST_OBJECTS += ticktock.o
@@ -52,17 +57,21 @@ endif
 
 TARGETS += ants
 TARGETS += origants
+#ANTS_SOURCES += timestep.cc
 ANTS_SOURCES += ants.cc
-ANTS_SOURCES += initialize.cc
-ANTS_SOURCES += output.cc
-ANTS_SOURCES += timestep.cc
+ifdef USETICKTOCK
 ANTS_SOURCES += ticktock.cc
+endif
+#ANTS_SOURCES += initialize.cc
 ANTS_SOURCES += ants_on_table.cc
+ANTS_SOURCES += output.cc
 ANTS_SOURCES += $(COMMON_SOURCES)
 ANTS_OBJECTS := $(subst .cc,.o,$(ANTS_SOURCES))
 
 ORIGANTS_OBJECTS += origants.o 
+ifdef USETICKTOCK
 ORIGANTS_OBJECTS += ticktock.o 
+endif
 
 TARGETS += testdriver
 TEST_SOURCES += ants_on_table.cc
