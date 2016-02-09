@@ -62,7 +62,7 @@ s/\\eq\b/{\\mathrm{eq}}/g ;
 s/\\ee/\\epsilon/g ;
 #s,\\E{(.*?)},{E_{k $1}^\\nought},g ;
 #s/\\ee/\\mathcal{E}/g ;
-#s/_eff/_{\\mathrm{eff}}/g ;
+s/_\\eff/_{\\mathrm{eff}}/g ;
 #s/\\Eg/E_{\\mathrm{g}}/g ;
 #s/_E/_{\\mathrm{E}}/g ;
 #s/ENV/{(\\mathrm{E}, \\mathrm{N}, \mathrm{V})}/g ;
