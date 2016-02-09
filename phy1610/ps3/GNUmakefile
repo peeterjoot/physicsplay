@@ -2,7 +2,6 @@
 CXXFLAGS += -MMD
 
 CXXFLAGS += -I../inc
-CXXFLAGS += -I../ps2
 CXXFLAGS += -I$(HOME)/rarray
 ifdef SCINET_RARRAY_INC
    CXXFLAGS += -I$(SCINET_RARRAY_INC)
@@ -53,9 +52,12 @@ endif
 
 TARGETS += ants
 TARGETS += origants
-ANTS_SOURCES += ../ps2/ants.cc
+ANTS_SOURCES += ants.cc
+ANTS_SOURCES += initialize.cc
+ANTS_SOURCES += output.cc
+ANTS_SOURCES += timestep.cc
 ANTS_SOURCES += ticktock.cc
-ANTS_SOURCES += ../ps2/ants_on_table.cc
+ANTS_SOURCES += ants_on_table.cc
 ANTS_SOURCES += $(COMMON_SOURCES)
 ANTS_OBJECTS := $(subst .cc,.o,$(ANTS_SOURCES))
 
@@ -63,7 +65,9 @@ ORIGANTS_OBJECTS += origants.o
 ORIGANTS_OBJECTS += ticktock.o 
 
 TARGETS += testdriver
-TEST_SOURCES += ../ps2/ants_on_table.cc
+TEST_SOURCES += ants_on_table.cc
+TEST_SOURCES += timestep.cc
+TEST_SOURCES += initialize.cc
 TEST_SOURCES += testdriver.cc
 TEST_SOURCES += $(COMMON_SOURCES)
 TEST_OBJECTS += $(subst .cc,.o,$(TEST_SOURCES))

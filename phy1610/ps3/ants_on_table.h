@@ -33,7 +33,11 @@ class ants_on_table
       }
    } ;
 
+   /// Tick-tock state
    mutable timerData    m_timerData ;
+
+   /// timestep state   
+   myrarray2         m_new_number_of_ants ;
 public:
 
    /**
@@ -50,12 +54,9 @@ public:
    ~ants_on_table( ) ;
 
    /**
-      \retval The grid size that the simulation was initialized with.
+      Reset the simulation, putting in a new number of total ants, and initial counts and velocities.
     */
-   inline size_t get_grid_size() const
-   {
-      return m_table_grid_size ;
-   }
+   void initialize( const int total_ants ) ;
 
    /**
       \brief add the number of ants at each grid location.
@@ -65,72 +66,14 @@ public:
    float total_number_of_ants() const ;
 
    /**
-      A simple forward iterator to drive the time stepping iterations.
-     */
-   class iterator
-   {
-      ants_on_table *   m_ants_p ;              ///< pointer to the simulation object modified by the iterator.
-      int               m_timevalue ;           ///< The timestep value that the iterator is on.
-      myrarray2         m_new_number_of_ants ;  ///< A temporary array used in each timestep.  Anchored here to avoid reallocation.
-
-      // Allow ants_on_table::initialize() to construct a starting iterator, but nothing else.
-      friend class ants_on_table ;
-
-      /**
-         An iterator object to be returned from ants_on_table::initialize()
-       */
-      explicit iterator( ants_on_table * p_ants ) ;
-
-   public:
-
-      /**
-         A constructor to specify the end iteration.
-
-         \param number_of_time_intervals [in]
-            The number of times the ants walk around before we stop looking at them.
-       */
-      explicit iterator( const int number_of_time_intervals ) ;
-
-      /**
-         Perform one timestep operation.
-       */
-      iterator& operator++ () ; // Pre-increment
-
-      /**
-         Check against an end iterator to see if we've done the final timestep.
-       */
-      inline bool operator != ( iterator & rhs)
-      {
-         return m_timevalue != rhs.m_timevalue ;
-      }
-
-      /**
-         Return the results of the last timestep operation (total number of ants on the table).
-        */
-      inline float operator* () const
-      {
-         return m_ants_p->total_number_of_ants() ;
-      }
-
-      /**
-         Return the time step number that the iteration is on.
-       */
-      inline int operator()() const
-      {
-         return m_timevalue ;
-      }
-   } ;
-
-   /**
-      Reset the simulation, putting in a new number of total ants, and initial counts and velocities, and return
-      an iterator that can be used for the subsequent timestep iterations.
-    */
-   iterator initialize( const int total_ants ) ;
-
-   /**
       Perform one iteration of the ants walking on the table simulation.
     */
-   void timestep( iterator & i ) ;
+   void timestep( ) ;
 } ;
+
+/**
+   Run the timestep function the specified number of times and output the results
+ */
+void output( ants_on_table & a, const int num_time_intervals ) ;
 
 #endif
