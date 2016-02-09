@@ -16,7 +16,7 @@ void output( ants_on_table & a, const int num_time_intervals )
 
       timer.tick() ;
 
-      std::cout << totants << " " << i << std::endl ;
+      std::cout << i << " " << totants << std::endl ;
 
       ioTime += timer.silent_tock() ;
 
