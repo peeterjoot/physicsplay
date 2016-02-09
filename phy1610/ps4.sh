@@ -4,7 +4,8 @@
 #PBS -N peeterj-ants-prof
 
 # Note: submit to queue with:
-# subq ./ps4.sh
+# 
+# cd ; qsub physicsplay/phy1610/ps4.sh
 #------------------------
 . $HOME/physicsplay/phy1610/scinet.env.ps2_3
 
