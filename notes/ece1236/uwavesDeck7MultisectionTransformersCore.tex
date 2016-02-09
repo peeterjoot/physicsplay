@@ -1,0 +1,88 @@
+
+\section{Terminology review}
+
+\begin{equation}\label{eqn:uwavesDeck7MultisectionTransformersCore:20}
+Z_{\textrm{in}} = R + j X
+\end{equation}
+\begin{equation}\label{eqn:uwavesDeck7MultisectionTransformersCore:40}
+Y_{\textrm{in}} = G + j B
+\end{equation}
+
+\begin{itemize}
+\item \( Z_{\textrm{in}} \) : \textAndIndex{impedance}
+\item \( R \) : \textAndIndex{resistance}
+\item \( X \) : \textAndIndex{reactance}
+\item \( Y_{\textrm{in}} \) : \textAndIndex{admittance}
+\item \( G \) : \textAndIndex{conductance}
+\item \( B \) : \textAndIndex{susceptance}
+\end{itemize}
+
+\section{Multisection transformers}
+
+Through a transformation of the form
+
+F4A
+
+We can perform a transformation that allows for maximum power delivery, but such a transformation does not allow any control over the bandwidth.  The standard solution is to add more steps as sketched in
+
+F4B
+
+This can be implemented in electronics, or potentially geometrically as in this sketch of a microwave stripline transformer implementation
+
+F4C
+
+To find a multistep transformation algebraically can be hard, but it is easy to do on a Smith chart.  The rule of thumb is that we want to stay near the center of the chart with each transformation.
+
+There is however, a closed form method of calculating a specific sort of multisection transformation that is algebraically tractable.  That method uses a chain of \( \lambda/4 \) transformers to increase the bandwidth as sketched in 
+
+F4E
+
+The total reflection coefficient can be approximated to first order by summing the reflections at each stage (without considering there may be other internal reflections of transmitted field components).  Algebraically that is
+
+\begin{equation}\label{eqn:uwavesDeck7MultisectionTransformersCore:60}
+\Gamma(\theta) \approx \Gamma_0 
++ \Gamma_1 e^{-2 j \Theta} + 
++ \Gamma_2 e^{-4 j \Theta} +  \cdots
++ \Gamma_N e^{-2 N j \Theta},
+\end{equation}
+
+where
+
+\begin{equation}\label{eqn:uwavesDeck7MultisectionTransformersCore:80}
+\Gamma_n = \frac{Z_{n+1} - Z_n}{Z_{n+1} + Z_n}
+\end{equation}
+
+Why?  Consider reflections at the Z_1, Z_2 interface as sketched in
+
+F4F
+
+Assuming small reflections, where \( \Abs{\Gamma} \ll 1 \) then \( T = 1 + \Gamma \approx 1 \).  Here
+
+\begin{dmath}\label{eqn:uwavesDeck7MultisectionTransformersCore:100}
+\Theta 
+= \beta l 
+= \frac{2 \pi}{\lambda} \frac{\lambda}{4} 
+= \frac{\pi}{2}.
+\end{dmath}
+
+at the design frequency \( \omega_0 \).  We assume that \( Z_n \) are either monotonically increasing if \( R_\txtL > Z_0 \), or decreasing if \( R_\txtL < Z_0 \).
+
+\paragraph{Binomial multisection transformers}
+
+Let
+
+\begin{equation}\label{eqn:uwavesDeck7MultisectionTransformersCore:120}
+\Gamma(\Theta) = A \lr{ 1 + e^{-2 j \Theta} }^N
+\end{equation}
+
+This type of a response is maximally flat.  For an N-section transformer
+
+\begin{equation}\label{eqn:uwavesDeck7MultisectionTransformersCore:140}
+\frac{d^n}{d\Theta^n} \Abs{\Gamma(\Theta)}_{\omega_0} = 0,
+\end{equation}
+
+for \( n = 1, 2, \cdots, N-1 \) as plotted in \cref{fig:multitransformer:multitransformerFig1}.
+
+\imageFigure{../../figures/ece1236/multitransformerFig1}{Binomial transformer.}{fig:multitransformer:multitransformerFig1}{0.3}
+
+
