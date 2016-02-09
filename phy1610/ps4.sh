@@ -3,6 +3,9 @@
 #PBS -l walltime=0:15:00
 #PBS -N peeterj-ants-prof
 
+# Note: submit to queue with:
+# subq ./ps4.sh
+#------------------------
 . $HOME/physicsplay/phy1610/scinet.env.ps2_3
 
 ants=$HOME/physicsplay/phy1610/ps3/ants
