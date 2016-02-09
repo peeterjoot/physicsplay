@@ -8,7 +8,7 @@ PS3 += ps3/ants_on_table.cc
 PS3 += ps3/ants_on_table.h
 PS3 += ps2/ants.out.default
 PS3 += ps3/description.txt
-PS3 += ps3/Doxyfile
+#PS3 += ps3/Doxyfile
 PS3 += ps3/GNUmakefile
 PS3 += ps3/initialize.cc
 PS3 += ps3/origants.cc
@@ -28,7 +28,7 @@ all : ps3/ticktock.cc
 
 ps4.tar.gz : $(PS3) makefile
 	rm -f $@
-	tar zcf $@ $(PS3) ants.batch.2016-02-04-*/*
+	tar zcf $@ $(PS3) ants.batch.2016-02-09-10:17:41/*
 
 git.log : 
 	git log --stat inc ps2 ps3 > $@

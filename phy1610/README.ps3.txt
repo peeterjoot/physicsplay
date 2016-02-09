@@ -65,8 +65,8 @@ with increased numbers of ants and number of timesteps:
 
 The outputs for that can be found in:
 
-   ants.batch.2016-02-04-18:46:27/ants.out
-   ants.batch.2016-02-04-18:46:27/profile.rednode.out
+   ants.batch.2016-02-09-10:17:41/ants.out
+   ants.batch.2016-02-09-10:17:41/profile.rednode.out
 
 To compile on the gpc dev node I ran:
 
