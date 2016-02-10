@@ -1,0 +1,125 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+%{
+\input{../blogpost.tex}
+\renewcommand{\basename}{averagePowerCircuitElements}
+\renewcommand{\dirname}{notes/phy1520/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+
+\beginArtNoToc
+
+\generatetitle{Average power for circuit elements}
+%\chapter{Average power for circuit elements}
+%\label{chap:averagePowerCircuitElements}
+
+In \citep{pozar2009microwave} \S 2.2 is a comparison of field energy expressions with their circuit equivalents.  It's clearly been too long since I've worked with circuits, because I'd forgotten all the circuit energy expressions:
+
+\begin{equation}\label{eqn:averagePowerCircuitElements:20}
+\begin{aligned}
+W_\txtR &= \frac{R}{2} \Abs{I}^2 \\
+W_\txtC &= \frac{C}{4} \Abs{V}^2 \\
+W_\txtL &= \frac{L}{4} \Abs{I}^2 \\
+W_\txtG &= \frac{G}{2} \Abs{V}^2 \\
+\end{aligned}
+\end{equation}
+
+Here's a recap of where these come from
+
+\paragraph{Energy lost to resistance}
+
+Given
+\begin{equation}\label{eqn:averagePowerCircuitElements:40}
+v(t) = R i(t)
+\end{equation}
+
+the average power lost to a resistor is
+
+\begin{dmath}\label{eqn:averagePowerCircuitElements:60}
+p_\txtR 
+= \inv{T} \int_0^T v(t) i(t) dt
+= \inv{T} \int_0^T \Real( V e^{j \omega t} ) \Real( I e^{j \omega t} ) dt
+= \inv{4 T} \int_0^T 
+\lr{V e^{j \omega t} + V^\conj e^{-j \omega t} }
+\lr{I e^{j \omega t} + I^\conj e^{-j \omega t} }
+dt
+= \inv{4 T} \int_0^T 
+\lr{ 
+V I e^{2 j \omega t} + V^\conj I^\conj e^{-2 j \omega t}
++ V I^\conj + V^\conj I 
+} 
+dt
+= \inv{2} \Real( V I^\conj )
+= \inv{2} \Real( I R I^\conj )
+= \frac{R}{2} \Abs{I}^2.
+\end{dmath}
+
+Here it is assumed that the averaging is done over some integer multiple of the period, which kills off all the exponentials.
+
+\paragraph{Energy stored in a capacitor}
+
+I tried the same sort of analysis for a capacitor in phasor form, but everything canceled out.  Referring to \citep{irwin2007bec}, the approach used to figure this out is to operate first strictly in the time domain.  Specifically, for the capacitor where \( i = C dv/dt \) the power supplied up to a time \( t \) is
+
+\begin{dmath}\label{eqn:averagePowerCircuitElements:80}
+p_\txtC(t) 
+= \int_{-\infty}^t C \frac{dv}{dt} v(t) dt
+= \inv{2} C v^2(t).
+\end{dmath}
+
+The \( v^2(t) \) term can now be expanded in terms of phasors and averaged for
+
+\begin{dmath}\label{eqn:averagePowerCircuitElements:100}
+\overbar{p}_\txtC 
+= \frac{C}{2T} \int_0^T \inv{4} 
+\lr{ V e^{j \omega t} + V^\conj e^{-j \omega t} }
+\lr{ V e^{j \omega t} + V^\conj e^{-j \omega t} } dt
+= \frac{C}{2T} \int_0^T \inv{4} 
+2 \Abs{V}^2 dt
+= \frac{C}{4} \Abs{V}^2.
+\end{dmath}
+
+\paragraph{Energy stored in an inductor}
+
+The inductor energy is found the same way, with
+
+\begin{dmath}\label{eqn:averagePowerCircuitElements:120}
+p_\txtL(t) 
+= \int_{-\infty}^t L \frac{di}{dt} i(t) dt
+= \inv{2} L i^2(t),
+\end{dmath}
+
+which leads to
+
+\begin{equation}\label{eqn:averagePowerCircuitElements:140}
+\overbar{p}_\txtL
+= \frac{L}{4} \Abs{I}^2.
+\end{equation}
+
+\paragraph{Energy lost due to conductance}
+
+Finally, we have conductance.  In phasor space that is defined by
+
+\begin{equation}\label{eqn:averagePowerCircuitElements:160}
+G = \frac{I}{V} = \inv{R},
+\end{equation}
+
+so power lost due to conductance follows from power lost due to resistance.  In the average we have
+
+\begin{dmath}\label{eqn:averagePowerCircuitElements:180}
+p_\txtG 
+= \inv{2 G} \Abs{I}^2
+= \inv{2 G} \Abs{V G}^2
+= \frac{G}{2} \Abs{V}^2
+\end{dmath}
+
+%}
+\EndArticle
+%\EndNoBibArticle
