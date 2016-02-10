@@ -80,6 +80,7 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 all :: multiPendulumSphericalMatrix.pdf
 
 uwavesDeck6LCmatching.pdf : uwavesDeck6LCmatchingCore.tex
+uwavesDeck7MultisectionTransformers.pdf : ../ece1236/uwavesDeck7MultisectionTransformersCore.tex
 
 multiPendulumSphericalMatrix.tex :: ../classicalmechanics/multiPendulumSphericalMatrix.tex
 	cp $^ $@
