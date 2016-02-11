@@ -23,6 +23,7 @@ INCOMPLETE += stokespost.tex
 #INCOMPLETE += ps8mathematica.tex
 INCOMPLETE += $(wildcard uwaves*Core.tex)
 INCOMPLETE += uwavesDeck8ResonatorQfactor.tex
+#INCOMPLETE += continuumAndOtherTransformers.tex
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
@@ -80,8 +81,8 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
 all :: multiPendulumSphericalMatrix.pdf
 
-uwavesDeck6LCmatching.pdf : uwavesDeck6LCmatchingCore.tex
-uwavesDeck7MultisectionTransformers.pdf : ../ece1236/uwavesDeck7MultisectionTransformersCore.tex
+uwavesDeck6LCmatching.pdf : ../ece1236/uwavesDeck6LCmatchingCore.tex
+continuumAndOtherTransformers.pdf : ../ece1236/continuumAndOtherTransformersCore.tex
 
 multiPendulumSphericalMatrix.tex :: ../classicalmechanics/multiPendulumSphericalMatrix.tex
 	cp $^ $@

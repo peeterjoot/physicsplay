@@ -1,27 +1,10 @@
-
-\section{Terminology review}
-
-\begin{equation}\label{eqn:uwavesDeck7MultisectionTransformersCore:20}
-Z_{\textrm{in}} = R + j X
-\end{equation}
-\begin{equation}\label{eqn:uwavesDeck7MultisectionTransformersCore:40}
-Y_{\textrm{in}} = G + j B
-\end{equation}
-
-\begin{itemize}
-\item \( Z_{\textrm{in}} \) : \textAndIndex{impedance}
-\item \( R \) : \textAndIndex{resistance}
-\item \( X \) : \textAndIndex{reactance}
-\item \( Y_{\textrm{in}} \) : \textAndIndex{admittance}
-\item \( G \) : \textAndIndex{conductance}
-\item \( B \) : \textAndIndex{susceptance}
-\end{itemize}
-
-Apparently this notation goes all the way back to Heavyside!
-
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
 \section{Multisection transformers}
 
-Using a transformation of the form \cref{fig:deck7:deck7Fig1} it is possible to optimize for maximum power delivery, using for example a matching transformation \( Z_\in = Z_1^2/R_\L = Z_0\), or \( Z_1 = \sqrt{R_\L Z_0} \).  Unfortunately, such a transformation does not allow any control over the bandwidth.  This results in a pinched frequency response for which the standard solution is to add more steps as sketched in \cref{fig:Feb10:Feb10Fig2}.
+Using a transformation of the form \cref{fig:deck7:deck7Fig1} it is possible to optimize for maximum power delivery, using for example a matching transformation \( Z_{\textrm{in}} = Z_1^2/R_\txtL = Z_0\), or \( Z_1 = \sqrt{R_\txtL Z_0} \).  Unfortunately, such a transformation does not allow any control over the bandwidth.  This results in a pinched frequency response for which the standard solution is to add more steps as sketched in \cref{fig:Feb10:Feb10Fig2}.
 
 \imageFigure{../../figures/ece1236/Feb10Fig2}{Pinched frequency response.}{fig:Feb10:Feb10Fig2}{0.2}
 
@@ -83,7 +66,7 @@ Let
 This type of a response is maximally flat, and is plotted in \cref{fig:multitransformer:multitransformerFig1}.
 \imageFigure{../../figures/ece1236/multitransformerFig1}{Binomial transformer.}{fig:multitransformer:multitransformerFig1}{0.25}
 
-The absolute value of the reflection coeffiecent is
+The absolute value of the reflection coefficient is
 
 \begin{dmath}\label{eqn:uwavesDeck7MultisectionTransformersCore:160}
 \Abs{\Gamma(\Theta)} 
@@ -121,7 +104,7 @@ because the various \( \Theta \) sections become DC wires when the segment lengt
 A = 2^{-N} \frac{Z_\txtL - Z_0}{Z_\txtL + Z_0}. 
 }
 
-The reflection coefficent can now be expanded using the binomial theorem
+The reflection coefficient can now be expanded using the binomial theorem
 
 \begin{dmath}\label{eqn:uwavesDeck7MultisectionTransformersCore:240}
 \Gamma(\Theta) 
@@ -186,12 +169,12 @@ Using this approximation, we get
 \approx
 2 \Gamma_k 
 = 2 A \binom{N}{k}
-= 2 2^{-N} \frac{Z_\txtL - Z_0}{Z_\txtL + Z_0}
+= 2 \lr{2^{-N}} \binom{N}{k} \frac{Z_\txtL - Z_0}{Z_\txtL + Z_0}
 \approx
-= 2^{-N} \ln \frac{Z_\txtL}{Z_0},
+2^{-N} \binom{N}{k} \ln \frac{Z_\txtL}{Z_0},
 \end{dmath}
 
-I asked what business do we have in assuming that \( Z_\txtL/Z_0 \) is near unity?  The answer was that it isn't but suprisingly it works out well enough despite that.  As an example, consider \( Z_0 = 100 \Omega \) and \( R_\txtL = 50 \Omega \).  The exact expression
+I asked what business do we have in assuming that \( Z_\txtL/Z_0 \) is near unity?  The answer was that it isn't but surprisingly it works out well enough despite that.  As an example, consider \( Z_0 = 100 \Omega \) and \( R_\txtL = 50 \Omega \).  The exact expression
 
 \begin{dmath}\label{eqn:uwavesDeck7MultisectionTransformersCore:880}
 \frac{Z_\txtL - Z_0}{Z_\txtL + Z_0} 
@@ -210,7 +193,7 @@ Regardless of whether or not that last approximation is used, one can proceed it
 
 \paragraph{Bandwidth}
 
-To evaluate the bandwidth, let \( \Gamma_{\mathrm{m}} \) be the maximum tolerable reflection coeffeicient over the passband, as sketched in \cref{fig:deck7:deck7Fig6}.
+To evaluate the bandwidth, let \( \Gamma_{\mathrm{m}} \) be the maximum tolerable reflection coefficient over the passband, as sketched in \cref{fig:deck7:deck7Fig6}.
 
 \imageFigure{../../figures/ece1236/deck7Fig6}{Max tolerable reflection.}{fig:deck7:deck7Fig6}{0.2}
 
@@ -244,20 +227,32 @@ The relative width of the interval is
 2 - \frac{4 }{\pi} \arccos\lr{ \inv{2} \lr{ \frac{\Gamma_{\mathrm{max}}}{\Abs{A}}}^{1/N} }.
 \end{dmath}
 
-\paragraph{Example}
+\makeexample{Three section binomial transformer.}{example:uwavesDeck7MultisectionTransformersCore:1}{
 
 Design a 3-section binomial transformer to match \( R_\txtL = 50 \Omega \) to a line \( Z_0 = 100 \Omega \).  Calculate the BW based on a maximum \( \Gamma_\txtm = 0.05 \).
 
 \paragraph{Solution}
 
 %With \( N = 3 \), \( R_\txtL = 50 \Omega \), \( Z_0 = 100 
-Binomial coefficents
+%Binomial coefficents
+%
+%Now use 
 
-Now use 
-
+The scaling factor
 \begin{equation}\label{eqn:uwavesDeck7MultisectionTransformersCore:460}
-\ln \frac{Z_{n+1}}{Z_n} \approx 2^{-N} \binom{N}{n} \ln \frac{Z_\txtL}{Z_0}
+A 
+= 2^{-N} \frac{Z_\txtL - L_0}{Z_\txtL + Z_0} 
+\approx
+\inv{2^{N+1}} \ln \frac{Z_\txtL}{Z_0}
+= -0.0433
 \end{equation}
+
+Now use
+
+\begin{dmath}\label{eqn:uwavesDeck7MultisectionTransformersCore:940}
+\ln \frac{Z_{n+1}}{Z_n}
+\approx 2^{-N} \binom{N}{n} \ln \frac{R_\txtL}{Z_0},
+\end{dmath}
 
 starting from 
 
@@ -269,9 +264,12 @@ starting from
 \end{equation}
 
 or
-\begin{equation}\label{eqn:uwavesDeck7MultisectionTransformersCore:500}
-\ln Z_{1} = \ln Z_0 \approx 2^{-3} \binom{3}{0} \ln \frac{R_\txtL}{Z_0},
-\end{equation}
+\begin{dmath}\label{eqn:uwavesDeck7MultisectionTransformersCore:500}
+\ln Z_{1} 
+= \ln Z_0 + 2^{-3} \binom{3}{0} \ln \frac{R_\txtL}{Z_0}
+= \ln 100 + 2^{-3} (1) \ln 0.5
+= 4.518,
+\end{dmath}
 
 so
 \begin{equation}\label{eqn:uwavesDeck7MultisectionTransformersCore:520}
@@ -281,7 +279,8 @@ Z_1 = 91.7 \Omega
 \item \( n = 1 \)
 
 \begin{dmath}\label{eqn:uwavesDeck7MultisectionTransformersCore:540}
-\ln Z_{2} = \ln Z_1 \approx 2^{-3} \binom{3}{1} \ln \frac{50}{100} = 4.26,
+\ln Z_{2}
+= \ln Z_1 + 2^{-3} \binom{3}{1} \ln \frac{50}{100} = 4.26
 \end{dmath}
 
 so
@@ -292,7 +291,7 @@ Z_2 = 70.7 \Omega
 \item \( n = 2 \)
 
 \begin{dmath}\label{eqn:uwavesDeck7MultisectionTransformersCore:580}
-\ln Z_{3} = \ln Z_2 \approx 2^{-3} \binom{3}{2} \ln \frac{50}{100} = 4.0,
+\ln Z_{3} = \ln Z_2 + 2^{-3} \binom{3}{2} \ln \frac{50}{100} = 4.0,
 \end{dmath}
 
 so
@@ -301,12 +300,21 @@ so
 Z_3 = 54.5 \Omega.
 \end{dmath}
 
-FN
+\end{itemize}
 
-Fractional BW for \( \Gamma_m = 0.05 \), where \( 10 \log_{10} ... \)
+%FN
 
-At \( 2 \si{GHz} \),
+With the fractional BW for \( \Gamma_m = 0.05 \), where \( 10 \log_{10} \Abs{\Gamma_m}^2 = -26 \si{dB} \)
 
-% ...
-%BW = 
+\begin{dmath}\label{eqn:uwavesDeck7MultisectionTransformersCore:920}
+\frac{\Delta f}{f_0}
+\approx 
+2 - \frac{4}{\pi} \arccos\lr{ \inv{2} \lr{ \frac{\Gamma_m}{\Abs{A}} }^{1/N} }
+=
+2 - \frac{4}{\pi} \arccos\lr{ \inv{2} \lr{ \frac{0.05}{0.0433} }^{1/3} }
+= 0.7
+\end{dmath}
 
+At \( 2 \si{GHz} \), \( BW = 0.7 (70\%) = 1.4 \si{GHz} \), or \( [2.3,2.7] \si{GHz} \), whereas a single \( \lambda/4 \) transformer \( Z_T = \sqrt{ (100)(50) } = 70.7 \Omega \) yields a BW of just \( 0.36 \si{GHz} \) (18\%).
+
+} % example
