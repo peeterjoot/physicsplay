@@ -23,6 +23,7 @@ INCOMPLETE += stokespost.tex
 #INCOMPLETE += ps8mathematica.tex
 INCOMPLETE += $(wildcard uwaves*Core.tex)
 INCOMPLETE += uwavesDeck8ResonatorQfactor.tex
+INCOMPLETE += continuumAndOtherTransformers.tex
 
 TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES)) 
 
