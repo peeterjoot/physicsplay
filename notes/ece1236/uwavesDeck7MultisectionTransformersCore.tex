@@ -21,10 +21,16 @@ Apparently this notation goes all the way back to Heavyside!
 
 \section{Multisection transformers}
 
-Through a transformation of the form \cref{fig:deck7:deck7Fig1} it is possible to optimize for maximum power delivery.  Unfortunately, such a transformation does not allow any control over the bandwidth.  The standard solution is to add more steps as sketched in \cref{fig:deck7:deck7Fig2}.
+Using a transformation of the form \cref{fig:deck7:deck7Fig1} it is possible to optimize for maximum power delivery, using for example a matching transformation \( Z_\in = Z_1^2/R_\L = Z_0\), or \( Z_1 = \sqrt{R_\L Z_0} \).  Unfortunately, such a transformation does not allow any control over the bandwidth.  This results in a pinched frequency response for which the standard solution is to add more steps as sketched in \cref{fig:Feb10:Feb10Fig2}.
 
-\imageFigure{../../figures/ece1236/deck7Fig1}{Single stage impedance matching.}{fig:deck7:deck7Fig1}{0.15}
-\imageFigure{../../figures/ece1236/deck7Fig2}{Multiple step impedance matching.}{fig:deck7:deck7Fig2}{0.15}
+\imageFigure{../../figures/ece1236/Feb10Fig2}{Pinched frequency response.}{fig:Feb10:Feb10Fig2}{0.2}
+
+%The standard solution is to add more steps.
+% as sketched in \cref{fig:deck7:deck7Fig2}.
+
+% \imageTwoFigures{path1}{path2}{fancy plots}{fig:blah}{scale=0.3}
+\imageTwoFigures{../../figures/ece1236/deck7Fig1}{../../figures/ece1236/deck7Fig2}{Single and multiple stage impedance matching.}{fig:deck7:deck7Fig1}{scale=0.3}
+%\imageFigure{../../figures/ece1236/deck7Fig2}{Multiple step impedance matching.}{fig:deck7:deck7Fig2}{0.15}
 
 This can be implemented in electronics, or potentially geometrically as in this sketch of a microwave stripline transformer implementation \cref{fig:deck7:deck7Fig3}.
 
@@ -185,13 +191,22 @@ Using this approximation, we get
 = 2^{-N} \ln \frac{Z_\txtL}{Z_0},
 \end{dmath}
 
-I asked what business do we have in assuming that \( Z_\txtL/Z_0 \) is near unity?  The answer was that it isn't but suprisingly it works out well enough despite that.  As an example, consider \( Z_0 = 100 \Omega \) and \( R_\L = 50 \Omega \).  The exact expression
+I asked what business do we have in assuming that \( Z_\txtL/Z_0 \) is near unity?  The answer was that it isn't but suprisingly it works out well enough despite that.  As an example, consider \( Z_0 = 100 \Omega \) and \( R_\txtL = 50 \Omega \).  The exact expression
 
-\frac{Z_\L - Z_0}{Z_\L + Z_0} 
+\begin{dmath}\label{eqn:uwavesDeck7MultisectionTransformersCore:880}
+\frac{Z_\txtL - Z_0}{Z_\txtL + Z_0} 
 = \frac{100-50}{100+50} 
-= 
+= -0.333,
+\end{dmath}
 
-This can be used to find \( Z_{k+1} \) starting with \( k = 0 \).
+whereas
+\begin{dmath}\label{eqn:uwavesDeck7MultisectionTransformersCore:900}
+\inv{2} \ln \frac{Z_\txtL}{Z_0} = -0.3466,
+\end{dmath}
+
+which is pretty close after all.
+
+Regardless of whether or not that last approximation is used, one can proceed iteratively to \( Z_{k+1} \) starting with \( k = 0 \).
 
 \paragraph{Bandwidth}
 
@@ -295,111 +310,3 @@ At \( 2 \si{GHz} \),
 % ...
 %BW = 
 
-\section{Continuum transformer}
-
-\begin{equation}\label{eqn:uwavesDeck7MultisectionTransformersCore:820}
-\Delta \Gamma = \frac{ (Z + \Delta Z) - Z }{(Z + \Delta Z) + Z} = \frac{\Delta Z}{2 Z}
-\end{equation}
-
-\begin{equation}\label{eqn:uwavesDeck7MultisectionTransformersCore:840}
-\Delta Z \rightarrow 0
-\end{equation}
-
-\begin{equation}\label{eqn:uwavesDeck7MultisectionTransformersCore:860}
-d\Gamma = \frac{dZ}{2 Z} = \inv{2} \frac{d (\ln Z/Z_0)}{dz} dz
-\end{equation}
-...
-
-Hence as we did for multisection transformers, associate \( \Delta \Gamma \) with \( e^{- 2j \beta z} \) as sketched in 
-
-F
-
-assuming small reflections (i.e. \( Z(z) \) is a slowly varying function, ``adiabatic''  as the term in optics. Then
-
-\begin{equation}\label{eqn:uwavesDeck7MultisectionTransformersCore:n}
-\Gamma(\omega) = \int_0^L e^{ -2 j \beta z} d\Gamma
-\end{equation}
-
-\section{Exponential taper}
-
-Let
-\begin{equation}\label{eqn:uwavesDeck7MultisectionTransformersCore:620}
-Z(z) = Z_0 e^{a z}, \qquad 0 < z < L
-\end{equation}
-
-subject to
-\begin{equation}\label{eqn:uwavesDeck7MultisectionTransformersCore:640}
-\begin{aligned}
-Z(0) &= Z_0 \\
-Z(L) &= Z_0 e^{a z} = Z_\txtL,
-\end{aligned}
-\end{equation}
-
-which gives
-
-\begin{equation}\label{eqn:uwavesDeck7MultisectionTransformersCore:660}
-\ln \frac{Z_\txtL}{Z_0} = a L,
-\end{equation}
-
-or
-\begin{equation}\label{eqn:uwavesDeck7MultisectionTransformersCore:680}
-a = \inv{L} \ln \frac{Z_\txtL}{Z_0}
-\end{equation}
-
-Also 
-
-\begin{equation}\label{eqn:uwavesDeck7MultisectionTransformersCore:700}
-\frac{d}{dz} \ln \frac{Z_\txtL}{Z_0} = \frac{d}{dz} \ln e^{a z}
-\end{equation}
-
-so
-
-\begin{equation}\label{eqn:uwavesDeck7MultisectionTransformersCore:720}
-\frac{d}{dz} (a z) = a.
-\end{equation}
-
-Hence 
-
-\begin{dmath}\label{eqn:uwavesDeck7MultisectionTransformersCore:740}
-\Gamma(\omega) 
-= \inv{2} \int_0^L e^{-2 j \beta z} \frac{d}{dz} \ln \frac{Z_\txtL}{Z_0} dz
-= \frac{a}{2} 
-%...
-\end{dmath}
-
-\begin{enumerate}
-\item \( \beta \) is constant with \( z \) varying: this is good only for TEM lines.
-\item  ...
-\item The electrical length \( \beta L \), is ...
-\end{enumerate}
-
-F
-
-Want:
-
-\begin{dmath}\label{eqn:uwavesDeck7MultisectionTransformersCore:760}
-\beta L = \pi,
-\end{dmath}
-
-or
-\begin{dmath}\label{eqn:uwavesDeck7MultisectionTransformersCore:780}
-\frac{\omega_c}{v_\phi} L = \pi
-\end{dmath}
-
-where \( \omega_c \) is the cutoff frequency.  This gives
-
-\begin{dmath}\label{eqn:uwavesDeck7MultisectionTransformersCore:800}
-\omega_c = \frac{\pi v_\phi}{L}.
-\end{dmath}
-
-\paragraph{Triangular Taper}
-
-%Z(z) = ...
-
-Price to pay for this is that the zero is at \( 2 \pi \) so we have to make it twice as long to get the ripple down.
-
-\paragraph{Klopfenstein Taper}
-
-...
-
-\end{itemize}
