@@ -28,7 +28,7 @@ all : ps3/ticktock.cc
 
 ps4.tar.gz : $(PS3) makefile
 	rm -f $@
-	tar zcf $@ $(PS3) ants.batch.2016-02-09-10:17:41/*
+	tar zcf $@ $(PS3) ants.batch.2016-02-10-17*/* 
 
 git.log : 
 	git log --stat inc ps2 ps3 > $@
