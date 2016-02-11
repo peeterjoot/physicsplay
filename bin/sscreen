@@ -5,21 +5,34 @@ use warnings ;
 use Getopt::Long ;
 
 my $newscreen = 0 ;
+my $showUsage = 0 ;
+
+my $usage = 
+"sscreen:\n" .
+"  Look for a remote screen session running on the hostname found in ~/.screenhost\n" .
+"  if that file exists.  If it does not, then invoke gpc to pick a blue node\n" .
+"  and invoke screen on that node, saving the hostname of that node in ~/.screenhost\n" ;
 
 GetOptions
 (
-   'new!'       => \$newscreen,
-#   'help!'      => \$showUsage,
+   'new!'       => \$newscreen,  # internal option to call this script again on the blue node
+   'help!'      => \$showUsage,
 ) ;
+
+if ( $showUsage )
+{
+   print $usage ;
+   exit 1 ;
+}
 
 my $hostname = `hostname` ;
 chomp $hostname ;
 
 if ( -e "$ENV{HOME}/.screenhost" && $hostname =~ /^scinet/ )
 {
-   my $alias = `cat $ENV{HOME}/.screenhost` ; chomp $alias ;
+   my $screenhost = `cat $ENV{HOME}/.screenhost` ; chomp $screenhost ;
 
-   system( "ssh -t $alias 'module load extras ; screen -dr'" ) ;
+   system( "ssh -t $screenhost 'module load extras ; screen -dr'" ) ;
 }
 elsif ( $newscreen )
 {
