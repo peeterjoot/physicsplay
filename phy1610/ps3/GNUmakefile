@@ -18,15 +18,19 @@ else
    CXXFLAGS += -g
 endif
 
-ONSCINET=1
-ifdef ONSCINET
-   CXXFLAGS += -DSCINET_GPROF_HACKING 
-endif
+# hack from before Ramses emailed about -gstabs
+#ONSCINET=1
+#ifdef ONSCINET
+#   CXXFLAGS += -DSCINET_GPROF_HACKING 
+#endif
 
 ifdef PROFILED
-   CXXFLAGS += -pg -g
-   LDFLAGS += -pg -g
-   #LDFLAGS += -O2
+   PROFFLAGS += -pg
+   #PROFFLAGS += -g
+   PROFFLAGS += -gstabs
+
+	CXXFLAGS += $(PROFFLAGS)
+	LDFLAGS += $(PROFFLAGS)
 
    # now only for origants.cc
    CXXFLAGS += -DNUMBER_OF_TIME_INTERVALS=400
@@ -63,10 +67,10 @@ endif
 
 TARGETS += ants
 TARGETS += origants
-ifndef ONSCINET
+#ifndef ONSCINET
    ANTS_SOURCES += timestep.cc
    ANTS_SOURCES += initialize.cc
-endif
+#endif
 ANTS_SOURCES += ants.cc
 ifdef USETICKTOCK
 ANTS_SOURCES += ticktock.cc
@@ -83,10 +87,10 @@ endif
 
 TARGETS += testdriver
 TEST_SOURCES += ants_on_table.cc
-ifndef ONSCINET
+#ifndef ONSCINET
    TEST_SOURCES += timestep.cc
    TEST_SOURCES += initialize.cc
-endif
+#endif
 TEST_SOURCES += testdriver.cc
 TEST_SOURCES += $(COMMON_SOURCES)
 TEST_OBJECTS += $(subst .cc,.o,$(TEST_SOURCES))
