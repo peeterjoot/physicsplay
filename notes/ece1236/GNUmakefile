@@ -30,6 +30,7 @@ matlab.tex : ../../matlab/METADATA
 
 #uwaves4TransmissionLines.pdf : ../ece1236/uwaves4TransmissionLinesCore.tex
 #uwavesDeck5SmithChart.pdf :: ../ece1236/uwavesDeck5SmithChartCore.tex
+#uwavesDeck7MultisectionTransformers.pdf : ../ece1236/uwavesDeck7MultisectionTransformersCore.tex
 
 #problemSets :: uwavesproblemSet1.pdf
 #
