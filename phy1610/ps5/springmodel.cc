@@ -31,6 +31,8 @@ void showHelpAndExit()
    std::exit( (int)RETURNCODES::HELP ) ;
 }
 
+int minimizer(void) ;
+
 /**
    Parse arguments and run the driver.
  */
@@ -92,6 +94,8 @@ int main( int argc, char ** argv )
 
       std::exit( (int)RETURNCODES::PARSE_ERROR ) ;
    }
+
+   minimizer() ;
 
    return (int)RETURNCODES::SUCCESS ;
 }
