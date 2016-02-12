@@ -1,7 +1,5 @@
-# generate dependency files with each compilation:
-CXXFLAGS += -MMD
+include ../make.vars
 
-CXXFLAGS += -I../inc
 CXXFLAGS += -I$(HOME)/rarray
 ifdef SCINET_RARRAY_INC
    CXXFLAGS += -I$(SCINET_RARRAY_INC)
@@ -11,27 +9,8 @@ CXXFLAGS += -I$(HOME)/ticktock
 PRODUCTION := 1
 #PROFILED := 1
 #USETICKTOCK := 1
-ifdef PRODUCTION
-   CXXFLAGS += -DNDEBUG
-   CXXFLAGS += -O2
-else
-   CXXFLAGS += -g
-endif
-
-# hack from before Ramses emailed about -gstabs
-#ONSCINET=1
-#ifdef ONSCINET
-#   CXXFLAGS += -DSCINET_GPROF_HACKING 
-#endif
 
 ifdef PROFILED
-   PROFFLAGS += -pg
-   #PROFFLAGS += -g
-   PROFFLAGS += -gstabs
-
-	CXXFLAGS += $(PROFFLAGS)
-	LDFLAGS += $(PROFFLAGS)
-
    # now only for origants.cc
    CXXFLAGS += -DNUMBER_OF_TIME_INTERVALS=400
 endif
@@ -46,23 +25,10 @@ endif
 #CXXFLAGS += -DMYRARRAY2_USE_STD_VECTOR
 #CXXFLAGS += -DMYRARRAY_USING_RARRAY
 
-CXXFLAGS += -Wall -Werror
-CXXFLAGS += -std=c++11
 THISDIR := phy1610/ps3
 
-TARGETS += .gitignore
-
-OSNAME := $(shell uname -o)
-ifeq ("$(OSNAME)","Cygwin")
-   CXXFLAGS += -D_GLIBCXX_USE_C99
-
-   # get cxx11 abi link errors attempting to use boost unit_test with the pre-compiled boost library
-   CXXFLAGS += -DUSE_SINGLE_HEADER_BOOST_TEST_FRAMEWORK
-
-   # for putenv and mkstemp
-   CXXFLAGS += -U__STRICT_ANSI__
-else
-   TEST_LDLIBS += -lboost_unit_test_framework
+ifneq ("$(OSNAME)","Cygwin")
+   TEST_LDLIBS += $(BOOST_TEST_LDLIBS)
 endif
 
 TARGETS += ants
@@ -103,17 +69,8 @@ CLEANTARGETS += mine.out
 CLEANTARGETS += profile.mine.txt
 CLEANTARGETS += profile.orig.txt
 CLEANTARGETS += $(TARGETS)
-# doxygen:
-CLEANTARGETS += html latex
 
 ALL_OBJECTS += $(ANTS_OBJECTS) $(TEST_OBJECTS) $(ORIGANTS_OBJECTS)
-#CLEANTARGETS += $(ALL_OBJECTS)
-
-# clean dependency files if any
-#CLEANTARGETS += $(subst .o,.d,$(ALL_OBJECTS))
-CLEANTARGETS += *.o *.d
-
-GPROF := gprof --line --no-graph --brief
 
 all : $(TARGETS)
 
@@ -135,12 +92,6 @@ test: testdriver
 testdriver : $(TEST_OBJECTS)
 	$(CXX) $(LDFLAGS) -o $@ $(TEST_OBJECTS) $(TEST_LDLIBS)
 
-.gitignore: GNUmakefile
-	echo $(addprefix $(THISDIR)/,$(CLEANTARGETS)) | tr ' ' '\n' > $@
-
-clean::
-	rm -rf $(CLEANTARGETS)
-
 profile.mine.txt: ants
 	rm -f gmon.out
 	./ants -t 400 > mine.out
@@ -151,5 +102,4 @@ profile.orig.txt: origants
 	./origants > orig.out
 	$(GPROF) ./origants > $@
 
-# read in dependency files:
--include $(wildcard *.d)
+include ../make.rules
