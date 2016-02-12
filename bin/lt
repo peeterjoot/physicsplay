@@ -15,6 +15,7 @@ my $example ;
 my $problem ;
 my $oproblem ;
 my $section ;
+my $option ;
 my $subequations ;
 my $showUsage = 0 ;
 my $number = 'n' ;
@@ -39,6 +40,7 @@ GetOptions(
    'subproblem=s'  => \$subproblem,
    'subanswer=s'   => \$subanswer,
    'boxed'         => \$boxed,
+   'option'        => \$option,
    'bmatrix'       => \$bmatrix,
    'vmatrix'       => \$vmatrix,
    'dmath:i'       => \$dmath,
@@ -124,6 +126,8 @@ if ( defined $subequations )
    print "\\begin{subequations}\n\\label{eqn:$filename:n}\n" ;
 }
 
+
+
 generateEquation( 'boxed', $boxed ) ;
 
 generateEquation( 'dmath', $dmath ) ;
@@ -143,6 +147,16 @@ if ( !$printedEquation && defined $bmatrix )
 if ( !$printedEquation && defined $vmatrix )
 {
    generatePair( $vmatrix, 'vmatrix' ) ;
+}
+
+if ( defined $option )
+{
+   print "\\left\\{\n" .
+         "\\begin{array}{l l}\n" .
+         " & \\quad \\mbox{\\( \\)} \\\\\n" .
+         " & \\quad \\mbox{\\( \\)} \n" .
+         "\\end{array}\n" .
+         "\\right.\n" ;
 }
 
 if ( defined $subequations )
