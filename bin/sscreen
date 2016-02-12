@@ -1,0 +1,44 @@
+#!/usr/bin/perl
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+
+my $newscreen = 0 ;
+my $showUsage = 0 ;
+
+my $usage = 
+"sscreen:\n" .
+"  Look for a remote screen session running on the scinet hostname found in ~/.screenhost\n" .
+"  if that file exists.  If it does not, then invoke gpc to pick a blue (devel) node\n" .
+"  and invoke screen on that node, saving the hostname of that node in ~/.screenhost\n" ;
+
+GetOptions
+(
+   'new!'       => \$newscreen,  # internal option to call this script again on the blue node
+   'help!'      => \$showUsage,
+) ;
+
+if ( $showUsage )
+{
+   print $usage ;
+   exit 1 ;
+}
+
+my $hostname = `hostname` ;
+chomp $hostname ;
+
+if ( -e "$ENV{HOME}/.screenhost" && $hostname =~ /^scinet/ )
+{
+   my $screenhost = `cat $ENV{HOME}/.screenhost` ; chomp $screenhost ;
+
+   system( "ssh -t $screenhost 'module load extras ; screen -dr'" ) ;
+}
+elsif ( $newscreen )
+{
+   system("cd ; echo $hostname > .screenhost ; module load extras ; screen -q" ) ;
+}
+else
+{
+   system( "gpc -t 'sscreen -new'" ) ;
+}
