@@ -88,17 +88,17 @@ struct iterationResults
 struct iterationParameters
 {
    const Uint     m_max_iter ;  ///< Maximum number of iterations before giving up.
-   const double   m_relerr ;    ///< the relative error criteria for convergence.
    const double   m_abserr ;    ///< the absolute error criteria for convergence.
+   const double   m_relerr ;    ///< the relative error criteria for convergence.
    const bool     m_verbose ;   ///< verbose output
 
    iterationParameters( const Uint     max_iter,
-                        const double   relerr,
                         const double   abserr,
+                        const double   relerr,
                         const bool     verbose ) :
          m_max_iter{max_iter},
-         m_relerr{relerr},
          m_abserr{abserr},
+         m_relerr{relerr},
          m_verbose{verbose}
    {
    }
@@ -119,10 +119,10 @@ struct intervalIterationInputs : public iterationParameters
                             const Uint     max_iter,
                             const Uint     max_expansion_iters,
                             const Uint     max_subdivisions,
-                            const double   relerr,
                             const double   abserr,
+                            const double   relerr,
                             const bool     verbose = false ) :
-        iterationParameters( max_iter, relerr, abserr, verbose ),
+        iterationParameters( max_iter, abserr, relerr, verbose ),
         m_xLo{xLo},
         m_xHi{xHi},
         m_maxExpansionIterations{max_expansion_iters},
@@ -162,10 +162,10 @@ struct derivativeIterationInputs : public iterationParameters
 
    derivativeIterationInputs( const double   x0,
                               const Uint     max_iter,
-                              const double   relerr,
                               const double   abserr,
+                              const double   relerr,
                               const bool     verbose = false ) :
-        iterationParameters( max_iter, relerr, abserr, verbose ),
+        iterationParameters( max_iter, abserr, relerr, verbose ),
         m_x0{x0}
    {
    }
