@@ -4,6 +4,7 @@
 #include "integers.h"
 #include <iostream>
 #include <getopt.h>
+#include "minimizer.h"
 
 /**
    return codes for this exe.
@@ -31,7 +32,7 @@ void showHelpAndExit()
    std::exit( (int)RETURNCODES::HELP ) ;
 }
 
-int minimizer(void) ;
+void minimizer( const minimizerParameters & p, minimizerResults & r ) ;
 
 /**
    Parse arguments and run the driver.
@@ -95,7 +96,10 @@ int main( int argc, char ** argv )
       std::exit( (int)RETURNCODES::PARSE_ERROR ) ;
    }
 
-   minimizer() ;
+   minimizerParameters p ;
+   minimizerResults r ;
+
+   minimizer( p, r ) ;
 
    return (int)RETURNCODES::SUCCESS ;
 }
