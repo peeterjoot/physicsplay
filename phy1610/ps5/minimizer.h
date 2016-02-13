@@ -46,7 +46,7 @@ struct minimizerParameters
 
    minimizerParameters( const Uint     max_iter = 100,
                         const double   abserr = 0.001,
-                        const double   relerr = 0,
+                        const double   relerr = 0.001,
                         const bool     verbose = true,
                         const double   a = 0.0,
                         const double   b = 6.0 ) :

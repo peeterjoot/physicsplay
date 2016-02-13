@@ -3,6 +3,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_min.h>
 #include "minimizer.h"
+#include "gslhelper.h"
 
 struct vPlusCosX
 {
@@ -24,14 +25,6 @@ struct vPlusCosX
       return fn1( x, const_cast<vPlusCosX*>(this) ) ;
    }
 } ;
-
-/**
-   Test for any return code that isn't one of GSL_CONTINUE or GSL_SUCCESS.
- */
-inline bool isGslStatusFatal( int status )
-{
-   return ( (status != GSL_CONTINUE) && (status != GSL_SUCCESS) ) ;
-}
 
 void minimizer( const minimizerParameters & p, minimizerResults & r )
 {
@@ -81,7 +74,7 @@ void minimizer( const minimizerParameters & p, minimizerResults & r )
          r.m_a = gsl_min_fminimizer_x_lower( s ) ;
          r.m_b = gsl_min_fminimizer_x_upper( s ) ;
 
-         r.m_status = gsl_min_test_interval( r.m_a, r.m_b, p.m_abserr, p.m_relerr ) ;
+         r.m_status = min_test_interval( r.m_a, r.m_b, p.m_abserr, p.m_relerr ) ;
 
          if ( isGslStatusFatal( r.m_status ) )
          {
