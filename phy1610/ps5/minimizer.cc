@@ -1,30 +1,83 @@
 #include <stdio.h>
+#include <cmath>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_min.h>
 #include "minimizer.h"
 #include "gslhelper.h"
 
-struct vPlusCosX
+#if 0
+struct params
 {
    int v ;
 
-   vPlusCosX() : v(1)
+   params() : v(1)
    {
    }
 
    static double fn1(double x, void *param)
    {
-      vPlusCosX & p = *(vPlusCosX *)param ;
+      params & p = *(params *)param ;
+      // this was the function from the gsl sample code.
       return cos(x) + p.v ;
    }
 
    double operator() ( const double x ) const
    {
       // gsl functions take void *, not const void *, so this needs coersion:
-      return fn1( x, const_cast<vPlusCosX*>(this) ) ;
+      return fn1( x, const_cast<params*>(this) ) ;
    }
 } ;
+#else
+struct params
+{
+   double a ; ///< J (energy scale)
+   double b ; ///< m (length scale)
+   double c ; ///< N/m (spring constant)
+   double d ; ///< m(maximum spring extension)
+   double f ; ///< dimensionless (stiffness at maximum extension)
+   double g ; ///< m/s^2 (gravitational accelleration).
+   double m ;
+   double t2 ;
+
+   params( const double mass ) : 
+      a{1},
+      b{0.1},
+      c{100},
+      d{0.5},
+      f{2500},
+      g{9.8},
+      m{mass}
+   {
+      t2 = - c/2/a ;
+   }
+
+   static double es( const double x, const params & p )
+   {
+      double t1 = p.d/(x-p.d) ;
+
+      return p.a * ( p.b/x + t1 * t1 / p.f - std::exp( p.t2 * (x-p.b) ) ) ;
+   }
+
+   static double ew( const double x, const double m, const params & p )
+   {
+      return - p.g * m * x ;
+   }
+
+   static double function(double x, void *param)
+   {
+      params & p = *(params *)param ;
+
+      return es(x, p) + ew(x, p.m, p) ;
+   }
+
+   double operator() ( const double x ) const
+   {
+      // gsl functions take void *, not const void *, so this needs coersion:
+      return function( x, const_cast<params*>(this) ) ;
+   }
+} ;
+#endif
 
 void minimizer( const minimizerParameters & p, minimizerResults & r )
 {
@@ -32,8 +85,8 @@ void minimizer( const minimizerParameters & p, minimizerResults & r )
    r.m_a = p.m_a ;
    r.m_b = p.m_b ;
    gsl_function F ;
-   vPlusCosX c ;
-   F.function = &c.fn1 ;
+   params c ;
+   F.function = &c.function ;
    F.params = &c ;
 
    // turn off the print and abort on error behavior, and use explicit error checking.
