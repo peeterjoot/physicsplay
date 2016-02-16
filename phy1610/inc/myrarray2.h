@@ -261,7 +261,7 @@ public:
 
    /** construct a 2x2 array and supply an initial value to the array.
     */
-   inline valarray2( const size_t sz, const valueType v ) : m_storage( sz * sz, v ), m_sz{sz}
+   inline valarray2( const size_t sz, const valueType v ) : m_storage( v, sz * sz ), m_sz{sz}
    {
    }
 

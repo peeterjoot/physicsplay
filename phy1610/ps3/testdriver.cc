@@ -35,7 +35,7 @@ void testArray( const char * const what )
          t1 = a( i, j ) ;
          t2 = b( i, j ) ;
          snprintf( buf, sizeof(buf), "%s:i,j=%u,%u: a(i,j) = %f, b(i,j) = %f\n", what, (unsigned)i, (unsigned)j, t1, t2 ) ;
-         BOOST_REQUIRE( a( i, j ) == b( i, j ),  ) ;
+         BOOST_REQUIRE_MESSAGE( a( i, j ) == b( i, j ), buf ) ;
 
          sum += a( i, j ) ;
       }
@@ -53,8 +53,8 @@ void testArray( const char * const what )
 BOOST_AUTO_TEST_CASE( myra )
 {
    testArray< vecarray2 >( "vecarray" ) ;
-   testArray< valarray2 >( "valarray" ) ;
    testArray< farray2 >( "farray" ) ;
+   testArray< valarray2 >( "valarray" ) ;
    testArray< rarray2 >( "rarray" ) ;
 }
 
