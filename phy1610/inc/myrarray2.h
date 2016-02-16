@@ -17,12 +17,9 @@
  */
 class rarray2
 {
-   using valueType = float ;
-
-   rarray<valueType, 2>    m_storage ;
-   size_t                  m_sz ;
-
 public:
+
+   using valueType = float ;
 
    /** default constructor for empty array
     */
@@ -118,6 +115,10 @@ public:
       return *this ;
    }
 #endif
+
+private:
+   rarray<valueType, 2>    m_storage ;
+   size_t                  m_sz ;
 } ;
 
 /**
@@ -126,12 +127,9 @@ public:
  */
 class vecarray2
 {
-   using valueType = float ;
-
-   std::vector<valueType>  m_storage ;
-   size_t                  m_sz ;
-
 public:
+
+   using valueType = float ;
 
    /** default constructor for empty array
     */
@@ -227,6 +225,10 @@ public:
       return *this ;
    }
 #endif
+
+private:
+   std::vector<valueType>  m_storage ;
+   size_t                  m_sz ;
 } ;
 
 /**
@@ -235,12 +237,8 @@ public:
  */
 class valarray2
 {
-   using valueType = float ;
-
-   std::valarray<valueType>  m_storage ;
-   size_t                  m_sz ;
-
 public:
+   using valueType = float ;
 
    /** default constructor for empty array
     */
@@ -336,6 +334,10 @@ public:
       return *this ;
    }
 #endif
+
+private:
+   std::valarray<valueType>  m_storage ;
+   size_t                  m_sz ;
 } ;
 
 /**
@@ -344,12 +346,9 @@ public:
  */
 class farray2
 {
-   using valueType = float ;
-
-   valueType *             m_storage ;
-   size_t                  m_sz ;
-
 public:
+
+   using valueType = float ;
 
    /** default constructor for empty array
     */
@@ -453,6 +452,10 @@ public:
       return *this ;
    }
 #endif
+
+private:
+   valueType *             m_storage ;
+   size_t                  m_sz ;
 } ;
 
 #if !defined MYRARRAY_USING_RARRAY && \
