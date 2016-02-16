@@ -5,24 +5,9 @@
 
 #include <algorithm>
 #include <numeric>
-
-#if !defined MYRARRAY_USING_RARRAY && \
-    !defined MYRARRAY2_USE_STD_VECTOR && \
-    !defined MYRARRAY_USING_VALARRAY && \
-    !defined MYRARRAY_USING_FLOATARR
-
-   #define MYRARRAY_USING_VALARRAY
-   //#define MYRARRAY_USING_FLOATARR
-   //#define MYRARRAY_USING_RARRAY
-   //#define MYRARRAY2_USE_STD_VECTOR
-#endif
-
-#if defined MYRARRAY2_USE_STD_VECTOR
-   #include <vector>
-#endif
-#if defined MYRARRAY_USING_RARRAY
-   #include "rarray"
-#endif
+#include <vector>
+#include <valarray>
+#include "rarray"
 
 //FIXME: should use dynamic allocation in myrarray for vector and/or valarray storage?
 
@@ -470,6 +455,16 @@ public:
 #endif
 } ;
 
+#if !defined MYRARRAY_USING_RARRAY && \
+    !defined MYRARRAY2_USE_STD_VECTOR && \
+    !defined MYRARRAY_USING_VALARRAY && \
+    !defined MYRARRAY_USING_FLOATARR
+
 #define myrarray2 farray2
+   #define MYRARRAY_USING_VALARRAY
+   //#define MYRARRAY_USING_FLOATARR
+   //#define MYRARRAY_USING_RARRAY
+   //#define MYRARRAY2_USE_STD_VECTOR
+#endif
 
 #endif
