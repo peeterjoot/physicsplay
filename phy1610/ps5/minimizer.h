@@ -43,6 +43,7 @@ struct minimizerParameters
    const bool     m_verbose ;   ///< verbose output
    const double   m_a ;         ///< initial lower bound for the bracket
    const double   m_b ;         ///< initial upper bound for the bracket
+   const double   m_mass ;      ///< mass at which to evaluate the energy minimization.
 
    minimizerParameters( const Uint     max_iter = 100,
                         const double   abserr = 0.001,

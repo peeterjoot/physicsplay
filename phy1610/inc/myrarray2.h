@@ -3,58 +3,51 @@
 #if !defined phy1610_myrarray2_h_included
 #define phy1610_myrarray2_h_included
 
-#include <vector>
 #include <algorithm>
 #include <numeric>
 
+#if !defined MYRARRAY_USING_RARRAY && \
+    !defined MYRARRAY2_USE_STD_VECTOR && \
+    !defined MYRARRAY_USING_VALARRAY && \
+    !defined MYRARRAY_USING_FLOATARR
+
+   #define MYRARRAY_USING_VALARRAY
+   //#define MYRARRAY_USING_FLOATARR
+   //#define MYRARRAY_USING_RARRAY
+   //#define MYRARRAY2_USE_STD_VECTOR
+#endif
+
+#if defined MYRARRAY2_USE_STD_VECTOR
+   #include <vector>
+#endif
 #if defined MYRARRAY_USING_RARRAY
    #include "rarray"
 #endif
 
-//FIXME: should use dynamic allocation in myrarray for vector storage.
+//FIXME: should use dynamic allocation in myrarray for vector and/or valarray storage?
+
 /**
-   A class to manage the storage of and simple operations on a 2x2 dynamically allocated square array.
-
-   If MYRARRAY_USING_RARRAY is defined, this will use rarray<float,2>(sz,sz) to hold the array.
-
-   If MYRARRAY2_USE_STD_VECTOR is defined, this will use (a 1D) std::vector[sz*sz] to hold the array.
-
-   Otherwise, this will use (1D) float [sz*sz] (heap allocated) storage to hold the array.
+   A class to manage the storage of and simple operations on a 2x2 dynamically allocated square array using 
+   rarray<float,2>(sz,sz) to hold the array.
  */
-class myrarray2
+class rarray2
 {
    using valueType = float ;
 
-#if defined MYRARRAY_USING_RARRAY
    rarray<valueType, 2>    m_storage ;
-#elif defined MYRARRAY2_USE_STD_VECTOR
-   std::vector<valueType>  m_storage ;
-#else
-   valueType *             m_storage ;
-#endif
    size_t                  m_sz ;
 
 public:
 
    /** default constructor for empty array
     */
-#if defined MYRARRAY2_USE_STD_VECTOR || defined MYRARRAY_USING_RARRAY
-   inline myrarray2( ) : m_storage{}, m_sz{0}
-#else
-   inline myrarray2( ) : m_storage{nullptr}, m_sz{0}
-#endif
+   inline rarray2( ) : m_storage{}, m_sz{0}
    {
    }
 
    /** construct a 2x2 array without filling.
     */
-#if defined MYRARRAY_USING_RARRAY
-   inline myrarray2( const size_t sz ) : m_storage( sz, sz ), m_sz{sz}
-#elif defined MYRARRAY2_USE_STD_VECTOR
-   inline myrarray2( const size_t sz ) : m_storage( sz * sz ), m_sz{sz}
-#else
-   inline myrarray2( const size_t sz ) : m_storage{ new float[sz * sz] }, m_sz{sz}
-#endif
+   inline rarray2( const size_t sz ) : m_storage( sz, sz ), m_sz{sz}
    {
    }
 
@@ -62,28 +55,14 @@ public:
     */
    inline void fill( const valueType v )
    {
-#if defined MYRARRAY_USING_RARRAY
       m_storage.fill( v ) ;
-#elif defined MYRARRAY2_USE_STD_VECTOR
-      std::fill( m_storage.begin(), m_storage.end(), v ) ;
-#else
-      std::fill( &m_storage[0], &m_storage[m_sz * m_sz], v ) ;
-#endif
    }
 
    /** construct a 2x2 array and supply an initial value to the array.
     */
-#if defined MYRARRAY_USING_RARRAY
-   inline myrarray2( const size_t sz, const valueType v ) : m_storage( sz, sz ), m_sz{sz}
-#elif defined MYRARRAY2_USE_STD_VECTOR
-   inline myrarray2( const size_t sz, const valueType v ) : m_storage( sz * sz, v ), m_sz{sz}
-#else
-   inline myrarray2( const size_t sz, const valueType v ) : m_storage{ new float[sz * sz] }, m_sz{sz}
-#endif
+   inline rarray2( const size_t sz, const valueType v ) : m_storage( sz, sz ), m_sz{sz}
    {
-#if !defined MYRARRAY2_USE_STD_VECTOR
       fill( v ) ;
-#endif
    }
 
    /**
@@ -91,11 +70,7 @@ public:
     */
    inline valueType operator()( const size_t r, const size_t c ) const
    {
-#if defined MYRARRAY_USING_RARRAY
       return m_storage[ r ][ c ] ;
-#else
-      return m_storage[ r * m_sz + c ] ;
-#endif
    }
 
    /**
@@ -103,11 +78,7 @@ public:
     */
    inline void assign( const size_t r, const size_t c, const valueType v )
    {
-#if defined MYRARRAY_USING_RARRAY
       m_storage[ r ][ c ] = v ;
-#else
-      m_storage[ r * m_sz + c ] = v ;
-#endif
    }
 
    /**
@@ -115,11 +86,7 @@ public:
     */
    inline void add( const size_t r, const size_t c, const valueType v )
    {
-#if defined MYRARRAY_USING_RARRAY
       m_storage[ r ][ c ] += v ;
-#else
-      m_storage[ r * m_sz + c ] += v ;
-#endif
    }
 
    /**
@@ -128,7 +95,7 @@ public:
       For an rarray<float,2> implementation this relies on reference counting and a temporary
       to swap things around.
     */
-   inline void swap( myrarray2 & other )
+   inline void swap( rarray2 & other )
    {
       std::swap( m_storage, other.m_storage ) ; // should also work for vector backed storage.
       std::swap( m_sz, other.m_sz ) ;
@@ -143,50 +110,350 @@ public:
 
       total = 0.0 ;
 
-#if defined MYRARRAY_USING_RARRAY
       for ( size_t i = 0 ; i < m_sz ; i++ )
       {
          for ( size_t j = 0 ; j < m_sz ; j++ )
          {
-#if defined MYRARRAY_USING_RARRAY
             total += m_storage[i][j] ;
-#else
-            total += m_storage[ i * m_sz + j ] ;
-#endif
          }
       }
-
-#elif defined MYRARRAY2_USE_STD_VECTOR
-      total = std::accumulate( m_storage.begin(), m_storage.end(), 0.0f ) ;
-#else
-      total = std::accumulate( &m_storage[0], &m_storage[m_sz * m_sz], 0.0f ) ;
-#endif
 
       return total ;
    }
 
+#if 0
    /** 
       overwrite this array with a different one.  Don't think I ended up using this?
     */
-   inline myrarray2 & operator = ( const myrarray2 & b )
+   inline rarray2 & operator = ( const rarray2 & b )
    {
-#if defined MYRARRAY_USING_RARRAY
       m_storage = b.m_storage ;
       m_sz = b.m_sz ;
-#else
+
+      return *this ;
+   }
+#endif
+} ;
+
+/**
+   A class to manage the storage of and simple operations on a 2x2 dynamically allocated square array,
+   this will use (a 1D) std::vector[sz*sz] to hold the array.
+ */
+class vecarray2
+{
+   using valueType = float ;
+
+   std::vector<valueType>  m_storage ;
+   size_t                  m_sz ;
+
+public:
+
+   /** default constructor for empty array
+    */
+   inline vecarray2( ) : m_storage{}, m_sz{0}
+   {
+   }
+
+   /** construct a 2x2 array without filling.
+    */
+   inline vecarray2( const size_t sz ) : m_storage( sz * sz ), m_sz{sz}
+   {
+   }
+
+   /** fill the 2x2 array with a value.
+    */
+   inline void fill( const valueType v )
+   {
+      std::fill( m_storage.begin(), m_storage.end(), v ) ;
+   }
+
+   /** construct a 2x2 array and supply an initial value to the array.
+    */
+   inline vecarray2( const size_t sz, const valueType v ) : m_storage( sz * sz, v ), m_sz{sz}
+   {
+   }
+
+   /**
+      Fetch the array(r,c) value from the underlying storage.
+    */
+   inline valueType operator()( const size_t r, const size_t c ) const
+   {
+      return m_storage[ r * m_sz + c ] ;
+   }
+
+   /**
+      Assign a value v to the array(r,c) position in the array.
+    */
+   inline void assign( const size_t r, const size_t c, const valueType v )
+   {
+      m_storage[ r * m_sz + c ] = v ;
+   }
+
+   /**
+      Add a value v to the array(r,c) position in the array.
+    */
+   inline void add( const size_t r, const size_t c, const valueType v )
+   {
+      m_storage[ r * m_sz + c ] += v ;
+   }
+
+   /**
+      Swap the pointers for two sets of arrays.
+
+      For an rarray<float,2> implementation this relies on reference counting and a temporary
+      to swap things around.
+    */
+   inline void swap( vecarray2 & other )
+   {
+      std::swap( m_storage, other.m_storage ) ; // should also work for vector backed storage.
+      std::swap( m_sz, other.m_sz ) ;
+   }
+
+   /**
+      Compute the sum of all values in the array.
+    */
+   inline valueType sum( ) const
+   {
+      valueType total ;
+
+      total = 0.0 ;
+
+      total = std::accumulate( m_storage.begin(), m_storage.end(), 0.0f ) ;
+
+      return total ;
+   }
+
+#if 0
+   /** 
+      overwrite this array with a different one.  Don't think I ended up using this?
+    */
+   inline vecarray2 & operator = ( const vecarray2 & b )
+   {
       if ( m_sz == b.m_sz )
       {
-#if defined MYRARRAY2_USE_STD_VECTOR
          std::copy( b.m_storage.begin(), b.m_storage.end(), m_storage.begin() ) ;
-#else
-         std::copy( &b.m_storage[0], &b.m_storage[m_sz * m_sz], &m_storage[0] ) ;
-#endif
       }
       else
       {
-#if defined MYRARRAY2_USE_STD_VECTOR
          m_storage = b.m_storage ;
-#else
+         m_sz = b.m_sz ;
+      }
+
+      return *this ;
+   }
+#endif
+} ;
+
+/**
+   A class to manage the storage of and simple operations on a 2x2 dynamically allocated square array,
+   this will use (a 1D) std::valarray[sz*sz] to hold the array.
+ */
+class valarray2
+{
+   using valueType = float ;
+
+   std::valarray<valueType>  m_storage ;
+   size_t                  m_sz ;
+
+public:
+
+   /** default constructor for empty array
+    */
+   inline valarray2( ) : m_storage{}, m_sz{0}
+   {
+   }
+
+   /** construct a 2x2 array without filling.
+    */
+   inline valarray2( const size_t sz ) : m_storage( sz * sz ), m_sz{sz}
+   {
+   }
+
+   /** fill the 2x2 array with a value.
+    */
+   inline void fill( const valueType v )
+   {
+      m_storage = v ;
+   }
+
+   /** construct a 2x2 array and supply an initial value to the array.
+    */
+   inline valarray2( const size_t sz, const valueType v ) : m_storage( sz * sz, v ), m_sz{sz}
+   {
+   }
+
+   /**
+      Fetch the array(r,c) value from the underlying storage.
+    */
+   inline valueType operator()( const size_t r, const size_t c ) const
+   {
+      return m_storage[ r * m_sz + c ] ;
+   }
+
+   /**
+      Assign a value v to the array(r,c) position in the array.
+    */
+   inline void assign( const size_t r, const size_t c, const valueType v )
+   {
+      m_storage[ r * m_sz + c ] = v ;
+   }
+
+   /**
+      Add a value v to the array(r,c) position in the array.
+    */
+   inline void add( const size_t r, const size_t c, const valueType v )
+   {
+      m_storage[ r * m_sz + c ] += v ;
+   }
+
+   /**
+      Swap the pointers for two sets of arrays.
+
+      For an rarray<float,2> implementation this relies on reference counting and a temporary
+      to swap things around.
+    */
+   inline void swap( valarray2 & other )
+   {
+      std::swap( m_storage, other.m_storage ) ; // should also work for vector backed storage.
+      std::swap( m_sz, other.m_sz ) ;
+   }
+
+   /**
+      Compute the sum of all values in the array.
+    */
+   inline valueType sum( ) const
+   {
+      valueType total ;
+
+      total = 0.0 ;
+
+      total = m_storage.sum() ;
+
+      return total ;
+   }
+
+#if 0
+   /** 
+      overwrite this array with a different one.  Don't think I ended up using this?
+    */
+   inline valarray2 & operator = ( const valarray2 & b )
+   {
+      if ( m_sz == b.m_sz )
+      {
+         m_storage = b.m_storage ;
+      }
+      else
+      {
+         m_storage = b.m_storage ;
+         m_sz = b.m_sz ;
+      }
+
+      return *this ;
+   }
+#endif
+} ;
+
+/**
+   A class to manage the storage of and simple operations on a 2x2 dynamically allocated square array,
+   this will use (a 1D) float[sz*sz] storage to hold the array.
+ */
+class farray2
+{
+   using valueType = float ;
+
+   valueType *             m_storage ;
+   size_t                  m_sz ;
+
+public:
+
+   /** default constructor for empty array
+    */
+   inline farray2( ) : m_storage{nullptr}, m_sz{0}
+   {
+   }
+
+   /** construct a 2x2 array without filling.
+    */
+   inline farray2( const size_t sz ) : m_storage{ new float[sz * sz] }, m_sz{sz}
+   {
+   }
+
+   /** fill the 2x2 array with a value.
+    */
+   inline void fill( const valueType v )
+   {
+      std::fill( &m_storage[0], &m_storage[m_sz * m_sz], v ) ;
+   }
+
+   /** construct a 2x2 array and supply an initial value to the array.
+    */
+   inline farray2( const size_t sz, const valueType v ) : m_storage{ new float[sz * sz] }, m_sz{sz}
+   {
+      fill( v ) ;
+   }
+
+   /**
+      Fetch the array(r,c) value from the underlying storage.
+    */
+   inline valueType operator()( const size_t r, const size_t c ) const
+   {
+      return m_storage[ r * m_sz + c ] ;
+   }
+
+   /**
+      Assign a value v to the array(r,c) position in the array.
+    */
+   inline void assign( const size_t r, const size_t c, const valueType v )
+   {
+      m_storage[ r * m_sz + c ] = v ;
+   }
+
+   /**
+      Add a value v to the array(r,c) position in the array.
+    */
+   inline void add( const size_t r, const size_t c, const valueType v )
+   {
+      m_storage[ r * m_sz + c ] += v ;
+   }
+
+   /**
+      Swap the pointers for two sets of arrays.
+
+      For an rarray<float,2> implementation this relies on reference counting and a temporary
+      to swap things around.
+    */
+   inline void swap( farray2 & other )
+   {
+      std::swap( m_storage, other.m_storage ) ; // should also work for vector backed storage.
+      std::swap( m_sz, other.m_sz ) ;
+   }
+
+   /**
+      Compute the sum of all values in the array.
+    */
+   inline valueType sum( ) const
+   {
+      valueType total ;
+
+      total = 0.0 ;
+
+      total = std::accumulate( &m_storage[0], &m_storage[m_sz * m_sz], 0.0f ) ;
+
+      return total ;
+   }
+
+#if 0
+   /** 
+      overwrite this array with a different one.  Don't think I ended up using this?
+    */
+   inline farray2 & operator = ( const farray2 & b )
+   {
+      if ( m_sz == b.m_sz )
+      {
+         std::copy( &b.m_storage[0], &b.m_storage[m_sz * m_sz], &m_storage[0] ) ;
+      }
+      else
+      {
          if ( m_storage )
          {
             delete[] m_storage ;
@@ -195,13 +462,14 @@ public:
          m_storage = new float[ m_sz * m_sz] ;
 
          std::copy( &b.m_storage[0], &b.m_storage[m_sz * m_sz], &m_storage[0] ) ;
-#endif
          m_sz = b.m_sz ;
       }
-#endif
 
       return *this ;
    }
+#endif
 } ;
+
+#define myrarray2 farray2
 
 #endif
