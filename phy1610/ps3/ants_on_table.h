@@ -14,8 +14,9 @@
 class ants_on_table
 {
    size_t               m_table_grid_size ;  ///< table grid size.
-   myrarray2            m_number_of_ants ;   ///< number of ants at each grid location after each timestep.
-   myrarray2            m_velocity_of_ants ; ///< velocity of each ant at specified grid point.
+   myrarray2<float>     m_number_of_ants ;   ///< number of ants at each grid location after each timestep.
+   myrarray2<int>       m_velocity_x_of_ants ; ///< x velocity of each ant at specified grid point.
+   myrarray2<int>       m_velocity_y_of_ants ; ///< y velocity of each ant at specified grid point.
 
    struct timerData
    {
@@ -37,7 +38,7 @@ class ants_on_table
    mutable timerData    m_timerData ;
 
    /// timestep state   
-   myrarray2         m_new_number_of_ants ;
+   myrarray2<float>  m_new_number_of_ants ;
 public:
 
    /**

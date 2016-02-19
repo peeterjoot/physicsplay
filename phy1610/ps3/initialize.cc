@@ -6,6 +6,7 @@
 
 void ants_on_table::initialize( const int total_ants )
 {
+   constexpr double RADIUS_OF_POSITION_ADJUSTMENT { 1.9 } ;
    assert( total_ants ) ;
 
    for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
@@ -15,7 +16,8 @@ void ants_on_table::initialize( const int total_ants )
          float v = 
             M_PI * (sin ((2 * M_PI * (i + j)) / (m_table_grid_size *10)) + 1) ;
 
-         m_velocity_of_ants.assign( i, j, v ) ;
+         m_velocity_x_of_ants.assign( i, j, RADIUS_OF_POSITION_ADJUSTMENT * cos( v ) ) ;
+         m_velocity_y_of_ants.assign( i, j, RADIUS_OF_POSITION_ADJUSTMENT * sin( v ) ) ;
       }
    }
 

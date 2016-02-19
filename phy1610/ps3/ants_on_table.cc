@@ -9,10 +9,11 @@
 
 ants_on_table::ants_on_table( const size_t table_grid_size ) :
    m_table_grid_size( table_grid_size ),
-   m_number_of_ants( table_grid_size, table_grid_size ),
-   m_velocity_of_ants( table_grid_size, table_grid_size ),
-   m_timerData(),
-   m_new_number_of_ants( table_grid_size, table_grid_size )
+   m_number_of_ants( table_grid_size ),
+   m_velocity_x_of_ants( table_grid_size ),
+   m_velocity_y_of_ants( table_grid_size ),
+   m_timerData{},
+   m_new_number_of_ants( table_grid_size )
 {
    assert( table_grid_size > 1 ) ;
 }
@@ -41,15 +42,3 @@ float ants_on_table::total_number_of_ants() const
 
    return totants ;
 }
-
-#if 0 && defined SCINET_GPROF_HACKING
-   // gprof is behaving in a flaky way on the scinet systems (at least on the gpc-f104n084-ib0 "blue node").
-   // If I compile these files separately, I get no profiling line/instruction output for functions in these
-   // files.
-   //
-   // I don't have this gprof trouble on my personal ubuntu VMware image.
-   //
-   // Answer: Ramses: need -gstabs 
-   #include "timestep.cc"
-   #include "initialize.cc"
-#endif

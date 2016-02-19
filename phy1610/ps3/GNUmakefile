@@ -1,3 +1,7 @@
+PRODUCTION := 1
+#PROFILED := 1
+#USETICKTOCK := 1
+
 include ../make.vars
 
 CXXFLAGS += -I$(HOME)/rarray
@@ -5,10 +9,6 @@ ifdef SCINET_RARRAY_INC
    CXXFLAGS += -I$(SCINET_RARRAY_INC)
 endif
 CXXFLAGS += -I$(HOME)/ticktock
-
-PRODUCTION := 1
-#PROFILED := 1
-#USETICKTOCK := 1
 
 ifdef PROFILED
    # now only for origants.cc
@@ -33,10 +33,8 @@ endif
 
 TARGETS += ants
 TARGETS += origants
-#ifndef ONSCINET
-   ANTS_SOURCES += timestep.cc
-   ANTS_SOURCES += initialize.cc
-#endif
+ANTS_SOURCES += timestep.cc
+ANTS_SOURCES += initialize.cc
 ANTS_SOURCES += ants.cc
 ifdef USETICKTOCK
 ANTS_SOURCES += ticktock.cc
@@ -53,10 +51,8 @@ endif
 
 TARGETS += testdriver
 TEST_SOURCES += ants_on_table.cc
-#ifndef ONSCINET
-   TEST_SOURCES += timestep.cc
-   TEST_SOURCES += initialize.cc
-#endif
+TEST_SOURCES += timestep.cc
+TEST_SOURCES += initialize.cc
 TEST_SOURCES += testdriver.cc
 TEST_SOURCES += $(COMMON_SOURCES)
 TEST_OBJECTS += $(subst .cc,.o,$(TEST_SOURCES))
@@ -72,6 +68,9 @@ CLEANTARGETS += $(TARGETS)
 
 ALL_OBJECTS += $(ANTS_OBJECTS) $(TEST_OBJECTS) $(ORIGANTS_OBJECTS)
 
+TARGETS += testarray
+TESTARRAYOBJECTS += testarray.o 
+
 all : $(TARGETS)
 
 antsTest.diff: ants.out
@@ -86,11 +85,19 @@ ants : $(ANTS_OBJECTS)
 origants : $(ORIGANTS_OBJECTS)
 	$(CXX) $(LDFLAGS) -o $@ $(ORIGANTS_OBJECTS) $(ANTS_LDLIBS)
 
-test: testdriver
+test: runtestdriver runtestarray
+
+runtestdriver:
 	./testdriver --report_level=detailed
+
+runtestarray:
+	./testarray --report_level=detailed
 
 testdriver : $(TEST_OBJECTS)
 	$(CXX) $(LDFLAGS) -o $@ $(TEST_OBJECTS) $(TEST_LDLIBS)
+
+testarray : $(TESTARRAYOBJECTS)
+	$(CXX) $(LDFLAGS) -o $@ $(TESTARRAYOBJECTS) $(TEST_LDLIBS)
 
 profile.mine.txt: ants
 	rm -f gmon.out

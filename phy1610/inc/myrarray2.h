@@ -13,13 +13,12 @@
 
 /**
    A class to manage the storage of and simple operations on a 2x2 dynamically allocated square array using 
-   rarray<float,2>(sz,sz) to hold the array.
+   rarray<valueType,2>(sz,sz) to hold the array.
  */
+template <typename valueType>
 class rarray2
 {
 public:
-
-   using valueType = float ;
 
    /** default constructor for empty array
     */
@@ -74,7 +73,7 @@ public:
    /**
       Swap the pointers for two sets of arrays.
 
-      For an rarray<float,2> implementation this relies on reference counting and a temporary
+      For an rarray<valueType,2> implementation this relies on reference counting and a temporary
       to swap things around.
     */
    inline void swap( rarray2 & other )
@@ -125,11 +124,10 @@ private:
    A class to manage the storage of and simple operations on a 2x2 dynamically allocated square array,
    this will use (a 1D) std::vector[sz*sz] to hold the array.
  */
+template <typename valueType>
 class vecarray2
 {
 public:
-
-   using valueType = float ;
 
    /** default constructor for empty array
     */
@@ -183,7 +181,7 @@ public:
    /**
       Swap the pointers for two sets of arrays.
 
-      For an rarray<float,2> implementation this relies on reference counting and a temporary
+      For an rarray<valueType,2> implementation this relies on reference counting and a temporary
       to swap things around.
     */
    inline void swap( vecarray2 & other )
@@ -234,12 +232,39 @@ private:
 /**
    A class to manage the storage of and simple operations on a 2x2 dynamically allocated square array,
    this will use (a 1D) std::valarray[sz*sz] to hold the array.
+
+   I was hopeful about the possible auto-vectored performance of valarray, but that's not the case with
+   g++ 5.2.1.  See the -O2 or -O3 assembly listings for ../vt/vt.cc, given
+
+      void SineCosineVecOps( std::valarray<float> & s, std::valarray<float> & c, const std::valarray<float> & v )
+      {
+         s = std::sin( v ) ;
+         c = std::cos( v ) ;
+      }
+
+      void SineCosineManOps( std::valarray<float> & s, std::valarray<float> & c, const std::valarray<float> & v )
+      {
+         for ( Uint i = 0 ; i < ASIZE ; i++ )
+         {
+            float theta = v[i] ;
+
+            s[i] = std::sin( theta ) ;
+            c[i] = std::cos( theta ) ;
+         }
+      }
+
+   the compiler identifies sin and cos as simultaneously computable and calls fsincos() once for both.  On the other
+   hand, the generated code for the vectored operation is littered with new/delete heap operations and sine and cosine
+   are computed separately.  That valarray code runs about 1.5x slower than the manually coded loop (for an array size
+   of 300).
+
+   - Perhaps the intel compiler does this one better?  I doubt it since the std c++ library implementation will be the
+     same for both.
  */
+template <typename valueType>
 class valarray2
 {
 public:
-   using valueType = float ;
-
    /** default constructor for empty array
     */
    inline valarray2( ) : m_storage{}, m_sz{0}
@@ -292,7 +317,7 @@ public:
    /**
       Swap the pointers for two sets of arrays.
 
-      For an rarray<float,2> implementation this relies on reference counting and a temporary
+      For an rarray<valueType,2> implementation this relies on reference counting and a temporary
       to swap things around.
     */
    inline void swap( valarray2 & other )
@@ -342,13 +367,12 @@ private:
 
 /**
    A class to manage the storage of and simple operations on a 2x2 dynamically allocated square array,
-   this will use (a 1D) float[sz*sz] storage to hold the array.
+   this will use (a 1D) valueType[sz*sz] storage to hold the array.
  */
+template <typename valueType>
 class farray2
 {
 public:
-
-   using valueType = float ;
 
    /** default constructor for empty array
     */
@@ -358,7 +382,7 @@ public:
 
    /** construct a 2x2 array without filling.
     */
-   inline farray2( const size_t sz ) : m_storage{ new float[sz * sz] }, m_sz{sz}
+   inline farray2( const size_t sz ) : m_storage{ new valueType[sz * sz] }, m_sz{sz}
    {
    }
 
@@ -371,7 +395,7 @@ public:
 
    /** construct a 2x2 array and supply an initial value to the array.
     */
-   inline farray2( const size_t sz, const valueType v ) : m_storage{ new float[sz * sz] }, m_sz{sz}
+   inline farray2( const size_t sz, const valueType v ) : m_storage{ new valueType[sz * sz] }, m_sz{sz}
    {
       fill( v ) ;
    }
@@ -403,7 +427,7 @@ public:
    /**
       Swap the pointers for two sets of arrays.
 
-      For an rarray<float,2> implementation this relies on reference counting and a temporary
+      For an rarray<valueType,2> implementation this relies on reference counting and a temporary
       to swap things around.
     */
    inline void swap( farray2 & other )
@@ -443,7 +467,7 @@ public:
             delete[] m_storage ;
          }
 
-         m_storage = new float[ m_sz * m_sz] ;
+         m_storage = new valueType[ m_sz * m_sz] ;
 
          std::copy( &b.m_storage[0], &b.m_storage[m_sz * m_sz], &m_storage[0] ) ;
          m_sz = b.m_sz ;

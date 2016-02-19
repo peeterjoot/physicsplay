@@ -1,3 +1,7 @@
+PRODUCTION := 1
+#PROFILED := 1
+#USETICKTOCK := 1
+
 include ../make.vars
 
 THISDIR := phy1610/ps5

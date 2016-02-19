@@ -3,7 +3,6 @@
 
 void ants_on_table::timestep( )
 {
-   constexpr double RADIUS_OF_POSITION_ADJUSTMENT { 1.9 } ;
    constexpr double WALKING_ANTS_PER_FALLEN { 4.0 } ;
    constexpr double FALLEN_ANTS_FRACTION { 0.2 } ;
 
@@ -18,11 +17,10 @@ void ants_on_table::timestep( )
    {
       for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
       {
-         float v = m_velocity_of_ants( i, j ) ;
          float n = m_number_of_ants( i, j ) ;
+         int di = m_velocity_y_of_ants( i, j ) ;
+         int dj = m_velocity_x_of_ants( i, j ) ;
 
-         int di = RADIUS_OF_POSITION_ADJUSTMENT * sin( v ) ;
-         int dj = RADIUS_OF_POSITION_ADJUSTMENT * cos( v ) ;
          int i2 = (int)i + di ;
          int j2 = (int)j + dj ;
 
