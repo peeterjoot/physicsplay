@@ -144,7 +144,7 @@ int main( int argc, char ** argv )
                 << "Converged:\t" << r.m_converged << "\n"
                 << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
                 << "Min:\t" << r.m_min << "\n"
-                << "F(Root):\t" << p.m_f(r.m_min) << "\n"
+                << "F(Min):\t" << p.m_f(r.m_min) << "\n"
                 << "Abserr (bracket):\t" << r.m_b - r.m_a << "\n"
                 << std::endl ;
    }

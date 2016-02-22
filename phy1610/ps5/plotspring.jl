@@ -1,4 +1,6 @@
 using PyPlot
+#using PyCall
+#@pyimport matplotlib.pyplot as plt ;
 
 #In these expression, the parameters are as follows:
 a = 1 ; #J (energy scale)
@@ -32,8 +34,10 @@ csvx = csv[ :, 1 ] ;
 csvy = csv[ :, 2 ] ;
 
 if ( true )
+   #plt.close( plt.gcf() ) ;
    plot( xrange, y, color="red", linewidth=2.0 ) 
    plot( csvx, csvy, color="blue", linewidth=2.0 ) 
+   #plt.show() ;
 else
    xlen = length( xrange ) ;
    clen = length( csvx ) ;

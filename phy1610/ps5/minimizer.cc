@@ -14,6 +14,7 @@ void f_min_all( minimizerParameters & p, minimizerResults & r )
    r.m_b          = p.m_b ;
    F.function     = &p.m_f.function ;
    F.params       = &p.m_f ;
+   r.m_min = (r.m_b + r.m_a)/2 ;
 
    // turn off the print and abort on error behavior, and use explicit error checking.
    gsl_set_error_handler_off() ;

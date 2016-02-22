@@ -125,7 +125,7 @@ struct minimizerParameters
                         const Uint     max_iter = 100,
                         const double   abserr = 0.001,
                         const double   relerr = 0.001,
-                        const bool     verbose = true ) :
+                        const bool     verbose = false ) :
          m_max_iter{max_iter},
          m_abserr{abserr},
          m_relerr{relerr},
