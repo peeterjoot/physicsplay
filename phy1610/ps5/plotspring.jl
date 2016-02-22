@@ -7,9 +7,12 @@ c = 100 ; #N/m (spring constant)
 d = 0.5 ; #m(maximum spring extension)
 f = 2500 ; #(stiffness at maximum extension)
 g = 9.8 ; #m/s^2 (gravitational accelleration).
+c1 = a * b ;
+c2 = a * d^2/f ;
+c3 = -(c/2/a) ;
 
 function E_s(x)
-   (a * b) ./ x + (a * d^2/f) ./ ( (d - x).^2 ) - a * exp( -(c/2/a) * (x - b).^2 )  
+   c1 ./ x + c2 ./ ( (d - x).^2 ) - a * exp( c3 * (x - b).^2 )  
 end
 
 function E_w(m, x)
@@ -18,17 +21,25 @@ end
 
 m = 0.1 ;
 e = 0.01 ;
-xrange = collect( e:d/1000:d-e ) ;
-y = E_s(xrange) + E_w( m, xrange) ;
+n = 1000 ;
+xrange = collect( e:d/n:d-e ) ;
+y = E_s( xrange ) + E_w( m, xrange) ;
 
-xsz = length(xrange) ;
-xd = xrange[1:xsz-1]
-di = Array( Float64, xsz ) ;    
-# there's probably a function for adjacent differences, but can't look it 
-# up while offline:
-for i in 1:xsz-1
-   di[i] = y[i+1]-y[i]
+run( `./springmodel -m $m -f x.csv -n $n` ) ;
+csv = readdlm( "x.csv", ',' ) ;
+run( `rm -f x.csv` ) ;
+csvx = csv[ :, 1 ] ;
+csvy = csv[ :, 2 ] ;
+
+if ( true )
+   plot( xrange, y, color="red", linewidth=2.0 ) 
+   plot( csvx, csvy, color="blue", linewidth=2.0 ) 
+else
+   xlen = length( xrange ) ;
+   clen = length( csvx ) ;
+   xd = xrange[1:xlen-1] + d/n/2 ;
+   xc = csvx[1:clen-1] + d/n/2 ;
+   
+   plot( xc, diff( csvy ), color="red", linewidth=2.0 ) 
+   plot( xd, diff( y ), color="blue", linewidth=2.0 ) 
 end
-
-plot( xrange, y, color="red", linewidth=2.0 ) 
-#plot( xrange, di, color="blue", linewidth=2.0 ) 
