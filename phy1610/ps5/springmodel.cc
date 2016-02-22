@@ -40,7 +40,7 @@ int main( int argc, char ** argv )
 {
    int c{0} ;
    int line{0} ;
-   double mass{0.25} ;
+   double mass{0.1} ;
 
    constexpr struct option long_options[]{
      { "help",           0, NULL, 'h' },

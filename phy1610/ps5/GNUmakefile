@@ -34,6 +34,9 @@ all : $(TARGETS)
 springmodel : $(SPRINGMODEL_OBJECTS)
 	$(CXX) -o $@ $(SPRINGMODEL_OBJECTS) $(SPRINGMODEL_LDLIBS)
 
+x.csv : springmodel
+	./springmodel -m 0.1 > $@
+
 #runtests: test
 #	./test --report_level=detailed
 #
