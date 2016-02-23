@@ -232,8 +232,8 @@ int main( int argc, char ** argv )
             {
                if ( verbose )
                {
-                  std::cerr << m << ' ' << xmin << std::endl ;
-                  std::cerr << m << ' ' << xmax << std::endl ;
+                  out << m << ' ' << xmin << std::endl ;
+                  out << m << ' ' << xmax << std::endl ;
                }
                out << m << ' ' << diff << std::endl ;
             }

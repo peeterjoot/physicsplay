@@ -2,7 +2,7 @@ using PyPlot
 
 include("spring.jl") ;
 
-masses = [ 0.001, 0.05, 0.2, 0.4 ] ;
+masses = [ 0.001, 0.01, 0.05, 0.2, 0.4 ] ;
 e1 = 0.075 ;
 e2 = 0.02 ;
 n = 1000 ;
