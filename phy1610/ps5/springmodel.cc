@@ -122,7 +122,7 @@ int main( int argc, char ** argv )
    }
 
    minimizerParameters p( mass ) ;
-   minimizerResults r ;
+   minimizerResultsVec rv ;
 
    if ( filename.length() )
    {
@@ -137,16 +137,19 @@ int main( int argc, char ** argv )
    }
    else
    {
-      f_min_all( p, r ) ;
+      f_min_all( p, rv ) ;
 
-      std::cout << "Using " << r.m_solvername << " on: [ " << p.m_a << ", " << p.m_b << " ]\n"
-                << "Iterations:\t" << r.m_iter << "\n"
-                << "Converged:\t" << r.m_converged << "\n"
-                << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
-                << "Min:\t" << r.m_min << "\n"
-                << "F(Min):\t" << p.m_f(r.m_min) << "\n"
-                << "Abserr (bracket):\t" << r.m_b - r.m_a << "\n"
-                << std::endl ;
+      for ( const auto & r : rv )
+      {
+         std::cout << "Using " << r.m_solvername << " on: [ " << r.m_initial_a << ", " << r.m_initial_b << " ]\n"
+                   << "Iterations:\t" << r.m_iter << "\n"
+                   << "Converged:\t" << r.m_converged << "\n"
+                   << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
+                   << "Min:\t" << r.m_min << " in [ " << r.m_a << ", " << r.m_b << "]\n"
+                   << "F(Min):\t" << p.m_f(r.m_min) << "\n"
+                   << "Abserr (bracket):\t" << r.m_b - r.m_a << "\n"
+                   << std::endl ;
+      }
    }
 
    return (int)RETURNCODES::SUCCESS ;
