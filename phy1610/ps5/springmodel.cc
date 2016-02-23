@@ -7,6 +7,7 @@
 #include <iostream>
 #include <cstdio>
 #include <getopt.h>
+#include <limits>
 #include "minimizer.h"
 
 /**
@@ -31,8 +32,10 @@ void showHelpAndExit()
       << "usage: springmodel\n" 
          "\t[--mass=m|-m m]\n"
          "\t[--file=p|-f p]\n"
-         "\tWhen file is specified evaluate the minimization function at a\n"
-         "\tset of points in the interval and output a csv format file with these points.\n"
+         "\t  The path to an output filename when appropriate.\n"
+         "\t[--csv|-c]\n"
+         "\t  Evaluate the minimization function at a\n"
+         "\t  set of points in the interval and output a csv format file with these points for plotting.\n"
          "\t[--help]" 
       << std::endl ;
 
@@ -47,6 +50,10 @@ int main( int argc, char ** argv )
    int c{0} ;
    int line{0} ;
    double mass{0.1} ;
+   bool verbose{false} ;
+
+   // csv related options:
+   bool csv{false} ;
    unsigned long num{1000} ;
    std::string filename{} ;
 
@@ -54,31 +61,23 @@ int main( int argc, char ** argv )
      { "help",           0, NULL, 'h' },
      { "mass",           1, NULL, 'm' },
      { "file",           1, NULL, 'f' },
+     { "csv",            0, NULL, 'c' },
+     { "verbose",        0, NULL, 'v' },
      { "num",            1, NULL, 'n' },
      { NULL,             0, NULL, 0   }
    } ;
 
    try {
-      while ( -1 != ( c = getopt_long( argc, argv, "hm:f:n:", long_options, NULL ) ) )
+      while ( -1 != ( c = getopt_long( argc, argv, "hm:f:n:cv", long_options, NULL ) ) )
       { 
          switch ( c )
          {
-#if 0 // copied from ps[234]/ants.cc
-            case 'g' :
+            case 'c' :
             {
-               line = __LINE__ ;
-               table_grid_size = strToUint( optarg ) ;
+               csv = true ;
 
                break ;
             }
-            case 't' :
-            {
-               line = __LINE__ ;
-               num_time_intervals = std::stoi( optarg ) ;
-
-               break ;
-            }
-#endif
             case 'f' :
             {
                line = __LINE__ ;
@@ -121,11 +120,9 @@ int main( int argc, char ** argv )
       std::exit( (int)RETURNCODES::PARSE_ERROR ) ;
    }
 
-   minimizerParameters p( mass ) ;
-   minimizerResultsVec rv ;
-
-   if ( filename.length() )
+   if ( csv && filename.length() )
    {
+      minimizerParameters p( mass ) ;
       std::ofstream f( filename.c_str() ) ;
 
       double e = 0.01 ;
@@ -137,18 +134,74 @@ int main( int argc, char ** argv )
    }
    else
    {
-      f_min_all( p, rv ) ;
+      constexpr auto massLowerBound = 0.0 ;
+      constexpr auto massUpperBound = 0.5 ;
+      constexpr auto numMasses = 25 ;
+      constexpr auto massDelta = (massUpperBound - massLowerBound)/(numMasses + 2) ;
 
-      for ( const auto & r : rv )
+      double m = massLowerBound + massDelta ;
+
+      if ( !verbose )
       {
-         std::cout << "Using " << r.m_solvername << " on: [ " << r.m_initial_a << ", " << r.m_initial_b << " ]\n"
-                   << "Iterations:\t" << r.m_iter << "\n"
-                   << "Converged:\t" << r.m_converged << "\n"
-                   << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
-                   << "Min:\t" << r.m_min << " in [ " << r.m_a << ", " << r.m_b << "]\n"
-                   << "F(Min):\t" << p.m_f(r.m_min) << "\n"
-                   << "Abserr (bracket):\t" << r.m_b - r.m_a << "\n"
-                   << std::endl ;
+         std::cout << "mass x\n" ;
+      }
+
+      for ( int i = 0 ; i < numMasses ; i++ )
+      {
+         if ( verbose )
+         {
+            std::cout << "Mass:\t" << m << "\n" ;
+         }
+
+         minimizerParameters p( m ) ;
+         minimizerResultsVec rv ;
+
+         f_min_all( p, rv ) ;
+
+         if ( verbose )
+         {
+            for ( const auto & r : rv )
+            {
+               std::cout << "\tUsing " << r.m_solvername << " on: [ " << r.m_initial_a << ", " << r.m_initial_b << " ]\n"
+                         << "\tIterations:\t" << r.m_iter << "\n"
+                         << "\tConverged:\t" << r.m_converged << "\n"
+                         << "\tStatus:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
+                         << "\tMin:\t" << r.m_min << " in [ " << r.m_a << ", " << r.m_b << "]\n"
+                         << "\tF(Min):\t" << p.m_f(r.m_min) << "\n"
+                         << "\tAbserr (bracket):\t" << r.m_b - r.m_a << "\n"
+                         << std::endl ;
+            }
+
+            std::cout << std::endl ;
+         }
+         else
+         {
+            double min{ -std::numeric_limits<double>::infinity() } ;
+            double xmin{} ;
+            bool foundGlobalMin{false} ;
+
+            for ( const auto & r : rv )
+            {
+               if ( !r.m_status )
+               {
+                  double f = p.m_f( r.m_min ) ;
+
+                  if ( f > min )
+                  {
+                     xmin = r.m_min ;
+                     min = f ;
+                     foundGlobalMin = true ;
+                  }
+               }
+            }
+
+            if ( foundGlobalMin )
+            {
+               std::cout << m << ' ' << xmin << std::endl ;
+            }
+         }
+
+         m += massDelta ;
       }
    }
 

@@ -21,19 +21,19 @@ function E_w(m, x)
    - m * g .* x
 end
 
-m = 0.1 ;
+m = 0.37037 ;
 e = 0.01 ;
 n = 1000 ;
 xrange = collect( e:d/n:d-e ) ;
 y = E_s( xrange ) + E_w( m, xrange) ;
 
-run( `./springmodel -m $m -f x.csv -n $n` ) ;
+run( `./springmodel -m $m -c -f x.csv -n $n` ) ;
 csv = readdlm( "x.csv", ',' ) ;
 run( `rm -f x.csv` ) ;
 csvx = csv[ :, 1 ] ;
 csvy = csv[ :, 2 ] ;
 
-if ( true )
+if ( false )
    #plt.close( plt.gcf() ) ;
    plot( xrange, y, color="red", linewidth=2.0 ) 
    plot( csvx, csvy, color="blue", linewidth=2.0 ) 
