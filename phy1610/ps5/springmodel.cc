@@ -9,6 +9,7 @@
 #include <getopt.h>
 #include <limits>
 #include "minimizer.h"
+#include "stdoutfilestream.h"
 
 /**
    return codes for this exe.
@@ -120,16 +121,18 @@ int main( int argc, char ** argv )
       std::exit( (int)RETURNCODES::PARSE_ERROR ) ;
    }
 
-   if ( csv && filename.length() )
+   stdoutOrFileStream fstream( filename ) ;
+   std::ostream & out{ fstream.handle() } ;
+
+   if ( csv )
    {
       minimizerParameters p( mass ) ;
-      std::ofstream f( filename.c_str() ) ;
 
       double e = 0.01 ;
 
       for ( double x = e ; x < p.m_f.d - e ; x += p.m_f.d/num )
       {
-         f << x << ", " << p.m_f( x ) << std::endl ;
+         out << x << ", " << p.m_f( x ) << std::endl ;
       }
    }
    else
@@ -143,14 +146,14 @@ int main( int argc, char ** argv )
 
       if ( !verbose )
       {
-         std::cout << "mass x\n" ;
+         out << "mass x\n" ;
       }
 
       for ( int i = 0 ; i < numMasses ; i++ )
       {
          if ( verbose )
          {
-            std::cout << "Mass:\t" << m << "\n" ;
+            out << "Mass:\t" << m << "\n" ;
          }
 
          minimizerParameters p( m ) ;
@@ -162,7 +165,7 @@ int main( int argc, char ** argv )
          {
             for ( const auto & r : rv )
             {
-               std::cout << "\tUsing " << r.m_solvername << " on: [ " << r.m_initial_a << ", " << r.m_initial_b << " ]\n"
+               out << "\tUsing " << r.m_solvername << " on: [ " << r.m_initial_a << ", " << r.m_initial_b << " ]\n"
                          << "\tIterations:\t" << r.m_iter << "\n"
                          << "\tConverged:\t" << r.m_converged << "\n"
                          << "\tStatus:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
@@ -172,7 +175,7 @@ int main( int argc, char ** argv )
                          << std::endl ;
             }
 
-            std::cout << std::endl ;
+            out << std::endl ;
          }
          else
          {
@@ -197,7 +200,7 @@ int main( int argc, char ** argv )
 
             if ( foundGlobalMin )
             {
-               std::cout << m << ' ' << xmin << std::endl ;
+               out << m << ' ' << xmin << std::endl ;
             }
          }
 
