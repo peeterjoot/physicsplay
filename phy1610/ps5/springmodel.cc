@@ -3,6 +3,7 @@
  */
 #include "integers.h"
 #include <fstream>
+#include <cassert>
 #include <string>
 #include <iostream>
 #include <cstdio>
@@ -51,20 +52,21 @@ int main( int argc, char ** argv )
    int c{0} ;
    int line{0} ;
    double mass{0.1} ;
+   unsigned long numMasses{ 25 } ;
    bool verbose{false} ;
 
    // csv related options:
    bool csv{false} ;
-   unsigned long num{1000} ;
+   unsigned long numPoints{1000} ;
    std::string filename{} ;
 
    constexpr struct option long_options[]{
      { "help",           0, NULL, 'h' },
      { "mass",           1, NULL, 'm' },
+     { "num",            1, NULL, 'n' },
      { "file",           1, NULL, 'f' },
      { "csv",            0, NULL, 'c' },
      { "verbose",        0, NULL, 'v' },
-     { "num",            1, NULL, 'n' },
      { NULL,             0, NULL, 0   }
    } ;
 
@@ -73,6 +75,12 @@ int main( int argc, char ** argv )
       { 
          switch ( c )
          {
+            case 'v' :
+            {
+               verbose = true ;
+
+               break ;
+            }
             case 'c' :
             {
                csv = true ;
@@ -96,7 +104,14 @@ int main( int argc, char ** argv )
             case 'n' :
             {
                line = __LINE__ ;
-               num = std::stoul( optarg ) ;
+               if ( csv )
+               {
+                  numPoints = std::stoul( optarg ) ;
+               }
+               else
+               {
+                  numMasses = std::stoul( optarg ) ;
+               }
 
                break ;
             }
@@ -130,7 +145,7 @@ int main( int argc, char ** argv )
 
       double e = 0.01 ;
 
-      for ( double x = e ; x < p.m_f.d - e ; x += p.m_f.d/num )
+      for ( double x = e ; x < p.m_f.d - e ; x += p.m_f.d/numPoints )
       {
          out << x << ", " << p.m_f( x ) << std::endl ;
       }
@@ -139,8 +154,7 @@ int main( int argc, char ** argv )
    {
       constexpr auto massLowerBound = 0.0 ;
       constexpr auto massUpperBound = 0.5 ;
-      constexpr auto numMasses = 25 ;
-      constexpr auto massDelta = (massUpperBound - massLowerBound)/(numMasses + 2) ;
+      double massDelta = (massUpperBound - massLowerBound)/(numMasses + 2) ;
 
       double m = massLowerBound + massDelta ;
 
@@ -149,7 +163,7 @@ int main( int argc, char ** argv )
          out << "mass x\n" ;
       }
 
-      for ( int i = 0 ; i < numMasses ; i++ )
+      for ( unsigned long i = 0 ; i < numMasses ; i++ )
       {
          if ( verbose )
          {
@@ -179,28 +193,49 @@ int main( int argc, char ** argv )
          }
          else
          {
-            double min{ -std::numeric_limits<double>::infinity() } ;
+            constexpr double inf{ std::numeric_limits<double>::infinity() } ;
+            double fmin{ -inf } ;
+            double fmax{ inf } ;
             double xmin{} ;
-            bool foundGlobalMin{false} ;
+            double xmax{} ;
+            double diff{} ;
+            bool successfulResult{false} ;
+
+            assert( rv.size() <= 2 ) ;
+            assert( rv.size() >= 1 ) ;
 
             for ( const auto & r : rv )
             {
                if ( !r.m_status )
                {
+                  successfulResult = true ;
+
                   double f = p.m_f( r.m_min ) ;
 
-                  if ( f > min )
+                  if ( f > fmin )
                   {
                      xmin = r.m_min ;
-                     min = f ;
-                     foundGlobalMin = true ;
+                     fmin = f ;
+                  }
+
+                  if ( f < fmax )
+                  {
+                     xmax = r.m_min ;
+                     fmax = f ;
                   }
                }
             }
 
-            if ( foundGlobalMin )
+            diff = fmax - fmin ;
+
+            if ( successfulResult )
             {
-               out << m << ' ' << xmin << std::endl ;
+               if ( verbose )
+               {
+                  std::cerr << m << ' ' << xmin << std::endl ;
+                  std::cerr << m << ' ' << xmax << std::endl ;
+               }
+               out << m << ' ' << diff << std::endl ;
             }
          }
 

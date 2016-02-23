@@ -128,8 +128,8 @@ struct minimizerParameters
 
    minimizerParameters( const double   mass,
                         const Uint     max_iter = 100,
-                        const double   abserr = 0.001,
-                        const double   relerr = 0.001,
+                        const double   abserr = 1e-6,
+                        const double   relerr = 1e-6,
                         const bool     verbose = false ) :
          m_max_iter{max_iter},
          m_abserr{abserr},
