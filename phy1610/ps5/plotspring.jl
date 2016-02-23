@@ -1,6 +1,4 @@
 using PyPlot
-#using PyCall
-#@pyimport matplotlib.pyplot as plt ;
 
 #In these expression, the parameters are as follows:
 a = 1 ; #J (energy scale)
@@ -21,7 +19,8 @@ function E_w(m, x)
    - m * g .* x
 end
 
-m = 0.37037 ;
+#m = 0.37037 ;
+m = 0.2 ;
 e = 0.01 ;
 n = 1000 ;
 xrange = collect( e:d/n:d-e ) ;
@@ -33,11 +32,16 @@ run( `rm -f x.csv` ) ;
 csvx = csv[ :, 1 ] ;
 csvy = csv[ :, 2 ] ;
 
-if ( false )
-   #plt.close( plt.gcf() ) ;
+if ( true )
    plot( xrange, y, color="red", linewidth=2.0 ) 
-   plot( csvx, csvy, color="blue", linewidth=2.0 ) 
-   #plt.show() ;
+#   plot( csvx, csvy, color="blue", linewidth=2.0 ) 
+
+   xlabel("x")
+   ylabel("E_tot")
+   title("Nonlinear spring, total energy vs position for m = $m.")
+   grid("on")
+
+   savefig("energyVsPositionFig1.pdf")
 else
    xlen = length( xrange ) ;
    clen = length( csvx ) ;
