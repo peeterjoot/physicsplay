@@ -12,6 +12,7 @@
 #include "integers.h"
 #include "mysolver.h"
 #include "signof.h"
+#include "gslhelper.h"
 
 template <class paramType>
 fdfSolver<paramType>::fdfSolver( const solver whichSolver ) : m_T( solverToFdfMethod( whichSolver ) ), m_params{}

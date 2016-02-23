@@ -1,3 +1,6 @@
+SUBMAKES += $(shell find -name GNUmakefile)
+SUBDIRS := $(subst /GNUmakefile,,$(SUBMAKES))
+
 PS3 += ps3.git.log
 PS3 += inc/boosttest.h
 PS3 += inc/integers.h
@@ -56,3 +59,9 @@ $(TICKTOCK) :
 
 ps3/ticktock.cc : $(TICKTOCK)/ticktock.cc
 	cp $^ $@
+
+clean:
+	$(foreach dir,$(SUBDIRS),make -C $(dir) clean;)
+
+subdirs:
+	$(foreach dir,$(SUBDIRS),make -C $(dir);)
