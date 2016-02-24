@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <cassert>
 #include <cmath>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
@@ -6,15 +7,16 @@
 #include "minimizer.h"
 #include "gslhelper.h"
 
-
-void f_min_all( minimizerParameters & p, minimizerResults & r )
+void f_min_one( const double a, const double b, minimizerParameters & p, minimizerResults & r )
 {
    gsl_function F ;
-   r.m_a          = p.m_a ;
-   r.m_b          = p.m_b ;
+   r.m_initial_a  = a ;
+   r.m_initial_b  = b ;
+   r.m_a          = a ;
+   r.m_b          = b ;
    F.function     = &p.m_f.function ;
    F.params       = &p.m_f ;
-   r.m_min = (r.m_b + r.m_a)/2 ;
+   r.m_min        = (r.m_b + r.m_a)/2 ;
 
    // turn off the print and abort on error behavior, and use explicit error checking.
    gsl_set_error_handler_off() ;
@@ -27,12 +29,14 @@ void f_min_all( minimizerParameters & p, minimizerResults & r )
       throw std::bad_alloc() ;
    }
 
+   r.m_solvername = gsl_min_fminimizer_name( s ) ;
+
    r.m_status = gsl_min_fminimizer_set( s, &F, r.m_min, r.m_a, r.m_b ) ;
    if ( !r.m_status )
    {
       if ( p.m_verbose )
       {
-         printf( "using %s method\n", gsl_min_fminimizer_name (s) ) ;
+         printf( "using %s method\n", gsl_min_fminimizer_name(s) ) ;
 
          printf( "%5s [%9s, %9s] %9s %9s\n",
                  "r.m_iter", "lower", "upper", "min", "err(est)" ) ;
@@ -72,4 +76,179 @@ void f_min_all( minimizerParameters & p, minimizerResults & r )
    r.m_strerror = gsl_strerror( r.m_status ) ;
 
    gsl_min_fminimizer_free( s ) ;
+}
+
+void f_min_all( minimizerParameters & p, minimizerResultsVec & rv )
+{
+#if 0
+   /*
+      
+      Attempt 1:
+     
+      Suppose that we've found one of m=A or m=B for something with at least two
+      local minimums:
+     
+                              *
+                        ****** 
+      ***              *
+        ****      **** *
+           ****  **   * 
+               *
+      a        A      B  b
+      | (1) | (2) | (3) | (4) |
+      
+      Carve the both of the [a,m], and [m,b] intervals into a pair of intervals, and look for other
+      local minimums in these subdivisions.  This depends a bit on luck, since you could imagine two
+      local minimums very close to each other.  What if, for example, there was a local minimum in the
+      interval right next to the global minimum.  Would the minimizer return the global minimum that's
+      sitting on end point of such an interval?
+      
+      Imagine for example, we were seeking the min for a parabola y = (x-2)^2, and find the x=2 min in the [0,4]
+      interval.  If we then look for other local mins (not knowing it's a parabola with only one global=local min)
+      will we get back a local min from Brent's method at x=2 with a [1,2] search interval?
+      
+      The answer appears to be no.  Instead such a search appears to result in status = GSL_EINVAL (invalid argument supplied by user)
+      so gsl is already doing what we want, not treating a min found exactly on the end point of the interval as valid.  This is 
+      convienent, allowing us to just discard any unsuccessful min search.
+      
+   */
+   {
+      minimizerResults r ;
+
+      double a = p.m_a ;
+      double b = p.m_b ;
+
+      f_min_one( a, b, p, r ) ;
+
+      // start with one iteration looking for either a local or global minimum:
+      rv.push_back( r ) ;
+      if ( r.m_status )
+      {
+         // If this first min attempt didn't work, we can't do much more
+         return ;
+      }
+   }
+
+   {
+      double a = p.m_a ;
+      double b = r.m_min ;
+      double midpoint = (a + b)/2 ;
+      assert( a <= midpoint ) ;
+      assert( midpoint <= b ) ;
+
+      minimizerResults r1 ;
+      minimizerResults r2 ;
+
+      f_min_one( a, midpoint, p, r1 ) ;
+      f_min_one( midpoint, b, p, r2 ) ;
+
+      if ( !r1.m_status )
+      {
+         rv.push_back( r1 ) ;
+      }
+
+      if ( !r2.m_status )
+      {
+         rv.push_back( r2 ) ;
+      }
+   }
+
+   {
+      double a = r.m_min ;
+      double b = p.m_b ;
+      double midpoint = (a + b)/2 ;
+      assert( a <= midpoint ) ;
+      assert( midpoint <= b ) ;
+
+      minimizerResults r1 ;
+      minimizerResults r2 ;
+
+      f_min_one( a, midpoint, p, r1 ) ;
+      f_min_one( midpoint, b, p, r2 ) ;
+
+      if ( !r1.m_status )
+      {
+         rv.push_back( r1 ) ;
+      }
+
+      if ( !r2.m_status )
+      {
+         rv.push_back( r2 ) ;
+      }
+   }
+#else
+   /*
+      Attempt 2:
+      
+      With the code above I'm seeing a failure to find the second local minimum
+      for small values of m.  After looking at the plot of the function, it's derivative
+      and the sign of that derivative, I see that the two minimums appear to be nicely
+      separated, one in the left half of the [0,0.5] interval and one on the right.
+
+      Given that an alternate successful strategy was to subdivide the interval
+      successively.  For each side, if a minumum is found use it and return.  If not,
+      for each side, subdivide that interval once more and look in the remaining two quarters.
+      This works nicely for both the very low mass case and the larger mass case where two
+      minimums still exist (as we increase the mass enough, one of the minumums vanish).         
+   */
+   {
+      double a = p.m_a ;
+      double b = p.m_b ;
+      double c = (a + b)/2 ;
+
+      minimizerResults r1 ;
+      minimizerResults r2 ;
+
+      f_min_one( a, c, p, r1 ) ;
+      f_min_one( c, b, p, r2 ) ;
+
+      if ( !r1.m_status )
+      {
+         rv.push_back( r1 ) ;
+      }
+      else
+      {
+         minimizerResults r3 ;
+         minimizerResults r4 ;
+         double mid = (a + c)/2 ;
+
+         f_min_one( a, mid, p, r3 ) ;
+         f_min_one( mid, c, p, r4 ) ;
+
+         if ( !r3.m_status )
+         {
+            rv.push_back( r3 ) ;
+         }
+
+         if ( !r4.m_status )
+         {
+            rv.push_back( r4 ) ;
+         }
+      }
+
+      if ( !r2.m_status )
+      {
+         rv.push_back( r2 ) ;
+      }
+      else
+      {
+         minimizerResults r3 ;
+         minimizerResults r4 ;
+         double mid = (c + b)/2 ;
+
+         f_min_one( c, mid, p, r3 ) ;
+         f_min_one( mid, b, p, r4 ) ;
+
+         if ( !r3.m_status )
+         {
+            rv.push_back( r3 ) ;
+         }
+
+         if ( !r4.m_status )
+         {
+            rv.push_back( r4 ) ;
+         }
+      }
+   }
+#endif
 }

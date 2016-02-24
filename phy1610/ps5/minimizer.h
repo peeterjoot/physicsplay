@@ -5,6 +5,7 @@
 
 #include "integers.h"
 #include <string>
+#include <vector>
 #include <cmath>
 
 /**
@@ -12,11 +13,13 @@
  */
 struct minimizerResults
 {
-   std::string m_solvername ; ///< gsl_root_fdfsolver_name().
+   std::string m_solvername ; ///< gsl_min_fminimizer_name().
    int         m_status ;     ///< The last successful or unsuccessful gsl function return code.
    std::string m_strerror ;   ///< gsl_strerror() output for m_status.
    bool        m_converged ;  ///< did the iteration converge in the specfied number of iterations.
    Uint        m_iter ;       ///< the final iteration count at the point of convergence, error, or non-convergence.
+   double      m_initial_a ;  ///< initial lower bound for the bracket
+   double      m_initial_b ;  ///< initial upper bound for the bracket
    double      m_a ;          ///< final lower bound for the bracket
    double      m_b ;          ///< final upper bound for the bracket
    double      m_min ;        ///< final value found by the min search
@@ -28,6 +31,8 @@ public:
       m_strerror{},
       m_converged{},
       m_iter{},
+      m_initial_a{},
+      m_initial_b{},
       m_a{},
       m_b{},
       m_min{}
@@ -123,8 +128,8 @@ struct minimizerParameters
 
    minimizerParameters( const double   mass,
                         const Uint     max_iter = 100,
-                        const double   abserr = 0.001,
-                        const double   relerr = 0.001,
+                        const double   abserr = 1e-6,
+                        const double   relerr = 1e-6,
                         const bool     verbose = false ) :
          m_max_iter{max_iter},
          m_abserr{abserr},
@@ -137,6 +142,8 @@ struct minimizerParameters
    }
 } ;
 
-void f_min_all( minimizerParameters & p, minimizerResults & r ) ;
+using minimizerResultsVec = std::vector<minimizerResults> ;
+
+void f_min_all( minimizerParameters & p, minimizerResultsVec & r ) ;
 
 #endif
