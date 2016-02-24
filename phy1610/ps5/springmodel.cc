@@ -195,10 +195,10 @@ int main( int argc, char ** argv )
          {
             constexpr double inf{ std::numeric_limits<double>::infinity() } ;
             double fmin{ -inf } ;
-            double fmax{ inf } ;
+//            double fmax{ inf } ;
             double xmin{} ;
-            double xmax{} ;
-            double diff{} ;
+//            double xmax{} ;
+//            double diff{} ;
             bool successfulResult{false} ;
 
             assert( rv.size() <= 2 ) ;
@@ -218,24 +218,21 @@ int main( int argc, char ** argv )
                      fmin = f ;
                   }
 
-                  if ( f < fmax )
-                  {
-                     xmax = r.m_min ;
-                     fmax = f ;
-                  }
+//                  if ( f < fmax )
+//                  {
+//                     xmax = r.m_min ;
+//                     fmax = f ;
+//                  }
                }
             }
 
-            diff = fmax - fmin ;
+            //diff = fmax - fmin ;
 
             if ( successfulResult )
             {
-               if ( verbose )
-               {
-                  out << m << ' ' << xmin << std::endl ;
-                  out << m << ' ' << xmax << std::endl ;
-               }
-               out << m << ' ' << diff << std::endl ;
+               out << m << ' ' << xmin << std::endl ;
+               //out << m << ' ' << xmax << std::endl ;
+               //out << m << ' ' << diff << std::endl ;
             }
          }
 
