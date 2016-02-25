@@ -10,40 +10,53 @@
 #include "springfunction.h"
 
 template <typename gslParams>
-void f_min_one( const double a,
-                const double b,
-                const gslParams & f,
-                const minimizerParameters & p,
-                oneMinimumResult & r )
+brent_minimizer<gslParams>::brent_minimizer( const gslParams & f )
+   : m_F{},
+     m_f{f},
+     m_T{gsl_min_fminimizer_brent},
+     m_s{},
+     m_solvername{}
 {
-   gsl_function F ;
-   r.m_initial_a  = a ;
-   r.m_initial_b  = b ;
-   r.m_a          = a ;
-   r.m_b          = b ;
-   F.function     = &f.function ;
-   F.params       = const_cast<gslParams *>(&f) ;
-   r.m_xmin       = (r.m_b + r.m_a)/2 ;
+   m_F.function     = &f.function ;
+   m_F.params       = const_cast<gslParams *>(&f) ;
 
    // turn off the print and abort on error behavior, and use explicit error checking.
    gsl_set_error_handler_off() ;
 
-   const gsl_min_fminimizer_type * T = gsl_min_fminimizer_brent ;
-   gsl_min_fminimizer * s = gsl_min_fminimizer_alloc( T ) ;
+   m_s = gsl_min_fminimizer_alloc( m_T ) ;
 
-   if ( !s )
+   if ( !m_s )
    {
       throw std::bad_alloc() ;
    }
 
-   r.m_solvername = gsl_min_fminimizer_name( s ) ;
+   m_solvername = gsl_min_fminimizer_name( m_s ) ;
+}
 
-   r.m_status = gsl_min_fminimizer_set( s, &F, r.m_xmin, r.m_a, r.m_b ) ;
+template <typename gslParams>
+brent_minimizer<gslParams>::~brent_minimizer()
+{
+   gsl_min_fminimizer_free( m_s ) ;
+}
+
+template <typename gslParams>
+void brent_minimizer<gslParams>::f_min_one( const double a,
+                                            const double b,
+                                            const minimizerParameters & p,
+                                            oneMinimumResult & r )
+{
+   r.m_initial_a  = a ;
+   r.m_initial_b  = b ;
+   r.m_a          = a ;
+   r.m_b          = b ;
+   r.m_xmin       = (r.m_b + r.m_a)/2 ;
+
+   r.m_status = gsl_min_fminimizer_set( m_s, &m_F, r.m_xmin, r.m_a, r.m_b ) ;
    if ( !r.m_status )
    {
       if ( p.m_verbose )
       {
-         printf( "using %s method\n", gsl_min_fminimizer_name(s) ) ;
+         printf( "using %s method\n", gsl_min_fminimizer_name( m_s ) ) ;
 
          printf( "%5s [%9s, %9s] %9s %9s\n",
                  "r.m_iter", "lower", "upper", "min", "err(est)" ) ;
@@ -55,15 +68,15 @@ void f_min_one( const double a,
       do
       {
          r.m_iter++ ;
-         r.m_status = gsl_min_fminimizer_iterate( s ) ;
+         r.m_status = gsl_min_fminimizer_iterate( m_s ) ;
          if ( r.m_status )
          {
             break ;
          }
 
-         r.m_xmin = gsl_min_fminimizer_x_minimum( s ) ;
-         r.m_a = gsl_min_fminimizer_x_lower( s ) ;
-         r.m_b = gsl_min_fminimizer_x_upper( s ) ;
+         r.m_xmin = gsl_min_fminimizer_x_minimum( m_s ) ;
+         r.m_a = gsl_min_fminimizer_x_lower( m_s ) ;
+         r.m_b = gsl_min_fminimizer_x_upper( m_s ) ;
 
          r.m_status = min_test_interval( r.m_a, r.m_b, p.m_abserr, p.m_relerr ) ;
 
@@ -82,15 +95,14 @@ void f_min_one( const double a,
 
    r.m_strerror = gsl_strerror( r.m_status ) ;
 
-   gsl_min_fminimizer_free( s ) ;
-
    if ( !r.m_status )
    {
       r.m_converged = true ;
-      r.m_fmin = f( r.m_xmin ) ;
+      r.m_fmin = m_f( r.m_xmin ) ;
    }
 }
 
+#if 0
 /*
    Attempt 1:
 
@@ -189,67 +201,66 @@ void f_min_all_ATTEMPT1_UNUSED( const gslParams & f, const minimizerParameters &
       }
    }
 }
+#endif
 
 template <typename gslParams>
-void f_min_all( const gslParams & f, const minimizerParameters & p, minimizerResults & results )
+void brent_minimizer<gslParams>::f_min_all( const minimizerParameters & p, minimizerResults & results )
 {
+   double a = p.m_a ;
+   double b = p.m_b ;
+   double c = (a + b)/2 ;
+
+   oneMinimumResult r1 ;
+   oneMinimumResult r2 ;
+
+   f_min_one( a, c, p, r1 ) ;
+   f_min_one( c, b, p, r2 ) ;
+
+   if ( !r1.m_status )
    {
-      double a = p.m_a ;
-      double b = p.m_b ;
-      double c = (a + b)/2 ;
+      results.m_rv.push_back( r1 ) ;
+   }
+   else
+   {
+      oneMinimumResult r3 ;
+      oneMinimumResult r4 ;
+      double mid = (a + c)/2 ;
 
-      oneMinimumResult r1 ;
-      oneMinimumResult r2 ;
+      f_min_one( a, mid, p, r3 ) ;
+      f_min_one( mid, c, p, r4 ) ;
 
-      f_min_one( a, c, f, p, r1 ) ;
-      f_min_one( c, b, f, p, r2 ) ;
-
-      if ( !r1.m_status )
+      if ( !r3.m_status )
       {
-         results.m_rv.push_back( r1 ) ;
-      }
-      else
-      {
-         oneMinimumResult r3 ;
-         oneMinimumResult r4 ;
-         double mid = (a + c)/2 ;
-
-         f_min_one( a, mid, f, p, r3 ) ;
-         f_min_one( mid, c, f, p, r4 ) ;
-
-         if ( !r3.m_status )
-         {
-            results.m_rv.push_back( r3 ) ;
-         }
-
-         if ( !r4.m_status )
-         {
-            results.m_rv.push_back( r4 ) ;
-         }
+         results.m_rv.push_back( r3 ) ;
       }
 
-      if ( !r2.m_status )
+      if ( !r4.m_status )
       {
-         results.m_rv.push_back( r2 ) ;
+         results.m_rv.push_back( r4 ) ;
       }
-      else
+   }
+
+   if ( !r2.m_status )
+   {
+      results.m_rv.push_back( r2 ) ;
+   }
+   else
+   {
+      oneMinimumResult r3 ;
+      oneMinimumResult r4 ;
+      double mid = (c + b)/2 ;
+
+      f_min_one( c, mid, p, r3 ) ;
+      f_min_one( mid, b, p, r4 ) ;
+
+      if ( !r3.m_status )
       {
-         oneMinimumResult r3 ;
-         oneMinimumResult r4 ;
-         double mid = (c + b)/2 ;
+         results.m_rv.push_back( r3 ) ;
+      }
 
-         f_min_one( c, mid, f, p, r3 ) ;
-         f_min_one( mid, b, f, p, r4 ) ;
-
-         if ( !r3.m_status )
-         {
-            results.m_rv.push_back( r3 ) ;
-         }
-
-         if ( !r4.m_status )
-         {
-            results.m_rv.push_back( r4 ) ;
-         }
+      if ( !r4.m_status )
+      {
+         results.m_rv.push_back( r4 ) ;
       }
    }
 }
@@ -333,6 +344,4 @@ double minimizerResults::fmax()
 
 // instantiate this template for our spring model function
 template
-void f_min_all<gsl_spring_min_function>( const gsl_spring_min_function &  f,
-                                         const minimizerParameters &      p,
-                                         minimizerResults &               results ) ;
+class brent_minimizer<gsl_spring_min_function> ;

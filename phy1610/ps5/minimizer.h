@@ -3,6 +3,8 @@
 #if !defined phy1610_minimizer_h_included
 #define phy1610_minimizer_h_included
 
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_min.h>
 #include "integers.h"
 #include <string>
 #include <vector>
@@ -13,7 +15,6 @@
  */
 struct oneMinimumResult
 {
-   std::string m_solvername ; ///< gsl_min_fminimizer_name().
    int         m_status ;     ///< The last successful or unsuccessful gsl function return code.
    std::string m_strerror ;   ///< gsl_strerror() output for m_status.
    bool        m_converged ;  ///< did the iteration converge in the specfied number of iterations.
@@ -27,7 +28,6 @@ struct oneMinimumResult
 
 public:
    oneMinimumResult() :
-      m_solvername{},
       m_status{},
       m_strerror{},
       m_converged{},
@@ -122,26 +122,55 @@ public:
 } ;
 
 /**
-   Search for a pair of local and global minimums using the 1D Brent's method gsl implementation.
-
-   The partition search strategy used in this function is tailored to the ps5 "spring function",
-   which is known to have one or two local minimums.  A plot of that function, it's derivative
-   and the sign of that derivative, shows that the two minimums appear to be nicely
-   separated, one in the left half of the [0,0.5] interval of interest and one on the right.
-
-   Because we are specifically looking for one or two (nicely separated) local minimums
-   the interval is subdivided successively.  For each side, if a local minumum is found, it
-   is recorded in the results vector, and no further search is performed
-   on that side of the interval.  If a local minimum is not found on a side, then it is
-   subdivided once more and a further search is performed in each of the remaining quarter interval
-   partitions.
-
-   This method works nicely for both the very low mass case and the larger mass case where two
-   minimums still exist (as we increase the mass enough, one of the minumums vanish).
+   State associated with an instantantion of a brent 1D minimizer gsl object and functions
+   to run the minimizer.
  */
 template <typename gslParams>
-void f_min_all( const gslParams &            f,
-                const minimizerParameters &  p,
-                minimizerResults &           results ) ;
+class brent_minimizer
+{
+   gsl_function                     m_F ;
+   const gslParams &                m_f ;
+   const gsl_min_fminimizer_type *  m_T ;
+   gsl_min_fminimizer *             m_s ;
+   std::string                      m_solvername ; ///< gsl_min_fminimizer_name().
+
+   /**
+      Run the gsl brent minimizer on a single interval and collect the results.
+    */
+   void f_min_one( const double a,
+                   const double b,
+                   const minimizerParameters & p,
+                   oneMinimumResult & r ) ;
+public:
+   /**
+      Allocate a gsl brent minimizer object.
+    */
+   brent_minimizer( const gslParams & f ) ;
+
+   /**
+      Deallocate a gsl brent minimizer object.
+    */
+   ~brent_minimizer() ;
+
+   /**
+      Search for a pair of local and global minimums using the 1D Brent's method gsl implementation.
+
+      The partition search strategy used in this function is tailored to the ps5 "spring function",
+      which is known to have one or two local minimums.  A plot of that function, it's derivative
+      and the sign of that derivative, shows that the two minimums appear to be nicely
+      separated, one in the left half of the [0,0.5] interval of interest and one on the right.
+
+      Because we are specifically looking for one or two (nicely separated) local minimums
+      the interval is subdivided successively.  For each side, if a local minumum is found, it
+      is recorded in the results vector, and no further search is performed
+      on that side of the interval.  If a local minimum is not found on a side, then it is
+      subdivided once more and a further search is performed in each of the remaining quarter interval
+      partitions.
+
+      This method works nicely for both the very low mass case and the larger mass case where two
+      minimums still exist (as we increase the mass enough, one of the minumums vanish).
+    */
+   void f_min_all( const minimizerParameters & p, minimizerResults & results ) ;
+} ;
 
 #endif

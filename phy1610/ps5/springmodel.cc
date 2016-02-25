@@ -45,9 +45,7 @@ void showHelpAndExit()
 }
 
 extern template
-void f_min_all<gsl_spring_min_function>( const gsl_spring_min_function &   f,
-                                         const minimizerParameters &       p,
-                                         minimizerResults &                results ) ;
+class brent_minimizer<gsl_spring_min_function> ;
 
 /**
    Parse arguments and run the driver.
@@ -199,11 +197,12 @@ int main( int argc, char ** argv )
    }
    else
    {
-      constexpr auto massLowerBound = 0.0 ;
-      constexpr auto massUpperBound = 0.5 ;
-      double massDelta = (massUpperBound - massLowerBound)/(numMasses + 2) ;
+      brent_minimizer<gsl_spring_min_function> minimizer( f ) ;
+      constexpr auto massLowerBound { 0.0 } ;
+      constexpr auto massUpperBound { 0.5 } ;
+      double massDelta { (massUpperBound - massLowerBound)/(numMasses + 2) } ;
 
-      double m = massLowerBound + massDelta ;
+      double m { massLowerBound + massDelta } ;
       minimizerParameters params( f.start(), f.end() ) ;
 
       if ( showDiff )
@@ -231,7 +230,7 @@ int main( int argc, char ** argv )
       {
          minimizerResults results ;
          f.setMass( m ) ;
-         f_min_all( f, params, results ) ;
+         minimizer.f_min_all( params, results ) ;
 
          if ( verbose )
          {
@@ -239,7 +238,7 @@ int main( int argc, char ** argv )
 
             for ( const auto & r : results.m_rv )
             {
-               out << "\tUsing " << r.m_solvername << " on: [ " << r.m_initial_a << ", " << r.m_initial_b << " ]\n"
+               out << "\tSolving on: [ " << r.m_initial_a << ", " << r.m_initial_b << " ]\n"
                    << "\tIterations:\t" << r.m_iter << "\n"
                    << "\tConverged:\t" << r.m_converged << "\n"
                    << "\tStatus:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
@@ -257,7 +256,7 @@ int main( int argc, char ** argv )
 
             if ( showDiff )
             {
-               v = results.diff() ;
+               v = std::abs( results.diff() ) ;
             }
             else if ( showFmin )
             {
