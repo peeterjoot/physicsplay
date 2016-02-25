@@ -25,16 +25,14 @@ PS3 += ps4.sh
 PS3 += README.ps3.txt
 PS3 += scinet.env.ps2_3
 
-PS5 += ps5.git.log
-PS5 += inc/boosttest.h
-PS5 += inc/integers.h
-PS5 += ps5/description.txt
-#PS5 += ps5/Doxyfile
+PS5 += $(wildcard ps5/*.cc ps5/*.h ps5/*.jl ps5/*.pdf)
 PS5 += ps5/GNUmakefile
-PS5 += $(wildcard ps5/*.cc ps5/*.h)
-#PS5 += ps4.sh
-#PS5 += README.ps5.txt
-#PS5 += scinet.env.ps5
+PS5 += ps5/x.out
+PS5 += inc/integers.h
+PS5 += inc/stdoutfilestream.h
+PS5 += inc/gslhelper.h
+PS5 += README.ps5.txt
+PS5 += ps5.git.log
 
 TICKTOCK := $(HOME)/ticktock
 
