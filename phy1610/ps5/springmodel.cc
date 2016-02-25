@@ -33,12 +33,21 @@ void showHelpAndExit()
 
    std::cerr
       << "usage: springmodel\n"
-         "\t[--mass=m|-m m]\n"
          "\t[--file=p|-f p]\n"
-         "\t  The path to an output filename when appropriate.\n"
-         "\t[--csv|-c]\n"
+         "\t  The path to the output filename.  Stdout will be used if unspecified.\n"
+         "\t[--csv|-c [--mass=m|-m m]]\n"
          "\t  Evaluate the minimization function at a\n"
          "\t  set of points in the interval and output a csv format file with these points for plotting.\n"
+         "\t[--verbose|-v]\n"
+         "\t  Instead of the output required for the problem, show some detailed diagnositic state.\n"
+         "\t[--xmax]\n"
+         "\t  Show the x position of the largest local min instead of the (default) smallest local min for each value of m in [0,0,5].\n"
+         "\t[--fmax]\n"
+         "\t  Show E(x_max) for the the largest local min for each value of the mass in [0,0.5]\n"
+         "\t[--fmin]\n"
+         "\t  Show E(x_min) for the the smallest local min (global min) for each value of the mass in [0,0.5]\n"
+         "\t[--fmin]\n"
+         "\t  Show the difference between the two local minumums or zero for each value of the mass in [0,0.5]\n"
          "\t[--help]"
       << std::endl ;
 

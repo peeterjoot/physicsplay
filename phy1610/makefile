@@ -27,6 +27,8 @@ PS3 += scinet.env.ps2_3
 
 PS5 += $(wildcard ps5/*.cc ps5/*.h ps5/*.jl ps5/*.pdf)
 PS5 += ps5/GNUmakefile
+PS5 += make.vars
+PS5 += make.rules
 PS5 += ps5/x.out
 PS5 += inc/integers.h
 PS5 += inc/stdoutfilestream.h

@@ -1,7 +1,30 @@
-How to run:
+Usage:
 
    $ cd ps5
    $ make springmodel
+   $ ./springmodel  --help
+   usage: springmodel
+           [--file=p|-f p]
+             The path to the output filename.  Stdout will be used if unspecified.
+           [--csv|-c [--mass=m|-m m]]
+             Evaluate the minimization function at a
+             set of points in the interval and output a csv format file with these points for plotting.
+           [--verbose|-v]
+             Instead of the output required for the problem, show some detailed diagnositic state.
+           [--xmax]
+             Show the x position of the largest local min instead of the (default) smallest local min for each value of m in [0,0,5].
+           [--fmax]
+             Show E(x_max) for the the largest local min for each value of the mass in [0,0.5]
+           [--fmin]
+             Show E(x_min) for the the smallest local min (global min) for each value of the mass in [0,0.5]
+           [--fmin]
+             Show the difference between the two local minumums or zero for each value of the mass in [0,0.5]
+           [--help]
+
+Note that the --csv/xmax/fmin/fmax/diff options were for debugging during development.
+
+To invoke:
+
    $ ./springmodel --file x.out
 
 This writes the output for the mass vs. global minimum energy position location to the file ps5/x.out, and 
@@ -19,9 +42,11 @@ What's included in this tarball:
 
       ps5.git.log
 
-   - Makefile for ps5:
+   - Makefiles for ps5:
 
       ps5/GNUmakefile
+      make.vars
+      make.rules
 
    - Output of 'springmodel --file x.out' :
 
