@@ -14,8 +14,8 @@ brent_minimizer<gslParams>::brent_minimizer( const gslParams & f )
    : m_F{},
      m_f{f},
      m_T{gsl_min_fminimizer_brent},
-     m_s{},
-     m_solvername{}
+     m_s{}
+   //, m_solvername{}
 {
    m_F.function     = &f.function ;
    m_F.params       = const_cast<gslParams *>(&f) ;
@@ -30,7 +30,7 @@ brent_minimizer<gslParams>::brent_minimizer( const gslParams & f )
       throw std::bad_alloc() ;
    }
 
-   m_solvername = gsl_min_fminimizer_name( m_s ) ;
+   //m_solvername = gsl_min_fminimizer_name( m_s ) ;
 }
 
 template <typename gslParams>

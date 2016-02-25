@@ -132,7 +132,7 @@ class brent_minimizer
    const gslParams &                m_f ;
    const gsl_min_fminimizer_type *  m_T ;
    gsl_min_fminimizer *             m_s ;
-   std::string                      m_solvername ; ///< gsl_min_fminimizer_name().
+//   std::string                      m_solvername ; ///< gsl_min_fminimizer_name().
 
    /**
       Run the gsl brent minimizer on a single interval and collect the results.

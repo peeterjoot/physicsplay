@@ -11,6 +11,7 @@
 #include "minimizer.h"
 #include "stdoutfilestream.h"
 #include "springfunction.h"
+#include "solver.cc"
 
 /**
    return codes for this exe.
@@ -46,6 +47,84 @@ void showHelpAndExit()
 
 extern template
 class brent_minimizer<gsl_spring_min_function> ;
+
+/**
+   This class collects the gsl minimization function,
+   the parameters that define the interval, and the allocated gsl minimizer object.  That
+   is everything that we required to run the minimizer for a given mass and interval.
+ */
+class minimizerstate
+{
+   gsl_spring_min_function                   m_f ;
+   minimizerParameters                       m_params ;
+   brent_minimizer<gsl_spring_min_function>  m_minimizer ;
+
+public:      
+   /**
+      Set the (position) bounds on the minimization interval, and allocate the gsl minimizer object.
+    */
+   minimizerstate( ) :
+      m_f{},
+      m_params( m_f.start(), m_f.end() ), 
+      m_minimizer( m_f )
+   {
+   }
+
+   // use complier generated destructor.  No special handling is required.
+
+   /**
+      Run the minimizer for a specified mass.
+    */
+   void run( const double mass, minimizerResults & results )
+   {
+      m_f.setMass( mass ) ;
+
+      m_minimizer.f_min_all( m_params, results ) ;
+   }
+
+   void printFofX( const double mass, unsigned long numPoints, std::ostream & out )
+   {
+      m_f.setMass( mass ) ;
+
+      double delta = ( m_f.end() - m_f.start() ) / numPoints ;
+
+      for ( double x = m_f.start() ; x < m_f.end() ; x += delta )
+      {
+         out << x << ", " << m_f( x ) << std::endl ;
+      }
+   }
+
+   /**
+      Returns a value (1/-1) that indicates whether the difference in position between the pair
+      of local minimums at a specific mass is non-zero or zero.
+
+      This is a gsl solver method for a non-derivative solver.
+
+      \param m [in]
+         Point at which to evaluate this difference.
+
+      \param params [in]
+         object state required for the calculation.
+     */
+   static double function( double m, void * params )
+   {
+      minimizerstate & state = *(minimizerstate*)params ;
+
+      minimizerResults results ;
+
+      state.run( m, results ) ;
+
+      double d = std::abs( results.diff() ) ;
+
+      constexpr double tolerance = 1e-4 ;
+
+      double sign = (d > tolerance) ? 1.0 : -1.0 ;
+
+      // std::cout << "diff( " << m << " ) = " << sign << ": " << d << std::endl ;
+
+      return sign ;
+   }
+} ;
 
 /**
    Parse arguments and run the driver.
@@ -181,29 +260,19 @@ int main( int argc, char ** argv )
 
    stdoutOrFileStream fstream( filename ) ;
    std::ostream & out{ fstream.handle() } ;
-   gsl_spring_min_function f ;
+   minimizerstate state ;
 
    if ( csv )
    {
-      f.setMass( mass ) ;
-      minimizerParameters p( f.start(), f.end() ) ;
-
-      double delta = ( f.end() - f.start() ) / numPoints ;
-
-      for ( double x = f.start() ; x < f.end() ; x += delta )
-      {
-         out << x << ", " << f( x ) << std::endl ;
-      }
+      state.printFofX( mass, numPoints, out ) ;
    }
    else
    {
-      brent_minimizer<gsl_spring_min_function> minimizer( f ) ;
       constexpr auto massLowerBound { 0.0 } ;
       constexpr auto massUpperBound { 0.5 } ;
-      double massDelta { (massUpperBound - massLowerBound)/(numMasses + 2) } ;
+      double massDelta { (massUpperBound - massLowerBound)/(numMasses-1) } ;
 
-      double m { massLowerBound + massDelta } ;
-      minimizerParameters params( f.start(), f.end() ) ;
+      double m { massLowerBound } ;
 
       if ( showDiff )
       {
@@ -229,8 +298,8 @@ int main( int argc, char ** argv )
       for ( unsigned long i = 0 ; i < numMasses ; i++ )
       {
          minimizerResults results ;
-         f.setMass( m ) ;
-         minimizer.f_min_all( params, results ) ;
+
+         state.run( m, results ) ;
 
          if ( verbose )
          {
@@ -280,6 +349,43 @@ int main( int argc, char ** argv )
 
          m += massDelta ;
       }
+   }
+
+   /////////////////////////////////////////////////
+   //
+   // part (c).
+   // Find:
+   //   The maximum load m, i.e. the value of the mass m at which the two
+   //   local minima have the same energy. One way to implement this is to use one
+   //   of the GSL root finding algorithms on a function that gives the difference
+   //   of the energy values of the two minima, which can be obtained from f_all_min.
+   //
+   // The value of the maximum load can be printed out to the console.
+   //
+   constexpr double massInterval[]{ 0.0, 0.5 } ;
+   constexpr double maxIter{25} ;
+   constexpr double tolerance { 1e-4 } ;
+
+   intervalIterationInputs p( massInterval[0], massInterval[1], maxIter, tolerance, tolerance ) ;
+   intervalIterationResults r ;
+
+   fSolver<minimizerstate> s( state ) ;
+
+   s.iterate( p, r ) ;
+
+   if ( verbose )
+   {
+      std::cout << "Using " << r.m_solvername << " on: [ " << massInterval[0] << ", " << massInterval[1] << " ]\n"
+                << "Iterations:\t" << r.m_iter << "\n"
+                << "Converged:\t" << r.m_converged << "\n"
+                << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
+                << "Root:\t" << r.m_x << "\n"
+                << "Interval:\t [ " << r.m_xLo << ", " << r.m_xHi << " ]\n"
+                << "Abserr (bracket):\t" << r.m_xHi - r.m_xLo << "\n" << std::endl ;
+   }
+   else
+   {
+      std::cout << "Maximum load: " << r.m_x << " (kg)" << std::endl ;
    }
 
    return (int)RETURNCODES::SUCCESS ;
