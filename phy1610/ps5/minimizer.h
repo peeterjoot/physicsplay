@@ -42,79 +42,6 @@ public:
 } ;
 
 /**
-   The function object for the gsl minimization code.
- */
-struct gsl_spring_min_function
-{
-   double a ; ///< J (energy scale)
-   double b ; ///< m (length scale)
-   double c ; ///< N/m (spring constant)
-   double d ; ///< m(maximum spring extension)
-   double f ; ///< dimensionless (stiffness at maximum extension)
-   double g ; ///< m/s^2 (gravitational accelleration).
-   double m ; ///< mass (kg)
-
-   // pre-calculate some of the products and ratios required to evaluate the function:
-   double c1 ;
-   double c2 ;
-   double c3 ;
-
-   /**
-      constructor.  set physical parameters for the energy functions
-    */
-   gsl_spring_min_function( const double mass ) :
-      a{1},
-      b{0.1},
-      c{100},
-      d{0.5},
-      f{2500},
-      g{9.8},
-      m{mass},
-      c1{a * b},
-      c2{a * d * d/f},
-      c3{- c/(2 * a)}
-   {
-   }
-
-   /**
-      Kinetic energy of the spring function
-    */
-   static double es( const double x, const gsl_spring_min_function & p )
-   {
-      double xdSq = (x-p.d)*(x-p.d) ;
-      double xbSq = (x-p.b)*(x-p.b) ;
-      return p.c1 /x + p.c2 / xdSq - p.a * std::exp( p.c3 * xbSq ) ;
-   }
-
-   /**
-      Potential energy of the spring function
-    */
-   static double ew( const double x, const gsl_spring_min_function & p )
-   {
-      return - p.g * p.m * x ;
-   }
-
-   /**
-      Total energy of the spring function to pass to the gsl minimization code.
-    */
-   static double function( double x, void *param )
-   {
-      gsl_spring_min_function & p = *(gsl_spring_min_function *)param ;
-
-      return es( x, p ) + ew( x, p ) ;
-   }
-
-   /**
-      Evaluate the energy of the spring at the specified point.
-    */
-   double operator() ( const double x ) const
-   {
-      // gsl functions take void *, not const void *, so this needs coersion:
-      return function( x, const_cast<gsl_spring_min_function*>(this) ) ;
-   }
-} ;
-
-/**
    Interval related parameters for gsl minimizer run.
  */
 struct minimizerParameters
@@ -123,11 +50,12 @@ struct minimizerParameters
    const double            m_abserr ;     ///< the absolute error criteria for convergence.
    const double            m_relerr ;     ///< the relative error criteria for convergence.
    const bool              m_verbose ;    ///< verbose output
-   gsl_spring_min_function m_f ;          ///< minimization function
    double                  m_a ;          ///< initial lower bound for the bracket
    double                  m_b ;          ///< initial upper bound for the bracket
 
    minimizerParameters( const double   mass,
+                        const double   a,
+                        const double   b,
                         const Uint     max_iter = 100,
                         const double   abserr   = 1e-6,
                         const double   relerr   = 1e-6,
@@ -136,10 +64,10 @@ struct minimizerParameters
          m_abserr{abserr},
          m_relerr{relerr},
          m_verbose{verbose},
-         m_f{mass}
+         m_f{mass},
+         m_a{a},
+         m_b{b}
    {
-      m_a = m_f.b/10 ;
-      m_b = m_f.d - m_f.b/10 ;
    }
 } ;
 
@@ -150,6 +78,15 @@ class minimizerResults
 {
    Sint    m_minIndex ;                 ///< vector postion for the smallest local minimum
    Sint    m_maxIndex ;                 ///< vector postion for the largest local minimum
+
+   /**
+      Go through results array and see which of the local min found is the local vs global min
+      This also allows the determination of the difference between the two (if more than one).
+
+      These results are cached so that diff(), xmin(), ... can all consume this lookup.
+    */
+   void compareLocalMinimums() ;
+
 public:
    std::vector<oneMinimumResult> m_rv ; ///< iteration counts, minimum value, and other info for each min found.
 
@@ -159,11 +96,6 @@ public:
       m_rv{}
    {
    }
-
-   /**
-      determine the local and global minimum.  Run this before diff(), xmin(), xmax(), fmin(), fmax().
-    */
-   void f_min_all( minimizerParameters & p ) ;
 
    /**
       difference in x position of the smallest local minimum compared to the largest local minimum
@@ -190,5 +122,26 @@ public:
     */
    double fmax() const ;
 } ;
+
+/**
+   Search for a pair of local and global minimums using the 1D Brent's method gsl implementation.
+
+   The partition search strategy used in this function is tailored to the ps5 "spring function",
+   which is known to have one or two local minimums.  A plot of that function, it's derivative
+   and the sign of that derivative, shows that the two minimums appear to be nicely
+   separated, one in the left half of the [0,0.5] interval of interest and one on the right.
+
+   Because we are specifically looking for one or two (nicely separated) local minimums
+   the interval is subdivided successively.  For each side, if a local minumum is found, it
+   is recorded in the results vector, and no further search is performed
+   on that side of the interval.  If a local minimum is not found on a side, then it is 
+   subdivided once more and a further search is performed in each of the remaining quarter interval
+   partitions.
+
+   This method works nicely for both the very low mass case and the larger mass case where two
+   minimums still exist (as we increase the mass enough, one of the minumums vanish).
+ */
+template <typename gslParams>
+void f_min_all( gslParams & f, minimizerParameters & p, minimizerResults & results ) ;
 
 #endif

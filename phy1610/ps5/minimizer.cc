@@ -186,16 +186,6 @@ void minimizerResults::f_min_all( minimizerParameters & p )
    /*
       Attempt 2:
 
-      With the code above I'm seeing a failure to find the second local minimum
-      for small values of m.  After looking at the plot of the function, it's derivative
-      and the sign of that derivative, I see that the two minimums appear to be nicely
-      separated, one in the left half of the [0,0.5] interval and one on the right.
-
-      Given that an alternate successful strategy was to subdivide the interval
-      successively.  For each side, if a minumum is found use it and return.  If not,
-      for each side, subdivide that interval once more and look in the remaining two quarters.
-      This works nicely for both the very low mass case and the larger mass case where two
-      minimums still exist (as we increase the mass enough, one of the minumums vanish).
    */
    {
       double a = p.m_a ;
@@ -257,39 +247,51 @@ void minimizerResults::f_min_all( minimizerParameters & p )
       }
    }
 #endif
-   constexpr double inf{ std::numeric_limits<double>::infinity() } ;
-   double fMinValue{ -inf } ;
-   double fMaxValue{ inf } ;
+}
 
-   size_t sz = m_rv.size() ;
-   assert( sz <= 2 ) ;
-   assert( sz >= 1 ) ;
-
-   for ( size_t i = 0 ; i < sz ; i++ )
+void minimizerResults::compareLocalMinimums()
+{
+   // skip this array search if already done.
+   if ( m_minIndex < 0 )
    {
-      if ( !m_rv[i].m_status )
+      assert( m_maxIndex == (Sint)-1 ) ;
+
+      constexpr double inf{ std::numeric_limits<double>::infinity() } ;
+      double fMinValue{ -inf } ;
+      double fMaxValue{ inf } ;
+
+      size_t sz = m_rv.size() ;
+      assert( sz <= 2 ) ;
+      assert( sz >= 1 ) ;
+
+      for ( size_t i = 0 ; i < sz ; i++ )
       {
-         double f = m_rv[i].m_fmin ;
-
-         if ( f > fMinValue )
+         if ( !m_rv[i].m_status )
          {
-            fMinValue = f ;
-            m_minIndex = i ;
-         }
+            double f = m_rv[i].m_fmin ;
 
-         if ( f < fMaxValue )
-         {
-            fMaxValue = f ;
-            m_maxIndex = i ;
+            if ( f > fMinValue )
+            {
+               fMinValue = f ;
+               m_minIndex = i ;
+            }
+
+            if ( f < fMaxValue )
+            {
+               fMaxValue = f ;
+               m_maxIndex = i ;
+            }
          }
       }
    }
+
+   assert( m_minIndex > 0 ) ;
+   assert( m_maxIndex > 0 ) ;
 }
 
 double minimizerResults::diff() const
 {
-   assert( m_minIndex > 0 ) ;
-   assert( m_maxIndex > 0 ) ;
+   compareLocalMinimums() ;
 
    double xmin = m_rv[m_minIndex].m_xmin - m_rv[m_maxIndex].m_xmin ;
 
@@ -298,28 +300,28 @@ double minimizerResults::diff() const
 
 double minimizerResults::xmin() const
 {
-   assert( m_minIndex >= 0 ) ;
+   compareLocalMinimums() ;
 
    return m_rv[m_minIndex].m_xmin ;
 }
 
 double minimizerResults::xmax() const
 {
-   assert( m_maxIndex >= 0 ) ;
+   compareLocalMinimums() ;
 
    return m_rv[m_maxIndex].m_xmin ;
 }
 
 double minimizerResults::fmin() const
 {
-   assert( m_minIndex >= 0 ) ;
+   compareLocalMinimums() ;
 
    return m_rv[m_minIndex].m_fmin ;
 }
 
 double minimizerResults::fmax() const
 {
-   assert( m_maxIndex >= 0 ) ;
+   compareLocalMinimums() ;
 
    return m_rv[m_maxIndex].m_fmin ;
 }
