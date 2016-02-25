@@ -53,8 +53,7 @@ struct minimizerParameters
    double                  m_a ;          ///< initial lower bound for the bracket
    double                  m_b ;          ///< initial upper bound for the bracket
 
-   minimizerParameters( const double   mass,
-                        const double   a,
+   minimizerParameters( const double   a,
                         const double   b,
                         const Uint     max_iter = 100,
                         const double   abserr   = 1e-6,
@@ -64,7 +63,6 @@ struct minimizerParameters
          m_abserr{abserr},
          m_relerr{relerr},
          m_verbose{verbose},
-         m_f{mass},
          m_a{a},
          m_b{b}
    {
@@ -100,27 +98,27 @@ public:
    /**
       difference in x position of the smallest local minimum compared to the largest local minimum
     */
-   double diff() const ;
+   double diff() ;
 
    /**
       position of the smallest local minimum found
     */
-   double xmin() const ;
+   double xmin() ;
 
    /**
       position of the largest local minimum found
     */
-   double xmax() const ;
+   double xmax() ;
 
    /**
       value of the function at the position of the smallest local minimum found
     */
-   double fmin() const ;
+   double fmin() ;
 
    /**
       value of the function at the position of the largest local minimum found
     */
-   double fmax() const ;
+   double fmax() ;
 } ;
 
 /**
@@ -134,7 +132,7 @@ public:
    Because we are specifically looking for one or two (nicely separated) local minimums
    the interval is subdivided successively.  For each side, if a local minumum is found, it
    is recorded in the results vector, and no further search is performed
-   on that side of the interval.  If a local minimum is not found on a side, then it is 
+   on that side of the interval.  If a local minimum is not found on a side, then it is
    subdivided once more and a further search is performed in each of the remaining quarter interval
    partitions.
 
@@ -142,6 +140,8 @@ public:
    minimums still exist (as we increase the mass enough, one of the minumums vanish).
  */
 template <typename gslParams>
-void f_min_all( gslParams & f, minimizerParameters & p, minimizerResults & results ) ;
+void f_min_all( const gslParams &            f,
+                const minimizerParameters &  p,
+                minimizerResults &           results ) ;
 
 #endif

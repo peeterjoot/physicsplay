@@ -7,16 +7,22 @@
 #include <gsl/gsl_min.h>
 #include "minimizer.h"
 #include "gslhelper.h"
+#include "springfunction.h"
 
-void f_min_one( const double a, const double b, minimizerParameters & p, oneMinimumResult & r )
+template <typename gslParams>
+void f_min_one( const double a,
+                const double b,
+                const gslParams & f,
+                const minimizerParameters & p,
+                oneMinimumResult & r )
 {
    gsl_function F ;
    r.m_initial_a  = a ;
    r.m_initial_b  = b ;
    r.m_a          = a ;
    r.m_b          = b ;
-   F.function     = &p.m_f.function ;
-   F.params       = &p.m_f ;
+   F.function     = &f.function ;
+   F.params       = const_cast<gslParams *>(&f) ;
    r.m_xmin       = (r.m_b + r.m_a)/2 ;
 
    // turn off the print and abort on error behavior, and use explicit error checking.
@@ -80,54 +86,54 @@ void f_min_one( const double a, const double b, minimizerParameters & p, oneMini
 
    if ( !r.m_status )
    {
-      r.m_fmin = p.m_f( r.m_xmin ) ;
+      r.m_converged = true ;
+      r.m_fmin = f( r.m_xmin ) ;
    }
 }
 
-void minimizerResults::f_min_all( minimizerParameters & p )
+/*
+   Attempt 1:
+
+   Suppose that we've found one of m=A or m=B for something with at least two
+   local minimums:
+
+                           *
+                     ******
+   ***              *
+     ****      **** *
+        ****  **   *
+            *
+   a        A      B  b
+   | (1) | (2) | (3) | (4) |
+
+   Carve the both of the [a,m], and [m,b] intervals into a pair of intervals, and look for other
+   local minimums in these subdivisions.  This depends a bit on luck, since you could imagine two
+   local minimums very close to each other.  What if, for example, there was a local minimum in the
+   interval right next to the global minimum.  Would the minimizer return the global minimum that's
+   sitting on end point of such an interval?
+
+   Imagine for example, we were seeking the min for a parabola y = (x-2)^2, and find the x=2 min in the [0,4]
+   interval.  If we then look for other local mins (not knowing it's a parabola with only one global=local min)
+   will we get back a local min from Brent's method at x=2 with a [1,2] search interval?
+
+   The answer appears to be no.  Instead such a search appears to result in status = GSL_EINVAL (invalid argument supplied by user)
+   so gsl is already doing what we want, not treating a min found exactly on the end point of the interval as valid.  This is
+   convienent, allowing us to just discard any unsuccessful min search.
+
+*/
+template <typename gslParams>
+void f_min_all_ATTEMPT1_UNUSED( const gslParams & f, const minimizerParameters & p, minimizerResults & results )
 {
-#if 0
-   /*
+   oneMinimumResult r ;
 
-      Attempt 1:
-
-      Suppose that we've found one of m=A or m=B for something with at least two
-      local minimums:
-
-                              *
-                        ******
-      ***              *
-        ****      **** *
-           ****  **   *
-               *
-      a        A      B  b
-      | (1) | (2) | (3) | (4) |
-
-      Carve the both of the [a,m], and [m,b] intervals into a pair of intervals, and look for other
-      local minimums in these subdivisions.  This depends a bit on luck, since you could imagine two
-      local minimums very close to each other.  What if, for example, there was a local minimum in the
-      interval right next to the global minimum.  Would the minimizer return the global minimum that's
-      sitting on end point of such an interval?
-
-      Imagine for example, we were seeking the min for a parabola y = (x-2)^2, and find the x=2 min in the [0,4]
-      interval.  If we then look for other local mins (not knowing it's a parabola with only one global=local min)
-      will we get back a local min from Brent's method at x=2 with a [1,2] search interval?
-
-      The answer appears to be no.  Instead such a search appears to result in status = GSL_EINVAL (invalid argument supplied by user)
-      so gsl is already doing what we want, not treating a min found exactly on the end point of the interval as valid.  This is
-      convienent, allowing us to just discard any unsuccessful min search.
-
-   */
    {
-      oneMinimumResult r ;
-
       double a = p.m_a ;
       double b = p.m_b ;
 
-      f_min_one( a, b, p, r ) ;
+      f_min_one( a, b, f, p, r ) ;
 
       // start with one iteration looking for either a local or global minimum:
-      m_rv.push_back( r ) ;
+      results.m_rv.push_back( r ) ;
       if ( r.m_status )
       {
          // If this first min attempt didn't work, we can't do much more
@@ -137,7 +143,7 @@ void minimizerResults::f_min_all( minimizerParameters & p )
 
    {
       double a = p.m_a ;
-      double b = r.m_min ;
+      double b = r.m_xmin ;
       double midpoint = (a + b)/2 ;
       assert( a <= midpoint ) ;
       assert( midpoint <= b ) ;
@@ -145,22 +151,22 @@ void minimizerResults::f_min_all( minimizerParameters & p )
       oneMinimumResult r1 ;
       oneMinimumResult r2 ;
 
-      f_min_one( a, midpoint, p, r1 ) ;
-      f_min_one( midpoint, b, p, r2 ) ;
+      f_min_one( a, midpoint, f, p, r1 ) ;
+      f_min_one( midpoint, b, f, p, r2 ) ;
 
       if ( !r1.m_status )
       {
-         m_rv.push_back( r1 ) ;
+         results.m_rv.push_back( r1 ) ;
       }
 
       if ( !r2.m_status )
       {
-         m_rv.push_back( r2 ) ;
+         results.m_rv.push_back( r2 ) ;
       }
    }
 
    {
-      double a = r.m_min ;
+      double a = r.m_xmin ;
       double b = p.m_b ;
       double midpoint = (a + b)/2 ;
       assert( a <= midpoint ) ;
@@ -169,24 +175,24 @@ void minimizerResults::f_min_all( minimizerParameters & p )
       oneMinimumResult r1 ;
       oneMinimumResult r2 ;
 
-      f_min_one( a, midpoint, p, r1 ) ;
-      f_min_one( midpoint, b, p, r2 ) ;
+      f_min_one( a, midpoint, f, p, r1 ) ;
+      f_min_one( midpoint, b, f, p, r2 ) ;
 
       if ( !r1.m_status )
       {
-         m_rv.push_back( r1 ) ;
+         results.m_rv.push_back( r1 ) ;
       }
 
       if ( !r2.m_status )
       {
-         m_rv.push_back( r2 ) ;
+         results.m_rv.push_back( r2 ) ;
       }
    }
-#else
-   /*
-      Attempt 2:
+}
 
-   */
+template <typename gslParams>
+void f_min_all( const gslParams & f, const minimizerParameters & p, minimizerResults & results )
+{
    {
       double a = p.m_a ;
       double b = p.m_b ;
@@ -195,12 +201,12 @@ void minimizerResults::f_min_all( minimizerParameters & p )
       oneMinimumResult r1 ;
       oneMinimumResult r2 ;
 
-      f_min_one( a, c, p, r1 ) ;
-      f_min_one( c, b, p, r2 ) ;
+      f_min_one( a, c, f, p, r1 ) ;
+      f_min_one( c, b, f, p, r2 ) ;
 
       if ( !r1.m_status )
       {
-         m_rv.push_back( r1 ) ;
+         results.m_rv.push_back( r1 ) ;
       }
       else
       {
@@ -208,23 +214,23 @@ void minimizerResults::f_min_all( minimizerParameters & p )
          oneMinimumResult r4 ;
          double mid = (a + c)/2 ;
 
-         f_min_one( a, mid, p, r3 ) ;
-         f_min_one( mid, c, p, r4 ) ;
+         f_min_one( a, mid, f, p, r3 ) ;
+         f_min_one( mid, c, f, p, r4 ) ;
 
          if ( !r3.m_status )
          {
-            m_rv.push_back( r3 ) ;
+            results.m_rv.push_back( r3 ) ;
          }
 
          if ( !r4.m_status )
          {
-            m_rv.push_back( r4 ) ;
+            results.m_rv.push_back( r4 ) ;
          }
       }
 
       if ( !r2.m_status )
       {
-         m_rv.push_back( r2 ) ;
+         results.m_rv.push_back( r2 ) ;
       }
       else
       {
@@ -232,21 +238,20 @@ void minimizerResults::f_min_all( minimizerParameters & p )
          oneMinimumResult r4 ;
          double mid = (c + b)/2 ;
 
-         f_min_one( c, mid, p, r3 ) ;
-         f_min_one( mid, b, p, r4 ) ;
+         f_min_one( c, mid, f, p, r3 ) ;
+         f_min_one( mid, b, f, p, r4 ) ;
 
          if ( !r3.m_status )
          {
-            m_rv.push_back( r3 ) ;
+            results.m_rv.push_back( r3 ) ;
          }
 
          if ( !r4.m_status )
          {
-            m_rv.push_back( r4 ) ;
+            results.m_rv.push_back( r4 ) ;
          }
       }
    }
-#endif
 }
 
 void minimizerResults::compareLocalMinimums()
@@ -285,11 +290,11 @@ void minimizerResults::compareLocalMinimums()
       }
    }
 
-   assert( m_minIndex > 0 ) ;
-   assert( m_maxIndex > 0 ) ;
+   assert( m_minIndex >= 0 ) ;
+   assert( m_maxIndex >= 0 ) ;
 }
 
-double minimizerResults::diff() const
+double minimizerResults::diff()
 {
    compareLocalMinimums() ;
 
@@ -298,30 +303,36 @@ double minimizerResults::diff() const
    return xmin ;
 }
 
-double minimizerResults::xmin() const
+double minimizerResults::xmin()
 {
    compareLocalMinimums() ;
 
    return m_rv[m_minIndex].m_xmin ;
 }
 
-double minimizerResults::xmax() const
+double minimizerResults::xmax()
 {
    compareLocalMinimums() ;
 
    return m_rv[m_maxIndex].m_xmin ;
 }
 
-double minimizerResults::fmin() const
+double minimizerResults::fmin()
 {
    compareLocalMinimums() ;
 
    return m_rv[m_minIndex].m_fmin ;
 }
 
-double minimizerResults::fmax() const
+double minimizerResults::fmax()
 {
    compareLocalMinimums() ;
 
    return m_rv[m_maxIndex].m_fmin ;
 }
+
+// instantiate this template for our spring model function
+template
+void f_min_all<gsl_spring_min_function>( const gsl_spring_min_function &  f,
+                                         const minimizerParameters &      p,
+                                         minimizerResults &               results ) ;

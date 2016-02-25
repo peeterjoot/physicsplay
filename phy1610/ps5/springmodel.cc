@@ -10,6 +10,7 @@
 #include <getopt.h>
 #include "minimizer.h"
 #include "stdoutfilestream.h"
+#include "springfunction.h"
 
 /**
    return codes for this exe.
@@ -43,6 +44,11 @@ void showHelpAndExit()
    std::exit( (int)RETURNCODES::HELP ) ;
 }
 
+extern template
+void f_min_all<gsl_spring_min_function>( const gsl_spring_min_function &   f,
+                                         const minimizerParameters &       p,
+                                         minimizerResults &                results ) ;
+
 /**
    Parse arguments and run the driver.
  */
@@ -53,6 +59,11 @@ int main( int argc, char ** argv )
    double mass{0.1} ;
    unsigned long numMasses{ 25 } ;
    bool verbose{false} ;
+   bool showXmin{true} ;
+   bool showXmax{false} ;
+   bool showFmin{false} ;
+   bool showFmax{false} ;
+   bool showDiff{false} ;
 
    // csv related options:
    bool csv{false} ;
@@ -65,15 +76,50 @@ int main( int argc, char ** argv )
      { "num",            1, NULL, 'n' },
      { "file",           1, NULL, 'f' },
      { "csv",            0, NULL, 'c' },
+     { "xmin",           0, NULL, 'M' },
+     { "xmax",           0, NULL, 'N' },
+     { "fmin",           0, NULL, 'F' },
+     { "fmax",           0, NULL, 'X' },
+     { "diff",           0, NULL, 'd' },
      { "verbose",        0, NULL, 'v' },
      { NULL,             0, NULL, 0   }
    } ;
 
    try {
-      while ( -1 != ( c = getopt_long( argc, argv, "hm:f:n:cv", long_options, NULL ) ) )
+      while ( -1 != ( c = getopt_long( argc, argv, "hm:f:n:cvMNFdX", long_options, NULL ) ) )
       {
          switch ( c )
          {
+            case 'M' :
+            {
+               showXmin = true ;
+
+               break ;
+            }
+            case 'N' :
+            {
+               showXmax = true ;
+
+               break ;
+            }
+            case 'F' :
+            {
+               showFmin = true ;
+
+               break ;
+            }
+            case 'X' :
+            {
+               showFmax = true ;
+
+               break ;
+            }
+            case 'd' :
+            {
+               showDiff = true ;
+
+               break ;
+            }
             case 'v' :
             {
                verbose = true ;
@@ -137,16 +183,18 @@ int main( int argc, char ** argv )
 
    stdoutOrFileStream fstream( filename ) ;
    std::ostream & out{ fstream.handle() } ;
+   gsl_spring_min_function f ;
 
    if ( csv )
    {
-      minimizerParameters p( mass ) ;
+      f.setMass( mass ) ;
+      minimizerParameters p( f.start(), f.end() ) ;
 
-      double e = 0.01 ;
+      double delta = ( f.end() - f.start() ) / numPoints ;
 
-      for ( double x = e ; x < p.m_f.d - e ; x += p.m_f.d/numPoints )
+      for ( double x = f.start() ; x < f.end() ; x += delta )
       {
-         out << x << ", " << p.m_f( x ) << std::endl ;
+         out << x << ", " << f( x ) << std::endl ;
       }
    }
    else
@@ -156,26 +204,39 @@ int main( int argc, char ** argv )
       double massDelta = (massUpperBound - massLowerBound)/(numMasses + 2) ;
 
       double m = massLowerBound + massDelta ;
+      minimizerParameters params( f.start(), f.end() ) ;
 
-      if ( !verbose )
+      if ( showDiff )
       {
-         out << "mass x\n" ;
+         out << "mass diff\n" ;
+      }
+      else if ( showFmin )
+      {
+         out << "mass fmin\n" ;
+      }
+      else if ( showFmax )
+      {
+         out << "mass fmax\n" ;
+      }
+      else if ( showXmax )
+      {
+         out << "mass xmax\n" ;
+      }
+      else if ( showXmin )
+      {
+         out << "mass xmin\n" ;
       }
 
       for ( unsigned long i = 0 ; i < numMasses ; i++ )
       {
+         minimizerResults results ;
+         f.setMass( m ) ;
+         f_min_all( f, params, results ) ;
+
          if ( verbose )
          {
             out << "Mass:\t" << m << "\n" ;
-         }
 
-         minimizerParameters params( m ) ;
-         minimizerResults results ;
-
-         results.f_min_all( params ) ;
-
-         if ( verbose )
-         {
             for ( const auto & r : results.m_rv )
             {
                out << "\tUsing " << r.m_solvername << " on: [ " << r.m_initial_a << ", " << r.m_initial_b << " ]\n"
@@ -192,9 +253,30 @@ int main( int argc, char ** argv )
          }
          else
          {
-            out << m << ' ' << results.xmin() << std::endl ;
-            //out << m << ' ' << results.xmax() << std::endl ;
-            //out << m << ' ' << results.diff() << std::endl ;
+            double v{} ;
+
+            if ( showDiff )
+            {
+               v = results.diff() ;
+            }
+            else if ( showFmin )
+            {
+               v = results.fmin() ;
+            }
+            else if ( showFmax )
+            {
+               v = results.fmax() ;
+            }
+            else if ( showXmax )
+            {
+               v = results.xmax() ;
+            }
+            else if ( showXmin )
+            {
+               v = results.xmin() ;
+            }
+
+            out << m << ' ' << v << std::endl ;
          }
 
          m += massDelta ;
