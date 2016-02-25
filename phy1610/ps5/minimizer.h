@@ -11,7 +11,7 @@
 /**
    Output parameters from a gsl minimizer run.
  */
-struct minimizerResults
+struct oneMinimumResult
 {
    std::string m_solvername ; ///< gsl_min_fminimizer_name().
    int         m_status ;     ///< The last successful or unsuccessful gsl function return code.
@@ -22,10 +22,11 @@ struct minimizerResults
    double      m_initial_b ;  ///< initial upper bound for the bracket
    double      m_a ;          ///< final lower bound for the bracket
    double      m_b ;          ///< final upper bound for the bracket
-   double      m_min ;        ///< final value found by the min search
+   double      m_xmin ;       ///< final position value found by the min search
+   double      m_fmin ;       ///< value of the function at m_xmin, provided m_status is not an error.
 
 public:
-   minimizerResults() :
+   oneMinimumResult() :
       m_solvername{},
       m_status{},
       m_strerror{},
@@ -35,7 +36,7 @@ public:
       m_initial_b{},
       m_a{},
       m_b{},
-      m_min{}
+      m_xmin{}
    {
    }
 } ;
@@ -61,7 +62,7 @@ struct gsl_spring_min_function
    /**
       constructor.  set physical parameters for the energy functions
     */
-   gsl_spring_min_function( const double mass ) : 
+   gsl_spring_min_function( const double mass ) :
       a{1},
       b{0.1},
       c{100},
@@ -128,9 +129,9 @@ struct minimizerParameters
 
    minimizerParameters( const double   mass,
                         const Uint     max_iter = 100,
-                        const double   abserr = 1e-6,
-                        const double   relerr = 1e-6,
-                        const bool     verbose = false ) :
+                        const double   abserr   = 1e-6,
+                        const double   relerr   = 1e-6,
+                        const bool     verbose  = false ) :
          m_max_iter{max_iter},
          m_abserr{abserr},
          m_relerr{relerr},
@@ -142,8 +143,52 @@ struct minimizerParameters
    }
 } ;
 
-using minimizerResultsVec = std::vector<minimizerResults> ;
+/**
+   Specific results for each minimum that is found, and aggregate info about the biggest and smallest minimum found.
+ */
+class minimizerResults
+{
+   Sint    m_minIndex ;                 ///< vector postion for the smallest local minimum
+   Sint    m_maxIndex ;                 ///< vector postion for the largest local minimum
+public:
+   std::vector<oneMinimumResult> m_rv ; ///< iteration counts, minimum value, and other info for each min found.
 
-void f_min_all( minimizerParameters & p, minimizerResultsVec & r ) ;
+   minimizerResults() :
+      m_minIndex{(Sint)-1},
+      m_maxIndex{(Sint)-1},
+      m_rv{}
+   {
+   }
+
+   /**
+      determine the local and global minimum.  Run this before diff(), xmin(), xmax(), fmin(), fmax().
+    */
+   void f_min_all( minimizerParameters & p ) ;
+
+   /**
+      difference in x position of the smallest local minimum compared to the largest local minimum
+    */
+   double diff() const ;
+
+   /**
+      position of the smallest local minimum found
+    */
+   double xmin() const ;
+
+   /**
+      position of the largest local minimum found
+    */
+   double xmax() const ;
+
+   /**
+      value of the function at the position of the smallest local minimum found
+    */
+   double fmin() const ;
+
+   /**
+      value of the function at the position of the largest local minimum found
+    */
+   double fmax() const ;
+} ;
 
 #endif

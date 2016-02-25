@@ -8,14 +8,13 @@
 #include <iostream>
 #include <cstdio>
 #include <getopt.h>
-#include <limits>
 #include "minimizer.h"
 #include "stdoutfilestream.h"
 
 /**
    return codes for this exe.
  */
-enum class RETURNCODES : int 
+enum class RETURNCODES : int
 {
    SUCCESS,      ///< exit code for successful exectution
    HELP,         ///< exit code when -help (or bad option is supplied)
@@ -30,15 +29,15 @@ void showHelpAndExit()
 {
    static_assert( (int)RETURNCODES::LAST <= 256, "exit code doesn't fit in waitpid waitstatus byte." ) ;
 
-   std::cerr 
-      << "usage: springmodel\n" 
+   std::cerr
+      << "usage: springmodel\n"
          "\t[--mass=m|-m m]\n"
          "\t[--file=p|-f p]\n"
          "\t  The path to an output filename when appropriate.\n"
          "\t[--csv|-c]\n"
          "\t  Evaluate the minimization function at a\n"
          "\t  set of points in the interval and output a csv format file with these points for plotting.\n"
-         "\t[--help]" 
+         "\t[--help]"
       << std::endl ;
 
    std::exit( (int)RETURNCODES::HELP ) ;
@@ -72,7 +71,7 @@ int main( int argc, char ** argv )
 
    try {
       while ( -1 != ( c = getopt_long( argc, argv, "hm:f:n:cv", long_options, NULL ) ) )
-      { 
+      {
          switch ( c )
          {
             case 'v' :
@@ -120,12 +119,12 @@ int main( int argc, char ** argv )
             {
                showHelpAndExit() ;
             }
-         } 
+         }
       }
    }
    catch (...)
    {
-      std::cerr 
+      std::cerr
          << __FILE__
          << ":"
          << line << ": uncaught exception (parse error)\n"
@@ -170,70 +169,32 @@ int main( int argc, char ** argv )
             out << "Mass:\t" << m << "\n" ;
          }
 
-         minimizerParameters p( m ) ;
-         minimizerResultsVec rv ;
+         minimizerParameters params( m ) ;
+         minimizerResults results ;
 
-         f_min_all( p, rv ) ;
+         results.f_min_all( params ) ;
 
          if ( verbose )
          {
-            for ( const auto & r : rv )
+            for ( const auto & r : results.m_rv )
             {
                out << "\tUsing " << r.m_solvername << " on: [ " << r.m_initial_a << ", " << r.m_initial_b << " ]\n"
-                         << "\tIterations:\t" << r.m_iter << "\n"
-                         << "\tConverged:\t" << r.m_converged << "\n"
-                         << "\tStatus:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
-                         << "\tMin:\t" << r.m_min << " in [ " << r.m_a << ", " << r.m_b << "]\n"
-                         << "\tF(Min):\t" << p.m_f(r.m_min) << "\n"
-                         << "\tAbserr (bracket):\t" << r.m_b - r.m_a << "\n"
-                         << std::endl ;
+                   << "\tIterations:\t" << r.m_iter << "\n"
+                   << "\tConverged:\t" << r.m_converged << "\n"
+                   << "\tStatus:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
+                   << "\tMin:\t" << r.m_xmin << " in [ " << r.m_a << ", " << r.m_b << "]\n"
+                   << "\tF(Min):\t" << r.m_fmin << "\n"
+                   << "\tAbserr (bracket):\t" << r.m_b - r.m_a << "\n"
+                   << std::endl ;
             }
 
             out << std::endl ;
          }
          else
          {
-            constexpr double inf{ std::numeric_limits<double>::infinity() } ;
-            double fmin{ -inf } ;
-//            double fmax{ inf } ;
-            double xmin{} ;
-//            double xmax{} ;
-//            double diff{} ;
-            bool successfulResult{false} ;
-
-            assert( rv.size() <= 2 ) ;
-            assert( rv.size() >= 1 ) ;
-
-            for ( const auto & r : rv )
-            {
-               if ( !r.m_status )
-               {
-                  successfulResult = true ;
-
-                  double f = p.m_f( r.m_min ) ;
-
-                  if ( f > fmin )
-                  {
-                     xmin = r.m_min ;
-                     fmin = f ;
-                  }
-
-//                  if ( f < fmax )
-//                  {
-//                     xmax = r.m_min ;
-//                     fmax = f ;
-//                  }
-               }
-            }
-
-            //diff = fmax - fmin ;
-
-            if ( successfulResult )
-            {
-               out << m << ' ' << xmin << std::endl ;
-               //out << m << ' ' << xmax << std::endl ;
-               //out << m << ' ' << diff << std::endl ;
-            }
+            out << m << ' ' << results.xmin() << std::endl ;
+            //out << m << ' ' << results.xmax() << std::endl ;
+            //out << m << ' ' << results.diff() << std::endl ;
          }
 
          m += massDelta ;
