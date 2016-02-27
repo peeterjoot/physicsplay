@@ -180,13 +180,13 @@ class fdfSolver
    const gsl_root_fdfsolver_type *  m_T ; ///< gsl function pointer
    gsl_function_fdf                 m_F ; ///< gsl function object
    gsl_root_fdfsolver *             m_s ; ///< gsl handle for root search
-   paramType                        m_params ; ///< parameter object and associated functions.
+   paramType &                      m_params ; ///< parameter object and associated functions.
 
 public:
    /**
       Initialize and allocation resources for root solving algorithm.
     */
-   fdfSolver( const solver whichSolver ) ;
+   fdfSolver( paramType & p, const solver whichSolver = solver::newton ) ;
 
    /**
       Deallocate resources.
@@ -239,7 +239,7 @@ public:
       false if a bracketing interval was not found.
  */
 template <class paramType>
-bool increaseIntervalIfNotBracketed( const paramType & f, double & x_min, double & x_max, const Uint iter_max ) ;
+bool increaseIntervalIfNotBracketed( paramType & f, double & x_min, double & x_max, const Uint iter_max ) ;
 
 /**
    Attempt to decrease the initial interval to find one that brackets the root.
@@ -263,7 +263,7 @@ bool increaseIntervalIfNotBracketed( const paramType & f, double & x_min, double
       false if a bracketing interval was not found.
  */
 template <class paramType>
-bool decreaseIntervalIfNotBracketed( const paramType & f, double & x_min, double & x_max, const Uint max_divisions ) ;
+bool decreaseIntervalIfNotBracketed( paramType & f, double & x_min, double & x_max, const Uint max_divisions ) ;
 
 /**
    gsl based interval based root solver.
@@ -274,13 +274,13 @@ class fSolver
    const gsl_root_fsolver_type *  m_T ; ///< gsl function pointer
    gsl_function                   m_F ; ///< gsl function object
    gsl_root_fsolver *             m_s ; ///< gsl handle for root search
-   paramType                      m_params ; ///< parameter object and associated functions.
+   paramType &                    m_params ; ///< parameter object and associated functions.
 
 public:
    /**
       Initialize and allocation resources for root solving algorithm.
     */
-   fSolver( const solver whichSolver ) ;
+   fSolver( paramType & p, const solver whichSolver = solver::brent ) ;
 
    /**
       Deallocate resources.

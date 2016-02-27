@@ -90,19 +90,19 @@ struct solverParams
             if ( isFdfSolver( method ) && m_bracketed )
             {
                bracketedResult = true ;
-               fdfSolver<ps5function> s( method ) ;
+               fdfSolver<ps5function> s( f, method ) ;
 
                s.iterateBracketed( pi, ri ) ;
             }
             else if ( isFdfSolver( method ) )
             {
-               fdfSolver<ps5function> s( method ) ;
+               fdfSolver<ps5function> s( f, method ) ;
 
                s.iterate( pd, rd ) ;
             }
             else
             {
-               fSolver<ps5function> s( method ) ;
+               fSolver<ps5function> s( f, method ) ;
                bracketedResult = true ;
 
                s.iterate( pi, ri ) ;

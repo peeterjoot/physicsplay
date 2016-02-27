@@ -10,12 +10,12 @@
 #include <cmath>
 #include <cassert>
 #include "integers.h"
-#include "mysolver.h"
+#include "gslsolver.h"
 #include "signof.h"
 #include "gslhelper.h"
 
 template <class paramType>
-fdfSolver<paramType>::fdfSolver( const solver whichSolver ) : m_T( solverToFdfMethod( whichSolver ) ), m_params{}
+fdfSolver<paramType>::fdfSolver( paramType & p, const solver whichSolver ) : m_T( solverToFdfMethod( whichSolver ) ), m_params{p}
 {
    m_F.f = paramType::function ;
    m_F.df = paramType::derivative ;
@@ -41,7 +41,7 @@ fdfSolver<paramType>::~fdfSolver()
 template <class paramType>
 void fdfSolver<paramType>::iterate( const derivativeIterationInputs & p, derivativeIterationResults & r )
 {
-   const double r_expected { m_params.expectedRoot() } ;
+   //const double r_expected { m_params.expectedRoot() } ;
 
    r.m_xPrev      = p.m_x0 ;
    r.m_x          = p.m_x0 ;
@@ -78,8 +78,10 @@ void fdfSolver<paramType>::iterate( const derivativeIterationInputs & p, derivat
 
          if ( p.m_verbose )
          {
-            printf( "%5d %10.7f %+10.7f %10.7f\n",
-                    (int)r.m_iter, r.m_x, r.m_x - r_expected, r.m_x - r.m_xPrev ) ;
+            //printf( "%5d %10.7f %+10.7f %10.7f\n",
+            //        (int)r.m_iter, r.m_x, r.m_x - r_expected, r.m_x - r.m_xPrev ) ;
+            printf( "%5d %10.7f %10.7f\n",
+                    (int)r.m_iter, r.m_x, r.m_x - r.m_xPrev ) ;
          }
 
       } while ( r.m_status == GSL_CONTINUE && r.m_iter < p.m_max_iter ) ;
@@ -96,7 +98,7 @@ void fdfSolver<paramType>::iterate( const derivativeIterationInputs & p, derivat
 template <class paramType>
 void fdfSolver<paramType>::iterateBracketed( const intervalIterationInputs & p, intervalIterationResults & r )
 {
-   const double r_expected { m_params.expectedRoot() } ;
+   //const double r_expected { m_params.expectedRoot() } ;
 
    r.m_xPrev      = p.m_xLo ;
    r.m_xLo        = p.m_xLo ;
@@ -176,8 +178,10 @@ void fdfSolver<paramType>::iterateBracketed( const intervalIterationInputs & p, 
 
          if ( p.m_verbose )
          {
-            printf( "%5d [%.7f, %.7f] %.7f %+.7f %.7f\n",
-                    (int)r.m_iter, r.m_xLo, r.m_xHi, r.m_x, r.m_x - r_expected, r.m_xHi - r.m_xLo ) ;
+            //printf( "%5d [%.7f, %.7f] %.7f %+.7f %.7f\n",
+            //        (int)r.m_iter, r.m_xLo, r.m_xHi, r.m_x, r.m_x - r_expected, r.m_xHi - r.m_xLo ) ;
+            printf( "%5d [%.7f, %.7f] %.7f %.7f\n",
+                    (int)r.m_iter, r.m_xLo, r.m_xHi, r.m_x, r.m_xHi - r.m_xLo ) ;
          }
 
       } while ( r.m_status == GSL_CONTINUE && r.m_iter < p.m_max_iter ) ;
@@ -192,7 +196,7 @@ void fdfSolver<paramType>::iterateBracketed( const intervalIterationInputs & p, 
 }
 
 template <class paramType>
-fSolver<paramType>::fSolver( const solver whichSolver ) : m_T( solverToMethod( whichSolver ) ), m_params{}
+fSolver<paramType>::fSolver( paramType & p, const solver whichSolver ) : m_T( solverToMethod( whichSolver ) ), m_params{p}
 {
    m_F.function = paramType::function ;
    m_F.params = &m_params ;
@@ -214,7 +218,7 @@ fSolver<paramType>::~fSolver()
 }
 
 template <class paramType>
-bool increaseIntervalIfNotBracketed( const paramType & f, double & x_min, double & x_max, const Uint max_iter )
+bool increaseIntervalIfNotBracketed( paramType & f, double & x_min, double & x_max, const Uint max_iter )
 {
    Uint iter = 0 ;
    bool foundOne = false ;
@@ -265,7 +269,7 @@ bool increaseIntervalIfNotBracketed( const paramType & f, double & x_min, double
 }
 
 template <class paramType>
-bool decreaseIntervalIfNotBracketed( const paramType & f, double & x_min, double & x_max, const Uint max_subdivisions )
+bool decreaseIntervalIfNotBracketed( paramType & f, double & x_min, double & x_max, const Uint max_subdivisions )
 {
    bool foundOne = false ;
 
@@ -312,7 +316,7 @@ bool decreaseIntervalIfNotBracketed( const paramType & f, double & x_min, double
 template <class paramType>
 void fSolver<paramType>::iterate( const intervalIterationInputs & p, intervalIterationResults & r )
 {
-   const double r_expected { m_params.expectedRoot() } ;
+   //const double r_expected { m_params.expectedRoot() } ;
 
    r.m_xLo        = p.m_xLo ;
    r.m_xHi        = p.m_xHi ;
@@ -371,8 +375,10 @@ void fSolver<paramType>::iterate( const intervalIterationInputs & p, intervalIte
 
          if ( p.m_verbose )
          {
-            printf( "%5d [%.7f, %.7f] %.7f %+.7f %.7f\n",
-                    (int)r.m_iter, r.m_xLo, r.m_xHi, r.m_x, r.m_x - r_expected, r.m_xHi - r.m_xLo ) ;
+            //printf( "%5d [%.7f, %.7f] %.7f %+.7f %.7f\n",
+            //        (int)r.m_iter, r.m_xLo, r.m_xHi, r.m_x, r.m_x - r_expected, r.m_xHi - r.m_xLo ) ;
+            printf( "%5d [%.7f, %.7f] %.7f %.7f\n",
+                    (int)r.m_iter, r.m_xLo, r.m_xHi, r.m_x, r.m_xHi - r.m_xLo ) ;
          }
 
       } while ( (r.m_status == GSL_CONTINUE) && (r.m_iter < p.m_max_iter) ) ;

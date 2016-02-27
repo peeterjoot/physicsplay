@@ -1,6 +1,6 @@
 /** \file solverMethod
  */
-#include "mysolver.h"
+#include "gslsolver.h"
 
 static const void * solverMethod[] =
 {

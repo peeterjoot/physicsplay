@@ -3,7 +3,7 @@
  */
 #include "ps5function.h"
 #include "squareRootTwoFunction.h"
-#include "mysolver.cc"
+#include "gslsolver.cc"
 
 /**
    Explicit template instantation.

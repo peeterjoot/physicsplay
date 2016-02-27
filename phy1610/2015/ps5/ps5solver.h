@@ -5,7 +5,7 @@
 #define phy1610_psN_ps5solver_h_included
 
 #include "ps5function.h"
-#include "mysolver.h"
+#include "gslsolver.h"
 
 /**
    This template is explicit instantatiated in ps5solver.cc

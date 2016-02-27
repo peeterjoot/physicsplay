@@ -11,7 +11,7 @@
 #include "minimizer.h"
 #include "stdoutfilestream.h"
 #include "springfunction.h"
-#include "solver.cc"
+#include "gslsolver.cc"
 
 /**
    return codes for this exe.
@@ -107,6 +107,27 @@ public:
       Returns a value (1/-1) that indicates whether the difference in position between the pair
       of local minimums at a specific mass is non-zero or zero.
 
+      \param m [in]
+         Point at which to evaluate this difference.
+     */
+   double operator() ( const double m )
+   {
+      minimizerResults results ;
+
+      run( m, results ) ;
+
+      double d = std::abs( results.diff() ) ;
+
+      constexpr double tolerance = 1e-4 ;
+
+      double sign = (d > tolerance) ? 1.0 : -1.0 ;
+
+      // std::cout << "diff( " << m << " ) = " << sign << ": " << d << std::endl ;
+
+      return sign ;
+   }
+
+   /**
       This is a gsl solver method for a non-derivative solver.
 
       \param m [in]
@@ -119,19 +140,7 @@ public:
    {
       minimizerstate & state = *(minimizerstate*)params ;
 
-      minimizerResults results ;
-
-      state.run( m, results ) ;
-
-      double d = std::abs( results.diff() ) ;
-
-      constexpr double tolerance = 1e-4 ;
-
-      double sign = (d > tolerance) ? 1.0 : -1.0 ;
-
-      // std::cout << "diff( " << m << " ) = " << sign << ": " << d << std::endl ;
-
-      return sign ;
+      return state( m ) ;
    }
 } ;
 
@@ -375,7 +384,13 @@ int main( int argc, char ** argv )
    constexpr double maxIter{25} ;
    constexpr double tolerance { 1e-4 } ;
 
-   intervalIterationInputs p( massInterval[0], massInterval[1], maxIter, tolerance, tolerance ) ;
+   intervalIterationInputs p( massInterval[0],
+                              massInterval[1],
+                              maxIter,
+                              0,
+                              0,
+                              tolerance,
+                              tolerance ) ;
    intervalIterationResults r ;
 
    fSolver<minimizerstate> s( state ) ;

@@ -31,7 +31,7 @@ BOOST_AUTO_TEST_CASE( testsSolver )
    for ( auto u : {ps5function::expectedRoot()/2, ps5function::expectedRoot()} )
    {
       {
-         fdfSolver<ps5function> s( solver::newton ) ;
+         fdfSolver<ps5function> s( f, solver::newton ) ;
 
          derivativeIterationInputs p( u, maxIter, err, err ) ;
          derivativeIterationResults r ;
@@ -44,7 +44,7 @@ BOOST_AUTO_TEST_CASE( testsSolver )
       }
 
       {
-         fdfSolver<ps5function> s( solver::newton ) ;
+         fdfSolver<ps5function> s( f, solver::newton ) ;
 
          intervalIterationInputs p( 0, u, maxIter, maxExpansionIters, maxSubDivisions, err, err ) ;
          intervalIterationResults r ;
@@ -57,7 +57,7 @@ BOOST_AUTO_TEST_CASE( testsSolver )
       }
 
       {
-         fSolver<ps5function> s( solver::falsepos ) ;
+         fSolver<ps5function> s( f, solver::falsepos ) ;
          intervalIterationInputs p( 0, u, maxIter, maxExpansionIters, maxSubDivisions, err, err ) ;
          intervalIterationResults r ;
 
@@ -84,7 +84,8 @@ BOOST_AUTO_TEST_CASE( testsSquareRootTwo )
    }
 
    {
-      fdfSolver<squareRootTwoFunction> s( solver::newton ) ;
+      squareRootTwoFunction f ;
+      fdfSolver<squareRootTwoFunction> s( f, solver::newton ) ;
 
       intervalIterationInputs p( -2.0, 2.0, maxIter, maxExpansionIters, maxSubDivisions, err, err ) ;
       intervalIterationResults r ;
