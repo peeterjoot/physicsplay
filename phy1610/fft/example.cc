@@ -98,8 +98,9 @@ int main( int argc, char ** argv )
    std::ofstream infh( infile.c_str() ) ;
 
    constexpr size_t N{ 1024 } ;
-   constexpr double delta{ 2 * M_PI / N } ;
-   constexpr double shift{ M_PI } ;
+   constexpr double periods{ 5 } ;
+   constexpr double delta{ 2 * M_PI * periods / N } ;
+   constexpr double shift{ M_PI * periods } ;
    fftw_complex *in, *out ;
    fftw_plan p ;
 
@@ -133,7 +134,7 @@ int main( int argc, char ** argv )
    fftw_destroy_plan( p ) ;
    fftw_free( in ) ;
 
-   x = 0.0 ;
+   x = -shift ;
    for ( Uint i = 0 ; i < N ; i++ )
    {
       infh << x << ", " << in[i][0] << "\n" ;

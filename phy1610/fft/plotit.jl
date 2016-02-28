@@ -8,7 +8,7 @@ csvy = csv[ :, 2 ] ;
 plot( csvx, csvy ) ;
 
 xlabel("x")
-ylabel(L"f(x) = \sinc(2 \pi x/N)")
+ylabel(L"f(x) = \sinc(10 \pi x)")
 grid("on")
 
 savefig("sinc.pdf")
