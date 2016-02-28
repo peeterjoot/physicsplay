@@ -26,7 +26,7 @@ int main()
    dims[1] = yDim ;
 
    // Create the data variable.
-   NcVar data = dataFile.addVar( "data", NcInt, dims ) ;
+   NcVar data = dataFile.addVar( "data", ncInt, dims ) ;
    // Put the data in the file.
    data.putVar( &dataOut ) ;
 
