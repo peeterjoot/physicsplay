@@ -5,6 +5,9 @@ include ../make.vars
 
 THISDIR := phy1610/fft
 #CXXFLAGS += -E
+ifdef SCINET_NETCDF_INC
+   CXXFLAGS += -I$(SCINET_NETCDF_INC)
+endif
 
 ifneq ("$(OSNAME)","Cygwin")
    TEST_LDLIBS += $(BOOST_TEST_LDLIBS)
