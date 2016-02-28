@@ -99,24 +99,23 @@ int main( int argc, char ** argv )
 
    constexpr size_t N{ 1024 } ;
    constexpr double delta{ 2 * M_PI / N } ;
+   constexpr double shift{ M_PI } ;
    fftw_complex *in, *out ;
    fftw_plan p ;
 
    in = fftw_alloc_complex( N ) ;
    out = fftw_alloc_complex( N ) ;
 
-   // sin(x)/x
-   double x { 0.0 } ;
-   bool first{ true } ;
+   // [0,2 pi]
+   double x { -shift } ;
    for ( Uint i = 0 ; i < N ; i++ )
    {
       auto & c = in[ i ] ;
 
-      if ( first )
+      if ( 0.0 == x )
       {
-         c[0] = 0.0 ;
+         c[0] = 1.0 ;
          c[1] = 0.0 ;
-         first = false ;
       }
       else
       {

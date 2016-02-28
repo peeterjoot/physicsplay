@@ -25,7 +25,7 @@ cxvy = csvyr + csvyi * im ;
 plot( csvx, abs( cxvy) ) ;
 
 xlabel("k")
-ylabel("|\hat{f}(k)|")
+ylabel(L"|\hat{f}(k)|")
 grid("on")
 
 savefig("rect.pdf")
