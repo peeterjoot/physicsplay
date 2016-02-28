@@ -1,6 +1,6 @@
 // netCDF.writing.cpp
 #include <vector>
-#include <netcdf.h>
+#include <netcdf>
 
 using namespace netCDF ;
 
