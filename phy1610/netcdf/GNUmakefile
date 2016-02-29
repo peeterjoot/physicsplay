@@ -25,6 +25,10 @@ TARGETS += readfile
 READFILE_SOURCES := readfile.cc
 READFILE_OBJECTS := $(subst .cc,.o,$(READFILE_SOURCES))
 
+TARGETS += w2
+W2_SOURCES := w2.cc
+W2_OBJECTS := $(subst .cc,.o,$(W2_SOURCES))
+
 ifdef SCINET_NETCDF_LIB
    LDFLAGS += -L$(SCINET_NETCDF_LIB)
 endif
@@ -39,10 +43,13 @@ LDLIBS += -lnetcdf_c++4
 #TEST_LDLIBS += $(GSL_LDLIBS)
 
 CLEANTARGETS += $(TARGETS)
-CLEANTARGETS += first.netCDF.nc
+CLEANTARGETS += *.nc
 
 # doxygen:
 all : $(TARGETS)
+
+w2 : $(W2_OBJECTS)
+	$(CXX) -o $@ $(W2_OBJECTS) $(LDFLAGS) $(W2_LDFLAGS) $(LDLIBS) $(W2_LDLIBS)
 
 writefile : $(WRITEFILE_OBJECTS)
 	$(CXX) -o $@ $(WRITEFILE_OBJECTS) $(LDFLAGS) $(WRITEFILE_LDFLAGS) $(LDLIBS) $(WRITEFILE_LDLIBS)
