@@ -3,7 +3,7 @@
 #include "integers.h"
 
 using namespace netCDF ;
-using namespace netCDF::exceptions;
+using namespace netCDF::exceptions ;
 
 /**
    return codes for this exe.
@@ -122,19 +122,21 @@ int main( int argc, char ** argv )
       std::vector<size_t> startp ;
       std::vector<size_t> countp ;
 
-      startp.push_back(0);
-      startp.push_back(0);
-      startp.push_back(0);
+      startp.push_back( 0 ) ;
+      startp.push_back( 0 ) ;
+      startp.push_back( 0 ) ;
 
-      countp.push_back(1);
-      countp.push_back(nx);
-      countp.push_back(ny);
+      countp.push_back( 1 ) ; // write one timestep entry
+      countp.push_back( nx ) ;
+      countp.push_back( ny ) ;
 
       for ( Uint i = 0 ; i < nrec ; i++ )
       {
+         startp[0] = i ; // This is controlling the timestep location for the write
+
          setData( dataOut, i ) ;
 
-         data.putVar( startp, countp, dataOut );
+         data.putVar( startp, countp, dataOut ) ;
       }
 #else
       data.putVar( &dataOut ) ;
@@ -145,7 +147,7 @@ int main( int argc, char ** argv )
    }
    catch (NcException& e)
    {
-      std::cout << "unknown error" << std::endl;
+      std::cout << "unknown error" << std::endl ;
       e.what() ;
    }
 
