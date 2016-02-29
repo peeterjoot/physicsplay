@@ -4,9 +4,10 @@
 include ../make.vars
 
 THISDIR := phy1610/fft
-CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
+#CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
 ifdef SCINET_NETCDF_INC
    CXXFLAGS += -I$(SCINET_NETCDF_INC)
+   CXXFLAGS += -wd858
 endif
 
 ifneq ("$(OSNAME)","Cygwin")
