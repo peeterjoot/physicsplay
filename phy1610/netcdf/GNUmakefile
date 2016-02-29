@@ -3,8 +3,9 @@
 
 include ../make.vars
 
-THISDIR := phy1610/fft
 #CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
+
+THISDIR := phy1610/netcdf
 ifdef SCINET_NETCDF_INC
    CXXFLAGS += -I$(SCINET_NETCDF_INC)
 endif
@@ -20,11 +21,15 @@ TARGETS += writefile
 WRITEFILE_SOURCES := writefile.cc
 WRITEFILE_OBJECTS := $(subst .cc,.o,$(WRITEFILE_SOURCES))
 
+TARGETS += readfile
+READFILE_SOURCES := readfile.cc
+READFILE_OBJECTS := $(subst .cc,.o,$(READFILE_SOURCES))
+
 ifdef SCINET_NETCDF_LIB
-   WRITEFILE_LDFLAGS += -L$(SCINET_NETCDF_LIB)
+   LDFLAGS += -L$(SCINET_NETCDF_LIB)
 endif
 
-WRITEFILE_LDLIBS += -lnetcdf_c++4
+LDLIBS += -lnetcdf_c++4
 #WRITEFILE_LDLIBS += -lnetcdf
 
 #TARGETS += test
@@ -34,12 +39,16 @@ WRITEFILE_LDLIBS += -lnetcdf_c++4
 #TEST_LDLIBS += $(GSL_LDLIBS)
 
 CLEANTARGETS += $(TARGETS)
+CLEANTARGETS += first.netCDF.nc
 
 # doxygen:
 all : $(TARGETS)
 
 writefile : $(WRITEFILE_OBJECTS)
-	$(CXX) -o $@ $(WRITEFILE_OBJECTS) $(WRITEFILE_LDFLAGS) $(WRITEFILE_LDLIBS)
+	$(CXX) -o $@ $(WRITEFILE_OBJECTS) $(LDFLAGS) $(WRITEFILE_LDFLAGS) $(LDLIBS) $(WRITEFILE_LDLIBS)
+
+readfile : $(READFILE_OBJECTS)
+	$(CXX) -o $@ $(READFILE_OBJECTS) $(LDFLAGS) $(READFILE_LDFLAGS) $(LDLIBS) $(READFILE_LDLIBS)
 
 #runtests: test
 #	./test --report_level=detailed
