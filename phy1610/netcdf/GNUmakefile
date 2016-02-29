@@ -4,7 +4,7 @@
 include ../make.vars
 
 THISDIR := phy1610/fft
-#CXXFLAGS += -E
+CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
 ifdef SCINET_NETCDF_INC
    CXXFLAGS += -I$(SCINET_NETCDF_INC)
 endif
@@ -16,7 +16,8 @@ endif
 TARGETS += writefile
 WRITEFILE_SOURCES := writefile.cc
 WRITEFILE_OBJECTS := $(subst .cc,.o,$(WRITEFILE_SOURCES))
-#WRITEFILE_LDLIBS += 
+WRITEFILE_LDLIBS += -lnetcdf_c++4
+#WRITEFILE_LDLIBS += -lnetcdf
 
 #TARGETS += test
 #TEST_SOURCES += test.cc

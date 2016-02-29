@@ -1,11 +1,12 @@
 // netCDF.writing.cpp
-#include <vector>
+//#include <vector>
 #include <netcdf>
 
 using namespace netCDF ;
 
 int main()
 {
+#if 0
    int nx = 6, ny = 12 ;
    int dataOut[nx][ny] ;
    for ( int i = 0 ; i < nx; i++ )
@@ -15,9 +16,10 @@ int main()
          dataOut[i][j] = i * ny + j ;
       }
    }
-
+#endif
    // Create the netCDF file.
    NcFile dataFile( "first.netCDF.nc", NcFile::replace ) ;
+#if 0
    // Create the two dimensions.
    NcDim xDim = dataFile.addDim( "x", nx ) ;
    NcDim yDim = dataFile.addDim( "y", ny ) ;
@@ -32,6 +34,7 @@ int main()
 
    // Add an attribute.
    dataFile.putAtt( "Creation date:", "Feb 28, 2016" ) ;
+#endif
 
    return 0 ;
 }
