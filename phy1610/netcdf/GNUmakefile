@@ -7,6 +7,8 @@ THISDIR := phy1610/fft
 #CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
 ifdef SCINET_NETCDF_INC
    CXXFLAGS += -I$(SCINET_NETCDF_INC)
+endif
+ifdef SCINET_INTEL_INC
    CXXFLAGS += -wd858
 endif
 
@@ -17,6 +19,11 @@ endif
 TARGETS += writefile
 WRITEFILE_SOURCES := writefile.cc
 WRITEFILE_OBJECTS := $(subst .cc,.o,$(WRITEFILE_SOURCES))
+
+ifdef SCINET_NETCDF_LIB
+   WRITEFILE_LDFLAGS += -L$(SCINET_NETCDF_LIB)
+endif
+
 WRITEFILE_LDLIBS += -lnetcdf_c++4
 #WRITEFILE_LDLIBS += -lnetcdf
 
@@ -32,7 +39,7 @@ CLEANTARGETS += $(TARGETS)
 all : $(TARGETS)
 
 writefile : $(WRITEFILE_OBJECTS)
-	$(CXX) -o $@ $(WRITEFILE_OBJECTS) $(WRITEFILE_LDLIBS)
+	$(CXX) -o $@ $(WRITEFILE_OBJECTS) $(WRITEFILE_LDFLAGS) $(WRITEFILE_LDLIBS)
 
 #runtests: test
 #	./test --report_level=detailed
