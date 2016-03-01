@@ -12,25 +12,12 @@
 #include "stdoutfilestream.h"
 #include "springfunction.h"
 #include "gslsolver.cc"
-
-/**
-   return codes for this exe.
- */
-enum class RETURNCODES : int
-{
-   SUCCESS,      ///< exit code for successful exectution
-   HELP,         ///< exit code when -help (or bad option is supplied)
-   PARSE_ERROR,  ///< exit code if there's a parse error */
-
-   LAST
-} ;
+#include "returncodes.h"
 
 /** print the usage string for the program for --help (or unrecognized options)
  */
 void showHelpAndExit()
 {
-   static_assert( (int)RETURNCODES::LAST <= 256, "exit code doesn't fit in waitpid waitstatus byte." ) ;
-
    std::cerr
       << "usage: springmodel\n"
          "\t[--file=p|-f p]\n"

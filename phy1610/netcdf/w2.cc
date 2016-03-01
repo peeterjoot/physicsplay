@@ -21,6 +21,7 @@
 #include <string>
 #include <getopt.h>
 #include "integers.h"
+#include "returncodes.h"
 
 using namespace std;
 using namespace netCDF;
@@ -77,24 +78,10 @@ void populate_pressure_and_temperature( float pres_out[NLVL][NLAT][NLON], float 
          }
 }
 
-/**
-   return codes for this exe.
- */
-enum class RETURNCODES : int
-{
-   SUCCESS,      ///< exit code for successful exectution
-   HELP,         ///< exit code when -help (or bad option is supplied)
-   PARSE_ERROR,  ///< exit code if there's a parse error */
-
-   LAST
-} ;
-
 /** print the usage string for the program for --help (or unrecognized options)
  */
 void showHelpAndExit()
 {
-   static_assert( (int)RETURNCODES::LAST <= 256, "exit code doesn't fit in waitpid waitstatus byte." ) ;
-
    std::cerr
       << "usage: example\n"
          "\t[--nrec]"

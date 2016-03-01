@@ -22,13 +22,13 @@ void showHelpAndExit()
 
 constexpr int nx = 6, ny = 12 ;
 
-void setData( int * dataOut, const int v )
+void setData( int dataOut[nx][ny], const int v )
 {
    for ( int i = 0 ; i < nx; i++ )
    {
       for ( int j = 0 ; j < ny; j++ )
       {
-         dataOut[i * ny + j] = i * ny + j + v ;
+         dataOut[i][j] = i * ny + j + v ;
       }
    }
 }
@@ -82,7 +82,7 @@ int main( int argc, char ** argv )
    }
 
    try {
-      int dataOut[nx * ny] ;
+      int dataOut[nx][ny] ;
 
       // Create the netCDF file.
       NcFile dataFile( "first.netCDF.nc", NcFile::replace ) ;
@@ -101,10 +101,6 @@ int main( int argc, char ** argv )
       std::vector<size_t> startp { 0, 0, 0 } ;
       constexpr size_t nt{ 1 } ; // write one entry to the unlimited dimension.
       std::vector<size_t> countp { nt, nx, ny } ;
-      std::vector<ptrdiff_t> stridep { 1, 1, 1 } ;
-      // in memory stride.  each data[t][x][y] -> data[t][ny * x + y]
-      constexpr size_t stridey{ ny } ;
-      std::vector<ptrdiff_t> imapp { 1, stridey , 1 } ;
 
       for ( Uint i = 0 ; i < nrec ; i++ )
       {
@@ -113,7 +109,7 @@ int main( int argc, char ** argv )
          setData( dataOut, i ) ;
 
          // https://www.unidata.ucar.edu/software/netcdf/docs/cxx4/classnetCDF_1_1NcVar.html#a763b0a2d6665ac22ab1be21b8b39c102
-         data.putVar( startp, countp, stridep, imapp, dataOut ) ;
+         data.putVar( startp, countp, dataOut ) ;
       }
 
       // Add an attribute.
