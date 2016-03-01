@@ -1,6 +1,7 @@
 // netCDF.reading.cpp
 #include <iostream>
 #include <netcdf>
+#include "physicsplay_build_version.h"
 
 using namespace netCDF ;
 using namespace netCDF::exceptions;

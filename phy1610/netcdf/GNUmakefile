@@ -48,6 +48,8 @@ CLEANTARGETS += *.nc
 # doxygen:
 all : $(TARGETS)
 
+readfile.cc writefile.cc : ../inc/physicsplay_build_version.h
+
 w2 : $(W2_OBJECTS)
 	$(CXX) -o $@ $(W2_OBJECTS) $(LDFLAGS) $(W2_LDFLAGS) $(LDLIBS) $(W2_LDLIBS)
 

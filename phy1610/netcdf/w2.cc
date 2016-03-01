@@ -12,6 +12,8 @@
    http://www.unidata.ucar.edu/software/netcdf/docs/netcdf-cxx
 
    $Id: pres_temp_4D_wr.cpp,v 1.6 2010/02/11 22:36:42 russ Exp $
+   
+   http://www.unidata.ucar.edu/software/netcdf/examples/programs/PresTemp4dWr.cpp
 */
 
 #include <netcdf>

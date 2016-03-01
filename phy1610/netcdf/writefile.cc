@@ -1,6 +1,7 @@
 #include <netcdf>
 #include <getopt.h>
 #include "integers.h"
+#include "physicsplay_build_version.h"
 
 using namespace netCDF ;
 using namespace netCDF::exceptions ;
@@ -136,6 +137,7 @@ int main( int argc, char ** argv )
 
          setData( dataOut, i ) ;
 
+         // https://www.unidata.ucar.edu/software/netcdf/docs/cxx4/classnetCDF_1_1NcVar.html#a763b0a2d6665ac22ab1be21b8b39c102
          data.putVar( startp, countp, dataOut ) ;
       }
 #else
@@ -143,7 +145,7 @@ int main( int argc, char ** argv )
 #endif
 
       // Add an attribute.
-      dataFile.putAtt( "Creation date:", "Feb 28, 2016" ) ;
+      dataFile.putAtt( "Version info:", PHYSICSPLAY_COMMIT_INFO ) ;
    }
    catch (NcException& e)
    {

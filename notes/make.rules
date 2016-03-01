@@ -29,24 +29,48 @@ CLEAN_TARGETS += $(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.aux))
 include ../make.latexmk
 
 define dopdflatex
-	mkdir -p ./.revinfo/
-	~/bin/mkRevInfo > ./.revinfo/lastCommit.tex
-	~/bin/mkRevInfo -mytime > ./.revinfo/gitCommitDateAsMyTime.tex
-	~/bin/mkRevInfo -book > ./.revinfo/lastCommitBook.tex
-	~/bin/mkRevInfo -date > ./.revinfo/gitCommitDate.tex
-	~/bin/mkRevInfo -commit > ./.revinfo/gitCommitString.tex
-	~/bin/mkRevInfo -repo > ./.revinfo/gitRepo.tex
 	$(LATEXMK) $<
 	#touch $<.latexmain
 endef
 
 all :: $(MAIN_TARGETS)
 
+# FIXME: am guessing that depending on COMMIT_EDITMSG will not work for freshly cloned repo:
+.revinfo/lastCommit.tex : ../../.git/COMMIT_EDITMSG
+	mkdir -p .revinfo/
+	~/bin/mkRevInfo > $@
+
+.revinfo/gitCommitDateAsMyTime.tex : ../../.git/COMMIT_EDITMSG
+	mkdir -p .revinfo/
+	~/bin/mkRevInfo -mytime > $@
+
+.revinfo/lastCommitBook.tex : ../../.git/COMMIT_EDITMSG
+	mkdir -p .revinfo/
+	~/bin/mkRevInfo -book > $@
+
+.revinfo/gitCommitDate.tex : ../../.git/COMMIT_EDITMSG
+	mkdir -p .revinfo/
+	~/bin/mkRevInfo -date > $@
+
+.revinfo/gitCommitString.tex : ../../.git/COMMIT_EDITMSG
+	mkdir -p .revinfo/
+	~/bin/mkRevInfo -commit --no-newline > $@
+
+.revinfo/gitRepo.tex : ../../.git/COMMIT_EDITMSG
+	mkdir -p .revinfo/
+	~/bin/mkRevInfo -repo > .revinfo/gitRepo.tex
+
 opt/%.pdf : %.pdf
 	mkdir -p opt
 	$(QPDF) --linearize $< $@
 
 $(THISDIR).pdf :: $(THISBOOK_DEPS)
+$(THISDIR).pdf :: .revinfo/lastCommit.tex
+$(THISDIR).pdf :: .revinfo/gitCommitDateAsMyTime.tex
+$(THISDIR).pdf :: .revinfo/lastCommitBook.tex
+$(THISDIR).pdf :: .revinfo/gitCommitDate.tex
+$(THISDIR).pdf :: .revinfo/gitCommitString.tex
+$(THISDIR).pdf :: .revinfo/gitRepo.tex
 
 %.pdf :: %.tex
 	$(dopdflatex)
