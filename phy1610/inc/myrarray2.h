@@ -115,6 +115,13 @@ public:
    }
 #endif
 
+   using storageValueType = valueType ** ;
+
+   storageValueType storageLocation() const
+   {
+      return &m_storage[0][0] ;
+   }
+
 private:
    rarray<valueType, 2>    m_storage ;
    size_t                  m_sz ;
@@ -223,6 +230,13 @@ public:
       return *this ;
    }
 #endif
+
+   using storageValueType = valueType * ;
+
+   storageValueType storageLocation() const
+   {
+      return &m_storage[0] ;
+   }
 
 private:
    std::vector<valueType>  m_storage ;
@@ -360,6 +374,13 @@ public:
    }
 #endif
 
+   using storageValueType = valueType * ;
+
+   storageValueType storageLocation() const
+   {
+      return &m_storage[0] ;
+   }
+
 private:
    std::valarray<valueType>  m_storage ;
    size_t                  m_sz ;
@@ -477,21 +498,30 @@ public:
    }
 #endif
 
+   using storageValueType = valueType * ;
+
+   storageValueType storageLocation() const
+   {
+      return &m_storage[0] ;
+   }
+
 private:
    valueType *             m_storage ;
    size_t                  m_sz ;
 } ;
 
-#if !defined MYRARRAY_USING_RARRAY && \
-    !defined MYRARRAY2_USE_STD_VECTOR && \
-    !defined MYRARRAY_USING_VALARRAY && \
-    !defined MYRARRAY_USING_FLOATARR
-
-#define myrarray2 farray2
+#if 0
+   #define myrarray2 rarray2
+   #define MYRARRAY_USING_RARRAY
+#elif 0
+   #define myrarray2 valarray2
    #define MYRARRAY_USING_VALARRAY
-   //#define MYRARRAY_USING_FLOATARR
-   //#define MYRARRAY_USING_RARRAY
-   //#define MYRARRAY2_USE_STD_VECTOR
+#elif 0
+   #define myrarray2 vecarray2
+   #define MYRARRAY2_USE_STD_VECTOR
+#else
+   #define myrarray2 farray2
+   #define MYRARRAY_USING_FLOATARR
 #endif
 
 #endif

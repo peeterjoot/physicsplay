@@ -71,6 +71,19 @@ public:
       Perform one iteration of the ants walking on the table simulation.
     */
    void timestep( ) ;
+
+   float table_grid_size() const
+   {
+      return m_table_grid_size ;
+   }
+
+   using ants_storage_type = myrarray2<float>::storageValueType ;
+
+   /** for netcdf writer */
+   ants_storage_type antsBackingArray() const
+   {
+      return m_number_of_ants.storageLocation() ;
+   }
 } ;
 
 /**

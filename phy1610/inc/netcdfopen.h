@@ -15,6 +15,7 @@
  */  
 class NcFileOpener
 {
+protected:
    netCDF::NcFile * h ; ///< hack.  allocate the handle on the heap since there's no open/close method.
 
 public:
@@ -44,7 +45,6 @@ public:
    {
       close() ;
    }
-
 } ;
 
 #if 0
