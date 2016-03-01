@@ -25,6 +25,7 @@ void showHelpAndExit()
       "\t[--gridsize=N|-g N]\n"
       "\t[--timeintervals=N|-t N]\n"
       "\t[--numberofants=N|-n N]\n"
+      "\t[--netcdf=filename|-f filename]\n"
       "\t[--help]" << std::endl ;
 
    std::exit( (int)RETURNCODES::HELP ) ;
@@ -40,12 +41,14 @@ int main( int argc, char ** argv )
    int total_number_of_ants { 1010 } ; 
    int c{0} ;
    int line{0} ;
+   std::string netcdffilename{} ;
 
    constexpr struct option long_options[]{
      { "help",           0, NULL, 'h' },
      { "gridsize",       1, NULL, 'g' },
      { "timeintervals",  1, NULL, 't' },
      { "numberofants",   1, NULL, 'n' },
+     { "netcdf",         1, NULL, 'f' },
      { NULL,             0, NULL, 0   }
    } ;
 
@@ -75,6 +78,13 @@ int main( int argc, char ** argv )
 
                break ;
             }
+            case 'f' :
+            {
+               line = __LINE__ ;
+               netcdffilename = optarg ;
+
+               break ;
+            }
             case 'h' :
             default:
             {
@@ -98,7 +108,7 @@ int main( int argc, char ** argv )
 
    ants_on_table ants( table_grid_size ) ;
    ants.initialize( total_number_of_ants ) ;
-   output( ants, num_time_intervals ) ;
+   output( ants, num_time_intervals, netcdffilename ) ;
 
    return (int)RETURNCODES::SUCCESS ;
 }

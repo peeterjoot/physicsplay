@@ -5,6 +5,7 @@
 #define phy1610_ps2_ants_on_table_h_included
 
 #include "myrarray2.h"
+#include <string>
 
 /**
    Code that simulates ants walking on a table.
@@ -75,6 +76,6 @@ public:
 /**
    Run the timestep function the specified number of times and output the results
  */
-void output( ants_on_table & a, const int num_time_intervals ) ;
+void output( ants_on_table & a, const int num_time_intervals, const std::string netcdfFileName = "" ) ;
 
 #endif

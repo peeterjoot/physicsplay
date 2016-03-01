@@ -2,16 +2,11 @@
 #PROFILED := 1
 
 include ../make.vars
+include ../make.netcdf.vars
 
 #CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
 
 THISDIR := phy1610/netcdf
-ifdef SCINET_NETCDF_INC
-   CXXFLAGS += -I$(SCINET_NETCDF_INC)
-endif
-ifdef SCINET_INTEL_INC
-   CXXFLAGS += -wd858
-endif
 
 ifneq ("$(OSNAME)","Cygwin")
    TEST_LDLIBS += $(BOOST_TEST_LDLIBS)
@@ -29,11 +24,6 @@ TARGETS += w2
 W2_SOURCES := w2.cc
 W2_OBJECTS := $(subst .cc,.o,$(W2_SOURCES))
 
-ifdef SCINET_NETCDF_LIB
-   LDFLAGS += -L$(SCINET_NETCDF_LIB)
-endif
-
-LDLIBS += -lnetcdf_c++4
 #WRITEFILE_LDLIBS += -lnetcdf
 
 #TARGETS += test

@@ -1,8 +1,9 @@
-PRODUCTION := 1
+#PRODUCTION := 1
 #PROFILED := 1
 #USETICKTOCK := 1
 
 include ../make.vars
+include ../make.netcdf.vars
 
 CXXFLAGS += -I$(HOME)/rarray
 ifdef SCINET_RARRAY_INC
@@ -73,6 +74,8 @@ TESTARRAYOBJECTS += testarray.o
 
 all : $(TARGETS)
 
+output.cc : ../inc/physicsplay_build_version.h
+
 antsTest.diff: ants.out
 	diff -up ../ps2/ants.out.default ants.out > $@
 
@@ -80,7 +83,7 @@ ants.out: ants
 	./ants > $@
 
 ants : $(ANTS_OBJECTS)
-	$(CXX) $(LDFLAGS) -o $@ $(ANTS_OBJECTS) $(ANTS_LDLIBS)
+	$(CXX) $(LDFLAGS) -o $@ $(ANTS_OBJECTS) $(LDFLAGS) $(LDLIBS) $(ANTS_LDLIBS)
 
 origants : $(ORIGANTS_OBJECTS)
 	$(CXX) $(LDFLAGS) -o $@ $(ORIGANTS_OBJECTS) $(ANTS_LDLIBS)

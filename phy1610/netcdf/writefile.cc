@@ -35,6 +35,8 @@ void showHelpAndExit()
 
 constexpr int nx = 6, ny = 12 ;
 
+//#define USE_2D_ARRAY
+#if defined USE_2D_ARRAY
 void setData( int dataOut[nx][ny], const int v )
 {
    for ( int i = 0 ; i < nx; i++ )
@@ -45,6 +47,18 @@ void setData( int dataOut[nx][ny], const int v )
       }
    }
 }
+#else
+void setData( int * dataOut, const int v )
+{
+   for ( int i = 0 ; i < nx; i++ )
+   {
+      for ( int j = 0 ; j < ny; j++ )
+      {
+         dataOut[i * ny + j] = i * ny + j + v ;
+      }
+   }
+}
+#endif
 
 /**
    Parse arguments and run the driver.
@@ -95,7 +109,11 @@ int main( int argc, char ** argv )
    }
 
    try {
+#if defined USE_2D_ARRAY
       int dataOut[nx][ny] ;
+#else
+      int dataOut[nx * ny] ;
+#endif
 
       // Create the netCDF file.
       NcFile dataFile( "first.netCDF.nc", NcFile::replace ) ;
@@ -122,6 +140,10 @@ int main( int argc, char ** argv )
 #if defined WITH_TIMESTEPS
       std::vector<size_t> startp ;
       std::vector<size_t> countp ;
+#if !defined USE_2D_ARRAY
+      std::vector<ptrdiff_t> stridep ;
+      std::vector<ptrdiff_t> imapp ;
+#endif
 
       startp.push_back( 0 ) ;
       startp.push_back( 0 ) ;
@@ -131,6 +153,16 @@ int main( int argc, char ** argv )
       countp.push_back( nx ) ;
       countp.push_back( ny ) ;
 
+#if !defined USE_2D_ARRAY
+      stridep.push_back( 1 ) ;
+      stridep.push_back( 1 ) ;
+      stridep.push_back( 1 ) ;
+
+      imapp.push_back( 1 ) ;
+      imapp.push_back( ny ) ; // in memory stride.  each data[t][x][y] -> data[t][ny * x + y]
+      imapp.push_back( 1 ) ;
+#endif
+
       for ( Uint i = 0 ; i < nrec ; i++ )
       {
          startp[0] = i ; // This is controlling the timestep location for the write
@@ -138,7 +170,11 @@ int main( int argc, char ** argv )
          setData( dataOut, i ) ;
 
          // https://www.unidata.ucar.edu/software/netcdf/docs/cxx4/classnetCDF_1_1NcVar.html#a763b0a2d6665ac22ab1be21b8b39c102
+#if defined USE_2D_ARRAY
          data.putVar( startp, countp, dataOut ) ;
+#else
+         data.putVar( startp, countp, stridep, imapp, dataOut ) ;
+#endif
       }
 #else
       data.putVar( &dataOut ) ;
