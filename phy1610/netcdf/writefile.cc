@@ -1,24 +1,11 @@
 #include <netcdf>
-#include <getopt.h>
 #include "integers.h"
 #include "physicsplay_build_version.h"
 #include "returncodes.h"
+#include "parseoptions.h"
 
 using namespace netCDF ;
 using namespace netCDF::exceptions ;
-
-/** print the usage string for the program for --help (or unrecognized options)
- */
-void showHelpAndExit()
-{
-   std::cerr
-      << "usage: example\n"
-         "\t[--nrec]"
-         "\t[--help]"
-      << std::endl ;
-
-   std::exit( (int)RETURNCODES::HELP ) ;
-}
 
 constexpr int nx = 6, ny = 12 ;
 
@@ -38,48 +25,7 @@ void setData( int * dataOut, const int v )
  */
 int main( int argc, char ** argv )
 {
-   int c{0} ;
-   int line{0} ;
-   Uint nrec{ 1 } ;
-
-   constexpr struct option long_options[]{
-     { "help",           0, NULL, 'h' },
-     { "nrec",           1, NULL, 'n' },
-     { NULL,             0, NULL, 0   }
-   } ;
-
-   try {
-      while ( -1 != ( c = getopt_long( argc, argv, "hn:", long_options, NULL ) ) )
-      {
-         switch ( c )
-         {
-            case 'n' :
-            {
-               line = __LINE__ ;
-               nrec = strToUint( optarg ) ;
-
-               break ;
-            }
-            case 'h' :
-            default:
-            {
-               showHelpAndExit() ;
-            }
-         }
-      }
-   }
-   catch (...)
-   {
-      std::cerr
-         << __FILE__
-         << ":"
-         << line << ": uncaught exception (parse error)\n"
-         << "option: -" << (char)c << "\n"
-         << "argument: " << optarg << "\n"
-         << std::endl ;
-
-      std::exit( (int)RETURNCODES::PARSE_ERROR ) ;
-   }
+   parseOptions opt( argc, argv ) ;
 
    try {
       int dataOut[nx * ny] ;
@@ -106,7 +52,7 @@ int main( int argc, char ** argv )
       constexpr size_t stridey{ ny } ;
       std::vector<ptrdiff_t> imapp { 1, stridey , 1 } ;
 
-      for ( Uint i = 0 ; i < nrec ; i++ )
+      for ( Uint i = 0 ; i < opt.nrec() ; i++ )
       {
          startp[0] = i ; // This is controlling the timestep location for the write
 
