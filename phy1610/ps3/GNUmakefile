@@ -1,4 +1,4 @@
-#PRODUCTION := 1
+PRODUCTION := 1
 #PROFILED := 1
 #USETICKTOCK := 1
 
@@ -63,6 +63,7 @@ READANTS_SOURCES := readants.cc
 READANTS_OBJECTS += $(subst .cc,.o,$(READANTS_SOURCES))
 
 CLEANTARGETS += ants.out
+CLEANTARGETS += *.nc
 CLEANTARGETS += antsTest.diff
 CLEANTARGETS += gmon.out
 CLEANTARGETS += orig.out
