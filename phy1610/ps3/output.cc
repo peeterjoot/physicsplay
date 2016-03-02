@@ -5,13 +5,13 @@
 #include "optticktock.h"
 #include <iostream>
 #include "netcdfopen.h"
-#include <type_traits>
 #include "physicsplay_build_version.h"
 
 class netcdfOutput : public NcFileOpener
 {
    bool                    m_open ;
-   netCDF::NcVar           m_data ;
+   netCDF::NcVar           m_grid ;
+   netCDF::NcVar           m_total ;
    std::vector<size_t>     m_startp ;
    std::vector<size_t>     m_countp ;
    std::vector<ptrdiff_t>  m_stridep ;
@@ -21,7 +21,8 @@ public:
    netcdfOutput( const std::string netcdfFileName, const size_t n ) :
       NcFileOpener{},
       m_open{},
-      m_data{},
+      m_grid{},
+      m_total{},
       m_startp { 0, 0, 0 },
       m_countp { 1, n, n },
       m_stridep { 1, 1, 1 },
@@ -43,18 +44,19 @@ public:
 
       std::vector < netCDF::NcDim > dims { tDim, xDim, yDim } ;
 
-      // Create the data variable.
-      m_data = h->addVar( "data", netCDF::ncFloat, dims ) ;
+      // Create the total and array variables.
+      m_total = h->addVar( "total", netCDF::ncFloat, tDim ) ;
+      m_grid = h->addVar( "grid", netCDF::ncFloat, dims ) ;
 
       h->putAtt( "Version info:", PHYSICSPLAY_COMMIT_INFO ) ;
 
-      // ncdump is showing zeros for the entries once less than 1.
+      // ncdump is showing zeros for the entries once less than 1?
       //h->putAtt( "data:C_format", "%.7g" ) ;
    }
 
-   void writeTimeStep( const ants_on_table & a, const size_t timestep )
+   void writeTimeStep( const ants_on_table & a, const size_t timestep, const float total )
    {
-      if ( !m_open || timestep > 0 )
+      if ( !m_open )
       {
          return ;
       }
@@ -64,10 +66,14 @@ public:
       ants_on_table::ants_storage_type p = a.antsBackingArray() ;
 
 #if defined MYRARRAY_USING_RARRAY
-      m_data.putVar( m_startp, m_countp, m_stridep, p ) ;
+      m_grid.putVar( m_startp, m_countp, m_stridep, p ) ;
 #else
-      m_data.putVar( m_startp, m_countp, m_stridep, m_imapp, p ) ;
+      m_grid.putVar( m_startp, m_countp, m_stridep, m_imapp, p ) ;
 #endif
+
+      std::vector<size_t> index { timestep } ;
+
+      m_total.putVar( index, total ) ;
    }
 } ;
 
@@ -88,7 +94,7 @@ void output( ants_on_table & a, const int num_time_intervals, const std::string 
 
       ioTime += timer.silent_tock() ;
 
-      out.writeTimeStep( a, i ) ;
+      out.writeTimeStep( a, i, totants ) ;
 
       a.timestep() ;
    }

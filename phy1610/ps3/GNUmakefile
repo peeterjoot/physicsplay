@@ -34,6 +34,7 @@ endif
 
 TARGETS += ants
 TARGETS += origants
+TARGETS += readants
 ANTS_SOURCES += timestep.cc
 ANTS_SOURCES += initialize.cc
 ANTS_SOURCES += ants.cc
@@ -58,6 +59,9 @@ TEST_SOURCES += testdriver.cc
 TEST_SOURCES += $(COMMON_SOURCES)
 TEST_OBJECTS += $(subst .cc,.o,$(TEST_SOURCES))
 
+READANTS_SOURCES := readants.cc
+READANTS_OBJECTS += $(subst .cc,.o,$(READANTS_SOURCES))
+
 CLEANTARGETS += ants.out
 CLEANTARGETS += antsTest.diff
 CLEANTARGETS += gmon.out
@@ -81,6 +85,9 @@ antsTest.diff: ants.out
 
 ants.out: ants
 	./ants > $@
+
+readants : $(READANTS_OBJECTS)
+	$(CXX) $(LDFLAGS) -o $@ $(READANTS_OBJECTS) $(LDFLAGS) $(LDLIBS) $(READANTS_LDLIBS)
 
 ants : $(ANTS_OBJECTS)
 	$(CXX) $(LDFLAGS) -o $@ $(ANTS_OBJECTS) $(LDFLAGS) $(LDLIBS) $(ANTS_LDLIBS)
