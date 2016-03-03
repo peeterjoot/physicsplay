@@ -2,7 +2,7 @@ THISDIR := phy454-continuumechanics
 
 include ../make.bookvars
 
-FIGURES := ../../figures/$(THISDIR)
+FIGURES := ../../figures/phy454
 
 SOURCE_DIRS += appendix
 SOURCE_DIRS += figures

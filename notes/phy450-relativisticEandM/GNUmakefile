@@ -5,7 +5,7 @@ include ../make.bookvars
 #ONCEFLAGS := -justonce
 THISBOOK_DEPS += poppitz.tex
 
-FIGURES := ../../figures/$(THISDIR)
+FIGURES := ../../figures/phy450
 
 SOURCE_DIRS += $(FIGURES)
 SOURCE_DIRS += solutions

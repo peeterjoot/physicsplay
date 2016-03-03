@@ -8,7 +8,7 @@ SOURCE_DIRS += appendix
 # FIXME:
 # 1) including this incorrectly adds figures/*pdf to the ./.gitignore file
 # 2) also not seeing this result in figure dependencies. touch figures/etalonFig1.pdf
-FIGURES := ../../figures/$(THISDIR)
+FIGURES := ../../figures/ece1229
 SOURCE_DIRS += $(FIGURES)
 
 # also toggle redacted classicthesis-config.tex

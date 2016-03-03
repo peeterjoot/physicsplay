@@ -14,7 +14,7 @@ INCOMPLETE += multiphysicsProblemSet2bProblem2.tex
 #ONCEFLAGS := -justonce
 
 SOURCE_DIRS += appendix
-FIGURES := ../../figures/$(THISDIR)
+FIGURES := ../../figures/ece1254
 SOURCE_DIRS += $(FIGURES)
 
 # also toggle redacted classicthesis-config.tex

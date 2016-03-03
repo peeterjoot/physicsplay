@@ -5,7 +5,7 @@ include ../make.bookvars
 #ONCEFLAGS := -justonce
 
 SOURCE_DIRS += appendix
-FIGURES := ../../figures/$(THISDIR)
+FIGURES := ../../figures/ece1236
 SOURCE_DIRS += $(FIGURES)
 
 # also toggle redacted classicthesis-config.tex
