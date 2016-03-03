@@ -87,12 +87,10 @@ int main(int argc, char *argv[])
    }
 
    /* write a 2D rectilinear mesh  */
-   DBPutQuadmesh(dbfile, "quadmesh", NULL, coords, dims, ndims, DB_FLOAT,
-                 DB_COLLINEAR, NULL) ;
-   DBPutQuadvar1(dbfile, "temp", "quadmesh", temperature, dims, ndims, NULL,
-                 0, DB_FLOAT, DB_NODECENT, NULL) ;
-   DBPutQuadvar(dbfile, "velocity", "quadmesh", 2, varnames, velocity, dims,
-                ndims, NULL, 0, DB_FLOAT, DB_NODECENT, NULL) ;
+   DBPutQuadmesh(dbfile, "quadmesh", NULL, coords, dims, ndims, DB_FLOAT, DB_COLLINEAR, NULL) ;
+   DBPutQuadvar1(dbfile, "temp", "quadmesh", temperature, dims, ndims, NULL, 0, DB_FLOAT, DB_NODECENT, NULL) ;
+   DBPutQuadvar(dbfile, "velocity", "quadmesh", 2, varnames, velocity, dims, ndims, NULL, 0, DB_FLOAT, DB_NODECENT, NULL) ;
+
    DBClose(dbfile) ;
 
    return 0 ;
