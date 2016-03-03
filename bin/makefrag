@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# generates makefile fragments for variables and link rules (as used in phy1610/...)
+
+basename=${1:?}
+macroname=$(echo $basename | tr '[a-z]' '[A-Z]')
+
+cat << EOF
+TARGETS += ${basename:?}
+${macroname:?}_SOURCES := ${basename:?}.cc
+${macroname:?}_OBJECTS := \$(subst .cc,.o,\$(${macroname:?}_SOURCES))
+
+${basename:?} : \$(${macroname:?}_OBJECTS)
+	\$(CXX) -o \$@ \$(${macroname:?}_OBJECTS) \$(LDFLAGS) \$(${macroname:?}_LDFLAGS) \$(LDLIBS) \$(${macroname:?}_LDLIBS)
+EOF

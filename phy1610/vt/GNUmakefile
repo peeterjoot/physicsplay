@@ -14,15 +14,9 @@ TARGETS += vt
 VT_SOURCES += vt.cc
 VT_OBJECTS := $(subst .cc,.o,$(VT_SOURCES))
 
-#TARGETS += testdriver
-#TEST_SOURCES += vt_on_table.cc
-#TEST_OBJECTS += $(subst .cc,.o,$(TEST_SOURCES))
-
 CLEANTARGETS += $(TARGETS)
 
 ALL_OBJECTS += $(VT_OBJECTS) $(TEST_OBJECTS)
-
-#CXXFLAGS += -O3
 
 all : $(TARGETS)
 

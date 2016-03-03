@@ -44,11 +44,6 @@ ANTS_SOURCES += ants_on_table.cc
 ANTS_SOURCES += $(COMMON_SOURCES)
 ANTS_OBJECTS := $(subst .cc,.o,$(ANTS_SOURCES))
 
-#TARGETS += test
-#TEST_SOURCES += test.cc
-#TEST_SOURCES += $(COMMON_SOURCES)
-#TEST_OBJECTS := $(subst .cc,.o,$(TEST_SOURCES))
-
 CLEANTARGETS += $(TARGETS)
 # doxygen:
 CLEANTARGETS += html latex

@@ -21,12 +21,6 @@ SPRINGMODEL_SOURCES += $(COMMON_SOURCES)
 SPRINGMODEL_OBJECTS := $(subst .cc,.o,$(SPRINGMODEL_SOURCES))
 SPRINGMODEL_LDLIBS += $(GSL_LDLIBS)
 
-#TARGETS += test
-#TEST_SOURCES += test.cc
-#TEST_SOURCES += $(COMMON_SOURCES)
-#TEST_OBJECTS := $(subst .cc,.o,$(TEST_SOURCES))
-#TEST_LDLIBS += $(GSL_LDLIBS)
-
 CLEANTARGETS += $(TARGETS)
 
 # doxygen:
@@ -37,11 +31,5 @@ springmodel : $(SPRINGMODEL_OBJECTS)
 
 x.csv : springmodel
 	./springmodel -m 0.1 > $@
-
-#runtests: test
-#	./test --report_level=detailed
-#
-#test : $(TEST_OBJECTS)
-#	$(CXX) -o $@ $(TEST_OBJECTS) $(TEST_LDLIBS)
 
 include ../make.rules

@@ -12,27 +12,38 @@ ifneq ("$(OSNAME)","Cygwin")
 endif
 LDLIBS += -lsiloh5
 
-TARGETS += example
-EXAMPLE_SOURCES := example.cc
-EXAMPLE_OBJECTS := $(subst .cc,.o,$(EXAMPLE_SOURCES))
+TARGETS += example1
+EXAMPLE1_SOURCES := example1.cc
+EXAMPLE1_OBJECTS := $(subst .cc,.o,$(EXAMPLE1_SOURCES))
 
-#TARGETS += test
-#TEST_SOURCES += test.cc
-#TEST_SOURCES += $(COMMON_SOURCES)
-#TEST_OBJECTS := $(subst .cc,.o,$(TEST_SOURCES))
+TARGETS += example_timestep
+EXAMPLE_TIMESTEP_SOURCES := example_timestep.cc
+EXAMPLE_TIMESTEP_OBJECTS := $(subst .cc,.o,$(EXAMPLE_TIMESTEP_SOURCES))
+
+TARGETS += dartmouth
+TARGETS += temp.dat
+TARGETS += wind_vel.dat
+DARTMOUTH_SOURCES := dartmouth.cc
+DARTMOUTH_OBJECTS := $(subst .cc,.o,$(DARTMOUTH_SOURCES))
 
 CLEANTARGETS += $(TARGETS)
 
 # doxygen:
 all : $(TARGETS)
 
-example : $(EXAMPLE_OBJECTS)
-	$(CXX) -o $@ $(EXAMPLE_OBJECTS) $(LDFLAGS) $(EXAMPLE_LDFLAGS) $(LDLIBS) $(EXAMPLE_LDLIBS)
+temp.dat : mktemp
+	./$^ > $@
 
-#runtests: test
-#	./test --report_level=detailed
-#
-#test : $(TEST_OBJECTS)
-#	$(CXX) -o $@ $(TEST_OBJECTS) $(TEST_LDLIBS)
+wind_vel.dat : mkvel
+	./$^ > $@
+
+dartmouth : $(DARTMOUTH_OBJECTS)
+	$(CXX) -o $@ $(DARTMOUTH_OBJECTS) $(LDFLAGS) $(DARTMOUTH_LDFLAGS) $(LDLIBS) $(DARTMOUTH_LDLIBS)
+
+example1 : $(EXAMPLE1_OBJECTS)
+	$(CXX) -o $@ $(EXAMPLE1_OBJECTS) $(LDFLAGS) $(EXAMPLE1_LDFLAGS) $(LDLIBS) $(EXAMPLE1_LDLIBS)
+
+example_timestep : $(EXAMPLE_TIMESTEP_OBJECTS)
+	$(CXX) -o $@ $(EXAMPLE_TIMESTEP_OBJECTS) $(LDFLAGS) $(EXAMPLE_TIMESTEP_LDFLAGS) $(LDLIBS) $(EXAMPLE_TIMESTEP_LDLIBS)
 
 include ../make.rules
