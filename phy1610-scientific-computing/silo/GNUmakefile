@@ -7,9 +7,6 @@ include ../make.vars
 
 THISDIR := phy1610-scientific-computing/silo
 
-ifneq ("$(OSNAME)","Cygwin")
-   TEST_LDLIBS += $(BOOST_TEST_LDLIBS)
-endif
 LDLIBS += -lsiloh5
 
 TARGETS += example1
@@ -28,8 +25,11 @@ DARTMOUTH_OBJECTS := $(subst .cc,.o,$(DARTMOUTH_SOURCES))
 
 CLEANTARGETS += $(TARGETS)
 
-# doxygen:
+ifeq ("$(OSNAME)","Cygwin")
+all : 
+else
 all : $(TARGETS)
+endif
 
 #temp.dat : mktemp
 #	./$^ > $@

@@ -3,7 +3,9 @@ PRODUCTION := 1
 #USETICKTOCK := 1
 
 include ../make.vars
+ifneq ("$(OSNAME)","Cygwin")
 include ../make.netcdf.vars
+endif
 
 CXXFLAGS += -I$(HOME)/rarray
 ifdef SCINET_RARRAY_INC
@@ -28,13 +30,17 @@ endif
 
 THISDIR := phy1610-scientific-computing/ps3
 
-ifneq ("$(OSNAME)","Cygwin")
+ifeq ("$(OSNAME)","Cygwin")
+	CXXFLAGS += -DNO_NETCDF
+else
    TEST_LDLIBS += $(BOOST_TEST_LDLIBS)
 endif
 
 TARGETS += ants
 TARGETS += origants
+ifneq ("$(OSNAME)","Cygwin")
 TARGETS += readants
+endif
 ANTS_SOURCES += timestep.cc
 ANTS_SOURCES += initialize.cc
 ANTS_SOURCES += ants.cc

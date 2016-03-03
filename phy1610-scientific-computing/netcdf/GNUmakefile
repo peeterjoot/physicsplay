@@ -8,10 +8,6 @@ include ../make.netcdf.vars
 
 THISDIR := phy1610-scientific-computing/netcdf
 
-ifneq ("$(OSNAME)","Cygwin")
-   TEST_LDLIBS += $(BOOST_TEST_LDLIBS)
-endif
-
 TARGETS += writefile
 WRITEFILE_SOURCES := writefile.cc
 WRITEFILE_OBJECTS := $(subst .cc,.o,$(WRITEFILE_SOURCES))
@@ -31,8 +27,11 @@ READFILE_2D_OBJECTS := $(subst .cc,.o,$(READFILE_2D_SOURCES))
 CLEANTARGETS += $(TARGETS)
 CLEANTARGETS += *.nc
 
-# doxygen:
+ifeq ("$(OSNAME)","Cygwin")
+all : 
+else
 all : $(TARGETS)
+endif
 
 readfile.cc writefile.cc : ../inc/physicsplay_build_version.h
 readfile2D.cc writefile2D.cc : ../inc/physicsplay_build_version.h

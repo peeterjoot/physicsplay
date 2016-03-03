@@ -4,6 +4,7 @@
 #include "ants_on_table.h"
 #include "optticktock.h"
 #include <iostream>
+#if !defined NO_NETCDF
 #include "netcdfopen.h"
 #include "physicsplay_build_version.h"
 
@@ -76,13 +77,16 @@ public:
       m_total.putVar( index, total ) ;
    }
 } ;
+#endif
 
 void output( ants_on_table & a, const int num_time_intervals, const std::string netcdfFileName )
 {
    TickTockOrNoOp timer ;
    float ioTime { 0.0 } ;
 
+#if !defined NO_NETCDF
    netcdfOutput out( netcdfFileName, a.table_grid_size() ) ;
+#endif
 
    for ( int i = 0 ; i < num_time_intervals ; i++ )
    {
@@ -94,7 +98,9 @@ void output( ants_on_table & a, const int num_time_intervals, const std::string 
 
       ioTime += timer.silent_tock() ;
 
+#if !defined NO_NETCDF
       out.writeTimeStep( a, i, totants ) ;
+#endif
 
       a.timestep() ;
    }
