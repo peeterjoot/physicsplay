@@ -21,8 +21,8 @@ EXAMPLE_TIMESTEP_SOURCES := example_timestep.cc
 EXAMPLE_TIMESTEP_OBJECTS := $(subst .cc,.o,$(EXAMPLE_TIMESTEP_SOURCES))
 
 TARGETS += dartmouth
-TARGETS += temp.dat
-TARGETS += wind_vel.dat
+#TARGETS += temp.dat
+#TARGETS += wind_vel.dat
 DARTMOUTH_SOURCES := dartmouth.cc
 DARTMOUTH_OBJECTS := $(subst .cc,.o,$(DARTMOUTH_SOURCES))
 
@@ -31,11 +31,11 @@ CLEANTARGETS += $(TARGETS)
 # doxygen:
 all : $(TARGETS)
 
-temp.dat : mktemp
-	./$^ > $@
-
-wind_vel.dat : mkvel
-	./$^ > $@
+#temp.dat : mktemp
+#	./$^ > $@
+#
+#wind_vel.dat : mkvel
+#	./$^ > $@
 
 dartmouth : $(DARTMOUTH_OBJECTS)
 	$(CXX) -o $@ $(DARTMOUTH_OBJECTS) $(LDFLAGS) $(DARTMOUTH_LDFLAGS) $(LDLIBS) $(DARTMOUTH_LDLIBS)
