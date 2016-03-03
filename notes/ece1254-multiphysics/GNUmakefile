@@ -1,4 +1,4 @@
-THISDIR := ece1254
+THISDIR := ece1254-multiphysics
 
 include ../make.bookvars
 

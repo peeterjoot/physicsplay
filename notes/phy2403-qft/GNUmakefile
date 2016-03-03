@@ -1,4 +1,4 @@
-THISDIR := phy2403
+THISDIR := phy2403-qft
 
 include ../make.vars
 include ../make.rules

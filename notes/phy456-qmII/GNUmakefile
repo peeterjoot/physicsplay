@@ -1,4 +1,4 @@
-THISDIR := phy456
+THISDIR := phy456-qmII
 
 include ../make.bookvars
 

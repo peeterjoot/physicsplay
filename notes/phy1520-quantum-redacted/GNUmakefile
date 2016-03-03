@@ -1,4 +1,4 @@
-THISDIR := phy1520
+THISDIR := phy1520-quantum-redacted
 
 include ../make.bookvars
 

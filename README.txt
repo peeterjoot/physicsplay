@@ -68,43 +68,43 @@ notes/classicalmechanics/
    I only ended up doing the first problem set from that course, although I still indend to go back and
    revisit the rest to ensure I've got these basics down.
 
-notes/phy450/
+notes/phy450-relativisticEandM
 
    Class notes and problems from 'Relativistic Electrodynamics', taught by Prof. Erich Poppitz.
 
-notes/phy454/
+notes/phy454-continuumechanics
 
   Class notes and problems from 'Continuum Mechanics', taught by Prof. Kausik S. Das.
 
-notes/phy356/
+notes/phy356-qmI
 
   Class notes and problems from 'Quantum I', taught by Prof. Vatche Deyirmenjian.
 
-notes/phy456/
+notes/phy456-qmII
 
   Class notes and problems from 'Quantum II', taught by Prof. John Sipe.
 
-notes/phy485/
+notes/phy485-optics
 
   Class notes and problems from 'Advanced Classical Optics', taught by Prof. Joseph Thywissen.
 
-notes/phy452/
+notes/phy452-basicstatmech
 
   Class notes and problems from 'Basic Statistical Mechanics', taught by Prof. Arun Paramekanti.
 
-notes/phy487/
+notes/phy487-qmsolids
 
   Class notes and problems from 'Condensed Matter Physics', taught by Prof. Stephen Julian.
 
-notes/ece1254/
+notes/ece1254-multiphysics
 
   Class notes and problems from 'Modeling of Multiphysics Systems', taught by Prof. P. Triverio.
 
-notes/ece1229/
+notes/ece1229-antenna
 
   Class notes and problems from 'Advanced Antenna Theory', taught by Prof. G.V. Eleftheriades.
 
-notes/phy1520/
+notes/phy1520-quantum
 
   Class notes and problems from 'Graduate Quantum Mechanics', taught by Prof. Arun Paramekanti. (in progress)
 
@@ -153,7 +153,7 @@ del2xml/del2xml
 
    A script to take .csv formatted stuff and massage it into the xml format that rocketshuttle likes.
 
-phy1610/
+phy1610-scientific-computing
 
    Programming assignents from the UofT (scinet) 2016 Scientific computing course.  Also included is some of the programming assignments from the 2015 course(s) which I did before I officially signed up for this in the 2016 term.
 

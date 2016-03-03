@@ -1,4 +1,4 @@
-THISDIR := ece1229
+THISDIR := ece1229-antenna
 
 include ../make.bookvars
 

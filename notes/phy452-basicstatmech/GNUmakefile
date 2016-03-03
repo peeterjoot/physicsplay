@@ -1,4 +1,4 @@
-THISDIR := phy452
+THISDIR := phy452-basicstatmech
 
 include ../make.bookvars
 

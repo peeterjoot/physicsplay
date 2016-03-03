@@ -1,4 +1,4 @@
-THISDIR := phy450
+THISDIR := phy450-relativisticEandM
 
 include ../make.bookvars
 

@@ -1,4 +1,4 @@
-THISDIR := ece1236
+THISDIR := ece1236-microwaves
 
 include ../make.bookvars
 

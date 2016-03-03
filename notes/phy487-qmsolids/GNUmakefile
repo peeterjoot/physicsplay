@@ -1,4 +1,4 @@
-THISDIR := phy487
+THISDIR := phy487-qmsolids
 
 include ../make.bookvars
 

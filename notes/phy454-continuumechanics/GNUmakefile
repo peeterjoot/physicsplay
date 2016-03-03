@@ -1,4 +1,4 @@
-THISDIR := phy454
+THISDIR := phy454-continuumechanics
 
 include ../make.bookvars
 

@@ -1,4 +1,4 @@
-THISDIR := phy485
+THISDIR := phy485-optics
 
 include ../make.bookvars
 

@@ -1,4 +1,4 @@
-THISDIR := ece1254
+THISDIR := ece1254-redacted
 
 include ../make.bookvars
 
