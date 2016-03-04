@@ -1,8 +1,9 @@
 THISDIR := classicalmechanics
+THISBOOK := $(THISDIR)
 
 include ../make.bookvars
 
-FIGURES := ../../figures/$(THISDIR)
+FIGURES := ../../figures/$(THISBOOK)
 
 #ONCEFLAGS := -justonce
 

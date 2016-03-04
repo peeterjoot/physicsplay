@@ -1,4 +1,5 @@
 THISDIR := gabookII
+THISBOOK := $(THISDIR)
 
 include ../make.bookvars
 

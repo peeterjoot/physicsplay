@@ -20,7 +20,7 @@ MAIN_TARGETS += $(GENERATED_PDFS) .gitignore
 
 CLEAN_TARGETS += myrefs.bib
 CLEAN_TARGETS += $(MAIN_TARGETS) 
-CLEAN_TARGETS += "$(THISDIR).synctex.gz(busy)"
+CLEAN_TARGETS += "$(THISBOOK).synctex.gz(busy)"
 CLEAN_TARGETS += $(GENERATED_SOURCES)
 CLEAN_TARGETS += $(LOCAL_COPIED_FILES)
 CLEAN_TARGETS += $(COPIED_FILES)
@@ -33,6 +33,12 @@ define dopdflatex
 	#touch $<.latexmain
 endef
 
+all :: .revinfo/lastCommit.tex
+all :: .revinfo/gitCommitDateAsMyTime.tex
+all :: .revinfo/lastCommitBook.tex
+all :: .revinfo/gitCommitDate.tex
+all :: .revinfo/gitCommitString.tex
+all :: .revinfo/gitRepo.tex
 all :: $(MAIN_TARGETS)
 
 # FIXME: am guessing that depending on COMMIT_EDITMSG will not work for freshly cloned repo:
@@ -64,13 +70,7 @@ opt/%.pdf : %.pdf
 	mkdir -p opt
 	$(QPDF) --linearize $< $@
 
-$(THISDIR).pdf :: $(THISBOOK_DEPS)
-$(THISDIR).pdf :: .revinfo/lastCommit.tex
-$(THISDIR).pdf :: .revinfo/gitCommitDateAsMyTime.tex
-$(THISDIR).pdf :: .revinfo/lastCommitBook.tex
-$(THISDIR).pdf :: .revinfo/gitCommitDate.tex
-$(THISDIR).pdf :: .revinfo/gitCommitString.tex
-$(THISDIR).pdf :: .revinfo/gitRepo.tex
+$(THISBOOK).pdf :: $(THISBOOK_DEPS)
 
 %.pdf :: %.tex
 	$(dopdflatex)
@@ -83,17 +83,17 @@ clean ::
 # probably want a way to specialize this.  Don't have index markup on everything for example.
 # Do I want a separate appendix section necessarily? (yes, for phy485, maybe not for older stuff).
 #
-$(THISDIR).tex : ../classicthesis.mine/ClassicThesis.tex
+$(THISBOOK).tex : ../classicthesis.mine/ClassicThesis.tex
 	cp $< $@
 
 mathematica.tex : ../METADATA ../../mathematica/METADATA
-	(cd .. ; ./METADATA -mathematica -latex -$(THISDIR) $(REDACTED) > $(THISDIR)/mathematica.tex)
+	(cd .. ; ./METADATA -mathematica -latex -$(THISBOOK) $(REDACTED) > $(THISDIR)/mathematica.tex)
 
 matlab.tex : ../METADATA ../../matlab/METADATA
-	(cd .. ; ./METADATA -matlab -latex -$(THISDIR) $(REDACTED) > $(THISDIR)/matlab.tex)
+	(cd .. ; ./METADATA -matlab -latex -$(THISBOOK) $(REDACTED) > $(THISDIR)/matlab.tex)
 
 julia.tex : ../METADATA ../../julia/METADATA
-	(cd .. ; ./METADATA -julia -latex -$(THISDIR) $(REDACTED) > $(THISDIR)/julia.tex)
+	(cd .. ; ./METADATA -julia -latex -$(THISBOOK) $(REDACTED) > $(THISDIR)/julia.tex)
 
 # plainnat.bib (as used by classicthesis) doesn't like @webpage:
 # http://tex.stackexchange.com/questions/56951/what-does-warning-entry-type-for-isnt-style-file-defined-mean/56954#56954
@@ -114,7 +114,7 @@ ifneq ($(PDFDEPENDENCIES),)
 endif
 
 cronology.tex : ../METADATA
-	(cd .. ; ./METADATA -$(THISDIR) > $(THISDIR)/cronology.tex)
+	(cd .. ; ./METADATA -$(THISBOOK) > $(THISDIR)/cronology.tex)
 
 $(LOCAL_FILES) :
 	cp $(filter %$@, $(ORIG_FILES)) $@
@@ -154,7 +154,7 @@ vpath %.tex $(ORIG_FILE_DIRS)
 
 # This was for linearize.  Find a solution that does that as well as making the sizes manageable.
 ifneq ($(QPDF),)
-all :: opt/$(THISDIR).pdf
+all :: opt/$(THISBOOK).pdf
 endif
 
 kbordermatrix.sty : 

@@ -29,26 +29,6 @@ TEXFILES := $(filter-out $(INCOMPLETE), $(RAWTEXFILES))
 
 PDFS := $(TEXFILES:.tex=.pdf)
 
-# for gaBasics:
-#ORIG_FILES += ../phy454/figures/couetteFlowFig1.png
-#ORIG_FILES += ../phy454/figures/couetteFlowFig2.png
-#ORIG_FILES += ../phy454/figures/couetteFlowFig3.png
-#ORIG_FILES += ../phy454/figures/couetteFlowFig4.png
-#ORIG_FILES += ../phy454/figures/couetteFlowFig5.png
-#ORIG_FILES += ../phy454/figures/couetteFlowFig6.mp4
-#
-#ORIG_FILES += ../phy454/figures/twoCylinderFig1.png
-#ORIG_FILES += ../phy454/figures/twoCylinderFig2.png
-#ORIG_FILES += ../phy454/figures/twoCylindersFig3.mp4
-#ORIG_FILES += ../phy454/figures/twoCylinderFig4.png
-#ORIG_FILES += ../phy454/figures/twoCylindersFig6.png
-#ORIG_FILES += ../phy454/figures/twoCylindersFig7.png
-#ORIG_FILES += ../phy454/figures/twoCylindersFig8.png
-#ORIG_FILES += ../phy454/figures/twoCylindersFig9.png
-
-##       src/internal.o
-#VIDEO += animatedTwoLayerFlowMu1GreaterThanMu2.mp4
-
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 
 QPDF_DIR := $(wildcard /cygdrive/d/qpdf-*/bin $(HOME)/qpdf-*)
@@ -81,8 +61,8 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
 all :: multiPendulumSphericalMatrix.pdf
 
-uwavesDeck6LCmatching.pdf : ../ece1236/uwavesDeck6LCmatchingCore.tex
-continuumAndOtherTransformers.pdf : ../ece1236/continuumAndOtherTransformersCore.tex
+uwavesDeck6LCmatching.pdf : ../ece1236-microwaves/uwavesDeck6LCmatchingCore.tex
+continuumAndOtherTransformers.pdf : ../ece1236-microwaves/continuumAndOtherTransformersCore.tex
 
 multiPendulumSphericalMatrix.tex :: ../classicalmechanics/multiPendulumSphericalMatrix.tex
 	cp $^ $@
@@ -102,23 +82,15 @@ $(LOCAL_FILES) :
 
 multiPendulumSphericalMatrix.pdf : ../classicalmechanics/mine/multiPendulumSphericalMatrix.tex
 
-ensemblesForSpinOneHalf.pdf :: ../phy2403/ensemblesForSpinOneHalf.tex
-
-# FIXME: these don't appear to be added?
-#qftProblemSet2.pdf : ../phy2403/qftproblemSet2Problem1.tex
-#qftProblemSet2.pdf : ../phy2403/qftproblemSet2Problem2.tex
-#qftProblemSet2.pdf : ../phy2403/qftproblemSet2Problem3.tex
-#qftProblemSet2.pdf : ../phy2403/qftproblemSet2Problem4.tex
-#qftProblemSet2.pdf : ../phy2403/qftproblemSet2Problem5.tex
-#qftProblemSet1.pdf : ps8mathematica.tex
+ensemblesForSpinOneHalf.pdf :: ../phy2403-qft/ensemblesForSpinOneHalf.tex
 
 s1 : uwavesProblemSet1.pdf
 
-uwavesProblemSet1.pdf : ../ece1236/uwavesproblemSet1Problem1.tex \
-../ece1236/uwavesproblemSet1Problem2.tex \
-../ece1236/uwavesproblemSet1Problem3.tex \
-../ece1236/uwavesproblemSet1Problem4.tex \
-../ece1236/uwavesproblemSet1Problem5.tex
+uwavesProblemSet1.pdf : ../ece1236-microwaves/uwavesproblemSet1Problem1.tex \
+../ece1236-microwaves/uwavesproblemSet1Problem2.tex \
+../ece1236-microwaves/uwavesproblemSet1Problem3.tex \
+../ece1236-microwaves/uwavesproblemSet1Problem4.tex \
+../ece1236-microwaves/uwavesproblemSet1Problem5.tex
 
 gaBasics.pdf : gaBasics.tex
 
@@ -155,10 +127,10 @@ peeters_layout.sty : ../peeters_layout.sty
 peeters_figures.sty : ../peeters_figures.sty
 	cp $^ $@
 
-ece1229.sty : ../ece1229/ece1229.sty
+ece1229.sty : ../ece1229-antenna/ece1229.sty
 	cp $^ $@
 
-hbFigure.sty : ../ece1254/hbFigure.sty
+hbFigure.sty : ../ece1254-multiphysics/hbFigure.sty
 	cp $^ $@
 
 peeters_layout_exercise.sty : ../peeters_layout_exercise.sty

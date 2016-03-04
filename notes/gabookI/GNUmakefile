@@ -1,8 +1,9 @@
 THISDIR := gabookI
+THISBOOK := $(THISDIR)
 
 include ../make.bookvars
 
-FIGURES := ../../figures/$(THISDIR)
+FIGURES := ../../figures/$(THISBOOK)
 
 SOURCE_DIRS += appendix
 SOURCE_DIRS += basics
@@ -47,6 +48,6 @@ vpath %.png $(ORIG_FIGURE_DIRS)
 vpath %.pl $(ORIG_LISTING_DIRS)
 
 mathematica.tex : ../METADATA ../../mathematica/METADATA
-	(cd .. ; ./METADATA -mathematica -latex -gabook $(REDACTED) > $(THISDIR)/mathematica.tex)
+	(cd .. ; ./METADATA -mathematica -latex -gabook $(REDACTED) > $(THISBOOK)/mathematica.tex)
 
 stokesTheoremGeometricAlgebra.pdf : calculus/stokesTheoremGeometricAlgebra.tex

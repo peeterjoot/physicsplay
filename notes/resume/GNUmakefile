@@ -1,8 +1,9 @@
 THISDIR := resume
+THISBOOK := $(THISDIR)
 
 include ../make.vars
 
-GENERATED_PDFS += resume.pdf
+GENERATED_PDFS += $(THISBOOK).pdf
 
 all :: $(GENERATED_PDFS)
 

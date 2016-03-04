@@ -1,4 +1,6 @@
 THISDIR := ece1254-redacted
+THISBOOK := ece1254
+ORIGDIR := ece1254-multiphysics
 
 include ../make.bookvars
 
@@ -14,7 +16,7 @@ INCOMPLETE += multiphysicsProblemSet2bProblem2.tex
 #ONCEFLAGS := -justonce
 
 SOURCE_DIRS += appendix
-FIGURES := ../../figures/ece1254
+FIGURES := ../../figures/$(THISBOOK)
 SOURCE_DIRS += $(FIGURES)
 
 # also toggle redacted classicthesis-config.tex
@@ -23,14 +25,14 @@ REDACTED := -redacted
 
 GENERATED_SOURCES += matlab.tex 
 GENERATED_SOURCES += mathematica.tex 
-GENERATED_SOURCES += ps3amatlab.tex
-GENERATED_SOURCES += ps3bmatlab.tex
-GENERATED_SOURCES += projmatlab.tex
+#GENERATED_SOURCES += ps3amatlab.tex
+#GENERATED_SOURCES += ps3bmatlab.tex
+#GENERATED_SOURCES += projmatlab.tex
 
 # rules for mathematica.tex, ... output to $(THISDIR) explicitly.  Depend on those files being generated first in ../ece1254
-#ECE1254TEX := $(filter-out $(GENERATED_SOURCES),$(notdir $(wildcard ../$(THISDIR)/*.tex)))
+#ECE1254TEX := $(filter-out $(GENERATED_SOURCES),$(notdir $(wildcard ../$(THISBOOK)/*.tex)))
 
-ECE1254TEX := $(notdir $(wildcard ../$(THISDIR)/*.tex))
+ECE1254TEX := $(notdir $(wildcard ../$(ORIGDIR)/*.tex))
 ECE1254TEX += FrontBackmatter/preface.tex
 ECE1254STY := thisbook.sty
 
@@ -55,16 +57,16 @@ LATEXMK := ../make_pdflatex --oldscript -filename
 #ps3amatlab.tex : ../METADATA ../../matlab/METADATA
 #	(cd .. ; ./METADATA -matlab -latex -ece1254 -filter ece1254redacted/ps3a/ ) > $@
 
-$(ECE1254TEX) : %.tex : ../$(THISDIR)/%.tex
+$(ECE1254TEX) : %.tex : ../$(ORIGDIR)/%.tex
 	mkdir -p $(dir $@)
 	cp $< $@
 
-$(ECE1254STY) : %.sty : ../$(THISDIR)/%.sty
+$(ECE1254STY) : %.sty : ../$(ORIGDIR)/%.sty
 	cp $< $@
 
 clean ::
 	rm -f $(ECE1254TEX) $(ECE1254STY)
 
 myrefs.bib : 
-	(cd ../ece1254 ; make myrefs.bib)
-	cp ../ece1254/myrefs.bib .
+	(cd ../$(ORIGDIR) ; make myrefs.bib)
+	cp ../$(ORIGDIR)/myrefs.bib .

@@ -1,4 +1,5 @@
 THISDIR := peterlue
+THISBOOK := $(THISDIR)
 
 include ../make.vars
 

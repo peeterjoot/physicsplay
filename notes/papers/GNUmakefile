@@ -2,10 +2,11 @@
 # could consider moving: .././classicalmechanics/mine/multiPendulumSphericalMatrix.tex here too.
 #
 THISDIR := papers
+THISBOOK := $(THISDIR)
 
 include ../make.vars
 
-FIGURES := ../../figures/$(THISDIR)
+FIGURES := ../../figures/$(THISBOOK)
 SOURCE_DIRS += $(FIGURES)
 
 GENERATED_PDFS += gramSchmidtLorentz.pdf

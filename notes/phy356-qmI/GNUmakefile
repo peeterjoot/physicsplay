@@ -1,8 +1,9 @@
 THISDIR := phy356-qmI
+THISBOOK := phy356
 
 include ../make.bookvars
 
-FIGURES := ../../figures/phy356
+FIGURES := ../../figures/$(THISBOOK)
 
 SOURCE_DIRS += chapters
 SOURCE_DIRS += $(FIGURES)

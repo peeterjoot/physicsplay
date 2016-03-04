@@ -1,11 +1,12 @@
 THISDIR := phy450-relativisticEandM
+THISBOOK := phy450
 
 include ../make.bookvars
 
 #ONCEFLAGS := -justonce
 THISBOOK_DEPS += poppitz.tex
 
-FIGURES := ../../figures/phy450
+FIGURES := ../../figures/$(THISBOOK)
 
 SOURCE_DIRS += $(FIGURES)
 SOURCE_DIRS += solutions

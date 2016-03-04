@@ -1,4 +1,5 @@
 THISDIR := ece1229-antenna
+THISBOOK := ece1229
 
 include ../make.bookvars
 
@@ -8,7 +9,7 @@ SOURCE_DIRS += appendix
 # FIXME:
 # 1) including this incorrectly adds figures/*pdf to the ./.gitignore file
 # 2) also not seeing this result in figure dependencies. touch figures/etalonFig1.pdf
-FIGURES := ../../figures/ece1229
+FIGURES := ../../figures/$(THISBOOK)
 SOURCE_DIRS += $(FIGURES)
 
 # also toggle redacted classicthesis-config.tex

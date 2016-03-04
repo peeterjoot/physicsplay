@@ -1,8 +1,9 @@
 THISDIR := otherbook
+THISBOOK := $(THISDIR)
 
 include ../make.bookvars
 
-FIGURES := ../../figures/$(THISDIR)
+FIGURES := ../../figures/$(THISBOOK)
 
 ORIG_FIGURE_DIRS += ../../figures/classicalmechanics
 ORIG_FIGURE_DIRS += ../../figures/gabook

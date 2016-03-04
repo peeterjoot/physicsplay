@@ -1,11 +1,12 @@
 THISDIR := ece1236-microwaves
+THISBOOK := ece1236
 
 include ../make.bookvars
 
 #ONCEFLAGS := -justonce
 
 SOURCE_DIRS += appendix
-FIGURES := ../../figures/ece1236
+FIGURES := ../../figures/$(THISBOOK)
 SOURCE_DIRS += $(FIGURES)
 
 # also toggle redacted classicthesis-config.tex

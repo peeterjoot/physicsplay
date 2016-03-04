@@ -1,8 +1,9 @@
 THISDIR := phy485-optics
+THISBOOK := phy485
 
 include ../make.bookvars
 
-FIGURES := ../../figures/phy485
+FIGURES := ../../figures/$(THISBOOK)
 
 #ONCEFLAGS := -justonce
 

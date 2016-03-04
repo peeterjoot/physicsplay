@@ -1,8 +1,9 @@
 THISDIR := phy452-basicstatmech
+THISBOOK := phy452
 
 include ../make.bookvars
 
-FIGURES := ../../figures/phy452
+FIGURES := ../../figures/$(THISBOOK)
 
 SOURCE_DIRS += appendix
 SOURCE_DIRS += $(FIGURES)

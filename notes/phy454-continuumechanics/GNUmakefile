@@ -1,8 +1,9 @@
 THISDIR := phy454-continuumechanics
+THISBOOK := phy454
 
 include ../make.bookvars
 
-FIGURES := ../../figures/phy454
+FIGURES := ../../figures/$(THISBOOK)
 
 SOURCE_DIRS += appendix
 SOURCE_DIRS += figures
@@ -28,5 +29,5 @@ GENERATED_SOURCES += backmatter.tex
 
 include ../make.rules
 
-backmatter.tex : ../phy487/backmatter.tex
+backmatter.tex : ../phy487-qmsolids/backmatter.tex
 	cp $< $@

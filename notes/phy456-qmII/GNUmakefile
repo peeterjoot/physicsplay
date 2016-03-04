@@ -1,8 +1,9 @@
 THISDIR := phy456-qmII
+THISBOOK := phy456
 
 include ../make.bookvars
 
-FIGURES := ../../figures/phy456
+FIGURES := ../../figures/$(THISBOOK)
 
 #ONCEFLAGS := -justonce
 

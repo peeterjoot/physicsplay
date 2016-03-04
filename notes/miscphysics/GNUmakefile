@@ -1,8 +1,9 @@
 THISDIR := miscphysics
+THISBOOK := $(THISDIR)
 
 include ../make.bookvars
 
-FIGURES := ../../figures/$(THISDIR)
+FIGURES := ../../figures/$(THISBOOK)
 
 SOURCE_DIRS += $(FIGURES)
 SOURCE_DIRS += algebra

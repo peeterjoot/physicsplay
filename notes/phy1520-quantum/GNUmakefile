@@ -1,11 +1,12 @@
 THISDIR := phy1520-quantum
+THISBOOK := phy1520
 
 include ../make.bookvars
 
 #ONCEFLAGS := -justonce
 
 SOURCE_DIRS += appendix
-FIGURES := ../../figures/phy1520
+FIGURES := ../../figures/$(THISBOOK)
 SOURCE_DIRS += $(FIGURES)
 
 # also toggle redacted classicthesis-config.tex
