@@ -3,10 +3,8 @@ THISBOOK := $(THISDIR)
 
 include ../make.vars
 
-GENERATED_PDFS += $(THISBOOK).pdf
+all :: resume.pdf
 
-all :: $(GENERATED_PDFS)
-
-$(GENERATED_PDFS) :: $(JUSTBOOKDEPENDENCIES) $(LOCAL_FILES) $(GENERATED_SOURCES) $(COPIED_FILES) $(LOCAL_COPIED_FILES)
+resume.pdf :: resume.tex
 
 include ../make.rules
