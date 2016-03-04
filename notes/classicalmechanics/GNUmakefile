@@ -21,5 +21,5 @@ GENERATED_SOURCES += cronology.tex
 
 include ../make.rules
 
-backmatter.tex : ../classicthesis.mine/backmatter.tex
+backmatter.tex : ../classicthesis_mine/backmatter.tex
 	cp $< $@

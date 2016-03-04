@@ -41,7 +41,7 @@ listings/%.pl: %.pl
 	mkdir -p $(@D)
 	cp $< $@
 
-backmatter.tex : ../classicthesis.mine/backmatter.tex
+backmatter.tex : ../classicthesis_mine/backmatter.tex
 	cp $< $@
 
 vpath %.png $(ORIG_FIGURE_DIRS)

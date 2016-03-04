@@ -33,7 +33,7 @@ include ../make.rules
 #figures/%.png: %.png
 #	cp $< $@
 
-backmatter.tex : ../classicthesis.mine/backmatter.tex
+backmatter.tex : ../classicthesis_mine/backmatter.tex
 	cp $< $@
 
 #listings/%.pl: %.pl
