@@ -5,6 +5,8 @@
 #include "returncodes.h"
 #include "rarray"
 #include "rarrayio"
+#include <fstream>
+#include <complex>
 
 /** print the usage string for the program for --help (or unrecognized options)
  */
@@ -17,6 +19,37 @@ void showHelpAndExit()
       "\t[--help]" << std::endl ;
 
    std::exit( (int)RETURNCODES::HELP ) ;
+}
+
+using carray = rarray<std::complex<double>, 1> ;
+using darray = rarray<double, 1> ;
+
+struct ratData
+{
+   darray   m_times ;
+   carray   m_signal ;
+} ;
+
+void openRatFile( const std::string filename, ratData & r )
+{
+   // open the file
+   std::ifstream f( filename ) ;
+
+   // read in the signal
+   f >> r.m_times ;
+   f >> r.m_signal ;
+}
+
+inline std::string fullyQualifyPathWithDirectory( const std::string directoryName, const std::string fileName )
+{
+   if ( fileName[0] != '/' )
+   {
+      return directoryName + "/" + fileName ;
+   }
+   else
+   {
+      return fileName ;
+   }
 }
 
 /**
@@ -53,14 +86,14 @@ int main( int argc, char ** argv )
             case 'd' :
             {
                line = __LINE__ ;
-               detectionFileName = optarg ;
+               detectionFileName = ratPath + "/" + std::string(optarg) ;
 
                break ;
             }
             case 'p' :
             {
                line = __LINE__ ;
-               predictionFileName = optarg ;
+               predictionFileName = ratPath + "/" + std::string(optarg) ;
 
                break ;
             }
@@ -85,10 +118,14 @@ int main( int argc, char ** argv )
       std::exit( (int)RETURNCODES::PARSE_ERROR ) ;
    }
 
-   using crarray = rarray<std::complex<double>, 1> ;
+   predictionFileName = fullyQualifyPathWithDirectory( ratPath, predictionFileName ) ;
+   detectionFileName = fullyQualifyPathWithDirectory( ratPath, detectionFileName ) ;
 
-   crarray predictionData ;
-   crarray detectionData ;
+   ratData predictionData ;
+   ratData detectionData ;
+
+   openRatFile( detectionFileName, detectionData ) ;
+   openRatFile( predictionFileName, predictionData ) ;
 
    return (int)RETURNCODES::SUCCESS ;
 }

@@ -19,6 +19,10 @@ TARGETS += grav
 GRAV_SOURCES := grav.cc
 GRAV_OBJECTS := $(subst .cc,.o,$(GRAV_SOURCES))
 
+TARGETS += rarrayiotest
+RARRAYIOTEST_SOURCES := rarrayiotest.cc
+RARRAYIOTEST_OBJECTS := $(subst .cc,.o,$(RARRAYIOTEST_SOURCES))
+
 CLEANTARGETS += $(TARGETS)
 CLEANTARGETS += *.o
 
@@ -27,7 +31,10 @@ all : $(TARGETS)
 grav : $(GRAV_OBJECTS)
 	$(CXX) -o $@ $(GRAV_OBJECTS) $(LDFLAGS) $(GRAV_LDFLAGS) $(LDLIBS) $(GRAV_LDLIBS)
 
-grav.cc : ../inc/physicsplay_build_version.h
+rarrayiotest : $(RARRAYIOTEST_OBJECTS)
+	$(CXX) -o $@ $(RARRAYIOTEST_OBJECTS) $(LDFLAGS) $(RARRAYIOTEST_LDFLAGS) $(LDLIBS) $(RARRAYIOTEST_LDLIBS)
+
+#grav.cc : ../inc/physicsplay_build_version.h
 
 #runtestdriver:
 #	./testdriver --report_level=detailed
