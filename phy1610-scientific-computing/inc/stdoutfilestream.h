@@ -8,29 +8,41 @@
 #include <string>
 
 /**
+   open a file for write, throwing an exception if the open fails.
+ */
+inline void openStreamForFile( std::ofstream &           stream,
+                               const std::string &       filename,
+                               std::ios_base::openmode   mode = std::ios_base::out | std::ios_base::trunc )
+{
+   // throw an exception if the open fails
+   stream.exceptions( std::ios::failbit | std::ios::badbit ) ;
+
+   stream.open( filename.c_str(), mode ) ;
+}
+
+/**
    Provide a method that returns a stream reference, either to a file
    stream or stdout.
  */
 class stdoutOrFileStream
 {
-   std::ofstream  f ;             ///< file handle when appropriate.
-   bool           useFileHandle ; ///< do we use the ofstream or cout?
+   std::ofstream  m_streamHandle ;     ///< file handle when appropriate.
+   bool           m_useFileHandle ;    ///< do we use the ofstream or cout?
    
 public:
 
    /**
       open a file if filename represents a non-null string (pathname)
     */
-   stdoutOrFileStream( const std::string & filename ) : f{}, useFileHandle{false}
+   stdoutOrFileStream( const std::string & filename )
+      : m_streamHandle{},
+        m_useFileHandle{false}
    {
-      // throw an exception if the open fails
-      f.exceptions(std::ios::failbit | std::ios::badbit);
-
       if ( filename.length() )
       {
-         f.open( filename.c_str() ) ;
+         openStreamForFile( m_streamHandle, filename ) ;
 
-         useFileHandle = true ;
+         m_useFileHandle = true ;
       }
    }
 
@@ -39,9 +51,9 @@ public:
     */
    std::ostream & handle( ) 
    {
-      if ( useFileHandle )
+      if ( m_useFileHandle )
       {
-         return f ;
+         return m_streamHandle ;
       }
       else
       {

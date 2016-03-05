@@ -6,7 +6,10 @@
 #include "rarray"
 #include "rarrayio"
 #include <fstream>
+#include <regex>
 #include <complex>
+#include <cassert>
+#include "stdoutfilestream.h"
 
 /** print the usage string for the program for --help (or unrecognized options)
  */
@@ -30,25 +33,49 @@ struct ratData
    carray   m_signal ;
 } ;
 
-void openRatFile( const std::string filename, ratData & r )
-{
-   // open the file
-   std::ifstream f( filename ) ;
-
-   // read in the signal
-   f >> r.m_times ;
-   f >> r.m_signal ;
-}
-
 inline std::string fullyQualifyPathWithDirectory( const std::string directoryName, const std::string fileName )
 {
-   if ( fileName[0] != '/' )
+   if ( (fileName[0] != '/') && (directoryName != "") )
    {
       return directoryName + "/" + fileName ;
    }
    else
    {
       return fileName ;
+   }
+}
+
+void openRatFile( const std::string ratPath, const std::string filename, ratData & r )
+{
+   std::string qualPath = fullyQualifyPathWithDirectory( ratPath, filename ) ;
+
+   // open the file
+   std::ifstream f( qualPath ) ;
+
+   // read in the signal
+   f >> r.m_times ;
+   f >> r.m_signal ;
+}
+
+void outputSignalForPlotting( const std::string infile, const ratData & r )
+{
+   // open an output file, throwing an exception on failure.
+   std::ofstream f{} ;
+ 
+   std::regex reg{ R"((.*)\.rat$)" } ;
+   auto outFileName = std::regex_replace( infile, reg, "$1.csv" ) ;
+
+   openStreamForFile( f, outFileName ) ;
+
+   auto size = r.m_times.size() ;
+   assert( size == r.m_signal.size() ) ;
+
+   for ( decltype(size) i = 0 ; i < size ; i++ )
+   {
+      auto t = r.m_times[i] ;
+      auto v = r.m_signal[i] ;
+
+      f << t << "," << v.real() << "," << v.imag() << std::endl ;
    }
 }
 
@@ -118,14 +145,14 @@ int main( int argc, char ** argv )
       std::exit( (int)RETURNCODES::PARSE_ERROR ) ;
    }
 
-   predictionFileName = fullyQualifyPathWithDirectory( ratPath, predictionFileName ) ;
-   detectionFileName = fullyQualifyPathWithDirectory( ratPath, detectionFileName ) ;
-
    ratData predictionData ;
    ratData detectionData ;
 
-   openRatFile( detectionFileName, detectionData ) ;
-   openRatFile( predictionFileName, predictionData ) ;
+   openRatFile( ratPath, detectionFileName, detectionData ) ;
+   openRatFile( ratPath, predictionFileName, predictionData ) ;
+
+   outputSignalForPlotting( detectionFileName, detectionData ) ;
+   outputSignalForPlotting( predictionFileName, predictionData ) ;
 
    return (int)RETURNCODES::SUCCESS ;
 }

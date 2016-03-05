@@ -3,7 +3,7 @@ CFLAGS += -std=c++11
 #LDFLAGS += -lboost_regex
 HOSTNAME := $(shell hostname)
 
-include makefile.$(HOSTNAME)
+#include makefile.$(HOSTNAME)
 
 EXES += regexMatch
 
