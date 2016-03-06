@@ -1,6 +1,6 @@
 using PyPlot
 
-run(`./example --infile=sinc.csv --outfile=rect.csv`) ;
+run(`./twoarrays --infile=sinc.csv --outfile=rect.csv`) ;
 csv = readdlm( "sinc.csv", ',' ) ;
 csvx = csv[ :, 1 ] ;
 csvy = csv[ :, 2 ] ;

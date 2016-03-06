@@ -88,17 +88,20 @@ int main( int argc, char ** argv )
    constexpr double periods{ 5 } ;
    constexpr double delta{ 2 * M_PI * periods / N } ;
    constexpr double shift{ M_PI * periods } ;
-   fftw_complex *in, *out ;
+   fftw_complex *inout ;
    fftw_plan p ;
 
-   in = fftw_alloc_complex( N ) ;
-   out = fftw_alloc_complex( N ) ;
+   inout = fftw_alloc_complex( N ) ;
+
+   // docs say to always create the plan before initializing the data
+   // (since using some means the plan creation touches some of the flags)
+   p = fftw_plan_dft_1d( N, inout, inout, FFTW_FORWARD, FFTW_ESTIMATE ) ;
 
    // [0,2 pi]
    double x { -shift } ;
    for ( Uint i = 0 ; i < N ; i++ )
    {
-      auto & c = in[ i ] ;
+      auto & c = inout[ i ] ;
 
       if ( 0.0 == x )
       {
@@ -111,27 +114,24 @@ int main( int argc, char ** argv )
          c[1] = 0.0 ;
       }
 
+      infh << x << ", " << inout[i][0] << "\n" ;
+
       x += delta ;
    }
-
-   p = fftw_plan_dft_1d( N, in, out, FFTW_FORWARD, FFTW_ESTIMATE ) ;
 
    fftw_execute( p ) ;
 
    fftw_destroy_plan( p ) ;
-   fftw_free( in ) ;
 
    x = -shift ;
    for ( Uint i = 0 ; i < N ; i++ )
    {
-      infh << x << ", " << in[i][0] << "\n" ;
-
-      outfh << x << ", " << out[i][0] << ", " << out[i][1] << "\n" ;
+      outfh << x << ", " << inout[i][0] << ", " << inout[i][1] << "\n" ;
 
       x += delta ;
    }
 
-   fftw_free( out ) ;
+   fftw_free( inout ) ;
 
    return (int)RETURNCODES::SUCCESS ;
 }
