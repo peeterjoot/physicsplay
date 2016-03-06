@@ -17,11 +17,11 @@ ifneq ("$(OSNAME)","Cygwin")
    TEST_LDLIBS += $(BOOST_TEST_LDLIBS)
 endif
 
-TARGETS += grav
-GRAV_SOURCES += grav.cc
-GRAV_SOURCES += streamopen.cc
-GRAV_SOURCES += swapFileNameSuffix.cc
-GRAV_OBJECTS := $(subst .cc,.o,$(GRAV_SOURCES))
+TARGETS += ratToCsv
+RATTOCSV_SOURCES += ratToCsv.cc
+RATTOCSV_SOURCES += streamopen.cc
+RATTOCSV_SOURCES += swapFileNameSuffix.cc
+RATTOCSV_OBJECTS := $(subst .cc,.o,$(RATTOCSV_SOURCES))
 
 #TARGETS += booste
 BOOSTE_SOURCES += booste.cc
@@ -34,6 +34,7 @@ RARRAYIOTEST_OBJECTS := $(subst .cc,.o,$(RARRAYIOTEST_SOURCES))
 TARGETS += test
 TEST_SOURCES += test.cc
 TEST_SOURCES += swapFileNameSuffix.cc
+TEST_SOURCES += streamopen.cc
 TEST_OBJECTS := $(subst .cc,.o,$(TEST_SOURCES))
 
 CLEANTARGETS += $(TARGETS)
@@ -43,8 +44,8 @@ CLEANTARGETS += *.csv
 
 all : $(TARGETS)
 
-grav : $(GRAV_OBJECTS)
-	$(CXX) -o $@ $(GRAV_OBJECTS) $(LDFLAGS) $(GRAV_LDFLAGS) $(LDLIBS) $(GRAV_LDLIBS)
+ratToCsv : $(RATTOCSV_OBJECTS)
+	$(CXX) -o $@ $(RATTOCSV_OBJECTS) $(LDFLAGS) $(RATTOCSV_LDFLAGS) $(LDLIBS) $(RATTOCSV_LDLIBS)
 
 rarrayiotest : $(RARRAYIOTEST_OBJECTS)
 	$(CXX) -o $@ $(RARRAYIOTEST_OBJECTS) $(LDFLAGS) $(RARRAYIOTEST_LDFLAGS) $(LDLIBS) $(RARRAYIOTEST_LDLIBS)

@@ -1,3 +1,7 @@
+/** \file ratToCsv.cc
+
+   Read in one .rat file and write out a .csv file for plotting.
+  */
 #include "integers.h"
 #include <iostream>
 #include <string>
@@ -18,8 +22,7 @@ void showHelpAndExit()
 {
    std::cerr << "usage: grav\n" 
       "\t[--ratpath=p|-r p]\n"
-      "\t[--detection=f|-d f]\n"
-      "\t[--prediction=p|-p p]\n"
+      "\t[--filename=f|-d f]\n"
       "\t[--help]" << std::endl ;
 
    std::exit( (int)RETURNCODES::HELP ) ;
@@ -89,19 +92,17 @@ int main( int argc, char ** argv )
    int c{0} ;
    int line{0} ;
    std::string ratPath{RATPATH} ;
-   std::string detectionFileName{"detection01.rat"} ;
-   std::string predictionFileName{"GWprediction.rat"} ;
+   std::string fileName{} ;
 
    constexpr struct option longOptions[]{
      { "help",           0, NULL, 'h' },
      { "ratpath",        1, NULL, 'r' },
-     { "detection",      1, NULL, 'd' },
-     { "prediction",     1, NULL, 'p' },
+     { "filename",       1, NULL, 'f' },
      { NULL,             0, NULL, 0   }
    } ;
 
    try {
-      while ( -1 != ( c = getopt_long( argc, argv, "hr:d:p:", longOptions, NULL ) ) )
+      while ( -1 != ( c = getopt_long( argc, argv, "hr:f:", longOptions, NULL ) ) )
       { 
          switch ( c )
          {
@@ -112,17 +113,10 @@ int main( int argc, char ** argv )
 
                break ;
             }
-            case 'd' :
+            case 'f' :
             {
                line = __LINE__ ;
-               detectionFileName = ratPath + "/" + std::string(optarg) ;
-
-               break ;
-            }
-            case 'p' :
-            {
-               line = __LINE__ ;
-               predictionFileName = ratPath + "/" + std::string(optarg) ;
+               fileName = std::string(optarg) ;
 
                break ;
             }
@@ -148,28 +142,21 @@ int main( int argc, char ** argv )
    }
 
    try {
-      ratData predictionData ;
-      ratData detectionData ;
+      ratData data ;
 
-      openRatFile( ratPath, detectionFileName, detectionData ) ;
-      openRatFile( ratPath, predictionFileName, predictionData ) ;
+      openRatFile( ratPath, fileName, data ) ;
 
 #if 0 
       assert( 
-         ( (intptr_t)(&detectionData.m_times[0] & 0xF) == 0 ) &&
-         ( (intptr_t)(&detectionData.m_signal[0] & 0xF) == 0 ) &&
-         ( (intptr_t)(&predictionData.m_times[0] & 0xF) == 0 ) &&
-         ( (intptr_t)(&predictionData.m_signal[0] & 0xF) == 0 ) ) ;
+         ( (intptr_t)(&data.m_times[0] & 0xF) == 0 ) &&
+         ( (intptr_t)(&data.m_signal[0] & 0xF) == 0 ) &&
 
 std::cout << "pointers" << std::endl ;
-std::cout << &detectionData.m_times[0] << std::endl ;
-std::cout << &detectionData.m_signal[0] << std::endl ;
-std::cout << &predictionData.m_times[0] << std::endl ;
-std::cout << &predictionData.m_signal[0] << std::endl ;
+std::cout << &data.m_times[0] << std::endl ;
+std::cout << &data.m_signal[0] << std::endl ;
 #endif
 
-      outputSignalForPlotting( detectionFileName, detectionData ) ;
-      outputSignalForPlotting( predictionFileName, predictionData ) ;
+      outputSignalForPlotting( fileName, data ) ;
    } 
    catch (boost::exception & e)
    {
@@ -178,14 +165,6 @@ std::cout << &predictionData.m_signal[0] << std::endl ;
 
       return (int)RETURNCODES::EXCEPTION ;
    }
-#if 0
-   catch (std::exception & e)
-   {
-      std::cout << "Exception: " << e.what() << std::endl ;
-
-      return (int)RETURNCODES::EXCEPTION ;
-   }
-#endif
 
    return (int)RETURNCODES::SUCCESS ;
 }

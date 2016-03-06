@@ -3,6 +3,7 @@
 #include <boost/exception/get_error_info.hpp>
 #include <boost/exception/diagnostic_information.hpp>
 #include <iostream>
+#include "stdoutfilestream.h"
 
 #define BOOST_TEST_MAIN
 #define BOOST_TEST_MODULE test
@@ -30,6 +31,50 @@ BOOST_AUTO_TEST_CASE( timestep )
 
    BOOST_REQUIRE( true == caughtIt ) ;
 
+   {
+      std::ofstream f ;
 
-   // FIXME: test boost::exception codepath of open read/write wrapper functions.
+      openStreamForWriteOrThrow( "blah.out", f ) ;
+      f << 3 ;
+   }
+   {
+      std::ifstream f ;
+      int v ;
+
+      openStreamForReadOrThrow( "blah.out", f ) ;
+      f >> v ;
+
+      BOOST_REQUIRE( 3 == v ) ;
+   }
+
+   bool caughtWriteOpenFailure = false ;
+   bool caughtReadOpenFailure = false ;
+   {
+      std::ifstream ifs ;
+      std::ofstream ofs ;
+
+      try {
+         openStreamForWriteOrThrow( "/dontcreatethispath/blah.out", ofs ) ;
+      }
+      catch (boost::exception & e)
+      {
+         std::string s = boost::diagnostic_information( e ) ;
+         std::cout << s << std::endl ;
+
+         caughtWriteOpenFailure = true ;
+      }
+
+      try {
+         openStreamForReadOrThrow( "/dontcreatethispath/blah.out", ifs ) ;
+      }
+      catch (boost::exception & e)
+      {
+         std::string s = boost::diagnostic_information( e ) ;
+         std::cout << s << std::endl ;
+
+         caughtReadOpenFailure = true ;
+      }
+   }
+   BOOST_REQUIRE( true == caughtWriteOpenFailure ) ;
+   BOOST_REQUIRE( true == caughtReadOpenFailure ) ;
 }
