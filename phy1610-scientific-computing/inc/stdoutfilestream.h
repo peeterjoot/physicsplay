@@ -8,17 +8,19 @@
 #include <string>
 
 /**
-   open a file for write, throwing an exception if the open fails.
+   set the exception state so that an open error throws.
  */
-inline void openStreamForFile( std::ofstream &           stream,
-                               const std::string &       filename,
-                               std::ios_base::openmode   mode = std::ios_base::out | std::ios_base::trunc )
+template <typename S>
+inline void enableExceptionOnOpen( S & stream )
 {
-   // throw an exception if the open fails
    stream.exceptions( std::ios::failbit | std::ios::badbit ) ;
-
-   stream.open( filename.c_str(), mode ) ;
 }
+
+/** open file for read, or throw boost::exception */
+void openStreamForReadOrThrow( std::string filename, std::ifstream & stream ) ;
+
+/** open file for write with truncate, or throw boost::exception */
+void openStreamForWriteOrThrow( std::string filename, std::ofstream & stream ) ;
 
 /**
    Provide a method that returns a stream reference, either to a file
@@ -40,7 +42,7 @@ public:
    {
       if ( filename.length() )
       {
-         openStreamForFile( m_streamHandle, filename ) ;
+         openStreamForWriteOrThrow( filename, m_streamHandle ) ;
 
          m_useFileHandle = true ;
       }

@@ -51,7 +51,9 @@ void openRatFile( const std::string ratPath, const std::string filename, ratData
    std::string qualPath = fullyQualifyPathWithDirectory( ratPath, filename ) ;
 
    // open the file
-   std::ifstream f( qualPath ) ;
+   std::ifstream f{} ;
+
+   openStreamForReadOrThrow( qualPath, f ) ;
 
    // read in the signal
    f >> r.m_times ;
@@ -65,7 +67,7 @@ void outputSignalForPlotting( const std::string infile, const ratData & r )
 
    auto outFileName = replaceFileSuffix( infile, "rat", "csv" ) ;
 
-   openStreamForFile( f, outFileName ) ;
+   openStreamForWriteOrThrow( outFileName, f ) ;
 
    auto size = r.m_times.size() ;
    assert( size == r.m_signal.size() ) ;
@@ -154,8 +156,6 @@ int main( int argc, char ** argv )
 
       outputSignalForPlotting( detectionFileName, detectionData ) ;
       outputSignalForPlotting( predictionFileName, predictionData ) ;
-
-      return (int)RETURNCODES::SUCCESS ;
    } 
    catch (boost::exception & e)
    {
@@ -164,4 +164,14 @@ int main( int argc, char ** argv )
 
       return (int)RETURNCODES::EXCEPTION ;
    }
+#if 0
+   catch (std::exception & e)
+   {
+      std::cout << "Exception: " << e.what() << std::endl ;
+
+      return (int)RETURNCODES::EXCEPTION ;
+   }
+#endif
+
+   return (int)RETURNCODES::SUCCESS ;
 }

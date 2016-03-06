@@ -29,4 +29,7 @@ BOOST_AUTO_TEST_CASE( timestep )
    }
 
    BOOST_REQUIRE( true == caughtIt ) ;
+
+
+   // FIXME: test boost::exception codepath of open read/write wrapper functions.
 }

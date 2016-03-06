@@ -17,6 +17,7 @@ endif
 
 TARGETS += grav
 GRAV_SOURCES += grav.cc
+GRAV_SOURCES += streamopen.cc
 GRAV_SOURCES += swapFileNameSuffix.cc
 GRAV_OBJECTS := $(subst .cc,.o,$(GRAV_SOURCES))
 
@@ -35,6 +36,8 @@ TEST_OBJECTS := $(subst .cc,.o,$(TEST_SOURCES))
 
 CLEANTARGETS += $(TARGETS)
 CLEANTARGETS += *.o
+CLEANTARGETS += *.pdf
+CLEANTARGETS += *.csv
 
 all : $(TARGETS)
 

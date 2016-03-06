@@ -9,11 +9,18 @@
 
 struct error : virtual std::exception, virtual boost::exception { } ;
 struct regex_match_error : virtual error { } ;
+struct file_open_error : virtual error { } ;
 
 struct tag_match_input ;
 typedef boost::error_info<tag_match_input,std::string> match_info ;
 
 struct tag_match_re ;
 typedef boost::error_info<tag_match_re,std::string> re_info ;
+
+struct tag_open_error ;
+typedef boost::error_info<tag_open_error,const char *> open_info ;
+
+struct tag_open_error_origin ;
+typedef boost::error_info<tag_open_error_origin,std::string> name_info ;
 
 #endif
