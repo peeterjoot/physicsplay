@@ -154,6 +154,20 @@ int main( int argc, char ** argv )
       openRatFile( ratPath, detectionFileName, detectionData ) ;
       openRatFile( ratPath, predictionFileName, predictionData ) ;
 
+#if 0 
+      assert( 
+         ( (intptr_t)(&detectionData.m_times[0] & 0xF) == 0 ) &&
+         ( (intptr_t)(&detectionData.m_signal[0] & 0xF) == 0 ) &&
+         ( (intptr_t)(&predictionData.m_times[0] & 0xF) == 0 ) &&
+         ( (intptr_t)(&predictionData.m_signal[0] & 0xF) == 0 ) ) ;
+
+std::cout << "pointers" << std::endl ;
+std::cout << &detectionData.m_times[0] << std::endl ;
+std::cout << &detectionData.m_signal[0] << std::endl ;
+std::cout << &predictionData.m_times[0] << std::endl ;
+std::cout << &predictionData.m_signal[0] << std::endl ;
+#endif
+
       outputSignalForPlotting( detectionFileName, detectionData ) ;
       outputSignalForPlotting( predictionFileName, predictionData ) ;
    } 

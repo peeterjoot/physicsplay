@@ -2,6 +2,8 @@
 
 include ../make.vars
 
+#CXXFLAGS += -DRARRAY_USE_ALLOC_ALIGNED16
+
 ifdef SCINET_RARRAY_INC
    CXXFLAGS += -I$(SCINET_RARRAY_INC)
 else
