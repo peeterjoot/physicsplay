@@ -65,7 +65,7 @@ TEST_SOURCES += testdriver.cc
 TEST_SOURCES += $(COMMON_SOURCES)
 TEST_OBJECTS += $(subst .cc,.o,$(TEST_SOURCES))
 
-READANTS_SOURCES := readants.cc
+READANTS_SOURCES += readants.cc
 READANTS_OBJECTS += $(subst .cc,.o,$(READANTS_SOURCES))
 
 CLEANTARGETS += ants.out

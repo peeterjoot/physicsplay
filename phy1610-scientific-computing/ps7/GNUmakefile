@@ -16,12 +16,22 @@ ifneq ("$(OSNAME)","Cygwin")
 endif
 
 TARGETS += grav
-GRAV_SOURCES := grav.cc
+GRAV_SOURCES += grav.cc
+GRAV_SOURCES += swapFileNameSuffix.cc
 GRAV_OBJECTS := $(subst .cc,.o,$(GRAV_SOURCES))
 
-TARGETS += rarrayiotest
-RARRAYIOTEST_SOURCES := rarrayiotest.cc
+#TARGETS += booste
+BOOSTE_SOURCES += booste.cc
+BOOSTE_OBJECTS := $(subst .cc,.o,$(BOOSTE_SOURCES))
+
+#TARGETS += rarrayiotest
+RARRAYIOTEST_SOURCES += rarrayiotest.cc
 RARRAYIOTEST_OBJECTS := $(subst .cc,.o,$(RARRAYIOTEST_SOURCES))
+
+TARGETS += test
+TEST_SOURCES += test.cc
+TEST_SOURCES += swapFileNameSuffix.cc
+TEST_OBJECTS := $(subst .cc,.o,$(TEST_SOURCES))
 
 CLEANTARGETS += $(TARGETS)
 CLEANTARGETS += *.o
@@ -34,9 +44,15 @@ grav : $(GRAV_OBJECTS)
 rarrayiotest : $(RARRAYIOTEST_OBJECTS)
 	$(CXX) -o $@ $(RARRAYIOTEST_OBJECTS) $(LDFLAGS) $(RARRAYIOTEST_LDFLAGS) $(LDLIBS) $(RARRAYIOTEST_LDLIBS)
 
+booste : $(BOOSTE_OBJECTS)
+	$(CXX) -o $@ $(BOOSTE_OBJECTS) $(LDFLAGS) $(BOOSTE_LDFLAGS) $(LDLIBS) $(BOOSTE_LDLIBS)
+
+test : $(TEST_OBJECTS)
+	$(CXX) -o $@ $(TEST_OBJECTS) $(LDFLAGS) $(TEST_LDFLAGS) $(LDLIBS) $(TEST_LDLIBS)
+
 #grav.cc : ../inc/physicsplay_build_version.h
 
-#runtestdriver:
-#	./testdriver --report_level=detailed
+runtestdriver: test
+	./test --report_level=detailed
 
 include ../make.rules

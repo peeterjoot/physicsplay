@@ -1,0 +1,15 @@
+/** \file swapFileNameSuffix.h
+ */
+#if !defined phy1610_swapFileNameSuffix_h_included
+#define phy1610_swapFileNameSuffix_h_included
+
+#include <string>
+
+/**
+   Swap the file suffix, as in:
+
+   replaceFileSuffix( "blah.cc", "cc", "o" ) 
+ */
+std::string replaceFileSuffix( const std::string & filename, const char * const oldSuffix, const char * const newSuffix ) ;
+
+#endif

@@ -9,19 +9,19 @@ include ../make.netcdf.vars
 THISDIR := phy1610-scientific-computing/netcdf
 
 TARGETS += writefile
-WRITEFILE_SOURCES := writefile.cc
+WRITEFILE_SOURCES += writefile.cc
 WRITEFILE_OBJECTS := $(subst .cc,.o,$(WRITEFILE_SOURCES))
 
 TARGETS += writefile2D
-WRITEFILE_2D_SOURCES := writefile2D.cc
+WRITEFILE_2D_SOURCES += writefile2D.cc
 WRITEFILE_2D_OBJECTS := $(subst .cc,.o,$(WRITEFILE_2D_SOURCES))
 
 TARGETS += readfile
-READFILE_SOURCES := readfile.cc
+READFILE_SOURCES += readfile.cc
 READFILE_OBJECTS := $(subst .cc,.o,$(READFILE_SOURCES))
 
 TARGETS += readfile2D
-READFILE_2D_SOURCES := readfile2D.cc
+READFILE_2D_SOURCES += readfile2D.cc
 READFILE_2D_OBJECTS := $(subst .cc,.o,$(READFILE_2D_SOURCES))
 
 CLEANTARGETS += $(TARGETS)

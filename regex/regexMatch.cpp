@@ -8,6 +8,42 @@ int main()
    std::string s{ "foo.rat" } ;
    std::regex reg{ R"((.*)\.rat$)" } ;
 
+   std::smatch m ;
+   if ( std::regex_match( s, m, reg ) )
+   {
+      std::cout << m.str() << std::endl ;
+      for ( auto sm : m )
+      {
+         std::cout << sm.str() << std::endl ;
+      }
+      
+      
+      std::cout << "r: " << m[1].str() + ".csv" << std::endl ;
+   }
+   else
+   {
+      std::cout << "no match for " << s << std::endl ;
+   }
+
+   s = "foo.goo" ;
+
+   if ( std::regex_match( s, m, reg ) )
+   {
+      std::cout << m.str() << std::endl ;
+   }
+   else
+   {
+      std::cout << "no match for " << s << std::endl ;
+   }
+
+   return 0 ;
+}
+
+int ymain()
+{
+   std::string s{ "foo.rat" } ;
+   std::regex reg{ R"((.*)\.rat$)" } ;
+
    s = std::regex_replace( s, reg, "$1.csv" ) ;
 
    std::cout << s << std::endl ;

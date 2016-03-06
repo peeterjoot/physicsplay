@@ -6,10 +6,11 @@
 #include "rarray"
 #include "rarrayio"
 #include <fstream>
-#include <regex>
 #include <complex>
 #include <cassert>
 #include "stdoutfilestream.h"
+#include "swapFileNameSuffix.h"
+#include <boost/exception/diagnostic_information.hpp>
 
 /** print the usage string for the program for --help (or unrecognized options)
  */
@@ -61,9 +62,8 @@ void outputSignalForPlotting( const std::string infile, const ratData & r )
 {
    // open an output file, throwing an exception on failure.
    std::ofstream f{} ;
- 
-   std::regex reg{ R"((.*)\.rat$)" } ;
-   auto outFileName = std::regex_replace( infile, reg, "$1.csv" ) ;
+
+   auto outFileName = replaceFileSuffix( infile, "rat", "csv" ) ;
 
    openStreamForFile( f, outFileName ) ;
 
@@ -145,14 +145,23 @@ int main( int argc, char ** argv )
       std::exit( (int)RETURNCODES::PARSE_ERROR ) ;
    }
 
-   ratData predictionData ;
-   ratData detectionData ;
+   try {
+      ratData predictionData ;
+      ratData detectionData ;
 
-   openRatFile( ratPath, detectionFileName, detectionData ) ;
-   openRatFile( ratPath, predictionFileName, predictionData ) ;
+      openRatFile( ratPath, detectionFileName, detectionData ) ;
+      openRatFile( ratPath, predictionFileName, predictionData ) ;
 
-   outputSignalForPlotting( detectionFileName, detectionData ) ;
-   outputSignalForPlotting( predictionFileName, predictionData ) ;
+      outputSignalForPlotting( detectionFileName, detectionData ) ;
+      outputSignalForPlotting( predictionFileName, predictionData ) ;
 
-   return (int)RETURNCODES::SUCCESS ;
+      return (int)RETURNCODES::SUCCESS ;
+   } 
+   catch (boost::exception & e)
+   {
+      std::string s = boost::diagnostic_information( e ) ;
+      std::cout << s << std::endl ;
+
+      return (int)RETURNCODES::EXCEPTION ;
+   }
 }

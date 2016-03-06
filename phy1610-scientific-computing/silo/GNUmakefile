@@ -10,17 +10,17 @@ THISDIR := phy1610-scientific-computing/silo
 LDLIBS += -lsiloh5
 
 TARGETS += example1
-EXAMPLE1_SOURCES := example1.cc
+EXAMPLE1_SOURCES += example1.cc
 EXAMPLE1_OBJECTS := $(subst .cc,.o,$(EXAMPLE1_SOURCES))
 
 TARGETS += example_timestep
-EXAMPLE_TIMESTEP_SOURCES := example_timestep.cc
+EXAMPLE_TIMESTEP_SOURCES += example_timestep.cc
 EXAMPLE_TIMESTEP_OBJECTS := $(subst .cc,.o,$(EXAMPLE_TIMESTEP_SOURCES))
 
 TARGETS += dartmouth
 #TARGETS += temp.dat
 #TARGETS += wind_vel.dat
-DARTMOUTH_SOURCES := dartmouth.cc
+DARTMOUTH_SOURCES += dartmouth.cc
 DARTMOUTH_OBJECTS := $(subst .cc,.o,$(DARTMOUTH_SOURCES))
 
 CLEANTARGETS += $(TARGETS)

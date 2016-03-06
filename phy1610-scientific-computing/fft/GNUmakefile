@@ -6,7 +6,7 @@ include ../make.vars
 THISDIR := phy1610-scientific-computing/fft
 
 TARGETS += example
-FFT_SOURCES := example.cc
+FFT_SOURCES += example.cc
 FFT_OBJECTS := $(subst .cc,.o,$(FFT_SOURCES))
 FFT_LDLIBS += -lfftw3 -lm
 

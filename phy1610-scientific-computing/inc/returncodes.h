@@ -14,6 +14,7 @@ enum class RETURNCODES : unsigned char
     SUCCESS       ///< exit code for successful exectution
    ,HELP          ///< exit code when -help (or bad option is supplied)
    ,PARSE_ERROR   ///< exit code if there's a parse error */
+   ,EXCEPTION     ///< exit code if there's an unexpected exception thrown */
 } ;
 
 #endif
