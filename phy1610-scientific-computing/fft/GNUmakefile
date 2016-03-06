@@ -9,10 +9,12 @@ LDLIBS += -lfftw3 -lm
 
 TARGETS += twoarrays
 TWOARRAYS_SOURCES += twoarrays.cc
+TWOARRAYS_SOURCES += parseArgs.cc
 TWOARRAYS_OBJECTS := $(subst .cc,.o,$(TWOARRAYS_SOURCES))
 
 TARGETS += inplace
 INPLACE_SOURCES += inplace.cc
+INPLACE_SOURCES += parseArgs.cc
 INPLACE_OBJECTS := $(subst .cc,.o,$(INPLACE_SOURCES))
 
 CLEANTARGETS += $(TARGETS)
