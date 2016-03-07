@@ -17,8 +17,17 @@ ifneq ("$(OSNAME)","Cygwin")
    TEST_LDLIBS += $(BOOST_TEST_LDLIBS)
 endif
 
+TARGETS += grav
+GRAV_SOURCES += grav.cc
+GRAV_SOURCES += ratData.cc
+GRAV_SOURCES += fftstate.cc
+GRAV_SOURCES += streamopen.cc
+GRAV_OBJECTS := $(subst .cc,.o,$(GRAV_SOURCES))
+GRAV_LDLIBS += -lfftw3 -lm
+
 TARGETS += ratToCsv
 RATTOCSV_SOURCES += ratToCsv.cc
+RATTOCSV_SOURCES += ratData.cc
 RATTOCSV_SOURCES += streamopen.cc
 RATTOCSV_SOURCES += swapFileNameSuffix.cc
 RATTOCSV_OBJECTS := $(subst .cc,.o,$(RATTOCSV_SOURCES))
@@ -43,6 +52,9 @@ CLEANTARGETS += *.pdf
 CLEANTARGETS += *.csv
 
 all : $(TARGETS)
+
+grav : $(GRAV_OBJECTS)
+	$(CXX) -o $@ $(GRAV_OBJECTS) $(LDFLAGS) $(GRAV_LDFLAGS) $(LDLIBS) $(GRAV_LDLIBS)
 
 ratToCsv : $(RATTOCSV_OBJECTS)
 	$(CXX) -o $@ $(RATTOCSV_OBJECTS) $(LDFLAGS) $(RATTOCSV_LDFLAGS) $(LDLIBS) $(RATTOCSV_LDLIBS)

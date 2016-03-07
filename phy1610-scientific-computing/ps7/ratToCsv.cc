@@ -11,9 +11,11 @@
 #include "rarrayio"
 #include <fstream>
 #include <complex>
-#include <cassert>
+//#include <cassert>
 #include "stdoutfilestream.h"
 #include "swapFileNameSuffix.h"
+#include "ratData.h"
+#include "myexceptions.h"
 #include <boost/exception/diagnostic_information.hpp>
 
 /** print the usage string for the program for --help (or unrecognized options)
@@ -28,41 +30,6 @@ void showHelpAndExit()
    std::exit( (int)RETURNCODES::HELP ) ;
 }
 
-using carray = rarray<std::complex<double>, 1> ;
-using darray = rarray<double, 1> ;
-
-struct ratData
-{
-   darray   m_times ;
-   carray   m_signal ;
-} ;
-
-inline std::string fullyQualifyPathWithDirectory( const std::string directoryName, const std::string fileName )
-{
-   if ( (fileName[0] != '/') && (directoryName != "") )
-   {
-      return directoryName + "/" + fileName ;
-   }
-   else
-   {
-      return fileName ;
-   }
-}
-
-void openRatFile( const std::string ratPath, const std::string filename, ratData & r )
-{
-   std::string qualPath = fullyQualifyPathWithDirectory( ratPath, filename ) ;
-
-   // open the file
-   std::ifstream f{} ;
-
-   openStreamForReadOrThrow( qualPath, f ) ;
-
-   // read in the signal
-   f >> r.m_times ;
-   f >> r.m_signal ;
-}
-
 void outputSignalForPlotting( const std::string infile, const ratData & r )
 {
    // open an output file, throwing an exception on failure.
@@ -73,7 +40,15 @@ void outputSignalForPlotting( const std::string infile, const ratData & r )
    openStreamForWriteOrThrow( outFileName, f ) ;
 
    auto size = r.m_times.size() ;
-   assert( size == r.m_signal.size() ) ;
+   //assert( size == r.m_signal.size() ) ;
+   if ( size != r.m_signal.size() )
+   {
+      BOOST_THROW_EXCEPTION(
+           array_size_error()
+              << asize_info( size )
+              << asize_info( r.m_signal.size() )
+           ) ;
+   }
 
    for ( decltype(size) i = 0 ; i < size ; i++ )
    {
@@ -144,7 +119,7 @@ int main( int argc, char ** argv )
    try {
       ratData data ;
 
-      openRatFile( ratPath, fileName, data ) ;
+      data.open( ratPath, fileName ) ;
 
 #if 0 
       assert( 
