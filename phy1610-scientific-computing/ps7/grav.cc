@@ -5,7 +5,7 @@
 #include <string>
 #include <getopt.h>
 #include "returncodes.h"
-#include "ratData.h"
+#include "fftstate.h"
 #include <fstream>
 #include <cassert>
 #include "stdoutfilestream.h"
@@ -71,9 +71,18 @@ int main( int argc, char ** argv )
    }
 
    try {
-      ratData data ;
+      ratData pred ;
+      ratData det ;
       
-      data.open( ratPath, "GWprediction.rat" ) ;
+      pred.open( ratPath, "GWprediction.rat" ) ;
+      det.open( ratPath, "detection01.rat" ) ;
+
+      fftstate f( pred ) ; 
+      f.execute( pred ) ;
+      f.execute( det ) ;
+
+      //data.writeToCsv( "GWpredictionFFT.csv" ) ;
+      det.writeToCsv( "detection01FFT.csv" ) ;
    } 
    catch (boost::exception & e)
    {

@@ -15,6 +15,8 @@ struct ratData
    carray   m_signal ;
 
    void open( const std::string ratPath, const std::string filename ) ;
+
+   void writeToCsv( const std::string outFileName ) const ;
 } ;
 
 #endif

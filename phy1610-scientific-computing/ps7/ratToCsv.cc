@@ -9,9 +9,9 @@
 #include "returncodes.h"
 #include "rarray"
 #include "rarrayio"
+#include "fftstate.h"
 #include <fstream>
 #include <complex>
-//#include <cassert>
 #include "stdoutfilestream.h"
 #include "swapFileNameSuffix.h"
 #include "ratData.h"
@@ -32,31 +32,9 @@ void showHelpAndExit()
 
 void outputSignalForPlotting( const std::string infile, const ratData & r )
 {
-   // open an output file, throwing an exception on failure.
-   std::ofstream f{} ;
-
    auto outFileName = replaceFileSuffix( infile, "rat", "csv" ) ;
 
-   openStreamForWriteOrThrow( outFileName, f ) ;
-
-   auto size = r.m_times.size() ;
-   //assert( size == r.m_signal.size() ) ;
-   if ( size != r.m_signal.size() )
-   {
-      BOOST_THROW_EXCEPTION(
-           array_size_error()
-              << asize_info( size )
-              << asize_info( r.m_signal.size() )
-           ) ;
-   }
-
-   for ( decltype(size) i = 0 ; i < size ; i++ )
-   {
-      auto t = r.m_times[i] ;
-      auto v = r.m_signal[i] ;
-
-      f << t << "," << v.real() << "," << v.imag() << std::endl ;
-   }
+   r.writeToCsv( outFileName ) ;
 }
 
 /**

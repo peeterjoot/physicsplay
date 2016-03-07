@@ -29,3 +29,5 @@ plotit( "GWprediction" ) ;
 plotit( "detection01" ) ;
 plotit( "detection16" ) ;
 plotit( "detection32" ) ;
+plotit( "GWpredictionFFT" ) ;
+plotit( "detection01FFT" ) ;
