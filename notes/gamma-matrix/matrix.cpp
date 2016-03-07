@@ -3,9 +3,10 @@
 #include <boost/numeric/ublas/io.hpp>
 #include <complex>
 
-using namespace boost::numeric::ublas ;
+//using namespace boost::numeric::ublas ;
+namespace ublas = boost::numeric::ublas;
 typedef std::complex<int> int_complex ;
-typedef matrix<int_complex> cmatrix ;
+typedef ublas::matrix<int_complex> cmatrix ;
 
 void printit( const char * s, const cmatrix & m )
 {

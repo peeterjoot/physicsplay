@@ -23,7 +23,6 @@ SPRINGMODEL_LDLIBS += $(GSL_LDLIBS)
 
 CLEANTARGETS += $(TARGETS)
 
-# doxygen:
 all : $(TARGETS)
 
 springmodel : $(SPRINGMODEL_OBJECTS)

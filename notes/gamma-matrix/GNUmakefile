@@ -1,9 +1,9 @@
-EXE := .exe
+#EXE := .exe
 
 SOURCE := matrix.cpp
 
 COPTS += -g
-COPTS += -I$(HOME)/boostlib/include/boost-1_37/
+#COPTS += -I$(HOME)/boostlib/include/boost-1_37/
 #COPTS += -O2
 
 OBJECTS := $(subst .cpp,.o,$(SOURCE))

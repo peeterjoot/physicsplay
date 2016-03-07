@@ -20,7 +20,6 @@ INPLACE_OBJECTS := $(subst .cc,.o,$(INPLACE_SOURCES))
 CLEANTARGETS += $(TARGETS)
 CLEANTARGETS += *.csv *.pdf
 
-# doxygen:
 all : $(TARGETS)
 
 twoarrays : $(TWOARRAYS_OBJECTS)
