@@ -16,6 +16,7 @@ endif
 TARGETS += springmodel
 SPRINGMODEL_SOURCES += springmodel.cc
 SPRINGMODEL_SOURCES += ../2015/ps5/solverMethod.cc
+SPRINGMODEL_SOURCES += ../ps7/streamopen.cc
 SPRINGMODEL_SOURCES += minimizer.cc
 SPRINGMODEL_SOURCES += $(COMMON_SOURCES)
 SPRINGMODEL_OBJECTS := $(subst .cc,.o,$(SPRINGMODEL_SOURCES))
