@@ -17,10 +17,10 @@ inline void enableExceptionOnOpen( S & stream )
 }
 
 /** open file for read, or throw boost::exception */
-void openStreamForReadOrThrow( std::string filename, std::ifstream & stream ) ;
+void openStreamForReadOrThrow( const std::string & filename, std::ifstream & stream ) ;
 
 /** open file for write with truncate, or throw boost::exception */
-void openStreamForWriteOrThrow( std::string filename, std::ofstream & stream ) ;
+void openStreamForWriteOrThrow( const std::string & filename, std::ofstream & stream ) ;
 
 /**
    Provide a method that returns a stream reference, either to a file

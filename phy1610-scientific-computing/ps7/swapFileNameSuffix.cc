@@ -1,12 +1,17 @@
-/** \file swapFileNameSuffix.cc
-  */
+/** 
+   \file swapFileNameSuffix.cc
+
+   Implement a file suffix swap operation.
+ */
 #include "swapFileNameSuffix.h"
 #include "myexceptions.h"
 #include <regex>
 #include <boost/exception/exception.hpp>
 #include <boost/exception/info.hpp>
 
-std::string replaceFileSuffix( const std::string & filename, const char * const oldSuffix, const char * const newSuffix )
+std::string replaceFileSuffix( const std::string &    filename,
+                               const char * const     oldSuffix,
+                               const char * const     newSuffix )
 {
    std::string expr{ R"((.*)\.)" + std::string(oldSuffix) + "$" } ;
    std::regex reg{ expr } ;

@@ -1,4 +1,8 @@
-/** \file ratData.cc */
+/**
+   \file ratData.cc
+
+   Methods associated with the ratData class.
+ */
 #include "stdoutfilestream.h"
 #include "ratData.h"
 #include "rarrayio"
@@ -9,7 +13,8 @@
 
    restrictions: This function is Unix specific.
  */
-inline std::string fullyQualifyPathWithDirectory( const std::string directoryName, const std::string fileName )
+inline std::string fullyQualifyPathWithDirectory( const std::string & directoryName,
+                                                  const std::string & fileName )
 {
    if ( (fileName[0] != '/') && (directoryName != "") )
    {
@@ -21,7 +26,8 @@ inline std::string fullyQualifyPathWithDirectory( const std::string directoryNam
    }
 }
 
-void ratData::open( const std::string ratPath, const std::string filename )
+void ratData::open( const std::string & ratPath,
+                    const std::string & filename )
 {
    auto qualPath { fullyQualifyPathWithDirectory( ratPath, filename ) } ;
 
@@ -35,7 +41,7 @@ void ratData::open( const std::string ratPath, const std::string filename )
    f >> m_signalOrFFT ;
 }
 
-void ratData::writeToCsv( const std::string outFileName ) const
+void ratData::writeToCsv( const std::string & outFileName ) const
 {
    // open an output file, throwing an exception on failure.
    std::ofstream f{} ;
@@ -61,7 +67,7 @@ void ratData::writeToCsv( const std::string outFileName ) const
    }
 }
 
-void ratData::writePowerSpectrumToFile( const std::string outFileName ) const
+void ratData::writePowerSpectrumToFile( const std::string & outFileName ) const
 {
    // open an output file, throwing an exception on failure.
    std::ofstream f{} ;

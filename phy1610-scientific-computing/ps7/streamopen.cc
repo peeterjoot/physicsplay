@@ -1,10 +1,18 @@
+/**
+   \file streamopen.cc
+
+   Methods to open a file for read or for write (with truncate).  Throws an error with the filename
+   if open fails.   
+ */
 #include "myexceptions.h"
 #include <boost/exception/exception.hpp>
 #include <boost/exception/info.hpp>
 #include "stdoutfilestream.h"
 
 template <typename streamType>
-void openStream( std::string filename, streamType & stream, const decltype(std::ios_base::in) mode )
+void openStream( const std::string &                  filename,
+                 streamType &                         stream,
+                 const decltype(std::ios_base::in)    mode )
 {
    enableExceptionOnOpen( stream ) ;
 
@@ -21,12 +29,18 @@ void openStream( std::string filename, streamType & stream, const decltype(std::
    }
 }
 
-void openStreamForReadOrThrow( std::string filename, std::ifstream & stream )
+void openStreamForReadOrThrow( const std::string &   filename,
+                               std::ifstream &       stream )
 {
-   openStream<std::ifstream>( filename, stream, std::ios_base::in ) ;
+   openStream<std::ifstream>( filename,
+                              stream,
+                              std::ios_base::in ) ;
 }
 
-void openStreamForWriteOrThrow( std::string filename, std::ofstream & stream )
+void openStreamForWriteOrThrow( const std::string &   filename,
+                                std::ofstream &       stream )
 {
-   openStream<std::ofstream>( filename, stream, std::ios_base::out | std::ios_base::trunc ) ;
+   openStream<std::ofstream>( filename,
+                              stream,
+                              std::ios_base::out | std::ios_base::trunc ) ;
 }

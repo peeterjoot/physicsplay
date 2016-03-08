@@ -1,3 +1,8 @@
+/**
+   \file test.cc
+
+   boost test driver for misc utility code.
+ */
 #include "swapFileNameSuffix.h"
 #include "myexceptions.h"
 #include <boost/exception/get_error_info.hpp>

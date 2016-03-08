@@ -1,9 +1,16 @@
+/**
+   \file fftstate.cc
+
+   Methods for fftw3 in place FFT operation: plan creation and execute.
+ */
 #include "fftstate.h"
 #include "myexceptions.h"
 #include <regex>
 #include <iostream>
 
-fftstate::fftstate( ratData & d ) : m_plan{}, m_sz{ (size_t)d.m_signalOrFFT.size() }
+fftstate::fftstate( ratData & d )
+   : m_plan{},
+     m_sz{ (size_t)d.m_signalOrFFT.size() }
 {
    // The fftw docs say that the plan should always be created before the signal 
    // is initialized, but that currently the arrays are not modified if FFTW_ESTIMATE

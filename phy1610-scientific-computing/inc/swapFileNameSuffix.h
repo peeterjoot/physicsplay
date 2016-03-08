@@ -6,9 +6,12 @@
 #include <string>
 
 /**
-   Swap the file suffix, as in:
+   Implements a file suffix swap operation, of the (perl) form:
 
-   replaceFileSuffix( "blah.cc", "cc", "o" ) 
+      $f =~ s/\.cc$/.o/ ;
+
+   Example:
+      replaceFileSuffix( "blah.cc", "cc", "o" ) 
  */
 std::string replaceFileSuffix( const std::string & filename, const char * const oldSuffix, const char * const newSuffix ) ;
 

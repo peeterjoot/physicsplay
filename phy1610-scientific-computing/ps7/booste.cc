@@ -1,3 +1,8 @@
+/**
+   \file booste.cc
+
+   Experiment with boost exceptions.
+ */
 #include <boost/exception/exception.hpp>
 #include <boost/exception/info.hpp>
 #include <boost/exception/get_error_info.hpp>

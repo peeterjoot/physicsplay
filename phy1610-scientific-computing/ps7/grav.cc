@@ -1,5 +1,8 @@
-/** \file grav.cc
-  */
+/** 
+   \file grav.cc
+
+   Main driver for the ps7 assignment.
+ */
 #include "integers.h"
 #include <iostream>
 #include <string>

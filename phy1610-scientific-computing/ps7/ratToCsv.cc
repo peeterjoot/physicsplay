@@ -30,7 +30,8 @@ void showHelpAndExit()
    std::exit( (int)RETURNCODES::HELP ) ;
 }
 
-void outputSignalForPlotting( const std::string infile, const ratData & r )
+void outputSignalForPlotting( const std::string & infile,
+                              const ratData &     r )
 {
    auto outFileName { replaceFileSuffix( infile, "rat", "csv" ) } ;
 
