@@ -40,11 +40,11 @@ void fftstate::execute( ratData & d )
 
    if ( m_sz != newsize )
    {
-       BOOST_THROW_EXCEPTION(
-            array_size_error()
-               << asize_info( m_sz )
-               << asize_info( newsize )
-            ) ;
+      BOOST_THROW_EXCEPTION(
+           array_size_error()
+              << asize_info( m_sz )
+              << asize_info( newsize )
+           ) ;
    }
 
    fftw_execute_dft( m_plan,

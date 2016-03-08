@@ -12,9 +12,11 @@
 #include <fstream>
 #include <cassert>
 #include "stdoutfilestream.h"
+#include "dotprod.h"
 #include <boost/exception/diagnostic_information.hpp>
 
-/** print the usage string for the program for --help (or unrecognized options)
+/**
+   Print the usage string for the program for --help (or unrecognized options)
  */
 void showHelpAndExit()
 {
@@ -24,6 +26,43 @@ void showHelpAndExit()
 
    std::exit( (int)RETURNCODES::HELP ) ;
 }
+
+/**
+   Compute the correlation for two power spectrums.
+
+   \param pred [in]
+      Real positive power spectrum for the prediction signal in the frequency domain.
+
+   \param det [in]
+      Real positive power spectrum for a detected signal in the frequency domain.
+ */
+class correlator
+{
+   const darray &    m_pred ;
+   double            m_dotff ; ///< dotprod( m_pred, m_pred ).  This is precomputed since it is required for all the comparisons.
+
+public:
+
+   correlator( const darray & pred )
+      : m_pred( pred ),
+        m_dotff( dotprod( m_pred, m_pred ) )
+   {
+   }
+
+   /**
+      Compute the correlation of det with respect to the saved power spectrum signal m_pred.
+
+      \retval
+         The coorelation of the two signals.
+    */
+   double operator()( const darray & det ) const
+   {
+      auto dotfg { dotprod( m_pred, det ) } ;
+      auto dotgg { dotprod( det, det ) } ;
+
+      return dotfg / std::sqrt( m_dotff * dotgg ) ;
+   }
+} ;
 
 /**
    Parse arguments and run the driver.
@@ -91,8 +130,12 @@ int main( int argc, char ** argv )
       det.calculatePowerSpectrum() ;
 
       //pred.writePowerSpectrumToFile( "GWpredictionFFTPower.txt" ) ;
-      det.writePowerSpectrumToFile( "detection01Power.txt" ) ;
-   } 
+      //det.writePowerSpectrumToFile( "detection01Power.txt" ) ;
+
+      correlator c( pred.m_timesOrPower ) ;
+
+      std::cout << c( det.m_timesOrPower ) << std::endl ;
+   }
    catch (boost::exception & e)
    {
       auto s { boost::diagnostic_information( e ) } ;

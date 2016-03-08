@@ -9,6 +9,8 @@
 #include <boost/exception/diagnostic_information.hpp>
 #include <iostream>
 #include "stdoutfilestream.h"
+#include "dotprod.h"
+#include "ratData.h"
 
 #define BOOST_TEST_MAIN
 #define BOOST_TEST_MODULE test
@@ -82,4 +84,21 @@ BOOST_AUTO_TEST_CASE( timestep )
    }
    BOOST_REQUIRE( true == caughtWriteOpenFailure ) ;
    BOOST_REQUIRE( true == caughtReadOpenFailure ) ;
+
+   {
+      constexpr auto size{5} ;
+      constexpr auto v1{2} ;
+      constexpr auto v2{3} ;
+      darray f(5) ;
+      f.fill( 2 ) ;
+      f[0] = 1 ;
+
+      darray g(5) ;
+      g.fill( 3 ) ;
+
+      auto d { dotprod( f, g ) } ;
+      auto expected { (size -1)* v1 * v2 + g[0] } ;
+
+      BOOST_REQUIRE( std::abs(d - expected) < 1e-8 ) ;
+   }
 }

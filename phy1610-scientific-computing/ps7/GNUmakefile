@@ -1,4 +1,15 @@
 #PRODUCTION := 1
+#USE_OPENBLAS := 1
+
+ifdef USE_OPENBLAS
+   # ubuntu libopenblas
+   CXXFLAGS += -I/usr/include/openblas
+   LDFLAGS += -L/usr/lib/openblas
+   LDFLAGS += -lopenblas
+else
+   # ubuntu libblas
+   LDFLAGS += -lblas
+endif
 
 include ../make.vars
 
@@ -21,6 +32,7 @@ TARGETS += grav
 GRAV_SOURCES += grav.cc
 GRAV_SOURCES += ratData.cc
 GRAV_SOURCES += fftstate.cc
+GRAV_SOURCES += dotprod.cc
 GRAV_SOURCES += streamopen.cc
 GRAV_OBJECTS := $(subst .cc,.o,$(GRAV_SOURCES))
 GRAV_LDLIBS += -lfftw3 -lm
@@ -44,6 +56,7 @@ TARGETS += test
 TEST_SOURCES += test.cc
 TEST_SOURCES += swapFileNameSuffix.cc
 TEST_SOURCES += streamopen.cc
+TEST_SOURCES += dotprod.cc
 TEST_OBJECTS := $(subst .cc,.o,$(TEST_SOURCES))
 
 CLEANTARGETS += $(TARGETS)
