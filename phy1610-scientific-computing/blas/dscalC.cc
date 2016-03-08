@@ -8,7 +8,7 @@ int main(int argc, char **argv)
    int one = 1 ;
    int n = 3 ;
 
-   //Using CBLAS interface
+   // CSCAL - scales a vector by a constant.
    cblas_dscal(n, coeff, x, one) ;
 
    for (int i = 0 ; i < n; i++)
