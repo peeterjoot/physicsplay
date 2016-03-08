@@ -32,7 +32,7 @@ void showHelpAndExit()
 
 void outputSignalForPlotting( const std::string infile, const ratData & r )
 {
-   auto outFileName = replaceFileSuffix( infile, "rat", "csv" ) ;
+   auto outFileName { replaceFileSuffix( infile, "rat", "csv" ) } ;
 
    r.writeToCsv( outFileName ) ;
 }
@@ -113,7 +113,7 @@ std::cout << &data.m_signalOrFFT[0] << std::endl ;
    } 
    catch (boost::exception & e)
    {
-      std::string s = boost::diagnostic_information( e ) ;
+      auto s { boost::diagnostic_information( e ) } ;
       std::cout << s << std::endl ;
 
       return (int)RETURNCODES::EXCEPTION ;

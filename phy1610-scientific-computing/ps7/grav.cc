@@ -81,24 +81,18 @@ int main( int argc, char ** argv )
       f.execute( pred ) ;
       f.execute( det ) ;
 
-      if ( 0 )
-      {
-         pred.writeToCsv( "GWpredictionFFT.csv" ) ;
-         det.writeToCsv( "detection01FFT.csv" ) ;
-      }
+      //pred.writeToCsv( "GWpredictionFFT.csv" ) ;
+      //det.writeToCsv( "detection01FFT.csv" ) ;
 
-      size_t sz{ (size_t)pred.m_signalOrFFT.size() } ;
+      pred.calculatePowerSpectrum() ;
+      det.calculatePowerSpectrum() ;
 
-      for ( Uint i = 0 ; i < sz ; i++ )
-      {
-         pred.m_timesOrPower[i] = std::norm( pred.m_signalOrFFT[i] ) ;
-      }
-
-      pred.writePowerSpectrumToFile( "GWpredictionFFTPower.txt" ) ;
+      //pred.writePowerSpectrumToFile( "GWpredictionFFTPower.txt" ) ;
+      det.writePowerSpectrumToFile( "detection01Power.txt" ) ;
    } 
    catch (boost::exception & e)
    {
-      std::string s = boost::diagnostic_information( e ) ;
+      auto s { boost::diagnostic_information( e ) } ;
       std::cout << s << std::endl ;
 
       return (int)RETURNCODES::EXCEPTION ;

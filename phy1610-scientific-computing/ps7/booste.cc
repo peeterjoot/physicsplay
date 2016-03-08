@@ -28,16 +28,17 @@ int main()
    } 
    catch (boost::exception & e)
    {
-      if( std::string * i = boost::get_error_info<match_info>(e) ) 
+      if ( auto * i { boost::get_error_info<match_info>(e) } ) 
       {
          std::cout << "match pattern: " << *i << std::endl ;
       }
-      if( std::string * i = boost::get_error_info<re_info>(e) ) 
+
+      if ( auto * i { boost::get_error_info<re_info>(e) } ) 
       {
          std::cout << "match re: " << *i << std::endl ;
       }
 
-      std::string s = boost::diagnostic_information( e ) ;
+      auto s { boost::diagnostic_information( e ) } ;
       std::cout << s << std::endl ;
    }
 

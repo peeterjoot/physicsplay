@@ -20,4 +20,5 @@ function plotit( filebase )
    end
 end
 
-plotit( "GWpredictionFFTPower" ) ;
+#plotit( "GWpredictionFFTPower" ) ;
+plotit( "detection01Power" ) ;

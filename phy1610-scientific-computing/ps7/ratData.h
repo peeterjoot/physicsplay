@@ -42,6 +42,11 @@ struct ratData
       Write the power spectrum to a file for plotting.
     */
    void writePowerSpectrumToFile( const std::string outFileName ) const ;
+
+   /**
+      overwrite m_timesOrPower with the power spectrum of m_signalOrFFT.
+    */
+   void calculatePowerSpectrum() ;
 } ;
 
 #endif

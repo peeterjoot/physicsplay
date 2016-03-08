@@ -12,9 +12,9 @@
 
 BOOST_AUTO_TEST_CASE( timestep )
 {
-   bool caughtIt = false ;
+   auto caughtIt { false } ;
 
-   std::string out = replaceFileSuffix( "foo.cc", "cc", "o" ) ;
+   auto out { replaceFileSuffix( "foo.cc", "cc", "o" ) } ;
    BOOST_REQUIRE( out == "foo.o" ) ;
 
    try {
@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_CASE( timestep )
    } 
    catch (boost::exception & e)
    {
-      std::string s = boost::diagnostic_information( e ) ;
+      auto s { boost::diagnostic_information( e ) } ;
       std::cout << s << std::endl ;
 
       caughtIt = true ;
@@ -47,8 +47,8 @@ BOOST_AUTO_TEST_CASE( timestep )
       BOOST_REQUIRE( 3 == v ) ;
    }
 
-   bool caughtWriteOpenFailure = false ;
-   bool caughtReadOpenFailure = false ;
+   auto caughtWriteOpenFailure{ false } ;
+   auto caughtReadOpenFailure{ false } ;
    {
       std::ifstream ifs ;
       std::ofstream ofs ;
@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_CASE( timestep )
       }
       catch (boost::exception & e)
       {
-         std::string s = boost::diagnostic_information( e ) ;
+         auto s { boost::diagnostic_information( e ) } ;
          std::cout << s << std::endl ;
 
          caughtWriteOpenFailure = true ;
@@ -69,7 +69,7 @@ BOOST_AUTO_TEST_CASE( timestep )
       }
       catch (boost::exception & e)
       {
-         std::string s = boost::diagnostic_information( e ) ;
+         auto s { boost::diagnostic_information( e ) } ;
          std::cout << s << std::endl ;
 
          caughtReadOpenFailure = true ;

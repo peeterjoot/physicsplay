@@ -23,7 +23,7 @@ inline std::string fullyQualifyPathWithDirectory( const std::string directoryNam
 
 void ratData::open( const std::string ratPath, const std::string filename )
 {
-   std::string qualPath = fullyQualifyPathWithDirectory( ratPath, filename ) ;
+   auto qualPath { fullyQualifyPathWithDirectory( ratPath, filename ) } ;
 
    // open the file
    std::ifstream f{} ;
@@ -42,7 +42,7 @@ void ratData::writeToCsv( const std::string outFileName ) const
 
    openStreamForWriteOrThrow( outFileName, f ) ;
 
-   auto size = m_timesOrPower.size() ;
+   auto size { m_timesOrPower.size() } ;
    if ( size != m_signalOrFFT.size() )
    {
       BOOST_THROW_EXCEPTION(
@@ -52,10 +52,10 @@ void ratData::writeToCsv( const std::string outFileName ) const
            ) ;
    }
 
-   for ( decltype(size) i = 0 ; i < size ; i++ )
+   for ( decltype(size) i{0} ; i < size ; i++ )
    {
-      auto t = m_timesOrPower[i] ;
-      auto v = m_signalOrFFT[i] ;
+      auto t { m_timesOrPower[i] } ;
+      auto v { m_signalOrFFT[i] } ;
 
       f << t << "," << v.real() << "," << v.imag() << std::endl ;
    }
@@ -68,10 +68,21 @@ void ratData::writePowerSpectrumToFile( const std::string outFileName ) const
 
    openStreamForWriteOrThrow( outFileName, f ) ;
 
-   auto size = m_timesOrPower.size() ;
+   auto size { m_timesOrPower.size() } ;
 
-   for ( decltype(size) i = 0 ; i < size ; i++ )
+   for ( decltype(size) i{0} ; i < size ; i++ )
    {
       f << m_timesOrPower[i] << std::endl ;
+   }
+}
+
+void ratData::calculatePowerSpectrum()
+{
+   // Is there a BLAS method that can be used for this?
+   auto size{ m_signalOrFFT.size() } ;
+
+   for ( decltype(size) i{0} ; i < size ; i++ )
+   {
+      m_timesOrPower[i] = std::norm( m_signalOrFFT[i] ) ;
    }
 }
