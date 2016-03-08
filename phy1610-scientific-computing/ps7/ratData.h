@@ -3,11 +3,8 @@
 #if !defined phy1610_ratData_h_included
 #define phy1610_ratData_h_included
 
-#include "rarray"
-#include <complex>
-
-using carray = rarray<std::complex<double>, 1> ;
-using darray = rarray<double, 1> ;
+#include "darray.h"
+#include "carray.h"
 
 /**
    Storage for either the time domain:

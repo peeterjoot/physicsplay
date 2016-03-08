@@ -1,4 +1,7 @@
 /** \file stdoutfilestream.h
+
+   Some basic IO related methods, for opening files or throwing errors, and a class
+   that supplies a stdout-or-fileStream ostream handle.
  */
 #if !defined phy1610_stdoutfilestream_h_included
 #define phy1610_stdoutfilestream_h_included

@@ -1,4 +1,6 @@
 /** \file returncodes.h
+
+   Define some basic exit return codes.
  */
 #if !defined phy1610_returncodes_h_included
 #define phy1610_returncodes_h_included

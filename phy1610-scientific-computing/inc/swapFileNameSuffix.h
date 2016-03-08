@@ -1,4 +1,6 @@
 /** \file swapFileNameSuffix.h
+
+   File suffix operations.
  */
 #if !defined phy1610_swapFileNameSuffix_h_included
 #define phy1610_swapFileNameSuffix_h_included

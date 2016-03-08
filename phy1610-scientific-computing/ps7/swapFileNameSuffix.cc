@@ -3,11 +3,11 @@
 
    Implement a file suffix swap operation.
  */
-#include "swapFileNameSuffix.h"
-#include "myexceptions.h"
 #include <regex>
 #include <boost/exception/exception.hpp>
 #include <boost/exception/info.hpp>
+#include "swapFileNameSuffix.h"
+#include "myexceptions.h"
 
 std::string replaceFileSuffix( const std::string &    filename,
                                const char * const     oldSuffix,

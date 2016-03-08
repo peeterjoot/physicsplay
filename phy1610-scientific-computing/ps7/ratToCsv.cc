@@ -2,21 +2,17 @@
 
    Read in one .rat file and write out a .csv file for plotting.
   */
-#include "integers.h"
 #include <iostream>
 #include <string>
 #include <getopt.h>
-#include "returncodes.h"
-#include "rarray"
-#include "rarrayio"
-#include "fftstate.h"
+#include <boost/exception/diagnostic_information.hpp>
 #include <fstream>
-#include <complex>
+#include "integers.h"
+#include "returncodes.h"
 #include "stdoutfilestream.h"
 #include "swapFileNameSuffix.h"
 #include "ratData.h"
 #include "myexceptions.h"
-#include <boost/exception/diagnostic_information.hpp>
 
 /** print the usage string for the program for --help (or unrecognized options)
  */

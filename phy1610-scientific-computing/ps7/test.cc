@@ -3,11 +3,11 @@
 
    boost test driver for misc utility code.
  */
-#include "swapFileNameSuffix.h"
-#include "myexceptions.h"
 #include <boost/exception/get_error_info.hpp>
 #include <boost/exception/diagnostic_information.hpp>
 #include <iostream>
+#include "swapFileNameSuffix.h"
+#include "myexceptions.h"
 #include "stdoutfilestream.h"
 #include "dotprod.h"
 #include "ratData.h"

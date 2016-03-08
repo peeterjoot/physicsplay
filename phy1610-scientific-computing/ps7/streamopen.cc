@@ -4,11 +4,16 @@
    Methods to open a file for read or for write (with truncate).  Throws an error with the filename
    if open fails.   
  */
-#include "myexceptions.h"
 #include <boost/exception/exception.hpp>
 #include <boost/exception/info.hpp>
+#include "myexceptions.h"
 #include "stdoutfilestream.h"
 
+/**
+   Put the stream in a mode where an exception will be thrown on error, then open the file in the desired mode.
+
+   If this fails, then throw an error detailing the filename, and propogate the exception message.
+ */
 template <typename streamType>
 void openStream( const std::string &                  filename,
                  streamType &                         stream,

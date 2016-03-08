@@ -1,4 +1,6 @@
 /** \file myexception.h
+
+   Define some boost exception tags and exception types.
  */
 #if !defined phy1610_myexception_h_included
 #define phy1610_myexception_h_included

@@ -84,7 +84,7 @@ void ratData::writePowerSpectrumToFile( const std::string & outFileName ) const
 
 void ratData::calculatePowerSpectrum()
 {
-   // Is there a BLAS method that can be used for this?
+   // FIXME: Is there a BLAS method that can be used for this?
    auto size{ m_signalOrFFT.size() } ;
 
    for ( decltype(size) i{0} ; i < size ; i++ )

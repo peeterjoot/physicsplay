@@ -1,4 +1,6 @@
 /** \file boosttest.h
+
+   Deal with cygwin quirks if we attempt to use boost test there.
  */
 #if !defined phy1610_boosttest_h_included
 #define phy1610_boosttest_h_included
