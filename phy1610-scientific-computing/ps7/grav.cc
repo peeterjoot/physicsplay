@@ -81,8 +81,20 @@ int main( int argc, char ** argv )
       f.execute( pred ) ;
       f.execute( det ) ;
 
-      //data.writeToCsv( "GWpredictionFFT.csv" ) ;
-      det.writeToCsv( "detection01FFT.csv" ) ;
+      if ( 0 )
+      {
+         pred.writeToCsv( "GWpredictionFFT.csv" ) ;
+         det.writeToCsv( "detection01FFT.csv" ) ;
+      }
+
+      size_t sz{ (size_t)pred.m_signalOrFFT.size() } ;
+
+      for ( Uint i = 0 ; i < sz ; i++ )
+      {
+         pred.m_timesOrPower[i] = std::norm( pred.m_signalOrFFT[i] ) ;
+      }
+
+      pred.writePowerSpectrumToFile( "GWpredictionFFTPower.txt" ) ;
    } 
    catch (boost::exception & e)
    {

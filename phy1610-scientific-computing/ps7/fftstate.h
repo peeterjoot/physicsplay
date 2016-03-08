@@ -16,7 +16,7 @@ class fftstate
 
 public:
    /**
-      Create an fftw3 plan for the ratData::m_signal sized array.
+      Create an fftw3 plan for the ratData::m_signalOrFFT sized array.
     */
    fftstate( ratData & d ) ;
 

@@ -31,8 +31,8 @@ void ratData::open( const std::string ratPath, const std::string filename )
    openStreamForReadOrThrow( qualPath, f ) ;
 
    // read in the signal
-   f >> m_times ;
-   f >> m_signal ;
+   f >> m_timesOrPower ;
+   f >> m_signalOrFFT ;
 }
 
 void ratData::writeToCsv( const std::string outFileName ) const
@@ -42,21 +42,36 @@ void ratData::writeToCsv( const std::string outFileName ) const
 
    openStreamForWriteOrThrow( outFileName, f ) ;
 
-   auto size = m_times.size() ;
-   if ( size != m_signal.size() )
+   auto size = m_timesOrPower.size() ;
+   if ( size != m_signalOrFFT.size() )
    {
       BOOST_THROW_EXCEPTION(
            array_size_error()
               << asize_info( size )
-              << asize_info( m_signal.size() )
+              << asize_info( m_signalOrFFT.size() )
            ) ;
    }
 
    for ( decltype(size) i = 0 ; i < size ; i++ )
    {
-      auto t = m_times[i] ;
-      auto v = m_signal[i] ;
+      auto t = m_timesOrPower[i] ;
+      auto v = m_signalOrFFT[i] ;
 
       f << t << "," << v.real() << "," << v.imag() << std::endl ;
+   }
+}
+
+void ratData::writePowerSpectrumToFile( const std::string outFileName ) const
+{
+   // open an output file, throwing an exception on failure.
+   std::ofstream f{} ;
+
+   openStreamForWriteOrThrow( outFileName, f ) ;
+
+   auto size = m_timesOrPower.size() ;
+
+   for ( decltype(size) i = 0 ; i < size ; i++ )
+   {
+      f << m_timesOrPower[i] << std::endl ;
    }
 }

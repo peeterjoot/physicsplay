@@ -3,7 +3,7 @@
 #include <regex>
 #include <iostream>
 
-fftstate::fftstate( ratData & d ) : m_plan{}, m_sz{ (size_t)d.m_signal.size() }
+fftstate::fftstate( ratData & d ) : m_plan{}, m_sz{ (size_t)d.m_signalOrFFT.size() }
 {
    // The fftw docs say that the plan should always be created before the signal 
    // is initialized, but that currently the arrays are not modified if FFTW_ESTIMATE
@@ -13,8 +13,8 @@ fftstate::fftstate( ratData & d ) : m_plan{}, m_sz{ (size_t)d.m_signal.size() }
    // to the suggested fftw3 order.  If we wanted to use FFTW_MEASURE, we'd have to re-read the
    // data after creating the plan.
    m_plan = fftw_plan_dft_1d( m_sz,
-                              (fftw_complex*)&d.m_signal[0],
-                              (fftw_complex*)&d.m_signal[0],
+                              (fftw_complex*)&d.m_signalOrFFT[0],
+                              (fftw_complex*)&d.m_signalOrFFT[0],
                               FFTW_FORWARD,
                               FFTW_ESTIMATE ) ;
 
@@ -29,7 +29,7 @@ fftstate::fftstate( ratData & d ) : m_plan{}, m_sz{ (size_t)d.m_signal.size() }
 
 void fftstate::execute( ratData & d )
 {
-   size_t newsize{ (size_t)d.m_signal.size() } ;
+   size_t newsize{ (size_t)d.m_signalOrFFT.size() } ;
 
    if ( m_sz != newsize )
    {
@@ -41,6 +41,6 @@ void fftstate::execute( ratData & d )
    }
 
    fftw_execute_dft( m_plan,
-                     (fftw_complex*)&d.m_signal[0],
-                     (fftw_complex*)&d.m_signal[0] ) ;
+                     (fftw_complex*)&d.m_signalOrFFT[0],
+                     (fftw_complex*)&d.m_signalOrFFT[0] ) ;
 }

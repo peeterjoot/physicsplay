@@ -101,12 +101,12 @@ int main( int argc, char ** argv )
 
 #if 0 
       assert( 
-         ( (intptr_t)(&data.m_times[0] & 0xF) == 0 ) &&
-         ( (intptr_t)(&data.m_signal[0] & 0xF) == 0 ) &&
+         ( (intptr_t)(&data.m_timesOrPower[0] & 0xF) == 0 ) &&
+         ( (intptr_t)(&data.m_signalOrFFT[0] & 0xF) == 0 ) &&
 
 std::cout << "pointers" << std::endl ;
-std::cout << &data.m_times[0] << std::endl ;
-std::cout << &data.m_signal[0] << std::endl ;
+std::cout << &data.m_timesOrPower[0] << std::endl ;
+std::cout << &data.m_signalOrFFT[0] << std::endl ;
 #endif
 
       outputSignalForPlotting( fileName, data ) ;
