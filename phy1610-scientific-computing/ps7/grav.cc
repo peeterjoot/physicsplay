@@ -18,16 +18,21 @@
 #include "ratData.h"
 
 /**
-   getopt handling helper function.
+   getopt handling.
  */
-void parseArgs( int argc, char ** argv, std::string & ratPath ) ;
+struct parseArgs
+{
+   std::string m_ratPath{RATPATH} ;
+
+   parseArgs( int argc, char ** argv ) ;
+} ;
 
 /**
    Parse arguments and run the driver.
  */
 int main( int argc, char ** argv )
 {
-   std::string ratPath{RATPATH} ;
+   parseArgs a( argc, argv ) ;
 
    try {
       ratData                    pred ;
@@ -36,7 +41,7 @@ int main( int argc, char ** argv )
       ratData                    det ;
 
       // 1. Read the predicted GW signal from GWprediction.rat.
-      pred.open( ratPath, "GWprediction.rat" ) ;
+      pred.open( a.m_ratPath, "GWprediction.rat" ) ;
 
       // 3a. Compute the FFT of the two complex quantities, using FFTW.
       fftstate                   fft( pred.m_signalOrFFT ) ; 
@@ -61,7 +66,7 @@ int main( int argc, char ** argv )
          snprintf( detFileName, sizeof(detFileName), "detection%02d.rat", (int)i ) ;
 
          // 2. Read one of the GW signal from observations detection01.rat ...detection32.rat.
-         det.open( ratPath, detFileName ) ;
+         det.open( a.m_ratPath, detFileName ) ;
 
          // 3b. Compute the FFT of the two complex quantities, using FFTW.
          fft.execute( det.m_signalOrFFT ) ;
@@ -120,7 +125,7 @@ void showHelpAndExit()
    std::exit( (int)RETURNCODES::HELP ) ;
 }
 
-void parseArgs( int argc, char ** argv, std::string & ratPath )
+parseArgs::parseArgs( int argc, char ** argv )
 {
    int c{0} ;
    int line{0} ;
@@ -139,7 +144,7 @@ void parseArgs( int argc, char ** argv, std::string & ratPath )
             case 'r' :
             {
                line = __LINE__ ;
-               ratPath = optarg ;
+               m_ratPath = optarg ;
 
                break ;
             }

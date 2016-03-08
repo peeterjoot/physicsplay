@@ -36,9 +36,34 @@ PS5 += inc/gslhelper.h
 PS5 += README.ps5.txt
 PS5 += ps5.git.log
 
+PS7 += README.ps7.txt
+PS7 += ps7/GNUmakefile
+PS7 += make.vars
+PS7 += make.rules
+PS7 += ps7/dotprod.cc
+PS7 += ps7/fftstate.cc
+PS7 += ps7/grav.cc
+PS7 += inc/boosttest.h
+PS7 += inc/integers.h
+PS7 += inc/myexceptions.h
+PS7 += inc/returncodes.h
+PS7 += inc/stdoutfilestream.h
+PS7 += inc/swapFileNameSuffix.h
+PS7 += ps7/ratData.cc
+PS7 += ps7/ratToCsv.cc
+PS7 += ps7/streamopen.cc
+PS7 += ps7/swapFileNameSuffix.cc
+PS7 += ps7/test.cc
+PS7 += $(wildcard ps7/*.h ps7/*.jl)
+PS7 += ps7.git.log
+
 TICKTOCK := $(HOME)/ticktock
 
 all : ps3/ticktock.cc
+
+ps7.tar.gz : $(PS7) makefile
+	rm -f $@
+	tar zcf $@ $(PS7)
 
 ps5.tar.gz : $(PS5) makefile
 	rm -f $@
@@ -53,6 +78,9 @@ ps3.git.log :
 
 ps5.git.log : 
 	git log --stat inc ps5 > $@
+
+ps7.git.log : 
+	git log --stat inc ps7 > $@
 
 $(TICKTOCK) : 
 	(cd ; git clone https://github.com/vanzonr/ticktock.git)
