@@ -11,6 +11,7 @@
 #include "stdoutfilestream.h"
 #include "dotprod.h"
 #include "ratData.h"
+#include "rarrayio"
 
 #define BOOST_TEST_MAIN
 #define BOOST_TEST_MODULE test
@@ -39,7 +40,7 @@ BOOST_AUTO_TEST_CASE( replaceFileSuffixTest )
    BOOST_REQUIRE( true == caughtRegexException ) ;
 }
 
-BOOST_AUTO_TEST_CASE( openStreamNormal )
+BOOST_AUTO_TEST_CASE( openStreamNormalTest )
 {
    {
       std::ofstream f ;
@@ -60,14 +61,18 @@ BOOST_AUTO_TEST_CASE( openStreamNormal )
 // These two tests don't work on scinet nodes.  Don't see the boost exceptions with the info they are supposed to have
 // and boost's test infrastructure appears to be intercepting the throw's (i.e. it reports these tests as failed
 // even with the BOOST_REQUIRE's commented out).
-BOOST_AUTO_TEST_CASE( openStreamWriteException )
+BOOST_AUTO_TEST_CASE( openStreamWriteExceptionTest )
 {
-   // These two aren't working on scinet:
-   auto caughtWriteOpenFailure{ false } ;
    std::ofstream ofs ;
 
+   BOOST_CHECK_THROW(
+      openStreamForWriteOrThrow( "/dontcreatethispath/blah.out", ofs ),
+      file_open_error) ;
+
+#if 0
+   auto caughtWriteOpenFailure{ false } ;
    try {
-      openStreamForWriteOrThrow( "/dontcreatethispath/blah.out", ofs ) ;
+      openStreamForWriteOrThrow( "/dontcreatethispath/blah.out", ofs ),
    }
    catch (boost::exception & e)
    {
@@ -79,13 +84,20 @@ BOOST_AUTO_TEST_CASE( openStreamWriteException )
 
    std::cout << caughtWriteOpenFailure << std::endl ;
    BOOST_REQUIRE( true == caughtWriteOpenFailure ) ;
+#endif
 }
 
-BOOST_AUTO_TEST_CASE( openStreamReadException )
+BOOST_AUTO_TEST_CASE( openStreamReadExceptionTest )
 {
+   std::ifstream ifs ;
+
+   BOOST_CHECK_THROW(
+      openStreamForReadOrThrow( "/dontcreatethispath/blah.out", ifs ),
+      file_open_error) ;
+
+#if 0
    auto caughtReadOpenFailure{ false } ;
 
-   std::ifstream ifs ;
    try {
       openStreamForReadOrThrow( "/dontcreatethispath/blah.out", ifs ) ;
    }
@@ -99,9 +111,12 @@ BOOST_AUTO_TEST_CASE( openStreamReadException )
 
    std::cout << caughtReadOpenFailure << std::endl ;
    BOOST_REQUIRE( true == caughtReadOpenFailure ) ;
+#endif
 }
 
-BOOST_AUTO_TEST_CASE( dotproduct )
+constexpr auto tolerance{ 1e-8 } ;
+
+BOOST_AUTO_TEST_CASE( dotproductTest )
 {
    constexpr auto size{5} ;
    constexpr auto v1{2} ;
@@ -116,5 +131,24 @@ BOOST_AUTO_TEST_CASE( dotproduct )
    auto d { dotprod( f, g ) } ;
    auto expected { (size -1)* v1 * v2 + g[0] } ;
 
-   BOOST_REQUIRE( std::abs(d - expected) < 1e-8 ) ;
+   BOOST_REQUIRE( std::abs(d - expected) < tolerance ) ;
+}
+
+BOOST_AUTO_TEST_CASE( correlationTest )
+{
+   constexpr auto expected{ 0.9541159787234387 } ; // computed with correlator.jl
+   darray x ;
+   darray y ;
+
+   std::ifstream f("x.rat");
+   std::ifstream g("y.rat");
+
+   f >> x ;
+   g >> y ;
+
+   correlator c( x ) ;   
+
+   double result{ c( y ) } ;
+
+   BOOST_REQUIRE( std::abs(result - expected) < tolerance ) ;
 }

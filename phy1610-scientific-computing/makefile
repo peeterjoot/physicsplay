@@ -36,6 +36,7 @@ PS5 += inc/gslhelper.h
 PS5 += README.ps5.txt
 PS5 += ps5.git.log
 
+PS7 += scinet.env.ps7
 PS7 += README.ps7.txt
 PS7 += ps7/GNUmakefile
 PS7 += make.vars

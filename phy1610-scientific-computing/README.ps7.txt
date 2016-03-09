@@ -3,7 +3,12 @@
 (a)   All source, header and make files:
 
    README.ps7.txt
+
       This file.
+
+   scinet.env.ps7
+
+      module load and fftw3 env hacking to run this code on a scinet node.
 
    ps7/GNUmakefile
    make.vars
