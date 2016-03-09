@@ -1,14 +1,16 @@
-PRODUCTION := 1
+#PRODUCTION := 1
 #USE_OPENBLAS := 1
 
-ifdef USE_OPENBLAS
-   # ubuntu libopenblas
-   CXXFLAGS += -I/usr/include/openblas
-   LDFLAGS += -L/usr/lib/openblas
-   LDFLAGS += -lopenblas
-else
-   # ubuntu libblas
-   LDFLAGS += -lblas
+ifndef SCINET_OPENBLAS_INC
+   ifdef USE_OPENBLAS
+      # ubuntu libopenblas
+      CXXFLAGS += -I/usr/include/openblas
+      LDFLAGS += -L/usr/lib/openblas
+      LDFLAGS += -lopenblas
+   else
+      # ubuntu libblas
+      LDFLAGS += -lblas
+   endif
 endif
 
 include ../make.vars
@@ -18,7 +20,7 @@ include ../make.vars
 ifdef SCINET_RARRAY_INC
    CXXFLAGS += -I$(SCINET_RARRAY_INC)
 else
-	CXXFLAGS += -I$(HOME)/rarray
+   CXXFLAGS += -I$(HOME)/rarray
 endif
 CXXFLAGS += -DRATPATH=\"$(HOME)/gravitationalwaves\"
 

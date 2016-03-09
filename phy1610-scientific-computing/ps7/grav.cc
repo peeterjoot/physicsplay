@@ -91,9 +91,8 @@ int main( int argc, char ** argv )
       // This is a c++14 style in-place sort, similar to a perl sort, where the sort function is also specified inline:
       // http://stackoverflow.com/a/279878/189270
       std::sort( cvec.begin(), cvec.end(), [](auto & left, auto & right) { return left.second > right.second ; } ) ;
-
       // With c++11, auto can't be used for the function parameter types, instead requiring:
-      //std::sort( cvec.begin(), cvec.end(), [](results_pair & left, results_pair & right) { return left.second > right.second ; } ) ;
+      //std::sort( cvec.begin(), cvec.end(), [](const results_pair & left, const results_pair & right) { return left.second > right.second ; } ) ;
 
       std::cout << "\nTop " << numberOfTopCorrelationsToDisplay << " correlations\n\n" ;
 
@@ -104,7 +103,7 @@ int main( int argc, char ** argv )
    }
    catch (boost::exception & e)
    {
-      auto s { boost::diagnostic_information( e ) } ;
+      auto s{ boost::diagnostic_information( e ) } ;
       std::cout << s << std::endl ;
 
       return (int)RETURNCODES::EXCEPTION ;
