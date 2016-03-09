@@ -1,4 +1,5 @@
-#PRODUCTION := 1
+PRODUCTION := 1
+#PROFILED := 1
 #USE_OPENBLAS := 1
 
 ifndef SCINET_OPENBLAS_INC
@@ -80,5 +81,10 @@ test : $(TEST_OBJECTS)
 
 runtestdriver: test
 	./test --report_level=detailed
+
+profile.txt: grav
+	rm -f gmon.out
+	./grav > grav.out
+	$(GPROF) ./grav > $@
 
 include ../make.rules
