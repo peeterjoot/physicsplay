@@ -61,6 +61,8 @@ BOOST_AUTO_TEST_CASE( openStreamNormalTest )
 // These two tests don't work on scinet nodes.  Don't see the boost exceptions with the info they are supposed to have
 // and boost's test infrastructure appears to be intercepting the throw's (i.e. it reports these tests as failed
 // even with the BOOST_REQUIRE's commented out).
+//
+// Note that this test modified to use BOOST_CHECK_THROW also doesn't work on scinet.
 BOOST_AUTO_TEST_CASE( openStreamWriteExceptionTest )
 {
    std::ofstream ofs ;
