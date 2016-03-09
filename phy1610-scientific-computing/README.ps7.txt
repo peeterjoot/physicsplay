@@ -16,6 +16,12 @@
 
       Makefiles.
 
+   ps7/x.rat
+   ps7/y.rat
+   ps7/correlator.jl
+
+      generate unit test result data for correlator boost unit test.
+
    ps7/darray.h
    ps7/carray.h
    ps7/dotprod.h
