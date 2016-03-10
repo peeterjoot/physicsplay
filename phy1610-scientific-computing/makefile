@@ -56,6 +56,7 @@ PS7 += ps7/ratToCsv.cc
 PS7 += ps7/streamopen.cc
 PS7 += ps7/swapFileNameSuffix.cc
 PS7 += ps7/test.cc
+PS7 += ps7.sh
 PS7 += $(wildcard ps7/*.h ps7/*.jl ps7/*.rat)
 PS7 += ps7.git.log
 
