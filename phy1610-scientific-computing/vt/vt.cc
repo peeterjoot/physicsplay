@@ -2,11 +2,11 @@
 #include <valarray>
 #include <cstdlib>
 #include <cmath>
-#include <chrono>
+//#include <chrono>
 #include <iostream>
+#include "ticks.h"
 
 //using namespace std ;
-using namespace std::chrono ;
 
 inline float randomTx( const float & unused )
 {
@@ -29,28 +29,28 @@ int main()
    std::valarray<float> c( ASIZE ) ;
    std::valarray<float> sm( ASIZE ) ;
    std::valarray<float> cm( ASIZE ) ;
-   std::chrono::high_resolution_clock::duration vectorTime{} ;
-   std::chrono::high_resolution_clock::duration manualTime{} ;
+   ticks::duration vectorTime{} ;
+   ticks::duration manualTime{} ;
 
    for ( Uint j = 0 ; j < 500 ; j++ )
    {
       initialize( v, j ) ;
 
-      auto t0 = std::chrono::high_resolution_clock::now() ;
+      auto t0 = ticks::sample() ;
       SineCosineVecOps( s, c, v ) ;
-      auto t1 = std::chrono::high_resolution_clock::now() ;
+      auto t1 = ticks::sample() ;
 
       vectorTime += (t1 - t0) ;
 
-      auto t2 = std::chrono::high_resolution_clock::now() ;
+      auto t2 = ticks::sample() ;
       SineCosineManOps( sm, cm, v ) ;
-      auto t3 = std::chrono::high_resolution_clock::now() ;
+      auto t3 = ticks::sample() ;
 
       manualTime += (t3 - t2) ;
    }
 
-   auto vMicro { std::chrono::duration_cast<std::chrono::microseconds>(vectorTime).count() } ;
-   auto mMicro { std::chrono::duration_cast<std::chrono::microseconds>(manualTime).count() } ;
+   auto vMicro { durationToMicroseconds( vectorTime ) } ;
+   auto mMicro { durationToMicroseconds( manualTime ) } ;
 
    std::cout << "vectorTime: " << vMicro << "\n" ;
    std::cout << "manualTime: " << mMicro << "\n" ;
