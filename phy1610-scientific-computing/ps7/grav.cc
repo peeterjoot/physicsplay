@@ -16,6 +16,7 @@
 #include "stdoutfilestream.h"
 #include "dotprod.h"
 #include "ratData.h"
+#include "ticks.h"
 
 /**
    getopt handling.
@@ -23,6 +24,7 @@
 struct parseArgs
 {
    std::string m_ratPath{RATPATH} ;
+   bool        m_showTimes{false} ;
 
    parseArgs( int argc, char ** argv ) ;
 } ;
@@ -45,6 +47,7 @@ int main( int argc, char ** argv )
 
       // 3a. Compute the FFT of the two complex quantities, using FFTW.
       fftstate                   fft( pred.m_signalOrFFT ) ; 
+
       fft.execute( pred.m_signalOrFFT ) ;
 
       // 4a. Compute the power spectrum of both signals.
@@ -56,6 +59,10 @@ int main( int argc, char ** argv )
       constexpr Uint             firstDetFileNumber{1} ;
       constexpr Uint             lastDetFileNumber{32} ;
       constexpr Uint             numberOfTopCorrelationsToDisplay{5} ;
+      ticks::duration iotime{} ;
+      ticks::duration ffttime{} ;
+      ticks::duration pstime{} ;
+      ticks::duration cortime{} ;
 
       std::cout << "Correlations by detector filename\n\n" ;
 
@@ -65,20 +72,31 @@ int main( int argc, char ** argv )
          char detFileName[32] ; 
          snprintf( detFileName, sizeof(detFileName), "detection%02d.rat", (int)i ) ;
 
+         ticks t1 = ticks::sample() ;
          // 2. Read one of the GW signal from observations detection01.rat ...detection32.rat.
          det.open( a.m_ratPath, detFileName ) ;
 
+         ticks t2 = ticks::sample() ;
          // 3b. Compute the FFT of the two complex quantities, using FFTW.
          fft.execute( det.m_signalOrFFT ) ;
 
+         ticks t3 = ticks::sample() ;
          // 4b. Compute the power spectrum of both signals.
          det.calculatePowerSpectrum() ;
          //det.writeToCsv( "detection01FFT.csv" ) ;
          //det.writePowerSpectrumToFile( "detection01Power.txt" ) ;
          // break;
+         ticks t4 = ticks::sample() ;
 
          // 5. Compute the correlation coefficient between the power spectra as defined in Eq. (1), using a ?dot BLAS call for the inner product from Eq. (3).
          double c{ correlation( det.m_timesOrPower ) } ;
+
+         ticks t5 = ticks::sample() ;
+
+         iotime  += (t2 - t1) ;
+         ffttime += (t3 - t2) ;
+         pstime  += (t4 - t3) ;
+         cortime += (t5 - t4) ;
 
          // 6. Output the correlation coefficient
          std::cout << detFileName << ' ' << c << std::endl ;
@@ -100,6 +118,14 @@ int main( int argc, char ** argv )
       {
          std::cout << cvec[i].first << ' ' << cvec[i].second << std::endl ;
       }
+
+      if ( a.m_showTimes )
+      {
+         std::cout << "\nIO time for .rat reads:         \t" << durationToMicroseconds( iotime )  << " (us).\n" ;
+         std::cout <<   "FFT time:                       \t" << durationToMicroseconds( ffttime ) << " (us).\n" ;
+         std::cout <<   "Power spectrum calculation time:\t" << durationToMicroseconds( pstime )  << " (us).\n" ;
+         std::cout <<   "Correlation calculation time:   \t" << durationToMicroseconds( cortime ) << " (us).\n" ;
+      }
    }
    catch (boost::exception & e)
    {
@@ -118,7 +144,8 @@ int main( int argc, char ** argv )
 void showHelpAndExit()
 {
    std::cerr << "usage: grav\n" 
-      "\t[--ratpath=p|-r p]\n"
+      "\t[--ratpath=p|-r p] Specify the path for the input .rat files.\n"
+      "\t[--time|-t] Show elapsed times for component calculations.\n"
       "\t[--help]" << std::endl ;
 
    std::exit( (int)RETURNCODES::HELP ) ;
@@ -132,11 +159,12 @@ parseArgs::parseArgs( int argc, char ** argv )
    constexpr struct option longOptions[]{
      { "help",           0, NULL, 'h' },
      { "ratpath",        1, NULL, 'r' },
+     { "time",           0, NULL, 't' },
      { NULL,             0, NULL, 0   }
    } ;
 
    try {
-      while ( -1 != ( c = getopt_long( argc, argv, "hr:", longOptions, NULL ) ) )
+      while ( -1 != ( c = getopt_long( argc, argv, "hr:t", longOptions, NULL ) ) )
       { 
          switch ( c )
          {
@@ -144,6 +172,12 @@ parseArgs::parseArgs( int argc, char ** argv )
             {
                line = __LINE__ ;
                m_ratPath = optarg ;
+
+               break ;
+            }
+            case 't' :
+            {
+               m_showTimes = true ;
 
                break ;
             }

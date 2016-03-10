@@ -77,7 +77,8 @@
 
       $ ps7/grav --help
       usage: grav
-              [--ratpath=p|-r p]
+              [--ratpath=p|-r p] Specify the path for the input .rat files
+              [--time|-t] Show elapsed times for component calculations
               [--help]
 
 
