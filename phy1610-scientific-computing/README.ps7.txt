@@ -130,3 +130,9 @@ detection01.rat 0.939055
 detection17.rat 0.896847
 detection02.rat 0.887038
 ================================
+With --time
+
+IO time for .rat reads:                 23230399 (us)
+FFT time:                               510895 (us)
+Power spectrum calculation time:        70808 (us)
+Correlation calculation time:           8938 (us)
