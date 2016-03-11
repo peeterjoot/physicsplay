@@ -45,6 +45,7 @@ PS7 += ps7/dotprod.cc
 PS7 += ps7/fftstate.cc
 PS7 += ps7/grav.cc
 PS7 += inc/ticks.h
+PS7 += inc/cpplevel.h
 PS7 += inc/boosttest.h
 PS7 += inc/integers.h
 PS7 += inc/myexceptions.h
