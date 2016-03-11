@@ -17,6 +17,7 @@
 #include "dotprod.h"
 #include "ratData.h"
 #include "ticks.h"
+#include "cpplevel.h"
 
 /**
    getopt handling.
@@ -106,11 +107,21 @@ int main( int argc, char ** argv )
 
       // 8. Finally, determine the 5 most significant candidates (those with the 5 largest values of the correlation coefficient) from the observations set.
 
-      // This is a c++14 style in-place sort, similar to a perl sort, where the sort function is also specified inline:
+#if defined HAVE_CPLUSPLUS_14
+      auto second_greater = [](auto & left, auto & right) { return left.second > right.second ; } ;
+#else
+      // In c++11 mode, auto can't be used for the function parameter types:
+      auto second_greater = [](const results_pair & left, const results_pair & right) { return left.second > right.second ; }  ;
+#endif
+
+      // This is a c++14 style in-place (partial) sort, similar to a perl sort, where the sort function is also specified inline:
       // http://stackoverflow.com/a/279878/189270
-      std::sort( cvec.begin(), cvec.end(), [](auto & left, auto & right) { return left.second > right.second ; } ) ;
-      // With c++11, auto can't be used for the function parameter types, instead requiring:
-      //std::sort( cvec.begin(), cvec.end(), [](const results_pair & left, const results_pair & right) { return left.second > right.second ; } ) ;
+      //
+      // The partial sort avoids sorting the whole array when we only care about finding the few top most coorelated entries.
+      std::partial_sort( cvec.begin(),
+                         cvec.begin() + numberOfTopCorrelationsToDisplay,
+                         cvec.end(),
+                         second_greater ) ;
 
       std::cout << "\nTop " << numberOfTopCorrelationsToDisplay << " correlations\n\n" ;
 
