@@ -20,8 +20,6 @@
 
 BOOST_AUTO_TEST_CASE( replaceFileSuffixTest )
 {
-   auto caughtRegexException { false } ;
-
    auto out { replaceFileSuffix( "foo.cc", "cc", "o" ) } ;
    BOOST_REQUIRE( out == "foo.o" ) ;
 

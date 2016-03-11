@@ -37,6 +37,7 @@
    inc/returncodes.h
    inc/stdoutfilestream.h
    inc/swapFileNameSuffix.h
+   inc/ticks.h
 
       Headers common to this assignment and others (or standalone cblas, fft, ... test code not included).
 
@@ -63,6 +64,10 @@
       Some (Julia language) plotting scripts used in develoment.  Note that the frequency domain output of detection01.rat and the predicted
       signals look rect() like (i.e. perhaps sinc() like time domain signal once the noise is stripped away).
 
+   ps7.sh
+
+      scinet batch script.
+
 (b)
    ps7.git.log
 
@@ -78,7 +83,8 @@
 
       $ ps7/grav --help
       usage: grav
-              [--ratpath=p|-r p]
+              [--ratpath=p|-r p] Specify the path for the input .rat files
+              [--time|-t] Show elapsed times for component calculations
               [--help]
 
 
@@ -130,3 +136,9 @@ detection01.rat 0.939055
 detection17.rat 0.896847
 detection02.rat 0.887038
 ================================
+With --time (from a scinet batch run)
+
+IO time for .rat reads:                 32382340 (us).
+FFT time:                               946092 (us).
+Power spectrum calculation time:        141668 (us).
+Correlation calculation time:           13910 (us).

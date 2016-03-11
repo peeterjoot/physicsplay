@@ -5,11 +5,11 @@
 
 # Note: submit to queue with:
 # 
-# cd ; qsub physicsplay/phy1610/ps4.sh
+# cd ; qsub physicsplay/phy1610-scientific-computing/ps4.sh
 #------------------------
-. $HOME/physicsplay/phy1610/scinet.env.ps2_3
+. $HOME/physicsplay/phy1610-scientific-computing/scinet.env.ps2_3
 
-ants=$HOME/physicsplay/phy1610/ps3/ants
+ants=$HOME/physicsplay/phy1610-scientific-computing/ps3/ants
 gprofcmd="gprof --line --no-graph --brief"
 
 cd $SCRATCH

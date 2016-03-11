@@ -44,6 +44,8 @@ PS7 += make.rules
 PS7 += ps7/dotprod.cc
 PS7 += ps7/fftstate.cc
 PS7 += ps7/grav.cc
+PS7 += inc/ticks.h
+PS7 += inc/cpplevel.h
 PS7 += inc/boosttest.h
 PS7 += inc/integers.h
 PS7 += inc/myexceptions.h
@@ -55,6 +57,7 @@ PS7 += ps7/ratToCsv.cc
 PS7 += ps7/streamopen.cc
 PS7 += ps7/swapFileNameSuffix.cc
 PS7 += ps7/test.cc
+PS7 += ps7.sh
 PS7 += $(wildcard ps7/*.h ps7/*.jl ps7/*.rat)
 PS7 += ps7.git.log
 
