@@ -1,0 +1,298 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+%{
+\input{../blogpost.tex}
+\renewcommand{\basename}{variationalMatrix}
+\renewcommand{\dirname}{notes/phy1520/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+\usepackage{siunitx}
+
+\beginArtNoToc
+
+\generatetitle{Variational principle with two by two symmetric matrix}
+%\chapter{Variational principle with two by two symmetric matrix}
+%\label{chap:variationalMatrix}
+% \citep{sakurai2014modern} pr X.Y
+% \citep{pozar2009microwave}
+% \citep{qftLectureNotes}
+
+I pulled \citep{szabo1989modern}, one of too many lonely Dover books, off my shelf and started reading the review chapter.  It posed the following question, which I thought had an interesting subquestion.
+
+\makeproblem{Variational principle with two by two symmetric matrix.}{problem:variationalMatrix:1}{
+
+Consider a \( 2 \times 2 \) real symmetric matrix operator \(\BO \), with an arbitrary normalized trial vector 
+
+\begin{dmath}\label{eqn:variationalMatrix:20}
+\Bc = 
+\begin{bmatrix}
+\cos\theta \\
+\sin\theta
+\end{bmatrix}.
+\end{dmath}
+
+The variational principle requires that minimum value of \( \omega(\theta) = \Bc^\dagger \BO \Bc \) is greater than or equal to the lowest eigenvalue.  
+\makesubproblem{}{problem:variationalMatrix:1:a}
+If that minimum value occurs at \( \omega(\theta_0) \), show that this is exactly equal to the lowest eigenvalue.
+\makesubproblem{}{problem:variationalMatrix:1:b}
+Explain why this is should have been anticipated.
+} % problem
+
+\makeanswer{problem:variationalMatrix:1}{
+
+\makeSubAnswer{}{problem:variationalMatrix:1:a}
+%\paragraph{Finding the minimum.}
+
+If the operator representation is
+
+\begin{dmath}\label{eqn:variationalMatrix:40}
+\BO =
+\begin{bmatrix}
+a & b \\
+b & d
+\end{bmatrix},
+\end{dmath}
+
+then the variational product is
+
+\begin{dmath}\label{eqn:variationalMatrix:80}
+\omega(\theta)
+=
+\begin{bmatrix}
+\cos\theta & \sin\theta
+\end{bmatrix}
+\begin{bmatrix}
+a & b \\
+b & d
+\end{bmatrix}
+\begin{bmatrix}
+\cos\theta \\
+\sin\theta
+\end{bmatrix}
+=
+\begin{bmatrix}
+\cos\theta & \sin\theta
+\end{bmatrix}
+\begin{bmatrix}
+a \cos\theta + b \sin\theta \\
+b \cos\theta + d \sin\theta
+\end{bmatrix}
+=
+a \cos^2\theta + 2 b \sin\theta \cos\theta 
++ d \sin^2\theta
+=
+a \cos^2\theta + b \sin( 2 \theta )
++ d \sin^2\theta.
+\end{dmath}
+
+The minimum is given by
+
+\begin{dmath}\label{eqn:variationalMatrix:60}
+0 
+=
+\frac{d\omega}{d\theta}
+=
+-2 a \sin\theta \cos\theta + 2 b \cos( 2 \theta )
++ 2 d \sin\theta \cos\theta
+=
+2 b \cos( 2 \theta )
++ (d -a)\sin( 2 \theta )
+%\begin{bmatrix}
+%-\sin\theta & \cos\theta
+%\end{bmatrix}
+%\begin{bmatrix}
+%a & b \\
+%b & d
+%\end{bmatrix}
+%\begin{bmatrix}
+%\cos\theta \\
+%\sin\theta
+%\end{bmatrix}
+%+
+%\begin{bmatrix}
+%\cos\theta & \sin\theta
+%\end{bmatrix}
+%\begin{bmatrix}
+%a & b \\
+%b & d
+%\end{bmatrix}
+%\begin{bmatrix}
+%-\sin\theta \\
+%\cos\theta
+%\end{bmatrix}
+,
+\end{dmath}
+
+so the extreme values will be found at
+
+\begin{dmath}\label{eqn:variationalMatrix:100}
+\tan(2\theta_0) = \frac{2 b}{a - d}.
+\end{dmath}
+
+Solving for \( \cos(2\theta_0) \), with \( \alpha = 2b/(a-d) \), we have
+
+\begin{dmath}\label{eqn:variationalMatrix:120}
+1 - \cos^2(2\theta) = \alpha^2 \cos^2(2 \theta),
+\end{dmath}
+
+or
+
+\begin{dmath}\label{eqn:variationalMatrix:140}
+\cos^2(2\theta_0) 
+= \frac{1}{1 + \alpha^2} 
+= \frac{1}{1 + 4 b^2/(a-d)^2 }
+= \frac{(a-d)^2}{(a-d)^2 + 4 b^2 }.
+\end{dmath}
+
+So,
+
+\begin{equation}\label{eqn:variationalMatrix:200}
+\begin{aligned}
+\cos(2 \theta_0) &= \frac{ \pm (a-d) }{\sqrt{ (a-d)^2 + 4 b^2 }} \\
+\sin(2 \theta_0) &= \frac{ \pm 2 b }{\sqrt{ (a-d)^2 + 4 b^2 }},
+\end{aligned}
+\end{equation}
+
+Substituting this back into \( \omega(\theta_0) \) is a bit tedious.
+I did it once on paper, then confirmed with Mathematica (quantumchemistry/twoByTwoSymmetricVariation.nb).  The end result is
+
+\begin{dmath}\label{eqn:variationalMatrix:160}
+\omega(\theta_0) 
+=
+\inv{2} \lr{ a + d \pm \sqrt{ (a-d)^2 + 4 b^2 } }.
+\end{dmath}
+
+The eigenvalues of the operator are given by
+
+\begin{dmath}\label{eqn:variationalMatrix:220}
+0 
+= (a-\lambda)(d-\lambda) - b^2
+= \lambda^2 - (a+d) \lambda + a d - b^2
+= \lr{\lambda - \frac{a+d}{2}}^2 -\lr{ \frac{a+d}{2}}^2 + a d - b^2
+= \lr{\lambda - \frac{a+d}{2}}^2 - \inv{4} \lr{ (a-d)^2 + 4 b^2 },
+\end{dmath}
+
+so the eigenvalues are exactly the values \cref{eqn:variationalMatrix:160} as stated by the problem statement.
+
+\makeSubAnswer{}{problem:variationalMatrix:1:b}
+
+%\paragraph{Why should this have been anticipated?}
+
+If the eigenvectors are \( \Be_1, \Be_2 \), the operator can be diagonalized as
+
+\begin{dmath}\label{eqn:variationalMatrix:240}
+\BO = U D U^\T,
+\end{dmath}
+
+where \( U = \begin{bmatrix} \Be_1 & \Be_2 \end{bmatrix} \), and \( D \) has the eigenvalues along the diagonal.  The energy function \( \omega \) can now be written
+
+\begin{dmath}\label{eqn:variationalMatrix:260}
+\omega 
+= \Bc^\T U  D U^\T \Bc 
+= (U^\T \Bc)^\T  D U^\T \Bc.
+\end{dmath}
+
+We can show that the transformed vector \( U^\T \Bc \) is still a unit vector
+
+\begin{dmath}\label{eqn:variationalMatrix:280}
+U^\T \Bc
+=
+\begin{bmatrix}
+\Be_1^\T \\
+\Be_2^\T \\
+\end{bmatrix}
+\Bc
+=
+\begin{bmatrix}
+\Be_1^\T \Bc \\
+\Be_2^\T \Bc \\
+\end{bmatrix},
+\end{dmath}
+
+so
+\begin{dmath}\label{eqn:variationalMatrix:300}
+\Abs{
+U^\T \Bc
+}^2 
+=
+\Bc^\T \Be_1
+\Be_1^\T \Bc 
++
+\Bc^\T \Be_2
+\Be_2^\T \Bc 
+=
+\Bc^\T \lr{ \Be_1 \Be_1^\T 
++
+\Be_2
+\Be_2^\T } \Bc 
+= 
+\Bc^\T \Bc
+= 1,
+\end{dmath}
+
+so the transformed vector can be written as
+
+\begin{dmath}\label{eqn:variationalMatrix:320}
+U^\T \Bc = 
+\begin{bmatrix}
+\cos\phi \\
+\sin\phi
+\end{bmatrix},
+\end{dmath}
+
+for some \( \phi \).  With such a representation we have
+\begin{dmath}\label{eqn:variationalMatrix:340}
+\omega 
+=
+\begin{bmatrix}
+\cos\phi & \sin\phi
+\end{bmatrix}
+\begin{bmatrix}
+\lambda_1 & 0 \\
+0 & \lambda_2
+\end{bmatrix}
+\begin{bmatrix}
+\cos\phi \\
+\sin\phi
+\end{bmatrix}
+=
+\begin{bmatrix}
+\cos\phi & \sin\phi
+\end{bmatrix}
+\begin{bmatrix}
+\lambda_1 \cos\phi \\
+\lambda_2 \sin\phi
+\end{bmatrix}
+=
+\lambda_1 \cos^2\phi + \lambda_2 \sin^2\phi.
+\end{dmath}
+
+This has it's minimums where \( 0 = \sin(2 \phi)( \lambda_2 - \lambda_1 ) \).  For the non-degenerate case, two zeros at \( \phi = n \pi/2 \) for integral \( n \).  For \( \phi = 0, \pi/2 \), we have
+
+\begin{dmath}\label{eqn:variationalMatrix:360}
+\Bc = 
+\begin{bmatrix}
+1 \\
+0
+\end{bmatrix},
+\begin{bmatrix}
+0 \\
+1
+\end{bmatrix}.
+\end{dmath}
+
+We see that the extreme values of \( \omega \) occur when the trial vectors \( \Bc \) are eigenvectors of the operator.
+} % answer
+
+%
+%}
+\EndArticle
+%\EndNoBibArticle
