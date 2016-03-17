@@ -2,12 +2,11 @@
 #PROFILED := 1
 
 include ../make.vars
+include ../make.vars.silo
 
 #CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
 
 THISDIR := phy1610-scientific-computing/silo
-
-LDLIBS += -lsiloh5
 
 TARGETS += example1
 EXAMPLE1_SOURCES += example1.cc
@@ -22,6 +21,10 @@ TARGETS += dartmouth
 #TARGETS += wind_vel.dat
 DARTMOUTH_SOURCES += dartmouth.cc
 DARTMOUTH_OBJECTS := $(subst .cc,.o,$(DARTMOUTH_SOURCES))
+
+TARGETS += writeem
+WRITEEM_SOURCES += writeem.cc
+WRITEEM_OBJECTS := $(subst .cc,.o,$(WRITEEM_SOURCES))
 
 CLEANTARGETS += $(TARGETS)
 
@@ -45,5 +48,8 @@ example1 : $(EXAMPLE1_OBJECTS)
 
 example_timestep : $(EXAMPLE_TIMESTEP_OBJECTS)
 	$(CXX) -o $@ $(EXAMPLE_TIMESTEP_OBJECTS) $(LDFLAGS) $(EXAMPLE_TIMESTEP_LDFLAGS) $(LDLIBS) $(EXAMPLE_TIMESTEP_LDLIBS)
+
+writeem : $(WRITEEM_OBJECTS)
+	$(CXX) -o $@ $(WRITEEM_OBJECTS) $(LDFLAGS) $(WRITEEM_LDFLAGS) $(LDLIBS) $(WRITEEM_LDLIBS)
 
 include ../make.rules

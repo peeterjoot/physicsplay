@@ -20,8 +20,8 @@ void populate_variables_from_dat_files( float temp[NY][NX], float vel_x[NY][NX],
    }
    /* read in the temerpature data */
 
-   for (int j = 0 ; j < NX; ++j)
-      for (int i = 0 ; i < NY; ++i)
+   for (int j = 0 ; j < NX ; ++j)
+      for (int i = 0 ; i < NY ; ++i)
       {
          fgets(line, MAXLINE, fp1) ;
          sscanf(line, "%f", &temp[i][j]) ;
@@ -36,8 +36,8 @@ void populate_variables_from_dat_files( float temp[NY][NX], float vel_x[NY][NX],
       exit(-1) ;
    }
    /* read in wind velocity data */
-   for (int j = 0 ; j < NX; ++j)
-      for (int i = 0 ; i < NY; ++i)
+   for (int j = 0 ; j < NX ; ++j)
+      for (int i = 0 ; i < NY ; ++i)
       {
          fgets(line, MAXLINE, fp1) ;
          sscanf(line, "%f %f", &vel_x[i][j], &vel_y[i][j]) ;
@@ -47,6 +47,12 @@ void populate_variables_from_dat_files( float temp[NY][NX], float vel_x[NY][NX],
 
 void populate_variables( float temp[NY][NX], float vel_x[NY][NX], float vel_y[NY][NX] )
 {
+   if ( 0 )
+   {
+      populate_variables_from_dat_files( temp, vel_x, vel_y ) ;
+      return ;
+   }
+
    for (int j = 0 ; j < NX; ++j)
       for (int i = 0 ; i < NY; ++i)
       {
@@ -62,7 +68,7 @@ void populate_variables( float temp[NY][NX], float vel_x[NY][NX], float vel_y[NY
 }
 
 // Program to make a silo file from the wind temperature and velocity data from OpenDX.
-int main(int argc, char *argv[])
+int main( int argc, char *argv[] )
 {
    int i, j ;
    int dims[] = { NX, NY } ;
@@ -79,7 +85,6 @@ int main(int argc, char *argv[])
    temperature = (float *) malloc(sizeof(float) * NX * NY) ;
 
    populate_variables( temp, vel_x, vel_y ) ;
-//   populate_variables_from_dat_files( temp, vel_x, vel_y ) ;
 
    for (i = 0 ; i < NY; ++i)
       for (j = 0 ; j < NX; ++j)
@@ -88,6 +93,7 @@ int main(int argc, char *argv[])
          velocity[0][i * NX + j] = vel_x[i][j] ;
          velocity[1][i * NX + j] = vel_y[i][j] ;
       }
+
    // create x axis coordinates
    for (i = 0 ; i < NX; i++)
       x[i] = -178.75 + 2.5 * i ;
@@ -96,22 +102,22 @@ int main(int argc, char *argv[])
    for (i = 0 ; i < NY; i++)
       y[i] = -90 + 2.5 * i ;
 
-   DBfile *dbfile = NULL ;
    /* Open the Silo file */
-   dbfile = DBCreate("wind_temp.silo", DB_CLOBBER, DB_LOCAL,
-                     "2D wind temperature and velocity data", DB_HDF5) ;
-   if (dbfile == NULL)
+   DBfile * dbfile = DBCreate( "wind_temp.silo", DB_CLOBBER, DB_LOCAL,
+                               "2D wind temperature and velocity data", DB_HDF5 ) ;
+   if ( dbfile == NULL )
    {
-      fprintf(stderr, "Could not create Silo file!\n") ;
+      fprintf( stderr, "Could not create Silo file!\n" ) ;
+
       return -1 ;
    }
 
    /* write a 2D rectilinear mesh  */
-   DBPutQuadmesh(dbfile, "quadmesh", NULL, coords, dims, ndims, DB_FLOAT, DB_COLLINEAR, NULL) ;
-   DBPutQuadvar1(dbfile, "temp", "quadmesh", temperature, dims, ndims, NULL, 0, DB_FLOAT, DB_NODECENT, NULL) ;
-   DBPutQuadvar(dbfile, "velocity", "quadmesh", 2, varnames, velocity, dims, ndims, NULL, 0, DB_FLOAT, DB_NODECENT, NULL) ;
+   DBPutQuadmesh( dbfile, "quadmesh", NULL, coords, dims, ndims, DB_FLOAT, DB_COLLINEAR, NULL ) ;
+   DBPutQuadvar1( dbfile, "temp", "quadmesh", temperature, dims, ndims, NULL, 0, DB_FLOAT, DB_NODECENT, NULL ) ;
+   DBPutQuadvar( dbfile, "velocity", "quadmesh", 2, varnames, velocity, dims, ndims, NULL, 0, DB_FLOAT, DB_NODECENT, NULL ) ;
 
-   DBClose(dbfile) ;
+   DBClose( dbfile ) ;
 
    return 0 ;
 }
