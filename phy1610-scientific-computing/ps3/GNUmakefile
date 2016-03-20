@@ -6,11 +6,8 @@ include ../make.vars
 ifneq ("$(OSNAME)","Cygwin")
 include ../make.vars.netcdf
 endif
+include ../make.vars.rarray
 
-CXXFLAGS += -I$(HOME)/rarray
-ifdef SCINET_RARRAY_INC
-   CXXFLAGS += -I$(SCINET_RARRAY_INC)
-endif
 CXXFLAGS += -I$(HOME)/ticktock
 
 ifdef PROFILED
@@ -33,7 +30,7 @@ THISDIR := phy1610-scientific-computing/ps3
 ifeq ("$(OSNAME)","Cygwin")
 	CXXFLAGS += -DNO_NETCDF
 else
-   TEST_LDLIBS += $(BOOST_TEST_LDLIBS)
+   TEST_LDLIBS += $(LDLIBS_BOOSTTEST)
 endif
 
 TARGETS += ants

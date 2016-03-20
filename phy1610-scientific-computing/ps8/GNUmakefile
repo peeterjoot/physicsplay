@@ -1,9 +1,9 @@
 PRODUCTION := 1
 #PROFILED := 1
 
+include ../make.vars
 include ../make.vars.blas
 include ../make.vars.rarray
-include ../make.vars
 
 THISDIR := phy1610-scientific-computing/ps8
 

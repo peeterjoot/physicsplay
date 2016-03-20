@@ -3,8 +3,6 @@
 #USETICKTOCK := 1
 
 include ../make.vars
-include ../make.vars.boosttest
-include ../make.vars.gsl
 
 THISDIR := phy1610-scientific-computing/ps5
 
@@ -15,7 +13,7 @@ SPRINGMODEL_SOURCES += ../ps7/streamopen.cc
 SPRINGMODEL_SOURCES += minimizer.cc
 SPRINGMODEL_SOURCES += $(COMMON_SOURCES)
 SPRINGMODEL_OBJECTS := $(subst .cc,.o,$(SPRINGMODEL_SOURCES))
-SPRINGMODEL_LDLIBS += $(GSL_LDLIBS)
+SPRINGMODEL_LDLIBS += $(LDLIBS_GSL)
 
 CLEANTARGETS += $(TARGETS)
 

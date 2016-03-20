@@ -2,11 +2,10 @@ PRODUCTION := 1
 #PROFILED := 1
 #USE_OPENBLAS := 1
 
+include ../make.vars
 include ../make.vars.blas
 include ../make.vars.rarray
 include ../make.vars.fftw
-include ../make.vars.boosttest
-include ../make.vars
 
 #CXXFLAGS += -DRARRAY_USE_ALLOC_ALIGNED16
 
@@ -40,6 +39,7 @@ TEST_SOURCES += swapFileNameSuffix.cc
 TEST_SOURCES += streamopen.cc
 TEST_SOURCES += dotprod.cc
 TEST_OBJECTS := $(subst .cc,.o,$(TEST_SOURCES))
+TEST_LDLIBS += $(LDLIBS_BOOSTTEST)
 
 CLEANTARGETS += $(TARGETS)
 CLEANTARGETS += *.o
