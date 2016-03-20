@@ -5,7 +5,6 @@
 //
 
 #include "walkring_timestep.h"
-#include <random>
 
 // perform a single time step for the random walkers
 // pos: the positions of Z walkers. Z=pos.size()
@@ -15,7 +14,6 @@
 //    the probability to stay on the same spot is thus 1-2p.
 void perform_time_step(rarray<int,1>& pos, int N, double p)
 {
-    // PART OF THE ASSIGNMENT!
+   // FIXME: PART 3:
+   // misses the (random) dynamics of walkers on the ring in its perform time step function.
 }
-
-
