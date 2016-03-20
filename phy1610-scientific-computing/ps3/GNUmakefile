@@ -4,7 +4,7 @@ PRODUCTION := 1
 
 include ../make.vars
 ifneq ("$(OSNAME)","Cygwin")
-include ../make.netcdf.vars
+include ../make.vars.netcdf
 endif
 
 CXXFLAGS += -I$(HOME)/rarray

@@ -3,15 +3,10 @@
 #USETICKTOCK := 1
 
 include ../make.vars
+include ../make.vars.boosttest
+include ../make.vars.gsl
 
 THISDIR := phy1610-scientific-computing/ps5
-
-GSL_LDLIBS += -lgsl
-GSL_LDLIBS += -lgslcblas
-
-ifneq ("$(OSNAME)","Cygwin")
-   TEST_LDLIBS += $(BOOST_TEST_LDLIBS)
-endif
 
 TARGETS += springmodel
 SPRINGMODEL_SOURCES += springmodel.cc

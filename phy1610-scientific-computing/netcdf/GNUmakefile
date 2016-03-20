@@ -2,7 +2,7 @@
 #PROFILED := 1
 
 include ../make.vars
-include ../make.netcdf.vars
+include ../make.vars.netcdf
 
 #CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
 

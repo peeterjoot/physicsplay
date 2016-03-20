@@ -2,34 +2,17 @@ PRODUCTION := 1
 #PROFILED := 1
 #USE_OPENBLAS := 1
 
-ifndef SCINET_OPENBLAS_INC
-   ifdef USE_OPENBLAS
-      # ubuntu libopenblas
-      CXXFLAGS += -I/usr/include/openblas
-      LDFLAGS += -L/usr/lib/openblas
-      LDFLAGS += -lopenblas
-   else
-      # ubuntu libblas
-      LDFLAGS += -lblas
-   endif
-endif
-
+include ../make.vars.blas
+include ../make.vars.rarray
+include ../make.vars.fftw
+include ../make.vars.boosttest
 include ../make.vars
 
 #CXXFLAGS += -DRARRAY_USE_ALLOC_ALIGNED16
 
-ifdef SCINET_RARRAY_INC
-   CXXFLAGS += -I$(SCINET_RARRAY_INC)
-else
-   CXXFLAGS += -I$(HOME)/rarray
-endif
 CXXFLAGS += -DRATPATH=\"$(HOME)/gravitationalwaves\"
 
 THISDIR := phy1610-scientific-computing/ps7
-
-ifneq ("$(OSNAME)","Cygwin")
-   TEST_LDLIBS += $(BOOST_TEST_LDLIBS)
-endif
 
 TARGETS += grav
 GRAV_SOURCES += grav.cc
@@ -38,7 +21,7 @@ GRAV_SOURCES += fftstate.cc
 GRAV_SOURCES += dotprod.cc
 GRAV_SOURCES += streamopen.cc
 GRAV_OBJECTS := $(subst .cc,.o,$(GRAV_SOURCES))
-GRAV_LDLIBS += -lfftw3 -lm
+GRAV_LDLIBS += $(FFTW_LDLIBS)
 
 TARGETS += ratToCsv
 RATTOCSV_SOURCES += ratToCsv.cc

@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
   double      T;  // time
   double      dx; // spatial resolution
   double      dt; // temporal resolution (time step)
-  int         Z;  // number of walkers
+  //int         Z;  // number of walkers
   std::string datafile; // filename for output
   double      time_between_output;
 
