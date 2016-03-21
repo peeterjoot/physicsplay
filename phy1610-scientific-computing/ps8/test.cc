@@ -14,17 +14,29 @@
 
 constexpr auto Nchecks{ 20 } ;
 
-BOOST_AUTO_TEST_CASE( testFairCoin )
+using FairCoin = RandomIntegers<-1, 2, 1> ;
+
+void testFairCoin( FairCoin & c )
 {
-   using FairCoin = RandomIntegers<-1, 2, 1> ;
-
-   FairCoin c ;
-
    for ( auto i = 0 ; i < Nchecks ; i++ )
    {
       auto v = c.sample() ;
 
       BOOST_REQUIRE( (v == -1) or (v == +1) ) ;
+   }
+}
+
+BOOST_AUTO_TEST_CASE( testFC )
+{
+   FairCoin c ;
+
+   testFairCoin( c ) ;
+
+   for ( auto seed : {-1,1} )
+   {
+      c.start( seed ) ;
+
+      testFairCoin( c ) ;
    }
 }
 
@@ -35,10 +47,10 @@ inline bool equals( const double v1, const double v2 )
    return std::abs( v1 - v2 ) < tolerance ;
 }
 
-BOOST_AUTO_TEST_CASE( integer )
-{
-   RandomDiscreteReals<2> r(-0.5, 0.5) ;
+using R2 = RandomDiscreteReals<2> ;
 
+void testR2( R2 & r )
+{
    for ( auto i = 0 ; i < Nchecks ; i++ )
    {
       auto v = r.sample() ;
@@ -50,10 +62,24 @@ BOOST_AUTO_TEST_CASE( integer )
    }
 }
 
-BOOST_AUTO_TEST_CASE( openStreamWriteExceptionTest )
+BOOST_AUTO_TEST_CASE( testRandomDiscreteReals )
 {
-   RandomReals<> s(-0.5, 0.5) ;
+   R2 r(-0.5, 0.5) ;
 
+   testR2( r ) ;
+
+   for ( auto seed : {-0.5, 0.0, 0.5} )
+   {
+      r.start( seed ) ;
+
+      testR2( r ) ;
+   }
+}
+
+using R3 = RandomReals<> ;
+
+void testR3( R3 & s )
+{
    for ( auto i = 0 ; i < Nchecks ; i++ )
    {
       auto v = s.sample() ;
@@ -61,5 +87,19 @@ BOOST_AUTO_TEST_CASE( openStreamWriteExceptionTest )
       BOOST_REQUIRE( 
          (v >= -0.5) or 
          (v <= +0.5) ) ;
+   }
+}
+
+BOOST_AUTO_TEST_CASE( testRandomReals )
+{
+   R3 s(-0.5, 0.5) ;
+
+   testR3( s ) ;   
+
+   for ( auto seed : {-0.5, -0.1, 0.3, 0.5} )
+   {
+      s.start( seed ) ;
+
+      testR3( s ) ;
    }
 }
