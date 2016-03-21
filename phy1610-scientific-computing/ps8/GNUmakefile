@@ -4,6 +4,7 @@ PRODUCTION := 1
 include ../make.vars
 include ../make.vars.blas
 include ../make.vars.rarray
+include ../make.vars.boosttest
 
 THISDIR := phy1610-scientific-computing/ps8
 
@@ -25,9 +26,15 @@ WALKRING_SOURCES += walkring_timestep.cc
 WALKRING_SOURCES += walkring_parameters.cc
 WALKRING_OBJECTS := $(subst .cc,.o,$(WALKRING_SOURCES))
 
+TARGETS += test
+TEST_SOURCES += test.cc
+TEST_OBJECTS := $(subst .cc,.o,$(TEST_SOURCES))
+TEST_LDFLAGS += $(LDFLAGS_BOOSTTEST)
+TEST_LDLIBS += $(LDLIBS_BOOSTTEST)
+
 CLEANTARGETS += $(TARGETS)
 
-.PHONY: all clean run rundiffring runwalkring
+.PHONY: all clean run rundiffring runwalkring runtestdriver
 
 all : $(TARGETS)
 
@@ -38,6 +45,12 @@ walkring : $(WALKRING_OBJECTS)
 
 diffring : $(DIFFRING_OBJECTS)
 	$(CXX) -o $@ $(DIFFRING_OBJECTS) $(LDFLAGS) $(DIFFRING_LDFLAGS) $(LDLIBS) $(DIFFRING_LDLIBS)
+
+test : $(TEST_OBJECTS)
+	$(CXX) -o $@ $(TEST_OBJECTS) $(LDFLAGS) $(TEST_LDFLAGS) $(LDLIBS) $(TEST_LDLIBS)
+
+runtestdriver: test
+	./test --report_level=detailed
 
 run: rundiffring runwalkring
 
