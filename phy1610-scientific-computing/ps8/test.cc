@@ -4,6 +4,7 @@
    standalone simple test cases.
  */
 #include "randomgenerators.h"
+#include "banded.h"
 #include <iostream>
 #include <string>
 
@@ -102,4 +103,26 @@ BOOST_AUTO_TEST_CASE( testRandomReals )
 
       testR3( s ) ;
    }
+}
+
+BOOST_AUTO_TEST_CASE( banded )
+{
+   darray2 m( 3, 3 ) ;
+   darray2 compare( 3, 3 ) ;
+
+   compare.fill( 0.0 ) ;
+   compare[0][0] = 2 ; compare[0][1] = 3 ; compare[0][2] = 1 ;
+   compare[1][0] = 1 ; compare[1][1] = 2 ; compare[1][2] = 3 ;
+   compare[2][0] = 3 ; compare[2][1] = 1 ; compare[2][2] = 2 ;
+
+   initializeBandedMatrix( m, 1, 2, 3, BANDING_TYPE::CYCLIC ) ;
+
+   BOOST_REQUIRE( std::equal( &m[0][0], &m[2][2], &compare[0][0] ) ) ;
+
+   compare[2][0] = 0 ; 
+   compare[0][2] = 0 ; 
+
+   initializeBandedMatrix( m, 1, 2, 3, BANDING_TYPE::TRIDIAGONAL ) ;
+
+   BOOST_REQUIRE( std::equal( &m[0][0], &m[2][2], &compare[0][0] ) ) ;
 }
