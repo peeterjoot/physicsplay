@@ -6,7 +6,7 @@ include ../make.vars.blas
 include ../make.vars.rarray
 include ../make.vars.boosttest
 
-THISDIR := phy1610-scientific-computing/ps8
+#THISDIR := phy1610-scientific-computing/ps8
 
 TARGETS += diffring
 DIFFRING_SOURCES += diffring.cc

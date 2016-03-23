@@ -6,7 +6,7 @@ include ../make.vars.netcdf
 
 #CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
 
-THISDIR := phy1610-scientific-computing/netcdf
+#THISDIR := phy1610-scientific-computing/netcdf
 
 TARGETS += writefile
 WRITEFILE_SOURCES += writefile.cc

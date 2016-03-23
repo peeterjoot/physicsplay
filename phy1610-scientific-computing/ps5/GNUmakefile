@@ -4,7 +4,7 @@
 
 include ../make.vars
 
-THISDIR := phy1610-scientific-computing/ps5
+#THISDIR := phy1610-scientific-computing/ps5
 
 TARGETS += springmodel
 SPRINGMODEL_SOURCES += springmodel.cc

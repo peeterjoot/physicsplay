@@ -1,0 +1,88 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+%{
+\input{../blogpost.tex}
+\renewcommand{\basename}{ps8}
+\renewcommand{\dirname}{phy1610-scientific-computing/ps8}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+%\usepackage{siunitx}
+
+\beginArtNoToc
+
+\generatetitle{phy1620 ps8 notes and report}
+%\chapter{phy1620 ps8 notes and report}
+%\label{chap:ps8}
+
+\section{Background}
+
+The discretized diffusion equation has the form
+
+\begin{dmath}\label{eqn:ps8:20}
+T_{i+1} - T_i = \frac{D \Delta t}{\Delta x^2} \lr{ T_i(j+1) - 2 T_i(j) + T_i(j-1) },
+\end{dmath}
+
+where the spatial indexes \( j-1, j, j+1 \) are to be treated as cyclic variables over \( [1, 2, \cdots, N-1, N] \), and \( i, i+1, \cdots\) are the timestep indexes.  With
+
+\begin{dmath}\label{eqn:ps8:40}
+\alpha = \frac{D \Delta t}{\Delta x^2},
+\end{dmath}
+
+This takes the form
+
+\begin{dmath}\label{eqn:ps8:60}
+T_{i+1} = 
+\alpha T_i(j+1) + \lr{ 1 - 2 \alpha }  T_i(j) + \alpha T_i(j-1)
+.
+\end{dmath}
+
+Writing this out explicitly, but ignoring the time dependence index, we have
+\begin{equation}\label{eqn:ps8:80}
+\begin{aligned}
+T(1) &\rightarrow \alpha T(2) + \lr{ 1 - 2 \alpha } T(1) + \alpha T(N) \\
+T(2) &\rightarrow \alpha T(3) + \lr{ 1 - 2 \alpha } T(2) + \alpha T(1) \\
+       & \vdots \\
+T(N-1) &\rightarrow \alpha T(N) + \lr{ 1 - 2 \alpha }  T(N-1) + \alpha T(N-2) \\
+T(N) &\rightarrow \alpha T(1) + \lr{ 1 - 2 \alpha }  T(N) + \alpha T(N-1),
+\end{aligned}
+\end{equation}
+
+or in matrix form
+
+\begin{dmath}\label{eqn:ps8:100}
+\begin{bmatrix}
+T_{i+1}(1) \\
+T_{i+1}(2) \\
+\vdots \\
+T_{i+1}(N-1) \\
+T_{i+1}(N) \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 - 2 \alpha & \alpha       &           &              & \alpha       \\
+\alpha       & 1 - 2 \alpha & \alpha    &              &              \\
+             &              & \ddots    &              &              \\ 
+             &              & \alpha    & 1 - 2 \alpha & \alpha       \\ 
+\alpha       &              &           &  \alpha      & 1 - 2 \alpha \\ 
+\end{bmatrix}
+\begin{bmatrix}
+T_{i}(1) \\
+T_{i}(2) \\
+\vdots \\
+T_{i}(N-1) \\
+T_{i}(N) \\
+\end{bmatrix}
+\end{dmath}
+
+
+%}
+%\EndArticle
+\EndNoBibArticle

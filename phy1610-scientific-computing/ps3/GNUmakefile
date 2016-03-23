@@ -25,7 +25,7 @@ endif
 #CXXFLAGS += -DMYRARRAY2_USE_STD_VECTOR
 #CXXFLAGS += -DMYRARRAY_USING_RARRAY
 
-THISDIR := phy1610-scientific-computing/ps3
+#THISDIR := phy1610-scientific-computing/ps3
 
 ifeq ("$(OSNAME)","Cygwin")
 	CXXFLAGS += -DNO_NETCDF

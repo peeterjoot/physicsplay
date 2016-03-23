@@ -11,7 +11,7 @@ include ../make.vars.fftw
 
 CXXFLAGS += -DRATPATH=\"$(HOME)/gravitationalwaves\"
 
-THISDIR := phy1610-scientific-computing/ps7
+#THISDIR := phy1610-scientific-computing/ps7
 
 TARGETS += grav
 GRAV_SOURCES += grav.cc
