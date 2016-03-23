@@ -107,22 +107,28 @@ BOOST_AUTO_TEST_CASE( testRandomReals )
 
 BOOST_AUTO_TEST_CASE( banded )
 {
-   darray2 m( 3, 3 ) ;
-   darray2 compare( 3, 3 ) ;
+   auto n{6} ;
+   auto nm{5} ;
+   darray2 m( n, n ) ;
+   darray2 compare( n, n ) ;
 
    compare.fill( 0.0 ) ;
-   compare[0][0] = 2 ; compare[0][1] = 3 ; compare[0][2] = 1 ;
-   compare[1][0] = 1 ; compare[1][1] = 2 ; compare[1][2] = 3 ;
-   compare[2][0] = 3 ; compare[2][1] = 1 ; compare[2][2] = 2 ;
+   int r{0} ;
+   compare[r][0] = 2 ; compare[r][1] = 3 ; compare[r][5] = 1 ; r++ ;
+   compare[r][1] = 2 ; compare[r][2] = 3 ; compare[r][0] = 1 ; r++ ;
+   compare[r][2] = 2 ; compare[r][3] = 3 ; compare[r][1] = 1 ; r++ ;
+   compare[r][3] = 2 ; compare[r][4] = 3 ; compare[r][2] = 1 ; r++ ;
+   compare[r][4] = 2 ; compare[r][5] = 3 ; compare[r][3] = 1 ; r++ ;
+   compare[r][5] = 2 ; compare[r][0] = 3 ; compare[r][4] = 1 ; r++ ;
 
    initializeBandedMatrix( m, 1, 2, 3, BANDING_TYPE::CYCLIC ) ;
 
-   BOOST_REQUIRE( std::equal( &m[0][0], &m[2][2] + 1, &compare[0][0] ) ) ;
+   BOOST_REQUIRE( std::equal( &m[0][0], &m[nm][nm] + 1, &compare[0][0] ) ) ;
 
-   compare[2][0] = 0 ; 
-   compare[0][2] = 0 ; 
+   compare[nm][0] = 0 ; 
+   compare[0][nm] = 0 ; 
 
    initializeBandedMatrix( m, 1, 2, 3, BANDING_TYPE::TRIDIAGONAL ) ;
 
-   BOOST_REQUIRE( std::equal( &m[0][0], &m[2][2] + 1, &compare[0][0] ) ) ;
+   BOOST_REQUIRE( std::equal( &m[0][0], &m[nm][nm] + 1, &compare[0][0] ) ) ;
 }

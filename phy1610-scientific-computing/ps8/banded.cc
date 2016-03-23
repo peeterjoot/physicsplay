@@ -27,9 +27,10 @@ void initializeBandedMatrix( darray2 &     m,
 
    for ( decltype(rows) i = 0 ; i < rows ; i++ )
    {
-      m[i][i] = diagonal ;
-      m[(i+1)%rows][i] = subdiagonal ;
-      m[i][(i+1)%rows] = superdiagonal ;
+      auto iplusone{ (i+1)%rows } ;
+      m[i][i]        = diagonal ;
+      m[iplusone][i] = subdiagonal ;
+      m[i][iplusone] = superdiagonal ;
    }
 
    if ( how == BANDING_TYPE::TRIDIAGONAL )
