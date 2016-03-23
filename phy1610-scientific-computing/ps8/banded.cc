@@ -25,7 +25,7 @@ void initializeBandedMatrix( darray2 &     m,
                << acolumns_info( columns ) ) ;
    }
 
-   for ( decltype(rows) i = 0 ; i < rows ; i++ )
+   for ( decltype(rows) i { 0 } ; i < rows ; i++ )
    {
       auto iplusone{ (i+1)%rows } ;
       m[i][i]        = diagonal ;
