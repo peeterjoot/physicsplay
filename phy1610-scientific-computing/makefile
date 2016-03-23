@@ -61,9 +61,26 @@ PS7 += ps7.sh
 PS7 += $(wildcard ps7/*.h ps7/*.jl ps7/*.rat)
 PS7 += ps7.git.log
 
+PS8 += inc/boosttest.h
+PS8 += inc/darray.h
+PS8 += inc/myexceptions.h
+PS8 += make.vars
+PS8 += make.rules
+PS8 += make.vars.blas
+PS8 += make.vars.rarray
+PS8 += make.vars.boosttest
+PS8 += README.ps8.txt
+PS8 += $(wildcard ps8/*.h ps8/*.cc ps8/*.ini ps8/*.dat)
+PS7 += ps7/GNUmakefile
+PS8 += ps8.git.log
+
 TICKTOCK := $(HOME)/ticktock
 
 all : ps3/ticktock.cc
+
+ps8.tar.gz : $(PS8) makefile
+	rm -f $@
+	tar zcf $@ $(PS8)
 
 ps7.tar.gz : $(PS7) makefile
 	rm -f $@
@@ -85,6 +102,9 @@ ps5.git.log :
 
 ps7.git.log : 
 	git log --stat inc ps7 > $@
+
+ps8.git.log : 
+	git log --stat inc ps8 > $@
 
 $(TICKTOCK) : 
 	(cd ; git clone https://github.com/vanzonr/ticktock.git)
