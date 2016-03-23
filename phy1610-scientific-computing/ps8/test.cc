@@ -117,12 +117,12 @@ BOOST_AUTO_TEST_CASE( banded )
 
    initializeBandedMatrix( m, 1, 2, 3, BANDING_TYPE::CYCLIC ) ;
 
-   BOOST_REQUIRE( std::equal( &m[0][0], &m[2][2], &compare[0][0] ) ) ;
+   BOOST_REQUIRE( std::equal( &m[0][0], &m[2][2] + 1, &compare[0][0] ) ) ;
 
    compare[2][0] = 0 ; 
    compare[0][2] = 0 ; 
 
    initializeBandedMatrix( m, 1, 2, 3, BANDING_TYPE::TRIDIAGONAL ) ;
 
-   BOOST_REQUIRE( std::equal( &m[0][0], &m[2][2], &compare[0][0] ) ) ;
+   BOOST_REQUIRE( std::equal( &m[0][0], &m[2][2] + 1, &compare[0][0] ) ) ;
 }

@@ -1,4 +1,4 @@
-PRODUCTION := 1
+#PRODUCTION := 1
 #PROFILED := 1
 
 include ../make.vars
@@ -6,14 +6,13 @@ include ../make.vars.blas
 include ../make.vars.rarray
 include ../make.vars.boosttest
 
-#THISDIR := phy1610-scientific-computing/ps8
-
 TARGETS += diffring
 DIFFRING_SOURCES += diffring.cc
 DIFFRING_SOURCES += diffring_timestep.cc
 DIFFRING_SOURCES += diffring_output.cc
 DIFFRING_SOURCES += diffring_parameters.cc
 DIFFRING_SOURCES += ticktock.cc
+DIFFRING_SOURCES += banded.cc
 DIFFRING_SOURCES += sparkline.cc
 DIFFRING_OBJECTS := $(subst .cc,.o,$(DIFFRING_SOURCES))
 

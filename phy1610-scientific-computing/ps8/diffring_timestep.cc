@@ -6,6 +6,7 @@
 
 #include "diffring_timestep.h"
 #include <cblas.h>
+#include "banded.h"
 
 // perform a single time step for the density field
 // F: matrix that describes the time evolution
@@ -31,4 +32,9 @@ void fill_time_step_matrix(rarray<double,2>& F, double D, double dt, double dx)
    // number of grid points is N, one should make sure that one satifies:
    // ...
    // This should introducing non-zero elements F[0][N-1] and F[N-1][0].
+
+   auto alpha { D * dt/(dx * dx) } ;
+   auto diag { 1 - 2 * alpha } ;
+
+   initializeBandedMatrix( F, alpha, diag, alpha, BANDING_TYPE::CYCLIC ) ;
 }
