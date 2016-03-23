@@ -42,4 +42,15 @@ void initializeBandedMatrix( darray2 &          m,
                              const double        superdiagonal,
                              const BANDING_TYPE  how ) ;
 
+/**
+   Return the number of rows and columns in the matrix.
+
+   If the matrix is not square a array_not_square_error exception
+   will be thrown.
+
+   \param m [in]
+      Matrix to check.      
+ */
+int getSquareMatrixDimensions( const darray2 & m ) ;
+
 #endif

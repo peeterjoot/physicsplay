@@ -6,16 +6,10 @@
 #include "banded.h"
 #include "myexceptions.h"
 
-void initializeBandedMatrix( darray2 &     m,
-                             const double   subdiagonal,
-                             const double   diagonal,
-                             const double   superdiagonal,
-                             const BANDING_TYPE how )
+int getSquareMatrixDimensions( const darray2 & m )
 {
    auto rows = m.extent( 0 ) ; 
    auto columns = m.extent( 1 ) ; 
-
-   m.fill( 0.0 ) ;
 
    if ( rows != columns )
    {
@@ -24,6 +18,19 @@ void initializeBandedMatrix( darray2 &     m,
                << arows_info( rows )
                << acolumns_info( columns ) ) ;
    }
+
+   return rows ;
+}
+
+void initializeBandedMatrix( darray2 &     m,
+                             const double   subdiagonal,
+                             const double   diagonal,
+                             const double   superdiagonal,
+                             const BANDING_TYPE how )
+{
+   auto rows = getSquareMatrixDimensions( m ) ;
+
+   m.fill( 0.0 ) ;
 
    for ( decltype(rows) i { 0 } ; i < rows ; i++ )
    {
