@@ -5,6 +5,7 @@
  */
 #include "randomgenerators.h"
 #include "banded.h"
+#include "myexceptions.h"
 #include <iostream>
 #include <string>
 
@@ -131,4 +132,7 @@ BOOST_AUTO_TEST_CASE( banded )
    initializeBandedMatrix( m, 1, 2, 3, BANDING_TYPE::TRIDIAGONAL ) ;
 
    BOOST_REQUIRE( std::equal( &m[0][0], &m[nm][nm] + 1, &compare[0][0] ) ) ;
+
+   darray2 mbyn( n, n-1 ) ;
+   BOOST_CHECK_THROW( initializeBandedMatrix( mbyn, 1, 2, 3, BANDING_TYPE::TRIDIAGONAL ), array_not_square_error ) ;
 }
