@@ -33,6 +33,8 @@ void initializeBandedMatrix( darray2 &     m,
       m[i][iplusone] = superdiagonal ;
    }
 
+   // Now that we've entered the matrix, we have only two options:
+   // ... Do we take the red pill or the blue pill?
    if ( how == BANDING_TYPE::TRIDIAGONAL )
    {
       m[0][rows-1] = 0.0 ;
