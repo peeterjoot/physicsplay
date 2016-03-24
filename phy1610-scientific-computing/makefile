@@ -73,10 +73,14 @@ PS8 += README.ps8.txt
 PS8 += $(wildcard ps8/*.h ps8/*.cc ps8/*.ini ps8/*.dat)
 PS7 += ps7/GNUmakefile
 PS8 += ps8.git.log
+PS8 += ps8.pdf
 
 TICKTOCK := $(HOME)/ticktock
 
 all : ps3/ticktock.cc
+
+ps8.pdf : 
+	cp ../notes/blogit/ps8.pdf .
 
 ps8.tar.gz : $(PS8) makefile
 	rm -f $@
