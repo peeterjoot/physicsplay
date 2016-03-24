@@ -11,7 +11,11 @@
 void diffring_evolution::perform_time_step( darray & P )
 {
    // make tmpvec hold the input (X) vector, so that P can be the output (Y) vector in the dgemv
-   // call:
+   // call.
+   // This temporary vector serves two purposes:
+   // 1) I'm assuming the input and output vectors (X) and (Y) are not allowed to alias each other
+   //    in the blas call below.
+   // 2) don't allocate/deallocate a new vector of this sort each time.
    std::swap( m_tmpvec, P ) ;
 
    // Slide 11, lecture 13:
@@ -35,8 +39,8 @@ void diffring_evolution::perform_time_step( darray & P )
 }
 
 void diffring_evolution::fill_time_step_matrix( const double   D,
-                                               const double   dt,
-                                               const double   dx )
+                                                const double   dt,
+                                                const double   dx )
 {
    auto alpha { D * dt/(dx * dx) } ;
    auto diag { 1 - 2 * alpha } ;
@@ -45,9 +49,9 @@ void diffring_evolution::fill_time_step_matrix( const double   D,
 }
 
 diffring_evolution::diffring_evolution( const int      N,
-                                      const double   D,
-                                      const double   dt,
-                                      const double   dx ) 
+                                        const double   D,
+                                        const double   dt,
+                                        const double   dx ) 
    : m_n( N ),
      m_tmpvec( N ),
      m_F( N, N )
