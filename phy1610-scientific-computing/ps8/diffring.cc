@@ -42,8 +42,7 @@ int main(int argc, char *argv[])
   P.fill(0.0);
   P[0] = 1.0;
   // Time evolution matrix
-  rarray<double,2> F(N, N);
-  fill_time_step_matrix(F, D, dt, dx);
+  diffring_evolution F(N, D, dt, dx);
   // Setup initial time
   double time = 0.0;    
 
@@ -57,7 +56,7 @@ int main(int argc, char *argv[])
   for (int step = 1; step <= numSteps; step++) {
 
     // Compute next time point
-    perform_time_step(F, P);
+    F.perform_time_step(P);
 
     // Update time
     time += dt;
