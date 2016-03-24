@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
 
   // Open a file for data output
   std::ofstream file;
+  walkring_evolution evolution ;
   output_init(file, datafile);  
   // Initial output to screen
   output(file, 0, time, N, w, outputcols);
@@ -54,7 +55,7 @@ int main(int argc, char *argv[])
   for (int step = 1; step <= numSteps; step++) {
 
     // Compute next time point
-    perform_time_step(w, N, p);
+    evolution.perform_time_step(w, N, p);
 
     // Update time
     time += dt;
