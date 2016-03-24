@@ -31,11 +31,19 @@ void diffring_evolution::perform_time_step( darray & P )
    // UGG.  have to look at the fortran docs to see how to call this beastie!
    //
    // http://www.netlib.org/lapack/explore-html/d7/d15/group__double__blas__level2.html#gadd421a107a488d524859b4a64c1901a9
+   // Y := ALPHA*A*X + BETA*Y
    cblas_dgemv( CblasRowMajor,
-                CblasNoTrans, m_n, m_n,
-                1.0, &m_F[0][0], m_n,
-                &m_tmpvec[0], 1, 1.0,
-                &P[0], 1 ) ;
+                CblasNoTrans,    // TRANS
+                m_n,             // M
+                m_n,             // N
+                1.0,             // ALPHA
+                &m_F[0][0],      // A
+                m_n,             // LDA
+                &m_tmpvec[0],    // X
+                1,               // INCX
+                0.0,             // BETA
+                &P[0],           // Y
+                1 ) ;            // INCY
 }
 
 void diffring_evolution::fill_time_step_matrix( const double   D,

@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
   rarray<int,1> w(Z);
   // Setup initial conditions for w
   w.fill(0);
-   // Setup initial time
+  // Setup initial time
   double time = 0.0;
 
   // Open a file for data output
