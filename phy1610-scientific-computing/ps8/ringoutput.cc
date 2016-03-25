@@ -100,7 +100,9 @@ void walkring_output::showline( int step, double time, const rarray<int,1> &w )
    m_file << time << "\n" << m_density << " \n\n";
 
    reportToScreenToo( m_density, time, step, m_outputcols, timeSoFar ) ;
- 
+
+// FIXME: wanted to omit the internal times, but had some compilation issues along the way.  Do this if later if I
+// have time (here and in ringoutput::showline).
 //   auto t2 = ticks::sample() ; 
 //   m_wasteTime += durationToSeconds(t2 - t1) ;
 }
