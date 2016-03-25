@@ -4,6 +4,7 @@
 #define phy1610_ticks_h_included
 
 #include <chrono>
+#include "cpplevel.h"
 
 /**
    Wrapper for std::chrono::high_resolution_clock to make the long namespace names a bit more tractible.
@@ -34,14 +35,25 @@ inline ticks::duration operator -( const ticks & a, const ticks & b )
    return a.m_sample - b.m_sample ;
 }
 
-inline auto durationToMicroseconds( ticks::duration & diff )
+inline auto durationToMicroseconds( const ticks::duration & diff )
+#if !defined HAVE_CPLUSPLUS_14
+-> decltype(std::chrono::duration_cast<std::chrono::microseconds>( diff ).count())
+#endif
 {
    return std::chrono::duration_cast<std::chrono::microseconds>( diff ).count() ;
 }
 
-inline auto durationToNanoseconds( ticks::duration & diff )
+inline auto durationToNanoseconds( const ticks::duration & diff )
+#if !defined HAVE_CPLUSPLUS_14
+-> decltype(std::chrono::duration_cast<std::chrono::nanoseconds>( diff ).count())
+#endif
 {
    return std::chrono::duration_cast<std::chrono::nanoseconds>( diff ).count() ;
+}
+
+inline double durationToSeconds( const ticks::duration & diff )
+{
+   return std::chrono::duration<double>(diff).count() ;
 }
 
 #endif

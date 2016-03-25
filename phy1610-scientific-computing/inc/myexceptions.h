@@ -14,6 +14,7 @@ struct regex_match_error : virtual error { } ;
 struct file_open_error : virtual error { } ;
 struct plan_create_error : virtual error { } ;
 struct array_size_error : virtual error { } ;
+struct array_not_square_error : virtual error { } ;
 
 struct tag_match_input ;
 typedef boost::error_info<tag_match_input,std::string> match_info ;
@@ -29,5 +30,11 @@ typedef boost::error_info<tag_open_error_origin,std::string> name_info ;
 
 struct tag_array_size_mismatch ;
 typedef boost::error_info<tag_array_size_mismatch,size_t> asize_info ;
+
+struct tag_array_numrows ;
+typedef boost::error_info<tag_array_numrows,size_t> arows_info ;
+
+struct tag_array_numcolumns ;
+typedef boost::error_info<tag_array_numcolumns,size_t> acolumns_info ;
 
 #endif

@@ -17,4 +17,6 @@
    #include <boost/test/unit_test.hpp>
 #endif
 
+#define USE_BOOST_REQUIRE_AS_ASSERT
+
 #endif

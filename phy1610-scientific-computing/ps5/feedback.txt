@@ -1,0 +1,98 @@
+Marcelo Ponce - 2016-03-18 11:39
+Excellent documentation!
+Excellent modularity even for the makefile!
+Something is wrong with your minimum finder, for lower masses (0-0.17kg) the global minimum should be around 0.15-0.16, however your code is reporting x~0.4... I'm wondering whether it could be a typo in the equation, as the maximum load computation is also off, it should be m~0.1653kg
+
+Mark: 8/10
+
+
+==========================
+
+Wish I'd had more (non-honeymoon time) for this assignment.
+
+See: 
+   ~/physicsplay/mathematica/phy1610/2016ps5minimizationAndRootFinding.nb
+
+for a standalone implementation of the problem (much less work than solving this in C++ !).  
+This confirms the error observed in the grading remarks above.  
+
+For the mass load computation, the following table illustrates what fix was required:
+
+   $ sprindmodel --csv
+   0.01, 0.151008, 0.425717, -0.274708, -1
+   0.0292, 0.15256, 0.433838, -0.281278, -1
+   0.0484, 0.154161, 0.439088, -0.284927, -1
+   0.0676, 0.155815, 0.442937, -0.287121, -1
+   0.0868, 0.157528, 0.445946, -0.288418, -1
+   0.106, 0.159305, 0.448398, -0.289093, -1
+   0.1252, 0.161153, 0.450454, -0.289301, -1
+   0.1444, 0.16308, 0.452214, -0.289134, -1
+   0.1636, 0.165097, 0.453747, -0.28865, -1
+   0.1828, 0.455099, 0.167215, 0.287884, 1
+   0.202, 0.456306, 0.16945, 0.286856, 1
+   0.2212, 0.457392, 0.171821, 0.285571, 1
+   0.2404, 0.458377, 0.174354, 0.284023, 1
+   0.2596, 0.459277, 0.177083, 0.282195, 1
+   0.2788, 0.460104, 0.180056, 0.280049, 1
+   0.298, 0.460868, 0.183344, 0.277524, 1
+   0.3172, 0.461576, 0.187061, 0.274515, 1
+   0.3364, 0.462236, 0.191409, 0.270826, 1
+   0.3556, 0.462852, 0.196821, 0.266031, 1
+   0.3748, 0.46343, 0.46343, 0, 1
+   0.394, 0.463974, 0.463974, 0, 1
+   0.4132, 0.464487, 0.464487, 0, 1
+   0.4324, 0.464971, 0.464971, 0, 1
+   0.4516, 0.465431, 0.465431, 0, 1
+   0.4708, 0.465867, 0.465867, 0, 1
+   0.49, 0.466282, 0.466282, 0, 1
+
+The fix was simple:
+
+--- a/phy1610-scientific-computing/ps5/minimizer.cc
++++ b/phy1610-scientific-computing/ps5/minimizer.cc
+@@ -272,8 +272,8 @@ void minimizerResults::compareLocalMinimums()
+       assert( m_maxIndex == (Sint)-1 ) ;
+ 
+       constexpr double inf{ std::numeric_limits<double>::infinity() } ;
+-      double fMinValue{ -inf } ;
+-      double fMaxValue{ inf } ;
++      double fMinValue{ inf } ;
++      double fMaxValue{ -inf } ;
+ 
+       size_t sz = m_rv.size() ;
+       assert( sz <= 2 ) ;
+@@ -285,13 +285,13 @@ void minimizerResults::compareLocalMinimums()
+          {
+             double f = m_rv[i].m_fmin ;
+ 
+-            if ( f > fMinValue )
++            if ( f < fMinValue )
+             {
+                fMinValue = f ;
+                m_minIndex = i ;
+             }
+ 
+-            if ( f < fMaxValue )
++            if ( f > fMaxValue )
+             {
+                fMaxValue = f ;
+                m_maxIndex = i ;
+--- a/phy1610-scientific-computing/ps5/springmodel.cc
++++ b/phy1610-scientific-computing/ps5/springmodel.cc
+@@ -103,15 +109,7 @@ public:
+ 
+       run( m, results ) ;
+ 
+-      double d = std::abs( results.diff() ) ;
+-
+-      constexpr double tolerance = 1e-4 ;
+-
+-      double sign = (d > tolerance) ? 1.0 : -1.0 ;
+-
+-      // std::cout << "diff( " << m << " ) = " << sign << ": " << d << std::endl ;
+-
+-      return sign ;
++      return signof( results.diff() ) ;
+    }
+ 
+    /**

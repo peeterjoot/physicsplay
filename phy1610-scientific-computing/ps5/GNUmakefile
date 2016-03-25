@@ -4,14 +4,7 @@
 
 include ../make.vars
 
-THISDIR := phy1610-scientific-computing/ps5
-
-GSL_LDLIBS += -lgsl
-GSL_LDLIBS += -lgslcblas
-
-ifneq ("$(OSNAME)","Cygwin")
-   TEST_LDLIBS += $(BOOST_TEST_LDLIBS)
-endif
+#THISDIR := phy1610-scientific-computing/ps5
 
 TARGETS += springmodel
 SPRINGMODEL_SOURCES += springmodel.cc
@@ -20,7 +13,7 @@ SPRINGMODEL_SOURCES += ../ps7/streamopen.cc
 SPRINGMODEL_SOURCES += minimizer.cc
 SPRINGMODEL_SOURCES += $(COMMON_SOURCES)
 SPRINGMODEL_OBJECTS := $(subst .cc,.o,$(SPRINGMODEL_SOURCES))
-SPRINGMODEL_LDLIBS += $(GSL_LDLIBS)
+SPRINGMODEL_LDLIBS += $(LDLIBS_GSL)
 
 CLEANTARGETS += $(TARGETS)
 

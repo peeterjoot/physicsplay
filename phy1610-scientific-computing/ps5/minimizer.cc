@@ -272,8 +272,8 @@ void minimizerResults::compareLocalMinimums()
       assert( m_maxIndex == (Sint)-1 ) ;
 
       constexpr double inf{ std::numeric_limits<double>::infinity() } ;
-      double fMinValue{ -inf } ;
-      double fMaxValue{ inf } ;
+      double fMinValue{ inf } ;
+      double fMaxValue{ -inf } ;
 
       size_t sz = m_rv.size() ;
       assert( sz <= 2 ) ;
@@ -285,13 +285,13 @@ void minimizerResults::compareLocalMinimums()
          {
             double f = m_rv[i].m_fmin ;
 
-            if ( f > fMinValue )
+            if ( f < fMinValue )
             {
                fMinValue = f ;
                m_minIndex = i ;
             }
 
-            if ( f < fMaxValue )
+            if ( f > fMaxValue )
             {
                fMaxValue = f ;
                m_maxIndex = i ;
