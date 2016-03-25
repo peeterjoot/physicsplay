@@ -9,18 +9,16 @@ include ../make.vars.boosttest
 TARGETS += diffring
 DIFFRING_SOURCES += diffring.cc
 DIFFRING_SOURCES += diffring_timestep.cc
-DIFFRING_SOURCES += diffring_output.cc
+DIFFRING_SOURCES += ringoutput.cc
 DIFFRING_SOURCES += diffring_parameters.cc
-DIFFRING_SOURCES += ticktock.cc
 DIFFRING_SOURCES += banded.cc
 DIFFRING_SOURCES += sparkline.cc
 DIFFRING_OBJECTS := $(subst .cc,.o,$(DIFFRING_SOURCES))
 
 TARGETS += walkring
 WALKRING_SOURCES += walkring.cc
-WALKRING_SOURCES += ticktock.cc
 WALKRING_SOURCES += sparkline.cc
-WALKRING_SOURCES += walkring_output.cc
+WALKRING_SOURCES += ringoutput.cc
 WALKRING_SOURCES += walkring_timestep.cc
 WALKRING_SOURCES += walkring_parameters.cc
 WALKRING_OBJECTS := $(subst .cc,.o,$(WALKRING_SOURCES))

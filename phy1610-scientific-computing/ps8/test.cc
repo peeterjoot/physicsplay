@@ -3,16 +3,15 @@
 
    standalone simple test cases.
  */
+#define BOOST_TEST_MAIN
+#define BOOST_TEST_MODULE test
+
+#include "boosttest.h" // include this first to override assert()
 #include "randomgenerators.h"
 #include "banded.h"
 #include "myexceptions.h"
 #include <iostream>
 #include <string>
-
-#define BOOST_TEST_MAIN
-#define BOOST_TEST_MODULE test
-
-#include "boosttest.h"
 
 constexpr auto Nchecks{ 20 } ;
 
@@ -33,13 +32,6 @@ BOOST_AUTO_TEST_CASE( testFC )
    FairCoin c ;
 
    testFairCoin( c ) ;
-
-   for ( auto seed : {-1,1} )
-   {
-      c.start( seed ) ;
-
-      testFairCoin( c ) ;
-   }
 }
 
 inline bool equals( const double v1, const double v2 )
@@ -69,13 +61,6 @@ BOOST_AUTO_TEST_CASE( testRandomDiscreteReals )
    R2 r(-0.5, 0.5) ;
 
    testR2( r ) ;
-
-   for ( auto seed : {-0.5, 0.0, 0.5} )
-   {
-      r.start( seed ) ;
-
-      testR2( r ) ;
-   }
 }
 
 using R3 = RandomReals<> ;
@@ -97,13 +82,6 @@ BOOST_AUTO_TEST_CASE( testRandomReals )
    R3 s(-0.5, 0.5) ;
 
    testR3( s ) ;   
-
-   for ( auto seed : {-0.5, -0.1, 0.3, 0.5} )
-   {
-      s.start( seed ) ;
-
-      testR3( s ) ;
-   }
 }
 
 BOOST_AUTO_TEST_CASE( banded )
