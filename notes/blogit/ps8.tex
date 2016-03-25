@@ -22,9 +22,9 @@
 %\chapter{phy1620 ps8 notes and report}
 %\label{chap:ps8}
 
-\section{Background}
+\section{Time evolution matrix}
 
-The discretized diffusion equation has the form
+For forward time differences, the discretized diffusion equation has the form
 
 \begin{dmath}\label{eqn:ps8:20}
 T_{i+1} - T_i = \frac{D \Delta t}{\Delta x^2} \lr{ T_i(j+1) - 2 T_i(j) + T_i(j-1) },
@@ -82,6 +82,65 @@ T_{i}(N) \\
 \end{bmatrix}
 \end{dmath}
 
+\section{PDE graphical results}
+
+The graphical sparkline display for PDE method looked odd, and is shown in \cref{fig:diffringPuttyOutput:diffringPuttyOutputFig1}.  However, looking at the raw data from diffout.dat, I see that the density vector is almost entirely uniform
+
+\imageFigure{../../figures/phy1610/diffringPuttyOutputFig1}{sparkline Histogram display for PDE method.}{fig:diffringPuttyOutput:diffringPuttyOutputFig1}{0.3}
+
+\begin{dmath}\label{eqn:ps8:120}
+\Brho = \lr{ 0.00417546,0.00417545,0.00417544,0.00417543, \cdots }
+\end{dmath}
+
+This is what we expect given no sources.  The oddness of the display turns out to be an issue with putty, which doesn't display the boxes in a nicely visible fashion.
+
+\section{Walkring results}
+
+Looking at the graphical results for the walkring method, even for very high walker counts, my results looked like garbage.  For example, two such graphs can be seen in 
+\cref{fig:walkringPuttyOutput:walkringPuttyOutputFig3}, and
+\cref{fig:walkringPuttyOutput:walkringPuttyOutputFig2}.
+
+\imageFigure{../../figures/phy1610/walkringPuttyOutputFig3}{(putty) Walkring histogram data for \( Z = 1000 \).}{fig:walkringPuttyOutput:walkringPuttyOutputFig3}{0.3}
+\imageFigure{../../figures/phy1610/walkringPuttyOutputFig2}{(putty) Walkring histogram data for \( Z = 12000 \).}{fig:walkringPuttyOutput:walkringPuttyOutputFig2}{0.3}
+
+It wasn't possible to easily compare the walkring walker position vector dumps in walkout.dat to the 
+density vector dumps from diffout.dat.
+
+To rectify this I reworked the output code, so that walkout.dat displays the density vector instead of
+the position vector.  Doing so I see that the \( Z = 1000 \) density vector is not actually terribly unreasonable
+looking
+
+\begin{dmath}\label{eqn:ps8:140}
+\Brho = \lr{ 0.006,0.002,0.003,0.003,0.001,0.006,0.004,0.008,\cdots }.
+\end{dmath}
+
+For \( Z = 12000 \) things are still more uniform
+\begin{dmath}\label{eqn:ps8:160}
+\Brho = \lr{ 0.005,0.00341667,0.00475,0.00441667,0.00458333,0.00416667,0.0045,0.00391667,0.00358333,0.00333333, \cdots }.
+\end{dmath}
+
+Because the final results are expected to be uniformly flat, using mean and stddev was a good metric
+for comparison.  I have added two additional columns for those values (for both diffring and walkring, which now share code).
+
+Using those I was able to see the variation of the stddev with \( Z \).  
+The question of what value of \( Z \) is required for equivalence of the two methods also requires a required precision.  The chart of \cref{fig:stddevCompareSheet:stddevCompareSheetFig4}, shows that a stddev of \( 0.0004 \) can be obtained with \( Z = 24000 \).  Due to time constraints and the slow evaluation of the random iteration for large \( Z \) I did not attempt to find an equivalence better than that.
+
+\imageFigure{../../figures/phy1610/stddevCompareSheetFig4}{stddev variation with \( Z\).}{fig:stddevCompareSheet:stddevCompareSheetFig4}{0.3}
+
+A visual inspection of the \( Z = 24000 \) density vector from the final timestep iteration shows the uniformity has still not matched that of the PDE method in the same number of steps.
+
+\begin{dmath}\label{eqn:ps8:n}
+\Brho = \lr{ 0.00408333,0.00416667,0.00408333,0.00420833,0.00525,0.00358333,0.00375,0.00445833,0.00395833,\cdots}.
+\end{dmath}
+
+Only after obtaining these results did I find that the odd graphical displays observed above were an artifact of the putty terminal emulator.  After logging into my system directly using the X11 interface, I see much more reasonable results from the sparkline code as illustrated in \cref{fig:diffringOutput:diffringOutputFig6} and \cref{fig:walkring1000Output:walkring1000OutputFig5}.
+
+\imageFigure{../../figures/phy1610/diffringOutputFig6}{(X11)diffring profile.}{fig:diffringOutput:diffringOutputFig6}{0.3}
+\imageFigure{../../figures/phy1610/walkring1000OutputFig5}{(X11) walkring profile \( Z = 1000\).}{fig:walkring1000Output:walkring1000OutputFig5}{0.3}
+
+\section{Preferred method.}
+
+For this particular simulation, the PDE method is the clear winner, as it converges very quickly, even when run in a serial mode.  There are clear parallelization opportunities for the walkring code, but the effort to code those for this problem do not seem worthwhile.
 
 %}
 %\EndArticle
