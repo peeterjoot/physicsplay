@@ -8,7 +8,7 @@
 
 #include <fstream>
 #include <rarray>
-#include "diffring_output.h"
+#include "ringoutput.h"
 #include "diffring_timestep.h"
 #include "diffring_parameters.h"
 
@@ -47,10 +47,10 @@ int main(int argc, char *argv[])
   double time = 0.0;    
 
   // Open a file for data output
-  std::ofstream file;
-  output_init(file,datafile);
+  diffring_output out( datafile, outputcols ) ;  
+
   // Initial output
-  output(file, 0, time, P, outputcols);
+  out.showline( 0, time, P ) ;
 
   // Time evolution
   for (int step = 1; step <= numSteps; step++) {
@@ -63,13 +63,9 @@ int main(int argc, char *argv[])
 
     // Periodically add data to the file
     if (step % outputEvery == 0 and step > 0) 
-        output(file, step, time, P, outputcols);
+        out.showline( step, time, P );
   }
   
-  // Close file
-  output_finish(file);
-
   // All done
   return 0;
 }
-  

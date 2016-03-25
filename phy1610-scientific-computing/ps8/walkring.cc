@@ -8,7 +8,7 @@
 
 #include <fstream>
 #include <rarray>
-#include "walkring_output.h"
+#include "ringoutput.h"
 #include "walkring_timestep.h"
 #include "walkring_parameters.h"
 
@@ -39,17 +39,18 @@ int main(int argc, char *argv[])
     
   // Allocate walker data
   rarray<int,1> w(Z);
-  // Setup initial conditions for w
+  // Setup initial conditions for w (i.e. all walkers at position zero to start)
   w.fill(0);
   // Setup initial time
   double time = 0.0;
 
-  // Open a file for data output
-  std::ofstream file;
   walkring_evolution evolution ;
-  output_init(file, datafile);  
+
+  // Open a file for data output
+  walkring_output out( datafile, outputcols, N ) ;  
+
   // Initial output to screen
-  output(file, 0, time, N, w, outputcols);
+  out.showline(0, time, w );
 
   // Time evolution
   for (int step = 1; step <= numSteps; step++) {
@@ -62,13 +63,9 @@ int main(int argc, char *argv[])
 
     // Periodically add data to the file
     if (step % outputEvery == 0 and step > 0)      
-      output(file, step, time, N, w, outputcols);
+      out.showline( step, time, w );
   }
   
-  // Close file
-  output_finish(file);
-
   // All done
   return 0;
 }
-
