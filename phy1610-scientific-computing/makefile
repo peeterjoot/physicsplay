@@ -77,13 +77,22 @@ PS8 += ps8.pdf
 PS8 += README.ps8.txt
 PS8 += $(wildcard ps8/*.h ps8/*.cc ps8/*.ini ps8/*.dat)
 
+PS9 += $(wildcard hw9/*.h hw9/*.cc hw9/waveparams.txt hw9/*.sh hw9/*.pl)
+PS9 += ps9.git.log
+PS9 += README.ps9.txt
+PS9 += ps9.sh
+
 TICKTOCK := $(HOME)/ticktock
 
 #all : ps3/ticktock.cc
-all : ps8.tar.gz
+all : ps9.tar.gz
 
 ps8.pdf : ../notes/blogit/ps8.pdf
 	cp ../notes/blogit/ps8.pdf .
+
+ps9.tar.gz : $(PS9) makefile
+	rm -f $@
+	tar zcf $@ $(PS9)
 
 ps8.tar.gz : $(PS8) makefile ps8.pdf
 	rm -f $@
@@ -112,6 +121,9 @@ ps7.git.log :
 
 ps8.git.log : 
 	git log --stat inc ps8 > $@
+
+ps9.git.log : 
+	(cd hw9 && git log --stat .) > $@
 
 $(TICKTOCK) : 
 	(cd ; git clone https://github.com/vanzonr/ticktock.git)

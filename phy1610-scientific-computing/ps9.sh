@@ -1,7 +1,7 @@
 #!/bin/bash
 #PBS -l nodes=1:ppn=8
 #PBS -l walltime=0:15:00
-#PBS -N peeterj-grav-time
+#PBS -N peeterj-ps9part2-time
 
 # Note: submit to queue with:
 # 
