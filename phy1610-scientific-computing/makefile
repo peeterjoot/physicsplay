@@ -77,10 +77,13 @@ PS8 += ps8.pdf
 PS8 += README.ps8.txt
 PS8 += $(wildcard ps8/*.h ps8/*.cc ps8/*.ini ps8/*.dat)
 
-PS9 += $(wildcard hw9/*.h hw9/*.cc hw9/waveparams.txt hw9/*.sh hw9/*.pl)
+PS9 += $(wildcard hw9/*.h hw9/*.cc hw9/*.txt hw9/*.sh hw9/*.pl)
+PS9 += $(wildcard make.*)
 PS9 += ps9.git.log
 PS9 += README.ps9.txt
 PS9 += ps9.sh
+PS9 += hw9/setup
+PS9 += hw9/GNUmakefile
 
 TICKTOCK := $(HOME)/ticktock
 
