@@ -40,6 +40,7 @@ PS7 += scinet.env.ps7
 PS7 += README.ps7.txt
 PS7 += ps7/GNUmakefile
 PS7 += make.vars
+PS7 += make.vars.*
 PS7 += make.rules
 PS7 += ps7/dotprod.cc
 PS7 += ps7/fftstate.cc
@@ -52,6 +53,8 @@ PS7 += inc/myexceptions.h
 PS7 += inc/returncodes.h
 PS7 += inc/stdoutfilestream.h
 PS7 += inc/swapFileNameSuffix.h
+PS7 += inc/carray.h
+PS7 += inc/darray.h
 PS7 += ps7/ratData.cc
 PS7 += ps7/ratToCsv.cc
 PS7 += ps7/streamopen.cc
@@ -77,10 +80,13 @@ PS8 += ps8.pdf
 PS8 += README.ps8.txt
 PS8 += $(wildcard ps8/*.h ps8/*.cc ps8/*.ini ps8/*.dat)
 
-PS9 += $(wildcard hw9/*.h hw9/*.cc hw9/waveparams.txt hw9/*.sh hw9/*.pl)
+PS9 += $(wildcard hw9/*.h hw9/*.cc hw9/*.txt hw9/*.sh hw9/*.pl)
+PS9 += $(wildcard make.*)
 PS9 += ps9.git.log
 PS9 += README.ps9.txt
 PS9 += ps9.sh
+PS9 += hw9/setup
+PS9 += hw9/GNUmakefile
 
 TICKTOCK := $(HOME)/ticktock
 

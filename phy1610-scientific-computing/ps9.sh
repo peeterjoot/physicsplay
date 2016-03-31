@@ -16,6 +16,7 @@ outdir=part2.batch.`date +%F-%T`
 mkdir $outdir
 cd $outdir || exit 7
 
+# 9s per invocation with optimization
 $phy1610/hw9/part2.pl | tee -a part2.out
 $phy1610/hw9/part2.pl | tee -a part2.out
 $phy1610/hw9/part2.pl | tee -a part2.out
