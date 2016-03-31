@@ -109,8 +109,8 @@ BOOST_AUTO_TEST_CASE( correlationTest )
    darray x ;
    darray y ;
 
-   std::ifstream f("x.rat");
-   std::ifstream g("y.rat");
+   std::ifstream f( "x.rat" ) ;
+   std::ifstream g( "y.rat" ) ;
 
    f >> x ;
    g >> y ;
