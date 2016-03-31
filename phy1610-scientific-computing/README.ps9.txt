@@ -18,6 +18,9 @@ hw9/wave1d.cc
    
 hw9/waveparams.txt
    config parameters (modified to remove graphics)
+
+hw9/waveparamsp.txt
+   config file with parallel io enabled, graphics disabled.
    
 hw9/part1.sh
    simple script for part1.  compare basic parallelization results.
