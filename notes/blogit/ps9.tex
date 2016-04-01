@@ -1,0 +1,85 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+%{
+\input{../blogpost.tex}
+\renewcommand{\basename}{ps9}
+\renewcommand{\dirname}{notes/phy1610/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+\usepackage{siunitx}
+
+\beginArtNoToc
+
+\generatetitle{ps9 openmp parallelization}
+%\chapter{ps9 openmp parallelization}
+%\label{chap:ps9}
+% \citep{sakurai2014modern} pr X.Y
+% \citep{pozar2009microwave}
+% \citep{qftLectureNotes}
+
+\section{Parallelization of just the computational loop.}
+
+Scaling by number of threads for a few values of outtime is plotted in
+%
+%\begin{dmath}\label{eqn:ps9:20}
+%outtime = \lr{ 1, 10, 20 },
+%\end{dmath}
+%
+\cref{fig:ps9part2pivotdata:ps9part2pivotdataFig1}.
+
+\imageFigure{../../figures/phy1610/ps9part2pivotdataFig1}{Scaling of just the omp parallization of the computational loop.}{fig:ps9part2pivotdata:ps9part2pivotdataFig1}{0.3}
+
+The respective scaling for 8 threads is
+
+\begin{dmath}\label{eqn:ps9:n}
+\lr{ 3.84, 5.98, 6.22 }.
+\end{dmath}
+
+In particular, when we do a lot of IO, the scaling is really terrible.  It is not so bad when the IO is minimized (outtime=20).
+
+Note that these measurements were taken without optimizing the code.  I wasn't able to easily re-measure them after doing the parallel IO portion of the assignment, since I switched to binary IO as well.
+
+\section{Parallation of the IO}
+
+For this portion of the assignment I asked if we were free to use a binary format for the output files, or whether we should continue to use the text format.
+
+My thought was that with a binary format we have a lot more flexibility to do the IO in a less dumb way.  In particular, when parallelizing the IO using multiple threads each working on a subset of the timestep data output, we can just use a pwrite call so that each thread writes to a mutually exclusive subset of the file, and no critical sections would be required.
+
+Ramses replied that ``Yes, as long as you also rewrite the serial code to use binary output for comparison, you can change to a binary output format''.
+
+It turns out that this defeats part of the point of the assignment, because switching the output to binary IO almost completely eliminates the IO bottleneck of the code, even without any sort of parallelization.  This is demonstrated in the chart of \cref{fig:ps9part5rawData:ps9part5rawDataFig2}, where it can be seen that threading the IO does not make a significant difference in the performance of the given run, and appears to slightly degrade performance.  This makes sense since the memory is all consequitive in memory and on disk, a type of IO that the operating system can deal with quite nicely.  We only slow things down by threading it.  When the IO was done in ASCII, we have the additional bottleneck of formatting all the IO, which requires a lot of codepath.  This was the primary reason that IO showed up as a bottleneck in the original code.
+
+\imageFigure{../../figures/phy1610/ps9part5rawDataFig2}{Raw data for varied IO methods, number of threads, and outtime settings.}{fig:ps9part5rawData:ps9part5rawDataFig2}{0.3}
+
+With minimal IO we have about 3.5x scaling for all the IO methods, which drops to 2.8x scaling (8 threads) at outtime=0.1.
+
+Having switched to binary IO, the multiple file method ends up the slowest of all the IO methods.  Opening multiple files per timestep output execution is just not cost effective, and is much worse than either serial IO or threaded IO to a single file.
+
+In this case, the measurements above were done with optimization (O3) enabled.
+
+See \cref{fig:ps9part5pivotdataMultiFile:ps9part5pivotdataMultiFileFig3} 
+for a plot of the multiple file IO method at various settings.
+
+\imageFigure{../../figures/phy1610/ps9part5pivotdataMultiFileFig3}{Multiple file IO.}{fig:ps9part5pivotdataMultiFile:ps9part5pivotdataMultiFileFig3}{0.3}
+
+See \cref{fig:ps9part5pivotdataSerial:ps9part5pivotdataSerialFig4} 
+for a plot of the serial file IO method at various settings.
+
+\imageFigure{../../figures/phy1610/ps9part5pivotdataSerialFig4}{Serial IO.}{fig:ps9part5pivotdataSerial:ps9part5pivotdataSerialFig4}{0.3}
+
+See \cref{fig:ps9part5pivotdataThreaded:ps9part5pivotdataThreadedFig5}
+for a plot of the threaded single file IO method at various settings.
+
+\imageFigure{../../figures/phy1610/ps9part5pivotdataThreadedFig5}{Threaded single file IO.}{fig:ps9part5pivotdataThreaded:ps9part5pivotdataThreadedFig5}{0.3}
+
+%}
+%\EndArticle
+\EndNoBibArticle
