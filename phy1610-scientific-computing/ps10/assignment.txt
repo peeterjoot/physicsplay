@@ -1,0 +1,33 @@
+Starting from the same code as for assignment 9, you are going to parallelize the 1d damped wave equation using MPI. 
+
+Do the following on the GPC:
+
+   $ git clone /scinet/course/scientific_computing/2016/hw10
+   $ cd hw10
+   $ source setup
+
+In this directory you will find a serial implementation of the 1d wave equation. It takes its parameters from a file called "waveparams.txt". There's a number of nice utilities that it uses, and the whole thing gets compiled with "make".
+
+Your assignment is to find the concurrency in this program and parallelize it using MPI. Use a domain decomposition approach as outlined in class and keep the problem load-balanced. For simplicity just output one file per processor with its section of the problem.
+
+I'd suggest doing this in steps:
+
+   * Include mpi.h, add mpi_init/finalize/comm_size/comm_rank, and compile with mpic++ and make sure it runs;
+
+   * Calculate the local number of points in each process' local domain from the total number of points and the size (and possibly rank). Only allocate arrays of the local domain size plus 2 (for the ghost cells). Treat the case where the total number of points isn't divisible by the number of processors however you like, but make sure you're consistent about it.
+
+   * Make those changes, compile, and run. 
+     As you're developing and testing, start with only 2 procs.
+
+   * Now you'll find that you'll need to figure out the local x1 and local x2 of the domain; once this is done you won't need to know the global variables any more. 
+     Make those changes, compile, and run.
+
+   * Finally, fix the "old" Dirichlet boundary condition setting for internal points, doing the internal boundary conditions of ghost cell copying, as in our example in class with sending messages around to our neighbour.
+
+Do git commits in between all steps. I'd encourage you to use the graphics output while you're developing this.
+
+Next, comment out graphics and I/O, and perform a strong scaling plot (without I/O or graphics) up to 32 cores (4 GPC nodes) with a smaller grid spacing of dx=0.002. Note that for this simple problem, we don't necessarily expect a huge speedup; it's already pretty fast. Discuss the scaling.
+
+Submit code, Makefile, git log, scaling plot, and a text file with a discussion of your findings before 23:55 on April 7th, 2016.
+
+Late submission are excepted until April 14th, 2016, at a penalty of 0.5 point per days (out of 10).
