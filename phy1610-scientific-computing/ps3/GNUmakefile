@@ -99,9 +99,9 @@ ants : $(ANTS_OBJECTS)
 origants : $(ORIGANTS_OBJECTS)
 	$(CXX) $(LDFLAGS) -o $@ $(ORIGANTS_OBJECTS) $(ANTS_LDLIBS)
 
-test: runtestdriver runtestarray
+test: runtest runtestarray
 
-runtestdriver:
+runtest:
 	./testdriver --report_level=detailed
 
 runtestarray:

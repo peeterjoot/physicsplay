@@ -32,7 +32,7 @@ TEST_LDLIBS += $(LDLIBS_BOOSTTEST)
 
 CLEANTARGETS += $(TARGETS)
 
-.PHONY: all clean run rundiffring runwalkring runtestdriver
+.PHONY: all clean run rundiffring runwalkring runtest
 
 all : $(TARGETS)
 
@@ -47,7 +47,7 @@ diffring : $(DIFFRING_OBJECTS)
 test : $(TEST_OBJECTS)
 	$(CXX) -o $@ $(TEST_OBJECTS) $(LDFLAGS) $(TEST_LDFLAGS) $(LDLIBS) $(TEST_LDLIBS)
 
-runtestdriver: test
+runtest: test
 	./test --report_level=detailed
 
 run: rundiffring runwalkring

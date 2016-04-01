@@ -62,7 +62,7 @@ test : $(TEST_OBJECTS)
 
 #grav.cc : ../inc/physicsplay_build_version.h
 
-runtestdriver: test
+runtest: test
 	./test --report_level=detailed
 
 profile.txt: grav

@@ -28,6 +28,9 @@ typedef boost::error_info<tag_match_re,std::string> re_info ;
 struct tag_open_error ;
 typedef boost::error_info<tag_open_error,const char *> open_info ;
 
+struct tag_file_descriptor ;
+typedef boost::error_info<tag_file_descriptor,int> file_descriptor_info ;
+
 struct tag_open_error_origin ;
 typedef boost::error_info<tag_open_error_origin,std::string> name_info ;
 

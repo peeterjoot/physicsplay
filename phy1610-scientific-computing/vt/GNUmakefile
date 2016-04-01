@@ -26,9 +26,9 @@ vt : $(VT_OBJECTS)
 origvt : $(ORIGVT_OBJECTS)
 	$(CXX) $(LDFLAGS) -o $@ $(ORIGVT_OBJECTS) $(VT_LDLIBS)
 
-test: runtestdriver
+test: runtest
 
-runtestdriver:
+runtest:
 	./testdriver --report_level=detailed
 
 testdriver : $(TEST_OBJECTS)
