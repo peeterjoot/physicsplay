@@ -1,6 +1,26 @@
 README.ps9.txt
    This file.
 
+   -fopenmp options were added as can be seen in the compilation output:
+
+      g++ -MMD -Wall -Werror -std=c++11 -I../inc -DNDEBUG -O3 -I/scinet/gpc/Libraries/rarray-1.1/include -I/scinet/gpc/Libraries/boost_1_54_0-gcc4.8.1/include -fopenmp -I../inc -Wno-error=unused-local-typedefs -Wno-unused-local-typedefs -I/scinet/gpc/Libraries/pgplot-centos6/5.2.2-gcc  -c -o wave1d.o wave1d.cc
+      g++ -MMD -Wall -Werror -std=c++11 -I../inc -DNDEBUG -O3 -I/scinet/gpc/Libraries/rarray-1.1/include -I/scinet/gpc/Libraries/boost_1_54_0-gcc4.8.1/include -fopenmp -I../inc -Wno-error=unused-local-typedefs -Wno-unused-local-typedefs -I/scinet/gpc/Libraries/pgplot-centos6/5.2.2-gcc  -c -o arrayIOwriter.o arrayIOwriter.cc
+      g++ -MMD -Wall -Werror -std=c++11 -I../inc -DNDEBUG -O3 -I/scinet/gpc/Libraries/rarray-1.1/include -I/scinet/gpc/Libraries/boost_1_54_0-gcc4.8.1/include -fopenmp -I../inc -Wno-error=unused-local-typedefs -Wno-unused-local-typedefs -I/scinet/gpc/Libraries/pgplot-centos6/5.2.2-gcc  -c -o ticktock.o ticktock.cc
+      g++ -MMD -Wall -Werror -std=c++11 -I../inc -DNDEBUG -O3 -I/scinet/gpc/Libraries/rarray-1.1/include -I/scinet/gpc/Libraries/boost_1_54_0-gcc4.8.1/include -fopenmp -I../inc -Wno-error=unused-local-typedefs -Wno-unused-local-typedefs -I/scinet/gpc/Libraries/pgplot-centos6/5.2.2-gcc  -c -o test.o test.cc
+      g++ -MMD -Wall -Werror -std=c++11 -I../inc -DNDEBUG -O3 -I/scinet/gpc/Libraries/rarray-1.1/include -I/scinet/gpc/Libraries/boost_1_54_0-gcc4.8.1/include -fopenmp -I../inc -Wno-error=unused-local-typedefs -Wno-unused-local-typedefs -I/scinet/gpc/Libraries/pgplot-centos6/5.2.2-gcc  -c -o metaToText.o metaToText.cc
+      g++ -MMD -Wall -Werror -std=c++11 -I../inc -DNDEBUG -O3 -I/scinet/gpc/Libraries/rarray-1.1/include -I/scinet/gpc/Libraries/boost_1_54_0-gcc4.8.1/include -fopenmp -I../inc -Wno-error=unused-local-typedefs -Wno-unused-local-typedefs -I/scinet/gpc/Libraries/pgplot-centos6/5.2.2-gcc  -c -o readem.o readem.cc
+      g++ -MMD -Wall -Werror -std=c++11 -I../inc -DNDEBUG -O3 -I/scinet/gpc/Libraries/rarray-1.1/include -I/scinet/gpc/Libraries/boost_1_54_0-gcc4.8.1/include -fopenmp -I../inc -Wno-error=unused-local-typedefs -Wno-unused-local-typedefs -I/scinet/gpc/Libraries/pgplot-centos6/5.2.2-gcc  -c -o dataToText.o dataToText.cc
+      g++ -o metaToText metaToText.o readem.o   -fopenmp
+      g++ -o dataToText dataToText.o readem.o  -L/scinet/gpc/Libraries/boost_1_54_0-gcc4.8.1/lib -fopenmp -lboost_filesystem
+      g++ -o test test.o arrayIOwriter.o  -L/scinet/gpc/Libraries/boost_1_54_0-gcc4.8.1/lib -fopenmp -lboost_unit_test_framework
+      g++ -o wave1d wave1d.o arrayIOwriter.o ticktock.o  -L/scinet/gpc/Libraries/pgplot-centos6/5.2.2-gcc -fopenmp -lcpgplot -lpgplot -lX11 -lgfortran -lpng
+
+   (to both the compilation and link phases).
+
+ps9.pdf
+
+   report of some observations and timing info.
+
 hw9/inifile.h
 hw9/ticktock.h
 hw9/ticktock.cc
@@ -93,10 +113,23 @@ hw9/part1.sh
 
 hw9/oneThreadRegressionCheck.sh
    regression test: compare single-threaded output against results from that of ../hw9-dist/wave1d
+   This is no longer valid now that I've switched to binary IO.
 
 hw9/timeem.pl
    collect timings varing number of threads using serial IO, parallel IO, and multifile parallel IO.
    
+inc/boosttest.h
+
+   platform helper stuff for boost unittest
+
+inc/integers.h
+
+   Some integer convienience types and macros.
+
+inc/myexceptions.h
+
+   Some boost exception classes and info tag classes for PD data collection.
+
 ps9.git.log
    git log for assignment changes.
 

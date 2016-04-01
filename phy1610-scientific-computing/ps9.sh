@@ -1,7 +1,7 @@
 #!/bin/bash
 #PBS -l nodes=1:ppn=8
 #PBS -l walltime=0:15:00
-#PBS -N peeterj-ps9part2-time
+#PBS -N peeterj-ps9timeem-time
 
 # Note: submit to queue with:
 # 
@@ -12,16 +12,15 @@ phy1610=$HOME/physicsplay/phy1610-scientific-computing
 
 cd $SCRATCH || exit 5
 
-outdir=part2.batch.`date +%F-%T`
+outdir=timeem.batch.`date +%F-%T`
 mkdir $outdir
 cd $outdir || exit 7
 
-# 9s per invocation with optimization
-$phy1610/hw9/part2.pl | tee -a part2.out
-$phy1610/hw9/part2.pl | tee -a part2.out
-$phy1610/hw9/part2.pl | tee -a part2.out
-$phy1610/hw9/part2.pl | tee -a part2.out
-$phy1610/hw9/part2.pl | tee -a part2.out
-$phy1610/hw9/part2.pl | tee -a part2.out
-$phy1610/hw9/part2.pl | tee -a part2.out
-$phy1610/hw9/part2.pl | tee -a part2.out
+$phy1610/hw9/timeem.pl 2>&1 | tee -a timeem.out
+$phy1610/hw9/timeem.pl 2>&1 | tee -a timeem.out
+$phy1610/hw9/timeem.pl 2>&1 | tee -a timeem.out
+$phy1610/hw9/timeem.pl 2>&1 | tee -a timeem.out
+#$phy1610/hw9/timeem.pl | tee -a timeem.out
+#$phy1610/hw9/timeem.pl | tee -a timeem.out
+#$phy1610/hw9/timeem.pl | tee -a timeem.out
+#$phy1610/hw9/timeem.pl | tee -a timeem.out
