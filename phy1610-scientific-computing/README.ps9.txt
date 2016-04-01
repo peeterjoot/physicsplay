@@ -97,6 +97,18 @@ hw9/oneThreadRegressionCheck.sh
 hw9/timeem.pl
    collect timings varing number of threads using serial IO, parallel IO, and multifile parallel IO.
    
+inc/boosttest.h
+
+   platform helper stuff for boost unittest
+
+inc/integers.h
+
+   Some integer convienience types and macros.
+
+inc/myexceptions.h
+
+   Some boost exception classes and info tag classes for PD data collection.
+
 ps9.git.log
    git log for assignment changes.
 

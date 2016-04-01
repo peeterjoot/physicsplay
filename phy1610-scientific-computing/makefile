@@ -91,6 +91,9 @@ PS9 += README.ps9.txt
 PS9 += ps9.sh
 PS9 += hw9/setup
 PS9 += hw9/GNUmakefile
+PS0 += inc/boosttest.h
+PS0 += inc/integers.h
+PS0 += inc/myexceptions.h
 
 TICKTOCK := $(HOME)/ticktock
 
