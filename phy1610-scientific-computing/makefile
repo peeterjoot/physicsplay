@@ -95,16 +95,35 @@ PS9 += inc/integers.h
 PS9 += inc/myexceptions.h
 PS9 += ps9.pdf
 
+PS10 += $(wildcard ps10/*.h ps10/*.cc ps10/wave*.txt ps10/*.sh ps10/*.pl ps10/*.jl ps10/*.csv)
+PS10 += make.rules
+PS10 += make.vars
+#PS10 += make.vars.boosttest
+PS10 += make.vars.rarray
+PS10 += ps10.git.log
+PS10 += README.ps10.txt
+PS10 += ps10.sh
+PS10 += ps10/setup
+PS10 += ps10/GNUmakefile
+#PS10 += inc/boosttest.h
+#PS10 += inc/integers.h
+#PS10 += inc/myexceptions.h
+#PS10 += ps10.pdf
+
 TICKTOCK := $(HOME)/ticktock
 
 #all : ps3/ticktock.cc
-all : ps9.tar.gz
+all : ps10.tar.gz
 
 ps8.pdf : ../notes/blogit/ps8.pdf
 	cp ../notes/blogit/ps8.pdf .
 
 ps9.pdf : ../notes/blogit/ps9.pdf
 	cp ../notes/blogit/ps9.pdf .
+
+ps10.tar.gz : $(PS10) makefile
+	rm -f $@
+	tar zcf $@ $(PS10)
 
 ps9.tar.gz : $(PS9) makefile
 	rm -f $@
@@ -140,6 +159,9 @@ ps8.git.log :
 
 ps9.git.log : 
 	git log --stat inc ps9 > $@
+
+ps10.git.log : 
+	git log --stat inc ps10 > $@
 
 $(TICKTOCK) : 
 	(cd ; git clone https://github.com/vanzonr/ticktock.git)
