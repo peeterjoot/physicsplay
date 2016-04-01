@@ -62,7 +62,8 @@ public:
    {
       serial,
       threaded,
-      multifile
+      multifile,
+      noop
    } ;
 
    /**

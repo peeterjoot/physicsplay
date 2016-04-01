@@ -55,6 +55,10 @@ int main( int argc, char* argv[] )
     {
         ioHow = arrayIOwriter::IO_method::multifile ;
     }
+    else if ( graphics )
+    {
+        ioHow = arrayIOwriter::IO_method::noop ;
+    }
 
     // Output file name
     const std::string dataFileBaseName = outdir + filebase ;

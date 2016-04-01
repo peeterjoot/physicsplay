@@ -52,12 +52,15 @@ arrayIOwriter::arrayIOwriter( const std::string &   filePathAndBaseName,
    , m_nextFileNumber{0}
    , m_filePathAndBaseName( filePathAndBaseName )
 {
-   m_metaDataFd = internalOpen( m_nextFileNumber ) ;
-   m_nextFileNumber++ ;
-
-   if ( IO_method::multifile != m_how )
+   if ( IO_method::noop != m_how )
    {
-      m_fd = internalOpen( m_nextFileNumber ) ;
+      m_metaDataFd = internalOpen( m_nextFileNumber ) ;
+      m_nextFileNumber++ ;
+
+      if ( IO_method::multifile != m_how )
+      {
+         m_fd = internalOpen( m_nextFileNumber ) ;
+      }
    }
 }
 
@@ -137,7 +140,10 @@ void arrayIOwriter::internalPwrite( const int            fd,
 void arrayIOwriter::writeMetaData( const void * const   start,
                                    const size_t         numBytes )
 {
-   internalWrite( m_metaDataFd, start, numBytes ) ;
+   if ( IO_method::noop != m_how )
+   {
+      internalWrite( m_metaDataFd, start, numBytes ) ;
+   }
 }
 
 void arrayIOwriter::writeData( const void * const   start,
