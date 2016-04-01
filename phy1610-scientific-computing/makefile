@@ -80,8 +80,7 @@ PS8 += ps8.pdf
 PS8 += README.ps8.txt
 PS8 += $(wildcard ps8/*.h ps8/*.cc ps8/*.ini ps8/*.dat)
 
-PS9 += $(wildcard hw9/*.h hw9/*.cc hw9/wave*.txt hw9/*.sh hw9/*.pl hw9/*.jl hw9/*.csv)
-#PS9 += $(wildcard make.*)
+PS9 += $(wildcard ps9/*.h ps9/*.cc ps9/wave*.txt ps9/*.sh ps9/*.pl ps9/*.jl ps9/*.csv)
 PS9 += make.rules
 PS9 += make.vars
 PS9 += make.vars.boosttest
@@ -89,8 +88,8 @@ PS9 += make.vars.rarray
 PS9 += ps9.git.log
 PS9 += README.ps9.txt
 PS9 += ps9.sh
-PS9 += hw9/setup
-PS9 += hw9/GNUmakefile
+PS9 += ps9/setup
+PS9 += ps9/GNUmakefile
 PS9 += inc/boosttest.h
 PS9 += inc/integers.h
 PS9 += inc/myexceptions.h
@@ -140,7 +139,7 @@ ps8.git.log :
 	git log --stat inc ps8 > $@
 
 ps9.git.log : 
-	(cd hw9 && git log --stat .) > $@
+	git log --stat inc ps9 > $@
 
 $(TICKTOCK) : 
 	(cd ; git clone https://github.com/vanzonr/ticktock.git)

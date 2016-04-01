@@ -4,26 +4,26 @@ README.ps9.txt
 ps9.pdf
    Summary report and graphs.
 
-hw9/inifile.h
-hw9/ticktock.h
-hw9/ticktock.cc
+ps9/inifile.h
+ps9/ticktock.h
+ps9/ticktock.cc
    original supplied files.   
 
-hw9/setup
+ps9/setup
    Tweaked to deal with malfunctioning default gdb
 
 make.rules
 make.vars
 make.vars.boosttest
 make.vars.rarray
-hw9/GNUmakefile
+ps9/GNUmakefile
    Makefile for this assignment.  Not all the make.vars* files here are used for this assignment.
 
-hw9/iometadata.h
+ps9/iometadata.h
    Data structure that describes the fixed part of the metadata layout.
 
-hw9/arrayIOwriter.cc
-hw9/arrayIOwriter.h
+ps9/arrayIOwriter.cc
+ps9/arrayIOwriter.h
 
    Three IO methods are implemented, as specified in the assignment, but have been modified slightly:
 
@@ -67,38 +67,38 @@ hw9/arrayIOwriter.h
 
    these files implement a binary IO data writing 
 
-hw9/readem.h
-hw9/readem.cc
+ps9/readem.h
+ps9/readem.cc
    A hacky binary read method that aborts on any error.  Just used for the
    meta-to-text and data-to-text utilities.
 
-hw9/dataToText.cc
-hw9/metaToText.cc
+ps9/dataToText.cc
+ps9/metaToText.cc
    debug utility code to read from the data and meta binary files and dump out text.
 
-hw9/test.cc
+ps9/test.cc
    boost test driver for the binary file IO class.
 
-hw9/wave1d.cc
+ps9/wave1d.cc
    with parallization
    
-hw9/waveparams.txt
+ps9/waveparams.txt
    config parameters (modified to remove graphics)
 
-hw9/waveparamst.txt
+ps9/waveparamst.txt
    config file with thread based parallel io to a single file enabled, graphics disabled.
 
-hw9/waveparamsp.txt
+ps9/waveparamsp.txt
    config file with multifile parallel io enabled, graphics disabled.
    
-hw9/part1.sh
+ps9/part1.sh
    simple script for part1.  compare basic parallelization results.
 
-hw9/oneThreadRegressionCheck.sh
-   regression test: compare single-threaded output against results from that of ../hw9-dist/wave1d
+ps9/oneThreadRegressionCheck.sh
+   regression test: compare single-threaded output against results from that of ../ps9-dist/wave1d
    This is no longer valid now that I've switched to binary IO.
 
-hw9/timeem.pl
+ps9/timeem.pl
    collect timings varing number of threads using serial IO, parallel IO, and multifile parallel IO.
    
 inc/boosttest.h
@@ -113,12 +113,12 @@ inc/myexceptions.h
 
    Some boost exception classes and info tag classes for PD data collection.
 
-hw9/part2pivotdata.csv
-hw9/part5pivotdata.csv
-hw9/plotpart2.jl
-hw9/plotpart5m.jl
-hw9/plotpart5s.jl
-hw9/plotpart5t.jl
+ps9/part2pivotdata.csv
+ps9/part5pivotdata.csv
+ps9/plotpart2.jl
+ps9/plotpart5m.jl
+ps9/plotpart5s.jl
+ps9/plotpart5t.jl
 
    data and scripts for the report plots.
 
@@ -126,7 +126,7 @@ ps9.git.log
    git log for assignment changes.
 
 ps9.sh
-   qsub script to collect timing info.  Runs hw9/part2.pl a few times on a non-devel node.
+   qsub script to collect timing info.  Runs ps9/part2.pl a few times on a non-devel node.
 
 TODO:
    Report: part2.ods:
