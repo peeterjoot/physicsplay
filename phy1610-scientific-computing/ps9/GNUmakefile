@@ -8,7 +8,6 @@
 
 PRODUCTION := 1
 #PROFILED := 1
-#USE_OPENBLAS := 1
 
 CXXSTD += -std=c++11
 
