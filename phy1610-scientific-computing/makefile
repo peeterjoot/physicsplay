@@ -80,7 +80,7 @@ PS8 += ps8.pdf
 PS8 += README.ps8.txt
 PS8 += $(wildcard ps8/*.h ps8/*.cc ps8/*.ini ps8/*.dat)
 
-PS9 += $(wildcard hw9/*.h hw9/*.cc hw9/wave*.txt hw9/*.sh hw9/*.pl)
+PS9 += $(wildcard hw9/*.h hw9/*.cc hw9/wave*.txt hw9/*.sh hw9/*.pl hw9/*.jl hw9/*.csv)
 #PS9 += $(wildcard make.*)
 PS9 += make.rules
 PS9 += make.vars
@@ -94,6 +94,7 @@ PS9 += hw9/GNUmakefile
 PS9 += inc/boosttest.h
 PS9 += inc/integers.h
 PS9 += inc/myexceptions.h
+PS9 += ps9.pdf
 
 TICKTOCK := $(HOME)/ticktock
 
@@ -102,6 +103,9 @@ all : ps9.tar.gz
 
 ps8.pdf : ../notes/blogit/ps8.pdf
 	cp ../notes/blogit/ps8.pdf .
+
+ps9.pdf : ../notes/blogit/ps9.pdf
+	cp ../notes/blogit/ps9.pdf .
 
 ps9.tar.gz : $(PS9) makefile
 	rm -f $@
