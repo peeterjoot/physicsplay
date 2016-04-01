@@ -51,7 +51,7 @@ DATATOTEXT_SOURCES += dataToText.cc
 DATATOTEXT_SOURCES += readem.cc
 DATATOTEXT_OBJECTS := $(subst .cc,.o,$(DATATOTEXT_SOURCES))
 DATATOTEXT_LDFLAGS += -L$(SCINET_BOOST_LIB_DIR)
-DATATOTEXT_LDLIBS += -lboost_filesystem
+DATATOTEXT_LDLIBS += -lboost_filesystem -lboost_system
 
 CLEANTARGETS += $(TARGETS)
 CLEANTARGETS += waveparams_*txt

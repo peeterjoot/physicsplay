@@ -117,9 +117,12 @@ BOOST_AUTO_TEST_CASE( testWriterLargerArray )
    checkFileEquality( "serial00000.out", "threaded00000.out" ) ;
    checkFileEquality( "serial00000.out", "multifile00000.out" ) ;
 
-   system( "cat serial*out > sall.out" ) ;
-   system( "cat threaded*out > tall.out" ) ;
-   system( "cat multifile*out > mall.out" ) ;
+   int rc = system( "cat serial*out > sall.out" ) ;
+   BOOST_REQUIRE( 0 == rc ) ;
+   rc = system( "cat threaded*out > tall.out" ) ;
+   BOOST_REQUIRE( 0 == rc ) ;
+   rc = system( "cat multifile*out > mall.out" ) ;
+   BOOST_REQUIRE( 0 == rc ) ;
 
    checkFileEquality( "sall.out", "tall.out" ) ;
    checkFileEquality( "sall.out", "mall.out" ) ;
