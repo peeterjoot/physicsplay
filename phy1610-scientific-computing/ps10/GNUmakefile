@@ -10,6 +10,7 @@
 #PROFILED := 1
 
 CXXSTD += -std=c++11
+CXX := mpic++
 
 include ../make.vars
 include ../make.vars.rarray
