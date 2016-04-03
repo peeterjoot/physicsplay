@@ -19,6 +19,8 @@ include ../make.vars.rarray
 CXXFLAGS += $(PGPLOT_CXXFLAGS)
 #CXXFLAGS += -fopenmp
 CXXFLAGS += -I../inc
+CXXFLAGS += -Wno-error=literal-suffix
+CXXFLAGS += -Wno-literal-suffix
 
 # boost noisyness:
 #CXXFLAGS += -Wno-error=unused-local-typedefs
