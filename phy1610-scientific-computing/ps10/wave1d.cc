@@ -19,9 +19,11 @@ int main(int argc, char* argv[])
    int rank ;
    int size ;
    int err ;
+#if 0
    double msgsent, msgrcvd ;
    MPI_Status rstatus ;
    int tag = 1 ;
+#endif
 
    err = MPI_Init( &argc, &argv ) ;
    if ( err )
@@ -41,26 +43,6 @@ int main(int argc, char* argv[])
       printf( "rank err: %d\n", err ) ;
       abort() ;
    }
-
-   msgsent = rank * rank ;
-   msgrcvd = -999. ;
-
-   int left = (rank - 1 + size) % size ;
-   int right = (rank + 1) % size ;
-
-   err = MPI_Sendrecv( &msgsent, 1, MPI_DOUBLE, right, tag,
-                  &msgrcvd, 1, MPI_DOUBLE, left, tag,
-                  MPI_COMM_WORLD, &rstatus ) ;
-   if ( err )
-   {
-      printf( "sendrecv err = %d\n", err ) ;
-      abort() ;
-   }
- 
-   std::cout << "Hello from task.  Rank = " << rank << ", size = " << size << " world.  msgsent = " << msgsent << ", msgrcvd = " << msgrcvd << "\n" ;
- 
-   err = MPI_Finalize() ;
-   return 0 ;
 
    // Open inifile and parse (using Inifile class from inifile.h)
    Inifile parameter(argc==1?"default.txt":argv[1]) ;
@@ -211,6 +193,13 @@ int main(int argc, char* argv[])
    {
       dataFile.close() ;
    }
-   
+  
+   err = MPI_Finalize() ;
+   if ( err )
+   {
+      printf( "rank err: %d\n", err ) ;
+      abort() ;
+   }
+
    return 0 ;
 }
