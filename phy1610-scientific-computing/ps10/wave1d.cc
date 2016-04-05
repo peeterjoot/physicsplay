@@ -3,6 +3,10 @@
 // to use pgplot for runtime display of solution with 1 second between frames.
 //
 // SciNet - March 2015
+//
+//
+// https://support.scinet.utoronto.ca/education/go.php/176/content.php/cid/291/
+//
 
 #include <iostream>
 #include <fstream>
@@ -48,42 +52,42 @@ int main( int argc, char* argv[] )
    Inifile parameter(argc==1?"default.txt":argv[1]) ;
 
    // Physical parameters
-   double  c      = parameter.get<double>("c", 1.0) ;    // wave speed
-   double  tau    = parameter.get<double>("tau", 20.0) ;  // damping time
-   double  x1     = parameter.get<double>("x1", -26.0) ;  // left most x value
-   double  x2     = parameter.get<double>("x2", +26.0) ;  // right most x value
+   const double  c      = parameter.get<double>("c", 1.0) ;    // wave speed
+   const double  tau    = parameter.get<double>("tau", 20.0) ;  // damping time
+   const double  x1     = parameter.get<double>("x1", -26.0) ;  // left most x value
+   const double  x2     = parameter.get<double>("x2", +26.0) ;  // right most x value
 
    // Simulation parameters
-   double  runtime = parameter.get<double>("runtime", 50.0) ;   // how long should the simulation try to compute?
-   double  dx     = parameter.get<double>("dx", 0.01) ;      // spatial grid size  //0.02
+   const double  runtime = parameter.get<double>("runtime", 50.0) ;   // how long should the simulation try to compute?
+   const double  dx     = parameter.get<double>("dx", 0.01) ;      // spatial grid size  //0.02
 
    // Output parameters
-   double  outtime =  parameter.get<double>("outtime", 1.0) ; // how often should a snapshot of the wave be written out?
+   const double  outtime =  parameter.get<double>("outtime", 1.0) ; // how often should a snapshot of the wave be written out?
 
-   bool   graphics = parameter.get<bool>("graphics", false) ;   // output to graphics (with 1 sec delay)  or to a file?
+   const bool   graphics = parameter.get<bool>("graphics", false) ;   // output to graphics (with 1 sec delay)  or to a file?
 
    // Output file name
-   const std::string dataFilename = "dataFilename.out" ;
+   std::string dataFilename = "dataFilename.out" ;
 
    // Derived parameters
-   int    ngrid   = (x2-x1)/dx ;  // number of x points
-   int    npnts   = ngrid + 2 ;   // number of x points including boundary points
-   double  dt     = 0.5*dx/c ;   // time step size
-   int    nsteps  = runtime/dt ;  // number of steps of that size to reach runtime
-   int    nper   = outtime/dt ;  // how many step s between snapshots
+   const int    ngrid   = (x2-x1)/dx ;  // number of x points
+   const int    npnts   = ngrid + 2 ;   // number of x points including boundary points
+   const double dt      = 0.5*dx/c ;    // time step size
+   const int    nsteps  = runtime/dt ;  // number of steps of that size to reach runtime
+   const int    nper    = outtime/dt ;  // how many step s between snapshots
 
    // Report all the values.
-   std::cout << "#c      " << c      << std::endl ;
-   std::cout << "#tau     " << tau    << std::endl ;
-   std::cout << "#x1      " << x1     << std::endl ;
-   std::cout << "#x2      " << x2     << std::endl ;
+   std::cout << "#c        " << c       << std::endl ;
+   std::cout << "#tau      " << tau     << std::endl ;
+   std::cout << "#x1       " << x1      << std::endl ;
+   std::cout << "#x2       " << x2      << std::endl ;
    std::cout << "#runtime  " << runtime << std::endl ;
-   std::cout << "#dx      " << dx     << std::endl ;
+   std::cout << "#dx       " << dx      << std::endl ;
    std::cout << "#outtime  " << outtime << std::endl ;
-   std::cout << "#ngrid   " << ngrid   << std::endl ;
-   std::cout << "#dt      " << dt     << std::endl ;
+   std::cout << "#ngrid    " << ngrid   << std::endl ;
+   std::cout << "#dt       " << dt      << std::endl ;
    std::cout << "#nsteps   " << nsteps  << std::endl ;
-   std::cout << "#nper    " << nper   << std::endl ;
+   std::cout << "#nper     " << nper    << std::endl ;
    std::cout << "#graphics " << int(graphics) << std::endl ;
 
    // Define and allocate arrays.
@@ -132,12 +136,13 @@ int main( int argc, char* argv[] )
    }
    else
    {
+      dataFilename += '_' + std::to_string( rank ) ;
+
       dataFile.open( dataFilename.c_str() ) ;
 
       if ( rank == 0 )
       {
-         dataFile << nper << ','
-                  << npnts      << '\n' ;
+         dataFile << nper  << ',' << npnts << '\n' ;
          dataFile << 0.0 << '\n' ;
 
          for ( int i = 0 ; i < npnts ; i++ )
@@ -154,6 +159,9 @@ int main( int argc, char* argv[] )
       }
    }
 
+   const double laplacianScaleFactor{ pow( c/dx, 2 ) * dt } ;
+   const double invTau{ 1/tau } ;
+
    // measure time
    TickTock tt ;
    tt.tick() ;
@@ -167,24 +175,28 @@ int main( int argc, char* argv[] )
       rho[ngrid+1] = 0.0 ;
 
       // Evolve
+      // \partial_{tt} u - c^2 \partial_{xx} u + \inv{\tau} \partial_t u = 0
+      //
+      // \partial_t ( \partial_t u + u/\tau ) = c^2 \partial_{xx} u
       for ( int i = 1 ; i <= ngrid ; i++ )
       {
-         float laplacian = pow(c/dx,2)*(rho[i+1] + rho[i-1] - 2*rho[i]) ;
-         float friction = (rho[i] - rho_prev[i])/tau ;
-         rho_next[i] = 2*rho[i] - rho_prev[i] + dt*(laplacian*dt-friction) ;
+         float laplacianTimesDt = laplacianScaleFactor * ( rho[i+1] + rho[i-1] - 2 * rho[i] ) ;
+         float friction         = ( rho[i] - rho_prev[i] ) * invTau ;
+
+         rho_next[i] = 2 * rho[i] - rho_prev[i] + dt * ( laplacianTimesDt - friction ) ;
       }
 
       // Rotate array pointers so t+1 becomes the new t etc.
       rarray<float,1> temp ;
-      temp    = rho_prev ;
+      temp     = rho_prev ;
       rho_prev = rho ;
-      rho     = rho_next ;
+      rho      = rho_next ;
       rho_next = temp ;
 	
       //Output every nper
-//      if ((s+1)%nper == 0)
+//      if ( (s+1)%nper == 0 )
       {
-         if (graphics)
+         if ( graphics )
          {
             cpgbbuf() ;
             cpgeras() ;
@@ -199,8 +211,9 @@ int main( int argc, char* argv[] )
             cpgebuf() ;
             sleep(1) ; // artificial delay!
          }
-         else
+         else if ( 0 )
          {
+// FIXME: would have to sync the output between workers, or write to different files.
             dataFile << s * dt << '\n' ;
 
             for ( int i = 0 ; i < npnts ; i++ )
