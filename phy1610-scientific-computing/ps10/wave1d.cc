@@ -16,6 +16,7 @@
 #include <cpgplot.h>
 #include "ticktock.h"
 #include "inifile.h"
+#include "farray.h"
 #include <mpi.h>
 
 int main( int argc, char* argv[] )
@@ -91,11 +92,11 @@ int main( int argc, char* argv[] )
    std::cout << "#graphics " << int(graphics) << std::endl ;
 
    // Define and allocate arrays.
-   rarray<float,1> rho_prev(npnts) ; // time step t-1
-   rarray<float,1> rho(npnts) ;     // time step t
-   rarray<float,1> rho_next(npnts) ; // time step t+1
-   rarray<float,1> rho_init(npnts) ; // initial values
-   rarray<float,1> x(npnts) ;      // x values
+   farray rho_prev(npnts) ; // time step t-1
+   farray rho(npnts) ;      // time step t
+   farray rho_next(npnts) ; // time step t+1
+   farray rho_init(npnts) ; // initial values
+   farray x(npnts) ;        // x values
 
    // Initialize.
    for ( int i = 0 ; i < npnts ; i++ )
@@ -109,7 +110,7 @@ int main( int argc, char* argv[] )
    // Excite.
    for ( int i = npnts/4 + 1 ; i < 3*npnts/4 ; i++ )
    {
-      rho[i] = 0.25 - fabs(float(i-npnts/2)/float(npnts)) ;
+      rho[i] = 0.25 - fabs( float(i-npnts/2) / float(npnts) ) ;
       rho_prev[i] = rho[i] ;
       rho_init[i] = rho[i] ;
    }
@@ -187,7 +188,7 @@ int main( int argc, char* argv[] )
       }
 
       // Rotate array pointers so t+1 becomes the new t etc.
-      rarray<float,1> temp ;
+      farray temp ;
       temp     = rho_prev ;
       rho_prev = rho ;
       rho      = rho_next ;

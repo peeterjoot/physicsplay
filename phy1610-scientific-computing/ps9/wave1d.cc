@@ -13,11 +13,10 @@
 #include <time.h>
 #include "ticktock.h"
 #include "inifile.h"
+#include "farray.h"
 #include <omp.h>
 #include "arrayIOwriter.h"
 #include "iometadata.h"
-
-using farray = rarray<float, 1> ;
 
 int main( int argc, char* argv[] )
 {
