@@ -9,7 +9,7 @@
 #PRODUCTION := 1
 #PROFILED := 1
 
-CXXSTD += -std=c++11
+#CXXSTD := -std=c++11
 CXX := mpic++
 
 include ../make.vars
