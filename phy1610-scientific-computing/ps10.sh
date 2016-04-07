@@ -1,7 +1,7 @@
 #!/bin/bash
-#PBS -l nodes=1:ppn=8
+#PBS -l nodes=4:ppn=8
 #PBS -l walltime=0:15:00
-#PBS -N peeterj-ps10timeem-time
+#PBS -N peeterj-ps10timeem
 
 # Note: submit to queue with:
 # 
@@ -18,9 +18,3 @@ cd $outdir || exit 7
 
 $phy1610/ps10/timeem.pl 2>&1 | tee -a timeem.out
 $phy1610/ps10/timeem.pl 2>&1 | tee -a timeem.out
-$phy1610/ps10/timeem.pl 2>&1 | tee -a timeem.out
-$phy1610/ps10/timeem.pl 2>&1 | tee -a timeem.out
-#$phy1610/ps10/timeem.pl | tee -a timeem.out
-#$phy1610/ps10/timeem.pl | tee -a timeem.out
-#$phy1610/ps10/timeem.pl | tee -a timeem.out
-#$phy1610/ps10/timeem.pl | tee -a timeem.out

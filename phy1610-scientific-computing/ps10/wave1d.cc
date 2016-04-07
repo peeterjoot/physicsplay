@@ -80,6 +80,8 @@ int main( int argc, char* argv[] )
    // Output file name
    const std::string    dataFilename  = parameter.get<std::string>( "outfilebasename", "dataFilename" ) ;   // 
 
+   const bool           ioenabled = parameter.get<bool>( "ioenabled", 0 ) ;   // output to a file (not attempted if graphics enabled)
+
    // Derived parameters
    const int    ngrid   = (x2-x1)/dx ;  // number of x points
    const double dt      = 0.5*dx/c ;    // time step size
@@ -87,18 +89,19 @@ int main( int argc, char* argv[] )
    const int    nper    = outtime/dt ;  // how many step s between snapshots
 
    // Report all the values.
-   std::cout << "#c        " << c       << std::endl ;
-   std::cout << "#tau      " << tau     << std::endl ;
-   std::cout << "#x1       " << x1      << std::endl ;
-   std::cout << "#x2       " << x2      << std::endl ;
-   std::cout << "#runtime  " << runtime << std::endl ;
-   std::cout << "#dx       " << dx      << std::endl ;
-   std::cout << "#outtime  " << outtime << std::endl ;
-   std::cout << "#ngrid    " << ngrid   << std::endl ;
-   std::cout << "#dt       " << dt      << std::endl ;
-   std::cout << "#nsteps   " << nsteps  << std::endl ;
-   std::cout << "#nper     " << nper    << std::endl ;
-   std::cout << "#graphics " << int(graphics) << std::endl ;
+   std::cout << "#c         " << c       << std::endl ;
+   std::cout << "#tau       " << tau     << std::endl ;
+   std::cout << "#x1        " << x1      << std::endl ;
+   std::cout << "#x2        " << x2      << std::endl ;
+   std::cout << "#runtime   " << runtime << std::endl ;
+   std::cout << "#dx        " << dx      << std::endl ;
+   std::cout << "#outtime   " << outtime << std::endl ;
+   std::cout << "#ngrid     " << ngrid   << std::endl ;
+   std::cout << "#dt        " << dt      << std::endl ;
+   std::cout << "#nsteps    " << nsteps  << std::endl ;
+   std::cout << "#nper      " << nper    << std::endl ;
+   std::cout << "#graphics  " << graphics << std::endl ;
+   std::cout << "#ioenabled " << int(ioenabled) << std::endl ;
 
    rangePartition partition( ngrid, size, rank ) ;
    auto pgrid{ partition.localPartitionSize() } ;
@@ -174,7 +177,7 @@ int main( int argc, char* argv[] )
       cpgsci( red ) ;
       cpgline( npnts, x.data( ), &rho_init[0] ) ;
    }
-   else
+   else if ( ioenabled )
    {
       dataFile.open( dataFilename + std::to_string( rank ) + ".out" ) ;
 
@@ -260,7 +263,7 @@ int main( int argc, char* argv[] )
             cpgebuf( ) ;
             //sleep( 1 ) ; // artificial delay!
          }
-         else
+         else if ( ioenabled )
          {
             for ( auto j{fullrange.first-1} ; j <= (fullrange.second+1) ; j++ )
             {
@@ -285,7 +288,7 @@ int main( int argc, char* argv[] )
    std::cout << "#Walltime = " << tt.silent_tock() << " sec."  << std::endl ;
 
    // Close file.
-   if ( not graphics )
+   if ( not graphics and ioenabled )
    {
       dataFile.close() ;
    }

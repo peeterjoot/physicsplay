@@ -46,7 +46,7 @@ sub runcfg
       print $fh $cfgdata ;
       close $fh or die ;
 
-      my $ps9dir = "$ENV{HOME}/physicsplay/phy1610-scientific-computing/hw9" ;
+      my $ps9dir = "$ENV{HOME}/physicsplay/phy1610-scientific-computing/ps9" ;
 
       print "running $ps9dir/wave1d $cfgpath\n" ;
 
