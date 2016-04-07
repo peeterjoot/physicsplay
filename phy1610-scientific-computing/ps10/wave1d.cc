@@ -27,11 +27,6 @@ int main( int argc, char* argv[] )
    int rank{-1} ;
    int size{-1} ;
    int err ;
-#if 0
-   double msgsent, msgrcvd ;
-   MPI_Status rstatus ;
-   int tag = 1 ;
-#endif
 
    err = MPI_Init( &argc, &argv ) ;
    if ( err )
@@ -80,10 +75,9 @@ int main( int argc, char* argv[] )
    const double         outtime  = parameter.get<double>( "outtime", 1.0 ) ; // how often should a snapshot of the wave be written out?
 
    const bool           graphics = parameter.get<bool>( "graphics", false ) ;   // output to graphics (with 1 sec delay)  or to a file?
-   const std::string    initlog  = parameter.get<std::string>( "initlog", "" ) ;   // 
 
    // Output file name
-   std::string dataFilename = "dataFilename.out" ;
+   const std::string    dataFilename  = parameter.get<std::string>( "outfilebasename", "dataFilename" ) ;   // 
 
    // Derived parameters
    const int    ngrid   = (x2-x1)/dx ;  // number of x points
@@ -108,6 +102,8 @@ int main( int argc, char* argv[] )
    rangePartition partition( ngrid, size, rank ) ;
    auto pgrid{ partition.localPartitionSize() } ;
    auto npnts{ pgrid + 2 } ;
+   std::cout << "#pgrid " << int(pgrid) << std::endl ;
+   std::cout << "#npnts " << int(npnts) << std::endl ;
 
    // Define and allocate arrays.
    farray rho_prev(npnts) ; // time step t-1
@@ -116,6 +112,9 @@ int main( int argc, char* argv[] )
    farray rho_init(npnts) ; // initial values
    farray x(npnts) ;        // x values
 
+   // Set zero dirichlet boundary conditions for the global domain.  If one or more of the end points are ghost cells 
+   // in a size>1 mpirun, then the ghost-cell boundary values will be filled in properly when rho[] is initialized
+   // below
    rho.fill( 0.0 ) ;
    rho_prev.fill( 0.0 ) ;
    rho_next.fill( 0.0 ) ;
@@ -129,6 +128,8 @@ int main( int argc, char* argv[] )
 
       x[i] = x1 + (((int)j-1)*(x2-x1))/ngrid ;
    }
+   double localX1 = x[ 1 ] ;
+   double localX2 = x[ npnts ] ;
 
    auto global_npnts{ ngrid + 2 } ;
 
@@ -149,70 +150,50 @@ int main( int argc, char* argv[] )
       }
    }
 
-   if ( initlog != "" )
+   // Plot or output:
+   int red, grey, white ;
+   std::ofstream dataFile ;
+
+   if ( graphics )
    {
-      std::ofstream f( initlog + std::to_string( rank ) + ".out" ) ;
+      cpgbeg( 0, "/xwindow", 1, 1 ) ;
+      cpgask( 0 ) ;
+      red = 2 ; cpgscr( red, 1., 0., 0. ) ;
+      grey = 3 ; cpgscr( grey, .2, .2, .2 ) ;
+      white = 4 ; cpgscr( white, 1.0, 1.0, 1.0 ) ;
+      cpgsls( 1 ) ;
+      cpgslw( 6 ) ;
+      cpgsci( white ) ;
+      cpgslw( 2 ) ;
+      cpgenv( localX1, localX2, 0., 0.25, 0, 0 ) ;
+      cpglab( "x", "rho", "Wave Test" ) ;
+      cpgsls( 1 ) ;
+      cpgslw( 6 ) ;
+      cpgsci( white ) ;
+      cpgline( npnts, x.data( ), rho.data( ) ) ;
+      cpgsls( 2 ) ;
+      cpgslw( 12 ) ;
+      cpgsci( red ) ;
+      cpgline( npnts, x.data( ), &rho_init[0] ) ;
+   }
+   else
+   {
+      dataFile.open( dataFilename + std::to_string( rank ) + ".out" ) ;
 
       for ( auto j{fullrange.first-1} ; j <= (fullrange.second+1) ; j++ )
       {
          int i = partition.toLocalDomain( j ) ;
 
-#if 0
+         #if 0
          if ( (j == (fullrange.first-1)) || (j == (fullrange.second+1)) )
          {
-            f << "init: " << j << ", " << x[i] << ", " << rho[i] << ", r: " << rank << '\n' ;
+            dataFile << "init: " << j << ", " << x[i] << ", " << rho[i] << ", r: " << rank << '\n' ;
          }
          else
-#endif
+         #endif
          {
-            f << "init: " << j << ", " << x[i] << ", " << rho[i] << '\n' ;
+            dataFile << "init: " << j << ", " << x[i] << ", " << rho[i] << '\n' ;
          }
-      }
-   }
-
-#if 0
-   // Plot or Write out data.
-   std::ofstream dataFile ;
-   int red, grey, white ;
-
-   if ( graphics )
-   {
-      cpgbeg(0, "/xwindow", 1, 1) ;
-      cpgask(0) ;
-      red = 2 ; cpgscr(red,1.,0.,0.) ;
-      grey = 3 ; cpgscr(grey,.2,.2,.2) ;
-      white = 4 ; cpgscr(white,1.0,1.0,1.0) ;
-      cpgsls(1) ; cpgslw(6) ; cpgsci(white) ;
-      cpgslw(2) ;
-      cpgenv(x1, x2, 0., 0.25, 0, 0) ;
-      cpglab("x", "rho", "Wave Test") ;
-      cpgsls(1) ; cpgslw(6) ; cpgsci(white) ;
-      cpgline(npnts, x.data(), rho.data()) ;
-      cpgsls(2) ; cpgslw(12) ; cpgsci(red) ;
-      cpgline(npnts, x.data(), &rho_init[0]) ;
-   }
-   else
-   {
-      dataFilename += '_' + std::to_string( rank ) ;
-
-      dataFile.open( dataFilename.c_str() ) ;
-
-      if ( rank == 0 )
-      {
-         dataFile << nper  << ',' << npnts << '\n' ;
-         dataFile << 0.0 << '\n' ;
-
-         for ( int i = 0 ; i < npnts ; i++ )
-         {
-            dataFile << x[i] << '\n' ;
-         }
-
-         for ( int i = 0 ; i < npnts ; i++ )
-         {
-            dataFile << rho[i] << '\n' ;
-         }
-
-         dataFile << '\n' ;
       }
    }
 
@@ -224,24 +205,51 @@ int main( int argc, char* argv[] )
    tt.tick() ;
 
    // Take timesteps
-   for ( int s = 0 ; s < nsteps ; s++ )
+//   for ( int s = 0 ; s < nsteps ; s++ )
+   for ( int s = 0 ; s < 1 ; s++ )
    {
-
-      // Set zero dirichlet boundary conditions
-      rho[0] = 0.0 ;
-      rho[ngrid+1] = 0.0 ;
-
       // Evolve
       // \partial_{tt} u - c^2 \partial_{xx} u + \inv{\tau} \partial_t u = 0
       //
       // \partial_t ( \partial_t u + u/\tau ) = c^2 \partial_{xx} u
-      for ( int i = 1 ; i <= ngrid ; i++ )
+      for ( auto j{fullrange.first} ; j <= fullrange.second ; j++ )
       {
+         auto i { partition.toLocalDomain( j ) } ;
+
          float laplacianTimesDt = laplacianScaleFactor * ( rho[i+1] + rho[i-1] - 2 * rho[i] ) ;
          float friction         = ( rho[i] - rho_prev[i] ) * invTau ;
 
          rho_next[i] = 2 * rho[i] - rho_prev[i] + dt * ( laplacianTimesDt - friction ) ;
       }
+
+      float recievedTrailingGhostCell
+      // send trailing ghostcell to the right and recieve the leading ghostcell from the right
+      {
+         MPI_Status rstatus ;
+         int tag = 1 ;
+
+         int left = rank - 1 ;
+         if ( left < 0 )
+         {
+            left = MPI_PROC_NULL ;
+         }
+         int right = rank + 1 ;
+         if ( right >= size )
+         {
+            right = MPI_PROC_NULL ;
+         }
+
+         err = MPI_Sendrecv( &rho_next[ npnts ], 1, MPI_FLOAT, right, tag,
+                             &rho_next[ npnts + 1 ], 1, MPI_FLOAT, left, tag,
+                             MPI_COMM_WORLD, &rstatus ) ;
+         if ( err )
+         {
+            printf( "sendrecv err = %d\n", err ) ;
+            abort() ;
+         }
+         
+         std::cout << "#Rank = " << rank << ", size = " << size << ". msgsent = " << msgsent << ", msgrcvd = " << msgrcvd << "\n" ;
+      } 
 
       // Rotate array pointers so t+1 becomes the new t etc.
       farray temp ;
@@ -255,44 +263,54 @@ int main( int argc, char* argv[] )
       {
          if ( graphics )
          {
-            cpgbbuf() ;
-            cpgeras() ;
-            cpgsls(1) ; cpgslw(6) ; cpgsci(white) ;
-            cpgslw(2) ;
-            cpgenv(x1, x2, 0., 0.25, 0, 0) ;
-            cpglab("x", "rho", "Wave test") ;  //t=s*dt
-            cpgsls(2) ; cpgslw(12) ; cpgsci(red) ;
-            cpgline(npnts, x.data(), rho.data()) ;
-            cpgsls(1) ; cpgslw(6) ; cpgsci(white) ;
-            cpgline(npnts, x.data(), rho_init.data()) ;
-            cpgebuf() ;
-            sleep(1) ; // artificial delay!
+            cpgbbuf( ) ;
+            cpgeras( ) ;
+            cpgsls( 1 ) ;
+            cpgslw( 6 ) ;
+            cpgsci( white ) ;
+            cpgslw( 2 ) ;
+            cpgenv( localX1, localX2, 0., 0.25, 0, 0 ) ;
+            cpglab( "x", "rho", "Wave test" ) ;
+            cpgsls( 2 ) ;
+            cpgslw( 12 ) ;
+            cpgsci( red ) ;
+            cpgline( npnts, x.data( ), rho.data( ) ) ;
+            cpgsls( 1 ) ;
+            cpgslw( 6 ) ;
+            cpgsci( white ) ;
+            cpgline( npnts, x.data( ), rho_init.data( ) ) ;
+            cpgebuf( ) ;
+            sleep( 1 ) ; // artificial delay!
          }
-         else if ( 0 )
+         else
          {
-// FIXME: would have to sync the output between workers, or write to different files.
-            dataFile << s * dt << '\n' ;
-
-            for ( int i = 0 ; i < npnts ; i++ )
+            for ( auto j{fullrange.first-1} ; j <= (fullrange.second+1) ; j++ )
             {
-               dataFile << rho[i] << '\n' ;
-            }
+               int i = partition.toLocalDomain( j ) ;
 
-            dataFile << '\n' ;
+               #if 1
+               if ( (j == (fullrange.first-1)) || (j == (fullrange.second+1)) )
+               {
+                  dataFile << std::to_string(s) << ": " << j << ", " << x[i] << ", " << rho[i] << ", r: " << rank << '\n' ;
+               }
+               #endif
+               else
+               {
+                  dataFile << std::to_string(s) << ": " << j << ", " << x[i] << ", " << rho[i] << '\n' ;
+               }
+            }
          }
       }
-break ;
    }
 
    // Output measured runtime.
-   std::cout << "Walltime = " << tt.silent_tock() << " sec."  << std::endl ;
+   std::cout << "#Walltime = " << tt.silent_tock() << " sec."  << std::endl ;
 
    // Close file.
    if ( not graphics )
    {
       dataFile.close() ;
    }
-#endif
 
    err = MPI_Finalize() ;
    if ( err )

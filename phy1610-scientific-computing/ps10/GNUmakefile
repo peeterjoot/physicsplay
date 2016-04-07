@@ -52,6 +52,11 @@ TARGETS += nocycle
 NOCYCLE_SOURCES += nocycle.cc
 NOCYCLE_OBJECTS := $(subst .cc,.o,$(NOCYCLE_SOURCES))
 
+TARGETS += ghosts
+GHOSTS_SOURCES += ghosts.cc
+GHOSTS_SOURCES += sendAndRecieveGhostCells.cc
+GHOSTS_OBJECTS := $(subst .cc,.o,$(GHOSTS_SOURCES))
+
 CLEANTARGETS += $(TARGETS)
 CLEANTARGETS += waveparams_*txt
 CLEANTARGETS += dataFilename*
@@ -66,6 +71,9 @@ leftright : $(LEFTRIGHT_OBJECTS)
 
 nocycle : $(NOCYCLE_OBJECTS)
 	$(CXX) -o $@ $(NOCYCLE_OBJECTS) $(LDFLAGS) $(NOCYCLE_LDFLAGS) $(LDLIBS) $(NOCYCLE_LDLIBS)
+
+ghosts : $(GHOSTS_OBJECTS)
+	$(CXX) -o $@ $(GHOSTS_OBJECTS) $(LDFLAGS) $(GHOSTS_LDFLAGS) $(LDLIBS) $(GHOSTS_LDLIBS)
 
 test : $(TEST_OBJECTS)
 	$(CXX) -o $@ $(TEST_OBJECTS) $(LDFLAGS) $(TEST_LDFLAGS) $(LDLIBS) $(TEST_LDLIBS)

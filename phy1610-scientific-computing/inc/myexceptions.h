@@ -18,6 +18,7 @@ struct file_write_error : virtual error { } ;
 struct plan_create_error : virtual error { } ;
 struct array_size_error : virtual error { } ;
 struct array_not_square_error : virtual error { } ;
+struct sendrecv_error : virtual error { } ;
 
 struct tag_match_input ;
 typedef boost::error_info<tag_match_input,std::string> match_info ;
@@ -54,5 +55,20 @@ typedef boost::error_info<tag_array_numrows,size_t> arows_info ;
 
 struct tag_array_numcolumns ;
 typedef boost::error_info<tag_array_numcolumns,size_t> acolumns_info ;
+
+struct tag_mpirank ;
+typedef boost::error_info<tag_mpirank,int> mpirank_info ;
+
+struct tag_mpitag ;
+typedef boost::error_info<tag_mpitag,int> mpitag_info ;
+
+struct tag_mpierr ;
+typedef boost::error_info<tag_mpierr,int> mpierr_info ;
+
+struct tag_mpileft ;
+typedef boost::error_info<tag_mpileft,int> mpileft_info ;
+
+struct tag_mpiright ;
+typedef boost::error_info<tag_mpiright,int> mpiright_info ;
 
 #endif
