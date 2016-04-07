@@ -6,6 +6,10 @@ ps10.pdf
 
    Report.
 
+ps10/timeem.pl
+
+   A small driver for running and collecting scaling data for various numbers of mpi tasks (up to 32, running on 4 nodes).
+
 ps10/GNUmakefile
 make.rules
 make.vars
