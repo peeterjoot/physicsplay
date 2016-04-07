@@ -17,9 +17,12 @@ make.vars.rarray
 ps10/ticktock.h
 ps10/inifile.h
 ps10/ticktock.cc
-ps10/setup
 
    These are unchanged from the skeleton code supplied for this assignment.
+
+ps10/setup
+
+   Modified to use newer than gcc 4.8.1 compiler.  My code developed on a ubuntu VM doesn't compile with that older compiler.
    
 inc/boosttest.h
 inc/farray.h
