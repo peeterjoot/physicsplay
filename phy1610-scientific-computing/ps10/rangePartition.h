@@ -25,6 +25,11 @@ public:
     */
    using subrange = std::pair<index_type, index_type> ;
 
+   static subrange emptySubRange()
+   {
+      return subrange{1,0} ;
+   }
+
    /**
       \param numElements [in]
          The number of elements in the array to be partitioned.

@@ -48,8 +48,7 @@ rangePartition::subrange rangePartition::subsetOfGlobalRangeInThisPartition( con
    if ( (u < m_myFirstGlobalElementIndex) ||
         (m_myLastGlobalElementIndex < l) )
    {
-      r.first  = 1 ;
-      r.second = 0 ;
+      r = emptySubRange() ;
    }
    else
    {

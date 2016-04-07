@@ -44,6 +44,10 @@ int main( int argc, char* argv[] )
 // debug: fake being the second of two workers:
    rank = 1 ;
    size = 2 ;
+#elif 0
+
+   rank = 3 ;
+   size = 4 ;
 #else
    err = MPI_Comm_size( MPI_COMM_WORLD, &size ) ;
    if ( err )
@@ -63,20 +67,20 @@ int main( int argc, char* argv[] )
    Inifile parameter( argc==1 ? "default.txt" : argv[1] ) ;
 
    // Physical parameters
-   const double  c      = parameter.get<double>("c", 1.0) ;    // wave speed
-   const double  tau    = parameter.get<double>("tau", 20.0) ;  // damping time
-   const double  x1     = parameter.get<double>("x1", -26.0) ;  // left most x value
-   const double  x2     = parameter.get<double>("x2", +26.0) ;  // right most x value
+   const double         c        = parameter.get<double>( "c", 1.0 ) ;    // wave speed
+   const double         tau      = parameter.get<double>( "tau", 20.0 ) ;  // damping time
+   const double         x1       = parameter.get<double>( "x1", -26.0 ) ;  // left most x value
+   const double         x2       = parameter.get<double>( "x2", +26.0 ) ;  // right most x value
 
    // Simulation parameters
-   const double  runtime = parameter.get<double>("runtime", 50.0) ;   // how long should the simulation try to compute?
-   const double  dx     = parameter.get<double>("dx", 0.01) ;      // spatial grid size  //0.02
+   const double         runtime  = parameter.get<double>( "runtime", 50.0 ) ;   // how long should the simulation try to compute?
+   const double         dx       = parameter.get<double>( "dx", 0.01 ) ;      // spatial grid size  //0.02
 
    // Output parameters
-   const double  outtime =  parameter.get<double>("outtime", 1.0) ; // how often should a snapshot of the wave be written out?
+   const double         outtime  = parameter.get<double>( "outtime", 1.0 ) ; // how often should a snapshot of the wave be written out?
 
-   const bool   graphics = parameter.get<bool>("graphics", false) ;   // output to graphics (with 1 sec delay)  or to a file?
-   const bool   initdebug = parameter.get<bool>("initdebug", false) ;   // 
+   const bool           graphics = parameter.get<bool>( "graphics", false ) ;   // output to graphics (with 1 sec delay)  or to a file?
+   const std::string    initlog  = parameter.get<std::string>( "initlog", "" ) ;   // 
 
    // Output file name
    std::string dataFilename = "dataFilename.out" ;
@@ -130,31 +134,38 @@ int main( int argc, char* argv[] )
 
    // Excite.
    auto waverange{ partition.subsetOfGlobalRangeInThisPartition( global_npnts/4 + 1, 3*global_npnts/4 - 1 ) } ;
-   for ( auto j{ waverange.first } ; j <= waverange.second ; j++ )
+   if ( waverange != partition.emptySubRange() )
    {
-      BOOST_ASSERT( (int)j >= global_npnts/4 + 1 ) ;
-      BOOST_ASSERT( (int)j < 3*global_npnts/4 ) ;
+      for ( auto j{ waverange.first-1} ; j <= (waverange.second +1) ; j++ )
+      {
+         //BOOST_ASSERT( (int)j >= global_npnts/4 ) ;
+         //BOOST_ASSERT( (int)j <= 3*global_npnts/4 ) ;
 
-      auto i{ partition.toLocalDomain( j ) } ;
+         auto i{ partition.toLocalDomain( j ) } ;
 
-      rho[i] = 0.25 - fabs( float((int)j-global_npnts/2) / float(global_npnts) ) ;
-      rho_prev[i] = rho[i] ;
-      rho_init[i] = rho[i] ;
+         rho[i] = 0.25 - fabs( float((int)j-global_npnts/2) / float(global_npnts) ) ;
+         rho_prev[i] = rho[i] ;
+         rho_init[i] = rho[i] ;
+      }
    }
 
-   if ( initdebug )
+   if ( initlog != "" )
    {
+      std::ofstream f( initlog + std::to_string( rank ) + ".out" ) ;
+
       for ( auto j{fullrange.first-1} ; j <= (fullrange.second+1) ; j++ )
       {
          int i = partition.toLocalDomain( j ) ;
 
+#if 0
          if ( (j == (fullrange.first-1)) || (j == (fullrange.second+1)) )
          {
-            std::cout << "init: " << j << ", " << x[i] << ", " << rho[i] << ", r: " << rank << '\n' ;
+            f << "init: " << j << ", " << x[i] << ", " << rho[i] << ", r: " << rank << '\n' ;
          }
          else
+#endif
          {
-            std::cout << "init: " << j << ", " << x[i] << ", " << rho[i] << '\n' ;
+            f << "init: " << j << ", " << x[i] << ", " << rho[i] << '\n' ;
          }
       }
    }

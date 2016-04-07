@@ -12,7 +12,7 @@
 #include <vector>
 
 using s = rangePartition::subrange ;
-s empty{ 1, 0 } ;
+s empty = rangePartition::emptySubRange() ;
 
 BOOST_AUTO_TEST_CASE( partitionTest1 )
 {
