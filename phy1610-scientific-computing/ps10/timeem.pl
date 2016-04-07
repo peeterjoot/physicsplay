@@ -21,7 +21,7 @@ sub collecttimes
       $tm =~ s/ .*// ;
 
       #$times{$t} = $tm ; 
-      print "$t $tm\n" ;
+      print "$t,$tm\n" ;
    }
 
    #foreach my $t ( sort keys %times )
