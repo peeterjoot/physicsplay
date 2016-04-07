@@ -17,12 +17,15 @@
 #include "ticktock.h"
 #include "inifile.h"
 #include "farray.h"
+#include "rangePartition.h"
 #include <mpi.h>
+#include <boost/assert.hpp>
+#include <unistd.h>
 
 int main( int argc, char* argv[] )
 {
-   int rank ;
-   int size ;
+   int rank{-1} ;
+   int size{-1} ;
    int err ;
 #if 0
    double msgsent, msgrcvd ;
@@ -36,6 +39,12 @@ int main( int argc, char* argv[] )
       printf( "init err: %d\n", err ) ;
       abort() ;
    }
+
+#if 0
+// debug: fake being the second of two workers:
+   rank = 1 ;
+   size = 2 ;
+#else
    err = MPI_Comm_size( MPI_COMM_WORLD, &size ) ;
    if ( err )
    {
@@ -48,9 +57,10 @@ int main( int argc, char* argv[] )
       printf( "rank err: %d\n", err ) ;
       abort() ;
    }
+#endif
 
    // Open inifile and parse (using Inifile class from inifile.h)
-   Inifile parameter(argc==1?"default.txt":argv[1]) ;
+   Inifile parameter( argc==1 ? "default.txt" : argv[1] ) ;
 
    // Physical parameters
    const double  c      = parameter.get<double>("c", 1.0) ;    // wave speed
@@ -66,13 +76,13 @@ int main( int argc, char* argv[] )
    const double  outtime =  parameter.get<double>("outtime", 1.0) ; // how often should a snapshot of the wave be written out?
 
    const bool   graphics = parameter.get<bool>("graphics", false) ;   // output to graphics (with 1 sec delay)  or to a file?
+   const bool   initdebug = parameter.get<bool>("initdebug", false) ;   // 
 
    // Output file name
    std::string dataFilename = "dataFilename.out" ;
 
    // Derived parameters
    const int    ngrid   = (x2-x1)/dx ;  // number of x points
-   const int    npnts   = ngrid + 2 ;   // number of x points including boundary points
    const double dt      = 0.5*dx/c ;    // time step size
    const int    nsteps  = runtime/dt ;  // number of steps of that size to reach runtime
    const int    nper    = outtime/dt ;  // how many step s between snapshots
@@ -91,6 +101,10 @@ int main( int argc, char* argv[] )
    std::cout << "#nper     " << nper    << std::endl ;
    std::cout << "#graphics " << int(graphics) << std::endl ;
 
+   rangePartition partition( ngrid, size, rank ) ;
+   auto pgrid{ partition.localPartitionSize() } ;
+   auto npnts{ pgrid + 2 } ;
+
    // Define and allocate arrays.
    farray rho_prev(npnts) ; // time step t-1
    farray rho(npnts) ;      // time step t
@@ -98,23 +112,54 @@ int main( int argc, char* argv[] )
    farray rho_init(npnts) ; // initial values
    farray x(npnts) ;        // x values
 
+   rho.fill( 0.0 ) ;
+   rho_prev.fill( 0.0 ) ;
+   rho_next.fill( 0.0 ) ;
+
    // Initialize.
-   for ( int i = 0 ; i < npnts ; i++ )
+   auto fullrange{ partition.subsetOfGlobalRangeInThisPartition( 1, ngrid ) } ;
+   // Example: rank=0 we map [1,10] (say) to [0,11]
+   for ( auto j{fullrange.first-1} ; j <= (fullrange.second + 1) ; j++ )
    {
-      x[i] = x1 + ((i-1)*(x2-x1))/ngrid ;
-      rho[i] = 0.0 ;
-      rho_prev[i] = 0.0 ;
-      rho_next[i] = 0.0 ;
+      auto i{ partition.toLocalDomain( j ) } ; // int so that 0-1 doesn't end up as a big unsigned value.
+
+      x[i] = x1 + (((int)j-1)*(x2-x1))/ngrid ;
    }
 
+   auto global_npnts{ ngrid + 2 } ;
+
    // Excite.
-   for ( int i = npnts/4 + 1 ; i < 3*npnts/4 ; i++ )
+   auto waverange{ partition.subsetOfGlobalRangeInThisPartition( global_npnts/4 + 1, 3*global_npnts/4 - 1 ) } ;
+   for ( auto j{ waverange.first } ; j <= waverange.second ; j++ )
    {
-      rho[i] = 0.25 - fabs( float(i-npnts/2) / float(npnts) ) ;
+      BOOST_ASSERT( (int)j >= global_npnts/4 + 1 ) ;
+      BOOST_ASSERT( (int)j < 3*global_npnts/4 ) ;
+
+      auto i{ partition.toLocalDomain( j ) } ;
+
+      rho[i] = 0.25 - fabs( float((int)j-global_npnts/2) / float(global_npnts) ) ;
       rho_prev[i] = rho[i] ;
       rho_init[i] = rho[i] ;
    }
 
+   if ( initdebug )
+   {
+      for ( auto j{fullrange.first-1} ; j <= (fullrange.second+1) ; j++ )
+      {
+         int i = partition.toLocalDomain( j ) ;
+
+         if ( (j == (fullrange.first-1)) || (j == (fullrange.second+1)) )
+         {
+            std::cout << "init: " << j << ", " << x[i] << ", " << rho[i] << ", r: " << rank << '\n' ;
+         }
+         else
+         {
+            std::cout << "init: " << j << ", " << x[i] << ", " << rho[i] << '\n' ;
+         }
+      }
+   }
+
+#if 0
    // Plot or Write out data.
    std::ofstream dataFile ;
    int red, grey, white ;
@@ -236,6 +281,7 @@ break ;
    {
       dataFile.close() ;
    }
+#endif
 
    err = MPI_Finalize() ;
    if ( err )

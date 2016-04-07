@@ -32,6 +32,7 @@ TARGETS += wave1d
 WAVE1D_SOURCES += wave1d.cc
 #WAVE1D_SOURCES += arrayIOwriter.cc
 WAVE1D_SOURCES += ticktock.cc
+WAVE1D_SOURCES += rangePartition.cc
 WAVE1D_OBJECTS := $(subst .cc,.o,$(WAVE1D_SOURCES))
 WAVE1D_LDFLAGS += $(PGPLOT_LDFLAGS)
 WAVE1D_LDLIBS += $(PGPLOT_LDLIBS)

@@ -1,15 +1,15 @@
 /** \file rangePartition.cc
  */
 #include "rangePartition.h"
-#include <cassert>
+#include <boost/assert.hpp>
 #include <algorithm>
 
 rangePartition::rangePartition( const index_type numElements, const taskId numTasks, const taskId taskNumber )
 {
    index_type batchSize = numElements / numTasks ;
 
-   assert( taskNumber < numTasks ) ;
-   assert( taskNumber >= 0 ) ;
+   BOOST_ASSERT( taskNumber < numTasks ) ;
+   BOOST_ASSERT( taskNumber >= 0 ) ;
 
    m_myFirstGlobalElementIndex = 1 + batchSize * taskNumber ;
 
@@ -20,14 +20,14 @@ rangePartition::rangePartition( const index_type numElements, const taskId numTa
 
    m_myLastGlobalElementIndex = m_myFirstGlobalElementIndex + batchSize - 1 ;
 
-   assert( m_myFirstGlobalElementIndex >= 1 ) ;
-   assert( m_myLastGlobalElementIndex <= numElements ) ;
+   BOOST_ASSERT( m_myFirstGlobalElementIndex >= 1 ) ;
+   BOOST_ASSERT( m_myLastGlobalElementIndex <= numElements ) ;
 }
 
 rangePartition::index_type rangePartition::toLocalDomain( const index_type i ) const
 {
-   assert( i <= m_myLastGlobalElementIndex ) ;
-   assert( i >= m_myFirstGlobalElementIndex ) ;
+   BOOST_ASSERT( i <= (m_myLastGlobalElementIndex+1) ) ;
+   BOOST_ASSERT( i >= (m_myFirstGlobalElementIndex-1) ) ;
 
    index_type j = i - m_myFirstGlobalElementIndex + 1 ;
 
@@ -64,7 +64,7 @@ rangePartition::index_type rangePartition::localPartitionSize( ) const
 {
    index_type sz = m_myLastGlobalElementIndex - m_myFirstGlobalElementIndex + 1 ;
 
-   assert( sz > 0 ) ;
+   BOOST_ASSERT( sz > 0 ) ;
 
    return sz ;
 }
