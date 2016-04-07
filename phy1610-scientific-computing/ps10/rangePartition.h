@@ -1,4 +1,13 @@
 /** \file rangePartition.h
+
+   A helper class (and boost tests) to divide up a global domain range of indexes in [1,N] into per-mpi task partitions.
+
+   This includes a method to return the local domain index from a global domain index that falls into
+   the range of this mpi tasks' partition.
+
+   Includes a method to return the local domain subset of a global domain index range if any of that range
+   falls into the mpi tasks' partition (or an empty set).
+
  */
 #if !defined phy1610_rangePartition_h_included
 #define phy1610_rangePartition_h_included

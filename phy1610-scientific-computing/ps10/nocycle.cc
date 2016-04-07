@@ -1,3 +1,6 @@
+/** \file leftright.cc 
+   simple mpi experimentation code (non-cyclic send)
+ */
 #include <stdio.h>
 #include <iostream>
 #include <mpi.h>
