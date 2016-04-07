@@ -16,5 +16,6 @@ outdir=timeem.batch.`date +%F-%T`
 mkdir $outdir
 cd $outdir || exit 7
 
-$phy1610/ps10/timeem.pl 2>&1 | tee -a timeem.out
-$phy1610/ps10/timeem.pl 2>&1 | tee -a timeem.out
+# Can run twice in one 15 min batch job:
+$phy1610/ps10/timeem.pl 2>&1 | tee -a timeem.csv
+$phy1610/ps10/timeem.pl 2>&1 | tee -a timeem.csv
