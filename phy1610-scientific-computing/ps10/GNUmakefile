@@ -14,7 +14,7 @@ CXX := mpic++
 
 include ../make.vars
 include ../make.vars.rarray
-#include ../make.vars.boosttest
+include ../make.vars.boosttest
 
 CXXFLAGS += $(PGPLOT_CXXFLAGS)
 #CXXFLAGS += -fopenmp
@@ -36,12 +36,12 @@ WAVE1D_OBJECTS := $(subst .cc,.o,$(WAVE1D_SOURCES))
 WAVE1D_LDFLAGS += $(PGPLOT_LDFLAGS)
 WAVE1D_LDLIBS += $(PGPLOT_LDLIBS)
 
-#TARGETS += test
-#TEST_SOURCES += test.cc
-#TEST_SOURCES += arrayIOwriter.cc
-#TEST_OBJECTS := $(subst .cc,.o,$(TEST_SOURCES))
-#TEST_LDFLAGS += $(LDFLAGS_BOOSTTEST)
-#TEST_LDLIBS += $(LDLIBS_BOOSTTEST)
+TARGETS += test
+TEST_SOURCES += test.cc
+TEST_SOURCES += rangePartition.cc
+TEST_OBJECTS := $(subst .cc,.o,$(TEST_SOURCES))
+TEST_LDFLAGS += $(LDFLAGS_BOOSTTEST)
+TEST_LDLIBS += $(LDLIBS_BOOSTTEST)
 
 TARGETS += leftright
 LEFTRIGHT_SOURCES += leftright.cc
@@ -66,8 +66,8 @@ leftright : $(LEFTRIGHT_OBJECTS)
 nocycle : $(NOCYCLE_OBJECTS)
 	$(CXX) -o $@ $(NOCYCLE_OBJECTS) $(LDFLAGS) $(NOCYCLE_LDFLAGS) $(LDLIBS) $(NOCYCLE_LDLIBS)
 
-#test : $(TEST_OBJECTS)
-#	$(CXX) -o $@ $(TEST_OBJECTS) $(LDFLAGS) $(TEST_LDFLAGS) $(LDLIBS) $(TEST_LDLIBS)
+test : $(TEST_OBJECTS)
+	$(CXX) -o $@ $(TEST_OBJECTS) $(LDFLAGS) $(TEST_LDFLAGS) $(LDLIBS) $(TEST_LDLIBS)
 
 all : $(TARGETS)
 
