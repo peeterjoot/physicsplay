@@ -9,10 +9,9 @@ function plotit( )
 
    plot( csv[:, 1], csv[:, 2] ) ;
 
-   xlabel( "threads" ) ;
-   ylabel( "time" ) ;
+   xlabel( "mpi tasks" ) ;
+   ylabel( "time (sec)" ) ;
    grid( "on" ) ;
-   legend( loc="upper left" ) ;
 
    savefig( pdffile ) ;
 
