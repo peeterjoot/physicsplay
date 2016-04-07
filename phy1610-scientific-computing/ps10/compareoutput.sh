@@ -1,7 +1,7 @@
 
 #pat="init:"
 pat="0:"
-for i in 2 ; do
+for i in 2 5 10 ; do
    rm -f dataFilename*out
    ./wave1d waveparams.txt >/dev/null
    grep $pat dataFilename0.out > x1

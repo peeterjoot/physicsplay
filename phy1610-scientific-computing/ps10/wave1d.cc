@@ -21,6 +21,7 @@
 #include <mpi.h>
 #include <boost/assert.hpp>
 #include <unistd.h>
+#include "sendAndRecieveGhostCells.h"
 
 int main( int argc, char* argv[] )
 {
@@ -74,7 +75,7 @@ int main( int argc, char* argv[] )
    // Output parameters
    const double         outtime  = parameter.get<double>( "outtime", 1.0 ) ; // how often should a snapshot of the wave be written out?
 
-   const bool           graphics = parameter.get<bool>( "graphics", false ) ;   // output to graphics (with 1 sec delay)  or to a file?
+   const int            graphics = parameter.get<int>( "graphics", -1 ) ;   // output to graphics (with 1 sec delay)
 
    // Output file name
    const std::string    dataFilename  = parameter.get<std::string>( "outfilebasename", "dataFilename" ) ;   // 
@@ -124,12 +125,12 @@ int main( int argc, char* argv[] )
    // Example: rank=0 we map [1,10] (say) to [0,11]
    for ( auto j{fullrange.first-1} ; j <= (fullrange.second + 1) ; j++ )
    {
-      auto i{ partition.toLocalDomain( j ) } ; // int so that 0-1 doesn't end up as a big unsigned value.
+      auto i{ partition.toLocalDomain( j ) } ;
 
       x[i] = x1 + (((int)j-1)*(x2-x1))/ngrid ;
    }
    double localX1 = x[ 1 ] ;
-   double localX2 = x[ npnts ] ;
+   double localX2 = x[ pgrid ] ;
 
    auto global_npnts{ ngrid + 2 } ;
 
@@ -139,9 +140,6 @@ int main( int argc, char* argv[] )
    {
       for ( auto j{ waverange.first-1} ; j <= (waverange.second +1) ; j++ )
       {
-         //BOOST_ASSERT( (int)j >= global_npnts/4 ) ;
-         //BOOST_ASSERT( (int)j <= 3*global_npnts/4 ) ;
-
          auto i{ partition.toLocalDomain( j ) } ;
 
          rho[i] = 0.25 - fabs( float((int)j-global_npnts/2) / float(global_npnts) ) ;
@@ -154,7 +152,7 @@ int main( int argc, char* argv[] )
    int red, grey, white ;
    std::ofstream dataFile ;
 
-   if ( graphics )
+   if ( graphics == rank )
    {
       cpgbeg( 0, "/xwindow", 1, 1 ) ;
       cpgask( 0 ) ;
@@ -205,13 +203,10 @@ int main( int argc, char* argv[] )
    tt.tick() ;
 
    // Take timesteps
-//   for ( int s = 0 ; s < nsteps ; s++ )
-   for ( int s = 0 ; s < 1 ; s++ )
+   for ( int s = 0 ; s < nsteps ; s++ )
    {
       // Evolve
       // \partial_{tt} u - c^2 \partial_{xx} u + \inv{\tau} \partial_t u = 0
-      //
-      // \partial_t ( \partial_t u + u/\tau ) = c^2 \partial_{xx} u
       for ( auto j{fullrange.first} ; j <= fullrange.second ; j++ )
       {
          auto i { partition.toLocalDomain( j ) } ;
@@ -222,35 +217,18 @@ int main( int argc, char* argv[] )
          rho_next[i] = 2 * rho[i] - rho_prev[i] + dt * ( laplacianTimesDt - friction ) ;
       }
 
-      float recievedTrailingGhostCell
-      // send trailing ghostcell to the right and recieve the leading ghostcell from the right
+      if ( size > 1 )
       {
-         MPI_Status rstatus ;
-         int tag = 1 ;
-
-         int left = rank - 1 ;
-         if ( left < 0 )
-         {
-            left = MPI_PROC_NULL ;
-         }
-         int right = rank + 1 ;
-         if ( right >= size )
-         {
-            right = MPI_PROC_NULL ;
-         }
-
-         err = MPI_Sendrecv( &rho_next[ npnts ], 1, MPI_FLOAT, right, tag,
-                             &rho_next[ npnts + 1 ], 1, MPI_FLOAT, left, tag,
-                             MPI_COMM_WORLD, &rstatus ) ;
-         if ( err )
-         {
-            printf( "sendrecv err = %d\n", err ) ;
-            abort() ;
-         }
-         
-         std::cout << "#Rank = " << rank << ", size = " << size << ". msgsent = " << msgsent << ", msgrcvd = " << msgrcvd << "\n" ;
-      } 
-
+         float newLeftGhostCell, newRightGhostCell ;
+         sendAndRecieveGhostCells( rho_next[1], rho_next[ pgrid ],
+                                   &newRightGhostCell, &newLeftGhostCell,
+                                   size,
+                                   rank ) ;
+         //std::cout << "#debug: " << rank << "( " << rho_next[1] << ", " << rho_next[pgrid] << " ): " << newLeftGhostCell << ", " << newRightGhostCell << '\n' ;
+         rho_next[0]       = newLeftGhostCell ;
+         rho_next[pgrid+1] = newRightGhostCell ;
+      }
+      
       // Rotate array pointers so t+1 becomes the new t etc.
       farray temp ;
       temp     = rho_prev ;
@@ -259,9 +237,9 @@ int main( int argc, char* argv[] )
       rho_next = temp ;
 	
       //Output every nper
-//      if ( (s+1)%nper == 0 )
+      if ( (s+1)%nper == 0 )
       {
-         if ( graphics )
+         if ( graphics == rank )
          {
             cpgbbuf( ) ;
             cpgeras( ) ;
@@ -280,7 +258,7 @@ int main( int argc, char* argv[] )
             cpgsci( white ) ;
             cpgline( npnts, x.data( ), rho_init.data( ) ) ;
             cpgebuf( ) ;
-            sleep( 1 ) ; // artificial delay!
+            //sleep( 1 ) ; // artificial delay!
          }
          else
          {
@@ -288,13 +266,13 @@ int main( int argc, char* argv[] )
             {
                int i = partition.toLocalDomain( j ) ;
 
-               #if 1
+               #if 0 // for debugging.  tack on the rank to see which task the dup entries come from if different.
                if ( (j == (fullrange.first-1)) || (j == (fullrange.second+1)) )
                {
                   dataFile << std::to_string(s) << ": " << j << ", " << x[i] << ", " << rho[i] << ", r: " << rank << '\n' ;
                }
-               #endif
                else
+               #endif
                {
                   dataFile << std::to_string(s) << ": " << j << ", " << x[i] << ", " << rho[i] << '\n' ;
                }

@@ -17,20 +17,13 @@ include ../make.vars.rarray
 include ../make.vars.boosttest
 
 CXXFLAGS += $(PGPLOT_CXXFLAGS)
-#CXXFLAGS += -fopenmp
 CXXFLAGS += -I../inc
 CXXFLAGS += -Wno-error=literal-suffix
 CXXFLAGS += -Wno-literal-suffix
 
-# boost noisyness:
-#CXXFLAGS += -Wno-error=unused-local-typedefs
-#CXXFLAGS += -Wno-unused-local-typedefs
-
-#LDLIBS += -fopenmp
-
 TARGETS += wave1d
 WAVE1D_SOURCES += wave1d.cc
-#WAVE1D_SOURCES += arrayIOwriter.cc
+WAVE1D_SOURCES += sendAndRecieveGhostCells.cc
 WAVE1D_SOURCES += ticktock.cc
 WAVE1D_SOURCES += rangePartition.cc
 WAVE1D_OBJECTS := $(subst .cc,.o,$(WAVE1D_SOURCES))
