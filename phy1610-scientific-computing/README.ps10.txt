@@ -4,7 +4,11 @@ README.ps10.txt
 
 ps10.pdf
 
-   Report.
+   Scaling discussion.
+
+ps10.git.log
+
+   Git log for this assignment.
 
 ps10/timeem.pl
 
@@ -26,7 +30,7 @@ ps10/ticktock.cc
 
 ps10/setup
 
-   Modified to use newer than gcc 4.8.1 compiler.  My code developed on a ubuntu VM doesn't compile with that older compiler.
+   Modified to use newer than gcc 4.8.1 compiler.  My code developed on a ubuntu VM (which also supported MPI to my suprise) doesn't compile with that older compiler.
    
 inc/boosttest.h
 inc/farray.h
@@ -38,7 +42,13 @@ ps10/waveparams.txt
    Modified for no graphics.   
 
 ps10/waveparamsg.txt
-   graphics only for rank=0 mpi task.
+   graphics only for rank=0 mpi task.  Used for debugging (where I varied which of the MPI rank local domain results got displayed).
+
+ps10/waveparamsnoio.txt
+   d=0.01 but without graphics and IO enabled.  This was used for testing the qsub batch script before queuing it on the production nodes.
+
+ps10/wavescalingtestparams.txt
+   d=0.002 configurations (without graphics and without IO enabled).  This was used for the final scaling mesaurements submitted on a four node cluster.
 
 ps10/rangePartition.h
 ps10/rangePartition.cc
@@ -74,10 +84,6 @@ ps10/wave1d.cc
 
    Modifications to the supplied 1d solver skeleton code to partition the work into multiple MPI tasks.
 
-ps10.git.log
-
-   Git log for this assignment.
-
 ps10/compareoutput.sh
    A script used to numerically compare the size=1 output for the zeroth timestep to that of size=2,5,10.
    Was also used to do the same for the pre-timestep local partitioning of the density (rho) and grid array (x).
@@ -85,3 +91,13 @@ ps10/compareoutput.sh
 ps10.sh
 
    qsub script used to test scaling.
+
+ps10/timeem.csv
+ps10/minTimeVsParallelism.csv
+   Raw results from the qsub run.
+
+ps10/plotem.jl
+   Plot the .csv results above (in terms of time and in terms of scaling).
+
+ps10/ps10.tex
+   Scaling discussion source text.  See ps10.pdf
