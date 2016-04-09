@@ -1,13 +1,20 @@
 #include <mpi.h>
 #include "mpitask.h"
 #include <netcdf_par.h>
+#include <netcdf.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
 
-#define NDIMS 3
+#define NDIMS 2
 #define DIMSIZE 24
 #define QTR_DATA (DIMSIZE * DIMSIZE / 4)
-#define ERR abort()
+#define ERR \
+do { \
+   std::cout << __FILE__ << ':' << __LINE__ << ": res=" << res << " (" << nc_strerror(res) << '\n' ; \
+   abort() ; \
+} while ( 0 )
+
 #define FILE "tst_parallel.nc"
 
 int main( int argc, char ** argv )
