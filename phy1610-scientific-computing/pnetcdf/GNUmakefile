@@ -6,6 +6,9 @@ include ../make.vars
 #include ../make.vars.netcdf_c
 include ../make.vars.mpi
 
+# ubuntu:
+#CXXFLAGS += -I/usr/lib/openmpi/include
+
 CXXFLAGS += $(CXXFLAGS_NETCDF)
 
 TARGETS += ncpar
