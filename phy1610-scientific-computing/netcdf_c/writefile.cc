@@ -16,7 +16,7 @@ do { \
 
 int main()
 {
-   int status, ncid, idX, idTime, varid ;
+   int status, ncid, XdimId, TdimId, idVarG, idVarA ;
    constexpr auto N{40} ;
 
    // also: nc_open for already existing only
@@ -28,27 +28,31 @@ int main()
    status = nc_def_dim( ncid,
                         "X",
                         N,
-                        &idX ) ;
+                        &XdimId ) ;
    handle_error( status, "nc_def_dim", __LINE__ ) ;
 
    status = nc_def_dim( ncid,
                         "T",
                         NC_UNLIMITED,
-                        &idTime ) ;
+                        &TdimId ) ;
    handle_error( status, "nc_def_dim", __LINE__ ) ;
 
-   int dims[2]{idTime, idX} ;
+   int dimsA[2]{TdimId, XdimId} ;
 
-   status = nc_def_var( ncid, "R", NC_INT, 2, dims, &varid);
+   status = nc_def_var( ncid, "A", NC_INT, 2, dimsA, &idVarA);
    handle_error( status, "nc_def_var", __LINE__ ) ;
 
-   std::vector<int> R ;
-   int i{0} ;
-   for( int &v : R )
-   {
-      v += 2 * i ;
+   int dimsG[2]{XdimId} ;
 
-      i++ ;
+   status = nc_def_var( ncid, "G", NC_INT, 1, dimsG, &idVarG);
+   handle_error( status, "nc_def_var", __LINE__ ) ;
+
+   std::vector<int> vecA(N) ;
+   std::vector<float> vecG(N) ;
+   for( auto i{0} ; i < N ; i++ )
+   {
+      vecA[i] = i ;
+      vecG[i] = i/10.0 ;
    }
 
    status = nc_put_att_text( ncid,
@@ -61,14 +65,28 @@ int main()
    status = nc_enddef( ncid ) ;
    handle_error( status, "nc_enddef", __LINE__ ) ;
 
-   size_t start{0} ;
-   size_t count{1} ;
-   status = nc_put_vara_int( ncid,
-                             varid,
-                             &start,
-                             &count,
-                             &R[0] );
-   handle_error( status, "nc_put_var_int", __LINE__ ) ;
+   // Write out three timeslices of data:
+   for ( size_t i{0} ; i < 3 ; i++ )
+   {
+      size_t startA[]{i, 0} ;
+      size_t countA[]{1, N} ;
+      status = nc_put_vara_int( ncid,
+                                idVarA,
+                                startA,
+                                countA,
+                                &vecA[0] );
+      handle_error( status, "nc_put_var_int", __LINE__ ) ;
+   }
+
+   // Write out the grid-mesh values:
+   size_t startG[]{0} ;
+   size_t countG[]{N} ;
+   status = nc_put_vara_float( ncid,
+                               idVarG,
+                               startG,
+                               countG,
+                               &vecG[0] );
+   handle_error( status, "nc_put_var_float", __LINE__ ) ;
 
    status = nc_close( ncid ) ;
    handle_error( status, "nc_close", __LINE__ ) ;
