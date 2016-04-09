@@ -44,7 +44,7 @@ int main()
 
    int dimsG[2]{XdimId} ;
 
-   status = nc_def_var( ncid, "G", NC_INT, 1, dimsG, &idVarG);
+   status = nc_def_var( ncid, "G", NC_FLOAT, 1, dimsG, &idVarG);
    handle_error( status, "nc_def_var", __LINE__ ) ;
 
    std::vector<int> vecA(N) ;
@@ -76,6 +76,12 @@ int main()
                                 countA,
                                 &vecA[0] );
       handle_error( status, "nc_put_var_int", __LINE__ ) ;
+
+      // timestep:
+      for( auto j{0} ; j < N ; j++ )
+      {
+         vecA[j] ++ ;
+      }
    }
 
    // Write out the grid-mesh values:
