@@ -19,6 +19,7 @@ struct plan_create_error : virtual error { } ;
 struct array_size_error : virtual error { } ;
 struct array_not_square_error : virtual error { } ;
 struct sendrecv_error : virtual error { } ;
+struct mpiinitterm_error : virtual error { } ;
 
 struct tag_match_input ;
 typedef boost::error_info<tag_match_input,std::string> match_info ;

@@ -15,11 +15,10 @@ CXX := mpic++
 include ../make.vars
 include ../make.vars.rarray
 include ../make.vars.boosttest
+include ../make.vars.mpi
 
 CXXFLAGS += $(PGPLOT_CXXFLAGS)
 CXXFLAGS += -I../inc
-CXXFLAGS += -Wno-error=literal-suffix
-CXXFLAGS += -Wno-literal-suffix
 
 TARGETS += wave1d
 WAVE1D_SOURCES += wave1d.cc

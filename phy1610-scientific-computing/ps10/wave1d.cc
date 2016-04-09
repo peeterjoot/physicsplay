@@ -22,42 +22,13 @@
 #include <boost/assert.hpp>
 #include <unistd.h>
 #include "sendAndRecieveGhostCells.h"
+#include "mpitask.h"
 
 int main( int argc, char* argv[] )
 {
-   int rank{-1} ;
-   int size{-1} ;
-   int err ;
-
-   err = MPI_Init( &argc, &argv ) ;
-   if ( err )
-   {
-      printf( "init err: %d\n", err ) ;
-      abort() ;
-   }
-
-#if 0
-// debug: fake being the second of two workers:
-   rank = 1 ;
-   size = 2 ;
-#elif 0
-
-   rank = 3 ;
-   size = 4 ;
-#else
-   err = MPI_Comm_size( MPI_COMM_WORLD, &size ) ;
-   if ( err )
-   {
-      printf( "size err: %d\n", err ) ;
-      abort() ;
-   }
-   err = MPI_Comm_rank( MPI_COMM_WORLD, &rank ) ;
-   if ( err )
-   {
-      printf( "rank err: %d\n", err ) ;
-      abort() ;
-   }
-#endif
+   //mpitask mpi( 1, 2 ) ;
+   //mpitask mpi( 3, 4 ) ;
+   mpitask mpi( &argc, &argv ) ;
 
    // Open inifile and parse (using Inifile class from inifile.h)
    Inifile parameter( argc==1 ? "default.txt" : argv[1] ) ;
@@ -70,7 +41,7 @@ int main( int argc, char* argv[] )
 
    // Simulation parameters
    const double         runtime  = parameter.get<double>( "runtime", 50.0 ) ;   // how long should the simulation try to compute?
-   const double         dx       = parameter.get<double>( "dx", 0.01 ) ;      // spatial grid size  //0.02
+   const double         dx       = parameter.get<double>( "dx", 0.01 ) ;      // spatial grid mpi.m_size  //0.02
 
    // Output parameters
    const double         outtime  = parameter.get<double>( "outtime", 1.0 ) ; // how often should a snapshot of the wave be written out?
@@ -84,8 +55,8 @@ int main( int argc, char* argv[] )
 
    // Derived parameters
    const int    ngrid   = (x2-x1)/dx ;  // number of x points
-   const double dt      = 0.5*dx/c ;    // time step size
-   const int    nsteps  = runtime/dt ;  // number of steps of that size to reach runtime
+   const double dt      = 0.5*dx/c ;    // time step mpi.m_size
+   const int    nsteps  = runtime/dt ;  // number of steps of that mpi.m_size to reach runtime
    const int    nper    = outtime/dt ;  // how many step s between snapshots
 
    // Report all the values.
@@ -103,7 +74,7 @@ int main( int argc, char* argv[] )
    std::cout << "#graphics  " << graphics << std::endl ;
    std::cout << "#ioenabled " << int(ioenabled) << std::endl ;
 
-   rangePartition partition( ngrid, size, rank ) ;
+   rangePartition partition( ngrid, mpi.m_size, mpi.m_rank ) ;
    auto pgrid{ partition.localPartitionSize() } ;
    auto npnts{ pgrid + 2 } ;
    std::cout << "#pgrid " << int(pgrid) << std::endl ;
@@ -117,7 +88,7 @@ int main( int argc, char* argv[] )
    farray x(npnts) ;        // x values
 
    // Set zero dirichlet boundary conditions for the global domain.  If one or more of the end points are ghost cells 
-   // in a size>1 mpirun, then the ghost-cell boundary values will be filled in properly when rho[] is initialized
+   // in a mpi.m_size>1 mpirun, then the ghost-cell boundary values will be filled in properly when rho[] is initialized
    // below
    rho.fill( 0.0 ) ;
    rho_prev.fill( 0.0 ) ;
@@ -125,7 +96,7 @@ int main( int argc, char* argv[] )
 
    // Initialize.
    auto fullrange{ partition.subsetOfGlobalRangeInThisPartition( 1, ngrid ) } ;
-   // Example: rank=0 we map [1,10] (say) to [0,11]
+   // Example: mpi.m_rank=0 we map [1,10] (say) to [0,11]
    for ( auto j{fullrange.first-1} ; j <= (fullrange.second + 1) ; j++ )
    {
       auto i{ partition.toLocalDomain( j ) } ;
@@ -155,7 +126,7 @@ int main( int argc, char* argv[] )
    int red, grey, white ;
    std::ofstream dataFile ;
 
-   if ( graphics == rank )
+   if ( graphics == mpi.m_rank )
    {
       cpgbeg( 0, "/xwindow", 1, 1 ) ;
       cpgask( 0 ) ;
@@ -179,7 +150,7 @@ int main( int argc, char* argv[] )
    }
    else if ( ioenabled )
    {
-      dataFile.open( dataFilename + std::to_string( rank ) + ".out" ) ;
+      dataFile.open( dataFilename + std::to_string( mpi.m_rank ) + ".out" ) ;
 
       for ( auto j{fullrange.first-1} ; j <= (fullrange.second+1) ; j++ )
       {
@@ -188,7 +159,7 @@ int main( int argc, char* argv[] )
          #if 0
          if ( (j == (fullrange.first-1)) || (j == (fullrange.second+1)) )
          {
-            dataFile << "init: " << j << ", " << x[i] << ", " << rho[i] << ", r: " << rank << '\n' ;
+            dataFile << "init: " << j << ", " << x[i] << ", " << rho[i] << ", r: " << mpi.m_rank << '\n' ;
          }
          else
          #endif
@@ -220,14 +191,14 @@ int main( int argc, char* argv[] )
          rho_next[i] = 2 * rho[i] - rho_prev[i] + dt * ( laplacianTimesDt - friction ) ;
       }
 
-      if ( size > 1 )
+      if ( mpi.m_size > 1 )
       {
          float newLeftGhostCell, newRightGhostCell ;
          sendAndRecieveGhostCells( rho_next[1], rho_next[ pgrid ],
                                    &newRightGhostCell, &newLeftGhostCell,
-                                   size,
-                                   rank ) ;
-         //std::cout << "#debug: " << rank << "( " << rho_next[1] << ", " << rho_next[pgrid] << " ): " << newLeftGhostCell << ", " << newRightGhostCell << '\n' ;
+                                   mpi.m_size,
+                                   mpi.m_rank ) ;
+         //std::cout << "#debug: " << mpi.m_rank << "( " << rho_next[1] << ", " << rho_next[pgrid] << " ): " << newLeftGhostCell << ", " << newRightGhostCell << '\n' ;
          rho_next[0]       = newLeftGhostCell ;
          rho_next[pgrid+1] = newRightGhostCell ;
       }
@@ -242,7 +213,7 @@ int main( int argc, char* argv[] )
       //Output every nper
       if ( (s+1)%nper == 0 )
       {
-         if ( graphics == rank )
+         if ( graphics == mpi.m_rank )
          {
             cpgbbuf( ) ;
             cpgeras( ) ;
@@ -269,10 +240,10 @@ int main( int argc, char* argv[] )
             {
                int i = partition.toLocalDomain( j ) ;
 
-               #if 0 // for debugging.  tack on the rank to see which task the dup entries come from if different.
+               #if 0 // for debugging.  tack on the mpi.m_rank to see which task the dup entries come from if different.
                if ( (j == (fullrange.first-1)) || (j == (fullrange.second+1)) )
                {
-                  dataFile << std::to_string(s) << ": " << j << ", " << x[i] << ", " << rho[i] << ", r: " << rank << '\n' ;
+                  dataFile << std::to_string(s) << ": " << j << ", " << x[i] << ", " << rho[i] << ", r: " << mpi.m_rank << '\n' ;
                }
                else
                #endif
@@ -291,13 +262,6 @@ int main( int argc, char* argv[] )
    if ( not graphics and ioenabled )
    {
       dataFile.close() ;
-   }
-
-   err = MPI_Finalize() ;
-   if ( err )
-   {
-      printf( "rank err: %d\n", err ) ;
-      abort() ;
    }
 
    return 0 ;
