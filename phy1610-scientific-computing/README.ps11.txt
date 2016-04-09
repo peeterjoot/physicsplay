@@ -1,24 +1,18 @@
-README.ps10.txt
+README.ps11.txt
 
    This file.
 
-ps10.pdf
-
-   Scaling discussion.
-
-ps10.git.log
+ps11.git.log
 
    Git log for this assignment.
-
-ps10/timeem.pl
-
-   A small driver for running and collecting scaling data for various numbers of mpi tasks (up to 32, running on 4 nodes).
 
 ps10/GNUmakefile
 make.rules
 make.vars
 make.vars.boosttest
 make.vars.rarray
+make.vars.pnetcdf
+make.vars.mpi
 
    makefiles for this assignment.
 
@@ -50,7 +44,7 @@ ps10/waveparamsnoio.txt
 ps10/wavescalingtestparams.txt
    d=0.002 configurations (without graphics and without IO enabled).  This was used for the final scaling mesaurements submitted on a four node cluster.
 
-ps10/rangePartition.h
+inc/rangePartition.h
 ps10/rangePartition.cc
 ps10/test.cc
 
@@ -84,13 +78,16 @@ ps10/wave1d.cc
 
    Modifications to the supplied 1d solver skeleton code to partition the work into multiple MPI tasks.
 
-ps10/compareoutput.sh
-   A script used to numerically compare the size=1 output for the zeroth timestep to that of size=2,5,10.
-   Was also used to do the same for the pre-timestep local partitioning of the density (rho) and grid array (x).
-
 ps10.sh
 
    qsub script used to test scaling.
+
+#--------------------------------------
+# stuff that was strictly for ps10:
+
+ps10/compareoutput.sh
+   A script used to numerically compare the size=1 output for the zeroth timestep to that of size=2,5,10.
+   Was also used to do the same for the pre-timestep local partitioning of the density (rho) and grid array (x).
 
 ps10/timeem.csv
 ps10/minTimeVsParallelism.csv
@@ -101,3 +98,8 @@ ps10/plotem.jl
 
 ps10/ps10.tex
    Scaling discussion source text.  See ps10.pdf
+
+ps10/timeem.pl
+
+   A small driver for running and collecting scaling data for various numbers of mpi tasks (up to 32, running on 4 nodes).
+

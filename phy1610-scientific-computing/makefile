@@ -95,25 +95,33 @@ PS9 += inc/integers.h
 PS9 += inc/myexceptions.h
 PS9 += ps9.pdf
 
-PS10 += $(wildcard ps10/*.h ps10/*.cc ps10/wave*.txt ps10/*.sh ps10/*.pl ps10/*.jl ps10/*.csv ps10/*.tex)
+PS10 += $(wildcard ps10/*.h ps10/*.cc ps10/wave*.txt ps10/*.sh ps10/*.pl ps10/*.jl ps10/*.csv)
+PS10 += $(wildcard netcdf_c/*.cc netcdf_c/GNUmakefile netcdf_c/*.sh)
+PS10 += $(wildcard netcdf_c/*setup)
+#PS10 += $(wildcard ps10/*.tex)
 PS10 += make.rules
 PS10 += make.vars
 PS10 += make.vars.boosttest
 PS10 += make.vars.rarray
-PS10 += ps10.git.log
-PS10 += README.ps10.txt
+PS10 += make.vars.pnetcdf
+PS10 += make.vars.mpi
+PS10 += ps11.git.log
+PS10 += README.ps11.txt
 PS10 += ps10.sh
 PS10 += ps10/setup
 PS10 += ps10/GNUmakefile
 PS10 += inc/boosttest.h
 PS10 += inc/farray.h
 PS10 += inc/myexceptions.h
-PS10 += ps10.pdf
+PS10 += mpitask.h
+PS10 += physicsplay_build_version.h
+PS10 += rangePartition.h
+#PS10 += ps10.pdf
 
 TICKTOCK := $(HOME)/ticktock
 
 #all : ps3/ticktock.cc
-all : ps10.tar.gz
+all : ps11.tar.gz
 
 ps10.pdf : ../notes/blogit/ps10.pdf
 	cp ../notes/blogit/ps10.pdf .
@@ -123,6 +131,10 @@ ps8.pdf : ../notes/blogit/ps8.pdf
 
 ps9.pdf : ../notes/blogit/ps9.pdf
 	cp ../notes/blogit/ps9.pdf .
+
+ps11.tar.gz : $(PS10) makefile
+	rm -f $@
+	tar zcf $@ $(PS10)
 
 ps10.tar.gz : $(PS10) makefile
 	rm -f $@
@@ -165,6 +177,9 @@ ps9.git.log :
 
 ps10.git.log : 
 	git log --stat inc ps10 > $@
+
+ps11.git.log : 
+	git log --stat inc ps10 netcdf_c > $@
 
 $(TICKTOCK) : 
 	(cd ; git clone https://github.com/vanzonr/ticktock.git)
