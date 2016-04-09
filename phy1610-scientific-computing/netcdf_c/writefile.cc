@@ -1,5 +1,7 @@
 #include <netcdf.h>
 #include <stdlib.h>
+#include <cstring>
+#include "physicsplay_build_version.h"
 
 void handle_error( const int status )
 {
@@ -10,15 +12,31 @@ int main()
 {
    int status, ncid, idX, idTime ;
 
-   status = nc_create( "foo.nc", NC_CLOBBER, &ncid ) ;
+   status = nc_create( "foo.nc",
+                       NC_CLOBBER,
+                       &ncid ) ;
    if (status != NC_NOERR)
       handle_error(status) ;
 
-   status = nc_def_dim( ncid, "X", 40, &idX ) ;
+   status = nc_def_dim( ncid,
+                        "X",
+                        40,
+                        &idX ) ;
    if (status != NC_NOERR)
       handle_error(status) ;
 
-   status = nc_def_dim( ncid, "T", NC_UNLIMITED, &idTime ) ;
+   status = nc_def_dim( ncid,
+                        "T",
+                        NC_UNLIMITED,
+                        &idTime ) ;
+   if (status != NC_NOERR)
+      handle_error(status) ;
+
+   status = nc_put_att_text( ncid,
+                             NC_GLOBAL,
+                             "commit",
+                             strlen(PHYSICSPLAY_COMMIT_INFO),
+                             PHYSICSPLAY_COMMIT_INFO ) ;
    if (status != NC_NOERR)
       handle_error(status) ;
 
