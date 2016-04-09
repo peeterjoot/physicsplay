@@ -4,7 +4,8 @@
 include ../make.vars
 #include ../make.vars.netcdf_c
 include ../make.vars.pnetcdf
-include ../make.vars.mpi
+# Not required with mpic++
+#include ../make.vars.mpi
 
 CXX := mpic++
 
