@@ -4,6 +4,8 @@
 include ../make.vars
 #include ../make.vars.netcdf
 
+CXXFLAGS += $(CXXFLAGS_NETCDF)
+
 TARGETS += writefile
 WRITEFILE_SOURCES += writefile.cc
 WRITEFILE_OBJECTS := $(subst .cc,.o,$(WRITEFILE_SOURCES))
