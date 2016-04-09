@@ -95,7 +95,7 @@ PS9 += inc/integers.h
 PS9 += inc/myexceptions.h
 PS9 += ps9.pdf
 
-PS10 += $(wildcard ps10/*.h ps10/*.cc ps10/wave*.txt ps10/*.sh ps10/*.pl ps10/*.jl ps10/*.csv)
+PS10 += $(wildcard ps10/*.h ps10/*.cc ps10/wave*.txt ps10/*.sh ps10/*.pl ps10/*.jl ps10/*.csv ps10/*.tex)
 PS10 += make.rules
 PS10 += make.vars
 PS10 += make.vars.boosttest
@@ -108,12 +108,15 @@ PS10 += ps10/GNUmakefile
 PS10 += inc/boosttest.h
 PS10 += inc/farray.h
 PS10 += inc/myexceptions.h
-#PS10 += ps10.pdf
+PS10 += ps10.pdf
 
 TICKTOCK := $(HOME)/ticktock
 
 #all : ps3/ticktock.cc
 all : ps10.tar.gz
+
+ps10.pdf : ../notes/blogit/ps10.pdf
+	cp ../notes/blogit/ps10.pdf .
 
 ps8.pdf : ../notes/blogit/ps8.pdf
 	cp ../notes/blogit/ps8.pdf .
