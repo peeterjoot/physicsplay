@@ -92,7 +92,7 @@ public:
 
    index_type localPartitionSize( ) const ;
 
-private:
+//private:
 
    index_type     m_myFirstGlobalElementIndex ; ///< lower bound for: global domain index for this threads' partition.
    index_type     m_myLastGlobalElementIndex ;  ///< upper bound for: global domain index for this threads' partition.
