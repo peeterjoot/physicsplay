@@ -20,7 +20,8 @@ public:
                    const float * const   localXstart,
                    const float * const   localRhoStart ) ;
 
-   void writeData( const size_t          globalOffset,
+   void writeData( const size_t          timestep,
+                   const size_t          globalOffset,
                    const size_t          localN,
                    const float * const   localRhoStart ) ;
 

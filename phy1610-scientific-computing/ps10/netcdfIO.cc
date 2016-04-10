@@ -82,7 +82,7 @@ netcdfIO::netcdfIO( const std::string & fileBaseName, const size_t N )
 
 netcdfIO::~netcdfIO( )
 {
-   int status = nc_close( ncid ) ;
+   int status = nc_close( m_ncid ) ;
 
    if ( status )
    {
@@ -101,11 +101,11 @@ void netcdfIO::writeData( const size_t          timeStepCount,
 {
    size_t startRho[]{ timeStepCount, globalOffset } ;
    size_t countRho[]{ 1, localN } ;
-   status = nc_put_vara_float( m_ncid,
-                               m_rhoVarId,
-                               startRho,
-                               countRho,
-                               localRhoStart ) ;
+   int status = nc_put_vara_float( m_ncid,
+                                   m_rhoVarId,
+                                   startRho,
+                                   countRho,
+                                   localRhoStart ) ;
    handle_error( status ) ;
 }
 
@@ -117,11 +117,11 @@ void netcdfIO::writeMeta( const size_t          globalOffset,
    size_t startX[]{ globalOffset } ;
    size_t countX[]{ localN } ;
 
-   status = nc_put_vara_float( m_ncid,
-                               m_xVarId,
-                               startX,
-                               countX,
-                               localXstart ) ;
+   int status = nc_put_vara_float( m_ncid,
+                                   m_xVarId,
+                                   startX,
+                                   countX,
+                                   localXstart ) ;
    handle_error( status ) ;
 
    writeData( 0, globalOffset, localN, localRhoStart ) ;
