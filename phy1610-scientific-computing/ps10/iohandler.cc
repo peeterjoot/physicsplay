@@ -1,7 +1,28 @@
 /** \file iohandler.cc
  */
 #include "netcdfIO.h"
+#include "graphicsIO.h"
+#include "asciiIO.h"
 #include <string>
+
+void iohandlerImplementation::writeMeta( const size_t          globalOffset,
+                                         const size_t          localN,
+                                         const float * const   localXstart,
+                                         const float * const   localRhoStart )
+{
+}
+
+void iohandlerImplementation::writeData( const size_t          timeStepCount,
+                                         const size_t          globalOffset,
+                                         const size_t          localN,
+                                         const float * const   localXstart,
+                                         const float * const   localRhostart )
+{
+}
+
+iohandlerImplementation::~iohandlerImplementation( )
+{
+}
 
 iohandler::iohandler( const cfg             c,
                       const std::string &   fileBaseName,
@@ -22,9 +43,43 @@ iohandler::iohandler( const cfg             c,
          break ;
       }
       case cfg::graphics:
-         throw( "not implemented yet" ) ;
+      {
+         m_ioHandler = new graphicsIO( ) ;
+         break ;
+      }
       default:
+         break ;
          // no-op.
+   }
+}
+
+void iohandler::writeData( const size_t          timeStepCount,
+                           const size_t          globalOffset,
+                           const size_t          localN,
+                           const float * const   localXstart,
+                           const float * const   localRhostart )
+{
+   if ( m_ioHandler )
+   {
+      m_ioHandler->writeData( timeStepCount,
+                              globalOffset,
+                              localN,
+                              localXstart,
+                              localRhostart ) ;
+   }
+}
+
+void iohandler::writeMeta( const size_t          globalOffset,
+                           const size_t          localN,
+                           const float * const   localXstart,
+                           const float * const   localRhoStart )
+{
+   if ( m_ioHandler )
+   {
+      m_ioHandler->writeMeta( globalOffset,
+                              localN,
+                              localXstart,
+                              localRhoStart ) ;
    }
 }
 

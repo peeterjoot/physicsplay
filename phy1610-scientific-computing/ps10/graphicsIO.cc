@@ -2,7 +2,7 @@
 #include <cpgplot.h>
 #include "graphicsIO.h"
 
-graphicsIO::graphicsIO( const std::string & fileBaseName, const size_t N )
+graphicsIO::graphicsIO( )
    : m_rhoInitStart( nullptr )
 {
    cpgbeg( 0, "/xwindow", 1, 1 ) ;

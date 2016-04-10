@@ -91,6 +91,19 @@ public:
               const size_t          N,
               const int             mpirank ) ;
 
+   /** \copydoc iohandlerImplementation::writeData */
+   void writeData( const size_t          timeStepCount,
+                   const size_t          globalOffset,
+                   const size_t          localN,
+                   const float * const   localXstart,
+                   const float * const   localRhostart ) ;
+
+   /** \copydoc iohandlerImplementation::writeMeta */
+   void writeMeta( const size_t          globalOffset,
+                   const size_t          localN,
+                   const float * const   localXstart,
+                   const float * const   localRhoStart ) ;
+
    /** close files, handles, ... */
    ~iohandler() ;
 private:

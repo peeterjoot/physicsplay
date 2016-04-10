@@ -12,8 +12,7 @@
 class graphicsIO : public iohandlerImplementation
 {
 public:
-   graphicsIO( const std::string &   fileBaseName,
-               const size_t          N ) ;
+   graphicsIO( ) ;
 
    void writeMeta( const size_t          globalOffset,
                    const size_t          localN,

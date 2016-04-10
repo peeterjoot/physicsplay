@@ -16,6 +16,7 @@ include ../make.vars
 include ../make.vars.rarray
 include ../make.vars.boosttest
 include ../make.vars.mpi
+include ../make.vars.pnetcdf
 
 CXXFLAGS += $(PGPLOT_CXXFLAGS)
 CXXFLAGS += -I../inc
@@ -25,6 +26,7 @@ WAVE1D_SOURCES += wave1d.cc
 WAVE1D_SOURCES += sendAndRecieveGhostCells.cc
 WAVE1D_SOURCES += ticktock.cc
 WAVE1D_SOURCES += rangePartition.cc
+WAVE1D_SOURCES += mpitask.cc
 WAVE1D_OBJECTS := $(subst .cc,.o,$(WAVE1D_SOURCES))
 WAVE1D_LDFLAGS += $(PGPLOT_LDFLAGS)
 WAVE1D_LDLIBS += $(PGPLOT_LDLIBS)
@@ -49,6 +51,19 @@ GHOSTS_SOURCES += ghosts.cc
 GHOSTS_SOURCES += sendAndRecieveGhostCells.cc
 GHOSTS_OBJECTS := $(subst .cc,.o,$(GHOSTS_SOURCES))
 
+TARGETS += iotest
+IOTEST_SOURCES += iotest.cc
+IOTEST_SOURCES += netcdfIO.cc
+IOTEST_SOURCES += asciiIO.cc
+IOTEST_SOURCES += graphicsIO.cc
+IOTEST_SOURCES += iohandler.cc
+IOTEST_SOURCES += rangePartition.cc
+IOTEST_SOURCES += mpitask.cc
+IOTEST_SOURCES += ../ps7/streamopen.cc
+IOTEST_OBJECTS := $(subst .cc,.o,$(IOTEST_SOURCES))
+IOTEST_LDFLAGS += $(PGPLOT_LDFLAGS)
+IOTEST_LDLIBS += $(PGPLOT_LDLIBS)
+
 CLEANTARGETS += $(TARGETS)
 CLEANTARGETS += waveparams_*txt
 CLEANTARGETS += dataFilename*
@@ -57,6 +72,9 @@ all: $(TARGETS)
 
 wave1d : $(WAVE1D_OBJECTS)
 	$(CXX) -o $@ $(WAVE1D_OBJECTS) $(LDFLAGS) $(WAVE1D_LDFLAGS) $(LDLIBS) $(WAVE1D_LDLIBS)
+
+iotest : $(IOTEST_OBJECTS)
+	$(CXX) -o $@ $(IOTEST_OBJECTS) $(LDFLAGS) $(IOTEST_LDFLAGS) $(LDLIBS) $(IOTEST_LDLIBS)
 
 leftright : $(LEFTRIGHT_OBJECTS)
 	$(CXX) -o $@ $(LEFTRIGHT_OBJECTS) $(LDFLAGS) $(LEFTRIGHT_LDFLAGS) $(LDLIBS) $(LEFTRIGHT_LDLIBS)
@@ -69,8 +87,6 @@ ghosts : $(GHOSTS_OBJECTS)
 
 test : $(TEST_OBJECTS)
 	$(CXX) -o $@ $(TEST_OBJECTS) $(LDFLAGS) $(TEST_LDFLAGS) $(LDLIBS) $(TEST_LDLIBS)
-
-all : $(TARGETS)
 
 runtest: test
 	./test --report_level=detailed --log_level=all
