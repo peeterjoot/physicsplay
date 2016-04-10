@@ -20,6 +20,7 @@ struct array_size_error : virtual error { } ;
 struct array_not_square_error : virtual error { } ;
 struct sendrecv_error : virtual error { } ;
 struct mpiinitterm_error : virtual error { } ;
+struct netcdf_error : virtual error { } ;
 
 struct tag_match_input ;
 typedef boost::error_info<tag_match_input,std::string> match_info ;
@@ -71,5 +72,11 @@ typedef boost::error_info<tag_mpileft,int> mpileft_info ;
 
 struct tag_mpiright ;
 typedef boost::error_info<tag_mpiright,int> mpiright_info ;
+
+struct tag_netcdf_errno ;
+typedef boost::error_info<tag_netcdf_errno,int> netcdf_errno_info ;
+
+struct tag_netcdf_strerror ;
+typedef boost::error_info<tag_netcdf_strerror,const char *> netcdf_strerror_info ;
 
 #endif

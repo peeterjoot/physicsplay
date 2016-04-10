@@ -6,7 +6,7 @@
 #module load gcc/4.8.1
 #module load pgplot/5.2.2-gcc
 
-PRODUCTION := 1
+#PRODUCTION := 1
 #PROFILED := 1
 
 #CXXSTD := -std=c++11

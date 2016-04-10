@@ -1,6 +1,13 @@
 #PRODUCTION := 1
 #PROFILED := 1
 
+# scinet setup for writefile: 
+# ../scinet.env.netcdf.mpi.gcc-520
+# ../scinet.env.netcdf.serial.gcc-520
+#
+# scinet setup for pwritefile: 
+# ../scinet.env.netcdf.mpi.gcc-520
+
 include ../make.vars
 #include ../make.vars.netcdf_c
 include ../make.vars.pnetcdf

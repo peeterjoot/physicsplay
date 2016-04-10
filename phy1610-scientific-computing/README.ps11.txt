@@ -22,9 +22,9 @@ ps10/ticktock.cc
 
    These are unchanged from the skeleton code supplied for this assignment.
 
-ps10/setup
+scinet.env.netcdf.mpi.gcc-520
 
-   Modified to use newer than gcc 4.8.1 compiler.  My code developed on a ubuntu VM (which also supported MPI to my suprise) doesn't compile with that older compiler.
+   Modified the original hw11/setup to use newer than gcc 4.8.1 compiler.  My (ps10) code developed on a ubuntu VM (which also supported MPI to my suprise) doesn't compile with that older compiler.  For ps11 this has the modifications to allow allow parallel (+mpi) netcdf.
    
 inc/boosttest.h
 inc/farray.h
