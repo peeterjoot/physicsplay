@@ -13,20 +13,32 @@
 class asciiIO : public iohandlerImplementation
 {
 public:
-   asciiIO( const std::string &   fileBaseName,
-            const size_t          N ) ;
+   /**
+      \param fileBaseName [in]
+         Create an ascii file fileBaseName + ".out"
+    */
+   asciiIO( const std::string &   fileBaseName ) ;
 
+   /**
+      \copydoc iohandlerImplementation::writeMeta
+    */
    void writeMeta( const size_t          globalOffset,
                    const size_t          localN,
                    const float * const   localXstart,
                    const float * const   localRhoStart ) ;
 
+   /**
+      \copydoc iohandlerImplementation::writeData
+    */
    void writeData( const size_t          timestep,
                    const size_t          globalOffset,
                    const size_t          localN,
                    const float * const   localXstart,
                    const float * const   localRhoStart ) ;
 
+   /**
+      Close the file stream.
+    */
    ~asciiIO( ) ;
 private:
 

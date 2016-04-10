@@ -42,7 +42,9 @@ int main( int argc, char ** argv )
    using cfg = iohandler::cfg ;
    for ( auto c : { cfg::graphics, cfg::ascii, cfg::netcdf, cfg::noop } )
    {
-      if ( c == cfg::graphics && mpi.m_rank != 0 )
+      constexpr auto RANK_OF_MPI_TASK_TO_SHOW_GRAPHICS_ON{0} ;
+
+      if ( (c == cfg::graphics) && (mpi.m_rank != RANK_OF_MPI_TASK_TO_SHOW_GRAPHICS_ON) )
       {
          c = cfg::noop ;
       }

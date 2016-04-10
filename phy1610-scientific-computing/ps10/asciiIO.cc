@@ -2,7 +2,7 @@
 #include "asciiIO.h"
 #include "stdoutfilestream.h"
 
-asciiIO::asciiIO( const std::string & fileBaseName, const size_t N )
+asciiIO::asciiIO( const std::string & fileBaseName )
 {
    const std::string filename{ fileBaseName + ".out" } ;
 
@@ -38,5 +38,5 @@ void asciiIO::writeMeta( const size_t          globalOffset,
 
 asciiIO::~asciiIO( )
 {
-   // member destructors will close the file.
+   // member destructors will close the file if open.
 }

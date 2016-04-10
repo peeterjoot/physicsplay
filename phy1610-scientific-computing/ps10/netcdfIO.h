@@ -12,29 +12,45 @@
 class netcdfIO : public iohandlerImplementation
 {
 public:
+   /**
+      \param fileBaseName [in]
+         Write to fileBaseName + ".nc"
+
+      \param N [in]
+         Dimensions of the arrays to write.
+    */
    netcdfIO( const std::string &   fileBaseName,
              const size_t          N ) ;
 
+   /**
+      \copydoc iohandlerImplementation::writeMeta
+    */
    void writeMeta( const size_t          globalOffset,
                    const size_t          localN,
                    const float * const   localXstart,
                    const float * const   localRhoStart ) ;
 
+   /**
+      \copydoc iohandlerImplementation::writeData
+    */
    void writeData( const size_t          timestep,
                    const size_t          globalOffset,
                    const size_t          localN,
                    const float * const   localXstart,
                    const float * const   localRhoStart ) ;
 
+   /**
+      Close the netcdf file created if that was successful.
+    */
    ~netcdfIO( ) ;
 private:
 
-   bool  m_opened ;
-   int   m_ncid ;
-   int   m_xDimId ;
-   int   m_tDimId ;
-   int   m_rhoVarId ;
-   int   m_xVarId ;
+   bool  m_opened ;     ///< True if nc_create succeeded.
+   int   m_ncid ;       ///< File descriptor for the netcdf file.
+   int   m_xDimId ;     ///< Dimension identifier for the (grid) position dimension.
+   int   m_tDimId ;     ///< Dimension identifier for the time dimension.
+   int   m_rhoVarId ;   ///< Variable identifier for the rho array.
+   int   m_xVarId ;     ///< Variable identifier for the x array.
 } ;
 
 #endif

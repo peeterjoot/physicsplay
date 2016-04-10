@@ -39,7 +39,7 @@ iohandler::iohandler( const cfg             c,
       }
       case cfg::ascii:
       {
-         m_ioHandler = new asciiIO( fileBaseName + "_" + std::to_string( mpirank ), N ) ;
+         m_ioHandler = new asciiIO( fileBaseName + "_" + std::to_string( mpirank ) ) ;
          break ;
       }
       case cfg::graphics:

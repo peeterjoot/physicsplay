@@ -10,16 +10,20 @@ class Inifile
   public:
     Inifile()
     {}
-    Inifile(const std::string filename) {
-        read(filename.c_str());
-    }
+
     void read(const std::string filename)  {
         boost::property_tree::ini_parser::read_ini(filename, pt);
     }
+
+    Inifile(const std::string filename) {
+        read(filename.c_str());
+    }
+
     template<typename T>
     T get(const std::string str) const {
         return pt.get<T>(str);
     }
+
     template<typename T>
     T get(const std::string str, T defval) const {
        T result;

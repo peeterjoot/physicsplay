@@ -115,6 +115,7 @@ PS10 += inc/myexceptions.h
 PS10 += mpitask.h
 PS10 += physicsplay_build_version.h
 PS10 += rangePartition.h
+PS10 += ps7/streamopen.cc
 #PS10 += $(wildcard ps10/*.tex)
 #PS10 += ps10.pdf
 

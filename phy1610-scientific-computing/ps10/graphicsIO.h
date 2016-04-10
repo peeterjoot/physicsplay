@@ -12,31 +12,44 @@
 class graphicsIO : public iohandlerImplementation
 {
 public:
+   /** prep for plots to follow */
    graphicsIO( ) ;
 
+   /**
+      \copydoc iohandlerImplementation::writeMeta
+    */
    void writeMeta( const size_t          globalOffset,
                    const size_t          localN,
                    const float * const   localXstart,
                    const float * const   localRhoStart ) ;
 
+   /**
+      \copydoc iohandlerImplementation::writeData
+    */
    void writeData( const size_t          timestep,
                    const size_t          globalOffset,
                    const size_t          localN,
                    const float * const   localXstart,
                    const float * const   localRhoStart ) ;
 
+   /** no-op destructor */
    ~graphicsIO( ) ;
 private:
 
+   /**
+      Perform the plot for one timestep.  Has the common code for writeMeta and writeData.
+
+      \internal
+    */
    void plot( const size_t          localN,
               const float * const   x,
               const float * const   rhoInit,
               const float * const   rho ) ;
 
    const float *  m_rhoInitStart ; ///< Cache the value passed in during writeMeta
-   int            m_red ;
-   int            m_grey ;
-   int            m_white ;
+   int            m_red ;          ///< red colour handle
+   int            m_grey ;         ///< grey colour handle
+   int            m_white ;        ///< white colour handle
 } ;
 
 #endif
