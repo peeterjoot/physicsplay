@@ -97,6 +97,7 @@ netcdfIO::~netcdfIO( )
 void netcdfIO::writeData( const size_t          timeStepCount,
                           const size_t          globalOffset,
                           const size_t          localN,
+                          const float * const   localXstartIgnored,
                           const float * const   localRhoStart )
 {
    size_t startRho[]{ timeStepCount, globalOffset } ;
@@ -124,5 +125,9 @@ void netcdfIO::writeMeta( const size_t          globalOffset,
                                    localXstart ) ;
    handle_error( status ) ;
 
-   writeData( 0, globalOffset, localN, localRhoStart ) ;
+   writeData( 0,
+              globalOffset,
+              localN,
+              nullptr,
+              localRhoStart ) ;
 }

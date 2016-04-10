@@ -1,19 +1,20 @@
-/** \file netcdfIO.h
+/** \file asciiIO.h
  */
-#if !defined phy1610_netcdfIO_h_included
-#define phy1610_netcdfIO_h_included
+#if !defined phy1610_asciiIO_h_included
+#define phy1610_asciiIO_h_included
 
 #include "iohandler.h"
+#include <fstream>
 
 /**
-   Handle IO for a float x[N] "grid", plus float rho[N] "data", writing out just the local MPI
-   domain contributions to those 1D arrays.
+   Write (s, j, x[i], rho[i]) tuples to an ascii file, where j is the global domain index of the point, and
+   s \in [0,...) is the timestep index.
  */
-class netcdfIO : public iohandlerImplementation
+class asciiIO : public iohandlerImplementation
 {
 public:
-   netcdfIO( const std::string &   fileBaseName,
-             const size_t          N ) ;
+   asciiIO( const std::string &   fileBaseName,
+            const size_t          N ) ;
 
    void writeMeta( const size_t          globalOffset,
                    const size_t          localN,
@@ -26,15 +27,10 @@ public:
                    const float * const   localXstart,
                    const float * const   localRhoStart ) ;
 
-   ~netcdfIO( ) ;
+   ~asciiIO( ) ;
 private:
 
-   bool  m_opened ;
-   int   m_ncid ;
-   int   m_xDimId ;
-   int   m_tDimId ;
-   int   m_rhoVarId ;
-   int   m_xVarId ;
+   std::ofstream m_file ;
 } ;
 
 #endif
