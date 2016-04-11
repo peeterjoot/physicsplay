@@ -1,7 +1,7 @@
 #PRODUCTION := 1
 #PROFILED := 1
 
-# scinet setup for writefile: 
+# scinet setup for writefile, readfile: 
 # ../scinet.env.netcdf.mpi.gcc-520
 # ../scinet.env.netcdf.serial.gcc-520
 #
@@ -22,6 +22,10 @@ TARGETS += writefile
 WRITEFILE_SOURCES += writefile.cc
 WRITEFILE_OBJECTS := $(subst .cc,.o,$(WRITEFILE_SOURCES))
 
+TARGETS += readfile
+READFILE_SOURCES += readfile.cc
+READFILE_OBJECTS := $(subst .cc,.o,$(READFILE_SOURCES))
+
 TARGETS += writefilep
 WRITEFILEP_SOURCES += writefilep.cc
 WRITEFILEP_SOURCES += ../ps10/mpitask.cc
@@ -39,6 +43,9 @@ writefilep.cc writefile.cc : ../inc/physicsplay_build_version.h
 
 writefile : $(WRITEFILE_OBJECTS)
 	$(CXX) -o $@ $(WRITEFILE_OBJECTS) $(LDFLAGS) $(WRITEFILE_LDFLAGS) $(LDLIBS) $(WRITEFILE_LDLIBS)
+
+readfile : $(READFILE_OBJECTS)
+	$(CXX) -o $@ $(READFILE_OBJECTS) $(LDFLAGS) $(READFILE_LDFLAGS) $(LDLIBS) $(READFILE_LDLIBS)
 
 writefilep : $(WRITEFILEP_OBJECTS)
 	$(CXX) -o $@ $(WRITEFILEP_OBJECTS) $(LDFLAGS) $(WRITEFILEP_LDFLAGS) $(LDLIBS) $(WRITEFILEP_LDLIBS)
