@@ -83,6 +83,16 @@ void iohandler::writeMeta( const size_t          globalOffset,
    }
 }
 
+void iohandler::setSleepTime( const int t )
+{
+   graphicsIO * g = dynamic_cast<graphicsIO *>( m_ioHandler ) ;
+
+   if ( g )
+   {
+      g->setSleepTime( t ) ;
+   }
+}
+
 /** close files, handles, ... */
 iohandler::~iohandler()
 {

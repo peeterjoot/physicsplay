@@ -2,6 +2,7 @@
 #include "rangePartition.h"
 #include "mpitask.h"
 #include <string>
+#include <cmath>
 
 using itype = rangePartition::index_type ;
 
@@ -10,7 +11,7 @@ void initData( const itype m, const itype n, const itype j, float * const x, flo
    for ( size_t i{m} ; i <= n ; i++ )
    {
       x[i] = (j + i)/10.0 ;
-      rho[i] = j + i ;
+      rho[i] = (std::sin( j + i ) + 1)/8 ;
       rhoinit[i] = rho[i] ;
    }
 }
@@ -19,7 +20,7 @@ void evolveData( const itype m, const itype n, float * const rho )
 {
    for ( size_t i{m} ; i <= n ; i++ )
    {
-      rho[i] *= 1.5 ;
+      rho[i] *= 0.9 ;
    }
 }
 
@@ -52,6 +53,7 @@ int main( int argc, char ** argv )
       initData( r.first -1, r.second + 1, p.m_myFirstGlobalElementIndex - 1, x, rho, rhoinit ) ;
 
       iohandler io( c, "iotest", N, mpi.m_rank ) ;
+      io.setSleepTime( 1 ) ;
 
       io.writeMeta( p.m_myFirstGlobalElementIndex -1, n, &x[1], &rhoinit[1] ) ;
 

@@ -32,6 +32,14 @@ public:
                    const float * const   localXstart,
                    const float * const   localRhoStart ) ;
 
+   /**
+      how much time to sleep between plots.
+    */
+   void setSleepTime( const int t )
+   {
+      m_sleepTime = t ;
+   }
+
    /** no-op destructor */
    ~graphicsIO( ) ;
 private:
@@ -46,7 +54,9 @@ private:
               const float * const   rhoInit,
               const float * const   rho ) ;
 
+   bool           m_openedWindow ; ///< true for cpgbeg success.
    const float *  m_rhoInitStart ; ///< Cache the value passed in during writeMeta
+   int            m_sleepTime ;
    int            m_red ;          ///< red colour handle
    int            m_grey ;         ///< grey colour handle
    int            m_white ;        ///< white colour handle

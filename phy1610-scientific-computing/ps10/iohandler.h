@@ -104,6 +104,11 @@ public:
                    const float * const   localXstart,
                    const float * const   localRhoStart ) ;
 
+   /**
+      for graphics.  set the sleep time between plots.
+    */
+   void setSleepTime( const int t ) ;
+
    /** close files, handles, ... */
    ~iohandler() ;
 private:

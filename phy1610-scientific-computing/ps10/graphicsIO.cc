@@ -1,15 +1,25 @@
 /** \file graphicsIO.cc */
 #include <cpgplot.h>
 #include "graphicsIO.h"
+#include <unistd.h>
 
 graphicsIO::graphicsIO( )
-   : m_rhoInitStart( nullptr )
+   : m_openedWindow( false )
+   , m_rhoInitStart( nullptr )
 {
-   cpgbeg( 0, "/xwindow", 1, 1 ) ;
-   cpgask( 0 ) ;
-   m_red = 2 ; cpgscr( m_red, 1., 0., 0. ) ;
-   m_grey = 3 ; cpgscr( m_grey, .2, .2, .2 ) ;
-   m_white = 4 ; cpgscr( m_white, 1.0, 1.0, 1.0 ) ;
+   // 
+   // check for success for the initial begin command, so lots of noise
+   // isn't generated for subsequent plot APIs.
+   //
+   if ( cpgbeg( 0, "/xwindow", 1, 1 ) == 1 )
+   {
+      m_openedWindow = true ;
+
+      cpgask( 0 ) ;
+      m_red = 2 ; cpgscr( m_red, 1., 0., 0. ) ;
+      m_grey = 3 ; cpgscr( m_grey, .2, .2, .2 ) ;
+      m_white = 4 ; cpgscr( m_white, 1.0, 1.0, 1.0 ) ;
+   }
 }
 
 void graphicsIO::plot( const size_t          localN,
@@ -17,6 +27,11 @@ void graphicsIO::plot( const size_t          localN,
                        const float * const   rhoInit,
                        const float * const   rho )
 {
+   if ( !m_openedWindow )
+   {
+      return ;
+   }
+
    double localX1 = x[ 1 ] ;
    double localX2 = x[ localN ] ;
 
@@ -42,6 +57,11 @@ void graphicsIO::writeData( const size_t          timeStepCount,
                             const float * const   localXstart,
                             const float * const   localRhoStart )
 {
+   if ( !m_openedWindow )
+   {
+      return ;
+   }
+
    cpgbbuf( ) ;
    cpgeras( ) ;
 
@@ -51,6 +71,11 @@ void graphicsIO::writeData( const size_t          timeStepCount,
          &localRhoStart[-1] ) ;
 
    cpgebuf( ) ;
+
+   if ( m_sleepTime )
+   {
+      sleep( m_sleepTime ) ;
+   }
 }
 
 void graphicsIO::writeMeta( const size_t          globalOffset,
@@ -68,6 +93,4 @@ void graphicsIO::writeMeta( const size_t          globalOffset,
 
 graphicsIO::~graphicsIO( )
 {
-   // member destructors will close the file.
 }
-
