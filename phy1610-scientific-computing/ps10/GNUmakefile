@@ -66,6 +66,8 @@ IOTEST_LDLIBS += $(PGPLOT_LDLIBS)
 
 CLEANTARGETS += $(TARGETS)
 CLEANTARGETS += waveparams_*txt
+CLEANTARGETS += *.nc
+CLEANTARGETS += *.out
 CLEANTARGETS += dataFilename*
 
 all: $(TARGETS)
