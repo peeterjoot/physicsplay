@@ -23,6 +23,7 @@
 #include <unistd.h>
 #include "sendAndRecieveGhostCells.h"
 #include "mpitask.h"
+#include "iohandler.h"
 
 int main( int argc, char* argv[] )
 {
@@ -103,8 +104,6 @@ int main( int argc, char* argv[] )
 
       x[i] = x1 + (((int)j-1)*(x2-x1))/ngrid ;
    }
-   double localX1 = x[ 1 ] ;
-   double localX2 = x[ pgrid ] ;
 
    auto global_npnts{ ngrid + 2 } ;
 
@@ -122,52 +121,27 @@ int main( int argc, char* argv[] )
       }
    }
 
-   // Plot or output:
-   int red, grey, white ;
-   std::ofstream dataFile ;
+   using iocfg = iohandler::cfg ;
+   iocfg cfg = iocfg::noop ;
 
    if ( graphics == mpi.m_rank )
    {
-      cpgbeg( 0, "/xwindow", 1, 1 ) ;
-      cpgask( 0 ) ;
-      red = 2 ; cpgscr( red, 1., 0., 0. ) ;
-      grey = 3 ; cpgscr( grey, .2, .2, .2 ) ;
-      white = 4 ; cpgscr( white, 1.0, 1.0, 1.0 ) ;
-      cpgsls( 1 ) ;
-      cpgslw( 6 ) ;
-      cpgsci( white ) ;
-      cpgslw( 2 ) ;
-      cpgenv( localX1, localX2, 0., 0.25, 0, 0 ) ;
-      cpglab( "x", "rho", "Wave Test" ) ;
-      cpgsls( 1 ) ;
-      cpgslw( 6 ) ;
-      cpgsci( white ) ;
-      cpgline( npnts, x.data( ), rho.data( ) ) ;
-      cpgsls( 2 ) ;
-      cpgslw( 12 ) ;
-      cpgsci( red ) ;
-      cpgline( npnts, x.data( ), &rho_init[0] ) ;
+      cfg = iocfg::graphics ;
    }
    else if ( ioenabled )
    {
-      dataFile.open( dataFilename + std::to_string( mpi.m_rank ) + ".out" ) ;
-
-      for ( auto j{fullrange.first-1} ; j <= (fullrange.second+1) ; j++ )
-      {
-         int i = partition.toLocalDomain( j ) ;
-
-         #if 0
-         if ( (j == (fullrange.first-1)) || (j == (fullrange.second+1)) )
-         {
-            dataFile << "init: " << j << ", " << x[i] << ", " << rho[i] << ", r: " << mpi.m_rank << '\n' ;
-         }
-         else
-         #endif
-         {
-            dataFile << "init: " << j << ", " << x[i] << ", " << rho[i] << '\n' ;
-         }
-      }
+      cfg = iocfg::ascii ;
    }
+   else
+   {
+      // cfg = iocfg::netcdf ;
+   }
+
+   iohandler io( cfg, dataFilename, ngrid, mpi.m_rank ) ;
+   io.writeMeta( partition.m_myFirstGlobalElementIndex -1,
+                 partition.localPartitionSize(),
+                 &x[1],
+                 &rho_init[1] ) ;
 
    const double laplacianScaleFactor{ pow( c/dx, 2 ) * dt } ;
    const double invTau{ 1/tau } ;
@@ -177,7 +151,7 @@ int main( int argc, char* argv[] )
    tt.tick() ;
 
    // Take timesteps
-   for ( int s = 0 ; s < nsteps ; s++ )
+   for ( int s{1} ; s <= nsteps ; s++ )
    {
       // Evolve
       // \partial_{tt} u - c^2 \partial_{xx} u + \inv{\tau} \partial_t u = 0
@@ -211,58 +185,18 @@ int main( int argc, char* argv[] )
       rho_next = temp ;
 	
       //Output every nper
-      if ( (s+1)%nper == 0 )
+      if ( s % nper == 0 )
       {
-         if ( graphics == mpi.m_rank )
-         {
-            cpgbbuf( ) ;
-            cpgeras( ) ;
-            cpgsls( 1 ) ;
-            cpgslw( 6 ) ;
-            cpgsci( white ) ;
-            cpgslw( 2 ) ;
-            cpgenv( localX1, localX2, 0., 0.25, 0, 0 ) ;
-            cpglab( "x", "rho", "Wave test" ) ;
-            cpgsls( 2 ) ;
-            cpgslw( 12 ) ;
-            cpgsci( red ) ;
-            cpgline( npnts, x.data( ), rho.data( ) ) ;
-            cpgsls( 1 ) ;
-            cpgslw( 6 ) ;
-            cpgsci( white ) ;
-            cpgline( npnts, x.data( ), rho_init.data( ) ) ;
-            cpgebuf( ) ;
-            //sleep( 1 ) ; // artificial delay!
-         }
-         else if ( ioenabled )
-         {
-            for ( auto j{fullrange.first-1} ; j <= (fullrange.second+1) ; j++ )
-            {
-               int i = partition.toLocalDomain( j ) ;
-
-               #if 0 // for debugging.  tack on the mpi.m_rank to see which task the dup entries come from if different.
-               if ( (j == (fullrange.first-1)) || (j == (fullrange.second+1)) )
-               {
-                  dataFile << std::to_string(s) << ": " << j << ", " << x[i] << ", " << rho[i] << ", r: " << mpi.m_rank << '\n' ;
-               }
-               else
-               #endif
-               {
-                  dataFile << std::to_string(s) << ": " << j << ", " << x[i] << ", " << rho[i] << '\n' ;
-               }
-            }
-         }
+         io.writeData( s,
+                       partition.m_myFirstGlobalElementIndex -1,
+                       partition.localPartitionSize(),
+                       &x[1],
+                       &rho_init[1] ) ;
       }
    }
 
    // Output measured runtime.
    std::cout << "#Walltime = " << tt.silent_tock() << " sec."  << std::endl ;
-
-   // Close file.
-   if ( not graphics and ioenabled )
-   {
-      dataFile.close() ;
-   }
 
    return 0 ;
 }

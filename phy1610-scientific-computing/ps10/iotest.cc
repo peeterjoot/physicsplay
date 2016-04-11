@@ -40,28 +40,42 @@ int main( int argc, char ** argv )
 
    std::string fileBaseName{ "iotest" } ;
 
-   using cfg = iohandler::cfg ;
-   for ( auto c : { cfg::graphics, cfg::ascii, cfg::netcdf, cfg::noop } )
+   using iocfg = iohandler::cfg ;
+   for ( auto c : { iocfg::graphics, iocfg::ascii, iocfg::netcdf, iocfg::noop } )
    {
       constexpr auto RANK_OF_MPI_TASK_TO_SHOW_GRAPHICS_ON{0} ;
 
-      if ( (c == cfg::graphics) && (mpi.m_rank != RANK_OF_MPI_TASK_TO_SHOW_GRAPHICS_ON) )
+      if ( (c == iocfg::graphics) && (mpi.m_rank != RANK_OF_MPI_TASK_TO_SHOW_GRAPHICS_ON) )
       {
-         c = cfg::noop ;
+         c = iocfg::noop ;
       }
 
-      initData( r.first -1, r.second + 1, p.m_myFirstGlobalElementIndex - 1, x, rho, rhoinit ) ;
+      initData( r.first -1,
+                r.second + 1,
+                p.m_myFirstGlobalElementIndex - 1,
+                x,
+                rho,
+                rhoinit ) ;
 
       iohandler io( c, "iotest", N, mpi.m_rank ) ;
       io.setSleepTime( 1 ) ;
 
-      io.writeMeta( p.m_myFirstGlobalElementIndex -1, n, &x[1], &rhoinit[1] ) ;
+      io.writeMeta( p.m_myFirstGlobalElementIndex -1,
+                    n,
+                    &x[1],
+                    &rhoinit[1] ) ;
 
       for ( int s{1} ; s < 5 ; s++ )
       {
-         evolveData( r.first - 1, r.second + 1, rho ) ;
+         evolveData( r.first - 1,
+                     r.second + 1,
+                     rho ) ;
 
-         io.writeData( s, p.m_myFirstGlobalElementIndex -1, n, &x[1], &rho[1] ) ;
+         io.writeData( s,
+                       p.m_myFirstGlobalElementIndex -1,
+                       n,
+                       &x[1],
+                       &rho[1] ) ;
       }
    }
 
