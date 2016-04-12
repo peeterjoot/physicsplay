@@ -16,72 +16,78 @@ do { \
 int main()
 {
    int status, ncid, XdimId, TdimId, idVarG, idVarA ;
-   constexpr auto N{40} ;
+   size_t N, tLen ;
 
    status = nc_open( "foo.nc", NC_NOWRITE, &ncid ) ;
    handle_error( status, "nc_create", __LINE__ ) ;
 
-#if 0
-   status = nc_def_dim( ncid,
-                        "X",
-                        N,
-                        &XdimId ) ;
-   handle_error( status, "nc_def_dim", __LINE__ ) ;
+   status = nc_inq_dimid( ncid, "X", &XdimId ) ;
+   handle_error( status, "nc_inq_dimid", __LINE__ ) ;
 
-   status = nc_def_dim( ncid,
-                        "T",
-                        NC_UNLIMITED,
-                        &TdimId ) ;
-   handle_error( status, "nc_def_dim", __LINE__ ) ;
+   status = nc_inq_dimlen( ncid, XdimId, &N ) ;
+   handle_error( status, "nc_inq_dimlen", __LINE__ ) ;
 
-   int dimsA[2]{TdimId, XdimId} ;
+   std::cout << "X dim: " << N << '\n' ;
 
-   status = nc_def_var( ncid, "A", NC_INT, 2, dimsA, &idVarA);
-   handle_error( status, "nc_def_var", __LINE__ ) ;
+   status = nc_inq_dimid( ncid, "T", &TdimId ) ;
+   handle_error( status, "nc_inq_dimid", __LINE__ ) ;
 
-   int dimsG[2]{XdimId} ;
+   status = nc_inq_dimlen( ncid, TdimId, &tLen ) ;
+   handle_error( status, "nc_inq_dimlen", __LINE__ ) ;
 
-   status = nc_def_var( ncid, "G", NC_FLOAT, 1, dimsG, &idVarG);
-   handle_error( status, "nc_def_var", __LINE__ ) ;
-#endif
+   std::cout << "T dim: " << tLen << '\n' ;
 
+   status = nc_inq_varid( ncid, "A", &idVarA ) ;
+   handle_error( status, "nc_inq_varid", __LINE__ ) ;
+
+   status = nc_inq_varid( ncid, "G", &idVarG ) ;
+   handle_error( status, "nc_inq_varid", __LINE__ ) ;
+
+   size_t commitStringLen ;
+   status = nc_inq_attlen( ncid,
+                           NC_GLOBAL,
+                           "commit",
+                           &commitStringLen ) ;
+
+   char commit[ commitStringLen + 1 ] ;
    status = nc_get_att_text( ncid,
                              NC_GLOBAL,
                              "commit",
-                             strlen(PHYSICSPLAY_COMMIT_INFO),
-                             PHYSICSPLAY_COMMIT_INFO ) ;
+                             commit ) ;
    handle_error( status, "nc_get_att_text", __LINE__ ) ;
+   std::cout << "commit: " << commit << '\n' ;
 
    std::vector<int> vecA(N) ;
    std::vector<float> vecG(N) ;
-   for( auto i{0} ; i < N ; i++ )
+
+   // Read in the grid-mesh values:
+   status = nc_get_var_float( ncid,
+                              idVarG,
+                              &vecG[0] );
+   handle_error( status, "nc_get_var_float", __LINE__ ) ;
+
+   for ( size_t i{0} ; i < N ; i++ )
    {
-      vecA[i] = i ;
-      vecG[i] = i/10.0 ;
+      std::cout << "x[" << i << "] = " << vecG[i] << '\n' ;
    }
 
-   // Read in three timeslices of data:
-   for ( size_t i{0} ; i < 3 ; i++ )
+   // Read in the three timeslices of data:
+   for ( size_t s{0} ; s < tLen ; s++ )
    {
-      size_t startA[]{i, 0} ;
+      size_t startA[]{s, 0} ;
       size_t countA[]{1, N} ;
       status = nc_get_vara_int( ncid,
                                 idVarA,
                                 startA,
                                 countA,
                                 &vecA[0] );
-      handle_error( status, "nc_get_var_int", __LINE__ ) ;
-   }
+      handle_error( status, "nc_get_vara_int", __LINE__ ) ;
 
-   // Read in the grid-mesh values:
-   size_t startG[]{0} ;
-   size_t countG[]{N} ;
-   status = nc_get_vara_float( ncid,
-                               idVarG,
-                               startG,
-                               countG,
-                               &vecG[0] );
-   handle_error( status, "nc_get_var_float", __LINE__ ) ;
+      for ( size_t i{0} ; i < N ; i++ )
+      {
+         std::cout << s << ": y[" << i << "] = " << vecA[i] << '\n' ;
+      }
+   }
 
    status = nc_close( ncid ) ;
    handle_error( status, "nc_close", __LINE__ ) ;
