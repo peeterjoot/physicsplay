@@ -18,9 +18,13 @@ public:
 
       \param N [in]
          Dimensions of the arrays to write.
+
+      \param params [in]
+         A string representation of some of the input and derived parameters for the run.
     */
    netcdfIO( const std::string &   fileBaseName,
-             const size_t          N ) ;
+             const size_t          N,
+             const std::string &   params ) ;
 
    /**
       \copydoc iohandlerImplementation::writeMeta
@@ -40,17 +44,22 @@ public:
                    const float * const   localRhoStart ) ;
 
    /**
+    */ 
+   void writeTimes( std::vector<float> & timesData ) ;
+
+   /**
       Close the netcdf file created if that was successful.
     */
    ~netcdfIO( ) ;
 private:
 
-   bool  m_opened ;     ///< True if nc_create succeeded.
-   int   m_ncid ;       ///< File descriptor for the netcdf file.
-   int   m_xDimId ;     ///< Dimension identifier for the (grid) position dimension.
-   int   m_tDimId ;     ///< Dimension identifier for the time dimension.
-   int   m_rhoVarId ;   ///< Variable identifier for the rho array.
-   int   m_xVarId ;     ///< Variable identifier for the x array.
+   bool  m_opened ;        ///< True if nc_create succeeded.
+   int   m_ncid ;          ///< File descriptor for the netcdf file.
+   int   m_xDimId ;        ///< Dimension identifier for the (grid) position dimension.
+   int   m_tDimId ;        ///< Dimension identifier for the time dimension.
+   int   m_rhoVarId ;      ///< Variable identifier for the rho array.
+   int   m_xVarId ;        ///< Variable identifier for the x array.
+   int   m_atTimesVarId ;  ///< Variable identifier for the array of timestep times (s * dt).
 } ;
 
 #endif

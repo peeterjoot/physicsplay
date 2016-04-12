@@ -39,7 +39,7 @@ CLEANTARGETS += *.nc
 
 all : $(TARGETS)
 
-writefilep.cc writefile.cc : ../inc/physicsplay_build_version.h
+writefilep.o writefile.o : ../inc/physicsplay_build_version.h
 
 writefile : $(WRITEFILE_OBJECTS)
 	$(CXX) -o $@ $(WRITEFILE_OBJECTS) $(LDFLAGS) $(WRITEFILE_LDFLAGS) $(LDLIBS) $(WRITEFILE_LDLIBS)

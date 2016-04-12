@@ -24,12 +24,16 @@
 #include "sendAndRecieveGhostCells.h"
 #include "mpitask.h"
 #include "iohandler.h"
+#include <sstream>
+#include "physicsplay_build_version.h"
 
 int main( int argc, char* argv[] )
 {
    //mpitask mpi( 1, 2 ) ;
    //mpitask mpi( 3, 4 ) ;
    mpitask mpi( &argc, &argv ) ;
+
+   std::ostringstream info ;
 
    // Open inifile and parse (using Inifile class from inifile.h)
    Inifile parameter( argc==1 ? "default.txt" : argv[1] ) ;
@@ -52,7 +56,8 @@ int main( int argc, char* argv[] )
    // Output file name
    const std::string    dataFilename  = parameter.get<std::string>( "outfilebasename", "dataFilename" ) ;   // 
 
-   const bool           ioenabled = parameter.get<bool>( "ioenabled", 0 ) ;   // output to a file (not attempted if graphics enabled)
+   const bool           asciiIO = parameter.get<bool>( "asciiIO", 0 ) ;   // output to a file (not attempted if graphics enabled)
+   const bool           netcdfIO = parameter.get<bool>( "netcdfIO", 0 ) ;   // output to a file using mpi netcdf (not attempted if graphics enabled)
 
    // Derived parameters
    const int    ngrid   = (x2-x1)/dx ;  // number of x points
@@ -61,25 +66,27 @@ int main( int argc, char* argv[] )
    const int    nper    = outtime/dt ;  // how many step s between snapshots
 
    // Report all the values.
-   std::cout << "#c         " << c       << std::endl ;
-   std::cout << "#tau       " << tau     << std::endl ;
-   std::cout << "#x1        " << x1      << std::endl ;
-   std::cout << "#x2        " << x2      << std::endl ;
-   std::cout << "#runtime   " << runtime << std::endl ;
-   std::cout << "#dx        " << dx      << std::endl ;
-   std::cout << "#outtime   " << outtime << std::endl ;
-   std::cout << "#ngrid     " << ngrid   << std::endl ;
-   std::cout << "#dt        " << dt      << std::endl ;
-   std::cout << "#nsteps    " << nsteps  << std::endl ;
-   std::cout << "#nper      " << nper    << std::endl ;
-   std::cout << "#graphics  " << graphics << std::endl ;
-   std::cout << "#ioenabled " << int(ioenabled) << std::endl ;
+   info << "#commit    " << PHYSICSPLAY_COMMIT_INFO << std::endl ;
+   info << "#c         " << c       << std::endl ;
+   info << "#tau       " << tau     << std::endl ;
+   info << "#x1        " << x1      << std::endl ;
+   info << "#x2        " << x2      << std::endl ;
+   info << "#runtime   " << runtime << std::endl ;
+   info << "#dx        " << dx      << std::endl ;
+   info << "#outtime   " << outtime << std::endl ;
+   info << "#ngrid     " << ngrid   << std::endl ;
+   info << "#dt        " << dt      << std::endl ;
+   info << "#nsteps    " << nsteps  << std::endl ;
+   info << "#nper      " << nper    << std::endl ;
+   info << "#graphics  " << graphics << std::endl ;
+   info << "#asciiIO   " << int(asciiIO) << std::endl ;
+   info << "#netcdfIO  " << int(netcdfIO) << std::endl ;
 
    rangePartition partition( ngrid, mpi.m_size, mpi.m_rank ) ;
    auto pgrid{ partition.localPartitionSize() } ;
    auto npnts{ pgrid + 2 } ;
-   std::cout << "#pgrid " << int(pgrid) << std::endl ;
-   std::cout << "#npnts " << int(npnts) << std::endl ;
+   info << "#pgrid " << int(pgrid) << std::endl ;
+   info << "#npnts " << int(npnts) << std::endl ;
 
    // Define and allocate arrays.
    farray rho_prev(npnts) ; // time step t-1
@@ -87,6 +94,8 @@ int main( int argc, char* argv[] )
    farray rho_next(npnts) ; // time step t+1
    farray rho_init(npnts) ; // initial values
    farray x(npnts) ;        // x values
+
+   std::vector<float> outputTimes ;
 
    // Set zero dirichlet boundary conditions for the global domain.  If one or more of the end points are ghost cells 
    // in a mpi.m_size>1 mpirun, then the ghost-cell boundary values will be filled in properly when rho[] is initialized
@@ -128,20 +137,21 @@ int main( int argc, char* argv[] )
    {
       cfg = iocfg::graphics ;
    }
-   else if ( ioenabled )
+   else if ( asciiIO )
    {
       cfg = iocfg::ascii ;
    }
-   else
+   else if ( netcdfIO )
    {
-      // cfg = iocfg::netcdf ;
+      cfg = iocfg::netcdf ;
    }
 
-   iohandler io( cfg, dataFilename, ngrid, mpi.m_rank ) ;
+   iohandler io( cfg, dataFilename, ngrid, mpi.m_rank, info.str() ) ;
    io.writeMeta( partition.m_myFirstGlobalElementIndex -1,
                  partition.localPartitionSize(),
                  &x[1],
                  &rho_init[1] ) ;
+   outputTimes.push_back( 0.0 ) ;
 
    const double laplacianScaleFactor{ pow( c/dx, 2 ) * dt } ;
    const double invTau{ 1/tau } ;
@@ -192,11 +202,23 @@ int main( int argc, char* argv[] )
                        partition.localPartitionSize(),
                        &x[1],
                        &rho_init[1] ) ;
+
+         // 
+         // This is different from the hw11 version, where 0 is used as the time
+         // for both the initial (pre-timestep) data, as well as the first timestep
+         // iteration that is output.
+         //
+         outputTimes.push_back( s * dt ) ;
       }
    }
 
+   if ( mpi.m_rank == 0 )
+   {
+      io.writeTimes( outputTimes ) ;
+   }
+
    // Output measured runtime.
-   std::cout << "#Walltime = " << tt.silent_tock() << " sec."  << std::endl ;
+   std::cout << info.str() << "#Walltime = " << tt.silent_tock() << " sec."  << std::endl ;
 
    return 0 ;
 }

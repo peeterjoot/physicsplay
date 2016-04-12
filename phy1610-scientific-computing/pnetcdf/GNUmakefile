@@ -24,7 +24,7 @@ CLEANTARGETS += *.nc
 
 all : $(TARGETS)
 
-#writefile.cc : ../inc/physicsplay_build_version.h
+#writefile.o : ../inc/physicsplay_build_version.h
 
 ncpar : $(NCPAR_OBJECTS)
 	$(CXX) -o $@ $(NCPAR_OBJECTS) $(LDFLAGS) $(NCPAR_LDFLAGS) $(LDLIBS) $(NCPAR_LDLIBS)

@@ -27,14 +27,15 @@ iohandlerImplementation::~iohandlerImplementation( )
 iohandler::iohandler( const cfg             c,
                       const std::string &   fileBaseName,
                       const size_t          N,
-                      const int             mpirank )
+                      const int             mpirank,
+                      const std::string &   params )
    : m_ioHandler(nullptr)
 {
    switch ( c )
    {
       case cfg::netcdf:
       {
-         m_ioHandler = new netcdfIO( fileBaseName, N ) ;
+         m_ioHandler = new netcdfIO( fileBaseName, N, params ) ;
          break ;
       }
       case cfg::ascii:
@@ -90,6 +91,16 @@ void iohandler::setSleepTime( const int t )
    if ( g )
    {
       g->setSleepTime( t ) ;
+   }
+}
+
+void iohandler::writeTimes( std::vector<float> & timesData )
+{
+   netcdfIO * n = dynamic_cast<netcdfIO *>( m_ioHandler ) ;
+
+   if ( n )
+   {
+      n->writeTimes( timesData ) ;
    }
 }
 

@@ -82,7 +82,7 @@ TESTARRAYOBJECTS += testarray.o
 
 all : $(TARGETS)
 
-output.cc : ../inc/physicsplay_build_version.h
+output.o : ../inc/physicsplay_build_version.h
 
 antsTest.diff: ants.out
 	diff -up ../ps2/ants.out.default ants.out > $@

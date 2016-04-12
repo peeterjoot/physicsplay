@@ -60,7 +60,7 @@ booste : $(BOOSTE_OBJECTS)
 test : $(TEST_OBJECTS)
 	$(CXX) -o $@ $(TEST_OBJECTS) $(LDFLAGS) $(TEST_LDFLAGS) $(LDLIBS) $(TEST_LDLIBS)
 
-#grav.cc : ../inc/physicsplay_build_version.h
+#grav.o : ../inc/physicsplay_build_version.h
 
 runtest: test
 	./test --report_level=detailed

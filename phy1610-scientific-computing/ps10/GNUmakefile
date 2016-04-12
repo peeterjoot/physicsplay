@@ -77,6 +77,8 @@ CLEANTARGETS += dataFilename*
 
 all: $(TARGETS)
 
+wave1d.o : ../inc/physicsplay_build_version.h
+
 wave1d : $(WAVE1D_OBJECTS)
 	$(CXX) -o $@ $(WAVE1D_OBJECTS) $(LDFLAGS) $(WAVE1D_LDFLAGS) $(LDLIBS) $(WAVE1D_LDLIBS)
 

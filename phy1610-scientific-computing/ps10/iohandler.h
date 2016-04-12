@@ -4,6 +4,7 @@
 #define phy1610_iohandler_h_included
 
 #include <string>
+#include <vector>
 
 /**
    Low level IO writer for a float x[N] "grid", plus float rho[N] "data", writing out just the local MPI
@@ -85,11 +86,15 @@ public:
 
       \param mpirank [in]
           A value in the [0, mpi_size) range.
+
+      \param paramsInfo [in]
+          A string representation of some of the input and derived parameters for the run.
     */
    iohandler( const cfg             c,
               const std::string &   fileBaseName,
               const size_t          N,
-              const int             mpirank ) ;
+              const int             mpirank,
+              const std::string &   paramsInfo ) ;
 
    /** \copydoc iohandlerImplementation::writeData */
    void writeData( const size_t          timeStepCount,
@@ -103,6 +108,11 @@ public:
                    const size_t          localN,
                    const float * const   localXstart,
                    const float * const   localRhoStart ) ;
+
+   /**
+      for netcdf output
+    */
+   void writeTimes( std::vector<float> & timesData ) ;
 
    /**
       for graphics.  set the sleep time between plots.

@@ -33,8 +33,8 @@ else
 all : $(TARGETS)
 endif
 
-readfile.cc writefile.cc : ../inc/physicsplay_build_version.h
-readfile2D.cc writefile2D.cc : ../inc/physicsplay_build_version.h
+readfile.o writefile.o : ../inc/physicsplay_build_version.h
+readfile2D.o writefile2D.o : ../inc/physicsplay_build_version.h
 
 writefile : $(WRITEFILE_OBJECTS)
 	$(CXX) -o $@ $(WRITEFILE_OBJECTS) $(LDFLAGS) $(WRITEFILE_LDFLAGS) $(LDLIBS) $(WRITEFILE_LDLIBS)

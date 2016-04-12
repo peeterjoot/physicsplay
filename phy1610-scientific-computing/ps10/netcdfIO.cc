@@ -2,7 +2,6 @@
 #include "myexceptions.h"
 #include <boost/exception/exception.hpp>
 #include <boost/exception/info.hpp>
-#include "physicsplay_build_version.h"
 #include <mpi.h>
 #include <netcdf_par.h>
 
@@ -19,7 +18,9 @@ do {                                                                 \
    }                                                                 \
 } while ( 0 )
 
-netcdfIO::netcdfIO( const std::string & fileBaseName, const size_t N )
+netcdfIO::netcdfIO( const std::string &   fileBaseName,
+                    const size_t          N,
+                    const std::string &   params )
    : m_opened( false )
 {
    int status ;
@@ -63,11 +64,15 @@ netcdfIO::netcdfIO( const std::string & fileBaseName, const size_t N )
    status = nc_def_var( m_ncid, "X", NC_FLOAT, 1, xVarDims, &m_xVarId) ;
    handle_error( status ) ;
 
+   int atTimesDims[]{ m_tDimId } ;
+   status = nc_def_var( m_ncid, "ATTIMES", NC_FLOAT, 1, atTimesDims, &m_atTimesVarId) ;
+   handle_error( status ) ;
+
    status = nc_put_att_text( m_ncid,
                              NC_GLOBAL,
-                             "commit",
-                             strlen(PHYSICSPLAY_COMMIT_INFO),
-                             PHYSICSPLAY_COMMIT_INFO ) ;
+                             "params",
+                             params.length(),
+                             params.c_str() ) ;
    handle_error( status ) ;
 
    status = nc_enddef( m_ncid ) ;
@@ -107,6 +112,18 @@ void netcdfIO::writeData( const size_t          timeStepCount,
                                    startRho,
                                    countRho,
                                    localRhoStart ) ;
+   handle_error( status ) ;
+}
+
+void netcdfIO::writeTimes( std::vector<float> & timesData )
+{
+   size_t start[]{ 0 } ;
+   size_t count[]{ timesData.size() } ;
+   int status = nc_put_vara_float( m_ncid,
+                                   m_atTimesVarId,
+                                   start,
+                                   count,
+                                   &timesData[0] ) ;
    handle_error( status ) ;
 }
 
