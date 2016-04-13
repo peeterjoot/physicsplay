@@ -39,7 +39,7 @@ public:
    /**
       \copydoc iohandlerImplementation::writeData
     */
-   void writeData( const size_t          timestep,
+   void writeData( const float           time,
                    const size_t          globalOffset,
                    const size_t          localN,
                    const float * const   localXstart,
@@ -58,7 +58,8 @@ private:
 
    bool                 m_opened ;        ///< True if nc_create succeeded.
    std::vector<float>   m_times ;         ///< The (s*dt) points in time that the output data is written out.
-   int                  m_outStepCount ;  ///< The T variable value at which this write is occuring.
+   int                  m_rank ;          ///< mpi rank for the calling task.
+   size_t               m_outStepCount ;  ///< The T variable value at which this write is occuring.
    int                  m_ncid ;          ///< File descriptor for the netcdf file.
    int                  m_xDimId ;        ///< Dimension identifier for the (grid) position dimension.
    int                  m_tDimId ;        ///< Dimension identifier for the time dimension.

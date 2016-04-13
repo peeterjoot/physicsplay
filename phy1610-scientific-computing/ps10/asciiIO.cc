@@ -36,7 +36,7 @@ void asciiIO::writeMeta( const size_t          globalOffset,
               localRhoStart ) ;
 }
 
-asciiIO::close( )
+void asciiIO::close( )
 {
 }
 

@@ -20,7 +20,7 @@ void iohandlerImplementation::writeData( const float           time,
 {
 }
 
-iohandlerImplementation::close( )
+void iohandlerImplementation::close( )
 {
 }
 
@@ -39,7 +39,7 @@ iohandler::iohandler( const cfg             c,
    {
       case cfg::netcdf:
       {
-         m_ioHandler = new netcdfIO( fileBaseName, N, params ) ;
+         m_ioHandler = new netcdfIO( fileBaseName, N, mpirank, params ) ;
          break ;
       }
       case cfg::ascii:
@@ -99,7 +99,7 @@ void iohandler::setSleepTime( const int t )
 }
 
 /** close files, handles, ... */
-iohandler::close()
+void iohandler::close()
 {
    if ( m_ioHandler )
    {

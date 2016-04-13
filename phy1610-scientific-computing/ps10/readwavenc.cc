@@ -115,6 +115,7 @@ variables:
                              "params",
                              params ) ;
    handle_error( status, "nc_get_att_text", __LINE__ ) ;
+   params[paramsStringLen] = 0 ;
    std::cout << params ;
 
    std::vector<float> vecA( N ) ;

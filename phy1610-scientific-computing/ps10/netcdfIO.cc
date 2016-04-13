@@ -132,22 +132,22 @@ void netcdfIO::writeMeta( const size_t          globalOffset,
 
 void netcdfIO::writeTimes( )
 {
-   status = nc_var_par_access( m_ncid, m_atTimesVarId, NC_INDEPENDENT ) ;
+   int status = nc_var_par_access( m_ncid, m_atTimesVarId, NC_INDEPENDENT ) ;
    handle_error( status ) ;
 
    size_t start[]{ 0 } ;
    size_t count[]{ m_times.size() } ;
-   int status = nc_put_vara_float( m_ncid,
-                                   m_atTimesVarId,
-                                   start,
-                                   count,
-                                   &m_times[0] ) ;
+   status = nc_put_vara_float( m_ncid,
+                               m_atTimesVarId,
+                               start,
+                               count,
+                               &m_times[0] ) ;
    handle_error( status ) ;
 }
 
 void netcdfIO::internalClose( const bool isErrorCodePath )
 {
-   if ( m_open )
+   if ( m_opened )
    {
       if ( isErrorCodePath )
       {
@@ -174,11 +174,11 @@ void netcdfIO::internalClose( const bool isErrorCodePath )
          }
       }
 
-      m_open = false ;
+      m_opened = false ;
    }
 }
 
-netcdfIO::close( )
+void netcdfIO::close( )
 {
    internalClose( false ) ;
 }

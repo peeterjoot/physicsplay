@@ -91,7 +91,7 @@ void graphicsIO::writeMeta( const size_t          globalOffsetIgnored,
    m_rhoInitStart = localRhoStart ;
 }
 
-graphicsIO::close( )
+void graphicsIO::close( )
 {
 }
 

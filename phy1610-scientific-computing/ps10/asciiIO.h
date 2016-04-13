@@ -30,7 +30,7 @@ public:
    /**
       \copydoc iohandlerImplementation::writeData
     */
-   void writeData( const size_t          timestep,
+   void writeData( const float           time,
                    const size_t          globalOffset,
                    const size_t          localN,
                    const float * const   localXstart,
