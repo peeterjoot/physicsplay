@@ -17,11 +17,12 @@ void asciiIO::writeData( const float           time,
                          const float * const   localRhoStart )
 {
    // It's useful for testing ascii output to write out the ghost cells too:
-   for ( int i{-1} ; i <= (int)localN ; i++ )
+   //for ( int i{-1} ; i <= (int)localN ; i++ )
+   for ( size_t i{0} ; i < localN ; i++ )
    {
       int j = i + 1 + globalOffset ;
 
-      m_file << m_outStepCount << ", " << j << ", " << localXstart[i] << ", " << localRhoStart[i] << '\n' ;
+      m_file << m_outStepCount << ' ' << j << ' ' << localXstart[i] << ' ' << localRhoStart[i] << '\n' ;
    }
 
    m_times.push_back( time ) ;
@@ -46,7 +47,7 @@ void asciiIO::close( )
    {
       for ( size_t i{0} ; i < m_times.size() ; i++ )
       {
-         m_file << "# " << i << ", " << m_times[i] << '\n' ;
+         m_file << "# " << i << ' ' << m_times[i] << '\n' ;
       }
    }
 }
