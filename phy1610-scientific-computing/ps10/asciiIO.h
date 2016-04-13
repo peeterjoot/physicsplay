@@ -37,6 +37,11 @@ public:
                    const float * const   localRhoStart ) ;
 
    /**
+      \copydoc iohandlerImplementation::close
+    */
+   void close() ;
+
+   /**
       Close the file stream.
     */
    ~asciiIO( ) ;

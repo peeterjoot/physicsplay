@@ -20,8 +20,12 @@ do {                                                                 \
 
 netcdfIO::netcdfIO( const std::string &   fileBaseName,
                     const size_t          N,
+                    const int             rank,
                     const std::string &   params )
    : m_opened( false )
+   , m_times( )
+   , m_rank{ rank }
+   , m_outStepCount{0}
 {
    int status ;
    const std::string filename{ fileBaseName + ".nc" } ;
@@ -85,27 +89,13 @@ netcdfIO::netcdfIO( const std::string &   fileBaseName,
    handle_error( status ) ;
 }
 
-netcdfIO::~netcdfIO( )
-{
-   int status = nc_close( m_ncid ) ;
-
-   if ( status )
-   {
-      BOOST_THROW_EXCEPTION(
-            netcdf_error()
-               << netcdf_errno_info( status )
-               << netcdf_strerror_info( nc_strerror( status ) )
-               ) ;
-   }
-}
-
-void netcdfIO::writeData( const size_t          timeStepCount,
+void netcdfIO::writeData( const float           time,
                           const size_t          globalOffset,
                           const size_t          localN,
                           const float * const   localXstartIgnored,
                           const float * const   localRhoStart )
 {
-   size_t startRho[]{ timeStepCount, globalOffset } ;
+   size_t startRho[]{ m_outStepCount, globalOffset } ;
    size_t countRho[]{ 1, localN } ;
    int status = nc_put_vara_float( m_ncid,
                                    m_rhoVarId,
@@ -113,18 +103,9 @@ void netcdfIO::writeData( const size_t          timeStepCount,
                                    countRho,
                                    localRhoStart ) ;
    handle_error( status ) ;
-}
 
-void netcdfIO::writeTimes( std::vector<float> & timesData )
-{
-   size_t start[]{ 0 } ;
-   size_t count[]{ timesData.size() } ;
-   int status = nc_put_vara_float( m_ncid,
-                                   m_atTimesVarId,
-                                   start,
-                                   count,
-                                   &timesData[0] ) ;
-   handle_error( status ) ;
+   m_times.push_back( time ) ;
+   m_outStepCount++ ;
 }
 
 void netcdfIO::writeMeta( const size_t          globalOffset,
@@ -142,9 +123,67 @@ void netcdfIO::writeMeta( const size_t          globalOffset,
                                    localXstart ) ;
    handle_error( status ) ;
 
-   writeData( 0,
+   writeData( 0.0,
               globalOffset,
               localN,
               nullptr,
               localRhoStart ) ;
+}
+
+void netcdfIO::writeTimes( )
+{
+   status = nc_var_par_access( m_ncid, m_atTimesVarId, NC_INDEPENDENT ) ;
+   handle_error( status ) ;
+
+   size_t start[]{ 0 } ;
+   size_t count[]{ m_times.size() } ;
+   int status = nc_put_vara_float( m_ncid,
+                                   m_atTimesVarId,
+                                   start,
+                                   count,
+                                   &m_times[0] ) ;
+   handle_error( status ) ;
+}
+
+void netcdfIO::internalClose( const bool isErrorCodePath )
+{
+   if ( m_open )
+   {
+      if ( isErrorCodePath )
+      {
+         // We are either serivicing an exception, or somebody didn't call close() explicitly
+         // before the destructor triggered.
+         (void) nc_close( m_ncid ) ;
+      }
+      else
+      {
+         if ( 0 == m_rank )
+         {
+            writeTimes() ;
+         }
+
+         int status = nc_close( m_ncid ) ;
+
+         if ( status )
+         {
+            BOOST_THROW_EXCEPTION(
+                  netcdf_error()
+                     << netcdf_errno_info( status )
+                     << netcdf_strerror_info( nc_strerror( status ) )
+                     ) ;
+         }
+      }
+
+      m_open = false ;
+   }
+}
+
+netcdfIO::close( )
+{
+   internalClose( false ) ;
+}
+
+netcdfIO::~netcdfIO( )
+{
+   internalClose( true ) ;
 }

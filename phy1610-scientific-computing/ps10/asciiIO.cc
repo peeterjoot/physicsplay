@@ -9,7 +9,7 @@ asciiIO::asciiIO( const std::string & fileBaseName )
    openStreamForWriteOrThrow( filename, m_file ) ;
 }
 
-void asciiIO::writeData( const size_t          timeStepCount,
+void asciiIO::writeData( const float           time,
                          const size_t          globalOffset,
                          const size_t          localN,
                          const float * const   localXstart,
@@ -20,7 +20,7 @@ void asciiIO::writeData( const size_t          timeStepCount,
    {
       int j = i + 1 + globalOffset ;
 
-      m_file << timeStepCount << ", " << j << ", " << localXstart[i] << ", " << localRhoStart[i] << '\n' ;
+      m_file << time << " : " << j << ", " << localXstart[i] << ", " << localRhoStart[i] << '\n' ;
    }
 }
 
@@ -34,6 +34,10 @@ void asciiIO::writeMeta( const size_t          globalOffset,
               localN,
               localXstart,
               localRhoStart ) ;
+}
+
+asciiIO::close( )
+{
 }
 
 asciiIO::~asciiIO( )

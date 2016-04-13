@@ -12,11 +12,15 @@ void iohandlerImplementation::writeMeta( const size_t          globalOffset,
 {
 }
 
-void iohandlerImplementation::writeData( const size_t          timeStepCount,
+void iohandlerImplementation::writeData( const float           time,
                                          const size_t          globalOffset,
                                          const size_t          localN,
                                          const float * const   localXstart,
                                          const float * const   localRhostart )
+{
+}
+
+iohandlerImplementation::close( )
 {
 }
 
@@ -54,7 +58,7 @@ iohandler::iohandler( const cfg             c,
    }
 }
 
-void iohandler::writeData( const size_t          timeStepCount,
+void iohandler::writeData( const float           time,
                            const size_t          globalOffset,
                            const size_t          localN,
                            const float * const   localXstart,
@@ -62,7 +66,7 @@ void iohandler::writeData( const size_t          timeStepCount,
 {
    if ( m_ioHandler )
    {
-      m_ioHandler->writeData( timeStepCount,
+      m_ioHandler->writeData( time,
                               globalOffset,
                               localN,
                               localXstart,
@@ -94,17 +98,16 @@ void iohandler::setSleepTime( const int t )
    }
 }
 
-void iohandler::writeTimes( std::vector<float> & timesData )
+/** close files, handles, ... */
+iohandler::close()
 {
-   netcdfIO * n = dynamic_cast<netcdfIO *>( m_ioHandler ) ;
-
-   if ( n )
+   if ( m_ioHandler )
    {
-      n->writeTimes( timesData ) ;
+      m_ioHandler->close() ;
    }
 }
 
-/** close files, handles, ... */
+/** last resort closure of files, handles, ... */
 iohandler::~iohandler()
 {
    if ( m_ioHandler )

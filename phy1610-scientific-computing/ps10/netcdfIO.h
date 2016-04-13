@@ -4,6 +4,7 @@
 #define phy1610_netcdfIO_h_included
 
 #include "iohandler.h"
+#include <vector>
 
 /**
    Handle IO for a float x[N] "grid", plus float rho[N] "data", writing out just the local MPI
@@ -24,6 +25,7 @@ public:
     */
    netcdfIO( const std::string &   fileBaseName,
              const size_t          N,
+             const int             rank,
              const std::string &   params ) ;
 
    /**
@@ -44,8 +46,9 @@ public:
                    const float * const   localRhoStart ) ;
 
    /**
-    */ 
-   void writeTimes( std::vector<float> & timesData ) ;
+      \copydoc iohandlerImplementation::close
+    */
+   void close() ;
 
    /**
       Close the netcdf file created if that was successful.
@@ -53,13 +56,22 @@ public:
    ~netcdfIO( ) ;
 private:
 
-   bool  m_opened ;        ///< True if nc_create succeeded.
-   int   m_ncid ;          ///< File descriptor for the netcdf file.
-   int   m_xDimId ;        ///< Dimension identifier for the (grid) position dimension.
-   int   m_tDimId ;        ///< Dimension identifier for the time dimension.
-   int   m_rhoVarId ;      ///< Variable identifier for the rho array.
-   int   m_xVarId ;        ///< Variable identifier for the x array.
-   int   m_atTimesVarId ;  ///< Variable identifier for the array of timestep times (s * dt).
+   bool                 m_opened ;        ///< True if nc_create succeeded.
+   std::vector<float>   m_times ;         ///< The (s*dt) points in time that the output data is written out.
+   int                  m_outStepCount ;  ///< The T variable value at which this write is occuring.
+   int                  m_ncid ;          ///< File descriptor for the netcdf file.
+   int                  m_xDimId ;        ///< Dimension identifier for the (grid) position dimension.
+   int                  m_tDimId ;        ///< Dimension identifier for the time dimension.
+   int                  m_rhoVarId ;      ///< Variable identifier for the rho array.
+   int                  m_xVarId ;        ///< Variable identifier for the x array.
+   int                  m_atTimesVarId ;  ///< Variable identifier for the array of timestep times (s * dt).
+
+   /**
+      Let the MPI rank 0 task write out all the times that data has been written.
+    */ 
+   void writeTimes( ) ;
+
+   void internalClose( const bool isErrorCodePath ) ;
 } ;
 
 #endif

@@ -21,8 +21,8 @@ public:
                            const float * const   localRhoStart ) = 0 ;
 
    /**
-      \param timeStepCount [in]
-         A value >=1 representing the count of which timestep this is, with 1 being the first.
+      \param time [in]
+         The "point in time" (s*dt) for which the data is being output.
 
       \param globalOffset [in]
          Location of the data to be written relative to global domain, with 0 representing
@@ -45,13 +45,18 @@ public:
          localRhostart[0] is the location of the first non-ghost cell grid value, and that 
          localRhostart[-1] and localRhostart[localN] are both accessible (the ghost cell values.)
     */
-   virtual void writeData( const size_t          timeStepCount,
+   virtual void writeData( const float           time,
                            const size_t          globalOffset,
                            const size_t          localN,
                            const float * const   localXstart,
                            const float * const   localRhostart ) = 0 ;
 
-   /** free any resources required, close files, ...
+   /**
+      Close any required files, handles, or resources if required.
+    */
+   virtual void close() = 0 ;
+
+   /** Free any remaining resources after close() has been called.
     */
    virtual ~iohandlerImplementation( ) = 0 ;
 } ;
@@ -97,7 +102,7 @@ public:
               const std::string &   paramsInfo ) ;
 
    /** \copydoc iohandlerImplementation::writeData */
-   void writeData( const size_t          timeStepCount,
+   void writeData( const float           time,
                    const size_t          globalOffset,
                    const size_t          localN,
                    const float * const   localXstart,
@@ -110,16 +115,17 @@ public:
                    const float * const   localRhoStart ) ;
 
    /**
-      for netcdf output
-    */
-   void writeTimes( std::vector<float> & timesData ) ;
-
-   /**
       for graphics.  set the sleep time between plots.
     */
    void setSleepTime( const int t ) ;
 
-   /** close files, handles, ... */
+   /**
+      Close any required files, handles, or resources if required.
+    */
+   void close() ;
+
+   /** Free any remaining resources after close() has been called.
+    */
    ~iohandler() ;
 private:
 

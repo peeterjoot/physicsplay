@@ -77,6 +77,8 @@ int main( int argc, char ** argv )
                        &x[1],
                        &rho[1] ) ;
       }
+
+      io.close() ;
    }
 
    return 0 ;

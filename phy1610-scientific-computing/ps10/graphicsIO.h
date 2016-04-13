@@ -40,6 +40,11 @@ public:
       m_sleepTime = t ;
    }
 
+   /**
+      \copydoc iohandlerImplementation::close
+    */
+   void close() ;
+
    /** no-op destructor */
    ~graphicsIO( ) ;
 private:

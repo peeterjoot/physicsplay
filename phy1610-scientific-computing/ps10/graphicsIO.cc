@@ -51,8 +51,8 @@ void graphicsIO::plot( const size_t          localN,
    cpgline( localN + 2, x, rho ) ;
 }
 
-void graphicsIO::writeData( const size_t          timeStepCount,
-                            const size_t          globalOffset,
+void graphicsIO::writeData( const float           timeIgnored,
+                            const size_t          globalOffsetIgnored,
                             const size_t          localN,
                             const float * const   localXstart,
                             const float * const   localRhoStart )
@@ -78,7 +78,7 @@ void graphicsIO::writeData( const size_t          timeStepCount,
    }
 }
 
-void graphicsIO::writeMeta( const size_t          globalOffset,
+void graphicsIO::writeMeta( const size_t          globalOffsetIgnored,
                             const size_t          localN,
                             const float * const   localXstart,
                             const float * const   localRhoStart )
@@ -89,6 +89,10 @@ void graphicsIO::writeMeta( const size_t          globalOffset,
          &localRhoStart[-1] ) ;
 
    m_rhoInitStart = localRhoStart ;
+}
+
+graphicsIO::close( )
+{
 }
 
 graphicsIO::~graphicsIO( )
