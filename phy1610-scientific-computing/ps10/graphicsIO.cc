@@ -4,7 +4,8 @@
 #include <unistd.h>
 
 graphicsIO::graphicsIO( )
-   : m_openedWindow( false )
+   : iohandlerImplementation( -1 ) // don't need rank for graphics IO.
+   , m_openedWindow( false )
    , m_rhoInitStart( nullptr )
 {
    // 

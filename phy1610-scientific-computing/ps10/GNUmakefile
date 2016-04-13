@@ -78,6 +78,7 @@ CLEANTARGETS += waveparams_*txt
 CLEANTARGETS += *.nc
 CLEANTARGETS += *.out
 CLEANTARGETS += dataFilename*
+CLEANTARGETS += aggregate.out.*
 
 all: $(TARGETS)
 

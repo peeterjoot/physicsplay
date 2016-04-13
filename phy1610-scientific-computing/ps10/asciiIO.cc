@@ -2,9 +2,10 @@
 #include "asciiIO.h"
 #include "stdoutfilestream.h"
 
-asciiIO::asciiIO( const std::string & fileBaseName )
+asciiIO::asciiIO( const std::string & fileBaseName, const int rank )
+   : iohandlerImplementation( rank )
 {
-   const std::string filename{ fileBaseName + ".out" } ;
+   const std::string filename{ fileBaseName + "_" + std::to_string( rank ) + ".out" } ;
 
    openStreamForWriteOrThrow( filename, m_file ) ;
 }
@@ -20,8 +21,11 @@ void asciiIO::writeData( const float           time,
    {
       int j = i + 1 + globalOffset ;
 
-      m_file << time << " : " << j << ", " << localXstart[i] << ", " << localRhoStart[i] << '\n' ;
+      m_file << m_outStepCount << ", " << j << ", " << localXstart[i] << ", " << localRhoStart[i] << '\n' ;
    }
+
+   m_times.push_back( time ) ;
+   m_outStepCount++ ;
 }
 
 void asciiIO::writeMeta( const size_t          globalOffset,
@@ -38,6 +42,13 @@ void asciiIO::writeMeta( const size_t          globalOffset,
 
 void asciiIO::close( )
 {
+   if ( 0 == m_rank )
+   {
+      for ( size_t i{0} ; i < m_times.size() ; i++ )
+      {
+         m_file << "# " << i << ", " << m_times[i] << '\n' ;
+      }
+   }
 }
 
 asciiIO::~asciiIO( )

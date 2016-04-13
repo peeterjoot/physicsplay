@@ -18,14 +18,24 @@ do {                                                                 \
    }                                                                 \
 } while ( 0 )
 
+/** 
+ dont' know if this is actually an invalid value for netcdf (file, dimension, variable) handles, but at least give these a
+ non-random value.
+ */    
+static const constexpr int INVALID_NETCDF_ID{-1} ;
+
 netcdfIO::netcdfIO( const std::string &   fileBaseName,
                     const size_t          N,
                     const int             rank,
                     const std::string &   params )
-   : m_opened( false )
-   , m_times( )
-   , m_rank{ rank }
-   , m_outStepCount{0}
+   : iohandlerImplementation( rank )
+   , m_opened( false )
+   , m_ncid{ INVALID_NETCDF_ID }
+   , m_xDimId{ INVALID_NETCDF_ID }
+   , m_tDimId{ INVALID_NETCDF_ID }
+   , m_rhoVarId{ INVALID_NETCDF_ID }
+   , m_xVarId{ INVALID_NETCDF_ID }
+   , m_atTimesVarId{ INVALID_NETCDF_ID }
 {
    int status ;
    const std::string filename{ fileBaseName + ".nc" } ;

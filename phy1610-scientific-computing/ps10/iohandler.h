@@ -59,6 +59,15 @@ public:
    /** Free any remaining resources after close() has been called.
     */
    virtual ~iohandlerImplementation( ) = 0 ;
+
+   inline iohandlerImplementation( const int mpi_rank ) : m_times(), m_outStepCount{0}, m_rank{mpi_rank}
+   {
+   }
+
+protected:
+   std::vector<float>   m_times ;         ///< The (s*dt) points in time that the output data is written out.
+   size_t               m_outStepCount ;  ///< The T variable value at which this write is occuring.
+   int                  m_rank ;          ///< mpi rank for the calling task.
 } ;
 
 /**

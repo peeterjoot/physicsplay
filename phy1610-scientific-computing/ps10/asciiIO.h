@@ -16,8 +16,11 @@ public:
    /**
       \param fileBaseName [in]
          Create an ascii file fileBaseName + ".out"
+
+      \param rank [in]
+         mpi rank
     */
-   asciiIO( const std::string &   fileBaseName ) ;
+   asciiIO( const std::string &   fileBaseName, const int rank ) ;
 
    /**
       \copydoc iohandlerImplementation::writeMeta
@@ -48,6 +51,7 @@ public:
 private:
 
    std::ofstream m_file ;
+   std::vector<float>   m_times ;         ///< The (s*dt) points in time that the output data is written out.
 } ;
 
 #endif
