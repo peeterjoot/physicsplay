@@ -69,6 +69,10 @@ IOTEST_OBJECTS := $(subst .cc,.o,$(IOTEST_SOURCES))
 IOTEST_LDFLAGS += $(PGPLOT_LDFLAGS)
 IOTEST_LDLIBS += $(PGPLOT_LDLIBS)
 
+TARGETS += readwavenc
+READWAVENC_SOURCES += readwavenc.cc
+READWAVENC_OBJECTS := $(subst .cc,.o,$(READWAVENC_SOURCES))
+
 CLEANTARGETS += $(TARGETS)
 CLEANTARGETS += waveparams_*txt
 CLEANTARGETS += *.nc
@@ -96,6 +100,9 @@ ghosts : $(GHOSTS_OBJECTS)
 
 test : $(TEST_OBJECTS)
 	$(CXX) -o $@ $(TEST_OBJECTS) $(LDFLAGS) $(TEST_LDFLAGS) $(LDLIBS) $(TEST_LDLIBS)
+
+readwavenc : $(READWAVENC_OBJECTS)
+	$(CXX) -o $@ $(READWAVENC_OBJECTS) $(LDFLAGS) $(READWAVENC_LDFLAGS) $(LDLIBS) $(READWAVENC_LDLIBS)
 
 runtest: test
 	./test --report_level=detailed --log_level=all

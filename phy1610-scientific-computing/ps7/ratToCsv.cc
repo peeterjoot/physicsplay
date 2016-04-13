@@ -18,7 +18,7 @@
  */
 void showHelpAndExit()
 {
-   std::cerr << "usage: grav\n" 
+   std::cerr << "usage: ratToCsv\n" 
       "\t[--ratpath=p|-r p]\n"
       "\t[--filename=f|-d f]\n"
       "\t[--help]" << std::endl ;
