@@ -73,14 +73,20 @@ TARGETS += readwavenc
 READWAVENC_SOURCES += readwavenc.cc
 READWAVENC_OBJECTS := $(subst .cc,.o,$(READWAVENC_SOURCES))
 
+OUTCLEANTARGETS += *.nc
+OUTCLEANTARGETS += *.out
+OUTCLEANTARGETS += dataFilename*
+OUTCLEANTARGETS += aggregate.out.*
+OUTCLEANTARGETS += netcdf.out.*
+
 CLEANTARGETS += $(TARGETS)
 CLEANTARGETS += waveparams_*txt
-CLEANTARGETS += *.nc
-CLEANTARGETS += *.out
-CLEANTARGETS += dataFilename*
-CLEANTARGETS += aggregate.out.*
+CLEANTARGETS += $(OUTCLEANTARGETS)
 
 all: $(TARGETS)
+
+outclean:
+	rm -f $(OUTCLEANTARGETS)
 
 wave1d.o : ../inc/physicsplay_build_version.h
 

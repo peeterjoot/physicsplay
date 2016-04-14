@@ -21,6 +21,8 @@ void showHelpAndExit()
 {
    std::cerr << "usage: readwavenc\n" 
                 "\t[--filename=f|-f f]\n"
+                "\t[--verbose|-v]\n"
+                "\t[--times|-t]\n"
                 "\t[--help]" << std::endl ;
 
    std::exit( (int)RETURNCODES::HELP ) ;
@@ -32,21 +34,37 @@ void showHelpAndExit()
 int main( int argc, char ** argv )
 {
    int c{0} ;
+   bool verbose{false} ;
+   bool showtimes{false} ;
    std::string fileName{} ;
 
    constexpr struct option longOptions[]{
      { "help",           0, NULL, 'h' },
      { "filename",       1, NULL, 'f' },
+     { "verbose",        0, NULL, 'v' },
+     { "times",          0, NULL, 't' },
      { NULL,             0, NULL, 0   }
    } ;
 
-   while ( -1 != ( c = getopt_long( argc, argv, "hf:", longOptions, NULL ) ) )
+   while ( -1 != ( c = getopt_long( argc, argv, "hf:vt", longOptions, NULL ) ) )
    { 
       switch ( c )
       {
          case 'f' :
          {
             fileName = std::string(optarg) ;
+
+            break ;
+         }
+         case 'v' :
+         {
+            verbose = true ;
+
+            break ;
+         }
+         case 't' :
+         {
+            showtimes = true ;
 
             break ;
          }
@@ -84,7 +102,10 @@ variables:
    status = nc_inq_dimlen( ncid, XdimId, &N ) ;
    handle_error( status, "nc_inq_dimlen", __LINE__ ) ;
 
-   std::cout << "X dim: " << N << '\n' ;
+   if ( verbose )
+   {
+      std::cout << "X dim: " << N << '\n' ;
+   }
 
    status = nc_inq_dimid( ncid, "T", &TdimId ) ;
    handle_error( status, "nc_inq_dimid", __LINE__ ) ;
@@ -92,7 +113,10 @@ variables:
    status = nc_inq_dimlen( ncid, TdimId, &tLen ) ;
    handle_error( status, "nc_inq_dimlen", __LINE__ ) ;
 
-   std::cout << "T dim: " << tLen << '\n' ;
+   if ( verbose )
+   {
+      std::cout << "T dim: " << tLen << '\n' ;
+   }
 
    status = nc_inq_varid( ncid, "RHO", &idVarRho ) ;
    handle_error( status, "nc_inq_varid", __LINE__ ) ;
@@ -100,48 +124,32 @@ variables:
    status = nc_inq_varid( ncid, "X", &idVarX ) ;
    handle_error( status, "nc_inq_varid", __LINE__ ) ;
 
-   status = nc_inq_varid( ncid, "ATTIMES", &idVarAtTimes ) ;
-   handle_error( status, "nc_inq_varid", __LINE__ ) ;
+   if ( verbose )
+   {
+      size_t paramsStringLen ;
+      status = nc_inq_attlen( ncid,
+                              NC_GLOBAL,
+                              "params",
+                              &paramsStringLen ) ;
 
-   size_t paramsStringLen ;
-   status = nc_inq_attlen( ncid,
-                           NC_GLOBAL,
-                           "params",
-                           &paramsStringLen ) ;
+      char params[ paramsStringLen + 1 ] ;
+      status = nc_get_att_text( ncid,
+                                NC_GLOBAL,
+                                "params",
+                                params ) ;
+      handle_error( status, "nc_get_att_text", __LINE__ ) ;
+      params[paramsStringLen] = 0 ;
+      std::cout << params ;
+   }
 
-   char params[ paramsStringLen + 1 ] ;
-   status = nc_get_att_text( ncid,
-                             NC_GLOBAL,
-                             "params",
-                             params ) ;
-   handle_error( status, "nc_get_att_text", __LINE__ ) ;
-   params[paramsStringLen] = 0 ;
-   std::cout << params ;
-
-   std::vector<float> vecA( N ) ;
+   std::vector<float> vecRho( N ) ;
    std::vector<float> vecX( N ) ;
-   std::vector<float> vecT( tLen ) ;
 
    // Read in the grid-mesh values:
    status = nc_get_var_float( ncid,
                               idVarX,
                               &vecX[0] );
    handle_error( status, "nc_get_var_float", __LINE__ ) ;
-
-   for ( size_t i{0} ; i < N ; i++ )
-   {
-      std::cout << "x[" << i << "] = " << vecX[i] << '\n' ;
-   }
-
-   status = nc_get_var_float( ncid,
-                              idVarAtTimes,
-                              &vecT[0] );
-   handle_error( status, "nc_get_var_float", __LINE__ ) ;
-
-   for ( size_t i{0} ; i < tLen ; i++ )
-   {
-      std::cout << "t[" << i << "] = " << vecT[i] << '\n' ;
-   }
 
    // Read in the three timeslices of data:
    for ( size_t s{0} ; s < tLen ; s++ )
@@ -152,12 +160,30 @@ variables:
                                   idVarRho,
                                   startA,
                                   countA,
-                                  &vecA[0] );
+                                  &vecRho[0] );
       handle_error( status, "nc_get_vara_float", __LINE__ ) ;
 
       for ( size_t i{0} ; i < N ; i++ )
       {
-         std::cout << s << ": y[" << i << "] = " << vecA[i] << '\n' ;
+         std::cout << s << ' ' << i+1 << ' ' << vecX[i] << ' ' << vecRho[i] << '\n' ;
+      }
+   }
+
+   if ( showtimes )
+   {
+      status = nc_inq_varid( ncid, "ATTIMES", &idVarAtTimes ) ;
+      handle_error( status, "nc_inq_varid", __LINE__ ) ;
+
+      std::vector<float> vecT( tLen ) ;
+      status = nc_get_var_float( ncid,
+                                 idVarAtTimes,
+                                 &vecT[0] );
+      handle_error( status, "nc_get_var_float", __LINE__ ) ;
+
+      // display the (s*dt) times at which the output was saved
+      for ( size_t i{0} ; i < vecT.size() ; i++ )
+      {
+         std::cout << "# " << i << ' ' << vecT[i] << '\n' ;
       }
    }
 
