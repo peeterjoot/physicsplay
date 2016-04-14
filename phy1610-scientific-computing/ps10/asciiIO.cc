@@ -2,8 +2,8 @@
 #include "asciiIO.h"
 #include "stdoutfilestream.h"
 
-asciiIO::asciiIO( const std::string & fileBaseName, const int rank )
-   : iohandlerImplementation( rank )
+asciiIO::asciiIO( const std::string & fileBaseName, const int size, const int rank )
+   : iohandlerImplementation( size, rank )
 {
    const std::string filename{ fileBaseName + "_" + std::to_string( rank ) + ".out" } ;
 

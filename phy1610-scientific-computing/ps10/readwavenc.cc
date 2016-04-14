@@ -76,7 +76,7 @@ int main( int argc, char ** argv )
       } 
    } 
 
-   int status, ncid, XdimId, TdimId, idVarX, idVarRho, idVarAtTimes ;
+   int status, ncid, XdimId, TdimId, idVarX, idVarRho, idVarTimes ;
    size_t N, tLen ;
 
 #if 0
@@ -87,7 +87,7 @@ dimensions:
 variables:
         float RHO(T, X) ;
         float X(X) ;
-        float ATTIMES(T) ;
+        float TIMES(T) ;
 
 // global attributes:
 //                 :params = "#params    Revision https://github.com/peeterjoot/physicsplay commit 76a89aa6bf159d8807f22cb2d6802b3bcde2a7cd Apr/11/2016\n#c         1\n#tau       20\n#x1        -26\n#x2        26\n#runtime   150\n#dx        0.01\n#outtime   0.04\n#ngrid     5200\n#dt        0.005\n#nsteps    30000\n#nper      8\n#graphics  -1\n#asciiIO   0\n#netcdfIO  1\n#pgrid 5200\n#npnts 5202\n" ;
@@ -171,12 +171,12 @@ variables:
 
    if ( showtimes )
    {
-      status = nc_inq_varid( ncid, "ATTIMES", &idVarAtTimes ) ;
+      status = nc_inq_varid( ncid, "TIMES", &idVarTimes ) ;
       handle_error( status, "nc_inq_varid", __LINE__ ) ;
 
       std::vector<float> vecT( tLen ) ;
       status = nc_get_var_float( ncid,
-                                 idVarAtTimes,
+                                 idVarTimes,
                                  &vecT[0] );
       handle_error( status, "nc_get_var_float", __LINE__ ) ;
 

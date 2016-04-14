@@ -31,6 +31,7 @@ iohandlerImplementation::~iohandlerImplementation( )
 iohandler::iohandler( const cfg             c,
                       const std::string &   fileBaseName,
                       const size_t          N,
+                      const int             mpisize,
                       const int             mpirank,
                       const std::string &   params )
    : m_ioHandler(nullptr)
@@ -39,12 +40,12 @@ iohandler::iohandler( const cfg             c,
    {
       case cfg::netcdf:
       {
-         m_ioHandler = new netcdfIO( fileBaseName, N, mpirank, params ) ;
+         m_ioHandler = new netcdfIO( fileBaseName, N, mpisize, mpirank, params ) ;
          break ;
       }
       case cfg::ascii:
       {
-         m_ioHandler = new asciiIO( fileBaseName, mpirank ) ;
+         m_ioHandler = new asciiIO( fileBaseName, mpisize, mpirank ) ;
          break ;
       }
       case cfg::graphics:

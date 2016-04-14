@@ -57,7 +57,7 @@ int main( int argc, char ** argv )
                 rho,
                 rhoinit ) ;
 
-      iohandler io( c, "iotest", N, mpi.m_rank, "blah" ) ;
+      iohandler io( c, "iotest", N, mpi.m_size, mpi.m_rank, "blah" ) ;
       io.setSleepTime( 1 ) ;
 
       io.writeMeta( p.m_myFirstGlobalElementIndex -1,

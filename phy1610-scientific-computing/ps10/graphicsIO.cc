@@ -4,7 +4,7 @@
 #include <unistd.h>
 
 graphicsIO::graphicsIO( )
-   : iohandlerImplementation( -1 ) // don't need rank for graphics IO.
+   : iohandlerImplementation( -1, -1 ) // don't need mpi state for graphics IO.
    , m_openedWindow( false )
    , m_rhoInitStart( nullptr )
 {

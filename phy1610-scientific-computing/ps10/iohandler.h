@@ -60,13 +60,18 @@ public:
     */
    virtual ~iohandlerImplementation( ) = 0 ;
 
-   inline iohandlerImplementation( const int mpi_rank ) : m_times(), m_outStepCount{0}, m_rank{mpi_rank}
+   inline iohandlerImplementation( const int mpi_size, const int mpi_rank )
+      : m_times()
+      , m_outStepCount{0}
+      , m_size{mpi_size}
+      , m_rank{mpi_rank}
    {
    }
 
 protected:
    std::vector<float>   m_times ;         ///< The (s*dt) points in time that the output data is written out.
    size_t               m_outStepCount ;  ///< The T variable value at which this write is occuring.
+   int                  m_size ;          ///< mpi size for the calling task.
    int                  m_rank ;          ///< mpi rank for the calling task.
 } ;
 
@@ -98,6 +103,9 @@ public:
       \param N [in]
           Dimensions of the float "grid" and 1D data arrays to write.
 
+      \param mpisize [in]
+          Number of MPI tasks.
+
       \param mpirank [in]
           A value in the [0, mpi_size) range.
 
@@ -107,6 +115,7 @@ public:
    iohandler( const cfg             c,
               const std::string &   fileBaseName,
               const size_t          N,
+              const int             mpisize,
               const int             mpirank,
               const std::string &   paramsInfo ) ;
 

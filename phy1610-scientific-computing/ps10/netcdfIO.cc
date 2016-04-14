@@ -4,6 +4,7 @@
 #include <boost/exception/info.hpp>
 #include <mpi.h>
 #include <netcdf_par.h>
+#include "rangePartition.h"
 
 // macro to retain __LINE__ info in the BOOST_THROW_EXCEPTION macro
 #define handle_error( status )                                       \
@@ -26,16 +27,17 @@ static const constexpr int INVALID_NETCDF_ID{-1} ;
 
 netcdfIO::netcdfIO( const std::string &   fileBaseName,
                     const size_t          N,
+                    const int             size,
                     const int             rank,
                     const std::string &   params )
-   : iohandlerImplementation( rank )
+   : iohandlerImplementation( size, rank )
    , m_opened( false )
    , m_ncid{ INVALID_NETCDF_ID }
    , m_xDimId{ INVALID_NETCDF_ID }
    , m_tDimId{ INVALID_NETCDF_ID }
    , m_rhoVarId{ INVALID_NETCDF_ID }
    , m_xVarId{ INVALID_NETCDF_ID }
-   , m_atTimesVarId{ INVALID_NETCDF_ID }
+   , m_timesVarId{ INVALID_NETCDF_ID }
 {
    int status ;
    const std::string filename{ fileBaseName + ".nc" } ;
@@ -79,7 +81,7 @@ netcdfIO::netcdfIO( const std::string &   fileBaseName,
    handle_error( status ) ;
 
    int atTimesDims[]{ m_tDimId } ;
-   status = nc_def_var( m_ncid, "ATTIMES", NC_FLOAT, 1, atTimesDims, &m_atTimesVarId) ;
+   status = nc_def_var( m_ncid, "TIMES", NC_FLOAT, 1, atTimesDims, &m_timesVarId) ;
    handle_error( status ) ;
 
    status = nc_put_att_text( m_ncid,
@@ -140,21 +142,6 @@ void netcdfIO::writeMeta( const size_t          globalOffset,
               localRhoStart ) ;
 }
 
-void netcdfIO::writeTimes( )
-{
-   int status = nc_var_par_access( m_ncid, m_atTimesVarId, NC_INDEPENDENT ) ;
-   handle_error( status ) ;
-
-   size_t start[]{ 0 } ;
-   size_t count[]{ m_times.size() } ;
-   status = nc_put_vara_float( m_ncid,
-                               m_atTimesVarId,
-                               start,
-                               count,
-                               &m_times[0] ) ;
-   handle_error( status ) ;
-}
-
 void netcdfIO::internalClose( const bool isErrorCodePath )
 {
    if ( m_opened )
@@ -167,12 +154,46 @@ void netcdfIO::internalClose( const bool isErrorCodePath )
       }
       else
       {
+         int status ;
+         auto tsize{ m_times.size() } ;
+#if 0
+         rangePartition pt( tsize, m_size, m_rank ) ;
+         auto myrange{ pt.subsetOfGlobalRangeInThisPartition( 1, tsize ) } ;
+
+         if ( myrange != pt.emptySubRange() )
+         {
+            size_t start[]{ myrange.first - 1 } ;
+            size_t count[]{ pt.localPartitionSize() } ;
+std::cout << "(" << m_size << ", " << m_rank << "): [1, " << tsize << "] => " << start[0] << ": " << count[0] << '\n' ;
+            status = nc_put_vara_float( m_ncid,
+                                        m_timesVarId,
+                                        start,
+                                        count,
+                                        &m_times[ myrange.first - 1 ] ) ;
+            handle_error( status ) ;
+         }
+#else
          if ( 0 == m_rank )
          {
-            writeTimes() ;
+            status = nc_var_par_access( m_ncid, m_timesVarId, NC_INDEPENDENT ) ;
+            //status = nc_var_par_access( m_ncid, m_timesVarId, NC_COLLECTIVE ) ;
+            handle_error( status ) ;
+
+            size_t start[]{ 0 } ;
+            size_t count[]{ tsize } ;
+            status = nc_put_vara_float( m_ncid,
+                                        m_timesVarId,
+                                        start,
+                                        count,
+                                        &m_times[ 0 ] ) ;
+            handle_error( status ) ;
          }
 
-         int status = nc_close( m_ncid ) ;
+         status = MPI_Barrier( MPI_COMM_WORLD ) ;
+         handle_error( status ) ;
+#endif
+
+         status = nc_close( m_ncid ) ;
 
          if ( status )
          {

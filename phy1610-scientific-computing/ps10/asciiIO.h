@@ -17,10 +17,13 @@ public:
       \param fileBaseName [in]
          Create an ascii file fileBaseName + ".out"
 
+      \param size [in]
+         mpi size
+
       \param rank [in]
          mpi rank
     */
-   asciiIO( const std::string &   fileBaseName, const int rank ) ;
+   asciiIO( const std::string &   fileBaseName, const int size, const int rank ) ;
 
    /**
       \copydoc iohandlerImplementation::writeMeta

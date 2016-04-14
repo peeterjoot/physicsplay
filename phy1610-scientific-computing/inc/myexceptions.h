@@ -21,6 +21,7 @@ struct array_not_square_error : virtual error { } ;
 struct sendrecv_error : virtual error { } ;
 struct mpiinitterm_error : virtual error { } ;
 struct netcdf_error : virtual error { } ;
+struct assert_error : virtual error { } ;
 
 struct tag_match_input ;
 typedef boost::error_info<tag_match_input,std::string> match_info ;
@@ -78,5 +79,29 @@ typedef boost::error_info<tag_netcdf_errno,int> netcdf_errno_info ;
 
 struct tag_netcdf_strerror ;
 typedef boost::error_info<tag_netcdf_strerror,const char *> netcdf_strerror_info ;
+
+struct tag_intdata ;
+typedef boost::error_info<tag_intdata,long> intdata_info ;
+
+#define ASSERT_NO_ERROR (static_cast<void>(0))
+#ifdef NDEBUG
+   #define ASSERT_DATA_INT( expr, v1 )          ASSERT_NO_ERROR
+   #define ASSERT_DATA_INT_INT( expr, v1, v2 )  ASSERT_NO_ERROR
+#else
+   #define ASSERT_DATA_INT( expr, v1 )          \
+      ( (expr)                                  \
+      ? ASSERT_NO_ERROR                         \
+      : BOOST_THROW_EXCEPTION(                  \
+            assert_error()                      \
+               << intdata_info( v1 ) ) )
+
+   #define ASSERT_DATA_INT_INT( expr, v1, v2 )  \
+      ( (expr)                                  \
+      ? ASSERT_NO_ERROR                         \
+      : BOOST_THROW_EXCEPTION(                  \
+            assert_error()                      \
+               << intdata_info( v1 )            \
+               << intdata_info( v2 ) ) )
+#endif
 
 #endif

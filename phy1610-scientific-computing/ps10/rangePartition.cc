@@ -1,15 +1,16 @@
 /** \file rangePartition.cc
  */
 #include "rangePartition.h"
-#include <boost/assert.hpp>
 #include <algorithm>
+#include "myexceptions.h"
 
 rangePartition::rangePartition( const index_type numElements, const taskId numTasks, const taskId taskNumber )
 {
+   ASSERT_DATA_INT( numTasks > 0, numTasks ) ;
    index_type batchSize = numElements / numTasks ;
 
-   BOOST_ASSERT( taskNumber < numTasks ) ;
-   BOOST_ASSERT( taskNumber >= 0 ) ;
+   ASSERT_DATA_INT_INT( taskNumber < numTasks, taskNumber, numTasks ) ;
+   ASSERT_DATA_INT( taskNumber >= 0, taskNumber ) ;
 
    m_myFirstGlobalElementIndex = 1 + batchSize * taskNumber ;
 
@@ -20,14 +21,14 @@ rangePartition::rangePartition( const index_type numElements, const taskId numTa
 
    m_myLastGlobalElementIndex = m_myFirstGlobalElementIndex + batchSize - 1 ;
 
-   BOOST_ASSERT( m_myFirstGlobalElementIndex >= 1 ) ;
-   BOOST_ASSERT( m_myLastGlobalElementIndex <= numElements ) ;
+   ASSERT_DATA_INT( m_myFirstGlobalElementIndex >= 1, m_myFirstGlobalElementIndex ) ;
+   ASSERT_DATA_INT_INT( m_myLastGlobalElementIndex <= numElements, m_myLastGlobalElementIndex, numElements ) ;
 }
 
 rangePartition::index_type rangePartition::toLocalDomain( const index_type i ) const
 {
-   BOOST_ASSERT( i <= (m_myLastGlobalElementIndex+1) ) ;
-   BOOST_ASSERT( i >= (m_myFirstGlobalElementIndex-1) ) ;
+   ASSERT_DATA_INT_INT( i <= (m_myLastGlobalElementIndex+1), i, m_myLastGlobalElementIndex + 1 ) ;
+   ASSERT_DATA_INT_INT( i >= (m_myFirstGlobalElementIndex-1), i, m_myFirstGlobalElementIndex - 1 ) ;
 
    index_type j = i - m_myFirstGlobalElementIndex + 1 ;
 
@@ -63,7 +64,7 @@ rangePartition::index_type rangePartition::localPartitionSize( ) const
 {
    index_type sz = m_myLastGlobalElementIndex - m_myFirstGlobalElementIndex + 1 ;
 
-   BOOST_ASSERT( sz > 0 ) ;
+   ASSERT_DATA_INT( sz > 0, sz ) ;
 
    return sz ;
 }
