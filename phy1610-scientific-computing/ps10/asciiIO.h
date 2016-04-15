@@ -22,8 +22,14 @@ public:
 
       \param rank [in]
          mpi rank
+
+      \param writeTimes [in]
+         See iohandler::iohandler
     */
-   asciiIO( const std::string &   fileBaseName, const int size, const int rank ) ;
+   asciiIO( const std::string &   fileBaseName,
+            const int             size,
+            const int             rank,
+            const bool            writeTimes ) ;
 
    /**
       \copydoc iohandlerImplementation::writeMeta

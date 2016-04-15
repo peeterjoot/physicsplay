@@ -94,7 +94,7 @@ variables:
 #endif
 
    status = nc_open( fileName.c_str(), NC_NOWRITE, &ncid ) ;
-   handle_error( status, "nc_create", __LINE__ ) ;
+   handle_error( status, "nc_open", __LINE__ ) ;
 
    status = nc_inq_dimid( ncid, "X", &XdimId ) ;
    handle_error( status, "nc_inq_dimid", __LINE__ ) ;

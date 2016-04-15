@@ -60,11 +60,16 @@ public:
     */
    virtual ~iohandlerImplementation( ) = 0 ;
 
-   inline iohandlerImplementation( const int mpi_size, const int mpi_rank )
+   /**
+    */
+   inline iohandlerImplementation( const int    mpi_size,
+                                   const int    mpi_rank,
+                                   const bool   withTimes )
       : m_times()
       , m_outStepCount{0}
       , m_size{mpi_size}
       , m_rank{mpi_rank}
+      , m_withTimes{withTimes}
    {
    }
 
@@ -73,6 +78,7 @@ protected:
    size_t               m_outStepCount ;  ///< The T variable value at which this write is occuring.
    int                  m_size ;          ///< mpi size for the calling task.
    int                  m_rank ;          ///< mpi rank for the calling task.
+   int                  m_withTimes ;     ///< work around opal_progress hang for size > 1.
 } ;
 
 /**
@@ -111,12 +117,22 @@ public:
 
       \param paramsInfo [in]
           A string representation of some of the input and derived parameters for the run.
+
+      \param withTimes [in]
+         This is a hack for the opal_progress problem reported on the forum (no answer).
+
+            https://support.scinet.utoronto.ca/education/go.php/218/forums/forum/view.php/fid/6/pid/336/
+
+         When this param is false, then the (s*dt) times will be skipped.  wave1d contains the hack of
+         doing this for mpi size > 1.  This way the assignment criteria to show the times is met for 'mpirun -n 1'
+         runs, and I get most of the solution in place for the "bonus" task of using parallel netcdf.
     */
    iohandler( const cfg             c,
               const std::string &   fileBaseName,
               const size_t          N,
               const int             mpisize,
               const int             mpirank,
+              const bool            withTimes,
               const std::string &   paramsInfo ) ;
 
    /** \copydoc iohandlerImplementation::writeData */

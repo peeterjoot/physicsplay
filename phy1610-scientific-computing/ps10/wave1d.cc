@@ -144,7 +144,7 @@ int main( int argc, char* argv[] )
          cfg = iocfg::netcdf ;
       }
 
-      iohandler io( cfg, dataFilename, ngrid, mpi.m_size, mpi.m_rank, info.str() ) ;
+      iohandler io( cfg, dataFilename, ngrid, mpi.m_size, mpi.m_rank, 1 == mpi.m_size /* hack */, info.str() ) ;
 
       io.writeMeta( partition.m_myFirstGlobalElementIndex -1,
                     partition.localPartitionSize(),

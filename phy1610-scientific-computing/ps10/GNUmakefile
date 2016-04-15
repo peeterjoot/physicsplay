@@ -1,16 +1,26 @@
 #
 # Makefile for 1dwave code for SciNet's High Performance Scientific Computing
-#  
+#
 # Modules required
 #
 #module load gcc/4.8.1
 #module load pgplot/5.2.2-gcc
 
-#PRODUCTION := 1
+PRODUCTION := 1
 #PROFILED := 1
 
 #CXXSTD := -std=c++11
 CXX := mpic++
+
+#-----------------------------------------------------
+# HACK:
+#
+# Need a resolution for the issue raised on the forum:
+#    https://support.scinet.utoronto.ca/education/go.php/218/forums/forum/view.php/fid/6/pid/336/
+# before this can be enabled (at least for netcdfIO).
+#
+# CXXFLAGS += -DOUTPUT_WITH_TIMES
+#-----------------------------------------------------
 
 include ../make.vars
 include ../make.vars.rarray
@@ -96,6 +106,7 @@ OUTCLEANTARGETS += netcdf.out.*
 CLEANTARGETS += $(TARGETS)
 CLEANTARGETS += waveparams_*txt
 CLEANTARGETS += $(OUTCLEANTARGETS)
+CLEANTARGETS += $(IOTEST_OBJECTS)
 
 all: $(TARGETS)
 

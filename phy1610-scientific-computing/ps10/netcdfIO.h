@@ -26,6 +26,9 @@ public:
       \param rank [in]
          MPI rank
 
+      \param writeTimes [in]
+         See iohandler::iohandler
+
       \param params [in]
          A string representation of some of the input and derived parameters for the run.
     */
@@ -33,6 +36,7 @@ public:
              const size_t          N,
              const int             size,
              const int             rank,
+             const bool            writeTimes,
              const std::string &   params ) ;
 
    /**

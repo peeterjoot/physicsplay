@@ -29,8 +29,9 @@ netcdfIO::netcdfIO( const std::string &   fileBaseName,
                     const size_t          N,
                     const int             size,
                     const int             rank,
+                    const bool            writeTimes,
                     const std::string &   params )
-   : iohandlerImplementation( size, rank )
+   : iohandlerImplementation( size, rank, writeTimes )
    , m_opened( false )
    , m_ncid{ INVALID_NETCDF_ID }
    , m_xDimId{ INVALID_NETCDF_ID }
@@ -99,6 +100,16 @@ netcdfIO::netcdfIO( const std::string &   fileBaseName,
 
    status = nc_var_par_access( m_ncid, m_xVarId, NC_COLLECTIVE ) ;
    handle_error( status ) ;
+
+   if ( 1 )
+   {
+      status = nc_var_par_access( m_ncid, m_timesVarId, NC_COLLECTIVE ) ;
+   }
+   else
+   {
+      status = nc_var_par_access( m_ncid, m_timesVarId, NC_INDEPENDENT ) ;
+   }
+   handle_error( status ) ;
 }
 
 void netcdfIO::writeData( const float           time,
@@ -155,32 +166,18 @@ void netcdfIO::internalClose( const bool isErrorCodePath )
       else
       {
          int status ;
-         auto tsize{ m_times.size() } ;
-#if 0
-         rangePartition pt( tsize, m_size, m_rank ) ;
-         auto myrange{ pt.subsetOfGlobalRangeInThisPartition( 1, tsize ) } ;
 
-         if ( myrange != pt.emptySubRange() )
+         // HACK.  Need to be able to deal with (unanswered) issue raised here:
+         //
+         // https://support.scinet.utoronto.ca/education/go.php/218/forums/forum/view.php/fid/6/pid/336/
+         //
+         if ( (0 == m_rank) && m_withTimes )
          {
-            size_t start[]{ myrange.first - 1 } ;
-            size_t count[]{ pt.localPartitionSize() } ;
-std::cout << "(" << m_size << ", " << m_rank << "): [1, " << tsize << "] => " << start[0] << ": " << count[0] << '\n' ;
-            status = nc_put_vara_float( m_ncid,
-                                        m_timesVarId,
-                                        start,
-                                        count,
-                                        &m_times[ myrange.first - 1 ] ) ;
-            handle_error( status ) ;
-         }
-#else
-         if ( 0 == m_rank )
-         {
-            status = nc_var_par_access( m_ncid, m_timesVarId, NC_INDEPENDENT ) ;
-            //status = nc_var_par_access( m_ncid, m_timesVarId, NC_COLLECTIVE ) ;
-            handle_error( status ) ;
+            auto tsize{ m_times.size() } ;
 
             size_t start[]{ 0 } ;
             size_t count[]{ tsize } ;
+
             status = nc_put_vara_float( m_ncid,
                                         m_timesVarId,
                                         start,
@@ -189,9 +186,11 @@ std::cout << "(" << m_size << ", " << m_rank << "): [1, " << tsize << "] => " <<
             handle_error( status ) ;
          }
 
-         status = MPI_Barrier( MPI_COMM_WORLD ) ;
-         handle_error( status ) ;
-#endif
+         if ( 0 ) // didn't help
+         {
+            status = MPI_Barrier( MPI_COMM_WORLD ) ;
+            handle_error( status ) ;
+         }
 
          status = nc_close( m_ncid ) ;
 

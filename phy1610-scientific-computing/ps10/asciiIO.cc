@@ -2,8 +2,8 @@
 #include "asciiIO.h"
 #include "stdoutfilestream.h"
 
-asciiIO::asciiIO( const std::string & fileBaseName, const int size, const int rank )
-   : iohandlerImplementation( size, rank )
+asciiIO::asciiIO( const std::string & fileBaseName, const int size, const int rank, const bool writeTimes )
+   : iohandlerImplementation( size, rank, writeTimes )
 {
    const std::string filename{ fileBaseName + "_" + std::to_string( rank ) + ".out" } ;
 
@@ -43,7 +43,7 @@ void asciiIO::writeMeta( const size_t          globalOffset,
 
 void asciiIO::close( )
 {
-   if ( 0 == m_rank )
+   if ( (0 == m_rank) && m_withTimes )
    {
       for ( size_t i{0} ; i < m_times.size() ; i++ )
       {

@@ -33,6 +33,7 @@ iohandler::iohandler( const cfg             c,
                       const size_t          N,
                       const int             mpisize,
                       const int             mpirank,
+                      const bool            writeTimes,
                       const std::string &   params )
    : m_ioHandler(nullptr)
 {
@@ -40,12 +41,12 @@ iohandler::iohandler( const cfg             c,
    {
       case cfg::netcdf:
       {
-         m_ioHandler = new netcdfIO( fileBaseName, N, mpisize, mpirank, params ) ;
+         m_ioHandler = new netcdfIO( fileBaseName, N, mpisize, mpirank, writeTimes, params ) ;
          break ;
       }
       case cfg::ascii:
       {
-         m_ioHandler = new asciiIO( fileBaseName, mpisize, mpirank ) ;
+         m_ioHandler = new asciiIO( fileBaseName, mpisize, mpirank, writeTimes ) ;
          break ;
       }
       case cfg::graphics:
