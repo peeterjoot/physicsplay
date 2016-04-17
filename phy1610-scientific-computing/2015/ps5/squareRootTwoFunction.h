@@ -68,7 +68,7 @@ struct squareRootTwoFunction
     */
    static inline double expectedRoot()
    {
-      return std::sqrt(2.0);
+      return std::sqrt(2.0) ;
    }
 } ;
 

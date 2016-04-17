@@ -220,10 +220,10 @@ fSolver<paramType>::~fSolver()
 template <class paramType>
 bool increaseIntervalIfNotBracketed( paramType & f, double & x_min, double & x_max, const Uint max_iter )
 {
-   Uint iter = 0 ;
-   bool foundOne = false ;
-   double x1 = x_min ;
-   double x2 = x_max ;
+   Uint     iter { 0 } ;
+   bool     foundOne { false } ;
+   double   x1 { x_min } ;
+   double   x2 { x_max } ;
 
    // Brent's method (and probably the other interval methods) abort if
    // the root is not bracketed.  use the interval expansion method described
@@ -271,28 +271,28 @@ bool increaseIntervalIfNotBracketed( paramType & f, double & x_min, double & x_m
 template <class paramType>
 bool decreaseIntervalIfNotBracketed( paramType & f, double & x_min, double & x_max, const Uint max_subdivisions )
 {
-   bool foundOne = false ;
+   bool foundOne{ false } ;
 
    assert( max_subdivisions > 1 ) ;
 
-   double f1 = f( x_min ) ;
-   double s1 = signof( f1 ) ;
-   double x1 = x_min ;
-   double x2 = x_max ;
-   double f2 = f( x2 ) ;
-   double s2 = signof( f2 ) ;
+   double f1{ f( x_min ) } ;
+   double s1{ signof( f1 ) } ;
+   double x1{ x_min } ;
+   double x2{ x_max } ;
+   double f2{ f( x2 ) } ;
+   double s2{ signof( f2 ) } ;
 
    if ( s1 != s2 )
    {
       return true ;
    }
 
-   const double w = (x_max - x_min)/max_subdivisions ;
+   const double w { (x_max - x_min)/max_subdivisions } ;
 
    // This is a dumb search, and just plods through all the subdivisions serially, looking for the first
    // value of f(x) that changes sign.
    //
-   for ( Uint i = 0 ; i < max_subdivisions ; i++ )
+   for ( Uint i{ 0 } ; i < max_subdivisions ; i++ )
    {
       x2 = x1 + w ;
       f2 = f( x2 ) ;

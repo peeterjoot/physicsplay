@@ -49,7 +49,7 @@ void MyMatrix::set_element_checked( const Uint i, const Uint j, const MyMatrix::
 {
    if ( i >= r || j >= c )
    {
-      std::string s = 
+      std::string s =
                       std::string( "i = " ) + std::to_string( i )
                     + std::string( ", j = " ) + std::to_string( j )
                     + std::string( "; r = " ) + std::to_string( r )
@@ -65,7 +65,7 @@ MyMatrix::valueType MyMatrix::get_element_checked( const Uint i, const Uint j ) 
 {
    if ( i >= r || j >= c )
    {
-      std::string s = 
+      std::string s =
                       std::string( "i = " ) + std::to_string( i )
                     + std::string( ", j = " ) + std::to_string( j )
                     + std::string( "; r = " ) + std::to_string( r )
@@ -98,9 +98,9 @@ void MyMatrix::output( const std::string filename, const bool binaryMode ) const
       stream << r << " "
              << c << std::endl ;
 
-      for ( Uint i = 0 ; i < r ; i++ )
+      for ( Uint i{0} ; i < r ; i++ )
       {
-         for ( Uint j = 0 ; j < c ; j++ )
+         for ( Uint j{0} ; j < c ; j++ )
          {
             stream << elem[ pos( i, j ) ] << " " ;
          }
@@ -139,9 +139,9 @@ void MyMatrix::input( const std::string filename, const bool binaryMode )
    }
    else
    {
-      for ( Uint i = 0 ; i < r ; i++ )
+      for ( Uint i{0} ; i < r ; i++ )
       {
-         for ( Uint j = 0 ; j < c ; j++ )
+         for ( Uint j{0} ; j < c ; j++ )
          {
             valueType tmp ;
             stream >> tmp ;

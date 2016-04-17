@@ -16,7 +16,7 @@ void showHelpAndExit()
 }
 
 using namespace netCDF ;
-using namespace exceptions;
+using namespace exceptions ;
 
 /**
    Parse arguments and run the driver.
@@ -35,7 +35,7 @@ int main( int argc, char ** argv )
 
    try {
       while ( -1 != ( c = getopt_long( argc, argv, "hf:", long_options, NULL ) ) )
-      { 
+      {
          switch ( c )
          {
             case 'f' :
@@ -50,17 +50,17 @@ int main( int argc, char ** argv )
             {
                showHelpAndExit() ;
             }
-         } 
+         }
       }
    }
-   catch (...)
+   catch ( ... )
    {
-      std::cerr 
+      std::cerr
          << __FILE__
          << ":"
          << line << ": uncaught exception (parse error)\n"
-         << "option: -" << (char)c << "\n"
-         << "argument: " << optarg << "\n"
+         << "option: -" << (char)c << '\n'
+         << "argument: " << optarg << '\n'
          << std::endl ;
 
       std::exit( (int)RETURNCODES::PARSE_ERROR ) ;
@@ -76,34 +76,34 @@ int main( int argc, char ** argv )
       NcFile dataFile( netcdffilename, NcFile::read ) ;
 
       // Read the two dimensions.
-      NcDim xDim = dataFile.getDim( "x" ) ;
-      NcDim yDim = dataFile.getDim( "y" ) ;
-      NcDim tDim = dataFile.getDim( "t" ) ;
+      auto xDim = dataFile.getDim( "x" ) ;
+      auto yDim = dataFile.getDim( "y" ) ;
+      auto tDim = dataFile.getDim( "t" ) ;
 
-      size_t nx = xDim.getSize() ;
-      size_t ny = yDim.getSize() ;
-      size_t nt = tDim.getSize() ;
+      auto nx = xDim.getSize() ;
+      auto ny = yDim.getSize() ;
+      auto nt = tDim.getSize() ;
 
       std::cout << "Our matrix is " << nx << " by " << ny << ", with time dimension: " << nt << std::endl ;
 
       std::vector<float> p( nx * ny ) ;
 
       // Create the data variable.
-      NcVar grid = dataFile.getVar( "grid" ) ;
-      NcVar total = dataFile.getVar( "total" ) ;
+      auto grid = dataFile.getVar( "grid" ) ;
+      auto total = dataFile.getVar( "total" ) ;
 
       std::vector<size_t> startp { 0, 0, 0 } ;
       // read one entry from the unlimited (timestep) dimension.
       std::vector<size_t> countp { 1, nx, ny } ;
       std::vector<ptrdiff_t> stridep { 1, 1, 1 } ;
       // in memory stride.  each data[t][x][y] -> data[t][ny * x + y]
-      ptrdiff_t stridey{ (ptrdiff_t)ny } ;
+      auto stridey{ (ptrdiff_t)ny } ;
       std::vector<ptrdiff_t> imapp { 1, stridey , 1 } ;
 
       float err{} ;
 
       // Put the data in a variable and print it.
-      for ( size_t t = 0 ; t < nt ; t++ )
+      for ( size_t t{0} ; t < nt ; t++ )
       {
          startp[0] = t ;
 
@@ -125,9 +125,10 @@ int main( int argc, char ** argv )
 
       std::cout << "err: " << err << std::endl ;
    }
-   catch (NcException& e)
+   catch ( NcException & e )
    {
-      std::cout << "unknown error" << std::endl;
+      std::cout << "unknown error" << std::endl ;
+
       e.what() ;
    }
 

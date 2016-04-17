@@ -6,7 +6,7 @@
 #include <netcdf_par.h>
 #include "rangePartition.h"
 
-// macro to retain __LINE__ info in the BOOST_THROW_EXCEPTION macro
+// This is a macro instead of inline to retain __LINE__ info in the BOOST_THROW_EXCEPTION call
 #define handle_error( status )                                       \
 do {                                                                 \
    if ( status )                                                     \
@@ -19,10 +19,10 @@ do {                                                                 \
    }                                                                 \
 } while ( 0 )
 
-/** 
- dont' know if this is actually an invalid value for netcdf (file, dimension, variable) handles, but at least give these a
+/**
+ don't know if this is actually an invalid value for netcdf (file, dimension, variable) handles, but at least give these a
  non-random value.
- */    
+ */
 static const constexpr int INVALID_NETCDF_ID{-1} ;
 
 netcdfIO::netcdfIO( const std::string &   fileBaseName,

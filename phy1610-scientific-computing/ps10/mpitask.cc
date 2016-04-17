@@ -48,7 +48,9 @@ mpitask::mpitask( int * pargc, char *** pargv )
 mpitask::~mpitask()
 {
    if ( !m_initDone )
+   {
       return ;
+   }
 
    int err = MPI_Finalize() ;
    if ( err )

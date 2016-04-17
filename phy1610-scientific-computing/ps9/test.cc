@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_CASE( testWriterSmallArray )
    arrayIOwriter fmultifile( "multifile", arrayIOwriter::IO_method::multifile ) ;
 
    dummyMeta meta ;
-   size_t size{(size_t)meta.numThreads*2} ;
+   auto size{(size_t)meta.numThreads*2} ;
    std::vector<int> x(size) ;
    std::vector<int> data(size) ;
    for ( size_t i{0} ; i < size ; i++ )
@@ -62,7 +62,7 @@ BOOST_AUTO_TEST_CASE( testWriterSmallArray )
    fthreaded.writeData( &data[0], sizeof(data[0]), std::max(meta.numThreads-1,1) ) ;
    fmultifile.writeData( &data[0], sizeof(data[0]), std::max(meta.numThreads-1,1) ) ;
 
-   // for testing test code:   
+   // for testing test code:
    if ( 0 )
    {
       int more{3} ;
@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_CASE( testWriterLargerArray )
    arrayIOwriter fmultifile( "multifile", arrayIOwriter::IO_method::multifile ) ;
 
    dummyMeta meta ;
-   size_t size{(size_t)meta.numThreads*20} ;
+   auto size{(size_t)meta.numThreads*20} ;
    std::vector<int> x(size) ;
    std::vector<int> data(size) ;
    for ( size_t i{0} ; i < size ; i++ )
@@ -106,7 +106,7 @@ BOOST_AUTO_TEST_CASE( testWriterLargerArray )
    fthreaded.writeData( &data[0], sizeof(data[0]), size ) ;
    fmultifile.writeData( &data[0], sizeof(data[0]), size ) ;
 
-   // for testing test code:   
+   // for testing test code:
    if ( 0 )
    {
       int more{3} ;
@@ -145,7 +145,7 @@ int main( int argc, char *argv[] )
    std::cout << omp_get_num_threads() << std::endl ;
    std::cout << omp_get_max_threads() << std::endl ;
 
-   //return 0;
+   //return 0 ;
    return boost::unit_test::unit_test_main(init_function, argc, argv) ;
 }
 #endif

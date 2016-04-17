@@ -33,7 +33,7 @@ class stdoutOrFileStream
 {
    std::ofstream  m_streamHandle ;     ///< file handle when appropriate.
    bool           m_useFileHandle ;    ///< do we use the ofstream or cout?
-   
+
 public:
 
    /**
@@ -54,7 +54,7 @@ public:
    /**
       Return either the ofstream object or cout
     */
-   std::ostream & handle( ) 
+   std::ostream & handle( )
    {
       if ( m_useFileHandle )
       {

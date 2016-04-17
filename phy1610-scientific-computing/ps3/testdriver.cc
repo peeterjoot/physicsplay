@@ -16,20 +16,20 @@ BOOST_AUTO_TEST_CASE( timestep )
       {
          for ( auto numberOfTimeIntervals : { 0, 1, 5, 11, 23, 101 } )
          {
-            // 
-            // Attempting to verify a 1x1 boundary case failed (infinite loop).  That's because the 
+            //
+            // Attempting to verify a 1x1 boundary case failed (infinite loop).  That's because the
             // initialization algorithm can't handle that small of a grid size (the sine computed
             // is always zero).  Omitting that test, and adding an assert into the ants_on_table
             // constructor instead.
             //
             ants.initialize( initialNumberOfAnts ) ;
 
-            float lastTotal = ants.total_number_of_ants() ;
+            float lastTotal{ ants.total_number_of_ants() } ;
             BOOST_REQUIRE( lastTotal == initialNumberOfAnts ) ;
 
-            for ( int i = 0 ; i < numberOfTimeIntervals ; i++ )
+            for ( int i{0} ; i < numberOfTimeIntervals ; i++ )
             {
-               float total = ants.total_number_of_ants() ;
+               float total{ ants.total_number_of_ants() } ;
 
                // check for spontaneous generation of ants compared previous timestep:
                BOOST_REQUIRE( total <= lastTotal ) ;

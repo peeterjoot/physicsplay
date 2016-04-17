@@ -35,7 +35,7 @@ void TickTock::tick()
 void TickTock::tock(const char* prefix) const
 {
     // done measuring time; print elapsed seconds
-    print(prefix, silent_tock()); 
+    print(prefix, silent_tock());
 }
 
 double TickTock::silent_tock() const

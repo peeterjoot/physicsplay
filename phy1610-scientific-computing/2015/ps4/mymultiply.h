@@ -17,6 +17,6 @@
 // Matrix-multiply matrix a and b into matrix c
 // memory of c should already be allocated.
 
-void multiply(MyMatrix &a, MyMatrix &b, MyMatrix &c, const Uint tilesize = 0 );
+void multiply(MyMatrix &a, MyMatrix &b, MyMatrix &c, const Uint tilesize = 0 ) ;
 
 #endif

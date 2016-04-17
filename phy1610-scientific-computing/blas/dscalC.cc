@@ -11,8 +11,10 @@ int main(int argc, char **argv)
    // CSCAL - scales a vector by a constant.
    cblas_dscal(n, coeff, x, one) ;
 
-   for (int i = 0 ; i < n; i++)
+   for ( int i{0} ; i < n ; i++)
+   {
       std::cout << " " << x[i] ;
+   }
 
    std::cout << std::endl ;
 

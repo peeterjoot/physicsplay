@@ -49,16 +49,16 @@ parameters::parameters( int argc, char* argv[] )
    // Report all the values
    if ( verbose )
    {
-      std::cout << "#c       " << c       << "\n"
-                << "#tau     " << tau     << "\n"
-                << "#x1      " << x1      << "\n"
-                << "#x2      " << x2      << "\n"
-                << "#runtime " << runtime << "\n"
-                << "#dx      " << dx      << "\n"
-                << "#outtime " << outtime << "\n"
-                << "#ngrid   " << ngrid   << "\n"
-                << "#dt      " << dt      << "\n"
-                << "#nsteps  " << nsteps  << "\n"
+      std::cout << "#c       " << c       << '\n'
+                << "#tau     " << tau     << '\n'
+                << "#x1      " << x1      << '\n'
+                << "#x2      " << x2      << '\n'
+                << "#runtime " << runtime << '\n'
+                << "#dx      " << dx      << '\n'
+                << "#outtime " << outtime << '\n'
+                << "#ngrid   " << ngrid   << '\n'
+                << "#dt      " << dt      << '\n'
+                << "#nsteps  " << nsteps  << '\n'
                 << "#nper    " << nper    << std::endl ;
    }
 }

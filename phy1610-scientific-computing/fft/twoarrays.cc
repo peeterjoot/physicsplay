@@ -40,7 +40,7 @@ int main( int argc, char ** argv )
 
    // [0,2 pi]
    double x { -shift } ;
-   for ( Uint i = 0 ; i < N ; i++ )
+   for ( Uint i{0} ; i < N ; i++ )
    {
       auto & c = in[ i ] ;
 
@@ -55,7 +55,7 @@ int main( int argc, char ** argv )
          c[1] = 0.0 ;
       }
 
-      infh << x << ", " << in[i][0] << "\n" ;
+      infh << x << ", " << in[i][0] << '\n' ;
 
       x += delta ;
    }
@@ -66,9 +66,9 @@ int main( int argc, char ** argv )
    fftw_free( in ) ;
 
    x = -shift ;
-   for ( Uint i = 0 ; i < N ; i++ )
+   for ( Uint i{0} ; i < N ; i++ )
    {
-      outfh << x << ", " << out[i][0] << ", " << out[i][1] << "\n" ;
+      outfh << x << ", " << out[i][0] << ", " << out[i][1] << '\n' ;
 
       x += delta ;
    }

@@ -61,7 +61,7 @@ BOOST_AUTO_TEST_CASE( openStreamWriteExceptionTest )
    try {
       openStreamForWriteOrThrow( "/dontcreatethispath/blah.out", ofs ),
    }
-   catch (boost::exception & e)
+   catch ( boost::exception & e )
    {
       auto s { boost::diagnostic_information( e ) } ;
       std::cout << s << std::endl ;
@@ -115,7 +115,7 @@ BOOST_AUTO_TEST_CASE( correlationTest )
    f >> x ;
    g >> y ;
 
-   correlator c( x ) ;   
+   correlator c( x ) ;
 
    double result{ c( y ) } ;
 

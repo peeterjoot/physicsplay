@@ -39,9 +39,9 @@ public:
       m_open = true ;
 
       // Create the dimensions.
-      netCDF::NcDim tDim = h->addDim( "t" ) ;
-      netCDF::NcDim xDim = h->addDim( "x", n ) ;
-      netCDF::NcDim yDim = h->addDim( "y", n ) ;
+      auto tDim = h->addDim( "t" ) ;
+      auto xDim = h->addDim( "x", n ) ;
+      auto yDim = h->addDim( "y", n ) ;
 
       std::vector < netCDF::NcDim > dims { tDim, xDim, yDim } ;
 
@@ -82,15 +82,15 @@ public:
 void output( ants_on_table & a, const int num_time_intervals, const std::string netcdfFileName )
 {
    TickTockOrNoOp timer ;
-   float ioTime { 0.0 } ;
+   float ioTime{ 0.0f } ;
 
 #if !defined NO_NETCDF
    netcdfOutput out( netcdfFileName, a.table_grid_size() ) ;
 #endif
 
-   for ( int i = 0 ; i < num_time_intervals ; i++ )
+   for ( int i{0} ; i < num_time_intervals ; i++ )
    {
-      float totants = a.total_number_of_ants() ;
+      float totants{ a.total_number_of_ants() } ;
 
       timer.tick() ;
 

@@ -41,7 +41,7 @@ rangePartition::subrange rangePartition::subsetOfGlobalRangeInThisPartition( con
 
    // return an empty iteration range, if the local domain is a completely disjoint set from the one that
    // is passed in.  i.e.:
-   // 
+   //
    // [m,n] = [m_myFirstGlobalElementIndex,m_myLastGlobalElementIndex]
    //
    // | 1 ... [l,u] ... [m,n] ... N |

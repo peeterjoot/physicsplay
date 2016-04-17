@@ -8,14 +8,14 @@
 class parseOptions
 {
    const char * m_exeName ;
-   Uint         m_nrec ; 
+   Uint         m_nrec ;
 
    /** print the usage string for the program for --help (or unrecognized options)
     */
    void showHelpAndExit()
    {
       std::cerr
-         << "usage: " << m_exeName << "\n"
+         << "usage: " << m_exeName << '\n'
             "\t[--nrec]\n"
             "\t[--help]"
          << std::endl ;
@@ -23,7 +23,7 @@ class parseOptions
       std::exit( (int)RETURNCODES::HELP ) ;
    }
 
-public:   
+public:
    parseOptions( int argc, char ** argv ) : m_exeName{argv[0]}, m_nrec{1}
    {
       int c{0} ;
@@ -61,8 +61,8 @@ public:
             << __FILE__
             << ":"
             << line << ": uncaught exception (parse error)\n"
-            << "option: -" << (char)c << "\n"
-            << "argument: " << optarg << "\n"
+            << "option: -" << (char)c << '\n'
+            << "argument: " << optarg << '\n'
             << std::endl ;
 
          std::exit( (int)RETURNCODES::PARSE_ERROR ) ;

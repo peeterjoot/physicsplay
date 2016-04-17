@@ -16,16 +16,16 @@ void sendAndRecieveGhostCells( const float   myLeftGhostCell,
 {
    int err ;
    MPI_Status rstatus ;
-   constexpr int tag1 = 1 ;
-   constexpr int tag2 = 2 ;
+   constexpr int tag1{ 1 } ;
+   constexpr int tag2{ 2 } ;
 
-   int left = rank - 1 ;
+   int left{ rank - 1 } ;
    if ( rank == 0 )
    {
       left = MPI_PROC_NULL ;
    }
 
-   int right = rank + 1 ;
+   int right{ rank + 1 } ;
    if ( right == size )
    {
       right = MPI_PROC_NULL ;
