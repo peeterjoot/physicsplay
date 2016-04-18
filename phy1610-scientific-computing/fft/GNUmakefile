@@ -3,7 +3,7 @@
 
 include ../make.vars
 
-THISDIR := phy1610-scientific-computing/fft
+#THISDIR := phy1610-scientific-computing/fft
 
 LDLIBS += -lfftw3 -lm
 

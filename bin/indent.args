@@ -1,0 +1,89 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" or see the lclient
+# command for an example.  When done, check syntax with "podchecker".
+
+=head1 NAME
+
+indent.args - reindent function call text.
+
+=head1 SYNOPSIS
+
+indent.args [-help]
+
+=head1 DESCRIPTION
+
+Filter script to take function call text that is randomly indented, and indent to the position just after the first brace.   Example:
+
+   *rc = blah( foo,
+                 p->foo(),
+                 x, first, last,
+           y,
+           y,
+             retry,
+             z,
+                 3,
+                 4, 0/*timeout*/ ) ;
+
+=head1 SUPPORTED PLATFORMS
+
+ All (Unix verified)
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict;		# recommended but not mandatory
+use warnings;		# mandatory during testing
+use Getopt::Long;
+use Pod::Usage;
+
+# Suppress sourcing of users' .kshrc files in invoked shells
+delete $ENV{'ENV'};
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR; $| = 1;
+select STDOUT; $| = 1;
+
+#declare lexical variables to be used anywhere in this script (pseudo-global)
+my ($myName,$usage,$help) = "";
+
+($myName = $0) =~ s@.*[/\\]@@;
+
+GetOptions ( 
+   "help"               => \$help,
+) or pod2usage(-verbose => 0);
+
+# Validate/handle options
+
+if ($help)
+{
+   pod2usage(-verbose => 2);
+}
+
+my $len ;
+my $pre ;
+my $args ;
+while (<>)
+{
+   chomp ;
+
+   unless ( defined $args )
+   {
+      /(.*?\( *)(.*)/ or die ;
+      ($pre, $args) = ($1, $2) ;
+      $len = length( $pre ) ;
+   } 
+   else
+   { 
+      $args .= $_ ;
+   } 
+}
+
+my $pad = ' 'x$len ;
+
+$args =~ s/\s+/ /g ;
+$args =~ s/, */,\n$pad/g ;
+
+print "$pre$args\n" ;

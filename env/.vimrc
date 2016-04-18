@@ -16,6 +16,12 @@ set noerrorbells
 set textwidth=0
 " --- Peeter ---
 
+"git clone git@github.com:vim-scripts/Cpp11-Syntax-Support.git
+"mkdir -p .vim/syntax
+"cd .vim/syntax
+"for i in Cpp11-Syntax-Support/syntax/*.vim ; do ln -s $i ; done
+au BufNewFile,BufRead *.cpp *.cc *.h *.hpp set syntax=cpp11
+
 "set diffexpr=MyDiff()
 "function MyDiff()
 "  let opt = '-a --binary '

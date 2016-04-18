@@ -1,0 +1,161 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" or see the lclient
+# command for an example.  When done, check syntax with "podchecker".
+
+=head1 NAME
+
+timeAsciiVsNetcdfIO - time the ascii vs. netcdf file creation times for various mpi sizes
+
+=head1 SYNOPSIS
+
+timeAsciiVsNetcdfIO [-tmin N] [-tmax N] [-quick] [-check] [-scaling] [-fake]
+
+=head1 DESCRIPTION
+
+Ps11:
+Run wave1d with different mpi sizes, and compare the times to run, and the file sizes.
+
+This collects the times for the final report.
+Run with -check to also perform a functional test
+to verify the data saved to the ascii file is exactly that of the netcdf file.
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix only
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@protonmail.com
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict ;
+use warnings ;		# mandatory during testing
+use Getopt::Long ;
+use Pod::Usage ;
+use File::stat ;
+
+# Suppress sourcing of users' .kshrc files in invoked shells
+delete $ENV{'ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1;
+select STDOUT ; $| = 1;
+
+#declare lexical variables to be used anywhere in this script (pseudo-global)
+my ($myName, $usage) = '' ;
+
+($myName = $0) =~ s@.*[/\\]@@ ;
+my $tmax = 1 ;
+my $tmin = 1 ;
+my $quick = 0 ;
+my $check = 0 ;
+my $scaling = 0 ;
+my $fake = 0 ;
+
+GetOptions ( 
+   'scaling!'           => \$scaling,
+   'fake!'              => \$fake,
+   'tmin=i'             => \$tmin,
+   'tmax=i'             => \$tmax,
+   'quick!'             => \$quick,
+   'check!'             => \$check,
+   'help'               => sub { pod2usage(-verbose => 2) ; },
+) or pod2usage(-verbose => 0) ;
+
+collecttimes() ;
+
+exit 0 ;
+
+sub collecttimes
+{
+   my $ps10dir = "$ENV{HOME}/physicsplay/phy1610-scientific-computing/ps10" ;
+
+   my $testcfg = '' ;
+   if ( $quick )
+   {
+      $testcfg = 'Ps10' ; # less time intervals.
+   }
+
+   my %cfg = (
+      ascii  => "waveparams$testcfg.txt",
+      netcdf => "waveparams${testcfg}nc.txt"
+      ) ;
+
+   my @taskset = ($tmin..$tmax);
+   if ( $scaling )
+   {
+      @taskset = (1, 2, 4, 8, 16, 32) ;
+   }
+
+   foreach my $t ( @taskset )
+   {
+      foreach my $k ( keys %cfg )
+      {
+         my $cfgpath = "$ps10dir/$cfg{$k}" ;
+
+         verbose_system( 'rm -f dataFilename*out' ) ;
+         my $size ;
+
+         my $tm = verbose_bq( "mpirun -n $t $ps10dir/wave1d $cfgpath 2>&1 | grep Walltime | sort -k3 -n | tail -1" ) ;
+         if ( $k eq 'ascii' )
+         {
+            verbose_system( qq(cat dataFilename*out | grep -v '#' | sort -k1 -n -t' ' -k2 -n -t' ' > aggregate.out.$t) ) ;
+            my $st = stat( "aggregate.out.$t" ) ;
+
+            $size = $st->size ;
+         }
+         else
+         {
+            if ( $check )
+            {
+               verbose_system( qq( $ps10dir/readwavenc -f dataFilename.nc > netcdf.out.$t ) ) ;
+            }
+            my $st = stat( "dataFilename.nc" ) ;
+
+            $size = $st->size ;
+         }
+
+         $tm =~ s/.*= *// ;
+         $tm =~ s/ .*// ;
+
+         print "$k,$t,$tm,$size\n" ;
+      }
+
+      if ( $check )
+      {
+         verbose_system( "diff -up aggregate.out.$t netcdf.out.$t" ) ;
+      }
+   }
+}
+
+sub verbose_system
+{
+   my ( $cmd ) = @_ ;
+   
+   print "# $cmd\n" ;
+   system( $cmd ) unless ( $fake ) ;
+}
+
+sub verbose_bq
+{
+   my ( $cmd ) = @_ ;
+   
+   print "# $cmd\n" ;
+   my $out = '' ;
+
+   unless ( $fake )
+   {
+      $out = `$cmd` ; chomp $out ;
+   }
+
+   return $out ;
+}

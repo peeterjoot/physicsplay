@@ -1,0 +1,50 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+%{
+\input{../blogpost.tex}
+\renewcommand{\basename}{ps10}
+\renewcommand{\dirname}{notes/phy1610/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+\usepackage{siunitx}
+
+\beginArtNoToc
+
+\generatetitle{Ps10 Scaling discussion}
+%\chapter{Ps10 Scaling discussion}
+%\label{chap:ps10}
+% \citep{sakurai2014modern} pr X.Y
+% \citep{pozar2009microwave}
+% \citep{qftLectureNotes}
+
+For the final scaling test, I did a 4 GPC node run with graphics and IO commented out.  This was done by setting graphics=-1 and ioenabled=0 in the config file.  No separate executable was used for this test.
+The wave1d executable was compiled with optimization for this measurement (PRODUCTION=1 make clean ; make).
+
+While the batch job was running, I used jobperf to verify that I had MPI tasks running on multiple nodes, and also ran jobtop to verify that there, at least at one point in time, there was a set of MPI workers on the primary node.
+
+Two sets of times were collected for 'mpirun -n t' for \( t \in [1,32] \).  The minimum of these times are plotted in \cref{fig:ps10MinTimeVsParallelism:ps10MinTimeVsParallelismFig1}.  
+
+\imageFigure{../../figures/phy1610/ps10MinTimeVsParallelismFig1.pdf}{Time vs number of MPI workers.}{fig:ps10MinTimeVsParallelism:ps10MinTimeVsParallelismFig1}{0.3}
+
+The scaling is only 2.5x, quite poor for having thrown 32x more resources at the problem.  The variation of the scaling factor with the number of MPI workers is plotted in \cref{fig:ps10ScalingPlot:ps10ScalingPlotFig2}.  Observe that there is actually a drop in performance for 2,3, and 4 MPI tasks compared to serial computation.  
+
+\imageFigure{../../figures/phy1610/ps10ScalingPlotFig2}{Scaling vs. number of MPI tasks.}{fig:ps10ScalingPlot:ps10ScalingPlotFig2}{0.3}
+It is likely that the MPI communication could be optimized.  I used a pair of synchronous MPI_Sendrecv calls to pass the ghost cell values.  It is not clear to me whether those introduce a requirement for both of these calls to complete each timestep before the MPI worker can proceed to do its portion of the next timestep computations.  For example, if the number of MPI tasks is \( S\) the MPI task that is assigned to the \( [1, N/S ] \) subset of the global domain could proceed after it has sent its right-most ghost cell and received right's left-most ghost cell.  Is such a worker forced to wait for all the timestep=0 MPI messages to complete before it proceeds to the timestep=1 computations?  
+
+I assume that there are trace facilities available for optimizing MPI communications that can be used to fine tune the message passing performance.  Using such facilities, as well as explicit asynchronous message passing, could likely squeeze some additional scaling out of the system.  
+
+I wonder whether the tag mechanism could be used to optimize the message passing, perhaps setting a tag value that is related to the timestep iteration count, so that a MPI worker is allowed to proceed provided it has sent and received the ghost cells associated with that timestep.  Ideally, once a MPI task has received the ghost cells required for its next timestep, it should proceed to do that work, leaving the send of its own ghost cells for the timestep just completed, to be executed as an asynchronous task.  I do not know if such an asynchronous send would require the send values to be buffered elsewhere.
+
+%My conclusion is that the small amount of MPI knowledge acquired for this assignment may be the primary factor limiting scaling.
+
+%}
+%\EndArticle
+\EndNoBibArticle

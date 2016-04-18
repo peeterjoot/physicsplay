@@ -8,7 +8,7 @@
 
 #include <fstream>
 #include <rarray>
-#include "diffring_output.h"
+#include "ringoutput.h"
 #include "diffring_timestep.h"
 #include "diffring_parameters.h"
 
@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
   double      T;  // time
   double      dx; // spatial resolution
   double      dt; // temporal resolution (time step)
-  int         Z;  // number of walkers
+  //int         Z;  // number of walkers
   std::string datafile; // filename for output
   double      time_between_output;
 
@@ -42,35 +42,30 @@ int main(int argc, char *argv[])
   P.fill(0.0);
   P[0] = 1.0;
   // Time evolution matrix
-  rarray<double,2> F(N, N);
-  fill_time_step_matrix(F, D, dt, dx);
+  diffring_evolution F(N, D, dt, dx);
   // Setup initial time
   double time = 0.0;    
 
   // Open a file for data output
-  std::ofstream file;
-  output_init(file,datafile);
+  diffring_output out( datafile, outputcols ) ;  
+
   // Initial output
-  output(file, 0, time, P, outputcols);
+  out.showline( 0, time, P ) ;
 
   // Time evolution
   for (int step = 1; step <= numSteps; step++) {
 
     // Compute next time point
-    perform_time_step(F, P);
+    F.perform_time_step(P);
 
     // Update time
     time += dt;
 
     // Periodically add data to the file
     if (step % outputEvery == 0 and step > 0) 
-        output(file, step, time, P, outputcols);
+        out.showline( step, time, P );
   }
   
-  // Close file
-  output_finish(file);
-
   // All done
   return 0;
 }
-  

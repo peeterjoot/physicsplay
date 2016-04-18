@@ -6,12 +6,15 @@ template=${2?}
 cheatsheet=${3} # optional
 #echo "called: ct $out $template $cheatsheet"
 
-cp -i ../$template.tex $out.tex
+top=`git rev-parse --show-toplevel`
+notesdir=$top/notes
+
+cp -i $notesdir/$template.tex $out.tex
 
 git add $out.tex
 
 if [ x"$cheatsheet" != "x" ] ; then
-   cp -i ../latexCheatSheet.tex $cheatsheet
+   cp -i $notesdir/latexCheatSheet.tex $cheatsheet
    perl -p -i -e "s/WHAT/$out/g" $cheatsheet
 fi
 
@@ -19,4 +22,4 @@ perl -p -i -e 'use POSIX qw/strftime/ ; my $y = strftime( "%Y", localtime ) ; s/
 perl -p -i -e "s/WHAT/$out/g;" $out.tex
 
 echo '~/bin/lgrep' $out.tex '| tee o ; . ./o' >> renumber
-echo "perl -p -i ../../bin/latexRegex.pl ../blogit/$out.tex" >> renumber
+echo "perl -p -i ~/bin/latexRegex.pl $out.tex" >> renumber

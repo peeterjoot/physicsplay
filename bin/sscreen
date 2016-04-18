@@ -6,6 +6,7 @@ use Getopt::Long ;
 
 my $newscreen = 0 ;
 my $showUsage = 0 ;
+my $useX11    = 0 ;
 
 my $usage = 
 "sscreen:\n" .
@@ -16,6 +17,7 @@ my $usage =
 GetOptions
 (
    'new!'       => \$newscreen,  # internal option to call this script again on the blue node
+   'X!'         => \$useX11,
    'help!'      => \$showUsage,
 ) ;
 
@@ -28,11 +30,14 @@ if ( $showUsage )
 my $hostname = `hostname` ;
 chomp $hostname ;
 
+my $X = '' ;
+$X = '-X' if ( $useX11 ) ;
+
 if ( -e "$ENV{HOME}/.screenhost" && $hostname =~ /^scinet/ )
 {
    my $screenhost = `cat $ENV{HOME}/.screenhost` ; chomp $screenhost ;
 
-   system( "ssh -t $screenhost 'module load extras ; screen -dr'" ) ;
+   system( "ssh $X -t $screenhost 'module load extras ; screen -dr'" ) ;
 }
 elsif ( $newscreen )
 {
@@ -40,5 +45,5 @@ elsif ( $newscreen )
 }
 else
 {
-   system( "gpc -t 'sscreen -new'" ) ;
+   system( "gpc $X -t 'sscreen -new'" ) ;
 }

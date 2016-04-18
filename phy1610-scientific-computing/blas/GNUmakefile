@@ -4,7 +4,7 @@
 
 include ../make.vars
 
-THISDIR := phy1610-scientific-computing/blas
+#THISDIR := phy1610-scientific-computing/blas
 
 ifdef USE_OPENBLAS
    # ubuntu libopenblas

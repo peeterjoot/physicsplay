@@ -4,13 +4,10 @@ PRODUCTION := 1
 
 include ../make.vars
 ifneq ("$(OSNAME)","Cygwin")
-include ../make.netcdf.vars
+include ../make.vars.netcdf
 endif
+include ../make.vars.rarray
 
-CXXFLAGS += -I$(HOME)/rarray
-ifdef SCINET_RARRAY_INC
-   CXXFLAGS += -I$(SCINET_RARRAY_INC)
-endif
 CXXFLAGS += -I$(HOME)/ticktock
 
 ifdef PROFILED
@@ -28,12 +25,12 @@ endif
 #CXXFLAGS += -DMYRARRAY2_USE_STD_VECTOR
 #CXXFLAGS += -DMYRARRAY_USING_RARRAY
 
-THISDIR := phy1610-scientific-computing/ps3
+#THISDIR := phy1610-scientific-computing/ps3
 
 ifeq ("$(OSNAME)","Cygwin")
 	CXXFLAGS += -DNO_NETCDF
 else
-   TEST_LDLIBS += $(BOOST_TEST_LDLIBS)
+   TEST_LDLIBS += $(LDLIBS_BOOSTTEST)
 endif
 
 TARGETS += ants
@@ -85,7 +82,7 @@ TESTARRAYOBJECTS += testarray.o
 
 all : $(TARGETS)
 
-output.cc : ../inc/physicsplay_build_version.h
+output.o : ../inc/physicsplay_build_version.h
 
 antsTest.diff: ants.out
 	diff -up ../ps2/ants.out.default ants.out > $@
@@ -102,9 +99,9 @@ ants : $(ANTS_OBJECTS)
 origants : $(ORIGANTS_OBJECTS)
 	$(CXX) $(LDFLAGS) -o $@ $(ORIGANTS_OBJECTS) $(ANTS_LDLIBS)
 
-test: runtestdriver runtestarray
+test: runtest runtestarray
 
-runtestdriver:
+runtest:
 	./testdriver --report_level=detailed
 
 runtestarray:

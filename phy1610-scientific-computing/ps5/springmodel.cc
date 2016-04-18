@@ -43,7 +43,7 @@ void showHelpAndExit()
 
 extern template
 class brent_minimizer<gsl_spring_min_function> ;
-
+ 
 /**
    This class collects the gsl minimization function,
    the parameters that define the interval, and the allocated gsl minimizer object.  That
@@ -80,19 +80,25 @@ public:
 
    void printFofX( const double mass, unsigned long numPoints, std::ostream & out )
    {
-      m_f.setMass( mass ) ;
-
       double delta = ( m_f.end() - m_f.start() ) / numPoints ;
 
-      for ( double x = m_f.start() ; x < m_f.end() ; x += delta )
+      for ( double m = m_f.start() ; m < m_f.end() ; m += delta )
       {
-         out << x << ", " << m_f( x ) << std::endl ;
+         minimizerResults results ;
+         run( m, results ) ;
+
+         double xmin = results.xmin() ;
+         double xmax = results.xmax() ;
+         double d = results.diff() ;
+         double s = signof( d ) ;
+
+         out << m << ", " << xmin << ", " << xmax << ", " << d << ", " << s << std::endl ;
       }
    }
 
    /**
       Returns a value (1/-1) that indicates whether the difference in position between the pair
-      of local minimums at a specific mass is non-zero or zero.
+      of local minimums at a specific mass is less or greater to zero.
 
       \param m [in]
          Point at which to evaluate this difference.
@@ -103,15 +109,7 @@ public:
 
       run( m, results ) ;
 
-      double d = std::abs( results.diff() ) ;
-
-      constexpr double tolerance = 1e-4 ;
-
-      double sign = (d > tolerance) ? 1.0 : -1.0 ;
-
-      // std::cout << "diff( " << m << " ) = " << sign << ": " << d << std::endl ;
-
-      return sign ;
+      return signof( results.diff() ) ;
    }
 
    /**
@@ -149,7 +147,7 @@ int main( int argc, char ** argv )
 
    // csv related options:
    bool csv{false} ;
-   unsigned long numPoints{1000} ;
+   unsigned long numPoints{25} ;
    std::string filename{} ;
 
    constexpr struct option long_options[]{
@@ -270,90 +268,90 @@ int main( int argc, char ** argv )
    if ( csv )
    {
       state.printFofX( mass, numPoints, out ) ;
+
+      return (int)RETURNCODES::SUCCESS ;
    }
-   else
+
+   constexpr auto massLowerBound { 0.0 } ;
+   constexpr auto massUpperBound { 0.5 } ;
+   double massDelta { (massUpperBound - massLowerBound)/(numMasses-1) } ;
+
+   double m { massLowerBound } ;
+
+   if ( showDiff )
    {
-      constexpr auto massLowerBound { 0.0 } ;
-      constexpr auto massUpperBound { 0.5 } ;
-      double massDelta { (massUpperBound - massLowerBound)/(numMasses-1) } ;
+      out << "mass diff\n" ;
+   }
+   else if ( showFmin )
+   {
+      out << "mass fmin\n" ;
+   }
+   else if ( showFmax )
+   {
+      out << "mass fmax\n" ;
+   }
+   else if ( showXmax )
+   {
+      out << "mass xmax\n" ;
+   }
+   else if ( showXmin )
+   {
+      out << "mass xmin\n" ;
+   }
 
-      double m { massLowerBound } ;
+   for ( unsigned long i = 0 ; i < numMasses ; i++ )
+   {
+      minimizerResults results ;
 
-      if ( showDiff )
-      {
-         out << "mass diff\n" ;
-      }
-      else if ( showFmin )
-      {
-         out << "mass fmin\n" ;
-      }
-      else if ( showFmax )
-      {
-         out << "mass fmax\n" ;
-      }
-      else if ( showXmax )
-      {
-         out << "mass xmax\n" ;
-      }
-      else if ( showXmin )
-      {
-         out << "mass xmin\n" ;
-      }
+      state.run( m, results ) ;
 
-      for ( unsigned long i = 0 ; i < numMasses ; i++ )
+      if ( verbose )
       {
-         minimizerResults results ;
+         out << "Mass:\t" << m << "\n" ;
 
-         state.run( m, results ) ;
-
-         if ( verbose )
+         for ( const auto & r : results.m_rv )
          {
-            out << "Mass:\t" << m << "\n" ;
-
-            for ( const auto & r : results.m_rv )
-            {
-               out << "\tSolving on: [ " << r.m_initial_a << ", " << r.m_initial_b << " ]\n"
-                   << "\tIterations:\t" << r.m_iter << "\n"
-                   << "\tConverged:\t" << r.m_converged << "\n"
-                   << "\tStatus:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
-                   << "\tMin:\t" << r.m_xmin << " in [ " << r.m_a << ", " << r.m_b << "]\n"
-                   << "\tF(Min):\t" << r.m_fmin << "\n"
-                   << "\tAbserr (bracket):\t" << r.m_b - r.m_a << "\n"
-                   << std::endl ;
-            }
-
-            out << std::endl ;
-         }
-         else
-         {
-            double v{} ;
-
-            if ( showDiff )
-            {
-               v = std::abs( results.diff() ) ;
-            }
-            else if ( showFmin )
-            {
-               v = results.fmin() ;
-            }
-            else if ( showFmax )
-            {
-               v = results.fmax() ;
-            }
-            else if ( showXmax )
-            {
-               v = results.xmax() ;
-            }
-            else if ( showXmin )
-            {
-               v = results.xmin() ;
-            }
-
-            out << m << ' ' << v << std::endl ;
+            out << "\tSolving on: [ " << r.m_initial_a << ", " << r.m_initial_b << " ]\n"
+                << "\tIterations:\t" << r.m_iter << "\n"
+                << "\tConverged:\t" << r.m_converged << "\n"
+                << "\tStatus:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
+                << "\tMin:\t" << r.m_xmin << " in [ " << r.m_a << ", " << r.m_b << "]\n"
+                << "\tF(Min):\t" << r.m_fmin << "\n"
+                << "\tAbserr (bracket):\t" << r.m_b - r.m_a << "\n"
+                << std::endl ;
          }
 
-         m += massDelta ;
+         out << std::endl ;
       }
+      else
+      {
+         double v{} ;
+
+         if ( showDiff )
+         {
+            v = std::abs( results.diff() ) ;
+         }
+         else if ( showFmin )
+         {
+            v = results.fmin() ;
+         }
+         else if ( showFmax )
+         {
+            v = results.fmax() ;
+         }
+         else if ( showXmax )
+         {
+            v = results.xmax() ;
+         }
+         else if ( showXmin )
+         {
+            v = results.xmin() ;
+         }
+
+         out << m << ' ' << v << std::endl ;
+      }
+
+      m += massDelta ;
    }
 
    /////////////////////////////////////////////////

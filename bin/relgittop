@@ -1,0 +1,72 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" or see the lclient
+# command for an example.  When done, check syntax with "podchecker".
+
+=head1 NAME
+
+relgittop - find the directory relative to the git repository root.
+
+=head1 SYNOPSIS
+
+relgittop
+
+=head1 DESCRIPTION
+
+Example: if the current directory is:
+
+/home/peeterj/physicsplay/phy1610-scientific-computing/ps8
+
+and the git repo top is:
+
+/home/peeterj/physicsplay
+
+Then this script will print
+
+phy1610-scientific-computing/ps8
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix only
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@protonmail.com
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict ;
+use warnings ;		# mandatory during testing
+use Getopt::Long ;
+use Pod::Usage ;
+
+# Suppress sourcing of users' .kshrc files in invoked shells
+delete $ENV{'ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1;
+select STDOUT ; $| = 1;
+
+#declare lexical variables to be used anywhere in this script (pseudo-global)
+my ($myName,$usage) = '' ;
+
+($myName = $0) =~ s@.*[/\\]@@ ;
+
+GetOptions ( 
+   'help'               => sub { pod2usage(-verbose => 2) ; },
+) or pod2usage(-verbose => 0) ;
+
+my $top = `git rev-parse --show-toplevel` ; chomp $top ;
+my $pwd = `pwd` ; chomp $pwd ;
+
+my $reltop = $pwd ;
+$reltop =~ s,$top/,, ;
+
+print "$reltop\n" ;

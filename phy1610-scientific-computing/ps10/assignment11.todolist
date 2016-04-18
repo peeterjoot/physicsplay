@@ -1,0 +1,56 @@
+Starting from the same code as for assignment 9, you are going to replace the text output with binary output using netcdf. 
+Do the following on the GPC:
+
+$ git clone /scinet/course/scientific_computing/2016/hw11
+$ cd hw11
+$ source setup
+In this directory you will find the serial implementation of the 1d wave equation. It takes its parameters from a file called "waveparams.txt". The whole thing gets compiled with "make".
+
+Your assignment is to replace the text output with netcdf.
+
+Add a parameter to the parameter file to be read, that contains a filename.
+
+   DONE.
+
+The output should contain:
+   - the array of valid x values
+      DONE.
+   - and the rho array at each of those time values.
+      DONE.
+
+The rho array depends on time and space, thus, in the file, it becomes a 2d array, although it isn't one in the code.
+   DONE.
+
+You can get bonus points if you 
+   encorporate this in you mpi version of the code, using the netcdf parallel routines. 
+      DONE.
+
+Write the attributes out to the netcdf file as an additional metadata block.
+   DONE.
+
+The output should contain:
+   - the array of the time values at which output takes place
+      DONE.
+
+Write a nc reader for the wave1d output
+   readwavenc.cc introduced as a starting point for this.
+
+put in a try/catch block in wave1d main.
+
+introduce a close function to remove throws from the destructor if they occur.
+
+Have to re-introduce the (s*dt) 'time' values to the asciiIO output.  Could also do this like the netcdf code, saving these to the end
+and dumping them all only for the mpi rank 0 writer when all else is done.
+Prefix that output with # or something so all the mpi ascii files can be
+sorted, and these come out consistently outside of the rest of the data dump.
+
+Make the nc reader output consistent with the ascii output.
+
+Write a test driver for that comparison to functional test the netcdf writing code.
+
+============================
+TODO:
+
+Using waveparams.txt, compare the time it takes to run with ascii vs. netcdf, and compare the size of the text file vs. the netcdf file as well.
+
+Submit code, data files, git log, and a description of your findings by Apr 14, 2016.

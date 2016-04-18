@@ -6,7 +6,7 @@ include ../make.vars.silo
 
 #CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
 
-THISDIR := phy1610-scientific-computing/silo
+#THISDIR := phy1610-scientific-computing/silo
 
 TARGETS += example1
 EXAMPLE1_SOURCES += example1.cc

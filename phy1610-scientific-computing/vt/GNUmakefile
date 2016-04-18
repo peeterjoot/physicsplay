@@ -4,7 +4,7 @@ PRODUCTION := 1
 
 include ../make.vars
 
-THISDIR := phy1610-scientific-computing/vt
+#THISDIR := phy1610-scientific-computing/vt
 
 ifneq ("$(OSNAME)","Cygwin")
    TEST_LDLIBS += $(BOOST_TEST_LDLIBS)
@@ -26,9 +26,9 @@ vt : $(VT_OBJECTS)
 origvt : $(ORIGVT_OBJECTS)
 	$(CXX) $(LDFLAGS) -o $@ $(ORIGVT_OBJECTS) $(VT_LDLIBS)
 
-test: runtestdriver
+test: runtest
 
-runtestdriver:
+runtest:
 	./testdriver --report_level=detailed
 
 testdriver : $(TEST_OBJECTS)
