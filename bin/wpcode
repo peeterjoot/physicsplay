@@ -6,27 +6,19 @@
 
 =head1 NAME
 
-<command-name> - <one-line-description>
+wpwhat - print a wordpress sourcecode block
 
 =head1 SYNOPSIS
 
-<command> [<options>]
+wpwhat [--bash|--diff|--perl|--text]
 
 =head1 DESCRIPTION
 
-It looks like somebody used the perl skeleton without filling in the POD
-documentation for their particular script.  Shame on them!!!
+Peeter was lazy and didn't fill in this POD block.
 
 =head1 SUPPORTED PLATFORMS
 
-<delete all but one of the following>
- 
- All (verified)
  All (Unix verified)
- All (Windows verified)
- Unix only
- Windows only
- <insert special value here>
 
 =head1 SUPPORT
 
@@ -46,7 +38,7 @@ use Getopt::Long ;
 use Pod::Usage ;
 #use English (qw(OSNAME)) ;
 
-# Suppress sourcing of users' .kshrc files in invoked shells
+# Suppress sourcing of users' .bashrc files in invoked shells
 delete $ENV{'ENV'} ;
 
 # Set STDOUT and STDERR to unbuffered
@@ -55,15 +47,20 @@ select STDOUT ; $| = 1;
 
 #declare lexical variables to be used anywhere in this script (pseudo-global)
 my ($myName,$usage) = '' ;
+my $what = 'cpp' ;
 
 ($myName = $0) =~ s@.*[/\\]@@ ;
 
 GetOptions ( 
+   'bash'               => sub { $what = 'bash' ; },
+   'perl'               => sub { $what = 'perl' ; },
+   'diff'               => sub { $what = 'diff' ; },
+   'text'               => sub { $what = 'text' ; },
    'help'               => sub { pod2usage(-verbose => 2) ; },
 ) or pod2usage(-verbose => 0) ;
 
 # Validate/handle options
 
-#... handle options ...
-
-
+print qq([sourcecode language="$what"]
+[/sourcecode]
+) ;
