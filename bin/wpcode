@@ -6,29 +6,19 @@
 
 =head1 NAME
 
-relgittop - find the directory relative to the git repository root.
+wpwhat - print a wordpress sourcecode block
 
 =head1 SYNOPSIS
 
-relgittop
+wpwhat [--bash|--diff|--perl|--text]
 
 =head1 DESCRIPTION
 
-Example: if the current directory is:
-
-/home/peeterj/physicsplay/phy1610-scientific-computing/ps8
-
-and the git repo top is:
-
-/home/peeterj/physicsplay
-
-Then this script will print
-
-phy1610-scientific-computing/ps8
+Peeter was lazy and didn't fill in this POD block.
 
 =head1 SUPPORTED PLATFORMS
 
- Unix only
+ All (Unix verified)
 
 =head1 SUPPORT
 
@@ -43,9 +33,10 @@ phy1610-scientific-computing/ps8
 #-----------------------------------------------------------------------------
 
 use strict ;
-use warnings ;		# mandatory during testing
+use warnings ;
 use Getopt::Long ;
 use Pod::Usage ;
+#use English (qw(OSNAME)) ;
 
 # Suppress sourcing of users' .bashrc files in invoked shells
 delete $ENV{'ENV'} ;
@@ -56,17 +47,20 @@ select STDOUT ; $| = 1;
 
 #declare lexical variables to be used anywhere in this script (pseudo-global)
 my ($myName,$usage) = '' ;
+my $what = 'cpp' ;
 
 ($myName = $0) =~ s@.*[/\\]@@ ;
 
 GetOptions ( 
+   'bash'               => sub { $what = 'bash' ; },
+   'perl'               => sub { $what = 'perl' ; },
+   'diff'               => sub { $what = 'diff' ; },
+   'text'               => sub { $what = 'text' ; },
    'help'               => sub { pod2usage(-verbose => 2) ; },
 ) or pod2usage(-verbose => 0) ;
 
-my $top = `git rev-parse --show-toplevel` ; chomp $top ;
-my $pwd = `pwd` ; chomp $pwd ;
+# Validate/handle options
 
-my $reltop = $pwd ;
-$reltop =~ s,$top/,, ;
-
-print "$reltop\n" ;
+print qq([sourcecode language="$what"]
+[/sourcecode]
+) ;

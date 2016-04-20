@@ -1,76 +1,50 @@
 #!/usr/bin/perl
 
 #-----------------------------------------------------------------------------
-# POD Format Documentation.  Read "perldoc perlpod" or see the lclient
-# command for an example.  When done, check syntax with "podchecker".
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
 
 =head1 NAME
 
-myindent - run really badly formatted code through gnu-indent with some options to make it less horrible.
+myindent - gnu indent helper.
 
 =head1 SYNOPSIS
 
-<command> [<options>]
+myindent [STDIN]
 
 =head1 DESCRIPTION
 
-It looks like somebody used the perl skeleton without filling in the POD
-documentation for their particular script.  Shame on them!!!
+Run really badly formatted code through gnu-indent with some options to make it less horrible.  I don't like the results, but if applied as a filter
+to a single function, it can make that function easier to patch up manually.
 
 =head1 SUPPORTED PLATFORMS
 
-<delete all but one of the following>
- 
- All (verified)
  All (Unix verified)
- All (Windows verified)
- Unix only
- Windows only
- <insert special value here>
-
-=head1 SUPPORT
-
-<delete all but one of the following, and fill in the blanks>
-
- Open a CQ defect against project 'latest', component <component>
- Send email to <user or group>
- None
-
-=head1 AUTHORS
-
-=head1 CREATION DATE
 
 =cut
 
 #-----------------------------------------------------------------------------
 
-use strict;
-use warnings;		# mandatory during testing
-use Getopt::Long;
-use Pod::Usage;
+use strict ;
+use warnings ;
+use Getopt::Long ;
+use Pod::Usage ;
 
 # Suppress sourcing of users' .bashrc files in invoked shells
 delete $ENV{'ENV'};
 
 # Set STDOUT and STDERR to unbuffered
-select STDERR; $| = 1;
-select STDOUT; $| = 1;
+select STDERR; $| = 1 ;
+select STDOUT; $| = 1 ;
 
 #declare lexical variables to be used anywhere in this script (pseudo-global)
-my ($myName,$usage) = "";
+my ($myName,$usage) = "" ;
 
-($myName = $0) =~ s@.*[/\\]@@;
+($myName = $0) =~ s@.*[/\\]@@ ;
 
 #GetOptions ( 
 #   "help"               => sub { pod2usage(-verbose => 2); },
-#) or pod2usage(-verbose => 0);
-
-# Validate/handle options
-
-#... handle options ...
-
-# If appropriate, log the usage of this script.  Run "lclient -help" for usage.
-#system ("lclient $myName");
+#) or pod2usage(-verbose => 0) ;
 
 use English (qw(OSNAME)) ;
 
@@ -83,15 +57,15 @@ my $flags = '' ;
 #specified by the `-di' option.  For example, `-di16' makes things look
 #like:
 #
-#     int             foo;
-#     char           *bar;
+#     int             foo ;
+#     char           *bar ;
 #
 # OSS format: what we want is:
-#     int             foo;
-#     char *          bar;
+#     int             foo ;
+#     char *          bar ;
 #
 # where the spacing is a few bigger then the longest name.
-#$flags .= ' --declaration-indentation16' ; 
+#$flags .= ' --declaration-indentation16' ;
 
 # indent three characters:
 $flags .= ' --indent-level3' ;
@@ -100,7 +74,7 @@ $flags .= ' --indent-level3' ;
 #
 #     if (x > 0)
 #       {
-#         x--;
+#         x-- ;
 #       }
 #
 #If you use the `-bl' option, you may also want to specify the `-bli'
@@ -110,7 +84,7 @@ $flags .= ' --indent-level3' ;
 #
 #  if (x > 0)
 #  {
-#    x--;
+#    x-- ;
 #  }
 $flags .= ' --braces-after-if-line' ;
 $flags .= ' --brace-indent0' ;
@@ -123,15 +97,15 @@ $flags .= ' --case-indentation0' ;
 #declarations.  The `-brs' option formats braces like this:
 #
 #     struct foo {
-#       int x;
-#     };
+#       int x ;
+#     } ;
 #
 #The `-bls' option formats them like this:
 #
 #     struct foo
 #     {
-#       int x;
-#     };
+#       int x ;
+#     } ;
 $flags .= ' --braces-after-struct-decl-line' ;
 
 $flags .= ' --comment-delimiters-on-blank-lines' ;
