@@ -21,7 +21,7 @@ void read_diffusion_parameters(const std::string &inifilename,
   // datafile and time_between_output.
     
   // Open inifile and parse (using Inifile class from inifile.h)
-  Inifile parameter(inifilename);
+  Inifile parameter(inifilename) ;
       
   // Simulation parameters (defaults are given in case they are not in the file)
   L  = parameter.get<double>("L", 24.0);       // ring length
@@ -31,6 +31,6 @@ void read_diffusion_parameters(const std::string &inifilename,
   dt = parameter.get<double>("dt", 3.0e-5);    // temporal resolution (time step)
 
   // Output parameters
-  datafile = parameter.get<std::string>("data_file","walkring.dat");
-  time_between_output = parameter.get<double>("time_between_output", 0.3);
+  datafile = parameter.get<std::string>("data_file","walkring.dat") ;
+  time_between_output = parameter.get<double>("time_between_output", 0.3) ;
 }

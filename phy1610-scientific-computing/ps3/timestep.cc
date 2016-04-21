@@ -6,7 +6,7 @@ void ants_on_table::timestep( )
    constexpr double WALKING_ANTS_PER_FALLEN { 4.0 } ;
    constexpr double FALLEN_ANTS_FRACTION { 0.2 } ;
 
-   TickTockOrNoOp timer ; 
+   TickTockOrNoOp timer ;
 
    timer.tick() ;
    m_new_number_of_ants.fill( 0.0 ) ;

@@ -7,7 +7,7 @@
 void showHelpAndExit( char * argv0 )
 {
    std::cerr
-      << "usage: " << argv0 << "\n"
+      << "usage: " << argv0 << '\n'
          "\t[--infile]"
          "\t[--outfile]"
          "\t[--help]"
@@ -55,14 +55,14 @@ void parseArgs( int argc, char ** argv, std::string & infile, std::string outfil
          }
       }
    }
-   catch (...)
+   catch ( ... )
    {
       std::cerr
          << __FILE__
          << ":"
          << line << ": uncaught exception (parse error)\n"
-         << "option: -" << (char)c << "\n"
-         << "argument: " << optarg << "\n"
+         << "option: -" << (char)c << '\n'
+         << "argument: " << optarg << '\n'
          << std::endl ;
 
       std::exit( (int)RETURNCODES::PARSE_ERROR ) ;

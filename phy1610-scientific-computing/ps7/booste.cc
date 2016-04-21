@@ -10,8 +10,8 @@
 #include <regex>
 #include <iostream>
 
-struct error : virtual std::exception, virtual boost::exception { };
-struct regex_match_error : virtual error { };
+struct error : virtual std::exception, virtual boost::exception { } ;
+struct regex_match_error : virtual error { } ;
 
 struct tag_match_input ;
 typedef boost::error_info<tag_match_input,std::string> match_info ;
@@ -31,7 +31,7 @@ int main()
                << re_info( "blah" )
             ) ;
    } 
-   catch (boost::exception & e)
+   catch ( boost::exception & e )
    {
       if ( auto * i { boost::get_error_info<match_info>(e) } ) 
       {

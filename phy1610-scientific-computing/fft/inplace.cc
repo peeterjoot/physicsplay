@@ -53,7 +53,7 @@ int main( int argc, char ** argv )
          c[1] = 0.0 ;
       }
 
-      infh << x << ", " << inout[i][0] << "\n" ;
+      infh << x << ", " << inout[i][0] << '\n' ;
 
       x += delta ;
    }
@@ -65,7 +65,7 @@ int main( int argc, char ** argv )
    x = -shift ;
    for ( Uint i = 0 ; i < N ; i++ )
    {
-      outfh << x << ", " << inout[i][0] << ", " << inout[i][1] << "\n" ;
+      outfh << x << ", " << inout[i][0] << ", " << inout[i][1] << '\n' ;
 
       x += delta ;
    }

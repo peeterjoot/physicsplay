@@ -67,7 +67,7 @@ int main(int argc, char **argv)
         << matrix2string( 3, 3, &EV_orig[0]).  c_str( ) << "];" << endl
         << "D = [" << endl << matrix2string( 3, 3, &D_orig[0]).c_str( ) << "];" << endl
         << "A = [" << endl << matrix2string( 3, 3, &A[0]).c_str( ) << "];" << endl
-        ;
+ ;
 
    //< ----------------------------------------------------------------
    //> Actual eigen value problem. ------------------------------------

@@ -20,7 +20,7 @@
 // would be better to batch using file_size calculation (subtracting the other stuff in the file to get at the number of
 // time output events processed).
 //
-//uintmax_t sz = boost::filesystem::file_size(argv[1]) << '\n';
+//uintmax_t sz = boost::filesystem::file_size(argv[1]) << '\n' ;
 void readandprintfloat( const int fd )
 {
    float f ;

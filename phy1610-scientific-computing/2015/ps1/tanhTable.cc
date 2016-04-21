@@ -64,7 +64,7 @@ void computeAndPrintTable( const double x1, const double x2, const Uint n )
    for ( Uint i{0} ; i < n ; i++, x += intervalWidth )
    {
       const double y{f( x )} ;
-      std::cout << x << "\t" << y << "\n" ;
+      std::cout << x << "\t" << y << '\n' ;
    }
 
    // done: flush the stream.
@@ -133,14 +133,14 @@ int main( int argc, char ** argv )
          } 
       }
    }
-   catch (...)
+   catch ( ... )
    {
       std::cerr 
          << __FILE__
          << ":"
          << line << ": uncaught exception (parse error)\n"
-         << "option: -" << (char)c << "\n"
-         << "argument: " << optarg << "\n"
+         << "option: -" << (char)c << '\n'
+         << "argument: " << optarg << '\n'
          << std::endl ;
 
       std::exit( (int)RETURNCODES::PARSE_ERROR ) ;

@@ -148,7 +148,7 @@ variables:
    // Read in the grid-mesh values:
    status = nc_get_var_float( ncid,
                               idVarX,
-                              &vecX[0] );
+                              &vecX[0] ) ;
    handle_error( status, "nc_get_var_float", __LINE__ ) ;
 
    // Read in the three timeslices of data:
@@ -160,7 +160,7 @@ variables:
                                   idVarRho,
                                   startA,
                                   countA,
-                                  &vecRho[0] );
+                                  &vecRho[0] ) ;
       handle_error( status, "nc_get_vara_float", __LINE__ ) ;
 
       for ( size_t i{0} ; i < N ; i++ )
@@ -177,7 +177,7 @@ variables:
       std::vector<float> vecT( tLen ) ;
       status = nc_get_var_float( ncid,
                                  idVarTimes,
-                                 &vecT[0] );
+                                 &vecT[0] ) ;
       handle_error( status, "nc_get_var_float", __LINE__ ) ;
 
       // display the (s*dt) times at which the output was saved

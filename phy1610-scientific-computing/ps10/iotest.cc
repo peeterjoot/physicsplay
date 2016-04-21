@@ -6,7 +6,12 @@
 
 using itype = rangePartition::index_type ;
 
-void initData( const itype m, const itype n, const itype j, float * const x, float * const rho, float * const rhoinit )
+void initData( const itype     m,
+               const itype     n,
+               const itype     j,
+               float * const   x,
+               float * const   rho,
+               float * const   rhoinit )
 {
    for ( size_t i{m} ; i <= n ; i++ )
    {

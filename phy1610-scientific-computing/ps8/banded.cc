@@ -8,8 +8,8 @@
 
 int getSquareMatrixDimensions( const darray2 & m )
 {
-   auto rows = m.extent( 0 ) ; 
-   auto columns = m.extent( 1 ) ; 
+   auto rows = m.extent( 0 ) ;
+   auto columns = m.extent( 1 ) ;
 
    if ( rows != columns )
    {

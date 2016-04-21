@@ -81,7 +81,7 @@ BOOST_AUTO_TEST_CASE( testRandomReals )
 {
    R3 s(-0.5, 0.5) ;
 
-   testR3( s ) ;   
+   testR3( s ) ;
 }
 
 BOOST_AUTO_TEST_CASE( banded )
@@ -104,8 +104,8 @@ BOOST_AUTO_TEST_CASE( banded )
 
    BOOST_REQUIRE( std::equal( &m[0][0], &m[nm][nm] + 1, &compare[0][0] ) ) ;
 
-   compare[nm][0] = 0 ; 
-   compare[0][nm] = 0 ; 
+   compare[nm][0] = 0 ;
+   compare[0][nm] = 0 ;
 
    initializeBandedMatrix( m, 1, 2, 3, BANDING_TYPE::TRIDIAGONAL ) ;
 

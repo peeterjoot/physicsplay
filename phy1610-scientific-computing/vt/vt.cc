@@ -52,8 +52,8 @@ int main()
    auto vMicro { durationToMicroseconds( vectorTime ) } ;
    auto mMicro { durationToMicroseconds( manualTime ) } ;
 
-   std::cout << "vectorTime: " << vMicro << "\n" ;
-   std::cout << "manualTime: " << mMicro << "\n" ;
+   std::cout << "vectorTime: " << vMicro << '\n' ;
+   std::cout << "manualTime: " << mMicro << '\n' ;
    std::cout << "vectorTime/manualTime: " << (double)vMicro/mMicro << std::endl ;
 
    float si = s.sum() ;

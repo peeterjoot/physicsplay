@@ -21,12 +21,14 @@ int main( int argc, char* argv[] )
       printf( "init err: %d\n", err ) ;
       abort() ;
    }
+
    err = MPI_Comm_size( MPI_COMM_WORLD, &size ) ;
    if ( err )
    {
       printf( "size err: %d\n", err ) ;
       abort() ;
    }
+
    err = MPI_Comm_rank( MPI_COMM_WORLD, &rank ) ;
    if ( err )
    {
@@ -39,20 +41,20 @@ int main( int argc, char* argv[] )
 
 #if 0
    MPI_Status rstatus ;
-   constexpr int tag1 = 1 ;
-   constexpr int tag2 = 2 ;
+   constexpr int tag1{ 1 } ;
+   constexpr int tag2{ 2 } ;
 
    // send right ghost cell right.
    // send left ghost cell left.
    // recieve right's left ghost cell.
    // recieve lefts's right ghost cell.
-   int left = rank - 1 ;
+   int left{ rank - 1 } ;
    if ( rank == 0 )
    {
       left = MPI_PROC_NULL ;
    }
 
-   int right = rank + 1 ;
+   int right{ rank + 1 } ;
    if ( right == size )
    {
       right = MPI_PROC_NULL ;

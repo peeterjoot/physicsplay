@@ -145,7 +145,7 @@ int main( int argc, char *argv[] )
    std::cout << omp_get_num_threads() << std::endl ;
    std::cout << omp_get_max_threads() << std::endl ;
 
-   //return 0;
+   //return 0 ;
    return boost::unit_test::unit_test_main(init_function, argc, argv) ;
 }
 #endif

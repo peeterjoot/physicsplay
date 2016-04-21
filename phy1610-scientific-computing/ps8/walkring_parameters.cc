@@ -23,7 +23,7 @@ void read_walking_parameters(const std::string &inifilename,
 
     
   // Open inifile and parse (using Inifile class from inifile.h)
-  Inifile parameter(inifilename);
+  Inifile parameter(inifilename) ;
       
   // Simulation parameters (defaults are given in case they are not in the file)
   L  = parameter.get<double>("L", 24.0);       // ring length
@@ -34,7 +34,7 @@ void read_walking_parameters(const std::string &inifilename,
   Z  = parameter.get<int>("walkers", 20);      // number of walkers
 
   // Output parameters
-  datafile = parameter.get<std::string>("data_file","walkring.dat");
-  time_between_output = parameter.get<double>("time_between_output", 0.3);
+  datafile = parameter.get<std::string>("data_file","walkring.dat") ;
+  time_between_output = parameter.get<double>("time_between_output", 0.3) ;
 }
   

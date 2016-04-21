@@ -24,11 +24,11 @@ void showHelpAndExit()
 int main( int argc, char ** argv )
 {
    size_t table_grid_size   { 356 } ;
-   int num_time_intervals   { 40 } ; 
-   int total_number_of_ants { 1010 } ; 
+   int num_time_intervals   { 40 } ;
+   int total_number_of_ants { 1010 } ;
    int c{0} ;
    int line{0} ;
-   TickTockOrNoOp timer ; 
+   TickTockOrNoOp timer ;
    float ioTime { 0.0 } ;
 
    constexpr struct option long_options[]{
@@ -73,14 +73,14 @@ int main( int argc, char ** argv )
          } 
       }
    }
-   catch (...)
+   catch ( ... )
    {
       std::cerr 
          << __FILE__
          << ":"
          << line << ": uncaught exception (parse error)\n"
-         << "option: -" << (char)c << "\n"
-         << "argument: " << optarg << "\n"
+         << "option: -" << (char)c << '\n'
+         << "argument: " << optarg << '\n'
          << std::endl ;
 
       std::exit( (int)RETURNCODES::PARSE_ERROR ) ;
@@ -93,7 +93,7 @@ int main( int argc, char ** argv )
 
    for ( ; i != end ; ++i )
    {
-      float totants = i() ; 
+      float totants = i() ;
 
       timer.tick() ;
 

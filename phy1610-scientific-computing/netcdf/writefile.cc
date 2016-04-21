@@ -7,13 +7,13 @@
 using namespace netCDF ;
 using namespace netCDF::exceptions ;
 
-constexpr int nx = 6, ny = 12 ;
+constexpr int nx{6}, ny{12} ;
 
 void setData( int * dataOut, const int v )
 {
-   for ( int i = 0 ; i < nx; i++ )
+   for ( auto i{0} ; i < nx; i++ )
    {
-      for ( int j = 0 ; j < ny; j++ )
+      for ( auto j{0} ; j < ny; j++ )
       {
          dataOut[i * ny + j] = i * ny + j + v ;
       }
@@ -34,14 +34,14 @@ int main( int argc, char ** argv )
       NcFile dataFile( "first.netCDF.nc", NcFile::replace ) ;
 
       // Create the dimensions.
-      NcDim tDim = dataFile.addDim( "t" ) ;
-      NcDim xDim = dataFile.addDim( "x", nx ) ;
-      NcDim yDim = dataFile.addDim( "y", ny ) ;
+      auto tDim = dataFile.addDim( "t" ) ;
+      auto xDim = dataFile.addDim( "x", nx ) ;
+      auto yDim = dataFile.addDim( "y", ny ) ;
 
       std::vector < NcDim > dims { tDim, xDim, yDim } ;
 
       // Create the data variable.
-      NcVar data = dataFile.addVar( "data", ncInt, dims ) ;
+      auto data = dataFile.addVar( "data", ncInt, dims ) ;
 
       // Put the data in the file.
       std::vector<size_t> startp { 0, 0, 0 } ;
@@ -52,7 +52,7 @@ int main( int argc, char ** argv )
       constexpr size_t stridey{ ny } ;
       std::vector<ptrdiff_t> imapp { 1, stridey , 1 } ;
 
-      for ( Uint i = 0 ; i < opt.nrec() ; i++ )
+      for ( Uint i{0} ; i < opt.nrec() ; i++ )
       {
          startp[0] = i ; // This is controlling the timestep location for the write
 
@@ -65,7 +65,7 @@ int main( int argc, char ** argv )
       // Add an attribute.
       dataFile.putAtt( "Version info:", PHYSICSPLAY_COMMIT_INFO ) ;
    }
-   catch (NcException& e)
+   catch ( NcException & e )
    {
       std::cout << "unknown error" << std::endl ;
       e.what() ;

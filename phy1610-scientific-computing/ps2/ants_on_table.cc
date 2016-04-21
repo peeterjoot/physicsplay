@@ -69,7 +69,7 @@ float ants_on_table::total_number_of_ants() const
 {
    float totants = 0.0 ;
 
-   TickTockOrNoOp timer ; 
+   TickTockOrNoOp timer ;
 
    timer.tick() ;
 
@@ -86,7 +86,7 @@ void ants_on_table::timestep( iterator & iter )
    constexpr double WALKING_ANTS_PER_FALLEN { 4.0 } ;
    constexpr double FALLEN_ANTS_FRACTION { 0.2 } ;
 
-   TickTockOrNoOp timer ; 
+   TickTockOrNoOp timer ;
 
    timer.tick() ;
    iter.m_new_number_of_ants.fill( 0.0 ) ;
@@ -144,5 +144,5 @@ ants_on_table::iterator& ants_on_table::iterator::operator++ ()
    m_ants_p->timestep( *this ) ;
    m_timevalue++ ;
 
-   return *this;
+   return *this ;
 }

@@ -164,14 +164,14 @@ int main( int argc, char ** argv )
          } 
       }
    }
-   catch (...)
+   catch ( ... )
    {
       std::cerr 
          << __FILE__
          << ":"
          << line << ": uncaught exception (parse error)\n"
-         << "option: -" << (char)c << "\n"
-         << "argument: " << optarg << "\n"
+         << "option: -" << (char)c << '\n'
+         << "argument: " << optarg << '\n'
          << std::endl ;
 
       std::exit( (int)RETURNCODES::PARSE_ERROR ) ;

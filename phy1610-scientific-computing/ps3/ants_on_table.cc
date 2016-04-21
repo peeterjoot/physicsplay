@@ -32,7 +32,7 @@ float ants_on_table::total_number_of_ants() const
 {
    float totants = 0.0 ;
 
-   TickTockOrNoOp timer ; 
+   TickTockOrNoOp timer ;
 
    timer.tick() ;
 

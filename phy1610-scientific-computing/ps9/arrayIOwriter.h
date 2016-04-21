@@ -27,7 +27,7 @@
             int nper ;
             int numPoints ;
             float x[numPoints] ;
-            float times[] ; 
+            float times[] ;
          } ;
 
       and the data files are just

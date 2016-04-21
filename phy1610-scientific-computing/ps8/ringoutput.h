@@ -73,7 +73,7 @@ public:
       \param N [in]
          Number of grid points.
     */
-   walkring_output( const std::string & datafilename, const int outputcols, const int N )  ;
+   walkring_output( const std::string & datafilename, const int outputcols, const int N ) ;
 
    /**
       This function calculates a density array from the walker positions, and outputs

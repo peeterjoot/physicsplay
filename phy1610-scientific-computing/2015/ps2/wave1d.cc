@@ -47,10 +47,10 @@ void wave1d::initializeAndExcite()
 
 void wave1d::display( double time )
 {
-   std::cout << "# t = " << time << "\n" ;
+   std::cout << "# t = " << time << '\n' ;
    for ( Sint32 i = 1 ; i <= p.ngrid ; i++ ) 
    {
-      std::cout << x[i] << " " << rho[i] << "\n" ;
+      std::cout << x[i] << " " << rho[i] << '\n' ;
    }  
 }
 

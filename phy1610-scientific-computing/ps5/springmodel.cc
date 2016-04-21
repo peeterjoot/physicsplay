@@ -248,14 +248,14 @@ int main( int argc, char ** argv )
          }
       }
    }
-   catch (...)
+   catch ( ... )
    {
       std::cerr
          << __FILE__
          << ":"
          << line << ": uncaught exception (parse error)\n"
-         << "option: -" << (char)c << "\n"
-         << "argument: " << optarg << "\n"
+         << "option: -" << (char)c << '\n'
+         << "argument: " << optarg << '\n'
          << std::endl ;
 
       std::exit( (int)RETURNCODES::PARSE_ERROR ) ;
@@ -307,17 +307,17 @@ int main( int argc, char ** argv )
 
       if ( verbose )
       {
-         out << "Mass:\t" << m << "\n" ;
+         out << "Mass:\t" << m << '\n' ;
 
          for ( const auto & r : results.m_rv )
          {
             out << "\tSolving on: [ " << r.m_initial_a << ", " << r.m_initial_b << " ]\n"
-                << "\tIterations:\t" << r.m_iter << "\n"
-                << "\tConverged:\t" << r.m_converged << "\n"
-                << "\tStatus:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
+                << "\tIterations:\t" << r.m_iter << '\n'
+                << "\tConverged:\t" << r.m_converged << '\n'
+                << "\tStatus:\t" << r.m_status << " (" << r.m_strerror << ")" << '\n'
                 << "\tMin:\t" << r.m_xmin << " in [ " << r.m_a << ", " << r.m_b << "]\n"
-                << "\tF(Min):\t" << r.m_fmin << "\n"
-                << "\tAbserr (bracket):\t" << r.m_b - r.m_a << "\n"
+                << "\tF(Min):\t" << r.m_fmin << '\n'
+                << "\tAbserr (bracket):\t" << r.m_b - r.m_a << '\n'
                 << std::endl ;
          }
 
@@ -385,12 +385,12 @@ int main( int argc, char ** argv )
    if ( verbose )
    {
       std::cout << "Using " << r.m_solvername << " on: [ " << massInterval[0] << ", " << massInterval[1] << " ]\n"
-                << "Iterations:\t" << r.m_iter << "\n"
-                << "Converged:\t" << r.m_converged << "\n"
-                << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
-                << "Root:\t" << r.m_x << "\n"
+                << "Iterations:\t" << r.m_iter << '\n'
+                << "Converged:\t" << r.m_converged << '\n'
+                << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << '\n'
+                << "Root:\t" << r.m_x << '\n'
                 << "Interval:\t [ " << r.m_xLo << ", " << r.m_xHi << " ]\n"
-                << "Abserr (bracket):\t" << r.m_xHi - r.m_xLo << "\n" << std::endl ;
+                << "Abserr (bracket):\t" << r.m_xHi - r.m_xLo << '\n' << std::endl ;
    }
    else
    {

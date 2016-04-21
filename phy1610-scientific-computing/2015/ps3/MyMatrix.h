@@ -111,7 +111,7 @@ public:
 #if defined WITH_ARRAY
       if ( elem )
       {
-         delete[] elem ; 
+         delete[] elem ;
       }
 #endif
    }

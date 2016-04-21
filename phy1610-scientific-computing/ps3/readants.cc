@@ -16,7 +16,7 @@ void showHelpAndExit()
 }
 
 using namespace netCDF ;
-using namespace exceptions;
+using namespace exceptions ;
 
 /**
    Parse arguments and run the driver.
@@ -53,14 +53,14 @@ int main( int argc, char ** argv )
          } 
       }
    }
-   catch (...)
+   catch ( ... )
    {
       std::cerr 
          << __FILE__
          << ":"
          << line << ": uncaught exception (parse error)\n"
-         << "option: -" << (char)c << "\n"
-         << "argument: " << optarg << "\n"
+         << "option: -" << (char)c << '\n'
+         << "argument: " << optarg << '\n'
          << std::endl ;
 
       std::exit( (int)RETURNCODES::PARSE_ERROR ) ;
@@ -125,9 +125,9 @@ int main( int argc, char ** argv )
 
       std::cout << "err: " << err << std::endl ;
    }
-   catch (NcException& e)
+   catch ( NcException & e )
    {
-      std::cout << "unknown error" << std::endl;
+      std::cout << "unknown error" << std::endl ;
       e.what() ;
    }
 

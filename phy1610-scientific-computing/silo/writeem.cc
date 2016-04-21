@@ -13,8 +13,8 @@ int main( int argc, char *argv[] )
 
    int dims[] = { NX, NY } ;
    int ndims = 2 ;
-   float x[NX] { 0.1, 0.2, 0.3, 0.4, 0.5 } ;      
-   float y[NY] { 1.1, 1.2, 1.3 } ;      
+   float x[NX] { 0.1, 0.2, 0.3, 0.4, 0.5 } ;
+   float y[NY] { 1.1, 1.2, 1.3 } ;
    float scalar[NX * NY] { 5.1, 5.2, 5.3, 5.4, 5.5,
                            7.1, 7.2, 7.3, 7.4, 7.5,
                            9.1, 9.2, 9.3, 9.4, 9.5 } ;
