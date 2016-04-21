@@ -50,7 +50,7 @@ int main( int argc, char ** argv )
 
             vecX[i] ++ ;
          }
-         
+
          io.writeData( s * 0.1,
                        p.m_myFirstGlobalElementIndex -1,
                        p.localPartitionSize(),

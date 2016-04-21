@@ -1,8 +1,8 @@
 // http://stackoverflow.com/questions/21701496/lapacke-eigen-solution-is-inaccurate-how-to-improve-it
 /**
  * eigen.cpp
- * 
- * Given that you put version 3.5.0 into /opt/lapack/ compile this with: 
+ *
+ * Given that you put version 3.5.0 into /opt/lapack/ compile this with:
  * g++ eigen.cpp -I"/opt/lapack/lapack-3.5.0/lapacke/include" \
        -L"/opt/lapack/lapack-3.5.0" -llapacke -llapack -lblas -lcblas
  * The order of included libraries is important!
@@ -24,9 +24,9 @@ matrix2string( int m, int n, const double *A)
 {
    ostringstream oss ;
 
-   for ( int j = 0; j < m; j++)
+   for ( int j{0} ; j < m ; j++ )
    {
-      for ( int k = 0; k < n; k++)
+      for ( int k{0} ; k < n ; k++ )
       {
          oss << A[j + k * m] << "\t" ;
       }
@@ -62,8 +62,8 @@ int main(int argc, char **argv)
    cblas_dgemm( CblasColMajor, CblasNoTrans, CblasNoTrans, 3, 3, 3, 1,
                 &EV_orig[0], 3, &dummy[0], 3, 0, &A[0], 3) ;
 
-   cout << "Set up the problem building A = EV D EV'" << endl 
-        << "EV = [" << endl 
+   cout << "Set up the problem building A = EV D EV'" << endl
+        << "EV = [" << endl
         << matrix2string( 3, 3, &EV_orig[0]).  c_str( ) << "];" << endl
         << "D = [" << endl << matrix2string( 3, 3, &D_orig[0]).c_str( ) << "];" << endl
         << "A = [" << endl << matrix2string( 3, 3, &A[0]).c_str( ) << "];" << endl
@@ -98,7 +98,7 @@ int main(int argc, char **argv)
    // eigenvalues appear to be written into work.
    cout << "Ran dsyev(..) -- presumably 'double symmetric eigenvalue'." << endl
         << "Lambda: " << work[0] << ", " << work[1] << ", " << work[2] << endl
-        << "EV = [" << endl << matrix2string( 3, 3, &ATriL[0]) << "];" << endl 
+        << "EV = [" << endl << matrix2string( 3, 3, &ATriL[0]) << "];" << endl
         << "Info: " << info << endl ;
 
    //< ----------------------------------------------------------------

@@ -43,7 +43,7 @@ void showHelpAndExit()
 
 extern template
 class brent_minimizer<gsl_spring_min_function> ;
- 
+
 /**
    This class collects the gsl minimization function,
    the parameters that define the interval, and the allocated gsl minimizer object.  That
@@ -55,13 +55,13 @@ class minimizerstate
    minimizerParameters                       m_params ;
    brent_minimizer<gsl_spring_min_function>  m_minimizer ;
 
-public:      
+public:
    /**
       Set the (position) bounds on the minimization interval, and allocate the gsl minimizer object.
     */
    minimizerstate( ) :
       m_f{},
-      m_params( m_f.start(), m_f.end() ), 
+      m_params( m_f.start(), m_f.end() ),
       m_minimizer( m_f )
    {
    }
@@ -384,36 +384,36 @@ int main( int argc, char ** argv )
 
    if ( verbose )
    {
-      std::cout << "Using " 
-                  << r.m_solvername 
-                  << " on: [ " 
-                  << massInterval[0] 
-                  << ", " 
-                  << massInterval[1] 
+      std::cout << "Using "
+                  << r.m_solvername
+                  << " on: [ "
+                  << massInterval[0]
+                  << ", "
+                  << massInterval[1]
                   << " ]\n"
-                << "Iterations:\t" 
-                  << r.m_iter 
+                << "Iterations:\t"
+                  << r.m_iter
                   << '\n'
-                << "Converged:\t" 
-                  << r.m_converged 
+                << "Converged:\t"
+                  << r.m_converged
                   << '\n'
-                << "Status:\t" 
-                  << r.m_status 
-                  << " (" 
-                  << r.m_strerror 
-                  << ")" 
+                << "Status:\t"
+                  << r.m_status
+                  << " ("
+                  << r.m_strerror
+                  << ")"
                   << '\n'
-                << "Root:\t" 
-                  << r.m_x 
+                << "Root:\t"
+                  << r.m_x
                   << '\n'
-                << "Interval:\t [ " 
-                  << r.m_xLo 
-                  << ", " 
-                  << r.m_xHi 
+                << "Interval:\t [ "
+                  << r.m_xLo
+                  << ", "
+                  << r.m_xHi
                   << " ]\n"
-                << "Abserr (bracket):\t" 
-                  << r.m_xHi - r.m_xLo 
-                  << '\n' 
+                << "Abserr (bracket):\t"
+                  << r.m_xHi - r.m_xLo
+                  << '\n'
                 << std::endl ;
    }
    else

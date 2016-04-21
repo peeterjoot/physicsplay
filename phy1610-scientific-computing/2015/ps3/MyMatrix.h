@@ -76,7 +76,7 @@ class MyMatrix
    void set_element_checked( const Uint i, const Uint j, const valueType v ) ;
 public:
 
-   MyMatrix( ) : elem{}, r{0}, c{0} {} 
+   MyMatrix( ) : elem{}, r{0}, c{0} {}
 
    /**
       Construct an uninitialized matrix with a specified size.

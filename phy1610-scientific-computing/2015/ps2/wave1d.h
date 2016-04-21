@@ -12,7 +12,7 @@
    The compute method of this class solves the 1-dim wave equation
 
    \f[
-      \frac{\partial^2u}{\partial t^2} - c^2 \frac{\partial^2u}{\partial x^2} + (\frac{1}{\tau}) \frac{\partial u}{\partial t} = 0  
+      \frac{\partial^2u}{\partial t^2} - c^2 \frac{\partial^2u}{\partial x^2} + (\frac{1}{\tau}) \frac{\partial u}{\partial t} = 0
    \f]
 
    with boundary conditions \f[ u(x_1,t)=u(x_2,t)=0 \f],
@@ -35,11 +35,11 @@ class wave1d
 
 public:
    /**
-      Allocate storage for the computational arrays 
+      Allocate storage for the computational arrays
     */
    wave1d( const parameters & p_ ) ;
 
-   /** 
+   /**
       Set the values of x[], rho[], and rho_prev[] to initial values.
     */
    void initializeAndExcite() ;

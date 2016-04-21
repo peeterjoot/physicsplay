@@ -19,10 +19,10 @@ do {                                                                 \
    }                                                                 \
 } while ( 0 )
 
-/** 
+/**
  don't know if this is actually an invalid value for netcdf (file, dimension, variable) handles, but at least give these a
  non-random value.
- */    
+ */
 static const constexpr int INVALID_NETCDF_ID{-1} ;
 
 netcdfIO::netcdfIO( const std::string &   fileBaseName,

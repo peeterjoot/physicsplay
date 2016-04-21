@@ -23,7 +23,7 @@ class parseOptions
       std::exit( (int)RETURNCODES::HELP ) ;
    }
 
-public:   
+public:
    parseOptions( int argc, char ** argv ) : m_exeName{argv[0]}, m_nrec{1}
    {
       int c{0} ;

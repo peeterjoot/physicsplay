@@ -10,7 +10,7 @@
 #include "ticks.h"
 #include "darray.h"
 
-/** 
+/**
    A class to display a histogram of the density, and write the density at each grid point to a file.
   */
 class ringoutput
@@ -22,16 +22,16 @@ protected:
    ticks          m_startTimer ;
 
 public:
-   /** 
+   /**
       Setup output into a file of file name datafilename.
 
       A header will be written to screen as well.
 
-      \param datafilename [in] 
+      \param datafilename [in]
          Name of the file to open.
 
-      \param Number of grid points [in] 
-         Specify this for a walkring 
+      \param Number of grid points [in]
+         Specify this for a walkring
     */
    ringoutput( const std::string & datafilename, const int outputcols ) ;
 
@@ -62,12 +62,12 @@ private:
    int      m_N ;          ///< Number of grid points.
 
 public:
-   /** 
+   /**
       Setup output into a file of file name datafilename.
 
       A header will be written to screen as well.
 
-      \param datafilename [in] 
+      \param datafilename [in]
          Name of the file to open.
 
       \param N [in]
@@ -79,7 +79,7 @@ public:
       This function calculates a density array from the walker positions, and outputs
       that and the histogram of that data.
 
-      This allows us to produce more comparable .dat files than the original 
+      This allows us to produce more comparable .dat files than the original
       diffring_output.* and walkring_output.* modules originally produced (i.e. the .dat
       output is normalized to the diffring density format for output).
 

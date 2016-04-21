@@ -35,7 +35,7 @@ struct simulation
 /// Output parameters
 struct output
 {
-   double  outtime ;   ///< how often should a snapshot of the wave be written out? 
+   double  outtime ;   ///< how often should a snapshot of the wave be written out?
    bool    verbose ;   ///< print output or just compute it?
 
    /**
@@ -53,7 +53,7 @@ struct parameters : public physical,simulation,output
    Sint32   nsteps  ;  ///< number of steps of that size to reach runtime
    Sint32   nper    ;  ///< how many step s between snapshots
 
-   /** 
+   /**
       Read the parameter values from a file (argv[1]) if specified on the command line.
       If no file is specified, then the defaults are used.
 

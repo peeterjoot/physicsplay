@@ -35,7 +35,7 @@ int main( int argc, char ** argv )
 
    try {
       while ( -1 != ( c = getopt_long( argc, argv, "hf:", long_options, NULL ) ) )
-      { 
+      {
          switch ( c )
          {
             case 'f' :
@@ -50,12 +50,12 @@ int main( int argc, char ** argv )
             {
                showHelpAndExit() ;
             }
-         } 
+         }
       }
    }
    catch ( ... )
    {
-      std::cerr 
+      std::cerr
          << __FILE__
          << ":"
          << line << ": uncaught exception (parse error)\n"
@@ -103,7 +103,7 @@ int main( int argc, char ** argv )
       float err{} ;
 
       // Put the data in a variable and print it.
-      for ( size_t t = 0 ; t < nt ; t++ )
+      for ( size_t t{0} ; t < nt ; t++ )
       {
          startp[0] = t ;
 

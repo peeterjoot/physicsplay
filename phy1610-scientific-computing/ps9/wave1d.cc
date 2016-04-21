@@ -1,7 +1,7 @@
 //
 // wave1d.cc - Simulates a one-dimensional damped wave equation modified
-// to use pgplot for runtime display of solution with 1 second between frames.  
-// 
+// to use pgplot for runtime display of solution with 1 second between frames.
+//
 // SciNet - March 2015
 
 #include <iostream>
@@ -34,7 +34,7 @@ int main( int argc, char* argv[] )
     const double  dx            = parameter.get<double>( "dx", 0.01 ) ;           // spatial grid size  //0.02
 
     // Output parameters
-    const double  outtime       =  parameter.get<double>( "outtime", 1.0 ) ;      // how often should a snapshot of the wave be written out? 
+    const double  outtime       =  parameter.get<double>( "outtime", 1.0 ) ;      // how often should a snapshot of the wave be written out?
 
     const bool    graphics      = parameter.get<bool>( "graphics", true ) ;      // output to graphics (with 1 sec delay)  or to a file?
 
@@ -96,7 +96,7 @@ int main( int argc, char* argv[] )
     farray rho_next( numPoints ) ; // time step t+1
     farray rho_init( numPoints ) ; // initial values
     farray x( numPoints ) ;        // x values
- 
+
     // Initialize.
     for ( int i = 0 ; i < numPoints ; i++ )
     {
@@ -113,7 +113,7 @@ int main( int argc, char* argv[] )
         rho_prev[i] = rho[i] ;
         rho_init[i] = rho[i] ;
     }
-       
+
     int red, grey, white ;
 
     if ( graphics ) {
@@ -130,7 +130,7 @@ int main( int argc, char* argv[] )
         cpgline( numPoints, x.data( ), rho.data() ) ;
         cpgsls( 2 ) ; cpgslw( 12 ) ; cpgsci( red ) ;
         cpgline( numPoints, x.data( ), &rho_init[0] ) ;
-    } else {     
+    } else {
         ioManager.writeMetaData( &x[0], sizeof(x[0])*x.size() ) ;
         ioManager.writeMetaData( &timeVal, sizeof(timeVal) ) ;
         ioManager.writeData( &rho[0], sizeof(rho[0]), rho.size() ) ;
@@ -183,16 +183,16 @@ int main( int argc, char* argv[] )
                 cpgsls( 1 ) ; cpgslw( 6 ) ; cpgsci( white ) ;
                 cpgline( numPoints, x.data( ), rho_init.data( ) ) ;
                 cpgebuf( ) ;
-                sleep( 1 ) ; // artificial delay! 
+                sleep( 1 ) ; // artificial delay!
             }
             else
             {
                 ioManager.writeMetaData( &timeVal, sizeof(timeVal) ) ;
                 ioManager.writeData( &rho[0], sizeof(rho[0]), rho.size() ) ;
-            } 
+            }
         }
     }
-    
+
     // Output measured runtime.
     std::cout << "Walltime = " << tt.silent_tock() << " sec."  << std::endl ;
 

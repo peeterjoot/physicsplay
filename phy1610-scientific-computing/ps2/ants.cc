@@ -9,7 +9,7 @@
  */
 void showHelpAndExit()
 {
-   std::cerr << "usage: ants\n" 
+   std::cerr << "usage: ants\n"
       "\t[--gridsize=N|-g N]\n"
       "\t[--timeintervals=N|-t N]\n"
       "\t[--numberofants=N|-n N]\n"
@@ -41,7 +41,7 @@ int main( int argc, char ** argv )
 
    try {
       while ( -1 != ( c = getopt_long( argc, argv, "hg:t:n:", long_options, NULL ) ) )
-      { 
+      {
          switch ( c )
          {
             case 'g' :
@@ -70,12 +70,12 @@ int main( int argc, char ** argv )
             {
                showHelpAndExit() ;
             }
-         } 
+         }
       }
    }
    catch ( ... )
    {
-      std::cerr 
+      std::cerr
          << __FILE__
          << ":"
          << line << ": uncaught exception (parse error)\n"

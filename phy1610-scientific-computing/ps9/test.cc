@@ -62,7 +62,7 @@ BOOST_AUTO_TEST_CASE( testWriterSmallArray )
    fthreaded.writeData( &data[0], sizeof(data[0]), std::max(meta.numThreads-1,1) ) ;
    fmultifile.writeData( &data[0], sizeof(data[0]), std::max(meta.numThreads-1,1) ) ;
 
-   // for testing test code:   
+   // for testing test code:
    if ( 0 )
    {
       int more{3} ;
@@ -106,7 +106,7 @@ BOOST_AUTO_TEST_CASE( testWriterLargerArray )
    fthreaded.writeData( &data[0], sizeof(data[0]), size ) ;
    fmultifile.writeData( &data[0], sizeof(data[0]), size ) ;
 
-   // for testing test code:   
+   // for testing test code:
    if ( 0 )
    {
       int more{3} ;

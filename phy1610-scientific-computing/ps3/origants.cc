@@ -103,7 +103,7 @@ std::cout << "init time: \t" << s_init << std::endl ;
 std::cout << "core time: \t" << s_core << std::endl ;
 std::cout << "update time: \t" << s_update << std::endl ;
 #endif
-}             
+}
 
 int main()
 {

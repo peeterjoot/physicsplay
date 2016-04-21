@@ -74,6 +74,6 @@ int main( int argc, char ** argv )
 
    /* Close the netcdf file. */
    if ((res = nc_close(ncid)))   ERR ;
-   
+
    return 0 ;
 }

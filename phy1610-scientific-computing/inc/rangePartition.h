@@ -29,7 +29,7 @@ public:
    using taskId = int ;
    using index_type = size_t ;
 
-   /** 
+   /**
       A global domain sub-range that is appropriate for the assigned task.  See subsetOfGlobalRangeInThisPartition.
     */
    using subrange = std::pair<index_type, index_type> ;
@@ -59,8 +59,8 @@ public:
        Zero indexed array elements are not used, to allow for the use of v[0] as the lower bound parition guard cell.
     */
    index_type toLocalDomain( const index_type i ) const ;
-      
-   /** 
+
+   /**
       Given a global range [lowerGlobalBound, upperGlobalBound] determine the appropriate subset of that range
       that belongs in the current partition.
 

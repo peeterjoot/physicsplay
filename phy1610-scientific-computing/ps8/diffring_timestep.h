@@ -1,4 +1,4 @@
-// 
+//
 // diffring_timestep.h
 //
 // Time step module for 1d diffusion on a ring
@@ -49,7 +49,7 @@ public:
                        const double   D,
                        const double   dt,
                        const double   dx ) ;
- 
+
    /**
       Perform a single time step for the density field.
 

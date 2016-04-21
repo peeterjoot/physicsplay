@@ -36,7 +36,7 @@ int main( int argc, char ** argv )
    constexpr size_t N{40} ;
    rangePartition p( N, mpi.m_size, mpi.m_rank ) ;
    auto n{ p.localPartitionSize() } ;
-   
+
    float x[ n + 2 ] ;
    float rho[ n + 2 ] ;
    float rhoinit[ n + 2 ] ;

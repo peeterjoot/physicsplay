@@ -34,15 +34,15 @@ public:
       \param localXstart [in]
          Local domain location of the grid points to write in ascii mode.
 
-         For ascii mode IO it is assumed that 
-         localXstart[0] is the location of the first non-ghost cell grid value, and that 
+         For ascii mode IO it is assumed that
+         localXstart[0] is the location of the first non-ghost cell grid value, and that
          localXstart[-1] and localXstart[localN] are both accessible (the ghost cell values.)
 
       \param localRhostart [in]
          Local domain location of the data to write.
 
-         For ascii mode IO it is assumed that 
-         localRhostart[0] is the location of the first non-ghost cell grid value, and that 
+         For ascii mode IO it is assumed that
+         localRhostart[0] is the location of the first non-ghost cell grid value, and that
          localRhostart[-1] and localRhostart[localN] are both accessible (the ghost cell values.)
     */
    virtual void writeData( const float           time,
@@ -89,7 +89,7 @@ protected:
  */
 class iohandler
 {
-public: 
+public:
 
    enum class cfg { graphics  ///< pgplot based graphical display
                     ,ascii    ///< Ascii output to a file
@@ -99,13 +99,13 @@ public:
 
    /**
       Open files handles and other stuff depending on the configuration mode.
-  
+
       \param c [in]
           How to do the IO.
- 
+
       \param fileBaseName [in]
           Filename for the IO.  mpirank may be appended to this in some IO modes.
- 
+
       \param N [in]
           Dimensions of the float "grid" and 1D data arrays to write.
 

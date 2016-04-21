@@ -1,5 +1,5 @@
 /** \file ghosts.cc
-  
+
   A standalone mpi worker to get the ghost cell send/recv logic tested independently.
   */
 #include <stdio.h>

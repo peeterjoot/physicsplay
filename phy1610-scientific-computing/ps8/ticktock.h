@@ -7,7 +7,7 @@
 #ifndef _TICKTOCKH_
 #define _TICKTOCKH_
 
-class TickTock 
+class TickTock
 {
   public:
     void tick();                              // start measuring time

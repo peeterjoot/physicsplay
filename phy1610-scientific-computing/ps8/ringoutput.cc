@@ -1,4 +1,4 @@
-// 
+//
 // ringoutput.cc
 //
 // Module for output for 1d diffusion or 1d random walk on a ring
@@ -43,7 +43,7 @@ ringoutput::ringoutput( const std::string & datafilename, const int outputcols )
 
    // Some initial output to screen
    std::cout << "   Step     Time   Walltime(s)    Mean      Stdev   Profile\n" ;
- 
+
    // Start measuring elapsed time
    m_startTimer = ticks::sample() ;
 }
@@ -66,17 +66,17 @@ void ringoutput::showline( const int       step,
 {
    auto t1 = ticks::sample() ;
    double timeSoFar = durationToSeconds(t1 - m_startTimer) - m_wasteTime ;
-    
+
    // First, write rarray to file
    m_file << time << '\n' << P << "\n\n" ;
 
    reportToScreenToo( P, time, step, m_outputcols, timeSoFar ) ;
- 
+
 //   auto t2 = ticks::sample() ;
 //   m_wasteTime += durationToSeconds(t2 - t1) ;
 }
 
-walkring_output::walkring_output( const std::string & datafilename, const int outputcols, const int N ) 
+walkring_output::walkring_output( const std::string & datafilename, const int outputcols, const int N )
    : ringoutput( datafilename, outputcols )
    , m_density( N )
    , m_N( N )
@@ -87,7 +87,7 @@ void walkring_output::showline( int step, double time, const rarray<int,1> &w )
 {
    auto t1 = ticks::sample() ;
    auto timeSoFar = durationToSeconds(t1 - m_startTimer) - m_wasteTime ;
-    
+
    m_density.fill(0) ;
    const auto oneWalkerDensity = 1.0/ w.size() ;
 

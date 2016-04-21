@@ -13,7 +13,7 @@
 
 int main(int argc, char* argv[])
 {
-    if (argc>3) 
+    if ( argc > 3 )
     {
         // read command line arguments
         int r = atoi(argv[1]) ;
@@ -25,12 +25,13 @@ int main(int argc, char* argv[])
         MyMatrix a(r,c) ;
 
         // fill the 2d array
-        for (Uint i=0; i<a.get_rows(); i++) 
+        for ( Uint i{0} ; i < a.get_rows(); i++ )
         {
-            for (Uint j=0; j<a.get_columns(); j++) 
+            for ( Uint j{ 0 } ; j < a.get_columns(); j++ )
             {
                 double x = i/float(a.get_rows())-0.5 ;
                 double y = j/float(a.get_columns())-0.5; // corrected version: this said "i/float(....) before
+
                 a.set_element(i,j,exp(-(x*x+y*y)/8.0)) ;
             }
         }

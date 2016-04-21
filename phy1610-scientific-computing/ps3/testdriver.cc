@@ -16,8 +16,8 @@ BOOST_AUTO_TEST_CASE( timestep )
       {
          for ( auto numberOfTimeIntervals : { 0, 1, 5, 11, 23, 101 } )
          {
-            // 
-            // Attempting to verify a 1x1 boundary case failed (infinite loop).  That's because the 
+            //
+            // Attempting to verify a 1x1 boundary case failed (infinite loop).  That's because the
             // initialization algorithm can't handle that small of a grid size (the sine computed
             // is always zero).  Omitting that test, and adding an assert into the ants_on_table
             // constructor instead.

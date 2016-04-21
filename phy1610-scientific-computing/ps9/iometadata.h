@@ -18,7 +18,7 @@ struct IOmetaData
     int    nper ;
     int    numPoints ;
 
-    IOmetaData( ) {} 
+    IOmetaData( ) {}
 
     IOmetaData( int np, int npt ) : nper(np), numPoints(npt) { }
 } ;

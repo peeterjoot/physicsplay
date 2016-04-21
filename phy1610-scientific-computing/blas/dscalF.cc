@@ -11,7 +11,7 @@ int main(int argc, char **argv)
    //Direct Fortran call
    dscal(&n, &coeff, &x[0], &one) ;
 
-   for (int i = 0 ; i < n; i++)
+   for ( int i = 0 ; i < n ; i++ )
       std::cout << " " << x[i] ;
 
    return 0 ;

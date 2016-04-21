@@ -29,7 +29,7 @@ do {                                   \
  */
 void showHelpAndExit()
 {
-   std::cerr << "usage: readwavenc\n" 
+   std::cerr << "usage: readwavenc\n"
                 "\t[--filename=f|-f f]\n"
                 "\t[--verbose|-v]\n"
                 "\t[--times|-t]\n"
@@ -57,7 +57,7 @@ int main( int argc, char ** argv )
    } ;
 
    while ( -1 != ( c = getopt_long( argc, argv, "hf:vt", longOptions, NULL ) ) )
-   { 
+   {
       switch ( c )
       {
          case 'f' :
@@ -83,8 +83,8 @@ int main( int argc, char ** argv )
          {
             showHelpAndExit() ;
          }
-      } 
-   } 
+      }
+   }
 
    int status, ncid, XdimId, TdimId, idVarX, idVarRho, idVarTimes ;
    size_t N, tLen ;

@@ -18,7 +18,7 @@
  */
 void showHelpAndExit()
 {
-   std::cerr << "usage: ratToCsv\n" 
+   std::cerr << "usage: ratToCsv\n"
       "\t[--ratpath=p|-r p]\n"
       "\t[--filename=f|-d f]\n"
       "\t[--help]" << std::endl ;
@@ -53,7 +53,7 @@ int main( int argc, char ** argv )
 
    try {
       while ( -1 != ( c = getopt_long( argc, argv, "hr:f:", longOptions, NULL ) ) )
-      { 
+      {
          switch ( c )
          {
             case 'r' :
@@ -75,12 +75,12 @@ int main( int argc, char ** argv )
             {
                showHelpAndExit() ;
             }
-         } 
+         }
       }
    }
    catch ( ... )
    {
-      std::cerr 
+      std::cerr
          << __FILE__
          << ":"
          << line << ": uncaught exception (parse error)\n"
@@ -96,8 +96,8 @@ int main( int argc, char ** argv )
 
       data.open( ratPath, fileName ) ;
 
-#if 0 
-      assert( 
+#if 0
+      assert(
          ( (intptr_t)(&data.m_timesOrPower[0] & 0xF) == 0 ) &&
          ( (intptr_t)(&data.m_signalOrFFT[0] & 0xF) == 0 ) &&
 
@@ -107,7 +107,7 @@ std::cout << &data.m_signalOrFFT[0] << std::endl ;
 #endif
 
       outputSignalForPlotting( fileName, data ) ;
-   } 
+   }
    catch ( boost::exception & e )
    {
       auto s { boost::diagnostic_information( e ) } ;

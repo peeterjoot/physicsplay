@@ -1,4 +1,4 @@
-/** 
+/**
    \file grav.cc
 
    Main driver for the ps7 assignment.
@@ -154,7 +154,7 @@ int main( int argc, char ** argv )
  */
 void showHelpAndExit()
 {
-   std::cerr << "usage: grav\n" 
+   std::cerr << "usage: grav\n"
       "\t[--ratpath=p|-r p] Specify the path for the input .rat files.\n"
       "\t[--time|-t] Show elapsed times for component calculations.\n"
       "\t[--help]" << std::endl ;
@@ -176,7 +176,7 @@ parseArgs::parseArgs( int argc, char ** argv )
 
    try {
       while ( -1 != ( c = getopt_long( argc, argv, "hr:t", longOptions, NULL ) ) )
-      { 
+      {
          switch ( c )
          {
             case 'r' :
@@ -197,12 +197,12 @@ parseArgs::parseArgs( int argc, char ** argv )
             {
                showHelpAndExit() ;
             }
-         } 
+         }
       }
    }
    catch ( ... )
    {
-      std::cerr 
+      std::cerr
          << __FILE__
          << ":"
          << line << ": uncaught exception (parse error)\n"

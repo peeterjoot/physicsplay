@@ -280,7 +280,7 @@ void minimizerResults::compareLocalMinimums()
       assert( sz <= 2 ) ;
       assert( sz >= 1 ) ;
 
-      for ( size_t i = 0 ; i < sz ; i++ )
+      for ( size_t i{0} ; i < sz ; i++ )
       {
          if ( !m_rv[i].m_status )
          {

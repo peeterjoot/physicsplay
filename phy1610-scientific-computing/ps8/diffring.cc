@@ -1,9 +1,9 @@
-// 
+//
 // diffring.cc
 //
 // 1d diffusion on a ring
 //
-// Compile with make using provided Makefile 
+// Compile with make using provided Makefile
 //
 
 #include <fstream>
@@ -13,7 +13,7 @@
 #include "diffring_parameters.h"
 
 // the main function drives the simulation
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
   // Simulation parameters
   double      L;  // ring length
@@ -25,18 +25,18 @@ int main(int argc, char *argv[])
   std::string datafile; // filename for output
   double      time_between_output ;
 
-  // Read parameters from a file given on the command line. 
+  // Read parameters from a file given on the command line.
   // If no file was given, use "diffring.ini".
   std::string paramFilename = argc>1?argv[1]:"diffring.ini" ;
   read_diffusion_parameters(paramFilename, L, D, T, dx, dt, datafile, time_between_output) ;
 
-  // Compute derived parameters 
+  // Compute derived parameters
   const int numSteps = int(T/dt + 0.5);  // number of steps to take
   const int N = int(L/dx + 0.5);         // number of grid points
   const int outputEvery = int(time_between_output/dt + 0.5); // how many steps between output
   const int outputcols = 48;             // number of columns for sparkline output
-  
-  // Allocate density data 
+
+  // Allocate density data
   rarray<double,1> P(N) ;
   // Setup initial conditions for P
   P.fill(0.0) ;
@@ -62,10 +62,10 @@ int main(int argc, char *argv[])
     time += dt ;
 
     // Periodically add data to the file
-    if (step % outputEvery == 0 and step > 0) 
+    if (step % outputEvery == 0 and step > 0)
         out.showline( step, time, P ) ;
   }
-  
+
   // All done
   return 0 ;
 }

@@ -16,7 +16,7 @@ ants_on_table::iterator ants_on_table::initialize( const int total_ants )
    {
       for ( size_t j{0} ; j < m_table_grid_size ; j++ )
       {
-         float v = 
+         float v =
             M_PI * (sin ((2 * M_PI * (i + j)) / (m_table_grid_size *10)) + 1) ;
 
          m_velocity_of_ants.assign( i, j, v ) ;

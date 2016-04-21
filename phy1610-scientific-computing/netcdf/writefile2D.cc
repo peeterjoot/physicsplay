@@ -25,9 +25,9 @@ constexpr int nx{6}, ny{12} ;
 
 void setData( int dataOut[nx][ny], const int v )
 {
-   for ( int i = 0 ; i < nx; i++ )
+   for ( int i{0} ; i < nx; i++ )
    {
-      for ( int j = 0 ; j < ny; j++ )
+      for ( int j{0} ; j < ny; j++ )
       {
          dataOut[i][j] = i * ny + j + v ;
       }

@@ -54,7 +54,7 @@ int main( int argc, char* argv[] )
       const int            graphics = parameter.get<int>( "graphics", -1 ) ;   // output to graphics (with 1 sec delay)
 
       // Output file name
-      const std::string    dataFilename  = parameter.get<std::string>( "outfilebasename", "dataFilename" ) ;   // 
+      const std::string    dataFilename  = parameter.get<std::string>( "outfilebasename", "dataFilename" ) ;   //
 
       const bool           asciiIO = parameter.get<bool>( "asciiIO", 0 ) ;   // output to a file (not attempted if graphics enabled)
       const bool           netcdfIO = parameter.get<bool>( "netcdfIO", 0 ) ;   // output to a file using mpi netcdf (not attempted if graphics enabled)
@@ -95,7 +95,7 @@ int main( int argc, char* argv[] )
       farray rho_init(npnts) ; // initial values
       farray x(npnts) ;        // x values
 
-      // Set zero dirichlet boundary conditions for the global domain.  If one or more of the end points are ghost cells 
+      // Set zero dirichlet boundary conditions for the global domain.  If one or more of the end points are ghost cells
       // in a mpi.m_size>1 mpirun, then the ghost-cell boundary values will be filled in properly when rho[] is initialized
       // below
       rho.fill( 0.0 ) ;
@@ -190,14 +190,14 @@ int main( int argc, char* argv[] )
             rho_next[0]       = newLeftGhostCell ;
             rho_next[pgrid+1] = newRightGhostCell ;
          }
-         
+
          // Rotate array pointers so t+1 becomes the new t etc.
          farray temp ;
          temp     = rho_prev ;
          rho_prev = rho ;
          rho      = rho_next ;
          rho_next = temp ;
-      
+
          //Output every nper
          if ( (s % nper) == 0 )
          {

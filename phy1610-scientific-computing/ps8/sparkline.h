@@ -1,4 +1,4 @@
-// 
+//
 // sparkline.h
 //
 // write 1d rarray as a sparkline
@@ -25,7 +25,7 @@
 //  x:      rarray of values
 //  width:  width of the graph (int)
 //  zero:   whether the bottom of the characters should represent zero (bool)
-// 
+//
 // returns: the sparkline string in utf-8 format.
 //
 std::string sparkline(const rarray<char,1>& x, int width=-1, bool zero=false) ;

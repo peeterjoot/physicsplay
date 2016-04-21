@@ -30,7 +30,7 @@ void multiply(MyMatrix &a, MyMatrix &b, MyMatrix &c, const Uint tilesize )
    assert( m == c.get_rows() ) ;
    assert( s == c.get_columns() ) ;
 
-   if ( !tilesize )   
+   if ( !tilesize )
    {
       // compute the product element by element:
       // i is the row index of result matrix c, j is its column index.

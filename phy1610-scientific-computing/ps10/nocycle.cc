@@ -1,4 +1,4 @@
-/** \file leftright.cc 
+/** \file leftright.cc
    simple mpi experimentation code (non-cyclic send)
  */
 #include <stdio.h>
@@ -56,17 +56,17 @@ int main(int argc, char* argv[])
       abort() ;
    }
 
-   std::cout 
-      << "Hello from task.  Rank = " 
-      << rank 
-      << ", size = " 
-      << size 
-      << " world.  msgsent = " 
-      << msgsent 
-      << ", msgrcvd = " 
-      << msgrcvd 
+   std::cout
+      << "Hello from task.  Rank = "
+      << rank
+      << ", size = "
+      << size
+      << " world.  msgsent = "
+      << msgsent
+      << ", msgrcvd = "
+      << msgrcvd
       << '\n' ;
- 
+
    err = MPI_Finalize() ;
    if ( err )
    {

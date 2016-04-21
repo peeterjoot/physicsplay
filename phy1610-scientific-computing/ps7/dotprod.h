@@ -23,7 +23,7 @@ class correlator
 
 public:
 
-   /** 
+   /**
       Initialize the correlator object, caching the dot product of the reference signal.
 
       \param referenceSignal [in]

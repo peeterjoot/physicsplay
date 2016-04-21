@@ -1,4 +1,4 @@
-// 
+//
 // diffring_timestep.cc
 //
 // Time step module for 1d diffusion on a ring

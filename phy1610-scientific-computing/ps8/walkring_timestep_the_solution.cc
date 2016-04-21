@@ -1,4 +1,4 @@
-// 
+//
 // walkring_timestep.cc
 //
 // Time stepping module for 1d random walk on a ring

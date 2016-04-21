@@ -21,7 +21,7 @@ do {                                         \
          << '\n' ;                           \
       abort() ;                              \
    }                                         \
-} while ( 0 ) 
+} while ( 0 )
 
 int main()
 {

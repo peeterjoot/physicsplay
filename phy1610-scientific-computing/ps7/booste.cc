@@ -26,19 +26,19 @@ int main()
        std::regex r{"blah"} ;
 
        BOOST_THROW_EXCEPTION(
-            regex_match_error() 
+            regex_match_error()
                << match_info( s )
                << re_info( "blah" )
             ) ;
-   } 
+   }
    catch ( boost::exception & e )
    {
-      if ( auto * i { boost::get_error_info<match_info>(e) } ) 
+      if ( auto * i { boost::get_error_info<match_info>(e) } )
       {
          std::cout << "match pattern: " << *i << std::endl ;
       }
 
-      if ( auto * i { boost::get_error_info<re_info>(e) } ) 
+      if ( auto * i { boost::get_error_info<re_info>(e) } )
       {
          std::cout << "match re: " << *i << std::endl ;
       }
