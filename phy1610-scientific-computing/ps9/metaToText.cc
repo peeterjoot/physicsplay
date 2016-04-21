@@ -24,7 +24,7 @@
 void readandprintfloat( const int fd )
 {
    float f ;
-   static int numtimes = 0 ;
+   static int numtimes{ 0 } ;
    ssize_t n = read( fd, &f, sizeof(f) ) ;
 
    if ( (size_t)n == sizeof(f) )

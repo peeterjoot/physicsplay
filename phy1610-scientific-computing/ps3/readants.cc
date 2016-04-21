@@ -76,28 +76,28 @@ int main( int argc, char ** argv )
       NcFile dataFile( netcdffilename, NcFile::read ) ;
 
       // Read the two dimensions.
-      NcDim xDim = dataFile.getDim( "x" ) ;
-      NcDim yDim = dataFile.getDim( "y" ) ;
-      NcDim tDim = dataFile.getDim( "t" ) ;
+      auto xDim = dataFile.getDim( "x" ) ;
+      auto yDim = dataFile.getDim( "y" ) ;
+      auto tDim = dataFile.getDim( "t" ) ;
 
-      size_t nx = xDim.getSize() ;
-      size_t ny = yDim.getSize() ;
-      size_t nt = tDim.getSize() ;
+      auto nx = xDim.getSize() ;
+      auto ny = yDim.getSize() ;
+      auto nt = tDim.getSize() ;
 
       std::cout << "Our matrix is " << nx << " by " << ny << ", with time dimension: " << nt << std::endl ;
 
       std::vector<float> p( nx * ny ) ;
 
       // Create the data variable.
-      NcVar grid = dataFile.getVar( "grid" ) ;
-      NcVar total = dataFile.getVar( "total" ) ;
+      auto grid = dataFile.getVar( "grid" ) ;
+      auto total = dataFile.getVar( "total" ) ;
 
       std::vector<size_t> startp { 0, 0, 0 } ;
       // read one entry from the unlimited (timestep) dimension.
       std::vector<size_t> countp { 1, nx, ny } ;
       std::vector<ptrdiff_t> stridep { 1, 1, 1 } ;
       // in memory stride.  each data[t][x][y] -> data[t][ny * x + y]
-      ptrdiff_t stridey{ (ptrdiff_t)ny } ;
+      auto stridey{ (ptrdiff_t)ny } ;
       std::vector<ptrdiff_t> imapp { 1, stridey , 1 } ;
 
       float err{} ;
@@ -128,6 +128,7 @@ int main( int argc, char ** argv )
    catch ( NcException & e )
    {
       std::cout << "unknown error" << std::endl ;
+
       e.what() ;
    }
 

@@ -13,18 +13,19 @@ void ants_on_table::timestep( )
    m_timerData.m_init += timer.silent_tock() ;
 
    timer.tick() ;
-   for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
+
+   for ( size_t i{0} ; i < m_table_grid_size ; i++ )
    {
-      for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
+      for ( size_t j{0} ; j < m_table_grid_size ; j++ )
       {
-         float n = m_number_of_ants( i, j ) ;
-         int di = m_velocity_y_of_ants( i, j ) ;
-         int dj = m_velocity_x_of_ants( i, j ) ;
+         float n        = m_number_of_ants( i, j ) ;
+         int   di       = m_velocity_y_of_ants( i, j ) ;
+         int   dj       = m_velocity_x_of_ants( i, j ) ;
 
-         int i2 = (int)i + di ;
-         int j2 = (int)j + dj ;
+         int   i2       = (int)i + di ;
+         int   j2       = (int)j + dj ;
 
-         float fallen = FALLEN_ANTS_FRACTION * n ;
+         float fallen   = FALLEN_ANTS_FRACTION * n ;
 
          // some ants do not walk
          m_new_number_of_ants.assign( i, j, WALKING_ANTS_PER_FALLEN * fallen ) ;
@@ -36,6 +37,7 @@ void ants_on_table::timestep( )
          }
       }
    }
+
    m_timerData.m_core += timer.silent_tock() ;
 
    timer.tick() ;

@@ -138,8 +138,8 @@ void f_min_all_ATTEMPT1_UNUSED( const gslParams & f, const minimizerParameters &
    oneMinimumResult r ;
 
    {
-      double a = p.m_a ;
-      double b = p.m_b ;
+      double a{ p.m_a } ;
+      double b{ p.m_b } ;
 
       f_min_one( a, b, f, p, r ) ;
 
@@ -153,9 +153,10 @@ void f_min_all_ATTEMPT1_UNUSED( const gslParams & f, const minimizerParameters &
    }
 
    {
-      double a = p.m_a ;
-      double b = r.m_xmin ;
-      double midpoint = (a + b)/2 ;
+      double a          = p.m_a ;
+      double b          = r.m_xmin ;
+      double midpoint   = (a + b)/2 ;
+
       assert( a <= midpoint ) ;
       assert( midpoint <= b ) ;
 
@@ -177,9 +178,9 @@ void f_min_all_ATTEMPT1_UNUSED( const gslParams & f, const minimizerParameters &
    }
 
    {
-      double a = r.m_xmin ;
-      double b = p.m_b ;
-      double midpoint = (a + b)/2 ;
+      double a          = r.m_xmin ;
+      double b          = p.m_b ;
+      double midpoint   = (a + b)/2 ;
       assert( a <= midpoint ) ;
       assert( midpoint <= b ) ;
 
@@ -275,7 +276,7 @@ void minimizerResults::compareLocalMinimums()
       double fMinValue{ inf } ;
       double fMaxValue{ -inf } ;
 
-      size_t sz = m_rv.size() ;
+      size_t sz{ m_rv.size() } ;
       assert( sz <= 2 ) ;
       assert( sz >= 1 ) ;
 

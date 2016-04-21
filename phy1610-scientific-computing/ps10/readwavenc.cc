@@ -6,14 +6,24 @@
 #include <getopt.h>
 #include "returncodes.h"
 
-#define handle_error( status, what, line ) \
-do { \
-   if ( status ) \
-   { \
-      std::cout << __FILE__ << ':' << line << ':' << what << " failed with rc = " << status << ':' << nc_strerror( status ) << '\n' ; \
-      abort() ; \
-   } \
-} while ( 0 ) 
+#define handle_error( status, what )   \
+do {                                   \
+   if ( status )                       \
+   {                                   \
+      std::cout                        \
+         << __FILE__                   \
+         << ':'                        \
+         << __LINE__                   \
+         << ':'                        \
+         << what                       \
+         << " failed with rc = "       \
+         << status                     \
+         << ':'                        \
+         << nc_strerror( status )      \
+         << '\n' ;                     \
+      abort() ;                        \
+   }                                   \
+} while ( 0 )
 
 /** print the usage string for the program for --help (or unrecognized options)
  */
@@ -94,13 +104,13 @@ variables:
 #endif
 
    status = nc_open( fileName.c_str(), NC_NOWRITE, &ncid ) ;
-   handle_error( status, "nc_open", __LINE__ ) ;
+   handle_error( status, "nc_open" ) ;
 
    status = nc_inq_dimid( ncid, "X", &XdimId ) ;
-   handle_error( status, "nc_inq_dimid", __LINE__ ) ;
+   handle_error( status, "nc_inq_dimid" ) ;
 
    status = nc_inq_dimlen( ncid, XdimId, &N ) ;
-   handle_error( status, "nc_inq_dimlen", __LINE__ ) ;
+   handle_error( status, "nc_inq_dimlen" ) ;
 
    if ( verbose )
    {
@@ -108,10 +118,10 @@ variables:
    }
 
    status = nc_inq_dimid( ncid, "T", &TdimId ) ;
-   handle_error( status, "nc_inq_dimid", __LINE__ ) ;
+   handle_error( status, "nc_inq_dimid" ) ;
 
    status = nc_inq_dimlen( ncid, TdimId, &tLen ) ;
-   handle_error( status, "nc_inq_dimlen", __LINE__ ) ;
+   handle_error( status, "nc_inq_dimlen" ) ;
 
    if ( verbose )
    {
@@ -119,10 +129,10 @@ variables:
    }
 
    status = nc_inq_varid( ncid, "RHO", &idVarRho ) ;
-   handle_error( status, "nc_inq_varid", __LINE__ ) ;
+   handle_error( status, "nc_inq_varid" ) ;
 
    status = nc_inq_varid( ncid, "X", &idVarX ) ;
-   handle_error( status, "nc_inq_varid", __LINE__ ) ;
+   handle_error( status, "nc_inq_varid" ) ;
 
    if ( verbose )
    {
@@ -137,7 +147,7 @@ variables:
                                 NC_GLOBAL,
                                 "params",
                                 params ) ;
-      handle_error( status, "nc_get_att_text", __LINE__ ) ;
+      handle_error( status, "nc_get_att_text" ) ;
       params[paramsStringLen] = 0 ;
       std::cout << params ;
    }
@@ -149,7 +159,7 @@ variables:
    status = nc_get_var_float( ncid,
                               idVarX,
                               &vecX[0] ) ;
-   handle_error( status, "nc_get_var_float", __LINE__ ) ;
+   handle_error( status, "nc_get_var_float" ) ;
 
    // Read in the three timeslices of data:
    for ( size_t s{0} ; s < tLen ; s++ )
@@ -161,7 +171,7 @@ variables:
                                   startA,
                                   countA,
                                   &vecRho[0] ) ;
-      handle_error( status, "nc_get_vara_float", __LINE__ ) ;
+      handle_error( status, "nc_get_vara_float" ) ;
 
       for ( size_t i{0} ; i < N ; i++ )
       {
@@ -172,13 +182,13 @@ variables:
    if ( showtimes )
    {
       status = nc_inq_varid( ncid, "TIMES", &idVarTimes ) ;
-      handle_error( status, "nc_inq_varid", __LINE__ ) ;
+      handle_error( status, "nc_inq_varid" ) ;
 
       std::vector<float> vecT( tLen ) ;
       status = nc_get_var_float( ncid,
                                  idVarTimes,
                                  &vecT[0] ) ;
-      handle_error( status, "nc_get_var_float", __LINE__ ) ;
+      handle_error( status, "nc_get_var_float" ) ;
 
       // display the (s*dt) times at which the output was saved
       for ( size_t i{0} ; i < vecT.size() ; i++ )
@@ -188,7 +198,7 @@ variables:
    }
 
    status = nc_close( ncid ) ;
-   handle_error( status, "nc_close", __LINE__ ) ;
+   handle_error( status, "nc_close" ) ;
 
    return (int)RETURNCODES::SUCCESS ;
 }

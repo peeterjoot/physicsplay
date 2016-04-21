@@ -24,12 +24,12 @@ BOOST_AUTO_TEST_CASE( timestep )
             //
             ants.initialize( initialNumberOfAnts ) ;
 
-            float lastTotal = ants.total_number_of_ants() ;
+            float lastTotal{ ants.total_number_of_ants() } ;
             BOOST_REQUIRE( lastTotal == initialNumberOfAnts ) ;
 
-            for ( int i = 0 ; i < numberOfTimeIntervals ; i++ )
+            for ( int i{0} ; i < numberOfTimeIntervals ; i++ )
             {
-               float total = ants.total_number_of_ants() ;
+               float total{ ants.total_number_of_ants() } ;
 
                // check for spontaneous generation of ants compared previous timestep:
                BOOST_REQUIRE( total <= lastTotal ) ;

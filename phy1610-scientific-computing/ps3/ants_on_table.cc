@@ -30,13 +30,11 @@ ants_on_table::~ants_on_table( )
 
 float ants_on_table::total_number_of_ants() const
 {
-   float totants = 0.0 ;
-
    TickTockOrNoOp timer ;
 
    timer.tick() ;
 
-   totants = m_number_of_ants.sum() ;
+   float totants = m_number_of_ants.sum() ;
 
    m_timerData.m_totants += timer.silent_tock() ;
 

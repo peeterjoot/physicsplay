@@ -30,4 +30,3 @@ std::string replaceFileSuffix( const std::string &    filename,
 
    return outFileName ;
 }
-

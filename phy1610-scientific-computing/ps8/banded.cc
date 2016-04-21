@@ -22,11 +22,11 @@ int getSquareMatrixDimensions( const darray2 & m )
    return rows ;
 }
 
-void initializeBandedMatrix( darray2 &     m,
-                             const double   subdiagonal,
-                             const double   diagonal,
-                             const double   superdiagonal,
-                             const BANDING_TYPE how )
+void initializeBandedMatrix( darray2 &             m,
+                             const double          subdiagonal,
+                             const double          diagonal,
+                             const double          superdiagonal,
+                             const BANDING_TYPE    how )
 {
    auto rows = getSquareMatrixDimensions( m ) ;
 

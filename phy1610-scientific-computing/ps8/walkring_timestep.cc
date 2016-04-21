@@ -20,7 +20,7 @@ walkring_evolution::walkring_evolution()
 //    the probability to stay on the same spot is thus 1-2p.
 void walkring_evolution::perform_time_step(rarray<int,1>& pos, int N, double p)
 {
-   auto Z = pos.size() ;
+   auto Z{ pos.size() } ;
    assert( p >= 0.0 ) ;
    assert( N > 0 ) ;
    assert( Z > 0 ) ;

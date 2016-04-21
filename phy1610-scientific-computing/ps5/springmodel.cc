@@ -82,7 +82,7 @@ public:
    {
       double delta = ( m_f.end() - m_f.start() ) / numPoints ;
 
-      for ( double m = m_f.start() ; m < m_f.end() ; m += delta )
+      for ( double m{ m_f.start() } ; m < m_f.end() ; m += delta )
       {
          minimizerResults results ;
          run( m, results ) ;
@@ -134,21 +134,21 @@ public:
  */
 int main( int argc, char ** argv )
 {
-   int c{0} ;
-   int line{0} ;
-   double mass{0.1} ;
-   unsigned long numMasses{ 25 } ;
-   bool verbose{false} ;
-   bool showXmin{true} ;
-   bool showXmax{false} ;
-   bool showFmin{false} ;
-   bool showFmax{false} ;
-   bool showDiff{false} ;
+   int            c{0} ;
+   int            line{0} ;
+   double         mass{0.1} ;
+   unsigned long  numMasses{ 25 } ;
+   bool           verbose{false} ;
+   bool           showXmin{true} ;
+   bool           showXmax{false} ;
+   bool           showFmin{false} ;
+   bool           showFmax{false} ;
+   bool           showDiff{false} ;
 
    // csv related options:
-   bool csv{false} ;
-   unsigned long numPoints{25} ;
-   std::string filename{} ;
+   bool           csv{false} ;
+   unsigned long  numPoints{25} ;
+   std::string    filename{} ;
 
    constexpr struct option long_options[]{
      { "help",           0, NULL, 'h' },
@@ -299,7 +299,7 @@ int main( int argc, char ** argv )
       out << "mass xmin\n" ;
    }
 
-   for ( unsigned long i = 0 ; i < numMasses ; i++ )
+   for ( unsigned long i{0} ; i < numMasses ; i++ )
    {
       minimizerResults results ;
 
@@ -384,13 +384,37 @@ int main( int argc, char ** argv )
 
    if ( verbose )
    {
-      std::cout << "Using " << r.m_solvername << " on: [ " << massInterval[0] << ", " << massInterval[1] << " ]\n"
-                << "Iterations:\t" << r.m_iter << '\n'
-                << "Converged:\t" << r.m_converged << '\n'
-                << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << '\n'
-                << "Root:\t" << r.m_x << '\n'
-                << "Interval:\t [ " << r.m_xLo << ", " << r.m_xHi << " ]\n"
-                << "Abserr (bracket):\t" << r.m_xHi - r.m_xLo << '\n' << std::endl ;
+      std::cout << "Using " 
+                  << r.m_solvername 
+                  << " on: [ " 
+                  << massInterval[0] 
+                  << ", " 
+                  << massInterval[1] 
+                  << " ]\n"
+                << "Iterations:\t" 
+                  << r.m_iter 
+                  << '\n'
+                << "Converged:\t" 
+                  << r.m_converged 
+                  << '\n'
+                << "Status:\t" 
+                  << r.m_status 
+                  << " (" 
+                  << r.m_strerror 
+                  << ")" 
+                  << '\n'
+                << "Root:\t" 
+                  << r.m_x 
+                  << '\n'
+                << "Interval:\t [ " 
+                  << r.m_xLo 
+                  << ", " 
+                  << r.m_xHi 
+                  << " ]\n"
+                << "Abserr (bracket):\t" 
+                  << r.m_xHi - r.m_xLo 
+                  << '\n' 
+                << std::endl ;
    }
    else
    {

@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_CASE( testWriterSmallArray )
    arrayIOwriter fmultifile( "multifile", arrayIOwriter::IO_method::multifile ) ;
 
    dummyMeta meta ;
-   size_t size{(size_t)meta.numThreads*2} ;
+   auto size{(size_t)meta.numThreads*2} ;
    std::vector<int> x(size) ;
    std::vector<int> data(size) ;
    for ( size_t i{0} ; i < size ; i++ )
@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_CASE( testWriterLargerArray )
    arrayIOwriter fmultifile( "multifile", arrayIOwriter::IO_method::multifile ) ;
 
    dummyMeta meta ;
-   size_t size{(size_t)meta.numThreads*20} ;
+   auto size{(size_t)meta.numThreads*20} ;
    std::vector<int> x(size) ;
    std::vector<int> data(size) ;
    for ( size_t i{0} ; i < size ; i++ )
