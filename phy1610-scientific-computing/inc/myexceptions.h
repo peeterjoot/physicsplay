@@ -83,6 +83,9 @@ typedef boost::error_info<tag_netcdf_strerror,const char *> netcdf_strerror_info
 struct tag_intdata ;
 typedef boost::error_info<tag_intdata,long> intdata_info ;
 
+struct tag_intdata2 ;
+typedef boost::error_info<tag_intdata2,long> intdata2_info ;
+
 #define ASSERT_NO_ERROR (static_cast<void>(0))
 #ifdef NDEBUG
    #define ASSERT_DATA_INT( expr, v1 )          ASSERT_NO_ERROR
@@ -101,7 +104,7 @@ typedef boost::error_info<tag_intdata,long> intdata_info ;
       : BOOST_THROW_EXCEPTION(                  \
             assert_error()                      \
                << intdata_info( v1 )            \
-               << intdata_info( v2 ) ) )
+               << intdata2_info( v2 ) ) )
 #endif
 
 #endif
