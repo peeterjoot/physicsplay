@@ -20,7 +20,7 @@ double dotprod( const darray & f, const darray & g )
             ) ;
    }
 
-   // double cblas_ddot(const int N, const double *X, const int incX, const double *Y, const int incY);
+   // double cblas_ddot(const int N, const double *X, const int incX, const double *Y, const int incY) ;
    auto dot{ cblas_ddot( f.size(), &f[0], stride, &g[0], stride ) } ;
 
    return dot ;

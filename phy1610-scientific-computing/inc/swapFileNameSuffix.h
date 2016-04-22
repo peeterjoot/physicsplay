@@ -13,7 +13,7 @@
       $f =~ s/\.cc$/.o/ ;
 
    Example:
-      replaceFileSuffix( "blah.cc", "cc", "o" ) 
+      replaceFileSuffix( "blah.cc", "cc", "o" )
  */
 std::string replaceFileSuffix( const std::string & filename, const char * const oldSuffix, const char * const newSuffix ) ;
 

@@ -3,7 +3,7 @@
 #if !defined phy1610_mpitask_h_included
 #define phy1610_mpitask_h_included
 
-/** 
+/**
    Run the mpi init/term functions and collect the size and rank.
  */
 struct mpitask

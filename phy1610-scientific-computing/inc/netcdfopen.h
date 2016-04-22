@@ -5,14 +5,14 @@
 
 #include <netcdf>
 
-/** netcdf is a strange class library, providing no means to close or open 
+/** netcdf is a strange class library, providing no means to close or open
     a file other than a constructor and destructor.
 
    This wrapper class implements an open method, assuming a default constructed
    NcFile (or an actual NcFile object that will be closed before open).
 
    A close() method is also implemented for completeness sake.
- */  
+ */
 class NcFileOpener
 {
 protected:

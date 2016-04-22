@@ -38,7 +38,7 @@ class ants_on_table
    /// Tick-tock state
    mutable timerData    m_timerData ;
 
-   /// timestep state   
+   /// timestep state
    myrarray2<float>  m_new_number_of_ants ;
 public:
 
@@ -49,7 +49,7 @@ public:
          Total number of grid intervals in each direction.
     */
    ants_on_table( const size_t table_grid_size ) ;
-   
+
    /**
       (implicit) deallocation of member data, and if tick-tocks are enabled, print out of the timer-data.
     */

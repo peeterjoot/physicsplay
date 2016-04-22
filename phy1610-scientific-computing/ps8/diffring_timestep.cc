@@ -1,4 +1,4 @@
-// 
+//
 // diffring_timestep.cc
 //
 // Time step module for 1d diffusion on a ring
@@ -59,7 +59,7 @@ void diffring_evolution::fill_time_step_matrix( const double   D,
 diffring_evolution::diffring_evolution( const int      N,
                                         const double   D,
                                         const double   dt,
-                                        const double   dx ) 
+                                        const double   dx )
    : m_n( N ),
      m_tmpvec( N ),
      m_F( N, N )

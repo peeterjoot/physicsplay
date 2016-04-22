@@ -16,7 +16,7 @@ void showHelpAndExit()
                 "\t[--maxiter=m|-m m] [--derivmaxiter=m|-d m] [--err=e|-e e]\n"
                 "\t[--bracketed|-r]\n"
                 "\t[--help]\n"
-                "\n"
+                '\n'
                 "- At least one of --bisection, --falsepos, --brent, --newton, --secant, --steffenson must be specified\n"
                 "- A root search will be performed in [x0,x1] with step size of w,\n"
                 "  defaulting to [0,10,0.5]\n"
@@ -103,30 +103,30 @@ struct solverParams
                converged = ri.m_converged ;
 
                out << "Using " << ri.m_solvername << " on: [ " << m_x0 << ", " << xmin << " ]\n"
-                   << "Iterations:\t" << ri.m_iter << "\n" ;
+                   << "Iterations:\t" << ri.m_iter << '\n' ;
 
                if ( isFdfSolver( method ) )
                {
-                  out << "Bisection Corrections:\t" << ri.m_numBisections << "\n" ;
+                  out << "Bisection Corrections:\t" << ri.m_numBisections << '\n' ;
                }
 
-               out << "Converged:\t" << ri.m_converged << "\n"
-                   << "Status:\t" << ri.m_status << " (" << ri.m_strerror << ")" << "\n"
-                   << "Root:\t" << ri.m_x << "\n"
-                   << "F(Root):\t" << f(ri.m_x) << "\n"
-                   << "Abserr (bracket):\t" << ri.m_xHi - ri.m_xLo << "\n" << std::endl ;
+               out << "Converged:\t" << ri.m_converged << '\n'
+                   << "Status:\t" << ri.m_status << " (" << ri.m_strerror << ")" << '\n'
+                   << "Root:\t" << ri.m_x << '\n'
+                   << "F(Root):\t" << f(ri.m_x) << '\n'
+                   << "Abserr (bracket):\t" << ri.m_xHi - ri.m_xLo << '\n' << std::endl ;
             }
             else
             {
                converged = rd.m_converged ;
 
-               out << "Using " << rd.m_solvername << " with x_0 = " << xmin << "\n"
-                   << "Iterations:\t" << rd.m_iter << "\n"
-                   << "Converged:\t" << rd.m_converged << "\n"
-                   << "Status:\t" << rd.m_status << " (" << rd.m_strerror << ")" << "\n"
-                   << "Root:\t" << rd.m_x << "\n"
-                   << "F(Root):\t" << f(rd.m_x) << "\n"
-                   << "Abserr:\t" << fabs(rd.m_x - rd.m_xPrev) << "\n" << std::endl ;
+               out << "Using " << rd.m_solvername << " with x_0 = " << xmin << '\n'
+                   << "Iterations:\t" << rd.m_iter << '\n'
+                   << "Converged:\t" << rd.m_converged << '\n'
+                   << "Status:\t" << rd.m_status << " (" << rd.m_strerror << ")" << '\n'
+                   << "Root:\t" << rd.m_x << '\n'
+                   << "F(Root):\t" << f(rd.m_x) << '\n'
+                   << "Abserr:\t" << fabs(rd.m_x - rd.m_xPrev) << '\n' << std::endl ;
             }
 
             if ( converged )
@@ -269,14 +269,14 @@ int main( int argc, char * argv[] )
          }
       }
    }
-   catch (...)
+   catch ( ... )
    {
       std::cerr
          << __FILE__
          << ":"
          << line << ": uncaught exception (parse error)\n"
-         << "option: -" << (char)c << "\n"
-         << "argument: " << optarg << "\n"
+         << "option: -" << (char)c << '\n'
+         << "argument: " << optarg << '\n'
          << std::endl ;
 
       std::exit( (int)RETURNCODES::PARSE_ERROR ) ;

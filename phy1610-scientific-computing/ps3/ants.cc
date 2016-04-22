@@ -8,7 +8,7 @@
  */
 void showHelpAndExit()
 {
-   std::cerr << "usage: ants\n" 
+   std::cerr << "usage: ants\n"
       "\t[--gridsize=N|-g N]\n"
       "\t[--timeintervals=N|-t N]\n"
       "\t[--numberofants=N|-n N]\n"
@@ -24,8 +24,8 @@ void showHelpAndExit()
 int main( int argc, char ** argv )
 {
    size_t table_grid_size   { 356 } ;
-   int num_time_intervals   { 40 } ; 
-   int total_number_of_ants { 1010 } ; 
+   int num_time_intervals   { 40 } ;
+   int total_number_of_ants { 1010 } ;
    int c{0} ;
    int line{0} ;
    std::string netcdffilename{} ;
@@ -41,7 +41,7 @@ int main( int argc, char ** argv )
 
    try {
       while ( -1 != ( c = getopt_long( argc, argv, "hg:t:n:", long_options, NULL ) ) )
-      { 
+      {
          switch ( c )
          {
             case 'g' :
@@ -77,17 +77,17 @@ int main( int argc, char ** argv )
             {
                showHelpAndExit() ;
             }
-         } 
+         }
       }
    }
-   catch (...)
+   catch ( ... )
    {
-      std::cerr 
+      std::cerr
          << __FILE__
          << ":"
          << line << ": uncaught exception (parse error)\n"
-         << "option: -" << (char)c << "\n"
-         << "argument: " << optarg << "\n"
+         << "option: -" << (char)c << '\n'
+         << "argument: " << optarg << '\n'
          << std::endl ;
 
       std::exit( (int)RETURNCODES::PARSE_ERROR ) ;

@@ -7,7 +7,7 @@
 #ifndef _TICKTOCKH_
 #define _TICKTOCKH_
 
-class TickTock 
+class TickTock
 {
   public:
     void tick();                              // start measuring time
@@ -15,6 +15,6 @@ class TickTock
     double silent_tock() const;               // done measuring time; give elapsed seconds
   private:
     double tick_; // stores starting point in seconds
-};
+} ;
 
 #endif

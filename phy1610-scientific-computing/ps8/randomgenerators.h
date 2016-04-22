@@ -36,7 +36,7 @@ public:
    }
 
    /**
-      return a uniform random number sample from {a, a + delta, ..., a + delta N} 
+      return a uniform random number sample from {a, a + delta, ..., a + delta N}
     */
    int sample()
    {
@@ -75,7 +75,7 @@ public:
    }
 
    /**
-      return a uniform random number sample from {a, a + delta, ..., a + delta N} 
+      return a uniform random number sample from {a, a + delta, ..., a + delta N}
     */
    auto sample()
    {

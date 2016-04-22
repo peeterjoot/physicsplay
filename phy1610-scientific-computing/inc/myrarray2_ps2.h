@@ -144,9 +144,9 @@ public:
       total = 0.0 ;
 
 #if defined MYRARRAY_USING_RARRAY
-      for ( size_t i = 0 ; i < m_sz ; i++ )
+      for ( size_t i{0} ; i < m_sz ; i++ )
       {
-         for ( size_t j = 0 ; j < m_sz ; j++ )
+         for ( size_t j{0} ; j < m_sz ; j++ )
          {
 #if defined MYRARRAY_USING_RARRAY
             total += m_storage[i][j] ;
@@ -165,7 +165,7 @@ public:
       return total ;
    }
 
-   /** 
+   /**
       overwrite this array with a different one.  Don't think I ended up using this?
     */
    inline myrarray2 & operator = ( const myrarray2 & b )

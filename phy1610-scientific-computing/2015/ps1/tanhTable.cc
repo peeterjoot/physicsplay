@@ -1,9 +1,9 @@
 /**
    \file tanhTable.cc
 
-   A program that generates a table of data. 
+   A program that generates a table of data.
 
-   The table should have two columns, one column with x values ranging from -2.0 to 2.0, and a second column with values y=tanh(2x). 
+   The table should have two columns, one column with x values ranging from -2.0 to 2.0, and a second column with values y=tanh(2x).
 */
 #include <cmath>
 #include <cassert>
@@ -60,11 +60,11 @@ void computeAndPrintTable( const double x1, const double x2, const Uint n )
 
    const double intervalWidth{(x2 - x1)/n} ;
    double x = midpoint( x1, x1 + intervalWidth ) ;
-   
+
    for ( Uint i{0} ; i < n ; i++, x += intervalWidth )
    {
       const double y{f( x )} ;
-      std::cout << x << "\t" << y << "\n" ;
+      std::cout << x << "\t" << y << '\n' ;
    }
 
    // done: flush the stream.
@@ -101,7 +101,7 @@ int main( int argc, char ** argv )
 
    try {
       while ( -1 != ( c = getopt_long( argc, argv, "hn:l:u:", long_options, NULL ) ) )
-      { 
+      {
          switch ( c )
          {
             case 'n' :
@@ -130,17 +130,17 @@ int main( int argc, char ** argv )
             {
                showHelpAndExit() ;
             }
-         } 
+         }
       }
    }
-   catch (...)
+   catch ( ... )
    {
-      std::cerr 
+      std::cerr
          << __FILE__
          << ":"
          << line << ": uncaught exception (parse error)\n"
-         << "option: -" << (char)c << "\n"
-         << "argument: " << optarg << "\n"
+         << "option: -" << (char)c << '\n'
+         << "argument: " << optarg << '\n'
          << std::endl ;
 
       std::exit( (int)RETURNCODES::PARSE_ERROR ) ;

@@ -1,4 +1,4 @@
-/** 
+/**
    \file grav.cc
 
    Main driver for the ps7 assignment.
@@ -47,7 +47,7 @@ int main( int argc, char ** argv )
       pred.open( a.m_ratPath, "GWprediction.rat" ) ;
 
       // 3a. Compute the FFT of the two complex quantities, using FFTW.
-      fftstate                   fft( pred.m_signalOrFFT ) ; 
+      fftstate                   fft( pred.m_signalOrFFT ) ;
 
       fft.execute( pred.m_signalOrFFT ) ;
 
@@ -70,7 +70,7 @@ int main( int argc, char ** argv )
       // 7. Repeat steps 2-to-6 for each of the signals in the observation set.
       for ( Uint i{ firstDetFileNumber } ; i <= lastDetFileNumber ; i++ )
       {
-         char detFileName[32] ; 
+         char detFileName[32] ;
          snprintf( detFileName, sizeof(detFileName), "detection%02d.rat", (int)i ) ;
 
          ticks t1 = ticks::sample() ;
@@ -86,7 +86,7 @@ int main( int argc, char ** argv )
          det.calculatePowerSpectrum() ;
          //det.writeToCsv( "detection01FFT.csv" ) ;
          //det.writePowerSpectrumToFile( "detection01Power.txt" ) ;
-         // break;
+         // break ;
          ticks t4 = ticks::sample() ;
 
          // 5. Compute the correlation coefficient between the power spectra as defined in Eq. (1), using a ?dot BLAS call for the inner product from Eq. (3).
@@ -111,7 +111,7 @@ int main( int argc, char ** argv )
       auto second_greater = [](auto & left, auto & right) { return left.second > right.second ; } ;
 #else
       // In c++11 mode, auto can't be used for the function parameter types:
-      auto second_greater = [](const results_pair & left, const results_pair & right) { return left.second > right.second ; }  ;
+      auto second_greater = [](const results_pair & left, const results_pair & right) { return left.second > right.second ; } ;
 #endif
 
       // This is a c++14 style in-place (partial) sort, similar to a perl sort, where the sort function is also specified inline:
@@ -138,7 +138,7 @@ int main( int argc, char ** argv )
          std::cout <<   "Correlation calculation time:   \t" << durationToMicroseconds( cortime ) << " (us).\n" ;
       }
    }
-   catch (boost::exception & e)
+   catch ( boost::exception & e )
    {
       auto s{ boost::diagnostic_information( e ) } ;
       std::cout << s << std::endl ;
@@ -154,7 +154,7 @@ int main( int argc, char ** argv )
  */
 void showHelpAndExit()
 {
-   std::cerr << "usage: grav\n" 
+   std::cerr << "usage: grav\n"
       "\t[--ratpath=p|-r p] Specify the path for the input .rat files.\n"
       "\t[--time|-t] Show elapsed times for component calculations.\n"
       "\t[--help]" << std::endl ;
@@ -176,7 +176,7 @@ parseArgs::parseArgs( int argc, char ** argv )
 
    try {
       while ( -1 != ( c = getopt_long( argc, argv, "hr:t", longOptions, NULL ) ) )
-      { 
+      {
          switch ( c )
          {
             case 'r' :
@@ -197,17 +197,17 @@ parseArgs::parseArgs( int argc, char ** argv )
             {
                showHelpAndExit() ;
             }
-         } 
+         }
       }
    }
-   catch (...)
+   catch ( ... )
    {
-      std::cerr 
+      std::cerr
          << __FILE__
          << ":"
          << line << ": uncaught exception (parse error)\n"
-         << "option: -" << (char)c << "\n"
-         << "argument: " << optarg << "\n"
+         << "option: -" << (char)c << '\n'
+         << "argument: " << optarg << '\n'
          << std::endl ;
 
       std::exit( (int)RETURNCODES::PARSE_ERROR ) ;

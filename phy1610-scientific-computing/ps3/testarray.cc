@@ -27,9 +27,9 @@ void testArray( const char * const what )
 
    double sum = 0.0 ;
 
-   for ( Uint i = 0 ; i < 4 ; i++ )
+   for ( Uint i{0} ; i < 4 ; i++ )
    {
-      for ( Uint j = 0 ; j < 4 ; j++ )
+      for ( Uint j{0} ; j < 4 ; j++ )
       {
          t1 = a( i, j ) ;
          t2 = b( i, j ) ;

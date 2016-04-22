@@ -12,7 +12,7 @@
 //FIXME: should use dynamic allocation in myrarray for vector and/or valarray storage?
 
 /**
-   A class to manage the storage of and simple operations on a 2x2 dynamically allocated square array using 
+   A class to manage the storage of and simple operations on a 2x2 dynamically allocated square array using
    rarray<valueType,2>(sz,sz) to hold the array.
  */
 template <typename valueType>
@@ -91,9 +91,9 @@ public:
 
       total = 0.0 ;
 
-      for ( size_t i = 0 ; i < m_sz ; i++ )
+      for ( size_t i{0} ; i < m_sz ; i++ )
       {
-         for ( size_t j = 0 ; j < m_sz ; j++ )
+         for ( size_t j{0} ; j < m_sz ; j++ )
          {
             total += m_storage[i][j] ;
          }
@@ -103,7 +103,7 @@ public:
    }
 
 #if 0
-   /** 
+   /**
       overwrite this array with a different one.  Don't think I ended up using this?
     */
    inline rarray2 & operator = ( const rarray2 & b )
@@ -212,7 +212,7 @@ public:
    }
 
 #if 0
-   /** 
+   /**
       overwrite this array with a different one.  Don't think I ended up using this?
     */
    inline vecarray2 & operator = ( const vecarray2 & b )
@@ -258,7 +258,7 @@ private:
 
       void SineCosineManOps( std::valarray<float> & s, std::valarray<float> & c, const std::valarray<float> & v )
       {
-         for ( Uint i = 0 ; i < ASIZE ; i++ )
+         for ( Uint i{0} ; i < ASIZE ; i++ )
          {
             float theta = v[i] ;
 
@@ -355,7 +355,7 @@ public:
    }
 
 #if 0
-   /** 
+   /**
       overwrite this array with a different one.  Don't think I ended up using this?
     */
    inline valarray2 & operator = ( const valarray2 & b )
@@ -472,7 +472,7 @@ public:
    }
 
 #if 0
-   /** 
+   /**
       overwrite this array with a different one.  Don't think I ended up using this?
     */
    inline farray2 & operator = ( const farray2 & b )
