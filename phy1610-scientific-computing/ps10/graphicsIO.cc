@@ -8,7 +8,7 @@ graphicsIO::graphicsIO( )
    , m_openedWindow( false )
    , m_rhoInitStart( nullptr )
 {
-   // 
+   //
    // check for success for the initial begin command, so lots of noise
    // isn't generated for subsequent plot APIs.
    //

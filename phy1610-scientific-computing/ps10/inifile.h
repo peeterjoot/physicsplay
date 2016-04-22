@@ -12,31 +12,31 @@ class Inifile
     {}
 
     void read(const std::string filename)  {
-        boost::property_tree::ini_parser::read_ini(filename, pt);
+        boost::property_tree::ini_parser::read_ini(filename, pt) ;
     }
 
     Inifile(const std::string filename) {
-        read(filename.c_str());
+        read(filename.c_str()) ;
     }
 
     template<typename T>
     T get(const std::string str) const {
-        return pt.get<T>(str);
+        return pt.get<T>(str) ;
     }
 
     template<typename T>
     T get(const std::string str, T defval) const {
-       T result;
+       T result ;
        try {
-          result = pt.get<T>(str);
+          result = pt.get<T>(str) ;
        }
        catch (...) {
-          result = defval;
+          result = defval ;
        }
-       return result;
+       return result ;
     }
   private:
-    boost::property_tree::ptree pt;
-};
+    boost::property_tree::ptree pt ;
+} ;
 
 #endif

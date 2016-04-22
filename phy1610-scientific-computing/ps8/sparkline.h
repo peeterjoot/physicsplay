@@ -1,4 +1,4 @@
-// 
+//
 // sparkline.h
 //
 // write 1d rarray as a sparkline
@@ -25,22 +25,22 @@
 //  x:      rarray of values
 //  width:  width of the graph (int)
 //  zero:   whether the bottom of the characters should represent zero (bool)
-// 
+//
 // returns: the sparkline string in utf-8 format.
 //
-std::string sparkline(const rarray<char,1>& x, int width=-1, bool zero=false);
-std::string sparkline(const rarray<short,1>& x, int width=-1, bool zero=false);
-std::string sparkline(const rarray<int,1>& x, int width=-1, bool zero=false);
-std::string sparkline(const rarray<long,1>& x, int width=-1, bool zero=false);
-std::string sparkline(const rarray<long long,1>& x, int width=-1, bool zero=false);
-std::string sparkline(const rarray<unsigned char,1>& x, int width=-1, bool zero=false);
-std::string sparkline(const rarray<unsigned short,1>& x, int width=-1, bool zero=false);
-std::string sparkline(const rarray<unsigned int,1>& x, int width=-1, bool zero=false);
-std::string sparkline(const rarray<unsigned long,1>& x, int width=-1, bool zero=false);
-std::string sparkline(const rarray<unsigned long long,1>& x, int width=-1, bool zero=false);
-std::string sparkline(const rarray<float,1>& x, int width=-1, bool zero=false);
-std::string sparkline(const rarray<double,1>& x, int width=-1, bool zero=false);
-std::string sparkline(const rarray<long double,1>& x, int width=-1, bool zero=false);
+std::string sparkline(const rarray<char,1>& x, int width=-1, bool zero=false) ;
+std::string sparkline(const rarray<short,1>& x, int width=-1, bool zero=false) ;
+std::string sparkline(const rarray<int,1>& x, int width=-1, bool zero=false) ;
+std::string sparkline(const rarray<long,1>& x, int width=-1, bool zero=false) ;
+std::string sparkline(const rarray<long long,1>& x, int width=-1, bool zero=false) ;
+std::string sparkline(const rarray<unsigned char,1>& x, int width=-1, bool zero=false) ;
+std::string sparkline(const rarray<unsigned short,1>& x, int width=-1, bool zero=false) ;
+std::string sparkline(const rarray<unsigned int,1>& x, int width=-1, bool zero=false) ;
+std::string sparkline(const rarray<unsigned long,1>& x, int width=-1, bool zero=false) ;
+std::string sparkline(const rarray<unsigned long long,1>& x, int width=-1, bool zero=false) ;
+std::string sparkline(const rarray<float,1>& x, int width=-1, bool zero=false) ;
+std::string sparkline(const rarray<double,1>& x, int width=-1, bool zero=false) ;
+std::string sparkline(const rarray<long double,1>& x, int width=-1, bool zero=false) ;
 
 //
 // The sparkhist functions produce a one-line string with a graph made
@@ -71,32 +71,32 @@ std::string sparkline(const rarray<long double,1>& x, int width=-1, bool zero=fa
 // returns: the sparkline string in utf-8 format.
 //
 // first form
-std::string sparkhist(const rarray<char,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(const rarray<short,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(const rarray<int,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(const rarray<long,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(const rarray<long long,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(const rarray<unsigned char,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(const rarray<unsigned short,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(const rarray<unsigned int,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(const rarray<unsigned long,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(const rarray<unsigned long long,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(const rarray<float,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(const rarray<double,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(const rarray<long double,1>& x, int width=-1, bool zero=true);
+std::string sparkhist(const rarray<char,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(const rarray<short,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(const rarray<int,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(const rarray<long,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(const rarray<long long,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(const rarray<unsigned char,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(const rarray<unsigned short,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(const rarray<unsigned int,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(const rarray<unsigned long,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(const rarray<unsigned long long,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(const rarray<float,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(const rarray<double,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(const rarray<long double,1>& x, int width=-1, bool zero=true) ;
 // second form
-std::string sparkhist(char x1, char x2, const rarray<char,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(short x1, short x2, const rarray<short,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(int x1, int x2, const rarray<int,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(long x1, long x2, const rarray<long,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(long long x1, long long x2, const rarray<long long,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(unsigned char x1, unsigned char x2, const rarray<unsigned char,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(unsigned short x1, unsigned short x2, const rarray<unsigned short,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(unsigned int x1, unsigned int x2, const rarray<unsigned int,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(unsigned long x1, unsigned long x2, const rarray<unsigned long,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(unsigned long long x1, unsigned long long x2, const rarray<unsigned long long,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(float x1, float x2, const rarray<float,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(double x1, double x2, const rarray<double,1>& x, int width=-1, bool zero=true);
-std::string sparkhist(long double x1, long double x2, const rarray<long double,1>& x, int width=-1, bool zero=true);
+std::string sparkhist(char x1, char x2, const rarray<char,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(short x1, short x2, const rarray<short,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(int x1, int x2, const rarray<int,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(long x1, long x2, const rarray<long,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(long long x1, long long x2, const rarray<long long,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(unsigned char x1, unsigned char x2, const rarray<unsigned char,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(unsigned short x1, unsigned short x2, const rarray<unsigned short,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(unsigned int x1, unsigned int x2, const rarray<unsigned int,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(unsigned long x1, unsigned long x2, const rarray<unsigned long,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(unsigned long long x1, unsigned long long x2, const rarray<unsigned long long,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(float x1, float x2, const rarray<float,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(double x1, double x2, const rarray<double,1>& x, int width=-1, bool zero=true) ;
+std::string sparkhist(long double x1, long double x2, const rarray<long double,1>& x, int width=-1, bool zero=true) ;
 
 #endif

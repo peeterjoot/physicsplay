@@ -43,7 +43,7 @@ void showHelpAndExit()
 
 extern template
 class brent_minimizer<gsl_spring_min_function> ;
- 
+
 /**
    This class collects the gsl minimization function,
    the parameters that define the interval, and the allocated gsl minimizer object.  That
@@ -55,13 +55,13 @@ class minimizerstate
    minimizerParameters                       m_params ;
    brent_minimizer<gsl_spring_min_function>  m_minimizer ;
 
-public:      
+public:
    /**
       Set the (position) bounds on the minimization interval, and allocate the gsl minimizer object.
     */
    minimizerstate( ) :
       m_f{},
-      m_params( m_f.start(), m_f.end() ), 
+      m_params( m_f.start(), m_f.end() ),
       m_minimizer( m_f )
    {
    }
@@ -82,7 +82,7 @@ public:
    {
       double delta = ( m_f.end() - m_f.start() ) / numPoints ;
 
-      for ( double m = m_f.start() ; m < m_f.end() ; m += delta )
+      for ( double m{ m_f.start() } ; m < m_f.end() ; m += delta )
       {
          minimizerResults results ;
          run( m, results ) ;
@@ -134,21 +134,21 @@ public:
  */
 int main( int argc, char ** argv )
 {
-   int c{0} ;
-   int line{0} ;
-   double mass{0.1} ;
-   unsigned long numMasses{ 25 } ;
-   bool verbose{false} ;
-   bool showXmin{true} ;
-   bool showXmax{false} ;
-   bool showFmin{false} ;
-   bool showFmax{false} ;
-   bool showDiff{false} ;
+   int            c{0} ;
+   int            line{0} ;
+   double         mass{0.1} ;
+   unsigned long  numMasses{ 25 } ;
+   bool           verbose{false} ;
+   bool           showXmin{true} ;
+   bool           showXmax{false} ;
+   bool           showFmin{false} ;
+   bool           showFmax{false} ;
+   bool           showDiff{false} ;
 
    // csv related options:
-   bool csv{false} ;
-   unsigned long numPoints{25} ;
-   std::string filename{} ;
+   bool           csv{false} ;
+   unsigned long  numPoints{25} ;
+   std::string    filename{} ;
 
    constexpr struct option long_options[]{
      { "help",           0, NULL, 'h' },
@@ -248,14 +248,14 @@ int main( int argc, char ** argv )
          }
       }
    }
-   catch (...)
+   catch ( ... )
    {
       std::cerr
          << __FILE__
          << ":"
          << line << ": uncaught exception (parse error)\n"
-         << "option: -" << (char)c << "\n"
-         << "argument: " << optarg << "\n"
+         << "option: -" << (char)c << '\n'
+         << "argument: " << optarg << '\n'
          << std::endl ;
 
       std::exit( (int)RETURNCODES::PARSE_ERROR ) ;
@@ -299,7 +299,7 @@ int main( int argc, char ** argv )
       out << "mass xmin\n" ;
    }
 
-   for ( unsigned long i = 0 ; i < numMasses ; i++ )
+   for ( unsigned long i{0} ; i < numMasses ; i++ )
    {
       minimizerResults results ;
 
@@ -307,17 +307,17 @@ int main( int argc, char ** argv )
 
       if ( verbose )
       {
-         out << "Mass:\t" << m << "\n" ;
+         out << "Mass:\t" << m << '\n' ;
 
          for ( const auto & r : results.m_rv )
          {
             out << "\tSolving on: [ " << r.m_initial_a << ", " << r.m_initial_b << " ]\n"
-                << "\tIterations:\t" << r.m_iter << "\n"
-                << "\tConverged:\t" << r.m_converged << "\n"
-                << "\tStatus:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
+                << "\tIterations:\t" << r.m_iter << '\n'
+                << "\tConverged:\t" << r.m_converged << '\n'
+                << "\tStatus:\t" << r.m_status << " (" << r.m_strerror << ")" << '\n'
                 << "\tMin:\t" << r.m_xmin << " in [ " << r.m_a << ", " << r.m_b << "]\n"
-                << "\tF(Min):\t" << r.m_fmin << "\n"
-                << "\tAbserr (bracket):\t" << r.m_b - r.m_a << "\n"
+                << "\tF(Min):\t" << r.m_fmin << '\n'
+                << "\tAbserr (bracket):\t" << r.m_b - r.m_a << '\n'
                 << std::endl ;
          }
 
@@ -384,13 +384,37 @@ int main( int argc, char ** argv )
 
    if ( verbose )
    {
-      std::cout << "Using " << r.m_solvername << " on: [ " << massInterval[0] << ", " << massInterval[1] << " ]\n"
-                << "Iterations:\t" << r.m_iter << "\n"
-                << "Converged:\t" << r.m_converged << "\n"
-                << "Status:\t" << r.m_status << " (" << r.m_strerror << ")" << "\n"
-                << "Root:\t" << r.m_x << "\n"
-                << "Interval:\t [ " << r.m_xLo << ", " << r.m_xHi << " ]\n"
-                << "Abserr (bracket):\t" << r.m_xHi - r.m_xLo << "\n" << std::endl ;
+      std::cout << "Using "
+                  << r.m_solvername
+                  << " on: [ "
+                  << massInterval[0]
+                  << ", "
+                  << massInterval[1]
+                  << " ]\n"
+                << "Iterations:\t"
+                  << r.m_iter
+                  << '\n'
+                << "Converged:\t"
+                  << r.m_converged
+                  << '\n'
+                << "Status:\t"
+                  << r.m_status
+                  << " ("
+                  << r.m_strerror
+                  << ")"
+                  << '\n'
+                << "Root:\t"
+                  << r.m_x
+                  << '\n'
+                << "Interval:\t [ "
+                  << r.m_xLo
+                  << ", "
+                  << r.m_xHi
+                  << " ]\n"
+                << "Abserr (bracket):\t"
+                  << r.m_xHi - r.m_xLo
+                  << '\n'
+                << std::endl ;
    }
    else
    {

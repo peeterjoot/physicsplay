@@ -38,7 +38,7 @@ int main( int argc, char ** argv )
 
    // [0,2 pi]
    double x { -shift } ;
-   for ( Uint i = 0 ; i < N ; i++ )
+   for ( Uint i{0} ; i < N ; i++ )
    {
       auto & c = inout[ i ] ;
 
@@ -53,7 +53,7 @@ int main( int argc, char ** argv )
          c[1] = 0.0 ;
       }
 
-      infh << x << ", " << inout[i][0] << "\n" ;
+      infh << x << ", " << inout[i][0] << '\n' ;
 
       x += delta ;
    }
@@ -63,9 +63,9 @@ int main( int argc, char ** argv )
    fftw_destroy_plan( p ) ;
 
    x = -shift ;
-   for ( Uint i = 0 ; i < N ; i++ )
+   for ( Uint i{0} ; i < N ; i++ )
    {
-      outfh << x << ", " << inout[i][0] << ", " << inout[i][1] << "\n" ;
+      outfh << x << ", " << inout[i][0] << ", " << inout[i][1] << '\n' ;
 
       x += delta ;
    }

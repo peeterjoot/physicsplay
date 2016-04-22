@@ -4,44 +4,68 @@
 #include <vector>
 #include <iostream>
 
-#define handle_error( status, what, line ) \
-do { \
-   if ( status ) \
-   { \
-      std::cout << __FILE__ << ':' << line << ':' << what << " failed with rc = " << status << ':' << nc_strerror( status ) << '\n' ; \
-      abort() ; \
-   } \
-} while ( 0 ) 
+#define handle_error( status, what )         \
+do {                                         \
+   if ( status )                             \
+   {                                         \
+      std::cout                              \
+         << __FILE__                         \
+         << ':'                              \
+         << __LINE__                         \
+         << ':'                              \
+         << what                             \
+         << " failed with rc = "             \
+         << status                           \
+         << ':'                              \
+         << nc_strerror( status )            \
+         << '\n' ;                           \
+      abort() ;                              \
+   }                                         \
+} while ( 0 )
 
 int main()
 {
    int status, ncid, XdimId, TdimId, idVarG, idVarA ;
    size_t N, tLen ;
 
-   status = nc_open( "foo.nc", NC_NOWRITE, &ncid ) ;
-   handle_error( status, "nc_create", __LINE__ ) ;
+   status = nc_open( "foo.nc",
+                     NC_NOWRITE,
+                     &ncid ) ;
+   handle_error( status, "nc_create" ) ;
 
-   status = nc_inq_dimid( ncid, "X", &XdimId ) ;
-   handle_error( status, "nc_inq_dimid", __LINE__ ) ;
+   status = nc_inq_dimid( ncid,
+                          "X",
+                          &XdimId ) ;
+   handle_error( status, "nc_inq_dimid" ) ;
 
-   status = nc_inq_dimlen( ncid, XdimId, &N ) ;
-   handle_error( status, "nc_inq_dimlen", __LINE__ ) ;
+   status = nc_inq_dimlen( ncid,
+                           XdimId,
+                           &N ) ;
+   handle_error( status, "nc_inq_dimlen" ) ;
 
    std::cout << "X dim: " << N << '\n' ;
 
-   status = nc_inq_dimid( ncid, "T", &TdimId ) ;
-   handle_error( status, "nc_inq_dimid", __LINE__ ) ;
+   status = nc_inq_dimid( ncid,
+                          "T",
+                          &TdimId ) ;
+   handle_error( status, "nc_inq_dimid" ) ;
 
-   status = nc_inq_dimlen( ncid, TdimId, &tLen ) ;
-   handle_error( status, "nc_inq_dimlen", __LINE__ ) ;
+   status = nc_inq_dimlen( ncid,
+                           TdimId,
+                           &tLen ) ;
+   handle_error( status, "nc_inq_dimlen" ) ;
 
    std::cout << "T dim: " << tLen << '\n' ;
 
-   status = nc_inq_varid( ncid, "A", &idVarA ) ;
-   handle_error( status, "nc_inq_varid", __LINE__ ) ;
+   status = nc_inq_varid( ncid,
+                          "A",
+                          &idVarA ) ;
+   handle_error( status, "nc_inq_varid" ) ;
 
-   status = nc_inq_varid( ncid, "G", &idVarG ) ;
-   handle_error( status, "nc_inq_varid", __LINE__ ) ;
+   status = nc_inq_varid( ncid,
+                          "G",
+                          &idVarG ) ;
+   handle_error( status, "nc_inq_varid" ) ;
 
    size_t commitStringLen ;
    status = nc_inq_attlen( ncid,
@@ -54,7 +78,7 @@ int main()
                              NC_GLOBAL,
                              "commit",
                              commit ) ;
-   handle_error( status, "nc_get_att_text", __LINE__ ) ;
+   handle_error( status, "nc_get_att_text" ) ;
    std::cout << "commit: " << commit << '\n' ;
 
    std::vector<int> vecA(N) ;
@@ -63,8 +87,8 @@ int main()
    // Read in the grid-mesh values:
    status = nc_get_var_float( ncid,
                               idVarG,
-                              &vecG[0] );
-   handle_error( status, "nc_get_var_float", __LINE__ ) ;
+                              &vecG[0] ) ;
+   handle_error( status, "nc_get_var_float" ) ;
 
    for ( size_t i{0} ; i < N ; i++ )
    {
@@ -80,8 +104,8 @@ int main()
                                 idVarA,
                                 startA,
                                 countA,
-                                &vecA[0] );
-      handle_error( status, "nc_get_vara_int", __LINE__ ) ;
+                                &vecA[0] ) ;
+      handle_error( status, "nc_get_vara_int" ) ;
 
       for ( size_t i{0} ; i < N ; i++ )
       {
@@ -90,7 +114,7 @@ int main()
    }
 
    status = nc_close( ncid ) ;
-   handle_error( status, "nc_close", __LINE__ ) ;
+   handle_error( status, "nc_close" ) ;
 
    return 0 ;
 }

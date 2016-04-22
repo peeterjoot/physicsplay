@@ -1,5 +1,5 @@
 /** \file metaToText.cc
-  
+
    A hacky bit of debug code to read a binary metadata file (*00000.out)
  */
 #include <sys/types.h>
@@ -20,11 +20,11 @@
 // would be better to batch using file_size calculation (subtracting the other stuff in the file to get at the number of
 // time output events processed).
 //
-//uintmax_t sz = boost::filesystem::file_size(argv[1]) << '\n';
+//uintmax_t sz = boost::filesystem::file_size(argv[1]) << '\n' ;
 void readandprintfloat( const int fd )
 {
    float f ;
-   static int numtimes = 0 ;
+   static int numtimes{ 0 } ;
    ssize_t n = read( fd, &f, sizeof(f) ) ;
 
    if ( (size_t)n == sizeof(f) )

@@ -41,12 +41,20 @@ iohandler::iohandler( const cfg             c,
    {
       case cfg::netcdf:
       {
-         m_ioHandler = new netcdfIO( fileBaseName, N, mpisize, mpirank, writeTimes, params ) ;
+         m_ioHandler = new netcdfIO( fileBaseName,
+                                     N,
+                                     mpisize,
+                                     mpirank,
+                                     writeTimes,
+                                     params ) ;
          break ;
       }
       case cfg::ascii:
       {
-         m_ioHandler = new asciiIO( fileBaseName, mpisize, mpirank, writeTimes ) ;
+         m_ioHandler = new asciiIO( fileBaseName,
+                                    mpisize,
+                                    mpirank,
+                                    writeTimes ) ;
          break ;
       }
       case cfg::graphics:

@@ -19,9 +19,10 @@ int main( int argc, char ** argv )
       std::vector<float> vecX( p.localPartitionSize() + 2 ) ;
       std::vector<float> vecRho( p.localPartitionSize() + 2 ) ;
       rangePartition::subrange r{ p.subsetOfGlobalRangeInThisPartition( 1, N ) } ;
+
       for( auto j{r.first-1} ; j <= r.second ; j++ )
       {
-         int i = p.toLocalDomain( j ) ;
+         auto i{ p.toLocalDomain( j ) } ;
 
          vecX[i] = j ;
          vecRho[i] = j/10.0 ;
@@ -45,11 +46,11 @@ int main( int argc, char ** argv )
       {
          for( auto j{r.first-1} ; j <= r.second ; j++ )
          {
-            int i = p.toLocalDomain( j ) ;
+            auto i{ p.toLocalDomain( j ) } ;
 
             vecX[i] ++ ;
          }
-         
+
          io.writeData( s * 0.1,
                        p.m_myFirstGlobalElementIndex -1,
                        p.localPartitionSize(),

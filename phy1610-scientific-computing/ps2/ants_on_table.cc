@@ -12,29 +12,30 @@ ants_on_table::iterator ants_on_table::initialize( const int total_ants )
 {
    assert( total_ants ) ;
 
-   for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
+   for ( size_t i{0} ; i < m_table_grid_size ; i++ )
    {
-      for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
+      for ( size_t j{0} ; j < m_table_grid_size ; j++ )
       {
-         float v = 
+         float v =
             M_PI * (sin ((2 * M_PI * (i + j)) / (m_table_grid_size *10)) + 1) ;
 
          m_velocity_of_ants.assign( i, j, v ) ;
       }
    }
 
-   int n = 0 ;
-   float z = 0 ;
+   int n{ 0 } ;
+   float z{ 0 } ;
 
    m_number_of_ants.fill( 0.0 ) ;
 
-   while (n < total_ants)
+   while ( n < total_ants )
    {
-      for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
+      for ( size_t i{0} ; i < m_table_grid_size ; i++ )
       {
-         for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
+         for ( size_t j{0} ; j < m_table_grid_size ; j++ )
          {
             z += sin( 0.3 * (i + j) ) ;
+
             if (z > 1 and n != total_ants)
             {
                m_number_of_ants.add( i, j, 1 ) ;
@@ -67,9 +68,9 @@ ants_on_table::~ants_on_table( )
 
 float ants_on_table::total_number_of_ants() const
 {
-   float totants = 0.0 ;
+   float totants{0.0f} ;
 
-   TickTockOrNoOp timer ; 
+   TickTockOrNoOp timer ;
 
    timer.tick() ;
 
@@ -86,16 +87,16 @@ void ants_on_table::timestep( iterator & iter )
    constexpr double WALKING_ANTS_PER_FALLEN { 4.0 } ;
    constexpr double FALLEN_ANTS_FRACTION { 0.2 } ;
 
-   TickTockOrNoOp timer ; 
+   TickTockOrNoOp timer ;
 
    timer.tick() ;
    iter.m_new_number_of_ants.fill( 0.0 ) ;
    m_timerData.m_init += timer.silent_tock() ;
 
    timer.tick() ;
-   for ( size_t i = 0 ; i < m_table_grid_size ; i++ )
+   for ( size_t i{0} ; i < m_table_grid_size ; i++ )
    {
-      for ( size_t j = 0 ; j < m_table_grid_size ; j++ )
+      for ( size_t j{0} ; j < m_table_grid_size ; j++ )
       {
          float v = m_velocity_of_ants( i, j ) ;
          float n = m_number_of_ants( i, j ) ;
@@ -129,7 +130,8 @@ void ants_on_table::timestep( iterator & iter )
 ants_on_table::iterator::iterator( ants_on_table * p_ants )
    : m_ants_p( p_ants ),
      m_timevalue( 0 ),
-     m_new_number_of_ants( p_ants->get_grid_size(), p_ants->get_grid_size() )
+     m_new_number_of_ants( p_ants->get_grid_size(),
+                           p_ants->get_grid_size() )
 {
 }
 
@@ -144,5 +146,5 @@ ants_on_table::iterator& ants_on_table::iterator::operator++ ()
    m_ants_p->timestep( *this ) ;
    m_timevalue++ ;
 
-   return *this;
+   return *this ;
 }

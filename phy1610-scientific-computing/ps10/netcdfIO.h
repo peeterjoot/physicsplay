@@ -75,8 +75,8 @@ private:
    int                  m_xVarId ;        ///< Variable identifier for the x array.
    int                  m_timesVarId ;  ///< Variable identifier for the array of timestep times (s * dt).
 
-   /** write out the m_times array and then close the netcdf file. 
-  
+   /** write out the m_times array and then close the netcdf file.
+
       \param isErrorCodePath [in]
          This flag is specified when called from ~netcdfIO.  In that case, errors
          will be ignored, and no exceptions will be thrown.  When called from

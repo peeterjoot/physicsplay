@@ -1,5 +1,5 @@
 /** \file metaToText.cc
-  
+
    A hacky bit of debug code to read a binary non-metadata file (*000XX.out)
  */
 #include <sys/types.h>

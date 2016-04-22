@@ -1,0 +1,67 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
+
+=head1 NAME
+
+wpwhat - print a wordpress sourcecode block
+
+=head1 SYNOPSIS
+
+wpwhat [--bash|--diff|--perl|--text]
+
+=head1 DESCRIPTION
+
+Peeter was lazy and didn't fill in this POD block.
+
+=head1 SUPPORTED PLATFORMS
+
+ All (Unix verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@protonmail.com
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+use Pod::Usage ;
+#use English (qw(OSNAME)) ;
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'};
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1;
+select STDOUT ; $| = 1;
+
+#declare lexical variables to be used anywhere in this script (pseudo-global)
+my ($myName,$usage) = '' ;
+my $what = 'cpp' ;
+
+($myName = $0) =~ s@.*[/\\]@@ ;
+
+GetOptions ( 
+   'bash'               => sub { $what = 'bash' ; },
+   'perl'               => sub { $what = 'perl' ; },
+   'diff'               => sub { $what = 'diff' ; },
+   'text'               => sub { $what = 'text' ; },
+   'help'               => sub { pod2usage(-verbose => 2) ; },
+) or pod2usage(-verbose => 0) ;
+
+# Validate/handle options
+
+print qq([sourcecode language="$what"]
+[/sourcecode]
+) ;

@@ -11,7 +11,7 @@ int main()
 {
    ps5function f ;
 
-   for ( double x = 0.0 ; x <= 10.0 ; x += 0.01 )
+   for ( double x{ 0.0 } ; x <= 10.0 ; x += 0.01 )
    {
       double y, dy ;
 

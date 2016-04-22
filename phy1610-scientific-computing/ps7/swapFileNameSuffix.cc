@@ -1,4 +1,4 @@
-/** 
+/**
    \file swapFileNameSuffix.cc
 
    Implement a file suffix swap operation.
@@ -20,8 +20,8 @@ std::string replaceFileSuffix( const std::string &    filename,
 
    if ( !std::regex_match( filename, m, reg ) )
    {
-      BOOST_THROW_EXCEPTION( 
-            regex_match_error() 
+      BOOST_THROW_EXCEPTION(
+            regex_match_error()
                << match_info( filename )
                << re_info( expr ) ) ;
    }
@@ -30,4 +30,3 @@ std::string replaceFileSuffix( const std::string &    filename,
 
    return outFileName ;
 }
-

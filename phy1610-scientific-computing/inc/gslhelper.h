@@ -33,7 +33,7 @@ inline bool isGslStatusFatal( int status )
 
    stepping into gsl_root_test_delta in the debugger (apt-get source gsl), I see:
 
-      const double tolerance = epsabs + epsrel * fabs(x1)  ;
+      const double tolerance = epsabs + epsrel * fabs(x1) ;
 
       if (fabs(x1 - x0) < tolerance || x1 == x0)
       (gdb) p fabs(x1 - x0)

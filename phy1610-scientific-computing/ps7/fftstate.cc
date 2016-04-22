@@ -12,7 +12,7 @@ fftstate::fftstate( carray & d )
    : m_plan{},
      m_sz{ (size_t)d.size() }
 {
-   // The fftw docs say that the plan should always be created before the signal 
+   // The fftw docs say that the plan should always be created before the signal
    // is initialized, but that currently the arrays are not modified if FFTW_ESTIMATE
    // is used.  If that changes we'd have to re-initialize the data after creating the plan.
    // The rarrayio mechanism is the way we have to read the size, so we are forced to get the

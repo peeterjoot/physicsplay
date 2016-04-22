@@ -6,7 +6,12 @@
 
 using itype = rangePartition::index_type ;
 
-void initData( const itype m, const itype n, const itype j, float * const x, float * const rho, float * const rhoinit )
+void initData( const itype     m,
+               const itype     n,
+               const itype     j,
+               float * const   x,
+               float * const   rho,
+               float * const   rhoinit )
 {
    for ( size_t i{m} ; i <= n ; i++ )
    {
@@ -31,7 +36,7 @@ int main( int argc, char ** argv )
    constexpr size_t N{40} ;
    rangePartition p( N, mpi.m_size, mpi.m_rank ) ;
    auto n{ p.localPartitionSize() } ;
-   
+
    float x[ n + 2 ] ;
    float rho[ n + 2 ] ;
    float rhoinit[ n + 2 ] ;

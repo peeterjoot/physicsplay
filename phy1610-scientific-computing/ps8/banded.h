@@ -6,13 +6,13 @@
 #include "darray2.h"
 
 /** parameters for initializeBandedMatrix::how */
-enum class BANDING_TYPE 
+enum class BANDING_TYPE
 {
    TRIDIAGONAL,
    CYCLIC
 } ;
 
-/** 
+/**
    Construct a tridiagonal matrix, overwriting any previous contents.
 
    \param m [in,out]
@@ -46,7 +46,7 @@ void initializeBandedMatrix( darray2 &          m,
    will be thrown.
 
    \param m [in]
-      Matrix to check.      
+      Matrix to check.
  */
 int getSquareMatrixDimensions( const darray2 & m ) ;
 

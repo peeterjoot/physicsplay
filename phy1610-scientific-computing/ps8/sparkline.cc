@@ -1,4 +1,4 @@
-// 
+//
 // sparkline.cc
 //
 // write 1d rarray as a sparkline
@@ -29,18 +29,18 @@ static std::string sparkline_g(const rarray<T,1>& x, int width, bool zero)
     //  x:      rarray of values
     //  width:  width of the graph (int)
     //  zero:   whether the bottom of the characters should represent zero (bool)
-    // 
+    //
     // returns: the sparkline string in utf-8 format.
     //
     int per = (width<1)?1:((x.size()+width-1)/width);
     std::string result(3*((x.size()+per-1)/per), ' ');
     auto minmaxval = std::minmax_element(&x[0], &x[0] + x.size());
     T min, max;
-    if (zero) 
+    if (zero)
         min = std::min(T(0),*minmaxval.first);
     else
         min = *minmaxval.first;
-    if (zero) 
+    if (zero)
         max = std::max(T(0),*minmaxval.second);
     else
         max = *minmaxval.second;

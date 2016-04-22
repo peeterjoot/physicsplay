@@ -27,7 +27,7 @@ wave1d::wave1d( const parameters & p_ ) :
 void wave1d::initializeAndExcite()
 {
    // Initialize
-   for ( Sint i = 0 ; i < p.npnts ; i++ )
+   for ( Sint i{0} ; i < p.npnts ; i++ )
    {
       x[i] = p.x1 + ((i-1)*(p.x2-p.x1))/p.ngrid ;
 
@@ -47,17 +47,17 @@ void wave1d::initializeAndExcite()
 
 void wave1d::display( double time )
 {
-   std::cout << "# t = " << time << "\n" ;
-   for ( Sint32 i = 1 ; i <= p.ngrid ; i++ ) 
+   std::cout << "# t = " << time << '\n' ;
+   for ( Sint32 i{1} ; i <= p.ngrid ; i++ )
    {
-      std::cout << x[i] << " " << rho[i] << "\n" ;
-   }  
+      std::cout << x[i] << " " << rho[i] << '\n' ;
+   }
 }
 
 void wave1d::compute()
 {
    // Take timesteps
-   for ( Sint32 s = 0 ; s < p.nsteps ; s++ )
+   for ( Sint32 s{0} ; s < p.nsteps ; s++ )
    {
 
       // Set zero dirichlet boundary conditions
@@ -65,7 +65,7 @@ void wave1d::compute()
       rho[p.ngrid+1] = 0.0 ;
 
       // Evolve
-      for (Sint32 i = 1 ; i <= p.ngrid ; i++)
+      for ( Sint32 i{1} ; i <= p.ngrid ; i++ )
       {
          double laplacian = pow(p.c/p.dx,2)*(rho[i+1] + rho[i-1] - 2*rho[i]) ;
          double friction = (rho[i] - rho_prev[i])/p.tau ;

@@ -6,7 +6,7 @@
 #if defined __cplusplus
    #define EXTERNC extern "C"
 #else
-   #define EXTERNC 
+   #define EXTERNC
 #endif
 
 #endif

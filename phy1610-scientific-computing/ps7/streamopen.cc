@@ -2,7 +2,7 @@
    \file streamopen.cc
 
    Methods to open a file for read or for write (with truncate).  Throws an error with the filename
-   if open fails.   
+   if open fails.
  */
 #include <boost/exception/exception.hpp>
 #include <boost/exception/info.hpp>
@@ -27,8 +27,8 @@ void openStream( const std::string &                  filename,
    catch ( std::ios_base::failure & e )
    {
       // rethrow with file/line/... attributes.
-      BOOST_THROW_EXCEPTION( 
-            file_open_error() 
+      BOOST_THROW_EXCEPTION(
+            file_open_error()
                << open_info( e.what() )
                << name_info( filename ) ) ;
    }

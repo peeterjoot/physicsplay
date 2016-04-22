@@ -19,7 +19,7 @@ using FairCoin = RandomIntegers<-1, 2, 1> ;
 
 void testFairCoin( FairCoin & c )
 {
-   for ( auto i = 0 ; i < Nchecks ; i++ )
+   for ( auto i{0} ; i < Nchecks ; i++ )
    {
       auto v = c.sample() ;
 
@@ -45,13 +45,13 @@ using R2 = RandomDiscreteReals<2> ;
 
 void testR2( R2 & r )
 {
-   for ( auto i = 0 ; i < Nchecks ; i++ )
+   for ( auto i{0} ; i < Nchecks ; i++ )
    {
       auto v = r.sample() ;
 
       BOOST_REQUIRE_MESSAGE(
-         equals( v, -0.5 ) or 
-         equals( v, +0.5 ) or 
+         equals( v, -0.5 ) or
+         equals( v, +0.5 ) or
          equals( v, 0 ), "v = " + std::to_string(v) ) ;
    }
 }
@@ -67,12 +67,12 @@ using R3 = RandomReals<> ;
 
 void testR3( R3 & s )
 {
-   for ( auto i = 0 ; i < Nchecks ; i++ )
+   for ( auto i{0} ; i < Nchecks ; i++ )
    {
       auto v = s.sample() ;
 
-      BOOST_REQUIRE( 
-         (v >= -0.5) or 
+      BOOST_REQUIRE(
+         (v >= -0.5) or
          (v <= +0.5) ) ;
    }
 }
@@ -81,7 +81,7 @@ BOOST_AUTO_TEST_CASE( testRandomReals )
 {
    R3 s(-0.5, 0.5) ;
 
-   testR3( s ) ;   
+   testR3( s ) ;
 }
 
 BOOST_AUTO_TEST_CASE( banded )
@@ -104,8 +104,8 @@ BOOST_AUTO_TEST_CASE( banded )
 
    BOOST_REQUIRE( std::equal( &m[0][0], &m[nm][nm] + 1, &compare[0][0] ) ) ;
 
-   compare[nm][0] = 0 ; 
-   compare[0][nm] = 0 ; 
+   compare[nm][0] = 0 ;
+   compare[0][nm] = 0 ;
 
    initializeBandedMatrix( m, 1, 2, 3, BANDING_TYPE::TRIDIAGONAL ) ;
 

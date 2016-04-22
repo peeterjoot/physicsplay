@@ -32,7 +32,7 @@ int main()
    ticks::duration vectorTime{} ;
    ticks::duration manualTime{} ;
 
-   for ( Uint j = 0 ; j < 500 ; j++ )
+   for ( Uint j{0} ; j < 500 ; j++ )
    {
       initialize( v, j ) ;
 
@@ -52,8 +52,8 @@ int main()
    auto vMicro { durationToMicroseconds( vectorTime ) } ;
    auto mMicro { durationToMicroseconds( manualTime ) } ;
 
-   std::cout << "vectorTime: " << vMicro << "\n" ;
-   std::cout << "manualTime: " << mMicro << "\n" ;
+   std::cout << "vectorTime: " << vMicro << '\n' ;
+   std::cout << "manualTime: " << mMicro << '\n' ;
    std::cout << "vectorTime/manualTime: " << (double)vMicro/mMicro << std::endl ;
 
    float si = s.sum() ;
@@ -67,10 +67,10 @@ void initialize( std::valarray<float> & v, Uint n )
 {
    if ( 0 == n )
    {
-      v = v.apply( randomTx ) * M_PI ; 
+      v = v.apply( randomTx ) * M_PI ;
    }
 }
- 
+
 void SineCosineVecOps( std::valarray<float> & s, std::valarray<float> & c, const std::valarray<float> & v )
 {
    s = std::sin( v ) ;
@@ -79,7 +79,7 @@ void SineCosineVecOps( std::valarray<float> & s, std::valarray<float> & c, const
 
 void SineCosineManOps( std::valarray<float> & s, std::valarray<float> & c, const std::valarray<float> & v )
 {
-   for ( Uint i = 0 ; i < ASIZE ; i++ )
+   for ( Uint i{0} ; i < ASIZE ; i++ )
    {
       float theta = v[i] ;
 

@@ -14,7 +14,7 @@
 
    - The IO is split between a metadata file and timestep data file(s)
    - The IO is done in binary mode.
-   
+
    1) IO_method::serial
 
       Serial IO to a metadata file and a timestep data file.
@@ -27,12 +27,12 @@
             int nper ;
             int numPoints ;
             float x[numPoints] ;
-            float times[] ; 
+            float times[] ;
          } ;
 
       and the data files are just
 
-         float rho[] 
+         float rho[]
 
       values.
 
@@ -56,7 +56,7 @@ public:
    using fileHandleType = int ;
 
    /**
-      IO options for 
+      IO options for
     */
    enum class IO_method
    {
@@ -106,7 +106,7 @@ private:
    std::string       m_filePathAndBaseName ; ///< The output filename (and/or path) base.  A numeric sequence number and a .out suffix will be appended.
 
    /** open a file
- 
+
       \param fileSequenceNumber [in]
          open a file of the form "%s%05u.out" or "%s.out" depending on the IO_method in effect.
 

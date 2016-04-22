@@ -89,7 +89,7 @@ void computeAndPrintTable( const double x1, const double x2, const Uint n )
 
    const double intervalWidth{(x2 - x1)/n} ;
    double x = midpoint( x1, x1 + intervalWidth ) ;
-   
+
    for ( Uint i{0} ; i < n ; i++, x += intervalWidth )
    {
       const double y{f( x )} ;
@@ -132,7 +132,7 @@ int main( int argc, char ** argv )
 
    try {
       while ( -1 != ( c = getopt_long( argc, argv, "hn:l:u:", long_options, NULL ) ) )
-      { 
+      {
          switch ( c )
          {
             case 'n' :
@@ -161,17 +161,17 @@ int main( int argc, char ** argv )
             {
                showHelpAndExit() ;
             }
-         } 
+         }
       }
    }
-   catch (...)
+   catch ( ... )
    {
-      std::cerr 
+      std::cerr
          << __FILE__
          << ":"
          << line << ": uncaught exception (parse error)\n"
-         << "option: -" << (char)c << "\n"
-         << "argument: " << optarg << "\n"
+         << "option: -" << (char)c << '\n'
+         << "argument: " << optarg << '\n'
          << std::endl ;
 
       std::exit( (int)RETURNCODES::PARSE_ERROR ) ;
