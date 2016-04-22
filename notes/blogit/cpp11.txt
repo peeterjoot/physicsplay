@@ -1,0 +1,766 @@
+I recently wrapped up all the programming assignments for PHY1610, Scientific Computing for Physicists
+
+https://support.scinet.utoronto.ca/education/go.php/218/index.php/ib/1//p_course/218
+
+In all the assignments, we were required to compile with either 
+
+-std=c++11 
+
+or 
+
+-std=c++14 
+
+It's possible to use those options and still program using the older C++98 syntax, but I also used this as an opportunity to learn some new style C++.
+
+With the cavaet that we were provided with boilerplate code for a number of assignments, there was a non-trivial amount of code written for this course:
+
+[sourcecode language="bash"]
+$ cloc `cat f` 2>&1 | tee o
+     186 text files.
+     177 unique files.                                          
+       4 files ignored.
+
+http://cloc.sourceforge.net v 1.60  T=0.88 s (197.6 files/s, 16868.5 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+C++                            111           1710           1159           7317
+C/C++ Header                    62            819           1525           2237
+-------------------------------------------------------------------------------
+SUM:                           173           2529           2684           9554
+-------------------------------------------------------------------------------
+[/sourcecode]
+
+A lot of this code involved calling into external libraries (fftw3, cblas, lapack, gsl, netcdf, MPI, silo, boost exceptions, boost unittest, ...) and was pretty fun to write.
+
+Looking through my submissions, here are some of the newer language features that ended up in my code.  Keep in mind that new for me is relative to the C++ language features that I was able to use in DB2 code, which is restricted by the features made available by the very oldest compiler we were using accross all platform offerings.
+
+== Using statements
+
+I had only seen using statements for namespace selection, as in
+
+[sourcecode language="cpp"]
+using namespace std ;
+[/sourcecode]
+
+This is, however, a more general construct, and also allows for what is effectively a scope limited typedef with a more natural syntax.  Example:
+
+[sourcecode language="cpp"]
+using carray = rarray<std::complex<double>, 1> ;
+[/sourcecode]
+
+Compare this to
+
+[sourcecode language="cpp"]
+typedef rarray<std::complex<double>, 1> carray ;
+[/sourcecode]
+
+With the using syntax, the beginner programmer's issue of remembering the order for the type,typename pair in a typedef statement is obliterated.
+
+I got quite used to using using by the end of the course.
+
+== Testing language levels
+
+The following macros were helpful when experimenting with different language levels:
+
+[sourcecode language="cpp"]
+#if defined __cplusplus && (__cplusplus >= 201103L)
+   #define HAVE_CPLUSPLUS_11
+#endif
+
+#if defined __cplusplus && (__cplusplus >= 201402L)
+   #define HAVE_CPLUSPLUS_14
+#endif
+[/sourcecode]
+
+== enum class
+
+C++11 introduces an 'enum class', different from an enum.  For example, instead of writing:
+
+[sourcecode language="cpp"]
+/**
+   interval and derivative solver methods supplied by gsl
+ */
+enum solver
+{
+   bisection,
+   falsepos,
+   brent,
+   newton,
+   secant,
+   steffenson
+} ;
+[/sourcecode]
+
+you would write:
+
+[sourcecode language="cpp"]
+/**
+   interval and derivative solver methods supplied by gsl
+ */
+enum class solver
+{
+   bisection,
+   falsepos,
+   brent,
+   newton,
+   secant,
+   steffenson
+} ;
+[/sourcecode]
+
+The benifit of this compared to the non-class enum is that the enumeration names are not in the global scope.  You would write
+
+[sourcecode language="cpp"]
+void foo( const solver s ) 
+{
+   if ( s == solver::falsepos )
+}
+[/sourcecode]
+
+not
+[sourcecode language="cpp"]
+void foo( const solver s ) 
+{
+   if ( s == falsepos )
+}
+[/sourcecode]
+
+This nicely avoids namespace clashes.
+
+That is not the only benefit to C++11 enums.  C++11 enums can also be forward referenced, provided the storage class of the enum is also specified.
+
+If you have ever worked on code that is massively coupled and interdependent (such as DB2), you have seen places where piles of headers have to get dragged in for enum bodies, because it is not possible to forward reference an enum portably.  This is a very nice feature!
+
+A simple example of a forward declared C++11 enum is:
+
+[sourcecode language="cpp"]
+enum solver : int ;
+void foo( const solver s ) ;
+
+enum solver : int
+{
+  x = 0, y = 1
+} ;
+[/sourcecode]
+
+Or, using the non-global enum class syntax:
+
+[sourcecode language="cpp"]
+enum class what : int ;
+void foo( const what s ) ;
+
+enum class what : int
+{
+  x = 0, y = 1
+} ;
+[/sourcecode]
+
+I didn't actually use enum classes for enum forward referencing in my phy1610 assignments, because they were too simple to require that.
+
+There is huge potential for using enums with storage classes in DB2 code.  I expect that is also true for many other huge scale C++ codebases.  The fact that this feature does not have appear to be tied to a requirement to also use 'enum class' is very nice for transforming legacy code.  I left IBM before the day of seeing the use of compilers that allowed that on all platforms, but can imagine there will be some huge potential build time savings once C++11 compilers are uniformly available for DB2 code (and the code is ported to compile with C++11 enabled on all platforms).
+
+As a side note, the storage class qualification, even if not being used for forward referencing is quite nice.  I used it for return codes from main, which have to fit within one byte (i.e. within the waitpid waitstatus byte).  For example:
+
+[sourcecode language="cpp"]
+enum class RETURNCODES : unsigned char
+{
+    SUCCESS       ///< exit code for successful exectution
+   ,HELP          ///< exit code when -help (or bad option is supplied)
+   ,PARSE_ERROR   ///< exit code if there's a parse error */
+   ,EXCEPTION     ///< exit code if there's an unexpected exception thrown */
+} ;
+[/sourcecode]
+
+== Uniform initialization
+
+A new initialization paradigm is available in C++11.  Instead of using constructor syntax for initialization, as in
+
+[sourcecode language="cpp"]
+/**
+   Input parameters for gsl solver iteration.
+ */
+struct iterationParameters
+{
+   const Uint     m_max_iter ;  ///< Maximum number of iterations before giving up.
+   const double   m_abserr ;    ///< the absolute error criteria for convergence.
+   const double   m_relerr ;    ///< the relative error criteria for convergence.
+   const bool     m_verbose ;   ///< verbose output
+
+   iterationParameters( const Uint     max_iter,
+                        const double   abserr,
+                        const double   relerr,
+                        const bool     verbose ) :
+         m_max_iter(max_iter),
+         m_abserr(abserr),
+         m_relerr(relerr),
+         m_verbose(verbose)
+   {
+   }
+} ;
+[/sourcecode]
+
+one could write
+
+[sourcecode language="cpp"]
+/**
+   Input parameters for gsl solver iteration.
+ */
+struct iterationParameters
+{
+   const Uint     m_max_iter ;  ///< Maximum number of iterations before giving up.
+   const double   m_abserr ;    ///< the absolute error criteria for convergence.
+   const double   m_relerr ;    ///< the relative error criteria for convergence.
+   const bool     m_verbose ;   ///< verbose output
+
+   iterationParameters( const Uint     max_iter,
+                        const double   abserr,
+                        const double   relerr,
+                        const bool     verbose ) :
+         m_max_iter{max_iter},
+         m_abserr{abserr},
+         m_relerr{relerr},
+         m_verbose{verbose}
+   {
+   }
+} ;
+[/sourcecode]
+
+This is a little foreign looking and it is easy to wonder what the advantage is.  One of the advantages is that this syntax can be used for container initialization.  For example, instead of
+
+[sourcecode language="cpp"]
+std::vector<int> v ;
+v.push_back( 1 ) ;
+v.push_back( 2 ) ;
+v.push_back( 3 ) ;
+[/sourcecode]
+
+you can just do
+
+[sourcecode language="cpp"]
+std::vector<int> v{ 1, 2, 3 } ;
+[/sourcecode]
+
+This is called uniform initialization, since this mechanism was extended to basic types as well.  For example, instead of initializing an array with an assignment operator, as in
+
+[sourcecode language="cpp"]
+   constexpr struct option long_options[] = {
+     { "help",   0, NULL, 'h' },
+     { "number", 1, NULL, 'n' },
+     { "lower",  1, NULL, 'l' },
+     { "upper",  1, NULL, 'u' },
+     { NULL,     0, NULL, 0   }
+   } ;
+[/sourcecode]
+
+you can write
+[sourcecode language="cpp"]
+   constexpr struct option long_options[]{
+     { "help",   0, NULL, 'h' },
+     { "number", 1, NULL, 'n' },
+     { "lower",  1, NULL, 'l' },
+     { "upper",  1, NULL, 'u' },
+     { NULL,     0, NULL, 0   }
+   } ;
+[/sourcecode]
+
+Instead of just providing a special mechanism to initialize container class objects, the language was extended to provide a new initialization syntax that could be used to initialize contain those objects and all others.
+
+However, this is not just a different syntax for initialization, because there the types have to match strictly.  For example this init of a couple stack variables will not compile
+
+[sourcecode language="cpp"]
+   int more{3} ;
+   float x1{-2.0} ;
+   size_t size{meta.numThreads*20} ;
+[/sourcecode]
+
+What is required is one of
+
+[sourcecode language="cpp"]
+   float x1{-2.0f} ;
+
+   // or
+
+   double x1{-2.0} ;
+[/sourcecode]
+
+Additionally, suppose that meta.numThreads has int type.  Such a uniform initialization attempt will not compile, since the product is not of type size_t.  That line can be written as:
+
+[sourcecode language="cpp"]
+   size_t size{(size_t)meta.numThreads*20} ;
+
+   // or:
+   size_t size = meta.numThreads*20 ;
+[/sourcecode]
+
+I found uniform initialization hard on the eyes because it looked so foreign, but did eventually get used to it, with one exception.  It seems to me that the following is harder to read
+
+[sourcecode language="cpp"]
+double x{ midpoint( x1, x1 + intervalWidth ) } ;
+[/sourcecode]
+
+than
+[sourcecode language="cpp"]
+double x = midpoint( x1, x1 + intervalWidth ) ;
+[/sourcecode]
+
+There were also cases with -std=c++11 where uniform init and auto variables (see below) did not interact well, producing errors later when my auto-uniform-init'ed variables got interpretted as initializer lists instead of the types I desired.  All such errors seemed to go away with -std=c++14, which seemed to generally provide a more stable language environment.
+
+== New string to integer functions
+
+The c++11 standard library has new string to integer functions 
+http://en.cppreference.com/w/cpp/string/basic_string/stoul
+which are more convient than the strtoul functions.  These throw exceptions on error, but still allow the
+collection of errno and error position if you want them.
+
+[sourcecode language="cpp"]
+using Uint = std::uintptr_t ;
+
+/**
+   Register sized signed integer type for loop counters and so forth.
+ */
+using Sint = std::intptr_t ;
+
+/**
+   wrapper for stoul to match the type of Uint above.
+ */
+#if defined _WIN64
+   #define strToUint std::stoull
+#else
+   #define strToUint std::stoul
+#endif
+[/sourcecode]
+
+There are other similar functions like std::stod, for string to double conversion.  There were also opposite convertors, such as to_string, for converting integer types to strings.  For example:
+
+[sourcecode language="cpp"]
+const std::string filename{ fileBaseName + "_" + std::to_string( rank ) + ".out" } ;
+[/sourcecode]
+
+== Static assertions.
+
+DB2 had a static assertion implementation (OSS_CTASSERT, or sqlzStaticAssert?) but there is now one in the standard.  Here's an example using the Uint "typedef" above:
+
+[sourcecode language="cpp"]
+/**
+   Force a compilation error if size assumptions are invalid.
+ */
+inline void strToUintAssumptions()
+{
+#if defined _WIN64
+   static_assert( sizeof(Uint) == sizeof(unsigned long long), "bad assumptions about sizeof uintptr_t, long long" ) ;
+#else
+   static_assert( sizeof(Uint) == sizeof(unsigned long), "bad assumptions about sizeof uintptr_t, long" ) ;
+#endif
+}
+[/sourcecode]
+
+The advantage of static_assert over the DB2 implementation is that compilers likely produce a better error message when it fails (instead of something unintuitive like "reference of array location at offset -1 is invalid").
+
+== Boost exceptions.
+
+While not part of c++11, the boost exception classes were available for my assignments.  These are pretty easy to use.  As setup you define some helper classes, which really just provide a name for the exception, and a name to identify any of the data that you'd like to throw along with the underlying exception.  This could look like the following for example:
+
+[sourcecode language="cpp"]
+#include <boost/exception/exception.hpp>
+#include <boost/exception/info.hpp>
+
+struct error : virtual std::exception, virtual boost::exception { } ;
+struct regex_match_error : virtual error { } ;
+
+struct tag_match_input ;
+typedef boost::error_info<tag_match_input,std::string> match_info ;
+
+struct tag_match_re ;
+typedef boost::error_info<tag_match_re,std::string> re_info ;
+
+struct tag_intdata ;
+typedef boost::error_info<tag_intdata,long> intdata_info ;
+[/sourcecode]
+
+Such classes would be best in a namespace since they are generic, but I didn't bother for all these assignments.
+
+I used the boost exceptions for a couple things.  One of which, of course, was throwing exceptions, but the other was as an assert-with-data backend:
+
+[sourcecode language="cpp"]
+#define ASSERT_NO_ERROR (static_cast<void>(0))
+#ifdef NDEBUG
+   #define ASSERT_DATA_INT( expr, v1 )          ASSERT_NO_ERROR
+   #define ASSERT_DATA_INT_INT( expr, v1, v2 )  ASSERT_NO_ERROR
+#else
+   #define ASSERT_DATA_INT( expr, v1 )          \
+      ( (expr)                                  \
+      ? ASSERT_NO_ERROR                         \
+      : BOOST_THROW_EXCEPTION(                  \
+            assert_error()                      \
+               << intdata_info( v1 ) ) )
+//...
+#endif
+[/sourcecode]
+
+This allowed me to assert with data as in
+
+[sourcecode language="cpp"]
+ASSERT_DATA_INT( sz > 0, sz ) ;
+ASSERT_DATA_INT_INT( taskNumber < numTasks, taskNumber, numTasks ) ;
+[/sourcecode]
+
+This way I get not just the abort from the assert, but also the underlying reason, and can dump those to the console with no additional effort than catching any other boost exception:
+
+[sourcecode language="cpp"]
+//...
+#include <boost/exception/diagnostic_information.hpp>
+
+int main( int argc, char ** argv )
+{
+   try {
+      auto expected{7} ;
+
+      ASSERT_DATA_INT_INT( argc == expected, argc, expected ) ;
+   }
+   catch ( boost::exception & e )
+   {
+      auto s { boost::diagnostic_information( e ) } ;
+      std::cout << s << std::endl ;
+      // ...
+[/sourcecode]
+
+This generates something like:
+
+[sourcecode language="bash"]
+$ ./bassert
+bassert.cc(11): Throw in function int main(int, char**)
+Dynamic exception type: boost::exception_detail::clone_impl<assert_error>
+std::exception::what: std::exception
+[tag_intdata*] = 1
+[tag_intdata2*] = 7
+
+[/sourcecode]
+
+I wonder how efficient constructing such an exception object is?  When pre-processed the assertion above expands to
+
+[sourcecode language="bash"]
+      ( (argc == expected) ? (static_cast<void>(0)) :
+     ::boost::exception_detail::throw_exception_(
+     assert_error() << intdata_info( argc ) << intdata2_info( expected )
+     ,__PRETTY_FUNCTION__,"bassert.cc",11)
+     ) ;
+[/sourcecode]
+
+Stepping through this in the debugger I see some interesting stuff
+[sourcecode language="gdb"]
+(gdb) s
+error::error (this=0x7fffffffde60, __vtt_parm=0x409e90 <VTT for assert_error+32>, __in_chrg=<optimized out>)
+    at ../inc/myexceptions.h:13
+13      struct error : virtual std::exception, virtual boost::exception { } ;
+(gdb) s
+boost::operator<< <assert_error, tag_intdata, long> (x=..., v=...) at /usr/include/boost/exception/info.hpp:191
+191             return exception_detail::set_info(x,v);
+(gdb)
+boost::exception_detail::set_info<assert_error, tag_intdata, long> (x=..., v=...)
+    at /usr/include/boost/exception/info.hpp:167
+167             set_info( E const & x, error_info<Tag,T> const & v )
+(gdb) s
+170                 shared_ptr<error_info_tag_t> p( new error_info_tag_t(v) );
+(gdb) s
+boost::error_info<tag_intdata, long>::error_info (this=0x621c20)
+    at /usr/include/boost/exception/detail/error_info_impl.hpp:41
+41          error_info:
+(gdb) s
+boost::exception_detail::error_info_base::error_info_base (this=0x621c20)
+    at /usr/include/boost/exception/detail/error_info_impl.hpp:24
+24              error_info_base
+(gdb) s
+boost::shared_ptr<boost::error_info<tag_intdata, long> >::shared_ptr<boost::error_info<tag_intdata, long> > (
+    this=0x7fffffffdda0, p=0x621c20) at /usr/include/boost/smart_ptr/shared_ptr.hpp:347
+347         explicit shared_ptr( Y * p ): px( p ), pn() // Y must be complete
+(gdb) s
+boost::detail::shared_count::shared_count (this=0x7fffffffdda8) at /usr/include/boost/smart_ptr/detail/shared_count.hpp:114
+114         shared_count(): pi_(0) // nothrow
+(gdb) s
+119         }
+(gdb)
+boost::shared_ptr<boost::error_info<tag_intdata, long> >::shared_ptr<boost::error_info<tag_intdata, long> > (this=0x7fffffffdda0, p=0x621c20)
+    at /usr/include/boost/smart_ptr/shared_ptr.hpp:349
+349             boost::detail::sp_pointer_construct( this, p, pn );
+(gdb)
+boost::detail::sp_pointer_construct<boost::error_info<tag_intdata, long>, boost::error_info<tag_intdata, long> > (ppx=0x7fffffffdda0,
+    p=0x621c20, pn=...) at /usr/include/boost/smart_ptr/shared_ptr.hpp:269
+269     template< class T, class Y > inline void sp_pointer_construct( boost::shared_ptr< T > * ppx, Y * p, boost::detail::shared_count & pn )
+(gdb)
+271         boost::detail::shared_count( p ).swap( pn );
+(gdb)
+boost::detail::shared_count::shared_count<boost::error_info<tag_intdata, long> > (this=0x7fffffffdd30, p=0x621c20)
+    at /usr/include/boost/smart_ptr/detail/shared_count.hpp:121
+121         template<class Y> explicit shared_count( Y * p ): pi_( 0 )
+(gdb)
+130                 pi_ = new sp_counted_impl_p<Y>( p );
+(gdb)
+boost::detail::sp_counted_impl_p<boost::error_info<tag_intdata, long> >::sp_counted_impl_p (this=0x621c40, px=0x621c20)
+    at /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp:66
+66          explicit sp_counted_impl_p( X * px ): px_( px )
+(gdb)
+boost::detail::sp_counted_base::sp_counted_base (this=0x621c40) at /usr/include/boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp:109
+109         sp_counted_base(): use_count_( 1 ), weak_count_( 1 )
+(gdb)
+111         }
+(gdb)
+boost::detail::sp_counted_impl_p<boost::error_info<tag_intdata, long> >::sp_counted_impl_p (this=0x621c40, px=0x621c20)
+    at /usr/include/boost/smart_ptr/detail/sp_counted_impl.hpp:71
+71          }
+(gdb)
+boost::detail::shared_count::shared_count<boost::error_info<tag_intdata, long> > (this=0x7fffffffdd30, p=0x621c20)
+    at /usr/include/boost/smart_ptr/detail/shared_count.hpp:149
+149         }
+(gdb)
+boost::detail::shared_count::swap (this=0x7fffffffdd30, r=...) at /usr/include/boost/smart_ptr/detail/shared_count.hpp:488
+488             sp_counted_base * tmp = r.pi_;
+[/sourcecode]
+
+== Boost test
+
+The boost test library is also not a C++11 feature, but new for me, and learned in this course.  Here's a fragment of how it is used
+
+[sourcecode language="cpp"]
+bool epred( const std::out_of_range & e ) { return true ; }
+
+BOOST_AUTO_TEST_CASE( testsMat )
+{
+   MyMatrix a( 2, 3 ) ;
+
+   BOOST_REQUIRE( a.get_rows() == 2 ) ;
+   BOOST_REQUIRE( a.get_columns() == 3 ) ;
+//...
+   snprintf( buf, sizeof(buf), "%s:i,j=%u,%u: a(i,j) = %f, b(i,j) = %f\n", what, (unsigned)i, (unsigned)j, t1, t2 ) ;
+   BOOST_REQUIRE_MESSAGE( abs(sum == a.sum()) < eps, buf ) ;
+
+   BOOST_CHECK_EXCEPTION( a.set_element( 2, 0, 1.0, true ), std::out_of_range, epred );
+}
+[/sourcecode]
+
+A boost test after being run looks like:
+
+FIXME
+
+== Range for and auto type
+
+The range for is much like perl's foreach.  For example, in perl you could write
+
+[sourcecode language="perl"]
+my @a = ( 1, 2, 3 ) ;
+foreach my $v ( @a )
+{
+   foo( $v ) ;
+}
+[/sourcecode]
+
+An equivalent C++ loop like this can be as simple as
+
+[sourcecode language="cpp"]
+std::vector<int> a{1, 2, 3 } ;
+for ( auto v : a )
+{
+   foo( v ) ;
+}
+[/sourcecode]
+
+You can also declare the list of items to iterate over inline, as in
+
+[sourcecode language="cpp"]
+using iocfg = iohandler::cfg ;
+for ( auto c : { iocfg::graphics, iocfg::ascii, iocfg::netcdf, iocfg::noop } )
+{
+   // ...
+}
+[/sourcecode]
+
+Observe that, just like perl, C++ no longer requires any explicit type for the loop variable, as it is deduced when auto is specified.  It is still strongly typed, but you can write code that doesn't explicitly depend on that type.  I see lots of benefits to this, as you can have additional freedom to change type definitions and not have to adjust everything that uses it.
+
+I can imagine that it could potentially get confusing if all variables in a function get declared auto, but did not find that to be the case for any of the code I produced in these assignments.
+
+One gotcha with auto that I did hit was that care is required in computed expressions.  I'd used auto in one case and the result got stored as a large unsigned value, instead of signed as desired (i.e. negative values got stored in unsigned auto variables).  In that case I used an explicit type.  Extensive use of auto may end up requiring more unit and other test if the types picked are not those that are desired.
+
+== Useful standard helper methods
+
+[sourcecode language="cpp"]
+std::swap( m_sz, other.m_sz ) ;
+std::fill( m_storage.begin(), m_storage.end(), v ) ;
+std::copy( b.m_storage.begin(), b.m_storage.end(), m_storage.begin() ) ;
+r.first  = std::max( l, m_myFirstGlobalElementIndex ) ;
+r.second = std::min( u, m_myLastGlobalElementIndex ) ;
+inline double signof( const double v )
+{
+   return std::copysign( 1.0, v ) ;
+}
+
+valueType total{ std::accumulate( m_storage.begin(), m_storage.end(), 0.0f ) } ;
+
+      m_sum = std::accumulate( v.begin(), v.end(), 0.0 ) ;
+      m_mean = m_sum / v.size() ;
+      double mean = m_mean ; // for lambda capture
+
+      std::vector<double> diff( v.size() ) ;
+
+      std::transform( v.begin(), v.end(), diff.begin(), [mean](double x) { return x - mean; } ) ;
+
+      m_sq_sum = std::inner_product( diff.begin(), diff.end(), diff.begin(), 0.0 ) ;
+
+[/sourcecode]
+
+== std::pair (rangePartition.h)
+
+== std::chrono (ticks.h)
+
+This is a nice portability layer for fine grain time measurements, allowing you to avoid platform specific functions like gettimeofday, and also avoid any composition of the seconds/subseconds data that many such interfaces provide.
+
+Here's a fragment of a class that allows interval time measurements and subsequent conversion:
+
+[sourcecode language="cpp"]
+class ticks
+{
+   using clock      = std::chrono::high_resolution_clock ;
+
+   clock::time_point m_sample ;
+public:
+
+   static inline ticks sample()
+   {
+      ticks t ;
+      t.m_sample = clock::now() ;
+
+      return t ;
+   }
+
+   using duration   = decltype( m_sample - m_sample ) ;
+
+   friend duration operator -( const ticks & a, const ticks & b ) ;
+} ;
+
+inline ticks::duration operator -( const ticks & a, const ticks & b )
+{
+   return a.m_sample - b.m_sample ;
+}
+
+inline auto durationToMicroseconds( const ticks::duration & diff )
+{
+   return std::chrono::duration_cast<std::chrono::microseconds>( diff ).count() ;
+}
+[/sourcecode]
+
+Note that the last function is using c++14 return type deduction.  That does not work without coersion
+in c++11, requiring:
+
+[sourcecode language="cpp"]
+inline auto durationToMicroseconds( const ticks::duration & diff )
+-> decltype(std::chrono::duration_cast<std::chrono::microseconds>( diff ).count())
+{
+   return std::chrono::duration_cast<std::chrono::microseconds>( diff ).count() ;
+}
+[/sourcecode]
+
+which is very ugly.
+
+== Random numbers
+
+[sourcecode language="cpp"]
+/**
+   A random number generator that produces integer uniformly
+   distributed in the interval:
+
+   [a, a + delta N]
+
+   with separation delta between values returned.
+ */
+template <int a, int delta, int N>
+class RandomIntegers
+{
+   std::random_device                        m_rd ;A
+   //std::default_random_engine                m_engine ;
+   std::mt19937                              m_engine ;
+   std::uniform_int_distribution<unsigned>   m_uniform ;
+
+public:
+   /** constuct a uniform random number generator for the specified range */
+   RandomIntegers( )
+      : m_rd()
+      , m_engine( m_rd() )
+      , m_uniform( 0, N )
+   {
+      static_assert( N > 0, "Integer N > 0 expected" ) ;
+      static_assert( delta > 0, "Integer delta > 0 expected" ) ;
+   }
+
+   /**
+      return a uniform random number sample from {a, a + delta, ..., a + delta N}
+    */
+   int sample()
+   {
+      auto p = m_uniform( m_engine ) ;
+
+      return a + p * delta ;
+   }
+} ;
+[/sourcecode]
+
+== constexpr
+
+Instead of using #defines, one can use completely typed declarations, but still constant using the constexpr keyword.  An example
+
+[sourcecode language="cpp"]
+constexpr size_t N{3} ;
+std::tuple<int, N> t ;
+[/sourcecode]
+
+== nullptr
+
+The days of not knowing what header defines NULL and dealing with conflicting definitions are over.  Instead of using NULL, we now have a builtin language construct nullptr available.
+
+== Lambdas and sort
+
+Custom sorting is really simple in c++ now.  Here's an example of a partial sort (sorting the top N elements, and leaving the rest unspecified).  The sort function no longer has to be a function call, and can be specified inline
+
+[sourcecode language="cpp"]
+auto second_greater = [](auto & left, auto & right) { return left.second > right.second ; } ;
+std::partial_sort( cvec.begin(),
+                   cvec.begin() + N,
+                   cvec.end(),
+                   second_greater ) ;
+[/sourcecode]
+
+The "inline" sort function here is using c++14 lambda syntax.  For c++11, the parameter types can't be auto, so something succh as the following might be required
+
+[sourcecode language="cpp"]
+auto second_greater = [](const results_pair & left, const results_pair & right) { return left.second > right.second ; } ;
+[/sourcecode]
+
+== decltype
+
+Attempting to mix auto with g++'s '-Wall -Werror' causes some trouble.  For example, this doesn't work
+
+[sourcecode language="cpp"]
+void foo ( const size_t size )
+{
+   for ( auto i{0} ; i < size ; i++ )
+   {
+      // ...
+   }
+}
+[/sourcecode]
+
+This doesn't compile since the i < size portion generates sign vs unsigned comparison warnings.  There are a few ways to fix this.
+
+[sourcecode language="cpp"]
+   // specify the type explicitly:
+   for ( size_t i{0} ; i < size ; i++ )
+
+   // let the compiler use the type of the size variable:
+   for ( decltype(size) i{0} ; i < size ; i++ )
+[/sourcecode]
+
+The decltype method is probably of more use in template code.  For non-template code, I found that explicitly specifying the type was more readable.
+
+== std::valarray (myrarray.h)
+
+-- outline issues found.
+
+(vt/vt.cc)
