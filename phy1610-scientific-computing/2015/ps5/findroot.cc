@@ -16,7 +16,7 @@ void showHelpAndExit()
                 "\t[--maxiter=m|-m m] [--derivmaxiter=m|-d m] [--err=e|-e e]\n"
                 "\t[--bracketed|-r]\n"
                 "\t[--help]\n"
-                '\n'
+                "\n"
                 "- At least one of --bisection, --falsepos, --brent, --newton, --secant, --steffenson must be specified\n"
                 "- A root search will be performed in [x0,x1] with step size of w,\n"
                 "  defaulting to [0,10,0.5]\n"

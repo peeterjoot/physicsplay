@@ -29,3 +29,5 @@ apt install libsilo-bin
 apt install libsilo-dev
 apt install libstatistics-basic-perl
 apt install netcdf-bin
+apt install libboost-all-dev
+apt install libgsl0-dev
