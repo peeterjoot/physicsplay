@@ -3,17 +3,23 @@
 #include "myexceptions.h"
 #include <iostream>
 
+void foo( int x ) ;
+
 int main( int argc, char ** argv )
 {
    try {
       auto expected{7} ;
 
-//      ASSERT_DATA_INT_INT( argc == expected, argc, expected ) ;
+      ASSERT_DATA_INT_INT( argc == expected, argc, expected ) ;
+
+      foo( expected ) ;
+#if 0
 ::boost::exception_detail::throw_exception_(
      assert_error() 
          << intdata_info( argc ) 
          << intdata2_info( expected )
      ,__PRETTY_FUNCTION__,"bassert.cc",11) ;
+#endif
    }
    catch ( boost::exception & e )
    {
@@ -25,3 +31,5 @@ int main( int argc, char ** argv )
 
    return 0 ;
 }
+
+void foo( int x ) {}
