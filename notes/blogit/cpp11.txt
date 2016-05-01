@@ -522,25 +522,43 @@ boost::detail::shared_count::swap (this=0x7fffffffdd30, r=...) at /usr/include/b
 The boost test library is also not a C++11 feature, but new for me, and learned in this course.  Here's a fragment of how it is used
 
 [sourcecode language="cpp"]
-bool epred( const std::out_of_range & e ) { return true ; }
+#define BOOST_TEST_MAIN
+#define BOOST_TEST_MODULE test
 
-BOOST_AUTO_TEST_CASE( testsMat )
+#define BOOST_TEST_DYN_LINK
+
+#include <boost/test/unit_test.hpp>
+#include <vector>
+
+BOOST_AUTO_TEST_CASE( testExample )
 {
-   MyMatrix a( 2, 3 ) ;
+   std::vector<int> v(3) ;
 
-   BOOST_REQUIRE( a.get_rows() == 2 ) ;
-   BOOST_REQUIRE( a.get_columns() == 3 ) ;
-//...
-   snprintf( buf, sizeof(buf), "%s:i,j=%u,%u: a(i,j) = %f, b(i,j) = %f\n", what, (unsigned)i, (unsigned)j, t1, t2 ) ;
-   BOOST_REQUIRE_MESSAGE( abs(sum == a.sum()) < eps, buf ) ;
-
-   BOOST_CHECK_EXCEPTION( a.set_element( 2, 0, 1.0, true ), std::out_of_range, epred );
+   BOOST_REQUIRE( 3 == v.size() ) ;
+   BOOST_REQUIRE_MESSAGE( 3 == v.size(), "size: " + std::to_string( v.size() ) ) ;
 }
 [/sourcecode]
 
 A boost test after being run looks like:
 
-FIXME
+[sourcecode language="bash"]
+$ ./test --report_level=detailed --log_level=all
+Running 1 test case...
+Entering test module "test"
+test.cc:9: Entering test case "testExample"
+test.cc:13: info: check 3 == v.size() has passed
+test.cc:14: info: check 'size: 3' has passed
+test.cc:9: Leaving test case "testExample"; testing time: 87us
+Leaving test module "test"; testing time: 103us
+
+Test module "test" has passed with:
+  1 test case out of 1 passed
+  2 assertions out of 2 passed
+
+  Test case "testExample" has passed with:
+    2 assertions out of 2 passed
+
+[/sourcecode]
 
 == Range for and auto type
 
