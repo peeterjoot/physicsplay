@@ -1,4 +1,4 @@
-SUBMAKES += $(shell find -name GNUmakefile)
+SUBMAKES += $(shell find . -name GNUmakefile)
 SUBDIRS := $(subst /GNUmakefile,,$(SUBMAKES))
 
 PS3 += ps3.git.log
