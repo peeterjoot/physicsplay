@@ -6,12 +6,11 @@ include ../make.vars
 #include ../make.vars.netcdf_c
 include ../make.vars.mpi
 
-# ubuntu:
-#CXXFLAGS += -I/usr/lib/openmpi/include
-
 CXXFLAGS += $(CXXFLAGS_NETCDF)
 
+ifdef SCINET_NETCDF_INC
 TARGETS += ncpar
+endif
 NCPAR_SOURCES += ncpar.cc
 NCPAR_SOURCES += ../ps10/mpitask.cc
 NCPAR_OBJECTS := $(subst .cc,.o,$(NCPAR_SOURCES))

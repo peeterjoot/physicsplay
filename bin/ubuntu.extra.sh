@@ -32,3 +32,4 @@ apt install netcdf-bin
 apt install libboost-all-dev
 apt install libgsl0-dev
 apt install pgplot5
+apt install libnetcdf-dev libnetcdf11 netcdf-bin netcdf-dbg netcdf-doc

@@ -31,7 +31,6 @@ include ../make.vars.pnetcdf
 CXXFLAGS += $(PGPLOT_CXXFLAGS)
 CXXFLAGS += -I../inc
 
-TARGETS += wave1d
 WAVE1D_SOURCES += wave1d.cc
 WAVE1D_SOURCES += sendAndRecieveGhostCells.cc
 WAVE1D_SOURCES += ticktock.cc
@@ -46,8 +45,6 @@ WAVE1D_OBJECTS := $(subst .cc,.o,$(WAVE1D_SOURCES))
 WAVE1D_LDFLAGS += $(PGPLOT_LDFLAGS)
 WAVE1D_LDLIBS += $(PGPLOT_LDLIBS)
 
-
-TARGETS += writefilep
 WRITEFILEP_SOURCES += writefilep.cc
 WRITEFILEP_SOURCES += rangePartition.cc
 WRITEFILEP_SOURCES += mpitask.cc
@@ -59,6 +56,12 @@ WRITEFILEP_SOURCES += ../ps7/streamopen.cc
 WRITEFILEP_OBJECTS := $(subst .cc,.o,$(WRITEFILEP_SOURCES))
 WRITEFILEP_LDFLAGS += $(PGPLOT_LDFLAGS)
 WRITEFILEP_LDLIBS += $(PGPLOT_LDLIBS)
+
+ifdef SCINET_NETCDF_INC
+TARGETS += wave1d
+TARGETS += writefilep
+TARGETS += iotest
+endif
 
 TARGETS += test
 TEST_SOURCES += test.cc
@@ -80,7 +83,6 @@ GHOSTS_SOURCES += ghosts.cc
 GHOSTS_SOURCES += sendAndRecieveGhostCells.cc
 GHOSTS_OBJECTS := $(subst .cc,.o,$(GHOSTS_SOURCES))
 
-TARGETS += iotest
 IOTEST_SOURCES += iotest.cc
 IOTEST_SOURCES += netcdfIO.cc
 IOTEST_SOURCES += asciiIO.cc
