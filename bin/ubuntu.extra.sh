@@ -33,3 +33,8 @@ apt install libboost-all-dev
 apt install libgsl0-dev
 apt install pgplot5
 apt install libnetcdf-dev libnetcdf11 netcdf-bin netcdf-dbg netcdf-doc
+
+apt install texlive-latex-base
+apt install texlive-latex-extra
+apt install texlive-full
+
