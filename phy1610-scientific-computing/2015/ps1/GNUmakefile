@@ -4,6 +4,8 @@
 
 include ../../make.vars
 
+CXXFLAGS += -I../../inc
+
 TARGETS += tanhTable
 
 CLEANTARGETS += $(TARGETS)
