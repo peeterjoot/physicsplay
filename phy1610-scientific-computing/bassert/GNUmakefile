@@ -1,6 +1,8 @@
-PRODUCTION := 1
+#PRODUCTION := 1
 #PROFILED := 1
 #USE_OPENBLAS := 1
+
+#CXXFLAGS += -O3
 
 include ../make.vars
 
