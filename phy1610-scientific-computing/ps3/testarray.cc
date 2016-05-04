@@ -42,11 +42,11 @@ void testArray( const char * const what )
 
    t1 = a.sum() ;
    snprintf( buf, sizeof(buf), "%s: manual sum: %f, a.sum: %f\n", what, sum, t1 ) ;
-   BOOST_REQUIRE_MESSAGE( abs(sum == a.sum()) < eps, buf ) ;
+   BOOST_REQUIRE_MESSAGE( std::abs(sum - a.sum()) < eps, buf ) ;
 
    t1 = b.sum() ;
    snprintf( buf, sizeof(buf), "%s: sum: %f, a.sum: %f\n", what, sum, t1 ) ;
-   BOOST_REQUIRE_MESSAGE( abs(sum == b.sum()) < eps, buf ) ;
+   BOOST_REQUIRE_MESSAGE( std::abs(sum - b.sum()) < eps, buf ) ;
 }
 
 BOOST_AUTO_TEST_CASE( myra )

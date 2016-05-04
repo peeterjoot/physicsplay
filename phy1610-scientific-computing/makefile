@@ -195,4 +195,4 @@ clean:
 	$(foreach dir,$(SUBDIRS),make -C $(dir) clean;)
 
 subdirs:
-	$(foreach dir,$(SUBDIRS),make -C $(dir);)
+	$(foreach dir,$(SUBDIRS),echo $(dir) ; make -C $(dir);)

@@ -6,6 +6,9 @@ include ../make.vars.blas
 include ../make.vars.rarray
 include ../make.vars.boosttest
 
+CXXFLAGS += -Wno-error=constant-logical-operand
+CXXFLAGS += -Wno-error=unneeded-internal-declaration
+
 TARGETS += diffring
 DIFFRING_SOURCES += diffring.cc
 DIFFRING_SOURCES += diffring_timestep.cc

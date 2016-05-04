@@ -3,6 +3,7 @@
 
    Implementation of cblas based dot product and correlation methods.
  */
+#include <cmath>
 #include "dotprod.h"
 #include "myexceptions.h"
 

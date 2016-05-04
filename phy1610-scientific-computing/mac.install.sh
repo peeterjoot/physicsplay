@@ -3,3 +3,4 @@ brew install gsl
 brew install fftw
 brew install homebrew/science/openblas
 brew install homebrew/science/scalapack
+brew install netcdf

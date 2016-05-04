@@ -51,6 +51,6 @@ runtests: test
 	./test --report_level=detailed
 
 test : $(TEST_OBJECTS)
-	$(CXX) -o $@ $(TEST_OBJECTS) $(TEST_LDLIBS)
+	$(CXX) -o $@ $(TEST_OBJECTS) $(LDFLAGS) $(TEST_LDFLAGS) $(LDLIBS) $(TEST_LDLIBS)
 
 include ../../make.rules

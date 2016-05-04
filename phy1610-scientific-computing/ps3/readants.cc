@@ -1,7 +1,9 @@
 // netCDF.reading.cpp
 #include <iostream>
+#include <cmath>
 #include <netcdf>
 #include <algorithm>
+#include <numeric>
 #include <getopt.h>
 #include "returncodes.h"
 
