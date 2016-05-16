@@ -3,13 +3,15 @@
 file="$1"
 line="$2"
 
+export PATH=/Applications/Vim.app/Contents/MacOS:$PATH
+
 [ "${file:0:1}" == "/" ] || file="${PWD}/$file"
 
 exec osascript << EOF
   set ESC to ASCII character 27
-  tell application "/Applications/MacVim.app/Contents/MacOS/MacVim" to activate
+  tell application "Vim" to activate
   tell application "System Events"
-  tell process "/Applications/MacVim.app/Contents/MacOS/MacVim"
+  tell process "Vim"
   keystroke ESC & ":set hidden" & return 
   keystroke ":if bufexists(\'$file\')" & return 
   keystroke ":exe \":buffer \" . bufnr(\'$file\')"  & return 
