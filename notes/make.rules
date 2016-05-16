@@ -44,27 +44,27 @@ all :: $(MAIN_TARGETS)
 # FIXME: am guessing that depending on COMMIT_EDITMSG will not work for freshly cloned repo:
 .revinfo/lastCommit.tex : ../../.git/COMMIT_EDITMSG
 	mkdir -p .revinfo/
-	~/bin/mkRevInfo > $@
+	mkRevInfo > $@
 
 .revinfo/gitCommitDateAsMyTime.tex : ../../.git/COMMIT_EDITMSG
 	mkdir -p .revinfo/
-	~/bin/mkRevInfo -mytime > $@
+	mkRevInfo -mytime > $@
 
 .revinfo/lastCommitBook.tex : ../../.git/COMMIT_EDITMSG
 	mkdir -p .revinfo/
-	~/bin/mkRevInfo -book > $@
+	mkRevInfo -book > $@
 
 .revinfo/gitCommitDate.tex : ../../.git/COMMIT_EDITMSG
 	mkdir -p .revinfo/
-	~/bin/mkRevInfo -date > $@
+	mkRevInfo -date > $@
 
 .revinfo/gitCommitString.tex : ../../.git/COMMIT_EDITMSG
 	mkdir -p .revinfo/
-	~/bin/mkRevInfo -commit --no-newline > $@
+	mkRevInfo -commit --no-newline > $@
 
 .revinfo/gitRepo.tex : ../../.git/COMMIT_EDITMSG
 	mkdir -p .revinfo/
-	~/bin/mkRevInfo -repo > .revinfo/gitRepo.tex
+	mkRevInfo -repo > .revinfo/gitRepo.tex
 
 opt/%.pdf : %.pdf
 	mkdir -p opt
@@ -97,8 +97,9 @@ julia.tex : ../METADATA ../../julia/METADATA
 
 # plainnat.bib (as used by classicthesis) doesn't like @webpage:
 # http://tex.stackexchange.com/questions/56951/what-does-warning-entry-type-for-isnt-style-file-defined-mean/56954#56954
+# http://stackoverflow.com/questions/19242275/re-error-illegal-byte-sequence-on-mac-os-x
 Bibliography.bib : myrefs.bib
-	sed 's/@webpage/@manual/g' < $< > $@
+	sedwrapper 's/@webpage/@manual/g' < $< > $@
 
 # old style: don't think I have any direct uses anymore, but am generating Bibliography.bib from this.
 myrefs.bib: ../myrefs.bib.in ../METADATA
@@ -147,8 +148,8 @@ $(LOCAL_MY_CT_FRONTBACK_FILES) : %.tex : ../classicthesis_mine/%.tex
 #%.pdf : %.svg
 #	$(INKSCAPE) $^ --export-pdf=$@
 
-currentBookCopyright.tex : ~/bin/printCopyRight
-	~/bin/printCopyRight -latex > $@
+currentBookCopyright.tex : #~/bin/printCopyRight
+	printCopyRight -latex > $@
 
 vpath %.tex $(ORIG_FILE_DIRS)
 

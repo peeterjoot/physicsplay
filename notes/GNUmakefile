@@ -35,7 +35,7 @@ myMathematica.html : METADATA
 copyright : currentCopyright.latexPrologue currentBookCopyright.tex
 
 currentCopyright.latexPrologue :
-	~/bin/printCopyRight -what file -desc file -line='% ' > $@
+	printCopyRight -what file -desc file -line='% ' > $@
 
 l:
 	find -name "*.tex" | grep -ve classicthesis/  -e /bak/ -e /junk/ -e revinfo/ -e /th/ > $@
