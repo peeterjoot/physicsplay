@@ -1,15 +1,5 @@
 #include <iostream>
-
-// Stroustrop 10.4:  constexpr capable integer square root function
-constexpr int f( int s, int d, int a )
-{
-	return s <= a ? f( s + d, d + 2, a ) : d ;
-}
-
-constexpr int isqrt( int x )
-{
-	return f( 1, 3, x)/2 - 1 ;
-}
+#include "is.h"
 
 int main()
 {
