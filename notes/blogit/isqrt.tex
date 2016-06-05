@@ -41,19 +41,19 @@ breakatwhitespace=false,    % sets if automatic breaks should only happen at whi
 %\chapter{Integer square root}
 %\label{chap:isqrt}
 
-In citepStroustroup is the following constant expression formula for an integer square root.  This is a function that returns the smallest integer for which the square is less than the value to take the root of.  Check out the black magic he used
+In \citep{stroustrup2014c++} is a rather mysterious looking constant expression formula for an integer square root.  This is a function that returns the smallest integer for which the square is less than the value to take the root of.  Check out the black magic he used
 
 %\input{../../programming/isqrt/is.h}
 \begin{lstlisting}
-// Stroustrop 10.4:  constexpr capable integer square root function
+// Stroustrup 10.4:  constexpr capable integer square root function
 constexpr int isqrt_helper( int sq, int d, int n )
 {
 	return sq <= n ? isqrt_helper( sq + d, d + 2, n ) : d ;
 }
 
-constexpr int isqrt( int x )
+constexpr int isqrt( int n )
 {
-	return isqrt_helper( 1, 3, x)/2 - 1 ;
+	return isqrt_helper( 1, 3, n )/2 - 1 ;
 }
 \end{lstlisting}
 
@@ -84,12 +84,14 @@ as desired again.  The result will be the same for any value \( n \in [1,3] \).
 
 This time we have a final result of
 
-\begin{dmath}\label{eqn:isqrt:40}
+\begin{dmath}\label{eqn:isqrt:45}
 \frac{7}{2} - 1 = 2,
 \end{dmath}
 
 as expected.  We get the same result for any value \( n \in [4,8] \).
 \end{itemize}
+
+\section{Recurrence relations}
 
 The rough pattern of the magic involved can be seen.  We have a sequence of calls
 
@@ -100,7 +102,44 @@ The rough pattern of the magic involved can be seen.  We have a sequence of call
 \item \( \textrm{isqrt_helper}( 16, 9, n ) \),
 \end{itemize}
 
-which terminates at the point where the first (square) parameter exceeds that value that we are taking the root of.
+which terminates at the point where the first (square) parameter exceeds that value that we are taking the root of.  Let the parameters of the sequence of calls be \( s_k \), and \( d_k \), so that with \( s_0 = 1, d_0 = 3 \) the \( k \in [0,...] \) call to the helper function is \( q_k = \textrm{isqrt_helper}( s_k, d_k, n ) \).  
+
+The sequence for the second parameter, the eventual return value, can be summarized compactly as \( d_k = 3 + 2 k \).  It is not entirely obvious how we end up with a square for the values \( s_k = s_{k-1} + d_{k-1} \), but this follows by summation.  For \( k > 1 \) that is
+
+\begin{dmath}\label{eqn:isqrt:60}
+s_k 
+= s_{k-1} + d_{k-1}
+= s_0 + d_0 + d_1 + d_{k-1}
+= s_0 + \sum_{m=0}^{k-1} d_m
+= s_0 + \sum_{m=0}^{k-1} (3 + 2 m )
+= s_0 + \sum_{m=1}^{k} (3 + 2 (m-1) )
+= s_0 + \sum_{m=1}^{k} (1 + 2 m )
+= 1 + k + 2 \sum_{m=1}^{k} m
+= 1 + k + 2 \frac{k(k+1)}{2}
+= k^2 + 2 k + 1
+= (k+1)^2.
+\end{dmath}
+
+This clearly holds for the boundary cases \( k = 0,1 \) as well.  This allows the helper function action to be summarized more compactly
+
+\begin{dmath}\label{eqn:isqrt:80}
+\textrm{isqrt_helper}(1, 3, n) = 3 + 2 k,
+\end{dmath}
+
+where \( k \) is the smallest integer such that \( (k+1)^2 > n \).  After integer scaling the final result is
+
+\begin{dmath}\label{eqn:isqrt:100}
+(3 + 2 k)/2 -1 = k.
+\end{dmath}
+
+This little beastie makes sense after deconstruction, but it was very Jackson like to toss this into the book without comment or explanation.  
+
+As pointed out by Pramod Gupta, there's a \href
+{https://youtu.be/CPPX4kwqh80?t=123}
+{spooky appearance of collaboration}
+between Stroustrup and Jackson's publishers, not entirely limited to the book covers.
+
+%https://www.youtube.com/watch?v=CPPX4kwqh80
 
 %}
 \EndArticle
