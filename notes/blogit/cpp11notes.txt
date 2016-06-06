@@ -62,8 +62,53 @@ void foo( void )
 
 Here there is no data race if foo() is exectuted concurrently in a number of threads.  I remember seeing DB2 code that did this (and opening a defect to have it "fixed"), since I had no idea if it would work.  We didn't (and couldn't yet) use -std=c++11, so it's anybody's guess what that does without that option and on older pre c++11 compilers.
 
+<h2>Implied type initilizer lists.</h2>
+
+In a previous post I mentioned the c++11 uniform initialization syntax, but the basic idea is that is instead of 
+
+[sourcecode language="cpp"]
+int x(1) ;
+int y(0) ;
+[/sourcecode]
+
+or
+[sourcecode language="cpp"]
+int x = 1 ;
+int y = 0 ;
+[/sourcecode]
+
+c++11 now allows 
+
+[sourcecode language="cpp"]
+int x{1} ;
+int y{} ;
+[/sourcecode]
+
+Here the variables are initialized with values 1, and 0 (the default).  The motivation for this was to provide an initializer syntax that could be used with container classes.  Here's another variation on the initializer list initialization
+
+[sourcecode language="cpp"]
+int x = int{} ;
+int y = int{3} ;
+[/sourcecode]
+
+which can be reduced to
+[sourcecode language="cpp"]
+int x = {} ;
+int y = {3} ;
+[/sourcecode]
+
+where the types of the lists are implied.  I don't see much value add to use this equals-list syntax in the examples above.  Where this might be useful is in templated code to provide defaults
+
+[sourcecode language="cpp"]
+template <typename T>
+void foo( T x, T v = {} ) ;
+[/sourcecode]
+
 <h2></h2>
 <h2></h2>
+<h2></h2>
+<h2></h2>
+
 <h1>References</h1>
 
 [1] Bjarne Stroustrup. <em>The C++ Programming Language, 4th Edition</em>. Addison-Wesley, 2014.
