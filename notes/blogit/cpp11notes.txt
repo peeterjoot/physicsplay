@@ -1,0 +1,71 @@
+Some C++11 notes
+
+I've been reading [1].  Here are some notes of some bits and pieces that were new to me.
+
+<h2>nothrow new</h2>
+
+In DB2 we used to have to compile with -fcheck-new or similar, because we had lots of code that predated new throwing on error (c++98).  There is a form of new that explicitly doesn't throw:
+
+[sourcecode language="cpp"]
+void * operator new( size_t sz, const nothrow_t &) noexcept ;
+[/sourcecode]
+
+I don't know if this was introduced in c++11.  If this was a c++98 addition, then it should be used in almost all the codebases new calls.  When I left DB2 there were still some platform compilers (i.e. AIX xlC which doesn't use the clang front end like linuxppcle64 xlC) that were not c++11 capable, so if this explicit nothrow isn't c++98, it probably can't be used.
+
+<h2>Unnamed function parameters</h2>
+
+It is common to see function prototypes without named parameters, such as
+
+[sourcecode language="cpp"]
+void foo( int, int ) ;
+[/sourcecode]
+
+I did not realize that is also possible in the function definition, as in code like the following where a parameter has been dropped or left as a placeholder for future use
+
+[sourcecode language="cpp"]
+void foo( int x, int )
+{
+   printf( "%d\n", x ) ;
+}
+[/sourcecode]
+
+Not naming the parameter is probably a good way to get rid of unused parameter warnings.
+
+This is very likely not a c++11 addition.  I just didn't realize the language allowed for it, and had never seen it done.
+
+<h2>No return attribute</h2>
+
+Looks like __attribute__ extensions are being baked right into the language, as in
+
+[sourcecode language="cpp"]
+[[noreturn]] void exit( int ) ;
+[/sourcecode]
+
+I wonder if this is also in the plan for C?
+
+<h2>Thread safe static constructors</h2>
+
+C++11 explicitly requires static variable constructors are initialized using a "call-once" mechanism
+
+[sourcecode language="cpp"]
+class x
+{
+public: 
+   x() ;
+} ;
+
+void foo( void )
+{
+   static x v() ;
+}
+[/sourcecode]
+
+Here there is no data race if foo() is exectuted concurrently in a number of threads.  I remember seeing DB2 code that did this (and opening a defect to have it "fixed"), since I had no idea if it would work.  We didn't (and couldn't yet) use -std=c++11, so it's anybody's guess what that does without that option and on older pre c++11 compilers.
+
+<h2></h2>
+<h2></h2>
+<h1>References</h1>
+
+[1] Bjarne Stroustrup. <em>The C++ Programming Language, 4th Edition</em>. Addison-Wesley, 2014.
+
+[mathjax]
