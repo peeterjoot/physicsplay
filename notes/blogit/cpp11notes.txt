@@ -1,6 +1,6 @@
 Some C++11 notes
 
-I've been reading [1].  Here are some notes of some bits and pieces that were new to me.
+I've been reading Stroustroup's C++11 book [1].  Here are some notes of some bits and pieces that were new to me.
 
 <h2>nothrow new</h2>
 
@@ -104,8 +104,120 @@ template <typename T>
 void foo( T x, T v = {} ) ;
 [/sourcecode]
 
-<h2></h2>
-<h2></h2>
+<h2>Runtime values for default arguments.</h2>
+
+I don't know if this is new to C++11, but the book points out that default arguments can be runtime determined values.  Initially, my thought on this was that it is good that is not well known, since it would be confusing.  I did however, come up with a scenerio where this could be useful.  I wrote some code like the following the other day
+
+[sourcecode language="cpp"]
+extern bool g ;
+
+inline int foo( )
+{
+   int res = 0 ;
+
+   if ( g )
+   {
+      // first option
+   }
+   else
+   {
+      // second option
+   }
+
+   return res ;
+}
+[/sourcecode]
+
+The global g was precomputed at the shared library startup point (effectively const without being marked so).  My unit test of this code modified the value of g, which was a hack and I admit ugly.  It looked like
+
+[sourcecode language="cpp"]
+BOOST_AUTO_TEST_CASE( basicTest )
+{
+   for ( auto b : {false, true} )
+   {
+      g = b ;
+
+      int res = foo() ;
+
+      BOOST_REQUIRE( res >= 0 ) ;
+   }
+}
+[/sourcecode]
+
+This has a side effect of potentially changing the global.  A different way to do this would have been
+
+[sourcecode language="cpp"]
+extern bool g ;
+
+inline int foo( bool internalOverrideOfGlobalForTesting = g )
+{
+   int res = 0 ;
+
+   if ( internalOverrideOfGlobalForTesting )
+   {
+      // first option
+   }
+   else
+   {
+      // second option
+   }
+
+   return res ;
+}
+[/sourcecode]
+
+The test code could then be rewritten as
+
+[sourcecode language="cpp"]
+BOOST_AUTO_TEST_CASE( basicTest )
+{
+   for ( auto b : {false, true} )
+   {
+      int res = foo( b ) ;
+
+      BOOST_REQUIRE( res >= 0 ) ;
+   }
+}
+[/sourcecode]
+
+This doesn't touch the global (an internal value), but still would have allowed for testing both codepaths.  The fact that this "feature" exists may not actually be in this case, since my interface was a C interface.  Does a 
+
+<h2>noexcept</h2>
+
+Functions that intend to provide a C interface can use the noexcept keyword.  That allows the compiler to enforce the fact that such functions should provide a firewall that doesn't let any exceptions through.  Example:
+
+[sourcecode language="cpp"]
+// foo.h
+#if defined __cplusplus
+   #define EXTERNC extern "C"
+   #define NOEXCEPT noexcept
+#else
+   #define EXTERNC
+   #define NOEXCEPT
+#endif
+
+EXTERNC void foo(void) NOEXCEPT ;
+
+// foo.cc
+#include "foo.h"
+int foo( void ) NOEXCEPT
+{
+   int rc = 0 ;
+   try {
+      //
+   }
+   catch ( ... )
+   {
+      // handle error
+      rc = 1 ;
+   }
+
+   return rc ;
+}
+[/sourcecode]
+
+If foo does not catch all exceptions, then the use of noexcept will drive std::terminate(), like a throw from a destructor does on some platforms.
+
 <h2></h2>
 <h2></h2>
 
