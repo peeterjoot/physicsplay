@@ -6,7 +6,7 @@ CC := $(CXX)
 all : align
 
 clean :
-	rm -f *.o align
+	rm -f *.o align foo.cc
 
 align : foo.o align.o
 
