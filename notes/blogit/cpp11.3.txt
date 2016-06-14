@@ -37,5 +37,34 @@ catch ( ... )
 [/sourcecode]
 
 so that a throw in the class field member construction can also be caught.
-<h2></h2>
+
+<h2>Inline (default) namespace</h2>
+
+There is a mechanism for namespace versioning.  Suppose that you want a new V2 namespace to be the default, you can do:
+
+[sourcecode language="cpp"]
+namespace myproject
+{
+   inline namespace V2
+   {
+      struct X { 
+         int x ;
+         int y ;
+      } ;
+      void foo( const X & ) ;
+   } 
+
+   namespace V1
+   {
+      struct X { 
+         int x ;
+      } ;
+
+      void foo( const X & ) ;
+   } 
+} 
+[/sourcecode]
+
+Existing callers of the library that are using V1 interfaces can continue to work unmodified, but new callers will use the V2::X and V2::foo interfaces.
+
 <h2></h2>
