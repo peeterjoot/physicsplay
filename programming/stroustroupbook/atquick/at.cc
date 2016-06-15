@@ -27,13 +27,16 @@ public:
    }
 } x ;
 
-int main()
+int main( int argc, char ** argv )
 {
    atexit( normalexit ) ;
    std::at_quick_exit( quickCexit ) ;
    std::at_quick_exit( quickCPPexit ) ;
 
-   std::quick_exit( 3 ) ;
+   if ( argc == 1 )
+   {
+      std::quick_exit( 3 ) ;
+   }
 
    return 0 ;
 }

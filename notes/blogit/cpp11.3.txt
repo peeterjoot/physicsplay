@@ -80,6 +80,71 @@ void myproject::V1::foo( const myproject::V1::X & )
 [/sourcecode]
 
 <h2>Unnamed namespaces.</h2>
-<h2></h2>
+
+<h2>at_quick_exit</h2>
+
+There's now also a mechanism to exit and avoid global destructors and atexit routines from being evaluated.  Here's an example
+
+[sourcecode language="cpp"]
+#include <cstdlib>
+#include <iostream>
+
+extern "C"
+void normalexit()
+{
+   std::cout << "normalexit\n" ;
+}
+
+extern "C"
+void quickCexit()
+{
+   std::cout << "quickCexit\n" ;
+}
+
+void quickCPPexit()
+{
+   std::cout << "quickCPPexit\n" ;
+}
+
+class X
+{
+public:
+   ~X()
+   {
+      std::cout << "X::~X()\n" ;
+   }
+} x ;
+
+int main( int argc, char ** argv )
+{
+   atexit( normalexit ) ;
+   std::at_quick_exit( quickCexit ) ;
+   std::at_quick_exit( quickCPPexit ) ;
+
+   if ( argc == 1 )
+   {
+      std::quick_exit( 3 ) ;
+   }
+
+   return 0 ;
+}
+[/sourcecode]
+
+when run without arguments (argc == 1), we get
+[sourcecode language="bash"]
+$ ./at
+quickCPPexit
+quickCexit
+[/sourcecode]
+
+whereas if the normal exit processing is allowed to complete we see global destructors and regular atexit calls
+[sourcecode language="bash"]
+$ ./at 1
+normalexit
+X::~X()
+[/sourcecode]
+
+Observe, unlike atexit, which can only (portably) take extern "C" defined functions, at_quick_exit can take functions with both C and C++ linkage.
+
 <h2></h2>
 <h2></h2>
