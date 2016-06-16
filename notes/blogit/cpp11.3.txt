@@ -81,6 +81,46 @@ void myproject::V1::foo( const myproject::V1::X & )
 
 <h2>Unnamed namespaces.</h2>
 
+I'd once seen unnamed namespaces as a modern C++ (more general) replacement for static functions.  To see if such namespace functions are optimized away in the same fashion as a static function, I tried
+
+[sourcecode language="cpp"]
+#include <stdio.h>
+
+namespace
+{
+   void foo()
+   {
+      printf( "ns:foo\n" ) ;
+   }
+}
+
+int main() 
+{
+   foo() ;
+
+   return 0 ;
+}
+[/sourcecode]
+
+This example uses printf and not std::cout because I wanted to look at the assembly listing and cout's listing, at least on a mac, was completely abysemal.  foo() was optimized away, but that's a lot easier to see in the C printf listing:
+
+[sourcecode language="bash"]
+$ make
+c++ -o n -std=c++11 -O2 n.cc
+
+$ otool -tV n | less
+n:
+(__TEXT,__text) section
+_main:
+0000000100000f70        pushq   %rbp
+0000000100000f71        movq    %rsp, %rbp
+0000000100000f74        leaq    0x2b(%rip), %rdi        ## literal pool for: "ns:foo"
+0000000100000f7b        callq   0x100000f84             ## symbol stub for: _puts
+0000000100000f80        xorl    %eax, %eax
+0000000100000f82        popq    %rbp
+0000000100000f83        retq
+[/sourcecode]
+
 <h2>at_quick_exit</h2>
 
 There's now also a mechanism to exit and avoid global destructors and atexit routines from being evaluated.  Here's an example
