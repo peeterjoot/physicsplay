@@ -1,7 +1,10 @@
 #include <stdio.h>
 
-namespace {
-   void foo() { printf( "ns:foo\n" ) ;
+namespace
+{
+   void foo()
+   {
+      printf( "ns:foo\n" ) ;
    }
 }
 
