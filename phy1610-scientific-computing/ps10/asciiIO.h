@@ -59,7 +59,7 @@ public:
    ~asciiIO( ) ;
 private:
 
-   std::ofstream m_file ;
+   std::ofstream        m_file ;
    std::vector<float>   m_times ;         ///< The (s*dt) points in time that the output data is written out.
 } ;
 
