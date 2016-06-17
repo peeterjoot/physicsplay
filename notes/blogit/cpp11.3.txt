@@ -1,4 +1,4 @@
-Here's 
+Here's more notes from reading Stroustrup's "The C++ programming Language, 4th edition"
 
 <h2>throw() as noexcept equivalent</h2>
 
@@ -205,5 +205,106 @@ int main()
 
 Note that an explicit cast is required for enum class values, but not for enum, which are by default, int convertable.
 
-<h2></h2>
-<h2></h2>
+<h2>default initialization with new</h2>
+
+The uniform initializer syntax can also be used with new calls.  Here's an example with uninitialized and default initialized double allocations
+
+[sourcecode language="cpp"]
+#include <stdio.h>
+
+int main()
+{
+   double * d1 = new double ;
+   double * d2 = new double{} ;
+
+   printf( "%g %g\n", *d1, *d2 ) ;
+
+   return 0 ;
+}
+[/sourcecode]
+
+Observe that we get nice garbage values for *d1, but *d2 is always 0.0:
+
+[sourcecode language="bash"]
+$ ./d
+-1.49167e-154 0
+$ ./d
+0 0
+$ ./d
+1.72723e-77 0
+$ ./d
+-2.68156e+154 0
+[/sourcecode]
+
+<h2>initializer_list</h2>
+
+I remember really wanting a feature like this eons ago when I first wrote a matrix template class in 1st year.  Here's a sample of how it could be used
+
+[sourcecode language="cpp"]
+#include <iostream>
+#include <vector>
+#include <string>
+
+template <unsigned r, unsigned c>
+class m
+{
+    std::vector<double> mat ;
+
+public:
+    class bad_init {} ;
+    
+    m() : mat(r*c) {}
+
+    m( std::initializer_list<double> i ) : mat( r * c ) 
+    {
+        if ( i.size() > ( r * c ) )
+        {
+            throw bad_init() ;
+        }
+
+        int p{} ;
+        for ( auto v : i )
+        {
+            mat[ p++ ] = v ;
+        }
+    }
+
+    void dump( const std::string & n ) const
+    {
+        const char * sep = ": " ;
+        std::cout << n ;
+
+        for ( auto v : mat )
+        {
+            std::cout << sep << v ;
+            sep = ", " ;
+        }
+
+        std::cout << '\n' ;
+    }
+} ;
+
+int main()
+{
+    m< 3, 2 > v1 ;
+    m< 3, 2 > v2{ 0., 1., 2., 3., 4. } ;
+
+    v1.dump( "v1" ) ;
+    v2.dump( "v2" ) ;
+
+    m< 3, 2 > v3{ 0., 1., 2., 3., 4., 5., 6., 7. } ;
+
+    return 0 ;
+}
+[/sourcecode]
+
+This produces the two dumps and the expected std::terminate call for the wrong (too many) parameters on the third construction attempt
+
+[sourcecode language="bash"]
+$ ./i
+v1: 0, 0, 0, 0, 0, 0
+v2: 0, 1, 2, 3, 4, 0
+libc++abi.dylib: terminating with uncaught exception of type m<3u, 2u>::bad_init
+Abort trap: 6
+[/sourcecode]
+
