@@ -9,6 +9,7 @@
 PRODUCTION := 1
 #PROFILED := 1
 
+CXX := mpic++
 CXXSTD += -std=c++11
 
 include ../make.vars
@@ -16,14 +17,20 @@ include ../make.vars.rarray
 include ../make.vars.boosttest
 
 CXXFLAGS += $(PGPLOT_CXXFLAGS)
-CXXFLAGS += -fopenmp
 CXXFLAGS += -I../inc
+
+#ifeq ("$(OSNAME)","Darwin")
+#   #CXXFLAGS += -I/usr//local/Cellar/open-mpi/1.10.2/share/vampirtrace
+#   CXXFLAGS += -I/usr/local/Cellar/gcc/5.3.0/lib/gcc/5/gcc/x86_64-apple-darwin15.0.0/5.3.0/include/
+#   LDLIBS += -lompitrace
+#else
+#endif
+   CXXFLAGS += -fopenmp
+   LDLIBS += -fopenmp
 
 # boost noisyness:
 CXXFLAGS += -Wno-error=unused-local-typedefs
 CXXFLAGS += -Wno-unused-local-typedefs
-
-LDLIBS += -fopenmp
 
 TARGETS += wave1d
 WAVE1D_SOURCES += wave1d.cc
