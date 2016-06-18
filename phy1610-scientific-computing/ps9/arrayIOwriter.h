@@ -100,9 +100,9 @@ private:
    fileHandleType    m_metaDataFd ;          ///< The file descriptor used for the metadata IO.
 
    fileHandleType    m_fd ;                  ///< The file descriptor used for IO_method::threaded and IO_method::serial
-   size_t            m_currentOffset ;       ///< The offset of the next timestep data to write (Used for IO_method::threaded.)
+   size_t            m_currentOffset{} ;       ///< The offset of the next timestep data to write (Used for IO_method::threaded.)
 
-   unsigned          m_nextFileNumber ;      ///< For multifile, the numeric sequence number for the next file to be created.
+   unsigned          m_nextFileNumber{} ;      ///< For multifile, the numeric sequence number for the next file to be created.
    std::string       m_filePathAndBaseName ; ///< The output filename (and/or path) base.  A numeric sequence number and a .out suffix will be appended.
 
    /** open a file
@@ -129,8 +129,8 @@ private:
 
    struct writePartitionInfo
    {
-      size_t   m_batchSizeBytes ;
-      char *   m_startpos ;
+      size_t   m_batchSizeBytes{} ;
+      char *   m_startpos{} ;
 
       writePartitionInfo( const void * const   start,
                           const size_t         numBytes,

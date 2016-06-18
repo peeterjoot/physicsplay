@@ -9,8 +9,7 @@
 #include "myexceptions.h"
 
 fftstate::fftstate( carray & d )
-   : m_plan{},
-     m_sz{ (size_t)d.size() }
+   : m_sz{ (size_t)d.size() }
 {
    // The fftw docs say that the plan should always be created before the signal
    // is initialized, but that currently the arrays are not modified if FFTW_ESTIMATE

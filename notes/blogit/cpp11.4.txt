@@ -1,6 +1,105 @@
 Here's more notes from reading Stroustrup's "The C++ Programming Language, 4th edition"
 
-<h2></h2>
+<h2>Alternate construction methods</h2>
+
+I'd seen the new inline member initialization syntax that can be used to avoid (or simplify) explicit constructors.  For example, instead of
+
+[sourcecode language="cpp"]
+struct physical
+{
+   double  c      ;  ///< wave speed
+   double  tau    ;  ///< damping time
+   double  x1     ;  ///< left most x value
+   double  x2     ;  ///< right most x value
+
+   /**
+     set physical parameters to some defaults
+    */
+   physical() ;
+} ;
+
+physical::physical() :
+   c{ 1.0 },
+   tau{ 20.0 },
+   x1{ -26.0 },
+   x2{ +26.0 }
+{
+}
+[/sourcecode]
+
+You can do
+
+[sourcecode language="cpp"]
+struct physical
+{
+   double c{ 1.0 }    ;  ///< wave speed
+   double tau{ 20.0 } ;  ///< damping time
+   double x1{ -26.0 } ;  ///< left most x value
+   double x2{ +26.0 } ;  ///< right most x value
+} ;
+[/sourcecode]
+
+Much less code to write, and you can keep things all in one place.  I wondered if this could be combined with constexpr, but the only way I could get that to work was to use static members, which also have to have an explicit definition (at least on Mac) to avoid a link error:
+
+[sourcecode language="cpp"]
+struct p2
+{  
+   static constexpr double x2{ +26.0 } ;  ///< right most x value
+} ;
+constexpr double p2::x2 ;
+
+int main()
+{  
+   p2 p ;
+
+   return p.x2 ;
+}
+[/sourcecode]
+
+But that is a digression.  What I wanted to mention is that, while member initialization is cool, there's more in the C++11 constructor simplification toolbox.  We can write a constructor that builds on the member constructors (if any), but we can also make constructor specialations just call other constructors (called a delegating constructor), like so
+
+[sourcecode language="cpp"]
+struct physical
+{
+   double c{ 1.0 }    ;  ///< wave speed
+   double tau{ 20.0 } ;  ///< damping time
+   double x1{ -26.0 } ;  ///< left most x value
+   double x2{ +26.0 } ;  ///< right most x value
+
+   physical( const double cv ) : c{cv} {}
+   physical( const double x1v, const double x2v ) : x1{x1v}, x2{x2v} {}
+
+   physical( const double cv, const int m ) : physical{cv} { c *= m ; } ;
+} ;
+[/sourcecode]
+
+Stroustrup points out that the object is considered initialized by the time the delegating constructor is called. So if that throws, we shouldn't get to the body of the constructor function
+
+[sourcecode language="cpp"]
+#include <iostream>
+
+struct physical
+{
+   double c{ 1.0 }    ;  ///< wave speed
+
+   physical( const double cv ) { throw 3 ; }
+
+   physical( const double cv, const int m ) : physical{cv} { std::cout << "won't get here\n" ; }
+} ;
+
+int main()
+try
+{
+   physical p{5} ;
+
+   return 0 ;
+}
+catch (...)
+{
+   return 1 ;
+}
+[/sourcecode]
+
 <h2></h2>
 <h2></h2>
 <h2></h2>

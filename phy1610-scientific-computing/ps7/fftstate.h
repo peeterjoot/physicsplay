@@ -12,8 +12,8 @@
  */
 class fftstate
 {
-   fftw_plan   m_plan ; ///< Cached plan for the FFT operation.
-   size_t      m_sz ;   ///< save the initial array size and throw error if a different size is used.
+   fftw_plan   m_plan{} ; ///< Cached plan for the FFT operation.
+   size_t      m_sz{} ;   ///< save the initial array size and throw error if a different size is used.
 
 public:
    /**

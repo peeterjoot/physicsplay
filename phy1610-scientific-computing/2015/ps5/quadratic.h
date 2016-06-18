@@ -13,11 +13,9 @@
  */
 struct quadratic
 {
-   double a ;
-   double b ;
-   double c ;
-
-   quadratic() : a{1.0}, b{0.0}, c{-5.0} {}
+   double a{1.} ;
+   double b{0.} ;
+   double c{-5.} ;
 
    static double function( double x, void * params ) ;
    static double derivative( double x, void * params ) ;

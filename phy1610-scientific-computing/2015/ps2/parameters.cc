@@ -4,26 +4,6 @@
 #include <iostream>
 #include "parameters.h"
 
-physical::physical() :
-   c{ 1.0 },
-   tau{ 20.0 },
-   x1{ -26.0 },
-   x2{ +26.0 }
-{
-}
-
-simulation::simulation() :
-   runtime{ 200.0 },
-   dx{ 0.02 }
-{
-}
-
-output::output() :
-   outtime{ 1.0 },
-   verbose{ true }
-{
-}
-
 parameters::parameters( int argc, char* argv[] )
 {
    // Read the values from a file if specified on the command line

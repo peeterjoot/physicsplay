@@ -20,32 +20,33 @@ struct tag_match_re ;
 typedef boost::error_info<tag_match_re,std::string> re_info ;
 
 int main()
+try 
 {
-   try {
-       std::string s{"alja"} ;
-       std::regex r{"blah"} ;
+    std::string s{"alja"} ;
+    std::regex r{"blah"} ;
 
-       BOOST_THROW_EXCEPTION(
-            regex_match_error()
-               << match_info( s )
-               << re_info( "blah" )
-            ) ;
-   }
-   catch ( boost::exception & e )
+    BOOST_THROW_EXCEPTION(
+        regex_match_error()
+            << match_info( s )
+            << re_info( "blah" )
+        ) ;
+
+    return 0 ;
+}
+catch ( boost::exception & e )
+{
+   if ( auto * i { boost::get_error_info<match_info>(e) } )
    {
-      if ( auto * i { boost::get_error_info<match_info>(e) } )
-      {
-         std::cout << "match pattern: " << *i << std::endl ;
-      }
-
-      if ( auto * i { boost::get_error_info<re_info>(e) } )
-      {
-         std::cout << "match re: " << *i << std::endl ;
-      }
-
-      auto s { boost::diagnostic_information( e ) } ;
-      std::cout << s << std::endl ;
+       std::cout << "match pattern: " << *i << std::endl ;
    }
+
+   if ( auto * i { boost::get_error_info<re_info>(e) } )
+   {
+       std::cout << "match re: " << *i << std::endl ;
+   }
+
+   auto s { boost::diagnostic_information( e ) } ;
+   std::cout << s << std::endl ;
 
    return 0 ;
 }

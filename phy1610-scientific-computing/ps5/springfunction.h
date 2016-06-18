@@ -8,13 +8,13 @@
  */
 class gsl_spring_min_function
 {
-   double a ; ///< J (energy scale)
-   double b ; ///< m (length scale)
-   double c ; ///< N/m (spring constant)
-   double d ; ///< m(maximum spring extension)
-   double f ; ///< dimensionless (stiffness at maximum extension)
-   double g ; ///< m/s^2 (gravitational accelleration).
-   double m ; ///< mass (kg)
+   double a{1} ; ///< J (energy scale)
+   double b{0.1} ; ///< m (length scale)
+   double c{100} ; ///< N/m (spring constant)
+   double d{0.5} ; ///< m(maximum spring extension)
+   double f{2500} ; ///< dimensionless (stiffness at maximum extension)
+   double g{9.8} ; ///< m/s^2 (gravitational accelleration).
+   double m{} ; ///< mass (kg)
 
    // pre-calculate some of the products and ratios required to evaluate the function:
    double c1 ;
@@ -42,18 +42,9 @@ class gsl_spring_min_function
    }
 
 public:
-   /**
-      constructor.  set physical parameters for the kinetic energy function
-    */
-   gsl_spring_min_function( ) :
-      a{1},
-      b{0.1},
-      c{100},
-      d{0.5},
-      f{2500},
-      g{9.8},
-      m{},
-      c1{a * b},
+  
+  gsl_spring_min_function()
+    : c1{a * b},
       c2{a * d * d/f},
       c3{- c/(2 * a)}
    {
