@@ -34,7 +34,7 @@ struct minimizerParameters
 {
    const Uint              m_max_iter{100} ;   ///< Maximum number of iterations before giving up.
    const double            m_abserr{1e-6} ;    ///< the absolute error criteria for convergence.
-   const double            m_relerr{1e-6}      ///< the relative error criteria for convergence.
+   const double            m_relerr{1e-6} ;    ///< the relative error criteria for convergence.
    const bool              m_verbose{} ;       ///< verbose output
    double                  m_a ;               ///< initial lower bound for the bracket
    double                  m_b ;               ///< initial upper bound for the bracket
