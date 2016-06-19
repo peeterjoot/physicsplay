@@ -9,7 +9,19 @@
 PRODUCTION := 1
 #PROFILED := 1
 
-CXX := mpic++
+ifeq ("$(shell uname)","Darwin")
+   CXX := g++-5
+
+   # boost:
+   CXXFLAGS += -D_GLIBCXX_USE_CXX11_ABI=0
+   CXXFLAGS += -Wno-error=deprecated-declarations
+   CXXFLAGS += -Wno-error=unused-variable
+   CXXFLAGS += -Wno-deprecated-declarations
+   CXXFLAGS += -Wno-unused-variable
+   CXXFLAGS += -DUSE_SINGLE_HEADER_BOOST_TEST_FRAMEWORK
+else
+   CXX := mpic++
+endif
 CXXSTD += -std=c++11
 
 include ../make.vars
@@ -26,14 +38,14 @@ CXXFLAGS += -I../inc
 # 
 # Have hacked things to use gcc's omp runtime... probably doesn't work, but compiles and links.
 #
-ifeq ("$(OSNAME)","Darwin")
-   CXXFLAGS += -I/usr/local/Cellar/gcc/5.3.0/lib/gcc/5/gcc/x86_64-apple-darwin15.0.0/5.3.0/include
-   LDFLAGS += -L/usr/local/Cellar/gcc/5.3.0/lib/gcc/5
-   LDLIBS += -lgomp
-else
+#ifeq ("$(OSNAME)","Darwin")
+#   CXXFLAGS += -I/usr/local/Cellar/gcc/5.3.0/lib/gcc/5/gcc/x86_64-apple-darwin15.0.0/5.3.0/include
+#   LDFLAGS += -L/usr/local/Cellar/gcc/5.3.0/lib/gcc/5
+#   LDLIBS += -lgomp
+#else
    CXXFLAGS += -fopenmp
    LDLIBS += -fopenmp
-endif
+#endif
 
 # boost noisyness:
 CXXFLAGS += -Wno-error=unused-local-typedefs
