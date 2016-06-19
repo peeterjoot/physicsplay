@@ -125,7 +125,8 @@ PS10 += ps7/streamopen.cc
 TICKTOCK := $(HOME)/ticktock
 
 #all : ps3/ticktock.cc
-all : ps11.tar.gz
+#all : ps11.tar.gz
+all : subdirs
 
 ps10.pdf : ../notes/blogit/ps10.pdf
 	cp ../notes/blogit/ps10.pdf .

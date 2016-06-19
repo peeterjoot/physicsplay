@@ -45,10 +45,10 @@ allnotes.pdf : $(ALLNOTES)
 .PHONY: subdirs #$(SUBDIRS)
 
 subdirs:
-	$(foreach dir,$(SUBDIRS),make -C $(dir);)
+	$(foreach dir,$(SUBDIRS),echo $(dir) ; make -C $(dir);)
 
 subclean:
-	$(foreach dir,$(SUBDIRS),make -C $(dir) clean;)
+	$(foreach dir,$(SUBDIRS),echo $(dir) ; make -C $(dir) clean;)
 
 %/.gitignore : %/GNUmakefile
 	make -C $(<D) .gitignore
