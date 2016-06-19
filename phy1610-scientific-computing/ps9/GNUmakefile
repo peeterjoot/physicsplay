@@ -19,14 +19,21 @@ include ../make.vars.boosttest
 CXXFLAGS += $(PGPLOT_CXXFLAGS)
 CXXFLAGS += -I../inc
 
-#ifeq ("$(OSNAME)","Darwin")
-#   #CXXFLAGS += -I/usr//local/Cellar/open-mpi/1.10.2/share/vampirtrace
-#   CXXFLAGS += -I/usr/local/Cellar/gcc/5.3.0/lib/gcc/5/gcc/x86_64-apple-darwin15.0.0/5.3.0/include/
-#   LDLIBS += -lompitrace
-#else
-#endif
+#
+# mpic++ appears invoke clang on mac, and I don't find symbols like _omp_get_max_threads anywhere
+# in the clang runtime.  See that there is a clang omp runtime extension, but it doesn't look like
+# it's installed on my machine.  Can that be done after the fact, or does that have to be built-in?
+# 
+# Have hacked things to use gcc's omp runtime... probably doesn't work, but compiles and links.
+#
+ifeq ("$(OSNAME)","Darwin")
+   CXXFLAGS += -I/usr/local/Cellar/gcc/5.3.0/lib/gcc/5/gcc/x86_64-apple-darwin15.0.0/5.3.0/include
+   LDFLAGS += -L/usr/local/Cellar/gcc/5.3.0/lib/gcc/5
+   LDLIBS += -lgomp
+else
    CXXFLAGS += -fopenmp
    LDLIBS += -fopenmp
+endif
 
 # boost noisyness:
 CXXFLAGS += -Wno-error=unused-local-typedefs
@@ -56,7 +63,9 @@ TARGETS += dataToText
 DATATOTEXT_SOURCES += dataToText.cc
 DATATOTEXT_SOURCES += readem.cc
 DATATOTEXT_OBJECTS := $(subst .cc,.o,$(DATATOTEXT_SOURCES))
+ifdef  SCINET_BOOST_LIB_DIR
 DATATOTEXT_LDFLAGS += -L$(SCINET_BOOST_LIB_DIR)
+endif
 DATATOTEXT_LDLIBS += -lboost_filesystem -lboost_system
 
 CLEANTARGETS += $(TARGETS)
