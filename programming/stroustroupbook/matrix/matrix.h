@@ -43,8 +43,9 @@ public:
 
    //friend std::ostream & operator <<( std::ostream & o, const matrix & m ) ;
 
-   matrix( matrix && m ) = default ;
 #if 0
+   matrix( matrix && m ) = default ;
+#elif 1
    matrix( matrix && m )
       : sz{ m.sz }
       , e{ std::move(m.e) }

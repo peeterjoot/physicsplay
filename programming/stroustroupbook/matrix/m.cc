@@ -31,11 +31,24 @@ std::ostream & operator <<( std::ostream & o, const matrix & m )
 
 matrix f() ;
 
+int m0()
+{
+   matrix m1 = f() ;
+
+   return m1.size() ;
+}
+
+int m1()
+{
+   matrix m1 = f() ;
+   matrix m2 { f() } ;
+
+   return m1.size() + m2.size() ;
+}
+
 int main()
 {
-   matrix m{ f() } ;
-
-   return m.size() ;
+   return m0() ;
 }
 
 #if 0
