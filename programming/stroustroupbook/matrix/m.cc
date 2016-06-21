@@ -1,5 +1,6 @@
 #include "matrix.h"
 
+#if 0
 std::ostream & operator <<( std::ostream & o, const matrix & m )
 {
    o << "sz: " << m.sz
@@ -26,13 +27,17 @@ std::ostream & operator <<( std::ostream & o, const matrix & m )
 
    return o ;
 }
+#endif
 
 matrix f() ;
 
 int main()
 {
    matrix m{ f() } ;
-//   std::cout << m ;
 
    return m.size() ;
 }
+
+#if 0
+#include "m2.cc"
+#endif
