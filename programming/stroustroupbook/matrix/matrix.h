@@ -43,15 +43,26 @@ public:
 
    //friend std::ostream & operator <<( std::ostream & o, const matrix & m ) ;
 
-#if 0
-   matrix( matrix && m ) = default ;
-#elif 1
+   //matrix( matrix && m ) = default ;
    matrix( matrix && m )
       : sz{ m.sz }
       , e{ std::move(m.e) }
    {
       m.sz = 0 ;
       std::cout << "moved: " << &m << " to " << this << " ; m.e.size(): " << m.e.size() << '\n' ;
+   }
+
+#if 0
+   matrix & operator = ( matrix && m ) = default ;
+#else
+   matrix & operator = ( matrix && m )
+   {
+      std::cout << "move operator = : " << this << '\n' ;
+
+      std::swap( sz, m.sz ) ;
+      std::swap( e, m.e ) ;
+
+      return *this ;
    }
 #endif
 
@@ -60,6 +71,17 @@ public:
       , e{ m.e }
    {
       std::cout << "copied: " << &m << " to " << this << '\n' ;
+   }
+
+   matrix & operator = ( const matrix & m )
+   {
+      std::cout << "copy operator = : " << this << '\n' ;
+
+      matrix t{ m } ;
+      std::swap( sz, t.sz ) ;
+      std::swap( e, t.e ) ;
+
+      return *this ;
    }
 
    ~matrix()

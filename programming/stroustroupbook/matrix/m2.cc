@@ -6,3 +6,8 @@ matrix f()
 
    return d ;
 }
+
+void g( matrix & m )
+{
+   m = matrix( {1,2,3} ) ;   
+}

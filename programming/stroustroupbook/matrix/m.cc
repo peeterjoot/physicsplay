@@ -30,25 +30,34 @@ std::ostream & operator <<( std::ostream & o, const matrix & m )
 #endif
 
 matrix f() ;
+void g( matrix & ) ;
 
 int m0()
 {
-   matrix m1 = f() ;
+   matrix x1 = f() ;
 
-   return m1.size() ;
+   return x1.size() ;
 }
 
 int m1()
 {
-   matrix m1 = f() ;
-   matrix m2 { f() } ;
+   matrix x1 = f() ;
+   matrix x2 { f() } ;
 
-   return m1.size() + m2.size() ;
+   return x1.size() + x2.size() ;
+}
+
+int m2()
+{
+   matrix x1(0) ;
+   g( x1 ) ;
+
+   return x1.size() ;
 }
 
 int main()
 {
-   return m0() ;
+   return m0() + m2() ;
 }
 
 #if 0
