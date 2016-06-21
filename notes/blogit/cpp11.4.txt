@@ -100,6 +100,86 @@ catch (...)
 }
 [/sourcecode]
 
-<h2></h2>
-<h2></h2>
+<h2>default functions</h2>
+
+If we define a structure with an explicit constructor with parameters, then unless explicit action is taken, this means that we no longer get a default constructor.  Example:
+
+[sourcecode language="cpp"]
+#include <string>
+
+struct F
+{
+   std::string s{} ;
+   
+   F( int n ) : s( n, 'a' ) {}
+} ;
+
+F x ;
+[/sourcecode]
+
+This results in errors because the default constructor has been deleted by defining an explicit constructor
+
+[sourcecode language="bash"]
+$ c++ -o d -std=c++11 d.cc
+d.cc:10:3: error: no matching constructor for initialization of 'F'
+F x ;
+  ^
+d.cc:7:4: note: candidate constructor not viable: requires single argument 'n', but no arguments were provided
+   F( int n ) : s( n, 'a' ) {}
+   ^
+d.cc:3:8: note: candidate constructor (the implicit move constructor) not viable: requires 1 argument, but 0 were provided
+struct F
+       ^
+d.cc:3:8: note: candidate constructor (the implicit copy constructor) not viable: requires 1 argument, but 0 were provided
+1 error generated.
+[/sourcecode]
+
+We can get back the default constructor, without having to write it out explictly, by just doing:
+
+[sourcecode language="cpp"]
+#include <string>
+
+struct F
+{
+   std::string s{} ;
+   
+   F( int n ) : s( n, 'a' ) {}
+
+#if 1
+   F() = default ;
+#endif
+} ;
+
+F x ;
+[/sourcecode]
+
+It wouldn't be a big deal to define an explicit default constructor above, just
+[sourcecode language="cpp"]
+    F() : s{} {}
+[/sourcecode]
+
+but for a more complex class, being able to let the compiler do the work is nicer.  Using = default also 
+means that the redundancy of specifying a member initializer and also having to specify the same initializer
+in the default constructor member list is not required, which is nicer.
+
+<h2>move operations</h2>
+
+Back in university I once wrote a matrix class that I was proud of.  It was reference counted to avoid really expensive assignment and copy construction operations, which were particularily bad for any binary operation that returned a new value
+
+[sourcecode language="cpp"]
+template <class T>
+matrix<T> operator + ( const matrix<T> & a, const matrix<T> & b ) ;
+[/sourcecode]
+
+C implementations of an addition operation (like the blas functions), wouldn't do anything this dumb.  Instead they use an interface like
+
+[sourcecode language="cpp"]
+template <class T>
+void matrixadd( matrix<T> & r, const matrix<T> & a, const matrix<T> & b ) ;
+[/sourcecode]
+
+This doesn't have the syntactic sugar, but the performance won't suck as it would if reference counting wasn't used.  I recall having a lot of trouble getting the reference counting just right, and had to instrument all my copy constructors, assignment operators and destructors with trace logging to get it all right.  Right also depended on the compiler that was being used!  I've still got a copy of that code kicking around somewhere, but it can stay where it is out of sight since move operations obsolete it all.
+
+FIXME: construct an example
+
 <h2></h2>
