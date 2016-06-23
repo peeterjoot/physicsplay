@@ -5,10 +5,6 @@
 
 std::ostream & operator<< ( std::ostream & o, const matrix & m )
 {
-//   o << "sz: " << m.sz
-//     << ", m_elem.sz: " << m.m_elem.size() 
-//     << '\n' ;
-
    unsigned i = 1 ;
    auto rows = m.m_rows ;
    auto columns = m.m_columns ;
