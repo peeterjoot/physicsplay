@@ -10,7 +10,7 @@ int m0()
    matrix x1 = f() ;
    matrix x2 { std::move( mg ) } ;
 
-   return x1.size() + x2.size() ;
+   return x1.rows() + x2.rows() ;
 }
 
 int m1()
@@ -18,7 +18,7 @@ int m1()
    matrix x1 = f() ;
    matrix x2 { f() } ;
 
-   return x1.size() + x2.size() ;
+   return x1.rows() + x2.rows() ;
 }
 
 int m2()
@@ -26,15 +26,15 @@ int m2()
    matrix x1(0) ;
    g( x1 ) ;
 
-   return x1.size() ;
+   return x1.rows() ;
 }
 
 int main()
 {
    std::cout << mg << '\n' ;
 
-   return 0 ;
-//   return m0() + m2() ;
+//   return 0 ;
+   return m0() + m2() ;
 }
 
 #if defined INLINE_M2
