@@ -1,13 +1,15 @@
 CXXFLAGS += -std=c++11
-CXXFLAGS += -O2
+#CXXFLAGS += -O2
 CXXFLAGS += -MMD
-#CXXFLAGS += -g
+CXXFLAGS += -g
 
 OBJECTS += m.o
-ifdef INLINE_M2
-   CXXFLAGS += -DINLINE_M2
-else
+OBJECTS += matrix.o
+
+ifdef NO_INLINE_M2
    OBJECTS += m2.o
+else
+   CXXFLAGS += -DINLINE_M2
 endif
 
 m : $(OBJECTS)

@@ -1,30 +1,5 @@
 #include "matrix.h"
 
-std::ostream & operator <<( std::ostream & o, const matrix & m )
-{
-//   o << "sz: " << m.sz
-//     << ", e.sz: " << m.e.size() 
-//     << '\n' ;
-
-   unsigned i = 0 ;
-   char sep = ' ' ;
-   for ( const auto & e : m.e )
-   {
-      o << e << sep ; 
-
-      if ( i && ((i+1) % m.e.size() == 0) )
-      {
-         sep = '\n' ;
-      }
-      else
-      {
-         sep = ' ' ;
-      }
-   }
-
-   return o ;
-}
-
 matrix f() ;
 void g( matrix & ) ;
 

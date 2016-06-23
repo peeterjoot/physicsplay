@@ -14,6 +14,8 @@ class matrix
 
 public:
 
+   enum class initMethod { DIAGONALS } ;
+
    matrix( unsigned n ) 
       : sz{ n }
       , e( n * n )
@@ -26,19 +28,11 @@ public:
       return sz ;
    }
 
-   matrix( const std::initializer_list<T> & diagonals ) 
-      : sz{ diagonals.size() }
-      , e( sz, sz )
-   {
-      std::cout << "create diagonal ( " << sz << " ): " << this << '\n' ;
+   matrix( const size_t n, const size_t m, const std::initializer_list<T> & diagonals ) ;
 
-      unsigned i = 0 ;
-      
-      for ( const auto & v : diagonals )
-      {
-         e[ i * sz + i ] = v ;
-         i++ ;
-      }
+   matrix( const std::initializer_list<T> & diagonals )
+      : matrix( diagonals.size(), diagonals.size(), diagonals )
+   {
    }
 
    matrix( matrix && m )
