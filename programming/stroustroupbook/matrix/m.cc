@@ -1,20 +1,18 @@
 #include "matrix.h"
 
-#if 0
 std::ostream & operator <<( std::ostream & o, const matrix & m )
 {
-   o << "sz: " << m.sz
-     << ", e.sz: " << m.e.size() 
-     << '\n' ;
+//   o << "sz: " << m.sz
+//     << ", e.sz: " << m.e.size() 
+//     << '\n' ;
 
-/*
    unsigned i = 0 ;
-   const char * sep = ' ' ;
+   char sep = ' ' ;
    for ( const auto & e : m.e )
    {
       o << e << sep ; 
 
-      if ( i && ((i+1) % m.e.size() == 0)
+      if ( i && ((i+1) % m.e.size() == 0) )
       {
          sep = '\n' ;
       }
@@ -23,20 +21,21 @@ std::ostream & operator <<( std::ostream & o, const matrix & m )
          sep = ' ' ;
       }
    }
-*/
 
    return o ;
 }
-#endif
 
 matrix f() ;
 void g( matrix & ) ;
 
+matrix mg( {4, 5, 6} ) ;
+
 int m0()
 {
    matrix x1 = f() ;
+   matrix x2 { std::move( mg ) } ;
 
-   return x1.size() ;
+   return x1.size() + x2.size() ;
 }
 
 int m1()
@@ -57,9 +56,12 @@ int m2()
 
 int main()
 {
-   return m0() + m2() ;
+   std::cout << mg << '\n' ;
+
+   return 0 ;
+//   return m0() + m2() ;
 }
 
-#if 0
+#if defined INLINE_M2
 #include "m2.cc"
 #endif

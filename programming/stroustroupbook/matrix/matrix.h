@@ -18,7 +18,7 @@ public:
       : sz{ n }
       , e( n * n )
    {
-      std::cout << "create n x n: " << this << '\n' ;
+      std::cout << "create << " << sz << " x " << sz << ": " << this << '\n' ;
    }
 
    unsigned size() const
@@ -30,7 +30,7 @@ public:
       : sz{ diagonals.size() }
       , e( sz, sz )
    {
-      std::cout << "create diagonal: " << this << '\n' ;
+      std::cout << "create diagonal ( " << sz << " ): " << this << '\n' ;
 
       unsigned i = 0 ;
       
@@ -41,30 +41,23 @@ public:
       }
    }
 
-   //friend std::ostream & operator <<( std::ostream & o, const matrix & m ) ;
-
-   //matrix( matrix && m ) = default ;
    matrix( matrix && m )
       : sz{ m.sz }
       , e{ std::move(m.e) }
    {
       m.sz = 0 ;
-      std::cout << "moved: " << &m << " to " << this << " ; m.e.size(): " << m.e.size() << '\n' ;
+      std::cout << "move construction: " << &m << " to " << this << " ; m.e.size(): " << m.e.size() << '\n' ;
    }
 
-#if 0
-   matrix & operator = ( matrix && m ) = default ;
-#else
    matrix & operator = ( matrix && m )
    {
-      std::cout << "move operator = : " << this << '\n' ;
+      std::cout << "move operator=(): " << this << '\n' ;
 
       std::swap( sz, m.sz ) ;
       std::swap( e, m.e ) ;
 
       return *this ;
    }
-#endif
 
    matrix( const matrix & m )
       : sz{ m.sz }
@@ -88,6 +81,8 @@ public:
    {
       std::cout << "destroy: " << this << '\n' ;
    }
+
+   friend std::ostream & operator <<( std::ostream & o, const matrix & m ) ;
 } ;
 
 #endif
