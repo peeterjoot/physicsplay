@@ -1,7 +1,7 @@
 CXXFLAGS += -std=c++11
-#CXXFLAGS += -O2
+CXXFLAGS += -O2
 CXXFLAGS += -MMD
-CXXFLAGS += -g
+#CXXFLAGS += -g
 
 OBJECTS += m.o
 OBJECTS += matrix.o

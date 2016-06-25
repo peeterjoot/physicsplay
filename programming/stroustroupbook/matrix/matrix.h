@@ -4,14 +4,14 @@
 #include <vector>
 #include <iostream>
 
-// A simple square matrix implementation
+/// A simple square matrix skeleton, with instrumented copy, move, construction and destruction operators
 class matrix
 {
-   using T = int ;
+   using T = int ;                  ///< allow for easy future templatization.
 
-   size_t            m_rows ;
-   size_t            m_columns ;
-   std::vector<T>    m_elem ;
+   size_t            m_rows ;       ///< number of rows for the matrix.  May be zero.
+   size_t            m_columns ;    ///< number of columns for the matrix.  May be zero.
+   std::vector<T>    m_elem ;       ///< backing store for the matrix elements, stored in row major format.
 
 public:
 
@@ -24,11 +24,13 @@ public:
       std::cout << "create << " << m_rows << " x " << m_columns << ": " << this << '\n' ;
    }
 
+   /// number of rows in the matrix
    unsigned rows() const
    {
       return m_rows ;
    }
 
+   /// number of columns in the matrix
    unsigned columns() const
    {
       return m_columns ;
@@ -43,16 +45,20 @@ public:
    {
    }
 
+   /// move constructor to create 
    matrix( matrix && m )
       : m_rows{ m.m_rows }
       , m_columns{ m.m_columns }
       , m_elem{ std::move(m.m_elem) }
    {
+      //std::cout << "move construction: (m.m_rows, m.m_columns) [after move] : " << m.m_rows << ", " << m.m_columns << "\n" ;
+      //std::cout << "move construction: (m.m_elem.size()) [after move] : " << m.m_elem.size() << "\n" ;
       m.m_rows = 0 ;
       m.m_columns = 0 ;
-      std::cout << "move construction: " << &m << " to " << this << " ; dimensions: (rows, columns) = ( " << rows() << ", " << columns() << " )\n" ;
+      std::cout << "move construction: " << &m << " to " << this << " ; dimensions: (rows, columns, size) = ( " << rows() << ", " << columns() << ", " << m_elem.size() << " )\n" ;
    }
 
+   /// move assignment operator.
    matrix & operator = ( matrix && m )
    {
       std::cout << "move operator=(): " << this << '\n' ;
@@ -64,6 +70,7 @@ public:
       return *this ;
    }
 
+   /// copy construction operator.
    matrix( const matrix & m )
       : m_columns{ m.m_columns }
       , m_rows{ m.m_rows }
@@ -72,6 +79,7 @@ public:
       std::cout << "copied: " << &m << " to " << this << '\n' ;
    }
 
+   /// copy assignment operator.
    matrix & operator = ( const matrix & m )
    {
       std::cout << "copy operator = : " << this << '\n' ;
@@ -84,11 +92,13 @@ public:
       return *this ;
    }
 
+   /// destructor
    ~matrix()
    {
       std::cout << "destroy: " << this << '\n' ;
    }
 
+   /// formatted text io for the matrix (space separated elements, with newlines between rows).
    friend std::ostream & operator <<( std::ostream & o, const matrix & m ) ;
 } ;
 
