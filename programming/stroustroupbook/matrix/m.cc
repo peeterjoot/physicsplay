@@ -41,8 +41,8 @@ int main()
    std::cout << mg << '\n' ;
 
 //   return 0 ;
-//   return m0() + m2() ;
-   return m1() ;
+   return m0() + m2() ;
+//   return m1() ;
 }
 
 #if defined INLINE_M2

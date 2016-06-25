@@ -145,9 +145,7 @@ struct F
    
    F( int n ) : s( n, 'a' ) {}
 
-#if 1
    F() = default ;
-#endif
 } ;
 
 F x ;
@@ -180,6 +178,89 @@ void matrixadd( matrix<T> & r, const matrix<T> & a, const matrix<T> & b ) ;
 
 This doesn't have the syntactic sugar, but the performance won't suck as it would if reference counting wasn't used.  I recall having a lot of trouble getting the reference counting just right, and had to instrument all my copy constructors, assignment operators and destructors with trace logging to get it all right.  Right also depended on the compiler that was being used!  I've still got a copy of that code kicking around somewhere, but it can stay where it is out of sight since move operations obsolete it all.
 
-FIXME: construct an example
+With move constructor and assignment operators, I was suprised to see them not kick in.  These were the move operations
+
+[sourcecode language="cpp"]
+/// A simple square matrix skeleton, with instrumented copy, move, construction and destruction operators
+class matrix
+{
+   using T = int ;                  ///< allow for easy future templatization.
+
+   size_t            m_rows ;       ///< number of rows for the matrix.  May be zero.
+   size_t            m_columns ;    ///< number of columns for the matrix.  May be zero.
+   std::vector<T>    m_elem ;       ///< backing store for the matrix elements, stored in row major format.
+
+public:
+
+   /// move constructor to create 
+   matrix( matrix && m )
+      : m_rows{ m.m_rows }
+      , m_columns{ m.m_columns }
+      , m_elem{ std::move(m.m_elem) }
+   {  
+      m.m_rows = 0 ;
+      m.m_columns = 0 ;
+      //std::cout << "move construction: " << &m << " to " << this << " ; dimensions: (rows, columns, size) = ( " << rows() << ", " << columns() << ", " << m_elem.size() << " )\n" ;
+   }
+
+   /// move assignment operator.
+   matrix & operator = ( matrix && m )
+   {  
+      //std::cout << "move operator=(): " << this << '\n' ;
+
+      std::swap( m_columns, m.m_columns ) ;
+      std::swap( m_rows, m.m_rows ) ;
+      std::swap( m_elem, m.m_elem ) ;
+
+      return *this ;
+   }
+
+   /// Create (dense) square matrix with the specified diagonal elements.
+   matrix( const std::initializer_list<T> & diagonals )
+
+//...
+} ;
+[/sourcecode]
+
+With the following code driving this
+
+[sourcecode language="cpp"]
+matrix f() ;
+   
+int m1()
+{ 
+   matrix x1 = f() ; 
+   matrix x2 { f() } ;
+      
+   return x1.rows() + x2.rows() ;
+}     
+[/sourcecode]
+
+I was suprised to see none of my instrumentation showing for the move operations.  That appears
+to be because the compiler is doing return value optimization, and constructing these in place in the stack storage
+locations of &x1, and &x2.
+
+To get actual move construction, I have to explicitly ask for move, as in
+
+[sourcecode language="cpp"]
+matrix mg( {4, 5, 6} ) ;
+
+int m0()
+{
+   matrix x2 { std::move( mg ) } ;
+
+   return x2.rows() ;
+}
+[/sourcecode]
+
+and to get move assignment I could assign into a variable passed by reference, like
+[sourcecode language="cpp"]
+void g( matrix & m )
+{
+   m = matrix( {1,2,3} ) ;   
+}
+[/sourcecode]
+
+This resulted in a stack allocation for the diagonal matrix construction, then a move from that.  For this assignment, the compiler did not have to be instructed to use a move operation (and the function was coded explicitly to prevent return value optimization from kicking in).
 
 <h2></h2>
