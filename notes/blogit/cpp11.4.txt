@@ -160,6 +160,29 @@ but for a more complex class, being able to let the compiler do the work is nice
 means that the redundancy of specifying a member initializer and also having to specify the same initializer
 in the default constructor member list is not required, which is nicer.
 
+Note that like '= default', you can use '= delete' to tell the compiler not to generate any default for the member (or template specialization, ...) if it would have if left unrestricted.  This is similar to the trick of making destructors private:
+
+[sourcecode language="cpp"]
+class foo
+{
+   ~foo() ;
+public:
+// ...
+} ;
+[/sourcecode]
+
+Instead in c++11, you can write
+[sourcecode language="cpp"]
+class foo
+{
+public:
+   ~foo() = delete ;
+// ...
+} ;
+[/sourcecode]
+
+so instead of the compiler telling you there is unsufficent access to call the destructor, it should be able to tell you that an attempt to use a destructor for a class that has not defined one has been attempted.  Note that this can be an explicitly deleted destructor, or one implicitly deleted (see below).
+
 <h2>move operations</h2>
 
 Back in university I once wrote a matrix class that I was proud of.  It was reference counted to avoid really expensive assignment and copy construction operations, which were particularily bad for any binary operation that returned a new value
@@ -262,5 +285,32 @@ void g( matrix & m )
 [/sourcecode]
 
 This resulted in a stack allocation for the diagonal matrix construction, then a move from that.  For this assignment, the compiler did not have to be instructed to use a move operation (and the function was coded explicitly to prevent return value optimization from kicking in).
+
+Note that if any of a copy, move, or destructor is defined for the class, a standards compliant compiler is supposed to also not generate any default copy, move or destructor for the class (i.e. having any such function, means that all the others are =delete unless explicitly defined).
+
+<h2>Strange operator overload options</h2>
+
+In a table of overloadable operators I see two weird ones:
+<ul>
+<li> ,
+<li> ->*
+</ul>
+
+I'd never have imagined that there would be a valid reason to overload the comma operator, which I've only seen used in old style C macros that predated C99's inline support.  For example you could do
+
+[sourcecode language="cpp"]
+#define foo(x)    (f(x), g(x))
+[/sourcecode]
+
+which might be equivalent to, say, 
+
+[sourcecode language="cpp"]
+static inline int foo( int x )
+{
+   f( x ) ;
+
+   return g(x) ;
+}
+[/sourcecode]
 
 <h2></h2>
