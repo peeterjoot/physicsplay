@@ -346,4 +346,68 @@ This results in 7 + 0 + 3 + 3 = 13 as a return code.  I don't have any intention
 
 What is the ->* operation that can also be overloaded.
 
+<h2>User defined literals</h2>
+
+C++11 allows for user defined literal suffixes for constant creation, so that you could write something like
+
+[sourcecode language="cpp"]
+length v = 1.0009_m + 3_dm + 5.0_cm + 7_mm ;
+[/sourcecode]
+
+User defined literals must begin with underscore.  The system defined literals (such as the complex i, and the chrono ns from c++14) do have this underscore restriction.  This is opposite to the user requirement that states no non-system code should define underscore or double-underscore prefixed symbols.  I found getting the syntax right for such literals was a bit finicky.  The constructor has to be constexpr, and you have to explicitly use long double or unsigned long long types in the operator parameters, as in
+
+[sourcecode language="cpp"]
+struct length
+{
+   double len {} ;
+
+   constexpr length( double v ) : len{ v } {}
+} ;
+
+inline length operator + ( const length a, const length b )
+{
+   return length( a.len + b.len ) ;
+}
+
+constexpr length operator "" _m( long double v )
+{
+   return length{ static_cast<double>(v) } ;
+}
+
+constexpr length operator "" _dm( long double v )
+{
+   return length{ static_cast<double>(v/10.0) } ;
+}
+
+constexpr length operator "" _cm( long double v )
+{
+   return length{ static_cast<double>(v/100.0) } ;
+}
+
+constexpr length operator "" _mm( long double v )
+{
+   return length{ static_cast<double>(v/1000.0) } ;
+}
+
+constexpr length operator "" _m( unsigned long long v )
+{
+   return length{ static_cast<double>(v) } ;
+}
+
+constexpr length operator "" _dm( unsigned long long v )
+{
+   return length{ static_cast<double>(v/10.0) } ;
+}
+
+constexpr length operator "" _cm( unsigned long long v )
+{
+   return length{ static_cast<double>(v/100.0) } ;
+}
+
+constexpr length operator "" _mm( unsigned long long v )
+{
+   return length{ static_cast<double>(v/1000.0) } ;
+}
+[/sourcecode]
+
 <h2></h2>
