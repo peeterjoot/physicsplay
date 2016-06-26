@@ -313,4 +313,37 @@ static inline int foo( int x )
 }
 [/sourcecode]
 
+However, sure enough a comma overloaded function is possible:
+
+[sourcecode language="cpp"]
+struct foo
+{
+   int m ;
+
+   foo( int v = {} ) : m{v} {}
+
+   int blah( ) const
+   {
+      return m + 3 ;
+   }
+
+   int operator,(const foo & f) 
+   {
+      return blah() + f.blah() ;
+   }
+} ;
+
+int main()
+{
+   foo f ;
+   foo g{ 7 } ;
+
+   return f, g ;
+}
+[/sourcecode]
+
+This results in 7 + 0 + 3 + 3 = 13 as a return code.  I don't have any intention of exploiting this overloadable operator in any real code that I am going to write.
+
+What is the ->* operation that can also be overloaded.
+
 <h2></h2>

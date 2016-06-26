@@ -13,6 +13,12 @@ struct foo
    {
       return blah() + f.blah() ;
    }
+
+   int operator ->*(const foo & f) 
+   {
+      return blah() + f.blah() ;
+   }
+} ;
 } ;
 
 int main()
@@ -20,5 +26,6 @@ int main()
    foo f ;
    foo g{ 7 } ;
 
-   return f, g ;
+   //return f, g ;
+   return f ->* g ;
 }
