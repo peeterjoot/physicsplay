@@ -412,4 +412,48 @@ constexpr length operator "" _mm( unsigned long long v )
 }
 [/sourcecode]
 
-<h2></h2>
+<h2>string literals</h2>
+
+It's mentioned in the book that one can use an s suffix for string literals so that they have std::string type.  However, what isn't stated is that this requires both c++14 and the use of the std::literals namespace.  The following illustrates how this feature can be used
+
+[sourcecode language="cpp"]
+#include <string>
+#include <iostream>
+
+static_assert( __cplusplus >= 201402L, "require c++14 for string literal suffix" ) ;
+
+using namespace std::literals ;
+
+int main()
+{
+   std::string hi { "hi\n" } ;
+   hi += "there"s + "\n" ;
+
+   std::cout << hi ;
+
+   return 0 ;
+}
+[/sourcecode]
+
+Note that without the literal s suffix in the string concatonation, as in
+
+[sourcecode language="cpp"]
+   hi += "there" + "\n" ;
+[/sourcecode]
+
+This produces an error:
+
+[sourcecode language="bash"]
+$ make
+c++ -o d -std=c++14 d.cc
+d.cc:11:18: error: invalid operands to binary expression ('const char *' and 'const char *')
+   hi += "there" + "\n" ;
+         ~~~~~~~ ^ ~~~~
+1 error generated.
+make: *** [d] Error 1
+[/sourcecode]
+
+The language isn't designed to know to promote the right hand side elements to std::string just because they are being assigned to such a type.  The use of either the string literal suffix, or an explicit conversion is required, as in
+[sourcecode language="cpp"]
+hi += std::string{"there"} + "\n" ;
+[/sourcecode]
