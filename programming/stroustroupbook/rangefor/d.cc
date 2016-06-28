@@ -55,7 +55,7 @@ struct bitset
 
 int main()
 {
-   for ( auto v : bitset{ 0b10001100 } )
+   for ( auto v : bitset{ 0b10101010 } )
    {
       std::cout << v << "\n" ;
    }
