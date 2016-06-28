@@ -5,7 +5,22 @@ class bititer
    unsigned bset ;
    int cur{} ;
  
-   unsigned value() const
+public:
+
+   bititer( const unsigned b )
+      : bset{ b }
+   {
+   }
+
+   bititer & operator++()
+   {
+      bset >>= 1 ;
+      cur++ ;
+
+      return *this ;
+   }
+
+   unsigned operator*()
    {
       unsigned v{} ;
 
@@ -16,46 +31,6 @@ class bititer
 
       return v ;
    }
-
-   void increment()
-   {
-      bset >>= 1 ;
-      cur++ ;
-   }
-  
-public:
-
-   bititer( const unsigned b )
-      : bset{ b }
-   {
-   }
-
-#if 0
-   unsigned next( )
-   {
-      unsigned v = value() ;
-
-      increment() ;
-
-      return v ;
-   }
-#endif
-
-   bititer & operator++()
-   {
-      increment() ;
-
-      return *this ;
-   }
-
-   unsigned operator*()
-   {
-      return value() ;
-   }
-
-#if 0
-   operator bool() { return bset != 0 ; }
-#endif
 
    bool operator !=( const bititer & b )
    {
@@ -80,19 +55,7 @@ struct bitset
 
 int main()
 {
-#if 0
-   bititer i{ 0b1011 } ;
-
-   while ( i )
-   {
-      unsigned v = *i ;
-      ++i ;
-
-      std::cout << v << "\n" ;
-   }
-#endif
-
-   for ( auto v : bitset{ 0b1100 } )
+   for ( auto v : bitset{ 0b10001100 } )
    {
       std::cout << v << "\n" ;
    }
