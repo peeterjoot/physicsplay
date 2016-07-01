@@ -2,10 +2,10 @@ CXXFLAGS += -std=c++11
 CXXFLAGS += -O2
 CXXFLAGS += -MMD
 
-all : d
+all : d out.dis
 
-d : d.o
-	$(CXX) -o $@ $(CXXFLAGS) d.o
+d : d.o out.o
+	$(CXX) -o $@ $(CXXFLAGS) d.o out.o
 
 -include $(wildcard *.d)
 

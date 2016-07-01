@@ -1,47 +1,35 @@
 #include <stdio.h>
-#include "matrix.h"
 
-/** Implicitly checked with vft cost to doing so. */
-void outofbounds( const matrix & m, const char * s ) ;
+struct x
+{
+   virtual void foo( int v ) ;
+} ;
 
-/** Explicitly checked without vft cost to doing so. */
-void outofbounds( const checkedMatrix & m, const char * s ) ;
+//#define T int
+#define T long
+struct y : public x
+{
+   void foo( T v ) override ;
+} ;
 
-/** unchecked.  Don't want vft cost, but have it. */
-void outofbounds( const uncheckedMatrix & m, const char * s ) noexcept ;
+void x::foo( int v )
+{
+   printf( "x::foo:%d\n", v ) ;
+}
 
-/** unchecked.  have to redefine element access operator to not have the cost. */
-void outofbounds( const uncheckedMatrix2 & m, const char * s ) noexcept ;
+void y::foo( T v )
+{ 
+   printf( "y::foo:%d\n", (int)v ) ;
+}
 
 int main()
 {
-   uncheckedMatrix2 m0{ 1., 2., 3. } ;
-
-   outofbounds( m0, "m0" ) ;
-
-   uncheckedMatrix m1{ 1., 2., 3. } ;
-
-   outofbounds( m1, "m1" ) ;
-
-   try {
-      matrix m2{ 1., 2., 3. } ;
-
-      outofbounds( m2, "m2" ) ;
-   }
-   catch ( matrix::rangeError & e )
-   {
-      printf( "m2: range error: i,j (sz) = %lu, %lu (%lu)\n", e.i, e.j, e.sz ) ;
-   }
-
-   try {
-      checkedMatrix m3{ 1., 2., 3. } ;
-
-      outofbounds( m3, "m3" ) ;
-   }
-   catch ( matrix::rangeError & e )
-   {
-      printf( "m3: range error: i,j (sz) = %lu, %lu (%lu)\n", e.i, e.j, e.sz ) ;
-   }
+   y o ;
+   x & r = o ;
+   r.foo( 1 ) ;
+   r.foo( 1L ) ;
+   o.foo( 1 ) ;
+   o.foo( 1L ) ;
 
    return 0 ;
 }
