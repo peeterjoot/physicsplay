@@ -111,9 +111,11 @@ public:
    // inherit constructors:
    using matrix::matrix ;
 
+#if 0
    void handleRangeError( const indexType i, const indexType j ) const final
    {
    }
+#endif
 
    T operator()( const indexType i, const indexType j ) const
    {
