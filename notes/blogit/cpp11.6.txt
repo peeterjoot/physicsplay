@@ -1,4 +1,4 @@
-Chapter 31:
+Some notes on Chapter 31 (standard library) of Stroustrup's "The C++ Programming Language".
 
 <h2>Emplace</h2>
 
@@ -36,5 +36,55 @@ int main()
 [/sourcecode]
 
 The emplace_back is like the push_back function, but does not require that a constructed object be created first, either explicitly as in the object p above, or implictly as done with the {2, 3} pair initializer list.
+
+<h2>multimap</h2>
+
+I'd written some perl code the other day when I wanted a hash that had multiple entries per key.  Since my hashed elememts were simple, I just strung them together as comma separated entries (I could have also used a hash of array references).  It looks like c++11 builds exactly the construct that I wanted into STL, and has both a multimap and unordered_multimap.  Here's an example of the latter
+
+[sourcecode language="cpp"]
+#include <unordered_map>
+#include <string>
+#include <iostream>
+
+int main()
+{
+   std::unordered_multimap< int, std::string > m ;
+
+   m.emplace( 3, "hi" ) ;
+   m.emplace( 3, "bye" ) ;
+   m.emplace( 4, "wow" ) ;
+
+   for ( auto & v : m )
+   {
+      std::cout << v.first << ": " << v.second << '\n' ;
+   }
+  
+   for ( auto f{ m.find(3) } ; f != m.end() ; ++f )
+   {
+      std::cout << "find: " << f->first << ": " << f->second << '\n' ;
+   }
+   
+   return 0 ;
+} 
+[/sourcecode]
+
+Running this gives me
+[sourcecode language="bash"]
+$ ./a.out 
+4: wow
+3: hi
+3: bye
+find: 3: hi
+find: 3: bye
+[/sourcecode]
+
+Observe how nice auto is here.  I don't have to care what the typename for the unordered_multimap find result is.  According to gdb that type is:
+
+[sourcecode language="bash"]
+(gdb) whatis f
+type = std::__1::__hash_map_iterator<std::__1::__hash_iterator<std::__1::__hash_node<std::__1::__hash_value_type<int, std::__1::basic_string<char> >, void*>*> >
+[/sourcecode]
+
+Yikes!
 
 <h2></h2>
