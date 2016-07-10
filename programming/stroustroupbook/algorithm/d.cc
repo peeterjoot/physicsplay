@@ -16,7 +16,7 @@ int scan( const std::string & s, char v )
    }
    else
    {
-      std::cout << "diff: " << i - s.begin() << '\n' ;
+//      std::cout << "diff: " << i - s.begin() << '\n' ;
 
       return ( v > *i ) ? 1 : -1 ;
    }
@@ -41,7 +41,7 @@ int scan2( const std::string & s, char v )
    }
    else
    {
-      std::cout << "diff: " << p - s.begin() << '\n' ;
+//      std::cout << "diff: " << p - s.begin() << '\n' ;
 
       return ( v > *p ) ? 1 : -1 ;
    }
@@ -64,7 +64,7 @@ int scan3( const std::string & s, char v )
    }
    else
    {
-      std::cout << "diff: " << p - s.begin() << '\n' ;
+//      std::cout << "diff: " << p - s.begin() << '\n' ;
 
       return ( v > *p ) ? 1 : -1 ;
    }

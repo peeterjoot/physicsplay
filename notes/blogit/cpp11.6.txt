@@ -1,4 +1,4 @@
-Some notes on Chapter 31 (standard library) of Stroustrup's "The C++ Programming Language".
+Some notes on Chapter 31, 32 (standard library, STL) of Stroustrup's "The C++ Programming Language".
 
 <h2>Emplace</h2>
 
@@ -87,4 +87,118 @@ type = std::__1::__hash_map_iterator<std::__1::__hash_iterator<std::__1::__hash_
 
 Yikes!
 
-<h2></h2>
+<h2>STL</h2>
+
+The STL chapter outlines lots of different algorithms.  One new powerful feature in c++11 is that the Lambdas can be used instead of predicate function objects, which is so much cleaner.   I used that capability in a scientific computing programming assignment earlier this year with partial_sort.
+
+The find_if_not algorthim caught my eye, because I just manually coded exactly that sort of loop translating intel assembly that used 'REPL SCASB' instructions, and that code was precisely of this find_if_not form.  The c++ equivalent of the assembly was roughly of the following form:
+
+[sourcecode language="cpp"]
+int scan3( const std::string & s, char v )
+{
+   auto p = s.begin() ;
+   for ( ; p != s.end() ; p++ )
+   {
+      if ( *p != v )
+      {
+         break ; 
+      }
+   }
+
+   if ( p == s.end() )
+   {
+      return 0 ;
+   }
+   else
+   {
+      std::cout << "diff: " << p - s.begin() << '\n' ;
+
+      return ( v > *p ) ? 1 : -1 ;
+   }
+[/sourcecode]
+
+Range for can also be used for this loop, but it is only slightly clearer:
+
+[sourcecode language="cpp"]
+int scan2( const std::string & s, char v )
+{
+   auto p = s.begin() ;
+   for ( auto c : s )
+   {
+      if ( c != v )
+      {
+         break ;
+      }
+
+      p++ ;
+   }
+
+   if ( p == s.end() )
+   { 
+      return 0 ;
+   }
+   else
+   { 
+      std::cout << "diff: " << p - s.begin() << '\n' ;
+
+      return ( v > *p ) ? 1 : -1 ;
+   }
+}
+[/sourcecode]
+
+An STL version of this loop that uses a lambda predicate is
+[sourcecode language="cpp"]
+int scan( const std::string & s, char v )
+{
+   auto i = find_if_not( s.begin(),
+                         s.end(),
+                         [ v ]( char c ){ return c == v ; }
+                       ) ;
+
+   if ( i == s.end() )
+   { 
+      return 0 ;
+   }
+   else
+   { 
+      std::cout << "diff: " << i - s.begin() << '\n' ;
+
+      return ( v > *i ) ? 1 : -1 ;
+   }
+}
+[/sourcecode]
+
+I don't really think that this is any more clear than explicit for loop versions.  All give the same results when tried:
+
+[sourcecode language="cpp"]
+int main()
+{
+   std::vector< std::function< int( const std::string &, char ) > > v { scan, scan2, scan3 } ;
+
+   for ( auto f : v )
+   { 
+      int r0 = f( "nnnnn", 'n' ) ;
+      int rp = f( "nnnnnmmm", 'n' ) ;
+      int rn = f( "nnnnnpnn", 'n' ) ;
+
+      std::cout << r0 << '\n' ;
+      std::cout << rp << '\n' ;
+      std::cout << rn << '\n' ;
+   }
+
+   return 0 ;
+}
+[/sourcecode]
+
+The compiler does almost the same for all three implementations.  With the cout's removed, and compiling with optimization, the respective instruction counts are:
+
+[sourcecode language="bash"]
+(gdb) p 0xee3-0xe70
+$1 = 115
+(gdb) p 0xf4c-0xef0
+$2 = 92
+(gdb) p 0xfc3-0xf50
+$3 = 115
+[/sourcecode]
+
+The listings for the STL and the C style for loop are almost the same.  The Apple xcode 7 compiler seems to produce slightly more compact code for the range-for version of this function for reasons that are not obvious to me.
