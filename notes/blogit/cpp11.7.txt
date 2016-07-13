@@ -62,7 +62,20 @@ however, this does at least generate an out of bounds error
 $ ./d
 libc++abi.dylib: terminating with uncaught exception of type std::out_of_range: array::at
 Abort trap: 6
+[/sourcecode]
 
+Even though we don't get compile-time bounds checking (at least with the current clang compiler), array has the nice advantage of knowing its own size, so you can't screw it up:
+
+[sourcecode language="cpp"]
+void blah( a10 & a )
+{
+   a[0] = 1 ;
+
+   for ( int i{1} ; i < a.size() ; i++ )
+   {
+      a[i] = 2 * a[i-1] ;
+   }
+}
 [/sourcecode]
 
 <h2></h2>
