@@ -80,6 +80,101 @@ void blah( a10 & a )
 
 <h2>bitset</h2>
 
+The bitset class provides a fixed size bit array that appears to be formed from an array of register sized words.  On a 64-bit platform (mac+xcode 7) I'm seeing that sizeof() == 8 for <= 64 bits, and doubles after that for <= 128 bits.
+
+The code for something like the following (set two bits), is pretty decent, basically a single or immediate instruction:
+
+[sourcecode language="cpp"]
+using b70 = std::bitset<70> ;
+
+void foo( b70 & v )
+{
+   v[3] = 1 ;
+   v[13] = 1 ;
+}
+[/sourcecode]
+
+Array access operators are provided to access each bit position:
+[sourcecode language="cpp"]
+   for ( int i{} ; i < v.size() ; i++ )
+   {
+      char sep{ ' ' } ;
+      if ( ((i+1) % 8) == 0 )
+      {
+         sep = '\n' ;
+      }
+
+      std::cout << v[i] << sep ;
+   }
+   std::cout << '\n' ;
+[/sourcecode]
+
+There is no range-for support built in for this class.  I was able to implement a wrapper that allowed that using a wrapper class
+
+[sourcecode language="cpp"]
+template <int N>
+struct iter ;
+
+template <int N>
+struct mybits : public std::bitset<N>
+{
+   using T = std::bitset<N> ;
+
+   using T::T ;
+   using T::size ;
+
+   inline iter<N> begin( ) ;
+
+   inline iter<N> end( ) ;
+} ;
+[/sourcecode]
+
+and a helper iterator
+[sourcecode language="cpp"]
+template <int N>
+struct iter
+{
+   unsigned pos{} ;
+   const mybits<N> & b ;
+
+   iter( const mybits<N> & bits, unsigned p = {} ) : pos{p}, b{bits} {}
+
+   const iter & operator++()
+   {
+      pos++ ;
+
+      return *this ;
+   }
+
+   bool operator != ( const iter & i ) const
+   { 
+      return pos != i.pos ;
+   }
+
+   int operator*() const
+   { 
+      return b[ pos ] ;
+   }
+} ;
+[/sourcecode]
+
+plus the begin and end function bodies required for the loop
+[sourcecode language="cpp"]
+template <int N>
+inline iter<N> mybits<N>::begin( )
+{
+   return iter<N>( *this ) ;
+}
+
+template <int N>
+inline iter<N> mybits<N>::end( )
+{
+   return iter<N>( *this, size() ) ;
+}
+[/sourcecode]
+
+//I'm not sure what the rationale for not including such range for support is.
+
 <h2>bool vector specialization</h2>
 
 
