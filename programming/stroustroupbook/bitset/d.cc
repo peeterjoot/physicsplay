@@ -29,5 +29,9 @@ int main()
    }
    std::cout << '\n' ;
 
+   // also have a built in output method, and various conversion, utility and test functions (count, any, all, none, size, ...)
+   std::cout << v << '\n' ;
+   std::cout << v.to_string() << '\n' ;
+
    return 0 ;
 }
