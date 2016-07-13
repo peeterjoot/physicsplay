@@ -1,0 +1,69 @@
+Some notes on Chapter 33 (?) of Stroustrup's "The C++ Programming Language".
+
+<h2>array</h2>
+
+There's a fixed size array type designed to replace raw C style arrays.  It doesn't appear that it is bounds checked by default, and the Xcode7 (clang) compiler doesn't do bounds checking for it right now.  Here's an example
+
+[sourcecode language="cpp"]
+#include <array>
+
+using a10 = std::array<int, 10> ;
+
+void foo( a10 & a )
+{
+   a[3] = 7 ;
+   a[13] = 7 ;
+}
+
+void bar( int * a )
+{
+   a[3] = 7 ;
+   a[13] = 7 ;
+}
+[/sourcecode]
+
+The generated asm for both of these is identical
+[sourcecode language="bash"]
+$ gobjdump -d --reloc -C --no-show-raw-insn d.o
+
+d.o:     file format mach-o-x86-64
+
+Disassembly of section .text:
+
+0000000000000000 <foo(std::__1::array<int, 10ul>&)>:
+   0:   push   %rbp
+   1:   mov    %rsp,%rbp
+   4:   movl   $0x7,0xc(%rdi)
+   b:   movl   $0x7,0x34(%rdi)
+  12:   pop    %rbp
+  13:   retq   
+  14:   data16 data16 nopw %cs:0x0(%rax,%rax,1)
+
+0000000000000020 <bar(int*)>:
+  20:   push   %rbp
+  21:   mov    %rsp,%rbp
+  24:   movl   $0x7,0xc(%rdi)
+  2b:   movl   $0x7,0x34(%rdi)
+  32:   pop    %rbp
+  33:   retq   
+  34:   data16 data16 nopw %cs:0x0(%rax,%rax,1)
+
+[/sourcecode]
+
+The foo() function here is also not compile-time bounds checked if the out of bounds access is changed to
+
+[sourcecode language="cpp"]
+   a.at(13) = 7 ;
+[/sourcecode]
+
+however, this does at least generate an out of bounds error
+
+[sourcecode language="bash"]
+$ ./d
+libc++abi.dylib: terminating with uncaught exception of type std::out_of_range: array::at
+Abort trap: 6
+
+[/sourcecode]
+
+<h2></h2>
+
