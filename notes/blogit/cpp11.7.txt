@@ -177,4 +177,97 @@ I'm not sure what the rationale for not including such range for support is, whe
 
 bitset also has a number of handy type conversion operators that vector<bool> does not (to string, and string to integer)
 
+<h2>tuple</h2>
+
+The std::tuple type generalizes std::pair, allowing for easy structures of N different types.
+
+I saw that tuple has a tie method that allows it to behave very much like a perl array assignment.  Such an assignment looks like
+
+[sourcecode language="perl"]
+#!/usr/bin/perl
+
+my ($a, $b, $c) = foo() ;
+
+printf( "%0.1f $b $c\n", $a ) ;
+
+exit 0 ;
+
+sub foo
+{
+   return (1.0, "blah", 3) ;
+}
+[/sourcecode]
+
+A similar C++ equivalent is more verbose
+
+[sourcecode language="cpp"]
+#include <tuple>
+#include <stdio.h>
+
+using T = std::tuple<float, const char *, int> ;
+
+T foo()
+{
+   return std::make_tuple( 1.0, "blah", 3 ) ;
+}
+
+int main()
+{
+   float f ;
+   const char * k ;
+   int i ;
+
+   std::tie( f, k, i ) = foo() ;
+
+   printf("%f %s %d\n", f, k, i ) ;
+
+   return 0 ;
+}
+[/sourcecode]
+
+I was curious how the code that accepts a tuple return using tie, using different variables (as above), and using a structure return differed
+
+[sourcecode language="cpp"]
+struct S
+{
+   float f ;
+   const char * s ;
+   int i ;
+} ;
+
+S bar()
+{
+   return { 1.0, "blah", 3 } ;
+}
+[/sourcecode]
+
+In each case, using -O2 and the Xcode 7 compiler (clang), a printf function similar to the above ends up looking pretty much uniformly like:
+
+[sourcecode language="bash"]
+$ gobjdump -d --reloc -C --no-show-raw-insn u.o 
+...
+
+0000000000000110 <h()>:
+ 110:   push   %rbp
+ 111:   mov    %rsp,%rbp
+ 114:   sub    $0x20,%rsp
+ 118:   lea    -0x18(%rbp),%rdi
+ 11c:   callq  121 <h()+0x11>
+                        11d: BRANCH32   foo()
+ 121:   mov    -0x10(%rbp),%rsi
+ 125:   mov    -0x8(%rbp),%edx
+ 128:   movss  -0x18(%rbp),%xmm0
+ 12d:   cvtss2sd %xmm0,%xmm0
+ 131:   lea    0xd(%rip),%rdi        # 145 <h()+0x35>
+                        134: DISP32     .cstring-0x145
+ 138:   mov    $0x1,%al
+ 13a:   callq  13f <h()+0x2f>
+                        13b: BRANCH32   printf
+ 13f:   add    $0x20,%rsp
+ 143:   pop    %rbp
+ 144:   retq   
+[/sourcecode]
+
+The generated code is pretty much dominated by the stack pushing required for the printf call.  I used printf here instead of std::cout because the generated code for std::cout is so crappy looking (and verbose).
+
 <h2></h2>
