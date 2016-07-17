@@ -1,2 +1,4 @@
+include ../make.vars
+
 is : is.cc
-	$(CXX) -std=c++11 -o $@ $^
+	$(CXX) $(CXXFLAGS) -o $@ $^

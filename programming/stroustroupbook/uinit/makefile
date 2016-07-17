@@ -1,4 +1,7 @@
+include ../make.vars
+#CXXFLAGS += -std=c++14
+
 all : t.o
 
 %.o : %.cc
-	$(CXX) -std=c++11 -c $^
+	$(CXX) $(CXXFLAGS) -c $^

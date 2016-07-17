@@ -1,3 +1,4 @@
+include ../make.vars
 CXXFLAGS += -std=c++14
 CXXFLAGS += -g
 
