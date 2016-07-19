@@ -1,0 +1,85 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
+
+=head1 NAME
+
+mkiguard - script to generate header include guards.
+
+=head1 SYNOPSIS
+
+mkiguard [--help] --include=foo.h
+
+=head1 DESCRIPTION
+
+This script will generate an include guard for a header file.
+
+Options
+
+=over 4
+
+=item --include name
+
+The include file name to generate an include guard for.
+
+=item --prefix prefix
+
+What to prefix the guard name define with (default _PJ)
+
+=back
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@protonmail.com
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+use Pod::Usage ;
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
+
+my ($myName,$usage) = '' ;
+($myName = $0) =~ s@.*[/\\]@@ ;
+my $name = '' ;
+my $prefix = '_PJ' ;
+
+GetOptions ( 
+   'name=s'             => \$name,
+   'prefix=s'           => \$prefix,
+   'help'               => sub { pod2usage(-verbose => 2) ; },
+) or pod2usage(-verbose => 0) ;
+
+if ( $name eq '' )
+{
+   die "$myName: required parameter '--name=...' not specified.\n" ;
+}
+
+$name =~ s,.*/,, ;
+$name =~ s/\./_/g ;
+
+print 
+   "#if !defined ${prefix}_${name}_is_included\n" .
+   "#define ${prefix}_${name}_is_included\n" .
+   "\n" .
+   "\n#endif\n" ;

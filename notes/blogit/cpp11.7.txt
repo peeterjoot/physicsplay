@@ -1,0 +1,273 @@
+Some notes on Chapter 33 (?) of Stroustrup's "The C++ Programming Language".
+
+<h2>array</h2>
+
+There's a fixed size array type designed to replace raw C style arrays.  It doesn't appear that it is bounds checked by default, and the Xcode7 (clang) compiler doesn't do bounds checking for it right now.  Here's an example
+
+[sourcecode language="cpp"]
+#include <array>
+
+using a10 = std::array<int, 10> ;
+
+void foo( a10 & a )
+{
+   a[3] = 7 ;
+   a[13] = 7 ;
+}
+
+void bar( int * a )
+{
+   a[3] = 7 ;
+   a[13] = 7 ;
+}
+[/sourcecode]
+
+The generated asm for both of these is identical
+[sourcecode language="bash"]
+$ gobjdump -d --reloc -C --no-show-raw-insn d.o
+
+d.o:     file format mach-o-x86-64
+
+Disassembly of section .text:
+
+0000000000000000 <foo(std::__1::array<int, 10ul>&)>:
+   0:   push   %rbp
+   1:   mov    %rsp,%rbp
+   4:   movl   $0x7,0xc(%rdi)
+   b:   movl   $0x7,0x34(%rdi)
+  12:   pop    %rbp
+  13:   retq   
+  14:   data16 data16 nopw %cs:0x0(%rax,%rax,1)
+
+0000000000000020 <bar(int*)>:
+  20:   push   %rbp
+  21:   mov    %rsp,%rbp
+  24:   movl   $0x7,0xc(%rdi)
+  2b:   movl   $0x7,0x34(%rdi)
+  32:   pop    %rbp
+  33:   retq   
+  34:   data16 data16 nopw %cs:0x0(%rax,%rax,1)
+
+[/sourcecode]
+
+The foo() function here is also not compile-time bounds checked if the out of bounds access is changed to
+
+[sourcecode language="cpp"]
+   a.at(13) = 7 ;
+[/sourcecode]
+
+however, this does at least generate an out of bounds error
+
+[sourcecode language="bash"]
+$ ./d
+libc++abi.dylib: terminating with uncaught exception of type std::out_of_range: array::at
+Abort trap: 6
+[/sourcecode]
+
+Even though we don't get compile-time bounds checking (at least with the current clang compiler), array has the nice advantage of knowing its own size, so you can't screw it up:
+
+[sourcecode language="cpp"]
+void blah( a10 & a )
+{
+   a[0] = 1 ;
+
+   for ( int i{1} ; i < a.size() ; i++ )
+   {
+      a[i] = 2 * a[i-1] ;
+   }
+}
+[/sourcecode]
+
+<h2>bitset and vector bool</h2>
+
+The bitset class provides a fixed size bit array that appears to be formed from an array of register sized words.  On a 64-bit platform (mac+xcode 7) I'm seeing that sizeof() == 8 for <= 64 bits, and doubles after that for <= 128 bits.
+
+The code for something like the following (set two bits), is pretty decent, basically a single or immediate instruction:
+
+[sourcecode language="cpp"]
+using b70 = std::bitset<70> ;
+
+void foo( b70 & v )
+{
+   v[3] = 1 ;
+   v[13] = 1 ;
+}
+[/sourcecode]
+
+Array access operators are provided to access each bit position:
+[sourcecode language="cpp"]
+   for ( int i{} ; i < v.size() ; i++ )
+   {
+      char sep{ ' ' } ;
+      if ( ((i+1) % 8) == 0 )
+      {
+         sep = '\n' ;
+      }
+
+      std::cout << v[i] << sep ;
+   }
+   std::cout << '\n' ;
+[/sourcecode]
+
+There is no range-for support built in for this class.  I was able to implement a wrapper that allowed that using a wrapper class
+
+[sourcecode language="cpp"]
+template <int N>
+struct iter ;
+
+template <int N>
+struct mybits : public std::bitset<N>
+{
+   using T = std::bitset<N> ;
+
+   using T::T ;
+   using T::size ;
+
+   inline iter<N> begin( ) ;
+
+   inline iter<N> end( ) ;
+} ;
+[/sourcecode]
+
+and a helper iterator
+[sourcecode language="cpp"]
+template <int N>
+struct iter
+{
+   unsigned pos{} ;
+   const mybits<N> & b ;
+
+   iter( const mybits<N> & bits, unsigned p = {} ) : pos{p}, b{bits} {}
+
+   const iter & operator++()
+   {
+      pos++ ;
+
+      return *this ;
+   }
+
+   bool operator != ( const iter & i ) const
+   { 
+      return pos != i.pos ;
+   }
+
+   int operator*() const
+   { 
+      return b[ pos ] ;
+   }
+} ;
+[/sourcecode]
+
+plus the begin and end function bodies required for the loop
+[sourcecode language="cpp"]
+template <int N>
+inline iter<N> mybits<N>::begin( )
+{
+   return iter<N>( *this ) ;
+}
+
+template <int N>
+inline iter<N> mybits<N>::end( )
+{
+   return iter<N>( *this, size() ) ;
+}
+[/sourcecode]
+
+I'm not sure what the rationale for not including such range for support is, when std::vector<bool> has exactly that?  vector<bool> is a vector specialization that is also supposed to be compact, but unlike bitset, allows for a variable sized bit array.
+
+bitset also has a number of handy type conversion operators that vector<bool> does not (to string, and string to integer)
+
+<h2>tuple</h2>
+
+The std::tuple type generalizes std::pair, allowing for easy structures of N different types.
+
+I saw that tuple has a tie method that allows it to behave very much like a perl array assignment.  Such an assignment looks like
+
+[sourcecode language="perl"]
+#!/usr/bin/perl
+
+my ($a, $b, $c) = foo() ;
+
+printf( "%0.1f $b $c\n", $a ) ;
+
+exit 0 ;
+
+sub foo
+{
+   return (1.0, "blah", 3) ;
+}
+[/sourcecode]
+
+A similar C++ equivalent is more verbose
+
+[sourcecode language="cpp"]
+#include <tuple>
+#include <stdio.h>
+
+using T = std::tuple<float, const char *, int> ;
+
+T foo()
+{
+   return std::make_tuple( 1.0, "blah", 3 ) ;
+}
+
+int main()
+{
+   float f ;
+   const char * k ;
+   int i ;
+
+   std::tie( f, k, i ) = foo() ;
+
+   printf("%f %s %d\n", f, k, i ) ;
+
+   return 0 ;
+}
+[/sourcecode]
+
+I was curious how the code that accepts a tuple return using tie, using different variables (as above), and using a structure return differed
+
+[sourcecode language="cpp"]
+struct S
+{
+   float f ;
+   const char * s ;
+   int i ;
+} ;
+
+S bar()
+{
+   return { 1.0, "blah", 3 } ;
+}
+[/sourcecode]
+
+In each case, using -O2 and the Xcode 7 compiler (clang), a printf function similar to the above ends up looking pretty much uniformly like:
+
+[sourcecode language="bash"]
+$ gobjdump -d --reloc -C --no-show-raw-insn u.o 
+...
+
+0000000000000110 <h()>:
+ 110:   push   %rbp
+ 111:   mov    %rsp,%rbp
+ 114:   sub    $0x20,%rsp
+ 118:   lea    -0x18(%rbp),%rdi
+ 11c:   callq  121 <h()+0x11>
+                        11d: BRANCH32   foo()
+ 121:   mov    -0x10(%rbp),%rsi
+ 125:   mov    -0x8(%rbp),%edx
+ 128:   movss  -0x18(%rbp),%xmm0
+ 12d:   cvtss2sd %xmm0,%xmm0
+ 131:   lea    0xd(%rip),%rdi        # 145 <h()+0x35>
+                        134: DISP32     .cstring-0x145
+ 138:   mov    $0x1,%al
+ 13a:   callq  13f <h()+0x2f>
+                        13b: BRANCH32   printf
+ 13f:   add    $0x20,%rsp
+ 143:   pop    %rbp
+ 144:   retq   
+[/sourcecode]
+
+The generated code is pretty much dominated by the stack pushing required for the printf call.  I used printf here instead of std::cout because the generated code for std::cout is so crappy looking (and verbose).
+
+<h2></h2>

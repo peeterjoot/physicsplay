@@ -1,4 +1,4 @@
-CXXFLAGS += -std=c++11
+include ../make.vars
 CXXFLAGS += -g
 
 foo : foo.cc foo.h

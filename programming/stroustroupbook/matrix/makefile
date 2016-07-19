@@ -1,6 +1,6 @@
-CXXFLAGS += -std=c++11
+include ../make.vars
+
 CXXFLAGS += -O2
-CXXFLAGS += -MMD
 #CXXFLAGS += -g
 
 OBJECTS += m.o
@@ -15,7 +15,7 @@ endif
 m : $(OBJECTS)
 	$(CXX) -o $@ $(CXXFLAGS) $(OBJECTS)
 
--include $(wildcard *.d)
-
 clean :
 	rm -f m *.o *.d
+
+include ../make.rules

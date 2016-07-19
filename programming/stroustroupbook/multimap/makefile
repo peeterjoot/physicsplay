@@ -1,4 +1,4 @@
-CXXFLAGS += -std=c++11
+include ../make.vars
 CXXFLAGS += -g
 
 d : d.cc

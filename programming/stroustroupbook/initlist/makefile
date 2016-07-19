@@ -1,4 +1,4 @@
-CXXFLAGS += -std=c++11
+include ../make.vars
 
 i : i.cc
 	$(CXX) -o $@ $(CXXFLAGS) $<
