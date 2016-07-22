@@ -270,4 +270,53 @@ $ gobjdump -d --reloc -C --no-show-raw-insn u.o
 
 The generated code is pretty much dominated by the stack pushing required for the printf call.  I used printf here instead of std::cout because the generated code for std::cout is so crappy looking (and verbose).
 
+<h2>shared_ptr</h2>
+
+Reading the section on shared_ptr, it wasn't obvious that it was a thread safe interface.  I wondered if some sort of specialization was required to make the reference counting thread safe.  It appears that thread safety is built in
+## http://en.cppreference.com/w/cpp/memory/shared_ptr
+
+This can also be seen in the debugger (assuming the gcc libstdc++ is representitive)
+
+[sourcecode language="bash"]
+Breakpoint 1, main () at sharedptr.cc:33
+33    std::shared_ptr<T> p = std::make_shared<T>() ;
+Missing separate debuginfos, use: debuginfo-install libgcc-4.8.5-4.el7.x86_64 libstdc++-4.8.5-4.el7.x86_64
+(gdb) n
+35    foo( p ) ;
+(gdb) s
+std::shared_ptr<T>::shared_ptr (this=0x7fffffffe060) at /usr/include/c++/4.8.2/bits/shared_ptr.h:103
+103         shared_ptr(const shared_ptr&) noexcept = default;
+(gdb) s
+std::__shared_ptr<T, (__gnu_cxx::_Lock_policy)2>::__shared_ptr (this=0x7fffffffe060) at /usr/include/c++/4.8.2/bits/shared_ptr_base.h:779
+779         __shared_ptr(const __shared_ptr&) noexcept = default;
+(gdb) s
+std::__shared_count<(__gnu_cxx::_Lock_policy)2>::__shared_count (this=0x7fffffffe068, __r=...)
+    at /usr/include/c++/4.8.2/bits/shared_ptr_base.h:550
+550         : _M_pi(__r._M_pi)
+(gdb) s
+552      if (_M_pi != 0)
+(gdb) s
+553        _M_pi->_M_add_ref_copy();
+(gdb) s
+std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_add_ref_copy (this=0x607010) at /usr/include/c++/4.8.2/bits/shared_ptr_base.h:131
+131         { __gnu_cxx::__atomic_add_dispatch(&_M_use_count, 1); }
+[/sourcecode]
+
+This was looking at a call of the following form
+
+[sourcecode language="cpp"]
+using Tp = std::shared_ptr<T> ;
+
+void foo( Tp p ) ;
+
+int main()
+{
+   std::shared_ptr<T> p = std::make_shared<T>() ;
+
+   foo( p ) ;
+
+   return 0 ;
+}
+[/sourcecode]
+
 <h2></h2>
