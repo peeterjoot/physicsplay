@@ -7,7 +7,6 @@ class regex
 {
    bool     m_compiled{} ;
    regex_t  m_regex{} ;
-   int      m_matchRc{} ;
 
    inline void compile( const char * re ) ;
 
@@ -30,10 +29,12 @@ public:
    /** returns true if matched */
    inline bool exec( const char * pat ) ;
 
+#if 0
    bool matched() const
    {
       return m_matchRc ;
    }
+#endif
    
    ~regex()
    {
@@ -65,14 +66,14 @@ inline void regex::compile( const char * re )
 inline bool regex::exec( const char * pat )
 {
    /* Execute regular expression */
-   m_matchRc = regexec( &m_regex, pat, 0, NULL, 0 ) ;
+   int rc = regexec( &m_regex, pat, 0, NULL, 0 ) ;
 
-   if ( m_matchRc && (m_matchRc != REG_NOMATCH) )
+   if ( rc && (rc != REG_NOMATCH) )
    {
-      throw exception( m_regex, m_matchRc ) ;
+      throw exception( m_regex, rc ) ;
    }
 
-   return ( m_matchRc != REG_NOMATCH ) ;
+   return ( rc != REG_NOMATCH ) ;
 }
 
 inline regex::regex( const char * re )
@@ -98,7 +99,7 @@ try
    //regex re( "[^[:space:]]+[[:space:]][^[:space]]+" ) ;
    //regex re( "[[:space:]]+[[:space:]][[:space]]+" ) ;
    //regex re( "[:space:]+x[:space]+" ) ;
-   regex re( "[:space:]\+x[:space]\+" ) ;
+   regex re( "[:space:]+x[:space]+" ) ;
 
    const char * pat { "blah blah" } ;
    if ( re.exec( pat ) )
@@ -107,7 +108,7 @@ try
    }
    else
    {
-      std::cout << "no match: " << pat << '\n' ;
+      std::cout << "no match: '" << pat << "'\n" ;
    }
 
    //const char * pat2 { "blahblah" } ;
@@ -118,7 +119,7 @@ try
    }
    else
    {
-      std::cout << "no match: " << pat2 << '\n' ;
+      std::cout << "no match: '" << pat2 << "'\n" ;
    }
 
 
