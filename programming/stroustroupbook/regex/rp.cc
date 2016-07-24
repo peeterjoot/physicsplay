@@ -90,16 +90,27 @@ inline regex::regex( const char * re, const char * pat )
 }
 #endif
 
-int main()
-try
+void fail()
+try {
+   // https://github.com/agordon/posix-libc-examples/blob/master/regex-examples.c : a bad regex:
+   regex re( "hello([0-9*world" ) ;
+}
+catch ( std::exception & e )
 {
+   std::cerr << "fail: error: " << e.what() << '\n' ;
+}
+
+int main()
+try {
    //regex re( R"(\q\a\x\y\e\f\g)" ) ;
-   //regex re( R"(\S+\s\S+)" ) ;
+   regex re( R"((\S+)(\s+)(\S+))" ) ;
    //regex re( "\\S+\\s\\S+" ) ;
    //regex re( "[^[:space:]]+[[:space:]][^[:space]]+" ) ;
    //regex re( "[[:space:]]+[[:space:]][[:space]]+" ) ;
    //regex re( "[:space:]+x[:space]+" ) ;
-   regex re( "[:space:]+x[:space]+" ) ;
+   //regex re( "[:space:]+x[:space]+" ) ;
+
+   fail() ;
 
    const char * pat { "blah blah" } ;
    if ( re.exec( pat ) )
