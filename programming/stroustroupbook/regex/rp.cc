@@ -2,6 +2,7 @@
 #include <iostream>     
 #include <string>
 #include <exception>
+#include <array>
 
 class regex
 {
@@ -29,13 +30,30 @@ public:
    /** returns true if matched */
    inline bool exec( const char * pat ) ;
 
-#if 0
-   bool matched() const
+   /**
+      Match results and the string buffer that the match is coming from.
+    */
+   template <size_t N>
+   struct regmatch
    {
-      return m_matchRc ;
-   }
-#endif
-   
+      std::array<regmatch_t, N>  m_matchResults{} ;
+      const char *               m_pat ;
+
+      regmatch( const char * pat ) : m_pat( pat) {}
+      
+      std::string operator[]( const size_t i ) const
+      {
+         const regmatch_t & r = m_matchResults[ i ] ;
+         size_t len = r.rm_eo - r.rm_so ;
+
+         auto s = std::string( &m_pat[ r.rm_so ], len ) ;
+         return s ;
+      }
+   } ;
+
+   template <size_t N>
+   inline bool exec( regmatch<N> & matchBuf ) ;
+
    ~regex()
    {
       regfree( &m_regex ) ;
@@ -76,19 +94,24 @@ inline bool regex::exec( const char * pat )
    return ( rc != REG_NOMATCH ) ;
 }
 
+template <size_t N>
+inline bool regex::exec( regmatch<N> & matchBuf )
+{
+   /* Execute regular expression */
+   int rc = regexec( &m_regex, matchBuf.m_pat, N, &matchBuf.m_matchResults[0], 0 ) ;
+
+   if ( rc && (rc != REG_NOMATCH) )
+   {
+      throw exception( m_regex, rc ) ;
+   }
+
+   return ( rc != REG_NOMATCH ) ;
+}
+
 inline regex::regex( const char * re )
 {
    compile( re ) ;
 }
-
-#if 0
-inline regex::regex( const char * re, const char * pat )
-{
-   compile( re ) ;
-
-   exec( pat ) ;
-}
-#endif
 
 void fail()
 try {
@@ -112,10 +135,28 @@ try {
 
    fail() ;
 
-   const char * pat { "blah blah" } ;
+   const char * pat { "blah rah" } ;
    if ( re.exec( pat ) )
    {
       std::cout << "match: " << pat << '\n' ;
+   }
+   else
+   {
+      std::cout << "no match: '" << pat << "'\n" ;
+   }
+
+   regex::regmatch< 4 > m{ pat } ;
+   if ( re.exec( m ) )
+   {
+      std::cout << "match: " << pat << '\n' ;
+
+      std::cout << "match data\n" ;
+      for ( size_t i{} ; i < m.m_matchResults.size() ; i++ )
+      {
+         std::cout << i << " : " << m[i] << '\n' ;
+      }
+
+      std::cout << pat << " -> " << m[3] << " " << m[1] << '\n' ;
    }
    else
    {

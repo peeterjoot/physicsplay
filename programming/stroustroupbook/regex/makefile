@@ -1,7 +1,7 @@
 include ../make.vars
 #CXXFLAGS += -std=c++14
 CXXFLAGS += -g
-CXXFLAGS += -Wno-unknown-escape-sequence
+#CXXFLAGS += -Wno-unknown-escape-sequence
 #LDFLAGS += -lpthread
 #CXXFLAGS += -O2
 
