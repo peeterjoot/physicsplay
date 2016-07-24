@@ -4,14 +4,25 @@
 #include <exception>
 #include <array>
 
+/** 
+   A regular expression wrapper class that uses posix extended REs and provides some convience interfaces.
+ */
 class regex
 {
    bool     m_compiled{} ;
    regex_t  m_regex{} ;
 
+   /** 
+      Compile the Re.
+
+      \internal
+    */
    inline void compile( const char * re ) ;
 
 public:
+   /**
+      Exception state associated with a regcomp or regexec failure.
+    */
    class exception : public std::exception
    {
       std::string s ;
@@ -25,6 +36,9 @@ public:
       }
    } ;
 
+   /**
+      Construct a regex from the supplied string.
+    */
    inline regex( const char * re ) ;
 
    /** returns true if matched */
@@ -32,6 +46,9 @@ public:
 
    /**
       Match results and the string buffer that the match is coming from.
+
+      This is a helper class for the exec() function.  The string that the exec 
+      operates on is cached in this data structure.
     */
    template <size_t N>
    struct regmatch
@@ -39,8 +56,14 @@ public:
       std::array<regmatch_t, N>  m_matchResults{} ;
       const char *               m_pat ;
 
+      /**
+         Supply the string that the regex will operate on.
+       */
       regmatch( const char * pat ) : m_pat( pat) {}
-      
+
+      /**
+         Translate the posix regmatch_t offset info into a standalone string representation.
+       */      
       std::string operator[]( const size_t i ) const
       {
          const regmatch_t & r = m_matchResults[ i ] ;
@@ -51,6 +74,9 @@ public:
       }
    } ;
 
+   /**
+      Execute the regular expression allowing for collection of the match results.
+    */
    template <size_t N>
    inline bool exec( regmatch<N> & matchBuf ) ;
 
@@ -173,7 +199,6 @@ try {
    {
       std::cout << "no match: '" << pat2 << "'\n" ;
    }
-
 
    return 0 ;
 }
