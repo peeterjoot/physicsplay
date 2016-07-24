@@ -1,20 +1,31 @@
 #include <iostream>
 #include <string>
-//#include "boost/regex.hpp"
-#include <regex>
+#if 1
+   #include <boost/regex.hpp>
+
+   using regex = boost::regex ;
+   using smatch = boost::smatch ;
+   //using regex_replace = boost::regex_replace ;
+#else
+   #include <regex>
+
+   using regex = std::regex ;
+   using smatch = std::smatch ;
+   //using regex_replace = std::regex_replace ;
+#endif
 
 int main()
 {
    std::string s{ "foo.rat" } ;
-   std::regex reg{ R"((.*)\.rat$)" } ;
+   regex reg{ R"((.*)\.rat$)" } ;
 
-   std::smatch m ;
-   if ( std::regex_match( s, m, reg ) )
+   smatch m ;
+   if ( regex_match( s, m, reg ) )
    {
       std::cout << m.str() << std::endl ;
       for ( auto sm : m )
       {
-         std::cout << sm.str() << std::endl ;
+         std::cout << "smatch: " << sm.str() << std::endl ;
       }
       
       
@@ -27,7 +38,7 @@ int main()
 
    s = "foo.goo" ;
 
-   if ( std::regex_match( s, m, reg ) )
+   if ( regex_match( s, m, reg ) )
    {
       std::cout << m.str() << std::endl ;
    }
@@ -42,13 +53,13 @@ int main()
 int ymain()
 {
    std::string s{ "foo.rat" } ;
-   std::regex reg{ R"((.*)\.rat$)" } ;
+   regex reg{ R"((.*)\.rat$)" } ;
 
-   s = std::regex_replace( s, reg, "$1.csv" ) ;
+   s = regex_replace( s, reg, "$1.csv" ) ;
 
    std::cout << s << std::endl ;
 
-   s = std::regex_replace( "foo.noo", reg, "$1.csv" ) ;
+   s = regex_replace( "foo.noo", reg, "$1.csv" ) ;
    std::cout << s << std::endl ;
 
    return 0 ;
@@ -64,9 +75,9 @@ int xmain()
 
    s = boost::regex_replace( s, reg, "$2 $1" ) ;
 #else
-   std::regex reg{ "(.*) (.*)" } ;
+   regex reg{ "(.*) (.*)" } ;
 
-   s = std::regex_replace( s, reg, "$2 $1" ) ;
+   s = regex_replace( s, reg, "$2 $1" ) ;
 #endif
 
    std::cout << s << std::endl ;
