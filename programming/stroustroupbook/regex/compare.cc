@@ -36,7 +36,7 @@ void posixre_transform( regex_t * pRe, const char * input )
       posixre_error( pRe, rc ) ;
    }
 
-   if ( !rc )
+   if ( rc != REG_NOMATCH )
    {
       printf( "'%s' -> ", input ) ;
       int len ;
@@ -50,11 +50,11 @@ void posixre_free( regex_t * pRe )
    regfree( pRe ) ;
 }
 
+const char * strings[] { "hi bye", "helloworld", "why now", "onetwo" } ;
+
 void straightPosix()
 {
    regex_t re ;
-
-   const char * strings[] { "hi bye", "hello world", "why now", "one two" } ;
 
 #if 0
    const char * pattern = "(\\S+)\\s+(\\S+)" ; // doesn't work on mac
@@ -74,8 +74,6 @@ void straightPosix()
 
 void stdCplusplus()
 {
-   const char * strings[] { "hi bye", "hello world", "why now", "one two" } ;
-
    const char * pattern = R"((\S+)\s+(\S+))" ;
 
    std::regex re( pattern ) ;
@@ -93,8 +91,6 @@ void stdCplusplus()
 
 void stdCplusplus2()
 {
-   const char * strings[] { "hi bye", "hello world", "why now", "one two" } ;
-
    const char * pattern = R"((\S+)\s+(\S+))" ;
 
    std::regex re( pattern ) ;
@@ -108,8 +104,6 @@ void stdCplusplus2()
 void posixWrapper()
 {
    using namespace posixhelper ;
-
-   const char * strings[] { "hi bye", "hello world", "why now", "one two" } ;
 
    const char * pattern = "([^[:space:]]+)[[:space:]]+([^[:space:]]+)" ;
 
@@ -131,7 +125,7 @@ int main()
    straightPosix() ;
    stdCplusplus() ;
    stdCplusplus2() ;
-   posixWrapper() ;
+//   posixWrapper() ;
 
    return 0 ;
 }
