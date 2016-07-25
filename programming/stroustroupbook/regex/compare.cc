@@ -49,7 +49,7 @@ void posixre_free( regex_t * pRe )
    regfree( pRe ) ;
 }
 
-int xmain()
+int pmain()
 {
    regex_t re ;
 
@@ -73,7 +73,7 @@ int xmain()
    return 0 ;
 }
 
-int main()
+int smain()
 {
    const char * strings[] { "hi bye", "hello world", "why now", "one two" } ;
 
@@ -90,6 +90,14 @@ int main()
          std::cout << "'" << s << "' -> '" << m[2] << ' ' << m[1] << "'\n" ;
       }
    }
+
+   return 0 ;
+}
+
+int main()
+{
+   pmain() ;
+   smain() ;
 
    return 0 ;
 }
