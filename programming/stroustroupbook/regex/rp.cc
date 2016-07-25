@@ -14,18 +14,11 @@ catch ( std::exception & e )
 
 int main()
 try {
-   //regex re( R"(\q\a\x\y\e\f\g)" ) ;
-#if 0
-   // works on Linux, but not on Mac:
+#if 0 // works on Linux, but not on Mac:
    regex re( R"((\S+)(\s+)(\S+))" ) ;
 #else
    regex re( R"(([^[:space:]]+)([[:blank:]]+)([^[:space:]]+))" ) ;
 #endif
-   //regex re( "\\S+\\s\\S+" ) ;
-   //regex re( "[^[:space:]]+[[:space:]][^[:space]]+" ) ;
-   //regex re( "[[:space:]]+[[:space:]][[:space]]+" ) ;
-   //regex re( "[:space:]+x[:space]+" ) ;
-   //regex re( "[:space:]+x[:space]+" ) ;
 
    fail() ;
 

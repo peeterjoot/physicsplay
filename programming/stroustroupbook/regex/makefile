@@ -7,6 +7,7 @@ CXXFLAGS += -g
 
 TARGETS += rp
 TARGETS += rs
+TARGETS += compare
 
 all : $(TARGETS)
 
@@ -15,6 +16,9 @@ rp : rp.o
 
 rs : rs.o
 	$(CXX) -o $@ $(CXXFLAGS) $(LDFLAGS) rs.o
+
+compare : compare.o
+	$(CXX) -o $@ $(CXXFLAGS) $(LDFLAGS) compare.o
 
 clean:
 	rm -f *.o $(TARGETS)
