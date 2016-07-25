@@ -1,6 +1,7 @@
 #include <regex>
-#include <iostream>
 #include <regex.h>
+#include "posix_regex.h"
+#include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -49,7 +50,7 @@ void posixre_free( regex_t * pRe )
    regfree( pRe ) ;
 }
 
-int pmain()
+void straightPosix()
 {
    regex_t re ;
 
@@ -69,11 +70,9 @@ int pmain()
    }
 
    posixre_free( &re ) ;
-
-   return 0 ;
 }
 
-int smain()
+void stdCplusplus()
 {
    const char * strings[] { "hi bye", "hello world", "why now", "one two" } ;
 
@@ -90,14 +89,34 @@ int smain()
          std::cout << "'" << s << "' -> '" << m[2] << ' ' << m[1] << "'\n" ;
       }
    }
+}
 
-   return 0 ;
+void posixWrapper()
+{
+   using namespace posixhelper ;
+
+   const char * strings[] { "hi bye", "hello world", "why now", "one two" } ;
+
+   const char * pattern = "([^[:space:]]+)[[:space:]]+([^[:space:]]+)" ;
+
+   regex re( pattern ) ;
+
+   for ( auto s : strings )
+   {
+      regex::regmatch< 3 > m{ s } ;
+
+      if ( re.exec( m ) )
+      {
+         std::cout << "'" << s << "' -> '" << m[2] << ' ' << m[1] << "'\n" ;
+      }
+   }
 }
 
 int main()
 {
-   pmain() ;
-   smain() ;
+   straightPosix() ;
+   stdCplusplus() ;
+   posixWrapper() ;
 
    return 0 ;
 }
