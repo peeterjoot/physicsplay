@@ -91,6 +91,20 @@ void stdCplusplus()
    }
 }
 
+void stdCplusplus2()
+{
+   const char * strings[] { "hi bye", "hello world", "why now", "one two" } ;
+
+   const char * pattern = R"((\S+)\s+(\S+))" ;
+
+   std::regex re( pattern ) ;
+
+   for ( auto s : strings )
+   {
+      std::cout << regex_replace( s, re, "'$&' -> '$2 $1'\n" )  ;
+   }
+}
+
 void posixWrapper()
 {
    using namespace posixhelper ;
@@ -116,6 +130,7 @@ int main()
 {
    straightPosix() ;
    stdCplusplus() ;
+   stdCplusplus2() ;
    posixWrapper() ;
 
    return 0 ;
