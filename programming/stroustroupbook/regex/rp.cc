@@ -17,7 +17,7 @@ try {
 #if 0 // works on Linux, but not on Mac:
    regex re( R"((\S+)(\s+)(\S+))" ) ;
 #else
-   regex re( R"(([^[:space:]]+)([[:blank:]]+)([^[:space:]]+))" ) ;
+   regex re( R"(([^[:space:]]+)([[:space:]]+)([^[:space:]]+))" ) ;
 #endif
 
    fail() ;

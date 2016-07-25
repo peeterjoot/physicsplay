@@ -1,6 +1,7 @@
-#include <regex>
+//#include <regex>
 #include <regex.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 void posixre_error( regex_t * pRe, int rc )
 {
@@ -21,12 +22,12 @@ void posixre_compile( regex_t * pRe, const char * expression )
    }
 }
 
-void posixre_transform( regex_t * pRe, const char * string )
+void posixre_transform( regex_t * pRe, const char * input )
 {
    constexpr size_t N{3} ;
-   regmatch_t m[N] ;
+   regmatch_t m[N] {} ;
 
-   int rc = regexec( pRe, string, N, m, 0 ) ;
+   int rc = regexec( pRe, input, N, m, 0 ) ;
 
    if ( rc && (rc != REG_NOMATCH) )
    {
@@ -35,9 +36,10 @@ void posixre_transform( regex_t * pRe, const char * string )
 
    if ( !rc )
    {
-      printf( "0: %*s\n", (int)(m[0].rm_eo - m[0].rm_so), &string[ m[0].rm_so ] ) ;
-      printf( "1: %*s\n", (int)(m[1].rm_eo - m[1].rm_so), &string[ m[1].rm_so ] ) ;
-      printf( "2: %*s\n", (int)(m[2].rm_eo - m[2].rm_so), &string[ m[2].rm_so ] ) ;
+      printf( "'%s' -> ", input ) ;
+      int len ;
+      len = m[2].rm_eo - m[2].rm_so ; printf( "'%.*s ", len, &input[ m[2].rm_so ] ) ;
+      len = m[1].rm_eo - m[1].rm_so ; printf( "%.*s'\n", len, &input[ m[1].rm_so ] ) ;
    }
 }
 
@@ -52,8 +54,10 @@ int main()
 
    const char * strings[] { "hi bye", "hello world", "why now", "one two" } ;
 
-#if 0 // works on Linux, but not on Mac:
-   const char * pattern = "(\S+)\s+(\S+)" ;
+#if 0
+   const char * pattern = "(\\S+)\\s+(\\S+)" ;
+   //const char * pattern = R"((\S+)\s+(\S+))" ;
+   //const char * pattern = "(.*?) (.*)" ;
 #else
    const char * pattern = "([^[:space:]]+)[[:space:]]+([^[:space:]]+)" ;
 #endif
