@@ -1,4 +1,5 @@
-//#include <regex>
+#include <regex>
+#include <iostream>
 #include <regex.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -48,16 +49,14 @@ void posixre_free( regex_t * pRe )
    regfree( pRe ) ;
 }
 
-int main()
+int xmain()
 {
    regex_t re ;
 
    const char * strings[] { "hi bye", "hello world", "why now", "one two" } ;
 
 #if 0
-   const char * pattern = "(\\S+)\\s+(\\S+)" ;
-   //const char * pattern = R"((\S+)\s+(\S+))" ;
-   //const char * pattern = "(.*?) (.*)" ;
+   const char * pattern = "(\\S+)\\s+(\\S+)" ; // doesn't work on mac
 #else
    const char * pattern = "([^[:space:]]+)[[:space:]]+([^[:space:]]+)" ;
 #endif
@@ -70,6 +69,27 @@ int main()
    }
 
    posixre_free( &re ) ;
+
+   return 0 ;
+}
+
+int main()
+{
+   const char * strings[] { "hi bye", "hello world", "why now", "one two" } ;
+
+   const char * pattern = R"((\S+)\s+(\S+))" ;
+
+   std::regex re( pattern ) ;
+
+   for ( auto s : strings )
+   {
+      std::cmatch m ;
+
+      if ( regex_match( s, m, re ) )
+      {
+         std::cout << "'" << s << "' -> '" << m[2] << ' ' << m[1] << "'\n" ;
+      }
+   }
 
    return 0 ;
 }

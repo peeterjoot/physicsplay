@@ -12,6 +12,8 @@ catch ( std::exception & e )
    std::cerr << "fail: error: " << e.what() << '\n' ;
 }
 
+   //const char * pattern = R"((\S+)\s+(\S+))" ;
+   //const char * pattern = "(.*?) (.*)" ;
 int main()
 try {
 #if 0 // works on Linux, but not on Mac:
