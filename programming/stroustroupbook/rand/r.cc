@@ -48,7 +48,9 @@ public:
 class RandomIntegers3
 {  
    std::uniform_int_distribution<>::param_type  m_params ;
-   auto r = std::bind( uniform_int_distribution<>{ m_params }, std::default_random_engine{} ) ;
+
+   decltype( std::bind( std::uniform_int_distribution<>{ m_params }, std::default_random_engine{} ) )
+      r = std::bind( std::uniform_int_distribution<>{ m_params }, std::default_random_engine{} ) ;
 
 public:
    /** constuct a uniform random number generator for the specified range */

@@ -7,7 +7,7 @@ CXXFLAGS += -g
 #CXXFLAGS += -O2
 
 TARGETS += r
-TARGETS += r2
+#TARGETS += r2
 
 all : $(TARGETS)
 

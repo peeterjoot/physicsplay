@@ -5,18 +5,12 @@
 
 using namespace std ;
 
+// an exact copy of the class in Stroustrup chapter 40.  does not compile.
 class Rand_int
 {  
 public:
-   Rand_int( int a, int b )
-      : p{ a, b }
-   {  
-   }
-
-   int operator()() const
-   {
-      return r() ;
-   }
+   Rand_int( int lo, int hi ) : p{ lo, hi } {  }
+   int operator()() const { return r() ; }
 private:
    uniform_int_distribution<>::param_type  p ;
    auto r = bind( uniform_int_distribution<>{ p }, default_random_engine{} ) ;
