@@ -1,4 +1,39 @@
-Some notes on Chapter XX (YY) of Stroustrup's "The C++ Programming Language".
+Some notes on Chapter 40 (YY) of Stroustrup's "The C++ Programming Language".
 
-<h2></h2>
+<h2>Random and bind</h2>
 
+I'd used the std random interfaces before, but they are used in a slightly different fashion in the book.  Those examples use std::bind.  Here's a similar complete consumer of a distribution along with the engine it draws its random number from
+
+[sourcecode language="cpp"]
+int main( int argc, char ** argv )
+{
+   std::random_device                  dev{} ;
+   std::uniform_int_distribution<int>  uni{ 1, 5 } ;
+   std::unordered_map<int, int>        buckets ;
+   auto                                e = (argc == 1) ? std::mt19937() : std::mt19937{ dev() } ;
+   auto                                u = std::bind( uni, e ) ;
+
+   for ( int i{} ; i < 10000 ; i++ )
+   {
+      buckets[ u() ]++ ;
+   }
+
+   for ( auto v : buckets )
+   {
+      std::cout << v.first << ", " << v.second << '\n' ;
+   }
+
+   return 0 ;
+}
+[/sourcecode]
+
+In this example when no parameters are passed to the executable, the default mt19937 constructor is invoked.  When that is done, the
+random distribution observed is the same each time the exe is invoked.  Otherwise, the mt19937 engine is initialized drawing from an implementation defined random number source.
+
+Also looking at this code, I am not really convinced that use of std::bind is really any advantage here, when we could just use
+
+[sourcecode language="cpp"]
+   buckets[ uni( e ) ]++ ;
+[/sourcecode]
+
+It really seems like more of an obfuscation than anything else.  The effect of std::bind is kind of like a fancy scoped macro, allowing a set of arguments to be bundled into a single call.  If there was a larger or more complex set of parameters then the use of std::bind would seem more justified.
