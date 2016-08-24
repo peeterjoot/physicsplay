@@ -1,39 +1,16 @@
-OSNAME := $(shell uname -o)
+#PRODUCTION := 1
+#PROFILED := 1
+#USE_OPENBLAS := 1
 
-# for windows (cygwin):
-CXXFLAGS += -D_GLIBCXX_USE_C99
-
-# generate dependency files with each compilation:
-CXXFLAGS += -MMD
+include ../../make.vars
+include ../../make.vars.boosttest
 
 CXXFLAGS += -I../../inc
-
-# PRODUCTION := 1
-ifdef PRODUCTION
-   CXXFLAGS += -DNDEBUG
-   CXXFLAGS += -O2
-else
-   CXXFLAGS += -g
-endif
-
-CXXFLAGS += -Wall -Werror
-CXXFLAGS += -std=c++11
-THISDIR := phy1610-scientific-computing/2015/ps5
-
-TARGETS += .gitignore
 
 GSL_LDLIBS += -lgsl
 GSL_LDLIBS += -lgslcblas
 
-ifeq ("$(OSNAME)","Cygwin")
-   # get cxx11 abi link errors attempting to use boost unit_test with the pre-compiled boost library
-   CXXFLAGS += -DUSE_SINGLE_HEADER_BOOST_TEST_FRAMEWORK
-
-   # for putenv and mkstemp
-   CXXFLAGS += -U__STRICT_ANSI__
-else
-   TEST_LDLIBS += -lboost_unit_test_framework
-endif
+TEST_LDLIBS += $(LDLIBS_BOOSTTEST)
 
 TARGETS += showps5
 DISPLAY_SOURCES += showps5.cc
@@ -58,14 +35,9 @@ TEST_SOURCES += $(COMMON_SOURCES)
 TEST_OBJECTS := $(subst .cc,.o,$(TEST_SOURCES))
 TEST_LDLIBS += $(GSL_LDLIBS)
 
-CLEANTARGETS += $(TARGETS)
-# doxygen:
-CLEANTARGETS += html latex
-
 CLEANTARGETS += $(FINDROOT_OBJECTS) $(TEST_OBJECTS)
 
-# clean dependency files if any
-CLEANTARGETS += $(subst .o,.d,$(TEST_OBJECTS) $(FINDROOT_OBJECTS))
+CLEANTARGETS += $(TARGETS)
 
 all : $(TARGETS)
 
@@ -79,13 +51,6 @@ runtests: test
 	./test --report_level=detailed
 
 test : $(TEST_OBJECTS)
-	$(CXX) -o $@ $(TEST_OBJECTS) $(TEST_LDLIBS)
+	$(CXX) -o $@ $(TEST_OBJECTS) $(LDFLAGS) $(TEST_LDFLAGS) $(LDLIBS) $(TEST_LDLIBS)
 
-.gitignore: GNUmakefile
-	echo $(addprefix $(THISDIR)/,$(CLEANTARGETS)) | tr ' ' '\n' > $@
-
-clean::
-	rm -rf $(CLEANTARGETS)
-
-# read in dependency files:
--include $(wildcard *.d)
+include ../../make.rules

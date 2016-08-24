@@ -1,0 +1,310 @@
+Here's more notes from reading Stroustrup's "The C++ Programming Language, 4th edition"
+
+<h2>throw() as noexcept equivalent</h2>
+
+throw() without any exception types can be used as an equivalent to the new noexcept keyword.  Stroustrup also mentions that explicit throw() clauses 
+
+[sourcecode language="cpp"]
+void foo() throw( e1, e2 ) ;
+[/sourcecode]
+
+haven't worked out well in practise, and is deprecated.
+
+<h2>try scopes as function body</h2>
+
+It turns out that try clauses can be used as function bodies, as in
+
+[sourcecode language="cpp"]
+void foo( void )
+try {
+}
+catch ( ... )
+{
+}
+[/sourcecode]
+
+This can also be done for constructor and destructor bodies as in
+
+[sourcecode language="cpp"]
+X::X( T1 v, T2 w )
+try{
+ : f1( v )
+ , f2( w )
+}
+catch ( ... )
+{
+}
+[/sourcecode]
+
+so that a throw in the class field member construction can also be caught.
+
+<h2>Inline (default) namespace</h2>
+
+There is a mechanism for namespace versioning.  Suppose that you want a new V2 namespace to be the default, you can do:
+
+[sourcecode language="cpp"]
+namespace myproject
+{
+   inline namespace V2
+   {
+      struct X { 
+         int x ;
+         int y ;
+      } ;
+      void foo( const X & ) ;
+   } 
+
+   namespace V1
+   {
+      struct X { 
+         int x ;
+      } ;
+
+      void foo( const X & ) ;
+   } 
+} 
+[/sourcecode]
+
+Existing callers of the library that are using V1 interfaces can continue to work unmodified, but new callers will use the V2::X and V2::foo interfaces, and the library can provide both interfaces, one for compatibility and another for new code:
+
+[sourcecode language="cpp"]
+void myproject::V2::foo( const myproject::V2::X & )
+{
+   // ...
+}
+
+void myproject::V1::foo( const myproject::V1::X & )
+{
+   // ...
+}
+[/sourcecode]
+
+<h2>Unnamed namespaces.</h2>
+
+I'd once seen unnamed namespaces as a modern C++ (more general) replacement for static functions.  To see if such namespace functions are optimized away in the same fashion as a static function, I tried
+
+[sourcecode language="cpp"]
+#include <stdio.h>
+
+namespace
+{
+   void foo()
+   {
+      printf( "ns:foo\n" ) ;
+   }
+}
+
+int main() 
+{
+   foo() ;
+
+   return 0 ;
+}
+[/sourcecode]
+
+This example uses printf and not std::cout because I wanted to look at the assembly listing and cout's listing, at least on a mac, was completely abysmal.  foo() was optimized away, but that's a lot easier to see in the C printf listing:
+
+[sourcecode language="bash"]
+$ make
+c++ -o n -std=c++11 -O2 n.cc
+
+$ otool -tV n | less
+n:
+(__TEXT,__text) section
+_main:
+0000000100000f70        pushq   %rbp
+0000000100000f71        movq    %rsp, %rbp
+0000000100000f74        leaq    0x2b(%rip), %rdi        ## literal pool for: "ns:foo"
+0000000100000f7b        callq   0x100000f84             ## symbol stub for: _puts
+0000000100000f80        xorl    %eax, %eax
+0000000100000f82        popq    %rbp
+0000000100000f83        retq
+[/sourcecode]
+
+<h2>at_quick_exit</h2>
+
+There's now also a mechanism to exit and avoid global destructors and atexit routines from being evaluated.  Here's an example
+
+[sourcecode language="cpp"]
+#include <cstdlib>
+#include <iostream>
+
+extern "C"
+void normalexit()
+{
+   std::cout << "normalexit\n" ;
+}
+
+extern "C"
+void quickCexit()
+{
+   std::cout << "quickCexit\n" ;
+}
+
+void quickCPPexit()
+{
+   std::cout << "quickCPPexit\n" ;
+}
+
+class X
+{
+public:
+   ~X()
+   {
+      std::cout << "X::~X()\n" ;
+   }
+} x ;
+
+int main( int argc, char ** argv )
+{
+   atexit( normalexit ) ;
+   std::at_quick_exit( quickCexit ) ;
+   std::at_quick_exit( quickCPPexit ) ;
+
+   if ( argc == 1 )
+   {
+      std::quick_exit( 3 ) ;
+   }
+
+when run without arguments (argc == 1), we get
+[sourcecode language="bash"]
+$ ./at
+quickCPPexit
+quickCexit
+[/sourcecode]
+
+whereas if the normal exit processing is allowed to complete we see global destructors and regular atexit calls
+[sourcecode language="bash"]
+$ ./at 1
+normalexit
+X::~X()
+[/sourcecode]
+
+Observe, unlike atexit, which can only (portably) take extern "C" defined functions, at_quick_exit can take functions with both C and C++ linkage.
+
+<h2>Enum default</h2>
+
+It was not obvious to me what the default value for an enum class (or enum) should be (the first value, an invalid value, zero, ...)?  It turns out that the default is zero, as printed by the following fragment
+
+[sourcecode language="cpp"]
+#include <iostream>
+
+enum class x { v = 1, w } ;
+enum y { vv = 1, ww } ;
+
+int main()
+{
+   x e1 = {} ;
+   y e2 = {} ;
+   std::cout << (int)e1 << '\n' ;
+   std::cout << e2 << '\n' ;
+
+   return 0 ;
+}
+[/sourcecode]
+
+Note that an explicit cast is required for enum class values, but not for enum, which are by default, int convertible.
+
+<h2>default initialization with new</h2>
+
+The uniform initializer syntax can also be used with new calls.  Here's an example with uninitialized and default initialized double allocations
+
+[sourcecode language="cpp"]
+#include <stdio.h>
+
+int main()
+{
+   double * d1 = new double ;
+   double * d2 = new double{} ;
+
+   printf( "%g %g\n", *d1, *d2 ) ;
+
+   return 0 ;
+}
+[/sourcecode]
+
+Observe that we get nice garbage values for *d1, but *d2 is always 0.0:
+
+[sourcecode language="bash"]
+$ ./d
+-1.49167e-154 0
+$ ./d
+0 0
+$ ./d
+1.72723e-77 0
+$ ./d
+-2.68156e+154 0
+[/sourcecode]
+
+<h2>initializer_list</h2>
+
+I remember really wanting a feature like this eons ago when I first wrote a matrix template class in 1st year.  Here's a sample of how it could be used
+
+[sourcecode language="cpp"]
+#include <iostream>
+#include <vector>
+#include <string>
+
+template <unsigned r, unsigned c>
+class m
+{
+    std::vector<double> mat ;
+
+public:
+    class bad_init {} ;
+    
+    m() : mat(r*c) {}
+
+    m( std::initializer_list<double> i ) : mat( r * c ) 
+    {
+        if ( i.size() > ( r * c ) )
+        {
+            throw bad_init() ;
+        }
+
+        int p{} ;
+        for ( auto v : i )
+        {
+            mat[ p++ ] = v ;
+        }
+    }
+
+    void dump( const std::string & n ) const
+    {
+        const char * sep = ": " ;
+        std::cout << n ;
+
+        for ( auto v : mat )
+        {
+            std::cout << sep << v ;
+            sep = ", " ;
+        }
+
+        std::cout << '\n' ;
+    }
+} ;
+
+int main()
+{
+    m< 3, 2 > v1 ;
+    m< 3, 2 > v2{ 0., 1., 2., 3., 4. } ;
+
+    v1.dump( "v1" ) ;
+    v2.dump( "v2" ) ;
+
+    m< 3, 2 > v3{ 0., 1., 2., 3., 4., 5., 6., 7. } ;
+
+    return 0 ;
+}
+[/sourcecode]
+
+This produces the two dumps and the expected std::terminate call for the wrong (too many) parameters on the third construction attempt
+
+[sourcecode language="bash"]
+$ ./i
+v1: 0, 0, 0, 0, 0, 0
+v2: 0, 1, 2, 3, 4, 0
+libc++abi.dylib: terminating with uncaught exception of type m<3u, 2u>::bad_init
+Abort trap: 6
+[/sourcecode]
+

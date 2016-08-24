@@ -3,6 +3,7 @@
 #USE_OPENBLAS := 1
 
 include ../make.vars
+include ../make.vars.blas
 
 #THISDIR := phy1610-scientific-computing/blas
 

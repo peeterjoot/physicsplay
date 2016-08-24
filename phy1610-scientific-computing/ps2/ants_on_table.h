@@ -13,24 +13,16 @@
  */
 class ants_on_table
 {
-   size_t               m_table_grid_size ;  ///< table grid size.
-   myrarray2            m_number_of_ants ;   ///< number of ants at each grid location after each timestep.
-   myrarray2            m_velocity_of_ants ; ///< velocity of each ant at specified grid point.
+   size_t               m_table_grid_size{} ;  ///< table grid size.
+   myrarray2            m_number_of_ants ;     ///< number of ants at each grid location after each timestep.
+   myrarray2            m_velocity_of_ants ;   ///< velocity of each ant at specified grid point.
 
    struct timerData
    {
-      double m_init ;
-      double m_core ;
-      double m_update ;
-      double m_totants ;
-
-      timerData() :
-         m_init{ 0.0 },
-         m_core{ 0.0 },
-         m_update{ 0.0 },
-         m_totants{ 0.0 }
-      {
-      }
+      double m_init{ 0.0 } ;
+      double m_core{ 0.0 } ;
+      double m_update{ 0.0 } ;
+      double m_totants{ 0.0 } ;
    } ;
 
    mutable timerData    m_timerData ;

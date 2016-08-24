@@ -1,4 +1,4 @@
-SUBMAKES += $(shell find -name GNUmakefile)
+SUBMAKES += $(shell find . -name GNUmakefile)
 SUBDIRS := $(subst /GNUmakefile,,$(SUBMAKES))
 
 PS3 += ps3.git.log
@@ -125,7 +125,8 @@ PS10 += ps7/streamopen.cc
 TICKTOCK := $(HOME)/ticktock
 
 #all : ps3/ticktock.cc
-all : ps11.tar.gz
+#all : ps11.tar.gz
+all : subdirs
 
 ps10.pdf : ../notes/blogit/ps10.pdf
 	cp ../notes/blogit/ps10.pdf .
@@ -195,4 +196,4 @@ clean:
 	$(foreach dir,$(SUBDIRS),make -C $(dir) clean;)
 
 subdirs:
-	$(foreach dir,$(SUBDIRS),make -C $(dir);)
+	$(foreach dir,$(SUBDIRS),echo $(dir) ; make -C $(dir);)

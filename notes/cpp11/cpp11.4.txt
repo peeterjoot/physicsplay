@@ -1,0 +1,459 @@
+Here's more notes from reading Stroustrup's "The C++ Programming Language, 4th edition"
+
+<h2>Alternate construction methods</h2>
+
+I'd seen the new inline member initialization syntax that can be used to avoid (or simplify) explicit constructors.  For example, instead of
+
+[sourcecode language="cpp"]
+struct physical
+{
+   double  c      ;  ///< wave speed
+   double  tau    ;  ///< damping time
+   double  x1     ;  ///< left most x value
+   double  x2     ;  ///< right most x value
+
+   /**
+     set physical parameters to some defaults
+    */
+   physical() ;
+} ;
+
+physical::physical() :
+   c{ 1.0 },
+   tau{ 20.0 },
+   x1{ -26.0 },
+   x2{ +26.0 }
+{
+}
+[/sourcecode]
+
+You can do
+
+[sourcecode language="cpp"]
+struct physical
+{
+   double c{ 1.0 }    ;  ///< wave speed
+   double tau{ 20.0 } ;  ///< damping time
+   double x1{ -26.0 } ;  ///< left most x value
+   double x2{ +26.0 } ;  ///< right most x value
+} ;
+[/sourcecode]
+
+Much less code to write, and you can keep things all in one place.  I wondered if this could be combined with constexpr, but the only way I could get that to work was to use static members, which also have to have an explicit definition (at least on Mac) to avoid a link error:
+
+[sourcecode language="cpp"]
+struct p2
+{  
+   static constexpr double x2{ +26.0 } ;  ///< right most x value
+} ;
+constexpr double p2::x2 ;
+
+int main()
+{  
+   p2 p ;
+
+   return p.x2 ;
+}
+[/sourcecode]
+
+But that is a digression.  What I wanted to mention is that, while member initialization is cool, there's more in the C++11 constructor simplification toolbox.  We can write a constructor that builds on the member constructors (if any), but we can also make constructor specialations just call other constructors (called a delegating constructor), like so
+
+[sourcecode language="cpp"]
+struct physical
+{
+   double c{ 1.0 }    ;  ///< wave speed
+   double tau{ 20.0 } ;  ///< damping time
+   double x1{ -26.0 } ;  ///< left most x value
+   double x2{ +26.0 } ;  ///< right most x value
+
+   physical( const double cv ) : c{cv} {}
+   physical( const double x1v, const double x2v ) : x1{x1v}, x2{x2v} {}
+
+   physical( const double cv, const int m ) : physical{cv} { c *= m ; } ;
+} ;
+[/sourcecode]
+
+Stroustrup points out that the object is considered initialized by the time the delegating constructor is called. So if that throws, we shouldn't get to the body of the constructor function
+
+[sourcecode language="cpp"]
+#include <iostream>
+
+struct physical
+{
+   double c{ 1.0 }    ;  ///< wave speed
+
+   physical( const double cv ) { throw 3 ; }
+
+   physical( const double cv, const int m ) : physical{cv} { std::cout << "won't get here\n" ; }
+} ;
+
+int main()
+try
+{
+   physical p{5} ;
+
+   return 0 ;
+}
+catch (...)
+{
+   return 1 ;
+}
+[/sourcecode]
+
+<h2>default functions</h2>
+
+If we define a structure with an explicit constructor with parameters, then unless explicit action is taken, this means that we no longer get a default constructor.  Example:
+
+[sourcecode language="cpp"]
+#include <string>
+
+struct F
+{
+   std::string s{} ;
+   
+   F( int n ) : s( n, 'a' ) {}
+} ;
+
+F x ;
+[/sourcecode]
+
+This results in errors because the default constructor has been deleted by defining an explicit constructor
+
+[sourcecode language="bash"]
+$ c++ -o d -std=c++11 d.cc
+d.cc:10:3: error: no matching constructor for initialization of 'F'
+F x ;
+  ^
+d.cc:7:4: note: candidate constructor not viable: requires single argument 'n', but no arguments were provided
+   F( int n ) : s( n, 'a' ) {}
+   ^
+d.cc:3:8: note: candidate constructor (the implicit move constructor) not viable: requires 1 argument, but 0 were provided
+struct F
+       ^
+d.cc:3:8: note: candidate constructor (the implicit copy constructor) not viable: requires 1 argument, but 0 were provided
+1 error generated.
+[/sourcecode]
+
+We can get back the default constructor, without having to write it out explictly, by just doing:
+
+[sourcecode language="cpp"]
+#include <string>
+
+struct F
+{
+   std::string s{} ;
+   
+   F( int n ) : s( n, 'a' ) {}
+
+   F() = default ;
+} ;
+
+F x ;
+[/sourcecode]
+
+It wouldn't be a big deal to define an explicit default constructor above, just
+[sourcecode language="cpp"]
+    F() : s{} {}
+[/sourcecode]
+
+but for a more complex class, being able to let the compiler do the work is nicer.  Using = default also 
+means that the redundancy of specifying a member initializer and also having to specify the same initializer
+in the default constructor member list is not required, which is nicer.
+
+Note that like '= default', you can use '= delete' to tell the compiler not to generate any default for the member (or template specialization, ...) if it would have if left unrestricted.  This is similar to the trick of making destructors private:
+
+[sourcecode language="cpp"]
+class foo
+{
+   ~foo() ;
+public:
+// ...
+} ;
+[/sourcecode]
+
+Instead in c++11, you can write
+[sourcecode language="cpp"]
+class foo
+{
+public:
+   ~foo() = delete ;
+// ...
+} ;
+[/sourcecode]
+
+so instead of the compiler telling you there is unsufficent access to call the destructor, it should be able to tell you that an attempt to use a destructor for a class that has not defined one has been attempted.  Note that this can be an explicitly deleted destructor, or one implicitly deleted (see below).
+
+<h2>move operations</h2>
+
+Back in university I once wrote a matrix class that I was proud of.  It was reference counted to avoid really expensive assignment and copy construction operations, which were particularily bad for any binary operation that returned a new value
+
+[sourcecode language="cpp"]
+template <class T>
+matrix<T> operator + ( const matrix<T> & a, const matrix<T> & b ) ;
+[/sourcecode]
+
+C implementations of an addition operation (like the blas functions), wouldn't do anything this dumb.  Instead they use an interface like
+
+[sourcecode language="cpp"]
+template <class T>
+void matrixadd( matrix<T> & r, const matrix<T> & a, const matrix<T> & b ) ;
+[/sourcecode]
+
+This doesn't have the syntactic sugar, but the performance won't suck as it would if reference counting wasn't used.  I recall having a lot of trouble getting the reference counting just right, and had to instrument all my copy constructors, assignment operators and destructors with trace logging to get it all right.  Right also depended on the compiler that was being used!  I've still got a copy of that code kicking around somewhere, but it can stay where it is out of sight since move operations obsolete it all.
+
+With move constructor and assignment operators, I was suprised to see them not kick in.  These were the move operations
+
+[sourcecode language="cpp"]
+/// A simple square matrix skeleton, with instrumented copy, move, construction and destruction operators
+class matrix
+{
+   using T = int ;                  ///< allow for easy future templatization.
+
+   size_t            m_rows ;       ///< number of rows for the matrix.  May be zero.
+   size_t            m_columns ;    ///< number of columns for the matrix.  May be zero.
+   std::vector<T>    m_elem ;       ///< backing store for the matrix elements, stored in row major format.
+
+public:
+
+   /// move constructor to create 
+   matrix( matrix && m )
+      : m_rows{ m.m_rows }
+      , m_columns{ m.m_columns }
+      , m_elem{ std::move(m.m_elem) }
+   {  
+      m.m_rows = 0 ;
+      m.m_columns = 0 ;
+      //std::cout << "move construction: " << &m << " to " << this << " ; dimensions: (rows, columns, size) = ( " << rows() << ", " << columns() << ", " << m_elem.size() << " )\n" ;
+   }
+
+   /// move assignment operator.
+   matrix & operator = ( matrix && m )
+   {  
+      //std::cout << "move operator=(): " << this << '\n' ;
+
+      std::swap( m_columns, m.m_columns ) ;
+      std::swap( m_rows, m.m_rows ) ;
+      std::swap( m_elem, m.m_elem ) ;
+
+      return *this ;
+   }
+
+   /// Create (dense) square matrix with the specified diagonal elements.
+   matrix( const std::initializer_list<T> & diagonals )
+
+//...
+} ;
+[/sourcecode]
+
+With the following code driving this
+
+[sourcecode language="cpp"]
+matrix f() ;
+   
+int m1()
+{ 
+   matrix x1 = f() ; 
+   matrix x2 { f() } ;
+      
+   return x1.rows() + x2.rows() ;
+}     
+[/sourcecode]
+
+I was suprised to see none of my instrumentation showing for the move operations.  That appears to be because the compiler is doing return value optimization, and constructing these in place in the stack storage locations of &x1, and &x2.
+
+## https://en.wikipedia.org/wiki/Return_value_optimization
+
+To get actual move construction, I have to explicitly ask for move, as in
+
+[sourcecode language="cpp"]
+matrix mg( {4, 5, 6} ) ;
+
+int m0()
+{
+   matrix x2 { std::move( mg ) } ;
+
+   return x2.rows() ;
+}
+[/sourcecode]
+
+and to get move assignment I could assign into a variable passed by reference, like
+[sourcecode language="cpp"]
+void g( matrix & m )
+{
+   m = matrix( {1,2,3} ) ;   
+}
+[/sourcecode]
+
+This resulted in a stack allocation for the diagonal matrix construction, then a move from that.  For this assignment, the compiler did not have to be instructed to use a move operation (and the function was coded explicitly to prevent return value optimization from kicking in).
+
+Note that if any of a copy, move, or destructor is defined for the class, a standards compliant compiler is supposed to also not generate any default copy, move or destructor for the class (i.e. having any such function, means that all the others are =delete unless explicitly defined).
+
+<h2>Strange operator overload options</h2>
+
+In a table of overloadable operators I see two weird ones:
+<ul>
+<li> ,
+<li> ->*
+</ul>
+
+I'd never have imagined that there would be a valid reason to overload the comma operator, which I've only seen used in old style C macros that predated C99's inline support.  For example you could do
+
+[sourcecode language="cpp"]
+#define foo(x)    (f(x), g(x))
+[/sourcecode]
+
+which might be equivalent to, say, 
+
+[sourcecode language="cpp"]
+static inline int foo( int x )
+{
+   f( x ) ;
+
+   return g(x) ;
+}
+[/sourcecode]
+
+However, sure enough a comma overloaded function is possible:
+
+[sourcecode language="cpp"]
+struct foo
+{
+   int m ;
+
+   foo( int v = {} ) : m{v} {}
+
+   int blah( ) const
+   {
+      return m + 3 ;
+   }
+
+   int operator,(const foo & f) 
+   {
+      return blah() + f.blah() ;
+   }
+} ;
+
+int main()
+{
+   foo f ;
+   foo g{ 7 } ;
+
+   return f, g ;
+}
+[/sourcecode]
+
+This results in 7 + 0 + 3 + 3 = 13 as a return code.  I don't have any intention of exploiting this overloadable operator in any real code that I am going to write.
+
+What is the ->* operation that can also be overloaded.
+
+<h2>User defined literals</h2>
+
+C++11 allows for user defined literal suffixes for constant creation, so that you could write something like
+
+[sourcecode language="cpp"]
+length v = 1.0009_m + 3_dm + 5.0_cm + 7_mm ;
+[/sourcecode]
+
+## http://en.cppreference.com/w/cpp/language/user_literal
+
+User defined literals must begin with underscore.  The system defined literals (such as the complex i, and the chrono ns from c++14) do have this underscore restriction.  This is opposite to the user requirement that states no non-system code should define underscore or double-underscore prefixed symbols.  I found getting the syntax right for such literals was a bit finicky.  The constructor has to be constexpr, and you have to explicitly use long double or unsigned long long types in the operator parameters, as in
+
+[sourcecode language="cpp"]
+struct length
+{
+   double len {} ;
+
+   constexpr length( double v ) : len{ v } {}
+} ;
+
+inline length operator + ( const length a, const length b )
+{
+   return length( a.len + b.len ) ;
+}
+
+constexpr length operator "" _m( long double v )
+{
+   return length{ static_cast<double>(v) } ;
+}
+
+constexpr length operator "" _dm( long double v )
+{
+   return length{ static_cast<double>(v/10.0) } ;
+}
+
+constexpr length operator "" _cm( long double v )
+{
+   return length{ static_cast<double>(v/100.0) } ;
+}
+
+constexpr length operator "" _mm( long double v )
+{
+   return length{ static_cast<double>(v/1000.0) } ;
+}
+
+constexpr length operator "" _m( unsigned long long v )
+{
+   return length{ static_cast<double>(v) } ;
+}
+
+constexpr length operator "" _dm( unsigned long long v )
+{
+   return length{ static_cast<double>(v/10.0) } ;
+}
+
+constexpr length operator "" _cm( unsigned long long v )
+{
+   return length{ static_cast<double>(v/100.0) } ;
+}
+
+constexpr length operator "" _mm( unsigned long long v )
+{
+   return length{ static_cast<double>(v/1000.0) } ;
+}
+[/sourcecode]
+
+<h2>string literals</h2>
+
+It's mentioned in the book that one can use an s suffix for string literals so that they have std::string type.  However, what isn't stated is that this requires both c++14 and the use of the std::literals namespace.  The following illustrates how this feature can be used
+
+[sourcecode language="cpp"]
+#include <string>
+#include <iostream>
+
+static_assert( __cplusplus >= 201402L, "require c++14 for string literal suffix" ) ;
+
+using namespace std::literals ;
+
+int main()
+{
+   std::string hi { "hi\n" } ;
+   hi += "there"s + "\n" ;
+
+   std::cout << hi ;
+
+   return 0 ;
+}
+[/sourcecode]
+
+Note that without the literal s suffix in the string concatonation, as in
+
+[sourcecode language="cpp"]
+   hi += "there" + "\n" ;
+[/sourcecode]
+
+This produces an error:
+
+[sourcecode language="bash"]
+$ make
+c++ -o d -std=c++14 d.cc
+d.cc:11:18: error: invalid operands to binary expression ('const char *' and 'const char *')
+   hi += "there" + "\n" ;
+         ~~~~~~~ ^ ~~~~
+1 error generated.
+make: *** [d] Error 1
+[/sourcecode]
+
+The language isn't designed to know to promote the right hand side elements to std::string just because they are being assigned to such a type.  The use of either the string literal suffix, or an explicit conversion is required, as in
+[sourcecode language="cpp"]
+hi += std::string{"there"} + "\n" ;
+[/sourcecode]

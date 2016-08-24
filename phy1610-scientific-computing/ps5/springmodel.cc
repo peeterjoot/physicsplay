@@ -51,7 +51,7 @@ class brent_minimizer<gsl_spring_min_function> ;
  */
 class minimizerstate
 {
-   gsl_spring_min_function                   m_f ;
+   gsl_spring_min_function                   m_f{} ;
    minimizerParameters                       m_params ;
    brent_minimizer<gsl_spring_min_function>  m_minimizer ;
 
@@ -60,7 +60,6 @@ public:
       Set the (position) bounds on the minimization interval, and allocate the gsl minimizer object.
     */
    minimizerstate( ) :
-      m_f{},
       m_params( m_f.start(), m_f.end() ),
       m_minimizer( m_f )
    {

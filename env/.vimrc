@@ -14,13 +14,19 @@ set fileformat=unix
 set notitle
 set noerrorbells
 set textwidth=0
+syntax on
+
+"map <C-K> :pyf /usr/share/clang/clang-format.py<cr>
+"imap <C-K> <c-o>:pyf /usr/share/clang/clang-format.py<cr>
+map <C-K> :!mycformat<cr>
+imap <C-K> <c-o>:!mycformat<cr>
 " --- Peeter ---
 
 "git clone git@github.com:vim-scripts/Cpp11-Syntax-Support.git
 "mkdir -p .vim/syntax
 "cd .vim/syntax
 "for i in Cpp11-Syntax-Support/syntax/*.vim ; do ln -s $i ; done
-au BufNewFile,BufRead *.cpp *.cc *.h *.hpp set syntax=cpp11
+"au BufNewFile,BufRead *.cpp *.cc *.h *.hpp set syntax=cpp11
 
 "set diffexpr=MyDiff()
 "function MyDiff()

@@ -4,6 +4,7 @@
    Main driver for the ps7 assignment.
  */
 #include <iostream>
+#include <vector>
 #include <string>
 #include <getopt.h>
 #include <fstream>

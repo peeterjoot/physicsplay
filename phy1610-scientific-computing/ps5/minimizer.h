@@ -15,30 +15,16 @@
  */
 struct oneMinimumResult
 {
-   int         m_status ;     ///< The last successful or unsuccessful gsl function return code.
-   std::string m_strerror ;   ///< gsl_strerror() output for m_status.
-   bool        m_converged ;  ///< did the iteration converge in the specfied number of iterations.
-   Uint        m_iter ;       ///< the final iteration count at the point of convergence, error, or non-convergence.
-   double      m_initial_a ;  ///< initial lower bound for the bracket
-   double      m_initial_b ;  ///< initial upper bound for the bracket
-   double      m_a ;          ///< final lower bound for the bracket
-   double      m_b ;          ///< final upper bound for the bracket
-   double      m_xmin ;       ///< final position value found by the min search
-   double      m_fmin ;       ///< value of the function at m_xmin, provided m_status is not an error.
-
-public:
-   oneMinimumResult() :
-      m_status{},
-      m_strerror{},
-      m_converged{},
-      m_iter{},
-      m_initial_a{},
-      m_initial_b{},
-      m_a{},
-      m_b{},
-      m_xmin{}
-   {
-   }
+   int         m_status{} ;     ///< The last successful or unsuccessful gsl function return code.
+   std::string m_strerror{} ;   ///< gsl_strerror() output for m_status.
+   bool        m_converged{} ;  ///< did the iteration converge in the specfied number of iterations.
+   Uint        m_iter{} ;       ///< the final iteration count at the point of convergence, error, or non-convergence.
+   double      m_initial_a{} ;  ///< initial lower bound for the bracket
+   double      m_initial_b{} ;  ///< initial upper bound for the bracket
+   double      m_a{} ;          ///< final lower bound for the bracket
+   double      m_b{} ;          ///< final upper bound for the bracket
+   double      m_xmin{} ;       ///< final position value found by the min search
+   double      m_fmin{} ;       ///< value of the function at m_xmin, provided m_status is not an error.
 } ;
 
 /**
@@ -46,12 +32,12 @@ public:
  */
 struct minimizerParameters
 {
-   const Uint              m_max_iter ;   ///< Maximum number of iterations before giving up.
-   const double            m_abserr ;     ///< the absolute error criteria for convergence.
-   const double            m_relerr ;     ///< the relative error criteria for convergence.
-   const bool              m_verbose ;    ///< verbose output
-   double                  m_a ;          ///< initial lower bound for the bracket
-   double                  m_b ;          ///< initial upper bound for the bracket
+   const Uint              m_max_iter{100} ;   ///< Maximum number of iterations before giving up.
+   const double            m_abserr{1e-6} ;    ///< the absolute error criteria for convergence.
+   const double            m_relerr{1e-6} ;    ///< the relative error criteria for convergence.
+   const bool              m_verbose{} ;       ///< verbose output
+   double                  m_a ;               ///< initial lower bound for the bracket
+   double                  m_b ;               ///< initial upper bound for the bracket
 
    minimizerParameters( const double   a,
                         const double   b,
@@ -74,8 +60,8 @@ struct minimizerParameters
  */
 class minimizerResults
 {
-   Sint    m_minIndex ;                 ///< vector postion for the smallest local minimum
-   Sint    m_maxIndex ;                 ///< vector postion for the largest local minimum
+   Sint    m_minIndex{(Sint)-1} ;                 ///< vector postion for the smallest local minimum
+   Sint    m_maxIndex{(Sint)-1} ;                 ///< vector postion for the largest local minimum
 
    /**
       Go through results array and see which of the local min found is the local vs global min
@@ -86,14 +72,7 @@ class minimizerResults
    void compareLocalMinimums() ;
 
 public:
-   std::vector<oneMinimumResult> m_rv ; ///< iteration counts, minimum value, and other info for each min found.
-
-   minimizerResults() :
-      m_minIndex{(Sint)-1},
-      m_maxIndex{(Sint)-1},
-      m_rv{}
-   {
-   }
+   std::vector<oneMinimumResult> m_rv{} ; ///< iteration counts, minimum value, and other info for each min found.
 
    /**
       difference in x position of the smallest local minimum compared to the largest local minimum
@@ -128,11 +107,11 @@ public:
 template <typename gslParams>
 class brent_minimizer
 {
-   gsl_function                     m_F ;
+   gsl_function                     m_F{} ;
    const gslParams &                m_f ;
-   const gsl_min_fminimizer_type *  m_T ;
-   gsl_min_fminimizer *             m_s ;
-//   std::string                      m_solvername ; ///< gsl_min_fminimizer_name().
+   const gsl_min_fminimizer_type *  m_T{} ;
+   gsl_min_fminimizer *             m_s{} ;
+//   std::string                      m_solvername{} ; ///< gsl_min_fminimizer_name().
 
    /**
       Run the gsl brent minimizer on a single interval and collect the results.

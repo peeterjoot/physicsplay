@@ -93,7 +93,7 @@ int main( int argc, char ** argv )
 
    for ( ; i != end ; ++i )
    {
-      float totants{ i() } ;
+      int totants{ i() } ;
 
       timer.tick() ;
 

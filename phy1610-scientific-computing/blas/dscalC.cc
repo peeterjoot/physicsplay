@@ -3,10 +3,10 @@
 
 int main(int argc, char **argv)
 {
-   double x[] = { 1.0, 2.0, 3.0 } ;
-   double coeff = 4.323 ;
-   int one = 1 ;
-   int n = 3 ;
+   double x[] { 1.0, 2.0, 3.0 } ;
+   double coeff { 4.323 } ;
+   int one { 1 } ;
+   int n { 3 } ;
 
    // CSCAL - scales a vector by a constant.
    cblas_dscal(n, coeff, x, one) ;

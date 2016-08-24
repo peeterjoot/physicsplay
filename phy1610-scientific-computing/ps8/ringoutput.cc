@@ -6,6 +6,9 @@
 
 #include "ringoutput.h"
 #include <iostream>
+#include <vector>
+#include <cmath>
+#include <numeric>
 #include <iomanip>
 #include <rarrayio>
 #include "sparkline.h"
@@ -79,7 +82,7 @@ void ringoutput::showline( const int       step,
 walkring_output::walkring_output( const std::string & datafilename, const int outputcols, const int N )
    : ringoutput( datafilename, outputcols )
    , m_density( N )
-   , m_N( N )
+//   , m_N( N )
 {
 }
 

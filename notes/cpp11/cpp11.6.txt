@@ -1,0 +1,204 @@
+Some notes on Chapter 31, 32 (standard library, STL) of Stroustrup's "The C++ Programming Language".
+
+<h2>Emplace</h2>
+
+I'd never heard the word emplace before, but it turns out that it isn't a word made up for c++, but is also a dictionary word
+
+http://www.dictionary.com/browse/emplace
+
+meaning to "put into place or position".
+
+c++11 defines some emplace functions.  Here's an example for vector
+
+[sourcecode language="cpp"]
+#include <vector>
+#include <iostream>
+
+int main()
+{
+   using pair = std::pair<int, int> ;
+   using vector = std::vector< pair > ;
+
+   vector v ;
+
+   pair p{ 1, 2 } ;
+   v.push_back( p ) ;
+   v.push_back( {2, 3} ) ;
+   v.emplace_back( 3, 4 ) ;
+
+   for ( auto e : v )
+   {
+      std::cout << e.first << ", " << e.second << '\n' ;
+   }
+
+   return 0 ;
+}
+[/sourcecode]
+
+The emplace_back is like the push_back function, but does not require that a constructed object be created first, either explicitly as in the object p above, or implictly as done with the {2, 3} pair initializer list.
+
+<h2>multimap</h2>
+
+I'd written some perl code the other day when I wanted a hash that had multiple entries per key.  Since my hashed elememts were simple, I just strung them together as comma separated entries (I could have also used a hash of array references).  It looks like c++11 builds exactly the construct that I wanted into STL, and has both a multimap and unordered_multimap.  Here's an example of the latter
+
+[sourcecode language="cpp"]
+#include <unordered_map>
+#include <string>
+#include <iostream>
+
+int main()
+{
+   std::unordered_multimap< int, std::string > m ;
+
+   m.emplace( 3, "hi" ) ;
+   m.emplace( 3, "bye" ) ;
+   m.emplace( 4, "wow" ) ;
+
+   for ( auto & v : m )
+   {
+      std::cout << v.first << ": " << v.second << '\n' ;
+   }
+  
+   for ( auto f{ m.find(3) } ; f != m.end() ; ++f )
+   {
+      std::cout << "find: " << f->first << ": " << f->second << '\n' ;
+   }
+   
+   return 0 ;
+} 
+[/sourcecode]
+
+Running this gives me
+[sourcecode language="bash"]
+$ ./a.out 
+4: wow
+3: hi
+3: bye
+find: 3: hi
+find: 3: bye
+[/sourcecode]
+
+Observe how nice auto is here.  I don't have to care what the typename for the unordered_multimap find result is.  According to gdb that type is:
+
+[sourcecode language="bash"]
+(gdb) whatis f
+type = std::__1::__hash_map_iterator<std::__1::__hash_iterator<std::__1::__hash_node<std::__1::__hash_value_type<int, std::__1::basic_string<char> >, void*>*> >
+[/sourcecode]
+
+Yikes!
+
+<h2>STL</h2>
+
+The STL chapter outlines lots of different algorithms.  One new powerful feature in c++11 is that the Lambdas can be used instead of predicate function objects, which is so much cleaner.   I used that capability in a scientific computing programming assignment earlier this year with partial_sort.
+
+The find_if_not algorthim caught my eye, because I just manually coded exactly that sort of loop translating intel assembly that used 'REPL SCASB' instructions, and that code was precisely of this find_if_not form.  The c++ equivalent of the assembly was roughly of the following form:
+
+[sourcecode language="cpp"]
+int scan3( const std::string & s, char v )
+{
+   auto p = s.begin() ;
+   for ( ; p != s.end() ; p++ )
+   {
+      if ( *p != v )
+      {
+         break ; 
+      }
+   }
+
+   if ( p == s.end() )
+   {
+      return 0 ;
+   }
+   else
+   {
+      std::cout << "diff: " << p - s.begin() << '\n' ;
+
+      return ( v > *p ) ? 1 : -1 ;
+   }
+[/sourcecode]
+
+Range for can also be used for this loop, but it is only slightly clearer:
+
+[sourcecode language="cpp"]
+int scan2( const std::string & s, char v )
+{
+   auto p = s.begin() ;
+   for ( auto c : s )
+   {
+      if ( c != v )
+      {
+         break ;
+      }
+
+      p++ ;
+   }
+
+   if ( p == s.end() )
+   { 
+      return 0 ;
+   }
+   else
+   { 
+      std::cout << "diff: " << p - s.begin() << '\n' ;
+
+      return ( v > *p ) ? 1 : -1 ;
+   }
+}
+[/sourcecode]
+
+An STL version of this loop that uses a lambda predicate is
+[sourcecode language="cpp"]
+int scan( const std::string & s, char v )
+{
+   auto i = find_if_not( s.begin(),
+                         s.end(),
+                         [ v ]( char c ){ return c == v ; }
+                       ) ;
+
+   if ( i == s.end() )
+   { 
+      return 0 ;
+   }
+   else
+   { 
+      std::cout << "diff: " << i - s.begin() << '\n' ;
+
+      return ( v > *i ) ? 1 : -1 ;
+   }
+}
+[/sourcecode]
+
+I don't really think that this is any more clear than explicit for loop versions.  All give the same results when tried:
+
+[sourcecode language="cpp"]
+int main()
+{
+   std::vector< std::function< int( const std::string &, char ) > > v { scan, scan2, scan3 } ;
+
+   for ( auto f : v )
+   { 
+      int r0 = f( "nnnnn", 'n' ) ;
+      int rp = f( "nnnnnmmm", 'n' ) ;
+      int rn = f( "nnnnnpnn", 'n' ) ;
+
+      std::cout << r0 << '\n' ;
+      std::cout << rp << '\n' ;
+      std::cout << rn << '\n' ;
+   }
+
+   return 0 ;
+}
+[/sourcecode]
+
+The compiler does almost the same for all three implementations.  With the cout's removed, and compiling with optimization, the respective instruction counts are:
+
+[sourcecode language="bash"]
+(gdb) p 0xee3-0xe70
+$1 = 115
+(gdb) p 0xf4c-0xef0
+$2 = 92
+(gdb) p 0xfc3-0xf50
+$3 = 115
+[/sourcecode]
+
+The listings for the STL and the C style for loop are almost the same.  The Apple xcode 7 compiler seems to produce slightly more compact code for the range-for version of this function for reasons that are not obvious to me.

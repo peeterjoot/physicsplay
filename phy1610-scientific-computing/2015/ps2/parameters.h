@@ -9,39 +9,24 @@
 /// Physical parameters.
 struct physical
 {
-   double  c      ;  ///< wave speed
-   double  tau    ;  ///< damping time
-   double  x1     ;  ///< left most x value
-   double  x2     ;  ///< right most x value
-
-   /**
-     set physical parameters to some defaults
-    */
-   physical() ;
+   double c{ 1.0 }    ;  ///< wave speed
+   double tau{ 20.0 } ;  ///< damping time
+   double x1{ -26.0 } ;  ///< left most x value
+   double x2{ +26.0 } ;  ///< right most x value
 } ;
 
 /// Simulation parameters
 struct simulation
 {
-   double  runtime ;  ///< how long should the simulation try to compute?
-   double  dx     ;   ///< spatial grid size
-
-   /**
-     set simulation parameters to some defaults
-    */
-   simulation() ;
+   double  runtime{ 200.0 } ;  ///< how long should the simulation try to compute?
+   double  dx     { 0.02 }  ;  ///< spatial grid size
 } ;
 
 /// Output parameters
 struct output
 {
-   double  outtime ;   ///< how often should a snapshot of the wave be written out?
-   bool    verbose ;   ///< print output or just compute it?
-
-   /**
-     set output parameters to some defaults
-    */
-   output() ;
+   double  outtime{ 1.0 } ;    ///< how often should a snapshot of the wave be written out?
+   bool    verbose{ true } ;   ///< print output or just compute it?
 } ;
 
 /// Derived parameters and parsing

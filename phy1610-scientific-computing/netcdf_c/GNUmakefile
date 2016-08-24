@@ -26,7 +26,9 @@ TARGETS += readfile
 READFILE_SOURCES += readfile.cc
 READFILE_OBJECTS := $(subst .cc,.o,$(READFILE_SOURCES))
 
+ifdef SCINET_NETCDF_INC
 TARGETS += writefilep
+endif
 WRITEFILEP_SOURCES += writefilep.cc
 WRITEFILEP_SOURCES += ../ps10/mpitask.cc
 WRITEFILEP_SOURCES += ../ps10/rangePartition.cc

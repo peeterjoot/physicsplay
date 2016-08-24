@@ -48,8 +48,6 @@ arrayIOwriter::arrayIOwriter( const std::string &   filePathAndBaseName,
    , m_how{how}
    , m_metaDataFd{invalidFileHandle}
    , m_fd{invalidFileHandle}
-   , m_currentOffset{0}
-   , m_nextFileNumber{0}
    , m_filePathAndBaseName( filePathAndBaseName )
 {
    if ( IO_method::noop != m_how )
@@ -69,7 +67,6 @@ arrayIOwriter::writePartitionInfo::writePartitionInfo( const void * const   star
                                                        const int            numThreads,
                                                        const int            threadnum )
    : m_batchSizeBytes{ totalBytes / numThreads }
-   , m_startpos{nullptr}
 {
 
    // give the last thread anything left over

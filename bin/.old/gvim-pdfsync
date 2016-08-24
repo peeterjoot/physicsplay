@@ -1,0 +1,74 @@
+#!/bin/bash
+#
+# gvim-pdfsync: Script for opening a file in Vim in OS X and positioning
+#               the cursor at a particular line. If the file is already
+#               open in an existing Vim, the cursor will be repositioned
+#               re-opening the file.
+#
+#               The script is meant to extend the inverse searching
+#               (c.f. PDFSync compatible PDF viewers (e.g., Skim or
+#               TeXniscope) or DVI viewers that pay attention to 
+#               source specials (e.g., TeXniscope)) to MacVim.
+#
+# Version: 1.03
+#
+# Author: Ted Pavlic
+#         ted@tedpavlic.com
+#         http://www.tedpavlic.com/
+#
+# Usage: gvim-pdfsync "%file" [%line]
+#
+#        where %file is a file name and %line is a line number.
+#
+# History and acknowledgments: 
+#
+#    The genesis of this script is this comment:
+#
+#    http://www.macosxhints.com/comment.php?mode=view&cid=88674
+#
+#    to this thread:
+#
+#    http://www.macosxhints.com/article.php?story=20070111095701823
+#
+#    Most of the important AppleScript is by Yonatan Amit, the original
+#    author of that thread. 
+#
+# For more information (and history):
+#
+# http://phaseportrait.blogspot.com/2007/07/pdfsync-inverse-searches-on-vim-for-os.html
+#
+# Version history:
+#
+# 1.0  : 07/11/2007 - Initial release (Ted Pavlic)
+# 1.01 : 07/11/2007 - Some slashes got escaped in a copy/paste. Fixed. (Ted Pavlic)
+# 1.02 : 07/17/2007 - Added usage line and braces around variables. (Ted Pavlic)
+# 1.03 : 07/20/2007 - More conventional usage line. Updated documentation. (Ted Pavlic)
+#
+
+if [ "$1" == "" ]; then
+        echo "Usage: gvim-pdfsync FILE [lineNumber]" >&2
+        exit 1
+fi
+
+filename="$1"
+lineNum="$2"
+
+export PATH=/Applications/Vim.app/Contents/MacOS:$PATH
+
+[ "${filename:0:1}" == "/" ] || filename="${PWD}/${filename}"
+
+exec osascript \
+ -e "set ESC to ASCII character of 27" \
+ -e "tell application \"MacVim\" to activate" \
+ -e "tell application \"System Events\"" \
+   -e "tell process \"MacVim\"" \
+   -e "keystroke ESC & \":set hidden\" & return " \
+   -e "keystroke \":if bufexists('${filename}')\" & return " \
+   -e "keystroke \":exe \\\":buffer \\\" . bufnr('${filename}')\"  & return " \
+   -e "keystroke \":else \" & return " \
+   -e "keystroke \":    edit ${filename// /\\\\ }\" & return " \
+   -e "keystroke \":endif\" & return " \
+   -e "keystroke \":${lineNum}\" & return " \
+   -e "keystroke \"zO\" " \
+   -e "end tell" \
+ -e "end tell"

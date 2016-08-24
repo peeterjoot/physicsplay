@@ -20,16 +20,14 @@ using my_random_engine = std::mt19937 ;
 template <int a, int delta, int N>
 class RandomIntegers
 {
-   std::random_device                        m_rd ;
+   std::random_device                        m_rd{} ;
    my_random_engine                          m_engine ;
-   std::uniform_int_distribution<unsigned>   m_uniform ;
+   std::uniform_int_distribution<unsigned>   m_uniform{ 0, N } ;
 
 public:
    /** constuct a uniform random number generator for the specified range */
    RandomIntegers( )
-      : m_rd()
-      , m_engine( m_rd() )
-      , m_uniform( 0, N )
+      : m_engine( m_rd() )
    {
       static_assert( N > 0, "Integer N > 0 expected" ) ;
       static_assert( delta > 0, "Integer delta > 0 expected" ) ;
@@ -55,20 +53,18 @@ public:
 template <int N>
 class RandomDiscreteReals
 {
-   std::random_device                        m_rd ;
+   std::random_device                        m_rd{} ;
    double                                    m_a ;       ///< lower interval bound
    double                                    m_delta ;   ///< separation between random number samples
    my_random_engine                          m_engine ;
-   std::uniform_int_distribution<unsigned>   m_uniform ;
+   std::uniform_int_distribution<unsigned>   m_uniform{ 0, N } ;
 
 public:
    /** constuct a uniform random number generator for the specified range */
    RandomDiscreteReals( const double a, const double delta )
-      : m_rd()
-      , m_a( a )
+      : m_a( a )
       , m_delta( delta )
       , m_engine( m_rd() )
-      , m_uniform( 0, N )
    {
       static_assert( N > 0, "Real N > 0 expected" ) ;
       myassert( delta > 0 ) ;
@@ -94,7 +90,7 @@ public:
 template <typename T = double>
 class RandomReals
 {
-   std::random_device                  m_rd ;
+   std::random_device                  m_rd{} ;
    T                                   m_a ;        ///< lower interval bound
    T                                   m_b ;        ///< upper interval bound
    my_random_engine                    m_engine ;
@@ -103,8 +99,7 @@ class RandomReals
 public:
    /** constuct a uniform random number generator for the specified range */
    RandomReals( const T a, const T b )
-      : m_rd()
-      , m_a( a )
+      : m_a( a )
       , m_b( b )
       , m_engine( m_rd() )
       , m_uniform( a, b )

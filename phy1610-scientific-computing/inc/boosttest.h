@@ -8,7 +8,8 @@
 #if defined USE_SINGLE_HEADER_BOOST_TEST_FRAMEWORK
    #include <boost/test/included/unit_test.hpp>
 
-   #if defined __STRICT_ANSI__
+   // FIXME: this !mac should be am_cygwin
+   #if defined __STRICT_ANSI__ && !defined __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__
       #error cygwin boost/test/unit_test.hpp requires putenv and mkstemp in the global namespace.  Add -U__STRICT_ANSI__
    #endif
 #else

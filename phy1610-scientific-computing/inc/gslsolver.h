@@ -62,24 +62,13 @@ const gsl_root_fdfsolver_type * solverToFdfMethod( const solver whichSolver ) ;
  */
 struct iterationResults
 {
-   std::string m_solvername ; ///< gsl_root_fdfsolver_name().
-   bool        m_converged ;  ///< did the iteration converge in the specfied number of iterations.
-   Uint        m_iter ;       ///< The number of iterations performed before root is found or we give up.
-   int         m_status ;     ///< The last successful or unsuccessful gsl function return code.
-   std::string m_strerror ;   ///< gsl_strerror() output for m_status.
-   double      m_x ;          ///< The root at the conclusion of the iteration
-   double      m_xPrev ;      ///< The previous iteration point when finished (for fdf solvers)
-
-   iterationResults() :
-      m_solvername{},
-      m_converged{false},
-      m_iter{0},
-      m_status{0},
-      m_strerror{},
-      m_x{0.0},
-      m_xPrev{0}
-   {
-   }
+   std::string m_solvername ;   ///< gsl_root_fdfsolver_name().
+   bool        m_converged{} ;  ///< did the iteration converge in the specfied number of iterations.
+   Uint        m_iter{} ;       ///< The number of iterations performed before root is found or we give up.
+   int         m_status{} ;     ///< The last successful or unsuccessful gsl function return code.
+   std::string m_strerror{} ;   ///< gsl_strerror() output for m_status.
+   double      m_x{0.} ;        ///< The root at the conclusion of the iteration
+   double      m_xPrev{0.} ;    ///< The previous iteration point when finished (for fdf solvers)
 } ;
 
 /**
@@ -136,17 +125,9 @@ struct intervalIterationInputs : public iterationParameters
  */
 struct intervalIterationResults : public iterationResults
 {
-   double      m_xLo ;              ///< Final lower bound for the interval
-   double      m_xHi ;              ///< Final upper bound for the interval
-   Uint        m_numBisections ;    ///< For iterateBracketed, the number of bisection iterations.
-
-   intervalIterationResults() :
-      iterationResults{},
-      m_xLo{0.0},
-      m_xHi{0.0},
-      m_numBisections{0}
-   {
-   }
+   double      m_xLo{0.} ;            ///< Final lower bound for the interval
+   double      m_xHi{0.} ;            ///< Final upper bound for the interval
+   Uint        m_numBisections{} ;    ///< For iterateBracketed, the number of bisection iterations.
 } ;
 
 /** Output parameters for an gsl fdf solver iteration.
@@ -158,15 +139,14 @@ using derivativeIterationResults = iterationResults ;
  */
 struct derivativeIterationInputs : public iterationParameters
 {
-   const double   m_x0 ;        ///< Initial guess for the root.
+   const double   m_x0{} ;        ///< Initial guess for the root.
 
    derivativeIterationInputs( const double   x0,
                               const Uint     max_iter,
                               const double   abserr,
                               const double   relerr,
                               const bool     verbose = false ) :
-        iterationParameters( max_iter, abserr, relerr, verbose ),
-        m_x0{x0}
+        iterationParameters( max_iter, abserr, relerr, verbose )
    {
    }
 } ;

@@ -59,7 +59,7 @@ class walkring_output : private ringoutput
 {
 private:
    darray   m_density ;    ///< An internally calculated density, calculated once per output line.  This is written to the .dat file instead of showline's w parameter.
-   int      m_N ;          ///< Number of grid points.
+//   int      m_N ;          ///< Number of grid points.
 
 public:
    /**

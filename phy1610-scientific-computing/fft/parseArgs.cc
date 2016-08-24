@@ -7,7 +7,7 @@
 void showHelpAndExit( char * argv0 )
 {
    std::cerr
-      << "usage: " << argv0 << '\n'
+      << "usage: " << argv0 << "\n"
          "\t[--infile]"
          "\t[--outfile]"
          "\t[--help]"

@@ -1,0 +1,123 @@
+I was curious how the c++11 std::regex interface compared to the C posix regular expression library.  The c++11 interfaces are almost as easy to use as perl.  Suppose we have some space separated fields that we wish to switch the order of
+
+[sourcecode language="perl"]
+my @strings = ( "hi bye", "hello world", "why now", "one two" ) ;
+
+foreach ( @strings )
+{
+   s/(\S+)\s+(\S+)/'$&' -> '$2 $1'/ ;
+
+   print "$_\n" ;
+}
+[/sourcecode]
+
+The C++ equivalent is 
+
+[sourcecode language="cpp"]
+   const char * strings[] { "hi bye", "hello world", "why now", "one two" } ;
+
+   std::regex re( R"((\S+)\s+(\S+))" ) ;
+
+   for ( auto s : strings )
+   {
+      std::cout << regex_replace( s, re, "'$&' -> '$2 $1'\n" )  ;
+   }
+[/sourcecode]
+
+We have one additional step with the C++ code, compiling the regular expression.  Precompilation of perl regular expressions is also possibl, but that is usually just as performance optimization.
+
+The posix equivalent also requires precompilation too
+
+[sourcecode language="cpp"]
+void posixre_error( regex_t * pRe, int rc )
+{
+   char buf[ 128 ] ;
+
+   regerror( rc, pRe, buf, sizeof(buf) ) ;
+
+   fprintf( stderr, "regerror: %s\n", buf ) ;
+   exit( 1 ) ;
+}
+
+void posixre_compile( regex_t * pRe, const char * expression )
+{
+   int rc = regcomp( pRe, expression, REG_EXTENDED ) ;
+   if ( rc )
+   { 
+      posixre_error( pRe, rc ) ;
+   }
+}
+[/sourcecode]
+
+but the transform requires more work:
+
+[sourcecode language="cpp"]
+void posixre_transform( regex_t * pRe, const char * input )
+{
+   constexpr size_t N{3} ;
+   regmatch_t m[N] {} ;
+
+   int rc = regexec( pRe, input, N, m, 0 ) ;
+
+   if ( rc && (rc != REG_NOMATCH) )
+   {
+      posixre_error( pRe, rc ) ;
+   }
+
+   if ( !rc )
+   { 
+      printf( "'%s' -> ", input ) ;
+      int len ;
+      len = m[2].rm_eo - m[2].rm_so ; printf( "'%.*s ", len, &input[ m[2].rm_so ] ) ;
+      len = m[1].rm_eo - m[1].rm_so ; printf( "%.*s'\n", len, &input[ m[1].rm_so ] ) ;
+   }
+}
+[/sourcecode]
+
+To get at the capture expressions we have to pass an array of regmatch_t's.  The first element of that array is the entire match expression, and then we get the captures after that.  The awkward thing to deal with is that the regmatch_t is a structure containing the start end end offset within the string.
+
+If we want more granular info from the c++ matcher, it can also provide an array of capture info.  We can also get info about whether or not the match worked, something we can do in perl easily
+
+[sourcecode language="perl"]
+my @strings = ( "hi bye", "helloworld", "why now", "onetwo" ) ;
+
+foreach ( @strings )
+{
+   if ( s/(\S+)\s+(\S+)/$2 $1/ )
+   {
+      print "$_\n" ;
+   }
+}  
+[/sourcecode]
+
+This only prints the transformed line if there was a match success.  To do this in C++ we can use regex_match
+
+[sourcecode language="cpp"]
+const char * pattern = R"((\S+)\s+(\S+))" ;
+
+std::regex re( pattern ) ;
+
+for ( auto s : strings )
+{ 
+   std::cmatch m ;
+
+   if ( regex_match( s, m, re ) )
+   { 
+      std::cout << m[2] << ' ' << m[1] << '\n' ;
+   }
+}
+[/sourcecode]
+
+Note that we don't have to mess around with offsets as was required with the Posix C interface, and also don't have to worry about the size of the capture match array, since that is handled under the covers.  It's not too hard to do wrap the posix C APIs in a C++ wrapper that makes it about as easy to use as the C++ regex code, but unless you are constrained to using pre-C++11 code and can also live with a Unix only restriction.  There are also portability issues with the posix APIs.  For example, the perl-style regular expressions like:
+
+[sourcecode language="cpp"]
+   R"((\S+)(\s+)(\S+))" ) ;
+[/sourcecode]
+
+work fine with the Linux regex API, but that appears to be an exception.  To make code using that regex work on Mac, I had to use strict posix syntax
+
+[sourcecode language="cpp"]
+   R"(([^[:space:]]+)([[:space:]]+)([^[:space:]]+))"
+[/sourcecode]
+
+Actually using the Posix C interface, with a portability constraint that avoids the Linux regex extensions, would be horrendous.

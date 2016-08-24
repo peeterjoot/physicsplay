@@ -15,7 +15,7 @@ class parseOptions
    void showHelpAndExit()
    {
       std::cerr
-         << "usage: " << m_exeName << '\n'
+         << "usage: " << m_exeName << "\n"
             "\t[--nrec]\n"
             "\t[--help]"
          << std::endl ;

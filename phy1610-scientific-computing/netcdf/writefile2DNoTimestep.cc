@@ -23,33 +23,34 @@ void setData( int dataOut[nx][ny], const int v )
    Parse arguments and run the driver.
  */
 int main( int argc, char ** argv )
+try 
 {
-   try {
-      int dataOut[nx][ny] ;
+   int dataOut[nx][ny] ;
 
-      // Create the netCDF file.
-      NcFile dataFile( "first.netCDF.nc", NcFile::replace ) ;
+   // Create the netCDF file.
+   NcFile dataFile( "first.netCDF.nc", NcFile::replace ) ;
 
-      // Create the dimensions.
-      auto xDim = dataFile.addDim( "x", nx ) ;
-      auto yDim = dataFile.addDim( "y", ny ) ;
+   // Create the dimensions.
+   auto xDim = dataFile.addDim( "x", nx ) ;
+   auto yDim = dataFile.addDim( "y", ny ) ;
 
-      std::vector < NcDim > dims { xDim, yDim } ;
+   std::vector < NcDim > dims { xDim, yDim } ;
 
-      // Create the data variable.
-      auto data = dataFile.addVar( "data", ncInt, dims ) ;
+   // Create the data variable.
+   auto data = dataFile.addVar( "data", ncInt, dims ) ;
 
-      // Put the data in the file.
-      data.putVar( &dataOut ) ;
+   // Put the data in the file.
+   data.putVar( &dataOut ) ;
 
-      // Add an attribute.
-      dataFile.putAtt( "Version info:", PHYSICSPLAY_COMMIT_INFO ) ;
-   }
-   catch ( NcException & e )
-   {
-      std::cout << "unknown error" << std::endl ;
-      e.what() ;
-   }
+   // Add an attribute.
+   dataFile.putAtt( "Version info:", PHYSICSPLAY_COMMIT_INFO ) ;
 
    return (int)RETURNCODES::SUCCESS ;
+}
+catch ( NcException & e )
+{
+   std::cout << "unknown error" << std::endl ;
+   e.what() ;
+
+   return (int)RETURNCODES::EXCEPTION ;
 }

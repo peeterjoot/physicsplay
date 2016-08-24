@@ -10,23 +10,18 @@
 
 class netcdfOutput : public NcFileOpener
 {
-   bool                    m_open ;
-   netCDF::NcVar           m_grid ;
-   netCDF::NcVar           m_total ;
-   std::vector<size_t>     m_startp ;
+   bool                    m_open{} ;
+   netCDF::NcVar           m_grid{} ;
+   netCDF::NcVar           m_total{} ;
+   std::vector<size_t>     m_startp{ 0, 0, 0 } ;
    std::vector<size_t>     m_countp ;
-   std::vector<ptrdiff_t>  m_stridep ;
+   std::vector<ptrdiff_t>  m_stridep{ 1, 1, 1 } ;
    std::vector<ptrdiff_t>  m_imapp ;
 
 public:
    netcdfOutput( const std::string netcdfFileName, const size_t n ) :
       NcFileOpener{},
-      m_open{},
-      m_grid{},
-      m_total{},
-      m_startp { 0, 0, 0 },
       m_countp { 1, n, n },
-      m_stridep { 1, 1, 1 },
       // in memory stride.  each data[t][x][y] -> data[t][n * x + y]
       m_imapp { 1, (ptrdiff_t)n , 1 }
    {

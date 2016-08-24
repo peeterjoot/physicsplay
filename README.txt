@@ -166,6 +166,8 @@ phy1610-scientific-computing/
 
 programming/
 
+   Most of the stuff in this dir is simple one-off test programs to try out a specific language feature.
+
    cpuinfo/
 
       inline assembly test for powerpc mfpvr instruction.
@@ -196,7 +198,6 @@ programming/
    shellcode/
    strcpyOverlapped/
    sym2/
-      FIXME: describe.  Lots of this was little trivial bits of experimental crap code.
 
 #-------------------------------------------------------
 

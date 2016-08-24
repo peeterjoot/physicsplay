@@ -69,7 +69,7 @@ multiPendulumSphericalMatrix.tex :: ../classicalmechanics/multiPendulumSpherical
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
-	echo $(ORIG_FILES) | tr ' ' '\n' | sed 's,.*/,notes/blogit/,' > $@
+	echo $(ORIG_FILES) | tr ' ' '\n' | sedwrapper 's,.*/,notes/blogit/,' > $@
 
 video: $(VIDEO)
 
@@ -103,10 +103,10 @@ include ../make.latexmk
 
 %.pdf : %.tex
 	mkdir -p ./.revinfo/
-	~/bin/mkRevInfo > ./.revinfo/lastCommit.tex
-	~/bin/mkRevInfo -date > ./.revinfo/gitCommitDate.tex
-	~/bin/mkRevInfo -commit > ./.revinfo/gitCommitString.tex
-	~/bin/mkRevInfo -repo > ./.revinfo/gitRepo.tex
+	mkRevInfo > ./.revinfo/lastCommit.tex
+	mkRevInfo -date > ./.revinfo/gitCommitDate.tex
+	mkRevInfo -commit > ./.revinfo/gitCommitString.tex
+	mkRevInfo -repo > ./.revinfo/gitRepo.tex
 	$(LATEXMK) $<
 
 #%.mp4 : %.avi
@@ -161,7 +161,7 @@ macros_mathematica.sty : ../macros_mathematica.sty
 	cp $^ $@
 
 Bibliography.bib : myrefs.bib
-	sed 's/@webpage/@manual/g' < $< > $@
+	sedwrapper 's/@webpage/@manual/g' < $< > $@
 
 # old style:
 myrefs.bib: ../myrefs.bib.in ../METADATA

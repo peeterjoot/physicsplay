@@ -4,7 +4,7 @@
 
 include ../make.vars
 
-TARGETS += enum
+#TARGETS += enum
 ENUM_SOURCES += enum.cc
 ENUM_SOURCES += enum1.cc
 ENUM_OBJECTS := $(subst .cc,.o,$(ENUM_SOURCES))

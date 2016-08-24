@@ -31,8 +31,8 @@ void openStreamForWriteOrThrow( const std::string & filename, std::ofstream & st
  */
 class stdoutOrFileStream
 {
-   std::ofstream  m_streamHandle ;     ///< file handle when appropriate.
-   bool           m_useFileHandle ;    ///< do we use the ofstream or cout?
+   std::ofstream  m_streamHandle{} ;     ///< file handle when appropriate.
+   bool           m_useFileHandle{} ;    ///< do we use the ofstream or cout?
 
 public:
 
@@ -40,8 +40,6 @@ public:
       open a file if filename represents a non-null string (pathname)
     */
    stdoutOrFileStream( const std::string & filename )
-      : m_streamHandle{},
-        m_useFileHandle{false}
    {
       if ( filename.length() )
       {
