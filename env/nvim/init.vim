@@ -94,6 +94,9 @@ call plug#begin('~/.vim/plugged')
 "Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 
+" component specific .vimrc overrides:
+Plug 'embear/vim-localvimrc'
+
 " https://github.com/plasticboy/vim-markdown
 "Plug 'plasticboy/vim-markdown'
 
