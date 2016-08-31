@@ -257,3 +257,6 @@ set mouse=
 
 let g:localvimrc_whitelist=['~/workspace/*/', '~/build/trunk/']
 
+" http://unix.stackexchange.com/questions/88879/vim-better-colors-so-comments-arent-dark-blue
+color desert
+"set background=dark
