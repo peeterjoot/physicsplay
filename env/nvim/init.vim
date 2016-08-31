@@ -254,4 +254,6 @@ set mouse=
 "
 ""set backup
 "
-"
+
+let g:localvimrc_whitelist=['~/workspace/*/', '~/build/trunk/']
+
