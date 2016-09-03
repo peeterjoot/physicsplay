@@ -1,9 +1,93 @@
-#! /usr/bin/perl
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
+
+=head1 NAME
+
+lt - generate Latex environment Templates, (for use within vim).
+
+=head1 SYNOPSIS
+
+lt [--help] [--example='blah blah']
+            [--equation]
+            [--dmath]
+            [--aligned]
+            [--subequations]
+            [--option]
+            [--labelbox=up|down|default]
+
+=head1 DESCRIPTION
+
+Examples:
+
+=over 4
+
+==item --dmath
+
+Just a dmath env:
+
+:,!lt -f % -d
+
+=item --equation
+
+A equation env with an aligned in it
+
+:,!lt -f % -eq -a
+
+=item --example
+
+Print out a makeexample block
+
+:,!lt -f % -ex='The linear case.'
+
+==item --option
+
+A left brace triplet of option values
+
+:,!lt -f % --option
+
+==item multiple options
+
+The kitchen sink
+
+:,!lt -eq -f % -subeq -exa='blah blah' -dmath=3 -aligned
+
+=back 
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeter.joot@lzlabs.com
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
 
 use strict ;
 use warnings ;
-use Getopt::Long;
+use Getopt::Long ;
+use Pod::Usage ;
 
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
+
+my $myName = '' ;
+
+($myName = $0) =~ s@.*[/\\]@@ ;
 my $filename = "WHAT" ;
 my $equation ;
 my $boxed ;
@@ -26,7 +110,8 @@ my $item ;
 my $enum ;
 my $labelbox ;
 
-GetOptions( 
+#Getopt::Long::Configure( 'pass_through' ) ;
+GetOptions ( 
    'file=s'        => \$filename,
    'example:s'     => \$example,
    'item'          => \$item,
@@ -47,35 +132,8 @@ GetOptions(
    'number:i'      => \$number,
    'aligned'       => \$aligned,
    'labelbox=s'    => \$labelbox,
-   'help!'         => \$showUsage,
+   'help'          => sub { pod2usage(-verbose => 2) ; },
 ) ;
-
-if ( $showUsage )
-{
-   die 
-"usage: generate Latex environment Templates, (for use within vim).
-
-:,!lt -f % [-example='blah blah'|-equation|-dmath|-aligned|-subequations|-labelbox=up|down|default]
-
-Examples:
-
-Just a dmath env:
-
-:,!lt -f % -d
-
-A equation env with an aligned in it
-
-:,!lt -f % -eq -a
-
-A makeexample block
-
-:,!lt -f % -ex='The linear case.'
-
-The kitchen sink
-
-:,!lt -eq -f % -subeq -exa='blah blah' -dmath=3 -aligned
-" ;
-}
 
 $filename =~ s/\.tex$// ;
 $filename =~ s,.*/,, ;
