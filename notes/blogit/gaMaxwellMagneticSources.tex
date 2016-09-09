@@ -25,7 +25,7 @@
 
 \section{Setup.}
 
-A previous analysis enumerated the boundary conditions implied by Maxwell's equations in free space.  Let's now generalize those to linear media, also allowing for magnetic charges and currents, a convient formalism in antenna theory \citep{balanis2005antenna}.  The equations in their traditional vector form are
+A previous analysis enumerated the boundary conditions implied by Maxwell's equations in free space.  Let's now generalize those to linear media, also allowing for magnetic charges and currents, a convenient formalism in antenna theory \citep{balanis2005antenna}.  The equations in their traditional vector form are
 \index{electric charge density}
 \index{electric current density}
 \index{magnetic charge density}
@@ -101,21 +101,102 @@ or, in multivector form
 
 Observe that pre-multiplication with \( \inv{v} \partial_t - \spacegrad \) produces a wave equation operator \( \inv{v^2}\partial_{tt} - \spacegrad^2 \), validating the wave velocity assertion.
 
-This multivector formula can be summarized nicely in the traditional GA Maxwell's form 
+This multivector formula can be summarized nicely in what looks like the traditional GA Maxwell's form 
 
 %\begin{dmath}\label{eqn:gaMaxwellMagneticSources:640}
 \boxedEquation{eqn:gaMaxwellMagneticSources:640}{
 \begin{aligned}
-\grad F &= J \\
+\grad F &= \inv{v} J \\
 \grad &= \gamma_0 \lr{ \inv{v}\PD{t}{} + \spacegrad } \\
 F &= \BD + \inv{v} I \BH \\
-J &= \frac{\gamma_0}{v} \lr{ v \rho - \BJ } + \frac{\epsilon \gamma_0}{v} I \lr{ \rho_\txtm - v \BM }.
+J &= \gamma_0 \lr{ v \rho - \BJ } + \epsilon \gamma_0 I \lr{ \rho_\txtm - v \BM }.
 \end{aligned}
 }
 %\end{dmath}
 
-We have a different than usual scaling of the STA bivector \( F \) than with the free space formulation, and a different scaling of the time component of the STA gradient.  Inclusion of magnetic charges and currents means that \( J \) is now a multivector that also has a trivector component as well as the vector component.
+There are some differences from the GA free space Maxwell's equation.  We have a different than usual scaling of the STA bivector \( F \), and a different scaling of the time component of the STA gradient.  Inclusion of magnetic charges and currents means that \( J \) is now a multivector that also has a trivector component as well as the vector component.
 
-\section{Boundary conditions.}
+\section{Boundary conditions for zero four-currents.}
+
+The electrodynamic field \( F = \BD + I \BH/v \) is a multivector in this spatial domain (whereas it is a bivector in the spacetime algebra domain), and has vector and bivector components.  The product of the spatial gradient and the field can still be split into dot and curl components \( \spacegrad M = \spacegrad \cdot M + \spacegrad \wedge M \).  If \( M = \sum M_i \), where \( M_i \) is an grade \( i \) blade, then we give this the Hestenes' \citep{hestenes1999nfc} definitions
+
+\begin{dmath}\label{eqn:gaMaxwellMagneticSources:700}
+\begin{aligned}
+\spacegrad \cdot M &= \sum_i \gpgrade{\spacegrad M_i}{i-1} \\
+\spacegrad \wedge M &= \sum_i \gpgrade{\spacegrad M_i}{i+1}.
+\end{aligned}
+\end{dmath}
+
+With that said, Maxwell's equation can be rearranged into a pair of multivector equations
+
+\begin{dmath}\label{eqn:gaMaxwellMagneticSources:660}
+\begin{aligned}
+\spacegrad \wedge F &= \inv{v} \gpgrade{ -\partial_t F + \gamma_0 J}{2,3} \\
+\spacegrad \cdot F &= \inv{v} \gpgrade{ -\partial_t F + \gamma_0 J}{0,1}.
+\end{aligned}
+\end{dmath}
+
+The former equation can be integrated with Stokes theorem, but we need to apply a duality transformation to the latter in order to apply Stokes to it
+
+\begin{dmath}\label{eqn:gaMaxwellMagneticSources:740}
+\spacegrad \cdot F
+=
+-I^2 \spacegrad \cdot F
+=
+-I^2 \gpgrade{\spacegrad F}{0,1}
+=
+-I \gpgrade{I \spacegrad F}{2,3}
+=
+-I \spacegrad \wedge (IF).
+\end{dmath}
+
+Application of the grade selection operations and the duality transformations, leaves things in a state that we can apply Stokes integrals that provide the boundary conditions
+
+\begin{dmath}\label{eqn:gaMaxwellMagneticSources:680}
+\begin{aligned}
+\spacegrad \wedge F &= \inv{v} \lr{ -\partial_t (I \BH/v) + \epsilon I \lr{ \rho_\txtm - v \BM } } \\
+\spacegrad \wedge (I F) &= \frac{I}{v} \lr{ -\partial_t \BD + v \rho - \BJ}.
+\end{aligned}
+\end{dmath}
+
+These are Stokes integrable
+
+\begin{dmath}\label{eqn:gaMaxwellMagneticSources:720}
+\begin{aligned}
+\oint d^2 \Bx \cdot F &= \int d^3 \Bx \cdot \lr{ -\frac{I}{v^2} \partial_t \BH + \epsilon I \lr{ \inv{v} \rho_\txtm - \BM } } \\
+\oint d^2 \Bx \cdot (I F) &= \int d^3 \Bx \cdot \lr{ \frac{I}{v} \lr{ -\partial_t \BD + v \rho - \BJ}}.
+\end{aligned}
+\end{dmath}
+
+This is the core statement that determines the boundary conditions.  It can, of course, be unpacked into the traditional form, expressed in terms of the constituent fields, by first noting that
+
+\begin{dmath}\label{eqn:gaMaxwellMagneticSources:760}
+\begin{aligned}
+d^2 \Bx \cdot F &= d^2 \Bx \cdot \BD + \inv{v} I d^2 \Bx \wedge \BH \\
+d^2 \Bx \cdot (I F) &= I d^2 \Bx \wedge \BD - \inv{v} d^2 \Bx \cdot \BH.
+\end{aligned}
+\end{dmath}
+
+Equating all the equal grades we have
+
+\begin{dmath}\label{eqn:gaMaxwellMagneticSources:780}
+\begin{aligned}
+\oint d^2 \Bx \cdot \BD &= -\frac{I}{v^2} \partial_t \int d^3 \Bx \cdot \BH - \epsilon I \int d^3 \Bx \cdot \BM  \\
+I \oint d^2 \Bx \wedge (\BH/v) &= I \int d^3 \Bx \frac{\epsilon}{v} \rho_\txtm \\
+\oint I d^2 \Bx \wedge \BD &= I \int d^3 \Bx \rho \\
+- \oint d^2 \Bx \cdot \BH/v &= I \int d^3 \Bx \cdot \inv{v} \lr{ \partial_t \BD - \BJ }.
+\end{aligned}
+\end{dmath}
+
+%Rescaling in terms of the original fields of Maxwell's equations, these are
+%
+%\begin{dmath}\label{eqn:gaMaxwellMagneticSources:780}
+%\begin{aligned}
+%\oint d^2 \Bx \cdot \BD &= -\frac{I}{v^2} \partial_t \int d^3 \Bx \cdot \BH - \epsilon I \int d^3 \Bx \cdot \BM  \\
+%\oint d^2 \Bx \wedge \BB &= \int d^3 \Bx \mu \epsilon \rho_\txtm \\
+%\oint d^2 \Bx \wedge \BD &= \int d^3 \Bx \rho \\
+%\oint d^2 \Bx \cdot \BB &= -I \int d^3 \Bx \cdot \lr{ \partial_t \BD - \BJ }.
+%\end{aligned}
+%\end{dmath}
 
 \EndArticle
