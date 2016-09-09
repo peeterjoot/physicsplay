@@ -10,15 +10,17 @@
 
 \input{../peeter_prologue_print2.tex}
 
-\usepackage{ece1229}
+\usepackage{siunitx}
+\usepackage{esint} % \oiint
+%\usepackage{ece1229}
 
 \beginArtNoToc
 
-\generatetitle{Maxwell's equations in Geometric Algebra}
+\generatetitle{Boundary conditions for Maxwell's equations in linear media}
 \index{Geometric Algebra}
 \index{Maxwell equation}
 \index{Maxwell's equation}
-%\chapter{Maxwell's equations in Geometric Algebra}
+%\chapter{Boundary conditions for Maxwell's equations in linear media}
 %\label{chap:gaMaxwellMagneticSources}
 
 A previous analysis enumerated the boundary conditions implied by Maxwell's equations in free space.  Let's now generalize those to linear media, also allowing for magnetic charges and currents, a convient formalism in antenna theory \citep{balanis2005antenna}.  The equations in their traditional vector form are
@@ -42,113 +44,74 @@ A previous analysis enumerated the boundary conditions implied by Maxwell's equa
 \end{dmath}
 \end{subequations}
 
-where, for linear media \( \BB = \mu \BH \) and \( \BD = \epsilon \BE \).  We will see that this describes waves that propagate with velocity is \( v = 1/\sqrt{\mu\epsilon} \).
+where, for linear media \( \BB = \mu \BH \) and \( \BD = \epsilon \BE \).  We will see that this describes waves that propagate with velocity \( v = 1/\sqrt{\mu\epsilon} \).
 \index{linear media}
 
-Scaling and application of duality transformations \( \Ba \cross \Bb = -I \Ba \wedge \Bb \) gives
+After scaling, application of duality transformations \( \Ba \cross \Bb = -I \Ba \wedge \Bb \), and the use of \( \spacegrad \cdot \Bx + \spacegrad \wedge \Bx = \spacegrad \Bx \), we have
 
-\begin{subequations}
-\label{eqn:gaMaxwellMagneticSources:180}
-\begin{dmath}\label{eqn:gaMaxwellMagneticSources:200}
-\spacegrad \wedge \BD = -I \epsilon \lr{ \PD{t}{\BB} +\BM }
-\end{dmath}
-\begin{dmath}\label{eqn:gaMaxwellMagneticSources:220}
-\spacegrad \wedge \BH = I \lr{\BJ + \epsilon \PD{t}{\BE}}.
-\end{dmath}
-\begin{dmath}\label{eqn:gaMaxwellMagneticSources:n}
-\spacegrad \cdot \BD = \rho
-\end{dmath}
-\begin{dmath}\label{eqn:gaMaxwellMagneticSources:n}
-\spacegrad \cdot \BH = \inv{\mu} \rho_\txtm,
-\end{dmath}
-\end{subequations}
-
-Because a geometric product of the gradient with a vector decomposes into a dot and curl ( \( \spacegrad \Bx = \spacegrad \cdot \Bx + \spacegrad \wedge \Bx \) ), the reverse transformation can be applied
-
+%\begin{subequations}
+%\label{eqn:gaMaxwellMagneticSources:180}
+%\begin{dmath}\label{eqn:gaMaxwellMagneticSources:200}
+%\spacegrad \wedge \BD = -I \epsilon \lr{ \PD{t}{\BB} +\BM }
+%\end{dmath}
+%\begin{dmath}\label{eqn:gaMaxwellMagneticSources:220}
+%\spacegrad \wedge \BH = I \lr{\BJ + \PD{t}{\BD}}.
+%\end{dmath}
+%\begin{dmath}\label{eqn:gaMaxwellMagneticSources:480}
+%\spacegrad \cdot \BD = \rho
+%\end{dmath}
+%\begin{dmath}\label{eqn:gaMaxwellMagneticSources:500}
+%\spacegrad \cdot \BH = \inv{\mu} \rho_\txtm,
+%\end{dmath}
+%\end{subequations}
+%
+%Because a geometric product of the gradient with a vector decomposes into a dot and curl ( \( \spacegrad \Bx = \spacegrad \cdot \Bx + \spacegrad \wedge \Bx \) ), the reverse transformation can be applied
+%
 \begin{subequations}
 \label{eqn:gaMaxwellMagneticSources:240}
-\begin{dmath}\label{eqn:gaMaxwellMagneticSources:200}
-\spacegrad \BD = \rho + -I \epsilon \lr{ \PD{t}{\BB} +\BM }
+\begin{dmath}\label{eqn:gaMaxwellMagneticSources:520}
+\spacegrad \BD = \rho + -I \epsilon \lr{ \mu \PD{t}{\BH} +\BM }
 \end{dmath}
-\begin{dmath}\label{eqn:gaMaxwellMagneticSources:220}
-\spacegrad \BH = \inv{\mu} \rho_\txtm + I \lr{\BJ + \epsilon \PD{t}{\BE}}.
+\begin{dmath}\label{eqn:gaMaxwellMagneticSources:540}
+\spacegrad \BH = \inv{\mu} \rho_\txtm + I \lr{\BJ + \PD{t}{\BD}}.
 \end{dmath}
 \end{subequations}
 
-%%%XX
-%%%Noting that \( \epsilon_0 \mu_0 = 1/c^2 \) this can be summed as
-%%%
-%%%\begin{dmath}\label{eqn:gaMaxwellMagneticSources:300}
-%%%\spacegrad \lr{ \BE + I c \BB } 
-%%%= \rho/\epsilon_0 -\lr{ \inv{c} \PD{t}{I c \BB} + I\BM }
-%%%+ I c \rho_\txtm - \lr{c \mu_0 \BJ + \inv{c} \PD{t}{\BE}},
-%%%\end{dmath}
-%%%
-%%%or
-%%%
-%%%\begin{dmath}\label{eqn:gaMaxwellMagneticSources:320}
-%%%\lr{ \spacegrad + \inv{c} \PD{t}{} } \lr{ \BE + I c \BB } 
-%%%= \rho/\epsilon_0 - c \mu_0 \BJ + I c \rho_\txtm - I \BM 
-%%%\end{dmath}
-%%%
-%%%\section{Relativistic form}
-%%%
-%%%Premultiplying by \( \gamma_0 \) and using the spatial basis representation \( \sigma_k = \gamma_k \gamma_0 \), the four vector form of Maxwell's equation is
-%%%
-%%%\begin{dmath}\label{eqn:gaMaxwellMagneticSources:340}
-%%%\begin{aligned}
-%%%\grad F &= J + I M \\
-%%%F &= \BE + I c \BB \\
-%%%J &= \inv{\epsilon_0 c} \lr{ c \rho, \BJ } \\
-%%%M &= \lr{ c \rho_\txtm, \BM }.
-%%%\end{aligned}
-%%%\end{dmath}
-%%%
-%%%This can be separated into a pair of equations
-%%%\begin{dmath}\label{eqn:gaMaxwellMagneticSources:360}
-%%%\begin{aligned}
-%%%\grad \wedge F &= I M \\
-%%%\grad \cdot F &= J.
-%%%\end{aligned}
-%%%\end{dmath}
-%%%
-%%%When there is no magnetic four-current, we can write \( F = \grad \wedge A \), and the equations reduce to
-%%%
-%%%\begin{dmath}\label{eqn:gaMaxwellMagneticSources:380}
-%%%\grad^2 A - \grad (\grad \cdot A) = J.
-%%%\end{dmath}
-%%%
-%%%This can be further simplified using the Lorentz gauge, but this approach doesn't work when \( M \ne 0 \).  Suppose instead that \( J = 0 \).  A duality transformation of the form \( F = I G \) can be used in that case.  This gives
-%%%
-%%%\begin{dmath}\label{eqn:gaMaxwellMagneticSources:400}
-%%%I M 
-%%%= \gpgradethree{ \grad I G  } 
-%%%= -\gpgradethree{ I \grad G  } 
-%%%= -I \grad \cdot G,
-%%%\end{dmath}
-%%%
-%%%and
-%%%\begin{dmath}\label{eqn:gaMaxwellMagneticSources:420}
-%%%0 
-%%%= \gpgradeone{ \grad I G  } 
-%%%= -\gpgradeone{ I \grad G  } 
-%%%= -I \grad \wedge G,
-%%%\end{dmath}
-%%%
-%%%or
-%%%\begin{dmath}\label{eqn:gaMaxwellMagneticSources:440}
-%%%\begin{aligned}
-%%%\grad \wedge G &= 0 \\
-%%%\grad \cdot G &= - M
-%%%\end{aligned}
-%%%\end{dmath}
-%%%
-%%%It is clear that this can be reduced to one equation with a trial solution of \( G = \grad \wedge A_\txtm \), or
-%%%
-%%%\begin{dmath}\label{eqn:gaMaxwellMagneticSources:460}
-%%%\grad^2 A_\txtm - \grad \lr{ \grad \cdot A_\txtm } = -M.
-%%%\end{dmath}
-%%%
-%%%Observe that this can also be simplified with a Lorentz gauge selection for the four-potential.
+Since the dimensions \( [\BH] = \si{A/m} \), and \( [\BD] = \si{A/s/m^2} \), these can be put in a dimensionally consistent form as follows
+
+\begin{subequations}
+\label{eqn:gaMaxwellMagneticSources:580}
+\begin{dmath}\label{eqn:gaMaxwellMagneticSources:600}
+\spacegrad \BD + \inv{v} \PD{t}{}(I \BH/v) = \rho -I \epsilon \BM
+\end{dmath}
+\begin{dmath}\label{eqn:gaMaxwellMagneticSources:620}
+\spacegrad (I \BH/v) + \inv{v} \PD{t}{\BD} = \inv{\mu v} I \rho_\txtm - \inv{v} \BJ,
+\end{dmath}
+\end{subequations}
+
+or, in multivector form
+
+\begin{dmath}\label{eqn:gaMaxwellMagneticSources:560}
+\lr{ \inv{v}\PD{t}{} + \spacegrad } \lr{ \BD + \inv{v} I \BH } 
+= \inv{v} \lr{ v \rho - \BJ } 
+  + \frac{\epsilon}{v} I \lr{ \rho_\txtm - v \BM }.
+\end{dmath}
+
+Observe that pre-multiplication with \( \inv{v} \partial_t - \spacegrad \) produces a wave equation operator \( \inv{v^2}\partial_{tt} - \spacegrad^2 \), validating the wave velocity assertion.
+
+This multivector formula can be summarized nicely in the traditional GA Maxwell's form 
+
+%\begin{dmath}\label{eqn:gaMaxwellMagneticSources:640}
+\boxedEquation{eqn:gaMaxwellMagneticSources:640}{
+\grad F &= J \\
+\begin{aligned}
+\grad &= \gamma_0 \lr{ \inv{v}\PD{t}{} + \spacegrad } \\
+F &= \BD + \inv{v} I \BH \\
+J &= \frac{\gamma_0}{v} \lr{ v \rho - \BJ } + \frac{\epsilon \gamma_0}{v} I \lr{ \rho_\txtm - v \BM }.
+\end{aligned}
+}
+%\end{dmath}
+
+We have a different than usual scaling of the STA bivector \( F \) than with the free space formulation.  Inclusion of magnetic charges and currents means that \( J \) is now a multivector that also has a trivector component as well as the vector component.
 
 \EndArticle
