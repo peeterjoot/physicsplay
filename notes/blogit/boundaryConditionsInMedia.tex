@@ -1,0 +1,125 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+%{
+\input{../blogpost.tex}
+\renewcommand{\basename}{boundaryConditionsInMedia}
+\renewcommand{\dirname}{notes/phy1520/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+\usepackage{siunitx}
+
+\beginArtNoToc
+
+\generatetitle{Maxwell equation boundary conditions in media}
+%\chapter{Maxwell equation boundary conditions in media}
+%\label{chap:boundaryConditionsInMedia}
+% \citep{sakurai2014modern} pr X.Y
+% \citep{pozar2009microwave}
+% \citep{qftLectureNotes}
+% \citep{griffiths1999introduction}
+
+Following \citep{balanis1989advanced}, Maxwell's equations in media, including both electric and magnetic sources and currents are
+
+\begin{subequations}
+\label{eqn:boundaryConditionsInMedia:20}
+\begin{dmath}\label{eqn:boundaryConditionsInMedia:40}
+\spacegrad \cross \BE = -\BM - \partial_t \BB
+\end{dmath}
+\begin{dmath}\label{eqn:boundaryConditionsInMedia:60}
+\spacegrad \cross \BH = \BJ + \partial_t \BD
+\end{dmath}
+\begin{dmath}\label{eqn:boundaryConditionsInMedia:80}
+\spacegrad \cdot \BD = \rho
+\end{dmath}
+\begin{dmath}\label{eqn:boundaryConditionsInMedia:100}
+\spacegrad \cdot \BB = \rho_\txtm
+\end{dmath}
+\end{subequations}
+
+In general, it is not possible to assemble these into a single Geometric Algebra equation unless specfic assumptions about the permeabilities are made, but we can still use Geometric Algebra to examine the boundary condition question.  First, these equations can be expressed in a more natural multivector form
+
+\begin{subequations}
+\label{eqn:boundaryConditionsInMedia:120}
+\begin{dmath}\label{eqn:boundaryConditionsInMedia:140}
+\spacegrad \wedge \BE = -I \lr{ \BM + \partial_t \BB }
+\end{dmath}
+\begin{dmath}\label{eqn:boundaryConditionsInMedia:160}
+\spacegrad \wedge \BH = I \lr{ \BJ + \partial_t \BD }
+\end{dmath}
+\begin{dmath}\label{eqn:boundaryConditionsInMedia:180}
+\spacegrad \cdot \BD = \rho
+\end{dmath}
+\begin{dmath}\label{eqn:boundaryConditionsInMedia:200}
+\spacegrad \cdot \BB = \rho_\txtm
+\end{dmath}
+\end{subequations}
+
+Then duality relations can be used on the divergences to write all four equations in their curl form
+
+\begin{subequations}
+\label{eqn:boundaryConditionsInMedia:220}
+\begin{dmath}\label{eqn:boundaryConditionsInMedia:240}
+\spacegrad \wedge \BE = -I \lr{ \BM + \partial_t \BB }
+\end{dmath}
+\begin{dmath}\label{eqn:boundaryConditionsInMedia:260}
+\spacegrad \wedge \BH = I \lr{ \BJ + \partial_t \BD }
+\end{dmath}
+\begin{dmath}\label{eqn:boundaryConditionsInMedia:280}
+\spacegrad \wedge (I\BD) = \rho I
+\end{dmath}
+\begin{dmath}\label{eqn:boundaryConditionsInMedia:300}
+\spacegrad \wedge (I\BB) = \rho_\txtm I
+\end{dmath}
+\end{subequations}
+
+Now it is possible to employ Stokes theorem to each of these.  The usual procedure is to use both loops 
+\cref{fig:boundaryConditionsPillBox:boundaryConditionsPillBoxFig2}
+and pillbox configurations
+\cref{fig:boundaryConditionsTwoSurfaces:boundaryConditionsTwoSurfacesFig1}
+, where in both cases the height is made infinetisimal.
+
+% FIXME:remove all but the references when merging this into the gabookII.
+\imageFigure{../../figures/gabook/boundaryConditionsPillBoxFig2}{Two surfaces normal to the interface.}{fig:boundaryConditionsPillBox:boundaryConditionsPillBoxFig2}{0.3}
+\imageFigure{../../figures/gabook/boundaryConditionsTwoSurfacesFig1}{A pillbox volume encompassing the interface.}{fig:boundaryConditionsTwoSurfaces:boundaryConditionsTwoSurfacesFig1}{0.3}
+
+With all these relations expressed in curl form as above, we can use just the pillbox configuration to evaluate the Stokes integrals.  
+Let the height be measured along the z-axis, and assuming that all the charges and currents are localized to the surface
+
+\begin{dmath}\label{eqn:boundaryConditionsInMedia:320}
+\begin{aligned}
+\BM &= \BM_\txts \delta( z ) \\
+\BJ &= \BJ_\txts \delta( z ) \\
+\rho &= \rho_\txts \delta( z ) \\
+\rho_\txtm &= \rho_{\txtm\txts} \delta( z ),
+\end{aligned}
+\end{dmath}
+
+we can enumerate the Stokes integrals \( \int d^3 \Bx \cdot \lr{ \spacegrad \wedge X } = \oint_{\partial V} d^2 \Bx \cdot X \).  The three-volume area element will be written as \( d^3 \Bx = d^2 \Bx \wedge \Be_3 dz \), giving
+
+\begin{subequations}
+\label{eqn:boundaryConditionsInMedia:340}
+\begin{dmath}\label{eqn:boundaryConditionsInMedia:360}
+\oint_{\partial V} d^2 \Bx \cdot \BE = -\int (d^2 \Bx \wedge \Be_3) \cdot \lr{ I \BM_\txts + \partial_t I \BB \Delta z}
+\end{dmath}
+\begin{dmath}\label{eqn:boundaryConditionsInMedia:380}
+\oint_{\partial V} d^2 \Bx \cdot \BH = \int (d^2 \Bx \wedge \Be_3) \cdot \lr{ I \BJ_\txts + \partial_t I \BD \Delta z}
+\end{dmath}
+\begin{dmath}\label{eqn:boundaryConditionsInMedia:400}
+\oint_{\partial V} d^2 \Bx \cdot (I\BD) = \int (d^2 \Bx \wedge \Be_3) \cdot \lr{ \rho_\txts I }
+\end{dmath}
+\begin{dmath}\label{eqn:boundaryConditionsInMedia:420}
+\oint_{\partial V} d^2 \Bx \cdot (I\BB) = \int (d^2 \Bx \wedge \Be_3) \cdot \lr{ \rho_{\txtm\txts} I }
+\end{dmath}
+\end{subequations}
+
+%}
+\EndArticle
+%\EndNoBibArticle
