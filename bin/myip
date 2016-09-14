@@ -1,0 +1,111 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
+
+=head1 NAME
+
+myip - grab all the ip addresses.
+
+=head1 SYNOPSIS
+
+myip [--help] [--filter] [--debug]
+
+=head1 DESCRIPTION
+
+Options:
+
+=over 4
+
+=item --debug
+
+Show the raw lines too.
+
+=item --filter
+
+Skip line if it does not match the specified expression.  Examples:
+
+--filter=eno
+
+--filter=192
+
+--filter=172
+
+--filter=tun0
+
+=back 
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@protonmail.com
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+use Pod::Usage ;
+use English qw(OSNAME) ;
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
+
+my $myName = '' ;
+my $filter ;
+my $debug = 0 ;
+my $inet6 = 0 ;
+
+($myName = $0) =~ s@.*[/\\]@@ ;
+
+GetOptions ( 
+   'filter=s'           => \$filter,
+   'debug!'             => \$debug,
+   'inet6!'             => \$inet6,
+   'help'               => sub { pod2usage(-verbose => 2) ; },
+) or pod2usage(-verbose => 0) ;
+
+my @ips ;
+
+if ( $OSNAME eq 'darwin' )
+{
+   @ips = `ifconfig | grep inet | grep -e broadcast -e prefixlen -e netmask` ;
+}
+else
+{
+   @ips = `/usr/sbin/ip addr | grep inet | grep global` ;
+}
+
+foreach ( @ips )
+{
+   chomp ;
+   print "# $_\n" if ( $debug ) ;
+
+   next if ( /inet6/ && !$inet6 ) ;
+
+   if ( defined $filter )
+   {
+      next unless ( /$filter/ ) ;
+   }
+
+   s/^\s*inet6*\s*// ;
+   s, .*,, ;
+   s,/.*,, ;
+
+   print "$_\n" ;
+}
