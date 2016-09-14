@@ -1,6 +1,7 @@
 #include <thread>
 #include <vector>
-#include <iostream>
+#include <stdio.h>
+//#include <iostream>
 #include <string.h>
 #include <pthread.h>
 
@@ -16,7 +17,8 @@ void body( )
       {
          strerror_r( i, estr, sz ) ;
 
-         std::cout << "i: " << i << estr << '\n' ;
+         printf( "i: %d (%s)\n", i, estr ) ;
+//         std::cout << "i: " << i << estr << '\n' ;
       }
    }
 }
