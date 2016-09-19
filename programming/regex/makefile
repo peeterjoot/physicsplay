@@ -1,7 +1,7 @@
-CFLAGS += -g
-CFLAGS += -std=c++11
+CXXFLAGS += -g
+CXXFLAGS += -std=c++11
 #LDFLAGS += -lboost_regex
-HOSTNAME := $(shell hostname)
+#HOSTNAME := $(shell hostname)
 
 #include makefile.$(HOSTNAME)
 
