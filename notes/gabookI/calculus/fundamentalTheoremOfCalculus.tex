@@ -1,0 +1,273 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+%{
+%\input{../blogpost.tex}
+%\renewcommand{\basename}{fundamentalTheoremOfCalculus}
+%\renewcommand{\dirname}{notes/phy1520/}
+%%\newcommand{\dateintitle}{}
+%%\newcommand{\keywords}{}
+%
+%\input{../peeter_prologue_print2.tex}
+%
+%\usepackage{peeters_layout_exercise}
+%\usepackage{peeters_braket}
+%\usepackage{peeters_figures}
+%\usepackage{siunitx}
+%
+%\beginArtNoToc
+%
+%\generatetitle{Fundamental theorem of geometric calculus}
+%\label{chap:fundamentalTheoremOfCalculus}
+
+\section{Definitions}
+
+The Fundamental Theorem of (Geometric) Calculus is a generalization of Stokes theorem \cref{thm:stokesTheoremGeometricAlgebra:1740} to multivector integrals.  Notationally, it looks like Stokes theorem with all the dot and wedge products removed.  
+
+\maketheorem{Fundamental Theorem of Geometric Calculus}{thm:fundamentalTheoremOfCalculus:1}{
+For blades \(F, G \), and a volume element \(d^k \Bx\),
+
+\begin{equation*}
+\int_V F d^k \Bx \boldpartial G = \oint_{\partial V} F d^{k-1} \Bx G.
+\end{equation*}
+}
+
+The Fundamental Theorem as stated here generalized Stokes' theorem in a couple ways.  One generalization is that the blade grade restriction of Stokes' theorem are missing in action.  This theorem is a multivector result, whereas the LHS and RHS of Stokes' are of equal grade.  Additional, the fundamental theorem promotes the action of the vector derivative to a bidirectional operator.  Not all formulations of this theorem include that generalization.  For example \citep{aMacdonaldVAGC} states the theorem as
+
+\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:180}
+\int_V d^k \Bx \boldpartial F = \oint_{\partial V} d^{k-1} \Bx F.
+\end{dmath}
+
+whereas \citep{doran2003gap} points out there is a variant with the vector derivative acting to the left
+
+\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:200}
+\int_V F d^k \Bx \boldpartial = \oint_{\partial V} F d^{k-1} \Bx,
+\end{dmath}
+
+but does not promote the vector derivative to a bidirectional operator.  Here I follow \citep{sobczyk2011fundamental} which uses a bidirectional vector derivative, providing the most general expression of the Fundamental Theorem of (Geometric) Calculus.
+
+This theorem and Stokes' theorem, both single formulas, are loaded and abstract statement, requiring many definitions to make them useful.  
+Most of those definitions can be found in the previous Stokes' theorem chapter, but are summarized here
+
+\begin{itemize}
+\item The volume integral is over a \(m\) dimensional surface (manifold).
+\item Integration over the boundary of the manifold \(V\) is indicated by \( \partial V \).
+\item This manifold is assumed to be spanned by a parameterized vector \( \Bx(u^1, u^2, \cdots, u^k) \).
+\item A curvilinear coordinate basis \( \setlr{ \Bx_i } \) can be defined on the manifold by
+\begin{equation}\label{eqn:fundamentalTheoremOfCalculus:40}
+\Bx_i \equiv \PD{u^i}{\Bx} \equiv \partial_i \Bx.
+\end{equation}
+\item A dual basis \( \setlr{\Bx^i} \) reciprocal to the tangent vector basis \( \Bx_i \) can be calculated subject to the requirement \( \Bx_i \cdot \Bx^j = \delta_i^j \).
+\item The vector derivative \(\boldpartial\), the projection of the gradient onto the tangent space of the manifold, is defined by
+\begin{equation}\label{eqn:fundamentalTheoremOfCalculus:100}
+\boldpartial = \Bx^i \partial_i = \sum_{i=1}^k \Bx_i \PD{u^i}{}.
+\end{equation}
+\item The volume element is defined by
+\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:60}
+d^k \Bx = d\Bx_1 \wedge d\Bx_2 \cdots \wedge d\Bx_k,
+\end{dmath}
+
+where
+
+\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:80}
+d\Bx_k = \Bx_k du^k,\qquad \text{(no sum)}.
+\end{dmath}
+\item The volume element is non-zero on the manifold, or \( \Bx_1 \wedge \cdots \wedge \Bx_k \ne 0 \).
+\item The surface area element \( d^{k-1} \Bx \), is defined by
+\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:120}
+d^{k-1} \Bx = \sum_{i = 1}^k (-1)^{k-i} d\Bx_1 \wedge d\Bx_2 \cdots \widehat{d\Bx_i} \cdots \wedge d\Bx_k,
+\end{dmath}
+
+where \( \widehat{d\Bx_i} \) indicates the omission of \( d\Bx_i \).
+\item My proof for this theorem was restricted to a simple ``rectangular'' volume parameterized by the ranges
+   \( 
+   [u^1(0), u^1(1) ] \directproduct 
+   [u^2(0), u^2(1) ] \directproduct \cdots \directproduct
+   [u^k(0), u^k(1) ] \)
+\item The precise meaning that should be given to oriented area integral is
+\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:140}
+\oint_{\partial V} d^{k-1} \Bx \cdot F
+=
+\sum_{i = 1}^k (-1)^{k-i} \int \evalrange{
+   \lr{ \lr{ d\Bx_1 \wedge d\Bx_2 \cdots \widehat{d\Bx_i} \cdots \wedge d\Bx_k } \cdot F }
+}{u^i = u^i(0)}{u^i(1)},
+\end{dmath}
+
+where both the a area form and the blade \( F \) are evaluated at the end points of the parameterization range.
+\item
+The bidirectional vector derivative operator acts both to the left and right on \( F \) and \( G \).  The specific action of this operator is
+\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:240}
+F \boldpartial G
+=
+(F \boldpartial) G
++
+F (\boldpartial G)
+=
+(\partial_i F) \Bx^i G
++
+F \Bx^i (\partial_i G).
+\end{dmath}
+\end{itemize}
+
+For Stokes' theorem \cref{thm:stokesTheoremGeometricAlgebra:1740}, after the work of stating exactly what is meant by this theorem, most of the proof follows from the fact that for \( s < k \) the volume curl dot product can be expanded as
+
+\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:160}
+\int_V d^k \Bx \cdot (\boldpartial \wedge F) =
+\int_V d^k \Bx \cdot (\Bx^i \wedge \partial_i F) =
+\int_V \lr{ d^k \Bx \cdot \Bx^i } \cdot \partial_i F.
+\end{dmath}
+
+Each of the \(du^i\) integrals can be evaluated directly, since each of the remaining \(d\Bx_j = du^j \PDi{u^j}{}, i \ne j \) is calculated with \( u^i \) held fixed.  This allows for the integration over a ``rectangular'' parameterization region, proving the theorem for such a volume parameterization.  A more general proof requires a triangulation of the volume and surface, but the basic principle of the theorem is evident, without that additional work.
+
+\section{Fundamental Theorem of Calculus}
+
+The fundamental theorem can be demonstrated by direct expansion.  With the vector derivative \( \boldpartial \) and its partials \( \partial_i \) acting bidirectionally, that is
+
+\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:260}
+\int_V F d^k \Bx \boldpartial G
+=
+\int_V F d^k \Bx \Bx^i \partial_i G
+=
+\int_V F \lr{ d^k \Bx \cdot \Bx^i + d^k \Bx \wedge \Bx^i } \partial_i G.
+\end{dmath}
+
+Both the reciprocal frame vectors and the curvilinear basis span the tangent space of the manifold, since we can write any reciprocal frame vector as a set of projections in the curvilinear basis
+
+\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:280}
+\Bx^i = \sum_j \lr{ \Bx^i \cdot \Bx^j } \Bx_j,
+\end{dmath}
+
+so \( \Bx^i \in \Span \setlr{ \Bx_j, j \in [1,k] } \).  
+This means that \( d^k \Bx \wedge \Bx^i = 0 \), and
+%Writing \( d^k u = du^1 du^2 \cdots du^k \), we have
+
+FIXME: bug in latex?  widehat is duplicating the thing that it is covering:
+
+\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:300}
+\int_V F d^k \Bx \boldpartial G
+=
+\int_V F \lr{ d^k \Bx \cdot \Bx^i } \partial_i G
+=
+\sum_{i = 1}^{k}
+\int_V 
+du^1 du^2 \cdots \widehat{ du^i} \cdots du^k
+F \lr{ 
+(-1)^{k-i}
+ \Bx_1 \wedge \Bx_2 \cdots \widehat{\Bx_i} \cdots \wedge \Bx_k } \partial_i G du^i 
+=
+\sum_{i = 1}^{k}
+(-1)^{k-i}
+\int_{u^1}
+\int_{u^2}
+\cdots
+\int_{u^{i-1}}
+\int_{u^{i+1}}
+\cdots
+\int_{u^k}
+\evalrange{ \lr{
+F d\Bx_1 \wedge d\Bx_2 \cdots \widehat{d\Bx_i} \cdots \wedge d\Bx_k G
+}
+}{u^i = u^i(0)}{u^i(1)}.
+\end{dmath}
+
+Adding in the same notational sugar that we used in Stokes theorem, this proves the Fundamental theorem
+%\eqnref{eqn:fundamentalTheoremOfCalculus:220}
+for ``rectangular'' parameterizations.  Note that such a parameterization need not actually be rectangular.
+
+\makeexample{Application to Maxwell's equation}{example:fundamentalTheoremOfCalculus:1}{
+
+Maxwell's equation is an example of a first order gradient equation
+
+\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:320}
+\grad F = \inv{\epsilon_0 c} J.
+\end{dmath}
+
+Integrating over a four-volume (where the vector derivative equals the gradient), and applying the Fundamental theorem, we have
+
+\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:340}
+\inv{\epsilon_0 c} \int d^4 x J = \oint d^3 x F.
+\end{dmath}
+
+Observe that the surface area element product with \( F \) has both vector and trivector terms.  This can be demonstrated by considering some examples
+
+\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:360}
+\begin{aligned}
+\gamma_{012} \gamma_{01} &\propto \gamma_2 \\
+\gamma_{012} \gamma_{23} &\propto \gamma_{023}.
+\end{aligned}
+\end{dmath}
+
+On the other hand, the four volume integral of \( J \) has only trivector parts.  This means that the integral can be split into a pair of same-grade equations
+
+\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:380}
+\begin{aligned}
+\inv{\epsilon_0 c} \int d^4 x \cdot J &= 
+\oint \gpgradethree{ d^3 x F} \\
+0 &=
+\oint d^3 x \cdot F.
+\end{aligned}
+\end{dmath}
+
+The first can be put into a slightly tidier form using a duality transformation
+\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:400}
+\gpgradethree{ d^3 x F}
+=
+-\gpgradethree{ d^3 x I^2 F}
+=
+\gpgradethree{ I d^3 x I F}
+=
+(I d^3 x) \wedge (I F).
+\end{dmath}
+
+Letting \( n \Abs{d^3 x} = I d^3 x \), this gives
+
+\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:420}
+\oint \Abs{d^3 x} n \wedge (I F) = \inv{\epsilon_0 c} \int d^4 x \cdot J.
+\end{dmath}
+
+Note that this normal is normal to a three-volume subspace of the spacetime volume.  For example, if one component of that spacetime surface area element is \( \gamma_{012} c dt dx dy \), then the normal to that area component is \( \gamma_3 \).
+
+A second set of duality transformations
+
+\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:440}
+n \wedge (IF)
+=
+\gpgradethree{ n I F}
+=
+-\gpgradethree{ I n F}
+=
+-\gpgradethree{ I (n \cdot F)}
+=
+-I (n \cdot F),
+\end{dmath}
+
+and
+\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:460}
+I d^4 x \cdot J
+=
+\gpgradeone{ I d^4 x \cdot J }
+=
+\gpgradeone{ I d^4 x J }
+=
+\gpgradeone{ (I d^4 x) J }
+=
+(I d^4 x) J,
+\end{dmath}
+
+can further tidy things up, leaving us with
+
+%\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:500}
+\boxedEquation{eqn:fundamentalTheoremOfCalculus:500}{
+\begin{aligned}
+\oint \Abs{d^3 x} n \cdot F &= \inv{\epsilon_0 c} \int (I d^4 x) J \\
+\oint d^3 x \cdot F &= 0.
+\end{aligned}
+}
+%\end{dmath}
+
+The Fundamental theorem of calculus immediately provides relations between normal projections of the Faraday bivector \( F \) and the four-current \( J \), as well as boundary value constraints on \( F \) coming from the source free components of Maxwell's equation.
+} % example
+
+%}
+%\EndArticle
