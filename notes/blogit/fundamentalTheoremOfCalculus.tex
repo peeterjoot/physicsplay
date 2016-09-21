@@ -24,18 +24,18 @@
 
 \section{Stokes Theorem}
 
-Recall that the Geometric Algebra form of Stokes theorem has the form
+The Fundamental Theorem of (Geometric) Calculus is a generalization of Stokes theorem to multivector integrals.  Notationally, it looks like Stokes theorem with all the dot and wedge products removed.  It is worth restating Stokes theorem and all the definitions associated with it for reference
 
 \maketheorem{Stokes' Theorem}{thm:fundamentalTheoremOfCalculus:20}{
 
-For blades \(F\, \textrm{in} \bigwedge^{s}\), and \(m\) volume element \(d^k \Bx, s < k\),
+For blades \(F \in \bigwedge^{s}\), and \(m\) volume element \(d^k \Bx, s < k\),
 
 \begin{equation*}
 \int_V d^k \Bx \cdot (\boldpartial \wedge F) = \oint_{\partial V} d^{k-1} \Bx \cdot F.
 \end{equation*}
 }
 
-This is a loaded and abstract statement, and requires some definitions to make it useful
+This is a loaded and abstract statement, and requires many definitions to make it useful
 
 \begin{itemize}
 \item The volume integral is over a \(m\) dimensional surface (manifold).
@@ -87,11 +87,12 @@ where both the a area form and the blade \( F \) are evaluated at the end points
 After the work of stating exactly what is meant by this theorem, most of the proof follows from the fact that for \( s < k \) the volume curl dot product can be expanded as
 
 \begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:160}
-\int_V d^k \Bx \cdot (\Bx^i \partial_i \wedge F) =
+\int_V d^k \Bx \cdot (\boldpartial \wedge F) =
+\int_V d^k \Bx \cdot (\Bx^i \wedge \partial_i F) =
 \int_V \lr{ d^k \Bx \cdot \Bx^i } \cdot \partial_i F.
 \end{dmath}
 
-The theorem, over a ``rectangular'' parameterization region, then follows by direct integration, after noting that each of \( d \Bx_i = \PDi{u^i}{\Bx} du^i \) terms remaining can be integrated with the other \( u^j \) fixed.
+Each of the \(du^i\) integrals can be evaluated directly, since each of the remaining \(d\Bx_j = du^j \PDi{u^j}{}, i \ne j \) is calculated with \( u^i \) held fixed.  This allows for the integration over a ``rectangular'' parameterization region, proving the theorem for such a volume parameterization.  A more general proof requires a triangulation of the volume and surface, but the basic principle of the theorem is evident, without that additional work.
 
 \section{Fundamental Theorem of Calculus}
 
@@ -107,11 +108,13 @@ A similar expression is used in \citep{doran2003gap} where it is also pointed ou
 \int_V F d^k \Bx \boldpartial = \oint_{\partial V} F d^{k-1} \Bx.
 \end{dmath}
 
-In \citep{sobczyk2011fundamental} it is pointed out that a bidirectional formulation is possible
+In \citep{sobczyk2011fundamental} it is pointed out that a bidirectional formulation is possible, providing the most general expression of the Fundamental Theorem of (Geometric) Calculus
 
-\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:220}
+%\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:220}
+\boxedEquation{eqn:fundamentalTheoremOfCalculus:220}{
 \int_V F d^k \Bx \boldpartial G = \oint_{\partial V} F d^{k-1} \Bx G.
-\end{dmath}
+}
+%\end{dmath}
 
 Here the vector derivative acts both to the left and right on \( F \) and \( G \).  The specific action of this operator is
 \begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:240}
@@ -125,6 +128,57 @@ F (\boldpartial G)
 +
 F \Bx^i (\partial_i G).
 \end{dmath}
+
+The fundamental theorem can be demonstrated by direct expansion.  With the vector derivative \( \boldpartial \) and its partials \( \partial_i \) acting bidirectionally, that is
+
+\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:260}
+\int_V F d^k \Bx \boldpartial G
+=
+\int_V F d^k \Bx \Bx^i \partial_i G
+=
+\int_V F \lr{ d^k \Bx \cdot \Bx^i + d^k \Bx \wedge \Bx^i } \partial_i G.
+\end{dmath}
+
+Both the reciprocal frame vectors and the curvilinear basis span the tangent space of the manifold, since we can write any reciprocal frame vector as a set of projections in the curvilinear basis
+
+\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:280}
+\Bx^i = \sum_j \lr{ \Bx^i \cdot \Bx^j } \Bx_j,
+\end{dmath}
+
+so \( \Bx^i \in \Span \setlr{ \Bx_j, j \in [1,k] } \).  
+This means that \( d^k \Bx \wedge \Bx^i = 0 \), and
+%Writing \( d^k u = du^1 du^2 \cdots du^k \), we have
+
+\begin{dmath}\label{eqn:fundamentalTheoremOfCalculus:300}
+\int_V F d^k \Bx \boldpartial G
+=
+\int_V F \lr{ d^k \Bx \cdot \Bx^i } \partial_i G
+=
+\sum_{i = 1}^{k}
+\int_V 
+du^1 du^2 \cdots \widehat{ du^i} \cdots du^k
+F \lr{ 
+(-1)^{k-i}
+ \Bx_1 \wedge \Bx_2 \cdots \widehat{\Bx_i} \cdots \wedge \Bx_k } \partial_i G du^i 
+=
+\sum_{i = 1}^{k}
+(-1)^{k-i}
+\int_{u^1}
+\int_{u^2}
+\cdots
+\int_{u^{i-1}}
+\int_{u^{i+1}}
+\cdots
+\int_{u^k}
+\evalrange{ \lr{
+F d\Bx_1 \wedge d\Bx_2 \cdots \widehat{d\Bx_i} \cdots \wedge d\Bx_k G
+}
+}{u^i = u^i(0)}{u^i(1)}.
+\end{dmath}
+
+Adding in the same notational sugar that we used in Stokes theorem, this proves the Fundamental theorem 
+\eqnref{eqn:fundamentalTheoremOfCalculus:220}
+for ``rectangular'' parameterizations.  Note that such a parameterization need not actually be rectangular.
 
 %}
 \EndArticle
