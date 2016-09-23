@@ -27,7 +27,15 @@ include ../make.rules
 
 l1 : emtLecture1.pdf
 l2 : emtLecture2.pdf
-l3 : emtLecture3.pdf
+#l3 : emtLecture3.pdf
+p1 : emtProblemSet1.pdf
+
+emtProblemSet1.pdf : emtProblemSet1Problem1.tex
+emtProblemSet1.pdf : emtProblemSet1Problem2.tex
+emtProblemSet1.pdf : emtProblemSet1Problem3.tex
+emtProblemSet1.pdf : emtProblemSet1Problem4.tex
+emtProblemSet1.pdf : emtProblemSet1Problem5.tex
+emtProblemSet1.pdf : emtProblemSet1Problem6.tex
 
 julia.tex : ../../julia/METADATA
 mathematica.tex : ../../mathematica/METADATA
