@@ -1,0 +1,173 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\makeproblem{Waveguide field}{emt:problemSet1:6}{ 
+The instantaneous electric field inside a conducting parallel plate waveguide is given by
+
+\begin{dmath}\label{eqn:emtProblemSet1Problem6:20}
+\bcE(\Br, t) = \Be_2 E_0 \sin\lr{ \frac{\pi}{a} x } \cos\lr{ \omega t - \beta_\txtz z }
+\end{dmath}
+
+where \( \beta_\txtz \) is the waveguide's phase constant and \( a \) is the waveguide width (a constant).
+Assuming there are no sources within the free-space-filled pipe, determine
+\makesubproblem{}{emt:problemSet1:6a}
+The corresponding instantaneous magnetic field components inside the conducting pipe.
+\makesubproblem{}{emt:problemSet1:6b}
+The phase constant \( \beta_z \).
+} % makeproblem
+
+\makeanswer{emt:problemSet1:6}{ 
+\makeSubAnswer{}{emt:problemSet1:6a}
+
+Following the notation of \citep{balanis1989advanced} the phasor for the electric field is
+
+\begin{dmath}\label{eqn:emtProblemSet1Problem6:40}
+\BE(\Br, t) = \Be_2 E_0 \sin\lr{ \frac{\pi}{a} x } e^{ -j\beta_\txtz z },
+\end{dmath}
+
+and Maxwell's equations in source free linear media are
+
+\begin{subequations}
+\label{eqn:emtProblemSet1Problem6:60}
+\begin{dmath}\label{eqn:emtProblemSet1Problem6:80}
+\spacegrad \cross \BE = -j \omega \BB
+\end{dmath}
+\begin{dmath}\label{eqn:emtProblemSet1Problem6:100}
+\spacegrad \cross \BB = -j \omega \mu \epsilon \BE
+\end{dmath}
+\begin{dmath}\label{eqn:emtProblemSet1Problem6:120}
+\spacegrad \cdot \BE = 0
+\end{dmath}
+\begin{dmath}\label{eqn:emtProblemSet1Problem6:140}
+\spacegrad \cdot \BB = 0
+\end{dmath}
+\end{subequations}
+
+Rearranging for \( \BB \) in \cref{eqn:emtProblemSet1Problem6:60} gives
+
+\begin{dmath}\label{eqn:emtProblemSet1Problem6:160}
+\BB 
+= \frac{j}{\omega} \spacegrad \cross \BE
+= \frac{j E_0}{\omega} 
+\begin{vmatrix}
+\Be_1 & \Be_2 & \Be_3 \\
+\partial_x & \partial_y & \partial_z \\
+0 & \sin\lr{ \frac{\pi}{a} x } e^{ -j\beta_\txtz z } & 0 
+\end{vmatrix}
+= 
+\frac{j E_0}{\omega} 
+\lr{
+\Be_1 \beta \sin\lr{ \frac{\pi}{a} x } + \Be_3 \frac{\pi}{a} \cos\lr{ \frac{\pi}{a} x } 
+} e^{ -j\beta_\txtz z }.
+\end{dmath}
+
+In the time domain, the magnetic field is
+\begin{dmath}\label{eqn:emtProblemSet1Problem6:180}
+\bcB =
+\Real \BB e^{j \omega t}
+=
+-\frac{E_0}{\omega} 
+\lr{
+\Be_1 \beta \sin\lr{ \frac{\pi}{a} x } + \Be_3 \frac{\pi}{a} \cos\lr{ \frac{\pi}{a} x } 
+} \sin\lr{ \omega t - \beta_\txtz z },
+\end{dmath}
+
+or
+%\begin{dmath}\label{eqn:emtProblemSet1Problem6:200}
+\boxedEquation{eqn:emtProblemSet1Problem6:200}{
+\bcH =
+-\frac{E_0}{\omega \mu} 
+\lr{
+\Be_1 \beta \sin\lr{ \frac{\pi}{a} x } + \Be_3 \frac{\pi}{a} \cos\lr{ \frac{\pi}{a} x } 
+} \sin\lr{ \omega t - \beta_\txtz z }.
+}
+%\end{dmath}
+
+\makeSubAnswer{}{emt:problemSet1:6b}
+
+To determine the constraints on \( \beta_\txtz \) it can be observed that the fields obey the wave equation (or Helmholtz equation in the frequency domain), which follows from the expansion of the curl of the curl
+
+\begin{dmath}\label{eqn:emtProblemSet1Problem6:220}
+\spacegrad \cross \lr{ \spacegrad \cross \BA }
+=
+\epsilon_{a b c} \Be_a \partial_b \lr{ \epsilon_{r s t} \Be_r \partial_s A_t }_c
+=
+\epsilon_{a b c} \Be_a \partial_b \epsilon_{c s t} \partial_s A_t
+=
+\delta_{ab}^{[st]}
+\Be_a \partial_b \partial_s A_t
+=
+\Be_a \partial_b \lr{ \partial_a A_b - \partial_b A_a }
+=
+\spacegrad \lr{ \spacegrad \cdot \BA } - \spacegrad^2 \BA.
+\end{dmath}
+
+Applying this to the electric field equations, we find
+
+\begin{dmath}\label{eqn:emtProblemSet1Problem6:300}
+\spacegrad \cancel{\spacegrad \cdot \BE } - \spacegrad^2 \BE
+=
+\spacegrad \cross \lr{ \spacegrad \cross \BE } 
+= -j \omega \spacegrad \cross \BB
+= -j \omega (j \omega \mu \epsilon) \BE,
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:emtProblemSet1Problem6:240}
+\spacegrad^2 \BE
+= -\mu \epsilon \omega^2 \BE.
+\end{dmath}
+
+The Laplacian of the electric field of this problem is
+
+\begin{dmath}\label{eqn:emtProblemSet1Problem6:260}
+\spacegrad^2 \BE
+=
+\lr{ -\lr{\frac{\pi}{a}}^2 + (-j\beta_\txtz)^2 }
+\Be_2 E_0 \sin\lr{ \frac{\pi}{a} x } e^{ -j\beta_\txtz z },
+\end{dmath}
+
+so the constraint on the dispersion rate is
+
+%\begin{dmath}\label{eqn:emtProblemSet1Problem6:280}
+\boxedEquation{eqn:emtProblemSet1Problem6:280}{
+\beta_\txtz^2 = \mu \epsilon \omega^2 - \lr{\frac{\pi}{a}}^2.
+}
+%\end{dmath}
+
+\paragraph{Alternate Helmholtz equation derivation}
+
+A more elegant way to derive the Helmholtz equations for the electric and magnetic field phasors is possible using the Geometric Algebra 
+\citep{doran2003gap}
+vector product \( \BA \BB = \BA \cdot \BB + I \BA \cross \BB \), 
+where \( I = \Be_1 \Be_2 \Be_3 \) is the \R{3} Euclidean pseudoscalar.%  This identity also applies to the gradient
+%
+%\begin{dmath}\label{eqn:emtProblemSet1Problem6:320}
+%\spacegrad \BA = \spacegrad \cdot \BA + I \spacegrad \cross \BA.
+%\end{dmath}
+%
+Application of this to the Maxwell equations in source free simple media gives
+
+\begin{subequations}
+\label{eqn:emtProblemSet1Problem6:340}
+\begin{dmath}\label{eqn:emtProblemSet1Problem6:360}
+\spacegrad \BE = -j \omega I \BB
+\end{dmath}
+\begin{dmath}\label{eqn:emtProblemSet1Problem6:380}
+\spacegrad I \BB = -j \omega \mu \epsilon \BE.
+\end{dmath}
+\end{subequations}
+
+Operation with the gradient from the left produces the Helmholtz equation for each of the fields
+
+\begin{subequations}
+\label{eqn:emtProblemSet1Problem6:400}
+\begin{dmath}\label{eqn:emtProblemSet1Problem6:420}
+\spacegrad^2 \BE = - \mu \epsilon \omega^2 \BE
+\end{dmath}
+\begin{dmath}\label{eqn:emtProblemSet1Problem6:440}
+\spacegrad^2 \BB = - \mu \epsilon \omega^2 \BB.
+\end{dmath}
+\end{subequations}
+}
