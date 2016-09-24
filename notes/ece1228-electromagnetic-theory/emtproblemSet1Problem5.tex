@@ -23,8 +23,153 @@ respectively, then show that \( \BM_1 = \BM_2 \) .
 %\makesubproblem{}{emt:problemSet1:5a}
 } % makeproblem
 
-\makeanswer{emt:problemSet1:5}{ 
-%\makeSubAnswer{}{emt:problemSet1:5a}
+%Here's a homework question from ece1228 that screams for solution using Geometric Algebra techniques.  If I submitted such a solution, then my Prof probably wouldn't know what I was doing, so I'll probably also have to try to solve it another way too.
 
-TODO.
+\makeanswer{emt:problemSet1:5}{ 
+
+It will be important to note that \( \BC \) cannot be arbitrary.  A divergence constraint must be imposted on \( \BC \).  In particular, because \( \BC = \spacegrad \cross \BM_1 \), and \( \spacegrad \cdot (\spacegrad \cross \BM_1) = 0 \), the vector \( \BC \) is required to have zero divergence.
+
+With that said, dropping the suffix from \( \BM_1 \), the gradient of the vector can be written as a single even grade multivector
+
+\begin{dmath}\label{eqn:emtProblemSet1Problem5:60}
+\spacegrad \BM
+= \spacegrad \cdot \BM + I \spacegrad \cross \BM
+= s + I \BC.
+\end{dmath}
+
+Unlike the divergence or curl, the gradient is invertible, with the \R{3} Green's function
+
+\begin{dmath}\label{eqn:emtProblemSet1Problem5:80}
+\begin{aligned}
+G(\Bx ; \By) &= \inv{4 \pi} \frac{ \Bx - \By }{\Abs{\Bx - \By}^3} \\
+\spacegrad \BG &= \spacegrad \cdot \BG = \delta(\Bx - \By).
+\end{aligned}
+\end{dmath}
+
+This Green's function result is taken from \citep{doran2003gap}, where it is used to generalize the Cauchy integral equations to higher dimensions.
+
+The inversion equation is an application of the Fundamental Theorem of (Geometric) Calculus
+
+\begin{dmath}\label{eqn:emtProblemSet1Problem5:100}
+\oint_{\partial V} G d^2 \Bx \BM
+=
+\int_V G d^3 \Bx \lrspacegrad \BM 
+=
+\int_V d^3 \Bx (G \spacegrad) \BM 
++
+\int_V d^3 \Bx G (\spacegrad \BM)
+=
+\int_V d^3 \Bx \delta(\Bx - \By) \BM 
++
+\int_V d^3 \Bx G \lr{ s + I \BC }.
+\end{dmath}
+
+In the first volume integral the gradient operates bidirectionally on both \( G \) and \( \BM \).  Because \( d^3 \Bx \propto I \) in \R{3} we can commute it with any grades.  With \( d^3 \Bx = I dV \), and \( d^2 \Bx \ncap = I dA \), we have
+
+\begin{dmath}\label{eqn:emtProblemSet1Problem5:120}
+\BM(\By)
+=
+\inv{4\pi} \oint_{\partial V} dA \frac{ \Bx - \By }{\Abs{\Bx - \By}^3} \ncap \BM
+-
+\inv{4\pi} \int_V dV \frac{ \Bx - \By }{\Abs{\Bx - \By}^3} \lr{ s + I \BC }.
+\end{dmath}
+
+The trivectors grades on the RHS must sum to zero.  Omitting those for now, 
+%Since \( \BM \) is a vector the vector and trivector grades on the RHS must sum to zero.  
+with \( \Br = \Bx - \By \), the vector grade selection is
+
+\begin{dmath}\label{eqn:emtProblemSet1Problem5:121}
+\BM(\By)
+=
+\inv{4\pi} \oint_{\partial V} dA \inv{ r^2 } \gpgradeone{ \rcap \ncap \BM }
+-
+\inv{4\pi} \int_V dV \frac{ s \rcap }{ r^2 } 
+-
+\inv{4\pi} \int_V dV \frac{ \rcap \cdot (I\BC) }{ r^2 }
+=
+\inv{4\pi} \oint_{\partial V} dA \inv{ r^2 } \gpgradeone{ \rcap \ncap \BM }
++
+\inv{4\pi} \int_V dV \frac{ \rcap \cross \BC - s \rcap }{ r^2 },
+\end{dmath}
+
+where the cross product comes from the expansion
+
+\begin{dmath}\label{eqn:emtProblemSet1Problem5:140}
+\rcap \cdot (I\BC)
+=
+\gpgradeone{ \rcap I\BC }
+=
+I (\rcap \wedge \BC)
+=
+-\rcap \cross \BC.
+\end{dmath}
+
+The vector grade selection can be expanded as 
+
+\begin{dmath}\label{eqn:emtProblemSet1Problem5:220}
+\gpgradeone{ \rcap \ncap \BM }
+=
+\lr{ \rcap (\ncap \cdot \BM) + \rcap \cdot (\ncap \wedge \BM) }
+=
+\rcap (\ncap \cdot \BM) + (\rcap \cdot \ncap) \BM - \ncap ( \rcap \cdot \BM ).
+\end{dmath}
+
+This looks like it is probably largest when all of \( \rcap, \ncap, \BM \) are colinear, so will likely have magnitude \( \gpgradeone{ \rcap \ncap \BM } < \Abs{\BM} \).  What we can say for sure is 
+
+\begin{dmath}\label{eqn:emtProblemSet1Problem5:240}
+\Abs{\lr{ \inv{4\pi} \oint_{\partial V} dA \inv{ r^2 } \gpgradeone{ \rcap \ncap \BM } }}
+\ge
+\inv{4\pi} \oint_{\partial V} dA \inv{ r^2 } \Abs{ \gpgradeone{ \rcap \ncap \BM } }
+\ge
+\inv{4\pi} \oint_{\partial V} dA \inv{ r^2 } 3 \Abs{ \BM },
+\end{dmath}
+
+so if \( \lim_{\Bx' \rightarrow \infty} \ifrac{\Abs{\BM(\Bx')}}{\Abs{\Bx - \Bx'}^2 } \rightarrow 0 \), this whole surface integral will be killed,
+leaving \( \BM \) uniquely determined by a weighted integral of the curl and divergence values \( \BC \) and \( s \) respectively
+
+%\begin{boxed}\label{eqn:emtProblemSet1Problem5:200}
+\boxedEquation{eqn:emtProblemSet1Problem5:200}{
+\BM(\Bx)
+=
+\inv{4\pi} \int_V dV' \frac{ \BC(\Bx') \cross (\Bx - \Bx') + (\Bx - \Bx') s(\Bx')}{ \Abs{\Bx - \Bx'}^3 }.
+}
+%\end{boxed}
+
+The trivector grade component of \cref{eqn:emtProblemSet1Problem5:120} was neglected.  For that to be zero means that we must have
+
+\begin{dmath}\label{eqn:emtProblemSet1Problem5:160}
+\int_V dV \frac{ \rcap \cdot \BC }{ r^2 }
+=
+\oint_{\partial V} dA \inv{ r^2 } I ( \rcap \wedge \ncap \wedge \BM )
+=
+\oint_{\partial V} dA \inv{ r^2 } (\ncap \cross \rcap) \cdot \BM.
+\end{dmath}
+
+Again requiring that \( \lim_{\Bx' \rightarrow \infty} \ifrac{\Abs{\BM(\Bx')}}{\Abs{\Bx - \Bx'}^2 } \rightarrow 0 \)
+, the area integral is killed in the limit.  Somehow the LHS integral must be zero.  It isn't clear that \( \BC \cdot \rcap/r^2 \) should be zero, however, this expression is vaguely reminicent of an integrand related to \( \spacegrad \cdot \BC \), a quantity required to be zero, after a divergence theorem transformation.
+To see how this is related to the remaining integral in the trivector grade selection observe that
+
+\begin{equation}\label{eqn:emtProblemSet1Problem5:260}
+\spacegrad \inv{\Abs{\Br - \Br'}} 
+=
+-\spacegrad' \inv{\Abs{\Br - \Br'}} 
+=
+-\frac{\Bx - \Bx'}{\Abs{\Bx - \Bx'}^3}.
+\end{equation}
+
+This result, the zero divergence requirement for \( \BC \), and the chain rule can be used to rewrite the LHS of \cref{eqn:emtProblemSet1Problem5:160}
+
+\begin{dmath}\label{eqn:emtProblemSet1Problem5:280}
+\int_V dV \frac{ \rcap \cdot \BC(\Bx') }{ r^2 }
+=
+\int_V dV \spacegrad' \inv{\Abs{\Bx - \Bx'} } \cdot \BC(\Bx')
+=
+\int_V dV \spacegrad' \cdot \frac{\BC(\Bx')}{\Abs{\Bx - \Bx'} }
+-\int_V dV \frac{\spacegrad' \cdot \BC(\Bx')}{ \Abs{\Bx - \Bx'} }
+=
+\int_{\partial V} d\BA \cdot \frac{\BC(\Bx')}{\Abs{\Bx - \Bx'} }
+-\int_V dV \frac{\spacegrad' \cdot \BC(\Bx')}{ \Abs{\Bx - \Bx'} }.
+\end{dmath}
+
+Requiring that \( \lim_{\Bx' \rightarrow \infty} \ifrac{\BC(\Bx')}{\Abs{\Bx - \Bx'} } \rightarrow 0 \) and imposing the zero divergence requirement on \( \BC \), we see that all the trivector grade contributions in \cref{eqn:emtProblemSet1Problem5:120} are zero.
 }
