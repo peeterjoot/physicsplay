@@ -27,8 +27,6 @@ respectively, then show that \( \BM_1 = \BM_2 \) .
 
 \makeanswer{emt:problemSet1:5}{ 
 
-It will be important to note that \( \BC \) cannot be arbitrary.  A divergence constraint must be imposted on \( \BC \).  In particular, because \( \BC = \spacegrad \cross \BM_1 \), and \( \spacegrad \cdot (\spacegrad \cross \BM_1) = 0 \), the vector \( \BC \) is required to have zero divergence.
-
 With that said, dropping the suffix from \( \BM_1 \), the gradient of the vector can be written as a single even grade multivector
 
 \begin{dmath}\label{eqn:emtProblemSet1Problem5:60}
@@ -74,9 +72,52 @@ In the first volume integral the gradient operates bidirectionally on both \( G 
 \inv{4\pi} \int_V dV \frac{ \Bx - \By }{\Abs{\Bx - \By}^3} \lr{ s + I \BC }.
 \end{dmath}
 
-The trivectors grades on the RHS must sum to zero.  Omitting those for now, 
-%Since \( \BM \) is a vector the vector and trivector grades on the RHS must sum to zero.  
-with \( \Br = \Bx - \By \), the vector grade selection is
+\paragraph{Trivector components.}
+We expect the trivectors grades on the RHS to sum to zero.  For that to occur, after setting
+\( \Br = \Bx - \By \)
+we must have
+
+\begin{dmath}\label{eqn:emtProblemSet1Problem5:160}
+\int_V dV \frac{ \rcap \cdot \BC }{ r^2 }
+=
+\oint_{\partial V} dA \inv{ r^2 } I ( \rcap \wedge \ncap \wedge \BM )
+=
+\oint_{\partial V} dA \inv{ r^2 } (\ncap \cross \rcap) \cdot \BM.
+\end{dmath}
+
+If we require that \( \lim_{\Bx' \rightarrow \infty} \ifrac{\Abs{\BM(\Bx')}}{\Abs{\Bx - \Bx'}^2 } \rightarrow 0 \)
+, the area integral is killed in the limit.  Somehow the LHS integral must be zero.  It isn't clear that \( \BC \cdot \rcap/r^2 \) should be zero, however, this expression is vaguely reminicent of an integrand related to \( \spacegrad \cdot \BC \).
+Looking back to the definition
+\cref{eqn:emtProblemSet1Problem5:40}, it can be observed that 
+\( \BC \) cannot be arbitrary.  A divergence constraint must be imposted on \( \BC \).  In particular, because \( \BC = \spacegrad \cross \BM_1 \), and \( \spacegrad \cdot (\spacegrad \cross \BM_1) = 0 \), the vector \( \BC \) is required to have zero divergence.  That fact can be used to show that the 
+remaining integral in the trivector grade selection is zero.  To do so first observe that
+
+\begin{equation}\label{eqn:emtProblemSet1Problem5:260}
+\spacegrad \inv{\Abs{\Br - \Br'}} 
+=
+-\spacegrad' \inv{\Abs{\Br - \Br'}} 
+=
+-\frac{\Bx - \Bx'}{\Abs{\Bx - \Bx'}^3}.
+\end{equation}
+
+With this result, the zero divergence requirement for \( \BC \), and the chain rule can be used to rewrite the LHS of \cref{eqn:emtProblemSet1Problem5:160}, we have
+
+\begin{dmath}\label{eqn:emtProblemSet1Problem5:280}
+\int_V dV \frac{ \rcap \cdot \BC(\Bx') }{ r^2 }
+=
+\int_V dV \spacegrad' \inv{\Abs{\Bx - \Bx'} } \cdot \BC(\Bx')
+=
+\int_V dV \spacegrad' \cdot \frac{\BC(\Bx')}{\Abs{\Bx - \Bx'} }
+-\int_V dV \frac{\spacegrad' \cdot \BC(\Bx')}{ \Abs{\Bx - \Bx'} }
+=
+\int_{\partial V} d\BA \cdot \frac{\BC(\Bx')}{\Abs{\Bx - \Bx'} }
+-\int_V dV \frac{\spacegrad' \cdot \BC(\Bx')}{ \Abs{\Bx - \Bx'} }.
+\end{dmath}
+
+Requiring that \( \lim_{\Bx' \rightarrow \infty} \ifrac{\BC(\Bx')}{\Abs{\Bx - \Bx'} } \rightarrow 0 \) and imposing the zero divergence requirement on \( \BC \), we see that all the trivector grade contributions in \cref{eqn:emtProblemSet1Problem5:120} are zero.
+
+\paragraph{Vector components.}
+Now that we know any trivector grades of the multivector \cref{eqn:emtProblemSet1Problem5:120} are zero, the only remaining contributions are the vector components
 
 \begin{dmath}\label{eqn:emtProblemSet1Problem5:121}
 \BM(\By)
@@ -134,42 +175,4 @@ leaving \( \BM \) uniquely determined by a weighted integral of the curl and div
 \inv{4\pi} \int_V dV' \frac{ \BC(\Bx') \cross (\Bx - \Bx') + (\Bx - \Bx') s(\Bx')}{ \Abs{\Bx - \Bx'}^3 }.
 }
 %\end{boxed}
-
-The trivector grade component of \cref{eqn:emtProblemSet1Problem5:120} was neglected.  For that to be zero means that we must have
-
-\begin{dmath}\label{eqn:emtProblemSet1Problem5:160}
-\int_V dV \frac{ \rcap \cdot \BC }{ r^2 }
-=
-\oint_{\partial V} dA \inv{ r^2 } I ( \rcap \wedge \ncap \wedge \BM )
-=
-\oint_{\partial V} dA \inv{ r^2 } (\ncap \cross \rcap) \cdot \BM.
-\end{dmath}
-
-Again requiring that \( \lim_{\Bx' \rightarrow \infty} \ifrac{\Abs{\BM(\Bx')}}{\Abs{\Bx - \Bx'}^2 } \rightarrow 0 \)
-, the area integral is killed in the limit.  Somehow the LHS integral must be zero.  It isn't clear that \( \BC \cdot \rcap/r^2 \) should be zero, however, this expression is vaguely reminicent of an integrand related to \( \spacegrad \cdot \BC \), a quantity required to be zero, after a divergence theorem transformation.
-To see how this is related to the remaining integral in the trivector grade selection observe that
-
-\begin{equation}\label{eqn:emtProblemSet1Problem5:260}
-\spacegrad \inv{\Abs{\Br - \Br'}} 
-=
--\spacegrad' \inv{\Abs{\Br - \Br'}} 
-=
--\frac{\Bx - \Bx'}{\Abs{\Bx - \Bx'}^3}.
-\end{equation}
-
-This result, the zero divergence requirement for \( \BC \), and the chain rule can be used to rewrite the LHS of \cref{eqn:emtProblemSet1Problem5:160}
-
-\begin{dmath}\label{eqn:emtProblemSet1Problem5:280}
-\int_V dV \frac{ \rcap \cdot \BC(\Bx') }{ r^2 }
-=
-\int_V dV \spacegrad' \inv{\Abs{\Bx - \Bx'} } \cdot \BC(\Bx')
-=
-\int_V dV \spacegrad' \cdot \frac{\BC(\Bx')}{\Abs{\Bx - \Bx'} }
--\int_V dV \frac{\spacegrad' \cdot \BC(\Bx')}{ \Abs{\Bx - \Bx'} }
-=
-\int_{\partial V} d\BA \cdot \frac{\BC(\Bx')}{\Abs{\Bx - \Bx'} }
--\int_V dV \frac{\spacegrad' \cdot \BC(\Bx')}{ \Abs{\Bx - \Bx'} }.
-\end{dmath}
-
-Requiring that \( \lim_{\Bx' \rightarrow \infty} \ifrac{\BC(\Bx')}{\Abs{\Bx - \Bx'} } \rightarrow 0 \) and imposing the zero divergence requirement on \( \BC \), we see that all the trivector grade contributions in \cref{eqn:emtProblemSet1Problem5:120} are zero.
 }
