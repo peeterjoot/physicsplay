@@ -49,7 +49,9 @@ respectively, then show that \( \BM_1 = \BM_2 \) .
 
 \makeanswer{emt:problemSet1:5}{ 
 
-Dropping the suffix from \( \BM_1 \), the gradient of the vector can be written as a single even grade multivector
+It will be important to note that \( \BC \) cannot be arbitrary.  A divergence constraint must be imposted on \( \BC \).  In particular, because \( \BC = \spacegrad \cross \BM_1 \), and \( \spacegrad \cdot (\spacegrad \cross \BM_1) = 0 \), the vector \( \BC \) is required to have zero divergence.
+
+With that said, dropping the suffix from \( \BM_1 \), the gradient of the vector can be written as a single even grade multivector
 
 \begin{dmath}\label{eqn:curlAndDivergenceVectorUniqueness:60}
 \spacegrad \BM
@@ -98,7 +100,7 @@ The trivectors grades on the RHS must sum to zero.  Omitting those for now,
 %Since \( \BM \) is a vector the vector and trivector grades on the RHS must sum to zero.  
 with \( \Br = \Bx - \By \), the vector grade selection is
 
-\begin{dmath}\label{eqn:curlAndDivergenceVectorUniqueness:120}
+\begin{dmath}\label{eqn:curlAndDivergenceVectorUniqueness:121}
 \BM(\By)
 =
 \inv{4\pi} \oint_{\partial V} dA \inv{ r^2 } \gpgradeone{ \rcap \ncap \BM }
@@ -144,7 +146,7 @@ This looks like it is probably largest when all of \( \rcap, \ncap, \BM \) are c
 \inv{4\pi} \oint_{\partial V} dA \inv{ r^2 } 3 \Abs{ \BM },
 \end{dmath}
 
-so if the magnitude \( \Abs{\BM} \ll r^2 \) as \( r \rightarrow \infty \), this whole surface integral will be killed,
+so if \( \lim_{\Bx' \rightarrow \infty} \ifrac{\Abs{\BM(\Bx')}}{\Abs{\Bx - \Bx'}^2 } \rightarrow 0 \), this whole surface integral will be killed,
 leaving \( \BM \) uniquely determined by a weighted integral of the curl and divergence values \( \BC \) and \( s \) respectively
 
 %\begin{boxed}\label{eqn:curlAndDivergenceVectorUniqueness:200}
@@ -155,7 +157,7 @@ leaving \( \BM \) uniquely determined by a weighted integral of the curl and div
 }
 %\end{boxed}
 
-How about the trivector grade component of \cref{eqn:curlAndDivergenceVectorUniqueness:120}?  For that to be zero means that we must have
+The trivector grade component of \cref{eqn:curlAndDivergenceVectorUniqueness:120} was neglected.  For that to be zero means that we must have
 
 \begin{dmath}\label{eqn:curlAndDivergenceVectorUniqueness:160}
 \int_V dV \frac{ \rcap \cdot \BC }{ r^2 }
@@ -165,7 +167,33 @@ How about the trivector grade component of \cref{eqn:curlAndDivergenceVectorUniq
 \oint_{\partial V} dA \inv{ r^2 } (\ncap \cross \rcap) \cdot \BM.
 \end{dmath}
 
-With the same limiting argument as above, the area integral is killed in the limit, meaning that \( \rcap \cdot \BC = 0 \) is required for the trivector grade selection to be zero.  The way to make sense of this is to note that because \( \BC \) is a curl, it's divergence \( \spacegrad \cdot \BC \) must be zero.  There is probably a way to encoded that requirement into the original specification of the problem, so that this trivector grade contribution does not show up in the Green's function result.
+Again requiring that \( \lim_{\Bx' \rightarrow \infty} \ifrac{\Abs{\BM(\Bx')}}{\Abs{\Bx - \Bx'}^2 } \rightarrow 0 \)
+, the area integral is killed in the limit.  Somehow the LHS integral must be zero.  It isn't clear that \( \BC \cdot \rcap/r^2 \) should be zero, however, this expression is vaguely reminicent of an integrand related to \( \spacegrad \cdot \BC \), a quantity required to be zero, after a divergence theorem transformation.
+To see how this is related to the remaining integral in the trivector grade selection observe that
+
+\begin{equation}\label{eqn:curlAndDivergenceVectorUniqueness:260}
+\spacegrad \inv{\Abs{\Br - \Br'}} 
+=
+-\spacegrad' \inv{\Abs{\Br - \Br'}} 
+=
+-\frac{\Bx - \Bx'}{\Abs{\Bx - \Bx'}^3}.
+\end{equation}
+
+This result, the zero divergence requirement for \( \BC \), and the chain rule can be used to rewrite the LHS of \cref{eqn:curlAndDivergenceVectorUniqueness:160}
+
+\begin{dmath}\label{eqn:curlAndDivergenceVectorUniqueness:280}
+\int_V dV \frac{ \rcap \cdot \BC(\Bx') }{ r^2 }
+=
+\int_V dV \spacegrad' \inv{\Abs{\Bx - \Bx'} } \cdot \BC(\Bx')
+=
+\int_V dV \spacegrad' \cdot \frac{\BC(\Bx')}{\Abs{\Bx - \Bx'} }
+-\int_V dV \frac{\spacegrad' \cdot \BC(\Bx')}{ \Abs{\Bx - \Bx'} }
+=
+\int_{\partial V} d\BA \cdot \frac{\BC(\Bx')}{\Abs{\Bx - \Bx'} }
+-\int_V dV \frac{\spacegrad' \cdot \BC(\Bx')}{ \Abs{\Bx - \Bx'} }.
+\end{dmath}
+
+Requiring that \( \lim_{\Bx' \rightarrow \infty} \ifrac{\BC(\Bx')}{\Abs{\Bx - \Bx'} } \rightarrow 0 \) and imposing the zero divergence requirement on \( \BC \), we see that all the trivector grade contributions in \cref{eqn:curlAndDivergenceVectorUniqueness:120} are zero.
 }
 
 %}
