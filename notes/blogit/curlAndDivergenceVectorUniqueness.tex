@@ -47,11 +47,9 @@ Note: Assume there is a vector \( \BM_2 \) with its divergence and curl equal to
 respectively, then show that \( \BM_1 = \BM_2 \) .
 } % makeproblem
 
-\paragraph{Answer}
-%\makeanswer{emt:problemSet1:5}{ 
-%}
+\makeanswer{emt:problemSet1:5}{ 
 
-Dropping the suffix one above, the gradient of the vector can be written as a single multivector expression
+Dropping the suffix from \( \BM_1 \), the gradient of the vector can be written as a single even grade multivector
 
 \begin{dmath}\label{eqn:curlAndDivergenceVectorUniqueness:60}
 \spacegrad \BM
@@ -70,7 +68,7 @@ G(\Bx ; \By) &= \inv{4 \pi} \frac{ \Bx - \By }{\Abs{\Bx - \By}^3} \\
 
 This Green's function result is taken from \citep{doran2003gap}, where it is used to generalize the Cauchy integral equations to higher dimensions.
 
-The inversion equation is 
+The inversion equation is an application of the Fundamental Theorem of (Geometric) Calculus
 
 \begin{dmath}\label{eqn:curlAndDivergenceVectorUniqueness:100}
 \oint_{\partial V} G d^2 \Bx \BM
@@ -96,14 +94,14 @@ In the first volume integral the gradient operates bidirectionally on both \( G 
 \inv{4\pi} \int_V dV \frac{ \Bx - \By }{\Abs{\Bx - \By}^3} \lr{ s + I \BC }.
 \end{dmath}
 
-Since \( \BM \) is a vector the bivector and trivector grades on the RHS must sum to zero.  With \( \Br = \Bx - \By \), the vector grade is
+The trivectors grades on the RHS must sum to zero.  Omitting those for now, 
+%Since \( \BM \) is a vector the vector and trivector grades on the RHS must sum to zero.  
+with \( \Br = \Bx - \By \), the vector grade selection is
 
 \begin{dmath}\label{eqn:curlAndDivergenceVectorUniqueness:120}
 \BM(\By)
 =
 \inv{4\pi} \oint_{\partial V} dA \inv{ r^2 } \gpgradeone{ \rcap \ncap \BM }
-%\lr{ \rcap (\ncap \cdot \BM) + \rcap \cdot (\ncap \wedge \BM) }
-%\rcap (\ncap \cdot \BM) + (\rcap \cdot \ncap) \BM - \ncap ( \rcap \cdot \BM ),
 -
 \inv{4\pi} \int_V dV \frac{ s \rcap }{ r^2 } 
 -
@@ -126,7 +124,38 @@ I (\rcap \wedge \BC)
 -\rcap \cross \BC.
 \end{dmath}
 
-We must also have zero for the trivector components, meaning that
+The vector grade selection can be expanded as 
+
+\begin{dmath}\label{eqn:curlAndDivergenceVectorUniqueness:220}
+\gpgradeone{ \rcap \ncap \BM }
+=
+\lr{ \rcap (\ncap \cdot \BM) + \rcap \cdot (\ncap \wedge \BM) }
+=
+\rcap (\ncap \cdot \BM) + (\rcap \cdot \ncap) \BM - \ncap ( \rcap \cdot \BM ).
+\end{dmath}
+
+This looks like it is probably largest when all of \( \rcap, \ncap, \BM \) are colinear, so will likely have magnitude \( \gpgradeone{ \rcap \ncap \BM } < \Abs{\BM} \).  What we can say for sure is 
+
+\begin{dmath}\label{eqn:curlAndDivergenceVectorUniqueness:240}
+\Abs{\lr{ \inv{4\pi} \oint_{\partial V} dA \inv{ r^2 } \gpgradeone{ \rcap \ncap \BM } }}
+\ge
+\inv{4\pi} \oint_{\partial V} dA \inv{ r^2 } \Abs{ \gpgradeone{ \rcap \ncap \BM } }
+\ge
+\inv{4\pi} \oint_{\partial V} dA \inv{ r^2 } 3 \Abs{ \BM },
+\end{dmath}
+
+so if the magnitude \( \Abs{\BM} \ll r^2 \) as \( r \rightarrow \infty \), this whole surface integral will be killed,
+leaving \( \BM \) uniquely determined by
+
+%\begin{boxed}\label{eqn:curlAndDivergenceVectorUniqueness:200}
+\boxedEquation{eqn:curlAndDivergenceVectorUniqueness:200}{
+\BM(\Bx)
+=
+\inv{4\pi} \int_V dV' \frac{ \BC(\Bx') \cross (\Bx - \Bx') + (\Bx - \Bx') s(\Bx')}{ \Abs{\Bx - \Bx'}^3 }.
+}
+%\end{boxed}
+
+How about the trivector grade component of \cref{eqn:curlAndDivergenceVectorUniqueness:120}?  For that to be zero means that we must have
 
 \begin{dmath}\label{eqn:curlAndDivergenceVectorUniqueness:160}
 \int_V dV \frac{ \rcap \cdot \BC }{ r^2 }
@@ -136,15 +165,8 @@ We must also have zero for the trivector components, meaning that
 \oint_{\partial V} dA \inv{ r^2 } (\ncap \cross \rcap) \cdot \BM.
 \end{dmath}
 
-If this constraint is met, and the magnitude of \( \BM(\Br) < r^2 \) as \( r \rightarrow \infty \), then \( \BM \) is uniquely determined by
-
-%\begin{boxed}\label{eqn:curlAndDivergenceVectorUniqueness:200}
-\boxedEquation{eqn:curlAndDivergenceVectorUniqueness:200}{
-\BM(\Bx)
-=
-\inv{4\pi} \int_V dV' \frac{ \BC(\Bx') \cross (\Bx - \Bx') + (\Bx - \Bx') s(\Bx')}{ \Abs{\Bx - \Bx'}^3 }.
+With the same limiting argument as above, the area integral is killed in the limit, meaning that \( \rcap \cdot \BC = 0 \) is required for the trivector grade selection to be zero.  I'm not quite sure what to make of that. 
 }
-%\end{boxed}
 
 %}
 \EndArticle
