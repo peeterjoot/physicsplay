@@ -126,7 +126,7 @@ then it is sufficient to require that
 \lim_{x' \rightarrow \infty} \Abs{ \frac{x -x'}{\Abs{x - x'}^n} n(x') F(x') } \rightarrow 0,
 \end{dmath}
 
-in order to kill off the surface integral.  Evaluating the integral on a hypersphere centred on \( x \) where \( x - x' = n \Abs{x - x'} \), that is
+in order to kill off the surface integral.  Evaluating the integral on a hypersphere centred on \( x \) where \( x' - x = n \Abs{x - x'} \), that is
 
 \begin{dmath}\label{eqn:gradientGreensFunction:260}
 \lim_{x' \rightarrow \infty} \frac{ \Abs{F(x')}}{\Abs{x - x'}^{n-1}} \rightarrow 0.
@@ -169,24 +169,24 @@ I^{-1} \int_{\Abs{x - x'} < \epsilon} I dV' \lr{G(x,x') \lgrad'}
 } F(x)
 =
 \lr{ \lim_{\epsilon \rightarrow 0}
-\int_{\Abs{x - x'} = \epsilon} dA' \frac{\epsilon n}{S_n \epsilon^n} n
+\int_{\Abs{x - x'} = \epsilon} dA' \frac{\epsilon (-n)}{S_n \epsilon^n} n
 } F(x)
 =
-\lim_{\epsilon \rightarrow 0}
+-\lim_{\epsilon \rightarrow 0}
 \frac{F(x)}{S_n \epsilon^{n-1}}
 \int_{\Abs{x - x'} = \epsilon} dA'
 =
-\lim_{\epsilon \rightarrow 0}
+-\lim_{\epsilon \rightarrow 0}
 \frac{F(x)}{S_n \epsilon^{n-1}}
 S_n \epsilon^{n-1}
 = 
-F(x).
+-F(x).
 \end{dmath}
 
 This essentially calculates the divergence integral around an infinitesimal hypersphere, without assuming that the gradient commutes with the gradient in this infinitesimal region.  So, provided the test function is constrained by \cref{eqn:gradientGreensFunction:260}, we have
 
 \begin{dmath}\label{eqn:gradientGreensFunction:280}
-F(x) = -\int_V dV' G(x,x') \lr{ \grad' F(x') }.
+F(x) = \int_V dV' G(x,x') \lr{ \grad' F(x') }.
 \end{dmath}
 
 In particular, should we have a first order gradient equation
@@ -196,28 +196,49 @@ In particular, should we have a first order gradient equation
 \end{dmath}
 
 the inverse of this equation is given by
-\begin{dmath}\label{eqn:gradientGreensFunction:320}
-F(x) = -\int_V dV' G(x,x') M(x').
-\end{dmath}
-
-There is a slightly annoying negative sign in this convolution integral.  That sign is important to keep in mind, since the conventions for Green's functions often differ by a sign.  For this definition, it seems desirable to eliminate that negation by variable substitution
-
-\begin{dmath}\label{eqn:gradientGreensFunction:340}
-F(y) 
-= -\int_V dV' G(y,x') M(x')
-= -\int_V dV G(y,x) M(x),
-\end{dmath}
-
-so the inverse of \( \grad F = M \) can be written as 
-
-%\begin{dmath}\label{eqn:gradientGreensFunction:360}
-\boxedEquation{eqn:gradientGreensFunction:360}{
-F(y) 
-= \int_V dV G(x, y) M(x).
+%\begin{dmath}\label{eqn:gradientGreensFunction:320}
+\boxedEquation{eqn:gradientGreensFunction:320}{
+F(x) = \int_V dV' G(x,x') M(x').
 }
 %\end{dmath}
 
+Note that the sign of the Green's function is explicitly tied to the definition of the convolution integral that is used.
+%There is a slightly annoying negative sign in this convolution integral.  
+This is important since since the conventions for the sign of the Green's function or the parameters in the convolution integral often vary.
+
+%For this definition, it seems desirable to eliminate that negation by variable substitution
+%
+%\begin{dmath}\label{eqn:gradientGreensFunction:340}
+%F(y) 
+%= -\int_V dV' G(y,x') M(x')
+%= -\int_V dV G(y,x) M(x),
+%\end{dmath}
+%
+%so the inverse of \( \grad F = M \) can be written as 
+%
+%%\begin{dmath}\label{eqn:gradientGreensFunction:360}
+%\boxedEquation{eqn:gradientGreensFunction:360}{
+%F(y) 
+%= \int_V dV G(x, y) M(x).
+%}
+%\end{dmath}
+
 What's cool about this result is that it applies not only to gradient equations in Euclidean spaces, but also to multivector (or even just vector) fields \( F \), instead of the usual scalar functions that we usually apply Green's functions to.
+
+\makeexample{Electrostatics}{example:gradientGreensFunction:1}{
+As a check of the sign consider the electrostatics equation
+
+\begin{dmath}\label{eqn:gradientGreensFunction:380}
+\spacegrad \BE = \frac{\rho}{\epsilon_0},
+\end{dmath}
+
+for which we have after substitution into \cref{eqn:gradientGreensFunction:320}
+\begin{dmath}\label{eqn:gradientGreensFunction:400}
+\BE(\Bx) = \inv{4 \pi \epsilon_0} \int_V dV' \frac{\Bx - \Bx'}{\Abs{\Bx - \Bx'}^3} \rho(\Bx').
+\end{dmath}
+
+This matches the sign found in a trusted reference such as \citep{jackson1975cew}.
+} % example
 
 \paragraph{Future thought.}
 
