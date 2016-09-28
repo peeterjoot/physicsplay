@@ -63,6 +63,7 @@ all :: multiPendulumSphericalMatrix.pdf
 
 uwavesDeck6LCmatching.pdf : ../ece1236-microwaves/uwavesDeck6LCmatchingCore.tex
 continuumAndOtherTransformers.pdf : ../ece1236-microwaves/continuumAndOtherTransformersCore.tex
+curlAndDivergenceVectorUniqueness.pdf : ../ece1228-electromagnetic-theory/emtProblemSet1Problem5.tex
 
 multiPendulumSphericalMatrix.tex :: ../classicalmechanics/multiPendulumSphericalMatrix.tex
 	cp $^ $@
