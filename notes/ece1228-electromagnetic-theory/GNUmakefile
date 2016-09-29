@@ -37,6 +37,8 @@ emtProblemSet1.pdf : emtProblemSet1Problem4.tex
 emtProblemSet1.pdf : emtProblemSet1Problem5.tex
 emtProblemSet1.pdf : emtProblemSet1Problem6.tex
 emtProblemSet1.pdf : emtProblemSet1Appendix.tex
+emtProblemSet1.pdf : gaQuickTutorial.tex
+emtProblemSet1.pdf : gaPs1Problem5Attempt1.tex
 
 julia.tex : ../../julia/METADATA
 mathematica.tex : ../../mathematica/METADATA
