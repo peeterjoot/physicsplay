@@ -209,6 +209,8 @@ to select the scalar, vector, bivector, trivector, or higher grade algebraic ele
 Note that the wedge product of any number of vectors such as \( \Ba \wedge \Bb \wedge \Bc \) is associative and can be expressed in terms of the complete antisymmetrization of the product of those vectors.  A consequence of that is the fact a wedge product that includes any colinear vectors in the product is zero.
 \end{itemize}
 
+\makeexample{Helmholz equations.}{example:emtProblemSet1Appendix:1}{
+
 As an example of the power of \cref{eqn:emtProblemSet1Appendix:180}, consider the following alternate Alternate Helmholtz equation derivation.
 Application of \cref{eqn:emtProblemSet1Appendix:180} to 
 Maxwell equations in the frequency domain for source free simple media gives
@@ -238,6 +240,53 @@ Operation with the gradient from the left produces the Helmholtz equation for ea
 There was no reason to go through the headache of looking up or deriving the expansion of \( \spacegrad \cross (\spacegrad \cross \BA ) \) as was required in problem 6 to find the wave equation constraint on \( \beta_\txtz \).
 
 Observe that the usual Helmholtz equation for \( \BB \) doesn't have a pseudoscalar factor.  That result can be obtained by just cancelling the factors \( I \) since the \R{3} Euclidean pseudoscalar commutes with all grades (this isn't the case in \R{2} nor in Minkowski spaces.)
+} % example
+
+\makeexample{Factoring the Laplacian.}{example:emtProblemSet1Appendix:2}{
+
+In \cref{eqn:emtProblemSet1Appendix:460} the identity 
+
+\begin{dmath}\label{eqn:emtProblemSet1Appendix:660}
+\spacegrad \cross \lr{ \spacegrad \cross \BA } = \spacegrad \lr{ \spacegrad \cdot \BA } - \spacegrad^2 \BA.
+\end{dmath}
+
+was demonstrated using tensor contraction techniques.  We can also do this with Geometric Algebra by factoring the Laplacian action on a vector
+
+\begin{dmath}\label{eqn:emtProblemSet1Appendix:700}
+\spacegrad^2 \BA
+=
+\spacegrad (\spacegrad \BA)
+=
+\spacegrad (\spacegrad \cdot \BA + \spacegrad \wedge \BA)
+=
+\spacegrad (\spacegrad \cdot \BA)
++
+\spacegrad \cdot (\spacegrad \wedge \BA)
++
+\cancel{\spacegrad \wedge \spacegrad \wedge \BA}
+=
+\spacegrad (\spacegrad \cdot \BA)
++
+\spacegrad \cdot (\spacegrad \wedge \BA).
+\end{dmath}
+
+Should we wish to express the last term using cross products, a grade one selection operation can be used
+\begin{dmath}\label{eqn:emtProblemSet1Appendix:680}
+\spacegrad \cdot (\spacegrad \wedge \BA)
+=
+\gpgradeone{ \spacegrad (\spacegrad \wedge \BA) }
+=
+\gpgradeone{ \spacegrad I (\spacegrad \cross \BA) }
+=
+\gpgradeone{ I \spacegrad \wedge (\spacegrad \cross \BA) }
+=
+\gpgradeone{ I^2 \spacegrad \cross (\spacegrad \cross \BA) }
+=
+-\spacegrad \cross (\spacegrad \cross \BA).
+\end{dmath}
+
+Here coordinate expansion was not required in any step.
+} % example
 
 \section{Appendix III.  Geometric Algebra solution to problem 5.}
 
@@ -473,7 +522,7 @@ If we restrict attention to a finite surface, we have to add to the fixed soluti
 
 The constraints required by a zero triple product \( \spacegrad' \cdot (\BM(\Bx') \cross \ncap(\Bx')) \) are complicated on a such a general finite surface.  
 Consider instead, for simplicity, the case of a spherical surface, which can be analyzed more easily.  
-In that case the outward normal of the surface centered on the test charge point \( \Bx \) is \( \ncap = -\rcap \).  The pseudoscalar integrand is not generally killed unless the divergence of its tangential component on this surface is zero.  One way that this can occur is for \( \BM \cross \ncap = 0 \), so that \( -\gpgradeone{ \rcap \ncap \BM } = \BM = (\BM \cdot \ncap) \ncap = \BM_\txtn \).  
+In that case the outward normal of the surface centred on the test charge point \( \Bx \) is \( \ncap = -\rcap \).  The pseudoscalar integrand is not generally killed unless the divergence of its tangential component on this surface is zero.  One way that this can occur is for \( \BM \cross \ncap = 0 \), so that \( -\gpgradeone{ \rcap \ncap \BM } = \BM = (\BM \cdot \ncap) \ncap = \BM_\txtn \).  
 
 This gives
 
@@ -502,3 +551,48 @@ or, in terms of potential functions, which is arguably tidier
 %\end{dmath}
 
 Such a potential form provides a hint how this problem might be attempted without the use of Geometric Algebra.
+
+\section{Appendix IV.  2nd Geometric Algebra solution to problem 5.}
+
+Here's a third way of deriving the Helmholtz theorem inversion relation.  This is a refinement of the traditional vector algebra solution that led to \cref{eqn:emtProblemSet1Problem5:200}, that uses a factorization of the Laplacian directly, deferring any expansion in terms of dot and cross (or wedge) products until the very end.
+
+Starting from the first line of \cref{eqn:emtProblemSet1Problem5:160}, we have
+
+\begin{dmath}\label{eqn:emtProblemSet1Appendix:720}
+-4 \pi \BM(\Bx)
+= \int_V dV' \spacegrad^2 \inv{\Abs{\Bx - \Bx'}} \BM(\Bx')
+= \gpgradeone{\int_V dV' \spacegrad^2 \inv{\Abs{\Bx - \Bx'}} \BM(\Bx')}
+= -\gpgradeone{\int_V dV' \spacegrad \lr{ \spacegrad' \inv{\Abs{\Bx - \Bx'}}} \BM(\Bx')}
+= -\gpgradeone{\int_V dV' \spacegrad \lr{ 
+\spacegrad' \frac{\BM(\Bx')}{\Abs{\Bx - \Bx'}}
+-\frac{\spacegrad' \BM(\Bx')}{\Abs{\Bx - \Bx'}}
+} }
+= 
+-\gpgradeone{\spacegrad \int_{\partial V} dA' 
+\ncap \frac{\BM(\Bx')}{\Abs{\Bx - \Bx'}}
+ }
++\gpgradeone{\spacegrad \int_V dV' 
+\frac{s(\Bx') + I\BC(\Bx')}{\Abs{\Bx - \Bx'}}
+ }
+\end{dmath}
+
+By inserting a no-op grade selection operation in the second step, the troublesome trivector term that shows up in my first
+attempt is eliminated.  This leaves us with a boundary term, and term that recovers the unique solution on the infinite sphere when \( \Abs{\BM}/\Abs{\Bx - \Bx'} \rightarrow 0 \).  Noting that \( \gpgradeone{ \Ba I \Bb } = I^2 \Ba \cross \Bb = -\Ba \cross \Bb \), we recover the non-boundary integral of \cref{eqn:emtProblemSet1Problem5:200}.  The boundary term is seen to have a particularly simple form using this technique.  Note that the dot and double cross product expression obtained with the vector algebra approach can be recovered from this directly if desired using an expansion of the following form
+
+\begin{dmath}\label{eqn:emtProblemSet1Appendix:740}
+\gpgradeone{ \spacegrad \ncap \BX }
+=
+\gpgradeone{ \spacegrad (\ncap \cdot \BX) }
++
+\gpgradeone{ \spacegrad (\ncap \wedge \BX) }
+=
+\spacegrad (\ncap \cdot \BX) 
++
+\gpgradeone{ \spacegrad I (\ncap \cross \BX) }
+=
+\spacegrad (\ncap \cdot \BX) 
+-
+\spacegrad \cross (\ncap \cross \BX).
+\end{dmath}
+
+Using this expansion in \cref{eqn:emtProblemSet1Appendix:720} recovers \cref{eqn:emtProblemSet1Problem5:200}.  This is the most compact of all three solution attempts, but also requires full knowledge of the Geometric Algebra toolbox to understand.
