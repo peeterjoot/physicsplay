@@ -61,8 +61,10 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
 all :: multiPendulumSphericalMatrix.pdf
 
+gatutorial.pdf : ../ece1228-electromagnetic-theory/gaQuickTutorial.tex
 uwavesDeck6LCmatching.pdf : ../ece1236-microwaves/uwavesDeck6LCmatchingCore.tex
 continuumAndOtherTransformers.pdf : ../ece1236-microwaves/continuumAndOtherTransformersCore.tex
+curlAndDivergenceVectorUniqueness.pdf : ../ece1228-electromagnetic-theory/gaPs1Problem5Attempt1.tex
 
 multiPendulumSphericalMatrix.tex :: ../classicalmechanics/multiPendulumSphericalMatrix.tex
 	cp $^ $@

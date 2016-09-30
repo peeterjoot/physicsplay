@@ -2,220 +2,107 @@
 % Copyright © 2016 Peeter Joot.  All Rights Reserved.
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
 %
-\makeproblem{Helmholtz theorem}{emt:problemSet1:5}{ 
-Prove the first Helmholtz's theorem, i.e. if vector \(\BM_1\) is defined by its divergence
+\makeproblem{Helmholtz theorem}{emt:problemSet1:5}{
+Prove the first Helmholtz's theorem, i.e. if vector \(\BM\) is defined by its divergence
 
 \begin{dmath}\label{eqn:emtProblemSet1Problem5:20}
-\spacegrad \cdot \BM_1 = s
+\spacegrad \cdot \BM = s
 \end{dmath}
 
 and its curl
 \begin{dmath}\label{eqn:emtProblemSet1Problem5:40}
-\spacegrad \cross \BM_1 = \BC 
+\spacegrad \cross \BM = \BC
 \end{dmath}
 
-within a region and its normal component \( \BM_{1\txtn} \) over the boundary, then \( \BM_1 \) is 
+within a region and its normal component \( \BM_{\txtn} \) over the boundary, then \( \BM \) is
 uniquely specified.
 
-Note: Assume there is a vector \( \BM_2 \) with its divergence and curl equal to \( s \) and \( \BC \)
-respectively, then show that \( \BM_1 = \BM_2 \) .
-
-%\makesubproblem{}{emt:problemSet1:5a}
+%Note: Assume there is a vector \( \BN \) with its divergence and curl equal to \( s \) and \( \BC \) respectively, then show that \( \BM = \BN \) .
 } % makeproblem
 
-%Here's a homework question from ece1228 that screams for solution using Geometric Algebra techniques.  If I submitted such a solution, then my Prof probably wouldn't know what I was doing, so I'll probably also have to try to solve it another way too.
+\makeanswer{emt:problemSet1:5}{
 
-\makeanswer{emt:problemSet1:5}{ 
+I attempted this problem in two different ways.  My first approach assembled the divergence and curl relations above into a single (Geometric Algebra) multivector gradient equation and applied the vector valued Green's function for the gradient to invert that equation.  That approach logically led from the differential equation for \( \BM \) to the solution for \( \BM \) in terms of \( s \) and \( \BC \).  However, this strategy introduced some complexities
+that make me doubt the correctness of the associated boundary analysis.
 
-This can be demonstrated by inversion, which screams for an attempt using Geometric Algebra techniques.
-Dropping the suffix from \( \BM_1 \), the gradient of the vector can be written as a single even grade multivector
+Even if the details of the boundary handling in my multivector approach is not correct, I thought that approach was interesting enough to share, and have placed it in an appendix to this problem set.  It is accompanied with a primer on Geometric Algebra that is hopefully enough to allow the reader to grasp the basic ideas of the approach, but is probably not sufficient to understand all the details without further study.
+
+The answer obtained in that first attempt at this problem, when \( \Abs{\BM}/r^2 \), and \( \Abs{\BC}/r \) both vanish on an infinite sphere, is that the field has a unique value determined by \( s \) and \( \BC \), namely
 
 \begin{dmath}\label{eqn:emtProblemSet1Problem5:60}
-\spacegrad \BM
-= \spacegrad \cdot \BM + I \spacegrad \cross \BM
-= s + I \BC.
-\end{dmath}
-
-Unlike the divergence or curl, the gradient is invertible, with the \R{3} Green's function
-
-\begin{dmath}\label{eqn:emtProblemSet1Problem5:80}
-\begin{aligned}
-G(\Bx ; \By) &= \inv{4 \pi} \frac{ \Bx - \By }{\Abs{\Bx - \By}^3} \\
-\spacegrad \BG &= \spacegrad \cdot \BG = \delta(\Bx - \By).
-\end{aligned}
-\end{dmath}
-
-This Green's function result is taken from \citep{doran2003gap}, where it is used to generalize the Cauchy integral equations to higher dimensions.
-
-The inversion equation is an application of the Fundamental Theorem of (Geometric) Calculus
-
-\begin{dmath}\label{eqn:emtProblemSet1Problem5:100}
-\oint_{\partial V} G d^2 \Bx \BM
-=
-\int_V G d^3 \Bx \lrspacegrad \BM 
-=
-\int_V d^3 \Bx (G \spacegrad) \BM 
-+
-\int_V d^3 \Bx G (\spacegrad \BM)
-=
-\int_V d^3 \Bx \delta(\Bx - \By) \BM 
-+
-\int_V d^3 \Bx G \lr{ s + I \BC }.
-\end{dmath}
-
-In the first volume integral the gradient operates bidirectionally on both \( G \) and \( \BM \).  Because \( d^3 \Bx \propto I \) in \R{3} we can commute it with any grades.  With \( d^3 \Bx = I dV \), and \( d^2 \Bx \ncap = I dA \), we have
-
-\begin{dmath}\label{eqn:emtProblemSet1Problem5:120}
-\BM(\By)
-=
-\inv{4\pi} \oint_{\partial V} dA \frac{ \Bx - \By }{\Abs{\Bx - \By}^3} \ncap \BM
--
-\inv{4\pi} \int_V dV \frac{ \Bx - \By }{\Abs{\Bx - \By}^3} \lr{ s + I \BC }.
-\end{dmath}
-
-Integrating the surface integral over a sphere centered on \( \By \), after setting \( \Br = \Bx - \By = r \ncap \), the integrand can be written as
-
-\begin{dmath}\label{eqn:emtProblemSet1Problem5:320}
-\inv{4\pi} \frac{ \Bx - \By }{\Abs{\Bx - \By}^3} \ncap \BM
-=
-\inv{4\pi} \frac{ r \ncap }{ r^3 } \ncap \BM
-=
-\inv{4\pi} \frac{ \BM(\By) }{ r^2 }.
-\end{dmath}
-
-Provided the following constraint on the absolute value of the vector function \( \BM \) is imposed on the infinite sphere 
-
-\begin{dmath}\label{eqn:emtProblemSet1Problem5:340}
-\lim_{\By \rightarrow \infty} \frac{\Abs{\BM(\By)}}{\Abs{\Bx - \By}^2 } \rightarrow 0,
-\end{dmath}
-
-then this surface integral is killed in the limit, leaving
-
-\begin{dmath}\label{eqn:emtProblemSet1Problem5:360}
-\BM(\By)
-=
--
-\inv{4\pi} \int_V dV \frac{ \Bx - \By }{\Abs{\Bx - \By}^3} \lr{ s + I \BC }.
-\end{dmath}
-
-\paragraph{Trivector components.}
-
-Any trivector grades in the remaining integral must be zero.  That is 
-
-\begin{dmath}\label{eqn:emtProblemSet1Problem5:160}
-0 
-=
--\inv{4\pi} \int_V dV \frac{ \gpgradethree{\rcap I \BC} }{ r^2 }
-=
--\inv{4\pi} \int_V dV \frac{ I (\rcap \cdot \BC) }{ r^2 }
-\end{dmath}
-
-It isn't clear that \( \BC \cdot \rcap/r^2 \) should be zero, however, this expression is vaguely reminicent of an integrand related to \( \spacegrad \cdot \BC \).
-Looking back to the definition
-\cref{eqn:emtProblemSet1Problem5:40}, it can be observed that 
-\( \BC \) cannot be arbitrary.  A divergence constraint must be imposted on \( \BC \).  In particular, because \( \BC = \spacegrad \cross \BM_1 \), and \( \spacegrad \cdot (\spacegrad \cross \BM_1) = 0 \), the vector \( \BC \) is required to have zero divergence.  That fact can be exploited by noting
-
-\begin{equation}\label{eqn:emtProblemSet1Problem5:260}
-\spacegrad \inv{\Abs{\Bx - \By}} 
-=
--\spacegrad' \inv{\Abs{\Bx - \By}} 
-=
--\frac{\Bx - \By}{\Abs{\Bx - \By}^3}.
-\end{equation}
-
-With this result, the zero divergence requirement for \( \BC \), and the chain rule can be used to rewrite \cref{eqn:emtProblemSet1Problem5:160}
-
-\begin{dmath}\label{eqn:emtProblemSet1Problem5:280}
-\int_V dV \frac{ \rcap \cdot \BC(\By) }{ r^2 }
-=
-\int_V dV \spacegrad' \inv{\Abs{\Bx - \By} } \cdot \BC(\By)
-=
-\int_V dV \spacegrad' \cdot \frac{\BC(\By)}{\Abs{\Bx - \By} }
--\int_V dV \frac{\spacegrad' \cdot \BC(\By)}{ \Abs{\Bx - \By} }
-=
-\int_{\partial V} d\BA \cdot \frac{\BC(\By)}{\Abs{\Bx - \By} }
--\int_V dV \frac{\spacegrad' \cdot \BC(\By)}{ \Abs{\Bx - \By} }.
-\end{dmath}
-
-The zero divergence requirement for \( \BC \) kills the second integral.  The first is killed if an additional constraint is imposed on the system
-
-\begin{dmath}\label{eqn:emtProblemSet1Problem5:380}
-\lim_{\By \rightarrow \infty} \frac{\BC(\By)}{\Abs{\Bx - \By} } \rightarrow 0.
-\end{dmath}
-
-That constraint ensures that all the trivector grade contributions in \cref{eqn:emtProblemSet1Problem5:360} are zero.
-
-\paragraph{Vector components.}
-Now that we know any trivector grades of the multivector \cref{eqn:emtProblemSet1Problem5:120} are zero, the only remaining contributions are the vector components
-
-\begin{dmath}\label{eqn:emtProblemSet1Problem5:121}
-\BM(\By)
-=
-%\inv{4\pi} \oint_{\partial V} dA \inv{ r^2 } \gpgradeone{ \rcap \ncap \BM }
--
-\inv{4\pi} \int_V dV \frac{ s \rcap }{ r^2 } 
--
-\inv{4\pi} \int_V dV \frac{ \rcap \cdot (I\BC) }{ r^2 }
-=
-%\inv{4\pi} \oint_{\partial V} dA \inv{ r^2 } \gpgradeone{ \rcap \ncap \BM }
-%+
-\inv{4\pi} \int_V dV \frac{ \rcap \cross \BC - s \rcap }{ r^2 },
-\end{dmath}
-
-where the cross product comes from the expansion
-
-\begin{dmath}\label{eqn:emtProblemSet1Problem5:140}
-\rcap \cdot (I\BC)
-=
-\gpgradeone{ \rcap I\BC }
-=
-I (\rcap \wedge \BC)
-=
--\rcap \cross \BC.
-\end{dmath}
-
-%XX
-%The vector grade selection can be simplified by noting that when the integral is evaluated over the sphere centered at \( \Bx \) expanded as 
-%
-%\begin{dmath}\label{eqn:emtProblemSet1Problem5:220}
-%\gpgradeone{ \rcap \ncap \BM }
-%=
-%\lr{ \rcap (\ncap \cdot \BM) + \rcap \cdot (\ncap \wedge \BM) }
-%=
-%\rcap (\ncap \cdot \BM) + (\rcap \cdot \ncap) \BM - \ncap ( \rcap \cdot \BM ).
-%\end{dmath}
-%
-%This looks like it is probably largest when all of \( \rcap, \ncap, \BM \) are colinear, so will likely have magnitude \( \gpgradeone{ \rcap \ncap \BM } < \Abs{\BM} \).  What we can say for sure is 
-%
-%\begin{dmath}\label{eqn:emtProblemSet1Problem5:240}
-%\Abs{\lr{ \inv{4\pi} \oint_{\partial V} dA \inv{ r^2 } \gpgradeone{ \rcap \ncap \BM } }}
-%\ge
-%\inv{4\pi} \oint_{\partial V} dA \inv{ r^2 } \Abs{ \gpgradeone{ \rcap \ncap \BM } }
-%\ge
-%\inv{4\pi} \oint_{\partial V} dA \inv{ r^2 } 3 \Abs{ \BM },
-%\end{dmath}
-%
-%so if \( \lim_{\By \rightarrow \infty} \ifrac{\Abs{\BM(\By)}}{\Abs{\Bx - \By}^2 } \rightarrow 0 \), this whole surface integral will be killed,
-We are left with \( \BM \) uniquely determined by a weighted integral of the curl and divergence values \( \BC \) and \( s \) respectively.  With a change of variables for tidiness, that is
-
-%\begin{boxed}\label{eqn:emtProblemSet1Problem5:200}
-\boxedEquation{eqn:emtProblemSet1Problem5:200}{
-\BM(\Bx)
-=
-\inv{4\pi} \int_V dV' \frac{ \BC(\Bx') \cross (\Bx - \Bx') + (\Bx - \Bx') s(\Bx')}{ \Abs{\Bx - \Bx'}^3 }.
-}
-
-This result can also be written in terms of potential functions
-
-\begin{dmath}\label{eqn:emtProblemSet1Problem5:300}
-\BM(\Bx)
-=
+\BM =
 -\spacegrad \int_V dV' \frac{ s(\Bx')}{ 4 \pi \Abs{\Bx - \Bx'} }
 +\spacegrad \cross \int_V dV' \frac{ \BC(\Bx') }{ 4 \pi \Abs{\Bx - \Bx'} }.
 \end{dmath}
 
-This vector is unique provided the limiting constraints \cref{eqn:emtProblemSet1Problem5:340} \cref{eqn:emtProblemSet1Problem5:380} are imposed on the field specification.  Alternatively, if the
-boundary of the integrals is limited, we have a specific solution for each possible set of normal components \( \ncap \cdot \BM \) on the surface of the integral \cref{eqn:emtProblemSet1Problem5:120}.
+It's possible to work backwards from this result to obtain second order gradient terms applied to \( \BM(\Bx')/\Abs{\Bx - \Bx'} \) .  This suggests that a Laplacian (i.e. scalar) representation of the delta function may be a superior way to tackle this problem, perhaps also yielding a simpler result for the boundary term.  This is in fact the case, and the logical starting point is a convolution representation of the vector function \( \BM \)
 
-%\end{boxed}
+\begin{dmath}\label{eqn:emtProblemSet1Problem5:80}
+\BM(\Bx) = \int_V dV' \delta(\Bx - \Bx') \BM(\Bx').
+\end{dmath}
+
+The Laplacian representation of the delta function in \R{3} is
+
+\begin{dmath}\label{eqn:emtProblemSet1Problem5:100}
+\delta(\Bx - \Bx') = -\inv{4\pi} \spacegrad^2 \inv{\Abs{\Bx - \Bx'}},
+\end{dmath}
+
+so \( \BM \) can be represented as the following convolution
+
+\begin{dmath}\label{eqn:emtProblemSet1Problem5:120}
+\BM(\Bx) = -\inv{4\pi} \int_V dV' \spacegrad^2 \inv{\Abs{\Bx - \Bx'}} \BM(\Bx').
+\end{dmath}
+
+As noted in \cref{eqn:emtProblemSet1Appendix:460} the Laplacian of a vector can be factored as
+
+\begin{dmath}\label{eqn:emtProblemSet1Problem5:140}
+\spacegrad^2 \Ba
+=
+\spacegrad (\spacegrad \cdot \Ba)
+-
+\spacegrad \cross (\spacegrad \cross \Ba).
+\end{dmath}
+
+%Note that the last term can be written in cross product notation using \( \Bc \cdot (\Ba \wedge \Bb) = -\Bc \cross (\Ba \cross \Bb) \) if desired.
+
+Using this relation and proceeding with a few applications of the chain rule, plus the fact that \(
+\spacegrad 1/\Abs{\Bx - \Bx'} = -\spacegrad' 1/\Abs{\Bx - \Bx'} \), we find
+
+\begin{dmath}\label{eqn:emtProblemSet1Problem5:160}
+-4 \pi \BM(\Bx)
+= \int_V dV' \spacegrad^2 \inv{\Abs{\Bx - \Bx'}} \BM(\Bx')
+=
+\spacegrad \int_V dV' \spacegrad \cdot \inv{\Abs{\Bx - \Bx'}} \BM(\Bx')
+- \spacegrad \cross \int_V dV' \spacegrad \cross \inv{\Abs{\Bx - \Bx'}} \BM(\Bx')
+=
+-\spacegrad \int_V dV' \lr{ \spacegrad' \cdot \inv{\Abs{\Bx - \Bx'}}} \BM(\Bx')
++\spacegrad \cross \int_V dV' \lr{ \spacegrad' \inv{\Abs{\Bx - \Bx'}} } \cross \BM(\Bx')
+=
+-\spacegrad \int_V dV' \spacegrad' \cdot \frac{ \BM(\Bx') }{\Abs{\Bx - \Bx'}}
++\spacegrad \int_V dV' \frac{ \spacegrad' \cdot \BM(\Bx')}{\Abs{\Bx - \Bx'}}
++\spacegrad \cross \int_V dV' \spacegrad' \cross \frac{\BM(\Bx')}{\Abs{\Bx - \Bx'}}
+-\spacegrad \cross \int_V dV' \frac{ \spacegrad' \cross \BM(\Bx')}{\Abs{\Bx - \Bx'}}
+%=
+%-\spacegrad \int_{\partial V} dA' \ncap \cdot \frac{ \BM(\Bx') }{\Abs{\Bx - \Bx'}}
+%+\spacegrad \int_V dV' \frac{ s(\Bx')}{\Abs{\Bx - \Bx'}}
+%-\spacegrad \cdot \int_{\partial V} dV' \ncap \wedge \frac{\BM(\Bx')}{\Abs{\Bx - \Bx'}}
+%+\spacegrad \cdot \int_V dV' \frac{ I \BC(\Bx')}{\Abs{\Bx - \Bx'}}
+,
+\end{dmath}
+
+or
+
+%\begin{dmath}\label{eqn:emtProblemSet1Problem5:180}
+\boxedEquation{eqn:emtProblemSet1Problem5:200}{
+\BM(\Bx)
+=
+-\spacegrad \int_V dV' \frac{ s(\Bx')}{\Abs{\Bx - \Bx'}}
++\spacegrad \cross \int_V dV' \frac{ \BC(\Bx')}{\Abs{\Bx - \Bx'}}
++\spacegrad \int_{\partial V} dA' \ncap \cdot \frac{ \BM(\Bx') }{\Abs{\Bx - \Bx'}}
+-\spacegrad \cross \int_{\partial V} dV' \ncap \cross \frac{\BM(\Bx')}{\Abs{\Bx - \Bx'}}
+.
+%\end{dmath}
+}
+
+The vector \( \BM \) is unique if \( \Abs{\BM(\Bx')}/\Abs{\Bx - \Bx'} \) vanishes on the infinite sphere.  For solutions valid in and on a specific surface, the general solution is found by a superposition of the unique infinite-sphere solution, with a specific integral equation solution dependent on the normal and tangential components of \( \BM \) on the surface of interest.
 }
