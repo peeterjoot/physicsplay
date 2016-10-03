@@ -30,6 +30,7 @@ include ../make.rules
 #l3 : emtLecture3.pdf
 l4 : emtLecture4.pdf
 #p1 : emtProblemSet1.pdf
+p2 : emtProblemSet2.pdf
 pd : dipoleMoment.pdf
 pv : dipolePotential.pdf
 
@@ -39,9 +40,15 @@ emtProblemSet1.pdf : emtProblemSet1Problem3.tex
 emtProblemSet1.pdf : emtProblemSet1Problem4.tex
 emtProblemSet1.pdf : emtProblemSet1Problem5.tex
 emtProblemSet1.pdf : emtProblemSet1Problem6.tex
-emtProblemSet1.pdf : emtProblemSet1Appendix.tex
-emtProblemSet1.pdf : gaQuickTutorial.tex
-emtProblemSet1.pdf : gaPs1Problem5Attempt1.tex
+#emtProblemSet1.pdf : emtProblemSet1Appendix.tex
+#emtProblemSet1.pdf : gaQuickTutorial.tex
+#emtProblemSet1.pdf : gaPs1Problem5Attempt1.tex
+
+emtProblemSet2.pdf : emtProblemSet2Problem1.tex
+emtProblemSet2.pdf : emtProblemSet2Problem2.tex
+emtProblemSet2.pdf : emtProblemSet2Problem3.tex
+emtProblemSet2.pdf : emtProblemSet2Problem4.tex
+emtProblemSet2.pdf : emtProblemSet2Problem5.tex
 
 julia.tex : ../../julia/METADATA
 mathematica.tex : ../../mathematica/METADATA
