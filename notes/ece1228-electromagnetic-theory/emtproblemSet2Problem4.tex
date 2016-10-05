@@ -2,6 +2,7 @@
 % Copyright © 2016 Peeter Joot.  All Rights Reserved.
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
 %
+%{
 \makeproblem{Dipole moment density for disk.}{emt:problemSet2:4}{ 
 A dielectric circular disk of radius \( a \) and thickness \( d \) is permanently polarized with a
 dipole moment per unit volume \( \BP \) [\si{C/m^2}], where \( \Abs{\BP} \) 
@@ -21,8 +22,152 @@ of \( Z \gg d \).
 \makeanswer{emt:problemSet2:4}{ 
 \makeSubAnswer{}{emt:problemSet2:4a}
 
-TODO.
+In class the potential for a discrete dipole pair was found to be
+
+\begin{dmath}\label{eqn:emtProblemSet2Problem4:20}
+V(\Br) = \inv{4 \pi \epsilon_0} \frac{\rcap \cdot \Bp}{r^2},
+\end{dmath}
+
+so in the continuum, the element of dipole moment is \( d\Bp = \BP(\Br') dV' \), for a total potential of
+
+\begin{dmath}\label{eqn:emtProblemSet2Problem4:40}
+V(\Br)
+= \inv{4 \pi \epsilon_0} \int dV' \frac{\lr{ \Br - \Br'} \cdot \BP(\Br')}{\lr{\Br - \Br'}^3}.
+\end{dmath}
+
+Restricting \( \Br \) to the z-axis, with \( \Br(z) = z \zcap \), and using cylindrical coordinates for the disk
+
+\begin{dmath}\label{eqn:emtProblemSet2Problem4:60}
+\Br' = z'\zcap + \rho'\rhocap,
+\end{dmath}
+
+where \( z' \in [-d,0] \) and \( \rho' \in [0, a] \).  The difference vector between the charge and the observation point is
+
+\begin{dmath}\label{eqn:emtProblemSet2Problem4:80}
+\Br - \Br' = (z - z')\zcap - \rho' \rhocap,
+\end{dmath}
+
+with magnitude
+\begin{dmath}\label{eqn:emtProblemSet2Problem4:100}
+\Abs{\Br - \Br'}^2 = (z - z')^2 + (\rho')^2.
+\end{dmath}
+
+With \( \BP = \Abs{\BP} \zcap \), the potential along the axis is
+
+\begin{dmath}\label{eqn:emtProblemSet2Problem4:120}
+V(z)
+= 
+\frac{2 \pi \Abs{\BP} }{4 \pi \epsilon_0} 
+\int_0^a \rho' d\rho \int_{-d}^0 dz' \frac{\lr{ (z - z')\zcap - \rho' \rhocap} \cdot \zcap}{\lr{(z - z')^2 + (\rho')^2}^{3/2}}
+= 
+\frac{\Abs{\BP} }{2 \epsilon_0} 
+\int_0^a \rho' d\rho \int_{-d}^0 dz' \frac{ (z - z') }{\lr{(z - z')^2 + (\rho')^2}^{3/2}}
+= 
+% u = z' - z
+% v = \rho'
+-\frac{\Abs{\BP} }{2 \epsilon_0} 
+\int_0^a dv \int_{-d-z}^{-z} du \frac{ u v }{\lr{u^2 + v^2}^{3/2}}
+= 
+\frac{\Abs{\BP} }{2 \epsilon_0} 
+\int_{-d-z}^{-z} du \evalrange{\lr{\frac{ u }{\lr{u^2 + v^2}^{1/2}}}}{v =0}{a}
+= 
+\frac{\Abs{\BP} }{2 \epsilon_0} 
+\int_{-d-z}^{-z} du \lr{ \frac{ u }{\sqrt{u^2 + a^2}} - \frac{u}{\Abs{u}} }
+= 
+\frac{\Abs{\BP} }{2 \epsilon_0} 
+\int_{-d-z}^{-z} du \lr{ \frac{ u }{\sqrt{u^2 + a^2}} - \sgn{u}}.
+\end{dmath}
+
+Looking at the values of the integration variable \( u \), note that
+for \( z > 0 \), \( u < 0 \) and for \( z < -d \), \( u > 0 \), so the potential outside of the disk is
+
+\begin{dmath}\label{eqn:emtProblemSet2Problem4:140}
+V(z) 
+= 
+\frac{\Abs{\BP} }{2 \epsilon_0} \lr{ d \sgn(z) + \int_{-d-z}^{-z} du \frac{ u }{\sqrt{u^2 + a^2}} }
+= 
+\frac{\Abs{\BP} }{2 \epsilon_0} \lr{ d \sgn(z) + 
+\evalrange{\lr{\sqrt{u^2 + a^2}}}{-d-z}{-z}
+},
+\end{dmath}
+
+or
+
+%\begin{dmath}\label{eqn:emtProblemSet2Problem4:160}
+\boxedEquation{eqn:emtProblemSet2Problem4:180}{
+V(z) 
+= 
+\frac{\Abs{\BP} }{2 \epsilon_0} \lr{ d \sgn(z) + 
+\sqrt{ z^2 + a^2 } - \sqrt{ (d+z)^2 + a^2 }
+}.
+}
+%\end{dmath}
+
 \makeSubAnswer{}{emt:problemSet2:4b}
 
-TODO.
+Let 
+
+\begin{dmath}\label{eqn:emtProblemSet2Problem4:200}
+f(z) = \sqrt{ z^2 + a^2 },
+\end{dmath}
+
+which has a derivative of
+%This has a derivative that is zero at the origin
+
+\begin{dmath}\label{eqn:emtProblemSet2Problem4:220}
+f'(z) = \frac{z}{\sqrt{z^2 + a^2}}.
+\end{dmath}
+
+%The second derivative is
+%\begin{dmath}\label{eqn:emtProblemSet2Problem4:240}
+%f''(z) 
+%= \frac{1}{\sqrt{z^2 + a^2}} + (-1/2) \frac{ z(2z) }{\lr{z^2 + a^2}^{3/2}}
+%= \frac{ a^2 }{\lr{z^2 + a^2}^{3/2}}.
+%\end{dmath}
+%
+The first order Taylor approximation is 
+
+\begin{dmath}\label{eqn:emtProblemSet2Problem4:260}
+f(z + d) - f(z)
+\approx f'(z) d 
+=
+\frac{z d}{\sqrt{z^2 + a^2}},
+\end{dmath}
+
+so for \( \Abs{z} \gg d \) the potential is approximated by
+
+\begin{dmath}\label{eqn:emtProblemSet2Problem4:280}
+%\boxedEquation{eqn:emtProblemSet2Problem4:300}{
+V(z) 
+\approx
+\frac{\Abs{\BP} }{2 \epsilon_0} \lr{ d \sgn(z) - \frac{z d}{\sqrt{z^2 + a^2}} },
+%}
+\end{dmath}
+
+or
+%\begin{dmath}\label{eqn:emtProblemSet2Problem4:360}
+\boxedEquation{eqn:emtProblemSet2Problem4:380}{
+V(z) 
+=
+\frac{\Abs{\BP} d \sgn(z)}{2 \epsilon_0} \lr{ 1 -
+\frac{1}{\sqrt{1+ (a/z)^2}}
+}.
 }
+%\end{dmath}
+
+Note that if \( \Abs{z} \gg a \) too, this can be further approximated as
+
+%\boxedEquation{eqn:emtProblemSet2Problem4:340}{
+\begin{dmath}\label{eqn:emtProblemSet2Problem4:320}
+V(z)
+\approx
+\frac{\Abs{\BP} d \sgn(z)}{2 \epsilon_0} \lr{ 1 - (1 + (-1/2) (a/z)^2) }
+=
+\inv{4 \pi \epsilon_0} \frac{\Abs{\BP} \sgn(z) (d \pi a^2)}{z^2}.
+\end{dmath}
+%}
+
+This is a slightly tidier result that shows the asymptotic inverse-square \( z \) dependence of the potential more clearly than \cref{eqn:emtProblemSet2Problem4:380}, valid for \( z \gg d \).  We also have the volume of the disk as an explicit factor in this approximation.
+%, but requires \( z \\gg a,d \), a more strict limiting value than the \( z \gg d \) requested in the problem.
+}
+%}
