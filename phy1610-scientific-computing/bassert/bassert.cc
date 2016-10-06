@@ -28,6 +28,11 @@ catch ( boost::exception & e )
     auto s { boost::diagnostic_information( e ) } ;
     std::cout << s << std::endl ;
 
+    if ( auto * i = boost::get_error_info<intdata_info>(e) )
+    {
+        std::cout << "i: " << *i << '\n' ;
+    }
+
     return 1 ;
 }
 
