@@ -31,6 +31,7 @@ include ../make.rules
 l4 : emtLecture4.pdf
 #p1 : emtProblemSet1.pdf
 #p2 : emtProblemSet2.pdf
+p3 : emtProblemSet3.pdf
 #pd : dipoleMoment.pdf
 #pv : dipolePotential.pdf
 
@@ -49,6 +50,11 @@ emtProblemSet2.pdf : emtProblemSet2Problem2.tex
 emtProblemSet2.pdf : emtProblemSet2Problem3.tex
 emtProblemSet2.pdf : emtProblemSet2Problem4.tex
 emtProblemSet2.pdf : emtProblemSet2Problem5.tex
+
+emtProblemSet3.pdf : emtProblemSet3Problem1.tex
+emtProblemSet3.pdf : emtProblemSet3Problem2.tex
+emtProblemSet3.pdf : emtProblemSet3Problem3.tex
+emtProblemSet3.pdf : emtProblemSet3Problem4.tex
 
 julia.tex : ../../julia/METADATA
 mathematica.tex : ../../mathematica/METADATA
