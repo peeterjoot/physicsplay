@@ -8,7 +8,7 @@ A loop of wire located in x-y plane carrying current \(I\) is shown in \cref{fig
 The loop's radius is \(R_l\).
 \imageFigure{../../figures/ece1228-emt/currentLoopPs3Fig2}{Current loop.}{fig:currentLoopPs3:currentLoopPs3Fig2}{0.3}
 \makesubproblem{}{emt:problemSet3:2a}
-Calculate the magnetic field flux density, \( \BB \), along the loop axis at a distance \( z \) from its center.
+Calculate the magnetic field flux density, \( \BB \), along the loop axis at a distance \( z \) from its centre.
 
 \makesubproblem{}{emt:problemSet3:2b}
 Simplify the results in 
@@ -48,14 +48,229 @@ to the point of observation.
 \makeanswer{emt:problemSet3:2}{ 
 \makeSubAnswer{}{emt:problemSet3:2a}
 
-TODO.
+The integral for the general observation point is straightforward to write down.  For that point, with \( i = \Be_1 \Be_2 \) let
+
+\begin{dmath}\label{eqn:emtProblemSet3Problem2:60}
+\Br = z \Be_3 + \rho \Be_1 e^{i\theta}.
+\end{dmath}
+
+The charge point is
+\begin{dmath}\label{eqn:emtProblemSet3Problem2:80}
+\Br' = R_l \Be_1 e^{i \theta'},
+\end{dmath}
+
+and the element of the loop is
+\begin{dmath}\label{eqn:emtProblemSet3Problem2:100}
+d\Bl' = R_l \Be_2 e^{i\theta'} d\theta'.
+\end{dmath}
+
+The difference vector from the charge position to the observation point is
+
+\begin{dmath}\label{eqn:emtProblemSet3Problem2:120}
+\BR 
+= \Br - \Br'
+=
+z \Be_3 + \rho \Be_1 e^{i\theta}
+-
+R_l \Be_1 e^{i \theta'},
+\end{dmath}
+
+with squared length
+
+\begin{dmath}\label{eqn:emtProblemSet3Problem2:140}
+\BR^2 
+=
+z^2 + 
+\lr{ \rho \Be_1 e^{i\theta}
+-
+R_l \Be_1 e^{i \theta'}
+}
+\cdot
+\lr{ \rho \Be_1 e^{i\theta}
+-
+R_l \Be_1 e^{i \theta'}
+}
+=
+z^2 + \rho^2 + R_l^2 - 2 \rho R_l \cos\lr{ \theta - \theta' }.
+\end{dmath}
+
+For the cross product, using a bivector duality transformation, we have
+
+\begin{dmath}\label{eqn:emtProblemSet3Problem2:180}
+d\Bl' \cross \BR 
+=
+-\Be_1 \Be_2 \Be_3 R_l d\theta' \gpgradetwo{ 
+\Be_2 e^{i \theta'} 
+\lr{
+z \Be_3 + \rho \Be_1 e^{i\theta}
+-
+R_l \Be_1 e^{i \theta'}
+}
+}
+=
+R_l d\theta' \lr{ 
+z \Be_1 e^{i\theta'}
+-
+\Be_3 \rho \cos\lr{ \theta - \theta' }
++ \Be_3 R_l
+}.
+\end{dmath}
+
+The final integral can now be assembled
+
+\begin{dmath}\label{eqn:emtProblemSet3Problem2:200}
+\BB = \frac{I \mu_0 R_l}{4\pi} \int_0^{2\pi} d\theta' 
+\frac
+{ z \Be_1 e^{i\theta'} - \Be_3 \rho \cos\lr{ \theta - \theta' } + \Be_3 R_l }
+{ \lr{z^2 + \rho^2 + R_l^2 - 2 \rho R_l \cos\lr{ \theta - \theta' }}^{3/2} }.
+\end{dmath}
+
+It is clear now, why the problem statement asked only to consider the z-axis observation points where \( \rho = 0 \).  Performing the integral above for \( \rho \ne 0 \) looks spectacularly unpleasant.
+
+In the above computations I've used Geometric Algebra notation to express vector rotation in a plane and other geometrical constructions.  The basic rules are that unit vectors square to unity (\(\Be_k^2 = 1 \)), and that orthogonal vectors anticommute (\( \Be_1 \Be_2 = -\Be_2 \Be_1 \)).  For example
+
+\begin{dmath}\label{eqn:emtProblemSet3Problem2:160}
+\Be_1 e^{i \theta} = \Be_1 \lr{ \cos\theta + \Be_1 \Be_2 \sin\theta } = \Be_1 \cos\theta + \Be_2 \sin\theta.
+\end{dmath}
+
+As a check, let's repeat this calculation using traditional vector techniques for the \( \rho = 0 \) observation point of the problem statement.  That is
+
+\begin{dmath}\label{eqn:emtProblemSet3Problem2:220}
+\Br = z \Be_3.
+\end{dmath}
+
+The charge point is
+\begin{dmath}\label{eqn:emtProblemSet3Problem2:240}
+\Br' = R_l \lr{ \Be_1 \cos\theta' + \Be_2 \sin\theta' },
+\end{dmath}
+
+and the element of the loop is
+\begin{dmath}\label{eqn:emtProblemSet3Problem2:260}
+d\Bl' = R_l d\theta' \lr{ \Be_2 \cos\theta' - \Be_1 \sin\theta'}.
+\end{dmath}
+
+The difference vector from the charge position to the observation point is
+
+\begin{dmath}\label{eqn:emtProblemSet3Problem2:300}
+\BR 
+= \Br - \Br'
+=
+z \Be_3 - R_l \lr{ \Be_1 \cos\theta' + \Be_2 \sin\theta' },
+\end{dmath}
+
+with squared length
+
+\begin{dmath}\label{eqn:emtProblemSet3Problem2:320}
+\BR^2 
+=
+z^2 + R_l^2.
+\end{dmath}
+
+Finally, the cross product of the elemental arc with the difference vector is
+
+\begin{dmath}\label{eqn:emtProblemSet3Problem2:280}
+d\Bl' \cross \BR
+=
+R_l d\theta' 
+\lr{
+\Be_2 \cos\theta' - \Be_1 \sin\theta'
+}
+\cross
+\lr{
+z \Be_3 - R_l \lr{ \Be_1 \cos\theta' + \Be_2 \sin\theta' }
+}
+=
+R_l d\theta' 
+\lr{
+z \lr{ \Be_1 \cos\theta' + \Be_2 \sin\theta' }
++ 
+R_l \Be_3 \lr{ 
+\cos^2\theta' + \sin^2 \theta'
+}
+}
+=
+R_l d\theta' 
+\lr{
+z %\Be_1 e^{i\theta'}
+\lr{ \Be_1 \cos\theta' + \Be_2 \sin\theta' }
++ R_l \Be_3
+}.
+\end{dmath}
+
+The magnetic field integral is 
+\begin{dmath}\label{eqn:emtProblemSet3Problem2:201}
+\BB = \frac{I \mu_0 R_l}{4\pi} \int_0^{2\pi} d\theta' 
+\frac
+{ z 
+%\Be_1 e^{i\theta'} 
+\lr{ \Be_1 \cos\theta' + \Be_2 \sin\theta' }
++ \Be_3 R_l }
+{ \lr{ z^2 + R_l^2 }^{3/2} }.
+\end{dmath}
+
+This is consistent with \cref{eqn:emtProblemSet3Problem2:200} as expected.  Note that this integral is particularly easy to evaluate.  All the trigonometric contributions are killed integrating over the \( [0, 2 \pi] \) interval, leaving just
+\begin{equation}\label{eqn:emtProblemSet3Problem2:340}
+\BB = \frac{I \mu_0 R_l}{4\pi} 
+\frac
+{ 2 \pi \Be_3 R_l }
+{ \lr{ z^2 + R_l^2 }^{3/2} },
+\end{equation}
+
+or
+\boxedEquation{eqn:emtProblemSet3Problem2:360}{
+\BB = \frac{\Be_3 I \mu_0 }{2\pi} 
+\frac
+{ \lr{\pi R_l^2} }
+{ \lr{ z^2 + R_l^2 }^{3/2} },
+}
+
 \makeSubAnswer{}{emt:problemSet3:2b}
 
-TODO.
+Taylor expanding the denominator
+
+\begin{dmath}\label{eqn:emtProblemSet3Problem2:380}
+\BB 
+= \frac{\Be_3 I \mu_0 }{2\pi} 
+\frac
+{ \lr{\pi R_l^2} }
+{ z^3 }
+\lr{ 
+1 - \frac{3}{2} \lr{ \frac{R_l}{z} }^2
++ \frac{(3)(5)}{2^3} \lr{ \frac{R_l}{z} }^4 
++ \cdots
+}.
+\end{dmath}
+
+If \( z \gg R_l \) this is dominated by the zero order term of the expansion, leaving
+\boxedEquation{eqn:emtProblemSet3Problem2:460}{
+\BB 
+\approx \frac{\Be_3 I \mu_0 }{2\pi} 
+\frac
+{ \lr{\pi R_l^2} }
+{ z^3 }.
+}
+
 \makeSubAnswer{}{emt:problemSet3:2c}
 
-TODO.
+If an element of magnetic moment for the loop is \( d\Bm = \ncap I ds \), the magnetic moment for the whole loop is
+
+\begin{dmath}\label{eqn:emtProblemSet3Problem2:420}
+\BM 
+= \Be_3 I (2 \pi R_l)
+\end{dmath}
+
+so the magnetic field is
+
+%\begin{dmath}\label{eqn:emtProblemSet3Problem2:440}
+\boxedEquation{eqn:emtProblemSet3Problem2:440}{
+\BB 
+= \frac{ \mu_0 R_l \BM }{4\pi z^3}.
+}
+%\end{dmath}
+
 \makeSubAnswer{}{emt:problemSet3:2d}
 
-TODO.
+I couldn't recall the N vs. S convention for field lines in a magnet, and couldn't find anything in my electromagnetism books on this.
+However, the ``Field of a cylindrical bar magnet calculated with Amp\`ere's model'' figure in \citep{wiki:magnet}, indicates that the magnetic field lines emanate from the North pole of a magnet.  This means that the current loop in this problem can be thought of as representing a magnet with north and south poles in the \( z > 0 \) and \( z < 0 \) regions respectively, as sketched in \cref{fig:magnetPoleForCurrentLoop:magnetPoleForCurrentLoopFig1}.
+\imageFigure{../../figures/ece1228-emt/magnetPoleForCurrentLoopFig1}{Magnet pole orientations for current loop.}{fig:magnetPoleForCurrentLoop:magnetPoleForCurrentLoopFig1}{0.3}
 }
