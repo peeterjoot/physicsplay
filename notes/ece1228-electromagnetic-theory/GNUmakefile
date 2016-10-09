@@ -55,6 +55,7 @@ emtProblemSet3.pdf : emtProblemSet3Problem1.tex
 emtProblemSet3.pdf : emtProblemSet3Problem2.tex
 emtProblemSet3.pdf : emtProblemSet3Problem3.tex
 emtProblemSet3.pdf : emtProblemSet3Problem4.tex
+emtProblemSet3.pdf : emtProblemSet3Appendix.tex
 
 julia.tex : ../../julia/METADATA
 mathematica.tex : ../../mathematica/METADATA
