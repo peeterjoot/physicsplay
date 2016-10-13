@@ -28,10 +28,11 @@ include ../make.rules
 #l1 : emtLecture1.pdf
 #l2 : emtLecture2.pdf
 #l3 : emtLecture3.pdf
-l4 : emtLecture4.pdf
+#l4 : emtLecture4.pdf
+l5 : emtLecture5.pdf
 #p1 : emtProblemSet1.pdf
 #p2 : emtProblemSet2.pdf
-p3 : emtProblemSet3.pdf
+#p3 : emtProblemSet3.pdf
 #pd : dipoleMoment.pdf
 #pv : dipolePotential.pdf
 
