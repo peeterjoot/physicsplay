@@ -27,6 +27,9 @@ GetOptions(
    'help'       => sub { die "usage: mkRevInfo [-book] [-commit] [-date] [-repo]\n" ; },
 ) ;
 
+# count version from when I made my macbook clone:
+my $r = `git rev-list --count fb9dccc` ; chomp $r ;
+
 open my $fh, "git log -1 |" or die ;
 while (<$fh>)
 {
@@ -91,6 +94,8 @@ if ( $mytime )
 elsif ( $book )
 {
    $output = qq@
+Version 0.$r
+
 Sources for this notes compilation can be found in the github repository
 
 \\href{$url}{$url}
@@ -113,7 +118,7 @@ elsif ( $onlycommitdate )
 }
 else
 {
-   $output = "Revision $url commit $lastCommit $commitDate" ;
+   $output = "Revision 0.$r $url commit $lastCommit $commitDate" ;
 }
 
 if ( $define ne '' )
