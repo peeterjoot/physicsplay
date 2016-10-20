@@ -19,7 +19,7 @@ ALLNOTES += notes/classicalmechanics/classicalmechanics.pdf
 #ALLNOTES += notes/dekker/dekker.pdf
 ALLNOTES += notes/papers/relwave.pdf
 ALLNOTES += notes/phy356-qmI/phy356.pdf
-#ALLNOTES += notes/phy356/desaiTypos.pdf
+#ALLNOTES += notes/phy356-qmI/desaiTypos.pdf
 ALLNOTES += notes/phy450-relativisticEandM/phy450.pdf
 ALLNOTES += notes/papers/gramSchmidtLorentz.pdf
 ALLNOTES += notes/phy456-qmII/phy456.pdf
@@ -30,7 +30,10 @@ ALLNOTES += notes/phy487-qmsolids/phy487.pdf
 ALLNOTES += notes/ece1254-multiphysics/ece1254.pdf
 ALLNOTES += notes/ece1229-antenna/ece1229.pdf
 ALLNOTES += notes/phy1520-quantum/phy1520.pdf
-ALLNOTES += notes/ece1236-microwaves/phy1520.pdf
+ALLNOTES += notes/ece1236-microwaves/ece1236.pdf
+ALLNOTES += notes/ece1228-electromagnetic-theory/ece1228.pdf
+#ALLNOTES += notes/otherbook/otherbook.pdf
+#ALLNOTES += notes/phy1520-quantum-redacted/phy1520.pdf
 
 all :: .gitignore subdirs
 
