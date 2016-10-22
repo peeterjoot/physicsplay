@@ -14,7 +14,7 @@ SOURCE_DIRS += $(FIGURES)
 #REDACTED := -redacted
 
 #GENERATED_SOURCES += matlab.tex 
-#GENERATED_SOURCES += mathematica.tex 
+GENERATED_SOURCES += mathematica.tex 
 #GENERATED_SOURCES += julia.tex 
 
 EPS_FILES := $(wildcard $(FIGURES)/*.eps)
@@ -69,7 +69,11 @@ emtProblemSet4.pdf : emtProblemSet4Problem4.tex
 emtProblemSet5.pdf : emtProblemSet5Problem1.tex
 emtProblemSet5.pdf : emtProblemSet5Problem2.tex
 emtProblemSet5.pdf : emtProblemSet5Problem3.tex
+emtProblemSet5.pdf : ps5mathematica.tex
 
 julia.tex : ../../julia/METADATA
 mathematica.tex : ../../mathematica/METADATA
 matlab.tex : ../../matlab/METADATA
+
+ps5mathematica.tex : ../METADATA ../../mathematica/METADATA
+	(cd .. ; ./METADATA -mathematica -latex -ece1228 -filter ece1228-emt/ps5/ ) > $@

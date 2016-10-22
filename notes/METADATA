@@ -20,6 +20,7 @@ my $doEce1254 = 0 ;
 my $doEce1229 = 0 ;
 my $doPhy1520 = 0 ;
 my $doEce1236 = 0 ;
+my $doEce1228 = 0 ;
 my $doOtherbook = 0 ;
 
 my $doBib = 0 ;
@@ -50,6 +51,7 @@ GetOptions
    'phy450!'               => \$doPhy450,
    'phy1520!'              => \$doPhy1520,
    'ece1236!'              => \$doEce1236,
+   'ece1228!'              => \$doEce1228,
    'miscphysics!'          => \$doNonga,
    'latex!'                => \$latex,
    'cdf!'                  => \$cdf,
@@ -79,10 +81,11 @@ GetOptions
                           $doOtherbook = 1 ;
                           $doPhy1520 = 1 ;
                           $doEce1236 = 1 ;
+                          $doEce1228 = 1 ;
                        },
 
    'help'       => sub { die
-"METADATA [-help | -history | -bib] [-mathematica [-latex|-cdf] | -matlab [-latex] | -julia | -other | -phy356 | -classicalmechanics | -phy456 | -phy454 | -phy485 | -phy450 | -phy452 | -phy487 | -gabook | -gabookI | -gabookII | -ece1254 | -ece1229 | -phy1520 | -ece1236 ] [-redacted] [-filter dirname/]
+"METADATA [-help | -history | -bib] [-mathematica [-latex|-cdf] | -matlab [-latex] | -julia | -other | -phy356 | -classicalmechanics | -phy456 | -phy454 | -phy485 | -phy450 | -phy452 | -phy487 | -gabook | -gabookI | -gabookII | -ece1254 | -ece1229 | -phy1520 | -ece1236 | -ece1228] [-redacted] [-filter dirname/]
 
 options:
 -history hypertext history.
@@ -109,6 +112,7 @@ require "phy1520-quantum/METADATA" ;
 require "phy454-continuumechanics/METADATA" ;
 require "phy450-relativisticEandM/METADATA" ;
 require "ece1236-microwaves/METADATA" ;
+require "ece1228-electromagnetic-theory/METADATA" ;
 require "otherbook/METADATA" ;
 require "../mathematica/METADATA" ;
 require "../matlab/METADATA" ;
@@ -127,6 +131,7 @@ my @ece1254 = ece1254Meta() ;
 my @ece1229 = ece1229Meta() ;
 my @phy1520 = phy1520Meta() ;
 my @ece1236 = ece1236Meta() ;
+my @ece1228 = ece1228Meta() ;
 my @phy454 = phy454Meta() ;
 my @phy450 = phy450Meta() ;
 my @otherbook = otherbookMeta() ;
@@ -210,6 +215,11 @@ if ( !defined $filter )
    if ( $doEce1236 )
    {
       $filter = "ece1236/" ;
+   }
+
+   if ( $doEce1228 )
+   {
+      $filter = "ece1228-emt/" ;
    }
 }
 
@@ -319,6 +329,11 @@ if ( $doEce1236 )
    push( @All, @ece1236 ) ;
 }
 
+if ( $doEce1228 )
+{
+   push( @All, @ece1228 ) ;
+}
+
 if ( $doPhy450 )
 {
    push( @All, @phy450 ) ;
@@ -335,7 +350,7 @@ if ( $doHistory )
 }
 elsif ( $doBib )
 {
-   printBib( @gabookI, @gabookII, @miscphysics, @phy356, @classicalmechanics, @phy456, @phy454, @phy485, @phy452, @phy450, @phy487, @ece1254, @ece1229, @otherbook, @phy1520, @ece1236 ) ;
+   printBib( @gabookI, @gabookII, @miscphysics, @phy356, @classicalmechanics, @phy456, @phy454, @phy485, @phy452, @phy450, @phy487, @ece1254, @ece1229, @otherbook, @phy1520, @ece1236, @ece1228 ) ;
 
    ## generate cross reference's to gabook for miscphysics.pdf
    #printBookBib( 'Exploring physics with Geometric Algebra',
@@ -417,6 +432,11 @@ elsif ( $doBib )
                  'ece1236',
                  'http://peeterjoot.com/archives/math2016/ece1236.pdf',
                  @ece1236 ) ;
+
+   printBookBib( 'Electromagnetic Theory.',
+                 'ece1228',
+                 'http://peeterjoot.com/archives/math2016/ece1228.pdf',
+                 @ece1228 ) ;
 }
 elsif ( $doMathematica )
 {

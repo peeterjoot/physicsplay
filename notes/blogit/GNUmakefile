@@ -37,7 +37,8 @@ ifneq ($(QPDF_DIR),)
 endif
 
 #EPS_FILES := $(wildcard *.eps)
-EPS_FILES := $(wildcard ../../figures/ece1229/*.eps)
+#EPS_FILES := $(wildcard ../../figures/ece1229/*.eps)
+EPS_FILES := $(wildcard ../../figures/ece1228-emt/*.eps)
 PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))
 
 #ONCEFLAGS := -justonce
