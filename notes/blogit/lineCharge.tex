@@ -1,0 +1,176 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+%{
+\input{../blogpost.tex}
+\renewcommand{\basename}{lineCharge}
+%\renewcommand{\dirname}{notes/phy1520/}
+\renewcommand{\dirname}{notes/ece1228-electromagnetic-theory/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+\usepackage{siunitx}
+%\usepackage{txfonts} % \ointclockwise
+
+\beginArtNoToc
+
+\generatetitle{Line charge field and potential}
+%\chapter{Line charge field and potential}
+%\label{chap:lineCharge}
+% \citep{jackson1975cew}
+% \citep{griffiths1999introduction}
+
+Jackson mentions that \( -2 \lambda_0 \ln \rho \) is the well known potential for an infinite line charge (up to the unit specific factor).  Let's derive the potential for line charges, both finite and infinite, as well as the electric field for such distributions in a couple different ways.
+
+\paragraph{Using Gauss's law.}
+
+For an infinite length line charge, we can find the radial field contribution using Gauss's law, imagining a cylinder of length \( \Delta l \) of radius \( \rho \) surrounding this charge with the midpoint at the origin.  Ignoring any non-radial field contribution, we have
+
+\begin{dmath}\label{eqn:lineCharge:20}
+\int_{-\Delta l/2}^{\Delta l/2} \ncap \cdot \BE (2 \pi \rho) dl = \frac{\lambda_0}{\epsilon_0} \Delta l,
+\end{dmath}
+
+or
+
+\begin{dmath}\label{eqn:lineCharge:40}
+\BE = \frac{\lambda_0}{2 \pi \epsilon_0} \frac{\rhocap}{\rho}.
+\end{dmath}
+
+Since 
+
+\begin{dmath}\label{eqn:lineCharge:60}
+\frac{\rhocap}{\rho} = \spacegrad \ln \rho,
+\end{dmath}
+
+this means that the potential is
+
+\begin{dmath}\label{eqn:lineCharge:80}
+\phi = -\frac{2 \lambda_0}{4 \pi \epsilon_0} \ln \rho.
+\end{dmath}
+
+\paragraph{Finite line charge potential.}
+
+Let's try both these calculations for a finite charge distribution.  Gauss's law looses its usefulness, but we can evaluate the integrals directly.  For the electric field
+
+\begin{dmath}\label{eqn:lineCharge:100}
+\BE 
+= \frac{\lambda_0}{4 \pi \epsilon_0} \int \frac{(\Bx - \Bx')}{\Abs{\Bx - \Bx'}^3} dl'.
+\end{dmath}
+
+Using cylindrical coordinates with the field point \( \Bx = \rho \rhocap \) for convience, the charge point \( \Bx' = z' \zcap \), and a the charge distributed over \( [a,b] \) this is
+
+\begin{dmath}\label{eqn:lineCharge:120}
+\BE 
+= \frac{\lambda_0}{4 \pi \epsilon_0} \int_a^b \frac{(\rho \rhocap - z' \zcap)}{\lr{\rho^2 + (z')^2}^{3/2}} dz'.
+\end{dmath}
+
+When the charge is uniformly distributed around the origin \( [a,b] = b[-1,1] \) the \( \zcap \) component of this field is killed because the integrand is odd.  This justifies ignoring such contributions in the Gaussing cylinder analysis above.  The general solution to this integral is found to be
+
+\begin{dmath}\label{eqn:lineCharge:140}
+\BE 
+=
+\frac{\lambda_0}{4 \pi \epsilon_0} 
+\evalrange{
+   \lr{ 
+      \frac{z' \rhocap }{\rho \sqrt{ \rho^2 + (z')^2 } }
+      -\frac{\zcap}{ \sqrt{ \rho^2 + (z')^2 } }
+   }
+}{a}{b}
+=
+\frac{\lambda_0}{4 \pi \epsilon_0} 
+   \lr{ 
+      \frac{\rhocap }{\rho}
+\lr{
+ \frac{b}{\sqrt{ \rho^2 + b^2 } }
+ -\frac{a}{\sqrt{ \rho^2 + a^2 } }
+}
++ \zcap
+\lr{
+       \frac{1}{ \sqrt{ \rho^2 + a^2 } }
+      -\frac{1}{ \sqrt{ \rho^2 + b^2 } }
+}
+   }.
+\end{dmath}
+
+When \( b = -a = \Delta l/2 \), this reduces to
+
+\begin{dmath}\label{eqn:lineCharge:160}
+\BE
+=
+\frac{\lambda_0}{4 \pi \epsilon_0} 
+      \frac{\rhocap }{\rho}
+ \frac{\Delta l}{\sqrt{ \rho^2 + (\Delta l/2)^2 } },
+\end{dmath}
+
+which further reduces to \cref{eqn:lineCharge:40} when \( \Delta l \gg \rho \).
+
+\paragraph{Finite line charge potential.}
+
+Again, putting the field point at \( z' = 0 \), we have
+
+\begin{dmath}\label{eqn:lineCharge:180}
+\phi(\rho) 
+= \frac{\lambda_0}{4 \pi \epsilon_0} \int_a^b \frac{dz'}{\lr{\rho^2 + (z')^2}^{1/2}}
+= \frac{\lambda_0}{4 \pi \epsilon_0 } 
+\ln \frac{ b + \sqrt{ \rho^2 + b^2 }}{ a + \sqrt{\rho^2 + a^2}}.
+\end{dmath}
+
+With \( b = -a = \Delta l/2 \), this approaches
+
+\begin{dmath}\label{eqn:lineCharge:200}
+\phi 
+\approx 
+\frac{\lambda_0}{4 \pi \epsilon_0 } 
+\ln \frac{ (\Delta l/2) }{ \rho^2/2\Abs{\Delta l/2}}
+=
+\frac{-2 \lambda_0}{4 \pi \epsilon_0 } \ln \rho 
++
+\frac{\lambda_0}{4 \pi \epsilon_0 } 
+\ln \lr{ (\Delta l)^2/2 }.
+\end{dmath}
+
+Before \( \Delta l \) is allowed to tend to infinity, this is identical (up to a difference in the reference potential) to \cref{eqn:lineCharge:80} found using Gauss's law.  It is, strictly speaking, singular when \( \Delta l \rightarrow \infty \), so it does not seem right to infinity as a reference point for the potential.
+
+There's another weird thing about this result.  Since this has no \( z \) dependence, it is not obvious how we would recover the non-radial portion of the electric field from this potential using \( \BE = -\spacegrad \phi \)?  Let's calculate the elecric field from \cref{eqn:lineCharge:180} explicitly
+
+\begin{dmath}\label{eqn:lineCharge:220}
+\BE 
+= 
+-\frac{\lambda_0}{4 \pi \epsilon_0} 
+\spacegrad
+\ln \frac{ b + \sqrt{ \rho^2 + b^2 }}{ a + \sqrt{\rho^2 + a^2}}
+= 
+-\frac{\lambda_0 \rhocap}{4 \pi \epsilon_0 } 
+\PD{\rho}{}
+\ln \frac{ b + \sqrt{ \rho^2 + b^2 }}{ a + \sqrt{\rho^2 + a^2}}
+= 
+-\frac{\lambda_0 \rhocap}{4 \pi \epsilon_0} 
+\lr{
+\inv{ b + \sqrt{ \rho^2 + b^2 }} \frac{ \rho }{\sqrt{ \rho^2 + b^2 }} 
+-\inv{ a + \sqrt{ \rho^2 + a^2 }} \frac{ \rho }{\sqrt{ \rho^2 + a^2 }} 
+}
+=
+-\frac{\lambda_0 \rhocap}{4 \pi \epsilon_0 \rho} 
+\lr{
+\frac{ -b + \sqrt{ \rho^2 + b^2 }}{\sqrt{ \rho^2 + b^2 }} 
+-\frac{ -a + \sqrt{ \rho^2 + a^2 }}{\sqrt{ \rho^2 + a^2 }} 
+}
+=
+\frac{\lambda_0 \rhocap}{4 \pi \epsilon_0 \rho} 
+\lr{
+\frac{ b }{\sqrt{ \rho^2 + b^2 }} 
+-\frac{ a }{\sqrt{ \rho^2 + a^2 }} 
+}.
+\end{dmath}
+
+This recovers the radial component of the field.  Where did the \( \zcap \) component go?
+
+%}
+%\EndArticle
+\EndNoBibArticle
