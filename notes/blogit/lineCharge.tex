@@ -26,7 +26,7 @@
 % \citep{jackson1975cew}
 % \citep{griffiths1999introduction}
 
-Jackson mentions that \( -2 \lambda_0 \ln \rho \) is the well known potential for an infinite line charge (up to the unit specific factor).  Let's derive the potential for line charges, both finite and infinite, as well as the electric field for such distributions in a couple different ways.
+Jackson mentions that \( -2 \lambda_0 \ln \rho \) is the well known potential for an infinite line charge (up to the unit specific factor).  Checking that statement, since I didn't recall what that potential was offhand, I encountered some inconsistencies and non-convergent integrals, and thought it was worthwhile to explore those a bit more carefully.  This will be done here.
 
 \paragraph{Using Gauss's law.}
 
@@ -79,9 +79,15 @@ When the charge is uniformly distributed around the origin \( [a,b] = b[-1,1] \)
 \evalrange{
    \lr{ 
       \frac{z' \rhocap }{\rho \sqrt{ \rho^2 + (z')^2 } }
-      -\frac{\zcap}{ \sqrt{ \rho^2 + (z')^2 } }
+      +\frac{\zcap}{ \sqrt{ \rho^2 + (z')^2 } }
    }
-}{a}{b}
+}{a}{b},
+\end{dmath}
+
+or
+%\begin{dmath}\label{eqn:lineCharge:240}
+\boxedEquation{eqn:lineCharge:240}{
+\BE
 =
 \frac{\lambda_0}{4 \pi \epsilon_0} 
    \lr{ 
@@ -92,11 +98,12 @@ When the charge is uniformly distributed around the origin \( [a,b] = b[-1,1] \)
 }
 + \zcap
 \lr{
-       \frac{1}{ \sqrt{ \rho^2 + a^2 } }
-      -\frac{1}{ \sqrt{ \rho^2 + b^2 } }
+       \frac{1}{ \sqrt{ \rho^2 + b^2 } }
+      -\frac{1}{ \sqrt{ \rho^2 + a^2 } }
 }
    }.
-\end{dmath}
+}
+%\end{dmath}
 
 When \( b = -a = \Delta l/2 \), this reduces to
 
@@ -110,13 +117,18 @@ When \( b = -a = \Delta l/2 \), this reduces to
 
 which further reduces to \cref{eqn:lineCharge:40} when \( \Delta l \gg \rho \).
 
-\paragraph{Finite line charge potential.}
+\paragraph{Finite line charge potential.  Wrong but illuminating.}
 
 Again, putting the field point at \( z' = 0 \), we have
 
 \begin{dmath}\label{eqn:lineCharge:180}
 \phi(\rho) 
-= \frac{\lambda_0}{4 \pi \epsilon_0} \int_a^b \frac{dz'}{\lr{\rho^2 + (z')^2}^{1/2}}
+= \frac{\lambda_0}{4 \pi \epsilon_0} \int_a^b \frac{dz'}{\lr{\rho^2 + (z')^2}^{1/2}},
+\end{dmath}
+
+which integrates to
+\begin{dmath}\label{eqn:lineCharge:260}
+\phi(\rho)
 = \frac{\lambda_0}{4 \pi \epsilon_0 } 
 \ln \frac{ b + \sqrt{ \rho^2 + b^2 }}{ a + \sqrt{\rho^2 + a^2}}.
 \end{dmath}
@@ -169,7 +181,168 @@ There's another weird thing about this result.  Since this has no \( z \) depend
 }.
 \end{dmath}
 
-This recovers the radial component of the field.  Where did the \( \zcap \) component go?
+This recovers the radial component of the field from \cref{eqn:lineCharge:240}, but where did the \( \zcap \) component go?    The required potential appears to be
+
+\begin{dmath}\label{eqn:lineCharge:340}
+\phi(\rho, z)
+= 
+\frac{\lambda_0}{4 \pi \epsilon_0 } 
+\ln \frac{ b + \sqrt{ \rho^2 + b^2 }}{ a + \sqrt{\rho^2 + a^2}}
+-
+\frac{z \lambda_0}{4 \pi \epsilon_0 } 
+\lr{ \frac{1}{\sqrt{\rho^2 + b^2}}
+-\frac{1}{\sqrt{\rho^2 + a^2}}
+}.
+\end{dmath}
+
+When computing the electric field \( \BE(\rho, \theta, z) \), it was convienent to pick the coordinate system so that \( z = 0 \).  Doing this with the potential gives the wrong answers.  The reason for this appears to be that this kills the potential term that is linear in \( z \) before taking its gradient, and we need that term to have the \( \zcap \) field component that is expected for a charge distribution that is non-symmetric about the origin on the z-axis!
+
+\paragraph{Finite line charge potential.  Take II.}
+
+Let the point at which the potential is evaluated be
+
+\begin{dmath}\label{eqn:lineCharge:360}
+\Bx = \rho \rhocap + z \zcap,
+\end{dmath}
+
+and the charge point be
+\begin{dmath}\label{eqn:lineCharge:380}
+\Bx' = z' \zcap.
+\end{dmath}
+
+This gives
+
+\begin{dmath}\label{eqn:lineCharge:400}
+\phi(\rho, z) 
+= \frac{\lambda_0}{4\pi \epsilon_0} \int_a^b \frac{dz'}{\Abs{\rho^2 + (z - z')^2 }}
+= \frac{\lambda_0}{4\pi \epsilon_0} \int_{a-z}^{b-z} \frac{du}{ \Abs{\rho^2 + u^2} }
+= \frac{\lambda_0}{4\pi \epsilon_0} 
+\evalrange{\ln \lr{ u + \sqrt{ \rho^2 + u^2 }}}{b-z}{a-z}
+= 
+\frac{\lambda_0}{4\pi \epsilon_0} 
+\ln \frac
+{ b-z + \sqrt{ \rho^2 + (b-z)^2 }}
+{ a-z + \sqrt{ \rho^2 + (a-z)^2 }}.
+\end{dmath}
+
+The limit of this potential \( a = -\Delta/2 \rightarrow -\infty, b = \Delta/2 \rightarrow \infty \) doesn't exist in any strict sense.  If we are cavilier about the limits, as in
+\cref{eqn:lineCharge:200}, this can be evaluated as
+
+\begin{dmath}\label{eqn:lineCharge:n}
+\phi \approx 
+\frac{\lambda_0}{4\pi \epsilon_0} \lr{ -2 \ln \rho + \textrm{constant} }.
+\end{dmath}
+
+however, the constant (\( \ln \Delta^2/2 \)) is infinite, so there isn't really a good justification for using that constant as the potential reference point directly.
+
+It seems that the ``right'' way to calculate the potential for the infinite distribution, is to 
+
+\begin{itemize}
+\item Calculate the field from the potential.
+\item Take the PV limit of that field with the charge distribution extending to infinity.
+\item Compute the corresponding potential from this limiting value of the field.
+\end{itemize}
+
+Doing that doesn't blow up.  That field calculation, for the finite case, should include a \( \zcap \) component.  To verify, let's take the respective derivatives
+
+\begin{dmath}\label{eqn:lineCharge:420}
+-\PD{z}{} \phi
+=
+-\frac{\lambda_0}{4\pi \epsilon_0} 
+\lr{
+   \frac{ -1 + \frac{z - b}{\sqrt{ \rho^2 + (b-z)^2 }} }{
+      b-z + \sqrt{ \rho^2 + (b-z)^2 }
+   }
+-
+   \frac{ -1 + \frac{z - a}{\sqrt{ \rho^2 + (a-z)^2 }} }{
+      a-z + \sqrt{ \rho^2 + (a-z)^2 }
+   }
+}
+=
+\frac{\lambda_0}{4\pi \epsilon_0} 
+\lr{
+   \frac{ 1 + \frac{b - z}{\sqrt{ \rho^2 + (b-z)^2 }} }{
+      b-z + \sqrt{ \rho^2 + (b-z)^2 }
+   }
+-
+   \frac{ 1 + \frac{a - z}{\sqrt{ \rho^2 + (a-z)^2 }} }{
+      a-z + \sqrt{ \rho^2 + (a-z)^2 }
+   }
+}
+=
+\frac{\lambda_0}{4\pi \epsilon_0} 
+\lr{
+   \inv{\sqrt{ \rho^2 + (b-z)^2 }} 
+   -\inv{\sqrt{ \rho^2 + (a-z)^2 }} 
+},
+\end{dmath}
+
+and
+
+\begin{dmath}\label{eqn:lineCharge:440}
+-\PD{\rho}{} \phi
+=
+-\frac{\lambda_0}{4\pi \epsilon_0} 
+\lr{
+   \frac{ \frac{\rho}{\sqrt{ \rho^2 + (b-z)^2 }} }{
+      b-z + \sqrt{ \rho^2 + (b-z)^2 }
+   }
+-
+   \frac{ \frac{\rho}{\sqrt{ \rho^2 + (a-z)^2 }} }{
+      a-z + \sqrt{ \rho^2 + (a-z)^2 }
+   }
+}
+=
+-\frac{\lambda_0}{4\pi \epsilon_0} 
+\lr{
+   \frac{\rho \lr{
+      -(b-z) + \sqrt{ \rho^2 + (b-z)^2 }
+}}{ \rho^2 \sqrt{ \rho^2 + (b-z)^2 } }
+-
+   \frac{\rho \lr{
+      -(a-z) + \sqrt{ \rho^2 + (a-z)^2 }
+}}{ \rho^2 \sqrt{ \rho^2 + (a-z)^2 } }
+}
+=
+\frac{\lambda_0}{4\pi \epsilon_0 \rho} 
+\lr{
+\frac{b-z}{\sqrt{ \rho^2 + (b-z)^2 }}
+-\frac{a-z}{\sqrt{ \rho^2 + (a-z)^2 }}
+}
+.
+\end{dmath}
+
+Putting the pieces together, the electric field is
+\begin{dmath}\label{eqn:lineCharge:460}
+\BE = 
+\frac{\lambda_0}{4\pi \epsilon_0} 
+\lr{
+   \frac{\rhocap}{\rho} \lr{
+   \frac{b-z}{\sqrt{ \rho^2 + (b-z)^2 }}
+   -\frac{a-z}{\sqrt{ \rho^2 + (a-z)^2 }}
+   }
++
+   \zcap \lr{
+      \inv{\sqrt{ \rho^2 + (b-z)^2 }} 
+      -\inv{\sqrt{ \rho^2 + (a-z)^2 }} 
+   }
+}.
+\end{dmath}
+
+For has a PV limit of \cref{eqn:lineCharge:40} at \( z = 0 \), and also for the finite case, has the \( \zcap \) field component that was obtained when the field
+was obtained by direct integration.
+
+\paragraph{Conclusions}
+
+\begin{itemize}
+\item We have to evaluate the potential at all points in space, not just on the axis that we evaluate the field on (should we choose to do so).
+\item In this case, we found that it was not directly meaningful to take the limit of a potential distribution.  We can, however, compute the field from a potential for a finite charge distribution,
+ take the limit of that field, and then calculate the corresponding potential for the infinite distribution.
+\end{itemize}
+
+Is there a more robust mechanism that can be used to directly calculate the potential for an infinite charge distribution, instead of calculating the potential from the field of such an infinite distribution?  
+
+I think that were things go wrong is that the integral of \cref{eqn:lineCharge:180} does not apply to charge distributions that are not finite on the infinite ball \( z \in [-\infty, \infty] \).  That solution was obtained by utilizing an all-space Green's function, and the boundary term in that Green's analysis was assumed to tend to zero.  That isn't the case when the charge distribution is \( \lambda_0 \delta( z ) \).
 
 %}
 %\EndArticle
