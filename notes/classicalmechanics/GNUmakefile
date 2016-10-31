@@ -14,12 +14,12 @@ SOURCE_DIRS += mine
 SOURCE_DIRS += problems
 
 GENERATED_SOURCES += mathematica.tex 
-GENERATED_SOURCES += backmatter.tex
+#GENERATED_SOURCES += backmatter.tex
 GENERATED_SOURCES += cronology.tex
 
 #ONCEFLAGS := -justonce
 
 include ../make.rules
 
-backmatter.tex : ../classicthesis_mine/backmatter.tex
-	cp $< $@
+#backmatter.tex : ../classicthesis_mine/backmatter.tex
+#	cp $< $@
