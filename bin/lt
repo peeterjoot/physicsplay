@@ -16,6 +16,7 @@ lt [--help] [--example='blah blah']
             [--aligned]
             [--subequations]
             [--option]
+            [--listing]
             [--labelbox=up|down|default]
 
 =head1 DESCRIPTION
@@ -109,6 +110,7 @@ my $subanswer ;
 my $item ;
 my $enum ;
 my $labelbox ;
+my $listing ;
 
 #Getopt::Long::Configure( 'pass_through' ) ;
 GetOptions ( 
@@ -131,6 +133,7 @@ GetOptions (
    'dmath:i'       => \$dmath,
    'number:i'      => \$number,
    'aligned'       => \$aligned,
+   'listing'       => \$listing,
    'labelbox=s'    => \$labelbox,
    'help'          => sub { pod2usage(-verbose => 2) ; },
 ) ;
@@ -184,7 +187,11 @@ if ( defined $subequations )
    print "\\begin{subequations}\n\\label{eqn:$filename:n}\n" ;
 }
 
-
+if ( defined $listing )
+{
+   print "\\begin{lstlisting}\n" .
+         "\\end{lstlisting}\n" ;
+}
 
 generateEquation( 'boxed', $boxed ) ;
 
