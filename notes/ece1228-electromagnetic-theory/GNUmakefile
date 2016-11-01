@@ -76,6 +76,7 @@ emtProblemSet5.pdf : ps5mathematica.tex
 
 emtProblemSet6.pdf : emtProblemSet6Problem1.tex
 emtProblemSet6.pdf : emtProblemSet6Problem2.tex
+emtProblemSet6.pdf : emtProblemSet6Problem3.tex
 
 julia.tex : ../../julia/METADATA
 mathematica.tex : ../../mathematica/METADATA
