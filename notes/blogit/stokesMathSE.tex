@@ -1,0 +1,122 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+%{
+\input{../blogpost.tex}
+\renewcommand{\basename}{stokesMathSE}
+%\renewcommand{\dirname}{notes/phy1520/}
+\renewcommand{\dirname}{notes/ece1228-electromagnetic-theory/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+\usepackage{siunitx}
+%\usepackage{txfonts} % \ointclockwise
+
+\beginArtNoToc
+
+\generatetitle{Stokes generalization}
+%\chapter{Stokes generalization}
+%\label{chap:stokesMathSE}
+
+You can get an understanding of the required structure of the Stokes generalization by considering the \R{3} coordinate expansion of Stokes theorem.  Given a two parameter surface
+
+\begin{dmath}\label{eqn:stokesMathSE:20}
+\Bx = \Bx(a, b) = \Be_k x_k(a, b),
+\end{dmath}
+
+we can expand the Stokes integral on that surface
+\begin{dmath}\label{eqn:stokesMathSE:40}
+\begin{aligned}
+\int d\BA \cdot \lr{ \spacegrad \cross \BF }
+&=
+\int da db 
+\lr{ \PD{a}{\Bx} \cross 
+\PD{b}{\Bx} 
+}
+\cdot \lr{ \spacegrad \cross \BF } \\
+&=
+\int
+da db 
+\epsilon_{rst}
+\PD{a}{x_r} 
+\PD{b}{x_s} 
+\epsilon_{ruv}
+\partial_u F_v \\
+&=
+\int 
+da db
+\delta_{st}^{[uv]}
+\PD{a}{x_r} 
+\PD{b}{x_s} 
+\partial_u F_v \\
+&=
+\int 
+da db
+\frac{\partial(x_u, x_v)}{\partial(a,b)}
+\partial_u F_v.
+\end{aligned}
+\end{dmath}
+
+You can see that the primary structure involved here is the antisymmetric volume element.  With a bit of care to adjust upper and lower indexes, this can be used as a Stokes integral for a 4D space.  Given a two parameter surface in a 4D space \( \Bx(a,b) = \gamma_\mu x^\mu(a, b) \), and a four vector \( \BF = F^\mu \gamma_\mu \), the equivalent to the standard \R{3} Stokes integral has the coordinate expansion
+
+\begin{dmath}\label{eqn:stokesMathSE:60}
+\begin{aligned}
+\int 
+da db
+\frac{\partial(x^\mu, x^\nu)}{\partial(a,b)}
+\partial_\mu F_\nu
+&=
+\int 
+da db
+\lr{ 
+\PD{a}{x^\mu}\PD{b}{x^\nu} -
+\PD{b}{x^\mu}\PD{a}{x^\nu} 
+}
+\partial_\mu F_\nu \\
+&=
+\int 
+db \PD{b}{x^\nu} 
+\int da \PD{a}{x^\mu} 
+\PD{x^\mu}{F_\nu}
+-
+\int
+da \PD{a}{x^\nu} 
+\int
+db
+\PD{b}{x^\mu}
+\PD{x^\mu}{F_\nu} \\
+&=
+\int 
+db \evalbar{\lr{\PD{b}{x^\nu} F_\nu}}{\Delta a}
+-\int 
+da \evalbar{\lr{\PD{a}{x^\nu} F_\nu}}{\Delta b} \\
+&=
+\int 
+db \evalbar{\lr{\PD{b}{\Bx} \cdot \BF}}{\Delta a}
+-
+\int 
+da \evalbar{\lr{\PD{a}{\Bx} \cdot \BF}}{\Delta b}.
+\end{aligned}
+\end{dmath}
+
+This is an integral around the boundary of the surface parameterized by \( (a,b) \).  A more careful approach would have to consider breaking up the surface into smaller regions and summing the contributions from each region, but this is the rough idea.
+
+As mentioned, there are a number of integral formalisms that describe the generalized Stokes theorem.  One can generalize Stokes theorem by generalizing the degree of the volume element (two, three, or four parameter volume elements), as well as operating on algebraic structures of different degrees (four-vectors, second-degree antisymmetric tensors, or third degree antisymmetric tensors).  This can be described using tensor algebra, with differential forms, or using geometric calculus.
+
+In the geometric calculus formalism the generalized Stokes theorem has the form
+
+\begin{dmath}\label{eqn:stokesMathSE:80}
+\int d^k x \cdot \lr{ \partial \wedge F } = \int d^{k-1} x \cdot F,
+\end{dmath}
+
+where \( \partial \) is the projection of the gradient onto the integration manifold (i.e. the subspace that is being integrated over), and \( F \) is a ``blade'' of grade \( <= k -1 \).  To give precise meaning to all of this, I'd recommend Alan Macdonald's excellent little book Vector and Geometric Calculus (a prerequisite for that book is some basic knowledge of geometric algebra).
+
+%}
+\EndArticle
+%\EndNoBibArticle
