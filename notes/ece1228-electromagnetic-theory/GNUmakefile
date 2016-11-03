@@ -39,6 +39,7 @@ l8 : emtLecture8.pdf
 #p4 : emtProblemSet4.pdf
 #p5 : emtProblemSet5.pdf
 #p6 : emtProblemSet6.pdf
+p7 : emtProblemSet7.pdf
 #pd : dipoleMoment.pdf
 #pv : dipolePotential.pdf
 

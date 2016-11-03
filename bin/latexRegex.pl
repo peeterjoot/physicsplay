@@ -7,9 +7,9 @@
 #s/0\\ccube/_{0,\\textrm{ccube}}/g;
 #s/0\\iso/_{0,\\textrm{iso}}/g;
 #s/\\12\b/\\frac{1}{2}/g;
-#s/\\1\b/{(1)}/g;
+s/\\1\b/{(1)}/g;
 #s/\\23\b/\\frac{2}{3}/g;
-#s/\\2\b/{(2)}/g;
+s/\\2\b/{(2)}/g;
 #s/\\32\b/\\frac{3}{2}/g;
 #s/\^a/^{(a)}/g;
 #s/\\AF/\\textrm{AF}/g;

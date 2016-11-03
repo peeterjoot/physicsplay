@@ -62,7 +62,7 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 #all :: ftMaxVacuum.pdf
 all :: multiPendulumSphericalMatrix.pdf
 
-druid.pdf : ../ece1228-electromagnetic-theory/druid.tex
+#druid.pdf : ../ece1228-electromagnetic-theory/druid.tex
 gatutorial.pdf : ../ece1228-electromagnetic-theory/gaQuickTutorial.tex
 uwavesDeck6LCmatching.pdf : ../ece1236-microwaves/uwavesDeck6LCmatchingCore.tex
 continuumAndOtherTransformers.pdf : ../ece1236-microwaves/continuumAndOtherTransformersCore.tex

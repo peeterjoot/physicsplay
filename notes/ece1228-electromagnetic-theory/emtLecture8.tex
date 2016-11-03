@@ -1,0 +1,307 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{emt8}
+\renewcommand{\dirname}{notes/ece1228/}
+\newcommand{\keywords}{ECE1228H}
+\input{../peeter_prologue_print2.tex}
+
+%\usepackage{ece1228}
+\usepackage{peeters_braket}
+%\usepackage{peeters_layout_exercise}
+\usepackage{peeters_figures}
+\usepackage{mathtools}
+\usepackage{siunitx}
+
+\beginArtNoToc
+\generatetitle{ECE1228H Electromagnetic Theory.  Lecture 8: Waves.  Taught by Prof.\ M. Mojahedi}
+%\chapter{Waves}
+\label{chap:emt8}
+
+%\paragraph{Disclaimer}
+%
+%Peeter's lecture notes from class.  These may be incoherent and rough.
+%
+%These are notes for the UofT course ECE1228H, Electromagnetic Theory, taught by Prof. M. Mojahedi, covering \textchapref{{1}} \citep{balanis1989advanced} content.
+
+\paragraph{Cylindrical coorindate wave equation solutions}
+
+Seek a function
+
+\begin{dmath}\label{eqn:emtLecture8:20}
+\BE = E_\rho \rhocap + E_\phi \phicap + E_z \zcap
+\end{dmath}
+
+solving 
+
+\begin{dmath}\label{eqn:emtLecture8:40}
+\spacegrad^2 \BE = -\beta^2 \BE.
+\end{dmath}
+
+One way to find the Laplacian in cylindrical coordinates is to use
+
+\begin{dmath}\label{eqn:emtLecture8:60}
+\spacegrad^2 \BE = 
+\spacegrad \lr{ \spacegrad \cdot \BE }
+-\spacegrad \cross \lr{ \spacegrad \cross \BE },
+\end{dmath}
+
+where 
+
+\begin{dmath}\label{eqn:emtLecture8:80}
+\spacegrad = \rhocap \PD{\rho}{} + \frac{\phicap}{\rho} \PD{\phi}{} + \zcap \PD{z}{}
+\end{dmath}
+
+Can be shown that:
+\begin{dmath}\label{eqn:emtLecture8:100}
+\spacegrad \cdot \BE = \inv{\rho} \PD{\rho}{} \lr{ \rho E_\rho } + \inv{\rho}\PD{\phi}{E_\phi} + \PD{z}{E_z}
+\end{dmath}
+
+and
+\begin{dmath}\label{eqn:emtLecture8:120}
+\spacegrad \cross \BE 
+%= 
+%\begin{vmatrix}
+%\rhocap & \phicap & \zcap \\
+%\partial_\rho & \inv{\rho}\partial_\phi & \partial_z \\
+%E_\rho & \rho E_\phi & E_z
+%\end{vmatrix}
+=
+\rhocap  \lr{ \inv{\rho} \partial_\phi E_z - \partial_z E_\phi }
++\phicap \lr{ \partial_z E_\rho - \partial_\rho E_z }
++\zcap   \lr{ \inv{\rho} \partial_\rho (\rho E_\phi) - \inv{\rho} \partial_\phi E_\rho }
+\end{dmath}
+
+This gives
+\begin{dmath}\label{eqn:emtLecture8:200}
+\spacegrad^2 \psi = 
+\PDSq{\rho}{\psi}
++\inv{\rho} \PD{\rho}{\psi}
++\inv{\rho^2} \PDSq{\phi}{\psi}
++\PDSq{z}{\psi}.
+\end{dmath}
+
+and
+\begin{dmath}\label{eqn:emtLecture8:220}
+\begin{aligned}
+\spacegrad^2 E_\rho &= \lr{ -\frac{E_\rho}{\rho^2} - \frac{2}{\rho^2} \PD{\phi}{E_\phi} } \\
+\spacegrad^2 E_\phi &= \lr{ -\frac{E_\phi}{\rho^2} + \frac{2}{\rho^2} \PD{\phi}{E_\rho} } \\
+\spacegrad^2 E_z    &= -\beta^2 E_\phi.
+\end{aligned}
+\end{dmath}
+
+%Note that with \( i = \Be_1 \Be_2 \),
+%
+%\begin{dmath}\label{eqn:emtLecture8:140}
+%\rhocap = \Be_1 e^{i \phi}
+%\end{dmath}
+%
+%so
+%\begin{equation}\label{eqn:emtLecture8:160}
+%\PD{\phi}{\rhocap} = \Be_2 e^{i \phi} = \thetacap
+%\end{equation}
+%
+%... the end result is
+%
+%\begin{dmath}\label{eqn:emtLecture8:180}
+%\end{dmath}
+
+\paragraph{TEM:} If we want to have a TEM mode it can be shown that we need an axial distribution mechanism, such as the core of a co-axial cable.
+
+These are messy to solve in general, but we can solve the z-component without too much pain
+
+\begin{dmath}\label{eqn:emtLecture8:240}
+\PDSq{\rho}{E_z}
++\inv{\rho} \PD{\rho}{E_z}
++\inv{\rho^2} \PDSq{\phi}{E_z}
++\PDSq{z}{E_z}
+=
+-\beta^2 E_z
+\end{dmath}
+
+Solving this using separation of variables with
+
+\begin{dmath}\label{eqn:emtLecture8:260}
+E_z = R(\rho) P(\phi) Z(z)
+\end{dmath}
+
+\begin{dmath}\label{eqn:emtLecture8:280}
+\inv{R}\lr{R'' + \inv{\rho} R'} + \inv{\rho^2 P} P'' + \frac{Z''}{Z} = -\beta^2
+\end{dmath}
+
+Assuming for some constant \( \beta_z \) that we have
+\begin{dmath}\label{eqn:emtLecture8:300}
+\frac{Z''}{Z} = -\beta_z^2,
+\end{dmath}
+
+then
+
+\begin{dmath}\label{eqn:emtLecture8:320}
+\inv{R}\lr{\rho^2 R'' + \rho R'} + \inv{P} P'' + \rho^2 \lr{\beta^2 - \beta_z^2} = 0
+\end{dmath}
+
+Now assume that
+\begin{dmath}\label{eqn:emtLecture8:340}
+\inv{P} P'' = -m^2,
+\end{dmath}
+
+and let \( \beta^2 - \beta_z^2 = \beta_\rho^2 \), which leaves
+
+\begin{dmath}\label{eqn:emtLecture8:360}
+\rho^2 R'' + \rho R' + \lr{ \rho^2 \beta_\rho^2 -m^2 } R = 0.
+\end{dmath}
+
+This is the Bessel differential equation, with travelling wave solution
+
+\begin{dmath}\label{eqn:emtLecture8:380}
+R(\rho) = 
+A H_m^{(1)}(\beta_\rho \rho) 
++B H_m^{(2)}(\beta_\rho \rho),
+\end{dmath}
+
+and standing wave solutions
+\begin{dmath}\label{eqn:emtLecture8:400}
+R(\rho) = 
+A J_m(\beta_\rho \rho)
++B Y_m(\beta_\rho \rho).
+\end{dmath}
+
+Here \( H_m^{(1)}, H_m^{(2)} \) are Hankel functions of the first and second kinds, and
+\( J_m, Y_m \) are the Bessel functions of the first and second kinds.
+
+For \( P(\phi) \) 
+\begin{dmath}\label{eqn:emtLecture8:460}
+P'' = -m^2 P
+\end{dmath}
+
+\paragraph{Quadropole potential}
+
+In Jackson
+\citep{jackson1975cew}
+, the prove of which is scattered through chapter 3, is the following
+
+\begin{dmath}\label{eqn:emtLecture8:420}
+\inv{\Bx - \Bx'}
+= 
+4 \pi \sum_{l= 0}^\infty \sum_{m = -l}^l \inv{2 l + 1} \frac{(r')^l}{r^{l+1}} 
+Y^\conj_{l,m}(\theta', \phi')
+Y_{l,m}(\theta, \phi),
+\end{dmath}
+
+where \( Y_{l,m} \) are the spherical harmonics.  Plugging this into the potential we have
+
+\begin{dmath}\label{eqn:emtLecture8:440}
+\phi(\Bx) 
+= \inv{4 \pi \epsilon_0} \int \frac{\rho(\Bx') d^3 x'}{\Abs{\Bx - \Bx'}}
+= 
+\inv{4 \pi \epsilon_0} \int \rho(\Bx') d^3 x' \lr{
+4 \pi \sum_{l= 0}^\infty \sum_{m = -l}^l \inv{2 l + 1} \frac{(r')^l}{r^{l+1}} 
+Y^\conj_{l,m}(\theta', \phi')
+Y_{l,m}(\theta, \phi)
+}
+= 
+\inv{\epsilon_0} 
+\sum_{l= 0}^\infty \sum_{m = -l}^l \inv{2 l + 1} 
+\int \rho(\Bx') d^3 x' \lr{
+\frac{(r')^l}{r^{l+1}} 
+Y^\conj_{l,m}(\theta', \phi')
+Y_{l,m}(\theta, \phi)
+}
+= 
+\inv{\epsilon_0} 
+\sum_{l= 0}^\infty \sum_{m = -l}^l \inv{2 l + 1} 
+\lr{ 
+\int (r')^l \rho(\Bx') 
+Y^\conj_{l,m}(\theta', \phi')
+d^3 x' 
+}
+\frac{
+Y_{l,m}(\theta, \phi)
+}
+{
+r^{l+1}
+}
+\end{dmath}
+
+The integral terms are called the coefficients of the multipole moments, denoted
+\begin{dmath}\label{eqn:emtLecture8:480}
+q_{l,m} = 
+\int (r')^l \rho(\Bx') 
+Y^\conj_{l,m}(\theta', \phi')
+d^3 x',
+\end{dmath}
+
+The \( l = 0,1,2\) terms are, respectively, called the monopole, dipole, and quadropole terms of the potential
+\begin{dmath}\label{eqn:emtLecture8:500}
+\rho(\Bx) =
+\inv{4 \pi \epsilon_0} 
+\sum_{l= 0}^\infty \sum_{m = -l}^l \frac{4\pi} {2 l + 1} 
+q_{l,m}
+\frac{
+Y_{l,m}(\theta, \phi)
+}
+{
+r^{l+1}
+}.
+\end{dmath}
+
+Note the power of this expansion.  Should we wish to compute the electric field, we have only to compute the qradient of  the last (\(Y_{l,m} r^{-l-1} \)) portion (since \( q_{l,m} \) is a constant).
+ 
+HW: expand out q_{1,1}
+
+\begin{dmath}\label{eqn:emtLecture8:520}
+q_{1,1}
+= 
+-\int \sqrt{\frac{3}{8 \pi}} \sin\theta' e^{-i\phi'} r' \rho(\Bx') dV'
+=
+-\sqrt{\frac{3}{8 \pi}} \int \sin\theta' \lr{ \cos\phi' - i\sin\phi'} r' \rho(\Bx') dV'
+=
+-\sqrt{\frac{3}{8 \pi}} \lr{ 
+\int x' \rho(\Bx') dV'
+-i \int y' \rho(\Bx') dV'
+}
+=
+-\sqrt{\frac{3}{8 \pi}} \lr{ 
+p_x - i p_y
+}.
+\end{dmath}
+
+Here we've used
+\begin{dmath}\label{eqn:emtLecture8:540}
+\begin{aligned}
+x' &= r' \cos\theta' \cos\phi' \\
+y' &= r' \cos\theta' \sin\phi' \\
+z' &= r' \sin\theta'
+\end{aligned}
+\end{dmath}
+
+and the \( Y_{11} \) representation
+
+\begin{dmath}\label{eqn:emtLecture8:560}
+\begin{aligned}
+Y_{00} &= -\sqrt{\frac{1}{4 \pi}} \\
+Y_{11} &= -\sqrt{\frac{3}{8 \pi}} \sin\theta e^{i\phi} \\
+Y_{10} &= \sqrt{\frac{3}{4 \pi}} \cos\theta  \\
+Y_{22} &= -\inv{4} \sqrt{\frac{15}{2 \pi}} \sin^2\theta e^{2 i\phi} \\
+Y_{21} &= \sqrt{\frac{15}{8 \pi}} \sin\theta \cos\theta e^{i\phi} \\
+Y_{20} &= \sqrt{\frac{5}{4 \pi}} \lr{ \frac{3}{2} \cos^2\theta - \inv{2} } \\
+\end{aligned}
+\end{dmath}
+
+HW: compute a few of the more tedious moment coeffients.  These have been exam questions in the past.
+
+\paragraph{Waves}
+
+\begin{itemize}
+\item The field is a modification of space-time
+\item Mode is a particular field configuration for a given boundary value problem.  Many field configurations can satisfy Maxwell equations (wave equation).  These usually are referrred to as modes.  A mode is a self-consistent field distribution.
+\item In a TEM mode, \( \BE \) and \( \BH \) are every point in space are constrained in a local plane, independent of time.  This plane is called the equiphase plane.  In general equiphase planes are not parallel at two different points along the trajectory of the wave.
+\item If equiphase planes are parallel (i.e. the space orientation of the planes for TEM mode...
+... next time.
+\end{itemize}
+
+%}
+%\EndArticle
+\EndNoBibArticle
