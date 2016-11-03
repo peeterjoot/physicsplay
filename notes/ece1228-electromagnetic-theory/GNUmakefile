@@ -30,15 +30,15 @@ include ../make.rules
 #l3 : emtLecture3.pdf
 #l4 : emtLecture4.pdf
 #l5 : emtLecture5.pdf
-l6 : emtLecture6.pdf
-l7 : emtLecture7.pdf
+#l6 : emtLecture6.pdf
+#l7 : emtLecture7.pdf
 l8 : emtLecture8.pdf
 #p1 : emtProblemSet1.pdf
 #p2 : emtProblemSet2.pdf
 #p3 : emtProblemSet3.pdf
 #p4 : emtProblemSet4.pdf
 #p5 : emtProblemSet5.pdf
-p6 : emtProblemSet6.pdf
+#p6 : emtProblemSet6.pdf
 #pd : dipoleMoment.pdf
 #pv : dipolePotential.pdf
 
