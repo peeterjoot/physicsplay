@@ -79,6 +79,10 @@ emtProblemSet6.pdf : emtProblemSet6Problem1.tex
 emtProblemSet6.pdf : emtProblemSet6Problem2.tex
 emtProblemSet6.pdf : emtProblemSet6Problem3.tex
 
+emtProblemSet7.pdf : emtProblemSet7Problem1.tex
+emtProblemSet7.pdf : emtProblemSet7Problem2.tex
+emtProblemSet7.pdf : emtProblemSet7Problem3.tex
+
 julia.tex : ../../julia/METADATA
 mathematica.tex : ../../mathematica/METADATA
 matlab.tex : ../../matlab/METADATA
