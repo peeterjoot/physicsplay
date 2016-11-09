@@ -428,8 +428,8 @@ I
 \end{dmath}
 
 This gives
-%\begin{dmath}\label{eqn:sphericalLaplacian:n}
-\boxedEquation{eqn:sphericalLaplacian:n}{
+%\begin{dmath}\label{eqn:sphericalLaplacian:500}
+\boxedEquation{eqn:sphericalLaplacian:520}{
 \spacegrad \cross \BA 
 =
 \rcap \lr{ 
@@ -449,13 +449,144 @@ This gives
 
 This and the divergence result above both check against the back cover of \citep{jackson1975cew}.
 
-%\partial_{\theta}{\rcap}      &= \thetacap \\
-%\partial_{\phi}{\rcap}        &= S_\theta \phicap \\
-%\partial_{\theta}{\thetacap}  &= -\rcap \\
-%\partial_{\phi}{\thetacap}    &= C_\theta \phicap \\
-%\partial_{\theta}{\phicap}    &= 0 \\
-%\partial_{\phi}{\phicap}      &= \rcap S_\theta + \thetacap C_\theta.
+\paragraph{Laplacian}
+
+Using the divergence and curl it's possible to compute the Laplacian from those, but we saw in cylindrical coordinates that it was much harder to do it that way than to do it directly.
+
+\begin{dmath}\label{eqn:sphericalLaplacian:540}
+\begin{aligned}
+\spacegrad^2 \psi
+&=
+\lr{ 
+   \rcap \partial_{r} +
+   \frac{\thetacap}{r} \partial_{\theta} +
+   \frac{\phicap}{r S_\theta} \partial_{\phi} 
+} 
+\lr{ 
+   \rcap \partial_{r} \psi
+   + \frac{\thetacap}{r} \partial_{\theta} \psi
+   + \frac{\phicap}{r S_\theta} \partial_{\phi} \psi
+} \\
+&=
+     \partial_{rr} \psi
+   + \rcap \thetacap \partial_r \lr{ \inv{r} \partial_\theta \psi}
+   + \rcap \phicap \inv{S_\theta} \partial_r \lr{ \inv{r} \partial_\phi \psi } \\
+& 
+\quad   + \frac{\thetacap}{r} \partial_{\theta} \lr{ \rcap \partial_{r} \psi }
+   + \frac{\thetacap}{r^2} \partial_{\theta} \lr{ \thetacap \partial_{\theta} \psi }
+   + \frac{\thetacap}{r^2} \partial_{\theta} \lr{ \frac{\phicap}{S_\theta} \partial_{\phi} \psi } \\
+&
+\quad   + \frac{\phicap}{r S_\theta} \partial_{\phi} \lr{ \rcap \partial_{r} \psi }
+   + \frac{\phicap}{r^2 S_\theta} \partial_{\phi} \lr{ \thetacap \partial_{\theta} \psi }
+   + \frac{\phicap}{r^2 S_\theta^2} \partial_{\phi} \lr{ \phicap \partial_{\phi} \psi } \\
+&=
+     \partial_{rr} \psi
+   + \rcap \thetacap \partial_r \lr{ \inv{r} \partial_\theta \psi}
+   + \rcap \phicap \inv{S_\theta} \partial_r \lr{ \inv{r} \partial_\phi \psi } \\
+& 
+\quad   + \frac{\thetacap\rcap}{r} \partial_{\theta} \lr{ \partial_{r} \psi }
+   + \frac{1}{r^2} \partial_{\theta \theta} \psi 
+   + \frac{\thetacap \phicap}{r^2} \partial_{\theta} \lr{ \frac{1}{S_\theta} \partial_{\phi} \psi } \\
+&
+\quad   + \frac{\phicap \rcap}{r S_\theta} \partial_{\phi r} \psi 
+   + \frac{\phicap\thetacap}{r^2 S_\theta} \partial_{\phi\theta} \psi
+   + \frac{1}{r^2 S_\theta^2} \partial_{\phi \phi} \psi \\
+& 
+\quad   + \frac{\thetacap}{r} (\partial_\theta \rcap) \partial_{r} \psi 
+   + \frac{\thetacap}{r^2} (\partial_\theta \thetacap) \partial_{\theta} \psi
+   + \frac{\thetacap}{r^2} (\partial_\theta \phicap) \frac{\phicap}{S_\theta} \partial_{\phi} \psi \\
+&
+\quad   + \frac{\phicap}{r S_\theta} (\partial_\phi \rcap) \partial_{r} \psi
+   + \frac{\phicap}{r^2 S_\theta} (\partial_\phi \thetacap) \partial_{\theta} \psi 
+   + \frac{\phicap}{r^2 S_\theta^2} (\partial_\phi \phicap) \partial_{\phi} \psi  \\
+&=   
+     \partial_{rr} \psi
+   + \rcap \thetacap \partial_r \lr{ \inv{r} \partial_\theta \psi}
+   + \rcap \phicap \inv{S_\theta} \partial_r \lr{ \inv{r} \partial_\phi \psi } \\
+&
+\quad   + \frac{\thetacap\rcap}{r} \partial_{\theta} \lr{ \partial_{r} \psi }
+   + \frac{1}{r^2} \partial_{\theta \theta} \psi
+   + \frac{\thetacap \phicap}{r^2} \partial_{\theta} \lr{ \frac{1}{S_\theta} \partial_{\phi} \psi } \\
+&
+\quad   + \frac{\phicap \rcap}{r S_\theta} \partial_{\phi r} \psi
+   + \frac{\phicap\thetacap}{r^2 S_\theta} \partial_{\phi\theta} \psi
+   + \frac{1}{r^2 S_\theta^2} \partial_{\phi \phi} \psi \\
+&
+\quad   + \frac{\thetacap}{r} (\thetacap) \partial_{r} \psi 
+   + \frac{\thetacap}{r^2} (-\rcap) \partial_{\theta} \psi
+   + \frac{\thetacap}{r^2} (0) \frac{\phicap}{S_\theta} \partial_{\phi} \psi \\
+&
+\quad   + \frac{\phicap}{r S_\theta} (S_\theta \phicap) \partial_{r} \psi
+   + \frac{\phicap}{r^2 S_\theta} (C_\theta \phicap) \partial_{\theta} \psi 
+   + \frac{\phicap}{r^2 S_\theta^2} (-\rcap S_\theta - \thetacap C_\theta) \partial_{\phi} \psi
+\end{aligned}
+\end{dmath}
+
+All the bivector factors are expected to cancel out, but this should be checked.  Those with an \( \rcap \thetacap \) factor are
+
+\begin{dmath}\label{eqn:sphericalLaplacian:560}
+     \partial_r \lr{ \inv{r} \partial_\theta \psi}
+   - \frac{1}{r} \partial_{\theta r} \psi 
+   + \frac{1}{r^2} \partial_{\theta} \psi
+=
+     -\inv{r^2} \partial_\theta \psi
+     +\inv{r} \partial_{r \theta} \psi
+   - \frac{1}{r} \partial_{\theta r} \psi 
+   + \frac{1}{r^2} \partial_{\theta} \psi
+= 0,
+\end{dmath}
+
+and those with a \( \thetacap \phicap \) factor are
+\begin{dmath}\label{eqn:sphericalLaplacian:580}
+     \frac{1}{r^2} \partial_{\theta} \lr{ \frac{1}{S_\theta} \partial_{\phi} \psi } 
+   - \frac{1}{r^2 S_\theta} \partial_{\phi\theta} \psi
+   + \frac{1}{r^2 S_\theta^2} C_\theta \partial_{\phi} \psi
+=
+   - \frac{1}{r^2} \frac{C_\theta}{S_\theta^2} \partial_{\phi} \psi 
+   + \frac{1}{r^2 S_\theta} \partial_{\theta \phi} \psi 
+   - \frac{1}{r^2 S_\theta} \partial_{\phi\theta} \psi
+   + \frac{1}{r^2 S_\theta^2} C_\theta \partial_{\phi} \psi
+= 0,
+\end{dmath}
+
+and those with a \( \phicap \rcap \) factor are
+\begin{dmath}\label{eqn:sphericalLaplacian:600}
+   - \inv{S_\theta} \partial_r \lr{ \inv{r} \partial_\phi \psi } 
+   + \frac{1}{r S_\theta} \partial_{\phi r} \psi
+   - \frac{1}{r^2 S_\theta^2} S_\theta \partial_{\phi} \psi
+=
+     \inv{S_\theta} \frac{1}{r^2} \partial_\phi \psi 
+   - \inv{r S_\theta} \partial_{r \phi} \psi 
+   + \frac{1}{r S_\theta} \partial_{\phi r} \psi
+   - \frac{1}{r^2 S_\theta} \partial_{\phi} \psi
+= 0.
+\end{dmath}
+
+This leaves
+\begin{dmath}\label{eqn:sphericalLaplacian:620}
+\spacegrad^2 \psi
+=
+     \partial_{rr} \psi
+   + \frac{2}{r} \partial_{r}  \psi
+   + \frac{1}{r^2} \partial_{\theta \theta} \psi
+   + \frac{1}{r^2 S_\theta} C_\theta \partial_{\theta}  \psi
+   + \frac{1}{r^2 S_\theta^2} \partial_{\phi \phi} \psi.
+\end{dmath}
+
+This factors nicely as
+
+%\begin{dmath}\label{eqn:sphericalLaplacian:640}
+\boxedEquation{eqn:sphericalLaplacian:640}{
+\spacegrad^2 \psi
+=
+    \inv{r^2} \PD{r}{} \lr{ r^2 \PD{r}{ \psi} }
+   + \frac{1}{r^2 \sin\theta} \PD{\theta}{} \lr{ \sin\theta \PD{\theta}{ \psi } }
+   + \frac{1}{r^2 \sin\theta^2} \PDSq{\phi}{ \psi}
+,
+}
+%\end{dmath}
+
+which checks against the back cover of Jackson.  Here it has been demonstrated explicitly that this operator expression is valid for multivector fields \( \psi \) as well as scalar fields \( \psi \).
 
 %}
 \EndArticle
-%\EndNoBibArticle
