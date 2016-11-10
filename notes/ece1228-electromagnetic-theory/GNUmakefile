@@ -32,7 +32,8 @@ include ../make.rules
 #l5 : emtLecture5.pdf
 #l6 : emtLecture6.pdf
 #l7 : emtLecture7.pdf
-l8 : emtLecture8.pdf
+#l8 : emtLecture8.pdf
+l9 : emtLecture9.pdf
 #p1 : emtProblemSet1.pdf
 #p2 : emtProblemSet2.pdf
 #p3 : emtProblemSet3.pdf
