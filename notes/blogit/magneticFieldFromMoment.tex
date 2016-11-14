@@ -1,0 +1,85 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+%{
+\input{../blogpost.tex}
+\renewcommand{\basename}{magneticFieldFromMoment}
+%\renewcommand{\dirname}{notes/phy1520/}
+\renewcommand{\dirname}{notes/ece1228-electromagnetic-theory/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+\usepackage{siunitx}
+%\usepackage{mhchem} % \ce{}
+%\usepackage{macros_bm} % \bcM
+%\usepackage{txfonts} % \ointclockwise
+
+\beginArtNoToc
+
+\generatetitle{Calculating the magnetostatic field from the moment}
+%\chapter{Calculating the magnetostatic field from the moment}
+%\label{chap:magneticFieldFromMoment}
+% \citep{jackson1975cew}
+
+The vector potential, to first order, for a magnetostatic localized current distribution was found to be
+
+\begin{dmath}\label{eqn:magneticFieldFromMoment:20}
+\BA(\Bx) = \frac{\mu_0}{4 \pi} \frac{\Bm \cross \Bx}{\Abs{\Bx}^3}.
+\end{dmath}
+
+Initially, I tried to calculate the magnetic field from this, but ran into trouble.  Here's a new try.
+
+\begin{dmath}\label{eqn:magneticFieldFromMoment:40}
+\BB 
+= 
+\frac{\mu_0}{4 \pi} 
+\spacegrad \cross \lr{ \Bm \cross \frac{\Bx}{r^3} }
+= 
+-\frac{\mu_0}{4 \pi} 
+\spacegrad \cdot \lr{ \Bm \wedge \frac{\Bx}{r^3} }
+= 
+-\frac{\mu_0}{4 \pi} 
+\lr{
+(\Bm \cdot \spacegrad) \frac{\Bx}{r^3} 
+-\Bm \spacegrad \cdot \frac{\Bx}{r^3} 
+}
+= 
+\frac{\mu_0}{4 \pi} 
+\lr{
+-\frac{(\Bm \cdot \spacegrad) \Bx}{r^3}
+- \lr{ \Bm \cdot \lr{\spacegrad \inv{r^3} }} \Bx
++\Bm (\spacegrad \cdot \Bx) \inv{r^3} 
++\Bm \lr{\spacegrad \inv{r^3} } \cdot \Bx
+}.
+\end{dmath}
+
+Here I've used \( \Ba \cross \lr{ \Bb \cross \Bc } = -\Ba \cdot \lr{ \Bb \wedge \Bc } \), and then expanded that with \( \Ba \cdot \lr{ \Bb \wedge \Bc } = (\Ba \cdot \Bb) \Bc - (\Ba \cdot \Bc) \Bb \).  Since one of these vectors is the gradient, care must be taken to have it operate on the appropriate terms in such an expansion.
+
+Since we have \( \spacegrad \cdot \Bx = 3 \), \( (\Bm \cdot \spacegrad) \Bx = \Bm \), and \( \spacegrad 1/r^n = -n \Bx/r^{n+2} \), this reduces to
+
+\begin{dmath}\label{eqn:magneticFieldFromMoment:60}
+\BB 
+=
+\frac{\mu_0}{4 \pi} 
+\lr{
+- \frac{\Bm}{r^3}
++ 3 \frac{(\Bm \cdot \Bx) \Bx}{r^5} %
++ 3 \Bm \inv{r^3} 
+-3 \Bm \frac{\Bx}{r^5} \cdot \Bx
+}
+=
+\frac{\mu_0}{4 \pi} 
+\frac{3 (\Bm \cdot \ncap) \ncap -\Bm}{r^3},
+\end{dmath}
+
+which is the desired result.
+
+%}
+%\EndArticle
+\EndNoBibArticle
