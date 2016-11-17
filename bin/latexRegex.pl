@@ -196,6 +196,7 @@ s/[Ss]chrodinger/Schr\\"{o}dinger/g; # Schrodinger
 #s/\\TB/\\tilde{\\BB}/g;
 #s/\\Te/\\hat{T}_{\\epsilon}/g ;
 #s/\\TE/\\tilde{\\BE}/g;
+s/\\TE/{\\textrm{TE}}/g;
 #s/_\\T/_{\\mathrm{T}}/g;
 #s/_T/_{\\mathrm{T}}/g ;
 #s/\\tmax\b/{\\textrm{max}}/g ;
