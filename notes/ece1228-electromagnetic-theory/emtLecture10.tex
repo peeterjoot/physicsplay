@@ -14,6 +14,7 @@
 \usepackage{peeters_figures}
 \usepackage{mathtools}
 \usepackage{siunitx}
+\usepackage{macros_bm}
 
 \beginArtNoToc
 \generatetitle{ECE1228H Electromagnetic Theory.  Lecture 10: Fresnel relations.  Taught by Prof.\ M. Mojahedi}
@@ -28,36 +29,311 @@
 %
 \paragraph{Single interface TE mode.}
 
-We considered a Fresnel reflection geometry last class with \( \BE \) parallel to the interface
+The Fresnel reflection geometry for an electric field \( \BE \) parallel to the interface (TE mode) is sketched in \cref{fig:l10TwoInterfaces:l10TwoInterfacesFig1}.
 
-F1
+\imageFigure{../../figures/ece1228-emt/l10TwoInterfacesFig1}{Electric field TE mode Fresnel geometry.}{fig:l10TwoInterfaces:l10TwoInterfacesFig1}{0.2}
 
 \begin{dmath}\label{eqn:emtLecture10:20}
-   \BE_i = \ycap E_i e^{j \omega t - j \Bk_{1i} \cdot \Bx },
+   \bcE_i = \Be_2 E_i e^{j \omega t - j \Bk_{i} \cdot \Bx },
 \end{dmath}
 
 with an assumption that this field maintains it's polarization in both its reflected and transmitted components, so that
 
 \begin{dmath}\label{eqn:emtLecture10:40}
-   \BE_i = \ycap r E_i e^{j \omega t - j \Bk_{1r} \cdot \Bx },
+   \bcE_r = \Be_2 r E_i e^{j \omega t - j \Bk_{r} \cdot \Bx },
 \end{dmath}
 
 and
 \begin{dmath}\label{eqn:emtLecture10:60}
-   \BE_t = \ycap t E_i e^{j \omega t - j \Bk_{2t} \cdot \Bx },
+   \bcE_t = \Be_2 t E_i e^{j \omega t - j \Bk_{t} \cdot \Bx },
 \end{dmath}
 
-The end result is
+Measuring the angles \( \theta_i, \theta_r, \theta_t \) from the normal, with \( i = \Be_3 \Be_1 \) the wave vectors are
+
+\begin{dmath}\label{eqn:emtLecture10:620}
+\begin{aligned}
+\Bk_{i} &= \Be_3 k_1 e^{i\theta_i} = k_1\lr{ \Be_3 \cos\theta_i + \Be_1\sin\theta_i } \\
+\Bk_{r} &= -\Be_3 k_1 e^{-i\theta_r} = k_1 \lr{ -\Be_3 \cos\theta_r + \Be_1 \sin\theta_r } \\
+\Bk_{t} &= \Be_3 k_2 e^{i\theta_t} = k_2 \lr{ \Be_3 \cos\theta_t + \Be_1 \sin\theta_t }
+\end{aligned}
+\end{dmath}
+
+So the time harmonic electric fields are
+
+\begin{dmath}\label{eqn:emtLecture10:640}
+\begin{aligned}
+   \BE_i &= \Be_2 E_i \exp\lr{ - j k_1 \lr{ z\cos\theta_i + x \sin\theta_i} } \\
+   \BE_r &= \Be_2 r E_i \exp\lr{ - j k_1 \lr{ -z \cos\theta_r + x \sin\theta_r}} \\
+   \BE_t &= \Be_2 t E_i \exp\lr{ - j k_2 \lr{ z \cos\theta_t + x \sin\theta_t}}.
+\end{aligned}
+\end{dmath}
+
+The magnetic fields follow from Faraday's law
+
+\begin{dmath}\label{eqn:emtLecture10:900}
+\BH 
+= \inv{-j \omega \mu } \spacegrad \cross \BE 
+= \inv{-j \omega \mu } \spacegrad \cross \Be_2 e^{-j \Bk \cdot \Bx} 
+= \inv{j \omega \mu } \Be_2 \cross \spacegrad e^{-j \Bk \cdot \Bx} 
+= -\inv{\omega \mu } \Be_2 \cross \Bk e^{-j \Bk \cdot \Bx}
+= \inv{\omega \mu } \Bk \cross \BE
+\end{dmath}
+
+We have 
+
+\begin{dmath}\label{eqn:emtLecture10:920}
+\begin{aligned}
+\kcap_{i} \cross \Be_2 &= -\Be_1 \cos\theta_i + \Be_3\sin\theta_i  \\
+\kcap_{r} \cross \Be_2 &= \Be_1 \cos\theta_r + \Be_3 \sin\theta_r  \\
+\kcap_{t} \cross \Be_2 &= -\Be_1 \cos\theta_t + \Be_3 \sin\theta_t,
+\end{aligned}
+\end{dmath}
+
+so
+\begin{dmath}\label{eqn:emtLecture10:940}
+\begin{aligned}
+\BH_{i} &= \frac{k_1 E_i}{\omega\mu_1} \lr{ -\Be_1 \cos\theta_i + \Be_3\sin\theta_i } \exp\lr{ - j k_1 \lr{ z\cos\theta_i + x \sin\theta_i} } \\
+\BH_{r} &= \frac{k_1 r E_i}{\omega\mu_1} \lr{ \Be_1 \cos\theta_r + \Be_3 \sin\theta_r } \exp\lr{ - j k_1 \lr{ -z \cos\theta_r + x \sin\theta_r}} \\
+\BH_{t} &= \frac{k_2 t E_i}{\omega\mu_2} \lr{ -\Be_1 \cos\theta_t + \Be_3 \sin\theta_t } \exp\lr{ - j k_2 \lr{ z \cos\theta_t + x \sin\theta_t}}.
+\end{aligned}
+\end{dmath}
+
+The boundary conditions at \( z = 0 \) with \( \ncap = \Be_3 \) are
+
+\begin{dmath}\label{eqn:emtLecture10:960}
+\begin{aligned}
+\ncap \cross \BH_1 &= \ncap \cross \BH_2  \\
+\ncap \cdot \BB_1 &= \ncap \cdot \BB_2  \\
+\ncap \cross \BE_1 &= \ncap \cross \BE_2  \\
+\ncap \cdot \BD_1 &= \ncap \cdot \BD_2,
+\end{aligned}
+\end{dmath}
+
+which gives
 
 \begin{subequations}
-\label{eqn:emtLecture10:80}
-\begin{dmath}\label{eqn:emtLecture10:100}
-r = \frac{\mu_2 k_{1z} - \mu_1 k_{2z}}{\mu_2 k_{1z} + \mu_1 k_{2z}}
+\label{eqn:emtLecture10:980}
+\begin{dmath}\label{eqn:emtLecture10:1000}
+-\frac{k_1 }{\mu_1} \cos\theta_i \exp\lr{ - j k_1 x \sin\theta_i } 
++
+\frac{k_1 r }{\mu_1} \cos\theta_r \exp\lr{ - j k_1 x \sin\theta_r }
+=
+-\frac{k_2 t }{\mu_2} \cos\theta_t \exp\lr{ - j k_2 x \sin\theta_t },
 \end{dmath}
-\begin{dmath}\label{eqn:emtLecture10:120}
-t = \frac{2 \mu_2 k_{1z}}{\mu_2 k_{1z} + \mu_1 k_{2z}}
+\begin{dmath}\label{eqn:emtLecture10:1020}
+k_1 \sin\theta_i \exp\lr{ - j k_1 x \sin\theta_i }
++
+k_1 r \sin\theta_r \exp\lr{ + j k_1 x \sin\theta_r }
+=
+k_2 t \sin\theta_t \exp\lr{ - j k_2 x \sin\theta_t }
+\end{dmath}
+\begin{dmath}\label{eqn:emtLecture10:1040}
+\exp\lr{ - j k_1 \lr{ x \sin\theta_i} } 
++
+r \exp\lr{ - j k_1 \lr{ x \sin\theta_r}} 
+=
+t \exp\lr{ - j k_2 \lr{ x \sin\theta_t}}.
 \end{dmath}
 \end{subequations}
+
+Since these must also hold at \( x = 0 \)
+
+\begin{dmath}\label{eqn:emtLecture10:1060}
+\begin{aligned}
+-\frac{k_1 }{\mu_1} \cos\theta_i + \frac{k_1 r }{\mu_1} \cos\theta_r &= -\frac{k_2 t }{\mu_2} \cos\theta_t  \\
+k_1 \sin\theta_i + k_1 r \sin\theta_r &= k_2 t \sin\theta_t  \\
+1 + r &= t
+\end{aligned}
+\end{dmath}
+
+When \( t = 0 \) the latter two equations give Shell's first law
+
+%\begin{dmath}\label{eqn:emtLecture10:1080}
+\boxedEquation{eqn:emtLecture10:1080}{
+\sin\theta_i = \sin\theta_r.
+}
+%\end{dmath}
+
+Assuming this holds for all \( r, t \) we have
+
+\begin{dmath}\label{eqn:emtLecture10:1120}
+k_1 \sin\theta_i (1 + r ) = k_2 t \sin\theta_t,
+\end{dmath}
+
+which is Snell's second law
+%\begin{dmath}\label{eqn:emtLecture10:1140}
+\boxedEquation{eqn:emtLecture10:1160}{
+k_1 \sin\theta_i = k_2 \sin\theta_t.
+}
+%\end{dmath}
+
+With
+\begin{dmath}\label{eqn:emtLecture10:1200}
+\begin{aligned}
+k_{1z} &= k_1 \cos\theta_i \\
+k_{2z} &= k_2 \cos\theta_t,
+\end{aligned}
+\end{dmath}
+
+we can solve for \( r, t \) by inverting
+
+\begin{dmath}\label{eqn:emtLecture10:1180}
+\begin{bmatrix}
+\mu_2 k_{1z} & \mu_1 k_{2z} \\
+-1 & 1 \\
+\end{bmatrix}
+\begin{bmatrix}
+r \\
+t
+\end{bmatrix}
+=
+\begin{bmatrix}
+\mu_2 k_{1z} \\
+1
+\end{bmatrix},
+\end{dmath}
+
+which gives
+
+\begin{dmath}\label{eqn:emtLecture10:1220}
+\begin{bmatrix}
+r \\
+t
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & -\mu_1 k_{2z} \\
+1 &  \mu_2 k_{1z}
+\end{bmatrix}
+\begin{bmatrix}
+\mu_2 k_{1z} \\
+1
+\end{bmatrix},
+\end{dmath}
+
+or
+%\begin{dmath}\label{eqn:emtLecture10:1240}
+\boxedEquation{eqn:emtLecture10:1260}{
+\begin{aligned}
+r &= \frac{\mu_2 k_{1z} - \mu_1 k_{2z}}{\mu_2 k_{1z} + \mu_1 k_{2z}} \\
+t &= \frac{2 \mu_2 k_{1z}}{\mu_2 k_{1z} + \mu_1 k_{2z}}
+\end{aligned}
+}
+%\end{dmath}
+
+\paragraph{Single interface TM mode.}
+
+For completeness, now consider the TM mode.  In this case, the magnetic fields are
+
+\begin{dmath}\label{eqn:emtLecture10:1320}
+\begin{aligned}
+   \BH_i &= \Be_2 H_i \exp\lr{ - j k_1 \lr{ z\cos\theta_i + x \sin\theta_i} } \\
+   \BH_r &= \Be_2 r H_i \exp\lr{ - j k_1 \lr{ -z \cos\theta_r + x \sin\theta_r}} \\
+   \BH_t &= \Be_2 t H_i \exp\lr{ - j k_2 \lr{ z \cos\theta_t + x \sin\theta_t}}.
+\end{aligned}
+\end{dmath}
+
+Faraday's law also can provide the electric field from the magnetic
+
+\begin{dmath}\label{eqn:emtLecture10:1280}
+\kcap \cross \BH 
+= \frac{k}{\omega \mu } \kcap \cross \lr{ \kcap \cross \BE }
+= -\frac{k}{\omega \mu } \kcap \cdot \lr{ \kcap \wedge \BE } 
+= -\frac{k}{\omega \mu } \lr{ \BE - \kcap \lr{ \kcap \cdot \BE } },
+\end{dmath}
+
+so
+
+\begin{dmath}\label{eqn:emtLecture10:1300}
+\BE = \frac{\omega \mu}{k} \BH \cross \kcap.
+\end{dmath}
+
+This gives
+\begin{dmath}\label{eqn:emtLecture10:1340}
+\begin{aligned}
+   \BE_{i} &= -\frac{\omega \mu_1 H_i}{k_1} \lr{ -\Be_1 \cos\theta_i + \Be_3\sin\theta_i } \exp\lr{ - j k_1 \lr{ z\cos\theta_i + x \sin\theta_i} } \\
+   \BE_{r} &= -\frac{\omega \mu_1 r H_i}{k_1} \lr{ \Be_1 \cos\theta_r + \Be_3 \sin\theta_r } \exp\lr{ - j k_1 \lr{ -z \cos\theta_r + x \sin\theta_r}} \\
+   \BE_{t} &= -\frac{\omega \mu_2 t H_i}{k_2} \lr{ -\Be_1 \cos\theta_t + \Be_3 \sin\theta_t } \exp\lr{ - j k_2 \lr{ z \cos\theta_t + x \sin\theta_t}}.
+\end{aligned}
+\end{dmath}
+
+Imposing the same constraints \cref{eqn:emtLecture10:960} we have
+
+\begin{subequations}
+\label{eqn:emtLecture10:1360}
+%\ncap \cross \BH_1 &= \ncap \cross \BH_2  \\
+%\ncap \cdot \BB_1 &= \ncap \cdot \BB_2  % 0 = 0
+\begin{dmath}\label{eqn:emtLecture10:1380}
+   \exp\lr{ - j k_1 x \sin\theta_i } + r \exp\lr{ - j k_1 x \sin\theta_r } =
+   t \exp\lr{ - j k_2 x \sin\theta_t }
+\end{dmath}
+%\ncap \cross \BE_1 &= \ncap \cross \BE_2  \\
+\begin{dmath}\label{eqn:emtLecture10:1400}
+   -\frac{\mu_1 }{k_1} \cos\theta_i \exp\lr{ - j k_1 x \sin\theta_i } 
+   +\frac{\mu_1 r }{k_1} \cos\theta_r \exp\lr{ - j k_1 x \sin\theta_r } 
+=
+   -\frac{\mu_2 t }{k_2} \cos\theta_t \exp\lr{ - j k_2 x \sin\theta_t }
+\end{dmath}
+%\ncap \cdot \BD_1 &= \ncap \cdot \BD_2,
+\begin{dmath}\label{eqn:emtLecture10:1420}
+   \frac{\epsilon_1 \mu_1 }{k_1} \sin\theta_i  \exp\lr{ - j k_1 x \sin\theta_i } +
+   \frac{\epsilon_1 \mu_1 r }{k_1} \sin\theta_r  \exp\lr{ - j k_1 x \sin\theta_r } =
+   \frac{\epsilon_2 \mu_2 t }{k_2} \sin\theta_t  \exp\lr{ - j k_2 x \sin\theta_t }.
+\end{dmath}
+\end{subequations}
+
+Requiring these to be identical at \( x = 0 \) too, we have
+
+\begin{dmath}\label{eqn:emtLecture10:1440}
+\begin{aligned}
+1 + r &= t \\
+-\frac{\mu_1 }{k_1} \cos\theta_i +\frac{\mu_1 r }{k_1} \cos\theta_r &= -\frac{\mu_2 t }{k_2} \cos\theta_t  \\
+\frac{\epsilon_1 \mu_1 }{k_1} \sin\theta_i  + \frac{\epsilon_1 \mu_1 r }{k_1} \sin\theta_r  &= \frac{\epsilon_2 \mu_2 t }{k_2} \sin\theta_t  
+\end{aligned}
+\end{dmath}
+
+Once again, two of these equations can be simultaneously satisfied by \cref{eqn:emtLecture10:1080}, and \cref{eqn:emtLecture10:1120}.
+
+That leaves
+\begin{dmath}\label{eqn:emtLecture10:1460}
+\begin{bmatrix}
+\mu_1 k_2 \cos\theta_i & \mu_2 k_1 \cos\theta_t \\
+-1 & 1
+\end{bmatrix}
+\begin{bmatrix}
+r \\
+t
+\end{bmatrix}
+= 
+\begin{bmatrix}
+\mu_1 k_2 \cos\theta_i \\
+1
+\end{bmatrix},
+\end{dmath}
+
+the inverse of which is
+\begin{dmath}\label{eqn:emtLecture10:1480}
+\begin{bmatrix}
+r \\
+t
+\end{bmatrix}
+= 
+\inv{ \mu_1 k_2 \cos\theta_i + \mu_2 k_1 \cos\theta_t }
+\begin{bmatrix}
+1 & -\mu_2 k_1 \cos\theta_t \\
+1 & \mu_1 k_2 \cos\theta_i
+\end{bmatrix}
+\begin{bmatrix}
+\mu_1 k_2 \cos\theta_i \\
+1
+\end{bmatrix}
+=
+\inv{ \mu_1 k_2 \cos\theta_i + \mu_2 k_1 \cos\theta_t }
+\begin{bmatrix}
+\mu_1 k_2 \cos\theta_i - \mu_2 k_1 \cos\theta_t \\
+2 \mu_1 k_2 \cos\theta_i 
+\end{bmatrix}.
+\end{dmath}
 
 \paragraph{Two interface problem.}
 
@@ -204,7 +480,9 @@ v_g = -\frac{d}{\PD{\phi}{\omega}}.
 \end{dmath}
 %FIXME: last relation?
 
-This is called the \textAndIndex{group delay}.
+This is called the \textAndIndex{group delay}, and is essentially the velocity of the peak of the wave form, as sketched in
+
+F5.
 
 This is different than the phase velocity \( v_p = \omega/k \), as illustrated in the sketch of 
 
@@ -212,7 +490,7 @@ F2
 
 If (FIXME: why?) 
 
-\begin{dmath}\label{eqn:emtLecture10:n}
+\begin{dmath}\label{eqn:emtLecture10:660}
 v_g
 = \PD{k}{\omega}
 = 1/\PD{\omega}{k},
@@ -235,9 +513,104 @@ so
 v_g 
 = \frac{c}{n(\omega) + \omega \PD{\omega}{n} }
 = \frac{c}{n_g}
+\end{equation}
+
+Since the phase is
+
+\begin{dmath}\label{eqn:emtLecture10:680}
+\phi = -\frac{\omega}{c} n(\omega) d
+\end{dmath}
+
+we can show that
+\begin{dmath}\label{eqn:emtLecture10:700}
+v_g 
+= \frac{d}{-\PD{\omega}{\phi}}
 \equiv
 \frac{d}{\tau_g}.
-\end{equation}
+\end{dmath}
+
+By bounded medium, it is meant that the medium is not matched.
+
+\paragraph{Brewster's angle}
+
+Self study (examinable!) Brewster's angle for a single interface: The angle for which there is no reflection.
+
+Does it exist for a TE mode, and also for a TM mode, and if not, for which polarization?
+
+Should find that there is no Brewster angle for one of the polarizations when \( \mu_1 = \mu_2 \).  It may be that it's TE that always has some reflection.
+
+\paragraph{Critical angle}
+
+Self study (examinable!) critical angle, the angle for which \( \Abs{r} = 1 \)
+
+Does it exist for a TE mode, and also for a TM mode, and if not, for which polarization?
+
+We should find that this only occurs when we go from a medium with a low index of refraction to one where with a higher index of refraction (i.e. \( \theta_i \ge \theta_c \).
+
+For such an angle, what is the value of the phase?
+
+We should find that there is an electric and magnetic field on the other side of the medium, but that there is no transmitted power on that side of the interface (i.e. Poynting vector is zero (no power transfer) when the angle of incidance is greater than \( \theta_c \)).
+
+Can have photon tunnelling through the space between two prisms separated by an air gap
+
+F4
+
+where, despite the critical angle, the time for the photon to ``tunnel'' through the space between the prisms is less than the time for the photon to go through just the first prism.
+
+\section{Vector and electrostatic (scalar) potentials}
+
+In electrostatics where
+\begin{dmath}\label{eqn:emtLecture10:720}
+\spacegrad \cross \BE  = 0,
+\end{dmath}
+
+the electric field must be the gradient of some function
+\begin{dmath}\label{eqn:emtLecture10:740}
+\BE = \pm \spacegrad V,
+\end{dmath}
+
+We pick negative to have things consistent with the notion of force.
+
+In electrodynamics we have
+\begin{dmath}\label{eqn:emtLecture10:760}
+\spacegrad \cross \BE = - \PD{t}{\BB},
+\end{dmath}
+
+however, we also have
+
+\begin{dmath}\label{eqn:emtLecture10:780}
+\spacegrad \cdot \BB = 0,
+\end{dmath}
+
+so
+\begin{dmath}\label{eqn:emtLecture10:800}
+   \BB = \spacegrad \cross \BA.
+\end{dmath}
+
+This gives
+\begin{dmath}\label{eqn:emtLecture10:820}
+   \spacegrad \cross \BE = - \PD{t}{} \lr{ \spacegrad \cross \BA },
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:emtLecture10:840}
+0 = 
+\spacegrad \cross \lr{ \BE + \PD{t}{\BA} },
+\end{dmath}
+
+so this curled quantity can be the gradient of something
+
+\begin{dmath}\label{eqn:emtLecture10:860}
+\BE + \PD{t}{\BA} = \pm \spacegrad V.
+\end{dmath}
+
+We pick negative again, so
+
+\begin{dmath}\label{eqn:emtLecture10:880}
+\BE = -\spacegrad V -\PD{t}{\BA}.
+\end{dmath}
+
+Observe that when the fields are electrostatic with no time dependence, we would have \( \BE = -\spacegrad V \).
 
 %}
 %\EndArticle
