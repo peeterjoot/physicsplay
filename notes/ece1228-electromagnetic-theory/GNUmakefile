@@ -36,6 +36,7 @@ all:: emtLecture10.pdf
 #l8 : emtLecture8.pdf
 l9 : emtLecture9.pdf
 l10 : emtLecture10.pdf
+l10b : emtLecture10PartII.pdf
 #p1 : emtProblemSet1.pdf
 #p2 : emtProblemSet2.pdf
 #p3 : emtProblemSet3.pdf
