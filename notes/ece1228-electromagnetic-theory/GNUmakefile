@@ -25,7 +25,8 @@ THISBOOK_DEPS += $(PDFS_FROM_EPS)
 
 include ../make.rules
 
-all:: emtLecture10.pdf
+#all:: emtLecture10.pdf
+all :: emtLecture10PartII.pdf
 
 #l2 : emtLecture2.pdf
 #l3 : emtLecture3.pdf
@@ -35,7 +36,7 @@ all:: emtLecture10.pdf
 #l7 : emtLecture7.pdf
 #l8 : emtLecture8.pdf
 l9 : emtLecture9.pdf
-l10 : emtLecture10.pdf
+#l10 : emtLecture10.pdf
 l10b : emtLecture10PartII.pdf
 #p1 : emtProblemSet1.pdf
 #p2 : emtProblemSet2.pdf
