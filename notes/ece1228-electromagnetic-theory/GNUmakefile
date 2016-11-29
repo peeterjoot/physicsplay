@@ -46,6 +46,7 @@ l10b : emtLecture10PartII.pdf
 #p6 : emtProblemSet6.pdf
 #p7 : emtProblemSet7.pdf
 p8 : emtProblemSet8.pdf
+p9 : emtProblemSet9.pdf
 #pd : dipoleMoment.pdf
 #pv : dipolePotential.pdf
 
@@ -92,6 +93,10 @@ emtProblemSet7.pdf : emtProblemSet7Problem3.tex
 emtProblemSet8.pdf : emtProblemSet8Problem1.tex
 emtProblemSet8.pdf : emtProblemSet8Problem2.tex
 emtProblemSet8.pdf : emtProblemSet8Problem3.tex
+
+emtProblemSet9.pdf : emtProblemSet9Problem1.tex
+emtProblemSet9.pdf : emtProblemSet9Problem2.tex
+emtProblemSet9.pdf : emtProblemSet9Problem3.tex
 
 julia.tex : ../../julia/METADATA
 mathematica.tex : ../../mathematica/METADATA
