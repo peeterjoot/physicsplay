@@ -20,6 +20,7 @@ INCOMPLETE += censor1l.tex
 INCOMPLETE += censor1p.tex
 INCOMPLETE += censor1pg.tex
 INCOMPLETE += stokespost.tex
+INCOMPLETE += groupAndPhase.tex
 #INCOMPLETE += ps8mathematica.tex
 INCOMPLETE += $(wildcard uwaves*Core.tex)
 INCOMPLETE += uwavesDeck8ResonatorQfactor.tex
