@@ -97,6 +97,7 @@ emtProblemSet8.pdf : emtProblemSet8Problem3.tex
 emtProblemSet9.pdf : emtProblemSet9Problem1.tex
 emtProblemSet9.pdf : emtProblemSet9Problem2.tex
 emtProblemSet9.pdf : emtProblemSet9Problem3.tex
+emtProblemSet9.pdf : ps9mathematica.tex
 
 julia.tex : ../../julia/METADATA
 mathematica.tex : ../../mathematica/METADATA
@@ -104,3 +105,6 @@ matlab.tex : ../../matlab/METADATA
 
 ps5mathematica.tex : ../METADATA ../../mathematica/METADATA
 	(cd .. ; ./METADATA -mathematica -latex -ece1228 -filter ece1228-emt/ps5/ ) > $@
+
+ps9mathematica.tex : ../METADATA ../../mathematica/METADATA
+	(cd .. ; ./METADATA -mathematica -latex -ece1228 -filter ece1228-emt/ps9/ ) > $@
