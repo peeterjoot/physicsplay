@@ -1,4 +1,4 @@
-Peeter Joot's geometric algebra biased math and physics latex source.
+Peeter Joot's math and physics latex source.
 
 #-------------------------------------------------------
 # grabbing a copy of the tree
@@ -134,12 +134,23 @@ notes/
      Class notes and problems from 'Modeling of Multiphysics Systems', taught by Prof. P. Triverio.
 
    ece1229-antenna/
+   ece1229-antenna-project/
 
      Class notes and problems from 'Advanced Antenna Theory', taught by Prof. G.V. Eleftheriades.
 
    phy1520-quantum/
 
-     Class notes and problems from 'Graduate Quantum Mechanics', taught by Prof. Arun Paramekanti. (in progress)
+     Class notes and problems from 'Graduate Quantum Mechanics', taught by Prof. Arun Paramekanti.
+
+   ece1236-microwaves/
+     Class notes and problems from 'Microwave circuits', taught by Prof. G.V. Eleftheriades.
+     I dropped this course to focus on phy1610 (Scientific Computing for Physicists.)
+
+   phy2403-qft/
+      Problem set 1 (2015?) solutions and some other notes.
+
+   ece1228-electromagnetic-theory/
+      Fall 2016, University of Toronto, Electromagnetic Theory course (ECE1228H), taught by Prof.\ M. Mojahedi.
 
    resume/
 
