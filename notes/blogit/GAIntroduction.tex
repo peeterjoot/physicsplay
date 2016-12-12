@@ -1,0 +1,157 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+%{
+\input{../blogpost.tex}
+\renewcommand{\basename}{GAIntroduction}
+%\renewcommand{\dirname}{notes/phy1520/}
+\renewcommand{\dirname}{notes/ece1228-electromagnetic-theory/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+\usepackage{siunitx}
+%\usepackage{mhchem} % \ce{}
+%\usepackage{macros_bm} % \bcM
+%\usepackage{txfonts} % \ointclockwise
+
+\beginArtNoToc
+
+\generatetitle{An introduction to Geometric Algebra.}
+\chapter{Geometric Algebra.}
+%\label{chap:GAIntroduction}
+\section{Did you ever ask your grade school teacher how to multiply vectors?}
+
+In high school you first see vectors as sets of coordinates
+
+\begin{equation}\label{eqn:GAIntroduction:20}
+\Ba = 
+\begin{bmatrix}
+a_1 \\
+a_2 \\
+a_3 \\
+\end{bmatrix}, \qquad
+\Bb = 
+\begin{bmatrix}
+b_1 \\
+b_2 \\
+b_3 \\
+\end{bmatrix},
+\end{equation}
+
+or perhaps explicitly in terms of a basis \( \setlr{ \Be_1, \Be_2 \Be_3 } \)
+
+\begin{dmath}\label{eqn:GAIntroduction:40}
+\begin{aligned}
+\Ba &= a_1 \Be_1 + a_2 \Be_2 + a_3 \Be_3  \\
+\Bb &= b_1 \Be_1 + b_2 \Be_2 + b_3 \Be_3
+\end{aligned}.
+\end{dmath}
+
+You will learn the rules for addition and subtraction of such vectors, and how to operate on them with rotation matrices or other representations of linear transformations.  As a student, you see this algebraic object as a generalization of numbers, so it is inevitable to
+ask how vectors are multiplied.
+
+Your teacher's response may have been something like
+
+\begin{itemize}
+\item ``You can not multiply vectors.'', or
+\item ``Vector multiplication is not well defined.'', or
+\item ``We will get to that.'', or
+\item ``There are multiplication like operations.''
+\end{itemize}
+
+Soon enough you will eventually learn of two multiplication like operations for vectors, the dot and cross products
+
+\begin{dmath}\label{eqn:GAIntroduction:60}
+\begin{aligned}
+\Ba \cdot \Bb &= a_1 b_1 + a_2 b_2 + a_3 b_3 = \Abs{\Ba} \Abs{\Bb} \cos \theta_{ab} \\
+\Ba \cross \Bb &= 
+\begin{vmatrix}
+\Be_1 & \Be_2 & \Be_3 \\
+a_1 & a_2 & a_3 \\
+b_1 & b_2 & b_3 \\
+\end{vmatrix}
+= \ncap_{ab} \Abs{\Ba} \Abs{\Bb} \sin\theta_{ab}.
+\end{aligned}
+\end{dmath}
+
+There's clearly a relationship between the structure of the dot and cross product, but it isn't obvious what it is.  When studying solutions of equations, you will see the utility in defining vectors in higher dimensional spaces, and the dot product generalizes to such spaces trivially.  You'll want to understand how the cross product generalizes to higher dimensional or even two dimensional spaces.  
+As a student, you may feel like you aren't getting the complete answer.  
+
+Many current students of science will never see an answer to these sorts of questions.  If you study long enough, and happen to include 
+enough of the right esoteric physics and mathematics in your studies (quantum mechanics, calculus on manifolds, ...) you 
+may find answers that will satisfactorily answer some of those questions.
+
+For example, if you study complex variable theory, you will see that you have the structure of the dot and cross products in the real and imaginary components of the product of a complex number with the conjugate of another
+
+\begin{equation}\label{eqn:GAIntroduction:80}
+z = r e^{i \theta}, w = \rho e^{i \alpha}
+\end{equation}
+
+\begin{equation}\label{eqn:GAIntroduction:100}
+\begin{aligned}
+\Real( z w^\conj ) &= r \rho \cos(\theta - \alpha) \\
+\Imag( z w^\conj ) &= r \rho \sin(\theta - \alpha).
+\end{aligned}
+\end{equation}
+
+This provides one answer, perhaps satisfactory, to the question of how the cross product degeneralizes from 3D to 2D.
+
+Should you study non-relativistic quantum mechanics, you will learn of Pauli matrices, and again see that the dot and cross products are both components of a higher order multiplication operation
+
+\begin{equation}\label{eqn:GAIntroduction:120}
+\lr{\Bsigma \cdot \Bx }
+\lr{\Bsigma \cdot \By }
+=
+I \lr{ \Bx \cdot \By } + i \Bsigma \cdot \lr{ \Bx \cross \By }.
+\end{equation}
+
+Should you study quantum field theory, you'll encounter yet another algebraic structure, the Dirac matrices.  Products of vectors expressed with this algebra also highlight how the generalization of the dot and cross products are related to a single vector multiplication operation.  Unfortunately, this algebra comes with still another different notation
+
+\begin{dmath}\label{eqn:GAIntroduction:140}
+\aslash \bslash
+=
+\inv{2} \symmetric{ \aslash}{ \bslash }
++
+\inv{2} \antisymmetric{ \aslash}{ \bslash }
+=
+a^\mu b_\mu + \inv{2} a^\mu b^\nu \antisymmetric{\gamma_\mu}{\gamma_\nu}.
+\end{dmath}
+
+The student of differential forms will learn how to compute the wedge products of forms, and of duality operations, which can be used to construct generalized multiplication operations that have the structure of the dot and cross products
+
+\begin{equation}\label{eqn:GAIntroduction:160}
+\begin{aligned}
+df \wedge * dg &= \lr{ \sum_{i=1}^3 \PD{x_i}{f} \PD{x_i}{g} } dx_1 \wedge dx_2 \wedge dx_3 \\
+df \wedge dg &= \sum_{1 \le i < j \le 3} \lr{
+\PD{x_i}{f} \PD{x_j}{g} 
+-\PD{x_j}{f} \PD{x_i}{g} 
+}
+dx_i \wedge dx_j.
+\end{aligned}
+\end{equation}
+
+Here we have yet another notation, once again considerably different than the vector notation that we are comfortable with, that expresses the idea that the dot and cross products are related operations.
+
+It should not be suprising that all of these ideas, and many others, are special cases of something more general.  The aim of this material is to provide the instruction manual for an enhanced toolbox of vector algebra techniques.  There are many applications for this new set of tools once learned.  Of particular interest here is their application to the study of electromagnetism.
+
+\chapter{Maxwell's equations.}
+TODO.
+\chapter{Vector calculus.}
+TODO.
+\chapter{Electrostatics.}
+TODO.
+\chapter{Magnetostatics.}
+TODO.
+\chapter{Boundary value conditions.}
+TODO.
+\chapter{Time harmonic fields.}
+
+%}
+\EndArticle
+%\EndNoBibArticle
