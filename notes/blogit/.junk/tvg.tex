@@ -1,0 +1,297 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+%{
+\input{../blogpost.tex}
+\renewcommand{\basename}{vectorAreaGriffiths}
+%\renewcommand{\dirname}{notes/phy1520/}
+\renewcommand{\dirname}{notes/ece1228-electromagnetic-theory/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+\usepackage{siunitx}
+\usepackage{macros_qed}
+\usepackage{txfonts} % \ointclockwise
+
+\beginArtNoToc
+
+\generatetitle{Vector Area}
+%\chapter{Vector Area}
+
+One of the results of this problem is required for a later one on magnetic moments that I'd like to do.
+
+\makeoproblem{Vector Area.}{problem:vectorAreaGriffiths:1}{\citep{griffiths1999introduction} pr. 1.61}{
+
+The integral 
+
+\begin{dmath}\label{eqn:vectorAreaGriffiths:20}
+\Ba = \int_S d\Ba,
+\end{dmath}
+
+is sometimes called the vector area of the surface \( S \).
+
+\makesubproblem{}{problem:vectorAreaGriffiths:1:a}
+
+Find the vector area of a hemispherical bowl of radius \( R \).
+\makesubproblem{}{problem:vectorAreaGriffiths:1:b}
+
+Show that \( \Ba = 0 \) for any closed surface.
+\makesubproblem{}{problem:vectorAreaGriffiths:1:c}
+Show that \( \Ba \) is the same for all surfaces sharing the same boundary.
+
+\makesubproblem{}{problem:vectorAreaGriffiths:1:d}
+
+Show that 
+\begin{dmath}\label{eqn:vectorAreaGriffiths:40}
+\Ba = \inv{2} \oint \Br \cross d\Bl,
+\end{dmath}
+
+where the integral is around the boundary line.
+
+\makesubproblem{}{problem:vectorAreaGriffiths:1:e}
+
+Show that 
+\begin{dmath}\label{eqn:vectorAreaGriffiths:60}
+\oint \lr{ \Bc \cdot \Br } d\Bl = \Ba \cross \Bc.
+\end{dmath}
+} % problem
+
+\makeanswer{problem:vectorAreaGriffiths:1}{
+\makeSubAnswer{}{problem:vectorAreaGriffiths:1:a}
+
+\begin{dmath}\label{eqn:vectorAreaGriffiths:80}
+\begin{aligned}
+\Ba
+&=
+\int_{0}^{\pi/2} R^2 \sin\theta d\theta \int_0^{2\pi} d\phi
+\lr{ \sin\theta \cos\phi, \sin\theta \sin\phi, \cos\theta } \\
+&=
+R^2 \int_{0}^{\pi/2} d\theta \int_0^{2\pi} d\phi
+\lr{ \sin^2\theta \cos\phi, \sin^2\theta \sin\phi, \sin\theta\cos\theta } \\
+&=
+2 \pi R^2 \int_{0}^{\pi/2} d\theta \Be_3 
+\sin\theta\cos\theta  \\
+&=
+\pi R^2 
+\Be_3 
+\int_{0}^{\pi/2} d\theta 
+\sin(2 \theta) \\
+&=
+\pi R^2 
+\Be_3 
+\evalrange{\lr{\frac{-\cos(2 \theta)}{2}}}{0}{\pi/2} \\
+&=
+\pi R^2 
+\Be_3 
+\lr{ 1 - (-1) }/2 \\
+&=
+\pi R^2 
+\Be_3.
+\end{aligned}
+\end{dmath}
+
+\makeSubAnswer{}{problem:vectorAreaGriffiths:1:b}
+
+As hinted in the original problem description, this follows from
+
+\begin{dmath}\label{eqn:vectorAreaGriffiths:100}
+\int dV \spacegrad T = \oint T d\Ba,
+\end{dmath}
+
+simply by setting \( T = 1 \).
+
+\makeSubAnswer{}{problem:vectorAreaGriffiths:1:c}
+
+Suppose that two surfaces sharing a boundary are parameterized by vectors \( \Bx(u, v), \Bx(a,b) \) respectively.  The area integral with the first parameterization is
+
+\begin{dmath}\label{eqn:vectorAreaGriffiths:120}
+\begin{aligned}
+\Ba 
+&= \int \PD{u}{\Bx} \cross \PD{v}{\Bx} du dv \\
+&= \epsilon_{ijk} \Be_i \int \PD{u}{x_j} \PD{v}{x_k} du dv \\
+&= 
+\epsilon_{ijk} \Be_i \int 
+\lr{ 
+\PD{a}{x_j} 
+\PD{u}{a} 
++
+\PD{b}{x_j} 
+\PD{u}{b} 
+} 
+\lr{ 
+\PD{a}{x_k} 
+\PD{v}{a} 
++
+\PD{b}{x_k} 
+\PD{v}{b} 
+} 
+du dv \\
+&=
+\epsilon_{ijk} \Be_i \int 
+du dv
+\lr{
+\PD{a}{x_j} 
+\PD{u}{a} 
+\PD{a}{x_k} 
+\PD{v}{a} 
++
+\PD{b}{x_j} 
+\PD{u}{b} 
+\PD{b}{x_k} 
+\PD{v}{b} 
++
+\PD{b}{x_j} 
+\PD{u}{b} 
+\PD{a}{x_k} 
+\PD{v}{a} 
++
+\PD{a}{x_j} 
+\PD{u}{a} 
+\PD{b}{x_k} 
+\PD{v}{b} 
+} \\
+&=
+\epsilon_{ijk} \Be_i \int 
+du dv
+\lr{
+\PD{a}{x_j} 
+\PD{a}{x_k} 
+\PD{u}{a} 
+\PD{v}{a} 
++
+\PD{b}{x_j} 
+\PD{b}{x_k} 
+\PD{u}{b} 
+\PD{v}{b} 
+}
++
+\epsilon_{ijk} \Be_i \int 
+du dv
+\lr{
+\PD{b}{x_j} 
+\PD{a}{x_k} 
+\PD{u}{b} 
+\PD{v}{a} 
+-
+\PD{a}{x_k} 
+\PD{b}{x_j} 
+\PD{u}{a} 
+\PD{v}{b} 
+}.
+\end{aligned}
+\end{dmath}
+
+In the last step a \( j,k \) index swap was performed for the last term of the second integral.  The first integral is zero, since the integrand is symmetric in \( j,k \).  This leaves
+\begin{dmath}\label{eqn:vectorAreaGriffiths:140}
+\begin{aligned}
+\Ba 
+&=
+\epsilon_{ijk} \Be_i \int 
+du dv
+\lr{
+\PD{b}{x_j} 
+\PD{a}{x_k} 
+\PD{u}{b} 
+\PD{v}{a} 
+-
+\PD{a}{x_k} 
+\PD{b}{x_j} 
+\PD{u}{a} 
+\PD{v}{b} 
+} \\
+&=
+\epsilon_{ijk} \Be_i \int 
+\PD{b}{x_j} 
+\PD{a}{x_k} 
+\lr{
+\PD{u}{b} 
+\PD{v}{a} 
+-
+\PD{u}{a} 
+\PD{v}{b} 
+}
+du dv \\
+&=
+\epsilon_{ijk} \Be_i \int 
+\PD{b}{x_j} 
+\PD{a}{x_k} 
+\frac{\partial(b,a)}{\partial(u,v)} du dv \\
+&=
+-\int 
+\PD{b}{\Bx} \cross \PD{a}{\Bx} da db \\
+&=
+\int 
+\PD{a}{\Bx} \cross \PD{b}{\Bx} da db.
+\end{aligned}
+\end{dmath}
+
+However, this is the area integral with the second parameterization, proving that the area-integral for any given boundary is independant of the surface.
+
+\makeSubAnswer{}{problem:vectorAreaGriffiths:1:d}
+
+Having proven that the area-integral for a given boundary is independent of the surface that it is evaluated on, the result follows by illustration as hinted in the full problem description.  Draw a ``cone'', tracing a vector \( \Bx' \) from the origin to the position line element, and divide that cone up into infinitesimal slices as sketched in \cref{fig:coneVectorArea:coneVectorAreaFig1}.
+
+\imageFigure{../../figures/ece1228-emt/coneVectorAreaFig1}{Cone configuration.}{fig:coneVectorArea:coneVectorAreaFig1}{0.2}
+
+The area of each of these triangular slices is
+
+\begin{dmath}\label{eqn:vectorAreaGriffiths:160}
+\inv{2} \Bx' \cross d\Bl'.
+\end{dmath}
+
+Summing those triangles proves the result.
+
+\makeSubAnswer{}{problem:vectorAreaGriffiths:1:e}
+
+As hinted in the problem, this follows from
+
+\begin{dmath}\label{eqn:vectorAreaGriffiths:180}
+\int \spacegrad T \cross d\Ba = -\oint T d\Bl.
+\end{dmath}
+
+Set \( T = \Bc \cdot \Br \), for which 
+
+\begin{dmath}\label{eqn:vectorAreaGriffiths:240}
+\begin{aligned}
+\spacegrad T
+&= \Be_k \partial_k c_m x_m \\
+&= \Be_k c_m \delta_{km} \\
+&= \Be_k c_k \\
+&= \Bc,
+\end{aligned}
+\end{dmath}
+
+so
+\begin{dmath}\label{eqn:vectorAreaGriffiths:200}
+\begin{aligned}
+(\spacegrad T) \cross d\Ba
+&=
+\int \Bc \cross d\Ba \\
+&=
+\Bc \cross \int d\Ba \\
+&=
+\Bc \cross \Ba.
+\end{aligned}
+\end{dmath}
+
+so
+\begin{dmath}\label{eqn:vectorAreaGriffiths:220}
+\Bc \cross \Ba = -\oint (\Bc \cdot \Br) d\Bl,
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:vectorAreaGriffiths:260}
+\oint (\Bc \cdot \Br) d\Bl
+=
+\Ba \cross \Bc. \qedmarker
+\end{dmath}
+} % answer
+
+%}
+\EndArticle

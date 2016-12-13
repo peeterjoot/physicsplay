@@ -1,0 +1,96 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+%{
+\input{../blogpost.tex}
+\renewcommand{\basename}{biotSavartGreens}
+%\renewcommand{\dirname}{notes/phy1520/}
+\renewcommand{\dirname}{notes/ece1228-electromagnetic-theory/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+\usepackage{siunitx}
+
+\beginArtNoToc
+
+\generatetitle{Green's function inversion of magnetostatic equation}
+%\chapter{Green's function inversion of magnetostatic equation}
+%\label{chap:biotSavartGreens}
+% \citep{sakurai2014modern} pr X.Y
+% \citep{pozar2009microwave}
+% \citep{qftLectureNotes}
+% \citep{doran2003gap}
+% \citep{jackson1975cew}
+% \citep{griffiths1999introduction}
+
+A previous example of inverting a gradient equation was the electrostatics equation.  We can do the same for the magnetostatics equation, which has the following Geometric Algebra form in linear media
+
+\begin{dmath}\label{eqn:biotSavartGreens:20}
+\spacegrad I \BB = - \mu \BJ.
+\end{dmath}
+
+The Green's inversion of this is
+\begin{dmath}\label{eqn:biotSavartGreens:40}
+\begin{aligned}
+I \BB(\Bx) 
+&= \int_V dV' G(\Bx, \Bx') \spacegrad' I \BB(\Bx') \\
+&= \int_V dV' G(\Bx, \Bx') (-\mu \BJ(\Bx')) \\
+&= \inv{4\pi} \int_V dV' \frac{\Bx - \Bx'}{ \Abs{\Bx - \Bx'}^3 } (-\mu \BJ(\Bx')).
+\end{aligned}
+\end{dmath}
+
+We expect the LHS to be a bivector, so the scalar component of this should be zero.  That can be demonstrated with some of the usual trickery
+\begin{dmath}\label{eqn:biotSavartGreens:60}
+\begin{aligned}
+-\frac{\mu}{4\pi} \int_V dV' \frac{\Bx - \Bx'}{ \Abs{\Bx - \Bx'}^3 } \cdot \BJ(\Bx')
+&= \frac{\mu}{4\pi} \int_V dV' \lr{ \spacegrad \inv{ \Abs{\Bx - \Bx'} }} \cdot \BJ(\Bx') \\
+&= -\frac{\mu}{4\pi} \int_V dV' \lr{ \spacegrad' \inv{ \Abs{\Bx - \Bx'} }} \cdot \BJ(\Bx') \\
+&= -\frac{\mu}{4\pi} \int_V dV' \lr{ 
+\spacegrad' \cdot \frac{\BJ(\Bx')}{ \Abs{\Bx - \Bx'} } 
+-
+\frac{\spacegrad' \cdot \BJ(\Bx')}{ \Abs{\Bx - \Bx'} } 
+}.
+\end{aligned}
+\end{dmath}
+
+The current \( \BJ \) is not unconstrained.  This can be seen by premultiplying \cref{eqn:biotSavartGreens:20} by the gradient
+
+\begin{dmath}\label{eqn:biotSavartGreens:80}
+\spacegrad^2 I \BB = -\mu \spacegrad \BJ.
+\end{dmath}
+
+On the LHS we have a bivector so must have \( \spacegrad \BJ = \spacegrad \wedge \BJ \), or \( \spacegrad \cdot \BJ = 0 \).  This kills the \( \spacegrad' \cdot \BJ(\Bx') \) integrand numerator in \cref{eqn:biotSavartGreens:60}, leaving
+
+\begin{dmath}\label{eqn:biotSavartGreens:100}
+\begin{aligned}
+-\frac{\mu}{4\pi} \int_V dV' \frac{\Bx - \Bx'}{ \Abs{\Bx - \Bx'}^3 } \cdot \BJ(\Bx')
+&= -\frac{\mu}{4\pi} \int_V dV' \spacegrad' \cdot \frac{\BJ(\Bx')}{ \Abs{\Bx - \Bx'} }  \\
+&= -\frac{\mu}{4\pi} \int_{\partial V} dA' \ncap \cdot \frac{\BJ(\Bx')}{ \Abs{\Bx - \Bx'} }.
+\end{aligned}
+\end{dmath}
+
+This shows that the scalar part of the equation is zero, provided the normal component of \( \BJ/\Abs{\Bx - \Bx'} \) vanishes on the boundary of the infinite sphere.  This leaves the Biot-Savart law as a bivector equation
+
+\begin{dmath}\label{eqn:biotSavartGreens:120}
+I \BB(\Bx) 
+= \frac{\mu}{4\pi} \int_V dV' \BJ(\Bx') \wedge \frac{\Bx - \Bx'}{ \Abs{\Bx - \Bx'}^3 }.
+\end{dmath}
+
+Observe that the traditional vector form of the Biot-Savart law can be obtained by premultiplying both sides with \( -I \), leaving
+
+\begin{dmath}\label{eqn:biotSavartGreens:140}
+\BB(\Bx) 
+= \frac{\mu}{4\pi} \int_V dV' \BJ(\Bx') \cross \frac{\Bx - \Bx'}{ \Abs{\Bx - \Bx'}^3 }.
+\end{dmath}
+
+This checks against a trusted source such as \citep{griffiths1999introduction} (eq. 5.39).
+
+%}
+\EndArticle
+%\EndNoBibArticle

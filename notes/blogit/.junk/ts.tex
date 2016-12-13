@@ -1,0 +1,275 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+%{
+\input{../blogpost.tex}
+\renewcommand{\basename}{stokesCorollariesGriffiths}
+%\renewcommand{\dirname}{notes/phy1520/}
+\renewcommand{\dirname}{notes/ece1228-electromagnetic-theory/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+\usepackage{siunitx}
+\usepackage{macros_qed}
+
+\beginArtNoToc
+
+\generatetitle{Corollaries to Stokes and Divergence theorems}
+%\chapter{Corollaries to Stokes and Divergence theorems}
+
+In \citep{griffiths1999introduction} a few problems are set to prove some variations of Stokes theorem.  He gives some cool tricks to prove each one using just the classic 3D Stokes and divergence theorems.  We can also do them directly from the more general Stokes theorem \( \int d^k \Bx \cdot (\spacegrad \wedge F) = \oint d^{k-1} \Bx \cdot F \).
+
+\makeoproblem{Stokes theorem on scalar function.}{problem:stokesCorollariesGriffiths:1}{\citep{griffiths1999introduction} pr. 1.60a}{
+Prove
+\begin{dmath}\label{eqn:stokesCorollariesGriffiths:20}
+\int \spacegrad T dV = \oint T d\Ba.
+\end{dmath}
+} % problem
+
+\makeanswer{problem:stokesCorollariesGriffiths:1}{
+
+The direct way to prove this is to apply Stokes theorem
+
+\begin{dmath}\label{eqn:stokesCorollariesGriffiths:80}
+\int d^3 \Bx \cdot (\spacegrad \wedge T) = \oint d^2 \Bx \cdot T
+\end{dmath}
+
+Here \( d^3 \Bx = d\Bx_1 \wedge d\Bx_2 \wedge d\Bx_3 \), a pseudoscalar (trivector) volume element, and the wedge and dot products take their most general meanings.  For \(k\)-blade \( F \), and \(k'\)-blade \( F' \), that is
+
+\begin{dmath}\label{eqn:stokesCorollariesGriffiths:100}
+\begin{aligned}
+F \wedge F' &= \gpgrade{F F'}{k+k'} \\
+F \cdot F' &= \gpgrade{F F'}{\Abs{k-k'}}
+\end{aligned}
+\end{dmath}
+
+With \( d^3\Bx = I dV \), and \( d^2 \Bx = I \ncap dA = I d\Ba \), we have
+
+\begin{dmath}\label{eqn:stokesCorollariesGriffiths:120}
+\int I dV \spacegrad T = \oint I d\Ba T.
+\end{dmath}
+
+Cancelling the factors of \( I \) proves the result.
+
+Griffith's trick to do this was to let \( \Bv = \Bc T \), where \( \Bc \) is a constant.  For this, the divergence theorem integral is
+
+\begin{dmath}\label{eqn:stokesCorollariesGriffiths:160}
+\begin{aligned}
+\int dV \spacegrad \cdot (\Bc T)
+&=
+\int dV \Bc \cdot \spacegrad T \\
+&=
+\Bc \cdot \int dV \spacegrad T \\
+&=
+\oint d\Ba \cdot (\Bc T) \\
+&=
+\Bc \cdot \oint d\Ba T.
+\end{aligned}
+\end{dmath}
+
+This is true for any constant \( \Bc \), so is also true for the unit vectors.  This allows for summing projections in each of the unit directions
+
+\begin{dmath}\label{eqn:stokesCorollariesGriffiths:180}
+\begin{aligned}
+\int dV \spacegrad T
+&=
+\sum \Be_k \lr{ \Be_k \cdot \int dV \spacegrad T } \\
+&=
+\sum \Be_k \lr{ \Be_k \cdot \oint d\Ba T } \\
+&=
+\oint d\Ba T.\qedmarker
+\end{aligned}
+\end{dmath}
+
+} % answer
+
+\makeoproblem{}{problem:stokesCorollariesGriffiths:2}{\citep{griffiths1999introduction} pr. 1.60b}{
+Prove
+\begin{dmath}\label{eqn:stokesCorollariesGriffiths:40}
+\int \spacegrad \cross \Bv dV = -\oint \Bv \cross d\Ba.
+\end{dmath}
+} % problem
+
+\makeanswer{problem:stokesCorollariesGriffiths:2}{
+This also follows directly from the general Stokes theorem
+
+\begin{dmath}\label{eqn:stokesCorollariesGriffiths:200}
+\int d^3 \Bx \cdot \lr{ \spacegrad \wedge \Bv } = \oint d^2 \Bx \cdot \Bv
+\end{dmath}
+
+The volume integrand is
+
+\begin{dmath}\label{eqn:stokesCorollariesGriffiths:220}
+\begin{aligned}
+d^3 \Bx \cdot \lr{ \spacegrad \wedge \Bv } 
+&=
+\gpgradeone{ I dV I \spacegrad \cross \Bv }  \\
+&=
+-dV \spacegrad \cross \Bv,
+\end{aligned}
+\end{dmath}
+
+and the surface integrand is
+\begin{dmath}\label{eqn:stokesCorollariesGriffiths:240}
+\begin{aligned}
+d^2 \Bx \cdot \Bv
+&=
+\gpgradeone{ I d\Ba \Bv } \\
+&=
+\gpgradeone{ I (d\Ba \wedge \Bv) } \\
+&=
+I^2 (d\Ba \cross \Bv) \\
+&=
+-d\Ba \cross \Bv \\
+&=
+\Bv \cross d\Ba.
+\end{aligned}
+\end{dmath}
+
+Plugging these into \cref{eqn:stokesCorollariesGriffiths:200} proves the result.
+
+Griffiths trick for the same is to apply the divergence theorem to \( \Bv \cross \Bc \).  Such a volume integral is
+
+\begin{dmath}\label{eqn:stokesCorollariesGriffiths:260}
+\begin{aligned}
+\int dV \spacegrad \cdot (\Bv \cross \Bc)
+&=
+\int dV \Bc \cdot (\spacegrad \cross \Bv) \\
+&=
+\Bc \cdot \int dV \spacegrad \cross \Bv.
+\end{aligned}
+\end{dmath}
+
+This must equal
+\begin{dmath}\label{eqn:stokesCorollariesGriffiths:280}
+\begin{aligned}
+\oint d\Ba \cdot (\Bv \cross \Bc)
+&=
+\Bc \cdot \oint d\Ba \cross \Bv \\
+&=
+-\Bc \cdot \oint \Bv \cross d\Ba
+\end{aligned}
+\end{dmath}
+
+Again, assembling projections, we have
+\begin{dmath}\label{eqn:stokesCorollariesGriffiths:300}
+\begin{aligned}
+\int dV \spacegrad \cross \Bv
+&=
+\sum \Be_k \lr{ \Be_k \cdot \int dV \spacegrad \cross \Bv } \\
+&=
+-\sum \Be_k \lr{ \Be_k \cdot \oint \Bv \cross d\Ba } \\
+&=
+-\oint \Bv \cross d\Ba.
+\end{aligned}
+\end{dmath}
+
+} % answer
+
+\makeoproblem{}{problem:stokesCorollariesGriffiths:3}{\citep{griffiths1999introduction} pr. 1.60e}{
+Prove
+\begin{dmath}\label{eqn:stokesCorollariesGriffiths:60}
+\int \spacegrad T \cross d\Ba = -\oint T d\Bl.
+\end{dmath}
+} % problem
+
+\makeanswer{problem:stokesCorollariesGriffiths:3}{
+
+This one follows from
+\begin{dmath}\label{eqn:stokesCorollariesGriffiths:320}
+\int d^2 \Bx \cdot \lr{ \spacegrad \wedge T } = \oint d^1 \Bx \cdot T.
+\end{dmath}
+
+The surface integrand can be written
+\begin{dmath}\label{eqn:stokesCorollariesGriffiths:340}
+\begin{aligned}
+d^2 \Bx \cdot \lr{ \spacegrad \wedge T }
+&=
+\gpgradeone{ I d\Ba \spacegrad T } \\
+&=
+I (d\Ba \wedge \spacegrad T )  \\
+&=
+I^2 ( d\Ba \cross \spacegrad T )  \\
+&=
+-d\Ba \cross \spacegrad T.
+\end{aligned}
+\end{dmath}
+
+The line integrand is
+
+\begin{dmath}\label{eqn:stokesCorollariesGriffiths:360}
+d^1 \Bx \cdot T = d^1 \Bx T.
+\end{dmath}
+
+Given a two parameter representation of the surface area element \( d^2 \Bx = d\Bx_1 \wedge d\Bx_2 \), the line element representation is
+\begin{dmath}\label{eqn:stokesCorollariesGriffiths:380}
+\begin{aligned}
+d^1 \Bx 
+&= (\Bx_1 \wedge d\Bx_2) \cdot \Bx^1 + (d\Bx_1 \wedge \Bx_2) \cdot \Bx^2 \\
+&= -d\Bx_2 + d\Bx_1,
+\end{aligned}
+\end{dmath}
+
+giving
+
+\begin{dmath}\label{eqn:stokesCorollariesGriffiths:400}
+\begin{aligned}
+-\int d\Ba \cross \spacegrad T
+&=
+\int 
+-\evalbar{\lr{ \PD{u_2}{\Bx} T }}{\Delta u_1} du_2
++\evalbar{\lr{ \PD{u_1}{\Bx} T }}{\Delta u_2} du_1 \\
+&=
+-\oint d\Bl T,
+\end{aligned}
+\end{dmath}
+
+or
+\begin{dmath}\label{eqn:stokesCorollariesGriffiths:420}
+\int \spacegrad T \cross d\Ba
+=
+-\oint d\Bl T. \qedmarker
+\end{dmath}
+
+Griffiths trick for the same is to use \( \Bv = \Bc T \) for constant \( \Bc \) in (the usual 3D) Stokes' theorem.  That is
+
+\begin{dmath}\label{eqn:stokesCorollariesGriffiths:440}
+\begin{aligned}
+\int d\Ba \cdot (\spacegrad \cross (\Bc T))
+%=
+%\int d\Ba \cdot (\Bc \cross \spacegrad T)
+&=
+\Bc \cdot \int d\Ba \cross \spacegrad T \\
+&=
+-\Bc \cdot \int \spacegrad T \cross d\Ba \\
+&=
+\oint d\Bl \cdot (\Bc T) \\
+&=
+\Bc \cdot \oint d\Bl T.
+\end{aligned}
+\end{dmath}
+} % answer
+
+Again assembling projections we have
+\begin{dmath}\label{eqn:stokesCorollariesGriffiths:460}
+\begin{aligned}
+\int \spacegrad T \cross d\Ba
+&=
+\sum \Be_k \lr{ \Be_k \cdot \int \spacegrad T \cross d\Ba} \\
+&=
+-\sum \Be_k \lr{ \Be_k \cdot  \oint d\Bl T } \\
+&=
+-\oint d\Bl T.\qedmarker
+\end{aligned}
+\end{dmath}
+
+%It's a bit more work to translate the algebraic enumeration \( d^1 \Bx \) 
+
+%}
+\EndArticle

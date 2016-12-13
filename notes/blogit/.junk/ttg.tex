@@ -1,0 +1,212 @@
+\input{../blogpost.tex}
+\renewcommand{\basename}{transverseGauge}
+\renewcommand{\dirname}{notes/ece1228-electromagnetic-theory/}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+\usepackage{siunitx}
+
+\beginArtNoToc
+
+\generatetitle{Transverse gauge}
+
+Jackson \citep{jackson1975cew} has an interesting presentation of the transverse gauge.  I'd like to walk through the details of this, but first want to translate the preliminaries to SI units (if I had the 3rd edition I'd not have to do this translation step).
+
+\paragraph{Gauge freedom}
+
+The starting point is noting that \( \spacegrad \cdot \BB = 0 \) the magnetic field can be expressed as a curl
+
+\begin{dmath}\label{eqn:transverseGauge:20}
+\BB = \spacegrad \cross \BA.
+\end{dmath}
+
+Faraday's law now takes the form
+\begin{dmath}\label{eqn:transverseGauge:40}
+\begin{aligned}
+0
+&= \spacegrad \cross \BE + \PD{t}{\BB} \\
+&= \spacegrad \cross \BE + \PD{t}{} \lr{ \spacegrad \cross \BA } \\
+&= \spacegrad \cross \lr{ \BE + \PD{t}{\BA} }.
+\end{aligned}
+\end{dmath}
+
+Because this curl is zero, the interior sum can be expressed as a gradient
+
+\begin{dmath}\label{eqn:transverseGauge:60}
+\BE + \PD{t}{\BA} \equiv -\spacegrad \Phi.
+\end{dmath}
+
+This can now be substituted into the remaining two Maxwell's equations.
+
+\begin{dmath}\label{eqn:transverseGauge:80}
+\begin{aligned}
+\spacegrad \cdot \BD &= \rho_v \\
+\spacegrad \cross \BH &= \BJ + \PD{t}{\BD} \\
+\end{aligned}
+\end{dmath}
+
+For Gauss's law, in simple media, we have
+
+\begin{dmath}\label{eqn:transverseGauge:140}
+\begin{aligned}
+\rho_v
+&=
+\epsilon \spacegrad \cdot \BE \\
+&=
+\epsilon \spacegrad \cdot \lr{ -\spacegrad \Phi - \PD{t}{\BA} }
+\end{aligned}
+\end{dmath}
+
+For simple media again, the Ampere-Maxwell equation is
+
+\begin{dmath}\label{eqn:transverseGauge:100}
+\inv{\mu} \spacegrad \cross \lr{ \spacegrad \cross \BA } = \BJ + \epsilon \PD{t}{} \lr{ -\spacegrad \Phi - \PD{t}{\BA} }.
+\end{dmath}
+
+Expanding \( \spacegrad \cross \lr{ \spacegrad \cross \BA } = -\spacegrad^2 \BA + \spacegrad \lr{ \spacegrad \cdot \BA } \) gives
+\begin{dmath}\label{eqn:transverseGauge:120}
+-\spacegrad^2 \BA + \spacegrad \lr{ \spacegrad \cdot \BA } + \epsilon \mu \PDSq{t}{\BA} = \mu \BJ - \epsilon \mu \spacegrad \PD{t}{\Phi}.
+\end{dmath}
+
+Maxwell's equations are now reduced to
+\begin{dmath}\label{eqn:transverseGauge:180}
+\boxed{
+\begin{aligned}
+\spacegrad^2 \BA - \spacegrad \lr{ \spacegrad \cdot \BA + \epsilon \mu \PD{t}{\Phi}} - \epsilon \mu \PDSq{t}{\BA} &= -\mu \BJ \\
+\spacegrad^2 \Phi + \PD{t}{\spacegrad \cdot \BA} &= -\frac{\rho_v }{\epsilon}.
+\end{aligned}
+}
+\end{dmath}
+
+There are two obvious constraints that we can impose
+\begin{equation}\label{eqn:transverseGauge:200}
+\spacegrad \cdot \BA - \epsilon \mu \PD{t}{\Phi} = 0,
+\end{equation}
+
+or
+\begin{equation}\label{eqn:transverseGauge:220}
+\spacegrad \cdot \BA = 0.
+\end{equation}
+
+The first constraint is the Lorentz gauge, which I've played with previously.  It happens to be really nice in a relativistic context since, in vacuum with a four-vector potential \( A = (\Phi/c, \BA) \), that is a requirement that the four-divergence of the four-potential vanishes (\( \partial_\mu A^\mu = 0 \)).
+
+\paragraph{Transverse gauge}
+
+Jackson identifies the latter constraint as the transverse gauge, which I'm less familiar with.  With this gauge selection, we have
+
+\begin{dmath}\label{eqn:transverseGauge:260}
+\spacegrad^2 \BA - \epsilon \mu \PDSq{t}{\BA} = -\mu \BJ + \epsilon\mu \spacegrad \PD{t}{\Phi}
+\end{dmath}
+\begin{dmath}\label{eqn:transverseGauge:280}
+\spacegrad^2 \Phi = -\frac{\rho_v }{\epsilon}.
+\end{dmath}
+
+What's not obvious is the fact that the irrotational (zero curl) contribution due to \(\Phi\) in \cref{eqn:transverseGauge:260} cancels the corresponding irrotational term from the current.  Jackson uses a transverse and longitudinal decomposition of the current, related to the Helmholtz theorem to allude to this.
+
+That decomposition follows from expanding \( \spacegrad^2 J/R \) in two ways using the delta function \( -4 \pi \delta(\Bx - \Bx') = \spacegrad^2 1/R \) representation, as well as directly
+
+\begin{dmath}\label{eqn:transverseGauge:300}
+\begin{aligned}
+- 4 \pi \BJ(\Bx) 
+&=
+\int \spacegrad^2 \frac{\BJ(\Bx')}{\Abs{\Bx - \Bx'}} d^3 x' \\
+&=
+\spacegrad 
+\int \spacegrad \cdot \frac{\BJ(\Bx')}{\Abs{\Bx - \Bx'}} d^3 x'
++
+\spacegrad \cdot
+\int \spacegrad \wedge \frac{\BJ(\Bx')}{\Abs{\Bx - \Bx'}} d^3 x' \\
+&=
+-\spacegrad 
+\int \BJ(\Bx') \cdot \spacegrad' \inv{\Abs{\Bx - \Bx'}} d^3 x'
++
+\spacegrad \cdot \lr{ \spacegrad \wedge
+\int \frac{\BJ(\Bx')}{\Abs{\Bx - \Bx'}} d^3 x'
+} \\
+&=
+-\spacegrad 
+\int \spacegrad' \cdot \frac{\BJ(\Bx')}{\Abs{\Bx - \Bx'}} d^3 x'
++\spacegrad 
+\int \frac{\spacegrad' \cdot \BJ(\Bx')}{\Abs{\Bx - \Bx'}} d^3 x'
+-
+\spacegrad \cross \lr{
+\spacegrad \cross 
+\int \frac{\BJ(\Bx')}{\Abs{\Bx - \Bx'}} d^3 x'
+}
+\end{aligned}
+\end{dmath}
+
+The first term can be converted to a surface integral
+
+\begin{dmath}\label{eqn:transverseGauge:320}
+-\spacegrad 
+\int \spacegrad' \cdot \frac{\BJ(\Bx')}{\Abs{\Bx - \Bx'}} d^3 x'
+=
+-\spacegrad 
+\int d\BA' \cdot \frac{\BJ(\Bx')}{\Abs{\Bx - \Bx'}},
+\end{dmath}
+
+so provided the currents are either localized or \( \Abs{\BJ}/R \rightarrow 0 \) on an infinite sphere, we can make the identification
+
+\begin{equation}\label{eqn:transverseGauge:340}
+\BJ(\Bx) 
+=
+-\spacegrad \inv{4 \pi} \int \frac{\spacegrad' \cdot \BJ(\Bx')}{\Abs{\Bx - \Bx'}} d^3 x'
++
+\spacegrad \cross \spacegrad \cross \inv{4 \pi} \int \frac{\BJ(\Bx')}{\Abs{\Bx - \Bx'}} d^3 x'
+\equiv
+\BJ_l + 
+\BJ_t,
+\end{equation}
+
+where \( \spacegrad \cross \BJ_l = 0 \) (irrotational, or longitudinal), whereas \( \spacegrad \cdot \BJ_t = 0 \) (solenoidal or transverse).  The irrotational property is clear from inspection, and the transverse property can be verified readily
+
+\begin{dmath}\label{eqn:transverseGauge:360}
+\begin{aligned}
+\spacegrad \cdot \lr{ \spacegrad \cross \lr{ \spacegrad \cross \BX } }
+&=
+-\spacegrad \cdot \lr{ \spacegrad \cdot \lr{ \spacegrad \wedge \BX } } \\
+&=
+-\spacegrad \cdot \lr{ \spacegrad^2 \BX - \spacegrad \lr{ \spacegrad \cdot \BX } } \\
+&=
+-\spacegrad \cdot \lr{\spacegrad^2 \BX} + \spacegrad^2 \lr{ \spacegrad \cdot \BX } \\
+&= 0.
+\end{aligned}
+\end{dmath}
+
+Since
+
+\begin{dmath}\label{eqn:transverseGauge:380}
+\Phi(\Bx, t) 
+=
+\inv{4 \pi \epsilon} \int \frac{\rho_v(\Bx', t)}{\Abs{\Bx - \Bx'}} d^3 x',
+\end{dmath}
+
+we have
+
+\begin{dmath}\label{eqn:transverseGauge:400}
+\begin{aligned}
+\spacegrad \PD{t}{\Phi}
+&=
+\inv{4 \pi \epsilon} \spacegrad \int \frac{\partial_t \rho_v(\Bx', t)}{\Abs{\Bx - \Bx'}} d^3 x' \\
+&=
+\inv{4 \pi \epsilon} \spacegrad \int \frac{-\spacegrad' \cdot \BJ}{\Abs{\Bx - \Bx'}} d^3 x' \\
+&=
+\frac{\BJ_l}{\epsilon}.
+\end{aligned}
+\end{dmath}
+
+This means that the Ampere-Maxwell equation takes the form
+
+\begin{equation}\label{eqn:transverseGauge:420}
+\spacegrad^2 \BA - \epsilon \mu \PDSq{t}{\BA} 
+= -\mu \BJ + \mu \BJ_l
+= -\mu \BJ_t.
+\end{equation}
+
+This justifies the ``transverse'' in the label transverse gauge.
+
+\EndArticle

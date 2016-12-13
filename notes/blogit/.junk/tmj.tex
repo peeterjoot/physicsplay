@@ -1,0 +1,229 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+%{
+\input{../blogpost.tex}
+\renewcommand{\basename}{magneticMomentJackson}
+%\renewcommand{\dirname}{notes/phy1520/}
+\renewcommand{\dirname}{notes/ece1228-electromagnetic-theory/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+\usepackage{siunitx}
+%\usepackage{txfonts} % \ointclockwise
+
+\beginArtNoToc
+
+\generatetitle{Magnetic moment for a localized magnetostatic current}
+%\chapter{Magnetic moment for a localized magnetostatic current}
+%\label{chap:magneticMomentJackson}
+% \citep{sakurai2014modern} pr X.Y
+% \citep{pozar2009microwave}
+% \citep{qftLectureNotes}
+% \citep{doran2003gap}
+\paragraph{Motivation.}
+
+I was once again reading my Jackson \citep{jackson1975cew}.  This time I found that his 
+presentation of magnetic moment didn't really make sense to me.  Here's my own pass through it, filling in a number of details.  As I did last time, I'll also translate into SI units as I go.
+
+\paragraph{Vector potential.}
+
+The Biot-Savart expression for the magnetic field can be factored into a curl expression using the usual tricks
+
+\begin{dmath}\label{eqn:magneticMomentJackson:20}
+\begin{aligned}
+\BB 
+&= \frac{\mu_0}{4\pi} \int \frac{\BJ(\Bx') \cross (\Bx - \Bx')}{\Abs{\Bx - \Bx'}^3} d^3 x' \\
+&= -\frac{\mu_0}{4\pi} \int \BJ(\Bx') \cross \spacegrad \inv{\Abs{\Bx - \Bx'}} d^3 x' \\
+&= \frac{\mu_0}{4\pi} \spacegrad \cross \int \frac{\BJ(\Bx')}{\Abs{\Bx - \Bx'}} d^3 x',
+\end{aligned}
+\end{dmath}
+
+so the vector potential, through its curl, defines the magnetic field \( \BB = \spacegrad \cross \BA \) is given by
+
+\begin{dmath}\label{eqn:magneticMomentJackson:40}
+\BA(\Bx) = \frac{\mu_0}{4 \pi} \int \frac{J(\Bx')}{\Abs{\Bx - \Bx'}} d^3 x'.
+\end{dmath}
+
+If the current source is localized (zero outside of some finite region), then there will always be a region for which \( \Abs{\Bx} \gg \Abs{\Bx'} \), so the denominator yields to Taylor expansion
+
+\begin{dmath}\label{eqn:magneticMomentJackson:60}
+\begin{aligned}
+\inv{\Abs{\Bx - \Bx'}}
+&=
+\inv{\Abs{\Bx}} \lr{1 + \frac{\Abs{\Bx'}^2}{\Abs{\Bx}^2} - 2 \frac{\Bx \cdot \Bx'}{\Abs{\Bx}^2} }^{-1/2}
+\approx
+\inv{\Abs{\Bx}} \lr{ 1 + \frac{\Bx \cdot \Bx'}{\Abs{\Bx}^2} } \\
+&=
+\inv{\Abs{\Bx}} + \frac{\Bx \cdot \Bx'}{\Abs{\Bx}^3}.
+\end{aligned}
+\end{dmath}
+
+so the vector potential, far enough away from the current source is
+\begin{dmath}\label{eqn:magneticMomentJackson:80}
+\BB(\Bx) 
+=
+\frac{\mu_0}{4 \pi} \int \frac{J(\Bx')}{\Abs{\Bx}} d^3 x'
++\frac{\mu_0}{4 \pi} \int \frac{(\Bx \cdot \Bx')J(\Bx')}{\Abs{\Bx}^3} d^3 x'.
+\end{dmath}
+
+Jackson uses a sneaky trick to show that the first integral is killed for a localized source.  That trick appears to be based on evaluating the following divergence
+
+\begin{dmath}\label{eqn:magneticMomentJackson:100}
+\begin{aligned}
+\spacegrad \cdot (\BJ(\Bx) x_i)
+&=
+(\spacegrad \cdot \BJ) x_i
++
+(\spacegrad x_i) \cdot \BJ \\
+&=
+(\Be_k \partial_k x_i) \cdot\BJ \\
+&=
+\delta_{ki} J_k \\
+&=
+J_i.
+\end{aligned}
+\end{dmath}
+
+Note that this made use of the fact that \( \spacegrad \cdot \BJ = 0 \) for magnetostatics.  This provides a way to rewrite the current density as a divergence
+
+\begin{dmath}\label{eqn:magneticMomentJackson:120}
+\begin{aligned}
+\int \frac{J(\Bx')}{\Abs{\Bx}} d^3 x'
+&=
+\Be_i \int \frac{\spacegrad' \cdot (x_i' \BJ(\Bx'))}{\Abs{\Bx}} d^3 x' \\
+&=
+\frac{\Be_i}{\Abs{\Bx}} \int \spacegrad' \cdot (x_i' \BJ(\Bx')) d^3 x' \\
+&=
+\frac{1}{\Abs{\Bx}} \oint \Bx' (d\Ba \cdot \BJ(\Bx')).
+\end{aligned}
+\end{dmath}
+
+When \( \BJ \) is localized, this is zero provided we pick the integration surface for the volume outside of that localization region.
+
+It is now desired to rewrite \( \int \Bx \cdot \Bx' \BJ \) as a triple cross product since the dot product of such a triple cross product has exactly this term in it
+
+\begin{dmath}\label{eqn:magneticMomentJackson:140}
+\begin{aligned}
+- \Bx \cross \int \Bx' \cross \BJ
+&=
+\int (\Bx \cdot \Bx') \BJ
+-
+\int (\Bx \cdot \BJ) \Bx' \\
+&=
+\int (\Bx \cdot \Bx') \BJ 
+-
+\Be_k x_i \int J_i x_k',
+\end{aligned}
+\end{dmath}
+
+so
+\begin{dmath}\label{eqn:magneticMomentJackson:160}
+\int (\Bx \cdot \Bx') \BJ
+=
+- \Bx \cross \int \Bx' \cross \BJ
++
+\Be_k x_i \int J_i x_k'.
+\end{dmath}
+
+To get of this second term, the next sneaky trick is to consider the following divergence
+
+\begin{dmath}\label{eqn:magneticMomentJackson:180}
+\begin{aligned}
+\oint d\Ba' \cdot (\BJ(\Bx') x_i' x_j')
+&=
+\int dV' \spacegrad' \cdot (\BJ(\Bx') x_i' x_j') \\
+&=
+\int dV' (\spacegrad' \cdot \BJ)
++
+\int dV' \BJ \cdot \spacegrad' (x_i' x_j') \\
+&=
+\int dV' J_k \cdot \lr{ x_i' \partial_k x_j' + x_j' \partial_k x_i' } \\
+&=
+\int dV' J_k x_i' \delta_{kj} + J_k x_j' \delta_{ki} \\
+&=
+\int dV' J_j x_i' + J_i x_j'.
+\end{aligned}
+\end{dmath}
+
+The surface integral is once again zero, which means that we have an antisymmetric relationship in integrals of the form
+
+\begin{dmath}\label{eqn:magneticMomentJackson:200}
+\int J_j x_i' = -\int J_i x_j'.
+\end{dmath}
+
+Now we can use the tensor algebra trick of writing \( y = (y + y)/2 \),
+
+\begin{dmath}\label{eqn:magneticMomentJackson:220}
+\begin{aligned}
+\int (\Bx \cdot \Bx') \BJ
+&=
+- \Bx \cross \int \Bx' \cross \BJ
++
+\Be_k x_i \int J_i x_k' \\
+&=
+- \Bx \cross \int \Bx' \cross \BJ
++
+\inv{2} \Be_k x_i \int \lr{ J_i x_k' + J_i x_k' } \\
+&=
+- \Bx \cross \int \Bx' \cross \BJ
++
+\inv{2} \Be_k x_i \int \lr{ J_i x_k' - J_k x_i' } \\
+&=
+- \Bx \cross \int \Bx' \cross \BJ
++
+\inv{2} \Be_k x_i \int (\BJ \cross \Bx')_j \epsilon_{ikj} \\
+&=
+- \Bx \cross \int \Bx' \cross \BJ
+-
+\inv{2} \epsilon_{kij} \Be_k x_i \int (\BJ \cross \Bx')_j  \\
+&=
+- \Bx \cross \int \Bx' \cross \BJ
+-
+\inv{2} \Bx \cross \int \BJ \cross \Bx' \\
+&=
+- \Bx \cross \int \Bx' \cross \BJ
++
+\inv{2} \Bx \cross \int \Bx' \cross \BJ \\
+&=
+-\inv{2} \Bx \cross \int \Bx' \cross \BJ,
+\end{aligned}
+\end{dmath}
+
+so
+
+\begin{dmath}\label{eqn:magneticMomentJackson:240}
+\BA(\Bx) \approx \frac{\mu_0}{4 \pi \Abs{\Bx}^3} \lr{ -\frac{\Bx}{2} } \int \Bx' \cross \BJ(\Bx') d^3 x'.
+\end{dmath}
+
+Letting 
+
+\begin{dmath}\label{eqn:magneticMomentJackson:260}
+\boxed{
+\Bm = \inv{2} \int \Bx' \cross \BJ(\Bx') d^3 x',
+}
+\end{dmath}
+
+the far field approximation of the vector potential is
+\begin{dmath}\label{eqn:magneticMomentJackson:280}
+\boxed{
+\BA(\Bx) = \frac{\mu_0}{4 \pi} \frac{\Bm \cross \Bx}{\Abs{\Bx}^3}.
+}
+\end{dmath}
+
+Note that when the current is restricted to an infintisimally thin loop, the magnetic moment reduces to
+
+\begin{dmath}\label{eqn:magneticMomentJackson:300}
+\Bm(\Bx) = \frac{I}{2} \int \Bx \cross d\Bl'.
+\end{dmath}
+
+Refering to \citep{griffiths1999introduction} (pr. 1.60), this can be seen to be \( I \) times the ``vector-area'' integral.
+
+%}
+\EndArticle

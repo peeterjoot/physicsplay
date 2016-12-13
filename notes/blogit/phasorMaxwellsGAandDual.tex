@@ -1,0 +1,369 @@
+%
+% Copyright © 2015 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\input{../blogpost.tex}
+\renewcommand{\basename}{phasorMaxwellsGAandDual}
+\renewcommand{\dirname}{notes/ece1229/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{ece1229}
+
+\beginArtNoToc
+
+\generatetitle{Maxwell's (phasor) equations in Geometric Algebra}
+\index{Geometric Algebra}
+\index{Maxwell equation}
+\index{Maxwell's equation}
+\index{Maxwell equation!phasor}
+%\chapter{Maxwell's (phasor) equations in Geometric Algebra}
+%\label{chap:phasorMaxwellsGAandDual}
+\section{Motivation}
+
+In \citep{balanis2005antenna} \S 3.2 is a demonstration of the required (curl) form for the magnetic field, and potential form for the electric field.  Then in \S 3.3, is a treatment of magnetic charges and currents, but no electric charges and currents, which demonstration of the required (curl) form for the electric field, and potential form for the electric field (dual-Maxwell equations).
+
+I was wondering how this derivation would proceed using the Geometric Algebra (GA) formalism.
+
+\section{Maxwell's equation in GA phasor form}
+
+Maxwell's equations, omitting magnetic charges and currents, are
+\index{electric charge density}
+\index{electric current density}
+\index{magnetic charge density}
+\index{magnetic current density}
+
+\begin{subequations}
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:20}
+\spacegrad \cross \bcE = -\PD{t}{\bcB} -\bcM
+\end{dmath}
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:40}
+\spacegrad \cross \bcH = \bcJ + \PD{t}{\bcD}
+\end{dmath}
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:60}
+\spacegrad \cdot \bcD = \rho
+\end{dmath}
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:80}
+\spacegrad \cdot \bcB = \rho_m.
+\end{dmath}
+\end{subequations}
+
+Assuming linear media \( \bcB = \mu_0 \bcH \), \( \bcD = \epsilon_0 \bcE \), and phasor relationships of the form \( \bcE = \Real \lr{ \BE(\Br) e^{j \omega t}} \) for the fields and the currents, these reduce to
+\index{linear media}
+
+\begin{subequations}
+\label{eqn:phasorMaxwellsGAandDual:99}
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:100}
+\spacegrad \cross \BE = - j \omega \BB -\BM
+\end{dmath}
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:120}
+\spacegrad \cross \BB = \mu_0 \BJ + j \omega \epsilon_0 \mu_0 \BE
+\end{dmath}
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:140}
+\spacegrad \cdot \BE = \rho/\epsilon_0
+\end{dmath}
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:160}
+\spacegrad \cdot \BB = \rho_m.
+\end{dmath}
+\end{subequations}
+
+These four equations can be assembled into a single equation form using the GA identities
+
+\begin{subequations}
+\label{eqn:phasorMaxwellsGAandDual:180}
+\begin{equation}\label{eqn:phasorMaxwellsGAandDual:200}
+\Bf \Bg 
+= \Bf \cdot \Bg + \Bf \wedge \Bg
+= \Bf \cdot \Bg + I \Bf \cross \Bg.
+\end{equation}
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:220}
+I = \xcap \ycap \zcap.
+\end{dmath}
+\end{subequations}
+\index{wedge product!relation to cross product}
+\index{geometric product}
+
+The electric and magnetic field equations, respectively, are
+
+\begin{subequations}
+\label{eqn:phasorMaxwellsGAandDual:240}
+\begin{equation}\label{eqn:phasorMaxwellsGAandDual:260}
+\spacegrad \BE = \rho/\epsilon_0 - \lr{ \BM + j k c \BB} I
+\end{equation}
+\begin{equation}\label{eqn:phasorMaxwellsGAandDual:280}
+\spacegrad c \BB = c \rho_\txtm + \frac{I}{\epsilon_0 c} \BJ + j k \BE I
+\end{equation}
+\end{subequations}
+
+where \( \omega = k c \), and \( 1 = c^2 \epsilon_0 \mu_0 \) have also been used to eliminate some of the mess of constants.
+
+Summing these (first scaling \cref{eqn:phasorMaxwellsGAandDual:280} by \( I \)), gives Maxwell's equation in its GA phasor form
+
+\boxedEquation{eqn:phasorMaxwellsGAandDual:300}{
+%\begin{equation}\label{eqn:phasorMaxwellsGAandDual:300}
+\lr{ \spacegrad + j k } \lr{ \BE + c \BB I } = \inv{\epsilon_0 c}\lr{c \rho_\txtm - \BJ} + \lr{c \rho - \BM} I.
+%\end{equation}
+}
+\index{Maxwell's equation!non-covariant GA form}
+
+\section{Preliminaries.  Dual magnetic form of Maxwell's equations}
+
+The arguments of the text showing that a potential representation for the electric and magnetic fields is possible easily translates into GA.  To perform this translation, some duality lemmas are required
+
+First consider the cross product of two vectors \( \Bx, \By \) and the right handed dual \( -\By I \) of \( \By \), a bivector, of one of these vectors.  Noting that the Euclidean pseudoscalar \( I \) commutes with all grade multivectors in a Euclidean geometric algebra space, the cross product can be written
+\index{pseudoscalar}
+
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:320}
+\lr{ \Bx \cross \By } 
+= 
+-I \lr{ \Bx \wedge \By }
+= 
+-I \inv{2} \lr{ \Bx \By - \By \Bx }
+%= 
+%- \inv{2} \lr{ \Bx \By I - \By I \Bx }
+= 
+\inv{2} \lr{ \Bx (-\By I) - (-\By I) \Bx }
+= 
+\Bx \cdot \lr{ -\By I }.
+\end{dmath}
+\index{cross product!duality}
+\index{wedge product}
+
+The last step makes use of the fact that the wedge product of a vector and vector is antisymmetric, whereas the dot product (vector grade selection) of a vector and bivector is antisymmetric.  Details on grade selection operators and how to characterize symmetric and antisymmetric products of vectors with blades as either dot or wedge products can be found in \citep{hestenes1999nfc}, \citep{doran2003gap}.
+
+Similarly, the dual of the dot product can be written as
+\index{dot product!dual}
+
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:440}
+-I \lr{ \Bx \cdot \By }
+= 
+-I \inv{2} \lr{ \Bx \By + \By \Bx }
+= 
+\inv{2} \lr{ \Bx (-\By I) + (-\By I) \Bx }
+= 
+\Bx \wedge \lr{ -\By I }.
+\end{dmath}
+
+These duality transformations are motivated by the observation that in the GA form of Maxwell's equation the magnetic field shows up in its dual form, a bivector.  Spelled out in terms of the dual magnetic field, those equations are
+\index{bivector}
+
+\begin{subequations}
+\label{eqn:phasorMaxwellsGAandDual:340}
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:360}
+\spacegrad \wedge \BE = - j \omega \BB I
+\end{dmath}
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:380}
+\spacegrad \cdot \lr{ -\BB I } = \mu_0 \BJ + j \omega \epsilon_0 \mu_0 \BE
+\end{dmath}
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:400}
+\spacegrad \cdot \BE = \rho/\epsilon_0
+\end{dmath}
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:420}
+\spacegrad \wedge (-\BB I) = 0.
+\end{dmath}
+\end{subequations}
+
+\section{Constructing a potential representation}
+
+The starting point of the argument in the text was the observation that the triple product \( \spacegrad \cdot \lr{ \spacegrad \cross \Bx } = 0 \) for any (sufficiently continuous) vector \( \Bx \).  This triple product is a completely antisymmetric sum, and the equivalent statement in GA is \( \spacegrad \wedge \spacegrad \wedge \Bx = 0 \) for any vector \( \Bx \).  This follows from \( \Ba \wedge \Ba = 0 \), true for any vector \( \Ba \), including the gradient operator \( \spacegrad \), provided those gradients are acting on a sufficiently continuous blade.
+\index{triple product}
+
+In the absence of magnetic charges, 
+\cref{eqn:phasorMaxwellsGAandDual:420} shows that the divergence of the dual magnetic field is zero.  It it therefore possible to find a potential \( \BA \) such that
+\index{divergence}
+
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:460}
+\BB I = \spacegrad \wedge \BA.
+\end{dmath}
+
+Substituting this into Maxwell-Faraday \cref{eqn:phasorMaxwellsGAandDual:360} gives
+
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:480}
+\spacegrad \wedge \lr{ \BE + j \omega \BA } = 0.
+\end{dmath}
+
+This relation is a bivector identity with zero, so will be satisfied if 
+
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:500}
+\BE + j \omega \BA = -\spacegrad \phi,
+\end{dmath}
+
+for some scalar \( \phi \).  Unlike the \( \BB I = \spacegrad \wedge \BA \) solution to \cref{eqn:phasorMaxwellsGAandDual:420}, the grade of \( \phi \) is fixed by the requirement that \( \BE + j \omega \BA \) is unity (a vector), so
+a \( \BE + j \omega \BA = \spacegrad \wedge \psi \), for a higher grade blade \( \psi \) would not work, despite satisfying the condition \( \spacegrad \wedge \spacegrad \wedge \psi  = 0 \).
+
+Substitution of \cref{eqn:phasorMaxwellsGAandDual:500} and \cref{eqn:phasorMaxwellsGAandDual:460} into Ampere's law \cref{eqn:phasorMaxwellsGAandDual:380} gives
+\index{Ampere's law}
+
+\begin{equation}\label{eqn:phasorMaxwellsGAandDual:520}
+\begin{aligned}
+-\spacegrad \cdot \lr{ \spacegrad \wedge \BA } &= \mu_0 \BJ + j \omega \epsilon_0 \mu_0 \lr{ -\spacegrad \phi -j \omega \BA } \\
+-\spacegrad^2 \BA - \spacegrad \lr{\spacegrad \cdot \BA} &=
+\end{aligned}
+\end{equation}
+
+Rearranging gives
+
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:540}
+\spacegrad^2 \BA + k^2 \BA = -\mu_0 \BJ - \spacegrad \lr{ \spacegrad \cdot \BA + j \frac{k}{c} \phi }.
+\end{dmath}
+
+The fields \( \BA \) and \( \phi \) are assumed to be phasors, say \( \bcA = \Real \BA e^{j k c t} \) and \( \varphi = \Real \phi e^{j k c t} \).  Grouping the scalar and vector potentials into the standard four vector form
+\index{phasor}
+\( A^\mu = \lr{\phi/c, \BA} \), and expanding the Lorentz gauge condition
+\index{Lorentz gauge}
+
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:580}
+0 
+= \partial_\mu \lr{ A^\mu e^{j k c t}}
+= \partial_a \lr{ A^a e^{j k c t}} + \inv{c}\PD{t}{} \lr{ \frac{\phi}{c} e^{j k c t}}
+= \spacegrad \cdot \BA e^{j k c t} + \inv{c} j k \phi e^{j k c t}
+= \lr{ \spacegrad \cdot \BA + j k \phi/c } e^{j k c t},
+\end{dmath}
+
+shows that in
+\cref{eqn:phasorMaxwellsGAandDual:540}
+the quantity in braces is in fact the Lorentz gauge condition, so in the Lorentz gauge, the vector potential satisfies a non-homogeneous Helmholtz equation.
+\index{Helmholtz equation!non-homogeneous}
+
+\boxedEquation{eqn:phasorMaxwellsGAandDual:550}{
+%\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:550}
+\spacegrad^2 \BA + k^2 \BA = -\mu_0 \BJ.
+%\end{dmath}
+}
+
+\section{Maxwell's equation in Four vector form}
+\index{four vector}
+
+The four vector form of Maxwell's equation follows from \cref{eqn:phasorMaxwellsGAandDual:300} after pre-multiplying by \( \gamma^0 \).
+
+With 
+\begin{subequations}
+\label{eqn:phasorMaxwellsGAandDual:600}
+\begin{equation}\label{eqn:phasorMaxwellsGAandDual:620}
+A = A^\mu \gamma_\mu = \lr{ \phi/c, \BA }
+\end{equation}
+\begin{equation}\label{eqn:phasorMaxwellsGAandDual:640}
+F = \grad \wedge A = \inv{c} \lr{ \BE + c \BB I }
+\end{equation}
+\begin{equation}\label{eqn:phasorMaxwellsGAandDual:660}
+\grad = \gamma^\mu \partial_\mu = \gamma^0 \lr{ \spacegrad + j k }
+\end{equation}
+\begin{equation}\label{eqn:phasorMaxwellsGAandDual:680}
+J = J^\mu \gamma_\mu = \lr{ c \rho, \BJ },
+\end{equation}
+\end{subequations}
+
+Maxwell's equation is
+\index{spacetime gradient}
+
+\boxedEquation{eqn:phasorMaxwellsGAandDual:700}{
+%\begin{boxed}\label{eqn:phasorMaxwellsGAandDual:720}
+\grad F = \mu_0 J.
+%\end{boxed}
+}
+
+Here \( \setlr{ \gamma_\mu } \) is used as the basis of the four vector Minkowski space, with \( \gamma_0^2 = -\gamma_k^2 = 1 \) (i.e. \(\gamma^\mu \cdot \gamma_\nu = {\delta^\mu}_\nu \)), and \( \gamma_a \gamma_0 = \sigma_a \) where \( \setlr{ \sigma_a} \) is the Pauli basic (i.e. standard basis vectors for \R{3}).
+\index{Minkowski space}
+
+Let's demonstrate this, one piece at a time.  Observe that the action of the spacetime gradient on a phasor, assuming that all time dependence is in the exponential, is
+
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:740}
+\gamma^\mu \partial_\mu \lr{ \psi e^{j k c t} }
+= 
+\lr{ \gamma^a \partial_a + \gamma_0 \partial_{c t} } \lr{ \psi e^{j k c t} }
+= 
+\gamma_0 \lr{ \gamma_0 \gamma^a \partial_a + j k } \lr{ \psi e^{j k c t} }
+= 
+\gamma_0 \lr{ \sigma_a \partial_a + j k } \psi e^{j k c t}
+= 
+\gamma_0 \lr{ \spacegrad + j k } \psi e^{j k c t}
+\end{dmath}
+
+This allows the operator identification of \cref{eqn:phasorMaxwellsGAandDual:660}.  The four current portion of the equation comes from
+\index{four current}
+
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:760}
+c \rho - \BJ 
+= 
+\gamma_0 \lr{ \gamma_0 c \rho - \gamma_0 \gamma_a \gamma_0 J^a }
+= 
+\gamma_0 \lr{ \gamma_0 c \rho + \gamma_a J^a }
+= 
+\gamma_0 \lr{ \gamma_\mu J^\mu }
+= \gamma_0 J.
+\end{dmath}
+
+Taking the curl of the four potential gives
+\index{curl!four vector}
+
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:780}
+\grad \wedge A 
+=
+\lr{ \gamma^a \partial_a + \gamma_0 j k } \wedge \lr{ \gamma_0 \phi/c + \gamma_b A^b }
+=
+- \sigma_a \partial_a \phi/c + \gamma^a \wedge \gamma_b \partial_a A^b - j k \sigma_b A^b
+=
+- \sigma_a \partial_a \phi/c + \sigma_a \wedge \sigma_b \partial_a A^b - j k \sigma_b A^b
+= \inv{c} \lr{ - \spacegrad \phi - j \omega \BA + c \spacegrad \wedge \BA }
+= \inv{c} \lr{ \BE + c \BB I }.
+\end{dmath}
+
+Substituting all of these into Maxwell's \cref{eqn:phasorMaxwellsGAandDual:300} gives
+
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:800}
+\gamma_0 \grad c F = \inv{ \epsilon_0 c } \gamma_0 J,
+\end{dmath}
+
+which recovers \cref{eqn:phasorMaxwellsGAandDual:700} as desired.
+
+\section{Helmholtz equation directly from the GA form}
+\index{Helmholtz equation}
+
+It is easier to find \cref{eqn:phasorMaxwellsGAandDual:550} from the GA form of Maxwell's \cref{eqn:phasorMaxwellsGAandDual:700} than the traditional curl and divergence equations.  Note that
+
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:820}
+\grad F 
+=
+\grad \lr{ \grad \wedge A }
+=
+\grad \cdot \lr{ \grad \wedge A }
++
+\cancel{\grad \wedge \lr{ \grad \wedge A }}
+=
+\grad^2 A - \grad \lr{ \grad \cdot A },
+\end{dmath}
+
+however, the Lorentz gauge condition \( \partial_\mu A^\mu = \grad \cdot A = 0 \) kills the latter term above.  This leaves
+\index{Lorentz gauge}
+
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:840}
+\grad F 
+=
+\grad^2 A
+=
+\gamma_0 \lr{ \spacegrad + j k }
+\gamma_0 \lr{ \spacegrad + j k } A
+=
+\gamma_0^2 \lr{ -\spacegrad + j k }
+\lr{ \spacegrad + j k } A
+=
+-\lr{ \spacegrad^2 + k^2 } A = \mu_0 J.
+\end{dmath}
+
+The timelike component of this gives
+
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:860}
+\lr{ \spacegrad^2 + k^2 } \phi = -\rho/\epsilon_0,
+\end{dmath}
+
+and the spacelike components give
+
+\begin{dmath}\label{eqn:phasorMaxwellsGAandDual:880}
+\lr{ \spacegrad^2 + k^2 } \BA = -\mu_0 \BJ,
+\end{dmath}
+
+recovering \cref{eqn:phasorMaxwellsGAandDual:550} as desired.
+
+\EndArticle

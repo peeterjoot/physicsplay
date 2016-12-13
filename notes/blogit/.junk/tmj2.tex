@@ -1,0 +1,217 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+%{
+\input{../blogpost.tex}
+\renewcommand{\basename}{magnetostaticsJacksonNotesForceAndTorque}
+%\renewcommand{\dirname}{notes/phy1520/}
+\renewcommand{\dirname}{notes/ece1228-electromagnetic-theory/}
+%\newcommand{\dateintitle}{}
+%\newcommand{\keywords}{}
+
+\input{../peeter_prologue_print2.tex}
+
+\usepackage{peeters_layout_exercise}
+\usepackage{peeters_braket}
+\usepackage{peeters_figures}
+\usepackage{siunitx}
+%\usepackage{txfonts} % \ointclockwise
+
+\beginArtNoToc
+
+\generatetitle{Magnetostatic force and torque}
+%\chapter{Magnetostatic force and torque}
+
+%\label{chap:magnetostaticsJacksonNotesForceAndTorque}
+% \citep{sakurai2014modern} pr X.Y
+% \citep{pozar2009microwave}
+% \citep{qftLectureNotes}
+% \citep{doran2003gap}
+% \citep{jackson1975cew}
+% \citep{griffiths1999introduction}
+
+In Jackson \citep{jackson1975cew}, the following equations for the vector potential, magnetostatic force and torque are derived
+
+\begin{dmath}\label{eqn:magnetostaticsJacksonNotesForceAndTorque:20}
+\Bm = \inv{2} \int \Bx' \cross \BJ(\Bx') d^3 x'
+\end{dmath}
+\begin{dmath}\label{eqn:magnetostaticsJacksonNotesForceAndTorque:40}
+\BF = \spacegrad( \Bm \cdot \BB ),
+\end{dmath}
+\begin{dmath}\label{eqn:magnetostaticsJacksonNotesForceAndTorque:60}
+\BN = \Bm \cross \BB,
+\end{dmath}
+
+where \( \BB \) is an applied external magnetic field and \( \Bm \) is the magnetic dipole for the current in question.  These results (and a similar one derived earlier for the vector potential \( \BA \)) all follow from 
+an analysis of localized current densities \( \BJ \), evaluated far enough away from the current sources.
+
+For the force and torque, the starting point for the force is one that had me puzzled a bit.  Namely
+
+\begin{dmath}\label{eqn:magnetostaticsJacksonNotesForceAndTorque:80}
+\BF = \int \BJ(\Bx) \cross \BB(\Bx) d^3 x
+\end{dmath}
+
+This is clearly the continuum generalization of the point particle Lorentz force equation, which for \( \BE = 0 \) is:
+
+\begin{dmath}\label{eqn:magnetostaticsJacksonNotesForceAndTorque:100}
+\BF = q \Bv \cross \BB
+\end{dmath}
+
+For the point particle, this is the force on the particle when it is in the external field \( BB \).  i.e. this is the force at the position of the particle.  My question is what does it mean to sum all the forces on the charge distribution over all space.
+How can a force be applied over all, as opposed to a force applied at a single point, or against a surface?
+
+In the special case of a localized current density, this makes some sense.  Considering the other half of the force equation \( \BF = \ddt{}\int \rho_m \Bv dV \), where \( \rho_m \) here is mass density of the charged particles making up the continuous current distribution.  The other half of this \( \BF = m\Ba \) equation is also an average phenomena, so we have an average of sorts on both the field contribution to the force equation and the mass contribution to the force equation.  There is probably a centre-of-mass and centre-of-current density interpretation that would make a bit more sense of this continuum force description.
+
+It's kind of funny how you can work through all the detailed mathematical steps in a book like Jackson, but then go right back to the beginning and say ``Hey, what does that even mean''?
+
+\paragraph{Force}
+
+Moving on from the pondering of the meaning of the equation being manipulated, let's do the easy part, the derivation of the results that Jackson comes up with.
+
+Writing out \cref{eqn:magnetostaticsJacksonNotesForceAndTorque:80} in coordinates
+
+\begin{dmath}\label{eqn:magnetostaticsJacksonNotesForceAndTorque:320}
+\BF = \epsilon_{ijk} \Be_i \int J_j B_k d^3 x.
+\end{dmath}
+
+To first order, a slowly varying (external) magnetic field can be expanded around a point of interest
+
+\begin{dmath}\label{eqn:magnetostaticsJacksonNotesForceAndTorque:120}
+\BB(\Bx) = \BB(\Bx_0) + \lr{ \Bx - \Bx_0 } \cdot \spacegrad \BB,
+\end{dmath}
+
+where the directional derivative is evaluated at the point \( \Bx_0 \) after the gradient operation.  Setting the origin at this point \( \Bx_0 \) gives
+
+\begin{dmath}\label{eqn:magnetostaticsJacksonNotesForceAndTorque:340}
+\begin{aligned}
+\BF 
+&= \epsilon_{ijk} \Be_i 
+\lr{
+\int J_j(\Bx') B_k(0) d^3 x'
++
+\int J_j(\Bx') (\Bx' \cdot \spacegrad) B_k(0) d^3 x'
+} \\
+&= 
+\epsilon_{ijk} \Be_i 
+\Bk_0 \int J_j(\Bx') d^3 x'
++
+\epsilon_{ijk} \Be_i 
+\int J_j(\Bx') (\Bx' \cdot \spacegrad) B_k(0) d^3 x'.
+\end{aligned}
+\end{dmath}
+
+We found 
+%FIXME: in \cref{eqn:magneticMomentJackson:100}
+earlier
+that the first integral can be written as a divergence
+
+\begin{dmath}\label{eqn:magnetostaticsJacksonNotesForceAndTorque:140}
+\int J_j(\Bx') d^3 x' 
+=
+\int \spacegrad' \cdot \lr{ \BJ(\Bx') x_j' } dV',
+\end{dmath}
+
+which is zero when the integration surface is outside of the current localization region.  We also found
+%FIXME: \cref{eqn:magneticMomentJackson:220}
+that
+
+\begin{equation}\label{eqn:magnetostaticsJacksonNotesForceAndTorque:160}
+\int (\Bx \cdot \Bx') \BJ
+= -\inv{2} \Bx \cross \int \Bx' \cross \BJ = \Bm \cross \Bx.
+\end{equation}
+
+so
+\begin{dmath}\label{eqn:magnetostaticsJacksonNotesForceAndTorque:180}
+\begin{aligned}
+\int (\spacegrad B_k(0) \cdot \Bx') J_j
+&= -\inv{2} \lr{ \spacegrad B_k(0) \cross \int \Bx' \cross \BJ}_j \\
+&= \lr{ \Bm \cross (\spacegrad B_k(0)) }_j.
+\end{aligned}
+\end{dmath}
+
+This gives
+
+\begin{dmath}\label{eqn:magnetostaticsJacksonNotesForceAndTorque:200}
+\begin{aligned}
+\BF 
+&= \epsilon_{ijk} \Be_i \lr{ \Bm \cross (\spacegrad B_k(0)) }_j \\
+&= \epsilon_{ijk} \Be_i \lr{ \Bm \cross \spacegrad }_j B_k(0) \\
+&= (\Bm \cross \spacegrad) \cross \BB(0) \\
+&= -\BB(0) \cross (\Bm \cross \lspacegrad) \\
+&= (\BB(0) \cdot \Bm) \lspacegrad - (\BB \cdot \lspacegrad) \Bm \\
+&= \spacegrad (\BB(0) \cdot \Bm) - \Bm (\spacegrad \cdot \BB(0)).
+\end{aligned}
+\end{dmath}
+
+The second term is killed by the magnetic Gauss's law, leaving to first order
+
+\begin{dmath}\label{eqn:magnetostaticsJacksonNotesForceAndTorque:220}
+\BF = \spacegrad \lr{\Bm \cdot \BB}.
+\end{dmath}
+
+\paragraph{Torque}
+
+For the torque we have a similar quandary at the starting point.  About what point is a continuum torque integral of the following form
+
+\begin{dmath}\label{eqn:magnetostaticsJacksonNotesForceAndTorque:240}
+\BN = \int \Bx' \cross (\BJ(\Bx') \cross \BB(\Bx')) d^3 x'?
+\end{dmath}
+
+Ignoring that detail again, assuming the answer has something to do with the centre of mass and parallel axis theorem, we can proceed with a constant approximation of the magnetic field
+
+\begin{dmath}\label{eqn:magnetostaticsJacksonNotesForceAndTorque:260}
+\begin{aligned}
+\BN 
+&= \int \Bx' \cross (\BJ(\Bx') \cross \BB(0)) d^3 x' \\
+&= 
+-\int (\Bx' \cdot \BJ(\Bx')) \BB(0) d^3 x'
++\int (\Bx' \cdot \BB(0)) \BJ(\Bx') d^3 x' \\
+&= 
+-\BB(0) \int (\Bx' \cdot \BJ(\Bx')) d^3 x'
++\int (\Bx' \cdot \BB(0)) \BJ(\Bx') d^3 x'.
+\end{aligned}
+\end{dmath}
+
+Jackson's trick for killing the first integral is to transform it into a divergence by evaluating
+
+\begin{dmath}\label{eqn:magnetostaticsJacksonNotesForceAndTorque:280}
+\begin{aligned}
+\spacegrad \cdot \lr{ \BJ \Abs{\Bx}^2 }
+&=
+(\spacegrad \cdot \BJ) \Abs{\Bx}^2 
++
+\BJ \cdot \spacegrad \Abs{\Bx}^2 \\
+&=
+\BJ \cdot \Be_i \partial_i x_m x_m \\
+&=
+2 \BJ \cdot \Be_i \delta_{im} x_m \\
+&=
+2 \BJ \cdot \Bx,
+\end{aligned}
+\end{dmath}
+
+so
+
+\begin{dmath}\label{eqn:magnetostaticsJacksonNotesForceAndTorque:300}
+\begin{aligned}
+\BN 
+&=
+-\inv{2} \BB(0) \int \spacegrad' \cdot \lr{ \BJ(\Bx') \Abs{\Bx'}^2 } d^3 x'
++\int (\Bx' \cdot \BB(0)) \BJ(\Bx') d^3 x' \\
+&=
+-\inv{2} \BB(0) \oint \Bn \cdot \lr{ \BJ(\Bx') \Abs{\Bx'}^2 } d^3 x'
++\int (\Bx' \cdot \BB(0)) \BJ(\Bx') d^3 x'.
+\end{aligned}
+\end{dmath}
+
+Again, the localized current density assumption kills the surface integral.  The second integral can be evaluated with \cref{eqn:magnetostaticsJacksonNotesForceAndTorque:160}, so to first order we have
+
+\begin{dmath}\label{eqn:magnetostaticsJacksonNotesForceAndTorque:360}
+\BN 
+=
+\Bm \cross \BB.
+\end{dmath}
+
+%}
+\EndArticle
