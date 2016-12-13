@@ -23,6 +23,8 @@ PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))
 THISBOOK_DEPS += $(PDFS_FROM_EPS)
 #THISBOOK_DEPS += macros_mathematica.sty
 
+CLEAN_TARGETS += ps5mathematica.tex ps9mathematica.tex
+
 include ../make.rules
 
 #all:: emtLecture10.pdf
