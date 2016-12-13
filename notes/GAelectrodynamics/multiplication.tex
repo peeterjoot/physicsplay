@@ -1,0 +1,253 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+%{
+%%\input{../blogpost.tex}
+%%\renewcommand{\basename}{multiplication}
+%%%\renewcommand{\dirname}{notes/phy1520/}
+%%\renewcommand{\dirname}{notes/ece1228-electromagnetic-theory/}
+%%%\newcommand{\dateintitle}{}
+%%%\newcommand{\keywords}{}
+%%
+%%\input{../peeter_prologue_print2.tex}
+%%
+%%\usepackage{peeters_layout_exercise}
+%%\usepackage{peeters_braket}
+%%\usepackage{peeters_figures}
+%%\usepackage{siunitx}
+%%%\usepackage{mhchem} % \ce{}
+%%%\usepackage{macros_bm} % \bcM
+%%%\usepackage{txfonts} % \ointclockwise
+%%
+%%\beginArtNoToc
+%%
+%%\generatetitle{Vector multiplication}
+%%%\chapter{Vector multiplication}
+%%%\label{chap:multiplication}
+%%
+Geometric Algebra defines a multiplication operation for vectors, forming a vector space spanned by all the possible vector products.  This algebra is described by the following small set of axioms
+
+\makeaxiom{Associative multiplication.}{axiom:multiplication:associative}{
+
+The product of any three vectors \(\Ba,\Bb,\Bc\) is associative.
+
+\begin{equation*}\label{eqn:multiplication:160}
+\Ba (\Bb \Bc) 
+= (\Ba \Bb) \Bc
+= \Ba \Bb \Bc.
+\end{equation*}
+}
+
+\makeaxiom{Linearity.}{axiom:multiplication:linear}{
+Vector products are linear with respect to addition and subtraction.
+
+\begin{dmath*}\label{eqn:multiplication:180}
+\begin{aligned}
+(\Ba + 3 \Bb \Bd) \Bc &= \Ba \Bb + 3 \Bb \Bd \Bc \\
+\Ba (\Bb \Bd - 2 \Bc) &= \Ba \Bb \Bd - 2 \Ba \Bc.
+\end{aligned}
+\end{dmath*}
+}
+
+\makeaxiom{Contraction.}{axiom:multiplication:contraction}{
+
+The square of a vector is the squared length of the vector.
+
+\begin{dmath*}\label{eqn:multiplication:200}
+\Ba^2 = \Abs{\Ba}^2.
+\end{dmath*}
+}
+
+Axiom \ref{axiom:multiplication:contraction}, the contraction property, is generally metric dependent.  In particular, for special relativistic calculations, the length of a (four-)vector may generally be negative or positive.
+However, for the engineering electromagnetic problems that will be the focus of these notes, it can be assumed that there is an orthonormal Euclidean basis, where the vector length is always positive.
+
+The linearity and associativity axioms need little comment, but the contraction property might be suprising.  For one justification of this rule, consider a one dimensional vector space spanned by a single unit vector \( \setlr{ \Be } \).  That span, for real \( x \) is all the values
+
+\begin{dmath}\label{eqn:multiplication:20}
+\Bx = x \Be.
+\end{dmath}
+
+This vector space is isomorphic with a number line, all the possible real values \( x \).  
+Given a positive number \( x \), the multiplication rules for real numbers require that \( (\pm x)^2 = x^2 \).  
+The square of a number provides the (squared) length of the number, its distance from the origin.  
+The same rule can be imposed for one dimensional vectors, 
+a requirement that the (squared) distance from the origin equals the square of the vector itself.   Such a rule is consistent with the rules of scalar multiplication, and for the 
+one dimensional vectors of \cref{eqn:multiplication:20} can be stated as
+
+\begin{equation}\label{eqn:multiplication:40}
+\Bx^2 = x^2.
+\end{equation}
+
+This contraction axiom, justified or not, has additional implications
+
+\begin{dmath}\label{eqn:multiplication:80}
+x^2 
+= \Bx^2 
+= (x \Be)(x \Be)
+= x^2 \Be^2.
+\end{dmath}
+
+This rule requires the square of a unit (Euclidean) vector to be unity
+
+%\begin{equation}\label{eqn:multiplication:60}
+\boxedEquation{eqn:multiplication:60}{
+\Be^2 = 1.
+}
+%\end{equation}
+
+With this implication noted, now consider the square of a two dimensional vector
+
+\begin{dmath}\label{eqn:multiplication:100}
+\Bx = x \Be_1 + y \Be_2.
+\end{dmath}
+
+The length of this vector is \( x^2 + y^2 \).  The contraction property requires that
+
+\begin{dmath}\label{eqn:multiplication:120}
+x^2 + y^2
+= \Bx^2
+= 
+\lr{ x \Be_1 + y \Be_2}
+\lr{ x \Be_1 + y \Be_2}
+=
+\lr{ x \Be_1 } \lr{ x \Be_1 }
++
+\lr{ y \Be_2 } \lr{ y \Be_2 }
++
+\lr{ x \Be_1 } \lr{ y \Be_2 }
++
+\lr{ y \Be_2 } \lr{ x \Be_1 }
+=
+x^2 \Be_1^2 
++
+y^2 \Be_2^2 
++
+x y \lr{ \Be_1 \Be_2 + \Be_2 \Be_1 }
+=
+x^2 + y^2 
++
+x y \lr{ \Be_1 \Be_2 + \Be_2 \Be_1 }.
+\end{dmath}
+
+For this identity to hold, the \( x y \) vector product factor must be zero.  That is
+
+%\begin{dmath}\label{eqn:multiplication:140}
+\boxedEquation{eqn:multiplication:140}{
+\Be_1 \Be_2 = -\Be_1 \Be_2.
+}
+%\end{dmath}
+
+This implies that the product of two othonormal vectors anticommutes.  
+Further work is required to provide an interpretation of such a product of orthogonal vectors.
+
+By considering the implications of the contraction axiom, most of the work of proving an important theorem has now been performed
+
+\begin{theorem}
+\begin{subequations}\label{thm:multiplication:basics}
+\begin{align}
+{\Bu}^2 = 1 & \qquad \mbox{Square of a unit vector \(\Bu\) is one.} \\
+\Bu \Bv = -\Bv \Bu & \qquad \mbox{The product of two orthonormal unit vectors \(\Bu\), and \(\Bv\) anticommute.}
+\end{align}
+\end{subequations}
+\end{theorem}
+
+Proof of this theorem in higher dimensional spaces is left as an exersize for the reader.
+
+\section{Definitions}
+
+In three dimensonal spaces a number of different types of geometric objects will be encountered.  It is worthwhile to define the nomenclature to refer to such objects so that they can be discussed when encountered.
+
+\makedefinition{Scalar}{def:multiplication:scalar}{
+A real number with no implied direction.
+}
+
+\makedefinition{Vector}{def:multiplication:vector}{
+\href{https://www.youtube.com/watch?v=bOIe0DIMbI8}{A quantity with magnitude and direction}
+}
+
+\makedefinition{Bivector}{def:multiplication:bivector}{
+A product of two normal vectors, or a sum thereof.
+}
+
+The product \( \Be_1 \Be_2 \) is a bivector, as is \( \Be_2 \Be_3 + 3 \Be_4 \Be_1 \)
+
+\makedefinition{Trivector}{def:multiplication:trivector}{
+A product of three mutually normal vectors, or a sum thereof.
+}
+
+The quantity \( \Be_3 \Be_1 \Be_2 \) is a trivector, as is \( \Be_1 \Be_2 \Be_3 + 3 \Be_5 \Be_4 \Be_1 \).
+
+\makedefinition{Blade}{def:multiplication:blade}{
+A scalar, vector, bivector, or a trivector (or higher degree analogue), that can be constructed by multiplication of a number of vectors, but not an unfactorable sum of thereof.
+}
+
+The factorable quantity
+\begin{dmath}\label{eqn:multiplication:220}
+\Be_1 \Be_2 + 3 \Be_1 \Be_3
+=
+\Be_1 (\Be_2 + 3 \Be_3)
+\end{dmath}
+
+is a blade, whereas
+
+\begin{dmath}\label{eqn:multiplication:240}
+\Be_1 \Be_2 + 3 \Be_2 \Be_4,
+\end{dmath}
+
+and
+\begin{dmath}\label{eqn:multiplication:260}
+\Be_1 \Be_2 + \Be_2 \Be_3 + \Be_3 \Be_1
+\end{dmath}
+
+are not.
+
+Scalar, vector, bivector, and trivectors are also referred to as sums of 0-blades, 1-blades, 2-blades, and 3-blades respectively.
+
+\makedefinition{Grade.}{def:multiplication:grade}{
+The minumum number of vector products required to form a given blade.
+}
+
+The grade of a scalar, vector, bivector, and trivector are 0, 1, 2, and 3 respectively.
+
+The quantities
+\begin{dmath}\label{eqn:multiplication:300}
+\begin{aligned}
+\Be_2 + \Be_1 \Be_2 \Be_2 &= \Be_1 + \Be_2 \\
+\Be_1 \Be_2 \Be_2 \Be_2 \Be_3 &= \Be_1 \Be_2 \Be_3 \\
+\end{aligned}
+\end{dmath}
+
+have grades 1 and 3 respectively.
+
+Quantities with higher grades than 3 are not generally given explicit names, but can be referred to having grade-k.  When an object of grade-k is
+also a blade, it can be referred to as a k-blade.
+
+In a three dimensional space the highest grade possible is 3.  Blades can have grades higher than 3 in higher dimensional vector spaces.
+
+\makedefinition{Pseudoscalar.}{def:multiplication:pseudoscalar}{
+A blade with grade that matches the dimension of the space.
+}
+
+In a two dimensional space \( \Be_2 \Be_1 \) is a pseudoscalar.  In a three dimensional space
+\( \Be_3 \Be_1 \Be_2 \) is a pseudoscalar.  A pseudoscalar has an implied orientation, which can be
+associated with the handedness of the underlying basis.  It is conventional to refer to \( i = \Be_1 \Be_2 \)
+as ``the pseudoscalar'' for a two dimensional space, and \( I = \Be_1 \Be_2 \Be_3 \) as ``the pseudoscalar'' for a three dimensional space.
+
+\makedefinition{Multivector.}{def:multiplication:multivector}{
+A sum of zero or more blades.
+}
+
+Examples include
+\begin{dmath}\label{eqn:multiplication:280}
+\begin{aligned}
+&3 \\
+& 1 + \Be_1 \Be_2 \\
+& 2 - \Be_1 \Be_2 \Be_3 \\
+& \Be_1 + \Be_1 \Be_2 + \Be_2 \Be_3 + \Be_3 \Be_1 + \Be_1 \Be_2 \Be_4
+\end{aligned}
+\end{dmath}
+
+%%%}
+%%%\EndArticle
+%%\EndNoBibArticle

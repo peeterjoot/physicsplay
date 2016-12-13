@@ -25,3 +25,5 @@ THISBOOK_DEPS += $(PDFS_FROM_EPS)
 #CLEAN_TARGETS += 
 
 include ../make.rules
+
+#m : multiplication.pdf
