@@ -1,0 +1,91 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\makeproblem{Lossy waves.}{emt:problemSet6:2}{ 
+In the case of lossy medium the wave equation was given by
+
+\begin{dmath}\label{eqn:emtproblemSet6Problem2:20}
+\spacegrad^2 \BE = \gamma^2 \BE,
+\end{dmath}
+
+where
+
+\begin{dmath}\label{eqn:emtproblemSet6Problem2:40}
+\gamma^2 = \lr{ \alpha + j \beta }^2.
+\end{dmath}
+Now consider a medium for which \( \epsilon(\omega) = \epsilon'(\omega) \) (i.e. \( \epsilon''(\omega) = 0 \)), \( \sigma = \sigma_0 \) (i.e. \(\omega \tau \sim 0 \) in the Drude model), and \( \mu \) is a constant and real.
+For this case obtain the expression for \( \alpha \) and \(\beta\) in terms of \( \omega, \mu, \epsilon', \sigma_0 \).
+}
+
+\makeanswer{emt:problemSet6:2}{ 
+
+The desired values of \( \alpha \) and \( \beta \) are defined by
+
+\begin{dmath}\label{eqn:emtproblemSet6Problem2:80}
+\gamma^2 
+= \lr{\alpha + j \beta}^2 
+= -\mu \epsilon \omega^2 + j \omega \mu \sigma
+= -\mu \lr{ \epsilon' - j \epsilon''} \omega^2 + j \omega \mu \sigma
+= -\mu \epsilon' \omega^2 + j \omega \mu \lr{ \sigma + \epsilon'' \omega }.
+\end{dmath}
+
+When \( \epsilon'' = 0 \) and \( \sigma = \sigma_0 \), this is
+\begin{dmath}\label{eqn:emtproblemSet6Problem2:100}
+\lr{\alpha + j \beta}^2 
+= -\mu \epsilon' \omega^2 + j \omega \mu \sigma_0
+= \mu \epsilon' \omega^2 \lr{ -1 + j \frac{\sigma_0}{\epsilon' \omega} }
+%= \sqrt{ \lr{ \mu \epsilon' \omega^2}^2 + \lr{ \omega \mu \sigma_0 }^2 }
+%\exp\lr{ 
+%-j \Atan\lr{\frac{ \sigma_0 }{\epsilon' \omega}}
+%}
+%= 
+%\mu \epsilon' \omega^2
+%\sqrt{ 1 + \lr{ \frac{\sigma_0}{\epsilon' \omega} }^2 }
+%\exp\lr{ 
+%-j \Atan\lr{\frac{ \sigma_0 }{\epsilon' \omega}}
+%},
+\end{dmath}
+
+To attempt to take the square root of \( z = -1 + j t \), I wrote
+
+\begin{dmath}\label{eqn:emtproblemSet6Problem2:120}
+z = \sqrt{ 1 + t^2 } e^{-j\Atan t },
+\end{dmath}
+
+so
+\begin{dmath}\label{eqn:emtproblemSet6Problem2:140}
+\sqrt{z} 
+= \lr{ 1 + t^2 }^{1/4} e^{-\frac{j}{2}\Atan t }
+= 
+\lr{ 1 + t^2 }^{1/4} 
+\lr{ 
+\cos\lr{ \inv{2} \Atan t }
+- j \sin\lr{ \inv{2} \Atan t } }.
+\end{dmath}
+
+Expanding the trig relations using
+\begin{dmath}\label{eqn:emtproblemSet6Problem2:160}
+\begin{aligned}
+\cos\lr{ \inv{2} \Atan t } &= \inv{\sqrt{2}} \sqrt{ 1 + \inv{\sqrt{1 + t^2}}} \\
+\sin\lr{ \inv{2} \Atan t } &= \frac{t}{\sqrt{2}} \inv{ \sqrt{ 1 + t^2} \sqrt{ 1 + \inv{\sqrt{1 + t^2}}}},
+\end{aligned}
+\end{dmath}
+
+and doing some simplification, I find
+
+\begin{dmath}\label{eqn:emtproblemSet6Problem2:180}
+\sqrt{z} = \inv{\sqrt{2}} \sqrt{ 1 + \sqrt{ 1 + t^2} } - j \frac{t}{\sqrt{2} \sqrt{ 1 + \sqrt{ 1 + t^2} }}.
+\end{dmath}
+
+Curiously, a squaring check shows that this yields \( z = 1 - j t \) and not \( z = -1 + j t \).  This indicates that a \( j^2 \)  phase factor was lost somewhere in the algebra (probably related to the quadrant ambiguity of the arctan).  Inserting that phase factor back in gives
+
+\boxedEquation{eqn:emtproblemSet6Problem2:200}{
+\begin{aligned}
+\alpha &= \inv{\sqrt{2}} \frac{\sigma_0 \sqrt{\frac{\mu}{\epsilon'}}} { \sqrt{ 1 + \sqrt{ 1 + \lr{\frac{\sigma_0}{\epsilon' \omega} }^2 }} } \\
+\beta &= \inv{\sqrt{2}} \omega \sqrt{\mu\epsilon'} \sqrt{ 1 + \sqrt{ 1 + \lr{\frac{\sigma_0}{\epsilon' \omega} }^2 }}.
+\end{aligned}
+}
+
+A computation of \( (\alpha + j \beta)^2 \) shows that this gives \( -\mu \epsilon' \omega^2 + j \omega \mu \sigma_0 \) as expected.
+}

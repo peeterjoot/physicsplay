@@ -1,0 +1,101 @@
+%
+% Copyright © 2016 Peeter Joot.  All Rights Reserved.
+% Licenced as described in the file LICENSE under the root directory of this GIT repository.
+%
+\makeproblem{Laplacian form of delta function.}{emt:problemSet3:4}{ 
+\index{Laplacian!Green's function}
+\index{Green's function!Laplacian representation}
+Prove that
+
+\begin{dmath}\label{eqn:emtProblemSet3Problem4:20}
+-\spacegrad^2 \inv{r} = 4 \pi \delta^3(\Br),
+\end{dmath}
+
+where \( r = \Abs{\Br} \) is the position vector.
+} % makeproblem
+
+\makeanswer{emt:problemSet3:4}{ 
+
+The first thing to show is that \( \spacegrad^2 1/r = 0 \) everywhere that \( r \ne 0 \).  Note that 
+
+\begin{dmath}\label{eqn:emtProblemSet3Problem4:40}
+\spacegrad r^{-n}
+=
+\spacegrad \lr{\Br^2}^{-n/2}
+=
+-\frac{n}{2} \frac{\Be_k \partial_k x_m x_m}{r^{n + 2}}
+=
+-\frac{n}{2} \frac{2 \Be_k \delta_{km} x_m}{r^{n + 2}}
+=
+-n \frac{\Br}{r^{n+2}}.
+\end{dmath}
+
+The Laplacian is
+\begin{dmath}\label{eqn:emtProblemSet3Problem4:60}
+\spacegrad^2 \inv{r} 
+=
+\spacegrad \cdot \spacegrad \inv{r} 
+=
+-\spacegrad \cdot 
+\frac{\Br}{r^{3}}
+=
+-\frac{\spacegrad \cdot \Br}{r^3}
+-
+\lr{ \spacegrad \inv{r^3} } \cdot \Br
+=
+-\frac{3}{r^3}
+-
+\lr{ -3 \frac{\Br}{r^5}} \cdot \Br
+=
+-\frac{3}{r^3}
++
+3 \frac{ r^2}{r^5} 
+=
+0,
+\end{dmath}
+
+provided \( \Br \ne 0 \), an expected property of the delta function.
+
+To complete the proof, we have to show that this Laplacian has the desired filtering effect under convolution
+
+\begin{dmath}\label{eqn:emtProblemSet3Problem4:80}
+\int dV' f(\Br') \delta^3(\Br' -\Br) = f(\Br).
+\end{dmath}
+
+\index{delta function}
+Inserting the assumed delta function representation we have
+
+\begin{dmath}\label{eqn:emtProblemSet3Problem4:100}
+\int dV' f(\Br') \delta^3(\Br' - \Br) 
+=
+-\inv{4\pi} \int dV' f(\Br') {\spacegrad'}^2 \inv{\Abs{\Br' - \Br}}
+=
+-\lim_{\epsilon \rightarrow 0}
+\inv{4\pi} \int_{\Abs{\Br - \Br'} < \epsilon} dV' f(\Br') \spacegrad' \cdot \spacegrad' \inv{\Abs{\Br' - \Br}}
+=
+\lim_{\epsilon \rightarrow 0}
+\inv{4\pi} \int_{\Abs{\Br - \Br'} < \epsilon} dV' f(\Br') \spacegrad' \cdot \frac{\Br' - \Br}{\Abs{\Br' - \Br}^3}
+=
+\lim_{\epsilon \rightarrow 0}
+\inv{4\pi} \int_{\Abs{\Br - \Br'} = \epsilon} dV' f(\Br') \ncap \cdot \frac{\Br' - \Br}{\Abs{\Br' - \Br}^3}.
+\end{dmath}
+
+Because the Laplacian has been shown to be zero everywhere where \( \Br \ne \Br' \) the volume integral over all space has been restricted to a small spherical volume surrounding the point \( \Br \).  The divergence theorem is then used to transform this integral into a surface integral over that spherical volume.  However, the exterior normal to this surface is \( \ncap = \lr{\Br' - \Br}/\Abs{\Br' - \Br} \), leaving
+
+\begin{dmath}\label{eqn:emtProblemSet3Problem4:120}
+\int dV' f(\Br') \delta^3(\Br' - \Br) 
+=
+\lim_{\epsilon \rightarrow 0}
+\inv{4\pi} \int_{\Abs{\Br - \Br'} = \epsilon} dV' f(\Br') \inv{\Abs{\Br' - \Br}^2}
+=
+\lim_{\epsilon \rightarrow 0}
+\inv{4\pi} \int_{\Abs{\Br - \Br'} = \epsilon} dV' f(\Br') \inv{\epsilon^2}
+=
+\lim_{\epsilon \rightarrow 0}
+\inv{4\pi} f(\Br) \frac{4 \pi \epsilon^2}{\epsilon^2}
+=
+f(\Br).
+\end{dmath}
+
+In the second last step, the it is assumed that the function \( f(\Br') \) is well behaved enough in the near the point \( \Br \) that it can be pulled out of the integral, and replaced with it's mean value in the neighbourhood of \( \Br \), which then tends to \( f(\Br)\) as \( \epsilon \rightarrow 0 \).
+}
