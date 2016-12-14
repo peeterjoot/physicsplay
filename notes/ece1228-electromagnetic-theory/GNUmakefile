@@ -48,7 +48,7 @@ l10b : emtLecture10PartII.pdf
 #p6 : emtProblemSet6.pdf
 #p7 : emtProblemSet7.pdf
 #p8 : emtProblemSet8.pdf
-p9 : emtProblemSet9.pdf
+#p9 : emtProblemSet9.pdf
 #pd : dipoleMoment.pdf
 #pv : dipolePotential.pdf
 
