@@ -1,0 +1,133 @@
+Helmholtz theorem
+
+<a href="http://peeterjoot.com/archives/math2016//helmholtzDerviationMultivector.pdf">[Click here for a PDF of this post with nicer formatting]</a>
+
+This is a problem from ece1228.  I attempted solutions in a number of ways.  One using Geometric Algebra, one devoid of that algebra, and then this method, which combined aspects of both.  Of the three methods I tried to obtain this result, this is the most compact and elegant.  It does however, require a fair bit of Geometric Algebra knowledge, including the Fundamental Theorem of Geometric Calculus, as detailed in [1], [3] and [2].
+
+<h2>Question: Helmholtz theorem</h2>
+Prove the first Helmholtz's theorem, i.e. if vector \(\BM\) is defined by its divergence
+
+\begin{equation}\label{eqn:helmholtzDerviationMultivector:20}
+\spacegrad \cdot \BM = s
+\end{equation}
+
+and its curl
+\begin{equation}\label{eqn:helmholtzDerviationMultivector:40}
+\spacegrad \cross \BM = \BC
+\end{equation}
+
+within a region and its normal component \( \BM_{\txtn} \) over the boundary, then \( \BM \) is
+uniquely specified.
+
+<h2>Answer</h2>
+The gradient of the vector \( \BM \) can be written as a single even grade multivector
+
+\begin{equation}\label{eqn:helmholtzDerviationMultivector:60}
+\spacegrad \BM
+= \spacegrad \cdot \BM + I \spacegrad \cross \BM
+= s + I \BC.
+\end{equation}
+
+We will use this to attempt to discover the relation between the vector \( \BM \) and its divergence and curl.  We can express \( \BM \) at the point of interest as a convolution with the delta function at all other points in space
+
+\begin{equation}\label{eqn:helmholtzDerviationMultivector:80}
+\BM(\Bx) = \int_V dV' \delta(\Bx - \Bx') \BM(\Bx').
+\end{equation}
+
+The Laplacian representation of the delta function in \R{3} is
+
+\begin{equation}\label{eqn:helmholtzDerviationMultivector:100}
+\delta(\Bx - \Bx') = -\inv{4\pi} \spacegrad^2 \inv{\Abs{\Bx - \Bx'}},
+\end{equation}
+
+so \( \BM \) can be represented as the following convolution
+
+\begin{equation}\label{eqn:helmholtzDerviationMultivector:120}
+\BM(\Bx) = -\inv{4\pi} \int_V dV' \spacegrad^2 \inv{\Abs{\Bx - \Bx'}} \BM(\Bx').
+\end{equation}
+
+Using this relation and proceeding with a few applications of the chain rule, plus the fact that \( \spacegrad 1/\Abs{\Bx - \Bx'} = -\spacegrad' 1/\Abs{\Bx - \Bx'} \), we find
+
+\begin{equation}\label{eqn:helmholtzDerviationMultivector:720}
+\begin{aligned}
+-4 \pi \BM(\Bx)
+&= \int_V dV' \spacegrad^2 \inv{\Abs{\Bx - \Bx'}} \BM(\Bx') \\
+&= \gpgradeone{\int_V dV' \spacegrad^2 \inv{\Abs{\Bx - \Bx'}} \BM(\Bx')} \\
+&= -\gpgradeone{\int_V dV' \spacegrad \lr{ \spacegrad' \inv{\Abs{\Bx - \Bx'}}} \BM(\Bx')} \\
+&= -\gpgradeone{\spacegrad \int_V dV' \lr{ 
+\spacegrad' \frac{\BM(\Bx')}{\Abs{\Bx - \Bx'}}
+-\frac{\spacegrad' \BM(\Bx')}{\Abs{\Bx - \Bx'}}
+} } \\
+&= 
+-\gpgradeone{\spacegrad \int_{\partial V} dA' 
+\ncap \frac{\BM(\Bx')}{\Abs{\Bx - \Bx'}}
+ }
++\gpgradeone{\spacegrad \int_V dV' 
+\frac{s(\Bx') + I\BC(\Bx')}{\Abs{\Bx - \Bx'}}
+ } \\
+&= 
+-\gpgradeone{\spacegrad \int_{\partial V} dA' 
+\ncap \frac{\BM(\Bx')}{\Abs{\Bx - \Bx'}}
+ }
++\spacegrad \int_V dV' 
+\frac{s(\Bx')}{\Abs{\Bx - \Bx'}}
++\spacegrad \cdot \int_V dV' 
+\frac{I\BC(\Bx')}{\Abs{\Bx - \Bx'}}.
+\end{aligned}
+\end{equation}
+
+By inserting a no-op grade selection operation in the second step, the trivector terms that would show up in subsequent steps are automatically filtered out.  This leaves us with a boundary term dependent on the surface and the normal and tangential components of \( \BM \).  Added to that is a pair of volume integrals that provide the unique dependence of \( \BM \) on its divergence and curl.  When the surface is taken to infinity, which requires \( \Abs{\BM}/\Abs{\Bx - \Bx'} \rightarrow 0 \), then the dependence of \( \BM \) on its divergence and curl is unique.
+
+In order to express final result in traditional vector algebra form, a couple transformations are required.  The first is that
+
+\begin{equation}\label{eqn:helmholtzDerviationMultivector:800}
+\gpgradeone{ \Ba I \Bb } = I^2 \Ba \cross \Bb = -\Ba \cross \Bb.
+\end{equation}
+
+For the grade selection in the boundary integral, note that
+
+\begin{equation}\label{eqn:helmholtzDerviationMultivector:740}
+\begin{aligned}
+\gpgradeone{ \spacegrad \ncap \BX }
+&=
+\gpgradeone{ \spacegrad (\ncap \cdot \BX) }
++
+\gpgradeone{ \spacegrad (\ncap \wedge \BX) } \\
+&=
+\spacegrad (\ncap \cdot \BX) 
++
+\gpgradeone{ \spacegrad I (\ncap \cross \BX) } \\
+&=
+\spacegrad (\ncap \cdot \BX) 
+-
+\spacegrad \cross (\ncap \cross \BX).
+\end{aligned}
+\end{equation}
+
+These give
+
+\begin{equation}\label{eqn:helmholtzDerviationMultivector:721}
+\boxed{
+\begin{aligned}
+\BM(\Bx)
+&= 
+\spacegrad \inv{4\pi} \int_{\partial V} dA' \ncap \cdot \frac{\BM(\Bx')}{\Abs{\Bx - \Bx'}}
+-
+\spacegrad \cross \inv{4\pi} \int_{\partial V} dA' \ncap \cross \frac{\BM(\Bx')}{\Abs{\Bx - \Bx'}} \\
+&-\spacegrad \inv{4\pi} \int_V dV' 
+\frac{s(\Bx')}{\Abs{\Bx - \Bx'}}
++\spacegrad \cross \inv{4\pi} \int_V dV' 
+\frac{\BC(\Bx')}{\Abs{\Bx - \Bx'}}.
+\end{aligned}
+}
+\end{equation}
+
+<h1>References</h1>
+
+[1] C. Doran and A.N. Lasenby. <em>Geometric algebra for physicists</em>. Cambridge University Press New York, Cambridge, UK, 1st edition,  2003.
+
+[2] A. Macdonald. <em>Vector and Geometric Calculus</em>. CreateSpace Independent Publishing Platform, 2012.
+
+[3] Garret Sobczyk and Omar Le\'on S\'anchez. Fundamental theorem of calculus. <em>Advances in Applied Clifford Algebras</em>, 21:221--231, 2011. URL <a href="http://arxiv.org/abs/0809.4526">http://arxiv.org/abs/0809.4526</a>.
+
+[mathjax]

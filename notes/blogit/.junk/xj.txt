@@ -1,0 +1,278 @@
+Jackson's electrostatic self energy analysis
+
+<a href="http://peeterjoot.com/archives/math2016//electrostaticJacksonSelfEnergy.pdf">[Click here for a PDF of this post with nicer formatting]</a>
+
+<h3>Motivation</h3>
+I was reading my Jackson [1], which characteristically had the statement ``the [...] integral <em>can easily be shown</em> to have the value \( 4 \pi \)'', in a discussion of electrostatic energy and self energy.  After a few attempts and a couple of pages of calculations, I figured out how this can be easily shown.
+
+<h3>Context</h3>
+
+Let me walk through the context that leads to the ``easy'' integral, and then the evaluation of that integral.  Unlike my older copy of Jackson, I'll do this in SI units.
+
+The starting point is a statement that the work done (potential energy) of one charge \( q_i \) in a set of \( n \) charges, where that charge is brought to its position \( \Bx_i \) from infinity, is
+
+\begin{equation}\label{eqn:electrostaticJacksonSelfEnergy:20}
+W_i = q_i \Phi(\Bx_i),
+\end{equation}
+
+where the potential energy due to the rest of the charge configuration is
+
+\begin{equation}\label{eqn:electrostaticJacksonSelfEnergy:40}
+\Phi(\Bx_i) = \inv{4 \pi \epsilon} \sum_{i \ne j} \frac{q_j}{\Abs{\Bx_i - \Bx_j}}.
+\end{equation}
+
+This means that the total potential energy, making sure not to double count, to move all the charges in from infinity is
+
+\begin{equation}\label{eqn:electrostaticJacksonSelfEnergy:60}
+W = \inv{4 \pi \epsilon} \sum_{1 \le i < j \le n} \frac{q_i q_j}{\Abs{\Bx_i - \Bx_j}}.
+\end{equation}
+
+This sum over all unique pairs is somewhat unwieldy, so it can be adjusted by explicitly double counting with a corresponding divide by two
+\begin{equation}\label{eqn:electrostaticJacksonSelfEnergy:80}
+W = \inv{2} \inv{4 \pi \epsilon} \sum_{1 \le i \ne j \le n} \frac{q_i q_j}{\Abs{\Bx_i - \Bx_j}}.
+\end{equation}
+
+The point that causes the trouble later is the continuum equivalent to this relationship, which is
+
+\begin{equation}\label{eqn:electrostaticJacksonSelfEnergy:100}
+W = \inv{8 \pi \epsilon} \int \frac{\rho(\Bx) \rho(\Bx')}{\Abs{\Bx - \Bx'}} d^3 \Bx d^3 \Bx',
+\end{equation}
+
+or
+\begin{equation}\label{eqn:electrostaticJacksonSelfEnergy:120}
+W = \inv{2} \int \rho(\Bx) \Phi(\Bx) d^3 \Bx.
+\end{equation}
+
+There's a subtlety here that is often passed over.  When the charge densities represent point charges \( \rho(\Bx) = q \delta^3(\Bx - \Bx') \) are located at, notice that this integral equivalent is evaluated over all space, including the spaces that the charges that the charges are located at.
+
+Ignoring that subtlety, this potential energy can be expressed in terms of the electric field, and then integrated by parts
+
+\begin{equation}\label{eqn:electrostaticJacksonSelfEnergy:140}
+\begin{aligned}
+W 
+&= \inv{2 } \int (\spacegrad \cdot (\epsilon \BE)) \Phi(\Bx) d^3 \Bx \\
+&= \frac{\epsilon}{2 } \int \lr{ \spacegrad \cdot (\BE \Phi) - (\spacegrad \Phi) \cdot \BE } d^3 \Bx \\
+&= 
+\frac{\epsilon}{2 } 
+\oint dA \ncap \cdot (\BE \Phi) 
++
+\frac{\epsilon}{2 } \int \BE \cdot \BE d^3 \Bx.
+\end{aligned}
+\end{equation}
+
+The presumption is that \( \BE \Phi \) falls off as the bounds of the integration volume tends to infinity.  That leaves us with an energy density proportional to the square of the field
+
+\begin{equation}\label{eqn:electrostaticJacksonSelfEnergy:160}
+w = \frac{\epsilon}{2 } \BE^2.
+\end{equation}
+
+<h3>Inconsistency</h3>
+
+It's here that Jackson points out the inconsistency between \ref{eqn:electrostaticJacksonSelfEnergy:160} and the original
+discrete analogue \ref{eqn:electrostaticJacksonSelfEnergy:80} that this was based on.  The energy density is positive definite, whereas the discrete potential energy can be negative if there is a difference in the sign of the charges.
+
+Here Jackson uses a two particle charge distribution to help resolve this conundrum.  For a superposition \( \BE = \BE_1 + \BE_2 \), we have
+
+\begin{equation}\label{eqn:electrostaticJacksonSelfEnergy:180}
+\BE 
+= 
+\inv{4 \pi \epsilon} \frac{q_1 (\Bx - \Bx_1)}{\Abs{\Bx - \Bx_1}^3}
++ \inv{4 \pi \epsilon} \frac{q_2 (\Bx - \Bx_2)}{\Abs{\Bx - \Bx_2}^3},
+\end{equation}
+
+so the energy density is
+\begin{equation}\label{eqn:electrostaticJacksonSelfEnergy:200}
+w = 
+\frac{1}{32 \pi^2 \epsilon} \frac{q_1^2}{\Abs{\Bx - \Bx_1}^4 }
++
+\frac{1}{32 \pi^2 \epsilon} \frac{q_2^2}{\Abs{\Bx - \Bx_2}^4 }
++
+2 \frac{q_1 q_2}{32 \pi^2 \epsilon} 
+\frac{(\Bx - \Bx_1)}{\Abs{\Bx - \Bx_1}^3} \cdot
+\frac{(\Bx - \Bx_2)}{\Abs{\Bx - \Bx_2}^3}.
+\end{equation}
+
+The discrete potential had only an interaction energy, whereas the potential from this squared field has an interaction energy plus two self energy terms.  Those two strictly positive self energy terms are what forces this field energy positive, independent of the sign of the interaction energy density.  Jackson makes a change of variables of the form
+
+\begin{equation}\label{eqn:electrostaticJacksonSelfEnergy:220}
+\begin{aligned}
+\Brho &= (\Bx - \Bx_1)/R \\
+R &= \Abs{\Bx_1 - \Bx_2} \\
+\ncap &= (\Bx_1 - \Bx_2)/R,
+\end{aligned}
+\end{equation}
+
+for which we find
+
+\begin{equation}\label{eqn:electrostaticJacksonSelfEnergy:240}
+\Bx = \Bx_1 + R \Brho,
+\end{equation}
+
+so
+\begin{equation}\label{eqn:electrostaticJacksonSelfEnergy:260}
+\Bx - \Bx_2 = 
+\Bx_1 - \Bx_2 + R \Brho
+R (\ncap + \Brho),
+\end{equation}
+
+and
+\begin{equation}\label{eqn:electrostaticJacksonSelfEnergy:280}
+d^3 \Bx = R^3 d^3 \Brho,
+\end{equation}
+
+so the total interaction energy is
+\begin{equation}\label{eqn:electrostaticJacksonSelfEnergy:300}
+\begin{aligned}
+W_{\textrm{int}}
+&=
+\frac{q_1 q_2}{16 \pi^2 \epsilon} 
+\int d^3 \Bx
+\frac{(\Bx - \Bx_1)}{\Abs{\Bx - \Bx_1}^3} \cdot
+\frac{(\Bx - \Bx_2)}{\Abs{\Bx - \Bx_2}^3} \\
+&=
+\frac{q_1 q_2}{16 \pi^2 \epsilon} 
+\int R^3 d^3 \Brho
+\frac{ R \Brho }{ R^3 \Abs{\Brho}^3 } \cdot
+\frac{R (\ncap + \Brho)}{R^3 \Abs{\ncap + \Brho}^3} \\
+&=
+\frac{q_1 q_2}{16 \pi^2 \epsilon R} 
+\int d^3 \Brho
+\frac{ \Brho }{ \Abs{\Brho}^3 } \cdot
+\frac{(\ncap + \Brho)}{ \Abs{\ncap + \Brho}^3}.
+\end{aligned}
+\end{equation}
+
+Evaluating this integral is what Jackson calls easy.  The technique required is to express the integrand in terms of gradients in the \( \Brho \) coordinate system
+
+\begin{equation}\label{eqn:electrostaticJacksonSelfEnergy:320}
+\begin{aligned}
+\int d^3 \Brho
+\frac{ \Brho }{ \Abs{\Brho}^3 } \cdot
+\frac{(\ncap + \Brho)}{ \Abs{\ncap + \Brho}^3}
+&=
+\int d^3 \Brho
+\lr{ - \spacegrad_\Brho \inv{\Abs{\Brho}} }
+\cdot
+\lr{ - \spacegrad_\Brho \inv{\Abs{\ncap + \Brho}} } \\
+&=
+\int d^3 \Brho
+\lr{ \spacegrad_\Brho \inv{\Abs{\Brho}} }
+\cdot
+\lr{ \spacegrad_\Brho \inv{\Abs{\ncap + \Brho}} }.
+\end{aligned}
+\end{equation}
+
+I found it somewhat non-trivial to find the exact form of the chain rule that is required to simplify this integral, but after some trial and error, figured it out by working backwards from
+\begin{equation}\label{eqn:electrostaticJacksonSelfEnergy:340}
+\spacegrad_\Brho^2 \inv{ \Abs{\Brho} \Abs{\ncap + \Brho}}
+=
+\spacegrad_\Brho \cdot \lr{ \inv{\Abs{\Brho}} \spacegrad_\Brho \inv{ \Abs{\ncap + \Brho} } }
++
+\spacegrad_\Brho \cdot \lr{ \inv{\Abs{\ncap + \Brho}} \spacegrad_\Brho \inv{ \Abs{\Brho} } }.
+\end{equation}
+
+In integral form this is
+\begin{equation}\label{eqn:electrostaticJacksonSelfEnergy:360}
+\begin{aligned}
+\oint dA' \ncap' \cdot \spacegrad_\Brho \inv{ \Abs{\Brho} \Abs{\ncap + \Brho}}
+&=
+\int d^3 \Brho' 
+\spacegrad_{\Brho'} \cdot \lr{ \inv{\Abs{\Brho' - \ncap}} \spacegrad_{\Brho'} \inv{ \Abs{\Brho'} } }
++
+\int d^3 \Brho
+\spacegrad_\Brho \cdot \lr{ \inv{\Abs{\ncap + \Brho}} \spacegrad_\Brho \inv{ \Abs{\Brho} } } \\
+&=
+\int d^3 \Brho' 
+\lr{ \spacegrad_{\Brho'} \inv{\Abs{\Brho' - \ncap} } \cdot \spacegrad_{\Brho'} \inv{ \Abs{\Brho'} } }
++
+\int d^3 \Brho' 
+\inv{\Abs{\Brho' - \ncap}} \spacegrad_{\Brho'}^2 \inv{ \Abs{\Brho'} }  \\
+&+
+\int d^3 \Brho
+\lr{ \spacegrad_\Brho \inv{\Abs{\ncap + \Brho}}} \cdot \spacegrad_\Brho \inv{ \Abs{\Brho} } 
++
+\int d^3 \Brho
+\inv{\Abs{\ncap + \Brho}} \spacegrad_\Brho^2 \inv{ \Abs{\Brho} }  \\
+&=
+2 \int d^3 \Brho
+\lr{ \spacegrad_\Brho \inv{\Abs{\ncap + \Brho}}} \cdot \spacegrad_\Brho \inv{ \Abs{\Brho} }  \\
+&- 4 \pi
+\int d^3 \Brho' 
+\inv{\Abs{\Brho' - \ncap}} \delta^3(\Brho') 
+- 4 \pi
+\int d^3 \Brho 
+\inv{\Abs{\Brho + \ncap}} \delta^3(\Brho) \\
+&=
+2 \int d^3 \Brho
+\lr{ \spacegrad_\Brho \inv{\Abs{\ncap + \Brho}}} \cdot \spacegrad_\Brho \inv{ \Abs{\Brho} } 
+- 8 \pi.
+\end{aligned}
+\end{equation}
+
+This used the Laplacian representation of the delta function \( \delta^3(\Bx) = -(1/4\pi) \spacegrad^2 (1/\Abs{\Bx}) \).  Back-substitution gives
+
+\begin{equation}\label{eqn:electrostaticJacksonSelfEnergy:380}
+\int d^3 \Brho
+\frac{ \Brho }{ \Abs{\Brho}^3 } \cdot
+\frac{(\ncap + \Brho)}{ \Abs{\ncap + \Brho}^3}
+=
+4 \pi
++
+\oint dA' \ncap' \cdot \spacegrad_\Brho \inv{ \Abs{\Brho} \Abs{\ncap + \Brho}}.
+\end{equation}
+
+We can argue that this last integral tends to zero, since
+
+\begin{equation}\label{eqn:electrostaticJacksonSelfEnergy:400}
+\begin{aligned}
+\oint dA' \ncap' \cdot \spacegrad_\Brho \inv{ \Abs{\Brho} \Abs{\ncap + \Brho}}
+&=
+\oint dA' \ncap' \cdot \lr{ 
+\lr{ \spacegrad_\Brho \inv{ \Abs{\Brho}} } \inv{\Abs{\ncap + \Brho}}
++
+\inv{ \Abs{\Brho}} \lr{ \spacegrad_\Brho \inv{\Abs{\ncap + \Brho}} }
+} \\
+&=
+-\oint dA' \ncap' \cdot \lr{ 
+\frac{ \Brho } {\inv{ \Abs{\Brho}}^3 } \inv{\Abs{\ncap + \Brho}}
++
+\inv{ \Abs{\Brho}} \frac{ (\Brho + \ncap) }{ \Abs{\ncap + \Brho}^3 }
+} \\
+&=
+-\oint dA' \inv{\Abs{\Brho} \Abs{\Brho + \ncap}}
+\lr{
+\frac{ \ncap' \cdot \Brho }{
+{\Abs{\Brho}}^2 }
++\frac{ \ncap' \cdot (\Brho + \ncap) }{
+{\Abs{\Brho + \ncap}}^2 }
+}.
+\end{aligned}
+\end{equation}
+
+The integrand in this surface integral is of \( O(1/\rho^3) \) so tends to zero on an infinite surface in the \( \Brho \) coordinate system.  This completes the ``easy'' integral, leaving
+
+\begin{equation}\label{eqn:electrostaticJacksonSelfEnergy:420}
+\int d^3 \Brho
+\frac{ \Brho }{ \Abs{\Brho}^3 } \cdot
+\frac{(\ncap + \Brho)}{ \Abs{\ncap + \Brho}^3}
+=
+4 \pi.
+\end{equation}
+
+The total field energy can now be expressed as a sum of the self energies and the interaction energy
+\begin{equation}\label{eqn:electrostaticJacksonSelfEnergy:440}
+W = 
+\frac{1}{32 \pi^2 \epsilon} \int d^3 \Bx \frac{q_1^2}{\Abs{\Bx - \Bx_1}^4 }
++
+\frac{1}{32 \pi^2 \epsilon} \int d^3 \Bx \frac{q_2^2}{\Abs{\Bx - \Bx_2}^4 }
++ \inv{ 4 \pi \epsilon}
+\frac{q_1 q_2}{\Abs{\Bx_1 - \Bx_2} }.
+\end{equation}
+
+The interaction energy is exactly the potential energies for the two particles, the this total energy in the field is biased in the positive direction by the pair of self energies.  It is interesting that the energy obtained from integrating the field energy density contains such self energy terms, but I don't know exactly what to make of them at this point in time.
+
+<h1>References</h1>
+
+[1] JD Jackson. <em>Classical Electrodynamics</em>. John Wiley and Sons, 2nd edition, 1975.
+
+[mathjax]
