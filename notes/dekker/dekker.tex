@@ -48,13 +48,13 @@ In my recent post about \href{http://wp.me/ppf39-c1}{memory barriers and atomics
 
 I have an old friend, who we'll call Joe here, uses a Dekker's algorithm program to demonstrate to his computer architecture class that this is in fact not the case.  This flies in the face of all my experience with DB2, so it becomes immediately interesting from both a theoretical point of view and a correctness issue for the mutual exclusion code that I maintain for our product, much of which I have written or rewritten myself over the years.
 
-When talking to Joe, I had stated that I thought the MFENCE, LFENCE, and SFENCE instructions were only required for SSE.  I said the Intel memory model already provided an ordering guarantee, and that no fence instructions were required.  My mistaken recollection was that these were effectively no-ops for non-SSE code and special memory configurations used in privileged mode.  
+When talking to Joe, I had stated that I thought the MFENCE, LFENCE, and SFENCE instructions were only required for SSE.  I said the Intel memory model already provided an ordering guarantee, and that no fence instructions were required.  My mistaken recollection was that these were effectively no-ops for non-SSE code and special memory configurations used in privileged mode.
 The reasons for my misunderstanding is explored here, including why DB2 mutex implementation does not require these fences.  I knew this once back in the days when the P6 was new, but I had forgotten all this processor-ordering business, demonstrated by an implementation of the Dekker algorithm on a recent Intel multiprocessor machine.
 
 The fact that DB2 mutex and atomic code does not use memory fence instructions can likely be extrapolated to any other Intel targeting mutex implementation regardless of the products or library that providing the mutex.  We all are restricted to the same tricks and toolbox, the Intel instruction set specification itself, and we will see that the easiest and fastest way to implement a mutex does not require these fence instructions and why.
 
 Dekker's algorithm uses a pair of flags and a turn variable to control access to a critical section.  While this algorithm is of historical interest, and the subject of classroom discussions, I doubt that anybody uses it for anything real.  There are a number of flaws, the most obvious of which is that it allows only the synchronization of a pair of threads.  A less obvious limitation is that it assumes strongly ordered memory access.  These strongly ordered memory access assumptions can be subdivided into two cases.  The first of these ordering assumptions is that we require acquire and release fences to ensure the data guarded by the critical section is not accessed outside of the critical section.  The second of the ordering assumptions is the trickier part, since there are memory ordering access assumptions in the algorithm itself.  I would expect that these have been studied in depth by others, but even without such study, running the code with and without a few types of barrier instructions demonstrates conclusively that the algorithm is flawed as is, at least on Intel hardware.
- 
+
 Trolling the internet I found references stating that Dekker's algorithm can be faster than mutex methods build using the more modern hardware specific atomic instructions.  Experiment shows that this is not necessarily true.  To demonstrate this requires some low level knowledge.  One cannot compare Dekker's to pre-canned blackbox library methods like pthread\_mutex\_lock, where the implementation details are unknown.  With Dekker's algorithm doing brute force spinning, a good comparison requires that the mutex implementation also do so.  Results comparing the Dekker's method and some alternatives will be supplied below.  These are of general interest since the question of how expensive is an atomic compared to a mutex occurs frequently (at least in DB2 development).
 
 \section{What the Intel documentation says about ordering.}
@@ -67,7 +67,7 @@ Here's what the instruction set reference says about these fence instructions
 \begin{item}
 \href{http://www.intel.com/Assets/PDF/manual/253667.pdf}{SFENCE} \citep{IntelArch}
 
-Performs a serializing operation on all store-to-memory instructions that were issued prior the SFENCE instruction. This serializing operation guarantees that every store instruction that precedes in program order the SFENCE instruction is globally visible before any store instruction that follows the SFENCE instruction is globally visible. The SFENCE instruction is ordered with respect store instructions, other SFENCE instructions, any MFENCE instructions, and any serializing instructions (such as the CPUID instruction). It is not ordered with respect to load instructions or the LFENCE instruction. 
+Performs a serializing operation on all store-to-memory instructions that were issued prior the SFENCE instruction. This serializing operation guarantees that every store instruction that precedes in program order the SFENCE instruction is globally visible before any store instruction that follows the SFENCE instruction is globally visible. The SFENCE instruction is ordered with respect store instructions, other SFENCE instructions, any MFENCE instructions, and any serializing instructions (such as the CPUID instruction). It is not ordered with respect to load instructions or the LFENCE instruction.
 \end{item}
 
 \begin{item}
@@ -130,13 +130,13 @@ void my_lock( int tid )
 
    while ( true == g[other].flag )
    {
-      // 
+      //
       // The other guy is in the CS or wants in.
       //
       if ( turn != tid )
       {
          // he said he wants it, but hasn't given me my turn yet.
-         // 
+         //
          // let him have a chance.
          //
          g[tid].flag = false ;
@@ -147,7 +147,7 @@ void my_lock( int tid )
          }
 
          // he's about to give up his turn or has, so I can say I want it again.
-         // 
+         //
          // I'll now spin on his flag changing (though I could miss it if
          // unlucky and have to start all over if he tries again fast).
          //
@@ -320,7 +320,7 @@ The DB2 mutex code (and likely many other similar implementations) is fine as is
 
 \section{Conclusions.}
 
-I think that it is fair to say that the processor ordering model of modern Intel CPUs is demonstrably unordered requiring barriers in some cases.  It would be interesting to identify exactly where in the Dekker algorithm there are ordering dependencies.  I suspect such a study is already in the literature, although it is of little practical value since bus locked Intel instructions are superior.  
+I think that it is fair to say that the processor ordering model of modern Intel CPUs is demonstrably unordered requiring barriers in some cases.  It would be interesting to identify exactly where in the Dekker algorithm there are ordering dependencies.  I suspect such a study is already in the literature, although it is of little practical value since bus locked Intel instructions are superior.
 
 While some timing differences were presented, these may just provide a ballpark performance comparison.  Doing a performance comparison without optimization is of dubious value.  It may possible that since only relative times were compared there may be some validity to the comparison otherwise, but that really requires doing it to be sure.  It would be interesting to redo at least the xchg vs xadd vs baseline cases with optimization and see the differences.
 

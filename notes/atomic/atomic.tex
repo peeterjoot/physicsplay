@@ -3,8 +3,8 @@
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
 %
 
-% 
-% 
+%
+%
 \input{../peeter_prologue_print.tex}
 
 \usepackage{listings}
@@ -51,16 +51,16 @@ Discussion of problems and solutions associated with correct atomic and memory b
 
 Use of atomic instructions for manipulating ``word'' (or smaller) size quantities, avoiding the use of mutual exclusion library functions is becoming increasingly easy for developers.  This has not made the using atomic instructions or library methods correctly any less difficult or error prone.
 
-Information on how to use these written for an average Joe developer is hard to come by.  What can be easily found is good detailed low level information targeted at or written by operating system kernel extension writers or compiler developers \citep{lyons2002powerpc}, or language implementers and designers \citep{lea2005jsr} \citep{boehmMM} \citep{manson2004jsr} \citep{boehm2007c++} \citep{sutter2006prism} \citep{blainey2007weakmm} \citep{adve1996shared}.  
-%Once the low level details are understood one can move on to interesting exploitation topics such as lock free data structures 
+Information on how to use these written for an average Joe developer is hard to come by.  What can be easily found is good detailed low level information targeted at or written by operating system kernel extension writers or compiler developers \citep{lyons2002powerpc}, or language implementers and designers \citep{lea2005jsr} \citep{boehmMM} \citep{manson2004jsr} \citep{boehm2007c++} \citep{sutter2006prism} \citep{blainey2007weakmm} \citep{adve1996shared}.
+%Once the low level details are understood one can move on to interesting exploitation topics such as lock free data structures
 The driving reason for most atomic usage is lock avoidance, and a desire for performance drives most use of atomic methods.  When atomic operations are used to replace lock protected updates, this can change the semantics of the program in subtle ways that are difficult to understand or get right.  In particular, additional use of memory barrier instructions or library methods may be required to correctly replace lock protected updates.
 
 %of these problems over the years.
-%.  I am now deluded enough to think that I understand some of this topic a bit, and am going to make an attempt here at 
-%  A lecture discussion forum for sharing information on this topic is hard to use effectively, since it is hard to talk to many 
+%.  I am now deluded enough to think that I understand some of this topic a bit, and am going to make an attempt here at
+%  A lecture discussion forum for sharing information on this topic is hard to use effectively, since it is hard to talk to many
 %.  I have given a couple internal talks on the subject, failing miserably at all but putting people to sleep.  In our own atomic library documentation to describe some of the issues in an coherent fashion.
-%I have tried and failed previously in internal (DB2) talks, 
-%  Part of the problem was that I was myself struggling to figure things out while also being the source for information.  
+%I have tried and failed previously in internal (DB2) talks,
+%  Part of the problem was that I was myself struggling to figure things out while also being the source for information.
 %of the issues, and their solutions.
 
 It is assumed here that most use of atomics is done for performance based lock (mutex) avoidance.  An attempt to cheat, writing atomic based code that avoids a lock, unfortunately requires some understanding of what that lock provided in the first place.  Here the meaning of, requirements for, and implementation of, a lock are discussed.  The implementation of an atomic operation is then discussed, and we then move on to an enumeration of the types of memory barrier instructions and their effects.  Finally, unless the assembly samples provided have not scared aways the reader, we cover a simple non-mutex example of barrier usage.  This example uses an atomic to signal completion of a previous update and requires memory barriers for correctness on weakly ordered systems.
@@ -111,7 +111,7 @@ T1: <new timeslice.  Starts running again.>
 
 We had four updates to the counter after the initialization, but the counter value only goes up by one.  Uncontrolled updates like this can oscillate in peculiar fashions, and something that may be expected to be monotonically increase perhaps only trends upwards on average.  If the counter is not heavily contended you may even fluke out, running for a long time before getting unlucky with an inconsistent update of some sort.
 
-%When I came out of school tenish years ago, multicpu machines were not a commodity applicance and it was a bit of a rude suprise that a sequence of increments would not do just that, increment.  Nowadays a garden variety computer from a big box store is a multi-cpu machine, and next year your phone will probably be too.  
+%When I came out of school tenish years ago, multicpu machines were not a commodity applicance and it was a bit of a rude suprise that a sequence of increments would not do just that, increment.  Nowadays a garden variety computer from a big box store is a multi-cpu machine, and next year your phone will probably be too.
 
 This example leads us nicely to requirements for locking or atomic methods to protect such updates.
 
@@ -139,7 +139,7 @@ If all threads only ever updates this value we can use a similar bit of code to 
    doSomethingWithIt( v ) ;
 \end{lstlisting}
 
-No two sequential samplings of the shared variable x would see the value go down was possible in the uncontrolled update case.  
+No two sequential samplings of the shared variable x would see the value go down was possible in the uncontrolled update case.
 
 Now, you may ask why a mutex is required for the read.  If that is just a single operation, why would it matter?  That is a good question, but not easy to answer portably.  If your variable is appropriately aligned and of an appropriate size (practically speaking this means less than or equal to the native register size) and you are not compiling with funky compiler options that turn your accesses into byte accesses (such options do exist), then you may be able to do just that.  However, if that variable, for example, is a 64-bit integer and you are running on a 32-bit platform, then this read may take two instructions and you have a risk of reading the two halves at different points in time.  Similarly, suppose you were doing a 32-bit integer read, but that 32-bit integer was aligned improperly on a 16-bit boundary (on a platform that allows unaligned access), then your apparent single read may internally require multiple memory accesses (perhaps on different cache lines).  This could cause the same sort of split read scenario.
 
@@ -190,7 +190,7 @@ I find that this billion sets of call a function, increment a variable and retur
 \subsection{How does the lock work?}
 
 Any mutex implementation requires at least one platform specific method of performing a read, update, change cycle as if it is done without interruption.  Your hardware will likely provide a \href{http://en.wikipedia.org/wiki/Compare-and-swap}{Compare and swap} or \href{http://en.wikipedia.org/wiki/Load-Link/Store-Conditional}{Load Link/Store Conditional} (which can be used to construct higher level atomics like compare and swap).  Implementing a mutex is intrinsically unportable territory.  Older \href{http://download.intel.com/design/intarch/manuals/24319101.pdf}{intel} cpus did not provide a compare and swap, but one did have a bus locked exchange available (LOCK XCHG).
-%, so if you wanted to use compare and swap you had to know or mandate that the code could only be run on newer cpus.  
+%, so if you wanted to use compare and swap you had to know or mandate that the code could only be run on newer cpus.
 \href{http://ftp.parisc-linux.org/docs/arch/pa11_acd.pdf}{HP's PARSIC}, also easily argued to not be a modern architecture, only provides an atomic load and clear word instruction, also requiring 16 BYTE a aligned word.  What can be assumed is that any multiple cpu machine provides some sort of low level atomic instruction suitable for building a mutual exclusion interface.  If one were to imagine what a pthread\_mutex\_lock protected increment expands to, it would likely have the following form
 
 \begin{lstlisting}
@@ -260,7 +260,7 @@ For illustrative purposes, suppose that one was using the \href{http://gcc.gnu.o
    {
       WakeUpAnyWaiters() ;
    }
-\end{lstlisting} 
+\end{lstlisting}
 
 Reading the GCC docs one sees that this has desired compiler behaviour for instruction scheduling.  Namely, ``these builtins are considered a full barrier. That is, no memory operand will be moved across the operation, either forward or backward''.  The compiler will not move instructions that access memory and move them into or out of the critical section bounded by the pair of atomic instructions.
 
@@ -292,10 +292,10 @@ We can do a mutex implementation less wrongly using a memory barrier for release
    // Got the mutex, access the protected data.
    pShared->myLockProtectedData++ ;
 
-   __sync_syncronize() ; 
+   __sync_syncronize() ;
 
    m = 0 ;
-\end{lstlisting} 
+\end{lstlisting}
 
 Observe that the use of the word barrier is overloaded on the GCC page, with some usage associated with compiler instruction scheduling, and other usage referring to memory ordering.  Their syncronize function appears to be both.  Looking at the generated assembly for a weakly ordered system would verify this interpretation, and one would likely find an lwsync or sync instruction on PowerPC for example.  This modification of the locking code ensures the compiler lays down the code with the clearing of the lock word after the protected data access, and the hardware memory barrier instruction should ensure that reads or writes to the protected data are complete before the store to the lock word is allowed to occur.  Depending on the type of instruction that is emitted for the synchronize builtin, this may not actually prevent loads and stores that occur after the lock release from being started before the lock is released.  Generally if that must be prevented a full barrier is required, and it would not surprise me if most implementations of library methods like pthread\_mutex\_unlock do not prevent memory accesses that occur after the lock release from being initiated before the lock release occurs.  This sort of subtlety is not likely to be found in documentation for the mutex library functions.
 
@@ -321,8 +321,8 @@ With the sample code above we are still left with the possibility that the hardw
    // Got the mutex, access the protected data.
    pShared->myLockProtectedData++ ;
 
-   __sync_lock_release( &m ) ; 
-\end{lstlisting} 
+   __sync_lock_release( &m ) ;
+\end{lstlisting}
 
 This now implements functional mutual exclusion code, even on weakly ordered systems.  The compiler has provided methods that ensure it does not move the lock protected data accesses out of the critical section, we are using atomic instructions that guarantee other threads cannot also be modifying the data (presuming they all use the same mutex), and also have instructions that ensure the hardware does not inappropriately reorder the memory accesses.  Inappropriate reordering means that accesses to the lock protected data remain after the lock acquisition and before the lock release.  It may not mean that memory accesses from before the lock acquisition are done by the time the lock is acquired nor that memory accesses that occur after the lock is released occur after the lock is released (the compiler says it does that, but the hardware may be a sneaky bastard behind your back).
 
@@ -338,7 +338,7 @@ At the core of every atomic library method or compiler intrinsic is one or more 
 
 If you do not have an instruction for exactly what you want, it can often be built from some other lower level operation.  Suppose for example you want to safely do the contended increment without using a lock, but only have a compare and swap.  Something like the following can be used
 
-\begin{lstlisting} 
+\begin{lstlisting}
 int fetch_and_add( volatile int *ptr, int value )
 {
    int v = *ptr ;
@@ -355,7 +355,7 @@ int fetch_and_add( volatile int *ptr, int value )
 
    return prev ;
 }
-\end{lstlisting} 
+\end{lstlisting}
 
 Generally, one can assume at least a compare and swap operation, but this may also be simulated, built up out of more direct and primitive operations.  On PowerPC for example, this is done with the very flexible load-linked/store-condition instructions (load with reservation and store conditional in PowerPC lingo).  A fetch and add can be built with a small loop
 
@@ -368,7 +368,7 @@ fadd32_spin:
    sub       r3,r0,r4      ; fake a return using normal function return register r3
 \end{lstlisting} %\label{lst:fetchAndAddPPC}
 
-Building a portable dependence on a load-linked/store-condition primitive can be tricky, but possible.  In DB2's reader-writer mutex implementation, a data structure employing some nifty lock free algorithms \citep{valois-lock} \citep{harris2002practical} \citep{harris2001pragmatic} \citep{harrisPapers} \citep{benciaWeb} \citep{michael2002safe} we use this load-linked/store-conditional code to implement a slick compare-against-bitmask-and-increment-or-set-bit atomic operation.  We can do the same thing with compare and swap, but the generated assembly code is particular pretty on AIX, where PowerPC gives us this more powerful primitive. 
+Building a portable dependence on a load-linked/store-condition primitive can be tricky, but possible.  In DB2's reader-writer mutex implementation, a data structure employing some nifty lock free algorithms \citep{valois-lock} \citep{harris2002practical} \citep{harris2001pragmatic} \citep{harrisPapers} \citep{benciaWeb} \citep{michael2002safe} we use this load-linked/store-conditional code to implement a slick compare-against-bitmask-and-increment-or-set-bit atomic operation.  We can do the same thing with compare and swap, but the generated assembly code is particular pretty on AIX, where PowerPC gives us this more powerful primitive.
 \subsection{A historical reflection aside}
 
 Even only a couple of years ago, it was much harder to exploit atomic instructions.  Part of the reason is that we have tossed or stopped caring about older systems.  Nobody cares anymore about older ia32 systems that did not have cmpxchg.  Pre-PowerPC AIX implementations that did not have lwarx and stwcx. instructions are now dead and buried in landfill somewhere.  PARISC systems that did not provide any sort of reasonable atomic instructions are now being replaced by HP IPF systems.  We can now generally assume that some basic atomic building blocks are available and no longer have to tiptoe around avoiding breaking the old guys.
@@ -377,20 +377,20 @@ Another reason that makes atomic usage easier these days is the wide availabilit
 
 It is fun to illustrate just how murky the portability waters were before the prevalance of compiler intrinsics.  Atomic exploitation generally required writing assembly code, and that is never particularly fun.  Here is a sample code showing how one would code an ``inline assembly'' language implementation of fetch and add using the IBM compiler targeting PowerPC
 
-\begin{lstlisting} 
+\begin{lstlisting}
 int PowerPcFetchAndAdd32Internal ( volatile int * pAtomic, int value ) ;
 
 #pragma mc_func PowerPcFetchAndAdd32Internal { "7c001828" "7c002214" \
    "7c00192d" "40a2fff4" "7c640050" }
 
 #pragma reg_killed_by PowerPcFetchAndAdd32Internal cr0, gr0, gr3
-\end{lstlisting} 
+\end{lstlisting}
 
 What we have here is literally a mechanism to instruct the compiler to shove the raw instructions, specified by hexadecimal opcodes, directly into the instruction stream, with the writer of the inline assembly routine providing information about all the registers clobbered and side effects of the code.  This inline assembly code is actually generated from the listing in PowerPC assembly fragment above, which was carefully constructed to have the same structure as a real function call on AIX (input params in r3,r4, and output in r3)
 
 Before the GCC intrinsics were available, one could use the powerful GCC inline assembly syntax to instruct the compiler what to shove into the code.  Here is an example for fetch and add
 
-\begin{lstlisting} 
+\begin{lstlisting}
 #define IA32_XADD32(pAtomic, addValue, oldValue)                    \
 __asm__ __volatile__( "lock; xaddl %0,%1\n\t"                       \
  /* outputs */     : "=r"(oldValue), /* %0 : register */            \
@@ -398,9 +398,9 @@ __asm__ __volatile__( "lock; xaddl %0,%1\n\t"                       \
  /* inputs */      : "0" (addValue)  /* %2 == %0 : register */      \
  /* clobbers */    : "cc"            /* condition registers (ZF) */ \
                        )
-\end{lstlisting} 
+\end{lstlisting}
 
-Looks kind of like ASCII barf, but does the job nicely enough if you can get it right.  
+Looks kind of like ASCII barf, but does the job nicely enough if you can get it right.
 
 On platforms that provided no good inline assembly methods was not available (which includes those platforms and compilers for which inline assembly makes the code worse than using out of line assembly) one had the option of coding standalone assembler files to create the function call methods desired.  That can be just as difficult since one is then forced to learn the assembler syntax in more detail and understand the idiosyncrasies of all the platform calling conventions.
 
@@ -443,7 +443,7 @@ This sort of effective instruction reordering is often described saying that one
 
 This acquire barrier, perhaps unsurprising, is exactly the type of barrier required when implementing code for mutex acquisition.  In addition to ia64, the PowerPC platform requires such barriers, and provides the isync instruction to the programmer.  An example in a higher level language that may not have the desired effect without an such an acquire barrier is
 
-\begin{lstlisting} 
+\begin{lstlisting}
 if ( pSharedMem->atomic.bitTest() ) // use a bit to flag that somethingElse is "ready"
 {
    foo( pSharedMem->somethingElse ) ;
@@ -454,12 +454,12 @@ If correct function of your program depends on somethingElse only being read aft
 
 Your code should really look something like this
 
-\begin{lstlisting} 
+\begin{lstlisting}
 if ( pSharedMem->atomic.bitTestAcquire() )
 {
    foo( pSharedMem->somethingElse ) ;
 }
-\end{lstlisting} 
+\end{lstlisting}
 
 Here it is assumed the atomic library provides acquire and release variations of all atomic operations.  For PowerPC this could be as simple as adding an isync to the unordered atomic operation, but on a platform like ia64 one would probably use a different instruction completely (ie. cmpxchg.acq for example).  With such an acquire barrier the somethingElse access or another other memory operation that follows the load associated with the bitTest necessarily follows the load itself.  For example, this can mean that a non-dependent load that has been executed ahead of the acquire barrier will have to be thrown out and reexecuted.
 
@@ -554,13 +554,13 @@ As mentioned it is common for correct memory barrier usage to require paired con
 \begin{lstlisting}
 while (!pShared->lock.testAndSet_Acquire()) ;
 // (this loop should include all the normal critical section stuff like
-// spin, waste, 
-// pause() instructions, and last-resort-give-up-and-blocking on a resource 
+// spin, waste,
+// pause() instructions, and last-resort-give-up-and-blocking on a resource
 // until the lock is made available.)
 
 // Access to shared memory.
 
-pShared->foo = 1 
+pShared->foo = 1
 v = pShared-> goo
 
 pShared->lock.clear_Release()
@@ -587,7 +587,7 @@ In the consumer
 \begin{lstlisting}
 if ( pShared->atomic.compareAndSwap_Acquire(1,1) )
 {
-   v = pShared->goo 
+   v = pShared->goo
 }
 \end{lstlisting}
 
@@ -597,7 +597,7 @@ That is really all there is to this example, so it is perhaps anticlimatic, as w
 
 \section{Conclusion}
 
-Some of the issues associated with using atomics and barriers to replace the simpler lock mechanism have been discussed.  It is unfortunate to have to provide examples that utilize assembly code to illustrate these ideas, but it is harder to discuss these topics without doing so.  Hopefully the inclusion of some of the low level details and assembly listings has not rendered this on paper discussion too incomprehensible.  
+Some of the issues associated with using atomics and barriers to replace the simpler lock mechanism have been discussed.  It is unfortunate to have to provide examples that utilize assembly code to illustrate these ideas, but it is harder to discuss these topics without doing so.  Hopefully the inclusion of some of the low level details and assembly listings has not rendered this on paper discussion too incomprehensible.
 
 The fact that some low level systems details must be understood for correct use of atomics to avoid locking should perhaps be a warning to the programmer.  It can be very hard to implement lock avoidance algorithms correctly, harder still to test them.  There is also a significant maintenance impact to going down this road, so be good and sure that you really need the performance provided before taking this path.  Premature optimization in this area can be particularly dangerous and costly.
 

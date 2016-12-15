@@ -3,8 +3,8 @@
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
 %
 
-% 
-% 
+%
+%
 \input{../peeter_prologue_print.tex}
 %\input{../peeter_prologue_widescreen.tex}
 
@@ -86,7 +86,7 @@ There are few assumptions here.  One is that the pointer location used to ``broa
 
 Another assumption made here is that the compiler has generated code that executes in the same order as the higher level C code.  That is probably a bad assumption unless something else is done to explicitly enforce this ordering.  On some systems we have intrinsics or low level compiler methods to enforce this ordering.  One example is the no-op barrier mechanism available in the GCC compiler suite (or the Intel compiler that also implements GCC style inline assembly).  So a more correct, but now platform specific, way of coding this broadcast function would be:
 
- 
+
 \begin{lstlisting}
 void updateMemoryAndLetEverybodySeeIt( broadcast * pStuff, sharedMem * pShared )
 {
@@ -94,11 +94,11 @@ void updateMemoryAndLetEverybodySeeIt( broadcast * pStuff, sharedMem * pShared )
    pStuff->y = 7 ;
 
    __asm__ __volatile__  ( "" ::: "memory" ) ;
- 
+
    pShared->publicUnprotectedMemoryWithStuff  =  pStuff ;
 }
 \end{lstlisting}
- 
+
 
 The next assumption here is one of sequential memory, one that also cannot be correctly presumed.  By the time the publicUnprotectedMemoryWithStuff assignment is made, it is assumed that the previous x, and y memory operations are complete.  i.e.: when somebody accesses $*pStuff->publicUnprotectedMemoryWithStuff$, the 3 and 7 values will be seen, and not some previous values.  This is not correct on a system where out of order memory accesses are possible.  Two example systems like this are AIX and HP-IPF (PowerPC and ia64 respectively).
 
@@ -111,9 +111,9 @@ void updateMemoryAndLetEverybodySeeIt( broadcast * pStuff, sharedMem * pShared )
 {
    pStuff->x = 3 ;
    pStuff->y = 7 ;
- 
+
    __asm__ __volatile__  ( "lwsync" ::: "memory" ) ;
- 
+
    pShared->publicUnprotectedMemoryWithStuff  =  pStuff ;
 }
 \end{lstlisting}
@@ -125,9 +125,9 @@ void updateMemoryAndLetEverybodySeeIt( broadcast * pStuff, sharedMem * pShared )
 {
    pStuff->x = 3 ;
    pStuff->y = 7 ;
- 
+
    __lwsync() ; // from builtins.h
- 
+
    pShared->publicUnprotectedMemoryWithStuff  =  pStuff ;
 }
 \end{lstlisting}

@@ -3,8 +3,8 @@
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
 %
 
-% 
-% 
+%
+%
 \input{../peeter_prologue_print.tex}
 
 \usepackage{listings}
@@ -57,7 +57,7 @@ lock movb [mem], 0
 
 xchg [mem],0	; NOTE: lock implied for xchg with memory operand.
 
-mfence ; movb [mem],0 
+mfence ; movb [mem],0
 
 \end{lstlisting}
 
@@ -83,55 +83,55 @@ Now, if we look at the \href{http://download.intel.com/design/intarch/manuals/24
 So, it appears that if these two sets of memory operations are the only accesses protected by the mutex we are covered.  Does real code have to worry about non- temporal streaming instructions and these string operation instructions?  What are these beasties, and can we trust our compilers and system libraries (such as the C runtime libraries) to avoid the use of such instructions?  Details like these are not likely documented or guaranteed in any form, so to be safe it appears that something more would be required generally.  For DB2 use where we cannot possible audit all the code generated within all such mutex use, we would need a guarantee that none of the Intel, GCC, Sun(AMD) or Microsoft compilers, generated any such instructions or use these in their compiler runtimes.  We would also require that the C runtime libraries on Linux, Solaris, and Windows used no such instructions.  That sounds like a bit much to ask for, although we could possibly get ``lucky'' and avoid seeing any problem due to the missing  barrier instructions.  If there was a runtime failure to enforce the required ordering chances are that it would be pretty much impossible to debug or solve it!
 
 A little bit of digging quickly answers this question.  Creating a program that includes some non-inline calls to memcpy, disassembly shows that the Intel runtime library functions associated with such a call can include such instructions.  I found for example:
- 
+
 \begin{lstlisting}
-  404990:   49 83 e8 40             sub    $0x40,%r8  
-  404994:   0f 18 82 80 01 00 00    prefetchnta 0x180(%rdx)  
-  40499b:   4c 8b 0a                mov    (%rdx),%r9  
-  40499e:   4c 0f c3 09             movnti %r9,(%rcx)  
-  4049a2:   4c 8b 52 08             mov    0x8(%rdx),%r10  
-  4049a6:   4c 0f c3 51 08          movnti %r10,0x8(%rcx)  
-  4049ab:   4c 8b 5a 10             mov    0x10(%rdx),%r11  
-  4049af:   4c 0f c3 59 10          movnti %r11,0x10(%rcx)  
-  4049b4:   4c 8b 4a 18             mov    0x18(%rdx),%r9  
-  4049b8:   4c 0f c3 49 18          movnti %r9,0x18(%rcx)  
-  4049bd:   4c 8b 52 20             mov    0x20(%rdx),%r10  
-  4049c1:   4c 0f c3 51 20          movnti %r10,0x20(%rcx)  
-  4049c6:   4c 8b 5a 28             mov    0x28(%rdx),%r11  
-  4049ca:   4c 0f c3 59 28          movnti %r11,0x28(%rcx)  
-  4049cf:   4c 8b 4a 30             mov    0x30(%rdx),%r9  
-  4049d3:   4c 0f c3 49 30          movnti %r9,0x30(%rcx)  
-  4049d8:   4c 8b 52 38             mov    0x38(%rdx),%r10  
-  4049dc:   4c 0f c3 51 38          movnti %r10,0x38(%rcx)  
-  4049e1:   48 8d 52 40             lea    0x40(%rdx),%rdx  
-  4049e5:   48 8d 49 40             lea    0x40(%rcx),%rcx  
-  4049e9:   49 83 f8 40             cmp    $0x40,%r8  
-  4049ed:   7d a1                   jge    404990 <__intel_new_memcpy+0x16a0>  
-  4049ef:   e9 7c ff ff ff          jmpq   404970 <__intel_new_memcpy+0x1680>  
-  4049f4:   66                      data16  
+  404990:   49 83 e8 40             sub    $0x40,%r8
+  404994:   0f 18 82 80 01 00 00    prefetchnta 0x180(%rdx)
+  40499b:   4c 8b 0a                mov    (%rdx),%r9
+  40499e:   4c 0f c3 09             movnti %r9,(%rcx)
+  4049a2:   4c 8b 52 08             mov    0x8(%rdx),%r10
+  4049a6:   4c 0f c3 51 08          movnti %r10,0x8(%rcx)
+  4049ab:   4c 8b 5a 10             mov    0x10(%rdx),%r11
+  4049af:   4c 0f c3 59 10          movnti %r11,0x10(%rcx)
+  4049b4:   4c 8b 4a 18             mov    0x18(%rdx),%r9
+  4049b8:   4c 0f c3 49 18          movnti %r9,0x18(%rcx)
+  4049bd:   4c 8b 52 20             mov    0x20(%rdx),%r10
+  4049c1:   4c 0f c3 51 20          movnti %r10,0x20(%rcx)
+  4049c6:   4c 8b 5a 28             mov    0x28(%rdx),%r11
+  4049ca:   4c 0f c3 59 28          movnti %r11,0x28(%rcx)
+  4049cf:   4c 8b 4a 30             mov    0x30(%rdx),%r9
+  4049d3:   4c 0f c3 49 30          movnti %r9,0x30(%rcx)
+  4049d8:   4c 8b 52 38             mov    0x38(%rdx),%r10
+  4049dc:   4c 0f c3 51 38          movnti %r10,0x38(%rcx)
+  4049e1:   48 8d 52 40             lea    0x40(%rdx),%rdx
+  4049e5:   48 8d 49 40             lea    0x40(%rcx),%rcx
+  4049e9:   49 83 f8 40             cmp    $0x40,%r8
+  4049ed:   7d a1                   jge    404990 <__intel_new_memcpy+0x16a0>
+  4049ef:   e9 7c ff ff ff          jmpq   404970 <__intel_new_memcpy+0x1680>
+  4049f4:   66                      data16
 \end{lstlisting}
 
 Here we have piles of the non-temporal movnti instructions.  This compiler runtime helper function is a massive one, and looking in other places one finds that some of the non-temporal stores are in fact associated with a SFENCE instruction, such as:
 
-\begin{lstlisting} 
-  406190:   49 81 e8 80 00 00 00    sub    $0x80,%r8  
-  406197:   66 0f e7 07             movntdq %xmm0,(%rdi)  
-  40619b:   66 0f e7 47 10          movntdq %xmm0,0x10(%rdi)  
-  4061a0:   66 0f e7 47 20          movntdq %xmm0,0x20(%rdi)  
-  4061a5:   66 0f e7 47 30          movntdq %xmm0,0x30(%rdi)  
-  4061aa:   66 0f e7 47 40          movntdq %xmm0,0x40(%rdi)  
-  4061af:   66 0f e7 47 50          movntdq %xmm0,0x50(%rdi)  
-  4061b4:   66 0f e7 47 60          movntdq %xmm0,0x60(%rdi)  
-  4061b9:   66 0f e7 47 70          movntdq %xmm0,0x70(%rdi)  
-  4061be:   48 81 c7 80 00 00 00    add    $0x80,%rdi  
-  4061c5:   49 81 f8 80 00 00 00    cmp    $0x80,%r8  
-  4061cc:   7d c2                   jge    406190 <__intel_new_memset+0xac0>  
-  4061ce:   0f ae f8                sfence 
-\end{lstlisting} 
+\begin{lstlisting}
+  406190:   49 81 e8 80 00 00 00    sub    $0x80,%r8
+  406197:   66 0f e7 07             movntdq %xmm0,(%rdi)
+  40619b:   66 0f e7 47 10          movntdq %xmm0,0x10(%rdi)
+  4061a0:   66 0f e7 47 20          movntdq %xmm0,0x20(%rdi)
+  4061a5:   66 0f e7 47 30          movntdq %xmm0,0x30(%rdi)
+  4061aa:   66 0f e7 47 40          movntdq %xmm0,0x40(%rdi)
+  4061af:   66 0f e7 47 50          movntdq %xmm0,0x50(%rdi)
+  4061b4:   66 0f e7 47 60          movntdq %xmm0,0x60(%rdi)
+  4061b9:   66 0f e7 47 70          movntdq %xmm0,0x70(%rdi)
+  4061be:   48 81 c7 80 00 00 00    add    $0x80,%rdi
+  4061c5:   49 81 f8 80 00 00 00    cmp    $0x80,%r8
+  4061cc:   7d c2                   jge    406190 <__intel_new_memset+0xac0>
+  4061ce:   0f ae f8                sfence
+\end{lstlisting}
 
 Here we have a tight loop of MOVNTDQ instructions until done, and when done things terminate with an SFENCE instruction.  It is unambiguous in this second listing that the non-temporal stores will be ordered in a fashion equivalent to a regular plain old store instruction.  If all the non-temporal stores in this runtime library code terminate with an SFENCE instruction before this function exits then we are covered for this one method, but looking at the listing it is not obvious whether or not that is the case.  Perhaps so, but if we are looking for an answer to the question, ``is it possible to encounter non- temporal stores for code that could be executed during a critical section'', we have an answer in the affirmative.  Perhaps the Intel runtime does do an SFENCE instruction before it returns in all codepaths, but a sophisticated symbolic disassembler, or the source code itself is probably required to try to answer that question.  I was not about to try such a disassembly myself (the reverse engineering implied in such an attempt would also likely violates license agreements).
 
-How about the string operation exception to the store ordering guarantee of a pair of stores?  One can also find MOVS instructions in the very same runtime library function, so concern about these is also required.  For us we need to understand if the store zero to the lock word of the mutex that releases this lock is necessarily ordered after the MOVS store instruction that may be associated with the data that this mutex protects.  The answer can be found in 8.2.4.1 bullet 3, where it states ``String operations are not reordered with other stores''.  Provided the memory is WB (write back), whatever that means, we are covered.  We do not have a guarantee that string operations have any intrinsic ordering between themselves, but only need to keep the animal in the cage, making sure that any stores, including these are complete before the lock release is visible to other cpus. 
+How about the string operation exception to the store ordering guarantee of a pair of stores?  One can also find MOVS instructions in the very same runtime library function, so concern about these is also required.  For us we need to understand if the store zero to the lock word of the mutex that releases this lock is necessarily ordered after the MOVS store instruction that may be associated with the data that this mutex protects.  The answer can be found in 8.2.4.1 bullet 3, where it states ``String operations are not reordered with other stores''.  Provided the memory is WB (write back), whatever that means, we are covered.  We do not have a guarantee that string operations have any intrinsic ordering between themselves, but only need to keep the animal in the cage, making sure that any stores, including these are complete before the lock release is visible to other cpus.
 
 So, given this, it appears that the lock release code fragment must be modified like so for correctness if there is a possibility of non-temporal store instructions
 
@@ -146,7 +146,7 @@ __asm__ __volatile__("sfence" : : : "memory" ) ;  // compiler fence to avoid loa
 pMutex->lockWord = 0 ;
 \end{lstlisting}
 
-The SFENCE is not required for the possible MOVS instructions that may be executed, but may be required, at least pathologically, if we have a memcpy while the mutex is 
+The SFENCE is not required for the possible MOVS instructions that may be executed, but may be required, at least pathologically, if we have a memcpy while the mutex is
 held.
 
 Next, let us move on to consider the load fencing.  Can any of the loads get out of the cage?  We now go back to the manual.  It states that ``Reads are not reordered with other reads''.  So if we released the mutex with xchg, we would be covered.  That is not the case in this first or second listing for this potential simple lock release code.  Ah, here we go ``Writes are not reordered with older reads''.  We are good.  It appears that the SFENCE plus store zero is sufficient and correct for the lock release, even if the code in question contains non-temporal stores.  The next question is whether or not it is better to use an SFENCE or to use an XCHG (with implied LOCK prefix).

@@ -159,7 +159,7 @@ where the Jacobian evaluated at \( \Bx^0 \) is
 
 \begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:280}
 J(\Bx^0) =
-G + 
+G +
 \evalbar{
 {\begin{bmatrix}
 \PD{\psi_j}{H_i}
@@ -171,7 +171,7 @@ In this case the Jacobian is the sum of a constant matrix and one with hyperboli
 
 \begin{subequations}
 \begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:520}
-J_H(\Bx^0) = 2 \lr{ \Delta x }^2 
+J_H(\Bx^0) = 2 \lr{ \Delta x }^2
 {\begin{bmatrix}
 \cosh\psi_i \delta_{ij}
 \end{bmatrix}}_{ij}.
@@ -211,7 +211,7 @@ or
 
 \makeSubAnswer{}{multiphysics:problemSet2b:2b}
 
-Despite the Jacobian being non-singular, there is the possibility that it can have near zero eigenvalues.  This could trigger oscillatory behavior if the iteration changes too much at once (motivating the use of damping).  To apply the damping method outlined in the class slides, the bounds \( beta \) and \( \rho \) of 
+Despite the Jacobian being non-singular, there is the possibility that it can have near zero eigenvalues.  This could trigger oscillatory behavior if the iteration changes too much at once (motivating the use of damping).  To apply the damping method outlined in the class slides, the bounds \( beta \) and \( \rho \) of
 
 \begin{subequations}
 \begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:540}
@@ -233,17 +233,17 @@ a value that is constant and can be precomputed before any iteration.  For the L
 \begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:600}
 \begin{aligned}
 \Norm{ J(\Bx') - J(\Bx) }
-&= 
+&=
 \Norm{ G + J_H(\Bx') - \lr{ G + J_H(\Bx)} } \\
-&= 
-2 \lr{ \Delta x }^2 
+&=
+2 \lr{ \Delta x }^2
 \Norm{
 {\begin{bmatrix}
 \lr{\cosh \psi_i' - \cosh \psi_i} \delta_{ij}
 \end{bmatrix}}_{ij}
 } \\
 &=
-2 \lr{ \Delta x }^2 
+2 \lr{ \Delta x }^2
 \Norm{
 {\begin{bmatrix}
 \lr{ \inv{2} \lr{\psi_i'}^2 - \inv{2} \psi_i^2 }\delta_{ij}
@@ -284,13 +284,13 @@ The damping algorithm of the class slides was
 }
 
 %%% Newton's method is make the approximation \( F(\Bx^1) \approx 0 \), and to solve for \( \Bx^1 \) in
-%%% 
+%%%
 %%% \begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:300}
 %%% \Bx^1 = \Bx^0 - \lr{ J(\Bx^0) }^{-1} F(\Bx^0),
 %%% \end{equation}
-%%% 
+%%%
 %%% however, rather than calculate the inverse of the Jacobian, LU factorization can be used to solve for \( \Bx^1 - \Bx^0 \).  With a constant Jacobian such a pre-factorization should be very effective in this case.
-%%% 
+%%%
 %%% %%%The difference of exponentials can be expanded in Taylor series
 %%% %%%
 %%% %%%\begin{dmath}\label{eqn:multiphysicsProblemSet2bProblem2:120}
@@ -331,43 +331,43 @@ The damping algorithm of the class slides was
 %%% %%%\end{equation}
 %%% %%%
 %%% %%%FIXME: does he want us to show that this complete Jacobian is non-singular (which is what matters since that's what has to be inverted to apply newton's method).
-%%% 
+%%%
 %%% In order to apply damped Newton's method, we are looking to minimize \( \Norm{F \lr{ \Bx^0 + \alpha \Delta} }^2 \) with respect to \( \alpha \).  Here \( \Delta = -J^{-1} F \), the direction of the iteration adjustment.  That comes from solving
-%%% 
+%%%
 %%% \begin{dmath}\label{eqn:multiphysicsProblemSet2bProblem2:380}
-%%% 0 
-%%% = \PD{\alpha}{} \Norm{ F( \Bx^0 + \alpha \Delta ) }^2 
+%%% 0
+%%% = \PD{\alpha}{} \Norm{ F( \Bx^0 + \alpha \Delta ) }^2
 %%% = 2 F \cdot \PD{ \alpha }{F}
 %%% = 2 \lr{ G \lr{ \Bx^0 + \alpha \Delta } - \Bb + H } \cdot \lr{
-%%% G \Delta + 
+%%% G \Delta +
 %%% 2 \lr{ \Delta x }^2
 %%% {\begin{bmatrix}
 %%% \Delta_i \cosh\lr{ \psi_i + \alpha \Delta_i }
 %%% \end{bmatrix}}_i
 %%% }
 %%% \end{dmath}
-%%% 
-%%% Writing 
-%%% 
+%%%
+%%% Writing
+%%%
 %%% \begin{dmath}\label{eqn:multiphysicsProblemSet2bProblem2:400}
-%%% H' = 
+%%% H' =
 %%% 2 \lr{ \Delta x }^2
 %%% {\begin{bmatrix}
 %%% \Delta_i \cosh\lr{ \psi_i + \alpha \Delta_i }
-%%% \end{bmatrix}}_i 
+%%% \end{bmatrix}}_i
 %%% \approx
 %%% 2 \lr{ \Delta x }^2
 %%% {\begin{bmatrix}
-%%% \Delta_i \cosh \psi_i 
+%%% \Delta_i \cosh \psi_i
 %%% \end{bmatrix}}_i
 %%% = J_H(\Bx^0) \Delta
 %%% ,
 %%% \end{dmath}
-%%% 
+%%%
 %%% then to zeroth order in \( \alpha \) this has solution
-%%% 
+%%%
 %%% \begin{dmath}\label{eqn:multiphysicsProblemSet2bProblem2:420}
-%%% \alpha 
+%%% \alpha
 %%% = -\frac{F(\Bx^0) \cdot \lr{ G \Delta + H' }}{
 %%% (G \Delta) \cdot \lr{ G \Delta + H' }
 %%% }
@@ -375,9 +375,9 @@ The damping algorithm of the class slides was
 %%% - \frac{F^\T J \Delta}{\Delta^\T G J \Delta}
 %%% .
 %%% \end{dmath}
-%%% 
+%%%
 %%% % BOGUS thought, the 2's along the diagonal will dominate.
-%%% %With \( 2 ( 1 + \lr{ \Delta x}^2 ) \approx \) along the diagonal of the The inverse Jacobian being \( O(N^2) \) 
+%%% %With \( 2 ( 1 + \lr{ \Delta x}^2 ) \approx \) along the diagonal of the The inverse Jacobian being \( O(N^2) \)
 %%% %
 %%% %\begin{equation}\label{eqn:multiphysicsProblemSet2bProblem2:360}
 %%% %\lr{ J(\Bx^0) }^{-1} = \frac{(N+1)^2}{2} I,
