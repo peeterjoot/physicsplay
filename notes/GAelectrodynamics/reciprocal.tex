@@ -3,30 +3,30 @@
 % Licenced as described in the file LICENSE under the root directory of this GIT repository.
 %
 %{
-\input{../blogpost.tex}
-\renewcommand{\basename}{reciprocal}
-%\renewcommand{\dirname}{notes/phy1520/}
-\renewcommand{\dirname}{notes/ece1228-electromagnetic-theory/}
-%\newcommand{\dateintitle}{}
-%\newcommand{\keywords}{}
-
-\input{../peeter_prologue_print2.tex}
-
-\usepackage{peeters_layout_exercise}
-\usepackage{peeters_braket}
-\usepackage{peeters_figures}
-\usepackage{siunitx}
-%\usepackage{mhchem} % \ce{}
-%\usepackage{macros_bm} % \bcM
-%\usepackage{macros_qed} % \qedmarker
-%\usepackage{txfonts} % \ointclockwise
-
-\beginArtNoToc
-
-\generatetitle{Reciprocal frame vectors}
-%\chapter{reciprocal frame vectors}
-%\label{chap:reciprocal}
-
+%\input{../blogpost.tex}
+%\renewcommand{\basename}{reciprocal}
+%%\renewcommand{\dirname}{notes/phy1520/}
+%\renewcommand{\dirname}{notes/ece1228-electromagnetic-theory/}
+%%\newcommand{\dateintitle}{}
+%%\newcommand{\keywords}{}
+%
+%\input{../peeter_prologue_print2.tex}
+%
+%\usepackage{peeters_layout_exercise}
+%\usepackage{peeters_braket}
+%\usepackage{peeters_figures}
+%\usepackage{siunitx}
+%%\usepackage{mhchem} % \ce{}
+%%\usepackage{macros_bm} % \bcM
+%%\usepackage{macros_qed} % \qedmarker
+%%\usepackage{txfonts} % \ointclockwise
+%
+%\beginArtNoToc
+%
+%\generatetitle{Reciprocal frame vectors}
+%%\chapter{reciprocal frame vectors}
+%%\label{chap:reciprocal}
+%
 \makedefinition{Reciprocal frame}{dfn:reciprocal:frame}{
 Given a basis for a subspace \( \setlr{ \Bx_1, \Bx_2, \cdots \Bx_n } \), the reciprocal frame is defined as the set of vectors \( \setlr{ \Bx^1, \Bx^2, \cdots \Bx^n } \) satisfying
 
@@ -50,7 +50,7 @@ One of the utilities of a reciprocal frame is that it allows for the computation
 Dotting with the reciprocal frame vectors then trivally extracts these coordinates
 
 \begin{dmath}\label{eqn:reciprocal:40}
-\Ba \cdot \Bx^i 
+\Ba \cdot \Bx^i
 = \lr{\sum_j a^j \Bx_j} \cdot \Bx^i
 = \sum_j a^j {\delta_j}^i
 = a^i.
@@ -65,15 +65,18 @@ Similarly, dotting with the frame basis vectors provides the coordinates with re
 Dotting with the basis vectors gives
 
 \begin{dmath}\label{eqn:reciprocal:80}
-\Ba \cdot \Bx^i 
+\Ba \cdot \Bx^i
 = \lr{\sum_j a_j \Bx^j} \cdot \Bx_i
 = \sum_j a_j {\delta^j}_i
 = a_i.
 \end{dmath}
 
-Fixme: PICTURES THAT DEMONSTRATES THESE.  
+An example of a 2D oblique Euclidean basis and a corresponding reciprocal basis is plotted in \cref{fig:obliqueReciprocal:obliqueReciprocalFig2}.  Also plotted are the superposition of the projections required to arrive at a given point \( (4,2) \)).
+In this plot, neither of the reciprocal frame vectors \( \Be^i \) are normal to the corresponding basis vectors \( \Be_i \).  If \( \Be_1 \), say, is increased(decreased) in magnitude, there will be a corresponding decrease(increase) in the magnitude of \( \Be^1 \), but if the orientation is remained fixed, the corresponding direction of the reciprocal frame vector stays the same.
 
-The question to answer is how to compute the reciprocal frame vectors.  This is not intrinsically a GA problem, and can be solved with standand linear algebra theory.  For example, given a 2D basis \( \setlr{ \Bx_1, \Bx_2 } \), the reciprocal basis can be assumed to have a coordinate representation in the original basis
+\imageFigure{../../figures/GAelectrodynamics/obliqueReciprocalFig2}{Oblique and reciprocal bases.}{fig:obliqueReciprocal:obliqueReciprocalFig2}{0.45}
+
+How are the reciprocal frame vectors computed?  While these vectors have a natural GA representation, this is not intrinsically a GA problem, and can be solved with standand linear algebra, using a matrix inversion.  For example, given a 2D basis \( \setlr{ \Bx_1, \Bx_2 } \), the reciprocal basis can be assumed to have a coordinate representation in the original basis
 
 \begin{dmath}\label{eqn:reciprocal:100}
 \begin{aligned}
@@ -112,6 +115,7 @@ Additionally, the numerators are each dot products of \( \Bx_1, \Bx_2 \) with th
 \end{dmath}
 
 or
+
 %\begin{dmath}\label{eqn:reciprocal:180}
 \boxedEquation{eqn:reciprocal:180}{
 \begin{aligned}
@@ -120,6 +124,78 @@ or
 \end{aligned}
 }
 %\end{dmath}
+
+Geometrically, dotting with the bivector of the plane is a hybrid rotation and scaling operation.  For example, for \R{2} with \( \Bx_1 = a_1 \Be_1 + a_2 \Be_2, \Bx_2 = b_1 \Be_1 + b_2 \Be_2 \), that pseudoscalar for this basis is
+
+\begin{dmath}\label{eqn:reciprocal:260}
+\Bx_1 \wedge \Bx_2
+=
+\lr{ a_1 \Be_1 + a_2 \Be_2 } \wedge \lr{ b_1 \Be_1 + b_2 \Be_2 }
+=
+\lr{ a_1 b_2 - a_2 b_1 } \Be_{12}.
+\end{dmath}
+
+This has inverse
+\begin{dmath}\label{eqn:reciprocal:280}
+\inv{\Bx_1 \wedge \Bx_2 }
+=
+\inv{ a_1 b_2 - a_2 b_1 } \Be_{21}.
+\end{dmath}
+
+So for the \R{2} the reciprocal frame is just
+
+\begin{dmath}\label{eqn:reciprocal:300}
+\begin{aligned}
+\Bx^1 &= \Bx_2 \frac{\Be_{21}}{ a_1 b_2 - a_2 b_1 } \\
+\Bx^2 &= \Bx_1 \frac{\Be_{12}}{ a_1 b_2 - a_2 b_1 }
+\end{aligned}
+\end{dmath}
+
+The vector \( \Bx^1 \) is obtained by rotating \( \Bx_2 \) by \( -\pi/2 \), and rescaling it.
+The vector \( \Bx^2 \) is similarly obtained by a scaling and a rotation of \( \Bx_1 \) by \( \pi/2 \).
+
+Generalizing \cref{eqn:reciprocal:180} is almost possible by inspection.  Given
+a subspace spanned by a three vector basis \( \setlr{ \Bx_1, \Bx_2, \Bx_3 } \) the reciprocal frame vectors can be written as dot products
+
+\begin{dmath}\label{eqn:reciprocal:320}
+\begin{aligned}
+\Bx^1 &= \lr{ \Bx_2 \wedge \Bx_3 } \cdot \lr{ \Bx^3 \wedge \Bx^2 \wedge \Bx^1 } \\
+\Bx^2 &= \lr{ \Bx_3 \wedge \Bx_1 } \cdot \lr{ \Bx^1 \wedge \Bx^3 \wedge \Bx^2 } \\
+\Bx^3 &= \lr{ \Bx_1 \wedge \Bx_2 } \cdot \lr{ \Bx^2 \wedge \Bx^1 \wedge \Bx^3 } \\
+\end{aligned}
+\end{dmath}
+
+Each of those trivector terms equals \( - \Bx^1 \wedge \Bx^2 \wedge \Bx^3 \) and can be related to the (known) pseudoscalar \( \Bx_1 \wedge \Bx_2 \wedge \Bx_3 \) by observing that
+
+\begin{dmath}\label{eqn:reciprocal:340}
+\lr{ \Bx^1 \wedge \Bx^2 \wedge \Bx^3 } \cdot \lr{ \Bx_1 \wedge \Bx_2 \wedge \Bx_3 }
+=
+\Bx^1 \cdot \lr{ \Bx^2 \cdot \lr{ \Bx^3 \cdot \lr{ \Bx_1 \wedge \Bx_2 \wedge \Bx_3 } }}
+=
+\Bx^1 \cdot \lr{ \Bx^2 \cdot \lr{ \Bx_1 \wedge \Bx_2 } }
+=
+\Bx^1 \cdot \lr{ -\Bx_1 }
+=
+-1,
+\end{dmath}
+
+which means that
+
+\begin{dmath}\label{eqn:reciprocal:360}
+-\Bx^1 \wedge \Bx^2 \wedge \Bx^3 = \inv{ \Bx_1 \wedge \Bx_2 \wedge \Bx_3 },
+\end{dmath}
+
+and
+
+\boxedEquation{eqn:reciprocal:380}{
+\begin{aligned}
+\Bx^1 &= \lr{ \Bx_2 \wedge \Bx_3 } \cdot \inv{ \Bx_1 \wedge \Bx_2 \wedge \Bx_3 } \\
+\Bx^2 &= \lr{ \Bx_3 \wedge \Bx_1 } \cdot \inv{ \Bx_1 \wedge \Bx_2 \wedge \Bx_3 } \\
+\Bx^3 &= \lr{ \Bx_1 \wedge \Bx_2 } \cdot \inv{ \Bx_1 \wedge \Bx_2 \wedge \Bx_3 } \\
+\end{aligned}
+}
+
+It should be clear how to generalize this to higher dimensions if desired.
 
 \makeproblem{Reciprocal frame for two dimensional subspace.}{problem:reciprocal:2dsubspaceRecip}{
 Prove \cref{eqn:reciprocal:120}.
@@ -143,7 +219,7 @@ This can be written out as a pair of matrix equations
 \begin{dmath}\label{eqn:reciprocal:220}
 \begin{aligned}
 \begin{bmatrix}
-1 \\ 
+1 \\
 0
 \end{bmatrix}
 &=
@@ -156,7 +232,7 @@ a \\
 b
 \end{bmatrix} \\
 \begin{bmatrix}
-0 \\ 
+0 \\
 1
 \end{bmatrix}
 &=
@@ -178,7 +254,7 @@ The matrix inverse is
 \Bx_1^2 & \Bx_1 \cdot \Bx_2 \\
 \Bx_2 \cdot \Bx_1 & \Bx_2^2 \\
 \end{bmatrix}
-}^-1
+}^{-1}
 =
 \inv{ \Bx_1^2 \Bx_2^2 - \lr{\Bx_1 \cdot \Bx_2}^2 }
 \begin{bmatrix}
@@ -191,5 +267,4 @@ Multiplying by the \( (1,0), and (0,1) \) vectors picks out the respective colum
 } % answer
 
 %}
-%\EndArticle
-\EndNoBibArticle
+%\EndNoBibArticle
