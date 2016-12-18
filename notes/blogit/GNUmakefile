@@ -126,10 +126,10 @@ clean :: mostlyclean localclean
 mostlyclean :: 
 	rm -f $(CLEAN_TARGETS)
 
-peeters_layout.sty : ../peeters_layout.sty
+peeters_layout.sty : ../latex/peeters_layout.sty
 	cp $^ $@
 
-peeters_figures.sty : ../peeters_figures.sty
+peeters_figures.sty : ../latex/peeters_figures.sty
 	cp $^ $@
 
 ece1229.sty : ../ece1229-antenna/ece1229.sty
@@ -138,39 +138,39 @@ ece1229.sty : ../ece1229-antenna/ece1229.sty
 hbFigure.sty : ../ece1254-multiphysics/hbFigure.sty
 	cp $^ $@
 
-peeters_layout_exercise.sty : ../peeters_layout_exercise.sty
+peeters_layout_exercise.sty : ../latex/peeters_layout_exercise.sty
 	cp $^ $@
 
-peeters_macros.sty : ../peeters_macros.sty
+peeters_macros.sty : ../latex/peeters_macros.sty
 	cp $^ $@
 
-peeters_braket.sty : ../peeters_braket.sty
+peeters_braket.sty : ../latex/peeters_braket.sty
 	cp $^ $@
 
-macros_bm.sty : ../macros_bm.sty
+macros_bm.sty : ../latex/macros_bm.sty
 	cp $^ $@
 
-macros_cal.sty : ../macros_cal.sty
+macros_cal.sty : ../latex/macros_cal.sty
 	cp $^ $@
 
-macros_lcal.sty : ../macros_lcal.sty
+macros_lcal.sty : ../latex/macros_lcal.sty
 	cp $^ $@
 
-macros_qed.sty : ../macros_qed.sty
+macros_qed.sty : ../latex/macros_qed.sty
 	cp $^ $@
 
-matlab.sty : ../matlab.sty
+matlab.sty : ../latex/matlab.sty
 	cp $^ $@
 
-macros_mathematica.sty : ../macros_mathematica.sty
+macros_mathematica.sty : ../latex/macros_mathematica.sty
 	cp $^ $@
 
 Bibliography.bib : myrefs.bib
 	sedwrapper 's/@webpage/@manual/g' < $< > $@
 
 # old style:
-myrefs.bib: ../myrefs.bib.in ../METADATA
-	cp ../myrefs.bib.in myrefs.bib
+myrefs.bib: ../latex/myrefs.bib.in ../METADATA
+	cp ../latex/myrefs.bib.in myrefs.bib
 	(cd .. ; ./METADATA -bib >> $(THISDIR)/myrefs.bib)
 
 #ps8mathematica.tex : ../METADATA ../../mathematica/METADATA
