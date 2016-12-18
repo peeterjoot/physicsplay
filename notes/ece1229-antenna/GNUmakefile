@@ -1,7 +1,7 @@
 THISDIR := ece1229-antenna
 THISBOOK := ece1229
 
-include ../make.bookvars
+include ../latex/make.bookvars
 
 #ONCEFLAGS := -justonce
 
@@ -26,7 +26,7 @@ PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))
 THISBOOK_DEPS += $(PDFS_FROM_EPS)
 THISBOOK_DEPS += macros_mathematica.sty
 
-include ../make.rules
+include ../latex/make.rules
 
 problemSets : advancedantennaProblemSet1.pdf advancedantennaProblemSet2.pdf advancedantennaProblemSet3.pdf advancedantennaProblemSet4.pdf advancedantennaProblemSet5.pdf
 

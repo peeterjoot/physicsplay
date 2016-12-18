@@ -4,7 +4,7 @@
 THISDIR := papers
 THISBOOK := $(THISDIR)
 
-include ../make.vars
+include ../latex/make.vars
 
 FIGURES := ../../figures/$(THISBOOK)
 SOURCE_DIRS += $(FIGURES)
@@ -16,4 +16,4 @@ all :: myrefs.bib $(GENERATED_PDFS)
 
 $(GENERATED_PDFS) :: $(JUSTBOOKDEPENDENCIES) $(LOCAL_FILES) $(GENERATED_SOURCES) $(COPIED_FILES) $(LOCAL_COPIED_FILES)
 
-include ../make.rules
+include ../latex/make.rules

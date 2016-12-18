@@ -26,7 +26,7 @@ CLEAN_TARGETS += $(LOCAL_COPIED_FILES)
 CLEAN_TARGETS += $(COPIED_FILES)
 CLEAN_TARGETS += $(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.aux))
 
-include ../make.latexmk
+include ../latex/make.latexmk
 
 define dopdflatex
 	$(LATEXMK) $<
@@ -83,7 +83,7 @@ clean ::
 # probably want a way to specialize this.  Don't have index markup on everything for example.
 # Do I want a separate appendix section necessarily? (yes, for phy485, maybe not for older stuff).
 #
-$(THISBOOK).tex : ../classicthesis_mine/ClassicThesis.tex
+$(THISBOOK).tex : ../latex/classicthesis_mine/ClassicThesis.tex
 	cp $< $@
 
 mathematica.tex : ../METADATA ../../mathematica/METADATA
@@ -102,9 +102,9 @@ Bibliography.bib : myrefs.bib
 	sedwrapper 's/@webpage/@manual/g' < $< > $@
 
 # old style: don't think I have any direct uses anymore, but am generating Bibliography.bib from this.
-myrefs.bib: ../myrefs.bib.in ../METADATA
-	cp ../myrefs.bib.in myrefs.bib
-	(cd .. ; ./METADATA -bib >> $(THISDIR)/myrefs.bib)
+myrefs.bib: ../latex/myrefs.bib.in ../METADATA
+	cp ../latex/myrefs.bib.in myrefs.bib
+	(cd .. ; test -e ./METADATA && ./METADATA -bib >> $(THISDIR)/myrefs.bib)
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
@@ -120,26 +120,14 @@ cronology.tex : ../METADATA
 $(LOCAL_FILES) :
 	cp $(filter %$@, $(ORIG_FILES)) $@
 
-$(LOCAL_CT_FRONTBACK_FILES) : %.tex : ../classicthesis/%.tex
+$(LOCAL_CT_FRONTBACK_FILES) : %.tex : ../latex/classicthesis/%.tex
 	cp $< $@
 
-$(LOCAL_MY_CT_FRONTBACK_FILES) : %.tex : ../classicthesis_mine/%.tex
+$(LOCAL_MY_CT_FRONTBACK_FILES) : %.tex : ../latex/classicthesis_mine/%.tex
 	cp $< $@
 
-%.sty : ../%.sty
+$(COPIED_STY) : %.sty : ../latex/%.sty
 	cp $^ $@
-
-#book_layout.sty : ../book_layout.sty
-#	cp $^ $@
-#
-#peeters_layout.sty : ../peeters_layout.sty
-#	cp $^ $@
-#
-#peeters_macros.sty : ../peeters_macros.sty
-#	cp $^ $@
-#
-#macros_bm.sty : ../macros_bm.sty
-#	cp $^ $@
 
 # http://tex.stackexchange.com/questions/24831/i-encountered-an-errorunknown-graphics-extension-eps
 %.pdf : %.eps

@@ -1,7 +1,7 @@
 THISDIR := phy456-qmII
 THISBOOK := phy456
 
-include ../make.bookvars
+include ../latex/make.bookvars
 
 FIGURES := ../../figures/$(THISBOOK)
 
@@ -18,7 +18,7 @@ SOURCE_DIRS += $(FIGURES)
 GENERATED_SOURCES += mathematica.tex 
 #GENERATED_SOURCES += backmatter.tex
 
-include ../make.rules
+include ../latex/make.rules
 
 #backmatter.tex : ../classicthesis_mine/backmatter.tex
 #	cp $< $@

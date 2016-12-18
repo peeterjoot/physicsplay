@@ -1,7 +1,7 @@
 THISDIR := phy452-basicstatmech
 THISBOOK := phy452
 
-include ../make.bookvars
+include ../latex/make.bookvars
 
 FIGURES := ../../figures/$(THISBOOK)
 
@@ -32,7 +32,7 @@ PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))
 
 THISBOOK_DEPS += $(PDFS_FROM_EPS)
 
-include ../make.rules
+include ../latex/make.rules
 
 basicStatMechProblemSet1.pdf :: basicStatMechProblemSet1Problem1.tex
 basicStatMechProblemSet1.pdf :: basicStatMechProblemSet1Problem2.tex

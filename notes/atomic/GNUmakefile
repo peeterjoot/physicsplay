@@ -9,7 +9,7 @@ ORIG_FILES += ../plainurl.bst
 ORIG_FILES += ../unsrturl.bst
 ORIG_FILES += ../eliblog.cls
 
-include ../make.latexmk
+include ../latex/make.latexmk
 
 LOCAL_FILES := $(notdir $(ORIG_FILES))
 

@@ -1,7 +1,7 @@
 THISDIR := gabookI
 THISBOOK := $(THISDIR)
 
-include ../make.bookvars
+include ../latex/make.bookvars
 
 FIGURES := ../../figures/$(THISBOOK)
 
@@ -35,7 +35,7 @@ GENERATED_PDFS += bigCollectionOfPartiallyIncorrectStokesTheoremMusings.pdf
 GENERATED_PDFS += synopsisOfBigCollectionOfPartiallyIncorrectStokesTheoremMusings.pdf
 GENERATED_PDFS += stokesTheoremGeometricAlgebra.pdf
 
-include ../make.rules
+include ../latex/make.rules
 
 listings/%.pl: %.pl
 	mkdir -p $(@D)

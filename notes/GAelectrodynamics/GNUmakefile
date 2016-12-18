@@ -1,7 +1,7 @@
 THISDIR := GAelectrodynamics
 THISBOOK := GAelectrodynamics
 
-include ../make.bookvars
+include ../latex/make.bookvars
 
 # Override my default:
 MY_CLASSICTHESIS_FRONTBACK_FILES := $(filter-out ../classicthesis_mine/FrontBackmatter/Dedication.tex,$(MY_CLASSICTHESIS_FRONTBACK_FILES))
@@ -27,7 +27,7 @@ THISBOOK_DEPS += $(PDFS_FROM_EPS)
 
 CLEAN_TARGETS += *.sp FrontBackmatter/*.sp
 
-include ../make.rules
+include ../latex/make.rules
 
 .PHONY: spellcheck
 spellcheck: $(patsubst %.tex,%.sp,$(PRIMARY_SOURCES))

@@ -2,7 +2,7 @@ THISDIR := ece1254-redacted
 THISBOOK := ece1254
 ORIGDIR := ece1254-multiphysics
 
-include ../make.bookvars
+include ../latex/make.bookvars
 
 THISBOOK_DEPS += kbordermatrix.sty
 
@@ -41,7 +41,7 @@ THISBOOK_DEPS += $(ECE1254TEX)
 THISBOOK_DEPS += $(ECE1254STY)
 THISBOOK_DEPS += $(PDFS_FROM_EPS)
 
-include ../make.rules
+include ../latex/make.rules
 
 LATEXMK := ../make_pdflatex --oldscript -filename
 

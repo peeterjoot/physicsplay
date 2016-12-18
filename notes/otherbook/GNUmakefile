@@ -1,7 +1,7 @@
 THISDIR := otherbook
 THISBOOK := $(THISDIR)
 
-include ../make.bookvars
+include ../latex/make.bookvars
 
 FIGURES := ../../figures/$(THISBOOK)
 
@@ -17,7 +17,7 @@ SOURCE_DIRS += $(FIGURES)
 
 #GENERATED_SOURCES += mathematica.tex 
 
-include ../make.rules
+include ../latex/make.rules
 
 figures/%.png: %.png
 	cp $< $@

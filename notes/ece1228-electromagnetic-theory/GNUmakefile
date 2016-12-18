@@ -1,7 +1,7 @@
 THISDIR := ece1228-electromagnetic-theory
 THISBOOK := ece1228
 
-include ../make.bookvars
+include ../latex/make.bookvars
 
 #ONCEFLAGS := -justonce
 
@@ -25,7 +25,7 @@ THISBOOK_DEPS += $(PDFS_FROM_EPS)
 
 CLEAN_TARGETS += ps5mathematica.tex ps9mathematica.tex
 
-include ../make.rules
+include ../latex/make.rules
 
 #all:: emtLecture10.pdf
 all :: emtLecture10PartII.pdf

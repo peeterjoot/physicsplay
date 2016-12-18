@@ -1,7 +1,7 @@
 THISDIR := phy485-optics
 THISBOOK := phy485
 
-include ../make.bookvars
+include ../latex/make.bookvars
 
 FIGURES := ../../figures/$(THISBOOK)
 
@@ -12,4 +12,4 @@ SOURCE_DIRS += $(FIGURES)
 
 GENERATED_SOURCES += mathematica.tex 
 
-include ../make.rules
+include ../latex/make.rules

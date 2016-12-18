@@ -1,7 +1,7 @@
 THISDIR := phy1520-quantum
 THISBOOK := phy1520
 
-include ../make.bookvars
+include ../latex/make.bookvars
 
 #ONCEFLAGS := -justonce
 
@@ -23,7 +23,7 @@ PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))
 THISBOOK_DEPS += $(PDFS_FROM_EPS)
 #THISBOOK_DEPS += macros_mathematica.sty
 
-include ../make.rules
+include ../latex/make.rules
 
 julia.tex : ../../julia/METADATA
 mathematica.tex : ../../mathematica/METADATA

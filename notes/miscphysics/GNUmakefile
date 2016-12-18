@@ -1,7 +1,7 @@
 THISDIR := miscphysics
 THISBOOK := $(THISDIR)
 
-include ../make.bookvars
+include ../latex/make.bookvars
 
 FIGURES := ../../figures/$(THISBOOK)
 
@@ -28,7 +28,7 @@ GENERATED_SOURCES += backmatter.tex
 
 #ONCEFLAGS := -justonce
 
-include ../make.rules
+include ../latex/make.rules
 
 #figures/%.png: %.png
 #	cp $< $@

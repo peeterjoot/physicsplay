@@ -9,7 +9,7 @@ pdfs := $(files:.tex=.pdf)
 
 PDF_GENERATED_DEPS += peeters_macros.sty peeters_layout.sty Bibliography.bib myrefs.bib
 
-include ../make.latexmk
+include ../latex/make.latexmk
 
 all :: $(pdfs) .gitignore
 

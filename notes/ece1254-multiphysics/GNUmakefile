@@ -1,7 +1,7 @@
 THISDIR := ece1254-multiphysics
 THISBOOK := ece1254
 
-include ../make.bookvars
+include ../latex/make.bookvars
 
 INCOMPLETE += multiphysicsProblemSet1Problem1.tex
 INCOMPLETE += multiphysicsProblemSet1Problem2.tex
@@ -35,7 +35,7 @@ GENERATED_SOURCES += projmatlab.tex
 THISBOOK_DEPS += $(PDFS_FROM_EPS)
 THISBOOK_DEPS += kbordermatrix.sty
 
-include ../make.rules
+include ../latex/make.rules
 
 #all :: proj
 proj :: ece1254projectReport.pdf

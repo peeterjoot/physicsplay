@@ -1,7 +1,7 @@
 THISDIR := classicalmechanics
 THISBOOK := $(THISDIR)
 
-include ../make.bookvars
+include ../latex/make.bookvars
 
 FIGURES := ../../figures/$(THISBOOK)
 
@@ -19,7 +19,7 @@ GENERATED_SOURCES += cronology.tex
 
 #ONCEFLAGS := -justonce
 
-include ../make.rules
+include ../latex/make.rules
 
 #backmatter.tex : ../classicthesis_mine/backmatter.tex
 #	cp $< $@

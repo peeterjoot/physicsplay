@@ -2,7 +2,7 @@ THISDIR := phy1520-quantum-redacted
 THISBOOK := phy1520
 ORIGDIR := phy1520-quantum
 
-include ../make.bookvars
+include ../latex/make.bookvars
 
 #ONCEFLAGS := -justonce
 
@@ -27,7 +27,7 @@ THISBOOK_DEPS += $(PHY1520TEX)
 THISBOOK_DEPS += $(PHY1520STY)
 THISBOOK_DEPS += $(PDFS_FROM_EPS)
 
-include ../make.rules
+include ../latex/make.rules
 
 LATEXMK := ../make_pdflatex --oldscript -filename
 

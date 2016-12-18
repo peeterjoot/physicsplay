@@ -1,7 +1,7 @@
 THISDIR := phy450-relativisticEandM
 THISBOOK := phy450
 
-include ../make.bookvars
+include ../latex/make.bookvars
 
 #ONCEFLAGS := -justonce
 THISBOOK_DEPS += poppitz.tex
@@ -16,7 +16,7 @@ SOURCE_DIRS += problems
 GENERATED_SOURCES += mathematica.tex 
 GENERATED_SOURCES += poppitz.tex
 
-include ../make.rules
+include ../latex/make.rules
 
 backmatter.tex : ../classicthesis_mine/backmatter.tex
 	cp $< $@

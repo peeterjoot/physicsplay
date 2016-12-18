@@ -1,7 +1,7 @@
 THISDIR := phy356-qmI
 THISBOOK := phy356
 
-include ../make.bookvars
+include ../latex/make.bookvars
 
 FIGURES := ../../figures/$(THISBOOK)
 
@@ -13,6 +13,6 @@ GENERATED_PDFS += desaiTypos.pdf
 
 #ONCEFLAGS := -justonce
 
-include ../make.rules
+include ../latex/make.rules
 
 desaiTypos.pdf :: desaiTyposInnards.tex

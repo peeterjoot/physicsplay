@@ -6,7 +6,7 @@ SDRAW := "/cygdrive/c/Program Files (x86)/LibreOffice 4/program/sdraw.exe"
 RAWTEXFILES := $(shell ls *.tex)
 
 CLEAN_TARGETS += $(PDFS) 
-include ../make.cleanvars
+include ../latex/make.cleanvars
 
 # buildable:
 #INCOMPLETE += dotBlade.tex
@@ -104,7 +104,7 @@ gaBasics.pdf : gaBasics.tex
 #gaBasics.tex : gaBasics.txt
 #	./wordToTex < gaBasics.txt > gaBasics.tex
 
-include ../make.latexmk
+include ../latex/make.latexmk
 
 %.pdf : %.tex
 	mkdir -p ./.revinfo/

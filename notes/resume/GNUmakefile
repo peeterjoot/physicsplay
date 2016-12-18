@@ -1,7 +1,7 @@
 THISDIR := resume
 THISBOOK := $(THISDIR)
 
-include ../make.vars
+include ../latex/make.vars
 
 all :: peeters_macros.sty
 all :: peeters_layout.sty
@@ -14,4 +14,4 @@ peeters_layout.sty : ../peeters_layout.sty
 peeters_macros.sty : ../peeters_macros.sty
 	cp $^ $@
 
-include ../make.rules
+include ../latex/make.rules

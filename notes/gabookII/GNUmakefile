@@ -1,7 +1,7 @@
 THISDIR := gabookII
 THISBOOK := $(THISDIR)
 
-include ../make.bookvars
+include ../latex/make.bookvars
 
 FIGURES := ../../figures/gabook
 
@@ -15,6 +15,6 @@ SOURCE_DIRS += relativity
 
 #ONCEFLAGS := -justonce
 
-include ../make.rules
+include ../latex/make.rules
 
 #vpath %.png $(ORIG_FIGURE_DIRS)

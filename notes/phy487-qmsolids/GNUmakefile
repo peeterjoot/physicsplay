@@ -1,7 +1,7 @@
 THISDIR := phy487-qmsolids
 THISBOOK := phy487
 
-include ../make.bookvars
+include ../latex/make.bookvars
 
 #ONCEFLAGS := -justonce
 
@@ -23,7 +23,7 @@ PDFS_FROM_EPS := $(subst eps,pdf,$(EPS_FILES))
 
 THISBOOK_DEPS += $(PDFS_FROM_EPS)
 
-include ../make.rules
+include ../latex/make.rules
 
 condensedMatterProblemSet1.pdf :: condensedMatterProblemSet1Problem1.tex
 condensedMatterProblemSet1.pdf :: condensedMatterProblemSet1Problem2.tex
