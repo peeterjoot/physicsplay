@@ -1,5 +1,7 @@
 Peeter Joot's math and physics latex source.
 
+Much of what used to be housed in this repo has now been moved to standalone repositories.
+
 #-------------------------------------------------------
 # grabbing a copy of the tree
 #
@@ -57,100 +59,16 @@ notes/
 
       Some informal papers on atomic operations and memory barriers.
 
-   gabookI/
-
-      The first part of 'Exploring physics with Geometric Algebra' -- a too large collection of Geometric Algebra related math and physics.  Book I has lots of geometry and some basic physics:
-
-         Basics and Geometry
-         Projection
-         Rotation
-         Calculus
-         General Physics
-
-   gabookII/
-
-      The second part of 'Exploring physics with Geometric Algebra' -- a too large collection of Geometric Algebra related math and physics.  Book II contains stuff about
-
-         Relativity
-         Electrodynamics
-         Lorentz Force
-         Electrodynamics Stress Energy
-         Quantum Mechanics
-         Fourier treatments
-
-   miscphysics/
-
-      A collection of mostly non-Geometric Algebra related math physics notes (since my GA stuff is collected separately).
-
-   otherbook/
-
-      Junky incomplete and wrong Physics and Math Play or Just Unsorted.
-
    papers/
       http://arxiv.org/abs/1104.4829 -- Change of basis and Gram-Schmidt orthonormalization in special relativity
       relwave.tex -- expanding on Pauli's derivation of Schrodinger's equation from the Klein-Gordon equation.
 
-   classicalmechanics/
-
-      Personal study notes on Lagrangians, and Hamiltonians (Reading of Goldstein, ... ).
-      These are currently part of the posted gabook.pdf, but I've pulled them into this collection because
-      gabook is too big.
-
-      There are also some classical mechanics notes and problems from auditing a small subset of
-      'Advanced Classical Mechanics', taught by Prof. Erich Poppitz.
-      I only ended up doing the first problem set from that course, although I still indend to go back and
-      revisit the rest to ensure I've got these basics down.
-
-   phy450-relativisticEandM/
-
-      Class notes and problems from 'Relativistic Electrodynamics', taught by Prof. Erich Poppitz.
-
-   phy454-continuumechanics/
-
-     Class notes and problems from 'Continuum Mechanics', taught by Prof. Kausik S. Das.
-
-   phy356-qmI/
-
-     Class notes and problems from 'Quantum I', taught by Prof. Vatche Deyirmenjian.
-
-   phy456-qmII/
-
-     Class notes and problems from 'Quantum II', taught by Prof. John Sipe.
-
-   phy485-optics/
-
-     Class notes and problems from 'Advanced Classical Optics', taught by Prof. Joseph Thywissen.
-
-   phy452-basicstatmech/
-
-     Class notes and problems from 'Basic Statistical Mechanics', taught by Prof. Arun Paramekanti.
-
-   phy487-qmsolids/
-
-     Class notes and problems from 'Condensed Matter Physics', taught by Prof. Stephen Julian.
-
-   ece1254-multiphysics/
-
-     Class notes and problems from 'Modeling of Multiphysics Systems', taught by Prof. P. Triverio.
-
-   ece1229-antenna/
    ece1229-antenna-project/
 
-     Class notes and problems from 'Advanced Antenna Theory', taught by Prof. G.V. Eleftheriades.
-
-   phy1520-quantum/
-
-     Class notes and problems from 'Graduate Quantum Mechanics', taught by Prof. Arun Paramekanti.
-
-   ece1236-microwaves/
-     Class notes and problems from 'Microwave circuits', taught by Prof. G.V. Eleftheriades.
-     I dropped this course to focus on phy1610 (Scientific Computing for Physicists.)
+     notes for 'Advanced Antenna Theory' project assignment (class taught by Prof. G.V. Eleftheriades.)
 
    phy2403-qft/
       Problem set 1 (2015?) solutions and some other notes.
-
-   ece1228-electromagnetic-theory/
-      Fall 2016, University of Toronto, Electromagnetic Theory course (ECE1228H), taught by Prof.\ M. Mojahedi.
 
    resume/
 
