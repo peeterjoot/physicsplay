@@ -3,6 +3,7 @@
 #
 THISDIR := papers
 THISBOOK := $(THISDIR)
+BASEVER := 069daa3
 
 include ../latex/make.vars
 

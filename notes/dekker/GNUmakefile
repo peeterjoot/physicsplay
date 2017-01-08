@@ -19,20 +19,20 @@ all :: $(pdfs) .gitignore
 
 $(pdfs) : $(PDF_GENERATED_DEPS)
 
-peeters_layout.sty : ../peeters_layout.sty
+peeters_layout.sty : ../latex/peeters_layout.sty
 	cp $^ $@
 
-peeters_macros.sty : ../peeters_macros.sty
+peeters_macros.sty : ../latex/peeters_macros.sty
 	cp $^ $@
 
 # plainnat.bib (as used by classicthesis) doesn't like @webpage:
 # http://tex.stackexchange.com/questions/56951/what-does-warning-entry-type-for-isnt-style-file-defined-mean/56954#56954
 Bibliography.bib : myrefs.bib
-	sed 's/@webpage/@manual/g' < $< > $@
+	sedwrapper 's/@webpage/@manual/g' < $< > $@
 
 # old style: don't think I have any direct uses anymore, but am generating Bibliography.bib from this.
-myrefs.bib: ../myrefs.bib.in ../METADATA
-	cp ../myrefs.bib.in myrefs.bib
+myrefs.bib: ../latex/myrefs.bib.in ../METADATA
+	cp ../latex/myrefs.bib.in myrefs.bib
 	../METADATA -bib >> myrefs.bib
 
 %.pdf : %.tex

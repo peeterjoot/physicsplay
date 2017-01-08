@@ -1,3 +1,5 @@
+BASEVER := 069daa3
+
 # these samples are from:
 #  http://www.ieee.org/documents/IEEEtran.zip
 

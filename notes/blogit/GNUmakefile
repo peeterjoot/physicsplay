@@ -1,4 +1,5 @@
 THISDIR := blogit
+BASEVER := 069daa3
 
 INKSCAPE := "/cygdrive/c/Program Files (x86)/Inkscape/inkscape.exe"
 SDRAW := "/cygdrive/c/Program Files (x86)/LibreOffice 4/program/sdraw.exe"
@@ -52,7 +53,7 @@ all :: peeters_braket.sty
 all :: peeters_figures.sty
 all :: matlab.sty
 all :: macros_qed.sty
-all :: ece1229.sty
+#all :: ece1229.sty
 all :: peeters_layout.sty
 all :: peeters_layout_exercise.sty
 all :: macros_bm.sty
@@ -64,13 +65,13 @@ all :: $(LOCAL_FILES) $(PDFS) .gitignore
 all :: multiPendulumSphericalMatrix.pdf
 
 #druid.pdf : ../ece1228-electromagnetic-theory/druid.tex
-gatutorial.pdf : ../ece1228-electromagnetic-theory/gaQuickTutorial.tex
-uwavesDeck6LCmatching.pdf : ../ece1236-microwaves/uwavesDeck6LCmatchingCore.tex
-continuumAndOtherTransformers.pdf : ../ece1236-microwaves/continuumAndOtherTransformersCore.tex
-curlAndDivergenceVectorUniqueness.pdf : ../ece1228-electromagnetic-theory/gaPs1Problem5Attempt1.tex
-
-multiPendulumSphericalMatrix.tex :: ../classicalmechanics/multiPendulumSphericalMatrix.tex
-	cp $^ $@
+#gatutorial.pdf : ../ece1228-electromagnetic-theory/gaQuickTutorial.tex
+#uwavesDeck6LCmatching.pdf : ../ece1236-microwaves/uwavesDeck6LCmatchingCore.tex
+#continuumAndOtherTransformers.pdf : ../ece1236-microwaves/continuumAndOtherTransformersCore.tex
+#curlAndDivergenceVectorUniqueness.pdf : ../ece1228-electromagnetic-theory/gaPs1Problem5Attempt1.tex
+#
+#multiPendulumSphericalMatrix.tex :: ../classicalmechanics/multiPendulumSphericalMatrix.tex
+#	cp $^ $@
 
 .gitignore : GNUmakefile
 	rm -f .gitignore
@@ -85,19 +86,19 @@ local : $(LOCAL_FILES)
 $(LOCAL_FILES) : 
 	cp $(filter %$@, $(ORIG_FILES)) $@
 
-multiPendulumSphericalMatrix.pdf : ../classicalmechanics/mine/multiPendulumSphericalMatrix.tex
-
-ensemblesForSpinOneHalf.pdf :: ../phy2403-qft/ensemblesForSpinOneHalf.tex
-
-s1 : uwavesProblemSet1.pdf
-
-uwavesProblemSet1.pdf : ../ece1236-microwaves/uwavesproblemSet1Problem1.tex \
-../ece1236-microwaves/uwavesproblemSet1Problem2.tex \
-../ece1236-microwaves/uwavesproblemSet1Problem3.tex \
-../ece1236-microwaves/uwavesproblemSet1Problem4.tex \
-../ece1236-microwaves/uwavesproblemSet1Problem5.tex
-
-gaBasics.pdf : gaBasics.tex
+#multiPendulumSphericalMatrix.pdf : ../classicalmechanics/mine/multiPendulumSphericalMatrix.tex
+#
+#ensemblesForSpinOneHalf.pdf :: ../phy2403-qft/ensemblesForSpinOneHalf.tex
+#
+#s1 : uwavesProblemSet1.pdf
+#
+#uwavesProblemSet1.pdf : ../ece1236-microwaves/uwavesproblemSet1Problem1.tex \
+#../ece1236-microwaves/uwavesproblemSet1Problem2.tex \
+#../ece1236-microwaves/uwavesproblemSet1Problem3.tex \
+#../ece1236-microwaves/uwavesproblemSet1Problem4.tex \
+#../ece1236-microwaves/uwavesproblemSet1Problem5.tex
+#
+#gaBasics.pdf : gaBasics.tex
 
 # gaBasics.doc is currently my source for this document:
 #
@@ -108,10 +109,10 @@ include ../latex/make.latexmk
 
 %.pdf : %.tex
 	mkdir -p ./.revinfo/
-	mkRevInfo > ./.revinfo/lastCommit.tex
-	mkRevInfo -date > ./.revinfo/gitCommitDate.tex
-	mkRevInfo -commit > ./.revinfo/gitCommitString.tex
-	mkRevInfo -repo > ./.revinfo/gitRepo.tex
+	mkRevInfo --base $(BASEVER) > ./.revinfo/lastCommit.tex
+	mkRevInfo --base $(BASEVER) -date > ./.revinfo/gitCommitDate.tex
+	mkRevInfo --base $(BASEVER) -commit > ./.revinfo/gitCommitString.tex
+	mkRevInfo --base $(BASEVER) -repo > ./.revinfo/gitRepo.tex
 	$(LATEXMK) $<
 
 #%.mp4 : %.avi

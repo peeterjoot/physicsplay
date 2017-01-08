@@ -57,18 +57,18 @@ mostlyclean ::
 	rm -f *.ilg *.idx *.ps *.dvi $(PDFS) *.aux *.log *.bbl *.blg *.brf *.toc *.stackdump *.bib
 	rm -rf ./.revinfo/
 
-peeters_layout.sty : ../peeters_layout.sty
+peeters_layout.sty : ../latex/peeters_layout.sty
 	cp $^ $@
 
-peeters_macros.sty : ../peeters_macros.sty
+peeters_macros.sty : ../latex/peeters_macros.sty
 	cp $^ $@
 
 Bibliography.bib : myrefs.bib
-	sed 's/@webpage/@manual/g' < $< > $@
+	sedwrapper 's/@webpage/@manual/g' < $< > $@
 
 # old style:
-myrefs.bib: ../myrefs.bib.in ../METADATA
-	cp ../myrefs.bib.in myrefs.bib
+myrefs.bib: ../latex/myrefs.bib.in ../METADATA
+	cp ../latex/myrefs.bib.in myrefs.bib
 	../METADATA -bib >> myrefs.bib
 
 localclean ::
