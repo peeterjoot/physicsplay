@@ -4,7 +4,7 @@ SUBMAKES += $(wildcard phy1610-scientific-computing/*/*/GNUmakefile)
 SUBDIRS := $(subst /GNUmakefile,,$(SUBMAKES))
 IGNOREDIRS += notes/atomic
 IGNOREDIRS += notes/bb
-IGNOREDIRS += notes/peterlue
+IGNOREDIRS += notes/.PeterLue
 
 # make rules in these dirs are busted by my reorg to separate repos.
 IGNOREDIRS += notes/ieeepaper
