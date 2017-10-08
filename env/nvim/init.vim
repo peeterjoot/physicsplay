@@ -256,7 +256,7 @@ set mouse=
 "
 
 "let g:localvimrc_whitelist=[ '/home/pjoot/workspace/*/.lvimrc', '/home/pjoot/build/*/.lvimrc' ]
-let g:localvimrc_whitelist=[ '/home/pjoot/workspace/*/.*', '/home/pjoot/build/*/.*', '/home/pjoot/freeware/llvm' ]
+let g:localvimrc_whitelist=[ '/home/pjoot/workspace/*/.*', '/home/pjoot/build/*/.*', '/home/pjoot/freeware/llvm', '/home/pjoot/freeware/binutils-gdb' ]
 "let g:localvimrc_blacklist=[ '*akefile', '*.mk' ]
 
 " http://unix.stackexchange.com/questions/88879/vim-better-colors-so-comments-arent-dark-blue
