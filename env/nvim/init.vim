@@ -108,6 +108,10 @@ Plug 'embear/vim-localvimrc'
 " https://github.com/octol/vim-cpp-enhanced-highlight :
 Plug 'octol/vim-cpp-enhanced-highlight'
 
+" http://www.vim.org/scripts/download_script.php?src_id=2500
+" https://github.com/vim-scripts/jcl.vim
+Plug 'vim-scripts/jcl'
+
 " https://github.com/kien/rainbow_parentheses.vim
 "Plug 'kien/rainbow_parentheses.vim'
 
