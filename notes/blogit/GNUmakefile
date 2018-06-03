@@ -109,10 +109,10 @@ include ../latex/make.latexmk
 
 %.pdf : %.tex
 	mkdir -p ./.revinfo/
-	mkRevInfo --base $(BASEVER) > ./.revinfo/lastCommit.tex
-	mkRevInfo --base $(BASEVER) -date > ./.revinfo/gitCommitDate.tex
-	mkRevInfo --base $(BASEVER) -commit > ./.revinfo/gitCommitString.tex
-	mkRevInfo --base $(BASEVER) -repo > ./.revinfo/gitRepo.tex
+	mkRevInfo --base $(BASEVER) --outfile ./.revinfo/lastCommit.tex
+	mkRevInfo --base $(BASEVER) -date --outfile ./.revinfo/gitCommitDate.tex
+	mkRevInfo --base $(BASEVER) -commit --outfile ./.revinfo/gitCommitString.tex
+	mkRevInfo --base $(BASEVER) -repo --outfile ./.revinfo/gitRepo.tex
 	$(LATEXMK) $<
 
 #%.mp4 : %.avi
