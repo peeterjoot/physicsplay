@@ -14,6 +14,7 @@ set fileformat=unix
 set notitle
 set noerrorbells
 set textwidth=0
+set modelines=1
 syntax on
 
 "map <C-K> :pyf /usr/share/clang/clang-format.py<cr>
