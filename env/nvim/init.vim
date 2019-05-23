@@ -259,6 +259,15 @@ set mouse=
 ""set backup
 "
 
+" Extra file type associations for COBOL and PL/I files:
+augroup filetypedetect
+   au BufRead,BufNewFile *.cobrc setfiletype cobol
+   au BufRead,BufNewFile *.cbl setfiletype cobol
+   au BufRead,BufNewFile *.CBL setfiletype cobol
+   au BufRead,BufNewFile *.COB setfiletype cobol
+   au BufRead,BufNewFile *.plirc setfiletype pli
+augroup END
+
 "let g:localvimrc_whitelist=[ '/home/pjoot/workspace/*/.lvimrc', '/home/pjoot/build/*/.lvimrc' ]
 let g:localvimrc_whitelist=[ '/home/pjoot/workspace/*/.*', '/home/pjoot/build/*/.*', '/home/pjoot/freeware/llvm', '/home/pjoot/freeware/binutils-gdb' ]
 "let g:localvimrc_blacklist=[ '*akefile', '*.mk' ]
