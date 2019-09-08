@@ -1,0 +1,124 @@
+: <<=cut
+#-----------------------------------------------------------------------------
+# POD like Format Documentation.  Invoke perldoc ./thisfile to see the documentation.
+# See "perldoc perlpod" for examples.
+# When done, check syntax with "podchecker".  
+
+=head1 NAME
+
+bashrc_pjoot - Peeter's generic .bashrc aliases and functions
+
+=head1 SYNOPSIS
+
+. /pathtothisfile/bashrc_pjoot
+
+=head1 DESCRIPTION
+
+Some bash aliases and functions.
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@pm.me
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+set -o vi
+
+alias P='cd `/bin/pwd`'
+
+export VISUAL=vim
+export EDITOR=vim
+export PS1="${HOSTNAME?}:\${PWD?}> "
+
+export REPLYTO=peeterjoot@pm.me
+
+alias tj='touch -t197301010000'
+alias sv='set -o vi'
+alias se='set -o emacs'
+alias sshe='. ~/.ssh/agent.env'
+alias ssha='ssh-agent | head -2 | tee ~/.ssh/agent.env ; . ~/.ssh/agent.env ; ssh-add'
+
+alias pj='ps -ef | grep "^ *${USER?}" | sort -n -k 3 -k 2'
+alias thisdirfiles='find . -type f -maxdepth 1 | sed "s,^\./,,"'
+
+# on some systems 'sudo bash' doesn't reset PS1, so you can end up running as root by accident.
+#
+#   alias psroot='PS1="# "'
+# 
+# However, here's a better solution, since PS1 is updated so you know you are running as root:
+alias rootshell='sudo su - root'
+
+# tmpfs mounted directory owned by the current userid:
+if [ -d "/run/user/$UID" ] ; then
+   export TMPDIR=/run/user/$UID
+fi
+
+# suppress the /etc/issue stuff that's displayed with git against git01:
+# http://stackoverflow.com/a/27607760/189270
+export GIT_SSH_COMMAND='ssh -q'
+
+function cdpath {
+   cd `which $1 | sed 's,\(.*\)/.*,\1,'`
+}
+
+# https://forums.virtualbox.org/viewtopic.php?f=8&t=55766
+alias 'sshvm=ssh -p 2222 pjoot@127.0.0.1'
+
+function scptovm {
+   scp -P 2222 $1 pjoot@127.0.0.1:$2
+}
+
+function scpfromvm {
+   scp -P 2222 pjoot@127.0.0.1:$1 $2
+}
+
+# run from $TOP
+alias mkctags='ctags --recurse'
+
+alias gitdifftrunk='git diff trunk...HEAD'
+
+#alias gitmergestatus='git rev-list --left-right --count trunk...LzLanguages'
+alias gitmergestatus='git rev-list --left-right --count trunk...HEAD'
+
+alias gitgraphone='git log --all --graph --decorate --oneline --simplify-by-decoration'
+
+# less confusing output than the above
+alias gitgraph='git log --graph --decorate'
+
+# mac:
+alias diskutilapp="open -a 'Disk Utility'"
+
+alias fetchall='git fetch --all 2>&1 | tee o'
+
+alias gitcontains='git branch -r --contains'
+
+# https://www.commandlinefu.com/commands/view/14346/git-diff-last-two-commits
+alias gitlast='git diff $(git log --pretty=format:%h -2 --reverse | tr "\n" " ")'
+
+# Start a web server in the current directory on a random dynamic port.
+#alias httphere='python3 -m http.server --bind $(hostname) $(shuf -i 49152-65000 -n1)'
+#alias httphere='python3 -m http.server --bind $(myip | grep 192) $(shuf -i 49152-65000 -n1)'
+alias httphere='python3 -m http.server --bind $(myip | grep 192) 50001'
+
+# https://stackoverflow.com/questions/5717026/how-to-git-cherry-pick-only-changes-to-certain-files
+alias cpn='git cherry-pick -n'
+
+function rebaseN
+{
+   git rebase -i HEAD~$1
+}
+
+alias rebase2='rebaseN 2'
+
+alias mybranch='git symbolic-ref --short HEAD'
+
+alias dhreset='sudo dhclient -r ; sudo dhclient -v'
