@@ -1,0 +1,79 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
+
+=head1 NAME
+
+dosc - Run screen to create new session or attach to one.
+
+=head1 SYNOPSIS
+
+dosc [--help]
+
+=head1 DESCRIPTION
+
+Options: None
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeter.joot@lzlabs.com
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+use Pod::Usage ;
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
+
+my $myName = '' ;
+my $dryrun = 0;
+
+($myName = $0) =~ s@.*[/\\]@@ ;
+
+GetOptions ( 
+   'help'               => sub { pod2usage(-verbose => 2) ; },
+   'dryrun!'            => \$dryrun,
+) or pod2usage(-verbose => 0) ;
+
+# ps on mac shows uids instead of usernames:
+my $uid = $> ;
+
+# Google chrome on mac shows screen.  Ignore all /Applications/ paths:
+my $cmd = qq(ps -ef | grep -e $ENV{USER} -e $uid | grep -i screen | grep -ve grep -e /Applications/ -e '-screen');
+my @ps = `$cmd` ; chomp @ps ;
+
+if ( $dryrun )
+{
+   print "# cmd: $cmd\n" ;
+   print "# ps: @ps\n" ;
+   exit 1;
+}
+
+if ( scalar(@ps) )
+{
+   exec( (qw(screen -dr)) ) ;
+}
+else
+{
+   exec( (qw(screen -q)) ) ;
+}
