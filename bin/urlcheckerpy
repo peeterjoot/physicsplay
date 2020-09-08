@@ -1,0 +1,153 @@
+#!/usr/bin/env python3
+ 
+# this script is from:
+# https://gasstationwithoutpumps.wordpress.com/2020/09/06/checked-urls-in-book/
+# 
+# prereqs:
+#
+# pip3 install PyPDF2
+# pip3 install requests
+ 
+import PyPDF2
+import argparse
+import sys
+import requests 
+
+def parse_args():
+    """Parse the options and return what argparse does:
+        a structure whose fields are the possible options
+    """
+    parser = argparse.ArgumentParser( description= __doc__, formatter_class = argparse.ArgumentDefaultsHelpFormatter )
+    parser.add_argument("filenames", type=str, nargs="*",
+            default=[],
+            help="""names of files to check
+            """)
+    options=parser.parse_args()
+    return options
+ 
+     
+def pdf_to_urls(pdf_file_name):
+   """yields urls used as hyperlinks in file named by pdf_file_name
+   """
+   pdf = PyPDF2.PdfFileReader(pdf_file_name)
+   for page_num in range(pdf.numPages):
+        pdfPage = pdf.getPage(page_num)
+        pageObject = pdfPage.getObject()
+        if '/Annots' in pageObject.keys():
+            ann = pageObject['/Annots']
+            for a in ann:
+               u = a.getObject()
+               if '/URI' in u['/A']:
+                   yield( page_num,  u['/A']['/URI'])
+ 
+ 
+# HTTP status codes from https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+HTTP_codes = {
+    100:"Continue"
+    , 101:"Switching Protocol"
+    , 102:"Processing (WebDAV)"
+    , 102:"Early Hints"
+    , 200:"OK"
+    , 201:"Created"
+    , 202:"Accepted"
+    , 203:"Non-Authoritative Information"
+    , 204:"No Content"
+    , 205:"Reset Content"
+    , 206:"Partial Content"
+    , 207:"Multi-Status (WebDAV)"
+    , 208:"Already Reported (WebDAV)"
+    , 226:"IM Used (HTTP Delta encoding)"
+    , 300:"Multiple Choice"
+    , 301:"Moved Permanently"
+    , 302:"Found"
+    , 303:"See Other"
+    , 304:"Not Modified"
+    , 305:"Use Proxy (deprecated)"
+    , 306:"unused"
+    , 307:"Temporary Redirect"
+    , 308:"Permanent Redirect"
+    , 400:"Bad Request"
+    , 401:"Unauthorized"
+    , 402:"Payment Required"
+    , 403:"Forbidden"
+    , 404:"Not Found"
+    , 405:"Method Not Allowed"
+    , 406:"Not Acceptable"
+    , 407:"Proxy Authentication Required"
+    , 408:"Request Timeout"
+    , 409:"Conflict"
+    , 410:"Gone"
+    , 411:"Length Required"
+    , 412:"Precondition Failed"
+    , 413:"Payload Too Large"
+    , 414:"URI Too Long"
+    , 415:"Unsupported Media Type"
+    , 416:"Range Not Satisfiable"
+    , 417:"Expectation Failed"
+    , 418:"I'm a teapot"
+    , 421:"Misdirected Request"
+    , 422:"Unprocessable Entity (WebDAV)"
+    , 423:"Locked (WebDAV)"
+    , 424:"Failed Dependency (WebDAV)"
+    , 425:"Too Early"
+    , 426:"Upgrade Required"
+    , 428:"Precondition Required"
+    , 429:"Too Many Requests"
+    , 431:"Request Header Fields Too Large"
+    , 451:"Unavailable for Legal Reasons"
+    , 500:"Internal Server Error"
+    , 501:"Not Implemented"
+    , 502:"Bad Gateway"
+    , 503:"Service Unavailable"
+    , 504:"Gateway Timeout"
+    , 505:"HTTP Version Not Supported"
+    , 506:"Variant Also Negotiates"
+    , 507:"Insufficient Storage (WebDAV)"
+    , 508:"Loop Detected (WebDAV)"
+    , 510:"Not Extended"
+    , 511:"Network Authentication Required"
+    }
+ 
+ 
+ 
+options=parse_args()
+for pdf_name in options.filenames:
+    print("checking",pdf_name,file=sys.stderr)
+    for page_num,url in pdf_to_urls(pdf_name):
+        print ("checking page",page_num, url, file=sys.stderr)
+        req = None
+        try:
+            req = requests.head(url, verify=False)      # don't check SSL certificates
+            if req.status_code in [403,405,406]: raise RuntimeError(HTTP_codes[req.status_code])
+        except:
+            print("--head failed, trying get",file=sys.stderr)
+            try: 
+                req = requests.get(url)
+                if req.status_code in [403,405,406]: raise RuntimeError(HTTP_codes[req.status_code])
+            except: 
+                print("----get failed, trying post",file=sys.stderr)
+                try: req = requests.post(url)
+                except: pass
+     
+        if req is None:
+            print("page",page_num, url, "requests failed with no return")
+            print("!!!", url, "requests failed with no return", file=sys.stderr)
+            continue
+ 
+        if req.status_code not in (200,302):
+            try: 
+               code_meaning = HTTP_codes[req.status_code]
+            except: 
+               code_meaning = "Unknown code!!"
+             
+            try:
+                new_url = req.headers["location"]
+            except:
+                new_url=url
+             
+            if url==new_url:
+                print("page",page_num, url, req.status_code, code_meaning)
+                print("!!!", url, req.status_code, code_meaning, file=sys.stderr)
+            else:
+                print("OK? page",page_num, url, "moved to", new_url, req.status_code, code_meaning)
+                print("!!!", url, "moved to", new_url, req.status_code, code_meaning, file=sys.stderr)
