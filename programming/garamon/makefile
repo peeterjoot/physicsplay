@@ -1,5 +1,5 @@
+CXXSTANDARD ?= c++17
 include ../stroustroupbook/make.vars
-CXXFLAGS += -std=c++17
 CXXFLAGS += -g
 CXXFLAGS += -I/usr/local/Cellar/eigen/3.3.7/include/eigen3
 CXXFLAGS += -Wno-error=unused-variable
