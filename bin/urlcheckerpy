@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
- 
-# this script is from:
-# https://gasstationwithoutpumps.wordpress.com/2020/09/06/checked-urls-in-book/
-# 
+#
+# this script is based on:
+#
+#    https://gasstationwithoutpumps.wordpress.com/2020/09/06/checked-urls-in-book/
+#
+# (hacked in support for checking plain text read from stdin)
+#
 # prereqs:
 #
 # pip3 install PyPDF2
 # pip3 install requests
- 
+
 import PyPDF2
 import argparse
 import sys
-import requests 
+import requests
 
 def parse_args():
     """Parse the options and return what argparse does:
@@ -24,23 +27,23 @@ def parse_args():
             """)
     options=parser.parse_args()
     return options
- 
-     
+
+
 def pdf_to_urls(pdf_file_name):
-   """yields urls used as hyperlinks in file named by pdf_file_name
-   """
-   pdf = PyPDF2.PdfFileReader(pdf_file_name)
-   for page_num in range(pdf.numPages):
+    """yields urls used as hyperlinks in file named by pdf_file_name
+    """
+    pdf = PyPDF2.PdfFileReader(pdf_file_name)
+    for page_num in range(pdf.numPages):
         pdfPage = pdf.getPage(page_num)
         pageObject = pdfPage.getObject()
         if '/Annots' in pageObject.keys():
             ann = pageObject['/Annots']
             for a in ann:
-               u = a.getObject()
-               if '/URI' in u['/A']:
-                   yield( page_num,  u['/A']['/URI'])
- 
- 
+                u = a.getObject()
+                if '/URI' in u['/A']:
+                    yield( page_num,  u['/A']['/URI'])
+
+
 # HTTP status codes from https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
 HTTP_codes = {
     100:"Continue"
@@ -107,47 +110,57 @@ HTTP_codes = {
     , 510:"Not Extended"
     , 511:"Network Authentication Required"
     }
- 
- 
- 
-options=parse_args()
-for pdf_name in options.filenames:
-    print("checking",pdf_name,file=sys.stderr)
-    for page_num,url in pdf_to_urls(pdf_name):
-        print ("checking page",page_num, url, file=sys.stderr)
-        req = None
+
+
+def checkit(what,page_or_line_num,url):
+    """checks a url found on (page/line) """
+    print ("checking ",what,page_or_line_num, url, file=sys.stderr)
+    req = None
+    try:
+        req = requests.head(url, verify=False)      # don't check SSL certificates
+        if req.status_code in [403,405,406]: raise RuntimeError(HTTP_codes[req.status_code])
+    except:
+        print("--head failed, trying get",file=sys.stderr)
         try:
-            req = requests.head(url, verify=False)      # don't check SSL certificates
+            req = requests.get(url)
             if req.status_code in [403,405,406]: raise RuntimeError(HTTP_codes[req.status_code])
         except:
-            print("--head failed, trying get",file=sys.stderr)
-            try: 
-                req = requests.get(url)
-                if req.status_code in [403,405,406]: raise RuntimeError(HTTP_codes[req.status_code])
-            except: 
-                print("----get failed, trying post",file=sys.stderr)
-                try: req = requests.post(url)
-                except: pass
-     
-        if req is None:
-            print("page",page_num, url, "requests failed with no return")
-            print("!!!", url, "requests failed with no return", file=sys.stderr)
-            continue
- 
-        if req.status_code not in (200,302):
-            try: 
-               code_meaning = HTTP_codes[req.status_code]
-            except: 
-               code_meaning = "Unknown code!!"
-             
-            try:
-                new_url = req.headers["location"]
-            except:
-                new_url=url
-             
-            if url==new_url:
-                print("page",page_num, url, req.status_code, code_meaning)
-                print("!!!", url, req.status_code, code_meaning, file=sys.stderr)
-            else:
-                print("OK? page",page_num, url, "moved to", new_url, req.status_code, code_meaning)
-                print("!!!", url, "moved to", new_url, req.status_code, code_meaning, file=sys.stderr)
+            print("----get failed, trying post",file=sys.stderr)
+            try: req = requests.post(url)
+            except: pass
+
+    if req is None:
+        print(what,page_or_line_num, url, "requests failed with no return")
+        print("!!!", url, "requests failed with no return", file=sys.stderr)
+        return
+
+    if req.status_code not in (200,302):
+        try:
+           code_meaning = HTTP_codes[req.status_code]
+        except:
+           code_meaning = "Unknown code!!"
+
+        try:
+            new_url = req.headers["location"]
+        except:
+            new_url=url
+
+        if url==new_url:
+            print(what,page_or_line_num, url, req.status_code, code_meaning)
+            print("!!!", url, req.status_code, code_meaning, file=sys.stderr)
+        else:
+            print("OK? ", what, page_or_line_num, url, "moved to", new_url, req.status_code, code_meaning)
+            print("!!!", url, "moved to", new_url, req.status_code, code_meaning, file=sys.stderr)
+
+
+if not sys.argv[1:]:
+    lineno=1
+    for line in sys.stdin:
+        checkit("line", lineno, line)
+        lineno = lineno + 1
+else:
+    options=parse_args()
+    for pdf_name in options.filenames:
+        print("checking",pdf_name,file=sys.stderr)
+        for page_num,url in pdf_to_urls(pdf_name):
+            checkit("page", page_num, url)
