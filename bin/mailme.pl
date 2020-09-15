@@ -3,7 +3,7 @@
 $to = 'peeter.joot@lzlabs.com';
 $from = 'peeter.joot@lzlabs.com';
 $subject = 'Test Email';
-$message = 'This is test email sent by Perl Script';
+$message = 'This is test email sent by Perl Script (macos)';
  
 open(MAIL, "|/usr/sbin/sendmail -t");
  
