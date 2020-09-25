@@ -2,14 +2,50 @@
 //#define _OE_SOCKETS
 #include <stdio.h>
 #include <sys/types.h>
-#include <sys/socket.h> 
+#include <sys/socket.h>
 #include <netinet/in.h>
 #if !defined __APPLE__ && !defined __linux__
 #include <un.h>
 #endif
+#include <unistd.h>
 
-int main()
+// to find out the wormhole names to start with
+void fakecalls()
 {
+   socket(0,0,0);
+   recv(0,0,0,0);
+   send(0,0,0,0);
+   unlink(0);
+   bind(0,0,0);
+   listen(0,0);
+   connect(0,0,0);
+   close(0);
+}
+
+int main( int argc, char ** argv )
+{
+if ( argc == 7 )
+{
+   fakecalls();
+}
+
+// send,recv parameters
+#if defined MSG_CONNTERM
+printf( "MSG_CONNTERM = %d\n", MSG_CONNTERM );
+#endif
+#if defined MSG_OOB
+printf( "MSG_OOB = %d\n", MSG_OOB );
+#endif
+#if defined MSG_PEEK
+printf( "MSG_PEEK = %d\n", MSG_PEEK );
+#endif
+#if defined MSG_WAITALL
+printf( "MSG_WAITALL = %d\n", MSG_WAITALL );
+#endif
+#if defined MSG_DONTROUTE
+printf( "MSG_DONTROUTE = %d\n", MSG_DONTROUTE );
+#endif
+
 // socket() parameters
 #if defined SOMAXCONN
 printf( "SOMAXCONN = %d\n", SOMAXCONN );

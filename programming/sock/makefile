@@ -13,7 +13,7 @@ server : server.o
 	$(CXX) -o $@ $(CXXFLAGS) $^
 
 dump : dump.o
-	$(CXX) -o $@ $(CXXFLAGS) $^
+	$(CC) -o $@ $(CFLAGS) $^
 
 client : client.o
 	$(CXX) -o $@ $(CXXFLAGS) $^
