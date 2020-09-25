@@ -1,5 +1,5 @@
 include ../stroustroupbook/make.vars
-CXXFLAGS += -std=c++17
+CXXFLAGS += -std=c++11
 CXXFLAGS += -g
 #CXXFLAGS += -O2
 

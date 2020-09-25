@@ -1,10 +1,10 @@
-//#define _XOPEN_SOURCE_EXTENDED 1
+#define _XOPEN_SOURCE_EXTENDED 1
 //#define _OE_SOCKETS
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/socket.h> 
 #include <netinet/in.h>
-#if !defined __APPLE__
+#if !defined __APPLE__ && !defined __linux__
 #include <un.h>
 #endif
 
@@ -87,21 +87,37 @@ printf( "SIN6_LEN = %d\n", (int)SIN6_LEN );
 #endif
 
 printf( "socklen_t: %lu\n", (unsigned long)sizeof(socklen_t) );
-#if !defined __APPLE__
+#if !defined __APPLE__ && !defined __linux__
 printf( "ip_addr_t: %lu\n", (unsigned long)sizeof(ip_addr_t) );
 #endif
+printf( "in_port_t: %lu\n", (unsigned long)sizeof(in_port_t) );
+printf( "struct in6_addr: %lu\n", (unsigned long)sizeof(struct in6_addr) );
+printf( "sa_family_t: %lu\n", (unsigned long)sizeof(sa_family_t) );
 printf( "struct in_addr: %lu\n", (unsigned long)sizeof(struct in_addr) );
 printf( "struct sockaddr: %lu\n", (unsigned long)sizeof(struct sockaddr) );
 printf( "struct sockaddr_in: %lu\n", (unsigned long)sizeof(struct sockaddr_in) );
 struct sockaddr_in * in = 0;
 
+#if !defined __linux__
 printf("   %03lu: sin_len: %lu\n", (unsigned long)&in->sin_len, (unsigned long)sizeof(in->sin_len) );
+#endif
 printf("   %03lu: sin_family: %lu\n", (unsigned long)&in->sin_family, (unsigned long)sizeof(in->sin_family) );
 printf("   %03lu: sin_port: %lu\n", (unsigned long)&in->sin_port, (unsigned long)sizeof(in->sin_port) );
 printf("   %03lu: sin_addr: %lu\n", (unsigned long)&in->sin_addr, (unsigned long)sizeof(in->sin_addr) );
 printf("   %03lu: sin_zero: %lu\n", (unsigned long)&in->sin_zero, (unsigned long)sizeof(in->sin_zero) );
 
-#if !defined __APPLE__
+struct sockaddr_in6 * in6 = 0;
+printf( "struct sockaddr_in6: %lu\n", (unsigned long)sizeof(struct sockaddr_in6) );
+#if !defined __linux__
+printf("   %03lu: sin6_len: %lu\n", (unsigned long)&in6->sin6_len, (unsigned long)sizeof(in6->sin6_len) );
+#endif
+printf("   %03lu: sin6_family: %lu\n", (unsigned long)&in6->sin6_family, (unsigned long)sizeof(in6->sin6_family) );
+printf("   %03lu: sin6_port: %lu\n", (unsigned long)&in6->sin6_port, (unsigned long)sizeof(in6->sin6_port) );
+printf("   %03lu: sin6_flowinfo: %lu\n", (unsigned long)&in6->sin6_flowinfo, (unsigned long)sizeof(in6->sin6_flowinfo) );
+printf("   %03lu: sin6_addr: %lu\n", (unsigned long)&in6->sin6_addr, (unsigned long)sizeof(in6->sin6_addr) );
+printf("   %03lu: sin6_scope_id: %lu\n", (unsigned long)&in6->sin6_scope_id, (unsigned long)sizeof(in6->sin6_scope_id) );
+
+#if !defined __APPLE__ && !defined __linux__
 struct sockaddr_un * un = 0;
 printf( "struct sockaddr_un: %lu\n", (unsigned long)sizeof(struct sockaddr_un) );
 printf("   %03lu: sun_len: %lu\n", (unsigned long)&un->sun_len, (unsigned long)sizeof(un->sun_len) );
