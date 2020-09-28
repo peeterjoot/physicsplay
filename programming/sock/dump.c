@@ -4,9 +4,9 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#if !defined __APPLE__ && !defined __linux__
-#include <un.h>
-#endif
+//#if !defined __APPLE__ && !defined __linux__
+#include <sys/un.h>
+//#endif
 #include <unistd.h>
 
 // to find out the wormhole names to start with
