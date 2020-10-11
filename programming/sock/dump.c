@@ -19,6 +19,7 @@ void fakecalls()
    bind(0,0,0);
    listen(0,0);
    connect(0,0,0);
+   inet_addr(0);
    close(0);
 }
 
