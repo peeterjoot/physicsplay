@@ -14,8 +14,8 @@ LDFLAGS_E3GA += -le3ga
 
 TARGETS += e2ga
 TARGETS += e3ga
-TARGETS += bug
-TARGETS += issue4
+#TARGETS += issue4
+#TARGETS += issue7
 
 all : $(TARGETS)
 
@@ -25,11 +25,11 @@ e2ga : e2ga.o
 e3ga : e3ga.o
 	$(CXX) -o $@ $(CXXFLAGS) e3ga.o $(LDFLAGS_E3GA)
 
-bug : bug.o
-	$(CXX) -o $@ $(CXXFLAGS) bug.o $(LDFLAGS_E3GA)
-
 issue4 : issue4.o
 	$(CXX) -o $@ $(CXXFLAGS) issue4.o $(LDFLAGS_E3GA)
+
+issue7 : issue7.o
+	$(CXX) -o $@ $(CXXFLAGS) issue7.o $(LDFLAGS_E3GA)
 
 clean:
 	rm -f *.o *.d *.i $(TARGETS)

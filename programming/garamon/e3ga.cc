@@ -102,8 +102,8 @@ cout << mv1 << endl;
 
 
    // outerPrimalDual dies (as do the calls that follow if commented out -- maybe same issue.)
-cout << "mv1: " << mv1 << endl;
-cout << "mv2: " << mv2 << endl;
+//cout << "mv1: " << mv1 << endl;
+//cout << "mv2: " << mv2 << endl;
    // for high dimensions: useful fast dual-operation calls
    mv3 = mv1.outerPrimalDual(mv2);    // fast version of mv3 = mv1 ^ mv2.dual();
    mv3 = mv1.outerDualPrimal(mv2);    // fast version of mv3 = mv1.dual() ^ mv2;
