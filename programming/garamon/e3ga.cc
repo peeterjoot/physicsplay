@@ -43,6 +43,8 @@ cout << mv1 << endl;
    mv.clear(k);                       // remove the component of grade k
    if(mv.isEmpty()){}                 // test multivector emptiness
    if(mv1 == mv2){}                   // test multivector equality
+
+   // Used to die here.  Issue #4, now fixed.
    if(mv1 != mv2){}                   // test multivector difference
 
 
@@ -99,6 +101,9 @@ cout << mv1 << endl;
    mv3 = !mv1;                        // dual of the multivector
 
 
+   // outerPrimalDual dies (as do the calls that follow if commented out -- maybe same issue.)
+cout << "mv1: " << mv1 << endl;
+cout << "mv2: " << mv2 << endl;
    // for high dimensions: useful fast dual-operation calls
    mv3 = mv1.outerPrimalDual(mv2);    // fast version of mv3 = mv1 ^ mv2.dual();
    mv3 = mv1.outerDualPrimal(mv2);    // fast version of mv3 = mv1.dual() ^ mv2;

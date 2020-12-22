@@ -4,27 +4,29 @@ using namespace std;
 using namespace e3ga;
 using multivector = Mvec<double>;
 
-void issue7()
+void issue4()
 {
    const multivector e1 = ::e1<double>();
    const multivector e2 = ::e2<double>();
-   const auto e12 = ::e12<double>();
 
    multivector mv1;
    multivector mv2(mv1);
    multivector mv3;
 
-   mv1 = -3120.65 + 9066.51*e1 + 17022*e2 + 73008.7*e12;
-   mv2 = 5*e1 -5*e2;
+   mv1 = 5*e1 -5*e2;
+   mv1[E12] = 42.0;
+   mv2[E1] = mv1[E2];
+   mv2[scalar] = 42.0;
 
-   cout << "mv1: " << mv1 << endl;
-   cout << "mv2: " << mv2 << endl;
-
-   mv3 = mv1.outerPrimalDual(mv2);    // fast version of mv3 = mv1 ^ mv2.dual();
+   if(mv1 == mv2){}
+cout << "okay\n";
+   if(mv1 != mv2){}
+cout << "dead by now.\n";
 }
 
 int main()
 {
-   issue7();
+   issue4();
+
    return 0;
 }
