@@ -14,4 +14,8 @@
    #define HAVE_CPLUSPLUS_14
 #endif
 
+#if defined __cplusplus && (__cplusplus >= 201703L)
+   #define HAVE_CPLUSPLUS_17
+#endif
+
 #endif
