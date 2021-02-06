@@ -12,7 +12,7 @@
 using namespace netCDF;
 using namespace netCDF::exceptions;
 
-constexpr int nx{ 20 }, ny{ 15 }, nz{ 1 };
+constexpr int nx{ 20 }, ny{ 15 }, nz{ 3 };
 using varType = double;
 
 inline int point( int i, int j, int k ) {
@@ -63,12 +63,12 @@ void setData( varType* dataOut, const int v ) {
     printf( "};\n" );
 #endif
 
-//#define PRINT_AS_DOTS
-#ifdef PRINT_AS_DOTS
+#define PRINT_AS_ASCII_ART
+#ifdef PRINT_AS_ASCII_ART
     int nl = 0;
     for ( auto i = 0 ; i < nx * ny * nz ; i++ ) {
         nl++;
-        printf( "%c", dataOut[i] ? '.' : ' ');
+        printf( "%c", dataOut[i] ? 'X' : ' ');
 
         if ( nl == nx ) {
             printf("\n");
@@ -92,9 +92,9 @@ int main( int argc, char** argv ) {
         NcFile dataFile( "first.netCDF.nc", NcFile::replace );
 
         // Create the dimensions.
-        auto xDim = dataFile.addDim( "x", nx );
+        auto zDim = dataFile.addDim( "x", nz );
         auto yDim = dataFile.addDim( "y", ny );
-        auto zDim = dataFile.addDim( "z", nz );
+        auto xDim = dataFile.addDim( "z", nx );
 
         std::vector<NcDim> dims{ xDim, yDim, zDim };
 
@@ -105,7 +105,8 @@ int main( int argc, char** argv ) {
         std::vector<size_t> startp{ 0, 0, 0 };
         std::vector<size_t> countp{ nx, ny, nz };
         std::vector<ptrdiff_t> stridep{ 1, 1, 1 };
-        std::vector<ptrdiff_t> imapp{ 1, nx, nx * ny };
+        std::vector<ptrdiff_t> imapp{ 1, nx, nx*ny};
+//    auto p = i + nx * (j + ny * k);
 
         for ( Uint i{ 0 }; i < opt.nrec(); i++ ) {
             startp[0] = i;
@@ -113,6 +114,7 @@ int main( int argc, char** argv ) {
             setData( dataOut, i );
 
             data.putVar( startp, countp, stridep, imapp, dataOut );
+            //data.putVar( startp, countp, stridep, dataOut );
             //data.putVar( startp, dataOut );
         }
 
