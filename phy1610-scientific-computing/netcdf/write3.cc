@@ -3,20 +3,25 @@
 #include "physicsplay_build_version.h"
 #include "returncodes.h"
 #include "parseoptions.h"
+#include <assert.h>
 
 using namespace netCDF ;
 using namespace netCDF::exceptions ;
 
-constexpr int nx{6}, ny{12} ;
-using varType = int;
+constexpr int nx{6}, ny{12}, nz{3} ;
+using varType = double;
 
-void setData( varType * dataOut, const int v )
-{
-   for ( auto i{0} ; i < nx; i++ )
-   {
-      for ( auto j{0} ; j < ny; j++ )
-      {
-         dataOut[i * ny + j] = i * ny + j + v ;
+void setData( varType * dataOut, const int v ) {
+   for ( auto i{0} ; i < nx; i++ ) {
+      for ( auto j{0} ; j < ny; j++ ) {
+         for ( auto k{0} ; k < nz; k++ ) {
+            // data[x][y] -> data[ny * x + y]
+            // data[x][y][z] -> data[nz*ny * x + nz * y + z]
+            auto p = k + nz * j + nz * ny * i;
+            assert( p < nx*ny*nz );
+
+            dataOut[ p ] = i + j + k + v;
+         }
       }
    }
 }
@@ -24,41 +29,38 @@ void setData( varType * dataOut, const int v )
 /**
    Parse arguments and run the driver.
  */
-int main( int argc, char ** argv )
-{
+int main( int argc, char ** argv ) {
    parseOptions opt( argc, argv ) ;
 
    try {
-      varType dataOut[nx * ny] ;
+      varType dataOut[nx * ny * nz]{};
 
       // Create the netCDF file.
       NcFile dataFile( "first.netCDF.nc", NcFile::replace ) ;
 
       // Create the dimensions.
-      auto tDim = dataFile.addDim( "t" ) ;
       auto xDim = dataFile.addDim( "x", nx ) ;
       auto yDim = dataFile.addDim( "y", ny ) ;
+      auto zDim = dataFile.addDim( "z", nz ) ;
 
-      std::vector < NcDim > dims { tDim, xDim, yDim } ;
+      std::vector < NcDim > dims { xDim, yDim, zDim } ;
 
       // Create the data variable.
-      auto data = dataFile.addVar( "data", ncInt, dims ) ;
+      auto data = dataFile.addVar( "data", ncDouble, dims ) ;
 
       // Put the data in the file.
       std::vector<size_t> startp { 0, 0, 0 } ;
-      constexpr size_t nt{ 1 } ; // write one entry to the unlimited dimension.
-      std::vector<size_t> countp { nt, nx, ny } ;
+      std::vector<size_t> countp { nx, ny, nz } ;
       std::vector<ptrdiff_t> stridep { 1, 1, 1 } ;
-      // in memory stride.  each data[t][x][y] -> data[t][ny * x + y]
-      std::vector<ptrdiff_t> imapp { 1, ny , 1 } ;
+      // in memory stride.  each data[x][y] -> data[ny * x + y]
+      std::vector<ptrdiff_t> imapp { 1, ny , nz } ;
 
       for ( Uint i{0} ; i < opt.nrec() ; i++ )
       {
-         startp[0] = i ; // This is controlling the timestep location for the write
+         startp[0] = i ;
 
          setData( dataOut, i ) ;
 
-         // https://www.unidata.ucar.edu/software/netcdf/docs/cxx4/classnetCDF_1_1NcVar.html#a763b0a2d6665ac22ab1be21b8b39c102
          data.putVar( startp, countp, stridep, imapp, dataOut ) ;
       }
 
@@ -67,7 +69,7 @@ int main( int argc, char ** argv )
    }
    catch ( NcException & e )
    {
-      std::cout << e.what() << "\n";
+      std::cout << "caught: " << e.what() << "\n";
    }
 
    return (int)RETURNCODES::SUCCESS ;
