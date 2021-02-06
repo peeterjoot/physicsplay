@@ -3,15 +3,12 @@
 #include "returncodes.h"
 
 #include <assert.h>
-#include <netcdf>
+#include <netcdfcpp.h>
 #include <cmath>
 #include <vector>
 
 #include "integers.h"
 #include "physicsplay_build_version.h"
-
-using namespace netCDF;
-using namespace netCDF::exceptions;
 
 constexpr int nx{ 20 }, ny{ 15 }, nz{ 3 };
 using varType = double;
@@ -90,7 +87,7 @@ int main( int argc, char** argv ) {
         varType dataOut[nx * ny * nz]{};
 
         // Create the netCDF file.
-        NcFile dataFile( "first.netCDF.nc", NcFile::replace );
+        NcFile dataFile( "first.netCDF.nc", NcFile::Replace );
 
         // Create the dimensions.
         auto xDim = dataFile.add_dim( "x", nx );
@@ -100,7 +97,7 @@ int main( int argc, char** argv ) {
         std::vector<NcDim> dims{ xDim, yDim, zDim };
 
         // Create the data variable.
-        auto data = dataFile.addVar( "data", ncDouble, dims );
+        auto data = dataFile.add_var( "data", ncDouble, dims );
 
         // Put the data in the file.
         std::vector<size_t> startp{ 0, 0, 0 };
@@ -111,10 +108,10 @@ int main( int argc, char** argv ) {
 
         setData( dataOut, i );
 
-        data.putVar( startp, countp, stridep, imapp, dataOut );
+        data.put_var( startp, countp, stridep, imapp, dataOut );
 
         // Add an attribute.
-        dataFile.putAtt( "Version info:", PHYSICSPLAY_COMMIT_INFO );
+        dataFile.put_att( "Version info:", PHYSICSPLAY_COMMIT_INFO );
     } catch ( NcException& e ) {
         std::cout << "caught: " << e.what() << "\n";
     }
