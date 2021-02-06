@@ -16,6 +16,10 @@ TARGETS += write3
 WRITE3_SOURCES += write3.cc
 WRITE3_OBJECTS := $(subst .cc,.o,$(WRITE3_SOURCES))
 
+TARGETS += write3undef
+WRITE3UNDEF_SOURCES += write3undef.cc
+WRITE3UNDEF_OBJECTS := $(subst .cc,.o,$(WRITE3UNDEF_SOURCES))
+
 TARGETS += writefile2D
 WRITEFILE_2D_SOURCES += writefile2D.cc
 WRITEFILE_2D_OBJECTS := $(subst .cc,.o,$(WRITEFILE_2D_SOURCES))
