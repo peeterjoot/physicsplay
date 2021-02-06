@@ -93,9 +93,9 @@ int main( int argc, char** argv ) {
         NcFile dataFile( "first.netCDF.nc", NcFile::replace );
 
         // Create the dimensions.
-        auto xDim = dataFile.add_dim( "x", nx );
-        auto yDim = dataFile.add_dim( "y", ny );
-        auto zDim = dataFile.add_dim( "z", nz );
+        auto xDim = dataFile.addDim( "x", nx );
+        auto yDim = dataFile.addDim( "y", ny );
+        auto zDim = dataFile.addDim( "z", nz );
 
         std::vector<NcDim> dims{ xDim, yDim, zDim };
 
@@ -109,7 +109,7 @@ int main( int argc, char** argv ) {
         std::vector<ptrdiff_t> imapp{ 1, nx, nx * ny };
 //    auto p = i + nx * (j + ny * k);
 
-        setData( dataOut, i );
+        setData( dataOut, 0 );
 
         data.putVar( startp, countp, stridep, imapp, dataOut );
 
