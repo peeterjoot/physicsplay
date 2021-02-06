@@ -4,6 +4,10 @@
 #define phy1610_parseoptions_h_included
 
 #include <getopt.h>
+#include <cstdlib>
+#include <iostream>
+#include "returncodes.h"
+#include "integers.h"
 
 class parseOptions
 {
