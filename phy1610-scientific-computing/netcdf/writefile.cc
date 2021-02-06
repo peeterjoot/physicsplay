@@ -8,8 +8,15 @@ using namespace netCDF ;
 using namespace netCDF::exceptions ;
 
 constexpr int nx{6}, ny{12} ;
+#if 1
+using varType = int;
+using varNcType = ncInt;
+#else
+using varType = double;
+using varNcType = ncDouble;
+#endif
 
-void setData( int * dataOut, const int v )
+void setData( varType * dataOut, const int v )
 {
    for ( auto i{0} ; i < nx; i++ )
    {
@@ -28,7 +35,7 @@ int main( int argc, char ** argv )
    parseOptions opt( argc, argv ) ;
 
    try {
-      int dataOut[nx * ny] ;
+      varType dataOut[nx * ny] ;
 
       // Create the netCDF file.
       NcFile dataFile( "first.netCDF.nc", NcFile::replace ) ;
@@ -49,8 +56,7 @@ int main( int argc, char ** argv )
       std::vector<size_t> countp { nt, nx, ny } ;
       std::vector<ptrdiff_t> stridep { 1, 1, 1 } ;
       // in memory stride.  each data[t][x][y] -> data[t][ny * x + y]
-      constexpr size_t stridey{ ny } ;
-      std::vector<ptrdiff_t> imapp { 1, stridey , 1 } ;
+      std::vector<ptrdiff_t> imapp { 1, ny , 1 } ;
 
       for ( Uint i{0} ; i < opt.nrec() ; i++ )
       {
@@ -67,8 +73,7 @@ int main( int argc, char ** argv )
    }
    catch ( NcException & e )
    {
-      std::cout << "unknown error" << std::endl ;
-      e.what() ;
+      std::cout << e.what() << "\n";
    }
 
    return (int)RETURNCODES::SUCCESS ;
