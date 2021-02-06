@@ -92,9 +92,9 @@ int main( int argc, char** argv ) {
         NcFile dataFile( "first.netCDF.nc", NcFile::replace );
 
         // Create the dimensions.
-        auto zDim = dataFile.addDim( "x", nz );
+        auto xDim = dataFile.addDim( "x", nx );
         auto yDim = dataFile.addDim( "y", ny );
-        auto xDim = dataFile.addDim( "z", nx );
+        auto zDim = dataFile.addDim( "z", nz );
 
         std::vector<NcDim> dims{ xDim, yDim, zDim };
 
@@ -105,18 +105,12 @@ int main( int argc, char** argv ) {
         std::vector<size_t> startp{ 0, 0, 0 };
         std::vector<size_t> countp{ nx, ny, nz };
         std::vector<ptrdiff_t> stridep{ 1, 1, 1 };
-        std::vector<ptrdiff_t> imapp{ 1, nx, nx*ny};
+        std::vector<ptrdiff_t> imapp{ 1, nx, nx * ny };
 //    auto p = i + nx * (j + ny * k);
 
-        for ( Uint i{ 0 }; i < opt.nrec(); i++ ) {
-            startp[0] = i;
+        setData( dataOut, i );
 
-            setData( dataOut, i );
-
-            data.putVar( startp, countp, stridep, imapp, dataOut );
-            //data.putVar( startp, countp, stridep, dataOut );
-            //data.putVar( startp, dataOut );
-        }
+        data.putVar( startp, countp, stridep, imapp, dataOut );
 
         // Add an attribute.
         dataFile.putAtt( "Version info:", PHYSICSPLAY_COMMIT_INFO );
