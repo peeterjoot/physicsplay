@@ -13,7 +13,7 @@
 using namespace netCDF;
 using namespace netCDF::exceptions;
 
-constexpr int nx{ 20 }, ny{ 15 }, nz{ 3 };
+constexpr int nx{ 200 }, ny{ 150 }, nz{ 20 };
 using varType = double;
 
 inline int point( int i, int j, int k ) {
@@ -27,23 +27,25 @@ inline int point( int i, int j, int k ) {
 void setData( varType* dataOut, const int v ) {
     double cx = ( nx - 1.0 ) / 2.0;
     double cy = ( ny - 1.0 ) / 2.0;
-    double a = ( nx - 1.5 ) / 2.0;
-    double b = ( ny - 1.5 ) / 2.0;
 
 //#define PRINT_AS_MATHEMATICA
 #ifdef PRINT_AS_MATHEMATICA
     const char * comma = "a = {";
 #endif
-    for ( int x = 0 ; x < a ; x++ ) {
-        double theta = std::acos(x/a);
-        double y = b * std::sin(theta);
+    for ( auto k{ 0 }; k < nz; k++ ) {
+        double a = ( nx - 1.5 - k ) / 2.0;
+        double b = ( ny - 1.5 - k ) / 2.0;
 
-        double pxp= std::floor(cx + x);
-        double pxm= std::floor(cx - x);
-        double pyp= std::floor(cy + y);
-        double pym= std::floor(cy - y);
+        for ( int x = 0 ; x < a ; x++ ) {
 
-        for ( auto k{ 0 }; k < nz; k++ ) {
+            double theta = std::acos(x/a);
+            double y = b * std::sin(theta);
+
+            double pxp= std::floor(cx + x);
+            double pxm= std::floor(cx - x);
+            double pyp= std::floor(cy + y);
+            double pym= std::floor(cy - y);
+
             auto p1 = point( pxp, pyp, k );
             auto p2 = point( pxp, pym, k );
             auto p3 = point( pxm, pyp, k );
