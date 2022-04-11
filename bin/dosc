@@ -62,6 +62,9 @@ my $uid = $> ;
 my $cmd = qq(ps -ef | grep -e $ENV{USER} -e $uid | grep -i screen | grep -ve grep -e /Applications/ -e '-screen');
 my @ps = `$cmd` ; chomp @ps ;
 
+my $cmd2 = qq(ps -ef | grep -e $ENV{USER} -e $uid | grep tmux | grep -ve grep);
+my @ps2 = `$cmd2` ; chomp @ps2 ;
+
 if ( $dryrun )
 {
    print "# cmd: $cmd\n" ;
@@ -69,7 +72,11 @@ if ( $dryrun )
    exit 1;
 }
 
-if ( scalar(@ps) )
+if ( scalar(@ps2) )
+{
+   exec( (qw(tmux at)) ) ;
+}
+elsif ( scalar(@ps) )
 {
    exec( (qw(screen -dr)) ) ;
 }
