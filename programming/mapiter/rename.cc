@@ -25,7 +25,7 @@ struct map {
          if ( !ok ) {
             return 3; // target already exists.
          } else {
-	    c.first->second = std::move( f->second );
+            c.first->second = std::move( f->second );
             m.erase( f );
          }
       } catch (std::exception & e) {
