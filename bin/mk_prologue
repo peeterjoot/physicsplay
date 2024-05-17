@@ -1,0 +1,184 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
+
+=head1 NAME
+
+mk_prologue - generate a boilerplate prologue for C header or source files, or perl or bash scripts.
+
+=head1 SYNOPSIS
+
+mk_prologue [--help] [--perl=name |--bash=name |--source=name] [--includeguard=prefix]
+
+=head1 DESCRIPTION
+
+This script will generate a Doxygen prologue for C/C++ source code, or
+a POD prologue for a perl script, or a perldoc prologue for
+a bash script.
+
+If the source name has a .h in it, then an include guard is also printed.
+
+This script expects:
+
+- /etc/passwd to be populated with the full name for the developer.
+
+- $REPLYTO to have an email address for the developer.
+
+=over 4
+
+=item --includeguard TT
+
+Default is PJ
+
+=back
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@pm.me
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+use Pod::Usage ;
+use Config ;
+use English qw(OSNAME) ;
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
+
+my $myName = '' ;
+($myName = $0) =~ s@.*[/\\]@@ ;
+my $source = '' ;
+my $perl = '' ;
+my $bash = '' ;
+my $platforms = 0 ;
+my $includeguard = 'PJ';
+
+GetOptions (
+   'platforms!'         => \$platforms,
+   'source=s'           => \$source,
+   'perl=s'             => \$perl,
+   'bash=s'             => \$bash,
+   'includeguard=s'     => \$includeguard,
+   'help'               => sub { pod2usage(-verbose => 2) ; },
+) or pod2usage(-verbose => 0) ;
+
+my $user = $ENV{'USER'} or die "$myName: expect USER env var to be set" ;
+my $author ;
+
+if ( $Config{osname} eq 'darwin' )
+{
+   $author = `dscl . -read /Users/$user | grep -A1 RealName | tail -1` ; chomp $author ;
+   $author =~ s/^ *// ;
+}
+else
+{
+   $author = `getent passwd $user | cut -f5 -d:` ; chomp $author ;
+}
+
+my $replyto = $ENV{'REPLYTO'} or die "$myName: expect REPLYTO to contain email address." ;
+my $out ;
+
+if ( !$platforms )
+{
+   $platforms = qq(
+ Unix (Linux verified)
+) ;
+}
+else
+{
+   $platforms = qq(
+<delete all but one of the following>
+
+ Unix (Linux verified)
+ All (verified)
+ All (Linux verified)
+ All (Unix verified)
+ All (Windows verified)
+ Unix only
+ Linux only
+ Windows only
+ <insert special value here>
+) ;
+}
+
+if ( $perl ne '' )
+{
+   $perl =~ s,.*/,, ;
+
+   require "$0.perl" ;
+
+   $out = prologue( $perl, $platforms, $replyto, $author ) ;
+}
+elsif ( $bash ne '' )
+{
+   $bash =~ s,.*/,, ;
+
+   require "$0.bash" ;
+
+   $out = prologue( $bash, $platforms, $replyto, $author ) ;
+}
+elsif ( $source ne '' )
+{
+   require "$0.source" ;
+
+   $out = prologue( $source, $platforms, $replyto, $author ) ;
+
+   my $extra = '' ;
+
+   if ( $source =~ /\.c/ )
+   {
+   }
+   elsif ( $source =~ /\.hpp/ )
+   {
+   }
+   else
+   {
+      $extra = qq(extern "C" {\n\n// Function prototypes\n\n}\n) ;
+   }
+
+   if ( $source =~ /\.h/ )
+   {
+      $source =~ s,.*/,, ;
+      $source =~ s/\./_/g ;
+
+      $out .=
+         "#if !defined __${includeguard}_${source}_is_included\n" .
+         "#define __${includeguard}_${source}_is_included\n" .
+         "\n" .
+         "#pragma once\n" .
+         "// #includes and other stuff\n" .
+         "\n" .
+         $extra .
+         "\n#endif\n" ;
+   }
+   else
+   {
+      $out .= $extra ;
+   }
+}
+else
+{
+   die "$myName: expected one of --perl=N, --source=N, --bash=N\n" ;
+}
+
+print $out ;
