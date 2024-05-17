@@ -1,0 +1,61 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
+
+=head1 NAME
+
+my_cscopefilter - take cscope command line output and grab just the filename portion of it.
+
+=head1 SYNOPSIS
+
+my_cscopefilter [--help] [--relative]
+
+=head1 DESCRIPTION
+
+This script is used as a helper for the command line options of my_scope, a cscope
+helper utility.  It is invoked when using any of the my_scope command line search options.
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@pm.me
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+use Pod::Usage ;
+#use English (qw(OSNAME)) ;
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
+
+#declare lexical variables to be used anywhere in this script (pseudo-global)
+my $myName = '' ;
+
+($myName = $0) =~ s@.*[/\\]@@ ;
+my $relative = '' ;
+
+GetOptions (
+   'help'               => sub { pod2usage(-verbose => 2) ; },
+   'relative!'          => sub { my $top = `my_findtop` ; chomp $top ; $relative = " | sed s,^,$top/," ; }
+) or pod2usage(-verbose => 0) ;
+
+system qq(cut -f1 -d" " | grep -v ^/usr/$relative) ;

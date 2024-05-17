@@ -1,0 +1,335 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" or see the lclient
+# command for an example.  When done, check syntax with "podchecker".
+
+=head1 NAME
+
+my_cscope - build or use a cscope database for source code query and browsing.
+
+=head1 SYNOPSIS
+
+my_cscope [--help] [--top=topdir]
+[--build] [--index=extension]
+[--find|--def|--called|--calling|--text|--egrep|--assign|--include
+[--nofilter|--relative]
+[--grep]
+[--quote]
+[--verbose]
+]
+
+=head1 DESCRIPTION
+
+cscope is a terminfo based source code browser.  The cscope database can also be
+used within vim (control-]) and other editors to navigate to function and symbol
+definitions without leaving the editor.
+
+Options:
+
+=over 4
+
+=item --build [--only]
+
+Build or rebuild the cscope database.  With --only, exit after building it.
+
+=item --index=foo
+
+A build suboption to add additional file extensions for the indexing
+command can be added, for example, to also index *.foo and *.moo files run
+
+my_cscope --build --index=foo --index=moo
+
+=item --top
+
+Required if my_findtop doesn't return anything meaningful.  This supplies the the root path of the directory to be indexed.
+
+=item --grep
+
+By default the my_cscope command line produces just the list of files:
+
+   $ my_cscope --find my_strerror
+   include/my_strerror.h
+   src/my_strerror.cpp
+   ...
+
+The raw output that this list of files is obtained from can be seen by using the --nofilter (i.e. do not run the output through the script my_cscopefilter).  Here's an example:
+
+   $ my_cscope --find my_strerror  --nofilter | head -5
+   ...
+
+It can be useful to display output in 'grep -n' format.  This can be done by adding --grep to your --find (or other my_cscope
+command line query):
+
+   $ my_cscope --find my_strerror  --grep | head -5
+   ...
+
+If you wonder why this may be desired, the reason is that tools can be used to navigate between all such filename:linenumber:context
+triplets.  Suppose you want to quickly edit all references to secPutstr.  This can be done with
+
+   $ grep -n foo `cat foo.out` | tee foo.q
+
+   $ vim -q foo.q
+
+Within the (vim) editor, the :cn (:cN) command can then be used to navigate to the next (previous) entry in the set of foo.q (vim "quickfix") entries.
+
+=item --nofilter
+
+Use of a filter is the default if any command line search options are supplied
+(see below), but that can be disabled with --nofilter.  With a filter the
+my_cscopefilter script will be used on the output to grab
+just the filenames that matched the command line query.  An example of this can be found above.
+
+=item --relative
+
+Same as --filter, but calls 'my_cscopefilter --relative'.  This option allows for a
+displaying the filenames relative to $TOP for the build tree:
+
+   $ my_cscope --find fooPutstr --relative | tee foo.out
+   ...
+
+   $ grep -n fooPutstr `cat foo.out` | tee foo.q
+   ...
+
+=back
+
+Command line mode search options.  These return the list of files with the results of the search (or with --grep) a filename:linenumber:context triplet of the search results:
+
+=over 4
+
+=item --find|-n 0
+
+Find this C symbol
+
+=item --definition|-n 1
+
+Find this global definition.
+
+=item --called|-n 2
+
+Find functions called by this function.
+
+=item --calling|-n 3
+
+Find functions calling this function
+
+=item --text|-n 4
+
+Find this text string.
+
+=item --egrep|-n 6
+
+Find this egrep pattern.
+
+=item --file|-n 7
+
+Find this file.
+
+=item --include|-n 8
+
+Find files #including this file.
+
+=item --assign|-n 9
+
+Find assignments to this symbol.
+
+=item --quote
+
+This is also a command line only option, used to single quote the search expression.  Example:
+
+my_cscope --egrep a --quote --grep | grep "'z'"
+
+This could be used to find patterns like:
+
+ if((c >= 'a') && (c <= 'z'))
+
+which is not appropriate for EBCDIC.
+
+=item --verbose
+
+Show the index build command.
+
+=back
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix only (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeter.joot@lzlabs.com
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict ;
+use warnings ;		# mandatory during testing
+use Getopt::Long ;
+use Pod::Usage ;
+#use English (qw(OSNAME)) ;
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
+
+#declare lexical variables to be used anywhere in this script (pseudo-global)
+my $myName = '' ;
+($myName = $0) =~ s@.*[/\\]@@ ;
+
+my $n = -1 ;
+my $TOP = `my_findtop` ; chomp $TOP ;
+my $filter = '' ;
+my $build = 0 ;
+my $tmpdir = $ENV{'TMPDIR'} ;
+$tmpdir = '/tmp' unless ( defined $tmpdir ) ;
+my $grep = 0 ;
+my $buildonly = 1 ;
+my $pwd = `pwd` ; chomp $pwd ;
+my $verbose = 0;
+my $quote = 0;
+
+my %cmd =
+(
+   'find'       => 0, # -0: Find this C symbol:
+   'definition' => 1, # -1: Find this global definition:
+   'called'     => 2, # -2: Find functions called by this function:
+   'calling'    => 3, # -3: Find functions calling this function:
+   'text'       => 4, # -4: Find this text string:
+   # 'change'   => 5, # -5: Change this text string:
+   'egrep'      => 6, # -6: Find this egrep pattern:
+   'file'       => 7, # -7: Find this file:
+   'include'    => 8, # -8: Find files #including this file:
+   'assign'     => 9, # -9: Find assignments to this symbol:
+) ;
+
+my @extensions = (
+   "cc",
+   "[chly]",
+   "[hc]pp",
+   "hx"
+   );
+
+GetOptions (
+   'help'         => sub { pod2usage(-verbose => 2) ; },
+   'top=s'        => \$TOP,
+#   'filter!'      => sub { $filter = ' | my_cscopefilter | sort -u' ; },
+   'nofilter'     => sub { $filter = ' ' ; },
+   'relative!'    => sub { $filter = ' | my_cscopefilter --relative | sort -u' ; },
+   'index=s'      => \@extensions,
+   'find'         => sub { setDefaultsForCmdline() ; $n = $cmd{'find'} ; },
+   'definition'   => sub { setDefaultsForCmdline() ; $n = $cmd{'definition'} ; },
+   'called'       => sub { setDefaultsForCmdline() ; $n = $cmd{'called'} ; },
+   'calling'      => sub { setDefaultsForCmdline() ; $n = $cmd{'calling'} ; },
+   'text'         => sub { setDefaultsForCmdline() ; $n = $cmd{'text'} ; },
+   'egrep'        => sub { setDefaultsForCmdline() ; $n = $cmd{'egrep'} ; },
+   'file'         => sub { setDefaultsForCmdline() ; $n = $cmd{'file'} ; },
+   'include'      => sub { setDefaultsForCmdline() ; $n = $cmd{'include'} ; },
+   'assign'       => sub { setDefaultsForCmdline() ; $n = $cmd{'assign'} ; },
+   'grep!'        => \$grep,
+   'build!'       => \$build,
+   'n:i'          => \$n,
+   'verbose!'     => \$verbose,
+   'quote!'       => \$quote,
+) or pod2usage(-verbose => 0) ;
+
+# Validate/handle options
+
+die "--top required" if ( $TOP eq '' );
+
+my $extstring = '' ;
+my $orstring = '' ;
+foreach ( @extensions )
+{
+   $extstring .= qq(${orstring}-name "*.$_");
+   $orstring = ' -o ' ;
+}
+
+if ( $build )
+{
+$ENV{'TOP'} = $TOP ;
+my $bcmd = qq@
+cd $TOP || exit 1
+rm -f cscope.out
+
+find . \\
+\\( $extstring \\) \\
+-type f \\
+| grep -v ' ' \\
+| grep -Fv '/.junk' \\
+| sed 's/^..//' > $tmpdir/cscope.files.\$\$
+
+cscope -b -i$tmpdir/cscope.files.\$\$
+
+rm $tmpdir/cscope.files.\$\$
+@ ;
+
+   print "# $bcmd\n" if ( $verbose );
+   system( $bcmd );
+
+   exit 0 if ( $buildonly ) ;
+}
+
+if ( $n >= 0 )
+{
+   die "$myName: no search expression" if ( scalar( @ARGV ) ne 1 ) ;
+
+   my $s = "@ARGV";
+
+   if ( $quote ) {
+      $s = qq("'${s}'");
+   }
+
+   my $cmd;
+   if ( $grep )
+   {
+      $cmd = qq(cd $TOP && cscope -d -L -$n ${s}$filter | tr '\n' ' ');
+      print "# $cmd\n" if ( $verbose );
+
+      my $g = `$cmd`; chomp $g ;
+
+      system( "grep -n ${s} $g /.n 2>/dev/null" ) ;
+   }
+   else
+   {
+      my $cmd = qq(cd $TOP && cscope -d -L -$n ${s}$filter);
+      print "# $cmd\n" if ( $verbose );
+
+      system( $cmd );
+   }
+}
+else
+{
+   my $cmd = qq(cd $TOP && cscope -d);
+   print "# $cmd\n" if ( $verbose );
+
+   system( $cmd );
+}
+
+exit 0 ;
+
+sub setDefaultsForCmdline
+{
+   if ( $filter eq '' )
+   {
+      my $f = 'my_cscopefilter' ;
+      if ( $pwd ne $TOP )
+      {
+         $f .= ' -relative' ;
+      }
+
+      $filter = " | $f | sort -u" ;
+   }
+
+   $buildonly = 0 ;
+}
+
+# vim: et ts=3 sw=3
