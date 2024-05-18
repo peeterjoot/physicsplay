@@ -10,7 +10,7 @@ include ../make.vars.fftw
 #CXXFLAGS += -DRARRAY_USE_ALLOC_ALIGNED16
 
 CXXFLAGS += -DRATPATH=\"$(HOME)/gravitationalwaves\"
-CXXFLAGS += -Wno-error=constant-logical-operand
+#CXXFLAGS += -Wno-error=constant-logical-operand
 
 #THISDIR := phy1610-scientific-computing/ps7
 
