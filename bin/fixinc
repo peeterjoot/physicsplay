@@ -1,0 +1,122 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
+
+=head1 NAME
+
+fixinc - modify a set of source files, adding #includes.
+
+=head1 SYNOPSIS
+
+fixinc [--help] [<options>]
+
+=head1 DESCRIPTION
+
+Input like:
+
+/home/foo/bar/a.c:errno.h
+/home/foo/bar/b.c:ctype.h
+/home/foo/bar/c.c:ctype.h
+/home/foo/bar/d.c:netinet/in.h
+/home/foo/bar/e.c:ctype.h
+/home/foo/bar/e.c:stdio.h
+/home/foo/bar/f.c:stdio.h
+/home/foo/bar/f.c:ctype.h
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@protonmail.com
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+use Pod::Usage ;
+use File::Copy qw(move);
+#use feature 'say' ;
+#use Data::Dumper ;
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
+
+my $myName = '' ;
+
+($myName = $0) =~ s@.*[/\\]@@ ;
+
+#Getopt::Long::Configure( 'pass_through' ) ;
+GetOptions (
+   'help'               => sub { pod2usage(-verbose => 2) ; },
+) or pod2usage(-verbose => 0) ;
+
+# Validate/handle options, and everything else...
+
+#print Dumper();
+
+# Hash to store headers to add for each file
+my %headers_to_add;
+
+# Read from standard input and populate the hash
+while (<>) {
+    chomp;
+    my ($filename, $header) = split /:/, $_;
+    push @{ $headers_to_add{$filename} }, $header;
+}
+
+# Process each file
+for my $filename (keys %headers_to_add) {
+    # Read the file content
+    open my $fh, '<', $filename or die "Cannot open '$filename': $!";
+    my @lines = <$fh>;
+    close $fh;
+
+    # Prepare the include lines to be added
+    my @new_includes = map { "#include <$_>\n" } @{ $headers_to_add{$filename} };
+    
+    # Check if each header is already included
+    my %existing_includes = map { $_ => 1 } grep { /^\s*#\s*include\s+/ } @lines;
+    
+    # Remove any duplicates
+    @new_includes = grep { !$existing_includes{$_} } @new_includes;
+
+    # Skip if no new includes
+    next unless @new_includes;
+
+    # Find the position after the last existing #include
+    my $last_include_index = -1;
+    for my $i (0..$#lines) {
+        if ($lines[$i] =~ /^\s*#\s*include\s+/) {
+            $last_include_index = $i;
+        }
+    }
+
+    # Insert new includes after the last existing #include
+    splice @lines, $last_include_index + 1, 0, @new_includes;
+
+    # Write the updated content back to the file
+    open $fh, '>', "$filename.tmp" or die "Cannot open '$filename.tmp': $!";
+    print $fh @lines;
+    close $fh;
+
+    # Replace the original file with the updated one
+    move("$filename.tmp", $filename) or die "Cannot move '$filename.tmp' to '$filename': $!";
+}
+
+print "Files have been updated.\n";
