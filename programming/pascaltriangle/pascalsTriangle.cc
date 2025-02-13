@@ -1,11 +1,45 @@
+/*
+ * Print Pascal's triangle up to a given size.
+ *
+ * Usage: pascalsTriangle [n]
+ *
+ * n = 10 by default.
+ *
+ * Example:
+ * ./pascalsTriangle 6
+         1
+        1  1
+      1  2  1
+     1  3  3  1
+   1  4  6  4  1
+  1  5 10 10  5  1
+ */
 #include <stdio.h>
-#include <string>
+#include <stdlib.h>
 
-int m = 10;
-
-void printrow( int n, int spaces ) {
+/** For the last row of Pascal's triangle that we will print, how many digits is required for one of the central values
+ *
+ * This function and printrow both use a recurrence relationship to compute the binomial coefficient:
+ *
+ * \binom{n,k} = \binom{n,k-1} (n - k + 1)/k
+ *
+ */
+static int biggest( int n ) {
    int binom = 1;
-   int leading = (m - n) * spaces/2;
+
+   for ( int k = 1 ; k < n/2 ; k++ ) {
+      binom *= (n - k + 1);
+      binom /= k;
+   }
+
+   int len = snprintf( NULL, 0, "%d", binom );
+   return len;
+}
+
+/// Print a row of Pascal's triangle
+static void printrow( int n, int m, int spaces ) {
+   int binom = 1;
+   int leading = (m - n - 1) * spaces/2;
 
    printf( "%*s%*d", leading, "", spaces, 1 );
 
@@ -17,30 +51,27 @@ void printrow( int n, int spaces ) {
    }
 
    if ( n > 0 ) {
-      printf( "%*d\n", spaces, 1 );
-   } else {
-      printf( "\n" );
+      printf( "%*d", spaces, 1 );
    }
+   printf( "\n" );
 }
 
 int main( int argc, char ** argv ) {
-   if ( argc == 2 ) {
-      m = std::stoi( argv[1] );
-   } 
+   int m = 10;
 
-   int spaces = 1;
-   if ( m >= 5 ) {
-      spaces++;
+   if ( argc == 2 ) {
+      m = atoi( argv[1] );
    }
-   if ( m >= 9 ) {
-      spaces += 2;
+
+   if ( m <= 0 ) {
+      fprintf( stderr, "invalid size: %d\n", m );
+      return 1;
    }
-   if ( m >= 14 ) {
-      spaces += 2;
-   }
+
+   int spaces = biggest( m ) + 1;
 
    for ( int n = 0 ; n < m ; n++ ) {
-      printrow( n, spaces ); 
+      printrow( n, m, spaces );
    }
 
    return 0;
