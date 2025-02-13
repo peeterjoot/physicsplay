@@ -39,7 +39,6 @@ int main( int argc, char ** argv ) {
       spaces += 2;
    }
 
-   //printf( "%*d\n", spaces, 1 );
    for ( int n = 0 ; n < m ; n++ ) {
       printrow( n, spaces ); 
    }
