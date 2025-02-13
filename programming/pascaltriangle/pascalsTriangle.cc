@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/** For the last row of Pascal's triangle that we will print, how many digits is required for one of the central values
+/** For the last row of Pascal's triangle that we will print, figure out how many digits is required for one of the central values.
  *
  * This function and printrow both use a recurrence relationship to compute the binomial coefficient:
  *

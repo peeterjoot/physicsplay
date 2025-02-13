@@ -1,4 +1,5 @@
 CXXFLAGS += -g
+CXXFLAGS += -O2
 
 all : pascalsTriangle
 
