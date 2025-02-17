@@ -1,0 +1,55 @@
+#! /usr/bin/env python3
+
+import requests
+import json
+import sys
+import os
+
+CACHE_FILE = 'context_cache.json'
+
+#def load_cache():
+#    if os.path.exists(CACHE_FILE):
+#        with open(CACHE_FILE, 'r') as f:
+#            return json.load(f)
+#    return {}
+
+#def save_cache(context):
+#    with open(CACHE_FILE, 'w') as f:
+#        json.dump(context, f)
+
+def query_ollama(prompt, context):
+    response = requests.post(
+        'http://localhost:11434/api/generate', 
+        json={'model': 'mixtral', 'prompt': prompt, 'context': context, 'stream': False}
+    ).json()
+
+    # Print all keys and the raw response
+    #print("API Response:", response)
+    #print("Keys in Response:", response.keys())  # Show available keys in the response
+
+    # Handle different response structures
+    return response
+
+def main():
+    context = []
+    #context = load_cache()
+    
+    while True:
+        # Read input from stdin (interactive prompt)
+        prompt = input("Enter your query: ")
+
+        # Query the model and get the response
+        response = query_ollama(prompt, context)
+        rr = response['response']
+        print(f"Response: {rr}")
+
+        # Update context (for context propagation)
+        context = response['context']
+        #save_cache(context)
+
+        # Optionally prompt again or break out of the loop
+        if prompt.lower() in ["exit", "quit"]:
+            break
+
+if __name__ == "__main__":
+    main()
