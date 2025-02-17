@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 
-# the pip3 requests module below depends on a virtual environment.  Run this to enter that enviornment:
+# the pip3 requests module below depends on a virtual environment.  Run this to enter that environment:
 #
 # cd && . .venv/bin/activate
 #
@@ -11,8 +11,10 @@ import sys
 import os
 import argparse
 import re
+from pathlib import Path
 
-MODEL = 'mixtral'
+#MODEL = 'mixtral'
+MODEL = 'llama2'
 CACHE_FILE = ''
 
 def load_cache():
@@ -39,7 +41,7 @@ def main():
     # Set up argument parser
     parser = argparse.ArgumentParser(description="Query the Ollama Mixtral LLM model.")
     parser.add_argument('--clean', action='store_true', help="Start with an empty context list (no cache).")
-    parser.add_argument('--model', type=str, default='mixtral', help="Specify an alternative model.")
+    parser.add_argument('--model', type=str, default=MODEL, help="Specify an alternative model.")
     parser.add_argument('--cache', type=str, default='context_cache', help="context cache path component.")
     parser.add_argument('--query', type=str, default='', help="multiline query in a file")
 
@@ -60,8 +62,7 @@ def main():
 
     while True:
         if args.query:
-            with open(args.query, "r") as f:
-                prompt = f.read().strip()
+            prompt = Path(args.query).read_text().strip()
         else:
             # Read input from stdin (interactive prompt)
             prompt = input("Enter your query: ")
