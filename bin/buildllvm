@@ -1,0 +1,39 @@
+set -x
+
+#cd ~/llvm-project
+#git checkout llvmorg-20.1.2
+
+#BUILDDIR=~/build-llvm
+#rm -rf $BUILDDIR
+#mkdir $BUILDDIR
+
+BUILD_TYPE=Debug
+#BUILD_TYPE=Release
+
+INSTDIR=/usr/local/llvm-20
+
+TARGETS='X86'
+cmake \
+-G \
+Ninja \
+../llvm-project/llvm \
+-DBUILD_SHARED_LIBS=true \
+-DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+-DLLVM_ENABLE_ASSERTIONS=TRUE \
+-DLLVM_OPTIMIZED_TABLEGEN=ON \
+-DLLVM_LIBDIR_SUFFIX=64 \
+-DCMAKE_BUILD_WITH_INSTALL_RPATH=TRUE \
+-DLLVM_TARGETS_TO_BUILD="${TARGETS}" \
+-DCMAKE_INSTALL_PREFIX=${INSTDIR} \
+-DLLVM_ENABLE_PROJECTS='clang;lldb;mlir' \
+-DCMAKE_INSTALL_RPATH=${INSTDIR}/lib64 || exit 5
+
+#-DICU_LIBRARY=${ICU_LIB_DIR} \
+#-DCMAKE_INSTALL_RPATH=${GCCDIR}/lib64:${INSTDIR}/lib64
+#-DCMAKE_SHARED_LINKER_FLAGS="-B${LDDIR}" \
+#-DCMAKE_EXE_LINKER_FLAGS="-B${LDDIR}" \
+
+#ninja || exit 6
+
+#sudo rm -rf ${INSTDIR}
+#sudo ${NINJA} install || exit 7
