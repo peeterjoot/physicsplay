@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 
-# the pip3 requests module below depends on a virtual environment.  Run this to enter that environment:
+# the pip3 requests module below depends on a virtual environment.  Run this to enter that enviornment:
 #
 # cd && . .venv/bin/activate
 #
@@ -62,6 +62,8 @@ def main():
 
     while True:
         if args.query:
+            #with open(args.query, "r") as f:
+            #    prompt = f.read().strip()
             prompt = Path(args.query).read_text().strip()
         else:
             # Read input from stdin (interactive prompt)
