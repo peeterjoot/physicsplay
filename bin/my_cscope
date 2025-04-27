@@ -196,6 +196,7 @@ my $buildonly = 1 ;
 my $pwd = `pwd` ; chomp $pwd ;
 my $verbose = 0;
 my $quote = 0;
+my @searchdirs = ('.');
 
 my %cmd =
 (
@@ -236,6 +237,7 @@ GetOptions (
    'assign'       => sub { setDefaultsForCmdline() ; $n = $cmd{'assign'} ; },
    'grep!'        => \$grep,
    'build!'       => \$build,
+   'searchdirs=s' => \@searchdirs,
    'n:i'          => \$n,
    'verbose!'     => \$verbose,
    'quote!'       => \$quote,
@@ -257,20 +259,40 @@ if ( $build )
 {
 $ENV{'TOP'} = $TOP ;
 my $bcmd = qq@
+set -x
+
 cd $TOP || exit 1
 rm -f cscope.out
 
-find . \\
+rm -f $tmpdir/cscope.files.\$\$
+touch $tmpdir/cscope.files.\$\$
+@;
+
+my $relfilter = q(| sed 's/^..//');
+
+foreach (@searchdirs) {
+   $bcmd .= qq@
+find $_ \\
 \\( $extstring \\) \\
 -type f \\
 | grep -v ' ' \\
 | grep -Fv '/.junk' \\
-| sed 's/^..//' > $tmpdir/cscope.files.\$\$
+$relfilter >> $tmpdir/cscope.files.\$\$
 
+@;
+
+$relfilter = '';
+}
+
+$bcmd .= qq@
 cscope -b -i$tmpdir/cscope.files.\$\$
 
-rm $tmpdir/cscope.files.\$\$
 @ ;
+unless ( $verbose ) {
+$bcmd .= qq@
+   rm $tmpdir/cscope.files.\$\$
+@;
+}
 
    print "# $bcmd\n" if ( $verbose );
    system( $bcmd );
