@@ -1,0 +1,44 @@
+#!/bin/bash
+
+: <<=cut
+#-----------------------------------------------------------------------------
+# POD like Format Documentation.  Invoke perldoc ./thisfile to see the documentation.
+# See "perldoc perlpod" for examples.
+# When done, check syntax with "podchecker".  
+
+=head1 NAME
+
+allwhich - a simple wildcard $PATH search utility
+
+=head1 SYNOPSIS
+
+allwhich [--help]
+
+=head1 DESCRIPTION
+
+Example:
+
+   $ allwhich filter
+   /usr/bin/msgfilter
+   /usr/bin/svndumpfilter
+   /home/pjoot/bin/scfilter
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@pm.me
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+(for i in `echo $PATH | tr : '\n'` ; do
+   echo $i/*$1* | grep -vFe '*' | tr ' ' '\n'
+done) | sort -u

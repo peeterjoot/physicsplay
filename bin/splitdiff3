@@ -1,0 +1,154 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
+
+=head1 NAME
+
+splitdiff3 - filter STDIN containing 'diff3 -m' output, and split things into chunks.
+
+=head1 SYNOPSIS
+
+splitdiff3 [--help] --out outbasepath [--mine | --orig | --other | --merge]
+
+=head1 DESCRIPTION
+
+Options:
+
+=over 4
+
+=item --out=basepath
+
+File base.
+
+=item --mine | --orig | --other | --merge
+
+output a selected conflict block, or run all three through 'diff3 -m'
+
+=back 
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@pm.me
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+use Pod::Usage ;
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
+
+my $myName = '' ;
+my $outbase ;
+my $outputmine = 0 ;
+my $outputorig = 0 ;
+my $outputother = 0 ;
+my $outputmerge = 0 ;
+
+($myName = $0) =~ s@.*[/\\]@@ ;
+
+GetOptions ( 
+   'help'               => sub { pod2usage(-verbose => 2) ; },
+   'out=s'              => \$outbase,
+   'mine!'              => \$outputmine,
+   'orig!'              => \$outputorig,
+   'other!'             => \$outputother,
+   'merge!'             => \$outputmerge,
+) or pod2usage(-verbose => 0) ;
+
+my $tmpdir = $ENV{'TMPDIR'} ;
+if ( !defined $tmpdir )
+{
+   $tmpdir = '/tmp' ;
+}
+
+if ( !defined $outbase )
+{
+   $outbase = "$tmpdir/o"
+}
+
+#<<<<<<< HEAD
+#	WNOERROR_COMMENT := -Wno-error=comment
+#	
+#||||||| merged common ancestors
+#	WERROR += -Wno-error=comment
+#=======
+#	WERROR += -Wno-error=comment
+#
+#>>>>>>> use lz_mutex instead of pthread_mutex_t in rc/
+
+system( "rm -f $outbase.other $outbase.orig $outbase.mine" ) ;
+
+my $other = 0 ;
+my $orig = 0 ;
+my $mine = 0 ;
+my $fh ;
+while ( <> )
+{
+   chomp ;
+
+   if ( /^<<<<<<</ )
+   {
+      $other = 1 ;
+      open $fh, ">$outbase.other" or die ;
+      next ;
+   }
+   elsif ( /^\|\|\|\|\|\|\| / )
+   {
+      close $fh or die ;
+      open $fh, ">$outbase.orig" or die ;
+      next ;
+   }
+   elsif ( /^=======/ )
+   {
+      close $fh or die ;
+      open $fh, ">$outbase.mine" or die ;
+      next ;
+   }
+   elsif ( /^>>>>>>>/ )
+   {
+      close $fh or die ;
+      last ;
+   }
+
+   if ( defined $fh )
+   {
+      print $fh "$_\n" ;
+   }
+}
+
+if ( $outputother )
+{
+   system( "cat $outbase.other" ) ;
+}
+elsif ( $outputorig )
+{
+   system( "cat $outbase.orig" ) ;
+}
+elsif ( $outputmine )
+{
+   system( "cat $outbase.mine" ) ;
+}
+elsif ( $outputmerge )
+{
+   system( "diff3 -m $outbase.mine $outbase.orig $outbase.other" ) ;
+}

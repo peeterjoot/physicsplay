@@ -1,0 +1,86 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
+
+=head1 NAME
+
+diffsplit - split a unified diff of many files into many different files
+
+=head1 SYNOPSIS
+
+diffsplit [--help] --filename f [--outdir d]
+
+=head1 DESCRIPTION
+
+Split a diff
+
+=over 4
+
+=item --filename
+
+The diff to split.
+
+=item [--outdir]
+
+defaults to ./t
+
+=back
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@pm.me
+
+=head1 AUTHORS
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+use Pod::Usage ;
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
+
+my $myName = '' ;
+
+($myName = $0) =~ s@.*[/\\]@@ ;
+my $filename ;
+my $outdir = './t' ;
+
+GetOptions ( 
+   'filename=s'         => \$filename,
+   'outdir=s'           => \$outdir,
+   'help'               => sub { pod2usage(-verbose => 2) ; },
+) or pod2usage(-verbose => 0) ;
+
+my $f = `cat $filename` ;
+
+my @d = split( /^---/ms, $f ) ;
+
+my $filebase = `basename $filename` ; chomp $filebase ;
+
+system( "mkdir -p $outdir" ) ;
+
+my $i = 0 ;
+foreach (@d)
+{
+   open my $fh, ">$outdir/$filebase.$i" or die ;
+   print $fh "---$_" ;
+   close $fh or die ;
+
+   $i++ ;
+}
