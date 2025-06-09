@@ -1,0 +1,19 @@
+# https://www.scaler.com/topics/how-to-increase-swap-space-in-linux/ method 2:
+
+# run as root:
+sudo su -
+
+# on fedora with btrfs, we require a no copy-on-write attr to successfully create a swapfile.  Also avoided fallocate for good measure (but 
+# not sure if that helped.)
+sw=/var/tmp/swapfile
+rm -f $sw
+touch $sw
+chattr +C $sw
+lsattr $sw
+#btrfs property set $sw compression none
+#fallocate -l 30G $sw
+dd if=/dev/zero of=$sw bs=1M count=30720 
+chmod 600 $sw
+mkswap $sw
+swapon $sw
+
