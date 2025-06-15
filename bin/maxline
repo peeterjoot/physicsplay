@@ -1,0 +1,90 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
+
+=head1 NAME
+
+maxline - show the length of the longest line in a file
+
+=head1 SYNOPSIS
+
+maxline [--help] [<options>]
+
+=head1 DESCRIPTION
+
+Options: None
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@pm.me
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+use Pod::Usage ;
+use List::Util qw( max ) ;
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
+
+my $myName = '' ;
+my $short = 0;
+
+($myName = $0) =~ s@.*[/\\]@@ ;
+
+Getopt::Long::Configure( 'pass_through' ) ;
+GetOptions (
+   'help'               => sub { pod2usage(-verbose => 2) ; },
+   'short!'             => \$short,
+) or pod2usage(-verbose => 0) ;
+
+pod2usage(-verbose => 2) unless ( scalar(@ARGV) == 1 );
+
+process( $ARGV[0] );
+
+exit 0;
+
+sub process
+{
+   my ($f) = @_;
+   my %hf = ();
+
+   open my $fh, "<$f" or die "could not open file $f";
+   while (<$fh>)
+   {
+      chomp;
+      my $len = length($_);
+      $hf{$len}++;
+   }
+   close $fh;
+
+   my $max = max keys(%hf);
+
+   if ( $short )
+   {
+      print "$max\n";
+   }
+   else
+   {
+      print "$max $f\n";
+   }
+}

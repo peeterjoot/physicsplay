@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# http://odroid.com/dokuwiki/doku.php?id=en:odroid_flashing_tools
+
+card=/dev/sda
+image=/home/pjoot/arm/ubuntu64-16.04lts-mate-odroid-c2-20160226.img
+#image=/home/pjoot/arm/odroid_fedora3.img
+#image=/home/pjoot/arm/Fedora-Workstation-armhfp-23-10-sda.raw
+
+size=$((`stat -c%s $image`/512))
+
+dd if=$image bs=512 count=$size of=$card
+sync ; sleep 1 ; sync ; sleep 1 ; sync ; sleep 1
+
+dd if=$card bs=512 count=$size | md5sum
+dd if=$image bs=512 count=$size | md5sum

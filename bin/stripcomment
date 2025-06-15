@@ -1,0 +1,78 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
+
+=head1 NAME
+
+stripcomment - Strip C comments
+
+=head1 SYNOPSIS
+
+stripcomment [--help]
+
+=head1 DESCRIPTION
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@pm.me
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+use Pod::Usage ;
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
+
+my $myName = '' ;
+my $filename;
+
+($myName = $0) =~ s@.*[/\\]@@ ;
+
+#Getopt::Long::Configure( 'pass_through' ) ;
+GetOptions (
+   'help'               => sub { pod2usage(-verbose => 2) ; },
+   'filename=s'			=> \$filename,
+) or pod2usage(-verbose => 0) ;
+
+die unless ( defined $filename );
+
+stripblockcomments( $filename );
+
+exit 0;
+
+# https://rosettacode.org/wiki/Strip_block_comments#Perl
+sub stripblockcomments
+{
+    my ($in) = @_;
+
+    open my $infh, "<$in" or die;
+    my $code = '' ;
+    {
+        local $/ ;
+        $code = <$infh> ; #slurp mode
+    }
+    $code =~ s,/\*.*?\*/,,sg ;
+    close $infh;
+
+    print $code . "\n" ;
+}
