@@ -1,0 +1,120 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
+
+=head1 NAME
+
+prunespaces - change all files with spaces to underscore in current directory tree
+
+=head1 SYNOPSIS
+
+prunespaces [--help] [--depth=n]
+
+=head1 DESCRIPTION
+
+Options:
+
+=over 4
+
+=item --depth=10
+
+Max depth for the directory search.
+
+=item --permissions
+
+Run: chflags nouchg
+
+instead of: mv -i
+
+=back
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@pm.me
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+use Pod::Usage ;
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
+
+my $myName = '' ;
+my $depth = 10;
+my $find = 'find';
+my $permissions = 0;
+
+($myName = $0) =~ s@.*[/\\]@@ ;
+
+#Getopt::Long::Configure( 'pass_through' ) ;
+GetOptions (
+   'help'               => sub { pod2usage(-verbose => 2) ; },
+   'depth=i'            => \$depth,
+   'permissions!'       => \$permissions,
+) or pod2usage(-verbose => 0) ;
+
+#die "$^O\n";
+
+$find = 'gfind' if ( $^O eq 'darwin' );
+
+prunespaces();
+
+exit 0;
+
+sub prunespaces
+{
+   for ( my $i = 0 ; $i < $depth ; $i++ )
+   {
+      my @f = `$find -maxdepth $i -name "* *" -type d` ; chomp @f;
+      renameem( @f );
+   }
+   for ( my $i = 0 ; $i < $depth ; $i++ )
+   {
+      my @f = `$find -maxdepth $i -name "* *" -type f` ; chomp @f;
+      renameem( @f );
+   }
+}
+
+sub renameem
+{
+   my (@f) = @_;
+   my $cmd = 'mv -i';
+   if ( $permissions ) {
+      # https://apple.stackexchange.com/questions/101328/file-cant-be-moved-by-root-on-os-x
+      $cmd = 'chflags nouchg';
+   }
+
+   foreach ( @f )
+   {
+      my $n = $_;
+      $n =~ s/ /_/g or next;
+
+      my $q = q(');
+
+      if ( $n =~ m/'/ ) {
+         $q = q(");
+      }
+
+      system( qq(${cmd} ${q}$_${q} ${q}$n${q}) );
+   }
+}
