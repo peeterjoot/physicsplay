@@ -1,0 +1,104 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
+
+=head1 NAME
+
+typedef2 - A filter script to transform lines with C typedefs to C++ using statements.
+
+=head1 SYNOPSIS
+
+typedef2 [--help] [<options>]
+
+=head1 DESCRIPTION
+
+Transform text with C typedefs into C++ using statements.
+
+One way to run this is to select a set of lines in vim, and then pipe those lines through this script.  Example:
+
+:,+2!typedef2
+
+This will run the current and next two lines through this filter.
+
+Options:
+
+=over 4
+
+=item --functionpointer
+
+Assume the input is a function pointer typedef and transform accordingly.
+
+=back
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@pm.me
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+use Pod::Usage ;
+#use feature 'say' ;
+#use Data::Dumper ;
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
+
+my $myName = '' ;
+my $fp = 0;
+($myName = $0) =~ s@.*[/\\]@@ ;
+
+#Getopt::Long::Configure( 'pass_through' ) ;
+GetOptions (
+   'help'               => sub { pod2usage(-verbose => 2) ; },
+   'functionpointer!'   => \$fp,
+) or pod2usage(-verbose => 0) ;
+
+# Validate/handle options, and everything else...
+
+#print Dumper();
+
+my $line = '';
+
+while (<>) {
+    if ( $fp ) {
+        $line .= $_;
+
+        if ($line =~ /;\s*$/) {  # End of a typedef statement
+            $line =~ s/
+                typedef\s+                     # Match 'typedef' followed by one or more spaces
+                ((?:\S+\s+)*\S+)               # Capture the return type (one or more words)
+                \s*                            # Optional spaces
+                \(\s*\*\s*(\w+)\s*\)\s*        # Match '(*function_name)' with optional spaces
+                \(\s*([^)]*)\s*\)              # Capture the arguments inside parentheses
+                ;                              # Match the closing semicolon
+            /using $2 = $1(*)($3);/x;          # Replace with 'using function_name = return_type(*)(arguments);'
+            print $line;
+            $line = '';  # Reset for the next typedef statement
+        }
+    } else {
+        s/typedef\s+(.+?)\s+(\w+)\s*;/using $2 = $1;/;
+        print;
+    }
+}
+
+# vim: et ts=4 sw=4

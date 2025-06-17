@@ -1,0 +1,163 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
+
+=head1 NAME
+
+indentmap - reformat a perl script so that the equal signs of perl hashes are all lined up.
+
+=head1 SYNOPSIS
+
+indentmap [--help] --filename foo
+
+=head1 DESCRIPTION
+
+Output goes to stdout.
+
+Options:
+
+=over 4
+
+=item --filename foo
+
+The name of the file to process.
+
+=back
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@pm.me
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+use Pod::Usage ;
+#use feature 'say' ;
+#use Data::Dumper ;
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
+
+my $myName = '' ;
+my $input_file = '';
+($myName = $0) =~ s@.*[/\\]@@ ;
+
+#Getopt::Long::Configure( 'pass_through' ) ;
+GetOptions (
+   'help'               => sub { pod2usage(-verbose => 2) ; },
+   'filename=s'         => \$input_file,
+) or pod2usage(-verbose => 0) ;
+
+# Validate/handle options, and everything else...
+
+die "--filename required" unless ( $input_file );
+
+#print Dumper();
+
+# Read input from a file
+open my $in, '<', $input_file or die "Cannot open file: $input_file $!";
+
+my $inside_hash = 0;
+my @hash_lines;
+my @output;
+
+while (my $line = <$in>) {
+    chomp $line;
+
+    # Detect start of a hash
+    if ($line =~ /^my\s+%\w+\s+=\s+\($/) {
+        $inside_hash = 1;
+        push @output, $line;
+        next;
+    }
+
+    # Detect end of a hash
+    if ($inside_hash && $line =~ /^\);$/) {
+        $inside_hash = 0;
+        push @hash_lines, $line;
+
+        # Process and align hash lines
+        my $aligned_hash = align_hash(\@hash_lines);
+        push @output, @$aligned_hash;
+        @hash_lines = ();
+        next;
+    }
+
+    # Collect hash lines
+    if ($inside_hash) {
+        push @hash_lines, $line;
+    } else {
+        push @output, $line;
+    }
+}
+
+close $in;
+
+# Print the formatted output
+foreach my $line (@output) {
+    print "$line\n";
+}
+
+# Function to align hash lines
+sub align_hash {
+    my ($lines_ref) = @_;
+    my @lines = @$lines_ref;
+
+    # Find the longest key
+    my $max_key_length = 0;
+    foreach my $line (@lines) {
+        if ($line =~ /^(\s*'[^']+'|[^\s]+)\s*=>\s*/) {
+            my $key = $1;
+            $max_key_length = length($key) if length($key) > $max_key_length;
+        }
+    }
+
+    # Align the hash lines
+    my @aligned_lines;
+    foreach my $line (@lines) {
+        if ($line =~ /^(\s*'[^']+'|[^\s]+)\s*=>\s*(.+)$/) {
+            my $key = $1;
+            my $value = normalize_value($2);
+            my $padding = ' ' x ($max_key_length - length($key));
+            push @aligned_lines, "$key$padding => $value";
+        } else {
+            push @aligned_lines, $line;
+        }
+    }
+
+    return \@aligned_lines;
+}
+
+# Function to normalize the value quoting
+sub normalize_value {
+    my ($value) = @_;
+    if ($value =~ /^'([^']*)'(.*)$/) {
+        $value = "q($1)$2";
+    } elsif ($value =~ /^"([^']*)"(.*)$/) {
+        $value = "qq($1)$2";
+    } elsif ($value =~ /^qq\(([^)]*)\)(.*)$/) {
+        $value = "q($1)$2";
+    } elsif ($value =~ /^q\(([^)]*)\)(.*)$/) {
+        $value = "q($1)$2";
+    }
+    return $value;
+}
