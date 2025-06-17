@@ -19,8 +19,8 @@ syntax on
 
 "map <C-K> :pyf /usr/share/clang/clang-format.py<cr>
 "imap <C-K> <c-o>:pyf /usr/share/clang/clang-format.py<cr>
-map <C-K> :!mycformat<cr>
-imap <C-K> <c-o>:!mycformat<cr>
+"map <C-K> :!mycformat<cr>
+"imap <C-K> <c-o>:!mycformat<cr>
 " --- Peeter ---
 
 "git clone git@github.com:vim-scripts/Cpp11-Syntax-Support.git
