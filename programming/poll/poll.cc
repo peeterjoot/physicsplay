@@ -6,7 +6,7 @@
 
 std::atomic<int> done{};
 
-void poller()
+void poller( volatile int * v )
 {
     int i{};
 
@@ -14,7 +14,8 @@ void poller()
     {
         if ( 0 == (i % 100) )
         {
-            std::cout << std::format( "{}\n", i );
+            int sample = *v;
+            std::cout << std::format( "{}: {}\n", i, sample );
         }
         i++;
         usleep( 10000 );
@@ -23,10 +24,11 @@ void poller()
 
 int main()
 {
-    std::thread t(poller);
+    int i{};
+    std::thread t(poller, static_cast<volatile int *>(&i) );
 
     // ten seconds polling time, 10ms sleep per interval:
-    for ( int i = 0 ; i < 1000 ; i++ )
+    for ( ; i < 1000 ; i++ )
     {
         usleep( 10000 );
     }
