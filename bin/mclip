@@ -1,10 +1,12 @@
 #! /usr/bin/perl
 
-# This script passes a file to my macbook, and runs pbcopy from there to get the contents into the clipboard.
+# This script passes a file to a (hardcoded) macbook hostname,
+# and runs pbcopy from there to get the contents into the clipboard.
 
+my $machost = 'sofiamac';
 my $file = @ARGV[0];
 die "file '$file' does not exist." unless ( -e "$file" );
 my $rfile = $file;
 $rfile =~ s,.*/,,;
 
-system( qq(ssh macbook mkdir -p tmp/.clip && scp $file macbook:tmp/.clip/$rfile && ssh macbook 'pbcopy < tmp/.clip/$rfile') );
+system( qq(ssh ${machost} mkdir -p tmp/.clip && scp $file ${machost}:tmp/.clip/$rfile && ssh ${machost} 'pbcopy < tmp/.clip/$rfile') );
