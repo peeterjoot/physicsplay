@@ -1,8 +1,4 @@
-sub prologue
-{
-   my ( $name, $platforms, $replyto, $author ) = @_ ;
-
-return qq%#!/usr/bin/perl
+#!/usr/bin/perl
 
 #-----------------------------------------------------------------------------
 # POD Format Documentation.  Read "perldoc perlpod" for an example.
@@ -10,34 +6,35 @@ return qq%#!/usr/bin/perl
 
 =head1 NAME
 
-$name - <one-line-description>
+tnd - tmux rename window to pwd
 
 =head1 SYNOPSIS
 
-$name [--help] [<options>]
+tnd [--help] [--n n]
 
 =head1 DESCRIPTION
-
 
 Options:
 
 =over 4
 
-=item --foo=bar
+=item --n=1
 
-Blah.
+The number of path components to retain.
 
 =back
 
 =head1 SUPPORTED PLATFORMS
-$platforms
+
+ Unix (Linux verified)
+
 =head1 SUPPORT
 
- Send email to $replyto
+ Send email to peeterjoot@pm.me
 
 =head1 AUTHORS
 
- $author
+ Peeter Joot
 
 =cut
 
@@ -49,26 +46,32 @@ use Getopt::Long ;
 use Pod::Usage ;
 
 # Suppress sourcing of users' .bashrc files in invoked shells
-delete \$ENV{'ENV'} ;
-delete \$ENV{'BASH_ENV'} ;
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
 
 # Set STDOUT and STDERR to unbuffered
-select STDERR ; \$| = 1 ;
-select STDOUT ; \$| = 1 ;
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
 
-my \$myName = '' ;
+my $myName = '' ;
+my $n = 1;
 
-(\$myName = \$0) =~ s\@.*[/\\\\]\@\@ ;
+($myName = $0) =~ s@.*[/\\]@@ ;
 
 #Getopt::Long::Configure( 'pass_through' ) ;
 GetOptions (
    'help'               => sub { pod2usage(-verbose => 2) ; },
+   'n=s'                => \$n,
 ) or pod2usage(-verbose => 0) ;
 
 # Validate/handle options, and everything else...
 
-# vim: et ts=3 sw=3
-% ;
-}
+my $pwd = `pwd` ; chomp $pwd;
+my @pwd = split( m,/, , $pwd );
+my @last_n = splice( @pwd, -$n );
+my $dir = join( '/', @last_n );
+#print "$dir\n";
 
-1 ;
+system( tmux rename-window $dir );
+
+# vim: et ts=3 sw=3
