@@ -6,16 +6,27 @@ set nocompatible
 
 "behave mswin
 " --- Peeter ---
+set nocompatible
 set nobackup
-set et			" expand tabs to spaces.
-set shiftwidth=3        " for >> indenting
-set tabstop=3           " the amount of space a tab moves.
+set expandtab               " expand tabs to spaces
+set shiftwidth=4            " for >> indenting
+set tabstop=4               " the amount of space a tab moves
 set fileformat=unix
 set notitle
 set noerrorbells
 set textwidth=0
-set modelines=1
+set modeline
+set modelines=3             " search 3 lines at beginning or end of file for a modeline
+set history=200
+set autoindent              " enable auto-indentation
+set smartindent             " or use 'set cindent' for C++-specific indentation
+filetype plugin indent on   " enable filetype-specific plugins and indentation
 syntax on
+
+augroup filetypedetect
+  autocmd!
+  autocmd BufNewFile,BufRead *.cxx,*.cpp,*.cc,*.c++,*.hpp,*.c,*.h setfiletype cpp
+augroup END
 
 "map <C-K> :pyf /usr/share/clang/clang-format.py<cr>
 "imap <C-K> <c-o>:pyf /usr/share/clang/clang-format.py<cr>
