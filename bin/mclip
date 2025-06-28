@@ -1,12 +1,80 @@
-#! /usr/bin/perl
+#!/usr/bin/perl
 
-# This script passes a file to a (hardcoded) macbook hostname,
-# and runs pbcopy from there to get the contents into the clipboard.
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
 
+=head1 NAME
+
+mclip - ssh to macbook to run pbcopy
+
+=head1 SYNOPSIS
+
+mclip [--help] [--host h]
+
+=head1 DESCRIPTION
+
+This script passes a file to a (hardcoded) macbook hostname, and runs pbcopy from there to get the contents into the clipboard.
+
+Options:
+
+=over 4
+
+=item --host=foo
+
+hostname to ssh to.
+
+=back
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@pm.me
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+use Pod::Usage ;
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
+
+my $myName = '' ;
 my $machost = 'macbook';
-my $file = @ARGV[0];
-die "file '$file' does not exist." unless ( -e "$file" );
-my $rfile = $file;
-$rfile =~ s,.*/,,;
 
-system( qq(ssh ${machost} mkdir -p tmp/.clip && scp $file ${machost}:tmp/.clip/$rfile && ssh ${machost} 'pbcopy < tmp/.clip/$rfile') );
+($myName = $0) =~ s@.*[/\\]@@ ;
+
+Getopt::Long::Configure( 'pass_through' ) ;
+GetOptions (
+   'help'               => sub { pod2usage(-verbose => 2) ; },
+   'host=s'             => \$machost,
+) or pod2usage(-verbose => 0) ;
+
+# Validate/handle options, and everything else...
+
+foreach my $file (@ARGV)
+{
+   die "file '$file' does not exist." unless ( -e "$file" );
+   my $rfile = $file;
+   $rfile =~ s,.*/,,;
+
+   system( qq(ssh ${machost} mkdir -p tmp/.clip && scp $file ${machost}:tmp/.clip/$rfile && ssh ${machost} 'pbcopy < tmp/.clip/$rfile') );
+}
+
+# vim: et ts=3 sw=3
