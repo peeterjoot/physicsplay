@@ -26,6 +26,7 @@ syntax on
 augroup filetypedetect
   autocmd!
   autocmd BufNewFile,BufRead *.cxx,*.cpp,*.cc,*.c++,*.hpp,*.c,*.h setfiletype cpp
+  autocmd BufNewFile,BufRead *.py setfiletype python
 augroup END
 
 "map <C-K> :pyf /usr/share/clang/clang-format.py<cr>
