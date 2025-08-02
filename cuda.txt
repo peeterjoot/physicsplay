@@ -1,0 +1,40 @@
+sudo dnf config-manager addrepo --from-repofile=https://developer.download.nvidia.com/compute/cuda/repos/fedora41/$(uname -m)/cuda-fedora41.repo
+sudo dnf module disable nvidia-driver
+sudo dnf config-manager setopt cuda-fedora41-$(uname -m).exclude=nvidia-driver,nvidia-modprobe,nvidia-persistenced,nvidia-settings,nvidia-libXNVCtrl,nvidia-xconfig
+sudo dnf -y install cuda-toolkit
+sudo dnf -y install gcc14 gcc14-c++
+
+
+
+export PATH=/usr/local/cuda-12.9/bin:$PATH
+
+#export HOST_COMPILER=g++-14
+
+(mkdir -p ~/cuda-bin/; \
+(cd ~/cuda-bin && rm -f gcc g++ && ln -s /usr/bin/gcc-14 gcc ; ln -s /usr/bin/g++-14 g++) )
+
+export PATH=~/cuda-bin:$PATH
+
+
+cd
+git clone https://github.com/NVIDIA/cuda-samples.git
+cd cuda-samples
+git checkout v12.9
+git checkout -b peeter
+cd /home/peeter/cuda-samples/Samples/1_Utilities/deviceQuery/
+
+rm -rf build
+mkdir build
+cd build
+#export HOST_COMPILER=g++-14
+
+export CC=/usr/bin/gcc-14
+export CXX=/usr/bin/g++-14
+
+cmake .. -G Ninja \
+-D CMAKE_C_COMPILER=/usr/bin/gcc-14 \
+-D CMAKE_CPP_COMPILER=/usr/bin/g++-14 \
+2>&1 | tee o
+
+sudo dnf config-manager --add-repo https://developer.download.nvidia.com/compute/nvidia-container-toolkit/rhel8/x86_64/nvidia-container-toolkit.repo
+sudo dnf install nvidia-container-toolkit
