@@ -1,3 +1,4 @@
+CXX := g++
 CXXFLAGS += -std=c++23
 CXXFLAGS += -fmodules
 
@@ -6,7 +7,7 @@ STDCXX := /usr/include/c++/15/bits/std.cc
 
 all : try
 
-try: std.o try.o
+try: std.o stuff.o try.o
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) $(LOADLIBES)
 
 std.o : $(STDCXX)

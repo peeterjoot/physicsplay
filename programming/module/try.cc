@@ -1,19 +1,19 @@
+import stuff;
+#if 0
+// This doesn't work.  Doens't seem to be implemented in g++-15:
+import iostream;
+import format;
+#else
 import std;
-
-using namespace std;
-
-vector<string> collect_lines(istream &is) {
-  unordered_set<string> s;
-  for (string line; getline(is, line);)
-    s.insert(line);
-
-  return vector{from_range, s};
-}
+#endif
 
 int main() {
-  auto v = collect_lines(cin);
+
+  //stuff::helper();
+
+  auto v = stuff::collect_lines(std::cin);
   for (const auto &i : v) {
-    cout << format("{}\n", i);
+      std::cout << std::format("{}\n", i);
   }
 
   return 0;
