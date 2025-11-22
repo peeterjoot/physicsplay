@@ -12,14 +12,17 @@ all: try
 std.pcm: $(STDCXX)
 	$(CXX) $(CXXFLAGS) -Wno-reserved-module-identifier --precompile $< -o $@
 
-stuff.pcm: stuff.cc std.pcm
-	$(CXX) $(CXXFLAGS) $(STD_MODULE) -c -x c++-module $< -o $@
+stuff.pcm: stuff.cppm std.pcm
+	$(CXX) $(CXXFLAGS) $(STD_MODULE) --precompile $< -o $@
 
-%.o: %.cc stuff.pcm std.pcm
+try.o : %.o: %.cc stuff.pcm std.pcm
 	$(CXX) $(CXXFLAGS) $(STD_MODULE) -fmodule-file=stuff=stuff.pcm -c $< -o $@
 
-try: try.o
-	$(CXX) $(CXXFLAGS) $^ -o $@
+stuff.o : %.o: %.cc stuff.pcm std.pcm
+	$(CXX) $(CXXFLAGS) $(STD_MODULE) -c $< -o $@
+
+try: try.o stuff.o
+	$(CXX) $(CXXFLAGS) $(STD_MODULE) -fmodule-file=stuff=stuff.pcm try.o stuff.o -o $@
 
 clean:
 	rm -f *.o *.pcm try

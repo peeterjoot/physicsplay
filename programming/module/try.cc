@@ -1,11 +1,5 @@
 import stuff;
-#if 0
-// This doesn't work.  Doens't seem to be implemented in g++-15:
-import iostream;
-import format;
-#else
 import std;
-#endif
 
 int main() {
 
@@ -13,7 +7,10 @@ int main() {
 
   auto v = stuff::collect_lines(std::cin);
   for (const auto &i : v) {
-      std::cout << std::format("{}\n", i);
+
+      // g++-15.2.1-4 breaks with use of std::format:
+      //std::cout << std::format("{}\n", i);
+      std::cout << i << '\n';
   }
 
   return 0;

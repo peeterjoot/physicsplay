@@ -1,6 +1,7 @@
 export module stuff;
 import std;
 
+//export
 namespace stuff {
 
 void helper() { std::cout << "call to a private function\n"; }
