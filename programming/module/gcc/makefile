@@ -5,10 +5,7 @@ CXXFLAGS += -fmodules
 # This assumes g++ is g++-15
 STDCXX := /usr/include/c++/15/bits/std.cc
 
-all :: try
-
-broken: broken.o
-	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) $(LOADLIBES)
+all : try
 
 try: std.o stuff.o try.o
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) $(LOADLIBES)
