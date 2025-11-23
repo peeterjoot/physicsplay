@@ -1,25 +1,32 @@
 CXX := clang++
-CXXFLAGS += -std=c++23 -stdlib=libc++ -Wall -Wextra
-
-# Disable Make's hard-coded built-in module rules (they ignore .SUFFIXES:)
-%pcm: %cc   # ← THIS LINE IS THE KEY
+CXXFLAGS += -std=c++23
+CXXFLAGS += -stdlib=libc++
+CXXFLAGS += -Wall -Wextra
+CXXFLAGS += -Werror
 
 STD_MODULE := -fmodule-file=std=std.pcm
 STDCXX     := /usr/share/libc++/v1/std.cppm
 
+MODULES += std.pcm
+MODULES += stuff.pcm
+
+PCMFLAGS_std += -Wno-reserved-module-identifier
+PCMFLAGS_stuff += $(STD_MODULE)
+
+CXXFLAGS_try += -fmodule-file=stuff=stuff.pcm
+
+VPATH := /usr/share/libc++/v1
+
 all: try
 
-std.pcm: $(STDCXX)
-	$(CXX) $(CXXFLAGS) -Wno-reserved-module-identifier --precompile $< -o $@
+%.o: %.cc            # ← this cancels the built-in rule
+#%: %.o               # optional, also kills the built-in link rule if you want
 
-stuff.pcm: stuff.cppm std.pcm
-	$(CXX) $(CXXFLAGS) $(STD_MODULE) --precompile $< -o $@
+%.pcm: %.cppm
+	$(CXX) $(CXXFLAGS) $(PCMFLAGS_$*) --precompile $< -o $@
 
-try.o : %.o: %.cc stuff.pcm std.pcm
-	$(CXX) $(CXXFLAGS) $(STD_MODULE) -fmodule-file=stuff=stuff.pcm -c $< -o $@
-
-stuff.o : %.o: %.cc stuff.pcm std.pcm
-	$(CXX) $(CXXFLAGS) $(STD_MODULE) -c $< -o $@
+%.o: %.cc | $(MODULES)
+	$(CXX) $(CXXFLAGS) $(STD_MODULE) $(CXXFLAGS_$*) -c $< -o $@
 
 try: try.o stuff.o
 	$(CXX) $(CXXFLAGS) $(STD_MODULE) -fmodule-file=stuff=stuff.pcm try.o stuff.o -o $@
