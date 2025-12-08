@@ -14,6 +14,8 @@ set tabstop=4               " the amount of space a tab moves
 set fileformat=unix
 set notitle
 set noerrorbells
+set novisualbell
+set t_vb=  " Disable visual bell entirely
 set textwidth=0
 set modeline
 set modelines=3             " search 3 lines at beginning or end of file for a modeline
