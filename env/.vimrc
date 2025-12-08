@@ -29,6 +29,17 @@ augroup filetypedetect
   autocmd BufNewFile,BufRead *.py setfiletype python
 augroup END
 
+"------------------------
+" Tell vim where to find tags (searches up directory tree)
+set tags=./tags;,tags;
+
+" Open tag in vertical split with Ctrl-]
+map <C-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+
+" Open tag in horizontal split
+map <A-]> :sp <CR>:exec("tag ".expand("<cword>"))<CR>
+"------------------------
+
 "map <C-K> :pyf /usr/share/clang/clang-format.py<cr>
 "imap <C-K> <c-o>:pyf /usr/share/clang/clang-format.py<cr>
 "map <C-K> :!mycformat<cr>
