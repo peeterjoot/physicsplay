@@ -1,0 +1,71 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
+
+=head1 NAME
+
+gitmergebase - <one-line-description>
+
+=head1 SYNOPSIS
+
+gitmergebase [--help] [<options>]
+
+=head1 DESCRIPTION
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@pm.me
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+use Pod::Usage ;
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
+
+my $myName = '' ;
+my $base = 'main';
+my $mine = '';
+
+($myName = $0) =~ s@.*[/\\]@@ ;
+
+#Getopt::Long::Configure( 'pass_through' ) ;
+GetOptions (
+   'help'               => sub { pod2usage(-verbose => 2) ; },
+   'base=s'             => \$base,
+   'mine=s'             => \$mine,
+) or pod2usage(-verbose => 0) ;
+
+# Validate/handle options, and everything else...
+
+unless ( $mine )
+{
+  $mine = `git branch --show-current` ; chomp $mine;
+}
+
+my $cmd = qq(git merge-base --fork-point $base $mine);
+
+print "# $cmd\n";
+exec $cmd;
+
+# vim: et ts=2 sw=2

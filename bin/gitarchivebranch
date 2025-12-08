@@ -1,0 +1,120 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
+
+=head1 NAME
+
+gitarchivebranch - Move a branch to an archive path.
+
+=head1 SYNOPSIS
+
+gitarchivebranch [--help] [--dryrun] [--abandoned | --merged | --why string ] [--branch b]
+
+=head1 DESCRIPTION
+
+Move the current or named branch to an archive path.
+
+Options:
+
+=over 4
+
+=item --dryrun
+
+Show the command that would be run without doing it.
+
+=item --why
+
+Archive path suffix.  Default is archive
+
+=item --abandoned
+
+Equivalent to --why abandoned
+
+=item --merged
+
+Equivalent to --why merged
+
+=item --branch branchname
+
+Move the named branch instead of the current branch.
+
+=back
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@pm.me
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+use strict ;
+use warnings ;
+use Getopt::Long ;
+use Pod::Usage ;
+use POSIX qw(strftime);
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
+
+my $dryrun = 0;
+my $myName = '' ;
+my $why = 'archive';
+my $branch_name = '';
+
+($myName = $0) =~ s@.*[/\\]@@ ;
+
+GetOptions (
+   'help'               => sub { pod2usage(-verbose => 2) ; },
+   'dryrun!'            => \$dryrun,
+   'why=s'              => \$why,
+   'abandoned'          => sub { $why = 'abandoned' },
+   'merged'             => sub { $why = 'merged' },
+   'branch=s'           => \$branch_name,
+) or pod2usage(-verbose => 0) ;
+
+# Determine which branch to archive
+my $current_branch;
+
+if ($branch_name) {
+  $current_branch = $branch_name;
+} else {
+  $current_branch = `git branch --show-current`;
+  chomp $current_branch;
+  die "No current branch found\n" unless $current_branch;
+}
+
+my $timestamp = strftime("%Y-%m-%d-%H%M", localtime);
+my $new_branch = $current_branch;
+my $user = $ENV{'USER'};
+
+# Transform the branch name: insert "/old/" after the user prefix
+$new_branch =~ s{^${user}/}{${user}/old/};
+
+# Append the archive suffix and timestamp
+$new_branch .= "-${why}-$timestamp";
+
+# Display the command
+print "# git branch -m $current_branch $new_branch\n";
+
+unless ($dryrun) {
+  system("git", "branch", "-m", $current_branch, $new_branch) == 0
+      or die "Failed to rename branch: $!\n";
+  print "Renamed branch: $current_branch -> $new_branch\n";
+}
+
+# vim: et ts=2 sw=2

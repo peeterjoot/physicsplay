@@ -1,0 +1,85 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
+
+=head1 NAME
+
+gitbackup - Create a git backup branch.
+
+=head1 SYNOPSIS
+
+gitbackup [--help] [--dryrun]
+
+=head1 DESCRIPTION
+
+Options:
+
+=over 4
+
+=item --dryrun
+
+Show the command that would be run without doing it.
+
+=back
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@pm.me
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+use strict ;
+use warnings ;
+use Getopt::Long ;
+use Pod::Usage ;
+use POSIX qw(strftime);
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
+
+my $dryrun = 0;
+my $myName = '' ;
+($myName = $0) =~ s@.*[/\\]@@ ;
+
+GetOptions (
+   'help'               => sub { pod2usage(-verbose => 2) ; },
+   'dryrun!'            => \$dryrun,
+) or pod2usage(-verbose => 0) ;
+
+my $current_branch = `git branch --show-current`;
+chomp $current_branch;
+
+die "No current branch found\n" unless $current_branch;
+
+my $timestamp = strftime("%Y-%m-%d-%H%M", localtime);
+my $new_branch = $current_branch;
+my $user = $ENV{'USER'};
+$new_branch =~ s{^${user}/}{${user}/old/};
+$new_branch .= "-snapshot-$timestamp";
+
+print "# git branch $new_branch\n";
+
+unless ($dryrun) {
+  system("git", "branch", $new_branch) == 0
+      or die "Failed to create branch: $!\n";
+
+  print "Created branch: $new_branch\n";
+}
+
+# vim: et ts=2 sw=2
