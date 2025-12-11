@@ -1,0 +1,82 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
+
+=head1 NAME
+
+gitupdatebranch - update a branch without switching branches.
+
+=head1 SYNOPSIS
+
+gitupdatebranch [--help] [--branch main] [--remote origin]
+
+=head1 DESCRIPTION
+
+Options:
+
+=over 4
+
+=item --branch branchname
+
+The default is master.
+
+=item --branch remote
+
+The default is origin.
+
+=back
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@pm.me
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict;
+use warnings;
+use Getopt::Long;
+use Pod::Usage;
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'};
+delete $ENV{'BASH_ENV'};
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR; $| = 1;
+select STDOUT; $| = 1;
+
+my $myName = '';
+my $remote = 'origin';
+my $branch = 'master';
+my $dryrun = 0;
+
+($myName = $0) =~ s@.*[/\\]@@ ;
+
+#Getopt::Long::Configure( 'pass_through' ) ;
+GetOptions (
+  'help'               => sub { pod2usage(-verbose => 2); },
+  'branch=s'           => \$branch,
+  'remote=s'           => \$remote,
+  'dryrun!'            => \$dryrun,
+) or pod2usage(-verbose => 0);
+
+# Validate/handle options, and everything else...
+
+my $cmd = qq(git fetch ${remote};git merge ${remote}/${branch});
+
+print "# $cmd\n";
+system($cmd) unless ($dryrun);
+
+# vim: et ts=2 sw=2
