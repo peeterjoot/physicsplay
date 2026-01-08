@@ -1,1 +1,103 @@
-grep -nr "$*" --exclude-dir={build,.git} .
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
+
+=head1 NAME
+
+nrgrep - 'grep -nr' in a repo or directory, suppressing noisy directories.
+
+=head1 SYNOPSIS
+
+nrgrep [--help] [-i] [--exdir dir]* [--top]
+
+=head1 DESCRIPTION
+
+Options:
+
+=over 4
+
+=item --top
+
+Issue the search from the repo top directory.
+
+=item --i
+
+Ignore case.
+
+=item --exdir dirname
+
+Add --exclude-dir dirname to the flags.  By default build, and .git are excluded.
+
+=back
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@pm.me
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+use Pod::Usage ;
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
+
+my $myName = '' ;
+my $ic = 0;
+my $fromtop = 0;
+my @exdirs = (qw(
+build
+.git
+));
+($myName = $0) =~ s@.*[/\\]@@ ;
+
+Getopt::Long::Configure( 'pass_through' ) ;
+GetOptions (
+  'help'               => sub { pod2usage(-verbose => 2) ; },
+  'i!'                 => \$ic,
+  'exdir=s'            => \@exdirs,
+  'top!'               => \$fromtop,
+) or pod2usage(-verbose => 0) ;
+
+# Validate/handle options, and everything else...
+
+if ($fromtop) {
+  my $TOP = `git rev-parse --show-toplevel`; chomp $TOP;
+  chdir $TOP or die;
+}
+
+my $args = '';
+$args .= '  --exclude=tags';
+#$args .= " --exclude='*.js'";
+if ($ic) {
+  $args .= ' -i';
+}
+
+foreach (@exdirs) {
+  $args .= " --exclude-dir=$_";
+}
+
+my $cmd = qq(grep -nr $args "@ARGV" .);
+print("# $cmd\n");
+system($cmd);
+
+# vim: et ts=2 sw=2
