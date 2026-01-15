@@ -1,0 +1,72 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
+
+=head1 NAME
+
+firsterror - take compile output with errors and report first line per file with the lowest file:line value.
+
+=head1 SYNOPSIS
+
+firsterror [--help] [<options>]
+
+=head1 DESCRIPTION
+
+A filter script.
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@pm.me
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+use Pod::Usage ;
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
+
+my $myName = '' ;
+
+($myName = $0) =~ s@.*[/\\]@@ ;
+
+#Getopt::Long::Configure( 'pass_through' ) ;
+GetOptions (
+   'help'               => sub { pod2usage(-verbose => 2) ; },
+) or pod2usage(-verbose => 0) ;
+
+my %min_line;
+my %min_line_full;
+
+while (<>) {
+    if (/^([^:]+):(\d+):(.*)/) {
+        my ($file, $line, $rest) = ($1, $2, $3);
+        if (!exists $min_line{$file} || $line < $min_line{$file}) {
+            $min_line{$file} = $line;
+            $min_line_full{$file} = "$file:$line:$rest\n";
+        }
+    }
+}
+
+for my $file (sort keys %min_line) {
+    print $min_line_full{$file};
+}
