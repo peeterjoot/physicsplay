@@ -2,7 +2,7 @@
 #-----------------------------------------------------------------------------
 # POD like Format Documentation.  Invoke perldoc ./thisfile to see the documentation.
 # See "perldoc perlpod" for examples.
-# When done, check syntax with "podchecker".  
+# When done, check syntax with "podchecker".
 
 =head1 NAME
 
@@ -53,7 +53,7 @@ alias thisdirfiles='find . -type f -maxdepth 1 | sed "s,^\./,,"'
 # on some systems 'sudo bash' doesn't reset PS1, so you can end up running as root by accident.
 #
 #   alias psroot='PS1="# "'
-# 
+#
 # However, here's a better solution, since PS1 is updated so you know you are running as root:
 alias rootshell='sudo su - root'
 
@@ -97,7 +97,17 @@ alias gitgraphone='git log --all --graph --decorate --oneline --simplify-by-deco
 # less confusing output than the above
 alias gitgraph='git log --graph --decorate'
 
-# How to not show trailing space diffs:
+# 'git diff' variant to not show trailing space diffs (-w, and even '-w --ignore-blank-lines' does not work for that)
+#
+# 'git diff -w --ignore-blank-lines' still shows trailing spaces since -w (or --ignore-all-space)
+# ignores changes in the amount of whitespace, but doesn't suppress the highlighting of trailing
+# spaces - that's purely a visual/color thing controlled by core.whitespace. The -w flag would ignore things like:
+#
+#   -foo(  bar,baz)
+#   +foo(bar, baz)
+#
+# But trailing space highlighting is a separate feature that marks lines ending in spaces as
+# "bad whitespace" regardless of whether they changed.
 alias gitdiffw='git -c core.whitespace=-trailing-space diff'
 
 alias fetchall='git fetch --all 2>&1 | tee o'
