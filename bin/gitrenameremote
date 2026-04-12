@@ -1,0 +1,82 @@
+#!/usr/bin/perl
+
+#-----------------------------------------------------------------------------
+# POD Format Documentation.  Read "perldoc perlpod" for an example.
+# When done, check syntax with "podchecker".
+
+=head1 NAME
+
+gitrenameremote - rename a branch (remote origin)
+
+=head1 SYNOPSIS
+
+gitrenameremote [--help] --old branch --new branch
+
+=head1 DESCRIPTION
+
+Options:
+
+=over 4
+
+=item --foo=bar
+
+Blah.
+
+=back
+
+=head1 SUPPORTED PLATFORMS
+
+ Unix (Linux verified)
+
+=head1 SUPPORT
+
+ Send email to peeterjoot@pm.me
+
+=head1 AUTHORS
+
+ Peeter Joot
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+use strict ;
+use warnings ;
+use Getopt::Long ;
+use Pod::Usage ;
+
+# Suppress sourcing of users' .bashrc files in invoked shells
+delete $ENV{'ENV'} ;
+delete $ENV{'BASH_ENV'} ;
+
+# Set STDOUT and STDERR to unbuffered
+select STDERR ; $| = 1 ;
+select STDOUT ; $| = 1 ;
+
+my $myName = '' ;
+
+($myName = $0) =~ s@.*[/\\]@@ ;
+my $new;
+my $old;
+my $origin = 'origin';
+
+#Getopt::Long::Configure( 'pass_through' ) ;
+GetOptions (
+   'help'               => sub { pod2usage(-verbose => 2) ; },
+   'old=s'              => \$old,
+   'new=s'              => \$new,
+   'origin=s'           => \$origin,
+) or pod2usage(-verbose => 0) ;
+
+# Validate/handle options, and everything else...
+
+die if ( !defined $old );
+die if ( !defined $new );
+
+print qq(git checkout $old
+git branch -m $new
+git push origin -u $new
+git push origin --delete $old
+);
+
+# vim: et ts=3 sw=3
