@@ -6,11 +6,11 @@
 
 =head1 NAME
 
-nrgrep - 'grep -nr' in a repo or directory, suppressing noisy directories.
+nrgrep - 'grep -nr' in a repo, suppressing noisy directories.
 
 =head1 SYNOPSIS
 
-nrgrep [--help] [-i] [--exdir dir]* [--top]
+nrgrep [--help] [-i] [--exdir dir]* [--top] [--[no-]unique]
 
 =head1 DESCRIPTION
 
@@ -64,8 +64,11 @@ select STDOUT ; $| = 1 ;
 my $myName = '' ;
 my $ic = 0;
 my $fromtop = 0;
+my $unique = 1;
+my $file = '';
 my @exdirs = (qw(
 build
+html
 .git
 ));
 ($myName = $0) =~ s@.*[/\\]@@ ;
@@ -75,7 +78,9 @@ GetOptions (
   'help'               => sub { pod2usage(-verbose => 2) ; },
   'i!'                 => \$ic,
   'exdir=s'            => \@exdirs,
+  'file=s'             => \$file,
   'top!'               => \$fromtop,
+  'unique!'            => \$unique,
 ) or pod2usage(-verbose => 0) ;
 
 # Validate/handle options, and everything else...
@@ -96,8 +101,23 @@ foreach (@exdirs) {
   $args .= " --exclude-dir=$_";
 }
 
-my $cmd = qq(grep -nr $args "@ARGV" .);
-print("# $cmd\n");
+if ( $file )
+{
+  $args .= " -f $file";
+}
+else
+{
+  $args .= qq( "@ARGV");
+}
+
+$args .= ' .';
+
+my $cmd = qq(grep -nr $args . | sed 's,^\./,,');
+if ( $unique )
+{
+  $cmd .= ' | sort -u';
+}
+print("# $cmd\n") unless ($unique);
 system($cmd);
 
 # vim: et ts=2 sw=2
