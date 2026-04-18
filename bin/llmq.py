@@ -14,7 +14,8 @@ import re
 from pathlib import Path
 
 #MODEL = 'mixtral'
-MODEL = 'llama2'
+#MODEL = 'llama2'
+MODEL = 'qwen3.5:122b'
 CACHE_FILE = ''
 
 def load_cache():
@@ -39,7 +40,7 @@ def main():
     global MODEL, CACHE_FILE
 
     # Set up argument parser
-    parser = argparse.ArgumentParser(description="Query the Ollama Mixtral LLM model.")
+    parser = argparse.ArgumentParser(description="Query an Ollama LLM model.")
     parser.add_argument('--clean', action='store_true', help="Start with an empty context list (no cache).")
     parser.add_argument('--model', type=str, default=MODEL, help="Specify an alternative model.")
     parser.add_argument('--cache', type=str, default='context_cache', help="context cache path component.")
