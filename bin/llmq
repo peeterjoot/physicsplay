@@ -7,7 +7,27 @@
 # pip install requests ollama
 
 # then use it:
-cd
-. .venv/bin/activate
-#exec llmq.py $*
-exec llmq2.py $*
+#cd
+#. .venv/bin/activate
+##exec llmq.py $*
+#exec llmq2.py $*
+
+# Full path to the venv's Python interpreter
+VENV_PYTHON="$HOME/.venv/bin/python"
+
+# Full path to your script (adjust if llmq2.py is not in your home)
+SCRIPT="$HOME/bin/llmq2.py"
+
+if [ ! -x "$VENV_PYTHON" ]; then
+    echo "Error: Virtual environment Python not found at $VENV_PYTHON"
+    echo "Run the setup commands to create the venv first."
+    exit 1
+fi
+
+if [ ! -f "$SCRIPT" ]; then
+    echo "Error: Script not found at $SCRIPT"
+    exit 1
+fi
+
+# Run the script with the venv's Python:
+exec "$VENV_PYTHON" "$SCRIPT" $*

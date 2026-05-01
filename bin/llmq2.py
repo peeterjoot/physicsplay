@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Ollama query script with persistent conversation history (context caching).
-Uses the modern /api/chat endpoint.
+Ollama query script with persistent conversation history.
+--query paths are now resolved relative to current working directory.
 """
 
 import requests
@@ -12,10 +12,7 @@ import argparse
 import re
 from pathlib import Path
 
-# Default settings
-#DEFAULT_MODEL = 'qwen3.5:122b'
 DEFAULT_MODEL = 'qwen3.6:35b'
-CACHE_FILE = ''
 
 def load_cache(cache_path: str):
     if os.path.exists(cache_path):
@@ -33,18 +30,16 @@ def save_cache(cache_path: str, messages: list):
     except Exception as e:
         print(f"Warning: Could not save cache: {e}")
 
-def query_ollama(model: str, messages: list, num_ctx: int = 131072):
-    """Send request using the modern /api/chat endpoint"""
+def query_ollama(model: str, messages: list, num_ctx: int = 65536):
     payload = {
         "model": model,
         "messages": messages,
         "stream": False,
         "options": {
-            "num_ctx": num_ctx,      # Large context for your M5 Max
+            "num_ctx": num_ctx,
             "temperature": 0.7,
         }
     }
-
     try:
         response = requests.post(
             'http://localhost:11434/api/chat',
@@ -58,39 +53,44 @@ def query_ollama(model: str, messages: list, num_ctx: int = 131072):
         sys.exit(1)
 
 def main():
-    global CACHE_FILE
-
-    parser = argparse.ArgumentParser(description="Query Ollama with persistent context caching.")
-    parser.add_argument('--clean', action='store_true', help="Start with empty context (no history).")
+    parser = argparse.ArgumentParser(description="Query Ollama with persistent context.")
+    parser.add_argument('--clean', action='store_true', help="Start with empty context.")
     parser.add_argument('--model', type=str, default=DEFAULT_MODEL, help="Model to use.")
-    parser.add_argument('--cache', type=str, default='context', help="Cache name component (default: context).")
-    parser.add_argument('--query', type=str, help="Path to a file containing the query (non-interactive mode).")
+    parser.add_argument('--cache', type=str, default='context', help="Cache name component.")
+    parser.add_argument('--query', type=str, help="Path to query file (relative to current directory).")
     parser.add_argument('--system', type=str, default="", help="Optional system prompt.")
     args = parser.parse_args()
 
     model = args.model
     print(f"Using model: {model}")
 
-    # Set cache file path
-    cache_name = args.cache
-    CACHE_FILE = os.path.expanduser(f'~/.llmq.{cache_name}.{model.replace(":", "_")}.json')
-    print(f"Context cache file: {CACHE_FILE}")
+    cache_file = os.path.expanduser(f'~/.llmq.{args.cache}.{model.replace(":", "_")}.json')
+    print(f"Context cache file: {cache_file}")
 
-    # Load previous messages or start fresh
+    # Load history
     if args.clean:
         messages = []
-        print("Starting with clean (empty) context.")
+        print("Starting with clean context.")
     else:
-        messages = load_cache(CACHE_FILE)
+        messages = load_cache(cache_file)
 
-    # Add system prompt once at the beginning if provided and not already present
+    # Add system prompt if provided
     if args.system and (not messages or messages[0].get("role") != "system"):
         messages.insert(0, {"role": "system", "content": args.system})
 
     while True:
         if args.query:
+            query_path = Path(args.query)
+            # If user gave a relative path, it stays relative to cwd (default behavior)
+            # No extra script_dir logic
+
             try:
-                prompt = Path(args.query).read_text(encoding='utf-8').strip()
+                prompt = query_path.read_text(encoding='utf-8').strip()
+                print(f"Loaded query from: {query_path.resolve()}")
+            except FileNotFoundError:
+                print(f"Error: Query file not found: {query_path}")
+                print(f"Current working directory: {Path.cwd()}")
+                sys.exit(1)
             except Exception as e:
                 print(f"Error reading query file: {e}")
                 sys.exit(1)
@@ -105,25 +105,17 @@ def main():
                 break
             continue
 
-        # Add user message
         messages.append({"role": "user", "content": prompt})
 
-        # Query the model
+        print("Querying model...")
         response = query_ollama(model, messages)
 
-        # Extract assistant reply
-        assistant_message = response.get('message', {})
-        reply = assistant_message.get('content', 'No response received.')
-
+        reply = response.get('message', {}).get('content', 'No response received.')
         print(f"\nResponse:\n{reply}\n")
 
-        # Add assistant message to history
         messages.append({"role": "assistant", "content": reply})
+        save_cache(cache_file, messages)
 
-        # Save updated history
-        save_cache(CACHE_FILE, messages)
-
-        # Non-interactive mode: run once and exit
         if args.query:
             break
 
