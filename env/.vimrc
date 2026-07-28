@@ -25,10 +25,16 @@ set smartindent             " or use 'set cindent' for C++-specific indentation
 filetype plugin indent on   " enable filetype-specific plugins and indentation
 syntax on
 
-augroup filetypedetect
+" Don't use autocmd! inside filetypedetect — it wipes Vim's built-in filetype
+" rules (e.g. *.cob -> cobol). Use a separate augroup for overrides.
+"augroup filetypedetect
+"  autocmd!
+"  autocmd BufNewFile,BufRead *.cxx,*.cpp,*.cc,*.c++,*.hpp,*.c,*.h setfiletype cpp
+"  autocmd BufNewFile,BufRead *.py setfiletype python
+"augroup END
+augroup peeter_filetype
   autocmd!
-  autocmd BufNewFile,BufRead *.cxx,*.cpp,*.cc,*.c++,*.hpp,*.c,*.h setfiletype cpp
-  autocmd BufNewFile,BufRead *.py setfiletype python
+  autocmd BufNewFile,BufRead *.c,*.h setfiletype cpp
 augroup END
 
 "------------------------

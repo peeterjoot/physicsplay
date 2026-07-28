@@ -10,7 +10,7 @@ mclip - ssh to macbook to run pbcopy
 
 =head1 SYNOPSIS
 
-mclip [--help] [--host h]
+mclip [--help] [--host h] [--tmux]
 
 =head1 DESCRIPTION
 
@@ -57,12 +57,14 @@ select STDOUT ; $| = 1 ;
 
 my $myName = '' ;
 my $machost = 'macbook';
+my $tmux = 0;
 
 ($myName = $0) =~ s@.*[/\\]@@ ;
 
 Getopt::Long::Configure( 'pass_through' ) ;
 GetOptions (
    'help'               => sub { pod2usage(-verbose => 2) ; },
+   'tmux!'              => \$tmux,
    'host=s'             => \$machost,
 ) or pod2usage(-verbose => 0) ;
 
@@ -71,6 +73,15 @@ GetOptions (
 if ( $ENV{'MACHOST'} )
 {
    $machost = $ENV{'MACHOST'};
+}
+
+if ( $tmux )
+{
+   my $TMPDIR = $ENV{'TMPDIR'};
+   my $out = qq($TMPDIR/.tmux.buffer);
+   system(qq(tmux show-buffer > ${out}));
+   die if ( $? >> 8 );
+   push( @ARGV, $out );
 }
 
 foreach my $file (@ARGV)
