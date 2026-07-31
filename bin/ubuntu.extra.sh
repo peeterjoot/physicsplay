@@ -38,3 +38,5 @@ apt install -y texlive-latex-base
 apt install -y texlive-latex-extra
 apt install -y texlive-full
 
+# for mDNS (automatic IP address mapping for macbook)
+apt install -y avahi-daemon libnss-mdns
