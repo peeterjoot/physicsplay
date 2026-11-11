@@ -1,1 +1,19 @@
-tmux at
+#!/bin/bash
+# Reattach to a running herdr session if there is one (preferring "default"),
+# otherwise fall back to tmux.
+
+if command -v herdr >/dev/null 2>&1 && [ -z "$HERDR_ENV" ]; then
+    sessions=$(herdr session list 2>/dev/null | awk 'NR > 1 && $2 == "running" { print $1 }')
+
+    if echo "$sessions" | grep -qx default; then
+        exec herdr
+    fi
+
+    first=$(echo "$sessions" | head -1)
+
+    if [ -n "$first" ]; then
+        exec herdr session attach "$first"
+    fi
+fi
+
+exec tmux at

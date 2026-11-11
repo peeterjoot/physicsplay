@@ -35,6 +35,7 @@ syntax on
 augroup peeter_filetype
   autocmd!
   autocmd BufNewFile,BufRead *.c,*.h setfiletype cpp
+  autocmd BufNewFile,BufRead *.CBL,*.COB,*.CPY setfiletype cobol
 augroup END
 
 "------------------------

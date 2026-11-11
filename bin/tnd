@@ -72,6 +72,15 @@ my @last_n = splice( @pwd, -$n );
 my $dir = join( '/', @last_n );
 #print "$dir\n";
 
-system( qq(tmux rename-window $dir) );
+if ( $ENV{'HERDR_TAB_ID'} ) {
+  # herdr prints the renamed tab as JSON on stdout: discard it.
+  open( my $saved, '>&', \*STDOUT ) or die "$myName: dup stdout: $!\n";
+  open( STDOUT, '>', '/dev/null' ) or die "$myName: /dev/null: $!\n";
+  my $rc = system( 'herdr', 'tab', 'rename', $ENV{'HERDR_TAB_ID'}, $dir );
+  open( STDOUT, '>&', $saved ) or die "$myName: restore stdout: $!\n";
+  $rc == 0 or die "$myName: herdr tab rename failed\n";
+} else {
+  system( 'tmux', 'rename-window', $dir );
+}
 
 # vim: et ts=2 sw=2

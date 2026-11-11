@@ -155,11 +155,42 @@ alias objd='llvm-objdump -dr --no-show-raw-insn --source --line-numbers'
 alias gitredate='GIT_COMMITTER_DATE="$(date)" git commit --amend --no-edit --date "$(date)"'
 
 #alias tat='tmux at'
-alias tp='tmux select-window -p'
-alias tl='tmux select-window -l'
-alias tn='tmux select-window -n'
-alias tnew='tmux new-window'
-alias tre='tmux rename-window'
+#alias tp='tmux select-window -p'
+#alias tl='tmux select-window -l'
+#alias tn='tmux select-window -n'
+#alias tnew='tmux new-window'
+unalias tre 2>/dev/null
+# Rename the current herdr tab (inside herdr) or tmux window (otherwise).
+#   tre name          rename the current tab/window
+#   tre -t N name     rename tab/window number N
+function tre
+{
+   if [ -n "$HERDR_TAB_ID" ]; then
+      local tab="$HERDR_TAB_ID"
+
+      if [ "$1" = "-t" ]; then
+         tab=$(herdr tab list 2>/dev/null | python3 -c '
+import json, sys
+n, ws = int(sys.argv[1]), sys.argv[2]
+# N is the position (1-based); herdr'"'"'s "number" field is not, once tabs close.
+tabs = [t for t in json.load(sys.stdin)["result"]["tabs"] if t["workspace_id"] == ws]
+if 1 <= n <= len(tabs):
+    print(tabs[n - 1]["tab_id"])
+' "$2" "$HERDR_WORKSPACE_ID")
+         shift 2
+
+         if [ -z "$tab" ]; then
+            echo "tre: no herdr tab with that number" >&2
+
+            return 1
+         fi
+      fi
+
+      herdr tab rename "$tab" "$@" >/dev/null
+   else
+      tmux rename-window "$@"
+   fi
+}
 #function tnd
 #{
 #   tmux rename-window `pwd | sed 's,.*/,,'`
